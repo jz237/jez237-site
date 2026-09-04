@@ -51,6 +51,7 @@ const ALLOWED_LINK_HOSTS = [
   'registry.opendata.aws',
   'www.openstreetmap.org',
   'openstreetmap.org',
+  'basemap.nationalmap.gov',
 ];
 
 const RUNTIME_FETCH = /\b(?:fetch|XMLHttpRequest|importScripts|WebSocket|EventSource)\s*\(\s*['"`](https?:)?\/\//i;

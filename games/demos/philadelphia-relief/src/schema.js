@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-20260904';
-import { ERA_IDS } from './eras.js?v=philly-20260904';
+import { WEATHERS } from './solar.js?v=philly-2026090402';
+import { ERA_IDS } from './eras.js?v=philly-2026090402';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -169,6 +169,7 @@ export const CONTROLS = {
 /** Toggleable map layers, in legend order. */
 export const LAYERS = {
   terrain: { k: 'Lt', def: true, label: 'Terrain relief' },
+  imagery: { k: 'Li', def: true, label: 'Aerial imagery' },
   hillshade: { k: 'Lh', def: true, label: 'Hillshade' },
   contours: { k: 'Lc', def: true, label: 'Contours' },
   water: { k: 'Lw', def: true, label: 'Waterways' },
@@ -178,7 +179,7 @@ export const LAYERS = {
   boundaries: { k: 'Lb', def: false, label: 'County / municipal lines' },
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
   landmarks: { k: 'Lm', def: true, label: 'Landmarks' },
-  structures: { k: 'Lx', def: true, label: 'Buildings & bridges' },
+  structures: { k: 'Lx', def: false, label: '3D buildings & bridges' },
   flood: { k: 'Lf', def: false, label: 'Flood hazard' },
 };
 

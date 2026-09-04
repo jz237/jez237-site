@@ -4,12 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Philadelphia Relief — A 3D Topographic Map of the Delaware Valley</title>
-<meta name="description" content="An interactive cinematic 3D relief map of Philadelphia and its suburbs — the Wissahickon gorge, the Main Line ridge, the Schuylkill and Delaware rivers, Bucks, Montgomery, Delaware and Chester Counties and South Jersey. Real USGS elevation, no API keys." />
+<meta name="description" content="An interactive cinematic 3D relief map of Philadelphia and its suburbs with georeferenced public-domain USGS aerial imagery, real elevation, optional 3D buildings, historical views and flood layers. No API keys." />
 <meta name="keywords" content="Philadelphia topographic map, 3D terrain, Delaware Valley relief, Wissahickon, Schuylkill River, Main Line, Bucks County, elevation map, WebGL" />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://jez237.com/games/demos/philadelphia-relief/" />
 <meta property="og:title" content="Philadelphia Relief — A 3D Topographic Map" />
-<meta property="og:description" content="A cinematic, interactive relief map of the Philadelphia region: real USGS elevation, 17,300 OpenStreetMap footprints, the Delaware bridges, guided tours, FEMA flood zones and NOAA sea-level scenarios, a simulated clock, and honest historical views. No accounts, no keys, nothing leaves your browser." />
+<meta property="og:description" content="A cinematic, interactive relief map of Philadelphia: public-domain USGS aerial imagery draped over real elevation, optional 3D buildings, guided tours, flood scenarios and historical views. No accounts or API keys." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://jez237.com/games/demos/philadelphia-relief/" />
 <meta property="og:image" content="https://jez237.com/games/demos/philadelphia-relief/assets/social-card.jpg" />
@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/games/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-20260904" />
+<link rel="stylesheet" href="app.css?v=philly-2026090402" />
 </head>
 <body data-theme="dusk">
 
@@ -31,6 +31,9 @@
 <div id="stage" class="stage">
   <canvas id="canvas" aria-label="3D relief map of the Philadelphia region. Drag to pan, right-drag to orbit, scroll to zoom." role="img"></canvas>
   <div id="labelHost" class="label-host"></div>
+  <div id="imageryCredit" class="imagery-credit" hidden>
+    Aerial imagery: USDA / USGS The National Map
+  </div>
 </div>
 
 <!-- ── loading ─────────────────────────────────────────────────────────── -->
@@ -132,7 +135,7 @@
 <footer class="readout" id="readout">
   <div class="readout-main">
     <div class="readout-preset">
-      <span class="readout-preset-name" id="outPreset">Philadelphia Skyline</span>
+      <span class="readout-preset-name" id="outPreset">Aerial Philadelphia</span>
       <span class="readout-preset-blurb" id="outBlurb"></span>
     </div>
     <dl class="readout-stats" aria-live="off">
@@ -215,7 +218,7 @@
     <h2 id="obTitle">Philadelphia, in relief</h2>
     <p>
       A 3D map of Philadelphia and the Delaware Valley built only from public data:
-      real USGS elevation, 17,300 real OpenStreetMap building footprints, FEMA flood
+      public-domain USGS aerial imagery, real elevation, optional OpenStreetMap buildings, FEMA flood
       zones and NOAA sea-level scenarios. The land here is subtle, about 380 m of relief
       across 94 km, so the vertical scale is exaggerated to make it legible. Bridges and a
       few landmarks are <b>schematic</b> shapes built from published dimensions, and the map
@@ -223,6 +226,7 @@
     </p>
     <ul class="overlay-hints">
       <li><b>Drag</b> to move, <b>right-drag</b> or <b>two fingers</b> to orbit, <b>scroll</b> or <b>pinch</b> to zoom</li>
+      <li><b>Aerial imagery</b> opens by default; enable <b>3D buildings &amp; bridges</b> when you want the modelled skyline</li>
       <li><b>Press ▶</b> for a captioned tour; <b>click</b> a landmark for its sourced card</li>
       <li><b>Search</b> scenes, tours, places, bridges, eras and layers from the box at the top</li>
       <li>Try the <b>Era</b> control for 1776 or 1900, the <b>clock</b> for a winter sunrise, and the <b>Flood hazard</b> layer</li>
@@ -260,6 +264,17 @@
         </dd>
       </div>
       <div>
+        <dt>Aerial imagery</dt>
+        <dd>
+          <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer"
+             target="_blank" rel="noopener">USGS Imagery Only</a> from The National Map,
+          principally USDA National Agriculture Imagery Program orthoimagery in this region.
+          It is baked once into a 4096 × 4096 north-up texture over the exact terrain bounds,
+          then draped directly over the elevation mesh. U.S. federal map services and data are
+          public domain. Credit: USDA, USGS The National Map: Orthoimagery.
+        </dd>
+      </div>
+      <div>
         <dt>Rivers, roads, rail, boundaries, parks, place names</dt>
         <dd>
           © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a>
@@ -275,6 +290,8 @@
       <div>
         <dt>Buildings</dt>
         <dd>
+          Optional — the aerial image is the default surface, and the
+          <b>3D buildings &amp; bridges</b> layer restores the extruded model when wanted.
           <b id="aboutBuildingCount">—</b> OpenStreetMap footprints in two core detail
           zones — every building in Center City and University City, and only the
           notable ones (tall, large or named) across inner Philadelphia and Camden —
@@ -385,15 +402,16 @@
 
     <h3>How it is built</h3>
     <p>
-      Three.js on WebGL 2. The terrain is one draw call: a grid that is
+      Three.js on WebGL 2. The terrain is one draw call: a georeferenced USGS
+      orthoimage and height field on a grid that is
       log-warped around the camera target in the vertex shader, so detail
       concentrates where you are looking without any LOD seams. Hillshade,
       contours, ambient occlusion and the atmosphere are computed per pixel from
       the height field. Buildings are one draw call per zone and height tier,
       packed tallest-first so the density slider is a draw-range prefix; whole
       tiers frustum-cull as a unit and rise out of the ground as you approach.
-      Every byte is served from this origin — no map service, no account, no API
-      key, nothing to leak.
+      Every byte is served from this origin — the USGS image is baked at build time,
+      so there is no runtime map service, account or API key.
     </p>
 
     <p class="about-foot">
@@ -418,7 +436,7 @@
         <tr><th scope="row"><kbd>1</kbd>–<kbd>8</kbd></th><td>Jump to a cinematic preset (1 is the skyline)</td></tr>
         <tr><th scope="row"><kbd>Space</kbd></th><td>Play or pause the tour</td></tr>
         <tr><th scope="row"><kbd>[</kbd> <kbd>]</kbd></th><td>Previous / next shot in the tour</td></tr>
-        <tr><th scope="row"><kbd>H</kbd></th><td>Home: back to the opening skyline</td></tr>
+        <tr><th scope="row"><kbd>H</kbd></th><td>Home: back to aerial Philadelphia</td></tr>
         <tr><th scope="row"><kbd>C</kbd></th><td>Show or hide the control studio</td></tr>
         <tr><th scope="row"><kbd>L</kbd></th><td>Show or hide labels</td></tr>
         <tr><th scope="row"><kbd>V</kbd></th><td>Cinema mode: hide every panel, keep the captions</td></tr>
@@ -453,11 +471,11 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-20260904"></script>
+<script type="module" src="src/main.js?v=philly-2026090402"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
-    draws is public: AWS Terrain Tiles (USGS 3DEP / SRTM), with map features from
+    draws is public: USGS aerial imagery and elevation, with map features from
     OpenStreetMap contributors.
   </div>
 </noscript>

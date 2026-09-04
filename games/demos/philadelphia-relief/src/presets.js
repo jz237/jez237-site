@@ -10,8 +10,8 @@
  * without a renderer.
  */
 
-import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-20260904';
-import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-20260904';
+import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090402';
+import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090402';
 
 /** Keys that are angles and must take the short way round when blending. */
 const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
@@ -31,13 +31,12 @@ export const PRESET_EXCLUDED_LAYERS = new Set(['flood']);
 export const PRESETS = [
   {
     id: 'skyline',
-    name: 'Philadelphia Skyline',
+    name: 'Aerial Philadelphia',
     blurb:
-      'Center City from the south-west at the end of the day: the Comcast and ' +
-      'Liberty Place towers over the rowhouse grid, the Schuylkill at your feet ' +
-      'and the Ben Franklin Bridge reaching for Camden. Real OpenStreetMap ' +
-      'footprints; heights measured where the data has them, estimated or taken ' +
-      'from public references where it does not.',
+      'Philadelphia from the south-west at the end of the day: public-domain ' +
+      'USGS orthoimagery lies directly on the real relief, with the Schuylkill at ' +
+      'your feet and the Delaware reaching toward Camden. Turn on 3D buildings ' +
+      'and bridges whenever you want the modelled skyline.',
     camera: {
       camLon: -75.1655, camLat: 39.9505, camDist: 6500, camBearing: 32, camPitch: 73,
     },
@@ -49,9 +48,9 @@ export const PRESETS = [
       roadOpacity: 0.35, boundaryOpacity: 0.15, labelDensity: 0.45, labelSize: 1,
       structureDetail: 0.75, structureHeight: 1.15,
     },
-    layers: { terrain: true, hillshade: true, contours: true, water: true,
+    layers: { terrain: true, imagery: true, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: true },
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'ben-franklin-bridge',
@@ -72,9 +71,9 @@ export const PRESETS = [
       roadOpacity: 0.4, boundaryOpacity: 0.1, labelDensity: 0.4, labelSize: 1,
       structureDetail: 0.7, structureHeight: 1.15,
     },
-    layers: { terrain: true, hillshade: true, contours: true, water: true,
+    layers: { terrain: true, imagery: true, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: true, boundaries: false,
-      places: true, landmarks: true, structures: true },
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'overview',
@@ -94,9 +93,9 @@ export const PRESETS = [
       roadOpacity: 0.3, boundaryOpacity: 0.38, labelDensity: 0.38, labelSize: 1,
       structureDetail: 0.6, structureHeight: 1,
     },
-    layers: { terrain: true, hillshade: true, contours: true, water: true,
+    layers: { terrain: true, imagery: true, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: false, boundaries: true,
-      places: true, landmarks: true, structures: true },
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'dawn-delaware',
@@ -116,9 +115,9 @@ export const PRESETS = [
       roadOpacity: 0.24, boundaryOpacity: 0.18, labelDensity: 0.36, labelSize: 1,
       structureDetail: 0.7, structureHeight: 1,
     },
-    layers: { terrain: true, hillshade: true, contours: true, water: true,
+    layers: { terrain: true, imagery: true, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: true },
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'schuylkill-flyover',
@@ -139,9 +138,9 @@ export const PRESETS = [
       roadOpacity: 0.55, boundaryOpacity: 0.18, labelDensity: 0.55, labelSize: 1.05,
       structureDetail: 0.7, structureHeight: 1,
     },
-    layers: { terrain: true, hillshade: true, contours: true, water: true,
+    layers: { terrain: true, imagery: true, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: true, boundaries: false,
-      places: true, landmarks: true, structures: true },
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'wissahickon',
@@ -161,9 +160,9 @@ export const PRESETS = [
       roadOpacity: 0.34, boundaryOpacity: 0.14, labelDensity: 0.62, labelSize: 1.05,
       structureDetail: 0.5, structureHeight: 1,
     },
-    layers: { terrain: true, hillshade: true, contours: true, water: true,
+    layers: { terrain: true, imagery: true, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: true },
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'main-line-ridge',
@@ -184,9 +183,9 @@ export const PRESETS = [
       roadOpacity: 0.3, boundaryOpacity: 0.34, labelDensity: 0.6, labelSize: 1.05,
       structureDetail: 0.5, structureHeight: 1,
     },
-    layers: { terrain: true, hillshade: true, contours: true, water: true,
+    layers: { terrain: true, imagery: true, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: true, boundaries: true,
-      places: true, landmarks: true, structures: true },
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'night-metro',
@@ -206,9 +205,9 @@ export const PRESETS = [
       roadOpacity: 0.95, boundaryOpacity: 0.3, labelDensity: 0.55, labelSize: 1,
       structureDetail: 0.85, structureHeight: 1,
     },
-    layers: { terrain: true, hillshade: true, contours: true, water: true,
+    layers: { terrain: true, imagery: true, hillshade: true, contours: true, water: true,
       parks: false, roads: true, rail: true, boundaries: true,
-      places: true, landmarks: true, structures: true },
+      places: true, landmarks: true, structures: false },
   },
 ];
 

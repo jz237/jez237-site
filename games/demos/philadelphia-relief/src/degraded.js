@@ -15,6 +15,8 @@ export const ASSETS = [
     label: 'terrain metadata' },
   { id: 'heightmap', path: 'data/heightmap.webp', kind: 'image', required: true,
     label: 'elevation heightmap' },
+  { id: 'imagery', path: 'data/imagery.webp', kind: 'image', layer: 'imagery',
+    label: 'aerial imagery' },
   { id: 'water', path: 'data/water.geojson', kind: 'geojson', layer: 'water',
     label: 'waterways' },
   { id: 'parks', path: 'data/parks.geojson', kind: 'geojson', layer: 'parks',

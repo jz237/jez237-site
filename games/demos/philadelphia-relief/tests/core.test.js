@@ -223,14 +223,15 @@ test('presets', async (t) => {
     }
     assert.equal(new Set(PRESET_IDS).size, PRESETS.length, 'preset ids must be unique');
     assert.equal(PRESETS.length, 8);
-    // The product's biggest feature must be what a clean load shows: the
-    // opening shot is the skyline, and it is what Home returns to.
+    // The opening shot is the same view Home returns to. Aerial imagery is the
+    // default surface; the previous extrusions remain an optional layer.
     assert.equal(HOME_PRESET, 'skyline');
     assert.equal(PRESETS[0].id, HOME_PRESET);
     assert.equal(defaults().preset, HOME_PRESET);
     const home = presetPatch(HOME_PRESET);
-    assert.ok(home.camDist < 12000, `opening camera is ${home.camDist} m out; structures need < 12 km`);
-    assert.equal(home.layers.structures, true);
+    assert.ok(home.camDist < 12000, `opening camera is ${home.camDist} m out`);
+    assert.equal(home.layers.imagery, true);
+    assert.equal(home.layers.structures, false);
     assert.ok(home.structureDetail >= 0.6);
     // The regional view survives as its own card.
     assert.ok(presetPatch('overview').camDist > 60000);

@@ -6,13 +6,13 @@
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-20260904';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-20260904';
-import { getEra } from './eras.js?v=philly-20260904';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-20260904';
-import { TOURS } from './tours.js?v=philly-20260904';
-import { ERAS } from './eras.js?v=philly-20260904';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-20260904';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090402';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090402';
+import { getEra } from './eras.js?v=philly-2026090402';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090402';
+import { TOURS } from './tours.js?v=philly-2026090402';
+import { ERAS } from './eras.js?v=philly-2026090402';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090402';
 
 const ENUM_LABELS = {
   theme: (v) => getTheme(v).label,

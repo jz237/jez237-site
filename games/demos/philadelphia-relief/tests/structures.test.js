@@ -453,7 +453,7 @@ test('bridges', async (t) => {
 test('structures state plumbing', async (t) => {
   await t.test('the layer and its controls exist with unique keys and sane defaults', () => {
     assert.ok(LAYERS.structures, 'structures layer');
-    assert.equal(LAYERS.structures.def, true);
+    assert.equal(LAYERS.structures.def, false, 'aerial imagery replaces the extrusions by default');
     assert.ok(CONTROLS.structureDetail && CONTROLS.structureHeight);
     assert.equal(coerce('structureDetail', 5), 1);
     assert.equal(coerce('structureHeight', 0), 0.5, 'never flat');
@@ -463,12 +463,12 @@ test('structures state plumbing', async (t) => {
     assert.ok(defaults().structureDetail >= 0.6, 'the opening shot shows the fabric');
   });
 
-  await t.test('every preset states its structure settings and keeps the layer on', () => {
+  await t.test('every preset keeps the optional structure layer off', () => {
     for (const preset of PRESETS) {
       const patch = presetPatch(preset.id);
       assert.ok(Number.isFinite(patch.structureDetail), `${preset.id} detail`);
       assert.ok(Number.isFinite(patch.structureHeight), `${preset.id} height`);
-      assert.equal(patch.layers.structures, true, `${preset.id} must show structures`);
+      assert.equal(patch.layers.structures, false, `${preset.id} must default to aerial imagery`);
     }
     assert.ok(presetPatch('night-metro').structureDetail > presetPatch('overview').structureDetail,
       'the night shot is the dense one');
@@ -476,15 +476,15 @@ test('structures state plumbing', async (t) => {
 
   await t.test('the layer toggle and controls round-trip through the URL', () => {
     const store = createStore();
-    store.set({ structureDetail: 0.25, structureHeight: 1.8, layers: { structures: false } });
+    store.set({ structureDetail: 0.25, structureHeight: 1.8, layers: { structures: true } });
     const hash = encodeState(store.get());
-    assert.ok(hash.includes('sd=0.25') && hash.includes('sh=1.8') && hash.includes('Lx=0'));
+    assert.ok(hash.includes('sd=0.25') && hash.includes('sh=1.8') && hash.includes('Lx=1'));
     const restored = createStore(decodeState(`#${hash}`));
     assert.equal(restored.get().structureDetail, 0.25);
     assert.equal(restored.get().structureHeight, 1.8);
-    assert.equal(restored.get().layers.structures, false);
+    assert.equal(restored.get().layers.structures, true);
     store.reset();
-    assert.equal(store.get().layers.structures, true);
+    assert.equal(store.get().layers.structures, false);
     assert.equal(store.get().structureDetail, defaults().structureDetail);
   });
 
@@ -520,10 +520,11 @@ test('structures state plumbing', async (t) => {
         assert.equal(m, null, `${label} overclaims: "${m && m[0]}"`);
       }
     }
-    // And the shot that shows the buildings says where their heights came from.
-    const skyline = PRESETS.find((p) => p.id === 'skyline').blurb;
-    assert.match(skyline, /measured/i, 'skyline blurb must mention measured heights');
-    assert.match(skyline, /estimat|reference/i, 'skyline blurb must admit estimates/references');
+    // The optional layer's About entry says where its heights came from even
+    // though the opening aerial scene no longer needs that caveat in its blurb.
+    const about = sources.find(([label]) => label === 'index.html')[1];
+    assert.match(about, /carry a measured OSM height/i);
+    assert.match(about, /estimated from storey counts|public reference heights/i);
   });
 
   await t.test('every theme colours the layer', () => {
