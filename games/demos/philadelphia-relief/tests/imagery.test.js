@@ -9,7 +9,8 @@ import { ASSETS, assess, MODE } from '../src/degraded.js';
 import { createStore } from '../src/state.js';
 import { decodeState, encodeState } from '../src/urlstate.js';
 import {
-  DETAIL_DISTANCE_M, ULTRA_DISTANCE_M, detailCellFor, detailImageSize,
+  DETAIL_DISTANCE_M, ULTRA_DISTANCE_M, ROOFTOP_DISTANCE_M,
+  detailCellFor, detailImageSize,
   detailResolutionM, detailUrl, imageryTierFor, neighbourCells,
 } from '../src/imagery-detail.js';
 import { detailRequest } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
@@ -103,12 +104,27 @@ test('building-resolution imagery', async (t) => {
     assert.ok(neighbourCells(cell, region).length >= 2);
   });
 
+  await t.test('uses a tightly bounded roof cell for the final camera descent', () => {
+    const cell = detailCellFor(-75.1652, 39.9526, region, 'rooftop');
+    assert.equal(cell.tier, 'rooftop');
+    assert.ok(cell.bounds.west < -75.1652 && cell.bounds.east > -75.1652);
+    assert.ok(detailResolutionM(cell, 4096, projection) < 0.3);
+    assert.ok(detailResolutionM(cell, 2048, projection) < 0.6);
+    assert.equal(imageryTierFor(ROOFTOP_DISTANCE_M, 'standard'), 'rooftop');
+    assert.equal(imageryTierFor(ROOFTOP_DISTANCE_M, 'maximum'), 'rooftop');
+    assert.equal(imageryTierFor(ROOFTOP_DISTANCE_M, 'data'), 'detail');
+    assert.equal(imageryTierFor(ROOFTOP_DISTANCE_M + 1, 'standard'), 'ultra');
+    assert.ok(neighbourCells(cell, region).length >= 2);
+  });
+
   await t.test('chooses a memory-safe phone texture and full desktop texture', () => {
     assert.equal(detailImageSize(390, 3, 'balanced'), 2048);
     assert.equal(detailImageSize(1440, 1.5, 'balanced'), 4096);
     assert.equal(detailImageSize(1920, 2, 'performance'), 2048);
     assert.equal(detailImageSize(390, 3, 'balanced', 'maximum', 'ultra'), 4096);
     assert.equal(detailImageSize(1440, 1, 'cinematic', 'standard', 'ultra'), 2048);
+    assert.equal(detailImageSize(1440, 1, 'balanced', 'standard', 'rooftop'), 4096);
+    assert.equal(detailImageSize(390, 3, 'balanced', 'standard', 'rooftop'), 2048);
   });
 
   await t.test('the edge function accepts only bounded map cells and two sizes', () => {
@@ -119,6 +135,12 @@ test('building-resolution imagery', async (t) => {
     assert.equal(valid.tier, 'ultra');
     assert.equal(valid.size, 4096);
     assert.ok(valid.bounds.west >= region.west && valid.bounds.east <= region.east);
+    const rooftop = detailRequest(new URLSearchParams({
+      tier: 'rooftop', lon: '-75.1652', lat: '39.9526', size: '4096',
+    }));
+    assert.ok(rooftop);
+    assert.equal(rooftop.tier, 'rooftop');
+    assert.ok(detailResolutionM(rooftop, 4096, projection) < 0.3);
     assert.equal(detailRequest(new URLSearchParams({
       lon: '-77', lat: '39.95', size: '4096',
     })), null);

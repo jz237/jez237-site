@@ -2,19 +2,23 @@
  * Camera-following aerial imagery levels.
  *
  * The regional texture is always available immediately. A city-detail cell
- * replaces it below 16 km, and a smaller source-resolution block cell replaces
- * that below 4.8 km. Cells overlap, cross-fade in the terrain shader and are
- * prefetched into the browser/edge cache after the camera settles.
+ * replaces it below 16 km, a smaller source-resolution block cell replaces
+ * that below 4.8 km, and a camera-following roof cell takes over for the final
+ * descent. Cells overlap, cross-fade in the terrain shader and are prefetched
+ * into the browser/edge cache after the camera settles.
  */
 
 export const DETAIL_DISTANCE_M = 16000;
 export const ULTRA_DISTANCE_M = 4800;
+export const ROOFTOP_DISTANCE_M = 1600;
 export const IMAGERY_DETAIL_MODES = Object.freeze(['data', 'standard', 'maximum']);
 export const DETAIL_TIERS = Object.freeze({
   detail: Object.freeze({ span: Object.freeze({ lon: 0.096, lat: 0.072 }),
     grid: Object.freeze({ lon: 0.04, lat: 0.03 }) }),
   ultra: Object.freeze({ span: Object.freeze({ lon: 0.032, lat: 0.024 }),
     grid: Object.freeze({ lon: 0.012, lat: 0.009 }) }),
+  rooftop: Object.freeze({ span: Object.freeze({ lon: 0.012, lat: 0.009 }),
+    grid: Object.freeze({ lon: 0.0045, lat: 0.0035 }) }),
 });
 export const DETAIL_SPAN = DETAIL_TIERS.detail.span;
 export const DETAIL_GRID = DETAIL_TIERS.detail.grid;
@@ -50,6 +54,7 @@ export function detailCellFor(lon, lat, region, tier = 'detail') {
 
 export function imageryTierFor(distanceM, mode = 'standard') {
   if (distanceM > DETAIL_DISTANCE_M) return null;
+  if (mode !== 'data' && distanceM <= ROOFTOP_DISTANCE_M) return 'rooftop';
   if (mode !== 'data' && distanceM <= ULTRA_DISTANCE_M) return 'ultra';
   return 'detail';
 }
