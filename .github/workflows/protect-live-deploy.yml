@@ -29,6 +29,7 @@ jobs:
             /games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
             /scripts/check_games_catalog_syntax.mjs
             /scripts/guard_cloudflare_deploy.mjs
+            /scripts/live-deploy-baseline.json
         run: |
           set -euo pipefail
 

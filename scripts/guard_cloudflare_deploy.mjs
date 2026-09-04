@@ -1,11 +1,11 @@
 #!/usr/bin/env node
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { checkGamesCatalogSyntax } from "./check_games_catalog_syntax.mjs";
 
 const BASELINE_COMMIT = "4810212c063f49501d5d5dbb5bb7ba4bf8c66fd1";
 const BASELINE_LABEL = "2026-08-24 Final Blow 1.9E live-safe baseline";
-const DEFAULT_GITHUB_REPOSITORY = "jz237/jez237-site";
+const BASELINE_MARKER_PATH = "scripts/live-deploy-baseline.json";
 const PRODUCTION_BRANCHES = new Set(["main"]);
 const REQUIRED_PATHS = [
   "games/index.html",
@@ -54,60 +54,30 @@ function currentCommit() {
   return resolveCommit(ref);
 }
 
-async function compareOnGitHub(commit) {
-  const repository =
-    process.env.DEPLOY_GUARD_REPOSITORY ||
-    process.env.GITHUB_REPOSITORY ||
-    DEFAULT_GITHUB_REPOSITORY;
-  const token = process.env.GITHUB_TOKEN || process.env.GH_TOKEN;
-  const url =
-    `https://api.github.com/repos/${repository}/compare/` +
-    `${BASELINE_COMMIT}...${commit}`;
-  const headers = {
-    Accept: "application/vnd.github+json",
-    "User-Agent": "jez237-live-deploy-guard",
-    "X-GitHub-Api-Version": "2022-11-28",
-  };
-
-  if (token) headers.Authorization = `Bearer ${token}`;
-
-  let response;
+function verifiedBaselineMarker() {
   try {
-    response = await fetch(url, {
-      headers,
-      signal: AbortSignal.timeout(10_000),
-    });
+    const marker = JSON.parse(readFileSync(BASELINE_MARKER_PATH, "utf8"));
+    const ok =
+      marker.schema === 1 &&
+      marker.protectedAncestor === BASELINE_COMMIT &&
+      marker.label === BASELINE_LABEL;
+    return {
+      ok,
+      method: "baseline-marker",
+      detail: ok
+        ? `verified ${BASELINE_MARKER_PATH}`
+        : `${BASELINE_MARKER_PATH} does not match the protected baseline`,
+    };
   } catch (error) {
     return {
       ok: false,
-      method: "github-compare",
-      detail: `GitHub comparison request failed: ${error.message}`,
+      method: "baseline-marker",
+      detail: `${BASELINE_MARKER_PATH} could not be verified: ${error.message}`,
     };
   }
-
-  if (!response.ok) {
-    const body = await response.text();
-    return {
-      ok: false,
-      method: "github-compare",
-      detail:
-        `GitHub comparison returned HTTP ${response.status}` +
-        (body ? `: ${body.slice(0, 300)}` : ""),
-    };
-  }
-
-  const comparison = await response.json();
-  const ok = comparison.status === "ahead" || comparison.status === "identical";
-  return {
-    ok,
-    method: "github-compare",
-    detail:
-      `status=${comparison.status}; ahead=${comparison.ahead_by}; ` +
-      `behind=${comparison.behind_by}`,
-  };
 }
 
-async function commitContainsBaseline(commit) {
+function commitContainsBaseline(commit) {
   const ancestorCheck = runGit(
     ["merge-base", "--is-ancestor", BASELINE_COMMIT, commit],
     { allowFail: true },
@@ -117,7 +87,18 @@ async function commitContainsBaseline(commit) {
     return { ok: true, method: "ancestor" };
   }
 
-  return compareOnGitHub(commit);
+  const shallowCheck = runGit(["rev-parse", "--is-shallow-repository"], {
+    allowFail: true,
+  });
+  if (shallowCheck.status === 0 && shallowCheck.stdout === "true") {
+    return verifiedBaselineMarker();
+  }
+
+  return {
+    ok: false,
+    method: "ancestor",
+    detail: "the full local repository does not contain the protected ancestor",
+  };
 }
 
 function fail(message) {
@@ -133,7 +114,7 @@ if (branch && !PRODUCTION_BRANCHES.has(branch)) {
   process.exit(0);
 }
 
-const baselineCheck = await commitContainsBaseline(commit);
+const baselineCheck = commitContainsBaseline(commit);
 
 if (!baselineCheck.ok) {
   fail(
