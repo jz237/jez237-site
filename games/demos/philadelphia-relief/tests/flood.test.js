@@ -23,26 +23,68 @@ async function loadPack(stem) {
 }
 
 function checkPack(manifest, decoded) {
+  assert.equal(manifest.format, 'PHF2');
   assert.equal(decoded.count, Object.values(manifest.kept).reduce((a, b) => a + b, 0));
   const [west, south, east, north] = manifest.bounds;
   assert.deepEqual(decoded.bounds, { west, south, east, north });
   let vertices = 0;
+  let holes = 0;
   let area = 0;
+  const checkRing = (ring) => {
+    assert.ok(ring.length >= 4);
+    assert.deepEqual(ring[0], ring[ring.length - 1], 'rings are closed');
+    for (const [lon, lat] of ring) {
+      assert.ok(lon >= west && lon <= east && lat >= south && lat <= north, 'inside the region');
+    }
+    vertices += ring.length - 1;
+  };
   for (const [cls, polys] of decoded.classes) {
     assert.ok(cls < manifest.classes.length, `class ${cls} named in the manifest`);
     assert.equal(polys.length, manifest.kept[manifest.classes[cls]]);
-    for (const { ring } of polys) {
-      assert.ok(ring.length >= 4);
-      assert.deepEqual(ring[0], ring[ring.length - 1], 'rings are closed');
-      for (const [lon, lat] of ring) {
-        assert.ok(lon >= west && lon <= east && lat >= south && lat <= north, 'inside the region');
+    for (const poly of polys) {
+      checkRing(poly.ring);
+      area += ringAreaKm2(poly.ring);
+      for (const hole of poly.holes) {
+        checkRing(hole);
+        area -= ringAreaKm2(hole);
       }
-      vertices += ring.length - 1;
-      area += ringAreaKm2(ring);
+      holes += poly.holes.length;
     }
   }
   assert.equal(vertices, manifest.vertices);
+  assert.equal(holes, manifest.holes);
+  assert.equal(decoded.holes, manifest.holes);
   return area;
+}
+
+/**
+ * Earcut fidelity: the triangles of every polygon must cover its area (outer
+ * minus holes) within a small tolerance. This is the check that caught the
+ * old ear clipper filling concave floodplains with wedges.
+ */
+async function checkTriangulation(decoded, label) {
+  const THREE = await import('../vendor/three.module.min.js');
+  const { triangulateWithHoles } = await import('../src/vectors.js');
+  const mLon = 111320 * Math.cos((39.95 * Math.PI) / 180);
+  const mLat = 111033;
+  const local = (ring) => ring.slice(0, -1).map(([lon, lat]) => [lon * mLon, lat * mLat]);
+  const area2 = (a, b, c) => Math.abs((b[0] - a[0]) * (c[1] - a[1]) - (c[0] - a[0]) * (b[1] - a[1])) / 2;
+  let bad = 0;
+  let total = 0;
+  for (const polys of decoded.classes.values()) {
+    for (const poly of polys) {
+      const outer = local(poly.ring);
+      const holes = poly.holes.map(local);
+      const pts = [...outer, ...holes.flat()];
+      const tris = triangulateWithHoles(THREE.ShapeUtils.triangulateShape, THREE, outer, holes);
+      let covered = 0;
+      for (let i = 0; i < tris.length; i += 3) covered += area2(pts[tris[i]], pts[tris[i + 1]], pts[tris[i + 2]]);
+      const want = (ringAreaKm2(poly.ring) - poly.holes.reduce((a, h) => a + ringAreaKm2(h), 0)) * 1e6;
+      total += 1;
+      if (want > 20000 && Math.abs(covered - want) > want * 0.03) bad += 1;
+    }
+  }
+  assert.ok(bad <= Math.ceil(total * 0.01), `${label}: ${bad} of ${total} polygons mis-triangulated`);
 }
 
 test('FEMA flood zones', { skip: !existsSync(new URL('fema-nfhl.bin', dataDir)) }, async (t) => {
@@ -54,6 +96,11 @@ test('FEMA flood zones', { skip: !existsSync(new URL('fema-nfhl.bin', dataDir)) 
     assert.ok(manifest.kept.sfha > 1000 && manifest.kept.moderate > 500 && manifest.kept.coastal > 10);
     assert.ok(area > 500 && area < 2000, `plausible flooded area ${area.toFixed(0)} km²`);
     assert.ok(manifest.bytes < 1.6e6, 'the shipped file stays small');
+  });
+
+  await t.test('every polygon triangulates to its own area', async () => {
+    await checkTriangulation(decoded, 'FEMA');
+    assert.ok(manifest.holes > 50, `FEMA zones keep their islands (${manifest.holes} holes)`);
   });
 
   await t.test('carries its provenance and caveats', () => {
@@ -86,6 +133,10 @@ test('NOAA sea level rise', { skip: !existsSync(new URL('noaa-slr.bin', dataDir)
     }
   });
 
+  await t.test('every scenario polygon triangulates to its own area', async () => {
+    await checkTriangulation(decoded, 'NOAA');
+  });
+
   await t.test('quotes NOAA use constraint and datum', () => {
     assert.match(manifest.source.credit, /NOAA/);
     assert.match(manifest.source.useConstraint, /scale of potential flooding, not the exact location/);
@@ -105,7 +156,7 @@ test('flood decoder rejects junk', () => {
 function HEADER_LIKE() {
   const buf = new ArrayBuffer(44);
   const v = new DataView(buf);
-  [80, 72, 70, 49].forEach((c, i) => v.setUint8(i, c));
+  [80, 72, 70, 50].forEach((c, i) => v.setUint8(i, c));
   v.setUint32(4, 1, true);
   v.setFloat64(8, -75.8, true); v.setFloat64(16, 39.7, true);
   v.setFloat64(24, -74.7, true); v.setFloat64(32, 40.6, true);

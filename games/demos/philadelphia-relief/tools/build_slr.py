@@ -88,14 +88,36 @@ def extract(zip_path: pathlib.Path) -> pathlib.Path:
 
 
 def rings_from_geometry(geom) -> list:
-    """Outer rings (lon/lat tuples) of a shapely Polygon/MultiPolygon."""
+    """(outer, [holes]) ring groups, lon/lat tuples, of a shapely Polygon/MultiPolygon.
+
+    Holes matter here: NOAA's inundation polygons wrap islands of higher
+    ground, which must stay dry on the map."""
     polys = list(geom.geoms) if hasattr(geom, "geoms") else [geom]
     out = []
     for poly in polys:
         if poly.is_empty:
             continue
-        out.append([(x, y) for x, y in poly.exterior.coords])
+        out.append(([(x, y) for x, y in poly.exterior.coords],
+                    [[(x, y) for x, y in hole.coords] for hole in poly.interiors]))
     return out
+
+
+MIN_HOLE_M2 = 1500.0
+
+
+def finish_ring(ring, simplify_m: float) -> list | None:
+    """Clip a ring to the region, simplify and close it; None when nothing is left."""
+    if len(ring) < 4:
+        return None
+    pts = clip_polygon(ring)
+    if len(pts) < 4:
+        return None
+    simp = round_coords(simplify(pts, simplify_m), 5)
+    if len(simp) < 4:
+        return None
+    if simp[0] != simp[-1]:
+        simp.append(simp[0])
+    return simp
 
 
 def main() -> int:
@@ -137,24 +159,25 @@ def main() -> int:
                 if geom is None or geom.is_empty:
                     continue
                 geom = shapely.simplify(geom, tol_deg, preserve_topology=True)
-                for ring in rings_from_geometry(geom):
-                    if len(ring) < 4:
+                for outer_ring, hole_rings in rings_from_geometry(geom):
+                    outer = finish_ring(outer_ring, SIMPLIFY_M * 0.5)
+                    if outer is None:
                         continue
-                    pts = clip_polygon(ring)
-                    if len(pts) < 4:
-                        continue
-                    area = ring_area_m2(pts)
+                    area = ring_area_m2(outer)
                     if area < MIN_AREA_M2:
                         continue
-                    simp = round_coords(simplify(pts, SIMPLIFY_M * 0.5), 5)
-                    if len(simp) < 4:
-                        continue
-                    if simp[0] != simp[-1]:
-                        simp.append(simp[0])
+                    holes = []
+                    for hole_ring in hole_rings:
+                        hole = finish_ring(hole_ring, SIMPLIFY_M * 0.5)
+                        if hole is None or ring_area_m2(hole) < MIN_HOLE_M2:
+                            continue
+                        holes.append(hole)
+                        area -= ring_area_m2(hole)
                     features.append({
                         "type": "Feature",
-                        "properties": {"ft": ft, "st": state, "a": int(area)},
-                        "geometry": {"type": "Polygon", "coordinates": [simp]},
+                        "properties": {"ft": ft, "st": state, "a": int(max(0, area)),
+                                       "holes": len(holes)},
+                        "geometry": {"type": "Polygon", "coordinates": [outer, *holes]},
                     })
                     kept += 1
             stats[f"{state}_{ft}ft"] = {"source": len(wkbs), "kept": kept}
@@ -175,8 +198,9 @@ def main() -> int:
                              "during the highest high tides with the sea level rise amount.",
             "datum": "feet above current mean higher high water (MHHW)",
             "fetched": time.strftime("%Y-%m-%d"),
-            "note": "Clipped to the map region and simplified to ~15 m; low-lying "
-                    "(hydrologically disconnected) areas are not included.",
+            "note": "Clipped to the map region and simplified to ~15 m, holes (islands of "
+                    "higher ground) kept; low-lying hydrologically disconnected areas are "
+                    "not included.",
         },
         "scenariosFt": SCENARIOS_FT,
         "stats": stats,

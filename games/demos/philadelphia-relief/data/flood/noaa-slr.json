@@ -148,9 +148,9 @@
    "kept": 3
   }
  },
- "format": "PHF1",
+ "format": "PHF2",
  "file": "noaa-slr.bin",
- "bytes": 464573,
+ "bytes": 293076,
  "classes": [
   "1ft",
   "2ft",
@@ -162,16 +162,17 @@
   "10ft"
  ],
  "kept": {
-  "1ft": 7,
-  "2ft": 13,
-  "3ft": 12,
-  "4ft": 11,
-  "5ft": 15,
-  "6ft": 18,
-  "8ft": 9,
-  "10ft": 12
+  "1ft": 4,
+  "2ft": 11,
+  "3ft": 11,
+  "4ft": 8,
+  "5ft": 14,
+  "6ft": 17,
+  "8ft": 8,
+  "10ft": 11
  },
- "vertices": 116012,
+ "vertices": 73082,
+ "holes": 60,
  "minAreaM2": 6000.0,
  "simplifyM": 20.0,
  "bounds": [

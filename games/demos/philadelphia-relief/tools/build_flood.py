@@ -55,6 +55,7 @@ GROUPS = [
 ]
 
 MIN_AREA_M2 = 4000.0
+MIN_HOLE_M2 = 1500.0
 SIMPLIFY_M = 18.0
 
 
@@ -139,50 +140,122 @@ def fetch_all(where: str, refresh: bool) -> list:
     return features
 
 
+def shoelace(ring) -> float:
+    area = 0.0
+    for i in range(len(ring) - 1):
+        area += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1]
+    return area
+
+
+def point_in_ring(x: float, y: float, ring) -> bool:
+    inside = False
+    for i in range(len(ring) - 1):
+        x1, y1 = ring[i]
+        x2, y2 = ring[i + 1]
+        if (y1 > y) != (y2 > y):
+            if x < x1 + (y - y1) * (x2 - x1) / (y2 - y1):
+                inside = not inside
+    return inside
+
+
 def rings_of(geom: dict) -> list:
-    """Outer rings of an Esri JSON polygon (rings are clockwise for outers)."""
+    """(outer, [holes]) groups of an Esri JSON polygon.
+
+    Esri rings are clockwise for outers (negative shoelace in lon/lat) and
+    counter-clockwise for holes; each hole belongs to the outer that contains
+    its first vertex. Holes matter: a floodplain wraps islands of higher ground."""
     if not geom:
         return []
-    rings = geom.get("rings") or []
-    outers = []
-    for ring in rings:
-        if len(ring) < 4:
+    rings = [r for r in (geom.get("rings") or []) if len(r) >= 4]
+    outers = [r for r in rings if shoelace(r) <= 0]
+    holes = [r for r in rings if shoelace(r) > 0]
+    if not outers:
+        return [(r, []) for r in rings[:1]]
+    groups = [(outer, []) for outer in outers]
+    for hole in holes:
+        x, y = hole[0]
+        for outer, hs in groups:
+            if point_in_ring(x, y, outer):
+                hs.append(hole)
+                break
+    return groups
+
+
+def load_cached_features() -> dict:
+    """Every feature in the response cache, deduped by OBJECTID and classified
+    by its own attributes, for a rebuild without touching FEMA's servers."""
+    by_code = {code: [] for code, _w, _l in GROUPS}
+    seen = set()
+    for path in sorted(CACHE.glob("*.json")):
+        try:
+            payload = json.loads(path.read_text())
+        except json.JSONDecodeError:
             continue
-        # Esri: clockwise = outer ring (in lon/lat terms, negative shoelace).
-        area = 0.0
-        for i in range(len(ring) - 1):
-            area += ring[i][0] * ring[i + 1][1] - ring[i + 1][0] * ring[i][1]
-        if area <= 0:
-            outers.append(ring)
-    return outers or rings[:1]
+        for f in payload.get("features", []) if isinstance(payload, dict) else []:
+            attrs = f.get("attributes") or {}
+            oid = attrs.get("OBJECTID")
+            if oid is None or oid in seen:
+                continue
+            zone = attrs.get("FLD_ZONE")
+            subty = attrs.get("ZONE_SUBTY") or ""
+            if zone in ("AE", "A", "AO", "AH"):
+                code = "sfha"
+            elif zone == "VE":
+                code = "coastal"
+            elif zone == "X" and subty.startswith("0.2 PCT"):
+                code = "moderate"
+            else:
+                continue
+            seen.add(oid)
+            by_code[code].append(f)
+    return by_code
 
 
 def main() -> int:
     ap = argparse.ArgumentParser()
     ap.add_argument("--refresh", action="store_true")
+    ap.add_argument("--from-cache", action="store_true",
+                    help="rebuild from every cached response instead of querying")
     args = ap.parse_args()
 
     OUT.mkdir(parents=True, exist_ok=True)
     out_features = []
     counts = {}
     bfe_count = 0
+    hole_count = 0
+    cached = load_cached_features() if args.from_cache else None
+
+    def finish(ring, tol):
+        pts = clip_polygon([tuple(p) for p in ring])
+        if len(pts) < 4:
+            return None
+        simp = round_coords(simplify(pts, tol), 5)
+        if len(simp) < 4:
+            return None
+        if simp[0] != simp[-1]:
+            simp.append(simp[0])
+        return simp
+
     for code, where, label in GROUPS:
-        raw = fetch_all(where, args.refresh)
+        raw = cached[code] if cached is not None else fetch_all(where, args.refresh)
         kept = 0
         for f in raw:
             props = f.get("attributes", {}) or {}
-            for ring in rings_of(f.get("geometry")):
-                pts = clip_polygon([tuple(p) for p in ring])
-                if len(pts) < 4:
+            for outer_ring, hole_rings in rings_of(f.get("geometry")):
+                simp = finish(outer_ring, SIMPLIFY_M)
+                if simp is None:
                     continue
-                area = ring_area_m2(pts)
+                area = ring_area_m2(simp)
                 if area < MIN_AREA_M2:
                     continue
-                simp = round_coords(simplify(pts, SIMPLIFY_M), 5)
-                if len(simp) < 4:
-                    continue
-                if simp[0] != simp[-1]:
-                    simp.append(simp[0])
+                holes = []
+                for hole_ring in hole_rings:
+                    hole = finish(hole_ring, SIMPLIFY_M)
+                    if hole is None or ring_area_m2(hole) < MIN_HOLE_M2:
+                        continue
+                    holes.append(hole)
+                    area -= ring_area_m2(hole)
+                hole_count += len(holes)
                 bfe = props.get("STATIC_BFE")
                 has_bfe = isinstance(bfe, (int, float)) and bfe > -9000
                 if has_bfe:
@@ -193,9 +266,10 @@ def main() -> int:
                         "c": code,
                         "z": props.get("FLD_ZONE"),
                         "bfe": round(float(bfe), 1) if has_bfe else None,
-                        "a": int(area),
+                        "a": int(max(0, area)),
+                        "holes": len(holes),
                     },
-                    "geometry": {"type": "Polygon", "coordinates": [simp]},
+                    "geometry": {"type": "Polygon", "coordinates": [simp, *holes]},
                 })
                 kept += 1
         counts[code] = {"fetched": len(raw), "kept": kept, "label": label}
@@ -210,13 +284,15 @@ def main() -> int:
             "license": "US federal government work; public domain. Cite as FEMA NFHL.",
             "note": "The effective FIRM is the regulatory product; this is a simplified "
                     "visualisation of the NFHL as served on the build date, clipped to the "
-                    "map region and simplified to ~18 m. Not for insurance, permitting or "
+                    "map region and simplified to ~18 m, holes (islands of higher ground) kept. "
+                    "Not for insurance, permitting or "
                     "engineering decisions.",
             "fetched": time.strftime("%Y-%m-%d"),
         },
         "classes": {code: label for code, _w, label in GROUPS},
         "counts": counts,
         "withBaseFloodElevation": bfe_count,
+        "holes": hole_count,
         "features": out_features,
     }
     # The GeoJSON is kept beside the cache for inspection; the browser gets
