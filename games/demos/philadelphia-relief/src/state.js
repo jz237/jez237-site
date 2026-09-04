@@ -7,7 +7,7 @@
  * — presets, layer toggles, URL round-trips — without a browser.
  */
 
-import { defaults, coercePatch, CHEAP_KEYS, LAYERS } from './schema.js?v=philly-2026090405';
+import { defaults, coercePatch, CHEAP_KEYS, LAYERS } from './schema.js?v=philly-2026090406';
 
 export function createStore(initial = {}) {
   let state = { ...defaults() };

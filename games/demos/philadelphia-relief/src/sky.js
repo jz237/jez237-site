@@ -7,7 +7,7 @@
  * as atmosphere rather than as a model on a backdrop.
  */
 
-import { hexToRgb, getTheme } from './themes.js?v=philly-2026090405';
+import { hexToRgb, getTheme } from './themes.js?v=philly-2026090406';
 
 const SKY_VERTEX = /* glsl */ `
   varying vec3 vDir;
