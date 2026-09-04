@@ -61,12 +61,22 @@ def clean_polygon(rings: list, simplify_m: float) -> list:
     poly = poly.simplify(tol, preserve_topology=True)
     if not poly.is_valid:
         poly = poly.buffer(0)
-    parts = list(poly.geoms) if hasattr(poly, "geoms") else [poly]
+    # make_valid may hand back a GeometryCollection holding a MultiPolygon
+    # (plus stray lines); flatten it all the way down to polygons or the
+    # largest inundation polygons vanish.
     out = []
-    for part in parts:
-        if part.geom_type != "Polygon" or part.is_empty or part.area <= 0:
-            continue
-        out.append([list(part.exterior.coords)] + [list(h.coords) for h in part.interiors])
+
+    def collect(geom):
+        if geom.is_empty:
+            return
+        if geom.geom_type == "Polygon":
+            if geom.area > 0:
+                out.append([list(geom.exterior.coords)] + [list(h.coords) for h in geom.interiors])
+        elif hasattr(geom, "geoms"):
+            for g in geom.geoms:
+                collect(g)
+
+    collect(poly)
     return out
 
 
@@ -105,7 +115,18 @@ def pack(features: list, classes: list, class_of, value_of, min_area: float,
         if ring_area_m2(rings[0]) < min_area:
             continue
         value = value_of(f)
-        for part in clean_polygon(rings, simplify_m):
+        # A ring is stored with a 16-bit vertex count. A marsh coastline at
+        # 15 m can run past 65,535 points, so coarsen that polygon alone
+        # until every ring fits rather than drop it (which once lost most
+        # of NOAA's 4 ft scenario) or bloat the format.
+        tol = simplify_m
+        parts = clean_polygon(rings, tol)
+        for _ in range(8):
+            if all(len(ring) <= 65000 for part in parts for ring in part):
+                break
+            tol *= 1.5
+            parts = clean_polygon(rings, tol)
+        for part in parts:
             if ring_area_m2(part[0]) < min_area:
                 continue
             packed_rings = []

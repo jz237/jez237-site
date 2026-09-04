@@ -29,7 +29,7 @@
   }
  },
  "withBaseFloodElevation": 708,
- "holes": 886,
+ "holes": 896,
  "classLabels": {
   "sfha": "1% annual-chance flood (Special Flood Hazard Area)",
   "coastal": "1% annual-chance coastal high hazard (wave action)",
@@ -37,13 +37,13 @@
  },
  "format": "PHF2",
  "file": "fema-nfhl.bin",
- "bytes": 700021,
+ "bytes": 706445,
  "kept": {
-  "sfha": 4554,
+  "sfha": 4582,
   "coastal": 55,
-  "moderate": 1890
+  "moderate": 1902
  },
- "vertices": 163179,
+ "vertices": 164710,
  "minAreaM2": 10000.0,
  "simplifyM": 25.0,
  "bounds": [
