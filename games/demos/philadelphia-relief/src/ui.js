@@ -6,13 +6,13 @@
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090404';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090404';
-import { getEra } from './eras.js?v=philly-2026090404';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090404';
-import { TOURS } from './tours.js?v=philly-2026090404';
-import { ERAS } from './eras.js?v=philly-2026090404';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090404';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090405';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090405';
+import { getEra } from './eras.js?v=philly-2026090405';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090405';
+import { TOURS } from './tours.js?v=philly-2026090405';
+import { ERAS } from './eras.js?v=philly-2026090405';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090405';
 
 const ENUM_LABELS = {
   theme: (v) => getTheme(v).label,
@@ -552,6 +552,7 @@ export function createCard(options) {
       return i ? [document.createTextNode(' · '), a] : [a];
     }));
     note.textContent = card.note || (card.model ? 'Schematic model' : 'Real footprint');
+    fly.textContent = card.building ? 'Zoom to roof' : 'Fly here';
     node.hidden = false;
     // Toasts share the bottom edge on phones; tell the stylesheet how tall
     // the card is so they can sit above it.

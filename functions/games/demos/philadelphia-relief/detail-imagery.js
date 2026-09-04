@@ -10,6 +10,7 @@ const REGION = {
 const TIERS = {
   detail: { span: { lon: 0.096, lat: 0.072 }, grid: { lon: 0.04, lat: 0.03 } },
   ultra: { span: { lon: 0.032, lat: 0.024 }, grid: { lon: 0.012, lat: 0.009 } },
+  rooftop: { span: { lon: 0.012, lat: 0.009 }, grid: { lon: 0.0045, lat: 0.0035 } },
 };
 const ALLOWED_SIZES = new Set([2048, 4096]);
 const CACHE_SECONDS = 30 * 24 * 60 * 60;

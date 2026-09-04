@@ -54,19 +54,21 @@ for (const view of views) {
   });
   page.on('pageerror', (error) => problems.push(`[${view.id}] page: ${error.message}`));
 
-  await page.goto(`${URL}#q=balanced&d=2500&id=maximum`,
+  await page.goto(`${URL}#q=balanced&x=-75.1636&y=39.9526&d=1&p=0&b=0&id=maximum`,
     { waitUntil: 'load', timeout: 60000 });
   await page.waitForFunction(() => !document.getElementById('loading'), { timeout: 60000 });
   if (await page.locator('#obStart').isVisible().catch(() => false)) {
     await page.locator('#obStart').click();
   }
-  const ultra = await page.waitForFunction(() => {
+  const rooftop = await page.waitForFunction(() => {
     const detail = window.philadelphiaRelief?.stats().imagery.detail;
-    return detail?.state === 'active' && detail.tier === 'ultra' ? detail : null;
+    return detail?.state === 'active' && detail.tier === 'rooftop' ? detail : null;
   }, { timeout: 60000 }).then((handle) => handle.jsonValue()).catch(() => null);
-  check(ultra && ultra.size === 4096 && ultra.resolutionM < 0.8,
-    `[${view.id}] maximum ultra detail missing: ${JSON.stringify(ultra)}`);
-  await page.screenshot({ path: path.join(OUT, `${view.id}-01-ultra.png`) });
+  const floorPose = await page.evaluate(() => window.philadelphiaRelief?.stats().camera);
+  check(rooftop && rooftop.size === 4096 && rooftop.resolutionM < 0.3
+    && floorPose?.dist >= 179 && floorPose.dist <= 181,
+    `[${view.id}] maximum roof detail missing: ${JSON.stringify(rooftop)}`);
+  await page.screenshot({ path: path.join(OUT, `${view.id}-01-rooftop.png`) });
 
   await clickOption(page, 'imageryDetail', 'Data Saver');
   const saver = await page.waitForFunction(() => {
@@ -151,6 +153,26 @@ for (const view of views) {
   check(picked.selected && picked.title === 'Selected building' && !picked.hidden
     && /Not included/.test(picked.facts) && picked.inside && !picked.overflow,
   `[${view.id}] building inspection failed: ${JSON.stringify(picked)}`);
+  const roofButton = await page.locator('#cardFly').textContent();
+  check(roofButton === 'Zoom to roof', `[${view.id}] roof zoom action missing: ${roofButton}`);
+  await clickOption(page, 'imageryDetail', 'Maximum Detail');
+  await page.locator('#cardFly').click();
+  const roofPose = await page.waitForFunction(() => {
+    const stats = window.philadelphiaRelief?.stats();
+    return stats?.camera?.dist <= 600 && stats.imagery.detail?.tier === 'rooftop'
+      && stats.imagery.detail.state === 'active' ? stats : null;
+  }, { timeout: 60000 }).then((handle) => handle.jsonValue()).catch(() => null);
+  check(roofPose?.camera?.dist <= 600 && roofPose.imagery.detail.resolutionM < 0.3,
+    `[${view.id}] building roof flight failed: ${JSON.stringify(roofPose)}`);
+  const mapBox = await page.locator('#canvas').boundingBox();
+  await page.mouse.move(mapBox.x + mapBox.width / 2, mapBox.y + mapBox.height / 2);
+  for (let i = 0; i < 4; i += 1) await page.mouse.wheel(0, -1200);
+  const manualFloor = await page.waitForFunction(() => {
+    const camera = window.philadelphiaRelief?.stats().camera;
+    return camera?.dist <= 181 ? camera : null;
+  }, { timeout: 10000 }).then((handle) => handle.jsonValue()).catch(() => null);
+  check(manualFloor?.dist >= 179 && manualFloor.dist <= 181,
+    `[${view.id}] wheel zoom did not reach the 180 m floor: ${JSON.stringify(manualFloor)}`);
   await page.screenshot({ path: path.join(OUT, `${view.id}-06-building-card.png`) });
   await context.close();
 }
@@ -160,6 +182,6 @@ if (problems.length) {
   console.error(`FAILED — ${problems.length} problem(s)\n  - ${problems.join('\n  - ')}`);
   process.exitCode = 1;
 } else {
-  console.log('PASSED — ultra detail, data modes, comparisons, hybrid buildings and inspection.');
+  console.log('PASSED — rooftop detail, data modes, comparisons, hybrid buildings and inspection.');
 }
 console.log(`screenshots: ${OUT}`);
