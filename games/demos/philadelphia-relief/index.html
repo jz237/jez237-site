@@ -200,7 +200,7 @@
   <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="obTitle">
     <h2 id="obTitle">Philadelphia, in relief</h2>
     <p>
-      Real elevation for Philadelphia and its suburbs, with 14,500 real building
+      Real elevation for Philadelphia and its suburbs, with 17,300 real building
       footprints standing on it — the Center City skyline, the rowhouse grid and the Delaware
       bridges. The land here is subtle, about 380 m of relief across 94 km, so the
       vertical scale is exaggerated to make it legible.
@@ -259,9 +259,10 @@
       <div>
         <dt>Buildings</dt>
         <dd>
-          <b id="aboutBuildingCount">—</b> OpenStreetMap footprints in two detail
-          zones: every building in Center City and University City, and only the
-          notable ones (tall, large or named) across inner Philadelphia and Camden.
+          <b id="aboutBuildingCount">—</b> OpenStreetMap footprints in two core detail
+          zones — every building in Center City and University City, and only the
+          notable ones (tall, large or named) across inner Philadelphia and Camden —
+          plus eight suburban zones described below.
           <b id="aboutMeasuredPct">—</b> carry a measured OSM height, most of it
           from the City of Philadelphia's LiDAR-derived footprint import;
           <b id="aboutEstimatedPct">—</b> are estimated from storey counts or
@@ -269,6 +270,12 @@
           towers with no height in OSM (One Liberty Place, Comcast Center and their
           neighbours) use public reference heights supplied by this project, plus
           the City Hall tower as a curated box.
+        
+          Eight suburban zones (King of Prussia, the Main Line, Northeast Philadelphia,
+          Cherry Hill, the airport and Chester, Lower Bucks, Trenton, Wilmington) hold
+          notable buildings only and load as you approach them.
+          <b>Quality</b> defaults to <b>Auto</b>: the map steps its own detail down when the
+          frame rate stays low and back up when there is headroom; pick a level to override it.
         </dd>
       </div>
       <div>

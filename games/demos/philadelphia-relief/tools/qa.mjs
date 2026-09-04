@@ -167,12 +167,67 @@ async function run() {
       problems.push(`[${viewport.id}] first frame has no rowhouse tier loaded at balanced quality`);
     }
     if (probe.degraded) problems.push(`[${viewport.id}] degraded banner shown: ${probe.degradedText}`);
+    // Progressive suburbs: the opening skyline (camera south-west of City
+    // Hall, looking north-east, 6.5 km out) must not have fetched the zones
+    // behind or far from it. Zones in the view direction may legitimately load.
+    const eagerOnly = ['wilmington', 'trenton', 'schuylkill-valley', 'airport-chester', 'main-line'];
+    const leaked = (first?.zones || []).filter((z) => eagerOnly.includes(z));
+    if (leaked.length) problems.push(`[${viewport.id}] suburbs fetched at the opening shot: ${leaked}`);
+    report.push(`[${viewport.id}] zones at first frame: ${JSON.stringify(first?.zones)}`);
 
     const shot = (name) => page.screenshot({
       path: path.join(OUT, `${viewport.id}-${name}.png`),
     });
 
     await shot('01-first-frame');
+
+    // Adaptive quality: the default setting is "auto". Under SwiftShader the
+    // frame rate sits well under the floor, so the controller must step the
+    // effective quality down within its window, drop the rowhouse tier, and
+    // say so in the readout. This is the one place the pass runs on "auto".
+    if (first?.quality !== 'auto' || first?.effectiveQuality !== 'balanced') {
+      problems.push(`[${viewport.id}] first load is not auto/balanced: ${first?.quality}/${first?.effectiveQuality}`);
+    }
+    const adapted = await page.waitForFunction(() => {
+      const s = window.philadelphiaRelief?.stats();
+      return s?.adaptive?.steps?.length >= 1 ? s : null;
+    }, { timeout: 25000 }).then((h) => h.jsonValue()).catch(() => null);
+    if (!adapted) {
+      problems.push(`[${viewport.id}] adaptive quality never stepped down under a slow renderer`);
+    } else {
+      if (adapted.effectiveQuality !== 'performance' || adapted.adaptive.level !== 'performance') {
+        problems.push(`[${viewport.id}] adaptive stepped to ${adapted.effectiveQuality}, expected performance`);
+      }
+      await page.waitForTimeout(2500);
+      const after = await page.evaluate(() => ({
+        tiers: window.philadelphiaRelief.stats().structureTiers,
+        note: document.querySelector('#studioGroups .control-value')
+          ? [...document.querySelectorAll('#studioGroups .control-value')].map((n) => n.textContent)
+            .find((t) => /^Auto/.test(t)) : null,
+      }));
+      if (after.tiers.some((t) => t.endsWith('/low'))) {
+        problems.push(`[${viewport.id}] low tier still loaded after stepping to performance: ${after.tiers}`);
+      }
+      if ((after.note || '') !== 'Auto · Performance') {
+        problems.push(`[${viewport.id}] quality readout does not show the effective level: "${after.note}"`);
+      }
+      report.push(`[${viewport.id}] adaptive: ${JSON.stringify(adapted.adaptive.steps)} -> tiers ${JSON.stringify(after.tiers)}`);
+    }
+    await shot('01b-adapted-quality');
+
+    // The rest of the pass pins the quality by hand so tier counts and pixel
+    // ratios are deterministic; that is the manual override in use.
+    await page.goto(URL + '#q=balanced', { waitUntil: 'load', timeout: 60000 });
+    await page.waitForFunction(() => !document.getElementById('loading'), { timeout: 60000 })
+      .catch(() => problems.push(`[${viewport.id}] loading overlay never cleared (manual reload)`));
+    await page.waitForTimeout(2500);
+    const manual = await page.evaluate(() => window.philadelphiaRelief?.stats() || null);
+    if (manual?.quality !== 'balanced' || manual?.adaptive !== null || manual?.effectiveQuality !== 'balanced') {
+      problems.push(`[${viewport.id}] manual quality override not honoured: ${JSON.stringify({ q: manual?.quality, e: manual?.effectiveQuality, a: manual?.adaptive })}`);
+    }
+    if (!manual?.structureTiers?.some((t) => t.endsWith('/low'))) {
+      problems.push(`[${viewport.id}] manual balanced did not load the rowhouse tier`);
+    }
 
     // ---- scripted interaction pass ----------------------------------------
     if (!viewport.isMobile) {
@@ -518,7 +573,9 @@ async function run() {
 async function structuresPass(page, viewport, shot, problems, report) {
   const stats = () => page.evaluate(() => window.philadelphiaRelief?.stats() || null);
   const goto = async (hash, settle = 3600) => {
-    await page.evaluate((h) => { window.location.hash = h; }, hash);
+    // Pin the quality unless the route sets it: these checks count tiers.
+    const h = /(^|&)q=/.test(hash) ? hash : `${hash}&q=balanced`;
+    await page.evaluate((x) => { window.location.hash = x; }, h);
     await page.waitForTimeout(settle);
   };
   const bridges = await page.evaluate(async () => {
@@ -560,10 +617,13 @@ async function structuresPass(page, viewport, shot, problems, report) {
     if (s.structures.drawnBuildings < view.minBuildings) {
       problems.push(`[${viewport.id}] ${view.id}: only ${s.structures.drawnBuildings} buildings drawn`);
     }
-    if (s.structures.drawCalls > 10) {
-      problems.push(`[${viewport.id}] ${view.id}: ${s.structures.drawCalls} structure draw calls`);
+    // One call per zone tier in view, plus bridges (2) and landmark models (1).
+    const callBudget = 3 * (s.zones?.length || 2) + 3;
+    if (s.structures.drawCalls > callBudget) {
+      problems.push(`[${viewport.id}] ${view.id}: ${s.structures.drawCalls} structure draw calls `
+        + `(budget ${callBudget} for zones ${JSON.stringify(s.zones)})`);
     }
-    if (s.drawCalls > 40) problems.push(`[${viewport.id}] ${view.id}: ${s.drawCalls} total draw calls`);
+    if (s.drawCalls > 30 + callBudget) problems.push(`[${viewport.id}] ${view.id}: ${s.drawCalls} total draw calls`);
     await shot(`11-structures-${view.id}`);
   }
 
@@ -644,6 +704,22 @@ async function structuresPass(page, viewport, shot, problems, report) {
     problems.push(`[${viewport.id}] Home shows only ${home?.structures?.drawnBuildings} buildings`);
   }
   await shot('16-route-home');
+
+  // Suburban zones are lazy: King of Prussia's notable buildings arrive once
+  // the camera gets there (the first-frame check above proves they were not
+  // fetched up front).
+  await goto('#x=-75.383&y=40.089&d=7000&b=20&p=60', 6000);
+  const kop = await stats();
+  if (!(kop?.zones || []).includes('schuylkill-valley')
+      || !(kop?.structureTiers || []).some((t) => t.startsWith('schuylkill-valley/'))) {
+    problems.push(`[${viewport.id}] King of Prussia zone did not load: zones ${kop?.zones}, tiers ${kop?.structureTiers}`);
+  }
+  if (!(kop?.structures?.drawnBuildings > 20)) {
+    problems.push(`[${viewport.id}] King of Prussia shows ${kop?.structures?.drawnBuildings} buildings`);
+  }
+  report.push(`[${viewport.id}] King of Prussia: zones ${JSON.stringify(kop?.zones)}, `
+    + `${kop?.structures?.drawnBuildings} buildings drawn`);
+  await shot('18-suburb-king-of-prussia');
 
   // Clicking a schematic model (a press that neither moves nor lingers)
   // opens its card. Independence Hall sits at the orbit target, so the

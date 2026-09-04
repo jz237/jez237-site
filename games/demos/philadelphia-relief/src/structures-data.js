@@ -236,6 +236,29 @@ export function heightScale(exaggeration, structureHeight) {
 }
 
 /** Nearest distance from a point (world xz) to an axis-aligned zone box. */
+/**
+ * Metres from a lon/lat point to a zone's bounds (0 inside), on the same
+ * flat-earth scale the projection uses.
+ */
+export function zoneReachM(bounds, lon, lat) {
+  const mLon = 111320 * Math.cos(((bounds.south + bounds.north) / 2) * (Math.PI / 180));
+  const dx = lon < bounds.west ? bounds.west - lon : lon > bounds.east ? lon - bounds.east : 0;
+  const dy = lat < bounds.south ? bounds.south - lat : lat > bounds.north ? lat - bounds.north : 0;
+  return Math.hypot(dx * mLon, dy * 111033);
+}
+
+/**
+ * Coarse test for a lazy zone: the orbit target is within `reachM` of it and
+ * the camera is close enough that its buildings would show at all. The
+ * renderer then asks whether the zone's box is actually in the view frustum
+ * before fetching it. Never unloads: a zone you have visited stays warm.
+ */
+export function shouldActivateZone(zone, pose, { reachM = 30000, maxDistM = 45000 } = {}) {
+  if (!zone || !zone.lazy || !zone.bounds || !pose) return false;
+  if (!(pose.dist <= maxDistM)) return false;
+  return zoneReachM(zone.bounds, pose.lon, pose.lat) <= reachM;
+}
+
 export function distanceToBox(x, z, box) {
   const dx = Math.max(box.minX - x, 0, x - box.maxX);
   const dz = Math.max(box.minZ - z, 0, z - box.maxZ);

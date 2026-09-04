@@ -17,6 +17,7 @@ import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, tierRange,
   drawFraction, drawIndexCount, heightScale, distanceToBox, deckProfile, resample,
   TIER_PLAN, TIER_ORDER,
+  zoneReachM, shouldActivateZone,
 } from '../src/structures-data.js';
 import { CONTROLS, LAYERS, defaults, coerce } from '../src/schema.js';
 import { createStore } from '../src/state.js';
@@ -496,5 +497,38 @@ test('structures state plumbing', async (t) => {
     }
     assert.ok(THEMES.noir.structure.glowAmount > THEMES.dusk.structure.glowAmount,
       'night lights the windows');
+  });
+});
+
+// ---------------------------------------------------------------------------
+test('lazy suburban zones', async (t) => {
+  const lazy = manifest.zones.filter((z) => z.lazy);
+  await t.test('the manifest marks the suburbs lazy and keeps the core eager', () => {
+    assert.ok(lazy.length >= 6, `${lazy.length} lazy zones`);
+    for (const id of ['center-city', 'inner-city']) {
+      assert.equal(manifest.zones.find((z) => z.id === id).lazy, false, `${id} must load at start`);
+    }
+    const eagerBytes = manifest.zones.filter((z) => !z.lazy)
+      .reduce((a, z) => a + z.tiers.reduce((b, t) => b + t.bytes, 0), 0);
+    assert.ok(eagerBytes < 0.85e6, `eager payload ${eagerBytes} B`);
+  });
+
+  await t.test('reach is zero inside a zone and grows outside it', () => {
+    const kop = manifest.zones.find((z) => z.id === 'schuylkill-valley');
+    assert.equal(zoneReachM(kop.bounds, -75.38, 40.09), 0);
+    const east = zoneReachM(kop.bounds, kop.bounds.east + 0.1, 40.09);
+    assert.ok(east > 8000 && east < 9000, `0.1 deg east is ~8.5 km, got ${east}`);
+    const cityHall = zoneReachM(kop.bounds, -75.1635, 39.9526);
+    assert.ok(cityHall > 14000 && cityHall < 20000, `City Hall is ${cityHall} m from the zone`);
+  });
+
+  await t.test('activation needs a near target, a low camera and a lazy zone', () => {
+    const kop = manifest.zones.find((z) => z.id === 'schuylkill-valley');
+    assert.equal(shouldActivateZone(kop, { lon: -75.38, lat: 40.09, dist: 7000 }), true);
+    assert.equal(shouldActivateZone(kop, { lon: -75.38, lat: 40.09, dist: 90000 }), false, 'too far out');
+    assert.equal(shouldActivateZone(kop, { lon: -74.75, lat: 40.22, dist: 7000 }), false, 'Trenton is out of reach');
+    const core = manifest.zones.find((z) => z.id === 'center-city');
+    assert.equal(shouldActivateZone(core, { lon: -75.16, lat: 39.95, dist: 7000 }), false, 'core zones are eager');
+    assert.equal(shouldActivateZone(null, { lon: 0, lat: 0, dist: 1 }), false);
   });
 });
