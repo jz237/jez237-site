@@ -23,7 +23,8 @@ export const ERAS = [
   },
   {
     id: '1950s', year: 1955, label: 'The 1950s', short: '1955',
-    note: 'Buildings documented as built by 1955 are solid; documented-newer buildings are gone; '
+    note: 'Modern aerial photography is hidden. Buildings documented as built by 1955 are '
+      + 'solid; documented-newer buildings are gone; '
       + 'the undated majority is ghosted. Only the Benjamin Franklin (1926), Tacony-Palmyra '
       + '(1929) and Burlington-Bristol (1931) bridges cross the Delaware. Motorways are ghosted: '
       + 'the Schuylkill Expressway opened in stages from 1958 and I-95 through the 1960s and 70s.',
@@ -36,7 +37,8 @@ export const ERAS = [
   },
   {
     id: 'industrial', year: 1900, label: 'Industrial city, 1900', short: '1900',
-    note: 'City Hall is rising, Reading Terminal and the rowhouse grid are here, but only buildings '
+    note: 'Modern aerial photography is hidden. City Hall is rising, Reading Terminal and the '
+      + 'rowhouse grid are here, but only buildings '
       + 'documented as built by 1900 are solid; the undated majority is ghosted. No road bridge '
       + 'crossed the Delaware at Philadelphia until 1926, so the river is unbridged. Railways are '
       + 'shown (the first, the Philadelphia and Columbia, opened in 1834); motorways are hidden.',
@@ -49,7 +51,8 @@ export const ERAS = [
   },
   {
     id: '1776', year: 1776, label: '1776', short: '1776',
-    note: 'Only buildings documented as standing by 1776 are solid (Independence Hall, Christ Church, '
+    note: 'Modern aerial photography is hidden. Only buildings documented as standing by 1776 '
+      + 'are solid (Independence Hall, Christ Church, '
       + 'Carpenters\' Hall, Gloria Dei and a few more); everything undated is ghosted. No bridges, no '
       + 'railways, no motorways. The amber outline is the approximate built-up extent of the town '
       + 'and of Germantown, traced from William Faden\'s 1777 plan; it is not a survey. The relief '

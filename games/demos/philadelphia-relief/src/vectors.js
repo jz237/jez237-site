@@ -9,7 +9,7 @@
  * together instead of tearing them apart.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090403';
+import { hexToRgb } from './themes.js?v=philly-2026090404';
 
 const LINE_VERTEX = /* glsl */ `
   attribute vec3  aOther;      // the far end of this segment
@@ -94,11 +94,16 @@ const AREA_FRAGMENT = /* glsl */ `
   uniform float uOpacity;
   uniform vec3  uFogColor;
   uniform float uFogDensity;
+  uniform float uCompareClip;
+  uniform float uComparePosition;
+  uniform float uViewportWidth;
   uniform vec3  uCameraPos;
   varying vec3  vWorld;
   varying float vElev;
 
   void main() {
+    if (uCompareClip > 0.5
+        && gl_FragCoord.x / max(uViewportWidth, 1.0) < uComparePosition) discard;
     float dist = length(vWorld - uCameraPos);
     float depth = dist * uFogDensity * exp(-max(0.0, vElev) / 260.0);
     float fog = 1.0 - exp(-depth * depth);
@@ -432,6 +437,9 @@ export function buildAreaMesh(THREE, rings, ctx, options) {
     uFogColor: { value: new THREE.Vector3() },
     uFogDensity: { value: 1.2e-5 },
     uCameraPos: { value: new THREE.Vector3() },
+    uCompareClip: { value: 0 },
+    uComparePosition: { value: 0.5 },
+    uViewportWidth: { value: 1 },
   };
   if (isWater) {
     uniforms.uShallow = { value: new THREE.Vector3() };

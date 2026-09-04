@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/games/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026090403" />
+<link rel="stylesheet" href="app.css?v=philly-2026090404" />
 </head>
 <body data-theme="dusk">
 
@@ -34,6 +34,19 @@
   <div id="imageryCredit" class="imagery-credit" hidden>
     Aerial imagery: USDA / USGS The National Map
   </div>
+</div>
+
+<!-- ── draggable comparison divider ───────────────────────────────────── -->
+<div id="compareBar" class="compare-bar" hidden>
+  <span id="compareLeft" class="compare-side compare-left">Aerial</span>
+  <label class="visually-hidden" for="compareSlider">Comparison divider</label>
+  <input id="compareSlider" type="range" min="5" max="95" step="1" value="50"
+         aria-label="Move comparison divider" />
+  <div id="compareDivider" class="compare-divider" aria-hidden="true">
+    <span>↔</span>
+  </div>
+  <span id="compareRight" class="compare-side compare-right">Relief</span>
+  <button type="button" id="compareClose" class="compare-close" aria-label="Close comparison">✕</button>
 </div>
 
 <!-- ── loading ─────────────────────────────────────────────────────────── -->
@@ -227,7 +240,7 @@
     <ul class="overlay-hints">
       <li><b>Drag</b> to move, <b>right-drag</b> or <b>two fingers</b> to orbit, <b>scroll</b> or <b>pinch</b> to zoom</li>
       <li><b>Aerial imagery</b> opens by default; enable <b>3D buildings &amp; bridges</b> when you want the modelled skyline</li>
-      <li><b>Press ▶</b> for a captioned tour; <b>click</b> a landmark for its sourced card</li>
+      <li><b>Press ▶</b> for a captioned tour; <b>click any building</b> for its footprint and data provenance</li>
       <li><b>Search</b> scenes, tours, places, bridges, eras and layers from the box at the top</li>
       <li>Try the <b>Era</b> control for 1776 or 1900, the <b>clock</b> for a winter sunrise, and the <b>Flood hazard</b> layer</li>
       <li>Everything runs in your browser: no accounts, no keys, nothing is sent anywhere. <b>Share</b> (↗) copies a link you can name.</li>
@@ -271,9 +284,11 @@
           principally USDA National Agriculture Imagery Program orthoimagery in this region.
           A 4096 × 4096 north-up regional texture is baked over the exact terrain bounds.
           Below 16 km camera distance, Jez237.com's edge loads and caches an overlapping
-          8 km detail window around the camera at about 2 m/px on desktop or 4 m/px on a
-          phone. Both are draped directly over the elevation mesh; the regional image stays
-          visible whenever detail is unavailable. U.S. federal map services and data are
+          city-detail window. Below 4.8 km it cross-fades to a smaller block-detail cell at
+          about 0.7–1.3 m/px, depending on the selected data mode. Neighboring cells are
+          prefetched after the camera settles. All photography is draped directly over the
+          elevation mesh; the regional image stays visible whenever detail is unavailable.
+          U.S. federal map services and data are
           public domain. Credit: USDA, USGS The National Map: Orthoimagery.
         </dd>
       </div>
@@ -449,7 +464,7 @@
         <tr><th scope="row"><kbd>/</kbd></th><td>Focus the search box</td></tr>
         <tr><th scope="row"><kbd>?</kbd></th><td>This list</td></tr>
         <tr><th scope="row"><kbd>Esc</kbd></th><td>Close a card or dialog, leave cinema mode, or stop the flythrough</td></tr>
-        <tr><th scope="row">Click</th><td>A landmark model or label opens its information card</td></tr>
+        <tr><th scope="row">Click</th><td>A landmark or building opens its sourced information card</td></tr>
       </tbody>
     </table>
   </div>
@@ -475,7 +490,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026090403"></script>
+<script type="module" src="src/main.js?v=philly-2026090404"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

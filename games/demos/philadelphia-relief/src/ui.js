@@ -6,13 +6,13 @@
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090403';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090403';
-import { getEra } from './eras.js?v=philly-2026090403';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090403';
-import { TOURS } from './tours.js?v=philly-2026090403';
-import { ERAS } from './eras.js?v=philly-2026090403';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090403';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090404';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090404';
+import { getEra } from './eras.js?v=philly-2026090404';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090404';
+import { TOURS } from './tours.js?v=philly-2026090404';
+import { ERAS } from './eras.js?v=philly-2026090404';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090404';
 
 const ENUM_LABELS = {
   theme: (v) => getTheme(v).label,
@@ -23,6 +23,10 @@ const ENUM_LABELS = {
   timeMode: (v) => ({ manual: 'Sliders', clock: 'Clock' }[v] || v),
   weather: (v) => WEATHER_PRESETS[v]?.label || v,
   era: (v) => getEra(v).label,
+  imageryDetail: (v) => ({ data: 'Data Saver', standard: 'Standard',
+    maximum: 'Maximum Detail' }[v] || v),
+  compareMode: (v) => ({ off: 'Off', aerial: 'Aerial / relief',
+    history: 'Present / selected era', flood: 'Normal / flood' }[v] || v),
 };
 const RANGE_LABELS = { dayOfYear: dayLabel, clockHour: clockLabel };
 
@@ -60,7 +64,8 @@ export function buildControls(store, host) {
   const inputs = new Map();
 
   for (const group of GROUPS) {
-    const entries = Object.entries(CONTROLS).filter(([, c]) => c.group === group.id);
+    const entries = Object.entries(CONTROLS)
+      .filter(([, c]) => c.group === group.id && c.ui !== false);
     if (!entries.length) continue;
 
     const section = el('div', 'control-group');
@@ -525,13 +530,14 @@ export function createCard(options) {
   const note = node.querySelector('#cardNote');
   const fly = node.querySelector('#cardFly');
   let openName = null;
+  let openRecord = null;
   let restoreTo = null;
 
-  function open(name, { focus = true } = {}) {
-    const card = cards?.[name];
+  function render(name, card, { focus = true } = {}) {
     if (!card) return false;
     if (!openName) restoreTo = document.activeElement;
     openName = name;
+    openRecord = card;
     kind.textContent = card.category || 'Landmark';
     title.textContent = name;
     facts.replaceChildren(...card.facts.flatMap(([label, value]) => [
@@ -545,20 +551,29 @@ export function createCard(options) {
       a.textContent = label;
       return i ? [document.createTextNode(' · '), a] : [a];
     }));
-    note.textContent = card.model ? 'Schematic model' : 'Real footprint';
+    note.textContent = card.note || (card.model ? 'Schematic model' : 'Real footprint');
     node.hidden = false;
     // Toasts share the bottom edge on phones; tell the stylesheet how tall
     // the card is so they can sit above it.
     document.body.classList.add('card-open');
     document.body.style.setProperty('--card-h', `${node.offsetHeight}px`);
     if (focus) fly.focus();
-    if (onChange) onChange(name);
+    if (onChange) onChange(name, card);
     return true;
+  }
+
+  function open(name, options = {}) {
+    return render(name, cards?.[name], options);
+  }
+
+  function openCustom(name, card, options = {}) {
+    return render(name, card, options);
   }
 
   function close() {
     if (!openName) return;
     openName = null;
+    openRecord = null;
     node.hidden = true;
     document.body.classList.remove('card-open');
     document.body.style.removeProperty('--card-h');
@@ -568,9 +583,11 @@ export function createCard(options) {
   }
 
   node.querySelector('#cardClose').addEventListener('click', close);
-  fly.addEventListener('click', () => { if (openName && onFly) onFly(openName); });
+  fly.addEventListener('click', () => {
+    if (openName && onFly) onFly(openName, openRecord);
+  });
 
-  return { open, close, get openName() { return openName; } };
+  return { open, openCustom, close, get openName() { return openName; } };
 }
 
 /** The era banner: what this historical view can and cannot show, with sources. */

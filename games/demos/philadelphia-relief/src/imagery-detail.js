@@ -1,18 +1,26 @@
 /**
- * Close-range aerial imagery loader.
+ * Camera-following aerial imagery levels.
  *
- * A 94 km region at building resolution would be several gigabytes. Instead,
- * the bundled regional texture appears immediately and this module asks the
- * same-origin Pages Function for one overlapping 8 km detail window whenever
- * the camera settles below the close-range threshold. The coarse texture is
- * always retained as the failure/offline fallback.
+ * The regional texture is always available immediately. A city-detail cell
+ * replaces it below 16 km, and a smaller source-resolution block cell replaces
+ * that below 4.8 km. Cells overlap, cross-fade in the terrain shader and are
+ * prefetched into the browser/edge cache after the camera settles.
  */
 
 export const DETAIL_DISTANCE_M = 16000;
-export const DETAIL_SPAN = Object.freeze({ lon: 0.096, lat: 0.072 });
-export const DETAIL_GRID = Object.freeze({ lon: 0.04, lat: 0.03 });
+export const ULTRA_DISTANCE_M = 4800;
+export const IMAGERY_DETAIL_MODES = Object.freeze(['data', 'standard', 'maximum']);
+export const DETAIL_TIERS = Object.freeze({
+  detail: Object.freeze({ span: Object.freeze({ lon: 0.096, lat: 0.072 }),
+    grid: Object.freeze({ lon: 0.04, lat: 0.03 }) }),
+  ultra: Object.freeze({ span: Object.freeze({ lon: 0.032, lat: 0.024 }),
+    grid: Object.freeze({ lon: 0.012, lat: 0.009 }) }),
+});
+export const DETAIL_SPAN = DETAIL_TIERS.detail.span;
+export const DETAIL_GRID = DETAIL_TIERS.detail.grid;
 
 const STABLE_CHECKS = 2;
+const PREFETCH_NEIGHBOURS = Object.freeze([[1, 0], [-1, 0], [0, 1], [0, -1]]);
 
 function clamp(value, low, high) {
   return Math.min(high, Math.max(low, value));
@@ -22,43 +30,43 @@ function quantize(value, origin, step) {
   return origin + Math.round((value - origin) / step) * step;
 }
 
-export function detailCellFor(lon, lat, region) {
-  const halfLon = DETAIL_SPAN.lon / 2;
-  const halfLat = DETAIL_SPAN.lat / 2;
-  const centerLon = clamp(
-    quantize(lon, region.west, DETAIL_GRID.lon),
-    region.west + halfLon,
-    region.east - halfLon,
-  );
-  const centerLat = clamp(
-    quantize(lat, region.south, DETAIL_GRID.lat),
-    region.south + halfLat,
-    region.north - halfLat,
-  );
+export function detailCellFor(lon, lat, region, tier = 'detail') {
+  const spec = DETAIL_TIERS[tier] || DETAIL_TIERS.detail;
+  const halfLon = spec.span.lon / 2;
+  const halfLat = spec.span.lat / 2;
+  const centerLon = clamp(quantize(lon, region.west, spec.grid.lon),
+    region.west + halfLon, region.east - halfLon);
+  const centerLat = clamp(quantize(lat, region.south, spec.grid.lat),
+    region.south + halfLat, region.north - halfLat);
   const bounds = {
-    west: centerLon - halfLon,
-    east: centerLon + halfLon,
-    south: centerLat - halfLat,
-    north: centerLat + halfLat,
+    west: centerLon - halfLon, east: centerLon + halfLon,
+    south: centerLat - halfLat, north: centerLat + halfLat,
   };
   return {
-    lon: centerLon,
-    lat: centerLat,
-    bounds,
-    key: `${centerLon.toFixed(4)},${centerLat.toFixed(4)}`,
+    tier, lon: centerLon, lat: centerLat, bounds,
+    key: `${tier}:${centerLon.toFixed(4)},${centerLat.toFixed(4)}`,
   };
 }
 
-export function detailImageSize(viewWidth, pixelRatio, quality) {
+export function imageryTierFor(distanceM, mode = 'standard') {
+  if (distanceM > DETAIL_DISTANCE_M) return null;
+  if (mode !== 'data' && distanceM <= ULTRA_DISTANCE_M) return 'ultra';
+  return 'detail';
+}
+
+export function detailImageSize(viewWidth, pixelRatio, quality,
+  mode = 'standard', tier = 'detail') {
+  if (mode === 'data') return 2048;
+  if (mode === 'maximum') return 4096;
   const screenWidth = viewWidth * Math.min(pixelRatio || 1, 2);
-  return quality === 'performance' || screenWidth < 1200 ? 2048 : 4096;
+  if (quality === 'performance' || screenWidth < 1200) return 2048;
+  return tier === 'ultra' ? 2048 : 4096;
 }
 
 export function detailUrl(cell, size) {
   const query = new URLSearchParams({
-    lon: cell.lon.toFixed(4),
-    lat: cell.lat.toFixed(4),
-    size: String(size),
+    tier: cell.tier || 'detail', lon: cell.lon.toFixed(4),
+    lat: cell.lat.toFixed(4), size: String(size),
   });
   return `detail-imagery?${query}`;
 }
@@ -67,6 +75,21 @@ export function detailResolutionM(cell, size, projection) {
   const widthM = (cell.bounds.east - cell.bounds.west) * projection.metersPerDegLon;
   const heightM = (cell.bounds.north - cell.bounds.south) * projection.metersPerDegLat;
   return Math.max(widthM, heightM) / size;
+}
+
+export function neighbourCells(cell, region) {
+  const spec = DETAIL_TIERS[cell.tier] || DETAIL_TIERS.detail;
+  const seen = new Set([cell.key]);
+  const cells = [];
+  for (const [dx, dy] of PREFETCH_NEIGHBOURS) {
+    const next = detailCellFor(cell.lon + dx * spec.grid.lon,
+      cell.lat + dy * spec.grid.lat, region, cell.tier);
+    if (!seen.has(next.key)) {
+      seen.add(next.key);
+      cells.push(next);
+    }
+  }
+  return cells;
 }
 
 function loadImage(path) {
@@ -90,25 +113,39 @@ export function createImageryDetail(options) {
   let failedAt = 0;
   let generation = 0;
   let state = 'regional';
+  let prefetched = 0;
 
   const report = (nextState) => {
     state = nextState;
     onStatus(api.stats());
   };
 
+  function prefetch(cell, size, mode) {
+    if (mode === 'data' || typeof fetch !== 'function') return;
+    const run = () => {
+      for (const next of neighbourCells(cell, region)) {
+        fetch(detailUrl(next, size), { cache: 'force-cache', credentials: 'same-origin' })
+          .then((response) => { if (response.ok) prefetched += 1; })
+          .catch(() => {});
+      }
+    };
+    if (typeof requestIdleCallback === 'function') requestIdleCallback(run, { timeout: 2500 });
+    else setTimeout(run, 500);
+  }
+
   const api = {
-    consider(pose, enabled, viewWidth, pixelRatio, quality) {
-      const close = enabled && pose.dist <= DETAIL_DISTANCE_M;
-      terrain.setDetailActive(close && !!current);
-      if (!close) {
+    consider(pose, enabled, viewWidth, pixelRatio, quality, mode = 'standard') {
+      const tier = enabled ? imageryTierFor(pose.dist, mode) : null;
+      terrain.setDetailActive(!!tier && !!current);
+      if (!tier) {
         candidateKey = '';
         stableChecks = 0;
         if (state !== 'regional') report('regional');
         return;
       }
 
-      const cell = detailCellFor(pose.lon, pose.lat, region);
-      const size = detailImageSize(viewWidth, pixelRatio, quality);
+      const cell = detailCellFor(pose.lon, pose.lat, region, tier);
+      const size = detailImageSize(viewWidth, pixelRatio, quality, mode, tier);
       const key = `${cell.key},${size}`;
       if (current?.key === key) {
         terrain.setDetailActive(true);
@@ -131,19 +168,15 @@ export function createImageryDetail(options) {
       report('loading');
       loadImage(detailUrl(cell, size)).then((image) => {
         if (requestGeneration !== generation) return;
-        current = {
-          key,
-          cell,
-          size,
-          image,
-          resolutionM: detailResolutionM(cell, size, projection),
-        };
+        current = { key, cell, size, image,
+          resolutionM: detailResolutionM(cell, size, projection) };
         pendingKey = '';
         failedKey = '';
         failedAt = 0;
         terrain.setDetailImagery(image, cell.bounds, region);
         terrain.setDetailActive(true);
         report('active');
+        prefetch(cell, size, mode);
       }).catch(() => {
         if (requestGeneration !== generation) return;
         pendingKey = '';
@@ -153,26 +186,24 @@ export function createImageryDetail(options) {
       });
     },
 
+    tick(dt) { terrain.tickDetailTransition?.(dt); },
+
     attachTerrain(nextTerrain) {
       terrain = nextTerrain;
-      if (current) terrain.setDetailImagery(current.image, current.cell.bounds, region);
+      if (current) terrain.setDetailImagery(current.image, current.cell.bounds, region, true);
       terrain.setDetailActive(state === 'active' && !!current);
     },
 
     stats() {
       return {
-        state,
-        active: state === 'active',
+        state, active: state === 'active', tier: current?.cell.tier || null,
         size: current?.size || 0,
         resolutionM: current ? Math.round(current.resolutionM * 100) / 100 : null,
-        bounds: current?.cell.bounds || null,
+        bounds: current?.cell.bounds || null, prefetched,
       };
     },
 
-    retry() {
-      failedKey = '';
-      failedAt = 0;
-    },
+    retry() { failedKey = ''; failedAt = 0; },
 
     dispose() {
       generation += 1;

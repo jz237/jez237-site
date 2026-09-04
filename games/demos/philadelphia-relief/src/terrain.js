@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090403';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090404';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -60,7 +60,10 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform sampler2D uRamp;       // hypsometric LUT
   uniform sampler2D uImagery;    // georeferenced USGS orthoimagery
   uniform sampler2D uImageryDetail;
+  uniform sampler2D uImageryDetailPrev;
   uniform vec4 uImageryDetailBounds; // minU, minV, maxU, maxV
+  uniform vec4 uImageryDetailPrevBounds;
+  uniform vec2 uImageryDetailTexel;
 
   uniform vec3  uSunDir;         // world space, pointing toward the sun
   uniform vec3  uSunColor;
@@ -84,6 +87,10 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uReliefOn;
   uniform float uImageryOn;
   uniform float uImageryDetailOn;
+  uniform float uImageryDetailBlend;
+  uniform float uCompareMode;
+  uniform float uComparePosition;
+  uniform float uViewportWidth;
   uniform float uWaterLevel;
   uniform float uExposure;
   uniform vec2  uSpacing;        // metres between height samples, x and z
@@ -116,6 +123,19 @@ const FRAGMENT_SHADER = /* glsl */ `
     tE = pow(tE, 0.78);
     vec3 reliefBase = texture2D(uRamp, vec2(tE, 0.5)).rgb;
     vec3 aerialBase = texture2D(uImagery, vUv).rgb;
+    vec2 previousSpan = max(
+      uImageryDetailPrevBounds.zw - uImageryDetailPrevBounds.xy,
+      vec2(0.00001));
+    vec2 previousUv = (vUv - uImageryDetailPrevBounds.xy) / previousSpan;
+    float previousEdge = min(
+      min(previousUv.x, 1.0 - previousUv.x),
+      min(previousUv.y, 1.0 - previousUv.y));
+    float previousMix = smoothstep(0.0, 0.035, previousEdge)
+      * uImageryDetailOn * (1.0 - uImageryDetailBlend);
+    vec3 previousBase = texture2D(
+      uImageryDetailPrev, clamp(previousUv, 0.0, 1.0)).rgb;
+    aerialBase = mix(aerialBase, previousBase, previousMix);
+
     vec2 detailSpan = max(
       uImageryDetailBounds.zw - uImageryDetailBounds.xy,
       vec2(0.00001));
@@ -124,13 +144,35 @@ const FRAGMENT_SHADER = /* glsl */ `
       min(detailUv.x, 1.0 - detailUv.x),
       min(detailUv.y, 1.0 - detailUv.y));
     float detailMix = smoothstep(0.0, 0.035, detailEdge)
-      * uImageryDetailOn * uImageryOn;
-    vec3 detailBase = texture2D(uImageryDetail, clamp(detailUv, 0.0, 1.0)).rgb;
+      * uImageryDetailOn * uImageryDetailBlend;
+    vec2 safeDetailUv = clamp(detailUv, 0.0, 1.0);
+    vec3 detailBase = texture2D(uImageryDetail, safeDetailUv).rgb;
+    vec3 detailBlur = (
+      texture2D(uImageryDetail, clamp(safeDetailUv + vec2(uImageryDetailTexel.x, 0.0), 0.0, 1.0)).rgb
+      + texture2D(uImageryDetail, clamp(safeDetailUv - vec2(uImageryDetailTexel.x, 0.0), 0.0, 1.0)).rgb
+      + texture2D(uImageryDetail, clamp(safeDetailUv + vec2(0.0, uImageryDetailTexel.y), 0.0, 1.0)).rgb
+      + texture2D(uImageryDetail, clamp(safeDetailUv - vec2(0.0, uImageryDetailTexel.y), 0.0, 1.0)).rgb
+    ) * 0.25;
+    detailBase = clamp(detailBase * 1.16 - detailBlur * 0.16, 0.0, 1.0);
     aerialBase = mix(aerialBase, detailBase, detailMix);
-    vec3 base = mix(reliefBase, aerialBase, uImageryOn);
+
+    // Lift the baked orthoimage shadows and restore restrained local contrast.
+    // The photography already contains real sunlight; the DEM should add only
+    // a hint of shape rather than darkening it a second time.
+    aerialBase = pow(max(aerialBase, vec3(0.0)), vec3(0.84));
+    float aerialLuma = dot(aerialBase, vec3(0.2126, 0.7152, 0.0722));
+    aerialBase = mix(vec3(aerialLuma), aerialBase, 1.08);
+    aerialBase = clamp((aerialBase - 0.5) * 1.055 + 0.5, 0.0, 1.0);
+
+    float surfaceImagery = uImageryOn;
+    if (uCompareMode > 0.5 && uCompareMode < 2.5) {
+      surfaceImagery = step(gl_FragCoord.x / max(uViewportWidth, 1.0), uComparePosition);
+    }
+    vec3 base = mix(reliefBase, aerialBase, surfaceImagery);
 
     float slope = 1.0 - n.y;
-    base = mix(base, base * 0.70, smoothstep(0.015, 0.40, slope));
+    base = mix(base, base * 0.70,
+      smoothstep(0.015, 0.40, slope) * (1.0 - surfaceImagery));
 
     // Ground that sits at river level reads damp rather than dusty.
     float lowland = 1.0 - smoothstep(uWaterLevel, uWaterLevel + 12.0, vElev);
@@ -157,21 +199,22 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Preserve the orthoimage's real colour while letting the DEM add subtle
     // directional shape. A full material-light multiplication made roofs and
     // streets nearly black at dusk, which defeated the point of the imagery.
-    float aerialShade = clamp(0.82 + ndl * 0.18, 0.72, 1.08);
-    vec3 aerialLit = aerialBase * aerialShade * mix(0.88, 1.0, ao);
-    vec3 lit = mix(reliefLit, aerialLit, uImageryOn);
+    float aerialShade = clamp(0.97 + ndl * 0.03, 0.94, 1.03);
+    vec3 aerialLit = aerialBase * aerialShade;
+    vec3 lit = mix(reliefLit, aerialLit, surfaceImagery);
 
     vec3 viewDir = normalize(uCameraPos - vWorld);
     vec3 halfVec = normalize(uSunDir + viewDir);
     lit += uSunColor * pow(max(0.0, dot(n, halfVec)), 90.0)
-      * 0.03 * uKey * (1.0 - uImageryOn);
+      * 0.03 * uKey * (1.0 - surfaceImagery);
 
     // Flat cartographic shading when the hillshade layer is off. Named
     // flatShade because plain "flat" is a reserved interpolation qualifier
     // in GLSL ES 3.0, which is what three compiles to on WebGL 2.
     vec3 reliefFlat = reliefBase * (uAmbient * 0.6 + 0.75) * uExposure * 0.8;
-    vec3 flatShade = mix(reliefFlat, aerialBase, uImageryOn);
-    vec3 color = mix(flatShade, lit, uHillshade);
+    vec3 flatShade = mix(reliefFlat, aerialBase, surfaceImagery);
+    float effectiveHillshade = mix(uHillshade, uHillshade * 0.18, surfaceImagery);
+    vec3 color = mix(flatShade, lit, effectiveHillshade);
 
     // ---- contours ------------------------------------------------------
     if (uContourStrength > 0.001 && uContourInterval > 0.0) {
@@ -299,6 +342,8 @@ export function createTerrain(THREE, options) {
   const rampTex = makeRampTexture(THREE, 'dusk');
   const imageryTex = makeImageryTexture(THREE, imagery);
   let imageryDetailTex = makeImageryTexture(THREE, null, false);
+  let imageryDetailPrevTex = makeImageryTexture(THREE, null, false);
+  let hasDetail = false;
 
   const uniforms = {
     uHeight: { value: heightTex },
@@ -306,7 +351,10 @@ export function createTerrain(THREE, options) {
     uRamp: { value: rampTex },
     uImagery: { value: imageryTex },
     uImageryDetail: { value: imageryDetailTex },
+    uImageryDetailPrev: { value: imageryDetailPrevTex },
     uImageryDetailBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
+    uImageryDetailPrevBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
+    uImageryDetailTexel: { value: new THREE.Vector2(1, 1) },
     uCenter: { value: new THREE.Vector2(0.5, 0.5) },
     uWarp: { value: 1.0 },
     uExag: { value: 14 },
@@ -333,6 +381,10 @@ export function createTerrain(THREE, options) {
     uReliefOn: { value: 1 },
     uImageryOn: { value: 0 },
     uImageryDetailOn: { value: 0 },
+    uImageryDetailBlend: { value: 1 },
+    uCompareMode: { value: 0 },
+    uComparePosition: { value: 0.5 },
+    uViewportWidth: { value: 1 },
     uWaterLevel: { value: 2 },
     uExposure: { value: 2.3 },
   };
@@ -360,17 +412,33 @@ export function createTerrain(THREE, options) {
     segments,
     hasImagery: !!imagery,
 
-    setDetailImagery(image, bounds, region) {
+    setDetailImagery(image, bounds, region, immediate = false) {
       const next = makeImageryTexture(THREE, image, false);
-      imageryDetailTex.dispose();
+      imageryDetailPrevTex.dispose();
+      imageryDetailPrevTex = hasDetail
+        ? imageryDetailTex : makeImageryTexture(THREE, null, false);
+      uniforms.uImageryDetailPrev.value = imageryDetailPrevTex;
+      uniforms.uImageryDetailPrevBounds.value.copy(uniforms.uImageryDetailBounds.value);
       imageryDetailTex = next;
       uniforms.uImageryDetail.value = next;
+      uniforms.uImageryDetailTexel.value.set(
+        1 / Math.max(1, image.naturalWidth || image.width || 1),
+        1 / Math.max(1, image.naturalHeight || image.height || 1),
+      );
       uniforms.uImageryDetailBounds.value.set(
         (bounds.west - region.west) / (region.east - region.west),
         (region.north - bounds.north) / (region.north - region.south),
         (bounds.east - region.west) / (region.east - region.west),
         (region.north - bounds.south) / (region.north - region.south),
       );
+      uniforms.uImageryDetailBlend.value = immediate || !hasDetail ? 1 : 0;
+      hasDetail = true;
+    },
+
+    tickDetailTransition(dt) {
+      const blend = uniforms.uImageryDetailBlend;
+      if (blend.value >= 1) return;
+      blend.value = Math.min(1, blend.value + Math.max(0, dt) / 0.48);
     },
 
     setDetailActive(active) {
@@ -398,6 +466,7 @@ export function createTerrain(THREE, options) {
       rampTex.dispose();
       imageryTex.dispose();
       imageryDetailTex.dispose();
+      imageryDetailPrevTex.dispose();
     },
   };
 }

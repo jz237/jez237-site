@@ -16,7 +16,7 @@
  * regional shot without becoming needles up close.
  */
 
-import { triangulate } from './vectors.js?v=philly-2026090403';
+import { triangulate } from './vectors.js?v=philly-2026090404';
 
 export const TIER_ORDER = ['tall', 'mid', 'low'];
 
@@ -288,6 +288,43 @@ export function distanceToBox(x, z, box) {
   const dx = Math.max(box.minX - x, 0, x - box.maxX);
   const dz = Math.max(box.minZ - z, 0, z - box.maxZ);
   return Math.hypot(dx, dz);
+}
+
+/** Even/odd footprint containment, in the tier's local metre coordinates. */
+export function pointInFootprint(x, z, poly) {
+  let inside = false;
+  const n = poly?.length / 2 || 0;
+  for (let i = 0, j = n - 1; i < n; j = i++) {
+    const xi = poly[i * 2];
+    const zi = poly[i * 2 + 1];
+    const xj = poly[j * 2];
+    const zj = poly[j * 2 + 1];
+    const crosses = ((zi > z) !== (zj > z))
+      && (x < (xj - xi) * (z - zi) / ((zj - zi) || 1e-9) + xi);
+    if (crosses) inside = !inside;
+  }
+  return inside;
+}
+
+function distanceToSegment(px, pz, ax, az, bx, bz) {
+  const dx = bx - ax;
+  const dz = bz - az;
+  const d2 = dx * dx + dz * dz;
+  const t = d2 ? clamp01(((px - ax) * dx + (pz - az) * dz) / d2) : 0;
+  return Math.hypot(px - (ax + dx * t), pz - (az + dz * t));
+}
+
+/** Distance to a footprint edge (0 when inside). */
+export function distanceToFootprint(x, z, poly) {
+  if (pointInFootprint(x, z, poly)) return 0;
+  let best = Infinity;
+  const n = poly?.length / 2 || 0;
+  for (let i = 0; i < n; i += 1) {
+    const j = (i + 1) % n;
+    best = Math.min(best, distanceToSegment(x, z,
+      poly[i * 2], poly[i * 2 + 1], poly[j * 2], poly[j * 2 + 1]));
+  }
+  return best;
 }
 
 function clamp01(v) {
