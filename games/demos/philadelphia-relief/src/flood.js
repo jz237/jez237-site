@@ -6,12 +6,13 @@
  * touches WebGL or the DOM, so it is unit-tested against the shipped file.
  */
 
-const MAGIC = 'PHF1';
+const MAGIC = 'PHF2';
 const HEADER_BYTES = 4 + 4 + 8 * 4;
 
 /**
- * Decode a packed flood file. Returns { count, bounds, classes: Map<classIndex,
- * [{ ring, value }]> } where each ring is a closed [lon, lat] list.
+ * Decode a packed flood file. Returns { count, bounds, holes, classes:
+ * Map<classIndex, [{ ring, holes, value }]> } where each ring is a closed
+ * [lon, lat] list and `holes` are the polygon's interior rings.
  */
 export function decodeFlood(buffer) {
   const view = new DataView(buffer);
@@ -27,13 +28,12 @@ export function decodeFlood(buffer) {
   const sx = (bounds.east - bounds.west) / 65535;
   const sy = (bounds.north - bounds.south) / 65535;
   const classes = new Map();
+  let holes = 0;
   let offset = HEADER_BYTES;
-  for (let i = 0; i < count; i += 1) {
-    if (offset + 5 > buffer.byteLength) throw new Error(`flood: truncated at polygon ${i}`);
-    const cls = view.getUint8(offset);
-    const value = view.getInt16(offset + 1, true);
-    const n = view.getUint16(offset + 3, true);
-    offset += 5;
+  const readRing = (i) => {
+    if (offset + 2 > buffer.byteLength) throw new Error(`flood: truncated at polygon ${i}`);
+    const n = view.getUint16(offset, true);
+    offset += 2;
     if (offset + n * 4 > buffer.byteLength) throw new Error(`flood: truncated ring ${i}`);
     const ring = new Array(n + 1);
     for (let v = 0; v < n; v += 1) {
@@ -43,11 +43,24 @@ export function decodeFlood(buffer) {
     }
     ring[n] = ring[0];
     offset += n * 4;
+    return ring;
+  };
+  for (let i = 0; i < count; i += 1) {
+    if (offset + 5 > buffer.byteLength) throw new Error(`flood: truncated at polygon ${i}`);
+    const cls = view.getUint8(offset);
+    const value = view.getInt16(offset + 1, true);
+    const rings = view.getUint16(offset + 3, true);
+    offset += 5;
+    if (rings < 1) throw new Error(`flood: polygon ${i} has no rings`);
+    const ring = readRing(i);
+    const inner = [];
+    for (let h = 1; h < rings; h += 1) inner.push(readRing(i));
+    holes += inner.length;
     if (!classes.has(cls)) classes.set(cls, []);
-    classes.get(cls).push({ ring, value: value === -32768 ? null : value });
+    classes.get(cls).push({ ring, holes: inner, value: value === -32768 ? null : value });
   }
   if (offset !== buffer.byteLength) throw new Error('flood: trailing bytes');
-  return { count, bounds, classes };
+  return { count, bounds, holes, classes };
 }
 
 /**

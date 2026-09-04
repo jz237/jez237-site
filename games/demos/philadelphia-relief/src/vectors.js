@@ -193,10 +193,12 @@ export function collectRings(geojson, minArea = 0) {
     const props = feature.properties || {};
     if (minArea && props.area && props.area < minArea) continue;
     if (g.type === 'Polygon') {
-      if (g.coordinates[0]?.length >= 4) rings.push({ ring: g.coordinates[0], props });
+      if (g.coordinates[0]?.length >= 4) {
+        rings.push({ ring: g.coordinates[0], holes: g.coordinates.slice(1), props });
+      }
     } else if (g.type === 'MultiPolygon') {
       for (const poly of g.coordinates) {
-        if (poly[0]?.length >= 4) rings.push({ ring: poly[0], props });
+        if (poly[0]?.length >= 4) rings.push({ ring: poly[0], holes: poly.slice(1), props });
       }
     }
   }
@@ -289,6 +291,36 @@ export function buildLineMesh(THREE, parts, ctx, options) {
  * region rectangle, so they are simple in practice. The iteration guard means a
  * pathological ring degrades to a partial fan rather than hanging the tab.
  */
+/** A ring without its duplicated closing vertex. */
+function openRing(ring) {
+  const n = ring.length;
+  return n > 1 && ring[0][0] === ring[n - 1][0] && ring[0][1] === ring[n - 1][1]
+    ? ring.slice(0, -1) : ring;
+}
+
+/**
+ * Triangulate an outer ring with holes. With three.js at hand this is earcut
+ * (ShapeUtils.triangulateShape), which copes with the long concave rings of
+ * a floodplain and with islands; indices refer to the outer ring's points
+ * followed by each hole's points in order. Without it, the pure ear clipper
+ * below handles the outer ring alone.
+ */
+export function triangulateWithHoles(earcut, THREE, outer, holes) {
+  if (earcut && THREE?.Vector2) {
+    const contour = outer.map(([x, z]) => new THREE.Vector2(x, z));
+    const holeVecs = holes.map((h) => h.map(([x, z]) => new THREE.Vector2(x, z)));
+    const faces = earcut(contour, holeVecs);
+    const out = new Array(faces.length * 3);
+    for (let i = 0; i < faces.length; i += 1) {
+      out[i * 3] = faces[i][0];
+      out[i * 3 + 1] = faces[i][1];
+      out[i * 3 + 2] = faces[i][2];
+    }
+    return out;
+  }
+  return triangulate(outer);
+}
+
 export function triangulate(points) {
   const n = points.length;
   if (n < 3) return [];
@@ -357,21 +389,26 @@ export function buildAreaMesh(THREE, rings, ctx, options) {
   const elevs = [];
   const indices = [];
 
+  const earcut = THREE?.ShapeUtils?.triangulateShape;
   for (const entry of rings) {
     const ring = entry.ring || entry;
-    // Drop the duplicated closing vertex before triangulating.
-    const pts = ring[0][0] === ring[ring.length - 1][0]
-      && ring[0][1] === ring[ring.length - 1][1] ? ring.slice(0, -1) : ring;
+    const pts = openRing(ring);
     if (pts.length < 3) continue;
+    const holes = (entry.holes || []).map(openRing).filter((h) => h.length >= 3);
 
     const local = pts.map(([lon, lat]) => toLocal(projection, lon, lat));
-    const tris = triangulate(local);
+    const localHoles = holes.map((h) => h.map(([lon, lat]) => toLocal(projection, lon, lat)));
+    const tris = triangulateWithHoles(earcut, THREE, local, localHoles);
     if (!tris.length) continue;
 
     const base = positions.length / 3;
-    for (let i = 0; i < local.length; i += 1) {
-      positions.push(local[i][0], 0, local[i][1]);
-      elevs.push(sampleElevation(pts[i][0], pts[i][1]));
+    const all = [pts, ...holes];
+    const allLocal = [local, ...localHoles];
+    for (let r = 0; r < all.length; r += 1) {
+      for (let i = 0; i < all[r].length; i += 1) {
+        positions.push(allLocal[r][i][0], 0, allLocal[r][i][1]);
+        elevs.push(sampleElevation(all[r][i][0], all[r][i][1]));
+      }
     }
     for (const t of tris) indices.push(base + t);
   }

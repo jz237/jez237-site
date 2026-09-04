@@ -173,13 +173,17 @@ meshes, fetched only when the layer is first switched on:
 | FEMA National Flood Hazard Layer, "Flood Hazard Zones" (`tools/build_flood.py`) | 1% annual-chance floodplain (AE, A, AO, AH), coastal high hazard VE, 0.2% shaded X; base flood elevation where mapped | US federal work, public domain | tiled REST queries, paged by `OBJECTID`, clipped, simplified to ~25 m, polygons under a hectare dropped |
 | NOAA Office for Coastal Management, Sea Level Rise Viewer data (`tools/build_slr.py`) | inundation at high tide for 1–6, 8 and 10 ft above today's mean higher high water; disconnected low-lying areas excluded | public; NOAA's use constraint quoted in the legend | bulk file geodatabases for PA, NJ (middle, southern) and DE read with pyogrio, one class per scenario; 97 polygons, 454 KB packed |
 
-Both are packed by `tools/floodpack.py` into a compact binary (`PHF1`: quantised
-16-bit coordinates, one class byte and one value per polygon) with a JSON
+Both are packed by `tools/floodpack.py` into a compact binary (`PHF2`: quantised
+16-bit coordinates, one class byte and one value per polygon, holes kept so
+islands of higher ground stay dry) with a JSON
 manifest that carries the source, licence, counts and caveats; the FEMA set is
-657 KB instead of a 6 MB GeoJSON. The studio's **Flood & sea level** group picks
+692 KB instead of a 6 MB GeoJSON. The studio's **Flood & sea level** group picks
 FEMA zones or a sea-level scenario (the slider snaps to a published foot), the
 legend under the layer toggles names the source and its caveat, and the About
-panel quotes both. This is a visualisation of simplified public data: **not for
+panel quotes both. Polygons are triangulated with three.js's earcut
+(`ShapeUtils.triangulateShape`), which handles the long concave rings of a
+floodplain and its holes; a test triangulates every shipped polygon and checks
+the triangles cover its area. This is a visualisation of simplified public data: **not for
 insurance, permitting or engineering decisions**, and NOAA's scenarios show the
 scale of potential flooding, not its exact location.
 
