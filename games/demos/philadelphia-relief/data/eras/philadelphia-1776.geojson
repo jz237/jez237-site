@@ -1,0 +1,175 @@
+{
+ "type": "FeatureCollection",
+ "note": "Approximate built-up extent of Philadelphia and its liberties in 1776, traced by hand from William Faden's 'A plan of the city and environs of Philadelphia' (1777, public domain; Library of Congress). The town filled the blocks between the Delaware and about Seventh/Eighth Street, from Vine Street south to Cedar (South) Street, with Southwark below and the Northern Liberties above along the river. The outline is approximate to a few blocks and is labelled so on the map; it is not a survey.",
+ "source": {
+  "name": "William Faden, A plan of the city and environs of Philadelphia, 1777",
+  "url": "https://www.loc.gov/item/gm71000629/",
+  "license": "public domain"
+ },
+ "features": [
+  {
+   "type": "Feature",
+   "properties": {
+    "n": "Philadelphia, 1776 (approximate built-up extent)",
+    "kind": "town"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -75.144,
+       39.9585
+      ],
+      [
+       -75.1495,
+       39.958
+      ],
+      [
+       -75.1545,
+       39.956
+      ],
+      [
+       -75.156,
+       39.952
+      ],
+      [
+       -75.1555,
+       39.947
+      ],
+      [
+       -75.153,
+       39.944
+      ],
+      [
+       -75.149,
+       39.9415
+      ],
+      [
+       -75.145,
+       39.9395
+      ],
+      [
+       -75.1425,
+       39.937
+      ],
+      [
+       -75.1455,
+       39.933
+      ],
+      [
+       -75.1475,
+       39.93
+      ],
+      [
+       -75.1485,
+       39.9275
+      ],
+      [
+       -75.144,
+       39.9265
+      ],
+      [
+       -75.1405,
+       39.931
+      ],
+      [
+       -75.14,
+       39.936
+      ],
+      [
+       -75.1395,
+       39.942
+      ],
+      [
+       -75.1385,
+       39.948
+      ],
+      [
+       -75.137,
+       39.954
+      ],
+      [
+       -75.135,
+       39.961
+      ],
+      [
+       -75.133,
+       39.966
+      ],
+      [
+       -75.138,
+       39.9665
+      ],
+      [
+       -75.142,
+       39.964
+      ],
+      [
+       -75.144,
+       39.9585
+      ]
+     ]
+    ]
+   }
+  },
+  {
+   "type": "Feature",
+   "properties": {
+    "n": "Germantown, 1776 (village along the Germantown road, approximate)",
+    "kind": "village"
+   },
+   "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+     [
+      [
+       -75.1665,
+       40.0215
+      ],
+      [
+       -75.17,
+       40.025
+      ],
+      [
+       -75.176,
+       40.033
+      ],
+      [
+       -75.181,
+       40.041
+      ],
+      [
+       -75.184,
+       40.047
+      ],
+      [
+       -75.179,
+       40.0485
+      ],
+      [
+       -75.1745,
+       40.042
+      ],
+      [
+       -75.169,
+       40.0335
+      ],
+      [
+       -75.164,
+       40.0255
+      ],
+      [
+       -75.162,
+       40.0215
+      ],
+      [
+       -75.1665,
+       40.0215
+      ]
+     ]
+    ]
+   }
+  }
+ ]
+}
