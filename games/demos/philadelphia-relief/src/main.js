@@ -31,7 +31,9 @@ import { createPostFX } from './postfx.js';
 import { createCameraRig } from './camera.js';
 import { createLabelLayer, buildLabelCandidates } from './labels.js';
 import { createStructures } from './structures.js';
-import { TIER_PLAN, shouldActivateZone, distanceToBox } from './structures-data.js';
+import {
+  TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
+} from './structures-data.js';
 import { createAdaptiveQuality, resolveQuality } from './adaptive.js';
 import { decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE } from './flood.js';
 import { buildLandmarkModels } from './landmark-models.js';
@@ -217,7 +219,7 @@ async function loadStructures(quality, existing = null, activeZones = null) {
       if (!want.has(tier.tier) || tierBuffers.has(tier.file)) continue;
       jobs.push((async () => {
         try {
-          tierBuffers.set(tier.file, await fetchBinary(`data/structures/${tier.file}`));
+          tierBuffers.set(tier.file, await fetchBinary(tierAssetPath(tier.file, manifest.format)));
         } catch (error) {
           console.warn(`[philly-relief] structures tier ${tier.file} unavailable:`,
             error.message);

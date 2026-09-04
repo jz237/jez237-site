@@ -43,21 +43,28 @@ const SOURCE_NAMES = ['measured', 'levels', 'default', 'curated', 'merged'];
 // ---------------------------------------------------------------------------
 
 /**
- * Parse one PHB1 tier stream. Returns plain records with footprints in local
- * metres (+x east, +z south of the zone origin).
+ * Parse one PHB1 or PHB2 tier stream. PHB1 is retained as a compatibility
+ * fallback for browsers that cached the original building payload; PHB2 adds
+ * the documented construction year used by the historical views.
  */
 export function parseTier(buffer) {
   const view = new DataView(buffer);
   if (view.byteLength < 8) throw new Error('structures: tier stream too short');
   const magic = String.fromCharCode(view.getUint8(0), view.getUint8(1),
     view.getUint8(2), view.getUint8(3));
-  if (magic !== 'PHB2') throw new Error(`structures: bad magic "${magic}"`);
+  if (magic !== 'PHB1' && magic !== 'PHB2') {
+    throw new Error(`structures: bad magic "${magic}"`);
+  }
+  const hasYear = magic === 'PHB2';
 
   const count = view.getUint32(4, true);
   const buildings = new Array(count);
   let offset = 8;
   for (let i = 0; i < count; i += 1) {
-    if (offset + 10 > view.byteLength) throw new Error('structures: truncated tier stream');
+    const headerBytes = hasYear ? 10 : 8;
+    if (offset + headerBytes > view.byteLength) {
+      throw new Error('structures: truncated tier stream');
+    }
     const n = view.getUint16(offset, true);
     const height = view.getUint16(offset + 2, true) / 10;
     const minHeight = view.getUint16(offset + 4, true) / 10;
@@ -65,9 +72,11 @@ export function parseTier(buffer) {
     const flags = view.getUint8(offset + 7);
     const named = (flags & 1) === 1;
     // Documented construction year (0 = undated) and where it came from.
-    const year = view.getUint16(offset + 8, true);
-    const yearSource = (flags & 4) ? 'curated' : (flags & 2) ? 'osm' : 'none';
-    offset += 10;
+    const year = hasYear ? view.getUint16(offset + 8, true) : 0;
+    const yearSource = hasYear
+      ? ((flags & 4) ? 'curated' : (flags & 2) ? 'osm' : 'none')
+      : 'none';
+    offset += headerBytes;
     if (n < 3 || offset + n * 4 > view.byteLength) {
       throw new Error(`structures: building ${i} has a bad ring (${n} vertices)`);
     }
@@ -80,6 +89,15 @@ export function parseTier(buffer) {
     buildings[i] = { height, minHeight, source, named, poly, year, yearSource };
   }
   return { count, buildings, bytes: view.byteLength };
+}
+
+/**
+ * Version structure payload URLs by their declared binary format. This keeps
+ * a previously cached PHB1 response from being paired with the PHB2 parser
+ * after an in-place static-site deployment.
+ */
+export function tierAssetPath(file, format = 'PHB1') {
+  return `data/structures/${file}?format=${encodeURIComponent(format)}`;
 }
 
 // ---------------------------------------------------------------------------
