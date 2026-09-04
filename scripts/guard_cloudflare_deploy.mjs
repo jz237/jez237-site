@@ -1,6 +1,7 @@
 #!/usr/bin/env node
 import { existsSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { checkGamesCatalogSyntax } from "./check_games_catalog_syntax.mjs";
 
 const BASELINE_COMMIT = "4810212c063f49501d5d5dbb5bb7ba4bf8c66fd1";
 const BASELINE_LABEL = "2026-08-24 Final Blow 1.9E live-safe baseline";
@@ -145,6 +146,13 @@ if (!baselineCheck.ok) {
 const missingPaths = REQUIRED_PATHS.filter((path) => !existsSync(path));
 if (missingPaths.length > 0) {
   fail(`required live-site paths are missing: ${missingPaths.join(", ")}`);
+}
+
+try {
+  const checked = checkGamesCatalogSyntax();
+  console.log(`Games catalog syntax passed (${checked} inline scripts).`);
+} catch (error) {
+  fail(error.message);
 }
 
 console.log(
