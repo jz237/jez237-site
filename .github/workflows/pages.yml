@@ -31,6 +31,7 @@ jobs:
             !/.wrangler/
             !/functions/
             !/scripts/
+            /scripts/check_games_catalog_syntax.mjs
             !/stock-market-src/
             !/tmp/
             !/workers/
@@ -71,6 +72,9 @@ jobs:
 
       - name: Guard Final Blow service worker
         run: node --test games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
+
+      - name: Check GameMaster catalog JavaScript
+        run: node scripts/check_games_catalog_syntax.mjs
 
       - name: Prepare GitHub Pages payload
         run: |
