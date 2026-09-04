@@ -7,6 +7,7 @@
  */
 
 import { CONTROLS, LAYERS, GROUPS } from './schema.js';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js';
 import { PRESETS, QUICK_JUMPS } from './presets.js';
 import { getTheme, THEME_IDS } from './themes.js';
 
@@ -16,7 +17,10 @@ const ENUM_LABELS = {
     cinematic: 'Cinematic' }[v] || v),
   contourInterval: (v) => `${v} m`,
   floodMode: (v) => ({ fema: 'FEMA flood zones', slr: 'Sea level rise' }[v] || v),
+  timeMode: (v) => ({ manual: 'Sliders', clock: 'Clock' }[v] || v),
+  weather: (v) => WEATHER_PRESETS[v]?.label || v,
 };
+const RANGE_LABELS = { dayOfYear: dayLabel, clockHour: clockLabel };
 
 // A control's readout can carry a live note ("Auto · Balanced"); the
 // note survives store syncs because formatValue folds it in.
@@ -31,7 +35,8 @@ export function formatValue(id, value) {
   const digits = step >= 1 ? 0 : step >= 0.1 ? 1 : 2;
   const base = spec.kind === 'enum'
     ? (ENUM_LABELS[id] || String)(value)
-    : `${Number(value).toFixed(digits)}${spec.unit || ''}`;
+    : RANGE_LABELS[id] ? RANGE_LABELS[id](Number(value))
+      : `${Number(value).toFixed(digits)}${spec.unit || ''}`;
   const note = valueNotes.get(id);
   return note ? `${base} · ${note}` : base;
 }

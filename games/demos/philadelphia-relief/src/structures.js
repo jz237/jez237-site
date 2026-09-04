@@ -431,8 +431,8 @@ export function createStructures(THREE, options) {
     sharedUniforms.uHScale.value = hScale;
     sharedUniforms.uSunDir.value.copy(sunDir);
     sharedUniforms.uCameraPos.value.copy(camera.position);
-    sharedUniforms.uKey.value = state.keyLight;
-    sharedUniforms.uAmbient.value = state.ambient;
+    sharedUniforms.uKey.value = (ctx.light || state).keyLight;
+    sharedUniforms.uAmbient.value = (ctx.light || state).ambient;
     sharedUniforms.uFogDensity.value = fogDensity;
 
     const fraction = drawFraction(q, detail);

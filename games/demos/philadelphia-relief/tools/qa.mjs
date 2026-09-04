@@ -752,6 +752,35 @@ async function structuresPass(page, viewport, shot, problems, report) {
     problems.push(`[${viewport.id}] flood layer off still shows ${floodOff.flood.visible}`);
   }
 
+  // Simulated sun and weather: a winter morning puts the sun low in the
+  // south-east, one in the morning is night, and fog multiplies the haze.
+  await goto('#tm=clock&dy=355&ck=8.5', 2500);
+  const morning = (await stats())?.light;
+  const readouts = await page.evaluate(() => [...document.querySelectorAll('#studioGroups .control-value')]
+    .map((n) => n.textContent));
+  if (!(morning?.clock && morning.sunAzimuth > 115 && morning.sunAzimuth < 140
+      && morning.trueAltitude > 3 && morning.trueAltitude < 14 && morning.keyLight > 0)) {
+    problems.push(`[${viewport.id}] clock mode winter morning wrong: ${JSON.stringify(morning)}`);
+  }
+  if (!readouts.includes('21 Dec') || !readouts.includes('08:30')
+      || !readouts.some((t) => /by the clock/.test(t))) {
+    problems.push(`[${viewport.id}] clock readouts missing: ${JSON.stringify(readouts)}`);
+  }
+  report.push(`[${viewport.id}] clock 21 Dec 08:30 -> ${JSON.stringify(morning)}`);
+  await shot('20-clock-winter-morning');
+  await goto('#tm=clock&dy=172&ck=1', 2500);
+  const night = (await stats())?.light;
+  if (!(night?.night === true && night.keyLight === 0 && night.trueAltitude < -20)) {
+    problems.push(`[${viewport.id}] clock mode night wrong: ${JSON.stringify(night)}`);
+  }
+  await shot('20b-clock-night');
+  await goto('#we=fog&tm=manual', 2500);   // hash edits patch the live state, so say manual
+  const fog = (await stats())?.light;
+  if (!(fog?.weather === 'fog' && fog.fogDensity >= 0.9 && fog.clock === false)) {
+    problems.push(`[${viewport.id}] fog weather wrong: ${JSON.stringify(fog)}`);
+  }
+  await shot('20c-weather-fog');
+
   // Suburban zones are lazy: King of Prussia's notable buildings arrive once
   // the camera gets there (the first-frame check above proves they were not
   // fetched up front).

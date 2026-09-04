@@ -1,3 +1,4 @@
+import { WEATHERS } from './solar.js';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -122,6 +123,26 @@ export const CONTROLS = {
     k: 'as', kind: 'range', min: 0.25, max: 2.5, step: 0.05, def: 1,
     group: 'scene', label: 'Animation speed', unit: '×',
   },
+  timeMode: {
+    k: 'tm', kind: 'enum', values: ['manual', 'clock'], def: 'manual',
+    group: 'time', label: 'Sun',
+    hint: 'Sliders: the light controls below set the sun. Clock: the sun stands where it ' +
+      'would over Philadelphia on that date and clock time (Eastern time, daylight saving by ' +
+      'the calendar). A simulation for the map, not a forecast.',
+  },
+  dayOfYear: {
+    k: 'dy', kind: 'range', min: 1, max: 365, step: 1, def: 172,
+    group: 'time', label: 'Date',
+  },
+  clockHour: {
+    k: 'ck', kind: 'range', min: 0, max: 24, step: 0.25, def: 17.5,
+    group: 'time', label: 'Clock time',
+  },
+  weather: {
+    k: 'we', kind: 'enum', values: WEATHERS, def: 'clear',
+    group: 'time', label: 'Weather',
+    hint: 'Simulated: scales haze, sun, sky fill, bloom and water. Not a forecast.',
+  },
   floodMode: {
     k: 'fm', kind: 'enum', values: FLOOD_MODES, def: 'fema',
     group: 'hazards', label: 'Hazard shown',
@@ -169,10 +190,11 @@ export const GROUPS = [
   { id: 'scene', label: 'Scene' },
   { id: 'terrain', label: 'Terrain' },
   { id: 'structures', label: 'Structures' },
-  { id: 'hazards', label: 'Flood & sea level' },
+  { id: 'time', label: 'Time & weather' },
   { id: 'light', label: 'Light' },
   { id: 'atmosphere', label: 'Atmosphere' },
   { id: 'carto', label: 'Cartography' },
+  { id: 'hazards', label: 'Flood & sea level' },
 ];
 
 export const THEME_LIST = THEMES;
@@ -264,4 +286,5 @@ export const CHEAP_KEYS = new Set([
   'boundaryOpacity', 'theme', 'camLon', 'camLat', 'camDist', 'camBearing',
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
+  'timeMode', 'dayOfYear', 'clockHour', 'weather',
 ]);
