@@ -83,6 +83,22 @@ body {
 
 .label-host { position: absolute; inset: 0; pointer-events: none; }
 
+.imagery-credit {
+  position: fixed;
+  z-index: 48;
+  right: clamp(12px, 2vw, 20px);
+  bottom: 88px;
+  padding: 4px 7px;
+  border: 1px solid var(--line);
+  border-radius: 5px;
+  background: rgba(10, 13, 12, 0.68);
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 9px;
+  letter-spacing: 0.03em;
+  pointer-events: none;
+  backdrop-filter: blur(8px);
+}
+
 .map-labels { position: absolute; inset: 0; }
 
 .map-label {
@@ -1030,4 +1046,11 @@ body.hide-cursor .cinema-bar:focus-within { opacity: 1; }
   .readout-preset-name { font-size: 12px; }
   body.sheet-open .readout { display: none; }
   .caption { bottom: calc(110px + env(safe-area-inset-bottom)); }
+  .imagery-credit {
+    right: 8px;
+    bottom: calc(108px + env(safe-area-inset-bottom));
+    max-width: 185px;
+    text-align: right;
+  }
+  body.sheet-open .imagery-credit { display: none; }
 }

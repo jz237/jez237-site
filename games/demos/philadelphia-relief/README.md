@@ -10,9 +10,11 @@ Live path: `/games/demos/philadelphia-relief/`
 **Concept and prompt by Jez. Built collaboratively with Claude via Traycer and
 GPT-5.6.**
 
-It is a plain static page. No build step, no framework, no bundler, no API key,
-no account, and **no third-party requests at runtime** — every byte it draws is
-served from this origin.
+It is a plain static page. No framework, no bundler, no API key, no account,
+and **no third-party requests at runtime** — every byte it draws is served from
+this origin. A 4096² public-domain USGS orthoimage is baked at build time and
+draped directly over the elevation mesh; the earlier 3D buildings remain as an
+optional layer and are off by default.
 
 ---
 
@@ -78,6 +80,19 @@ region. Near the target cells are ~20 m; at the far edge they are ~400 m. Changi
 the warp is a uniform update, so nothing is ever re-uploaded and there are no
 seams to stitch.
 
+### Aerial imagery, exactly on the terrain
+
+`tools/build_imagery.py` exports the map's exact west/east/south/north bounds
+from the public-domain **USGS Imagery Only** service in EPSG:4326. The resulting
+4096 × 4096 WebP has the same north-up regular lon/lat grid as the terrain, so
+the fragment shader samples it with the terrain UV directly: no screenshot
+placement, runtime tile service, key or reprojection. The map displays the
+requested USDA / USGS credit whenever the layer is visible.
+
+The **Aerial imagery** layer opens on and **3D buildings & bridges** opens off.
+Turning the latter on restores the full OSM extrusion/bridge model without
+discarding any of the existing data.
+
 ### Everything else is per-pixel
 
 Normals, hillshade, contours (with `fwidth` antialiasing and an index contour
@@ -94,7 +109,7 @@ camera that moves from 190 km out to 1.2 km. Each vertex carries its **raw
 elevation in metres**, not a baked world Y, so the exaggeration slider moves the
 overlays and the ground together instead of tearing them apart.
 
-### Buildings and bridges
+### Optional buildings and bridges
 
 Real OpenStreetMap footprints, extruded to their OSM heights, in **two detail
 zones** rather than a region-wide dump:

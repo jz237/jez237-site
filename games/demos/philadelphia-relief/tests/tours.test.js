@@ -66,7 +66,8 @@ test('tours', async (t) => {
         assert.equal(patch.preset, shot.preset, 'override never changes the preset identity');
         if (shot.override) {
           for (const key of Object.keys(shot.override)) {
-            assert.ok(key in CAMERA || key in CONTROLS, `${tour.id}#${i} override key ${key}`);
+            assert.ok(key in CAMERA || key in CONTROLS || key === 'layers',
+              `${tour.id}#${i} override key ${key}`);
           }
         }
       }

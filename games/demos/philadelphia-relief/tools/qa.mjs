@@ -150,19 +150,20 @@ async function run() {
     if (probe.controls < 15) problems.push(`[${viewport.id}] only ${probe.controls} controls built`);
     if (probe.presets !== 8) problems.push(`[${viewport.id}] ${probe.presets} presets, expected 8`);
 
-    // The clean first load must show the city, not hide it 94 km away: a
-    // substantial building count on the first frame, on both viewports.
+    // The clean first load is the georeferenced aerial surface. The previous
+    // extrusion model must stay available without obscuring the imagery.
     const first = await page.evaluate(() => window.philadelphiaRelief?.stats() || null);
     const firstHash = await page.evaluate(() => window.location.hash);
     report.push(`[${viewport.id}] first frame: preset "${probe.readout.preset}", hash "${firstHash}", `
-      + `buildings ${first?.structures?.drawnBuildings}, tiers ${JSON.stringify(first?.structureTiers)}`);
-    if (probe.readout.preset !== 'Philadelphia Skyline') {
-      problems.push(`[${viewport.id}] first load opens on "${probe.readout.preset}", not the skyline`);
+      + `imagery ${first?.imagery?.visible}, structures visible ${first?.structuresVisible}, `
+      + `tiers ${JSON.stringify(first?.structureTiers)}`);
+    if (probe.readout.preset !== 'Aerial Philadelphia') {
+      problems.push(`[${viewport.id}] first load opens on "${probe.readout.preset}", not aerial Philadelphia`);
     }
-    const minFirst = viewport.isMobile ? 1500 : 2500;
-    if (!(first?.structures?.drawnBuildings >= minFirst)) {
-      problems.push(`[${viewport.id}] first frame draws ${first?.structures?.drawnBuildings} buildings, want >= ${minFirst}`);
+    if (!first?.imagery?.available || !first?.imagery?.visible) {
+      problems.push(`[${viewport.id}] aerial imagery is not available and visible on the first frame`);
     }
+    if (first?.structuresVisible) problems.push(`[${viewport.id}] 3D structures obscure aerial mode`);
     if (!first?.structureTiers?.some((t) => t.endsWith('/low'))) {
       problems.push(`[${viewport.id}] first frame has no rowhouse tier loaded at balanced quality`);
     }

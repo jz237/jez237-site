@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-20260904';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090402';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -58,6 +58,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
   uniform sampler2D uMacro;      // heavily downsampled heights, for ambient occlusion
   uniform sampler2D uRamp;       // hypsometric LUT
+  uniform sampler2D uImagery;    // georeferenced USGS orthoimagery
 
   uniform vec3  uSunDir;         // world space, pointing toward the sun
   uniform vec3  uSunColor;
@@ -79,6 +80,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uContourInterval;
   uniform float uHillshade;
   uniform float uReliefOn;
+  uniform float uImageryOn;
   uniform float uWaterLevel;
   uniform float uExposure;
   uniform vec2  uSpacing;        // metres between height samples, x and z
@@ -109,7 +111,9 @@ const FRAGMENT_SHADER = /* glsl */ `
     // whole city into the darkest tenth of the ramp.
     float tE = clamp((vElev - uElevLo) / max(uElevHi - uElevLo, 1.0), 0.0, 1.0);
     tE = pow(tE, 0.78);
-    vec3 base = texture2D(uRamp, vec2(tE, 0.5)).rgb;
+    vec3 reliefBase = texture2D(uRamp, vec2(tE, 0.5)).rgb;
+    vec3 aerialBase = texture2D(uImagery, vUv).rgb;
+    vec3 base = mix(reliefBase, aerialBase, uImageryOn);
 
     float slope = 1.0 - n.y;
     base = mix(base, base * 0.70, smoothstep(0.015, 0.40, slope));
@@ -135,16 +139,24 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Gain. The ramp is a reflectance (~0.10-0.35 linear) and the incident
     // light at a 19 deg sun is well under 1.0, so without this the product
     // lands near black and the relief disappears into the ground colour.
-    vec3 lit = base * (key + sky + bounce) * ao * uExposure;
+    vec3 reliefLit = base * (key + sky + bounce) * ao * uExposure;
+    // Preserve the orthoimage's real colour while letting the DEM add subtle
+    // directional shape. A full material-light multiplication made roofs and
+    // streets nearly black at dusk, which defeated the point of the imagery.
+    float aerialShade = clamp(0.82 + ndl * 0.18, 0.72, 1.08);
+    vec3 aerialLit = aerialBase * aerialShade * mix(0.88, 1.0, ao);
+    vec3 lit = mix(reliefLit, aerialLit, uImageryOn);
 
     vec3 viewDir = normalize(uCameraPos - vWorld);
     vec3 halfVec = normalize(uSunDir + viewDir);
-    lit += uSunColor * pow(max(0.0, dot(n, halfVec)), 90.0) * 0.03 * uKey;
+    lit += uSunColor * pow(max(0.0, dot(n, halfVec)), 90.0)
+      * 0.03 * uKey * (1.0 - uImageryOn);
 
     // Flat cartographic shading when the hillshade layer is off. Named
     // flatShade because plain "flat" is a reserved interpolation qualifier
     // in GLSL ES 3.0, which is what three compiles to on WebGL 2.
-    vec3 flatShade = base * (uAmbient * 0.6 + 0.75) * uExposure * 0.8;
+    vec3 reliefFlat = reliefBase * (uAmbient * 0.6 + 0.75) * uExposure * 0.8;
+    vec3 flatShade = mix(reliefFlat, aerialBase, uImageryOn);
     vec3 color = mix(flatShade, lit, uHillshade);
 
     // ---- contours ------------------------------------------------------
@@ -260,7 +272,7 @@ export function warpForDistance(distanceM) {
 }
 
 export function createTerrain(THREE, options) {
-  const { meta, grid, macro, quality = 'balanced' } = options;
+  const { meta, grid, macro, imagery = null, quality = 'balanced' } = options;
   const { width, height } = meta;
   const regionW = meta.projection.widthM;
   const regionH = meta.projection.heightM;
@@ -271,11 +283,13 @@ export function createTerrain(THREE, options) {
   const macroSize = Math.round(Math.sqrt(macro.length));
   const macroTex = makeHeightTexture(THREE, macro, macroSize, macroSize);
   const rampTex = makeRampTexture(THREE, 'dusk');
+  const imageryTex = makeImageryTexture(THREE, imagery);
 
   const uniforms = {
     uHeight: { value: heightTex },
     uMacro: { value: macroTex },
     uRamp: { value: rampTex },
+    uImagery: { value: imageryTex },
     uCenter: { value: new THREE.Vector2(0.5, 0.5) },
     uWarp: { value: 1.0 },
     uExag: { value: 14 },
@@ -300,6 +314,7 @@ export function createTerrain(THREE, options) {
     uContourInterval: { value: 25 },
     uHillshade: { value: 1 },
     uReliefOn: { value: 1 },
+    uImageryOn: { value: 0 },
     uWaterLevel: { value: 2 },
     uExposure: { value: 2.3 },
   };
@@ -325,6 +340,7 @@ export function createTerrain(THREE, options) {
     material,
     uniforms,
     segments,
+    hasImagery: !!imagery,
 
     setTheme(themeId) {
       const theme = getTheme(themeId);
@@ -345,8 +361,30 @@ export function createTerrain(THREE, options) {
       heightTex.dispose();
       macroTex.dispose();
       rampTex.dispose();
+      imageryTex.dispose();
     },
   };
+}
+
+/** Browser image -> north-up terrain texture. Row 0 and UV y=0 are north. */
+function makeImageryTexture(THREE, image) {
+  if (!image) {
+    const tex = new THREE.DataTexture(
+      new Uint8Array([96, 104, 88, 255]), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
+    tex.needsUpdate = true;
+    return tex;
+  }
+  const tex = new THREE.Texture(image);
+  tex.flipY = false;
+  tex.wrapS = THREE.ClampToEdgeWrapping;
+  tex.wrapT = THREE.ClampToEdgeWrapping;
+  tex.minFilter = THREE.LinearMipmapLinearFilter;
+  tex.magFilter = THREE.LinearFilter;
+  tex.anisotropy = 8;
+  tex.colorSpace = THREE.SRGBColorSpace;
+  tex.generateMipmaps = true;
+  tex.needsUpdate = true;
+  return tex;
 }
 
 function setVec3(target, hex) {

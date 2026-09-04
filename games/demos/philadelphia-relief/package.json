@@ -12,9 +12,10 @@
     "check": "npm run lint && npm test",
     "qa": "node tools/qa.mjs",
     "build:terrain": "python3 tools/build_terrain.py --grid 2048 --step 0.25 --out heightmap.webp",
+    "build:imagery": "python3 tools/build_imagery.py --size 4096 --quality 82",
     "build:vectors": "python3 tools/build_vectors.py",
     "build:structures": "python3 tools/build_structures.py",
-    "build:data": "npm run build:terrain && npm run build:vectors && npm run build:structures"
+    "build:data": "npm run build:terrain && npm run build:imagery && npm run build:vectors && npm run build:structures"
   },
   "engines": {
     "node": ">=20"

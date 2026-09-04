@@ -14,13 +14,27 @@
  * Pure module — the tests drive every tour through every seam.
  */
 
-import { presetPatch, blendPatches, TOUR } from './presets.js?v=philly-20260904';
-import { coercePatch } from './schema.js?v=philly-20260904';
+import { presetPatch, blendPatches, TOUR } from './presets.js?v=philly-2026090402';
+import { coercePatch } from './schema.js?v=philly-2026090402';
 
 const OSM = 'OpenStreetMap contributors (ODbL); heights as measured in the OSM data';
 const REFS = 'Public reference values (rounded); see bridges.json and the About panel';
 const DEM = 'This map’s elevation data: USGS 3DEP / SRTM via AWS Terrain Tiles';
 const WIKI = 'Wikipedia (public reference)';
+
+const MODEL_PRESETS = new Set(['skyline', 'ben-franklin-bridge', 'night-metro']);
+
+/** Tours that describe modelled structures explicitly switch that optional layer on. */
+function withStructures(shot) {
+  if (!MODEL_PRESETS.has(shot.preset)) return shot;
+  return {
+    ...shot,
+    override: {
+      ...(shot.override || {}),
+      layers: { ...(shot.override?.layers || {}), structures: true },
+    },
+  };
+}
 
 const GRAND_CAPTIONS = {
   skyline: {
@@ -71,7 +85,7 @@ export const TOURS = [
     name: 'The Grand Tour',
     blurb: 'All eight shots: skyline, the bridge, and out across the whole valley.',
     // Derived from the flythrough definition so the two cannot drift apart.
-    shots: TOUR.map((s) => ({ ...s, caption: GRAND_CAPTIONS[s.preset] })),
+    shots: TOUR.map((s) => withStructures({ ...s, caption: GRAND_CAPTIONS[s.preset] })),
   },
   {
     id: 'skyline',
@@ -108,7 +122,7 @@ export const TOURS = [
         title: 'Back to the skyline',
         text: 'Drag from any building to keep exploring; click a landmark for its card.',
         source: 'This map' } },
-    ],
+    ].map(withStructures),
   },
   {
     id: 'crossings',
@@ -146,7 +160,7 @@ export const TOURS = [
           text: 'A cantilever truss with a main span about 501 m — among the longest of its ' +
             'kind in the world.',
           source: REFS } },
-    ],
+    ].map(withStructures),
   },
   {
     id: 'rivers',

@@ -1,0 +1,26 @@
+{
+  "generator": "tools/build_imagery.py",
+  "source": {
+    "name": "USGS Imagery Only",
+    "agency": "USDA / U.S. Geological Survey, National Geospatial Program",
+    "url": "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer",
+    "service": "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/export",
+    "description": "Public-domain orthoimagery from The National Map; principally USDA National Agriculture Imagery Program imagery in this region.",
+    "credit": "USDA, USGS The National Map: Orthoimagery",
+    "license": "Public domain"
+  },
+  "bounds": {
+    "west": -75.8,
+    "east": -74.7,
+    "south": 39.7,
+    "north": 40.55
+  },
+  "projection": "EPSG:4326",
+  "width": 4096,
+  "height": 4096,
+  "format": "webp",
+  "quality": 82,
+  "bytes": 5213486,
+  "sha256": "fae7075278fc21ffbadac90929d80121397518f2c3fa86f61340413a4fcdf41f",
+  "builtAt": "2026-09-04T16:17:15+00:00"
+}
