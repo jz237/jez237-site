@@ -1,0 +1,242 @@
+{
+  "note": "Buildings with a documented construction or opening year, keyed by their exact OpenStreetMap name so the build can date the footprint. Years are the commonly published completion or opening year (Wikipedia unless noted); a building drawn solid in an era view is one of these, or one OpenStreetMap itself dates with start_date. Everything else is undated and drawn ghosted in past eras: absence of a date is not evidence of absence.",
+  "source": "Wikipedia articles named per entry; OpenStreetMap start_date where present",
+  "buildings": {
+    "Independence Hall": {
+      "year": 1753,
+      "source": "Wikipedia: Independence Hall"
+    },
+    "Congress Hall": {
+      "year": 1789,
+      "source": "Wikipedia: Congress Hall"
+    },
+    "Old City Hall": {
+      "year": 1791,
+      "source": "Wikipedia: Old City Hall (Philadelphia)"
+    },
+    "Carpenters' Hall": {
+      "year": 1774,
+      "source": "Wikipedia: Carpenters' Hall"
+    },
+    "First Bank of the United States": {
+      "year": 1797,
+      "source": "Wikipedia: First Bank of the United States"
+    },
+    "Second Bank of the United States": {
+      "year": 1824,
+      "source": "Wikipedia: Second Bank of the United States"
+    },
+    "Merchants' Exchange Building": {
+      "year": 1834,
+      "source": "Wikipedia: Merchants' Exchange Building (Philadelphia)"
+    },
+    "Christ Church Philadelphia": {
+      "year": 1744,
+      "source": "Wikipedia: Christ Church, Philadelphia"
+    },
+    "Gloria Dei Church": {
+      "year": 1700,
+      "source": "Wikipedia: Gloria Dei (Old Swedes') Church"
+    },
+    "Old Swedes Church": {
+      "year": 1700,
+      "source": "Wikipedia: Gloria Dei (Old Swedes') Church"
+    },
+    "Betsy Ross House": {
+      "year": 1740,
+      "source": "Wikipedia: Betsy Ross House (built c. 1740)"
+    },
+    "Elfreth's Alley Museum": {
+      "year": 1755,
+      "source": "Wikipedia: Elfreth's Alley (houses 1720s-1830s; museum house 1755)"
+    },
+    "Powel House": {
+      "year": 1765,
+      "source": "Wikipedia: Powel House"
+    },
+    "Hill-Physick House": {
+      "year": 1786,
+      "source": "Wikipedia: Physick House"
+    },
+    "Historic Bartram House": {
+      "year": 1731,
+      "source": "Wikipedia: Bartram's Garden"
+    },
+    "Head House": {
+      "year": 1805,
+      "source": "Wikipedia: Head House Square"
+    },
+    "Arch Street Friends Meetinghouse": {
+      "year": 1804,
+      "source": "Wikipedia: Arch Street Friends Meeting House"
+    },
+    "Athenaeum of Philadelphia": {
+      "year": 1845,
+      "source": "Wikipedia: Athenaeum of Philadelphia (building 1845; OSM says 1814, the society's founding)"
+    },
+    "Academy of Music": {
+      "year": 1857,
+      "source": "Wikipedia: Academy of Music (Philadelphia)"
+    },
+    "Eastern State Penitentiary": {
+      "year": 1829,
+      "source": "Wikipedia: Eastern State Penitentiary"
+    },
+    "Engine House, Fairmount Water Works": {
+      "year": 1815,
+      "source": "Wikipedia: Fairmount Water Works"
+    },
+    "Caretaker's House, Fairmount Water Works": {
+      "year": 1815,
+      "source": "Wikipedia: Fairmount Water Works"
+    },
+    "Old Mill House, Fairmount Water Works": {
+      "year": 1822,
+      "source": "Wikipedia: Fairmount Water Works"
+    },
+    "New Mill House, Fairmount Water works": {
+      "year": 1862,
+      "source": "Wikipedia: Fairmount Water Works"
+    },
+    "Laurel Hill Cemetery Gatehouse": {
+      "year": 1836,
+      "source": "Wikipedia: Laurel Hill Cemetery"
+    },
+    "Girard College Chapel": {
+      "year": 1933,
+      "source": "Wikipedia: Girard College"
+    },
+    "Masonic Temple": {
+      "year": 1873,
+      "source": "Wikipedia: Masonic Temple (Philadelphia)"
+    },
+    "College Hall": {
+      "year": 1873,
+      "source": "Wikipedia: College Hall (University of Pennsylvania)"
+    },
+    "Cathedral of Saints Peter and Paul": {
+      "year": 1864,
+      "source": "Wikipedia: Cathedral Basilica of Saints Peter and Paul"
+    },
+    "Church of St. James the Less": {
+      "year": 1849,
+      "source": "Wikipedia: Church of St. James the Less"
+    },
+    "Arch Street Presbyterian Church": {
+      "year": 1855,
+      "source": "Wikipedia: Arch Street Presbyterian Church"
+    },
+    "Arch Street United Methodist Church": {
+      "year": 1870,
+      "source": "Wikipedia: Arch Street United Methodist Church"
+    },
+    "Mother Bethel African Methodist Episcopal Church": {
+      "year": 1890,
+      "source": "Wikipedia: Mother Bethel A.M.E. Church"
+    },
+    "Curtis Institute of Music": {
+      "year": 1893,
+      "source": "Wikipedia: Curtis Institute of Music (Drexel mansion, 1893)"
+    },
+    "Divine Lorraine Hotel": {
+      "year": 1894,
+      "source": "Wikipedia: Divine Lorraine Hotel"
+    },
+    "Reading Terminal Headhouse": {
+      "year": 1893,
+      "source": "Wikipedia: Reading Terminal"
+    },
+    "Reading Terminal Market": {
+      "year": 1893,
+      "source": "Wikipedia: Reading Terminal Market"
+    },
+    "Land Title and Trust Building": {
+      "year": 1898,
+      "source": "Wikipedia: Land Title Building"
+    },
+    "City Hall": {
+      "year": 1901,
+      "source": "Wikipedia: Philadelphia City Hall"
+    },
+    "Philadelphia City Hall": {
+      "year": 1901,
+      "source": "Wikipedia: Philadelphia City Hall"
+    },
+    "Macy's": {
+      "year": 1911,
+      "source": "Wikipedia: Wanamaker's (the Wanamaker Building, 1911)"
+    },
+    "Penn Museum": {
+      "year": 1899,
+      "source": "Wikipedia: Penn Museum"
+    },
+    "Rodin Museum": {
+      "year": 1929,
+      "source": "Wikipedia: Rodin Museum"
+    },
+    "Franklin Institute": {
+      "year": 1934,
+      "source": "Wikipedia: Franklin Institute"
+    },
+    "Please Touch Museum": {
+      "year": 1876,
+      "source": "Wikipedia: Memorial Hall (Philadelphia)"
+    },
+    "Loews Philadelphia Hotel": {
+      "year": 1932,
+      "source": "Wikipedia: PSFS Building"
+    },
+    "Camden City Hall": {
+      "year": 1931,
+      "source": "Wikipedia: Camden City Hall"
+    },
+    "Chester City Hall": {
+      "year": 1724,
+      "source": "Wikipedia: Chester Courthouse (Old Chester Courthouse, 1724)"
+    },
+    "Penn Mutual Tower": {
+      "year": 1975,
+      "source": "Wikipedia: Penn Mutual Tower"
+    },
+    "Municipal Services Building": {
+      "year": 1965,
+      "source": "Wikipedia: Municipal Services Building (Philadelphia); OSM start_date 1963 is the start of construction"
+    },
+    "One Liberty Place": {
+      "year": 1987,
+      "source": "Wikipedia: One Liberty Place"
+    },
+    "BNY Mellon Center": {
+      "year": 1990,
+      "source": "Wikipedia: BNY Mellon Center (Philadelphia)"
+    },
+    "Comcast Center": {
+      "year": 2008,
+      "source": "Wikipedia: Comcast Center"
+    },
+    "Comcast Technology Center": {
+      "year": 2018,
+      "source": "Wikipedia: Comcast Technology Center"
+    },
+    "Cira Centre": {
+      "year": 2005,
+      "source": "Wikipedia: Cira Centre"
+    },
+    "Aramark Global Headquarters": {
+      "year": 2018,
+      "source": "Wikipedia: 2400 Market Street"
+    },
+    "Pennsylvania Convention Center": {
+      "year": 1993,
+      "source": "Wikipedia: Pennsylvania Convention Center"
+    },
+    "Bok": {
+      "year": 1938,
+      "source": "Wikipedia: Edward W. Bok Technical High School"
+    },
+    "Mint Building": {
+      "year": 1969,
+      "source": "Wikipedia: Philadelphia Mint"
+    }
+  }
+}

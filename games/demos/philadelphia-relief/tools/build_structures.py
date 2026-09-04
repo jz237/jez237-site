@@ -30,6 +30,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import math
 import os
 import pathlib
@@ -213,6 +214,39 @@ def replaced_by_models() -> set:
 
 
 REPLACED_BY_MODELS = replaced_by_models()
+
+
+def historic_years() -> dict:
+    """Curated construction years keyed by exact OSM name (data/historic-buildings.json)."""
+    path = ROOT / "data" / "historic-buildings.json"
+    if not path.exists():
+        return {}
+    doc = json.loads(path.read_text())
+    return {name: int(v["year"]) for name, v in doc.get("buildings", {}).items()}
+
+
+HISTORIC_YEARS = historic_years()
+HISTORIC_MATCHED: set = set()
+
+
+def parse_year(value) -> int | None:
+    """A four-digit year from an OSM start_date ('1893', '1893-05-01', 'c. 1740')."""
+    if not value:
+        return None
+    m = re.search(r"(1[5-9]\d\d|20\d\d)", str(value))
+    return int(m.group(1)) if m else None
+
+
+def building_year(tags: dict) -> tuple[int, str]:
+    """(year, source): the curated year wins, then OSM start_date, else 0 (undated)."""
+    name = tags.get("name")
+    if name in HISTORIC_YEARS:
+        HISTORIC_MATCHED.add(name)
+        return HISTORIC_YEARS[name], "curated"
+    y = parse_year(tags.get("start_date"))
+    if y:
+        return y, "osm"
+    return 0, "none"
 
 # ---------------------------------------------------------------------------
 # Bridges. Deck alignment and width come from OSM; the structural parameters
@@ -486,7 +520,8 @@ def process_zone(zone, payload, seen_ids: set) -> list:
                 notable = (height >= NOTABLE_MIN_HEIGHT_M
                            or (area >= NOTABLE_MIN_AREA_M2 and height >= 8.0)
                            or (named and height >= 12.0)
-                           or (named and area >= 1200.0))
+                           or (named and area >= 1200.0)
+                           or tags.get("name") in HISTORIC_YEARS)   # dated: history is notable
                 if not notable:
                     continue
             simplified = simplify(ring[:-1] if ring[0] == ring[-1] else ring, 0.6)
@@ -497,6 +532,7 @@ def process_zone(zone, payload, seen_ids: set) -> list:
             # bounds are honest and int16 packing cannot overflow.
             if any(abs(x) > 32000 or abs(z) > 32000 for x, z in local):
                 continue
+            year, year_source = building_year(tags)
             records.append({
                 "id": f"{el['type'][0]}{el['id']}",
                 "name": tags.get("name"),
@@ -506,6 +542,8 @@ def process_zone(zone, payload, seen_ids: set) -> list:
                 "area": round(area),
                 "poly": local,
                 "tier": tier_of(height),
+                "year": year,
+                "year_source": year_source,
             })
             emitted = True
         if emitted:
@@ -642,16 +680,21 @@ def simplify_local(points: list, tol_m: float) -> list:
 SOURCE_CODES = {"measured": 0, "levels": 1, "default": 2, "curated": 3, "merged": 4}
 
 
+YEAR_FLAGS = {"none": 0, "osm": 2, "curated": 4}
+
+
 def pack_tier(records: list) -> bytes:
-    out = bytearray(b"PHB1")
+    """PHB2: per building n, height dm, min height dm, source, flags, year (0 = undated)."""
+    out = bytearray(b"PHB2")
     out += struct.pack("<I", len(records))
     for r in records:
         poly = r["poly"]
         n = len(poly)
         h_dm = min(65535, int(round(r["height"] * 10)))
         mh_dm = min(65535, int(round(r["min_height"] * 10)))
-        flags = 1 if r["name"] else 0
-        out += struct.pack("<HHHBB", n, h_dm, mh_dm, SOURCE_CODES[r["source"]], flags)
+        flags = (1 if r["name"] else 0) | YEAR_FLAGS.get(r.get("year_source", "none"), 0)
+        year = min(65535, max(0, int(r.get("year") or 0)))
+        out += struct.pack("<HHHBBH", n, h_dm, mh_dm, SOURCE_CODES[r["source"]], flags, year)
         for x, z in poly:
             out += struct.pack("<hh", int(round(x)), int(round(z)))
     return bytes(out)
@@ -763,6 +806,7 @@ def main() -> int:
     totals = {"buildings": 0, "vertices": 0, "bytes": 0}
     source_counts: dict[str, int] = {}
 
+    dated_records: list = []
     for zone in ZONES:
         records, origin = process_zone(zone, raw[zone["id"]], seen)
         for r in records:
@@ -786,12 +830,15 @@ def main() -> int:
                 "poly": [(cx - hw, cz - hd), (cx + hw, cz - hd), (cx + hw, cz + hd),
                          (cx - hw, cz + hd)],
                 "tier": tier_of(extra["height"]),
+                "year": HISTORIC_YEARS.get(extra["name"], 0),
+                "year_source": "curated" if extra["name"] in HISTORIC_YEARS else "none",
             })
             source_counts["curated"] = source_counts.get("curated", 0) + 1
 
         merged_away = 0
         if zone["mode"] == "full" and not args.no_merge:
             records, merged_away = merge_low_rows(records)
+        dated_records.extend(records)
 
         tiers_out = []
         for tier_name, _floor in TIERS:
@@ -840,7 +887,7 @@ def main() -> int:
     }, indent=1) + "\n")
 
     manifest = {
-        "format": "PHB1",
+        "format": "PHB2",
         "generator": "tools/build_structures.py",
         "attribution": "(c) OpenStreetMap contributors, ODbL 1.0",
         "heightSources": {
@@ -857,6 +904,17 @@ def main() -> int:
         "bridgesFile": "bridges.json",
         "bridgeCount": len(bridges),
         "replacedByModels": sorted(REPLACED_BY_MODELS),
+        "dated": {
+            "curated": sum(1 for r in dated_records if r.get("year_source") == "curated"),
+            "osm": sum(1 for r in dated_records if r.get("year_source") == "osm"),
+            "undated": sum(1 for r in dated_records if not r.get("year")),
+            "historicUnmatched": sorted(set(HISTORIC_YEARS) - HISTORIC_MATCHED - REPLACED_BY_MODELS),
+            "note": "Years: curated = data/historic-buildings.json (published completion/opening "
+                    "year, Wikipedia); osm = OpenStreetMap start_date; undated = no public date "
+                    "in the data this map ships. Philadelphia's assessor records carry a "
+                    "year_built for every parcel but their licence reserves all database rights, "
+                    "so they are not redistributed here.",
+        },
         "projection": {
             "metersPerDegLat": round(region.METERS_PER_DEG_LAT, 4),
             "metersPerDegLon": round(region.METERS_PER_DEG_LON, 4),

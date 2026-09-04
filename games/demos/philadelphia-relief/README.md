@@ -187,6 +187,34 @@ the triangles cover its area. This is a visualisation of simplified public data:
 insurance, permitting or engineering decisions**, and NOAA's scenarios show the
 scale of potential flooding, not its exact location.
 
+### Historical views
+
+The **Era** control restages what is *mapped*: **1776**, the **industrial city
+of 1900**, the **1950s** and the present. The rule is honesty over drama. A
+building is drawn solid in a past era only when a public date says it was
+standing: a curated list of dated buildings (`data/historic-buildings.json`,
+published completion years, one Wikipedia citation per entry, matched by exact
+OpenStreetMap name at build time; the manifest reports any name that failed to
+match and a test insists that list stays empty) and OpenStreetMap's own
+`start_date` where it exists. Buildings documented as newer than the era vanish;
+the undated majority is **ghosted** into the haze, because a missing date is
+not a missing building. The structure stream (`PHB2`) carries the year and its
+source per building; bridges carry their opening years (no road bridge crossed
+the Delaware at Philadelphia before 1926, so 1900 is unbridged and the 1950s
+have exactly three); railways exist from 1834; motorways are hidden before
+1950 and ghosted in the 1950s; landmark labels with a `since` year vanish
+before their time. The 1776 view adds the approximate built-up extent of the
+town and of Germantown, traced by hand from William Faden's 1777 plan (Library
+of Congress, public domain) and labelled approximate. A banner names each
+era's rules and sources; the relief, rivers and shoreline are always today's.
+
+**What could not be sourced, and why.** The obvious source for building ages
+is the City of Philadelphia's property assessment data, which carries a
+`year_built` for every parcel; its licence reserves all rights in the
+database, so it is not redistributed here. OpenStreetMap dates only a few
+dozen buildings in the region. So the era views show far fewer solid buildings
+than stood in 1900 or 1955, and say so on screen rather than guessing.
+
 ### Simulated time and weather
 
 The **Time & weather** group is a simulation, not a forecast. In **Clock**

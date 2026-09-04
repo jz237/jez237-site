@@ -45,7 +45,7 @@ const inRegion = (lon, lat) => projection.contains(lon, lat);
 // ---------------------------------------------------------------------------
 test('structures manifest', async (t) => {
   await t.test('describes bounded zones with tiers, counts and sizes', () => {
-    assert.equal(manifest.format, 'PHB1');
+    assert.equal(manifest.format, 'PHB2');
     assert.ok(manifest.zones.length >= 2, 'two detail zones');
     for (const zone of manifest.zones) {
       assert.ok(inRegion(zone.bounds.west, zone.bounds.south), `${zone.id} sw outside region`);
@@ -118,9 +118,15 @@ test('tier streams', async (t) => {
   }
 
   await t.test('rejects a corrupted stream instead of rendering garbage', () => {
-    const good = new Uint8Array([80, 72, 66, 49, 1, 0, 0, 0, 3, 0, 100, 0, 0, 0, 0, 0,
+    // PHB2: magic, count=1, then n=3, height 10.0 m, min 0, source 0, flags 0b101
+    // (named, curated year), year 1753, and three vertices.
+    const good = new Uint8Array([80, 72, 66, 50, 1, 0, 0, 0, 3, 0, 100, 0, 0, 0, 0, 5, 217, 6,
       0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 0]);
-    assert.equal(parseTier(good.buffer).count, 1);
+    const parsed = parseTier(good.buffer);
+    assert.equal(parsed.count, 1);
+    assert.equal(parsed.buildings[0].year, 1753);
+    assert.equal(parsed.buildings[0].yearSource, 'curated');
+    assert.equal(parsed.buildings[0].named, true);
     const badMagic = new Uint8Array(good);
     badMagic[0] = 88;
     assert.throws(() => parseTier(badMagic.buffer), /bad magic/);
@@ -530,5 +536,48 @@ test('lazy suburban zones', async (t) => {
     const core = manifest.zones.find((z) => z.id === 'center-city');
     assert.equal(shouldActivateZone(core, { lon: -75.16, lat: 39.95, dist: 7000 }), false, 'core zones are eager');
     assert.equal(shouldActivateZone(null, { lon: 0, lat: 0, dist: 1 }), false);
+  });
+});
+
+// ---------------------------------------------------------------------------
+test('documented construction years', async (t) => {
+  await t.test('the manifest counts dated buildings and every curated name was placed', () => {
+    const d = manifest.dated;
+    assert.ok(d.curated >= 25, `${d.curated} curated-dated buildings`);
+    assert.ok(d.osm >= 40, `${d.osm} OSM-dated buildings`);
+    assert.ok(d.undated > d.curated + d.osm, 'most buildings are honestly undated');
+    assert.deepEqual(d.historicUnmatched, [], 'a curated name that matches nothing is a lie in waiting');
+    assert.match(d.note, /licence reserves all database rights/);
+  });
+
+  await t.test('the streams carry years only where the manifest says they exist', async () => {
+    let dated = 0;
+    let undated = 0;
+    for (const zone of manifest.zones) {
+      for (const tier of zone.tiers) {
+        const parsed = parseTier((await readFile(new URL(tier.file, dataDir))).buffer);
+        for (const b of parsed.buildings) {
+          if (b.year) {
+            dated += 1;
+            assert.ok(b.year >= 1600 && b.year <= 2030, `year ${b.year}`);
+            assert.ok(b.yearSource !== 'none', 'a year always names its source');
+          } else {
+            undated += 1;
+            assert.equal(b.yearSource, 'none');
+          }
+        }
+      }
+    }
+    assert.equal(dated, manifest.dated.curated + manifest.dated.osm);
+    assert.equal(undated, manifest.dated.undated);
+  });
+
+  await t.test('the curated list cites a source for every year', async () => {
+    const doc = JSON.parse(await readFile(new URL('historic-buildings.json', dataDir.href.replace(/structures\/$/, '')), 'utf8'));
+    for (const [name, entry] of Object.entries(doc.buildings)) {
+      assert.ok(entry.year > 1600 && entry.year < 2030, `${name} year`);
+      assert.match(entry.source, /Wikipedia|OpenStreetMap/, `${name} needs a public source`);
+    }
+    assert.match(doc.note, /absence of a date is not evidence of absence/);
   });
 });

@@ -12,6 +12,7 @@ import * as THREE from '../vendor/three.module.min.js';
 import { createStore } from './state.js';
 import { CAMERA, CONTROLS } from './schema.js';
 import { effectiveLight } from './solar.js';
+import { getEra, eraRules, landmarkInEra } from './eras.js';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
@@ -40,7 +41,7 @@ import {
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
-  enumLabel, setValueNote, renderFloodLegend,
+  enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
 } from './ui.js';
 import { getTheme } from './themes.js';
 
@@ -385,7 +386,16 @@ async function boot() {
       if (item.kind === 'landmark') ui.openCard(item.name);
     },
   });
-  labels.setCandidates(buildLabelCandidates(data.places, data.landmarks));
+  const landmarksForEra = (era) => (data.landmarks ? {
+    ...data.landmarks,
+    landmarks: (data.landmarks.landmarks || []).filter((l) => landmarkInEra(l, era)),
+  } : data.landmarks);
+  labels.setCandidates(buildLabelCandidates(data.places, landmarksForEra(store.value('era'))));
+  store.subscribe((state, changed) => {
+    if (changed.has('era')) {
+      labels.setCandidates(buildLabelCandidates(data.places, landmarksForEra(state.era)));
+    }
+  });
 
   const motion = createMotion(store, projection);
   const ui = wireInterface({ store, motion, data, projection, rig, structures });
@@ -445,6 +455,43 @@ async function boot() {
       adaptive?.disturb();
     }).catch((error) => console.warn('[philly-relief] tier sync failed:', error));
   }
+
+  // The 1776 view draws an approximate built-up extent traced from Faden's
+  // 1777 plan; it is fetched the first time that era is chosen.
+  const eraExtent = { entries: null, pending: null };
+  function ensureEraExtent() {
+    if (eraExtent.entries || eraExtent.pending) return eraExtent.pending || Promise.resolve();
+    eraExtent.pending = (async () => {
+      try {
+        const doc = await fetchJson('data/eras/philadelphia-1776.geojson');
+        const entry = buildAreaMesh(THREE, collectRings(doc), { projection, sampleElevation }, {
+          kind: 'era', color: '#f2b45c', opacity: 0.34, renderOrder: 9, name: 'era-1776-extent',
+        });
+        eraExtent.entries = [];
+        if (entry) {
+          entry.layer = 'era';
+          entry.kind = 'era';
+          entry.mesh.visible = false;
+          overlayRoot.add(entry.mesh);
+          overlays.areas.push(entry);
+          overlays.all.push(entry);
+          eraExtent.entries.push(entry);
+          recolorOverlays(overlays, getTheme(store.value('theme')));
+        }
+      } catch (error) {
+        console.warn('[philly-relief] 1776 extent unavailable:', error.message);
+        eraExtent.entries = [];
+      } finally {
+        eraExtent.pending = null;
+        applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
+      }
+    })();
+    return eraExtent.pending;
+  }
+  store.subscribe((state, changed) => {
+    if (changed.has('era') && eraRules(state.era).extent1776) ensureEraExtent();
+  });
+  if (eraRules(store.value('era')).extent1776) ensureEraExtent();
 
   const qualityNote = () => setValueNote('quality',
     store.value('quality') === 'auto' ? enumLabel('quality', effectiveQuality) : '');
@@ -534,6 +581,14 @@ async function boot() {
       },
       landmarkModels: structures ? structures.landmarkModelCount : 0,
       card: ui.cardName,
+      era: {
+        id: store.value('era'),
+        year: structures ? structures.eraYear : 9999,
+        bridges: structures ? structures.visibleBridges : [],
+        motorwaysVisible: overlays.all.some((e) => e.kind === 'road-1' && e.mesh.visible),
+        railVisible: overlays.all.some((e) => e.layer === 'rail' && e.mesh.visible),
+        extent1776Visible: overlays.all.some((e) => e.layer === 'era' && e.mesh.visible),
+      },
       light: lastLight ? {
         clock: lastLight.clock, weather: lastLight.weather, night: lastLight.night,
         sunAzimuth: Math.round(lastLight.sunAzimuth * 10) / 10,
@@ -905,9 +960,14 @@ function applyState(state, ctx) {
   postfx.setVignette(0.28 + light.fogDensity * 0.35);
 
   const selection = flood ? floodSelection(state, flood.manifests) : null;
+  const era = eraRules(state.era);
+  structures?.setEra(era.year);
   for (const entry of overlays.all) {
     let on = !!state.layers[entry.layer];
     if (entry.layer === 'flood') on = !!selection && selection.keys.has(entry.floodKey);
+    if (entry.layer === 'era') on = era.extent1776;
+    if (entry.layer === 'rail' && !era.rail) on = false;
+    if (entry.kind === 'road-1' && era.motorways === 'hide') on = false;
     entry.mesh.visible = on;
     const uu = entry.mesh.material.uniforms;
     if (entry.layer === 'roads' && uu.uOpacity) {
@@ -915,7 +975,8 @@ function applyState(state, ctx) {
       // Secondary roads and ramps are context, not subject: at full strength
       // the network read as the map and buried the relief underneath it.
       uu.uOpacity.value = state.roadOpacity
-        * (tier === 1 ? 1 : tier === 2 ? 0.6 : tier === 3 ? 0.3 : 0.25);
+        * (tier === 1 ? 1 : tier === 2 ? 0.6 : tier === 3 ? 0.3 : 0.25)
+        * (tier === 1 && era.motorways === 'ghost' ? 0.3 : 1);
     } else if (entry.layer === 'boundaries' && uu.uOpacity) {
       const level = Number(entry.kind.split('-')[1]);
       uu.uOpacity.value = state.boundaryOpacity * (level === 6 ? 1 : 0.55);
@@ -928,6 +989,8 @@ function applyState(state, ctx) {
 
   ui?.syncControls(state);
   if (selection) renderFloodLegend($('floodLegend'), floodLegend(selection, flood.manifests));
+  renderEraBanner($('eraBanner'), getEra(state.era),
+    () => ui?.store?.set({ era: 'present' }, { source: 'ui' }));
   // In clock mode the sun sliders are overridden; say so in their readouts.
   setValueNote('sunAzimuth', light.clock ? `${Math.round(light.sunAzimuth)}° by the clock` : '');
   setValueNote('sunAltitude', light.clock
@@ -955,7 +1018,7 @@ function recolorOverlays(overlays, theme) {
       setVec3(u.uColor.value, theme.rail);
     } else if (entry.layer === 'boundaries') {
       setVec3(u.uColor.value, theme.boundary);
-    } else if (entry.layer === 'flood') {
+    } else if (entry.layer === 'flood' || entry.layer === 'era') {
       setVec3(u.uFogColor.value, theme.fog);
     }
   }
@@ -1487,6 +1550,7 @@ function wireInterface(deps) {
 
   return {
     layerToggles,
+    store,
     openCard(name, options) { return card.open(name, options); },
     closeCard() { card.close(); },
     get cardName() { return card.openName; },
@@ -1556,6 +1620,10 @@ function fillStructureFacts(manifest, structures) {
     `${Math.round((((counts.levels || 0) + (counts.default || 0)) / total) * 100)}%`);
   set('aboutCuratedCount', String(counts.curated || 0));
   set('aboutBridgeCount', String((structures?.bridges || []).length));
+  const dated = manifest.dated || {};
+  set('aboutDatedCurated', String(dated.curated ?? 0));
+  set('aboutDatedOsm', String(dated.osm ?? 0));
+  set('aboutUndated', (dated.undated ?? 0).toLocaleString());
   set('aboutBridgeNames', (structures?.bridges || []).map((b) => b.name).join(', '));
 }
 

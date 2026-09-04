@@ -591,6 +591,35 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { transform: scale(1.25)
 .caption span { display: block; font-size: 12.5px; line-height: 1.5; color: rgba(255,255,255,0.88); }
 .caption small { display: block; margin-top: 5px; font-size: 10px; color: var(--muted); }
 
+/* ── era banner ────────────────────────────────────────────────────────── */
+
+.era-banner {
+  position: fixed; z-index: 57;
+  top: calc(64px + env(safe-area-inset-top)); left: 50%; transform: translateX(-50%);
+  width: min(560px, calc(100vw - 32px));
+  padding: 10px 14px 8px;
+  background: var(--panel-blur); backdrop-filter: blur(16px);
+  border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  font-size: 12px; line-height: 1.45;
+  animation: rise-in 280ms var(--ease);
+}
+.era-banner[hidden] { display: none; }
+.era-head { display: flex; align-items: baseline; gap: 10px; }
+.era-head strong { font-size: 14px; }
+.era-tag {
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent);
+}
+.era-note { margin: 4px 0 0; color: rgba(255, 255, 255, 0.86); }
+.era-sources { margin: 4px 0 0; font-size: 10.5px; color: var(--muted); }
+.era-sources a { color: var(--accent); }
+.era-back { margin-top: 4px; padding-left: 0; }
+body.cinema .era-banner { top: max(12px, env(safe-area-inset-top)); }
+@media (max-width: 820px) {
+  .era-banner { top: calc(112px + env(safe-area-inset-top)); width: calc(100vw - 24px); }
+  body.sheet-open .era-banner { display: none; }
+}
+
 /* ── flood legend ──────────────────────────────────────────────────────── */
 
 .legend {

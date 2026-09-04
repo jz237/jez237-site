@@ -178,6 +178,9 @@
   <small id="captionSource"></small>
 </div>
 
+<!-- ── era banner ──────────────────────────────────────────────────────── -->
+<div id="eraBanner" class="era-banner" role="status" aria-live="polite" hidden></div>
+
 <!-- ── landmark card ───────────────────────────────────────────────────── -->
 <aside id="card" class="card" role="dialog" aria-labelledby="cardTitle" hidden>
   <div class="card-head">
@@ -328,6 +331,26 @@
           the key light fades through civil twilight to a dim night. The <b>weather</b>
           presets scale haze, sun, sky fill, bloom and water by fixed factors. Neither reads
           any live data.
+        </dd>
+      </div>
+      <div>
+        <dt>Historical views</dt>
+        <dd>
+          The <b>Era</b> control (1776, the industrial city of 1900, the 1950s) changes what is
+          mapped, not how it is lit. A building is drawn solid in a past era only when a public
+          date says it was standing: <b id="aboutDatedCurated">—</b> come from a curated list of
+          dated buildings (published completion years, cited per entry in
+          <code>data/historic-buildings.json</code>) and <b id="aboutDatedOsm">—</b> from
+          OpenStreetMap's <code>start_date</code>; buildings documented as newer disappear, and the
+          <b id="aboutUndated">—</b> undated ones are <b>ghosted</b>, because a missing date is
+          not a missing building. Bridges follow their opening years; railways exist from 1834;
+          motorways are hidden before 1950 and ghosted in the 1950s. The 1776 view adds the
+          approximate built-up extent of the town and of Germantown, traced by hand from William
+          Faden's 1777 plan (Library of Congress, public domain) and labelled approximate.
+          <b>What is missing, and why:</b> Philadelphia's assessor records carry a year built
+          for every parcel, but their licence reserves all rights in the database, so they are
+          not redistributed here; OpenStreetMap dates only a few dozen buildings. The relief,
+          rivers and shoreline are always today's.
         </dd>
       </div>
     </dl>
