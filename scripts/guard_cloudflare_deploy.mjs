@@ -1,10 +1,11 @@
 #!/usr/bin/env node
-import { existsSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
+import { checkGamesCatalogSyntax } from "./check_games_catalog_syntax.mjs";
 
-const BASELINE_COMMIT = "ed5a786a7103eb8c215f9d30907211c2027b23b0";
-const BASELINE_COMMIT_UNIX_SECONDS = 1783207467;
-const BASELINE_LABEL = "2026-07-04 live-safe baseline";
+const BASELINE_COMMIT = "4810212c063f49501d5d5dbb5bb7ba4bf8c66fd1";
+const BASELINE_LABEL = "2026-08-24 Final Blow 1.9E live-safe baseline";
+const BASELINE_MARKER_PATH = "scripts/live-deploy-baseline.json";
 const PRODUCTION_BRANCHES = new Set(["main"]);
 const REQUIRED_PATHS = [
   "games/index.html",
@@ -53,9 +54,27 @@ function currentCommit() {
   return resolveCommit(ref);
 }
 
-function commitUnixSeconds(ref) {
-  const result = runGit(["show", "-s", "--format=%ct", ref], { allowFail: true });
-  return result.status === 0 ? Number(result.stdout) : 0;
+function verifiedBaselineMarker() {
+  try {
+    const marker = JSON.parse(readFileSync(BASELINE_MARKER_PATH, "utf8"));
+    const ok =
+      marker.schema === 1 &&
+      marker.protectedAncestor === BASELINE_COMMIT &&
+      marker.label === BASELINE_LABEL;
+    return {
+      ok,
+      method: "baseline-marker",
+      detail: ok
+        ? `verified ${BASELINE_MARKER_PATH}`
+        : `${BASELINE_MARKER_PATH} does not match the protected baseline`,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      method: "baseline-marker",
+      detail: `${BASELINE_MARKER_PATH} could not be verified: ${error.message}`,
+    };
+  }
 }
 
 function commitContainsBaseline(commit) {
@@ -68,12 +87,18 @@ function commitContainsBaseline(commit) {
     return { ok: true, method: "ancestor" };
   }
 
-  const commitTime = commitUnixSeconds(commit);
-  if (commitTime >= BASELINE_COMMIT_UNIX_SECONDS) {
-    return { ok: true, method: "timestamp" };
+  const shallowCheck = runGit(["rev-parse", "--is-shallow-repository"], {
+    allowFail: true,
+  });
+  if (shallowCheck.status === 0 && shallowCheck.stdout === "true") {
+    return verifiedBaselineMarker();
   }
 
-  return { ok: false, method: "ancestor" };
+  return {
+    ok: false,
+    method: "ancestor",
+    detail: "the full local repository does not contain the protected ancestor",
+  };
 }
 
 function fail(message) {
@@ -94,14 +119,8 @@ const baselineCheck = commitContainsBaseline(commit);
 if (!baselineCheck.ok) {
   fail(
     `commit ${commit} does not include ${BASELINE_LABEL} ${BASELINE_COMMIT}. ` +
-      "Refusing to deploy a tree older than the protected live site.",
-  );
-}
-
-if (baselineCheck.method === "timestamp") {
-  console.warn(
-    "Deploy guard could not prove ancestry, likely because this is a shallow checkout. " +
-      "Accepted because the commit timestamp is newer than the protected baseline.",
+      "Refusing to deploy a tree older than or disconnected from the protected " +
+      `live site.${baselineCheck.detail ? ` ${baselineCheck.detail}` : ""}`,
   );
 }
 
@@ -110,7 +129,15 @@ if (missingPaths.length > 0) {
   fail(`required live-site paths are missing: ${missingPaths.join(", ")}`);
 }
 
+try {
+  const checked = checkGamesCatalogSyntax();
+  console.log(`Games catalog syntax passed (${checked} inline scripts).`);
+} catch (error) {
+  fail(error.message);
+}
+
 console.log(
   `Deploy guard passed for ${branch || "current branch"} at ${commit}. ` +
-    `Baseline: ${BASELINE_COMMIT}; method: ${baselineCheck.method}.`,
+    `Baseline: ${BASELINE_COMMIT}; method: ${baselineCheck.method}` +
+    `${baselineCheck.detail ? `; ${baselineCheck.detail}` : ""}.`,
 );
