@@ -7,45 +7,51 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js';
+import * as THREE from '../vendor/three.module.min.js?v=philly-20260904';
 
-import { createStore } from './state.js';
-import { CAMERA, CONTROLS } from './schema.js';
-import { effectiveLight } from './solar.js';
-import { getEra, eraRules, landmarkInEra } from './eras.js';
+import { createStore } from './state.js?v=philly-20260904';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-20260904';
+import { effectiveLight } from './solar.js?v=philly-20260904';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-20260904';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js';
-import { TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame } from './tours.js';
-import { decodeState, encodeState, buildShareUrl, readViewName, cleanViewName } from './urlstate.js';
+} from './geo.js?v=philly-20260904';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-20260904';
+import {
+  TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
+} from './tours.js?v=philly-20260904';
+import {
+  decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
+} from './urlstate.js?v=philly-20260904';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js';
+} from './degraded.js?v=philly-20260904';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js';
-import { createSky, sunDirection } from './sky.js';
-import { createPostFX } from './postfx.js';
-import { createCameraRig } from './camera.js';
-import { createLabelLayer, buildLabelCandidates } from './labels.js';
-import { createStructures } from './structures.js';
+} from './terrain.js?v=philly-20260904';
+import { createSky, sunDirection } from './sky.js?v=philly-20260904';
+import { createPostFX } from './postfx.js?v=philly-20260904';
+import { createCameraRig } from './camera.js?v=philly-20260904';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-20260904';
+import { createStructures } from './structures.js?v=philly-20260904';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js';
-import { decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE } from './flood.js';
-import { buildLandmarkModels } from './landmark-models.js';
+} from './structures-data.js?v=philly-20260904';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-20260904';
+import {
+  decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
+} from './flood.js?v=philly-20260904';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-20260904';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js';
+} from './vectors.js?v=philly-20260904';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js';
-import { getTheme } from './themes.js';
+} from './ui.js?v=philly-20260904';
+import { getTheme } from './themes.js?v=philly-20260904';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 

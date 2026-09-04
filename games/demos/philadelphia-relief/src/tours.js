@@ -14,8 +14,8 @@
  * Pure module — the tests drive every tour through every seam.
  */
 
-import { presetPatch, blendPatches, TOUR } from './presets.js';
-import { coercePatch } from './schema.js';
+import { presetPatch, blendPatches, TOUR } from './presets.js?v=philly-20260904';
+import { coercePatch } from './schema.js?v=philly-20260904';
 
 const OSM = 'OpenStreetMap contributors (ODbL); heights as measured in the OSM data';
 const REFS = 'Public reference values (rounded); see bridges.json and the About panel';

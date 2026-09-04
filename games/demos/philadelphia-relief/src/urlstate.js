@@ -8,8 +8,8 @@
  * Pure module: the tests round-trip real app states through it.
  */
 
-import { CONTROLS, CAMERA, LAYERS, defaults, coercePatch } from './schema.js';
-import { presetPatch, getPreset } from './presets.js';
+import { CONTROLS, CAMERA, LAYERS, defaults, coercePatch } from './schema.js?v=philly-20260904';
+import { presetPatch, getPreset } from './presets.js?v=philly-20260904';
 
 const PRESET_KEY = 'P';
 const NAME_KEY = 'n';
