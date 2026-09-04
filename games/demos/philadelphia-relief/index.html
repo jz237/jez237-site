@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/games/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026090402" />
+<link rel="stylesheet" href="app.css?v=philly-2026090403" />
 </head>
 <body data-theme="dusk">
 
@@ -269,8 +269,11 @@
           <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer"
              target="_blank" rel="noopener">USGS Imagery Only</a> from The National Map,
           principally USDA National Agriculture Imagery Program orthoimagery in this region.
-          It is baked once into a 4096 × 4096 north-up texture over the exact terrain bounds,
-          then draped directly over the elevation mesh. U.S. federal map services and data are
+          A 4096 × 4096 north-up regional texture is baked over the exact terrain bounds.
+          Below 16 km camera distance, Jez237.com's edge loads and caches an overlapping
+          8 km detail window around the camera at about 2 m/px on desktop or 4 m/px on a
+          phone. Both are draped directly over the elevation mesh; the regional image stays
+          visible whenever detail is unavailable. U.S. federal map services and data are
           public domain. Credit: USDA, USGS The National Map: Orthoimagery.
         </dd>
       </div>
@@ -410,8 +413,9 @@
       the height field. Buildings are one draw call per zone and height tier,
       packed tallest-first so the density slider is a draw-range prefix; whole
       tiers frustum-cull as a unit and rise out of the ground as you approach.
-      Every byte is served from this origin — the USGS image is baked at build time,
-      so there is no runtime map service, account or API key.
+      The browser loads every byte from this origin: a baked regional image first, then a
+      bounded, same-origin Cloudflare cache endpoint for close-range USGS detail. There is
+      no browser credential, map account or API key.
     </p>
 
     <p class="about-foot">
@@ -471,7 +475,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026090402"></script>
+<script type="module" src="src/main.js?v=philly-2026090403"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

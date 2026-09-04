@@ -10,11 +10,13 @@ Live path: `/games/demos/philadelphia-relief/`
 **Concept and prompt by Jez. Built collaboratively with Claude via Traycer and
 GPT-5.6.**
 
-It is a plain static page. No framework, no bundler, no API key, no account,
-and **no third-party requests at runtime** — every byte it draws is served from
+It is a plain browser page with one bounded Cloudflare Pages Function. There is
+no framework, bundler, API key or account, and the browser loads every byte from
 this origin. A 4096² public-domain USGS orthoimage is baked at build time and
-draped directly over the elevation mesh; the earlier 3D buildings remain as an
-optional layer and are off by default.
+draped directly over the elevation mesh. Below 16 km camera distance, the edge
+function streams and caches one overlapping 8 km USGS detail window around the
+camera target, giving about 2 m/px on desktop and 4 m/px on a phone. The earlier
+3D buildings remain as an optional layer and are off by default.
 
 ---
 
@@ -86,8 +88,16 @@ seams to stitch.
 from the public-domain **USGS Imagery Only** service in EPSG:4326. The resulting
 4096 × 4096 WebP has the same north-up regular lon/lat grid as the terrain, so
 the fragment shader samples it with the terrain UV directly: no screenshot
-placement, runtime tile service, key or reprojection. The map displays the
-requested USDA / USGS credit whenever the layer is visible.
+placement, key or reprojection. It is the instant-start regional level.
+
+At close range, `src/imagery-detail.js` selects an overlapping 0.096° × 0.072°
+cell around the camera. The same-origin `detail-imagery` Pages Function validates
+and quantises every request, streams the matching USGS export without buffering,
+and caches it at the edge for 30 days. Desktop receives 4096² (about 2 m/px);
+phones and Performance mode receive 2048² (about 4 m/px). The shader feathers
+the detail window into the regional texture, which remains visible if the source
+or function is unavailable. The map displays the requested USDA / USGS credit
+and the active ground resolution whenever the aerial layer is visible.
 
 The **Aerial imagery** layer opens on and **3D buildings & bridges** opens off.
 Turning the latter on restores the full OSM extrusion/bridge model without
