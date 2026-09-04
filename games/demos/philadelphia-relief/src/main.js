@@ -7,51 +7,52 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090402';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090403';
 
-import { createStore } from './state.js?v=philly-2026090402';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090402';
-import { effectiveLight } from './solar.js?v=philly-2026090402';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090402';
+import { createStore } from './state.js?v=philly-2026090403';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090403';
+import { effectiveLight } from './solar.js?v=philly-2026090403';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090403';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090402';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090402';
+} from './geo.js?v=philly-2026090403';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090403';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090402';
+} from './tours.js?v=philly-2026090403';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090402';
+} from './urlstate.js?v=philly-2026090403';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090402';
+} from './degraded.js?v=philly-2026090403';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090402';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090402';
-import { createPostFX } from './postfx.js?v=philly-2026090402';
-import { createCameraRig } from './camera.js?v=philly-2026090402';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090402';
-import { createStructures } from './structures.js?v=philly-2026090402';
+} from './terrain.js?v=philly-2026090403';
+import { createImageryDetail } from './imagery-detail.js?v=philly-2026090403';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090403';
+import { createPostFX } from './postfx.js?v=philly-2026090403';
+import { createCameraRig } from './camera.js?v=philly-2026090403';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090403';
+import { createStructures } from './structures.js?v=philly-2026090403';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090402';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090402';
+} from './structures-data.js?v=philly-2026090403';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090403';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090402';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090402';
+} from './flood.js?v=philly-2026090403';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090403';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090402';
+} from './vectors.js?v=philly-2026090403';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090402';
-import { getTheme } from './themes.js?v=philly-2026090402';
+} from './ui.js?v=philly-2026090403';
+import { getTheme } from './themes.js?v=philly-2026090403';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -299,6 +300,20 @@ async function boot() {
     meta, grid, macro, imagery: data.imagery, quality: effectiveQuality,
   });
   scene.add(terrain.mesh);
+
+  const imageryDetail = createImageryDetail({
+    terrain,
+    region: projection.bounds,
+    projection: meta.projection,
+    onStatus(detail) {
+      const credit = $('imageryCredit');
+      if (!credit) return;
+      const suffix = detail.state === 'active'
+        ? ` · ${detail.resolutionM.toFixed(1)} m/px building detail`
+        : detail.state === 'loading' ? ' · loading building detail…' : '';
+      credit.textContent = `Aerial imagery: USDA / USGS The National Map${suffix}`;
+    },
+  });
 
   const overlayRoot = new THREE.Group();
   overlayRoot.name = 'overlays';
@@ -578,6 +593,7 @@ async function boot() {
       imagery: {
         available: terrain.hasImagery,
         visible: terrain.uniforms.uImageryOn.value > 0.5,
+        detail: imageryDetail.stats(),
       },
       structuresVisible: structures ? structures.group.visible : false,
       structureTiers: structures ? structures.loadedTiers : [],
@@ -621,6 +637,7 @@ async function boot() {
   let last = performance.now();
   let labelClock = 0;
   let zoneClock = 0;
+  let imageryClock = 0;
   const zoneFrustum = new THREE.Frustum();
   const zoneMatrix = new THREE.Matrix4();
   const zoneBox = new THREE.Box3();
@@ -648,6 +665,18 @@ async function boot() {
     terrain.uniforms.uWarp.value = warpForDistance(now.dist);
     terrain.uniforms.uCameraPos.value.copy(camera.position);
     terrain.uniforms.uExag.value = exaggeration;
+
+    imageryClock += dt;
+    if (imageryClock >= 0.5) {
+      imageryClock = 0;
+      imageryDetail.consider(
+        now,
+        state.layers.imagery && terrain.hasImagery,
+        viewW,
+        window.devicePixelRatio || 1,
+        effectiveQuality,
+      );
+    }
 
     // Suburban structure zones load once they are in view and near enough:
     // a coarse reach test first, then the zone's box against the frustum.
@@ -792,6 +821,7 @@ async function boot() {
     scene.remove(terrain.mesh);
     terrain.dispose();
     terrain = createTerrain(THREE, { meta, grid, macro, imagery: data.imagery, quality });
+    imageryDetail.attachTerrain(terrain);
     terrain.setTheme(store.value('theme'));
     scene.add(terrain.mesh);
     applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
@@ -808,6 +838,8 @@ async function boot() {
 
   requestAnimationFrame(tick);
   finishLoading();
+
+  window.addEventListener('pagehide', () => imageryDetail.dispose(), { once: true });
 
   if (!window.location.hash && !readSeen()) {
     dom.onboarding.hidden = false;

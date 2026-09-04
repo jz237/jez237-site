@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090402';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090403';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -59,6 +59,8 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform sampler2D uMacro;      // heavily downsampled heights, for ambient occlusion
   uniform sampler2D uRamp;       // hypsometric LUT
   uniform sampler2D uImagery;    // georeferenced USGS orthoimagery
+  uniform sampler2D uImageryDetail;
+  uniform vec4 uImageryDetailBounds; // minU, minV, maxU, maxV
 
   uniform vec3  uSunDir;         // world space, pointing toward the sun
   uniform vec3  uSunColor;
@@ -81,6 +83,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uHillshade;
   uniform float uReliefOn;
   uniform float uImageryOn;
+  uniform float uImageryDetailOn;
   uniform float uWaterLevel;
   uniform float uExposure;
   uniform vec2  uSpacing;        // metres between height samples, x and z
@@ -113,6 +116,17 @@ const FRAGMENT_SHADER = /* glsl */ `
     tE = pow(tE, 0.78);
     vec3 reliefBase = texture2D(uRamp, vec2(tE, 0.5)).rgb;
     vec3 aerialBase = texture2D(uImagery, vUv).rgb;
+    vec2 detailSpan = max(
+      uImageryDetailBounds.zw - uImageryDetailBounds.xy,
+      vec2(0.00001));
+    vec2 detailUv = (vUv - uImageryDetailBounds.xy) / detailSpan;
+    float detailEdge = min(
+      min(detailUv.x, 1.0 - detailUv.x),
+      min(detailUv.y, 1.0 - detailUv.y));
+    float detailMix = smoothstep(0.0, 0.035, detailEdge)
+      * uImageryDetailOn * uImageryOn;
+    vec3 detailBase = texture2D(uImageryDetail, clamp(detailUv, 0.0, 1.0)).rgb;
+    aerialBase = mix(aerialBase, detailBase, detailMix);
     vec3 base = mix(reliefBase, aerialBase, uImageryOn);
 
     float slope = 1.0 - n.y;
@@ -284,12 +298,15 @@ export function createTerrain(THREE, options) {
   const macroTex = makeHeightTexture(THREE, macro, macroSize, macroSize);
   const rampTex = makeRampTexture(THREE, 'dusk');
   const imageryTex = makeImageryTexture(THREE, imagery);
+  let imageryDetailTex = makeImageryTexture(THREE, null, false);
 
   const uniforms = {
     uHeight: { value: heightTex },
     uMacro: { value: macroTex },
     uRamp: { value: rampTex },
     uImagery: { value: imageryTex },
+    uImageryDetail: { value: imageryDetailTex },
+    uImageryDetailBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
     uCenter: { value: new THREE.Vector2(0.5, 0.5) },
     uWarp: { value: 1.0 },
     uExag: { value: 14 },
@@ -315,6 +332,7 @@ export function createTerrain(THREE, options) {
     uHillshade: { value: 1 },
     uReliefOn: { value: 1 },
     uImageryOn: { value: 0 },
+    uImageryDetailOn: { value: 0 },
     uWaterLevel: { value: 2 },
     uExposure: { value: 2.3 },
   };
@@ -342,6 +360,23 @@ export function createTerrain(THREE, options) {
     segments,
     hasImagery: !!imagery,
 
+    setDetailImagery(image, bounds, region) {
+      const next = makeImageryTexture(THREE, image, false);
+      imageryDetailTex.dispose();
+      imageryDetailTex = next;
+      uniforms.uImageryDetail.value = next;
+      uniforms.uImageryDetailBounds.value.set(
+        (bounds.west - region.west) / (region.east - region.west),
+        (region.north - bounds.north) / (region.north - region.south),
+        (bounds.east - region.west) / (region.east - region.west),
+        (region.north - bounds.south) / (region.north - region.south),
+      );
+    },
+
+    setDetailActive(active) {
+      uniforms.uImageryDetailOn.value = active ? 1 : 0;
+    },
+
     setTheme(themeId) {
       const theme = getTheme(themeId);
       writeRampRGBA(rampTex.image.data, themeId);
@@ -362,12 +397,13 @@ export function createTerrain(THREE, options) {
       macroTex.dispose();
       rampTex.dispose();
       imageryTex.dispose();
+      imageryDetailTex.dispose();
     },
   };
 }
 
 /** Browser image -> north-up terrain texture. Row 0 and UV y=0 are north. */
-function makeImageryTexture(THREE, image) {
+function makeImageryTexture(THREE, image, mipmaps = true) {
   if (!image) {
     const tex = new THREE.DataTexture(
       new Uint8Array([96, 104, 88, 255]), 1, 1, THREE.RGBAFormat, THREE.UnsignedByteType);
@@ -378,11 +414,11 @@ function makeImageryTexture(THREE, image) {
   tex.flipY = false;
   tex.wrapS = THREE.ClampToEdgeWrapping;
   tex.wrapT = THREE.ClampToEdgeWrapping;
-  tex.minFilter = THREE.LinearMipmapLinearFilter;
+  tex.minFilter = mipmaps ? THREE.LinearMipmapLinearFilter : THREE.LinearFilter;
   tex.magFilter = THREE.LinearFilter;
   tex.anisotropy = 8;
   tex.colorSpace = THREE.SRGBColorSpace;
-  tex.generateMipmaps = true;
+  tex.generateMipmaps = mipmaps;
   tex.needsUpdate = true;
   return tex;
 }
