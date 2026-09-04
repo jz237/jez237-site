@@ -11562,5 +11562,19 @@
     "slot": "near-future-technology",
     "model": "openai/gpt-image-2",
     "size": "1536x1024"
+  },
+  {
+    "id": "2026-09-03-machine-dream-machine-dream-the-arch-that-outlives-its-ston",
+    "title": "Machine dream: The Arch That Outlives Its Stones",
+    "tests": "Concept: identity as continuity of organization rather than continuity of material. Human-legible metaphor: one stable load-bearing arch continuously replaces pale incoming blocks with dark outgoing blocks. Capture: low 24 mm architectural-documentary view in a rain-wet basalt hall at blue dawn. Physical logic: connected cradles, cables, pulleys, counterweights, shoring, compression wedges, and rails preserve support under gravity. Anti-repeat: no observer, greenhouse, shower repair device, observatory blind spot, prediction loom, robots, circuitry, readable text, paper, or multiple surreal anomalies. Independent full-resolution Claude Opus 5 pixel QA: PASS; actual arch, input/output stone states, support paths, material contacts, lighting, and exclusion checks visibly passed.",
+    "prompt": "Create a richly detailed photorealistic machine dream about personal identity as continuity of organization rather than continuity of material. Inside a vast rain-wet basalt assembly hall, one monumental dry-stone arch is visibly walking forward while preserving a single unbroken load-bearing silhouette: fresh pale limestone blocks rise in bronze lifting cradles and lock into the advancing left foot and crown, while weathered dark stones disengage one by one from the retreating right foot into a recessed return channel. Make the change-over unmistakable at thumbnail scale, with the complete stable arch centered across the hall, bright new masonry entering at one edge and worn masonry leaving at the other. Show one continuous believable gravity-and-counterweight mechanism: taut braided cables, bronze pulleys, compression wedges, temporary shoring fingers, block tracks, and counterweights all physically connected to the replacement cycle; the arch remains convincingly compressed and supported, with no floating stones. Use a low 24 mm architectural-documentary camera, strong near-to-far depth, cold blue dawn entering through roof slots, one warm sun shaft crossing the crown, wet black basalt reflections, mineral streaks, chipped limestone, oxidized bronze, grease, scratches, rain mist, grounded contact shadows, and coherent gravity. The ordinary human meaning should be instantly legible without a caption: the enduring shape stays recognizably itself even though every physical piece is gradually exchanged. One visual metaphor only. No people, humanoid robots, faces, eyes, brains, circuitry, servers, holograms, code, screens, readable text, labels, diagrams, paper, museum display, magical glow, levitation, collapse, or decorative gears unrelated to the mechanism.",
+    "image": "images/2026-09-03-machine-dream-machine-dream-the-arch-that-outlives-its-ston.jpg",
+    "thumb": "thumbs/2026-09-03-machine-dream-machine-dream-the-arch-that-outlives-its-ston.webp",
+    "color": "#3a342f",
+    "date": "2026-09-03",
+    "batch": "Daily Prompt",
+    "slot": "machine-dream",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024"
   }
 ]
