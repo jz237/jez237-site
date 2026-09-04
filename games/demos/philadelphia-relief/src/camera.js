@@ -13,8 +13,8 @@
  *   two-finger drag         orbit; pinch distance zooms at the same time
  */
 
-import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026090405';
-import { CAMERA } from './schema.js?v=philly-2026090405';
+import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026090406';
+import { CAMERA } from './schema.js?v=philly-2026090406';
 
 const DEG = Math.PI / 180;
 
@@ -25,6 +25,11 @@ export function createCameraRig(THREE, options) {
 
   const want = poseFromStore(store.get());
   const now = { ...want };
+  let revision = 0;
+  let lastExaggeration = NaN;
+  let projectionAspect = NaN;
+  let projectionNear = NaN;
+  let projectionFar = NaN;
   let userActive = false;
   let idleTimer = 0;
 
@@ -244,6 +249,11 @@ export function createCameraRig(THREE, options) {
       return pointers.size > 0;
     },
 
+    /** Changes only while the camera matrix actually changes. */
+    get revision() {
+      return revision;
+    },
+
     /** Current smoothed pose, for the readout. */
     pose() {
       return { ...now };
@@ -267,6 +277,13 @@ export function createCameraRig(THREE, options) {
 
     update(dt, opts = {}) {
       const snap = opts.snap === true;
+      const prevLon = now.lon;
+      const prevLat = now.lat;
+      const prevDist = now.dist;
+      const prevPitch = now.pitch;
+      const prevBearing = now.bearing;
+      const prevFov = now.fov;
+      const targetFov = store.get().fov;
       // A follow that is fast enough to feel direct while still smoothing out
       // pointer jitter and the flythrough's per-frame retargeting.
       const hl = snap ? 0 : 0.075;
@@ -274,61 +291,91 @@ export function createCameraRig(THREE, options) {
       now.lat = damp(now.lat, want.lat, hl, dt);
       now.dist = Math.exp(damp(Math.log(now.dist), Math.log(want.dist), hl, dt));
       now.pitch = damp(now.pitch, want.pitch, hl, dt);
-      now.fov = damp(now.fov, store.get().fov, snap ? 0 : 0.12, dt);
+      now.fov = damp(now.fov, targetFov, snap ? 0 : 0.12, dt);
       // Bearing wraps, so damp the delta rather than the absolute value.
       now.bearing = normalizeAngle(
         now.bearing + shortestAngleDelta(now.bearing, want.bearing)
           * (snap ? 1 : 1 - Math.pow(2, -dt / 0.075)));
 
+      // Exponential smoothing otherwise approaches forever. Snap only once
+      // the remaining differences are far below a visible sub-pixel change,
+      // allowing projection and label work to become genuinely idle.
+      if (Math.abs(now.lon - want.lon) < 1e-9) now.lon = want.lon;
+      if (Math.abs(now.lat - want.lat) < 1e-9) now.lat = want.lat;
+      if (Math.abs(now.dist - want.dist) < 1e-4) now.dist = want.dist;
+      if (Math.abs(now.pitch - want.pitch) < 1e-6) now.pitch = want.pitch;
+      if (Math.abs(now.fov - targetFov) < 1e-6) now.fov = targetFov;
+      if (Math.abs(shortestAngleDelta(now.bearing, want.bearing)) < 1e-6) {
+        now.bearing = want.bearing;
+      }
+
       const exag = getExaggeration();
       const groundY = sampleElevation(now.lon, now.lat) * exag;
       targetVec.set(projection.lonToX(now.lon), groundY, projection.latToZ(now.lat));
+
+      const changed = now.lon !== prevLon || now.lat !== prevLat
+        || now.dist !== prevDist || now.pitch !== prevPitch
+        || now.bearing !== prevBearing || now.fov !== prevFov
+        || exag !== lastExaggeration;
 
       const pitchRad = now.pitch * DEG;
       const bearingRad = now.bearing * DEG;
       const horizontal = now.dist * Math.sin(pitchRad);
       const vertical = now.dist * Math.cos(pitchRad);
 
-      camera.position.set(
-        targetVec.x - Math.sin(bearingRad) * horizontal,
-        targetVec.y + vertical,
-        targetVec.z + Math.cos(bearingRad) * horizontal);
+      if (changed) {
+        camera.position.set(
+          targetVec.x - Math.sin(bearingRad) * horizontal,
+          targetVec.y + vertical,
+          targetVec.z + Math.cos(bearingRad) * horizontal);
+      }
 
       // Exaggeration multiplies the vertical world, so a steep pitch at close
       // range can put the camera inside a hillside — the ground rears up as
       // giant spikes and the shot is ruined. Lift the eye clear of whatever is
       // actually underneath it and re-aim; the effective pitch eases off, which
       // is exactly what a pilot would do.
-      const eye = projection.clamp(
-        projection.xToLon(camera.position.x), projection.zToLat(camera.position.z));
-      const groundUnderEye = sampleElevation(eye.lon, eye.lat) * exag;
-      const clearance = Math.max(45, now.dist * 0.06);
-      if (camera.position.y < groundUnderEye + clearance) {
-        camera.position.y = groundUnderEye + clearance;
-      }
+      if (changed) {
+        const eye = projection.clamp(
+          projection.xToLon(camera.position.x), projection.zToLat(camera.position.z));
+        const groundUnderEye = sampleElevation(eye.lon, eye.lat) * exag;
+        const clearance = Math.max(45, now.dist * 0.06);
+        if (camera.position.y < groundUnderEye + clearance) {
+          camera.position.y = groundUnderEye + clearance;
+        }
 
-      camera.up.set(0, 1, 0);
-      camera.lookAt(targetVec);
+        camera.up.set(0, 1, 0);
+        camera.lookAt(targetVec);
+        revision += 1;
+      }
 
       if (camera.fov !== now.fov) {
         camera.fov = now.fov;
         camera.updateProjectionMatrix();
       }
+      lastExaggeration = exag;
 
       if (userActive && pointers.size === 0) {
         idleTimer += dt;
         if (idleTimer > 0.35) userActive = false;
       }
-      return { target: targetVec, groundY };
+      return { target: targetVec, groundY, changed };
     },
 
     setAspect(aspect) {
-      camera.aspect = aspect;
       // Near/far track the orbit distance so precision stays usable at both
       // 180 m and 190 km without ever clipping the terrain.
-      camera.near = clamp(now.dist * 0.008, 2, 400);
-      camera.far = Math.max(60000, now.dist * 6 + 260000);
-      camera.updateProjectionMatrix();
+      const near = clamp(now.dist * 0.008, 2, 400);
+      const far = Math.max(60000, now.dist * 6 + 260000);
+      if (aspect !== projectionAspect || near !== projectionNear || far !== projectionFar) {
+        projectionAspect = aspect;
+        projectionNear = near;
+        projectionFar = far;
+        camera.aspect = aspect;
+        camera.near = near;
+        camera.far = far;
+        camera.updateProjectionMatrix();
+      }
     },
 
     dispose() {

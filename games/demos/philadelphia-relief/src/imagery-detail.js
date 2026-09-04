@@ -119,6 +119,9 @@ export function createImageryDetail(options) {
   let generation = 0;
   let state = 'regional';
   let prefetched = 0;
+  let prefetchTimer = 0;
+  let prefetchIdle = 0;
+  let prefetchGeneration = 0;
 
   const report = (nextState) => {
     state = nextState;
@@ -127,15 +130,33 @@ export function createImageryDetail(options) {
 
   function prefetch(cell, size, mode) {
     if (mode === 'data' || typeof fetch !== 'function') return;
+    const requestGeneration = ++prefetchGeneration;
     const run = () => {
+      prefetchIdle = 0;
+      if (requestGeneration !== prefetchGeneration) return;
       for (const next of neighbourCells(cell, region)) {
         fetch(detailUrl(next, size), { cache: 'force-cache', credentials: 'same-origin' })
           .then((response) => { if (response.ok) prefetched += 1; })
           .catch(() => {});
       }
     };
-    if (typeof requestIdleCallback === 'function') requestIdleCallback(run, { timeout: 2500 });
-    else setTimeout(run, 500);
+    // Neighbour cells are speculative. Let the visible tile decode and the
+    // opening interaction settle before spending bandwidth and image memory;
+    // moving to another cell invalidates this job before it starts.
+    clearTimeout(prefetchTimer);
+    if (prefetchIdle && typeof cancelIdleCallback === 'function') {
+      cancelIdleCallback(prefetchIdle);
+      prefetchIdle = 0;
+    }
+    prefetchTimer = setTimeout(() => {
+      prefetchTimer = 0;
+      if (requestGeneration !== prefetchGeneration) return;
+      if (typeof requestIdleCallback === 'function') {
+        prefetchIdle = requestIdleCallback(run, { timeout: 5000 });
+      } else {
+        run();
+      }
+    }, 6000);
   }
 
   const api = {
@@ -212,6 +233,11 @@ export function createImageryDetail(options) {
 
     dispose() {
       generation += 1;
+      prefetchGeneration += 1;
+      clearTimeout(prefetchTimer);
+      if (prefetchIdle && typeof cancelIdleCallback === 'function') {
+        cancelIdleCallback(prefetchIdle);
+      }
       pendingKey = '';
       current = null;
       terrain.setDetailActive(false);

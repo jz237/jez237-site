@@ -135,6 +135,11 @@ export function createPostFX(THREE, renderer) {
   let height = 1;
   let bloomWidth = 1;
   let bloomHeight = 1;
+  // Two Gaussian blurs convolve to another Gaussian whose variance is the
+  // sum of theirs. The former 1.0 + 1.7 pass pairs are therefore represented
+  // by one pair at sqrt(1^2 + 1.7^2), preserving the same soft radius while
+  // removing two full bloom-buffer draws and their memory traffic.
+  const combinedBlurScale = Math.hypot(1, 1.7);
 
   function draw(material, target) {
     quad.material = material;
@@ -176,19 +181,11 @@ export function createPostFX(THREE, renderer) {
       draw(brightMat, brightRT);
 
       blurMat.uniforms.uInput.value = brightRT.texture;
-      blurMat.uniforms.uDirection.value.set(1 / bloomWidth, 0);
+      blurMat.uniforms.uDirection.value.set(combinedBlurScale / bloomWidth, 0);
       draw(blurMat, blurRT);
 
       blurMat.uniforms.uInput.value = blurRT.texture;
-      blurMat.uniforms.uDirection.value.set(0, 1 / bloomHeight);
-      draw(blurMat, brightRT);
-
-      blurMat.uniforms.uInput.value = brightRT.texture;
-      blurMat.uniforms.uDirection.value.set(1.7 / bloomWidth, 0);
-      draw(blurMat, blurRT);
-
-      blurMat.uniforms.uInput.value = blurRT.texture;
-      blurMat.uniforms.uDirection.value.set(0, 1.7 / bloomHeight);
+      blurMat.uniforms.uDirection.value.set(0, combinedBlurScale / bloomHeight);
       draw(blurMat, brightRT);
 
       compositeMat.uniforms.uBloom.value = brightRT.texture;

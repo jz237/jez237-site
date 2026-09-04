@@ -7,52 +7,52 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090405';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090406';
 
-import { createStore } from './state.js?v=philly-2026090405';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090405';
-import { effectiveLight } from './solar.js?v=philly-2026090405';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090405';
+import { createStore } from './state.js?v=philly-2026090406';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090406';
+import { effectiveLight } from './solar.js?v=philly-2026090406';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090406';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090405';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090405';
+} from './geo.js?v=philly-2026090406';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090406';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090405';
+} from './tours.js?v=philly-2026090406';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090405';
+} from './urlstate.js?v=philly-2026090406';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090405';
+} from './degraded.js?v=philly-2026090406';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090405';
-import { createImageryDetail } from './imagery-detail.js?v=philly-2026090405';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090405';
-import { createPostFX } from './postfx.js?v=philly-2026090405';
-import { createCameraRig } from './camera.js?v=philly-2026090405';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090405';
-import { createStructures } from './structures.js?v=philly-2026090405';
+} from './terrain.js?v=philly-2026090406';
+import { createImageryDetail } from './imagery-detail.js?v=philly-2026090406';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090406';
+import { createPostFX } from './postfx.js?v=philly-2026090406';
+import { createCameraRig } from './camera.js?v=philly-2026090406';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090406';
+import { createStructures } from './structures.js?v=philly-2026090406';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090405';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090405';
+} from './structures-data.js?v=philly-2026090406';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090406';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090405';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090405';
+} from './flood.js?v=philly-2026090406';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090406';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090405';
+} from './vectors.js?v=philly-2026090406';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090405';
-import { getTheme } from './themes.js?v=philly-2026090405';
+} from './ui.js?v=philly-2026090406';
+import { getTheme } from './themes.js?v=philly-2026090406';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -122,8 +122,6 @@ function readImagePixels(img) {
 async function loadEverything() {
   const results = {};
   const data = {};
-  const hashPatch = decodeState(window.location.hash) || {};
-  const quality = resolveQuality(hashPatch.quality || 'auto', null);
 
   setProgress(0.05, 'Reading elevation model…');
   try {
@@ -178,9 +176,27 @@ async function loadEverything() {
     data[asset.id] = value;
   }
 
-  setProgress(0.78, 'Loading buildings…');
-  data.structures = await loadStructures(quality);
-  results.structures = !!data.structures;
+  // The manifest is part of the overlay batch above. Keep startup focused on
+  // the visible aerial scene: the packed footprint tiers are hydrated after
+  // first paint (or immediately when a structure feature is requested).
+  // Bridges are tiny and remain eager so landmark routes are always complete.
+  setProgress(0.78, 'Preparing buildings…');
+  const structureManifest = data.structures;
+  if (structureManifest) {
+    let bridges;
+    try {
+      bridges = await fetchJson(
+        `data/structures/${structureManifest.bridgesFile || 'bridges.json'}`);
+    } catch (error) {
+      console.warn('[philly-relief] bridges unavailable:', error.message);
+      bridges = { bridges: [] };
+    }
+    data.structures = { manifest: structureManifest, tierBuffers: new Map(), bridges };
+    results.structures = true;
+  } else {
+    data.structures = null;
+    results.structures = false;
+  }
 
   // Schematic landmark models and their information cards are enhancements:
   // without them the map still draws every footprint and label.
@@ -457,7 +473,7 @@ async function boot() {
     press = event.button === 0 && event.target === renderer.domElement
       ? { x: event.clientX, y: event.clientY, at: performance.now() } : null;
   });
-  dom.stage.addEventListener('pointerup', (event) => {
+  dom.stage.addEventListener('pointerup', async (event) => {
     const start = press;
     press = null;
     if (!start || !structures || event.target !== renderer.domElement) return;
@@ -472,6 +488,11 @@ async function boot() {
       structures.setSelectedBuilding(null);
       ui.openCard(model.landmark);
       return;
+    }
+    if (!structures.buildingTotal) {
+      toast('Loading mapped building footprints…');
+      await syncTiers(effectiveQuality);
+      if (!structures.buildingTotal) return;
     }
     const point = new THREE.Vector3();
     const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
@@ -521,7 +542,7 @@ async function boot() {
     .filter((z) => !z.lazy).map((z) => z.id));
   let tierSync = Promise.resolve();
   function syncTiers(level) {
-    if (!structures || !data.structures) return;
+    if (!structures || !data.structures) return Promise.resolve();
     const wanted = new Set(TIER_PLAN[level] || TIER_PLAN.balanced);
     tierSync = tierSync.then(async () => {
       const fresh = await loadStructures(level, data.structures, activeZones);
@@ -541,7 +562,29 @@ async function boot() {
       structures.setTheme(getTheme(store.value('theme')));
       adaptive?.disturb();
     }).catch((error) => console.warn('[philly-relief] tier sync failed:', error));
+    return tierSync;
   }
+
+  // A direct shared link can open with buildings already enabled; load those
+  // immediately. The default aerial view waits until the browser is idle, so
+  // hidden geometry cannot delay its first useful frame.
+  if (store.isLayerOn('structures')) {
+    syncTiers(effectiveQuality);
+  } else {
+    const warmStructures = () => syncTiers(effectiveQuality);
+    setTimeout(() => {
+      if (typeof requestIdleCallback === 'function') {
+        requestIdleCallback(warmStructures, { timeout: 5000 });
+      } else {
+        warmStructures();
+      }
+    }, 2500);
+  }
+  store.subscribe((state, changed) => {
+    if (changed.has('layers.structures') && state.layers.structures) {
+      syncTiers(effectiveQuality);
+    }
+  });
 
   // The 1776 view draws an approximate built-up extent traced from Faden's
   // 1777 plan; it is fetched the first time that era is chosen.
@@ -707,6 +750,7 @@ async function boot() {
   });
   let last = performance.now();
   let labelClock = 0;
+  let lastLabelKey = '';
   let zoneClock = 0;
   let imageryClock = 0;
   const zoneFrustum = new THREE.Frustum();
@@ -832,15 +876,21 @@ async function boot() {
     labelClock += dt;
     if (labelClock > 1 / 24) {
       labelClock = 0;
-      labels.update(camera, {
-        width: viewW,
-        height: viewH,
-        exaggeration,
-        density: state.labelDensity,
-        size: state.labelSize,
-        showPlaces: state.layers.places,
-        showLandmarks: state.layers.landmarks,
-      });
+      const labelKey = `${rig.revision}:${viewW}:${viewH}:${exaggeration}:`
+        + `${state.labelDensity}:${state.labelSize}:${state.layers.places}:`
+        + `${state.layers.landmarks}:${state.era}`;
+      if (labelKey !== lastLabelKey) {
+        lastLabelKey = labelKey;
+        labels.update(camera, {
+          width: viewW,
+          height: viewH,
+          exaggeration,
+          density: state.labelDensity,
+          size: state.labelSize,
+          showPlaces: state.layers.places,
+          showLandmarks: state.layers.landmarks,
+        });
+      }
     }
 
     ui.updateReadout({ pose: now, groundY: pose.groundY, viewH, dt });
