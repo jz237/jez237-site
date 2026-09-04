@@ -24,6 +24,10 @@ import { damp } from './geo.js';
 const VERTEX_SHADER = /* glsl */ `
   attribute float aGround;     // DEM elevation under the structure, metres
   attribute vec2  aInfo;       // (structure height, base offset), metres
+  #ifdef LANDMARK
+  attribute float aModel;      // which schematic model this vertex belongs to
+  varying float vModel;
+  #endif
 
   uniform float uExag;         // terrain exaggeration
   uniform float uHScale;       // structural vertical scale
@@ -34,11 +38,17 @@ const VERTEX_SHADER = /* glsl */ `
   varying float vRel;          // 0 at the base, 1 at the roof
 
   void main() {
+    // Landmark models store absolute structural y (base already included).
+    #ifdef LANDMARK
+    float structural = position.y * uGrow;
+    vModel = aModel;
+    #else
     float structural = (aInfo.y + position.y) * uGrow;
+    #endif
     vec3 p = vec3(position.x, aGround * uExag + structural * uHScale + 0.5, position.z);
     vWorld = p;
     vElev = aGround;
-    vRel = aInfo.x > 0.0 ? clamp(position.y / aInfo.x, 0.0, 1.0) : 0.0;
+    vRel = aInfo.x > 0.0 ? clamp((position.y - aInfo.y) / aInfo.x, 0.0, 1.0) : 0.0;
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
   }
 `;
@@ -60,6 +70,12 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uAmbient;
   uniform float uFogDensity;
   uniform float uExposure;
+  #ifdef LANDMARK
+  uniform float uSelected;
+  uniform vec3  uHighlight;
+  uniform float uPulse;
+  varying float vModel;
+  #endif
 
   varying vec3  vWorld;
   varying float vElev;
@@ -94,6 +110,13 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Night themes light the upper floors; restrained so towers read as
     // lit buildings, not lanterns.
     color += uGlow * uGlowAmount * (0.35 + 0.65 * vRel) * (1.0 - roof * 0.8);
+
+    #ifdef LANDMARK
+    // A selected model glows with the accent colour and breathes gently.
+    if (uSelected >= 0.0 && abs(vModel - uSelected) < 0.5) {
+      color = mix(color, uHighlight, 0.42 + 0.18 * uPulse);
+    }
+    #endif
 
     vec3 toFrag = vWorld - uCameraPos;
     float dist = length(toFrag);
@@ -165,7 +188,8 @@ const LINE_FRAGMENT = /* glsl */ `
 `;
 
 export function createStructures(THREE, options) {
-  const { manifest, tierBuffers, bridgesDoc, projection, sampleElevation, quality } = options;
+  const { manifest, tierBuffers, bridgesDoc, landmarkModels, projection, sampleElevation,
+    quality } = options;
 
   const group = new THREE.Group();
   group.name = 'structures';
@@ -191,9 +215,16 @@ export function createStructures(THREE, options) {
     uGlowAmount: { value: 0 },
   };
 
-  function makeSolidMaterial() {
+  function makeSolidMaterial(landmark = false) {
+    const uniforms = { ...sharedUniforms, uGrow: { value: 1 } };
+    if (landmark) {
+      uniforms.uSelected = { value: -1 };
+      uniforms.uHighlight = { value: new THREE.Vector3(1, 0.7, 0.4) };
+      uniforms.uPulse = { value: 0 };
+    }
     return new THREE.ShaderMaterial({
-      uniforms: { ...sharedUniforms, uGrow: { value: 1 } },
+      uniforms,
+      defines: landmark ? { LANDMARK: 1 } : {},
       vertexShader: VERTEX_SHADER,
       fragmentShader: FRAGMENT_SHADER,
       side: THREE.DoubleSide,
@@ -351,8 +382,35 @@ export function createStructures(THREE, options) {
     return { mesh, material, segments: n };
   }
 
+  // ---- landmark models ------------------------------------------------------
+  // One mesh for every schematic model, plus an invisible proxy box per model
+  // for picking: the geometry's y is structural, not world, so a raycast
+  // against it would land in the wrong place; the proxies are placed in world
+  // space every frame with the current exaggeration.
+  let landmarkMesh = null;
+  const proxies = [];
+  let selectedModel = -1;
+  if (landmarkModels && landmarkModels.vertexCount > 0) {
+    const geometry = solidGeometry(landmarkModels);
+    geometry.setAttribute('aModel', new THREE.BufferAttribute(landmarkModels.model, 1));
+    landmarkMesh = new THREE.Mesh(geometry, makeSolidMaterial(true));
+    landmarkMesh.name = 'structures-landmarks';
+    landmarkMesh.renderOrder = 23;
+    landmarkMesh.frustumCulled = false;
+    group.add(landmarkMesh);
+    for (const m of landmarkModels.models) {
+      const proxy = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1));
+      proxy.visible = false;
+      proxy.userData.model = m;
+      proxy.position.set(m.x, 0, m.z);
+      proxies.push(proxy);
+      group.add(proxy);
+    }
+  }
+
   // ---- per-frame ----------------------------------------------------------
   const camXZ = { x: 0, z: 0 };
+  let clock = 0;
   let lastStats = { drawnBuildings: 0, drawCalls: 0, tiers: [] };
 
   function update(ctx) {
@@ -399,6 +457,22 @@ export function createStructures(THREE, options) {
         distanceKm: Number((d / 1000).toFixed(1)) });
     }
 
+    // Landmark models sit at the tall tier's range and share the highlight.
+    clock += dt;
+    if (landmarkMesh) {
+      const u = landmarkMesh.material.uniforms;
+      u.uPulse.value = 0.5 + 0.5 * Math.sin(clock * 3);
+      u.uSelected.value = selectedModel;
+      calls += 1;
+      for (const proxy of proxies) {
+        const m = proxy.userData.model;
+        const y0 = m.ground * exaggeration;
+        const h = Math.max(4, m.top * hScale);
+        proxy.position.set(m.x, y0 + h / 2, m.z);
+        proxy.scale.set(m.radius * 2, h, m.radius * 2);
+      }
+    }
+
     // Bridges are big enough to keep at every range the tall tier uses.
     const bridgeGrow = tiers.length ? Math.max(0.35, tiers.reduce((m, t) => Math.max(m, t.grow), 0)) : 1;
     if (bridgeSolid) {
@@ -428,6 +502,23 @@ export function createStructures(THREE, options) {
     update,
 
     get buildingTotal() { return buildingTotal; },
+    get landmarkModelCount() { return proxies.length; },
+
+    /** Pick a landmark model under a raycaster; returns its model record or null. */
+    pickLandmark(raycaster) {
+      if (!proxies.length || !group.visible) return null;
+      const hits = raycaster.intersectObjects(proxies, false);
+      return hits.length ? hits[0].object.userData.model : null;
+    },
+
+    setSelectedModel(index) {
+      selectedModel = Number.isInteger(index) ? index : -1;
+    },
+
+    modelByLandmark(name) {
+      const p = proxies.find((x) => x.userData.model.landmark === name);
+      return p ? p.userData.model : null;
+    },
     get loadedTiers() { return tiers.map((t) => `${t.zone}/${t.tier}`); },
     stats() { return lastStats; },
 
@@ -465,6 +556,7 @@ export function createStructures(THREE, options) {
       setVec3(sharedUniforms.uFogColor.value, theme.fog);
       setVec3(sharedUniforms.uFogTint.value, theme.fogTint);
       if (bridgeLines) setVec3(bridgeLines.material.uniforms.uColor.value, s.cable || '#e8e0d6');
+      if (landmarkMesh) setVec3(landmarkMesh.material.uniforms.uHighlight.value, theme.ui.accent);
     },
 
     dispose() {
@@ -481,6 +573,11 @@ export function createStructures(THREE, options) {
         bridgeLines.mesh.geometry.dispose();
         bridgeLines.material.dispose();
       }
+      if (landmarkMesh) {
+        landmarkMesh.geometry.dispose();
+        landmarkMesh.material.dispose();
+      }
+      for (const proxy of proxies) proxy.geometry.dispose();
       group.parent?.remove(group);
     },
   };

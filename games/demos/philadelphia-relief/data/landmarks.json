@@ -3,56 +3,397 @@
   "curated": true,
   "rank": "1 = always shown, 2 = mid density, 3 = dense only",
   "landmarks": [
-    { "n": "Philadelphia City Hall", "lon": -75.1635, "lat": 39.9526, "c": "civic", "r": 1, "d": "William Penn stands on the high ground of the original city grid, between the two rivers." },
-    { "n": "Independence Hall", "lon": -75.1500, "lat": 39.9489, "c": "civic", "r": 2, "d": "Old City, on the gentle rise above the Delaware waterfront." },
-    { "n": "Philadelphia Museum of Art", "lon": -75.1810, "lat": 39.9656, "c": "civic", "r": 2, "d": "Sited on Faire Mount, the bluff where the Schuylkill turns toward Center City." },
-    { "n": "Boathouse Row", "lon": -75.1889, "lat": 39.9694, "c": "water", "r": 2, "d": "On the Schuylkill just above the Fairmount Dam." },
-    { "n": "Comcast Technology Center", "lon": -75.1698, "lat": 39.9548, "c": "civic", "r": 3, "d": "The tallest building in Pennsylvania." },
-    { "n": "30th Street Station", "lon": -75.1820, "lat": 39.9556, "c": "transport", "r": 3, "d": "West bank of the Schuylkill at the Market Street crossing." },
-    { "n": "University City", "lon": -75.1932, "lat": 39.9522, "c": "civic", "r": 2, "d": "The West Philadelphia terrace above the Schuylkill." },
-    { "n": "Benjamin Franklin Bridge", "lon": -75.1350, "lat": 39.9540, "c": "bridge", "r": 2, "d": "Philadelphia to Camden across the Delaware." },
-    { "n": "Walt Whitman Bridge", "lon": -75.1290, "lat": 39.9057, "c": "bridge", "r": 3, "d": "South Philadelphia to Gloucester City." },
-    { "n": "Penn's Landing", "lon": -75.1408, "lat": 39.9455, "c": "water", "r": 3, "d": "The Delaware River waterfront where the city was founded." },
-    { "n": "Citizens Bank Park", "lon": -75.1665, "lat": 39.9061, "c": "civic", "r": 3, "d": "The South Philadelphia sports complex, on reclaimed low ground." },
-    { "n": "Philadelphia Navy Yard", "lon": -75.1690, "lat": 39.8890, "c": "civic", "r": 3, "d": "At the confluence of the Schuylkill and the Delaware." },
-    { "n": "Philadelphia Int'l Airport", "lon": -75.2437, "lat": 39.8729, "c": "transport", "r": 2, "d": "Built on the Delaware River tidal flats — among the lowest ground in the region." },
-    { "n": "Fort Mifflin", "lon": -75.2110, "lat": 39.8759, "c": "civic", "r": 3, "d": "On Mud Island, in the Delaware marshes below the airport." },
-
-    { "n": "Wissahickon Valley", "lon": -75.2135, "lat": 40.0555, "c": "park", "r": 1, "d": "A 60 m deep gorge cut into the Piedmont — the sharpest relief inside the city." },
-    { "n": "Manayunk", "lon": -75.2246, "lat": 40.0262, "c": "town", "r": 2, "d": "Steep streets climbing from the Schuylkill; the Manayunk Wall is the local landmark." },
-    { "n": "Chestnut Hill", "lon": -75.2085, "lat": 40.0729, "c": "town", "r": 2, "d": "The highest ground in Philadelphia, on the Wissahickon ridge." },
-    { "n": "Belmont Plateau", "lon": -75.2070, "lat": 39.9880, "c": "park", "r": 3, "d": "The classic skyline overlook in West Fairmount Park." },
-    { "n": "Laurel Hill", "lon": -75.1880, "lat": 39.9990, "c": "park", "r": 3, "d": "On the bluff above the east bank of the Schuylkill." },
-    { "n": "Pennypack Park", "lon": -75.0330, "lat": 40.0620, "c": "park", "r": 3, "d": "A wooded creek corridor through Northeast Philadelphia." },
-    { "n": "Northeast Philadelphia", "lon": -75.0106, "lat": 40.0819, "c": "town", "r": 2, "d": "The broad, gently rolling shelf between Pennypack and Poquessing Creeks." },
-    { "n": "Port Richmond", "lon": -75.1009, "lat": 39.9864, "c": "town", "r": 1, "d": "A historic Delaware River neighborhood on the flat waterfront shelf northeast of Center City." },
-
-    { "n": "Valley Forge", "lon": -75.4586, "lat": 40.1015, "c": "park", "r": 1, "d": "Where Valley Creek meets the Schuylkill, ringed by Mount Joy and Mount Misery." },
-    { "n": "King of Prussia", "lon": -75.3960, "lat": 40.0893, "c": "town", "r": 2, "d": "On the plateau above the Schuylkill's big westward bend." },
-    { "n": "Conshohocken", "lon": -75.3016, "lat": 40.0790, "c": "town", "r": 3, "d": "In the Schuylkill gorge, where the valley narrows sharply." },
-    { "n": "Bryn Mawr", "lon": -75.3157, "lat": 40.0218, "c": "town", "r": 2, "d": "On the Main Line ridge — the drainage divide the railroad was built along." },
-    { "n": "Ardmore", "lon": -75.2932, "lat": 40.0068, "c": "town", "r": 3, "d": "Main Line, on the crest between Mill Creek and Cobbs Creek." },
-    { "n": "Norristown", "lon": -75.3399, "lat": 40.1215, "c": "town", "r": 3, "d": "County seat of Montgomery County, on the Schuylkill." },
-    { "n": "Fort Washington", "lon": -75.1900, "lat": 40.1330, "c": "park", "r": 3, "d": "Militia Hill overlooks the Wissahickon headwaters." },
-    { "n": "Green Lane Reservoir", "lon": -75.4720, "lat": 40.3390, "c": "water", "r": 3, "d": "Upper Perkiomen Creek, in the northern Montgomery County hills." },
-
-    { "n": "Media", "lon": -75.3877, "lat": 39.9168, "c": "town", "r": 2, "d": "Delaware County seat, on the ridge above Ridley Creek." },
-    { "n": "Ridley Creek State Park", "lon": -75.4470, "lat": 39.9450, "c": "park", "r": 3, "d": "A deep wooded valley in the Delaware County Piedmont." },
-    { "n": "Chester", "lon": -75.3557, "lat": 39.8496, "c": "town", "r": 3, "d": "The oldest city in Pennsylvania, on the Delaware riverfront." },
-    { "n": "Brandywine Battlefield", "lon": -75.5860, "lat": 39.8720, "c": "park", "r": 3, "d": "The Brandywine valley, at the western edge of the frame." },
-
-    { "n": "Doylestown", "lon": -75.1299, "lat": 40.3101, "c": "town", "r": 2, "d": "Bucks County seat, in the rolling country above Neshaminy Creek." },
-    { "n": "Levittown", "lon": -74.8380, "lat": 40.1548, "c": "town", "r": 1, "d": "The archetypal postwar planned suburb: 17,000 houses laid out at once on the flat Delaware terrace downstream of the falls at Trenton." },
-    { "n": "Washington Crossing", "lon": -74.8710, "lat": 40.2960, "c": "park", "r": 3, "d": "The Delaware crossing of December 1776." },
-    { "n": "Peace Valley / Lake Galena", "lon": -75.1750, "lat": 40.3400, "c": "water", "r": 3, "d": "A reservoir on the north branch of Neshaminy Creek." },
-    { "n": "Tyler State Park", "lon": -74.9540, "lat": 40.2360, "c": "park", "r": 3, "d": "Neshaminy Creek meanders through central Bucks County." },
-    { "n": "Quakertown", "lon": -75.3413, "lat": 40.4418, "c": "town", "r": 3, "d": "Upper Bucks, at the foot of the higher ground to the northwest." },
-
-    { "n": "Camden", "lon": -75.1196, "lat": 39.9259, "c": "town", "r": 1, "d": "Directly across the Delaware from Center City, on the New Jersey coastal plain." },
-    { "n": "Cherry Hill", "lon": -75.0246, "lat": 39.9268, "c": "town", "r": 2, "d": "Flat coastal-plain suburb east of Camden." },
-    { "n": "Cooper River Park", "lon": -75.0620, "lat": 39.9280, "c": "water", "r": 3, "d": "A dammed tidal tributary of the Delaware." },
-    { "n": "Palmyra Cove", "lon": -75.0330, "lat": 40.0090, "c": "park", "r": 3, "d": "Tidal wetland on the New Jersey bank of the Delaware." },
-    { "n": "Moorestown", "lon": -74.9490, "lat": 39.9684, "c": "town", "r": 3, "d": "Burlington County, on the low sandy plain." },
-    { "n": "Rancocas Creek", "lon": -74.8500, "lat": 40.0000, "c": "water", "r": 3, "d": "A wide tidal creek draining the Pine Barrens into the Delaware." }
+    {
+      "n": "Philadelphia City Hall",
+      "lon": -75.1635,
+      "lat": 39.9526,
+      "c": "civic",
+      "r": 1,
+      "d": "William Penn stands on the high ground of the original city grid, between the two rivers."
+    },
+    {
+      "n": "Independence Hall",
+      "lon": -75.15,
+      "lat": 39.9489,
+      "c": "civic",
+      "r": 2,
+      "d": "Old City, on the gentle rise above the Delaware waterfront."
+    },
+    {
+      "n": "Philadelphia Museum of Art",
+      "lon": -75.181,
+      "lat": 39.9656,
+      "c": "civic",
+      "r": 2,
+      "d": "Sited on Faire Mount, the bluff where the Schuylkill turns toward Center City."
+    },
+    {
+      "n": "Boathouse Row",
+      "lon": -75.1889,
+      "lat": 39.9694,
+      "c": "water",
+      "r": 2,
+      "d": "On the Schuylkill just above the Fairmount Dam."
+    },
+    {
+      "n": "Comcast Technology Center",
+      "lon": -75.1698,
+      "lat": 39.9548,
+      "c": "civic",
+      "r": 3,
+      "d": "The tallest building in Pennsylvania."
+    },
+    {
+      "n": "30th Street Station",
+      "lon": -75.182,
+      "lat": 39.9556,
+      "c": "transport",
+      "r": 3,
+      "d": "West bank of the Schuylkill at the Market Street crossing."
+    },
+    {
+      "n": "University City",
+      "lon": -75.1932,
+      "lat": 39.9522,
+      "c": "civic",
+      "r": 2,
+      "d": "The West Philadelphia terrace above the Schuylkill."
+    },
+    {
+      "n": "Benjamin Franklin Bridge",
+      "lon": -75.135,
+      "lat": 39.954,
+      "c": "bridge",
+      "r": 2,
+      "d": "Philadelphia to Camden across the Delaware."
+    },
+    {
+      "n": "Walt Whitman Bridge",
+      "lon": -75.129,
+      "lat": 39.9057,
+      "c": "bridge",
+      "r": 3,
+      "d": "South Philadelphia to Gloucester City."
+    },
+    {
+      "n": "Penn's Landing",
+      "lon": -75.1408,
+      "lat": 39.9455,
+      "c": "water",
+      "r": 3,
+      "d": "The Delaware River waterfront where the city was founded."
+    },
+    {
+      "n": "Citizens Bank Park",
+      "lon": -75.1665,
+      "lat": 39.9061,
+      "c": "civic",
+      "r": 3,
+      "d": "The South Philadelphia sports complex, on reclaimed low ground."
+    },
+    {
+      "n": "Philadelphia Navy Yard",
+      "lon": -75.169,
+      "lat": 39.889,
+      "c": "civic",
+      "r": 3,
+      "d": "At the confluence of the Schuylkill and the Delaware."
+    },
+    {
+      "n": "Philadelphia Int'l Airport",
+      "lon": -75.2437,
+      "lat": 39.8729,
+      "c": "transport",
+      "r": 2,
+      "d": "Built on the Delaware River tidal flats — among the lowest ground in the region."
+    },
+    {
+      "n": "Fort Mifflin",
+      "lon": -75.2131,
+      "lat": 39.8749,
+      "c": "civic",
+      "r": 3,
+      "d": "On Mud Island, in the Delaware marshes below the airport."
+    },
+    {
+      "n": "Wissahickon Valley",
+      "lon": -75.2135,
+      "lat": 40.0555,
+      "c": "park",
+      "r": 1,
+      "d": "A 60 m deep gorge cut into the Piedmont — the sharpest relief inside the city."
+    },
+    {
+      "n": "Manayunk",
+      "lon": -75.2246,
+      "lat": 40.0262,
+      "c": "town",
+      "r": 2,
+      "d": "Steep streets climbing from the Schuylkill; the Manayunk Wall is the local landmark."
+    },
+    {
+      "n": "Chestnut Hill",
+      "lon": -75.2085,
+      "lat": 40.0729,
+      "c": "town",
+      "r": 2,
+      "d": "The highest ground in Philadelphia, on the Wissahickon ridge."
+    },
+    {
+      "n": "Belmont Plateau",
+      "lon": -75.207,
+      "lat": 39.988,
+      "c": "park",
+      "r": 3,
+      "d": "The classic skyline overlook in West Fairmount Park."
+    },
+    {
+      "n": "Laurel Hill",
+      "lon": -75.188,
+      "lat": 39.999,
+      "c": "park",
+      "r": 3,
+      "d": "On the bluff above the east bank of the Schuylkill."
+    },
+    {
+      "n": "Pennypack Park",
+      "lon": -75.033,
+      "lat": 40.062,
+      "c": "park",
+      "r": 3,
+      "d": "A wooded creek corridor through Northeast Philadelphia."
+    },
+    {
+      "n": "Northeast Philadelphia",
+      "lon": -75.0106,
+      "lat": 40.0819,
+      "c": "town",
+      "r": 2,
+      "d": "The broad, gently rolling shelf between Pennypack and Poquessing Creeks."
+    },
+    {
+      "n": "Port Richmond",
+      "lon": -75.1009,
+      "lat": 39.9864,
+      "c": "town",
+      "r": 1,
+      "d": "A historic Delaware River neighborhood on the flat waterfront shelf northeast of Center City."
+    },
+    {
+      "n": "Valley Forge",
+      "lon": -75.4586,
+      "lat": 40.1015,
+      "c": "park",
+      "r": 1,
+      "d": "Where Valley Creek meets the Schuylkill, ringed by Mount Joy and Mount Misery."
+    },
+    {
+      "n": "King of Prussia",
+      "lon": -75.396,
+      "lat": 40.0893,
+      "c": "town",
+      "r": 2,
+      "d": "On the plateau above the Schuylkill's big westward bend."
+    },
+    {
+      "n": "Conshohocken",
+      "lon": -75.3016,
+      "lat": 40.079,
+      "c": "town",
+      "r": 3,
+      "d": "In the Schuylkill gorge, where the valley narrows sharply."
+    },
+    {
+      "n": "Bryn Mawr",
+      "lon": -75.3157,
+      "lat": 40.0218,
+      "c": "town",
+      "r": 2,
+      "d": "On the Main Line ridge — the drainage divide the railroad was built along."
+    },
+    {
+      "n": "Ardmore",
+      "lon": -75.2932,
+      "lat": 40.0068,
+      "c": "town",
+      "r": 3,
+      "d": "Main Line, on the crest between Mill Creek and Cobbs Creek."
+    },
+    {
+      "n": "Norristown",
+      "lon": -75.3399,
+      "lat": 40.1215,
+      "c": "town",
+      "r": 3,
+      "d": "County seat of Montgomery County, on the Schuylkill."
+    },
+    {
+      "n": "Fort Washington",
+      "lon": -75.19,
+      "lat": 40.133,
+      "c": "park",
+      "r": 3,
+      "d": "Militia Hill overlooks the Wissahickon headwaters."
+    },
+    {
+      "n": "Green Lane Reservoir",
+      "lon": -75.472,
+      "lat": 40.339,
+      "c": "water",
+      "r": 3,
+      "d": "Upper Perkiomen Creek, in the northern Montgomery County hills."
+    },
+    {
+      "n": "Media",
+      "lon": -75.3877,
+      "lat": 39.9168,
+      "c": "town",
+      "r": 2,
+      "d": "Delaware County seat, on the ridge above Ridley Creek."
+    },
+    {
+      "n": "Ridley Creek State Park",
+      "lon": -75.447,
+      "lat": 39.945,
+      "c": "park",
+      "r": 3,
+      "d": "A deep wooded valley in the Delaware County Piedmont."
+    },
+    {
+      "n": "Chester",
+      "lon": -75.3557,
+      "lat": 39.8496,
+      "c": "town",
+      "r": 3,
+      "d": "The oldest city in Pennsylvania, on the Delaware riverfront."
+    },
+    {
+      "n": "Brandywine Battlefield",
+      "lon": -75.586,
+      "lat": 39.872,
+      "c": "park",
+      "r": 3,
+      "d": "The Brandywine valley, at the western edge of the frame."
+    },
+    {
+      "n": "Doylestown",
+      "lon": -75.1299,
+      "lat": 40.3101,
+      "c": "town",
+      "r": 2,
+      "d": "Bucks County seat, in the rolling country above Neshaminy Creek."
+    },
+    {
+      "n": "Levittown",
+      "lon": -74.838,
+      "lat": 40.1548,
+      "c": "town",
+      "r": 1,
+      "d": "The archetypal postwar planned suburb: 17,000 houses laid out at once on the flat Delaware terrace downstream of the falls at Trenton."
+    },
+    {
+      "n": "Washington Crossing",
+      "lon": -74.871,
+      "lat": 40.296,
+      "c": "park",
+      "r": 3,
+      "d": "The Delaware crossing of December 1776."
+    },
+    {
+      "n": "Peace Valley / Lake Galena",
+      "lon": -75.175,
+      "lat": 40.34,
+      "c": "water",
+      "r": 3,
+      "d": "A reservoir on the north branch of Neshaminy Creek."
+    },
+    {
+      "n": "Tyler State Park",
+      "lon": -74.954,
+      "lat": 40.236,
+      "c": "park",
+      "r": 3,
+      "d": "Neshaminy Creek meanders through central Bucks County."
+    },
+    {
+      "n": "Quakertown",
+      "lon": -75.3413,
+      "lat": 40.4418,
+      "c": "town",
+      "r": 3,
+      "d": "Upper Bucks, at the foot of the higher ground to the northwest."
+    },
+    {
+      "n": "Camden",
+      "lon": -75.1196,
+      "lat": 39.9259,
+      "c": "town",
+      "r": 1,
+      "d": "Directly across the Delaware from Center City, on the New Jersey coastal plain."
+    },
+    {
+      "n": "Cherry Hill",
+      "lon": -75.0246,
+      "lat": 39.9268,
+      "c": "town",
+      "r": 2,
+      "d": "Flat coastal-plain suburb east of Camden."
+    },
+    {
+      "n": "Cooper River Park",
+      "lon": -75.062,
+      "lat": 39.928,
+      "c": "water",
+      "r": 3,
+      "d": "A dammed tidal tributary of the Delaware."
+    },
+    {
+      "n": "Palmyra Cove",
+      "lon": -75.033,
+      "lat": 40.009,
+      "c": "park",
+      "r": 3,
+      "d": "Tidal wetland on the New Jersey bank of the Delaware."
+    },
+    {
+      "n": "Moorestown",
+      "lon": -74.949,
+      "lat": 39.9684,
+      "c": "town",
+      "r": 3,
+      "d": "Burlington County, on the low sandy plain."
+    },
+    {
+      "n": "Rancocas Creek",
+      "lon": -74.85,
+      "lat": 40.0,
+      "c": "water",
+      "r": 3,
+      "d": "A wide tidal creek draining the Pine Barrens into the Delaware."
+    },
+    {
+      "n": "Lincoln Financial Field",
+      "lon": -75.1675,
+      "lat": 39.9008,
+      "c": "civic",
+      "r": 3,
+      "d": "The football stadium of the South Philadelphia sports complex."
+    },
+    {
+      "n": "Battleship New Jersey",
+      "lon": -75.131,
+      "lat": 39.939,
+      "c": "civic",
+      "r": 3,
+      "d": "A museum ship moored on the Camden waterfront opposite Penn's Landing."
+    },
+    {
+      "n": "Cira Centre",
+      "lon": -75.1822,
+      "lat": 39.9569,
+      "c": "civic",
+      "r": 3,
+      "d": "Beside 30th Street Station on the west bank of the Schuylkill."
+    }
   ]
 }

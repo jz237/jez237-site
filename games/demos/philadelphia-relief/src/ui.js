@@ -412,6 +412,71 @@ export function createDialogs(ids) {
   return { open, close, get openId() { return openId; } };
 }
 
+/**
+ * The landmark information card: a non-modal panel that names its sources.
+ * `cards` is the cards document (name -> card); `onFly(name)` flies the camera;
+ * `onChange(name|null)` reports what is open so the map can highlight it.
+ */
+export function createCard(options) {
+  const { cards, onFly, onChange } = options;
+  const node = document.getElementById('card');
+  if (!node) return { open() { return false; }, close() {}, get openName() { return null; } };
+  const title = node.querySelector('#cardTitle');
+  const kind = node.querySelector('#cardKind');
+  const facts = node.querySelector('#cardFacts');
+  const text = node.querySelector('#cardText');
+  const sources = node.querySelector('#cardSources');
+  const note = node.querySelector('#cardNote');
+  const fly = node.querySelector('#cardFly');
+  let openName = null;
+  let restoreTo = null;
+
+  function open(name, { focus = true } = {}) {
+    const card = cards?.[name];
+    if (!card) return false;
+    if (!openName) restoreTo = document.activeElement;
+    openName = name;
+    kind.textContent = card.category || 'Landmark';
+    title.textContent = name;
+    facts.replaceChildren(...card.facts.flatMap(([label, value]) => [
+      el('dt', null, label), el('dd', null, value)]));
+    text.textContent = card.text;
+    sources.replaceChildren(...card.sources.flatMap(([label, url], i) => {
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener noreferrer';
+      a.textContent = label;
+      return i ? [document.createTextNode(' · '), a] : [a];
+    }));
+    note.textContent = card.model ? 'Schematic model' : 'Real footprint';
+    node.hidden = false;
+    // Toasts share the bottom edge on phones; tell the stylesheet how tall
+    // the card is so they can sit above it.
+    document.body.classList.add('card-open');
+    document.body.style.setProperty('--card-h', `${node.offsetHeight}px`);
+    if (focus) fly.focus();
+    if (onChange) onChange(name);
+    return true;
+  }
+
+  function close() {
+    if (!openName) return;
+    openName = null;
+    node.hidden = true;
+    document.body.classList.remove('card-open');
+    document.body.style.removeProperty('--card-h');
+    if (restoreTo && restoreTo.focus && document.contains(restoreTo)) restoreTo.focus();
+    restoreTo = null;
+    if (onChange) onChange(null);
+  }
+
+  node.querySelector('#cardClose').addEventListener('click', close);
+  fly.addEventListener('click', () => { if (openName && onFly) onFly(openName); });
+
+  return { open, close, get openName() { return openName; } };
+}
+
 /** Apply a theme's UI colours to the document. */
 export function applyThemeChrome(themeId) {
   const theme = getTheme(THEME_IDS.includes(themeId) ? themeId : 'dusk');

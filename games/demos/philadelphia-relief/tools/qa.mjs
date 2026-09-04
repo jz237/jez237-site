@@ -253,6 +253,57 @@ async function run() {
       await page.waitForTimeout(2400);
       await shot('07-search-manayunk');
 
+      // Landmark card: searching a landmark opens its card, which names its
+      // sources and says whether the model is schematic; Esc closes it.
+      await page.fill('#searchInput', 'Independence Hall');
+      await page.waitForTimeout(400);
+      await page.press('#searchInput', 'Enter');
+      await page.waitForTimeout(2600);
+      if (await page.evaluate(() => document.body.classList.contains('sheet-open'))) {
+        await page.locator('#mbShots').click();
+        await page.waitForTimeout(500);
+      }
+      const cardInfo = await page.evaluate(() => {
+        const el = document.getElementById('card');
+        const r = el.getBoundingClientRect();
+        return {
+          hidden: el.hidden, display: getComputedStyle(el).display,
+          title: document.getElementById('cardTitle')?.textContent,
+          links: [...el.querySelectorAll('#cardSources a')].map((a) => a.href),
+          note: document.getElementById('cardNote')?.textContent,
+          facts: el.querySelectorAll('#cardFacts dt').length,
+          inside: r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
+          rect: [r.left, r.top, r.right, r.bottom].map(Math.round),
+          stats: window.philadelphiaRelief.stats(),
+        };
+      });
+      if (cardInfo.hidden || cardInfo.display === 'none' || cardInfo.title !== 'Independence Hall') {
+        problems.push(`[${viewport.id}] landmark card did not open from search: ${JSON.stringify(cardInfo)}`);
+      }
+      const goodLink = (h) => /^https:\/\/(en\.wikipedia\.org|www\.openstreetmap\.org)\//.test(h);
+      if (!cardInfo.links.length || !cardInfo.links.every(goodLink)) {
+        problems.push(`[${viewport.id}] card sources missing or off-list: ${cardInfo.links}`);
+      }
+      if (cardInfo.note !== 'Schematic model' || cardInfo.facts < 2) {
+        problems.push(`[${viewport.id}] card lacks its schematic note or facts: ${cardInfo.note}/${cardInfo.facts}`);
+      }
+      if (!cardInfo.inside) problems.push(`[${viewport.id}] card is clipped: ${cardInfo.rect}`);
+      if (cardInfo.stats.card !== 'Independence Hall' || cardInfo.stats.landmarkModels < 7) {
+        problems.push(`[${viewport.id}] card state not reflected: ${JSON.stringify(cardInfo.stats)}`);
+      }
+      report.push(`[${viewport.id}] card "${cardInfo.title}" (${cardInfo.note}, ${cardInfo.facts} facts, `
+        + `${cardInfo.links.length} sources), ${cardInfo.stats.landmarkModels} landmark models`);
+      await shot('07b-landmark-card');
+      await page.click('#cardFly');
+      await page.waitForTimeout(2600);
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(300);
+      const cardClosed = await page.evaluate(() => ({
+        hidden: document.getElementById('card').hidden, card: window.philadelphiaRelief.stats().card }));
+      if (!cardClosed.hidden || cardClosed.card !== null) {
+        problems.push(`[${viewport.id}] Esc did not close the card: ${JSON.stringify(cardClosed)}`);
+      }
+
       // Guided tour: play, and the caption must be up and read a real shot.
       await page.click('#btnPlay');
       await page.waitForTimeout(3000);
@@ -593,6 +644,39 @@ async function structuresPass(page, viewport, shot, problems, report) {
     problems.push(`[${viewport.id}] Home shows only ${home?.structures?.drawnBuildings} buildings`);
   }
   await shot('16-route-home');
+
+  // Clicking a schematic model (a press that neither moves nor lingers)
+  // opens its card. Independence Hall sits at the orbit target, so the
+  // screen centre is on it.
+  await goto('#x=-75.15&y=39.9489&d=2200&b=20&p=62', 2000);
+  const centre = await page.evaluate(() => {
+    const r = document.getElementById('stage').getBoundingClientRect();
+    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+  });
+  await page.mouse.click(centre.x, centre.y);
+  await page.waitForTimeout(500);
+  const picked = await page.evaluate(() => ({
+    card: window.philadelphiaRelief.stats().card, hidden: document.getElementById('card').hidden }));
+  if (picked.card !== 'Independence Hall' || picked.hidden) {
+    problems.push(`[${viewport.id}] clicking the Independence Hall model did not open its card: `
+      + JSON.stringify(picked));
+  }
+  // The card must sit inside the viewport and clear of the phone toolbar.
+  const cardBox = await page.evaluate(() => {
+    const r = document.getElementById('card').getBoundingClientRect();
+    const bar = document.getElementById('mobileBar');
+    const b = bar && getComputedStyle(bar).display !== 'none' ? bar.getBoundingClientRect() : null;
+    return { rect: [r.left, r.top, r.right, r.bottom].map(Math.round), w: innerWidth, h: innerHeight,
+      inside: r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
+      clearOfBar: !b || r.bottom <= b.top + 1 };
+  });
+  if (!cardBox.inside || !cardBox.clearOfBar) {
+    problems.push(`[${viewport.id}] card is clipped or under the toolbar: ${JSON.stringify(cardBox)}`);
+  }
+  report.push(`[${viewport.id}] model click -> card "${picked.card}" at ${cardBox.rect}`);
+  await shot('17-landmark-model-click');
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(300);
 
   // The toggle must empty the layer.
   await goto('#x=-75.1655&y=39.9505&d=6500&b=32&p=73&Lx=0', 1500);

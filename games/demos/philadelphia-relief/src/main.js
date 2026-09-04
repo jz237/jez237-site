@@ -30,12 +30,13 @@ import { createCameraRig } from './camera.js';
 import { createLabelLayer, buildLabelCandidates } from './labels.js';
 import { createStructures } from './structures.js';
 import { TIER_PLAN } from './structures-data.js';
+import { buildLandmarkModels } from './landmark-models.js';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
 } from './vectors.js';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
-  createSearch, buildSearchIndex, createDialogs, applyThemeChrome, toast,
+  createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
 } from './ui.js';
 import { getTheme } from './themes.js';
 
@@ -159,8 +160,22 @@ async function loadEverything() {
   data.structures = await loadStructures(quality);
   results.structures = !!data.structures;
 
+  // Schematic landmark models and their information cards are enhancements:
+  // without them the map still draws every footprint and label.
+  [data.landmarkModels, data.landmarkCards] = await Promise.all([
+    optionalJson('data/landmark-models.json'), optionalJson('data/landmark-cards.json')]);
+
   setProgress(0.82, 'Building the scene…');
   return { results, data };
+}
+
+async function optionalJson(path) {
+  try {
+    return await fetchJson(path);
+  } catch (error) {
+    console.warn(`[philly-relief] ${path} unavailable:`, error.message);
+    return null;
+  }
 }
 
 async function fetchBinary(path) {
@@ -267,6 +282,7 @@ async function boot() {
       manifest: data.structures.manifest,
       tierBuffers: data.structures.tierBuffers,
       bridgesDoc: data.structures.bridges,
+      landmarkModels: packLandmarkModels(data, projection, sampleElevation),
       projection,
       sampleElevation,
       quality: store.value('quality'),
@@ -292,12 +308,38 @@ async function boot() {
     container: dom.labelHost,
     projection,
     sampleElevation,
-    onSelect: (item) => motion.flyTo({ lon: item.lon, lat: item.lat }, { label: item.name }),
+    onSelect: (item) => {
+      motion.flyTo({ lon: item.lon, lat: item.lat }, { label: item.name });
+      if (item.kind === 'landmark') ui.openCard(item.name);
+    },
   });
   labels.setCandidates(buildLabelCandidates(data.places, data.landmarks));
 
   const motion = createMotion(store, projection);
-  const ui = wireInterface({ store, motion, data, projection, rig });
+  const ui = wireInterface({ store, motion, data, projection, rig, structures });
+
+  // A click on the canvas (a press that neither moved nor lingered) picks a
+  // landmark model and opens its card. Labels handle their own clicks.
+  const picker = new THREE.Raycaster();
+  const pickPoint = new THREE.Vector2();
+  let press = null;
+  dom.stage.addEventListener('pointerdown', (event) => {
+    press = event.button === 0 && event.target === renderer.domElement
+      ? { x: event.clientX, y: event.clientY, at: performance.now() } : null;
+  });
+  dom.stage.addEventListener('pointerup', (event) => {
+    const start = press;
+    press = null;
+    if (!start || !structures || event.target !== renderer.domElement) return;
+    const moved = Math.hypot(event.clientX - start.x, event.clientY - start.y);
+    if (moved > 4 || performance.now() - start.at > 500) return;
+    const rect = dom.stage.getBoundingClientRect();
+    pickPoint.set(((event.clientX - rect.left) / rect.width) * 2 - 1,
+      -((event.clientY - rect.top) / rect.height) * 2 + 1);
+    picker.setFromCamera(pickPoint, rig.camera);
+    const model = structures.pickLandmark(picker);
+    if (model) ui.openCard(model.landmark);
+  });
 
   applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, force: true });
   store.subscribe((state) => applyState(state, { terrain, sky, overlays, structures, postfx, ui }));
@@ -364,6 +406,8 @@ async function boot() {
       drawCalls: lastRenderInfo ? lastRenderInfo.calls : 0,
       triangles: lastRenderInfo ? lastRenderInfo.triangles : 0,
       quality: store.value('quality'),
+      landmarkModels: structures ? structures.landmarkModelCount : 0,
+      card: ui.cardName,
     }),
   });
   let last = performance.now();
@@ -904,7 +948,7 @@ function createMotion(store, projection) {
 // ---------------------------------------------------------------------------
 
 function wireInterface(deps) {
-  const { store, motion, data, projection, rig } = deps;
+  const { store, motion, data, projection, rig, structures } = deps;
 
   const controls = buildControls(store, dom.studioGroups);
   const layerToggles = buildLayerToggles(store, dom.layerToggles);
@@ -917,6 +961,23 @@ function wireInterface(deps) {
   let captureFn = null;
   let rebuildQuality = null;
 
+  const landmarkByName = (name) => (data.landmarks?.landmarks || []).find((l) => l.n === name);
+  const card = createCard({
+    cards: data.landmarkCards?.cards || null,
+    onFly: (name) => {
+      const landmark = landmarkByName(name);
+      if (!landmark) return;
+      motion.flyTo({ lon: landmark.lon, lat: landmark.lat,
+        camDist: Math.min(store.value('camDist'), 3200) }, { label: name });
+    },
+    onChange: (name) => {
+      const model = name && structures ? structures.modelByLandmark(name) : null;
+      structures?.setSelectedModel(model ? model.index : -1);
+    },
+  });
+  const modelCount = $('aboutModelCount');
+  if (modelCount) modelCount.textContent = String(structures?.landmarkModelCount || 0);
+
   const searchEntries = buildSearchIndex(data.places, data.landmarks);
   createSearch({
     input: dom.searchInput,
@@ -925,6 +986,7 @@ function wireInterface(deps) {
     onSelect: (entry) => {
       if (entry.kind === 'preset') motion.toPreset(entry.presetId);
       else motion.flyTo(entry.jump || entry, { label: entry.name });
+      if (entry.kind === 'landmark') card.open(entry.name, { focus: false });
     },
   });
 
@@ -1054,6 +1116,7 @@ function wireInterface(deps) {
       // sheets are put away for the show and restored on exit.
       sheetsBeforeCinema = NARROW.matches ? sheets.filter((sh) => !sh.isCollapsed()) : [];
       for (const sh of sheetsBeforeCinema) sh.set(true);
+      card.close();
       $('cinemaPlay').focus();
       armCursorTimer();
     } else {
@@ -1183,7 +1246,9 @@ function wireInterface(deps) {
         event.preventDefault();
         break;
       case 'Escape':
-        if (cinema) setCinema(false); else motion.stop();
+        if (card.openName) card.close();
+        else if (cinema) setCinema(false);
+        else motion.stop();
         break;
       case '+': case '=':
         rig.nudge({ zoom: 1 / 1.25 });
@@ -1238,6 +1303,9 @@ function wireInterface(deps) {
 
   return {
     layerToggles,
+    openCard(name, options) { return card.open(name, options); },
+    closeCard() { card.close(); },
+    get cardName() { return card.openName; },
     syncControls(state) {
       controls.sync(state);
       layerToggles.sync(state);
@@ -1278,6 +1346,18 @@ function wireInterface(deps) {
 // ---------------------------------------------------------------------------
 // Small helpers
 // ---------------------------------------------------------------------------
+
+/** Schematic landmark models, packed for the structures shader (or null). */
+function packLandmarkModels(data, projection, sampleElevation) {
+  const doc = data.landmarkModels;
+  if (!doc || !Array.isArray(doc.models)) return null;
+  const anchors = new Map((data.landmarks?.landmarks || []).map((l) => [l.n, { lon: l.lon, lat: l.lat }]));
+  return buildLandmarkModels(doc, {
+    anchors,
+    toWorld: (lon, lat) => [projection.lonToX(lon), projection.latToZ(lat)],
+    groundAt: (x, z) => sampleElevation(projection.xToLon(x), projection.zToLat(z)),
+  });
+}
 
 /** The About panel quotes the manifest so its numbers cannot drift. */
 function fillStructureFacts(manifest, structures) {

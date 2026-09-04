@@ -149,6 +149,21 @@ CURATED_FOOTPRINT_HEIGHTS = {
     "City Hall": 50,
 }
 
+
+def replaced_by_models() -> set:
+    """OSM names whose flat extrusion a schematic landmark model stands in for."""
+    path = ROOT / "data" / "landmark-models.json"
+    if not path.exists():
+        return set()
+    doc = json.loads(path.read_text())
+    names = set()
+    for model in doc.get("models", []):
+        names.update(model.get("replaces", []))
+    return names
+
+
+REPLACED_BY_MODELS = replaced_by_models()
+
 # ---------------------------------------------------------------------------
 # Bridges. Deck alignment and width come from OSM; the structural parameters
 # are curated approximations from public references (rounded). The renderer
@@ -394,6 +409,10 @@ def process_zone(zone, payload, seen_ids: set) -> list:
             continue
         tags = el.get("tags", {}) or {}
         if tags.get("building") in ("no", "roof") or tags.get("building:part"):
+            continue
+        if tags.get("name") in REPLACED_BY_MODELS:
+            # A schematic model (data/landmark-models.json) draws this one.
+            seen_ids.add(key)
             continue
         if not tags.get("building") and tags.get("leisure") != "stadium":
             continue
@@ -786,6 +805,7 @@ def main() -> int:
         "totals": totals,
         "bridgesFile": "bridges.json",
         "bridgeCount": len(bridges),
+        "replacedByModels": sorted(REPLACED_BY_MODELS),
         "projection": {
             "metersPerDegLat": round(region.METERS_PER_DEG_LAT, 4),
             "metersPerDegLon": round(region.METERS_PER_DEG_LON, 4),

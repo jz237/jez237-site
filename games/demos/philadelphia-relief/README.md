@@ -135,11 +135,27 @@ arch, or lift towers, all on a deck that rests on both banks and rises to the
 clearance at midspan. All bridge solids are one draw call and all thin members
 are one more. They are recognisable silhouettes, not surveys of the steel.
 
+**Landmark models and cards.** Seven landmarks whose form does not read from a
+flat extrusion — Independence Hall, the Museum of Art, Boathouse Row, Citizens
+Bank Park, Lincoln Financial Field, Fort Mifflin and the Battleship New Jersey —
+are drawn as **schematic solids** (`data/landmark-models.json`: boxes, pyramids,
+gables, rings and cylinders in local metres, dimensions rounded from public
+references). The hall, the museum and the two stadiums replace their OSM
+footprints (the stadiums carry no height at all in OSM); the manifest records
+what was replaced, so nothing is drawn twice. The models share the building
+shader and one extra draw call, and each has an invisible proxy for picking.
+Clicking a model, or any landmark label, opens an **information card**
+(`data/landmark-cards.json`) with dated facts, a sentence on what the map shows,
+a note saying whether the object is a real footprint or a schematic model, and
+the sources every fact rests on (links, opened in a new tab; nothing is fetched
+at runtime). Search results for landmarks open the card too. The card is
+non-modal, keyboard-reachable, closes with `Esc`, and highlights its model.
+
 **Provenance of heights**, counted per source footprint in the manifest and
 quoted live in the About panel: 76% carry a measured OSM `height`
 (Philadelphia's come largely from the city's LiDAR-derived footprint import),
 8% are estimated from `building:levels`, 16% from
-building type, and **27 skyline towers with no height in OSM**
+building type, and **23 skyline towers with no height in OSM**
 (One Liberty Place, Comcast Center, BNY Mellon Center, Three Logan Square and
 their neighbours) use rounded public reference heights supplied by this project
 and flagged `curated`. The City Hall tower is a curated 26 m box on top of a
@@ -250,7 +266,8 @@ the heightmap and the vector layers cannot drift apart.
 | `1`–`8` | Cinematic presets (`1` is the opening skyline) |
 | `Space` | Play/pause the tour · `[` `]` previous/next shot |
 | `H` | Home · `C` studio · `L` labels · `F` fullscreen · `P` save PNG |
-| `/` | Search · `?` shortcuts · `Esc` close / stop |
+| `/` | Search · `?` shortcuts · `Esc` close card / dialog, leave cinema, stop |
+| Click a landmark model or label | Information card with facts and sources |
 
 The control studio covers terrain exaggeration, contour strength and interval,
 **building density and structure height**, sun azimuth and altitude, key light,
