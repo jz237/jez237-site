@@ -91,6 +91,7 @@
     <div class="control-group">
       <h3 class="group-head">Layers</h3>
       <div id="layerToggles" class="layer-grid"></div>
+      <div id="floodLegend" class="legend" hidden></div>
     </div>
     <div class="studio-footer">
       <button type="button" class="text-btn" id="btnReset">Reset everything</button>
@@ -297,6 +298,24 @@
           solids with dimensions rounded from public references — recognisable
           silhouettes, <b>not surveys</b>. Click one, or any landmark label, for a
           card that says what is measured and what is not, with its sources.
+        </dd>
+      </div>
+      <div>
+        <dt>Flood hazard and sea level</dt>
+        <dd>
+          The <b>Flood hazard</b> layer drapes two public datasets on the relief.
+          <b>FEMA flood zones</b> come from the National Flood Hazard Layer's "Flood Hazard
+          Zones" service (US federal work, public domain): the 1% annual-chance floodplain
+          (zones AE, A, AO, AH), the coastal high-hazard zone VE, and the 0.2% annual-chance
+          shaded zone X, fetched once at build time, clipped to the region, simplified to
+          about 25 m with areas under a hectare dropped. The effective FIRM is the regulatory
+          product; this is a visualisation, <b>not for insurance, permitting or engineering
+          decisions</b>. <b>Sea level rise</b> comes from the NOAA Office for Coastal
+          Management's Sea Level Rise Viewer data (bulk vectors, no key), one scenario per
+          foot above today's mean higher high water; hydrologically disconnected low-lying
+          areas are not shown. NOAA's constraint, quoted: "These data illustrate the scale of
+          potential flooding, not the exact location, and do not account for erosion,
+          subsidence, or future construction." Nothing is fetched at run time.
         </dd>
       </div>
     </dl>

@@ -162,6 +162,27 @@ the sources every fact rests on (links, opened in a new tab; nothing is fetched
 at runtime). Search results for landmarks open the card too. The card is
 non-modal, keyboard-reachable, closes with `Esc`, and highlights its model.
 
+### Flood hazard and sea-level rise
+
+The **Flood hazard** layer (off by default, a viewer's own choice that presets
+never touch) drapes two public datasets on the relief as translucent area
+meshes, fetched only when the layer is first switched on:
+
+| Source | What | Licence | Bake |
+|---|---|---|---|
+| FEMA National Flood Hazard Layer, "Flood Hazard Zones" (`tools/build_flood.py`) | 1% annual-chance floodplain (AE, A, AO, AH), coastal high hazard VE, 0.2% shaded X; base flood elevation where mapped | US federal work, public domain | tiled REST queries, paged by `OBJECTID`, clipped, simplified to ~25 m, polygons under a hectare dropped |
+| NOAA Office for Coastal Management, Sea Level Rise Viewer data (`tools/build_slr.py`) | inundation at high tide for 1–6, 8 and 10 ft above today's mean higher high water; disconnected low-lying areas excluded | public; NOAA's use constraint quoted in the legend | bulk file geodatabases for PA, NJ (middle, southern) and DE read with pyogrio, one class per scenario |
+
+Both are packed by `tools/floodpack.py` into a compact binary (`PHF1`: quantised
+16-bit coordinates, one class byte and one value per polygon) with a JSON
+manifest that carries the source, licence, counts and caveats; the FEMA set is
+657 KB instead of a 6 MB GeoJSON. The studio's **Flood & sea level** group picks
+FEMA zones or a sea-level scenario (the slider snaps to a published foot), the
+legend under the layer toggles names the source and its caveat, and the About
+panel quotes both. This is a visualisation of simplified public data: **not for
+insurance, permitting or engineering decisions**, and NOAA's scenarios show the
+scale of potential flooding, not its exact location.
+
 **Provenance of heights**, counted per source footprint in the manifest and
 quoted live in the About panel: 76% carry a measured OSM `height`
 (Philadelphia's come largely from the city's LiDAR-derived footprint import),
@@ -285,7 +306,7 @@ The control studio covers terrain exaggeration, contour strength and interval,
 ambient fill, fog density, bloom, water intensity, label size and density, road
 opacity, boundary strength, theme, field of view, quality (auto or a manual
 level) and animation speed —
-plus eleven layer toggles, including **Buildings & bridges**.
+plus twelve layer toggles, including **Buildings & bridges** and **Flood hazard**.
 
 **The opening shot is the Center City skyline** — 6.5 km out, south-west of
 City Hall, with the towers, the rowhouse grid and the Ben Franklin Bridge in

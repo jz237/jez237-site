@@ -15,6 +15,7 @@ const ENUM_LABELS = {
   quality: (v) => ({ auto: 'Auto', performance: 'Performance', balanced: 'Balanced',
     cinematic: 'Cinematic' }[v] || v),
   contourInterval: (v) => `${v} m`,
+  floodMode: (v) => ({ fema: 'FEMA flood zones', slr: 'Sea level rise' }[v] || v),
 };
 
 // A control's readout can carry a live note ("Auto · Balanced"); the
@@ -500,6 +501,34 @@ export function createCard(options) {
   fly.addEventListener('click', () => { if (openName && onFly) onFly(openName); });
 
   return { open, close, get openName() { return openName; } };
+}
+
+/** Render (or hide) the flood legend under the layer toggles. */
+export function renderFloodLegend(node, legend) {
+  if (!node) return;
+  if (!legend) {
+    node.hidden = true;
+    node.replaceChildren();
+    return;
+  }
+  const rows = legend.rows.map((row) => {
+    const r = el('div', 'legend-row');
+    const swatch = el('span', 'legend-swatch');
+    swatch.style.background = row.color;
+    r.append(swatch, el('span', null, row.label));
+    return r;
+  });
+  const source = el('p', 'legend-source');
+  source.append(document.createTextNode(`${legend.source} · `));
+  const link = document.createElement('a');
+  link.href = legend.url;
+  link.target = '_blank';
+  link.rel = 'noopener noreferrer';
+  link.textContent = 'source';
+  source.appendChild(link);
+  node.replaceChildren(el('div', 'legend-title', legend.title), ...rows, source,
+    el('p', 'legend-caveat', legend.caveat));
+  node.hidden = false;
 }
 
 /** Apply a theme's UI colours to the document. */

@@ -705,6 +705,53 @@ async function structuresPass(page, viewport, shot, problems, report) {
   }
   await shot('16-route-home');
 
+  // Flood hazard: FEMA zones drape the low ground around the airport and the
+  // Delaware, the legend names the source and its caveat, the NOAA scenario
+  // switch shows exactly one scenario (when its data has been baked), and
+  // the layer toggle empties it again.
+  const floodBase = '#x=-75.23&y=39.875&d=18000&b=20&p=58';
+  await goto(`${floodBase}&Lf=1`, 7000);
+  const fema = await stats();
+  const femaVisible = fema?.flood?.visible || [];
+  if (!femaVisible.includes('fema:sfha') || femaVisible.length < 3 || !(fema?.flood?.polygons > 200)) {
+    problems.push(`[${viewport.id}] FEMA flood zones did not show: ${JSON.stringify(fema?.flood)}`);
+  }
+  const legend = await page.evaluate(() => {
+    const el = document.getElementById('floodLegend');
+    const r = el.getBoundingClientRect();
+    return { hidden: el.hidden, text: el.textContent, rows: el.querySelectorAll('.legend-row').length,
+      visible: r.width > 0 && r.height > 0 };
+  });
+  if (legend.hidden || legend.rows !== 3 || !/FEMA National Flood Hazard Layer/.test(legend.text)
+      || !/Not for insurance/.test(legend.text)) {
+    problems.push(`[${viewport.id}] flood legend wrong: ${JSON.stringify(legend)}`);
+  }
+  report.push(`[${viewport.id}] FEMA flood: ${JSON.stringify(fema?.flood)}; legend rows ${legend.rows}`);
+  await shot('19-flood-fema');
+
+  const slrAvailable = (await page.context().request.get(
+    new globalThis.URL('data/flood/noaa-slr.json', page.url()).href)).ok();
+  if (slrAvailable) {
+    await goto(`${floodBase}&Lf=1&fm=slr&sr=6`, 7000);
+    const slr = await stats();
+    if (JSON.stringify(slr?.flood?.visible) !== '["slr:6ft"]' || !(slr?.flood?.polygons > 0)) {
+      problems.push(`[${viewport.id}] NOAA 6 ft scenario did not show alone: ${JSON.stringify(slr?.flood)}`);
+    }
+    const slrLegend = await page.evaluate(() => document.getElementById('floodLegend').textContent);
+    if (!/6 ft above MHHW/.test(slrLegend) || !/scale of potential flooding/.test(slrLegend)) {
+      problems.push(`[${viewport.id}] NOAA legend wrong: ${slrLegend}`);
+    }
+    report.push(`[${viewport.id}] NOAA 6 ft: ${JSON.stringify(slr?.flood)}`);
+    await shot('19b-flood-slr-6ft');
+  } else {
+    report.push(`[${viewport.id}] NOAA sea-level data not baked; scenario check skipped`);
+  }
+  await goto(`${floodBase}&Lf=0`, 1500);
+  const floodOff = await stats();
+  if ((floodOff?.flood?.visible || []).length) {
+    problems.push(`[${viewport.id}] flood layer off still shows ${floodOff.flood.visible}`);
+  }
+
   // Suburban zones are lazy: King of Prussia's notable buildings arrive once
   // the camera gets there (the first-frame check above proves they were not
   // fetched up front).

@@ -31,6 +31,7 @@ import { createLabelLayer, buildLabelCandidates } from './labels.js';
 import { createStructures } from './structures.js';
 import { TIER_PLAN, shouldActivateZone, distanceToBox } from './structures-data.js';
 import { createAdaptiveQuality, resolveQuality } from './adaptive.js';
+import { decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE } from './flood.js';
 import { buildLandmarkModels } from './landmark-models.js';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
@@ -38,7 +39,7 @@ import {
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
-  enumLabel, setValueNote,
+  enumLabel, setValueNote, renderFloodLegend,
 } from './ui.js';
 import { getTheme } from './themes.js';
 
@@ -287,6 +288,63 @@ async function boot() {
   scene.add(overlayRoot);
   const overlays = buildOverlays(data, { projection, sampleElevation }, overlayRoot);
 
+  // Flood hazard data is fetched the first time its layer is switched on:
+  // FEMA zones and NOAA sea-level scenarios are each a packed binary plus a
+  // manifest, decoded into draped area meshes that join the overlay set.
+  const flood = { manifests: {}, entries: {}, pending: {}, announced: new Set() };
+  const FLOOD_FILES = { fema: 'fema-nfhl', slr: 'noaa-slr' };
+  const FLOOD_NOTES = {
+    fema: 'FEMA flood zones: a simplified National Flood Hazard Layer, not for insurance or '
+      + 'permitting decisions',
+    slr: 'NOAA sea-level scenarios show the scale of potential flooding, not exact locations',
+  };
+  function ensureFlood(source) {
+    if (flood.entries[source]) return Promise.resolve();
+    if (flood.pending[source]) return flood.pending[source];
+    flood.pending[source] = (async () => {
+      try {
+        const [manifest, buffer] = await Promise.all([
+          fetchJson(`data/flood/${FLOOD_FILES[source]}.json`),
+          fetchBinary(`data/flood/${FLOOD_FILES[source]}.bin`),
+        ]);
+        const decoded = decodeFlood(buffer);
+        const entries = [];
+        for (const [cls, polys] of decoded.classes) {
+          const name = manifest.classes[cls];
+          const style = source === 'fema' ? FEMA_STYLE[name] : SLR_STYLE;
+          if (!style) continue;
+          const entry = buildAreaMesh(THREE, polys.map((poly) => poly.ring),
+            { projection, sampleElevation }, {
+              kind: 'flood', color: style.color, opacity: style.opacity, renderOrder: 8,
+              name: `flood-${source}-${name}`,
+            });
+          if (!entry) continue;
+          entry.layer = 'flood';
+          entry.kind = 'flood';
+          entry.floodKey = `${source}:${name}`;
+          entry.polygons = polys.length;
+          entry.mesh.visible = false;
+          overlayRoot.add(entry.mesh);
+          overlays.areas.push(entry);
+          overlays.all.push(entry);
+          entries.push(entry);
+        }
+        flood.manifests[source] = manifest;
+        flood.entries[source] = entries;
+        recolorOverlays(overlays, getTheme(store.value('theme')));
+      } catch (error) {
+        console.warn(`[philly-relief] flood data ${source} unavailable:`, error.message);
+        flood.manifests[source] = null;
+        flood.entries[source] = [];
+      } finally {
+        delete flood.pending[source];
+        adaptive?.disturb();
+        applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
+      }
+    })();
+    return flood.pending[source];
+  }
+
   let structures = null;
   if (data.structures) {
     structures = createStructures(THREE, {
@@ -352,8 +410,8 @@ async function boot() {
     if (model) ui.openCard(model.landmark);
   });
 
-  applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, force: true });
-  store.subscribe((state) => applyState(state, { terrain, sky, overlays, structures, postfx, ui }));
+  applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
+  store.subscribe((state) => applyState(state, { terrain, sky, overlays, structures, postfx, ui, flood }));
 
   // Structure tiers follow the effective quality and the set of active zones.
   // Raising the quality later means the rowhouse tier was never fetched;
@@ -408,6 +466,18 @@ async function boot() {
   });
   qualityNote();
 
+  store.subscribe((state, changed) => {
+    if (!changed.has('layers.flood') && !changed.has('floodMode')) return;
+    if (!state.layers.flood) return;
+    const source = state.floodMode === 'slr' ? 'slr' : 'fema';
+    ensureFlood(source);
+    if (!flood.announced.has(source)) {
+      flood.announced.add(source);
+      toast(FLOOD_NOTES[source]);
+    }
+  });
+  if (store.isLayerOn('flood')) ensureFlood(store.value('floodMode') === 'slr' ? 'slr' : 'fema');
+
   // ---- resize -------------------------------------------------------------
   let viewW = 1;
   let viewH = 1;
@@ -452,6 +522,12 @@ async function boot() {
         ? { level: adaptive.level, fps: Math.round(adaptive.fps), steps: adaptive.steps }
         : null,
       zones: [...activeZones],
+      flood: {
+        loaded: Object.keys(flood.entries),
+        visible: overlays.all.filter((e) => e.layer === 'flood' && e.mesh.visible).map((e) => e.floodKey),
+        polygons: overlays.all.filter((e) => e.layer === 'flood' && e.mesh.visible)
+          .reduce((a, e) => a + (e.polygons || 0), 0),
+      },
       landmarkModels: structures ? structures.landmarkModelCount : 0,
       card: ui.cardName,
     }),
@@ -531,7 +607,7 @@ async function boot() {
     for (const entry of overlays.areas) {
       const u = entry.material.uniforms;
       u.uExag.value = exaggeration;
-      u.uLift.value = entry.kind === 'water' ? lift * 0.45 : lift * 0.3;
+      u.uLift.value = entry.kind === 'water' ? lift * 0.45 : entry.kind === 'flood' ? lift * 0.6 : lift * 0.3;
       u.uCameraPos.value.copy(camera.position);
       u.uFogDensity.value = terrain.uniforms.uFogDensity.value;
       if (entry.kind === 'water') {
@@ -629,7 +705,7 @@ async function boot() {
     terrain = createTerrain(THREE, { meta, grid, macro, quality });
     terrain.setTheme(store.value('theme'));
     scene.add(terrain.mesh);
-    applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, force: true });
+    applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
     resize();
     adaptive?.disturb();
   }
@@ -786,7 +862,7 @@ function buildOverlays(data, ctx, root) {
 let lastTheme = null;
 
 function applyState(state, ctx) {
-  const { terrain, sky, overlays, structures, postfx, ui, force } = ctx;
+  const { terrain, sky, overlays, structures, postfx, ui, flood, force } = ctx;
   const theme = getTheme(state.theme);
 
   if (force || state.theme !== lastTheme) {
@@ -812,8 +888,10 @@ function applyState(state, ctx) {
   postfx.setThreshold(state.theme === 'noir' ? 0.5 : 0.72);
   postfx.setVignette(0.28 + state.fogDensity * 0.35);
 
+  const selection = flood ? floodSelection(state, flood.manifests) : null;
   for (const entry of overlays.all) {
-    const on = !!state.layers[entry.layer];
+    let on = !!state.layers[entry.layer];
+    if (entry.layer === 'flood') on = !!selection && selection.keys.has(entry.floodKey);
     entry.mesh.visible = on;
     const uu = entry.mesh.material.uniforms;
     if (entry.layer === 'roads' && uu.uOpacity) {
@@ -833,6 +911,7 @@ function applyState(state, ctx) {
   }
 
   ui?.syncControls(state);
+  if (selection) renderFloodLegend($('floodLegend'), floodLegend(selection, flood.manifests));
 }
 
 function recolorOverlays(overlays, theme) {
@@ -856,6 +935,8 @@ function recolorOverlays(overlays, theme) {
       setVec3(u.uColor.value, theme.rail);
     } else if (entry.layer === 'boundaries') {
       setVec3(u.uColor.value, theme.boundary);
+    } else if (entry.layer === 'flood') {
+      setVec3(u.uFogColor.value, theme.fog);
     }
   }
 }

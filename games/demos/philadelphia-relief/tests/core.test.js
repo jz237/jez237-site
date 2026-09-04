@@ -17,6 +17,7 @@ import {
 import { createStore, isCheapChange } from '../src/state.js';
 import {
   PRESETS, PRESET_IDS, HOME_PRESET, getPreset, presetPatch, blendPresets, PRESET_EXCLUDED,
+  PRESET_EXCLUDED_LAYERS,
   TOUR, TOUR_DURATION, tourAt, tourTimeForShot, QUICK_JUMPS,
 } from '../src/presets.js';
 import { encodeState, decodeState, buildShareUrl } from '../src/urlstate.js';
@@ -244,7 +245,14 @@ test('presets', async (t) => {
       if (PRESET_EXCLUDED.has(key)) continue;
       assert.equal(base[key], opening[key], `default ${key} has drifted from the opening preset`);
     }
-    assert.deepEqual(base.layers, opening.layers);
+    for (const [lid, on] of Object.entries(opening.layers)) {
+      assert.equal(base.layers[lid], on, `default layer ${lid} has drifted from the opening preset`);
+    }
+    // Hazard overlays are a viewer's own choice: off by default and not part
+    // of any restaging, so a preset never switches them off.
+    assert.equal(base.layers.flood, false);
+    for (const preset of PRESETS) assert.equal(presetPatch(preset.id).layers.flood, undefined);
+    assert.ok(PRESET_EXCLUDED_LAYERS.has('flood'));
   });
 
   await t.test('presets leave the viewer\'s own preferences alone', () => {
@@ -272,6 +280,10 @@ test('presets', async (t) => {
           `${preset.id}.${key} = ${patch[key]} is outside its domain`);
       }
       for (const id of Object.keys(LAYERS)) {
+        if (PRESET_EXCLUDED_LAYERS.has(id)) {
+          assert.equal(patch.layers[id], undefined, `${preset.id} must leave layer ${id} alone`);
+          continue;
+        }
         assert.equal(typeof patch.layers[id], 'boolean', `${preset.id} layer ${id}`);
       }
       // Every camera target has to be inside the region we actually have data for.
@@ -319,8 +331,10 @@ test('presets', async (t) => {
       assert.ok(Math.abs(start[key] - from[key]) < 1e-6, `start ${key}`);
       assert.ok(Math.abs(end[key] - to[key]) < 1e-6, `end ${key}`);
     }
-    assert.deepEqual(start.layers, from.layers);
-    assert.deepEqual(end.layers, to.layers);
+    const staged = (layers) => Object.fromEntries(Object.entries(layers)
+      .filter(([id]) => !PRESET_EXCLUDED_LAYERS.has(id)));
+    assert.deepEqual(staged(start.layers), from.layers);
+    assert.deepEqual(staged(end.layers), to.layers);
     assert.equal(start.preset, 'overview');
     assert.equal(end.preset, 'night-metro');
   });

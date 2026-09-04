@@ -13,6 +13,7 @@
 
 const THEMES = ['dusk', 'slate', 'verdant', 'blueprint', 'noir'];
 const QUALITY = ['auto', 'performance', 'balanced', 'cinematic'];
+const FLOOD_MODES = ['fema', 'slr'];
 const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
 
 /**
@@ -121,6 +122,19 @@ export const CONTROLS = {
     k: 'as', kind: 'range', min: 0.25, max: 2.5, step: 0.05, def: 1,
     group: 'scene', label: 'Animation speed', unit: '×',
   },
+  floodMode: {
+    k: 'fm', kind: 'enum', values: FLOOD_MODES, def: 'fema',
+    group: 'hazards', label: 'Hazard shown',
+    hint: 'Turn on the Flood hazard layer to see it. FEMA zones are the mapped 1% and ' +
+      '0.2% annual-chance floodplains; sea level rise is NOAA\'s modelled inundation at ' +
+      'high tide. Both are simplified visualisations, not the regulatory maps.',
+  },
+  seaLevelRise: {
+    k: 'sr', kind: 'range', min: 1, max: 10, step: 1, def: 3,
+    group: 'hazards', label: 'Sea level rise', unit: ' ft',
+    hint: 'Feet above today\'s mean higher high water. NOAA publishes 1 to 6, 8 and 10 ft; ' +
+      '7 and 9 show the next lower scenario. Scale of potential flooding, not exact location.',
+  },
 };
 
 /** Toggleable map layers, in legend order. */
@@ -136,6 +150,7 @@ export const LAYERS = {
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
   landmarks: { k: 'Lm', def: true, label: 'Landmarks' },
   structures: { k: 'Lx', def: true, label: 'Buildings & bridges' },
+  flood: { k: 'Lf', def: false, label: 'Flood hazard' },
 };
 
 /** Camera pose. Kept in the same store so presets and URLs stay uniform. */
@@ -154,6 +169,7 @@ export const GROUPS = [
   { id: 'scene', label: 'Scene' },
   { id: 'terrain', label: 'Terrain' },
   { id: 'structures', label: 'Structures' },
+  { id: 'hazards', label: 'Flood & sea level' },
   { id: 'light', label: 'Light' },
   { id: 'atmosphere', label: 'Atmosphere' },
   { id: 'carto', label: 'Cartography' },
@@ -247,5 +263,5 @@ export const CHEAP_KEYS = new Set([
   'waterIntensity', 'contourStrength', 'contourInterval', 'roadOpacity',
   'boundaryOpacity', 'theme', 'camLon', 'camLat', 'camDist', 'camBearing',
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
-  'structureDetail', 'structureHeight',
+  'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
 ]);
