@@ -29,6 +29,8 @@ export const ASSETS = [
     label: 'place labels' },
   { id: 'landmarks', path: 'data/landmarks.json', kind: 'json', layer: 'landmarks',
     label: 'landmarks' },
+  { id: 'structures', path: 'data/structures/buildings.json', kind: 'manifest',
+    layer: 'structures', label: 'buildings and bridges' },
 ];
 
 export const MODE = {

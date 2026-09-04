@@ -29,6 +29,8 @@ import { createSky, sunDirection } from './sky.js';
 import { createPostFX } from './postfx.js';
 import { createCameraRig } from './camera.js';
 import { createLabelLayer, buildLabelCandidates } from './labels.js';
+import { createStructures } from './structures.js';
+import { TIER_PLAN } from './structures-data.js';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
 } from './vectors.js';
@@ -101,6 +103,8 @@ function readImagePixels(img) {
 async function loadEverything() {
   const results = {};
   const data = {};
+  const hashPatch = decodeState(window.location.hash) || {};
+  const quality = hashPatch.quality || 'balanced';
 
   setProgress(0.05, 'Reading elevation model…');
   try {
@@ -152,8 +156,64 @@ async function loadEverything() {
     data[asset.id] = value;
   }
 
+  setProgress(0.78, 'Loading buildings…');
+  data.structures = await loadStructures(quality);
+  results.structures = !!data.structures;
+
   setProgress(0.82, 'Building the scene…');
   return { results, data };
+}
+
+async function fetchBinary(path) {
+  const response = await fetch(path, { cache: 'default' });
+  if (!response.ok) throw new Error(`${path}: HTTP ${response.status}`);
+  return response.arrayBuffer();
+}
+
+/**
+ * The structures layer is a manifest plus one binary stream per zone and
+ * height tier. Only the tiers the quality mode asks for are fetched, so a
+ * phone in performance mode never downloads the rowhouse fabric at all.
+ * A tier that fails to arrive is skipped; the manifest failing means no layer.
+ */
+async function loadStructures(quality, existing = null) {
+  let manifest = existing?.manifest;
+  if (!manifest) {
+    try {
+      manifest = await fetchJson('data/structures/buildings.json');
+    } catch (error) {
+      console.warn('[philly-relief] structures manifest unavailable:', error.message);
+      return null;
+    }
+  }
+  const want = new Set(TIER_PLAN[quality] || TIER_PLAN.balanced);
+  const tierBuffers = existing?.tierBuffers || new Map();
+  const jobs = [];
+  for (const zone of manifest.zones || []) {
+    for (const tier of zone.tiers || []) {
+      if (!want.has(tier.tier) || tierBuffers.has(tier.file)) continue;
+      jobs.push((async () => {
+        try {
+          tierBuffers.set(tier.file, await fetchBinary(`data/structures/${tier.file}`));
+        } catch (error) {
+          console.warn(`[philly-relief] structures tier ${tier.file} unavailable:`,
+            error.message);
+        }
+      })());
+    }
+  }
+  await Promise.all(jobs);
+
+  let bridges = existing?.bridges ?? null;
+  if (bridges === null) {
+    try {
+      bridges = await fetchJson(`data/structures/${manifest.bridgesFile || 'bridges.json'}`);
+    } catch (error) {
+      console.warn('[philly-relief] bridges unavailable:', error.message);
+      bridges = { bridges: [] };
+    }
+  }
+  return { manifest, tierBuffers, bridges };
 }
 
 // ---------------------------------------------------------------------------
@@ -202,6 +262,20 @@ async function boot() {
   scene.add(overlayRoot);
   const overlays = buildOverlays(data, { projection, sampleElevation }, overlayRoot);
 
+  let structures = null;
+  if (data.structures) {
+    structures = createStructures(THREE, {
+      manifest: data.structures.manifest,
+      tierBuffers: data.structures.tierBuffers,
+      bridgesDoc: data.structures.bridges,
+      projection,
+      sampleElevation,
+      quality: store.value('quality'),
+    });
+    scene.add(structures.group);
+    fillStructureFacts(data.structures.manifest, structures);
+  }
+
   const postfx = createPostFX(THREE, renderer);
 
   const rig = createCameraRig(THREE, {
@@ -224,8 +298,32 @@ async function boot() {
   const motion = createMotion(store, projection);
   const ui = wireInterface({ store, motion, data, projection, rig });
 
-  applyState(store.get(), { terrain, sky, overlays, postfx, ui, force: true });
-  store.subscribe((state) => applyState(state, { terrain, sky, overlays, postfx, ui }));
+  applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, force: true });
+  store.subscribe((state) => applyState(state, { terrain, sky, overlays, structures, postfx, ui }));
+
+  // Raising the quality later means the rowhouse tier was never fetched;
+  // lowering it on a phone frees that memory again.
+  let tierSync = Promise.resolve();
+  store.subscribe((state, changed) => {
+    if (!changed.has('quality') || !structures || !data.structures) return;
+    const wanted = new Set(TIER_PLAN[state.quality] || TIER_PLAN.balanced);
+    tierSync = tierSync.then(async () => {
+      const fresh = await loadStructures(state.quality, data.structures);
+      if (!fresh) return;
+      for (const zone of fresh.manifest.zones || []) {
+        for (const tier of zone.tiers || []) {
+          const have = structures.hasTier(zone.id, tier.tier);
+          const buffer = fresh.tierBuffers.get(tier.file);
+          if (wanted.has(tier.tier) && !have && buffer) structures.addTier(zone, tier, buffer);
+          if (!wanted.has(tier.tier) && have) {
+            structures.removeTier(zone.id, tier.tier);
+            fresh.tierBuffers.delete(tier.file);
+          }
+        }
+      }
+      structures.setTheme(getTheme(store.value('theme')));
+    }).catch((error) => console.warn('[philly-relief] tier sync failed:', error));
+  });
 
   // ---- resize -------------------------------------------------------------
   let viewW = 1;
@@ -245,12 +343,28 @@ async function boot() {
     for (const entry of overlays.lines) {
       entry.material.uniforms.uResolution.value.set(viewW, viewH);
     }
+    structures?.setResolution(viewW, viewH);
   }
   window.addEventListener('resize', resize);
   resize();
 
   // ---- frame loop ---------------------------------------------------------
   const sunDir = new THREE.Vector3();
+  let lastRenderInfo = null;
+
+  // Read-only diagnostics for the QA harness and curious readers. Nothing in
+  // the app depends on it.
+  window.philadelphiaRelief = Object.freeze({
+    stats: () => ({
+      structures: structures ? structures.stats() : null,
+      structureTiers: structures ? structures.loadedTiers : [],
+      buildingsLoaded: structures ? structures.buildingTotal : 0,
+      bridges: structures ? structures.bridges : [],
+      drawCalls: lastRenderInfo ? lastRenderInfo.calls : 0,
+      triangles: lastRenderInfo ? lastRenderInfo.triangles : 0,
+      quality: store.value('quality'),
+    }),
+  });
   let last = performance.now();
   let labelClock = 0;
   let fpsAccum = 0;
@@ -304,9 +418,18 @@ async function boot() {
       }
     }
 
+    if (structures) {
+      structures.update({
+        camera, state, exaggeration, dt, sunDir,
+        fogDensity: terrain.uniforms.uFogDensity.value,
+      });
+    }
+
     renderer.setRenderTarget(postfx.renderTarget);
     renderer.clear();
     renderer.render(scene, camera);
+    // Snapshot before the post-FX passes reset the counters.
+    lastRenderInfo = { calls: renderer.info.render.calls, triangles: renderer.info.render.triangles };
     postfx.composite();
 
     labelClock += dt;
@@ -370,7 +493,7 @@ async function boot() {
     terrain = createTerrain(THREE, { meta, grid, macro, quality });
     terrain.setTheme(store.value('theme'));
     scene.add(terrain.mesh);
-    applyState(store.get(), { terrain, sky, overlays, postfx, ui, force: true });
+    applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, force: true });
     resize();
   });
 
@@ -527,7 +650,7 @@ let lastTheme = null;
 let lastQuality = null;
 
 function applyState(state, ctx) {
-  const { terrain, sky, overlays, postfx, ui, force } = ctx;
+  const { terrain, sky, overlays, structures, postfx, ui, force } = ctx;
   const theme = getTheme(state.theme);
 
   if (force || state.theme !== lastTheme) {
@@ -536,7 +659,9 @@ function applyState(state, ctx) {
     sky.setTheme(state.theme);
     applyThemeChrome(state.theme);
     recolorOverlays(overlays, theme);
+    structures?.setTheme(theme);
   }
+  if (structures) structures.group.visible = !!state.layers.structures;
 
   if (!force && state.quality !== lastQuality && ui?.rebuildQuality) {
     lastQuality = state.quality;
@@ -1003,6 +1128,24 @@ function wireInterface(deps) {
 // ---------------------------------------------------------------------------
 // Small helpers
 // ---------------------------------------------------------------------------
+
+/** The About panel quotes the manifest so its numbers cannot drift. */
+function fillStructureFacts(manifest, structures) {
+  const set = (id, text) => {
+    const node = $(id);
+    if (node) node.textContent = text;
+  };
+  const counts = manifest.sourceCounts || {};
+  const total = Object.values(counts).reduce((a, b) => a + b, 0) || 1;
+  const pct = (k) => `${Math.round(((counts[k] || 0) / total) * 100)}%`;
+  set('aboutBuildingCount', (manifest.totals?.buildings || 0).toLocaleString());
+  set('aboutMeasuredPct', pct('measured'));
+  set('aboutEstimatedPct',
+    `${Math.round((((counts.levels || 0) + (counts.default || 0)) / total) * 100)}%`);
+  set('aboutCuratedCount', String(counts.curated || 0));
+  set('aboutBridgeCount', String((structures?.bridges || []).length));
+  set('aboutBridgeNames', (structures?.bridges || []).map((b) => b.name).join(', '));
+}
 
 function formatClock(seconds) {
   const s = Math.max(0, Math.floor(seconds));

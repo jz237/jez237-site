@@ -277,6 +277,9 @@ async function run() {
       await shot('03-touch');
     }
 
+    // ---- structures layer -------------------------------------------------
+    await structuresPass(page, viewport, shot, problems, report);
+
     // Degraded mode: block the heightmap and confirm the app still comes up.
     const degradedPage = await context.newPage();
     const degradedProblems = [];
@@ -321,6 +324,97 @@ async function run() {
     console.log('PASSED — no console errors, no page errors, all probes ok.');
   }
   console.log(`screenshots: ${OUT}`);
+}
+
+/**
+ * Prove the buildings-and-bridges layer: it draws at the skyline, at each of
+ * the four required crossings, in the night shot and on a phone; the toggle
+ * empties it; performance mode never loads the rowhouse tier; and draw calls
+ * stay bounded throughout.
+ */
+async function structuresPass(page, viewport, shot, problems, report) {
+  const stats = () => page.evaluate(() => window.philadelphiaRelief?.stats() || null);
+  const goto = async (hash, settle = 3600) => {
+    await page.evaluate((h) => { window.location.hash = h; }, hash);
+    await page.waitForTimeout(settle);
+  };
+  const bridges = await page.evaluate(async () => {
+    const r = await fetch('data/structures/bridges.json');
+    return (await r.json()).bridges.map((b) => {
+      const mid = b.centerline[Math.floor(b.centerline.length / 2)];
+      const a = b.centerline[0];
+      const z = b.centerline[b.centerline.length - 1];
+      const bearing = (Math.atan2(z[0] - a[0], z[1] - a[1]) * 180 / Math.PI + 360) % 360;
+      return { id: b.id, name: b.name, lon: mid[0], lat: mid[1], bearing: Math.round(bearing) };
+    });
+  }).catch(() => []);
+  if (bridges.length < 4) problems.push(`[${viewport.id}] bridges.json has ${bridges.length} bridges`);
+
+  const views = [
+    { id: 'skyline', hash: '#x=-75.1655&y=39.9505&d=6500&b=32&p=73&Lx=1', minBuildings: 500 },
+    { id: 'sports-complex', hash: '#x=-75.167&y=39.9045&d=5200&b=15&p=71&Lx=1', minBuildings: 40 },
+  ];
+  for (const b of bridges) {
+    if (['benjamin-franklin', 'walt-whitman', 'betsy-ross', 'tacony-palmyra'].includes(b.id)) {
+      views.push({ id: `bridge-${b.id}`, minBuildings: 0,
+        // Look back along the span with the sun behind the camera, so the
+        // frame shows the structure rather than the glint off the river.
+        hash: `#x=${b.lon.toFixed(4)}&y=${b.lat.toFixed(4)}&d=3800&b=${(b.bearing + 215) % 360}&p=75&Lx=1` });
+    }
+  }
+  if (viewport.isMobile) views.splice(1);   // the phone proves the skyline only
+
+  for (const view of views) {
+    await goto(view.hash);
+    const s = await stats();
+    if (!s?.structures) {
+      problems.push(`[${viewport.id}] ${view.id}: no structure stats`);
+      continue;
+    }
+    report.push(`[${viewport.id}] ${view.id}: buildings ${s.structures.drawnBuildings}, `
+      + `structure calls ${s.structures.drawCalls}, total calls ${s.drawCalls}, `
+      + `tris ${s.triangles}, tiers ${JSON.stringify(s.structures.tiers)}`);
+    if (s.structures.drawnBuildings < view.minBuildings) {
+      problems.push(`[${viewport.id}] ${view.id}: only ${s.structures.drawnBuildings} buildings drawn`);
+    }
+    if (s.structures.drawCalls > 10) {
+      problems.push(`[${viewport.id}] ${view.id}: ${s.structures.drawCalls} structure draw calls`);
+    }
+    if (s.drawCalls > 40) problems.push(`[${viewport.id}] ${view.id}: ${s.drawCalls} total draw calls`);
+    await shot(`11-structures-${view.id}`);
+  }
+
+  // Night shot with structures.
+  if (!viewport.isMobile) {
+    await page.keyboard.press('6');
+    await page.waitForTimeout(3200);
+    await shot('12-structures-night');
+  }
+
+  // The toggle must empty the layer.
+  await goto('#x=-75.1655&y=39.9505&d=6500&b=32&p=73&Lx=0', 1500);
+  const off = await stats();
+  if (off?.structures?.drawnBuildings !== 0 || off?.structures?.drawCalls !== 0) {
+    problems.push(`[${viewport.id}] structures toggle off still draws ${JSON.stringify(off?.structures)}`);
+  }
+  const before = off?.drawCalls ?? 0;
+  await goto('#x=-75.1655&y=39.9505&d=6500&b=32&p=73&Lx=1', 1500);
+  const on = await stats();
+  if (!(on?.drawCalls > before)) problems.push(`[${viewport.id}] toggling structures on did not add draw calls`);
+
+  // Performance mode: no rowhouse tier, capped fraction.
+  await goto('#x=-75.1655&y=39.9505&d=6500&b=32&p=73&Lx=1&q=performance', 4500);
+  const perf = await stats();
+  if (perf?.structureTiers?.some((t) => t.endsWith('/low'))) {
+    problems.push(`[${viewport.id}] performance mode loaded the low tier: ${perf.structureTiers}`);
+  }
+  if (perf?.structures && perf.structures.fraction > 0.7) {
+    problems.push(`[${viewport.id}] performance fraction ${perf.structures.fraction} > 0.7`);
+  }
+  report.push(`[${viewport.id}] performance: tiers ${JSON.stringify(perf?.structureTiers)}, `
+    + `buildings ${perf?.structures?.drawnBuildings}, calls ${perf?.drawCalls}`);
+  await shot('13-structures-performance');
+  await goto('#', 800);
 }
 
 run().catch((error) => {

@@ -55,6 +55,8 @@ games/demos/philadelphia-relief/
     postfx.js           a small hand-rolled bloom
     camera.js           orbit / pan / zoom / pitch / bearing rig
     labels.js           projected DOM labels with decluttering and terrain occlusion
+    structures-data.js  buildings + bridges, the pure half: binary parse, extrusion, LOD policy
+    structures.js       buildings + bridges, the THREE half: one draw call per zone and tier
     ui.js               control studio, presets, search, dialogs
     main.js             load order, wiring, frame loop
   data/                 generated; see "Data provenance"
@@ -92,6 +94,58 @@ camera that moves from 190 km out to 1.2 km. Each vertex carries its **raw
 elevation in metres**, not a baked world Y, so the exaggeration slider moves the
 overlays and the ground together instead of tearing them apart.
 
+### Buildings and bridges
+
+Real OpenStreetMap footprints, extruded to their OSM heights, in **two detail
+zones** rather than a region-wide dump:
+
+| Zone | Rule | Buildings |
+|---|---|---|
+| Center City & University City (South St → Fairmount, Drexel/Penn → the Delaware) | every footprint, rowhouses included | 12,172 |
+| Inner Philadelphia & Camden (Navy Yard and the stadiums → Port Richmond and Temple, the airport's edge → the Camden waterfront) | notable only: ≥20 m, ≥2,500 m² and ≥8 m, or named and substantial | 2,338 |
+
+Each zone is split into three **height tiers** (tall ≥35 m, mid ≥12 m, low) and
+each tier is exactly **one draw call**. Buildings are packed tallest-first, so the
+density slider and the quality mode simply move a draw-range prefix: turning
+density down keeps the skyline and sheds the rowhouse fabric. Tiers frustum-cull
+as a unit and **rise out of the ground** as the camera enters their range (tall
+from the regional view, mid from ~40 km, low from ~15 km, all scaled by the
+slider and quality). Performance mode never fetches the low tier at all, so a
+phone downloads 402 KB of buildings instead of 777 KB.
+
+Geometry is lean: a base ring, a roof ring, and face normals recovered from
+screen-space derivatives in the fragment shader, so walls share their ring
+vertices — about 2n vertices per n-gon footprint. Rowhouses below 18 m are
+**merged into block rows** at build time (party walls are sub-pixel at any range
+the map uses), which is why Center City's fabric is 11,846 rows and mid-rises
+rather than 30,000 houses.
+
+Each vertex carries the DEM elevation under its building's centroid, and the
+shader computes `y = ground × exaggeration + structure × hScale`, where
+`hScale = √exaggeration × structure-height slider`. Buildings therefore ride the
+terrain like the roads do, and stay proportionate to the hills at the wide shot
+without becoming needles up close.
+
+**Bridges** (6: Benjamin Franklin Bridge, Walt Whitman Bridge, Betsy Ross Bridge, Tacony-Palmyra Bridge, Commodore Barry Bridge, Burlington-Bristol Bridge) use the OSM `man_made=bridge`
+outline (or the `bridge=yes` carriageway centerline) for alignment and deck
+width, and a small curated table of public reference values — main span, tower
+height, navigation clearance — for the schematic form: suspension towers with a
+parabolic main cable and hangers, cantilever-truss chords and diagonals, a tied
+arch, or lift towers, all on a deck that rests on both banks and rises to the
+clearance at midspan. All bridge solids are one draw call and all thin members
+are one more. They are recognisable silhouettes, not surveys of the steel.
+
+**Provenance of heights**, counted per source footprint in the manifest and
+quoted live in the About panel: 76% carry a measured OSM `height`
+(Philadelphia's come largely from the city's LiDAR-derived footprint import),
+8% are estimated from `building:levels`, 16% from
+building type, and **27 skyline towers with no height in OSM**
+(One Liberty Place, Comcast Center, BNY Mellon Center, Three Logan Square and
+their neighbours) use rounded public reference heights supplied by this project
+and flagged `curated`. The City Hall tower is a curated 26 m box on top of a
+footprint held at its ~50 m roof, because extruding the whole block to 167 m
+would make a cube.
+
 ---
 
 ## Data provenance
@@ -104,6 +158,8 @@ panel, which is the copy that actually matters.
 | Elevation | [AWS Terrain Tiles](https://registry.opendata.aws/terrain-tiles/) (Mapzen *terrarium*), zoom 12 | Open data | Underlying data for this region is USGS 3DEP and SRTM |
 | Water, roads, rail, boundaries, parks, place names | OpenStreetMap via the public Overpass API | ODbL 1.0 | Queried **once at build time** and baked to static GeoJSON |
 | Landmarks | Hand-curated for this map (`data/landmarks.json`) | — | ~44 entries; elevations are sampled from the same DEM as the ground |
+| Building footprints and heights | OpenStreetMap via Overpass, two detail zones | ODbL 1.0 | 76% measured heights; 27 curated tower heights from public references, flagged in the manifest |
+| Bridges | OSM outline/centerline for alignment; curated spans, tower heights and clearances | ODbL 1.0 + curated | Schematic forms; `data/structures/bridges.json` says so in its own header |
 
 The files under `data/` derived from OSM are a **Derivative Database** under ODbL.
 The attribution in the About panel and this table is what keeps that licence
@@ -121,10 +177,19 @@ satisfied; keep both if you fork this.
 | `data/boundaries.geojson` | 82 KB | county (lvl 6) and municipal (lvl 8) lines |
 | `data/rail.geojson` | 60 KB | non-service heavy rail, metro and tram |
 | `data/places.geojson` | 113 KB | 771 OSM place nodes, ranked city → neighbourhood |
+| `data/structures/buildings.json` | 5 KB | manifest: zones, tiers, counts, byte sizes, height-source counts, tallest buildings |
+| `data/structures/center-city-{tall,mid,low}.bin` | 16 KB / 258 KB / 349 KB | PHB1 binary: 326 / 5,052 / 6,794 footprints, int16 metres from the zone origin, tallest first |
+| `data/structures/inner-city-{tall,mid,low}.bin` | 16 KB / 112 KB / 25 KB | 131 / 1,827 / 380 notable footprints, including the three stadiums |
+| `data/structures/bridges.json` | 3 KB | 6 bridges: centerline, deck width, type and curated structural parameters |
 
 Lossless WebP was chosen over PNG for the heightmap: it is bit-exact (the build
 verifies this and refuses to ship otherwise) and ~32% smaller, which matters for a
 2048² hero asset on mobile.
+
+**The structures payload** is 777 KB for 14,510 buildings
+(169,805 footprint vertices). The PHB1 stream is 8 bytes per building plus
+4 per vertex; the manifest records every count so the tests can hold the files to
+it.
 
 **Why the GeoJSON is small.** OSM splits a highway or a creek into a new way at
 every intersection, so a raw export was 10,832 features holding only 26,161
@@ -164,6 +229,8 @@ with `numpy` and `pillow`, and downloads ~17 MB of terrain tiles (cached in
 python3 -m venv .venv && .venv/bin/pip install numpy pillow
 .venv/bin/python tools/build_terrain.py --grid 2048 --step 0.25 --out heightmap.webp
 .venv/bin/python tools/build_vectors.py            # add --refresh to bypass the cache
+.venv/bin/pip install shapely                      # only for the rowhouse merge
+.venv/bin/python tools/build_structures.py         # buildings + bridges (~75 MB of OSM, cached)
 ```
 
 The region is defined once in `tools/region.py`; every generator imports it, so
@@ -186,9 +253,10 @@ the heightmap and the vector layers cannot drift apart.
 | `/` | Search · `?` shortcuts · `Esc` close / stop |
 
 The control studio covers terrain exaggeration, contour strength and interval,
-sun azimuth and altitude, key light, ambient fill, fog density, bloom, water
-intensity, label size and density, road opacity, boundary strength, theme, field
-of view, quality and animation speed — plus ten layer toggles.
+**building density and structure height**, sun azimuth and altitude, key light,
+ambient fill, fog density, bloom, water intensity, label size and density, road
+opacity, boundary strength, theme, field of view, quality and animation speed —
+plus eleven layer toggles, including **Buildings & bridges**.
 
 **Presets** are complete restagings, not bookmarks: camera, light, air and layer
 selection all move together. The flythrough strings all six into a ~91 s loop
@@ -261,7 +329,23 @@ Stated plainly, and repeated in the About panel:
   surveyed.
 - The whole region is one mesh with no shadow casting; the hillshade is direct
   lighting plus an ambient-occlusion approximation, so you will not see a ridge
-  cast a shadow across a valley.
+  cast a shadow across a valley. Buildings cast no shadows either.
+- **Buildings exist only in the two detail zones.** Outside Center City,
+  University City and inner Philadelphia/Camden there are none, and in the inner
+  zone only notable ones. Rowhouse rows are merged and simplified to ~0.6 m;
+  flat-roof extrusions only — no pitched roofs, spires, setbacks or building
+  parts (One Liberty Place is a box, not a spire). Heights marked `levels` or
+  `default` are estimates; the 27 `curated` entries are public reference values,
+  not surveys. Stadiums are `leisure=stadium` outlines extruded as solid blocks
+  at their published heights, not bowls. OSM footprint coverage and tagging vary
+  block by block.
+- **Bridges are schematic.** Alignment and deck width are real; the towers,
+  cables, trusses and arches are built from a handful of rounded reference
+  numbers. Approach viaducts beyond OSM's `bridge=yes` extent are drawn by the
+  roads layer as flat lines, so a bridge's deck meets a thin road at each end.
+- Buildings are stretched by √exaggeration, not the full factor. That is a
+  deliberate compromise between reading against the hills at the wide shot and
+  not becoming needles up close; it is not a physical scale.
 
 ## Deployment
 
