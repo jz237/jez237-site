@@ -111,6 +111,8 @@
     <div id="presetList" class="preset-list" role="group" aria-label="Cinematic presets"></div>
     <div class="group-head-row"><h3 class="group-head">Quick jump</h3></div>
     <div id="quickJumps" class="chip-row" role="group" aria-label="Quick jump destinations"></div>
+    <div class="group-head-row"><h3 class="group-head">Bridges &amp; structures</h3></div>
+    <div id="structureJumps" class="chip-row" role="group" aria-label="Bridge and structure destinations"></div>
   </div>
 </section>
 
@@ -118,7 +120,7 @@
 <footer class="readout" id="readout">
   <div class="readout-main">
     <div class="readout-preset">
-      <span class="readout-preset-name" id="outPreset">The Delaware Valley</span>
+      <span class="readout-preset-name" id="outPreset">Philadelphia Skyline</span>
       <span class="readout-preset-blurb" id="outBlurb"></span>
     </div>
     <dl class="readout-stats" aria-live="off">
@@ -149,18 +151,19 @@
 <!-- ── onboarding ──────────────────────────────────────────────────────── -->
 <div id="onboarding" class="overlay" hidden>
   <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="obTitle">
-    <h2 id="obTitle">The Delaware Valley, in relief</h2>
+    <h2 id="obTitle">Philadelphia, in relief</h2>
     <p>
-      Real elevation for Philadelphia and its suburbs, from the Wissahickon gorge
-      to the Bucks County hills. The land here is subtle — about 380 m of relief
-      across 94 km — so the vertical scale is exaggerated to make it legible.
+      Real elevation for Philadelphia and its suburbs, with 14,500 real buildings
+      standing on it — the Center City skyline, the rowhouse grid and the Delaware
+      bridges. The land here is subtle, about 380 m of relief across 94 km, so the
+      vertical scale is exaggerated to make it legible.
     </p>
     <ul class="overlay-hints">
       <li><b>Drag</b> to move across the region</li>
       <li><b>Right-drag</b> or <b>two fingers</b> to orbit and tilt</li>
       <li><b>Scroll</b> or <b>pinch</b> to zoom</li>
       <li><b>Press ▶</b> for the flythrough — moving the camera pauses it</li>
-      <li><b>Zoom into Center City</b> and the buildings and Delaware bridges rise out of the ground</li>
+      <li><b>Pull back</b> with the <b>Delaware Valley</b> preset for the whole region; the <b>bridge chips</b> fly to each crossing</li>
     </ul>
     <div class="overlay-actions">
       <button type="button" class="primary-btn" id="obStart">Start exploring</button>
@@ -281,9 +284,9 @@
         <tr><th scope="row"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd></th><td>Pan across the region</td></tr>
         <tr><th scope="row"><kbd>Shift</kbd> + arrows</th><td>Orbit and tilt</td></tr>
         <tr><th scope="row"><kbd>+</kbd> <kbd>−</kbd></th><td>Zoom in and out</td></tr>
-        <tr><th scope="row"><kbd>1</kbd>–<kbd>6</kbd></th><td>Jump to a cinematic preset</td></tr>
+        <tr><th scope="row"><kbd>1</kbd>–<kbd>8</kbd></th><td>Jump to a cinematic preset (1 is the skyline)</td></tr>
         <tr><th scope="row"><kbd>Space</kbd></th><td>Play or pause the flythrough</td></tr>
-        <tr><th scope="row"><kbd>H</kbd></th><td>Reset to the opening view</td></tr>
+        <tr><th scope="row"><kbd>H</kbd></th><td>Home: back to the opening skyline</td></tr>
         <tr><th scope="row"><kbd>C</kbd></th><td>Show or hide the control studio</td></tr>
         <tr><th scope="row"><kbd>L</kbd></th><td>Show or hide labels</td></tr>
         <tr><th scope="row"><kbd>F</kbd></th><td>Fullscreen</td></tr>

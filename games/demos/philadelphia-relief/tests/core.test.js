@@ -16,7 +16,7 @@ import {
 } from '../src/schema.js';
 import { createStore, isCheapChange } from '../src/state.js';
 import {
-  PRESETS, PRESET_IDS, getPreset, presetPatch, blendPresets, PRESET_EXCLUDED,
+  PRESETS, PRESET_IDS, HOME_PRESET, getPreset, presetPatch, blendPresets, PRESET_EXCLUDED,
   TOUR, TOUR_DURATION, tourAt, tourTimeForShot, QUICK_JUMPS,
 } from '../src/presets.js';
 import { encodeState, decodeState, buildShareUrl } from '../src/urlstate.js';
@@ -215,24 +215,36 @@ test('store', async (t) => {
 
 // ---------------------------------------------------------------------------
 test('presets', async (t) => {
-  await t.test('the five named cinematic shots plus an overview all exist', () => {
-    for (const id of ['overview', 'dawn-delaware', 'schuylkill-flyover',
-      'wissahickon', 'main-line-ridge', 'night-metro']) {
+  await t.test('the eight cinematic shots all exist and the skyline opens', () => {
+    for (const id of ['skyline', 'ben-franklin-bridge', 'overview', 'dawn-delaware',
+      'schuylkill-flyover', 'wissahickon', 'main-line-ridge', 'night-metro']) {
       assert.ok(getPreset(id), `missing preset ${id}`);
     }
     assert.equal(new Set(PRESET_IDS).size, PRESETS.length, 'preset ids must be unique');
+    assert.equal(PRESETS.length, 8);
+    // The product's biggest feature must be what a clean load shows: the
+    // opening shot is the skyline, and it is what Home returns to.
+    assert.equal(HOME_PRESET, 'skyline');
+    assert.equal(PRESETS[0].id, HOME_PRESET);
+    assert.equal(defaults().preset, HOME_PRESET);
+    const home = presetPatch(HOME_PRESET);
+    assert.ok(home.camDist < 12000, `opening camera is ${home.camDist} m out; structures need < 12 km`);
+    assert.equal(home.layers.structures, true);
+    assert.ok(home.structureDetail >= 0.6);
+    // The regional view survives as its own card.
+    assert.ok(presetPatch('overview').camDist > 60000);
   });
 
   await t.test('the defaults are exactly the opening shot', () => {
     // This is what lets a default view serialise to an empty hash and makes
     // Home land where a fresh load does.
-    const overview = presetPatch('overview');
+    const opening = presetPatch(HOME_PRESET);
     const base = defaults();
     for (const key of [...Object.keys(CONTROLS), ...Object.keys(CAMERA)]) {
       if (PRESET_EXCLUDED.has(key)) continue;
-      assert.equal(base[key], overview[key], `default ${key} has drifted from the overview preset`);
+      assert.equal(base[key], opening[key], `default ${key} has drifted from the opening preset`);
     }
-    assert.deepEqual(base.layers, overview.layers);
+    assert.deepEqual(base.layers, opening.layers);
   });
 
   await t.test('presets leave the viewer\'s own preferences alone', () => {
@@ -341,6 +353,12 @@ test('presets', async (t) => {
         }
       }
     }
+  });
+
+  await t.test('the tour opens on the skyline and visits every shot once', () => {
+    assert.equal(TOUR[0].preset, HOME_PRESET);
+    assert.deepEqual([...new Set(TOUR.map((s) => s.preset))].sort(), [...PRESET_IDS].sort());
+    assert.equal(TOUR.length, PRESETS.length);
   });
 
   await t.test('discrete values snap once at the midpoint, never blend', () => {
@@ -959,7 +977,8 @@ test('quick jumps', async (t) => {
   await t.test('every required destination is reachable and inside the region', () => {
     const required = ['Center City', 'South Philadelphia', 'University City', 'Manayunk',
       'Chestnut Hill', 'Northeast Philadelphia', 'King of Prussia', 'Media',
-      'Doylestown', 'Levittown', 'Camden', 'Cherry Hill', 'Valley Forge'];
+      'Doylestown', 'Levittown', 'Camden', 'Cherry Hill', 'Valley Forge',
+      'Walt Whitman Bridge', 'Betsy Ross Bridge', 'Tacony-Palmyra Bridge', 'Sports Complex'];
     const names = QUICK_JUMPS.map((j) => j.name);
     for (const name of required) assert.ok(names.includes(name), `missing quick jump: ${name}`);
     for (const jump of QUICK_JUMPS) {

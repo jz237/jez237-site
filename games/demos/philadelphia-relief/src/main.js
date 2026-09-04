@@ -16,7 +16,7 @@ import {
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
 } from './geo.js';
 import {
-  PRESETS, getPreset, presetPatch, TOUR, TOUR_DURATION, tourAt, tourTimeForShot,
+  PRESETS, HOME_PRESET, getPreset, presetPatch, TOUR, TOUR_DURATION, tourAt, tourTimeForShot,
 } from './presets.js';
 import { decodeState, encodeState, buildShareUrl } from './urlstate.js';
 import {
@@ -280,7 +280,9 @@ async function boot() {
 
   const rig = createCameraRig(THREE, {
     store,
-    dom: dom.canvas,
+    // The stage holds the canvas and the label layer, so gestures that start
+    // on a label (dense over the skyline) still drive the camera.
+    dom: dom.stage,
     projection,
     sampleElevation,
     getExaggeration: () => (store.isLayerOn('terrain') ? store.value('exaggeration') : 0),
@@ -877,6 +879,8 @@ function wireInterface(deps) {
   const layerToggles = buildLayerToggles(store, dom.layerToggles);
   const presets = buildPresets(dom.presetList, (id) => motion.toPreset(id));
   buildQuickJumps(dom.quickJumps, (jump) => motion.flyTo(jump, { label: jump.name }));
+  buildQuickJumps($('structureJumps'), (jump) => motion.flyTo(jump, { label: jump.name }),
+    'structures');
 
   const dialogs = createDialogs(['about', 'shortcuts']);
   let captureFn = null;
@@ -958,7 +962,7 @@ function wireInterface(deps) {
   });
 
   // ---- top bar actions ----------------------------------------------------
-  $('btnHome').addEventListener('click', () => motion.toPreset('overview'));
+  $('btnHome').addEventListener('click', () => motion.toPreset(HOME_PRESET));
   $('btnAbout').addEventListener('click', () => dialogs.open('about'));
   $('btnKeys').addEventListener('click', () => dialogs.open('shortcuts'));
   $('btnFull').addEventListener('click', toggleFullscreen);
@@ -1007,7 +1011,7 @@ function wireInterface(deps) {
         event.preventDefault();
         break;
       case 'h': case 'H':
-        motion.toPreset('overview');
+        motion.toPreset(HOME_PRESET);
         break;
       case 'f': case 'F':
         toggleFullscreen();

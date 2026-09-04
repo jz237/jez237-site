@@ -32,6 +32,8 @@ export function createCameraRig(THREE, options) {
   let mode = null;              // 'pan' | 'orbit'
   let last = null;
   let lastPinch = 0;
+  let captured = false;
+  let pressStart = null;
 
   function poseFromStore(state) {
     return {
@@ -121,7 +123,11 @@ export function createCameraRig(THREE, options) {
 
   function onPointerDown(event) {
     if (event.button !== undefined && event.button > 2) return;
-    dom.setPointerCapture?.(event.pointerId);
+    // Capture is taken lazily, on the first real movement. The rig listens on
+    // the whole stage so a drag that begins on a map label still pans; taking
+    // capture immediately would retarget pointerup and swallow the label's
+    // own click, so a clean tap must never trigger it.
+    pressStart = { x: event.clientX, y: event.clientY, id: event.pointerId };
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
     if (pointers.size === 1) {
       mode = (event.button === 2 || event.button === 1 || event.shiftKey) ? 'orbit' : 'pan';
@@ -137,6 +143,11 @@ export function createCameraRig(THREE, options) {
   function onPointerMove(event) {
     if (!pointers.has(event.pointerId)) return;
     pointers.set(event.pointerId, { x: event.clientX, y: event.clientY });
+    if (!captured && pressStart && pressStart.id === event.pointerId
+      && Math.hypot(event.clientX - pressStart.x, event.clientY - pressStart.y) > 3) {
+      dom.setPointerCapture?.(event.pointerId);
+      captured = true;
+    }
     markInteraction();
 
     if (pointers.size >= 2) {
@@ -157,7 +168,11 @@ export function createCameraRig(THREE, options) {
 
   function onPointerUp(event) {
     pointers.delete(event.pointerId);
-    dom.releasePointerCapture?.(event.pointerId);
+    if (captured) {
+      try { dom.releasePointerCapture?.(event.pointerId); } catch { /* already released */ }
+      captured = false;
+    }
+    pressStart = null;
     if (pointers.size === 0) {
       mode = null;
       last = null;

@@ -22,32 +22,32 @@ const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
 export const CONTROLS = {
   // ---- terrain -----------------------------------------------------------
   exaggeration: {
-    k: 'ex', kind: 'range', min: 1, max: 25, step: 0.5, def: 10,
+    k: 'ex', kind: 'range', min: 1, max: 25, step: 0.5, def: 5.5,
     group: 'terrain', label: 'Vertical exaggeration', unit: '×',
     hint: 'The region spans only ~380 m of relief across 94 km, so the wide ' +
       'shots need real stretch. Close in, less is more: the presets scale it ' +
       'down as the camera drops.',
   },
   contourStrength: {
-    k: 'cs', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.28,
+    k: 'cs', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.18,
     group: 'terrain', label: 'Contour strength',
   },
   contourInterval: {
-    k: 'ci', kind: 'enum', values: CONTOUR_INTERVALS, def: 50,
+    k: 'ci', kind: 'enum', values: CONTOUR_INTERVALS, def: 25,
     group: 'terrain', label: 'Contour interval', unit: ' m',
   },
 
   // ---- light -------------------------------------------------------------
   sunAzimuth: {
-    k: 'sa', kind: 'range', min: 0, max: 360, step: 1, def: 116, wrap: 360,
+    k: 'sa', kind: 'range', min: 0, max: 360, step: 1, def: 208, wrap: 360,
     group: 'light', label: 'Sun azimuth', unit: '°',
   },
   sunAltitude: {
-    k: 'sl', kind: 'range', min: 1, max: 80, step: 1, def: 19,
+    k: 'sl', kind: 'range', min: 1, max: 80, step: 1, def: 22,
     group: 'light', label: 'Sun altitude', unit: '°',
   },
   keyLight: {
-    k: 'kl', kind: 'range', min: 0, max: 2, step: 0.02, def: 1.2,
+    k: 'kl', kind: 'range', min: 0, max: 2, step: 0.02, def: 1.24,
     group: 'light', label: 'Key light',
   },
   ambient: {
@@ -57,17 +57,17 @@ export const CONTROLS = {
 
   // ---- atmosphere --------------------------------------------------------
   fogDensity: {
-    k: 'fd', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.40,
+    k: 'fd', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.32,
     group: 'atmosphere', label: 'Fog / haze density',
   },
   glow: {
-    k: 'gl', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.34,
+    k: 'gl', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.32,
     group: 'atmosphere', label: 'Bloom',
     hint: 'Restrained by design — it lifts the sun glint off the rivers ' +
       'without washing out the relief.',
   },
   waterIntensity: {
-    k: 'wi', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.8,
+    k: 'wi', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.85,
     group: 'atmosphere', label: 'Water intensity',
   },
 
@@ -77,27 +77,27 @@ export const CONTROLS = {
     group: 'carto', label: 'Label size', unit: '×',
   },
   labelDensity: {
-    k: 'ld', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.38,
+    k: 'ld', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.45,
     group: 'carto', label: 'Label density',
   },
   roadOpacity: {
-    k: 'ro', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.3,
+    k: 'ro', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.35,
     group: 'carto', label: 'Road opacity',
   },
   boundaryOpacity: {
-    k: 'bo', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.38,
+    k: 'bo', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.15,
     group: 'carto', label: 'Boundary strength',
   },
 
   // ---- structures --------------------------------------------------------
   structureDetail: {
-    k: 'sd', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.6,
+    k: 'sd', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.75,
     group: 'structures', label: 'Building density',
     hint: 'Buildings are drawn tallest-first, so turning this down keeps the ' +
       'skyline and sheds the rowhouse fabric. Performance mode caps it.',
   },
   structureHeight: {
-    k: 'sh', kind: 'range', min: 0.5, max: 3, step: 0.05, def: 1,
+    k: 'sh', kind: 'range', min: 0.5, max: 3, step: 0.05, def: 1.15,
     group: 'structures', label: 'Structure height', unit: '×',
     hint: 'Buildings and bridges are stretched by the square root of the ' +
       'terrain exaggeration, then by this. 1× keeps towers proportionate to ' +
@@ -132,7 +132,7 @@ export const LAYERS = {
   parks: { k: 'Lp', def: true, label: 'Parks & preserves' },
   roads: { k: 'Lr', def: true, label: 'Major roads' },
   rail: { k: 'Ll', def: false, label: 'Rail' },
-  boundaries: { k: 'Lb', def: true, label: 'County / municipal lines' },
+  boundaries: { k: 'Lb', def: false, label: 'County / municipal lines' },
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
   landmarks: { k: 'Lm', def: true, label: 'Landmarks' },
   structures: { k: 'Lx', def: true, label: 'Buildings & bridges' },
@@ -140,14 +140,14 @@ export const LAYERS = {
 
 /** Camera pose. Kept in the same store so presets and URLs stay uniform. */
 export const CAMERA = {
-  camLon: { k: 'x', min: -75.8, max: -74.7, def: -75.2, prec: 4 },
-  camLat: { k: 'y', min: 39.7, max: 40.55, def: 40.02, prec: 4 },
+  camLon: { k: 'x', min: -75.8, max: -74.7, def: -75.1655, prec: 4 },
+  camLat: { k: 'y', min: 39.7, max: 40.55, def: 39.9505, prec: 4 },
   // Orbit radius in metres from the target.
-  camDist: { k: 'd', min: 1200, max: 190000, def: 86000, prec: 0 },
+  camDist: { k: 'd', min: 1200, max: 190000, def: 6500, prec: 0 },
   // Map convention: 0 deg = north-up, increasing clockwise.
-  camBearing: { k: 'b', min: 0, max: 360, def: 38, wrap: 360, prec: 1 },
+  camBearing: { k: 'b', min: 0, max: 360, def: 32, wrap: 360, prec: 1 },
   // Map convention: 0 deg = straight down, 85 deg = near the horizon.
-  camPitch: { k: 'p', min: 0, max: 85, def: 63, prec: 1 },
+  camPitch: { k: 'p', min: 0, max: 85, def: 73, prec: 1 },
 };
 
 export const GROUPS = [
@@ -165,9 +165,9 @@ export const QUALITY_LIST = QUALITY;
 /**
  * Default value for every key in the store.
  *
- * These are exactly the 'overview' preset's values, so a fresh load and
- * pressing Home land on the same frame, and a default view serialises to an
- * empty URL hash. A test asserts the two stay in step.
+ * These are exactly the opening 'skyline' preset's values, so a fresh load
+ * and pressing Home land on the same frame, and a default view serialises to
+ * an empty URL hash. A test asserts the two stay in step.
  */
 export function defaults() {
   const out = {};
@@ -175,7 +175,7 @@ export function defaults() {
   for (const [id, c] of Object.entries(CAMERA)) out[id] = c.def;
   out.layers = {};
   for (const [id, l] of Object.entries(LAYERS)) out.layers[id] = l.def;
-  out.preset = 'overview';
+  out.preset = 'skyline';
   return out;
 }
 
