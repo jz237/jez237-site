@@ -19,7 +19,7 @@ import {
 } from './geo.js';
 import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js';
 import { TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame } from './tours.js';
-import { decodeState, encodeState, buildShareUrl } from './urlstate.js';
+import { decodeState, encodeState, buildShareUrl, readViewName, cleanViewName } from './urlstate.js';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
 } from './degraded.js';
@@ -581,6 +581,7 @@ async function boot() {
       },
       landmarkModels: structures ? structures.landmarkModelCount : 0,
       card: ui.cardName,
+      viewName: ui.viewName,
       era: {
         id: store.value('era'),
         year: structures ? structures.eraYear : 9999,
@@ -1205,7 +1206,47 @@ function wireInterface(deps) {
   buildQuickJumps($('structureJumps'), (jump) => motion.flyTo(jump, { label: jump.name }),
     'structures');
 
-  const dialogs = createDialogs(['about', 'shortcuts']);
+  const dialogs = createDialogs(['about', 'shortcuts', 'share']);
+  let viewName = readViewName(window.location.hash);
+  if (viewName) toast(`Shared view: ${viewName}`);
+  // Choosing another scene restages the view, so the shared name comes off.
+  store.subscribe((state, changed) => {
+    if (changed.has('preset') && viewName) {
+      viewName = '';
+      api.syncControls(state);
+    }
+  });
+
+  // Share dialog: name the view (optional) and copy a link that carries the
+  // whole state as a delta from its preset.
+  const shareName = $('shareName');
+  const shareUrl = $('shareUrl');
+  const refreshShareUrl = () => {
+    if (!shareUrl) return;
+    shareUrl.textContent = buildShareUrl(window.location.href, store.get(), shareName?.value || '');
+  };
+  shareName?.addEventListener('input', refreshShareUrl);
+  $('shareCopy')?.addEventListener('click', async () => {
+    const name = cleanViewName(shareName?.value || '');
+    viewName = name;
+    const url = buildShareUrl(window.location.href, store.get(), name);
+    try {
+      await navigator.clipboard.writeText(url);
+      toast(name ? `Link to "${name}" copied` : 'Link to this view copied');
+    } catch {
+      // Clipboard is blocked outside a secure context or without permission;
+      // putting the URL in the address bar still lets the reader copy it.
+      history.replaceState(null, '', url);
+      toast('Link is in the address bar');
+    }
+    dialogs.close();
+    api.syncControls(store.get());
+  });
+  function openShareDialog() {
+    if (shareName) shareName.value = viewName || '';
+    refreshShareUrl();
+    dialogs.open('share');
+  }
   let captureFn = null;
 
   const landmarkByName = (name) => (data.landmarks?.landmarks || []).find((l) => l.n === name);
@@ -1225,14 +1266,26 @@ function wireInterface(deps) {
   const modelCount = $('aboutModelCount');
   if (modelCount) modelCount.textContent = String(structures?.landmarkModelCount || 0);
 
-  const searchEntries = buildSearchIndex(data.places, data.landmarks);
+  const searchEntries = buildSearchIndex(data.places, data.landmarks,
+    { cards: data.landmarkCards?.cards || {} });
   createSearch({
     input: dom.searchInput,
     results: dom.searchResults,
     entries: searchEntries,
     onSelect: (entry) => {
-      if (entry.kind === 'preset') motion.toPreset(entry.presetId);
-      else motion.flyTo(entry.jump || entry, { label: entry.name });
+      if (entry.kind === 'preset') {
+        motion.toPreset(entry.presetId);
+      } else if (entry.kind === 'tour') {
+        motion.setTour(entry.tourId);
+        motion.play();
+      } else if (entry.kind === 'era') {
+        store.set({ era: entry.eraId }, { source: 'search' });
+      } else if (entry.kind === 'flood') {
+        store.set({ layers: { flood: true }, floodMode: entry.floodMode }, { source: 'search' });
+        toast(entry.floodMode === 'slr' ? 'Sea level rise is on the map' : 'FEMA flood zones are on the map');
+      } else {
+        motion.flyTo(entry.jump || entry, { label: entry.name });
+      }
       if (entry.kind === 'landmark') card.open(entry.name, { focus: false });
     },
   });
@@ -1414,7 +1467,9 @@ function wireInterface(deps) {
   $('btnKeys').addEventListener('click', () => dialogs.open('shortcuts'));
   $('btnFull').addEventListener('click', toggleFullscreen);
   $('btnShot').addEventListener('click', () => saveScreenshot(captureFn, store));
-  $('btnShare').addEventListener('click', () => shareLink(store));
+  $('btnShare').addEventListener('click', () => api.openShare());
+  // Phones have no header share button; the studio sheet carries one.
+  $('btnShareStudio')?.addEventListener('click', () => api.openShare());
   $('btnReset').addEventListener('click', () => {
     motion.stop();
     store.reset({ source: 'ui' });
@@ -1530,17 +1585,26 @@ function wireInterface(deps) {
   store.subscribe((state) => {
     clearTimeout(hashTimer);
     hashTimer = setTimeout(() => {
-      const encoded = encodeState(state);
+      const encoded = [encodeState(state), viewName ? `n=${encodeURIComponent(viewName)}` : '']
+        .filter(Boolean).join('&');
       ownHash = `#${encoded}`;
       history.replaceState(null, '', encoded ? ownHash : window.location.pathname);
     }, 350);
   });
   window.addEventListener('hashchange', () => {
     if (window.location.hash === ownHash) return;
+    // A pasted named link names the view even without a reload; the name is
+    // applied after the state so a scene change in the same link cannot
+    // clear it.
+    const name = readViewName(window.location.hash);
     const patch = decodeState(window.location.hash);
     if (patch) {
       motion.stop();
       store.set(patch, { source: 'hash' });
+    }
+    if (name !== viewName) {
+      viewName = name;
+      api.syncControls(store.get());
     }
   });
 
@@ -1548,7 +1612,7 @@ function wireInterface(deps) {
   let fps = 0;
   let readoutClock = 0;
 
-  return {
+  const api = {
     layerToggles,
     store,
     openCard(name, options) { return card.open(name, options); },
@@ -1559,9 +1623,16 @@ function wireInterface(deps) {
       layerToggles.sync(state);
       presets.sync(state);
       const preset = getPreset(state.preset);
-      dom.outPreset.textContent = preset ? preset.name : 'Custom view';
-      dom.outBlurb.textContent = preset ? preset.blurb : 'Your own framing and light.';
+      // A shared link can carry a name; it heads the readout until a preset
+      // restages the view.
+      dom.outPreset.textContent = viewName || (preset ? preset.name : 'Custom view');
+      dom.outBlurb.textContent = viewName
+        ? (preset ? `${preset.name}, shared by link.` : 'A named view shared by link.')
+        : (preset ? preset.blurb : 'Your own framing and light.');
     },
+    get viewName() { return viewName; },
+    setViewName(name) { viewName = cleanViewName(name); this.syncControls(store.get()); },
+    openShare() { openShareDialog(); },
     setFps(value) { fps = value; },
     setCapture(fn) { captureFn = fn; },
 
@@ -1587,6 +1658,7 @@ function wireInterface(deps) {
       dom.scaleLabel.textContent = bar.label;
     },
   };
+  return api;
 }
 
 // ---------------------------------------------------------------------------
@@ -1675,19 +1747,6 @@ function stamp() {
   const pad = (n) => String(n).padStart(2, '0');
   return `${d.getFullYear()}${pad(d.getMonth() + 1)}${pad(d.getDate())}`
     + `-${pad(d.getHours())}${pad(d.getMinutes())}`;
-}
-
-async function shareLink(store) {
-  const url = buildShareUrl(window.location.href, store.get());
-  try {
-    await navigator.clipboard.writeText(url);
-    toast('Link to this view copied');
-  } catch {
-    // Clipboard is blocked outside a secure context or without permission;
-    // putting the URL in the address bar still lets the reader copy it.
-    history.replaceState(null, '', url);
-    toast('Link is in the address bar');
-  }
 }
 
 function showBanner(status) {

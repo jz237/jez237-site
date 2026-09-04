@@ -12,6 +12,8 @@ import { CONTROLS, CAMERA, LAYERS, defaults, coercePatch } from './schema.js';
 import { presetPatch, getPreset } from './presets.js';
 
 const PRESET_KEY = 'P';
+const NAME_KEY = 'n';
+export const VIEW_NAME_MAX = 60;
 
 /** short key -> state key, built once from the schema. */
 const BY_SHORT = (() => {
@@ -120,9 +122,28 @@ export function decodeState(hash) {
   return Object.keys(clean).length ? clean : null;
 }
 
-/** Build a shareable absolute URL for the current state. */
-export function buildShareUrl(href, state) {
+/** A view name safe to carry in a hash: trimmed, control characters out, capped. */
+export function cleanViewName(name) {
+  if (typeof name !== 'string') return '';
+  // eslint-disable-next-line no-control-regex
+  return name.replace(/[\u0000-\u001f\u007f]/g, ' ').replace(/\s+/g, ' ').trim().slice(0, VIEW_NAME_MAX);
+}
+
+/** The name a shared link carries (`n=`), or '' when it has none. */
+export function readViewName(hash) {
+  if (typeof hash !== 'string') return '';
+  const body = hash.replace(/^#+/, '');
+  if (!body) return '';
+  return cleanViewName(new URLSearchParams(body).get(NAME_KEY) || '');
+}
+
+/** Build a shareable absolute URL for the current state, optionally named. */
+export function buildShareUrl(href, state, name = '') {
+  const parts = [];
   const encoded = encodeState(state);
+  if (encoded) parts.push(encoded);
+  const clean = cleanViewName(name);
+  if (clean) parts.push(`${NAME_KEY}=${encodeURIComponent(clean)}`);
   const base = String(href).split('#')[0];
-  return encoded ? `${base}#${encoded}` : base;
+  return parts.length ? `${base}#${parts.join('&')}` : base;
 }
