@@ -616,7 +616,12 @@ input[type="range"]:focus-visible::-webkit-slider-thumb { transform: scale(1.25)
 .era-back { margin-top: 4px; padding-left: 0; }
 body.cinema .era-banner { top: max(12px, env(safe-area-inset-top)); }
 @media (max-width: 820px) {
-  .era-banner { top: calc(112px + env(safe-area-inset-top)); width: calc(100vw - 24px); }
+  /* Below the search box (which ends about 140 px down), compact. */
+  .era-banner {
+    top: calc(150px + env(safe-area-inset-top)); width: calc(100vw - 24px);
+    padding: 8px 12px 6px; font-size: 11px;
+  }
+  .era-banner .era-note { display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
   body.sheet-open .era-banner { display: none; }
 }
 

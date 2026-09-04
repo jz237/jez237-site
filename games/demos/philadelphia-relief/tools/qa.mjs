@@ -791,15 +791,19 @@ async function structuresPass(page, viewport, shot, problems, report) {
   const banner = await page.evaluate(() => {
     const el = document.getElementById('eraBanner');
     const r = el.getBoundingClientRect();
+    const search = document.getElementById('searchInput').getBoundingClientRect();
+    const overlapsSearch = r.top < search.bottom && r.bottom > search.top
+      && r.left < search.right && r.right > search.left;
     return { hidden: el.hidden, text: el.textContent, links: el.querySelectorAll('a').length,
-      inside: r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight };
+      inside: r.left >= 0 && r.top >= 0 && r.right <= innerWidth && r.bottom <= innerHeight,
+      overlapsSearch, top: Math.round(r.top), searchBottom: Math.round(search.bottom) };
   });
   if (!(era1776?.year === 1776 && era1776.bridges.length === 0 && era1776.railVisible === false
       && era1776.motorwaysVisible === false && era1776.extent1776Visible === true)) {
     problems.push(`[${viewport.id}] 1776 view wrong: ${JSON.stringify(era1776)}`);
   }
-  if (banner.hidden || !banner.inside || banner.links < 2 || !/Faden/.test(banner.text)
-      || !/not a survey/.test(banner.text)) {
+  if (banner.hidden || !banner.inside || banner.overlapsSearch || banner.links < 2
+      || !/Faden/.test(banner.text) || !/not a survey/.test(banner.text)) {
     problems.push(`[${viewport.id}] 1776 banner wrong: ${JSON.stringify(banner)}`);
   }
   report.push(`[${viewport.id}] era 1776: ${JSON.stringify(era1776)}`);
