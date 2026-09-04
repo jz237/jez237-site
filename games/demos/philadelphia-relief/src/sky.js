@@ -29,6 +29,7 @@ const SKY_FRAGMENT = /* glsl */ `
   uniform vec3  uSunDir;
   uniform float uSunAltitude;   // degrees
   uniform float uHaze;
+  uniform float uNight;
   varying vec3  vDir;
 
   void main() {
@@ -48,6 +49,7 @@ const SKY_FRAGMENT = /* glsl */ `
     color += uSunColor * pow(toSun, 220.0) * 0.9;       // inner halo
     color += uSunColor * smoothstep(0.99955, 0.99985, toSun) * 2.2;  // disc
 
+    color *= mix(1.0, 0.12, uNight);
     gl_FragColor = vec4(color, 1.0);
   }
 `;
@@ -60,6 +62,7 @@ export function createSky(THREE) {
     uSunDir: { value: new THREE.Vector3(0, 1, 0) },
     uSunAltitude: { value: 20 },
     uHaze: { value: 0.4 },
+    uNight: { value: 0 },
   };
 
   const material = new THREE.ShaderMaterial({

@@ -10,7 +10,8 @@
 import * as THREE from '../vendor/three.module.min.js';
 
 import { createStore } from './state.js';
-import { CAMERA } from './schema.js';
+import { CAMERA, CONTROLS } from './schema.js';
+import { effectiveLight } from './solar.js';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
@@ -42,6 +43,8 @@ import {
   enumLabel, setValueNote, renderFloodLegend,
 } from './ui.js';
 import { getTheme } from './themes.js';
+
+const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
 const $ = (id) => document.getElementById(id);
 const REDUCED_MOTION = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -505,6 +508,7 @@ async function boot() {
   // ---- frame loop ---------------------------------------------------------
   const sunDir = new THREE.Vector3();
   let lastRenderInfo = null;
+  let lastLight = null;
 
   // Read-only diagnostics for the QA harness and curious readers. Nothing in
   // the app depends on it.
@@ -530,6 +534,14 @@ async function boot() {
       },
       landmarkModels: structures ? structures.landmarkModelCount : 0,
       card: ui.cardName,
+      light: lastLight ? {
+        clock: lastLight.clock, weather: lastLight.weather, night: lastLight.night,
+        sunAzimuth: Math.round(lastLight.sunAzimuth * 10) / 10,
+        sunAltitude: Math.round(lastLight.sunAltitude * 10) / 10,
+        trueAltitude: Math.round(lastLight.trueAltitude * 10) / 10,
+        keyLight: Math.round(lastLight.keyLight * 100) / 100,
+        fogDensity: Math.round(lastLight.fogDensity * 100) / 100,
+      } : null,
     }),
   });
   let last = performance.now();
@@ -590,11 +602,14 @@ async function boot() {
       if (joined) syncTiers(effectiveQuality);
     }
 
-    sunDirection(state.sunAzimuth, state.sunAltitude, sunDir);
+    const light = effectiveLight(state, LIGHT_BOUNDS);
+    lastLight = light;
+    sunDirection(light.sunAzimuth, light.sunAltitude, sunDir);
     terrain.uniforms.uSunDir.value.copy(sunDir);
     sky.uniforms.uSunDir.value.copy(sunDir);
-    sky.uniforms.uSunAltitude.value = state.sunAltitude;
-    sky.uniforms.uHaze.value = state.fogDensity;
+    sky.uniforms.uSunAltitude.value = light.sunAltitude;
+    sky.uniforms.uHaze.value = light.fogDensity;
+    sky.uniforms.uNight.value = 1 - light.twilight;
 
     elapsed += dt * state.animationSpeed;
     const lift = 30 + now.dist * 0.0016;
@@ -618,7 +633,7 @@ async function boot() {
 
     if (structures) {
       structures.update({
-        camera, state, exaggeration, dt, sunDir,
+        camera, state, exaggeration, dt, sunDir, light,
         fogDensity: terrain.uniforms.uFogDensity.value,
       });
     }
@@ -875,18 +890,19 @@ function applyState(state, ctx) {
   }
   if (structures) structures.group.visible = !!state.layers.structures;
 
+  const light = effectiveLight(state, LIGHT_BOUNDS);
   const u = terrain.uniforms;
-  u.uKey.value = state.keyLight;
-  u.uAmbient.value = state.ambient;
-  u.uFogDensity.value = fogDensityFor(state.fogDensity);
+  u.uKey.value = light.keyLight;
+  u.uAmbient.value = light.ambient;
+  u.uFogDensity.value = fogDensityFor(light.fogDensity);
   u.uContourStrength.value = state.layers.contours ? state.contourStrength : 0;
   u.uContourInterval.value = state.contourInterval;
   u.uHillshade.value = state.layers.hillshade ? 1 : 0;
   u.uReliefOn.value = state.layers.terrain ? 1 : 0;
 
-  postfx.setIntensity(state.glow * 0.85);
+  postfx.setIntensity(light.glow * 0.85);
   postfx.setThreshold(state.theme === 'noir' ? 0.5 : 0.72);
-  postfx.setVignette(0.28 + state.fogDensity * 0.35);
+  postfx.setVignette(0.28 + light.fogDensity * 0.35);
 
   const selection = flood ? floodSelection(state, flood.manifests) : null;
   for (const entry of overlays.all) {
@@ -904,14 +920,18 @@ function applyState(state, ctx) {
       const level = Number(entry.kind.split('-')[1]);
       uu.uOpacity.value = state.boundaryOpacity * (level === 6 ? 1 : 0.55);
     } else if (entry.kind === 'water') {
-      uu.uIntensity.value = state.waterIntensity;
+      uu.uIntensity.value = light.waterIntensity;
     } else if (entry.layer === 'water' && uu.uOpacity) {
-      uu.uOpacity.value = 0.35 + state.waterIntensity * 0.65;
+      uu.uOpacity.value = 0.35 + light.waterIntensity * 0.65;
     }
   }
 
   ui?.syncControls(state);
   if (selection) renderFloodLegend($('floodLegend'), floodLegend(selection, flood.manifests));
+  // In clock mode the sun sliders are overridden; say so in their readouts.
+  setValueNote('sunAzimuth', light.clock ? `${Math.round(light.sunAzimuth)}° by the clock` : '');
+  setValueNote('sunAltitude', light.clock
+    ? `${Math.round(light.trueAltitude)}° by the clock${light.night ? ' (night)' : ''}` : '');
 }
 
 function recolorOverlays(overlays, theme) {

@@ -1,0 +1,183 @@
+{
+ "source": {
+  "name": "NOAA Office for Coastal Management, Sea Level Rise Viewer data (Sea Level Rise Vectors), packages PA, NJ_Middle, NJ_Southern, DE",
+  "url": "https://coast.noaa.gov/slrdata/",
+  "credit": "NOAA Office for Coastal Management",
+  "useConstraint": "These data illustrate the scale of potential flooding, not the exact location, and do not account for erosion, subsidence, or future construction. Inundation is shown as it would appear during the highest high tides with the sea level rise amount.",
+  "datum": "feet above current mean higher high water (MHHW)",
+  "fetched": "2026-09-04",
+  "note": "Clipped to the map region and simplified to ~15 m; low-lying (hydrologically disconnected) areas are not included."
+ },
+ "scenariosFt": [
+  1,
+  2,
+  3,
+  4,
+  5,
+  6,
+  8,
+  10
+ ],
+ "stats": {
+  "PA_1ft": {
+   "source": 123,
+   "kept": 3
+  },
+  "PA_2ft": {
+   "source": 146,
+   "kept": 4
+  },
+  "PA_3ft": {
+   "source": 291,
+   "kept": 7
+  },
+  "PA_4ft": {
+   "source": 460,
+   "kept": 5
+  },
+  "PA_5ft": {
+   "source": 524,
+   "kept": 7
+  },
+  "PA_6ft": {
+   "source": 548,
+   "kept": 14
+  },
+  "PA_8ft": {
+   "source": 529,
+   "kept": 8
+  },
+  "PA_10ft": {
+   "source": 524,
+   "kept": 4
+  },
+  "NJ_Middle_1ft": {
+   "source": 255,
+   "kept": 2
+  },
+  "NJ_Middle_2ft": {
+   "source": 288,
+   "kept": 1
+  },
+  "NJ_Middle_3ft": {
+   "source": 311,
+   "kept": 4
+  },
+  "NJ_Middle_4ft": {
+   "source": 343,
+   "kept": 2
+  },
+  "NJ_Middle_5ft": {
+   "source": 409,
+   "kept": 6
+  },
+  "NJ_Middle_6ft": {
+   "source": 449,
+   "kept": 5
+  },
+  "NJ_Middle_8ft": {
+   "source": 441,
+   "kept": 1
+  },
+  "NJ_Middle_10ft": {
+   "source": 422,
+   "kept": 3
+  },
+  "NJ_Southern_1ft": {
+   "source": 640,
+   "kept": 2
+  },
+  "NJ_Southern_2ft": {
+   "source": 627,
+   "kept": 12
+  },
+  "NJ_Southern_3ft": {
+   "source": 667,
+   "kept": 6
+  },
+  "NJ_Southern_4ft": {
+   "source": 688,
+   "kept": 3
+  },
+  "NJ_Southern_5ft": {
+   "source": 645,
+   "kept": 7
+  },
+  "NJ_Southern_6ft": {
+   "source": 793,
+   "kept": 1
+  },
+  "NJ_Southern_8ft": {
+   "source": 836,
+   "kept": 6
+  },
+  "NJ_Southern_10ft": {
+   "source": 861,
+   "kept": 5
+  },
+  "DE_1ft": {
+   "source": 555,
+   "kept": 2
+  },
+  "DE_2ft": {
+   "source": 492,
+   "kept": 2
+  },
+  "DE_3ft": {
+   "source": 536,
+   "kept": 3
+  },
+  "DE_4ft": {
+   "source": 675,
+   "kept": 3
+  },
+  "DE_5ft": {
+   "source": 600,
+   "kept": 3
+  },
+  "DE_6ft": {
+   "source": 737,
+   "kept": 4
+  },
+  "DE_8ft": {
+   "source": 552,
+   "kept": 1
+  },
+  "DE_10ft": {
+   "source": 538,
+   "kept": 3
+  }
+ },
+ "format": "PHF1",
+ "file": "noaa-slr.bin",
+ "bytes": 464573,
+ "classes": [
+  "1ft",
+  "2ft",
+  "3ft",
+  "4ft",
+  "5ft",
+  "6ft",
+  "8ft",
+  "10ft"
+ ],
+ "kept": {
+  "1ft": 7,
+  "2ft": 13,
+  "3ft": 12,
+  "4ft": 11,
+  "5ft": 15,
+  "6ft": 18,
+  "8ft": 9,
+  "10ft": 12
+ },
+ "vertices": 116012,
+ "minAreaM2": 6000.0,
+ "simplifyM": 20.0,
+ "bounds": [
+  -75.8,
+  39.7,
+  -74.7,
+  40.55
+ ]
+}
