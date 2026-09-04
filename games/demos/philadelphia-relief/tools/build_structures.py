@@ -672,8 +672,9 @@ def simplify_local(points: list, tol_m: float) -> list:
 # Binary packing
 #
 # One little-endian stream per tier:
-#   magic "PHB1", uint32 count, then per building:
+#   magic "PHB2", uint32 count, then per building:
 #     uint16 nVerts, uint16 heightDm, uint16 minHeightDm, uint8 source, uint8 flags,
+#     uint16 constructionYear,
 #     nVerts x (int16 x, int16 z)      metres from the zone origin, +x east, +z south
 # ---------------------------------------------------------------------------
 

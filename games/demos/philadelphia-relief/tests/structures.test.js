@@ -18,6 +18,7 @@ import {
   drawFraction, drawIndexCount, heightScale, distanceToBox, deckProfile, resample,
   TIER_PLAN, TIER_ORDER,
   zoneReachM, shouldActivateZone,
+  tierAssetPath,
 } from '../src/structures-data.js';
 import { CONTROLS, LAYERS, defaults, coerce } from '../src/schema.js';
 import { createStore } from '../src/state.js';
@@ -132,6 +133,21 @@ test('tier streams', async (t) => {
     assert.throws(() => parseTier(badMagic.buffer), /bad magic/);
     assert.throws(() => parseTier(good.buffer.slice(0, 20)), /bad ring|truncated/);
     assert.throws(() => parseTier(new ArrayBuffer(4)), /too short/);
+  });
+
+  await t.test('accepts a cached PHB1 stream without historical dates', () => {
+    const legacy = new Uint8Array([80, 72, 66, 49, 1, 0, 0, 0, 3, 0, 100, 0, 0, 0, 0, 1,
+      0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 0]);
+    const parsed = parseTier(legacy.buffer);
+    assert.equal(parsed.count, 1);
+    assert.equal(parsed.buildings[0].named, true);
+    assert.equal(parsed.buildings[0].year, 0);
+    assert.equal(parsed.buildings[0].yearSource, 'none');
+  });
+
+  await t.test('versions tier URLs by manifest format', () => {
+    assert.equal(tierAssetPath('center-city-tall.bin', 'PHB2'),
+      'data/structures/center-city-tall.bin?format=PHB2');
   });
 });
 
