@@ -11,7 +11,7 @@
 
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, tierRange,
@@ -42,6 +42,22 @@ const SKYLINE = ['Comcast Technology Center', 'Comcast Center', 'One Liberty Pla
 
 const hex = /^#[0-9a-f]{6}$/i;
 const inRegion = (lon, lat) => projection.contains(lon, lat);
+
+test('browser assets carry one cache generation', async () => {
+  const index = await readFile(new URL('../index.html', import.meta.url), 'utf8');
+  assert.match(index, /app\.css\?v=philly-\d+/);
+  assert.match(index, /src\/main\.js\?v=philly-\d+/);
+
+  const srcDir = new URL('../src/', import.meta.url);
+  const files = (await readdir(srcDir)).filter((file) => file.endsWith('.js'));
+  for (const file of files) {
+    const source = await readFile(new URL(file, srcDir), 'utf8');
+    const imports = source.matchAll(/from\s+['"](\.\.?\/[^'"]+\.js(?:\?[^'"]*)?)['"]/g);
+    for (const match of imports) {
+      assert.match(match[1], /\?v=philly-\d+$/, `${file}: ${match[1]} is not versioned`);
+    }
+  }
+});
 
 // ---------------------------------------------------------------------------
 test('structures manifest', async (t) => {

@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-20260904';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
