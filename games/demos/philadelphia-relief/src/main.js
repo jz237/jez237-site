@@ -15,9 +15,8 @@ import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
 } from './geo.js';
-import {
-  PRESETS, HOME_PRESET, getPreset, presetPatch, TOUR, TOUR_DURATION, tourAt, tourTimeForShot,
-} from './presets.js';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js';
+import { TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame } from './tours.js';
 import { decodeState, encodeState, buildShareUrl } from './urlstate.js';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
@@ -741,12 +740,14 @@ function createMotion(store, projection) {
   let active = null;      // { from, to, t, duration, kind }
   let tourTime = 0;
   let playing = false;
+  let tour = getTour(DEFAULT_TOUR);
+  let caption = null;
   const listeners = new Set();
 
   const flyDuration = REDUCED_MOTION ? 0.2 : 1.9;
 
   function notify() {
-    for (const fn of listeners) fn({ playing, tourTime });
+    for (const fn of listeners) fn({ playing, tourTime, tour, caption });
   }
 
   function snapshot() {
@@ -761,6 +762,31 @@ function createMotion(store, projection) {
 
     get playing() { return playing; },
     get tourTime() { return tourTime; },
+    get tour() { return tour; },
+    get duration() { return tourDuration(tour); },
+    get caption() { return caption; },
+
+    /** Switch tours; playback restarts from that tour's first shot. */
+    setTour(id) {
+      const next = getTour(id);
+      if (!next || next === tour) return;
+      const wasPlaying = playing;
+      this.stop();
+      tour = next;
+      tourTime = 0;
+      caption = null;
+      if (wasPlaying) this.play(); else notify();
+    },
+
+    /** Jump to the start of the previous / next shot in the current tour. */
+    step(delta) {
+      const frame = tourFrame(tour, tourTime);
+      if (!frame) return;
+      const n = tour.shots.length;
+      const target = (frame.index + delta + n) % n;
+      this.seek(tourShotStart(tour, target));
+      if (!playing) this.play();
+    },
 
     /** Restage the whole scene as a preset, easing the camera into place. */
     toPreset(id, { immediate = false } = {}) {
@@ -820,15 +846,18 @@ function createMotion(store, projection) {
     },
 
     seek(seconds) {
-      tourTime = ((seconds % TOUR_DURATION) + TOUR_DURATION) % TOUR_DURATION;
-      const frame = tourAt(tourTime);
+      const total = tourDuration(tour) || 1;
+      tourTime = ((seconds % total) + total) % total;
+      const frame = tourFrame(tour, tourTime);
       if (frame?.patch) store.set(frame.patch, { source: 'tour' });
+      caption = frame?.caption || null;
       notify();
     },
 
     stop() {
       if (playing) {
         playing = false;
+        caption = null;
         notify();
       }
       active = null;
@@ -838,7 +867,8 @@ function createMotion(store, projection) {
     interrupt() {
       if (playing) {
         playing = false;
-        toast('Flythrough paused');
+        caption = null;
+        toast('Tour paused');
         notify();
       }
       active = null;
@@ -846,9 +876,10 @@ function createMotion(store, projection) {
 
     update(dt) {
       if (playing) {
-        tourTime = (tourTime + dt * store.value('animationSpeed')) % TOUR_DURATION;
-        const frame = tourAt(tourTime);
+        tourTime = (tourTime + dt * store.value('animationSpeed')) % (tourDuration(tour) || 1);
+        const frame = tourFrame(tour, tourTime);
         if (frame?.patch) store.set(frame.patch, { source: 'tour' });
+        caption = frame?.caption || null;
         notify();
         return;
       }
@@ -926,39 +957,82 @@ function wireInterface(deps) {
   setupPanel(dom.shots, dom.shotsToggle);
 
   // ---- timeline -----------------------------------------------------------
-  TOUR.forEach((shot, i) => {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'timeline-shot';
-    const preset = getPreset(shot.preset);
-    b.title = preset ? preset.name : shot.preset;
-    b.setAttribute('aria-label', `Jump to ${b.title}`);
-    b.style.left = `${(tourTimeForShot(i) / TOUR_DURATION) * 100}%`;
-    b.addEventListener('click', (event) => {
-      event.stopPropagation();
-      motion.seek(tourTimeForShot(i));
-      motion.play();
+  const tourSelect = $('tourSelect');
+  for (const tour of TOURS) {
+    const option = document.createElement('option');
+    option.value = tour.id;
+    option.textContent = tour.name;
+    option.title = tour.blurb;
+    tourSelect.appendChild(option);
+  }
+  tourSelect.value = motion.tour.id;
+  tourSelect.addEventListener('change', () => motion.setTour(tourSelect.value));
+
+  function buildMarkers(tour) {
+    dom.timelineShots.innerHTML = '';
+    const total = tourDuration(tour);
+    tour.shots.forEach((shot, i) => {
+      const b = document.createElement('button');
+      b.type = 'button';
+      b.className = 'timeline-shot';
+      b.title = shot.caption?.title || getPreset(shot.preset)?.name || shot.preset;
+      b.setAttribute('aria-label', `Jump to ${b.title}`);
+      b.style.left = `${(tourShotStart(tour, i) / total) * 100}%`;
+      b.addEventListener('click', (event) => {
+        event.stopPropagation();
+        motion.seek(tourShotStart(tour, i));
+        motion.play();
+      });
+      dom.timelineShots.appendChild(b);
     });
-    dom.timelineShots.appendChild(b);
-  });
+  }
+  buildMarkers(motion.tour);
 
   dom.btnPlay.addEventListener('click', () => motion.toggle());
+  $('btnPrevShot').addEventListener('click', () => motion.step(-1));
+  $('btnNextShot').addEventListener('click', () => motion.step(1));
   dom.timelineTrack.addEventListener('click', (event) => {
     const rect = dom.timelineTrack.getBoundingClientRect();
-    motion.seek(((event.clientX - rect.left) / rect.width) * TOUR_DURATION);
+    motion.seek(((event.clientX - rect.left) / rect.width) * motion.duration);
   });
 
-  motion.onChange(({ playing, tourTime }) => {
+  const captionEl = $('caption');
+  const captionTitle = $('captionTitle');
+  const captionText = $('captionText');
+  const captionSource = $('captionSource');
+  let lastCaption = null;
+  let lastTourId = motion.tour.id;
+
+  motion.onChange(({ playing, tourTime, tour, caption }) => {
+    if (tour.id !== lastTourId) {
+      lastTourId = tour.id;
+      buildMarkers(tour);
+      if (tourSelect.value !== tour.id) tourSelect.value = tour.id;
+    }
     dom.btnPlay.setAttribute('aria-pressed', String(playing));
-    dom.btnPlay.setAttribute('aria-label', playing ? 'Pause the flythrough' : 'Play the flythrough');
+    dom.btnPlay.setAttribute('aria-label', playing ? `Pause ${tour.name}` : `Play ${tour.name}`);
     dom.playIcon.textContent = playing ? '❚❚' : '▶';
-    const pct = (tourTime / TOUR_DURATION) * 100;
-    dom.timelineFill.style.width = `${pct}%`;
+    const total = tourDuration(tour) || 1;
+    dom.timelineFill.style.width = `${(tourTime / total) * 100}%`;
     dom.timelineTime.textContent = formatClock(tourTime);
-    const frame = tourAt(tourTime);
+    const frame = tourFrame(tour, tourTime);
     [...dom.timelineShots.children].forEach((node, i) => {
       node.setAttribute('aria-current', String(frame?.index === i));
     });
+
+    // Captions only change when the shot does, so the live region is not
+    // re-announced every frame.
+    if (caption !== lastCaption) {
+      lastCaption = caption;
+      if (caption) {
+        captionTitle.textContent = caption.title;
+        captionText.textContent = caption.text;
+        captionSource.textContent = caption.source ? `Source: ${caption.source}` : '';
+        captionEl.hidden = false;
+      } else {
+        captionEl.hidden = true;
+      }
+    }
   });
 
   // ---- top bar actions ----------------------------------------------------
@@ -1027,6 +1101,12 @@ function wireInterface(deps) {
         store.set({ layers: { places: !on, landmarks: !on } }, { source: 'key' });
         break;
       }
+      case '[':
+        motion.step(-1);
+        break;
+      case ']':
+        motion.step(1);
+        break;
       case '/':
         dom.searchInput.focus();
         dom.searchInput.select();
