@@ -148,7 +148,24 @@ async function run() {
       problems.push(`[${viewport.id}] canvas has no drawing buffer`);
     }
     if (probe.controls < 15) problems.push(`[${viewport.id}] only ${probe.controls} controls built`);
-    if (probe.presets !== 6) problems.push(`[${viewport.id}] ${probe.presets} presets, expected 6`);
+    if (probe.presets !== 8) problems.push(`[${viewport.id}] ${probe.presets} presets, expected 8`);
+
+    // The clean first load must show the city, not hide it 94 km away: a
+    // substantial building count on the first frame, on both viewports.
+    const first = await page.evaluate(() => window.philadelphiaRelief?.stats() || null);
+    const firstHash = await page.evaluate(() => window.location.hash);
+    report.push(`[${viewport.id}] first frame: preset "${probe.readout.preset}", hash "${firstHash}", `
+      + `buildings ${first?.structures?.drawnBuildings}, tiers ${JSON.stringify(first?.structureTiers)}`);
+    if (probe.readout.preset !== 'Philadelphia Skyline') {
+      problems.push(`[${viewport.id}] first load opens on "${probe.readout.preset}", not the skyline`);
+    }
+    const minFirst = viewport.isMobile ? 1500 : 2500;
+    if (!(first?.structures?.drawnBuildings >= minFirst)) {
+      problems.push(`[${viewport.id}] first frame draws ${first?.structures?.drawnBuildings} buildings, want >= ${minFirst}`);
+    }
+    if (!first?.structureTiers?.some((t) => t.endsWith('/low'))) {
+      problems.push(`[${viewport.id}] first frame has no rowhouse tier loaded at balanced quality`);
+    }
     if (probe.degraded) problems.push(`[${viewport.id}] degraded banner shown: ${probe.degradedText}`);
 
     const shot = (name) => page.screenshot({
@@ -159,10 +176,12 @@ async function run() {
 
     // ---- scripted interaction pass ----------------------------------------
     if (!viewport.isMobile) {
-      // Presets, via the visible cards.
-      for (const [i, id] of ['dawn-delaware', 'schuylkill-flyover', 'wissahickon',
-        'main-line-ridge', 'night-metro'].entries()) {
-        await page.locator('#presetList .preset-card').nth(i + 1).click();
+      // Presets, via the visible cards, by name.
+      for (const [id, name] of [['ben-franklin-bridge', 'Benjamin Franklin Bridge'],
+        ['overview', 'The Delaware Valley'], ['dawn-delaware', 'Dawn over the Delaware'],
+        ['schuylkill-flyover', 'Schuylkill Flyover'], ['wissahickon', 'Wissahickon Valley'],
+        ['main-line-ridge', 'Main Line Ridge'], ['night-metro', 'Night Metro']]) {
+        await page.locator('#presetList .preset-card', { hasText: name }).click();
         await page.waitForTimeout(2400);
         await shot(`02-preset-${id}`);
       }
@@ -240,10 +259,21 @@ async function run() {
       const playing = await page.getAttribute('#btnPlay', 'aria-pressed');
       if (playing !== 'true') problems.push(`[${viewport.id}] play did not start`);
       await shot('08-flythrough');
-      // Interacting must interrupt it gracefully.
-      await page.mouse.move(box.x + 400, box.y + 400);
+      // Interacting must interrupt it gracefully — and the drag deliberately
+      // starts on a map label, which is what a finger lands on over the
+      // skyline. Labels are buttons; they must not swallow the gesture.
+      const labelBox = await page.evaluate(() => {
+        const el = [...document.querySelectorAll('.map-label')]
+          .find((n) => n.style.display !== 'none');
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2, text: el.textContent };
+      });
+      const start = labelBox || { x: box.x + 400, y: box.y + 400 };
+      report.push(`[${viewport.id}] interrupt drag starts on ${labelBox ? `label "${labelBox.text}"` : 'bare canvas'}`);
+      await page.mouse.move(start.x, start.y);
       await page.mouse.down();
-      await page.mouse.move(box.x + 340, box.y + 430, { steps: 6 });
+      await page.mouse.move(start.x - 60, start.y + 30, { steps: 6 });
       await page.mouse.up();
       await page.waitForTimeout(600);
       const afterInterrupt = await page.getAttribute('#btnPlay', 'aria-pressed');
@@ -251,6 +281,24 @@ async function run() {
         problems.push(`[${viewport.id}] dragging did not pause the flythrough`);
       }
       report.push(`[${viewport.id}] flythrough interrupt ok`);
+
+      // A clean click on a label still flies to it: lazy capture must not have
+      // stolen the label's click.
+      const target = await page.evaluate(() => {
+        const el = [...document.querySelectorAll('.map-label')]
+          .find((n) => n.style.display !== 'none' && n.dataset.kind === 'landmark');
+        if (!el) return null;
+        const r = el.getBoundingClientRect();
+        return { x: r.left + r.width / 2, y: r.top + r.height / 2, text: el.textContent };
+      });
+      if (target) {
+        const before = await page.evaluate(() => document.getElementById('outCoords')?.textContent);
+        await page.mouse.click(target.x, target.y);
+        await page.waitForTimeout(2600);
+        const after = await page.evaluate(() => document.getElementById('outCoords')?.textContent);
+        if (before === after) problems.push(`[${viewport.id}] clicking label "${target.text}" did not fly there`);
+        report.push(`[${viewport.id}] label click "${target.text}": ${before} -> ${after}`);
+      }
 
       // Dialogs.
       await page.click('#btnAbout');
@@ -341,9 +389,9 @@ async function structuresPass(page, viewport, shot, problems, report) {
   const bridges = await page.evaluate(async () => {
     const r = await fetch('data/structures/bridges.json');
     return (await r.json()).bridges.map((b) => {
-      const mid = b.centerline[Math.floor(b.centerline.length / 2)];
       const a = b.centerline[0];
       const z = b.centerline[b.centerline.length - 1];
+      const mid = [(a[0] + z[0]) / 2, (a[1] + z[1]) / 2];
       const bearing = (Math.atan2(z[0] - a[0], z[1] - a[1]) * 180 / Math.PI + 360) % 360;
       return { id: b.id, name: b.name, lon: mid[0], lat: mid[1], bearing: Math.round(bearing) };
     });
@@ -384,12 +432,70 @@ async function structuresPass(page, viewport, shot, problems, report) {
     await shot(`11-structures-${view.id}`);
   }
 
-  // Night shot with structures.
+  // Night shot with structures (preset 8).
   if (!viewport.isMobile) {
-    await page.keyboard.press('6');
+    await page.keyboard.press('8');
     await page.waitForTimeout(3200);
     await shot('12-structures-night');
   }
+
+  // ---- the routes a user actually sees: the bridge card and the chips ----
+  const readoutNear = async (lat, lon, label) => {
+    const text = await page.evaluate(() => document.getElementById('outCoords')?.textContent || '');
+    const m = /([\d.]+)° N, ([\d.]+)° W/.exec(text);
+    const ok = m && Math.abs(Number(m[1]) - lat) < 0.012 && Math.abs(Number(m[2]) + lon) < 0.012;
+    if (!ok) problems.push(`[${viewport.id}] ${label}: readout "${text}" is not near ${lat},${-lon}`);
+    return ok;
+  };
+  const openSheet = async () => {
+    if (!viewport.isMobile) return;
+    const collapsed = await page.evaluate(() => document.getElementById('shots').classList.contains('collapsed'));
+    if (collapsed) { await page.locator('#shotsToggle').click(); await page.waitForTimeout(500); }
+  };
+  const closeSheet = async () => {
+    if (!viewport.isMobile) return;
+    await page.locator('#shotsToggle').click();
+    await page.waitForTimeout(400);
+  };
+
+  await openSheet();
+  await page.locator('#presetList .preset-card', { hasText: 'Benjamin Franklin Bridge' }).click();
+  await closeSheet();
+  await page.waitForTimeout(3600);
+  await readoutNear(39.9519, -75.1285, 'Benjamin Franklin Bridge card');
+  const bfb = await stats();
+  if (!(bfb?.structures?.drawnBuildings > 0) || !(bfb?.bridges?.length >= 4)) {
+    problems.push(`[${viewport.id}] bridge preset shows no structures: ${JSON.stringify(bfb?.structures)}`);
+  }
+  await shot('14-route-ben-franklin-card');
+
+  const chips = viewport.isMobile
+    ? [['Walt Whitman Bridge', 39.9052, -75.1293]]
+    : [['Walt Whitman Bridge', 39.9052, -75.1293], ['Betsy Ross Bridge', 39.9848, -75.0659],
+      ['Tacony-Palmyra Bridge', 40.0123, -75.0432], ['Commodore Barry Bridge', 39.8265, -75.3697],
+      ['Sports Complex', 39.9045, -75.167]];
+  for (const [name, lat, lon] of chips) {
+    await openSheet();
+    const chip = page.locator('#structureJumps .chip', { hasText: name });
+    if (await chip.count() !== 1) { problems.push(`[${viewport.id}] chip "${name}" missing`); continue; }
+    await chip.click();
+    await closeSheet();
+    await page.waitForTimeout(3200);
+    await readoutNear(lat, lon, `${name} chip`);
+    if (name === 'Walt Whitman Bridge' || name === 'Sports Complex') {
+      await shot(`15-route-${name.toLowerCase().replace(/[^a-z]+/g, '-')}`);
+    }
+  }
+
+  // Home returns to the opening skyline.
+  await page.locator('#btnHome').click();
+  await page.waitForTimeout(3200);
+  await readoutNear(39.9505, -75.1655, 'Home button');
+  const home = await stats();
+  if (!(home?.structures?.drawnBuildings >= (viewport.isMobile ? 1500 : 2500))) {
+    problems.push(`[${viewport.id}] Home shows only ${home?.structures?.drawnBuildings} buildings`);
+  }
+  await shot('16-route-home');
 
   // The toggle must empty the layer.
   await goto('#x=-75.1655&y=39.9505&d=6500&b=32&p=73&Lx=0', 1500);

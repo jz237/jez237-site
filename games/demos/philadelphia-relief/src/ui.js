@@ -165,8 +165,9 @@ export function buildPresets(host, onSelect) {
   };
 }
 
-export function buildQuickJumps(host, onSelect) {
+export function buildQuickJumps(host, onSelect, group = 'places') {
   for (const jump of QUICK_JUMPS) {
+    if ((jump.group || 'places') !== group) continue;
     const b = el('button', 'chip', jump.name);
     b.type = 'button';
     b.addEventListener('click', () => onSelect(jump));

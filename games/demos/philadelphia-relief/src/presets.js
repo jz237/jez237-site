@@ -27,6 +27,52 @@ export const PRESET_EXCLUDED = new Set(['quality', 'animationSpeed']);
 
 export const PRESETS = [
   {
+    id: 'skyline',
+    name: 'Philadelphia Skyline',
+    blurb:
+      'Center City from the south-west at the end of the day: the Comcast and ' +
+      'Liberty Place towers over the rowhouse grid, the Schuylkill at your feet ' +
+      'and the Ben Franklin Bridge reaching for Camden. Every building is a ' +
+      'real footprint at its real height.',
+    camera: {
+      camLon: -75.1655, camLat: 39.9505, camDist: 6500, camBearing: 32, camPitch: 73,
+    },
+    settings: {
+      theme: 'dusk', fov: 40, exaggeration: 5.5,
+      sunAzimuth: 208, sunAltitude: 22, keyLight: 1.24, ambient: 0.42,
+      fogDensity: 0.32, glow: 0.32, waterIntensity: 0.85,
+      contourStrength: 0.18, contourInterval: 25,
+      roadOpacity: 0.35, boundaryOpacity: 0.15, labelDensity: 0.45, labelSize: 1,
+      structureDetail: 0.75, structureHeight: 1.15,
+    },
+    layers: { terrain: true, hillshade: true, contours: true, water: true,
+      parks: true, roads: true, rail: false, boundaries: false,
+      places: true, landmarks: true, structures: true },
+  },
+  {
+    id: 'ben-franklin-bridge',
+    name: 'Benjamin Franklin Bridge',
+    blurb:
+      'From the Camden bank looking back across the Delaware: the 1926 ' +
+      'suspension span with its towers and cables drawn schematically, and ' +
+      'the skyline behind. Its 1,750 ft main span was the longest in the ' +
+      'world when it opened.',
+    camera: {
+      camLon: -75.1285, camLat: 39.9519, camDist: 3800, camBearing: 315, camPitch: 75,
+    },
+    settings: {
+      theme: 'dusk', fov: 44, exaggeration: 4.5,
+      sunAzimuth: 128, sunAltitude: 18, keyLight: 1.3, ambient: 0.4,
+      fogDensity: 0.34, glow: 0.4, waterIntensity: 0.9,
+      contourStrength: 0.12, contourInterval: 25,
+      roadOpacity: 0.4, boundaryOpacity: 0.1, labelDensity: 0.4, labelSize: 1,
+      structureDetail: 0.7, structureHeight: 1.15,
+    },
+    layers: { terrain: true, hillshade: true, contours: true, water: true,
+      parks: true, roads: true, rail: true, boundaries: false,
+      places: true, landmarks: true, structures: true },
+  },
+  {
     id: 'overview',
     name: 'The Delaware Valley',
     blurb:
@@ -164,6 +210,13 @@ export const PRESETS = [
 
 export const PRESET_IDS = PRESETS.map((p) => p.id);
 
+/**
+ * The opening shot: what a clean load shows and where Home returns. It is the
+ * first card by convention, and the schema defaults are its values exactly
+ * (a test holds the two together).
+ */
+export const HOME_PRESET = PRESETS[0].id;
+
 export function getPreset(id) {
   return PRESETS.find((p) => p.id === id) || null;
 }
@@ -237,6 +290,8 @@ export function blendPresets(fromId, toId, t, easing = easeInOutCubic) {
  * moving to the next one; both in seconds at 1x animation speed.
  */
 export const TOUR = [
+  { preset: 'skyline', hold: 5, travel: 6 },
+  { preset: 'ben-franklin-bridge', hold: 5, travel: 8 },
   { preset: 'overview', hold: 4.5, travel: 7 },
   { preset: 'dawn-delaware', hold: 5.5, travel: 7 },
   { preset: 'schuylkill-flyover', hold: 5, travel: 6.5 },
@@ -307,6 +362,11 @@ export function tourTimeForShot(index) {
  * Named destinations for the quick-jump chips. Each carries its own framing,
  * because "go to Manayunk" should mean a shot of the river gorge, not the
  * overview camera re-centred on a point.
+ *
+ * `group: 'structures'` chips sit under their own heading. The bridge chips
+ * are placed on each span's OSM centerline midpoint (data/structures/
+ * bridges.json) and look back along the span toward the city; a test holds
+ * them to the data.
  */
 export const QUICK_JUMPS = [
   { id: 'center-city', name: 'Center City', lon: -75.1635, lat: 39.9526,
@@ -341,4 +401,15 @@ export const QUICK_JUMPS = [
     camDist: 12000, camBearing: 292, camPitch: 71 },
   { id: 'cherry-hill', name: 'Cherry Hill', lon: -75.0246, lat: 39.9268,
     camDist: 14000, camBearing: 280, camPitch: 70 },
+
+  { id: 'walt-whitman-bridge', name: 'Walt Whitman Bridge', group: 'structures',
+    lon: -75.1293, lat: 39.9052, camDist: 3800, camBearing: 318, camPitch: 75 },
+  { id: 'betsy-ross-bridge', name: 'Betsy Ross Bridge', group: 'structures',
+    lon: -75.0659, lat: 39.9848, camDist: 3600, camBearing: 333, camPitch: 75 },
+  { id: 'tacony-palmyra-bridge', name: 'Tacony-Palmyra Bridge', group: 'structures',
+    lon: -75.0432, lat: 40.0123, camDist: 3200, camBearing: 5, camPitch: 75 },
+  { id: 'commodore-barry-bridge', name: 'Commodore Barry Bridge', group: 'structures',
+    lon: -75.3697, lat: 39.8265, camDist: 4500, camBearing: 356, camPitch: 74 },
+  { id: 'sports-complex', name: 'Sports Complex', group: 'structures',
+    lon: -75.167, lat: 39.9045, camDist: 4200, camBearing: 15, camPitch: 71 },
 ];

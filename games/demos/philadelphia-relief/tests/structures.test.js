@@ -20,7 +20,7 @@ import {
 } from '../src/structures-data.js';
 import { CONTROLS, LAYERS, defaults, coerce } from '../src/schema.js';
 import { createStore } from '../src/state.js';
-import { PRESETS, presetPatch } from '../src/presets.js';
+import { PRESETS, presetPatch, QUICK_JUMPS, HOME_PRESET } from '../src/presets.js';
 import { encodeState, decodeState } from '../src/urlstate.js';
 import { assess, ASSETS, MODE } from '../src/degraded.js';
 import { THEMES, THEME_IDS } from '../src/themes.js';
@@ -351,6 +351,50 @@ test('bridges', async (t) => {
     assert.ok(maxIdx < merged.vertexCount, 'merged indices were re-based');
   });
 
+  await t.test('the bridge chips and preset sit on their spans and look back at the city', () => {
+    const chips = QUICK_JUMPS.filter((j) => j.group === 'structures');
+    assert.ok(chips.length >= 5, 'bridge and structure chips');
+    const mPerDegLon = terrainMeta.projection.metersPerDegLon;
+    const mPerDegLat = terrainMeta.projection.metersPerDegLat;
+    const check = (name, lon, lat, id) => {
+      const bridge = bridgesDoc.bridges.find((b) => b.id === id);
+      assert.ok(bridge, `${name}: no bridge ${id}`);
+      // Midpoint of the span, not the middle vertex: a straight bridge has
+      // only two centerline points and the middle vertex would be an end.
+      const a = bridge.centerline[0];
+      const z = bridge.centerline[bridge.centerline.length - 1];
+      const mid = [(a[0] + z[0]) / 2, (a[1] + z[1]) / 2];
+      const dm = Math.hypot((lon - mid[0]) * mPerDegLon, (lat - mid[1]) * mPerDegLat);
+      assert.ok(dm < 600, `${name} is ${Math.round(dm)} m from its span midpoint`);
+    };
+    for (const [name, id] of [['Walt Whitman Bridge', 'walt-whitman'],
+      ['Betsy Ross Bridge', 'betsy-ross'], ['Tacony-Palmyra Bridge', 'tacony-palmyra'],
+      ['Commodore Barry Bridge', 'commodore-barry']]) {
+      const chip = chips.find((c) => c.name === name);
+      assert.ok(chip, `missing chip ${name}`);
+      check(name, chip.lon, chip.lat, id);
+      assert.ok(chip.camDist <= 5000, `${name} chip is too far out to show the structure`);
+    }
+    const bfb = presetPatch('ben-franklin-bridge');
+    assert.ok(bfb, 'Ben Franklin Bridge preset');
+    check('Ben Franklin preset', bfb.camLon, bfb.camLat, 'benjamin-franklin');
+    // The sports complex chip lands inside the notable zone that holds the stadiums.
+    const sports = chips.find((c) => c.id === 'sports-complex');
+    const inner = manifest.zones.find((z) => z.id === 'inner-city').bounds;
+    assert.ok(sports.lon > inner.west && sports.lon < inner.east
+      && sports.lat > inner.south && sports.lat < inner.north);
+  });
+
+  await t.test('the opening shot frames the full-fabric zone at structure range', () => {
+    const home = presetPatch(HOME_PRESET);
+    const zone = manifest.zones.find((z) => z.id === 'center-city').bounds;
+    assert.ok(home.camLon > zone.west && home.camLon < zone.east
+      && home.camLat > zone.south && home.camLat < zone.north, 'target inside Center City');
+    // Inside the low tier's grow range at balanced quality, so the rowhouse
+    // fabric is up on the first frame, not just the towers.
+    assert.ok(home.camDist < tierRange('low', 'balanced', home.structureDetail) * 0.75);
+  });
+
   await t.test('too short a line is refused rather than extruded', () => {
     assert.equal(buildBridge({ type: 'truss' }, [[0, 0], [5, 0]], () => 0), null);
   });
@@ -364,8 +408,10 @@ test('structures state plumbing', async (t) => {
     assert.ok(CONTROLS.structureDetail && CONTROLS.structureHeight);
     assert.equal(coerce('structureDetail', 5), 1);
     assert.equal(coerce('structureHeight', 0), 0.5, 'never flat');
-    assert.equal(defaults().structureDetail, 0.6);
-    assert.equal(defaults().structureHeight, 1);
+    // Defaults are the opening skyline's values, held there by the core tests.
+    assert.equal(defaults().structureDetail, presetPatch(HOME_PRESET).structureDetail);
+    assert.equal(defaults().structureHeight, presetPatch(HOME_PRESET).structureHeight);
+    assert.ok(defaults().structureDetail >= 0.6, 'the opening shot shows the fabric');
   });
 
   await t.test('every preset states its structure settings and keeps the layer on', () => {
@@ -390,7 +436,7 @@ test('structures state plumbing', async (t) => {
     assert.equal(restored.get().layers.structures, false);
     store.reset();
     assert.equal(store.get().layers.structures, true);
-    assert.equal(store.get().structureDetail, 0.6);
+    assert.equal(store.get().structureDetail, defaults().structureDetail);
   });
 
   await t.test('a missing manifest degrades to a disabled layer, not a broken map', () => {

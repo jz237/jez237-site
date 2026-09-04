@@ -44,7 +44,7 @@ games/demos/philadelphia-relief/
   src/
     schema.js           SINGLE SOURCE OF TRUTH for every control, layer and camera key
     state.js            the store: coercion, subscriptions, layer toggles, reset
-    presets.js          the six cinematic shots, the blend maths, the flythrough, quick jumps
+    presets.js          the eight cinematic shots, the blend maths, the flythrough, quick jumps
     themes.js           five palettes: ramp, sky, water, ink, and the UI chrome
     geo.js              projection, elevation sampling, scale/zoom/compass formatting
     urlstate.js         compact URL hash: only the delta from the active preset
@@ -247,7 +247,7 @@ the heightmap and the vector layers cannot drift apart.
 | Scroll / pinch | Zoom (anchored on the cursor) |
 | `↑ ↓ ← →` | Pan · `Shift` + arrows to orbit |
 | `+` `−` | Zoom |
-| `1`–`6` | Cinematic presets |
+| `1`–`8` | Cinematic presets (`1` is the opening skyline) |
 | `Space` | Play/pause the flythrough |
 | `H` | Home · `C` studio · `L` labels · `F` fullscreen · `P` save PNG |
 | `/` | Search · `?` shortcuts · `Esc` close / stop |
@@ -258,8 +258,16 @@ ambient fill, fog density, bloom, water intensity, label size and density, road
 opacity, boundary strength, theme, field of view, quality and animation speed —
 plus eleven layer toggles, including **Buildings & bridges**.
 
+**The opening shot is the Center City skyline** — 6.5 km out, south-west of
+City Hall, with the towers, the rowhouse grid and the Ben Franklin Bridge in
+frame — because the buildings are the map's biggest feature and a 94 km regional
+view hides them completely. *The Delaware Valley* regional view is preset 2's
+neighbour (card 3, key `3`); Home and `H` return to the skyline. The Ben Franklin
+Bridge has its own preset, and the other crossings and the sports complex sit
+under a **Bridges & structures** chip row.
+
 **Presets** are complete restagings, not bookmarks: camera, light, air and layer
-selection all move together. The flythrough strings all six into a ~91 s loop
+selection all move together. The flythrough strings all eight into a ~98 s loop
 with a scrubbable timeline; touching the camera pauses it rather than fighting
 you.
 
