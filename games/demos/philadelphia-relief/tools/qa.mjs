@@ -308,6 +308,34 @@ async function run() {
       await page.waitForTimeout(2400);
       await shot('07-search-manayunk');
 
+      // Search categories: results are grouped under headings, a tour and an
+      // era are findable, and a "bridge:" prefix narrows to the crossings.
+      const searchProbe = async (text) => {
+        await page.fill('#searchInput', text);
+        await page.waitForTimeout(350);
+        return page.evaluate(() => ({
+          groups: [...document.querySelectorAll('#searchResults .search-group')].map((n) => n.textContent),
+          options: [...document.querySelectorAll('#searchResults [role="option"]')]
+            .map((n) => n.textContent),
+        }));
+      };
+      const tourHits = await searchProbe('grand');
+      if (!tourHits.groups.includes('Tours') || !tourHits.options.some((o) => /Grand Tour/.test(o))) {
+        problems.push(`[${viewport.id}] search "grand" found no tour: ${JSON.stringify(tourHits)}`);
+      }
+      const eraHits = await searchProbe('1776');
+      if (!eraHits.groups.includes('Eras')) {
+        problems.push(`[${viewport.id}] search "1776" found no era: ${JSON.stringify(eraHits)}`);
+      }
+      const bridgeHits = await searchProbe('bridge:');
+      if (!bridgeHits.options.length || !bridgeHits.groups.every((g) => /Bridges/.test(g))) {
+        problems.push(`[${viewport.id}] "bridge:" prefix did not narrow to bridges: ${JSON.stringify(bridgeHits)}`);
+      }
+      report.push(`[${viewport.id}] search groups: grand ${tourHits.groups}, 1776 ${eraHits.groups}, `
+        + `bridge: ${bridgeHits.options.length} hits`);
+      await page.press('#searchInput', 'Escape');
+      await page.waitForTimeout(300);
+
       // Landmark card: searching a landmark opens its card, which names its
       // sources and says whether the model is schematic; Esc closes it.
       await page.fill('#searchInput', 'Independence Hall');
@@ -751,6 +779,61 @@ async function structuresPass(page, viewport, shot, problems, report) {
   if ((floodOff?.flood?.visible || []).length) {
     problems.push(`[${viewport.id}] flood layer off still shows ${floodOff.flood.visible}`);
   }
+
+  // Named sharing: the share dialog carries a name into the link, and a link
+  // with a name heads the readout with it. Scene previews and social
+  // metadata are static assets that must be present and loadable.
+  if (viewport.isMobile) {
+    // The phone header has no share icon; the studio sheet carries the action.
+    await page.locator('#mbStudio').click();
+    await page.waitForTimeout(500);
+    await page.locator('#btnShareStudio').click();
+  } else {
+    await page.locator('#btnShare').click();
+  }
+  await page.waitForTimeout(300);
+  await page.fill('#shareName', 'QA view');
+  await page.waitForTimeout(200);
+  const share = await page.evaluate(() => ({
+    open: !document.getElementById('share').hidden,
+    url: document.getElementById('shareUrl').textContent,
+  }));
+  if (!share.open || !/n=QA%20view/.test(share.url) || !/#/.test(share.url)) {
+    problems.push(`[${viewport.id}] share dialog wrong: ${JSON.stringify(share)}`);
+  }
+  await page.keyboard.press('Escape');
+  await page.waitForTimeout(200);
+  if (viewport.isMobile) {
+    await page.locator('#mbStudio').click();     // put the studio sheet away again
+    await page.waitForTimeout(400);
+  }
+  // A named link pasted into an open page is a hash change, not a reload;
+  // the name must still take effect.
+  await goto('#d=9000&n=Named%20QA%20view', 2500);
+  const named = await page.evaluate(() => ({
+    readout: document.getElementById('outPreset').textContent,
+    viewName: window.philadelphiaRelief.stats().viewName,
+    hash: window.location.hash,
+    thumbs: [...document.querySelectorAll('#presetList .p-thumb')]
+      .map((img) => ({ complete: img.complete, w: img.naturalWidth })),
+    ogImage: document.querySelector('meta[property="og:image"]')?.content,
+    twitter: document.querySelector('meta[name="twitter:card"]')?.content,
+  }));
+  if (named.readout !== 'Named QA view' || named.viewName !== 'Named QA view') {
+    problems.push(`[${viewport.id}] named link not honoured: ${JSON.stringify(named)}`);
+  }
+  if (named.thumbs.length !== 8) problems.push(`[${viewport.id}] ${named.thumbs.length} preset previews`);
+  if (!viewport.isMobile && !named.thumbs.every((t) => t.complete && t.w > 0)) {
+    problems.push(`[${viewport.id}] preset previews did not load: ${JSON.stringify(named.thumbs)}`);
+  }
+  if (!/\/assets\/social-card\.jpg$/.test(named.ogImage || '') || named.twitter !== 'summary_large_image') {
+    problems.push(`[${viewport.id}] social metadata missing: ${JSON.stringify([named.ogImage, named.twitter])}`);
+  }
+  const card = (await page.context().request.get(
+    new globalThis.URL('assets/social-card.jpg', page.url()).href));
+  if (!card.ok()) problems.push(`[${viewport.id}] social card asset missing`);
+  report.push(`[${viewport.id}] named view "${named.readout}", hash ${named.hash}`);
+  await shot('22-named-share');
 
   // Simulated sun and weather: a winter morning puts the sun low in the
   // south-east, one in the morning is night, and fog multiplies the haze.

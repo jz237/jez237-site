@@ -9,9 +9,18 @@
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://jez237.com/games/demos/philadelphia-relief/" />
 <meta property="og:title" content="Philadelphia Relief — A 3D Topographic Map" />
-<meta property="og:description" content="A cinematic, interactive relief map of the Philadelphia region built from public USGS elevation data." />
+<meta property="og:description" content="A cinematic, interactive relief map of the Philadelphia region: real USGS elevation, 17,300 OpenStreetMap footprints, the Delaware bridges, guided tours, FEMA flood zones and NOAA sea-level scenarios, a simulated clock, and honest historical views. No accounts, no keys, nothing leaves your browser." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://jez237.com/games/demos/philadelphia-relief/" />
+<meta property="og:image" content="https://jez237.com/games/demos/philadelphia-relief/assets/social-card.jpg" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:image:alt" content="The Center City Philadelphia skyline standing on an exaggerated relief map at dusk, with the Delaware River and the Benjamin Franklin Bridge beyond." />
+<meta property="og:site_name" content="jez237" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="Philadelphia Relief — A 3D Topographic Map" />
+<meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
+<meta name="twitter:image" content="https://jez237.com/games/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
 <link rel="stylesheet" href="app.css" />
 </head>
@@ -94,6 +103,7 @@
       <div id="floodLegend" class="legend" hidden></div>
     </div>
     <div class="studio-footer">
+      <button type="button" class="text-btn" id="btnShareStudio">Share this view…</button>
       <button type="button" class="text-btn" id="btnReset">Reset everything</button>
     </div>
   </div>
@@ -204,17 +214,19 @@
   <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="obTitle">
     <h2 id="obTitle">Philadelphia, in relief</h2>
     <p>
-      Real elevation for Philadelphia and its suburbs, with 17,300 real building
-      footprints standing on it — the Center City skyline, the rowhouse grid and the Delaware
-      bridges. The land here is subtle, about 380 m of relief across 94 km, so the
-      vertical scale is exaggerated to make it legible.
+      A 3D map of Philadelphia and the Delaware Valley built only from public data:
+      real USGS elevation, 17,300 real OpenStreetMap building footprints, FEMA flood
+      zones and NOAA sea-level scenarios. The land here is subtle, about 380 m of relief
+      across 94 km, so the vertical scale is exaggerated to make it legible. Bridges and a
+      few landmarks are <b>schematic</b> shapes built from published dimensions, and the map
+      says so wherever it shows them.
     </p>
     <ul class="overlay-hints">
-      <li><b>Drag</b> to move across the region</li>
-      <li><b>Right-drag</b> or <b>two fingers</b> to orbit and tilt</li>
-      <li><b>Scroll</b> or <b>pinch</b> to zoom</li>
-      <li><b>Press ▶</b> for a captioned tour — moving the camera pauses it</li>
-      <li><b>Pull back</b> with the <b>Delaware Valley</b> preset for the whole region; the <b>bridge chips</b> fly to each crossing</li>
+      <li><b>Drag</b> to move, <b>right-drag</b> or <b>two fingers</b> to orbit, <b>scroll</b> or <b>pinch</b> to zoom</li>
+      <li><b>Press ▶</b> for a captioned tour; <b>click</b> a landmark for its sourced card</li>
+      <li><b>Search</b> scenes, tours, places, bridges, eras and layers from the box at the top</li>
+      <li>Try the <b>Era</b> control for 1776 or 1900, the <b>clock</b> for a winter sunrise, and the <b>Flood hazard</b> layer</li>
+      <li>Everything runs in your browser: no accounts, no keys, nothing is sent anywhere. <b>Share</b> (↗) copies a link you can name.</li>
     </ul>
     <div class="overlay-actions">
       <button type="button" class="primary-btn" id="obStart">Start exploring</button>
@@ -418,6 +430,24 @@
         <tr><th scope="row">Click</th><td>A landmark model or label opens its information card</td></tr>
       </tbody>
     </table>
+  </div>
+</div>
+
+<!-- ── share ───────────────────────────────────────────────────────────── -->
+<div id="share" class="overlay" hidden>
+  <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <button type="button" class="overlay-close" data-close="share" aria-label="Close">✕</button>
+    <h2 id="shareTitle">Share this view</h2>
+    <p>The link carries the camera, light, layers and era as a delta from the current scene.
+      Give it a name and the name heads the readout for whoever opens it.</p>
+    <label class="share-label" for="shareName">Name this view (optional)</label>
+    <input id="shareName" class="share-input" type="text" maxlength="60" autocomplete="off"
+           placeholder="e.g. Manayunk at sunrise" />
+    <p class="share-url" id="shareUrl" aria-live="polite"></p>
+    <div class="overlay-actions">
+      <button type="button" class="primary-btn" id="shareCopy">Copy link</button>
+      <button type="button" class="text-btn" data-close="share">Cancel</button>
+    </div>
   </div>
 </div>
 

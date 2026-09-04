@@ -388,7 +388,16 @@ values labelled as such — and captions are announced through an `aria-live`
 region. Touching the camera pauses a tour rather than fighting you.
 
 Any view can be shared: the URL hash carries only the **delta from the active
-preset**, so a link reads as "this shot, plus the three things I changed".
+preset**, so a link reads as "this shot, plus the three things I changed". The
+share button (↗) opens a small dialog where the view can be **named**; the name
+rides in the link (`n=`), is cleaned and capped on the way in, and heads the
+readout for whoever opens it. **Search** covers scenes, tours, eras, layers,
+bridges, landmarks (labelled with their card's category) and places, grouped
+under headings; a `bridge:` or `tour:` prefix narrows to one category. Each
+scene card carries a **preview** baked from the map itself by
+`tools/previews.mjs` (Playwright against a local server; 320×168 JPEGs under
+14 KB each, committed as static assets), and the page ships Open Graph and
+Twitter card metadata with a 1200×630 social card baked the same way.
 
 ---
 

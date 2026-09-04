@@ -10,6 +10,8 @@ import { CONTROLS, LAYERS, GROUPS } from './schema.js';
 import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js';
 import { getEra } from './eras.js';
 import { PRESETS, QUICK_JUMPS } from './presets.js';
+import { TOURS } from './tours.js';
+import { ERAS } from './eras.js';
 import { getTheme, THEME_IDS } from './themes.js';
 
 const ENUM_LABELS = {
@@ -183,9 +185,20 @@ export function buildPresets(host, onSelect) {
     const b = el('button', 'preset-card');
     b.type = 'button';
     b.setAttribute('aria-pressed', 'false');
+    // A baked preview of the shot (assets/previews, made by tools/previews.mjs).
+    const thumb = document.createElement('img');
+    thumb.className = 'p-thumb';
+    thumb.src = `assets/previews/${preset.id}.jpg`;
+    thumb.alt = '';
+    thumb.width = 64;
+    thumb.height = 34;
+    thumb.loading = 'lazy';
+    thumb.decoding = 'async';
+    const text = el('span', 'p-text');
     const index = el('span', 'p-index', String(i + 1));
     const name = el('span', 'p-name', preset.name);
-    b.append(index, name);
+    text.append(index, name);
+    b.append(thumb, text);
     b.title = preset.blurb;
     b.addEventListener('click', () => onSelect(preset.id));
     cards.set(preset.id, b);
@@ -246,7 +259,16 @@ export function createSearch(options) {
       input.setAttribute('aria-expanded', 'true');
       return;
     }
+    let lastGroup = null;
     matches.forEach((entry, i) => {
+      // Results are grouped under a category heading in rank order.
+      const group = entry.group || entry.kindLabel;
+      if (group !== lastGroup) {
+        const head = el('li', 'search-group', group);
+        head.setAttribute('role', 'presentation');
+        results.appendChild(head);
+        lastGroup = group;
+      }
       const li = el('li');
       li.setAttribute('role', 'option');
       li.id = `search-opt-${i}`;
@@ -287,21 +309,40 @@ export function createSearch(options) {
       close();
       return;
     }
-    matches = entries
-      .map((entry) => ({ entry, s: score(entry, q) }))
+    // "bridge:" or "tour:" style prefixes narrow to a category.
+    const colon = q.indexOf(':');
+    const filter = colon > 0 ? q.slice(0, colon).trim() : '';
+    const term = colon > 0 ? q.slice(colon + 1).trim() : q;
+    const pool = filter
+      ? entries.filter((e) => norm(e.group || e.kindLabel).startsWith(filter)
+        || norm(e.kindLabel).startsWith(filter))
+      : entries;
+    const ranked = pool
+      .map((entry) => ({ entry, s: term ? score(entry, term) : 1 }))
       .filter((m) => m.s !== Infinity)
       .sort((a, b) => (a.s - b.s)
         || (a.entry.priority - b.entry.priority)
         || a.entry.name.length - b.entry.name.length)
-      .slice(0, 10)
+      .slice(0, 12)
       .map((m) => m.entry);
+    // Keep rank order but gather each category's hits together.
+    const order = [];
+    for (const e of ranked) {
+      const g = e.group || e.kindLabel;
+      if (!order.includes(g)) order.push(g);
+    }
+    matches = order.flatMap((g) => ranked.filter((e) => (e.group || e.kindLabel) === g));
     active = matches.length ? 0 : -1;
     render();
   }
 
-  input.addEventListener('input', update);
-  input.addEventListener('focus', () => { if (input.value.trim()) update(); });
-  input.addEventListener('blur', () => setTimeout(close, 120));
+  // A blur schedules the close a beat later so a click on a result lands
+  // first; typing again within that beat must cancel it, or the results a
+  // fast typist just asked for are wiped from under the Enter key.
+  let blurTimer = 0;
+  input.addEventListener('input', () => { clearTimeout(blurTimer); update(); });
+  input.addEventListener('focus', () => { clearTimeout(blurTimer); if (input.value.trim()) update(); });
+  input.addEventListener('blur', () => { blurTimer = setTimeout(close, 120); });
   input.addEventListener('keydown', (event) => {
     if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
       event.preventDefault();
@@ -326,18 +367,38 @@ export function createSearch(options) {
  * Build the search index. Curated entries outrank OSM place nodes so
  * "Valley Forge" lands on the authored shot rather than a nearby hamlet.
  */
-export function buildSearchIndex(placesGeojson, landmarksDoc) {
+export function buildSearchIndex(placesGeojson, landmarksDoc, extras = {}) {
   const entries = [];
+  const cards = extras.cards || {};
 
   for (const preset of PRESETS) {
     entries.push({
-      name: preset.name, kind: 'preset', kindLabel: 'Preset',
+      name: preset.name, kind: 'preset', kindLabel: 'Scene', group: 'Scenes',
       presetId: preset.id, priority: 0,
     });
   }
-  for (const jump of QUICK_JUMPS) {
+  for (const tour of Object.values(TOURS || {})) {
     entries.push({
-      name: jump.name, kind: 'jump', kindLabel: 'Place',
+      name: tour.name, kind: 'tour', kindLabel: 'Tour', group: 'Tours',
+      tourId: tour.id, priority: 0.5,
+    });
+  }
+  for (const era of ERAS) {
+    if (era.id === 'present') continue;
+    entries.push({
+      name: `${era.label} (historical view)`, kind: 'era', kindLabel: 'Era', group: 'Eras',
+      eraId: era.id, priority: 0.7,
+    });
+  }
+  entries.push({ name: 'FEMA flood zones', kind: 'flood', kindLabel: 'Layer', group: 'Layers',
+    floodMode: 'fema', priority: 0.8 });
+  entries.push({ name: 'Sea level rise', kind: 'flood', kindLabel: 'Layer', group: 'Layers',
+    floodMode: 'slr', priority: 0.8 });
+  for (const jump of QUICK_JUMPS) {
+    const bridge = jump.group === 'structures';
+    entries.push({
+      name: jump.name, kind: 'jump', kindLabel: bridge ? 'Bridge' : 'Place',
+      group: bridge ? 'Bridges & structures' : 'Places',
       jump, lon: jump.lon, lat: jump.lat, priority: 1,
     });
   }
@@ -346,9 +407,11 @@ export function buildSearchIndex(placesGeojson, landmarksDoc) {
   for (const l of landmarksDoc?.landmarks || []) {
     if (seen.has(l.n.toLowerCase())) continue;
     seen.add(l.n.toLowerCase());
+    const category = cards[l.n]?.category;
     entries.push({
-      name: l.n, kind: 'landmark', kindLabel: 'Landmark',
+      name: l.n, kind: 'landmark', kindLabel: category || 'Landmark', group: 'Landmarks',
       lon: l.lon, lat: l.lat, note: l.d, priority: 2 + (l.r ?? 2) * 0.1,
+      card: !!cards[l.n],
     });
   }
   for (const feature of placesGeojson?.features || []) {
@@ -357,7 +420,7 @@ export function buildSearchIndex(placesGeojson, landmarksDoc) {
     seen.add(p.n.toLowerCase());
     const [lon, lat] = feature.geometry?.coordinates || [];
     entries.push({
-      name: p.n, kind: 'place', kindLabel: labelForPlaceKind(p.k),
+      name: p.n, kind: 'place', kindLabel: labelForPlaceKind(p.k), group: 'Places',
       lon, lat, priority: 4 + (p.rank ?? 3) * 0.1,
     });
   }
