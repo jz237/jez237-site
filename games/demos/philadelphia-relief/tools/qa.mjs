@@ -325,6 +325,35 @@ async function run() {
       await page.selectOption('#tourSelect', 'grand');
       await page.waitForTimeout(400);
 
+      // Cinema mode hides every panel, keeps the caption, and exits on Escape.
+      await page.click('#btnPlay');
+      await page.waitForTimeout(600);
+      await page.keyboard.press('v');
+      await page.waitForTimeout(3200);
+      const cinema = await page.evaluate(() => {
+        const vis = (id) => {
+          const el = document.getElementById(id);
+          return !!el && getComputedStyle(el).display !== 'none';
+        };
+        return { studio: vis('studio'), shots: vis('shots'), readout: vis('readout'),
+          topbar: getComputedStyle(document.querySelector('.topbar')).display !== 'none',
+          caption: vis('caption') && !document.getElementById('caption').hidden,
+          bar: vis('cinemaBar'), body: document.body.classList.contains('cinema') };
+      });
+      if (!cinema.body || cinema.studio || cinema.shots || cinema.readout || cinema.topbar) {
+        problems.push(`[${viewport.id}] cinema mode left chrome visible: ${JSON.stringify(cinema)}`);
+      }
+      if (!cinema.caption) problems.push(`[${viewport.id}] cinema mode lost the caption`);
+      if (!cinema.bar) problems.push(`[${viewport.id}] cinema controls missing`);
+      report.push(`[${viewport.id}] cinema: ${JSON.stringify(cinema)}`);
+      await shot('18-cinema');
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(500);
+      const back = await page.evaluate(() => document.body.classList.contains('cinema'));
+      if (back) problems.push(`[${viewport.id}] Escape did not leave cinema mode`);
+      await page.keyboard.press('Escape');   // stop the tour
+      await page.waitForTimeout(300);
+
       // Dialogs.
       await page.click('#btnAbout');
       await page.waitForTimeout(500);
@@ -332,17 +361,47 @@ async function run() {
       await page.keyboard.press('Escape');
       await page.waitForTimeout(300);
 
-      // URL state round-trip.
-      await page.waitForTimeout(600);
+      // URL state round-trip: nudge the camera off the default view first,
+      // since the tour above legitimately leaves the state at the defaults.
+      await page.mouse.move(box.x + box.width / 2, box.y + box.height / 2);
+      await page.mouse.wheel(0, -400);
+      await page.waitForTimeout(1200);
       const hash = await page.evaluate(() => window.location.hash);
       report.push(`[${viewport.id}] hash: ${hash.slice(0, 160)}`);
       if (hash.length < 2) problems.push(`[${viewport.id}] no URL state was written`);
     } else {
-      await page.locator('#studioToggle').click();
+      const barVisible = await page.evaluate(() =>
+        getComputedStyle(document.getElementById('mobileBar')).display !== 'none');
+      if (!barVisible) problems.push(`[${viewport.id}] phone toolbar not shown`);
+      await page.locator('#mbStudio').click();
       await page.waitForTimeout(600);
+      const studioOpen = await page.evaluate(() =>
+        !document.getElementById('studio').classList.contains('collapsed'));
+      if (!studioOpen) problems.push(`[${viewport.id}] toolbar did not open the studio`);
       await shot('02-studio-open');
-      await page.locator('#studioToggle').click();
+      await page.locator('#mbStudio').click();
       await page.waitForTimeout(400);
+      await page.locator('#mbShots').click();
+      await page.waitForTimeout(500);
+      await shot('02b-shots-open');
+      await page.locator('#mbShots').click();
+      await page.waitForTimeout(400);
+
+      await page.locator('#mbPlay').click();
+      await page.waitForTimeout(500);
+      await page.locator('#mbCinema').click();
+      await page.waitForTimeout(3000);
+      const pc = await page.evaluate(() => ({
+        body: document.body.classList.contains('cinema'),
+        bar: getComputedStyle(document.getElementById('mobileBar')).display === 'none',
+        caption: !document.getElementById('caption').hidden,
+      }));
+      if (!pc.body || !pc.bar || !pc.caption) problems.push(`[${viewport.id}] phone cinema: ${JSON.stringify(pc)}`);
+      await shot('18-cinema');
+      await page.locator('#cinemaExit').click();
+      await page.waitForTimeout(400);
+      await page.locator('#mbPlay').click();   // pause
+      await page.waitForTimeout(300);
 
       const box = await page.locator('#canvas').boundingBox();
       await page.touchscreen.tap(box.x + box.width / 2, box.y + box.height / 2);
@@ -465,7 +524,23 @@ async function structuresPass(page, viewport, shot, problems, report) {
   }
 
   // ---- the routes a user actually sees: the bridge card and the chips ----
+  // Flights are time-based but the per-frame step is capped, so under a
+  // software renderer a 1.9 s flight can take four. Wait for the readout to
+  // stop moving instead of guessing a duration.
+  const settle = async (maxMs = 14000) => {
+    let prev = null;
+    let still = 0;
+    const t0 = Date.now();
+    while (Date.now() - t0 < maxMs) {
+      await page.waitForTimeout(350);
+      const cur = await page.evaluate(() => document.getElementById('outCoords')?.textContent || '');
+      still = cur === prev ? still + 1 : 0;
+      prev = cur;
+      if (still >= 2) break;
+    }
+  };
   const readoutNear = async (lat, lon, label) => {
+    await settle();
     const text = await page.evaluate(() => document.getElementById('outCoords')?.textContent || '');
     const m = /([\d.]+)° N, ([\d.]+)° W/.exec(text);
     const ok = m && Math.abs(Number(m[1]) - lat) < 0.012 && Math.abs(Number(m[2]) + lon) < 0.012;
@@ -475,18 +550,17 @@ async function structuresPass(page, viewport, shot, problems, report) {
   const openSheet = async () => {
     if (!viewport.isMobile) return;
     const collapsed = await page.evaluate(() => document.getElementById('shots').classList.contains('collapsed'));
-    if (collapsed) { await page.locator('#shotsToggle').click(); await page.waitForTimeout(500); }
+    if (collapsed) { await page.locator('#mbShots').click(); await page.waitForTimeout(500); }
   };
   const closeSheet = async () => {
     if (!viewport.isMobile) return;
-    await page.locator('#shotsToggle').click();
-    await page.waitForTimeout(400);
+    const open = await page.evaluate(() => !document.getElementById('shots').classList.contains('collapsed'));
+    if (open) { await page.locator('#mbShots').click(); await page.waitForTimeout(400); }
   };
 
   await openSheet();
   await page.locator('#presetList .preset-card', { hasText: 'Benjamin Franklin Bridge' }).click();
   await closeSheet();
-  await page.waitForTimeout(3600);
   await readoutNear(39.9519, -75.1285, 'Benjamin Franklin Bridge card');
   const bfb = await stats();
   if (!(bfb?.structures?.drawnBuildings > 0) || !(bfb?.bridges?.length >= 4)) {
@@ -505,7 +579,6 @@ async function structuresPass(page, viewport, shot, problems, report) {
     if (await chip.count() !== 1) { problems.push(`[${viewport.id}] chip "${name}" missing`); continue; }
     await chip.click();
     await closeSheet();
-    await page.waitForTimeout(3200);
     await readoutNear(lat, lon, `${name} chip`);
     if (name === 'Walt Whitman Bridge' || name === 'Sports Complex') {
       await shot(`15-route-${name.toLowerCase().replace(/[^a-z]+/g, '-')}`);
@@ -514,7 +587,6 @@ async function structuresPass(page, viewport, shot, problems, report) {
 
   // Home returns to the opening skyline.
   await page.locator('#btnHome').click();
-  await page.waitForTimeout(3200);
   await readoutNear(39.9505, -75.1655, 'Home button');
   const home = await stats();
   if (!(home?.structures?.drawnBuildings >= (viewport.isMobile ? 1500 : 2500))) {

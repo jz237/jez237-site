@@ -828,3 +828,84 @@ kbd {
   .loading-mark span { animation: none; }
   .preset-card:hover, .brand-home:hover, .primary-btn:hover { transform: none; }
 }
+
+/* ── cinema mode ───────────────────────────────────────────────────────── */
+
+body.cinema .topbar,
+body.cinema .panel,
+body.cinema .readout,
+body.cinema .mobile-bar,
+body.cinema .toast { display: none !important; }
+body.cinema.hide-cursor #stage { cursor: none; }
+body.cinema .caption {
+  bottom: max(28px, env(safe-area-inset-bottom));
+  width: min(720px, calc(100vw - 32px));
+  background: rgba(8, 5, 3, 0.62);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+body.cinema .caption strong { font-size: 15px; }
+body.cinema .caption span { font-size: 14px; }
+
+.cinema-bar {
+  position: fixed; z-index: 58;
+  top: max(14px, env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right));
+  display: flex; gap: 6px;
+  opacity: 0.85; transition: opacity 240ms var(--ease);
+}
+.cinema-bar[hidden] { display: none; }
+body.hide-cursor .cinema-bar { opacity: 0; }
+body.hide-cursor .cinema-bar:focus-within { opacity: 1; }
+.cinema-btn {
+  width: 38px; height: 38px; border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  background: rgba(8, 5, 3, 0.55); backdrop-filter: blur(10px);
+  color: #fff; font-size: 16px; line-height: 1; cursor: pointer;
+}
+.cinema-btn:hover, .cinema-btn:focus-visible { background: var(--accent); color: #12100c; }
+.cinema-play { font-size: 13px; }
+
+/* ── phone toolbar ─────────────────────────────────────────────────────── */
+
+.mobile-bar { display: none; }
+
+@media (max-width: 820px) {
+  .mobile-bar {
+    position: fixed; z-index: 57;
+    left: 0; right: 0; bottom: 0;
+    display: flex; justify-content: space-around; align-items: stretch;
+    padding: 6px 4px calc(6px + env(safe-area-inset-bottom));
+    background: var(--panel-blur); backdrop-filter: blur(20px);
+    border-top: 1px solid var(--line);
+  }
+  .mobile-btn {
+    flex: 1 1 0; min-width: 0; min-height: 46px;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
+    border: 0; background: none; color: var(--muted);
+    font: inherit; cursor: pointer; border-radius: var(--radius-sm);
+  }
+  .mobile-btn span { font-size: 17px; line-height: 1; }
+  .mobile-btn small { font-size: 9.5px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .mobile-btn[aria-pressed="true"] { color: var(--accent); }
+  .mobile-btn:active { background: rgba(255, 255, 255, 0.08); }
+
+  /* The sheets now open from the toolbar: no stacked handles, and each sheet
+     sits above the bar. A collapsed sheet is fully off-screen. */
+  .panel { bottom: calc(58px + env(safe-area-inset-bottom)); max-height: 58vh; }
+  .studio, .shots { bottom: calc(58px + env(safe-area-inset-bottom)); }
+  .panel.collapsed { transform: translateY(calc(100% + 80px)); }
+  .panel-head::after { display: none; }
+
+  /* Compact readout pill above the toolbar. */
+  .readout {
+    left: 8px; right: 8px;
+    bottom: calc(66px + env(safe-area-inset-bottom));
+    padding: 8px 12px; gap: 6px;
+  }
+  .readout-stats { display: none; }
+  .readout-preset-blurb { display: none; }
+  .timeline { display: none; }
+  .readout-preset { max-width: none; }
+  .readout-preset-name { font-size: 12px; }
+  body.sheet-open .readout { display: none; }
+  .caption { bottom: calc(110px + env(safe-area-inset-bottom)); }
+}

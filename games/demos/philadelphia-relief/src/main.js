@@ -1035,6 +1035,69 @@ function wireInterface(deps) {
     }
   });
 
+  // ---- cinema mode ----------------------------------------------------------
+  // Everything but the map and the captions goes away. The tour keeps its
+  // controls in a small cluster that fades with the cursor.
+  let cinema = false;
+  let cursorTimer = 0;
+  let sheetsBeforeCinema = [];
+  const cinemaBar = $('cinemaBar');
+  const setCinema = (on) => {
+    cinema = !!on;
+    document.body.classList.toggle('cinema', cinema);
+    cinemaBar.hidden = !cinema;
+    $('btnCinema').setAttribute('aria-pressed', String(cinema));
+    $('mbCinema').setAttribute('aria-pressed', String(cinema));
+    if (cinema) {
+      // Desktop panels are simply hidden by CSS and come back untouched. On a
+      // phone an open sheet also hides the caption (body.sheet-open), so the
+      // sheets are put away for the show and restored on exit.
+      sheetsBeforeCinema = NARROW.matches ? sheets.filter((sh) => !sh.isCollapsed()) : [];
+      for (const sh of sheetsBeforeCinema) sh.set(true);
+      $('cinemaPlay').focus();
+      armCursorTimer();
+    } else {
+      document.body.classList.remove('hide-cursor');
+      clearTimeout(cursorTimer);
+      for (const sh of sheetsBeforeCinema) sh.set(false);
+      sheetsBeforeCinema = [];
+      syncMobileBar();
+      $('btnCinema').focus();
+    }
+  };
+  function armCursorTimer() {
+    document.body.classList.remove('hide-cursor');
+    clearTimeout(cursorTimer);
+    cursorTimer = setTimeout(() => {
+      if (cinema) document.body.classList.add('hide-cursor');
+    }, 2600);
+  }
+  window.addEventListener('pointermove', () => { if (cinema) armCursorTimer(); }, { passive: true });
+  $('btnCinema').addEventListener('click', () => setCinema(!cinema));
+  $('cinemaExit').addEventListener('click', () => setCinema(false));
+  $('cinemaPlay').addEventListener('click', () => motion.toggle());
+  $('cinemaPrev').addEventListener('click', () => motion.step(-1));
+  $('cinemaNext').addEventListener('click', () => motion.step(1));
+  motion.onChange(({ playing }) => {
+    $('cinemaPlay').textContent = playing ? '❚❚' : '▶';
+    $('mbPlay').setAttribute('aria-pressed', String(playing));
+    $('mbPlay').querySelector('span').textContent = playing ? '❚❚' : '▶';
+  });
+
+  // ---- phone toolbar --------------------------------------------------------
+  const sheetButtons = [[$('mbShots'), sheets.find((sh) => sh.panel === dom.shots)],
+    [$('mbStudio'), sheets.find((sh) => sh.panel === dom.studio)]];
+  function syncMobileBar() {
+    for (const [btn, sh] of sheetButtons) btn.setAttribute('aria-pressed', String(!sh.isCollapsed()));
+  }
+  for (const [btn, sh] of sheetButtons) {
+    btn.addEventListener('click', () => { sh.set(!sh.isCollapsed()); syncMobileBar(); });
+  }
+  for (const sh of sheets) sh.panel.querySelector('.panel-toggle').addEventListener('click', syncMobileBar);
+  $('mbHome').addEventListener('click', () => motion.toPreset(HOME_PRESET));
+  $('mbPlay').addEventListener('click', () => motion.toggle());
+  $('mbCinema').addEventListener('click', () => setCinema(true));
+
   // ---- top bar actions ----------------------------------------------------
   $('btnHome').addEventListener('click', () => motion.toPreset(HOME_PRESET));
   $('btnAbout').addEventListener('click', () => dialogs.open('about'));
@@ -1090,6 +1153,9 @@ function wireInterface(deps) {
       case 'f': case 'F':
         toggleFullscreen();
         break;
+      case 'v': case 'V':
+        setCinema(!cinema);
+        break;
       case 'p': case 'P':
         saveScreenshot(captureFn, store);
         break;
@@ -1117,7 +1183,7 @@ function wireInterface(deps) {
         event.preventDefault();
         break;
       case 'Escape':
-        motion.stop();
+        if (cinema) setCinema(false); else motion.stop();
         break;
       case '+': case '=':
         rig.nudge({ zoom: 1 / 1.25 });
