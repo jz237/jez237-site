@@ -14,12 +14,12 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090403';
+import { hexToRgb } from './themes.js?v=philly-2026090404';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
-  drawIndexCount, heightScale, distanceToBox, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026090403';
-import { damp } from './geo.js?v=philly-2026090403';
+  drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
+} from './structures-data.js?v=philly-2026090404';
+import { damp } from './geo.js?v=philly-2026090404';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute float aGround;     // DEM elevation under the structure, metres
@@ -74,6 +74,10 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uFogDensity;
   uniform float uExposure;
   uniform float uEraYear;      // 9999 = present; else the era's year
+  uniform float uHybrid;
+  uniform float uCompareHistory;
+  uniform float uComparePosition;
+  uniform float uViewportWidth;
   varying float vYear;
   #ifdef LANDMARK
   uniform float uSelected;
@@ -95,6 +99,8 @@ const FRAGMENT_SHADER = /* glsl */ `
 
     float roof = smoothstep(0.55, 0.85, n.y);
     vec3 base = mix(uWall, uRoof, roof);
+    vec3 surveyNeutral = mix(vec3(0.18, 0.21, 0.23), vec3(0.34, 0.37, 0.38), roof);
+    base = mix(base, surveyNeutral, uHybrid);
 
     // A touch of darkening toward the base, where streets and neighbours
     // shadow the lower storeys.
@@ -111,11 +117,19 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Ground bounce warms the shadow side a little.
     vec3 bounce = uFogColor * uAmbient * 0.35 * max(0.0, -ndl);
     vec3 color = base * (key + sky + bounce) * uExposure;
+    // Keep the aerial overlay chromatically neutral even under the warm dusk
+    // sun.  The geometry is a survey aid here, not a second painted city.
+    color = mix(color, surveyNeutral * mix(0.72, 0.92, roof), uHybrid * 0.92);
 
     // Historical views: documented-newer buildings vanish; undated ones fade
     // into the haze, because a missing date is not a missing building.
-    if (uEraYear < 9000.0) {
-      if (vYear > uEraYear) discard;
+    float displayYear = uEraYear;
+    if (uCompareHistory > 0.5
+        && gl_FragCoord.x / max(uViewportWidth, 1.0) < uComparePosition) {
+      displayYear = 9999.0;
+    }
+    if (displayYear < 9000.0) {
+      if (vYear > displayYear) discard;
       if (vYear < 1.0) {
         // Ghost: a 2 px screen-space checker keeps every other pixel, so the
         // undated fabric reads as a hatched shadow in any theme, and what
@@ -128,7 +142,8 @@ const FRAGMENT_SHADER = /* glsl */ `
 
     // Night themes light the upper floors; restrained so towers read as
     // lit buildings, not lanterns.
-    color += uGlow * uGlowAmount * (0.35 + 0.65 * vRel) * (1.0 - roof * 0.8);
+    color += uGlow * uGlowAmount * (0.35 + 0.65 * vRel) * (1.0 - roof * 0.8)
+      * (1.0 - uHybrid);
 
     #ifdef LANDMARK
     // A selected model glows with the accent colour and breathes gently.
@@ -136,6 +151,16 @@ const FRAGMENT_SHADER = /* glsl */ `
       color = mix(color, uHighlight, 0.42 + 0.18 * uPulse);
     }
     #endif
+
+    // In aerial mode, keep roof forms and façade direction without painting
+    // opaque blocks over the photography. Screen-door transparency preserves
+    // correct depth ordering across the consolidated building meshes.
+    if (uHybrid > 0.001) {
+      float keep = mix(0.08, 0.24, roof) * uHybrid + (1.0 - uHybrid);
+      vec2 ditherCell = floor(gl_FragCoord.xy);
+      float threshold = fract(ditherCell.x * 0.75487766 + ditherCell.y * 0.56984029);
+      if (threshold > keep) discard;
+    }
 
     vec3 toFrag = vWorld - uCameraPos;
     float dist = length(toFrag);
@@ -239,6 +264,10 @@ export function createStructures(THREE, options) {
     uRoof: { value: new THREE.Vector3(0.4, 0.37, 0.34) },
     uGlow: { value: new THREE.Vector3(1, 0.7, 0.4) },
     uGlowAmount: { value: 0 },
+    uHybrid: { value: 0 },
+    uCompareHistory: { value: 0 },
+    uComparePosition: { value: 0.5 },
+    uViewportWidth: { value: 1 },
   };
 
   function makeSolidMaterial(landmark = false) {
@@ -299,8 +328,8 @@ export function createStructures(THREE, options) {
       minX: projection.lonToX(zone.bounds.west), maxX: projection.lonToX(zone.bounds.east),
       minZ: projection.latToZ(zone.bounds.north), maxZ: projection.latToZ(zone.bounds.south),
     };
-    tiers.push({ zone: zone.id, tier: tierMeta.tier, mesh, packed, box, grow: 0,
-      count: parsed.count, meta: tierMeta });
+    tiers.push({ zone: zone.id, tier: tierMeta.tier, mesh, packed, parsed, originX, originZ,
+      box, grow: 0, count: parsed.count, meta: tierMeta });
     buildingTotal += parsed.count;
     return parsed.count;
   }
@@ -448,15 +477,53 @@ export function createStructures(THREE, options) {
   let clock = 0;
   let lastStats = { drawnBuildings: 0, drawCalls: 0, tiers: [] };
 
+  // The selected footprint lives outside the structures group so inspection
+  // still works in the default aerial-only mode.
+  const inspectionGroup = new THREE.Group();
+  inspectionGroup.name = 'building-inspection';
+  let selectedBuilding = null;
+  let buildingOutline = null;
+
+  function setSelectedBuilding(record) {
+    if (buildingOutline) {
+      inspectionGroup.remove(buildingOutline);
+      buildingOutline.geometry.dispose();
+      buildingOutline.material.dispose();
+      buildingOutline = null;
+    }
+    selectedBuilding = record || null;
+    if (!record?.ring?.length) return;
+    const points = record.ring.map(([x, z]) => new THREE.Vector3(x, 0, z));
+    const geometry = new THREE.BufferGeometry().setFromPoints(points);
+    const material = new THREE.LineBasicMaterial({
+      color: 0xffc46b, transparent: true, opacity: 0.96,
+      depthTest: false, depthWrite: false,
+    });
+    buildingOutline = new THREE.LineLoop(geometry, material);
+    buildingOutline.name = 'selected-building-footprint';
+    buildingOutline.renderOrder = 60;
+    inspectionGroup.add(buildingOutline);
+  }
+
   function update(ctx) {
     const { camera, state, exaggeration, dt, sunDir, fogDensity } = ctx;
     const on = !!state.layers.structures;
     group.visible = on;
+    const hScale = heightScale(exaggeration, state.structureHeight);
+    const hybrid = state.layers.imagery
+      && (state.era === 'present' || state.compareMode === 'history'
+        || state.compareMode === 'aerial')
+      ? Math.max(0, Math.min(1, (10000 - state.camDist) / 7000)) : 0;
+    if (buildingOutline && selectedBuilding) {
+      const shownAsVolume = on && hybrid < 0.98;
+      const height = shownAsVolume ? selectedBuilding.height * hScale : 0;
+      buildingOutline.position.y = selectedBuilding.ground * exaggeration + height + 4;
+      buildingOutline.visible = true;
+    }
     if (!on) {
       lastStats = { drawnBuildings: 0, drawCalls: 0, tiers: [] };
       return lastStats;
     }
-    const hScale = heightScale(exaggeration, state.structureHeight);
     const detail = state.structureDetail;
     const q = state.quality;
     camXZ.x = camera.position.x;
@@ -469,6 +536,9 @@ export function createStructures(THREE, options) {
     sharedUniforms.uKey.value = (ctx.light || state).keyLight;
     sharedUniforms.uAmbient.value = (ctx.light || state).ambient;
     sharedUniforms.uFogDensity.value = fogDensity;
+    sharedUniforms.uHybrid.value = hybrid;
+    sharedUniforms.uCompareHistory.value = state.compareMode === 'history' ? 1 : 0;
+    sharedUniforms.uComparePosition.value = state.comparePosition;
 
     const fraction = drawFraction(q, detail);
     let drawn = 0;
@@ -532,6 +602,7 @@ export function createStructures(THREE, options) {
 
   return {
     group,
+    inspectionGroup,
     tiers,
     bridges: bridgeInfo,
     update,
@@ -556,6 +627,45 @@ export function createStructures(THREE, options) {
       const hits = raycaster.intersectObjects(proxies, false);
       return hits.length ? hits[0].object.userData.model : null;
     },
+
+    /** Find the footprint under a world-space ground point, with a small click tolerance. */
+    pickBuildingAt(x, z, toleranceM = 18) {
+      let best = null;
+      let bestDistance = toleranceM;
+      for (const t of tiers) {
+        if (distanceToBox(x, z, t.box) > toleranceM) continue;
+        const lx = x - t.originX;
+        const lz = z - t.originZ;
+        for (let index = 0; index < t.parsed.buildings.length; index += 1) {
+          const building = t.parsed.buildings[index];
+          const distance = distanceToFootprint(lx, lz, building.poly);
+          if (distance > bestDistance) continue;
+          const ring = [];
+          let cx = 0;
+          let cz = 0;
+          for (let i = 0; i < building.poly.length; i += 2) {
+            const px = t.originX + building.poly[i];
+            const pz = t.originZ + building.poly[i + 1];
+            ring.push([px, pz]);
+            cx += px;
+            cz += pz;
+          }
+          cx /= ring.length;
+          cz /= ring.length;
+          bestDistance = distance;
+          best = {
+            ...building, id: `${t.zone}/${t.tier}/${index}`,
+            zone: t.zone, tier: t.tier, ring, x: cx, z: cz,
+            ground: groundAt(cx, cz), distance,
+          };
+          if (distance === 0) return best;
+        }
+      }
+      return best;
+    },
+
+    setSelectedBuilding,
+    get selectedBuilding() { return selectedBuilding; },
 
     setSelectedModel(index) {
       selectedModel = Number.isInteger(index) ? index : -1;
@@ -589,6 +699,7 @@ export function createStructures(THREE, options) {
 
     setResolution(w, h) {
       if (bridgeLines) bridgeLines.material.uniforms.uResolution.value.set(w, h);
+      sharedUniforms.uViewportWidth.value = w;
     },
 
     setTheme(theme) {
@@ -624,6 +735,8 @@ export function createStructures(THREE, options) {
         landmarkMesh.material.dispose();
       }
       for (const proxy of proxies) proxy.geometry.dispose();
+      setSelectedBuilding(null);
+      inspectionGroup.parent?.remove(inspectionGroup);
       group.parent?.remove(group);
     },
   };

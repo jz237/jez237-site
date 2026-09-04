@@ -7,52 +7,52 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090403';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090404';
 
-import { createStore } from './state.js?v=philly-2026090403';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090403';
-import { effectiveLight } from './solar.js?v=philly-2026090403';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090403';
+import { createStore } from './state.js?v=philly-2026090404';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090404';
+import { effectiveLight } from './solar.js?v=philly-2026090404';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090404';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090403';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090403';
+} from './geo.js?v=philly-2026090404';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090404';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090403';
+} from './tours.js?v=philly-2026090404';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090403';
+} from './urlstate.js?v=philly-2026090404';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090403';
+} from './degraded.js?v=philly-2026090404';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090403';
-import { createImageryDetail } from './imagery-detail.js?v=philly-2026090403';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090403';
-import { createPostFX } from './postfx.js?v=philly-2026090403';
-import { createCameraRig } from './camera.js?v=philly-2026090403';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090403';
-import { createStructures } from './structures.js?v=philly-2026090403';
+} from './terrain.js?v=philly-2026090404';
+import { createImageryDetail } from './imagery-detail.js?v=philly-2026090404';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090404';
+import { createPostFX } from './postfx.js?v=philly-2026090404';
+import { createCameraRig } from './camera.js?v=philly-2026090404';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090404';
+import { createStructures } from './structures.js?v=philly-2026090404';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090403';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090403';
+} from './structures-data.js?v=philly-2026090404';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090404';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090403';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090403';
+} from './flood.js?v=philly-2026090404';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090404';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090403';
+} from './vectors.js?v=philly-2026090404';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090403';
-import { getTheme } from './themes.js?v=philly-2026090403';
+} from './ui.js?v=philly-2026090404';
+import { getTheme } from './themes.js?v=philly-2026090404';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -78,6 +78,9 @@ const dom = {
   timelineTime: $('timelineTime'),
   searchInput: $('searchInput'), searchResults: $('searchResults'),
   onboarding: $('onboarding'), obStart: $('obStart'), obTour: $('obTour'),
+  compareBar: $('compareBar'), compareSlider: $('compareSlider'),
+  compareDivider: $('compareDivider'), compareLeft: $('compareLeft'),
+  compareRight: $('compareRight'), compareClose: $('compareClose'),
 };
 
 // ---------------------------------------------------------------------------
@@ -309,9 +312,12 @@ async function boot() {
       const credit = $('imageryCredit');
       if (!credit) return;
       const suffix = detail.state === 'active'
-        ? ` · ${detail.resolutionM.toFixed(1)} m/px building detail`
+        ? ` · ${detail.resolutionM.toFixed(1)} m/px ${detail.tier === 'ultra'
+          ? 'block detail' : 'city detail'}`
         : detail.state === 'loading' ? ' · loading building detail…' : '';
       credit.textContent = `Aerial imagery: USDA / USGS The National Map${suffix}`;
+      setValueNote('imageryDetail', detail.state === 'active'
+        ? `${detail.resolutionM.toFixed(1)} m/px` : '');
     },
   });
 
@@ -389,6 +395,7 @@ async function boot() {
       quality: effectiveQuality,
     });
     scene.add(structures.group);
+    scene.add(structures.inspectionGroup);
     fillStructureFacts(data.structures.manifest, structures);
   }
 
@@ -428,8 +435,21 @@ async function boot() {
   const motion = createMotion(store, projection);
   const ui = wireInterface({ store, motion, data, projection, rig, structures });
 
-  // A click on the canvas (a press that neither moved nor lingered) picks a
-  // landmark model and opens its card. Labels handle their own clicks.
+  // Comparison modes bring their required counterpart into view. The choices
+  // remain ordinary state, so the resulting split survives a shared URL.
+  store.subscribe((state, changed) => {
+    if (!changed.has('compareMode')) return;
+    if (state.compareMode === 'history' && state.era === 'present') {
+      store.set({ era: 'industrial' }, { source: 'comparison' });
+    } else if (state.compareMode === 'flood' && !state.layers.flood) {
+      store.set({ layers: { flood: true } }, { source: 'comparison' });
+    } else if (state.compareMode === 'aerial' && !state.layers.imagery) {
+      store.set({ layers: { imagery: true } }, { source: 'comparison' });
+    }
+  });
+
+  // A click first tries a schematic landmark, then solves the ray against the
+  // height field and finds the actual packed OSM footprint underneath.
   const picker = new THREE.Raycaster();
   const pickPoint = new THREE.Vector2();
   let press = null;
@@ -448,7 +468,46 @@ async function boot() {
       -((event.clientY - rect.top) / rect.height) * 2 + 1);
     picker.setFromCamera(pickPoint, rig.camera);
     const model = structures.pickLandmark(picker);
-    if (model) ui.openCard(model.landmark);
+    if (model) {
+      structures.setSelectedBuilding(null);
+      ui.openCard(model.landmark);
+      return;
+    }
+    const point = new THREE.Vector3();
+    const plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0);
+    let groundY = 0;
+    for (let i = 0; i < 4; i += 1) {
+      plane.constant = -groundY;
+      if (!picker.ray.intersectPlane(plane, point)) return;
+      groundY = sampleElevation(projection.xToLon(point.x), projection.zToLat(point.z))
+        * (store.isLayerOn('terrain') ? store.value('exaggeration') : 0);
+    }
+    const building = structures.pickBuildingAt(point.x, point.z);
+    if (!building) return;
+    structures.setSelectedBuilding(building);
+    const lon = projection.xToLon(building.x);
+    const lat = projection.zToLat(building.z);
+    const sourceLabels = {
+      measured: 'Measured height', levels: 'Estimated from storeys',
+      curated: 'Curated reference height', merged: 'Merged source height',
+      default: 'Estimated from building type',
+    };
+    ui.openBuilding('Selected building', {
+      category: 'OpenStreetMap building footprint',
+      facts: [
+        ['Height', `${building.height.toFixed(1)} m · ${sourceLabels[building.source] || building.source}`],
+        ['Construction', building.year
+          ? `${building.year} · ${building.yearSource === 'osm' ? 'OpenStreetMap' : 'curated source'}`
+          : 'Date not included in the source'],
+        ['Name / address', 'Not included in this compact layer'],
+        ['Location', `${lat.toFixed(5)}, ${lon.toFixed(5)}`],
+      ],
+      text: 'This is the real mapped footprint. The outline and height provenance are shown '
+        + 'without inferring a name, address or construction date that the packed source does not contain.',
+      sources: [['OpenStreetMap contributors', 'https://www.openstreetmap.org/copyright']],
+      note: `Footprint · ${building.zone} · ${building.tier}`,
+      lon, lat, building: true,
+    });
   });
 
   applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
@@ -570,12 +629,19 @@ async function boot() {
     const ratio = Math.min(window.devicePixelRatio || 1, cap);
     renderer.setPixelRatio(ratio);
     renderer.setSize(viewW, viewH, false);
+    const drawW = Math.max(1, Math.round(viewW * ratio));
     postfx.setSize(viewW, viewH, ratio);
     rig.setAspect(viewW / viewH);
     for (const entry of overlays.lines) {
       entry.material.uniforms.uResolution.value.set(viewW, viewH);
     }
-    structures?.setResolution(viewW, viewH);
+    structures?.setResolution(drawW, Math.max(1, Math.round(viewH * ratio)));
+    terrain.uniforms.uViewportWidth.value = drawW;
+    for (const entry of overlays.areas) {
+      if (entry.material.uniforms.uViewportWidth) {
+        entry.material.uniforms.uViewportWidth.value = drawW;
+      }
+    }
   }
   window.addEventListener('resize', resize);
   resize();
@@ -614,6 +680,10 @@ async function boot() {
           .reduce((a, e) => a + (e.polygons || 0), 0),
       },
       landmarkModels: structures ? structures.landmarkModelCount : 0,
+      buildingSelection: structures?.selectedBuilding
+        ? { id: structures.selectedBuilding.id, height: structures.selectedBuilding.height,
+          source: structures.selectedBuilding.source, year: structures.selectedBuilding.year }
+        : null,
       card: ui.cardName,
       viewName: ui.viewName,
       era: {
@@ -667,14 +737,18 @@ async function boot() {
     terrain.uniforms.uExag.value = exaggeration;
 
     imageryClock += dt;
+    imageryDetail.tick(dt);
     if (imageryClock >= 0.5) {
       imageryClock = 0;
       imageryDetail.consider(
         now,
-        state.layers.imagery && terrain.hasImagery,
+        state.layers.imagery && terrain.hasImagery
+          && (state.era === 'present' || state.compareMode === 'aerial'
+            || state.compareMode === 'history'),
         viewW,
         window.devicePixelRatio || 1,
         effectiveQuality,
+        state.imageryDetail,
       );
     }
 
@@ -728,6 +802,7 @@ async function boot() {
       u.uLift.value = entry.kind === 'water' ? lift * 0.45 : entry.kind === 'flood' ? lift * 0.6 : lift * 0.3;
       u.uCameraPos.value.copy(camera.position);
       u.uFogDensity.value = terrain.uniforms.uFogDensity.value;
+      if (u.uComparePosition) u.uComparePosition.value = state.comparePosition;
       if (entry.kind === 'water') {
         u.uSunDir.value.copy(sunDir);
         u.uTime.value = elapsed;
@@ -1005,9 +1080,16 @@ function applyState(state, ctx) {
   u.uContourInterval.value = state.contourInterval;
   u.uHillshade.value = state.layers.hillshade ? 1 : 0;
   u.uReliefOn.value = state.layers.terrain ? 1 : 0;
-  u.uImageryOn.value = state.layers.imagery && terrain.hasImagery ? 1 : 0;
+  // Modern photography is deliberately suppressed in every historical view.
+  // The historical comparison mode exposes it only on the labelled present side.
+  u.uImageryOn.value = state.layers.imagery && terrain.hasImagery
+    && state.era === 'present' ? 1 : 0;
+  u.uCompareMode.value = state.compareMode === 'aerial' ? 1
+    : state.compareMode === 'history' ? 2 : state.compareMode === 'flood' ? 3 : 0;
+  u.uComparePosition.value = state.comparePosition;
   const imageryCredit = $('imageryCredit');
-  if (imageryCredit) imageryCredit.hidden = !u.uImageryOn.value;
+  if (imageryCredit) imageryCredit.hidden = !(u.uImageryOn.value
+    || state.compareMode === 'aerial' || state.compareMode === 'history');
 
   postfx.setIntensity(light.glow * 0.85);
   postfx.setThreshold(state.theme === 'noir' ? 0.5 : 0.72);
@@ -1024,6 +1106,10 @@ function applyState(state, ctx) {
     if (entry.kind === 'road-1' && era.motorways === 'hide') on = false;
     entry.mesh.visible = on;
     const uu = entry.mesh.material.uniforms;
+    if (entry.layer === 'flood' && uu.uCompareClip) {
+      uu.uCompareClip.value = state.compareMode === 'flood' ? 1 : 0;
+      uu.uComparePosition.value = state.comparePosition;
+    }
     if (entry.layer === 'roads' && uu.uOpacity) {
       const tier = Number(entry.kind.split('-')[1]);
       // Secondary roads and ramps are context, not subject: at full strength
@@ -1305,17 +1391,47 @@ function wireInterface(deps) {
   const landmarkByName = (name) => (data.landmarks?.landmarks || []).find((l) => l.n === name);
   const card = createCard({
     cards: data.landmarkCards?.cards || null,
-    onFly: (name) => {
+    onFly: (name, record) => {
+      if (record?.building) {
+        motion.flyTo({ lon: record.lon, lat: record.lat,
+          camDist: Math.min(store.value('camDist'), 2200) }, { label: name });
+        return;
+      }
       const landmark = landmarkByName(name);
       if (!landmark) return;
       motion.flyTo({ lon: landmark.lon, lat: landmark.lat,
         camDist: Math.min(store.value('camDist'), 3200) }, { label: name });
     },
-    onChange: (name) => {
-      const model = name && structures ? structures.modelByLandmark(name) : null;
+    onChange: (name, record) => {
+      const model = name && !record?.building && structures
+        ? structures.modelByLandmark(name) : null;
       structures?.setSelectedModel(model ? model.index : -1);
+      if (!record?.building) structures?.setSelectedBuilding(null);
     },
   });
+  const compareLabels = {
+    aerial: ['Aerial', 'Relief'],
+    history: ['Present aerial', 'Selected era'],
+    flood: ['Normal', 'Flood hazard'],
+  };
+  dom.compareSlider?.addEventListener('input', () => {
+    store.set({ comparePosition: Number(dom.compareSlider.value) / 100 },
+      { source: 'comparison' });
+  });
+  dom.compareClose?.addEventListener('click', () => {
+    store.set({ compareMode: 'off' }, { source: 'comparison' });
+  });
+  function syncComparison(state) {
+    const labels = compareLabels[state.compareMode];
+    dom.compareBar.hidden = !labels;
+    document.body.classList.toggle('compare-active', Boolean(labels));
+    if (!labels) return;
+    dom.compareLeft.textContent = labels[0];
+    dom.compareRight.textContent = labels[1];
+    const pct = Math.round(state.comparePosition * 100);
+    dom.compareSlider.value = String(pct);
+    dom.compareBar.style.setProperty('--compare-position', `${pct}%`);
+  }
   const modelCount = $('aboutModelCount');
   if (modelCount) modelCount.textContent = String(structures?.landmarkModelCount || 0);
 
@@ -1669,12 +1785,14 @@ function wireInterface(deps) {
     layerToggles,
     store,
     openCard(name, options) { return card.open(name, options); },
+    openBuilding(name, record, options) { return card.openCustom(name, record, options); },
     closeCard() { card.close(); },
     get cardName() { return card.openName; },
     syncControls(state) {
       controls.sync(state);
       layerToggles.sync(state);
       presets.sync(state);
+      syncComparison(state);
       const preset = getPreset(state.preset);
       // A shared link can carry a name; it heads the readout until a preset
       // restages the view.

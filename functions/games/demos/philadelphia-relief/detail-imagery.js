@@ -7,8 +7,10 @@ const REGION = {
   south: 39.7,
   north: 40.55,
 };
-const DETAIL_SPAN = { lon: 0.096, lat: 0.072 };
-const GRID_STEP = { lon: 0.04, lat: 0.03 };
+const TIERS = {
+  detail: { span: { lon: 0.096, lat: 0.072 }, grid: { lon: 0.04, lat: 0.03 } },
+  ultra: { span: { lon: 0.032, lat: 0.024 }, grid: { lon: 0.012, lat: 0.009 } },
+};
 const ALLOWED_SIZES = new Set([2048, 4096]);
 const CACHE_SECONDS = 30 * 24 * 60 * 60;
 
@@ -24,20 +26,23 @@ export function detailRequest(searchParams) {
   const requestedLon = Number(searchParams.get("lon"));
   const requestedLat = Number(searchParams.get("lat"));
   const size = Number(searchParams.get("size"));
+  const tier = searchParams.get("tier") || "detail";
+  const spec = TIERS[tier];
   if (!Number.isFinite(requestedLon) || !Number.isFinite(requestedLat)) return null;
+  if (!spec) return null;
   if (!ALLOWED_SIZES.has(size)) return null;
   if (requestedLon < REGION.west || requestedLon > REGION.east) return null;
   if (requestedLat < REGION.south || requestedLat > REGION.north) return null;
 
-  const halfLon = DETAIL_SPAN.lon / 2;
-  const halfLat = DETAIL_SPAN.lat / 2;
+  const halfLon = spec.span.lon / 2;
+  const halfLat = spec.span.lat / 2;
   const lon = clamp(
-    quantize(requestedLon, REGION.west, GRID_STEP.lon),
+    quantize(requestedLon, REGION.west, spec.grid.lon),
     REGION.west + halfLon,
     REGION.east - halfLon,
   );
   const lat = clamp(
-    quantize(requestedLat, REGION.south, GRID_STEP.lat),
+    quantize(requestedLat, REGION.south, spec.grid.lat),
     REGION.south + halfLat,
     REGION.north - halfLat,
   );
@@ -47,8 +52,8 @@ export function detailRequest(searchParams) {
     south: lat - halfLat,
     north: lat + halfLat,
   };
-  const key = `${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
-  return { lon, lat, size, bounds, key };
+  const key = `${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
+  return { tier, lon, lat, size, bounds, key };
 }
 
 function sameOriginRequest(request) {

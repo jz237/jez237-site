@@ -18,7 +18,7 @@ import {
   drawFraction, drawIndexCount, heightScale, distanceToBox, deckProfile, resample,
   TIER_PLAN, TIER_ORDER,
   zoneReachM, shouldActivateZone,
-  tierAssetPath,
+  tierAssetPath, pointInFootprint, distanceToFootprint,
 } from '../src/structures-data.js';
 import { CONTROLS, LAYERS, defaults, coerce } from '../src/schema.js';
 import { createStore } from '../src/state.js';
@@ -222,6 +222,14 @@ test('extrusion', async (t) => {
     // less than one third of the width of a 6 km close-up frame.
     assert.ok(340 * heightScale(10, 1) < 6000 / 3);
   });
+});
+
+test('building footprint inspection', () => {
+  const square = new Float32Array([0, 0, 20, 0, 20, 20, 0, 20]);
+  assert.equal(pointInFootprint(10, 10, square), true);
+  assert.equal(pointInFootprint(30, 10, square), false);
+  assert.equal(distanceToFootprint(10, 10, square), 0);
+  assert.equal(distanceToFootprint(25, 10, square), 5);
 });
 
 // ---------------------------------------------------------------------------

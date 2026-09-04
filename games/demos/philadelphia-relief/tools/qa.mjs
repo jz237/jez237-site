@@ -32,6 +32,7 @@ const VIEWPORTS = [
 const IGNORE = [
   /Failed to load resource.*favicon/i,
   /\[\.WebGL-.*\]\s*GL Driver Message/i,
+  /analytics\.google\.com\/g\/collect/i,
 ];
 
 async function run() {
@@ -82,6 +83,7 @@ async function run() {
       problems.push(`[${viewport.id}] pageerror: ${err.message}`);
     });
     page.on('requestfailed', (req) => {
+      if (/analytics\.google\.com\/g\/collect/i.test(req.url())) return;
       problems.push(`[${viewport.id}] request failed: ${req.url()} ${req.failure()?.errorText}`);
     });
 
@@ -680,7 +682,12 @@ async function structuresPass(page, viewport, shot, problems, report) {
     }
   };
   const readoutNear = async (lat, lon, label) => {
-    await settle();
+    await page.waitForFunction(({ expectedLat, expectedLon }) => {
+      const text = document.getElementById('outCoords')?.textContent || '';
+      const match = /([\d.]+)° N, ([\d.]+)° W/.exec(text);
+      return match && Math.abs(Number(match[1]) - expectedLat) < 0.012
+        && Math.abs(Number(match[2]) + expectedLon) < 0.012;
+    }, { expectedLat: lat, expectedLon: lon }, { timeout: 14000 }).catch(() => {});
     const text = await page.evaluate(() => document.getElementById('outCoords')?.textContent || '');
     const m = /([\d.]+)° N, ([\d.]+)° W/.exec(text);
     const ok = m && Math.abs(Number(m[1]) - lat) < 0.012 && Math.abs(Number(m[2]) + lon) < 0.012;
@@ -703,8 +710,8 @@ async function structuresPass(page, viewport, shot, problems, report) {
   await closeSheet();
   await readoutNear(39.9519, -75.1285, 'Benjamin Franklin Bridge card');
   const bfb = await stats();
-  if (!(bfb?.structures?.drawnBuildings > 0) || !(bfb?.bridges?.length >= 4)) {
-    problems.push(`[${viewport.id}] bridge preset shows no structures: ${JSON.stringify(bfb?.structures)}`);
+  if (bfb?.structuresVisible || !(bfb?.bridges?.length >= 4)) {
+    problems.push(`[${viewport.id}] bridge preset did not preserve aerial-first mode: ${JSON.stringify(bfb)}`);
   }
   await shot('14-route-ben-franklin-card');
 
@@ -729,8 +736,8 @@ async function structuresPass(page, viewport, shot, problems, report) {
   await page.locator('#btnHome').click();
   await readoutNear(39.9505, -75.1655, 'Home button');
   const home = await stats();
-  if (!(home?.structures?.drawnBuildings >= (viewport.isMobile ? 1500 : 2500))) {
-    problems.push(`[${viewport.id}] Home shows only ${home?.structures?.drawnBuildings} buildings`);
+  if (home?.structuresVisible || home?.structures?.drawnBuildings !== 0) {
+    problems.push(`[${viewport.id}] Home did not restore aerial-first mode: ${JSON.stringify(home?.structures)}`);
   }
   await shot('16-route-home');
 
@@ -916,7 +923,7 @@ async function structuresPass(page, viewport, shot, problems, report) {
   // Suburban zones are lazy: King of Prussia's notable buildings arrive once
   // the camera gets there (the first-frame check above proves they were not
   // fetched up front).
-  await goto('#x=-75.383&y=40.089&d=7000&b=20&p=60', 6000);
+  await goto('#x=-75.383&y=40.089&d=7000&b=20&p=60&Lx=1', 6000);
   const kop = await stats();
   if (!(kop?.zones || []).includes('schuylkill-valley')
       || !(kop?.structureTiers || []).some((t) => t.startsWith('schuylkill-valley/'))) {

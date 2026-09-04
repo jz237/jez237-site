@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090403';
-import { ERA_IDS } from './eras.js?v=philly-2026090403';
+import { WEATHERS } from './solar.js?v=philly-2026090404';
+import { ERA_IDS } from './eras.js?v=philly-2026090404';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -16,6 +16,8 @@ import { ERA_IDS } from './eras.js?v=philly-2026090403';
 const THEMES = ['dusk', 'slate', 'verdant', 'blueprint', 'noir'];
 const QUALITY = ['auto', 'performance', 'balanced', 'cinematic'];
 const FLOOD_MODES = ['fema', 'slr'];
+const IMAGERY_DETAIL = ['data', 'standard', 'maximum'];
+const COMPARE_MODES = ['off', 'aerial', 'history', 'flood'];
 const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
 
 /**
@@ -91,6 +93,12 @@ export const CONTROLS = {
     k: 'bo', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.15,
     group: 'carto', label: 'Boundary strength',
   },
+  imageryDetail: {
+    k: 'id', kind: 'enum', values: IMAGERY_DETAIL, def: 'standard',
+    group: 'carto', label: 'Aerial detail',
+    hint: 'Data Saver stops at the city tile. Standard adds a source-resolution block tile; ' +
+      'Maximum uses 4096 px for every close tile. Nearby cells are prefetched and cached.',
+  },
 
   // ---- structures --------------------------------------------------------
   structureDetail: {
@@ -150,6 +158,16 @@ export const CONTROLS = {
     hint: 'A past era shows only buildings with a documented date as solid, hides what is ' +
       'documented newer, and ghosts the undated majority. Bridges, railways and motorways ' +
       'follow their real opening years. The relief and shoreline are always today\'s.',
+  },
+  compareMode: {
+    k: 'cm', kind: 'enum', values: COMPARE_MODES, def: 'off',
+    group: 'scene', label: 'Compare',
+    hint: 'Drag the divider on the map. Compare aerial with relief, the present with the ' +
+      'selected era, or normal terrain with the selected flood layer.',
+  },
+  comparePosition: {
+    k: 'cp', kind: 'range', min: 0.05, max: 0.95, step: 0.01, def: 0.5,
+    group: 'scene', label: 'Comparison divider', ui: false,
   },
   floodMode: {
     k: 'fm', kind: 'enum', values: FLOOD_MODES, def: 'fema',
@@ -296,4 +314,5 @@ export const CHEAP_KEYS = new Set([
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
   'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era',
+  'imageryDetail', 'compareMode', 'comparePosition',
 ]);

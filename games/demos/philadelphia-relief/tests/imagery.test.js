@@ -9,7 +9,8 @@ import { ASSETS, assess, MODE } from '../src/degraded.js';
 import { createStore } from '../src/state.js';
 import { decodeState, encodeState } from '../src/urlstate.js';
 import {
-  DETAIL_DISTANCE_M, detailCellFor, detailImageSize, detailResolutionM, detailUrl,
+  DETAIL_DISTANCE_M, ULTRA_DISTANCE_M, detailCellFor, detailImageSize,
+  detailResolutionM, detailUrl, imageryTierFor, neighbourCells,
 } from '../src/imagery-detail.js';
 import { detailRequest } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
 
@@ -87,21 +88,35 @@ test('building-resolution imagery', async (t) => {
     assert.ok(cell.bounds.south >= region.south && cell.bounds.north <= region.north);
     assert.ok(detailResolutionM(cell, 4096, projection) < 2.1);
     assert.ok(detailResolutionM(cell, 2048, projection) < 4.2);
-    assert.match(detailUrl(cell, 4096), /^detail-imagery\?lon=/);
+    assert.match(detailUrl(cell, 4096), /^detail-imagery\?tier=detail&lon=/);
     assert.equal(DETAIL_DISTANCE_M, 16000);
+  });
+
+  await t.test('adds a source-resolution ultra cell only below the block threshold', () => {
+    const cell = detailCellFor(-75.1652, 39.9526, region, 'ultra');
+    assert.equal(cell.tier, 'ultra');
+    assert.ok(detailResolutionM(cell, 4096, projection) < 0.8);
+    assert.ok(detailResolutionM(cell, 2048, projection) < 1.4);
+    assert.equal(imageryTierFor(ULTRA_DISTANCE_M, 'standard'), 'ultra');
+    assert.equal(imageryTierFor(ULTRA_DISTANCE_M, 'data'), 'detail');
+    assert.equal(imageryTierFor(DETAIL_DISTANCE_M + 1, 'maximum'), null);
+    assert.ok(neighbourCells(cell, region).length >= 2);
   });
 
   await t.test('chooses a memory-safe phone texture and full desktop texture', () => {
     assert.equal(detailImageSize(390, 3, 'balanced'), 2048);
     assert.equal(detailImageSize(1440, 1.5, 'balanced'), 4096);
     assert.equal(detailImageSize(1920, 2, 'performance'), 2048);
+    assert.equal(detailImageSize(390, 3, 'balanced', 'maximum', 'ultra'), 4096);
+    assert.equal(detailImageSize(1440, 1, 'cinematic', 'standard', 'ultra'), 2048);
   });
 
   await t.test('the edge function accepts only bounded map cells and two sizes', () => {
     const valid = detailRequest(new URLSearchParams({
-      lon: '-75.1652', lat: '39.9526', size: '4096',
+      tier: 'ultra', lon: '-75.1652', lat: '39.9526', size: '4096',
     }));
     assert.ok(valid);
+    assert.equal(valid.tier, 'ultra');
     assert.equal(valid.size, 4096);
     assert.ok(valid.bounds.west >= region.west && valid.bounds.east <= region.east);
     assert.equal(detailRequest(new URLSearchParams({
@@ -109,6 +124,9 @@ test('building-resolution imagery', async (t) => {
     })), null);
     assert.equal(detailRequest(new URLSearchParams({
       lon: '-75.16', lat: '39.95', size: '8192',
+    })), null);
+    assert.equal(detailRequest(new URLSearchParams({
+      tier: 'planet', lon: '-75.16', lat: '39.95', size: '4096',
     })), null);
   });
 });

@@ -10,8 +10,8 @@
  * without a renderer.
  */
 
-import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090403';
-import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090403';
+import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090404';
+import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090404';
 
 /** Keys that are angles and must take the short way round when blending. */
 const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
@@ -24,7 +24,8 @@ const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
  * selecting a shot must not stomp on either.
  */
 export const PRESET_EXCLUDED = new Set(['quality', 'animationSpeed', 'floodMode', 'seaLevelRise',
-  'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era']);
+  'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era', 'imageryDetail',
+  'compareMode', 'comparePosition']);
 /** Layers that are the viewer's own choice: a preset never switches them. */
 export const PRESET_EXCLUDED_LAYERS = new Set(['flood']);
 
