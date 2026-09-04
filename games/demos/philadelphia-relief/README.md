@@ -101,8 +101,18 @@ zones** rather than a region-wide dump:
 
 | Zone | Rule | Buildings |
 |---|---|---|
-| Center City & University City (South St → Fairmount, Drexel/Penn → the Delaware) | every footprint, rowhouses included | 12,172 |
-| Inner Philadelphia & Camden (Navy Yard and the stadiums → Port Richmond and Temple, the airport's edge → the Camden waterfront) | notable only: ≥20 m, ≥2,500 m² and ≥8 m, or named and substantial | 2,338 |
+| Center City & University City (South St → Fairmount, Drexel/Penn → the Delaware) | every footprint, rowhouses included | 12,170 |
+| Inner Philadelphia & Camden (Navy Yard and the stadiums → Port Richmond and Temple, the airport's edge → the Camden waterfront) | notable only: ≥20 m, ≥2,500 m² and ≥8 m, or named and substantial | 2,336 |
+| Eight suburban zones (King of Prussia–Conshohocken, the Main Line, Northeast Philadelphia, Cherry Hill, the airport and Chester, Lower Bucks, Trenton, Wilmington) | notable only, **lazy-loaded** as the camera approaches | 2,821 |
+
+Eight further **suburban zones** — King of Prussia to Conshohocken, the Main
+Line, Northeast Philadelphia, Cherry Hill, the airport and Chester, Lower Bucks
+(Bristol, Levittown, Bensalem), Trenton and Wilmington — carry notable buildings
+only and are **lazy**: nothing of theirs is fetched at start-up. A zone's tiers
+arrive once the orbit target comes within ~15 km of it with the camera under
+45 km out (`shouldActivateZone` in `src/structures-data.js`), and a zone you have
+visited stays loaded. The manifest marks them `lazy` and the About panel's
+building count includes them.
 
 Each zone is split into three **height tiers** (tall ≥35 m, mid ≥12 m, low) and
 each tier is exactly **one draw call**. Buildings are packed tallest-first, so the
@@ -111,7 +121,8 @@ density down keeps the skyline and sheds the rowhouse fabric. Tiers frustum-cull
 as a unit and **rise out of the ground** as the camera enters their range (tall
 from the regional view, mid from ~40 km, low from ~15 km, all scaled by the
 slider and quality). Performance mode never fetches the low tier at all, so a
-phone downloads 402 KB of buildings instead of 777 KB.
+phone downloads the two core zones' tall and mid tiers (about 400 KB) instead of the
+full 970 KB, and suburban zones only when it visits them.
 
 Geometry is lean: a base ring, a roof ring, and face normals recovered from
 screen-space derivatives in the fragment shader, so walls share their ring
@@ -155,7 +166,7 @@ non-modal, keyboard-reachable, closes with `Esc`, and highlights its model.
 quoted live in the About panel: 76% carry a measured OSM `height`
 (Philadelphia's come largely from the city's LiDAR-derived footprint import),
 8% are estimated from `building:levels`, 16% from
-building type, and **23 skyline towers with no height in OSM**
+building type, and **24 buildings with no usable height in OSM**
 (One Liberty Place, Comcast Center, BNY Mellon Center, Three Logan Square and
 their neighbours) use rounded public reference heights supplied by this project
 and flagged `curated`. The City Hall tower is a curated 26 m box on top of a
@@ -202,8 +213,8 @@ Lossless WebP was chosen over PNG for the heightmap: it is bit-exact (the build
 verifies this and refuses to ship otherwise) and ~32% smaller, which matters for a
 2048² hero asset on mobile.
 
-**The structures payload** is 777 KB for 14,510 buildings
-(169,805 footprint vertices). The PHB1 stream is 8 bytes per building plus
+**The structures payload** is 970 KB for 17,327 buildings
+(207,828 footprint vertices). The PHB1 stream is 8 bytes per building plus
 4 per vertex; the manifest records every count so the tests can hold the files to
 it.
 
@@ -272,7 +283,8 @@ the heightmap and the vector layers cannot drift apart.
 The control studio covers terrain exaggeration, contour strength and interval,
 **building density and structure height**, sun azimuth and altitude, key light,
 ambient fill, fog density, bloom, water intensity, label size and density, road
-opacity, boundary strength, theme, field of view, quality and animation speed —
+opacity, boundary strength, theme, field of view, quality (auto or a manual
+level) and animation speed —
 plus eleven layer toggles, including **Buildings & bridges**.
 
 **The opening shot is the Center City skyline** — 6.5 km out, south-west of
@@ -282,6 +294,17 @@ view hides them completely. *The Delaware Valley* regional view is preset 2's
 neighbour (card 3, key `3`); Home and `H` return to the skyline. The Ben Franklin
 Bridge has its own preset, and the other crossings and the sports complex sit
 under a **Bridges & structures** chip row.
+
+**Quality** defaults to **Auto**: an adaptive controller (`src/adaptive.js`)
+watches real frame times and steps the *effective* level down when the smoothed
+rate stays under 28 fps for 2.5 s, and back up when it stays over 54 fps for
+12 s, with a 4 s cool-down after every change, resize, tier upload or rebuild
+so one bad frame never moves it and it cannot oscillate. The readout shows the
+effective level ("Auto · Balanced"), each change is announced as a toast, and
+the three manual levels are plain overrides: pick one and nothing adapts. The
+URL carries a manual choice (`q=performance`) and omits the default. A phone at
+a crawl therefore lands in Performance (no rowhouse tier, pixel ratio 1) by
+itself, and a fast desktop climbs to Cinematic.
 
 **Presets** are complete restagings, not bookmarks: camera, light, air and layer
 selection all move together.

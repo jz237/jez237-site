@@ -12,7 +12,7 @@
 /** @typedef {'range'|'enum'|'bool'} ControlKind */
 
 const THEMES = ['dusk', 'slate', 'verdant', 'blueprint', 'noir'];
-const QUALITY = ['performance', 'balanced', 'cinematic'];
+const QUALITY = ['auto', 'performance', 'balanced', 'cinematic'];
 const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
 
 /**
@@ -114,7 +114,7 @@ export const CONTROLS = {
     group: 'scene', label: 'Field of view', unit: '°',
   },
   quality: {
-    k: 'q', kind: 'enum', values: QUALITY, def: 'balanced',
+    k: 'q', kind: 'enum', values: QUALITY, def: 'auto',
     group: 'scene', label: 'Quality',
   },
   animationSpeed: {

@@ -12,18 +12,38 @@ import { getTheme, THEME_IDS } from './themes.js';
 
 const ENUM_LABELS = {
   theme: (v) => getTheme(v).label,
-  quality: (v) => ({ performance: 'Performance', balanced: 'Balanced', cinematic: 'Cinematic' }[v] || v),
+  quality: (v) => ({ auto: 'Auto', performance: 'Performance', balanced: 'Balanced',
+    cinematic: 'Cinematic' }[v] || v),
   contourInterval: (v) => `${v} m`,
 };
+
+// A control's readout can carry a live note ("Auto · Balanced"); the
+// note survives store syncs because formatValue folds it in.
+const valueNotes = new Map();
+const noteRefreshers = [];
 
 /** Format a control's current value for its readout. */
 export function formatValue(id, value) {
   const spec = CONTROLS[id];
   if (!spec) return String(value);
-  if (spec.kind === 'enum') return (ENUM_LABELS[id] || String)(value);
   const step = spec.step ?? 1;
   const digits = step >= 1 ? 0 : step >= 0.1 ? 1 : 2;
-  return `${Number(value).toFixed(digits)}${spec.unit || ''}`;
+  const base = spec.kind === 'enum'
+    ? (ENUM_LABELS[id] || String)(value)
+    : `${Number(value).toFixed(digits)}${spec.unit || ''}`;
+  const note = valueNotes.get(id);
+  return note ? `${base} · ${note}` : base;
+}
+
+/** The plain label of an enum option, never carrying a live note. */
+export function enumLabel(id, value) {
+  return (ENUM_LABELS[id] || String)(value);
+}
+
+/** Attach (or clear, with '') a live note to a control's readout. */
+export function setValueNote(id, note) {
+  valueNotes.set(id, note || '');
+  for (const refresh of noteRefreshers) refresh(id);
 }
 
 export function buildControls(store, host) {
@@ -103,6 +123,11 @@ export function buildControls(store, host) {
   }
 
   sync(store.get());
+  noteRefreshers.push((id) => {
+    const entry = inputs.get(id);
+    if (entry) entry.value.textContent = formatValue(id, store.value(id));
+  });
+
   return { sync };
 }
 

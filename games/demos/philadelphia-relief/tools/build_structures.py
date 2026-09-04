@@ -51,7 +51,7 @@ CACHE = pathlib.Path(os.environ.get("PHILLY_OSM_CACHE", "/tmp/philly-osm-cache")
 ENDPOINTS = [
     "https://overpass-api.de/api/interpreter",
     "https://overpass.kumi.systems/api/interpreter",
-    "https://overpass.osm.jp/api/interpreter",
+    "https://overpass.openstreetmap.fr/api/interpreter",   # osm.jp's cert no longer matches
 ]
 USER_AGENT = "philadelphia-relief-build/1.0 (static site asset generator)"
 
@@ -75,6 +75,56 @@ ZONES = [
         # Navy Yard and the sports complex up to Port Richmond and Temple,
         # the airport's east edge across to the Camden waterfront.
         "south": 39.880, "west": -75.260, "north": 40.010, "east": -75.080,
+    },
+    # Suburban zones: notable buildings only, and `lazy`, so the browser
+    # fetches them as the camera approaches rather than at start-up.
+    {
+        "id": "schuylkill-valley",
+        "label": "King of Prussia, Norristown & Conshohocken (notable buildings)",
+        "mode": "notable", "lazy": True,
+        "south": 40.060, "west": -75.420, "north": 40.130, "east": -75.270,
+    },
+    {
+        "id": "main-line",
+        "label": "The Main Line (notable buildings)",
+        "mode": "notable", "lazy": True,
+        "south": 39.990, "west": -75.330, "north": 40.060, "east": -75.205,
+    },
+    {
+        "id": "northeast-philadelphia",
+        "label": "Northeast Philadelphia (notable buildings)",
+        "mode": "notable", "lazy": True,
+        "south": 40.010, "west": -75.100, "north": 40.110, "east": -74.960,
+    },
+    {
+        "id": "cherry-hill",
+        "label": "Cherry Hill & eastern Camden County (notable buildings)",
+        "mode": "notable", "lazy": True,
+        "south": 39.880, "west": -75.080, "north": 39.960, "east": -74.950,
+    },
+    {
+        "id": "airport-chester",
+        "label": "The airport, Tinicum & Chester (notable buildings)",
+        "mode": "notable", "lazy": True,
+        "south": 39.820, "west": -75.430, "north": 39.900, "east": -75.260,
+    },
+    {
+        "id": "lower-bucks",
+        "label": "Bristol, Levittown & Bensalem (notable buildings)",
+        "mode": "notable", "lazy": True,
+        "south": 40.070, "west": -74.960, "north": 40.180, "east": -74.800,
+    },
+    {
+        "id": "trenton",
+        "label": "Trenton (notable buildings)",
+        "mode": "notable", "lazy": True,
+        "south": 40.195, "west": -74.800, "north": 40.245, "east": -74.720,
+    },
+    {
+        "id": "wilmington",
+        "label": "Wilmington (notable buildings)",
+        "mode": "notable", "lazy": True,
+        "south": 39.720, "west": -75.590, "north": 39.780, "east": -75.510,
     },
 ]
 
@@ -771,6 +821,7 @@ def main() -> int:
                          key=lambda r: -r["height"])[:12]
         manifest_zones.append({
             "id": zone["id"], "label": zone["label"], "mode": zone["mode"],
+            "lazy": bool(zone.get("lazy")),
             "bounds": {k: zone[k] for k in ("west", "east", "south", "north")},
             "origin": {"lon": origin[0], "lat": origin[1]},
             "tiers": tiers_out,

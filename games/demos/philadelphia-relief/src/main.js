@@ -29,7 +29,8 @@ import { createPostFX } from './postfx.js';
 import { createCameraRig } from './camera.js';
 import { createLabelLayer, buildLabelCandidates } from './labels.js';
 import { createStructures } from './structures.js';
-import { TIER_PLAN } from './structures-data.js';
+import { TIER_PLAN, shouldActivateZone, distanceToBox } from './structures-data.js';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js';
 import { buildLandmarkModels } from './landmark-models.js';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
@@ -37,6 +38,7 @@ import {
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
+  enumLabel, setValueNote,
 } from './ui.js';
 import { getTheme } from './themes.js';
 
@@ -104,7 +106,7 @@ async function loadEverything() {
   const results = {};
   const data = {};
   const hashPatch = decodeState(window.location.hash) || {};
-  const quality = hashPatch.quality || 'balanced';
+  const quality = resolveQuality(hashPatch.quality || 'auto', null);
 
   setProgress(0.05, 'Reading elevation model…');
   try {
@@ -190,7 +192,7 @@ async function fetchBinary(path) {
  * phone in performance mode never downloads the rowhouse fabric at all.
  * A tier that fails to arrive is skipped; the manifest failing means no layer.
  */
-async function loadStructures(quality, existing = null) {
+async function loadStructures(quality, existing = null, activeZones = null) {
   let manifest = existing?.manifest;
   if (!manifest) {
     try {
@@ -204,6 +206,8 @@ async function loadStructures(quality, existing = null) {
   const tierBuffers = existing?.tierBuffers || new Map();
   const jobs = [];
   for (const zone of manifest.zones || []) {
+    // Suburban zones are lazy: fetched once the camera approaches them.
+    if (zone.lazy && !(activeZones && activeZones.has(zone.id))) continue;
     for (const tier of zone.tiers || []) {
       if (!want.has(tier.tier) || tierBuffers.has(tier.file)) continue;
       jobs.push((async () => {
@@ -263,12 +267,19 @@ async function boot() {
     return;
   }
 
+  // Quality: the setting is a manual level or "auto", which hands the
+  // effective level to the adaptive controller; everything that costs
+  // (terrain mesh, structure tiers, pixel ratio) follows the effective level.
+  let effectiveQuality = resolveQuality(store.value('quality'), null);
+  let adaptive = store.value('quality') === 'auto'
+    ? createAdaptiveQuality({ start: effectiveQuality }) : null;
+
   const scene = new THREE.Scene();
   const sky = createSky(THREE);
   scene.add(sky.mesh);
 
   const macro = buildMacroGrid(grid, meta.width, meta.height, 256);
-  let terrain = createTerrain(THREE, { meta, grid, macro, quality: store.value('quality') });
+  let terrain = createTerrain(THREE, { meta, grid, macro, quality: effectiveQuality });
   scene.add(terrain.mesh);
 
   const overlayRoot = new THREE.Group();
@@ -285,7 +296,7 @@ async function boot() {
       landmarkModels: packLandmarkModels(data, projection, sampleElevation),
       projection,
       sampleElevation,
-      quality: store.value('quality'),
+      quality: effectiveQuality,
     });
     scene.add(structures.group);
     fillStructureFacts(data.structures.manifest, structures);
@@ -344,16 +355,21 @@ async function boot() {
   applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, force: true });
   store.subscribe((state) => applyState(state, { terrain, sky, overlays, structures, postfx, ui }));
 
+  // Structure tiers follow the effective quality and the set of active zones.
   // Raising the quality later means the rowhouse tier was never fetched;
-  // lowering it on a phone frees that memory again.
+  // lowering it on a phone frees that memory again. Suburban zones join the
+  // active set as the camera approaches them and are never dropped.
+  const activeZones = new Set((data.structures?.manifest.zones || [])
+    .filter((z) => !z.lazy).map((z) => z.id));
   let tierSync = Promise.resolve();
-  store.subscribe((state, changed) => {
-    if (!changed.has('quality') || !structures || !data.structures) return;
-    const wanted = new Set(TIER_PLAN[state.quality] || TIER_PLAN.balanced);
+  function syncTiers(level) {
+    if (!structures || !data.structures) return;
+    const wanted = new Set(TIER_PLAN[level] || TIER_PLAN.balanced);
     tierSync = tierSync.then(async () => {
-      const fresh = await loadStructures(state.quality, data.structures);
+      const fresh = await loadStructures(level, data.structures, activeZones);
       if (!fresh) return;
       for (const zone of fresh.manifest.zones || []) {
+        if (!activeZones.has(zone.id)) continue;
         for (const tier of zone.tiers || []) {
           const have = structures.hasTier(zone.id, tier.tier);
           const buffer = fresh.tierBuffers.get(tier.file);
@@ -365,8 +381,32 @@ async function boot() {
         }
       }
       structures.setTheme(getTheme(store.value('theme')));
+      adaptive?.disturb();
     }).catch((error) => console.warn('[philly-relief] tier sync failed:', error));
+  }
+
+  const qualityNote = () => setValueNote('quality',
+    store.value('quality') === 'auto' ? enumLabel('quality', effectiveQuality) : '');
+  function applyQuality(level, message) {
+    if (level === effectiveQuality) return;
+    effectiveQuality = level;
+    rebuildTerrain(level);
+    syncTiers(level);
+    qualityNote();
+    if (message) toast(message);
+  }
+  store.subscribe((state, changed) => {
+    if (!changed.has('quality')) return;
+    if (state.quality === 'auto') {
+      // Start adapting from wherever we are: no jump on the way in.
+      adaptive = createAdaptiveQuality({ start: effectiveQuality });
+    } else {
+      adaptive = null;
+      applyQuality(state.quality);
+    }
+    qualityNote();
   });
+  qualityNote();
 
   // ---- resize -------------------------------------------------------------
   let viewW = 1;
@@ -376,8 +416,9 @@ async function boot() {
     const rect = dom.stage.getBoundingClientRect();
     viewW = Math.max(1, Math.round(rect.width));
     viewH = Math.max(1, Math.round(rect.height));
-    const quality = store.value('quality');
+    const quality = effectiveQuality;
     const cap = quality === 'performance' ? 1 : quality === 'cinematic' ? 2 : 1.5;
+    adaptive?.disturb();
     const ratio = Math.min(window.devicePixelRatio || 1, cap);
     renderer.setPixelRatio(ratio);
     renderer.setSize(viewW, viewH, false);
@@ -406,12 +447,21 @@ async function boot() {
       drawCalls: lastRenderInfo ? lastRenderInfo.calls : 0,
       triangles: lastRenderInfo ? lastRenderInfo.triangles : 0,
       quality: store.value('quality'),
+      effectiveQuality,
+      adaptive: adaptive
+        ? { level: adaptive.level, fps: Math.round(adaptive.fps), steps: adaptive.steps }
+        : null,
+      zones: [...activeZones],
       landmarkModels: structures ? structures.landmarkModelCount : 0,
       card: ui.cardName,
     }),
   });
   let last = performance.now();
   let labelClock = 0;
+  let zoneClock = 0;
+  const zoneFrustum = new THREE.Frustum();
+  const zoneMatrix = new THREE.Matrix4();
+  const zoneBox = new THREE.Box3();
   let fpsAccum = 0;
   let fpsFrames = 0;
   let running = true;
@@ -436,6 +486,33 @@ async function boot() {
     terrain.uniforms.uWarp.value = warpForDistance(now.dist);
     terrain.uniforms.uCameraPos.value.copy(camera.position);
     terrain.uniforms.uExag.value = exaggeration;
+
+    // Suburban structure zones load once they are in view and near enough:
+    // a coarse reach test first, then the zone's box against the frustum.
+    zoneClock += dt;
+    if (zoneClock >= 0.5 && structures && data.structures) {
+      zoneClock = 0;
+      let joined = false;
+      let frustumReady = false;
+      for (const zone of data.structures.manifest.zones || []) {
+        if (activeZones.has(zone.id) || !shouldActivateZone(zone, now)) continue;
+        if (!frustumReady) {
+          zoneFrustum.setFromProjectionMatrix(zoneMatrix.multiplyMatrices(
+            camera.projectionMatrix, camera.matrixWorldInverse));
+          frustumReady = true;
+        }
+        const b = zone.bounds;
+        zoneBox.min.set(projection.lonToX(b.west), -50, projection.latToZ(b.north));
+        zoneBox.max.set(projection.lonToX(b.east), 6000, projection.latToZ(b.south));
+        if (!zoneFrustum.intersectsBox(zoneBox)) continue;
+        const eyeGap = distanceToBox(camera.position.x, camera.position.z, {
+          minX: zoneBox.min.x, maxX: zoneBox.max.x, minZ: zoneBox.min.z, maxZ: zoneBox.max.z });
+        if (eyeGap > 30000) continue;
+        activeZones.add(zone.id);
+        joined = true;
+      }
+      if (joined) syncTiers(effectiveQuality);
+    }
 
     sunDirection(state.sunAzimuth, state.sunAltitude, sunDir);
     terrain.uniforms.uSunDir.value.copy(sunDir);
@@ -496,7 +573,8 @@ async function boot() {
 
   function tick(timestamp) {
     if (!running) return;
-    const dt = Math.min(0.1, (timestamp - last) / 1000) || 0.016;
+    const rawDt = (timestamp - last) / 1000;
+    const dt = Math.min(0.1, rawDt) || 0.016;
     last = timestamp;
 
     fpsAccum += dt;
@@ -508,6 +586,17 @@ async function boot() {
     }
 
     renderFrame(dt);
+
+    if (adaptive) {
+      const level = adaptive.sample(rawDt);
+      if (level !== effectiveQuality) {
+        const step = adaptive.steps.at(-1);
+        const name = enumLabel('quality', level);
+        applyQuality(level, step?.reason === 'headroom'
+          ? `Quality raised to ${name}: there is headroom`
+          : `Quality set to ${name} to keep the map smooth (${step?.fps ?? '?'} fps)`);
+      }
+    }
     requestAnimationFrame(tick);
   }
 
@@ -518,6 +607,7 @@ async function boot() {
     } else if (!running) {
       running = true;
       last = performance.now();
+      adaptive?.disturb();
       requestAnimationFrame(tick);
     }
   });
@@ -529,10 +619,11 @@ async function boot() {
   });
 
   ui.setCapture(() => {
+    adaptive?.disturb();
     renderFrame(0);
     return dom.canvas;
   });
-  ui.setQualityRebuild((quality) => {
+  function rebuildTerrain(quality) {
     scene.remove(terrain.mesh);
     terrain.dispose();
     terrain = createTerrain(THREE, { meta, grid, macro, quality });
@@ -540,7 +631,8 @@ async function boot() {
     scene.add(terrain.mesh);
     applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, force: true });
     resize();
-  });
+    adaptive?.disturb();
+  }
 
   if (status.mode !== MODE.FULL) {
     showBanner(status);
@@ -692,7 +784,6 @@ function buildOverlays(data, ctx, root) {
 // ---------------------------------------------------------------------------
 
 let lastTheme = null;
-let lastQuality = null;
 
 function applyState(state, ctx) {
   const { terrain, sky, overlays, structures, postfx, ui, force } = ctx;
@@ -707,13 +798,6 @@ function applyState(state, ctx) {
     structures?.setTheme(theme);
   }
   if (structures) structures.group.visible = !!state.layers.structures;
-
-  if (!force && state.quality !== lastQuality && ui?.rebuildQuality) {
-    lastQuality = state.quality;
-    ui.rebuildQuality(state.quality);
-    return;   // the rebuild re-enters with force
-  }
-  lastQuality = state.quality;
 
   const u = terrain.uniforms;
   u.uKey.value = state.keyLight;
@@ -959,7 +1043,6 @@ function wireInterface(deps) {
 
   const dialogs = createDialogs(['about', 'shortcuts']);
   let captureFn = null;
-  let rebuildQuality = null;
 
   const landmarkByName = (name) => (data.landmarks?.landmarks || []).find((l) => l.n === name);
   const card = createCard({
@@ -1316,8 +1399,6 @@ function wireInterface(deps) {
     },
     setFps(value) { fps = value; },
     setCapture(fn) { captureFn = fn; },
-    setQualityRebuild(fn) { rebuildQuality = fn; },
-    get rebuildQuality() { return rebuildQuality; },
 
     updateReadout({ pose, groundY, viewH, dt }) {
       readoutClock += dt;

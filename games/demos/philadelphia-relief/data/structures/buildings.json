@@ -10,10 +10,10 @@
   "merged": "average of a merged rowhouse row"
  },
  "sourceCounts": {
-  "levels": 2761,
-  "default": 5922,
-  "measured": 27867,
-  "curated": 23
+  "levels": 3032,
+  "default": 7567,
+  "measured": 28771,
+  "curated": 24
  },
  "tiers": [
   {
@@ -34,6 +34,7 @@
    "id": "center-city",
    "label": "Center City & University City",
    "mode": "full",
+   "lazy": false,
    "bounds": {
     "west": -75.205,
     "east": -75.135,
@@ -144,6 +145,7 @@
    "id": "inner-city",
    "label": "Inner Philadelphia & Camden (notable buildings)",
    "mode": "notable",
+   "lazy": false,
    "bounds": {
     "west": -75.26,
     "east": -75.08,
@@ -249,12 +251,459 @@
      "source": "measured"
     }
    ]
+  },
+  {
+   "id": "schuylkill-valley",
+   "label": "King of Prussia, Norristown & Conshohocken (notable buildings)",
+   "mode": "notable",
+   "lazy": true,
+   "bounds": {
+    "west": -75.42,
+    "east": -75.27,
+    "south": 40.06,
+    "north": 40.13
+   },
+   "origin": {
+    "lon": -75.345,
+    "lat": 40.095
+   },
+   "tiers": [
+    {
+     "tier": "tall",
+     "file": "schuylkill-valley-tall.bin",
+     "count": 59,
+     "vertices": 382,
+     "bytes": 2008,
+     "minHeight": 35.0,
+     "maxHeight": 81.0,
+     "named": 11
+    },
+    {
+     "tier": "mid",
+     "file": "schuylkill-valley-mid.bin",
+     "count": 728,
+     "vertices": 5187,
+     "bytes": 26580,
+     "minHeight": 12.0,
+     "maxHeight": 34.5,
+     "named": 200
+    },
+    {
+     "tier": "low",
+     "file": "schuylkill-valley-low.bin",
+     "count": 154,
+     "vertices": 2312,
+     "bytes": 10488,
+     "minHeight": 3.0,
+     "maxHeight": 11.4,
+     "named": 154
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": []
+  },
+  {
+   "id": "main-line",
+   "label": "The Main Line (notable buildings)",
+   "mode": "notable",
+   "lazy": true,
+   "bounds": {
+    "west": -75.33,
+    "east": -75.205,
+    "south": 39.99,
+    "north": 40.06
+   },
+   "origin": {
+    "lon": -75.2675,
+    "lat": 40.025000000000006
+   },
+   "tiers": [
+    {
+     "tier": "tall",
+     "file": "main-line-tall.bin",
+     "count": 4,
+     "vertices": 94,
+     "bytes": 416,
+     "minHeight": 37.2,
+     "maxHeight": 43.3,
+     "named": 3
+    },
+    {
+     "tier": "mid",
+     "file": "main-line-mid.bin",
+     "count": 191,
+     "vertices": 3598,
+     "bytes": 15928,
+     "minHeight": 12.0,
+     "maxHeight": 34.5,
+     "named": 162
+    },
+    {
+     "tier": "low",
+     "file": "main-line-low.bin",
+     "count": 59,
+     "vertices": 1312,
+     "bytes": 5728,
+     "minHeight": 4.8,
+     "maxHeight": 11.4,
+     "named": 59
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": []
+  },
+  {
+   "id": "northeast-philadelphia",
+   "label": "Northeast Philadelphia (notable buildings)",
+   "mode": "notable",
+   "lazy": true,
+   "bounds": {
+    "west": -75.1,
+    "east": -74.96,
+    "south": 40.01,
+    "north": 40.11
+   },
+   "origin": {
+    "lon": -75.03,
+    "lat": 40.06
+   },
+   "tiers": [
+    {
+     "tier": "tall",
+     "file": "northeast-philadelphia-tall.bin",
+     "count": 6,
+     "vertices": 419,
+     "bytes": 1732,
+     "minHeight": 36.9,
+     "maxHeight": 51.5,
+     "named": 1
+    },
+    {
+     "tier": "mid",
+     "file": "northeast-philadelphia-mid.bin",
+     "count": 337,
+     "vertices": 7528,
+     "bytes": 32816,
+     "minHeight": 12.0,
+     "maxHeight": 34.7,
+     "named": 182
+    },
+    {
+     "tier": "low",
+     "file": "northeast-philadelphia-low.bin",
+     "count": 148,
+     "vertices": 3266,
+     "bytes": 14256,
+     "minHeight": 4.8,
+     "maxHeight": 11.9,
+     "named": 148
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": []
+  },
+  {
+   "id": "cherry-hill",
+   "label": "Cherry Hill & eastern Camden County (notable buildings)",
+   "mode": "notable",
+   "lazy": true,
+   "bounds": {
+    "west": -75.08,
+    "east": -74.95,
+    "south": 39.88,
+    "north": 39.96
+   },
+   "origin": {
+    "lon": -75.015,
+    "lat": 39.92
+   },
+   "tiers": [
+    {
+     "tier": "tall",
+     "file": "cherry-hill-tall.bin",
+     "count": 2,
+     "vertices": 16,
+     "bytes": 88,
+     "minHeight": 41.1,
+     "maxHeight": 60.9,
+     "named": 1
+    },
+    {
+     "tier": "mid",
+     "file": "cherry-hill-mid.bin",
+     "count": 172,
+     "vertices": 1754,
+     "bytes": 8400,
+     "minHeight": 12.0,
+     "maxHeight": 31.2,
+     "named": 164
+    },
+    {
+     "tier": "low",
+     "file": "cherry-hill-low.bin",
+     "count": 150,
+     "vertices": 2277,
+     "bytes": 10316,
+     "minHeight": 4.8,
+     "maxHeight": 11.4,
+     "named": 150
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": [
+    {
+     "name": "Mark 70",
+     "height": 60.9,
+     "source": "levels"
+    }
+   ]
+  },
+  {
+   "id": "airport-chester",
+   "label": "The airport, Tinicum & Chester (notable buildings)",
+   "mode": "notable",
+   "lazy": true,
+   "bounds": {
+    "west": -75.43,
+    "east": -75.26,
+    "south": 39.82,
+    "north": 39.9
+   },
+   "origin": {
+    "lon": -75.345,
+    "lat": 39.86
+   },
+   "tiers": [
+    {
+     "tier": "mid",
+     "file": "airport-chester-mid.bin",
+     "count": 104,
+     "vertices": 1400,
+     "bytes": 6440,
+     "minHeight": 12.0,
+     "maxHeight": 30.0,
+     "named": 103
+    },
+    {
+     "tier": "low",
+     "file": "airport-chester-low.bin",
+     "count": 86,
+     "vertices": 1006,
+     "bytes": 4720,
+     "minHeight": 8.1,
+     "maxHeight": 11.4,
+     "named": 86
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": []
+  },
+  {
+   "id": "lower-bucks",
+   "label": "Bristol, Levittown & Bensalem (notable buildings)",
+   "mode": "notable",
+   "lazy": true,
+   "bounds": {
+    "west": -74.96,
+    "east": -74.8,
+    "south": 40.07,
+    "north": 40.18
+   },
+   "origin": {
+    "lon": -74.88,
+    "lat": 40.125
+   },
+   "tiers": [
+    {
+     "tier": "mid",
+     "file": "lower-bucks-mid.bin",
+     "count": 141,
+     "vertices": 1731,
+     "bytes": 8060,
+     "minHeight": 12.0,
+     "maxHeight": 30.0,
+     "named": 141
+    },
+    {
+     "tier": "low",
+     "file": "lower-bucks-low.bin",
+     "count": 63,
+     "vertices": 960,
+     "bytes": 4352,
+     "minHeight": 4.8,
+     "maxHeight": 9.0,
+     "named": 63
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": []
+  },
+  {
+   "id": "trenton",
+   "label": "Trenton (notable buildings)",
+   "mode": "notable",
+   "lazy": true,
+   "bounds": {
+    "west": -74.8,
+    "east": -74.72,
+    "south": 40.195,
+    "north": 40.245
+   },
+   "origin": {
+    "lon": -74.75999999999999,
+    "lat": 40.22
+   },
+   "tiers": [
+    {
+     "tier": "tall",
+     "file": "trenton-tall.bin",
+     "count": 4,
+     "vertices": 49,
+     "bytes": 236,
+     "minHeight": 37.8,
+     "maxHeight": 50.0,
+     "named": 4
+    },
+    {
+     "tier": "mid",
+     "file": "trenton-mid.bin",
+     "count": 121,
+     "vertices": 1181,
+     "bytes": 5700,
+     "minHeight": 12.0,
+     "maxHeight": 34.5,
+     "named": 119
+    },
+    {
+     "tier": "low",
+     "file": "trenton-low.bin",
+     "count": 111,
+     "vertices": 1094,
+     "bytes": 5272,
+     "minHeight": 9.0,
+     "maxHeight": 11.4,
+     "named": 111
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": []
+  },
+  {
+   "id": "wilmington",
+   "label": "Wilmington (notable buildings)",
+   "mode": "notable",
+   "lazy": true,
+   "bounds": {
+    "west": -75.59,
+    "east": -75.51,
+    "south": 39.72,
+    "north": 39.78
+   },
+   "origin": {
+    "lon": -75.55000000000001,
+    "lat": 39.75
+   },
+   "tiers": [
+    {
+     "tier": "tall",
+     "file": "wilmington-tall.bin",
+     "count": 29,
+     "vertices": 302,
+     "bytes": 1448,
+     "minHeight": 37.8,
+     "maxHeight": 110.0,
+     "named": 25
+    },
+    {
+     "tier": "mid",
+     "file": "wilmington-mid.bin",
+     "count": 99,
+     "vertices": 1421,
+     "bytes": 6484,
+     "minHeight": 12.0,
+     "maxHeight": 34.5,
+     "named": 77
+    },
+    {
+     "tier": "low",
+     "file": "wilmington-low.bin",
+     "count": 53,
+     "vertices": 858,
+     "bytes": 3864,
+     "minHeight": 3.5,
+     "maxHeight": 11.4,
+     "named": 53
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": [
+    {
+     "name": "1201 N Market",
+     "height": 110.0,
+     "source": "measured"
+    },
+    {
+     "name": "River Tower at Christina Landing",
+     "height": 90.0,
+     "source": "measured"
+    },
+    {
+     "name": "I M Pei Building",
+     "height": 86.0,
+     "source": "measured"
+    },
+    {
+     "name": "Brandywine Building",
+     "height": 80.0,
+     "source": "measured"
+    },
+    {
+     "name": "CItizens Bank Center",
+     "height": 77.0,
+     "source": "measured"
+    },
+    {
+     "name": "PNC Bank Building",
+     "height": 75.0,
+     "source": "measured"
+    },
+    {
+     "name": "The Residents at Christina Landing",
+     "height": 74.0,
+     "source": "measured"
+    },
+    {
+     "name": "WSFS Building",
+     "height": 72.0,
+     "source": "measured"
+    },
+    {
+     "name": "One Christina Center",
+     "height": 71.0,
+     "source": "measured"
+    },
+    {
+     "name": "300 Delaware Avenue",
+     "height": 70.0,
+     "source": "measured"
+    },
+    {
+     "name": "New Castle County Courthouse",
+     "height": 70.0,
+     "source": "measured"
+    },
+    {
+     "name": "Three Christina Center",
+     "height": 70.0,
+     "source": "measured"
+    }
+   ]
   }
  ],
  "totals": {
-  "buildings": 14506,
-  "vertices": 169681,
-  "bytes": 794820
+  "buildings": 17327,
+  "vertices": 207828,
+  "bytes": 970152
  },
  "bridgesFile": "bridges.json",
  "bridgeCount": 6,
