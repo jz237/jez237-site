@@ -70,6 +70,7 @@
     <button type="button" class="icon-btn" id="btnHome" title="Reset view (H)" aria-label="Reset view">⌂</button>
     <button type="button" class="icon-btn" id="btnShot" title="Save PNG (P)" aria-label="Save a PNG of the current view">▣</button>
     <button type="button" class="icon-btn" id="btnShare" title="Copy link to this view" aria-label="Copy a link to this view">↗</button>
+    <button type="button" class="icon-btn" id="btnCinema" title="Cinema mode (V)" aria-label="Enter cinema mode" aria-pressed="false">▭</button>
     <button type="button" class="icon-btn" id="btnFull" title="Fullscreen (F)" aria-label="Toggle fullscreen">⤢</button>
     <button type="button" class="icon-btn" id="btnKeys" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">⌘</button>
     <button type="button" class="icon-btn" id="btnAbout" title="About &amp; sources" aria-label="About and data sources">i</button>
@@ -151,6 +152,23 @@
     <span class="timeline-time" id="timelineTime">0:00</span>
   </div>
 </footer>
+
+<!-- ── cinema controls (only shown in cinema mode) ─────────────────────── -->
+<div id="cinemaBar" class="cinema-bar" role="group" aria-label="Cinema controls" hidden>
+  <button type="button" class="cinema-btn" id="cinemaPrev" aria-label="Previous shot">‹</button>
+  <button type="button" class="cinema-btn cinema-play" id="cinemaPlay" aria-label="Play or pause the tour">▶</button>
+  <button type="button" class="cinema-btn" id="cinemaNext" aria-label="Next shot">›</button>
+  <button type="button" class="cinema-btn cinema-exit" id="cinemaExit" aria-label="Exit cinema mode (Esc)">✕</button>
+</div>
+
+<!-- ── phone toolbar ───────────────────────────────────────────────────── -->
+<nav id="mobileBar" class="mobile-bar" aria-label="Map tools">
+  <button type="button" class="mobile-btn" id="mbHome" aria-label="Home"><span aria-hidden="true">⌂</span><small>Home</small></button>
+  <button type="button" class="mobile-btn" id="mbShots" aria-label="Shots and places" aria-pressed="false"><span aria-hidden="true">◈</span><small>Shots</small></button>
+  <button type="button" class="mobile-btn" id="mbPlay" aria-label="Play or pause the tour" aria-pressed="false"><span aria-hidden="true">▶</span><small>Tour</small></button>
+  <button type="button" class="mobile-btn" id="mbStudio" aria-label="Control studio" aria-pressed="false"><span aria-hidden="true">⚙</span><small>Studio</small></button>
+  <button type="button" class="mobile-btn" id="mbCinema" aria-label="Cinema mode" aria-pressed="false"><span aria-hidden="true">▭</span><small>Cinema</small></button>
+</nav>
 
 <!-- ── tour caption ────────────────────────────────────────────────────── -->
 <div id="caption" class="caption" aria-live="polite" hidden>
@@ -301,6 +319,7 @@
         <tr><th scope="row"><kbd>H</kbd></th><td>Home: back to the opening skyline</td></tr>
         <tr><th scope="row"><kbd>C</kbd></th><td>Show or hide the control studio</td></tr>
         <tr><th scope="row"><kbd>L</kbd></th><td>Show or hide labels</td></tr>
+        <tr><th scope="row"><kbd>V</kbd></th><td>Cinema mode: hide every panel, keep the captions</td></tr>
         <tr><th scope="row"><kbd>F</kbd></th><td>Fullscreen</td></tr>
         <tr><th scope="row"><kbd>P</kbd></th><td>Save the current view as a PNG</td></tr>
         <tr><th scope="row"><kbd>/</kbd></th><td>Focus the search box</td></tr>
