@@ -351,6 +351,16 @@ test('bridges', async (t) => {
     assert.ok(maxIdx < merged.vertexCount, 'merged indices were re-based');
   });
 
+  await t.test('footprints replaced by schematic models are dropped and recorded', () => {
+    assert.deepEqual(manifest.replacedByModels,
+      ['Citizens Bank Park', 'Independence Hall', 'Lincoln Financial Field', 'Philadelphia Museum of Art']);
+    for (const zone of manifest.zones) {
+      for (const b of zone.tallest || []) {
+        assert.ok(!manifest.replacedByModels.includes(b.name), `${b.name} still extruded`);
+      }
+    }
+  });
+
   await t.test('the bridge chips and preset sit on their spans and look back at the city', () => {
     const chips = QUICK_JUMPS.filter((j) => j.group === 'structures');
     assert.ok(chips.length >= 5, 'bridge and structure chips');

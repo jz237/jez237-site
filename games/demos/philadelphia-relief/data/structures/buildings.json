@@ -10,10 +10,10 @@
   "merged": "average of a merged rowhouse row"
  },
  "sourceCounts": {
-  "curated": 27,
   "levels": 2761,
   "default": 5922,
-  "measured": 27867
+  "measured": 27867,
+  "curated": 23
  },
  "tiers": [
   {
@@ -48,22 +48,22 @@
     {
      "tier": "tall",
      "file": "center-city-tall.bin",
-     "count": 326,
-     "vertices": 3393,
-     "bytes": 16188,
+     "count": 325,
+     "vertices": 3365,
+     "bytes": 16068,
      "minHeight": 35.0,
      "maxHeight": 341.0,
-     "named": 256
+     "named": 255
     },
     {
      "tier": "mid",
      "file": "center-city-mid.bin",
-     "count": 5052,
-     "vertices": 56055,
-     "bytes": 264644,
+     "count": 5051,
+     "vertices": 56031,
+     "bytes": 264540,
      "minHeight": 14.3,
      "maxHeight": 34.9,
-     "named": 291
+     "named": 290
     },
     {
      "tier": "low",
@@ -158,12 +158,12 @@
     {
      "tier": "tall",
      "file": "inner-city-tall.bin",
-     "count": 131,
-     "vertices": 3803,
-     "bytes": 16268,
+     "count": 129,
+     "vertices": 3731,
+     "bytes": 15964,
      "minHeight": 35.0,
      "maxHeight": 117.0,
-     "named": 76
+     "named": 74
     },
     {
      "tier": "mid",
@@ -252,12 +252,18 @@
   }
  ],
  "totals": {
-  "buildings": 14510,
-  "vertices": 169805,
-  "bytes": 795348
+  "buildings": 14506,
+  "vertices": 169681,
+  "bytes": 794820
  },
  "bridgesFile": "bridges.json",
  "bridgeCount": 6,
+ "replacedByModels": [
+  "Citizens Bank Park",
+  "Independence Hall",
+  "Lincoln Financial Field",
+  "Philadelphia Museum of Art"
+ ],
  "projection": {
   "metersPerDegLat": 111037.0072,
   "metersPerDegLon": 85238.0237

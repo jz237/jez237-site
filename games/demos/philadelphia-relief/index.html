@@ -177,6 +177,24 @@
   <small id="captionSource"></small>
 </div>
 
+<!-- ── landmark card ───────────────────────────────────────────────────── -->
+<aside id="card" class="card" role="dialog" aria-labelledby="cardTitle" hidden>
+  <div class="card-head">
+    <div>
+      <small class="card-kind" id="cardKind"></small>
+      <h2 id="cardTitle" class="card-title"></h2>
+    </div>
+    <button type="button" class="icon-btn" id="cardClose" aria-label="Close card (Esc)">✕</button>
+  </div>
+  <dl class="card-facts" id="cardFacts"></dl>
+  <p class="card-text" id="cardText"></p>
+  <p class="card-sources"><span>Sources:</span> <span id="cardSources"></span></p>
+  <div class="card-actions">
+    <button type="button" class="primary-btn" id="cardFly">Fly here</button>
+    <small class="card-note" id="cardNote"></small>
+  </div>
+</aside>
+
 <!-- ── onboarding ──────────────────────────────────────────────────────── -->
 <div id="onboarding" class="overlay" hidden>
   <div class="overlay-card" role="dialog" aria-modal="true" aria-labelledby="obTitle">
@@ -263,6 +281,17 @@
           <b>schematic</b> forms built from them, not surveys of the steel.
         </dd>
       </div>
+      <div>
+        <dt>Landmark models</dt>
+        <dd>
+          <b id="aboutModelCount">—</b> landmarks whose form does not read from a
+          flat extrusion (Independence Hall, the Art Museum, Boathouse Row, the two
+          stadiums, Fort Mifflin and the Battleship New Jersey) are drawn as simple
+          solids with dimensions rounded from public references — recognisable
+          silhouettes, <b>not surveys</b>. Click one, or any landmark label, for a
+          card that says what is measured and what is not, with its sources.
+        </dd>
+      </div>
     </dl>
 
     <h3>What this map is not</h3>
@@ -324,7 +353,8 @@
         <tr><th scope="row"><kbd>P</kbd></th><td>Save the current view as a PNG</td></tr>
         <tr><th scope="row"><kbd>/</kbd></th><td>Focus the search box</td></tr>
         <tr><th scope="row"><kbd>?</kbd></th><td>This list</td></tr>
-        <tr><th scope="row"><kbd>Esc</kbd></th><td>Close a dialog, or stop the flythrough</td></tr>
+        <tr><th scope="row"><kbd>Esc</kbd></th><td>Close a card or dialog, leave cinema mode, or stop the flythrough</td></tr>
+        <tr><th scope="row">Click</th><td>A landmark model or label opens its information card</td></tr>
       </tbody>
     </table>
   </div>
