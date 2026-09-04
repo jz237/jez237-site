@@ -6,7 +6,7 @@
   "useConstraint": "These data illustrate the scale of potential flooding, not the exact location, and do not account for erosion, subsidence, or future construction. Inundation is shown as it would appear during the highest high tides with the sea level rise amount.",
   "datum": "feet above current mean higher high water (MHHW)",
   "fetched": "2026-09-04",
-  "note": "Clipped to the map region and simplified to ~15 m; low-lying (hydrologically disconnected) areas are not included."
+  "note": "Clipped to the map region and simplified to ~15 m, holes (islands of higher ground) kept; low-lying hydrologically disconnected areas are not included."
  },
  "scenariosFt": [
   1,
@@ -89,7 +89,7 @@
   },
   "NJ_Southern_2ft": {
    "source": 627,
-   "kept": 12
+   "kept": 11
   },
   "NJ_Southern_3ft": {
    "source": 667,
@@ -101,7 +101,7 @@
   },
   "NJ_Southern_5ft": {
    "source": 645,
-   "kept": 7
+   "kept": 6
   },
   "NJ_Southern_6ft": {
    "source": 793,
@@ -109,7 +109,7 @@
   },
   "NJ_Southern_8ft": {
    "source": 836,
-   "kept": 6
+   "kept": 5
   },
   "NJ_Southern_10ft": {
    "source": 861,
@@ -150,7 +150,7 @@
  },
  "format": "PHF2",
  "file": "noaa-slr.bin",
- "bytes": 293076,
+ "bytes": 709056,
  "classes": [
   "1ft",
   "2ft",
@@ -162,17 +162,17 @@
   "10ft"
  ],
  "kept": {
-  "1ft": 4,
-  "2ft": 11,
-  "3ft": 11,
-  "4ft": 8,
-  "5ft": 14,
-  "6ft": 17,
-  "8ft": 8,
+  "1ft": 9,
+  "2ft": 19,
+  "3ft": 16,
+  "4ft": 13,
+  "5ft": 18,
+  "6ft": 21,
+  "8ft": 9,
   "10ft": 11
  },
- "vertices": 73082,
- "holes": 60,
+ "vertices": 174812,
+ "holes": 4478,
  "minAreaM2": 6000.0,
  "simplifyM": 20.0,
  "bounds": [
