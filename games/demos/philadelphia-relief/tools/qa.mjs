@@ -932,14 +932,27 @@ async function structuresPass(page, viewport, shot, problems, report) {
   // opens its card. Independence Hall sits at the orbit target, so the
   // screen centre is on it.
   await goto('#x=-75.15&y=39.9489&d=2200&b=20&p=62', 2000);
-  const centre = await page.evaluate(() => {
-    const r = document.getElementById('stage').getBoundingClientRect();
-    return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
-  });
-  await page.mouse.click(centre.x, centre.y);
-  await page.waitForTimeout(500);
-  const picked = await page.evaluate(() => ({
-    card: window.philadelphiaRelief.stats().card, hidden: document.getElementById('card').hidden }));
+  // Wait for the flight to settle (SwiftShader flights vary in length), then
+  // click the centre; one retry covers a click that lands mid-frame.
+  let picked = null;
+  for (let attempt = 0; attempt < 2 && !(picked?.card); attempt += 1) {
+    let last = '';
+    for (let k = 0; k < 20; k += 1) {
+      await page.waitForTimeout(400);
+      const now = await page.evaluate(() => document.getElementById('outCoords').textContent
+        + document.getElementById('outZoom').textContent);
+      if (now === last) break;
+      last = now;
+    }
+    const centre = await page.evaluate(() => {
+      const r = document.getElementById('stage').getBoundingClientRect();
+      return { x: r.left + r.width / 2, y: r.top + r.height / 2 };
+    });
+    await page.mouse.click(centre.x, centre.y);
+    await page.waitForTimeout(600);
+    picked = await page.evaluate(() => ({
+      card: window.philadelphiaRelief.stats().card, hidden: document.getElementById('card').hidden }));
+  }
   if (picked.card !== 'Independence Hall' || picked.hidden) {
     problems.push(`[${viewport.id}] clicking the Independence Hall model did not open its card: `
       + JSON.stringify(picked));
@@ -980,6 +993,10 @@ async function structuresPass(page, viewport, shot, problems, report) {
   }
   if (perf?.structures && perf.structures.fraction > 0.7) {
     problems.push(`[${viewport.id}] performance fraction ${perf.structures.fraction} > 0.7`);
+  }
+  // Performance mode must still be a usable map: the skyline is drawn.
+  if (!(perf?.structures?.drawnBuildings >= (viewport.isMobile ? 1000 : 1500))) {
+    problems.push(`[${viewport.id}] performance mode draws only ${perf?.structures?.drawnBuildings} buildings`);
   }
   report.push(`[${viewport.id}] performance: tiers ${JSON.stringify(perf?.structureTiers)}, `
     + `buildings ${perf?.structures?.drawnBuildings}, calls ${perf?.drawCalls}`);
