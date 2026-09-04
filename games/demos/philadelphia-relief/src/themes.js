@@ -6,6 +6,9 @@
  * [t, '#rrggbb'] with t normalised over the region's elevation range, so the
  * same stops read correctly whatever the DEM min/max turn out to be.
  *
+ * `structure` colours the buildings and bridges layer: walls, roofs, the night
+ * glow of lit upper floors, and cable ink.
+ *
  * `skyFill` is the cool ambient the shader lights shadows with; `skyHorizon`
  * is the warm band the sky and the fog share. Keeping them separate is what
  * gives the golden-hour themes blue shadows instead of one flat hue.
@@ -29,6 +32,7 @@ export const THEMES = {
     contour: '#1a120a', contourIndex: '#0d0906',
     road: ['#ffd9a8', '#f0bd85', '#c99a68'],
     rail: '#e8ddd0', boundary: '#f2e2c8', park: '#3f5a3a',
+    structure: { wall: '#bfb1a0', roof: '#8c7f72', glow: '#ffb964', glowAmount: 0, cable: '#f0e6d8' },
     ink: '#fdf3e3', inkMuted: '#c8b49a', halo: '#120c07',
     ui: { bg: '#160f0a', panel: '#241a12', accent: '#f0a95e', text: '#f6ead9' },
   },
@@ -46,6 +50,7 @@ export const THEMES = {
     contour: '#0e1418', contourIndex: '#060a0d',
     road: ['#ffffff', '#dfe6ec', '#aab4bd'],
     rail: '#c6d0d8', boundary: '#dde5eb', park: '#3c4f45',
+    structure: { wall: '#b4bcc4', roof: '#7c868f', glow: '#cfe2f2', glowAmount: 0, cable: '#e6edf2' },
     ink: '#f2f6f9', inkMuted: '#a9b6c0', halo: '#0a0f14',
     ui: { bg: '#0e1319', panel: '#1a222b', accent: '#7fb2d8', text: '#eaf1f7' },
   },
@@ -63,6 +68,7 @@ export const THEMES = {
     contour: '#4a3a22', contourIndex: '#2e2313',
     road: ['#fff6e2', '#f2ddb8', '#cdb389'],
     rail: '#5a4b3a', boundary: '#8f6f9c', park: '#2f5c34',
+    structure: { wall: '#cdbfab', roof: '#93867a', glow: '#fff4d8', glowAmount: 0, cable: '#f4efe4' },
     ink: '#f8f5e8', inkMuted: '#bfc4a8', halo: '#14200f',
     ui: { bg: '#141a12', panel: '#20291c', accent: '#8fbf6a', text: '#eef3e4' },
   },
@@ -80,6 +86,7 @@ export const THEMES = {
     contour: '#7fd4ff', contourIndex: '#bdeaff',
     road: ['#8ff0ff', '#5cc9e8', '#3f9ec0'],
     rail: '#a8e5ff', boundary: '#5fa8d8', park: '#12405a',
+    structure: { wall: '#2f6d9e', roof: '#1f4f78', glow: '#8ff0ff', glowAmount: 0.18, cable: '#a8e5ff' },
     ink: '#dff4ff', inkMuted: '#7fb2cc', halo: '#03101d',
     ui: { bg: '#040d17', panel: '#0c1c2c', accent: '#4fc3f7', text: '#dff4ff' },
   },
@@ -97,6 +104,7 @@ export const THEMES = {
     contour: '#2a3850', contourIndex: '#3d4d68',
     road: ['#ffd98a', '#ffb964', '#d98f4a'],
     rail: '#7fe0d0', boundary: '#4a5f80', park: '#102018',
+    structure: { wall: '#26303f', roof: '#161d28', glow: '#ffb964', glowAmount: 0.42, cable: '#9fd3c8' },
     ink: '#e8f0ff', inkMuted: '#8b9ab5', halo: '#01030a',
     ui: { bg: '#05080f', panel: '#0e141f', accent: '#ffb964', text: '#e8f0ff' },
   },

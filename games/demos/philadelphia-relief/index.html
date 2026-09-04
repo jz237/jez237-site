@@ -160,6 +160,7 @@
       <li><b>Right-drag</b> or <b>two fingers</b> to orbit and tilt</li>
       <li><b>Scroll</b> or <b>pinch</b> to zoom</li>
       <li><b>Press ▶</b> for the flythrough — moving the camera pauses it</li>
+      <li><b>Zoom into Center City</b> and the buildings and Delaware bridges rise out of the ground</li>
     </ul>
     <div class="overlay-actions">
       <button type="button" class="primary-btn" id="obStart">Start exploring</button>
@@ -205,14 +206,42 @@
         <dt>Landmarks</dt>
         <dd>Hand-curated for this map. Elevations are sampled from the same DEM as the ground.</dd>
       </div>
+      <div>
+        <dt>Buildings</dt>
+        <dd>
+          <b id="aboutBuildingCount">—</b> OpenStreetMap footprints in two detail
+          zones: every building in Center City and University City, and only the
+          notable ones (tall, large or named) across inner Philadelphia and Camden.
+          <b id="aboutMeasuredPct">—</b> carry a measured OSM height, most of it
+          from the City of Philadelphia's LiDAR-derived footprint import;
+          <b id="aboutEstimatedPct">—</b> are estimated from storey counts or
+          building type; <b id="aboutCuratedCount">—</b> skyline
+          towers with no height in OSM (One Liberty Place, Comcast Center and their
+          neighbours) use public reference heights supplied by this project, plus
+          the City Hall tower as a curated box.
+        </dd>
+      </div>
+      <div>
+        <dt>Bridges</dt>
+        <dd>
+          <b id="aboutBridgeCount">—</b> Delaware crossings —
+          <span id="aboutBridgeNames">—</span>. Deck alignment and width come from
+          OpenStreetMap; spans, tower heights and clearances are rounded public
+          reference values, and the towers, cables, trusses and arches are
+          <b>schematic</b> forms built from them, not surveys of the steel.
+        </dd>
+      </div>
     </dl>
 
     <h3>What this map is not</h3>
     <p class="caveat">
       This is a visualisation, not a survey. Elevations come from a ~30 m public
       DEM resampled to ~46 m, then <b>vertically exaggerated</b> by whatever the
-      slider says — the default 14× is not a real slope. Readouts are good to a
-      few metres at best. Three source-data seams in the northwest (thin stripes
+      slider says — the default 10× is not a real slope. Buildings and bridges
+      are stretched by the square root of that factor (times the structure-height
+      slider), so a tower stays proportionate to a hill without becoming a needle;
+      their footprints are simplified to ~0.6 m and rowhouse rows are merged into
+      single blocks. Readouts are good to a few metres at best. Three source-data seams in the northwest (thin stripes
       spiking to 900 m in ground that is really ~260 m) were replaced with a
       local median during the build. Simplified vectors drop detail below roughly
       25–140 m depending on the layer, minor roads and unnamed streams are not
@@ -226,8 +255,11 @@
       log-warped around the camera target in the vertex shader, so detail
       concentrates where you are looking without any LOD seams. Hillshade,
       contours, ambient occlusion and the atmosphere are computed per pixel from
-      the height field. Every byte is served from this origin — no map service,
-      no account, no API key, nothing to leak.
+      the height field. Buildings are one draw call per zone and height tier,
+      packed tallest-first so the density slider is a draw-range prefix; whole
+      tiers frustum-cull as a unit and rise out of the ground as you approach.
+      Every byte is served from this origin — no map service, no account, no API
+      key, nothing to leak.
     </p>
 
     <p class="about-foot">

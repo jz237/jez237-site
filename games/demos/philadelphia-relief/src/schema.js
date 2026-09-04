@@ -89,6 +89,21 @@ export const CONTROLS = {
     group: 'carto', label: 'Boundary strength',
   },
 
+  // ---- structures --------------------------------------------------------
+  structureDetail: {
+    k: 'sd', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.6,
+    group: 'structures', label: 'Building density',
+    hint: 'Buildings are drawn tallest-first, so turning this down keeps the ' +
+      'skyline and sheds the rowhouse fabric. Performance mode caps it.',
+  },
+  structureHeight: {
+    k: 'sh', kind: 'range', min: 0.5, max: 3, step: 0.05, def: 1,
+    group: 'structures', label: 'Structure height', unit: '×',
+    hint: 'Buildings and bridges are stretched by the square root of the ' +
+      'terrain exaggeration, then by this. 1× keeps towers proportionate to ' +
+      'the hills without turning them into needles up close.',
+  },
+
   // ---- camera / scene ----------------------------------------------------
   theme: {
     k: 'th', kind: 'enum', values: THEMES, def: 'dusk',
@@ -120,6 +135,7 @@ export const LAYERS = {
   boundaries: { k: 'Lb', def: true, label: 'County / municipal lines' },
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
   landmarks: { k: 'Lm', def: true, label: 'Landmarks' },
+  structures: { k: 'Lx', def: true, label: 'Buildings & bridges' },
 };
 
 /** Camera pose. Kept in the same store so presets and URLs stay uniform. */
@@ -137,6 +153,7 @@ export const CAMERA = {
 export const GROUPS = [
   { id: 'scene', label: 'Scene' },
   { id: 'terrain', label: 'Terrain' },
+  { id: 'structures', label: 'Structures' },
   { id: 'light', label: 'Light' },
   { id: 'atmosphere', label: 'Atmosphere' },
   { id: 'carto', label: 'Cartography' },
@@ -230,4 +247,5 @@ export const CHEAP_KEYS = new Set([
   'waterIntensity', 'contourStrength', 'contourInterval', 'roadOpacity',
   'boundaryOpacity', 'theme', 'camLon', 'camLat', 'camDist', 'camBearing',
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
+  'structureDetail', 'structureHeight',
 ]);

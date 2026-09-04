@@ -1,0 +1,265 @@
+{
+ "format": "PHB1",
+ "generator": "tools/build_structures.py",
+ "attribution": "(c) OpenStreetMap contributors, ODbL 1.0",
+ "heightSources": {
+  "measured": "OSM height tag (Philadelphia's are largely LiDAR-derived)",
+  "levels": "estimated from building:levels at 3.3 m per storey",
+  "default": "estimated from building type",
+  "curated": "public reference value supplied by this project",
+  "merged": "average of a merged rowhouse row"
+ },
+ "sourceCounts": {
+  "curated": 27,
+  "levels": 2761,
+  "default": 5922,
+  "measured": 27867
+ },
+ "tiers": [
+  {
+   "tier": "tall",
+   "minHeightM": 35.0
+  },
+  {
+   "tier": "mid",
+   "minHeightM": 12.0
+  },
+  {
+   "tier": "low",
+   "minHeightM": 0.0
+  }
+ ],
+ "zones": [
+  {
+   "id": "center-city",
+   "label": "Center City & University City",
+   "mode": "full",
+   "bounds": {
+    "west": -75.205,
+    "east": -75.135,
+    "south": 39.938,
+    "north": 39.97
+   },
+   "origin": {
+    "lon": -75.17,
+    "lat": 39.954
+   },
+   "tiers": [
+    {
+     "tier": "tall",
+     "file": "center-city-tall.bin",
+     "count": 326,
+     "vertices": 3393,
+     "bytes": 16188,
+     "minHeight": 35.0,
+     "maxHeight": 341.0,
+     "named": 256
+    },
+    {
+     "tier": "mid",
+     "file": "center-city-mid.bin",
+     "count": 5052,
+     "vertices": 56055,
+     "bytes": 264644,
+     "minHeight": 14.3,
+     "maxHeight": 34.9,
+     "named": 291
+    },
+    {
+     "tier": "low",
+     "file": "center-city-low.bin",
+     "count": 6794,
+     "vertices": 75738,
+     "bytes": 357312,
+     "minHeight": 5.3,
+     "maxHeight": 10.0,
+     "named": 1
+    }
+   ],
+   "mergedRowhouses": 22067,
+   "tallest": [
+    {
+     "name": "Comcast Technology Center",
+     "height": 341.0,
+     "source": "measured"
+    },
+    {
+     "name": "Comcast Center",
+     "height": 297.0,
+     "source": "curated"
+    },
+    {
+     "name": "One Liberty Place",
+     "height": 288.0,
+     "source": "curated"
+    },
+    {
+     "name": "Two Liberty Place",
+     "height": 258.0,
+     "source": "curated"
+    },
+    {
+     "name": "BNY Mellon Center",
+     "height": 241.0,
+     "source": "curated"
+    },
+    {
+     "name": "Three Logan Square",
+     "height": 227.0,
+     "source": "curated"
+    },
+    {
+     "name": "FMC Tower",
+     "height": 222.5,
+     "source": "measured"
+    },
+    {
+     "name": "G. Fred DiBona Jr. Building",
+     "height": 190.0,
+     "source": "curated"
+    },
+    {
+     "name": "W Hotel & Element by Westin Philadelphia",
+     "height": 189.0,
+     "source": "measured"
+    },
+    {
+     "name": "The Laurel",
+     "height": 182.0,
+     "source": "measured"
+    },
+    {
+     "name": "One Commerce Square",
+     "height": 172.0,
+     "source": "curated"
+    },
+    {
+     "name": "Two Commerce Square",
+     "height": 172.0,
+     "source": "curated"
+    }
+   ]
+  },
+  {
+   "id": "inner-city",
+   "label": "Inner Philadelphia & Camden (notable buildings)",
+   "mode": "notable",
+   "bounds": {
+    "west": -75.26,
+    "east": -75.08,
+    "south": 39.88,
+    "north": 40.01
+   },
+   "origin": {
+    "lon": -75.17,
+    "lat": 39.945
+   },
+   "tiers": [
+    {
+     "tier": "tall",
+     "file": "inner-city-tall.bin",
+     "count": 131,
+     "vertices": 3803,
+     "bytes": 16268,
+     "minHeight": 35.0,
+     "maxHeight": 117.0,
+     "named": 76
+    },
+    {
+     "tier": "mid",
+     "file": "inner-city-mid.bin",
+     "count": 1827,
+     "vertices": 25079,
+     "bytes": 114940,
+     "minHeight": 12.0,
+     "maxHeight": 35.0,
+     "named": 1370
+    },
+    {
+     "tier": "low",
+     "file": "inner-city-low.bin",
+     "count": 380,
+     "vertices": 5737,
+     "bytes": 25996,
+     "minHeight": 4.8,
+     "maxHeight": 11.9,
+     "named": 380
+    }
+   ],
+   "mergedRowhouses": 0,
+   "tallest": [
+    {
+     "name": "Camden City Hall",
+     "height": 113.0,
+     "source": "curated"
+    },
+    {
+     "name": "Courtyard Apartments at Riverview Tower",
+     "height": 100.8,
+     "source": "measured"
+    },
+    {
+     "name": "Morgan Hall North",
+     "height": 90.6,
+     "source": "levels"
+    },
+    {
+     "name": "River Park House",
+     "height": 88.7,
+     "source": "measured"
+    },
+    {
+     "name": "Park Plaza Condos",
+     "height": 72.5,
+     "source": "measured"
+    },
+    {
+     "name": "Northgate",
+     "height": 67.5,
+     "source": "levels"
+    },
+    {
+     "name": "Northgate II",
+     "height": 67.5,
+     "source": "levels"
+    },
+    {
+     "name": "Medical Education & Research Building",
+     "height": 66.8,
+     "source": "measured"
+    },
+    {
+     "name": "The Point at City Line",
+     "height": 62.8,
+     "source": "measured"
+    },
+    {
+     "name": "Triad1828 Centre",
+     "height": 60.9,
+     "source": "levels"
+    },
+    {
+     "name": "Vantage",
+     "height": 60.0,
+     "source": "measured"
+    },
+    {
+     "name": "Gotham Tower",
+     "height": 60.0,
+     "source": "measured"
+    }
+   ]
+  }
+ ],
+ "totals": {
+  "buildings": 14510,
+  "vertices": 169805,
+  "bytes": 795348
+ },
+ "bridgesFile": "bridges.json",
+ "bridgeCount": 6,
+ "projection": {
+  "metersPerDegLat": 111037.0072,
+  "metersPerDegLon": 85238.0237
+ }
+}

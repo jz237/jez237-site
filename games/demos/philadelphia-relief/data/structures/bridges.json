@@ -1,0 +1,152 @@
+{
+ "attribution": "Deck alignment (c) OpenStreetMap contributors, ODbL 1.0. Spans, tower heights and clearances are curated approximations from public references; structural form is schematic.",
+ "curated": true,
+ "bridges": [
+  {
+   "id": "benjamin-franklin",
+   "name": "Benjamin Franklin Bridge",
+   "type": "suspension",
+   "main_span_m": 533,
+   "tower_height_m": 116,
+   "clearance_m": 41,
+   "deck_width_m": 38.7,
+   "opened": 1926,
+   "carries": "I-676 / US 30, PATCO",
+   "note": "Main span 1,750 ft; the world's longest suspension span when it opened.",
+   "centerline": [
+    [
+     -75.140704,
+     39.954009
+    ],
+    [
+     -75.128545,
+     39.951901
+    ]
+   ],
+   "length_m": 1062,
+   "geometry_source": "osm-outline"
+  },
+  {
+   "id": "walt-whitman",
+   "name": "Walt Whitman Bridge",
+   "type": "suspension",
+   "main_span_m": 610,
+   "tower_height_m": 114,
+   "clearance_m": 46,
+   "deck_width_m": 26.5,
+   "opened": 1957,
+   "carries": "I-76",
+   "note": "Main span 2,000 ft.",
+   "centerline": [
+    [
+     -75.136729,
+     39.90648
+    ],
+    [
+     -75.121797,
+     39.903922
+    ]
+   ],
+   "length_m": 1304,
+   "geometry_source": "osm-outline"
+  },
+  {
+   "id": "betsy-ross",
+   "name": "Betsy Ross Bridge",
+   "type": "truss",
+   "main_span_m": 222,
+   "truss_height_m": 26,
+   "truss_position": "below",
+   "clearance_m": 41,
+   "deck_width_m": 33.9,
+   "opened": 1976,
+   "carries": "NJ 90",
+   "note": "Continuous steel deck truss: the roadway rides on top of the steel.",
+   "centerline": [
+    [
+     -75.069965,
+     39.986482
+    ],
+    [
+     -75.061842,
+     39.983107
+    ]
+   ],
+   "length_m": 787,
+   "geometry_source": "osm-outline"
+  },
+  {
+   "id": "tacony-palmyra",
+   "name": "Tacony-Palmyra Bridge",
+   "type": "arch",
+   "main_span_m": 165,
+   "arch_rise_m": 32,
+   "clearance_m": 16,
+   "deck_width_m": 16.8,
+   "opened": 1929,
+   "carries": "NJ 73",
+   "note": "Steel tied arch beside a bascule span.",
+   "centerline": [
+    [
+     -75.045232,
+     40.015071
+    ],
+    [
+     -75.041084,
+     40.009544
+    ]
+   ],
+   "length_m": 708,
+   "geometry_source": "osm-outline"
+  },
+  {
+   "id": "commodore-barry",
+   "name": "Commodore Barry Bridge",
+   "type": "truss",
+   "main_span_m": 501,
+   "truss_height_m": 52,
+   "truss_position": "above",
+   "clearance_m": 58,
+   "deck_width_m": 23.7,
+   "opened": 1974,
+   "carries": "US 322",
+   "note": "Cantilever through truss; among the longest of its kind.",
+   "centerline": [
+    [
+     -75.376369,
+     39.832799
+    ],
+    [
+     -75.362982,
+     39.820166
+    ]
+   ],
+   "length_m": 1808,
+   "geometry_source": "osm-outline"
+  },
+  {
+   "id": "burlington-bristol",
+   "name": "Burlington-Bristol Bridge",
+   "type": "lift",
+   "main_span_m": 165,
+   "tower_height_m": 60,
+   "clearance_m": 19,
+   "deck_width_m": 8,
+   "opened": 1931,
+   "carries": "NJ 413 / PA 413",
+   "note": "Vertical-lift span between two towers.",
+   "centerline": [
+    [
+     -74.868087,
+     40.07783
+    ],
+    [
+     -74.870442,
+     40.08377
+    ]
+   ],
+   "length_m": 689,
+   "geometry_source": "osm-centerline"
+  }
+ ]
+}

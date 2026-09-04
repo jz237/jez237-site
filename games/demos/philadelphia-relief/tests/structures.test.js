@@ -1,0 +1,416 @@
+/**
+ * Structures layer: data integrity, geometry placement, LOD policy, and the
+ * state/URL/degraded plumbing that carries it.
+ *
+ * Reads the real shipped files under data/structures/, so a regeneration that
+ * drops a bridge, breaks the binary layout, or drifts a tower off its footprint
+ * fails here before it reaches a browser.
+ *
+ *   node --test tests/
+ */
+
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { readFile } from 'node:fs/promises';
+
+import {
+  parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, tierRange,
+  drawFraction, drawIndexCount, heightScale, distanceToBox, deckProfile, resample,
+  TIER_PLAN, TIER_ORDER,
+} from '../src/structures-data.js';
+import { CONTROLS, LAYERS, defaults, coerce } from '../src/schema.js';
+import { createStore } from '../src/state.js';
+import { PRESETS, presetPatch } from '../src/presets.js';
+import { encodeState, decodeState } from '../src/urlstate.js';
+import { assess, ASSETS, MODE } from '../src/degraded.js';
+import { THEMES, THEME_IDS } from '../src/themes.js';
+import { createProjection } from '../src/geo.js';
+
+const dataDir = new URL('../data/structures/', import.meta.url);
+const manifest = JSON.parse(await readFile(new URL('buildings.json', dataDir), 'utf8'));
+const bridgesDoc = JSON.parse(await readFile(new URL('bridges.json', dataDir), 'utf8'));
+const terrainMeta = JSON.parse(
+  await readFile(new URL('../data/terrain.json', import.meta.url), 'utf8'));
+const projection = createProjection(terrainMeta);
+
+const REQUIRED_BRIDGES = ['Benjamin Franklin Bridge', 'Walt Whitman Bridge',
+  'Betsy Ross Bridge', 'Tacony-Palmyra Bridge'];
+const SKYLINE = ['Comcast Technology Center', 'Comcast Center', 'One Liberty Place',
+  'Two Liberty Place', 'BNY Mellon Center', 'Three Logan Square'];
+
+const hex = /^#[0-9a-f]{6}$/i;
+const inRegion = (lon, lat) => projection.contains(lon, lat);
+
+// ---------------------------------------------------------------------------
+test('structures manifest', async (t) => {
+  await t.test('describes bounded zones with tiers, counts and sizes', () => {
+    assert.equal(manifest.format, 'PHB1');
+    assert.ok(manifest.zones.length >= 2, 'two detail zones');
+    for (const zone of manifest.zones) {
+      assert.ok(inRegion(zone.bounds.west, zone.bounds.south), `${zone.id} sw outside region`);
+      assert.ok(inRegion(zone.bounds.east, zone.bounds.north), `${zone.id} ne outside region`);
+      const w = (zone.bounds.east - zone.bounds.west) * manifest.projection.metersPerDegLon;
+      const h = (zone.bounds.north - zone.bounds.south) * manifest.projection.metersPerDegLat;
+      // No unbounded full-region dump: every zone is a few kilometres, not 94.
+      assert.ok(w < 20000 && h < 20000, `${zone.id} is ${Math.round(w)}x${Math.round(h)} m`);
+      for (const tier of zone.tiers) {
+        assert.ok(TIER_ORDER.includes(tier.tier), `${zone.id} unknown tier ${tier.tier}`);
+        assert.ok(tier.count > 0 && tier.bytes > 8 && tier.vertices >= 3 * tier.count);
+      }
+    }
+    assert.ok(manifest.totals.buildings > 10000, 'the fabric must be substantial');
+    assert.ok(manifest.totals.bytes < 1.6e6,
+      `payload ${manifest.totals.bytes} B exceeds the 1.6 MB budget`);
+  });
+
+  await t.test('heights are honest about their provenance', () => {
+    const c = manifest.sourceCounts;
+    const total = Object.values(c).reduce((a, b) => a + b, 0);
+    assert.ok(c.measured / total > 0.5, 'most heights should be measured OSM values');
+    assert.ok(c.curated > 0 && c.curated < 60, 'curated overrides are few and counted');
+    assert.ok(manifest.heightSources.curated.includes('reference'),
+      'the manifest must say curated heights are references, not surveys');
+  });
+
+  await t.test('the skyline towers are present, tall, and in the tall tier', () => {
+    const center = manifest.zones.find((z) => z.id === 'center-city');
+    const names = new Map(center.tallest.map((b) => [b.name, b]));
+    for (const name of SKYLINE) {
+      const b = names.get(name);
+      assert.ok(b, `${name} missing from the tallest list`);
+      assert.ok(b.height >= 150, `${name} is only ${b.height} m`);
+    }
+    assert.ok(names.get('Comcast Technology Center').height > 330);
+    assert.equal(names.get('Comcast Technology Center').source, 'measured');
+    assert.equal(names.get('One Liberty Place').source, 'curated');
+  });
+});
+
+// ---------------------------------------------------------------------------
+test('tier streams', async (t) => {
+  for (const zone of manifest.zones) {
+    for (const tier of zone.tiers) {
+      await t.test(`${zone.id}/${tier.tier} parses, is sorted, and stays in its box`, async () => {
+        const buffer = (await readFile(new URL(tier.file, dataDir))).buffer;
+        const parsed = parseTier(buffer);
+        assert.equal(parsed.count, tier.count, 'count matches the manifest');
+        assert.equal(parsed.buildings.reduce((a, b) => a + b.poly.length / 2, 0),
+          tier.vertices, 'vertex total matches the manifest');
+
+        const floor = manifest.tiers.find((x) => x.tier === tier.tier).minHeightM;
+        const halfW = (zone.bounds.east - zone.bounds.west) / 2 * manifest.projection.metersPerDegLon;
+        const halfH = (zone.bounds.north - zone.bounds.south) / 2 * manifest.projection.metersPerDegLat;
+        let prev = Infinity;
+        for (const b of parsed.buildings) {
+          assert.ok(b.height <= prev + 1e-6, 'tallest first');
+          prev = b.height;
+          assert.ok(b.height >= floor && b.height <= 400, `height ${b.height} outside tier`);
+          assert.ok(b.minHeight >= 0 && b.minHeight < b.height);
+          assert.ok(b.poly.length >= 6, 'at least a triangle');
+          for (let k = 0; k < b.poly.length; k += 2) {
+            assert.ok(Math.abs(b.poly[k]) <= halfW + 250, `x ${b.poly[k]} outside the zone`);
+            assert.ok(Math.abs(b.poly[k + 1]) <= halfH + 250, `z ${b.poly[k + 1]} outside the zone`);
+          }
+        }
+      });
+    }
+  }
+
+  await t.test('rejects a corrupted stream instead of rendering garbage', () => {
+    const good = new Uint8Array([80, 72, 66, 49, 1, 0, 0, 0, 3, 0, 100, 0, 0, 0, 0, 0,
+      0, 0, 0, 0, 10, 0, 0, 0, 10, 0, 10, 0]);
+    assert.equal(parseTier(good.buffer).count, 1);
+    const badMagic = new Uint8Array(good);
+    badMagic[0] = 88;
+    assert.throws(() => parseTier(badMagic.buffer), /bad magic/);
+    assert.throws(() => parseTier(good.buffer.slice(0, 20)), /bad ring|truncated/);
+    assert.throws(() => parseTier(new ArrayBuffer(4)), /too short/);
+  });
+});
+
+// ---------------------------------------------------------------------------
+test('extrusion', async (t) => {
+  const square = { height: 30, minHeight: 0, source: 'measured', named: false,
+    poly: new Float32Array([0, 0, 10, 0, 10, 10, 0, 10]) };
+  const hex6 = { height: 12, minHeight: 2, source: 'levels', named: true,
+    poly: new Float32Array([0, 0, 4, 0, 6, 3, 4, 6, 0, 6, -2, 3]) };
+
+  await t.test('packs 2n vertices and 6n + 3(n-2) indices per building', () => {
+    const packed = extrudeBuildings([square, hex6], {
+      originX: 1000, originZ: -500, groundAt: () => 7,
+    });
+    assert.equal(packed.vertexCount, 8 + 12);
+    assert.equal(packed.indexCount, (24 + 6) + (36 + 12));
+    assert.deepEqual([...packed.buildingEnd], [30, 78]);
+    for (const idx of packed.index) assert.ok(idx < packed.vertexCount, 'index in range');
+  });
+
+  await t.test('sits on the ground sampled at its own centroid, in world xz', () => {
+    let asked = null;
+    const packed = extrudeBuildings([square], {
+      originX: 1000, originZ: -500, groundAt: (x, z) => { asked = [x, z]; return 42; },
+    });
+    assert.deepEqual(asked, [1005, -495], 'centroid, offset by the zone origin');
+    for (let v = 0; v < packed.vertexCount; v += 1) assert.equal(packed.ground[v], 42);
+    // Base ring at structural 0, roof ring at the height; world x/z carry the
+    // origin. Winding may be normalised, so compare as sets.
+    const corner = (v) => `${packed.position[v * 3]},${packed.position[v * 3 + 2]}`;
+    const baseRing = new Set([0, 1, 2, 3].map(corner));
+    assert.deepEqual([...baseRing].sort(),
+      ['1000,-490', '1000,-500', '1010,-490', '1010,-500']);
+    for (let v = 0; v < 4; v += 1) assert.equal(packed.position[v * 3 + 1], 0);
+    for (let v = 4; v < 8; v += 1) assert.equal(packed.position[v * 3 + 1], 30);
+    assert.equal(packed.info[0], 30);
+  });
+
+  await t.test('winding is normalised so a clockwise ring still gets a roof', () => {
+    const cw = { ...square, poly: new Float32Array([0, 0, 0, 10, 10, 10, 10, 0]) };
+    const a = extrudeBuildings([square], { originX: 0, originZ: 0, groundAt: () => 0 });
+    const b = extrudeBuildings([cw], { originX: 0, originZ: 0, groundAt: () => 0 });
+    assert.equal(a.indexCount, b.indexCount);
+    // Roof triangles reference roof-ring vertices only.
+    const roof = [...b.index.slice(24)];
+    assert.ok(roof.every((i) => i >= 4), 'roof uses the top ring');
+  });
+
+  await t.test('vertical scale is damped against terrain exaggeration', () => {
+    assert.equal(heightScale(1, 1), 1);
+    assert.ok(Math.abs(heightScale(10, 1) - Math.sqrt(10)) < 1e-9);
+    assert.ok(Math.abs(heightScale(10, 2) - 2 * Math.sqrt(10)) < 1e-9);
+    assert.equal(heightScale(0.2, 1), 1, 'never below true scale');
+    assert.ok(heightScale(10, 0) > 0, 'never collapses to zero');
+    // A 340 m tower at the default exaggeration stays a tower, not a needle:
+    // less than one third of the width of a 6 km close-up frame.
+    assert.ok(340 * heightScale(10, 1) < 6000 / 3);
+  });
+});
+
+// ---------------------------------------------------------------------------
+test('LOD policy', async (t) => {
+  await t.test('performance mode never fetches the rowhouse tier', () => {
+    assert.deepEqual(TIER_PLAN.performance, ['tall', 'mid']);
+    assert.ok(TIER_PLAN.balanced.includes('low'));
+    assert.ok(TIER_PLAN.cinematic.includes('low'));
+  });
+
+  await t.test('ranges grow with detail and quality, tall beyond mid beyond low', () => {
+    for (const q of ['performance', 'balanced', 'cinematic']) {
+      assert.ok(tierRange('tall', q, 0.6) > tierRange('mid', q, 0.6));
+      assert.ok(tierRange('mid', q, 0.6) > tierRange('low', q, 0.6));
+      assert.ok(tierRange('low', q, 1) > tierRange('low', q, 0));
+    }
+    assert.ok(tierRange('mid', 'cinematic', 0.6) > tierRange('mid', 'balanced', 0.6));
+    assert.ok(tierRange('mid', 'balanced', 0.6) > tierRange('mid', 'performance', 0.6));
+    assert.ok(tierRange('tall', 'balanced', 0.6) > 90000, 'the skyline shows from the overview');
+  });
+
+  await t.test('grow is 1 inside the range, 0 beyond it, smooth between', () => {
+    const range = tierRange('low', 'balanced', 0.6);
+    assert.equal(tierGrow('low', 0, 'balanced', 0.6), 1);
+    assert.equal(tierGrow('low', range * 0.5, 'balanced', 0.6), 1);
+    assert.equal(tierGrow('low', range * 2, 'balanced', 0.6), 0);
+    const mid = tierGrow('low', range * 0.875, 'balanced', 0.6);
+    assert.ok(mid > 0.3 && mid < 0.7, `midway grow ${mid}`);
+    assert.equal(tierGrow('nope', 1, 'balanced', 0.6), 0);
+  });
+
+  await t.test('draw fraction is a tallest-first prefix, capped in performance mode', () => {
+    assert.equal(drawFraction('balanced', 1), 1);
+    assert.ok(drawFraction('performance', 1) <= 0.7);
+    assert.ok(drawFraction('balanced', 0) > 0, 'never nothing: the skyline stays');
+    assert.ok(drawFraction('balanced', 0.6) > drawFraction('balanced', 0.3));
+    const packed = extrudeBuildings([
+      { height: 50, minHeight: 0, poly: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]) },
+      { height: 20, minHeight: 0, poly: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]) },
+      { height: 10, minHeight: 0, poly: new Float32Array([0, 0, 1, 0, 1, 1, 0, 1]) },
+    ], { originX: 0, originZ: 0, groundAt: () => 0 });
+    assert.equal(drawIndexCount(packed, 1), packed.indexCount);
+    assert.equal(drawIndexCount(packed, 0.34), packed.buildingEnd[0], 'one building: the tallest');
+    assert.equal(drawIndexCount(packed, 0), 0);
+    assert.equal(drawIndexCount(null, 1), 0);
+  });
+
+  await t.test('distance to a zone box is zero inside and euclidean outside', () => {
+    const box = { minX: 0, maxX: 100, minZ: 0, maxZ: 100 };
+    assert.equal(distanceToBox(50, 50, box), 0);
+    assert.equal(distanceToBox(-30, 50, box), 30);
+    assert.ok(Math.abs(distanceToBox(-30, -40, box) - 50) < 1e-9);
+  });
+});
+
+// ---------------------------------------------------------------------------
+test('bridges', async (t) => {
+  await t.test('the four required Delaware crossings ship with real alignments', () => {
+    const names = new Set(bridgesDoc.bridges.map((b) => b.name));
+    for (const name of REQUIRED_BRIDGES) assert.ok(names.has(name), `missing ${name}`);
+    assert.ok(bridgesDoc.attribution.includes('OpenStreetMap'));
+    assert.equal(bridgesDoc.curated, true, 'must declare its structure as curated');
+    for (const b of bridgesDoc.bridges) {
+      assert.ok(b.centerline.length >= 2, `${b.id} needs a centerline`);
+      for (const [lon, lat] of b.centerline) assert.ok(inRegion(lon, lat), `${b.id} off-region`);
+      assert.ok(['suspension', 'truss', 'arch', 'lift', 'girder'].includes(b.type), b.type);
+      assert.ok(b.length_m > 200 && b.length_m < 4000, `${b.id} length ${b.length_m}`);
+      assert.ok(b.deck_width_m >= 8 && b.deck_width_m <= 60, `${b.id} width ${b.deck_width_m}`);
+      assert.ok(b.clearance_m > 10 && b.clearance_m < 80);
+      assert.ok(['osm-outline', 'osm-centerline', 'curated'].includes(b.geometry_source));
+    }
+    const bfb = bridgesDoc.bridges.find((b) => b.id === 'benjamin-franklin');
+    assert.equal(bfb.type, 'suspension');
+    assert.ok(bfb.tower_height_m > 100);
+    // Its centre must sit over the Delaware between Philadelphia and Camden.
+    const mid = bfb.centerline[Math.floor(bfb.centerline.length / 2)];
+    assert.ok(mid[0] > -75.15 && mid[0] < -75.12 && mid[1] > 39.945 && mid[1] < 39.965,
+      `Ben Franklin midpoint ${mid} is not on the river`);
+  });
+
+  await t.test('the deck is level at the clearance and only eases down at its ends', () => {
+    const spec = { clearance_m: 41 };
+    const mid = deckProfile(0.5, spec, 8, 6);
+    assert.ok(mid.struct > 35, `midspan struct ${mid.struct}`);
+    assert.ok(mid.ground > 6 && mid.ground < 8, 'bank elevation interpolates');
+    // Level across the middle: no hump.
+    for (const u of [0.25, 0.4, 0.6, 0.75]) {
+      assert.ok(Math.abs(deckProfile(u, spec, 8, 6).struct - mid.struct) < 1e-9, `hump at ${u}`);
+    }
+    // Ends still stand proud, like the start of an approach viaduct.
+    const ends = [deckProfile(0, spec, 8, 6), deckProfile(1, spec, 8, 6)];
+    for (const e of ends) {
+      assert.ok(e.struct > 10 && e.struct < mid.struct * 0.5, `end struct ${e.struct}`);
+    }
+    // Monotone taper: no grade steeper than the ends themselves.
+    let prev = deckProfile(0, spec, 8, 6).struct;
+    for (let u = 0.02; u <= 0.5; u += 0.02) {
+      const cur = deckProfile(u, spec, 8, 6).struct;
+      assert.ok(cur >= prev - 1e-9, 'deck dips on the way up');
+      prev = cur;
+    }
+  });
+
+  await t.test('a suspension bridge builds towers, cables and hangers on the deck', () => {
+    const line = [[0, 0], [1200, 0]];
+    const built = buildBridge({ type: 'suspension', main_span_m: 533, tower_height_m: 116,
+      clearance_m: 41, deck_width_m: 39 }, resample(line, 40), () => 0);
+    assert.ok(built.solids.vertexCount > 100 && built.solids.indexCount > 100);
+    assert.ok(built.lines.length > 60, `only ${built.lines.length} cable segments`);
+    // Every index points at a real vertex and every vertex is finite.
+    for (const i of built.solids.index) assert.ok(i < built.solids.vertexCount);
+    for (const v of built.solids.position) assert.ok(Number.isFinite(v));
+    // The tallest structural vertex is the tower top.
+    let top = 0;
+    for (let v = 0; v < built.solids.vertexCount; v += 1) {
+      top = Math.max(top, built.solids.position[v * 3 + 1]);
+    }
+    assert.ok(Math.abs(top - 116) < 1e-6, `tower top ${top}`);
+    // Cable high points meet the tower tops; the sag stays above the deck.
+    let cableMax = 0;
+    let cableMin = Infinity;
+    for (const seg of built.lines) {
+      cableMax = Math.max(cableMax, seg.sa, seg.sb);
+      cableMin = Math.min(cableMin, seg.sa, seg.sb);
+    }
+    assert.ok(Math.abs(cableMax - 116) < 1e-6);
+    assert.ok(cableMin >= 0);
+  });
+
+  await t.test('a deck truss keeps its steel under the roadway; a through truss rises above', () => {
+    const line = resample([[0, 0], [800, 0]], 40);
+    const deckTop = (built) => {
+      let top = 0;
+      for (let v = 0; v < built.solids.vertexCount; v += 1) {
+        top = Math.max(top, built.solids.position[v * 3 + 1]);
+      }
+      return top;
+    };
+    const belowSpec = { type: 'truss', main_span_m: 222, truss_height_m: 26,
+      truss_position: 'below', clearance_m: 41, deck_width_m: 30 };
+    const aboveSpec = { ...belowSpec, truss_position: 'above', truss_height_m: 52 };
+    const below = buildBridge(belowSpec, line, () => 2);
+    const above = buildBridge(aboveSpec, line, () => 2);
+    const lineMax = (b) => Math.max(...b.lines.map((l) => Math.max(l.sa, l.sb)));
+    assert.ok(lineMax(below) <= deckTop(below) + 1e-6, 'deck truss must not rise above the deck');
+    assert.ok(lineMax(above) > deckTop(above) + 20, 'through truss must rise well above it');
+    assert.ok(Math.min(...below.lines.map((l) => Math.min(l.sa, l.sb))) >= 1, 'never below water');
+  });
+
+  await t.test('every shipped bridge builds without a degenerate part', () => {
+    const groundAt = () => 3;
+    const parts = [];
+    for (const spec of bridgesDoc.bridges) {
+      const world = spec.centerline.map(([lon, lat]) =>
+        [projection.lonToX(lon), projection.latToZ(lat)]);
+      const built = buildBridge(spec, resample(world, 40), groundAt);
+      assert.ok(built, `${spec.id} did not build`);
+      assert.ok(built.solids.vertexCount > 0);
+      parts.push(built.solids);
+    }
+    const merged = mergeSolids(parts);
+    assert.equal(merged.vertexCount, parts.reduce((a, p) => a + p.vertexCount, 0));
+    assert.equal(merged.indexCount, parts.reduce((a, p) => a + p.indexCount, 0));
+    let maxIdx = 0;
+    for (const i of merged.index) maxIdx = Math.max(maxIdx, i);
+    assert.ok(maxIdx < merged.vertexCount, 'merged indices were re-based');
+  });
+
+  await t.test('too short a line is refused rather than extruded', () => {
+    assert.equal(buildBridge({ type: 'truss' }, [[0, 0], [5, 0]], () => 0), null);
+  });
+});
+
+// ---------------------------------------------------------------------------
+test('structures state plumbing', async (t) => {
+  await t.test('the layer and its controls exist with unique keys and sane defaults', () => {
+    assert.ok(LAYERS.structures, 'structures layer');
+    assert.equal(LAYERS.structures.def, true);
+    assert.ok(CONTROLS.structureDetail && CONTROLS.structureHeight);
+    assert.equal(coerce('structureDetail', 5), 1);
+    assert.equal(coerce('structureHeight', 0), 0.5, 'never flat');
+    assert.equal(defaults().structureDetail, 0.6);
+    assert.equal(defaults().structureHeight, 1);
+  });
+
+  await t.test('every preset states its structure settings and keeps the layer on', () => {
+    for (const preset of PRESETS) {
+      const patch = presetPatch(preset.id);
+      assert.ok(Number.isFinite(patch.structureDetail), `${preset.id} detail`);
+      assert.ok(Number.isFinite(patch.structureHeight), `${preset.id} height`);
+      assert.equal(patch.layers.structures, true, `${preset.id} must show structures`);
+    }
+    assert.ok(presetPatch('night-metro').structureDetail > presetPatch('overview').structureDetail,
+      'the night shot is the dense one');
+  });
+
+  await t.test('the layer toggle and controls round-trip through the URL', () => {
+    const store = createStore();
+    store.set({ structureDetail: 0.25, structureHeight: 1.8, layers: { structures: false } });
+    const hash = encodeState(store.get());
+    assert.ok(hash.includes('sd=0.25') && hash.includes('sh=1.8') && hash.includes('Lx=0'));
+    const restored = createStore(decodeState(`#${hash}`));
+    assert.equal(restored.get().structureDetail, 0.25);
+    assert.equal(restored.get().structureHeight, 1.8);
+    assert.equal(restored.get().layers.structures, false);
+    store.reset();
+    assert.equal(store.get().layers.structures, true);
+    assert.equal(store.get().structureDetail, 0.6);
+  });
+
+  await t.test('a missing manifest degrades to a disabled layer, not a broken map', () => {
+    const results = Object.fromEntries(ASSETS.map((a) => [a.id, true]));
+    results.structures = false;
+    const status = assess(results);
+    assert.equal(status.mode, MODE.PARTIAL);
+    assert.ok(status.disableLayers.includes('structures'));
+    assert.match(status.message, /buildings and bridges/);
+    assert.equal(status.trustworthy, true, 'the terrain is still real');
+  });
+
+  await t.test('every theme colours the layer', () => {
+    for (const id of THEME_IDS) {
+      const s = THEMES[id].structure;
+      assert.ok(s, `${id} has no structure palette`);
+      for (const key of ['wall', 'roof', 'glow', 'cable']) assert.match(s[key], hex, `${id}.${key}`);
+      assert.ok(s.glowAmount >= 0 && s.glowAmount <= 1);
+    }
+    assert.ok(THEMES.noir.structure.glowAmount > THEMES.dusk.structure.glowAmount,
+      'night lights the windows');
+  });
+});
