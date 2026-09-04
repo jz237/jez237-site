@@ -136,10 +136,14 @@
     </div>
   </div>
 
-  <div class="timeline" role="group" aria-label="Flythrough">
-    <button type="button" class="play-btn" id="btnPlay" aria-label="Play the flythrough">
+  <div class="timeline" role="group" aria-label="Guided tours">
+    <label class="visually-hidden" for="tourSelect">Tour</label>
+    <select id="tourSelect" class="tour-select"></select>
+    <button type="button" class="step-btn" id="btnPrevShot" aria-label="Previous shot ([)">‹</button>
+    <button type="button" class="play-btn" id="btnPlay" aria-label="Play the tour">
       <span id="playIcon">▶</span>
     </button>
+    <button type="button" class="step-btn" id="btnNextShot" aria-label="Next shot (])">›</button>
     <div class="timeline-track" id="timelineTrack">
       <div class="timeline-fill" id="timelineFill"></div>
       <div class="timeline-shots" id="timelineShots"></div>
@@ -147,6 +151,13 @@
     <span class="timeline-time" id="timelineTime">0:00</span>
   </div>
 </footer>
+
+<!-- ── tour caption ────────────────────────────────────────────────────── -->
+<div id="caption" class="caption" aria-live="polite" hidden>
+  <strong id="captionTitle"></strong>
+  <span id="captionText"></span>
+  <small id="captionSource"></small>
+</div>
 
 <!-- ── onboarding ──────────────────────────────────────────────────────── -->
 <div id="onboarding" class="overlay" hidden>
@@ -162,7 +173,7 @@
       <li><b>Drag</b> to move across the region</li>
       <li><b>Right-drag</b> or <b>two fingers</b> to orbit and tilt</li>
       <li><b>Scroll</b> or <b>pinch</b> to zoom</li>
-      <li><b>Press ▶</b> for the flythrough — moving the camera pauses it</li>
+      <li><b>Press ▶</b> for a captioned tour — moving the camera pauses it</li>
       <li><b>Pull back</b> with the <b>Delaware Valley</b> preset for the whole region; the <b>bridge chips</b> fly to each crossing</li>
     </ul>
     <div class="overlay-actions">
@@ -285,7 +296,8 @@
         <tr><th scope="row"><kbd>Shift</kbd> + arrows</th><td>Orbit and tilt</td></tr>
         <tr><th scope="row"><kbd>+</kbd> <kbd>−</kbd></th><td>Zoom in and out</td></tr>
         <tr><th scope="row"><kbd>1</kbd>–<kbd>8</kbd></th><td>Jump to a cinematic preset (1 is the skyline)</td></tr>
-        <tr><th scope="row"><kbd>Space</kbd></th><td>Play or pause the flythrough</td></tr>
+        <tr><th scope="row"><kbd>Space</kbd></th><td>Play or pause the tour</td></tr>
+        <tr><th scope="row"><kbd>[</kbd> <kbd>]</kbd></th><td>Previous / next shot in the tour</td></tr>
         <tr><th scope="row"><kbd>H</kbd></th><td>Home: back to the opening skyline</td></tr>
         <tr><th scope="row"><kbd>C</kbd></th><td>Show or hide the control studio</td></tr>
         <tr><th scope="row"><kbd>L</kbd></th><td>Show or hide labels</td></tr>

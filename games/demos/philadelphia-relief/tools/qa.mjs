@@ -253,11 +253,19 @@ async function run() {
       await page.waitForTimeout(2400);
       await shot('07-search-manayunk');
 
-      // Flythrough.
+      // Guided tour: play, and the caption must be up and read a real shot.
       await page.click('#btnPlay');
       await page.waitForTimeout(3000);
       const playing = await page.getAttribute('#btnPlay', 'aria-pressed');
       if (playing !== 'true') problems.push(`[${viewport.id}] play did not start`);
+      const cap = await page.evaluate(() => {
+        const el = document.getElementById('caption');
+        return { hidden: el?.hidden, title: document.getElementById('captionTitle')?.textContent,
+          source: document.getElementById('captionSource')?.textContent };
+      });
+      if (cap.hidden || !cap.title) problems.push(`[${viewport.id}] tour caption not shown while playing`);
+      if (!/Source:/.test(cap.source || '')) problems.push(`[${viewport.id}] caption has no source line`);
+      report.push(`[${viewport.id}] tour caption: "${cap.title}"`);
       await shot('08-flythrough');
       // Interacting must interrupt it gracefully — and the drag deliberately
       // starts on a map label, which is what a finger lands on over the
@@ -299,6 +307,23 @@ async function run() {
         if (before === after) problems.push(`[${viewport.id}] clicking label "${target.text}" did not fly there`);
         report.push(`[${viewport.id}] label click "${target.text}": ${before} -> ${after}`);
       }
+
+      // Switching tours: the crossings tour must caption a bridge, and the
+      // step button must advance to the next captioned shot.
+      await page.selectOption('#tourSelect', 'crossings');
+      await page.click('#btnPlay');
+      await page.waitForTimeout(2500);
+      const bridgeCap = await page.evaluate(() => document.getElementById('captionTitle')?.textContent);
+      if (!/Bridge/.test(bridgeCap || '')) problems.push(`[${viewport.id}] crossings tour caption "${bridgeCap}"`);
+      await page.click('#btnNextShot');
+      await page.waitForTimeout(1800);
+      const nextCap = await page.evaluate(() => document.getElementById('captionTitle')?.textContent);
+      if (nextCap === bridgeCap) problems.push(`[${viewport.id}] next-shot did not change the caption`);
+      report.push(`[${viewport.id}] crossings tour: "${bridgeCap}" -> "${nextCap}"`);
+      await shot('17-tour-crossings-caption');
+      await page.keyboard.press('Escape');
+      await page.selectOption('#tourSelect', 'grand');
+      await page.waitForTimeout(400);
 
       // Dialogs.
       await page.click('#btnAbout');

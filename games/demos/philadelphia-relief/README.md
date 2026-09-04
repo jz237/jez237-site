@@ -248,7 +248,7 @@ the heightmap and the vector layers cannot drift apart.
 | `↑ ↓ ← →` | Pan · `Shift` + arrows to orbit |
 | `+` `−` | Zoom |
 | `1`–`8` | Cinematic presets (`1` is the opening skyline) |
-| `Space` | Play/pause the flythrough |
+| `Space` | Play/pause the tour · `[` `]` previous/next shot |
 | `H` | Home · `C` studio · `L` labels · `F` fullscreen · `P` save PNG |
 | `/` | Search · `?` shortcuts · `Esc` close / stop |
 
@@ -267,9 +267,17 @@ Bridge has its own preset, and the other crossings and the sports complex sit
 under a **Bridges & structures** chip row.
 
 **Presets** are complete restagings, not bookmarks: camera, light, air and layer
-selection all move together. The flythrough strings all eight into a ~98 s loop
-with a scrubbable timeline; touching the camera pauses it rather than fighting
-you.
+selection all move together.
+
+**Guided tours** (`src/tours.js`) string shots into captioned sequences with a
+scrubbable timeline, a tour picker and previous/next-shot buttons (`[` `]`):
+*The Grand Tour* (all eight presets, ~98 s), *Skyline Close-Up*, *Delaware
+Crossings* (five bridges) and *Rivers & Ridges*. A shot is a preset plus an
+optional camera override, so a tour can stop at a bridge or a block without the
+app growing a preset for it. Every caption carries the source its sentences rest
+on — the map's own elevation data, OpenStreetMap heights, or public reference
+values labelled as such — and captions are announced through an `aria-live`
+region. Touching the camera pauses a tour rather than fighting you.
 
 Any view can be shared: the URL hash carries only the **delta from the active
 preset**, so a link reads as "this shot, plus the three things I changed".

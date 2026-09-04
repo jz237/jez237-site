@@ -256,6 +256,16 @@ export function blendPresets(fromId, toId, t, easing = easeInOutCubic) {
   const a = presetPatch(fromId);
   const b = presetPatch(toId);
   if (!a || !b) return null;
+  return blendPatches(a, b, t, easing);
+}
+
+/**
+ * Blend two complete state patches (the shape presetPatch returns), with the
+ * same rules as a preset transition. Tours use this to move between a preset
+ * and a camera override without needing a preset for every stop.
+ */
+export function blendPatches(a, b, t, easing = easeInOutCubic) {
+  if (!a || !b) return null;
   const e = easing(clamp(t, 0, 1));
   const out = {};
 
@@ -280,9 +290,9 @@ export function blendPresets(fromId, toId, t, easing = easeInOutCubic) {
 
   out.layers = {};
   for (const id of Object.keys(LAYERS)) {
-    out.layers[id] = e < 0.5 ? !!a.layers[id] : !!b.layers[id];
+    out.layers[id] = e < 0.5 ? !!a.layers?.[id] : !!b.layers?.[id];
   }
-  out.preset = e < 0.5 ? fromId : toId;
+  out.preset = e < 0.5 ? a.preset : b.preset;
   return out;
 }
 
