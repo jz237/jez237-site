@@ -449,6 +449,34 @@ test('structures state plumbing', async (t) => {
     assert.equal(status.trustworthy, true, 'the terrain is still real');
   });
 
+  await t.test('user-facing copy never claims every height is real or measured', async () => {
+    // The manifest says most heights are measured and the rest are estimates
+    // or curated references; the copy must never round that up. This is the
+    // exact overclaim a review caught in the skyline blurb.
+    const forbidden = [
+      /\b(?:real|true|actual|exact)\s+heights?\b/i,
+      /\bat (?:its|their) (?:real|true|actual) height/i,
+      /every building is a real/i,
+      /footprints with measured heights\b/i,
+    ];
+    const sources = [
+      ['preset blurbs', PRESETS.map((p) => `${p.name}: ${p.blurb}`).join('\n')],
+      ['index.html', await readFile(new URL('../index.html', import.meta.url), 'utf8')],
+      ['README.md', await readFile(new URL('../README.md', import.meta.url), 'utf8')],
+      ['games catalog', await readFile(new URL('../../../index.html', import.meta.url), 'utf8')],
+    ];
+    for (const [label, text] of sources) {
+      for (const re of forbidden) {
+        const m = re.exec(text);
+        assert.equal(m, null, `${label} overclaims: "${m && m[0]}"`);
+      }
+    }
+    // And the shot that shows the buildings says where their heights came from.
+    const skyline = PRESETS.find((p) => p.id === 'skyline').blurb;
+    assert.match(skyline, /measured/i, 'skyline blurb must mention measured heights');
+    assert.match(skyline, /estimat|reference/i, 'skyline blurb must admit estimates/references');
+  });
+
   await t.test('every theme colours the layer', () => {
     for (const id of THEME_IDS) {
       const s = THEMES[id].structure;

@@ -32,8 +32,9 @@ export const PRESETS = [
     blurb:
       'Center City from the south-west at the end of the day: the Comcast and ' +
       'Liberty Place towers over the rowhouse grid, the Schuylkill at your feet ' +
-      'and the Ben Franklin Bridge reaching for Camden. Every building is a ' +
-      'real footprint at its real height.',
+      'and the Ben Franklin Bridge reaching for Camden. Real OpenStreetMap ' +
+      'footprints; heights measured where the data has them, estimated or taken ' +
+      'from public references where it does not.',
     camera: {
       camLon: -75.1655, camLat: 39.9505, camDist: 6500, camBearing: 32, camPitch: 73,
     },
