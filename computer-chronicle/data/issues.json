@@ -1,44 +1,698 @@
 {
-  "generatedAt": "2026-09-02T12:02:27.247Z",
+  "generatedAt": "2026-09-05T12:02:03.630Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-05",
+      "historicDate": "1984-05-07",
+      "displayDate": "Week of May 7-13, 1984",
+      "edition": "Issue 093 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Cinematic videogame excitement on warm aged newsprint",
+        "motifs": [
+          "fractal alien mountains",
+          "split-screen futuristic arena",
+          "Atari home computers and cartridges"
+        ],
+        "layout": "Dense seven-column 1984 computer weekly with bold red and blue rules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+        "dateline": "Week of May 7-13, 1984",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Lucasfilm Games banner with dominant fractal-world halftone",
+        "secondaryRail": "Input devices, word processing, charts and price watch",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "#9b1c1c",
+        "secondary": "#173f6b",
+        "texture": "warm newsprint grain and halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-05-07.jpg",
+        "alt": "GPT Image 2 front page for the Computer Chronicle week of May 7-13, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Lucasfilm's Games Group steps onto the home-computer stage with Ballblazer and Rescue on Fractalus!, while pens, tablets and sub-$100 word processors broaden what a family machine can do.",
+      "morningLine": "From a fractal alien mountain to the printed page, this is the week home computers learned new tricks.",
+      "lead": {
+        "headline": "Lucasfilm Brings the Force to Home Videogames",
+        "dek": "The film studio unveils Ballblazer and Rescue on Fractalus!, two Atari projects built around fresh technology and a cinematic sense of play.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          2
+        ],
+        "body": [
+          "SAN RAFAEL, Calif. — Lucasfilm publicly entered the home videogame market May 8, unveiling the first two projects from a Games Group nurtured through its collaboration with Atari. The announcement puts one of cinema's most famous technical workshops behind software intended for Atari 8-bit computers and the 5200 console.",
+          "Ballblazer turns a futuristic sport into a fast split-screen contest. Each player sees the arena from a first-person viewpoint while the computer produces a changing musical accompaniment, an unusually energetic pairing of action and sound for the home screen.",
+          "The companion project, then presented as Rescue on Fractalus!, places the player in a cockpit above an alien mountain range. Its terrain draws on Loren Carpenter's fractal graphics methods, allowing the machine to suggest an expansive, jagged landscape without storing every ridge by hand.",
+          "The two games remain previews rather than finished store releases, but they signal an ambitious new studio identity. Atari supplies hardware knowledge and marketing support; Lucasfilm supplies visual research, experimentation and the expectation that a computer game can stage a world rather than merely keep score."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Pens and Tablets Challenge the Keyboard",
+          "body": [
+            "COMPUTE!'s May cover package asks readers to imagine pointing and drawing directly at the screen. Its survey of light pens and graphics tablets presents these devices as increasingly practical alternatives to typing commands.",
+            "A companion technical article explains how the devices report position, while the issue's Digital Palette feature and a 3-D surface-plotting program turn the idea into hands-on graphics work. The $2.95 magazine captures direct manipulation moving from laboratory curiosity toward the home desk."
+          ],
+          "sourceRefs": [
+            3,
+            4
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Home Word Processing Drops Below $100",
+          "body": [
+            "Atari is advertising AtariWriter, a 16K-compatible ROM cartridge, at under $100. The package offers search and replace, block movement, headers and footers, form letters, print preview, automatic page numbering and even an undo command.",
+            "Professional Software answers with WordPro 3 Plus/64 and SpellRight Plus for $99.95. The competing offers show serious writing tools becoming family-budget purchases, with mail merge and spelling assistance no longer reserved for an office system."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Atari Searches for a New Mission",
+          "body": [
+            "Creative Computing describes Atari's new watchwords as profitability, reliability and creativity after a punishing year for the videogame business. The company must restore confidence while deciding how its home computers and game machines fit together.",
+            "The report arrives before the next great corporate turn: Warner still owns the consumer operation, but pressure for a workable plan is unmistakable. Lucasfilm's imaginative previews offer one example of the distinctive software Atari needs."
+          ],
+          "sourceRefs": [
+            5
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Ballblazer",
+          "summary": "Lucasfilm previews a split-screen futuristic sport with dynamically generated music.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            2
+          ]
+        },
+        {
+          "title": "Rescue on Fractalus!",
+          "summary": "A cockpit rescue game renders an alien mountain range with fractal terrain.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Light pens and graphics tablets",
+          "summary": "COMPUTE! surveys hands-on graphics input for home users.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3,
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "AtariWriter",
+          "detail": "Under-$100 ROM word processor for 16K Atari computers"
+        },
+        {
+          "name": "WordPro 3 Plus/64",
+          "detail": "Commodore 64 word processing with mail merge and column math"
+        },
+        {
+          "name": "SpellRight Plus",
+          "detail": "Spelling companion bundled with WordPro"
+        },
+        {
+          "name": "Pentominos",
+          "detail": "Jim Butterfield puzzle program for six computer families"
+        },
+        {
+          "name": "3-D Surface Plotting",
+          "detail": "COMPUTE! graphics program for home machines"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Ballblazer",
+            "Rescue on Fractalus!",
+            "Pitstop",
+            "Sabre Wulf",
+            "Wizardry"
+          ]
+        },
+        {
+          "label": "Top Movies",
+          "items": [
+            "Breakin'",
+            "Sixteen Candles",
+            "Firestarter",
+            "Romancing the Stone",
+            "Police Academy"
+          ]
+        },
+        {
+          "label": "Hardware Counter",
+          "items": [
+            "Leading Edge Starwriter 18 CPS",
+            "Light pens",
+            "Graphics tablets",
+            "Atari 8-bit computers"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "COMPUTE! May 1984",
+          "price": "$2.95",
+          "note": "Newsstand price"
+        },
+        {
+          "item": "AtariWriter",
+          "price": "under $100",
+          "note": "ROM word processor"
+        },
+        {
+          "item": "WordPro 3 Plus/64 + SpellRight Plus",
+          "price": "$99.95",
+          "note": "Advertised software bundle"
+        },
+        {
+          "item": "Leading Edge Starwriter",
+          "price": "Price on request",
+          "note": "18 CPS letter-quality printer"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Pentominos crosses platforms",
+          "text": "Jim Butterfield publishes versions for Commodore 64, VIC-20, TI-99/4A, IBM PC and PCjr, Atari, and Apple systems."
+        },
+        {
+          "headline": "Firestarter reaches theaters",
+          "text": "The Stephen King adaptation opens May 11 as a new weekend attraction."
+        },
+        {
+          "headline": "World's fair opens in New Orleans",
+          "text": "The Louisiana World Exposition opens May 12 on the Mississippi riverfront."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Hello",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 2,
+          "title": "Against All Odds (Take a Look at Me Now)",
+          "artist": "Phil Collins"
+        },
+        {
+          "rank": 3,
+          "title": "Hold Me Now",
+          "artist": "Thompson Twins"
+        },
+        {
+          "rank": 4,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        },
+        {
+          "rank": 5,
+          "title": "Love Somebody",
+          "artist": "Rick Springfield"
+        }
+      ],
+      "periodAd": {
+        "headline": "NEW ATARIWRITER: UNDER $100",
+        "summary": "Search, replace, print preview, form letters, headers, footers and undo in a 16K-compatible ROM cartridge.",
+        "tagline": "Turn your Atari into a writing desk."
+      },
+      "market": {
+        "headline": "Productivity Software Joins the Price War",
+        "summary": "Two capable home word-processing packages now advertise below the $100 line.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Soviet Union Pulls Out of Los Angeles Olympics",
+        "summary": "Moscow announced May 8 that it would not participate, citing athlete security; the decision threatened a wider Eastern Bloc boycott four years after the U.S.-led boycott of the Moscow Games.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          6
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Lucasfilm game announcement and project details",
+            "status": "Verified exact-date wire report and period coverage",
+            "sourceRefs": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "Graphics input and word-processing features",
+            "status": "Verified in May 1984 period magazine material",
+            "sourceRefs": [
+              3,
+              4
+            ]
+          },
+          {
+            "claim": "Music and movies",
+            "status": "Verified with dated weekly chart listings",
+            "sourceRefs": [
+              7,
+              8,
+              9
+            ]
+          },
+          {
+            "claim": "Soviet Olympic boycott",
+            "status": "Verified exact-date wire report",
+            "sourceRefs": [
+              6
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "UPI: Lucasfilm 'force' enters video game market, May 8, 1984",
+          "url": "https://www.upi.com/Archives/1984/05/08/Lucasfilm-force-enters-video-game-market/9795452836800/"
+        },
+        {
+          "label": "Lucasfilm premieres first two games",
+          "url": "https://ohiostate.pressbooks.pub/app/uploads/sites/45/2020/01/Lucasfilm-Atari-games.pdf"
+        },
+        {
+          "label": "Lucasfilm & Atari, Antic, August 1984",
+          "url": "http://atarimagazines.com/v3n4/lucasfilm.html"
+        },
+        {
+          "label": "COMPUTE! Issue 48, May 1984",
+          "url": "https://archive.org/details/1984-05-compute-magazine"
+        },
+        {
+          "label": "COMPUTE! May 1984 index",
+          "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue48"
+        },
+        {
+          "label": "Creative Computing: Outpost Atari, May 1984",
+          "url": "https://www.atarimagazines.com/creative/v10n5/191_Outpost_Atari_for_the_f.php"
+        },
+        {
+          "label": "UPI: Soviet Olympic boycott, May 8, 1984",
+          "url": "https://www.upi.com/Archives/1984/05/08/Soviet-boycott-could-spread-to-rest-of-East-Bloc/6528452836800/"
+        },
+        {
+          "label": "Billboard Hot 100, week of May 12, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-05-12"
+        },
+        {
+          "label": "Domestic weekend chart, May 11-13, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W19/"
+        },
+        {
+          "label": "Weekly Rock Top 20, May 12, 1984",
+          "url": "https://tunecaster.com/charts/80/rock8419.html"
+        }
+      ]
+    },
     {
       "currentDate": "2026-09-04",
       "historicDate": "1984-04-30",
       "displayDate": "Week of April 30-May 6, 1984",
       "edition": "Issue 092 - Weekly 1984 Computer & Culture Chronicle",
-      "visualProfile": {"tone":"Bustling international computer-fair energy on warm aged newsprint","motifs":["lap-size LCD computer","crowded exhibition hall","floppy disks and game boxes"],"layout":"Dense seven-column 1984 computer weekly with bold red and blue rules"},
-      "masthead": {"title":"Computer Chronicle","subtitle":"The Weekly Record of Personal Computing and Digital Culture","dateline":"Week of April 30-May 6, 1984","price":"75¢"},
-      "layoutPlan": {"leadPlacement":"Hanover Fair banner with dominant portable-computer halftone","secondaryRail":"Games, software, charts and price watch","archiveNavigation":"Chronological weekly archive"},
-      "sectionChrome": {"primary":"#9b1c1c","secondary":"#173f6b","texture":"warm newsprint grain and halftone ink"},
-      "heroImage": {"src":"media/computer-chronicle-gpt-image-2-week-1984-04-30.jpg","alt":"GPT Image 2 front page for the Computer Chronicle week of April 30-May 6, 1984","caption":"GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.","confidence":"Generated visual based on verified structured issue data; webpage text and sources remain canonical"},
+      "visualProfile": {
+        "tone": "Bustling international computer-fair energy on warm aged newsprint",
+        "motifs": [
+          "lap-size LCD computer",
+          "crowded exhibition hall",
+          "floppy disks and game boxes"
+        ],
+        "layout": "Dense seven-column 1984 computer weekly with bold red and blue rules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+        "dateline": "Week of April 30-May 6, 1984",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Hanover Fair banner with dominant portable-computer halftone",
+        "secondaryRail": "Games, software, charts and price watch",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "#9b1c1c",
+        "secondary": "#173f6b",
+        "texture": "warm newsprint grain and halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-04-30.jpg",
+        "alt": "GPT Image 2 front page for the Computer Chronicle week of April 30-May 6, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
       "editorNote": "Europe's vast Hanover Fair points toward portable LCD machines and new 16-bit ambitions, while compatibility cards, music software and bulletin boards reshape the personal-computer world.",
       "morningLine": "From Hanover's packed aisles to the local modem line, computers are getting smaller, more musical and more connected.",
-      "lead": {"headline":"Hanover's 650,000 Visitors See the Portable Future","dek":"Epson lifts the lid on a lap-size LCD machine as Commodore signals a 16-bit business turn.","confidence":"same-week","sourceRefs":[0],"body":["HANOVER, West Germany — One of Europe's largest computer fairs drew roughly 650,000 visitors this week, turning the exhibition floor into a vivid measure of how quickly electronic computing is moving from specialist rooms toward desks, briefcases and homes.","IBM assigned about 500 people to its own sprawling exhibit, but a much smaller machine supplied the most suggestive glimpse of the road ahead. Epson demonstrated a lap-size computer with a pop-up liquid-crystal display capable of showing eight lines of 80 characters.","The screen is modest beside a desktop monitor, yet the design makes portability more than a marketing word. A usable keyboard-and-display computer that can travel with its owner hints at a new class of personal machine for work beyond the office.","Commodore, meanwhile, showed an unnamed 16-bit system built around the Zilog Z8000. InfoWorld reported that Commodore was manufacturing the processor under license, a notable departure from the 6502-family chips behind its mass-market home computers.","Taken together, the exhibits reveal an industry testing two futures at once: lighter machines that follow their users and more powerful business systems reaching beyond the familiar 8-bit world."]},
+      "lead": {
+        "headline": "Hanover's 650,000 Visitors See the Portable Future",
+        "dek": "Epson lifts the lid on a lap-size LCD machine as Commodore signals a 16-bit business turn.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "HANOVER, West Germany — One of Europe's largest computer fairs drew roughly 650,000 visitors this week, turning the exhibition floor into a vivid measure of how quickly electronic computing is moving from specialist rooms toward desks, briefcases and homes.",
+          "IBM assigned about 500 people to its own sprawling exhibit, but a much smaller machine supplied the most suggestive glimpse of the road ahead. Epson demonstrated a lap-size computer with a pop-up liquid-crystal display capable of showing eight lines of 80 characters.",
+          "The screen is modest beside a desktop monitor, yet the design makes portability more than a marketing word. A usable keyboard-and-display computer that can travel with its owner hints at a new class of personal machine for work beyond the office.",
+          "Commodore, meanwhile, showed an unnamed 16-bit system built around the Zilog Z8000. InfoWorld reported that Commodore was manufacturing the processor under license, a notable departure from the 6502-family chips behind its mass-market home computers.",
+          "Taken together, the exhibits reveal an industry testing two futures at once: lighter machines that follow their users and more powerful business systems reaching beyond the familiar 8-bit world."
+        ]
+      },
       "stories": [
-        {"headline":"Chuck Peddle Rides Back to Victor with the PlusPC","confidence":"exact-date","sourceRefs":[0],"body":["Chuck Peddle, the 6502 pioneer and founder of Victor Technologies, is returning to help the bankrupt computer maker manufacture and distribute its new PlusPC. The proposed arrangement still requires bankruptcy-court approval.","Victor bills the machine as IBM PC-compatible, an essential claim in a market rapidly organizing around that standard. Peddle stepped down as Victor's top officer in November 1983 but remains a major shareholder.","Working with consultant Chris Taylor, Peddle said the system was expected in time for July's National Computer Conference in Las Vegas. The plan gives Victor a possible route back into the industry's fastest-moving lane." ]},
-        {"headline":"One Box, Two Computer Worlds","confidence":"exact-date","sourceRefs":[0],"body":["Rana's Quadlink card promises to let an IBM PC run Apple II software by placing a 6502 processor, 64K of memory, Applesoft ROM and Apple DOS 3.3 inside the PC chassis.","Rana says a cable change extends the idea to Columbia and Compaq compatibles. The company's Apple IIe add-on uses a dual-drive box, while Micro Craft's Dimension 68000 pursues the same compatibility problem with multiple coprocessors.","The convenience carries a price: Quadlink lists for $680, with one mail-order advertisement offering it for $485. Even so, the hardware shows how valuable existing software libraries have become." ]},
-        {"headline":"Can a Computer Teach Music?","confidence":"exact-date","sourceRefs":[0],"body":["Programs for Commodore, Atari and Radio Shack computers are moving beyond games to teach notation, key signatures, rhythm and composition. Electronic Arts' Music Construction Set was tested on a Commodore 64 by classically trained musician Leslie Miller.","AtariMusic I and II have also appeared in studies where students learned without instructors. The experiments suggest that a home computer can become both an electronic score pad and a patient practice partner.","Gareth Loy of UC San Diego's computer-audio laboratory cautions that present machines remain limited in pitch accuracy and tone color. Improving low-cost synthesizers may narrow that gap, but musicians are not ready to dismiss the human teacher." ]},
-        {"headline":"Early Macintosh Verdict: Brilliant, but Boxed In","confidence":"exact-date","sourceRefs":[0],"body":["Three months after launch, InfoWorld calls the Macintosh exceptionally easy to use, powerful and innovative. Its graphics and mouse-driven approach remain the machine's great attractions.","The review also asks for more than 128K of memory and a hard disk, while noting that the sealed case offers no internal expansion slots. A reader separately objects to the missing cursor keys and lack of letter-quality printing support.","Microsoft Multiplan for Macintosh earns praise as an improved version of InfoWorld's 1982 software product of the year. Strong applications may determine whether buyers accept the first Macintosh's tight limits." ]}
+        {
+          "headline": "Chuck Peddle Rides Back to Victor with the PlusPC",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Chuck Peddle, the 6502 pioneer and founder of Victor Technologies, is returning to help the bankrupt computer maker manufacture and distribute its new PlusPC. The proposed arrangement still requires bankruptcy-court approval.",
+            "Victor bills the machine as IBM PC-compatible, an essential claim in a market rapidly organizing around that standard. Peddle stepped down as Victor's top officer in November 1983 but remains a major shareholder.",
+            "Working with consultant Chris Taylor, Peddle said the system was expected in time for July's National Computer Conference in Las Vegas. The plan gives Victor a possible route back into the industry's fastest-moving lane."
+          ]
+        },
+        {
+          "headline": "One Box, Two Computer Worlds",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Rana's Quadlink card promises to let an IBM PC run Apple II software by placing a 6502 processor, 64K of memory, Applesoft ROM and Apple DOS 3.3 inside the PC chassis.",
+            "Rana says a cable change extends the idea to Columbia and Compaq compatibles. The company's Apple IIe add-on uses a dual-drive box, while Micro Craft's Dimension 68000 pursues the same compatibility problem with multiple coprocessors.",
+            "The convenience carries a price: Quadlink lists for $680, with one mail-order advertisement offering it for $485. Even so, the hardware shows how valuable existing software libraries have become."
+          ]
+        },
+        {
+          "headline": "Can a Computer Teach Music?",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Programs for Commodore, Atari and Radio Shack computers are moving beyond games to teach notation, key signatures, rhythm and composition. Electronic Arts' Music Construction Set was tested on a Commodore 64 by classically trained musician Leslie Miller.",
+            "AtariMusic I and II have also appeared in studies where students learned without instructors. The experiments suggest that a home computer can become both an electronic score pad and a patient practice partner.",
+            "Gareth Loy of UC San Diego's computer-audio laboratory cautions that present machines remain limited in pitch accuracy and tone color. Improving low-cost synthesizers may narrow that gap, but musicians are not ready to dismiss the human teacher."
+          ]
+        },
+        {
+          "headline": "Early Macintosh Verdict: Brilliant, but Boxed In",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ],
+          "body": [
+            "Three months after launch, InfoWorld calls the Macintosh exceptionally easy to use, powerful and innovative. Its graphics and mouse-driven approach remain the machine's great attractions.",
+            "The review also asks for more than 128K of memory and a hard disk, while noting that the sealed case offers no internal expansion slots. A reader separately objects to the missing cursor keys and lack of letter-quality printing support.",
+            "Microsoft Multiplan for Macintosh earns praise as an improved version of InfoWorld's 1982 software product of the year. Strong applications may determine whether buyers accept the first Macintosh's tight limits."
+          ]
+        }
       ],
       "computerItems": [
-        {"title":"Epson lap-size computer","summary":"A pop-up LCD displays eight lines of 80 characters in a portable package shown at Hanover.","confidence":"same-week","sourceRefs":[0]},
-        {"title":"Commodore Z8000 system","summary":"An unnamed 16-bit business machine marks a turn beyond Commodore's familiar 6502 line.","confidence":"same-week","sourceRefs":[0]},
-        {"title":"Victor PlusPC","summary":"Chuck Peddle's proposed IBM-compatible machine awaits bankruptcy-court approval.","confidence":"exact-date","sourceRefs":[0]}
+        {
+          "title": "Epson lap-size computer",
+          "summary": "A pop-up LCD displays eight lines of 80 characters in a portable package shown at Hanover.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Commodore Z8000 system",
+          "summary": "An unnamed 16-bit business machine marks a turn beyond Commodore's familiar 6502 line.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Victor PlusPC",
+          "summary": "Chuck Peddle's proposed IBM-compatible machine awaits bankruptcy-court approval.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        }
       ],
-      "softwareList": [{"name":"Music Construction Set","detail":"Composition and notation on the Commodore 64"},{"name":"AtariMusic I","detail":"Computer-assisted music instruction"},{"name":"AtariMusic II","detail":"Follow-up Atari music lessons"},{"name":"Microsoft Multiplan for Macintosh","detail":"Praised spreadsheet adaptation"},{"name":"PFS line for Macintosh","detail":"Productivity software moves to Apple's new machine"}],
-      "storeShelves": [{"label":"Top Computer Games","items":["Run for the Money","Ultima II","Wizardry","Sabre Wulf"]},{"label":"At the Movies","items":["Breakin'","Sixteen Candles","Romancing the Stone","Police Academy"]},{"label":"Hardware Counter","items":["Epson lap-size computer","Commodore Z8000 system","Victor PlusPC","Rana Quadlink"]}],
-      "priceWatch": [{"item":"Rana Quadlink","price":"$680 list / $485 mail-order","note":"IBM PC card for Apple II software"},{"item":"Lotus 1-2-3","price":"$329 advertised","note":"Period mail-order price"},{"item":"Microsoft Word","price":"$255 advertised","note":"Period mail-order price"},{"item":"MasterType","price":"$40 list / $27 mail-order","note":"Typing tutor"}],
-      "briefs": [{"headline":"Kaypro users organize online","text":"A Kaypro users' bulletin board carries messages, guest-speaker forums and public-domain software information."},{"headline":"Photographers dial into Photonet","text":"A professional network offers bulletin boards, electronic mail, news and special-interest services to about 100 photography subscribers."},{"headline":"The BBS law question","text":"Lawmakers and operators debate what access 'without authorization' means when dial-up numbers circulate publicly."}],
-      "musicChart": [{"rank":1,"title":"Against All Odds (Take a Look at Me Now)","artist":"Phil Collins"},{"rank":2,"title":"Hello","artist":"Lionel Richie"},{"rank":3,"title":"Hold Me Now","artist":"Thompson Twins"},{"rank":4,"title":"Footloose","artist":"Kenny Loggins"},{"rank":5,"title":"Love Somebody","artist":"Rick Springfield"}],
-      "periodAd": {"headline":"RUN APPLE II SOFTWARE ON YOUR IBM PC","summary":"Rana Quadlink packs a 6502, 64K and Apple-compatible software support onto an IBM PC card.","tagline":"Two computer worlds in one box — $485 mail-order."},
-      "market": {"headline":"Victor Bets on Compatibility","summary":"The bankrupt computer maker's proposed PlusPC and Chuck Peddle's return show how strongly the IBM PC standard now pulls the market.","confidence":"exact-date","sourceRefs":[0]},
-      "worldAnchor": {"headline":"Soviet forces drive into Afghanistan's Panjshir Valley","summary":"UPI reported May 1 that roughly 15,000 Soviet troops were pressing into the strategic valley in the largest offensive of the war to that point, destroying homes and crops.","confidence":"exact-date","sourceRefs":[3]},
-      "gadgetWatch": {"headline":"Hitachi DA-800 puts second-generation CD hardware on the test bench","summary":"Audio magazine's May equipment profile evaluates Hitachi's DA-800 as compact-disc players begin moving beyond their first generation.","confidence":"same-month","sourceRefs":[5]},
-      "undergroundDesk": {"headline":"Computer-Access Law Meets the BBS Era","dek":"Operators ask lawmakers to define electronic boundaries without treating every dial-up connection as malicious.","body":["Proposed computer-access rules are colliding with the open, experimental culture of bulletin boards. The central dispute is how to define entry 'without authorization' when telephone numbers may be posted precisely because a system owner wants callers.","BBS operator John James uses a home board to circulate legislative information and argues that electronic communication increasingly matters to telecommuters. Anton Dovydaitis suggests that closed systems display an explicit electronic warning rather than leaving their status ambiguous.","The debate is about law, notice and intent, not intrusion technique. Its outcome may shape how online communities distinguish welcomed exploration from trespass."],"groups":[{"name":"John James's legislative-affairs bulletin board","note":"A home BBS used to circulate legislative information and host discussion."}],"sourceRefs":[0],"confidence":"exact-date"},
-      "accuracyLedger": {"items":[{"claim":"Hanover attendance, Epson LCD portable and Commodore Z8000","status":"Verified same-week period report","sourceRefs":[0]},{"claim":"Victor PlusPC, compatibility hardware and Macintosh review","status":"Verified exact-date period reporting","sourceRefs":[0]},{"claim":"Music and movies","status":"Verified dated chart listings","sourceRefs":[1,2]},{"claim":"Panjshir Valley offensive","status":"Verified exact-date wire report","sourceRefs":[3]}]},
-      "sources": [{"label":"InfoWorld, Vol. 6 No. 18, April 30, 1984","url":"https://books.google.com/books?id=iC4EAAAAMBAJ"},{"label":"Billboard Hot 100, week of May 5, 1984","url":"https://billboard.elpee.jp/hot100/week/1984-05-05"},{"label":"Domestic weekend chart, May 4-6, 1984","url":"https://www.boxofficemojo.com/weekend/1984W18/"},{"label":"UPI: Soviets leveling Afghanistan's Panjshir valley, May 1, 1984","url":"https://www.upi.com/Archives/1984/05/01/Soviets-leveling-Afghanistans-Panjshir-valley/2258452232000/"},{"label":"UPI: China accuses Vietnam, May 1, 1984","url":"https://www.upi.com/Archives/1984/05/01/China-accused-Vietnam-today-of-preparing-for-an-invasion/8260452232000/"},{"label":"Audio: Hitachi DA-800 Compact Disc Player, May 1984","url":"https://www.gammaelectronics.xyz/audio_05-1984_hitachi.html"},{"label":"Audio: Yamaha CD-X1 advertisement, May 1984","url":"https://www.gammaelectronics.xyz/audio_05-1984_yamaha.html"}]
+      "softwareList": [
+        {
+          "name": "Music Construction Set",
+          "detail": "Composition and notation on the Commodore 64"
+        },
+        {
+          "name": "AtariMusic I",
+          "detail": "Computer-assisted music instruction"
+        },
+        {
+          "name": "AtariMusic II",
+          "detail": "Follow-up Atari music lessons"
+        },
+        {
+          "name": "Microsoft Multiplan for Macintosh",
+          "detail": "Praised spreadsheet adaptation"
+        },
+        {
+          "name": "PFS line for Macintosh",
+          "detail": "Productivity software moves to Apple's new machine"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Run for the Money",
+            "Ultima II",
+            "Wizardry",
+            "Sabre Wulf"
+          ]
+        },
+        {
+          "label": "At the Movies",
+          "items": [
+            "Breakin'",
+            "Sixteen Candles",
+            "Romancing the Stone",
+            "Police Academy"
+          ]
+        },
+        {
+          "label": "Hardware Counter",
+          "items": [
+            "Epson lap-size computer",
+            "Commodore Z8000 system",
+            "Victor PlusPC",
+            "Rana Quadlink"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Rana Quadlink",
+          "price": "$680 list / $485 mail-order",
+          "note": "IBM PC card for Apple II software"
+        },
+        {
+          "item": "Lotus 1-2-3",
+          "price": "$329 advertised",
+          "note": "Period mail-order price"
+        },
+        {
+          "item": "Microsoft Word",
+          "price": "$255 advertised",
+          "note": "Period mail-order price"
+        },
+        {
+          "item": "MasterType",
+          "price": "$40 list / $27 mail-order",
+          "note": "Typing tutor"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Kaypro users organize online",
+          "text": "A Kaypro users' bulletin board carries messages, guest-speaker forums and public-domain software information."
+        },
+        {
+          "headline": "Photographers dial into Photonet",
+          "text": "A professional network offers bulletin boards, electronic mail, news and special-interest services to about 100 photography subscribers."
+        },
+        {
+          "headline": "The BBS law question",
+          "text": "Lawmakers and operators debate what access 'without authorization' means when dial-up numbers circulate publicly."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Against All Odds (Take a Look at Me Now)",
+          "artist": "Phil Collins"
+        },
+        {
+          "rank": 2,
+          "title": "Hello",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 3,
+          "title": "Hold Me Now",
+          "artist": "Thompson Twins"
+        },
+        {
+          "rank": 4,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        },
+        {
+          "rank": 5,
+          "title": "Love Somebody",
+          "artist": "Rick Springfield"
+        }
+      ],
+      "periodAd": {
+        "headline": "RUN APPLE II SOFTWARE ON YOUR IBM PC",
+        "summary": "Rana Quadlink packs a 6502, 64K and Apple-compatible software support onto an IBM PC card.",
+        "tagline": "Two computer worlds in one box — $485 mail-order."
+      },
+      "market": {
+        "headline": "Victor Bets on Compatibility",
+        "summary": "The bankrupt computer maker's proposed PlusPC and Chuck Peddle's return show how strongly the IBM PC standard now pulls the market.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Soviet forces drive into Afghanistan's Panjshir Valley",
+        "summary": "UPI reported May 1 that roughly 15,000 Soviet troops were pressing into the strategic valley in the largest offensive of the war to that point, destroying homes and crops.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Hitachi DA-800 puts second-generation CD hardware on the test bench",
+        "summary": "Audio magazine's May equipment profile evaluates Hitachi's DA-800 as compact-disc players begin moving beyond their first generation.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          5
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "Computer-Access Law Meets the BBS Era",
+        "dek": "Operators ask lawmakers to define electronic boundaries without treating every dial-up connection as malicious.",
+        "body": [
+          "Proposed computer-access rules are colliding with the open, experimental culture of bulletin boards. The central dispute is how to define entry 'without authorization' when telephone numbers may be posted precisely because a system owner wants callers.",
+          "BBS operator John James uses a home board to circulate legislative information and argues that electronic communication increasingly matters to telecommuters. Anton Dovydaitis suggests that closed systems display an explicit electronic warning rather than leaving their status ambiguous.",
+          "The debate is about law, notice and intent, not intrusion technique. Its outcome may shape how online communities distinguish welcomed exploration from trespass."
+        ],
+        "groups": [
+          {
+            "name": "John James's legislative-affairs bulletin board",
+            "note": "A home BBS used to circulate legislative information and host discussion."
+          }
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "exact-date"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Hanover attendance, Epson LCD portable and Commodore Z8000",
+            "status": "Verified same-week period report",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Victor PlusPC, compatibility hardware and Macintosh review",
+            "status": "Verified exact-date period reporting",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Music and movies",
+            "status": "Verified dated chart listings",
+            "sourceRefs": [
+              1,
+              2
+            ]
+          },
+          {
+            "claim": "Panjshir Valley offensive",
+            "status": "Verified exact-date wire report",
+            "sourceRefs": [
+              3
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "InfoWorld, Vol. 6 No. 18, April 30, 1984",
+          "url": "https://books.google.com/books?id=iC4EAAAAMBAJ"
+        },
+        {
+          "label": "Billboard Hot 100, week of May 5, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-05-05"
+        },
+        {
+          "label": "Domestic weekend chart, May 4-6, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W18/"
+        },
+        {
+          "label": "UPI: Soviets leveling Afghanistan's Panjshir valley, May 1, 1984",
+          "url": "https://www.upi.com/Archives/1984/05/01/Soviets-leveling-Afghanistans-Panjshir-valley/2258452232000/"
+        },
+        {
+          "label": "UPI: China accuses Vietnam, May 1, 1984",
+          "url": "https://www.upi.com/Archives/1984/05/01/China-accused-Vietnam-today-of-preparing-for-an-invasion/8260452232000/"
+        },
+        {
+          "label": "Audio: Hitachi DA-800 Compact Disc Player, May 1984",
+          "url": "https://www.gammaelectronics.xyz/audio_05-1984_hitachi.html"
+        },
+        {
+          "label": "Audio: Yamaha CD-X1 advertisement, May 1984",
+          "url": "https://www.gammaelectronics.xyz/audio_05-1984_yamaha.html"
+        }
+      ]
     },
     {
       "currentDate": "2026-09-03",

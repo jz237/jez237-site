@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-05",
+      "historicDate": "1984-05-07",
+      "displayDate": "Week of May 7-13, 1984",
+      "edition": "Issue 093 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "From a fractal alien mountain to the printed page, this is the week home computers learned new tricks.",
+      "leadHeadline": "Lucasfilm Brings the Force to Home Videogames",
+      "storyHeadlines": [
+        "Pens and Tablets Challenge the Keyboard",
+        "Home Word Processing Drops Below $100",
+        "Atari Searches for a New Mission"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-05-07.jpg",
+      "thumb": "media/thumbs/1984-05-07.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-04",
       "historicDate": "1984-04-30",
       "displayDate": "Week of April 30-May 6, 1984",
