@@ -8,7 +8,7 @@ Listed with a **Demo** badge in the finished **Playable Games** section of https
 
 ## Controls
 
-Drag to orbit within the front hemisphere; scroll or pinch to zoom. Arrow keys orbit when the scene is focused. Home, double-click, or Reset view returns to the front. The toolbar also provides automatic orbit (left 45°, up 45°, right 90°, down 45°, then left 90° and repeat), animation pause, adjustable glow (default 0), original-image comparison, and fullscreen.
+Drag to orbit all the way around the sculpture, without going below level height; scroll or pinch to zoom. Arrow keys orbit when the scene is focused. Home, double-click, or Reset view returns to the front. The toolbar also provides automatic orbit (left 45°, up 45°, right 90°, down 45°, then left 90° and repeat), animation pause, adjustable glow (default 0), original-image comparison, and fullscreen.
 
 ## Development
 
@@ -49,3 +49,9 @@ Version `2026.09.05.8` replaces the side-to-side auto-orbit with an eased viewin
 ### Finished demo and center-view hold
 
 Version `2026.09.05.9` stops the camera for exactly four animation seconds at the level, straight-on view, both after the intro and on each lower return sweep. The rings, lights, and other effects continue during this camera hold. The Animate control freezes both the scene and the hold timer. The Games catalog now lists this finished work with a Demo badge in Playable Games, with a dedicated lightweight animated SVG thumbnail showing the chrome crest, counter-rotating rings, red cores, and blinking lights. The thumbnail uses the catalog's existing reduced-motion behavior.
+
+### Dense neural globe and energy spine
+
+Version `2026.09.05.10` publishes the approved neural-volume experiment: 4,800 additional interior nodes and 11,840 short neural connections, with independent flashes, waves of activity, and traveling signal packets. The two batched objects respect animation pause, reduced motion, and staged startup. `dense-brain.js` builds the volume without changing the original globe silhouette.
+
+The lower red bar is now a reference-inspired recessed red-white energy channel with machined shoulders, angled metal braces, and a bright contact above the platform surface. Manual orbit permits full 360° viewing, including behind the sculpture, but cannot descend below level height. Automatic orbit waypoints, timing, easing, and the four-second center hold remain unchanged.

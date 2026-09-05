@@ -10,6 +10,7 @@ import { techText, createPowerUp } from './refinements.js';
 import { createPanelMetals } from './panel-metal.js';
 import { createFinalPolish, setupShowcase } from './showcase.js';
 import { configureFrontOrbit, updateFrontOrbit, frontOrbitStats } from './front-orbit.js';
+import { createDenseBrain } from './dense-brain.js';
 
 const $=id=>document.getElementById(id), TAU=Math.PI*2;
 let seed=3719;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
@@ -19,7 +20,7 @@ renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setSize(innerWid
 renderer.info.autoReset=false;
 $('stage').append(renderer.domElement);
 const camera=new T.PerspectiveCamera(38,innerWidth/innerHeight,.1,150);
-const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.07;controls.rotateSpeed=.55;controls.enablePan=false;controls.minDistance=12;controls.maxDistance=85;controls.minPolarAngle=.17;controls.maxPolarAngle=Math.PI*.82;controls.autoRotateSpeed=.65;
+const controls=new OrbitControls(camera,renderer.domElement);controls.enableDamping=true;controls.dampingFactor=.07;controls.rotateSpeed=.55;controls.enablePan=false;controls.minDistance=12;controls.maxDistance=85;controls.minPolarAngle=.17;controls.maxPolarAngle=Math.PI/2;controls.autoRotateSpeed=.65;
 configureFrontOrbit(controls);
 let cinema,needsRender=true;controls.addEventListener('change',()=>{needsRender=true});
 const reset=()=>{cinema?.cancel();controls.autoRotate=false;$('orbit').setAttribute('aria-pressed','false');const damping=controls.enableDamping;controls.enableDamping=false;controls.update();const d=Math.max(22.6,24.5/Math.max(camera.aspect,.32));controls.target.set(0,.65,0);camera.position.set(.12,.65,d);controls.update();controls.enableDamping=damping};reset();controls.autoRotateSpeed=.24;
@@ -90,6 +91,7 @@ const nodeGeo=new T.SphereGeometry(.038,6,6);const stars=[];
 for(let i=0;i<190;i++){const a=rnd()*TAU,b=Math.acos(2*rnd()-1);const p=new T.Vector3(4.14*Math.sin(b)*Math.cos(a),4.14*Math.cos(b),4.14*Math.sin(b)*Math.sin(a));stars.push(p)}
 beaconBank(stars.map(p=>p.toArray()),neural,1.8);
 for(let i=0;i<stars.length;i++)for(let j=i+1;j<stars.length;j++){const dist=stars[i].distanceTo(stars[j]);if(dist<1.5&&dist>.6)stroke([stars[i].toArray(),stars[j].toArray()],i%5?faintBlue:thinRed,neural)}
+const denseBrain=createDenseBrain(neural);beacons.push(...denseBrain.materials);beaconCount+=denseBrain.nodeCount;
 // Armored plates reproduce the three-part silhouette of the reference.
 const crest=new T.Group();crest.position.z=.15;root.add(crest);
 const plates=[[[0,5.55],[-1.38,4.04],[0,2.55],[1.38,4.04]],[[-1.48,3.87],[-4.05,.12],[-.58,.12],[-.15,1.37]],[[1.48,3.87],[.15,1.37],[.58,.12],[4.05,.12]]];
@@ -186,7 +188,28 @@ subtitle.add(textGroup);
 box(11.4,.023,.03,red,subtitle,0,-.16,.23);
 // Lower diamond and illuminated platform.
 mesh(extrude(poly([[-3.5,-2.62],[0,-4.31],[3.5,-2.62],[0,-1.8]]),.36,.06),panelMetals.withEdges(chrome),root,0,0,-.35);mesh(extrude(poly([[-3.18,-2.63],[0,-4.12],[3.18,-2.63],[0,-2.0]]),.15,.025),panelMetals.withEdges(black),root,0,0,.09);
-stroke([[-3.1,-2.65,.31],[0,-4.10,.31],[3.1,-2.65,.31]],thinRed);box(.065,1.42,.1,red,root,0,-3.55,.48);glowSprite(0xff102a,1.3,root,0,-4.14,.52,.7);
+stroke([[-3.1,-2.65,.31],[0,-4.10,.31],[3.1,-2.65,.31]],thinRed);
+// Reference-inspired recessed energy spine: machined shoulders, hot filament,
+// and a luminous convergence point instead of a flat red rectangle.
+const energySpine=new T.Group();energySpine.name='Reference-style lower energy spine';root.add(energySpine);
+const spineMetal=chrome.clone();spineMetal.roughness=.23;spineMetal.envMapIntensity=.48;
+mesh(extrude(poly([[-.22,-2.82],[.22,-2.82],[.18,-3.64],[.08,-4.17],[-.08,-4.17],[-.18,-3.64]]),.13,.018),steel,energySpine,0,0,.35);
+mesh(extrude(poly([[-.082,-2.82],[.082,-2.82],[.052,-4.13],[-.052,-4.13]]),.025,.006),black,energySpine,0,0,.5);
+for(const side of [-1,1]){
+ const shoulder=[[.125,-2.82],[.205,-2.82],[.162,-3.66],[.065,-4.16],[.045,-4.11],[.105,-3.61]].map(([x,y])=>[x*side,y]);
+ mesh(extrude(poly(shoulder),.07,.012),spineMetal,energySpine,0,0,.50);
+ const brace=[[.10,-4.14],[.22,-4.04],[1.82,-2.9],[2.01,-2.9],[.28,-4.16]].map(([x,y])=>[x*side,y]);
+ mesh(extrude(poly(brace),.09,.016),spineMetal,energySpine,0,0,.35);
+ stroke([[side*.16,-4.08,.47],[side*1.89,-2.93,.47]],thinRed,energySpine);
+ for(let j=0;j<5;j++)box(.046,.055,.034,j%2?steel:spineMetal,energySpine,side*(.14-j*.007),-2.99-j*.19,.59);
+}
+mesh(extrude(poly([[-.034,-2.83],[.034,-2.83],[.022,-4.14],[-.022,-4.14]]),.018,.004),red,energySpine,0,0,.54);
+mesh(extrude(poly([[-.008,-2.84],[.008,-2.84],[.015,-4.13],[-.015,-4.13]]),.008,.002),hot,energySpine,0,0,.567);
+const spineAura=glowSprite(0xff142e,1,energySpine,0,-3.64,.58,.35);spineAura.scale.set(.3,1.4,1);
+// The light sits just above the platform surface, not inside its solid deck.
+mesh(new T.SphereGeometry(.037,16,12),hot,energySpine,0,-3.90,.59);
+const spineTip=glowSprite(0xff233e,.9,energySpine,0,-3.90,.62,.8);pulses.push({obj:spineTip,base:.9});
+const spineFlare=glowSprite(0xffcad3,1,energySpine,0,-3.90,.64,.6);spineFlare.scale.set(1.4,.045,1);
 const platformMetal=black.clone();platformMetal.color.set(0x040609);platformMetal.envMapIntensity=.025;platformMetal.roughness=.34;
 const dais=new T.Group();dais.position.set(0,-4.45,0);root.add(dais);for(let i=0;i<4;i++){const r=6.8-i*.85;mesh(new T.CylinderGeometry(r,r+.08,.16,128),platformMetal,dais,0,i*.12,0)}
 const floorRings=new T.Group();floorRings.rotation.x=-Math.PI/2;floorRings.position.y=.51;dais.add(floorRings);
@@ -222,9 +245,9 @@ let animated=!matchMedia('(prefers-reduced-motion: reduce)').matches,elapsed=0,f
 function update(dt){if(animated)elapsed+=dt;for(const m of beacons){m.uniforms.time.value=elapsed;m.uniforms.resolution.value=innerHeight*renderer.getPixelRatio()}for(const {g,s,axis='z'} of turners)g.rotation[axis]=elapsed*s;for(const p of pulses){const s=p.base*(1+Math.sin(elapsed*2.4)*.065);p.obj.scale.set(s,s,1)}coreLight.intensity=18+Math.sin(elapsed*2.4)*3;for(let i=0;i<count;i++){positions[i*3]=bases[i*3]+Math.sin(elapsed*.12+i)*.13;positions[i*3+1]=((bases[i*3+1]+5+elapsed*(.06+(i%5)*.013))%19)-5;positions[i*3+2]=bases[i*3+2]}pgeo.attributes.position.needsUpdate=true;for(const w of wisps)w.s.position.x=w.x+Math.sin(elapsed*.1+w.x)*.4;cinema.update(elapsed,animated?dt:0,animated);updateFrontOrbit(controls,dt,animated);if(animated||needsRender){renderScene();needsRender=false;frames++}}
 function frame(now){const dt=Math.max(0,Math.min((now-previous)/1000,.06));previous=now;update(dt);requestAnimationFrame(frame)}requestAnimationFrame(frame);
 $('home').onclick=reset;renderer.domElement.ondblclick=reset;$('orbit').onclick=()=>{controls.autoRotate=!controls.autoRotate;$('orbit').setAttribute('aria-pressed',String(controls.autoRotate))};$('motion').onclick=()=>{animated=!animated;$('motion').setAttribute('aria-pressed',String(animated))};$('glow').oninput=e=>{bloom.strength=Number(e.target.value)};$('compare').onclick=()=>{const on=$('reference').classList.toggle('show');$('compare').setAttribute('aria-pressed',String(on))};$('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{$('message').textContent='Fullscreen is unavailable in this viewer. Open the file in Chrome.'}};
-$('stage').addEventListener('keydown',e=>{const spherical=new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target));if(e.key==='ArrowLeft')spherical.theta-=.1;else if(e.key==='ArrowRight')spherical.theta+=.1;else if(e.key==='ArrowUp')spherical.phi=Math.max(.2,spherical.phi-.1);else if(e.key==='ArrowDown')spherical.phi=Math.min(Math.PI*.8,spherical.phi+.1);else if(e.key==='Home'){reset();return}else return;e.preventDefault();camera.position.copy(controls.target).add(new T.Vector3().setFromSpherical(spherical));controls.update()});
+$('stage').addEventListener('keydown',e=>{const spherical=new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target));if(e.key==='ArrowLeft')spherical.theta-=.1;else if(e.key==='ArrowRight')spherical.theta+=.1;else if(e.key==='ArrowUp')spherical.phi=Math.max(.2,spherical.phi-.1);else if(e.key==='ArrowDown')spherical.phi=Math.min(controls.maxPolarAngle,spherical.phi+.1);else if(e.key==='Home'){reset();return}else return;e.preventDefault();camera.position.copy(controls.target).add(new T.Vector3().setFromSpherical(spherical));controls.update()});
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);bloomComposer.setSize(innerWidth,innerHeight)});renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();$('message').textContent='The graphics context was interrupted. Reload to restore the scene.'});
 $('replay').onclick=()=>{animated=true;$('motion').setAttribute('aria-pressed','true');cinema.replay()};
 const toggleMotion=$('motion').onclick;$('motion').onclick=()=>{toggleMotion();if(!animated){const auto=controls.autoRotate,damping=controls.enableDamping;controls.autoRotate=false;controls.enableDamping=false;controls.update(0);controls.enableDamping=damping;controls.autoRotate=auto}needsRender=true};
 $('glow').addEventListener('input',()=>{needsRender=true});addEventListener('resize',()=>{needsRender=true});
-window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.9',...frontOrbitStats(controls),...cinema.stats(),...powerUp.stats(),...polish.stats(),...showcase.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,orbitAngle:controls.getAzimuthalAngle(),orbitPath:'left-up-right-down',orbitElevation:Math.PI/2-controls.getPolarAngle(),upperCoreAnimation:true,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
+window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.10',brainNodes:denseBrain.nodeCount,brainLinks:denseBrain.linkCount,...frontOrbitStats(controls),...cinema.stats(),...powerUp.stats(),...polish.stats(),...showcase.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,orbitAngle:controls.getAzimuthalAngle(),orbitPath:'left-up-right-down',orbitElevation:Math.PI/2-controls.getPolarAngle(),upperCoreAnimation:true,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
