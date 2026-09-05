@@ -139,7 +139,7 @@ const subtitle=new T.Group();subtitle.name='Extruded CYBERDYNE SYSTEMS';subtitle
 mesh(extrude(poly([[-5.92,-.17],[-5.64,.43],[5.61,.43],[5.94,-.17]]),.20,.045),black,subtitle,0,0,-.1);
 const font=new FontLoader().parse(fontData);let letterX=0;const textGroup=new T.Group();subtitle.add(textGroup);
 for(const char of 'CYBERDYNE SYSTEMS'){if(char===' '){letterX+=.38;continue}const geo=extrude(font.generateShapes(char,.4),.075,.009);geo.computeBoundingBox();const width=geo.boundingBox.max.x-geo.boundingBox.min.x;mesh(geo,silver,textGroup,letterX,0,.16);letterX+=width+.11}textGroup.scale.x=10.85/letterX;textGroup.position.x=-5.425;
-box(11.4,.023,.03,red,subtitle,0,-.16,.23);box(11.15,.025,.025,chrome,subtitle,0,.45,.16);
+box(11.4,.023,.03,red,subtitle,0,-.16,.23);
 // Lower diamond and illuminated platform.
 mesh(extrude(poly([[-3.5,-2.62],[0,-4.31],[3.5,-2.62],[0,-1.8]]),.36,.06),chrome,root,0,0,-.35);mesh(extrude(poly([[-3.18,-2.63],[0,-4.12],[3.18,-2.63],[0,-2.0]]),.15,.025),black,root,0,0,.09);
 stroke([[-3.1,-2.65,.31],[0,-4.10,.31],[3.1,-2.65,.31]],thinRed);box(.065,1.42,.1,red,root,0,-3.55,.48);glowSprite(0xff102a,1.3,root,0,-4.14,.52,.7);
@@ -180,4 +180,4 @@ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updat
 $('replay').onclick=()=>{animated=true;$('motion').setAttribute('aria-pressed','true');cinema.replay()};
 const toggleMotion=$('motion').onclick;$('motion').onclick=()=>{toggleMotion();if(!animated){const auto=controls.autoRotate,damping=controls.enableDamping;controls.autoRotate=false;controls.enableDamping=false;controls.update(0);controls.enableDamping=damping;controls.autoRotate=auto}needsRender=true};
 $('glow').addEventListener('input',()=>{needsRender=true});addEventListener('resize',()=>{needsRender=true});
-window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.3',...cinema.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
+window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.4',...cinema.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
