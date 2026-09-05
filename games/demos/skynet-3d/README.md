@@ -8,7 +8,7 @@ Listed in the **Unfinished** section of https://jez237.com/games/.
 
 ## Controls
 
-Drag to orbit; scroll or pinch to zoom. Arrow keys orbit when the scene is focused. Home, double-click, or Reset view returns to the front. The toolbar also provides automatic orbit, animation pause, adjustable glow, original-image comparison, and fullscreen.
+Drag to orbit within the front hemisphere; scroll or pinch to zoom. Arrow keys orbit when the scene is focused. Home, double-click, or Reset view returns to the front. The toolbar also provides automatic orbit (reversing at ±90°), animation pause, adjustable glow (default 0), original-image comparison, and fullscreen.
 
 ## Development
 
@@ -37,3 +37,7 @@ The intro and replay now stage the ignition: core, rings/platform, neural networ
 Version `2026.09.05.6` includes the locally approved flat K/Y bevels, darker brushed-gunmetal word backing, textured satin-metal panel sides, and corrected backing corner beside the T. The backing has five subtle assembly seams and nine recessed fasteners. Nine iris blades slide open during ignition, and five panel outlines carry intermittent sparks synchronized to the neural signal clock. All effects respect animation pause and reduced motion.
 
 Showcase hides the interface and requests fullscreen when available. Escape exits; moving the pointer or tapping the scene reveals an Exit showcase button. The button is also keyboard accessible. Exiting preserves fullscreen if it was already active before Showcase, and embedded viewers without fullscreen support still get an interface-free presentation. `showcase.js` implements these additions; `panel-metal.js` generates the metal texture maps locally.
+
+### Front-facing orbit and upper core
+
+Version `2026.09.05.7` adds a raised rotating scanner and counter-rotating inner segments to the small upper core, synchronized with pause and reduced motion. Glow now starts at 0 but remains adjustable. Auto-orbit reverses at either 90-degree side profile, and manual controls share those front-facing limits. CYBERDYNE SYSTEMS is lowered slightly to center it vertically within its backing panel.
