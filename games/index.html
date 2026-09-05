@@ -1255,6 +1255,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="card-art.css?v=20260905-1">
 </head>
 <body class="arcade-galaxy-page">
   <iframe id="globe-bg" src="../experiments/blueforest-globe/?bg=1&r=0.125&v=globe-big7" title="" aria-hidden="true" tabindex="-1" scrolling="no" loading="eager"></iframe>
@@ -1298,6 +1299,7 @@
     </footer>
   </main>
 
+  <script src="card-art.js?v=20260905-1"></script>
   <script>
     const SITE_BASE = './';
     const gameHref = g => g.href || `${SITE_BASE}${g.path}`;
@@ -1518,6 +1520,8 @@
       return `<svg ${common}>${art[effect] || art.star}</svg>`;
     }
     function gameIcon(g, index) {
+      const cover = window.GameCardArt?.render(g, index);
+      if (cover) return cover;
       const effect = iconEffect(g);
       const seed = `${index}:${slugTitle(g.title)}:${effect}`;
       return `
@@ -1796,6 +1800,7 @@
           svg.style.setProperty('--d', (-Math.random() * 4).toFixed(2) + 's');
         });
         ParticleIconRuntime.mount();
+        window.GameCardArt?.mount();
       });
     }
 
