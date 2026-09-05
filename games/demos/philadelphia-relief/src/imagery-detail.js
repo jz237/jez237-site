@@ -4,8 +4,10 @@
  * The regional texture is always available immediately. A city-detail cell
  * replaces it below 16 km, a smaller source-resolution block cell replaces
  * that below 4.8 km, and a camera-following roof cell takes over for the final
- * descent. Cells overlap, cross-fade in the terrain shader and are prefetched
- * into the browser/edge cache after the camera settles.
+ * useful descent. The camera quality floor prevents magnifying the delivered
+ * source beyond roughly one imagery sample per screen pixel. Cells overlap,
+ * cross-fade in the terrain shader and are prefetched into the browser/edge
+ * cache after the camera settles.
  */
 
 export const DETAIL_DISTANCE_M = 16000;

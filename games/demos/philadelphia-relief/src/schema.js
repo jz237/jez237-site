@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090406';
-import { ERA_IDS } from './eras.js?v=philly-2026090406';
+import { WEATHERS } from './solar.js?v=philly-2026090407';
+import { ERA_IDS } from './eras.js?v=philly-2026090407';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -97,7 +97,8 @@ export const CONTROLS = {
     k: 'id', kind: 'enum', values: IMAGERY_DETAIL, def: 'standard',
     group: 'carto', label: 'Aerial detail',
     hint: 'Data Saver stops at the city tile. Standard adds a source-resolution block tile; ' +
-      'Maximum uses 4096 px for every close tile. Nearby cells are prefetched and cached.',
+      'Maximum uses 4096 px for every close tile. Nearby cells are prefetched and cached. ' +
+      'Close zoom stops before the source photography would be visibly enlarged.',
   },
 
   // ---- structures --------------------------------------------------------
@@ -206,7 +207,10 @@ export const CAMERA = {
   camLon: { k: 'x', min: -75.8, max: -74.7, def: -75.1655, prec: 4 },
   camLat: { k: 'y', min: 39.7, max: 40.55, def: 39.9505, prec: 4 },
   // Orbit radius in metres from the target.
-  camDist: { k: 'd', min: 180, max: 190000, def: 6500, prec: 0 },
+  // Visual-quality floor, not merely a camera-safety floor. At 900 m the
+  // phone-safe texture and the USGS source remain at or below approximately
+  // one useful source sample per screen pixel; descending farther magnifies it.
+  camDist: { k: 'd', min: 900, max: 190000, def: 6500, prec: 0 },
   // Map convention: 0 deg = north-up, increasing clockwise.
   camBearing: { k: 'b', min: 0, max: 360, def: 32, wrap: 360, prec: 1 },
   // Map convention: 0 deg = straight down, 85 deg = near the horizon.

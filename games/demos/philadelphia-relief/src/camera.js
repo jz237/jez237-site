@@ -13,8 +13,8 @@
  *   two-finger drag         orbit; pinch distance zooms at the same time
  */
 
-import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026090406';
-import { CAMERA } from './schema.js?v=philly-2026090406';
+import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026090407';
+import { CAMERA } from './schema.js?v=philly-2026090407';
 
 const DEG = Math.PI / 180;
 
@@ -364,7 +364,7 @@ export function createCameraRig(THREE, options) {
 
     setAspect(aspect) {
       // Near/far track the orbit distance so precision stays usable at both
-      // 180 m and 190 km without ever clipping the terrain.
+      // the source-quality close-view floor and 190 km without clipping.
       const near = clamp(now.dist * 0.008, 2, 400);
       const far = Math.max(60000, now.dist * 6 + 260000);
       if (aspect !== projectionAspect || near !== projectionNear || far !== projectionFar) {

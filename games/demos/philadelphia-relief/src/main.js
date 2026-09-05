@@ -7,52 +7,52 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090406';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090407';
 
-import { createStore } from './state.js?v=philly-2026090406';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090406';
-import { effectiveLight } from './solar.js?v=philly-2026090406';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090406';
+import { createStore } from './state.js?v=philly-2026090407';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090407';
+import { effectiveLight } from './solar.js?v=philly-2026090407';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090407';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090406';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090406';
+} from './geo.js?v=philly-2026090407';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090407';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090406';
+} from './tours.js?v=philly-2026090407';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090406';
+} from './urlstate.js?v=philly-2026090407';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090406';
+} from './degraded.js?v=philly-2026090407';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090406';
-import { createImageryDetail } from './imagery-detail.js?v=philly-2026090406';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090406';
-import { createPostFX } from './postfx.js?v=philly-2026090406';
-import { createCameraRig } from './camera.js?v=philly-2026090406';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090406';
-import { createStructures } from './structures.js?v=philly-2026090406';
+} from './terrain.js?v=philly-2026090407';
+import { createImageryDetail } from './imagery-detail.js?v=philly-2026090407';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090407';
+import { createPostFX } from './postfx.js?v=philly-2026090407';
+import { createCameraRig } from './camera.js?v=philly-2026090407';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090407';
+import { createStructures } from './structures.js?v=philly-2026090407';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090406';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090406';
+} from './structures-data.js?v=philly-2026090407';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090407';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090406';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090406';
+} from './flood.js?v=philly-2026090407';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090407';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090406';
+} from './vectors.js?v=philly-2026090407';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090406';
-import { getTheme } from './themes.js?v=philly-2026090406';
+} from './ui.js?v=philly-2026090407';
+import { getTheme } from './themes.js?v=philly-2026090407';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -328,12 +328,16 @@ async function boot() {
       const credit = $('imageryCredit');
       if (!credit) return;
       const suffix = detail.state === 'active'
-        ? ` · ${detail.resolutionM.toFixed(1)} m/px ${detail.tier === 'rooftop'
-          ? 'roof detail' : detail.tier === 'ultra' ? 'block detail' : 'city detail'}`
+        ? detail.tier === 'rooftop'
+          ? ' · roof imagery · native-source quality limit'
+          : ` · ${detail.resolutionM.toFixed(1)} m sampling · ${detail.tier === 'ultra'
+            ? 'block imagery' : 'city imagery'}`
         : detail.state === 'loading' ? ' · loading building detail…' : '';
       credit.textContent = `Aerial imagery: USDA / USGS The National Map${suffix}`;
       setValueNote('imageryDetail', detail.state === 'active'
-        ? `${detail.resolutionM.toFixed(1)} m/px` : '');
+        ? detail.tier === 'rooftop' ? 'Native-source quality limit'
+          : `${detail.resolutionM.toFixed(1)} m sampling`
+        : '');
     },
   });
 
@@ -837,7 +841,7 @@ async function boot() {
     // During roof inspection the vector overlays should hug the photography,
     // not float tens of metres above it. Restore the established separation
     // smoothly as the camera returns to district scale.
-    const closeMix = Math.min(1, Math.max(0, (now.dist - 180) / 2200));
+    const closeMix = Math.min(1, Math.max(0, (now.dist - CAMERA.camDist.min) / 2200));
     const closeEase = closeMix * closeMix * (3 - 2 * closeMix);
     const lift = 2 + 28 * closeEase + now.dist * 0.0016;
     for (const entry of overlays.lines) {
@@ -1450,7 +1454,7 @@ function wireInterface(deps) {
     onFly: (name, record) => {
       if (record?.building) {
         motion.flyTo({ lon: record.lon, lat: record.lat,
-          camDist: Math.min(store.value('camDist'), 550) }, { label: name });
+          camDist: Math.min(store.value('camDist'), 1000) }, { label: name });
         return;
       }
       const landmark = landmarkByName(name);
