@@ -8,7 +8,7 @@ Listed in the **Unfinished** section of https://jez237.com/games/.
 
 ## Controls
 
-Drag to orbit within the front hemisphere; scroll or pinch to zoom. Arrow keys orbit when the scene is focused. Home, double-click, or Reset view returns to the front. The toolbar also provides automatic orbit (reversing at ±90°), animation pause, adjustable glow (default 0), original-image comparison, and fullscreen.
+Drag to orbit within the front hemisphere; scroll or pinch to zoom. Arrow keys orbit when the scene is focused. Home, double-click, or Reset view returns to the front. The toolbar also provides automatic orbit (left 45°, up 45°, right 90°, down 45°, then left 90° and repeat), animation pause, adjustable glow (default 0), original-image comparison, and fullscreen.
 
 ## Development
 
@@ -41,3 +41,7 @@ Showcase hides the interface and requests fullscreen when available. Escape exit
 ### Front-facing orbit and upper core
 
 Version `2026.09.05.7` adds a raised rotating scanner and counter-rotating inner segments to the small upper core, synchronized with pause and reduced motion. Glow now starts at 0 but remains adjustable. Auto-orbit reverses at either 90-degree side profile, and manual controls share those front-facing limits. CYBERDYNE SYSTEMS is lowered slightly to center it vertically within its backing panel.
+
+### Choreographed viewing loop
+
+Version `2026.09.05.8` replaces the side-to-side auto-orbit with an eased viewing path. From the front it moves left 45°, up 45°, right 90°, down 45°, then left 90° and repeats. Each 45° leg takes five seconds and each 90° sweep ten seconds. Zoom distance is preserved. Pause freezes the current leg; dragging takes priority, then the path smoothly rejoins the left-hand starting point. Reduced-motion visitors still start with animation disabled.
