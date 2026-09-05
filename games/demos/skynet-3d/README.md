@@ -15,3 +15,7 @@ Drag to orbit; scroll or pinch to zoom. Arrow keys orbit when the scene is focus
 Run `npm ci`, then `npm run build` to rebuild `skynet-live.js` from `src.js`. The checked-in bundle includes Three.js, font data, and postprocessing. Opening `index.html` requires no installation or external CDN. Three.js license is included in `THREE-LICENSE.txt` and in the bundle.
 
 This is a modeled visual demo, not a playable game. Fine details and reflections differ from the generated reference image.
+
+### September 5 visual update
+
+Version `2026.09.05.2` brings a lower, reference-inspired camera angle, dark studio-reflected chrome, finer engraved armor, more detailed core machinery, chamber ribs, and independently blinking red/ice-blue points on the neural globe, mechanical rings, crest, and platform. Light banks are batched for efficient rendering. All blinking follows the animation pause control and starts paused when reduced motion is requested.
