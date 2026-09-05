@@ -19,3 +19,9 @@ This is a modeled visual demo, not a playable game. Fine details and reflections
 ### September 5 visual update
 
 Version `2026.09.05.2` brings a lower, reference-inspired camera angle, dark studio-reflected chrome, finer engraved armor, more detailed core machinery, chamber ribs, and independently blinking red/ice-blue points on the neural globe, mechanical rings, crest, and platform. Light banks are batched for efficient rendering. All blinking follows the animation pause control and starts paused when reduced motion is requested.
+
+### Cinematic update
+
+Version `2026.09.05.3` adds a 7.5-second close-up-to-wide reveal and Replay intro control, followed by a gentle orbit. Dragging, zooming, keyboard navigation or Reset view interrupts the reveal immediately. Animation pause freezes the reveal, orbit, highlights, mist, blinking lights, and 161 traveling neural signal paths. Reduced-motion visitors start at the full front view with motion disabled.
+
+The scene now includes soft shadow mapping for major solid bodies, deeper letter bodies, recessed mounting hardware and cooling vents, swept chrome highlights, five procedural ground-mist layers, three overhead shafts, and subtle red floor reflections. Neural links are batched into a few draw calls. `cinematic.js` contains the new effects; the normal build bundles it into the offline-capable script.
