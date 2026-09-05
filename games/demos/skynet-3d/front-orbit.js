@@ -1,8 +1,8 @@
 import {Spherical,Vector3} from 'three';
 
 const states=new WeakMap(),quarter=Math.PI/4;
-// From the initial front view: left, up, right, down, then left and repeat.
-export const orbitWaypoints=[[-quarter,Math.PI/2],[-quarter,quarter],[quarter,quarter],[quarter,Math.PI/2]];
+// Stop level and centered for four seconds, including after the intro.
+export const orbitWaypoints=[[0,Math.PI/2,4],[-quarter,Math.PI/2],[-quarter,quarter],[quarter,quarter],[quarter,Math.PI/2]];
 export const orbitRadiansPerSecond=Math.PI/20; // 45° in five seconds; 90° in ten.
 const smooth=t=>t*t*t*(t*(t*6-15)+10);
 
@@ -23,8 +23,9 @@ export function updateFrontOrbit(controls,dt,animated){
  const theta=controls.getAzimuthalAngle(),phi=controls.getPolarAngle();
  if(state.leg&&(Math.abs(theta-state.theta)>1e-6||Math.abs(phi-state.phi)>1e-6))state.leg=null;
  const startLeg=(index,fromTheta,fromPhi)=>{
-  const [toTheta,toPhi]=orbitWaypoints[index];
-  return {index,fromTheta,fromPhi,toTheta,toPhi,time:0,duration:Math.max(.001,Math.abs(toTheta-fromTheta),Math.abs(toPhi-fromPhi))/orbitRadiansPerSecond};
+  const [toTheta,toPhi,hold=0]=orbitWaypoints[index];
+  const travel=Math.max(Math.abs(toTheta-fromTheta),Math.abs(toPhi-fromPhi))/orbitRadiansPerSecond;
+  return {index,fromTheta,fromPhi,toTheta,toPhi,time:0,travel,hold,duration:travel+hold};
  };
  if(!state.leg)state.leg=startLeg(0,theta,phi);
  let remaining=Math.max(0,dt),leg=state.leg;
@@ -33,7 +34,7 @@ export function updateFrontOrbit(controls,dt,animated){
   leg=state.leg=startLeg((leg.index+1)%orbitWaypoints.length,leg.toTheta,leg.toPhi);
  }
  leg.time+=remaining;
- const blend=smooth(leg.time/leg.duration);
+ const blend=smooth(leg.travel>0?Math.min(1,leg.time/leg.travel):1);
  state.theta=leg.fromTheta+(leg.toTheta-leg.fromTheta)*blend;
  state.phi=leg.fromPhi+(leg.toPhi-leg.fromPhi)*blend;
  const radius=controls.object.position.distanceTo(controls.target),damping=controls.enableDamping;
@@ -41,4 +42,10 @@ export function updateFrontOrbit(controls,dt,animated){
  controls.enableDamping=false;controls.update(0);
  controls.object.position.copy(controls.target).add(new Vector3().setFromSpherical(new Spherical(radius,state.phi,state.theta)));
  controls.update(0);controls.enableDamping=damping;controls.autoRotate=auto;
+}
+
+export function frontOrbitStats(controls){
+ const leg=states.get(controls)?.leg;
+ const holding=!!(controls.autoRotate&&leg&&leg.hold>0&&leg.time>=leg.travel);
+ return {orbitHolding:holding,orbitHoldRemaining:holding?Math.max(0,leg.duration-leg.time):0};
 }
