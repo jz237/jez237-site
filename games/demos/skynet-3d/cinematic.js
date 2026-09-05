@@ -51,8 +51,8 @@ export function createCinematic({scene,root,neural,stars,crest,plates,word,dais,
   // Layered low-lying fog with feathered edges, never a full-screen overlay.
   for(let i=0;i<5;i++){
     const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,uniforms:{time:{value:0},offset:{value:i*7.3}},vertexShader:uvVertex,
-      fragmentShader:`uniform float time;uniform float offset;varying vec2 vUv;${noise}void main(){vec2 p=vUv*vec2(6.,3.);p.x+=time*.027+offset;float n=fbm(p+fbm(p*.7+time*.014));float edge=pow(max(0.,sin(vUv.x*3.14159)*sin(vUv.y*3.14159)),1.6);float density=smoothstep(.32,.76,n)*edge;vec3 col=mix(vec3(.13,.2,.28),vec3(.32,.07,.10),exp(-pow((vUv.x-.5)*4.,2.)));gl_FragColor=vec4(col,density*.26);}`});
-    const fog=new T.Mesh(new T.PlaneGeometry(26,3.7),mat);fog.name='Drifting ground mist';fog.position.set((i%2-.5)*4,-3.45,-4+i*2.9);scene.add(fog);timed.push(mat);
+      fragmentShader:`uniform float time;uniform float offset;varying vec2 vUv;${noise}void main(){vec2 p=vUv*vec2(7.,4.);p.x+=time*.055+offset;p.y+=.6*sin(p.x*1.7+time*.18+offset);vec2 curl=vec2(fbm(p*.8+vec2(time*.035,0.)),fbm(p*.8+vec2(9.,time*.024)));float n=fbm(p+curl*2.8);float edge=pow(max(0.,sin(vUv.x*3.14159)*sin(vUv.y*3.14159)),1.8);float pockets=.35+.65*noise(vec2(vUv.x*8.+offset,time*.035));float density=smoothstep(.41,.72,n)*edge*pockets;vec3 col=mix(vec3(.16,.22,.29),vec3(.38,.075,.10),exp(-pow((vUv.x-.5)*4.,2.)));gl_FragColor=vec4(col,density*.31);}`});
+    const fog=new T.Mesh(new T.PlaneGeometry(19+(i%2)*3,3.3),mat);fog.name='Drifting ground mist';fog.position.set((i%2-.5)*7,-3.7,-3+i*2.5);fog.rotation.y=(i%2-.5)*.18;scene.add(fog);timed.push(mat);
   }
   // Soft overhead shafts, dim enough to retain black levels and sharp circuitry.
   for(let i=0;i<3;i++){

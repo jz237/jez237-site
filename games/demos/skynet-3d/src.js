@@ -5,9 +5,8 @@ import { RenderPass } from 'three/addons/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from 'three/addons/postprocessing/UnrealBloomPass.js';
 import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
-import { FontLoader } from 'three/addons/loaders/FontLoader.js';
-import fontData from 'three/examples/fonts/helvetiker_regular.typeface.json';
 import { createCinematic } from './cinematic.js';
+import { techText, createPowerUp } from './refinements.js';
 
 const $=id=>document.getElementById(id), TAU=Math.PI*2;
 let seed=3719;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
@@ -104,6 +103,25 @@ for(let j=0;j<8;j++){const a=j/8*TAU;const support=box(.17,2.9,.23,black,rear,Ma
 torus(5.8,.13,black,rear);torus(4.0,.065,chrome,rear);bolts(5.8,48,.04,rear,-.18);
 function glowSprite(color,size,parent,x,y,z,opacity=.65){const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');const grad=g.createRadialGradient(64,64,0,64,64,64);grad.addColorStop(0,'rgba(255,255,255,1)');grad.addColorStop(.08,'rgba(255,255,255,.7)');grad.addColorStop(.25,'rgba(255,255,255,.18)');grad.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=grad;g.fillRect(0,0,128,128);const m=new T.SpriteMaterial({map:new T.CanvasTexture(c),color,transparent:true,opacity,blending:T.AdditiveBlending,depthWrite:false});m.userData.glow=true;const s=new T.Sprite(m);s.scale.set(size,size,1);s.position.set(x,y,z);parent.add(s);return s}
 function coreAssembly(x,y,z,r){const g=new T.Group();g.position.set(x,y,z);root.add(g);mesh(new T.CylinderGeometry(r,r,.46,80).rotateX(Math.PI/2),black,g);
+ if(r>1){
+  g.name='Recessed iris reactor';
+  const annulus=(outer,inner,depth,mat,z)=>{const s=new T.Shape();s.absarc(0,0,outer,0,TAU,false);const h=new T.Path();h.absarc(0,0,inner,0,TAU,true);s.holes.push(h);return mesh(extrude(s,depth,.022),mat,g,0,0,z)};
+  annulus(r*1.04,r*.72,.34,black,.24);annulus(r*.99,r*.87,.11,chrome,.59);annulus(r*.79,r*.40,.22,steel,.36);annulus(r*.72,r*.57,.07,chrome,.60);
+  for(let j=0;j<20;j++){const a=j*TAU/20;sector(r*.93,.11,a,.19,.09,j%4===0?chrome:steel,g,.74);sector(r*.94,.023,a+.028,.07,.018,red,g,.847);sector(r*.81,.032,a+.04,.11,.028,chrome,g,.64)}
+  torus(r*1.045,.015,red,g,0,0,.59);torus(r*.74,.012,red,g,0,0,.72);torus(r*.43,.014,chrome,g,0,0,.49);
+  bolts(r*.92,20,.035,g,.85);ticks(r*.79,120,.008,.042,chrome,g,.67);
+  const iris=new T.Group();iris.name='Nine mechanical iris blades';iris.position.z=.73;g.add(iris);turners.push({g:iris,s:.027});
+  const blade=poly([[.28,-.08],[.57,-.26],[.84,-.12],[.73,.14],[.43,.22],[.25,.14]]);
+  const irisMetal=steel.clone();irisMetal.color.set(0x0b131d);irisMetal.envMapIntensity=.13;irisMetal.roughness=.29;
+  const irisEtch=new T.LineBasicMaterial({color:0x7e9eb7,transparent:true,opacity:.3});
+  for(let j=0;j<9;j++){const leaf=new T.Group();leaf.rotation.z=j*TAU/9;leaf.position.z=(j%3)*.013;iris.add(leaf);mesh(extrude(blade,.045,.009),irisMetal,leaf);stroke([[.28,-.08,.057],[.57,-.26,.057],[.84,-.12,.057]],irisEtch,leaf);for(let k=0;k<3;k++)stroke([[.47+k*.045,-.05,.058],[.64+k*.04,-.1,.058]],irisEtch,leaf)}
+  const lensMat=new T.MeshPhysicalMaterial({color:0x9c0310,metalness:.25,roughness:.075,clearcoat:1,transparent:true,opacity:.55,depthWrite:false,emissive:0x340008,emissiveIntensity:.2});
+  const lens=mesh(new T.SphereGeometry(.24,40,24),lensMat,g,0,0,.37);lens.scale.z=.5;lens.name='Recessed red lens';
+  mesh(new T.SphereGeometry(.095,24,16),hot,g,0,0,.43);torus(.145,.009,red,g,0,0,.46);torus(.225,.012,red,g,0,0,.47);
+  const glow=glowSprite(0xff122c,.92,g,0,0,.51,.64);pulses.push({obj:glow,base:.92});const flare=glowSprite(0xff2035,1,g,0,0,.52,.40);flare.scale.set(3.4,.045,1);
+  beaconBank(Array.from({length:32},(_,i)=>{const a=i*TAU/32;return[Math.cos(a)*r*.84,Math.sin(a)*r*.84,.80]}),g,.65);
+  return g;
+ }
  for(let i=0;i<8;i++){const rad=r*(.23+i*.104);torus(rad,i%3===0?.036:.015,i%3===0?chrome:(i%2?red:steel),g,0,0,.31+i*.012)}
  const rotor=new T.Group();rotor.position.z=.41;g.add(rotor);turners.push({g:rotor,s:-.12});ticks(r*.83,48,.027,.095,chrome,rotor);bolts(r*.93,16,.033,rotor,.025);for(let j=0;j<6;j++)sector(r*.68,.035,j/6*TAU,.40,.04,red,rotor,.015);
  for(let j=0;j<16;j++){const a=j*TAU/16;sector(r*.91,.065,a,.17,.07,j%3?steel:chrome,g,.46);sector(r*.51,.025,a+.06,.13,.04,j%4?chrome:red,g,.48)}
@@ -111,7 +129,7 @@ function coreAssembly(x,y,z,r){const g=new T.Group();g.position.set(x,y,z);root.
  mesh(new T.SphereGeometry(r*.115,24,16),hot,g,0,0,.47);const glow=glowSprite(0xff0b24,r*1.1,g,0,0,.65,.7);const flare=glowSprite(0xff2438,1,g,0,0,.67,.46);flare.scale.set(r*4.8,r*.075,1);pulses.push({obj:glow,base:r*1.1});
  beaconBank(Array.from({length:32},(_,i)=>{const a=i*TAU/32;return[Math.cos(a)*r*.76,Math.sin(a)*r*.76,.57]}),g,.65);return g;
 }
-coreAssembly(0,.83,1.08,1.18);coreAssembly(0,3.08,.86,.43);
+const primaryCore=coreAssembly(0,.83,1.08,1.18),upperCore=coreAssembly(0,3.08,.86,.43);
 // Custom angular glyphs with solid extruded bodies and red inlaid seams.
 const glyph={
 S:[[1,.98],[.2,.98],[0,.78],[0,.54],[.17,.40],[.70,.40],[.75,.34],[.75,.24],[.69,.18],[0,.18],[0,0],[.79,0],[1,.19],[1,.45],[.81,.59],[.29,.59],[.24,.65],[.24,.75],[.30,.81],[1,.81]],
@@ -137,8 +155,7 @@ stroke([[-6.8,-2.94,1.25],[-6.5,-1.04,1.25],[6.5,-1.04,1.25],[6.76,-1.33,1.25]],
 for(let i=0;i<44;i++)box(.16,.035,.025,i%7?steel:red,root,-6.2+i*.29,-2.91,1.29);
 const subtitle=new T.Group();subtitle.name='Extruded CYBERDYNE SYSTEMS';subtitle.position.set(0,-.61,1.27);root.add(subtitle);
 mesh(extrude(poly([[-5.92,-.17],[-5.64,.43],[5.61,.43],[5.94,-.17]]),.20,.045),black,subtitle,0,0,-.1);
-const font=new FontLoader().parse(fontData);let letterX=0;const textGroup=new T.Group();subtitle.add(textGroup);
-for(const char of 'CYBERDYNE SYSTEMS'){if(char===' '){letterX+=.38;continue}const geo=extrude(font.generateShapes(char,.4),.075,.009);geo.computeBoundingBox();const width=geo.boundingBox.max.x-geo.boundingBox.min.x;mesh(geo,silver,textGroup,letterX,0,.16);letterX+=width+.11}textGroup.scale.x=10.85/letterX;textGroup.position.x=-5.425;
+const textGroup=techText('CYBERDYNE SYSTEMS',silver);subtitle.add(textGroup);
 box(11.4,.023,.03,red,subtitle,0,-.16,.23);
 // Lower diamond and illuminated platform.
 mesh(extrude(poly([[-3.5,-2.62],[0,-4.31],[3.5,-2.62],[0,-1.8]]),.36,.06),chrome,root,0,0,-.35);mesh(extrude(poly([[-3.18,-2.63],[0,-4.12],[3.18,-2.63],[0,-2.0]]),.15,.025),black,root,0,0,.09);
@@ -158,19 +175,21 @@ beaconBank(Array.from({length:100},(_,i)=>{const a=i/100*TAU,r=i%3===0?6.35:4.8;
 const floor=mesh(new T.PlaneGeometry(110,110),new T.MeshBasicMaterial({color:0x020408}),scene,0,-4.62,0);floor.rotation.x=-Math.PI/2;
 // AI circuit backplanes in the chamber.
 function circuitTexture(){const c=document.createElement('canvas');c.width=512;c.height=512;const x=c.getContext('2d');x.clearRect(0,0,512,512);x.lineWidth=1;for(let i=0;i<75;i++){const yy=rnd()*512,xx=rnd()*420;x.strokeStyle=i%4===0?'#e34154':'#3c7598';x.globalAlpha=.2+rnd()*.6;x.beginPath();x.moveTo(xx,yy);x.lineTo(xx+30,yy);x.lineTo(xx+45,yy+15);x.lineTo(xx+80+rnd()*120,yy+15);x.stroke();x.fillStyle=x.strokeStyle;x.fillRect(xx,yy-1,3,3)}x.font='8px monospace';x.globalAlpha=.6;for(let i=0;i<40;i++){x.fillStyle=i%4===0?'#ef344e':'#5a9ab5';x.fillText(Array.from({length:28},()=>Math.floor(rnd()*16).toString(16)).join(' '),10,18+i*12)}const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;return t}
-const panelMat=new T.MeshBasicMaterial({map:circuitTexture(),transparent:true,opacity:.50,side:T.DoubleSide,depthWrite:false,blending:T.AdditiveBlending});
+const panelMat=new T.MeshBasicMaterial({map:circuitTexture(),transparent:true,opacity:.18,side:T.DoubleSide,depthWrite:false,blending:T.AdditiveBlending});
 for(const side of [-1,1])for(let i=0;i<4;i++){const g=new T.Group();g.position.set(side*(8.5+i*1.2),1.7+(i%2)*2,-3-i*4);g.rotation.y=-side*.4;scene.add(g);mesh(new T.PlaneGeometry(4.2,4.8),panelMat,g);box(.035,4.9,.05,steel,g,side*2.16,0,0);box(4.3,.018,.025,i%2?ice:dimRed,g,0,-2.45,0);box(4.3,.01,.025,ice,g,0,2.45,0)}
-const rays=new T.Group();scene.add(rays);const rayBlue=new T.LineBasicMaterial({color:0x386383,transparent:true,opacity:.13}),rayRed=new T.LineBasicMaterial({color:0x90212e,transparent:true,opacity:.22});for(let i=0;i<65;i++){const side=i%2?1:-1;const x=side*(6+rnd()*20),y=-3+rnd()*16,z=-8-rnd()*26;stroke([[x,y,z],[x*.4,y*.4,z-25]],i%6===0?rayRed:rayBlue,rays)}
+const rays=new T.Group();scene.add(rays);const rayBlue=new T.LineBasicMaterial({color:0x386383,transparent:true,opacity:.035}),rayRed=new T.LineBasicMaterial({color:0x90212e,transparent:true,opacity:.06});for(let i=0;i<65;i++){const side=i%2?1:-1;const x=side*(6+rnd()*20),y=-3+rnd()*16,z=-8-rnd()*26;stroke([[x,y,z],[x*.4,y*.4,z-25]],i%6===0?rayRed:rayBlue,rays)}
 beaconBank(Array.from({length:150},()=>[(rnd()-.5)*36,-3+rnd()*17,-3-rnd()*24]),scene,1.05);
 // Segmented chamber ribs and floor conduits frame the emblem in real depth.
-for(let i=0;i<7;i++){const g=new T.Group();g.position.set(0,1,-6-i*3);scene.add(g);torus(12+i*.45,.075,black,g);for(let j=0;j<12;j++){const a=j*TAU/12;sector(12+i*.45,.045,a,.17,.05,j%3?steel:chrome,g)}}
-for(let i=0;i<50;i++){const a=i*TAU/50,r=7+rnd()*2;stroke([[Math.cos(a)*r,-4.59,Math.sin(a)*r],[Math.cos(a)*r*1.6,-4.59,Math.sin(a)*r*1.6],[Math.cos(a+.025)*r*2.8,-4.59,Math.sin(a+.025)*r*2.8]],i%9===0?thinRed:faintBlue,scene)}
+for(let i=0;i<7;i++){const g=new T.Group();g.position.set(0,1,-6-i*3);scene.add(g);torus(12+i*.45,.075,black,g);for(let j=0;j<12;j++){const a=j*TAU/12;sector(12+i*.45,.045,a,.17,.05,steel,g)}}
+for(let i=0;i<50;i++){const a=i*TAU/50,r=7+rnd()*2;stroke([[Math.cos(a)*r,-4.59,Math.sin(a)*r],[Math.cos(a)*r*1.6,-4.59,Math.sin(a)*r*1.6],[Math.cos(a+.025)*r*2.8,-4.59,Math.sin(a+.025)*r*2.8]],i%9===0?rayRed:rayBlue,scene)}
 // Deterministic ember movement, independent of refresh rate.
 const count=900,positions=new Float32Array(count*3),bases=new Float32Array(count*3);for(let i=0;i<count;i++){bases[i*3]=(rnd()-.5)*45;bases[i*3+1]=rnd()*19-5;bases[i*3+2]=rnd()*36-20}
 const pgeo=new T.BufferGeometry();pgeo.setAttribute('position',new T.BufferAttribute(positions,3));const particles=new T.Points(pgeo,new T.PointsMaterial({color:new T.Color(2,.12,.15),size:.035,transparent:true,opacity:.8,blending:T.AdditiveBlending,depthWrite:false}));scene.add(particles);
 function fogTexture(){const c=document.createElement('canvas');c.width=c.height=256;const g=c.getContext('2d');for(let i=0;i<180;i++){const x=rnd()*256,y=rnd()*256,r=8+rnd()*36;const gr=g.createRadialGradient(x,y,0,x,y,r);gr.addColorStop(0,'rgba(130,149,171,.03)');gr.addColorStop(1,'rgba(0,0,0,0)');g.fillStyle=gr;g.fillRect(0,0,256,256)}const tex=new T.CanvasTexture(c);return tex}
 const fogMap=fogTexture(),wisps=[];for(let i=0;i<18;i++){const mat=new T.SpriteMaterial({map:fogMap,color:i%3===0?0x658394:0x9c4758,transparent:true,opacity:.19,depthWrite:false,blending:T.AdditiveBlending});const s=new T.Sprite(mat);s.position.set((rnd()-.5)*25,-3.6+rnd()*.3,(rnd()-.5)*12);s.scale.set(8,2.2,1);scene.add(s);wisps.push({s,x:s.position.x})}glowSprite(0x86caff,7,scene,0,9,-5,.18);
 cinema=createCinematic({scene,root,neural,stars,crest,plates,word,dais,renderer,camera,controls,chrome,steel,black,letterMetal,rnd});
+const powerUp=createPowerUp({chassis,dais,crest,neural,word,subtitle,primaryCore,upperCore,coreLight});
+const updateCinematic=cinema.update;cinema.update=(...args)=>{updateCinematic(...args);powerUp.update(cinema.stats())};
 let animated=!matchMedia('(prefers-reduced-motion: reduce)').matches,elapsed=0,frames=0,previous=performance.now();$('motion').setAttribute('aria-pressed',String(animated));
 function update(dt){if(animated)elapsed+=dt;for(const m of beacons){m.uniforms.time.value=elapsed;m.uniforms.resolution.value=innerHeight*renderer.getPixelRatio()}for(const {g,s,axis='z'} of turners)g.rotation[axis]=elapsed*s;for(const p of pulses){const s=p.base*(1+Math.sin(elapsed*2.4)*.065);p.obj.scale.set(s,s,1)}coreLight.intensity=18+Math.sin(elapsed*2.4)*3;for(let i=0;i<count;i++){positions[i*3]=bases[i*3]+Math.sin(elapsed*.12+i)*.13;positions[i*3+1]=((bases[i*3+1]+5+elapsed*(.06+(i%5)*.013))%19)-5;positions[i*3+2]=bases[i*3+2]}pgeo.attributes.position.needsUpdate=true;for(const w of wisps)w.s.position.x=w.x+Math.sin(elapsed*.1+w.x)*.4;cinema.update(elapsed,animated?dt:0,animated);const auto=controls.autoRotate;if(!animated)controls.autoRotate=false;controls.update(dt);controls.autoRotate=auto;if(animated||needsRender){renderScene();needsRender=false;frames++}}
 function frame(now){const dt=Math.max(0,Math.min((now-previous)/1000,.06));previous=now;update(dt);requestAnimationFrame(frame)}requestAnimationFrame(frame);
@@ -180,4 +199,4 @@ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updat
 $('replay').onclick=()=>{animated=true;$('motion').setAttribute('aria-pressed','true');cinema.replay()};
 const toggleMotion=$('motion').onclick;$('motion').onclick=()=>{toggleMotion();if(!animated){const auto=controls.autoRotate,damping=controls.enableDamping;controls.autoRotate=false;controls.enableDamping=false;controls.update(0);controls.enableDamping=damping;controls.autoRotate=auto}needsRender=true};
 $('glow').addEventListener('input',()=>{needsRender=true});addEventListener('resize',()=>{needsRender=true});
-window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.4',...cinema.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
+window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.5',...cinema.stats(),...powerUp.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();

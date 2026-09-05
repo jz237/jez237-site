@@ -25,3 +25,9 @@ Version `2026.09.05.2` brings a lower, reference-inspired camera angle, dark stu
 Version `2026.09.05.3` adds a 7.5-second close-up-to-wide reveal and Replay intro control, followed by a gentle orbit. Dragging, zooming, keyboard navigation or Reset view interrupts the reveal immediately. Animation pause freezes the reveal, orbit, highlights, mist, blinking lights, and 161 traveling neural signal paths. Reduced-motion visitors start at the full front view with motion disabled.
 
 The scene now includes soft shadow mapping for major solid bodies, deeper letter bodies, recessed mounting hardware and cooling vents, swept chrome highlights, five procedural ground-mist layers, three overhead shafts, and subtle red floor reflections. Neural links are batched into a few draw calls. `cinematic.js` contains the new effects; the normal build bundles it into the offline-capable script.
+
+### Typography and reactor refinement
+
+Version `2026.09.05.5` replaces the subtitle font with custom chamfered, extruded letterforms and rebuilds the main reactor with a recessed red lens, nine layered iris blades, a stepped annular housing, engraved surfaces, and mounting hardware. The previously removed silver strip remains absent. Background scaffolding is dimmer and procedural smoke breaks into curling patches around the platform.
+
+The intro and replay now stage the ignition: core, rings/platform, neural network/crest, then wordmark. Manual camera input or Reset view skips to full power. Pausing also pauses the sequence, and reduced-motion mode starts fully powered without animation. `refinements.js` holds the custom alphabet and staged lighting behavior.
