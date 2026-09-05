@@ -31,3 +31,9 @@ The scene now includes soft shadow mapping for major solid bodies, deeper letter
 Version `2026.09.05.5` replaces the subtitle font with custom chamfered, extruded letterforms and rebuilds the main reactor with a recessed red lens, nine layered iris blades, a stepped annular housing, engraved surfaces, and mounting hardware. The previously removed silver strip remains absent. Background scaffolding is dimmer and procedural smoke breaks into curling patches around the platform.
 
 The intro and replay now stage the ignition: core, rings/platform, neural network/crest, then wordmark. Manual camera input or Reset view skips to full power. Pausing also pauses the sequence, and reduced-motion mode starts fully powered without animation. `refinements.js` holds the custom alphabet and staged lighting behavior.
+
+### Showcase and finishing pass
+
+Version `2026.09.05.6` includes the locally approved flat K/Y bevels, darker brushed-gunmetal word backing, textured satin-metal panel sides, and corrected backing corner beside the T. The backing has five subtle assembly seams and nine recessed fasteners. Nine iris blades slide open during ignition, and five panel outlines carry intermittent sparks synchronized to the neural signal clock. All effects respect animation pause and reduced motion.
+
+Showcase hides the interface and requests fullscreen when available. Escape exits; moving the pointer or tapping the scene reveals an Exit showcase button. The button is also keyboard accessible. Exiting preserves fullscreen if it was already active before Showcase, and embedded viewers without fullscreen support still get an interface-free presentation. `showcase.js` implements these additions; `panel-metal.js` generates the metal texture maps locally.

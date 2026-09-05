@@ -7,6 +7,8 @@ import { OutputPass } from 'three/addons/postprocessing/OutputPass.js';
 import { ShaderPass } from 'three/addons/postprocessing/ShaderPass.js';
 import { createCinematic } from './cinematic.js';
 import { techText, createPowerUp } from './refinements.js';
+import { createPanelMetals } from './panel-metal.js';
+import { createFinalPolish, setupShowcase } from './showcase.js';
 
 const $=id=>document.getElementById(id), TAU=Math.PI*2;
 let seed=3719;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
@@ -38,6 +40,7 @@ const chrome=new T.MeshPhysicalMaterial({color:0xbac8d6,metalness:1,roughness:.1
 const silver=new T.MeshPhysicalMaterial({color:0xe0e8f0,metalness:.9,roughness:.2,clearcoat:.7});
 const steel=new T.MeshStandardMaterial({color:0x101721,metalness:1,roughness:.27,envMapIntensity:.3,bumpMap:brush,bumpScale:.014});
 const black=new T.MeshStandardMaterial({color:0x020307,metalness:1,roughness:.26,envMap:scene.environment,envMapIntensity:.16,bumpMap:brush,bumpScale:.013});
+const panelMetals=createPanelMetals(renderer,scene.environment);
 const red=new T.MeshBasicMaterial({color:new T.Color(2.8,.001,.008)});
 const dimRed=new T.MeshBasicMaterial({color:new T.Color(.52,.003,.009)}),ice=new T.MeshBasicMaterial({color:new T.Color(.14,.35,.65)}),hot=new T.MeshBasicMaterial({color:new T.Color(12,2.4,2.8)});
 for(const mat of [red,dimRed,hot])mat.userData.glow=true;
@@ -88,8 +91,8 @@ for(let i=0;i<stars.length;i++)for(let j=i+1;j<stars.length;j++){const dist=star
 // Armored plates reproduce the three-part silhouette of the reference.
 const crest=new T.Group();crest.position.z=.15;root.add(crest);
 const plates=[[[0,5.55],[-1.38,4.04],[0,2.55],[1.38,4.04]],[[-1.48,3.87],[-4.05,.12],[-.58,.12],[-.15,1.37]],[[1.48,3.87],[.15,1.37],[.58,.12],[4.05,.12]]];
-plates.forEach(p=>{mesh(extrude(poly(p),.42,.07),chrome,crest);const cx=p.reduce((a,b)=>a+b[0],0)/p.length,cy=p.reduce((a,b)=>a+b[1],0)/p.length;
- const inner=p.map(([x,y])=>[cx+(x-cx)*.965,cy+(y-cy)*.965]);mesh(extrude(poly(inner),.08,.024),black,crest,0,0,.49);
+plates.forEach(p=>{mesh(extrude(poly(p),.42,.07),panelMetals.withEdges(chrome),crest);const cx=p.reduce((a,b)=>a+b[0],0)/p.length,cy=p.reduce((a,b)=>a+b[1],0)/p.length;
+ const inner=p.map(([x,y])=>[cx+(x-cx)*.965,cy+(y-cy)*.965]);mesh(extrude(poly(inner),.08,.024),panelMetals.withEdges(black),crest,0,0,.49);
  stroke(p.map(([x,y])=>[cx+(x-cx)*.985,cy+(y-cy)*.985,.425]),thinRed,crest,true);
 });
 // Fine etched paths and inset chips, clipped to the crest plates.
@@ -147,18 +150,29 @@ letterMetal.onBeforeCompile=shader=>{
  diffuseColor.rgb *= bands;
  `);
 };
-function letterFace(s){const g=extrude(s,.095,.087),n=g.attributes.normal,p=g.attributes.position;for(let i=0;i<n.count;i++)if(n.getZ(i)>.99){const v=new T.Vector3(.025,(p.getY(i)-.85)*.22,1).normalize();n.setXYZ(i,v.x,v.y,v.z)}return g}
+function letterGeometry(s,depth,bevel,flatTop=false){
+ const g=extrude(s,depth,bevel);
+ if(flatTop){
+  // ExtrudeGeometry limits sharp-corner miters independently, tilting diagonal-arm
+  // end caps. Give every top vertex the same rounded-bevel height at each depth.
+  const p=g.attributes.position;
+  for(let i=0;i<p.count;i++)if(p.getY(i)>=1.75-1e-6){const z=p.getZ(i),endDistance=Math.max(0,-z,z-depth);const rise=endDistance>=bevel-1e-6?0:Math.sqrt(Math.max(0,bevel*bevel-endDistance*endDistance));p.setY(i,1.75+rise)}
+  p.needsUpdate=true;g.computeVertexNormals();g.computeBoundingBox();g.computeBoundingSphere();
+ }
+ return g;
+}
+function letterFace(s,flatTop=false){const g=letterGeometry(s,.095,.087,flatTop),n=g.attributes.normal,p=g.attributes.position;for(let i=0;i<n.count;i++)if(n.getZ(i)>.99){const v=new T.Vector3(.025,(p.getY(i)-.85)*.22,1).normalize();n.setXYZ(i,v.x,v.y,v.z)}return g}
 const word=new T.Group();word.name='Extruded SKYNET letters';word.position.set(-6.4,-2.74,1.55);root.add(word);let cursor=0;
-for(const letter of 'SKYNET'){const g=new T.Group();g.position.x=cursor;word.add(g);const pts=glyph[letter].map(([x,y])=>[x*1.81+y*.14,y*1.75]);const s=poly(pts);mesh(extrude(s,.82,.125),black,g,0,0,-.74);mesh(extrude(s,.045,.102),red,g,0,0,.105);mesh(letterFace(s),letterMetal,g,0,.025,.235);cursor+=Math.max(...pts.map(v=>v[0]))+.16}word.scale.x=12.8/(cursor-.16);
-mesh(extrude(poly([[-6.85,-2.98],[-6.53,-1.01],[6.55,-1.01],[6.85,-1.38],[6.55,-1.50],[6.80,-2.98]]),.27,.065),steel,root,0,0,.89);
-stroke([[-6.8,-2.94,1.25],[-6.5,-1.04,1.25],[6.5,-1.04,1.25],[6.76,-1.33,1.25]],thinRed);
+for(const letter of 'SKYNET'){const g=new T.Group();g.position.x=cursor;word.add(g);const pts=glyph[letter].map(([x,y])=>[x*1.81+y*.14,y*1.75]);const s=poly(pts),flatTop=letter==='K'||letter==='Y';mesh(letterGeometry(s,.82,.125,flatTop),black,g,0,0,-.74);mesh(letterGeometry(s,.045,.102,flatTop),red,g,0,0,.105);mesh(letterFace(s,flatTop),letterMetal,g,0,.025,.235);cursor+=Math.max(...pts.map(v=>v[0]))+.16}word.scale.x=12.8/(cursor-.16);
+const wordBacking=mesh(extrude(poly([[-6.85,-2.98],[-6.53,-1.01],[6.55,-1.01],[6.80,-2.98]]),.27,.065),panelMetals.withEdges(panelMetals.face),root,0,0,.89);wordBacking.name='Brushed-metal SKYNET backing panel';
+stroke([[-6.8,-2.94,1.25],[-6.5,-1.04,1.25],[6.5,-1.04,1.25]],thinRed);
 for(let i=0;i<44;i++)box(.16,.035,.025,i%7?steel:red,root,-6.2+i*.29,-2.91,1.29);
 const subtitle=new T.Group();subtitle.name='Extruded CYBERDYNE SYSTEMS';subtitle.position.set(0,-.61,1.27);root.add(subtitle);
-mesh(extrude(poly([[-5.92,-.17],[-5.64,.43],[5.61,.43],[5.94,-.17]]),.20,.045),black,subtitle,0,0,-.1);
+mesh(extrude(poly([[-5.92,-.17],[-5.64,.43],[5.61,.43],[5.94,-.17]]),.20,.045),panelMetals.withEdges(black),subtitle,0,0,-.1);
 const textGroup=techText('CYBERDYNE SYSTEMS',silver);subtitle.add(textGroup);
 box(11.4,.023,.03,red,subtitle,0,-.16,.23);
 // Lower diamond and illuminated platform.
-mesh(extrude(poly([[-3.5,-2.62],[0,-4.31],[3.5,-2.62],[0,-1.8]]),.36,.06),chrome,root,0,0,-.35);mesh(extrude(poly([[-3.18,-2.63],[0,-4.12],[3.18,-2.63],[0,-2.0]]),.15,.025),black,root,0,0,.09);
+mesh(extrude(poly([[-3.5,-2.62],[0,-4.31],[3.5,-2.62],[0,-1.8]]),.36,.06),panelMetals.withEdges(chrome),root,0,0,-.35);mesh(extrude(poly([[-3.18,-2.63],[0,-4.12],[3.18,-2.63],[0,-2.0]]),.15,.025),panelMetals.withEdges(black),root,0,0,.09);
 stroke([[-3.1,-2.65,.31],[0,-4.10,.31],[3.1,-2.65,.31]],thinRed);box(.065,1.42,.1,red,root,0,-3.55,.48);glowSprite(0xff102a,1.3,root,0,-4.14,.52,.7);
 const platformMetal=black.clone();platformMetal.color.set(0x040609);platformMetal.envMapIntensity=.025;platformMetal.roughness=.34;
 const dais=new T.Group();dais.position.set(0,-4.45,0);root.add(dais);for(let i=0;i<4;i++){const r=6.8-i*.85;mesh(new T.CylinderGeometry(r,r+.08,.16,128),platformMetal,dais,0,i*.12,0)}
@@ -176,7 +190,7 @@ const floor=mesh(new T.PlaneGeometry(110,110),new T.MeshBasicMaterial({color:0x0
 // AI circuit backplanes in the chamber.
 function circuitTexture(){const c=document.createElement('canvas');c.width=512;c.height=512;const x=c.getContext('2d');x.clearRect(0,0,512,512);x.lineWidth=1;for(let i=0;i<75;i++){const yy=rnd()*512,xx=rnd()*420;x.strokeStyle=i%4===0?'#e34154':'#3c7598';x.globalAlpha=.2+rnd()*.6;x.beginPath();x.moveTo(xx,yy);x.lineTo(xx+30,yy);x.lineTo(xx+45,yy+15);x.lineTo(xx+80+rnd()*120,yy+15);x.stroke();x.fillStyle=x.strokeStyle;x.fillRect(xx,yy-1,3,3)}x.font='8px monospace';x.globalAlpha=.6;for(let i=0;i<40;i++){x.fillStyle=i%4===0?'#ef344e':'#5a9ab5';x.fillText(Array.from({length:28},()=>Math.floor(rnd()*16).toString(16)).join(' '),10,18+i*12)}const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;return t}
 const panelMat=new T.MeshBasicMaterial({map:circuitTexture(),transparent:true,opacity:.18,side:T.DoubleSide,depthWrite:false,blending:T.AdditiveBlending});
-for(const side of [-1,1])for(let i=0;i<4;i++){const g=new T.Group();g.position.set(side*(8.5+i*1.2),1.7+(i%2)*2,-3-i*4);g.rotation.y=-side*.4;scene.add(g);mesh(new T.PlaneGeometry(4.2,4.8),panelMat,g);box(.035,4.9,.05,steel,g,side*2.16,0,0);box(4.3,.018,.025,i%2?ice:dimRed,g,0,-2.45,0);box(4.3,.01,.025,ice,g,0,2.45,0)}
+for(const side of [-1,1])for(let i=0;i<4;i++){const g=new T.Group();g.position.set(side*(8.5+i*1.2),1.7+(i%2)*2,-3-i*4);g.rotation.y=-side*.4;scene.add(g);mesh(new T.PlaneGeometry(4.2,4.8),panelMat,g);box(.035,4.9,.05,panelMetals.edge,g,side*2.16,0,0);box(4.3,.018,.025,i%2?ice:dimRed,g,0,-2.45,0);box(4.3,.01,.025,ice,g,0,2.45,0)}
 const rays=new T.Group();scene.add(rays);const rayBlue=new T.LineBasicMaterial({color:0x386383,transparent:true,opacity:.035}),rayRed=new T.LineBasicMaterial({color:0x90212e,transparent:true,opacity:.06});for(let i=0;i<65;i++){const side=i%2?1:-1;const x=side*(6+rnd()*20),y=-3+rnd()*16,z=-8-rnd()*26;stroke([[x,y,z],[x*.4,y*.4,z-25]],i%6===0?rayRed:rayBlue,rays)}
 beaconBank(Array.from({length:150},()=>[(rnd()-.5)*36,-3+rnd()*17,-3-rnd()*24]),scene,1.05);
 // Segmented chamber ribs and floor conduits frame the emblem in real depth.
@@ -189,7 +203,8 @@ function fogTexture(){const c=document.createElement('canvas');c.width=c.height=
 const fogMap=fogTexture(),wisps=[];for(let i=0;i<18;i++){const mat=new T.SpriteMaterial({map:fogMap,color:i%3===0?0x658394:0x9c4758,transparent:true,opacity:.19,depthWrite:false,blending:T.AdditiveBlending});const s=new T.Sprite(mat);s.position.set((rnd()-.5)*25,-3.6+rnd()*.3,(rnd()-.5)*12);s.scale.set(8,2.2,1);scene.add(s);wisps.push({s,x:s.position.x})}glowSprite(0x86caff,7,scene,0,9,-5,.18);
 cinema=createCinematic({scene,root,neural,stars,crest,plates,word,dais,renderer,camera,controls,chrome,steel,black,letterMetal,rnd});
 const powerUp=createPowerUp({chassis,dais,crest,neural,word,subtitle,primaryCore,upperCore,coreLight});
-const updateCinematic=cinema.update;cinema.update=(...args)=>{updateCinematic(...args);powerUp.update(cinema.stats())};
+const polish=createFinalPolish({scene,root,crest,plates,wordBacking,primaryCore,renderer,steel,black}),showcase=setupShowcase();
+const updateCinematic=cinema.update;cinema.update=(...args)=>{updateCinematic(...args);const reveal=cinema.stats();powerUp.update(reveal);polish.update(args[0],reveal,powerUp.stats().powerStages)};
 let animated=!matchMedia('(prefers-reduced-motion: reduce)').matches,elapsed=0,frames=0,previous=performance.now();$('motion').setAttribute('aria-pressed',String(animated));
 function update(dt){if(animated)elapsed+=dt;for(const m of beacons){m.uniforms.time.value=elapsed;m.uniforms.resolution.value=innerHeight*renderer.getPixelRatio()}for(const {g,s,axis='z'} of turners)g.rotation[axis]=elapsed*s;for(const p of pulses){const s=p.base*(1+Math.sin(elapsed*2.4)*.065);p.obj.scale.set(s,s,1)}coreLight.intensity=18+Math.sin(elapsed*2.4)*3;for(let i=0;i<count;i++){positions[i*3]=bases[i*3]+Math.sin(elapsed*.12+i)*.13;positions[i*3+1]=((bases[i*3+1]+5+elapsed*(.06+(i%5)*.013))%19)-5;positions[i*3+2]=bases[i*3+2]}pgeo.attributes.position.needsUpdate=true;for(const w of wisps)w.s.position.x=w.x+Math.sin(elapsed*.1+w.x)*.4;cinema.update(elapsed,animated?dt:0,animated);const auto=controls.autoRotate;if(!animated)controls.autoRotate=false;controls.update(dt);controls.autoRotate=auto;if(animated||needsRender){renderScene();needsRender=false;frames++}}
 function frame(now){const dt=Math.max(0,Math.min((now-previous)/1000,.06));previous=now;update(dt);requestAnimationFrame(frame)}requestAnimationFrame(frame);
@@ -199,4 +214,4 @@ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updat
 $('replay').onclick=()=>{animated=true;$('motion').setAttribute('aria-pressed','true');cinema.replay()};
 const toggleMotion=$('motion').onclick;$('motion').onclick=()=>{toggleMotion();if(!animated){const auto=controls.autoRotate,damping=controls.enableDamping;controls.autoRotate=false;controls.enableDamping=false;controls.update(0);controls.enableDamping=damping;controls.autoRotate=auto}needsRender=true};
 $('glow').addEventListener('input',()=>{needsRender=true});addEventListener('resize',()=>{needsRender=true});
-window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.5',...cinema.stats(),...powerUp.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
+window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.6',...cinema.stats(),...powerUp.stats(),...polish.stats(),...showcase.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
