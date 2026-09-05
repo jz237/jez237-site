@@ -115,7 +115,7 @@ uniform writes — they respond instantly and never rebuild geometry.
 
 Rivers, roads, rail and boundaries are expanded into screen-space-width ribbons in
 the vertex shader, which is the only way a road network stays readable across a
-camera that moves from 190 km out to 180 m. Each vertex carries its **raw
+camera that moves from 190 km out to a 900 m source-quality floor. Each vertex carries its **raw
 elevation in metres**, not a baked world Y, so the exaggeration slider moves the
 overlays and the ground together instead of tearing them apart.
 

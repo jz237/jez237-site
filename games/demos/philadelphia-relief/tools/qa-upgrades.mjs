@@ -66,7 +66,7 @@ for (const view of views) {
   }, { timeout: 60000 }).then((handle) => handle.jsonValue()).catch(() => null);
   const floorPose = await page.evaluate(() => window.philadelphiaRelief?.stats().camera);
   check(rooftop && rooftop.size === 4096 && rooftop.resolutionM < 0.3
-    && floorPose?.dist >= 179 && floorPose.dist <= 181,
+    && floorPose?.dist >= 899 && floorPose.dist <= 901,
     `[${view.id}] maximum roof detail missing: ${JSON.stringify(rooftop)}`);
   await page.screenshot({ path: path.join(OUT, `${view.id}-01-rooftop.png`) });
 
@@ -159,20 +159,21 @@ for (const view of views) {
   await page.locator('#cardFly').click();
   const roofPose = await page.waitForFunction(() => {
     const stats = window.philadelphiaRelief?.stats();
-    return stats?.camera?.dist <= 600 && stats.imagery.detail?.tier === 'rooftop'
+    return stats?.camera?.dist <= 1050 && stats.imagery.detail?.tier === 'rooftop'
       && stats.imagery.detail.state === 'active' ? stats : null;
   }, { timeout: 60000 }).then((handle) => handle.jsonValue()).catch(() => null);
-  check(roofPose?.camera?.dist <= 600 && roofPose.imagery.detail.resolutionM < 0.3,
+  check(roofPose?.camera?.dist >= 900 && roofPose?.camera?.dist <= 1050
+    && roofPose.imagery.detail.resolutionM < 0.3,
     `[${view.id}] building roof flight failed: ${JSON.stringify(roofPose)}`);
   const mapBox = await page.locator('#canvas').boundingBox();
   await page.mouse.move(mapBox.x + mapBox.width / 2, mapBox.y + mapBox.height / 2);
   for (let i = 0; i < 4; i += 1) await page.mouse.wheel(0, -1200);
   const manualFloor = await page.waitForFunction(() => {
     const camera = window.philadelphiaRelief?.stats().camera;
-    return camera?.dist <= 181 ? camera : null;
+    return camera?.dist <= 901 ? camera : null;
   }, { timeout: 10000 }).then((handle) => handle.jsonValue()).catch(() => null);
-  check(manualFloor?.dist >= 179 && manualFloor.dist <= 181,
-    `[${view.id}] wheel zoom did not reach the 180 m floor: ${JSON.stringify(manualFloor)}`);
+  check(manualFloor?.dist >= 899 && manualFloor.dist <= 901,
+    `[${view.id}] wheel zoom did not reach the 900 m quality floor: ${JSON.stringify(manualFloor)}`);
   await page.screenshot({ path: path.join(OUT, `${view.id}-06-building-card.png`) });
   await context.close();
 }

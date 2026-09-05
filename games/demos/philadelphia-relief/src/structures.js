@@ -14,12 +14,12 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090406';
+import { hexToRgb } from './themes.js?v=philly-2026090407';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026090406';
-import { damp } from './geo.js?v=philly-2026090406';
+} from './structures-data.js?v=philly-2026090407';
+import { damp } from './geo.js?v=philly-2026090407';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute float aGround;     // DEM elevation under the structure, metres
