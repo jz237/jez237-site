@@ -1,10 +1,10 @@
 # SKYNET 3D Demo
 
-An unfinished, live Three.js interpretation of the Cyberdyne Systems / Skynet concept image. The sculpture uses solid extruded lettering and crest plates, animated mechanical rings, a neural globe, red core lights, particles, and an illuminated platform. The reference PNG is displayed only by the Reference control; it is not used as a substitute for the 3D model.
+A finished, live Three.js interpretation of the Cyberdyne Systems / Skynet concept image. The sculpture uses solid extruded lettering and crest plates, animated mechanical rings, a neural globe, red core lights, particles, and an illuminated platform. The reference PNG is displayed only by the Reference control; it is not used as a substitute for the 3D model.
 
 Live demo: https://jez237.com/games/demos/skynet-3d/
 
-Listed in the **Unfinished** section of https://jez237.com/games/.
+Listed with a **Demo** badge in the finished **Playable Games** section of https://jez237.com/games/.
 
 ## Controls
 
@@ -45,3 +45,7 @@ Version `2026.09.05.7` adds a raised rotating scanner and counter-rotating inner
 ### Choreographed viewing loop
 
 Version `2026.09.05.8` replaces the side-to-side auto-orbit with an eased viewing path. From the front it moves left 45°, up 45°, right 90°, down 45°, then left 90° and repeats. Each 45° leg takes five seconds and each 90° sweep ten seconds. Zoom distance is preserved. Pause freezes the current leg; dragging takes priority, then the path smoothly rejoins the left-hand starting point. Reduced-motion visitors still start with animation disabled.
+
+### Finished demo and center-view hold
+
+Version `2026.09.05.9` stops the camera for exactly four animation seconds at the level, straight-on view, both after the intro and on each lower return sweep. The rings, lights, and other effects continue during this camera hold. The Animate control freezes both the scene and the hold timer. The Games catalog now lists this finished work with a Demo badge in Playable Games, with a dedicated lightweight animated SVG thumbnail showing the chrome crest, counter-rotating rings, red cores, and blinking lights. The thumbnail uses the catalog's existing reduced-motion behavior.

@@ -9,7 +9,7 @@ import { createCinematic } from './cinematic.js';
 import { techText, createPowerUp } from './refinements.js';
 import { createPanelMetals } from './panel-metal.js';
 import { createFinalPolish, setupShowcase } from './showcase.js';
-import { configureFrontOrbit, updateFrontOrbit } from './front-orbit.js';
+import { configureFrontOrbit, updateFrontOrbit, frontOrbitStats } from './front-orbit.js';
 
 const $=id=>document.getElementById(id), TAU=Math.PI*2;
 let seed=3719;const rnd=()=>{seed=(seed*1664525+1013904223)>>>0;return seed/4294967296};
@@ -227,4 +227,4 @@ addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updat
 $('replay').onclick=()=>{animated=true;$('motion').setAttribute('aria-pressed','true');cinema.replay()};
 const toggleMotion=$('motion').onclick;$('motion').onclick=()=>{toggleMotion();if(!animated){const auto=controls.autoRotate,damping=controls.enableDamping;controls.autoRotate=false;controls.enableDamping=false;controls.update(0);controls.enableDamping=damping;controls.autoRotate=auto}needsRender=true};
 $('glow').addEventListener('input',()=>{needsRender=true});addEventListener('resize',()=>{needsRender=true});
-window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.8',...cinema.stats(),...powerUp.stats(),...polish.stats(),...showcase.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,orbitAngle:controls.getAzimuthalAngle(),orbitPath:'left-up-right-down',orbitElevation:Math.PI/2-controls.getPolarAngle(),upperCoreAnimation:true,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
+window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.9',...frontOrbitStats(controls),...cinema.stats(),...powerUp.stats(),...polish.stats(),...showcase.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,orbitAngle:controls.getAzimuthalAngle(),orbitPath:'left-up-right-down',orbitElevation:Math.PI/2-controls.getPolarAngle(),upperCoreAnimation:true,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
