@@ -14,6 +14,15 @@ function angle(controls,theta,phi){
  assert.ok(Math.abs(controls.getAzimuthalAngle()-theta*Math.PI/180)<1e-8);
  assert.ok(Math.abs(controls.getPolarAngle()-phi*Math.PI/180)<1e-8);
 }
+test('manual controls allow the rear but block views below level height',()=>{
+ const c=setup();c.autoRotate=false;
+ for(const x of [-20,0,20]){
+  c.object.position.set(x,-10,-24);c.update(0);
+  assert.ok(c.object.position.z<0);
+  assert.ok(c.object.position.y>=c.target.y-1e-9);
+  assert.ok(c.getPolarAngle()<=Math.PI/2+1e-9);
+ }
+});
 test('ordered 45° left, 45° up, 90° right, 45° down, 90° left loop',()=>{
  const c=setup();
  updateFrontOrbit(c,4,true);angle(c,0,90);

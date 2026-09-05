@@ -7,8 +7,11 @@ export const orbitRadiansPerSecond=Math.PI/20; // 45° in five seconds; 90° in 
 const smooth=t=>t*t*t*(t*(t*6-15)+10);
 
 export function configureFrontOrbit(controls){
- controls.minAzimuthAngle=-Math.PI/2;
- controls.maxAzimuthAngle=Math.PI/2;
+ // Manual viewing can circle the sculpture, but never dip underneath it.
+ // Automatic motion remains constrained by the unchanged waypoint path above.
+ controls.minAzimuthAngle=-Infinity;
+ controls.maxAzimuthAngle=Infinity;
+ controls.maxPolarAngle=Math.PI/2;
  const state={leg:null,interacting:false};states.set(controls,state);
  controls.addEventListener('start',()=>{state.interacting=true;state.leg=null});
  controls.addEventListener('end',()=>{state.interacting=false;state.leg=null});
