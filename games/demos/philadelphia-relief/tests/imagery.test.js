@@ -129,7 +129,7 @@ test('building-resolution imagery', async (t) => {
     assert.equal(detailImageSize(390, 3, 'balanced', 'standard', 'rooftop'), 2048);
   });
 
-  await t.test('the edge function accepts only bounded map cells and two sizes', () => {
+  await t.test('the edge function accepts only bounded map cells and three sizes', () => {
     const valid = detailRequest(new URLSearchParams({
       tier: 'ultra', lon: '-75.1652', lat: '39.9526', size: '4096',
     }));
@@ -237,7 +237,7 @@ test('visible imagery previews, refines, and cancels obsolete requests', async (
   consider({ ...pose, dist: 50000 });
   assert.equal(requests.length, 0, 'no remote image at regional zoom');
   consider(); consider();
-  assert.match(requests[0].url, /size=2048/);
+  assert.match(requests[0].url, /size=1024/);
   requests[0].resolve({ image: 'preview', source: 'test' });
   await Promise.resolve();
   assert.deepEqual(shown, ['preview']);
@@ -253,5 +253,29 @@ test('visible imagery previews, refines, and cancels obsolete requests', async (
   assert.equal(requests.length, 3);
   consider({ ...pose, dist: 50000 });
   assert.equal(requests[2].signal.aborted, true, 'zooming out stops close-detail downloads');
+  api.dispose();
+});
+
+
+test('dragging across grid boundaries retains useful pending imagery', async () => {
+  const requests = [];
+  const api = createImageryDetail({ terrain: { setDetailActive() {}, setDetailImagery() {} },
+    region: terrain.bounds, projection: terrain.projection,
+    loadImage(url, signal) {
+      return new Promise((resolve) => requests.push({ url, signal, resolve }));
+    },
+  });
+  const pose = { lon: -75.1652, lat: 39.9526, dist: 250 };
+  const consider = (lon) => api.consider({ ...pose, lon }, true, 1440, 1, 'balanced', 'maximum');
+  consider(pose.lon); consider(pose.lon);
+  for (const lon of [-75.1648, -75.1644, -75.1640]) consider(lon);
+  assert.equal(requests.length, 1, 'moving through several grid cells keeps the same useful download');
+  assert.equal(requests[0].signal.aborted, false);
+  requests[0].resolve({ image: 'sharp preview', source: 'test' });
+  await Promise.resolve();
+  assert.equal(api.stats().size, 1024, 'a quick preview becomes visible even after panning');
+  consider(-75.1640); consider(-75.1640);
+  assert.match(requests[1].url, /size=4096/);
+  assert.equal(api.stats().refining, true);
   api.dispose();
 });

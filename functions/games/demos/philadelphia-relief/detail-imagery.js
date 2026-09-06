@@ -15,7 +15,7 @@ const TIERS = {
   inspection: { span: { lon: 0.006, lat: 0.0045 }, grid: { lon: 0.0005, lat: 0.0005 } },
   rooftop: { span: { lon: 0.012, lat: 0.009 }, grid: { lon: 0.0045, lat: 0.0035 } },
 };
-const ALLOWED_SIZES = new Set([2048, 4096]);
+const ALLOWED_SIZES = new Set([1024, 2048, 4096]);
 const CACHE_SECONDS = 30 * 24 * 60 * 60;
 
 function clamp(value, low, high) {
@@ -56,7 +56,7 @@ export function detailRequest(searchParams) {
     south: lat - halfLat,
     north: lat + halfLat,
   };
-  const key = `regional-v4,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
+  const key = `pan-v5,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
   const height = Math.round(size * spec.span.lat / spec.span.lon);
   return { tier, lon, lat, size, height, bounds, key };
 }

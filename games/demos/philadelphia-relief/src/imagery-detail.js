@@ -57,6 +57,14 @@ export function detailCellFor(lon, lat, region, tier = 'detail') {
   };
 }
 
+export function cellContainsPose(cell, pose, inset = 0) {
+  const b = cell.bounds;
+  const dx = (b.east - b.west) * inset;
+  const dy = (b.north - b.south) * inset;
+  return pose.lon >= b.west + dx && pose.lon <= b.east - dx
+    && pose.lat >= b.south + dy && pose.lat <= b.north - dy;
+}
+
 export function imageryTierFor(distanceM, mode = 'standard') {
   if (distanceM > DETAIL_DISTANCE_M) return null;
   if (mode !== 'data' && distanceM <= INSPECTION_DISTANCE_M) return 'inspection';
@@ -79,7 +87,7 @@ export function detailUrl(cell, size) {
     tier: cell.tier || 'detail', lon: cell.lon.toFixed(4),
     lat: cell.lat.toFixed(4), size: String(size),
   });
-  return `detail-imagery?${query}&v=regional4`;
+  return `detail-imagery?${query}&v=pan5`;
 }
 
 export function detailResolutionM(cell, size, projection) {
@@ -136,6 +144,8 @@ export function createImageryDetail(options) {
   let pendingController = null;
   let pendingSize = 0;
   let pendingCellKey = '';
+  let pendingCell = null;
+  const previews = new Map();
 
   const report = (nextState) => {
     state = nextState;
@@ -149,6 +159,7 @@ export function createImageryDetail(options) {
     pendingController = null;
     pendingKey = '';
     pendingCellKey = '';
+    pendingCell = null;
     pendingSize = 0;
   }
 
@@ -164,13 +175,17 @@ export function createImageryDetail(options) {
         return;
       }
 
-      const cell = detailCellFor(pose.lon, pose.lat, region, tier);
+      // Keep a useful in-flight tile instead of canceling at every small grid
+      // boundary crossed while panning. Current tiles have a tighter margin so
+      // the next preview starts before the old coverage leaves the screen.
+      const cell = pendingCell?.tier === tier && cellContainsPose(pendingCell, pose, 0.08)
+        ? pendingCell : current?.cell.tier === tier && cellContainsPose(current.cell, pose, 0.22)
+          ? current.cell : detailCellFor(pose.lon, pose.lat, region, tier);
       const targetSize = detailImageSize(viewWidth, pixelRatio, quality, mode, tier);
       // Resolve visible detail quickly, then refine the same cell. Do not spend
       // bandwidth on four neighbouring exports while the user is waiting.
-      const preview = (tier === 'inspection' || tier === 'rooftop')
-        && targetSize === 4096 && current?.cell.key !== cell.key;
-      const size = preview ? 2048 : targetSize;
+      const preview = mode !== 'data' && current?.cell.key !== cell.key;
+      const size = preview ? 1024 : targetSize;
       const key = `${cell.key},${size}`;
       if (pendingKey && pendingKey !== key) cancelPending();
       if (current?.key === key) {
@@ -191,18 +206,28 @@ export function createImageryDetail(options) {
 
       pendingKey = key;
       pendingCellKey = cell.key;
+      pendingCell = cell;
       pendingSize = size;
       pendingController = new AbortController();
       const requestGeneration = ++generation;
       report('loading');
-      imageLoader(detailUrl(cell, size), pendingController.signal).then(({ image, source }) => {
+      const cached = previews.get(key);
+      const loading = cached ? Promise.resolve(cached)
+        : imageLoader(detailUrl(cell, size), pendingController.signal);
+      loading.then(({ image, source }) => {
         if (requestGeneration !== generation) return;
+        if (size === 1024) {
+          previews.delete(key);
+          previews.set(key, { image, source });
+          if (previews.size > 8) previews.delete(previews.keys().next().value);
+        }
         current = { key, cell, size, image, source,
           resolutionM: detailResolutionM(cell, size, projection) };
         pendingKey = '';
         pendingController = null;
         pendingSize = 0;
         pendingCellKey = '';
+        pendingCell = null;
         failedKey = '';
         failedAt = 0;
         terrain.setDetailImagery(image, cell.bounds, region);
@@ -215,6 +240,7 @@ export function createImageryDetail(options) {
         pendingController = null;
         pendingSize = 0;
         pendingCellKey = '';
+        pendingCell = null;
         failedKey = key;
         failedAt = Date.now();
         report('unavailable');
@@ -246,6 +272,7 @@ export function createImageryDetail(options) {
       cancelPending();
       pendingKey = '';
       current = null;
+      previews.clear();
       terrain.setDetailActive(false);
     },
   };
