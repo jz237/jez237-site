@@ -255,7 +255,8 @@ as a module; `game.js` imports from `engine/`.
   index.html          UI, screens, controls dialog, HUD
   game.js             ~8k lines: simulation loop, rendering, input, QA hooks
   styles.css
-  sw.js               Small PWA shell cache — never add images, audio, or index.html
+  sw.js               Small PWA shell cache (never add images, audio, or index.html
+                      to SHELL) plus the capped, build-keyed runtime media cache (5.1)
   engine/
     foundation.mjs    frame clock, RNG, move instancing, ARCADE_TUNING
     defense.mjs       movement/defense rules, hitboxes, FIGHTER_SCALE, STUN_RULES
@@ -358,11 +359,16 @@ reproduce them exactly. Keep it that way.
   existing Grit row for this reason. `.grit-row` is a 5-column grid; keep it one line.
 - **Keep `sw.js` small and redirect-safe.** The old 19 MB / 162-request media
   precache made browsers load Final Blow once and then fail with `ERR_FAILED`.
-  Cache only the root URL and core code shell; never cache `./index.html`, images,
-  audio, or runtime media. Navigations must fall back to cached `./`, because
-  Cloudflare redirects `/index.html` and browsers reject that redirected cached
-  response on later navigations. Keep the cache name, `sw.js?v=` registration,
-  and `game.js?v=` entry version aligned, then run the service-worker guard.
+  Install only the root URL and core code shell; never cache `./index.html`.
+  Since 5.1 media that has been FETCHED is kept in a second cache
+  (`final-blow-media-<build>`, cache-first under `assets/` and
+  `renderer/hd|vendor`, whole 200s only, 120 MB cap evicting oldest-first) —
+  that is a different thing from installing it, and `SHELL` must stay
+  media-free. Navigations must fall back to cached `./`, because Cloudflare
+  redirects `/index.html` and browsers reject that redirected cached response
+  on later navigations. Keep the cache name (the media name derives from it),
+  `sw.js?v=` registration, and `game.js?v=` entry version aligned, then run
+  the service-worker guard and `tests/service-worker-media.test.mjs`.
 - **Rollback protocol is at version 2.** If you add an input field that affects
   the simulation, add a bit in `NET_INPUT`, handle it in `inputToBits`/`bitsToInput`,
   and bump `ROLLBACK_PROTOCOL_VERSION`.
@@ -396,7 +402,8 @@ frames: `assets/fighters/cyraxx.webp` (588x720 portrait),
 `assets/atlases/cyraxx.webp` (4x4 combat), `assets/moves/cyraxx-specials.webp`
 (4x4 specials, **frame 15 is the victory pose**).
 
-Pipeline (`tools/`, Pillow only, no numpy):
+Pipeline (`tools/`; the `build_*.py` below are Pillow-only — the `tools/swing/`
+sheet pipeline needs numpy too, see `tools/README.md` and `tools/requirements.txt`):
 
 1. Generate each 4x4 sheet as a **single image** on a flat pure magenta
    (`#FF00FF`) background — one generation per sheet, never 16 separate ones, or
@@ -488,7 +495,7 @@ every autonomous decision made during 1.1:
 | File | Covers |
 | --- | --- |
 | `CONTROLS.md` | Four-button layout, motions, chords, grabs, 10 design decisions |
-| `MISSING-AUDIO.md` | The outstanding voice work order, and which takes the SFX review rejected |
+| `MISSING-AUDIO.md` | The outstanding voice work order, which takes the SFX review rejected, and the 5.1 build-time audio manifest (`tools/audio/build_manifest.mjs`) |
 | `COMBAT.md` | SF2HF/MK3 tuning tables, dizzy, fighter scale, the movement-ratio bug |
 | `THROWABLES.md` | Personal objects and stage weapons |
 | `CYRAXX.md` | The rebuild, identity cues, pipeline, the fal edit-mode limitation |

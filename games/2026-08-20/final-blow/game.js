@@ -50,9 +50,12 @@ import {
   COMBO_RULES,
   GRIT_RULES,
   ComboTracker,
+  attackGritGain,
   canCancelAttack,
   createAdvancedMove,
   gritCostForAction,
+  isSpecialIntoSpecialCancel,
+  projectileGritGain,
   recognizeCombatCommand,
 } from "./engine/combos.mjs";
 import {
@@ -68,10 +71,8 @@ import {
   UNIFIED_EXT2_CELLS,
   buildUnifiedExt2AcceptMasks,
   UNIFIED_EXT3_BANK,
-  UNIFIED_EXT3_CELLS,
   UNIFIED_EXT4_BANK,
   buildSwingAcceptMasks,
-  swingSubstitute,
   WALK_CELL_COUNT,
   WALK_POSE_MIN_SPEED,
   buildUnifiedAcceptMasks,
@@ -90,6 +91,7 @@ import {
   attackMotionBeat,
   bareHandedAttack,
   blockstunKeys,
+  crouchBlockstunKeys,
   throwClinchKeys,
   throwRecoveryKeys,
   baseCellDrawAdjust,
@@ -183,6 +185,7 @@ import {
   tallyRows,
   tallyTotal,
   teamBattleSnapshot,
+  draftCpuTeam,
 } from "./engine/modes.mjs";
 import {
   ARCADE_BOSS_ID,
@@ -232,7 +235,11 @@ import {
   remapKeyBinding,
   remapPadBinding,
   resolveFourButtonInput,
+  pruneFlickSamples,
+  touchPadFlick,
   touchPadTokens,
+  commandLabel,
+  styleCopy,
 } from "./engine/controls.mjs";
 import {
   FIGHT_SCHOOL_COACH_LINES,
@@ -260,17 +267,33 @@ import {
   trainingDummyInput,
   trainingSnapshot,
   trialDemoScript,
+  fightSchoolStepLabel,
 } from "./engine/training.mjs";
 import {
   PERFORMANCE_PROFILES,
   auditFighterBalance,
   auditTournamentBalance,
   createPerformanceGovernor,
+  forgetGovernorMemory,
+  governorMemoryKey,
+  governorMemorySignature,
   hapticPatternFor,
   normalizeVisualQuality,
+  readGovernorMemory,
   resolvePerformanceProfile,
   trimVisualBudget,
+  writeGovernorMemory,
 } from "./engine/polish.mjs";
+import {
+  CLOCK_CALLOUT_SECONDS,
+  ROUND_END_CAUSES,
+  clockTickPlan,
+  dizzyRingPlan,
+  drawFromBag,
+  roundEndAnnouncerPlan,
+  roundEndBannerSub,
+  roundEndCause,
+} from "./engine/announcer.mjs";
 import {
   buildInviteUrl,
   buildWatchUrl,
@@ -341,6 +364,43 @@ import {
   replaySummary,
   validateReplayRecord,
 } from "./engine/replay.mjs";
+// v5.0 FULL SWING (engineering pass): the substitution resolver and the
+// ambient-pulse state machine are engine modules now, so the gate that keeps
+// the inverted ext4 air-hit cell off screen and the 48-tick pulse decay are
+// unit-tested under Node. game.js keeps the DOM gates and the state reads.
+import { swingContext, swingResolve } from "./engine/swing-resolve.mjs";
+import {
+  INTRO_ART_HOLD_MS,
+  PRELOAD_PLAN,
+  holdDecision,
+  matchupPreloadIds,
+  readinessSummary,
+  shiftedAnnouncementDelay,
+  unifiedFamilyFor,
+} from "./engine/art-readiness.mjs";
+import {
+  AMBIENT_KO_HORNS,
+  ambientKoBeat,
+  ambientPhaseChange,
+  ambientPulseLevel,
+  ambientStutter,
+  ambientSurge,
+  ambientSyncedCycle,
+  createAmbientObs,
+  pickKoHorn,
+  pulseAmbientLatch,
+  stirPulseKind,
+} from "./engine/ambient.mjs";
+// v5.1 TEMPO TELLS: the whiff-tax / re-arm tell phases, the lab's frame
+// phase and its frame-data line — pure, shared with the CINEMA 3D fighter
+// layer so both renderers agree on when the fringe burns.
+import {
+  TEMPO_TELL_RULES,
+  noteWhiffOnMove,
+  trainingFrameDataLabel,
+  trainingFramePhase as tempoTrainingFramePhase,
+  whiffTellState,
+} from "./engine/tempo-tells.mjs";
 import {
   ONLINE_QOL_LEVEL,
   SET_LENGTHS,
@@ -407,6 +467,18 @@ import {
   scufflePhase,
 } from "./engine/crowd.mjs";
 import {
+  CROWD_KO_HOLD,
+  CROWD_VOICE_CUES,
+  createCrowdVoiceBag,
+  crowdKoHoldColumn,
+  crowdKoHoldReaction,
+  crowdVoiceBagDraw,
+  crowdVoiceCueFor,
+  crowdVoiceFiles,
+  crowdVoiceLevel,
+  crowdVoicePath,
+} from "./engine/crowd-voice.mjs";
+import {
   STAGE_WEAPONS,
   canPickUpWeapon,
   canWeaponArrive,
@@ -434,6 +506,21 @@ import {
   fighterAudioCue,
   fighterAudioVariants,
 } from "./engine/fighter-audio.mjs";
+import {
+  dashScuffParams,
+  distinctDraw,
+  pickSharedVariation,
+  rearmClickParams,
+  weaponClatterParams,
+} from "./engine/shared-sfx.mjs";
+import {
+  AUDIO_MANIFEST_PATH,
+  announcerBankFromManifest,
+  announcerEstimateMs,
+  announcerWindow,
+  fighterBankFromManifest,
+  parseAudioManifest,
+} from "./engine/audio-manifest.mjs";
 
 const canvas = document.querySelector("#game");
 const ctx = canvas.getContext("2d");
@@ -1045,6 +1132,48 @@ for (const fighter of [...roster.filter(({ id }) => id !== ARCADE_BOSS_ID), arca
 const fighterMotionAtlases = {};
 const motionBankState = { masks: null, requested: false };
 
+// ---------------------------------------------------------------------------
+// v5.1 #35 — every authored sheet is requested through ONE constructor, for
+// two reasons the first fight on a phone made measurable. fetchPriority: the
+// browser's scheduler was putting the motion banks, the stage plate and the
+// crowd sheets ahead of the unified family, the one bank whose gate flips a
+// fighter's entire vocabulary on a single tick; the hint (set BEFORE src, or
+// it does nothing) puts that family first. Decode bookkeeping: the readiness
+// hold needs to tell "still downloading" from "404ed" — a failed sheet must
+// count as settled or a missing file would hold every intro to the cap.
+// Module-level render state, never snapshotted, never read by the sim.
+// ---------------------------------------------------------------------------
+const authoredDecodeState = new Map();
+
+function sheetPriority(bank) {
+  return PRELOAD_PLAN.find((entry) => entry.bank === bank)?.priority || "auto";
+}
+
+function authoredSheetImage(bank, url) {
+  const image = new Image();
+  if ("fetchPriority" in image) image.fetchPriority = sheetPriority(bank);
+  image.src = url;
+  return image;
+}
+
+/** Start (once) the decode that settles `key`; returns the decode promise. */
+function trackSheetDecode(key, image) {
+  if (authoredDecodeState.has(key)) return authoredDecodeState.get(key).promise;
+  const entry = { state: "pending", promise: null };
+  authoredDecodeState.set(key, entry);
+  const settle = (ok) => { entry.state = ok ? "ready" : "failed"; };
+  entry.promise = (typeof image.decode === "function" ? image.decode() : Promise.resolve())
+    // decode() rejects for a broken file AND for a still-loading image the
+    // browser chose not to decode; the latter still draws, so the gate's own
+    // predicate has the last word.
+    .then(() => settle(true), () => settle(Boolean(image.complete && image.naturalWidth)));
+  return entry.promise;
+}
+
+function sheetDecodeState(key) {
+  return authoredDecodeState.get(key)?.state || "";
+}
+
 function ensureMotionManifest() {
   if (motionBankState.requested) return;
   motionBankState.requested = true;
@@ -1058,8 +1187,7 @@ function ensureMotionAtlas(fighterId) {
   ensureMotionManifest();
   let atlas = fighterMotionAtlases[fighterId];
   if (!atlas) {
-    atlas = new Image();
-    atlas.src = `assets/motion/${fighterId}.webp`;
+    atlas = authoredSheetImage("motion", `assets/motion/${fighterId}.webp`);
     fighterMotionAtlases[fighterId] = atlas;
   }
   return atlas;
@@ -1092,8 +1220,7 @@ function ensureMotion2Atlas(fighterId) {
   ensureMotion2Manifest();
   let atlas = fighterMotion2Atlases[fighterId];
   if (!atlas) {
-    atlas = new Image();
-    atlas.src = `assets/motion2/${fighterId}.webp`;
+    atlas = authoredSheetImage("motion2", `assets/motion2/${fighterId}.webp`);
     fighterMotion2Atlases[fighterId] = atlas;
   }
   return atlas;
@@ -1112,25 +1239,25 @@ function motion2CellDrawable(fighterId, cell) {
 // the manifest at all, so their mask is undefined, walkCellDrawable is false,
 // and their locomotion stays the base-only cycle byte-identically.
 const fighterWalkAtlases = {};
-const walkBankState = { masks: null, requested: false };
+const walkBankState = { masks: null, requested: false, ready: null };
 
 function ensureWalkManifest() {
-  if (walkBankState.requested) return;
+  if (walkBankState.requested) return walkBankState.ready;
   walkBankState.requested = true;
-  fetch("assets/walk/MANIFEST.json")
+  walkBankState.ready = fetch("assets/walk/MANIFEST.json")
     .then((response) => (response.ok ? response.json() : null))
     .then((manifest) => {
       walkBankState.masks = manifest
         ? buildMotionAcceptMasks(manifest, WALK_CELL_COUNT) : {};
     })
     .catch(() => { walkBankState.masks = {}; });
+  return walkBankState.ready;
 }
 
 function ensureWalkAtlas(fighterId) {
   let atlas = fighterWalkAtlases[fighterId];
   if (!atlas) {
-    atlas = new Image();
-    atlas.src = `assets/walk/${fighterId}.webp`;
+    atlas = authoredSheetImage("walk", `assets/walk/${fighterId}.webp`);
     fighterWalkAtlases[fighterId] = atlas;
   }
   return atlas;
@@ -1163,25 +1290,25 @@ function walkCellDrawable(fighterId, cell) {
 // the manifest in IS the whole integration.
 // ---------------------------------------------------------------------------
 const fighterMotion3Atlases = {};
-const motion3BankState = { masks: null, keyMap: null, requested: false };
+const motion3BankState = { masks: null, keyMap: null, requested: false, ready: null };
 
 function ensureMotion3Manifest() {
-  if (motion3BankState.requested) return;
+  if (motion3BankState.requested) return motion3BankState.ready;
   motion3BankState.requested = true;
-  fetch("assets/motion3/MANIFEST.json")
+  motion3BankState.ready = fetch("assets/motion3/MANIFEST.json")
     .then((response) => (response.ok ? response.json() : null))
     .then((manifest) => {
       motion3BankState.keyMap = buildMotion3KeyMap(manifest);
       motion3BankState.masks = manifest ? buildMotionAcceptMasks(manifest) : {};
     })
     .catch(() => { motion3BankState.masks = {}; motion3BankState.keyMap = {}; });
+  return motion3BankState.ready;
 }
 
 function ensureMotion3Atlas(fighterId) {
   let atlas = fighterMotion3Atlases[fighterId];
   if (!atlas) {
-    atlas = new Image();
-    atlas.src = `assets/motion3/${fighterId}.webp`;
+    atlas = authoredSheetImage("motion3", `assets/motion3/${fighterId}.webp`);
     fighterMotion3Atlases[fighterId] = atlas;
   }
   return atlas;
@@ -1266,8 +1393,7 @@ function unifiedFighterWhole(fighterId) {
 function ensureUnifiedAtlas(fighterId) {
   let atlas = fighterUnifiedAtlases[fighterId];
   if (!atlas) {
-    atlas = new Image();
-    atlas.src = `assets/unified/${fighterId}.webp`;
+    atlas = authoredSheetImage("unified", `assets/unified/${fighterId}.webp`);
     fighterUnifiedAtlases[fighterId] = atlas;
   }
   return atlas;
@@ -1337,8 +1463,7 @@ function ensureUnifiedExtAtlas(fighterId) {
   if (built) return built;
   let source = fighterUnifiedExtSources[fighterId];
   if (!source) {
-    source = new Image();
-    source.src = `assets/unified/${fighterId}-ext.webp`;
+    source = authoredSheetImage("ext", `assets/unified/${fighterId}-ext.webp`);
     fighterUnifiedExtSources[fighterId] = source;
   }
   if (!source.complete || !source.naturalWidth) return null;
@@ -1390,8 +1515,7 @@ function unifiedFighterExt2Whole(fighterId) {
 function ensureUnifiedExt2Atlas(fighterId) {
   let atlas = fighterUnifiedExt2Atlases[fighterId];
   if (!atlas) {
-    atlas = new Image();
-    atlas.src = `assets/unified/${fighterId}-ext2.webp`;
+    atlas = authoredSheetImage("ext2", `assets/unified/${fighterId}-ext2.webp`);
     fighterUnifiedExt2Atlases[fighterId] = atlas;
   }
   return atlas;
@@ -1426,8 +1550,7 @@ function swingFighterWhole(fighterId, bank) {
 function ensureSwingAtlas(fighterId, bank) {
   let atlas = fighterSwingAtlases[bank][fighterId];
   if (!atlas) {
-    atlas = new Image();
-    atlas.src = `assets/unified/${fighterId}-${swingSuffix[bank]}.webp`;
+    atlas = authoredSheetImage(swingSuffix[bank], `assets/unified/${fighterId}-${swingSuffix[bank]}.webp`);
     fighterSwingAtlases[bank][fighterId] = atlas;
   }
   return atlas;
@@ -1442,36 +1565,10 @@ function swingCellDrawable(fighterId, cell, bank) {
   return Boolean(atlas.complete && atlas.naturalWidth);
 }
 
-/** The swing substitution for a resolved pose, when its target cell can draw. */
-function swingResolve(fighter, pose) {
-  const attack = fighter.attacking;
-  const grounded = fighter.grounded;
-  const victimAirborne = !grounded && (fighter.hitstunFrames > 0 || fighter.pendingKnockdown || fighter.airHitstunFrames > 0);
-  const ctx = {
-    limb: attack?.limb === "kick" ? "kick" : "punch",
-    heavy: attack?.kind === "heavy",
-    crouching: attack ? Boolean(attack.cancelProfileId?.startsWith("crouch")) : fighter.crouch,
-    attacking: Boolean(attack),
-    airborne: !grounded,
-    victimAirborne,
-    falling: victimAirborne && fighter.vy > 0 && Boolean(fighter.pendingKnockdown),
-  };
-  let sub = swingSubstitute(pose.bank, pose.frame, ctx);
-  // A crouching normal's active window has no motion cell at all (it draws a
-  // base cell); the crouch extension / sweep stand in for it directly.
-  if (!sub && attack && ctx.crouching && pose.bank === "base" && !attack.animation
-    && fighter.attackFrame >= attack.activeStartFrame && fighter.attackFrame < attack.activeEndFrame) {
-    sub = { bank: UNIFIED_EXT3_BANK, frame: ctx.limb === "kick" ? UNIFIED_EXT3_CELLS.sweep : UNIFIED_EXT3_CELLS.crouchPunchExt };
-  }
-  // The substitute may land on ANY authored bank (ext3/ext4 mostly, but the
-  // unified crouch transition, the ext2 crouch recover and the ext descent
-  // too), so the gate is the bank-routed one, not the swing-only one.
-  if (sub && !motionBankCellDrawable(fighter.def.id, sub.frame, sub.bank)) {
-    sub = sub.alt && motionBankCellDrawable(fighter.def.id, sub.alt.frame, sub.alt.bank) ? sub.alt : null;
-  }
-  if (!sub) return pose;
-  return { bank: sub.bank, frame: sub.frame, fallback: pose };
-}
+// The swing substitution for a resolved pose (context derivation, the crouching
+// normal's active-window override, the bank-routed gate with its `alt`
+// fallback) is engine/swing-resolve.mjs — `swingContext` + `swingResolve`,
+// applied in fighterAnimationPose with motionBankCellDrawable as the gate.
 
 /**
  * v4.1 — is this fighter's cell 20 a DESCENT rather than a flinch?
@@ -1525,70 +1622,301 @@ function preloadAuthoredBanks(fighterIds) {
   ensureMotionManifest();
   ensureMotion2Manifest();
   ensureMotion3Manifest();
+  ensureWalkManifest();
   for (const id of ids) {
-    // Counting only FIRST requests keeps the probe meaningful: makeFighter is
+    // Counting only FIRST preloads keeps the probe meaningful: makeFighter is
     // also the rollback rebuild path, and a resimulation must not look like a
-    // fresh preload.
-    if (!fighterMotionAtlases[id] || !fighterMotion2Atlases[id]) motionFxDebug.bankPreloads += 1;
-    for (const atlas of [ensureMotionAtlas(id), ensureMotion2Atlas(id), ensureMotion3Atlas(id)]) {
-      if (atlas && !atlas.complete && typeof atlas.decode === "function") {
-        atlas.decode().catch(() => {});
-      }
+    // fresh preload. (5.1: the select screen preloads too, so a browsed
+    // fighter counts once, at the first highlight, not again at FIGHT.)
+    if (!preloadedFighterIds.has(id)) {
+      preloadedFighterIds.add(id);
+      motionFxDebug.bankPreloads += 1;
     }
   }
-  // v3.0: the unified sheet is warmed through the SAME choke point, but only
-  // once the manifest has confirmed the fighter is 16/16 — an incomplete sheet
-  // can never draw a cell, so requesting it would be pure waste. `cyraxx` is
-  // 0/16 and has no sheet in the repo at all, so this gate is also what keeps
-  // the preload from 404ing on him.
-  //
-  // Warming this one matters MORE than the others, not less. The other banks
-  // fall back per beat, so a late sheet costs one beat; this bank's gate is
-  // all-or-nothing, so a late sheet flips the fighter's ENTIRE core vocabulary
-  // in a single tick. Decoding it before FIGHT! is what keeps that flip off
-  // the screen.
+  const decodeTracked = (key, image) => {
+    if (image) trackSheetDecode(key, image);
+  };
+  // v5.1 #35 — REQUEST ORDER IS THE POINT. Measured on a throttled phone
+  // profile, the motion banks used to go out first (synchronously, here) while
+  // the unified family waited a manifest round trip, and the browser then
+  // scheduled the stage plate and the crowd ahead of it. So the whole preload
+  // now runs behind the manifest (kicked at boot, so it is normally already
+  // settled and this is a microtask), the unified family is requested first
+  // with fetchPriority high on the three sheets the fight opens on, the
+  // per-beat motion banks follow, and the bonus banks go last at low priority
+  // and only when their manifest says the fighter has a sheet.
   ensureUnifiedManifest()?.then(() => {
     for (const id of ids) {
-      if (!unifiedFighterWhole(id)) continue;
-      const atlas = ensureUnifiedAtlas(id);
-      if (atlas && !atlas.complete && typeof atlas.decode === "function") {
-        atlas.decode().catch(() => {});
-      }
-      // v4.0: the ext sheet is warmed through this SAME choke point and behind
-      // the SAME manifest gate, so a fighter with no ext block (the five 3.0
-      // holdouts) never requests one and never 404s — the manifest-BEFORE-sheet
-      // order that keeps cyraxx quiet is what keeps them quiet too.
+      // v3.0: the unified sheet is warmed only once the manifest has confirmed
+      // the fighter is 16/16 — an incomplete sheet can never draw a cell, so
+      // requesting it would be pure waste, and a fighter with no sheet in the
+      // repo must never 404 (the manifest-BEFORE-sheet order).
       //
-      // Warming it matters for the same reason the main sheet's does, one step
-      // further on. This gate does not flip a fighter's vocabulary, it flips
-      // his CADENCE: the walk goes from a four-key cycle at 10 keys/s to a
-      // six-key cycle at 15, and the jump swaps key arrays. A sheet that lands
-      // mid-stride would change both on one tick. Decoding it before FIGHT!
-      // keeps that off the screen, and padding it here rather than on the first
-      // draw keeps the canvas build out of a frame budget.
-      // v4.9: the in-between sheet decodes before FIGHT! too — its first use
-      // is the first jab of the round.
-      if (unifiedFighterExt2Whole(id)) {
-        const atlas2 = ensureUnifiedExt2Atlas(id);
-        if (typeof atlas2.decode === "function") atlas2.decode().catch(() => {});
+      // Warming this one matters MORE than the others, not less. The other
+      // banks fall back per beat, so a late sheet costs one beat; this bank's
+      // gate is all-or-nothing, so a late sheet flips the fighter's ENTIRE
+      // core vocabulary in a single tick. Decoding it before FIGHT! is what
+      // keeps that flip off the screen.
+      if (!unifiedFighterWhole(id)) continue;
+      decodeTracked(`${id}:unified`, ensureUnifiedAtlas(id));
+      // v4.0: the ext sheet flips a fighter's CADENCE — the walk goes from a
+      // four-key cycle at 10 keys/s to a six-key cycle at 15 and the jump
+      // swaps key arrays. The first call starts the request and returns null;
+      // the decode then calls back to build the padded canvas, so the canvas
+      // build stays out of a frame budget.
+      if (unifiedFighterExtWhole(id) && !ensureUnifiedExtAtlas(id)) {
+        const source = fighterUnifiedExtSources[id];
+        if (source) trackSheetDecode(`${id}:ext`, source).then(() => ensureUnifiedExtAtlas(id));
       }
+      // v4.9: the in-between sheet — its first use is the first jab.
+      if (unifiedFighterExt2Whole(id)) decodeTracked(`${id}:ext2`, ensureUnifiedExt2Atlas(id));
+      // v5.0: strikes and reactions.
       for (const swingBank of [UNIFIED_EXT3_BANK, UNIFIED_EXT4_BANK]) {
         if (!swingFighterWhole(id, swingBank)) continue;
-        const swingAtlas = ensureSwingAtlas(id, swingBank);
-        if (typeof swingAtlas.decode === "function") swingAtlas.decode().catch(() => {});
-      }
-      if (!unifiedFighterExtWhole(id)) continue;
-      // The first call starts the request and returns null; the decode then
-      // calls back to build the padded canvas. Both paths end at the same
-      // builder, so a sheet already in cache is simply padded now.
-      if (!ensureUnifiedExtAtlas(id)) {
-        const source = fighterUnifiedExtSources[id];
-        if (source && typeof source.decode === "function") {
-          source.decode().then(() => ensureUnifiedExtAtlas(id)).catch(() => {});
-        }
+        decodeTracked(`${id}:${swingSuffix[swingBank]}`, ensureSwingAtlas(id, swingBank));
       }
     }
+    // Both motion sheets are requested — and DECODED, which is the half that
+    // actually matters, since a complete-but-undecoded image still stalls the
+    // first blit — as soon as a matchup is known (v2.9 B3). Failure stays
+    // silent by design: this is the on-demand media policy, and the fallback
+    // chain remains the safety net.
+    for (const id of ids) {
+      decodeTracked(`${id}:motion`, ensureMotionAtlas(id));
+      decodeTracked(`${id}:motion2`, ensureMotion2Atlas(id));
+    }
+    // The bonus banks gate the REQUEST on their manifests (the walk sheet
+    // exists for two fighters; motion3 has fighters with 0/8 accepted), so
+    // a speculative request cannot 404 on the eight who have none.
+    ensureMotion3Manifest()?.then(() => {
+      for (const id of ids) {
+        if (motion3BankState.masks?.[id]?.accept.some(Boolean)) decodeTracked(`${id}:motion3`, ensureMotion3Atlas(id));
+      }
+    });
+    ensureWalkManifest()?.then(() => {
+      for (const id of ids) {
+        if (walkBankState.masks?.[id]) decodeTracked(`${id}:walk`, ensureWalkAtlas(id));
+      }
+    });
   });
+}
+
+// Fighters whose banks have been through preloadAuthoredBanks at least once.
+const preloadedFighterIds = new Set();
+
+// The unified manifest is the gate every preload waits on, so it is requested
+// at boot: one small JSON, and by the time a player has picked a fighter it
+// has long since settled, which turns the select-screen preload's wait on it
+// into a microtask. (Offline, the fetch fails into the empty-mask path the
+// manifest loader already has.)
+ensureUnifiedManifest();
+
+// ---------------------------------------------------------------------------
+// v5.1 #35 — READINESS + THE INTRO HOLD.
+//
+// Per fighter, per sheet of the unified family: is it drawable NOW, by the
+// same predicate the drawable gates use? (The ext sheet's answer is "the
+// padded canvas exists", so a decoded-but-unpadded ext is still pending —
+// exactly the state that would draw the four-key walk.) The intro of an
+// offline match holds the fixed-step clock while any of these is pending, up
+// to INTRO_ART_HOLD_MS, under a LOADING curtain; the cap means a dead sheet
+// or a dead connection costs a fixed 1.5 s and then the fallback chain takes
+// over as before. The hold never runs online (rollback owns both clocks),
+// never in the attract demo, never for a replay, and never touches the sim:
+// loop() simply hands the clock zero seconds, so the tick stream a replay
+// records is identical with or without it.
+// ---------------------------------------------------------------------------
+const introArtHold = {
+  enabled: true,
+  active: false,
+  ids: [],
+  startedAt: 0,
+  heldMs: 0,
+  lastReason: "",
+  lastPending: [],
+  holds: 0,
+  released: 0,
+  capped: 0,
+  skipped: 0,
+};
+
+function unifiedGatesFor(fighterId) {
+  if (!unifiedBankState.masks) return null;
+  return {
+    whole: unifiedFighterWhole(fighterId),
+    ext: unifiedFighterExtWhole(fighterId),
+    ext2: unifiedFighterExt2Whole(fighterId),
+    ext3: swingFighterWhole(fighterId, UNIFIED_EXT3_BANK),
+    ext4: swingFighterWhole(fighterId, UNIFIED_EXT4_BANK),
+  };
+}
+
+function sheetDrawableNow(fighterId, bank) {
+  const live = (image) => Boolean(image && image.complete && image.naturalWidth);
+  switch (bank) {
+    case "unified": return live(fighterUnifiedAtlases[fighterId]);
+    case "ext": return Boolean(ensureUnifiedExtAtlas(fighterId));
+    case "ext2": return live(fighterUnifiedExt2Atlases[fighterId]);
+    case "ext3": return live(fighterSwingAtlases[UNIFIED_EXT3_BANK][fighterId]);
+    case "ext4": return live(fighterSwingAtlases[UNIFIED_EXT4_BANK][fighterId]);
+    case "motion": return live(fighterMotionAtlases[fighterId]);
+    case "motion2": return live(fighterMotion2Atlases[fighterId]);
+    case "motion3": return live(fighterMotion3Atlases[fighterId]);
+    case "walk": return live(fighterWalkAtlases[fighterId]);
+    default: return false;
+  }
+}
+
+/** One fighter's readiness: the unified family gates the hold, the rest is reported. */
+function fighterArtReadiness(fighterId) {
+  const gates = unifiedGatesFor(fighterId);
+  if (!gates) {
+    return { id: fighterId, manifest: false, ready: false, pending: ["manifest"], failed: [], banks: {} };
+  }
+  const family = unifiedFamilyFor(gates);
+  const summary = readinessSummary(family.map((bank) => ({
+    name: `${fighterId}:${bank}`,
+    drawable: sheetDrawableNow(fighterId, bank),
+    decodeState: sheetDecodeState(`${fighterId}:${bank}`),
+  })));
+  const banks = {};
+  for (const bank of ["motion", "motion2", "motion3", "walk"]) {
+    banks[bank] = sheetDrawableNow(fighterId, bank) ? "ready" : sheetDecodeState(`${fighterId}:${bank}`) || "unrequested";
+  }
+  return { id: fighterId, manifest: true, family, ...summary, banks };
+}
+
+function matchupArtPending(ids) {
+  return ids.flatMap((id) => fighterArtReadiness(id).pending);
+}
+
+function artReadinessSnapshot() {
+  const ids = introArtHold.active ? introArtHold.ids : state.fighters.map((fighter) => fighter.def.id);
+  const fighters = {};
+  for (const id of new Set(ids)) fighters[id] = fighterArtReadiness(id);
+  return {
+    fighters,
+    ready: Object.values(fighters).every((entry) => entry.ready),
+    manifest: Boolean(unifiedBankState.masks),
+    hold: {
+      enabled: introArtHold.enabled,
+      active: introArtHold.active,
+      capMs: INTRO_ART_HOLD_MS,
+      heldMs: Math.round(introArtHold.active ? performance.now() - introArtHold.startedAt : introArtHold.heldMs),
+      lastReason: introArtHold.lastReason,
+      lastPending: [...introArtHold.lastPending],
+      holds: introArtHold.holds,
+      released: introArtHold.released,
+      capped: introArtHold.capped,
+      skipped: introArtHold.skipped,
+    },
+    preloads: motionFxDebug.bankPreloads,
+    preloaded: [...preloadedFighterIds],
+  };
+}
+
+function renderArtHoldCurtain(pending) {
+  const curtain = $("#artHold");
+  if (!curtain) return;
+  curtain.hidden = !introArtHold.active;
+  if (!introArtHold.active) return;
+  const total = introArtHold.ids.reduce((sum, id) => sum + (fighterArtReadiness(id).family?.length || 0), 0);
+  curtain.querySelector("span").textContent = total
+    ? `${Math.max(0, total - pending.length)} / ${total} SHEETS`
+    : "MANIFEST";
+}
+
+/** Arm the hold for this matchup at the top of an offline intro. */
+function armIntroArtHold(ids) {
+  releaseIntroArtHold("rearmed", performance.now());
+  const holdable = introArtHold.enabled && state.mode !== "online" && state.mode !== "demo" && !replayPlayback.active;
+  preloadAuthoredBanks(ids);
+  const pending = holdable ? matchupArtPending(ids) : [];
+  if (!pending.length) {
+    introArtHold.skipped += 1;
+    introArtHold.lastReason = holdable ? "ready" : "ineligible";
+    introArtHold.lastPending = [];
+    return false;
+  }
+  introArtHold.active = true;
+  introArtHold.ids = [...ids];
+  introArtHold.startedAt = performance.now();
+  introArtHold.heldMs = 0;
+  introArtHold.lastReason = "holding";
+  introArtHold.lastPending = pending;
+  introArtHold.holds += 1;
+  renderArtHoldCurtain(pending);
+  return true;
+}
+
+function releaseIntroArtHold(reason, now) {
+  if (!introArtHold.active) return;
+  introArtHold.active = false;
+  introArtHold.heldMs = Math.max(0, now - introArtHold.startedAt);
+  introArtHold.lastReason = reason;
+  if (reason === "capped") introArtHold.capped += 1;
+  else if (reason === "ready") introArtHold.released += 1;
+  renderArtHoldCurtain([]);
+  // The FIGHT! call was armed against the wall clock at the top of the intro;
+  // the sim stood still for heldMs, so the call moves by the same amount.
+  shiftFightAnnouncement(introArtHold.heldMs, now);
+}
+
+/** Called once per rendered frame; true while the sim clock must stand still. */
+function updateIntroArtHold(now) {
+  if (!introArtHold.active) return false;
+  const inIntro = state.screen === "fight" && state.phase === "intro" && !state.paused;
+  const pending = inIntro ? matchupArtPending(introArtHold.ids) : [];
+  const decision = holdDecision({
+    startedAt: introArtHold.startedAt,
+    now,
+    capMs: INTRO_ART_HOLD_MS,
+    pendingCount: pending.length,
+    inIntro,
+  });
+  if (decision.hold) {
+    introArtHold.lastPending = pending;
+    renderArtHoldCurtain(pending);
+    return true;
+  }
+  introArtHold.lastPending = pending;
+  releaseIntroArtHold(decision.reason, now);
+  return false;
+}
+
+// The select screens warm the highlighted matchup. Highlights change on every
+// cursor move, and a decoded family is 30-35 MB of RGBA per fighter, so a
+// browse across the roster must not decode ten of them: a highlight only
+// counts once the cursor has rested on it for SELECT_PRELOAD_DWELL_MS. A
+// lock, and the stage screen, warm immediately.
+const SELECT_PRELOAD_DWELL_MS = 400;
+let selectPreloadTimer = 0;
+
+function selectMatchupIds() {
+  const arcadeMatch = state.mode === "arcade" ? currentArcadeMatch(state.arcadeRun) : null;
+  return matchupPreloadIds({
+    picks: state.picks,
+    roster,
+    teamPicks: state.mode === "team" ? state.teamPicks : null,
+    bossId: arcadeBoss.id,
+    bossActive: arcadeMatch?.opponentId === ARCADE_BOSS_ID,
+  });
+}
+
+function preloadSelectMatchup({ immediate = false, voice = false } = {}) {
+  window.clearTimeout(selectPreloadTimer);
+  selectPreloadTimer = 0;
+  const warm = () => {
+    selectPreloadTimer = 0;
+    const ids = selectMatchupIds();
+    preloadAuthoredBanks(ids);
+    // Voice last, and only for a settled matchup: the pools are Audio
+    // elements per take, and the manifest already knows every take's length,
+    // so this is the same warm startMatch does, a screen earlier.
+    if (voice) warmFighterAudio(ids);
+  };
+  if (immediate) warm();
+  else selectPreloadTimer = window.setTimeout(warm, SELECT_PRELOAD_DWELL_MS);
 }
 
 // The Commissioner has no separate specials sheet, so DOM art paths (victory
@@ -1749,6 +2077,14 @@ const fatalityAudioAssets = Object.freeze(Object.fromEntries(
   Object.entries(GORE_SFX).map(([kind, meta]) => [kind, `assets/audio/fatality/${meta.file}`]),
 ));
 
+// v5.1 KO MOMENT: the voiced crowd bank (assets/audio/crowd/, manifest in
+// engine/crowd-voice.mjs) — generated media on the same pattern. It does NOT
+// join sfxPools: sound()'s round-robin cursor can land the same take twice in
+// a row across pool borders, and a crowd that repeats itself is the one thing
+// Jez listens for. playCrowdVoice() below draws from a per-cue shuffle bag
+// instead. Listed here so the registration is auditable next to the others.
+const crowdVoiceAssets = Object.freeze(crowdVoiceFiles());
+
 const sfxVolumes = {
   select: 0.5,
   jump: 0.42,
@@ -1830,8 +2166,13 @@ const fighterAudioAudit = auditFighterAudio();
 // those takes were rejected and deleted — they name a proceduralSound() voice
 // instead, which is the whole point of routing through a kind rather than a
 // path. Nothing here may ever name a rejected recording.
+//
+// `dash` and `stage-weapon` are deliberately absent: they used to borrow
+// jump.mp3 and the ui-select menu click, which were the wrong reads (a dash
+// is a foot on concrete, not a jump; a bottle landing is not a menu). Both
+// now synthesise through SHARED_SYNTH_VOICES in sound() — a dash scuff and a
+// per-material clatter — so they never reach the shared pool at all.
 const fallbackSoundKinds = Object.freeze({
-  dash: "jump",
   throw: "heavy",
   "hit-light": "hit",
   "hit-heavy": "hit",
@@ -1843,7 +2184,6 @@ const fallbackSoundKinds = Object.freeze({
   "roundhouse-impact": "hit",
   super: "final",
   fatal: "final",
-  "stage-weapon": "select",
   // Wave 9 reactive voice cues: shared-sample/procedural fallbacks mirror the
   // FIGHTER_REACTIVE_PLACEHOLDERS mapping so a fighter with no palette at all
   // still lands on the nearest generic sound.
@@ -1904,12 +2244,16 @@ const soundCaptionLabels = Object.freeze({
   fatal: "GRAPHIC FATALITY",
   finish: "FINAL BLOW READY",
   "stage-weapon": "STAGE WEAPON DROPS",
+  "rearm-drop": "NOT RE-ARMED",
   final: "FINAL BLOW",
   ko: "KNOCKOUT",
   pause: "GAME PAUSED",
   resume: "FIGHT RESUMED",
   // Release 1.7 DEPTH: the Perfect Guard 'tink' block variant.
   "perfect-guard": "PERFECT GUARD",
+  // w51 clock truth: the :00 buzzer (ticks themselves stay uncaptioned —
+  // ten captions in ten seconds would bury the fight captions).
+  "time-buzzer": "TIME",
 });
 
 const keys = new Set();
@@ -2004,6 +2348,11 @@ const state = {
   survivalRun: null,
   teamBattle: null,
   teamPicks: [[], []],
+  // 5.1 (sweep #32): Block War opponent choice. `teamCpu` is the P1 decision
+  // (auto-drafted CPU team vs a second player); `teamChoicePending` holds the
+  // select screen on the two-button prompt after P1's third pick.
+  teamCpu: false,
+  teamChoicePending: false,
   mutators: [],
   matchRules: resolveMatchRules([]),
   // One-shot per round: has the Sudden Death mutator's first-clean-hit dizzy
@@ -2161,6 +2510,7 @@ const DEMO_FINISHER_REACTION = 0.35;
 const DEMO_ROUND_INTRO_SECONDS = 1.15;
 const DEMO_KO_HOLD_SECONDS = 3.1;
 let fightAnnouncementTimer = 0;
+let fightAnnouncementPlan = null;
 
 // ===========================================================================
 // R2.1 STREETS — REPLAY THEATER + online QoL module state. Everything here is
@@ -2394,16 +2744,19 @@ const ASSIST_CANVAS_PALETTES = Object.freeze({
     hurtboxP1: "#39a9ff", hurtboxP2: "#ffffff", pushbox: "#b9a5ff", hitbox: "#ff8c00",
     low: "#ffd166", overhead: "#ff6b35", dizzy: "#ffe066", dizzyAlt: "#ffffff", crush: "#82cfff",
     frameStartup: "#39a9ff", frameActive: "#ff8c00", frameRecovery: "#9aa5b1", frameStun: "#ffd166",
+    frameWhiff: "#f4f4f4", frameRearm: "#5f6878",
   }),
   protanopia: Object.freeze({
     hurtboxP1: "#36c8d8", hurtboxP2: "#ffffff", pushbox: "#c5b3ff", hitbox: "#f0a01e",
     low: "#ffe066", overhead: "#f08a24", dizzy: "#ffe680", dizzyAlt: "#ffffff", crush: "#7cd4e8",
     frameStartup: "#36c8d8", frameActive: "#f0a01e", frameRecovery: "#9aa5b1", frameStun: "#ffe066",
+    frameWhiff: "#f4f4f4", frameRearm: "#5f6878",
   }),
   tritanopia: Object.freeze({
     hurtboxP1: "#4ce6c4", hurtboxP2: "#ff4f8b", pushbox: "#d8e34a", hitbox: "#ff5c39",
     low: "#d8e34a", overhead: "#ff4f8b", dizzy: "#ffb3c8", dizzyAlt: "#ffffff", crush: "#4ce6c4",
     frameStartup: "#4ce6c4", frameActive: "#ff5c39", frameRecovery: "#9aa5b1", frameStun: "#d8e34a",
+    frameWhiff: "#f4f4f4", frameRearm: "#5f6878",
   }),
 });
 
@@ -2427,17 +2780,11 @@ const frameMeter = {
   lastTick: -1,
 };
 
+// v5.1 TEMPO TELLS: the phase logic lives in engine/tempo-tells.mjs so the
+// taxed tail ("whiff") and the re-arm gap ("rearm") are unit-tested; before
+// this the meter painted the tax as plain recovery and the gap as idle.
 function trainingFramePhase(fighter) {
-  if (!fighter) return "idle";
-  if (fighter.dizzyFrames > 0 || fighter.hitstunFrames > 0) return "hitstun";
-  if (fighter.blockstunFrames > 0) return "blockstun";
-  const move = fighter.attacking;
-  if (move) {
-    if (fighter.attackFrame < move.activeStartFrame) return "startup";
-    if (fighter.attackFrame < move.activeEndFrame) return "active";
-    return "recovery";
-  }
-  return "idle";
+  return tempoTrainingFramePhase(fighter);
 }
 
 function feedFrameMeter() {
@@ -2775,8 +3122,8 @@ function renderSchoolPanel() {
     schoolPanelStamp = "";
     return;
   }
-  const snapshot = fightSchoolSnapshot(schoolSession.machine);
-  const stamp = `${snapshot.lesson}:${snapshot.step}:${snapshot.graduated}`;
+  const snapshot = fightSchoolSnapshot(schoolSession.machine, { style: state.controlStyle });
+  const stamp = `${snapshot.lesson}:${snapshot.step}:${snapshot.graduated}:${state.controlStyle}`;
   if (stamp === schoolPanelStamp) return;
   schoolPanelStamp = stamp;
   $("#schoolLessonCounter").textContent = snapshot.graduated
@@ -2796,10 +3143,35 @@ function renderSchoolPanel() {
 function schoolDummyScript(script) {
   const frames = [];
   for (let index = 0; index < 42; index += 1) frames.push({ left: true });
+  // 5.1: "launcher" feeds the kit's rising launcher through the same direct
+  // action field the reversal dummy uses, so the OFF THE FLOOR lesson gets a
+  // real juggle to tech out of; "sweep" is the derived crouching HK — the
+  // knockdown low every kit has — for the wake-up steps. Both breathe longer
+  // than the guard scripts because the player is on the floor or in the air.
   if (script === "low") frames.push({ down: true, heavy: true });
+  else if (script === "launcher") frames.push({ launcher: true });
+  else if (script === "sweep") frames.push({ down: true, heavy: true, limb: "kick" });
   else frames.push({ left: true, heavy: true });
-  for (let index = 0; index < 66; index += 1) frames.push({});
+  const rest = script === "launcher" || script === "sweep" ? 110 : 66;
+  for (let index = 0; index < rest; index += 1) frames.push({});
   return frames;
+}
+
+// 5.1 STREET FURNITURE: the lab's SPAWN STAGE WEAPON button body, shared with
+// the school's "weapon" setup so the lesson can keep an object on the floor.
+function spawnTrainingWeapon() {
+  if (!state.stageWeaponsEnabled) {
+    if (schoolSession.active) schoolSession.restoreWeapons = true;
+    setStageWeapons(true);
+  }
+  if (!state.stageWeapon) resetStageWeapon();
+  if (!state.stageWeapon) return false;
+  state.stageWeapon.phase = "ground";
+  state.stageWeapon.frames = 0;
+  state.stageWeapon.holder = -1;
+  state.fighters.forEach((fighter) => { fighter.carriedWeapon = null; fighter.carryFrames = 0; });
+  updateHud();
+  return true;
 }
 
 function applySchoolStepSetup() {
@@ -2820,6 +3192,10 @@ function applySchoolStepSetup() {
   } else if (lesson.setup === "lowHealth") {
     state.training.autoRecover = false;
     schoolSession.pendingSetup = "lowHealth";
+  } else if (lesson.setup === "weapon") {
+    state.training.autoRecover = true;
+    schoolSession.pendingSetup = "weapon";
+    schoolSession.weaponSpawnTick = -Infinity;
   } else {
     state.training.autoRecover = true;
     schoolSession.pendingSetup = null;
@@ -2839,6 +3215,12 @@ function exitFightSchool({ toTitle = false } = {}) {
   schoolSession.pendingSetup = null;
   stopTrialDemo();
   if (schoolSession.savedDifficulty) setAiDifficulty(schoolSession.savedDifficulty);
+  // 5.1: the STREET FURNITURE lesson may have switched stage weapons on for
+  // a player who keeps them off — hand the option back the way it was.
+  if (schoolSession.restoreWeapons) {
+    schoolSession.restoreWeapons = false;
+    setStageWeapons(false);
+  }
   if (state.mode === "training") {
     state.training.autoRecover = true;
     state.training.dummyMode = "stand";
@@ -2969,6 +3351,17 @@ function schoolTick() {
     dummy.health = 5;
     updateHud();
   }
+  // 5.1 STREET FURNITURE: keep an object on the floor until the lesson is
+  // done — a thrown or expired weapon respawns after a breath (the "thrown"
+  // phase is left alone so the landing hit can still bank the step).
+  if (schoolSession.pendingSetup === "weapon" && state.phase === "fight"
+    && state.simulationTick - (schoolSession.weaponSpawnTick ?? -Infinity) > 60) {
+    const weapon = state.stageWeapon;
+    if (!weapon || !["ground", "held", "thrown"].includes(weapon.phase)) {
+      schoolSession.weaponSpawnTick = state.simulationTick;
+      spawnTrainingWeapon();
+    }
+  }
   if (step?.kind === "walk" && player && player.grounded && !player.attacking
     && player.hitstunFrames <= 0 && player.blockstunFrames <= 0 && Math.abs(player.vx) > 40) {
     const direction = Math.sign(player.vx) === player.facing ? "forward" : "back";
@@ -2990,6 +3383,7 @@ const modeFxDebug = {
   survivalMilestones: 0,
   teamEliminations: 0,
   teamWalkIns: 0,
+  teamDrafts: 0,
   dailyRuns: 0,
   attractScoreBoards: 0,
   scoreSubmissions: 0,
@@ -3319,6 +3713,7 @@ function unlockCommissioner({ quiet = false } = {}) {
   if (!rosterHasCommissioner()) {
     roster.push(commissionerPlayableDef);
     setupRoster();
+  buildMoveListSelect();
   }
   onlineFighterIds.add(ARCADE_BOSS_ID);
   syncOnlineCommissionerOption();
@@ -3337,6 +3732,7 @@ function relockCommissioner() {
   onlineFighterIds.delete(ARCADE_BOSS_ID);
   syncOnlineCommissionerOption();
   setupRoster();
+  buildMoveListSelect();
   return true;
 }
 
@@ -3367,6 +3763,20 @@ function refreshProgressionUi() {
       ? `${records.wins}W · ${records.losses}L · ${records.rankedFighters} RANKED`
       : "NO FIGHTS LOGGED";
   }
+  // 5.1 (sweep #30): the school button reports real progress, and a player
+  // with no fight logged and no lesson done gets a one-line route to it.
+  const school = loadSchoolProgress();
+  const done = Object.keys(school.completed).length;
+  const schoolStatus = $("#fightSchoolStatus");
+  if (schoolStatus) {
+    schoolStatus.textContent = school.graduated || done >= FIGHT_SCHOOL_LESSONS.length
+      ? "GRADUATED · REPLAY ANY LESSON"
+      : done > 0
+        ? `${done} / ${FIGHT_SCHOOL_LESSONS.length} LESSONS DONE`
+        : `${FIGHT_SCHOOL_LESSONS.length} LESSONS · FREE`;
+  }
+  const newcomer = $("#titleNewcomer");
+  if (newcomer) newcomer.hidden = !(records.matches === 0 && done === 0);
 }
 
 function renderBlackBookScreen() {
@@ -3715,14 +4125,33 @@ function demoSnapshot() {
 function cancelFightAnnouncement() {
   window.clearTimeout(fightAnnouncementTimer);
   fightAnnouncementTimer = 0;
+  fightAnnouncementPlan = null;
 }
 
+// v5.1 #35: the plan (callback, when it was armed, for how long) outlives the
+// timer so the intro art hold can move the call by the time it held the sim.
 function scheduleFightAnnouncement(callback, delay) {
   cancelFightAnnouncement();
-  fightAnnouncementTimer = window.setTimeout(() => {
-    fightAnnouncementTimer = 0;
-    callback();
-  }, delay);
+  fightAnnouncementPlan = { callback, armedAt: performance.now(), delay };
+  fightAnnouncementTimer = window.setTimeout(fireFightAnnouncement, delay);
+}
+
+function fireFightAnnouncement() {
+  fightAnnouncementTimer = 0;
+  const plan = fightAnnouncementPlan;
+  if (!plan) return;
+  // The timer beat the hold's release: leave the plan armed, the release
+  // re-arms it for the shifted moment.
+  if (introArtHold.active) return;
+  fightAnnouncementPlan = null;
+  plan.callback();
+}
+
+function shiftFightAnnouncement(heldMs, now) {
+  const plan = fightAnnouncementPlan;
+  if (!plan) return;
+  window.clearTimeout(fightAnnouncementTimer);
+  fightAnnouncementTimer = window.setTimeout(fireFightAnnouncement, shiftedAnnouncementDelay(plan, heldMs, now));
 }
 
 function clearDemoResultTimer() {
@@ -6506,6 +6935,18 @@ function makeFighter(index, side, overrideDef = null) {
     dashFrames: 0,
     dashCooldownFrames: 0,
     attackRearmFrames: 0,
+    // v5.1 TEMPO TELLS: the last whiff (tick, tax and re-arm lengths) and the
+    // tick of the last press the re-arm gap ate. Plain sim fields, rollback-
+    // cloned like attackRearmFrames; read by both renderers through
+    // whiffTellState() and by the training lab, never by the sim itself.
+    whiffTell: null,
+    rearmDropTick: -Infinity,
+    // BLOCK ECONOMY: blocked special-into-special cancels spent in the
+    // current string (reset by any non-cancel attack start) and whether the
+    // guard input was held last tick, for the Perfect Guard tap re-arm. Both
+    // are plain sim fields, so the rollback snapshot carries them for free.
+    blockedSpecialCancels: 0,
+    guardInputHeld: false,
     dashDirection: 0,
     queuedDashDirection: 0,
     directionTapTracker: new DirectionTapTracker(),
@@ -6542,6 +6983,13 @@ function makeFighter(index, side, overrideDef = null) {
     grabbed: null,
     lastThrowInputFrame: -Infinity,
     lastHitResult: "",
+    // v5.1 EXT4 ROUTING: the attack LEVEL of the last contact, kept apart from
+    // lastHitResult because that string drops the level on a counter hit
+    // ("counter") and the reaction drawing needs it on every hit: a MID/LOW
+    // opens on the body blow, anything else on the head snap. Presentation
+    // data — it chooses a drawing, never a sim outcome — so it is snapshotted
+    // with lastHitResult and stays out of the combat checksum like it.
+    lastHitLevel: "",
     hitFlash: 0,
     specialGlow: 0,
     animTime: visualRandom() * 2,
@@ -6628,6 +7076,16 @@ const presentationDebug = {
   bloomPasses: 0, rgbSplits: 0,
   // Release 1.8C REALITY BREAK steady render-only passes.
   realisticBackdrops: 0, realisticLighting: 0, realisticPortraits: 0, filmGrainPasses: 0,
+  // CINEMA 3D gameplay reads drawn by the 2D overlay pass while the 3D world
+  // is live (dizzy/crush markers, rhythm rings, combat text, weapon tag), so a
+  // probe can prove a read reached the screen in 3D rather than trusting the
+  // sim field alone.
+  cinema3dOverlayReads: 0,
+  // v5.1 TEMPO TELLS: per-frame draws of the whiff fringe, the extension-cell
+  // ghosts, the re-arm flash and the eaten-press flash (2D draw path), so a
+  // probe can prove a whiff produced a tell rather than trusting the sim
+  // field alone.
+  whiffFringes: 0, whiffGhosts: 0, rearmFlashes: 0, rearmDropFlashes: 0,
 };
 
 // Release 1.7A CLEAN HITS: preserve the fighter palette during hit feedback.
@@ -6639,6 +7097,10 @@ const HIT_FLASH_FILTER = "brightness(1.55) saturate(1.12)";
 // draw path, so rollback resimulation cannot touch it.
 const gritFlareLevel = [0, 0];
 const gritReadyLatched = [false, false];
+// v5.1 TEMPO TELLS: the extension cell each side was drawing when its swing
+// whiffed, so the re-arm gap can show that cell falling away behind the
+// idle body. Render-only, same class of state as gritReadyLatched.
+const whiffGhostCells = [null, null];
 // Accumulating battle damage: MK3-style bruise/cut smudges baked onto each
 // fighter's sprite. Module-level per-side arrays on the superDimLevel pattern —
 // render-only, never snapshotted, so rollback checksums are untouched. Mark
@@ -7495,7 +7957,11 @@ function fighterMotionTransform(fighter) {
   // stance now ARRIVES carrying the flinch's tuck and unwinds out of it over
   // the next few ticks; the helper returns null before the handoff, so the
   // flinch itself is never double-tucked, and null once settled.
-  if (fighter.blockstunFrames > 0 && !fighter.crouch && fighter.grounded && !reducedMotion) {
+  // v5.1: a CROUCHED block has a flinch now too (the ext3 crouch guard, see
+  // crouchBlockstunKeys) and hands back to the crouch on the same
+  // BLOCK_EXIT_AT tick, so the bridge rides the crouch stance as well — the
+  // same lift/pitch/squash, unwinding out of the crouched cover.
+  if (fighter.blockstunFrames > 0 && fighter.grounded && !reducedMotion) {
     const blockTotal = Math.max(fighter.blockstunFrames, obs.blockstunTotal || 0);
     const blockPhase = clamp(1 - fighter.blockstunFrames / Math.max(1, blockTotal), 0, 0.999);
     const bridge = blockRecoverTransform(blockPhase);
@@ -8372,6 +8838,9 @@ function drawElementalWash() {
 const hudFxDebug = {
   damageGhosts: 0, letterSlams: 0, comboHeat: 0, slashWipes: 0,
   selectSlams: 0, victoryEntrances: 0, pipFlips: 0, timerPulses: 0,
+  // w51: clock ticks booked on the same timer edge as timerPulses (QA
+  // asserts the two counters agree — a pulse without a tick is a bug).
+  timerTicks: 0,
   // Wave 7 render-tech one-shots: monotonic totals on the same pattern.
   // sloMoBlurFrames counts rendered frames with the slow-mo smear active
   // (like cinemaFxDebug.handheldFrames — still monotonic, never reset).
@@ -9200,6 +9669,10 @@ function drawPracticalLights(time, frame, centre, reaction) {
   const flicker = (speed, phase, amount) =>
     reduced ? 0 : Math.sin(frame * speed + phase * Math.PI * 2) * amount;
   const backdropShift = (centre - W * 0.5) * -0.035;
+  // v5.1 STAGE KO BEATS: the painted lights answer the same surge the
+  // ambient layer reads (a big hit or the KO beat), so the El band, the
+  // boardwalk neon pools and the heat-lamp cones flare with their stages.
+  const surge = stageSurge(frame, reduced);
   ctx.save();
   ctx.globalCompositeOperation = "lighter";
   if (state.stage === "somerset") {
@@ -9208,7 +9681,7 @@ function drawPracticalLights(time, frame, centre, reaction) {
     const bandX = trainX + 215;
     if (bandX > -280 && bandX < W + 280) {
       const band = glowSprite(255, 208, 116);
-      ctx.globalAlpha = 0.34 + flicker(0.31, 0.2, 0.05);
+      ctx.globalAlpha = 0.34 + flicker(0.31, 0.2, 0.05) + surge.level * 0.4;
       ctx.drawImage(band, bandX - 260, FLOOR - 66, 520, 132);
       ctx.globalAlpha = 0.2;
       ctx.drawImage(band, bandX - 150, 158, 300, 110); // spill around the cars
@@ -9227,7 +9700,7 @@ function drawPracticalLights(time, frame, centre, reaction) {
     for (const pool of pools) {
       const x = pool.x + backdropShift;
       if (x < -220 || x > W + 220) continue;
-      ctx.globalAlpha = 0.24 + flicker(0.06, pool.phase, 0.09);
+      ctx.globalAlpha = 0.24 + flicker(0.06, pool.phase, 0.09) + surge.level * 0.36;
       ctx.drawImage(glowSprite(pool.red, pool.green, pool.blue), x - pool.radiusX, FLOOR - 34, pool.radiusX * 2, 120);
       presentationDebug.practicalLights += 1;
     }
@@ -9240,13 +9713,14 @@ function drawPracticalLights(time, frame, centre, reaction) {
   } else if (state.stage === "buffet") {
     // Heat-lamp cones flicker over the steam table, hanging from the same
     // swaying pendants the atmosphere pass draws (same x, same phase).
-    const sway = (0.02 + reaction * 0.05) * Math.sin(frame * 0.03);
+    const sway = (0.02 + reaction * 0.05 + surge.level * 0.12) * Math.sin(frame * 0.03);
     const cone = coneSprite(255, 186, 104);
     for (let index = 0; index < 6; index += 1) {
       const x = 150 + index * 200 + (centre - W * 0.5) * -0.1 + Math.sin(sway + index) * 12;
       if (x < -120 || x > W + 120) continue;
-      ctx.globalAlpha = 0.3 + flicker(0.052, index * 0.37, 0.08);
-      ctx.drawImage(cone, x - 82, 132, 164, 310);
+      // The cones flare and widen with the surge (a heat lamp kicked to full).
+      ctx.globalAlpha = 0.3 + flicker(0.052, index * 0.37, 0.08) + surge.level * 0.5;
+      ctx.drawImage(cone, x - 82 - surge.level * 20, 132, 164 + surge.level * 40, 310);
       presentationDebug.practicalLights += 1;
     }
   } else if (state.stage === "janney") {
@@ -9597,8 +10071,12 @@ function drawForegroundOccluders(centre) {
 let crowdFlashCacheCrowd = null;
 let crowdFlashCandidates = [];
 
-function crowdFlashPick(crowd, frame, reaction) {
-  if (reaction <= 0.7 || !crowd.people?.length) return null;
+// v5.1 KO MOMENT: during the KO hold the phones come out — an 8-tick window
+// lit 5 of 8 (7.5 pops/s against the fight's 3/s cap) with three picks per
+// window, each hashed on its own salt so they land on different people.
+// Outside the hold this is exactly the single 20-tick pick it always was.
+function crowdFlashPicks(crowd, frame, reaction) {
+  if (reaction <= 0.7 || !crowd.people?.length) return [];
   if (crowdFlashCacheCrowd !== crowd) {
     crowdFlashCacheCrowd = crowd;
     const phones = [];
@@ -9609,15 +10087,23 @@ function crowdFlashPick(crowd, frame, reaction) {
     crowdFlashCandidates = phones.length >= 3 ? phones : crowd.people.map((_, index) => index);
   }
   const reduced = state.accessibility.reducedMotion;
-  const windowTicks = reduced ? 60 : 20; // 20 ticks @60Hz → ≤3 pops per second
+  const hold = !reduced && crowdKoHoldAge() >= 0;
+  const windowTicks = reduced ? 60 : hold ? CROWD_KO_HOLD.flashWindowTicks : 20; // 20 ticks @60Hz → ≤3 pops per second
+  const litTicks = hold ? CROWD_KO_HOLD.flashLitTicks : 8;
   const windowIndex = Math.floor(frame / windowTicks);
   const inWindow = frame - windowIndex * windowTicks;
-  if (!reduced && inWindow >= 8) return null;
-  const pick = crowdFlashCandidates[
-    Math.floor(presentationHash01(windowIndex, crowdFlashCandidates.length) * crowdFlashCandidates.length)
-    % crowdFlashCandidates.length
-  ];
-  return { index: pick, fade: reduced ? 1 : 1 - inWindow / 8, reduced };
+  if (!reduced && inWindow >= litTicks) return [];
+  const count = hold ? Math.min(CROWD_KO_HOLD.flashPicks, crowdFlashCandidates.length) : 1;
+  const picks = [];
+  for (let salt = 0; salt < count; salt += 1) {
+    const pick = crowdFlashCandidates[
+      Math.floor(presentationHash01(windowIndex, crowdFlashCandidates.length + salt * 7919) * crowdFlashCandidates.length)
+      % crowdFlashCandidates.length
+    ];
+    if (picks.some((entry) => entry.index === pick)) continue;
+    picks.push({ index: pick, fade: reduced ? 1 : 1 - inWindow / litTicks, reduced });
+  }
+  return picks;
 }
 
 function drawCrowdFlash(spot, pick) {
@@ -9659,6 +10145,40 @@ function roundWinBeatLevel(frame) {
   if (roundWinBeatStartTick < 0) return 0;
   const t = (frame - roundWinBeatStartTick) / ROUND_WIN_BEAT_TICKS;
   return t >= 1 || t < 0 ? 0 : 1 - t;
+}
+
+// v5.1 KO MOMENT: the crowd's KO hold, latched on the same render-side
+// pattern from the roundover phase edge (a fatality round latches on the kill
+// itself, observed through finisher.slowMotionHits like the bed swell, so the
+// crowd stays hushed through the pre-kill cinematic). While latched the crowd
+// draw, the CINEMA 3D billboards, the scuffles, the cups, the flashbulbs and
+// the crowd bed all read crowdDrawReaction() — the hold curve from
+// engine/crowd-voice.mjs — instead of the decaying sim value. Measured before
+// this on 20 seeds: a heavy-hit KO put 6-10% of the painted people on the
+// cheer cell for 2.5 ticks of the 294-tick hold. Never sim state, never
+// resimulated; the latch is idempotent so every consumer may poke it.
+const crowdKoHold = { startTick: -1, cheerFired: false };
+
+function updateCrowdKoHoldLatch() {
+  const live = state.screen === "fight" && state.phase === "roundover"
+    && (!state.finisher || (state.finisher.slowMotionHits || 0) > 0);
+  if (live) {
+    if (crowdKoHold.startTick < 0) {
+      crowdKoHold.startTick = state.simulationTick;
+      crowdKoHold.cheerFired = false;
+    }
+  } else if (crowdKoHold.startTick >= 0) {
+    crowdKoHold.startTick = -1;
+    crowdKoHold.cheerFired = false;
+  }
+}
+
+function crowdKoHoldAge() {
+  return crowdKoHold.startTick < 0 ? -1 : state.simulationTick - crowdKoHold.startTick;
+}
+
+function crowdDrawReaction() {
+  return Math.max(state.crowdReaction, crowdKoHoldReaction(crowdKoHoldAge()));
 }
 
 const ROUND_WIN_BEATS = Object.freeze({
@@ -9723,6 +10243,8 @@ const rollbackPresentationFighterFields = new Set([
   // resolves), so it is snapshotted and restored with everything else but
   // stays out of the combat checksum exactly as walkTime always has.
   "animTime", "walkTime", "strideTime", "hitFlash", "specialGlow", "cinematicFrame", "cinematicRotation", "cinematicScale", "lastHitResult",
+  // v5.1: the last contact's level, same class of field as lastHitResult.
+  "lastHitLevel",
 ]);
 
 function cloneRollbackValue(value) {
@@ -9953,25 +10475,94 @@ const MOVE_LEVEL_TAGS = Object.freeze({
   mid: "MID", low: "LOW", overhead: "OH", throw: "THROW", air: "AIR",
 });
 
-function renderMoveList(fighterId = "deathblow") {
-  const kit = getFighterKit(fighterId);
-  if (!kit) return;
-  $("#moveListIdentity").innerHTML = `<strong>${kit.archetype}</strong> · ${kit.summary}`;
+// 5.1 (sweep #29): the command column is rendered for the ACTIVE control
+// style. Normals keep the frame-data row's own command; specials/EX/super go
+// through commandLabel so MODERN reads LP&LK and LEGEND reads HP where CLASSIC
+// reads ↓ → + PUNCH. A kit's authored note after " · " (Allan's "counters
+// strikes") survives the substitution.
+const MOVE_LIST_NORMAL_ACTIONS = new Set(["light", "heavy", "throw"]);
+
+function moveListCommand(row, style = state.controlStyle) {
+  if (MOVE_LIST_NORMAL_ACTIONS.has(row.action)) return row.command;
+  const [, ...notes] = String(row.command || "").split(" · ");
+  const label = commandLabel(row.action, style, row.command);
+  return notes.length ? `${label} · ${notes.join(" · ")}` : label;
+}
+
+function moveListMarkup(fighterId, style = state.controlStyle) {
   const signed = (value) => `${value >= 0 ? "+" : ""}${value}`;
   const rows = listFighterFrameData(fighterId).map((row) => `
     <div class="move-list-row frame-row">
       <b>${row.name}</b>
-      <span>${row.command}</span>
+      <span>${moveListCommand(row, style)}</span>
       <span class="sar">${row.startup} / ${row.active} / ${row.recovery}</span>
       <span class="sar">${row.level === "throw" ? "—" : `${signed(row.onHit)} / ${signed(row.onBlock)}`}</span>
       <span class="sar">${row.damage}</span>
       <em class="level-chip lvl-${row.level}">${MOVE_LEVEL_TAGS[row.level] || row.level.toUpperCase()}</em>
     </div>`);
-  $("#moveListRows").className = "move-list-rows frame-data";
-  $("#moveListRows").innerHTML = `
+  return `
     <div class="move-list-row frame-head">
       <b>MOVE</b><span>COMMAND</span><span>S / A / R</span><span>HIT / BLOCK</span><span>DMG</span><span>LVL</span>
     </div>` + rows.join("");
+}
+
+function renderMoveList(fighterId = "deathblow") {
+  const kit = getFighterKit(fighterId);
+  if (!kit) return;
+  $("#moveListIdentity").innerHTML = `<strong>${kit.archetype}</strong> · ${kit.summary}`;
+  $("#moveListRows").className = "move-list-rows frame-data";
+  $("#moveListRows").innerHTML = moveListMarkup(fighterId);
+}
+
+// The dialog's fighter <select> is built from the live roster (the unlocked
+// Commissioner included) instead of a static eight-option list that had no
+// Pinelands Devil entry.
+function buildMoveListSelect() {
+  const select = $("#moveListSelect");
+  if (!select) return;
+  const current = select.value;
+  select.innerHTML = roster.map((fighter) => `<option value="${fighter.id}">${fighter.name}</option>`).join("");
+  select.value = roster.some(({ id }) => id === current) ? current : roster[0].id;
+}
+
+// 5.1 (sweep #29): MOVE LIST from the pause menu — a compact overlay for the
+// fighter P1 is actually holding, no scrolling past the remap grid. Opened
+// from #pauseMoveListButton, closed by its own button, Escape or the pad's
+// back; the pause panel stays underneath so RESUME is one press away.
+const moveListOverlay = { open: false, fighterId: "" };
+
+function openMoveListOverlay(fighterId = state.fighters[0]?.kitId || roster[state.picks[0]]?.id || "deathblow") {
+  const overlay = $("#moveListOverlay");
+  if (!overlay || state.screen !== "fight") return false;
+  const def = roster.find(({ id }) => id === fighterId) || (fighterId === ARCADE_BOSS_ID ? arcadeBoss : null);
+  const kit = getFighterKit(fighterId);
+  if (!kit) return false;
+  moveListOverlay.open = true;
+  moveListOverlay.fighterId = fighterId;
+  $("#moveListOverlayName").textContent = def?.name || fighterId.toUpperCase();
+  $("#moveListOverlayStyle").textContent = `${state.controlStyle.toUpperCase()} CONTROLS`;
+  $("#moveListOverlayIdentity").innerHTML = `<strong>${kit.archetype}</strong> · ${kit.summary}`;
+  $("#moveListOverlayRows").innerHTML = moveListMarkup(fighterId);
+  $("#moveListOverlayExtras").innerHTML = [
+    ["THROWABLE", commandLabel("throwObject", state.controlStyle)],
+    ["STAGE WEAPON", commandLabel("stageWeapon", state.controlStyle)],
+    ["DASH", commandLabel("dash", state.controlStyle)],
+    ["TAUNT", commandLabel("taunt", state.controlStyle)],
+    ["PERFECT GUARD", commandLabel("perfectGuard", state.controlStyle)],
+    ["GUARD REVERSAL", commandLabel("guardReversal", state.controlStyle)],
+  ].map(([name, command]) => `<span><b>${name}</b>${command}</span>`).join("");
+  overlay.hidden = false;
+  $("#moveListOverlayClose")?.focus?.({ preventScroll: true });
+  return true;
+}
+
+function closeMoveListOverlay() {
+  const overlay = $("#moveListOverlay");
+  if (!overlay || !moveListOverlay.open) return false;
+  moveListOverlay.open = false;
+  overlay.hidden = true;
+  $("#pauseMoveListButton")?.focus?.({ preventScroll: true });
+  return true;
 }
 
 function arcadeOpponentDef(match = currentArcadeMatch(state.arcadeRun)) {
@@ -10679,6 +11270,8 @@ function showScreen(name) {
     state.pauseReason = "";
     $("#pausePanel").hidden = true;
     $("#pauseReason").hidden = true;
+    closeMoveListOverlay();
+    hideControlCard();
   }
   $("#hud").classList.toggle("hidden", !playing);
   $("#hud").setAttribute("aria-hidden", String(!playing));
@@ -10728,6 +11321,9 @@ function startSelect(mode) {
   state.survivalRun = null;
   state.teamBattle = null;
   state.teamPicks = [[], []];
+  state.teamCpu = false;
+  state.teamChoicePending = false;
+  renderTeamOpponentChoice();
   dailySession.active = false;
   endScoreRun();
   if (state.mode === "training") {
@@ -10783,6 +11379,9 @@ function chooseFighter(index, palette = 0) {
     return;
   }
   if (state.mode === "team") {
+    // 5.1 (sweep #32): P1's third pick raises the VS CPU / VS PLAYER 2
+    // choice; nothing else on the roster answers until it is made.
+    if (state.teamChoicePending) return;
     const side = state.locks[0] ? 1 : 0;
     const team = state.teamPicks[side];
     if (team.includes(roster[index].id) || team.length >= TEAM_RULES.teamSize) return;
@@ -10792,12 +11391,18 @@ function chooseFighter(index, palette = 0) {
     if (team.length >= TEAM_RULES.teamSize) {
       state.locks[side] = true;
       state.selectingPlayer = 1;
+      if (side === 0) {
+        state.teamChoicePending = true;
+        renderTeamOpponentChoice();
+      }
     }
     $("#selectPrompt").textContent = state.locks[0] && state.locks[1]
       ? "BLOCK WAR · TEAMS SET — STAGE SELECT"
-      : state.locks[0]
-        ? `BLOCK WAR · PLAYER 2 — PICK 3 (${state.teamPicks[1].length + 1}/3)`
-        : `BLOCK WAR · PLAYER 1 — PICK 3 (${state.teamPicks[0].length + 1}/3)`;
+      : state.teamChoicePending
+        ? "BLOCK WAR · YOUR THREE ARE SET — WHO'S ACROSS THE STREET?"
+        : state.locks[0]
+          ? `BLOCK WAR · PLAYER 2 — PICK 3 (${state.teamPicks[1].length + 1}/3)`
+          : `BLOCK WAR · PLAYER 1 — PICK 3 (${state.teamPicks[0].length + 1}/3)`;
     sound("select");
     const lockedCard = $(`.fighter-card[data-index="${index}"]`);
     if (lockedCard) {
@@ -10844,6 +11449,62 @@ function chooseFighter(index, palette = 0) {
   updateRosterUI();
 }
 
+// 5.1 (sweep #32): the two-button opponent prompt on the Block War select
+// screen. VS CPU drafts three fighters P1 did not pick (draftCpuTeam over
+// state.rng — seedMatch reseeds at FIGHT, so the draw never leaks into the
+// match stream), reveals them with the lock-in stamp one after another and
+// raises the difficulty bar; VS PLAYER 2 hands the cursor to the second seat
+// exactly as before.
+function renderTeamOpponentChoice() {
+  const choice = $("#teamOpponentChoice");
+  if (!choice) return;
+  const visible = state.screen === "select" && state.mode === "team" && state.teamChoicePending;
+  choice.hidden = !visible;
+  if (visible) $("[data-team-opponent='cpu']")?.focus?.({ preventScroll: true });
+}
+
+function focusTeamOpponentChoice(delta = 0) {
+  const buttons = $$("[data-team-opponent]");
+  if (!buttons.length) return null;
+  const current = Math.max(0, buttons.indexOf(document.activeElement));
+  const next = buttons[(current + delta + buttons.length) % buttons.length];
+  next.focus?.({ preventScroll: true });
+  return next;
+}
+
+function chooseTeamOpponent(kind = "cpu") {
+  if (state.mode !== "team" || !state.teamChoicePending) return false;
+  unlockAudio();
+  state.teamChoicePending = false;
+  if (kind === "cpu") {
+    const drafted = draftCpuTeam(state.teamPicks[0], roster.map(({ id }) => id), () => state.rng.nextFloat());
+    state.teamPicks[1] = drafted;
+    state.teamCpu = true;
+    state.locks[1] = true;
+    state.picks[1] = Math.max(0, rosterIndexById(drafted[drafted.length - 1]));
+    $("#selectPrompt").textContent = "BLOCK WAR · CPU DRAFTED — STAGE SELECT";
+    drafted.forEach((id, order) => {
+      window.setTimeout(() => {
+        if (state.screen !== "select" || state.mode !== "team") return;
+        const card = $(`.fighter-card[data-index="${rosterIndexById(id)}"]`);
+        if (card) {
+          restartCssAnimation(card, "locked-flash");
+          hudFxDebug.selectSlams += 1;
+        }
+      }, 140 + order * 260);
+    });
+    modeFxDebug.teamDrafts += 1;
+  } else {
+    state.teamCpu = false;
+    $("#selectPrompt").textContent = `BLOCK WAR · PLAYER 2 — PICK 3 (${state.teamPicks[1].length + 1}/3)`;
+  }
+  sound("select");
+  renderTeamOpponentChoice();
+  syncDifficultyUi();
+  updateRosterUI();
+  return true;
+}
+
 function updateRosterUI() {
   const teamMode = state.mode === "team";
   $$(".fighter-card").forEach((card) => {
@@ -10879,12 +11540,18 @@ function updateRosterUI() {
   } else if (!bothLocked) readout.classList.remove("vs-slam");
   selectBothLocked = bothLocked;
   $("#fighterContinue").disabled = !bothLocked;
+  // v5.1 #35: warm the highlighted matchup's sheets (after a dwell; at once
+  // on a lock) — the select and stage screens are 5-15 s of cover the first
+  // fight used to waste.
+  preloadSelectMatchup({ immediate: bothLocked, voice: bothLocked });
 }
 
 function showStageSelect() {
   if (!(state.locks[0] && state.locks[1])) return;
   $("#fightButton").textContent = state.mode === "training" ? "ENTER LAB →" : "FIGHT →";
   showScreen("stage");
+  // v5.1 #35: the matchup is final here — sheets first, then voice.
+  preloadSelectMatchup({ immediate: true, voice: true });
   renderArcadeRoute();
   updateStageUI();
 }
@@ -10932,7 +11599,7 @@ function startMatch(resetSet = true) {
   // then lock the House Rules config for this match BEFORE the fighters are
   // built (Turbo scales movement at makeFighter time).
   if (state.mode === "team" && !state.teamBattle && state.teamPicks[0].length === TEAM_RULES.teamSize) {
-    beginTeamBattle(false);
+    beginTeamBattle(state.teamCpu);
   }
   applyMatchRulesForMatch();
   resetRoundScoreTracking();
@@ -10983,6 +11650,18 @@ function startMatch(resetSet = true) {
   commandHistory[1].length = 0;
   updateHud();
   showScreen("fight");
+  // v5.1 #35: hold the intro clock (offline only, capped) until both
+  // fighters' unified family has decoded — see armIntroArtHold. Armed BEFORE
+  // the FIGHT! timer below so a release can shift it.
+  armIntroArtHold(state.fighters.map((fighter) => fighter.def.id));
+  // After showScreen: the touch HUD only exists (display: flex) once the
+  // fight screen has marked it .playing, and the coach checks exactly that.
+  // 5.1: the first-run control card is raised here, on startMatch's own
+  // round-1 path (resetRound only serves later rounds and round restarts),
+  // and BEFORE the flick tip so the two coaching lines never share the
+  // screen — maybeCoachTouchFlick defers while the card is up.
+  if (!rollbackResimulating) maybeShowControlCard();
+  maybeCoachTouchFlick();
   updateTrainingUi();
   const arcadeMatch = state.mode === "arcade" ? currentArcadeMatch(state.arcadeRun) : null;
   let introLabel = arcadeMatch?.kind === "boss" ? "FINAL BOUT · THE COMMISSIONER"
@@ -11183,16 +11862,25 @@ function resetRound() {
   scheduleFightAnnouncement(() => {
     if (state.screen === "fight" && state.phase === "intro") announce("FIGHT!", "", 0.75);
   }, 1050);
+  // 5.1: a later round always clears the card; round 1 of the first fight
+  // may raise it (render-only, guarded — resetRound runs on a sim path).
+  if (!rollbackResimulating) {
+    if (state.round === 1) maybeShowControlCard();
+    else hideControlCard();
+  }
 }
 
-function announce(main, sub = "", duration = 1) {
+function announce(main, sub = "", duration = 1, { speak = null } = {}) {
   if (rollbackResimulating) return;
   const box = $("#announcer");
   const strong = box.querySelector("strong");
   const text = String(main);
   // Wave 9: every banner also books its spoken announcer call (captions
   // always; audio only once real takes exist in assets/audio/announcer/).
-  announcerSpeakBanner(text);
+  // w51: a caller that knows more than the banner text (finishRound knows
+  // whether the round was a decision and whether it closed the match) hands
+  // the exact cue plan in through `speak`; the text map is the fallback.
+  announcerSpeakBanner(text, speak);
   const letters = [...text];
   // Letter-by-letter slam: each character lands with its own scale-punch on a
   // short stagger. The innerHTML rebuild also restarts the animation on
@@ -11410,6 +12098,12 @@ function finishRound(winner, type = -1) {
   state.phase = "roundover";
   state.rounds[winner] += 1;
   state.finisherType = type;
+  // v5.1 KO MOMENT: the round-winning hit is the biggest stir of the round —
+  // the FINISH prompt's 1.4, tagged "ko" so the swell plays the KO recipe and
+  // the voiced crowd roars. Sim path on purpose (deterministic on both
+  // rollback peers, like every other stir); the roundover HOLD that keeps the
+  // crowd up for the 4.9 s is render-side (updateCrowdKoHoldLatch).
+  stirCrowd(1.4, "ko");
   // v2.9 FLOW: demo coverage — the round-end beat, plus the Final Blow
   // ceremony when one executes (the gore/fatality toggles decide the flavour
   // downstream exactly as before; this is pure observation).
@@ -11432,8 +12126,22 @@ function finishRound(winner, type = -1) {
     // (demo-only; every other mode keeps the full 4.9s beat).
     state.phaseTime = state.mode === "demo" ? DEMO_KO_HOLD_SECONDS : 4.9;
     duckMusic(0.28, 2600);
-    announce(`${winDef.name} WINS`, "KNOCKOUT", 2.4);
-    sound("ko", state.fighters[1 - winner]);
+    // w51 announcer truth: the clock running out on two standing fighters is
+    // a DECISION, not a knockout — the banner says so, the announcer opens on
+    // the timeover bank instead of "K.O.!", and knockout.mp3 (the reviewed
+    // shared KO groan) stays silent because nobody went down; the :00 buzzer
+    // from the clock tick is the sound of that moment. A round win speaks the
+    // winner's name; only the round that closes the match (state.rounds was
+    // incremented above) earns the "<id>-wins" bank.
+    const loser = state.fighters[1 - winner];
+    const cause = roundEndCause({ finisherType: type, timer: state.timer, loserHealth: loser.health });
+    const speak = roundEndAnnouncerPlan({
+      cause,
+      matchWon: state.rounds[winner] >= roundsToWinValue(),
+      fighterId: winDef.id,
+    });
+    announce(`${winDef.name} WINS`, roundEndBannerSub(cause), 2.4, { speak });
+    if (cause !== ROUND_END_CAUSES.decision) sound("ko", loser);
   }
   // Wave 9: round-story callouts (FLAWLESS / COMEBACK / time-over / fatality)
   // layered after the primary call — guarded + deduped like announce().
@@ -12828,6 +13536,14 @@ function updateHud() {
     if (timerLow) {
       restartCssAnimation(timerEl, "tick");
       hudFxDebug.timerPulses += 1;
+      // w51 clock truth: the red heartbeat gets a sound. One synthesised
+      // tick per displayed second on the same edge (rising pitch ladder,
+      // buzzer at :00) and the once-per-round "TEN SECONDS" announcer call
+      // at :10, both behind the updateHud rollback guard above so replays
+      // and resims stay silent. timerTicks and timerPulses must agree.
+      hudFxDebug.timerTicks += 1;
+      clockTickAudio(state.timer);
+      clockCallout();
     }
   }
   if (!timerLow) timerEl.classList.remove("tick");
@@ -12843,16 +13559,151 @@ function updateHud() {
   setTouchPrompt(finishing ? "final" : superReady ? "super" : "");
 }
 
+// ---------------------------------------------------------------------------
+// 5.1 (sweep #30): first-run control card. A newcomer used to reach ROUND 1
+// without ever being told J/K/N/M or "hold away to block". The card sits in
+// a corner through the first human fight's round-1 intro and the opening
+// seconds (it is NOT allowed to stretch the intro clock: a replay of that
+// fight would re-run with the stock 2.1 s intro and desync), shows the four
+// buttons for the device actually in the player's hands — keyboard bindings,
+// pad glyphs in the detected label set, or the touch cluster — plus the
+// block rule, the active style's special command and the grab. Dismissed by
+// a tap/click, Escape, or its own timer; shown once per install.
+// ---------------------------------------------------------------------------
+const CONTROL_CARD_KEY = "final-blow-control-card";
+const CONTROL_CARD_MS = 9500;
+const controlCard = { visible: false, timer: 0, shows: 0 };
+
+function controlCardSeen() {
+  try {
+    return localStorage.getItem(CONTROL_CARD_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+function controlCardDevice() {
+  if (assignedPadBySide[0] !== null || getPad(0)) return "pad";
+  if (getComputedStyle($("#touchControls")).display !== "none") return "touch";
+  return "keyboard";
+}
+
+function controlCardLines(device = controlCardDevice()) {
+  const style = state.controlStyle;
+  const buttons = device === "pad"
+    ? ATTACK_BUTTONS.map((action) => `${padButtonLabel(padMap[action], activePadLabelSet())} ${BUTTON_LABELS[action]}`)
+    : device === "keyboard"
+      ? ATTACK_BUTTONS.map((action) => `${formatKeyCode(keyMaps[0][action])} ${BUTTON_LABELS[action]}`)
+      : ["LP", "HP", "LK", "HK"].map((label) => `${label} PAD`);
+  const move = device === "keyboard"
+    ? `${formatKeyCode(keyMaps[0].left)} ${formatKeyCode(keyMaps[0].right)} WALK · ${formatKeyCode(keyMaps[0].up)} JUMP · ${formatKeyCode(keyMaps[0].down)} CROUCH`
+    : device === "pad" ? "STICK OR D-PAD WALKS · UP JUMPS · DOWN CROUCHES"
+      : "LEFT PAD WALKS · UP JUMPS · DOWN CROUCHES";
+  return [
+    ["MOVE", move],
+    ["BLOCK", "HOLD AWAY · DOWN-AWAY FOR LOWS"],
+    ["BUTTONS", buttons.join(" · ")],
+    ["SPECIAL", commandLabel("commandSpecial", style)],
+    ["GRAB", "CLOSE + TOWARD + LP"],
+  ];
+}
+
+function showControlCard() {
+  const card = $("#controlCard");
+  if (!card) return false;
+  $("#controlCardLines").innerHTML = controlCardLines()
+    .map(([name, text]) => `<span><b>${name}</b>${text}</span>`).join("");
+  card.hidden = false;
+  controlCard.visible = true;
+  controlCard.shows += 1;
+  window.clearTimeout(controlCard.timer);
+  controlCard.timer = window.setTimeout(() => hideControlCard(), CONTROL_CARD_MS);
+  return true;
+}
+
+function hideControlCard() {
+  const card = $("#controlCard");
+  window.clearTimeout(controlCard.timer);
+  if (!card || !controlCard.visible) return false;
+  controlCard.visible = false;
+  card.hidden = true;
+  // The touch flick tip waited its turn behind the card (two coaching lines
+  // at once is noise); it takes the prompt now if the pad is on screen.
+  if (state.screen === "fight" && !state.paused) maybeCoachTouchFlick();
+  return true;
+}
+
+function maybeShowControlCard() {
+  // No screen check here: startMatch announces ROUND 1 a few lines before
+  // showScreen("fight"), and showScreen only tears the card down when the
+  // destination is NOT the fight screen.
+  if (state.round !== 1) return false;
+  if (!["arcade", "versus", "survival", "team"].includes(state.mode)) return false;
+  if (replayPlayback.active || demoSession.active || controlCardSeen()) return false;
+  try {
+    localStorage.setItem(CONTROL_CARD_KEY, "1");
+  } catch {
+    // Storage refused: the card shows this once and again next load.
+  }
+  return showControlCard();
+}
+
+// 5.x phone flick-to-dash discoverability (sweep #41): a transient coaching
+// line on the touch prompt. The super and finish labels always outrank it —
+// the hint only fills the prompt while it would otherwise be empty, and it
+// expires on its own timer so the HUD refresh cadence never matters.
+const touchHint = { text: "", until: 0, timer: 0 };
+let touchPromptKind = "";
+
+function showTouchHint(text, ms = 3200) {
+  touchHint.text = text;
+  touchHint.until = performance.now() + ms;
+  window.clearTimeout(touchHint.timer);
+  touchHint.timer = window.setTimeout(() => setTouchPrompt(touchPromptKind), ms + 16);
+  setTouchPrompt(touchPromptKind);
+}
+
+// The first three touch-controlled fights open with the flick tip; after that
+// the player has either found it or the prompt would be nagging. Counted in
+// storage so it is per install, not per page load.
+const TOUCH_FLICK_COACH_KEY = "final-blow-touch-flick-coach";
+const TOUCH_FLICK_COACH_LIMIT = 3;
+
+function maybeCoachTouchFlick() {
+  if (state.mode === "demo" || replayPlayback.active) return;
+  if (getComputedStyle($("#touchControls")).display === "none") return;
+  // 5.1: never alongside the first-run control card — hideControlCard()
+  // re-invokes this once the card is gone, so the tip is deferred, not lost.
+  if (controlCard.visible) return;
+  let shown = 0;
+  try {
+    shown = Number(localStorage.getItem(TOUCH_FLICK_COACH_KEY)) || 0;
+  } catch {
+    // Storage refused: coach once for this page load and move on.
+  }
+  if (shown >= TOUCH_FLICK_COACH_LIMIT) return;
+  try {
+    localStorage.setItem(TOUCH_FLICK_COACH_KEY, String(shown + 1));
+  } catch {
+    // Same: nothing to persist means the tip simply shows again next time.
+  }
+  showTouchHint("FLICK THE PAD TO DASH · DOUBLE-TAP WORKS TOO", 4200);
+}
+
 function setTouchPrompt(kind = "") {
+  touchPromptKind = kind;
   const prompt = $("#touchPrompt");
   const actions = $(".touch-action");
+  const hintActive = !kind && Boolean(touchHint.text) && performance.now() < touchHint.until;
   const label = kind === "final" ? "FINISH HIM · LP = A · LK = B · ANY DISTANCE"
-    : kind === "super" ? "SUPER READY · \u2193 \u2192 \u2193 \u2192 + PUNCH"
-      : "";
+    : kind === "super" ? `SUPER READY · ${commandLabel("super", state.controlStyle)}`
+      : hintActive ? touchHint.text
+        : "";
   prompt.textContent = label;
   prompt.hidden = !label;
   prompt.classList.toggle("ready", kind === "final");
   prompt.classList.toggle("super-ready", kind === "super");
+  prompt.classList.toggle("hint", hintActive);
   actions.classList.toggle("ready", kind === "final");
   actions.classList.toggle("super-ready", kind === "super");
 }
@@ -12940,9 +13791,9 @@ function updateTrainingUi(input = {}) {
   const move = snapshot.lastMove;
   $("#trainingDamage").textContent = Number(snapshot.lastDamage).toFixed(1).replace(/\.0$/, "");
   $("#trainingCombo").textContent = `${combo.hits} HIT`;
-  $("#trainingFrames").textContent = move
-    ? `${move.name} · S${move.startup} A${move.active} R${move.recovery}`
-    : "—";
+  // v5.1 TEMPO TELLS: the line grows `R12+6 WHIFF · RE-ARM 4F` once the
+  // swing whiffs (noteWhiff merges the tax into lastMove at the tax site).
+  $("#trainingFrames").textContent = trainingFrameDataLabel(move);
   $("#trainingAdvantage").textContent = snapshot.lastAdvantage === null
     ? move ? `${move.onHit >= 0 ? "+" : ""}${move.onHit} HIT · ${move.onBlock >= 0 ? "+" : ""}${move.onBlock} BLOCK` : "—"
     : `${snapshot.lastAdvantage >= 0 ? "+" : ""}${snapshot.lastAdvantage} ACTUAL`;
@@ -12964,7 +13815,18 @@ function updateTrainingUi(input = {}) {
     ? `PLAYING ${snapshot.recordingFrames}F` : `PLAY LOOP ${snapshot.recordingFrames || "—"}F`;
 }
 
+// 5.1 (sweep #31): the dialog's SPECIALS / ENHANCED / SUPER lines were static
+// classic copy. Elements carrying data-style-copy are templates rendered for
+// the live style whenever the option changes.
+function renderControlStyleCopy() {
+  $$("[data-style-copy]").forEach((element) => {
+    if (!element.dataset.template) element.dataset.template = element.textContent;
+    element.textContent = styleCopy(element.dataset.template, state.controlStyle);
+  });
+}
+
 function syncNewOptionsUi() {
+  renderControlStyleCopy();
   $("#goreToggle").checked = state.graphicFatalities;
   $("#stageWeaponToggle").checked = state.stageWeaponsEnabled;
   $("#controlStyleSelect").value = state.controlStyle;
@@ -13263,7 +14125,16 @@ const advancedActions = new Set([
 ]);
 
 function beginAttack(fighter, action, input = {}, { reversal = false, force = false, cancelledFrom = "", limb = "", backThrow = null } = {}) {
-  if (!force && (fighter.attacking || fighter.attackRearmFrames > 0 || fighter.stun > 0 || fighter.down || fighter.wakeupFrames > 0)) return false;
+  if (!force && (fighter.attacking || fighter.attackRearmFrames > 0 || fighter.stun > 0 || fighter.down || fighter.wakeupFrames > 0)) {
+    // v5.1 TEMPO TELLS: a press that reaches here with ONLY the re-arm gap in
+    // the way is the press the 4.5 rule eats (tryStartBufferedAttack has
+    // already consumed the buffer entry). Stamp it so the body can flash
+    // "not yet" and the mash is audible: before this the drop was silent.
+    if (!fighter.attacking && fighter.attackRearmFrames > 0 && fighter.stun <= 0 && !fighter.down && fighter.wakeupFrames <= 0) {
+      noteRearmDrop(fighter);
+    }
+    return false;
+  }
   const actionGroup = fighterActionGroup(action);
   if (actionGroup === "throw" && !fighter.grounded) return false;
   if (advancedActions.has(action) && !fighter.grounded) return false;
@@ -13379,6 +14250,9 @@ function beginAttack(fighter, action, input = {}, { reversal = false, force = fa
   fighter.lastAttackHitFrame = -Infinity;
   fighter.attackConnected = "";
   fighter.cancelledFrom = cancelledFrom;
+  // BLOCK ECONOMY: a fresh (non-cancel) swing opens a new string, so its
+  // blocked special-into-special budget resets; tryAttackCancel spends it.
+  if (!cancelledFrom) fighter.blockedSpecialCancels = 0;
   fighter.linkedFrom = linkedFrom;
   fighter.counterTriggered = false;
   fighter.trapDeployed = false;
@@ -13392,7 +14266,15 @@ function beginAttack(fighter, action, input = {}, { reversal = false, force = fa
   fighter.dashFrames = 0;
   fighter.queuedDashDirection = 0;
   fighter.lastHitResult = reversal ? "reversal" : "";
-  if (reversal || fighter.attacking.reversalInvulnerableFrames) {
+  // BLOCK ECONOMY: reversal invulnerability is granted when the move is a
+  // real reversal (wake-up window, guard reversal) or when it is paid for
+  // (EX and super, gritCost > 0). Before this, every free back special and
+  // launcher carrying reversalInvulnerableFrames was hurtbox-less from frame
+  // 0 in NEUTRAL too, so Benny/Cyraxx/Ali could press ↓← at any time and hit
+  // through anything. The field itself stays on the move so the same special
+  // is still a genuine wake-up reversal.
+  const invulnerableStart = reversal || (fighter.attacking.reversalInvulnerableFrames > 0 && gritCost > 0);
+  if (invulnerableStart) {
     fighter.invulnerableFrames = Math.max(
       fighter.invulnerableFrames,
       fighter.attacking.reversalInvulnerableFrames || DEFENSE_RULES.reversalWindowFrames,
@@ -13651,7 +14533,12 @@ function enterDizzy(fighter, attacker) {
   if ($("#flashToggle").checked) state.flash = Math.max(state.flash, 0.2);
   spawnCombatText(fighter.x, fighter.y - fighter.height - 52, "DIZZY", "#ffd54a");
   duckMusic(0.55, 620);
-  sound("ko", fighter);
+  // w51 announcer truth: a dizzy is a stun the fighter recovers from, so it
+  // must not play knockout.mp3 (the same reviewed KO groan a real KO uses —
+  // for the Commissioner/Devil their ko take is "the book hitting the
+  // floor"). The stars get their own synthesised ring instead; the fighter's
+  // dazed voice bark still layers over it below.
+  dizzyRingAudio(fighter);
   // Wave 15: the dizzy flutters in the hands (all gates inside).
   combatHaptic("dizzy");
   // Wave 9: dazed voice bark layered over the ring (guarded + tick-deduped).
@@ -13698,6 +14585,10 @@ function performTaunt(fighter) {
   demoChoreoBeat(fighter.side, "taunt");
   spawnCombatText(fighter.x, fighter.y - fighter.height - 44, "TAUNT", fighter.def.accent);
   stirCrowd(0.25);
+  // v5.1 KO MOMENT: the crowd answers the showboat out loud. 0.25 sits under
+  // the 0.5 swell latch, so this is its own render-side cue (resim-guarded
+  // inside): an "oooh" at taunt level, never the roar.
+  playCrowdVoice("ooh", 0.25, { source: "taunt" });
   fighterTauntCue(fighter, fighter.tauntLine);
 }
 
@@ -14195,7 +15086,7 @@ function performWallBounce(fighter, wallDirection) {
     );
   }
   // Spectacle through the existing systems: the wave-4 splat, the crowd surge
-  // (0.75 clears the crowdFlashPick flashbulb threshold), combat text, the
+  // (0.75 clears the crowdFlashPicks flashbulb threshold), combat text, the
   // announcer bank and the shared violence response.
   spawnWallImpact(fighter, wallDirection);
   stirCrowd(0.75);
@@ -14250,7 +15141,13 @@ function tryAttackCancel(fighter, input) {
   const action = bufferedAction(fighter, attackActionPriority.filter((candidate) => candidate !== "throw"));
   const actionGroup = fighterActionGroup(action);
   if (current.rhythmCancel && fighter.rhythmStacks < (current.rhythmCancelStacks || 2)) return false;
-  if (!action || !canCancelAttack(current, actionGroup, fighter.attackFrame, fighter.attackConnected)) return false;
+  // BLOCK ECONOMY: the string's blocked special-into-special budget rides
+  // along so a second blocked voltage/flow cancel is refused (see
+  // SPECIAL_CANCEL_RULES). The refusal is silent: the move simply finishes on
+  // its own recovery, which is the punish window the blocker earned.
+  const connectedBefore = fighter.attackConnected;
+  const cancelBudget = { blockedSpecialCancels: fighter.blockedSpecialCancels };
+  if (!action || !canCancelAttack(current, actionGroup, fighter.attackFrame, connectedBefore, cancelBudget)) return false;
   const queuedLimb = fighter.inputBuffer.entries.find((entry) => entry.action === action)?.payload?.limb;
   const moveContext = {
     airborne: !fighter.grounded,
@@ -14274,6 +15171,12 @@ function tryAttackCancel(fighter, input) {
   if (!started) {
     fighter.attacking = current;
     return false;
+  }
+  // BLOCK ECONOMY: a blocked special-into-special cancel spends one unit of
+  // the string's budget. beginAttack keeps the counter because the cancel
+  // passed cancelledFrom, so this is the only place it moves.
+  if (connectedBefore === "block" && isSpecialIntoSpecialCancel(current, actionGroup)) {
+    fighter.blockedSpecialCancels += 1;
   }
   fighter.confirmWindowFrames = 12;
   const chain = ["light", "heavy", "launcher", "driveHeavy"].includes(actionGroup);
@@ -14387,11 +15290,13 @@ function updateFighter(fighter, opponent, input, dt) {
       fighter.knockdownFrames = Math.max(1, fighter.knockdownFrames - WAKEUP_RULES.quickRiseFrames);
       if (!rollbackResimulating) mechFxDebug.quickRises += 1;
       spawnCombatText(fighter.x, fighter.y - fighter.height - 30, "QUICK RISE", fighter.def.accent);
+      if (!rollbackResimulating && state.mode === "training" && fighter.side === 0) schoolEvent({ type: "wake", option: "quick" });
     } else if (option === "delay") {
       fighter.wakeOption = "delay";
       fighter.knockdownFrames += WAKEUP_RULES.delayFrames;
       if (!rollbackResimulating) mechFxDebug.wakeDelays += 1;
       spawnCombatText(fighter.x, fighter.y - fighter.height - 30, "DELAYED", "#8a93a5");
+      if (!rollbackResimulating && state.mode === "training" && fighter.side === 0) schoolEvent({ type: "wake", option: "delay" });
     }
   }
   const flowSpeed = fighter.def.id === "ali" ? 1 + fighter.rhythmStacks * 0.045 : 1;
@@ -14416,7 +15321,10 @@ function updateFighter(fighter, opponent, input, dt) {
       && fighter.airHitstunFrames >= AIR_RECOVERY_RULES.minimumHitstunFrames) {
       const buffered = fighter.inputBuffer.consume(["light", "heavy", "special"], state.simulationTick);
       const pressed = Boolean(buffered || input.light || input.heavy || input.special);
-      if (canAirRecover(fighter, pressed)) performAirRecovery(fighter);
+      if (canAirRecover(fighter, pressed)) {
+        performAirRecovery(fighter);
+        if (!rollbackResimulating && state.mode === "training" && fighter.side === 0) schoolEvent({ type: "airTech" });
+      }
     }
   } else if (fighter.down || fighter.wakeupFrames > 0 || fighter.landingRecoveryFrames > 0 || fighter.throwTechFlashFrames > 0) {
     fighter.vx *= 0.72;
@@ -14580,7 +15488,12 @@ function updateFighter(fighter, opponent, input, dt) {
     // is deterministic and the follow-through pose simply holds longer.
     if (!attack.whiffTaxed && fighter.attackFrame >= attack.activeEndFrame && !fighter.attackConnected) {
       attack.whiffTaxed = true;
-      attack.totalFrames += whiffRecoveryFrames(attack);
+      const whiffTax = whiffRecoveryFrames(attack);
+      attack.whiffTaxFrames = whiffTax;
+      attack.totalFrames += whiffTax;
+      // v5.1 TEMPO TELLS: the moment the tax lands is the moment the tell
+      // starts (fringe, ghost, WHIFF text, lab readout).
+      noteWhiff(fighter, attack, whiffTax);
     }
     const cancelled = tryStartupChordOverride(fighter, input) || tryAttackCancel(fighter, input);
     if (!cancelled && fighter.attackFrame >= attack.totalFrames) {
@@ -14599,7 +15512,21 @@ function updateFighter(fighter, opponent, input, dt) {
   // Release 1.7: Perfect Guard — stamp the tick a FRESH guard began. Blockstun
   // holds guarding true continuously, so a held guard keeps its original
   // stamp; only releasing and re-tapping back can arm a new just-defend.
-  if (fighter.guarding && !wasGuarding) fighter.guardStartedTick = state.simulationTick;
+  // BLOCK ECONOMY: that re-tap now counts INSIDE blockstun too (Garou-style
+  // tap-tap just-defend). Before, guarding never went false during a string,
+  // so only its first hit could ever be perfect-guarded and a blockstring
+  // was 'nothing I can do'. The edge is the directional back input only: the
+  // engine-internal input.guard channel the CPU's defend intent drives never
+  // re-arms, so the CPU's just-defend rate stays close to the authored
+  // perfectGuardChance (a retreat-intent flip inside blockstun can still
+  // produce a tap, but decisions are 7-28 frames apart and it reads as a
+  // legitimately late tap).
+  const backTapped = directionContext(fighter, input).backHeld;
+  const guardTapEdge = backTapped && !fighter.guardInputHeld;
+  fighter.guardInputHeld = backTapped;
+  if (fighter.guarding && (!wasGuarding || (fighter.blockstunFrames > 0 && guardTapEdge))) {
+    fighter.guardStartedTick = state.simulationTick;
+  }
 
   applyFighterPhysics(fighter, dt);
 }
@@ -14671,6 +15598,7 @@ function triggerPaintTrap(trap, victim) {
   victim.stun = Math.max(victim.hitstunFrames, victim.blockstunFrames) / SIMULATION_HZ;
   victim.vx = owner.facing * trap.push * (blocked ? 0.26 : 1);
   victim.lastHitResult = blocked ? "blocked-low-trap" : "paint-trap";
+  victim.lastHitLevel = ATTACK_LEVELS.LOW;
   victim.hitFlash = 0.13;
   if (!blocked) {
     victim.attacking = null;
@@ -14950,6 +15878,7 @@ function triggerProjectile(projectile, victim) {
   victim.vx = hitDirection * projectile.push * (blocked ? 0.27 : armored ? 0.12 : 1);
   const resultKind = projectile.style === "feedback" ? "feedback-echo" : "projectile";
   victim.lastHitResult = blocked ? `blocked-${projectile.level}-${resultKind}` : armored ? "armor" : counter ? `counter-${resultKind}` : projectile.style === "feedback" ? "feedback-echo" : `${projectile.level}-projectile`;
+  victim.lastHitLevel = projectile.level;
   victim.hitFlash = 0.13;
   if (!blocked && !armored) {
     // Release 1.8 GRIND: score attack — projectiles/thrown objects score as
@@ -14994,7 +15923,14 @@ function triggerProjectile(projectile, victim) {
   }
   owner.attackConnected = blocked ? "block" : "hit";
   owner.confirmWindowFrames = 12;
-  owner.meter = clamp(owner.meter + 15 * GRIT_RULES.hitGainMultiplier, 0, GRIT_RULES.maximum);
+  // BLOCK ECONOMY: a projectile pays its owner once (gritPaid latches on the
+  // projectile, which is rollback-cloned with it) — 15 on hit, 6 on block —
+  // so a wall of blocked orbs no longer funds a super in five seconds. The
+  // defender's 0.45x share of the old flat 15 is unchanged.
+  if (!projectile.gritPaid) {
+    projectile.gritPaid = true;
+    owner.meter = clamp(owner.meter + projectileGritGain({ blocked }), 0, GRIT_RULES.maximum);
+  }
   victim.meter = clamp(victim.meter + 15 * GRIT_RULES.damageTakenGainMultiplier, 0, GRIT_RULES.maximum);
   state.effects.push({ kind: projectile.style === "feedback" ? "feedbackBurst" : "projectileBurst", x: projectile.x, y: projectile.y, life: 0.5, max: 0.5, color: projectile.color });
   const impactTier = projectile.stageWeapon ? "weapon" : projectile.throwable ? "heavy" : "special";
@@ -15006,6 +15942,20 @@ function triggerProjectile(projectile, victim) {
   applyViolenceResponse(impactTier, { blocked, counter });
   state.lastImpactSide = owner.side;
   projectile.hit = true;
+  // 5.1 FIGHT SCHOOL: thrown objects never went through observeTrainingHit,
+  // so THE JAWN and STREET FURNITURE observe the projectile impact here. The
+  // serial is offset past any fighter attackSerial so the dedupe latch can
+  // never mistake it for the swing that released it.
+  if (!rollbackResimulating && state.mode === "training" && owner.side === 0 && !blocked && !armored) {
+    schoolEvent({
+      type: "hit",
+      action: projectile.stageWeapon ? "stageWeapon" : projectile.throwable ? "throwObject" : "projectile",
+      limb: "punch",
+      attackSerial: 1000000 + state.simulationTick,
+      back: false,
+      dizzy: victim.dizzyFrames > 0,
+    });
+  }
   sound(blocked ? "block" : "hit-heavy", blocked ? victim : owner);
   updateHud();
 }
@@ -15085,6 +16035,50 @@ function updateProjectiles(dt) {
 
 function spawnCombatText(x, y, label, color = "#fff") {
   state.effects.push({ kind: "combatText", label, x, y, life: 0.72, max: 0.72, color });
+}
+
+// v5.1 TEMPO TELLS: monotonic sim-side totals (guarded against resimulation
+// like progressionMatch) so a smoke probe can prove a scripted whiff was
+// noticed and that a mash inside the gap was eaten. snapshot().violence and
+// qa.tempo() read them; nothing in the sim does.
+const tempoFxDebug = { whiffTells: 0, rearmDrops: 0 };
+
+// The moment the tax lands (the active window closed on nothing). Stamps the
+// fighter's whiffTell for both renderers, floats WHIFF at the hand, and
+// merges the real tail into the lab's lastMove — which used to be snapshotted
+// at attack START and so always showed the authored R.
+function noteWhiff(fighter, attack, taxFrames) {
+  fighter.whiffTell = {
+    tick: state.simulationTick,
+    taxFrames,
+    rearmFrames: ATTACK_REARM_FRAMES,
+    kind: attack.kind,
+    profileId: attack.profileId,
+  };
+  if (!rollbackResimulating) tempoFxDebug.whiffTells += 1;
+  // Exempt moves (projectile, trap, hurled object) tax nothing because they
+  // connect later through what they spawned — no WHIFF for those.
+  if (taxFrames > 0) {
+    spawnCombatText(
+      fighter.x + fighter.facing * 44,
+      fighter.y - fighter.height * 0.74,
+      TEMPO_TELL_RULES.textLabel,
+      TEMPO_TELL_RULES.textColor,
+    );
+  }
+  if (state.mode === "training" && fighter.side === 0 && state.training.lastMove) {
+    state.training.lastMove = noteWhiffOnMove(state.training.lastMove, taxFrames, ATTACK_REARM_FRAMES);
+  }
+}
+
+// A press the re-arm gap ate (beginAttack refused it with only the gap in
+// the way). The stamp drives the eaten-press flash; the click is voiced for
+// human seats only — the CPU's own mash is not feedback anyone needs.
+function noteRearmDrop(fighter) {
+  fighter.rearmDropTick = state.simulationTick;
+  if (rollbackResimulating) return;
+  tempoFxDebug.rearmDrops += 1;
+  if (!sideIsCpuControlled(fighter.side)) sound("rearm-drop", fighter);
 }
 
 /**
@@ -15300,7 +16294,11 @@ function tryPickUpStageWeapon(fighter, input) {
   const weapon = state.stageWeapon;
   if (!weapon || weapon.phase !== "ground") return false;
   if (fighter.carriedWeapon) return false;
-  if (isPassiveDifficulty(fighter.aiBrain?.difficulty)) return false;
+  // The passive dummy never arms itself — but makeFighter hands EVERY seat a
+  // brain, and FIGHT SCHOOL runs on "passive", so this guard used to refuse
+  // the human player too (measured: standing 5 px over the object in the
+  // STREET FURNITURE lesson, ↓ + HP did nothing). CPU-controlled seats only.
+  if (sideIsCpuControlled(fighter.side) && isPassiveDifficulty(fighter.aiBrain?.difficulty)) return false;
   if (!input.down || !input.heavy) return false;
   const profile = stageWeaponProfile();
   if (!canPickUpWeapon(fighter, weapon, { range: profile.pickupRange, scale: FIGHTER_SCALE })) return false;
@@ -15314,6 +16312,7 @@ function tryPickUpStageWeapon(fighter, input) {
   fighter.inputBuffer.consume("heavy", state.simulationTick);
   spawnCombatText(fighter.x, fighter.y - fighter.height - 40, profile.name, fighter.def.accent);
   if (!rollbackResimulating) objectSound(profile.style);
+  if (!rollbackResimulating && state.mode === "training" && fighter.side === 0) schoolEvent({ type: "pickup" });
   updateHud();
   return true;
 }
@@ -15629,7 +16628,9 @@ function registerAliFlow(attacker, attack) {
 // owned; medals/school are guarded meta on the announce() pattern.
 function observeTrainingHit(attacker, victim, attack) {
   if (state.mode !== "training" || attacker.side !== 0) return;
-  const action = attack.kitAction || attack.kind;
+  // 5.1: the guard reversal is an advanced move with no kitAction, so it used
+  // to report as a plain "special" — the SPLIT SECOND lesson needs its name.
+  const action = attack.kitAction || (attack.profileId === "guard-reversal" ? "guardReversal" : attack.kind);
   const limb = attack.limb || "punch";
   const trialProgress = recordTrainingTrialHit(state.training, {
     fighterId: attacker.kitId,
@@ -15695,7 +16696,7 @@ function hit(attacker, victim, attack, collision) {
   // LOW/OVERHEAD combat-text hook level), landed-hit lessons below. Both are
   // meta observations on the announce() guard pattern.
   if (!rollbackResimulating && state.mode === "training" && blocked && victim.side === 0) {
-    schoolEvent({ type: "block", level: attack.level });
+    schoolEvent({ type: "block", level: attack.level, perfect });
   }
   if (!blocked) observeTrainingHit(attacker, victim, attack);
   const armored = !blocked
@@ -15766,6 +16767,7 @@ function hit(attacker, victim, attack, collision) {
   victim.lastHitResult = victim.guardCrushFrames > 0 ? "guard-crush"
     : blocked ? (perfect ? "perfect-guard" : `blocked-${attack.level}`)
       : armored ? "armor" : counter ? "counter" : attack.level;
+  victim.lastHitLevel = attack.level;
   if (!blocked && !armored) {
     // Release 1.8 GRIND: score attack — clean hits score by move class
     // (guarded meta bookkeeping inside; never touches sim state).
@@ -15840,7 +16842,10 @@ function hit(attacker, victim, attack, collision) {
     addStun(victim, attacker, attack, { counter, blocked });
     if (victim.carriedWeapon) dropStageWeapon(victim, false);
   }
-  attacker.meter = clamp(attacker.meter + attack.meter * GRIT_RULES.hitGainMultiplier, 0, GRIT_RULES.maximum);
+  // BLOCK ECONOMY: a blocked hit pays the attacker half (attackGritGain);
+  // the defender's share is untouched, so blocking correctly is close to
+  // Grit-neutral instead of funding the attacker's super.
+  attacker.meter = clamp(attacker.meter + attackGritGain(attack, { blocked }), 0, GRIT_RULES.maximum);
   victim.meter = clamp(victim.meter + attack.meter * GRIT_RULES.damageTakenGainMultiplier, 0, GRIT_RULES.maximum);
   // Release 1.7: a Perfect Guard banks bonus Grit for the defender.
   if (perfect) victim.meter = clamp(victim.meter + PERFECT_GUARD_RULES.gritBonus, 0, GRIT_RULES.maximum);
@@ -16859,21 +17864,64 @@ function resetCrowd() {
 // v5.0 AMBIENT REACTIONS: a presentation-side pulse the stage life reacts to
 // (floodlights flare, moths scatter, the wok flares). Latched from the crowd
 // stir and from the KO phase change; never sim state, never resimulated.
-const ambientObs = { phase: null, pulseTick: -100000, pulseAmount: 0, pulseKind: "" };
+// The thresholds, the decay and the KO latch are engine/ambient.mjs (tested);
+// this file keeps the resim guard and the tick.
+const ambientObs = createAmbientObs();
 
 function pulseAmbient(kind, amount) {
   if (rollbackResimulating) return;
-  ambientObs.pulseTick = state.simulationTick;
-  ambientObs.pulseAmount = amount;
-  ambientObs.pulseKind = kind;
+  pulseAmbientLatch(ambientObs, kind, amount, state.simulationTick);
 }
 
-function stirCrowd(amount = 1) {
+// v5.1 STAGE KO BEATS: the one read every stage layer shares. The KO latch
+// (phase edge into finish/roundover) and the level at `frame`, then the
+// crowd's KO hold folded in as the KO beat — whichever of the two is
+// stronger drives the furniture (engine/ambient.mjs ambientSurge). The
+// atmosphere passes run inside drawCrowd, before drawStageAmbient, so this is
+// called more than once per frame; the phase latch is one-shot per edge and
+// the hold latch idempotent, so the extra reads change nothing.
+function readAmbientPulse(frame, reduced) {
+  const koPulse = ambientPhaseChange(ambientObs, state.phase, state.screen);
+  if (koPulse) pulseAmbient(koPulse.kind, koPulse.amount);
+  const { pulseAge, pulse, ko } = ambientPulseLevel(ambientObs, frame, reduced);
+  return { pulseAge, pulse, ko };
+}
+
+function stageKoBeat(reduced = state.accessibility.reducedMotion) {
+  updateCrowdKoHoldLatch();
+  return ambientKoBeat(crowdKoHoldAge(), reduced);
+}
+
+function stageSurge(frame, reduced = state.accessibility.reducedMotion) {
+  const level = readAmbientPulse(frame, reduced);
+  // pulseAge rides along raw: the synced cycles (splashes, steam, pigeons)
+  // run 60 ticks, longer than the 48-tick level, so they key off the latch
+  // age rather than the surge's age (which reads -1 once the level is gone).
+  return { ...ambientSurge(level, stageKoBeat(reduced)), pulseAge: level.pulseAge };
+}
+
+// A soft-edged horizontal band of light (the pass-through window, the pool
+// surface, a street-level flash): fades in and out vertically so it reads as
+// a lit plane in the plate, not a painted rectangle.
+function ambientBand(x, y, width, height, rgb, alpha) {
+  if (alpha <= 0.002) return;
+  const gradient = ctx.createLinearGradient(0, y, 0, y + height);
+  gradient.addColorStop(0, `rgba(${rgb},0)`);
+  gradient.addColorStop(0.35, `rgba(${rgb},${alpha})`);
+  gradient.addColorStop(0.65, `rgba(${rgb},${alpha})`);
+  gradient.addColorStop(1, `rgba(${rgb},0)`);
+  ctx.fillStyle = gradient;
+  ctx.fillRect(x, y, width, height);
+}
+
+function stirCrowd(amount = 1, kind = "") {
   state.crowdReaction = Math.min(1.4, state.crowdReaction + amount);
-  if (amount >= 0.7) pulseAmbient(amount >= 1 ? "big" : "splat", amount);
+  const pulseKind = stirPulseKind(amount);
+  if (pulseKind) pulseAmbient(pulseKind, amount);
   // Release 1.6 LOUD: big stirs also latch a one-shot crowd swell/gasp for
   // the render-side crowd bus (guarded + tick-deduped inside the latch).
-  if (amount >= 0.5) latchCrowdSwell(amount);
+  // v5.1: the kind rides along so a "ko" stir gets the KO swell and roar.
+  if (amount >= 0.5) latchCrowdSwell(amount, kind);
 }
 
 // v4.7 BYSTANDERS: painted crowd sheets (assets/crowd/, built by
@@ -16884,6 +17932,9 @@ const crowdSheets = { manifest: null, images: new Map(), requested: false };
 function ensureCrowdMedia() {
   if (crowdSheets.requested) return;
   crowdSheets.requested = true;
+  // v5.1: the voiced crowd warms with the painted one (twelve small takes,
+  // 18-49 KB each) so the first KO of the session does not miss its roar.
+  ensureCrowdVoiceMedia();
   fetch("assets/crowd/MANIFEST.json")
     .then((response) => (response.ok ? response.json() : null))
     .then((manifest) => {
@@ -16922,11 +17973,17 @@ function crowdSpriteFrame(person, gait, paused, reaction) {
   const reducedMotion = state.accessibility.reducedMotion;
   const frame = state.simulationTick;
   let column = 0;
-  if (reaction > person.sprite.reactThreshold) column = 2;
+  // v5.1 KO MOMENT: through the hold a person past their threshold pumps
+  // between the cheer and weight-shift cells on their own shift timer and
+  // bounces on the spot, so a crowd that is up for five seconds never freezes.
+  const holdColumn = crowdKoHoldAge() >= 0 && !reducedMotion ? crowdKoHoldColumn(person.sprite, frame, reaction) : -1;
+  if (holdColumn >= 0) column = holdColumn;
+  else if (reaction > person.sprite.reactThreshold) column = 2;
   else if (!paused && !reducedMotion) column = Math.sin(gait) > 0 ? 3 : 0;
   else if (!reducedMotion && ((frame + person.sprite.shiftOffset) % person.sprite.shiftPeriod) < person.sprite.shiftLength) column = 1;
   const posture = POSTURE_BY_ID[person.posture] || POSTURES[0];
-  const bob = paused || reducedMotion ? 0 : Math.abs(Math.sin(gait)) * posture.bob * 2.4;
+  let bob = paused || reducedMotion ? 0 : Math.abs(Math.sin(gait)) * posture.bob * 2.4;
+  if (holdColumn === 2) bob = Math.abs(Math.sin(frame * 0.19 + person.sprite.shiftOffset)) * CROWD_KO_HOLD.bobPx;
   return { column, bob };
 }
 
@@ -17172,14 +18229,18 @@ function drawPedestrian(person, layer, x, gait, paused, reaction) {
 // The choreography of one scuffle / pool-incident loop on a frame: where each
 // member stands in group space, how they lean and reach, and which painted
 // cell they wear. Shared by drawScuffle and the CINEMA 3D billboards.
-function scuffleMembers(group, frame, reaction) {
+function scuffleMembers(group, frame, reaction, celebrate = false) {
   const phase = scufflePhase(group, frame);
   const beat = Math.sin(phase * Math.PI * 2);
   const clash = Math.max(0, Math.sin(phase * Math.PI * 2 - 0.6));
   const swing = group.reach * (0.4 + clash * 0.6) * (1 + reaction * 0.25);
   const members = [];
   const add = (offsetX, lean, armReach, tilt = 0) => members.push({ offsetX, lean, armReach, tilt });
-  switch (group.kind) {
+  // v5.1 KO MOMENT: through the hold every group drops its quarrel for the
+  // celebrate choreography (the pool incidents already run it — they have no
+  // case of their own — so this only turns the tailgate's fights into a cheer).
+  const kind = celebrate ? "celebrate" : group.kind;
+  switch (kind) {
     case "argue":
       add(-16, 0.2 + beat * 0.06, swing * 0.7);
       add(18, -0.2 - beat * 0.06, -swing * 0.7, 0.04);
@@ -17218,7 +18279,7 @@ function scuffleMembers(group, frame, reaction) {
   }
   members.forEach((member, index) => {
     const reaching = Math.abs(member.armReach) > group.reach * 0.55;
-    const armsUp = group.kind === "celebrate" || (group.kind === "separate" && index === 2) || (clash > 0.5 && group.kind !== "wrestle");
+    const armsUp = kind === "celebrate" || (kind === "separate" && index === 2) || (clash > 0.5 && kind !== "wrestle");
     member.column = armsUp ? (reaching ? 3 : 2) : reaching ? 3 : 0;
     member.character = group.characters ? group.characters[index % group.characters.length] : null;
   });
@@ -17226,7 +18287,7 @@ function scuffleMembers(group, frame, reaction) {
 }
 
 function drawScuffle(group, frame, centre, reaction) {
-  const { phase, clash, members } = scuffleMembers(group, frame, reaction);
+  const { phase, clash, members } = scuffleMembers(group, frame, reaction, crowdKoHoldAge() >= 0);
   const drawX = group.x + (centre - W * 0.5) * -0.2;
   if (drawX < -110 || drawX > W + 110) return;
 
@@ -17333,7 +18394,11 @@ function crowdBillboards() {
   const variant = crowdSheets.manifest?.variants?.[crowd?.variant];
   if (!crowd || !variant || state.screen !== "fight") return out;
   const frame = state.simulationTick;
-  const reaction = state.crowdReaction;
+  // v5.1 KO MOMENT: the 3D crowd reads the same held reaction as the canvas,
+  // so the arms-up cells, the pumps and the celebrate scuffles carry over.
+  updateCrowdKoHoldLatch();
+  const reaction = crowdDrawReaction();
+  const celebrate = crowdKoHoldAge() >= 0;
   const holdDim = 1 - fatalitySpotLevel * 0.62;
   crowd.people.forEach((person, index) => {
     if (!person.sprite) return;
@@ -17350,7 +18415,7 @@ function crowdBillboards() {
     });
   });
   (crowd.scuffles || []).forEach((group, groupIndex) => {
-    const { members } = scuffleMembers(group, frame, reaction);
+    const { members } = scuffleMembers(group, frame, reaction, celebrate);
     members.forEach((member, index) => {
       const character = member.character === null ? null : variant.characters[member.character];
       if (!character) return;
@@ -17503,14 +18568,16 @@ function drawStageAmbient(frame, centre, reaction) {
   const skyX = (centre - W * 0.5) * -0.06;
   const stage = state.stage;
   // v5.0 AMBIENT REACTIONS: a KO is a pulse too, latched on the phase change.
-  if (state.phase !== ambientObs.phase) {
-    if ((state.phase === "finish" || state.phase === "roundover") && state.screen === "fight") pulseAmbient("ko", 1.4);
-    ambientObs.phase = state.phase;
-  }
-  const pulseAge = frame - ambientObs.pulseTick;
   // 0..1 over the first ~40 ticks after a big moment, then gone.
-  const pulse = reduced || pulseAge < 0 || pulseAge > 48 ? 0 : (1 - pulseAge / 48) * Math.min(1, ambientObs.pulseAmount);
-  const ko = ambientObs.pulseKind === "ko" && pulse > 0;
+  const { pulseAge, pulse, ko } = readAmbientPulse(frame, reduced);
+  // v5.1 STAGE KO BEATS: the crowd's KO hold is the stage's KO beat (flash
+  // decays over the same 48 ticks, hold rides the whole roundover), and the
+  // four stages below the Vet draw from the stronger of pulse and flash.
+  // Furniture pinned to painted landmarks rides the plate's own parallax
+  // (drawCover's -0.035), sky pieces the wider skyX like the gulls.
+  const beat = stageKoBeat(reduced);
+  const surge = ambientSurge({ pulseAge, pulse }, beat);
+  const plateX = (centre - W * 0.5) * -0.035;
   ctx.save();
   if (stage === "vet") {
     // Floodlights breathe, a blimp crawls the sky, fireworks pop over the bowl.
@@ -17542,20 +18609,49 @@ function drawStageAmbient(frame, centre, reaction) {
     }
   } else if (stage === "wildwood") {
     // The wheel's rim lights turn, the sign chases, a plane crosses, a ship
-    // sits on the horizon.
+    // sits on the horizon. v5.1 STAGE KO BEATS: a big hit sends a bright
+    // sector chasing round the rim (a lap every 18 ticks) and floods the
+    // WILDWOOD letters pink-gold with the chase bulbs stuttering under it;
+    // the KO strobes the rim in 6-tick alternation, holds every chase bulb
+    // lit for the whole roundover and puts two fireworks up over the pier.
     const cx = 222 + skyX, cy = 240, radius = 83;
+    const chaseAngle = surge.age >= 0 ? surge.age * 0.35 : 0;
+    const rimStrobe = surge.ko && surge.level > 0 ? Math.floor(surge.age / 6) % 2 : -1;
     for (let bulb = 0; bulb < 18; bulb += 1) {
       const angle = (bulb / 18) * Math.PI * 2 + f * 0.007;
       const hue = (bulb * 40 + f * 0.6) % 360;
+      const bx = cx + Math.cos(angle) * radius, by = cy + Math.sin(angle) * radius;
+      // Angular distance to the chasing sector, folded to 0..PI.
+      const gap = Math.abs((((angle - chaseAngle) % (Math.PI * 2)) + Math.PI * 3) % (Math.PI * 2) - Math.PI);
+      const inSector = surge.level > 0 && gap < 0.9;
+      const strobed = rimStrobe >= 0 && bulb % 2 === rimStrobe;
       ctx.fillStyle = `hsla(${hue}, 95%, 72%, .75)`;
       ctx.beginPath();
-      ctx.arc(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius, 2.4, 0, Math.PI * 2);
+      ctx.arc(bx, by, 2.4 + (inSector || strobed ? surge.level * 2.2 : 0), 0, Math.PI * 2);
       ctx.fill();
+      if (inSector) ambientGlow(bx, by, 14 + surge.level * 12, "255,240,220", surge.level * (1 - gap / 0.9) * 0.9);
+      if (strobed) ambientGlow(bx, by, 12, "255,250,240", surge.level * 0.85);
     }
+    if (surge.level > 0) ambientGlow(cx, cy, radius + 40 + surge.level * 40, "255,190,230", surge.level * 0.28);
+    // The sign: pink-gold flood over the letters while a surge is live.
+    if (surge.level > 0) {
+      ambientGlow(520 + plateX, 165, 250, "255,170,200", surge.level * 0.42);
+      ambientGlow(850 + plateX, 165, 250, "255,196,150", surge.level * 0.42);
+    }
+    // Chase bulbs under the letters: the idle 1-in-7 chase, 4x faster on a
+    // pulse; the KO hold burns every bulb (stuttering through the flash,
+    // then a solid double-speed chase for the rest of the roundover).
     for (let bulb = 0; bulb < 28; bulb += 1) {
-      const lit = ((bulb - Math.floor(f * (0.18 + pulse * 0.6))) % 7 + 7) % 7 === 0;
-      if (!lit) continue;
-      ambientGlow(368 + bulb * 24 + skyX * 0.3, 234, 7, "255,228,200", 0.55);
+      const chase = ((bulb - Math.floor(f * (0.18 + pulse * 0.6 + (beat.hold ? 0.18 : 0)))) % 7 + 7) % 7 === 0;
+      const held = beat.hold && ambientStutter(presentationHash01(Math.floor(f / 3), 23, bulb), beat.flash) > 0.5;
+      if (!chase && !held) continue;
+      const alpha = held ? 0.55 + beat.flash * 0.4 : 0.55 + surge.level * 0.35;
+      ambientGlow(368 + bulb * 24 + skyX * 0.3, 234, 7 + surge.level * 5, "255,228,200", alpha);
+    }
+    // The KO's fireworks over the pier (the pulse burst below stays).
+    if (beat.hold) {
+      ambientFirework(beat.age, 100000, 53 + crowdKoHold.startTick, 120, 560, 60, 200);
+      if (beat.age >= 22) ambientFirework(beat.age - 22, 100000, 59 + crowdKoHold.startTick, 200, 640, 50, 180);
     }
     if (!reduced) {
       const planeX = W + 200 - ((f * 0.85) % (W + 460)) + skyX;
@@ -17572,6 +18668,12 @@ function drawStageAmbient(frame, centre, reaction) {
     }
   } else if (stage === "buffet") {
     // Kitchen staff cross the pass-through, a wok flares, pendants breathe.
+    // v5.1 STAGE KO BEATS: a big hit throws the wok — a fireball climbing out
+    // of the pass with a white-hot core — stutters the five pendants and
+    // rattles the tray line (specular glints hopping along the sneeze guard);
+    // the steam-table plumes erupt in drawBuffetAtmosphere and the heat lamps
+    // flare in drawPracticalLights off the same surge. The KO floods the
+    // whole pass-through window with kitchen light.
     const crossing = (period, salt, direction, speed, y, height) => {
       const age = (f + salt) % period;
       const duration = 840 / speed;
@@ -17593,12 +18695,31 @@ function drawStageAmbient(frame, centre, reaction) {
     }
     const flare = (f + 170) % 330;
     if (flare < 14) ambientGlow(1040, 158, 60, "255,170,70", (14 - flare) / 14 * 0.6);
-    if (pulse > 0) ambientGlow(1040, 150, 60 + pulse * 90, "255,190,90", pulse * 0.8);
-    for (const px of [40, 330, 640, 940, 1240]) {
-      ambientGlow(px, 74, 46, "255,196,120", 0.08 + Math.sin(f * 0.05 + px) * 0.03);
+    if (surge.level > 0) {
+      // The fireball climbs ~30 px out of the pass as it fades.
+      const climb = (1 - surge.level) * 30;
+      ambientGlow(1040 + plateX, 150 - climb, 60 + surge.level * 110, "255,190,90", surge.level * 0.9);
+      ambientGlow(1040 + plateX, 128 - climb, 30 + surge.level * 40, "255,240,200", surge.level * 0.7);
+    }
+    if (beat.flash > 0) ambientBand(230 + plateX, 122, 900, 100, "255,228,180", beat.flash * 0.55);
+    for (const [index, px] of [40, 330, 640, 940, 1240].entries()) {
+      const stutter = ambientStutter(presentationHash01(Math.floor(f / 3), 7, index), surge.level);
+      ambientGlow(px + plateX, 74, 46 + surge.level * 30, "255,196,120", (0.08 + Math.sin(f * 0.05 + px) * 0.03 + surge.level * 0.22) * stutter);
+    }
+    if (surge.level > 0) {
+      // Tray rattle: ten glints hop along the tray line, each on its own beat.
+      for (let glint = 0; glint < 10; glint += 1) {
+        const hop = Math.max(0, Math.sin(surge.age * 0.55 + glint * 1.1)) * surge.level * 9;
+        ambientGlow(150 + glint * 110 + plateX, 322 - hop, 14, "255,240,220", surge.level * 0.8);
+      }
     }
   } else if (stage === "cruise") {
-    // Funnel smoke, gulls over the water, a ship on the horizon.
+    // Funnel smoke, gulls over the water, a ship on the horizon. v5.1 STAGE
+    // KO BEATS: a big hit flashes the pool and the wet deck and stutters the
+    // party string under the bar awning; the five splash plumes fire together
+    // in drawPoolDeckAtmosphere. The KO sounds the horn (updateCrowdAudio) —
+    // a steam jet off the funnel with the horn light on it — and puts six
+    // gulls up off the port rail.
     if (!reduced) {
       for (let puff = 0; puff < 7; puff += 1) {
         const age = (f + puff * 41) % 290;
@@ -17622,6 +18743,43 @@ function drawStageAmbient(frame, centre, reaction) {
     ctx.fillStyle = "rgba(226,232,240,.6)";
     ctx.fillRect(shipX, 296, 26, 5);
     ctx.fillRect(shipX + 6, 291, 12, 5);
+    // The party string under the awning: 26 warm bulbs, a soft idle glow,
+    // stuttering hard while a surge is live.
+    for (let bulb = 0; bulb < 26; bulb += 1) {
+      const stutter = ambientStutter(presentationHash01(Math.floor(f / 3), 11, bulb), surge.level);
+      ambientGlow(350 + bulb * 26 + plateX, 308, 6 + surge.level * 5, "255,214,150", (0.35 + surge.level * 0.3) * stutter);
+    }
+    if (surge.level > 0) {
+      // Pool surface and wet deck flash — the 'pool-deck flash' of the 5.0 note.
+      ambientBand(200 + plateX, 402, 880, 96, "150,235,255", surge.level * 0.55);
+      ambientGlow(640 + plateX, 450, 300, "170,240,255", surge.level * 0.35);
+      ambientBand(0, 500, W, 110, "255,244,214", surge.level * 0.28);
+    }
+    if (beat.hold) {
+      // Horn: a steam jet climbs off the funnel for ~40 ticks under the light.
+      const jet = Math.min(1, beat.age / 40);
+      const funnelX = 745 + skyX;
+      for (let puff = 0; puff < 4; puff += 1) {
+        const t = Math.max(0, jet - puff * 0.12);
+        if (t <= 0) continue;
+        ctx.globalAlpha = (1 - t) * 0.75;
+        ctx.fillStyle = "#f4f7fa";
+        ctx.beginPath();
+        ctx.arc(funnelX + t * 30 + puff * 6, 14 - t * 70 - puff * 10, 8 + t * 22, 0, Math.PI * 2);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+      ambientGlow(funnelX, 22, 40 + beat.flash * 50, "255,240,200", beat.flash * 0.9);
+      // Six gulls up off the port rail, fanning out over 90 ticks.
+      if (beat.age < 90) {
+        const t = beat.age / 90;
+        for (let gull = 0; gull < 6; gull += 1) {
+          const gx = 110 + gull * 34 + plateX + t * (180 + gull * 55);
+          const gy = 330 - t * (210 + gull * 28) + Math.sin(beat.age * 0.3 + gull) * 6;
+          ambientGull(gx, gy, Math.sin(beat.age * 0.45 + gull * 1.3) * 4, 7 + (gull % 3) * 2, 0.8 * (1 - t * 0.5));
+        }
+      }
+    }
   } else if (stage === "janney") {
     // Moths orbit the sodium lamp, TVs flicker in the rowhouses, a car's
     // lights sweep the far street, a plane blinks over the roofs.
@@ -17654,10 +18812,42 @@ function drawStageAmbient(frame, centre, reaction) {
     }
   } else if (stage === "somerset") {
     // The corner signal cycles, headlights come up the side street, pigeons
-    // peck the wet sidewalk and scatter now and then.
+    // peck the wet sidewalk and scatter now and then. v5.1 STAGE KO BEATS: a
+    // big hit surges the nine station lamps under the El and the SOMERSET
+    // sign, stutters the corner signal and the storefront neon (the El's
+    // window band on the pavement flares in drawPracticalLights); the KO
+    // sends a second train through at speed — 60 ticks end to end, lit
+    // windows smeared into a streak, its band sweeping the wet street — and
+    // lights the whole street level for the flash.
     const cycle = f % 720;
     const signal = cycle < 380 ? "255,64,50" : cycle < 440 ? "255,190,60" : "80,230,120";
-    ambientGlow(1193 + skyX * 0.3, 67, 9, signal, 0.85);
+    ambientGlow(1193 + skyX * 0.3, 67, 9 + surge.level * 8, signal, 0.85 * ambientStutter(presentationHash01(Math.floor(f / 4), 17, 0), surge.level));
+    if (surge.level > 0) {
+      const lamps = [[150, 100], [670, 100], [615, 205], [45, 240], [190, 268], [410, 280], [460, 300], [760, 285], [1240, 95]];
+      for (const [index, [lx, ly]] of lamps.entries()) {
+        const stutter = ambientStutter(presentationHash01(Math.floor(f / 4), 13, index), surge.level * 0.6);
+        ambientGlow(lx + plateX, ly, 22 + surge.level * 70, "255,214,140", surge.level * 0.75 * stutter);
+      }
+      ambientGlow(600 + plateX, 292, 90 + surge.level * 60, "120,255,170", surge.level * 0.55);
+      ambientGlow(60 + plateX, 300, 30 + surge.level * 30, "255,90,70", surge.level * 0.6 * ambientStutter(presentationHash01(Math.floor(f / 3), 19, 0), surge.level));
+    }
+    if (beat.hold && beat.age < 60) {
+      const t = beat.age / 60;
+      const tx = -460 + t * (W + 920) + plateX;
+      ctx.fillStyle = "rgba(200,210,220,.5)";
+      ctx.fillRect(tx, 154, 430, 58);
+      ambientBand(tx - 120, 160, 670, 36, "255,225,150", 0.35);
+      for (let x = tx + 24; x < tx + 410; x += 53) {
+        ctx.fillStyle = "rgba(255,232,160,.95)";
+        ctx.fillRect(x, 166, 34, 22);
+        ambientGlow(x + 17, 177, 40, "255,225,150", 0.5);
+      }
+      ambientGlow(tx + 215, 560, 300, "255,208,116", 0.35 * (1 - t * 0.3));
+    }
+    if (beat.flash > 0) {
+      ambientBand(0, 380, W, 240, "255,225,180", beat.flash * 0.35);
+      ambientGlow(640 + plateX, 300, 520, "255,225,180", beat.flash * 0.3);
+    }
     if (!reduced) {
       const pass = f % 820;
       if (pass < 170) {
@@ -17669,7 +18859,7 @@ function drawStageAmbient(frame, centre, reaction) {
         ambientGlow(x + size, 288, size, "255,250,235", 0.9);
       }
       for (let bird = 0; bird < 3; bird += 1) {
-        const scatter = pulseAge >= 0 && pulseAge < 60 ? pulseAge + bird * 4 : (f + bird * 90) % 900;
+        const scatter = ambientSyncedCycle(pulseAge, bird * 4, 60, (f + bird * 90) % 900);
         const fly = scatter < 60 ? scatter / 60 : 0;
         const bx = 150 + bird * 26 + skyX * 0.2 + fly * (60 + bird * 20) + (scatter >= 60 ? 0 : 0);
         const by = 332 + (bird % 2) * 4 - fly * (90 + bird * 15) + (fly ? 0 : Math.abs(Math.sin(f * 0.11 + bird)) * -2);
@@ -17723,23 +18913,29 @@ function drawBoardwalkAtmosphere(frame, centre) {
 // Steam bursts, swaying pendant lights and rattling trays over the crab legs.
 function drawBuffetAtmosphere(frame, centre, reaction) {
   ctx.save();
+  // v5.1 STAGE KO BEATS: all seven plumes erupt together on a surge — the
+  // rise shoots to full in 10 ticks, the plume grows and brightens with the
+  // level and settles back over its 48 ticks (measured idle: 0.16 peak alpha).
+  const surge = stageSurge(frame);
+  const erupt = surge.level > 0 ? Math.min(1, surge.age / 10) : 0;
   for (let index = 0; index < 7; index += 1) {
     const x = 120 + index * 165 + (centre - W * 0.5) * -0.1;
     if (x < -60 || x > W + 60) continue;
     // Steam pulses on their own rhythm rather than all together.
     const pulse = (frame * (0.012 + index * 0.002) + index * 1.7) % (Math.PI * 2);
-    const rise = (Math.sin(pulse) + 1) * 0.5;
-    const size = 16 + rise * 26;
-    const gradient = ctx.createRadialGradient(x, 430 - rise * 46, 2, x, 430 - rise * 46, size);
-    gradient.addColorStop(0, `rgba(240,244,248,${0.16 * (1 - rise * 0.55)})`);
+    const rise = Math.max((Math.sin(pulse) + 1) * 0.5, erupt);
+    const size = 16 + rise * 26 + surge.level * 24;
+    const top = 430 - rise * 46 - surge.level * 18;
+    const gradient = ctx.createRadialGradient(x, top, 2, x, top, size);
+    gradient.addColorStop(0, `rgba(240,244,248,${0.16 * (1 - rise * 0.55) + surge.level * 0.34})`);
     gradient.addColorStop(1, "rgba(240,244,248,0)");
     ctx.fillStyle = gradient;
     ctx.beginPath();
-    ctx.arc(x, 430 - rise * 46, size, 0, Math.PI * 2);
+    ctx.arc(x, top, size, 0, Math.PI * 2);
     ctx.fill();
   }
-  // Pendant lights swaying, harder right after a big hit.
-  const sway = (0.02 + reaction * 0.05) * Math.sin(frame * 0.03);
+  // Pendant lights swaying, harder right after a big hit (and hardest on a surge).
+  const sway = (0.02 + reaction * 0.05 + surge.level * 0.12) * Math.sin(frame * 0.03);
   ctx.globalAlpha = 0.4;
   ctx.strokeStyle = "#f2c98a";
   ctx.lineWidth = 2;
@@ -17756,20 +18952,28 @@ function drawBuffetAtmosphere(frame, centre, reaction) {
 // Splashes in the pool, traffic on the slide and heat shimmer over the deck.
 function drawPoolDeckAtmosphere(frame, centre, reaction) {
   ctx.save();
-  // Splash plumes where the pool sits behind the fight floor.
-  for (let index = 0; index < 5; index += 1) {
-    const cycle = (frame * (0.9 + index * 0.25) + index * 137) % 260;
-    if (cycle > 60) continue;
+  // Splash plumes where the pool sits behind the fight floor. v5.1 STAGE KO
+  // BEATS: all five fire together for the 60 ticks after a pulse (each 3
+  // ticks behind the last), bigger with the level; the KO adds a cannonball
+  // in the middle of the pool — eleven drops on an 80 px spread.
+  const surge = stageSurge(frame);
+  const plumes = surge.ko && surge.hold && surge.age < 60 ? 6 : 5;
+  for (let index = 0; index < plumes; index += 1) {
+    const cannonball = index === 5;
+    const idle = (frame * (0.9 + index * 0.25) + index * 137) % 260;
+    const cycle = cannonball ? surge.age : ambientSyncedCycle(surge.pulseAge, index * 3, 60, idle);
+    if (cycle < 0 || cycle > 60) continue;
     const life = cycle / 60;
-    const x = 220 + index * 210 + (centre - W * 0.5) * -0.12;
+    const x = (cannonball ? 640 : 220 + index * 210) + (centre - W * 0.5) * -0.12;
     if (x < -60 || x > W + 60) continue;
-    ctx.globalAlpha = (1 - life) * 0.65;
+    const drops = cannonball ? 11 : 7;
+    ctx.globalAlpha = (1 - life) * (0.65 + surge.level * 0.3);
     ctx.fillStyle = "#dff4ff";
-    for (let drop = 0; drop < 7; drop += 1) {
-      const angle = (drop / 7) * Math.PI - Math.PI;
-      const spread = life * 46;
+    for (let drop = 0; drop < drops; drop += 1) {
+      const angle = (drop / drops) * Math.PI - Math.PI;
+      const spread = life * (cannonball ? 80 : 46 + surge.level * 20);
       ctx.beginPath();
-      ctx.arc(x + Math.cos(angle) * spread, 452 + Math.sin(angle) * spread * 0.5, 4 - life * 2, 0, Math.PI * 2);
+      ctx.arc(x + Math.cos(angle) * spread, 452 + Math.sin(angle) * spread * 0.5, (cannonball ? 6 : 4 + surge.level * 2) - life * 2, 0, Math.PI * 2);
       ctx.fill();
     }
   }
@@ -17872,13 +19076,15 @@ function drawCrowd(time) {
   const crowd = state.crowd;
   if (!crowd) return;
   const centre = state.fighters.length ? (state.fighters[0].x + state.fighters[1].x) * 0.5 : W * 0.5;
-  const reaction = state.crowdReaction;
+  // v5.1 KO MOMENT: the held reaction (the sim value outside the hold).
+  updateCrowdKoHoldLatch();
+  const reaction = crowdDrawReaction();
   const frame = state.simulationTick;
   // Cheapest possible culling: skip anyone whose parallaxed x is off screen.
   // A hard-stirred crowd pops scattered phone flashes; the pick hashes
   // (window, person) so it can never perturb the visualRandom stream.
-  const flashPick = crowdFlashPick(crowd, frame, reaction);
-  let flashSpot = null;
+  const flashPicks = crowdFlashPicks(crowd, frame, reaction);
+  const flashSpots = [];
   let personIndex = -1;
   for (const person of crowd.people) {
     personIndex += 1;
@@ -17887,13 +19093,14 @@ function drawCrowd(time) {
     const drawX = x + (centre - W * 0.5) * -layer.parallax;
     if (drawX < -70 || drawX > W + 70) continue;
     drawPedestrian(person, layer, drawX, gait, paused, reaction);
-    if (flashPick && personIndex === flashPick.index) {
+    const flashPick = flashPicks.length ? flashPicks.find((pick) => pick.index === personIndex) : null;
+    if (flashPick) {
       const scale = layer.scale * person.height;
-      flashSpot = { x: drawX + person.direction * 8 * scale, y: person.y - 118 * scale, size: 8 + 9 * layer.scale };
+      flashSpots.push([{ x: drawX + person.direction * 8 * scale, y: person.y - 118 * scale, size: 8 + 9 * layer.scale }, flashPick]);
     }
   }
   ctx.globalAlpha = 1;
-  if (flashSpot) drawCrowdFlash(flashSpot, flashPick);
+  for (const [spot, pick] of flashSpots) drawCrowdFlash(spot, pick);
 
   for (const group of crowd.scuffles || []) drawScuffle(group, frame, centre, reaction);
   if (crowd.variant === "tailgate") {
@@ -17986,7 +19193,31 @@ function fighterAnimationPose(fighter) {
     fighter.def.id,
     { bareHanded },
   );
-  return swingResolve(fighter, resolvedPose);
+  const pose = swingResolve(resolvedPose, swingContext(fighter, { roundDecided: state.phase === "finish" || state.phase === "roundover" || state.phase === "result" }), (cell, bank) => motionBankCellDrawable(fighter.def.id, cell, bank));
+  recordPoseTrace(fighter, pose);
+  return pose;
+}
+
+// v5.0 QA (engineering pass): the pose TRANSITIONS per side, so a probe can
+// assert the ORDER a strike's drawings arrived in (the 5.0 acceptance
+// evidence — jab `ext2:0 -> ext3:0 -> ext3:2 -> ext2:1 -> unified:7` — was
+// read off by eye from frame attribution, and pose() reports only the
+// current cell). Written at the single resolution choke point above, deduped
+// against the previous entry so the several reads per tick (draw, observers,
+// the CINEMA 3D bridge, pose()) record one transition; only the LIVE fighter
+// on each side is traced, never a ghost or a preview body. 64 entries is
+// four seconds of a busy exchange at the ~4-6 transitions a normal makes.
+const POSE_TRACE_SIZE = 64;
+const poseTrace = [[], []];
+
+function recordPoseTrace(fighter, pose) {
+  const side = fighter.side;
+  if ((side !== 0 && side !== 1) || state.fighters?.[side] !== fighter) return;
+  const ring = poseTrace[side];
+  const last = ring.length ? ring[ring.length - 1] : null;
+  if (last && last.bank === pose.bank && last.frame === pose.frame) return;
+  ring.push({ tick: state.simulationTick, bank: pose.bank, frame: pose.frame });
+  if (ring.length > POSE_TRACE_SIZE) ring.shift();
 }
 
 // Showcase rotation (taunt + round-win): the match seed and banked rounds pick
@@ -18380,7 +19611,30 @@ function fighterPoseDescriptor(fighter) {
     // block once the flinch stopped owning the whole thing.
     return beatPoseAt(blockstunKeys(), blockPhase, uni(UNIFIED_CELLS.guard, base(roles.guard)));
   }
-  if (fighter.hitFlash > 0 || fighter.hitstunFrames > 21) return uni(UNIFIED_CELLS.lightHit, base(roles.hit));
+  // v5.1 EXT4 ROUTING — CROUCH BLOCKSTUN. The branch above is gated on
+  // `!crouch` because the authored flinch is a standing cover, and the crouch
+  // stance branch below then held unified:5 through the whole window: a
+  // low-blocked heavy produced no pose change at all. The ext3 crouch guard
+  // (forearms crossed, still crouched) owns the impact band now, paced by the
+  // same observer clock; the recovery bands are empty and resolve to the
+  // crouch read the stance branch draws, so a fighter without the cell is
+  // byte-identical and the flinch hands back to exactly the drawing it left.
+  if (fighter.blockstunFrames > 0 && fighter.crouch && fighter.grounded) {
+    const blockTotal = Math.max(fighter.blockstunFrames, motionObs[fighter.side]?.blockstunTotal || 0);
+    const blockPhase = clamp(1 - fighter.blockstunFrames / Math.max(1, blockTotal), 0, 0.999);
+    return beatPoseAt(crouchBlockstunKeys(), blockPhase, uni(UNIFIED_CELLS.crouch, base(roles.crouch)));
+  }
+  if (fighter.hitFlash > 0 || fighter.hitstunFrames > 21) {
+    // v5.1: a BLOCKED contact's flash keeps the stance. The flash outlives a
+    // jab's 4-tick blockstun, and this read then borrowed the clean-hit cell
+    // for the flash's remaining ticks — a 4-tick hit read on a block (measured:
+    // unified:12 / ext4:1 at ticks 63-66 after a blocked jab, blockstun 0,
+    // guarding). No hitstun and a guard up is a block, not a hit.
+    if (fighter.hitstunFrames === 0 && (fighter.guarding || fighter.block)) {
+      return fighter.crouch ? uni(UNIFIED_CELLS.crouch, base(roles.crouch)) : uni(UNIFIED_CELLS.guard, base(roles.guard));
+    }
+    return uni(UNIFIED_CELLS.lightHit, base(roles.hit));
+  }
   // v2.9 FLOW: sequenced wake-up — getup-a (knee up, hand pushing off) into
   // getup-b (half-risen crouch) across the recovery countdown, ending the
   // teleport-to-feet. Pure helper in fighter-kits.mjs; fallbacks exact.
@@ -19641,37 +20895,9 @@ function drawAttackVfx(fighter, time, activePower) {
 
 function drawPaintTraps(time) {
   for (const trap of state.traps) {
-    const armed = trap.armFrames <= 0;
-    const life = clamp(trap.lifeFrames / trap.maxLifeFrames, 0, 1);
-    const pulse = 1 + Math.sin(time * 0.009 + trap.x * 0.02) * 0.08;
     ctx.save();
     ctx.translate(trap.x, trap.y);
-    ctx.globalAlpha = Math.min(1, life * 1.8) * (armed ? 0.9 : 0.58);
-    ctx.fillStyle = trap.color;
-    ctx.shadowColor = trap.color;
-    ctx.shadowBlur = armed ? 21 : 9;
-    ctx.beginPath();
-    ctx.ellipse(0, 1, trap.radius * 0.86 * pulse, 14 * pulse, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.globalAlpha *= 0.55;
-    ctx.fillStyle = "#fff2c6";
-    for (let spot = 0; spot < 6; spot += 1) {
-      const angle = spot * 2.4;
-      ctx.beginPath();
-      ctx.ellipse(Math.cos(angle) * trap.radius * 0.52, -3 + Math.sin(angle) * 7, 6 + spot % 3 * 2, 3, angle, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = Math.min(1, life * 1.8);
-    ctx.fillStyle = "#d9d9d9";
-    ctx.fillRect(-7, -23, 14, 25);
-    ctx.fillStyle = trap.color;
-    ctx.fillRect(-7, -18, 14, 10);
-    ctx.strokeStyle = armed ? "#fff" : trap.color;
-    ctx.lineWidth = armed ? 3 : 2;
-    ctx.globalAlpha *= armed ? 0.75 : 0.35;
-    ctx.beginPath();
-    ctx.ellipse(0, 0, trap.radius * pulse, 20 * pulse, 0, 0, Math.PI * 2);
-    ctx.stroke();
+    drawPaintTrapWith(ctx, trap, time);
     if (state.debug) {
       ctx.globalAlpha = 0.82;
       ctx.strokeStyle = "#ffef5a";
@@ -19683,14 +20909,59 @@ function drawPaintTraps(time) {
   }
 }
 
+// The trap drawing itself, origin at the trap's floor point, on ANY 2D
+// context: the 2D world pass hands it the game canvas; CINEMA 3D paints it
+// into an impostor canvas over the host bridge (world-objects.mjs), so both
+// renderers draw Post's hazard from one function. Presentation-only reads.
+function drawPaintTrapWith(c, trap, time) {
+  const armed = trap.armFrames <= 0;
+  const life = clamp(trap.lifeFrames / trap.maxLifeFrames, 0, 1);
+  const pulse = 1 + Math.sin(time * 0.009 + trap.x * 0.02) * 0.08;
+  c.globalAlpha = Math.min(1, life * 1.8) * (armed ? 0.9 : 0.58);
+  c.fillStyle = trap.color;
+  c.shadowColor = trap.color;
+  c.shadowBlur = armed ? 21 : 9;
+  c.beginPath();
+  c.ellipse(0, 1, trap.radius * 0.86 * pulse, 14 * pulse, 0, 0, Math.PI * 2);
+  c.fill();
+  c.globalAlpha *= 0.55;
+  c.fillStyle = "#fff2c6";
+  for (let spot = 0; spot < 6; spot += 1) {
+    const angle = spot * 2.4;
+    c.beginPath();
+    c.ellipse(Math.cos(angle) * trap.radius * 0.52, -3 + Math.sin(angle) * 7, 6 + spot % 3 * 2, 3, angle, 0, Math.PI * 2);
+    c.fill();
+  }
+  c.globalAlpha = Math.min(1, life * 1.8);
+  c.fillStyle = "#d9d9d9";
+  c.fillRect(-7, -23, 14, 25);
+  c.fillStyle = trap.color;
+  c.fillRect(-7, -18, 14, 10);
+  c.strokeStyle = armed ? "#fff" : trap.color;
+  c.lineWidth = armed ? 3 : 2;
+  c.globalAlpha *= armed ? 0.75 : 0.35;
+  c.beginPath();
+  c.ellipse(0, 0, trap.radius * pulse, 20 * pulse, 0, 0, Math.PI * 2);
+  c.stroke();
+}
+
 // Each personal object is drawn as a recognisable physical thing rather than a
 // recoloured orb, so its flight path and weight read at a glance.
 function drawThrowable(projectile, time, life) {
+  drawThrowableWith(ctx, projectile, time, life);
+}
+
+// Same drawing on ANY 2D context. CINEMA 3D paints each live object through
+// this into a per-object impostor canvas (renderer/three/world-objects.mjs),
+// so the painted pizza wheel, cane, needle... are the SAME drawings in both
+// renderers. `options.cable === false` skips the mouse's trailing cable
+// (world-space geometry the 3D layer draws as its own line).
+function drawThrowableWith(c, projectile, time, life, options = {}) {
   const w = projectile.width;
   const h = projectile.height;
   const angle = projectile.spinAngle || 0;
   const wobble = projectile.wobble ? Math.sin(time * 0.02) * projectile.wobble * 0.01 : 0;
-  ctx.globalAlpha = Math.min(1, life * 2.2);
+  c.globalAlpha = Math.min(1, life * 2.2);
   switch (projectile.style) {
     case "pizza": {
       if (cinema3dDressingActive()) {
@@ -19700,177 +20971,177 @@ function drawThrowable(projectile, time, life) {
         // classic 2D primitives below stay byte-identical with 3D off.
         const hd = fatalityPizzaCanvas();
         const rim = fatalityPizzaRimCanvas();
-        ctx.rotate(angle + wobble);
+        c.rotate(angle + wobble);
         const d = w * 1.04;
-        ctx.drawImage(hd, -d / 2, -d / 2, d, d);
+        c.drawImage(hd, -d / 2, -d / 2, d, d);
         // trailing RIM ghosts: the motion blur lives on the spinning edge —
         // the face detail stays printed once (no doubled pepperoni).
-        ctx.save();
-        ctx.globalAlpha *= 0.3;
-        ctx.rotate(-0.1);
-        ctx.drawImage(rim, -d / 2, -d / 2, d, d);
-        ctx.rotate(-0.12);
-        ctx.globalAlpha *= 0.55;
-        ctx.drawImage(rim, -d / 2, -d / 2, d, d);
-        ctx.restore();
+        c.save();
+        c.globalAlpha *= 0.3;
+        c.rotate(-0.1);
+        c.drawImage(rim, -d / 2, -d / 2, d, d);
+        c.rotate(-0.12);
+        c.globalAlpha *= 0.55;
+        c.drawImage(rim, -d / 2, -d / 2, d, d);
+        c.restore();
         // rim speed smears: short bright arcs whipping off the cutting edge
-        ctx.strokeStyle = "rgba(255,244,225,0.55)";
-        ctx.lineCap = "round";
-        ctx.lineWidth = Math.max(1.5, w * 0.02);
+        c.strokeStyle = "rgba(255,244,225,0.55)";
+        c.lineCap = "round";
+        c.lineWidth = Math.max(1.5, w * 0.02);
         for (let s = 0; s < 3; s += 1) {
           const a0 = s * 2.1 + 0.4;
-          ctx.beginPath();
-          ctx.arc(0, 0, w * 0.52, a0, a0 + 0.5);
-          ctx.stroke();
+          c.beginPath();
+          c.arc(0, 0, w * 0.52, a0, a0 + 0.5);
+          c.stroke();
         }
         break;
       }
-      ctx.rotate(angle + wobble);
-      ctx.fillStyle = "#e8b23a";
-      ctx.beginPath();
-      ctx.arc(0, 0, w * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#c9812a";
-      ctx.beginPath();
-      ctx.arc(0, 0, w * 0.42, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#f2e2b4";
-      ctx.beginPath();
-      ctx.arc(0, 0, w * 0.36, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#c4402a";
+      c.rotate(angle + wobble);
+      c.fillStyle = "#e8b23a";
+      c.beginPath();
+      c.arc(0, 0, w * 0.5, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "#c9812a";
+      c.beginPath();
+      c.arc(0, 0, w * 0.42, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "#f2e2b4";
+      c.beginPath();
+      c.arc(0, 0, w * 0.36, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "#c4402a";
       for (let i = 0; i < 6; i += 1) {
         const a = (i / 6) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.arc(Math.cos(a) * w * 0.2, Math.sin(a) * w * 0.2, w * 0.06, 0, Math.PI * 2);
-        ctx.fill();
+        c.beginPath();
+        c.arc(Math.cos(a) * w * 0.2, Math.sin(a) * w * 0.2, w * 0.06, 0, Math.PI * 2);
+        c.fill();
       }
-      ctx.strokeStyle = "rgba(120,70,20,.5)";
-      ctx.lineWidth = 2;
+      c.strokeStyle = "rgba(120,70,20,.5)";
+      c.lineWidth = 2;
       for (let i = 0; i < 8; i += 1) {
         const a = (i / 8) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
-        ctx.lineTo(Math.cos(a) * w * 0.5, Math.sin(a) * w * 0.5);
-        ctx.stroke();
+        c.beginPath();
+        c.moveTo(0, 0);
+        c.lineTo(Math.cos(a) * w * 0.5, Math.sin(a) * w * 0.5);
+        c.stroke();
       }
       break;
     }
     case "mouse": {
       // Cable trailing back toward the thrower.
       const owner = state.fighters[projectile.ownerSide];
-      if (owner) {
+      if (owner && options.cable !== false) {
         const back = (owner.x - projectile.x) * (Math.sign(projectile.vx) || 1);
-        ctx.strokeStyle = "#8a93a5";
-        ctx.lineWidth = 3;
-        ctx.beginPath();
-        ctx.moveTo(0, 0);
+        c.strokeStyle = "#8a93a5";
+        c.lineWidth = 3;
+        c.beginPath();
+        c.moveTo(0, 0);
         for (let i = 1; i <= 8; i += 1) {
           const t = i / 8;
-          ctx.lineTo(back * t, Math.sin(t * Math.PI * 2 + time * 0.02) * 9 * (1 - t));
+          c.lineTo(back * t, Math.sin(t * Math.PI * 2 + time * 0.02) * 9 * (1 - t));
         }
-        ctx.stroke();
+        c.stroke();
       }
-      ctx.rotate(Math.sin(angle) * 0.2);
-      ctx.fillStyle = "#e3e8f0";
-      ctx.beginPath();
-      ctx.ellipse(0, 0, w * 0.5, h * 0.5, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#5b6474";
-      ctx.fillRect(-w * 0.06, -h * 0.5, w * 0.12, h * 0.42);
-      ctx.fillStyle = "#7fe9ff";
-      ctx.beginPath();
-      ctx.arc(w * 0.18, 0, h * 0.14, 0, Math.PI * 2);
-      ctx.fill();
+      c.rotate(Math.sin(angle) * 0.2);
+      c.fillStyle = "#e3e8f0";
+      c.beginPath();
+      c.ellipse(0, 0, w * 0.5, h * 0.5, 0, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "#5b6474";
+      c.fillRect(-w * 0.06, -h * 0.5, w * 0.12, h * 0.42);
+      c.fillStyle = "#7fe9ff";
+      c.beginPath();
+      c.arc(w * 0.18, 0, h * 0.14, 0, Math.PI * 2);
+      c.fill();
       break;
     }
     case "loogie": {
-      ctx.fillStyle = "#b9e37a";
-      ctx.beginPath();
-      ctx.ellipse(0, 0, w * 0.5, h * 0.42, Math.atan2(projectile.vy, projectile.vx) * 0.35, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "rgba(223,243,184,.75)";
-      ctx.beginPath();
-      ctx.ellipse(-w * 0.12, -h * 0.12, w * 0.18, h * 0.16, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(137,184,79,.7)";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.moveTo(-w * 0.5, h * 0.1);
-      ctx.quadraticCurveTo(-w * 0.9, 0, -w * 1.2, h * 0.2);
-      ctx.stroke();
+      c.fillStyle = "#b9e37a";
+      c.beginPath();
+      c.ellipse(0, 0, w * 0.5, h * 0.42, Math.atan2(projectile.vy, projectile.vx) * 0.35, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "rgba(223,243,184,.75)";
+      c.beginPath();
+      c.ellipse(-w * 0.12, -h * 0.12, w * 0.18, h * 0.16, 0, 0, Math.PI * 2);
+      c.fill();
+      c.strokeStyle = "rgba(137,184,79,.7)";
+      c.lineWidth = 2;
+      c.beginPath();
+      c.moveTo(-w * 0.5, h * 0.1);
+      c.quadraticCurveTo(-w * 0.9, 0, -w * 1.2, h * 0.2);
+      c.stroke();
       break;
     }
     case "wires": {
       const uncoiled = projectile.hazard;
-      ctx.strokeStyle = "#4f5b70";
-      ctx.lineWidth = 4;
+      c.strokeStyle = "#4f5b70";
+      c.lineWidth = 4;
       const coils = uncoiled ? 5 : 7;
       for (let i = 0; i < coils; i += 1) {
         const spread = uncoiled ? w * 0.5 : w * 0.3;
-        ctx.strokeStyle = i % 2 ? "#4f5b70" : "#7b3fa0";
-        ctx.beginPath();
+        c.strokeStyle = i % 2 ? "#4f5b70" : "#7b3fa0";
+        c.beginPath();
         if (uncoiled) {
-          ctx.moveTo(-spread + (i / coils) * spread * 2, h * 0.2);
-          ctx.quadraticCurveTo(
+          c.moveTo(-spread + (i / coils) * spread * 2, h * 0.2);
+          c.quadraticCurveTo(
             -spread + ((i + 0.5) / coils) * spread * 2,
             h * 0.2 - 16 - Math.sin(time * 0.01 + i) * 5,
             -spread + ((i + 1) / coils) * spread * 2,
             h * 0.2,
           );
         } else {
-          ctx.arc(0, 0, w * 0.2 + i * 3, angle + i, angle + i + 4.2);
+          c.arc(0, 0, w * 0.2 + i * 3, angle + i, angle + i + 4.2);
         }
-        ctx.stroke();
+        c.stroke();
       }
       break;
     }
     case "xacto": {
-      ctx.save();
-      ctx.globalCompositeOperation = "screen";
-      ctx.globalAlpha = 0.35 + Math.abs(Math.sin(time * 0.022)) * 0.55;
-      ctx.strokeStyle = "#ffffff";
-      ctx.lineWidth = 2;
-      ctx.beginPath(); ctx.moveTo(-w * 0.85, 0); ctx.lineTo(-w * 0.2, 0); ctx.stroke();
-      ctx.restore();
-      ctx.rotate(Math.atan2(projectile.vy, Math.abs(projectile.vx)));
-      ctx.fillStyle = "#2b3038";
-      ctx.fillRect(-w * 0.5, -h * 0.5, w * 0.45, h);
-      ctx.fillStyle = "#dfe6f0";
-      ctx.beginPath();
-      ctx.moveTo(-w * 0.05, -h * 0.5);
-      ctx.lineTo(w * 0.5, 0);
-      ctx.lineTo(-w * 0.05, h * 0.5);
-      ctx.closePath();
-      ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,.7)";
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(-w * 0.05, 0);
-      ctx.lineTo(w * 0.5, 0);
-      ctx.stroke();
+      c.save();
+      c.globalCompositeOperation = "screen";
+      c.globalAlpha = 0.35 + Math.abs(Math.sin(time * 0.022)) * 0.55;
+      c.strokeStyle = "#ffffff";
+      c.lineWidth = 2;
+      c.beginPath(); c.moveTo(-w * 0.85, 0); c.lineTo(-w * 0.2, 0); c.stroke();
+      c.restore();
+      c.rotate(Math.atan2(projectile.vy, Math.abs(projectile.vx)));
+      c.fillStyle = "#2b3038";
+      c.fillRect(-w * 0.5, -h * 0.5, w * 0.45, h);
+      c.fillStyle = "#dfe6f0";
+      c.beginPath();
+      c.moveTo(-w * 0.05, -h * 0.5);
+      c.lineTo(w * 0.5, 0);
+      c.lineTo(-w * 0.05, h * 0.5);
+      c.closePath();
+      c.fill();
+      c.strokeStyle = "rgba(255,255,255,.7)";
+      c.lineWidth = 1.5;
+      c.beginPath();
+      c.moveTo(-w * 0.05, 0);
+      c.lineTo(w * 0.5, 0);
+      c.stroke();
       break;
     }
     case "golfball": {
-      ctx.globalAlpha *= 0.52;
-      ctx.fillStyle = "#ffffff";
+      c.globalAlpha *= 0.52;
+      c.fillStyle = "#ffffff";
       for (let trail = 1; trail <= 3; trail += 1) {
-        ctx.beginPath();
-        ctx.arc(-w * (0.55 + trail * 0.32), 0, Math.max(2, w * (0.15 - trail * 0.025)), 0, Math.PI * 2);
-        ctx.fill();
+        c.beginPath();
+        c.arc(-w * (0.55 + trail * 0.32), 0, Math.max(2, w * (0.15 - trail * 0.025)), 0, Math.PI * 2);
+        c.fill();
       }
-      ctx.globalAlpha = Math.min(1, life * 2.2);
-      ctx.rotate(angle);
-      ctx.fillStyle = "#ffffff";
-      ctx.beginPath();
-      ctx.arc(0, 0, w * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "rgba(150,165,185,.55)";
+      c.globalAlpha = Math.min(1, life * 2.2);
+      c.rotate(angle);
+      c.fillStyle = "#ffffff";
+      c.beginPath();
+      c.arc(0, 0, w * 0.5, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "rgba(150,165,185,.55)";
       for (let i = 0; i < 7; i += 1) {
         const a = (i / 7) * Math.PI * 2;
-        ctx.beginPath();
-        ctx.arc(Math.cos(a) * w * 0.24, Math.sin(a) * w * 0.24, w * 0.06, 0, Math.PI * 2);
-        ctx.fill();
+        c.beginPath();
+        c.arc(Math.cos(a) * w * 0.24, Math.sin(a) * w * 0.24, w * 0.06, 0, Math.PI * 2);
+        c.fill();
       }
       break;
     }
@@ -19880,178 +21151,178 @@ function drawThrowable(projectile, time, life) {
         const phase = time * 0.01 + i * 1.7;
         const bx = Math.cos(phase) * w * (projectile.hazard ? 0.45 : 0.28);
         const by = Math.sin(phase * 1.4) * h * 0.3;
-        ctx.fillStyle = i % 3 ? "#7a3a2c" : "#c4552f";
-        ctx.beginPath();
-        ctx.ellipse(bx, by, 6, 4.4, phase, 0, Math.PI * 2);
-        ctx.fill();
-        ctx.strokeStyle = "rgba(40,20,14,.8)";
-        ctx.lineWidth = 1.2;
+        c.fillStyle = i % 3 ? "#7a3a2c" : "#c4552f";
+        c.beginPath();
+        c.ellipse(bx, by, 6, 4.4, phase, 0, Math.PI * 2);
+        c.fill();
+        c.strokeStyle = "rgba(40,20,14,.8)";
+        c.lineWidth = 1.2;
         for (let leg = -1; leg <= 1; leg += 2) {
-          ctx.beginPath();
-          ctx.moveTo(bx, by);
-          ctx.lineTo(bx + leg * 6, by + Math.sin(phase * 3) * 4);
-          ctx.stroke();
+          c.beginPath();
+          c.moveTo(bx, by);
+          c.lineTo(bx + leg * 6, by + Math.sin(phase * 3) * 4);
+          c.stroke();
         }
       }
       break;
     }
     case "vinyl": {
-      ctx.save();
-      ctx.globalAlpha = 0.22 + Math.abs(Math.sin(time * 0.018)) * 0.2;
-      ctx.strokeStyle = "#ff4fb9";
-      ctx.lineWidth = 2;
+      c.save();
+      c.globalAlpha = 0.22 + Math.abs(Math.sin(time * 0.018)) * 0.2;
+      c.strokeStyle = "#ff4fb9";
+      c.lineWidth = 2;
       for (let ring = 1; ring <= 2; ring += 1) {
-        ctx.beginPath();
-        ctx.ellipse(0, 0, w * (0.5 + ring * 0.22), h * (0.32 + ring * 0.12), 0, 0, Math.PI * 2);
-        ctx.stroke();
+        c.beginPath();
+        c.ellipse(0, 0, w * (0.5 + ring * 0.22), h * (0.32 + ring * 0.12), 0, 0, Math.PI * 2);
+        c.stroke();
       }
-      ctx.restore();
-      ctx.rotate(angle);
-      ctx.fillStyle = "#16161a";
-      ctx.beginPath();
-      ctx.arc(0, 0, w * 0.5, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "rgba(216,216,210,.28)";
-      ctx.lineWidth = 1.4;
+      c.restore();
+      c.rotate(angle);
+      c.fillStyle = "#16161a";
+      c.beginPath();
+      c.arc(0, 0, w * 0.5, 0, Math.PI * 2);
+      c.fill();
+      c.strokeStyle = "rgba(216,216,210,.28)";
+      c.lineWidth = 1.4;
       for (let r = 3; r < 5; r += 1) {
-        ctx.beginPath();
-        ctx.arc(0, 0, w * 0.5 * (r / 6), 0, Math.PI * 2);
-        ctx.stroke();
+        c.beginPath();
+        c.arc(0, 0, w * 0.5 * (r / 6), 0, Math.PI * 2);
+        c.stroke();
       }
-      ctx.fillStyle = "#ff4fb9";
-      ctx.beginPath();
-      ctx.arc(0, 0, w * 0.17, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#16161a";
-      ctx.beginPath();
-      ctx.arc(0, 0, w * 0.04, 0, Math.PI * 2);
-      ctx.fill();
+      c.fillStyle = "#ff4fb9";
+      c.beginPath();
+      c.arc(0, 0, w * 0.17, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "#16161a";
+      c.beginPath();
+      c.arc(0, 0, w * 0.04, 0, Math.PI * 2);
+      c.fill();
       break;
     }
     // Wave 16 — the Commissioner's steel cane: a hard end-over-end steel shaft
     // with a gold crook and ferrule, so the flat authority throw reads at a
     // glance against every other object in the set.
     case "cane": {
-      ctx.rotate(angle);
+      c.rotate(angle);
       const shaft = w * 0.94;
       // steel shaft with a cold top highlight
-      ctx.fillStyle = "#3b4150";
-      ctx.fillRect(-shaft * 0.5, -h * 0.18, shaft, h * 0.36);
-      ctx.fillStyle = "rgba(214,222,236,.5)";
-      ctx.fillRect(-shaft * 0.5, -h * 0.18, shaft, h * 0.12);
+      c.fillStyle = "#3b4150";
+      c.fillRect(-shaft * 0.5, -h * 0.18, shaft, h * 0.36);
+      c.fillStyle = "rgba(214,222,236,.5)";
+      c.fillRect(-shaft * 0.5, -h * 0.18, shaft, h * 0.12);
       // gold crook handle
-      ctx.strokeStyle = "#d6b56b";
-      ctx.lineWidth = h * 0.3;
-      ctx.beginPath();
-      ctx.arc(-shaft * 0.5, -h * 0.5, h * 0.42, Math.PI * 0.15, Math.PI * 1.2);
-      ctx.stroke();
+      c.strokeStyle = "#d6b56b";
+      c.lineWidth = h * 0.3;
+      c.beginPath();
+      c.arc(-shaft * 0.5, -h * 0.5, h * 0.42, Math.PI * 0.15, Math.PI * 1.2);
+      c.stroke();
       // gold ferrule tip
-      ctx.fillStyle = "#d6b56b";
-      ctx.fillRect(shaft * 0.5 - w * 0.08, -h * 0.22, w * 0.08, h * 0.44);
+      c.fillStyle = "#d6b56b";
+      c.fillRect(shaft * 0.5 - w * 0.08, -h * 0.22, w * 0.08, h * 0.44);
       break;
     }
     case "needle": {
-      ctx.rotate(Math.atan2(projectile.vy, Math.abs(projectile.vx) || 1));
-      ctx.fillStyle = "#cfd6e2";
-      ctx.fillRect(-w * 0.5, -h * 0.35, w * 0.7, h * 0.7);
-      ctx.fillStyle = "#e9edf5";
-      ctx.beginPath();
-      ctx.moveTo(w * 0.2, -h * 0.2);
-      ctx.lineTo(w * 0.5, 0);
-      ctx.lineTo(w * 0.2, h * 0.2);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = "#ff6b5a";
-      ctx.fillRect(-w * 0.5, -h * 0.5, w * 0.16, h);
+      c.rotate(Math.atan2(projectile.vy, Math.abs(projectile.vx) || 1));
+      c.fillStyle = "#cfd6e2";
+      c.fillRect(-w * 0.5, -h * 0.35, w * 0.7, h * 0.7);
+      c.fillStyle = "#e9edf5";
+      c.beginPath();
+      c.moveTo(w * 0.2, -h * 0.2);
+      c.lineTo(w * 0.5, 0);
+      c.lineTo(w * 0.2, h * 0.2);
+      c.closePath();
+      c.fill();
+      c.fillStyle = "#ff6b5a";
+      c.fillRect(-w * 0.5, -h * 0.5, w * 0.16, h);
       break;
     }
     case "bottle": {
-      ctx.rotate(angle);
-      ctx.fillStyle = "rgba(96,148,72,.92)";
-      ctx.beginPath();
-      ctx.moveTo(-w * 0.32, h * 0.5);
-      ctx.lineTo(w * 0.32, h * 0.5);
-      ctx.lineTo(w * 0.32, -h * 0.05);
-      ctx.lineTo(w * 0.14, -h * 0.3);
-      ctx.lineTo(w * 0.14, -h * 0.5);
-      ctx.lineTo(-w * 0.14, -h * 0.5);
-      ctx.lineTo(-w * 0.14, -h * 0.3);
-      ctx.lineTo(-w * 0.32, -h * 0.05);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = "rgba(240,248,220,.55)";
-      ctx.fillRect(-w * 0.2, -h * 0.02, w * 0.1, h * 0.42);
-      ctx.fillStyle = "#d8b24a";
-      ctx.fillRect(-w * 0.3, h * 0.06, w * 0.6, h * 0.2);
+      c.rotate(angle);
+      c.fillStyle = "rgba(96,148,72,.92)";
+      c.beginPath();
+      c.moveTo(-w * 0.32, h * 0.5);
+      c.lineTo(w * 0.32, h * 0.5);
+      c.lineTo(w * 0.32, -h * 0.05);
+      c.lineTo(w * 0.14, -h * 0.3);
+      c.lineTo(w * 0.14, -h * 0.5);
+      c.lineTo(-w * 0.14, -h * 0.5);
+      c.lineTo(-w * 0.14, -h * 0.3);
+      c.lineTo(-w * 0.32, -h * 0.05);
+      c.closePath();
+      c.fill();
+      c.fillStyle = "rgba(240,248,220,.55)";
+      c.fillRect(-w * 0.2, -h * 0.02, w * 0.1, h * 0.42);
+      c.fillStyle = "#d8b24a";
+      c.fillRect(-w * 0.3, h * 0.06, w * 0.6, h * 0.2);
       break;
     }
     case "pigeon": {
-      ctx.rotate(angle * 0.6);
-      ctx.fillStyle = "#6f7684";
-      ctx.beginPath();
-      ctx.ellipse(0, 0, w * 0.42, h * 0.32, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#8c93a3";
-      ctx.beginPath();
-      ctx.ellipse(-w * 0.28, -h * 0.1, w * 0.16, h * 0.2, 0.4, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.fillStyle = "#585f6c";
-      ctx.beginPath();
-      ctx.ellipse(w * 0.3, -h * 0.16, w * 0.14, h * 0.16, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.strokeStyle = "#ff9a4a";
-      ctx.lineWidth = 3;
-      ctx.beginPath();
-      ctx.moveTo(-w * 0.1, h * 0.28);
-      ctx.lineTo(-w * 0.24, h * 0.5);
-      ctx.stroke();
+      c.rotate(angle * 0.6);
+      c.fillStyle = "#6f7684";
+      c.beginPath();
+      c.ellipse(0, 0, w * 0.42, h * 0.32, 0, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "#8c93a3";
+      c.beginPath();
+      c.ellipse(-w * 0.28, -h * 0.1, w * 0.16, h * 0.2, 0.4, 0, Math.PI * 2);
+      c.fill();
+      c.fillStyle = "#585f6c";
+      c.beginPath();
+      c.ellipse(w * 0.3, -h * 0.16, w * 0.14, h * 0.16, 0, 0, Math.PI * 2);
+      c.fill();
+      c.strokeStyle = "#ff9a4a";
+      c.lineWidth = 3;
+      c.beginPath();
+      c.moveTo(-w * 0.1, h * 0.28);
+      c.lineTo(-w * 0.24, h * 0.5);
+      c.stroke();
       break;
     }
     case "tongs": {
-      ctx.rotate(angle);
-      ctx.strokeStyle = "#d5dce8";
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(-w * 0.5, -h * 0.4);
-      ctx.lineTo(w * 0.5, 0);
-      ctx.moveTo(-w * 0.5, h * 0.4);
-      ctx.lineTo(w * 0.5, 0);
-      ctx.stroke();
-      ctx.strokeStyle = "#9fb0c6";
-      ctx.lineWidth = 2;
-      ctx.beginPath();
-      ctx.arc(-w * 0.5, 0, h * 0.4, -1.4, 1.4);
-      ctx.stroke();
+      c.rotate(angle);
+      c.strokeStyle = "#d5dce8";
+      c.lineWidth = 4;
+      c.beginPath();
+      c.moveTo(-w * 0.5, -h * 0.4);
+      c.lineTo(w * 0.5, 0);
+      c.moveTo(-w * 0.5, h * 0.4);
+      c.lineTo(w * 0.5, 0);
+      c.stroke();
+      c.strokeStyle = "#9fb0c6";
+      c.lineWidth = 2;
+      c.beginPath();
+      c.arc(-w * 0.5, 0, h * 0.4, -1.4, 1.4);
+      c.stroke();
       break;
     }
     case "cup": {
-      ctx.rotate(angle * 0.5);
-      ctx.fillStyle = "#ff5aa8";
-      ctx.beginPath();
-      ctx.moveTo(-w * 0.34, -h * 0.5);
-      ctx.lineTo(w * 0.34, -h * 0.5);
-      ctx.lineTo(w * 0.22, h * 0.5);
-      ctx.lineTo(-w * 0.22, h * 0.5);
-      ctx.closePath();
-      ctx.fill();
-      ctx.fillStyle = "rgba(255,255,255,.55)";
-      ctx.fillRect(-w * 0.3, -h * 0.44, w * 0.6, h * 0.12);
-      ctx.strokeStyle = "#7fe9ff";
-      ctx.lineWidth = 4;
-      ctx.beginPath();
-      ctx.moveTo(w * 0.1, -h * 0.5);
-      ctx.lineTo(w * 0.34, -h * 0.9);
-      ctx.stroke();
+      c.rotate(angle * 0.5);
+      c.fillStyle = "#ff5aa8";
+      c.beginPath();
+      c.moveTo(-w * 0.34, -h * 0.5);
+      c.lineTo(w * 0.34, -h * 0.5);
+      c.lineTo(w * 0.22, h * 0.5);
+      c.lineTo(-w * 0.22, h * 0.5);
+      c.closePath();
+      c.fill();
+      c.fillStyle = "rgba(255,255,255,.55)";
+      c.fillRect(-w * 0.3, -h * 0.44, w * 0.6, h * 0.12);
+      c.strokeStyle = "#7fe9ff";
+      c.lineWidth = 4;
+      c.beginPath();
+      c.moveTo(w * 0.1, -h * 0.5);
+      c.lineTo(w * 0.34, -h * 0.9);
+      c.stroke();
       break;
     }
     default: {
-      ctx.fillStyle = projectile.color;
-      ctx.beginPath();
-      ctx.arc(0, 0, w * 0.5, 0, Math.PI * 2);
-      ctx.fill();
+      c.fillStyle = projectile.color;
+      c.beginPath();
+      c.arc(0, 0, w * 0.5, 0, Math.PI * 2);
+      c.fill();
     }
   }
-  ctx.globalAlpha = 1;
+  c.globalAlpha = 1;
 }
 
 // The grounded weapon and its arrival telegraph. Both fighters can see exactly
@@ -20251,78 +21522,85 @@ function drawProjectiles(time) {
       ctx.restore();
       continue;
     }
-    if (projectile.style === "feedback") {
-      const armed = projectile.armFrames <= 0;
-      const charge = projectile.maxArmFrames
-        ? 1 - clamp(projectile.armFrames / projectile.maxArmFrames, 0, 1)
-        : 1;
-      ctx.globalCompositeOperation = "screen";
-      ctx.globalAlpha = Math.min(0.95, life * 1.6) * (0.38 + charge * 0.62);
-      ctx.shadowColor = projectile.color;
-      ctx.shadowBlur = armed ? 30 : 17;
-      ctx.strokeStyle = projectile.color;
-      ctx.lineWidth = armed ? 6 : 3;
-      if (!armed) ctx.setLineDash([9, 7]);
-      for (let ring = 0; ring < 3; ring += 1) {
-        const phase = (time * 0.004 + ring * 0.29) % 1;
-        const radiusX = projectile.width * (0.2 + phase * 0.34) * pulse;
-        const radiusY = projectile.height * (0.23 + phase * 0.28) * pulse;
-        ctx.globalAlpha *= 0.82;
-        ctx.beginPath();
-        ctx.ellipse(0, 0, radiusX, radiusY, Math.sin(time * 0.002 + ring) * 0.13, 0, Math.PI * 2);
-        ctx.stroke();
-      }
-      ctx.setLineDash([]);
-      ctx.globalAlpha = armed ? 0.9 : 0.48;
-      ctx.fillStyle = armed ? "#efffe8" : projectile.color;
-      for (let slice = -2; slice <= 2; slice += 1) {
-        const jitter = Math.sin(time * 0.03 + slice * 2.1) * 9;
-        ctx.fillRect(-projectile.width * 0.38 + jitter, slice * projectile.height * 0.16 - 3, projectile.width * (0.7 - Math.abs(slice) * 0.08), armed ? 5 : 3);
-      }
-      if (state.debug) {
-        ctx.globalCompositeOperation = "source-over";
-        ctx.globalAlpha = 0.85;
-        ctx.strokeStyle = "#ffef5a";
-        ctx.strokeRect(-projectile.width * 0.5, -projectile.height * 0.5, projectile.width, projectile.height);
-      }
-      ctx.restore();
-      continue;
-    }
-    ctx.globalCompositeOperation = "screen";
-    ctx.globalAlpha = Math.min(1, life * 2);
-    const trail = ctx.createLinearGradient(-105, 0, 20, 0);
-    trail.addColorStop(0, `${projectile.color}00`);
-    trail.addColorStop(0.55, `${projectile.color}78`);
-    trail.addColorStop(1, projectile.color);
-    ctx.fillStyle = trail;
-    ctx.beginPath();
-    ctx.moveTo(-112, 0);
-    ctx.quadraticCurveTo(-32, -projectile.height * 0.5, 15, 0);
-    ctx.quadraticCurveTo(-32, projectile.height * 0.5, -112, 0);
-    ctx.fill();
-    ctx.shadowColor = projectile.color;
-    ctx.shadowBlur = 24;
-    ctx.fillStyle = "#fff5b8";
-    ctx.beginPath();
-    ctx.ellipse(0, 0, projectile.width * 0.34 * pulse, projectile.height * 0.4 * pulse, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = projectile.color;
-    ctx.lineWidth = 5;
-    ctx.beginPath();
-    ctx.arc(0, 0, projectile.height * 0.48 * pulse, 0, Math.PI * 2);
-    ctx.stroke();
-    ctx.strokeStyle = "rgba(255,255,255,.82)";
-    ctx.lineWidth = 2;
-    ctx.beginPath();
-    ctx.arc(-4, -4, projectile.height * 0.18, -2.7, -0.3);
-    ctx.stroke();
-    if (state.debug) {
-      ctx.globalCompositeOperation = "source-over";
-      ctx.globalAlpha = 0.85;
-      ctx.strokeStyle = "#ffef5a";
-      ctx.strokeRect(-projectile.width * 0.5, -projectile.height * 0.5, projectile.width, projectile.height);
-    }
+    drawProjectileBodyWith(ctx, projectile, time, life, pulse);
     ctx.restore();
+  }
+}
+
+// The non-throwable projectile body (feedback rings / the default orb + trail)
+// in the projectile's own frame — origin at its centre, x already mirrored to
+// its direction — on ANY 2D context, for the same reason drawThrowableWith
+// exists: CINEMA 3D paints it into an impostor over the host bridge.
+function drawProjectileBodyWith(c, projectile, time, life, pulse) {
+  if (projectile.style === "feedback") {
+    const armed = projectile.armFrames <= 0;
+    const charge = projectile.maxArmFrames
+      ? 1 - clamp(projectile.armFrames / projectile.maxArmFrames, 0, 1)
+      : 1;
+    c.globalCompositeOperation = "screen";
+    c.globalAlpha = Math.min(0.95, life * 1.6) * (0.38 + charge * 0.62);
+    c.shadowColor = projectile.color;
+    c.shadowBlur = armed ? 30 : 17;
+    c.strokeStyle = projectile.color;
+    c.lineWidth = armed ? 6 : 3;
+    if (!armed) c.setLineDash([9, 7]);
+    for (let ring = 0; ring < 3; ring += 1) {
+      const phase = (time * 0.004 + ring * 0.29) % 1;
+      const radiusX = projectile.width * (0.2 + phase * 0.34) * pulse;
+      const radiusY = projectile.height * (0.23 + phase * 0.28) * pulse;
+      c.globalAlpha *= 0.82;
+      c.beginPath();
+      c.ellipse(0, 0, radiusX, radiusY, Math.sin(time * 0.002 + ring) * 0.13, 0, Math.PI * 2);
+      c.stroke();
+    }
+    c.setLineDash([]);
+    c.globalAlpha = armed ? 0.9 : 0.48;
+    c.fillStyle = armed ? "#efffe8" : projectile.color;
+    for (let slice = -2; slice <= 2; slice += 1) {
+      const jitter = Math.sin(time * 0.03 + slice * 2.1) * 9;
+      c.fillRect(-projectile.width * 0.38 + jitter, slice * projectile.height * 0.16 - 3, projectile.width * (0.7 - Math.abs(slice) * 0.08), armed ? 5 : 3);
+    }
+    if (state.debug) {
+      c.globalCompositeOperation = "source-over";
+      c.globalAlpha = 0.85;
+      c.strokeStyle = "#ffef5a";
+      c.strokeRect(-projectile.width * 0.5, -projectile.height * 0.5, projectile.width, projectile.height);
+    }
+    return;
+  }
+  c.globalCompositeOperation = "screen";
+  c.globalAlpha = Math.min(1, life * 2);
+  const trail = c.createLinearGradient(-105, 0, 20, 0);
+  trail.addColorStop(0, `${projectile.color}00`);
+  trail.addColorStop(0.55, `${projectile.color}78`);
+  trail.addColorStop(1, projectile.color);
+  c.fillStyle = trail;
+  c.beginPath();
+  c.moveTo(-112, 0);
+  c.quadraticCurveTo(-32, -projectile.height * 0.5, 15, 0);
+  c.quadraticCurveTo(-32, projectile.height * 0.5, -112, 0);
+  c.fill();
+  c.shadowColor = projectile.color;
+  c.shadowBlur = 24;
+  c.fillStyle = "#fff5b8";
+  c.beginPath();
+  c.ellipse(0, 0, projectile.width * 0.34 * pulse, projectile.height * 0.4 * pulse, 0, 0, Math.PI * 2);
+  c.fill();
+  c.strokeStyle = projectile.color;
+  c.lineWidth = 5;
+  c.beginPath();
+  c.arc(0, 0, projectile.height * 0.48 * pulse, 0, Math.PI * 2);
+  c.stroke();
+  c.strokeStyle = "rgba(255,255,255,.82)";
+  c.lineWidth = 2;
+  c.beginPath();
+  c.arc(-4, -4, projectile.height * 0.18, -2.7, -0.3);
+  c.stroke();
+  if (state.debug) {
+    c.globalCompositeOperation = "source-over";
+    c.globalAlpha = 0.85;
+    c.strokeStyle = "#ffef5a";
+    c.strokeRect(-projectile.width * 0.5, -projectile.height * 0.5, projectile.width, projectile.height);
   }
 }
 
@@ -20470,6 +21748,126 @@ function emberHash(seed) {
   return scrambled - Math.floor(scrambled);
 }
 
+// ---------------------------------------------------------------------------
+// v5.1 TEMPO TELLS — the whiff tax and the re-arm gap, on the body.
+//
+// Both draw inside drawFighter's local space (origin at the feet, +x toward
+// the opponent after the mirror, the same space the super-ready outline and
+// the dizzy ghosts use). Phase and strength come from whiffTellState()
+// (engine/tempo-tells.mjs), the one function the CINEMA 3D fighter layer
+// reads too, so the fringe burns on the same ticks in both worlds.
+//
+// UNDER the sprite (drawTempoTellUnder):
+//   whiff — a solid red fringe (an enlarged red silhouette; the sprite covers
+//           all but a ~4-6 px rim) that burns hotter through the taxed tail,
+//           plus 1-2 red ghosts of the extension cell falling back behind
+//           the follow-through. The cell is remembered for the gap.
+//   rearm — the fringe fading across the 4-frame gap, and the remembered
+//           extension cell dropping away behind the idle body: "the swing
+//           is still costing you".
+// OVER the sprite (drawTempoTellOver):
+//   rearm — a muted pale wash: the body goes grey for the gap (disarmed).
+//   eaten press — a sharper white pop for 6 ticks, so a mash reads as
+//           "not yet" even after the gap has closed.
+//   whiff — a thin dust crescent in front of the fist that fades through
+//           the taxed tail (the swipe of a swing that met air).
+// Reduced motion keeps the fringe, wash and pop (gameplay information, like
+// the super-ready aura) and drops the ghosts and the swipe; the battery
+// profile's trailScale drops the ghosts. Counted into presentationDebug so
+// a probe can prove a whiff reached the screen.
+// ---------------------------------------------------------------------------
+function drawTempoTellUnder(fighter, tell, atlas, frame, renderSize) {
+  const reducedMotion = state.accessibility.reducedMotion;
+  const trailScale = state.performance.trailScale;
+  const red = TEMPO_TELL_RULES.whiffColor;
+  if (tell.phase === "whiff") {
+    whiffGhostCells[fighter.side] = { atlas, frame, renderSize, tick: state.simulationTick };
+    ctx.save();
+    ctx.globalAlpha = 0.6 + 0.3 * tell.strength;
+    const outline = 1.05 + 0.02 * tell.strength;
+    ctx.scale(outline, outline);
+    drawSilhouetteFrame(atlas, frame, renderSize, red);
+    ctx.restore();
+    presentationDebug.whiffFringes += 1;
+    if (!reducedMotion && trailScale > 0) {
+      const copies = Math.max(1, Math.round(TEMPO_TELL_RULES.ghostTrailCopies * trailScale));
+      for (let copy = 1; copy <= copies; copy += 1) {
+        ctx.save();
+        ctx.globalCompositeOperation = "screen";
+        ctx.globalAlpha = (0.36 / copy) * (0.6 + 0.4 * tell.strength);
+        ctx.translate(-copy * 17, copy * 2);
+        drawSilhouetteFrame(atlas, frame, renderSize, red);
+        ctx.restore();
+        presentationDebug.whiffGhosts += 1;
+      }
+    }
+    return;
+  }
+  if (tell.phase === "rearm") {
+    ctx.save();
+    ctx.globalAlpha = 0.7 * tell.strength;
+    ctx.scale(1.045, 1.045);
+    drawSilhouetteFrame(atlas, frame, renderSize, red);
+    ctx.restore();
+    presentationDebug.whiffFringes += 1;
+    const ghost = whiffGhostCells[fighter.side];
+    if (ghost && !reducedMotion && trailScale > 0
+      && state.simulationTick - ghost.tick <= 40 && ghost.atlas?.complete && ghost.atlas.naturalWidth) {
+      ctx.save();
+      ctx.globalCompositeOperation = "screen";
+      ctx.globalAlpha = 0.34 * tell.strength;
+      ctx.translate(-10 - (1 - tell.strength) * 18, 3);
+      drawSilhouetteFrame(ghost.atlas, ghost.frame, ghost.renderSize, red);
+      ctx.restore();
+      presentationDebug.whiffGhosts += 1;
+    }
+  }
+}
+
+function drawTempoTellOver(fighter, tell, atlas, frame, renderSize) {
+  const reducedMotion = state.accessibility.reducedMotion;
+  if (tell.phase === "rearm") {
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    ctx.globalAlpha = 0.42 * tell.strength;
+    drawSilhouetteFrame(atlas, frame, renderSize, TEMPO_TELL_RULES.rearmColor);
+    ctx.restore();
+    presentationDebug.rearmFlashes += 1;
+  }
+  if (tell.dropFlash > 0) {
+    ctx.save();
+    ctx.globalCompositeOperation = "screen";
+    ctx.globalAlpha = 0.55 * tell.dropFlash;
+    drawSilhouetteFrame(atlas, frame, renderSize, "#ffffff");
+    ctx.restore();
+    presentationDebug.rearmDropFlashes += 1;
+  }
+  if (tell.phase === "whiff" && !reducedMotion) {
+    // The swipe: a crescent about the same shoulder pivot the heavy limb
+    // wedge uses, on the fist side, thinning and fading through the tail.
+    const tailProgress = tell.taxed && tell.taxFrames > 0 ? 1 - tell.taxLeft / tell.taxFrames : 0;
+    const fade = 1 - tailProgress * 0.85;
+    const pivotX = 8;
+    const pivotY = -renderSize * 0.62;
+    const reach = renderSize * (0.5 + tailProgress * 0.06);
+    ctx.save();
+    ctx.lineCap = "round";
+    ctx.globalAlpha = 0.7 * fade;
+    ctx.strokeStyle = "rgba(255,244,236,0.9)";
+    ctx.lineWidth = 3.5 * fade + 0.5;
+    ctx.beginPath();
+    ctx.arc(pivotX, pivotY, reach, -0.95 + tailProgress * 0.25, 0.45 + tailProgress * 0.2);
+    ctx.stroke();
+    ctx.globalAlpha = 0.55 * fade;
+    ctx.strokeStyle = TEMPO_TELL_RULES.whiffColor;
+    ctx.lineWidth = 2 * fade + 0.5;
+    ctx.beginPath();
+    ctx.arc(pivotX, pivotY, reach * 0.9, -0.8 + tailProgress * 0.25, 0.4 + tailProgress * 0.2);
+    ctx.stroke();
+    ctx.restore();
+  }
+}
+
 function hexToRgbChannels(hex) {
   const value = parseInt(hex.slice(1, 7), 16);
   return `${(value >> 16) & 255},${(value >> 8) & 255},${value & 255}`;
@@ -20521,6 +21919,28 @@ function drawContactShadow(fighter, jump, renderSize, lunge) {
   }
   ctx.restore();
   if (!reflectionPassActive) presentationDebug.contactShadows += 1;
+}
+
+// Ali's rhythm-stack rings, origin at the fighter's FEET (pre-mirror, so the
+// arc always opens screen-right the way it always has). Split out of
+// drawFighter so the CINEMA 3D overlay pass can draw the same rings at the
+// projected feet: FLOW 1/2/3 is his mechanic, not decoration.
+function drawRhythmRings(fighter, time) {
+  if (fighter.def.id !== "ali" || fighter.rhythmStacks <= 0) return;
+  ctx.save();
+  ctx.translate(0, -112);
+  ctx.globalCompositeOperation = "screen";
+  ctx.strokeStyle = fighter.rhythmStacks === 3 ? "#ff4fb9" : fighter.def.accent;
+  ctx.shadowColor = fighter.def.accent;
+  ctx.shadowBlur = 17 + fighter.rhythmStacks * 4;
+  for (let ring = 0; ring < fighter.rhythmStacks; ring += 1) {
+    ctx.globalAlpha = 0.24 + ring * 0.07;
+    ctx.lineWidth = 3 + ring;
+    ctx.beginPath();
+    ctx.arc(0, 0, 72 + ring * 22 + Math.sin(time * 0.01 + ring) * 6, -1.12, 1.12);
+    ctx.stroke();
+  }
+  ctx.restore();
 }
 
 function drawFighter(fighter, time) {
@@ -20608,27 +22028,18 @@ function drawFighter(fighter, time) {
   const hitSmear = state.performance.trailScale > 0 && !reducedMotion
     ? clamp(fighter.hitFlash / 0.14, 0, 1)
     : 0;
+  // v5.1 TEMPO TELLS: which tell (whiff tail / re-arm gap / eaten press) this
+  // body wears this frame. Render-only read of snapshotted sim fields.
+  const tempoTell = whiffTellState(fighter, state.simulationTick);
+  const tempoTellLive = !reflectionPassActive && !graphicFatality
+    && (tempoTell.phase !== "none" || tempoTell.dropFlash > 0)
+    && Boolean(atlas?.complete && atlas.naturalWidth);
 
   ctx.save();
   ctx.translate(fighter.x, fighter.y);
   drawContactShadow(fighter, jump, renderSize, lunge);
 
-  if (fighter.def.id === "ali" && fighter.rhythmStacks > 0) {
-    ctx.save();
-    ctx.translate(0, -112);
-    ctx.globalCompositeOperation = "screen";
-    ctx.strokeStyle = fighter.rhythmStacks === 3 ? "#ff4fb9" : fighter.def.accent;
-    ctx.shadowColor = fighter.def.accent;
-    ctx.shadowBlur = 17 + fighter.rhythmStacks * 4;
-    for (let ring = 0; ring < fighter.rhythmStacks; ring += 1) {
-      ctx.globalAlpha = 0.24 + ring * 0.07;
-      ctx.lineWidth = 3 + ring;
-      ctx.beginPath();
-      ctx.arc(0, 0, 72 + ring * 22 + Math.sin(time * 0.01 + ring) * 6, -1.12, 1.12);
-      ctx.stroke();
-    }
-    ctx.restore();
-  }
+  drawRhythmRings(fighter, time);
 
   if (fighter.cinematicRotation) ctx.rotate(fighter.cinematicRotation);
   if (finisherHoldWinner) ctx.rotate(Math.sin(time * 0.0012 + 0.8) * 0.011);
@@ -20964,6 +22375,9 @@ function drawFighter(fighter, time) {
       }
     }
 
+    // v5.1 TEMPO TELLS, under the sprite: whiff fringe + extension-cell ghosts.
+    if (tempoTellLive) drawTempoTellUnder(fighter, tempoTell, atlas, frame, renderSize);
+
     if (!reflectionPassActive && hitSmear > 0) {
       // Directional hit-reaction smear: stretched additive ghosts trailing
       // opposite the knockback on the frames the white hit flash is live.
@@ -21027,6 +22441,9 @@ function drawFighter(fighter, time) {
       presentationDebug.battleDamage += battleDamageMarks[fighter.side].length;
     } else drawAtlasFrame(atlas, frame, renderSize);
     ctx.restore();
+
+    // v5.1 TEMPO TELLS, over the sprite: re-arm wash, eaten-press pop, swipe.
+    if (tempoTellLive) drawTempoTellOver(fighter, tempoTell, atlas, frame, renderSize);
 
     // v2.6 MOTION pose cross-fade (spec 3): the previous atlas cell lingers
     // 2-3 sim frames at falling alpha OVER the fresh pose (keeps the fighter
@@ -23251,6 +24668,23 @@ function drawFinisherRealityComposite() {
   ctx.restore();
 }
 
+// One combat-text label ("COUNTER", "WET PAINT!", the weapon cue), origin at
+// the effect's own point with the caller's shadow already set. The 2D world
+// pass calls it from drawParticles; the CINEMA 3D overlay pass calls it at
+// the projected point, so the same label reads in both renderers.
+function drawCombatTextBody(effect, alpha) {
+  ctx.globalAlpha = Math.min(1, alpha * 1.7);
+  ctx.translate(0, -(1 - alpha) * 42);
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+  ctx.font = "900 24px Arial Narrow, Arial, sans-serif";
+  ctx.lineWidth = 7;
+  ctx.strokeStyle = "rgba(0,0,0,.88)";
+  ctx.strokeText(effect.label, 0, 0);
+  ctx.fillStyle = effect.color;
+  ctx.fillText(effect.label, 0, 0);
+}
+
 function drawParticles() {
   for (const particle of state.particles) {
     const alpha = clamp(particle.life / particle.max, 0, 1);
@@ -23373,16 +24807,7 @@ function drawParticles() {
     ctx.shadowBlur = 25;
     ctx.shadowColor = effect.color;
     if (effect.kind === "combatText") {
-      ctx.globalAlpha = Math.min(1, alpha * 1.7);
-      ctx.translate(0, -(1 - alpha) * 42);
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      ctx.font = "900 24px Arial Narrow, Arial, sans-serif";
-      ctx.lineWidth = 7;
-      ctx.strokeStyle = "rgba(0,0,0,.88)";
-      ctx.strokeText(effect.label, 0, 0);
-      ctx.fillStyle = effect.color;
-      ctx.fillText(effect.label, 0, 0);
+      drawCombatTextBody(effect, alpha);
     } else if (effect.kind === "finisherImpact") {
       drawFinisherImpact(effect, alpha);
     } else if (effect.kind === "fatalityProjectile") {
@@ -23944,6 +25369,11 @@ const FRAME_PHASE_ROLES = Object.freeze({
   recovery: ["frameRecovery", "#3fa7ff"],
   hitstun: ["frameStun", "#ffd54a"],
   blockstun: ["frameStun", "#b8985a"],
+  // v5.1 TEMPO TELLS: the taxed whiff tail (magenta — neither the active red
+  // nor the recovery blue, so "that was the tax" reads at a glance) and the
+  // re-arm gap (grey: the fighter is free to move but not to swing).
+  whiff: ["frameWhiff", "#ff4fd8"],
+  rearm: ["frameRearm", "#8f98a8"],
 });
 
 function framePhaseColor(phase) {
@@ -25318,6 +26748,11 @@ function draw(time) {
   // ring can project its world-space origin after the restore.
   if (distortionRing) worldScreenTransform = ctx.getTransform();
   ctx.restore();
+  // CINEMA 3D gameplay reads: the pure-2D screen art the world pass above
+  // skipped (dizzy / guard-crush markers with their drain bars, Ali's rhythm
+  // rings, combat text, the stage-weapon name tag) drawn at the projected sim
+  // points on the overlay canvas — exactly the CRT-punch pattern.
+  if (cinema3dWorld && state.screen === "fight") drawCinema3dOverlayReads(time);
   // CINEMA 3D handles grade/bloom/grain in its own post stack; the 2D
   // frame-capture composites would smear a transparent canvas, so they are
   // skipped while the 3D world is live. UI-readability overlays (letterbox,
@@ -25414,6 +26849,9 @@ function clearLatchedInputEdges() {
 
 function runSimulationStep(dt, tick) {
   if (!(state.mode === "online" && onlineSession.rollback)) state.simulationTick = tick;
+  // 5.x flick-to-dash: a queued flick plays its lift/tap/lift/tap on the
+  // touch Set one real sim tick at a time, ahead of this tick's readInput.
+  pumpTouchFlicks();
   simulateGameTick(dt);
 }
 
@@ -25436,6 +26874,9 @@ function loop(now) {
   const steppedFrames = speedScaled ? demoSpeed.takeFrameSteps() : 0;
   for (let index = 0; index < steppedFrames; index += 1) simulationClock.stepOnce(runSimulationStep);
   const simSeconds = speedScaled ? demoSpeed.scale(elapsed) : elapsed;
+  // v5.1 #35: an intro art hold hands the clock zero seconds — no tick runs,
+  // no accumulator builds, the tick stream resumes exactly where it stood.
+  const artHeld = updateIntroArtHold(now);
   const frame = state.qaManualMode
     ? {
       steps: 0,
@@ -25443,7 +26884,7 @@ function loop(now) {
       alpha: state.simulationAlpha,
       droppedSeconds: simulationClock.droppedSeconds,
     }
-    : simulationClock.advance(simSeconds, runSimulationStep);
+    : simulationClock.advance(artHeld ? 0 : simSeconds, runSimulationStep);
   state.simulationTick = state.mode === "online" && onlineSession.rollback
     ? onlineSession.rollback.frame : frame.tick;
   state.simulationAlpha = frame.alpha;
@@ -25501,16 +26942,79 @@ function applyAccessibilitySettings() {
 // in CABINET MODE (which pins high), and only while a fight or demo is
 // actually rendering. state.performance is render-only and un-checksummed,
 // so every decision is rollback-safe by construction.
+//
+// 5.x memory (sweep #37): the machine used to be nulled the moment a screen
+// other than fight/demo rendered, so every fight re-baselined at the static
+// tier and a boundary phone stuttered through one 120-frame window (2 s) or
+// two steps across a 360-frame cooldown (~8 s) before it landed where the
+// previous fight had already landed. Now the machine is RETAINED across the
+// result/select/title screens (frozen, not fed — a menu's frame times are not
+// fight evidence either way), only dropped when a static gate closes (forced
+// profile, cabinet, online), and the landed tier is written to localStorage
+// keyed by build + device signature so the first fight of the next session
+// starts there too. The seeded start is silent: no COOLING toast for a tier
+// the player already lived through.
 // ---------------------------------------------------------------------------
-const performanceGovernor = { machine: null, steps: 0, lastChange: "" };
+const performanceGovernor = { machine: null, steps: 0, lastChange: "", seededFrom: "", remembered: "" };
 let governorToastTimer = 0;
 
-function governorEligible() {
+// Static gates: closing any of these drops the machine (the old behaviour).
+function governorAllowed() {
   return state.visualQuality === "auto"
     && !state.cabinetMode
-    && state.mode !== "online"
+    && state.mode !== "online";
+}
+
+// Feeding gate: the machine only observes frames while a fight or demo is
+// actually rendering; elsewhere it is kept alive, untouched.
+function governorEligible() {
+  return governorAllowed()
     && !document.hidden
     && (state.screen === "fight" || demoSession.active);
+}
+
+function governorMemoryStorage() {
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
+function governorMemoryContext() {
+  const environment = performanceEnvironment(state.accessibility.reducedMotion);
+  const baselineId = resolvePerformanceProfile("auto", environment).id;
+  return {
+    baselineId,
+    key: governorMemoryKey(GAME_VERSION),
+    signature: governorMemorySignature({
+      userAgent: navigator.userAgent,
+      hardwareConcurrency: environment.hardwareConcurrency,
+      deviceMemory: environment.deviceMemory,
+      baselineId,
+    }),
+  };
+}
+
+function rememberGovernorTier(profileId) {
+  const memory = governorMemoryContext();
+  performanceGovernor.remembered = writeGovernorMemory(governorMemoryStorage(), memory.key, {
+    signature: memory.signature,
+    profileId,
+  }) ? profileId : "";
+}
+
+function createGovernorMachine() {
+  const memory = governorMemoryContext();
+  const remembered = readGovernorMemory(governorMemoryStorage(), memory.key, memory.signature);
+  performanceGovernor.seededFrom = remembered ? "memory" : "static";
+  performanceGovernor.remembered = remembered?.profileId || "";
+  // createPerformanceGovernor clamps the seed to the baseline, so a stale
+  // 'high' memory on a device whose static resolution says balanced is inert.
+  return createPerformanceGovernor({
+    profileId: remembered?.profileId || state.performance.id,
+    baselineId: memory.baselineId,
+  });
 }
 
 // One-line HUD toast on a tier change, on the sound-caption channel's element
@@ -25530,25 +27034,32 @@ function applyGovernorChange(change) {
   performanceGovernor.steps += 1;
   performanceGovernor.lastChange = `${change.action}:${change.from}->${change.to}`;
   applyPerformanceSettings();
+  rememberGovernorTier(change.to);
   governorToast(change.action === "down"
     ? `AUTO PERFORMANCE · COOLING TO ${change.to.toUpperCase()}`
     : `AUTO PERFORMANCE · RESTORED TO ${change.to.toUpperCase()}`);
 }
 
 function feedPerformanceGovernor(frameMs) {
-  if (!governorEligible()) {
-    // Leaving eligibility (online match, forced profile, cabinet) drops the
-    // machine entirely so the static resolution rules the profile again and a
-    // later return to AUTO re-baselines from scratch.
+  if (!governorAllowed()) {
+    // A static gate closed (online match, forced profile, cabinet): drop the
+    // machine so the static resolution rules the profile again. The memory
+    // survives, so a later return to AUTO re-seeds from the landed tier
+    // instead of re-baselining from scratch.
     if (performanceGovernor.machine) {
       performanceGovernor.machine = null;
       applyPerformanceSettings();
     }
     return;
   }
+  // Menus, the result screen, a hidden tab: keep the machine and its
+  // cooldown/recovery counters exactly where the last fight left them.
+  if (!governorEligible()) return;
   if (!performanceGovernor.machine) {
-    const baseline = resolvePerformanceProfile("auto", performanceEnvironment(state.accessibility.reducedMotion)).id;
-    performanceGovernor.machine = createPerformanceGovernor({ profileId: state.performance.id, baselineId: baseline });
+    performanceGovernor.machine = createGovernorMachine();
+    // A remembered tier below the static baseline applies from this frame —
+    // that is the whole point: no window of misses, no toast.
+    applyPerformanceSettings();
   }
   applyGovernorChange(performanceGovernor.machine.observe(frameMs));
 }
@@ -25788,7 +27299,9 @@ function renderDifficultyOptions() {
 
 // The picker is only meaningful when a CPU is actually in the match.
 function facesCpuOpponent() {
-  return state.mode === "arcade" || (state.mode === "training" && state.training.dummyMode === "cpu");
+  return state.mode === "arcade"
+    || (state.mode === "team" && state.teamCpu)
+    || (state.mode === "training" && state.training.dummyMode === "cpu");
 }
 
 function syncDifficultyUi() {
@@ -25907,7 +27420,7 @@ function duckMusic(amount, duration) {
 }
 
 function stopSfx() {
-  [...Object.values(sfxPools).flat(), ...[...fighterSfxPools.values()].flat()].forEach((sample) => {
+  [...Object.values(sfxPools).flat(), ...[...fighterSfxPools.values()].flat(), ...[...crowdVoiceBanks.values()].flat()].forEach((sample) => {
     sample.pause();
     sample.currentTime = 0;
   });
@@ -25921,19 +27434,29 @@ function fighterSoundId(fighter) {
 // ---------------------------------------------------------------------------
 // Wave 9 "voice plumbing" — fighter voice variant banks. Module-level render
 // state only (never snapshotted, never read by the simulation): which
-// canonical variant files exist on disk, probed exactly once per bank per
-// session via HEAD requests so missing takes can never spam the network.
-// Everything ships working with zero new mp3 files present and picks up real
-// takes automatically the moment they appear at their canonical paths.
+// canonical variant files exist on disk. Since 5.1 that answer comes from
+// assets/audio/MANIFEST.json (baked from the files by
+// tools/audio/build_manifest.mjs, which also measures every take's length);
+// the HEAD probe below survives only as the fallback for a missing or
+// unreadable manifest, where it still runs exactly once per bank per session
+// so missing takes can never spam the network.
 // ---------------------------------------------------------------------------
 
 // Monotonic wave-9 voice totals, exposed via snapshot().violence.
 const voiceFxDebug = {
   announcerCalls: 0, announcerBanksLoaded: 0, voiceVariantPlays: 0,
   reactiveCues: 0, storyCallouts: 0, onlineMoments: 0,
+  // w51: "TEN SECONDS" clock calls (once per round) and decision round-ends
+  // that opened on the timeover bank instead of "ko".
+  clockCallouts: 0, decisionCalls: 0,
+  // 5.1 manifest counters: banks resolved without a request, and media
+  // elements actually created for fighter voice (was 3-5 per take, up to
+  // 183 per fighter at fight start; now one per take, grown only on overlap).
+  manifestBanks: 0, voiceElements: 0,
 };
 // Every probe HEAD request ever issued — QA asserts this stays flat when the
-// same missing bank is requested repeatedly (probe once, cached forever).
+// same missing bank is requested repeatedly (probe once, cached forever), and
+// stays at ZERO for the whole session while the manifest is present.
 let voiceProbeRequests = 0;
 
 function probeAudioFile(url) {
@@ -25943,55 +27466,144 @@ function probeAudioFile(url) {
     .catch(() => false);
 }
 
-// `${fighterId}:${cue}` -> { srcs: confirmed variant files, probed }. How a
-// bank fills depends on what the review left behind:
+// The build-time audio manifest, fetched once at boot (before any fighter is
+// made, so by the time makeFighter warms a palette the answer is usually
+// already here and the bank fills synchronously). `data` is the parsed
+// manifest or null once settled; `settled` distinguishes "not yet loaded"
+// (banks wait for it) from "missing" (banks probe, the pre-5.1 path).
+const audioManifestState = { promise: null, data: null, settled: false };
+
+function loadAudioManifest() {
+  if (!audioManifestState.promise) {
+    audioManifestState.promise = fetch(AUDIO_MANIFEST_PATH)
+      .then((response) => (response.ok ? response.json() : null))
+      .then((raw) => parseAudioManifest(raw))
+      .catch(() => null)
+      .then((manifest) => {
+        audioManifestState.data = manifest;
+        audioManifestState.settled = true;
+        return manifest;
+      });
+  }
+  return audioManifestState.promise;
+}
+// Fetched at boot like the motion/walk/unified manifests: one small JSON
+// request, long before the first makeFighter.
+loadAudioManifest();
+
+// `${fighterId}:${cue}` -> { srcs: confirmed variant files, durationsMs,
+// probed, source }. How a bank fills depends on what the review left behind:
 //   recorded    — the reviewed kick pools. Every path is an accepted take that
 //                 ships, so the bank is complete on creation and never probes.
 //   probed      — a surviving 1.5 core take. Variant 1 is known to exist;
-//                 slots 2 and 3 are speculative and cost one HEAD each.
-//   placeholder — a reactive cue with nothing recorded yet; starts empty and
-//                 borrows a detuned take until real files appear.
-// A cue whose recording was rejected has no palette entry at all, so it never
+//                 slots 2 and 3 are speculative (one HEAD each, manifest-less).
+//   placeholder — a reactive cue; starts empty and borrows a detuned take
+//                 until real files are confirmed.
+// With the manifest loaded the probed/placeholder distinction only decides
+// what the bank holds while the fetch is in flight: the manifest then names
+// every existing take at once (source "manifest", zero requests). A cue
+// whose recording was rejected has no palette entry at all, so it never
 // reaches this function and can never be requested from the network.
 const fighterVoiceBanks = new Map();
+
+function probeFighterVoiceBank(bank, variants, seeded) {
+  // One probe pass per bank per session, sequential and stopping at the
+  // first gap (banks are contiguous), so a fully-missing bank costs a
+  // single request and a present bank grows the rotation in place.
+  (async () => {
+    const found = variants.slice(0, seeded);
+    for (let index = seeded; index < variants.length; index += 1) {
+      if (!(await probeAudioFile(variants[index]))) break;
+      found.push(variants[index]);
+    }
+    bank.srcs = found;
+    bank.probed = true;
+    bank.source = "probe";
+  })();
+}
 
 function fighterVoiceBank(fighterId, cue) {
   const variants = fighterAudioVariants(fighterId, cue);
   if (!variants) return null;
   const key = `${fighterId}:${cue}`;
   let bank = fighterVoiceBanks.get(key);
-  if (!bank) {
-    // Wave 16: the bank kind is fighter-aware — the Commissioner's core cues
-    // probe all slots because no recorded variant 1 exists yet.
-    const kind = fighterAudioBankKind(cue, fighterId);
-    if (kind === FIGHTER_AUDIO_BANK_KINDS.recorded) {
-      bank = { key, srcs: [...variants], probed: true };
-      fighterVoiceBanks.set(key, bank);
-      return bank;
-    }
-    const seeded = kind === FIGHTER_AUDIO_BANK_KINDS.probed ? 1 : 0;
-    bank = { key, srcs: variants.slice(0, seeded), probed: false };
+  if (bank) return bank;
+  // Wave 16: the bank kind is fighter-aware — the Commissioner's core cues
+  // probe all slots because no recorded variant 1 exists yet.
+  const kind = fighterAudioBankKind(cue, fighterId);
+  const manifestDurations = (srcs) => srcs.map((src) => fighterBankFromManifest(audioManifestState.data, fighterId, [src])?.durationsMs[0] || 0);
+  if (kind === FIGHTER_AUDIO_BANK_KINDS.recorded) {
+    // The review pool is the truth for recorded banks; the manifest only
+    // contributes lengths (and cannot trim what the review accepted).
+    bank = { key, srcs: [...variants], durationsMs: manifestDurations(variants), probed: true, source: "recorded" };
     fighterVoiceBanks.set(key, bank);
-    // One probe pass per bank per session, sequential and stopping at the
-    // first gap (banks are contiguous), so a fully-missing bank costs a
-    // single request and a present bank grows the rotation in place.
-    (async () => {
-      const found = variants.slice(0, seeded);
-      for (let index = seeded; index < variants.length; index += 1) {
-        if (!(await probeAudioFile(variants[index]))) break;
-        found.push(variants[index]);
-      }
-      bank.srcs = found;
-      bank.probed = true;
-    })();
+    return bank;
   }
+  const seeded = kind === FIGHTER_AUDIO_BANK_KINDS.probed ? 1 : 0;
+  bank = { key, srcs: variants.slice(0, seeded), durationsMs: [], probed: false, source: "pending" };
+  fighterVoiceBanks.set(key, bank);
+  const settleFromManifest = (manifest) => {
+    const resolved = fighterBankFromManifest(manifest, fighterId, variants);
+    if (!resolved) return false;
+    bank.srcs = [...resolved.srcs];
+    bank.durationsMs = [...resolved.durationsMs];
+    bank.probed = true;
+    bank.source = "manifest";
+    voiceFxDebug.manifestBanks += 1;
+    return true;
+  };
+  if (audioManifestState.settled) {
+    if (!settleFromManifest(audioManifestState.data)) probeFighterVoiceBank(bank, variants, seeded);
+    return bank;
+  }
+  loadAudioManifest().then((manifest) => {
+    if (!settleFromManifest(manifest)) probeFighterVoiceBank(bank, variants, seeded);
+  });
   return bank;
 }
 
-function fighterVoicePool(kind, bankKey, variantIndex, src) {
+// Pool caps per cue, unchanged from the eager createSfxPool sizes: a hit cue
+// may stack five overlapping plays, anything else three. The difference is
+// that a pool now STARTS at one element per confirmed take and only grows
+// when a play finds every element busy — measured at 5.0 a devil vs
+// commissioner fight created ~366 fighter voice elements at makeFighter
+// against Chrome's live-player cap (~75 desktop / ~40 Android), so early
+// takes could be torn down and need a reload on first play.
+function fighterVoicePoolCap(cue) {
+  return cue.startsWith("hit-") || cue === "hit" ? 5 : 3;
+}
+
+function fighterVoiceElement(src, preload) {
+  const sample = new Audio(src);
+  sample.preload = preload;
+  voiceFxDebug.voiceElements += 1;
+  return sample;
+}
+
+function fighterVoicePool(cue, bankKey, variantIndex, src, preload = "auto") {
   const poolKey = `${bankKey}:${variantIndex}`;
-  if (!fighterSfxPools.has(poolKey)) fighterSfxPools.set(poolKey, createSfxPool(kind, src));
-  return fighterSfxPools.get(poolKey);
+  let pool = fighterSfxPools.get(poolKey);
+  if (!pool) {
+    pool = [fighterVoiceElement(src, preload)];
+    pool.cue = cue;
+    fighterSfxPools.set(poolKey, pool);
+  }
+  return pool;
+}
+
+// The element a play should use: the first idle one, else a fresh copy while
+// the pool is under its cap (the take is genuinely overlapping itself), else
+// the oldest — which the caller restarts, exactly as the fixed pools did once
+// they wrapped.
+function fighterVoiceSample(pool) {
+  const idle = pool.find((sample) => sample.paused || sample.ended);
+  if (idle) return idle;
+  if (pool.length < fighterVoicePoolCap(pool.cue)) {
+    const sample = fighterVoiceElement(pool[0].src, "auto");
+    pool.push(sample);
+    return sample;
+  }
+  return pool[0];
 }
 
 /**
@@ -26023,15 +27635,50 @@ function fighterVoiceTake(kind, fighterId) {
   const pool = fighterVoicePool(cue, bank.key, variantIndex, bank.srcs[variantIndex]);
   if (!pool?.length) return null;
   if (bank.srcs.length === 1) rate *= 0.94 + visualRandom() * 0.12;
-  return { sample: pool[Math.floor(cursor / bank.srcs.length) % pool.length], rate };
+  return { sample: fighterVoiceSample(pool), rate, durationMs: bank.durationsMs?.[variantIndex] || 0 };
 }
+
+// Voice warm-up runs from makeFighter, i.e. at the same instant the unified
+// sheets (8-14 MB) start downloading against the 2.1 s intro. One element per
+// confirmed take is created with preload="metadata" so the browser opens the
+// file but does not pull the whole 1-3 MB palette during the intro; the FIGHT!
+// banner (or this timer, for paths without one — training, demo) then flips
+// the same elements to preload="auto" so every take is resident before the
+// first exchange. Banks still waiting on the manifest fetch get their pools
+// at top-up time instead.
+const FIGHTER_VOICE_TOPUP_MS = 2400;
+let fighterVoiceTopupTimer = 0;
 
 function warmFighterAudio(fighters = state.fighters) {
   for (const fighter of fighters) {
     const fighterId = fighterSoundId(fighter);
     for (const cue of FIGHTER_AUDIO_CUES) {
       const bank = fighterVoiceBank(fighterId, cue);
-      bank?.srcs.forEach((src, index) => fighterVoicePool(cue, bank.key, index, src));
+      bank?.srcs.forEach((src, index) => fighterVoicePool(cue, bank.key, index, src, "metadata"));
+    }
+  }
+  // The two announcer calls the intro itself makes (the round card and
+  // FIGHT!) used to open their banks at the moment they fired, so the first
+  // line of every fight was a cold fetch; with the manifest settled these
+  // fill synchronously here, a couple of seconds ahead of the call.
+  announcerBank(state.round >= 3 ? "finalround" : state.round === 2 ? "round2" : "round1");
+  announcerBank("fight");
+  window.clearTimeout(fighterVoiceTopupTimer);
+  fighterVoiceTopupTimer = window.setTimeout(() => topUpFighterAudio(fighters), FIGHTER_VOICE_TOPUP_MS);
+}
+
+function topUpFighterAudio(fighters = state.fighters) {
+  window.clearTimeout(fighterVoiceTopupTimer);
+  for (const fighter of fighters) {
+    const fighterId = fighterSoundId(fighter);
+    if (!fighterId) continue;
+    for (const cue of FIGHTER_AUDIO_CUES) {
+      const bank = fighterVoiceBanks.get(`${fighterId}:${cue}`);
+      bank?.srcs.forEach((src, index) => {
+        for (const sample of fighterVoicePool(cue, bank.key, index, src)) {
+          if (sample.preload !== "auto") sample.preload = "auto";
+        }
+      });
     }
   }
 }
@@ -26097,6 +27744,11 @@ function sound(kind, fighter = null) {
   // preservesPitch are set explicitly on every play because pool elements
   // are reused and a detuned take must never leak into the next play.
   const take = fighterVoiceTake(kind, fighterId);
+  // Item 21: the dash scuff and the stage-weapon clatter are synthesised
+  // (SHARED_SYNTH_VOICES) rather than borrowed samples. The scuff is the
+  // foot, so it plays under a fighter's own dash grunt as well; with no
+  // take it IS the cue and the shared pool is never consulted.
+  const synthesised = sharedSynthVoice(kind, fighter);
   if (take) {
     voiceFxDebug.voiceVariantPlays += 1;
     const sample = take.sample;
@@ -26109,6 +27761,7 @@ function sound(kind, fighter = null) {
     if (playback?.catch) playback.catch(() => proceduralSound(fallbackKind));
     return;
   }
+  if (synthesised) return;
   const pool = sfxPools[fallbackKind];
   if (!pool?.length) {
     proceduralSound(fallbackKind);
@@ -26117,11 +27770,56 @@ function sound(kind, fighter = null) {
   const cursor = (sfxCursors[fallbackKind] || 0) % pool.length;
   sfxCursors[fallbackKind] = cursor + 1;
   const sample = pool[cursor];
+  // Item 21: body-hit.mp3 lands on nearly every impact and the two swing
+  // takes on most swings, bit-identical play after play. The reviewed files
+  // are frozen, so the variety is applied here: a per-play pitch shift
+  // (±6-8%, preservesPitch off so the rate actually changes the sound) and a
+  // ±1.5 dB level nudge, drawn so no two consecutive plays of one take can
+  // share a pitch (engine/shared-sfx.mjs distinctDraw). visualRandom is the
+  // checksum-exempt stream the single-take fighter banks already use. Set on
+  // every play: pool elements are reused and a detuned rate must never leak
+  // into a kind outside the table.
+  const variation = nextSharedVariation(fallbackKind);
   sample.pause();
   sample.currentTime = 0;
-  sample.volume = (sfxVolumes[kind] ?? 0.62) * state.sfxVolume;
+  sample.preservesPitch = variation.rate === 1;
+  sample.playbackRate = variation.rate;
+  sample.volume = Math.min(1, (sfxVolumes[kind] ?? 0.62) * state.sfxVolume * variation.gain);
   const playback = sample.play();
   if (playback?.catch) playback.catch(() => proceduralSound(fallbackKind));
+}
+
+// Last variation record per shared kind (the "previous" distinctDraw needs)
+// plus the most recent play for QA: snapshot().audio.variation lets the smoke
+// prove two consecutive body-hits differ in rate without listening.
+const sharedVariationLast = {};
+let lastSharedVariation = null;
+
+function nextSharedVariation(kind) {
+  const variation = pickSharedVariation(kind, sharedVariationLast[kind], visualRandom);
+  if (variation.rate !== 1) {
+    sharedVariationLast[kind] = variation;
+    audioFxDebug.sharedVariations += 1;
+    lastSharedVariation = Object.freeze({ kind, ...variation });
+  }
+  return variation;
+}
+
+// Cues that synthesise instead of borrowing a shared take. Each returns true
+// when it handled the cue (whether or not the context was awake enough to
+// make a sound) so sound() skips the pool and the procedural fallback.
+const SHARED_SYNTH_VOICES = Object.freeze({
+  dash: (fighter) => dashScuff(fighter),
+  "stage-weapon": () => weaponClatter(),
+  // v5.1 TEMPO TELLS: the press the re-arm gap ate.
+  "rearm-drop": () => rearmClick(),
+});
+
+function sharedSynthVoice(kind, fighter) {
+  const voice = SHARED_SYNTH_VOICES[kind];
+  if (!voice) return false;
+  voice(fighter);
+  return true;
 }
 
 function showSoundCaption(kind, fighter = null, overrideText = "") {
@@ -26275,6 +27973,17 @@ function proceduralSound(kind) {
 // the leak probe can assert creation stays proportional to events.
 const audioFxDebug = {
   impactLayers: 0, crowdSwells: 0, ambienceEvents: 0, nodesCreated: 0,
+  // w51: synthesised dizzy rings and clock ticks/buzzers actually voiced
+  // (after the sound-toggle / attract gates, unlike the hudFxDebug edges).
+  dizzyRings: 0, clockTicks: 0,
+  // Item 21: jittered shared-sample plays and the two synthesised cues.
+  sharedVariations: 0, dashScuffs: 0, weaponClatters: 0,
+  // v5.1 STAGE KO BEATS: the cruise ship's KO horns actually voiced.
+  koHorns: 0,
+  // v5.1 KO MOMENT: voiced crowd takes actually started (post every gate).
+  crowdVoicePlays: 0,
+  // v5.1 TEMPO TELLS: re-arm clicks actually voiced.
+  rearmClicks: 0,
 };
 // Live node bookkeeping for the QA node-graph hook: persistent = currently
 // connected long-lived nodes (master bus, beds, music routing), one-shots =
@@ -26483,6 +28192,71 @@ function impactLayerAudio(tierName, { counter = false } = {}) {
   }
 }
 
+// --- w51 announcer/clock truth: dizzy ring + clock tick synths -------------
+
+/**
+ * Dizzy ring: three triangle chirps climbing a minor-ish arpeggio on a
+ * wobble LFO (engine/announcer.mjs dizzyRingPlan), replacing the knockout.mp3
+ * groan enterDizzy used to play on a stun the fighter recovers from. Sim-path
+ * trigger on the impactAudioAllowed guard; the variant comes from the tick
+ * hash so consecutive dizzies never ring identically and no RNG stream moves.
+ */
+function dizzyRingAudio(fighter) {
+  if (!impactAudioAllowed()) return;
+  unlockAudio();
+  audioFxDebug.dizzyRings += 1;
+  const variant = presentationHash01(state.simulationTick, fighter?.side ?? 0, 51);
+  const level = state.sfxVolume;
+  for (const chirp of dizzyRingPlan(variant)) {
+    synthToneShot({
+      wave: "triangle", from: chirp.hz, seconds: chirp.seconds, peak: chirp.peak * level,
+      attack: 0.006, filterType: "bandpass", freq: chirp.hz, q: 3,
+      vibratoRate: chirp.vibratoRate, vibratoDepth: chirp.vibratoDepth, delay: chirp.delay,
+    });
+  }
+}
+
+/**
+ * Clock tick for a displayed reading in the final ten seconds (plan in
+ * engine/announcer.mjs: 880 Hz ladder, brighter and shorter under :05, a
+ * square two-partial buzzer at :00). Fired from updateHud's timer edge — the
+ * one place the digit changes — so it can never drift from the red pulse.
+ * Same gates as every other sim-path synth; never a reviewed take.
+ */
+function clockTickAudio(timer) {
+  const plan = clockTickPlan(timer);
+  if (!plan) return;
+  if (plan.kind === "buzzer") showSoundCaption("time-buzzer");
+  // impactLayerAudio pattern: no unlockAudio() here — a fight has already
+  // unlocked the context on its first sample play, and synthToneShot is a
+  // silent no-op on a context that is not running.
+  if (!impactAudioAllowed()) return;
+  audioFxDebug.clockTicks += 1;
+  const level = state.sfxVolume;
+  if (plan.kind === "buzzer") {
+    synthToneShot({ wave: plan.wave, from: plan.hz, seconds: plan.seconds, peak: plan.peak * level, attack: 0.01, filterType: "lowpass", freq: 1400, q: 0.8 });
+    synthToneShot({ wave: plan.wave, from: plan.hz * 1.498, seconds: plan.seconds * 0.9, peak: plan.peak * 0.55 * level, attack: 0.01, filterType: "lowpass", freq: 1400, q: 0.8 });
+    return;
+  }
+  synthToneShot({ wave: plan.wave, from: plan.hz, seconds: plan.seconds, peak: plan.peak * level, attack: 0.002, filterType: "bandpass", freq: plan.hz, q: 4 });
+}
+
+// Once-per-round "TEN SECONDS" call at the :10 reading. Keyed like the voice
+// round tracker (matchSerial:round) so a rollback that replays the edge, or a
+// paused game re-rendering the HUD, cannot book it twice; the announcer busy
+// window and shuffle bag handle spacing and the no-repeat rule.
+let clockCalloutRoundKey = "";
+
+function clockCallout() {
+  if (rollbackResimulating || state.phase !== "fight") return;
+  if (Math.ceil(state.timer) !== CLOCK_CALLOUT_SECONDS) return;
+  const key = `${state.matchSerial}:${state.round}`;
+  if (key === clockCalloutRoundKey) return;
+  clockCalloutRoundKey = key;
+  voiceFxDebug.clockCallouts += 1;
+  announcerSay("tenseconds");
+}
+
 // Pre-impact whoosh layered under the swing sample at attack start.
 function impactSwingWhoosh(attack) {
   if (!attack || !impactAudioAllowed()) return;
@@ -26499,6 +28273,76 @@ function impactSwingWhoosh(attack) {
     peak: (0.016 + size * 0.02) * state.sfxVolume,
     attack: 0.03,
   });
+}
+
+// --- Item 21: synthesised dash scuff and stage-weapon clatter --------------
+
+// Previous distinctDraw per synth voice so consecutive dashes (or drops) can
+// never share a hiss. Draws come from the tick hash salted by the voice's
+// own serial (the impactLayerAudio pattern) — never an RNG stream.
+const synthVoiceLastDraw = {};
+
+function synthVoiceDraw(name, serial) {
+  let salt = 0;
+  const rand = () => presentationHash01(state.simulationTick, serial, 41 + salt++);
+  const draw = distinctDraw(synthVoiceLastDraw[name], rand);
+  synthVoiceLastDraw[name] = draw;
+  return draw;
+}
+
+/**
+ * Dash scuff: a sneaker skidding on concrete instead of the borrowed
+ * jump.mp3. Band-passed hiss sweeping down as the foot slows, over a short
+ * sine plant for the push-off; a back dash is the heel dragging (lower,
+ * longer). Sim-path trigger, so it rides impactAudioAllowed() and the tick
+ * hash like the impact layers.
+ */
+function dashScuff(fighter) {
+  if (!impactAudioAllowed()) return;
+  audioFxDebug.dashScuffs += 1;
+  const forward = !fighter || fighter.dashDirection === 0 || fighter.dashDirection === fighter.facing;
+  const params = dashScuffParams({
+    forward,
+    draw: synthVoiceDraw("dash", audioFxDebug.dashScuffs),
+    level: state.sfxVolume,
+  });
+  synthNoiseShot(params.hiss);
+  synthToneShot(params.plant);
+}
+
+/**
+ * Stage-weapon clatter: the object that just landed, in its own material
+ * (engine/shared-sfx.mjs STAGE_WEAPON_CLATTER keyed by the weapon style) —
+ * glass ring and roll for the bottle, metal tinks for the needle, wing flaps
+ * for the pigeon — instead of the ui-select menu click.
+ */
+function weaponClatter() {
+  if (!impactAudioAllowed()) return;
+  audioFxDebug.weaponClatters += 1;
+  const style = stageWeaponProfile()?.style || "cup";
+  const params = weaponClatterParams(style, {
+    draw: synthVoiceDraw("stage-weapon", audioFxDebug.weaponClatters),
+    level: state.sfxVolume,
+  });
+  for (const tone of params.tones) synthToneShot(tone);
+  for (const noise of params.noises) synthNoiseShot(noise);
+}
+
+/**
+ * v5.1 TEMPO TELLS: re-arm click — the dry tick a press makes when the
+ * 4-frame re-arm gap eats it (engine/shared-sfx.mjs rearmClickParams). Sim-
+ * path trigger like the scuff; the distinctDraw keeps two eaten presses in
+ * one gap from sharing a pitch.
+ */
+function rearmClick() {
+  if (!impactAudioAllowed()) return;
+  audioFxDebug.rearmClicks += 1;
+  const params = rearmClickParams({
+    draw: synthVoiceDraw("rearm-drop", audioFxDebug.rearmClicks),
+    level: state.sfxVolume,
+  });
+  synthNoiseShot(params.tick);
+  synthToneShot(params.pip);
 }
 
 // --- Feature: crowd audio bus driven by state.crowdReaction ----------------
@@ -26521,14 +28365,17 @@ let crowdBed = null;
 // One-shot swell latch fed by stirCrowd (sim path, guarded + tick-deduped).
 let crowdSwellPending = 0;
 let crowdSwellTick = -1;
+// v5.1: the pending swell's kind ("ko" for the round-winning hit, "" else).
+let crowdSwellPendingKind = "";
 // Post-fatal-blow bed swell and its render-side edge observer.
 let crowdKillSwell = 0;
 let crowdObservedKillHits = 0;
 
-function latchCrowdSwell(amount) {
+function latchCrowdSwell(amount, kind = "") {
   if (rollbackResimulating || crowdSwellTick === state.simulationTick) return;
   crowdSwellTick = state.simulationTick;
   crowdSwellPending = Math.max(crowdSwellPending, Math.min(1.6, amount));
+  if (kind) crowdSwellPendingKind = kind;
 }
 
 function buildCrowdBed(variant) {
@@ -26563,11 +28410,20 @@ function teardownCrowdBed() {
   crowdBed = null;
 }
 
-function playCrowdSwell(variant, amount) {
+function playCrowdSwell(variant, amount, kind = "") {
   const profile = CROWD_AUDIO_PROFILES[variant] || CROWD_AUDIO_PROFILES.street;
   const strength = clamp(amount / 1.4, 0.25, 1.15);
   const level = state.sfxVolume;
   const jitter = presentationHash01(state.simulationTick, audioFxDebug.crowdSwells) - 0.5;
+  if (kind === "ko") {
+    // v5.1 KO MOMENT: the KO gets its own recipe under the voiced roar — a
+    // slower, longer, lower swell (0.25 s attack, ~2 s) with a second late
+    // wave at 0.9 s — so the round-winning hit never reuses the mid-round
+    // gasp/whoop the crowd just made for a throw.
+    synthNoiseShot({ seconds: 1.6 + strength * 0.6, filterType: "lowpass", freq: 520 + strength * 520, freqEnd: 360, peak: 0.055 * strength * level, attack: 0.25 });
+    synthNoiseShot({ seconds: 1.2, filterType: "bandpass", freq: 760 * (1 + jitter * 0.15), q: 1.1, peak: 0.028 * strength * level, attack: 0.2, delay: 0.9 });
+    return;
+  }
   switch (profile.swell) {
     case "roar":
       synthNoiseShot({ seconds: 0.9 + strength * 0.5, filterType: "lowpass", freq: 700 + strength * 700, freqEnd: 420, peak: 0.05 * strength * level, attack: 0.16 });
@@ -26590,6 +28446,79 @@ function playCrowdSwell(variant, amount) {
   }
 }
 
+// --- v5.1 KO MOMENT: the voiced crowd ---------------------------------------
+// Twelve generated takes (assets/audio/crowd/, engine/crowd-voice.mjs) played
+// OVER the synth swell, never instead of it. Module-level render state on the
+// announcer pattern: HTMLAudio takes per cue, a shuffle bag per cue (every
+// take once per bag, no repeat across the border), a per-cue minimum gap and
+// a shared busy window so a gasp never lands on a roar still sounding. The
+// level is the cue's base volume scaled by the stir amount (crowdVoiceLevel)
+// and the SFX slider. Nothing here reads back into the simulation.
+const crowdVoiceBanks = new Map();
+const crowdVoiceBags = new Map();
+const crowdVoiceLastAt = new Map();
+let crowdVoiceBusyUntil = 0;
+// The last dozen plays as "cue-take", newest last (snapshot().violence).
+const crowdVoiceRecent = [];
+let lastCrowdVoice = null;
+
+function crowdVoiceBank(cue) {
+  let bank = crowdVoiceBanks.get(cue);
+  if (bank) return bank;
+  const spec = CROWD_VOICE_CUES[cue];
+  bank = [];
+  for (let take = 1; take <= (spec?.takes || 0); take += 1) {
+    const sample = new Audio(crowdVoicePath(cue, take));
+    sample.preload = "auto";
+    bank.push(sample);
+  }
+  crowdVoiceBanks.set(cue, bank);
+  return bank;
+}
+
+function ensureCrowdVoiceMedia() {
+  for (const cue of Object.keys(CROWD_VOICE_CUES)) crowdVoiceBank(cue);
+}
+
+/**
+ * Play one voiced crowd take. `amount` is the stir amount the reaction
+ * answers (sets the level); `source` is bookkeeping for the recent log.
+ * Returns the take index played, or -1 when a gate held it back.
+ */
+function playCrowdVoice(cue, amount, { source = "" } = {}) {
+  if (rollbackResimulating || !cue) return -1;
+  const spec = CROWD_VOICE_CUES[cue];
+  if (!spec) return -1;
+  if (!$("#soundToggle")?.checked || !(state.sfxVolume > 0)) return -1;
+  if (demoSession.attract && !state.audioUnlocked) return -1;
+  const now = performance.now();
+  if (now - (crowdVoiceLastAt.get(cue) ?? -Infinity) < spec.minGapMs) return -1;
+  if (!spec.layers && now < crowdVoiceBusyUntil) return -1;
+  const bank = crowdVoiceBank(cue);
+  if (!bank.length) return -1;
+  let bag = crowdVoiceBags.get(cue);
+  if (!bag || bag.size !== bank.length) {
+    bag = createCrowdVoiceBag(bank.length);
+    crowdVoiceBags.set(cue, bag);
+  }
+  const take = crowdVoiceBagDraw(bag, visualRandom);
+  const sample = bank[take];
+  unlockAudio();
+  showSoundCaption("crowd-voice", null, spec.caption);
+  sample.pause();
+  sample.currentTime = 0;
+  sample.volume = clamp(spec.volume * crowdVoiceLevel(amount) * state.sfxVolume, 0, 1);
+  const playback = sample.play();
+  if (playback?.catch) playback.catch(() => {});
+  crowdVoiceLastAt.set(cue, now);
+  crowdVoiceBusyUntil = Math.max(crowdVoiceBusyUntil, now + spec.busyMs);
+  audioFxDebug.crowdVoicePlays += 1;
+  lastCrowdVoice = Object.freeze({ cue, take: take + 1, amount, source, level: Number(sample.volume.toFixed(3)) });
+  crowdVoiceRecent.push(`${cue}-${take + 1}`);
+  while (crowdVoiceRecent.length > 12) crowdVoiceRecent.shift();
+  return take;
+}
+
 function updateCrowdAudio(dt) {
   const fightLive = state.screen === "fight" && state.fighters.length === 2;
   const soundOn = Boolean($("#soundToggle")?.checked) && state.sfxVolume > 0;
@@ -26604,8 +28533,11 @@ function updateCrowdAudio(dt) {
   crowdObservedKillHits = state.finisher ? finisherHits : 0;
   crowdKillSwell = Math.max(0, crowdKillSwell - dt / 2.6);
   const preKillDuck = state.finisher && finisherHits === 0 ? 0.12 : 1;
+  // v5.1 KO MOMENT: the bed rides the held reaction too, so it stays up for
+  // the whole roundover instead of breathing out 2.5 ticks after the KO.
+  updateCrowdKoHoldLatch();
   const target = fightLive
-    ? clamp(clamp(state.crowdReaction / 1.4, 0, 1) * preKillDuck + crowdKillSwell * 0.8, 0, 1)
+    ? clamp(clamp(crowdDrawReaction() / 1.4, 0, 1) * preKillDuck + crowdKillSwell * 0.8, 0, 1)
     : 0;
   // Fast attack, slow decay — the crowd catches its breath rather than
   // snapping quiet.
@@ -26615,11 +28547,29 @@ function updateCrowdAudio(dt) {
   // One-shot swell/gasp bursts latched by stirCrowd spikes and the kill.
   if (crowdSwellPending > 0) {
     const amount = crowdSwellPending;
+    const kind = crowdSwellPendingKind;
     crowdSwellPending = 0;
+    crowdSwellPendingKind = "";
     if (fightLive && soundOn) {
       audioFxDebug.crowdSwells += 1;
-      playCrowdSwell(state.crowd?.variant || "street", amount);
+      playCrowdSwell(state.crowd?.variant || "street", amount, kind);
+      // The voiced take over the synth layer: roar for the KO and the fatal
+      // blow, ooh/gasp by amount below that (engine/crowd-voice.mjs tiers).
+      playCrowdVoice(kind === "ko" ? "roar" : crowdVoiceCueFor(amount), amount, { source: kind || "stir" });
     }
+  }
+  // The sustained cheer follows the KO roar 0.6 s into the hold, once.
+  if (fightLive && soundOn && !crowdKoHold.cheerFired && crowdKoHoldAge() >= CROWD_KO_HOLD.cheerDelayTicks) {
+    crowdKoHold.cheerFired = true;
+    playCrowdVoice("cheer", 1.4, { source: "ko-hold" });
+  }
+  // v5.1 STAGE KO BEATS: the cruise ship answers the KO with its horn, once
+  // per hold, never the same blast twice running (engine/ambient.mjs
+  // pickKoHorn off a hash of the hold tick, so replay and live agree).
+  if (fightLive && soundOn && state.stage === "cruise" && crowdKoHold.startTick >= 0 && koHorn.holdTick !== crowdKoHold.startTick) {
+    koHorn.holdTick = crowdKoHold.startTick;
+    koHorn.last = pickKoHorn(koHorn.last, presentationHash01(crowdKoHold.startTick, 211));
+    playKoHorn(AMBIENT_KO_HORNS[koHorn.last]);
   }
   const wantBed = fightLive && soundOn && audioContextRunning();
   if (wantBed) {
@@ -26869,6 +28819,23 @@ function teardownAmbienceRig() {
   ambienceRig = null;
 }
 
+// The ship's horn: two sawtooth reeds a fifth apart through a 600 Hz lowpass
+// (the chord of a real whistle), a breath of noise on the attack, one or two
+// blasts per the horn spec. Presentation audio, render-side, off the KO hold.
+const koHorn = { holdTick: -1, last: -1 };
+
+function playKoHorn(horn) {
+  if (!horn || !audioContextRunning()) return;
+  const level = state.sfxVolume;
+  audioFxDebug.koHorns += 1;
+  for (let blast = 0; blast < horn.blasts; blast += 1) {
+    const delay = blast * (horn.seconds + horn.gap);
+    synthToneShot({ delay, wave: "sawtooth", from: horn.from, seconds: horn.seconds, peak: horn.peak * level, attack: 0.12, filterType: "lowpass", freq: 600, q: 1.1, vibratoRate: 5.5, vibratoDepth: 1.6 });
+    synthToneShot({ delay, wave: "sawtooth", from: horn.fifth, seconds: horn.seconds, peak: horn.peak * 0.6 * level, attack: 0.14, filterType: "lowpass", freq: 900, q: 1.1, vibratoRate: 4.8, vibratoDepth: 2.2 });
+    synthNoiseShot({ delay, seconds: 0.28, filterType: "bandpass", freq: 420, q: 1.4, peak: 0.018 * level, attack: 0.04 });
+  }
+}
+
 function playAmbienceEvent(kind) {
   const level = state.sfxVolume;
   const hash = (salt) => presentationHash01(ambienceEventSerial, salt);
@@ -26970,6 +28937,17 @@ function muteRenderAudioBeds() {
 
 const ANNOUNCER_MAX_TAKES = 5;
 
+// cue -> index of the authored line its 2.8 retake re-reads (applied at the
+// end of ANNOUNCER_LINES below).
+const ANNOUNCER_RETAKES = Object.freeze({
+  ko: 0,
+  perfect: 0,
+  finishthem: 0,
+  wallbounce: 0,
+  "cyraxx-wins": 0,
+  flawless: 0,
+});
+
 // One line per planned take, mirrored exactly by MISSING-AUDIO.md — the
 // caption index and the mp3 take index stay aligned as files appear.
 const ANNOUNCER_LINES = (() => {
@@ -26984,6 +28962,13 @@ const ANNOUNCER_LINES = (() => {
     flawless: ["FLAWLESS VICTORY!", "AN ABSOLUTE SHUTOUT!"],
     comeback: ["WHAT A COMEBACK!", "BACK FROM THE DEAD!", "NEVER COUNT THEM OUT!"],
     timeover: ["TIME OVER — DECISION!", "THE CLOCK CALLS IT!", "TIME! JUDGES' DECISION!"],
+    // w51 clock truth: spoken once per round when the clock reads :10.
+    // TODO(tenseconds-takes): no recorded takes exist yet — the cue is absent
+    // from assets/audio/announcer/MANIFEST.json so it is caption-only (zero
+    // requests) until the owner approves generating tenseconds-1..3.mp3 with
+    // the announcer voice (work order in MISSING-AUDIO.md, Priority 6). The
+    // synthesised clock tick carries the moment audibly meanwhile.
+    tenseconds: ["TEN SECONDS!", "CLOCK'S RUNNING!", "TIME'S ALMOST UP!"],
     "fatality-performed": ["FATALITY.", "A GRAPHIC FINISH.", "THAT WAS A FINAL BLOW."],
     // Release 1.7 DEPTH: the guard-crush letter-slam's spoken call.
     guardcrush: ["GUARD CRUSH!", "DEFENSE SHATTERED!", "THE GUARD BREAKS!"],
@@ -26999,43 +28984,39 @@ const ANNOUNCER_LINES = (() => {
     banks[`${id}-name`] = [name, name, name];
     banks[`${id}-wins`] = [`${name} WINS!`, `THE WINNER — ${name}!`, `${name} TAKES IT!`];
   }
+  // 2.8 filled six banks with an extra take each (ko-5, perfect-4,
+  // finishthem-4, wallbounce-4, cyraxx-wins-4, flawless-3), every one a
+  // re-read of that bank's FIRST line (whisper-transcribed 2026-09-05: "K.O.",
+  // "Perfect!", "Finish them!", "Off the wall", "Cyraxx wins!", "Flawless
+  // victory"). Until 5.1 the caption list stopped short of them, so `pick %
+  // lines.length` captioned the extra take with the wrong words — the retake
+  // table appends the line each one actually speaks so caption == take.
+  for (const [cue, lineIndex] of Object.entries(ANNOUNCER_RETAKES)) {
+    banks[cue] = [...banks[cue], banks[cue][lineIndex]];
+  }
   return Object.freeze(banks);
 })();
 
 // Shuffle bags per cue: every take plays once before any repeats, and the
 // reshuffle never lets the same take land back-to-back across bag borders.
+// w51: the draw itself lives in engine/announcer.mjs (drawFromBag) so the
+// no-repeat rule is unit tested; this keeps the checksum-exempt RNG hookup.
 const announcerBags = new Map();
 
 function announcerBagDraw(cue, size) {
-  if (size <= 1) return 0;
-  let bag = announcerBags.get(cue);
-  if (!bag || bag.size !== size) {
-    bag = { size, order: [], position: 0, last: -1 };
-    announcerBags.set(cue, bag);
-  }
-  if (bag.position >= bag.order.length) {
-    const order = Array.from({ length: size }, (_, index) => index);
-    for (let index = order.length - 1; index > 0; index -= 1) {
-      const swap = Math.floor(visualRandom() * (index + 1));
-      [order[index], order[swap]] = [order[swap], order[index]];
-    }
-    if (order[0] === bag.last) [order[0], order[order.length - 1]] = [order[order.length - 1], order[0]];
-    bag.order = order;
-    bag.position = 0;
-  }
-  const pick = bag.order[bag.position];
-  bag.position += 1;
-  bag.last = pick;
-  return pick;
+  return drawFromBag(announcerBags, cue, size, visualRandom);
 }
 
-// cue -> { takes: [Audio...], probed }. 2.7 critic round: take counts come
-// from assets/audio/announcer/MANIFEST.json (generated from the files on
-// disk — regenerate it when takes land) so the picker is CLAMPED to takes
-// that exist. The old sequential HEAD probe discovered each bank's end by
+// cue -> { takes: [Audio...], durationsMs, probed }. 5.1: takes AND their
+// measured lengths come from assets/audio/MANIFEST.json (the shared
+// build-time manifest — see loadAudioManifest), so the picker is CLAMPED to
+// takes that exist and the speech clock knows how long each one runs. Two
+// fallbacks keep the pre-5.1 behaviour when that file is missing: the 2.7
+// announcer-only assets/audio/announcer/MANIFEST.json (take counts, no
+// lengths), then the sequential HEAD probe that discovered each bank's end by
 // 404ing one request past it (flawless-3, ko-5, wallbounce-4, ...) on every
-// cue a session touched; it survives only as the fallback for a missing/
-// unreadable manifest, where it still stops at the first gap.
+// cue a session touched; both still stop at the first gap. Lengths unknown to
+// the manifest are picked up from each element's loadedmetadata.
 const announcerBankCache = new Map();
 let announcerManifestPromise = null;
 
@@ -27049,12 +29030,41 @@ function announcerTakeCounts() {
   return announcerManifestPromise;
 }
 
+function fillAnnouncerBank(bank, srcs, durationsMs = []) {
+  bank.takes = srcs.map((src, index) => {
+    const sample = new Audio(src);
+    sample.preload = "auto";
+    if (!(durationsMs[index] > 0)) {
+      sample.addEventListener("loadedmetadata", () => {
+        if (!(bank.durationsMs[index] > 0) && Number.isFinite(sample.duration) && sample.duration > 0) {
+          bank.durationsMs[index] = Math.round(sample.duration * 1000);
+        }
+      }, { once: true });
+    }
+    return sample;
+  });
+  bank.durationsMs = srcs.map((_, index) => durationsMs[index] || 0);
+  bank.probed = true;
+  if (srcs.length) voiceFxDebug.announcerBanksLoaded += 1;
+}
+
 function announcerBank(cue) {
   let bank = announcerBankCache.get(cue);
   if (bank) return bank;
-  bank = { cue, takes: [], probed: false };
+  bank = { cue, takes: [], durationsMs: [], probed: false };
   announcerBankCache.set(cue, bank);
+  const settleFromManifest = (manifest) => {
+    const resolved = announcerBankFromManifest(manifest, cue, ANNOUNCER_MAX_TAKES);
+    if (!resolved) return false;
+    fillAnnouncerBank(bank, resolved.srcs, resolved.durationsMs);
+    voiceFxDebug.manifestBanks += 1;
+    return true;
+  };
+  // The manifest usually settled at boot, so a bank fills synchronously and
+  // the very first call on a cue already knows its takes and their lengths.
+  if (audioManifestState.settled && settleFromManifest(audioManifestState.data)) return bank;
   (async () => {
+    if (!audioManifestState.settled && settleFromManifest(await loadAudioManifest())) return;
     const counts = await announcerTakeCounts();
     const found = [];
     if (counts) {
@@ -27070,23 +29080,28 @@ function announcerBank(cue) {
         found.push(src);
       }
     }
-    bank.takes = found.map((src) => {
-      const sample = new Audio(src);
-      sample.preload = "auto";
-      return sample;
-    });
-    bank.probed = true;
-    if (found.length) voiceFxDebug.announcerBanksLoaded += 1;
+    fillAnnouncerBank(bank, found);
   })();
   return bank;
 }
 
 // Serialised speech clock: each accepted call reserves a busy window so
 // layered calls (KO -> fighter-wins -> story) never talk over each other.
+// Before 5.1 the window was announcerEstimateMs (word count, capped at
+// 1.7 s) while real takes run to 4676 ms (benny-wins-2): a Benny comeback KO
+// drawing ko-2 (2429 ms) started the wins call at 950 ms and "comeback" at
+// 2500 ms with benny-wins-2 still going — three takes stacked and the duck
+// released mid-line. The window now comes from the take's measured length
+// (announcerTakeMs), and the same number drives the music duck.
 let announcerBusyUntil = 0;
 
-function announcerEstimateMs(line) {
-  return Math.min(1700, 420 + line.split(/\s+/).length * 260);
+function announcerTakeMs(bank, takeIndex, line) {
+  if (takeIndex >= 0) {
+    if (bank.durationsMs[takeIndex] > 0) return bank.durationsMs[takeIndex];
+    const take = bank.takes[takeIndex];
+    if (take && Number.isFinite(take.duration) && take.duration > 0) return Math.round(take.duration * 1000);
+  }
+  return announcerEstimateMs(line);
 }
 
 /**
@@ -27104,16 +29119,19 @@ function announcerSay(cue, { delay = 0 } = {}) {
   const now = performance.now();
   const pick = announcerBagDraw(cue, Math.max(lines.length, bank.takes.length));
   const line = lines[pick % lines.length];
-  const startAt = Math.max(now + delay, announcerBusyUntil + 90);
-  announcerBusyUntil = startAt + announcerEstimateMs(line);
+  const takeIndex = bank.takes.length ? pick % bank.takes.length : -1;
+  const speechMs = announcerTakeMs(bank, takeIndex, line);
+  const slot = announcerWindow({ now, delay, busyUntil: announcerBusyUntil, speechMs, line });
+  const { startAt } = slot;
+  announcerBusyUntil = slot.busyUntil;
   window.setTimeout(() => {
     showSoundCaption("announcer", null, line);
     if (!$("#soundToggle").checked) return;
     if (demoSession.attract && !state.audioUnlocked) return;
-    const take = bank.takes.length ? bank.takes[pick % bank.takes.length] : null;
+    const take = takeIndex >= 0 ? bank.takes[takeIndex] : null;
     if (!take) return;
     unlockAudio();
-    duckMusic(0.45, Math.max(750, announcerEstimateMs(line)));
+    duckMusic(0.45, Math.max(750, speechMs));
     take.pause();
     take.currentTime = 0;
     take.volume = 0.9 * state.sfxVolume;
@@ -27126,9 +29144,19 @@ function announcerSay(cue, { delay = 0 } = {}) {
 // Banner -> spoken cue map. Runs inside announce() after its rollback guard,
 // so every existing announce call site (round intros, FIGHT, FINISH THEM,
 // KO, FINAL BLOW) gains the spoken call without new sim-path hooks.
-function announcerSpeakBanner(text) {
+function announcerSpeakBanner(text, plan = null) {
+  // w51: an explicit cue plan (finishRound's roundEndAnnouncerPlan) wins
+  // over the text map — it knows decision-vs-KO and round-vs-match.
+  if (Array.isArray(plan)) {
+    if (plan[0]?.cue === "timeover") voiceFxDebug.decisionCalls += 1;
+    for (const { cue, delay = 0 } of plan) announcerSay(cue, { delay });
+    return;
+  }
   if (text === "FIGHT!") {
     announcerSay("fight");
+    // The sheets had the intro to themselves; from here the fighters' voice
+    // takes may pull their remaining bytes (see warmFighterAudio).
+    topUpFighterAudio();
     return;
   }
   const roundMatch = text.match(/^(?:ONLINE )?ROUND (\d+)$/);
@@ -27150,9 +29178,11 @@ function announcerSpeakBanner(text) {
     return;
   }
   if (text.endsWith(" WINS")) {
-    announcerSay("ko");
+    // Text-only fallback (no caller uses it since w51 — finishRound always
+    // passes a plan). Without the round/match facts it can only be honest
+    // about the KO call, so it books the name bank, never "-wins".
     const fighter = roster.find(({ name }) => text === `${name} WINS`);
-    if (fighter) announcerSay(`${fighter.id}-wins`, { delay: 950 });
+    for (const { cue, delay } of roundEndAnnouncerPlan({ fighterId: fighter?.id || "" })) announcerSay(cue, { delay });
   }
 }
 
@@ -27248,12 +29278,13 @@ function queueStoryCallouts(winner, type) {
   if (key === storyRoundKey) return;
   storyRoundKey = key;
   const loser = state.fighters[1 - winner];
+  // w51: the time-over line is no longer a layered story callout — a decision
+  // OPENS on the timeover bank (finishRound's plan), so queuing it again here
+  // spoke "TIME OVER — DECISION!" twice. PERFECT / COMEBACK still layer over
+  // a decision when they are true.
   if (type >= 0) {
     voiceFxDebug.storyCallouts += 1;
     announcerSay("fatality-performed", { delay: 2400 });
-  } else if (state.timer <= 0 && loser.health > 0) {
-    voiceFxDebug.storyCallouts += 1;
-    announcerSay("timeover", { delay: 1100 });
   } else if (state.fighters[winner].health >= 100) {
     voiceFxDebug.storyCallouts += 1;
     announcerSay("perfect", { delay: 1200 });
@@ -27453,7 +29484,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.0");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.1");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -27617,6 +29648,7 @@ function setPaused(paused, reason = "") {
   state.paused = Boolean(paused);
   state.pauseReason = state.paused ? String(reason || state.pauseReason || "") : "";
   $("#pausePanel").hidden = !state.paused;
+  if (!state.paused) closeMoveListOverlay();
   $("#pauseReason").hidden = !state.pauseReason;
   $("#pauseReason").textContent = state.pauseReason;
   $("#touchControls").classList.toggle("paused", state.paused);
@@ -27682,12 +29714,34 @@ function titleKeyboard(event) {
   }
   if (state.screen === "fight" && (event.code === "Escape" || event.code === "KeyP")) {
     event.preventDefault();
+    // 5.1: the pause-menu move list closes first; a second press resumes.
+    if (moveListOverlay.open) {
+      closeMoveListOverlay();
+      return;
+    }
+    if (controlCard.visible && !state.paused) hideControlCard();
     setPaused(!state.paused);
     return;
   }
   if (event.code === "Escape") {
     if ($("#controlsDialog").open) return;
     if (state.screen !== "title") showScreen("title");
+  }
+  if (state.screen === "select" && state.teamChoicePending) {
+    // 5.1: the Block War opponent prompt owns the keyboard — arrows move
+    // between its two buttons, Enter / any attack key confirms the focused one.
+    if (["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.code)) {
+      event.preventDefault();
+      focusTeamOpponentChoice(["ArrowLeft", "ArrowUp"].includes(event.code) ? -1 : 1);
+      return;
+    }
+    const attackKey = keyMaps.some((map) => [map.lp, map.hp, map.lk, map.hk].includes(event.code));
+    if (event.code === "Enter" || event.code === "Space" || attackKey) {
+      event.preventDefault();
+      const focused = $$("[data-team-opponent]").includes(document.activeElement) ? document.activeElement : null;
+      chooseTeamOpponent(focused?.dataset.teamOpponent || "cpu");
+    }
+    return;
   }
   if (state.screen === "select" && ["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.code)) {
     event.preventDefault();
@@ -27836,6 +29890,7 @@ function menuPadButtonEdge(pad, slot, index) {
 function menuFocusRoot() {
   const dialog = $("#controlsDialog");
   if (dialog.open) return dialog;
+  if (state.screen === "fight" && state.paused && moveListOverlay.open) return $("#moveListOverlay");
   if (state.screen === "fight") return state.paused ? $("#pausePanel") : null;
   return $(`#${state.screen}Screen`);
 }
@@ -27904,6 +29959,20 @@ function handleSelectPadEvent(kind, padIndex) {
   }
   const twoPlayer = ["versus", "team"].includes(state.mode);
   if (padIndex === 1 && !twoPlayer) return;
+  if (state.teamChoicePending) {
+    // 5.1: pad on the Block War opponent prompt — left/right between the two
+    // buttons, A/Y confirms the focused one. Pad 0 only (P2's pad has no say).
+    if (padIndex !== 0) return;
+    if (kind === "left" || kind === "right" || kind === "up" || kind === "down") {
+      focusTeamOpponentChoice(kind === "left" || kind === "up" ? -1 : 1);
+      padNavDebug.moves += 1;
+    } else if (kind === "confirm" || kind === "altConfirm") {
+      padNavDebug.confirms += 1;
+      const focused = $$("[data-team-opponent]").includes(document.activeElement) ? document.activeElement : null;
+      chooseTeamOpponent(focused?.dataset.teamOpponent || "cpu");
+    }
+    return;
+  }
   // Pad 0 drives whichever side is currently picking (the keyboard-cursor
   // rule); a second pad always owns P2's pick in the two-player modes.
   const side = padIndex === 1 ? 1 : (state.locks[0] ? 1 : 0);
@@ -28184,6 +30253,12 @@ $("#onlineReadyButton").addEventListener("click", toggleOnlineReady);
 $("#onlineDisconnectButton").addEventListener("click", () => disconnectOnline(true));
 $("#controlsButton").addEventListener("click", () => { unlockAudio(); $("#controlsDialog").showModal(); });
 $("#moveListSelect").addEventListener("change", (event) => renderMoveList(event.target.value));
+$("#pauseMoveListButton")?.addEventListener("click", () => openMoveListOverlay());
+$("#moveListOverlayClose")?.addEventListener("click", () => closeMoveListOverlay());
+$("#titleNewcomerButton")?.addEventListener("click", () => startFightSchool());
+$("#controlCardClose")?.addEventListener("click", () => hideControlCard());
+$("#controlCard")?.addEventListener("click", () => hideControlCard());
+$$("[data-team-opponent]").forEach((button) => button.addEventListener("click", () => chooseTeamOpponent(button.dataset.teamOpponent)));
 $("#musicToggle").addEventListener("change", () => {
   unlockAudio();
   syncMusic();
@@ -28416,16 +30491,7 @@ $("#trainingTrialResetButton").addEventListener("click", () => {
 });
 $("#trainingResetButton").addEventListener("click", () => resetTrainingPosition(true));
 // Training can force this round's weapon onto the floor for practice.
-$("#trainingWeaponButton").addEventListener("click", () => {
-  if (!state.stageWeaponsEnabled) setStageWeapons(true);
-  if (!state.stageWeapon) resetStageWeapon();
-  if (!state.stageWeapon) return;
-  state.stageWeapon.phase = "ground";
-  state.stageWeapon.frames = 0;
-  state.stageWeapon.holder = -1;
-  state.fighters.forEach((fighter) => { fighter.carriedWeapon = null; fighter.carryFrames = 0; });
-  updateHud();
-});
+$("#trainingWeaponButton").addEventListener("click", () => spawnTrainingWeapon());
 $("#musicSelect").addEventListener("change", (event) => {
   unlockAudio();
   chooseMusic(event.target.value);
@@ -28610,7 +30676,52 @@ document.addEventListener("webkitfullscreenchange", syncOrientationGate);
 // Everything still flows through the same touch tokens into readInput's
 // action vocabulary: no new inputs, no new net bits, no timing changes.
 // ---------------------------------------------------------------------------
-const touchFxDebug = { padSlides: 0, clusterRolls: 0 };
+const touchFxDebug = { padSlides: 0, clusterRolls: 0, flicks: 0 };
+
+// ---------------------------------------------------------------------------
+// 5.x flick-to-dash (sweep #41). Until now the only phone dash was lifting
+// the thumb and re-landing in the same sector inside the 12-frame double-tap
+// window (engine/defense.mjs dashTapWindowFrames) — a re-press the sector
+// pad never signalled and QA never drove. A flick (touchPadFlick,
+// engine/controls.mjs: >= 0.6R of horizontal travel inside 100 ms, landing
+// >= 0.45R out) is now translated into exactly the input the sim already
+// understands: two direction presses two ticks apart. The pulse plays
+// lift / tap / lift / tap / settle on the touch Set, one real sim tick per
+// stage, from runSimulationStep — so DirectionTapTracker sees press #2 two
+// frames after press #1 (well inside its 12), readInput is untouched, and no
+// new net bit exists. Four stages is the price of not knowing how long the
+// thumb has already been in that sector: a thumb resting at the sector edge
+// that then flicks outward has an ancient first press, so the pulse always
+// authors both. The settle stage reconciles with whatever the thumb has done
+// meanwhile (lifted, or slid to another sector) so no token is ever left
+// stuck in the Set.
+// ---------------------------------------------------------------------------
+const TOUCH_FLICK_PULSE = Object.freeze(["lift", "tap", "lift", "tap", "settle"]);
+const touchFlickPulses = new Map(); // token -> { entry, stage }
+
+function queueTouchFlick(entry, token) {
+  if (touchFlickPulses.has(token)) return false;
+  touchFlickPulses.set(token, { entry, stage: 0 });
+  return true;
+}
+
+function pumpTouchFlicks() {
+  if (!touchFlickPulses.size) return;
+  for (const [token, pulse] of touchFlickPulses) {
+    const stage = TOUCH_FLICK_PULSE[pulse.stage];
+    if (stage === "lift") {
+      touch.delete(token);
+    } else if (stage === "tap") {
+      pressTouchTokens([token]);
+    } else {
+      const stillHeld = pulse.entry.active && pulse.entry.tokens.includes(token);
+      if (!stillHeld) touch.delete(token);
+      touchFlickPulses.delete(token);
+      continue;
+    }
+    pulse.stage += 1;
+  }
+}
 
 function pressTouchTokens(tokens) {
   for (const token of tokens) {
@@ -28644,15 +30755,17 @@ function capturePointer(element, pointerId) {
   for (const button of pad.querySelectorAll("[data-touch]")) {
     cellButtons.set(touchTokenKey(button.dataset.touch.split(/\s+/).filter(Boolean)), button);
   }
-  const pointers = new Map(); // pointerId -> { tokens, rect }
+  const pointers = new Map(); // pointerId -> { tokens, rect, samples, active }
   const setHighlight = () => {
     const activeKeys = new Set([...pointers.values()].map((entry) => touchTokenKey(entry.tokens)));
     for (const [key, button] of cellButtons) button.classList.toggle("active", activeKeys.has(key));
   };
+  const padRadius = (entry) => Math.min(entry.rect.width, entry.rect.height) / 2;
+  const offsetX = (entry, event) => event.clientX - (entry.rect.left + entry.rect.width / 2);
   const tokensAt = (entry, event) => {
-    const dx = event.clientX - (entry.rect.left + entry.rect.width / 2);
+    const dx = offsetX(entry, event);
     const dy = event.clientY - (entry.rect.top + entry.rect.height / 2);
-    return touchPadTokens(dx, dy, Math.min(entry.rect.width, entry.rect.height) / 2);
+    return touchPadTokens(dx, dy, padRadius(entry));
   };
   const applyTokens = (entry, nextTokens) => {
     if (touchTokenKey(entry.tokens) === touchTokenKey(nextTokens)) return;
@@ -28662,12 +30775,34 @@ function capturePointer(element, pointerId) {
     entry.tokens = nextTokens;
     setHighlight();
   };
+  // Flick read, after the sector swap so the landing sector's token is
+  // already in entry.tokens. performance.now() rather than event.timeStamp:
+  // synthetic QA PointerEvents carry creation-time stamps that are not
+  // comparable across a dispatch, and the wall clock is what the 100 ms
+  // window means anyway.
+  const sampleFlick = (entry, event) => {
+    const now = performance.now();
+    entry.samples.push({ t: now, x: offsetX(entry, event) });
+    pruneFlickSamples(entry.samples, now);
+    const direction = touchPadFlick(entry.samples, padRadius(entry));
+    if (!direction) return;
+    const token = direction > 0 ? "right" : "left";
+    if (!entry.tokens.includes(token)) return;
+    // One sweep, one dash: the next flick needs fresh travel.
+    entry.samples.length = 0;
+    if (!queueTouchFlick(entry, token)) return;
+    touchFxDebug.flicks += 1;
+    // The first three landed flicks of a session get a beat of confirmation
+    // on the prompt (screen direction, like the pad itself).
+    if (touchFxDebug.flicks <= 3) showTouchHint(direction > 0 ? "DASH ▶▶" : "◀◀ DASH", 700);
+  };
   pad.addEventListener("pointerdown", (event) => {
     event.preventDefault();
     capturePointer(pad, event.pointerId);
-    const entry = { tokens: [], rect: pad.getBoundingClientRect() };
+    const entry = { tokens: [], rect: pad.getBoundingClientRect(), samples: [], active: true };
     pointers.set(event.pointerId, entry);
     applyTokens(entry, tokensAt(entry, event));
+    sampleFlick(entry, event);
     if (state.touchSettings.haptics && event.isTrusted) navigator.vibrate?.(12);
     unlockAudio();
   });
@@ -28676,11 +30811,13 @@ function capturePointer(element, pointerId) {
     if (!entry) return;
     event.preventDefault();
     applyTokens(entry, tokensAt(entry, event));
+    sampleFlick(entry, event);
   });
   const end = (event) => {
     const entry = pointers.get(event.pointerId);
     if (!entry) return;
     event.preventDefault();
+    entry.active = false;
     releaseTouchTokens(entry.tokens);
     pointers.delete(event.pointerId);
     setHighlight();
@@ -28753,7 +30890,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.0-fullswing",
+  version: "5.1-truth",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -28795,8 +30932,13 @@ window.__finalBlowEngine = {
         audit: fighterAudioAudit,
         lastEvent: lastSoundEvent ? { ...lastSoundEvent } : null,
         loadedPalettes: new Set([...fighterSfxPools.keys()].map((key) => key.split(":")[0])).size,
+        // Item 21: the last shared-pool pitch/level draw, so QA can prove two
+        // consecutive body-hits were not the identical play.
+        variation: lastSharedVariation ? { ...lastSharedVariation } : null,
       },
       offlineReady: state.offlineReady,
+      // v5.1 #35: per-fighter sheet readiness and the intro art hold.
+      artReadiness: artReadinessSnapshot(),
       accessibility: { ...state.accessibility },
       touchSettings: { ...state.touchSettings },
       // R1.9 wave 15 platform blocks: thumb-slide input, haptics, pad menu
@@ -28811,9 +30953,13 @@ window.__finalBlowEngine = {
       governor: {
         eligible: governorEligible(),
         active: Boolean(performanceGovernor.machine),
+        // 5.x: alive but frozen on a non-fight screen.
+        retained: Boolean(performanceGovernor.machine) && !governorEligible(),
         profile: state.performance.id,
         steps: performanceGovernor.steps,
         lastChange: performanceGovernor.lastChange,
+        seededFrom: performanceGovernor.seededFrom,
+        remembered: performanceGovernor.remembered,
       },
       wakeLock: {
         supported: Boolean(navigator.wakeLock),
@@ -28983,6 +31129,14 @@ window.__finalBlowEngine = {
         breathingFighters: presentationDebug.breathing,
         contactShadows: presentationDebug.contactShadows,
         gritAuras: presentationDebug.gritAuras,
+        // v5.1 TEMPO TELLS: sim totals (whiffs noticed, presses the re-arm
+        // gap ate) and the per-frame draws of each tell.
+        whiffTells: tempoFxDebug.whiffTells,
+        rearmDrops: tempoFxDebug.rearmDrops,
+        whiffFringes: presentationDebug.whiffFringes,
+        whiffGhosts: presentationDebug.whiffGhosts,
+        rearmFlashes: presentationDebug.rearmFlashes,
+        rearmDropFlashes: presentationDebug.rearmDropFlashes,
         // R1.9 SCHOOL & POCKET counters (trainingFxDebug: monotonic one-shots
         // on the hudFxDebug pattern) for orchestrator smoke tests.
         frameMeterTicks: trainingFxDebug.frameMeterTicks,
@@ -29100,7 +31254,23 @@ window.__finalBlowEngine = {
         // into the simulation.
         crowdBusLevel: Number(crowdAudioLevel.toFixed(3)),
         crowdSwells: audioFxDebug.crowdSwells,
+        // v5.1 KO MOMENT: voiced crowd plays, the last dozen as "cue-take" so
+        // the smoke can prove no take ever repeats back to back, and the hold.
+        crowdVoicePlays: audioFxDebug.crowdVoicePlays,
+        crowdVoiceRecent: crowdVoiceRecent.slice(),
+        crowdVoiceLast: lastCrowdVoice,
+        crowdVoiceFiles: crowdVoiceAssets.length,
+        crowdKoHold: crowdKoHoldAge() >= 0 ? 1 : 0,
+        crowdKoHoldAge: crowdKoHoldAge(),
+        crowdDrawReaction: Number(crowdDrawReaction().toFixed(3)),
         impactLayers: audioFxDebug.impactLayers,
+        // Item 21: jittered shared-sample plays and the synthesised dash
+        // scuff / stage-weapon clatter totals (monotonic, resim-guarded).
+        sharedVariations: audioFxDebug.sharedVariations,
+        dashScuffs: audioFxDebug.dashScuffs,
+        rearmClicks: audioFxDebug.rearmClicks,
+        weaponClatters: audioFxDebug.weaponClatters,
+        koHorns: audioFxDebug.koHorns,
         musicIntensity: Number(musicIntensityLevel.toFixed(3)),
         ambienceActive: ambienceEngaged ? 1 : 0,
         ambienceStage: ambienceEngaged ? state.stage : "",
@@ -29120,6 +31290,24 @@ window.__finalBlowEngine = {
         storyCallouts: voiceFxDebug.storyCallouts,
         onlineMoments: voiceFxDebug.onlineMoments,
         voiceProbeRequests,
+        // w51 announcer/clock truth: timer-edge ticks booked (must equal
+        // timerPulses), ticks/rings actually voiced past the audio gates,
+        // once-per-round TEN SECONDS calls and decision round-ends.
+        timerTicks: hudFxDebug.timerTicks,
+        clockTicksVoiced: audioFxDebug.clockTicks,
+        dizzyRings: audioFxDebug.dizzyRings,
+        clockCallouts: voiceFxDebug.clockCallouts,
+        decisionCalls: voiceFxDebug.decisionCalls,
+        // 5.1 audio manifest: -1 while the fetch is in flight, 1 loaded, 0
+        // missing (probe fallback); banks resolved from it without a request;
+        // fighter voice media elements created so far (one per take plus
+        // overlap growth — was 3-5 per take at warm-up).
+        audioManifest: audioManifestState.settled ? (audioManifestState.data ? 1 : 0) : -1,
+        voiceManifestBanks: voiceFxDebug.manifestBanks,
+        voiceElements: voiceFxDebug.voiceElements,
+        // Remaining serialised-speech reservation: after a KO call it should
+        // read the take's real length (ko-2 = 2429 ms), not the old <=1700.
+        announcerBusyMs: Math.max(0, Math.round(announcerBusyUntil - performance.now())),
         // Release 1.7 DEPTH: sim-mechanic one-shot totals (mechFxDebug —
         // monotonic, resim-guarded at every increment site).
         guardCrushes: mechFxDebug.guardCrushes,
@@ -29244,6 +31432,11 @@ window.__finalBlowEngine = {
         grabbed: fighter.grabbed ? { ...fighter.grabbed } : null,
         throwInvulnerableFrames: fighter.throwInvulnerableFrames,
         throwTechFlashFrames: fighter.throwTechFlashFrames,
+        // v5.1 TEMPO TELLS: the live swing's tax and the re-arm countdown.
+        attackRearmFrames: fighter.attackRearmFrames,
+        whiffTaxed: Boolean(fighter.attacking?.whiffTaxed),
+        whiffTaxFrames: fighter.attacking?.whiffTaxFrames || 0,
+        whiffTell: fighter.whiffTell ? { ...fighter.whiffTell } : null,
         combo: fighter.combo.snapshot(state.simulationTick),
         hurtboxes: getHurtboxes(fighter),
         hitboxes: getActiveHitboxes(fighter),
@@ -29368,6 +31561,27 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
     },
     trialDemoActive() {
       return trialDemo.active;
+    },
+    // --- 5.1 modes & onboarding probes -------------------------------------
+    controlCard(device = null) {
+      return { visible: controlCard.visible, shows: controlCard.shows, seen: controlCardSeen(), device: controlCardDevice(), lines: controlCardLines(device || controlCardDevice()) };
+    },
+    controlCardReset() {
+      localStorage.removeItem(CONTROL_CARD_KEY);
+      hideControlCard();
+      return true;
+    },
+    moveListOverlay(open = true) {
+      if (open) return openMoveListOverlay() && { ...moveListOverlay, rows: $$("#moveListOverlayRows .frame-row").length };
+      closeMoveListOverlay();
+      return { ...moveListOverlay };
+    },
+    teamChoice(kind = "cpu") {
+      const ok = chooseTeamOpponent(kind);
+      return { ok, cpu: state.teamCpu, pending: state.teamChoicePending, picks: state.teamPicks.map((team) => [...team]), difficultyBar: !$("#difficultyBar").hidden };
+    },
+    schoolStepLabel(lessonIndex = 0, stepIndex = 0, style = state.controlStyle) {
+      return fightSchoolStepLabel(FIGHT_SCHOOL_LESSONS[lessonIndex]?.steps[stepIndex], style);
     },
     trialMedals() {
       return JSON.parse(JSON.stringify(trialMedals));
@@ -29881,6 +32095,82 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
         };
       });
     },
+    // v5.0 QA (engineering pass): the last `count` pose transitions of one
+    // side (or both, tagged), oldest first — the frame chains MOTION-ATLAS.md
+    // v5.0 records were read by eye; a probe asserts the ORDER from this.
+    // `poseTraceReset()` clears both rings so a scripted strike starts clean.
+    poseTrace(count = POSE_TRACE_SIZE, side = null) {
+      const sides = side === 0 || side === 1 ? [side] : [0, 1];
+      const take = Math.max(0, Math.floor(count));
+      return sides.flatMap((index) => (take ? poseTrace[index].slice(-take) : [])
+        .map((entry) => ({ side: index, ...entry })));
+    },
+    poseTraceReset() {
+      poseTrace[0].length = 0;
+      poseTrace[1].length = 0;
+      return true;
+    },
+    // v5.1 #35: readiness of the fighters' authored sheets and the intro art
+    // hold counters (also on snapshot().artReadiness). `artHold(false)` lets a
+    // timing-sensitive probe opt out of the hold for the rest of the session.
+    artReadiness(ids = null) {
+      const snapshot = artReadinessSnapshot();
+      if (Array.isArray(ids)) {
+        snapshot.fighters = Object.fromEntries(ids.map((id) => [id, fighterArtReadiness(id)]));
+        snapshot.ready = Object.values(snapshot.fighters).every((entry) => entry.ready);
+      }
+      return snapshot;
+    },
+    artHold(enabled = true) {
+      introArtHold.enabled = Boolean(enabled);
+      if (!introArtHold.enabled) releaseIntroArtHold("disabled", performance.now());
+      return introArtHold.enabled;
+    },
+    // The ambient-pulse latch and its level at the current tick, so a probe
+    // can ask whether a big hit / KO actually latched before it measures the
+    // floodlights. Presentation state only, never part of a snapshot.
+    ambient() {
+      const reduced = state.accessibility.reducedMotion;
+      const level = ambientPulseLevel(ambientObs, state.simulationTick, reduced);
+      // v5.1 STAGE KO BEATS: the KO beat off the crowd hold and the surge the
+      // four stages' furniture actually draws from, so a probe can confirm a
+      // stage reacted (surge > 0) before it measures a landmark rectangle.
+      const beat = ambientKoBeat(crowdKoHoldAge(), reduced);
+      return {
+        ...ambientObs,
+        ...level,
+        beat,
+        surge: ambientSurge(level, beat),
+        stage: state.stage,
+        tick: state.simulationTick,
+      };
+    },
+    // v5.1 TEMPO TELLS: each side's tell phase at the current tick (the same
+    // whiffTellState both renderers draw from), the frame-meter phase, the
+    // sim totals and what the last rendered frame actually drew — so a probe
+    // can script a whiff and assert it produced a tell, not just a tax.
+    tempo() {
+      return {
+        tick: state.simulationTick,
+        sides: state.fighters.map((fighter) => ({
+          side: fighter.side,
+          ...whiffTellState(fighter, state.simulationTick),
+          framePhase: trainingFramePhase(fighter),
+          attackRearmFrames: fighter.attackRearmFrames,
+          whiffTell: fighter.whiffTell ? { ...fighter.whiffTell } : null,
+        })),
+        whiffTells: tempoFxDebug.whiffTells,
+        rearmDrops: tempoFxDebug.rearmDrops,
+        rearmClicks: audioFxDebug.rearmClicks,
+        drawn: {
+          fringes: presentationDebug.whiffFringes,
+          ghosts: presentationDebug.whiffGhosts,
+          rearmFlashes: presentationDebug.rearmFlashes,
+          dropFlashes: presentationDebug.rearmDropFlashes,
+        },
+        trainingFrames: state.mode === "training" ? trainingFrameDataLabel(state.training.lastMove) : "",
+      };
+    },
     fighter(side, values = {}) {
       const fighter = state.fighters[side];
       if (!fighter) throw new Error(`Unknown fighter side: ${side}`);
@@ -30097,7 +32387,30 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
     },
     // --- R1.9 wave 15 platform probes -------------------------------------
     touchDebug() {
-      return { ...touchFxDebug, tokens: [...touch] };
+      return { ...touchFxDebug, tokens: [...touch], flickPulses: touchFlickPulses.size };
+    },
+    // 5.x flick-to-dash probe: lands a thumb at the pad centre and sweeps it
+    // to the pad edge in one synthetic move (0 ms elapsed, well inside the
+    // 100 ms window), then hands back the queued pulse so the caller can step
+    // the sim and watch the dash start. The thumb stays down until
+    // touchFlick(direction, false) lifts it — mirrors a real flick-and-hold.
+    touchFlick(direction = 1, hold = true) {
+      const pad = $(".touch-move");
+      const rect = pad.getBoundingClientRect();
+      const centreX = rect.left + rect.width / 2;
+      const centreY = rect.top + rect.height / 2;
+      const radius = Math.min(rect.width, rect.height) / 2;
+      const pointerId = 41;
+      const dispatch = (type, x) => pad.dispatchEvent(new PointerEvent(type, {
+        bubbles: true, pointerType: "touch", pointerId, clientX: x, clientY: centreY,
+      }));
+      if (hold) {
+        dispatch("pointerdown", centreX);
+        dispatch("pointermove", centreX + Math.sign(direction || 1) * radius * 0.9);
+      } else {
+        dispatch("pointerup", centreX + Math.sign(direction || 1) * radius * 0.9);
+      }
+      return this.touchDebug();
     },
     haptics(enabled = null) {
       if (enabled !== null) state.touchSettings.haptics = Boolean(enabled);
@@ -30129,19 +32442,43 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
     },
     governorInject(frameMs = 25, frames = 130) {
       if (!performanceGovernor.machine) {
-        const baseline = resolvePerformanceProfile("auto", performanceEnvironment(state.accessibility.reducedMotion)).id;
-        performanceGovernor.machine = createPerformanceGovernor({ profileId: state.performance.id, baselineId: baseline });
+        performanceGovernor.machine = createGovernorMachine();
+        applyPerformanceSettings();
       }
       for (let frame = 0; frame < Math.max(1, Math.floor(frames)); frame += 1) {
         applyGovernorChange(performanceGovernor.machine.observe(frameMs));
       }
+      return this.governorMemory();
+    },
+    // 5.x: what the governor remembers for this build + device, and whether
+    // the live machine was seeded from it.
+    governorMemory() {
+      const memory = governorMemoryContext();
+      const remembered = readGovernorMemory(governorMemoryStorage(), memory.key, memory.signature);
       return {
         eligible: governorEligible(),
+        active: Boolean(performanceGovernor.machine),
+        retained: Boolean(performanceGovernor.machine) && !governorEligible(),
         profile: state.performance.id,
         machineProfile: performanceGovernor.machine?.profile() || null,
         steps: performanceGovernor.steps,
         lastChange: performanceGovernor.lastChange,
+        seededFrom: performanceGovernor.seededFrom,
+        key: memory.key,
+        baseline: memory.baselineId,
+        remembered: remembered?.profileId || null,
       };
+    },
+    // Wipes the memory AND the live machine so a probe that stepped the
+    // governor down leaves the page at the static resolution for whatever
+    // runs next; a fresh machine will then seed from 'static'.
+    governorForget() {
+      forgetGovernorMemory(governorMemoryStorage(), governorMemoryContext().key);
+      performanceGovernor.machine = null;
+      performanceGovernor.seededFrom = "";
+      performanceGovernor.remembered = "";
+      applyPerformanceSettings();
+      return this.governorMemory();
     },
     wakeLock() {
       syncWakeLock();
@@ -30489,7 +32826,9 @@ if (!commissionerUnlocked() && blackBookLedger.tallies.finalArcadeClears >= 1) {
   unlockCommissioner({ quiet: true });
 }
 setupRoster();
+buildMoveListSelect();
 renderMoveList();
+renderControlStyleCopy();
 // ---------------------------------------------------------------------------
 // CINEMA 3D bridge — experimental Three.js presentation renderer.
 // The module lazy-loads on first activation (toggle or ?renderer=3d) so the
@@ -30577,6 +32916,96 @@ function updateCinema3dHudFade(active, dtMs) {
   hud.style.opacity = opacity >= 0.999 ? "" : opacity.toFixed(3);
 }
 
+// CINEMA 3D gameplay reads (overlay pass). Runs after the world ctx.restore()
+// while the 3D world is live, on the transparent 2D canvas that sits ON TOP
+// of the 3D one. Every marker here is pure 2D screen art the world pass skips
+// in 3D (it never ran: drawDizzyStars / drawGuardCrushMarker / the combatText
+// branch of drawParticles all live inside `if (!cinema3dWorld)`), so a 3D
+// player was getting dizzied, crushed and countered without a single tell.
+// Each marker is drawn by the SAME function the 2D path uses, re-anchored:
+// the sim point it draws about is projected through the live framing camera
+// (renderer.projectSim, the CRT-punch pattern) and the drawing is scaled by
+// the projected size of 100 sim px at that point, so a punch-in or the
+// corner-vs-corner pull-back scales the read with the fighter it belongs to.
+// Render-only reads of snapshotted state; nothing here touches the sim.
+function cinema3dOverlayAnchor(simX, simY) {
+  const project = cinema3dBridge.renderer?.projectSim;
+  if (!project) return null;
+  const at = project(simX, simY);
+  const above = project(simX, simY - 100);
+  if (!at || !above) return null;
+  const scale = clamp((at.y - above.y) / 100, 0.35, 2.5);
+  return { x: at.x, y: at.y, scale };
+}
+
+function drawCinema3dOverlayReads(time) {
+  if (!cinema3dBridge.renderer?.projectSim) return;
+  let drawn = 0;
+  // A drawing authored about (originX, originY) in sim space, replayed about
+  // the projected point at the projected scale.
+  const replay = (originX, originY, paint) => {
+    const anchor = cinema3dOverlayAnchor(originX, originY);
+    if (!anchor) return;
+    ctx.save();
+    ctx.translate(anchor.x, anchor.y);
+    ctx.scale(anchor.scale, anchor.scale);
+    ctx.translate(-originX, -originY);
+    paint();
+    ctx.restore();
+    drawn += 1;
+  };
+  for (const fighter of state.fighters) {
+    // Rhythm rings are authored about the feet (drawFighter translates to
+    // fighter.x/y before drawing them).
+    if (fighter.def.id === "ali" && fighter.rhythmStacks > 0) {
+      replay(fighter.x, fighter.y, () => {
+        ctx.translate(fighter.x, fighter.y);
+        drawRhythmRings(fighter, time);
+      });
+    }
+    // The markers anchor themselves above the DRAWN sprite height; replaying
+    // about that same point keeps the drain bar over the head in 3D too.
+    const markerY = fighter.y - fighterRenderSize(fighter.def.id) * 0.956 - 26;
+    if (fighter.dizzyFrames > 0) {
+      replay(fighter.x, markerY, () => drawDizzyStars(fighter, time));
+    } else if (fighter.guardCrushFrames > 0) {
+      replay(fighter.x, markerY, () => drawGuardCrushMarker(fighter, time));
+    }
+  }
+  const weapon = state.stageWeapon;
+  const profile = weapon && (weapon.phase === "telegraph" || weapon.phase === "ground")
+    ? stageWeaponProfile() : null;
+  if (profile) {
+    // Name tag: the object is identifiable without knowing the stage (the
+    // world-objects layer draws the object itself; text stays on this pass).
+    const telegraphing = weapon.phase === "telegraph";
+    const progress = telegraphing ? clamp(weapon.frames / Math.max(1, profile.telegraphFrames), 0, 1) : 1;
+    const remaining = telegraphing ? 1 : 1 - clamp(weapon.frames / Math.max(1, profile.groundFrames), 0, 1);
+    const tagY = FLOOR - profile.height * FIGHTER_SCALE - 26;
+    replay(weapon.x, tagY, () => {
+      ctx.globalAlpha = telegraphing ? progress : 0.55 + remaining * 0.45;
+      ctx.font = "900 15px system-ui, sans-serif";
+      ctx.textAlign = "center";
+      ctx.fillStyle = "#ffd54a";
+      ctx.strokeStyle = "rgba(0,0,0,.75)";
+      ctx.lineWidth = 4;
+      ctx.strokeText(profile.name, weapon.x, tagY);
+      ctx.fillText(profile.name, weapon.x, tagY);
+    });
+  }
+  for (const effect of state.effects) {
+    if (effect.kind !== "combatText") continue;
+    const alpha = clamp(effect.life / (effect.max || 0.9), 0, 1);
+    replay(effect.x, effect.y, () => {
+      ctx.translate(effect.x, effect.y);
+      ctx.shadowBlur = 25;
+      ctx.shadowColor = effect.color;
+      drawCombatTextBody(effect, alpha);
+    });
+  }
+  presentationDebug.cinema3dOverlayReads += drawn;
+}
+
 function ensureCinema3d() {
   if (!state.cinema3d || !cinema3dAllowed()) {
     cinema3dBridge.renderer?.setVisible(false);
@@ -30617,6 +33046,13 @@ function ensureCinema3d() {
       unifiedSheetAdjust: UNIFIED_SHEET_ADJUST,
       isUnifiedFighter: unifiedFighterReady,
       downTiltFor,
+      // 5.1 CINEMA 3D fighter layer: the prone settle's full-tilt reference
+      // (so the 3D `share` cannot drift from the 2D constant), and the
+      // bank's OWN sheet for the idle-time bank warm-up — paletteAtlas falls
+      // back to the base sheet for a bank a fighter does not have, which
+      // the warm-up must never mistake for an authored bank.
+      downTiltRadians: DOWN_TILT_RADIANS,
+      fighterBankSheet: (fighterId, bank) => altAtlasSource(fighterId, bank).image || null,
       crowdBillboards,
       crowdSheetImage: (name) => crowdSheets.images.get(name) || null,
       crowdMediaRequest: ensureCrowdMedia,
@@ -30628,6 +33064,27 @@ function ensureCinema3d() {
       cellFloorOffset,
       cellVerticalOffset,
       gritSuperCost: GRIT_RULES.superCost,
+      // CINEMA 3D gameplay reads (world-objects layer): the SAME 2D painters
+      // that draw projectiles, thrown objects, the stage weapon and Post's
+      // wire traps, handed a foreign 2D context so the 3D layer can print
+      // each live object into an impostor canvas — one drawing per object in
+      // both renderers, never a second art set. Presentation-only reads.
+      paintProjectile: (context, projectile, timeMs, options) => {
+        const life = projectile.maxLifeFrames
+          ? clamp(projectile.lifeFrames / projectile.maxLifeFrames, 0, 1) : 1;
+        // `throwable` is the sim's own split (drawProjectiles keys on it);
+        // the 3D layer marks its synthetic stage-weapon descriptors the same
+        // way the 2D drawStageWeapon call would.
+        if (projectile.throwable) {
+          drawThrowableWith(context, projectile, timeMs, life, options);
+          return;
+        }
+        const pulse = 1 + Math.sin(timeMs * 0.018 + projectile.x * 0.03) * 0.11;
+        drawProjectileBodyWith(context, projectile, timeMs, life, pulse);
+      },
+      paintTrap: (context, trap, timeMs) => drawPaintTrapWith(context, trap, timeMs),
+      stageWeaponProfile,
+      fighterScale: FIGHTER_SCALE,
       gameCanvas: canvas,
       isRollbackResimulating: () => rollbackResimulating,
       // 4.3 MESH FIGHTERS switch (options panel / ?fighters=3d), read per frame.

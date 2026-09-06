@@ -22,14 +22,30 @@
 //     through the burst (SF6-style silhouette preservation).
 // Reads the exact same sim fields drawFighter reads; writes nothing back.
 import * as THREE from "three";
-import { PX, worldX, worldY, SIM_FLOOR } from "./shared.mjs";
-import { normalMapForAtlas, softDotTexture, hardShadowTexture, smearedAtlasTexture, bleedAtlasCanvas, hdComposedCanvas, atlasFootMetrics } from "./textures.mjs";
+import { PX, worldX, worldY, SIM_FLOOR, hash01 } from "./shared.mjs";
+import {
+  normalMapForAtlas, softDotTexture, hardShadowTexture, smearedAtlasTexture, bleedAtlasCanvas, hdComposedCanvas,
+  atlasFootMetrics, atlasKey, flatNormalTexture, releaseAtlasPixels, releaseAtlasCaches, atlasCacheStats,
+} from "./textures.mjs";
+import { IdleQueue } from "./atlas-pixels.mjs";
+// 5.1 (#44): the pose-parity maths the 2D path owns — the authored-facing
+// mirror, the prone settle, the hitstop tremble and the exhaustion hunch —
+// in a dependency-free module Node can pin against drawFighter.
+import {
+  spriteMirror, postMirrorRotation, hitstopTremble, exhaustionLean, proneTransform, proneSettleLift,
+} from "./sprite-pose.mjs";
+// 5.1 (#45): per-stage sprite lighting (Somerset's constants became a table).
+import { spriteLightFor, spriteLightFrame } from "./stage-lighting.mjs";
 import { FIGHTER_MASK_LAYER } from "./post.mjs";
 // v2.10 WALK: the authored-bank list is shared with the sim so 3D can never
 // drift from the 2D path on which banks exist (motion, motion2, walk).
 // v3.0: ...and on the unified bank's name, so the sheet-adjust branch below
 // cannot drift from the sim's idea of what that bank is called.
 import { AUTHORED_BANKS, UNIFIED_BANK } from "../../engine/fighter-kits.mjs";
+// v5.1 TEMPO TELLS: the SAME phase/strength function drawFighter's 2D pass
+// reads, so the whiff fringe and the re-arm wash land on identical ticks in
+// both renderers (no host member: it is pure engine code, not a game.js read).
+import { whiffTellState } from "../../engine/tempo-tells.mjs";
 
 // HD (2x) atlas variants for 3D mode only (renderer/hd/MANIFEST.json).
 // Loaded lazily per fighter; on any failure the bank silently keeps the
@@ -50,22 +66,27 @@ function loadHdImage(path) {
 const ATLAS_COLUMNS = 4;
 const ATLAS_ROWS = 4;
 
-// Scene-matched sprite light anchors:
-//   - warm sodium streetlights live screen-LEFT, so the screen-left silhouette
-//     edge catches a sodium rim;
-//   - the K&A neon burns screen-RIGHT, so the screen-right edge catches
-//     magenta (stronger the closer the fighter stands to the sign);
-//   - the green-white station lamp hangs overhead: top edges only.
+// Scene-matched sprite light anchors — since 5.1 (#45) PER STAGE, from
+// stage-lighting.mjs (main.mjs hands the layer the current stage's
+// descriptor in setStageLight):
+//   - a practical screen-LEFT, so the screen-left silhouette edge catches
+//     its rim (Somerset: the sodium streetlights);
+//   - a practical screen-RIGHT (Somerset: the K&A neon, stronger the closer
+//     the fighter stands to the sign);
+//   - an overhead source keying the crown and the top of the body
+//     (Somerset: the green-white station lamp).
 // Every rim is gated by the normal map (the edge must actually FACE its
 // light) — nothing glows uniformly around the silhouette.
-const SODIUM_RIM = new THREE.Color(0xffa04a);
-const NEON_RIM = new THREE.Color(0xff4fd8);
-const LAMP_KEY = new THREE.Color(0xa9f7d2); // green-cyan: reads as the lamp's colour, not white
-const BODEGA_WARM = new THREE.Color(0xffc27a);
-const CYAN_RIM = new THREE.Color(0x3fd6ff);
-// Green overhead lamp the contact shadows stretch away from.
-const LAMP_X = 0.4;
-const LAMP_Z = -4;
+//
+// 5.1 (#44): the 2D down tilt is 1.35 rad at full recline; the host hands
+// the constant over (downTiltRadians) so the settle's `share` cannot drift.
+const DOWN_TILT_RADIANS_FALLBACK = 1.35;
+// 5.1 (#40): rigs whose fighters have been gone this long (menus after a
+// match, the arcade ladder's next pair not yet built) release their banks.
+const IDLE_EVICT_SEC = 3;
+// 5.1 SUPER-READY: the 2D aura's ember count at trailScale 1 (7; the balanced
+// tier rounds down to its share, never below 3).
+const AURA_EMBERS = 7;
 
 function applyAtlasFrame(texture, frame) {
   const column = frame % ATLAS_COLUMNS;
@@ -110,6 +131,11 @@ function patchSpriteMaterial(material, atlasWidth, atlasHeight) {
     rimRightStrength: { value: 0.6 },
     topColor: new THREE.Color(0xc8ffdf),
     topStrength: { value: 0.5 },
+    // 5.1 (#45): the body multiplier under the overhead source used to be a
+    // shader constant (vec3(0.88, 1.12, 0.99) — the station lamp's green).
+    // Per stage now: floodlight white on the Vet, heat-lamp amber at the
+    // buffet, sky blue on the cruise deck.
+    topTint: new THREE.Color(0.88, 1.12, 0.99),
     fillLeftColor: new THREE.Color(0x000000),
     fillRightColor: new THREE.Color(0x000000),
     floorBounce: new THREE.Color(0x000000),
@@ -134,6 +160,18 @@ function patchSpriteMaterial(material, atlasWidth, atlasHeight) {
     // fighter crosses the stage) + overall specular budget.
     lampDx: { value: 0 },
     specStrength: { value: 0.6 },
+    // 5.1 SUPER-READY RIM: 0..1 pulsing accent-coloured silhouette stroke the
+    // moment the meter can pay for a super (the KI/SF3 max-meter read). The
+    // 2D path draws an enlarged accent silhouette behind the sprite; here the
+    // same read is the edge term itself, so it wraps every pose exactly.
+    readyRim: { value: 0 },
+    readyColor: new THREE.Color(0xffffff),
+    // v5.1 TEMPO TELLS: 0..1 hot-red silhouette stroke while a swing is
+    // paying its whiff tax / re-arming (the 2D pass draws an enlarged red
+    // silhouette behind the sprite), and 0..1 pale desaturating wash for the
+    // re-arm gap and an eaten press (the 2D "screen" grey/white flash).
+    whiffRim: { value: 0 },
+    rearmDim: { value: 0 },
     texel: new THREE.Vector2(1 / atlasWidth, 1 / atlasHeight),
   };
   material.userData.fb = fb;
@@ -144,6 +182,7 @@ function patchSpriteMaterial(material, atlasWidth, atlasHeight) {
     shader.uniforms.uFbRimRightStrength = fb.rimRightStrength;
     shader.uniforms.uFbTopColor = { value: fb.topColor };
     shader.uniforms.uFbTopStrength = fb.topStrength;
+    shader.uniforms.uFbTopTint = { value: fb.topTint };
     shader.uniforms.uFbFillLeftColor = { value: fb.fillLeftColor };
     shader.uniforms.uFbFillRightColor = { value: fb.fillRightColor };
     shader.uniforms.uFbFloorBounce = { value: fb.floorBounce };
@@ -157,6 +196,10 @@ function patchSpriteMaterial(material, atlasWidth, atlasHeight) {
     shader.uniforms.uFbSuperVictim = fb.superVictim;
     shader.uniforms.uFbLampDx = fb.lampDx;
     shader.uniforms.uFbSpecStrength = fb.specStrength;
+    shader.uniforms.uFbReadyRim = fb.readyRim;
+    shader.uniforms.uFbReadyColor = { value: fb.readyColor };
+    shader.uniforms.uFbWhiffRim = fb.whiffRim;
+    shader.uniforms.uFbRearmDim = fb.rearmDim;
     shader.uniforms.uFbTexel = { value: fb.texel };
     shader.vertexShader = shader.vertexShader
       .replace("#include <common>", "#include <common>\nvarying vec3 vFbWorld;\nvarying vec2 vFbLocal;")
@@ -172,6 +215,7 @@ uniform vec3 uFbRimRightColor;
 uniform float uFbRimRightStrength;
 uniform vec3 uFbTopColor;
 uniform float uFbTopStrength;
+uniform vec3 uFbTopTint;
 uniform vec3 uFbFillLeftColor;
 uniform vec3 uFbFillRightColor;
 uniform vec3 uFbFloorBounce;
@@ -185,6 +229,10 @@ uniform float uFbSuperDim;
 uniform float uFbSuperVictim;
 uniform float uFbLampDx;
 uniform float uFbSpecStrength;
+uniform float uFbReadyRim;
+uniform vec3 uFbReadyColor;
+uniform float uFbWhiffRim;
+uniform float uFbRearmDim;
 uniform vec2 uFbTexel;`)
       // 1px-ERODED matte + derivative-smoothed cut at 0.5: the alpha is taken
       // as the MIN of this texel and its 4 neighbours, which shrinks the matte
@@ -271,12 +319,14 @@ float fbFillR = pow(fbScreenU, 1.4);
 vec3 fbFill = uFbFillLeftColor * fbFillL
   + uFbFillRightColor * fbFillR * (0.35 + 0.65 * vFbLocal.y);
 diffuseColor.rgb += fbFill * (vec3(1.0) - diffuseColor.rgb) * (0.45 + 0.55 * (1.0 - fbTone));
-// --- Green-white TOP-LIGHT term (station lamp overhead): a broad body
-// gradient down from the head/shoulders, not just a silhouette stroke — the
-// lamp genuinely keys the upper body the way it keys the floor below it.
+// --- TOP-LIGHT term (the stage's overhead source: Somerset's station lamp,
+// the Vet's floodlights, the buffet's heat lamps): a broad body gradient
+// down from the head/shoulders, not just a silhouette stroke — the lamp
+// genuinely keys the upper body the way it keys the floor below it. The
+// body multiplier (uFbTopTint) is per stage since 5.1.
 float fbTopBody = smoothstep(0.5, 0.96, vFbLocal.y) * clamp(uFbTopStrength, 0.0, 1.2);
 diffuseColor.rgb = mix(diffuseColor.rgb,
-  diffuseColor.rgb * vec3(0.88, 1.12, 0.99) + uFbTopColor * 0.085,
+  diffuseColor.rgb * uFbTopTint + uFbTopColor * 0.085,
   fbTopBody * 0.8);
 // --- Warm FLOOR BOUNCE climbing the lower legs from the sodium-lit boards:
 // screen-blended so shoes/shins visibly pick up the orange light pools (the
@@ -288,7 +338,18 @@ diffuseColor.rgb += uFbFloorBounce * fbLow * (vec3(1.0) - diffuseColor.rgb) * (0
 // Super freeze: the body drops toward a silhouette (rims boosted in JS).
 // The VICTIM digs deeper — a dark shape against the duotone stage, the way
 // SF6 keeps the super's owner lit while time stops around the other guy.
-diffuseColor.rgb *= 1.0 - uFbSuperDim * (0.62 + uFbSuperVictim * 0.24);`)
+diffuseColor.rgb *= 1.0 - uFbSuperDim * (0.62 + uFbSuperVictim * 0.24);
+// 5.1 TEMPO TELLS: re-arm wash — the body drops toward a pale grey for the
+// 4-frame gap (disarmed) and pops paler for an eaten press; luminance-
+// preserving so the pose stays readable under it.
+diffuseColor.rgb = mix(diffuseColor.rgb,
+  vec3(dot(diffuseColor.rgb, vec3(0.3, 0.59, 0.11))) * 0.55 + 0.42, uFbRearmDim);
+// ...and the whiff casts the body red from the inside as well as the edge:
+// on Somerset the K&A magenta rims and a super-ready accent aura sit right
+// on top of a red edge stroke (measured: the stroke alone was hard to pick
+// out of the stage's own pink), so the 2D fringe+ghost mass gets its 3D
+// counterpart as a warm interior tint that no stage light supplies.
+diffuseColor.rgb = mix(diffuseColor.rgb, diffuseColor.rgb * vec3(1.35, 0.5, 0.55), uFbWhiffRim * 0.4);`)
       .replace("#include <emissivemap_fragment>", `#include <emissivemap_fragment>
 // --- Directional silhouette rims -------------------------------------------
 // Tight 1-2px edge strokes from outward alpha sampling, converted to SCREEN
@@ -379,6 +440,16 @@ totalEmissiveRadiance += (uFbTopColor * 0.85 + vec3(0.15))
 // fighters is what fused their legs into the "doubled ghost legs" read).
 totalEmissiveRadiance += vec3(1.0, 0.56, 0.2)
   * (uFbSuperDim * (fbEdgeAny * 0.7 + 0.08) * (1.0 - uFbSuperVictim * 0.88));
+// 5.1 SUPER-READY: the whole silhouette wears a pulsing stroke in the
+// fighter's accent, plus a whisper of body lift, while the meter can pay for
+// a super — gameplay information (the opponent can cash a super NOW), so it
+// rides above the flash guard and the freeze dim rather than under them.
+totalEmissiveRadiance += uFbReadyColor * (uFbReadyRim * (fbEdgeAny * 1.35 + 0.05));
+// 5.1 TEMPO TELLS: the whiff fringe — a hot red stroke on the same edge
+// term, NOT the fighter's accent, so it never reads as the super aura. It
+// rides above the flash guard like the ready rim: "that swing is costing
+// you" is gameplay information the opponent needs to see too (punish).
+totalEmissiveRadiance += vec3(1.0, 0.25, 0.33) * (uFbWhiffRim * (fbEdgeAny * 1.7 + 0.08));
 // --- Flash guard (SF6 Drive-Impact discipline): while a burst is live the
 // interior keeps its OWN contrast (deepened S-curve, not a flat wash) and
 // the silhouette carries a hot high-contrast rim — the character must stay
@@ -410,7 +481,9 @@ if (uFbHitTone > 0.001) {
 }`);
   };
   // Distinct program per patched material (uniforms differ per bank).
-  material.customProgramCacheKey = () => "fb-sprite-grade-v10";
+  // v12 (5.1): uFbTopTint joined the uniform set; v13 (5.1): uFbWhiffRim /
+  // uFbRearmDim (the tempo tells) joined it — both landed in the same wave.
+  material.customProgramCacheKey = () => "fb-sprite-grade-v13";
   return fb;
 }
 
@@ -475,6 +548,8 @@ export class FighterLayer {
     this.rigs = [null, null];
     this.blobTexture = softDotTexture(128, "rgba(0,0,0,1)", "rgba(0,0,0,0)");
     this.hardBlobTexture = hardShadowTexture(128);
+    // 5.1 SUPER-READY aura + ember sprite (white; tinted per fighter accent).
+    this.auraTexture = softDotTexture(128);
     // Wired by main.mjs to the impact-VFX layer once both layers exist.
     this.getFlashLevel = () => 0;
     // Wired by main.mjs: { x, color, level } of the latest impact, so the
@@ -484,24 +559,53 @@ export class FighterLayer {
     // Eased 0..1 super-freeze level, set by main.mjs: body drops toward a
     // rim-lit silhouette while the cut-in owns the frame.
     this.superDim = 0;
+    // 5.1 (#45): the current stage's sprite-light descriptor (main.mjs sets
+    // it in buildStage); Somerset's numbers until a stage says otherwise.
+    this.spriteLight = spriteLightFor("somerset");
+    this.stageLightColors = null;
+    // 5.1 (#40): bank builds run as idle-time steps off the render thread.
+    this.queue = new IdleQueue();
+    this.rigSerial = 0;
+    this.noFighterSec = 0;
+    // QA tallies: how many banks were built, how many chains finished, and
+    // how many sheets were evicted (drives the "no growth across a ladder"
+    // probe).
+    this.bankStats = { built: 0, ready: 0, evicted: 0, warmed: 0, lateFallbacks: 0 };
   }
 
-  buildBank(image, hdPath = null) {
-    const map = atlasColorTexture(image);
-    const normalMap = normalMapForAtlas(image);
-    applyAtlasFrame(map, 0);
-    // Normal map shares the frame window via its own transform.
-    normalMap.matrixAutoUpdate = true;
-    applyAtlasFrame(normalMap, 0);
+  // The normal-map resolution step for this tier: the balanced tier gets a
+  // half-resolution field — a quarter of the kernel work and of the GPU
+  // bytes, and the 3x3 blur already softens the field past what the halving
+  // loses. Never skipped outright: the rims are GATED by these normals, and a
+  // flat map is a fighter with no rims at all.
+  normalStep() {
+    return this.host.getPerformanceProfile?.()?.id === "balanced" ? 2 : 1;
+  }
+
+  // 5.1 (#40): a bank is DRAWABLE the frame it is asked for and FINISHED a
+  // few idle slices later. The shell goes up synchronously with the raw
+  // sheet as its colour map (one texture upload; the shader's 1px-eroded
+  // alpha test hides most of the white fringe the bleed exists to kill) and
+  // a shared flat normal map (same program defines, so the real map lands
+  // without a recompile). The queued chain then swaps in, one idle step
+  // each: foot metrics -> bled colour map -> smeared mirror map -> normal
+  // map (-> HD composite). Each step checks `disposed` first, so a rig torn
+  // down mid-chain leaves nothing behind.
+  buildBank(image, hdPath = null, { key = null, priority = 0, warm = false } = {}) {
+    const raw = new THREE.CanvasTexture(image);
+    raw.colorSpace = THREE.SRGBColorSpace;
+    raw.anisotropy = 8;
+    applyAtlasFrame(raw, 0);
+    const normalMap = flatNormalTexture();
     const material = new THREE.MeshStandardMaterial({
-      map,
+      map: raw,
       normalMap,
       normalScale: new THREE.Vector2(0.75, 0.75),
       roughness: 0.78,
       metalness: 0.04,
       alphaTest: 0.5,
       side: THREE.DoubleSide,
-      emissiveMap: map,
+      emissiveMap: raw,
       emissive: new THREE.Color(0x000000),
       emissiveIntensity: 0,
       envMapIntensity: 0.4,
@@ -511,7 +615,7 @@ export class FighterLayer {
     // key light prints the fighter's true silhouette into its shadow map.
     const depthMaterial = new THREE.MeshDepthMaterial({
       depthPacking: THREE.RGBADepthPacking,
-      map,
+      map: raw,
       alphaTest: 0.5,
     });
     // Wet-floor reflection: VERTICALLY smeared atlas — the mirror keeps the
@@ -519,10 +623,8 @@ export class FighterLayer {
     // tracks every pose) while water drags the image into vertical streaks.
     // Faded by height, tinted per-frame toward whichever practical the
     // fighter stands under (poseRig grades the mirror colour).
-    const reflMap = smearedAtlasTexture(image);
-    applyAtlasFrame(reflMap, 0);
     const reflMaterial = new THREE.MeshBasicMaterial({
-      map: reflMap,
+      map: raw,
       transparent: true,
       opacity: 0.34,
       depthTest: false,
@@ -535,33 +637,118 @@ export class FighterLayer {
       fog: false,
     });
     patchReflectionMaterial(reflMaterial);
-    // Per-frame sole line + foot positions: kills the hover (transparent
-    // padding under the feet) and drives the per-foot contact shadows.
-    const footMetrics = atlasFootMetrics(image);
-    const bank = { map, normalMap, material, depthMaterial, reflMap, reflMaterial, fb, footMetrics, disposed: false };
+    const bank = {
+      image, hdImage: null, key,
+      map: raw, rawMap: raw, normalMap, material, depthMaterial, reflMap: raw, reflMaterial, fb,
+      // Per-frame sole line + foot positions (kills the hover, drives the
+      // per-foot contact shadows): null until the metrics step has run —
+      // poseRig falls back to the quad bottom for those first frames.
+      footMetrics: null,
+      frame: 0, disposed: false, ready: false, stage: "raw", warm,
+    };
+    this.bankStats.built += 1;
+    if (warm) this.bankStats.warmed += 1;
+    const step = (name, fn) => this.queue.push(() => {
+      if (bank.disposed) return;
+      fn();
+      bank.stage = name;
+    }, { key, priority });
+    step("metrics", () => {
+      bank.footMetrics = atlasFootMetrics(image);
+    });
+    step("bleed", () => {
+      const bled = atlasColorTexture(image);
+      applyAtlasFrame(bled, bank.frame);
+      bank.map = bled;
+      material.map = bled;
+      material.emissiveMap = bled;
+      depthMaterial.map = bled;
+      material.needsUpdate = true;
+      depthMaterial.needsUpdate = true;
+    });
+    step("smear", () => {
+      const refl = smearedAtlasTexture(image);
+      applyAtlasFrame(refl, bank.frame);
+      bank.reflMap = refl;
+      reflMaterial.map = refl;
+      reflMaterial.needsUpdate = true;
+      raw.dispose();
+      bank.rawMap = null;
+    });
+    step("normal", () => {
+      const normal = normalMapForAtlas(image, { step: this.normalStep() });
+      // Normal map shares the frame window via its own transform.
+      normal.matrixAutoUpdate = true;
+      applyAtlasFrame(normal, bank.frame);
+      bank.normalMap = normal;
+      material.normalMap = normal;
+      material.needsUpdate = true;
+      // The shared pixel read has served its three consumers.
+      releaseAtlasPixels(image);
+      bank.ready = true;
+      this.bankStats.ready += 1;
+    });
     // HD swap: once the 2x atlas arrives, replace the colour/emissive/depth
     // map with the HD composite. Alpha is byte-identical NN-2x, so pose,
     // shadow silhouette and rim sampling stay aligned — only fb.texel moves
     // to the finer grid. Normal + reflection maps stay SD (blurred anyway).
+    // The composite (a 2560x2560 canvas draw + upload) is itself an idle
+    // step, queued only when the image has arrived.
     if (hdPath) {
-      loadHdImage(hdPath).then((hdImage) => {
-        if (!hdImage || bank.disposed) return;
-        const hdTexture = new THREE.CanvasTexture(hdComposedCanvas(hdImage, image));
-        hdTexture.colorSpace = THREE.SRGBColorSpace;
-        hdTexture.anisotropy = 8;
-        applyAtlasFrame(hdTexture, 0);
-        const old = bank.map;
-        bank.map = hdTexture;
-        material.map = hdTexture;
-        material.emissiveMap = hdTexture;
-        depthMaterial.map = hdTexture;
-        fb.texel.set(1 / hdImage.naturalWidth, 1 / hdImage.naturalHeight);
-        material.needsUpdate = true;
-        depthMaterial.needsUpdate = true;
-        old.dispose();
+      step("hd-request", () => {
+        loadHdImage(hdPath).then((hdImage) => {
+          if (!hdImage || bank.disposed) return;
+          bank.hdImage = hdImage;
+          step("hd", () => {
+            const hdTexture = new THREE.CanvasTexture(hdComposedCanvas(hdImage, image));
+            hdTexture.colorSpace = THREE.SRGBColorSpace;
+            hdTexture.anisotropy = 8;
+            applyAtlasFrame(hdTexture, bank.frame);
+            const old = bank.map;
+            bank.map = hdTexture;
+            material.map = hdTexture;
+            material.emissiveMap = hdTexture;
+            depthMaterial.map = hdTexture;
+            fb.texel.set(1 / hdImage.naturalWidth, 1 / hdImage.naturalHeight);
+            material.needsUpdate = true;
+            depthMaterial.needsUpdate = true;
+            if (old !== bank.rawMap) old.dispose();
+          });
+        });
       });
     }
     return bank;
+  }
+
+  // 5.1 (#45): main.mjs hands over the stage's descriptor when the stage is
+  // (re)built. Resolved once into THREE colours here so poseRig never
+  // allocates per frame.
+  setStageLight(descriptor) {
+    this.spriteLight = descriptor || spriteLightFor("somerset");
+    this.stageLightColors = null;
+  }
+
+  // 5.1 (#40): every authored bank whose OWN sheet is already decoded
+  // (preloadAuthoredBanks warms them before FIGHT!) gets its shell and its
+  // chain at rig build, priority-ordered behind base and specials, so the
+  // first jab / first hit / first crouch of a fight no longer builds a bank
+  // on a gameplay frame. The host's fighterBankSheet gate is what keeps the
+  // base-sheet fallback in fighterAtlasFor from being mistaken for a bank
+  // the fighter does not have.
+  warmAuthoredBanks(rig, fighter) {
+    const host = this.host;
+    if (!host.fighterAtlasFor || !host.fighterBankSheet) return 0;
+    let warmed = 0;
+    AUTHORED_BANKS.forEach((bankName, index) => {
+      if (rig.banks[bankName]) return;
+      const own = host.fighterBankSheet(fighter.def.id, bankName);
+      if (!own?.complete || !own.naturalWidth) return;
+      const image = host.fighterAtlasFor(fighter, bankName);
+      if (!image?.complete || !image.naturalWidth) return;
+      rig.banks[bankName] = this.buildBank(image, null, { key: rig.key, priority: 2 + index, warm: true });
+      warmed += 1;
+    });
+    return warmed;
   }
 
   buildRig(fighter) {
@@ -580,8 +767,12 @@ export class FighterLayer {
     // the roster — devil has no sheets at all). No gate, no request: a
     // missing entry silently keeps the SD atlas instead of 404ing.
     const hdFor = (bank) => (paletteKey || !host.hdSheetPath ? null : host.hdSheetPath(id, bank));
-    const banks = { base: this.buildBank(baseImage, hdFor("base")) };
-    if (moveImage?.complete && moveImage.naturalWidth) banks.specials = this.buildBank(moveImage, hdFor("specials"));
+    this.rigSerial += 1;
+    const key = `rig:${this.rigSerial}:${id}`;
+    const banks = { base: this.buildBank(baseImage, hdFor("base"), { key, priority: 0 }) };
+    if (moveImage?.complete && moveImage.naturalWidth) {
+      banks.specials = this.buildBank(moveImage, hdFor("specials"), { key, priority: 1 });
+    }
 
     const geometry = new THREE.PlaneGeometry(1, 1);
     geometry.translate(0, 0.5, 0); // feet-anchored, matching drawAtlasFrame
@@ -639,30 +830,93 @@ export class FighterLayer {
     footA.renderOrder = footB.renderOrder = 6; // sole ellipses read over the stretch
     coreA.renderOrder = coreB.renderOrder = 6;
 
+    // 5.1 SUPER-READY aura (2D parity, and VISIBLE): a soft additive accent
+    // glow behind the body at hip height + the seven shoulder embers, both
+    // children of the feet-anchored root so they ride the lunge and the flip.
+    // Ember positions are the 2D formula exactly (hashed from the sim tick,
+    // never simulated), so a rollback has nothing to rewind and both
+    // renderers put the same ember in the same place on the same tick.
+    const aura = new THREE.Mesh(new THREE.PlaneGeometry(1, 1), new THREE.MeshBasicMaterial({
+      map: this.auraTexture,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      opacity: 0,
+      color: new THREE.Color(0xffffff),
+    }));
+    aura.position.z = -0.04;
+    aura.renderOrder = 3;
+    aura.visible = false;
+    root.add(aura);
+    const emberPositions = new Float32Array(AURA_EMBERS * 3);
+    const emberColors = new Float32Array(AURA_EMBERS * 3);
+    const emberGeometry = new THREE.BufferGeometry();
+    emberGeometry.setAttribute("position", new THREE.BufferAttribute(emberPositions, 3));
+    emberGeometry.setAttribute("color", new THREE.BufferAttribute(emberColors, 3));
+    const embers = new THREE.Points(emberGeometry, new THREE.PointsMaterial({
+      size: 0.04,
+      map: this.auraTexture,
+      transparent: true,
+      depthWrite: false,
+      blending: THREE.AdditiveBlending,
+      vertexColors: true,
+      sizeAttenuation: true,
+    }));
+    embers.frustumCulled = false;
+    embers.renderOrder = 6;
+    embers.visible = false;
+    root.add(embers);
+
     this.group.add(shadow);
     this.group.add(reflRoot);
     this.group.add(root);
-    return {
-      id, paletteKey, banks, mesh, root, reflMesh, reflRoot, shadow, footA, footB, coreA, coreB, penumbra,
+    const rig = {
+      id, key, paletteKey, banks, mesh, root, reflMesh, reflRoot, shadow, footA, footB, coreA, coreB, penumbra,
+      aura, embers,
       currentBank: "base", lastHitFlash: 0, hitWhiteTtl: 0, hitToneTtl: 0,
     };
+    this.warmAuthoredBanks(rig, fighter);
+    return rig;
   }
 
+  // 5.1 (#40): disposal now EVICTS. Every texture the rig owns is released,
+  // its queued build steps are dropped, and every sheet no other live rig
+  // draws from has its canvases / pixel read / normal map cleared from the
+  // module caches in textures.mjs — an arcade ladder used to leave ~200 MB
+  // of canvases resident per fighter met in 3D.
   disposeRig(rig) {
     if (!rig) return;
+    this.queue.cancel(rig.key);
     this.group.remove(rig.root);
     this.group.remove(rig.reflRoot);
     this.group.remove(rig.shadow);
+    const other = this.rigs.find((candidate) => candidate && candidate !== rig);
+    const stillDrawn = (image) => Boolean(other && image
+      && Object.values(other.banks).some((bank) => atlasKey(bank.image) === atlasKey(image)
+        || (bank.hdImage && atlasKey(bank.hdImage) === atlasKey(image))));
     for (const bank of Object.values(rig.banks)) {
       bank.disposed = true; // cancels any in-flight HD swap
       bank.material.dispose();
       bank.depthMaterial.dispose();
       bank.reflMaterial.dispose();
       bank.map.dispose();
-      bank.reflMap.dispose();
+      if (bank.reflMap !== bank.map) bank.reflMap.dispose();
+      if (bank.rawMap && bank.rawMap !== bank.map && bank.rawMap !== bank.reflMap) bank.rawMap.dispose();
+      for (const image of [bank.image, bank.hdImage]) {
+        if (!image || stillDrawn(image)) continue;
+        this.bankStats.evicted += releaseAtlasCaches(image);
+      }
     }
     rig.mesh.geometry.dispose();
     rig.reflMesh.geometry.dispose();
+    if (rig.aura) {
+      rig.aura.geometry.dispose();
+      rig.aura.material.dispose();
+    }
+    if (rig.embers) {
+      rig.embers.geometry.dispose();
+      rig.embers.material.dispose();
+    }
     for (const blob of [rig.footA, rig.footB, rig.coreA, rig.coreB, rig.penumbra]) {
       blob.geometry.dispose();
       blob.material.dispose();
@@ -671,6 +925,19 @@ export class FighterLayer {
 
   update(state, dtSec, timeSec) {
     const fighters = state.fighters || [];
+    // 5.1 (#40): no fighters for a while (menus, the ladder between pairs)
+    // releases both rigs — the next pair's banks rebuild off the frame.
+    if (!fighters[0] && !fighters[1]) {
+      this.noFighterSec += dtSec;
+      if (this.noFighterSec >= IDLE_EVICT_SEC && (this.rigs[0] || this.rigs[1])) {
+        for (let side = 0; side < 2; side += 1) {
+          this.disposeRig(this.rigs[side]);
+          this.rigs[side] = null;
+        }
+      }
+    } else {
+      this.noFighterSec = 0;
+    }
     for (let side = 0; side < 2; side += 1) {
       const fighter = fighters[side];
       let rig = this.rigs[side];
@@ -708,13 +975,37 @@ export class FighterLayer {
   // v3.0 UNIFIED: and so does the unified bank — SD sheet in assets/unified/,
   // never renderer/hd/. buildBank is called with NO hdPath on this path, so
   // the 2x swap can never be requested for it.
+  // 5.1 (#40): a bank that reaches here was not warm at rig build (its
+  // sheet decoded after the intro). The shell is drawable this frame — one
+  // raw upload, not the old four-kernel build — and the chain finishes on
+  // idle slices. Counted so a probe can tell "warmed at build" from "built
+  // on first use".
   ensureMotionBank(rig, fighter, bankName = "motion") {
     if (rig.banks[bankName]) return true;
     const host = this.host;
     const image = host.fighterAtlasFor ? host.fighterAtlasFor(fighter, bankName) : null;
     if (!image?.complete || !image.naturalWidth) return false;
-    rig.banks[bankName] = this.buildBank(image);
+    rig.banks[bankName] = this.buildBank(image, null, { key: rig.key, priority: 1 });
+    this.bankStats.lateFallbacks += 1;
     return true;
+  }
+
+  // QA surface (main.mjs stats()): bank readiness per side + cache sizes.
+  bankReport() {
+    return {
+      ...this.bankStats,
+      pending: this.queue.pending,
+      sides: this.rigs.map((rig) => (rig ? Object.fromEntries(Object.entries(rig.banks)
+        .map(([name, bank]) => [name, bank.ready ? "ready" : bank.stage])) : null)),
+      caches: atlasCacheStats(),
+      stageLight: this.spriteLight?.id ?? null,
+    };
+  }
+
+  // QA: run every queued build step now (the browser probe's "warm, then
+  // measure" path).
+  drainBankQueue() {
+    return this.queue.drain();
   }
 
   poseRig(rig, fighter, state, timeSec, dtSec = 0) {
@@ -744,6 +1035,7 @@ export class FighterLayer {
     applyAtlasFrame(bank.map, pose.frame);
     applyAtlasFrame(bank.normalMap, pose.frame);
     applyAtlasFrame(bank.reflMap, pose.frame);
+    bank.frame = pose.frame; // a texture landing mid-chain opens on this cell
 
     // --- Same presentation math drawFighter uses (read-only sim fields) ----
     const attack = fighter.attacking;
@@ -808,9 +1100,18 @@ export class FighterLayer {
       : 0;
     const hitSmear = THREE.MathUtils.clamp(fighter.hitFlash / 0.14, 0, 1);
     const facing = fighter.facing >= 0 ? 1 : -1;
+    // 5.1 (#44): the DRAWN mirror is the numeric facing times the direction
+    // the authored cell points (Post's base bank is left-authored on 13/16
+    // cells, his specials on 12/16). Everything drawFighter applies after
+    // ctx.scale(renderMirror, 1) — the quad's x scale, the lunge, the attack
+    // tilt, the hunch, the shader's screen-space edge orientation — uses
+    // this; everything it applies before (down tilt, flips, the tremble)
+    // keeps the sim facing.
+    const mirror = spriteMirror(fighter.def.id, bankName, pose.frame, facing);
+    const reducedMotion = Boolean(state.accessibility?.reducedMotion);
     const jump = SIM_FLOOR - fighter.y;
 
-    const offsetPx = (lunge - startupPower * 8) * facing;
+    const offsetPx = (lunge - startupPower * 8) * mirror;
     const dropPx = floorFix + crouchDrop - attackSwing * (attackKind === "special" ? 13 : 5);
     rig.root.position.set(
       worldX(fighter.x) + offsetPx * PX,
@@ -822,10 +1123,15 @@ export class FighterLayer {
     // y-down/clockwise, so the three z-rotation flips sign.
     // v4.6 PRONE parity: the host measures how far this drawing still has
     // to tilt to lie down (0 for a cell authored flat), same as the 2D path.
+    // 5.1 (#44): the 2D translate that follows the tilt is in the ROTATED
+    // frame — proneTransform resolves it into world axes (mostly a forward
+    // nudge; the 3D layer had been applying its raw x term as a 45 px
+    // backward slide).
+    const downTiltRadians = host.downTiltRadians ?? DOWN_TILT_RADIANS_FALLBACK;
     const downTilt = fighter.down
-      ? (host.downTiltFor ? host.downTiltFor(fighter.def.id, bankName, pose.frame) : 1.35) : 0;
-    let rootRotation = 0;
-    if (downTilt > 0) rootRotation = facing * downTilt;
+      ? (host.downTiltFor ? host.downTiltFor(fighter.def.id, bankName, pose.frame) : downTiltRadians) : 0;
+    const prone = proneTransform({ facing, downTilt, downTiltRadians });
+    let rootRotation = prone.rotation;
     if (fighter.cinematicRotation) rootRotation += -fighter.cinematicRotation;
     if (fighter.airTechFlipFrames > 0) {
       const flip = 1 - fighter.airTechFlipFrames / 14;
@@ -842,7 +1148,7 @@ export class FighterLayer {
       if (motion.flipRotation) rootRotation += -motion.flipRotation;
     }
     rig.root.rotation.z = rootRotation;
-    if (downTilt > 0) rig.root.position.x += -facing * 45 * (downTilt / 1.35) * PX;
+    if (prone.dx) rig.root.position.x += prone.dx * PX;
     // v2.6 BODY-FIRST parity: the shared world-space body offset (attack
     // extension / victim stagger step). Sim x maps straight to world x; sim
     // y is down-positive so it flips for world y.
@@ -850,14 +1156,36 @@ export class FighterLayer {
       rig.root.position.x += motion.offsetX * PX;
       rig.root.position.y -= motion.offsetY * PX;
     }
+    // 5.1 (#44) MOTION FIX 4 parity: victims never freeze solid — the 1-2 px
+    // pose shiver through hitstop / super storms, hashed from the sim tick
+    // exactly like drawFighter (pre-mirror, world space). The contact shadows
+    // stay put, as they do in 2D.
+    const tremble = hitstopTremble({
+      reducedMotion,
+      hitstunFrames: fighter.hitstunFrames,
+      cinematicFrame: fighter.cinematicFrame,
+      hitstop: state.hitstop,
+      opponentSuper: Boolean(state.fighters?.[1 - fighter.side]?.attacking?.superMove),
+      tick: state.simulationTick || 0,
+      side: fighter.side,
+    });
+    const trembleX = tremble ? tremble.x * PX : 0;
+    if (tremble) {
+      rig.root.position.x += trembleX;
+      rig.root.position.y -= tremble.y * PX;
+    }
 
     const cineScale = fighter.cinematicScale !== 1 ? fighter.cinematicScale : 1;
     const scaleX = (1 + activePower * 0.045 - startupPower * 0.025) * (1 + hitSmear * 0.05)
       * (motion ? motion.scaleX : 1);
     const scaleY = (crouchScale + startupPower * 0.035 - activePower * 0.025)
       * (1 + breath) * (1 - hitSmear * 0.06) * (motion ? motion.scaleY : 1);
-    rig.mesh.scale.set(renderSize * facing * scaleX * cineScale, renderSize * scaleY * cineScale, 1);
-    rig.mesh.rotation.z = facing * attackSwing * (attackKind === "heavy" ? 0.07 : 0.025);
+    rig.mesh.scale.set(renderSize * mirror * scaleX * cineScale, renderSize * scaleY * cineScale, 1);
+    // Attack tilt + the 5.1 (#44) exhaustion hunch: both are post-mirror
+    // canvas rotations in drawFighter (rotate(-swing*k), rotate(0.085*ex)),
+    // so both cross to three through the same sign rule.
+    rig.mesh.rotation.z = postMirrorRotation(-attackSwing * (attackKind === "heavy" ? 0.07 : 0.025), mirror)
+      + postMirrorRotation(exhaustionLean({ breathing, moving, health: fighter.health, reducedMotion }), mirror);
     if (motion && motion.flipRotation) {
       // Pivot the somersault about the body centre, not the feet: rotating
       // the feet-anchored root by θ then shifting the root so the centre
@@ -877,6 +1205,23 @@ export class FighterLayer {
     const upright = !fighter.down && Math.abs(rootRotation) < 0.25;
     const footPad = bank.footMetrics?.padBottom?.[pose.frame] ?? 0;
     if (upright && footPad > 0) rig.root.position.y -= footPad * Math.abs(rig.mesh.scale.y);
+    // 5.1 (#44) PRONE SETTLE: a downed body rests ON the boards. The rotated
+    // silhouette box (measured per cell) is placed so its lowest corner sits
+    // 2 px under the ground plane: a tilted cell LIFTS by about half the
+    // body width (the pivot-at-the-feet rotation had been burying the back
+    // half of the body in the floor), an authored-flat cell DROPS by its
+    // bottom padding (it had been floating by exactly that — the "feet in
+    // the air" read Flat Out exists to kill). Grounded only: a body still
+    // in the air keeps its sim height.
+    if (fighter.down && fighter.grounded) {
+      rig.root.position.y += proneSettleLift({
+        rotation: rootRotation,
+        scaleX: rig.mesh.scale.x,
+        scaleY: rig.mesh.scale.y,
+        extent: bank.footMetrics?.extent?.[pose.frame],
+        restBelow: 2 * PX,
+      });
+    }
 
     // --- Wet-floor reflection: exact mirror across the ground plane --------
     // Silhouette-true (critic fix): near-1:1 vertical scale + a visible shear
@@ -921,60 +1266,102 @@ export class FighterLayer {
     } else {
       material.emissiveIntensity = 0;
     }
+    // 5.1 SUPER-READY (VISIBLE parity with the 2D aura + outline + embers):
+    // the emissive lift above was the only 3D tell and it never read as
+    // "he can super NOW". Same pulse clock as the 2D path (time*0.006 per
+    // ms = 6 rad/s), reduced motion holds the pulse at its mid-point.
+    const readyPulse = reducedMotion ? 0.5 : 0.5 + Math.sin(timeSec * 6 + fighter.side * 2.4) * 0.5;
+    const accent = fighter.def.accent || "#ff8040";
+    bank.fb.readyColor.set(accent);
+    bank.fb.readyRim.value = superReady ? 0.55 + readyPulse * 0.45 : 0;
+    // 5.1 TEMPO TELLS (parity with drawTempoTellUnder / Over): the fringe
+    // burns at 0.6-1.0 through the whiff and fades across the re-arm gap;
+    // the wash is the gap's grey (0.42 × strength) or the eaten-press pop
+    // (0.55 × its 6-tick fade), whichever is stronger.
+    const tempoTell = whiffTellState(fighter, state.simulationTick || 0);
+    bank.fb.whiffRim.value = tempoTell.phase === "whiff"
+      ? 0.6 + 0.4 * tempoTell.strength
+      : tempoTell.phase === "rearm" ? 0.7 * tempoTell.strength : 0;
+    bank.fb.rearmDim.value = Math.max(
+      tempoTell.phase === "rearm" ? 0.42 * tempoTell.strength : 0,
+      0.55 * tempoTell.dropFlash,
+    );
+    if (rig.aura) {
+      if (superReady) {
+        const auraReach = renderSize * 0.6;
+        rig.aura.material.color.set(accent);
+        rig.aura.material.opacity = (0.5 + readyPulse * 0.3) * 0.38;
+        rig.aura.position.set(0, renderSize * 0.32, -0.04);
+        rig.aura.scale.set(auraReach * 2, auraReach * 2, 1);
+        rig.aura.visible = true;
+      } else {
+        rig.aura.visible = false;
+      }
+    }
+    if (rig.embers) {
+      const trailScale = state.performance?.trailScale ?? 1;
+      const showEmbers = superReady && !reducedMotion && trailScale > 0;
+      rig.embers.visible = showEmbers;
+      if (showEmbers) {
+        const emberCount = Math.min(AURA_EMBERS, Math.max(3, Math.round(AURA_EMBERS * trailScale)));
+        const positions = rig.embers.geometry.attributes.position;
+        const colors = rig.embers.geometry.attributes.color;
+        const accentColor = rig.embers.material.userData.accent
+          || (rig.embers.material.userData.accent = new THREE.Color());
+        accentColor.set(accent);
+        const sizePx = host.fighterRenderSize(fighter.def.id) * sizeAdjust;
+        const tick = state.simulationTick || 0;
+        for (let ember = 0; ember < AURA_EMBERS; ember += 1) {
+          if (ember >= emberCount) {
+            positions.setXYZ(ember, 0, -10, 0);
+            colors.setXYZ(ember, 0, 0, 0);
+            continue;
+          }
+          // The 2D formula, verbatim, in sim px about the feet.
+          const cycleFrames = 66 + (ember % 3) * 14;
+          const clock = tick + ember * 31;
+          const progress = (clock % cycleFrames) / cycleFrames;
+          const jitter = hash01(Math.floor(clock / cycleFrames) * 13 + ember * 7 + fighter.side * 101);
+          const emberX = (jitter - 0.5) * sizePx * 0.44 + Math.sin((progress + jitter) * Math.PI * 2) * 5;
+          const emberY = sizePx * (0.66 + progress * 0.32);
+          positions.setXYZ(ember, emberX * PX * mirror, emberY * PX, 0.05);
+          const alpha = (1 - progress) * 0.85;
+          // Hot enough to bloom at birth, alternating accent / warm white
+          // like the 2D pass; brightness carries the fade.
+          if (ember % 2) colors.setXYZ(ember, accentColor.r * 1.8 * alpha, accentColor.g * 1.8 * alpha, accentColor.b * 1.8 * alpha);
+          else colors.setXYZ(ember, 1.6 * alpha, 1.52 * alpha, 1.35 * alpha);
+        }
+        positions.needsUpdate = true;
+        colors.needsUpdate = true;
+      }
+    }
 
     // --- Scene-matched sprite lighting + flash guard ------------------------
+    // 5.1 (#45): PER STAGE. The position-driven terms (a rim from the
+    // screen-left practical that eases up as the fighter nears it, a rim
+    // from the screen-right practical that only lands when he stands under
+    // it, the overhead crown key, the body fills, the floor bounce climbing
+    // the shins, the zone grade and the mirror's whisper of hue) come from
+    // stage-lighting.mjs — the Vet's floodlights and sodium lot lamps, the
+    // buffet's heat lamps and red sign, the cruise deck's sky and pool —
+    // instead of Somerset's constants on every stage. Somerset itself is
+    // number-for-number what it was.
     const fx = rig.root.position.x;
     const fb = bank.fb;
-    // Screen-space edge orientation for the shader (uv.x flips with facing).
-    fb.facing.value = facing;
-    // Sodium rim from the screen-left streetlights: strength eases up the
-    // closer the fighter stands to the left lamps, colour warmed toward the
-    // bodega amber when the fighter drifts deep screen-left.
-    const leftNear = THREE.MathUtils.clamp(1 - (fx + 3.2) / 6, 0.25, 1);
-    fb.rimLeftColor.copy(SODIUM_RIM).lerp(BODEGA_WARM, THREE.MathUtils.clamp(-(fx + 2) / 5, 0, 1) * 0.5);
-    fb.rimLeftStrength.value = (0.55 + leftNear * 0.45) * (1 + hitSmear * 0.5);
-    // Screen-right rim sampled from whichever practical is actually nearest:
-    // K&A magenta near the sign, cooled toward the cyan check-cashing glow at
-    // the far right edge. Strength tapers hard with distance — mid-stage the
-    // right edge goes DARK instead of wearing a constant pink outline.
-    // Normalised to the REAL right-corner reach (fx tops out ~2.9 at the
-    // wall): the old /5.5 span meant a cornered fighter only ever collected
-    // half the K&A magenta — the corner signature never landed (fix j).
-    const neonMix = THREE.MathUtils.clamp((fx + 0.4) / 3.3, 0, 1);
-    fb.rimRightColor.copy(NEON_RIM).lerp(CYAN_RIM, THREE.MathUtils.clamp((fx - 3.4) / 3, 0, 1) * 0.55);
-    fb.rimRightStrength.value = 0.22 + neonMix * neonMix * 1.15;
-    // Green-cyan top key from the overhead station lamp: strongest when the
-    // fighter stands near the lamp column, never fully off. Drives BOTH the
-    // silhouette strip along hair/shoulders and the broad top-body gradient.
-    // Raised hard (critic fix 2): the lamp directly above the fight line must
-    // OBVIOUSLY key the fighters' crowns.
-    const lampNear = Math.exp(-((fx - LAMP_X) * (fx - LAMP_X)) / 7);
-    fb.topColor.copy(LAMP_KEY);
-    // Anchored to the actual lamp (round-3, critic item 7): the crown light
-    // follows lamp proximity instead of a near-constant floor, so two
-    // fighters no longer wear identical green-white crowns wherever they
-    // stand — the light belongs to the fixture.
-    fb.topStrength.value = 0.5 + lampNear * 0.95;
-    // --- Scene-light BODY fill (not just edges): the cheap trick that sits
-    // the fighter IN the scene. Magenta wash rises across the body as the
-    // fighter nears the K&A neon; warm sodium fill answers from screen-left;
-    // both slide across the sprite as it moves.
-    fb.fillLeftColor.copy(SODIUM_RIM).multiplyScalar(0.17 + leftNear * 0.24);
-    fb.fillRightColor.copy(NEON_RIM).multiplyScalar(0.14 + neonMix * neonMix * 0.6);
-    // Warm ORANGE floor bounce on shoes/shins from the sodium light pools —
-    // deliberately obvious (critic fix 2): the lower legs read lit BY the
-    // street, brightest standing in a pool.
-    fb.floorBounce.copy(SODIUM_RIM).lerp(BODEGA_WARM, 0.35)
-      .multiplyScalar(0.32 + lampNear * 0.16 + leftNear * 0.12);
-    // Position-driven ZONE GRADE: overall body exposure + temperature slide
-    // with the nearest practical. Base lift keeps a dark outfit level with
-    // the wall behind it (the shader weights this into the shadows/mids);
-    // walking neon-corner -> lamp -> sodium left visibly re-colours the body.
-    fb.zoneTint.setRGB(
-      1.16 * (1 + leftNear * 0.20 + neonMix * neonMix * 0.16),
-      1.16 * (1 + lampNear * 0.22 + leftNear * 0.05),
-      1.16 * (1 + neonMix * neonMix * 0.34 + lampNear * 0.10 - leftNear * 0.12),
-    );
+    // Screen-space edge orientation for the shader (uv.x flips with the mirror).
+    fb.facing.value = mirror;
+    const light = spriteLightFrame(this.spriteLight, fx, hitSmear);
+    fb.rimLeftColor.setRGB(light.rimLeft[0], light.rimLeft[1], light.rimLeft[2]);
+    fb.rimLeftStrength.value = light.rimLeftStrength;
+    fb.rimRightColor.setRGB(light.rimRight[0], light.rimRight[1], light.rimRight[2]);
+    fb.rimRightStrength.value = light.rimRightStrength;
+    fb.topColor.setRGB(light.top[0], light.top[1], light.top[2]);
+    fb.topTint.setRGB(light.topTint[0], light.topTint[1], light.topTint[2]);
+    fb.topStrength.value = light.topStrength;
+    fb.fillLeftColor.setRGB(light.fillLeft[0], light.fillLeft[1], light.fillLeft[2]);
+    fb.fillRightColor.setRGB(light.fillRight[0], light.fillRight[1], light.fillRight[2]);
+    fb.floorBounce.setRGB(light.floorBounce[0], light.floorBounce[1], light.floorBounce[2]);
+    fb.zoneTint.setRGB(light.zone[0], light.zone[1], light.zone[2]);
     // Impact light spill: the burst relights the near side of BOTH fighters
     // in the burst's own colour for its ~0.25s life.
     const spill = this.getImpactSpill?.();
@@ -988,20 +1375,17 @@ export class FighterLayer {
       target.b += spill.color.b * near * 0.32;
     }
     // Screen-space sheen: glint direction slides with the fighter's offset
-    // from the lamp; budget rises standing under it. Raised (critic fix h):
-    // every material must declare itself at a glance — metal sparks, leather
-    // sheens, skin sweats — so the sheen pass now carries a real budget.
-    fb.lampDx.value = THREE.MathUtils.clamp((fx - LAMP_X) / 2.5, -1, 1);
-    fb.specStrength.value = 0.72 + lampNear * 0.68;
+    // from the overhead source; budget rises standing under it. Raised
+    // (critic fix h): every material must declare itself at a glance —
+    // metal sparks, leather sheens, skin sweats — so the sheen pass now
+    // carries a real budget.
+    fb.lampDx.value = light.lampDx;
+    fb.specStrength.value = light.specStrength;
     // Wet-floor mirror graded by position — BARELY (round-3 palette fix).
     // The sprite's own colours ARE the mirror; the stage only breathes a
     // few percent of its practical hue into it. The old 1.12-1.26 warm lift
     // is what turned Deathblow's black shirt into an orange-brown smear.
-    bank.reflMaterial.color.setRGB(
-      1.0 + leftNear * 0.04 - neonMix * 0.02,
-      1.01 + lampNear * 0.05 + leftNear * 0.01,
-      1.06 + neonMix * neonMix * 0.14 + lampNear * 0.03,
-    );
+    bank.reflMaterial.color.setRGB(light.mirror[0], light.mirror[1], light.mirror[2]);
     // Super freeze: body toward silhouette, rims boosted (set in the shader).
     // Only the attacker owns the freeze light; the other fighter reads as the
     // dark shape time stopped around (fixes the fused-legs "ghost" read).
@@ -1027,7 +1411,7 @@ export class FighterLayer {
       const meshW = Math.abs(rig.mesh.scale.x) || 1;
       const meshH = Math.abs(rig.mesh.scale.y) || 1;
       fb.hitUv.set(
-        THREE.MathUtils.clamp(0.5 + ((spill.x - fx) / meshW) * facing, 0.12, 0.88),
+        THREE.MathUtils.clamp(0.5 + ((spill.x - fx) / meshW) * mirror, 0.12, 0.88),
         THREE.MathUtils.clamp(((spill.y ?? 0) - rig.root.position.y) / meshH, 0.15, 0.9),
       );
     }
@@ -1039,12 +1423,12 @@ export class FighterLayer {
     // --- Grounding shadows --------------------------------------------------
     // Layer 1: tight near-black contact ellipse under EACH measured foot —
     // nearly black at the sole is what makes a fighter read planted.
-    // Layer 2: one longer soft shadow stretched AWAY from the overhead green
-    // station lamp (the lamp hangs behind at x=LAMP_X, so the throw runs
-    // toward the camera and away in x). The key light's shadow-mapped
-    // silhouette still draws the pose-shaped shadow on top.
+    // Layer 2: one longer soft shadow stretched AWAY from the overhead
+    // source (it hangs behind the fight line, so the throw runs toward the
+    // camera and away in x). The key light's shadow-mapped silhouette still
+    // draws the pose-shaped shadow on top.
     const slide = (1 - airFade) * 0.3; // airborne: contact patch drifts + fades
-    rig.shadow.position.set(fx, 0.01, 0.02);
+    rig.shadow.position.set(fx - trembleX, 0.01, 0.02);
     const feet = (upright && bank.footMetrics?.feet?.[pose.frame]) || [];
     const soleY = 0.004;
     const footScaleX = renderSize * 0.2 * (0.75 + 0.25 * airFade);

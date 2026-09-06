@@ -19,7 +19,10 @@ opening normal.
 | Up | Jump. Up-toward and up-away give the forward and back jump arcs. |
 | Down | Crouch. Crouching alone does **not** block. |
 | Down + away | Crouch-block, which is the only way to guard lows. |
+| Tap away ≤4 frames before impact | **Perfect Guard**: no chip, shorter blockstun, +3 Grit, no guard-gauge pressure. Release and tap away again *inside* blockstun to re-arm it against the next hit of a string. |
+| Away + special motion, or LP+HP, in blockstun | **Guard reversal** (30 Grit). |
 | Double-tap left / right | Dash. Backdash keeps its startup invulnerability. |
+| Flick the touch pad left / right | Dash on a phone (5.x). A quick sweep of the thumb to the pad edge is read as the same double-tap; see **Touch** below. |
 
 ## The four buttons
 
@@ -57,6 +60,9 @@ Each button authors a distinct normal in every stance:
 | ← → + LK/HK | Running heavy |
 | Motion + LP&HP or LK&HK | Enhanced (EX) version · 25 Grit |
 | ↓ → ↓ → + LP/HP, or HP&HK | Grit super · 100 Grit |
+| ↓ ← + LK/HK (EX: LK&HK) | Personal throwable — two per round, the pips under the Grit bar |
+| ↓ + HP over a grounded stage object · HP again throws (toward = the hard throw) | Stage weapon |
+| Double-tap ↓, then LK&HK | Taunt (+8 Grit, punishable) |
 
 Chords are two of the existing four buttons pressed together — no fifth button is
 added. The chord is accepted when one button edges while its partner is held, and it
@@ -103,7 +109,133 @@ target; left-handed mode mirrors the two clusters. A prompt above the cluster sh
 the super command when Grit is full and `FINISH HIM · LP = A · LK = B · ANY DISTANCE`
 during the finishing window.
 
-## Autonomous decisions taken for this checkpoint
+### Flick to dash (5.x, sweep #41)
+
+Until 5.0 the only phone dash was lifting the thumb and re-landing in the same
+sector inside the 12-frame double-tap window, which the sector pad never signalled
+and QA never drove. A **flick** now dashes: sweep the thumb at least 0.6 of the pad
+radius horizontally inside 100 ms (6 frames) and land at least 0.45 R out in that
+direction (`TOUCH_PAD_RULES.flick*`, `touchPadFlick` in `engine/controls.mjs`; on the
+844×390 target the radius is ~75 px, so a flick is ~45 px of travel). The landing test
+is what stops the thumb's return swing from reading as a backdash. The flick is
+translated into exactly what the sim already understands — two direction presses two
+ticks apart, played on the touch Set as lift / tap / lift / tap / settle, one real sim
+tick per stage from `runSimulationStep` — so `DirectionTapTracker` fires, `readInput`
+is untouched and no new net bit exists. Double-tap still works. The first three
+touch-controlled fights open with `FLICK THE PAD TO DASH · DOUBLE-TAP WORKS TOO` on the
+touch prompt (per install, `final-blow-touch-flick-coach`), and the first three flicks
+of a session flash `DASH ▶▶` / `◀◀ DASH` for a beat; super and finish labels always
+outrank the tip. QA: `__finalBlowQa.touchFlick(direction, hold)` and
+`touchDebug().flicks / flickPulses`.
+
+### Performance governor memory (5.x, sweep #37)
+
+The adaptive governor (`engine/polish.mjs`) used to be rebuilt from the static
+baseline at every fight, so a boundary phone re-lived 2–8 s of dropped frames and the
+COOLING toast at the top of every round 1. It now keeps its machine alive across the
+result/select/title screens (frozen, not fed — a menu's frame times are not fight
+evidence), drops it only when a static gate closes (forced profile, cabinet, online),
+and writes the landed tier to `localStorage` under
+`final-blow-governor-tier:<application-version>` with a device signature (UA,
+`hardwareConcurrency`, `deviceMemory`, static baseline). The next session's first
+fight starts on that tier silently; the memory can never seed above the static
+baseline; the step-up path still needs 30 s of headroom and rewrites the memory when
+it lands. QA: `__finalBlowQa.governorMemory()` / `governorForget()`, and
+`snapshot().governor.{retained, seededFrom, remembered}`.
+
+## Modes & onboarding (5.1, sweep #29–#33)
+
+### One command table, every style
+
+`commandLabel(action, style)` / `styleCopy(template, style)` in `engine/controls.mjs`
+are the single source of truth for "how do I do X in the active control style".
+The table mirrors the resolver: MODERN's LP&LK chord is the command special
+(neutral or ↓) and, held away, the back special — the base kick special, launcher
+and super motion stay classic; LEGEND's HP is the command special, ↓ + HP the
+launcher, ← + HP the back special, HK the base special, HP alone the super at full
+Grit. EX chords, the throwable and the taunt are style-free. Four surfaces render
+through it: the move list's COMMAND column, the FIGHT SCHOOL step labels, the
+options dialog's SPECIALS / ENHANCED / SUPER lines (`data-style-copy` templates,
+re-rendered on every style change) and the touch prompt's SUPER READY line.
+
+| Action | CLASSIC | MODERN | LEGEND |
+| --- | --- | --- | --- |
+| Command special | ↓ → + PUNCH | LP&LK | HP |
+| Back special | ↓ ← + PUNCH | ← + LP&LK | ← + HP |
+| Base special | ↓ → + KICK | ↓ → + KICK | HK |
+| Launcher | → ↓ → + PUNCH | → ↓ → + PUNCH | ↓ + HP |
+| Super | ↓ → ↓ → + PUNCH or HP&HK | HP&HK at full Grit | HP at full Grit |
+
+### Move list from the pause menu
+
+**MOVE LIST** on the pause panel opens a compact overlay for the fighter P1 is
+holding (the Commissioner included), with the command column in the active style
+and a footer for the things the frame-data rows never listed: throwable, stage
+weapon, dash, taunt, Perfect Guard and guard reversal. Escape / pad back closes
+the overlay first, a second press resumes. The options dialog's fighter select is
+now built from the live roster (the Pinelands Devil and an unlocked Commissioner
+appear) instead of the static eight-option list. QA: `__finalBlowQa.moveListOverlay(open)`.
+
+### First-run control card
+
+The first human fight (arcade, versus, survival, team — never training, demo,
+online or replay) raises a corner card through the round-1 intro and the opening
+seconds: MOVE, BLOCK (hold away · down-away for lows), the four buttons for the
+device actually in hand (keyboard bindings from the live keymaps, pad glyphs in the
+detected label set, or the touch cluster), the style's special command and the
+grab. It is dismissed by a tap/click, Escape, or its own 9.5 s timer, and shown
+once per install (`final-blow-control-card`). It deliberately does **not** stretch
+the intro clock: `phaseTime` is sim state, and a replay of that first fight would
+re-run with the stock 2.1 s intro and desync. On the touch layout the card sits
+top-left, away from the pad, and the flick-to-dash tip waits behind it — the card's
+dismissal re-invokes `maybeCoachTouchFlick()`, so the tip is deferred, not lost.
+The title screen shows a `NEW HERE? FIGHT SCHOOL · 3 MIN` ribbon until a match is
+logged or a lesson is completed, and the school button reports real progress.
+QA: `__finalBlowQa.controlCard()` / `controlCardReset()`.
+
+### Fight School lessons 8–12
+
+| # | Lesson | Steps (dummy script) | Event |
+| --- | --- | --- | --- |
+| 8 | THE JAWN | land the throwable, then HP behind it | projectile impact (`throwObject`) |
+| 9 | GRIT ECONOMY | land any EX, then the super | `enhanced*` / `super` hits |
+| 10 | SPLIT SECOND | Perfect Guard ×2 (overhead loop), then a guard reversal | block with `perfect`, `guardReversal` hit |
+| 11 | OFF THE FLOOR | air tech (launcher script), quick rise, delayed wake (sweep script) | `airTech`, `wake` |
+| 12 | STREET FURNITURE | pick the stage weapon up, land the throw | `pickup`, `stageWeapon` impact |
+
+Labels are templates (`LAND {commandSpecial}`) resolved per style by
+`fightSchoolStepLabel`; lesson 4's old hard-coded `↓ → + PUNCH` now reads LP&LK
+under MODERN and HP under LEGEND. The school observes four new sim hooks (guarded
+behind `rollbackResimulating`, training only, side 0): projectile impacts in
+`triggerProjectile` (the throwable and the stage weapon never went through
+`observeTrainingHit`), the weapon pick-up, `performAirRecovery`, and the wake-up
+option. The guard reversal is an advanced move with no `kitAction`, so
+`observeTrainingHit` now names it `guardReversal` instead of a plain `special`. The
+STREET FURNITURE setup keeps an object on the floor (respawning after a throw lands
+or the weapon expires) and restores the stage-weapon option on exit if it had to
+switch it on. The first seven lesson ids are unchanged, so saved progress holds.
+
+### Team Battle vs CPU
+
+The title button reads `1–2 PLAYERS · TEAM BATTLE · 3V3`. After P1's third pick the
+select screen raises **VS CPU · AUTO-DRAFT** / **VS PLAYER 2** (arrows or stick move
+between them, Enter / A / any attack key confirms; the roster ignores picks until
+the choice is made). VS CPU drafts three fighters P1 did not pick
+(`draftCpuTeam` in `engine/modes.mjs`, drawn from `state.rng` — `seedMatch`
+reseeds at FIGHT, so the draw never leaks into the match stream), stamps the three
+cards one after another, raises the CPU difficulty bar and locks P2; FIGHT then
+calls `beginTeamBattle(true)`, the path `sideIsCpuControlled` and the rematch flows
+already honoured. QA: `__finalBlowQa.teamChoice("cpu" | "player")`.
+
+### Combo trials for every kit
+
+`TRAINING_COMBO_TRIALS` is generated for every `FIGHTER_KITS` id. The Pinelands
+Devil (HOWL CONFIRM, BARRENS CASHOUT) and the Commissioner (GAVEL CONFIRM,
+AUTHORITY CASHOUT) get the same bronze pair as the original eight plus the six
+generated trials — eight each, the signature route included because Wing Flit and
+Binding Clause both land on the standing dummy.
+
+
 
 These were unspecified in the backlog and were resolved with reversible, data-driven
 choices:
