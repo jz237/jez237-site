@@ -65,6 +65,25 @@ export function cellContainsPose(cell, pose, inset = 0) {
     && pose.lat >= b.south + dy && pose.lat <= b.north - dy;
 }
 
+// At steep angles the orbit target is far beyond the foreground the viewer
+// is inspecting. Sample lower in the visible ground footprint, rather than
+// choosing both the tile and its detail solely from that distant target.
+export function imageryFocus(pose, projection) {
+  const pitch = Math.min(85, Math.max(0, pose.pitch || 0));
+  const weight = Math.min(1, Math.max(0, (pitch - 25) / 35));
+  if (!weight) return pose;
+  const rad = Math.PI / 180;
+  const lowerPitch = pitch - (pose.fov || 40) * 0.25 * weight;
+  const height = pose.dist * Math.cos(pitch * rad);
+  const offset = pose.dist * Math.sin(pitch * rad) - height * Math.tan(lowerPitch * rad);
+  const bearing = (pose.bearing || 0) * rad;
+  return { ...pose,
+    lon: pose.lon - Math.sin(bearing) * offset / projection.metersPerDegLon,
+    lat: pose.lat - Math.cos(bearing) * offset / projection.metersPerDegLat,
+    dist: height / Math.cos(lowerPitch * rad),
+  };
+}
+
 export function imageryTierFor(distanceM, mode = 'standard') {
   if (distanceM > DETAIL_DISTANCE_M) return null;
   if (mode !== 'data' && distanceM <= INSPECTION_DISTANCE_M) return 'inspection';

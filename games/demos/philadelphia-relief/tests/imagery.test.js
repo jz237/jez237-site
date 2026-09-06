@@ -11,7 +11,7 @@ import { decodeState, encodeState } from '../src/urlstate.js';
 import {
   DETAIL_DISTANCE_M, ULTRA_DISTANCE_M, ROOFTOP_DISTANCE_M,
   createImageryDetail, detailCellFor, detailImageSize,
-  detailResolutionM, detailUrl, imageryTierFor, neighbourCells,
+  detailResolutionM, detailUrl, imageryTierFor, imageryFocus, neighbourCells,
 } from '../src/imagery-detail.js';
 import { detailRequest, imagerySources, imageryState, onRequestGet } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
 
@@ -278,4 +278,19 @@ test('dragging across grid boundaries retains useful pending imagery', async () 
   assert.match(requests[1].url, /size=4096/);
   assert.equal(api.stats().refining, true);
   api.dispose();
+});
+
+
+test('tilted South Philadelphia view selects detail for the visible foreground', () => {
+  const pose = { lon: -75.1677, lat: 39.9278, dist: 4907, bearing: 0.8, pitch: 73.7, fov: 40 };
+  const focus = imageryFocus(pose, terrain.projection);
+  assert.equal(imageryTierFor(pose.dist), 'detail');
+  assert.equal(imageryTierFor(focus.dist), 'ultra');
+  assert.ok(focus.lat < pose.lat - 0.01, 'imagery follows the closer foreground');
+  assert.ok(focus.lat > pose.lat - 0.03);
+  const topDown = { ...pose, pitch: 0 };
+  assert.equal(imageryFocus(topDown, terrain.projection), topDown);
+  const east = imageryFocus({ ...pose, bearing: 90 }, terrain.projection);
+  assert.ok(east.lon < pose.lon);
+  assert.ok(Math.abs(east.lat - pose.lat) < 1e-9);
 });
