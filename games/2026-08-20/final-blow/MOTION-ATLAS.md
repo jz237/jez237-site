@@ -3549,3 +3549,727 @@ generated sheet was also rebuilt with the despill (see the manifest's
 contact or a crouched victim (there is no HIGH level — a MID jab snaps the
 head), a blocked contact keeps its stance through the hit flash, and the
 wake-up rung is measured on the ext4 get-up it draws from.
+## v5.2 — LOCOMOTION, ITEM ONE: THE SIXTH SHEET IS REGISTERED, AND NOTHING DRAWS DIFFERENTLY YET
+
+Every fighter now carries `assets/unified/<id>-ext5.webp` (bank
+`unified-ext5`, grammar cells 72-87): dash launch, dash stretch, dash brake,
+turnaround, apex tuck, descent, air recover, an upright air hit, power charge,
+entrance A and B, victory, taunt, crouch guard flinch, throw grab, dizzy sway.
+The 5.0 air arc and the dash are where the roster still crosses generations
+in the middle of a motion — the jump traced `unified:8 -> ext:3 -> motion:5
+-> motion3:2 -> motion3:3 -> ext3:8 -> ext3:10` and the dash `motion2:6 ->
+motion:7 -> motion3:5 -> motion2:6` on jez, four banks apiece — and this
+sheet is the same-generation answer. Generated the 4.9/5.0 way
+(`tools/swing/grammar-ext5.txt`, `build_sheet.py --bank ext5`: image-to-image
+from the fighter's own unified sheet, per-cluster LAB match, un-premultiplied
+despill, magenta inpaint, the purple impact strokes purged on cells 7 and 13),
+built AT THE UNIFIED SCALE — ali at his own 1.3661, since a 6x4 main sheet
+draws its figure smaller. Shipped LOSSLESS, 800 KB - 1.11 MB each, 9.23 MB
+for the ten; the 5.1 encode gate has not been run on this bank and the family
+on the wire grows by that much per fighter until it is.
+
+THIS ITEM REGISTERS AND DOES NOT ROUTE. The wave splits the two on purpose:
+registering first is what lets a trace prove the drawing is unchanged with
+the sheets ACCEPTED, and it puts the tables in front of the routing item
+instead of beside it. So: the sheets ship; `UNIFIED_EXT5_BANK` / `_BASE` 72 /
+`_CELLS` / `_BEATS` and a `SWING_BANKS` entry (the per-cell gate, `swingFrame`
+and both loaders need no new code); `AUTHORED_BANKS` gains the bank last, so
+CINEMA 3D warms it from the shared list; the manifest carries `ext5Sheet`,
+`ext5Scale` and sixteen `ext5Cells` per fighter and `format.ext5Status`
+reads `REGISTERED 5.2 — routed by the locomotion pass`; game.js mirrors every
+ext3/ext4 site (`ext5Masks`, the swing atlas table, the drawable and
+readiness gates, the palette source, the snapshot's `swing` triple, and the
+preload plan, where ext5 joins the family the intro holds for — the dash is
+the first thing a player does, and a sheet that pops in after FIGHT! is the
+5.1 strobe by network). No track and no substitution names an ext5 cell.
+`tests/unified-swing.test.mjs` pins all sixteen unreachable in
+`EXT5_UNROUTED_FOR_NOW`, sweeps every bank x cell x 2048 contexts through
+`swingSubstitute`, walks fourteen key tracks for an ext5 link, and reads
+`swing-resolve.mjs` and the substitution body for the bank's name. The
+routing item shrinks that list.
+
+THE MEASURED TABLES, from the slicer sidecars (`swing-v50/ext5-<id>.json`),
+re-measured on the shipped masters at alpha >= 24 (160 of 160 cells match,
+feet on row 314 on every one). `UNIFIED_EXT5_CELL_HEIGHT` runs 134-313: the
+dash stretch is a horizontal lunge on every sheet (post 134, benny 153,
+devil and ali 173, cyraxx 183, jez 184, alan 186, donald 203, deathblow 211,
+commissioner 213) and is the shortest dash cell on all ten; the tuck sits
+under the descent on all ten. `UNIFIED_EXT5_CELL_ADJUST` carries the
+fit-restore for the wide cells — the stretch on nine sheets (jez 1.183, alan
+1.168, post 1.284, benny 1.291, cyraxx 1.271, ali 1.263, devil 1.252,
+deathblow 1.059, donald 1.013), the brake on seven (jez 1.26, cyraxx 1.183,
+ali 1.146, deathblow 1.116, alan 1.082, post 1.03), the launch on benny
+(1.059) and the devil (1.108), cyraxx's air recover and victory — and the
+commissioner's row folds his 1.033 sheet factor into all sixteen exactly as
+his ext2/ext3/ext4 rows do (stretch 1.0618 x 1.033 = 1.0968), because
+`bankSheetAdjust` has no ext branch and both renderers must agree.
+`CELL_BODY_CENTRE[id]["unified-ext5"]` is the sidecar's bodyCentre; the
+airborne anchor reads it the day a jump cell is routed. `swingDrawnHeight`
+knows the bank; `swingStandInAdjust` is 1 on every cell because nothing is a
+stand-in yet.
+
+THE REVIEW, at 1:1 on the masters. 159 of 160 accept. ali's crouch guard
+flinch (85) is HELD: a yellow impact burst is painted into the cell at his
+hands, and the purge keys purple only — accept:false until it is keyed out,
+and a crouched block keeps his ext3 crouch guard. The air-hit-upright cell
+(79) did not come back upright: nine sheets drew a doubled-over fold (head
+and feet both down, a body blow taken in the air) and the devil's an arched
+launch. Unlike the inverted ext4:7 the feet are under the head on every
+sheet, so it is accepted with that note in the manifest and the routing pass
+decides what, if anything, it stands in for. post's and jez's victory cells
+(arms raised to the row edge) shed the most bleed-over blobs to the slicer's
+bottom-edge rule (13 and 10), and both read whole.
+
+PROVED UNCHANGED. The engine trace (the swing-resolve harness's kit-less
+strike mirror plus the jump-arc and dash tracks, gate built from the shipped
+manifests) was run before and after registration for jez, deathblow and ali,
+with the ext5 masks whole after. Every track is byte-identical, hold ticks
+included — jez: jab `ext2:0 x4 -> ext3:0 x5 -> ext3:2 x2 -> ext2:1 x2 ->
+unified:7 x2 -> unified:0 x2`, heavy kick `ext:6 x4 -> ext2:6 x3 -> unified:6
+x5 -> ext3:14 x6 -> ext3:11 x8 -> ext2:7 x5 -> unified:7 x5 -> unified:0 x7`,
+jump `unified:8 x5 -> ext:3 x5 -> motion:5 x7 -> motion3:2 x5 -> motion3:3 x3
+-> ext3:8 x4 -> ext3:10 x17`, dash `motion2:6 x3 -> motion:7 x3 -> motion3:5
+x4 -> motion2:6 x4`; the only line that differs is the gate's own header,
+which now lists the bank. Every hold budget in `tests/motion-holds` stands
+untouched (370 tests, all green; the swing script gained four functions). This is the baseline the routing
+item's before/after is measured against.
+
+## v5.2 — LOCOMOTION, ITEM TWO: THE GROUND AND BOOKEND CELLS REACH THE SCREEN
+
+Routing only, no art. Item one proved the registered sheet changed nothing;
+this item spends twelve of its sixteen cells — the dash in three drawings,
+the turnaround, the power charge, the two entrances, the victory, the taunt,
+the crouch guard flinch, the throw grab and the dizzy sway — and leaves the
+four AIR cells (apex tuck, descent, air recover, air-hit-upright) pinned
+unreachable for the item after it. The rule this item was written under: a
+same-generation cell REPLACES A DRAWING AND NEVER CHANGES TIMING. Every ext5
+link sits AHEAD of the motion link it stands in for, in the band that link
+already owned, so the band grid — and so every hold budget in
+`tests/motion-holds` — is the one the motion links set; where a beat is
+emitted directly rather than through a track, the ext5 descriptor carries
+the exact pre-5.2 chain as its fallback (`unifiedExt5Pose`, the sibling of
+`unifiedExt2Pose`), and the substitution table maps the motion cells
+themselves so any path that resolves one lands on the sheet.
+
+THE DASH WAS FOUR BANKS IN THIRTEEN TICKS. Traced with every sheet whole,
+jez's forward dash read `unified:0 -> motion2:6 x2 -> motion:7 x2 -> motion3:5
+x3 -> motion2:6 x6 -> unified:0`: the 2.9 brake key bookending a stretch that
+itself changed generation halfway, and on the devil — whose motion2 brake is
+rejected — `base:5 x2 -> motion:7 x2 -> motion3:5 x3 -> base:12 x6`, a base
+cell at both ends. `dashKeys` now leads every band with the sheet: launch
+(ext5:0, a running leap) for band 0, the stretch (ext5:1, the horizontal
+lunge, fit-restored 1.01-1.29) for bands 0.16 AND 0.42 — there is one stretch
+drawing where motion3 supplied a second body, and the two bands merge into 8
+ticks at the 16-tick audit span, exactly MOTION_HOLD_BUDGET, 6 on a 13-tick
+dash — and the brake (ext5:2, the planted-foot skid) for band 0.68. The
+dash-exit velocity-decay branch in game.js draws the same brake over its
+motion2 chain, so the tail is the drawing the dash left on. Attributions
+(entered from and exited to unified:0, `MOTION_RULES.dashExitFrames` = 4
+exit ticks counted):
+
+    jez        forward  unified:0 -> ext5:0 x2 -> ext5:1 x5 -> ext5:2 x6 -> unified:0   9+4, 13 of 13 on the family
+               back     unified:0 -> ext5:0 x2 -> ext5:1 x7 -> ext5:2 x7 -> unified:0   12+4, 16 of 16
+    deathblow  forward  unified:0 -> ext5:0 x3 -> ext5:1 x6 -> ext5:2 x8 -> unified:0   13+4, 17 of 17
+               back     unified:0 -> ext5:0 x3 -> ext5:1 x8 -> ext5:2 x9 -> unified:0   16+4, 20 of 20
+    devil      forward  unified:0 -> ext5:0 x2 -> ext5:1 x5 -> ext5:2 x6 -> unified:0   9+4, 13 of 13
+               back     unified:0 -> ext5:0 x2 -> ext5:1 x6 -> ext5:2 x7 -> unified:0   11+4, 15 of 15
+
+The hold lengths are the ones the 5.1 read had, tick for tick (deathblow's
+back dash held motion2:6 for the same 9 = 5 band + 4 exit ticks); only the
+generation changed. Without the sheet the gate returns the 5.1 read exactly.
+
+THE REST, by frame attribution (jez, every sheet whole; deathblow and the
+devil identical unless noted):
+
+    turnaround     unified:0 -> ext5:3 x3 -> unified:0          the 3-tick latch, over motion2:5; the draw-site audit
+                                                               counts the ext5 pivot as the pivot drawn
+    super charge   ext5:8 x4 -> ext3:3 x2                       the charge band over motion:12, then the reserved smear
+                   (deathblow / devil ext5:8 x7 -> ext3:3 x2; ali ext5:8 x5, his super has no smear room)
+    intro          ext5:9 x30 -> unified:0 | ext5:10 x30 -> unified:0   the seed-and-side pick, over motion:14 / motion:15
+    win            ext5:11 x45 on all three showcase picks     over specials:15 / motion:13 / motion:15
+    taunt          ext5:12 x45 on all three picks
+    throw          ext2:12 x9 -> ext5:14 x7 -> [hurl] -> ext3:2 x9 -> ext2:13 x9 -> unified:7 x9 -> unified:0
+                                                               reach -> SEIZE -> hurl: the load band drew the UNIFIED
+                                                               crouch transition before (the devil, whose motion2:4 is
+                                                               off, drew the guard) — the seize is what the band means
+    dizzy          ext4:4 x12 -> ext5:15 x12 -> ext4:5 x12 -> ext5:15 x12 -> ... (11 runs over 128 ticks)
+                                                               was ext4:4 x12 -> ext4:5 x116; the loop now alternates
+                                                               the slump and the sway on the 12-tick beat the reel set
+                                                               (`DIZZY_SWAY_TICKS`, `ctx.swayBeat` = parity of the
+                                                               elapsed dizzy / guard-crush clock, sim state), the
+                                                               slump as the sway's `alt` so a held sheet keeps the loop
+    crouched block ext5:13 x8 -> ext3:12 x3 -> unified:5 x6    an IMPACT and a SETTLE, like the standing
+                                                               ext4:0 x8 -> unified:7 x9; was ext3:12 x8 -> unified:5 x9
+
+The crouched block takes the flinch through a capability answer
+(`crouchBlockstunKeys({ flinch })`, answered per fighter from the per-cell
+gate exactly as `inbetween` and `extended` are), not through the gate alone:
+ali's flinch cell is HELD (the painted impact burst item one recorded), and
+with the settle band opened on the crouch guard for everyone his impact band
+would have fallen to the same cell and merged into one 11-tick hold. He
+reads the 5.1 track, byte for byte, until the cell is keyed out.
+
+THE STAND-INS, by the 5.1 rule (match when the body plan is the rung's,
+ceiling at the idle otherwise; measured drawn height x fit-restore against
+the unified rung, the commissioner's fold on both sides): the turnaround,
+the two entrances and the crouched flinch MATCH — turnaround commissioner
++8.0%, cyraxx +5.9%, jez +5.1%, deathblow -6.6%, devil -4.9%, factors 0.926
+/ 0.945 / 0.952 / 1.071 / 1.052; entrance A deathblow 1.075, post 1.086, jez
+0.949, benny 0.965, cyraxx 0.945, commissioner 0.957; entrance B deathblow
+1.106, donald 1.111, devil 1.084, post 1.081, alan 1.050, jez 0.958, cyraxx
+0.955, commissioner 0.962; the crouched flinch onto the crouch like the ext3
+guard it hands to — cyraxx +31.4% (the 0.80 clamp floor leaves him 5% over),
+commissioner +23.5% (0.810), ali +16.9% (0.855, moot while held), donald
++13.5% (0.881), the rest 0.914-0.936. The power charge, the victory and the
+taunt are different plans and take the CEILING only: victory donald 0.913,
+cyraxx 0.919, alan 0.945, commissioner 0.947, jez 0.949, benny 0.965; taunt
+jez 0.930, commissioner 0.941; charge cyraxx 0.955, commissioner 0.957,
+benny 0.965. The three dash cells, the seize and the sway take exactly 1: a
+lunge, a lean and a sway are the motion, and each replaces a motion cell
+that never had a reconciliation either. The sway sits 5% over the slump it
+alternates with on jez, cyraxx and the commissioner (head up against head
+down, the same body at the same scale) — that is the bob, not a size pop.
+
+CINEMA 3D needed no code: `renderer/three/fighters.mjs` warms and draws
+whatever bank the resolved pose names through `AUTHORED_BANKS` and the
+host's `fighterAtlasFor` / `fighterBankSheet`, both of which item one taught
+the bank; `tests/cinema-fighters` now pins an ext5 brake drawn from the ext5
+bank on a fighter who owns the sheet and from the descriptor's fallback on
+one who does not. 371 tests green (the one addition). Manifest
+`format.ext5Status` reads `WIRED 5.2 (ground and bookend cells)`.
+
+STILL UNROUTED, for the next item: ext5:4 apex tuck, ext5:5 descent, ext5:6
+air recover, ext5:7 air-hit-upright (the doubled-over fold item one
+recorded) — the jump still crosses `unified:8 -> ext:3 -> motion:5 ->
+motion3:2 -> motion3:3 -> ext3:8 -> ext3:10`. Residuals of this item: the
+merged stretch band on a 16-tick dash sits exactly at the budget, not under
+it; ali's crouched block waits on his flinch cell; the ext5 sheets are still
+lossless on the wire.
+
+## v5.2 — LOCOMOTION, ITEM THREE: THE AIR CELLS, AND THE JUMP IS ONE FAMILY FROM TAKEOFF TO TOUCHDOWN
+
+Routing only, no art. Item two left the four AIR cells pinned — apex tuck
+(ext5:4), descent (5), air recover (6), air-hit-upright (7) — and the jump
+still crossed `unified:8 -> ext:3 -> motion:5 -> motion3:2 -> motion3:3 ->
+ext3:8 -> ext3:10` on jez: the unified family for the rise and the ascent,
+the motion family for the tuck, the motion3 keys for the apex and the fall,
+and then — because five sheets never accepted their ext descent — the ext3
+AIR CHAMBER standing in for motion:11, so every air normal read chamber ->
+strike -> CHAMBER AGAIN -> land, a rewind on the drawing the strike had
+just left. This item spends the four cells on exactly those beats and
+nothing else, under item two's rule: a same-generation cell REPLACES A
+DRAWING AND NEVER CHANGES TIMING.
+
+THE JUMP ARC. `jumpArcKeys` takes a third capability answer, `air` (game.js
+`unifiedFighterAirReady`: the ext5 apex tuck, descent AND air recover all
+drawable — asked as one answer, because a partial sheet would put a
+generation crossing back into the middle of the air, which is the 3.0
+configuration). With it every band below the ascent leads with the
+fighter's own drawing, one link AHEAD of the link it replaces on the band
+grid the motion links set: ext5:4 over the motion3 apex, ext5:5 over the
+motion3 jump-descent, ext5:6 over motion:11, the ext3 landing gather over
+motion:6 (the table drew it there already; the link makes the track say
+so). And with nothing motion left below them, the 3.0 objection to
+unified:8 and :9 — "with no usable descent after it the tuck would hand
+straight to a motion cell in mid-air, 7.56 dE held 15 ticks" — has no
+object: the RISE AND THE TUCK ARE UN-RETIRED in every `air` arc, plain,
+extended and descend alike. Cell 9 was checked at 1:1 on all ten sheets
+before that: a compact ball, knees to the chest, the head over the hips on
+every one (the six 4.0/4.1 sheets' "jump tuck at the apex", the four
+holdouts' "compact ball, head tucked"; donald's club shaft runs down through
+the ball with the brass head clear of the shoes), so no sheet is excused.
+ali keeps his own cell 20 where the 4.1 arc put it — the fall band — with
+the ext5 apex tuck as the same-family fallback behind it, and the ext5
+descent follows it; the five sheets that never accepted cell 20 take ext5:5
+where they had the motion3 fall. Without the answer every arc is the 5.1
+array, byte for byte (the three test suites that pin those arrays did not
+move).
+
+THE TABLE. `swingSubstitute` gains the airborne cases: motion:5 for a
+NEUTRAL airborne body (the air-tech flip's ball; the plain jump's tuck band
+leads with unified:9 and never resolves it) -> ext5:4; motion:11 airborne
+and not a victim (the attacker's trail after an air strike, the air-tech
+tail) -> ext5:6, with the 5.0 chain behind it IN ITS ORDER as nested alts —
+the ext descent where a sheet accepted it (ali), then the ext3 chamber — so
+a held ext5 sheet degrades to exactly the 5.0 read and never past it
+(`swingResolve` follows an alt's alt now; the gate is asked down the chain
+and no further); motion:11 for a victim CARRIED in a juggle (airborne
+hitstun, not yet falling with the knockdown pending) -> ext5:7 with the ext4
+launched arch as its alt. The arch stays the LAUNCH's opener (unified:13 /
+motion:8 while rising faster than 120px/s) and ext4:10 falling and ext4:9
+crumple stay the descent, as the brief asked; the inverted ext4:7 stays
+unrouted (the sweep in swing-resolve proves it, 256 contexts x 4 gates x 9
+banks). Cell 79 is the doubled-over fold item one recorded — head and feet
+both down, feet UNDER the head on all ten (the devil's an arched launch) —
+which is what a body takes a blow in the air like, and it is worn for the
+three-to-six ticks at the top of a carry between the arch and the fall.
+
+THE STAND-INS take exactly 1 on all four: they are airborne bodies, anchored
+by `CELL_BODY_CENTRE[id]["unified-ext5"]` (the sidecar's bodyCentre, which
+item one installed against this day) through the same `cellVerticalOffset`
+both renderers call, so there is no ground rung to reconcile to. The anchor
+lifts (cell px, negative is up): apex tuck deathblow -68, post -66, donald
+-67, jez -52, ali -55, devil -25 — under the unified:9 tuck's -63..-85 on
+every sheet, since the ball is a little looser; descent -2 (commissioner)
+to -28 (donald), cyraxx +1; air recover -2..-30; air hit -27..-56 — the
+figure unfolds out of the tuck toward the street, exactly the order the
+4.1 descent test asks of ali's cell 20. The B2 contract now sweeps the four
+with the other twelve airborne cells: every one lands on the fighter's
+reference row. Fit-restore: cyraxx's air recover 1.0304, the commissioner's
+1.033 fold on all four (his air hit 1.0329 x 1.033 = 1.067); heights apex
+168-250, descent 249-309, recover 245-310, air hit 194-244 (the tuck under
+the descent on all ten, item one's pin).
+
+ATTRIBUTIONS, traced through the engine over the sim's own ballistics
+(GRAVITY 2485, dt 1/60, the devil's 350 glide cap on a controlled body,
+never a victim), the gate from the shipped manifests, the landing-recovery
+hand-off and the idle included; `tests/swing-resolve.test.mjs
+testExt5AirChains` pins every line below. The 5.1 read is the same trace
+with the ext5 sheet held.
+
+    PLAIN JUMP
+    jez        unified:0 -> unified:8 x3 -> ext:3 x4 -> unified:9 x6 -> ext5:4 x4 -> ext5:5 x5 -> ext5:6 x8 -> ext3:10 x7 -> unified:6 x7 -> unified:0
+        5.1    unified:0 -> unified:8 x3 -> ext:3 x4 -> motion:5 x6 -> motion3:2 x4 -> motion3:3 x5 -> ext3:8 x8 -> ext3:10 x7 -> unified:6 x7 -> unified:0
+    deathblow  unified:0 -> unified:8 x6 -> unified:9 x6 -> ext5:4 x3 -> ext5:5 x4 -> ext5:6 x8 -> ext3:10 x6 -> unified:6 x7 -> unified:0     (no ext sheet)
+        5.1    unified:0 -> motion2:7 x6 -> motion:5 x9 -> ext3:8 x12 -> ext3:10 x6 -> unified:6 x7 -> unified:0                              (no motion3 either: two slots empty)
+        + ext  unified:0 -> unified:8 x3 -> ext:3 x3 -> unified:9 x6 -> ext5:4 x3 -> ext5:5 x4 -> ext5:6 x8 -> ext3:10 x6 -> ...              (the ext8 item's ascent accepted, descent held)
+        + both unified:0 -> unified:8 x3 -> ext:3 x3 -> unified:9 x6 -> ext:4 x3 -> ext5:5 x4 -> ext5:6 x8 -> ext3:10 x6 -> ...               (a real descent of his own takes the fall band, as ali's does)
+    ali        unified:0 -> unified:8 x3 -> ext:3 x4 -> unified:9 x6 -> ext:4 x4 -> ext5:5 x5 -> ext5:6 x8 -> ext3:10 x7 -> unified:6 x7 -> unified:0
+        5.1    unified:0 -> unified:8 x3 -> ext:3 x4 -> unified:9 x6 -> ext:4 x4 -> motion3:3 x5 -> ext:4 x8 -> ext3:10 x7 -> ...               (his own descent, a motion3 fall, his own descent again)
+    devil      unified:0 -> unified:8 x7 -> unified:9 x6 -> ext5:4 x4 -> ext5:5 x4 -> ext5:6 x9 -> ext3:10 x11 -> unified:6 x7 -> unified:0    (the glide cap stretches the fall; 5.1 held motion3:3 x4 -> ext3:8 x9 -> ext3:10 x11 the same)
+
+    AIR NORMALS (kit-less light, the air-attack landing recovery after)
+    jez  kick  ext3:8 x5 -> ext3:7 x4 -> motion3:4 x4 -> ext5:6 x5 -> ext3:10 x4 -> unified:6 x11 -> unified:0
+        5.0    ext3:8 x5 -> ext3:7 x4 -> motion3:4 x4 -> ext3:8 x5 -> ext3:10 x4 -> ...                                                         (the chamber rewind)
+    jez  punch ext3:8 x5 -> ext3:6 x5 -> motion3:4 x3 -> ext5:6 x5 -> ext3:10 x3 -> unified:6 x11 -> unified:0
+    deathblow  ext3:8 x5 -> ext3:7 x8 -> ext5:6 x5 -> ext3:10 x4 -> unified:6 x11 -> unified:0                                                  (no motion3 second body)
+    ali  kick  ext3:8 x5 -> ext3:7 x4 -> motion3:4 x4 -> ext5:6 x5 -> ext3:10 x4 -> ...                                                         (5.0 trailed on his ext:4 descent; the recover is the drawing the band means)
+    devil      as jez
+
+    A JUGGLE HIT (launched -610, knockdown pending; the same on all four)
+               ext4:6 x11 -> ext5:7 x3 -> ext4:10 x6 -> ext4:9 x8
+        5.1    ext4:6 x14 -> ext4:10 x6 -> ext4:9 x8                                                                                             (the arch held through the carry)
+
+    AN AIR TECH (from 220px up, the landing tax after)
+    jez        ext5:4 x8 -> ext5:6 x4 -> ext5:5 x11 -> ext5:6 x4 -> ext3:10 x4 -> unified:6 x11 -> unified:0
+        5.1    motion:5 x8 -> ext3:8 x4 -> motion3:3 x11 -> ext3:8 x4 -> ext3:10 x4 -> ...                                                       (three banks in one fall)
+    deathblow  ext5:4 x8 -> ext5:6 x4 -> ext5:5 x13 -> ext5:6 x2 -> ext3:10 x4 -> ...
+    ali        ext5:4 x8 -> ext5:6 x4 -> ext5:5 x11 -> ext5:6 x3 -> ext3:10 x5 -> ...
+    devil      ext5:4 x8 -> ext5:6 x4 -> ext5:5 x18 -> ext5:6 x7 -> ext3:10 x12 -> ...
+
+Every hold is the 5.1 hold, tick for tick, on the three fighters who carry
+the motion3 keys; deathblow (and donald) never had them, so the two empty
+slots his arc fell through — the tuck held 9 and the chamber 12 — are now
+ext5:4 x3 and ext5:5 x4 with the tuck at 6 and the recover at 8: shorter,
+never longer. At the 46-tick uniform audit span the air arc draws the same
+number of runs at the same lengths as the motion3 read in all three shapes
+(`tests/motion-holds` "jump arc + ext5", limit MOTION_HOLD_BUDGET + 4 as the
+motion3 assertion has always had; `tests/unified-swing` pins the run list
+`unified:8 x5 -> ext:3 x5 -> unified:9 x7 -> ext5:4 x5 -> ext5:5 x3 -> ext5:6
+x9 -> ext3:10 x12`). The landing is ext3:10 (the gather, airborne) into the
+unified crouch transition of the landing recovery, then the idle — no
+motion cell anywhere on the arc, the plain jump's count of generations
+crossed goes from three (jez) or two (deathblow) to ZERO.
+
+CINEMA 3D needed no code again: the rig draws whatever bank the resolved
+pose names and asks the host's `cellVerticalOffset` with the bank, the frame
+and the height above the floor; `tests/cinema-fighters` pins an airborne
+ext5:5 at 150px drawn from the ext5 bank with exactly that call, so the
+anchor cannot differ between the canvas and the rig. Manifest
+`format.ext5Status` reads `WIRED 5.2 (all sixteen cells)` and cells 76-79
+carry their routing beside the art. 372 tests green (the cinema pin is the
+one addition); `EXT5_UNROUTED_FOR_NOW` is empty and the reachability sweep
+proves all sixteen.
+
+WHAT STILL CROSSES, named bluntly. (1) motion3:4, the air strike's SECOND
+BODY, sits in the middle of every air normal on the eight fighters who carry
+the motion3 sheet (`ext3:7 x4 -> motion3:4 x4`) — a generation crossing
+inside the strike. There is no same-generation second strike drawing
+(ext3 has one air punch and one air kick), so by the owner's rule it stays;
+folding the band into the ext3 strike would hold that cell 8-9 ticks, which
+is the shipping read deathblow and donald already have and is one over the
+budget. An air follow-through cell is the art item. (2) The air tech
+re-enters the neutral arc mid-fall, so its tail reads ext5:6 -> ext5:5 ->
+ext5:6 — the 5.1 shape (ext3:8 -> motion3:3 -> ext3:8) on one family; a
+tech-specific fall track would remove the return. (3) The plain jump's last
+airborne band holds the air recover 8-9 ticks on the short arcs (the 5.1
+chamber's own hold); the band grid is untouched on purpose. (4) The ext5
+sheets are still lossless on the wire.
+
+## v5.2 — LOCOMOTION, ITEM FOUR: THE BOOKENDS AND THE FINAL BLOW ON THE FAMILY
+
+Routing only, no art. Sweep item #6's evidence was blunt: the intro, the win
+pose and the fatality cinematics drew RAW BASE-ATLAS CELLS and motion
+signature cells at 1.02-1.34x zoom — the oldest generation on the roster at
+the most-watched moments, on both sides of a Final Blow. Item two had already
+put the ext5 entrance and the ext5 victory on screen as one held cell each;
+this item makes the two bookends two-beat reads and re-keys every one of the
+ten Final Blow scripts through the unified family, under the same rule as the
+items before it: a same-generation cell REPLACES A DRAWING AND NEVER CHANGES
+TIMING.
+
+THE INTRO is `ext5:9 -> ext5:10 -> unified:0` on both fighters. Item two's
+seed-and-side pick chose entrance A OR B for the whole 1.3 s walk-on; the
+walk-on is now entrance A for its first half, entrance B for its second, then
+the idle for the 0.95 s before FIGHT! — keyed on the intro clock the sim
+already snapshots (`engine/bookends.mjs introEntranceCell`: A above 1.6 s,
+B down to the 2.7 FRAMES release at 0.95, released below). The pre-5.2
+fallback — the motion signature the seed-and-side pick chose — rides under
+BOTH beats, so a held ext5 sheet reads exactly as it did. Traced through the
+engine (jez, deathblow, both sides, both seed parities) and in the browser:
+
+    intro      unified-ext5:9 x39 -> unified-ext5:10 x39 -> unified:0 x57      (2.25 s, 60 Hz; the browser probe: ext5:9@+0 -> ext5:10@+40 -> idle@+79)
+    held ext5  motion:14 x78 -> unified:0 x57  |  motion:15 x78 -> unified:0 x57  (the 5.1 read, tick for tick)
+
+THE ROUND WIN is the ext5 victory through the "<name> WINS" call, then the
+ext5 taunt as the SECOND beat — on the two showcase picks that were the
+rotation's own second drawings (the motion victory2 and the second
+signature; item two had flattened all three picks onto the victory). The
+kit's own pick holds the victory: one drawing was always what that pick
+meant. The beat is keyed on the roundover clock (`roundWinShowcaseCell`:
+the taunt from 2.4 s in, the call's own length, only when the hold leaves it
+a whole second — the demo's 3.1 s KO hold does not, and reads one beat).
+`ROUND_WIN_HOLD_SECONDS` is the 4.9 `finishRound` always set, now read back
+by the pose. Traced (jez, the kit victory as the rotation's base):
+
+    pick 0     unified-ext5:11 x294
+    pick 1, 2  unified-ext5:11 x144 -> unified-ext5:12 x150                 (browser: ext5:11@+0 -> ext5:12@+145)
+    demo hold  unified-ext5:11 x186
+    held ext5  specials:15 x294 | motion:13 x294 | motion:15 x294         (the rotation's own three drawings, as 5.1 drew them)
+
+THE FINAL BLOW. The ten scripts (`finisherChoreography`) carried their
+drawings as `af` / `vf`, raw base indices in the 4x4 atlas grammar wave 5
+wrote them against — "9 is a punch, 13 the heavy, 12 the crouch, 15 the
+flinch" — and the resolver drew exactly that. The table lives in
+`engine/finisher-scripts.mjs` now, VERBATIM in everything that moves
+(sha256 of the ten scripts with the new fields stripped is the base commit's,
+`tests/fatalities-poses` pins the digest), and every key also names the
+same-generation drawing for that beat as a "bank:frame" token — `a` for the
+attacker, `v` for the victim, `vPlain` for the victim's plain body at rest —
+which `cinematicPoseDescriptor` puts OVER the base cell the sim still stores
+in `cinematicFrame` (checksummed, rolled back, unchanged). The drawing
+switches at the half-way point of a segment, the rule `af` / `vf` always
+had, so a new cell arrives on the exact tick the base cell always did; a
+held sheet is the pre-item read, byte for byte (pinned, both bodies, all
+ten). Where the key's beat has no family drawing the base cell stays and is
+named: `FINISHER_RESIDUAL_BASE_CELLS`.
+
+The attacker's vocabulary, by beat: the run-in is the ext5 dash launch and
+stretch (unified:1 / unified:3 walk keys on donald and the commissioner —
+see below); jabs and crosses ext3:0, a cross-through the victim ext3:3 (the
+horizontal smear: jez's PHASE STEP, benny's CROSS CURRENT, the devil's
+TALON RIP), kicks ext3:1, the heavy ext3:13 / ext3:14, a body shot the
+crouched extension ext3:4, the LIFT the rising smear ext3:9 (every script's
+launch key), the airborne strike ext3:6 / ext3:7, a fall onto the victim the
+ext5 descent, a landing the ext3 gather, alan's piledriver the ext5 seize
+in the air then the ext2 throw release, post's PRIMER the ext2 special
+gather; the wind-up before the kill is the ext5 power charge on every
+script that backed off for one (base:12, the crouch, before); and the exit
+key — 0.65 s of the script plus the whole 3.4 s aftermath hold — is the
+ext5 VICTORY: the attacker turns from the body into the same drawing a
+plain KO wins on. THE PROPS decided two scripts: donald's club and the
+commissioner's cane are on the UNIFIED sheet and on no ext sheet (ext3 and
+ext5 draw both men bare-handed — an art residual item two shipped with),
+so their scripts stay on unified cells end to end: the walk keys for the
+approach, unified:10 (the club thrust / the cane jab), unified:11 (the
+club chip / the cane kick), unified:8 (the club backswing and the cane
+raised overhead — the 3.0-retired jump rise, which is a drawing here, not a
+track), unified:9 for the airborne key (the tuck, club shaft through the
+ball), unified:7 for the commissioner's brace. GOLDEN DRIVE and FINAL
+AUTHORITY lose their baked crescent and fire aura: the projectile-focus
+beats own that spectacle, and a cane-less base:13 in the middle of a
+cane-carrying script is the 2.9 R8 blink. The one script that keeps base
+cells is POST: PAINT LIFT, FULL COVERAGE and the wind-up between are the
+spray can with its baked mist (base:13, base:14), a weapon-specific
+cinematic drawing no sheet in the family carries — four keys, two cells,
+named as the residual.
+
+The victim's ladder is the same shape on all ten: dazed on the ext4 dizzy
+(5) while the attacker runs in, the head snap (1) and the body blow (2)
+alternating under the jabs, the big hit (3) under the heavy that starts the
+lift, the launched arch (6) at the apex, the ext5 carried fold (7) where
+the attacker is in the air with him (alan, donald, the commissioner), and
+from the slam to the end of the hold the ext4 WALL SPLAT (8) — a body that
+hit something hard, arms and legs splayed — laid down by the script's own
+`vr`. That cell was chosen for the dismemberment: the graphic fatality
+slices the victim's cell into bands by height (head 0-28%, torso, waist,
+legs) and anchors the stump at the standing pose's arm and leg heights, so
+under the overlay the rest MUST stay an upright-plan cell; a splayed one
+puts the arms out where the cut is drawn. With the sprite drawn WHOLE — the
+gore toggle off, or before the kill — there is nothing to slice, and the
+last key's `vPlain` lays the body in the ext4 KO cell instead. A script's
+`vr` was written to lay an UPRIGHT flinch down about its feet (1.18 at the
+kill, 1.35-1.38 at rest: 77-79 degrees), and applied to a cell authored flat
+it would stand the body back up, so `cinematicDrawRotation` (engine) takes
+the lie a prone cell already carries (1.35, DOWN_TILT_RADIANS) off the
+script's rotation toward zero before either renderer applies it — the KO
+cell draws flat at every rest the ten scripts ask for (1.7 degrees at the
+deepest, 1.38), and every upright-plan cell keeps the script's rotation
+untouched. The CINEMA 3D rig reads the same function through a new optional
+host member (`cinematicDrawRotation`; `tests/cinema-fighters` pins the KO
+lie at -0.03 and the splat at -1.38 through the bridge). The wall splat was
+measured against the idle (drawn height x fit-restore, the commissioner's
+fold on both sides): 0.87-1.03 on all ten, the commissioner's +2.5% the only
+one over and inside the deadband — no stand-in rule; the dizzy opener keeps
+item two's loop against the sway; the KO lie is 0.28-0.39 of the idle tall.
+
+ATTRIBUTIONS, traced through the engine over script time (60 Hz, the
+finisher's own slow-motion ticks not counted — the browser stretches the
+same runs and never reorders them; `tests/fatalities-poses` pins the four
+below and sweeps all ten for family-only banks, both bodies, plus the
+plain-body ladder into the KO lie):
+
+    jez        attacker  ext5:0 x12 -> ext5:1 x17 -> ext3:0 x15 -> ext3:3 x16 -> ext3:0 x17 -> ext3:3 x21 -> ext3:9 x25 -> ext3:6 x29 -> ext5:5 x34 -> ext5:8 x37 -> ext3:14 x55 -> ext5:11 x242
+               victim    ext4:5 x29 -> ext4:1 x15 -> ext4:2 x16 -> ext4:1 x17 -> ext4:2 x21 -> ext4:3 x25 -> ext4:6 x29 -> ext4:8 x368
+               plain     ... -> ext4:8 x126 -> ext4:15 x242                                                        (the KO lie from the last key, 4.65 s)
+        5.1    base:0 x12 -> base:7 x17 -> base:9 x15 -> base:10 x16 -> base:9 x17 -> base:10 x21 -> base:13 x25 -> base:14 x29 -> base:13 x34 -> base:12 x37 -> base:14 x55 -> base:0 x242 / base:15 throughout
+    deathblow  attacker  ext5:0 x13 -> ext5:1 x20 -> ext3:13 x22 -> ext3:9 x23 -> ext3:3 x24 -> ext3:6 x30 -> ext3:14 x42 -> ext5:8 x46 -> ext3:4 x62 -> ext5:11 x244
+               victim    ext4:5 x33 -> ext4:2 x22 -> ext4:1 x23 -> ext4:3 x24 -> ext4:6 x30 -> ext4:8 x394
+    alan       attacker  ext5:0 x13 -> ext5:1 x20 -> ext3:0 x16 -> ext3:13 x19 -> ext3:4 x21 -> ext3:9 x27 -> ext5:14 x31 -> ext2:13 x38 -> ext5:8 x40 -> ext3:13 x56 -> ext5:11 x242
+               victim    ext4:5 x33 -> ext4:2 x16 -> ext4:1 x19 -> ext4:2 x21 -> ext4:6 x27 -> ext5:7 x31 -> ext4:8 x376
+    post       attacker  ext5:0 x15 -> ext2:14 x25 -> ext3:0 x20 -> ext3:13 x23 -> ext3:3 x24 -> base:13 x25 -> base:14 x29 -> ext3:10 x31 -> base:13 x33 -> base:14 x53 -> ext5:11 x242   (the spray can, residual)
+    benny      attacker  ext5:0 x12 -> ext5:1 x19 -> ext3:0 x14 -> ext3:3 x16 -> ext3:1 x17 -> ext3:9 x22 -> ext3:7 x29 -> ext5:5 x36 -> ext5:8 x47 -> ext3:14 x65 -> ext5:11 x243
+    donald     attacker  unified:1 x15 -> unified:3 x23 -> unified:10 x18 -> unified:11 x21 -> unified:8 x24 -> unified:10 x25 -> unified:9 x27 -> unified:11 x32 -> unified:8 x39 -> unified:10 x59 -> ext5:11 x243
+               victim    ext4:5 x38 -> ext4:1 x18 -> ext4:2 x45 -> ext4:6 x25 -> ext5:7 x27 -> ext4:8 x373
+    cyraxx     attacker  ext5:0 x14 -> ext5:1 x22 -> ext3:0 x17 -> ext3:1 x18 -> ext3:9 x22 -> ext3:6 x26 -> ext5:5 x29 -> ext3:10 x33 -> ext5:8 x38 -> ext3:13 x60 -> ext5:11 x244
+    ali        attacker  ext5:0 x13 -> ext5:1 x20 -> ext3:0 x15 -> ext3:3 x17 -> ext3:1 x19 -> ext3:9 x21 -> ext3:6 x27 -> ext3:7 x33 -> ext5:8 x46 -> ext3:13 x68 -> ext5:11 x244
+    devil      attacker  ext5:0 x12 -> ext5:1 x20 -> ext3:0 x15 -> ext3:3 x18 -> ext3:1 x20 -> ext3:13 x22 -> ext3:6 x27 -> ext3:7 x32 -> ext5:8 x45 -> ext3:14 x68 -> ext5:11 x244
+    commissioner attacker unified:1 x15 -> unified:3 x24 -> unified:10 x20 -> unified:8 x21 -> unified:11 x23 -> unified:8 x27 -> unified:9 x29 -> unified:10 x33 -> unified:7 x36 -> unified:8 x57 -> ext5:11 x244
+               victim    ext4:5 x39 -> ext4:1 x20 -> ext4:2 x21 -> ext4:3 x23 -> ext4:6 x27 -> ext5:7 x29 -> ext4:8 x370
+
+Every run's length is the base cell's, tick for tick (the `held` column of
+the trace script reproduces the 5.1 read exactly, deathblow's base:13 -> 9
+unusable swap included); only the generation changed. The count of
+cross-generation flips inside a script goes from "every key" to zero on
+nine scripts and to post's four named ones. In the browser (jez vs
+deathblow, NEON GUILLOTINE, gore on): attacker `ext5:0 -> ext5:1 -> ext3:0
+-> ext3:3 -> ext3:0 -> ext3:3 -> ext3:9 -> ext3:6 -> ext5:5 -> ext5:8 ->
+ext3:14 -> ext5:11`, victim `ext4:5 -> ext4:1 -> ext4:2 -> ext4:1 -> ext4:2
+-> ext4:3 -> ext4:6 -> ext4:8`, the same lists; gore off the victim's tail
+is `ext4:8 -> ext4:15` and the body lies flat on the street under the
+attacker's raised arms.
+
+ONE REGRESSION CAUGHT ON THE WAY, item two's: the dash ghost trail read its
+base frame ONE level down the resolved pose's fallback, and an ext5 dash
+cell falls back to the motion link it stands in for and only then to the
+base cell — so on every fighter whose ext5 sheet had decoded, the trail
+went silent (the browser smoke's "a dash must leave a ghost trail" fails on
+73e7f4f once the sheet is ready before the probe; the roadmap2 checkout on
+disk has no ext5 family and never showed it). `baseFallbackFrame` (engine)
+walks the chain to its base cell; the smoke is green again on this branch.
+
+Residuals, named bluntly: (1) post's four spray-can keys are base cells, and
+will be until a sheet draws the can — the one weapon-specific cinematic
+drawing on the roster. (2) donald's club and the commissioner's cane are
+absent from their ext3 and ext5 sheets (dash, entrances, victory, every
+strike stand-in), so both scripts end on a bare-handed ext5 victory after a
+prop-carrying script, as their plain-KO win pose already did — an art item,
+the same class as ali's boombox in 5.0. (3) The victim's rest under the
+gore overlay is the upright-plan splat by necessity; the KO lie is the
+plain body's only. (4) The finisher's slow-motion ticks stretch every run
+on screen; the attributions above are script time. 387 tests green (the
+two new suites, the cinema pin, the trail pin).
+
+## v5.2 — THE LAST FOUR ON THE EXT SHEET: TWO TAKES, ONE PICK PER CELL, AND THE SHEET SCALED OFF THE BREATH
+
+deathblow, post, donald and the devil walked the 3.5 four-key cycle, held
+one idle drawing for as long as the stick was neutral and chambered every
+heavy on motion2 art for five waves after the other six got their ext
+sheets — the 4.x art waves recorded, generation by generation, why a 24-cell
+sheet never came back for them. This wave stops asking for one. Their ext
+sheet is a SECOND generation, generated the 4.9 way (image-to-image from the
+fighter's own unified sheet, colour-matched onto it, despilled with the 5.1
+slicer), and it is asked for TWICE on one 4x4 sheet: rows 0-1 are take A of
+the eight ext poses, rows 2-3 take B of the same eight
+(`tools/swing/grammar-ext8.txt`, `build_sheet.py --bank ext8`, archived as
+`swing-v50/lossless-51/<id>-ext8.webp` with an `ext8-<id>.json` sidecar).
+`tools/swing/install_ext8.py` picks one take per cell and composes the
+8-cell 1280x640 `<id>-ext.webp` the runtime already knows how to pad, gate
+and draw. No routing changed for the six who had a sheet; every table below
+is a measurement.
+
+### The pick, by height, and what the two takes actually differed in
+
+The slicer sidecar carries each cell's alpha>=24 height at the fighter's
+unified scale, and the rule is the one the 4.0 tables are built on: the
+breathing idle and the two walk-downs are the upright cycle, so the take
+nearest the fighter's UNIFIED IDLE (`UNIFIED_CELL_HEIGHT[id][0]`) wins;
+the wind-ups likewise; the mid-reaction the take nearest his unified
+light-hit (cell 12); the two jump cells whichever take is upright at 1:1,
+tie to A. Where the takes differed by more than a few pixels it was a real
+pose difference, and the height caught it: deathblow's take-A wind-ups are
+303px against a 272px idle because the model raised the chambered fist OVER
+HIS HEAD in both; take B (270/273) has it at the shoulder, which is a chamber.
+
+| | take (sidecar cell) per ext frame 16..23 | breathe A/B vs idle | wind-ups A/B |
+| --- | --- | --- | --- |
+| deathblow | B A B A A B B B (8 1 10 3 4 13 14 15) | 276 / **269** vs 272 | 303 303 / **270 273** |
+| post | B A A A B A B A (8 1 2 3 12 5 14 7) | 307 / **303** vs 279 | **286** 306 / 288 **305** |
+| donald | A A B A B A A A (0 1 10 3 12 5 6 7) | **265** / 268 vs 261 | **258 261** / 258 263 |
+| devil | A A A A B A A A (0 1 2 3 12 5 6 7) | **270** / 268 vs 283 | **266 272** / 262 263 |
+
+### THE SHEET SCALE, which is the finding of this install
+
+Every X-H contract in `tests/unified-ext.test.mjs` — the breathe draws
+within 2% of the idle, the two sheets draw at ONE size — rests on the 4.0
+premise that the ext sheet is *the same generation at the same global
+scale*. A second generation does not carry that. Built at the unified
+scale, post's breathe came back 303px against his 279px idle (+8.6%) and
+the devil's 270 against 283 (-4.6%): the idle alternates 0 <-> 16 every
+eight ticks, so either would have pulsed the stance on every breath — the
+exact fault the contract exists to refuse. donald was +1.5%, deathblow -1.1%.
+
+The breathe IS the idle by definition, so it sets the sheet's scale. Each
+sheet is resampled ONCE at compose time by `idle / breathe` (premultiplied
+Lanczos; feet re-registered on row 314 and the torso band on column 160
+exactly as the slicer does; a figure that would then leave the cell is
+fit-scaled about its torso column and drawn back through `drawAdjust`, the
+ext3/ext4 rule) — the ext2 precedent of one scale per sheet, applied to the
+one cell that can anchor it. Factors: deathblow 1.0112, post 0.9208, donald
+0.9849, devil 1.0481; the manifest records the result as `extScale`
+(1.2839 / 1.2523 / 1.2202 / 1.4383 against unified 1.2697 / 1.36 / 1.2389 /
+1.3722). Nothing downstream learns anything: the per-cell adjust table
+carries only height reconciliations and one fit term, both renderers read
+the sheet as they read the 4.0 sheets, and the X-H assertions pass
+unchanged. The alternative — a flat 0.921 / 1.048 in `UNIFIED_EXT_CELL_ADJUST`
+the way the commissioner's 1.033 is folded — draws the same pixels and
+would have had to weaken the one-size assertion to do it.
+
+### The measured rows (composed sheets, alpha >= 24, bbox midpoints)
+
+| | ext heights 16..23 | body centres | ext adjust | walk-downs raw | breathe |
+| --- | --- | --- | --- | --- | --- |
+| deathblow (idle 272) | 273 290 290 283 285 274 277 281 | 178 170 170 173 172 178 176 174 | 17: 0.938, 18: 0.938 | +6.6% / +6.6% | +0.4% |
+| post (idle 279) | 280 274 273 288 274 265 282 269 | 176 178 179 172 178 183 174 181 | — | -1.8% / -2.2% | +0.4% |
+| donald (idle 261) | 261 261 256 243 261 254 257 256 | 184 184 186 193 184 188 186 186 | — | 0.0% / -1.9% | 0.0% |
+| devil (idle 283) | 283 277 278 302 270 279 285 281 | 173 176 176 164 180 175 172 174 | 17: 1.0056 (fit) | -2.1% / -1.8% | 0.0% |
+
+deathblow's two walk-downs sit 6.6% over his idle and take the same term
+the 4.0 sheets take (jez 0.926/0.936, alan 0.935/0.945); the other six
+walk-downs are inside the 3% band the cyraxx row set. The devil's walk-down
+A is 280px wide with the wings and tail, and at his 1.048 factor the
+slicer's fit rule trims it 0.6% to stay inside the cell; 1.0056 draws it
+back. Drawn on screen, every corrected key of all four six-key cycles is
+within 0.05% of its idle and every uncorrected ext key within 2.2%; the
+breathe within 0.4%. Airborne anchoring: every ascent (centres 173/172/193/
+164) and descent (172/178/184/180) sits above the fighter's own apex tuck
+(247/234/238/228), which is the X-H ordering the B2 anchor needs.
+
+### THE DESCENT IS A DESCENT, four times
+
+Read at 1:1 on the lossless masters, both takes of cell 20 on all four
+sheets are what the 4.0 prompt asked for and never got: torso vertical,
+head level and looking forward, feet below the hips, arms out for balance
+— deathblow with both legs reaching down and slightly flexed, post with the
+knees bent in take A (a crouch in the air) and reaching down in take B,
+donald arms wide and legs under him in both, the devil one leg lifted in
+take A and both reaching for the floor in take B with the wings out. The
+taller, more open take was picked on the three where it existed (post,
+donald and the devil take B). Nothing on any of the eight is head-down or
+arched backward; nothing puts the feet above the hips. `accept:true` and
+ROUTED on all four, so the arc owns the whole airborne chain
+`8 -> 19 -> 9 -> 20` as it has for ali since 4.1 — five fighters now, the
+five 4.0 sheets still stopping at 19.
+
+### The devil's heavy wind-up was landing on his claw lunge
+
+His motion2:4 (crouch-trans) is rejected — it is the all-fours prowl — and
+that had a consequence nobody traced: the heavy wind-up's COMPRESS band
+keys `motion2:4` alone, and the 5.0 substitution onto the unified crouch
+transition fires only on a RESOLVED motion2:4. His never resolved, so the
+band fell through to the caller's base fallback, base 13, his AIRBORNE claw
+lunge, for the last 30% of every heavy wind-up on the street — and the kick
+arc, which CONTINUES that drawing for two ticks, fell through to the same
+cell. Traced through the engine before this wave: heavy kick `ext:6 ->
+ext2:6 -> unified:6 x4 -> base:13 x2 -> motion:1 ...` with the compress
+band itself on base:13 when the arc was not reserved. The extended chain
+now keys `ukey(crouchTrans)` under the motion2 bridge, and game.js degrades
+the arc's continuation through the same cell, both inside the ext branch so
+the 3.5 arrays are byte-identical; the other nine resolve motion2:4 and are
+substituted exactly as in 5.0 (pinned in swing-resolve.test.mjs).
+
+### Verified by frame attribution — engine traces, then real play
+
+Node traces through the engine with the shipped manifests as the gate, per
+tick, for all four (deathblow shown; the others differ only in the motion3
+descent post and the devil carry, and the base:8 donald's prop gate leaves
+under his punch smear — see below):
+
+    walk       unified:1 x4 -> ext:1 x4 -> unified:2 x4 -> unified:3 x4 -> ext:2 x4 -> unified:4 x4  (retreat reverses it)
+    idle       unified:0 x8 -> ext:0 x8 -> unified:0 x8 ...
+    heavy punch  ext:5 x5 -> ext2:4 x5 -> unified:6 x3 -> ext3:3 x2 -> ext3:13 x6 -> ext3:2 x8 -> ext2:5 x5 -> unified:7 x4 -> idle
+    heavy kick   ext:6 x6 -> ext2:6 x6 -> unified:6 x6 -> ext3:14 x7 -> ext3:11 x9 -> ext2:7 x6 -> unified:7 x6 -> idle
+    jump arc     unified:8 x5 -> ext:3 x5 -> unified:9 x7 -> ext:4 x5 -> motion:11 x12 -> motion:6 x12
+    light        ext4:1 x7 -> ext4:4 x7 -> ext:7 x7 -> unified:7 x8 -> idle
+    heavy        ext4:3 x7 -> ext:7 x7 -> ext4:4 x7 -> unified:7 x8 -> idle
+
+Every hold budget is the 4.1 number: the ext cells replace drawings and
+move no band. Then the same beats in the real game, headless Chrome on the
+worktree, `__finalBlowQa.pose()` read every sim tick (the trace ring is
+written at the render choke point, which a page nobody paints never
+reaches): all four fighters report `family: [unified, ext, ext2, ext3,
+ext4]` ready with no pending or failed sheet, zero runtime errors, zero
+failed responses; walk `unified:1 -> unified-ext:1 -> unified:2 ->
+unified:3 -> unified-ext:2 -> unified:4` on all four; the idle alternating
+8/8; the devil's heavy kick `unified-ext:6 -> unified-ext2:6 -> unified:6 x6
+-> unified-ext3:14 -> unified-ext3:11 -> unified-ext2:7 -> unified:7` with
+no base cell anywhere in it; the light hit `unified-ext4:1 x7 ->
+unified-ext4:4 x7 -> unified-ext:7 x7 -> unified:7 x8 -> idle`.
+
+### What this install did not do, written down
+
+* **The plain jump's drawn descent is long.** 5.0's substitution draws the
+  ext descent under `motion:11` for any airborne fighter (it was written for
+  the attacker's trail), so a routed descent now covers the air-recovery
+  band too: deathblow and donald, motion3 off, hold `unified-ext:4` for
+  17-20 ticks of a plain jump; post and the devil rewind through `motion3:3`
+  (`ext:4 x5 -> motion3:3 x6 -> ext:4 x9`). ali has drawn the same rewind
+  since 5.0. The tracks and their budgets are unchanged; the drawing is.
+  The ext5 sheet's own apex tuck, descent and AIR-RECOVER cells are the
+  answer, and that item should key the air-recovery band on them.
+* **donald's heavy punch smear** still leaves the family for two ticks
+  (`unified:6 -> base:8 x2 -> ext3:13`): his motion:2 smear is a prop-action
+  cell, the prop gate diverts it to base 13 and then to the bare-hand
+  stand-in, so the ext3 smear substitution never fires. Same class as the
+  devil's compress band, one link under the smear key; not this item.
+* **17/18 leg phase is unverified frame by frame**, as 5.0 recorded for
+  ali. At 1:1 the two walk-downs exchange legs on all four sheets; which of
+  them carries cell 1's phase against cell 3's was not measured (the
+  luminance metric needs each fighter's marker and the two contact keys
+  share a silhouette by construction since 4.3).
+* **The four sheets ship lossless** (411-586 KB). The 5.1 #36 encode pass
+  was not run: it needs the composed sheets archived as lossless masters
+  first (`swing-v50/lossless-51/<id>-ext.webp`), then
+  `encode_sheets.py --only`.
+* The devil's ext8 masters carry a few green energy specks around the
+  wings and tail, inherited from the generation; nothing was retouched.
+
+## v5.2 — LOCOMOTION: THE WAVE IN ONE PLACE
+
+The dash, the turnaround, the jump arc, the air normals' trail, the intro,
+the win pose, the fatality and the four fighters who never had an ext sheet:
+one generated sheet per fighter (`<id>-ext5.webp`, bank `unified-ext5`,
+cells 72-87 — dash launch / stretch / brake, turnaround, apex tuck, descent,
+air recover, upright air hit, power charge, entrance A / B, victory, taunt,
+crouch guard flinch, throw grab, dizzy sway; 0.96-1.92 dE to each fighter's
+unified sheet) and a two-take in-between sheet composed into `<id>-ext.webp`
+for deathblow, post, donald and the devil (their breathing idle, walk
+in-betweens, take-off, feet-first descent, wind-up cocks and mid-reaction;
+the devil's heavy wind-up finally compresses on his own crouch transition
+instead of his airborne claw lunge). Every routed beat keeps its hold budget
+— an ext5 link sits one link ahead of the motion link it replaces, in the
+same band grid — so timing is byte-identical to 5.1 and only the drawing
+changes: the dash reads `unified:0 -> ext5:0 -> ext5:1 -> ext5:2 -> unified:0`
+on every fighter (13 of 13 ticks on the unified family, where 5.1 crossed
+four banks), the plain jump `unified:8 -> ext:3 -> unified:9 -> ext5:4/ext:4
+-> ext5:5 -> ext5:6 -> ext3:10 -> unified:6`, the air kick draws its chamber
+once (`ext3:8 -> ext3:7 -> motion3:4 -> ext5:6 -> ext3:10`; the motion3
+second strike body is the one crossing left on that arc), the intro walks on
+as `ext5:9 -> ext5:10 -> idle`, the round win holds `ext5:11` with the taunt
+`ext5:12` as the second beat, and the Final Blow scripts draw the attacker
+through unified / ext2 / ext3 / ext5 cells and the victim through ext4
+(residuals: donald's club and the commissioner's cane are absent from their
+generated sheets; post's spray-can keys stay base cells). Details and
+attributions in the per-item sections above (ext5 install, ext5 ground,
+ext5 air, bookends, ext8 install) and in tests/swing-resolve.test.mjs, which
+now runs every chain at node level with the gate from the shipped manifests.

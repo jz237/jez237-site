@@ -554,6 +554,45 @@ test("a mid-chain disposal drops the queued steps, and a late bank counts as a f
   assert.equal(lateLayer.bankReport().warmed, 0);
 });
 
+// v5.2 LOCOMOTION (ext5-ground): CINEMA 3D draws whatever bank the resolved
+// pose names, through the shared AUTHORED_BANKS list — an ext5 dash brake on
+// a fighter who owns the sheet is drawn from that sheet, warmed with the
+// family; on a fighter who does not, the descriptor's own fallback draws.
+test("an ext5 pose draws from the ext5 bank when the fighter owns the sheet, and falls back when he does not", () => {
+  const owns = fighterMock({ __pose: { bank: "unified-ext5", frame: 2, fallback: { bank: "motion2", frame: 6, fallback: { bank: "base", frame: 12 } } } });
+  const ownState = stateMock([owns]);
+  const { layer } = layerFor(ownState, { ownBanks: [...OWN_BANKS, "unified-ext5"] });
+  layer.update(ownState, 1 / 60, 0);
+  const rig = layer.rigs[0];
+  assert.ok(rig.banks["unified-ext5"], "warmed with the family from AUTHORED_BANKS");
+  assert.equal(rig.currentBank, "unified-ext5");
+  assert.equal(layer.bankReport().lateFallbacks, 0, "not a late build: the sheet was warmed");
+  // The same pose on a fighter without the sheet: the descriptor's fallback.
+  const lacks = fighterMock({ __pose: { bank: "unified-ext5", frame: 2, fallback: { bank: "motion2", frame: 6, fallback: { bank: "base", frame: 12 } } } });
+  const lackState = stateMock([lacks]);
+  const lackLayer = layerFor(lackState, { ownBanks: ["motion2"] }).layer;
+  lackLayer.host.fighterAtlasFor = (f, bank) => (bank === "motion2" || bank === "base" ? { complete: true, naturalWidth: 1280, naturalHeight: 1280, src: `own:${bank}` } : null);
+  lackLayer.update(lackState, 1 / 60, 0);
+  assert.equal(lackLayer.rigs[0].currentBank, "motion2", "the ext5 descriptor's fallback chain is honoured");
+  assert.equal(lackLayer.rigs[0].banks["unified-ext5"], undefined);
+});
+
+// v5.2 LOCOMOTION (ext5-air): an airborne ext5 cell — the descent — draws
+// from the ext5 bank and asks the host for the SAME vertical registration the
+// canvas uses (cellVerticalOffset with the bank, the frame and the height
+// above the floor), so the airborne anchor cannot differ between renderers.
+test("an ext5 air cell draws from the ext5 bank with the shared airborne anchor", () => {
+  const asked = [];
+  const airborne = fighterMock({ grounded: false, y: SIM_FLOOR - 150, __pose: { bank: "unified-ext5", frame: 5, fallback: { bank: "motion3", frame: 3, fallback: { bank: "motion", frame: 11, fallback: { bank: "base", frame: 13 } } } } });
+  const state = stateMock([airborne]);
+  const { layer } = layerFor(state, { ownBanks: [...OWN_BANKS, "unified-ext5"] });
+  layer.host.cellVerticalOffset = (id, bank, frame, airHeight) => { asked.push([id, bank, frame, airHeight]); return 0; };
+  layer.update(state, 1 / 60, 0);
+  assert.equal(layer.rigs[0].currentBank, "unified-ext5");
+  assert.ok(asked.some(([id, bank, frame, airHeight]) => id === "post" && bank === "unified-ext5" && frame === 5 && airHeight === 150),
+    `the anchor is asked for the ext5 descent at 150px: ${JSON.stringify(asked)}`);
+});
+
 test("sheets shared by both sides survive one side's disposal; idle rigs are evicted after 3 s", () => {
   const a = fighterMock();
   const b = fighterMock({ side: 1, facing: -1, x: 800 });
@@ -806,4 +845,29 @@ test("fighters.mjs builds nothing synchronously past the raw shell, and game.js 
   assert.match(gameSource, /downTiltRadians: DOWN_TILT_RADIANS,/);
   assert.match(mainSource, /banks: layers\.get\("fighters"\)\?\.bankReport\?\.\(\) \?\? null,/);
   assert.match(mainSource, /drainBankQueue: renderer3d\.drainBankQueue,/);
+});
+
+// ---------------------------------------------------------------------------
+// v5.2 LOCOMOTION (bookends) — the Final Blow's prone rest through the bridge.
+// ---------------------------------------------------------------------------
+test("a cinematic KO lie draws flat through host.cinematicDrawRotation; an upright cinematic cell keeps the script's rotation", async () => {
+  const { cinematicDrawRotation } = await import("../engine/finisher-scripts.mjs");
+  // The victim at the script's rest (vr 1.38 x direction 1), drawn WHOLE on the ext4 KO cell.
+  const victim = fighterMock({ side: 1, facing: -1, cinematicFrame: 15, cinematicRotation: 1.38, __pose: { bank: "unified-ext4", frame: 15 } });
+  const state = stateMock([victim]);
+  state.phase = "roundover";
+  const { host, layer } = layerFor(state);
+  host.cinematicDrawRotation = cinematicDrawRotation;
+  layer.update(state, 1 / 60, 0);
+  const rig = layer.rigs[0];
+  assert.ok(Math.abs(rig.root.rotation.z + 0.03) < 1e-9, `the KO lie sheds its 1.35 lie: ${rig.root.rotation.z}`);
+  // The same script angle on the splayed wall splat (the upright plan the 2D overlay slices) is the full lay-down.
+  victim.__pose = { bank: "unified-ext4", frame: 8 };
+  layer.update(state, 1 / 60, 0);
+  assert.ok(Math.abs(rig.root.rotation.z + 1.38) < 1e-9, `an upright cell keeps the script's rotation: ${rig.root.rotation.z}`);
+  // A host without the member (an older bridge) applies the raw rotation, as 5.1 did.
+  delete host.cinematicDrawRotation;
+  victim.__pose = { bank: "unified-ext4", frame: 15 };
+  layer.update(state, 1 / 60, 0);
+  assert.ok(Math.abs(rig.root.rotation.z + 1.38) < 1e-9);
 });

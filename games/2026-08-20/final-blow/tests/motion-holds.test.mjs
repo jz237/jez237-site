@@ -15,6 +15,7 @@ import {
   airNormalKeys,
   attackRecoveryKeys,
   blockstunKeys,
+  crouchBlockstunKeys,
   throwClinchKeys,
   airborneAnchorOffset,
   airborneAnchorRamp,
@@ -187,6 +188,38 @@ function testHoldBudget() {
     assert.ok(beatKeyRuns(dashKeys(), span).length >= 1);
     assert.ok(beatKeyRuns(jumpArcKeys(0.22), span).length >= 1);
   }
+  // v5.2 LOCOMOTION: the same budgets with the ext5 sheet answering. A
+  // same-generation cell replaces a drawing and never changes timing, so
+  // the worst hold on every routed track is no longer than it was on the
+  // shipping cells. The dash's one stretch drawing owns two bands — 8 ticks
+  // at the 16-tick span, exactly the budget — where motion3 supplied a
+  // second body; the crouched block, which had NO pose change at all before
+  // 5.1 and one before 5.2, now has three drawings inside the budget.
+  const withSwing = (key) => defaultBeatKeyResolve(key, { motion3: false, ext2: true, swing: true });
+  assert.equal(assertBudget("dash + ext5", dashKeys(), SPANS.dash, MOTION_HOLD_BUDGET, withSwing, 3), MOTION_HOLD_BUDGET);
+  assert.equal(assertBudget("crouch block + ext5", crouchBlockstunKeys({ flinch: true }), 17, MOTION_HOLD_BUDGET, withSwing, 3), 8);
+  assertBudget("throw clinch + ext5", throwClinchKeys({ inbetween: true }), 24, MOTION_HOLD_BUDGET + 1, withSwing, 3);
+  for (const [name, keys, span] of [["dash", dashKeys(), SPANS.dash], ["throw clinch", throwClinchKeys({ inbetween: true }), 24]]) {
+    assert.ok(longestBeatHold(keys, span, withSwing) <= longestBeatHold(keys, span, shipping), `${name}: the ext5 sheet never lengthens a hold`);
+  }
+  // v5.2 LOCOMOTION (ext5-air): the jump arc under the `air` answer. Every
+  // band keeps the grid of the arc it replaces, so its worst hold at the
+  // uniform span is the motion3 read's (the limit the motion3 assertion
+  // above sets) in all three shapes, and no shape holds longer than the
+  // read it replaces — the air cells replace drawings, never timing.
+  const withAir = (key) => defaultBeatKeyResolve(key, { motion3: false, ext: true, unified: true, swing: true });
+  const withMotion3Ext = (key) => defaultBeatKeyResolve(key, { motion3: true, ext: true, unified: true });
+  for (const [label, opts] of [["plain", {}], ["extended", { extended: true }], ["descend", { extended: true, descend: true }]]) {
+    const air = assertBudget(`jump arc + ext5 (${label})`, jumpArcKeys(0.22, { ...opts, air: true }), SPANS.jump, MOTION_HOLD_BUDGET + 4, withAir, 6);
+    assert.ok(air <= longestBeatHold(jumpArcKeys(0.22, opts), SPANS.jump, withMotion3Ext), `${label}: the air cells never lengthen a hold`);
+    assert.equal(beatKeyRuns(jumpArcKeys(0.22, { ...opts, air: true }), SPANS.jump, withAir).length,
+      beatKeyRuns(jumpArcKeys(0.22, opts), SPANS.jump, withMotion3Ext).length, `${label}: the same number of drawings as the motion3 read`);
+    assertBudget(`jump arc + ext5 (${label}, donald)`, jumpArcKeys(0.06, { ...opts, air: true }), SPANS.jump, MOTION_HOLD_BUDGET + 4, withAir, 6);
+  }
+  assert.deepEqual(jumpArcKeys(0.22, { air: false }), jumpArcKeys(0.22), "no answer, the 3.0 arc byte for byte");
+  // The air normal's trail is the table's business (no track link): its
+  // budget with the swing answer is the shipping one.
+  assertBudget("air normal + swing", airNormalKeys(9 / 31, 18 / 31), 31, MOTION_HOLD_BUDGET + 1, withSwing, 4);
 }
 
 function testMotion3OnlyImproves() {
@@ -299,6 +332,10 @@ function testAirborneAnchor() {
       ["motion", MOTION_CELLS.land],
       ["motion", MOTION_CELLS.bighit],
       ["motion", MOTION_CELLS.crumple],
+      // v5.2 LOCOMOTION (ext5-air): the four ext5 air cells are routed —
+      // the apex tuck, the descent, the air recover, the upright air hit —
+      // and every one anchors to the same row through the same table.
+      ["unified-ext5", 4], ["unified-ext5", 5], ["unified-ext5", 6], ["unified-ext5", 7],
     ];
     const anchored = airborne.map(([bank, frame]) => (
       table[bank][frame] + airborneAnchorOffset(id, bank, frame)
