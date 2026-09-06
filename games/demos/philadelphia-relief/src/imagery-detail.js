@@ -81,7 +81,9 @@ export function detailUrl(cell, size) {
 export function detailResolutionM(cell, size, projection) {
   const widthM = (cell.bounds.east - cell.bounds.west) * projection.metersPerDegLon;
   const heightM = (cell.bounds.north - cell.bounds.south) * projection.metersPerDegLat;
-  return Math.max(widthM, heightM) / size;
+  const imageHeight = Math.round(size * (cell.bounds.north - cell.bounds.south)
+    / (cell.bounds.east - cell.bounds.west));
+  return Math.max(widthM / size, heightM / imageHeight);
 }
 
 export function neighbourCells(cell, region) {
