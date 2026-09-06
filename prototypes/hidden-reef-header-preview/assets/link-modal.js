@@ -1,0 +1,898 @@
+(function () {
+  const IMAGE_ZOOM_SCALE = 2.55;
+  const TOUCH_ZOOM_SCALE = 2.6;
+  const TOUCH_ZOOM_MIN = 1;
+  const TOUCH_ZOOM_MAX = 4;
+  const DOUBLE_TAP_MS = 320;
+
+  let lastFocusBeforeModal = null;
+  let lastFocusBeforeDrawer = null;
+
+  function restoreFocus(element) {
+    if (element && document.contains(element) && typeof element.focus === 'function') {
+      element.focus();
+    }
+  }
+
+  function getFocusable(container) {
+    return [...container.querySelectorAll('button, [href], select, input, textarea, [tabindex]:not([tabindex="-1"])')]
+      .filter(el => !el.disabled && el.getClientRects().length > 0);
+  }
+
+  /* Keep ?product= in the address bar while the popup is open so the link is shareable. */
+  function syncProductUrl(href) {
+    if (typeof window.history?.replaceState !== 'function') return;
+    try {
+      const url = new URL(window.location.href);
+      if (href) url.searchParams.set('product', href);
+      else url.searchParams.delete('product');
+      window.history.replaceState(null, '', url.toString());
+    } catch (error) {
+      /* Leave the address bar unchanged if the URL cannot be rebuilt. */
+    }
+  }
+
+  async function copyTextToClipboard(text) {
+    try {
+      if (navigator.clipboard?.writeText) {
+        await navigator.clipboard.writeText(text);
+      } else {
+        const field = document.createElement('textarea');
+        field.value = text;
+        field.setAttribute('readonly', '');
+        field.style.position = 'fixed';
+        field.style.left = '-9999px';
+        document.body.appendChild(field);
+        field.select();
+        document.execCommand('copy');
+        field.remove();
+      }
+      return true;
+    } catch (error) {
+      return false;
+    }
+  }
+
+  function ensureModal() {
+    let modal = document.querySelector('.link-modal');
+    if (modal) return modal;
+    modal = document.createElement('div');
+    modal.className = 'link-modal';
+    modal.setAttribute('aria-hidden', 'true');
+    modal.innerHTML = '<div class="link-modal__backdrop" data-link-close></div><section class="link-modal__panel" role="dialog" aria-modal="true" aria-labelledby="link-modal-title"><button class="link-modal__close" type="button" data-link-close>Close</button><div class="link-modal__gallery"><div class="link-modal__media" aria-label="Product image"><img class="link-modal__image" alt=""><span class="link-modal__zoom-lens" aria-hidden="true"></span></div><div class="link-modal__thumbs" aria-label="Product images"></div></div><div class="link-modal__zoom-pane" aria-hidden="true"><img class="link-modal__zoom-image" alt=""></div><div class="link-modal__body"><span class="link-modal__eyebrow">Product details</span><h2 id="link-modal-title"></h2><div class="link-modal__facts"></div><p></p><div class="link-modal__variants"></div><div class="link-modal__status"></div><ul class="link-modal__details"></ul><div class="link-modal__related"></div><div class="link-modal__meta"></div><div class="link-modal__actions"><button class="btn link-modal__add" type="button">Add to preview list</button><a class="btn secondary link-modal__open" target="_blank" rel="noopener">View on Hidden Reef</a><button class="btn secondary link-modal__share" type="button">Copy link</button></div></div></section>';
+    document.body.appendChild(modal);
+    modal.addEventListener('click', event => {
+      if (event.target.matches('[data-link-close]')) closeModal(modal);
+      if (event.target.matches('.link-modal__share')) {
+        const shareButton = event.target;
+        copyTextToClipboard(window.location.href).then(copied => {
+          shareButton.textContent = copied ? 'Link copied' : 'Copy failed';
+          window.setTimeout(() => { shareButton.textContent = 'Copy link'; }, 1600);
+        });
+      }
+      if (event.target.matches('.link-modal__add')) {
+        const button = event.target;
+        addToCart({
+          name: button.dataset.name,
+          price: button.dataset.price,
+          url: button.dataset.url,
+          image: button.dataset.image
+        });
+        closeModal(modal);
+        openCart();
+      }
+      const thumb = event.target.closest('.link-modal__thumb');
+      if (thumb) {
+        event.preventDefault();
+        setModalImage(modal, Number(thumb.dataset.modalImageIndex || 0));
+      }
+    });
+    modal.addEventListener('change', event => {
+      if (!event.target.matches('.link-modal__variant-select')) return;
+      const selected = event.target.selectedOptions[0];
+      if (selected) setModalVariant(modal, {
+        name: selected.dataset.name,
+        price: selected.dataset.price,
+        url: selected.value,
+        image: selected.dataset.image,
+        images: parseJsonList(selected.dataset.images),
+        barcode: selected.dataset.barcode
+      });
+    });
+    initImageZoom(modal);
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(modal);
+    });
+    modal.addEventListener('keydown', event => {
+      if (event.key !== 'Tab' || !modal.classList.contains('is-open')) return;
+      const focusables = getFocusable(modal);
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
+    });
+    return modal;
+  }
+
+  function closeModal(modal) {
+    resetImageZoom(modal);
+    if (modal.contains(document.activeElement)) document.activeElement.blur();
+    modal.classList.remove('is-open');
+    modal.setAttribute('aria-hidden', 'true');
+    document.body.classList.remove('link-modal-open');
+    syncProductUrl(null);
+    restoreFocus(lastFocusBeforeModal);
+    lastFocusBeforeModal = null;
+  }
+
+  function setImageZoom(modal, event) {
+    const panel = modal.querySelector('.link-modal__panel');
+    const media = modal.querySelector('.link-modal__media');
+    const zoomImage = modal.querySelector('.link-modal__zoom-image');
+    if (!panel || !media || !zoomImage || !event) return;
+    const rect = media.getBoundingClientRect();
+    const x = Math.min(100, Math.max(0, ((event.clientX - rect.left) / rect.width) * 100));
+    const y = Math.min(100, Math.max(0, ((event.clientY - rect.top) / rect.height) * 100));
+    media.style.setProperty('--modal-lens-x', x.toFixed(2) + '%');
+    media.style.setProperty('--modal-lens-y', y.toFixed(2) + '%');
+    zoomImage.style.setProperty('--modal-zoom-x', x.toFixed(2) + '%');
+    zoomImage.style.setProperty('--modal-zoom-y', y.toFixed(2) + '%');
+    zoomImage.style.setProperty('--modal-image-zoom', String(IMAGE_ZOOM_SCALE));
+    media.classList.add('is-zoomed');
+    panel.classList.add('is-image-zooming');
+  }
+
+  function resetImageZoom(modal) {
+    const panel = modal.querySelector('.link-modal__panel');
+    const media = modal.querySelector('.link-modal__media');
+    const zoomImage = modal.querySelector('.link-modal__zoom-image');
+    const image = modal.querySelector('.link-modal__image');
+    media?.classList.remove('is-zoomed', 'is-touch-zoomed');
+    panel?.classList.remove('is-image-zooming');
+    if (media) {
+      media.style.removeProperty('--modal-lens-x');
+      media.style.removeProperty('--modal-lens-y');
+      media.dataset.touchScale = String(TOUCH_ZOOM_MIN);
+      media.dataset.touchPanX = '0';
+      media.dataset.touchPanY = '0';
+    }
+    if (image) {
+      image.style.removeProperty('--modal-touch-scale');
+      image.style.removeProperty('--modal-touch-x');
+      image.style.removeProperty('--modal-touch-y');
+      image.style.removeProperty('--modal-touch-pan-x');
+      image.style.removeProperty('--modal-touch-pan-y');
+    }
+    if (zoomImage) {
+      zoomImage.style.removeProperty('--modal-zoom-x');
+      zoomImage.style.removeProperty('--modal-zoom-y');
+      zoomImage.style.removeProperty('--modal-image-zoom');
+    }
+  }
+
+  function touchDistance(touches) {
+    const dx = touches[0].clientX - touches[1].clientX;
+    const dy = touches[0].clientY - touches[1].clientY;
+    return Math.hypot(dx, dy);
+  }
+
+  function touchCenter(touches) {
+    return {
+      clientX: (touches[0].clientX + touches[1].clientX) / 2,
+      clientY: (touches[0].clientY + touches[1].clientY) / 2
+    };
+  }
+
+  function pointToPercent(media, point) {
+    const rect = media.getBoundingClientRect();
+    return {
+      x: Math.min(100, Math.max(0, ((point.clientX - rect.left) / rect.width) * 100)),
+      y: Math.min(100, Math.max(0, ((point.clientY - rect.top) / rect.height) * 100))
+    };
+  }
+
+  function clampTouchScale(scale) {
+    return Math.min(TOUCH_ZOOM_MAX, Math.max(TOUCH_ZOOM_MIN, scale));
+  }
+
+  function clamp(value, min, max) {
+    return Math.min(max, Math.max(min, value));
+  }
+
+  function clampTouchPan(media, scale, x, y) {
+    const rect = media.getBoundingClientRect();
+    const maxX = Math.max(0, (rect.width * (scale - 1)) / 2);
+    const maxY = Math.max(0, (rect.height * (scale - 1)) / 2);
+    return {
+      x: clamp(x, -maxX, maxX),
+      y: clamp(y, -maxY, maxY)
+    };
+  }
+
+  function setTouchImagePan(modal, x, y) {
+    const media = modal.querySelector('.link-modal__media');
+    const image = modal.querySelector('.link-modal__image');
+    if (!media || !image) return;
+    const scale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+    const pan = clampTouchPan(media, scale, x, y);
+    image.style.setProperty('--modal-touch-pan-x', pan.x.toFixed(1) + 'px');
+    image.style.setProperty('--modal-touch-pan-y', pan.y.toFixed(1) + 'px');
+    media.dataset.touchPanX = pan.x.toFixed(1);
+    media.dataset.touchPanY = pan.y.toFixed(1);
+  }
+
+  function setTouchImageZoom(modal, scale, point) {
+    const media = modal.querySelector('.link-modal__media');
+    const image = modal.querySelector('.link-modal__image');
+    if (!media || !image) return TOUCH_ZOOM_MIN;
+    const nextScale = clampTouchScale(scale);
+    if (nextScale <= TOUCH_ZOOM_MIN + 0.02) {
+      image.style.removeProperty('--modal-touch-scale');
+      image.style.removeProperty('--modal-touch-x');
+      image.style.removeProperty('--modal-touch-y');
+      image.style.removeProperty('--modal-touch-pan-x');
+      image.style.removeProperty('--modal-touch-pan-y');
+      media.classList.remove('is-touch-zoomed');
+      media.dataset.touchScale = String(TOUCH_ZOOM_MIN);
+      media.dataset.touchPanX = '0';
+      media.dataset.touchPanY = '0';
+      return TOUCH_ZOOM_MIN;
+    }
+    resetImageZoom(modal);
+    if (point) {
+      const origin = pointToPercent(media, point);
+      image.style.setProperty('--modal-touch-x', origin.x.toFixed(2) + '%');
+      image.style.setProperty('--modal-touch-y', origin.y.toFixed(2) + '%');
+    }
+    image.style.setProperty('--modal-touch-scale', nextScale.toFixed(2));
+    media.classList.add('is-touch-zoomed');
+    media.dataset.touchScale = nextScale.toFixed(2);
+    setTouchImagePan(modal, Number(media.dataset.touchPanX) || 0, Number(media.dataset.touchPanY) || 0);
+    return nextScale;
+  }
+
+  function initImageZoom(modal) {
+    const media = modal.querySelector('.link-modal__media');
+    if (!media) return;
+    let lastTapAt = 0;
+    let currentTouchScale = TOUCH_ZOOM_MIN;
+    let pinchStartDistance = 0;
+    let pinchStartScale = TOUCH_ZOOM_MIN;
+    let pinching = false;
+    let pinchJustEnded = false;
+    let panning = false;
+    let panMoved = false;
+    let panStartX = 0;
+    let panStartY = 0;
+    let panOriginX = 0;
+    let panOriginY = 0;
+
+    media.addEventListener('pointermove', event => {
+      if (event.pointerType !== 'mouse') return;
+      setImageZoom(modal, event);
+    });
+
+    media.addEventListener('pointerleave', event => {
+      if (event.pointerType === 'mouse') resetImageZoom(modal);
+    });
+
+    media.addEventListener('touchstart', event => {
+      currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+      if (event.touches.length === 2) {
+        event.preventDefault();
+        panning = false;
+        panMoved = false;
+        pinching = true;
+        pinchStartDistance = touchDistance(event.touches);
+        pinchStartScale = currentTouchScale;
+      } else if (event.touches.length === 1 && currentTouchScale > TOUCH_ZOOM_MIN) {
+        panning = true;
+        panMoved = false;
+        panStartX = event.touches[0].clientX;
+        panStartY = event.touches[0].clientY;
+        panOriginX = Number(media.dataset.touchPanX) || 0;
+        panOriginY = Number(media.dataset.touchPanY) || 0;
+      }
+    }, { passive: false });
+
+    media.addEventListener('touchmove', event => {
+      if (!pinching) currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+      if (event.touches.length === 2 && pinchStartDistance > 0) {
+        event.preventDefault();
+        const nextScale = pinchStartScale * (touchDistance(event.touches) / pinchStartDistance);
+        currentTouchScale = setTouchImageZoom(modal, nextScale, touchCenter(event.touches));
+      } else if (event.touches.length === 1 && panning && currentTouchScale > TOUCH_ZOOM_MIN) {
+        event.preventDefault();
+        const dx = event.touches[0].clientX - panStartX;
+        const dy = event.touches[0].clientY - panStartY;
+        if (Math.abs(dx) > 3 || Math.abs(dy) > 3) panMoved = true;
+        setTouchImagePan(modal, panOriginX + dx, panOriginY + dy);
+      } else if (currentTouchScale > TOUCH_ZOOM_MIN) {
+        event.preventDefault();
+      }
+    }, { passive: false });
+
+    media.addEventListener('touchend', event => {
+      currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+      if (pinching && event.touches.length < 2) {
+        pinching = false;
+        pinchStartDistance = 0;
+        pinchJustEnded = true;
+        window.setTimeout(() => { pinchJustEnded = false; }, DOUBLE_TAP_MS);
+        return;
+      }
+      if (panning && event.touches.length < 1) {
+        panning = false;
+        if (panMoved) {
+          panMoved = false;
+          lastTapAt = 0;
+          return;
+        }
+      }
+      if (event.touches.length || pinchJustEnded || !event.changedTouches.length) return;
+
+      const now = Date.now();
+      const tap = event.changedTouches[0];
+      if (now - lastTapAt <= DOUBLE_TAP_MS) {
+        event.preventDefault();
+        currentTouchScale = Number(media.dataset.touchScale) || TOUCH_ZOOM_MIN;
+        currentTouchScale = currentTouchScale > TOUCH_ZOOM_MIN
+          ? setTouchImageZoom(modal, TOUCH_ZOOM_MIN)
+          : setTouchImageZoom(modal, TOUCH_ZOOM_SCALE, tap);
+        lastTapAt = 0;
+      } else {
+        lastTapAt = now;
+      }
+    }, { passive: false });
+  }
+
+  function escapeHtml(value) {
+    return String(value || '').replace(/[&<>"']/g, char => ({'&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'}[char]));
+  }
+
+  function parseJsonList(value) {
+    try {
+      const parsed = JSON.parse(value || '[]');
+      return Array.isArray(parsed) ? parsed : [];
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function uniqueList(items) {
+    const seen = new Set();
+    return items.filter(item => {
+      const value = String(item || '').trim();
+      if (!value || seen.has(value)) return false;
+      seen.add(value);
+      return true;
+    });
+  }
+
+  function getProductImages(product, fallbackImage) {
+    if (product?.images?.length) return uniqueList(product.images);
+    return uniqueList([product?.imageUrl, fallbackImage]);
+  }
+
+  function setModalImage(modal, imageIndex) {
+    const images = parseJsonList(modal.dataset.images);
+    const image = images[imageIndex] || images[0] || '';
+    const imageNode = modal.querySelector('.link-modal__image');
+    const zoomImage = modal.querySelector('.link-modal__zoom-image');
+    if (!imageNode || !image) return;
+    resetImageZoom(modal);
+    imageNode.src = image;
+    if (zoomImage) zoomImage.src = image;
+    modal.querySelector('.link-modal__add').dataset.image = image;
+    modal.querySelectorAll('.link-modal__thumb').forEach((button, index) => {
+      button.classList.toggle('active', index === imageIndex);
+      button.setAttribute('aria-pressed', index === imageIndex ? 'true' : 'false');
+    });
+  }
+
+  function renderImageGallery(modal, images, title) {
+    const normalizedImages = uniqueList(images);
+    const gallery = modal.querySelector('.link-modal__gallery');
+    const thumbs = modal.querySelector('.link-modal__thumbs');
+    modal.dataset.images = JSON.stringify(normalizedImages);
+    gallery?.classList.toggle('has-thumbs', normalizedImages.length > 1);
+    if (!thumbs) return;
+    if (normalizedImages.length <= 1) {
+      thumbs.innerHTML = '';
+      thumbs.style.display = 'none';
+    } else {
+      thumbs.style.display = '';
+      thumbs.innerHTML = normalizedImages.map((image, index) => '<button class="link-modal__thumb' + (index === 0 ? ' active' : '') + '" type="button" data-modal-image-index="' + index + '" aria-label="View product image ' + (index + 1) + '" aria-pressed="' + (index === 0 ? 'true' : 'false') + '"><img src="' + escapeHtml(image) + '" alt="' + escapeHtml(title || 'Product image') + ' thumbnail"></button>').join('');
+    }
+    setModalImage(modal, 0);
+  }
+
+  const CART_KEY = 'hiddenReefDemoCart';
+  const LIGHTSPEED_CART_URL = 'https://www.thehiddenreef.com/';
+
+  function parsePrice(price) {
+    const value = parseFloat(String(price || '').replace(/[^0-9.]/g, ''));
+    return Number.isFinite(value) ? value : 0;
+  }
+
+  function readCart() {
+    try {
+      return JSON.parse(localStorage.getItem(CART_KEY) || '[]');
+    } catch (error) {
+      return [];
+    }
+  }
+
+  function writeCart(items) {
+    localStorage.setItem(CART_KEY, JSON.stringify(items));
+  }
+
+  function ensureCartDrawer() {
+    const drawerNoteHtml = '<strong>Preview list only.</strong> This is not a live order or checkout. Final availability, discounts, shipping, tax, and payment are handled on The Hidden Reef site or in store.';
+    let drawer = document.querySelector('.drawer');
+    if (!drawer) {
+      drawer = document.createElement('aside');
+      drawer.className = 'drawer';
+      drawer.setAttribute('aria-label', 'Preview list drawer');
+      drawer.innerHTML = '<div class="drawer-head"><h2>Preview list</h2><button class="close-cart" type="button">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your preview list is empty. Add products you want to check with the store.</p><div class="cart-summary"></div><p class="drawer-note">' + drawerNoteHtml + '</p><a class="btn cart-handoff" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Shop on Hidden Reef site →</a>';
+      document.body.appendChild(drawer);
+    }
+    const title = drawer.querySelector('.drawer-head h2');
+    if (title) title.textContent = 'Preview list';
+    const empty = drawer.querySelector('#empty-cart');
+    if (empty) empty.textContent = 'Your preview list is empty. Add products you want to check with the store.';
+    if (!drawer.querySelector('.cart-summary')) {
+      const summary = document.createElement('div');
+      summary.className = 'cart-summary';
+      drawer.querySelector('#empty-cart')?.after(summary);
+    }
+    if (!drawer.querySelector('.drawer-note')) {
+      const note = document.createElement('p');
+      note.className = 'drawer-note';
+      note.innerHTML = drawerNoteHtml;
+      drawer.querySelector('.cart-summary')?.after(note);
+    }
+    const note = drawer.querySelector('.drawer-note');
+    if (note) note.innerHTML = drawerNoteHtml;
+    if (!drawer.querySelector('.drawer-tools')) {
+      const tools = document.createElement('div');
+      tools.className = 'drawer-tools';
+      tools.style.cssText = 'display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:12px;';
+      tools.innerHTML = '<button class="btn secondary cart-copy" type="button">Copy list</button><button class="btn secondary cart-print" type="button">Print list</button><span class="cart-tools-status" aria-live="polite" style="font-size:12px;color:#ffdd9a;font-weight:800;"></span>';
+      const summary = drawer.querySelector('.cart-summary');
+      if (summary) summary.after(tools);
+      else drawer.appendChild(tools);
+    }
+    const handoff = drawer.querySelector('.cart-handoff') || drawer.querySelector('.drawer .btn, .btn');
+    if (handoff) {
+      handoff.classList.add('cart-handoff');
+      handoff.textContent = 'Shop on Hidden Reef site →';
+      handoff.setAttribute('href', LIGHTSPEED_CART_URL);
+      handoff.setAttribute('target', '_blank');
+      handoff.setAttribute('rel', 'noopener');
+    }
+    return drawer;
+  }
+
+  function buildCartListText() {
+    const items = readCart();
+    const lines = ['The Hidden Reef preview list', ''];
+    items.forEach((item, index) => {
+      lines.push(`${index + 1}. ${item.name}`);
+      lines.push(`   Qty ${item.qty} - ${item.price || 'See site'}`);
+      if (item.url) lines.push(`   ${item.url}`);
+    });
+    const total = items.reduce((sum, item) => sum + parsePrice(item.price) * item.qty, 0);
+    lines.push('', `Reference subtotal: $${total.toFixed(2)}`);
+    lines.push('Availability, discounts, tax, and final pricing are confirmed by the store.');
+    return lines.join('\n');
+  }
+
+  function setCartToolsStatus(message) {
+    const status = document.querySelector('.drawer .cart-tools-status');
+    if (status) status.textContent = message;
+  }
+
+  async function copyCartList() {
+    if (!readCart().length) {
+      setCartToolsStatus('List is empty');
+      return;
+    }
+    const copied = await copyTextToClipboard(buildCartListText());
+    setCartToolsStatus(copied ? 'Copied' : 'Copy failed');
+  }
+
+  function printCartList() {
+    if (!readCart().length) {
+      setCartToolsStatus('List is empty');
+      return;
+    }
+    const printWindow = window.open('', '_blank');
+    if (!printWindow) {
+      setCartToolsStatus('Allow pop-ups to print');
+      return;
+    }
+    const doc = printWindow.document;
+    doc.open();
+    doc.write('<!doctype html><html><head><meta charset="utf-8"><title>Hidden Reef preview list</title><style>body{font-family:Arial,Helvetica,sans-serif;margin:32px;color:#111}h1{font-size:20px;margin:0 0 6px}p.meta{color:#555;margin:0 0 18px;font-size:12px}pre{white-space:pre-wrap;font:14px/1.5 Arial,Helvetica,sans-serif}</style></head><body><h1>The Hidden Reef - Preview List</h1><p class="meta">Bring this list to the store to check availability and current pricing.</p><pre></pre></body></html>');
+    doc.close();
+    doc.querySelector('pre').textContent = buildCartListText();
+    printWindow.focus();
+    printWindow.print();
+  }
+
+  function updateCartCount(items) {
+    const count = items.reduce((sum, item) => sum + item.qty, 0);
+    document.querySelectorAll('.cart-button span').forEach(countNode => {
+      countNode.textContent = String(count);
+    });
+    document.querySelectorAll('.cart-button').forEach(button => {
+      button.setAttribute('aria-label', count ? 'Open preview list with ' + count + ' item' + (count === 1 ? '' : 's') : 'Open empty preview list');
+    });
+  }
+
+  function renderCart() {
+    const drawer = ensureCartDrawer();
+    const items = readCart();
+    updateCartCount(items);
+    setCartToolsStatus('');
+    const list = drawer.querySelector('#cart-items');
+    const empty = drawer.querySelector('#empty-cart');
+    const summary = drawer.querySelector('.cart-summary');
+    const total = items.reduce((sum, item) => sum + parsePrice(item.price) * item.qty, 0);
+
+    if (empty) empty.style.display = items.length ? 'none' : '';
+    if (list) {
+      list.innerHTML = items.map((item, index) => '<div class="cart-item"><div><strong>' + escapeHtml(item.name) + '</strong><span>' + escapeHtml(item.price || 'See site') + '</span><div class="cart-qty" aria-label="Quantity controls"><button type="button" data-cart-dec="' + index + '" aria-label="Decrease quantity">−</button><strong>' + item.qty + '</strong><button type="button" data-cart-inc="' + index + '" aria-label="Increase quantity">+</button></div></div><button type="button" data-cart-remove="' + index + '">Remove</button></div>').join('');
+    }
+    if (summary) {
+      summary.innerHTML = items.length ? '<span>Reference subtotal</span><strong>$' + total.toFixed(2) + '</strong>' : '<span>Reference subtotal</span><strong>$0.00</strong>';
+    }
+  }
+
+  function addToCart(product) {
+    const items = readCart();
+    const key = normalizeUrl(product.url || product.name);
+    const existing = items.find(item => item.key === key);
+    if (existing) {
+      existing.qty += 1;
+    } else {
+      items.push({
+        key,
+        name: product.name || 'Hidden Reef item',
+        price: product.price || 'See site',
+        url: product.url || 'https://www.thehiddenreef.com/',
+        image: product.image || '',
+        qty: 1
+      });
+    }
+    writeCart(items);
+    renderCart();
+  }
+
+  function openCart() {
+    const drawer = ensureCartDrawer();
+    renderCart();
+    lastFocusBeforeDrawer = document.activeElement;
+    drawer.classList.add('is-open');
+    drawer.style.transform = 'translateX(0)';
+    document.body.classList.add('cart-open');
+    drawer.querySelector('.close-cart')?.focus();
+  }
+
+  function closeCartDrawer() {
+    const drawer = document.querySelector('.drawer');
+    if (!drawer || !drawer.classList.contains('is-open')) {
+      document.body.classList.remove('cart-open');
+      return;
+    }
+    if (drawer.contains(document.activeElement)) document.activeElement.blur();
+    drawer.classList.remove('is-open');
+    drawer.style.transform = '';
+    document.body.classList.remove('cart-open');
+    restoreFocus(lastFocusBeforeDrawer);
+    lastFocusBeforeDrawer = null;
+  }
+
+  function initDemoCart() {
+    document.querySelectorAll('.cart-button strong').forEach(label => {
+      label.textContent = 'Cart';
+    });
+    ensureCartDrawer();
+    renderCart();
+    document.addEventListener('keydown', event => {
+      if (event.key !== 'Escape') return;
+      const modal = document.querySelector('.link-modal');
+      if (modal && modal.classList.contains('is-open')) return;
+      closeCartDrawer();
+    });
+    document.addEventListener('click', event => {
+      const cartButton = event.target.closest('.cart-button');
+      if (cartButton) {
+        event.preventDefault();
+        openCart();
+      }
+      if (event.target.matches('.close-cart')) {
+        closeCartDrawer();
+      }
+      if (event.target.matches('.cart-copy')) copyCartList();
+      if (event.target.matches('.cart-print')) printCartList();
+      const remove = event.target.closest('[data-cart-remove]');
+      if (remove) {
+        const items = readCart();
+        items.splice(Number(remove.dataset.cartRemove), 1);
+        writeCart(items);
+        renderCart();
+      }
+      const inc = event.target.closest('[data-cart-inc]');
+      if (inc) {
+        const items = readCart();
+        const item = items[Number(inc.dataset.cartInc)];
+        if (item) item.qty += 1;
+        writeCart(items);
+        renderCart();
+      }
+      const dec = event.target.closest('[data-cart-dec]');
+      if (dec) {
+        const items = readCart();
+        const index = Number(dec.dataset.cartDec);
+        const item = items[index];
+        if (item) {
+          item.qty -= 1;
+          if (item.qty <= 0) items.splice(index, 1);
+        }
+        writeCart(items);
+        renderCart();
+      }
+    });
+  }
+
+  function normalizeUrl(value) {
+    try {
+      const url = new URL(value, window.location.href);
+      url.hash = '';
+      return url.href.replace(/\/$/, '');
+    } catch (error) {
+      return String(value || '').replace(/\/$/, '');
+    }
+  }
+
+  function extractBrand(name) {
+    return window.THR?.extractBrand ? THR.extractBrand(name) : '';
+  }
+
+  function getCatalogGroups() {
+    const categories = window.THR?.categories || {};
+    const groups = {};
+    Object.keys(categories).forEach(groupSlug => {
+      const group = categories[groupSlug];
+      Object.keys(group.children || {}).forEach(childKey => {
+        const child = group.children[childKey];
+        groups[child.slug] = {
+          groupName: group.name,
+          childName: child.name,
+          description: child.description,
+          sourceUrl: child.sourceUrl
+        };
+      });
+    });
+    return groups;
+  }
+
+  function getProductContext(href) {
+    const target = normalizeUrl(href);
+    const groups = getCatalogGroups();
+    const productsBySlug = window.THR_PRODUCTS || {};
+    const normalizeVariantKey = window.THR?.normalizeVariantKey || fallbackVariantKey;
+
+    for (const slug of Object.keys(productsBySlug)) {
+      const products = productsBySlug[slug] || [];
+      const product = products.find(item => normalizeUrl(item.productUrl) === target);
+      if (product) {
+        const variantKey = normalizeVariantKey(product);
+        /* Collect variants across the whole catalog (a product's color/size
+           siblings can live in another group), deduped by product URL so
+           cross-listed copies of the same product never count as options. */
+        let variants = [product];
+        if (variantKey) {
+          const seenUrls = new Set();
+          variants = [];
+          Object.keys(productsBySlug).forEach(anySlug => {
+            (productsBySlug[anySlug] || []).forEach(item => {
+              if (normalizeVariantKey(item) !== variantKey) return;
+              const urlKey = normalizeUrl(item.productUrl || item.name || '');
+              if (seenUrls.has(urlKey)) return;
+              seenUrls.add(urlKey);
+              variants.push(item);
+            });
+          });
+        }
+        return {
+          product,
+          slug,
+          variants,
+          related: products
+            .filter(item => normalizeUrl(item.productUrl) !== target && normalizeVariantKey(item) !== variantKey)
+            .slice(0, 3),
+          category: groups[slug] || {}
+        };
+      }
+    }
+
+    return { product: null, slug: '', variants: [], related: [], category: {} };
+  }
+
+  /* Mirrors normalizeVariantKey in thr-cards.js for pages that load without it. */
+  function fallbackVariantKey(product) {
+    const rawName = String(product?.name || '');
+    let name = rawName.toLowerCase();
+    const brand = String((window.THR?.extractBrand && THR.extractBrand(rawName)) || '').toLowerCase();
+    let brandPrefix = '';
+    if (brand) {
+      brandPrefix = brand.replace(/[^a-z0-9]+/g, '');
+      if (name.indexOf(brand) === 0) name = name.slice(brand.length);
+      const initials = brand.split(/\s+/).map(word => word.charAt(0)).join('');
+      if (initials.length > 1) name = name.replace(new RegExp('^\\s*' + initials + '\\b'), '');
+    }
+    return brandPrefix + name
+      .replace(/\b(teak|white|black|blue|red|green|brown|gray|grey|silver|tan|clear|assorted|orange|yellow|pink|purple|teal|ivory|beige)\b/g, '')
+      .replace(/\b\d+(\.\d+)?\s*(oz|ml|l|liter|litre|gal|gallon|gallons|g|w|watt|watts|lb|lbs|pk|pack|ct|count|in|inch|\")\b/g, '')
+      .replace(/[^a-z0-9]+/g, '');
+  }
+
+  function setModalVariant(modal, variant) {
+    const title = variant.name || 'Hidden Reef item';
+    const price = variant.price || 'See site';
+    const url = variant.url || 'https://www.thehiddenreef.com/';
+    const images = getProductImages({ imageUrl: variant.image, images: variant.images }, variant.image);
+    const image = images[0] || '';
+    const barcode = variant.barcode || '';
+    modal.querySelector('h2').textContent = title;
+    modal.querySelector('.link-modal__open').href = url;
+    const addButton = modal.querySelector('.link-modal__add');
+    addButton.dataset.name = title;
+    addButton.dataset.price = price;
+    addButton.dataset.url = url;
+    addButton.dataset.image = image;
+    const imageNode = modal.querySelector('.link-modal__image');
+    imageNode.alt = title;
+    renderImageGallery(modal, images, title);
+    const priceFact = modal.querySelector('[data-modal-price]');
+    if (priceFact) priceFact.textContent = price;
+    const urlNode = modal.querySelector('.link-modal__url');
+    if (urlNode) urlNode.textContent = url;
+    const barcodeNode = modal.querySelector('.link-modal__barcode');
+    if (barcodeNode) {
+      barcodeNode.textContent = barcode ? 'Barcode: ' + barcode : '';
+      barcodeNode.style.display = barcode ? '' : 'none';
+    }
+    syncProductUrl(url);
+  }
+
+  function renderVariantSelector(modal, variants, activeUrl) {
+    const wrap = modal.querySelector('.link-modal__variants');
+    if (!wrap) return;
+    if (!variants || variants.length <= 1) {
+      wrap.innerHTML = '';
+      wrap.style.display = 'none';
+      return;
+    }
+    wrap.style.display = '';
+    wrap.innerHTML = '<label for="link-modal-variant">Options</label><select id="link-modal-variant" class="link-modal__variant-select">' + variants.map(item => {
+      const selected = normalizeUrl(item.productUrl) === normalizeUrl(activeUrl) ? ' selected' : '';
+      return '<option value="' + escapeHtml(item.productUrl || '') + '" data-name="' + escapeHtml(item.name || '') + '" data-price="' + escapeHtml(item.price || 'See site') + '" data-image="' + escapeHtml(item.imageUrl || '') + '" data-images="' + escapeHtml(JSON.stringify(item.images || [])) + '" data-barcode="' + escapeHtml(item.barcode || '') + '"' + selected + '>' + escapeHtml(item.name || 'Option') + ' - ' + escapeHtml(item.price || 'See site') + '</option>';
+    }).join('') + '</select><span>Select the exact color, size, or package before adding it to your cart.</span>';
+  }
+
+  function openProductModal(href, card, fallbackTitle) {
+    const modal = ensureModal();
+    const context = getProductContext(href);
+    const product = context.product || {};
+    const title = product.name || card?.querySelector('h3, strong')?.textContent?.trim() || fallbackTitle || 'Hidden Reef item';
+    const categoryName = context.category.childName || card?.dataset.category || card?.querySelector('.thr-brand, span')?.textContent?.trim() || 'Catalog item';
+    const departmentName = context.category.groupName || 'Hidden Reef catalog';
+    const desc = card?.dataset.info || context.category.description || card?.querySelector('p, em')?.textContent?.trim() || 'Check the product page for current details, options, and availability.';
+    const img = card?.querySelector('img');
+    const sourceImageRect = img?.getBoundingClientRect();
+    const productImages = getProductImages(product, img?.getAttribute('src') || 'assets/site/hero-aquatic-world.jpg');
+    const price = product.price || card?.dataset.price || card?.querySelector('.price, .thr-price')?.textContent?.trim() || 'See site';
+    const source = card?.dataset.source || 'Original Hidden Reef page';
+    const barcode = product.barcode || '';
+    const details = (card?.dataset.details || '').split('|').map(item => item.trim()).filter(Boolean);
+    const url = new URL(href);
+    const brand = card?.querySelector('.thr-brand')?.textContent?.trim() || extractBrand(title) || 'Hidden Reef';
+    const detailItems = details.length ? details : [
+      'Listed under ' + departmentName + ' / ' + categoryName + '.',
+      'Current online price is shown for reference.',
+      'Availability and final price are confirmed on the store page or in person.'
+    ];
+    const relatedHtml = context.related.length
+      ? '<strong>Related products</strong><div>' + context.related.map(item => '<a class="product-link" href="' + escapeHtml(item.productUrl) + '">' + escapeHtml(item.name) + '</a>').join('') + '</div>'
+      : '';
+
+    modal.querySelector('h2').textContent = title;
+    modal.querySelector('p').textContent = desc;
+    modal.querySelector('.link-modal__open').href = href;
+    const addButton = modal.querySelector('.link-modal__add');
+    addButton.dataset.name = title;
+    addButton.dataset.price = price;
+    addButton.dataset.url = href;
+    addButton.dataset.image = productImages[0] || '';
+    modal.querySelector('.link-modal__facts').innerHTML = '<span><strong>Brand</strong>' + escapeHtml(brand) + '</span><span><strong>Price</strong><em data-modal-price>' + escapeHtml(price) + '</em></span><span><strong>Department</strong>' + escapeHtml(departmentName) + '</span><span><strong>Category</strong>' + escapeHtml(categoryName) + '</span>';
+    renderVariantSelector(modal, context.variants, href);
+    modal.querySelector('.link-modal__status').innerHTML = '<strong>Store availability</strong><span>Stock can change quickly. Check the product page or contact the store before making a special trip.</span>';
+    modal.querySelector('.link-modal__details').innerHTML = detailItems.map(item => '<li>' + escapeHtml(item) + '</li>').join('');
+    modal.querySelector('.link-modal__details').style.display = detailItems.length ? '' : 'none';
+    modal.querySelector('.link-modal__related').innerHTML = relatedHtml;
+    modal.querySelector('.link-modal__related').style.display = relatedHtml ? '' : 'none';
+    modal.querySelector('.link-modal__meta').innerHTML = '<strong>' + escapeHtml(source) + '</strong><span>' + escapeHtml(url.hostname) + '</span><span class="link-modal__barcode"' + (barcode ? '' : ' style="display:none"') + '>' + (barcode ? 'Barcode: ' + escapeHtml(barcode) : '') + '</span><span class="link-modal__url">' + escapeHtml(href) + '</span>';
+    modal.querySelector('.link-modal__image').alt = img?.getAttribute('alt') || title;
+    renderImageGallery(modal, productImages, title);
+    lastFocusBeforeModal = document.activeElement;
+    modal.classList.add('is-open');
+    modal.setAttribute('aria-hidden', 'false');
+    document.body.classList.add('link-modal-open');
+    modal.querySelector('.link-modal__panel').scrollTop = 0;
+    modal.querySelector('.link-modal__close').focus();
+    if (sourceImageRect && !window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.requestAnimationFrame(() => {
+        const gallery = modal.querySelector('.link-modal__gallery');
+        const targetRect = modal.querySelector('.link-modal__image')?.getBoundingClientRect();
+        if (!gallery || !targetRect || !targetRect.width || !targetRect.height) return;
+        gallery.style.setProperty('--shared-from-x', (sourceImageRect.left - targetRect.left).toFixed(1) + 'px');
+        gallery.style.setProperty('--shared-from-y', (sourceImageRect.top - targetRect.top).toFixed(1) + 'px');
+        gallery.style.setProperty('--shared-from-scale-x', Math.max(0.12, sourceImageRect.width / targetRect.width).toFixed(3));
+        gallery.style.setProperty('--shared-from-scale-y', Math.max(0.12, sourceImageRect.height / targetRect.height).toFixed(3));
+        gallery.classList.remove('is-shared-opening');
+        void gallery.offsetWidth;
+        gallery.classList.add('is-shared-opening');
+        window.setTimeout(() => gallery.classList.remove('is-shared-opening'), 560);
+      });
+    }
+    syncProductUrl(href);
+  }
+
+  document.addEventListener('click', event => {
+    const link = event.target.closest('.product a[href^="https://www.thehiddenreef.com"], .product-link, .live-link[href^="https://www.thehiddenreef.com"], .thr-product[href^="https://www.thehiddenreef.com"]');
+    if (!link) return;
+
+    event.preventDefault();
+    const card = link.closest('.product') || link.closest('.thr-product') || link.closest('.live-link');
+    openProductModal(link.href, card, link.textContent.trim());
+  });
+
+  /* Shared product links: ?product=<catalog url> opens the popup on load. */
+  function openProductFromUrl() {
+    const params = new URLSearchParams(window.location.search);
+    const productUrl = params.get('product');
+    if (!productUrl) return;
+    try {
+      const parsed = new URL(productUrl, 'https://www.thehiddenreef.com/');
+      if (parsed.hostname !== 'www.thehiddenreef.com') return;
+      openProductModal(parsed.href);
+    } catch (error) {
+      /* Ignore malformed product URLs. */
+    }
+  }
+
+  window.THR = window.THR || {};
+  window.THR.openProductModal = openProductModal;
+
+  function boot() {
+    initDemoCart();
+    if (new URLSearchParams(window.location.search).get('preview') === 'open') openCart();
+    openProductFromUrl();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
+}());

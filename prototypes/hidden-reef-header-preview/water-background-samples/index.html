@@ -1,0 +1,807 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow,noarchive">
+  <meta name="theme-color" content="#031b2a">
+  <title>Water Background Lab - The Hidden Reef</title>
+  <style>
+    :root {
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --ink: #f6fbff;
+      --muted: #c7e1ea;
+      --line: rgba(191, 236, 246, .22);
+      --glass: rgba(2, 24, 38, .66);
+      --glass-strong: rgba(1, 18, 30, .84);
+      --accent: #7fe9f5;
+      --accent-2: #ffb24d;
+      --shadow: 0 24px 80px rgba(0, 10, 24, .34);
+    }
+
+    * { box-sizing: border-box; }
+
+    html, body { min-height: 100%; }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      background: #031b2a;
+      color: var(--ink);
+    }
+
+    button { font: inherit; }
+
+    .water-stage,
+    .water-photo,
+    .water-depth,
+    .surface-light,
+    #water-renderer,
+    #bubbles {
+      position: fixed;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    .water-stage {
+      z-index: -4;
+      overflow: hidden;
+      background: #031b2a;
+    }
+
+    .water-photo {
+      z-index: 0;
+      opacity: 0;
+      background-position: center top;
+      background-size: cover;
+      transform: scale(1.035);
+      transition: opacity 900ms ease;
+      will-change: opacity, transform;
+    }
+
+    .water-photo[data-water="reef"] {
+      background-image: url("../assets/water-lab/clear-reef-water-gpt-image-2.webp");
+    }
+
+    .water-photo[data-water="deep"] {
+      background-image: url("../assets/water-lab/deep-aquarium-water-gpt-image-2.webp");
+    }
+
+    .water-photo[data-water="pond"] {
+      background-image: url("../assets/water-lab/sunlit-pond-water-gpt-image-2.webp");
+    }
+
+    body[data-water="reef"] .water-photo[data-water="reef"],
+    body[data-water="deep"] .water-photo[data-water="deep"],
+    body[data-water="pond"] .water-photo[data-water="pond"] {
+      opacity: 1;
+    }
+
+    body.motion-on .water-photo {
+      animation: water-drift 28s ease-in-out infinite alternate;
+    }
+
+    #water-renderer {
+      z-index: 0;
+      display: block;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 500ms ease;
+    }
+
+    body.refractive-water #water-renderer { opacity: 1; }
+    body.refractive-water .water-photo { opacity: 0 !important; }
+
+    @keyframes water-drift {
+      from { transform: scale(1.035) translate3d(-.35%, -.15%, 0); }
+      to { transform: scale(1.075) translate3d(.45%, .35%, 0); }
+    }
+
+    .water-depth {
+      z-index: 1;
+      pointer-events: none;
+      background:
+        radial-gradient(ellipse at 52% -8%, rgba(183, 247, 255, .14), transparent 44%),
+        linear-gradient(180deg, rgba(0, 27, 40, .04) 0%, rgba(0, 19, 34, .2) 50%, rgba(0, 8, 19, .52) 100%);
+      transition: background 700ms ease;
+    }
+
+    body[data-water="deep"] .water-depth {
+      background:
+        radial-gradient(ellipse at 55% -10%, rgba(92, 214, 255, .10), transparent 42%),
+        linear-gradient(180deg, rgba(0, 15, 31, .16), rgba(0, 8, 22, .56));
+    }
+
+    body[data-water="pond"] .water-depth {
+      background:
+        radial-gradient(ellipse at 24% -8%, rgba(255, 230, 164, .13), transparent 40%),
+        linear-gradient(180deg, rgba(2, 42, 38, .02), rgba(0, 30, 33, .46));
+    }
+
+    .surface-light {
+      z-index: 2;
+      top: -24%;
+      height: 68%;
+      opacity: .2;
+      filter: blur(34px);
+      pointer-events: none;
+      mix-blend-mode: screen;
+      background:
+        radial-gradient(ellipse at 18% 42%, rgba(185, 248, 255, .46) 0 2%, transparent 17%),
+        radial-gradient(ellipse at 48% 24%, rgba(177, 244, 255, .36) 0 2%, transparent 19%),
+        radial-gradient(ellipse at 77% 38%, rgba(205, 252, 255, .38) 0 2%, transparent 18%);
+      transform: scale(1.16) rotate(-2deg);
+    }
+
+    body.motion-on .surface-light {
+      animation: surface-shimmer 13s ease-in-out infinite alternate;
+    }
+
+    @keyframes surface-shimmer {
+      from { transform: scale(1.14) translate3d(-1.2%, 0, 0) rotate(-2deg); opacity: .16; }
+      to { transform: scale(1.22) translate3d(1.4%, 2%, 0) rotate(2deg); opacity: .25; }
+    }
+
+    #bubbles { z-index: 3; pointer-events: none; }
+
+    .page-shell {
+      min-height: 100svh;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      padding: 22px clamp(18px, 4vw, 66px) 24px;
+    }
+
+    .lab-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      position: relative;
+      z-index: 5;
+      min-height: 72px;
+      padding: 10px 14px 10px 18px;
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      background: rgba(1, 23, 36, .48);
+      box-shadow: 0 14px 45px rgba(0, 10, 20, .17);
+      backdrop-filter: blur(18px) saturate(1.15);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      min-width: 0;
+    }
+
+    .brand img {
+      width: clamp(116px, 15vw, 170px);
+      height: auto;
+      filter: drop-shadow(0 5px 10px rgba(0, 0, 0, .25));
+    }
+
+    .lab-label {
+      padding-left: 15px;
+      border-left: 1px solid var(--line);
+      color: var(--muted);
+      font-size: 12px;
+      font-weight: 760;
+      letter-spacing: .11em;
+      line-height: 1.35;
+      text-transform: uppercase;
+    }
+
+    .header-actions { display: flex; align-items: center; gap: 9px; }
+
+    .quiet-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 43px;
+      padding: 0 15px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(3, 32, 47, .5);
+      color: var(--ink);
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 700;
+      transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+    }
+
+    .quiet-button:hover { border-color: rgba(156, 237, 248, .5); background: rgba(9, 55, 70, .68); }
+    .quiet-button:active { transform: translateY(1px); }
+    .quiet-button:focus-visible,
+    .water-choice:focus-visible { outline: 3px solid rgba(127, 233, 245, .72); outline-offset: 3px; }
+
+    .hero {
+      align-self: center;
+      display: grid;
+      grid-template-columns: minmax(0, 1.08fr) minmax(300px, .72fr);
+      align-items: center;
+      gap: clamp(28px, 7vw, 108px);
+      width: min(1280px, 100%);
+      margin: 6vh auto 4vh;
+    }
+
+    .hero-copy {
+      max-width: 720px;
+      text-shadow: 0 3px 22px rgba(0, 16, 31, .48);
+    }
+
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin: 0 0 20px;
+      color: var(--accent);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 28px;
+      height: 1px;
+      background: currentColor;
+      box-shadow: 0 0 12px currentColor;
+    }
+
+    h1 {
+      max-width: 760px;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(47px, 7.2vw, 104px);
+      font-weight: 700;
+      letter-spacing: -.045em;
+      line-height: .91;
+    }
+
+    .hero-copy > p {
+      max-width: 610px;
+      margin: 25px 0 0;
+      color: #e4f5f9;
+      font-size: clamp(17px, 1.55vw, 23px);
+      line-height: 1.55;
+    }
+
+    .preview-card {
+      position: relative;
+      overflow: hidden;
+      padding: clamp(24px, 3.3vw, 42px);
+      border: 1px solid rgba(184, 238, 246, .27);
+      border-radius: 26px;
+      background: var(--glass);
+      box-shadow: var(--shadow), inset 0 1px rgba(255, 255, 255, .08);
+      backdrop-filter: blur(22px) saturate(1.18);
+    }
+
+    .preview-card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(255, 255, 255, .09), transparent 42%);
+      pointer-events: none;
+    }
+
+    .preview-kicker {
+      position: relative;
+      margin: 0 0 13px;
+      color: var(--accent);
+      font-size: 12px;
+      font-weight: 850;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .preview-card h2 {
+      position: relative;
+      margin: 0;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: clamp(28px, 3vw, 43px);
+      line-height: 1.03;
+    }
+
+    .preview-card p {
+      position: relative;
+      margin: 17px 0 25px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .mock-actions { position: relative; display: flex; flex-wrap: wrap; gap: 10px; }
+
+    .mock-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 46px;
+      padding: 0 18px;
+      border: 1px solid transparent;
+      border-radius: 11px;
+      background: var(--accent-2);
+      color: #10202a;
+      font-weight: 820;
+    }
+
+    .mock-button.secondary {
+      border-color: var(--line);
+      background: rgba(2, 30, 44, .54);
+      color: var(--ink);
+    }
+
+    .lab-footer {
+      position: relative;
+      z-index: 6;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      align-items: end;
+      gap: 18px;
+      width: min(1280px, 100%);
+      margin: 0 auto;
+    }
+
+    .chooser {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      padding: 10px;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: var(--glass-strong);
+      box-shadow: 0 18px 58px rgba(0, 10, 24, .25);
+      backdrop-filter: blur(22px) saturate(1.15);
+    }
+
+    .water-choice {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: 11px;
+      min-width: 0;
+      min-height: 58px;
+      padding: 8px 13px;
+      border: 1px solid transparent;
+      border-radius: 13px;
+      background: transparent;
+      color: var(--muted);
+      text-align: left;
+      cursor: pointer;
+      transition: background 180ms ease, border-color 180ms ease, color 180ms ease;
+    }
+
+    .water-choice:hover { background: rgba(95, 202, 221, .08); color: var(--ink); }
+    .water-choice[aria-pressed="true"] {
+      border-color: rgba(134, 231, 243, .28);
+      background: rgba(88, 200, 219, .14);
+      color: var(--ink);
+    }
+
+    .water-swatch {
+      width: 30px;
+      height: 30px;
+      border: 1px solid rgba(255, 255, 255, .38);
+      border-radius: 50%;
+      box-shadow: inset 0 1px rgba(255, 255, 255, .32), 0 4px 14px rgba(0, 8, 18, .3);
+    }
+
+    [data-select="reef"] .water-swatch { background: linear-gradient(145deg, #55e5ee, #07517c); }
+    [data-select="deep"] .water-swatch { background: linear-gradient(145deg, #1596be, #02182f); }
+    [data-select="pond"] .water-swatch { background: linear-gradient(145deg, #d0c774, #05746f); }
+
+    .choice-copy { min-width: 0; }
+    .choice-copy strong,
+    .choice-copy small { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    .choice-copy strong { font-size: 14px; }
+    .choice-copy small { margin-top: 3px; color: #9fc4cf; font-size: 11px; }
+
+    .status-note {
+      max-width: 210px;
+      margin: 0 0 5px;
+      color: rgba(226, 244, 248, .75);
+      font-size: 12px;
+      line-height: 1.55;
+      text-align: right;
+    }
+
+    .status-note strong { color: var(--ink); }
+
+    @media (max-width: 880px) {
+      .page-shell { min-height: auto; padding: 14px 14px 18px; }
+      .lab-header { min-height: 62px; }
+      .lab-label { display: none; }
+      .hero { grid-template-columns: 1fr; gap: 24px; margin: 12vh auto 7vh; }
+      .hero-copy { max-width: 620px; }
+      .preview-card { max-width: 520px; }
+      .lab-footer { grid-template-columns: 1fr; }
+      .status-note { max-width: none; margin: 0; text-align: left; }
+    }
+
+    @media (max-width: 560px) {
+      .brand img { width: 124px; }
+      .quiet-button { min-height: 39px; padding: 0 12px; font-size: 12px; }
+      .hero { margin-top: 11vh; }
+      h1 { font-size: clamp(45px, 15vw, 70px); }
+      .hero-copy > p { font-size: 17px; }
+      .preview-card { border-radius: 20px; }
+      .chooser { gap: 6px; padding: 7px; border-radius: 17px; }
+      .water-choice { display: flex; flex-direction: column; justify-content: center; gap: 6px; min-height: 82px; padding: 7px 5px; text-align: center; }
+      .water-swatch { width: 25px; height: 25px; }
+      .choice-copy strong { font-size: 12px; }
+      .choice-copy small { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
+      .water-photo { transition-duration: 160ms; }
+    }
+  </style>
+</head>
+<body class="motion-on" data-water="reef">
+  <div class="water-stage" aria-hidden="true">
+    <div class="water-photo" data-water="reef"></div>
+    <div class="water-photo" data-water="deep"></div>
+    <div class="water-photo" data-water="pond"></div>
+    <canvas id="water-renderer"></canvas>
+    <div class="water-depth"></div>
+    <div class="surface-light"></div>
+    <canvas id="bubbles"></canvas>
+  </div>
+
+  <main class="page-shell">
+    <header class="lab-header">
+      <div class="brand">
+        <img src="../assets/site/logo-full.png" alt="The Hidden Reef">
+        <span class="lab-label">Water<br>Background Lab</span>
+      </div>
+      <div class="header-actions">
+        <button class="quiet-button" id="motion-toggle" type="button" aria-pressed="true">Pause water</button>
+      </div>
+    </header>
+
+    <section class="hero" aria-labelledby="page-title">
+      <div class="hero-copy">
+        <p class="eyebrow" id="mode-kicker">Clear reef water</p>
+        <h1 id="page-title">Real water,<br>three moods.</h1>
+        <p id="mode-description">Bright, clean and welcoming. This direction gives the storefront an immediate underwater feeling without competing with the content.</p>
+      </div>
+
+      <aside class="preview-card" aria-label="Sample content over the selected background">
+        <p class="preview-kicker">Readability preview</p>
+        <h2>Bring the reef home.</h2>
+        <p>This glass treatment keeps navigation, offers and store information legible while the water remains visible behind it.</p>
+        <div class="mock-actions" aria-hidden="true">
+          <span class="mock-button">Explore livestock</span>
+          <span class="mock-button secondary">Visit the store</span>
+        </div>
+      </aside>
+    </section>
+
+    <footer class="lab-footer">
+      <div class="chooser" role="group" aria-label="Choose a water background">
+        <button class="water-choice" type="button" data-select="reef" aria-pressed="true">
+          <span class="water-swatch" aria-hidden="true"></span>
+          <span class="choice-copy"><strong>Clear Reef</strong><small>Preferred - bright and versatile</small></span>
+        </button>
+        <button class="water-choice" type="button" data-select="deep" aria-pressed="false">
+          <span class="water-swatch" aria-hidden="true"></span>
+          <span class="choice-copy"><strong>Deep Aquarium</strong><small>Preferred - dramatic and premium</small></span>
+        </button>
+        <button class="water-choice" type="button" data-select="pond" aria-pressed="false">
+          <span class="water-swatch" aria-hidden="true"></span>
+          <span class="choice-copy"><strong>Sunlit Pond</strong><small>Comparison - natural and warm</small></span>
+        </button>
+      </div>
+      <p class="status-note"><strong>Concept page only.</strong><br>The current website background has not been changed.</p>
+    </footer>
+  </main>
+
+  <script>
+    (() => {
+      const modes = {
+        reef: {
+          kicker: "Clear reef water",
+          description: "Bright, clean and welcoming. Moving refraction now bends the surface and light continuously, so the page reads as water instead of a still photograph."
+        },
+        deep: {
+          kicker: "Deep aquarium water",
+          description: "Darker, quieter and more cinematic. Slower refractive currents give this option real depth while preserving strong contrast behind the content."
+        },
+        pond: {
+          kicker: "Sunlit pond water",
+          description: "Freshwater greens and natural warmth. This direction connects most directly to ponds, planted tanks and the outdoor side of the store."
+        }
+      };
+
+      const buttons = [...document.querySelectorAll("[data-select]")];
+      const kicker = document.getElementById("mode-kicker");
+      const description = document.getElementById("mode-description");
+      const motionToggle = document.getElementById("motion-toggle");
+      const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
+      let motionEnabled = !prefersReducedMotion.matches;
+      let waterRenderer = null;
+
+      function setMode(mode, updateUrl = true) {
+        if (!modes[mode]) return;
+        document.body.dataset.water = mode;
+        kicker.textContent = modes[mode].kicker;
+        description.textContent = modes[mode].description;
+        buttons.forEach((button) => button.setAttribute("aria-pressed", String(button.dataset.select === mode)));
+        waterRenderer?.setMode(mode);
+        if (updateUrl) history.replaceState(null, "", `?water=${mode}`);
+      }
+
+      function syncMotion() {
+        document.body.classList.toggle("motion-on", motionEnabled);
+        motionToggle.setAttribute("aria-pressed", String(motionEnabled));
+        motionToggle.textContent = motionEnabled ? "Pause water" : "Play water";
+      }
+
+      buttons.forEach((button) => button.addEventListener("click", () => setMode(button.dataset.select)));
+      motionToggle.addEventListener("click", () => { motionEnabled = !motionEnabled; syncMotion(); });
+      prefersReducedMotion.addEventListener?.("change", (event) => { motionEnabled = !event.matches; syncMotion(); });
+
+      const initialMode = new URLSearchParams(location.search).get("water");
+      setMode(modes[initialMode] ? initialMode : "reef", false);
+      syncMotion();
+
+      function createWaterRenderer() {
+        const rendererCanvas = document.getElementById("water-renderer");
+        const gl = rendererCanvas.getContext("webgl", {
+          alpha: false,
+          antialias: false,
+          depth: false,
+          powerPreference: "high-performance"
+        });
+        if (!gl) return null;
+
+        const vertexSource = `
+          attribute vec2 aPosition;
+          varying vec2 vUv;
+          void main() {
+            vUv = aPosition * .5 + .5;
+            gl_Position = vec4(aPosition, 0.0, 1.0);
+          }
+        `;
+
+        const fragmentSource = `
+          precision highp float;
+          varying vec2 vUv;
+          uniform sampler2D uTexture;
+          uniform vec2 uResolution;
+          uniform vec2 uImageSize;
+          uniform float uTime;
+          uniform float uIntensity;
+
+          vec2 coverUv(vec2 screenUv) {
+            vec2 ratio = uResolution / uImageSize;
+            float scale = max(ratio.x, ratio.y);
+            vec2 visible = uResolution / (uImageSize * scale);
+            return (screenUv - .5) * visible + .5;
+          }
+
+          void main() {
+            float surface = smoothstep(.12, 1.04, vUv.y);
+            float broadX = sin(vUv.y * 19.0 + uTime * .82)
+              + .52 * sin(vUv.y * 47.0 - uTime * 1.12)
+              + .28 * sin((vUv.x + vUv.y) * 31.0 + uTime * .66);
+            float broadY = sin(vUv.x * 17.0 - uTime * .58)
+              + .44 * sin(vUv.x * 38.0 + uTime * .91)
+              + .22 * sin((vUv.x - vUv.y) * 53.0 - uTime * .48);
+            float amplitude = mix(.0015, .0074, surface) * uIntensity;
+            vec2 distortion = vec2(broadX, broadY) * amplitude;
+            vec2 sampleUv = clamp(coverUv(vUv + distortion), .002, .998);
+            vec3 color = texture2D(uTexture, sampleUv).rgb;
+
+            float slowLight = sin(vUv.x * 12.0 + vUv.y * 15.0 + uTime * .54)
+              + .55 * sin(vUv.x * 27.0 - vUv.y * 10.0 - uTime * .43);
+            color += slowLight * .0085 * uIntensity * (.34 + surface * .66);
+            gl_FragColor = vec4(color, 1.0);
+          }
+        `;
+
+        function compile(type, source) {
+          const shader = gl.createShader(type);
+          gl.shaderSource(shader, source);
+          gl.compileShader(shader);
+          if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            throw new Error(gl.getShaderInfoLog(shader) || "Water shader failed to compile.");
+          }
+          return shader;
+        }
+
+        let program;
+        try {
+          program = gl.createProgram();
+          gl.attachShader(program, compile(gl.VERTEX_SHADER, vertexSource));
+          gl.attachShader(program, compile(gl.FRAGMENT_SHADER, fragmentSource));
+          gl.linkProgram(program);
+          if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(program));
+        } catch (error) {
+          console.warn(error);
+          return null;
+        }
+
+        gl.useProgram(program);
+        const positionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([
+          -1, -1, 1, -1, -1, 1,
+          -1, 1, 1, -1, 1, 1
+        ]), gl.STATIC_DRAW);
+        const position = gl.getAttribLocation(program, "aPosition");
+        gl.enableVertexAttribArray(position);
+        gl.vertexAttribPointer(position, 2, gl.FLOAT, false, 0, 0);
+
+        const uniforms = {
+          resolution: gl.getUniformLocation(program, "uResolution"),
+          imageSize: gl.getUniformLocation(program, "uImageSize"),
+          time: gl.getUniformLocation(program, "uTime"),
+          intensity: gl.getUniformLocation(program, "uIntensity")
+        };
+
+        const texture = gl.createTexture();
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.uniform1i(gl.getUniformLocation(program, "uTexture"), 0);
+
+        const sources = {
+          reef: "../assets/water-lab/clear-reef-water-gpt-image-2.webp",
+          deep: "../assets/water-lab/deep-aquarium-water-gpt-image-2.webp",
+          pond: "../assets/water-lab/sunlit-pond-water-gpt-image-2.webp"
+        };
+        const intensities = { reef: 1, deep: .72, pond: .84 };
+        const loadedImages = {};
+        let imageWidth = 1;
+        let imageHeight = 1;
+        let elapsedTime = 0;
+        let previousFrame = performance.now();
+
+        function upload(mode) {
+          const image = loadedImages[mode];
+          if (!image || document.body.dataset.water !== mode) return;
+          gl.bindTexture(gl.TEXTURE_2D, texture);
+          gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+          gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, image);
+          imageWidth = image.naturalWidth;
+          imageHeight = image.naturalHeight;
+          gl.uniform1f(uniforms.intensity, intensities[mode]);
+          rendererCanvas.dataset.waterRenderer = "active";
+          document.body.classList.add("refractive-water");
+        }
+
+        function setRendererMode(mode) {
+          if (loadedImages[mode]) {
+            upload(mode);
+            return;
+          }
+          const image = new Image();
+          image.decoding = "async";
+          image.onload = () => { loadedImages[mode] = image; upload(mode); };
+          image.src = sources[mode];
+        }
+
+        Object.keys(sources).forEach((mode) => {
+          if (mode === document.body.dataset.water) return;
+          const image = new Image();
+          image.decoding = "async";
+          image.onload = () => { loadedImages[mode] = image; };
+          image.src = sources[mode];
+        });
+
+        function resizeRenderer() {
+          const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+          const nextWidth = Math.round(innerWidth * ratio);
+          const nextHeight = Math.round(innerHeight * ratio);
+          if (rendererCanvas.width !== nextWidth || rendererCanvas.height !== nextHeight) {
+            rendererCanvas.width = nextWidth;
+            rendererCanvas.height = nextHeight;
+            gl.viewport(0, 0, nextWidth, nextHeight);
+          }
+        }
+
+        function render(frameTime) {
+          resizeRenderer();
+          const delta = Math.min((frameTime - previousFrame) / 1000, .05);
+          previousFrame = frameTime;
+          if (motionEnabled) elapsedTime += delta;
+          gl.uniform2f(uniforms.resolution, rendererCanvas.width, rendererCanvas.height);
+          gl.uniform2f(uniforms.imageSize, imageWidth, imageHeight);
+          gl.uniform1f(uniforms.time, elapsedTime);
+          gl.drawArrays(gl.TRIANGLES, 0, 6);
+          requestAnimationFrame(render);
+        }
+
+        setRendererMode(document.body.dataset.water);
+        requestAnimationFrame(render);
+        return { setMode: setRendererMode };
+      }
+
+      waterRenderer = createWaterRenderer();
+
+      const canvas = document.getElementById("bubbles");
+      const context = canvas.getContext("2d");
+      let width = 0;
+      let height = 0;
+      let bubbles = [];
+      let lastTime = performance.now();
+      let bubbleTime = lastTime;
+
+      function makeBubble(randomY = true) {
+        const radius = 2 + Math.random() * 10;
+        return {
+          x: Math.random() * width,
+          y: randomY ? Math.random() * height : height + radius * 2,
+          radius,
+          speed: 6 + Math.random() * 13,
+          drift: 5 + Math.random() * 10,
+          phase: Math.random() * Math.PI * 2,
+          opacity: .07 + Math.random() * .14
+        };
+      }
+
+      function resizeCanvas() {
+        const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+        width = window.innerWidth;
+        height = window.innerHeight;
+        canvas.width = Math.round(width * ratio);
+        canvas.height = Math.round(height * ratio);
+        canvas.style.width = `${width}px`;
+        canvas.style.height = `${height}px`;
+        context.setTransform(ratio, 0, 0, ratio, 0, 0);
+        const desired = width < 600 ? 10 : 18;
+        bubbles = Array.from({ length: desired }, () => makeBubble(true));
+      }
+
+      function drawBubble(bubble, time) {
+        const wobble = Math.sin(time * .00055 + bubble.phase) * bubble.drift;
+        const x = bubble.x + wobble;
+        const gradient = context.createRadialGradient(
+          x - bubble.radius * .32,
+          bubble.y - bubble.radius * .36,
+          bubble.radius * .05,
+          x,
+          bubble.y,
+          bubble.radius
+        );
+        gradient.addColorStop(0, `rgba(255,255,255,${bubble.opacity * 1.5})`);
+        gradient.addColorStop(.3, `rgba(213,249,255,${bubble.opacity * .35})`);
+        gradient.addColorStop(.76, `rgba(170,236,248,${bubble.opacity * .1})`);
+        gradient.addColorStop(1, `rgba(231,252,255,${bubble.opacity})`);
+        context.beginPath();
+        context.arc(x, bubble.y, bubble.radius, 0, Math.PI * 2);
+        context.fillStyle = gradient;
+        context.fill();
+        context.strokeStyle = `rgba(224,250,255,${bubble.opacity * .65})`;
+        context.lineWidth = Math.max(.45, bubble.radius * .07);
+        context.stroke();
+      }
+
+      function animate(time) {
+        const elapsed = Math.min((time - lastTime) / 1000, .05);
+        lastTime = time;
+        if (motionEnabled) bubbleTime += elapsed * 1000;
+        context.clearRect(0, 0, width, height);
+        bubbles.forEach((bubble, index) => {
+          if (motionEnabled) bubble.y -= bubble.speed * elapsed;
+          if (bubble.y < -bubble.radius * 2) bubbles[index] = makeBubble(false);
+          drawBubble(bubble, bubbleTime);
+        });
+        requestAnimationFrame(animate);
+      }
+
+      resizeCanvas();
+      addEventListener("resize", resizeCanvas, { passive: true });
+      requestAnimationFrame(animate);
+    })();
+  </script>
+</body>
+</html>
