@@ -1,0 +1,493 @@
+:root {
+  --background: #020b16;
+  --foreground: #d1eef3;
+  color-scheme: dark;
+}
+* {
+  box-sizing: border-box;
+}
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+  background: var(--background);
+  color: var(--foreground);
+}
+body {
+  font-family: Arial, Helvetica, sans-serif;
+}
+button {
+  font: inherit;
+}
+button:focus-visible {
+  outline: 2px solid #80e9ff;
+  outline-offset: 5px;
+  border-radius: 4px;
+}
+.ocean-page {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  background: radial-gradient(ellipse at 50% 43%, #06203b 0%, #020b16 70%);
+  padding: 44px 0;
+}
+.reef-stage {
+  width: 100%;
+  position: relative;
+  background: #020b16;
+  box-shadow: 0 0 110px #00648b1c;
+}
+.reef-frame {
+  transform: translateY(-1%);
+  width: 100%;
+  aspect-ratio: 3/1;
+  min-height: 340px;
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+  background: #003068;
+}
+.reef-crop {
+  width: 100%;
+  height: max(24vw, 244.8px);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+@media (max-width: 800px) {
+  .reef-crop {
+    height: max(43.636364vw, 252px);
+  }
+}
+@media (max-width: 480px) {
+  .reef-crop {
+    height: max(72vw, 280.8px);
+  }
+}
+.reef-poster,
+.water-canvas,
+.life-canvas,
+.vignette,
+.surface-glow {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+}
+.reef-poster {
+  object-fit: cover;
+  z-index: 0;
+}
+.water-canvas {
+  z-index: 1;
+  opacity: 0;
+  transition: opacity 1.5s;
+}
+.is-ready .water-canvas {
+  opacity: 1;
+}
+.life-canvas {
+  z-index: 5;
+  pointer-events: none;
+}
+.vignette {
+  z-index: 6;
+  pointer-events: none;
+  box-shadow:
+    inset 0 -12px 38px #00162e66,
+    inset 0 0 45px #00132433;
+}
+.surface-glow {
+  z-index: 2;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 29% 14% at 50% 0%,
+    #acffff70,
+    transparent
+  );
+  mix-blend-mode: screen;
+  animation: surface 9s ease-in-out infinite alternate;
+}
+.brand {
+  position: absolute;
+  z-index: 4;
+  left: 19%;
+  top: 21%;
+  width: 62%;
+  text-align: center;
+  opacity: 0;
+  filter: drop-shadow(0 3px 4px #00173180);
+  transition: opacity 1.2s 0.15s;
+}
+.is-ready .brand {
+  opacity: 1;
+}
+.brand-top {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 5%;
+  height: clamp(32px, 4vw, 90px);
+  padding: 0 17%;
+}
+.brand-top span {
+  font-family: 'Reef Display', Georgia, serif;
+  font-size: clamp(32px, 4.3vw, 96px);
+  font-weight: 500;
+  line-height: 1;
+  color: #f4d796;
+  text-shadow:
+    0 1px 0 #936126,
+    0 3px 5px #001b38;
+}
+.brand i {
+  display: block;
+  height: 2px;
+  flex: 1;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    #d89929 16%,
+    #fff1a1 65%,
+    #d89929
+  );
+  box-shadow: 0 1px 2px #001326;
+}
+.brand-top i:last-child,
+.brand-bottom i:last-child {
+  transform: scaleX(-1);
+}
+.brand h1 {
+  margin: 0;
+  line-height: 1;
+}
+.wordmark {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+  filter: drop-shadow(0 5px 5px #001b38aa);
+}
+.wordmark text {
+  font-family: 'Reef Display', Georgia, serif;
+  font-size: 226px;
+  font-weight: 600;
+  font-kerning: normal;
+  letter-spacing: -3px;
+}
+.wordmark-depth {
+  fill: #a67530;
+  stroke: #815b2b;
+  stroke-width: 1.5px;
+  stroke-linejoin: round;
+}
+.wordmark-face {
+  fill: url(#pearl-face);
+  stroke: url(#gold-rim);
+  stroke-width: 2px;
+  paint-order: stroke fill;
+  stroke-linejoin: round;
+}
+.brand-bottom {
+  display: flex;
+  align-items: center;
+  gap: 2%;
+  margin: 1.3% 5% 0;
+}
+.brand-bottom p {
+  font-family: 'Reef Sans', Arial, sans-serif;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.05vw;
+  font-size: clamp(10px, 1.34vw, 32px);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.23em;
+  color: #70dfef;
+  margin: 0;
+  white-space: nowrap;
+  text-shadow:
+    0 2px 3px #000b20,
+    0 0 12px #0ac1ff33;
+}
+.brand-bottom b {
+  color: #efc15a;
+  font-size: 0.7em;
+  text-shadow: 0 1px 0 #805317;
+}
+.brand-bottom i {
+  min-width: 4%;
+}
+.glint {
+  position: absolute;
+  z-index: 2;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: white;
+  box-shadow:
+    0 0 7px 2px #b4f6ff,
+    0 0 16px 5px #00caff33;
+  animation: twinkle 7s ease-in-out infinite;
+  pointer-events: none;
+}
+.glint:before,
+.glint:after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  background: linear-gradient(transparent, #fff, transparent);
+  width: 1px;
+  height: 30px;
+  transform: translate(-50%, -50%);
+}
+.glint:after {
+  transform: translate(-50%, -50%) rotate(90deg);
+  height: 20px;
+}
+.glint-one {
+  left: 6%;
+  top: 39%;
+}
+.glint-two {
+  left: 52%;
+  top: 60%;
+  animation-delay: -2.8s;
+}
+.glint-three {
+  right: 7%;
+  top: 36%;
+  animation-delay: -4.8s;
+}
+.controls {
+  height: 62px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 30px;
+  border-top: 1px solid #0b2a3b;
+  background: #030e1a;
+}
+.reef-signature {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  color: #7097a9;
+}
+.reef-signature svg {
+  color: #4e9aaf;
+}
+.control-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.control-actions button {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: none;
+  border: 0;
+  color: #97b3c2;
+  cursor: pointer;
+  font-size: 12px;
+  padding: 9px 0;
+  transition: color 0.2s;
+}
+.control-actions button:hover {
+  color: #ecfcff;
+}
+.control-divider {
+  height: 14px;
+  width: 1px;
+  background: #213545;
+}
+.reef-stage:fullscreen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background: #010812;
+}
+.reef-stage:fullscreen .reef-frame {
+  max-height: calc(100svh - 62px);
+  aspect-ratio: 3/1;
+  min-height: 0;
+}
+.is-paused *,
+.is-paused *:after {
+  animation-play-state: paused !important;
+}
+@keyframes twinkle {
+  0%,
+  35%,
+  65%,
+  100% {
+    opacity: 0;
+    transform: scale(0.3) rotate(0);
+  }
+  48%,
+  52% {
+    opacity: 1;
+    transform: scale(1) rotate(15deg);
+  }
+}
+@keyframes surface {
+  to {
+    opacity: 0.5;
+    transform: scaleX(1.15);
+  }
+}
+@media (min-width: 2200px) {
+  .reef-frame {
+    max-height: 850px;
+  }
+  .brand {
+    top: 20%;
+  }
+}
+@media (max-width: 800px) {
+  .reef-frame {
+    aspect-ratio: 1.65;
+    min-height: 350px;
+  }
+  .brand {
+    left: 9%;
+    width: 82%;
+    top: 32%;
+  }
+  .brand-top {
+    height: 42px;
+    padding: 0 23%;
+  }
+  .brand-top span {
+    font-size: 40px;
+  }
+  .brand-bottom p {
+    font-size: 1.8vw;
+    gap: 1.35vw;
+  }
+  .controls {
+    padding: 0 18px;
+  }
+  .reef-signature {
+    font-size: 10px;
+    letter-spacing: 0.12em;
+  }
+  .control-actions {
+    gap: 14px;
+  }
+}
+@media (max-width: 480px) {
+  .reef-frame {
+    aspect-ratio: 1;
+    min-height: 390px;
+  }
+  .brand {
+    left: 5%;
+    width: 90%;
+    top: 35%;
+  }
+  .brand-bottom p {
+    font-size: 2.05vw;
+    letter-spacing: 0.14em;
+  }
+  .brand-top span {
+    font-size: 35px;
+  }
+  .controls {
+    height: 60px;
+    padding: 0 14px;
+  }
+  .control-actions button span {
+    display: none;
+  }
+  .control-actions button {
+    padding: 12px 4px;
+  }
+  .ocean-page {
+    padding: 24px 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *:after {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+.reef-poster {
+  background: url(./lettering-clean.png) center / cover;
+}
+
+
+/* Display the supplied photograph's actual lettering, without font substitution. */
+.reference-brand {
+  left: 21.1786%;
+  top: 5.5249%;
+  width: 58.011%;
+  filter: none;
+}
+.reference-wordmark {
+  display: block;
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+.letter-reflections {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+@media (max-width: 800px) {
+  .reference-brand {
+    left: 8%;
+    top: 20%;
+    width: 84%;
+  }
+}
+@media (max-width: 480px) {
+  .reference-brand {
+    left: 3%;
+    top: 24%;
+    width: 94%;
+  }
+}
+.clean-view-link {
+  color: #a8ccd7;
+  font-size: 12px;
+  text-decoration: none;
+  white-space: nowrap;
+}
+.clean-view-link:hover { color: #e0fbff; }
+.clean-view-link:focus-visible { outline: 2px solid #80e9ff; outline-offset: 5px; }
+.ocean-page.embed-view {
+  min-height: 0;
+  padding: 0;
+  display: block;
+  background: transparent;
+}
+.embed-view .reef-stage { box-shadow: none; }
+.embed-view .controls { display: none; }
+.embed-view .reef-stage:focus-visible { outline: 2px solid #80e9ff; outline-offset: -2px; }
+.embed-pause {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  background: #021c30;
+  color: white;
+  padding: 8px 12px;
+}
+.embed-pause:focus-visible { opacity: 1; pointer-events: auto; }
+
+.sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
+html,body { overflow:hidden; }
+.embed-pause { opacity:.8; pointer-events:auto; top:auto; left:auto; bottom:8px; right:8px; border:1px solid #80e9ff66; border-radius:4px; font-size:11px; padding:5px 8px; cursor:pointer; }
+.embed-pause:hover,.embed-pause:focus-visible { opacity:1; }
