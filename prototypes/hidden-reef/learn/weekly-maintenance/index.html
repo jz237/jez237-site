@@ -263,16 +263,13 @@
       .footer-top { grid-template-columns: 1fr; }
     }
   </style>
-  <link rel="stylesheet" href="../../assets/site-masthead.css?v=20260712-unified-nav" />
+  <link rel="stylesheet" href="../../assets/site-masthead.css?v=20260906-animated" />
 </head>
 <body>
   <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
   <main class="page">
     <header class="header masthead">
-      <a class="brand" href="../../">
-        <img src="../../assets/site/hidden-reef-masthead.png" alt="The Hidden Reef - Aquariums, Fish, Coral, Ponds" />
-        <span><strong>The Hidden Reef</strong><span>Aquariums · Fish · Coral · Ponds</span></span>
-      </a>
+      <a class="brand" href="../../" aria-label="The Hidden Reef home"><span class="header-home-label">The Hidden Reef home</span></a><iframe class="animated-reef-header" src="../../assets/animated-header/index.html" title="The Hidden Reef animated aquarium header" scrolling="no"></iframe>
     </header>
 
     <nav class="main-nav" aria-label="Store categories">
@@ -441,6 +438,6 @@
       </div>
     </footer>
   </main>
-  <script src="../../assets/reef-background.js?v=20260712-unified-nav"></script>
+  <script src="../../assets/reef-background.js?v=20260906-performance"></script>
 </body>
 </html>
