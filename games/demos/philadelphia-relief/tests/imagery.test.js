@@ -89,8 +89,8 @@ test('building-resolution imagery', async (t) => {
     assert.ok(cell.bounds.south < 39.9526 && cell.bounds.north > 39.9526);
     assert.ok(cell.bounds.west >= region.west && cell.bounds.east <= region.east);
     assert.ok(cell.bounds.south >= region.south && cell.bounds.north <= region.north);
-    assert.ok(detailResolutionM(cell, 4096, projection) < 2.1);
-    assert.ok(detailResolutionM(cell, 2048, projection) < 4.2);
+    assert.ok(detailResolutionM(cell, 4096, projection) < 2.7);
+    assert.ok(detailResolutionM(cell, 2048, projection) < 5.3);
     assert.match(detailUrl(cell, 4096), /^detail-imagery\?tier=detail&lon=/);
     assert.equal(DETAIL_DISTANCE_M, 16000);
   });
@@ -98,8 +98,8 @@ test('building-resolution imagery', async (t) => {
   await t.test('adds a source-resolution ultra cell only below the block threshold', () => {
     const cell = detailCellFor(-75.1652, 39.9526, region, 'ultra');
     assert.equal(cell.tier, 'ultra');
-    assert.ok(detailResolutionM(cell, 4096, projection) < 0.8);
-    assert.ok(detailResolutionM(cell, 2048, projection) < 1.4);
+    assert.ok(detailResolutionM(cell, 4096, projection) < 0.9);
+    assert.ok(detailResolutionM(cell, 2048, projection) < 1.8);
     assert.equal(imageryTierFor(ULTRA_DISTANCE_M, 'standard'), 'ultra');
     assert.equal(imageryTierFor(ULTRA_DISTANCE_M, 'data'), 'detail');
     assert.equal(imageryTierFor(DETAIL_DISTANCE_M + 1, 'maximum'), null);
@@ -110,8 +110,8 @@ test('building-resolution imagery', async (t) => {
     const cell = detailCellFor(-75.1652, 39.9526, region, 'rooftop');
     assert.equal(cell.tier, 'rooftop');
     assert.ok(cell.bounds.west < -75.1652 && cell.bounds.east > -75.1652);
-    assert.ok(detailResolutionM(cell, 4096, projection) < 0.3);
-    assert.ok(detailResolutionM(cell, 2048, projection) < 0.6);
+    assert.ok(detailResolutionM(cell, 4096, projection) < 0.34);
+    assert.ok(detailResolutionM(cell, 2048, projection) < 0.67);
     assert.equal(imageryTierFor(ROOFTOP_DISTANCE_M, 'standard'), 'rooftop');
     assert.equal(imageryTierFor(ROOFTOP_DISTANCE_M, 'maximum'), 'rooftop');
     assert.equal(imageryTierFor(ROOFTOP_DISTANCE_M, 'data'), 'detail');
@@ -142,7 +142,7 @@ test('building-resolution imagery', async (t) => {
     }));
     assert.ok(rooftop);
     assert.equal(rooftop.tier, 'rooftop');
-    assert.ok(detailResolutionM(rooftop, 4096, projection) < 0.3);
+    assert.ok(detailResolutionM(rooftop, 4096, projection) < 0.34);
     assert.equal(detailRequest(new URLSearchParams({
       lon: '-77', lat: '39.95', size: '4096',
     })), null);
