@@ -25,7 +25,9 @@ test('aerial imagery asset', async (t) => {
     assert.deepEqual(imagery.bounds, terrain.bounds);
     assert.equal(imagery.projection, 'EPSG:4326');
     assert.equal(imagery.width, 4096);
-    assert.equal(imagery.height, 4096);
+    assert.equal(imagery.height, 3165);
+    const b = imagery.bounds;
+    assert.ok(Math.abs(imagery.width / imagery.height - (b.east - b.west) / (b.north - b.south)) < 0.0002);
     assert.equal(imagery.format, 'webp');
   });
 
@@ -151,4 +153,15 @@ test('building-resolution imagery', async (t) => {
       tier: 'planet', lon: '-75.16', lat: '39.95', size: '4096',
     })), null);
   });
+});
+
+
+test('imagery requests preserve geographic proportions without expanding latitude', () => {
+  for (const tier of ['detail', 'ultra', 'rooftop']) {
+    const request = detailRequest(new URLSearchParams({
+      tier, lon: '-75.1655', lat: '39.9505', size: '4096',
+    }));
+    const b = request.bounds;
+    assert.ok(Math.abs(request.size / request.height - (b.east - b.west) / (b.north - b.south)) < 1e-8);
+  }
 });
