@@ -10,7 +10,7 @@
  * occlusion test so a name never floats over the ridge that is hiding it.
  */
 
-import { clamp } from './geo.js?v=philly-2026090610';
+import { clamp } from './geo.js?v=philly-2026090611';
 
 const MAX_NODES = 90;
 
