@@ -16,7 +16,7 @@
  * regional shot without becoming needles up close.
  */
 
-import { triangulate } from './vectors.js?v=philly-2026090611';
+import { triangulate } from './vectors.js?v=philly-2026090612';
 
 export const TIER_ORDER = ['tall', 'mid', 'low'];
 
@@ -137,6 +137,7 @@ export function extrudeBuildings(buildings, ctx) {
 
   const position = new Float32Array(vertCount * 3);
   const ground = new Float32Array(vertCount);
+  const facadeOrigin = new Float32Array(vertCount * 2);
   const info = new Float32Array(vertCount * 2);     // (height, minHeight)
   const year = new Float32Array(vertCount);         // documented year, 0 = undated
   const index = new Uint32Array(indexCount);
@@ -175,6 +176,8 @@ export function extrudeBuildings(buildings, ctx) {
       position[(base + n + k) * 3] = originX + x;
       position[(base + n + k) * 3 + 1] = b.height;
       position[(base + n + k) * 3 + 2] = originZ + z;
+      facadeOrigin.set([originX + cx / n, originZ + cz / n], (base + k) * 2);
+      facadeOrigin.set([originX + cx / n, originZ + cz / n], (base + n + k) * 2);
       ground[base + k] = g;
       ground[base + n + k] = g;
       info[(base + k) * 2] = b.height;
@@ -207,7 +210,7 @@ export function extrudeBuildings(buildings, ctx) {
     v += 2 * n;
   }
 
-  return { position, ground, info, year, index, buildingEnd, vertexCount: vertCount,
+  return { position, ground, facadeOrigin, info, year, index, buildingEnd, vertexCount: vertCount,
     indexCount, buildingCount: buildings.length };
 }
 

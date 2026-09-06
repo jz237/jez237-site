@@ -553,15 +553,9 @@ Stated plainly, and repeated in the About panel:
 - The whole region is one mesh with no shadow casting; the hillshade is direct
   lighting plus an ambient-occlusion approximation, so you will not see a ridge
   cast a shadow across a valley. Buildings cast no shadows either.
-- **Buildings exist only in the two detail zones.** Outside Center City,
-  University City and inner Philadelphia/Camden there are none, and in the inner
-  zone only notable ones. Rowhouse rows are merged and simplified to ~0.6 m;
-  flat-roof extrusions only — no pitched roofs, spires, setbacks or building
-  parts (One Liberty Place is a box, not a spire). Heights marked `levels` or
-  `default` are estimates; the 27 `curated` entries are public reference values,
-  not surveys. Stadiums are `leisure=stadium` outlines extruded as solid blocks
-  at their published heights, not bowls. OSM footprint coverage and tagging vary
-  block by block.
+- Bundled building coverage is densest in Center City and includes notable suburban
+  buildings. Close-up OSM extracts add local mapped footprints on demand. Footprint,
+  address and roof tagging vary by block; missing heights remain estimates.
 - **Bridges are schematic.** Alignment and deck width are real; the towers,
   cables, trusses and arches are built from a handful of rounded reference
   numbers. Approach viaducts beyond OSM's `bridge=yes` extent are drawn by the
@@ -587,11 +581,36 @@ is three.js r180, MIT, unmodified. Map data is © OpenStreetMap contributors und
 ODbL 1.0; elevation is from the AWS Terrain Tiles open data set.
 
 
-Panning retains pending cells while their coverage remains useful instead of
-canceling at each snapped grid boundary. Eight recent small previews are cached
-in memory (about 24 MiB decoded), and the previous adjacent GPU tile remains
-underneath the current one. Upgrading a preview to full resolution preserves
-that neighbour, preventing the edge from reverting to the coarse regional image.
+## Continuous exploration (September 2026)
 
-Tilted cameras choose imagery detail and focus from the nearer visible ground,
-so an oblique city view does not leave its foreground on the regional tile.
+The camera now streams a multi-resolution mosaic over its visible ground footprint,
+including wide screens and tilted views. `src/imagery-tiles.js` plans continuous
+cells, schedules three requests at a time, shows 512-pixel previews first, then
+refines to 1024 or 2048 pixels per tile. Directional look-ahead queues two adjacent
+previews after visible work. Data saver disables speculation. Cached tiles remain
+available while panning; the cache evicts stale textures and caps desired coverage
+at 24 tiles. Beyond the 24 km detail horizon the regional backdrop remains visible.
+Sampling depends on camera distance, quality and native imagery coverage.
+
+Street inspection (button or I) sets a 350 m, nearly overhead view, uses natural
+terrain scale and hides the story and tour panels. Exit or Escape restores the
+previous settings at the current location. Street names are decluttered over the
+photography; mapped address numbers appear below 650 m.
+
+`street-detail` provides bounded, same-origin, week-cached OSM extracts on demand
+below 3.2 km. It retains street names, house numbers, precise building footprints,
+height provenance, roof shape and orientation. The local mesh replaces bundled
+buildings within the loaded patch; authored landmarks remain. Gabled, hipped,
+pyramidal and skillion profiles are supported. Unmapped roof shapes stay flat;
+untagged heights/dimensions are estimates. Flat roofs can use the streamed aerial
+photography, giving real rooftop surface detail. Building cards show available
+names/addresses and distinguish mapped roof shapes from estimated dimensions.
+Facade patterns remain illustrative, and this is not a photogrammetric mesh.
+
+If the neighborhood source is busy, existing geometry and bundled street labels
+remain available. The extract is retried after a cooldown; imagery is independent.
+`tools/build_street_labels.py --source <Overpass JSON>` regenerates bundled names.
+
+Validation: `npm run check`, including viewport coverage across rotation/aspect/
+zoom, server/client tile bounds, request cancellation/concurrency, mapped address
+provenance, roof geometry and existing map behavior.

@@ -14,14 +14,17 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090611';
+import { hexToRgb } from './themes.js?v=philly-2026090612';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026090611';
-import { damp } from './geo.js?v=philly-2026090611';
+} from './structures-data.js?v=philly-2026090612';
+import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026090612';
+import { damp } from './geo.js?v=philly-2026090612';
 
 const VERTEX_SHADER = /* glsl */ `
+  attribute vec2 aFacadeOrigin;
+  varying vec2 vFacadeXZ;
   attribute float aGround;     // DEM elevation under the structure, metres
   attribute vec2  aInfo;       // (structure height, base offset), metres
   attribute float aYear;       // documented construction year, 0 = undated
@@ -60,6 +63,7 @@ const VERTEX_SHADER = /* glsl */ `
     vHeight = aInfo.x;
     vStorey = position.y;
     vWorld = p;
+    vFacadeXZ = position.xz - aFacadeOrigin;
     vElev = aGround;
     vRel = aInfo.x > 0.0 ? clamp((position.y - aInfo.y) / aInfo.x, 0.0, 1.0) : 0.0;
     vYear = aYear;
@@ -70,7 +74,15 @@ const VERTEX_SHADER = /* glsl */ `
 const FRAGMENT_SHADER = /* glsl */ `
   precision highp float;
 
+  varying vec2 vFacadeXZ;
   uniform float uFacade;
+  uniform vec4 uLocalBounds;
+  uniform float uLocalClip;
+  uniform float uRoofPhotoOn;
+  uniform sampler2D uRoofPhoto0; uniform vec4 uRoofPhotoBounds0;
+  uniform sampler2D uRoofPhoto1; uniform vec4 uRoofPhotoBounds1;
+  uniform sampler2D uRoofPhoto2; uniform vec4 uRoofPhotoBounds2;
+  uniform sampler2D uRoofPhoto3; uniform vec4 uRoofPhotoBounds3;
   uniform vec3  uWall;
   uniform vec3  uRoof;
   uniform vec3  uGlow;
@@ -107,6 +119,8 @@ const FRAGMENT_SHADER = /* glsl */ `
   varying float vRel;
 
   void main() {
+    if (uLocalClip > 0.5 && vWorld.x > uLocalBounds.x && vWorld.x < uLocalBounds.z
+        && vWorld.z > uLocalBounds.y && vWorld.z < uLocalBounds.w) discard;
     // Flat face normal from screen-space derivatives: no normal attribute,
     // shared ring vertices, crisp edges.
     vec3 n = normalize(cross(dFdx(vWorld), dFdy(vWorld)));
@@ -118,7 +132,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 surveyNeutral = mix(vec3(0.18, 0.21, 0.23), vec3(0.34, 0.37, 0.38), roof);
     // Procedural architectural finishes, illustrative rather than surveyed facades.
     vec3 tangent = normalize(vec3(n.z, 0.0, -n.x) + vec3(0.00001));
-    float across = dot(vWorld, tangent);
+    float across = dot(vFacadeXZ, tangent.xz);
     vec2 bay = vec2(across / mix(2.6, 3.2, vStyle), vStorey / mix(3.2, 3.8, vStyle));
     vec2 cell = fract(bay);
     vec2 aa = max(fwidth(bay), vec2(0.015));
@@ -165,6 +179,21 @@ const FRAGMENT_SHADER = /* glsl */ `
     }
     #endif
 
+    // Georeferenced photography supplies real rooftop equipment and surface detail.
+    if (roof > 0.75 && uRoofPhotoOn > 0.5) {
+      vec2 uv0 = (vWorld.xz-uRoofPhotoBounds0.xy)/max(vec2(0.001),uRoofPhotoBounds0.zw-uRoofPhotoBounds0.xy);
+      vec2 uv1 = (vWorld.xz-uRoofPhotoBounds1.xy)/max(vec2(0.001),uRoofPhotoBounds1.zw-uRoofPhotoBounds1.xy);
+      vec2 uv2 = (vWorld.xz-uRoofPhotoBounds2.xy)/max(vec2(0.001),uRoofPhotoBounds2.zw-uRoofPhotoBounds2.xy);
+      vec2 uv3 = (vWorld.xz-uRoofPhotoBounds3.xy)/max(vec2(0.001),uRoofPhotoBounds3.zw-uRoofPhotoBounds3.xy);
+      if (all(greaterThanEqual(uv0,vec2(0.0))) && all(lessThanEqual(uv0,vec2(1.0))))
+        base = texture2D(uRoofPhoto0,uv0).rgb;
+      else if (all(greaterThanEqual(uv1,vec2(0.0))) && all(lessThanEqual(uv1,vec2(1.0))))
+        base = texture2D(uRoofPhoto1,uv1).rgb;
+      else if (all(greaterThanEqual(uv2,vec2(0.0))) && all(lessThanEqual(uv2,vec2(1.0))))
+        base = texture2D(uRoofPhoto2,uv2).rgb;
+      else if (all(greaterThanEqual(uv3,vec2(0.0))) && all(lessThanEqual(uv3,vec2(1.0))))
+        base = texture2D(uRoofPhoto3,uv3).rgb;
+    }
     // A touch of darkening toward the base, where streets and neighbours
     // shadow the lower storeys.
     base *= mix(0.8, 1.0, vRel);
@@ -312,6 +341,9 @@ export function createStructures(THREE, options) {
 
   const groundAt = (x, z) => sampleElevation(projection.xToLon(x), projection.zToLat(z));
 
+  let localBounds = null;
+  const emptyRoof = new THREE.DataTexture(new Uint8Array([96,96,96,255]),1,1);
+  emptyRoof.needsUpdate = true;
   const sharedUniforms = {
     uExag: { value: 10 },
     uHScale: { value: 1 },
@@ -336,8 +368,15 @@ export function createStructures(THREE, options) {
     uViewportWidth: { value: 1 },
   };
 
+  sharedUniforms.uRoofPhotoOn = { value: 0 };
+  for (let i = 0; i < 4; i++) {
+    sharedUniforms[`uRoofPhoto${i}`] = { value: emptyRoof };
+    sharedUniforms[`uRoofPhotoBounds${i}`] = { value: new THREE.Vector4() };
+  }
   function makeSolidMaterial(landmark = false, facade = true) {
-    const uniforms = { ...sharedUniforms, uGrow: { value: 1 }, uFacade: { value: facade ? 1 : 0 } };
+    const uniforms = {
+      uLocalBounds: { value: new THREE.Vector4() },
+      uLocalClip: { value: 0 }, ...sharedUniforms, uGrow: { value: 1 }, uFacade: { value: facade ? 1 : 0 } };
     if (landmark) {
       uniforms.uSelected = { value: -1 };
       uniforms.uHighlight = { value: new THREE.Vector3(1, 0.7, 0.4) };
@@ -356,6 +395,8 @@ export function createStructures(THREE, options) {
   function solidGeometry(packed) {
     const geometry = new THREE.BufferGeometry();
     geometry.setAttribute('position', new THREE.BufferAttribute(packed.position, 3));
+    geometry.setAttribute('aFacadeOrigin', new THREE.BufferAttribute(
+      packed.facadeOrigin || new Float32Array(packed.vertexCount * 2), 2));
     geometry.setAttribute('aGround', new THREE.BufferAttribute(packed.ground, 1));
     geometry.setAttribute('aInfo', new THREE.BufferAttribute(packed.info, 2));
     geometry.setAttribute('aYear', new THREE.BufferAttribute(
@@ -371,7 +412,7 @@ export function createStructures(THREE, options) {
   let buildingTotal = 0;
 
   function addTier(zone, tierMeta, buffer) {
-    const parsed = parseTier(buffer);
+    const parsed = Array.isArray(buffer) ? { buildings: buffer, count: buffer.length } : parseTier(buffer);
     const originX = projection.lonToX(zone.origin.lon);
     const originZ = projection.latToZ(zone.origin.lat);
     // Replace only footprints inside an authored landmark footprint, avoiding duplicate volumes.
@@ -386,7 +427,8 @@ export function createStructures(THREE, options) {
         && building.height >= m.replaceMinHeight && Math.hypot(x - m.x, z - m.z) < m.replaceRadius);
     });
     parsed.count = parsed.buildings.length;
-    const packed = extrudeBuildings(parsed.buildings, { originX, originZ, groundAt });
+    const packed = zone.id === 'local-detail' ? localBuildingSolids(parsed.buildings, groundAt)
+      : extrudeBuildings(parsed.buildings, { originX, originZ, groundAt });
     const geometry = solidGeometry(packed);
     const mesh = new THREE.Mesh(geometry, makeSolidMaterial());
     mesh.name = `structures-${zone.id}-${tierMeta.tier}`;
@@ -626,11 +668,15 @@ export function createStructures(THREE, options) {
       const target = tierGrow(t.tier, d, q, detail);
       t.grow = damp(t.grow, target, target > t.grow ? 0.18 : 0.1, dt);
       if (t.grow < 0.01) t.grow = target > 0 ? t.grow : 0;
-      const visible = t.grow > 0.005;
+      const localActive = !!localBounds && state.era === 'present' && state.camDist < 3200;
+      const isLocal = t.zone === 'local-detail';
+      if (localBounds) t.mesh.material.uniforms.uLocalBounds.value.copy(localBounds);
+      t.mesh.material.uniforms.uLocalClip.value = localActive && !isLocal ? 1 : 0;
+      const visible = isLocal ? localActive : t.grow > 0.005;
       t.mesh.visible = visible;
       if (!visible) continue;
-      t.mesh.material.uniforms.uGrow.value = t.grow;
-      const count = drawIndexCount(t.packed, fraction);
+      t.mesh.material.uniforms.uGrow.value = isLocal ? 1 : t.grow;
+      const count = drawIndexCount(t.packed, isLocal ? 1 : fraction);
       t.mesh.geometry.setDrawRange(0, count);
       const buildings = Math.round(t.packed.buildingCount * fraction);
       drawn += buildings;
@@ -684,6 +730,30 @@ export function createStructures(THREE, options) {
     bridges: bridgeInfo,
     update,
 
+    setRoofImagery(tiles, enabled) {
+      sharedUniforms.uRoofPhotoOn.value = enabled && tiles.length ? 1 : 0;
+      for (let i = 0; i < 4; i++) {
+        const entry = tiles[i], b = entry?.bounds;
+        sharedUniforms[`uRoofPhoto${i}`].value = entry?.texture || emptyRoof;
+        const bounds = sharedUniforms[`uRoofPhotoBounds${i}`].value;
+        if (b) bounds.set(projection.lonToX(b.west),projection.latToZ(b.north),
+          projection.lonToX(b.east),projection.latToZ(b.south));
+        else bounds.set(0,0,0,0);
+      }
+    },
+
+    setLocalDetail(doc) {
+      this.removeTier('local-detail', 'low');
+      localBounds = null;
+      const buildings = neighborhoodBuildings(doc, projection);
+      if (!buildings.length) return;
+      const b = doc.bounds;
+      addTier({ id: 'local-detail', origin: { lon: projection.xToLon(0), lat: projection.zToLat(0) },
+        bounds: b }, { tier: 'low', count: buildings.length }, buildings);
+      localBounds = new THREE.Vector4(projection.lonToX(b.west), projection.latToZ(b.north),
+        projection.lonToX(b.east), projection.latToZ(b.south));
+    },
+
     get buildingTotal() { return buildingTotal; },
     get landmarkModelCount() { return proxies.length; },
 
@@ -709,7 +779,8 @@ export function createStructures(THREE, options) {
     pickBuildingAt(x, z, toleranceM = 18) {
       let best = null;
       let bestDistance = toleranceM;
-      for (const t of tiers) {
+      for (const t of [...tiers].sort((a,b) => (b.zone === 'local-detail') - (a.zone === 'local-detail'))) {
+        if (t.zone === 'local-detail' && !t.mesh.visible) continue;
         if (distanceToBox(x, z, t.box) > toleranceM) continue;
         const lx = x - t.originX;
         const lz = z - t.originZ;
@@ -794,6 +865,7 @@ export function createStructures(THREE, options) {
     },
 
     dispose() {
+      emptyRoof.dispose();
       for (const t of tiers) {
         t.mesh.geometry.dispose();
         t.mesh.material.dispose();
