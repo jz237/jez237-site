@@ -51,19 +51,30 @@ export async function onRequest(context) {
   if (!cell) return fail(400, 'Invalid neighborhood');
   const key = new Request(`${url.origin}${url.pathname}?cell=${cell.key}&v=1`);
   const cached = await caches.default.match(key); if (cached) return cached;
-  try {
-    const upstream = await fetch('https://overpass-api.de/api/interpreter', {
-      method: 'POST', body: new URLSearchParams({ data: streetQuery(cell) }),
-      headers: { 'User-Agent': 'PhiladelphiaRelief/2.0 (https://jez237.com/games/demos/philadelphia-relief/)' },
-      signal: AbortSignal.timeout(25000),
-    });
-    if (!upstream.ok) { await upstream.body?.cancel(); return fail(503, 'Neighborhood source busy'); }
-    const doc = compactStreets(await boundedJson(upstream), cell);
-    const response = new Response(JSON.stringify(doc), { headers: { ...headers, 'Cache-Control': 'public, max-age=604800' } });
-    context.waitUntil(caches.default.put(key, response.clone()));
-    return response;
-  } catch (error) {
-    console.error(JSON.stringify({ message: 'Neighborhood detail unavailable', error: error.message }));
-    return fail(503, 'Neighborhood detail temporarily unavailable');
+  for (const endpoint of ['https://overpass.private.coffee/api/interpreter',
+    'https://overpass-api.de/api/interpreter']) {
+    try {
+      const upstream = await fetch(endpoint, {
+        method: 'POST', body: new URLSearchParams({ data: streetQuery(cell) }),
+        headers: { 'User-Agent': 'PhiladelphiaRelief/2.0 (https://jez237.com/games/demos/philadelphia-relief/)' },
+        signal: AbortSignal.timeout(25000),
+      });
+      if (!upstream.ok) {
+        console.warn(JSON.stringify({ message: 'Neighborhood provider busy',
+          provider: new URL(endpoint).hostname, status: upstream.status }));
+        await upstream.body?.cancel();
+        continue;
+      }
+      const doc = compactStreets(await boundedJson(upstream), cell);
+      const response = new Response(JSON.stringify(doc), {
+        headers: { ...headers, 'Cache-Control': 'public, max-age=604800' },
+      });
+      context.waitUntil(caches.default.put(key, response.clone()));
+      return response;
+    } catch (error) {
+      console.warn(JSON.stringify({ message: 'Neighborhood provider unavailable',
+        provider: new URL(endpoint).hostname, error: error.message }));
+    }
   }
+  return fail(503, 'Neighborhood detail temporarily unavailable');
 }
