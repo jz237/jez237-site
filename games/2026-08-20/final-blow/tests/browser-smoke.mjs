@@ -350,8 +350,8 @@ try {
     simHz: window.__finalBlowEngine?.simulationHz,
   }))()`);
   assert.match(title.title, /Final Blow/);
-  assert.match(title.build, /5\.0/);
-  assert.equal(title.version.text, 'VERSION 5.0');
+  assert.match(title.build, /5\.1/);
+  assert.equal(title.version.text, 'VERSION 5.1');
   assert.notEqual(title.version.display, 'none');
   assert.ok(title.version.left >= 0 && title.version.top >= 0);
   assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -365,7 +365,8 @@ try {
   assert.equal(title.trainingTools, 5);
   assert.equal(title.flowSkipHint, true);
   assert.equal(title.newStageButton, true);
-  assert.equal(title.pauseButtons, 4);
+  // 5.1: the pause menu gained MOVE LIST and the control card's controls entry.
+  assert.equal(title.pauseButtons, 6);
   assert.equal(title.soundCaptions, false);
   assert.match(title.onlineButton, /PRIVATE ROOM/);
   assert.match(title.demoButton, /WATCH DEMO/);
@@ -387,7 +388,7 @@ try {
   assert.equal(title.engine.demo.idleScheduled, true);
   assert.equal(title.onlineSecurityBadges, 4);
   assert.equal(title.aiDifficulty, 'street');
-  assert.equal(title.engineVersion, '5.0-fullswing');
+  assert.equal(title.engineVersion, '5.1-truth');
   assert.deepEqual(title.engine.presentationRules, {
     hitFlashFilter: 'brightness(1.55) saturate(1.12)',
     attackNamePopups: false,
@@ -3117,10 +3118,12 @@ try {
     };
   })()`);
   assert.equal(offlineCache.controlled, true);
-  assert.match(offlineCache.name, /final-blow-shell-5\.0/);
+  assert.match(offlineCache.name, /final-blow-shell-5\.1/);
   // 1.9E added engine/atlas-facing.mjs to the shell: game.js imports it, so
   // offline boot needs it cached.
-  assert.equal(offlineCache.entries, 22);
+  // 5.1 added engine/{audio-manifest, ambient, announcer, crowd-voice, shared-sfx,
+  // swing-resolve}.mjs to the shell: game.js imports them at boot.
+  assert.equal(offlineCache.entries, 28);
   assert.equal(offlineCache.hasAtlasFacing, true);
   assert.equal(offlineCache.hasIndex, false);
   assert.equal(offlineCache.rootRedirected, false);
@@ -3141,8 +3144,8 @@ try {
     version: window.__finalBlowEngine?.version,
   }))()`);
   assert.match(controlledReload.title, /Final Blow/);
-  assert.match(controlledReload.build, /5\.0/);
-  assert.equal(controlledReload.version, '5.0-fullswing');
+  assert.match(controlledReload.build, /5\.1/);
+  assert.equal(controlledReload.version, '5.1-truth');
 
   await client.send('Network.emulateNetworkConditions', {
     offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -3159,8 +3162,8 @@ try {
     badge: document.querySelector('#offlineBadge').textContent,
   }))()`);
   assert.match(offlineBoot.title, /Final Blow/);
-  assert.match(offlineBoot.build, /5\.0/);
-  assert.equal(offlineBoot.version, '5.0-fullswing');
+  assert.match(offlineBoot.build, /5\.1/);
+  assert.equal(offlineBoot.version, '5.1-truth');
   assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
   await client.send('Network.emulateNetworkConditions', {
     offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -3204,7 +3207,7 @@ try {
   assert.equal(landscape.mobileLandscape, true);
   assert.equal(landscape.orientationBlocked, false);
   assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-  assert.equal(landscape.version.text, 'VERSION 5.0');
+  assert.equal(landscape.version.text, 'VERSION 5.1');
   assert.notEqual(landscape.version.display, 'none');
   assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
   assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
@@ -3412,6 +3415,44 @@ try {
   })()`);
   assert.equal(touchGuard.fighters[0].guarding, true);
   assert.equal(touchGuard.fighters[0].guardHeight, "low");
+
+  // 5.x sweep #41: a fast horizontal sweep on the movement pad must start a
+  // dash through the existing double-tap detector — no new input bits. The
+  // pulse plays lift/tap/lift/tap/settle over five sim ticks, so 0.1 s (6
+  // ticks) is enough for the second press to land and startDash to run.
+  await evaluate(client, `window.__finalBlowQa.fight('deathblow', 'jez'); window.__finalBlowQa.step(0.1)`);
+  const flickQueued = await evaluate(client, `window.__finalBlowQa.touchFlick(1)`);
+  assert.equal(flickQueued.flickPulses, 1, "a centre-to-edge sweep must queue exactly one flick pulse");
+  assert.ok(flickQueued.flicks >= 1, "touchDebug().flicks must count the landed flick");
+  assert.ok(flickQueued.tokens.includes("right"), "the thumb lands in the right sector");
+  await evaluate(client, `window.__finalBlowQa.step(0.1)`);
+  const flickDash = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
+  const flickSettled = await evaluate(client, `window.__finalBlowQa.touchFlick(1, false)`);
+  assert.ok(flickDash.fighters[0].dashFrames > 0, `a flick must start a dash, saw dashFrames ${flickDash.fighters[0].dashFrames}`);
+  assert.equal(flickDash.fighters[0].dashDirection, 1, "flick right dashes toward screen right");
+  assert.equal(flickSettled.flickPulses, 0, "the pulse must have settled");
+  assert.ok(!flickSettled.tokens.includes("right"), "lifting the thumb must leave no direction token behind");
+
+  // 5.x sweep #37: the governor remembers the tier it lands on, keyed by
+  // build, and forgets on request so the rest of this run stays at the
+  // static resolution.
+  const governorMemory = await evaluate(client, `(() => {
+    window.__finalBlowQa.governorForget();
+    const before = window.__finalBlowQa.governorMemory();
+    const stepped = window.__finalBlowQa.governorInject(25, 130);
+    const stored = JSON.parse(localStorage.getItem(stepped.key) || 'null');
+    const after = window.__finalBlowQa.governorForget();
+    return { before, stepped, stored, after };
+  })()`);
+  assert.equal(governorMemory.before.remembered, null, "governorForget must leave nothing remembered");
+  assert.match(governorMemory.stepped.key, /^final-blow-governor-tier:/);
+  if (governorMemory.stepped.baseline !== "battery") {
+    assert.match(governorMemory.stepped.lastChange, /^down:/, "130 frames at 25 ms must step the governor down");
+    assert.equal(governorMemory.stored?.profileId, governorMemory.stepped.machineProfile, "the landed tier must be written to localStorage");
+    assert.equal(governorMemory.stepped.remembered, governorMemory.stepped.machineProfile);
+  }
+  assert.equal(governorMemory.after.remembered, null);
+  assert.equal(governorMemory.after.active, false, "governorForget must drop the live machine");
   await evaluate(client, `window.__finalBlowQa.fight('deathblow', 'jez'); window.__finalBlowQa.fighter(0, { meter: 50 }); (() => {
     for (const action of ['hp', 'lp']) {
       const el = document.querySelector('[data-touch="' + action + '"]');

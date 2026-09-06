@@ -346,7 +346,48 @@ export const TOUCH_PAD_RULES = Object.freeze({
   // resting spot over the centre cell.
   deadZoneRatio: 0.17,
   sectorDegrees: 45,
+  // 5.x phone flick-to-dash (sweep #41). A flick is horizontal travel of at
+  // least this fraction of the pad radius inside flickWindowMs (6 frames at
+  // 60 Hz — the same 100 ms a keyboard double-tap comfortably fits in), that
+  // LANDS at least flickLandRatio from the centre in the flick's direction.
+  // The landing test is what keeps the thumb's return swing honest: coming
+  // back from the pad edge to rest overshoots the centre by a cell at most,
+  // never by 0.45R, so a snappy return does not read as a backdash. On the
+  // 844x390 target the pad radius is ~75 px, so a flick is ~45 px of travel.
+  flickDistanceRatio: 0.6,
+  flickLandRatio: 0.45,
+  flickWindowMs: 100,
 });
+
+// Pure flick read over the pointer's recent horizontal samples
+// ([{ t: ms, x: offset-from-centre }] in arrival order, newest last). Returns
+// +1 (flick toward screen right), -1 (toward screen left) or 0. The game layer
+// clears the sample history once a flick lands, so the same sweep can never
+// fire twice; a fresh flick needs fresh travel.
+export function touchPadFlick(samples, radius, rules = TOUCH_PAD_RULES) {
+  if (!Array.isArray(samples) || samples.length < 2 || !(radius > 0)) return 0;
+  const latest = samples[samples.length - 1];
+  if (!latest || !Number.isFinite(latest.x) || !Number.isFinite(latest.t)) return 0;
+  const minTravel = radius * rules.flickDistanceRatio;
+  const minLanding = radius * rules.flickLandRatio;
+  for (let index = samples.length - 2; index >= 0; index -= 1) {
+    const sample = samples[index];
+    if (!sample || !Number.isFinite(sample.x) || !Number.isFinite(sample.t)) continue;
+    if (latest.t - sample.t > rules.flickWindowMs) break;
+    const travel = latest.x - sample.x;
+    if (Math.abs(travel) < minTravel) continue;
+    const direction = travel > 0 ? 1 : -1;
+    if (latest.x * direction >= minLanding) return direction;
+  }
+  return 0;
+}
+
+// Drops samples that have aged out of the flick window so a thumb resting on
+// the pad for a whole round does not accumulate a history.
+export function pruneFlickSamples(samples, now, rules = TOUCH_PAD_RULES) {
+  while (samples.length && now - samples[0].t > rules.flickWindowMs) samples.shift();
+  return samples;
+}
 
 // Octant index 0 is due east (screen +x), winding clockwise in y-down screen
 // space, each sector 45 degrees wide and centred on its cardinal/diagonal.
@@ -367,4 +408,82 @@ export function touchPadTokens(dx, dy, radius, rules = TOUCH_PAD_RULES) {
   const angle = Math.atan2(dy, dx) * (180 / Math.PI);
   const octant = ((Math.round(angle / rules.sectorDegrees) % 8) + 8) % 8;
   return [...TOUCH_SECTOR_TOKENS[octant]];
+}
+
+// ---------------------------------------------------------------------------
+// 5.1 (sweep #29 / #31): one source of truth for "how do I do X in the active
+// control style". Until now the move list, the school step labels, the
+// options-dialog motion lines and the touch super prompt each hard-coded the
+// CLASSIC motions, so a MODERN player was told to roll ↓ → for a special the
+// LP&LK chord already gives them and a LEGEND player was never told HP is the
+// special button. The table mirrors resolveFourButtonInput/applyControlStyle
+// exactly: MODERN's chord reaches the command special (neutral or ↓), the back
+// special (away) and nothing else — the base kick special, launcher and super
+// motion stay classic; LEGEND's HP pulse is expanded by direction (↓ launcher,
+// away back special, else command special), HK is the base special and an
+// airborne HP/HK is the air special. EX chords and the taunt are style-free.
+// ---------------------------------------------------------------------------
+const CLASSIC_COMMANDS = Object.freeze({
+  special: "↓ → + KICK",
+  airSpecial: "↓ → + KICK IN THE AIR",
+  commandSpecial: "↓ → + PUNCH",
+  backSpecial: "↓ ← + PUNCH",
+  launcher: "→ ↓ → + PUNCH",
+  driveHeavy: "← → + KICK",
+  enhanced: "MOTION + LP&HP OR LK&HK",
+  enhancedCommandSpecial: "↓ → + LP&HP",
+  enhancedBackSpecial: "↓ ← + LP&HP",
+  enhancedLauncher: "→ ↓ → + LP&HP",
+  super: "↓ → ↓ → + PUNCH OR HP&HK",
+  throw: "CLOSE + TOWARD/AWAY + LP OR LK",
+  throwObject: "↓ ← + KICK",
+  enhancedThrowObject: "↓ ← + LK&HK",
+  guardReversal: "IN BLOCKSTUN · LP&HP OR TOWARD + ↓ → + PUNCH",
+  taunt: "↓ ↓ + LK&HK",
+  dash: "DOUBLE-TAP ← OR →",
+  stageWeapon: "↓ + HP OVER THE OBJECT",
+  perfectGuard: "TAP AWAY AS THE HIT LANDS",
+  airTech: "ANY BUTTON WHILE JUGGLED",
+  quickRise: "↑ WHILE DOWN",
+  delayWake: "HOLD ↓ WHILE DOWN",
+});
+
+export const CONTROL_STYLE_COMMANDS = Object.freeze({
+  classic: CLASSIC_COMMANDS,
+  modern: Object.freeze({
+    ...CLASSIC_COMMANDS,
+    commandSpecial: "LP&LK",
+    backSpecial: "← + LP&LK",
+    super: "HP&HK AT FULL GRIT",
+    guardReversal: "IN BLOCKSTUN · LP&HP OR TOWARD + LP&LK",
+  }),
+  legend: Object.freeze({
+    ...CLASSIC_COMMANDS,
+    special: "HK",
+    airSpecial: "HP OR HK IN THE AIR",
+    commandSpecial: "HP",
+    backSpecial: "← + HP",
+    launcher: "↓ + HP",
+    super: "HP AT FULL GRIT",
+    guardReversal: "IN BLOCKSTUN · LP&HP OR TOWARD + HP",
+  }),
+});
+
+/**
+ * The command copy for `action` under `style`. Unknown actions fall back to
+ * `fallback` (a kit's authored command string, say) and then to the action
+ * name upper-cased, so a caller can never render an empty command cell.
+ */
+export function commandLabel(action, style = "classic", fallback = "") {
+  const table = CONTROL_STYLE_COMMANDS[normalizeControlStyle(style)] || CLASSIC_COMMANDS;
+  return table[action] || fallback || String(action || "").toUpperCase();
+}
+
+/**
+ * Replaces `{action}` tokens in a copy template with the style's command —
+ * school step labels and the dialog motion lines are authored once this way
+ * and rendered for whichever style is live.
+ */
+export function styleCopy(template, style = "classic") {
+  return String(template || "").replace(/\{([a-zA-Z]+)\}/g, (_, action) => commandLabel(action, style));
 }

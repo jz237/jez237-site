@@ -3129,3 +3129,423 @@ onto the idle (0.977/0.977/0.997/0.980 — the table's justification is now the
 entirely under), wake-up aimed at 299. Residuals: the passing keys' leg
 exchange is unverified frame by frame; the motion-bank skin sits a little dark
 of the design; a stray fragment was purged from ext3:14 after slicing.
+
+### Engineering pass after 5.0 — the resolver, the pulse and the pipeline under test
+
+No drawing changed. Three things 5.0 shipped with no test reaching them are
+now engine modules with tests, and game.js calls them:
+
+`engine/swing-resolve.mjs` — `swingContext(fighter)` (the seven fields the
+substitution table reads plus `crouchActive`, the crouching normal's active
+window) and `swingResolve(pose, ctx, drawable)` (the table, the crouch
+extension / sweep override for that window, the bank-routed gate with its
+`alt` fallback). `fighterAnimationPose` applies them with
+`motionBankCellDrawable` as the gate; the old inline `swingResolve(fighter,
+pose)` is gone. `tests/swing-resolve.test.mjs` pins the context derivation
+(the attack's cancel profile answers `crouching` over the stance; `falling`
+is the descent with a knockdown pending), the override switching on and off
+with `attackFrame`, the alt taken only when the descent cannot draw, and a
+sweep of every bank x cell x 256 contexts x 4 gates proving the resolver
+never produces the inverted ext4 air-hit cell and never an ungated one. The
+five frame chains above are pinned at node level: the gate is built from the
+shipped manifests, the track pieces are the engine's, and the kit-less
+strike branch of `fighterPoseDescriptor` is mirrored in the test (with its
+source lines pinned, until #52 makes it an import). All five chains — jab,
+heavy kick, crouch jab, sweep, air kick — reproduce the real-play attribution
+exactly, and with the swing sheets gated off the jab and the air kick are
+the 4.9 read while the heavy kick keeps its compress-band substitute (the
+UNIFIED crouch transition) and the crouch jab its crouched recover (ext2)
+in place of the standing follow — both land on non-swing sheets, which is
+the case the bank-routed gate exists for.
+
+The QA surface gained `poseTrace(count, side)` / `poseTraceReset()`: a
+64-entry per-side ring of pose TRANSITIONS (tick, bank, frame), written at
+the resolution choke point and deduped, so a browser probe can assert the
+order a strike's drawings arrived in instead of reading it off by eye. Only
+the live fighter on each side is traced.
+
+`engine/ambient.mjs` — the ambient-pulse state machine (`stirPulseKind`,
+`pulseAmbientLatch`, `ambientPhaseChange`, `ambientPulseLevel`; the 0.7 /
+1.0 thresholds, the 1.4 KO latch, the 48-tick linear decay, reduced motion
+zeroing the level but not the age). `__finalBlowQa.ambient()` reports the
+latch and its level. See STAGES.md.
+
+`tools/inbetweens` is folded into `tools/swing` (one `color_match` /
+`measure_de` / `fal_edit` / `gen_all`; the 4.9 grammar is
+`grammar-ext2.txt`, `build_ext2.py` was `build_sheet.py --bank ext2`); every
+script derives the checkout from its own location (`repo_root.py`,
+`FINAL_BLOW_ROOT` overrides) instead of one hard-coded path, and
+`tools/README.md` documents the numpy venv and the exact commands.
+## v5.1 — THE KO MOMENT: THE CROWD STAYS UP FOR THE HOLD, AND IT HAS A VOICE
+
+Sweep items #14 and #24. Measured with the real `createCrowd` over 20 seeds
+before this: a heavy-hit KO (stir 0.34 against painted thresholds of 0.3-0.8,
+decaying 0.016/tick) put 6-10% of the crowd on the cheer cell for 2.5 ticks,
+then the 4.9 s roundover hold played to a crowd already back on its routes;
+a non-super KO never popped a flashbulb (reaction > 0.7) and never made a
+sound but the synth swell.
+
+THE HOLD (render-side, `updateCrowdKoHoldLatch` in game.js, curve in
+`engine/crowd-voice.mjs`). Latched on the roundover phase edge the way
+`roundWinBeatStartTick` is — a fatality round latches on the kill itself,
+observed through `finisher.slowMotionHits`, so the crowd stays hushed under
+the pre-kill cinematic. While latched, `crowdDrawReaction()` (max of the sim
+value and the hold curve) is what the crowd draw, `crowdBillboards()` for
+CINEMA 3D, the scuffles, the tailgate cups and the crowd bed read. The curve
+opens at 0.3 (the lowest painted threshold: nobody up on tick 0) and climbs to
+0.95 over 20 ticks, so a person with threshold t throws their arms up at tick
+(t - 0.3) / 0.5 * 20 — the crowd goes up person by person over a third of a
+second, everyone by tick 20, and stays up for the full 294 ticks. Past their
+threshold each person pumps between the cheer and weight-shift cells for half
+their own shift window (`crowdKoHoldColumn`) and bounces 3 px on the spot, so
+measured over 20 seeds on every painted stage (32-44 people) 88% of the crowd
+is arms-up on an average tick (66-100% on any one) against 6-10% for 2.5 ticks
+before; the scuffles drop their quarrel for the
+celebrate choreography; the phones come out at three per 8-tick window (7.5/s
+against the fight's 3/s cap), lit 5 of 8. Reduced motion keeps the old cells
+and the single dim steady flash. The sim's `state.crowdReaction` is untouched
+(the smoke's "settles to 0" pin still holds); `finishRound` adds a
+`stirCrowd(1.4, "ko")` — the FINISH prompt's amount, sim path, deterministic
+on both rollback peers — so the KO is the round's biggest stir.
+
+THE VOICE (`assets/audio/crowd/`, twelve takes). Generated with the ElevenLabs
+sound-effects tool — gasp x3 (1.5-1.8 s), ooh x3 (2.0-2.2 s), roar x3
+(3.5 s), sustained cheer x3 (4.0 s) — and normalised with ffmpeg: static gain
+to -14 LUFS (the shipped hits sit at -11, the announcer at -13.4), limiter at
+-1 dBTP, 0.32 s tail fade, mono 44.1 kHz 96 kbps, 18-49 KB each; every
+measurement is in the directory's MANIFEST.json and pinned by
+`tests/crowd-ko-moment.test.mjs`. New generated media on the
+`elementAudioAssets` pattern — the 45 reviewed takes and the four music tracks
+are untouched, and the takes do NOT join `sfxPools` (its round-robin cursor
+can land the same take twice across pool borders). `playCrowdVoice(cue,
+amount)` draws from a per-cue shuffle bag with a no-repeat border (the
+announcer contract, rng-injected so node proves it), at the cue volume x
+`crowdVoiceLevel(amount)` (0.4-1: a special's gasp 0.61, a super's ooh 0.79,
+the KO roar 0.93) x the SFX slider, behind a per-cue minimum gap and a shared
+busy window so a gasp never lands on a roar still sounding (roar and cheer may
+layer). Routing: every swell the sim latches now also picks a take by amount —
+>= 1.2 roar (FINISH, KO, fatal blow), 0.7-1.2 ooh (wall bounce, super),
+0.5-0.7 gasp (special, throw, weapon) — over the synth swell, which stays
+underneath and gains a KO-only recipe (0.25 s attack, ~2 s, a second wave at
+0.9 s) so the round-winning hit never reuses the mid-round whoop; the
+sustained cheer follows the roar 36 ticks into the hold, once; a taunt (0.25,
+under the swell latch) answers with an ooh at taunt level. Captions read
+CROWD GASPS / CROWD: OOOH / CROWD ROARS / CROWD CHEERS. Debug:
+`snapshot().violence.crowdVoicePlays`, `crowdVoiceRecent` (the last twelve as
+cue-take, for the never-repeat assertion), `crowdVoiceLast`, `crowdKoHold`,
+`crowdKoHoldAge`, `crowdDrawReaction`. sw.js is unchanged on purpose: the
+shell test pins that runtime media stays out of the install cache, and the
+bank warms with the painted sheets in `ensureCrowdMedia()`.
+
+Not done here: a boo/laugh bank for the taunt (it borrows the ooh), the
+per-stage KO ambient beats for the four stages without one (item #15), and
+the 3D stages' own reaction to the hold (the billboards carry it; the stage
+furniture in `renderer/three` does not — item #43).
+## v5.1 — EXT4 ROUTING: THE REACTION SHEET REACHES THE SCREEN, AND THE GUARD FLINCH STOPS GROWING
+
+Routing only, no art. Two findings from the post-5.0 sweep, both against the
+ext4 reaction sheet 5.0 shipped.
+
+THE GUARD FLINCH RE-OPENED M4. `blockstunKeys` band 0 resolves motion2:8 and
+the substitution draws ext4:0, but `guardFlinchAdjust` only ever reconciled
+motion2:8 (and floors at 1, so it could not have shrunk a cell). Measured on
+screen (UNIFIED_EXT4_CELL_HEIGHT x its ADJUST against the unified guard, the
+commissioner's 1.033 on both sides): benny +13.1%, cyraxx +11.4%, alan +9.1%,
+ali +3.8%, jez +3.7%, commissioner +1.5%, deathblow -5.7%, donald -4.3% — a
+blocked hit made three of the most-played fighters GROW for the impact ticks,
+in both renderers. The ext4 flinch is an upright figure against the settled
+knees-bent guard: the walk-key gap, with the walk-key cure.
+
+`swingStandInAdjust` (engine/fighter-kits.mjs, third factor of
+`cellDrawAdjust`, so CINEMA 3D reads the same number) lands every routed
+stand-in on the height of the unified rung it replaces, per body PLAN:
+match in both directions when the plans agree — ext4:0 guard flinch onto
+unified:7, ext4:1 head snap onto unified:12 (measured +9.4 jez, +13.7 benny,
++15.9 cyraxx, +15.6 commissioner, +9.0 alan), ext3:12 crouch guard onto
+unified:5 (-8.1 alan .. +12.8 commissioner); CEILING only (never taller
+than the idle, never enlarged) for the body blow, big hit and reel, whose
+depth differs per drawing and which the 3.0 reasoning leaves alone rather
+than flatten. 3% deadband, clamp 0.80..1.22. Resulting factors: guard flinch
+benny 0.884, cyraxx 0.945, alan 0.917, jez 0.964, ali 0.964, deathblow 1.061,
+donald 1.045; head snap jez 0.914, alan 0.918, benny 0.891, cyraxx 0.917,
+commissioner 0.894, ali 0.948, post 1.043, devil 1.061; crouch guard
+deathblow 0.952, jez 1.063, alan 1.088, post 0.932, benny 0.924, cyraxx
+0.958, commissioner 0.916, devil 0.888; ceilings on cyraxx's big hit (+8.7% of
+idle) and reel (+7.7%), the commissioner's big hit (+8.2%), benny's and
+alan's big hit. Contract test: every stand-in within 3% of its rung or at or
+under the idle, on all ten sheets; the get-up rung the wake-up seam is
+measured on, the crumple and the thrown cell take exactly 1.
+
+HALF THE SHEET NEVER DREW. 5.0 keyed the head snap on motion2:9 and the big
+hit on motion:8, but every chain carrying those links leads with a UNIFIED
+rung (`reactionTrackKeys` stacks `urung(ladder[band])` in front of the 2.9
+chain; the airborne victim and the clinch read `uni(...)` first) and all ten
+fighters are whole on the unified bank, so the resolved pose was always
+unified:12/13/14 and the substitution never fired. Traced with every sheet
+whole: light `unified:12 -> unified:14 -> ext:7 -> unified:7 -> idle`, heavy
+`unified:13 -> ext:7 -> unified:14 -> unified:7 -> idle`. `swingSubstitute`
+keys on the resolved UNIFIED reaction cells now (same generation — ext4 is
+generated from that sheet — so RULE 2's connected-region objection does not
+apply; idle, walk, guard and crouch are never substituted):
+
+    unified:12 light hit   -> ext4:2 body blow when the last contact was
+                              LOW or the victim is crouching (MID is the
+                              level nearly every normal carries — a jab is
+                              a face hit — so it snaps the head), else
+                              ext4:1 head snap
+    unified:13 big hit     -> ext4:6 launched while carried, else ext4:3
+    unified:14 stagger     -> ext4:4 (a backward reel)
+    unified:15 knockdown   -> ext4:15 KO, only once the round is decided
+                              against the fighter (finish/roundover/result
+                              and health <= 0); a plain knockdown keeps
+                              unified:15 so the wake-up chain is untouched
+    motion2:10 dizzy       -> ext4:4 reel for the first 12 ticks of a dizzy
+                              or guard crush, then ext4:5 sway
+    motion2:8  block hit   -> ext3:12 crouch guard when crouching
+
+The level read is a new presentation field `fighter.lastHitLevel` (melee,
+projectile and paint-trap contacts set it; snapshotted beside
+`lastHitResult`, out of the checksum) because `lastHitResult` drops the level
+on a counter hit.
+
+CROUCH BLOCKSTUN HAD NO FLINCH. The standing track is gated on `!crouch`
+(motion2:8 is a standing cover) and the crouch stance held unified:5 through
+the window — worse, the contact-flash read below it drew the STANDING light
+hit for the flash ticks, so a crouched block popped the fighter upright.
+`crouchBlockstunKeys` (same band grid as the standing track: the flinch owns
+the impact to BLOCK_EXIT_AT, empty recovery bands hand to the crouch read)
+draws ext3:12 over unified:5, and the R6 flinch-exit bridge rides the crouch
+too. Byte-identical for a fighter without the cell.
+
+Traced chains (jez, every sheet whole, hold ticks): light
+`ext4:1 x7 -> ext4:4 x7 -> ext:7 x7 -> unified:7 x8 -> idle`; light LOW
+`ext4:2 x7 -> ext4:4 x7 -> ext:7 x7 -> unified:7 x8 -> idle`; heavy
+`ext4:3 x7 -> ext:7 x7 -> ext4:4 x7 -> unified:7 x8 -> idle`; heavy airborne
+opener `ext4:6`; standing block `ext4:0 x8 -> unified:7 x9`; crouched block
+`ext3:12 x8 -> unified:5 x9`; dizzy `ext4:4 x12 -> ext4:5 x116`; KO
+`ext4:9 (crumple) -> ext4:15`; wake-up unchanged `ext4:9 x3 -> ext4:12 x7 ->
+ext4:13 x6`. No track or hold budget changed; the drawings did.
+
+STILL UNROUTED, BY DECISION: ext4:7 air hit (inverted, as 5.0 recorded) and
+ext4:11 FLOOR BOUNCE — inspected at 1:1 on all ten sheets, it is a body on
+its shoulders with the legs in the air (the read 4.6 took off the floor and
+the owner's rule), and there is no ground-bounce sim state for it to mean
+anything. Both stay drawn, gated and pinned unreachable. The KO cell lies
+flat with the head on the same side as unified:15 on every sheet, so
+`downTiltFor` measures it at 0 and the down-tilt rule holds.
+
+## v5.1 — CINEMA 3D DRAWS THE SAME FIGHTER: POST'S MIRROR, THE PRONE SETTLE, THE TREMBLE AND THE HUNCH
+
+Three animation reads the 2D path owned never crossed the bridge into the
+3D fighter layer (renderer/three/fighters.mjs). They do now, through
+`renderer/three/sprite-pose.mjs` — a dependency-free module Node pins
+against drawFighter in `tests/cinema-fighters.test.mjs`, which registers a
+stub `three` and DRIVES poseRig with a mock host.
+
+THE MIRROR. drawFighter draws with `facing * atlasFrameFacing(id, bank,
+frame)` (1.9E: Post's base bank is left-authored on 13/16 cells, his
+specials on 12/16). poseRig used the facing alone, so in 3D Post read
+backward on every one of those cells and looked away from his opponent
+through every special — the exact bug Jez reported on the 2D path, still
+live in the renderer he showcases. `spriteMirror()` is now the sign of the
+quad's x scale, of the shader's screen-space edge orientation
+(`uFbFacing`, which the rims and fills key on) and of everything drawFighter
+applies AFTER `ctx.scale(renderMirror, 1)`: the lunge, the attack tilt, the
+new hunch. Everything it applies before (down tilt, air-tech flip, the
+tremble) keeps the sim facing. Pinned on all 64 Post cell x facing
+combinations: `sign(mesh.scale.x) === facing * atlasFrameFacing`.
+
+THE PRONE SETTLE. The 2D down pose is `rotate(-facing*tilt);
+translate(-facing*45*share, 17*share)` — and that translate is in the
+ROTATED frame. Resolved to world axes at full tilt it is +6.7 px toward
+the facing and 47.6 px DOWN THE SCREEN, which on the 2D perspective floor
+reads as "lying nearer the camera". The 3D layer had been applying the raw
+x term as a 45 px world slide BACKWARD and ignoring the rest, and because
+the quad pivots at the feet, a tilted body's back half sat under the
+boards while an authored-flat KO cell floated by its bottom padding (the
+"feet in the air" read Flat Out exists to kill). `proneTransform()` now
+resolves the nudge (only the world-x part is applied — a vertical
+billboard cannot lie "nearer the camera", and 47 px of -y would bury it),
+and `proneSettleLift()` rotates the cell's measured silhouette box (foot
+metrics now record `extent` per cell) and rests its lowest corner 2 px
+under the ground plane: a tilted cell LIFTS by about half the body width,
+a flat cell DROPS its padding. Grounded only; a body still in the air keeps
+its sim height. The 2D drawing did not change.
+
+THE TREMBLE AND THE HUNCH. MOTION FIX 4's 1-2 px hitstun shiver (hashed
+from `simulationTick*2 + side*17` through presentationHash01, the copy in
+sprite-pose pinned verbatim against game.js) and the 0.085 rad exhaustion
+lean under 25% health now run in 3D with the 2D gates (reduced motion off,
+cinematic frames off, super storms on). The tremble moves the body and the
+mirror but not the contact shadows, as in 2D.
+## v5.1 — STAGE KO BEATS: THE OTHER FOUR STAGES ANSWER THE KO
+
+Stage art, not fighter art, so the detail lives in STAGES.md ("5.1 — stage
+KO beats"). The short version: the 5.0 AMBIENT REACTIONS paragraph above
+claimed "sign chases, gull scatter and pool-deck flash" for the stages
+below the Vet; only the Vet actually reached the owner's visible bar (the
+pool-deck flash did not exist). The buffet, the cruise deck, Somerset and
+Wildwood now draw big hits and the KO from one shared surge read (the 5.0
+pulse plus the 5.1 crowd KO hold, `engine/ambient.mjs`), each with its own
+furniture — wok fireball, pass-through flood and steam eruption; pool and
+deck flash, horn, funnel jet, cannonball and gulls; station-lamp surge, sign
+flare, the KO train and a street flash; rim chase, sign flood, held chase
+bulbs and pier fireworks — measured on the canvas at the KO tick at +32 to
++130 mean brightness on the landmark rectangles (numbers in STAGES.md),
+decayed by KO+170, sky flat. Reduced motion zeroes all of it; the horn
+still sounds.
+## v5.1 — THE FIRST FIGHT ON A PHONE: SHEETS BEFORE FIGHT!, AND HALF THE BYTES WHERE THE GATE ALLOWS
+
+Three findings from the 5.1 sweep (#35, #36, #38), one story: the first
+fight of a session on a phone raced its own art. `preloadAuthoredBanks` had
+one call site, inside `makeFighter`, so 8–14 MB of sheets started
+downloading against a 2.25 s intro; the motion banks were requested FIRST
+(synchronously) while the unified family waited a manifest round trip, and
+the browser then scheduled the stage plate and the crowd ahead of it; nothing
+held the intro. Over cellular the fight opened on base cells and popped bank
+by bank for 5–30 s — the cross-generation strobe the one-generation law took
+out of the art, delivered by the network. Jez plays on a phone.
+
+### Sheets at select, the unified family first, and a capped hold
+
+- **The select screens warm the matchup.** `updateRosterUI` preloads the
+  highlighted seats after a 400 ms dwell (a decoded family is 30–35 MB of
+  RGBA per fighter, so a browse across the roster must not decode ten of
+  them); a lock and the stage screen warm at once, the stage screen warms
+  voice too (`warmFighterAudio` by id, off the audio manifest). Block War
+  warms every picked teammate; the arcade FINAL BOUT substitutes the boss.
+  The select and stage screens are 5–15 s of cover the first fight used to
+  waste.
+- **Request order is the point.** Every authored sheet is now built by
+  `authoredSheetImage(bank, url)`, which sets `img.fetchPriority` BEFORE
+  `src` — `high` on the main, ext and ext2 sheets (the idle/walk, the six-key
+  walk, the first jab), `low` on motion3 and walk. The whole preload runs
+  behind the unified manifest (fetched at boot, so this is a microtask by the
+  time anyone picks), the family first, the two motion banks next, the bonus
+  banks last and only when their manifest says the fighter has a sheet
+  (motion3 was requested unconditionally before — a 0/8 fighter's sheet
+  went out for nothing). Order and priorities live in
+  `engine/art-readiness.mjs` (`PRELOAD_PLAN`), pinned by
+  `tests/art-readiness.test.mjs`.
+- **The intro holds, capped.** `startMatch` arms `armIntroArtHold` for the
+  two fighters; while any sheet of either unified family is still decoding
+  (`fighterArtReadiness` — the same predicate the drawable gates use, so a
+  decoded-but-unpadded ext is still pending, exactly the state that would
+  draw the four-key walk), `loop()` hands the fixed-step clock ZERO seconds
+  under a LOADING FIGHTERS curtain, for at most `INTRO_ART_HOLD_MS` = 1500.
+  Then the fallback chain takes over as before. The hold never touches the
+  sim — no tick runs, the accumulator does not build — so the tick stream a
+  replay records is identical with or without it; it never runs online
+  (rollback owns both clocks), never in the attract demo, never for a
+  replay. The FIGHT! call is a wall-clock timer armed at the top of the
+  intro, so a release re-arms it shifted by the held time
+  (`shiftedAnnouncementDelay`); a timer that fires mid-hold defers to the
+  release. A failed sheet counts as settled (a 404 must not hold every intro
+  to the cap). Readiness and the hold's counters are on
+  `snapshot().artReadiness` and `qa.artReadiness(ids)`; `qa.artHold(false)`
+  opts a timing-sensitive probe out.
+
+Measured in the browser against a server that delays every unified sheet
+2.5 s: alan vs post from a cold select goes `LOADING FIGHTERS 0 / 9 SHEETS`,
+the hold releases `ready` the frame the last sheet pads, FIGHT! follows
+1.15 s later; the same pair again is `skipped` (reason `ready`) with no
+curtain. `bankPreloads` still counts one per fighter, at the first
+highlight now rather than at FIGHT.
+
+### The sheets: lossy WebP with exact alpha, gated by the costume measure
+
+36 of the 46 sheets in `assets/unified` shipped lossless (VP8L) — 32.0 of the
+directory's 34.2 MB — because every builder here saves `lossless=True`.
+`tools/swing/encode_sheets.py` re-encodes each from its lossless master
+(the `swing-v50/lossless-51` archive; a shipped VP8L file with no archive
+master is its own master; a sheet already lossy is left alone) as lossy WebP
+via PIL — quality 90 then 92, method 6, `alpha_quality` 100, `exact=True` —
+and keeps the encode only if the alpha plane is byte-identical (the cell
+metrics, foot rows and 3D UVs are read off alpha) AND `measure_de.py`'s
+weighted per-cluster dE against the master is under **0.7**. A sheet that
+fails keeps its lossless bytes. Settings and per-sheet numbers are recorded
+in `MANIFEST.json` `format.encoding`.
+
+The gate is tighter than the size win the sweep predicted: measure_de
+re-assigns the candidate's pixels to the master's clusters by their own
+colour, and the encoder's 4:2:0 chroma on the outline pixels moves enough of
+them between neighbouring clusters that quality barely matters (q90, q92 and
+a q98 probe land within 0.05 of each other). **14 sheets passed, 22 stayed
+lossless.** Directory: 34.42 MB → 26.35 MB (`du -sb`, manifest included);
+sheets alone 34.07 MB → 25.99 MB (76 %).
+
+| sheet | lossless | shipped | q | weighted dE | mean per-pixel dE |
+| --- | --- | --- | --- | --- | --- |
+| `alan-ext2.webp` | 1051 KB | 320 KB | q90 | 0.54 | 2.9 |
+| `alan-ext3.webp` | 810 KB | 257 KB | q90 | 0.47 | 3.3 |
+| `alan-ext4.webp` | 927 KB | 295 KB | q90 | 0.56 | 3.1 |
+| `commissioner-ext2.webp` | 814 KB | 245 KB | q90 | 0.56 | 2.5 |
+| `commissioner-ext3.webp` | 756 KB | 238 KB | q90 | 0.57 | 2.6 |
+| `commissioner-ext4.webp` | 839 KB | 264 KB | q90 | 0.53 | 2.6 |
+| `cyraxx-ext3.webp` | 757 KB | 284 KB | q92 | 0.70 | 3.4 |
+| `deathblow.webp` | 701 KB | 242 KB | q90 | 0.44 | 2.5 |
+| `devil.webp` | 893 KB | 354 KB | q90 | 0.60 | 2.8 |
+| `donald.webp` | 842 KB | 237 KB | q90 | 0.34 | 2.5 |
+| `jez-ext2.webp` | 956 KB | 314 KB | q90 | 0.54 | 3.7 |
+| `jez-ext3.webp` | 773 KB | 261 KB | q90 | 0.62 | 3.9 |
+| `jez-ext4.webp` | 852 KB | 288 KB | q90 | 0.69 | 3.9 |
+| `post.webp` | 794 KB | 280 KB | q90 | 0.60 | 3.1 |
+
+Kept lossless (weighted dE at q90 / q92): ali-ext 1.50/1.53, ali-ext2
+1.94/1.92, ali-ext3 1.90/1.93, ali-ext4 1.90/1.88, ali 1.75/1.77 (every Ali
+sheet — his saturated reds sit on cluster boundaries), benny-ext2 0.84/0.86,
+benny-ext3 0.82/0.84, benny-ext4 0.87/0.87, cyraxx-ext2 0.84/0.85,
+cyraxx-ext4 0.85/0.86, deathblow-ext2 0.92/0.90, deathblow-ext3 0.96/0.97,
+deathblow-ext4 0.95/0.95, devil-ext2 1.25/1.26, devil-ext3 1.26/1.23,
+devil-ext4 1.08/1.07, donald-ext2 0.71/0.71 (a hair over), donald-ext3
+1.22/1.22, donald-ext4 0.96/0.97, post-ext2 1.25/1.23, post-ext3 1.30/1.30,
+post-ext4 1.38/1.36. Per-fighter unified family on the wire, before → after:
+deathblow 3.25 → 2.78 MB, jez 3.08 → 1.32, alan 3.32 → 1.36, post 3.74 →
+3.21, benny 2.89 → 2.89, donald 3.46 → 2.84, cyraxx 2.97 → 2.49, ali 4.51 →
+4.51, devil 3.95 → 3.40, commissioner 2.89 → 1.19.
+
+Two things tried and rejected: extending the RGB of the transparent pixels
+outward before encoding (the outline chroma smear is not where the drift
+comes from — it moved the number by 0.03) and quality 95/98 (same numbers,
+40 % more bytes). Getting the other 22 under the gate wants `cwebp
+-sharp_yuv` or VP8L near-lossless, neither of which PIL exposes and neither
+of which is installed here; the tool re-runs in one command when either is.
+
+### The service worker keeps what it fetched
+
+`sw.js` now has a second cache, `final-blow-media-<build>` (derived from the
+shell name, so one version bump keys both): GET requests under `assets/`,
+`renderer/hd/` and `renderer/vendor/` are cache-first, a miss is fetched and
+stored (whole same-origin 200s only — a media element's byte-range request
+bypasses it), and a 120 MB byte cap evicts oldest-first so the cache can
+never recreate the 19 MB / 162-request install that was rejected in 3.3.
+Activate purges every older build's caches, media included, because a sheet
+is addressed by an un-versioned URL and a 5.0 sheet must never draw under a
+5.1 manifest. The shell path is untouched (`tests/service-worker-guard`),
+and `tests/service-worker-media.test.mjs` runs the worker in a vm against a
+fake CacheStorage to pin the policy.
+
+## v5.1 — TRUTH: THE WAVE IN ONE PLACE
+
+Fourteen items from the post-5.0 sweep, built in parallel on isolated
+worktrees and integrated onto the despilled 5.0 tree; each has its own
+section above or in the sibling docs:
+announcer and clock truth (a time-over is a DECISION, a dizzy is not a KO, the
+last ten seconds tick — COMBAT.md); the build-time audio manifest (zero voice
+probes, real announcer take lengths); the block economy (one blocked
+voltage/flow cancel per string, reversal-invulnerable moves negative on block,
+half Grit on block, per-projectile Grit cap, Perfect Guard re-arms — COMBAT.md);
+the ext4 routing pass above; the tempo tells (whiff fringe, ghosts, WHIFF text,
+re-arm wash and click, the lab's taxed readout — COMBAT.md, VISUALS.md); shared
+sample variation (pitch/level jitter, a synthesised dash scuff and weapon
+clatter); the KO moment above; the four other stages' KO beats above; flick-to-
+dash and the governor's memory (CONTROLS.md); the first fight on a phone above;
+the pause move list, first-run card, Fight School 8-12, CPU Team Battle and
+the Devil/Commissioner trials (CONTROLS.md, DEMO.md); CINEMA 3D gameplay reads
+(world-objects, the explicit host contract — VISUALS.md) and the 3D fighter
+layer above; the resolver, ambient pulse and tools pipeline under test. Every
+generated sheet was also rebuilt with the despill (see the manifest's
+`format.despill`). Seams closed at integration: the body blow opens on a LOW
+contact or a crouched victim (there is no HIGH level — a MID jab snaps the
+head), a blocked contact keeps its stance through the hit flash, and the
+wake-up rung is measured on the ext4 get-up it draws from.
