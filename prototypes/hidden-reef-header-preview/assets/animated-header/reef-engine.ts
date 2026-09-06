@@ -44,7 +44,14 @@ type Fish = {
   speed: number;
 };
 export class ReefEngine {
-  paused = false;
+  private stopped = false;
+  get paused() { return this.stopped; }
+  set paused(value: boolean) {
+    if (this.stopped === value) return;
+    this.stopped = value;
+    this.last = 0;
+    this.invalidate();
+  }
   private frame = 0;
   private clock = 0;
   private last = 0;
@@ -60,11 +67,17 @@ export class ReefEngine {
   private buffer: WebGLBuffer | null = null;
   private backdrop = new Image();
   private sprites = new Image();
+  private spriteSheet = document.createElement('canvas');
   private finFrames: HTMLCanvasElement[] = [];
   private fishLight: HTMLCanvasElement | null = null;
   private lastFinFrame = -1;
+  private lastWaterFrame = -1;
   private loaded = false;
   private disposed = false;
+  private economy = false;
+  private renderCost = 0;
+  private frameCost = 0;
+  private samples = 0;
   private reactions = new WeakMap<Fish, number>();
   private bubbleHold: { id: number; x: number; y: number; next: number } | null = null;
   private clickBubbles: Array<{ x: number; y: number; r: number; speed: number; phase: number; depth: number; born: number }> = [];
@@ -126,19 +139,24 @@ export class ReefEngine {
       onReady();
     };
     this.backdrop.addEventListener('load', () => {
-      this.dirty = true;
+      this.invalidate();
     });
     this.sprites.onload = () => {
+      if (this.disposed) return;
+      // Fish display at roughly 180 CSS pixels, not the source's 627px cells.
+      // Downsample once rather than filtering the full artwork in every mesh draw.
+      this.spriteSheet.width = this.spriteSheet.height = 512;
+      const sheet = this.spriteSheet.getContext('2d')!;
+      sheet.imageSmoothingQuality = 'high';
+      sheet.drawImage(this.sprites, 0, 0, 512, 512);
       this.fishLight = document.createElement('canvas');
-      this.fishLight.width = this.sprites.width / 2;
-      this.fishLight.height = this.sprites.height / 2;
+      this.fishLight.width = this.fishLight.height = 256;
       this.finFrames = Array.from({ length: 4 }, () => {
         const frame = document.createElement('canvas');
-        frame.width = this.sprites.width / 2;
-        frame.height = this.sprites.height / 2;
+        frame.width = frame.height = 256;
         return frame;
       });
-      this.dirty = true;
+      this.invalidate();
     };
     this.backdrop.src = './reef.png';
     this.sprites.src = './fish.png';
@@ -151,9 +169,22 @@ export class ReefEngine {
     window.addEventListener('pointerup', this.endBubbles);
     window.addEventListener('pointercancel', this.endBubbles);
     window.addEventListener('blur', this.stopBubbles);
+    document.addEventListener('visibilitychange', this.visibilityChanged);
+    root.dataset.quality = 'balanced';
     this.measure();
-    this.frame = requestAnimationFrame(this.animate);
   }
+  private invalidate = () => {
+    this.dirty = true;
+    if (!this.disposed && !document.hidden && !this.frame)
+      this.frame = requestAnimationFrame(this.animate);
+  };
+  private visibilityChanged = () => {
+    this.last = 0;
+    if (document.hidden) {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+    } else this.invalidate();
+  };
   private setupGL() {
     const gl = this.gl!;
     const compile = (type: number, source: string) => {
@@ -198,14 +229,15 @@ export class ReefEngine {
     this.height = r.height;
     const crop = this.root.querySelector<HTMLElement>('.reef-crop');
     if (crop) crop.style.height = `${r.height * 0.72}px`;
-    const d = Math.min(window.devicePixelRatio || 1, 1.75);
+    const d = Math.min(window.devicePixelRatio || 1, this.economy ? 1 : 1.25);
     for (const c of [this.water, this.life]) {
-      c.width = Math.round(r.width * d);
-      c.height = Math.round(r.height * d);
+      const scale = c === this.water && this.economy ? 0.8 : d;
+      c.width = Math.max(1, Math.round(r.width * scale));
+      c.height = Math.max(1, Math.round(r.height * scale));
     }
     this.ctx?.setTransform(d, 0, 0, d, 0, 0);
     this.gl?.viewport(0, 0, this.water.width, this.water.height);
-    this.dirty = true;
+    this.invalidate();
   }
   private move = (e: PointerEvent) => {
     const r = this.water.getBoundingClientRect();
@@ -248,7 +280,7 @@ export class ReefEngine {
       speed: 0.055 + size * 0.025 + Math.random() * 0.012, phase: Math.random() * Math.PI * 2, depth: 0.9, born: this.clock,
     });
     if (this.clickBubbles.length > 100) this.clickBubbles.shift();
-    this.dirty = true;
+    this.invalidate();
   }
   private clickFish = (event: MouseEvent) => {
     if ((event.target as Element).closest('button, a, input')) return;
@@ -286,7 +318,16 @@ export class ReefEngine {
     return { strength, flutter: Math.sin(age * 22) * strength };
   }
   private animate = (now: number) => {
-    const dt = Math.min((now - this.last) / 1000, 0.05);
+    this.frame = 0;
+    if (this.disposed || document.hidden) return;
+    // 30 fps is ample for this slow scene; do not chase 120/144 Hz displays.
+    if (!this.dirty && this.last && now - this.last < 1000 / 30 - 1) {
+      if (!this.paused) this.frame = requestAnimationFrame(this.animate);
+      return;
+    }
+    if (this.last && !this.paused)
+      this.frameCost = this.frameCost * 0.85 + Math.min(now - this.last, 250) * 0.15;
+    const dt = this.last ? Math.min((now - this.last) / 1000, 0.1) : 0;
     this.last = now;
     if (!this.paused && !document.hidden) {
       this.clock += dt;
@@ -294,15 +335,30 @@ export class ReefEngine {
         this.releaseBubble(this.bubbleHold.x, this.bubbleHold.y);
         this.bubbleHold.next = this.clock + 0.14;
       }
-      this.pointer.x += (this.target.x - this.pointer.x) * 0.025;
-      this.pointer.y += (this.target.y - this.pointer.y) * 0.025;
+      const easing = 1 - Math.exp(-1.52 * dt);
+      this.pointer.x += (this.target.x - this.pointer.x) * easing;
+      this.pointer.y += (this.target.y - this.pointer.y) * easing;
     }
     if (!document.hidden && (!this.paused || this.dirty)) {
-      this.drawWater();
+      const started = performance.now();
+      const waterTick = Math.floor(this.clock * (this.economy ? 15 : 30));
+      if (this.dirty || waterTick !== this.lastWaterFrame) {
+        this.drawWater();
+        this.lastWaterFrame = waterTick;
+      }
       this.drawLife();
       this.dirty = false;
+      this.renderCost = this.renderCost * 0.85 + (performance.now() - started) * 0.15;
+      // Ignore initial asset warmup. Once needed, keep the lighter mode stable
+      // for this page instead of repeatedly changing quality up and down.
+      if (!this.economy && ++this.samples >= 30 && (this.renderCost > 18 || this.frameCost > 48)) {
+        this.economy = true;
+        this.root.dataset.quality = 'economy';
+        this.lastFinFrame = -1;
+        this.measure();
+      }
     }
-    this.frame = requestAnimationFrame(this.animate);
+    if (!this.paused && !this.frame) this.frame = requestAnimationFrame(this.animate);
   };
   private drawWater() {
     const gl = this.gl,
@@ -329,9 +385,10 @@ export class ReefEngine {
       h = this.height,
       t = this.clock;
     c.clearRect(0, 0, w, h);
-    if (this.finFrames.length && Math.floor(t * 30) !== this.lastFinFrame) {
+    const finTick = Math.floor(t * (this.economy ? 10 : 15));
+    if (this.finFrames.length && finTick !== this.lastFinFrame) {
       this.updateSideFins(t);
-      this.lastFinFrame = Math.floor(t * 30);
+      this.lastFinFrame = finTick;
     }
     if (this.sprites.complete && this.sprites.naturalWidth) {
       c.save();
@@ -353,7 +410,8 @@ export class ReefEngine {
         );
       c.restore();
     }
-    for (const p of this.particles) {
+    for (let i = 0; i < this.particles.length; i += this.economy ? 2 : 1) {
+      const p = this.particles[i];
       const y = ((((p.y - t * p.speed) % 1) + 1) % 1) * h;
       const current = Math.sin(t * 0.65 + y / h * 12) + 0.25 * Math.sin(t * 0.91 + y / h * 19);
       const x = (p.x + Math.sin(t * 0.13 + p.phase) * 0.012 + current * 0.006) * w;
@@ -362,7 +420,8 @@ export class ReefEngine {
       c.arc(x, y, p.r, 0, Math.PI * 2);
       c.fill();
     }
-    for (const b of this.bubbles) {
+    for (let i = 0; i < this.bubbles.length; i += this.economy ? 2 : 1) {
+      const b = this.bubbles[i];
       const x =
           (b.x + Math.sin(t * 0.7 + b.phase) * 0.009) * w -
           this.pointer.x * (2 + b.depth * 10),
@@ -417,8 +476,8 @@ export class ReefEngine {
     const c = this.ctx!,
       w = this.width,
       h = this.height;
-    const sw = this.sprites.width / 2,
-      sh = this.sprites.height / 2,
+    const sw = this.spriteSheet.width / 2,
+      sh = this.spriteSheet.height / 2,
       sx = (f.cell % 2) * sw,
       sy = Math.floor(f.cell / 2) * sh;
     const mobile = w / h < 1.8;
@@ -431,7 +490,13 @@ export class ReefEngine {
     c.translate(x, y);
     c.rotate(Math.sin(swimTime * f.speed * 0.6 + f.phase) * 0.04);
     c.scale(scale, 1);
-    const slices = 52;
+    // Distant schooling fish are only a few pixels wide: one draw is enough.
+    if (f.size <= 0.05) {
+      c.drawImage(this.spriteSheet, sx, sy, sw, sh, -fw / 2, -fh / 2, fw, fh);
+      c.restore();
+      return;
+    }
+    const slices = this.economy ? 12 : 24;
     // A traveling bend is strongest at the tail and fades toward the head.
     // Keep the fish's center on its ordinary path instead of shaking the sprite.
     const flexX = (u: number) => {
@@ -450,14 +515,14 @@ export class ReefEngine {
         fh *
         0.028 *
         (0.78 + 0.22 * Math.sin(t * 0.75 + f.phase));
-      const rows = animatedSprite ? 8 : 1;
+      const rows = animatedSprite && !this.economy ? 3 : 1;
       const dorsalY = (v: number) => -fh / 2 + fh * v + wave +
         (animatedSprite ? Math.exp(-((v - 0.25) ** 2) / 0.018) * Math.sin(Math.PI * u) ** 2 *
           Math.sin(t * (2.7 + f.cell * 0.17) + u * 10 + f.phase) * fh * 0.012 : 0);
       for (let row = 0; row < rows; row++) {
       const v = row / rows;
       c.drawImage(
-        animatedSprite ?? this.sprites,
+        animatedSprite ?? this.spriteSheet,
         (animatedSprite ? 0 : sx) + sw * u,
         (animatedSprite ? 0 : sy) + sh * v,
         sw / slices,
@@ -510,7 +575,7 @@ export class ReefEngine {
       const fish = this.fish.find((f) => f.cell === cell);
       const finEffort = 1 + (fish ? this.reaction(fish, t).strength : 0) * 1.1;
       ctx.clearRect(0, 0, size, size);
-      ctx.drawImage(this.sprites, sx, sy, size, size, 0, 0, size, size);
+      ctx.drawImage(this.spriteSheet, sx, sy, size, size, 0, 0, size, size);
       const phase =
         t * (5.5 + cell * 0.37) + cell * 1.9 + Math.sin(t * 0.6 + cell) * 1.1;
       const breath = Math.sin(t * (2.1 + cell * 0.13) + cell * 1.8);
@@ -558,11 +623,11 @@ export class ReefEngine {
           a.x - m0 * a.sx - m2 * a.sy,
           a.y - m1 * a.sx - m3 * a.sy,
         );
-        ctx.drawImage(this.sprites, sx, sy, size, size, 0, 0, size, size);
+        ctx.drawImage(this.spriteSheet, sx, sy, size, size, 0, 0, size, size);
         ctx.restore();
       };
-      const columns = 10,
-        rows = 10;
+      const columns = this.economy ? 3 : 4,
+        rows = columns;
       for (let y = 0; y < rows; y++)
         for (let x = 0; x < columns; x++) {
           const a = point(x / columns, y / rows),
@@ -622,6 +687,7 @@ export class ReefEngine {
     window.removeEventListener('pointerup', this.endBubbles);
     window.removeEventListener('pointercancel', this.endBubbles);
     window.removeEventListener('blur', this.stopBubbles);
+    document.removeEventListener('visibilitychange', this.visibilityChanged);
     this.stopBubbles();
     if (this.gl) {
       this.gl.deleteTexture(this.texture);
