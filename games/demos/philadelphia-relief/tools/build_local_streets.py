@@ -22,7 +22,7 @@ for el in data['elements']:
  coords=[(round(pt['lon'],6),round(pt['lat'],6)) for pt in el.get('geometry',[])]
  if len(coords)>1: lines.append(coords)
 chains=[simplify(c,1.5) for c in chain_lines(lines)]
-f=root/'data/roads.geojson'; doc=json.loads(f.read_text()); doc['features']=[x for x in doc['features'] if x['properties'].get('t')!=5]
+f=root/'data/roads.geojson'; doc=json.loads(f.read_text()); doc['features']=[x for x in doc['features'] if x['properties'].get('t')!=5 or x['properties'].get('district')]
 doc['features'].append({'type':'Feature','properties':{'t':5},'geometry':{'type':'MultiLineString','coordinates':chains}})
 doc['localStreets']={'source':'OpenStreetMap contributors, ODbL 1.0','bounds':[39.87,-75.28,40.08,-75.03],'classes':['tertiary','residential','unclassified','living_street'],'ways':len(lines),'simplificationMetres':1.5}
 f.write_text(json.dumps(doc,separators=(',',':'))+'\n')

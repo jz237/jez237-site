@@ -4,194 +4,500 @@
     "Philadelphia City Hall": {
       "category": "Civic",
       "facts": [
-        ["Completed", "1901"],
-        ["Height", "167 m (548 ft) to the top of the William Penn statue"],
-        ["Statue", "11 m (37 ft) bronze William Penn by Alexander Milne Calder"],
-        ["Note", "The tallest habitable building in the world until 1908"]
+        [
+          "Completed",
+          "1901"
+        ],
+        [
+          "Height",
+          "167 m (548 ft) to the top of the William Penn statue"
+        ],
+        [
+          "Statue",
+          "11 m (37 ft) bronze William Penn by Alexander Milne Calder"
+        ],
+        [
+          "Note",
+          "The tallest habitable building in the world until 1908"
+        ]
       ],
-      "text": "Second Empire masonry on a site at the crossing of Broad and Market streets, the centre of Penn's 1680s grid. In this map the tower is a curated box on top of the real footprint, held at the roof height of the main building.",
-      "sources": [["Wikipedia: Philadelphia City Hall", "https://en.wikipedia.org/wiki/Philadelphia_City_Hall"]]
+      "text": "Second Empire masonry at Broad and Market streets. The schematic model includes the courtyard, corner pavilions and tower at its published overall height.",
+      "sources": [
+        [
+          "Wikipedia: Philadelphia City Hall",
+          "https://en.wikipedia.org/wiki/Philadelphia_City_Hall"
+        ]
+      ],
+      "model": "city-hall"
     },
     "Independence Hall": {
       "category": "Civic",
       "facts": [
-        ["Completed", "1753, as the Pennsylvania State House"],
-        ["Declaration of Independence", "adopted here on 4 July 1776"],
-        ["Constitution", "signed here in 1787"],
-        ["Steeple", "about 51 m (168 ft)"],
-        ["Status", "UNESCO World Heritage Site since 1979"]
+        [
+          "Completed",
+          "1753, as the Pennsylvania State House"
+        ],
+        [
+          "Declaration of Independence",
+          "adopted here on 4 July 1776"
+        ],
+        [
+          "Constitution",
+          "signed here in 1787"
+        ],
+        [
+          "Steeple",
+          "about 51 m (168 ft)"
+        ],
+        [
+          "Status",
+          "UNESCO World Heritage Site since 1979"
+        ]
       ],
       "text": "Georgian brick on the gentle rise above the Delaware waterfront. The model here is schematic: a hall with two wings and a steeple at the published height.",
       "model": "independence-hall",
-      "sources": [["Wikipedia: Independence Hall", "https://en.wikipedia.org/wiki/Independence_Hall"]]
+      "sources": [
+        [
+          "Wikipedia: Independence Hall",
+          "https://en.wikipedia.org/wiki/Independence_Hall"
+        ]
+      ]
     },
     "Philadelphia Museum of Art": {
       "category": "Civic",
       "facts": [
-        ["Opened", "1928"],
-        ["Site", "Faire Mount, the bluff where the Schuylkill turns toward Center City"],
-        ["Style", "Greek Revival temple front on a podium"],
-        ["Steps", "72, the ones made famous by Rocky"]
+        [
+          "Opened",
+          "1928"
+        ],
+        [
+          "Site",
+          "Faire Mount, the bluff where the Schuylkill turns toward Center City"
+        ],
+        [
+          "Style",
+          "Greek Revival temple front on a podium"
+        ],
+        [
+          "Steps",
+          "72, the ones made famous by Rocky"
+        ]
       ],
       "text": "Three temple-fronted pavilions on a podium at the head of the Benjamin Franklin Parkway. The model is a schematic podium and pavilions, not a survey of the building.",
       "model": "museum-of-art",
-      "sources": [["Wikipedia: Philadelphia Museum of Art", "https://en.wikipedia.org/wiki/Philadelphia_Museum_of_Art"]]
+      "sources": [
+        [
+          "Wikipedia: Philadelphia Museum of Art",
+          "https://en.wikipedia.org/wiki/Philadelphia_Museum_of_Art"
+        ]
+      ]
     },
     "Boathouse Row": {
       "category": "Water",
       "facts": [
-        ["What", "A row of rowing-club boathouses on the east bank of the Schuylkill"],
-        ["Status", "National Historic Landmark, 1987"],
-        ["Lights", "Rooflines outlined in lights since 1979"]
+        [
+          "What",
+          "A row of rowing-club boathouses on the east bank of the Schuylkill"
+        ],
+        [
+          "Status",
+          "National Historic Landmark, 1987"
+        ],
+        [
+          "Lights",
+          "Rooflines outlined in lights since 1979"
+        ]
       ],
       "text": "Just above the Fairmount Dam, where the tidal Schuylkill ends. The model is a schematic row of gabled houses; the real row has more houses of more shapes.",
       "model": "boathouse-row",
-      "sources": [["Wikipedia: Boathouse Row", "https://en.wikipedia.org/wiki/Boathouse_Row"]]
+      "sources": [
+        [
+          "Wikipedia: Boathouse Row",
+          "https://en.wikipedia.org/wiki/Boathouse_Row"
+        ]
+      ]
     },
     "Comcast Technology Center": {
       "category": "Civic",
       "facts": [
-        ["Completed", "2018"],
-        ["Height", "about 341 m as measured in OpenStreetMap; 342 m (1,121 ft) published"],
-        ["Architect", "Foster + Partners"],
-        ["Note", "The tallest building in Pennsylvania"]
+        [
+          "Completed",
+          "2018"
+        ],
+        [
+          "Height",
+          "about 341 m as measured in OpenStreetMap; 342 m (1,121 ft) published"
+        ],
+        [
+          "Architect",
+          "Foster + Partners"
+        ],
+        [
+          "Note",
+          "The tallest building in Pennsylvania"
+        ]
       ],
-      "text": "Drawn from its real OpenStreetMap footprint at its measured height, like every other building on the map.",
-      "sources": [["Wikipedia: Comcast Technology Center", "https://en.wikipedia.org/wiki/Comcast_Technology_Center"], ["OpenStreetMap", "https://www.openstreetmap.org/copyright"]]
+      "text": "Drawn from its real OpenStreetMap footprint at its measured height, like every other building on the map. The stepped model and facade ribs are schematic.",
+      "sources": [
+        [
+          "Wikipedia: Comcast Technology Center",
+          "https://en.wikipedia.org/wiki/Comcast_Technology_Center"
+        ],
+        [
+          "OpenStreetMap",
+          "https://www.openstreetmap.org/copyright"
+        ]
+      ],
+      "model": "comcast-technology"
     },
     "Citizens Bank Park": {
       "category": "Civic",
       "facts": [
-        ["Opened", "2004"],
-        ["Home of", "Philadelphia Phillies"],
-        ["Capacity", "about 42,000"]
+        [
+          "Opened",
+          "2004"
+        ],
+        [
+          "Home of",
+          "Philadelphia Phillies"
+        ],
+        [
+          "Capacity",
+          "about 42,000"
+        ]
       ],
       "text": "The ballpark at the South Philadelphia sports complex, on reclaimed low ground near the Navy Yard. OpenStreetMap maps the stadium as a leisure area with no height, so the map draws a schematic bowl at a published height.",
       "model": "citizens-bank-park",
-      "sources": [["Wikipedia: Citizens Bank Park", "https://en.wikipedia.org/wiki/Citizens_Bank_Park"]]
+      "sources": [
+        [
+          "Wikipedia: Citizens Bank Park",
+          "https://en.wikipedia.org/wiki/Citizens_Bank_Park"
+        ]
+      ]
     },
     "Lincoln Financial Field": {
       "category": "Civic",
       "facts": [
-        ["Opened", "2003"],
-        ["Home of", "Philadelphia Eagles"],
-        ["Capacity", "about 69,000"]
+        [
+          "Opened",
+          "2003"
+        ],
+        [
+          "Home of",
+          "Philadelphia Eagles"
+        ],
+        [
+          "Capacity",
+          "about 69,000"
+        ]
       ],
       "text": "The football stadium of the sports complex. Like the ballpark it is drawn as a schematic bowl: the real building is an open-ended horseshoe of stands.",
       "model": "lincoln-financial-field",
-      "sources": [["Wikipedia: Lincoln Financial Field", "https://en.wikipedia.org/wiki/Lincoln_Financial_Field"]]
+      "sources": [
+        [
+          "Wikipedia: Lincoln Financial Field",
+          "https://en.wikipedia.org/wiki/Lincoln_Financial_Field"
+        ]
+      ]
     },
     "Battleship New Jersey": {
       "category": "Water",
       "facts": [
-        ["Ship", "USS New Jersey (BB-62), Iowa-class battleship"],
-        ["Commissioned", "1943"],
-        ["Length", "about 270 m (887 ft)"],
-        ["Here since", "2001, as a museum ship on the Camden waterfront"]
+        [
+          "Ship",
+          "USS New Jersey (BB-62), Iowa-class battleship"
+        ],
+        [
+          "Commissioned",
+          "1943"
+        ],
+        [
+          "Length",
+          "about 270 m (887 ft)"
+        ],
+        [
+          "Here since",
+          "2001, as a museum ship on the Camden waterfront"
+        ]
       ],
       "text": "Moored on the Camden side of the Delaware opposite Penn's Landing. The hull and superstructure here are a schematic at the published length; the mooring position is approximate to a few tens of metres.",
       "model": "battleship-new-jersey",
-      "sources": [["Wikipedia: USS New Jersey (BB-62)", "https://en.wikipedia.org/wiki/USS_New_Jersey_(BB-62)"]]
+      "sources": [
+        [
+          "Wikipedia: USS New Jersey (BB-62)",
+          "https://en.wikipedia.org/wiki/USS_New_Jersey_(BB-62)"
+        ]
+      ]
     },
     "Fort Mifflin": {
       "category": "Civic",
       "facts": [
-        ["Built", "begun by the British in 1771"],
-        ["Siege", "held out for about six weeks against the Royal Navy in autumn 1777"],
-        ["Site", "Mud Island, in the Delaware marshes below the airport"]
+        [
+          "Built",
+          "begun by the British in 1771"
+        ],
+        [
+          "Siege",
+          "held out for about six weeks against the Royal Navy in autumn 1777"
+        ],
+        [
+          "Site",
+          "Mud Island, in the Delaware marshes below the airport"
+        ]
       ],
       "text": "A star-shaped bastioned fort at the water's edge. The model is a schematic ring of low walls; the real plan is a stone-faced star.",
       "model": "fort-mifflin",
-      "sources": [["Wikipedia: Fort Mifflin", "https://en.wikipedia.org/wiki/Fort_Mifflin"]]
+      "sources": [
+        [
+          "Wikipedia: Fort Mifflin",
+          "https://en.wikipedia.org/wiki/Fort_Mifflin"
+        ]
+      ]
     },
     "Benjamin Franklin Bridge": {
       "category": "Bridge",
       "facts": [
-        ["Opened", "1926"],
-        ["Main span", "533 m (1,750 ft), the world's longest suspension span until 1929"],
-        ["Engineer", "Ralph Modjeski; Paul Cret, architect"],
-        ["Carries", "I-676 / US 30 and the PATCO line"]
+        [
+          "Opened",
+          "1926"
+        ],
+        [
+          "Main span",
+          "533 m (1,750 ft), the world's longest suspension span until 1929"
+        ],
+        [
+          "Engineer",
+          "Ralph Modjeski; Paul Cret, architect"
+        ],
+        [
+          "Carries",
+          "I-676 / US 30 and the PATCO line"
+        ]
       ],
       "text": "Deck alignment and width from OpenStreetMap; towers, cables and hangers are drawn schematically from published dimensions.",
-      "sources": [["Wikipedia: Benjamin Franklin Bridge", "https://en.wikipedia.org/wiki/Benjamin_Franklin_Bridge"]]
+      "sources": [
+        [
+          "Wikipedia: Benjamin Franklin Bridge",
+          "https://en.wikipedia.org/wiki/Benjamin_Franklin_Bridge"
+        ]
+      ]
     },
     "Walt Whitman Bridge": {
       "category": "Bridge",
       "facts": [
-        ["Opened", "1957"],
-        ["Main span", "610 m (2,000 ft)"],
-        ["Carries", "I-76"]
+        [
+          "Opened",
+          "1957"
+        ],
+        [
+          "Main span",
+          "610 m (2,000 ft)"
+        ],
+        [
+          "Carries",
+          "I-76"
+        ]
       ],
       "text": "The southern suspension crossing, from South Philadelphia to Gloucester City. Schematic form from published dimensions.",
-      "sources": [["Wikipedia: Walt Whitman Bridge", "https://en.wikipedia.org/wiki/Walt_Whitman_Bridge"]]
+      "sources": [
+        [
+          "Wikipedia: Walt Whitman Bridge",
+          "https://en.wikipedia.org/wiki/Walt_Whitman_Bridge"
+        ]
+      ]
     },
     "Wissahickon Valley": {
       "category": "Park",
       "facts": [
-        ["Park", "about 1,800 acres of Fairmount Park"],
-        ["Relief", "roughly 60 m from creek to upland in this map's elevation data"],
-        ["Rock", "Wissahickon schist"]
+        [
+          "Park",
+          "about 1,800 acres of Fairmount Park"
+        ],
+        [
+          "Relief",
+          "roughly 60 m from creek to upland in this map's elevation data"
+        ],
+        [
+          "Rock",
+          "Wissahickon schist"
+        ]
       ],
       "text": "A gorge cut into the Piedmont entirely inside the city. The depth quoted is what this map's DEM shows, not a surveyed figure.",
-      "sources": [["Wikipedia: Wissahickon Valley Park", "https://en.wikipedia.org/wiki/Wissahickon_Valley_Park"]]
+      "sources": [
+        [
+          "Wikipedia: Wissahickon Valley Park",
+          "https://en.wikipedia.org/wiki/Wissahickon_Valley_Park"
+        ]
+      ]
     },
     "Manayunk": {
       "category": "Town",
       "facts": [
-        ["Canal", "the Schuylkill Navigation canal opened here in 1819"],
-        ["Name", "from the Lenape word for the river, 'place to drink'"],
-        ["Climb", "the Manayunk Wall, Lyceum Avenue, famous from the bicycle race"]
+        [
+          "Canal",
+          "the Schuylkill Navigation canal opened here in 1819"
+        ],
+        [
+          "Name",
+          "from the Lenape word for the river, 'place to drink'"
+        ],
+        [
+          "Climb",
+          "the Manayunk Wall, Lyceum Avenue, famous from the bicycle race"
+        ]
       ],
       "text": "Steep streets climbing from the Schuylkill where the valley narrows.",
-      "sources": [["Wikipedia: Manayunk", "https://en.wikipedia.org/wiki/Manayunk,_Philadelphia"]]
+      "sources": [
+        [
+          "Wikipedia: Manayunk",
+          "https://en.wikipedia.org/wiki/Manayunk,_Philadelphia"
+        ]
+      ]
     },
     "Philadelphia Int'l Airport": {
       "category": "Transport",
       "facts": [
-        ["Commercial service", "since 1940"],
-        ["Ground", "filled tidal flats on the Delaware; among the lowest land in the region"]
+        [
+          "Commercial service",
+          "since 1940"
+        ],
+        [
+          "Ground",
+          "filled tidal flats on the Delaware; among the lowest land in the region"
+        ]
       ],
       "text": "Its runways sit within a few metres of sea level in this map's elevation data.",
-      "sources": [["Wikipedia: Philadelphia International Airport", "https://en.wikipedia.org/wiki/Philadelphia_International_Airport"]]
+      "sources": [
+        [
+          "Wikipedia: Philadelphia International Airport",
+          "https://en.wikipedia.org/wiki/Philadelphia_International_Airport"
+        ]
+      ]
     },
     "Valley Forge": {
       "category": "Park",
       "facts": [
-        ["Encampment", "the Continental Army's winter of 1777–78"],
-        ["Park", "Valley Forge National Historical Park, since 1976"],
-        ["Ground", "where Valley Creek meets the Schuylkill, between Mount Joy and Mount Misery"]
+        [
+          "Encampment",
+          "the Continental Army's winter of 1777\u201378"
+        ],
+        [
+          "Park",
+          "Valley Forge National Historical Park, since 1976"
+        ],
+        [
+          "Ground",
+          "where Valley Creek meets the Schuylkill, between Mount Joy and Mount Misery"
+        ]
       ],
       "text": "The hills that sheltered the encampment read clearly in the relief.",
-      "sources": [["Wikipedia: Valley Forge", "https://en.wikipedia.org/wiki/Valley_Forge"]]
+      "sources": [
+        [
+          "Wikipedia: Valley Forge",
+          "https://en.wikipedia.org/wiki/Valley_Forge"
+        ]
+      ]
     },
     "Levittown": {
       "category": "Town",
       "facts": [
-        ["Built", "1952–1958 by Levitt & Sons"],
-        ["Houses", "about 17,300"],
-        ["Ground", "the flat Delaware terrace downstream of the falls at Trenton"]
+        [
+          "Built",
+          "1952\u20131958 by Levitt & Sons"
+        ],
+        [
+          "Houses",
+          "about 17,300"
+        ],
+        [
+          "Ground",
+          "the flat Delaware terrace downstream of the falls at Trenton"
+        ]
       ],
       "text": "The archetypal postwar planned suburb. Its houses are outside the map's building zones, so only the terrain and roads are drawn here.",
-      "sources": [["Wikipedia: Levittown, Pennsylvania", "https://en.wikipedia.org/wiki/Levittown,_Pennsylvania"]]
+      "sources": [
+        [
+          "Wikipedia: Levittown, Pennsylvania",
+          "https://en.wikipedia.org/wiki/Levittown,_Pennsylvania"
+        ]
+      ]
     },
     "Port Richmond": {
       "category": "Town",
       "facts": [
-        ["Where", "the flat Delaware waterfront shelf north-east of Center City"],
-        ["Note", "a historic river neighbourhood of rowhouse blocks and rail yards"]
+        [
+          "Where",
+          "the flat Delaware waterfront shelf north-east of Center City"
+        ],
+        [
+          "Note",
+          "a historic river neighbourhood of rowhouse blocks and rail yards"
+        ]
       ],
       "text": "Inside the inner-city building zone, so its notable buildings are drawn; the rowhouse fabric is not.",
-      "sources": [["Wikipedia: Port Richmond, Philadelphia", "https://en.wikipedia.org/wiki/Port_Richmond,_Philadelphia"]]
+      "sources": [
+        [
+          "Wikipedia: Port Richmond, Philadelphia",
+          "https://en.wikipedia.org/wiki/Port_Richmond,_Philadelphia"
+        ]
+      ]
     },
     "Cira Centre": {
       "category": "Civic",
       "facts": [
-        ["Completed", "2005"],
-        ["Height", "133 m (437 ft)"],
-        ["Architect", "César Pelli"]
+        [
+          "Completed",
+          "2005"
+        ],
+        [
+          "Height",
+          "133 m (437 ft)"
+        ],
+        [
+          "Architect",
+          "C\u00e9sar Pelli"
+        ]
       ],
       "text": "Beside 30th Street Station on the west bank of the Schuylkill, drawn from its OpenStreetMap footprint at its measured height.",
-      "sources": [["Wikipedia: Cira Centre", "https://en.wikipedia.org/wiki/Cira_Centre"]]
+      "sources": [
+        [
+          "Wikipedia: Cira Centre",
+          "https://en.wikipedia.org/wiki/Cira_Centre"
+        ]
+      ]
+    },
+    "The Hidden Reef": {
+      "category": "Aquarium store \u00b7 Levittown",
+      "facts": [
+        [
+          "Address",
+          "4501 New Falls Road, Levittown, PA 19056"
+        ],
+        [
+          "Phone",
+          "215-269-4930"
+        ],
+        [
+          "Specialty",
+          "Aquariums, fish, reef and pond supplies"
+        ]
+      ],
+      "text": "A local aquarium destination in Levittown. The pin uses the OpenStreetMap store point within its commercial building footprint.",
+      "note": "Business location \u00b7 address verified September 2026",
+      "sources": [
+        [
+          "Official store website",
+          "https://www.thehiddenreef.com/"
+        ],
+        [
+          "Contact and directions",
+          "https://www.thehiddenreef.com/service/"
+        ],
+        [
+          "OpenStreetMap location",
+          "https://www.openstreetmap.org/node/11383998380"
+        ]
+      ]
     }
   }
 }

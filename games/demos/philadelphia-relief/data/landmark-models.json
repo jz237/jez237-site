@@ -699,7 +699,13 @@
           "base": 150,
           "segs": 10
         }
-      ]
+      ],
+      "clock": {
+        "x": 0,
+        "z": -45,
+        "height": 102,
+        "radius": 5
+      }
     },
     {
       "id": "comcast-technology",

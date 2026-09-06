@@ -1220,3 +1220,8 @@ body.cinema .explore-nav { display: none; }
  .gesture-hint { display: none; }
 }
 
+.map-label[data-category="shop"] {
+  color: #c6fff1; background: #123d40; border: 1px solid #7edbc7;
+  border-radius: 8px; padding: 6px 10px; font-weight: 700;
+}
+.map-label[data-category="shop"]::before { content: "◆ "; color: #8eefd8; }

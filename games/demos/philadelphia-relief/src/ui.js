@@ -6,13 +6,13 @@
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090605';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090605';
-import { getEra } from './eras.js?v=philly-2026090605';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090605';
-import { TOURS } from './tours.js?v=philly-2026090605';
-import { ERAS } from './eras.js?v=philly-2026090605';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090605';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090606';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090606';
+import { getEra } from './eras.js?v=philly-2026090606';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090606';
+import { TOURS } from './tours.js?v=philly-2026090606';
+import { ERAS } from './eras.js?v=philly-2026090606';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090606';
 
 const ENUM_LABELS = {
   theme: (v) => getTheme(v).label,
@@ -417,7 +417,7 @@ export function buildSearchIndex(placesGeojson, landmarksDoc, extras = {}) {
     const category = cards[l.n]?.category;
     entries.push({
       name: l.n, kind: 'landmark', kindLabel: category || 'Landmark', group: 'Landmarks',
-      lon: l.lon, lat: l.lat, note: l.d, priority: 2 + (l.r ?? 2) * 0.1,
+      lon: l.lon, lat: l.lat, note: l.d, viewPreset: l.viewPreset, priority: 2 + (l.r ?? 2) * 0.1,
       card: !!cards[l.n],
     });
   }

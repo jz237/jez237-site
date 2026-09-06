@@ -27,7 +27,7 @@ test('landmark cards', async (t) => {
       for (const f of card.facts) assert.ok(f.length === 2 && f[0] && f[1], `${name} fact shape`);
       assert.ok(Array.isArray(card.sources) && card.sources.length >= 1, `${name} needs a source`);
       for (const [label, url] of card.sources) {
-        assert.ok(label && /^https:\/\/(en\.wikipedia\.org|www\.openstreetmap\.org)\//.test(url),
+        assert.ok(label && /^https:\/\/(en\.wikipedia\.org|www\.openstreetmap\.org|www\.thehiddenreef\.com)\//.test(url),
           `${name} source ${url}`);
       }
       if (card.model) {
@@ -73,6 +73,8 @@ test('landmark models', async (t) => {
     assert.ok(packed.vertexCount > 200 && packed.indexCount > 300);
     for (let i = 0; i < packed.indexCount; i += 1) assert.ok(packed.index[i] < packed.vertexCount);
     for (const v of packed.position) assert.ok(Number.isFinite(v));
+    assert.equal(packed.clock.length, packed.vertexCount * 4);
+    for (const value of packed.clock) assert.ok(Number.isFinite(value));
     for (let v = 0; v < packed.vertexCount; v += 1) {
       assert.equal(packed.ground[v], 7, 'ground is sampled at the anchor');
       assert.ok(packed.position[v * 3 + 1] >= 0, 'nothing below its own base');
@@ -113,4 +115,14 @@ test('Center City landmarks retain their referenced heights and facade styles', 
   assert.equal(tower.facade, 'glass');
   assert.equal(Math.max(...tower.parts.map((p) => (p.base || 0) + p.h)), 341);
   assert.equal(Math.max(...hall.parts.map((p) => (p.base || 0) + p.h)), 167);
+});
+
+
+test('The Hidden Reef has a searchable, sourced location inside the map bounds', () => {
+  const store = landmarks.landmarks.find((l) => l.n === 'The Hidden Reef');
+  assert.equal(store.lon, -74.8827262);
+  assert.equal(store.lat, 40.1368222);
+  assert.equal(store.viewPreset, 'hidden-reef');
+  assert.match(cards.cards[store.n].facts[0][1], /4501 New Falls Road/);
+  assert.ok(cards.cards[store.n].sources.some(([, url]) => url === 'https://www.thehiddenreef.com/'));
 });

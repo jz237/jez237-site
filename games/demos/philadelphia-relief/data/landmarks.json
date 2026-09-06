@@ -112,7 +112,7 @@
       "lat": 39.8729,
       "c": "transport",
       "r": 2,
-      "d": "Built on the Delaware River tidal flats — among the lowest ground in the region.",
+      "d": "Built on the Delaware River tidal flats \u2014 among the lowest ground in the region.",
       "since": 1940
     },
     {
@@ -130,7 +130,7 @@
       "lat": 40.0555,
       "c": "park",
       "r": 1,
-      "d": "A 60 m deep gorge cut into the Piedmont — the sharpest relief inside the city."
+      "d": "A 60 m deep gorge cut into the Piedmont \u2014 the sharpest relief inside the city."
     },
     {
       "n": "Manayunk",
@@ -219,7 +219,7 @@
       "lat": 40.0218,
       "c": "town",
       "r": 2,
-      "d": "On the Main Line ridge — the drainage divide the railroad was built along."
+      "d": "On the Main Line ridge \u2014 the drainage divide the railroad was built along."
     },
     {
       "n": "Ardmore",
@@ -408,6 +408,16 @@
       "r": 3,
       "d": "Beside 30th Street Station on the west bank of the Schuylkill.",
       "since": 2005
+    },
+    {
+      "n": "The Hidden Reef",
+      "lon": -74.8827262,
+      "lat": 40.1368222,
+      "c": "shop",
+      "r": 1,
+      "d": "Aquarium store at 4501 New Falls Road, Levittown.",
+      "viewPreset": "hidden-reef",
+      "source": "Store address: https://www.thehiddenreef.com/service/ ; map point: OpenStreetMap node 11383998380"
     }
   ]
 }
