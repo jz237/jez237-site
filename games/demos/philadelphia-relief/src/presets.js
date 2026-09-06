@@ -10,8 +10,8 @@
  * without a renderer.
  */
 
-import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090607';
-import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090607';
+import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090608';
+import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090608';
 
 /** Keys that are angles and must take the short way round when blending. */
 const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
@@ -60,6 +60,27 @@ export const PRESETS = [
       'Select the store label for its address, phone number and official website.',
     camera: {
       camLon: -74.8827262, camLat: 40.1368222, camDist: 1050, camBearing: 325, camPitch: 42,
+    },
+    settings: {
+      theme: 'dusk', fov: 40, exaggeration: 1,
+      sunAzimuth: 208, sunAltitude: 28, keyLight: 1.1, ambient: 0.68,
+      fogDensity: 0.32, glow: 0.16, waterIntensity: 0.85,
+      contourStrength: 0.18, contourInterval: 25,
+      roadOpacity: 0.65, boundaryOpacity: 0.15, labelDensity: 0.75, labelSize: 1,
+      structureDetail: 0.75, structureHeight: 1,
+    },
+    layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
+      parks: false, roads: true, rail: false, boundaries: false,
+      places: true, landmarks: true, structures: false },
+  },
+  {
+    id: 'bauder-signs',
+    name: 'Philadelphia · Bauder Signs',
+    blurb:
+      'Bauder Signs at 3613 Witte Street, Philadelphia. ' +
+      'Select the pin for its address and business information.',
+    camera: {
+      camLon: -75.09834015, camLat: 39.99592532, camDist: 650, camBearing: 20, camPitch: 20,
     },
     settings: {
       theme: 'dusk', fov: 40, exaggeration: 1,

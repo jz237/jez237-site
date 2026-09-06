@@ -33,7 +33,7 @@ export const ASSETS = [
     layer: 'boundaries', label: 'boundaries' },
   { id: 'places', path: 'data/places.geojson', kind: 'geojson', layer: 'places',
     label: 'place labels' },
-  { id: 'landmarks', path: 'data/landmarks.json?v=reef1', kind: 'json', layer: 'landmarks',
+  { id: 'landmarks', path: 'data/landmarks.json?v=bauder1', kind: 'json', layer: 'landmarks',
     label: 'landmarks' },
   { id: 'structures', path: 'data/structures/buildings.json', kind: 'manifest',
     layer: 'structures', label: 'buildings and bridges' },

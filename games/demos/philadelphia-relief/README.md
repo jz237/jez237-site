@@ -142,17 +142,27 @@ and inspection cells. Below 400 m, a 0.006° × 0.0045° inspection window deliv
 descend to 200 m. Sampling describes the delivered grid, not guaranteed native
 photographic resolution.
 
-The same-origin Pages Function selects **Philadelphia 2024 aerial imagery**
-([PASDA service](https://maps.pasda.psu.edu/ArcGIS/rest/services/pasda/PhiladelphiaImagery2024/MapServer))
-for cells wholly within the verified Center City coverage rectangle, and
-**PEMA 2021–2023 imagery**
-([PASDA service](https://services.pasda.psu.edu/server/rest/services/pasda/PEMAImagery2021_2023/MapServer))
-around Levittown. Other locations retain USDA / USGS imagery. Actual source
-credit is returned in the response and shown on the map. A local-source outage
-falls back to USGS with a five-minute cache, allowing the local source to recover.
-Successful primary imagery is cached for 30 days. Raster layers are selected
-explicitly so tile-index outlines never appear. Pixel proportions match the
-geographic bounds exactly; cells overlap and feather into the backdrop.
+The same-origin Pages Function routes close-up imagery across the map by actual
+state polygons from the US Census TIGERweb State_County service, bundled in
+`data/imagery-states.js`. Sources are Philadelphia 2024 / PASDA in Center City,
+PEMA 2021–2023 / PASDA elsewhere in Pennsylvania, NJ OGIS 2020, Delaware FirstMap
+2022 / Sanborn, and Maryland iMAP six-inch imagery at the western edge. Native
+resolution varies: NJ's 2020 source is one-foot imagery, while the PEMA,
+Delaware and Maryland sources offer finer detail. Regional tiles retain USGS.
+Service URLs and layer selection are in `detail-imagery.js`.
+
+Roof and inspection views first request a 2048 × 1536 preview, then refine to
+4096 × 3072 in Maximum mode. Only the current cell is downloaded; moving to a
+new cell or leaving detail range cancels stale requests. No speculative neighbour
+exports compete with visible imagery. The map identifies loading versus refining
+and always credits the source actually returned. State-service failures fall back
+to USGS; Philadelphia can also fall back to PEMA. Fallbacks are cached for five
+minutes, primary responses for 30 days. Existing imagery remains visible while
+requests run. Sampling describes the delivered grid, not native source resolution.
+
+Bauder Signs (also listed as Bauder Graphics) is searchable at 3613 Witte Street,
+Philadelphia. Its pin uses the City AIS address point and links to the address
+record and business listing. Open it with `#P=bauder-signs`.
 
 The **Aerial imagery** layer opens on and **3D buildings & bridges** opens off.
 Turning the latter on restores the full OSM extrusion/bridge model without

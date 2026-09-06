@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090607';
-import { ERA_IDS } from './eras.js?v=philly-2026090607';
+import { WEATHERS } from './solar.js?v=philly-2026090608';
+import { ERA_IDS } from './eras.js?v=philly-2026090608';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -97,8 +97,8 @@ export const CONTROLS = {
     k: 'id', kind: 'enum', values: IMAGERY_DETAIL, def: 'maximum',
     group: 'carto', label: 'Aerial detail',
     hint: 'Data Saver stops at the city tile. Standard adds a source-resolution block tile; ' +
-      'Maximum uses 4096 px for every close tile. Nearby cells are prefetched and cached. ' +
-      'Close zoom stops before the source photography would be visibly enlarged.',
+      'Maximum uses 4096 px for every close tile. Visible cells load on demand and are cached. ' +
+      'A smaller preview loads first, then refines to full detail.',
   },
 
   // ---- structures --------------------------------------------------------

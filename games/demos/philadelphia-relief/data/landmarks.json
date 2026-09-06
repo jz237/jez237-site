@@ -418,6 +418,16 @@
       "d": "Aquarium store at 4501 New Falls Road, Levittown.",
       "viewPreset": "hidden-reef",
       "source": "Store address: https://www.thehiddenreef.com/service/ ; map point: OpenStreetMap node 11383998380"
+    },
+    {
+      "n": "Bauder Signs",
+      "lon": -75.09834015,
+      "lat": 39.99592532,
+      "c": "shop",
+      "r": 1,
+      "d": "Bauder Signs / Bauder Graphics at 3613 Witte Street, Philadelphia.",
+      "viewPreset": "bauder-signs",
+      "source": "Address: https://www.aecdaily.com/s/11239/corporate ; City of Philadelphia AIS address point: https://api.phila.gov/ais/v1/search/3613%20WITTE%20ST"
     }
   ]
 }

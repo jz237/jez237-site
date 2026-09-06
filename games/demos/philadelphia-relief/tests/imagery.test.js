@@ -10,10 +10,10 @@ import { createStore } from '../src/state.js';
 import { decodeState, encodeState } from '../src/urlstate.js';
 import {
   DETAIL_DISTANCE_M, ULTRA_DISTANCE_M, ROOFTOP_DISTANCE_M,
-  detailCellFor, detailImageSize,
+  createImageryDetail, detailCellFor, detailImageSize,
   detailResolutionM, detailUrl, imageryTierFor, neighbourCells,
 } from '../src/imagery-detail.js';
-import { detailRequest, imagerySources, onRequestGet } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
+import { detailRequest, imagerySources, imageryState, onRequestGet } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
 
 const dataUrl = new URL('../data/', import.meta.url);
 const imagery = JSON.parse(await readFile(new URL('imagery.json', dataUrl), 'utf8'));
@@ -55,7 +55,7 @@ test('aerial mode state', async (t) => {
     assert.equal(defaults().layers.structures, false);
     for (const preset of PRESETS) {
       const layers = presetPatch(preset.id).layers;
-      assert.equal(layers.imagery, ['skyline', 'architecture', 'hidden-reef', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} imagery`);
+      assert.equal(layers.imagery, ['skyline', 'architecture', 'hidden-reef', 'bauder-signs', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} imagery`);
       assert.equal(layers.structures, preset.id === 'architecture', `${preset.id} structures`);
     }
   });
@@ -169,7 +169,8 @@ test('imagery requests preserve geographic proportions without expanding latitud
 
 test('close inspection retains geographic alignment and local coverage selection', () => {
   for (const [lon, lat, expected] of [[-75.1652, 39.9526, 'City of Philadelphia'],
-    [-74.8827, 40.1368, 'Pennsylvania PEMA'], [-75.05, 39.9, 'USDA / USGS']]) {
+    [-74.8827, 40.1368, 'Pennsylvania PEMA'], [-75.05, 39.9, 'New Jersey'], [-75.4, 40.09, 'Pennsylvania PEMA'],
+    [-75.55, 39.745, 'Delaware FirstMap'], [-75.796, 39.705, 'Maryland iMAP']]) {
     const request = detailRequest(new URLSearchParams({ tier: 'inspection',
       lon: String(lon), lat: String(lat), size: '4096' }));
     const client = detailCellFor(lon, lat, terrain.bounds, 'inspection');
@@ -181,7 +182,7 @@ test('close inspection retains geographic alignment and local coverage selection
   assert.equal(imageryTierFor(400, 'standard'), 'inspection');
   assert.equal(imageryTierFor(401, 'standard'), 'rooftop');
   assert.equal(imageryTierFor(200, 'data'), 'detail');
-  assert.equal(imagerySources({ bounds: { west: -75.25, east: -75.16,
+  assert.equal(imagerySources({ tier: 'detail', bounds: { west: -75.25, east: -75.16,
     south: 39.94, north: 39.96 } }).length, 1, 'cross-boundary cells use complete regional coverage');
 });
 
@@ -203,11 +204,54 @@ test('local source outage falls back with honest credit and a short cache', asyn
     assert.equal(response.status, 200);
     assert.equal(calls.length, 2);
     assert.match(calls[0], /PhiladelphiaImagery2024/);
-    assert.match(calls[1], /USGSImageryOnly/);
-    assert.equal(response.headers.get('X-Imagery-Source'), 'USDA / USGS The National Map');
+    assert.match(calls[1], /PEMAImagery2021_2023/);
+    assert.equal(response.headers.get('X-Imagery-Source'), 'Pennsylvania PEMA 2021-2023 / PASDA');
     assert.equal(response.headers.get('Cache-Control'), 'public, max-age=300');
   } finally {
     globalThis.fetch = oldFetch;
     globalThis.caches = oldCaches;
   }
+});
+
+
+test('source routing follows the Delaware River rather than rectangular districts', () => {
+  assert.equal(imageryState(-75.1652, 39.9526), 'PA');
+  assert.equal(imageryState(-75.119, 39.944), 'NJ');
+  assert.equal(imageryState(-74.8827, 40.1368), 'PA');
+  assert.equal(imageryState(-74.7429, 40.2171), 'NJ');
+  assert.equal(imageryState(-75.55, 39.745), 'DE');
+});
+
+test('visible imagery previews, refines, and cancels obsolete requests', async () => {
+  const requests = [];
+  const shown = [];
+  const terrainStub = { setDetailActive() {}, setDetailImagery(image) { shown.push(image); } };
+  const api = createImageryDetail({ terrain: terrainStub, region: terrain.bounds,
+    projection: terrain.projection,
+    loadImage(url, signal) {
+      return new Promise((resolve) => requests.push({ url, signal, resolve }));
+    },
+  });
+  const pose = { lon: -75.1652, lat: 39.9526, dist: 200 };
+  const consider = (p = pose) => api.consider(p, true, 1440, 1, 'balanced', 'maximum');
+  consider({ ...pose, dist: 50000 });
+  assert.equal(requests.length, 0, 'no remote image at regional zoom');
+  consider(); consider();
+  assert.match(requests[0].url, /size=2048/);
+  requests[0].resolve({ image: 'preview', source: 'test' });
+  await Promise.resolve();
+  assert.deepEqual(shown, ['preview']);
+  consider(); consider();
+  assert.match(requests[1].url, /size=4096/);
+  assert.equal(api.stats().refining, true);
+  consider({ ...pose, lon: -75.4 });
+  assert.equal(requests[1].signal.aborted, true, 'moving cancels old refinement');
+  requests[1].resolve({ image: 'stale', source: 'test' });
+  await Promise.resolve();
+  assert.deepEqual(shown, ['preview'], 'late obsolete responses cannot replace current image');
+  consider({ ...pose, lon: -75.4 });
+  assert.equal(requests.length, 3);
+  consider({ ...pose, dist: 50000 });
+  assert.equal(requests[2].signal.aborted, true, 'zooming out stops close-detail downloads');
+  api.dispose();
 });

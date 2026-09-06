@@ -27,7 +27,7 @@ test('landmark cards', async (t) => {
       for (const f of card.facts) assert.ok(f.length === 2 && f[0] && f[1], `${name} fact shape`);
       assert.ok(Array.isArray(card.sources) && card.sources.length >= 1, `${name} needs a source`);
       for (const [label, url] of card.sources) {
-        assert.ok(label && /^https:\/\/(en\.wikipedia\.org|www\.openstreetmap\.org|www\.thehiddenreef\.com)\//.test(url),
+        assert.ok(label && /^https:\/\/(en\.wikipedia\.org|www\.openstreetmap\.org|www\.thehiddenreef\.com|www\.aecdaily\.com|api\.phila\.gov)\//.test(url),
           `${name} source ${url}`);
       }
       if (card.model) {

@@ -6,8 +6,8 @@
  * that below 4.8 km, and a camera-following roof cell takes over for the final
  * descent; inspection cells bring local aerial imagery down to 200 m.
  * Source resolution varies outside the local coverage areas. Cells overlap,
- * cross-fade in the terrain shader and are prefetched into the browser/edge
- * cache after the camera settles.
+ * cross-fade in the terrain shader and load only for the visible cell after the camera settles.
+ * A smaller preview arrives before full detail; obsolete requests are canceled.
  */
 
 export const DETAIL_DISTANCE_M = 16000;
@@ -79,7 +79,7 @@ export function detailUrl(cell, size) {
     tier: cell.tier || 'detail', lon: cell.lon.toFixed(4),
     lat: cell.lat.toFixed(4), size: String(size),
   });
-  return `detail-imagery?${query}&v=local3`;
+  return `detail-imagery?${query}&v=regional4`;
 }
 
 export function detailResolutionM(cell, size, projection) {
@@ -105,8 +105,8 @@ export function neighbourCells(cell, region) {
   return cells;
 }
 
-async function loadImage(path) {
-  const response = await fetch(path, { credentials: 'same-origin' });
+async function loadImage(path, signal) {
+  const response = await fetch(path, { credentials: 'same-origin', signal });
   if (!response.ok) throw new Error('detail imagery unavailable');
   const source = response.headers.get('X-Imagery-Source') || 'USDA / USGS The National Map';
   const objectUrl = URL.createObjectURL(await response.blob());
@@ -123,6 +123,7 @@ async function loadImage(path) {
 
 export function createImageryDetail(options) {
   const { terrain: initialTerrain, region, projection, onStatus = () => {} } = options;
+  const imageLoader = options.loadImage || loadImage;
   let terrain = initialTerrain;
   let candidateKey = '';
   let stableChecks = 0;
@@ -132,45 +133,23 @@ export function createImageryDetail(options) {
   let failedAt = 0;
   let generation = 0;
   let state = 'regional';
-  let prefetched = 0;
-  let prefetchTimer = 0;
-  let prefetchIdle = 0;
-  let prefetchGeneration = 0;
+  let pendingController = null;
+  let pendingSize = 0;
+  let pendingCellKey = '';
 
   const report = (nextState) => {
     state = nextState;
     onStatus(api.stats());
   };
 
-  function prefetch(cell, size, mode) {
-    if (mode === 'data' || typeof fetch !== 'function') return;
-    const requestGeneration = ++prefetchGeneration;
-    const run = () => {
-      prefetchIdle = 0;
-      if (requestGeneration !== prefetchGeneration) return;
-      for (const next of neighbourCells(cell, region)) {
-        fetch(detailUrl(next, size), { cache: 'force-cache', credentials: 'same-origin' })
-          .then((response) => { if (response.ok) prefetched += 1; })
-          .catch(() => {});
-      }
-    };
-    // Neighbour cells are speculative. Let the visible tile decode and the
-    // opening interaction settle before spending bandwidth and image memory;
-    // moving to another cell invalidates this job before it starts.
-    clearTimeout(prefetchTimer);
-    if (prefetchIdle && typeof cancelIdleCallback === 'function') {
-      cancelIdleCallback(prefetchIdle);
-      prefetchIdle = 0;
-    }
-    prefetchTimer = setTimeout(() => {
-      prefetchTimer = 0;
-      if (requestGeneration !== prefetchGeneration) return;
-      if (typeof requestIdleCallback === 'function') {
-        prefetchIdle = requestIdleCallback(run, { timeout: 5000 });
-      } else {
-        run();
-      }
-    }, 6000);
+  function cancelPending() {
+    if (!pendingController) return;
+    generation += 1;
+    pendingController.abort();
+    pendingController = null;
+    pendingKey = '';
+    pendingCellKey = '';
+    pendingSize = 0;
   }
 
   const api = {
@@ -178,6 +157,7 @@ export function createImageryDetail(options) {
       const tier = enabled ? imageryTierFor(pose.dist, mode) : null;
       terrain.setDetailActive(!!tier && !!current);
       if (!tier) {
+        cancelPending();
         candidateKey = '';
         stableChecks = 0;
         if (state !== 'regional') report('regional');
@@ -185,8 +165,14 @@ export function createImageryDetail(options) {
       }
 
       const cell = detailCellFor(pose.lon, pose.lat, region, tier);
-      const size = detailImageSize(viewWidth, pixelRatio, quality, mode, tier);
+      const targetSize = detailImageSize(viewWidth, pixelRatio, quality, mode, tier);
+      // Resolve visible detail quickly, then refine the same cell. Do not spend
+      // bandwidth on four neighbouring exports while the user is waiting.
+      const preview = (tier === 'inspection' || tier === 'rooftop')
+        && targetSize === 4096 && current?.cell.key !== cell.key;
+      const size = preview ? 2048 : targetSize;
       const key = `${cell.key},${size}`;
+      if (pendingKey && pendingKey !== key) cancelPending();
       if (current?.key === key) {
         terrain.setDetailActive(true);
         if (state !== 'active') report('active');
@@ -204,22 +190,31 @@ export function createImageryDetail(options) {
       if (stableChecks < STABLE_CHECKS) return;
 
       pendingKey = key;
+      pendingCellKey = cell.key;
+      pendingSize = size;
+      pendingController = new AbortController();
       const requestGeneration = ++generation;
       report('loading');
-      loadImage(detailUrl(cell, size)).then(({ image, source }) => {
+      imageLoader(detailUrl(cell, size), pendingController.signal).then(({ image, source }) => {
         if (requestGeneration !== generation) return;
         current = { key, cell, size, image, source,
           resolutionM: detailResolutionM(cell, size, projection) };
         pendingKey = '';
+        pendingController = null;
+        pendingSize = 0;
+        pendingCellKey = '';
         failedKey = '';
         failedAt = 0;
         terrain.setDetailImagery(image, cell.bounds, region);
         terrain.setDetailActive(true);
         report('active');
-        prefetch(cell, size, mode);
+
       }).catch(() => {
         if (requestGeneration !== generation) return;
         pendingKey = '';
+        pendingController = null;
+        pendingSize = 0;
+        pendingCellKey = '';
         failedKey = key;
         failedAt = Date.now();
         report('unavailable');
@@ -239,7 +234,8 @@ export function createImageryDetail(options) {
         state, active: state === 'active', tier: current?.cell.tier || null,
         size: current?.size || 0, source: current?.source || null,
         resolutionM: current ? Math.round(current.resolutionM * 100) / 100 : null,
-        bounds: current?.cell.bounds || null, prefetched,
+        bounds: current?.cell.bounds || null, pendingSize,
+        refining: state === 'loading' && pendingCellKey === current?.cell.key,
       };
     },
 
@@ -247,11 +243,7 @@ export function createImageryDetail(options) {
 
     dispose() {
       generation += 1;
-      prefetchGeneration += 1;
-      clearTimeout(prefetchTimer);
-      if (prefetchIdle && typeof cancelIdleCallback === 'function') {
-        cancelIdleCallback(prefetchIdle);
-      }
+      cancelPending();
       pendingKey = '';
       current = null;
       terrain.setDetailActive(false);
