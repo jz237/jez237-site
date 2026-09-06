@@ -13,7 +13,7 @@ import {
   detailCellFor, detailImageSize,
   detailResolutionM, detailUrl, imageryTierFor, neighbourCells,
 } from '../src/imagery-detail.js';
-import { detailRequest } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
+import { detailRequest, imagerySources, onRequestGet } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
 
 const dataUrl = new URL('../data/', import.meta.url);
 const imagery = JSON.parse(await readFile(new URL('imagery.json', dataUrl), 'utf8'));
@@ -157,11 +157,57 @@ test('building-resolution imagery', async (t) => {
 
 
 test('imagery requests preserve geographic proportions without expanding latitude', () => {
-  for (const tier of ['detail', 'ultra', 'rooftop']) {
+  for (const tier of ['detail', 'ultra', 'rooftop', 'inspection']) {
     const request = detailRequest(new URLSearchParams({
       tier, lon: '-75.1655', lat: '39.9505', size: '4096',
     }));
     const b = request.bounds;
     assert.ok(Math.abs(request.size / request.height - (b.east - b.west) / (b.north - b.south)) < 1e-8);
+  }
+});
+
+
+test('close inspection retains geographic alignment and local coverage selection', () => {
+  for (const [lon, lat, expected] of [[-75.1652, 39.9526, 'City of Philadelphia'],
+    [-74.8827, 40.1368, 'Pennsylvania PEMA'], [-75.05, 39.9, 'USDA / USGS']]) {
+    const request = detailRequest(new URLSearchParams({ tier: 'inspection',
+      lon: String(lon), lat: String(lat), size: '4096' }));
+    const client = detailCellFor(lon, lat, terrain.bounds, 'inspection');
+    assert.deepEqual(request.bounds, client.bounds);
+    assert.ok(detailResolutionM(client, 4096, terrain.projection) < 0.17);
+    assert.ok(imagerySources(request)[0].name.startsWith(expected));
+  }
+  assert.equal(imageryTierFor(200, 'maximum'), 'inspection');
+  assert.equal(imageryTierFor(400, 'standard'), 'inspection');
+  assert.equal(imageryTierFor(401, 'standard'), 'rooftop');
+  assert.equal(imageryTierFor(200, 'data'), 'detail');
+  assert.equal(imagerySources({ bounds: { west: -75.25, east: -75.16,
+    south: 39.94, north: 39.96 } }).length, 1, 'cross-boundary cells use complete regional coverage');
+});
+
+test('local source outage falls back with honest credit and a short cache', async () => {
+  const oldFetch = globalThis.fetch;
+  const oldCaches = globalThis.caches;
+  const calls = [];
+  globalThis.caches = { default: { match: async () => null, put: async () => {} } };
+  globalThis.fetch = async (url) => {
+    calls.push(String(url));
+    return calls.length === 1 ? new Response('unavailable', { status: 503 })
+      : new Response('jpeg', { headers: { 'Content-Type': 'image/jpeg' } });
+  };
+  try {
+    const response = await onRequestGet({
+      request: new Request('https://example.com/detail-imagery?tier=inspection&lon=-75.1652&lat=39.9526&size=2048',
+        { headers: { referer: 'https://example.com/' } }), waitUntil() {},
+    });
+    assert.equal(response.status, 200);
+    assert.equal(calls.length, 2);
+    assert.match(calls[0], /PhiladelphiaImagery2024/);
+    assert.match(calls[1], /USGSImageryOnly/);
+    assert.equal(response.headers.get('X-Imagery-Source'), 'USDA / USGS The National Map');
+    assert.equal(response.headers.get('Cache-Control'), 'public, max-age=300');
+  } finally {
+    globalThis.fetch = oldFetch;
+    globalThis.caches = oldCaches;
   }
 });

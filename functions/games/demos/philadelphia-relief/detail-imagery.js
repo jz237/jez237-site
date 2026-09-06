@@ -10,6 +10,7 @@ const REGION = {
 const TIERS = {
   detail: { span: { lon: 0.096, lat: 0.072 }, grid: { lon: 0.04, lat: 0.03 } },
   ultra: { span: { lon: 0.032, lat: 0.024 }, grid: { lon: 0.012, lat: 0.009 } },
+  inspection: { span: { lon: 0.006, lat: 0.0045 }, grid: { lon: 0.0005, lat: 0.0005 } },
   rooftop: { span: { lon: 0.012, lat: 0.009 }, grid: { lon: 0.0045, lat: 0.0035 } },
 };
 const ALLOWED_SIZES = new Set([2048, 4096]);
@@ -53,9 +54,28 @@ export function detailRequest(searchParams) {
     south: lat - halfLat,
     north: lat + halfLat,
   };
-  const key = `aligned-v2,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
+  const key = `local-v3,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
   const height = Math.round(size * spec.span.lat / spec.span.lon);
   return { tier, lon, lat, size, height, bounds, key };
+}
+
+// Keep whole cells inside verified coverage, rather than using imagery service
+// bounding boxes, which also include empty areas outside the actual mosaic.
+export function imagerySources(detail) {
+  const b = detail.bounds;
+  const inside = (west, south, east, north) => b.west >= west && b.east <= east
+    && b.south >= south && b.north <= north;
+  const sources = [];
+  if (inside(-75.23, 39.93, -75.12, 40.00)) {
+    sources.push({ name: 'City of Philadelphia 2024 / PASDA', layers: 'show:0,1,2,3',
+      url: 'https://maps.pasda.psu.edu/ArcGIS/rest/services/pasda/PhiladelphiaImagery2024/MapServer/export' });
+  }
+  if (inside(-74.94, 40.10, -74.85, 40.18)) {
+    sources.push({ name: 'Pennsylvania PEMA 2021-2023 / PASDA', layers: 'show:3',
+      url: 'https://services.pasda.psu.edu/server/rest/services/pasda/PEMAImagery2021_2023/MapServer/export' });
+  }
+  sources.push({ name: 'USDA / USGS The National Map', url: SOURCE });
+  return sources;
 }
 
 function sameOriginRequest(request) {
@@ -96,51 +116,59 @@ export async function onRequestGet(context) {
   const cached = await cache.match(cacheKey);
   if (cached) return cached;
 
-  const sourceUrl = new URL(SOURCE);
-  sourceUrl.search = new URLSearchParams({
-    bbox: [
-      detail.bounds.west,
-      detail.bounds.south,
-      detail.bounds.east,
-      detail.bounds.north,
-    ].map((value) => value.toFixed(6)).join(","),
-    bboxSR: "4326",
-    imageSR: "4326",
-    size: `${detail.size},${detail.height}`,
-    format: "jpg",
-    transparent: "false",
-    f: "image",
-  }).toString();
+  const sources = imagerySources(detail);
+  for (const source of sources) {
+    const sourceUrl = new URL(source.url);
+    sourceUrl.search = new URLSearchParams({
+      bbox: [
+        detail.bounds.west,
+        detail.bounds.south,
+        detail.bounds.east,
+        detail.bounds.north,
+      ].map((value) => value.toFixed(6)).join(","),
+      bboxSR: "4326",
+      imageSR: "4326",
+      size: `${detail.size},${detail.height}`,
+      format: "jpg",
+      transparent: "false",
+      f: "image",
+      ...(source.layers ? { layers: source.layers } : {}),
+    }).toString();
 
-  try {
-    const upstream = await fetch(sourceUrl, {
-      headers: { Accept: "image/jpeg" },
-      cf: { cacheEverything: true, cacheTtl: CACHE_SECONDS },
-    });
-    const contentType = upstream.headers.get("content-type") || "";
-    if (!upstream.ok || !contentType.startsWith("image/jpeg")) {
-      return plain(502, "Aerial detail source unavailable\n");
+    try {
+      const upstream = await fetch(sourceUrl, {
+        headers: { Accept: "image/jpeg" },
+        signal: AbortSignal.timeout(30000),
+        cf: { cacheEverything: true, cacheTtl: CACHE_SECONDS },
+      });
+      const contentType = upstream.headers.get("content-type") || "";
+      if (!upstream.ok || !contentType.startsWith("image/jpeg")) {
+        continue;
+      }
+
+      const headers = new Headers(upstream.headers);
+      const ttl = source === sources[0] ? CACHE_SECONDS : 300;
+      headers.set("Cache-Control", `public, max-age=${ttl}`);
+      headers.set("CDN-Cache-Control", `public, max-age=${ttl}`);
+      headers.set("X-Content-Type-Options", "nosniff");
+      headers.set("X-Robots-Tag", "noindex, nofollow");
+      headers.set("X-Imagery-Detail-Key", detail.key);
+      headers.set("X-Imagery-Source", source.name);
+      const response = new Response(upstream.body, {
+        status: 200,
+        headers,
+      });
+      context.waitUntil(cache.put(cacheKey, response.clone()));
+      return response;
+    } catch (error) {
+      console.error(JSON.stringify({
+        message: "Detail imagery fetch failed",
+        source: source.name,
+        error: error instanceof Error ? error.message : String(error),
+      }));
     }
-
-    const headers = new Headers(upstream.headers);
-    headers.set("Cache-Control", `public, max-age=${CACHE_SECONDS}, immutable`);
-    headers.set("CDN-Cache-Control", `public, max-age=${CACHE_SECONDS}`);
-    headers.set("X-Content-Type-Options", "nosniff");
-    headers.set("X-Robots-Tag", "noindex, nofollow");
-    headers.set("X-Imagery-Detail-Key", detail.key);
-    const response = new Response(upstream.body, {
-      status: 200,
-      headers,
-    });
-    context.waitUntil(cache.put(cacheKey, response.clone()));
-    return response;
-  } catch (error) {
-    console.error(JSON.stringify({
-      message: "USGS detail imagery fetch failed",
-      error: error instanceof Error ? error.message : String(error),
-    }));
-    return plain(502, "Aerial detail source unavailable\n");
   }
+  return plain(502, "Aerial detail source unavailable\n");
 }
 
 export function onRequest(context) {

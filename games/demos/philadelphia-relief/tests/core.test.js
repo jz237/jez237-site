@@ -508,7 +508,7 @@ test('url state', async (t) => {
     assert.equal(patch.exaggeration, CONTROLS.exaggeration.max);
     assert.equal(patch.camPitch, CAMERA.camPitch.min);
     assert.equal(patch.camDist, CAMERA.camDist.min);
-    assert.equal(CAMERA.camDist.min, 900, 'source-quality camera floor');
+    assert.equal(CAMERA.camDist.min, 200, 'close inspection camera floor');
   });
 
   await t.test('layer flags survive as booleans', () => {

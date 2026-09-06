@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090606';
-import { ERA_IDS } from './eras.js?v=philly-2026090606';
+import { WEATHERS } from './solar.js?v=philly-2026090607';
+import { ERA_IDS } from './eras.js?v=philly-2026090607';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -207,10 +207,8 @@ export const CAMERA = {
   camLon: { k: 'x', min: -75.8, max: -74.7, def: -75.1655, prec: 4 },
   camLat: { k: 'y', min: 39.7, max: 40.55, def: 39.9505, prec: 4 },
   // Orbit radius in metres from the target.
-  // Visual-quality floor, not merely a camera-safety floor. At 900 m the
-  // phone-safe texture and the USGS source remain at or below approximately
-  // one useful source sample per screen pixel; descending farther magnifies it.
-  camDist: { k: 'd', min: 900, max: 190000, def: 4600, prec: 0 },
+  // Local aerial imagery and inspection cells support roof / parking detail.
+  camDist: { k: 'd', min: 200, max: 190000, def: 4600, prec: 0 },
   // Map convention: 0 deg = north-up, increasing clockwise.
   camBearing: { k: 'b', min: 0, max: 360, def: 32, wrap: 360, prec: 1 },
   // Map convention: 0 deg = straight down, 85 deg = near the horizon.

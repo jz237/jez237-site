@@ -132,18 +132,27 @@ seams to stitch.
 
 `tools/build_imagery.py` exports the map's exact west/east/south/north bounds
 from the public-domain **USGS Imagery Only** service in EPSG:4326. The resulting
-4096 × 4096 WebP has the same north-up regular lon/lat grid as the terrain, so
+4096 × 3165 WebP has the same north-up regular lon/lat grid as the terrain, so
 the fragment shader samples it with the terrain UV directly: no screenshot
 placement, key or reprojection. It is the instant-start regional level.
 
-At close range, `src/imagery-detail.js` selects an overlapping 0.096° × 0.072°
-cell around the camera. The same-origin `detail-imagery` Pages Function validates
-and quantises every request, streams the matching USGS export without buffering,
-and caches it at the edge for 30 days. Desktop receives 4096² (about 2 m/px);
-phones and Performance mode receive 2048² (about 4 m/px). The shader feathers
-the detail window into the regional texture, which remains visible if the source
-or function is unavailable. The map displays the requested USDA / USGS credit
-and the active ground resolution whenever the aerial layer is visible.
+At close range, `src/imagery-detail.js` switches between city, block, roof,
+and inspection cells. Below 400 m, a 0.006° × 0.0045° inspection window delivers
+4096 × 3072 pixels in Maximum mode (roughly 0.16 m sampling). The camera can
+descend to 200 m. Sampling describes the delivered grid, not guaranteed native
+photographic resolution.
+
+The same-origin Pages Function selects **Philadelphia 2024 aerial imagery**
+([PASDA service](https://maps.pasda.psu.edu/ArcGIS/rest/services/pasda/PhiladelphiaImagery2024/MapServer))
+for cells wholly within the verified Center City coverage rectangle, and
+**PEMA 2021–2023 imagery**
+([PASDA service](https://services.pasda.psu.edu/server/rest/services/pasda/PEMAImagery2021_2023/MapServer))
+around Levittown. Other locations retain USDA / USGS imagery. Actual source
+credit is returned in the response and shown on the map. A local-source outage
+falls back to USGS with a five-minute cache, allowing the local source to recover.
+Successful primary imagery is cached for 30 days. Raster layers are selected
+explicitly so tile-index outlines never appear. Pixel proportions match the
+geographic bounds exactly; cells overlap and feather into the backdrop.
 
 The **Aerial imagery** layer opens on and **3D buildings & bridges** opens off.
 Turning the latter on restores the full OSM extrusion/bridge model without
@@ -161,7 +170,7 @@ uniform writes — they respond instantly and never rebuild geometry.
 
 Rivers, roads, rail and boundaries are expanded into screen-space-width ribbons in
 the vertex shader, which is the only way a road network stays readable across a
-camera that moves from 190 km out to a 900 m source-quality floor. Each vertex carries its **raw
+camera that moves from 190 km out to a 200 m close-inspection floor. Each vertex carries its **raw
 elevation in metres**, not a baked world Y, so the exaggeration slider moves the
 overlays and the ground together instead of tearing them apart.
 
