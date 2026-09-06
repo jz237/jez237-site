@@ -53,8 +53,9 @@ export function detailRequest(searchParams) {
     south: lat - halfLat,
     north: lat + halfLat,
   };
-  const key = `${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
-  return { tier, lon, lat, size, bounds, key };
+  const key = `aligned-v2,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
+  const height = Math.round(size * spec.span.lat / spec.span.lon);
+  return { tier, lon, lat, size, height, bounds, key };
 }
 
 function sameOriginRequest(request) {
@@ -105,7 +106,7 @@ export async function onRequestGet(context) {
     ].map((value) => value.toFixed(6)).join(","),
     bboxSR: "4326",
     imageSR: "4326",
-    size: `${detail.size},${detail.size}`,
+    size: `${detail.size},${detail.height}`,
     format: "jpg",
     transparent: "false",
     f: "image",

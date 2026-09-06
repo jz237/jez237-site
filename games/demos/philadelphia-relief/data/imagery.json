@@ -17,10 +17,10 @@
   },
   "projection": "EPSG:4326",
   "width": 4096,
-  "height": 4096,
+  "height": 3165,
   "format": "webp",
   "quality": 82,
-  "bytes": 5213486,
-  "sha256": "fae7075278fc21ffbadac90929d80121397518f2c3fa86f61340413a4fcdf41f",
-  "builtAt": "2026-09-04T16:17:15+00:00"
+  "bytes": 4085452,
+  "sha256": "26857259a71301a4251de5ef6407245801423e1b60ce7eda65bcb41782285500",
+  "builtAt": "2026-09-06T00:48:35+00:00"
 }

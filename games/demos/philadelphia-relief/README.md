@@ -1,9 +1,11 @@
 ## September 2026 field guide refresh
 
 The opening city view uses high-resolution aerial imagery for real rooftops and street detail.
-A bundled 4096² USGS city image keeps the surrounding neighborhoods sharp while finer tiles load.
+A bundled 4096 × 3072 USGS city image keeps the surrounding neighborhoods sharp while finer tiles load.
 Rebuild it with `python tools/build_city_imagery.py`. Schematic 3D structures stay optional. Roads now include 20,864 OpenStreetMap neighborhood
 street segments, simplified at 1.5 metres, alongside the regional major-road network.
+The regional image and streamed detail tiles now preserve the geographic aspect ratio so
+photography aligns with vector streets instead of being stretched by the upstream export service.
 Local streets fade out as the camera pulls back to keep regional views readable.
 Rebuild this addition with `python tools/build_local_streets.py` (or `--source saved-overpass.json`).
 
@@ -26,7 +28,7 @@ GPT-5.6.**
 
 It is a plain browser page with one bounded Cloudflare Pages Function. There is
 no framework, bundler, API key or account, and the browser loads every byte from
-this origin. A 4096² public-domain USGS orthoimage is baked at build time and
+this origin. A 4096 × 3165 public-domain USGS orthoimage is baked at build time and
 draped directly over the elevation mesh. Below 16 km camera distance, the edge
 function streams and caches one overlapping 8 km USGS detail window around the
 camera target, giving about 2 m/px on desktop and 4 m/px on a phone. The earlier

@@ -55,24 +55,25 @@ def main() -> int:
         "south": region.SOUTH,
         "north": region.NORTH,
     }
+    image_height = round(args.size * (region.NORTH - region.SOUTH) / (region.EAST - region.WEST))
     params = {
         "bbox": f"{region.WEST},{region.SOUTH},{region.EAST},{region.NORTH}",
         "bboxSR": "4326",
         "imageSR": "4326",
-        "size": f"{args.size},{args.size}",
+        "size": f"{args.size},{image_height}",
         "format": "jpg",
         "transparent": "false",
         "f": "image",
     }
     url = f"{SERVICE}?{urllib.parse.urlencode(params)}"
     request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
-    print(f"[imagery] requesting {args.size}x{args.size} USGS orthoimagery", flush=True)
+    print(f"[imagery] requesting {args.size}x{image_height} USGS orthoimagery", flush=True)
     with urllib.request.urlopen(request, timeout=180) as response:
         blob = response.read()
 
     image = Image.open(io.BytesIO(blob)).convert("RGB")
-    if image.size != (args.size, args.size):
-        raise SystemExit(f"service returned {image.size}, expected {(args.size, args.size)}")
+    if image.size != (args.size, image_height):
+        raise SystemExit(f"service returned {image.size}, expected {(args.size, image_height)}")
 
     out = DATA / args.out
     image.save(out, "WEBP", quality=args.quality, method=6)
