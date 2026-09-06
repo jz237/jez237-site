@@ -592,3 +592,6 @@ canceling at each snapped grid boundary. Eight recent small previews are cached
 in memory (about 24 MiB decoded), and the previous adjacent GPU tile remains
 underneath the current one. Upgrading a preview to full resolution preserves
 that neighbour, preventing the edge from reverting to the coarse regional image.
+
+Tilted cameras choose imagery detail and focus from the nearer visible ground,
+so an oblique city view does not leave its foreground on the regional tile.

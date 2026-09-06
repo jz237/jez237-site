@@ -7,52 +7,52 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090609';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090610';
 
-import { createStore } from './state.js?v=philly-2026090609';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090609';
-import { effectiveLight } from './solar.js?v=philly-2026090609';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090609';
+import { createStore } from './state.js?v=philly-2026090610';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090610';
+import { effectiveLight } from './solar.js?v=philly-2026090610';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090610';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090609';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090609';
+} from './geo.js?v=philly-2026090610';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090610';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090609';
+} from './tours.js?v=philly-2026090610';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090609';
+} from './urlstate.js?v=philly-2026090610';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090609';
+} from './degraded.js?v=philly-2026090610';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090609';
-import { createImageryDetail } from './imagery-detail.js?v=philly-2026090609';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090609';
-import { createPostFX } from './postfx.js?v=philly-2026090609';
-import { createCameraRig } from './camera.js?v=philly-2026090609';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090609';
-import { createStructures } from './structures.js?v=philly-2026090609';
+} from './terrain.js?v=philly-2026090610';
+import { createImageryDetail, imageryFocus } from './imagery-detail.js?v=philly-2026090610';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090610';
+import { createPostFX } from './postfx.js?v=philly-2026090610';
+import { createCameraRig } from './camera.js?v=philly-2026090610';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090610';
+import { createStructures } from './structures.js?v=philly-2026090610';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090609';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090609';
+} from './structures-data.js?v=philly-2026090610';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090610';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090609';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090609';
+} from './flood.js?v=philly-2026090610';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090610';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090609';
+} from './vectors.js?v=philly-2026090610';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090609';
-import { getTheme } from './themes.js?v=philly-2026090609';
+} from './ui.js?v=philly-2026090610';
+import { getTheme } from './themes.js?v=philly-2026090610';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -792,7 +792,7 @@ async function boot() {
     if (imageryClock >= 0.5) {
       imageryClock = 0;
       imageryDetail.consider(
-        now,
+        imageryFocus(now, meta.projection),
         state.layers.imagery && terrain.hasImagery
           && (state.era === 'present' || state.compareMode === 'aerial'
             || state.compareMode === 'history'),
