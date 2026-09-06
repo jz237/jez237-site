@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/games/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026090611" />
+<link rel="stylesheet" href="app.css?v=philly-2026090612" />
 </head>
 <body data-theme="dusk">
 
@@ -105,6 +105,7 @@
 <nav class="explore-nav" aria-label="Explore and customize">
   <button type="button" id="openExplore" aria-controls="shots">Explore places <span aria-hidden="true">↗</span></button>
   <button type="button" id="openCustomize" aria-controls="studio">Customize <span aria-hidden="true">☷</span></button>
+  <button type="button" id="btnInspect" aria-pressed="false" title="Street inspection (I)">Street inspection</button>
 </nav>
 <!-- ── control studio ──────────────────────────────────────────────────── -->
 <section id="studio" class="panel studio collapsed" aria-labelledby="studioTitle">
@@ -416,15 +417,15 @@
     <p class="caveat">
       This is a visualisation, not a survey. Elevations come from a ~30 m public
       DEM resampled to ~46 m, then <b>vertically exaggerated</b> by whatever the
-      slider says — the default 10× is not a real slope. Buildings and bridges
+      slider says — the default 2× is not a real slope. Buildings and bridges
       are stretched by the square root of that factor (times the structure-height
       slider), so a tower stays proportionate to a hill without becoming a needle;
-      their footprints are simplified to ~0.6 m and rowhouse rows are merged into
-      single blocks. Readouts are good to a few metres at best. Three source-data seams in the northwest (thin stripes
+      bundled footprints are simplified, while close-up extracts retain individual
+      mapped outlines. Heights and roof dimensions without source values are estimates. Readouts are good to a few metres at best. Three source-data seams in the northwest (thin stripes
       spiking to 900 m in ground that is really ~260 m) were replaced with a
       local median during the build. Simplified vectors drop detail below roughly
-      25–140 m depending on the layer, minor roads and unnamed streams are not
-      included at all, and OpenStreetMap coverage varies by area. Do not use any
+      25–140 m in regional layers. Local streets, address numbers and roof shapes
+      appear where mapped; OpenStreetMap coverage varies by area. Do not use any
       of this for navigation, flood risk, engineering or property decisions.
     </p>
 
@@ -439,7 +440,7 @@
       packed tallest-first so the density slider is a draw-range prefix; whole
       tiers frustum-cull as a unit and rise out of the ground as you approach.
       The browser loads every byte from this origin: a baked regional image first, then a
-      bounded, same-origin Cloudflare cache endpoint for close-range USGS detail. There is
+      bounded tile mosaic for aerial detail and cached neighborhood extracts for streets and buildings. There is
       no browser credential, map account or API key.
     </p>
 
@@ -473,6 +474,7 @@
         <tr><th scope="row"><kbd>P</kbd></th><td>Save the current view as a PNG</td></tr>
         <tr><th scope="row"><kbd>/</kbd></th><td>Focus the search box</td></tr>
         <tr><th scope="row"><kbd>?</kbd></th><td>This list</td></tr>
+        <tr><th scope="row"><kbd>I</kbd></th><td>Enter or leave street inspection</td></tr>
         <tr><th scope="row"><kbd>Esc</kbd></th><td>Close a card or dialog, leave cinema mode, or stop the flythrough</td></tr>
         <tr><th scope="row">Click</th><td>A landmark or building opens its sourced information card</td></tr>
       </tbody>
@@ -500,7 +502,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026090611"></script>
+<script type="module" src="src/main.js?v=philly-2026090612"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

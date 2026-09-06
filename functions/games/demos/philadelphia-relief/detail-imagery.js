@@ -10,12 +10,16 @@ const REGION = {
   north: 40.55,
 };
 const TIERS = {
+  'tile-inspection': { span: { lon: 0.0032, lat: 0.0024 }, grid: { lon: 0.0032, lat: 0.0024 } },
+  'tile-rooftop': { span: { lon: 0.0128, lat: 0.0096 }, grid: { lon: 0.0128, lat: 0.0096 } },
+  'tile-ultra': { span: { lon: 0.0512, lat: 0.0384 }, grid: { lon: 0.0512, lat: 0.0384 } },
+  'tile-detail': { span: { lon: 0.1024, lat: 0.0768 }, grid: { lon: 0.1024, lat: 0.0768 } },
   detail: { span: { lon: 0.096, lat: 0.072 }, grid: { lon: 0.04, lat: 0.03 } },
   ultra: { span: { lon: 0.032, lat: 0.024 }, grid: { lon: 0.012, lat: 0.009 } },
   inspection: { span: { lon: 0.006, lat: 0.0045 }, grid: { lon: 0.0005, lat: 0.0005 } },
   rooftop: { span: { lon: 0.012, lat: 0.009 }, grid: { lon: 0.0045, lat: 0.0035 } },
 };
-const ALLOWED_SIZES = new Set([1024, 2048, 4096]);
+const ALLOWED_SIZES = new Set([512, 1024, 2048, 4096]);
 const CACHE_SECONDS = 30 * 24 * 60 * 60;
 
 function clamp(value, low, high) {
@@ -94,7 +98,7 @@ export function imagerySources(detail) {
   const b = detail.bounds;
   const sources = [];
   // Wide regional views use the inexpensive existing overview source.
-  if (detail.tier !== 'detail') {
+  if (detail.tier !== 'detail' && detail.tier !== 'tile-detail') {
     if (b.west >= -75.23 && b.east <= -75.12 && b.south >= 39.93 && b.north <= 40.00) {
       sources.push({ name: 'City of Philadelphia 2024 / PASDA', layers: 'show:0,1,2,3',
         url: 'https://maps.pasda.psu.edu/ArcGIS/rest/services/pasda/PhiladelphiaImagery2024/MapServer/export' });

@@ -7,52 +7,53 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090611';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090612';
 
-import { createStore } from './state.js?v=philly-2026090611';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090611';
-import { effectiveLight } from './solar.js?v=philly-2026090611';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090611';
+import { createStore } from './state.js?v=philly-2026090612';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090612';
+import { effectiveLight } from './solar.js?v=philly-2026090612';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090612';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090611';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090611';
+} from './geo.js?v=philly-2026090612';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090612';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090611';
+} from './tours.js?v=philly-2026090612';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090611';
+} from './urlstate.js?v=philly-2026090612';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090611';
+} from './degraded.js?v=philly-2026090612';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090611';
-import { createImageryDetail, imageryFocus } from './imagery-detail.js?v=philly-2026090611';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090611';
-import { createPostFX } from './postfx.js?v=philly-2026090611';
-import { createCameraRig } from './camera.js?v=philly-2026090611';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090611';
-import { createStructures } from './structures.js?v=philly-2026090611';
+} from './terrain.js?v=philly-2026090612';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026090612';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090612';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090612';
+import { createPostFX } from './postfx.js?v=philly-2026090612';
+import { createCameraRig } from './camera.js?v=philly-2026090612';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090612';
+import { createStructures } from './structures.js?v=philly-2026090612';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090611';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090611';
+} from './structures-data.js?v=philly-2026090612';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090612';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090611';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090611';
+} from './flood.js?v=philly-2026090612';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090612';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090611';
+} from './vectors.js?v=philly-2026090612';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090611';
-import { getTheme } from './themes.js?v=philly-2026090611';
+} from './ui.js?v=philly-2026090612';
+import { getTheme } from './themes.js?v=philly-2026090612';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -322,10 +323,12 @@ async function boot() {
   });
   scene.add(terrain.mesh);
 
-  const imageryDetail = createImageryDetail({
+  const imageryDetail = createImageryTiles(THREE, {
     terrain,
     region: projection.bounds,
     projection: meta.projection,
+    sceneProjection: projection,
+    maxAnisotropy: renderer.capabilities.getMaxAnisotropy(),
     onStatus(detail) {
       const credit = $('imageryCredit');
       if (!credit) return;
@@ -341,6 +344,8 @@ async function boot() {
         ? `${detail.resolutionM.toFixed(2)} m sampling` : '');
     },
   });
+
+  scene.add(imageryDetail.group);
 
   const overlayRoot = new THREE.Group();
   overlayRoot.name = 'overlays';
@@ -446,10 +451,33 @@ async function boot() {
     ...data.landmarks,
     landmarks: (data.landmarks.landmarks || []).filter((l) => landmarkInEra(l, era)),
   } : data.landmarks);
-  labels.setCandidates(buildLabelCandidates(data.places, landmarksForEra(store.value('era'))));
+  let labelDataRevision = 0;
+  let neighborhoodNames = [];
+  let streetNames = [];
+  const refreshLabels = () => { labelDataRevision++; labels.setCandidates([
+    ...buildLabelCandidates(data.places, landmarksForEra(store.value('era'))),
+    ...(store.value('era') === 'present' ? [...streetNames, ...neighborhoodNames] : []),
+  ]); };
+  refreshLabels();
+  let streetNamesRequested = false;
+  function ensureStreetNames() {
+    if (streetNamesRequested) return;
+    streetNamesRequested = true;
+    fetchJson('data/street-labels.json').then(doc => {
+      streetNames = doc.labels; refreshLabels();
+    }).catch(() => {});
+  }
+  const neighborhood = createNeighborhood(THREE, { projection, sampleElevation,
+    onData(doc, names) {
+      neighborhoodNames = names;
+      structures?.setLocalDetail(doc);
+      refreshLabels();
+    },
+  });
+  scene.add(neighborhood.group);
   store.subscribe((state, changed) => {
     if (changed.has('era')) {
-      labels.setCandidates(buildLabelCandidates(data.places, landmarksForEra(state.era)));
+      refreshLabels();
     }
   });
 
@@ -518,18 +546,20 @@ async function boot() {
       curated: 'Curated reference height', merged: 'Merged source height',
       default: 'Estimated from building type',
     };
-    ui.openBuilding('Selected building', {
+    ui.openBuilding(building.name || building.address || 'Selected building', {
       category: 'OpenStreetMap building footprint',
       facts: [
         ['Height', `${building.height.toFixed(1)} m · ${sourceLabels[building.source] || building.source}`],
         ['Construction', building.year
           ? `${building.year} · ${building.yearSource === 'osm' ? 'OpenStreetMap' : 'curated source'}`
           : 'Date not included in the source'],
-        ['Name / address', 'Not included in this compact layer'],
+        ['Name / address', building.address || building.name || 'Not included in the source'],
+        ['Roof', building.roofShape && building.roofShape !== 'unknown'
+          ? `${building.roofShape} · mapped shape; untagged dimensions estimated` : 'Shape not mapped'],
         ['Location', `${lat.toFixed(5)}, ${lon.toFixed(5)}`],
       ],
       text: 'This is the real mapped footprint. The outline and height provenance are shown '
-        + 'without inferring a name, address or construction date that the packed source does not contain.',
+        + 'with source heights where available. Untagged heights and roof dimensions are estimates.',
       sources: [['OpenStreetMap contributors', 'https://www.openstreetmap.org/copyright']],
       note: `Footprint · ${building.zone} · ${building.tier}`,
       lon, lat, building: true,
@@ -791,8 +821,10 @@ async function boot() {
     imageryDetail.tick(dt);
     if (imageryClock >= 0.5) {
       imageryClock = 0;
+      if (now.dist < 4200) ensureStreetNames();
+      neighborhood.consider(now, state);
       imageryDetail.consider(
-        imageryFocus(now, meta.projection),
+        now,
         state.layers.imagery && terrain.hasImagery
           && (state.era === 'present' || state.compareMode === 'aerial'
             || state.compareMode === 'history'),
@@ -800,6 +832,7 @@ async function boot() {
         window.devicePixelRatio || 1,
         effectiveQuality,
         state.imageryDetail,
+        viewH,
       );
     }
 
@@ -857,6 +890,11 @@ async function boot() {
         u.uOpacity.value = state.roadOpacity * 0.5 * streetFade;
         entry.mesh.visible = state.layers.roads && state.era === 'present' && streetFade > 0.01;
       }
+      if (entry.layer === 'roads' && now.dist < 2600 && neighborhood.hasCoverage(now)) {
+        entry.mesh.visible = false;
+      } else if (entry.layer === 'roads' && entry.kind !== 'road-5') {
+        entry.mesh.visible = state.layers.roads && state.era === 'present';
+      }
       u.uNear.value = camera.near;
     }
     for (const entry of overlays.areas) {
@@ -873,7 +911,11 @@ async function boot() {
       }
     }
 
+    neighborhood.update(camera, state, exaggeration, viewW * renderer.getPixelRatio(),
+      viewH * renderer.getPixelRatio());
     if (structures) {
+      structures.setRoofImagery(imageryDetail.roofTiles(now),
+        state.layers.imagery && state.era === 'present');
       structures.update({
         camera, state, exaggeration, dt, sunDir, light,
         fogDensity: terrain.uniforms.uFogDensity.value,
@@ -890,7 +932,7 @@ async function boot() {
     labelClock += dt;
     if (labelClock > 1 / 24) {
       labelClock = 0;
-      const labelKey = `${rig.revision}:${viewW}:${viewH}:${exaggeration}:`
+      const labelKey = `${rig.revision}:${labelDataRevision}:${viewW}:${viewH}:${exaggeration}:`
         + `${state.labelDensity}:${state.labelSize}:${state.layers.places}:`
         + `${state.layers.landmarks}:${state.era}`;
       if (labelKey !== lastLabelKey) {
@@ -903,6 +945,8 @@ async function boot() {
           size: state.labelSize,
           showPlaces: state.layers.places,
           showLandmarks: state.layers.landmarks,
+          showStreets: state.layers.roads && state.era === 'present',
+          distance: now.dist,
         });
       }
     }
@@ -986,7 +1030,8 @@ async function boot() {
   requestAnimationFrame(tick);
   finishLoading();
 
-  window.addEventListener('pagehide', () => imageryDetail.dispose(), { once: true });
+  window.addEventListener('pagehide', () => { imageryDetail.dispose(); neighborhood.dispose(); },
+      { once: true });
 
   // The visible field notes and gesture hint introduce the map without a blocking dialog.
 }
@@ -1571,6 +1616,36 @@ function wireInterface(deps) {
   document.querySelector('.skip-link').addEventListener('click', () => {
     studioPanel.set(false); dom.studioToggle.focus();
   });
+  let inspectionSnapshot = null;
+  function setInspection(enabled) {
+    motion.stop();
+    if (enabled && !inspectionSnapshot) {
+      inspectionSnapshot = structuredClone(store.get());
+      const pose = rig.pose();
+      store.set({ camLon: pose.lon, camLat: pose.lat, camPitch: 12, camDist: 350,
+        exaggeration: 1, era: 'present', compareMode: 'off', labelDensity: 0.65,
+        layers: { imagery: true, terrain: true, roads: true, structures: false,
+          places: false, landmarks: false, contours: false, parks: false, water: false, flood: false },
+      }, { source: 'inspection' });
+      studioPanel.set(true); shotsPanel.set(true);
+    } else if (!enabled && inspectionSnapshot) {
+      const pose = rig.pose(), saved = inspectionSnapshot;
+      inspectionSnapshot = null;
+      store.set({ ...saved, camLon: pose.lon, camLat: pose.lat }, { source: 'inspection' });
+    }
+    document.body.classList.toggle('street-inspection', enabled);
+    $('btnInspect').setAttribute('aria-pressed', String(enabled));
+    $('btnInspect').textContent = enabled ? 'Exit inspection' : 'Street inspection';
+  }
+  $('btnInspect').addEventListener('click', () => setInspection(!inspectionSnapshot));
+  store.subscribe((state, changed) => {
+    if (inspectionSnapshot && (changed.has('preset') || state.era !== 'present')) {
+      inspectionSnapshot = null;
+      document.body.classList.remove('street-inspection');
+      $('btnInspect').setAttribute('aria-pressed', 'false');
+      $('btnInspect').textContent = 'Street inspection';
+    }
+  });
   $('storyArchitecture').addEventListener('click', () => motion.toPreset('architecture'));
   $('storyTour').addEventListener('click', () => {
     motion.setTour('rivers'); motion.play();
@@ -1776,6 +1851,9 @@ function wireInterface(deps) {
       case 'f': case 'F':
         toggleFullscreen();
         break;
+      case 'i': case 'I':
+        setInspection(!inspectionSnapshot);
+        break;
       case 'v': case 'V':
         setCinema(!cinema);
         break;
@@ -1807,6 +1885,7 @@ function wireInterface(deps) {
         break;
       case 'Escape':
         if (card.openName) card.close();
+        else if (inspectionSnapshot) setInspection(false);
         else if (cinema) setCinema(false);
         else motion.stop();
         break;

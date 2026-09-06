@@ -10,7 +10,7 @@
  * occlusion test so a name never floats over the ridge that is hiding it.
  */
 
-import { clamp } from './geo.js?v=philly-2026090611';
+import { clamp } from './geo.js?v=philly-2026090612';
 
 const MAX_NODES = 90;
 
@@ -81,6 +81,7 @@ export function createLabelLayer(THREE, options) {
       if (!width || !height) return 0;
 
       const placed = [];
+      const streetSeen = new Set();
       const budget = Math.round(6 + density * (MAX_NODES - 6));
       // Density also gates *which* ranks are eligible, so turning it down
       // thins the map by importance rather than by whatever happens to fit.
@@ -90,8 +91,12 @@ export function createLabelLayer(THREE, options) {
       let used = 0;
       for (const item of candidates) {
         if (used >= budget) break;
-        if (item.rank > rankCutoff) continue;
-        if (item.kind === 'landmark' ? !showLandmarks : !showPlaces) continue;
+        const local = item.kind === 'street' || item.kind === 'address';
+        if (!local && item.rank > rankCutoff) continue;
+        if (local) {
+          if (!ctx.showStreets || ctx.distance > (item.kind === 'address' ? 650 : 4200)) continue;
+          if (item.kind === 'street' && streetSeen.has(item.name)) continue;
+        } else if (item.kind === 'landmark' ? !showLandmarks : !showPlaces) continue;
 
         projected.set(item.x, item.elev * exaggeration, item.z);
         const worldY = projected.y;
@@ -117,6 +122,7 @@ export function createLabelLayer(THREE, options) {
         if (isOccluded(camera, item, worldY, exaggeration)) continue;
         if (placed.some((p) => overlaps(p, box))) continue;
         placed.push(box);
+        if (item.kind === 'street') streetSeen.add(item.name);
 
         const el = pool[used] || makeNode();
         if (el._name !== item.name || el._kind !== item.kind) {
