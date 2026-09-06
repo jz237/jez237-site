@@ -32,3 +32,8 @@ credentials.json
 
 # macOS
 .DS_Store
+
+# newsbot's local feed cache (items.json, image_cache.json): regenerated every
+# run and already excluded from deploy (scripts/deploy_cloudflare_pages_site.sh).
+# Intentionally untracked to stop multi-MB churn commits. Do not force-add.
+ai-news/data/
