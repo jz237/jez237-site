@@ -7,7 +7,7 @@
  * as atmosphere rather than as a model on a backdrop.
  */
 
-import { hexToRgb, getTheme } from './themes.js?v=philly-2026090407';
+import { hexToRgb, getTheme } from './themes.js?v=philly-2026090601';
 
 const SKY_VERTEX = /* glsl */ `
   varying vec3 vDir;
@@ -42,7 +42,7 @@ const SKY_FRAGMENT = /* glsl */ `
     vec3 color = mix(uTop, uHorizon, clamp(band + uHaze * 0.35, 0.0, 1.0));
 
     // Ground haze below the horizon so a pitched-down camera never sees a void.
-    color = mix(color, uHorizon, smoothstep(0.0, -0.25, up));
+    color = mix(color, uHorizon, (1.0 - smoothstep(-0.25, 0.0, up)));
 
     float toSun = max(0.0, dot(dir, normalize(uSunDir)));
     color += uSunColor * pow(toSun, 8.0) * 0.28;        // broad glow

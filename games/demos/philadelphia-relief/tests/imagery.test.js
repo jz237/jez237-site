@@ -46,15 +46,15 @@ test('aerial imagery asset', async (t) => {
 });
 
 test('aerial mode state', async (t) => {
-  await t.test('opens with imagery and without synthetic 3D buildings', () => {
-    assert.equal(LAYERS.imagery.def, true);
-    assert.equal(LAYERS.structures.def, false);
-    assert.equal(defaults().layers.imagery, true);
-    assert.equal(defaults().layers.structures, false);
+  await t.test('opens with relief and an authored skyline', () => {
+    assert.equal(LAYERS.imagery.def, false);
+    assert.equal(LAYERS.structures.def, true);
+    assert.equal(defaults().layers.imagery, false);
+    assert.equal(defaults().layers.structures, true);
     for (const preset of PRESETS) {
       const layers = presetPatch(preset.id).layers;
-      assert.equal(layers.imagery, true, `${preset.id} imagery`);
-      assert.equal(layers.structures, false, `${preset.id} structures`);
+      assert.equal(layers.imagery, false, `${preset.id} imagery`);
+      assert.equal(layers.structures, ['skyline', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} structures`);
     }
   });
 
@@ -67,13 +67,13 @@ test('aerial mode state', async (t) => {
 
   await t.test('both surface choices survive a shared URL', () => {
     const store = createStore();
-    store.set({ layers: { imagery: false, structures: true } });
+    store.set({ layers: { imagery: true, structures: false } });
     const hash = encodeState(store.get());
-    assert.match(hash, /(?:^|&)Li=0(?:&|$)/);
-    assert.match(hash, /(?:^|&)Lx=1(?:&|$)/);
+    assert.match(hash, /(?:^|&)Li=1(?:&|$)/);
+    assert.match(hash, /(?:^|&)Lx=0(?:&|$)/);
     const restored = createStore(decodeState(`#${hash}`));
-    assert.equal(restored.get().layers.imagery, false);
-    assert.equal(restored.get().layers.structures, true);
+    assert.equal(restored.get().layers.imagery, true);
+    assert.equal(restored.get().layers.structures, false);
   });
 });
 

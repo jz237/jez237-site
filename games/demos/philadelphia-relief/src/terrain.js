@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090407';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090601';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -130,7 +130,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     float previousEdge = min(
       min(previousUv.x, 1.0 - previousUv.x),
       min(previousUv.y, 1.0 - previousUv.y));
-    float previousMix = smoothstep(0.0, 0.035, previousEdge)
+    float previousMix = smoothstep(0.0, 0.14, previousEdge)
       * uImageryDetailOn * (1.0 - uImageryDetailBlend);
     vec3 previousBase = texture2D(
       uImageryDetailPrev, clamp(previousUv, 0.0, 1.0)).rgb;
@@ -143,7 +143,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     float detailEdge = min(
       min(detailUv.x, 1.0 - detailUv.x),
       min(detailUv.y, 1.0 - detailUv.y));
-    float detailMix = smoothstep(0.0, 0.035, detailEdge)
+    float detailMix = smoothstep(0.0, 0.14, detailEdge)
       * uImageryDetailOn * uImageryDetailBlend;
     vec2 safeDetailUv = clamp(detailUv, 0.0, 1.0);
     vec3 detailBase = texture2D(uImageryDetail, safeDetailUv).rgb;
@@ -181,7 +181,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     // ---- ambient occlusion from the macro height -----------------------
     float macro = texture2D(uMacro, vUv).r;
     float concavity = vElev - macro;
-    float ao = mix(0.55, 1.0, smoothstep(-28.0, 22.0, concavity));
+    float ao = mix(0.76, 1.0, smoothstep(-28.0, 22.0, concavity));
 
     // ---- lighting ------------------------------------------------------
     float ndl = dot(n, uSunDir);
@@ -386,7 +386,7 @@ export function createTerrain(THREE, options) {
     uComparePosition: { value: 0.5 },
     uViewportWidth: { value: 1 },
     uWaterLevel: { value: 2 },
-    uExposure: { value: 2.3 },
+    uExposure: { value: 1.7 },
   };
 
   const material = new THREE.ShaderMaterial({
