@@ -4,8 +4,8 @@
  * The regional texture is always available immediately. A city-detail cell
  * replaces it below 16 km, a smaller source-resolution block cell replaces
  * that below 4.8 km, and a camera-following roof cell takes over for the final
- * useful descent. The camera quality floor prevents magnifying the delivered
- * source beyond roughly one imagery sample per screen pixel. Cells overlap,
+ * descent; inspection cells bring local aerial imagery down to 200 m.
+ * Source resolution varies outside the local coverage areas. Cells overlap,
  * cross-fade in the terrain shader and are prefetched into the browser/edge
  * cache after the camera settles.
  */
@@ -13,12 +13,15 @@
 export const DETAIL_DISTANCE_M = 16000;
 export const ULTRA_DISTANCE_M = 4800;
 export const ROOFTOP_DISTANCE_M = 1600;
+export const INSPECTION_DISTANCE_M = 400;
 export const IMAGERY_DETAIL_MODES = Object.freeze(['data', 'standard', 'maximum']);
 export const DETAIL_TIERS = Object.freeze({
   detail: Object.freeze({ span: Object.freeze({ lon: 0.096, lat: 0.072 }),
     grid: Object.freeze({ lon: 0.04, lat: 0.03 }) }),
   ultra: Object.freeze({ span: Object.freeze({ lon: 0.032, lat: 0.024 }),
     grid: Object.freeze({ lon: 0.012, lat: 0.009 }) }),
+  inspection: Object.freeze({ span: Object.freeze({ lon: 0.006, lat: 0.0045 }),
+    grid: Object.freeze({ lon: 0.0005, lat: 0.0005 }) }),
   rooftop: Object.freeze({ span: Object.freeze({ lon: 0.012, lat: 0.009 }),
     grid: Object.freeze({ lon: 0.0045, lat: 0.0035 }) }),
 });
@@ -56,6 +59,7 @@ export function detailCellFor(lon, lat, region, tier = 'detail') {
 
 export function imageryTierFor(distanceM, mode = 'standard') {
   if (distanceM > DETAIL_DISTANCE_M) return null;
+  if (mode !== 'data' && distanceM <= INSPECTION_DISTANCE_M) return 'inspection';
   if (mode !== 'data' && distanceM <= ROOFTOP_DISTANCE_M) return 'rooftop';
   if (mode !== 'data' && distanceM <= ULTRA_DISTANCE_M) return 'ultra';
   return 'detail';
@@ -75,7 +79,7 @@ export function detailUrl(cell, size) {
     tier: cell.tier || 'detail', lon: cell.lon.toFixed(4),
     lat: cell.lat.toFixed(4), size: String(size),
   });
-  return `detail-imagery?${query}&v=aligned2`;
+  return `detail-imagery?${query}&v=local3`;
 }
 
 export function detailResolutionM(cell, size, projection) {
@@ -101,14 +105,20 @@ export function neighbourCells(cell, region) {
   return cells;
 }
 
-function loadImage(path) {
-  return new Promise((resolve, reject) => {
+async function loadImage(path) {
+  const response = await fetch(path, { credentials: 'same-origin' });
+  if (!response.ok) throw new Error('detail imagery unavailable');
+  const source = response.headers.get('X-Imagery-Source') || 'USDA / USGS The National Map';
+  const objectUrl = URL.createObjectURL(await response.blob());
+  try {
     const image = new Image();
     image.decoding = 'async';
-    image.onload = () => resolve(image);
-    image.onerror = () => reject(new Error('detail image failed to decode'));
-    image.src = path;
-  });
+    image.src = objectUrl;
+    await image.decode();
+    return { image, source };
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
 }
 
 export function createImageryDetail(options) {
@@ -196,9 +206,9 @@ export function createImageryDetail(options) {
       pendingKey = key;
       const requestGeneration = ++generation;
       report('loading');
-      loadImage(detailUrl(cell, size)).then((image) => {
+      loadImage(detailUrl(cell, size)).then(({ image, source }) => {
         if (requestGeneration !== generation) return;
-        current = { key, cell, size, image,
+        current = { key, cell, size, image, source,
           resolutionM: detailResolutionM(cell, size, projection) };
         pendingKey = '';
         failedKey = '';
@@ -227,7 +237,7 @@ export function createImageryDetail(options) {
     stats() {
       return {
         state, active: state === 'active', tier: current?.cell.tier || null,
-        size: current?.size || 0,
+        size: current?.size || 0, source: current?.source || null,
         resolutionM: current ? Math.round(current.resolutionM * 100) / 100 : null,
         bounds: current?.cell.bounds || null, prefetched,
       };
