@@ -377,7 +377,9 @@ let targetResponse, target, runtimeErrors, failedResponses, voiceProbe404s, isVo
   // 5.3 VERIFICATION HARNESS probes.
   ambientQuiet, ambientKo, ambientDelta, ambientStages, crowdKoHold, tempoWhiff, tempoRearm, tempoDrop,
   timerGuard, announcerDecision, poseChains, cinemaBoot, cinemaHost, cinemaFight, cinemaWeapon, cinemaProjectile,
-  cinemaShot;
+  cinemaShot,
+  // 5.4 FIGHT NIGHT #30: the shareable-exhibition pin.
+  demoSeedUrl;
 // ---------------------------------------------------------------------------
 // The probe registry. Every body below is the 5.2 sequential script, verbatim,
 // wrapped in a named probe so one section can be run on its own (--only), left
@@ -430,8 +432,8 @@ probe('title-menu', async () => {
       simHz: window.__finalBlowEngine?.simulationHz,
     }))()`);
     assert.match(title.title, /Final Blow/);
-    assert.match(title.build, /5\.3/);
-    assert.equal(title.version.text, 'VERSION 5.3');
+    assert.match(title.build, /5\.4/);
+    assert.equal(title.version.text, 'VERSION 5.4');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -468,7 +470,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.3-spectacle');
+    assert.equal(title.engineVersion, '5.4-fightnight');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -486,7 +488,8 @@ probe('title-menu', async () => {
       x: 640, y: 360, zoom: 1, locked: true, mode: 'arena', shot: 'arena', intensity: 0,
       focus: 'fighters', projectileId: null,
       cuts: 0, impactCloseUps: 0, peakZoom: 1, slowMotionHits: 0,
-      presentation: { zoom: 1, x: 0, y: 0, rotation: 0, letterbox: 0 },
+      // (5.4 camera-cadence: the demo shot rides the presentation snapshot; null outside a demo.)
+      presentation: { zoom: 1, x: 0, y: 0, rotation: 0, letterbox: 0, demoShot: null },
     });
 });
 
@@ -3726,26 +3729,87 @@ probe('pose-trace-chains', async () => {
 });
 
 probe('demo-mode', async () => {
+    // 5.4 SESSION LAYER: card 1 of a session is a one-round QUICK BOUT on the
+    // card of the night; this probe walks a plain first-round KO and then the
+    // match-point Final Blow, which needs a best-of-three — the QA show
+    // override reshapes card 1 into the CO-MAIN (the same hook the clock card
+    // below uses). Card 2's forced clock card follows exactly as before.
+    await evaluate(client, `window.__finalBlowQa.demoNextShow({ bout: 'co-main' })`);
     demoOpening = await evaluate(client, `window.__finalBlowQa.demo(237)`);
+    assert.equal(demoOpening.demo.bout.kind, 'co-main');
+    assert.equal(demoOpening.demo.roundsToWin, 2);
+    assert.ok(['grudge', 'rookie-veteran', 'showboat', 'zoning-war'].includes(demoOpening.demo.story.id), demoOpening.demo.story.id);
     assert.equal(demoOpening.mode, 'demo');
     assert.equal(demoOpening.screen, 'fight');
     assert.equal(demoOpening.demo.active, true);
     assert.equal(demoOpening.demo.difficulty, 'demo');
     assert.notEqual(demoOpening.fighters[0].id, demoOpening.fighters[1].id);
-    assert.equal(demoOpening.fighters[0].ai.difficulty, 'demo');
-    assert.equal(demoOpening.fighters[1].ai.difficulty, 'demo');
+    // 5.4 PERSONAS: each attract seat plays its kit's archetype persona
+    // (engine/demo.mjs DEMO_PERSONAS), reported per side by the snapshot.
+    // 5.4 SESSION LAYER: ...under the card's STORY overlay per seat
+    // (demo-zoner-veteran, demo-grappler-grudge…): the tier is
+    // demoStoryTierFor(kit, story.tiers[side]), which is the bare persona
+    // when the story lays nothing on that seat.
+    for (const side of [0, 1]) {
+      assert.match(demoOpening.fighters[side].ai.difficulty, /^demo-[a-z]+(?:-[a-z]+)?$/,
+        `CPU ${side + 1} should play a demo persona, got ${demoOpening.fighters[side].ai.difficulty}`);
+      assert.equal(demoOpening.demo.personas[side], demoOpening.fighters[side].ai.difficulty);
+    }
+    const personaFor = await evaluate(client, `(async () => { const demo = await import('./engine/demo.mjs'); const tiers = ${JSON.stringify(demoOpening.demo.story.tiers)}; return [${JSON.stringify(demoOpening.fighters[0].id)}, ${JSON.stringify(demoOpening.fighters[1].id)}].map((id, side) => demo.demoStoryTierFor(id, tiers[side])); })()`);
+    assert.deepEqual(demoOpening.demo.personas, personaFor, 'the seats must play the persona their kit names, under the story overlay');
+    const barePersonas = await evaluate(client, `(async () => { const demo = await import('./engine/demo.mjs'); return [${JSON.stringify(demoOpening.fighters[0].id)}, ${JSON.stringify(demoOpening.fighters[1].id)}].map((id) => demo.demoPersonaFor(id)); })()`);
+    for (const side of [0, 1]) assert.ok(demoOpening.demo.personas[side].startsWith(barePersonas[side]), `seat ${side} keeps its archetype under the story`);
     demoThinking = await evaluate(client, `window.__finalBlowQa.step(4.5); window.__finalBlowEngine.snapshot()`);
     assert.ok(demoThinking.fighters[0].ai.decisions > 0, 'CPU 1 should make delayed visual decisions');
     assert.ok(demoThinking.fighters[1].ai.decisions > 0, 'CPU 2 should make delayed visual decisions');
-    assert.equal(demoThinking.demo.superShown, true, 'every exhibition should deliberately showcase a super');
+    // 5.4 FIGHT NIGHT (round-ends): `superShown` now means "the card's
+    // opener has fired" — a standard card draws super / throw / dash-in from
+    // the director's seeded show stream, a clock card opens on footsies.
+    assert.equal(demoThinking.demo.superShown, true, 'every exhibition should deliberately showcase its opener');
+    assert.equal(demoThinking.demo.show.format, 'standard', 'the first card of a session is a standard bout');
+    assert.ok(['super', 'throw', 'dash-in'].includes(demoThinking.demo.show.opener), demoThinking.demo.show.opener);
+    assert.equal(demoThinking.demo.opener.shown, true);
+    assert.ok(demoThinking.demo.opener.tick > 0);
     assert.equal(await evaluate(client, `document.querySelector('#demoHud').hidden`), false);
 
+    // 5.4 CLOSER: a first-round KO with a healthy winner is a PLAIN knockout
+    // — no FINISH THEM window, the loser collapses (5.3 koCollapseOnRoundEnd)
+    // and the full 4.9 s curtain call plays; only match point (or a comeback
+    // / brink round) takes the Final Blow.
+    // (A juggle KO is handed to the ceremony instead — the plain path would
+    // leave an airborne loser hanging — so the synthetic KO waits for a tick
+    // with both men on the ground and off the buttons.)
+    const demoGroundWait = `(() => { for (let tick = 0; tick < 600; tick += 1) { const pose = window.__finalBlowQa.pose(); const snap = window.__finalBlowEngine.snapshot(); if (snap.phase === 'fight' && pose.every((p) => p.grounded && !p.down) && snap.fighters.every((f) => !f.attack && f.hitstunFrames === 0)) return tick; window.__finalBlowQa.step(1/60); } return -1; })()`;
+    assert.ok(await evaluate(client, demoGroundWait) >= 0, 'a grounded, quiet tick for the synthetic KO');
     demoFinishReady = await evaluate(client, `window.__finalBlowQa.demoKnockout(0)`);
     assert.equal(demoFinishReady.phase, 'finish');
     assert.equal(demoFinishReady.fighters[1].health, 0);
-    demoFinalBlow = await evaluate(client, `window.__finalBlowQa.step(0.05); ({ snapshot: window.__finalBlowEngine.snapshot(), status: window.__finalBlowQa.status() })`);
+    assert.deepEqual({ finisher: demoFinishReady.demo.closer.finisher, reason: demoFinishReady.demo.closer.reason }, { finisher: false, reason: 'plain' });
+    const demoPlainKo = await evaluate(client, `window.__finalBlowQa.step(1.25); ({ snapshot: window.__finalBlowEngine.snapshot(), status: window.__finalBlowQa.status(), coverage: window.__finalBlowQa.demoCoverage(), pose: window.__finalBlowQa.pose(), banner: document.querySelector('#announcer strong').getAttribute('aria-label') + '|' + document.querySelector('#announcer span').textContent })`);
+    assert.equal(demoPlainKo.snapshot.phase, 'roundover', 'the 0.9 s plain-KO window lapses into the round end');
+    assert.equal(demoPlainKo.status.fatalityId, null, 'no Final Blow on a plain first-round KO');
+    assert.equal(demoPlainKo.pose[1].down, true, 'the loser goes down (5.3 KO collapse) instead of standing through the hold');
+    assert.ok(demoPlainKo.pose[1].knockdown >= 1, 'the KO lie holds through the curtain call');
+    assert.equal(demoPlainKo.pose[0].down, false);
+    assert.equal(demoPlainKo.coverage.closers.last.kind, 'knockout');
+    assert.match(demoPlainKo.banner, /WINS\|KNOCKOUT/);
+    // Through the curtain call and the ROUND 2 card into the next fight...
+    const demoRoundTwo = await evaluate(client, `window.__finalBlowQa.step(6.2); window.__finalBlowEngine.snapshot()`);
+    assert.equal(demoRoundTwo.phase, 'fight');
+    assert.equal(demoRoundTwo.demo.closer, null);
+    // ...where the same winner's KO is MATCH POINT: the Final Blow, variant A
+    // (the ledger's first take for this fighter), inside 0.35 s.
+    assert.ok(await evaluate(client, demoGroundWait) >= 0, 'a grounded, quiet tick for the match-point KO');
+    const demoMatchPoint = await evaluate(client, `window.__finalBlowQa.demoKnockout(0)`);
+    assert.equal(demoMatchPoint.phase, 'finish');
+    assert.deepEqual({ finisher: demoMatchPoint.demo.closer.finisher, reason: demoMatchPoint.demo.closer.reason, variant: demoMatchPoint.demo.closer.variant }, { finisher: true, reason: 'match-point', variant: 0 });
+    demoFinalBlow = await evaluate(client, `window.__finalBlowQa.step(0.4); ({ snapshot: window.__finalBlowEngine.snapshot(), status: window.__finalBlowQa.status(), coverage: window.__finalBlowQa.demoCoverage() })`);
     assert.equal(demoFinalBlow.snapshot.phase, 'roundover');
-    assert.ok(demoFinalBlow.status.elapsed > 0, 'the winning CPU should trigger its character Final Blow');
+    assert.ok(demoFinalBlow.status.elapsed > 0, 'the winning CPU should trigger its character Final Blow on match point');
+    assert.ok(demoFinalBlow.status.fatalityId, 'the Final Blow carries a fatality id');
+    assert.equal(demoFinalBlow.coverage.closers.last.kind, 'finisher');
+    assert.equal(demoFinalBlow.coverage.closers.last.variant, 0);
+    assert.equal(demoFinalBlow.coverage.closers.ledger[demoFinalBlow.snapshot.fighters[0].id], 1, 'the session ledger banks the take, so this fighter\'s next Final Blow is variant B');
 
     demoResult = await evaluate(client, `window.__finalBlowQa.demoResult(0)`);
     assert.equal(demoResult.screen, 'result');
@@ -3757,6 +3821,37 @@ probe('demo-mode', async () => {
     assert.equal(automaticDemoCycle.demo.cycle.cycle, 2);
     assert.equal(automaticDemoCycle.demo.matches, 2);
     assert.equal(automaticDemoCycle.demo.resultScheduled, false);
+    // 5.4 CLOCK card: forced through the QA show override — both CPUs on the
+    // clock brain, a 30-second clock on the HUD, the chip says so, and the
+    // buzzer ends the round as a DECISION (banner + the round-end log); the
+    // next round is back on the standard brain and the 99 s clock.
+    // (5.4 session layer: slot 2 of the card is a one-round quick bout, so
+    // the override also asks for the co-main's best-of-three — the decision
+    // has to be followed by a round 2 for the brain-swap pin below.)
+    await evaluate(client, `window.__finalBlowQa.demoNextShow({ format: 'clock', bout: 'co-main' })`);
+    const demoClockCard = await evaluate(client, `window.__finalBlowQa.demoCycles(2); window.__finalBlowQa.step(2.4); ({ snapshot: window.__finalBlowEngine.snapshot(), coverage: window.__finalBlowQa.demoCoverage(), timer: document.querySelector('#timer').textContent, chip: document.querySelector('#demoHudCycle').textContent })`);
+    assert.equal(demoClockCard.snapshot.demo.show.format, 'clock');
+    assert.equal(demoClockCard.snapshot.demo.show.opener, 'footsies-first');
+    assert.equal(demoClockCard.snapshot.fighters[0].ai.difficulty, 'demo-clock');
+    assert.equal(demoClockCard.snapshot.fighters[1].ai.difficulty, 'demo-clock');
+    assert.equal(demoClockCard.snapshot.demo.difficulty, 'demo-clock');
+    assert.equal(demoClockCard.coverage.show.tier, 'demo-clock');
+    assert.ok(Number(demoClockCard.timer) <= 30 && Number(demoClockCard.timer) >= 27, `the clock card's HUD clock starts at 30 (read ${demoClockCard.timer})`);
+    assert.match(demoClockCard.chip, /ON THE CLOCK/);
+    assert.equal(demoClockCard.snapshot.phase, 'fight');
+    const demoDecision = await evaluate(client, `window.__finalBlowQa.setTimer(1); window.__finalBlowQa.step(1.6); ({ snapshot: window.__finalBlowEngine.snapshot(), status: window.__finalBlowQa.status(), coverage: window.__finalBlowQa.demoCoverage(), banner: document.querySelector('#announcer strong').getAttribute('aria-label') + '|' + document.querySelector('#announcer span').textContent })`);
+    assert.equal(demoDecision.snapshot.phase, 'roundover');
+    assert.equal(demoDecision.status.fatalityId, null);
+    assert.equal(demoDecision.coverage.closers.last.kind, 'decision');
+    assert.equal(demoDecision.coverage.closers.decisionShown, true);
+    assert.match(demoDecision.banner, /WINS\|DECISION/);
+    const demoAfterDecision = await evaluate(client, `window.__finalBlowQa.step(6.4); ({ snapshot: window.__finalBlowEngine.snapshot(), timer: document.querySelector('#timer').textContent })`);
+    assert.equal(demoAfterDecision.snapshot.phase, 'fight');
+    // (5.4 personas: the standard brain is the seat's own archetype persona.)
+    assert.match(demoAfterDecision.snapshot.fighters[0].ai.difficulty, /^demo-(?!clock$)/, 'once the decision is on the board the card returns to the standard brain (the seat persona)');
+    assert.ok(Number(demoAfterDecision.timer) >= 96, `...and the 99 s clock (read ${demoAfterDecision.timer})`);
+    await evaluate(client, `window.__finalBlowQa.demoNextShow(null)`);
+
     await evaluate(client, `window.__finalBlowQa.demo(333)`);
     demoMarathon = await evaluate(client, `window.__finalBlowQa.demoCycles(64)`);
     assert.equal(demoMarathon.cycles.length, 64);
@@ -3779,6 +3874,471 @@ probe('demo-mode', async () => {
     assert.equal(demoExit.mode, 'arcade');
     assert.equal(demoExit.demo.active, false);
     assert.equal(await evaluate(client, `document.body.classList.contains('demo-active')`), false);
+});
+
+// 5.4 FIGHT NIGHT (sweep #30): SHAREABLE EXHIBITIONS. ?demo=<seed>[&cycle=n]
+// boots the seeded exhibition on the wall clock through the SAME startDemo
+// call qa.demo(seed, cycle) makes. The pin: two fresh loads of the link and
+// the QA path, each parked by the transport pause and stepped to one sim
+// tick, must agree on the settled rounds (winner, finisher, the tick each
+// round ended on, both health bars, each side's coverage count), on the live
+// coverage ledger and on both fighters' state. The card boundary is NOT
+// pinned — the 5 s result hold is a wall-clock timer, so card 2 opens on a
+// wall-clock tick (measured: same rounds, ticks offset by the hold jitter).
+probe('demo-seed-url', async () => {
+    const TARGET_TICK = 6000; // 100 s of sim: seed 237 card 1 settles 3 rounds by ~4300
+    const capture = `(() => {
+      const snapshot = window.__finalBlowEngine.snapshot();
+      const coverage = window.__finalBlowQa.demoCoverage();
+      return {
+        tick: snapshot.tick, screen: snapshot.screen, mode: snapshot.mode, rounds: snapshot.rounds,
+        demo: { seed: snapshot.demo.seed, source: snapshot.demo.source, attract: snapshot.demo.attract, qa: snapshot.demo.qa, cycle: snapshot.demo.cycle.cycle, picks: snapshot.demo.cycle.picks, stage: snapshot.demo.cycle.stage, shareUrl: snapshot.demo.shareUrl },
+        fighters: snapshot.fighters.map((fighter) => ({ id: fighter.id, x: fighter.x, health: fighter.health, move: fighter.move })),
+        perFighter: Object.fromEntries(Object.entries(coverage.perFighter).map(([id, entry]) => [id, { movesShown: entry.movesShown, moves: entry.moves, beats: entry.beats }])),
+        stats: coverage.stats,
+        ledger: window.__finalBlowQa.demoRounds(),
+        hud: { hidden: document.querySelector('#demoHud').hidden, cycleText: document.querySelector('#demoHudCycle').textContent, shareHidden: document.querySelector('#demoShareButton').hidden },
+      };
+    })()`;
+    const park = `(() => { window.__finalBlowQa.demoPause(true); return window.__finalBlowEngine.snapshot().tick; })()`;
+    const stepTo = async (tick) => {
+      const now = await evaluate(client, park);
+      assert.ok(now <= TARGET_TICK, `the demo must still be inside card 1 when parked, got tick ${now}`);
+      await evaluate(client, `window.__finalBlowQa.step(${(tick - now) / 60})`);
+      return evaluate(client, capture);
+    };
+    const strip = ({ demo, hud, ...rest }) => rest;
+
+    // Load A: the link, on the wall clock (attract rules: no gesture, no unlock).
+    await navigate(client, `${gameUrl}&demo=237`);
+    const opened = await evaluate(client, `(() => { const s = window.__finalBlowEngine.snapshot(); return { screen: s.screen, mode: s.mode, active: s.demo.active, attract: s.demo.attract, qa: s.demo.qa, seed: s.demo.seed, source: s.demo.source, wallClock: window.__finalBlowQa.demoSpeed().active, lastSound: s.audio.lastEvent, hudHidden: document.querySelector('#demoHud').hidden, shareHidden: document.querySelector('#demoShareButton').hidden, cycleText: document.querySelector('#demoHudCycle').textContent }; })()`);
+    assert.equal(opened.screen, 'fight');
+    assert.equal(opened.mode, 'demo');
+    assert.equal(opened.active, true);
+    assert.equal(opened.attract, true, 'a link boot is an attract start (no gesture, attract audio rules)');
+    assert.equal(opened.qa, false, 'a link boot runs on the wall clock, never the manual clock');
+    assert.equal(opened.wallClock, true, 'the transport drives the clock on a link boot (manual mode is off)');
+    assert.equal(opened.seed, 237);
+    assert.equal(opened.source, 'url');
+    assert.equal(opened.lastSound, null, 'no gesture, so the attract audio rules must have let nothing play');
+    assert.equal(opened.hudHidden, false);
+    assert.equal(opened.shareHidden, false, 'the COPY LINK bug must be on the HUD');
+    assert.match(opened.cycleText, /^CYCLE 1 · .+ · SEED 237$/);
+    const loadA = await stepTo(TARGET_TICK);
+    assert.equal(loadA.tick, TARGET_TICK);
+    // (5.4 closer/personas: rounds run longer than the 5.3 ~17 s ceremony;
+    // 5.4 session layer: card 1 of the night is a one-round QUICK BOUT, so
+    // the link settles exactly its one round inside 100 s and holds on the
+    // result — the manual steps carry the sim tick on through the hold.)
+    assert.ok(loadA.ledger.length >= 1, `seed 237 card 1 settles its round inside 100 s (got ${loadA.ledger.length})`);
+    assert.ok(loadA.ledger.every((entry) => entry.cycle === 1));
+    assert.equal(loadA.demo.shareUrl, `${gameUrl.replace('?debug=1', '')}?demo=237`, 'the link drops ?debug and carries the seed');
+
+    // Load B: the same link, a fresh page.
+    await navigate(client, `${gameUrl}&demo=237`);
+    const loadB = await stepTo(TARGET_TICK);
+    assert.deepEqual(strip(loadB), strip(loadA), 'two loads of the same ?demo= link must match tick for tick');
+
+    // Load C: the QA entry, same seed, manual clock — same startDemo call.
+    await navigate(client, gameUrl);
+    await evaluate(client, `window.__finalBlowQa.demo(237)`);
+    const loadC = await stepTo(TARGET_TICK);
+    assert.equal(loadC.demo.qa, true);
+    assert.equal(loadC.demo.source, 'qa');
+    assert.deepEqual(strip(loadC), strip(loadA), 'the link path and qa.demo(seed) must match tick for tick');
+
+    // &cycle=n opens card n exactly as qa.demo(seed, n) does.
+    await navigate(client, `${gameUrl}&demo=237&cycle=3`);
+    const cardUrl = await evaluate(client, `(() => { const s = window.__finalBlowEngine.snapshot(); return { cycle: s.demo.cycle, shareUrl: s.demo.shareUrl, matches: s.demo.matches, cycleText: document.querySelector('#demoHudCycle').textContent }; })()`);
+    await navigate(client, gameUrl);
+    const cardQa = await evaluate(client, `(() => { window.__finalBlowQa.demo(237, 3); const s = window.__finalBlowEngine.snapshot(); return { cycle: s.demo.cycle, shareUrl: s.demo.shareUrl, matches: s.demo.matches }; })()`);
+    assert.equal(cardUrl.cycle.cycle, 3);
+    assert.equal(cardUrl.matches, 3);
+    assert.deepEqual(cardUrl.cycle, cardQa.cycle);
+    assert.equal(cardUrl.shareUrl, cardQa.shareUrl);
+    assert.match(cardUrl.shareUrl, /\?demo=237&cycle=3$/);
+    assert.match(cardUrl.cycleText, /^CYCLE 3 · /);
+
+    // The share bug: a real pointer on it must NOT end the demo; one anywhere
+    // else still must. (Clipboard is available in headless; the label flips.)
+    await navigate(client, `${gameUrl}&demo=237`);
+    const bug = await evaluate(client, `(() => { const r = document.querySelector('#demoShareButton').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, width: r.width, height: r.height }; })()`);
+    assert.ok(bug.height >= 28 && bug.width >= 40, `the bug must be a real target, got ${bug.width}x${bug.height}`);
+    for (const type of ['mousePressed', 'mouseReleased']) {
+      await client.send('Input.dispatchMouseEvent', { type, x: bug.x, y: bug.y, button: 'left', clickCount: 1 });
+    }
+    await delay(250);
+    const afterShare = await evaluate(client, `(() => { const s = window.__finalBlowEngine.snapshot(); return { active: s.demo.active, screen: s.screen, label: document.querySelector('#demoShareButton').textContent, presses: window.__finalBlowEngine.snapshot().meta?.fx?.demoLinksShared ?? null }; })()`);
+    assert.equal(afterShare.active, true, 'a press on COPY LINK must not exit the demo');
+    assert.equal(afterShare.screen, 'fight');
+    assert.match(afterShare.label, /LINK COPIED|LINK SHARED|\//, 'the bug must acknowledge the press');
+    if (afterShare.presses !== null) assert.equal(afterShare.presses, 1, 'one press, one share counted');
+    for (const type of ['mousePressed', 'mouseReleased']) {
+      await client.send('Input.dispatchMouseEvent', { type, x: 700, y: 450, button: 'left', clickCount: 1 });
+    }
+    await delay(150);
+    const afterCanvas = await evaluate(client, `(() => { const s = window.__finalBlowEngine.snapshot(); return { active: s.demo.active, screen: s.screen }; })()`);
+    assert.equal(afterCanvas.active, false, 'any other press must still end the demo');
+    assert.equal(afterCanvas.screen, 'title');
+
+    // A seed that fails to parse is NO demo, never a different one; ?mode=demo
+    // is the jump-list shortcut (random seed, still shareable).
+    await navigate(client, `${gameUrl}&demo=..%2Fetc`);
+    const refused = await evaluate(client, `(() => { const s = window.__finalBlowEngine.snapshot(); return { screen: s.screen, active: s.demo.active }; })()`);
+    assert.deepEqual(refused, { screen: 'title', active: false });
+    await navigate(client, `${gameUrl}&mode=demo`);
+    const shortcut = await evaluate(client, `(() => { const s = window.__finalBlowEngine.snapshot(); return { screen: s.screen, active: s.demo.active, attract: s.demo.attract, seedType: typeof s.demo.seed, shareUrl: s.demo.shareUrl }; })()`);
+    assert.equal(shortcut.active, true);
+    assert.equal(shortcut.attract, true);
+    assert.equal(shortcut.seedType, 'number');
+    assert.match(shortcut.shareUrl, /\?demo=\d+$/);
+
+    demoSeedUrl = {
+      parkedAt: opened.cycleText,
+      ledger: loadA.ledger.map(({ cycle, round, winner, type, tick, health, movesShown }) => ({ cycle, round, winner, type, tick, health, movesShown })),
+      coverageAtTarget: Object.fromEntries(Object.entries(loadA.perFighter).map(([id, entry]) => [id, entry.movesShown])),
+      shareUrl: loadA.demo.shareUrl,
+      bug: { width: bug.width, height: bug.height, label: afterShare.label },
+    };
+    // Leave the page where the probes before this one left it: a clean boot.
+    await navigate(client, gameUrl);
+});
+
+// 5.4 FIGHT NIGHT (demo sweep #10 / #32): the broadcast bug, the demoted
+// operator legend, the three spectator-wrong prompts and the stage ticker.
+probe('demo-hud', async () => {
+    const demoHudBug = await evaluate(client, `(() => {
+      const qa = window.__finalBlowQa;
+      qa.demo(237);
+      qa.step(0.4);
+      const hud = document.querySelector('#demoHud');
+      const rect = (el) => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, right: r.right, bottom: r.bottom, width: r.width, height: r.height }; };
+      const frame = rect(document.querySelector('#gameFrame'));
+      const bug = rect(hud);
+      const firstTicker = document.querySelector('#stageTicker').textContent;
+      const firstCycle = document.querySelector('#demoHudCycle').textContent;
+      const intro = {
+        phase: window.__finalBlowEngine.snapshot().phase,
+        skipHidden: document.querySelector('#flowSkipHint').hidden,
+      };
+      qa.step(4.5);
+      // 5.4 closer: a first-round KO with a healthy winner is a PLAIN knockout
+      // (no FINISH THEM window). A winner on the brink takes the Final Blow,
+      // which is the window this probe reads the demo-worded sub-line from.
+      qa.fighter(0, { health: 20 });
+      qa.demoKnockout(0);
+      const finish = {
+        phase: window.__finalBlowEngine.snapshot().phase,
+        main: document.querySelector('#announcer strong').textContent,
+        sub: document.querySelector('#announcer span').textContent,
+      };
+      const snapshot = window.__finalBlowEngine.snapshot();
+      const stages = qa.demoStages();
+      // Cycle 2 lands on a different stage (the bag never repeats a stage
+      // back to back), so the ticker refresh is observable.
+      qa.demoCycles(2);
+      const second = window.__finalBlowEngine.snapshot();
+      const result = {
+        frame, bug,
+        hidden: hud.hidden,
+        fontSize: parseFloat(getComputedStyle(hud).fontSize),
+        matchupSize: parseFloat(getComputedStyle(document.querySelector('#demoHudMatchup')).fontSize),
+        show: hud.querySelector('b').textContent,
+        matchup: document.querySelector('#demoHudMatchup').textContent,
+        cycle: firstCycle,
+        prompt: hud.querySelector('small').textContent,
+        promptDisplay: getComputedStyle(hud.querySelector('small')).display,
+        speed: { text: document.querySelector('#demoHudSpeed').textContent, tone: document.querySelector('#demoHudSpeed').dataset.tone },
+        intro, finish,
+        stage: snapshot.stage,
+        firstTicker,
+        secondStage: second.stage,
+        secondTicker: document.querySelector('#stageTicker').textContent,
+        secondCycle: document.querySelector('#demoHudCycle').textContent,
+        bodyClasses: [...document.body.classList],
+        presence: second.demo.presence,
+        hold: second.demo.hold,
+        stageCount: stages.length,
+      };
+      qa.exitDemo();
+      result.tickerAfterExit = document.querySelector('#stageTicker').textContent;
+      return result;
+    })()`);
+    assert.equal(demoHudBug.hidden, false);
+    assert.equal(demoHudBug.show, 'WATCH DEMO · CPU VS CPU');
+    assert.match(demoHudBug.matchup, /^[A-Z0-9 .'-]+ VS [A-Z0-9 .'-]+$/);
+    assert.match(demoHudBug.cycle, /^CYCLE 1 · /);
+    assert.equal(demoHudBug.prompt, 'PRESS ANY BUTTON TO PLAY');
+    assert.notEqual(demoHudBug.promptDisplay, 'none');
+    // TV-safe: the matchup line is the bug's loudest text and at least twice
+    // the old 8.35 px chip on this 1440-wide viewport.
+    assert.ok(demoHudBug.matchupSize >= 17, `matchup line should read from the couch, got ${demoHudBug.matchupSize}px`);
+    assert.ok(demoHudBug.fontSize >= 10, `bug base size ${demoHudBug.fontSize}px`);
+    // A stable corner: bottom-left, inside the frame, under the floor line.
+    assert.ok(demoHudBug.bug.left >= demoHudBug.frame.left && demoHudBug.bug.right <= demoHudBug.frame.right);
+    assert.ok(demoHudBug.bug.bottom <= demoHudBug.frame.bottom);
+    assert.ok(demoHudBug.bug.top >= demoHudBug.frame.top + demoHudBug.frame.height * 0.78, 'the bug sits in the reflection band, clear of the fighters');
+    assert.ok(demoHudBug.bug.left < demoHudBug.frame.left + demoHudBug.frame.width * 0.1);
+    // The rate is a tag in the bug, not a 20 px canvas chip.
+    assert.equal(demoHudBug.speed.text, '0.75×');
+    assert.equal(demoHudBug.speed.tone, 'slow');
+    // The three prompts a spectator cannot act on.
+    assert.equal(demoHudBug.intro.phase, 'intro');
+    assert.equal(demoHudBug.intro.skipHidden, true, 'ANY ATTACK / START · SKIP must not show in a demo');
+    assert.equal(demoHudBug.finish.phase, 'finish');
+    assert.equal(demoHudBug.finish.main, 'FINISH THEM');
+    assert.match(demoHudBug.finish.sub, /MOVES IN FOR THE FINAL BLOW$/);
+    assert.doesNotMatch(demoHudBug.finish.sub, /LP = A/);
+    // The footer ticker follows the stage bag and is put back on exit.
+    assert.notEqual(demoHudBug.secondStage, demoHudBug.stage);
+    assert.match(demoHudBug.secondCycle, /^CYCLE 2 · /);
+    assert.ok(demoHudBug.secondTicker.length > 10);
+    assert.notEqual(demoHudBug.secondTicker, demoHudBug.firstTicker, 'the footer ticker must follow the stage bag');
+    assert.equal(demoHudBug.tickerAfterExit, 'SOMERSET SEPTA STATION // STREET ENTRANCE // PHILADELPHIA', 'the title gets its ticker back');
+    assert.deepEqual(demoHudBug.hold.phase, 'live');
+    assert.equal(demoHudBug.bodyClasses.includes('demo-active'), true);
+});
+
+// 5.4 FIGHT NIGHT (demo sweep #31): a hidden tab holds the demo — the result
+// countdown (2.4 s since the versus card, sweep #8/#20) freezes, the tab comes back to a RESUMING beat, and only
+// then does the countdown pick up what was left.
+probe('demo-hold', async () => {
+    const demoHoldProbe = await evaluate(client, `(async () => {
+      const qa = window.__finalBlowQa;
+      qa.demo(237);
+      qa.step(2);
+      qa.demoKnockout(0);
+      qa.step(0.05);
+      qa.demoResult(0);
+      const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+      const read = () => { const s = window.__finalBlowEngine.snapshot(); return { screen: s.screen, matches: s.demo.matches, resultScheduled: s.demo.resultScheduled, hold: s.demo.hold, tick: s.tick, status: document.querySelector('#demoResultStatus').textContent, prompt: document.querySelector('#demoHud small').textContent, speed: document.querySelector('#demoHudSpeed').textContent }; };
+      const before = read();
+      let hidden = true;
+      Object.defineProperty(document, 'hidden', { configurable: true, get: () => hidden });
+      Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => hidden ? 'hidden' : 'visible' });
+      document.dispatchEvent(new Event('visibilitychange'));
+      const atHide = read();
+      await wait(5400);
+      const stillHidden = read();
+      hidden = false;
+      document.dispatchEvent(new Event('visibilitychange'));
+      const atShow = read();
+      await wait(1400);
+      const afterBeat = read();
+      await wait(atHide.hold.resultRemainingMs + 400);
+      const afterHold = read();
+      delete document.hidden;
+      delete document.visibilityState;
+      qa.exitDemo();
+      return { before, atHide, stillHidden, atShow, afterBeat, afterHold };
+    })()`);
+    assert.equal(demoHoldProbe.before.screen, 'result');
+    assert.equal(demoHoldProbe.before.resultScheduled, true);
+    assert.equal(demoHoldProbe.atHide.hold.phase, 'held');
+    assert.equal(demoHoldProbe.atHide.resultScheduled, false, 'the wall-clock timer is frozen, not left running');
+    // 5.4 versus card (sweep #8/#20): the result hold is 2.4 s (the other
+    // 2.6 s of the old 5 s moved onto the fight screen as the versus card).
+    assert.ok(demoHoldProbe.atHide.hold.resultRemainingMs > 1400 && demoHoldProbe.atHide.hold.resultRemainingMs <= 2400, `remaining ${demoHoldProbe.atHide.hold.resultRemainingMs}`);
+    assert.equal(demoHoldProbe.atHide.status, 'NEXT FIGHT WAITS FOR THE SCREEN');
+    assert.equal(demoHoldProbe.atHide.speed, 'HELD');
+    assert.equal(demoHoldProbe.stillHidden.matches, 1, 'no new exhibition may start while hidden');
+    assert.equal(demoHoldProbe.stillHidden.screen, 'result');
+    assert.equal(demoHoldProbe.atShow.hold.phase, 'resuming');
+    assert.equal(demoHoldProbe.atShow.matches, 1);
+    assert.equal(demoHoldProbe.afterBeat.hold.phase, 'live');
+    assert.equal(demoHoldProbe.afterBeat.resultScheduled, true, 'the remaining hold is re-armed after the beat');
+    assert.equal(demoHoldProbe.afterBeat.matches, 1);
+    assert.ok(demoHoldProbe.afterBeat.hold.heldMs >= 6000, `held ${demoHoldProbe.afterBeat.hold.heldMs} ms`);
+    assert.equal(demoHoldProbe.afterHold.matches, 2, 'the next exhibition starts once the remaining hold runs out');
+    assert.equal(demoHoldProbe.afterHold.screen, 'fight');
+});
+
+// 5.4 FIGHT NIGHT (demo sweep #8/#20): the VERSUS card and the ring
+// introduction between exhibitions. A link boot opens on the card (both
+// corners, the stage row, the announcer's corner slams) over a 2.6 s clock
+// stop, and the announcer plan runs left corner -> right corner -> stage ->
+// ROUND 1 -> FIGHT! in that order — the ROUND 1 card is no longer clobbered
+// by a WATCH DEMO slam. The card's name line is TV-sized.
+probe('demo-versus', async () => {
+    // (5.4 session layer: the corner record reads the build-keyed standings
+    // board, which the demo probes before this one have filled and which
+    // persists across loads by design — clear it so this is the first bout.)
+    await navigate(client, gameUrl);
+    await evaluate(client, `Object.keys(localStorage).filter((k) => k.startsWith('final-blow-demo-standings')).forEach((k) => localStorage.removeItem(k))`);
+    await navigate(client, `${gameUrl}&demo=237`);
+    const opened = await evaluate(client, `(() => {
+      const box = document.querySelector('#introDialogue');
+      const s = window.__finalBlowEngine.snapshot();
+      const ring = window.__finalBlowQa.demoRingIntro();
+      const cards = [...box.querySelectorAll('.speech-card.versus')];
+      const left = cards[0];
+      return {
+        phase: s.phase, tick: s.tick, hidden: box.hidden, versus: box.classList.contains('versus'),
+        cards: cards.length, portraits: cards.filter((c) => c.querySelector('img.versus-portrait')?.getAttribute('src')).length,
+        leftRevealed: !left.hidden, rightHidden: cards[1].hidden, stageHidden: box.querySelector('.versus-stage').hidden,
+        eyebrow: left.querySelector('b').textContent, name: left.querySelector('strong').textContent,
+        title: left.querySelector('p').textContent, archetype: left.querySelector('em').textContent, record: left.querySelector('small').textContent,
+        nameSize: parseFloat(getComputedStyle(left.querySelector('strong')).fontSize),
+        banner: document.querySelector('#announcer strong').getAttribute('aria-label') + '|' + document.querySelector('#announcer span').textContent,
+        artHold: ring.artHold, planKinds: ring.plan.map((b) => b.kind), planCues: ring.plan.map((b) => b.cue), fired: ring.log.map((b) => b.kind),
+        pair: s.demo.cycle.picks, elapsedMs: ring.elapsedMs,
+      };
+    })()`);
+    assert.equal(opened.phase, 'intro');
+    // navigate() returns some way into the card (load + its settle delay), so
+    // the reveal state is asserted against the card's own clock.
+    assert.ok(opened.elapsedMs < 1900, `read under the card before the stage beat, got ${opened.elapsedMs} ms`);
+    // Reveals land on rendered frames, so a read within one frame (150 ms) of
+    // a beat may see either side of it.
+    const beatsBy = (ms) => [0, 1000, 1900].filter((at) => at <= ms).length;
+    const firedLower = beatsBy(opened.elapsedMs - 150);
+    const firedUpper = beatsBy(opened.elapsedMs);
+    assert.equal(opened.tick, 0, 'the clock stands still under the card');
+    assert.equal(opened.hidden, false);
+    assert.equal(opened.versus, true, 'the card rides the dialogue box');
+    assert.equal(opened.cards, 2);
+    assert.equal(opened.portraits, 2);
+    assert.equal(opened.leftRevealed, true);
+    if (opened.elapsedMs < 850) assert.equal(opened.rightHidden, true, 'the right corner waits for its 1.0 s beat');
+    if (opened.elapsedMs > 1150) assert.equal(opened.rightHidden, false, 'the right corner is up after its beat');
+    assert.equal(opened.stageHidden, true, 'the stage row waits for its 1.9 s beat');
+    assert.equal(opened.eyebrow, 'IN THE LEFT CORNER');
+    assert.ok(opened.name.length > 1 && opened.name === opened.name.toUpperCase());
+    assert.ok(opened.title.length > 3, 'roster title');
+    assert.ok(opened.archetype.length > 3, 'kit archetype');
+    assert.equal(opened.record, 'FIRST BOUT TONIGHT');
+    assert.ok(opened.nameSize >= 38, `the corner name reads from the couch at 1440 wide, got ${opened.nameSize}px`);
+    assert.match(opened.banner, /^[A-Z0-9 .'-]+\|IN THE (LEFT|RIGHT) CORNER · /, 'a corner slam is up');
+    assert.deepEqual(opened.planKinds, ['corner', 'corner', 'stage', 'round', 'fight']);
+    assert.equal(opened.planCues[0], `${opened.pair[0]}-name`);
+    assert.equal(opened.planCues[1], `${opened.pair[1]}-name`);
+    assert.deepEqual(opened.planCues.slice(2), ['', 'round1', 'fight'], 'no stage cue is invented; ROUND 1 and FIGHT! keep their banks');
+    assert.equal(opened.artHold.active, true);
+    assert.equal(opened.artHold.floorMs, 2600);
+    assert.ok(opened.fired.length >= firedLower && opened.fired.length <= firedUpper, `fired ${opened.fired.join(',')} at ${opened.elapsedMs} ms`);
+    assert.deepEqual(opened.fired, ['corner', 'corner', 'stage'].slice(0, opened.fired.length), 'beats fire in order');
+    // The reads below are timed from the card's own clock (the boot landed
+    // some way into the left corner's beat before navigate() returned).
+    await delay(Math.max(0, 2250 - opened.elapsedMs));
+    const midCard = await evaluate(client, `(() => {
+      const box = document.querySelector('#introDialogue');
+      const s = window.__finalBlowEngine.snapshot();
+      return { phase: s.phase, tick: s.tick, hidden: box.hidden, revealed: [...box.querySelectorAll('[data-card]')].map((c) => !c.hidden), fired: window.__finalBlowQa.demoRingIntro().log.map((b) => b.kind), stageRow: box.querySelector('.versus-stage span').textContent };
+    })()`);
+    assert.equal(midCard.tick, 0, 'still held at 2.2 s');
+    assert.deepEqual(midCard.revealed, [true, true, true], 'both corners and the stage row are up by the stage beat');
+    assert.deepEqual(midCard.fired, ['corner', 'corner', 'stage']);
+    assert.ok(midCard.stageRow.length > 3);
+    await delay(2000);
+    const released = await evaluate(client, `(() => {
+      const s = window.__finalBlowEngine.snapshot();
+      const ring = window.__finalBlowQa.demoRingIntro();
+      return { phase: s.phase, tick: s.tick, hidden: document.querySelector('#introDialogue').hidden, log: ring.log.map((b) => ({ kind: b.kind, at: b.at })), release: ring.releaseReason, banner: document.querySelector('#announcer strong').getAttribute('aria-label') };
+    })()`);
+    assert.ok(released.tick > 0, 'the clock runs after the release');
+    assert.equal(released.hidden, true, 'the card leaves with the ROUND card');
+    assert.ok(['floor', 'capped'].includes(released.release), `release ${released.release}`);
+    assert.deepEqual(released.log.map((b) => b.kind), ['corner', 'corner', 'stage', 'round', 'fight'], 'the announcer plan order');
+    assert.ok(released.log[3].at >= 2600 && released.log[3].at < 3200, `ROUND 1 at the 2.6 s release, got ${released.log[3].at}`);
+    assert.ok(released.log[4].at - released.log[3].at >= 1100 && released.log[4].at - released.log[3].at <= 1500, `FIGHT! 1150 ms after ROUND 1, got ${released.log[4].at - released.log[3].at}`);
+    assert.equal(released.banner, 'FIGHT!');
+    // Round 2 keeps its plain card: no versus card outside round 1. Card 1 of
+    // seed 237 is a QUICK BOUT (5.4 session layer: one round, no round 2), so
+    // a best-of-three is forced through the QA entry; the card's 2.6 s clock
+    // stop is wall time, so the probe waits it out before stepping.
+    await evaluate(client, `(() => { const qa = window.__finalBlowQa; qa.demoNextShow({ bout: 'co-main' }); qa.demo(237); })()`);
+    await delay(3200);
+    // The KO lands on a grounded, quiet tick so the 5.4 closer takes the PLAIN
+    // knockout (an airborne victim earns the Final Blow ceremony, which is
+    // longer than any fixed step); the step then runs until round 2 is up.
+    const roundTwo = await evaluate(client, `(() => { const qa = window.__finalBlowQa; qa.demoPause(true); qa.step(3);
+      for (let i = 0; i < 900; i += 1) { const snap = window.__finalBlowEngine.snapshot(); if (snap.phase === 'fight' && qa.pose().every((p) => p.grounded && !p.down) && snap.fighters.every((f) => !f.attack && f.hitstunFrames === 0)) break; qa.step(1 / 60); }
+      qa.demoKnockout(0);
+      for (let i = 0; i < 24; i += 1) { if (document.querySelector('#roundLabel').textContent === 'DEMO · ROUND 2') break; qa.step(0.5); }
+      const s = window.__finalBlowEngine.snapshot(); return { roundLabel: document.querySelector('#roundLabel').textContent, phase: s.phase, versus: document.querySelector('#introDialogue').classList.contains('versus'), planned: qa.demoRingIntro().planned }; })()`);
+    assert.equal(roundTwo.roundLabel, 'DEMO · ROUND 2', 'round 1 settled, round 2 open');
+    assert.equal(roundTwo.versus, false);
+    assert.equal(roundTwo.planned, false);
+});
+
+// 5.4 FIGHT NIGHT (demo sweep #7/#17): the demo CAMERA/CADENCE director. A
+// super draws a seeded shot and the presentation camera pushes in on the
+// attacker (the world behind the cut-in used to sit still); the KO draws a
+// shot, opens the slow-motion beat and drops the letterbox bars; the same
+// seed draws the same shots; a played match draws nothing.
+probe('demo-camera', async () => {
+    // Reduced motion keeps the demo camera's tempo and bars but drops the
+    // moves, and the finisher probes above leave the persisted toggle ON —
+    // start from a clean page with it off so the shots can be measured.
+    await navigate(client, gameUrl);
+    await evaluate(client, `localStorage.removeItem('final-blow-reduced-motion')`);
+    await navigate(client, gameUrl);
+    const demoCameraProbe = await evaluate(client, `(async () => {
+      const qa = window.__finalBlowQa;
+      const frames = (count) => new Promise((resolve) => { let left = count; const tick = () => (left -= 1) <= 0 ? resolve() : requestAnimationFrame(tick); requestAnimationFrame(tick); });
+      const stepTo = (predicate, limit) => { for (let tick = 0; tick < limit; tick += 1) { if (predicate(window.__finalBlowEngine.snapshot())) return tick; qa.step(1 / 60); } return -1; };
+      // The shot envelopes are wall-clock (like every presentation ease), so
+      // the probe waits on what the camera DID, not on a frame count — a
+      // loaded headless box can render a frame in 500 ms.
+      const settle = async (predicate, limit) => { for (let frame = 0; frame < limit; frame += 1) { await frames(1); if (predicate()) return true; } return false; };
+      const run = async (seed) => {
+        qa.demo(seed);
+        const before = window.__finalBlowEngine.snapshot().violence.superCutIns;
+        const superTick = stepTo((snap) => snap.violence.superCutIns > before, 900);
+        // The shot is drawn synchronously in the latch; the pose eases over the next frames.
+        const superShotId = qa.demoCamera().shot?.id ?? null;
+        const superDrawn = qa.demoCamera().director.supers;
+        let superZoom = 1;
+        await settle(() => { superZoom = Math.max(superZoom, window.__finalBlowEngine.snapshot().camera.presentation.zoom); return superZoom > 1.12; }, 180);
+        const superCam = qa.demoCamera();
+        const quiet = stepTo((snap) => snap.phase === 'fight' && snap.fighters.every((f) => !f.attack && f.hitstunFrames === 0) && qa.pose().every((p) => p.grounded && !p.down), 900);
+        qa.demoKnockout(0);
+        const koShotId = qa.demoCamera().koShot;
+        qa.step(2 / 60);
+        let koZoom = 1;
+        let koLetterbox = 0;
+        await settle(() => { const cam = window.__finalBlowEngine.snapshot().camera.presentation; koZoom = Math.max(koZoom, cam.zoom); koLetterbox = Math.max(koLetterbox, cam.letterbox); return koZoom > 1.1 && koLetterbox > 0.5; }, 180);
+        const koCam = qa.demoCamera();
+        const koSnap = window.__finalBlowEngine.snapshot();
+        return { superTick, quiet, superCam, koCam, superZoom, superShotId, superDrawn, koShotId, koZoom, koLetterbox, koPhase: koSnap.phase, tag: document.querySelector('#demoHudSpeed').textContent };
+      };
+      const first = await run(237);
+      const again = await run(237);
+      qa.exitDemo();
+      qa.aiFight('deathblow', 'jez', 'pro');
+      qa.step(3);
+      await frames(4);
+      const played = { snapshot: window.__finalBlowEngine.snapshot(), camera: qa.demoCamera() };
+      return { first, again, played };
+    })()`);
+    const { first, again, played } = demoCameraProbe;
+    assert.ok(first.superTick >= 0, 'the opener super fires inside 15 s');
+    assert.equal(first.superCam.active, true);
+    assert.ok(['tight', 'creep', 'snap'].includes(first.superShotId), `a super shot is drawn at the latch (${first.superShotId})`);
+    assert.equal(first.superDrawn, 1);
+    assert.ok(first.superZoom > 1.12, `the super pushes in past the played game's 1.08 dolly (peak zoom ${first.superZoom})`);
+    assert.equal(first.superCam.beat, 'exchange', 'a super is an exchange');
+    assert.ok(first.quiet >= 0, 'a quiet grounded tick for the synthetic KO');
+    assert.equal(first.koCam.beat, 'ko', 'the KO opens the slow-motion beat');
+    assert.ok(['freeze', 'creep', 'smash'].includes(first.koShotId), `a KO shot is drawn at the KO (${first.koShotId})`);
+    assert.equal(first.koCam.koShot, first.koShotId);
+    assert.ok(first.koCam.rate >= 0.25 && first.koCam.rate <= 0.5, `the beat's rate is slow motion (${first.koCam.rate})`);
+    assert.equal(first.koCam.cadence, null, 'the QA clock owns the cadence: the transport is not driven (the tick stream is the probe\'s)');
+    assert.equal(first.tag, '0.75×', 'under the QA clock the tag keeps the operator rate');
+    assert.equal(first.koPhase, 'finish');
+    assert.ok(first.koZoom > 1.1, `the KO pushes in (peak zoom ${first.koZoom})`);
+    assert.ok(first.koLetterbox > 0.5, `the letterbox drops on the KO beat (peak ${first.koLetterbox})`);
+    // Same seed, same shots at the same ticks.
+    assert.equal(again.superTick, first.superTick);
+    assert.equal(again.superShotId, first.superShotId);
+    assert.equal(again.koShotId, first.koShotId);
+    assert.deepEqual(again.koCam.director.log.map(({ kind, id, tick }) => [kind, id, tick]), first.koCam.director.log.map(({ kind, id, tick }) => [kind, id, tick]));
+    // A played match: no director, no shot, no cadence, identity camera.
+    assert.equal(played.camera.active, false);
+    assert.equal(played.camera.cadence, null);
+    assert.equal(played.snapshot.camera.presentation.demoShot, null);
+    assert.notEqual(played.snapshot.mode, 'demo');
+    assert.equal(played.snapshot.violence.demoShots, again.koCam.shots, 'the played match drew no shot (the monotonic total stands where the second demo left it)');
 });
 
 probe('offline-cache', async () => {
@@ -3814,12 +4374,13 @@ probe('offline-cache', async () => {
       };
     })()`);
     assert.equal(offlineCache.controlled, true);
-    assert.match(offlineCache.name, /final-blow-shell-5\.3/);
+    assert.match(offlineCache.name, /final-blow-shell-5\.4/);
     // 1.9E added engine/atlas-facing.mjs to the shell: game.js imports it, so
     // offline boot needs it cached.
     // 5.1 added engine/{audio-manifest, ambient, announcer, crowd-voice, shared-sfx,
     // swing-resolve}.mjs to the shell: game.js imports them at boot.
-    assert.equal(offlineCache.entries, 28);
+    // (5.4 Fight Night: the attract loop's six demo modules joined the shell.)
+    assert.equal(offlineCache.entries, 34);
     assert.equal(offlineCache.hasAtlasFacing, true);
     assert.equal(offlineCache.hasIndex, false);
     assert.equal(offlineCache.rootRedirected, false);
@@ -3840,8 +4401,8 @@ probe('offline-cache', async () => {
       version: window.__finalBlowEngine?.version,
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
-    assert.match(controlledReload.build, /5\.3/);
-    assert.equal(controlledReload.version, '5.3-spectacle');
+    assert.match(controlledReload.build, /5\.4/);
+    assert.equal(controlledReload.version, '5.4-fightnight');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -3858,8 +4419,8 @@ probe('offline-cache', async () => {
       badge: document.querySelector('#offlineBadge').textContent,
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
-    assert.match(offlineBoot.build, /5\.3/);
-    assert.equal(offlineBoot.version, '5.3-spectacle');
+    assert.match(offlineBoot.build, /5\.4/);
+    assert.equal(offlineBoot.version, '5.4-fightnight');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -3905,7 +4466,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.3');
+    assert.equal(landscape.version.text, 'VERSION 5.4');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
@@ -4003,9 +4564,19 @@ probe('mobile-landscape', async () => {
       const hud = document.querySelector('#demoHud').getBoundingClientRect();
       const touch = document.querySelector('#touchControls');
       const pause = document.querySelector('#touchPauseButton');
+      // 5.4 #28: the rate tag must stay off CPU 1's Grit row, the prompt must
+      // be visible and touch-worded, and the keyboard legend must stay off a
+      // coarse pointer (drawDemoSpeedHud paints it only when armed AND fine).
+      const rect = (el) => { const r = el.getBoundingClientRect(); return { left: r.left, top: r.top, right: r.right, bottom: r.bottom }; };
+      const small = document.querySelector('#demoHud small');
       const result = {
         snapshot,
         hud: { left: hud.left, top: hud.top, right: hud.right, bottom: hud.bottom },
+        speedTag: rect(document.querySelector('#demoHudSpeed')),
+        gritRow: rect(document.querySelector('.p1-hud .grit-row')),
+        prompt: { text: small.textContent, display: getComputedStyle(small).display },
+        matchupSize: parseFloat(getComputedStyle(document.querySelector('#demoHudMatchup')).fontSize),
+        coarse: matchMedia('(pointer: coarse)').matches,
         touchDisplay: getComputedStyle(touch).display,
         pauseDisplay: getComputedStyle(pause).display,
         overflow: document.documentElement.scrollWidth > innerWidth,
@@ -4033,6 +4604,15 @@ probe('mobile-landscape', async () => {
     assert.ok(mobileDemo.titleButtons.demo.left >= 0 && mobileDemo.titleButtons.demo.right <= 844);
     assert.ok(mobileDemo.titleButtons.controls.left >= 0 && mobileDemo.titleButtons.controls.right <= 844);
     assert.ok(mobileDemo.hud.left >= 0 && mobileDemo.hud.right <= 844 && mobileDemo.hud.bottom <= 390);
+    // 5.4 #28: the rate tag and the Grit row must not intersect (the canvas
+    // chip used to be painted straight through it on this viewport).
+    assert.equal(mobileDemo.coarse, true);
+    const apart = mobileDemo.speedTag.top >= mobileDemo.gritRow.bottom || mobileDemo.speedTag.bottom <= mobileDemo.gritRow.top
+      || mobileDemo.speedTag.left >= mobileDemo.gritRow.right || mobileDemo.speedTag.right <= mobileDemo.gritRow.left;
+    assert.ok(apart, `speed tag ${JSON.stringify(mobileDemo.speedTag)} overlaps the Grit row ${JSON.stringify(mobileDemo.gritRow)}`);
+    assert.equal(mobileDemo.prompt.text, 'TAP TO PLAY', 'a phone viewer needs a touch-worded exit');
+    assert.notEqual(mobileDemo.prompt.display, 'none', 'the exit prompt must be visible on a phone');
+    assert.ok(mobileDemo.matchupSize >= 12, `phone matchup line ${mobileDemo.matchupSize}px`);
 });
 
 probe('mobile-polish', async () => {
@@ -4645,6 +5225,8 @@ try {
         bothBrainsActive: [demoThinking.fighters[0].ai.decisions, demoThinking.fighters[1].ai.decisions],
         finalBlowElapsed: demoFinalBlow.status.elapsed,
         mobileHud: mobileDemo.hud,
+        // 5.4 #30: the seed-url pin's settled rounds and coverage.
+        seedUrl: demoSeedUrl ?? null,
       },
       mobile: {
         ...landscape,

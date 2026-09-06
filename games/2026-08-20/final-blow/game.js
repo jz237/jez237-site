@@ -483,12 +483,45 @@ import {
 } from "./engine/online-qol.mjs";
 import {
   DEMO_AI_DIFFICULTY,
+  DEMO_CLOCK_AI_DIFFICULTY,
+  DEMO_CLOCK_COVERAGE_BLEND,
   DEMO_IDLE_DELAY_MS,
   DEMO_RESULT_HOLD_MS,
+  buildDemoShareUrl,
   createDemoDirector,
+  demoCloserPlan,
   demoMatchupKey,
+  demoStoryFor,
+  demoStoryTierFor,
+  parseDemoBootRequest,
 } from "./engine/demo.mjs";
-import { createDemoChoreographer } from "./engine/demo-choreo.mjs";
+import { DEMO_COVERAGE_BLEND, createDemoChoreographer } from "./engine/demo-choreo.mjs";
+import {
+  createDemoLedger,
+  demoBoutPlan,
+  demoLedgerRecord,
+  demoNextUpText,
+  demoRecordsLine,
+  demoResultEyebrow,
+  demoRoundCardPlan,
+  demoSignOffLine,
+  demoStandingLine,
+  demoStandings,
+  demoStandingsStorageKey,
+  demoStoryBugText,
+  restoreDemoStandings,
+  serializeDemoStandings,
+} from "./engine/demo-session.mjs";
+import {
+  ATTRACT_BED_FADE_MS,
+  attractSoundChip,
+  bedFadeStep,
+  createAttractAudioGate,
+  demoBedLoops,
+  demoBedRestartAtCard,
+  demoVoiceDrawsFromBag,
+  gestureArmsAudio,
+} from "./engine/demo-audio.mjs";
 import {
   DEMO_SPEED_RATES,
   createDemoSpeed,
@@ -496,6 +529,38 @@ import {
   parseDemoSpeed,
   DEFAULT_DEMO_SPEED,
 } from "./engine/demo-speed.mjs";
+import {
+  DEMO_EXCHANGE_LEAN_ZOOM,
+  createDemoCadence,
+  createDemoCameraDirector,
+  shotAlive,
+  shotShape,
+} from "./engine/demo-camera.mjs";
+import {
+  DEMO_RESUME_BEAT_MS,
+  createDemoHold,
+  demoBugText,
+  demoHoldWanted,
+  demoIdleState,
+  demoLegendVisible,
+  demoResultHoldRemaining,
+  demoResultPrompt,
+  demoSpeedTag,
+  finishThemSubline,
+  flowSkipHintVisible,
+} from "./engine/demo-hud.mjs";
+// 5.4 FIGHT NIGHT (sweep #8/#20): the VERSUS card and the ring introduction
+// between exhibitions — pure copy, beat plan and standings fold.
+import {
+  DEMO_VERSUS_HOLD_MS,
+  demoRingIntroDue,
+  demoRingIntroPlan,
+  demoStandingsAfterMatch,
+  demoVersusAnnouncesRound,
+  demoVersusCard,
+  demoVersusCardTimes,
+} from "./engine/demo-versus.mjs";
+import { DEMO_COMMENTARY_KINDS, createDemoCommentaryBus } from "./engine/demo-commentary.mjs";
 import {
   auditGraphicFatalities,
   getGraphicFatality,
@@ -557,6 +622,7 @@ import {
   musicStingerFiles,
   musicStingerForRoundEnd,
   musicStingerPath,
+  stageTrackIndex,
 } from "./engine/music.mjs";
 import {
   STAGE_WEAPONS,
@@ -1714,6 +1780,10 @@ const introArtHold = {
   ids: [],
   startedAt: 0,
   heldMs: 0,
+  // 5.4 FIGHT NIGHT (sweep #8/#20): the demo's VERSUS floor — a minimum
+  // hold under the round-1 intro (engine/demo-versus.mjs); 0 in every
+  // played match, so holdDecision answers exactly what it always has.
+  floorMs: 0,
   lastReason: "",
   lastPending: [],
   holds: 0,
@@ -1802,21 +1872,41 @@ function artReadinessSnapshot() {
 function renderArtHoldCurtain(pending) {
   const curtain = $("#artHold");
   if (!curtain) return;
-  curtain.hidden = !introArtHold.active;
+  // 5.4 FIGHT NIGHT (sweep #27): in the demo the hold wears a chip on the
+  // demo HUD, never the curtain — a LOADING FIGHTERS card over an attract
+  // loop reads as a broken cabinet from across the room.
+  const demo = state.mode === "demo";
+  const chip = $("#demoHudLoading");
+  curtain.hidden = demo || !introArtHold.active;
+  // 5.4 (sweep #8/#20): under the VERSUS floor the chip only shows while a
+  // sheet is actually pending — the card, not a LOADING tag, is the cover.
+  if (chip) chip.hidden = !demo || !introArtHold.active || !pending.length;
   if (!introArtHold.active) return;
   const total = introArtHold.ids.reduce((sum, id) => sum + (fighterArtReadiness(id).family?.length || 0), 0);
-  curtain.querySelector("span").textContent = total
-    ? `${Math.max(0, total - pending.length)} / ${total} SHEETS`
-    : "MANIFEST";
+  const progress = total ? `${Math.max(0, total - pending.length)} / ${total} SHEETS` : "MANIFEST";
+  if (demo) {
+    if (chip) chip.textContent = `LOADING · ${progress}`;
+    return;
+  }
+  curtain.querySelector("span").textContent = progress;
 }
 
 /** Arm the hold for this matchup at the top of an offline intro. */
 function armIntroArtHold(ids) {
   releaseIntroArtHold("rearmed", performance.now());
-  const holdable = introArtHold.enabled && state.mode !== "online" && state.mode !== "demo" && !replayPlayback.active;
+  // 5.4 FIGHT NIGHT (sweep #27): the demo is no longer exempt. Its next pair
+  // is prewarmed a whole exhibition early (demoPrewarmNextPair), so on a warm
+  // cabinet this never engages; on a cold host it is the same capped 1.5 s
+  // safety net a played match gets, and the curtain is the demo HUD's
+  // LOADING chip (renderArtHoldCurtain) rather than the full-screen one.
+  const holdable = introArtHold.enabled && state.mode !== "online" && !replayPlayback.active;
   preloadAuthoredBanks(ids);
   const pending = holdable ? matchupArtPending(ids) : [];
-  if (!pending.length) {
+  // 5.4 FIGHT NIGHT (sweep #8/#20): a demo round 1 with a VERSUS card armed
+  // holds for the card's floor even with every sheet decoded — the ring
+  // introduction runs over the stopped clock (planDemoVersusCard).
+  const floorMs = holdable && demoVersus.planned ? DEMO_VERSUS_HOLD_MS : 0;
+  if (!pending.length && !floorMs) {
     introArtHold.skipped += 1;
     introArtHold.lastReason = holdable ? "ready" : "ineligible";
     introArtHold.lastPending = [];
@@ -1825,6 +1915,7 @@ function armIntroArtHold(ids) {
   introArtHold.active = true;
   introArtHold.ids = [...ids];
   introArtHold.startedAt = performance.now();
+  introArtHold.floorMs = floorMs;
   introArtHold.heldMs = 0;
   introArtHold.lastReason = "holding";
   introArtHold.lastPending = pending;
@@ -1841,9 +1932,13 @@ function releaseIntroArtHold(reason, now) {
   if (reason === "capped") introArtHold.capped += 1;
   else if (reason === "ready") introArtHold.released += 1;
   renderArtHoldCurtain([]);
+  introArtHold.floorMs = 0;
   // The FIGHT! call was armed against the wall clock at the top of the intro;
   // the sim stood still for heldMs, so the call moves by the same amount.
   shiftFightAnnouncement(introArtHold.heldMs, now);
+  // 5.4 (sweep #8/#20): the demo's ROUND card is owed at THIS moment — it
+  // follows the ring introduction instead of being buried under it.
+  releaseDemoVersusCard(reason, now);
 }
 
 /** Called once per rendered frame; true while the sim clock must stand still. */
@@ -1857,6 +1952,7 @@ function updateIntroArtHold(now) {
     capMs: INTRO_ART_HOLD_MS,
     pendingCount: pending.length,
     inIntro,
+    floorMs: introArtHold.floorMs,
   });
   if (decision.hold) {
     introArtHold.lastPending = pending;
@@ -2512,13 +2608,61 @@ const demoSession = {
   cycle: null,
   matches: 0,
   superSide: 0,
-  superShown: false,
+  // 5.4 FIGHT NIGHT (round-ends): the card's SHOW tag from the director
+  // ({ format, opener }), whether the opener has fired (this used to be
+  // `superShown` — every card opened on the walk-in super), the tick after the
+  // bell it fired on and what it turned out to be, plus the opener's own
+  // scratch (the dash tap, the footsies fuse).
+  show: null,
+  openerShown: false,
+  openerTick: -1,
+  openerAction: "",
+  openerScratch: 0,
+  // The round's CLOSER plan, set by checkKnockout in a demo the tick the KO
+  // lands ({ finisher, variant, reason } from engine/demo demoCloserPlan) and
+  // consumed by aiInput's finish branch. null outside a finish window.
+  closer: null,
+  // Per-session Final Blow ledger, fighterId -> Final Blows taken, the
+  // sibling of coverageCarry that alternates the A/B finisher per fighter; the
+  // bounded log of how every demo round ended (qa.demoCoverage().closers);
+  // and whether THIS card has already put a decision on the board.
+  finisherLedger: {},
+  closerLog: [],
+  decisionShown: false,
+  // The tier the current fighters were built with (demo / demo-clock).
+  fightersTier: "",
+  // QA only (qa.demoNextShow): a show tag forced onto the next card(s) so a
+  // probe can ask for a CLOCK card or a given opener deterministically.
+  // Survives endDemoSession on purpose — it is armed before qa.demo(seed).
+  showOverride: null,
+  // 5.4 SESSION LAYER (sweep #3/#11/#14/#15/#16/#25): the card's STORY
+  // resolved onto the seats (engine/demo demoStoryFor — opener, lead seat,
+  // per-seat tier overlay and yield tolerance, the showboat, the comeback
+  // seat), the session LEDGER (wins / losses / streaks / round scores per
+  // fighter, seeded from the build-keyed standings board in localStorage),
+  // the bout the result screen is holding on, the NEXT UP tease from the
+  // director's peek, and the countdown ticker under the result. All meta:
+  // the sim reads the bout's roundsToWin through state.matchRules and the
+  // story's tiers through makeFighter — both under state.mode === "demo" —
+  // and nothing else.
+  story: null,
+  ledger: null,
+  lastBout: null,
+  nextUp: null,
+  resultCountdownTimer: 0,
   resultTimer: 0,
   idleTimer: 0,
   // v2.9 FLOW: per-match coverage choreographer + the matchup keys this demo
   // session has featured (bounded by the director's matchup count).
   choreo: null,
   pairsSeen: [],
+  // 5.4 FIGHT NIGHT (sweep #12 / #21): the card's LOWER-THIRD event bus
+  // (engine/demo-commentary.mjs) — one per exhibition, seeded from the
+  // director like the choreographer — and the id of the line the DOM last
+  // showed (render-side bookkeeping for syncDemoLowerThird; -1 forces a
+  // repaint at the card swap, since a fresh bus restarts its ids at 1).
+  commentary: null,
+  lowerThirdShown: -1,
   // v2.9 FLOW: the CUMULATIVE attract ledger — fighterId -> { moveId: count }
   // across the exhibitions this session has already run. A single three-round
   // match cannot honestly demonstrate 30 moves per side every time, so a
@@ -2526,7 +2670,99 @@ const demoSession = {
   // cabinet has NOT shown for it yet. Bounded by the roster (10 fighters x
   // 30 ids), reset with the session, and never read by the sim.
   coverageCarry: {},
+  // 5.4 FIGHT NIGHT (sweep #7/#17): the CAMERA/CADENCE director. `camera`
+  // draws the seeded shot list (engine/demo-camera.mjs), `cadence` is the
+  // tick-keyed tempo policy, `shot` the live presentation envelope ({ kind,
+  // shot, side, age }), `koTick`/`koShot` the round-ending hit and the beat
+  // drawn for it, `cadenceBeat`/`cadenceRate` what the policy answered on the
+  // last rendered frame (applied to the transport by loop()). All render-side:
+  // the sim never reads any of it, and outside a demo all of it is null.
+  camera: null,
+  cadence: null,
+  shot: null,
+  koTick: -1,
+  koShot: null,
+  cadenceBeat: "",
+  cadenceRate: DEFAULT_DEMO_SPEED,
+  // 5.4 FIGHT NIGHT (sweep #26/#27): the NEXT pair's warm-up — see
+  // demoPrewarmNextPair. `pendingDirector` is the attract loop's director
+  // created early in the idle countdown so its first pair can be warmed
+  // before the demo even starts; startDemo adopts it.
+  prewarm: null,
+  lastPrewarm: null,
+  pendingDirector: null,
+  pendingDirectorSeed: null,
+  idlePrewarmTimer: 0,
+  // 5.4 FIGHT NIGHT (sweep #30): the RAW seed this exhibition runs on (the
+  // director only exposes its normalised hash) and where the demo was started
+  // from ("button" | "attract" | "qa" | "url"). The seed is what the COPY LINK
+  // bug writes into ?demo=, so a random button/attract show is shareable too.
+  seed: null,
+  source: null,
+  // ...and the round ledger: one entry per round the exhibition settles
+  // (cycle, round, winner, finisher type, the sim tick it happened on, both
+  // health bars and each side's coverage count at that moment). Written at
+  // finishRound on the demo path only, read by qa.demoRounds() and the
+  // seed-url pin, never by the sim — it exists so two loads of the same
+  // ?demo= link can be compared at a tick the SIM chose, not at whatever
+  // frame a probe happened to sample.
+  rounds: [],
+  // 5.4 FIGHT NIGHT (sweep #8/#20): the night's standings, fighterId ->
+  // { wins, losses } per settled EXHIBITION (the ledger above is per round
+  // and bounded; a cabinet runs for hours). Folded at showResult on the demo
+  // path, read by the versus card's record line and qa.demoCoverage().
+  standings: {},
+  shareNoteTimer: 0,
+  // 5.4 #31: the result hold's wall-clock bookkeeping, so a hidden tab can
+  // freeze the 5 s countdown and a returning one re-arms exactly what was
+  // left. `resultRemainingMs` is null while nothing is frozen.
+  resultArmedAt: 0,
+  resultRemainingMs: null,
+  // 5.4 #10/#32: the footer ticker the demo found on the title, put back on
+  // exit so an ended show does not leave the last exhibition's stage there.
+  tickerBefore: "",
 };
+// The ledger is bounded: an unattended cabinet runs for hours.
+const DEMO_ROUND_LEDGER_MAX = 64;
+
+// 5.4 FIGHT NIGHT (sweep #19): the attract show's audio ARMING GATE
+// (engine/demo-audio.mjs). The idle loop starts with no user gesture, so
+// every audio path used to hold on `demoSession.attract && !audioUnlocked`
+// — and two synth paths did not, so the first PERFECT GUARD of the show
+// flipped the flag and the bed, announcer and crowd joined 3.9 s into an
+// exchange. Now the gate only advances on a gesture Chrome counts as
+// activation (the exit key/pointer, a press anywhere on the title, the
+// TAP FOR SOUND chip) and opens AT THE NEXT ROUND CARD, so the first sound a
+// viewer hears is the announcer's ROUND call with the bed fading in under it.
+// Render-only, never snapshotted, consulted only behind demoSession.attract.
+const attractAudio = createAttractAudioGate();
+// Where the gate last opened (QA readout): the card it opened on and when.
+let attractAudioLiveAt = null;
+// The bed's fade-in multiplier: 1 everywhere, dropped to 0 at the card the
+// gate opens on and eased back over ATTRACT_BED_FADE_MS (demo only).
+let bedFadeLevel = 1;
+// 5.4 (sweep #24): the demo's fighter-voice shuffle bags (drawFromBag, the
+// announcer/crowd/stinger contract) keyed like fighterSfxCursors; a played
+// match keeps its round-robin cursor untouched. Plus the last dozen takes
+// as "fighter:cue:take" for the QA no-repeat readout (every mode, observation).
+const fighterVoiceBags = new Map();
+const fighterVoiceRecent = [];
+
+// 5.4 #31 — THE HIDDEN-TAB HOLD. Presentation-only, on the demoSession
+// pattern (never snapshotted, never read by the sim). While a demo tab is
+// hidden (or a phone is turned portrait) the render loop hands the fixed-step
+// clock zero seconds — the tick stream simply waits, the way the intro art
+// hold already waits — and the two wall-clock plans that pace the loop (the
+// result hold, the FIGHT! call) are frozen with it. Without this, rAF stopped
+// in the hidden tab but the 5 s timer kept firing, so the viewer came back to
+// a DIFFERENT pair mid-intro with the round card and FIGHT! already spent.
+const demoHold = createDemoHold();
+// 5.4 #32 — SCREENSAVER PRESENCE. The demo runs for hours on a TV; these are
+// the two idle clocks (pointer hide, bug tuck + chrome dim) the render loop
+// turns into body classes. Reset by mouse movement and transport keys — any
+// other input exits the demo anyway — and the HUD clock restarts per
+// exhibition so every new matchup is announced at full strength first.
+const demoPresence = { lastInputAt: 0, matchStartedAt: 0, cursorIdle: false, hudIdle: false };
 
 // v3.2 — the demo speed transport. See engine/demo-speed.mjs for why
 // this scales the TICK CADENCE and never dt. `?speed=` seeds it at boot; the
@@ -2545,7 +2781,32 @@ const DEMO_SPEED_HINT_MS = 9000;
 // and online presentation are byte-for-byte unchanged.
 const DEMO_FINISHER_REACTION = 0.35;
 const DEMO_ROUND_INTRO_SECONDS = 1.15;
-const DEMO_KO_HOLD_SECONDS = 3.1;
+// 5.4 FIGHT NIGHT (round-ends): the plain-KO hold is the FULL curtain call
+// again (it was 3.1 s — a hold no attract round ever reached, because every
+// round took the Final Blow). A plain knockout now has to carry the 5.3
+// collapse and thud, the "<name> WINS" call and the second victory beat,
+// which roundWinShowcaseCell only grants a hold of 3.4 s or more. The time is
+// reclaimed elsewhere: a round the closer plans as a plain KO does not open
+// the 6 s FINISH THEM window at all — the loser is on his feet for
+// DEMO_PLAIN_KO_WINDOW_SECONDS (the KO freeze) and then goes down.
+const DEMO_KO_HOLD_SECONDS = ROUND_WIN_HOLD_SECONDS;
+const DEMO_PLAIN_KO_WINDOW_SECONDS = 0.9;
+// The openers (engine/demo DEMO_OPENERS). The super walk-in commits inside
+// 245 px as it always has; the throw walks all the way into grab reach; the
+// dash-in taps its dash from mid range and lands a heavy off it; footsies
+// holds both men off the buttons for a spacing dance of this many ticks.
+// The CLOCK card's round clock. A clock-tier round cannot honestly last 99 s:
+// the game's own damage numbers floor a bar in five landed heavies (a
+// counter-hit HEAVY HAND is 26.7, a SOUTH STREET SLAM 25 — per-hit trace,
+// seed 1234), and brain-only clock rounds measured 16-104 s, median 36, over
+// eight forced cards even with the kit's swings cut to 0.3. At 30 s, 11 of
+// those 16 rounds reach the buzzer, and the card gets two rounds to put a
+// decision on the board before its fighters return to the standard brain and
+// the 99 s clock. The HUD shows 30 at the bell and the chip says ON THE CLOCK.
+const DEMO_CLOCK_ROUND_SECONDS = 30;
+const DEMO_OPENER_SUPER_RANGE = 245;
+const DEMO_OPENER_DASH_RANGE = 430;
+const DEMO_OPENER_FOOTSIES_TICKS = 96;
 let fightAnnouncementTimer = 0;
 let fightAnnouncementPlan = null;
 
@@ -3432,6 +3693,8 @@ const modeFxDebug = {
   teamDrafts: 0,
   dailyRuns: 0,
   attractScoreBoards: 0,
+  // 5.4 #30: COPY LINK / share presses on the demo HUD bug.
+  demoLinksShared: 0,
   scoreSubmissions: 0,
   // v2.1 PROGRESSION one-shot totals, same monotonic pattern.
   blackBookToasts: 0,
@@ -3445,6 +3708,8 @@ const modeFxDebug = {
   // R2.0 FAMILY wave 16 one-shot totals.
   commissionerUnlocks: 0,
   dialogueExchanges: 0,
+  // 5.4 (sweep #8/#20): demo versus cards mounted.
+  versusCards: 0,
   dialogueCardsShown: 0,
   winQuoteSelections: 0,
 };
@@ -4264,12 +4529,369 @@ function demoSnapshot() {
     cycle: demoSession.cycle ? { ...demoSession.cycle, picks: [...demoSession.cycle.picks] } : null,
     matches: demoSession.matches,
     superSide: demoSession.superSide,
-    superShown: demoSession.superShown,
-    difficulty: DEMO_AI_DIFFICULTY,
+    // `superShown` is kept as the historical name: it now means "the opener
+    // has fired", whichever of the four openers this card drew.
+    superShown: demoSession.openerShown,
+    show: demoSession.show ? { ...demoSession.show } : null,
+    opener: {
+      shown: demoSession.openerShown,
+      tick: demoSession.openerTick,
+      action: demoSession.openerAction,
+    },
+    closer: demoSession.closer ? { ...demoSession.closer } : null,
+    difficulty: demoSession.fightersTier || DEMO_AI_DIFFICULTY,
+    // 5.4 PERSONAS: the registered tier each seat is actually playing.
+    personas: (state.fighters || []).map((fighter) => fighter.aiBrain?.difficulty || null),
     resultScheduled: Boolean(demoSession.resultTimer),
     idleScheduled: Boolean(demoSession.idleTimer),
     director: demoSession.director?.snapshot() || null,
+    // 5.4 (sweep #26/#27): what is warming for the next swap.
+    prewarm: demoPrewarmSnapshot(),
+    // 5.4 #30: the raw seed, where the demo came from, the share link the
+    // COPY LINK bug would write, and how many rounds the ledger holds.
+    seed: demoSession.seed,
+    source: demoSession.source,
+    shareUrl: demoShareUrl(),
+    roundsSettled: demoSession.rounds.length,
+    // 5.4 SESSION LAYER: the story cast on the seats, the bout of the card,
+    // the format the sim is running, the tease and the ledger's headline.
+    story: demoSession.story ? { ...demoSession.story } : null,
+    bout: demoSession.show?.bout ? { ...demoSession.show.bout } : null,
+    roundsToWin: state.mode === "demo" ? roundsToWinValue() : null,
+    nextUp: demoSession.nextUp ? { ...demoSession.nextUp } : null,
+    session: demoSessionSnapshot(),
+    // 5.4 #31/#32: the hidden-tab hold and the screensaver presence classes.
+    hold: {
+      ...demoHold.snapshot(),
+      resultRemainingMs: demoSession.resultRemainingMs,
+    },
+    // 5.4 (sweep #8/#20): the night's standings and the versus card / ring
+    // introduction state for the current card.
+    standings: Object.fromEntries(Object.entries(demoSession.standings).map(([id, record]) => [id, { ...record }])),
+    versus: demoVersusSnapshot(),
+    presence: {
+      cursorIdle: demoPresence.cursorIdle,
+      hudIdle: demoPresence.hudIdle,
+    },
+    // 5.4 #12: the lower third's tally for this card (deterministic on the
+    // seed: it counts sim events, so two loads of one link agree).
+    commentary: demoSession.commentary ? demoSession.commentary.stats() : null,
   };
+}
+
+// 5.4 #30: the link for the exhibition on screen (null outside a demo).
+function demoShareUrl() {
+  if (!demoSession.active || demoSession.seed === null) return null;
+  return buildDemoShareUrl(location.href, { seed: demoSession.seed, cycle: demoSession.cycle?.cycle || 1 });
+}
+
+// 5.4 #30: the round ledger entry. Demo-only, reporting-only — the sim never
+// reads `rounds`, and the coverage counts are copied, not referenced.
+function demoLedgerRound(winner, type) {
+  if (state.mode !== "demo" || !demoSession.active || rollbackResimulating) return;
+  const coverage = demoSession.choreo ? demoSession.choreo.coverage() : {};
+  demoSession.rounds.push({
+    cycle: demoSession.cycle?.cycle || 0,
+    round: state.round,
+    winner,
+    type,
+    tick: state.simulationTick,
+    timer: Math.ceil(state.timer),
+    health: state.fighters.map((fighter) => Math.round(fighter.health * 100) / 100),
+    pair: state.fighters.map((fighter) => fighter.def.id),
+    movesShown: Object.fromEntries(Object.entries(coverage).map(([id, entry]) => [id, entry.movesShown])),
+  });
+  if (demoSession.rounds.length > DEMO_ROUND_LEDGER_MAX) demoSession.rounds.shift();
+}
+
+// ---------------------------------------------------------------------------
+// 5.4 SESSION LAYER — the ledger, the standings band, the result card and
+// the NEXT UP tease. Every function here runs on the demo path only (its
+// callers are gated on state.mode === "demo" / demoSession.active) and none
+// of it is read by the sim: the bout's roundsToWin reaches the sim through
+// applyMatchRulesForMatch and the story's tiers through makeFighter.
+// ---------------------------------------------------------------------------
+
+/** ROOKIE VS VETERAN: the rookie's full bar when the veteran is on match point. */
+function demoStoryRoundGrit() {
+  const story = demoSession.story;
+  if (!demoSession.active || !story || story.comebackSide < 0) return;
+  const rookie = story.comebackSide;
+  const veteran = 1 - rookie;
+  if (state.rounds[veteran] === roundsToWinValue() - 1 && state.rounds[rookie] < state.rounds[veteran]) {
+    state.fighters[rookie].meter = GRIT_RULES.maximum;
+  }
+}
+
+/** Bank the settled bout on the session ledger and the build-keyed board. */
+function demoRecordBout(winner) {
+  if (!demoSession.active || !demoSession.ledger || rollbackResimulating) return null;
+  const closing = demoSession.closerLog.at(-1);
+  const entry = demoLedgerRecord(demoSession.ledger, {
+    cycle: demoSession.cycle?.cycle || 0,
+    pair: state.fighters.map((fighter) => fighter.def.id),
+    winner,
+    rounds: state.rounds,
+    finisher: Boolean(closing && closing.cycle === (demoSession.cycle?.cycle || 0) && closing.kind === "finisher"),
+    story: demoSession.story?.id || "",
+    bout: demoSession.show?.bout || null,
+  });
+  demoSession.lastBout = entry;
+  try {
+    localStorage.setItem(demoStandingsStorageKey(GAME_VERSION), JSON.stringify(serializeDemoStandings(demoSession.ledger, { build: GAME_VERSION, now: Date.now() })));
+  } catch { /* storage full/blocked — the board stays in memory for the session */ }
+  return entry;
+}
+
+/** The NEXT UP tease from the director's peek (nothing consumed). */
+function demoNextUpFromPeek() {
+  const next = demoSession.director?.peek?.();
+  if (!next) return null;
+  const name = (id) => roster.find((entry) => entry.id === id)?.name || id;
+  return {
+    cycle: next.cycle,
+    pair: [...next.pair],
+    first: name(next.pair[0]),
+    second: name(next.pair[1]),
+    stageName: stages[next.stage]?.name || "",
+    bout: next.bout ? { ...next.bout } : null,
+    story: next.story,
+    storyLabel: demoStoryFor(next.story).label,
+  };
+}
+
+/** The set-score card as the bout's score, and the sign-off under the quote. */
+function renderDemoResultCard(winner) {
+  const card = $("#setScoreCard");
+  const entry = demoSession.lastBout;
+  if (!card || !entry) return;
+  const names = state.fighters.map((fighter) => fighter.def.name);
+  const bout = demoSession.show?.bout || null;
+  const records = state.fighters.map((fighter) => ({ name: fighter.def.name, ...(demoSession.ledger?.fighters?.[fighter.def.id] || {}) }));
+  $("#setScoreTitle").textContent = `${demoSession.story?.label || "EXHIBITION"} · ${bout ? bout.label : "BEST OF 3"}`;
+  $("#setScoreLine").innerHTML = `
+    <b class="${winner === 0 ? "champ" : ""}">${names[0]}</b>
+    <span>${state.rounds[0]} — ${state.rounds[1]}</span>
+    <b class="${winner === 1 ? "champ" : ""}">${names[1]}</b>`;
+  $("#setScoreSub").textContent = demoRecordsLine({ first: records[0], second: records[1] });
+  const cycle = demoSession.cycle?.cycle || 0;
+  $("#setScorePips").innerHTML = demoSession.closerLog
+    .filter((round) => round.cycle === cycle)
+    .map((round) => `<i class="${round.winner === 0 ? "left" : "right"}"></i>`)
+    .join("");
+  card.classList.remove("champion", "crowned");
+  card.hidden = false;
+  // The sign-off (sweep #25): seeded variant from the director, one family
+  // per situation, on the recap line the demo never used.
+  const recap = $("#resultRecap");
+  if (recap) {
+    recap.textContent = demoSignOffLine({
+      variant: demoSession.show?.signOff ?? 0,
+      winnerName: names[winner], loserName: names[1 - winner],
+      rounds: state.rounds, winner, bout,
+      nextBout: demoSession.nextUp?.bout || null,
+      streak: demoSession.ledger?.fighters?.[state.fighters[winner].def.id]?.streak || 0,
+    });
+    recap.hidden = false;
+  }
+}
+
+// The Release 1.8 high-score takeover's markup, kept so the title's cabinet
+// board is exactly what it was after a demo (renderDemoStandingsBand rewrites
+// the same element as tonight's standings).
+let attractScoresMarkup = null;
+
+function restoreAttractScoresMarkup() {
+  const board = $("#attractScores");
+  if (board && attractScoresMarkup !== null) board.innerHTML = attractScoresMarkup;
+  if (board) board.classList.remove("demo-standings");
+}
+
+/** TONIGHT'S CARD: standings across the bottom, the high scores as its last line in attract mode. */
+function renderDemoStandingsBand() {
+  const board = $("#attractScores");
+  if (!board) return;
+  if (attractScoresMarkup === null) attractScoresMarkup = board.innerHTML;
+  const bout = demoSession.show?.bout || null;
+  const rows = demoStandings(demoSession.ledger || createDemoLedger(), { limit: 8 });
+  const name = (id) => roster.find((entry) => entry.id === id)?.name || id;
+  const table = demoSession.attract ? loadHighScores() : [];
+  const scores = table.slice(0, 3).map((row, index) => `${index + 1} ${row.initials} ${Math.round(row.score).toLocaleString("en-US")}`).join(" · ");
+  board.classList.add("demo-standings");
+  board.innerHTML = `
+    <p class="eyebrow">TONIGHT'S CARD · STANDINGS${bout ? ` · CARD ${bout.card} · BOUT ${bout.slot} OF ${bout.of}` : ""}</p>
+    <div id="attractScoresRows" class="attract-score-rows">${rows.map((row, index) => `
+      <div class="attract-score-row standing${index === 0 ? " top" : ""}"><b>${demoStandingLine({ name: name(row.id), wins: row.wins, losses: row.losses, streak: row.streak })}</b></div>`).join("")}</div>
+    <small>${scores ? `HIGH SCORES · ${scores}` : coarsePointer() ? "TAP TO PLAY" : "PRESS ANY BUTTON TO PLAY"}</small>`;
+  board.hidden = false;
+  if (table.length) modeFxDebug.attractScoreBoards += 1;
+}
+
+/** The QA / snapshot view of the session ledger. */
+function demoSessionSnapshot() {
+  const ledger = demoSession.ledger;
+  if (!ledger) return null;
+  return {
+    cycles: ledger.cycles,
+    cards: ledger.cards,
+    bouts: ledger.bouts.map((entry) => ({ ...entry, rounds: [...entry.rounds] })),
+    standings: demoStandings(ledger).map((row) => ({ ...row })),
+    lastBout: demoSession.lastBout ? { ...demoSession.lastBout, rounds: [...demoSession.lastBout.rounds] } : null,
+    storageKey: demoStandingsStorageKey(GAME_VERSION),
+  };
+}
+
+/**
+ * 5.4 #30: COPY LINK / share. `navigator.share` where the platform has it
+ * (a phone hands the link to any app), the clipboard everywhere else, and
+ * when neither is reachable the address itself goes into the bug so it can be
+ * read off the screen. The button lives INSIDE the demo HUD, which only
+ * exists while a demo is on screen, and the pointer guard below keeps its tap
+ * from counting as "any input" — every other press still ends the demo.
+ */
+async function shareDemoLink() {
+  const url = demoShareUrl();
+  if (!url) return;
+  modeFxDebug.demoLinksShared += 1;
+  const button = $("#demoShareButton");
+  const note = (text, holdMs = 2400) => {
+    window.clearTimeout(demoSession.shareNoteTimer);
+    button.textContent = text;
+    demoSession.shareNoteTimer = window.setTimeout(() => {
+      demoSession.shareNoteTimer = 0;
+      button.textContent = "COPY LINK";
+    }, holdMs);
+  };
+  const [first, second] = state.fighters.map((fighter) => fighter.def.name);
+  if (typeof navigator.share === "function") {
+    try {
+      await navigator.share({
+        title: "FINAL BLOW · WATCH DEMO",
+        text: `${first} vs ${second} — the CPU exhibition, exactly as it played.`,
+        url,
+      });
+      note("LINK SHARED");
+      return;
+    } catch {
+      // Cancelled or no target — fall back to the clipboard below.
+    }
+  }
+  try {
+    await navigator.clipboard.writeText(url);
+    note("LINK COPIED");
+  } catch {
+    // No clipboard in this context: show the address so it can be read off.
+    note(url.replace(/^https?:\/\//, ""), 9000);
+  }
+}
+
+// The one pointer that must NOT exit the demo: a press on the share bug.
+function isDemoShareTarget(event) {
+  const target = event?.target;
+  return Boolean(demoSession.active && target && typeof target.closest === "function"
+    && target.closest("#demoShareButton"));
+}
+
+// ---------------------------------------------------------------------------
+// 5.4 #31 — the hidden-tab hold. See engine/demo-hud.mjs for the machine.
+// ---------------------------------------------------------------------------
+function freezeDemoResultTimer(now) {
+  if (!demoSession.resultTimer) return;
+  demoSession.resultRemainingMs = demoResultHoldRemaining({
+    armedAt: demoSession.resultArmedAt,
+    holdMs: DEMO_RESULT_HOLD_MS,
+    now,
+  });
+  clearDemoResultTimer();
+}
+
+function armDemoResultTimer(delay, now = performance.now()) {
+  clearDemoResultTimer();
+  demoSession.resultRemainingMs = null;
+  demoSession.resultArmedAt = now - Math.max(0, DEMO_RESULT_HOLD_MS - delay);
+  demoSession.resultTimer = window.setTimeout(() => {
+    demoSession.resultTimer = 0;
+    startNextDemoMatch();
+  }, delay);
+  // 5.4 SESSION LAYER: a real countdown on the NEXT UP line (render-only).
+  demoSession.resultCountdownTimer = window.setInterval(() => {
+    if (state.screen === "result" && demoSession.active) updateDemoUi();
+  }, 250);
+}
+
+/**
+ * Called from visibilitychange and the orientation gate. Holds while the
+ * page cannot be seen; on return starts the RESUMING beat, which the render
+ * loop settles (settleDemoHold) once it has actually painted a frame.
+ */
+function syncDemoHold(now = performance.now()) {
+  if (!demoSession.active) {
+    demoHold.reset();
+    return;
+  }
+  const wanted = demoHoldWanted({
+    hidden: document.hidden,
+    orientationBlocked: document.body.classList.contains("orientation-blocked"),
+  });
+  if (wanted) {
+    if (demoHold.hold(now)) {
+      freezeDemoResultTimer(now);
+      // Keep the plan, drop the timer: the release re-arms it shifted by
+      // exactly the time held, the way the intro art hold does.
+      window.clearTimeout(fightAnnouncementTimer);
+      fightAnnouncementTimer = 0;
+    }
+  } else {
+    demoHold.release(now);
+  }
+  updateDemoUi();
+}
+
+/** One call per rendered frame. Returns true while the clock must wait. */
+function settleDemoHold(now) {
+  if (!demoSession.active || !demoHold.frozen()) return false;
+  const settled = demoHold.settle(now);
+  if (!settled) return true;
+  if (fightAnnouncementPlan) {
+    // Fold the held span into the plan's own clock so a later hold (or the
+    // art hold's shift) composes instead of overwriting it.
+    fightAnnouncementPlan.armedAt += settled.heldMs;
+    if (!fightAnnouncementTimer) shiftFightAnnouncement(0, now);
+  }
+  if (demoSession.resultRemainingMs !== null && state.screen === "result") {
+    armDemoResultTimer(demoSession.resultRemainingMs, now);
+  } else {
+    demoSession.resultRemainingMs = null;
+  }
+  updateDemoUi();
+  return false;
+}
+
+// ---------------------------------------------------------------------------
+// 5.4 #32 — screensaver presence: pointer hide and the bug's tuck.
+// ---------------------------------------------------------------------------
+function noteDemoPresence(now = performance.now()) {
+  demoPresence.lastInputAt = now;
+  syncDemoPresence(now);
+}
+
+function syncDemoPresence(now) {
+  const active = demoSession.active;
+  const idle = active
+    ? demoIdleState({ now, lastInputAt: demoPresence.lastInputAt, matchStartedAt: demoPresence.matchStartedAt })
+    : { cursorIdle: false, hudIdle: false };
+  if (idle.cursorIdle !== demoPresence.cursorIdle) {
+    demoPresence.cursorIdle = idle.cursorIdle;
+    document.body.classList.toggle("demo-cursor-idle", idle.cursorIdle);
+  }
+  if (idle.hudIdle !== demoPresence.hudIdle) {
+    demoPresence.hudIdle = idle.hudIdle;
+    document.body.classList.toggle("demo-idle", idle.hudIdle);
+  }
+}
+
+function coarsePointer() {
+  return Boolean(window.matchMedia?.("(pointer: coarse)").matches);
 }
 
 function cancelFightAnnouncement() {
@@ -4307,28 +4929,151 @@ function shiftFightAnnouncement(heldMs, now) {
 function clearDemoResultTimer() {
   window.clearTimeout(demoSession.resultTimer);
   demoSession.resultTimer = 0;
+  window.clearInterval(demoSession.resultCountdownTimer);
+  demoSession.resultCountdownTimer = 0;
 }
 
 function clearIdleDemoTimer() {
   window.clearTimeout(demoSession.idleTimer);
   demoSession.idleTimer = 0;
+  window.clearTimeout(demoSession.idlePrewarmTimer);
+  demoSession.idlePrewarmTimer = 0;
+}
+
+// 5.4 #10/#28: the BROADCAST BUG. One corner element (bottom-left, over the
+// reflection band where the old key legend sat, so it can never cover a
+// fighter) carrying the show name, the matchup, the cycle + stage, the rate
+// tag and the one prompt a viewer can act on. It replaced a 9 px chip whose
+// only readable neighbour at TV distance was the operator's 20 px speed chip.
+// The rate tag inside the bug. 5.4 (sweep #17): it follows the cadence
+// director frame by frame (1× · 0.75× · SLOW-MO), so it is written from
+// loop() as well as from updateDemoUi — only when the words change, and only
+// while a demo is running (a played match never reaches the DOM write).
+let demoSpeedTagText = "";
+let demoSpeedTagTone = "";
+function syncDemoSpeedTag(force = false) {
+  if (!demoSession.active) return;
+  const speedTag = $("#demoHudSpeed");
+  if (!speedTag) return;
+  const tag = demoSpeedTag({
+    rate: demoSpeed.rate,
+    paused: demoSpeed.paused,
+    held: demoHold.frozen(),
+    cadence: demoSpeed.cadence,
+    beat: demoSession.cadenceBeat,
+  });
+  if (!force && tag.text === demoSpeedTagText && tag.tone === demoSpeedTagTone) return;
+  demoSpeedTagText = tag.text;
+  demoSpeedTagTone = tag.tone;
+  speedTag.textContent = tag.text;
+  speedTag.dataset.tone = tag.tone;
+}
+
+function demoCameraSnapshot() {
+  const live = demoSession.shot;
+  return {
+    active: demoCameraActive(),
+    beat: demoSession.cadenceBeat,
+    rate: demoSession.cadenceRate,
+    cadence: demoSpeed.cadence,
+    effectiveRate: demoSpeed.effectiveRate(),
+    locked: demoSpeed.cadenceLocked,
+    shot: live ? {
+      kind: live.kind,
+      id: live.shot.id,
+      side: live.side,
+      age: Number(live.age.toFixed(3)),
+      shape: Number(shotShape(live.shot, live.age).toFixed(3)),
+      zoom: live.shot.zoom,
+      slowMoRate: live.shot.slowMoRate ?? null,
+      slowMoTicks: live.shot.slowMoTicks ?? null,
+    } : null,
+    koTick: demoSession.koTick,
+    koShot: demoSession.koShot?.id || null,
+    policy: demoSession.cadence?.snapshot() || null,
+    director: demoSession.camera?.snapshot() || null,
+    tag: demoSpeedTagText,
+    presentation: {
+      zoom: Number(cinematicCamera.zoom.toFixed(4)),
+      rotation: Number(cinematicCamera.rotation.toFixed(5)),
+      letterbox: Number(letterboxLevel.toFixed(3)),
+      demoShot: cinematicCamera.demoShot,
+    },
+    shots: cinemaFxDebug.demoShots,
+    shotFrames: cinemaFxDebug.demoShotFrames,
+    koBars: cinemaFxDebug.demoKoBars,
+  };
 }
 
 function updateDemoUi() {
   const activeFight = demoSession.active && state.mode === "demo" && state.screen === "fight";
   const panel = $("#demoHud");
   panel.hidden = !activeFight;
+  // 5.4 (sweep #19): TAP FOR SOUND until a gesture arms the attract gate,
+  // SOUND AT THE BELL while it waits for its card, gone once it sounds.
+  const soundChip = $("#demoHudSound");
+  const chipLabel = attractSoundChip({ attract: demoSession.attract && activeFight, state: attractAudio.snapshot().state });
+  if (chipLabel) soundChip.textContent = chipLabel;
+  soundChip.hidden = !chipLabel;
+  syncDemoSpeedTag(true);
+  panel.classList.toggle("held", demoSession.active && demoHold.phase === "held");
+  panel.classList.toggle("resuming", demoSession.active && demoHold.phase === "resuming");
+  const resultStatus = $("#demoResultStatus");
+  if (resultStatus && demoSession.active) {
+    // 5.4 SESSION LAYER: NEXT UP · pair · stage · bout, with the hold's real
+    // remaining time; the 5.3 wording when the director has nothing to tease.
+    const remainingMs = demoSession.resultRemainingMs !== null ? demoSession.resultRemainingMs
+      : demoSession.resultTimer ? demoResultHoldRemaining({ armedAt: demoSession.resultArmedAt, holdMs: DEMO_RESULT_HOLD_MS, now: performance.now() })
+        : DEMO_RESULT_HOLD_MS;
+    resultStatus.textContent = demoSession.nextUp
+      ? demoNextUpText({ next: demoSession.nextUp, remainingMs, coarsePointer: coarsePointer(), held: demoHold.frozen() })
+      : demoResultPrompt({ holdMs: DEMO_RESULT_HOLD_MS, coarsePointer: coarsePointer(), held: demoHold.frozen() });
+  }
   if (!demoSession.cycle) return;
   const [firstId, secondId] = demoSession.cycle.picks;
   const first = roster.find(({ id }) => id === firstId);
   const second = roster.find(({ id }) => id === secondId);
-  $("#demoHudMatchup").textContent = `${first?.name || firstId} VS ${second?.name || secondId}`;
-  $("#demoHudCycle").textContent = `CYCLE ${demoSession.cycle.cycle} · ${stages[demoSession.cycle.stage].name}`;
+  const text = demoBugText({
+    first: first?.name || firstId,
+    second: second?.name || secondId,
+    cycle: demoSession.cycle.cycle,
+    stageName: stages[demoSession.cycle.stage].name,
+    coarsePointer: coarsePointer(),
+  });
+  $("#demoHudMatchup").textContent = text.matchup;
+  $("#demoHudCycle").textContent = text.cycle;
+  // 5.4 SESSION LAYER: the story row — story name, bout of the card, format.
+  const storyRow = $("#demoHudStory");
+  if (storyRow) {
+    storyRow.textContent = demoStoryBugText({ storyLabel: demoSession.story?.label || "", bout: demoSession.show?.bout || null });
+    storyRow.hidden = !storyRow.textContent;
+  }
+  const prompt = panel.querySelector("small");
+  if (prompt) prompt.textContent = demoHold.phase === "resuming" ? "RESUMING" : demoHold.phase === "held" ? "HOLDING" : text.prompt;
+  // 5.4: a CLOCK card says so on the bug — the viewer should know the
+  // clock is the story of this one — and (#30) the seed rides on it so what
+  // the link will say is what the screen says: SEED 237 · CYCLE 3 is the
+  // exhibition's address.
+  const onTheClock = demoSession.show?.format === "clock" ? " · ON THE CLOCK" : "";
+  const seedLabel = demoSession.seed === null ? "" : ` · SEED ${demoSession.seed}`;
+  $("#demoHudCycle").textContent = `${text.cycle}${onTheClock}${seedLabel}`;
+  // 5.4 (prewarm): the intro art hold wears a LOADING chip here, not the curtain.
+  const loadingChip = $("#demoHudLoading");
+  if (loadingChip) loadingChip.hidden = !(activeFight && introArtHold.active && introArtHold.lastPending.length);
+  const share = $("#demoShareButton");
+  share.hidden = demoSession.seed === null;
+  if (!demoSession.shareNoteTimer) share.textContent = "COPY LINK";
 }
 
 function endDemoSession() {
   clearDemoResultTimer();
   cancelFightAnnouncement();
+  clearDemoPrewarm(true);
+  demoHold.reset();
+  demoSession.resultRemainingMs = null;
+  demoSession.resultArmedAt = 0;
+  if (demoSession.tickerBefore) $("#stageTicker").textContent = demoSession.tickerBefore;
+  demoSession.tickerBefore = "";
   demoSession.active = false;
   demoSession.attract = false;
   demoSession.qa = false;
@@ -4336,11 +5081,49 @@ function endDemoSession() {
   demoSession.cycle = null;
   demoSession.matches = 0;
   demoSession.superSide = 0;
-  demoSession.superShown = false;
+  demoSession.show = null;
+  demoSession.openerShown = false;
+  demoSession.openerTick = -1;
+  demoSession.openerAction = "";
+  demoSession.openerScratch = 0;
+  demoSession.closer = null;
+  demoSession.finisherLedger = {};
+  demoSession.closerLog = [];
+  demoSession.decisionShown = false;
+  demoSession.fightersTier = "";
   demoSession.choreo = null;
+  demoSession.commentary = null;
+  demoSession.lowerThirdShown = -1;
+  syncDemoLowerThird();
   demoSession.pairsSeen = [];
   demoSession.coverageCarry = {};
+  demoSession.seed = null;
+  demoSession.source = null;
+  demoSession.rounds = [];
+  // 5.4 SESSION LAYER: the board is already on disk (written per bout); the
+  // in-memory ledger, story and tease go with the session.
+  demoSession.story = null;
+  demoSession.ledger = null;
+  demoSession.lastBout = null;
+  demoSession.nextUp = null;
+  restoreAttractScoresMarkup();
+  demoSession.standings = {};
+  resetDemoVersusCard();
+  demoSession.camera = null;
+  demoSession.cadence = null;
+  demoSession.shot = null;
+  demoSession.koTick = -1;
+  demoSession.koShot = null;
+  demoSession.cadenceBeat = "";
+  demoSession.cadenceRate = DEFAULT_DEMO_SPEED;
+  demoSpeed.setCadence(null);
+  cinematicCamera.demoShot = null;
+  window.clearTimeout(demoSession.shareNoteTimer);
+  demoSession.shareNoteTimer = 0;
+  attractAudio.endShow();
+  bedFadeLevel = 1;
   document.body.classList.remove("demo-active");
+  syncDemoPresence(performance.now());
   $("#demoHud").hidden = true;
   $("#demoResultStatus").hidden = true;
   $("#attractScores").hidden = true;
@@ -4418,7 +5201,17 @@ function handleDemoSpeedKey(event) {
     case "Digit4": demoSpeed.setRate(0.1); break;
     default: return false;
   }
+  // 5.4 (sweep #17): the operator took the keys — the cadence director
+  // stands down for the session and the rate they chose is what they watch.
+  demoSpeed.lockCadence();
+  // 5.4 #10: the legend is hidden by default and a transport key reveals it
+  // (nine seconds, then away again). A key is also real presence: it wakes
+  // the tucked bug and the pointer clocks.
   demoSpeed.hintUntilMs = performance.now() + DEMO_SPEED_HINT_MS;
+  if (demoSession.active) {
+    noteDemoPresence();
+    updateDemoUi();
+  }
   return true;
 }
 
@@ -4426,6 +5219,10 @@ function startNextDemoMatch() {
   if (!demoSession.active || !demoSession.director) return false;
   clearDemoResultTimer();
   cancelFightAnnouncement();
+  // 5.4 (sweep #26/#27): the warm-up for THIS swap is over; its report
+  // survives as lastPrewarm so qa.demoPrewarm() can say what it bought. The
+  // 3D rigs it built are adopted on the next rendered frame (buildRig).
+  clearDemoPrewarm(false);
   // v2.9 FLOW: bank the outgoing exhibition's coverage before it is replaced,
   // so the attract cycle is CUMULATIVE — the next time this fighter is
   // featured it leads with the part of its kit the cabinet has not shown yet.
@@ -4439,7 +5236,21 @@ function startNextDemoMatch() {
   demoSession.cycle = cycle;
   demoSession.matches += 1;
   demoSession.superSide = (cycle.cycle - 1) % 2;
-  demoSession.superShown = false;
+  // 5.4 FIGHT NIGHT (round-ends): the card's show tag has to be in place
+  // BEFORE startMatch builds the fighters — makeFighter reads it to pick the
+  // clock brain on a CLOCK card.
+  const showOverride = demoSession.showOverride?.show || {};
+  demoSession.show = { ...cycle.show, ...showOverride };
+  if (demoSession.showOverride && !demoSession.showOverride.sticky) demoSession.showOverride = null;
+  // 5.4 SESSION LAYER: the STORY names the opener and the lead seat, the
+  // bout of the card the format (see demoResolveShow).
+  demoResolveShow(cycle, showOverride);
+  demoSession.openerShown = false;
+  demoSession.openerTick = -1;
+  demoSession.openerAction = "";
+  demoSession.openerScratch = 0;
+  demoSession.closer = null;
+  demoSession.decisionShown = false;
   $("#attractScores").hidden = true;
   state.mode = "demo";
   state.arcadeRun = null;
@@ -4452,7 +5263,9 @@ function startNextDemoMatch() {
   state.stage = cycle.stage;
   $("#demoResultStatus").hidden = true;
   startMatch(true);
-  state.fighters[demoSession.superSide].meter = GRIT_RULES.maximum;
+  // The full-Grit showcase side: not on a CLOCK card, where a free super is a
+  // third of the health the round needs to keep to reach the buzzer.
+  if (demoSession.show.format !== "clock") state.fighters[demoSession.superSide].meter = GRIT_RULES.maximum;
   // v2.9 FLOW: a fresh coverage choreographer per exhibition. It works from
   // kit ids (what beginAttack resolves moves through) and knows whether this
   // stage/round actually planned a weapon, so the pickup beat is only chased
@@ -4464,19 +5277,79 @@ function startNextDemoMatch() {
     hasStageWeapon: Boolean(state.stageWeapon),
     seed: hashSeed(demoSession.director.snapshot().seed, "choreo", cycle.cycle),
     priorShown: demoSession.coverageCarry,
+    // 5.4: a CLOCK card hands most windows to the patient brain.
+    blend: demoSession.show.format === "clock" ? DEMO_CLOCK_COVERAGE_BLEND : DEMO_COVERAGE_BLEND,
+    // 5.4 SESSION LAYER: the story's per-seat yield tolerance and showboat.
+    story: demoSession.story,
   });
+  // 5.4 (sweep #12): a fresh lower-third bus per card, seeded from the same
+  // director stream (its own hash lane, so the choreographer's draws and the
+  // bags' draws never share a sequence) — the same ?demo= link shows the
+  // same lines on the same ticks. The round-start read fires at the bell.
+  demoSession.commentary = createDemoCommentaryBus({
+    seed: hashSeed(demoSession.director.snapshot().seed, "commentary", cycle.cycle),
+  });
+  demoSession.lowerThirdShown = -1;
   const pairKey = demoMatchupKey(...cycle.picks);
   if (!demoSession.pairsSeen.includes(pairKey)) demoSession.pairsSeen.push(pairKey);
   while (demoSession.pairsSeen.length > demoSession.director.snapshot().matchupCount) demoSession.pairsSeen.shift();
   updateHud();
   state.qaManualMode = demoSession.qa;
-  setTrack(cycle.track, true);
+  // 5.4 (sweep #22): the bed is the STAGE's own theme, set by startMatch's
+  // applyAutoStageMusic above. The director's track bag still draws (its
+  // rng stream, and so every seed's matchup order, is unchanged) but the
+  // draw no longer picks the bed: measured 17.2% stage/track agreement over
+  // 600 director cycles before, 100% after (tests/demo-audio.test.mjs).
+  // 5.4 #32: the footer ticker follows the stage bag. It was only ever written
+  // by the select screen, so an evening of exhibitions all ran under whichever
+  // stage the title had last shown.
+  $("#stageTicker").textContent = stages[state.stage].ticker;
+  // 5.4 #32: a new exhibition brings the bug back at full strength; the tuck
+  // clock restarts from here (see demoIdleState).
+  demoPresence.matchStartedAt = performance.now();
+  demoSession.resultRemainingMs = null;
+  syncDemoPresence(demoPresence.matchStartedAt);
   updateDemoUi();
-  announce(`WATCH DEMO · CYCLE ${cycle.cycle}`, `${state.fighters[0].def.name} VS ${state.fighters[1].def.name}`, 1.2);
+  // 5.4 (sweep #8/#20): the WATCH DEMO · CYCLE n slam that used to go up here
+  // CLOBBERED the ROUND 1 / stage card startMatch had just announced. The
+  // matchup is now the versus card and the ring introduction (startMatch ->
+  // planDemoVersusCard), and the show name lives on the bug and the card.
   return true;
 }
 
-function startDemo({ attract = false, qa = false, seed = null } = {}) {
+/**
+ * 5.4 SESSION LAYER: resolve the card's show tag into a story cast onto the
+ * seats, and the bout of the card. `override` is the QA show override
+ * (qa.demoNextShow): a forced CLOCK format is the clock story, a forced
+ * standard story is a standard card, a forced `bout` kind ("quick" /
+ * "co-main" / "main") reshapes this slot of the card, and a forced opener is
+ * kept. Pure on the director's tag, the override and the cycle number — the
+ * same seed casts the same show.
+ */
+function demoResolveShow(cycle, override = {}) {
+  const show = demoSession.show;
+  const storyId = override.story || (override.format === "clock" ? "clock" : cycle.show.story);
+  const story = demoStoryFor(storyId, { flip: show.flip ?? 0, cycle: cycle.cycle });
+  show.story = story.id;
+  show.format = story.id === "clock" ? "clock" : "standard";
+  show.opener = override.opener || story.opener;
+  show.bout = typeof override.bout === "string" ? demoBoutPlan(cycle.cycle, override.bout)
+    : (cycle.show.bout || demoBoutPlan(cycle.cycle));
+  demoSession.story = story;
+  if (story.superSide === 0 || story.superSide === 1) demoSession.superSide = story.superSide;
+}
+
+/**
+ * THE ONE DEMO ENTRY. The title button, the 45 s attract timer, qa.demo(seed)
+ * and (5.4 #30) the ?demo=<seed>[&cycle=n] boot router all come through here,
+ * which is what makes a share link honest: a URL boot is startDemo with the
+ * link's seed and card, so it replays the exact tick stream qa.demo(seed)
+ * reproduces — pinned by the demo-seed-url smoke probe (two fresh loads and
+ * the QA path settle the same rounds on the same ticks with the same coverage).
+ * `cycle` opens on card n by advancing the director through the same
+ * startNextDemoMatch loop qa.demoCycles uses; `source` is bookkeeping only.
+ */
+function startDemo({ attract = false, qa = false, seed = null, cycle = 1, source = null } = {}) {
   if (onlineSession.role) disconnectOnline(true);
   if (demoSession.active) endDemoSession();
   clearIdleDemoTimer();
@@ -4487,19 +5360,28 @@ function startDemo({ attract = false, qa = false, seed = null } = {}) {
   demoSession.active = true;
   demoSession.attract = Boolean(attract);
   demoSession.qa = Boolean(qa);
+  demoSession.source = source || (qa ? "qa" : attract ? "attract" : "button");
+  // 5.4 (sweep #19): a page that already has a gesture behind it (a played
+  // match, a title press) opens the show ARMED — sound from its first card.
+  if (demoSession.attract) attractAudio.beginShow({ unlocked: state.audioUnlocked });
   // v3.2: a demo always STARTS running. The rate is deliberately kept (it is
   // what `?speed=` set, and it should survive the demo's own match loop), but
   // a pause left latched from a previous session would open the next one
   // frozen with no obvious cause.
   demoSpeed.setPaused(false);
-  // v4.0: THE LEGEND'S HOME. The speed transport's key legend used to be armed
-  // only by the retired A/B exhibition's entry point, so on its own the demo
-  // never announced the transport at all — the keys worked, but the only way
-  // to discover them was to already know one and press it. Arming the hint on
-  // every demo start puts the legend where the controls are actually useful:
-  // nine seconds under the floor line at the top of a WATCH DEMO (and of the
-  // attract loop), then out of the way, and any transport key brings it back.
-  demoSpeed.hintUntilMs = performance.now() + DEMO_SPEED_HINT_MS;
+  // v4.0 armed the transport's key legend for nine seconds at every demo
+  // start so the keys announced themselves. 5.4 #10 DEMOTED IT: from the
+  // couch the viewer reads the largest text first, and a three-line keyboard
+  // legend (plus the 20 px speed chip) was the loudest demo-specific type on
+  // the screen — on a phone the third line fell off the viewport entirely.
+  // The rate now lives as a small tag inside the broadcast bug; the legend is
+  // hidden until a transport key asks for it (handleDemoSpeedKey).
+  demoSpeed.hintUntilMs = 0;
+  demoHold.reset();
+  demoSession.resultRemainingMs = null;
+  demoSession.tickerBefore = $("#stageTicker").textContent;
+  demoPresence.lastInputAt = performance.now();
+  demoPresence.matchStartedAt = demoPresence.lastInputAt;
   // v2.9 FLOW round 2 — SAME-PAGE DETERMINISM. A seeded demo is the QA
   // reproduction path, and every match seed derives from state.matchSerial
   // (see seedMatch), which only ever GROWS across a page's lifetime. A second
@@ -4522,15 +5404,70 @@ function startDemo({ attract = false, qa = false, seed = null } = {}) {
     // replay playback rewinds; see loadReplayHeader).
     state.simulationTick = 0;
     simulationClock.tick = 0;
+    // 5.4 (sweep #24): the demo's fighter-voice bags draw on visualRandom,
+    // which the rewind above resets — the bags' own memory (position, last
+    // take) has to rewind with it or a second qa.demo(seed) in the same page
+    // plays a different take order to the same stream.
+    fighterVoiceBags.clear();
+    fighterVoiceRecent.length = 0;
+    // 5.4 (sweep #7): the render-side per-tick dedupe latches rewind with
+    // the tick domain too, or a replayed beat on a repeated tick is skipped.
+    resetPresentationTickLatches();
   }
-  demoSession.director = createDemoDirector({
+  // 5.4 (sweep #27): an unseeded demo (the attract loop, or the WATCH DEMO
+  // button pressed during the countdown) adopts the director the idle
+  // countdown created early — its first pair has been warming for up to
+  // 20 s; an explicit seed is the QA reproduction path and always builds
+  // its own.
+  const pending = seed === null ? demoSession.pendingDirector : null;
+  const pendingSeed = pending ? demoSession.pendingDirectorSeed : null;
+  demoSession.pendingDirector = null;
+  demoSession.pendingDirectorSeed = null;
+  if (!pending) clearDemoPrewarm(true);
+  // 5.4 #30: the raw seed is kept (the director only exposes its hash) so a
+  // random button/attract exhibition has a shareable address as well — the
+  // adopted director's own raw seed when there is one. Note what that
+  // address promises: the same CARDS and choreography plan always; the same
+  // TICKS from a cold page — which a link always is. A seed passed in
+  // rewinds the page to cold above; the random path deliberately does not
+  // (the announcer/crowd edge trackers key on matchSerial:round, and a rewind
+  // under a played page could swallow a call already booked under that key).
+  const demoSeed = seed ?? pendingSeed ?? hashSeed(Date.now(), performance.now(), state.rng.nextUint32());
+  demoSession.director = pending || createDemoDirector({
     fighterIds: roster.map(({ id }) => id),
     stageIds: Object.keys(stages),
     trackCount: musicTracks.length,
-    seed: seed ?? hashSeed(Date.now(), performance.now(), state.rng.nextUint32()),
+    seed: demoSeed,
   });
+  demoSession.seed = demoSeed;
+  // 5.4 SESSION LAYER: tonight's ledger opens on the build-keyed standings
+  // board (a reload resumes the standings; a new build opens a clean board).
+  demoSession.ledger = restoreDemoStandings(storedJson(demoStandingsStorageKey(GAME_VERSION), null), { build: GAME_VERSION });
+  // 5.4 (sweep #7/#17): the camera/cadence director for this session. Its
+  // shot bags derive from the demo seed alone, so a seed replays the same
+  // shots; the cadence policy is tick-keyed. An operator who asked for a
+  // rate (?speed=, or a transport key already pressed on this page) keeps
+  // it: the cadence only drives while the rate is the couch default.
+  demoSession.camera = createDemoCameraDirector({ seed: demoSeed });
+  demoSession.cadence = createDemoCadence();
+  demoSession.shot = null;
+  demoSession.koTick = -1;
+  demoSession.koShot = null;
+  demoSession.cadenceBeat = "";
+  demoSession.cadenceRate = DEFAULT_DEMO_SPEED;
+  if (demoSpeed.rate === DEFAULT_DEMO_SPEED) demoSpeed.unlockCadence();
+  else demoSpeed.lockCadence();
   document.body.classList.add("demo-active");
   startNextDemoMatch();
+  // 5.4 #30: `&cycle=n` opens on card n. The director is advanced through
+  // the same loop qa.demoCycles runs, so ?demo=237&cycle=3 IS
+  // qa.demo(237); qa.demoCycles(3) — same pair, stage, track, choreography
+  // seed and match serial. (A card reached this way opens with an EMPTY
+  // coverage ledger; the cards before it were skipped, not shown, so the
+  // link says "the third card of seed 237 as a cold open", which is what a
+  // second load of the same link gets too.)
+  const cards = Math.max(1, Math.min(500, Math.floor(Number(cycle) || 1)));
+  for (let card = 1; card < cards; card += 1) startNextDemoMatch();
   return demoSnapshot();
 }
 
@@ -4538,19 +5475,35 @@ function scheduleNextDemoMatch() {
   if (!demoSession.active) return;
   clearDemoResultTimer();
   $("#demoResultStatus").hidden = false;
-  // Release 1.8 GRIND: real-cabinet attract loop — while the idle demo holds
-  // its result, the local high-score table takes the screen.
-  if (demoSession.attract) {
-    const table = renderHighScoreBoard();
-    if (table.length) {
-      $("#attractScores").hidden = false;
-      modeFxDebug.attractScoreBoards += 1;
-    }
+  // 5.4 SESSION LAYER (sweep #11/#16/#25): the result hold is TONIGHT'S CARD.
+  // The next matchup comes from the director's peek (nothing consumed), the
+  // standings band takes the bottom of the screen instead of the whole of it
+  // — the Release 1.8 high-score takeover covered the winner for all five
+  // seconds on any cabinet that had ever recorded a score — and the high
+  // scores ride the band's last line in attract mode. The announcer reads
+  // the next pair's names from the reviewed `<id>-name` banks (bag-drawn,
+  // never the same take twice running), behind the attract gate like every
+  // other call.
+  demoSession.nextUp = demoNextUpFromPeek();
+  renderDemoStandingsBand();
+  if (!demoSession.qa && demoSession.nextUp?.pair) {
+    voiceFxDebug.demoNextUpCalls += 1;
+    for (const id of demoSession.nextUp.pair) announcerSay(`${id}-name`, { delay: 1500 });
   }
-  demoSession.resultTimer = window.setTimeout(() => {
-    demoSession.resultTimer = 0;
-    startNextDemoMatch();
-  }, DEMO_RESULT_HOLD_MS);
+  // 5.4 (sweep #26/#27): a bout that never reached round 2 (a QA
+  // demoResult, a double-perfect) still gets the result hold's warm-up —
+  // 2.4 s here plus the 2.6 s versus hold, under which the art hold itself
+  // decodes (sweep #8/#20); a no-op when round 2 already started it.
+  demoPrewarmNextPair("result");
+  // 5.4 #31: a result that lands while the tab is hidden waits for the
+  // screen; the settle re-arms the full hold once a frame has been seen.
+  if (demoHold.frozen()) {
+    demoSession.resultRemainingMs = DEMO_RESULT_HOLD_MS;
+    updateDemoUi();
+    return;
+  }
+  armDemoResultTimer(DEMO_RESULT_HOLD_MS);
+  updateDemoUi();
 }
 
 function scheduleIdleDemo() {
@@ -4563,12 +5516,460 @@ function scheduleIdleDemo() {
     demoSession.idleTimer = 0;
     if ((state.attractEnabled || state.cabinetMode) && state.screen === "title" && !document.hidden && !$("#controlsDialog").open) startDemo({ attract: true });
   }, DEMO_IDLE_DELAY_MS);
+  // 5.4 (sweep #27): the attract loop's FIRST pair used to be the one pair
+  // nothing could warm — the director only existed once the demo started.
+  // Now the director is drawn DEMO_IDLE_PREWARM_LEAD_MS before the demo
+  // would start and its first pair warms through the rest of the countdown;
+  // startDemo({ attract }) adopts it. A cursor twitch re-arms the countdown
+  // but keeps the pending director (and the sheets it warmed), so the demo
+  // that eventually starts is the one that was warmed.
+  demoSession.idlePrewarmTimer = window.setTimeout(() => {
+    demoSession.idlePrewarmTimer = 0;
+    if (!(state.attractEnabled || state.cabinetMode) || demoSession.active || state.screen !== "title" || document.hidden) return;
+    if (!demoSession.pendingDirector) {
+      // (#30: the raw seed is kept beside it so the adopted show is shareable.)
+      const pendingSeed = hashSeed(Date.now(), performance.now(), state.rng.nextUint32());
+      demoSession.pendingDirectorSeed = pendingSeed;
+      demoSession.pendingDirector = createDemoDirector({
+        fighterIds: roster.map(({ id }) => id),
+        stageIds: Object.keys(stages),
+        trackCount: musicTracks.length,
+        seed: pendingSeed,
+      });
+    }
+    demoPrewarmNextPair("idle", demoSession.pendingDirector);
+  }, Math.max(0, DEMO_IDLE_DELAY_MS - DEMO_IDLE_PREWARM_LEAD_MS));
+}
+
+// ---------------------------------------------------------------------------
+// 5.4 FIGHT NIGHT (sweep #26 / #27) — PREWARM THE NEXT PAIR.
+//
+// Measured (headless Chrome, Radeon 8060S, balanced tier): in CINEMA 3D every
+// exhibition swap cost 130-362 ms of main-thread JS on the cycle-start frame
+// and 12-26 frames over 33 ms in the new pair's first two seconds, all of it
+// fighter-rig bank builds for a pair the world had 40 s of idle time to
+// prepare; and on a cold host (25 Mbps, cache off) a new fighter's first
+// 1.6-4.2 s were drawn from base fallbacks, because the demo was exempt from
+// the 5.1 intro art hold and the pair was only known at the boundary.
+//
+// The director now answers peek() — the next pair without consuming the
+// bag — and the running exhibition warms that pair at the top of round 2 (its
+// second half), with the result hold as the fallback for a bout that never
+// got there, and the idle countdown as the first exhibition's window:
+//   - the unified family and motion banks through preloadAuthoredBanks (the
+//     5.1 request-ordered plan, fetchPriority and decode tracking included);
+//   - the voice banks through warmFighterAudio (the audio manifest's pools,
+//     preload=metadata then auto) plus the announcer's "<id>-name" and
+//     "<id>-wins" takes;
+//   - in CINEMA 3D the fighter rigs' banks and textures, built on idle slices
+//     behind every live step (renderer/three/fighters.mjs prewarmFighters),
+//     pumped every DEMO_PREWARM_PUMP_MS so a sheet that decodes later still
+//     gets its bank before the swap, adopted whole at the swap and the
+//     outgoing pair evicted after it.
+// Everything here is render/network-side and gated on the demo session: the
+// sim never reads demoSession.prewarm, no timer here touches the clock, and
+// a played match runs byte-identical (tests/demo-prewarm.test.mjs pins the
+// call sites). The QA read is qa.demoPrewarm().
+// ---------------------------------------------------------------------------
+const DEMO_PREWARM_PUMP_MS = 250;
+const DEMO_IDLE_PREWARM_LEAD_MS = 20_000;
+// The pump outlives no exhibition (the swap clears it); this is the cap for
+// a title screen nobody comes back to.
+const DEMO_PREWARM_PUMP_MAX_MS = 180_000;
+
+function demoPrewarmDescriptors(ids) {
+  return ids.map((id, side) => {
+    const def = roster.find((fighter) => fighter.id === id);
+    return def ? { def, side } : null;
+  }).filter(Boolean);
+}
+
+function clearDemoPrewarm(release) {
+  const prewarm = demoSession.prewarm;
+  if (prewarm) {
+    window.clearInterval(prewarm.timer);
+    prewarm.timer = 0;
+    prewarm.endedAt = Math.round(performance.now() - prewarm.startedAt);
+    demoSession.lastPrewarm = prewarm;
+  }
+  demoSession.prewarm = null;
+  // A released warm-up (the demo exited, a played match started) also drops
+  // the 3D banks it built; a swap keeps them for buildRig to adopt.
+  if (release) cinema3dBridge.renderer?.releasePrewarm?.();
+}
+
+function demoPrewarmNextPair(reason, director = demoSession.director) {
+  if (!director || typeof director.peek !== "function") return null;
+  const next = director.peek();
+  const current = demoSession.prewarm;
+  if (current && current.director === director && current.cycle === next.cycle) return current;
+  clearDemoPrewarm(false);
+  const ids = [...next.pair];
+  const prewarm = {
+    director, cycle: next.cycle, ids, reason,
+    startedAt: performance.now(), endedAt: null, timer: 0,
+    passes: 0, artReadyAt: null, threeBanks: 0,
+  };
+  demoSession.prewarm = prewarm;
+  preloadAuthoredBanks(ids);
+  warmFighterAudio(ids);
+  for (const id of ids) {
+    announcerBank(`${id}-name`);
+    announcerBank(`${id}-wins`);
+  }
+  pumpDemoPrewarm();
+  prewarm.timer = window.setInterval(pumpDemoPrewarm, DEMO_PREWARM_PUMP_MS);
+  return prewarm;
+}
+
+function pumpDemoPrewarm() {
+  const prewarm = demoSession.prewarm;
+  if (!prewarm) return;
+  prewarm.passes += 1;
+  if (prewarm.timer && performance.now() - prewarm.startedAt > DEMO_PREWARM_PUMP_MAX_MS) {
+    window.clearInterval(prewarm.timer);
+    prewarm.timer = 0;
+  }
+  if (prewarm.artReadyAt === null && unifiedBankState.masks && !matchupArtPending(prewarm.ids).length) {
+    prewarm.artReadyAt = Math.round(performance.now() - prewarm.startedAt);
+  }
+  // CINEMA 3D: hand the pair over again on every pass — prewarmFighters is
+  // incremental, so each sheet that has decoded since the last pass gets its
+  // bank now, on idle slices, and the ones already built are left alone.
+  if (cinema3dBridge.renderer?.ready && state.cinema3d && cinema3dAllowed()) {
+    prewarm.threeBanks += cinema3dBridge.renderer.prewarmFighters?.(demoPrewarmDescriptors(prewarm.ids)) || 0;
+  }
+}
+
+function demoPrewarmSnapshot() {
+  const report = (prewarm) => (prewarm ? {
+    cycle: prewarm.cycle,
+    ids: [...prewarm.ids],
+    reason: prewarm.reason,
+    passes: prewarm.passes,
+    artReadyAt: prewarm.artReadyAt,
+    threeBanks: prewarm.threeBanks,
+    elapsedMs: prewarm.endedAt ?? Math.round(performance.now() - prewarm.startedAt),
+    ended: prewarm.endedAt !== null,
+  } : null);
+  return {
+    active: report(demoSession.prewarm),
+    last: report(demoSession.lastPrewarm),
+    pendingDirector: Boolean(demoSession.pendingDirector),
+    idlePrewarmScheduled: Boolean(demoSession.idlePrewarmTimer),
+    three: cinema3dBridge.renderer?.ready ? (cinema3dBridge.renderer.stats?.().banks?.prewarm ?? null) : null,
+  };
 }
 
 function noteUserActivity() {
   if (demoSession.active) return exitDemo();
   if (state.screen === "title") scheduleIdleDemo();
   return false;
+}
+
+// 5.4 FIGHT NIGHT (sweep #19) — the attract audio gate's game.js side.
+
+/** Is every audio path holding for the attract show? The ONE gate. */
+function attractAudioHeld() {
+  return demoSession.attract && !attractAudio.live();
+}
+
+/**
+ * A user gesture on the title or during the attract show. Only a gesture
+ * Chrome counts as activation arms the gate (engine gestureArmsAudio reads
+ * navigator.userActivation where it exists), so play() is never attempted
+ * without one — the autoplay rules are honoured, never bypassed. Idempotent.
+ */
+function armAttractAudio(event) {
+  if (!(demoSession.attract || state.screen === "title")) return false;
+  const accepted = gestureArmsAudio({
+    trusted: Boolean(event?.isTrusted),
+    type: event?.type || "",
+    code: event?.code || event?.key || "",
+    pointerType: event?.pointerType || "",
+    hasBeenActive: typeof navigator.userActivation?.hasBeenActive === "boolean"
+      ? navigator.userActivation.hasBeenActive : null,
+  });
+  if (!accepted) return false;
+  unlockAudio();
+  if (demoSession.attract) {
+    if (attractAudio.gesture()) attractAudioOpened("gesture-at-card");
+    updateDemoUi();
+  }
+  return true;
+}
+
+/** The TAP FOR SOUND chip: arms the gate and does NOT count as "the viewer wants out". */
+function attractSoundChipPress(event) {
+  if (!demoSession.attract) return false;
+  if (!event?.target?.closest?.("#demoHudSound")) return false;
+  event.preventDefault();
+  armAttractAudio(event);
+  return true;
+}
+
+function attractAudioOpened(reason) {
+  bedFadeLevel = 0;
+  audioFxDebug.attractAudioOpens += 1;
+  attractAudioLiveAt = Object.freeze({
+    reason, cycle: demoSession.cycle?.cycle || 0, round: state.round, phase: state.phase, tick: state.simulationTick,
+  });
+  syncMusic();
+}
+
+/**
+ * The ROUND card of a demo round. (1) Attract: the gate's release point —
+ * an armed show goes live HERE, so the first sound is the ROUND call the
+ * caller is about to book, with the bed fading in under it. (2) Every demo:
+ * the bed is restarted under the card when it would otherwise run out inside
+ * the round (sweep #22: the 80 s tracks ended and jukebox-advanced mid-fight).
+ * Called on sim paths (resetRound) — resim-guarded like announce().
+ */
+function demoRoundCard() {
+  if (rollbackResimulating || state.mode !== "demo") return;
+  if (demoSession.attract) {
+    if (attractAudio.roundCard()) attractAudioOpened("card");
+    updateDemoUi();
+  }
+  if (demoBedRestartAtCard({ currentTime: fightMusic.currentTime, duration: fightMusic.duration })) {
+    fightMusic.currentTime = 0;
+    audioFxDebug.demoBedRestarts += 1;
+  }
+  syncMusic();
+}
+
+/** FIGHT! — closes the card window; a gesture from here waits for the next card. */
+function demoBell() {
+  if (rollbackResimulating || !demoSession.attract) return;
+  attractAudio.bell();
+}
+
+// ---------------------------------------------------------------------------
+// 5.4 FIGHT NIGHT (sweep #8/#20) — THE VERSUS CARD AND THE RING INTRODUCTION.
+// Presentation only, on the demoSession pattern: never snapshotted, never
+// read by the sim, and every entry point is gated on a demo round 1. The
+// card rides the arcade dialogue-card DOM (#introDialogue / .speech-card) and
+// the intro art hold's clock stop (floored at DEMO_VERSUS_HOLD_MS), so the
+// tick stream of a seeded show is what it was; only the wall clock between
+// two exhibitions is spent differently (see engine/demo-versus.mjs).
+// ---------------------------------------------------------------------------
+const demoVersus = {
+  planned: false,
+  active: false,
+  startedAt: 0,
+  cycle: 0,
+  card: null,
+  plan: null,
+  fired: 0,
+  roundCard: null,
+  // The beats as they fired: { at (wall ms from the hold's start), kind,
+  // text, cue, tick } — the ring introduction's order, for qa.demoRingIntro.
+  log: [],
+  // Wall time of the last release, and its reason (QA readout).
+  releasedAt: 0,
+  releaseReason: "",
+};
+
+function resetDemoVersusCard() {
+  demoVersus.planned = false;
+  demoVersus.active = false;
+  demoVersus.startedAt = 0;
+  demoVersus.cycle = 0;
+  demoVersus.card = null;
+  demoVersus.plan = null;
+  demoVersus.fired = 0;
+  demoVersus.roundCard = null;
+  demoVersus.log = [];
+  demoVersus.releasedAt = 0;
+  demoVersus.releaseReason = "";
+}
+
+/** Is a versus card owed for the match startMatch is opening? Demo round 1 only. */
+function demoVersusWanted(resetSet) {
+  return state.mode === "demo" && demoSession.active && Boolean(demoSession.cycle)
+    && resetSet && state.round === 1 && !rollbackResimulating
+    && state.fighters.length === 2;
+}
+
+/**
+ * Plan the card for the match being started (before the art hold is armed,
+ * so it can floor the clock stop). Returns the plan or null.
+ */
+function planDemoVersusCard(resetSet) {
+  resetDemoVersusCard();
+  if (!demoVersusWanted(resetSet)) return null;
+  const corners = state.fighters.map((fighter) => {
+    const def = fighter.def;
+    const kit = getFighterKit(def.kitId || def.id);
+    return {
+      id: def.id, name: def.name, title: def.title, archetype: kit?.archetype || "",
+      color: def.color, portrait: `assets/fighters/${def.id}.webp`,
+    };
+  });
+  demoVersus.card = demoVersusCard({
+    corners,
+    stageName: stages[state.stage]?.name || "",
+    cycle: demoSession.cycle.cycle,
+    format: demoSession.show?.format || "standard",
+    // The corner records read the SESSION LAYER's ledger (the build-keyed
+    // standings the band shows), so the card and the band agree; the fold is
+    // the fallback before the ledger opens.
+    standings: demoSession.ledger?.fighters || demoSession.standings,
+    boutLabel: demoSession.show?.bout ? `BOUT ${demoSession.show.bout.slot} · ${demoSession.show.bout.label}` : "",
+    storyLabel: demoSession.story?.label || "",
+  });
+  demoVersus.plan = demoRingIntroPlan({
+    card: demoVersus.card,
+    stageName: stages[state.stage]?.name || "",
+    round: state.round,
+    holdMs: DEMO_VERSUS_HOLD_MS,
+  });
+  demoVersus.planned = true;
+  demoVersus.cycle = demoSession.cycle.cycle;
+  return demoVersus.plan;
+}
+
+/** Mount the planned card into the dialogue box and start its clock. */
+function mountDemoVersusCard() {
+  if (!demoVersus.planned || !demoVersus.card) return false;
+  cancelIntroDialogue();
+  const { cards, stage } = demoVersus.card;
+  introDialogue.active = true;
+  introDialogue.kind = "versus";
+  introDialogue.clock = "versus";
+  introDialogue.cardTimes = demoVersusCardTimes();
+  introDialogue.total = 0;
+  introDialogue.revealed = 0;
+  introDialogue.lines = cards.map((card) => ({ id: card.id, name: card.name, line: card.title, side: card.side }));
+  const box = $("#introDialogue");
+  if (box) {
+    const escape = (text) => String(text).replace(/[&<>"]/g, (ch) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[ch]));
+    const cornerHtml = (card) => `
+      <div class="speech-card versus ${card.side === 0 ? "from-left" : "from-right"}" data-card="${card.side}" hidden>
+        <img class="versus-portrait" src="${escape(card.portrait)}" alt="" draggable="false">
+        <div class="versus-copy">
+          <b style="--speaker:${escape(card.color)}">${escape(card.eyebrow)}</b>
+          <strong>${escape(card.name)}</strong>
+          <p>${escape(card.title)}</p>
+          <em>${escape(card.archetype)}</em>
+          <small>${escape(card.record)}</small>
+        </div>
+      </div>`;
+    box.innerHTML = `${cornerHtml(cards[0])}
+      <div class="versus-stage" data-card="2" hidden>
+        <b>VS</b>
+        <i>TONIGHT AT</i>
+        <span>${escape(stage.name)}</span>
+        <small>${escape(stage.show)}</small>
+      </div>${cornerHtml(cards[1])}`;
+    box.classList.add("versus");
+    box.hidden = false;
+  }
+  demoVersus.active = true;
+  demoVersus.startedAt = performance.now();
+  demoVersus.fired = 0;
+  demoVersus.log = [];
+  modeFxDebug.versusCards += 1;
+  // Beat 0 (the left corner) is due at 0 ms: fire it with the card so the
+  // first sound of the show is the corner call, not a frame later.
+  fireDemoVersusBeats();
+  return true;
+}
+
+function demoVersusElapsedMs(now = performance.now()) {
+  if (!demoVersus.active) return 0;
+  return Math.max(0, now - demoVersus.startedAt);
+}
+
+/** Fire every corner/stage beat that is due (render-side, idempotent). */
+function fireDemoVersusBeats(now = performance.now()) {
+  if (!demoVersus.active || !demoVersus.plan) return;
+  if (state.screen !== "fight" || state.phase !== "intro") return;
+  const due = demoRingIntroDue(demoVersus.plan, demoVersusElapsedMs(now), demoVersus.fired);
+  for (const beat of due) {
+    demoVersus.fired += 1;
+    if (beat.kind === "corner") {
+      const card = demoVersus.card.cards[beat.side];
+      announce(card.name, `${card.eyebrow} · ${card.title}`, 1.05, { speak: beat.cue ? [{ cue: beat.cue, delay: 0 }] : [] });
+    } else if (beat.kind === "stage" && beat.banner?.main) {
+      announce(beat.banner.main, beat.banner.sub, 0.85);
+    }
+    noteDemoVersusBeat(beat, now);
+  }
+}
+
+function noteDemoVersusBeat(beat, now) {
+  demoVersus.log.push({
+    at: Math.round(demoVersusElapsedMs(now)),
+    kind: beat.kind,
+    text: beat.text,
+    cue: beat.cue || "",
+    tick: state.simulationTick,
+  });
+}
+
+/**
+ * The art hold released: the ring introduction is over and the ROUND card
+ * is owed NOW, ahead of the FIGHT! call the release just shifted. A release
+ * because the sim already left the intro (the QA manual clock) announces
+ * nothing — the fight is on.
+ */
+function releaseDemoVersusCard(reason, now = performance.now()) {
+  if (!demoVersus.active) return false;
+  demoVersus.releasedAt = now;
+  demoVersus.releaseReason = reason;
+  // Any corner/stage beat the clock ran past (a hidden tab) still fires, in
+  // order, before the ROUND card.
+  fireDemoVersusBeats(now);
+  const roundBeat = demoVersus.plan?.find((beat) => beat.kind === "round") || null;
+  const owed = demoVersusAnnouncesRound({ reason, phase: state.phase, screen: state.screen });
+  if (owed && demoVersus.roundCard) {
+    announce(demoVersus.roundCard.main, demoVersus.roundCard.sub, 1.2);
+    if (roundBeat) noteDemoVersusBeat(roundBeat, now);
+  }
+  demoVersus.active = false;
+  demoVersus.planned = false;
+  // The card leaves with the ROUND banner; the walk-on has the screen.
+  if (introDialogue.kind === "versus") cancelIntroDialogue();
+  return owed;
+}
+
+/** The FIGHT! banner fired on a versus round: complete the order log. */
+function noteDemoVersusFight() {
+  if (state.mode !== "demo" || !demoVersus.plan || demoVersus.active) return;
+  if (demoVersus.log.some((entry) => entry.kind === "fight")) return;
+  const beat = demoVersus.plan.find((entry) => entry.kind === "fight");
+  if (!beat || !demoVersus.log.some((entry) => entry.kind === "round")) return;
+  demoVersus.log.push({
+    at: Math.round(performance.now() - demoVersus.startedAt),
+    kind: "fight", text: beat.text, cue: beat.cue, tick: state.simulationTick,
+  });
+}
+
+/** Fold a settled exhibition into the night's standings (demo path only). */
+function noteDemoMatchResult(winner) {
+  if (state.mode !== "demo" || !demoSession.active || rollbackResimulating) return;
+  if (state.fighters.length !== 2) return;
+  const winnerId = state.fighters[winner]?.def.id || "";
+  const loserId = state.fighters[1 - winner]?.def.id || "";
+  demoSession.standings = demoStandingsAfterMatch(demoSession.standings, winnerId, loserId);
+}
+
+function demoVersusSnapshot() {
+  return {
+    planned: demoVersus.planned,
+    active: demoVersus.active,
+    cycle: demoVersus.cycle,
+    fired: demoVersus.fired,
+    elapsedMs: Math.round(demoVersusElapsedMs()),
+    releaseReason: demoVersus.releaseReason,
+    plan: demoVersus.plan ? demoVersus.plan.map((beat) => ({ at: beat.at, kind: beat.kind, cue: beat.cue, text: beat.text })) : null,
+    log: demoVersus.log.map((entry) => ({ ...entry })),
+    card: demoVersus.card ? {
+      cards: demoVersus.card.cards.map((card) => ({ ...card })),
+      stage: { ...demoVersus.card.stage },
+    } : null,
+  };
 }
 
 function setOnlineStatus(kind, detail) {
@@ -7160,7 +8561,9 @@ function makeFighter(index, side, overrideDef = null) {
     cinematicScale: 1,
     down: false,
     aiClock: 0,
-    aiBrain: createAiBrain(state.mode === "demo" ? DEMO_AI_DIFFICULTY : state.aiDifficulty),
+    // 5.4 PERSONAS: attract-mode CPUs play their kit's archetype persona
+    // (engine/demo.mjs) — or the CLOCK brain on a clock card (round-ends).
+    aiBrain: createAiBrain(state.mode === "demo" ? demoAiTier(kitId) : state.aiDifficulty),
     combatState: FIGHTER_STATES.IDLE,
     previousCombatState: FIGHTER_STATES.IDLE,
     stateFrame: 0,
@@ -9003,6 +10406,8 @@ const hudFxDebug = {
   // sloMoBlurFrames counts rendered frames with the slow-mo smear active
   // (like cinemaFxDebug.handheldFrames — still monotonic, never reset).
   distortionRings: 0, sloMoBlurFrames: 0, superCutIns: 0,
+  // 5.4 #12: lower-third lines painted into #demoHudLine (render side).
+  lowerThirdLines: 0,
 };
 // Release 1.7 DEPTH: monotonic one-shot totals for the new defensive
 // mechanics, on the same hudFxDebug pattern. Each increment site sits inside
@@ -9052,13 +10457,16 @@ let selectBothLocked = false;
 // world-space pivot the zoom magnifies around (irrelevant at zoom 1). Zoom is
 // always >= 1 so the world always overdraws the frame; the HUD layer and all
 // screen-space passes draw after the world restore and are never affected.
-const cinematicCamera = { zoom: 1, x: 0, y: 0, rotation: 0, focusX: W * 0.5, focusY: H * 0.5 };
+const cinematicCamera = { zoom: 1, x: 0, y: 0, rotation: 0, focusX: W * 0.5, focusY: H * 0.5, demoShot: null };
 // Monotonic one-shot event totals on the hudFxDebug pattern, exposed via
 // snapshot().violence. handheldFrames counts rendered frames with the fatality
 // handheld wobble active (still monotonic, never reset).
 const cinemaFxDebug = {
   koPunchIns: 0, introDollies: 0, dreadCreeps: 0, counterPunchIns: 0,
   handheldFrames: 0, winSettles: 0, impactRecoils: 0,
+  // 5.4 (sweep #7): demo shots drawn (super + KO) and rendered frames a
+  // demo shot pose owned; the KO-beat letterbox deployments.
+  demoShots: 0, demoShotFrames: 0, demoKoBars: 0,
 };
 // Transient zoom-punch envelope: { age, attack, hold, release, magnitude,
 // focusX, focusY }. Shared by the KO punch-in and the counter/dizzy pops; the
@@ -9075,6 +10483,26 @@ let cameraGuardCrushTick = -1;
 // how long a render frame takes.
 const cameraRecoil = { x: 0, y: 0, ampX: 0, ampY: 0, age: 0 };
 let cameraRecoilTick = -1;
+
+// 5.4 FIGHT NIGHT (sweep #7): the render-side ONE-SHOT-PER-TICK latches. Each
+// is a dedupe against the sim tick ("this beat already fired on this tick"),
+// which is right for a stream that only ever grows — and wrong the moment a
+// seeded demo REWINDS the tick domain (startDemo with a seed sets the tick to
+// 0 so a same-page qa.demo(seed) replays the cold-load stream). Measured: a
+// second qa.demo(237) fired its opener super on tick 663 again, found
+// superCutInTick === 663 from the first run, and skipped the cut-in, the
+// distortion ring and the demo's super shot. Called only from that rewind;
+// presentation state only, nothing snapshotted.
+function resetPresentationTickLatches() {
+  cameraKoTick = -1;
+  cameraCounterTick = -1;
+  cameraDizzyTick = -1;
+  cameraGuardCrushTick = -1;
+  cameraRecoilTick = -1;
+  distortionRingTick = -1;
+  superCutInTick = -1;
+  crowdSwellTick = -1;
+}
 const CAMERA_RECOIL_PX = Object.freeze({ heavy: 2.4, special: 3.2, throw: 3, weapon: 3.4, super: 4 });
 // Eased phase-pose state (intro dolly / dread creep / win settle).
 let cameraPhaseZoom = 1;
@@ -9151,6 +10579,98 @@ function latchKoCameraPunch() {
     focusX: clamp(focusX, 0, W), focusY: clamp(focusY, 0, H),
   };
   cinemaFxDebug.koPunchIns += 1;
+  // 5.4 FIGHT NIGHT (sweep #7/#17), demo only: the round-ending hit draws a
+  // KO shot from the seeded list — a real push-in on the victim (the 0.08
+  // punch above is the played game's; it stays) and the slow-motion beat the
+  // cadence policy plays from this tick. Presentation bookkeeping only.
+  if (demoCameraActive()) {
+    const shot = demoSession.camera.koShot(state.simulationTick);
+    demoSession.koTick = state.simulationTick;
+    demoSession.koShot = shot;
+    demoSession.shot = { kind: "ko", shot, side: 1 - state.finishWinner, age: 0 };
+    cinemaFxDebug.demoShots += 1;
+  }
+}
+
+// 5.4 FIGHT NIGHT (sweep #7/#17): THE gate for every demo camera/cadence
+// call site — the attract show and nothing else. A played match never
+// consults the director, so it stays byte-identical (pinned from a node
+// trace in tests/demo-camera.test.mjs).
+function demoCameraActive() {
+  return state.mode === "demo" && demoSession.active && Boolean(demoSession.camera);
+}
+
+// What the cadence policy is shown each rendered frame: pure reads of
+// snapshotted sim fields. "Engaged" is anyone swinging, stunned, down, in a
+// grab or a projectile in flight, plus hitstop — the exchange; everything
+// else at range is neutral.
+function demoCadenceView() {
+  const [first, second] = state.fighters;
+  const engaged = state.hitstop > 0
+    || state.projectiles.length > 0
+    || state.fighters.some((fighter) => fighter.attacking
+      || fighter.hitstunFrames > 0 || fighter.blockstunFrames > 0 || fighter.dizzyFrames > 0
+      || fighter.down || fighter.pendingKnockdown || fighter.knockdownFrames > 0 || fighter.wakeupFrames > 0
+      || fighter.grabbed || fighter.grabbing);
+  return {
+    phase: state.phase,
+    finisher: Boolean(state.finisher),
+    tick: state.simulationTick,
+    engaged,
+    distance: first && second ? Math.abs(first.x - second.x) : Infinity,
+    koTick: demoSession.koTick,
+    koShot: demoSession.koShot,
+  };
+}
+
+// The demo's pose for this frame, or null when nothing demo-specific owns it:
+// the live super/KO shot envelope (zoom on the attacker's chest / the victim,
+// a degree of dutch), else the exchange lean while the cadence is at exchange
+// tempo. Advances the shot's age (wall dt, like every presentation ease) and
+// runs the cadence policy — the transport applies its answer next loop().
+function demoCameraPose(dt, phase, finisher, reduced = false) {
+  if (!demoCameraActive()) return null;
+  if (phase === "intro" && demoSession.koTick >= 0) {
+    // A new round: the KO beat is spent.
+    demoSession.koTick = -1;
+    demoSession.koShot = null;
+  }
+  const answer = demoSession.cadence.update(demoCadenceView());
+  demoSession.cadenceBeat = answer.beat;
+  demoSession.cadenceRate = answer.rate;
+  // Reduced motion keeps the tempo (it is not motion) but never the moves.
+  if (finisher || phase === "intro" || reduced) {
+    demoSession.shot = null;
+    return null;
+  }
+  const live = demoSession.shot;
+  if (live) {
+    live.age += dt;
+    if (!shotAlive(live.shot, live.age)) {
+      demoSession.shot = null;
+    } else {
+      const shape = shotShape(live.shot, live.age);
+      const subject = state.fighters[live.side] || state.fighters[0];
+      return {
+        zoom: 1 + (live.shot.zoom - 1) * shape,
+        focusX: subject.x,
+        focusY: clamp(subject.y - subject.height * 0.55, H * 0.3, H * 0.72),
+        rotation: (Math.PI / 180) * live.shot.dutchDeg * shape,
+        ease: 1 - Math.exp(-dt * live.shot.ease),
+      };
+    }
+  }
+  if (phase === "fight" && answer.beat === "exchange") {
+    const [first, second] = state.fighters;
+    return {
+      zoom: DEMO_EXCHANGE_LEAN_ZOOM,
+      focusX: (first.x + second.x) * 0.5,
+      focusY: clamp((first.y + second.y) * 0.5 - 128, H * 0.3, H * 0.72),
+      rotation: 0,
+      ease: 1 - Math.exp(-dt * 2.6),
+    };
+  }
+  return null;
 }
 
 function latchCameraPunchEnvelope(magnitude, focusX, focusY, attack, hold, release) {
@@ -9233,6 +10753,8 @@ function resetCinematicCamera() {
   cameraDutch = 0;
   cameraObservedPhase = null;
   letterboxLevel = 0;
+  if (demoSession.shot) demoSession.shot = null;
+  cinematicCamera.demoShot = null;
   cinematicCamera.zoom = 1;
   cinematicCamera.x = 0;
   cinematicCamera.y = 0;
@@ -9363,6 +10885,21 @@ function updateCinematicCamera(dtMs) {
     targetFocusY = clamp(splatVictim.y - 118, H * 0.3, H * 0.72);
     ease = 1 - Math.exp(-dt * 11);
   }
+  // 5.4 FIGHT NIGHT (sweep #7/#17), demo only: the seeded super/KO shot (or
+  // the exchange lean) outranks the FINISH THEM creep, the win settle and
+  // the splat framing while it is alive; the phase branches above keep the
+  // pose for every played match. null outside a demo — the played game's
+  // "identity by default" contract is untouched.
+  const demoPose = demoCameraPose(dt, phase, finisher, reduced);
+  if (demoPose) {
+    targetZoom = demoPose.zoom;
+    targetFocusX = demoPose.focusX;
+    targetFocusY = demoPose.focusY;
+    targetRotation = demoPose.rotation;
+    ease = demoPose.ease;
+    cinemaFxDebug.demoShotFrames += 1;
+  }
+  cinematicCamera.demoShot = demoSession.shot ? demoSession.shot.shot.id : null;
   cameraPhaseZoom += (targetZoom - cameraPhaseZoom) * ease;
   cameraPhaseRotation += (targetRotation - cameraPhaseRotation) * (1 - Math.exp(-dt * 6));
   cameraFocusX += (targetFocusX - cameraFocusX) * ease;
@@ -9452,7 +10989,13 @@ function updateCinematicCamera(dtMs) {
   }
 
   // Intro cinema bars: slide in during the intro, retract as FIGHT! lands.
-  const barTarget = phase === "intro" && !finisher ? 1 : 0;
+  // 5.4 (sweep #7), demo only: the bars also drop on the KO beat — from the
+  // round-ending hit through the FINISH THEM stand-off; a Final Blow's own
+  // overlay bars take over seamlessly (drawIntroLetterbox stands down for a
+  // finisher), a plain KO's retract with the roundover call.
+  const demoKoBars = phase === "finish" && !finisher && demoSession.koTick >= 0 && demoCameraActive();
+  if (demoKoBars && letterboxLevel === 0) cinemaFxDebug.demoKoBars += 1;
+  const barTarget = (phase === "intro" && !finisher) || demoKoBars ? 1 : 0;
   letterboxLevel += (barTarget - letterboxLevel) * (1 - Math.exp(-dt * (barTarget > letterboxLevel ? 9 : 13)));
   if (letterboxLevel < 0.004) letterboxLevel = 0;
 
@@ -10863,6 +12406,13 @@ function activeMutatorsForMatch() {
 function applyMatchRulesForMatch() {
   state.mutators = normalizeMutators(activeMutatorsForMatch());
   state.matchRules = resolveMatchRules(state.mutators);
+  // 5.4 SESSION LAYER (sweep #15): the demo's bout of the card sets the
+  // format — one round on the undercard, best-of-three co-main, best-of-five
+  // main event — through the same field the ONE-ROUND SHOWDOWN mutator uses.
+  // Demo only; every other mode derives its rules from the mutators alone.
+  if (state.mode === "demo" && demoSession.show?.bout?.roundsToWin) {
+    state.matchRules = { ...state.matchRules, roundsToWin: demoSession.show.bout.roundsToWin };
+  }
   state.suddenDeathHitDone = false;
 }
 
@@ -11775,8 +13325,11 @@ function startMatch(resetSet = true) {
   // to unlock audio — the call warns without one.
   if (!(state.mode === "demo" && demoSession.attract)) unlockAudio();
   // Release 1.6: AUTO mode now picks the stage-matched track instead of
-  // cycling the jukebox. Demo/attract keeps whatever was already playing.
-  if (state.mode !== "demo") applyAutoStageMusic();
+  // cycling the jukebox. 5.4 (sweep #22): the demo too — startNextDemoMatch
+  // used to set the bed from the director's own track bag, independent of
+  // the stage bag, so the stage's own theme played in 17% of exhibitions.
+  // A manual track pick is honoured here exactly as in a played match.
+  applyAutoStageMusic();
   resetMusicDuck();
   if (resetSet) {
     state.rounds = [0, 0];
@@ -11832,7 +13385,7 @@ function startMatch(resetSet = true) {
   state.effects.length = 0;
   state.traps.length = 0;
   state.projectiles.length = 0;
-  state.timer = 99;
+  state.timer = roundClockSeconds();
   state.timerCarry = 0;
   state.phase = "intro";
   state.phaseTime = 2.25;
@@ -11848,6 +13401,18 @@ function startMatch(resetSet = true) {
   commandHistory[1].length = 0;
   updateHud();
   showScreen("fight");
+  // 5.4 (sweep #27): a played match abandons the idle countdown's warm-up —
+  // its director is dropped and any 3D banks it built are released, so a
+  // 3D match never carries a phantom pair's textures.
+  if (state.mode !== "demo" && (demoSession.pendingDirector || demoSession.prewarm)) {
+    demoSession.pendingDirector = null;
+    demoSession.pendingDirectorSeed = null;
+    clearDemoPrewarm(true);
+  }
+  // 5.4 FIGHT NIGHT (sweep #8/#20): a demo round 1 opens on the VERSUS card
+  // — planned here so the art hold below knows to floor its clock stop at the
+  // card's length; mounted after beginIntroDialogue (which clears the box).
+  const versus = planDemoVersusCard(resetSet);
   // v5.1 #35: hold the intro clock (offline only, capped) until both
   // fighters' unified family has decoded — see armIntroArtHold. Armed BEFORE
   // the FIGHT! timer below so a release can shift it.
@@ -11883,11 +13448,19 @@ function startMatch(resetSet = true) {
     if (incoming) announcerSay(`${incoming}-name`, { delay: 300 });
   }
   if (state.mutators.length) introLabel = `${introLabel} · ${mutatorLabel(state.mutators)}`;
-  announce(introMain, introLabel, 1.2);
+  // 5.4 (sweep #19): the demo's ROUND card — the attract gate's release
+  // point, booked BEFORE the announce so the ROUND call itself is heard.
+  // (Sweep #8/#20: on a versus card the gate opens on the CARD, so the
+  // corner calls are the first sound; the ROUND 1 banner itself is deferred
+  // to the hold's release — releaseDemoVersusCard — after the ring intro.)
+  demoRoundCard();
+  if (versus) demoVersus.roundCard = { main: introMain, sub: introLabel };
+  else announce(introMain, introLabel, 1.2);
   // Wave 16: rival and FINAL BOUT intros open with a spoken-card exchange —
   // the intro window stretches to fit the read, and the FIGHT call waits.
   const dialogueSeconds = beginIntroDialogue(arcadeMatch);
   if (dialogueSeconds > 0) state.phaseTime = dialogueSeconds;
+  if (versus) mountDemoVersusCard();
   // Wave 9: the arcade final boss bout gets its own announcer intro, queued
   // behind ROUND 1 / FIGHT via the announcer busy window.
   if (arcadeMatch?.kind === "boss") {
@@ -11895,7 +13468,10 @@ function startMatch(resetSet = true) {
     announcerSay("boss-intro", { delay: 2100 });
   }
   scheduleFightAnnouncement(() => {
-    if (state.screen === "fight" && state.phase === "intro") announce("FIGHT!", "NO MERCY ON THESE STREETS", 0.8);
+    if (state.screen === "fight" && state.phase === "intro") {
+      announce("FIGHT!", "NO MERCY ON THESE STREETS", 0.8);
+      noteDemoVersusFight();
+    }
   }, dialogueSeconds > 0 ? Math.round(dialogueSeconds * 1000) - 650 : 1150);
   // R2.1 STREETS: arm the replay recorder once the match config is FINAL
   // (mutators, palettes, stage and the dialogue-stretched intro clock). Only
@@ -12028,6 +13604,11 @@ function resetRound() {
   warmFighterAudio();
   state.fighters.forEach((fighter, side) => { fighter.meter = carriedGrit[side] || 0; });
   if (state.matchRules.infiniteGrit) state.fighters.forEach((fighter) => { fighter.meter = GRIT_RULES.maximum; });
+  // 5.4 SESSION LAYER (sweep #3): ROOKIE VS VETERAN — the rookie's late
+  // comeback. When the veteran reaches match point the rookie opens the round
+  // with a full bar (the same demo-only free-Grit write startNextDemoMatch
+  // makes for the showcase seat, a round later). A demo has no rollback.
+  if (state.mode === "demo") demoStoryRoundGrit();
   resetStageWeapon();
   resetCrowd();
   clearBattleDamage();
@@ -12038,13 +13619,17 @@ function resetRound() {
   state.effects.length = 0;
   state.traps.length = 0;
   state.projectiles.length = 0;
-  state.timer = 99;
+  state.timer = roundClockSeconds();
   state.timerCarry = 0;
   state.phase = "intro";
   // v2.9 FLOW round 2: demo-only shorter round card — the exhibition owes the
   // viewer fighting, not four seconds of ROUND 2 per exhibition. Every other
   // mode keeps the full 2.1s presentation.
   state.phaseTime = state.mode === "demo" ? DEMO_ROUND_INTRO_SECONDS : 2.1;
+  // 5.4 FIGHT NIGHT (sweep #26/#27): round 2 is the exhibition's second half
+  // — the next pair starts warming here (render/network-side only; see
+  // demoPrewarmNextPair). Demo-gated, and never on a resimulation.
+  if (state.mode === "demo" && demoSession.active && !rollbackResimulating) demoPrewarmNextPair("round2");
   state.hitstop = 0;
   state.lastImpactSide = -1;
   state.finishWinner = -1;
@@ -12056,7 +13641,20 @@ function resetRound() {
   commandHistory[1].length = 0;
   updateFlowSkipHint();
   updateHud();
-  announce(`ROUND ${state.round}`, "SETTLE IT", 1.15);
+  demoRoundCard();
+  // 5.4 SESSION LAYER (sweep #15): a best-of-five has rounds the banks were
+  // never cut for ("ROUND 3" spoke finalround at 1-1), so the demo's card
+  // carries the running score and an honest cue plan (demoRoundCardPlan);
+  // every other mode announces exactly what it always has.
+  if (state.mode === "demo") {
+    const card = demoRoundCardPlan({
+      round: state.round, rounds: state.rounds, roundsToWin: roundsToWinValue(),
+      names: state.fighters.map((fighter) => fighter.def.name), bout: demoSession.show?.bout || null,
+    });
+    announce(card.main, card.sub, 1.15, { speak: card.speak });
+  } else {
+    announce(`ROUND ${state.round}`, "SETTLE IT", 1.15);
+  }
   scheduleFightAnnouncement(() => {
     if (state.screen === "fight" && state.phase === "intro") announce("FIGHT!", "", 0.75);
   }, 1050);
@@ -12112,7 +13710,9 @@ function announce(main, sub = "", duration = 1, { speak = null } = {}) {
 }
 
 function updateFlowSkipHint() {
-  const visible = state.screen === "fight" && (state.phase === "intro" || state.phase === "roundover");
+  // 5.4 #10: never in a demo — any input EXITS the show and the CPU seats
+  // refuse the skip, so the prompt was an instruction to kill the demo.
+  const visible = flowSkipHintVisible({ screen: state.screen, phase: state.phase, demoActive: demoSession.active });
   $("#flowSkipHint").hidden = !visible;
 }
 
@@ -12134,6 +13734,11 @@ const introDialogue = {
   lines: [],
   total: 0,
   revealed: 0,
+  // 5.4 (sweep #8/#20): the versus kind reveals off the VERSUS hold's wall
+  // clock (the phase clock is stopped under it) on its own card times;
+  // both null for the arcade exchange, which keeps the phase-clock reveal.
+  clock: null,
+  cardTimes: null,
 };
 // Last variant shown per pairing, so back-to-back runs never repeat while an
 // alternative exists. visualRandom only — presentation stream.
@@ -12157,9 +13762,12 @@ function cancelIntroDialogue() {
   introDialogue.active = false;
   introDialogue.lines = [];
   introDialogue.revealed = 0;
+  introDialogue.clock = null;
+  introDialogue.cardTimes = null;
   const box = $("#introDialogue");
   if (box) {
     box.hidden = true;
+    box.classList.remove("versus");
     box.innerHTML = "";
   }
 }
@@ -12227,9 +13835,17 @@ function updateIntroDialogue() {
     return;
   }
   const reduced = state.accessibility.reducedMotion;
-  const elapsed = introDialogue.total - state.phaseTime;
-  box.querySelectorAll(".speech-card").forEach((cardEl, index) => {
-    const show = reduced || elapsed >= (INTRO_DIALOGUE_CARD_TIMES[index] ?? 0);
+  // 5.4 (sweep #8/#20): the versus card reveals off the hold's wall clock
+  // and keeps its beat order under reduced motion (the slide is dropped, the
+  // ring introduction is not collapsed into one frame).
+  const versus = introDialogue.clock === "versus";
+  const elapsed = versus ? demoVersusElapsedMs() / 1000 : introDialogue.total - state.phaseTime;
+  const times = introDialogue.cardTimes || INTRO_DIALOGUE_CARD_TIMES;
+  box.querySelectorAll("[data-card]").forEach((cardEl, position) => {
+    // The card's own index, not its DOM position: the versus row is laid out
+    // left card / stage row / right card, and the stage row reveals last.
+    const index = Number.isFinite(Number(cardEl.dataset.card)) ? Number(cardEl.dataset.card) : position;
+    const show = (reduced && !versus) || elapsed >= (times[index] ?? 0);
     if (show && cardEl.hidden) {
       cardEl.hidden = false;
       cardEl.classList.toggle("instant", reduced);
@@ -12237,6 +13853,7 @@ function updateIntroDialogue() {
       introDialogue.revealed = Math.max(introDialogue.revealed, index + 1);
     }
   });
+  if (versus) fireDemoVersusBeats();
 }
 
 // Release 1.8 GRIND: only HUMAN inputs may skip the intro/round-over flow. A
@@ -12276,6 +13893,8 @@ function trySkipFightFlow(input0 = {}, input1 = {}) {
     announce("FIGHT!", "INTRO SKIPPED", 0.55);
     updateFlowSkipHint();
     // v5.3 SPECTACLE: a skipped intro is still a round start.
+    demoCommentaryRoundStart();
+    demoBell();
     playMusicStinger("roundstart", { source: `round${state.round}-skip` });
     return true;
   }
@@ -12309,7 +13928,14 @@ function finishRound(winner, type = -1) {
   // downstream exactly as before; this is pure observation).
   demoChoreoBeat(winner, "roundEnd");
   if (type >= 0) demoChoreoBeat(winner, "finisher");
+  // 5.4 #30: the demo round ledger (demo-gated inside; reporting only).
+  demoLedgerRound(winner, type);
+  // 5.4 #12: the lower third's round line (demo-gated inside; meta only).
+  demoCommentaryRoundEnd(winner, type);
   const winDef = state.fighters[winner].def;
+  // 5.4 FIGHT NIGHT (round-ends): the closer log, demo only, meta only. Reads
+  // the loser's health and the clock BEFORE the branches below touch either.
+  if (state.mode === "demo" && !rollbackResimulating) demoNoteRoundEnd(winner, type);
   // Wave 15: the KO slams in the hands — for both the knockout hold and the
   // opening of a Final Blow ceremony (all gates inside combatHaptic).
   combatHaptic("ko");
@@ -13318,7 +14944,7 @@ function showResult(winner) {
   const arcadeDefeat = state.mode === "arcade" && winner === 1 && state.arcadeRun && !dailyOver;
   const survivalOver = state.mode === "survival" && state.survivalRun?.over;
   const teamOver = state.mode === "team" && state.teamBattle?.over;
-  $("#resultEyebrow").textContent = state.mode === "demo" ? `WATCH DEMO · CYCLE ${demoSession.cycle?.cycle || 1}`
+  $("#resultEyebrow").textContent = state.mode === "demo" ? demoResultEyebrow({ cycle: demoSession.cycle?.cycle || 1, bout: demoSession.show?.bout || null })
     : survivalOver ? "THE GAUNTLET · RUN ENDED"
       : teamOver ? "BLOCK WAR · 3V3 SETTLED"
         : dailyOver ? "THE DAILY JAWN · ONE SHOT A DAY"
@@ -13361,11 +14987,19 @@ function showResult(winner) {
   restartCssAnimation($("#resultFinisher"), "enter");
   restartCssAnimation($(".result-copy"), "sweep");
   hudFxDebug.victoryEntrances += 1;
-  if (state.mode === "demo") scheduleNextDemoMatch();
+  // 5.4 SESSION LAYER: bank the bout on the session ledger FIRST — the
+  // standings band, the sign-off, the NEXT UP tease and the versus card's
+  // corner records all read it.
+  if (state.mode === "demo") {
+    demoRecordBout(winner);
+    noteDemoMatchResult(winner);
+    scheduleNextDemoMatch();
+  }
   else $("#demoResultStatus").hidden = true;
   // R2.1 STREETS: winner-stays scoreboard card (online rooms + offline versus
   // sets) and the CHANGE FIGHTERS path back to a QoL-speaking lobby.
   renderSetScoreCard();
+  if (state.mode === "demo") renderDemoResultCard(winner);
   $("#changeFightersButton").hidden = !(state.mode === "online" && onlineSession.lobby.remoteQol >= 1);
   if (state.mode === "online") {
     onlineSession.rematchVotes.clear();
@@ -14200,6 +15834,20 @@ function demoChoreoFighterView(fighter) {
     health: fighter.health,
     juggleCount: fighter.juggleCount,
     wallBounceUsed: Boolean(fighter.wallBounceUsed),
+    // 5.4 FIGHT NIGHT (sweep #4 / #5): the okizeme / tech family and the
+    // neutral budget read the same VISIBLE fields a human reads off the
+    // animation — the knockdown clock, whether the fall was a throw, the live
+    // swing's level, the tempo tells (a whiff tell and the re-arm gap), the
+    // hold's frame and the tech flash. The hidden wake option is deliberately
+    // NOT here: the rise is the thing the attacker is supposed to guess.
+    knockdownFrames: fighter.knockdownFrames,
+    throwKnockdown: Boolean(fighter.throwKnockdown),
+    attackLevel: fighter.attacking?.level || null,
+    attackRearmFrames: fighter.attackRearmFrames || 0,
+    whiffTick: Number.isFinite(fighter.whiffTell?.tick) ? fighter.whiffTell.tick : -1,
+    whiffKind: fighter.whiffTell?.kind || null,
+    grabbedFrame: fighter.grabbed ? fighter.grabbed.frame || 0 : 0,
+    throwTechFlashFrames: fighter.throwTechFlashFrames || 0,
   };
 }
 
@@ -14222,6 +15870,268 @@ function demoChoreoBeat(side, beat) {
   demoSession.choreo.noteBeat(side, beat);
 }
 
+// ---------------------------------------------------------------------------
+// 5.4 FIGHT NIGHT (sweep #12, the text half of #21) — THE LOWER THIRD. Every
+// sim call site below feeds the card's event bus through THIS gate (demo
+// mode, a live session with a bus, never during a rollback resimulation), so
+// a played match never reaches the bus and stays byte-identical — pinned
+// from source by tests/demo-commentary.test.mjs and by the checksum trace in
+// DEMO.md. The bus is meta (never snapshotted, never read by the sim); the
+// DOM is written once per rendered frame by syncDemoLowerThird.
+// ---------------------------------------------------------------------------
+function demoCommentaryLive() {
+  return !rollbackResimulating && state.mode === "demo" && demoSession.active && Boolean(demoSession.commentary);
+}
+
+function demoCommentaryNames() {
+  return state.fighters.map((fighter) => fighter.def.name);
+}
+
+function demoCommentaryEmit(kind, side, tokens = {}) {
+  if (!demoCommentaryLive()) return null;
+  const names = demoCommentaryNames();
+  return demoSession.commentary.emit(kind, {
+    side,
+    tick: state.simulationTick,
+    tokens: { NAME: names[side] ?? "", OTHER: names[1 - side] ?? "", ...tokens },
+  });
+}
+
+// A landed hit: FIRST BLOOD once per round, COUNTER HIT when it was one.
+function demoCommentaryHit(attacker, { counter = false } = {}) {
+  if (!demoCommentaryLive()) return;
+  demoSession.commentary.noteHit({ side: attacker.side, tick: state.simulationTick, names: demoCommentaryNames() });
+  if (counter) demoCommentaryEmit("counter", attacker.side);
+}
+
+// The bell: the round's latches reset and the room's allegiance is read from
+// the painted crowd's 5.3 favourites (dealt per round in createCrowd).
+function demoCommentaryRoundStart() {
+  if (!demoCommentaryLive()) return;
+  const people = state.crowd?.people || [];
+  const favourites = [0, 1].map((side) => people.filter((person) => person.sprite?.favourite === side).length);
+  demoSession.commentary.roundStart({ tick: state.simulationTick, names: demoCommentaryNames(), favourites });
+}
+
+// The round settles (finishRound): comeback / Final Blow / the round line.
+function demoCommentaryRoundEnd(winner, type) {
+  if (!demoCommentaryLive()) return;
+  demoSession.commentary.roundEnd({
+    winner,
+    tick: state.simulationTick,
+    names: demoCommentaryNames(),
+    roundNumber: state.round,
+    rounds: [...state.rounds],
+    finisher: type >= 0,
+  });
+}
+
+// The per-tick health observer (CLUTCH at 20%, COMEBACK on the lead flip).
+function demoCommentaryObserve() {
+  if (!demoCommentaryLive() || state.fighters.length !== 2) return;
+  demoSession.commentary.observe({
+    tick: state.simulationTick,
+    phase: state.phase,
+    health: state.fighters.map((fighter) => fighter.health),
+    names: demoCommentaryNames(),
+  });
+}
+
+// Render side: the line and the room read on the broadcast bug. Touches the
+// DOM only when the shown line changes, and reads the bus's clock (the sim
+// tick) so the line freezes with a hold or a pause and scales with the
+// transport rate like everything else on the screen.
+function syncDemoLowerThird() {
+  const line = $("#demoHudLine");
+  const room = $("#demoHudRoom");
+  if (!line || !room) return;
+  const bus = demoSession.active && state.mode === "demo" ? demoSession.commentary : null;
+  const event = bus ? bus.current(state.simulationTick) : null;
+  const shownId = event ? event.id : 0;
+  if (shownId !== demoSession.lowerThirdShown) {
+    demoSession.lowerThirdShown = shownId;
+    line.hidden = !event;
+    line.textContent = event ? event.line : "";
+    line.dataset.kind = event ? event.kind : "";
+    line.dataset.side = event && event.side >= 0 ? String(event.side) : "";
+    const accent = event && event.side >= 0 ? state.fighters[event.side]?.def.accent || "" : "";
+    if (accent) line.style.setProperty("--line-accent", accent);
+    else line.style.removeProperty("--line-accent");
+    if (event) {
+      hudFxDebug.lowerThirdLines += 1;
+      restartCssAnimation(line, "in");
+    }
+    $("#demoHud").classList.toggle("calling", Boolean(event));
+  }
+  const allegiance = bus ? bus.allegiance() : null;
+  const roomText = allegiance ? allegiance.text : "";
+  if (room.textContent !== roomText) {
+    room.textContent = roomText;
+    room.hidden = !roomText;
+    room.dataset.side = allegiance && allegiance.side >= 0 ? String(allegiance.side) : "";
+    room.value = allegiance ? String(allegiance.side) : "";
+  }
+}
+
+// ---------------------------------------------------------------------------
+// 5.4 FIGHT NIGHT (round-ends) — the demo's OPENER and CLOSER. Everything in
+// this block is reached only from demo-gated call sites (aiInput's demo
+// branch, checkKnockout's demo branch, makeFighter's demo branch, finishRound's
+// demo note), reads demoSession (meta, never snapshotted) and writes nothing
+// the checksummed sim reads outside a demo. A played match is byte-identical:
+// tests/demo-round-ends.test.mjs pins the gates from source and the parity
+// trace in DEMO.md pins the tick stream.
+// ---------------------------------------------------------------------------
+
+// Which brain a demo fighter is built with. A CLOCK card runs the patient
+// clock tier until it has put a decision on the board (two rounds at most, so
+// a card whose clock round still ended in a knockout never drags three).
+// On a standard card each seat plays its kit's archetype persona (5.4
+// PERSONAS, engine/demo.mjs demoPersonaFor); `fightersTier` records the
+// card's format tier (clock or the demo baseline) for the clock and the
+// snapshot, the per-seat tier is on each fighter's brain.
+function demoAiTier(kitId) {
+  const clock = demoSession.show?.format === "clock" && !demoSession.decisionShown && state.round <= 2;
+  demoSession.fightersTier = clock ? DEMO_CLOCK_AI_DIFFICULTY : DEMO_AI_DIFFICULTY;
+  // 5.4 SESSION LAYER: the story's per-seat overlay on the persona (the
+  // veteran / rookie grades, the grudge temperament, the spacing brains).
+  // Keyed by kit because the director never seats a kit against itself.
+  return clock ? DEMO_CLOCK_AI_DIFFICULTY : demoStoryTierFor(kitId, demoStoryOverlayFor(kitId));
+}
+
+function demoStoryOverlayFor(kitId) {
+  const story = demoSession.story;
+  if (!story || !state.picks) return null;
+  const seat = state.picks.findIndex((index) => (roster[index]?.kitId || roster[index]?.id) === kitId);
+  return seat >= 0 ? story.tiers[seat] || null : null;
+}
+
+// The round clock at the bell: 99 everywhere, and the CLOCK card's own
+// length on a demo round built with the clock brain (makeMatchFighters runs
+// before either timer reset, so the tier is already known).
+function roundClockSeconds() {
+  if (state.mode === "demo" && demoSession.fightersTier === DEMO_CLOCK_AI_DIFFICULTY) return DEMO_CLOCK_ROUND_SECONDS;
+  return 99;
+}
+
+// The closer plan for the round the KO just decided (checkKnockout, demo).
+// Pure on the round state plus the session ledger; the ledger bumps here for
+// a Final Blow so the next one this fighter takes is the other variant.
+function demoPlanCloser(winner) {
+  const attacker = state.fighters[winner];
+  const plan = demoCloserPlan({
+    winner,
+    rounds: state.rounds,
+    roundsToWin: roundsToWinValue(),
+    winnerHealth: attacker.health,
+    fighterId: attacker.def.id,
+    ledger: demoSession.finisherLedger,
+    loserGrounded: Boolean(state.fighters[1 - winner].grounded),
+    // 5.4 SESSION LAYER: a one-round QUICK BOUT rations its ceremony.
+    quickBout: demoSession.show?.bout?.kind === "quick",
+    quickFinisher: Boolean(demoSession.show?.quickFinisher),
+  });
+  if (plan.finisher) {
+    demoSession.finisherLedger[attacker.def.id] = (demoSession.finisherLedger[attacker.def.id] || 0) + 1;
+  }
+  demoSession.closer = { ...plan, winner, round: state.round };
+  return plan;
+}
+
+// finishRound's demo note: how the round ended, for the closer log and the
+// CLOCK card's "decision shown" latch. Meta only.
+function demoNoteRoundEnd(winner, type) {
+  const loser = state.fighters[1 - winner];
+  const cause = roundEndCause({ finisherType: type, timer: state.timer, loserHealth: loser.health });
+  if (cause === ROUND_END_CAUSES.decision) demoSession.decisionShown = true;
+  demoSession.closerLog.push({
+    cycle: demoSession.cycle?.cycle ?? 0,
+    round: state.round,
+    winner,
+    fighterId: state.fighters[winner].def.id,
+    kind: cause,
+    variant: type >= 0 ? type : -1,
+    fatalityId: type >= 0 ? state.finisher?.fatalityId || null : null,
+    reason: demoSession.closer?.reason || (cause === ROUND_END_CAUSES.decision ? "clock" : "plain"),
+    timer: state.timer,
+    format: demoSession.show?.format || "standard",
+  });
+  while (demoSession.closerLog.length > 64) demoSession.closerLog.shift();
+  demoSession.closer = null;
+}
+
+// The opener's scripted input for one demo fighter, or null once the opener
+// has fired (the choreographer and the brain own the rest of the card). The
+// showcase side is demoSession.superSide as before; which of the four
+// openers it runs is the director's seeded draw (cycle.show.opener).
+function demoOpenerInput(fighter, opponent, input) {
+  const opener = demoSession.show?.opener || "super";
+  const distance = Math.abs(opponent.x - fighter.x);
+  const towardRight = opponent.x > fighter.x;
+  const lead = fighter.side === demoSession.superSide;
+  const walkIn = () => { input.right = towardRight; input.left = !towardRight; };
+  const walkOff = () => { input.right = !towardRight; input.left = towardRight; };
+  const fire = (action) => {
+    demoSession.openerShown = true;
+    demoSession.openerTick = state.simulationTick;
+    demoSession.openerAction = action;
+  };
+  if (opener === "footsies-first") {
+    // Both men off the buttons: close to the mid band, then rock in and out
+    // of it — a feel-out the sweep found the demo never had (first contact
+    // 0.3-1.5 s after every bell). The fuse runs on side 0's ticks.
+    if (fighter.side === 0) demoSession.openerScratch += 1;
+    const step = demoSession.openerScratch;
+    if (step >= DEMO_OPENER_FOOTSIES_TICKS) {
+      if (fighter.side === 0) fire("footsies");
+      return null;
+    }
+    if (distance > 330) walkIn();
+    else if (distance < 230) walkOff();
+    else if (Math.floor(step / 12) % 2 === (lead ? 0 : 1)) walkIn();
+    else walkOff();
+    return input;
+  }
+  if (!lead) {
+    // The partner: the guard for the super and the throw (a throw through a
+    // standing guard is the SF2 read the opener is showing), the live brain
+    // for the dash-in so the heavy has to beat a real reaction.
+    if (opener === "dash-in") return null;
+    if (distance > DEMO_OPENER_SUPER_RANGE) walkIn();
+    else input.guard = true;
+    return input;
+  }
+  if (opener === "throw") {
+    if (distance > PROXIMITY_GRAB_RANGE - 10) { walkIn(); return input; }
+    input.throw = true;
+    fire("throw");
+    return input;
+  }
+  if (opener === "dash-in") {
+    // The dash needs the tap-release-tap the choreographer's dashTap uses,
+    // then the heavy comes out of the dash inside the super band.
+    if (demoSession.openerScratch === 0) {
+      if (distance > DEMO_OPENER_DASH_RANGE) { walkIn(); return input; }
+      demoSession.openerScratch = 1;
+    }
+    const step = demoSession.openerScratch;
+    demoSession.openerScratch += 1;
+    if (step === 2 || (step >= 5 && step <= 8)) { walkIn(); return input; }
+    if (step > 8 && distance <= DEMO_OPENER_SUPER_RANGE) {
+      input.heavy = true;
+      fire("dash-heavy");
+      return input;
+    }
+    if (step > 40) { fire("dash-heavy"); return null; }
+    return input;
+  }
+  // "super": the opener every card used to run.
+  if (distance > DEMO_OPENER_SUPER_RANGE) { walkIn(); return input; }
+  input.super = true;
+  fire("super");
+  return input;
+}
+
 function aiInput(fighter, opponent, dt) {
   fighter.aiClock -= dt;
   const input = { left: false, right: false, down: false, guard: false, jump: false, light: false, heavy: false, special: false, enhanced: false, throw: false, super: false, final: false };
@@ -14233,24 +16143,29 @@ function aiInput(fighter, opponent, dt) {
     // waiting out the brain's ordinary reaction clock — measured, only 54%
     // of an exhibition was actual fighting. The demo commits to its Final
     // Blow promptly instead. Arcade/tournament/versus pacing is untouched.
-    if (state.mode === "demo") fighter.aiClock = Math.min(fighter.aiClock, DEMO_FINISHER_REACTION);
+    if (state.mode === "demo") {
+      // 5.4 FIGHT NIGHT (round-ends): the CLOSER (set by checkKnockout).
+      // A plain-KO plan withholds `final` — the winner steps off the fallen
+      // man and lets the short window lapse into finishRound's collapse. A
+      // Final Blow plan carries the ledger's A/B variant; resolveInput has
+      // forwarded `finisherVariant` since 1.x, it was just never set here.
+      const plan = demoSession.closer;
+      if (plan && !plan.finisher) {
+        const towardRight = opponent.x > fighter.x;
+        input.left = towardRight;
+        input.right = !towardRight;
+        return input;
+      }
+      fighter.aiClock = Math.min(fighter.aiClock, DEMO_FINISHER_REACTION);
+      input.finisherVariant = plan ? plan.variant : 0;
+    }
     input.final = fighter.aiClock <= 0;
     if (input.final) fighter.aiClock = 2;
     return input;
   }
-  if (state.mode === "demo" && state.phase === "fight" && !demoSession.superShown) {
-    const distance = Math.abs(opponent.x - fighter.x);
-    const towardRight = opponent.x > fighter.x;
-    if (distance > 245) {
-      input.right = towardRight;
-      input.left = !towardRight;
-    } else if (fighter.side === demoSession.superSide) {
-      input.super = true;
-      demoSession.superShown = true;
-    } else {
-      input.guard = true;
-    }
-    return input;
+  if (state.mode === "demo" && state.phase === "fight" && !demoSession.openerShown) {
+    const scripted = demoOpenerInput(fighter, opponent, input);
+    if (scripted) return scripted;
   }
   const brainInput = stepAiBrain(fighter.aiBrain, {
     frame: state.simulationTick,
@@ -14535,6 +16450,14 @@ function beginAttack(fighter, action, input = {}, { reversal = false, force = fa
     // Wave 7: portrait cut-in band + screen-space distortion ring, latched
     // module-level on the announce() pattern (rollback guard + tick dedupe).
     latchSuperPresentation(fighter);
+    // 5.4 #12: the lower third names the spend (demo-gated inside).
+    demoCommentaryEmit("super", fighter.side);
+  } else if (gritCost > 0) {
+    // ...and an EX (a Grit price that is not the super) names the move.
+    // (A kit's EX move is often NAMED "... EX" already — PAINT THE TOWN EX —
+    // so the word is stripped here and the line puts it back once.)
+    const moveName = fighter.attacking.moveName || prettyProfileName(fighter.attacking.profileId, fighter.kitId) || fighter.attacking.kind;
+    demoCommentaryEmit("ex", fighter.side, { MOVE: String(moveName).replace(/\s*\bEX\b\s*/gi, " ").trim() });
   }
   if (linkedFrom) spawnCombatText(fighter.x, fighter.y - fighter.height - 20, "LINK", fighter.def.accent);
   // Release 1.7A CLEAN HITS: move names remain available in the move list and
@@ -14993,6 +16916,8 @@ function enterGuardCrush(fighter, attacker) {
     // v2.1 PROGRESSION: the crusher's ledger tally (guarded, P1 seat only).
     if (attacker) progressionEvent("guardCrush", {}, attacker.side);
   }
+  // 5.4 #12: the lower third (demo-gated inside); the line belongs to the crusher.
+  demoCommentaryEmit("guard-crush", attacker ? attacker.side : 1 - fighter.side);
   spawnCombatText(fighter.x, fighter.y - fighter.height - 52, "GUARD CRUSH", "#7de8ff");
   // Announcer letter-slam banner + its spoken bank cue (announce() carries the
   // resim guard and books the guardcrush announcer bank).
@@ -15472,6 +17397,8 @@ function performWallBounce(fighter, wallDirection) {
   );
   announcerSay("wallbounce");
   sound("hit-heavy", fighter);
+  // 5.4 #12: the lower third (demo-gated inside).
+  if (attacker) demoCommentaryEmit("wall-bounce", attacker.side);
 }
 
 const attackActionPriority = [...TOURNAMENT_ACTION_PRIORITY];
@@ -16552,6 +18479,8 @@ function throwStyle(fighter) {
 function beginGrabHold(attacker, victim, attack) {
   // v2.9 FLOW: demo coverage beat — a grab actually connected.
   demoChoreoBeat(attacker.side, "throw");
+  // 5.4 #12: the lower third (demo-gated inside).
+  demoCommentaryEmit("throw", attacker.side);
   const style = throwStyle(attacker);
   const back = Boolean(attack.backThrow);
   attacker.grabbing = {
@@ -16812,6 +18741,8 @@ function tryPickUpStageWeapon(fighter, input) {
   weapon.frames = 0;
   // v2.9 FLOW: demo coverage beat — the stage weapon actually got picked up.
   demoChoreoBeat(fighter.side, "weaponPickup");
+  // 5.4 #12: the lower third names the object (demo-gated inside).
+  demoCommentaryEmit("weapon-pickup", fighter.side, { WEAPON: profile.name });
   fighter.carriedWeapon = weapon.weaponId;
   fighter.carryFrames = 0;
   fighter.inputBuffer.consume("heavy", state.simulationTick);
@@ -16922,6 +18853,8 @@ function tryThrowStageWeapon(fighter, input) {
   });
   if (!rollbackResimulating) objectSound(profile.style);
   spawnCombatText(fighter.x, fighter.y - fighter.height - 46, committed ? profile.name : "TOSS", fighter.def.accent);
+  // 5.4 #12: the committed throw is the call; a toss is not a story.
+  if (committed) demoCommentaryEmit("weapon-throw", fighter.side, { WEAPON: profile.name });
   updateHud();
   return true;
 }
@@ -17083,6 +19016,8 @@ function techThrow(attacker, victim, { clinch = false } = {}) {
   }
   // Wave 9: tech shout from the escaping fighter (guarded + tick-deduped).
   fighterReactiveCue(victim, "tech");
+  // 5.4 #12: the lower third — the escapee's line (demo-gated inside).
+  demoCommentaryEmit("tech", victim.side);
   // v2.1 PROGRESSION: the escapee's grab-tech tally (guarded meta counter).
   if (!rollbackResimulating) {
     progressionMatch.techs[victim.side] += 1;
@@ -17281,6 +19216,8 @@ function hit(attacker, victim, attack, collision) {
   if (!blocked && !armored) {
     if (counter) demoChoreoBeat(attacker.side, "counterhit");
     if (!victim.grounded && victim.pendingKnockdown) demoChoreoBeat(attacker.side, "juggle");
+    // 5.4 #12: FIRST BLOOD / COUNTER HIT on the lower third (demo-gated inside).
+    demoCommentaryHit(attacker, { counter });
   }
   let comboResult = { hitNumber: 1, damageScale: 1 };
   if (!blocked && attack.level !== ATTACK_LEVELS.THROW) {
@@ -17491,6 +19428,8 @@ function hit(attacker, victim, attack, collision) {
       // v2.1 PROGRESSION: the defender's Perfect Guard ledger event (guarded).
       progressionEvent("perfectGuard", {}, victim.side);
     }
+    // 5.4 #12: the lower third (demo-gated inside).
+    demoCommentaryEmit("perfect-guard", victim.side);
     state.effects.push({
       kind: "shockRing", x: impact.x, y: impact.y,
       size: 78, life: 0.3, max: 0.3, color: "#63f2ff",
@@ -17552,10 +19491,23 @@ function checkKnockout() {
   attacker.attacking = null;
   duckMusic(0.34, 1900);
   stirCrowd(1.4, "", { side: winner, splatX: victim.x });
-  announce("FINISH THEM", "LP = A  ·  LK = B  ·  ANY DISTANCE", 2.2);
-  if (!rollbackResimulating) setTouchPrompt("final");
+  // 5.4 FIGHT NIGHT (round-ends), demo only: the CLOSER decides now whether
+  // this round is a Final Blow or a plain knockout. A plain one never opens
+  // the FINISH THEM window: the loser stands through the KO freeze and then
+  // finishRound lays him down (koCollapseOnRoundEnd), so the banner, the
+  // touch prompt and the "FINAL BLOW READY" cue are not promised. Every other
+  // mode keeps the 6 s window and the prompt exactly as before — and (#10) a
+  // demo spectator holds no controller, so the sub-line names who is moving
+  // in; outside the demo the exact shipped string is returned.
+  const plainDemoKo = state.mode === "demo" && !demoPlanCloser(winner).finisher;
+  if (plainDemoKo) {
+    state.phaseTime = DEMO_PLAIN_KO_WINDOW_SECONDS;
+  } else {
+    announce("FINISH THEM", finishThemSubline({ demo: state.mode === "demo", winnerName: attacker.def.name }), 2.2);
+    if (!rollbackResimulating) setTouchPrompt("final");
+  }
   updateHud();
-  sound("finish");
+  if (!plainDemoKo) sound("finish");
   // Wave 6: KO freeze-frame punch-in on the killing hit (render-only latch,
   // guarded + tick-deduped inside).
   latchKoCameraPunch();
@@ -17966,6 +19918,9 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
       // round reaches this edge (resetRound always returns to "intro"), and
       // the skip path below fires the same cue, so ROUND 2 with the intro
       // skipped still gets its downbeat.
+      // 5.4 #12: the round's allegiance read (demo-gated inside).
+      demoCommentaryRoundStart();
+      demoBell();
       playMusicStinger("roundstart", { source: `round${state.round}` });
     }
   }
@@ -18013,6 +19968,8 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
   }
   updateComboState();
   syncFighterStateMachines();
+  // 5.4 #12: the lower third's health observer (demo-gated inside, meta only).
+  demoCommentaryObserve();
 
   if (state.mode === "training") {
     let trainingHudDirty = false;
@@ -26932,8 +28889,9 @@ function drawDistortionRing(dtMs) {
 // predates the window), and nothing leaks out: normal frames simply never
 // blend.
 function updateSlowMoBlur() {
+  // 5.4 (sweep #17): the demo's KO slow-motion beat gets the same smear.
   const active = state.screen === "fight"
-    && (state.finisher?.slowMotionTicks || 0) > 0
+    && ((state.finisher?.slowMotionTicks || 0) > 0 || (demoCameraActive() && demoSession.cadenceBeat === "ko"))
     && state.performance.id !== "battery"
     && !state.accessibility.reducedMotion;
   if (!active) {
@@ -27352,6 +29310,13 @@ function latchSuperPresentation(fighter) {
     t: 0,
   };
   hudFxDebug.superCutIns += 1;
+  // 5.4 FIGHT NIGHT (sweep #7), demo only: the super draws its shot from the
+  // seeded list and the presentation camera pushes in on the attacker for the
+  // cut-in's life (the world behind the banner used to sit still).
+  if (demoCameraActive()) {
+    demoSession.shot = { kind: "super", shot: demoSession.camera.superShot(state.simulationTick), side: fighter.side, age: 0 };
+    cinemaFxDebug.demoShots += 1;
+  }
   latchDistortionRing(fighter.x, fighter.y - fighter.height * 0.6);
   if (state.performance.shadows && !state.accessibility.reducedMotion) {
     aberrationImpulse = Math.max(aberrationImpulse, 0.7);
@@ -27646,6 +29611,8 @@ function draw(time) {
   // intensity routing, stage ambience) from observed state. Unconditional so
   // every bed settles/tears down the moment the fight screen goes away.
   updateAudioPresentation(time, hudDtMs);
+  // 5.4 #32: the demo's screensaver clocks (no-op unless a demo is running).
+  syncDemoPresence(time);
   // v2.6 MOTION: observe landings/skids/dash starts/hitstun edges and pace
   // the squash/wobble/crossfade counters BEFORE either renderer consumes the
   // shared motion transforms (the 3D renderFrame below reads the same layer).
@@ -27841,6 +29808,9 @@ function draw(time) {
   drawCrtOverlay(time);
   // `time` is the RAF timestamp in ms, the same origin performance.now() uses.
   drawDemoSpeedHud(time);
+  // 5.4 #12: the lower third and the room read on the broadcast bug (DOM,
+  // demo only, written only when the shown line changes).
+  if (demoSession.active) syncDemoLowerThird();
   drawDebugOverlay();
   drawTrainingFrameMeter();
 }
@@ -27854,24 +29824,36 @@ function draw(time) {
 // ---------------------------------------------------------------------------
 function drawDemoSpeedHud(nowMs) {
   if (!demoSpeedScoped()) return;
-  const rateLabel = demoSpeed.paused ? "PAUSED" : `${demoSpeed.rate}x`;
-  const accent = demoSpeed.paused ? "#ffb347" : demoSpeed.rate === 1 ? "#4eddf5" : "#8affc1";
   const originX = 26;
   const originY = 122;
   ctx.save();
   ctx.textAlign = "left";
   ctx.textBaseline = "middle";
-  ctx.font = "900 20px ui-monospace, monospace";
-  const head = `DEMO SPEED · ${rateLabel}`;
-  const headWidth = ctx.measureText(head).width + 24;
-  ctx.fillStyle = "rgba(4,9,14,.78)";
-  ctx.fillRect(originX, originY - 16, headWidth, 32);
-  ctx.strokeStyle = accent;
-  ctx.lineWidth = 2;
-  ctx.strokeRect(originX, originY - 16, headWidth, 32);
-  ctx.fillStyle = accent;
-  ctx.fillText(head, originX + 12, originY + 1);
-  if (nowMs < demoSpeed.hintUntilMs) {
+  // 5.4 #10/#28: in a DEMO the rate is a DOM tag inside the broadcast bug
+  // (updateDemoUi), so CSS owns its place on every viewport — the canvas chip
+  // at (26,122) landed on CPU 1's Grit row once object-fit: cover cropped a
+  // phone's frame. Training keeps the canvas chip exactly as it was.
+  if (state.mode !== "demo") {
+    const rateLabel = demoSpeed.paused ? "PAUSED" : `${demoSpeed.rate}x`;
+    const accent = demoSpeed.paused ? "#ffb347" : demoSpeed.rate === 1 ? "#4eddf5" : "#8affc1";
+    ctx.font = "900 20px ui-monospace, monospace";
+    const head = `DEMO SPEED · ${rateLabel}`;
+    const headWidth = ctx.measureText(head).width + 24;
+    ctx.fillStyle = "rgba(4,9,14,.78)";
+    ctx.fillRect(originX, originY - 16, headWidth, 32);
+    ctx.strokeStyle = accent;
+    ctx.lineWidth = 2;
+    ctx.strokeRect(originX, originY - 16, headWidth, 32);
+    ctx.fillStyle = accent;
+    ctx.fillText(head, originX + 12, originY + 1);
+  }
+  // The legend: hidden by default, a transport key reveals it, and never on a
+  // coarse pointer (keyboard advice a touch viewer cannot follow, with its
+  // third line clipped off an 844x390 viewport).
+  const legendVisible = state.mode === "demo"
+    ? demoLegendVisible({ scoped: true, hintUntilMs: demoSpeed.hintUntilMs, nowMs, coarsePointer: coarsePointer() })
+    : nowMs < demoSpeed.hintUntilMs;
+  if (legendVisible) {
     // The legend lives BELOW THE FLOOR LINE, not under the chip: down here it
     // is over the reflection band, clear of both fighters entirely, and it
     // hides itself after nine seconds anyway. Armed on every demo start (see
@@ -27927,10 +29909,21 @@ function loop(now) {
   // tick, at 1/60s, on the rendered frame the viewer asked for it.
   const steppedFrames = speedScaled ? demoSpeed.takeFrameSteps() : 0;
   for (let index = 0; index < steppedFrames; index += 1) simulationClock.stepOnce(runSimulationStep);
+  // 5.4 FIGHT NIGHT (sweep #17): the cadence director's rate for this frame
+  // (what the last rendered frame's policy answered) rides the SAME scaler —
+  // a cadence, never a dt — so the tick stream is identical with or without
+  // it. Released outside a demo; the transport ignores it once a key locks.
+  demoSpeed.setCadence(speedScaled && demoCameraActive() ? demoSession.cadenceRate : null);
+  syncDemoSpeedTag();
   const simSeconds = speedScaled ? demoSpeed.scale(elapsed) : elapsed;
   // v5.1 #35: an intro art hold hands the clock zero seconds — no tick runs,
   // no accumulator builds, the tick stream resumes exactly where it stood.
   const artHeld = updateIntroArtHold(now);
+  // 5.4 #31: a demo whose tab is hidden (or has just come back and is on its
+  // RESUMING beat) waits the same way — zero seconds, the tick stream resumes
+  // exactly where it stood. Gated on the demo session inside; a played match
+  // never enters this branch.
+  const demoHeld = settleDemoHold(now);
   const frame = state.qaManualMode
     ? {
       steps: 0,
@@ -27938,7 +29931,7 @@ function loop(now) {
       alpha: state.simulationAlpha,
       droppedSeconds: simulationClock.droppedSeconds,
     }
-    : simulationClock.advance(artHeld ? 0 : simSeconds, runSimulationStep);
+    : simulationClock.advance(artHeld || demoHeld ? 0 : simSeconds, runSimulationStep);
   state.simulationTick = state.mode === "online" && onlineSession.rollback
     ? onlineSession.rollback.frame : frame.tick;
   state.simulationAlpha = frame.alpha;
@@ -28241,6 +30234,9 @@ function scheduleCabinetCursorHide() {
 }
 
 document.addEventListener("mousemove", () => {
+  // 5.4 #32: mouse movement is presence for the demo's own idle clocks
+  // (pointer hide, bug tuck) — it never exits the show, a click does.
+  if (demoSession.active) noteDemoPresence();
   if (!state.cabinetMode) return;
   document.body.classList.remove("cabinet-idle");
   scheduleCabinetCursorHide();
@@ -28425,15 +30421,10 @@ function chooseMusic(choice) {
 // Release 1.6: resolve the best-fit track for a stage. Prefers a stage's
 // planned todoTrack if that file has been composed and added to musicTracks;
 // otherwise falls back to the mapped existing track.
+// 5.4 (sweep #22): the resolution itself is engine/music stageTrackIndex so
+// the demo's stage/bed agreement is a pinned fact (tests/demo-audio.test.mjs).
 function stageMusicTrackIndex(stageId) {
-  const entry = STAGE_MUSIC[stageId];
-  if (!entry) return currentTrackIndex;
-  if (entry.todoTrack) {
-    const pending = musicTracks.findIndex((track) => track.src.includes(entry.todoTrack));
-    if (pending >= 0) return pending;
-  }
-  const index = musicTracks.findIndex((track) => track.title === entry.title);
-  return index >= 0 ? index : currentTrackIndex;
+  return stageTrackIndex(stageId, { stageMusic: STAGE_MUSIC, tracks: musicTracks, fallback: currentTrackIndex });
 }
 
 // Applied at match start when the music mode is AUTO: the header keeps its
@@ -28447,15 +30438,19 @@ function applyAutoStageMusic() {
 function syncMusic() {
   if (!state.audioUnlocked) return;
   const enabled = Boolean($("#musicToggle")?.checked);
-  fightMusic.loop = state.musicChoice !== "auto";
+  // 5.4 (sweep #22): the demo's bed LOOPS for the exhibition instead of
+  // jukebox-advancing on `ended` mid-round; AUTO in every played mode is
+  // untouched (demoBedLoops is false outside the demo).
+  fightMusic.loop = state.musicChoice !== "auto" || demoBedLoops(state.mode);
   // v5.3: the bed's half of the danger crossfade. dangerStemBedGain is 1
   // until the stem starts arriving, so nothing about the ordinary mix moves.
+  // 5.4: bedFadeLevel is 1 outside the attract gate's opening card.
   fightMusic.volume = clamp(
-    musicBaseVolume() * state.musicDuck * state.musicVolume * dangerStemBedGain(dangerStemLevel),
+    musicBaseVolume() * state.musicDuck * state.musicVolume * dangerStemBedGain(dangerStemLevel) * bedFadeLevel,
     0,
     1,
   );
-  if (!enabled || document.hidden || state.paused) {
+  if (!enabled || document.hidden || state.paused || attractAudioHeld()) {
     fightMusic.pause();
     stopDangerStem();
     return;
@@ -28511,6 +30506,8 @@ const voiceFxDebug = {
   // w51: "TEN SECONDS" clock calls (once per round) and decision round-ends
   // that opened on the timeover bank instead of "ko".
   clockCallouts: 0, decisionCalls: 0,
+  // 5.4 SESSION LAYER: NEXT UP name reads booked during the result hold.
+  demoNextUpCalls: 0,
   // 5.1 manifest counters: banks resolved without a request, and media
   // elements actually created for fighter voice (was 3-5 per take, up to
   // 183 per fighter at fight start; now one per take, grown only on overlap).
@@ -28691,11 +30688,23 @@ function fighterVoiceTake(kind, fighterId) {
     if (!bank?.srcs.length) return null;
   }
   const cursorKey = `${fighterId}:${cue}`;
-  const cursor = fighterSfxCursors.get(cursorKey) || 0;
-  fighterSfxCursors.set(cursorKey, cursor + 1);
-  const variantIndex = cursor % bank.srcs.length;
+  let variantIndex;
+  if (demoVoiceDrawsFromBag(state.mode)) {
+    // 5.4 (sweep #24): the demo draws its takes from the shuffle bag — every
+    // take once per bag, never the same take twice running across the
+    // border (the announcer/crowd/stinger contract) — instead of the
+    // predictable 1,2,3,1,2,3 cursor. visualRandom is seeded, so a demo seed
+    // replays the same takes; the played-match cursor below is untouched.
+    variantIndex = drawFromBag(fighterVoiceBags, cursorKey, bank.srcs.length, visualRandom);
+  } else {
+    const cursor = fighterSfxCursors.get(cursorKey) || 0;
+    fighterSfxCursors.set(cursorKey, cursor + 1);
+    variantIndex = cursor % bank.srcs.length;
+  }
   const pool = fighterVoicePool(cue, bank.key, variantIndex, bank.srcs[variantIndex]);
   if (!pool?.length) return null;
+  fighterVoiceRecent.push(`${cursorKey}:${variantIndex + 1}/${bank.srcs.length}`);
+  while (fighterVoiceRecent.length > 24) fighterVoiceRecent.shift();
   if (bank.srcs.length === 1) rate *= 0.94 + visualRandom() * 0.12;
   return { sample: fighterVoiceSample(pool), rate, durationMs: bank.durationsMs?.[variantIndex] || 0 };
 }
@@ -28799,7 +30808,7 @@ function sound(kind, fighter = null) {
   });
   showSoundCaption(kind, fighter);
   if (!$("#soundToggle").checked) return;
-  if (demoSession.attract && !state.audioUnlocked) return;
+  if (attractAudioHeld()) return;
   unlockAudio();
   // Wave 9: signature cues route through the variant banks (no-repeat
   // rotation + micro-variation + reactive placeholders). playbackRate and
@@ -28966,6 +30975,9 @@ function perfectGuardTink() {
   if (rollbackResimulating) return;
   showSoundCaption("perfect-guard");
   if (!$("#soundToggle").checked) return;
+  // 5.4 (sweep #19): this was the path that armed a cold attract show at
+  // the first Perfect Guard — mid-exchange, round card already spent.
+  if (attractAudioHeld()) return;
   unlockAudio();
   if (!state.audio) return;
   const now = state.audio.currentTime;
@@ -28983,6 +30995,7 @@ function perfectGuardTink() {
 
 function objectSound(styleId) {
   if (!$("#soundToggle").checked) return;
+  if (attractAudioHeld()) return;
   unlockAudio();
   if (!state.audio) return;
   const settings = OBJECT_SOUNDS[styleId];
@@ -29064,6 +31077,9 @@ const audioFxDebug = {
   // v5.3 SPECTACLE: round/match music stingers actually started (post every
   // gate) and low-health danger-stem entries (mix crossing 0.5 upward).
   stingerPlays: 0, dangerStemEnters: 0,
+  // 5.4 FIGHT NIGHT: attract audio gate openings and demo bed restarts
+  // under a round card.
+  attractAudioOpens: 0, demoBedRestarts: 0,
 };
 // Live node bookkeeping for the QA node-graph hook: persistent = currently
 // connected long-lived nodes (master bus, beds, music routing), one-shots =
@@ -29074,6 +31090,9 @@ let audioGraph = null;
 let sharedNoiseBuffer = null;
 
 function audioContextRunning() {
+  // 5.4 (sweep #19): the attract gate holds every synth path and both
+  // render beds through this one answer until it opens at a round card.
+  if (attractAudioHeld()) return false;
   return Boolean(state.audio && state.audio.state === "running");
 }
 
@@ -29217,7 +31236,7 @@ const IMPACT_LAYER_TIERS = Object.freeze({
 function impactAudioAllowed() {
   if (rollbackResimulating) return false;
   if (!$("#soundToggle").checked || state.sfxVolume <= 0) return false;
-  if (demoSession.attract && !state.audioUnlocked) return false;
+  if (attractAudioHeld()) return false;
   return true;
 }
 
@@ -29588,7 +31607,7 @@ function playCrowdVoice(cue, amount, { source = "" } = {}) {
   const spec = CROWD_VOICE_CUES[cue];
   if (!spec) return -1;
   if (!$("#soundToggle")?.checked || !(state.sfxVolume > 0)) return -1;
-  if (demoSession.attract && !state.audioUnlocked) return -1;
+  if (attractAudioHeld()) return -1;
   const now = performance.now();
   if (now - (crowdVoiceLastAt.get(cue) ?? -Infinity) < spec.minGapMs) return -1;
   if (!spec.layers && now < crowdVoiceBusyUntil) return -1;
@@ -29664,7 +31683,7 @@ function updateCrowdAudio(dt) {
   // v5.1 STAGE KO BEATS: the cruise ship answers the KO with its horn, once
   // per hold, never the same blast twice running (engine/ambient.mjs
   // pickKoHorn off a hash of the hold tick, so replay and live agree).
-  if (fightLive && soundOn && state.stage === "cruise" && crowdKoHold.startTick >= 0 && koHorn.holdTick !== crowdKoHold.startTick) {
+  if (fightLive && soundOn && !attractAudioHeld() && state.stage === "cruise" && crowdKoHold.startTick >= 0 && koHorn.holdTick !== crowdKoHold.startTick) {
     koHorn.holdTick = crowdKoHold.startTick;
     koHorn.last = pickKoHorn(koHorn.last, presentationHash01(crowdKoHold.startTick, 211));
     playKoHorn(AMBIENT_KO_HORNS[koHorn.last]);
@@ -29798,7 +31817,7 @@ function playMusicStinger(cue, { source = "" } = {}) {
   const spec = MUSIC_STINGERS[cue];
   if (!spec) return -1;
   if (!$("#musicToggle")?.checked || !(state.musicVolume > 0)) return -1;
-  if (demoSession.attract && !state.audioUnlocked) return -1;
+  if (attractAudioHeld()) return -1;
   const bank = musicStingerBank(cue);
   if (!bank.length) return -1;
   let bag = musicStingerBags.get(cue);
@@ -29868,6 +31887,13 @@ function updateMusicLayer(dt) {
   });
   dangerStemLevel = dangerStemStep(dangerStemLevel, target, dt);
   if (previous <= 0.5 && dangerStemLevel > 0.5) audioFxDebug.dangerStemEnters += 1;
+  // 5.4 (sweep #19): the attract bed's fade-in under the opening ROUND call.
+  // bedFadeLevel is only ever below 1 in the demo, so a played match's
+  // syncMusic cadence and volume are byte-identical.
+  if (bedFadeLevel < 1) {
+    bedFadeLevel = bedFadeStep(bedFadeLevel, dt, ATTRACT_BED_FADE_MS);
+    syncMusic();
+  }
   // Only touch the elements when the mix is actually moving or sounding —
   // syncMusic is otherwise the sole owner of fightMusic.volume.
   if (Math.abs(dangerStemLevel - previous) > 0.0005 || dangerStemPlaying) syncMusic();
@@ -30082,7 +32108,8 @@ function updateAmbienceAudio(time, dt) {
   // full level; every other screen is silent (and tears the rig down).
   const wantScreens = state.screen === "fight" || state.screen === "stage";
   const soundOn = Boolean($("#soundToggle")?.checked) && state.sfxVolume > 0;
-  ambienceEngaged = wantScreens && soundOn;
+  // 5.4 (sweep #19): the attract gate holds the ambience rig with the rest.
+  ambienceEngaged = wantScreens && soundOn && !attractAudioHeld();
   if (!ambienceEngaged) {
     ambienceNextEventAt = 0;
     if (ambienceRig) teardownAmbienceRig();
@@ -30331,7 +32358,7 @@ function announcerSay(cue, { delay = 0 } = {}) {
   window.setTimeout(() => {
     showSoundCaption("announcer", null, line);
     if (!$("#soundToggle").checked) return;
-    if (demoSession.attract && !state.audioUnlocked) return;
+    if (attractAudioHeld()) return;
     const take = takeIndex >= 0 ? bank.takes[takeIndex] : null;
     if (!take) return;
     unlockAudio();
@@ -30388,7 +32415,7 @@ function fighterTauntCue(fighter, line = 0) {
   const lineText = FIGHTER_TAUNT_LINES[fighterId]?.[line] || "";
   showSoundCaption("taunt", fighter, lineText);
   if (!$("#soundToggle").checked) return;
-  if (demoSession.attract && !state.audioUnlocked) return;
+  if (attractAudioHeld()) return;
   unlockAudio();
   const bank = fighterVoiceBank(fighterId, "taunt");
   const src = bank?.srcs?.[line];
@@ -30538,6 +32565,8 @@ function syncOrientationGate() {
   document.body.classList.toggle("mobile-landscape", phone && !portrait);
   if (blocked) renderRotateGate();
   setOnlineLocalSuspended(blocked || document.hidden);
+  // 5.4 #31: a phone turned portrait holds the demo the way a hidden tab does.
+  syncDemoHold();
 }
 
 function lockLandscape() {
@@ -30670,7 +32699,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.3");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -30961,6 +32990,10 @@ function titleKeyboard(event) {
 }
 
 window.addEventListener("keydown", (event) => {
+  // 5.4 (sweep #19): any accepted key on the title or during the attract
+  // show arms the audio gate — including the exit key, so the NEXT idle
+  // cycle opens with sound, and the transport keys, which do not exit.
+  armAttractAudio(event);
   // v3.2: the transport claims its keys FIRST. Everything below this
   // treats any keypress during a demo as "the viewer wants out", so without
   // this the slow-motion and frame-step keys would each quit the demo on
@@ -31000,7 +33033,18 @@ window.addEventListener("keydown", (event) => {
 });
 window.addEventListener("keyup", (event) => keys.delete(event.code));
 window.addEventListener("blur", () => { keys.clear(); pressed.clear(); });
-document.addEventListener("pointerdown", () => noteUserActivity(), true);
+// 5.4: the TAP FOR SOUND chip (sweep #19) arms the gate and keeps the show
+// running; a press on the COPY LINK bug (#30) arms it too and must not count
+// as "the viewer wants out"; any other press arms it AND exits (the exit
+// gesture is what arms the next idle cycle). A touch press is not activation
+// in Chrome — its release is, so pointerup arms too (idempotent).
+document.addEventListener("pointerdown", (event) => {
+  if (attractSoundChipPress(event)) return;
+  armAttractAudio(event);
+  if (isDemoShareTarget(event)) return;
+  noteUserActivity();
+}, true);
+document.addEventListener("pointerup", (event) => { armAttractAudio(event); }, true);
 
 window.addEventListener("gamepadconnected", (event) => {
   $("#padStatus").classList.add("connected");
@@ -31370,6 +33414,13 @@ function menuPadLoop() {
 $$('[data-mode]').forEach((button) => button.addEventListener("click", () => startSelect(button.dataset.mode)));
 $("#onlineButton").addEventListener("click", openOnlineLobby);
 $("#demoButton").addEventListener("click", () => startDemo());
+// 5.4 #30: the demo HUD's share bug. `click` only — the capture-phase
+// pointerdown guard above has already let this press through.
+$("#demoShareButton").addEventListener("click", (event) => {
+  event.preventDefault();
+  event.stopPropagation();
+  shareDemoLink();
+});
 // Wave 19: THE PHILLY OPEN bracket screen.
 $("#phillyOpenButton")?.addEventListener("click", showPhillyOpen);
 $("#bracketSize4Button")?.addEventListener("click", () => { bracketSession.setupSize = 4; renderBracketSetup(true); });
@@ -31691,7 +33742,10 @@ $("#trackButton").addEventListener("click", () => {
   advanceTrack();
 });
 fightMusic.addEventListener("ended", () => {
-  if (state.musicChoice === "auto") advanceTrack();
+  // 5.4 (sweep #22): the demo bed loops (see syncMusic), so this only ever
+  // fires for a played AUTO match; the guard keeps a demo from jukeboxing
+  // even if the element's loop flag were ever cleared under it.
+  if (state.musicChoice === "auto" && !demoBedLoops(state.mode)) advanceTrack();
   else {
     fightMusic.currentTime = 0;
     syncMusic();
@@ -31706,6 +33760,8 @@ document.addEventListener("visibilitychange", () => {
   else if (document.hidden && state.screen === "fight" && !state.paused) setPaused(true);
   if (document.hidden) clearIdleDemoTimer();
   else if (state.screen === "title") scheduleIdleDemo();
+  // 5.4 #31: a running demo freezes with the tab and resumes on a beat.
+  syncDemoHold();
   // Release 1.6 LOUD: rAF stops in hidden tabs, so drop the synth beds here
   // rather than letting them drone at their last eased level. The render loop
   // re-eases them when the tab returns; music restart stays syncMusic's job,
@@ -32080,7 +34136,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.3-spectacle",
+  version: "5.4-fightnight",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -32197,6 +34253,8 @@ window.__finalBlowEngine = {
           y: Number(cinematicCamera.y.toFixed(3)),
           rotation: Number(cinematicCamera.rotation.toFixed(5)),
           letterbox: Number(letterboxLevel.toFixed(3)),
+          // 5.4 (sweep #7): the live demo shot id, null in every played match.
+          demoShot: cinematicCamera.demoShot,
         },
       },
       finalBlowArt: {
@@ -32406,6 +34464,7 @@ window.__finalBlowEngine = {
         // R2.0 FAMILY wave 16 counters.
         dialogueExchanges: modeFxDebug.dialogueExchanges,
         dialogueCardsShown: modeFxDebug.dialogueCardsShown,
+        versusCards: modeFxDebug.versusCards,
         winQuoteSelections: modeFxDebug.winQuoteSelections,
         altPalettesBuilt: paletteFxDebug.built,
         altPaletteSides: [...matchPalettes],
@@ -32432,6 +34491,9 @@ window.__finalBlowEngine = {
         handheldFrames: cinemaFxDebug.handheldFrames,
         winSettles: cinemaFxDebug.winSettles,
         impactRecoils: cinemaFxDebug.impactRecoils,
+        demoShots: cinemaFxDebug.demoShots,
+        demoShotFrames: cinemaFxDebug.demoShotFrames,
+        demoKoBars: cinemaFxDebug.demoKoBars,
         // Signed live kick amplitude (screen px along the hit direction).
         // Holds the full kick value for the ~0.3s return, so per-frame peak
         // sampling reads the 2-4px magnitude without racing the decay.
@@ -33285,9 +35347,46 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       // The stage list the attract director shuffles through.
       return Object.keys(stages);
     },
-    demo(seed = 237) {
-      startDemo({ qa: true, seed });
+    // 5.4 FIGHT NIGHT (round-ends): force the show tag ({ format, opener })
+    // of the NEXT card (or of every following card with sticky) — arm it
+    // before qa.demo(seed) to shape the first card. QA only; meta only.
+    demoNextShow(show = null, { sticky = false } = {}) {
+      demoSession.showOverride = show ? { show: { ...show }, sticky: Boolean(sticky) } : null;
+      return demoSession.showOverride;
+    },
+    // 5.4 #30: qa.demo(seed, cycle) and the ?demo=<seed>&cycle=<n> boot router
+    // are the SAME call into startDemo — only the clock differs (manual here,
+    // wall clock from a link). See demoRounds()/demoShareUrl() below.
+    demo(seed = 237, cycle = 1) {
+      startDemo({ qa: true, seed, cycle, source: "qa" });
       return window.__finalBlowEngine.snapshot();
+    },
+    // 5.4 #30: the demo round ledger — one entry per settled round, stamped
+    // with the sim tick it settled on. Pure read (copies).
+    demoRounds() {
+      return demoSession.rounds.map((entry) => ({
+        ...entry, health: [...entry.health], pair: [...entry.pair], movesShown: { ...entry.movesShown },
+      }));
+    },
+    // 5.4 #30: the share link the COPY LINK bug would write (null outside a
+    // demo), and the boot request a query string would parse to.
+    demoShareUrl() {
+      return demoShareUrl();
+    },
+    // 5.4 (sweep #8/#20): the versus card and ring introduction of the
+    // current card — the plan, the beats as they fired (in order, with the
+    // wall ms from the hold's start and the sim tick), the card copy and
+    // the night's standings. Pure read.
+    demoRingIntro() {
+      return {
+        ...demoVersusSnapshot(),
+        holdMs: DEMO_VERSUS_HOLD_MS,
+        artHold: { active: introArtHold.active, floorMs: introArtHold.floorMs, lastReason: introArtHold.lastReason, heldMs: Math.round(introArtHold.heldMs) },
+        standings: Object.fromEntries(Object.entries(demoSession.standings).map(([id, record]) => [id, { ...record }])),
+      };
+    },
+    demoBootRequest(search = location.search) {
+      return parseDemoBootRequest(search);
     },
     demoKnockout(winner = 0) {
       if (!demoSession.active || state.mode !== "demo" || state.screen !== "fight") throw new Error("Start a QA demo first");
@@ -33305,6 +35404,18 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       state.finisherType = 0;
       showResult(side);
       return window.__finalBlowEngine.snapshot();
+    },
+    // 5.4 (sweep #26/#27): the next pair's warm-up — the director's peek,
+    // the art readiness of that pair, the 3D prewarm report. `force` starts
+    // the warm-up now (the round-2 / result-hold sites are the natural ones).
+    demoPrewarm({ force = false } = {}) {
+      if (force && demoSession.active) demoPrewarmNextPair("qa");
+      const next = demoSession.director?.peek?.() || null;
+      return {
+        ...demoPrewarmSnapshot(),
+        next: next ? { cycle: next.cycle, pair: [...next.pair], stage: next.stage, track: next.track } : null,
+        art: next ? window.__finalBlowQa.artReadiness([...next.pair]) : null,
+      };
     },
     demoCycles(count = 1) {
       if (!demoSession.active || state.mode !== "demo") throw new Error("Start a QA demo first");
@@ -33331,6 +35442,25 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
     exitDemo() {
       return exitDemo();
     },
+    // 5.4 #12: the lower third — the line on screen now (by the sim clock),
+    // the bounded recent list, the per-kind tally, the room read and the
+    // round's latches. Pure reads; null outside a demo.
+    demoCommentary() {
+      if (!demoSession.active || !demoSession.commentary) return null;
+      const bus = demoSession.commentary;
+      const current = bus.current(state.simulationTick);
+      return {
+        current: current ? { ...current, tokens: { ...current.tokens } } : null,
+        shown: { text: $("#demoHudLine").textContent, hidden: $("#demoHudLine").hidden, kind: $("#demoHudLine").dataset.kind || "" },
+        room: { text: $("#demoHudRoom").textContent, hidden: $("#demoHudRoom").hidden },
+        allegiance: bus.allegiance(),
+        round: bus.round(),
+        recent: bus.recent(),
+        stats: bus.stats(),
+        kinds: [...DEMO_COMMENTARY_KINDS],
+        painted: hudFxDebug.lowerThirdLines,
+      };
+    },
     // v2.9 FLOW: live read of the demo choreographer's coverage ledger —
     // per-fighter move counts, staged beats, the featured pair/stage and the
     // matchup keys this demo session has already featured. Pure reads.
@@ -33347,6 +35477,30 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
         // attract ledger this session has banked.
         lanes: demoSession.choreo.directives(),
         carry: { ...demoSession.coverageCarry },
+        // 5.4 FIGHT NIGHT (round-ends): the card's show tag and opener
+        // result, the session's Final Blow ledger, the live closer plan and
+        // the bounded log of how every demo round of the session ended.
+        show: {
+          ...(demoSession.show || {}),
+          tier: demoSession.fightersTier,
+          opener: demoSession.show?.opener || "super",
+          openerShown: demoSession.openerShown,
+          openerTick: demoSession.openerTick,
+          openerAction: demoSession.openerAction,
+          // 5.4 SESSION LAYER: the story and the bout (tests pin one of each
+          // story per ten cycles against the director; the probe reads this).
+          story: demoSession.story ? { ...demoSession.story } : null,
+          bout: demoSession.show?.bout ? { ...demoSession.show.bout } : null,
+        },
+        session: demoSessionSnapshot(),
+        choreoStory: demoSession.choreo.story(),
+        closers: {
+          ledger: { ...demoSession.finisherLedger },
+          plan: demoSession.closer ? { ...demoSession.closer } : null,
+          last: demoSession.closerLog.at(-1) ? { ...demoSession.closerLog.at(-1) } : null,
+          log: demoSession.closerLog.map((entry) => ({ ...entry })),
+          decisionShown: demoSession.decisionShown,
+        },
         hasStageWeapon: demoSession.choreo.hasStageWeapon(),
         cyclePairsSeen: [...demoSession.pairsSeen],
         // v2.9 round 4 — THE HONEST HALF OF THE BEAT LEDGER. `beats` above is
@@ -33425,6 +35579,10 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
           dizzy: fighter.dizzyFrames,
           grabbed: Boolean(fighter.grabbed),
           dash: fighter.dashFrames,
+          // 5.4 (round-ends): the KO collapse is a `down` fighter whose
+          // knockdown countdown floors at 1 through the decided round.
+          down: Boolean(fighter.down),
+          knockdown: fighter.knockdownFrames,
           vx: Math.round(fighter.vx),
           tick: state.simulationTick,
         };
@@ -33829,9 +35987,41 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
     // The transport. `qa.demoSpeed()` reads; `qa.demoSpeed(0.25)` sets the
     // rate. It is a TICK CADENCE multiplier — the fixed step it scales the
     // cadence of is never touched, so nothing here can perturb the sim.
+    // 5.4 FIGHT NIGHT (sweep #19/#22/#24): the attract audio gate, where it
+    // opened, the bed's binding/loop/fade/restart state and the last two
+    // dozen fighter-voice takes ("fighter:cue:take/of"). Pure reads.
+    attractAudio() {
+      return {
+        ...attractAudio.snapshot(),
+        held: attractAudioHeld(),
+        attract: demoSession.attract,
+        audioUnlocked: state.audioUnlocked,
+        opens: audioFxDebug.attractAudioOpens,
+        liveAt: attractAudioLiveAt,
+        chip: $("#demoHudSound").hidden ? "" : $("#demoHudSound").textContent,
+        bedTrack: musicTracks[currentTrackIndex]?.title || "",
+        bedLoop: fightMusic.loop,
+        bedPaused: fightMusic.paused,
+        bedFade: Number(bedFadeLevel.toFixed(3)),
+        bedRestarts: audioFxDebug.demoBedRestarts,
+        bedTime: Number((fightMusic.currentTime || 0).toFixed(2)),
+        voiceRecent: fighterVoiceRecent.slice(),
+        voiceBags: fighterVoiceBags.size,
+      };
+    },
     demoSpeed(rate = null) {
-      if (rate !== null) demoSpeed.setRate(rate);
+      if (rate !== null) {
+        demoSpeed.setRate(rate);
+        demoSpeed.lockCadence();
+      }
       return demoSpeedSnapshot();
+    },
+    // 5.4 (sweep #7/#17): the demo camera/cadence director — the beat and
+    // rate the policy answered, the live shot and its envelope, the KO beat's
+    // tick, the seeded shot director's bags/log, and the applied presentation
+    // camera. Pure reads; null-ish outside a demo.
+    demoCamera() {
+      return demoCameraSnapshot();
     },
     demoPause(paused = null) {
       if (paused !== null) demoSpeed.setPaused(paused);
@@ -34701,7 +36891,19 @@ if (pendingOnlineInvite) {
   // Wave 15 PWA shortcuts: ?mode=arcade|survival|daily deep-links from the
   // manifest jump list land past the title, straight into their mode.
   const bootMode = new URLSearchParams(location.search).get("mode");
-  if (bootMode === "arcade" || bootMode === "survival") {
+  // 5.4 FIGHT NIGHT #30: ?demo=<seed>[&cycle=n] (and the ?mode=demo jump-list
+  // shortcut) boots straight into the exhibition — the same startDemo call
+  // qa.demo(seed, cycle) makes, on the wall clock. It is an ATTRACT start on
+  // purpose: a link opens with no user gesture, so the attract rules for
+  // audio apply (nothing tries to unlock, nothing warns), the result hold
+  // shows the cabinet's board, and any press ends the show. A seed that
+  // fails to parse lands on the title, never on a different exhibition.
+  const bootDemo = parseDemoBootRequest(location.search);
+  if (bootDemo) {
+    showScreen("title");
+    suppressImmersivePrompt = true;
+    startDemo({ attract: true, seed: bootDemo.seed, cycle: bootDemo.cycle, source: "url" });
+  } else if (bootMode === "arcade" || bootMode === "survival") {
     showScreen("title");
     suppressImmersivePrompt = true;
     startSelect(bootMode);
