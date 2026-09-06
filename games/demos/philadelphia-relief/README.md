@@ -151,9 +151,9 @@ resolution varies: NJ's 2020 source is one-foot imagery, while the PEMA,
 Delaware and Maryland sources offer finer detail. Regional tiles retain USGS.
 Service URLs and layer selection are in `detail-imagery.js`.
 
-Roof and inspection views first request a 2048 × 1536 preview, then refine to
-4096 × 3072 in Maximum mode. Only the current cell is downloaded; moving to a
-new cell or leaving detail range cancels stale requests. No speculative neighbour
+Roof and inspection views first request a 1024 × 768 preview, then refine to
+4096 × 3072 in Maximum mode. Only the current cell is downloaded; moving beyond the useful coverage of a
+pending cell or leaving detail range cancels stale requests. No speculative neighbour
 exports compete with visible imagery. The map identifies loading versus refining
 and always credits the source actually returned. State-service failures fall back
 to USGS; Philadelphia can also fall back to PEMA. Fallbacks are cached for five
@@ -585,3 +585,10 @@ link it later, add an entry to `assets/nav.js`.
 Application code is MIT, in keeping with the rest of the site. `vendor/three.module*.js`
 is three.js r180, MIT, unmodified. Map data is © OpenStreetMap contributors under
 ODbL 1.0; elevation is from the AWS Terrain Tiles open data set.
+
+
+Panning retains pending cells while their coverage remains useful instead of
+canceling at each snapped grid boundary. Eight recent small previews are cached
+in memory (about 24 MiB decoded), and the previous adjacent GPU tile remains
+underneath the current one. Upgrading a preview to full resolution preserves
+that neighbour, preventing the edge from reverting to the coarse regional image.

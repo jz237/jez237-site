@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090608';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090609';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -139,7 +139,7 @@ const FRAGMENT_SHADER = /* glsl */ `
       min(previousUv.x, 1.0 - previousUv.x),
       min(previousUv.y, 1.0 - previousUv.y));
     float previousMix = smoothstep(0.0, 0.14, previousEdge)
-      * uImageryDetailOn * (1.0 - uImageryDetailBlend);
+      * uImageryDetailOn;
     vec3 previousBase = texture2D(
       uImageryDetailPrev, clamp(previousUv, 0.0, 1.0)).rgb;
     aerialBase = mix(aerialBase, previousBase, previousMix);
@@ -445,24 +445,31 @@ export function createTerrain(THREE, options) {
 
     setDetailImagery(image, bounds, region, immediate = false) {
       const next = makeImageryTexture(THREE, image, false);
-      imageryDetailPrevTex.dispose();
-      imageryDetailPrevTex = hasDetail
-        ? imageryDetailTex : makeImageryTexture(THREE, null, false);
-      uniforms.uImageryDetailPrev.value = imageryDetailPrevTex;
-      uniforms.uImageryDetailPrevBounds.value.copy(uniforms.uImageryDetailBounds.value);
+      const nextBounds = new THREE.Vector4(
+        (bounds.west - region.west) / (region.east - region.west),
+        (region.north - bounds.north) / (region.north - region.south),
+        (bounds.east - region.west) / (region.east - region.west),
+        (region.north - bounds.south) / (region.north - region.south),
+      );
+      const sameCell = hasDetail && nextBounds.equals(uniforms.uImageryDetailBounds.value);
+      if (sameCell) {
+        // A resolution upgrade must not evict the neighbouring tile that keeps
+        // the edge of the view sharp during a pan.
+        imageryDetailTex.dispose();
+      } else {
+        imageryDetailPrevTex.dispose();
+        imageryDetailPrevTex = imageryDetailTex;
+        uniforms.uImageryDetailPrev.value = imageryDetailPrevTex;
+        uniforms.uImageryDetailPrevBounds.value.copy(uniforms.uImageryDetailBounds.value);
+      }
       imageryDetailTex = next;
       uniforms.uImageryDetail.value = next;
       uniforms.uImageryDetailTexel.value.set(
         1 / Math.max(1, image.naturalWidth || image.width || 1),
         1 / Math.max(1, image.naturalHeight || image.height || 1),
       );
-      uniforms.uImageryDetailBounds.value.set(
-        (bounds.west - region.west) / (region.east - region.west),
-        (region.north - bounds.north) / (region.north - region.south),
-        (bounds.east - region.west) / (region.east - region.west),
-        (region.north - bounds.south) / (region.north - region.south),
-      );
-      uniforms.uImageryDetailBlend.value = immediate || !hasDetail ? 1 : 0;
+      uniforms.uImageryDetailBounds.value.copy(nextBounds);
+      uniforms.uImageryDetailBlend.value = immediate || !hasDetail || sameCell ? 1 : 0;
       hasDetail = true;
     },
 
