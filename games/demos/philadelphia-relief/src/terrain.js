@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090610';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090611';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -460,7 +460,11 @@ export function createTerrain(THREE, options) {
         imageryDetailPrevTex.dispose();
         imageryDetailPrevTex = imageryDetailTex;
         uniforms.uImageryDetailPrev.value = imageryDetailPrevTex;
-        uniforms.uImageryDetailPrevBounds.value.copy(uniforms.uImageryDetailBounds.value);
+        if (hasDetail) {
+          uniforms.uImageryDetailPrevBounds.value.copy(uniforms.uImageryDetailBounds.value);
+        } else {
+          uniforms.uImageryDetailPrevBounds.value.set(0, 0, 0, 0);
+        }
       }
       imageryDetailTex = next;
       uniforms.uImageryDetail.value = next;

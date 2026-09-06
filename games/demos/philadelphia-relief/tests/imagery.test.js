@@ -294,3 +294,23 @@ test('tilted South Philadelphia view selects detail for the visible foreground',
   assert.ok(east.lon < pose.lon);
   assert.ok(Math.abs(east.lat - pose.lat) < 1e-9);
 });
+
+
+test('first detail leaves the backdrop visible and refinement keeps the neighbour', async () => {
+  const THREE = await import('../vendor/three.module.min.js');
+  const { createTerrain } = await import('../src/terrain.js');
+  const map = createTerrain(THREE, { meta: { ...terrain, width: 2, height: 2 },
+    grid: new Float32Array(4), macro: new Float32Array(4), quality: 'performance' });
+  const a = detailCellFor(-75.1677, 39.9278, terrain.bounds, 'inspection');
+  const b = detailCellFor(-75.1640, 39.9278, terrain.bounds, 'inspection');
+  const preview = { width: 1024, height: 768 };
+  map.setDetailImagery(preview, a.bounds, terrain.bounds);
+  assert.deepEqual(map.uniforms.uImageryDetailPrevBounds.value.toArray(), [0, 0, 0, 0]);
+  const firstBounds = map.uniforms.uImageryDetailBounds.value.toArray();
+  map.setDetailImagery(preview, b.bounds, terrain.bounds);
+  const previous = map.uniforms.uImageryDetailPrev.value;
+  map.setDetailImagery({ width: 4096, height: 3072 }, b.bounds, terrain.bounds);
+  assert.equal(map.uniforms.uImageryDetailPrev.value, previous);
+  assert.deepEqual(map.uniforms.uImageryDetailPrevBounds.value.toArray(), firstBounds);
+  map.dispose();
+});
