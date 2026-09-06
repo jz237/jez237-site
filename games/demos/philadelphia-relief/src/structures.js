@@ -14,19 +14,23 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090604';
+import { hexToRgb } from './themes.js?v=philly-2026090605';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026090604';
-import { damp } from './geo.js?v=philly-2026090604';
+} from './structures-data.js?v=philly-2026090605';
+import { damp } from './geo.js?v=philly-2026090605';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute float aGround;     // DEM elevation under the structure, metres
   attribute vec2  aInfo;       // (structure height, base offset), metres
   attribute float aYear;       // documented construction year, 0 = undated
   varying float vYear;
+  varying float vHeight;
+  varying float vStorey;
+  varying float vStyle;
   #ifdef LANDMARK
+  attribute float aStyle;
   attribute float aModel;      // which schematic model this vertex belongs to
   varying float vModel;
   #endif
@@ -44,10 +48,14 @@ const VERTEX_SHADER = /* glsl */ `
     #ifdef LANDMARK
     float structural = position.y * uGrow;
     vModel = aModel;
+    vStyle = aStyle;
     #else
     float structural = (aInfo.y + position.y) * uGrow;
+    vStyle = smoothstep(24.0, 65.0, aInfo.x);
     #endif
     vec3 p = vec3(position.x, aGround * uExag + structural * uHScale + 0.5, position.z);
+    vHeight = aInfo.x;
+    vStorey = position.y;
     vWorld = p;
     vElev = aGround;
     vRel = aInfo.x > 0.0 ? clamp((position.y - aInfo.y) / aInfo.x, 0.0, 1.0) : 0.0;
@@ -59,6 +67,7 @@ const VERTEX_SHADER = /* glsl */ `
 const FRAGMENT_SHADER = /* glsl */ `
   precision highp float;
 
+  uniform float uFacade;
   uniform vec3  uWall;
   uniform vec3  uRoof;
   uniform vec3  uGlow;
@@ -79,6 +88,9 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uComparePosition;
   uniform float uViewportWidth;
   varying float vYear;
+  varying float vHeight;
+  varying float vStorey;
+  varying float vStyle;
   #ifdef LANDMARK
   uniform float uSelected;
   uniform vec3  uHighlight;
@@ -100,7 +112,38 @@ const FRAGMENT_SHADER = /* glsl */ `
     float roof = smoothstep(0.55, 0.85, n.y);
     vec3 base = mix(uWall, uRoof, roof);
     vec3 surveyNeutral = mix(vec3(0.18, 0.21, 0.23), vec3(0.34, 0.37, 0.38), roof);
-    base = mix(base, surveyNeutral, uHybrid);
+    // Procedural architectural finishes, illustrative rather than surveyed facades.
+    vec3 tangent = normalize(vec3(n.z, 0.0, -n.x) + vec3(0.00001));
+    float across = dot(vWorld, tangent);
+    vec2 bay = vec2(across / mix(2.6, 3.2, vStyle), vStorey / mix(3.2, 3.8, vStyle));
+    vec2 cell = fract(bay);
+    vec2 aa = max(fwidth(bay), vec2(0.015));
+    float legible = 1.0 - smoothstep(0.65, 1.5, max(aa.x, aa.y));
+    vec2 opening = smoothstep(vec2(0.16), vec2(0.16) + aa, cell)
+      * (1.0 - smoothstep(vec2(0.78) - aa, vec2(0.78), cell));
+    float window = opening.x * opening.y * (1.0 - roof) * legible * uFacade;
+    float variation = fract(sin(floor(vHeight) * 71.17) * 43758.54);
+    vec3 masonry = mix(vec3(0.25, 0.10, 0.065), vec3(0.48, 0.38, 0.27), variation);
+    #ifdef LANDMARK
+    masonry = vec3(0.64, 0.60, 0.49);
+    #endif
+    vec3 glass = mix(vec3(0.018, 0.052, 0.08), vec3(0.09, 0.19, 0.25), max(0.0, n.y + 0.45));
+    vec3 facade = mix(masonry, vec3(0.18, 0.24, 0.28), vStyle);
+    facade = mix(facade, glass, window);
+    float course = (1.0 - smoothstep(0.03, 0.03 + aa.y, cell.y)) * legible;
+    facade = mix(facade, vec3(0.53, 0.49, 0.40), course * (1.0 - vStyle) * 0.55);
+    float cornice = smoothstep(0.96, 0.985, vRel) * (1.0 - roof);
+    facade = mix(facade, vec3(0.48, 0.45, 0.37), cornice * (1.0 - vStyle));
+    vec2 roofCell = fract(vWorld.xz / 18.0);
+    vec2 roofAA = max(fwidth(vWorld.xz / 18.0), vec2(0.015));
+    vec2 vent = smoothstep(vec2(0.34), vec2(0.34) + roofAA, roofCell)
+      * (1.0 - smoothstep(vec2(0.55) - roofAA, vec2(0.55), roofCell));
+    float roofOccupied = step(0.86, fract(sin(dot(floor(vWorld.xz / 18.0), vec2(32.7, 91.2))) * 43758.5));
+    float roofDetail = vent.x * vent.y * roofOccupied
+      * (1.0 - smoothstep(0.2, 0.6, max(roofAA.x, roofAA.y)));
+    vec3 roofFinish = uRoof * mix(0.48, 0.82, variation);
+    roofFinish = mix(roofFinish, vec3(0.12, 0.14, 0.14), roofDetail);
+    base = mix(base, mix(facade, roofFinish, roof), uFacade);
 
     // A touch of darkening toward the base, where streets and neighbours
     // shadow the lower storeys.
@@ -119,7 +162,10 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 color = base * (key + sky + bounce) * uExposure;
     // Keep the aerial overlay chromatically neutral even under the warm dusk
     // sun.  The geometry is a survey aid here, not a second painted city.
-    color = mix(color, surveyNeutral * mix(0.72, 0.92, roof), uHybrid * 0.92);
+    float reflection = pow(1.0 - max(0.0, dot(n, viewDir)), 3.0);
+    color += uSkyColor * reflection * window * vStyle * 0.32;
+    float occupied = step(0.64, fract(sin(dot(floor(bay), vec2(12.9898, 78.233))) * 43758.5));
+    color += vec3(1.0, 0.67, 0.28) * occupied * window * uGlowAmount * 1.8;
 
     // Historical views: documented-newer buildings vanish; undated ones fade
     // into the haze, because a missing date is not a missing building.
@@ -270,8 +316,8 @@ export function createStructures(THREE, options) {
     uViewportWidth: { value: 1 },
   };
 
-  function makeSolidMaterial(landmark = false) {
-    const uniforms = { ...sharedUniforms, uGrow: { value: 1 } };
+  function makeSolidMaterial(landmark = false, facade = true) {
+    const uniforms = { ...sharedUniforms, uGrow: { value: 1 }, uFacade: { value: facade ? 1 : 0 } };
     if (landmark) {
       uniforms.uSelected = { value: -1 };
       uniforms.uHighlight = { value: new THREE.Vector3(1, 0.7, 0.4) };
@@ -308,6 +354,18 @@ export function createStructures(THREE, options) {
     const parsed = parseTier(buffer);
     const originX = projection.lonToX(zone.origin.lon);
     const originZ = projection.latToZ(zone.origin.lat);
+    // Replace only footprints inside an authored landmark footprint, avoiding duplicate volumes.
+    parsed.buildings = parsed.buildings.filter((building) => {
+      let x = 0, z = 0;
+      for (let i = 0; i < building.poly.length; i += 2) {
+        x += building.poly[i]; z += building.poly[i + 1];
+      }
+      const count = building.poly.length / 2;
+      x = x / count + originX; z = z / count + originZ;
+      return !(landmarkModels?.models || []).some((m) => m.replaceRadius > 0
+        && building.height >= m.replaceMinHeight && Math.hypot(x - m.x, z - m.z) < m.replaceRadius);
+    });
+    parsed.count = parsed.buildings.length;
     const packed = extrudeBuildings(parsed.buildings, { originX, originZ, groundAt });
     const geometry = solidGeometry(packed);
     const mesh = new THREE.Mesh(geometry, makeSolidMaterial());
@@ -365,7 +423,7 @@ export function createStructures(THREE, options) {
     }
     if (solidParts.length) {
       const merged = mergeSolids(solidParts);
-      const mesh = new THREE.Mesh(solidGeometry(merged), makeSolidMaterial());
+      const mesh = new THREE.Mesh(solidGeometry(merged), makeSolidMaterial(false, false));
       mesh.name = 'structures-bridges';
       mesh.renderOrder = 21;
       mesh.frustumCulled = false;
@@ -457,6 +515,7 @@ export function createStructures(THREE, options) {
   if (landmarkModels && landmarkModels.vertexCount > 0) {
     const geometry = solidGeometry(landmarkModels);
     geometry.setAttribute('aModel', new THREE.BufferAttribute(landmarkModels.model, 1));
+    geometry.setAttribute('aStyle', new THREE.BufferAttribute(landmarkModels.style, 1));
     landmarkMesh = new THREE.Mesh(geometry, makeSolidMaterial(true));
     landmarkMesh.name = 'structures-landmarks';
     landmarkMesh.renderOrder = 23;
@@ -510,10 +569,7 @@ export function createStructures(THREE, options) {
     const on = !!state.layers.structures;
     group.visible = on;
     const hScale = heightScale(exaggeration, state.structureHeight);
-    const hybrid = state.layers.imagery
-      && (state.era === 'present' || state.compareMode === 'history'
-        || state.compareMode === 'aerial')
-      ? Math.max(0, Math.min(1, (10000 - state.camDist) / 7000)) : 0;
+    const hybrid = 0; // Detailed facades remain opaque over aerial photography.
     if (buildingOutline && selectedBuilding) {
       const shownAsVolume = on && hybrid < 0.98;
       const height = shownAsVolume ? selectedBuilding.height * hScale : 0;

@@ -66,6 +66,16 @@
           "h": 17,
           "base": 34,
           "rot": 0
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 33,
+          "d": 15,
+          "h": 1.2,
+          "rot": 0,
+          "base": 13
         }
       ],
       "built": 1753
@@ -148,6 +158,46 @@
           "h": 20,
           "ridge": 6,
           "base": 8,
+          "rot": 40
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 181,
+          "d": 101,
+          "h": 1.2,
+          "rot": 40,
+          "base": 7
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 63,
+          "d": 51,
+          "h": 1.2,
+          "base": 31,
+          "rot": 40
+        },
+        {
+          "type": "box",
+          "x": -56,
+          "z": 22,
+          "w": 47,
+          "d": 41,
+          "h": 1.2,
+          "base": 27,
+          "rot": 40
+        },
+        {
+          "type": "box",
+          "x": 56,
+          "z": -22,
+          "w": 47,
+          "d": 41,
+          "h": 1.2,
+          "base": 27,
           "rot": 40
         }
       ],
@@ -393,6 +443,499 @@
       "lon": -75.2131,
       "lat": 39.8754,
       "built": 1771
+    },
+    {
+      "id": "city-hall",
+      "landmark": "Philadelphia City Hall",
+      "built": 1901,
+      "facade": "stone",
+      "replaceRadius": 67,
+      "source": "https://www.asce.org/about-civil-engineering/history-and-heritage/historic-landmarks/philadelphia-city-hall/ \u2014 548 ft overall. Courtyard, pavilions and tower proportions are illustrative.",
+      "parts": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": -48,
+          "w": 120,
+          "d": 24,
+          "h": 29,
+          "base": 0
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 48,
+          "w": 120,
+          "d": 24,
+          "h": 29,
+          "base": 0
+        },
+        {
+          "type": "box",
+          "x": -48,
+          "z": 0,
+          "w": 24,
+          "d": 72,
+          "h": 29,
+          "base": 0
+        },
+        {
+          "type": "box",
+          "x": 48,
+          "z": 0,
+          "w": 24,
+          "d": 72,
+          "h": 29,
+          "base": 0
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": -48,
+          "w": 122,
+          "d": 26,
+          "h": 2,
+          "base": 27
+        },
+        {
+          "type": "gable",
+          "x": 0,
+          "z": -48,
+          "w": 119,
+          "d": 23,
+          "h": 10,
+          "base": 29,
+          "ridge": 6
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 48,
+          "w": 122,
+          "d": 26,
+          "h": 2,
+          "base": 27
+        },
+        {
+          "type": "gable",
+          "x": 0,
+          "z": 48,
+          "w": 119,
+          "d": 23,
+          "h": 10,
+          "base": 29,
+          "ridge": 6
+        },
+        {
+          "type": "box",
+          "x": -48,
+          "z": 0,
+          "w": 26,
+          "d": 72,
+          "h": 2,
+          "base": 27
+        },
+        {
+          "type": "gable",
+          "x": -48,
+          "z": 0,
+          "w": 23,
+          "d": 69,
+          "h": 10,
+          "base": 29,
+          "ridge": 6
+        },
+        {
+          "type": "box",
+          "x": 48,
+          "z": 0,
+          "w": 26,
+          "d": 72,
+          "h": 2,
+          "base": 27
+        },
+        {
+          "type": "gable",
+          "x": 48,
+          "z": 0,
+          "w": 23,
+          "d": 69,
+          "h": 10,
+          "base": 29,
+          "ridge": 6
+        },
+        {
+          "type": "box",
+          "x": -49,
+          "z": -49,
+          "w": 27,
+          "d": 27,
+          "h": 5,
+          "base": 27
+        },
+        {
+          "type": "pyramid",
+          "x": -49,
+          "z": -49,
+          "w": 22,
+          "d": 22,
+          "h": 14,
+          "base": 32
+        },
+        {
+          "type": "box",
+          "x": -49,
+          "z": 49,
+          "w": 27,
+          "d": 27,
+          "h": 5,
+          "base": 27
+        },
+        {
+          "type": "pyramid",
+          "x": -49,
+          "z": 49,
+          "w": 22,
+          "d": 22,
+          "h": 14,
+          "base": 32
+        },
+        {
+          "type": "box",
+          "x": 49,
+          "z": -49,
+          "w": 27,
+          "d": 27,
+          "h": 5,
+          "base": 27
+        },
+        {
+          "type": "pyramid",
+          "x": 49,
+          "z": -49,
+          "w": 22,
+          "d": 22,
+          "h": 14,
+          "base": 32
+        },
+        {
+          "type": "box",
+          "x": 49,
+          "z": 49,
+          "w": 27,
+          "d": 27,
+          "h": 5,
+          "base": 27
+        },
+        {
+          "type": "pyramid",
+          "x": 49,
+          "z": 49,
+          "w": 22,
+          "d": 22,
+          "h": 14,
+          "base": 32
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": -45,
+          "w": 25,
+          "d": 25,
+          "h": 40,
+          "base": 35
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": -45,
+          "w": 23,
+          "d": 23,
+          "h": 3,
+          "base": 75
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": -45,
+          "w": 19,
+          "d": 19,
+          "h": 36,
+          "base": 78
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": -45,
+          "w": 22,
+          "d": 22,
+          "h": 3,
+          "base": 111
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": -45,
+          "w": 16,
+          "d": 16,
+          "h": 21,
+          "base": 114
+        },
+        {
+          "type": "pyramid",
+          "x": 0,
+          "z": -45,
+          "w": 14,
+          "d": 14,
+          "h": 15,
+          "base": 135
+        },
+        {
+          "type": "cylinder",
+          "x": 0,
+          "z": -45,
+          "r": 2.5,
+          "h": 17,
+          "base": 150,
+          "segs": 10
+        }
+      ]
+    },
+    {
+      "id": "comcast-technology",
+      "landmark": "Comcast Technology Center",
+      "built": 2018,
+      "facade": "glass",
+      "replaceRadius": 40,
+      "replaceMinHeight": 100,
+      "source": "https://www.fosterandpartners.com/projects/comcast-technology-center/ \u2014 341 m height and industrial vertical campus design; structural ribs and dimensions are illustrative.",
+      "parts": [
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 57,
+          "d": 75,
+          "h": 15,
+          "base": 0
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 47,
+          "d": 61,
+          "h": 235,
+          "base": 15
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 43,
+          "d": 55,
+          "h": 39,
+          "base": 250
+        },
+        {
+          "type": "box",
+          "x": 16,
+          "z": 0,
+          "w": 8,
+          "d": 18,
+          "h": 52,
+          "base": 289
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 30
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 48
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 66
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 84
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 102
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 120
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 138
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 156
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 174
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 192
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 210
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 228
+        },
+        {
+          "type": "box",
+          "x": 0,
+          "z": 0,
+          "w": 48,
+          "d": 62,
+          "h": 1.2,
+          "base": 246
+        },
+        {
+          "type": "box",
+          "x": -23.8,
+          "z": -27,
+          "w": 1.1,
+          "d": 1.8,
+          "h": 234,
+          "base": 15
+        },
+        {
+          "type": "box",
+          "x": -23.8,
+          "z": -9,
+          "w": 1.1,
+          "d": 1.8,
+          "h": 234,
+          "base": 15
+        },
+        {
+          "type": "box",
+          "x": -23.8,
+          "z": 9,
+          "w": 1.1,
+          "d": 1.8,
+          "h": 234,
+          "base": 15
+        },
+        {
+          "type": "box",
+          "x": -23.8,
+          "z": 27,
+          "w": 1.1,
+          "d": 1.8,
+          "h": 234,
+          "base": 15
+        },
+        {
+          "type": "box",
+          "x": 23.8,
+          "z": -27,
+          "w": 1.1,
+          "d": 1.8,
+          "h": 234,
+          "base": 15
+        },
+        {
+          "type": "box",
+          "x": 23.8,
+          "z": -9,
+          "w": 1.1,
+          "d": 1.8,
+          "h": 234,
+          "base": 15
+        },
+        {
+          "type": "box",
+          "x": 23.8,
+          "z": 9,
+          "w": 1.1,
+          "d": 1.8,
+          "h": 234,
+          "base": 15
+        },
+        {
+          "type": "box",
+          "x": 23.8,
+          "z": 27,
+          "w": 1.1,
+          "d": 1.8,
+          "h": 234,
+          "base": 15
+        }
+      ]
     }
   ]
 }

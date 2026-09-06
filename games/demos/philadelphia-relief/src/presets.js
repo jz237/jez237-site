@@ -10,8 +10,8 @@
  * without a renderer.
  */
 
-import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090604';
-import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090604';
+import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090605';
+import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090605';
 
 /** Keys that are angles and must take the short way round when blending. */
 const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
@@ -51,6 +51,27 @@ export const PRESETS = [
     layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
       parks: false, roads: true, rail: false, boundaries: false,
       places: true, landmarks: true, structures: false },
+  },
+  {
+    id: 'architecture',
+    name: 'Center City architecture',
+    blurb:
+      'Stone civic landmarks, glass towers, and brick neighborhoods. ' +
+      'Facade finishes and street widths are illustrative; footprints come from OpenStreetMap.',
+    camera: {
+      camLon: -75.1665, camLat: 39.9532, camDist: 1500, camBearing: 235, camPitch: 68,
+    },
+    settings: {
+      theme: 'dusk', fov: 40, exaggeration: 1.2,
+      sunAzimuth: 208, sunAltitude: 28, keyLight: 1.1, ambient: 0.68,
+      fogDensity: 0.32, glow: 0.16, waterIntensity: 0.85,
+      contourStrength: 0.18, contourInterval: 25,
+      roadOpacity: 0.65, boundaryOpacity: 0.15, labelDensity: 0.28, labelSize: 1,
+      structureDetail: 0.75, structureHeight: 1,
+    },
+    layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
+      parks: false, roads: true, rail: false, boundaries: false,
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'ben-franklin-bridge',
