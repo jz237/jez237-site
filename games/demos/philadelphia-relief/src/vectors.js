@@ -9,7 +9,7 @@
  * together instead of tearing them apart.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090604';
+import { hexToRgb } from './themes.js?v=philly-2026090605';
 
 const LINE_VERTEX = /* glsl */ `
   attribute vec3  aOther;      // the far end of this segment
@@ -22,13 +22,21 @@ const LINE_VERTEX = /* glsl */ `
   uniform float uExag;
   uniform float uLift;         // world units above the surface
   uniform float uNear;
+  uniform float uRoadWidth;
 
   varying float vAlong;
+  varying float vRoadPhase;
+  uniform float uStreetDetail;
 
   void main() {
     vec3 a = vec3(position.x, aElev * uExag + uLift, position.z);
     vec3 b = vec3(aOther.x, aOtherElev * uExag + uLift, aOther.z);
 
+    vec2 roadDir = normalize(b.xz - a.xz + vec2(0.000001));
+    float directionSign = roadDir.x < 0.0 || (abs(roadDir.x) < 0.00001 && roadDir.y < 0.0) ? -1.0 : 1.0;
+    roadDir *= directionSign;
+    vRoadPhase = dot(a.xz, roadDir);
+    a.xz += vec2(-roadDir.y, roadDir.x) * aSide * uRoadWidth * 0.5 * uStreetDetail;
     vec4 va = modelViewMatrix * vec4(a, 1.0);
     vec4 vb = modelViewMatrix * vec4(b, 1.0);
 
@@ -46,7 +54,7 @@ const LINE_VERTEX = /* glsl */ `
 
     vec2 sa = (ca.xy / max(ca.w, 1e-6)) * uResolution;
     vec2 sb = (cb.xy / max(cb.w, 1e-6)) * uResolution;
-    vec2 dir = sb - sa;
+    vec2 dir = (sb - sa) * directionSign;
     float len = length(dir);
     dir = len > 1e-5 ? dir / len : vec2(1.0, 0.0);
     // Called perp rather than normal: three declares a normal attribute for
@@ -54,21 +62,34 @@ const LINE_VERTEX = /* glsl */ `
     vec2 perp = vec2(-dir.y, dir.x);
 
     vAlong = aSide;
-    ca.xy += (perp * aSide * uWidth * 0.5 / uResolution) * ca.w;
+    ca.xy += (perp * aSide * uWidth * (1.0 - uStreetDetail) * 0.5 / uResolution) * ca.w;
     gl_Position = ca;
   }
 `;
 
 const LINE_FRAGMENT = /* glsl */ `
-  precision mediump float;
+  precision highp float;
   uniform vec3  uColor;
   uniform float uOpacity;
   varying float vAlong;
+  varying float vRoadPhase;
+  uniform float uStreetDetail;
 
   void main() {
     // Soften the ribbon edge so thin lines do not crawl when the camera moves.
     float edge = 1.0 - smoothstep(0.55, 1.0, abs(vAlong));
-    gl_FragColor = vec4(uColor, uOpacity * edge);
+    vec3 color = uColor;
+    if (uStreetDetail > 0.01) {
+      float curb = smoothstep(0.74, 0.82, abs(vAlong));
+      float aa = max(fwidth(vAlong), 0.012);
+      float center = 1.0 - smoothstep(0.015, 0.015 + aa, abs(vAlong));
+      float dash = step(0.5, fract(vRoadPhase / 12.0));
+      vec3 street = mix(vec3(0.095, 0.11, 0.12), vec3(0.42, 0.40, 0.35), curb);
+      street = mix(street, vec3(0.74, 0.65, 0.38), center * dash);
+      color = mix(color, street, uStreetDetail);
+      edge = 1.0 - smoothstep(0.94, 1.0, abs(vAlong));
+    }
+    gl_FragColor = vec4(color, mix(uOpacity, 0.94, uStreetDetail) * edge);
     if (gl_FragColor.a < 0.004) discard;
   }
 `;
@@ -268,6 +289,8 @@ export function buildLineMesh(THREE, parts, ctx, options) {
     uniforms: {
       uResolution: { value: new THREE.Vector2(1, 1) },
       uWidth: { value: options.width ?? 2 },
+      uRoadWidth: { value: options.roadWidth || 0 },
+      uStreetDetail: { value: 0 },
       uColor: { value: new THREE.Vector3(1, 1, 1) },
       uOpacity: { value: options.opacity ?? 1 },
       uExag: { value: 14 },

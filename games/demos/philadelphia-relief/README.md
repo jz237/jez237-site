@@ -1,3 +1,17 @@
+## Center City architecture update
+
+“Explore Center City in 3D” opens a close architectural view while Home retains the aerial overview.
+Procedural finishes distinguish brick and stone from glass, add windows, cornice bands, roof
+utility details and selected lit windows at night. These finishes are illustrative, not surveyed.
+City Hall now has a courtyard, pavilions and a 167 m tower; Comcast Technology Center has a
+341 m stepped silhouette and facade ribs. Existing art museum and Independence Hall models
+have added roof trim. Sources and approximation notes live in landmark-models.json.
+
+Near the camera, streets become width-aware asphalt ribbons with sidewalk edges and dashed
+centre markings. Widths and markings are illustrative; alignment uses OpenStreetMap geometry.
+The distant map retains thin cartographic lines. Corrected ribbon orientation prevents twisted
+quads. Facade and roof patterns fade as their projected size becomes too small to read.
+
 ## September 2026 field guide refresh
 
 The opening city view uses high-resolution aerial imagery for real rooftops and street detail.

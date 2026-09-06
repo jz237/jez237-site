@@ -79,7 +79,7 @@ test('landmark models', async (t) => {
       assert.ok(packed.info[v * 2] > 0, 'every part has a height');
     }
     for (const m of packed.models) {
-      assert.ok(m.top > 5 && m.top < 200, `${m.id} top ${m.top}`);
+      assert.ok(m.top > 5 && m.top < 350, `${m.id} top ${m.top}`);
       assert.ok(m.radius >= 10 && m.radius < 400, `${m.id} radius ${m.radius}`);
       assert.ok(m.vertexEnd > m.vertexStart);
       // The per-vertex model index is consistent across the model's range.
@@ -103,4 +103,14 @@ test('landmark models', async (t) => {
     assert.equal(packed.models[0].id, 'b');
     assert.equal(packed.models[0].x, -75.2);
   });
+});
+
+
+test('Center City landmarks retain their referenced heights and facade styles', () => {
+  const hall = models.models.find((m) => m.id === 'city-hall');
+  const tower = models.models.find((m) => m.id === 'comcast-technology');
+  assert.equal(hall.facade, 'stone');
+  assert.equal(tower.facade, 'glass');
+  assert.equal(Math.max(...tower.parts.map((p) => (p.base || 0) + p.h)), 341);
+  assert.equal(Math.max(...hall.parts.map((p) => (p.base || 0) + p.h)), 167);
 });
