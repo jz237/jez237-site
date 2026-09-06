@@ -4273,3 +4273,658 @@ generated sheets; post's spray-can keys stay base cells). Details and
 attributions in the per-item sections above (ext5 install, ext5 ground,
 ext5 air, bookends, ext8 install) and in tests/swing-resolve.test.mjs, which
 now runs every chain at node level with the gate from the shipped manifests.
+
+## v5.3 — SPECTACLE, ITEM SEVEN: THE KIT BANK JOINS THE FAMILY, AND A SPECIAL STOPS CHANGING GENERATION TWICE
+
+`assets/moves/<id>-specials.webp` is the sheet every special, EX, super and
+throw release draws from — `anim(row)` in `engine/fighter-kits.mjs`, four rows
+of four (wind-up / strike / second strike / recover), row 0 the main special
+and its EX, row 1 the throw release and the back special, row 2 the launcher,
+row 3 the super, cell 15 the victory pose. It was built by the base-atlas
+pipeline, so after 5.0 put the swing and the reactions on the unified family
+and 5.2 put locomotion and the bookends there, the KIT bank was the last thing
+on the roster still wearing the generation unified replaced. A special was the
+one beat that still went unified -> base -> unified with the camera on it.
+
+Ten kits, 100 animated moves, one bank each: regenerated image-to-image
+(`tools/swing/gen_specials.py`, openai/gpt-image-2 edit via fal) with IMAGE 1
+the fighter's unified sheet — the identity — and IMAGE 2 his shipped specials
+sheet — the poses — then sliced by `tools/swing/build_sheet.py --bank specials`
+at that fighter's own unified scale, feet on row 314, torso band on column 160,
+colours pulled onto the unified sheet by `color_match.py`. Nine fighters have a
+sheet; the Commissioner has none and never did (his kit poses address his combat
+atlas), so he is absent from `assets/moves/MANIFEST.json` and his 1.02 sheet
+adjust is untouched. No kit changed: same file, same path, same 4x4 grammar.
+
+### THE SHEET SCALE, which is again the finding of the install
+
+A unified or ext sheet normalises on its tallest STANDING drawing. A specials
+sheet has exactly ONE standing cell — the victory pose — so it has no standing
+reference to normalise against, and forcing the unified scale onto the raw does
+not help: the generation draws the figure at whatever size it draws it, and
+measured on the raws that was ±14% across the nine.
+
+It is measured against the sheet it replaces instead. The regeneration redraws
+the SAME 16 actions, so per cell `shipped drawn height / new drawn height` is
+this sheet's scale relative to the shipped one, and the MEDIAN over the sixteen
+is robust to the two or three poses whose height genuinely changed. Times the
+shipped `MOVE_SHEET_ADJUST` — the correction that bank has carried since 2.x —
+every special keeps the world size it ships at today, on the new drawing.
+
+| | shipped | median ratio | IQR of the 16 | new MOVE_SHEET_ADJUST |
+| --- | --- | --- | --- | --- |
+| deathblow | 1.14 | 1.0131 | 17.3% | **1.155** |
+| jez | 1.03 | 0.9823 | 5.2% | **1.012** |
+| alan | 1.06 | 0.9486 | 6.2% | **1.005** |
+| post | 1.02 | 1.0041 | 5.4% | **1.024** |
+| donald | 1.04 | 1.0398 | 10.3% | **1.081** |
+| devil | 1.04 | 0.9664 | 4.5% | **1.005** |
+| ali | 1.04 | 0.9228 | 4.5% | **0.960** |
+| benny | 1.02 | 0.8453 | 9.2% | **0.862** |
+| cyraxx | 1.05 | 0.9103 | 6.4% | **0.956** |
+
+The obvious objection to a height ratio on THIS bank is that a specials cell's
+height is part effect — a taller rubble burst inflates the cell without the
+figure moving. Cross-checked by re-deriving the same median over the eight
+BOOKEND cells only (columns 0 and 3 of every row: the wind-up and the recover,
+the two beats with the least effect on them), the two estimators agree to
+within 3% on all nine: deathblow -2.3%, post -3.1%, cyraxx +1.9%, jez/donald
+-1.3%, alan -0.5%, ali -0.2%, benny -0.3%, devil 0.0%. The all-sixteen median
+ships, for the sample size.
+
+The per-cell half is the slicer's fit restore, the same term `UNIFIED_EXT2..5_CELL_ADJUST`
+carry: a pose whose limbs would leave the 320px cell is fit-scaled about its
+torso column and drawn back up. It is `SPECIALS_CELL_ADJUST` in
+`engine/fighter-kits.mjs`, read through `baseCellDrawAdjust` so BOTH renderers
+get it from the one rule, and a unit test asserts every entry equals the
+manifest's `drawAdjust` for that cell — the table cannot drift from the art.
+Post's cell 6 is the widest at 1.6875 (his ground splash), donald's 6 at 1.5756.
+
+### THE FLOOR, which nobody had measured on this bank
+
+The shipped specials sheets were never registered to a common floor row. Content
+bottoms, measured at alpha >= 24: alan 280–298, benny 287–296, ali 292–296, post
+298–315, donald 303–307, cyraxx/devil/jez 313–315, deathblow 315–319. Cells are
+floor-anchored — `drawAtlasFrame` lands the CELL's bottom edge on the street —
+so an empty band under the feet IS the fighter leaving the ground: alan's
+specials drew his boots up to 36 cell px (~37 world px) above the pavement, and
+five fighters levitated through every special they have. The new sheets bottom
+on row 314 on all 144 cells, the unified family's row, which the manifest
+records per cell and `tests/specials-bank.test.mjs` asserts. This is the part
+that is visibly obvious without a side-by-side.
+
+### THE ACCEPT REVIEW: 143 of 144, and the one that failed
+
+Every cell was compared against the shipped cell it replaces, previews side by
+side at 1:1. One was rejected: **devil:8**, the wind-up of his launcher. The
+shipped cell is his four-legged crouched gather (content height 178); the
+regeneration reared him upright onto one leg (313) — a different action, and a
+foot off the street on a grounded wind-up, which 4.6 exists to refuse.
+
+A rejected cell does not break a move. The shipped generation is kept whole
+under `assets/moves/legacy/<id>-specials.webp` as bank `specials-legacy`, and
+`specialsGenerationPose` in game.js redirects a cell the manifest rejects to it
+at the single pose-resolution choke point — after `swingResolve`, because it is
+the only rule that reads the KIT bank and every chain above it can still land
+on a specials cell as its terminal fallback. The fallback bank keeps the
+SHIPPED sheet adjust (`MOVE_SHEET_LEGACY_ADJUST`), so a rejected cell draws
+exactly as it does today, at the size it does today, in both renderers.
+Deliberately NOT in `AUTHORED_BANKS`: that list is what CINEMA 3D walks to warm
+textures at idle, and this is one cell on one fighter — the sheet is requested
+only for a fighter whose manifest block actually rejects something, and the 3D
+bank is built the first time that cell resolves. A fighter with no manifest
+entry is never gated at all, which is what keeps the Commissioner and the boss
+on their combat atlas.
+
+### THE COLOUR, and the pipeline fix Post forced
+
+dE against each fighter's own unified sheet (`measure_de.py`), whole sheet and
+with EFFECT pixels excluded — a pixel further than 25 dE from every unified
+costume cluster, i.e. lightning, paint, a blade arc, fire, which the unified
+sheets contain none of and so can never match:
+
+| | shipped whole / costume | 5.3 whole / costume | effect px |
+| --- | --- | --- | --- |
+| deathblow | 5.60 / 5.31 | **1.54 / 1.45** | 3.2% |
+| jez | 8.71 / 4.59 | **4.43 / 2.79** | 20.2% |
+| alan | 15.11 / 8.79 | **1.69 / 1.56** | 4.4% |
+| post | 7.80 / 3.56 | **6.35 / 2.14** | 18.9% |
+| donald | 8.39 / 7.62 | **1.74 / 1.78** | 12.3% |
+| devil | 2.74 / 2.71 | **2.08 / 2.06** | 3.2% |
+| ali | 5.00 / 3.83 | **1.73 / 2.84** | 6.1% |
+| benny | 15.33 / 3.56 | **9.85 / 3.27** | 28.3% |
+| cyraxx | 4.49 / 4.55 | **1.74 / 1.96** | 3.9% |
+
+Costume dE 1.45–3.27 where the shipped sheets ran 2.71–8.79, and every
+remaining whole-sheet number is carried by the effect clusters: benny's
+lightning is 28% of his sheet, jez's blade arcs 20%, post's paint 19%.
+
+Post is the reason `build_sheet.py` grew four options. The 4.9 key band treats
+anything within 170 dE of pure magenta as partly background, and the 5.2
+despill calls every magenta-hued pixel key spill — both true until a fighter's
+own EFFECT is pink. His paint measures 110–150 dE from the key, so the default
+slice handed his spray 45–80% alpha and the despill refilled what survived: his
+whole vocabulary came off the sheet as dust. Measured on his raw, the key's own
+cluster is 0–20 dE, the valley runs to ~60 and his paint starts at 60, so his
+sheet is sliced `--keyLow 25 --keySpan 55 --hueSafe 60 --matchShift 5` — a tight
+band on the key, a despill that exempts a genuinely pink pixel (`|R-B| >= 60`;
+key spill is the key's own near-neutral magenta), and a shorter colour-match
+leash so the cluster the unified sheet has no counterpart for is not dragged
+toward a costume colour. The other eight are stock defaults. Sheets ship lossy
+WebP q92 with byte-exact alpha (`encode_sheets.py --src assets/moves --quality 92
+--threshold 1.7`, wdE 0.66–1.65; the 0.7 gate is fitted to the effect-free
+unified sheets and this bank has always shipped lossy per tools/README.md):
+9.52 MB of masters to 3.60 MB on the wire, and the alpha plane is unchanged so
+every cell metric in the manifest is measured on the shipped bytes.
+
+### THE HD VARIANTS ARE RETIRED
+
+`renderer/hd/<id>-specials.webp` (eight sheets, 9,037,480 bytes) were 2x
+upscales of the art this wave replaced. Left in place they would have run the
+CINEMA 3D rig's WHOLE specials bank and the super-portrait close-up on the old
+generation while the 2D canvas ran the new one — the same fault as the seam
+being removed, with an extra download. They are deleted, `HD_SHEETS` lists no
+`-specials` key, `hdSheetPath` answers for the base bank only, and
+`renderer/hd/MANIFEST.json` records what went and why. Regenerating them from
+the new SD masters is a separate job; until then the specials bank is SD in
+both renderers, which is what every other authored bank already does.
+
+### WHAT THE ENGINE DID NOT NEED, written down
+
+No `CELL_BODY_CENTRE` row for either bank. The airborne body-centre anchor is
+ramped by height above the floor, and no animated kit move leaves the ground —
+the roster's air normals and the shared/devil air specials carry no `animation`,
+so the bank is only ever drawn by a grounded fighter and a measured row would be
+dead weight that a future airborne special would inherit unexamined. No
+`CELL_FLOOR_OFFSET` row either: 314 on every cell is the family's own row.
+
+### Verified
+
+Node: all 100 animated kit moves across the ten kits resolve to the bank, all
+sixteen cells of every fighter are reachable (cell 12, the super wind-up, only
+through the charge stance's fallback), and the victory pose is `specials:15` on
+all ten — asserted in `tests/specials-bank.test.mjs`, which also holds the
+manifest shape, the floor row, the two derived tables against the manifest, the
+`AUTHORED_BANKS` exclusion, the game.js and CINEMA 3D wiring and the HD
+retirement. Browser (own headless Chrome, own port, both renderers, zero console
+errors and zero exceptions): jez / benny / donald supers screenshotted mid-move
+in 2D and CINEMA 3D on `specials:13` and `specials:14`, their plain specials on
+`specials:1`, and the devil's launcher held ON the rejected cell — pose
+`specials-legacy:8` in both renderers, the shipped four-legged gather, planted
+and the right size beside alan.
+
+Residuals, for the next wave: post's paint keeps small green flecks on the
+effect edges where the colour match meets the key fringe; the eight HD specials
+sheets are gone rather than regenerated; the Commissioner still has no specials
+sheet of his own, so his kit poses remain his combat atlas — the one place on
+the roster where a special is still drawn by the base generation; and
+`assets/moves` is still requested EAGERLY for the whole roster at module load
+(game.js, unchanged since 1.x), which is 3.60 MB on the wire before a matchup
+is even known, where the unified family goes through `PRELOAD_PLAN` for the two
+fighters actually picked. Seven of the 143 accepted cells move more than 15%
+from the drawn height they ship at today (benny 8/11, deathblow 7/8/9,
+cyraxx 14, post 5) — all of them cells whose new pose or effect extent is
+genuinely a different height, not a scale error; each is a bank-internal
+difference, not a step inside one move.
+## v5.3 — SPECTACLE: THE KO COLLAPSE, OR WHY THE LOSER WAS STANDING UP FOR HIS OWN KNOCKOUT
+
+Routing and a knockdown flag, no art. The integrator's 5.2 screenshot is the
+whole finding: "JEZ WINS · KNOCKOUT" across the middle of the screen, Jez
+holding the ext5 victory — and Benny STANDING BESIDE HIM, feet planted, head
+snapped back, for the full 4.9 s of the curtain call.
+
+It was never a drawing that was missing. `checkKnockout` opens the FINISH
+THEM window by explicitly UN-DOWNING the victim so he is dazed on his feet
+for the stand-off — `down = false`, `knockdownFrames = 0`, `wakeupFrames = 0`,
+`stun = 99`, `hitstunFrames = 5940` — which is exactly right for the six
+seconds the winner is being offered a Final Blow. When that window EXPIRES
+unspent, `finishRound(finishWinner, -1)` flipped the phase to roundover and
+touched none of it. So the pose read fell all the way through to the
+`hitFlash > 0 || hitstunFrames > 21` branch and drew `unified:12` — which
+`swingSubstitute` turns into **ext4:1 head snap** (or ext4:2 body blow if the
+killing hit was LOW or he was crouched) — for every tick of the hold.
+Measured in the browser against the base commit, jez vs benny on Somerset,
+the loser's chain across the edge:
+
+    5.2   finish window   unified-ext4:1                (correct: he is dazed and upright)
+    5.2   roundover       unified-ext4:1 x295           down=false, hitstun 5579, 0 dust, no thud
+
+The ext4 KO lie was already routed and already unreachable:
+`swingSubstitute` maps the unified `knockdown` rung to **ext4:15** under the
+resolver's `ko` context (`roundDecided && health <= 0`), so the drawing 5.0
+paid for only ever needed a fighter who was actually DOWN. Nobody ever put
+one there on a plain KO.
+
+**The collapse is `enterKnockdown` and nothing else.** At the finish ->
+roundover edge, in the `type < 0` branch of `finishRound` (a FINAL BLOW never
+reaches it — it returns through the finisher branch above), the loser is laid
+down through the ordinary knockdown path, so the crumple -> KO-lie handover,
+the prone down-tilt and the settle on the boards all arrive for free in BOTH
+renderers and the sim gains no new field to snapshot. Three fields are
+cleared first, because they are the STAND-OFF's and the pose read is ordered
+dizzy -> hitstun -> down: a body still holding 5940 hitstun frames or a dizzy
+clock would draw a standing reel over a fighter lying on the street.
+
+The decision is three pure functions in `engine/bookends.mjs`, beside the
+intro and the win pose the same file already owns:
+
+  * `koCollapseOnRoundEnd` — fires once, at the edge. The cause comes from
+    `roundEndCause` (announcer.mjs), the same classifier the banner and the
+    "K.O.!" call already read, so a DECISION never lays anyone down, a FINAL
+    BLOW keeps its own script, and a fighter already prone or still airborne
+    is left exactly where he is.
+  * `koCollapseHolds` — true while a decided round's KO lie must not tick
+    away. This is the one that had to exist: `DEFENSE_RULES.knockdownFrames`
+    is 48 and the roundover hold is 294, so left alone the loser stands back
+    up **0.8 s into the winner's curtain call** and plays a wake-up rung off
+    a KO. The countdown still RUNS (the crumple band reads it); it floors at
+    1 instead of 0, so `wakeupFrames` is never armed at all — which is what
+    makes the result screen and the rematch clean rather than a getup being
+    suppressed somewhere downstream.
+  * `koCollapseThudTick` — the single tick the body reaches the boards: the
+    crumple band's last frame, `48 - 7`. The thud and the dust are spent
+    THERE, ~117 ms after the flag, not at the phase edge with the fighter
+    still upright.
+
+`KO_COLLAPSE_CRUMPLE_TICKS` is the 7 the knockdown read has always used; it
+is a named constant now so the landing beat and the drawing cannot drift.
+
+THE LANDING is `spawnKnockdownImpact` at 320 px/s — the game's own body-hits-
+the-floor beat, at the bottom of its force clamp (0.55): a small dust puff
+(measured: 8 motes at the peak, 0 at the edge), a 102 px floor ring, the
+scuff scar, and a thud that resolves `hit-heavy` -> the shared body-hit take
+through the 5.1 per-play jitter. Browser-measured at the landing tick:
+`assets/audio/body-hit.mp3` at playbackRate **0.9369** — a real draw off the
+±8% span, not the file played flat, and `distinctDraw` guarantees the next
+one cannot share it. The KO groan (`knockout.mp3`) still fires at the edge,
+0.117 s ahead of the thud, so the two read as a groan and then a body
+landing rather than one event.
+
+Traced in the browser (jez vs benny, Somerset, the same probe as the 5.2 row
+above) and at node level in `tests/bookends.test.mjs` with the shipped
+manifests as the gate:
+
+    5.3   edge            down=true, knockdownFrames 48, hitstun 0        (phase flips at tick 360 = 6.00 s, unchanged)
+    5.3   roundover       unified-ext4:9 x7 -> unified-ext4:15 x288       thud + dust at kdf 41, one landing only
+    5.3   hold ends       down=true, knockdownFrames 1, wakeupFrames 0     no getup cell (ext4:12 / ext4:13) ever draws
+    5.3   round 2 opens   intro/unified-ext5:9 -> ext5:10                 fresh fighter, health 100, down=false
+    control (decision)    loser stands on unified:0, down=false            a timer win still ends with two fighters up
+    CINEMA 3D             the same two cells, the same lie                 `proneTransform` reads `fighter.down` over the host bridge
+
+Nothing the player can time moved: `state.phaseTime`, `roundWinHoldSeconds()`
+(4.9), the 6 s FINISH THEM window, `DEFENSE_RULES.knockdownFrames` and the
+crowd's KO hold latch (`updateCrowdKoHoldLatch`, keyed on the phase alone)
+are all untouched, and the winner still reads `ext5:11 -> ext5:12` beside the
+body exactly as 5.2 shipped it. The whole change is a drawing and a knockdown
+flag on a round that is already decided.
+
+## v5.3 — SPECTACLE: THE VERIFICATION HARNESS, OR THE FRAME CHAINS ARE A TEST NOW
+
+No art. Every acceptance number in this file above this line was read off a
+screen by a person: the frame chains in the 5.0 section ("verified by frame
+attribution in real play"), the floodlight swell ("measured on the Vet
+canvas"), the crowd's arms going up, the whiff fringe, the decision call. The
+one automated thing that draws anything — `tests/browser-smoke.mjs` — could
+not hold any of it, because it was 3,700 lines of one sequential body: the
+first failing assert aborted the rest, so a broken crowd probe hid the sixty
+checks after it, and re-running one section cost the whole two minutes. That
+is the actual reason the evidence lives in a markdown log. This install turns
+the log into assertions.
+
+### The registry, which is a pure re-wrap
+
+Every body is byte-identical; 788 assertions, unchanged. The 5.2 script's 207
+top-level declarations are hoisted to one `let` block so the sections became
+closures in one scope, and each section is registered as a named probe:
+69 of them, plus six new ones (five 5.1 tells and CINEMA 3D), 75 in all. They run
+in registry order — always, because they share page state on purpose (a probe
+leaves a fight running, a stage picked, reduced motion switched on for the
+offline-boot checks that follow) — but a probe that throws is now recorded
+against its own name and the run carries on. `--only` / `--skip` / `--report`
+/ `--artifacts` / `--list`; `--list` is answered before the server and Chrome
+start, so it is free. Documented in `tests/README.md`.
+
+The first full run under the registry found two pins that were stale rather
+than one: 5.3's stage-reach gave the Janney lot the loose brick where the smoke
+still asserted `weapon === null`, and 5.3's crowd depth gave Somerset one
+street argument where the smoke still asserted zero loop groups. Both are
+pinned by their own unit suites; the smoke had never reported the second one,
+because the first aborted the run. Both pins moved, with the reason written
+beside them.
+
+    5.2   one body, first failure aborts     stage-tailgate red, 61 probes never ran, ~120 s
+    5.3   75 probes, continue on failure     both stale pins reported in one 74 s run
+    5.3   node tests/browser-smoke.mjs --only=crowd,tempo,ambient    8.3 s
+    node  411 unit tests at HEAD -> 434 (probe registry 14, PNG decoder 7, setTimer guard 1, live host contract 1)
+
+### The five 5.1 tells, measured
+
+`ambient-ko-pulse` samples the two authored Vet floodlight centres through
+`getImageData` on the game canvas — [125, 88] and [1230, 232], the glow radius
+growing 90 → 210 with the pulse — as 120 px and 110 px boxes, against a patch
+of plain sky outside every glow and every firework lane as the control. MEDIANS
+over nine painted frames, not peaks and not means: the Vet's sky carries a
+crawling blimp (which only darkens what it crosses) and an ambient firework
+every few seconds (which only brightens, and whose sparks spread nearly
+200 px), so one frame is a sample and a peak picks the firework. The swell
+itself is CONSTANT across the hold — a QA fight freezes the sim clock, so the
+pulse age does not move — which is what makes the median the honest statistic.
+The peak-based first draft of this probe passed four isolated runs and then
+failed inside the full suite when a firework landed in its baseline window; the
+median has held to +/-0.2 across six runs.
+
+    floodlight A (125, 88)     45.6 quiet -> 63.0 KO      +16.5 .. +18.4
+    floodlight B (1230, 232)   66.3 quiet -> 111.8 KO     +45.1 .. +47.5
+    both regions, mean                                    +31 .. +33   (5.0 read +27 by hand)
+    plain sky (1000, 15)       34.3 quiet -> 35.9 KO      +1.5 .. +1.8
+    asserted                   mean >= 15, each >= 10, sky < 8, each flood > 3x sky
+
+Then all six stages, driven from Node so each gets real frames either side of
+its KO — the KO kind and the crowd's hold both latch from the DRAW path, which
+is the trap that made the first three attempts at this probe read `big` where
+they should have read `ko`: calm before (surge 0), surge 1 and `pulseKind: ko`
+after, on somerset, vet, wildwood, buffet, cruise and janney alike.
+
+`crowd-ko-hold` reads the latch the way a player sees it — after painted
+frames, not after a `qa.step`: hold 0 → 1, held reaction 1.4, the crowd split
+into 9 cheering / 14 wincing / 9 flinching on the tailgate, one voiced take
+(`roar-3`) and no take following itself, then 40 ticks of sim and the hold has
+aged with it. It waits out the roar's 2,000 ms rate limit first, so "the KO
+plays a take" is an assertion rather than a race against whichever probe landed
+a KO before it.
+
+`tempo-tells` scripts a jab into thin air at 700 px: `whiffTells` +1, the tell
+walking `none -> whiff -> rearm -> none` at ticks 8 / 20 / 24, strength 0.7,
+profile `jez-neon-jab`. The drawn counters are per-frame, so they are sampled
+over real frames while the QA fight holds the sim clock still — 1 fringe and 2
+ghosts on the whiff, 1 flash on the re-arm, and a second press inside the gap
+producing exactly one `rearmDrop`, one `rearmClick` and one drop flash.
+
+`announcer-decision` needed a hook. The clock's whole voice — the once-per-round
+TEN SECONDS call at :10, the synthesised tick per displayed second under it,
+the time-over decision at :00 — was unreachable, because a round starts at 99
+seconds and no test waits 89 of them. `__finalBlowQa.setTimer(seconds)` writes
+`state.timer` the way the sim does (whole seconds, carry cleared, `updateHud()`
+left to book the edge) and refuses anything that is not a QA fight:
+`state.qaManualMode` is set by `qa.fight()` / `qa.training()` and cleared by
+every real match start, so the probe proves the guard by starting a match from
+the menu and watching `setTimer` throw before it uses it. Walked in ~30 ms:
+
+    setTimer(11)      HUD 11        clockCallouts +0   timerTicks +0
+    step(1.05)        HUD 10        clockCallouts +1   timerTicks +1    announcerCalls +1
+    step(11)          HUD 00        clockCallouts +1   timerTicks +11   decisionCalls +1, phase roundover
+    invariant                       clockTicksVoiced == timerTicks (11)
+
+`pose-trace-chains` is the one that closes the 5.0 loop. `qa.pose()` resolves
+through the same `fighterAnimationPose` both renderers call, and
+`recordPoseTrace` sits at the end of it — so stepping one tick and asking for
+the pose records the transition with no rendered frame and no tick counting at
+all. Chains are asserted as an ordered PREFIX, never a length or a timing, so
+tempo tuning cannot break them. Four of the five come back exactly as this file
+recorded them by eye in 5.0. The fifth has moved, and the doc was wrong:
+
+    jab          ext2:0 -> ext3:0 -> ext3:2 -> ext2:1 -> unified:7                       as written in 5.0
+    heavy kick   ext:6 -> ext2:6 -> unified:6 -> ext3:14 -> ext3:11 -> ext2:7 -> unified:7   as written in 5.0
+    crouch jab   ext2:8 -> ext3:4 -> ext2:9 -> unified:7                                 as written in 5.0
+    sweep        ext2:10 -> ext3:5 -> ext3:15 -> ext2:11                                 as written in 5.0
+    air kick     ext3:8 -> ext3:7 -> motion3:4 -> ext5:6 -> ext3:10 -> unified:6          5.0 wrote the fourth cell as ext3:8
+
+5.2 LOCOMOTION gave the jump its own ext5 cells, and the return out of the
+descent became `unified-ext5:6` where 5.0 had drawn `unified-ext3:8` again. The
+5.0 note's parenthetical still holds: `motion3:4` is the one cross-generation
+cell left on the whole set, and the probe asserts that as a rule — every ground
+chain is unified-family end to end, and the air arc's single exception is
+written out by name rather than tolerated.
+
+### CINEMA 3D had never been booted by a test
+
+`renderer/three` is ~9,000 lines across 17 files. No test imported it, the
+smoke had no `?renderer=3d` probe, and 4.3 Mesh Fighters and 4.8 Front Row
+therefore shipped with no automated check at all. The `cinema-3d` probe runs
+last, because it reloads the page. Two things had to be put back before it
+could: the mobile section leaves the quality governor on `battery`, which
+`cinema3dAllowed()` refuses outright, and the fatality section leaves reduced
+motion on. Measured on Somerset in headless Chrome — through SwiftShader on the
+smoke's existing flags, no `--use-angle` needed:
+
+    stats()          241 draw calls, 4,211 triangles, 36 programs, 10 crowd billboards, 22 sheet banks
+    host contract    39 members (17 required, 22 optional), 0 missing on the LIVE bridge
+    world objects    forced stage weapon drawn (phase "ground"), live projectile drawn
+    artifact         cinema-3d.png, mean luma 59.6, 67% of the frame carrying image
+    console          0 errors, 0 exceptions, 0 failed responses across the whole 75-probe run
+
+The contract read is new: `tests/cinema-host.test.mjs` pins the list against
+the source at both ends, which cannot see the object the renderer is actually
+holding, so `__finalBlowThree.hostContract()` reports
+`missingHostMembers(host)` off the live bridge and the probe asserts it comes
+back empty. The screenshot is measured rather than just kept, because a WebGL
+canvas cannot be read back from the page — `Page.captureScreenshot` is the only
+honest read, so the PNG is decoded in Node (`tests/helpers/png-luma.mjs`,
+zlib only) and pinned against PNGs built byte by byte, one per filter type
+(`tests/png-luma.test.mjs`). A wrong decoder would turn "the 3D world is black"
+into a green test, which is precisely the failure the probe exists to catch.
+
+### What this install did not do, written down
+
+No art, no audio, no gameplay. Nothing in `game.js` changed except the new
+`setTimer` hook. No pin moved except the two stale ones named above, each with
+the reason beside it. The probes measure what already shipped; where a
+measurement disagreed with this file, the file is corrected here and the
+number in the probe is the one that was measured, not the one that was hoped
+for. The 45 reviewed takes and the four music tracks were not touched.
+
+Residuals, for the next wave: the `cinema-3d` probe is 31 s of the 75 s run,
+almost all of it the reload and the 3D module's first-frame sheet build (the
+5.1 #40 finding); the probes still share page state, so a `--only` run of a
+late probe boots from the title screen rather than from the state its
+neighbours would have left it in — every new probe here is written to be
+self-contained for that reason, but the 69 inherited ones are not; and the
+2D/3D pose parity assert from sweep #54's proposal is not written — the 3D
+fighter layer does not report the bank/frame it used, so there is nothing to
+compare `qa.pose()` against yet.
+## v5.3 — SPECTACLE: THE PINS BECOME IMPORTS, OR WHAT 27 REGEXES OVER game.js WERE NOT CHECKING
+
+No art, no routing, nothing on screen. This is the half of sweep item #52
+that pays now: the pieces of `game.js` the unit suite was pinning by REGEX
+OVER ITS SOURCE TEXT, moved into engine modules and asserted directly.
+
+The reason it is worth an install of its own is the failure mode. A pin like
+
+    assert.match(gameSource, /if \(bank === UNIFIED_EXT3_BANK \|\| bank === UNIFIED_EXT4_BANK \|\| bank === UNIFIED_EXT5_BANK\) return swingCellDrawable\(fighterId, cell, bank\);/);
+
+passes when those characters are present. It passes if the ladder above it
+has been reordered so the line is unreachable. It passes if `swingCellDrawable`
+now reads the wrong mask. It FAILS if somebody wraps the line at 100 columns.
+It is a test of the spelling and not of the behaviour, and the v5.0 gate — the
+one thing standing between a player and the inverted ext4 air-hit cell — had
+no other test at all (sweep #50). There were **27 such assert lines** across
+nine test files; all 27 are gone, replaced by assertions on the extracted
+functions plus the small wiring pins that are all a source pin is honestly
+good for ("game.js hands this gate to that table").
+
+### What moved, and what deliberately did not
+
+Four extractions. Every one of them is a DECISION — a table lookup, a string,
+an ordering, a precedence — and everything that touches the DOM (the `Image`
+constructor, the manifest `fetch`, the padded ext canvas, the decode tracker,
+the drawings themselves) stayed exactly where it was and is handed in.
+
+**`engine/banks.mjs` (236 lines)** — the bank plumbing:
+
+  * `BANK_GATE_KIND` / `bankCellDrawable`, the drawable-gate ROUTING that was
+    an if-ladder. A new bank is a row now rather than a branch inserted in
+    the right place. The trailing ternary's behaviour is preserved as the
+    table's default: an unknown bank name degrades to bank 1's gate, which
+    answers honestly (no mask, no draw) instead of drawing an unmasked cell.
+    One trap the extraction found and the test now pins: motion3 is addressed
+    by POSE NAME and answers with the resolved FRAME INDEX, so a `Boolean()`
+    on this path would have retired frame 0 of every motion3 sheet. The gate's
+    answer is passed through verbatim.
+  * `SWING_BANK_LIST` / `SWING_MASK_KEY` / `SWING_SUFFIX` / `swingSheetPath` —
+    the three tables that are the entire difference between ext3, ext4 and
+    ext5. The loader, the gate, the readiness switch, the palette source and
+    the preload all read the same three now, so they cannot drift apart.
+  * `ALT_ATLAS_TABLE` / `altAtlasKey` / `altAtlasSource` — which atlas table a
+    palette remap reads and what key it caches under. This is the one where a
+    wrong answer is INVISIBLE until a player picks palette 2: the cache would
+    serve the wrong sheet under the right key. The test asserts that every
+    bank resolves to its own table, that the three swing sheets (which share
+    one table) cannot share a key, and that the boss's specials still
+    collapses onto the base key rather than caching the same pixels twice.
+  * `bankPreloadPlan` — the v5.1 #35 request order, which was previously the
+    SHAPE OF A LOOP. It is a list now: the unified family first and in family
+    order (main -> ext -> ext2 -> ext3 -> ext4 -> ext5) per fighter, the
+    per-beat motion banks after, the bonus banks last and only for a fighter
+    whose manifest says he has one. A fighter who is not 16/16 contributes
+    nothing at all, ext sheets included — the manifest-BEFORE-sheet order that
+    keeps a fighter with no sheet in the repo from 404ing.
+
+**`engine/crowd-reaction.mjs` (139 lines)** — the crowd's reaction machine.
+Four rules that were four places in `game.js` (the stir at one end of the
+file, the decay line inside the fixed step, `resetCrowd` beside the crowd
+builder, the KO-hold latch a thousand lines away beside the round-win beat)
+and are one machine: `stirCrowdReaction` (the 1.4 ceiling, the author, the
+splat mark; it REPORTS the ambient pulse kind and the swell rather than
+latching either), `decayCrowdReaction` (0.016 a tick — 1.4 to 0 in **88
+ticks / 1.47 s**, and the author goes with it so the next authorless stir
+cannot inherit the last hit's side), `resetCrowdReaction`, and the KO hold
+(`crowdKoHoldLive` / `updateCrowdKoHoldLatch` / `crowdKoHoldAge` /
+`crowdDrawReaction`). The FIELD NAMES are unchanged and the functions take
+the live `state` object: `state.crowdReaction`, `state.crowdStirSide`,
+`state.crowdSplatX` and `state.crowdSplatTick` are read by the 2D crowd draw,
+the CINEMA 3D billboards, the crowd audio bus, the QA snapshot and the browser
+smoke probe, and renaming them for tidiness would have been a user-visible
+change dressed as a refactor.
+
+**`engine/pose-precedence.mjs` (93 lines)** — the contact pose ladder as a
+pure function over a fighter snapshot. Four branches whose ORDER is the whole
+behaviour: standing blockstun, crouch blockstun, the flash on a held guard,
+the flash on a hit. Written as an if-chain they read as four independent
+tests; they are not — blockstun outranks the flash because blockstun is the
+fact and the flash is the decoration (both are set on the tick a hit is
+blocked), and the crouch case is a separate branch rather than a flag because
+the authored flinch is a STANDING cover. `blockstunPhase` came out with it,
+and that turned up a THIRD copy of the same arithmetic: the guard-flinch exit
+bridge in `fighterMotionTransform` was recomputing it inline, so the transform
+and the drawing under it were two expressions that merely happened to agree.
+They read one helper now.
+
+**`engine/announcer.mjs` (+56 lines)** — `bannerAnnouncerPlan`, the rest of
+`announcerSpeakBanner`'s ladder. w51 moved the round-END call into the engine
+and left the banner -> cue map inline, where nothing tested two facts that
+are silent when broken: **ROUND 3 and up speak `finalround`** (there is no
+`round3` bank, so a naive `round${n}` would speak nothing at all), and the
+text-only " WINS" fallback books the fighter's NAME bank and never `-wins`,
+because without the round/match facts it cannot honestly claim he won the
+match. The roster lookup is passed in, so the file still knows nothing about
+the roster.
+
+Not moved, on purpose: the ext sheet's padded canvas, `hdSheetPath`,
+`bankSheetAdjust`, `specialsGenerationPose` and every atlas table. They are
+either DOM or already tested.
+
+### Proof, which for a no-op wave is the whole deliverable
+
+**The unit suite: 411 -> 434 tests, all green.** 23 new (8 banks, 7 crowd
+reaction, 6 pose precedence, 2 announcer) and 27 source-regex asserts retired.
+
+**Node trace of the shipped chains, before and after.** The v5.0 acceptance
+evidence in this file is a set of frame chains read off real play. They are
+resolved here through the beat tracks, `resolveMotionPose` and `swingResolve`
+with a gate built from the shipped manifests — and, on the after side, routed
+ENTIRELY through the extracted table. Ten fighters x eight chains (jab, heavy
+kick, crouch jab, sweep, air kick, air punch, standing block, crouch block),
+**80 lines, byte-identical, tick counts included**. Jez's, for the record:
+
+    jab           ext2:0 x4 -> ext3:0 x5 -> ext3:2 x2 -> ext2:1 x2 -> unified:7 x2 -> unified:0 x2
+    heavy kick    ext:6 x4 -> ext2:6 x3 -> unified:6 x5 -> ext3:14 x6 -> ext3:11 x8 -> ext2:7 x5 -> unified:7 x5 -> unified:0 x7
+    crouch jab    ext2:8 x4 -> ext3:4 x5 -> ext2:9 x5 -> unified:7 -> unified:0 x3
+    sweep         ext2:10 x11 -> ext3:5 x5 -> ext3:15 x9 -> ext2:11 x6 -> unified:7 x6 -> unified:0 x9
+    air kick      ext3:8 x5 -> ext3:7 x4 -> motion3:4 x4 -> ext5:6 x5 -> ext3:10 x4
+    air punch     ext3:8 x5 -> ext3:6 x5 -> motion3:4 x3 -> ext5:6 x5 -> ext3:10 x3
+    block stand   ext4:0 x8 -> unified:7 x9
+    block crouch  ext5:13 x8 -> ext3:12 x3 -> unified:5 x6
+
+`tests/banks.test.mjs` carries five of those chains as a permanent assertion,
+so the routing table is now checked BY the doc's own evidence.
+
+**Node trace of the four decisions, before and after.** The pre-extraction
+code was transcribed literally from `4baa18d`'s `game.js` — and each
+transcription is checked against that file's source text, so it cannot have
+drifted — and compared against the modules over the whole input space: every
+bank x cell x gate answer for the routing (including the frame-index and
+frame-0 cases), every bank x boss-share x missing-sheet combination for the
+alt-palette source, 64 gate maskings x 2-5 fighters for the preload order,
+all 1,440 snapshots of the contact ladder, twelve scripted 400-tick rounds of
+the crowd machine (stir, decay, hold latch and drawn reaction compared every
+tick), and 25 banner strings. **11,871 comparisons, 0 mismatches.**
+
+**One deliberate difference, written down.** `resetCrowd` cleared the
+reaction, the author and the splat TICK and left `crowdSplatX` holding the
+previous round's impact point; `resetCrowdReaction` clears all four. Nothing
+could read the stale value — `crowdFlinchLevel` is 0 past 26 ticks and the
+tick was `-1e9` — so the only place it ever showed was the debug snapshot's
+`splat.x`, beside an age of a billion. A machine that resets three of its
+four fields is a bug waiting for a fourth reader. Everything else in the
+11,871 comparisons is identical.
+
+`game.js` is 33 lines of code shorter and 54 lines of comment longer, which
+is the honest trade: the decisions left, and a note saying where they went
+stayed. The point was never the line count.
+
+### Left for the next pass, written down
+
+The sweep item's other half is untouched: crowd + ambient (`resetCrowd`
+through `drawCrowd`) and the voice/soundstage block are still inline, and the
+`assert.match(gameSource, ...)` count over the whole suite is still in the
+hundreds — most of it legitimate wiring pins, some of it not. The three new
+modules are also NOT in `sw.js`'s `SHELL` list, exactly like `engine/crowd.mjs`
+and `engine/modes.mjs` before them; the list is a curated subset with a
+32-entry cap in `tests/service-worker-guard.test.mjs`, so widening it is its
+own decision rather than a side effect of this one.
+
+## v5.3 — SPECTACLE: THE WAVE IN ONE PLACE
+
+Ten items, the last of the post-5.0 sweep:
+
+SPECIALS ON THE FIGHTER'S OWN GENERATION. Every special, EX, super, throw
+release and victory pose for the nine fighters who own a specials sheet is
+redrawn in the unified generation (image-to-image from the fighter's own
+unified sheet with the shipped specials sheet as the pose reference), at the
+same 4x4 grammar the kits address, so no kit changed. The shipped generation
+is kept whole as `specials-legacy` and a per-cell manifest gate falls back to
+it (143 of 144 cells accepted; the devil's launcher wind-up rejected).
+Costume-only dE fell from 8.13 to 3.44 mean. A defect nobody had measured:
+the shipped specials sheets were never floor-registered — five fighters
+levitated up to ~37 px through every special; all 144 new cells bottom on
+row 314. The eight 2x HD specials sheets were retired rather than left
+running the old generation under CINEMA 3D.
+
+CINEMA 3D STOPS BEING A DEAD CARD. The five generic 3D stages had an empty
+`update()` and the KO pulse never even latched with the toggle on. Now the
+same plate-coordinate practicals the 2D layer paints (the Vet's two
+floodlights at [125,88] and [1230,232], the buffet's five pendants, Somerset's
+ten lights) answer the pulse in 3D with real spill lights, fireworks fire on
+the same two shots, and the element flipbooks, charge glow, dash afterimages,
+the 2D particle pool and the battle-damage decals all reach the 3D sprites.
+Measured live on the Vet: practical peak 1.94 against a rest level of 0.
+
+THE REST. The crowd has two halves that react differently (a seeded favourite
+per round, a wince for a rival's hit, flinches near a wall splat, flashbulbs
+only from painted people who actually hold a phone) and Somerset finally has
+a living crowd. Janney gets a loose brick, every stage its own arrival
+choreography, and the scars come in flavours and reach the 3D floor as decals.
+Two missing stage beds are composed (wildwood, cruise), with round/match/
+decision stingers and a low-health stem. The wake-up keeps a crouch hurtbox
+for its last six frames and the 40-frame throw immunity is reserved for
+throws, so okizeme and command grabs exist; a whiffed throw has real recovery
+and a tech window. The title is PLAY / LEARN / MORE with a coach card that
+reads the last fight's damage digest and names one lesson. And the browser
+smoke is a registry of 75 named probes with `--only` / `--skip`,
+continue-on-failure and a CINEMA 3D probe; four blocks of game.js became
+tested engine modules.
+
+A plain KO now puts the loser on the boards: the Final Blow window used to
+expire with the loser standing, drawing a hit cell through the whole 4.9 s
+curtain call. He crumples, lands with a thud and lies flat until the round
+ends.

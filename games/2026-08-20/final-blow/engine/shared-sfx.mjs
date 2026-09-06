@@ -155,6 +155,15 @@ export const STAGE_WEAPON_CLATTER = Object.freeze({
     bounces: { count: 3, filterType: "bandpass", freq: 3200, q: 1.5, seconds: 0.028, peak: 0.03, gap: 0.085 },
     roll: null,
   }),
+  // 5.3: a half brick. No ring at all — a dead masonry slap, two dull
+  // bounces off the rubble and a gritty scrape as it skids to rest. The
+  // heaviest thud in the set (0.055 against the pigeon's 0.045).
+  brick: Object.freeze({
+    rings: [],
+    thud: [98, 38, 0.13, 0.055],
+    bounces: { count: 2, filterType: "lowpass", freq: 700, q: 0.6, seconds: 0.045, peak: 0.034, gap: 0.13 },
+    roll: { delay: 0.26, seconds: 0.28, filterType: "bandpass", freq: 1800, freqEnd: 900, peak: 0.011 },
+  }),
   // A souvenir cup: a hollow plastic clunk that bounces twice and rolls.
   cup: Object.freeze({
     rings: [["triangle", 620, 480, 0.12, 0.04]],
@@ -238,6 +247,58 @@ export function rearmClickParams({ draw = 0, level = 1 } = {}) {
       peak: round4(0.016 * level),
       attack: 0.002,
     },
+  };
+}
+
+/**
+ * 5.3 CLOSE RANGE — the clinch-break snap. The pre-contact throw tech already
+ * has the reviewed `block` take under it; the new REACTION tech (breaking a
+ * hold that had already started) needs to sound different or the player
+ * cannot tell the two reads apart. This is a synthesised layer over that take:
+ * a short cloth/grip rip (band-passed noise sweeping DOWN, the opposite
+ * direction to the dash scuff so the two never blur) plus two detuned square
+ * partials for the shove. `draw` comes from distinctDraw, so two clinch techs
+ * in a row can never share a pitch — the never-repeat-back-to-back rule the
+ * shared pool already lives by.
+ */
+export function clinchTechBreakParams({ draw = 0, level = 1 } = {}) {
+  const spread = clamp(draw, -1, 1);
+  const detune = 1 + spread * 0.11;
+  return {
+    rip: {
+      seconds: round4(0.115 * (1 - spread * 0.1)),
+      filterType: "bandpass",
+      freq: round4(1750 * detune),
+      freqEnd: round4(520 * detune),
+      q: 1.5,
+      peak: round4(0.052 * level),
+      attack: 0.003,
+    },
+    partials: [
+      {
+        wave: "square",
+        from: round4(268 * detune),
+        to: round4(126 * detune),
+        seconds: 0.1,
+        peak: round4(0.038 * level),
+        attack: 0.002,
+        filterType: "lowpass",
+        freq: round4(1200 * detune),
+        q: 0.7,
+      },
+      {
+        wave: "square",
+        delay: round4(0.028 * (1 + spread * 0.2)),
+        from: round4(402 * detune),
+        to: round4(196 * detune),
+        seconds: 0.08,
+        peak: round4(0.024 * level),
+        attack: 0.002,
+        filterType: "lowpass",
+        freq: round4(1600 * detune),
+        q: 0.7,
+      },
+    ],
   };
 }
 
