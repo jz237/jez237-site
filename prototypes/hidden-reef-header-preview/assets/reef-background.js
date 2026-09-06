@@ -1,6 +1,9 @@
 (function() {
   'use strict';
 
+  const reefAssetBase = new URL('.', document.currentScript.src);
+  const waterAsset = function(name) { return new URL('water-lab/' + name, reefAssetBase).href; };
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const motionScale = prefersReducedMotion ? 0 : 1;
   const canvas = document.querySelector('[data-reef-background]');
@@ -42,7 +45,7 @@
     const style = document.createElement('style');
     style.id = 'reef-background-glass-style';
     style.textContent = [
-      '.has-reef-background{background:#03182c url("/assets/water-lab/clear-reef-water-gpt-image-2.webp") center top/cover fixed no-repeat!important;}',
+      '.has-reef-background{background:#03182c url("' + waterAsset('clear-reef-water-gpt-image-2.webp') + '") center top/cover fixed no-repeat!important;}',
       '.has-reef-background body{background:transparent!important;}',
       '.has-reef-background .page{background:transparent!important;}',
       '.has-reef-background .header:not(.masthead),',
@@ -429,8 +432,8 @@
       image.src = source;
     }
 
-    loadTexture(0, 'uClear', '/assets/water-lab/clear-reef-water-gpt-image-2.webp', 'clear');
-    loadTexture(1, 'uDeep', '/assets/water-lab/deep-aquarium-water-gpt-image-2.webp', 'deep');
+    loadTexture(0, 'uClear', waterAsset('clear-reef-water-gpt-image-2.webp'), 'clear');
+    loadTexture(1, 'uDeep', waterAsset('deep-aquarium-water-gpt-image-2.webp'), 'deep');
 
     function resizeWaterCanvas() {
       const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
