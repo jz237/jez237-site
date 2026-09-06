@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/games/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026090407" />
+<link rel="stylesheet" href="app.css?v=philly-2026090601" />
 </head>
 <body data-theme="dusk">
 
@@ -102,22 +102,26 @@
   </div>
 </header>
 
+<nav class="explore-nav" aria-label="Explore and customize">
+  <button type="button" id="openExplore" aria-controls="shots">Explore places <span aria-hidden="true">↗</span></button>
+  <button type="button" id="openCustomize" aria-controls="studio">Customize <span aria-hidden="true">☷</span></button>
+</nav>
 <!-- ── control studio ──────────────────────────────────────────────────── -->
-<section id="studio" class="panel studio" aria-labelledby="studioTitle">
+<section id="studio" class="panel studio collapsed" aria-labelledby="studioTitle">
   <header class="panel-head">
-    <h2 id="studioTitle">Control studio</h2>
+    <h2 id="studioTitle">Customize the map</h2>
     <button type="button" class="panel-toggle" id="studioToggle"
-            aria-expanded="true" aria-controls="studioBody">
+            aria-expanded="false" aria-controls="studioBody">
       <span class="panel-toggle-label">Hide</span>
     </button>
   </header>
   <div class="panel-body" id="studioBody">
-    <div id="studioGroups"></div>
     <div class="control-group">
       <h3 class="group-head">Layers</h3>
       <div id="layerToggles" class="layer-grid"></div>
       <div id="floodLegend" class="legend" hidden></div>
     </div>
+    <div id="studioGroups"></div>
     <div class="studio-footer">
       <button type="button" class="text-btn" id="btnShareStudio">Share this view…</button>
       <button type="button" class="text-btn" id="btnReset">Reset everything</button>
@@ -126,11 +130,11 @@
 </section>
 
 <!-- ── shots & places ──────────────────────────────────────────────────── -->
-<section id="shots" class="panel shots" aria-labelledby="shotsTitle">
+<section id="shots" class="panel shots collapsed" aria-labelledby="shotsTitle">
   <header class="panel-head">
-    <h2 id="shotsTitle">Shots &amp; places</h2>
+    <h2 id="shotsTitle">Explore the valley</h2>
     <button type="button" class="panel-toggle" id="shotsToggle"
-            aria-expanded="true" aria-controls="shotsBody">
+            aria-expanded="false" aria-controls="shotsBody">
       <span class="panel-toggle-label">Hide</span>
     </button>
   </header>
@@ -148,17 +152,20 @@
 <footer class="readout" id="readout">
   <div class="readout-main">
     <div class="readout-preset">
-      <span class="readout-preset-name" id="outPreset">Aerial Philadelphia</span>
+      <span class="story-eyebrow">FIELD NOTES / DELAWARE VALLEY</span>
+      <span class="readout-preset-name" id="outPreset">Philadelphia, between two rivers</span>
       <span class="readout-preset-blurb" id="outBlurb"></span>
+      <button type="button" class="story-tour" id="storyTour">Follow the rivers <span aria-hidden="true">→</span></button>
+      <span class="gesture-hint">Drag to pan · Right-drag to orbit · Scroll to zoom</span>
     </div>
-    <dl class="readout-stats" aria-live="off">
+    <details class="map-details"><summary>Map details</summary><dl class="readout-stats" aria-live="off">
       <div><dt>Position</dt><dd id="outCoords">—</dd></div>
       <div><dt>Elevation</dt><dd id="outElev">—</dd></div>
       <div><dt>Bearing</dt><dd id="outBearing">—</dd></div>
       <div><dt>Pitch</dt><dd id="outPitch">—</dd></div>
       <div><dt>Zoom</dt><dd id="outZoom">—</dd></div>
       <div><dt>FPS</dt><dd id="outFps">—</dd></div>
-    </dl>
+    </dl></details>
     <div class="scalebar" aria-hidden="true">
       <div class="scalebar-line" id="scaleLine"><span id="scaleLabel"></span></div>
     </div>
@@ -239,7 +246,7 @@
     </p>
     <ul class="overlay-hints">
       <li><b>Drag</b> to move, <b>right-drag</b> or <b>two fingers</b> to orbit, <b>scroll</b> or <b>pinch</b> to zoom</li>
-      <li><b>Aerial imagery</b> opens by default; enable <b>3D buildings &amp; bridges</b> when you want the modelled skyline</li>
+      <li><b>Relief and 3D buildings</b> open by default; enable <b>Aerial imagery</b> to inspect the photography</li>
       <li><b>Press ▶</b> for a captioned tour; <b>click any building</b>, then choose <b>Zoom to roof</b> for close inspection</li>
       <li><b>Search</b> scenes, tours, places, bridges, eras and layers from the box at the top</li>
       <li>Try the <b>Era</b> control for 1776 or 1900, the <b>clock</b> for a winter sunrise, and the <b>Flood hazard</b> layer</li>
@@ -402,7 +409,7 @@
           rivers and shoreline are always today's.
         </dd>
       </div>
-    </dl>
+    </dl></details>
 
     <h3>What this map is not</h3>
     <p class="caveat">
@@ -492,7 +499,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026090407"></script>
+<script type="module" src="src/main.js?v=philly-2026090601"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

@@ -6,13 +6,13 @@
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090407';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090407';
-import { getEra } from './eras.js?v=philly-2026090407';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090407';
-import { TOURS } from './tours.js?v=philly-2026090407';
-import { ERAS } from './eras.js?v=philly-2026090407';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090407';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090601';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090601';
+import { getEra } from './eras.js?v=philly-2026090601';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090601';
+import { TOURS } from './tours.js?v=philly-2026090601';
+import { ERAS } from './eras.js?v=philly-2026090601';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090601';
 
 const ENUM_LABELS = {
   theme: (v) => getTheme(v).label,
@@ -68,8 +68,9 @@ export function buildControls(store, host) {
       .filter(([, c]) => c.group === group.id && c.ui !== false);
     if (!entries.length) continue;
 
-    const section = el('div', 'control-group');
-    section.appendChild(el('h3', 'group-head', group.label));
+    const section = el('details', 'control-group control-section');
+    section.open = group.id === 'scene';
+    section.appendChild(el('summary', 'group-head', group.label));
 
     for (const [id, spec] of entries) {
       const wrap = el('div', 'control');
@@ -79,6 +80,7 @@ export function buildControls(store, host) {
       const value = el('span', 'control-value', formatValue(id, store.value(id)));
       labelRow.append(name, value);
       wrap.appendChild(labelRow);
+      wrap.dataset.control = id;
 
       if (spec.kind === 'enum') {
         const seg = el('div', 'seg');

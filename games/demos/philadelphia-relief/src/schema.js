@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090407';
-import { ERA_IDS } from './eras.js?v=philly-2026090407';
+import { WEATHERS } from './solar.js?v=philly-2026090601';
+import { ERA_IDS } from './eras.js?v=philly-2026090601';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -27,7 +27,7 @@ const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
 export const CONTROLS = {
   // ---- terrain -----------------------------------------------------------
   exaggeration: {
-    k: 'ex', kind: 'range', min: 1, max: 25, step: 0.5, def: 5.5,
+    k: 'ex', kind: 'range', min: 1, max: 25, step: 0.5, def: 2,
     group: 'terrain', label: 'Vertical exaggeration', unit: '×',
     hint: 'The region spans only ~380 m of relief across 94 km, so the wide ' +
       'shots need real stretch. Close in, less is more: the presets scale it ' +
@@ -48,15 +48,15 @@ export const CONTROLS = {
     group: 'light', label: 'Sun azimuth', unit: '°',
   },
   sunAltitude: {
-    k: 'sl', kind: 'range', min: 1, max: 80, step: 1, def: 22,
+    k: 'sl', kind: 'range', min: 1, max: 80, step: 1, def: 28,
     group: 'light', label: 'Sun altitude', unit: '°',
   },
   keyLight: {
-    k: 'kl', kind: 'range', min: 0, max: 2, step: 0.02, def: 1.24,
+    k: 'kl', kind: 'range', min: 0, max: 2, step: 0.02, def: 1.1,
     group: 'light', label: 'Key light',
   },
   ambient: {
-    k: 'am', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.42,
+    k: 'am', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.68,
     group: 'light', label: 'Ambient / sky fill',
   },
 
@@ -66,7 +66,7 @@ export const CONTROLS = {
     group: 'atmosphere', label: 'Fog / haze density',
   },
   glow: {
-    k: 'gl', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.32,
+    k: 'gl', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.16,
     group: 'atmosphere', label: 'Bloom',
     hint: 'Restrained by design — it lifts the sun glint off the rivers ' +
       'without washing out the relief.',
@@ -82,11 +82,11 @@ export const CONTROLS = {
     group: 'carto', label: 'Label size', unit: '×',
   },
   labelDensity: {
-    k: 'ld', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.45,
+    k: 'ld', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.28,
     group: 'carto', label: 'Label density',
   },
   roadOpacity: {
-    k: 'ro', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.35,
+    k: 'ro', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.22,
     group: 'carto', label: 'Road opacity',
   },
   boundaryOpacity: {
@@ -109,7 +109,7 @@ export const CONTROLS = {
       'skyline and sheds the rowhouse fabric. Performance mode caps it.',
   },
   structureHeight: {
-    k: 'sh', kind: 'range', min: 0.5, max: 3, step: 0.05, def: 1.15,
+    k: 'sh', kind: 'range', min: 0.5, max: 3, step: 0.05, def: 1,
     group: 'structures', label: 'Structure height', unit: '×',
     hint: 'Buildings and bridges are stretched by the square root of the ' +
       'terrain exaggeration, then by this. 1× keeps towers proportionate to ' +
@@ -188,7 +188,7 @@ export const CONTROLS = {
 /** Toggleable map layers, in legend order. */
 export const LAYERS = {
   terrain: { k: 'Lt', def: true, label: 'Terrain relief' },
-  imagery: { k: 'Li', def: true, label: 'Aerial imagery' },
+  imagery: { k: 'Li', def: false, label: 'Aerial imagery' },
   hillshade: { k: 'Lh', def: true, label: 'Hillshade' },
   contours: { k: 'Lc', def: true, label: 'Contours' },
   water: { k: 'Lw', def: true, label: 'Waterways' },
@@ -198,7 +198,7 @@ export const LAYERS = {
   boundaries: { k: 'Lb', def: false, label: 'County / municipal lines' },
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
   landmarks: { k: 'Lm', def: true, label: 'Landmarks' },
-  structures: { k: 'Lx', def: false, label: '3D buildings & bridges' },
+  structures: { k: 'Lx', def: true, label: '3D buildings & bridges' },
   flood: { k: 'Lf', def: false, label: 'Flood hazard' },
 };
 
@@ -210,11 +210,11 @@ export const CAMERA = {
   // Visual-quality floor, not merely a camera-safety floor. At 900 m the
   // phone-safe texture and the USGS source remain at or below approximately
   // one useful source sample per screen pixel; descending farther magnifies it.
-  camDist: { k: 'd', min: 900, max: 190000, def: 6500, prec: 0 },
+  camDist: { k: 'd', min: 900, max: 190000, def: 5200, prec: 0 },
   // Map convention: 0 deg = north-up, increasing clockwise.
   camBearing: { k: 'b', min: 0, max: 360, def: 32, wrap: 360, prec: 1 },
   // Map convention: 0 deg = straight down, 85 deg = near the horizon.
-  camPitch: { k: 'p', min: 0, max: 85, def: 73, prec: 1 },
+  camPitch: { k: 'p', min: 0, max: 85, def: 72, prec: 1 },
 };
 
 export const GROUPS = [

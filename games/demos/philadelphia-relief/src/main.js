@@ -7,52 +7,52 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090407';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090601';
 
-import { createStore } from './state.js?v=philly-2026090407';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090407';
-import { effectiveLight } from './solar.js?v=philly-2026090407';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090407';
+import { createStore } from './state.js?v=philly-2026090601';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090601';
+import { effectiveLight } from './solar.js?v=philly-2026090601';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090601';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090407';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090407';
+} from './geo.js?v=philly-2026090601';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090601';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090407';
+} from './tours.js?v=philly-2026090601';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090407';
+} from './urlstate.js?v=philly-2026090601';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090407';
+} from './degraded.js?v=philly-2026090601';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090407';
-import { createImageryDetail } from './imagery-detail.js?v=philly-2026090407';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090407';
-import { createPostFX } from './postfx.js?v=philly-2026090407';
-import { createCameraRig } from './camera.js?v=philly-2026090407';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090407';
-import { createStructures } from './structures.js?v=philly-2026090407';
+} from './terrain.js?v=philly-2026090601';
+import { createImageryDetail } from './imagery-detail.js?v=philly-2026090601';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090601';
+import { createPostFX } from './postfx.js?v=philly-2026090601';
+import { createCameraRig } from './camera.js?v=philly-2026090601';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090601';
+import { createStructures } from './structures.js?v=philly-2026090601';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090407';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090407';
+} from './structures-data.js?v=philly-2026090601';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090601';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090407';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090407';
+} from './flood.js?v=philly-2026090601';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090601';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090407';
+} from './vectors.js?v=philly-2026090601';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090407';
-import { getTheme } from './themes.js?v=philly-2026090407';
+} from './ui.js?v=philly-2026090601';
+import { getTheme } from './themes.js?v=philly-2026090601';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -853,7 +853,8 @@ async function boot() {
     for (const entry of overlays.areas) {
       const u = entry.material.uniforms;
       u.uExag.value = exaggeration;
-      u.uLift.value = entry.kind === 'water' ? lift * 0.45 : entry.kind === 'flood' ? lift * 0.6 : lift * 0.3;
+      u.uLift.value = entry.kind === 'water' ? Math.min(3, lift * 0.15)
+        : entry.kind === 'flood' ? lift * 0.6 : lift * 0.15;
       u.uCameraPos.value.copy(camera.position);
       u.uFogDensity.value = terrain.uniforms.uFogDensity.value;
       if (u.uComparePosition) u.uComparePosition.value = state.comparePosition;
@@ -976,10 +977,7 @@ async function boot() {
 
   window.addEventListener('pagehide', () => imageryDetail.dispose(), { once: true });
 
-  if (!window.location.hash && !readSeen()) {
-    dom.onboarding.hidden = false;
-    dom.obStart?.focus();
-  }
+  // The visible field notes and gesture hint introduce the map without a blocking dialog.
 }
 
 function fallbackMeta() {
@@ -1347,7 +1345,7 @@ function createMotion(store, projection) {
     },
 
     stop() {
-      if (playing) {
+      if (playing || caption) {
         playing = false;
         caption = null;
         notify();
@@ -1511,7 +1509,8 @@ function wireInterface(deps) {
         store.set({ era: entry.eraId }, { source: 'search' });
       } else if (entry.kind === 'flood') {
         store.set({ layers: { flood: true }, floodMode: entry.floodMode }, { source: 'search' });
-        toast(entry.floodMode === 'slr' ? 'Sea level rise is on the map' : 'FEMA flood zones are on the map');
+        toast(entry.floodMode === 'slr'
+          ? 'Sea level rise is on the map' : 'FEMA flood zones are on the map');
       } else {
         motion.flyTo(entry.jump || entry, { label: entry.name });
       }
@@ -1528,11 +1527,15 @@ function wireInterface(deps) {
     function set(collapsed) {
       panel.classList.toggle('collapsed', collapsed);
       toggle.setAttribute('aria-expanded', String(!collapsed));
+      const opener = $(panel === dom.studio ? 'openCustomize' : 'openExplore');
+      opener?.setAttribute('aria-expanded', String(!collapsed));
       toggle.querySelector('.panel-toggle-label').textContent = collapsed ? 'Show' : 'Hide';
-      if (body) body.setAttribute('aria-hidden', String(collapsed && !NARROW.matches));
-      // On a phone these are bottom sheets over the map, so only one may be up
-      // at a time; on a desktop they are side panels and can both stay open.
-      if (!collapsed && NARROW.matches) {
+      if (body) {
+        body.setAttribute('aria-hidden', String(collapsed));
+        body.inert = collapsed;
+      }
+      // One drawer at a time keeps the map visible on every screen.
+      if (!collapsed) {
         for (const other of sheets) if (other.panel !== panel) other.set(true);
       }
       document.body.classList.toggle('sheet-open',
@@ -1541,11 +1544,19 @@ function wireInterface(deps) {
     toggle.addEventListener('click', () => set(!panel.classList.contains('collapsed')));
     const api = { panel, set, isCollapsed: () => panel.classList.contains('collapsed') };
     sheets.push(api);
-    set(NARROW.matches);   // start collapsed on a phone; the map comes first
+    set(true);   // Open on the map; controls are available on demand.
     return api;
   }
   const studioPanel = setupPanel(dom.studio, dom.studioToggle);
-  setupPanel(dom.shots, dom.shotsToggle);
+  const shotsPanel = setupPanel(dom.shots, dom.shotsToggle);
+  $('openExplore').addEventListener('click', () => shotsPanel.set(!shotsPanel.isCollapsed()));
+  $('openCustomize').addEventListener('click', () => studioPanel.set(!studioPanel.isCollapsed()));
+  document.querySelector('.skip-link').addEventListener('click', () => {
+    studioPanel.set(false); dom.studioToggle.focus();
+  });
+  $('storyTour').addEventListener('click', () => {
+    motion.setTour('rivers'); motion.play();
+  });
 
   // ---- timeline -----------------------------------------------------------
   const tourSelect = $('tourSelect');

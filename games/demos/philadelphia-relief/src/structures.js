@@ -14,12 +14,12 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090407';
+import { hexToRgb } from './themes.js?v=philly-2026090601';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026090407';
-import { damp } from './geo.js?v=philly-2026090407';
+} from './structures-data.js?v=philly-2026090601';
+import { damp } from './geo.js?v=philly-2026090601';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute float aGround;     // DEM elevation under the structure, metres
@@ -111,8 +111,8 @@ const FRAGMENT_SHADER = /* glsl */ `
     // top-only; otherwise the city is a black cut-out at dusk.
     float ndl = dot(n, uSunDir);
     float diffuse = max(0.0, ndl);
-    float wrapped = max(0.0, (ndl + 0.65) / 1.65);
-    vec3 key = uSunColor * uKey * 0.85 * mix(diffuse, wrapped, 0.6);
+    float wrapped = max(0.0, (ndl + 0.35) / 1.35);
+    vec3 key = uSunColor * uKey * 0.85 * mix(diffuse, wrapped, 0.35);
     vec3 sky = uSkyColor * uAmbient * (0.85 + 0.15 * n.y);
     // Ground bounce warms the shadow side a little.
     vec3 bounce = uFogColor * uAmbient * 0.35 * max(0.0, -ndl);
@@ -259,7 +259,7 @@ export function createStructures(THREE, options) {
     uEraYear: { value: 9999 },
     uAmbient: { value: 0.42 },
     uFogDensity: { value: 1e-5 },
-    uExposure: { value: 2.1 },
+    uExposure: { value: 1.25 },
     uWall: { value: new THREE.Vector3(0.6, 0.55, 0.5) },
     uRoof: { value: new THREE.Vector3(0.4, 0.37, 0.34) },
     uGlow: { value: new THREE.Vector3(1, 0.7, 0.4) },

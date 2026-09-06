@@ -9,7 +9,7 @@
  * together instead of tearing them apart.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090407';
+import { hexToRgb } from './themes.js?v=philly-2026090601';
 
 const LINE_VERTEX = /* glsl */ `
   attribute vec3  aOther;      // the far end of this segment

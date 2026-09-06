@@ -1,3 +1,19 @@
+## September 2026 field guide refresh
+
+The opening view now shows relief and the modeled skyline with a restrained blue-gray palette.
+Explore and Customize open one drawer at a time. Layers are first; rendering controls live in
+expandable sections. A readable field-notes card links directly to the Rivers & Ridges tour.
+The phone layout retains bottom-sheet controls. Aerial imagery remains available as a layer.
+
+The final HDR composite now applies tone mapping and the output color-space conversion.
+Dusk lighting, building materials, and exposure were retuned for that corrected pipeline.
+The skyline and bridge presets restore 3D structures, and Home clears paused tour captions.
+Imagery detail edges use wider blending; water overlays have a smaller, capped vertical offset.
+Shorelines and buildings still reflect the resolution and coverage of the existing source data.
+
+Validation: `npm run check` (242 tests), plus desktop and 390px phone browser review of
+presets, drawers, tours, pause/Home, and layer state. No data assets or backend routes changed.
+
 # Philadelphia Relief
 
 An interactive, cinematic 3D topographic map of Philadelphia and the surrounding
