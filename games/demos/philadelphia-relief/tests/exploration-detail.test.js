@@ -4,6 +4,7 @@ import { planImageryTiles, groundPoint, createTileStream } from '../src/imagery-
 import { detailRequest } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
 import { streetCell, compactStreets, streetQuery } from '../../../../functions/games/demos/philadelphia-relief/street-detail.js';
 import { roofProfile, localBuildingSolids, neighborhoodLabels, metres } from '../src/neighborhood-data.js';
+import { onRequest as neighborhoodRequest } from '../../../../functions/games/demos/philadelphia-relief/street-detail.js';
 
 const region = { west:-75.8,east:-74.7,south:39.7,north:40.55 };
 const projection = { metersPerDegLon:85220,metersPerDegLat:111033 };
@@ -88,4 +89,26 @@ test('mapped roof profiles produce a raised ridge, flat unknown roofs and finite
   assert.equal(packed.indexCount,packed.buildingEnd[0]);
   assert.ok(packed.index.every(i=>i<packed.vertexCount));
   assert.ok([...packed.position].some((n,i)=>i%3===1 && n===12));
+});
+
+test('hosted neighborhood endpoint falls back when a provider is busy and caches the complete result', async () => {
+  const oldFetch = globalThis.fetch, oldCaches = globalThis.caches;
+  const calls = [], writes = [];
+  globalThis.caches = { default: { match: async()=>null, put: async(key,response)=>writes.push([key,response]) } };
+  globalThis.fetch = async url => {
+    calls.push(url);
+    return calls.length === 1 ? new Response('Busy',{status:429})
+      : new Response(JSON.stringify({elements:[]}));
+  };
+  try {
+    const request = new Request('https://jez237.com/games/demos/philadelphia-relief/street-detail?lon=-75.16&lat=39.95',
+      {headers:{referer:'https://jez237.com/games/demos/philadelphia-relief/'}});
+    const tasks = [];
+    const response = await neighborhoodRequest({request,waitUntil:p=>tasks.push(p)});
+    await Promise.all(tasks);
+    assert.equal(response.status,200);
+    assert.equal(calls.length,2);
+    assert.equal(writes.length,1);
+    assert.equal((await response.json()).source,'OpenStreetMap contributors · ODbL 1.0');
+  } finally { globalThis.fetch = oldFetch; globalThis.caches = oldCaches; }
 });
