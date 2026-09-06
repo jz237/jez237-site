@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090601';
-import { ERA_IDS } from './eras.js?v=philly-2026090601';
+import { WEATHERS } from './solar.js?v=philly-2026090602';
+import { ERA_IDS } from './eras.js?v=philly-2026090602';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -86,7 +86,7 @@ export const CONTROLS = {
     group: 'carto', label: 'Label density',
   },
   roadOpacity: {
-    k: 'ro', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.22,
+    k: 'ro', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.65,
     group: 'carto', label: 'Road opacity',
   },
   boundaryOpacity: {
@@ -94,7 +94,7 @@ export const CONTROLS = {
     group: 'carto', label: 'Boundary strength',
   },
   imageryDetail: {
-    k: 'id', kind: 'enum', values: IMAGERY_DETAIL, def: 'standard',
+    k: 'id', kind: 'enum', values: IMAGERY_DETAIL, def: 'maximum',
     group: 'carto', label: 'Aerial detail',
     hint: 'Data Saver stops at the city tile. Standard adds a source-resolution block tile; ' +
       'Maximum uses 4096 px for every close tile. Nearby cells are prefetched and cached. ' +
@@ -188,17 +188,17 @@ export const CONTROLS = {
 /** Toggleable map layers, in legend order. */
 export const LAYERS = {
   terrain: { k: 'Lt', def: true, label: 'Terrain relief' },
-  imagery: { k: 'Li', def: false, label: 'Aerial imagery' },
+  imagery: { k: 'Li', def: true, label: 'Aerial imagery' },
   hillshade: { k: 'Lh', def: true, label: 'Hillshade' },
-  contours: { k: 'Lc', def: true, label: 'Contours' },
-  water: { k: 'Lw', def: true, label: 'Waterways' },
-  parks: { k: 'Lp', def: true, label: 'Parks & preserves' },
-  roads: { k: 'Lr', def: true, label: 'Major roads' },
+  contours: { k: 'Lc', def: false, label: 'Contours' },
+  water: { k: 'Lw', def: false, label: 'Waterways' },
+  parks: { k: 'Lp', def: false, label: 'Parks & preserves' },
+  roads: { k: 'Lr', def: true, label: 'Roads & local streets' },
   rail: { k: 'Ll', def: false, label: 'Rail' },
   boundaries: { k: 'Lb', def: false, label: 'County / municipal lines' },
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
   landmarks: { k: 'Lm', def: true, label: 'Landmarks' },
-  structures: { k: 'Lx', def: true, label: '3D buildings & bridges' },
+  structures: { k: 'Lx', def: false, label: '3D buildings & bridges' },
   flood: { k: 'Lf', def: false, label: 'Flood hazard' },
 };
 
@@ -210,11 +210,11 @@ export const CAMERA = {
   // Visual-quality floor, not merely a camera-safety floor. At 900 m the
   // phone-safe texture and the USGS source remain at or below approximately
   // one useful source sample per screen pixel; descending farther magnifies it.
-  camDist: { k: 'd', min: 900, max: 190000, def: 5200, prec: 0 },
+  camDist: { k: 'd', min: 900, max: 190000, def: 4600, prec: 0 },
   // Map convention: 0 deg = north-up, increasing clockwise.
   camBearing: { k: 'b', min: 0, max: 360, def: 32, wrap: 360, prec: 1 },
   // Map convention: 0 deg = straight down, 85 deg = near the horizon.
-  camPitch: { k: 'p', min: 0, max: 85, def: 72, prec: 1 },
+  camPitch: { k: 'p', min: 0, max: 85, def: 58, prec: 1 },
 };
 
 export const GROUPS = [

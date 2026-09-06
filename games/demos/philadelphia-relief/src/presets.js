@@ -10,8 +10,8 @@
  * without a renderer.
  */
 
-import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090601';
-import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090601';
+import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090602';
+import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090602';
 
 /** Keys that are angles and must take the short way round when blending. */
 const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
@@ -35,44 +35,45 @@ export const PRESETS = [
     name: 'Philadelphia, between two rivers',
     blurb:
       'The Schuylkill meets a city of towers and rowhouses, with the Delaware beyond. ' +
-      'Explore the real terrain, then follow the rivers into the hills that shaped Philadelphia.',
+      'Real aerial photography reveals the rooftops and street grid. ' +
+      'Follow the rivers into the hills that shaped Philadelphia.',
     camera: {
-      camLon: -75.1655, camLat: 39.9505, camDist: 5200, camBearing: 32, camPitch: 72,
+      camLon: -75.1655, camLat: 39.9505, camDist: 4600, camBearing: 32, camPitch: 58,
     },
     settings: {
       theme: 'dusk', fov: 40, exaggeration: 2,
       sunAzimuth: 208, sunAltitude: 28, keyLight: 1.1, ambient: 0.68,
       fogDensity: 0.32, glow: 0.16, waterIntensity: 0.85,
       contourStrength: 0.18, contourInterval: 25,
-      roadOpacity: 0.22, boundaryOpacity: 0.15, labelDensity: 0.28, labelSize: 1,
+      roadOpacity: 0.65, boundaryOpacity: 0.15, labelDensity: 0.28, labelSize: 1,
       structureDetail: 0.75, structureHeight: 1,
     },
-    layers: { terrain: true, imagery: false, hillshade: true, contours: true, water: true,
-      parks: true, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: true },
+    layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
+      parks: false, roads: true, rail: false, boundaries: false,
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'ben-franklin-bridge',
     name: 'Benjamin Franklin Bridge',
     blurb:
       'From the Camden bank looking back across the Delaware: the 1926 ' +
-      'suspension span with its towers and cables drawn schematically, and ' +
-      'the skyline behind. Its 1,750 ft main span was the longest in the ' +
+      'suspension span and the city street grid in aerial photography. ' +
+      'Its 1,750 ft main span was the longest in the ' +
       'world when it opened.',
     camera: {
-      camLon: -75.1285, camLat: 39.9519, camDist: 4600, camBearing: 292, camPitch: 66,
+      camLon: -75.1285, camLat: 39.9519, camDist: 4400, camBearing: 292, camPitch: 66,
     },
     settings: {
       theme: 'dusk', fov: 44, exaggeration: 1.5,
       sunAzimuth: 128, sunAltitude: 28, keyLight: 1.1, ambient: 0.68,
       fogDensity: 0.34, glow: 0.16, waterIntensity: 0.9,
       contourStrength: 0.12, contourInterval: 25,
-      roadOpacity: 0.4, boundaryOpacity: 0.1, labelDensity: 0.4, labelSize: 1,
+      roadOpacity: 0.65, boundaryOpacity: 0.1, labelDensity: 0.4, labelSize: 1,
       structureDetail: 0.7, structureHeight: 1.15,
     },
-    layers: { terrain: true, imagery: false, hillshade: true, contours: true, water: true,
-      parks: true, roads: true, rail: true, boundaries: false,
-      places: true, landmarks: true, structures: true },
+    layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
+      parks: false, roads: true, rail: true, boundaries: false,
+      places: true, landmarks: true, structures: false },
   },
   {
     id: 'overview',

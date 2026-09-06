@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090601';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090602';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -58,6 +58,9 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
   uniform sampler2D uMacro;      // heavily downsampled heights, for ambient occlusion
   uniform sampler2D uRamp;       // hypsometric LUT
+  uniform sampler2D uImageryCity;
+  uniform vec4 uImageryCityBounds;
+  uniform float uImageryCityOn;
   uniform sampler2D uImagery;    // georeferenced USGS orthoimagery
   uniform sampler2D uImageryDetail;
   uniform sampler2D uImageryDetailPrev;
@@ -123,6 +126,11 @@ const FRAGMENT_SHADER = /* glsl */ `
     tE = pow(tE, 0.78);
     vec3 reliefBase = texture2D(uRamp, vec2(tE, 0.5)).rgb;
     vec3 aerialBase = texture2D(uImagery, vUv).rgb;
+    vec2 cityUv = (vUv - uImageryCityBounds.xy)
+      / (uImageryCityBounds.zw - uImageryCityBounds.xy);
+    float cityEdge = min(min(cityUv.x, 1.0 - cityUv.x), min(cityUv.y, 1.0 - cityUv.y));
+    aerialBase = mix(aerialBase, texture2D(uImageryCity, clamp(cityUv, 0.0, 1.0)).rgb,
+      smoothstep(0.0, 0.08, cityEdge) * uImageryCityOn);
     vec2 previousSpan = max(
       uImageryDetailPrevBounds.zw - uImageryDetailPrevBounds.xy,
       vec2(0.00001));
@@ -159,7 +167,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Lift the baked orthoimage shadows and restore restrained local contrast.
     // The photography already contains real sunlight; the DEM should add only
     // a hint of shape rather than darkening it a second time.
-    aerialBase = pow(max(aerialBase, vec3(0.0)), vec3(0.84));
+    aerialBase = pow(max(aerialBase, vec3(0.0)), vec3(0.98));
     float aerialLuma = dot(aerialBase, vec3(0.2126, 0.7152, 0.0722));
     aerialBase = mix(vec3(aerialLuma), aerialBase, 1.08);
     aerialBase = clamp((aerialBase - 0.5) * 1.055 + 0.5, 0.0, 1.0);
@@ -329,7 +337,7 @@ export function warpForDistance(distanceM) {
 }
 
 export function createTerrain(THREE, options) {
-  const { meta, grid, macro, imagery = null, quality = 'balanced' } = options;
+  const { meta, grid, macro, imagery = null, cityImagery = null, quality = 'balanced' } = options;
   const { width, height } = meta;
   const regionW = meta.projection.widthM;
   const regionH = meta.projection.heightM;
@@ -341,6 +349,11 @@ export function createTerrain(THREE, options) {
   const macroTex = makeHeightTexture(THREE, macro, macroSize, macroSize);
   const rampTex = makeRampTexture(THREE, 'dusk');
   const imageryTex = makeImageryTexture(THREE, imagery);
+  const cityTex = makeImageryTexture(THREE, cityImagery);
+  const b = meta.bounds;
+  const cityBounds = new THREE.Vector4(
+    (-75.235 - b.west) / (b.east - b.west), (b.north - 40.005) / (b.north - b.south),
+    (-75.095 - b.west) / (b.east - b.west), (b.north - 39.90) / (b.north - b.south));
   let imageryDetailTex = makeImageryTexture(THREE, null, false);
   let imageryDetailPrevTex = makeImageryTexture(THREE, null, false);
   let hasDetail = false;
@@ -350,6 +363,9 @@ export function createTerrain(THREE, options) {
     uMacro: { value: macroTex },
     uRamp: { value: rampTex },
     uImagery: { value: imageryTex },
+    uImageryCity: { value: cityTex },
+    uImageryCityBounds: { value: cityBounds },
+    uImageryCityOn: { value: cityImagery ? 1 : 0 },
     uImageryDetail: { value: imageryDetailTex },
     uImageryDetailPrev: { value: imageryDetailPrevTex },
     uImageryDetailBounds: { value: new THREE.Vector4(0, 0, 1, 1) },
@@ -465,6 +481,7 @@ export function createTerrain(THREE, options) {
       macroTex.dispose();
       rampTex.dispose();
       imageryTex.dispose();
+      cityTex.dispose();
       imageryDetailTex.dispose();
       imageryDetailPrevTex.dispose();
     },

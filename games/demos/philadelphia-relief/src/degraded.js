@@ -17,11 +17,13 @@ export const ASSETS = [
     label: 'elevation heightmap' },
   { id: 'imagery', path: 'data/imagery.webp', kind: 'image', layer: 'imagery',
     label: 'aerial imagery' },
+  { id: 'cityImagery', path: 'data/imagery-city.webp', kind: 'image', supplemental: true,
+    label: 'city aerial imagery' },
   { id: 'water', path: 'data/water.geojson', kind: 'geojson', layer: 'water',
     label: 'waterways' },
   { id: 'parks', path: 'data/parks.geojson', kind: 'geojson', layer: 'parks',
     label: 'parks' },
-  { id: 'roads', path: 'data/roads.geojson', kind: 'geojson', layer: 'roads',
+  { id: 'roads', path: 'data/roads.geojson?v=streets-20260906', kind: 'geojson', layer: 'roads',
     label: 'roads' },
   { id: 'rail', path: 'data/rail.geojson', kind: 'geojson', layer: 'rail',
     label: 'rail' },
@@ -56,6 +58,7 @@ export function assess(results) {
   let requiredMissing = false;
 
   for (const asset of ASSETS) {
+    if (asset.supplemental) continue;
     const ok = !!results?.[asset.id];
     if (ok) continue;
     missing.push(asset);
@@ -63,7 +66,7 @@ export function assess(results) {
     else if (asset.layer) disableLayers.push(asset.layer);
   }
 
-  const overlayCount = ASSETS.filter((a) => !a.required).length;
+  const overlayCount = ASSETS.filter((a) => !a.required && !a.supplemental).length;
 
   if (requiredMissing) {
     return {

@@ -461,7 +461,7 @@ test('bridges', async (t) => {
 test('structures state plumbing', async (t) => {
   await t.test('the layer and its controls exist with unique keys and sane defaults', () => {
     assert.ok(LAYERS.structures, 'structures layer');
-    assert.equal(LAYERS.structures.def, true, 'the opening skyline includes modeled architecture');
+    assert.equal(LAYERS.structures.def, false, 'the opening view shows real rooftop photography');
     assert.ok(CONTROLS.structureDetail && CONTROLS.structureHeight);
     assert.equal(coerce('structureDetail', 5), 1);
     assert.equal(coerce('structureHeight', 0), 0.5, 'never flat');
@@ -476,7 +476,7 @@ test('structures state plumbing', async (t) => {
       const patch = presetPatch(preset.id);
       assert.ok(Number.isFinite(patch.structureDetail), `${preset.id} detail`);
       assert.ok(Number.isFinite(patch.structureHeight), `${preset.id} height`);
-      assert.equal(patch.layers.structures, ['skyline', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} layers`);
+      assert.equal(patch.layers.structures, false, `${preset.id} layers`);
     }
     assert.ok(presetPatch('night-metro').structureDetail > presetPatch('overview').structureDetail,
       'the night shot is the dense one');
@@ -484,15 +484,15 @@ test('structures state plumbing', async (t) => {
 
   await t.test('the layer toggle and controls round-trip through the URL', () => {
     const store = createStore();
-    store.set({ structureDetail: 0.25, structureHeight: 1.8, layers: { structures: false } });
+    store.set({ structureDetail: 0.25, structureHeight: 1.8, layers: { structures: true } });
     const hash = encodeState(store.get());
-    assert.ok(hash.includes('sd=0.25') && hash.includes('sh=1.8') && hash.includes('Lx=0'));
+    assert.ok(hash.includes('sd=0.25') && hash.includes('sh=1.8') && hash.includes('Lx=1'));
     const restored = createStore(decodeState(`#${hash}`));
     assert.equal(restored.get().structureDetail, 0.25);
     assert.equal(restored.get().structureHeight, 1.8);
-    assert.equal(restored.get().layers.structures, false);
+    assert.equal(restored.get().layers.structures, true);
     store.reset();
-    assert.equal(store.get().layers.structures, true);
+    assert.equal(store.get().layers.structures, false);
     assert.equal(store.get().structureDetail, defaults().structureDetail);
   });
 

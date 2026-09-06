@@ -1210,7 +1210,7 @@ body.cinema .explore-nav { display: none; }
  .gesture-hint, .map-details, .scalebar { display: none; }
  .caption { left: 12px; bottom: calc(114px + env(safe-area-inset-bottom)); max-width: calc(100vw - 24px); padding: 20px; }
  body:has(.caption:not([hidden])) .readout { display: none; }
- .imagery-credit { bottom: auto; top: 120px; font-size: 10px; max-width: calc(100vw - 24px); }
+ .imagery-credit { bottom: auto; top: 162px; font-size: 10px; max-width: calc(100vw - 24px); }
  .mobile-btn small { font-size: 11px; }
 }
 @media (max-height: 650px) and (min-width: 821px) {
@@ -1219,3 +1219,4 @@ body.cinema .explore-nav { display: none; }
  .readout-preset-blurb { font-size: 13px; margin-top: 10px; }
  .gesture-hint { display: none; }
 }
+

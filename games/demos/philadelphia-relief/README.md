@@ -1,18 +1,16 @@
 ## September 2026 field guide refresh
 
-The opening view now shows relief and the modeled skyline with a restrained blue-gray palette.
+The opening city view uses high-resolution aerial imagery for real rooftops and street detail.
+A bundled 4096² USGS city image keeps the surrounding neighborhoods sharp while finer tiles load.
+Rebuild it with `python tools/build_city_imagery.py`. Schematic 3D structures stay optional. Roads now include 20,864 OpenStreetMap neighborhood
+street segments, simplified at 1.5 metres, alongside the regional major-road network.
+Local streets fade out as the camera pulls back to keep regional views readable.
+Rebuild this addition with `python tools/build_local_streets.py` (or `--source saved-overpass.json`).
+
 Explore and Customize open one drawer at a time. Layers are first; rendering controls live in
 expandable sections. A readable field-notes card links directly to the Rivers & Ridges tour.
-The phone layout retains bottom-sheet controls. Aerial imagery remains available as a layer.
-
-The final HDR composite now applies tone mapping and the output color-space conversion.
-Dusk lighting, building materials, and exposure were retuned for that corrected pipeline.
-The skyline and bridge presets restore 3D structures, and Home clears paused tour captions.
-Imagery detail edges use wider blending; water overlays have a smaller, capped vertical offset.
-Shorelines and buildings still reflect the resolution and coverage of the existing source data.
-
-Validation: `npm run check` (242 tests), plus desktop and 390px phone browser review of
-presets, drawers, tours, pause/Home, and layer state. No data assets or backend routes changed.
+The phone layout retains bottom-sheet controls. The final HDR composite applies tone mapping
+and output color-space conversion, with retuned lighting and wider imagery-edge blending.
 
 # Philadelphia Relief
 
