@@ -72,6 +72,9 @@ import {
   buildUnifiedExt2AcceptMasks,
   UNIFIED_EXT3_BANK,
   UNIFIED_EXT4_BANK,
+  UNIFIED_EXT5_BANK,
+  UNIFIED_EXT5_CELLS,
+  unifiedExt5Pose,
   buildSwingAcceptMasks,
   WALK_CELL_COUNT,
   WALK_POSE_MIN_SPEED,
@@ -90,6 +93,7 @@ import {
   attackAnimationPose,
   attackMotionBeat,
   bareHandedAttack,
+  baseFallbackFrame,
   blockstunKeys,
   crouchBlockstunKeys,
   throwClinchKeys,
@@ -354,6 +358,17 @@ import {
   recommendedInputDelay,
   serializeRollbackState,
 } from "./engine/rollback.mjs";
+import {
+  FINISHER_CHOREOGRAPHY,
+  cinematicDrawRotation,
+  finisherCinematicPose,
+  sampleFinisher,
+} from "./engine/finisher-scripts.mjs";
+import {
+  ROUND_WIN_HOLD_SECONDS,
+  introEntranceCell,
+  roundWinShowcaseCell,
+} from "./engine/bookends.mjs";
 import {
   createReplayHeader,
   createReplayRecord,
@@ -730,267 +745,13 @@ const fatalityAudit = auditGraphicFatalities(roster.map(({ id }) => ({
 if (fatalityAudit.errors.length) console.warn("Final Blow graphic fatality warning", fatalityAudit.errors);
 
 // Each Final Blow is staged as a short, character-specific arcade cinematic.
-// Coordinates are local to the victim: negative X begins behind the attacker,
-// Y is height above the floor, and frame numbers address the 4x4 atlas grammar.
-const finisherChoreography = {
-  deathblow: {
-    combo: "FAULTLINE FIVE",
-    duration: 5.35,
-    keys: [
-      { t: 0, ax: -300, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .42, ax: -205, ay: 0, af: 6, vx: 0, vy: 0, vf: 15, zoom: 1.06 },
-      { t: .68, ax: -58, ay: 0, af: 10, vx: 10, vy: 0, vf: 15, zoom: 1.12 },
-      { t: 1.12, ax: -42, ay: 0, af: 13, vx: 28, vy: 38, vf: 15, vr: -.08, zoom: 1.15 },
-      { t: 1.48, ax: -10, ay: 0, af: 14, vx: 58, vy: 176, vf: 15, vr: -.28, zoom: 1.22 },
-      { t: 1.9, ax: -98, ay: 88, af: 13, vx: 62, vy: 225, vf: 15, vr: -.42, zoom: 1.18 },
-      { t: 2.5, ax: -8, ay: 24, af: 14, vx: 30, vy: 0, vf: 15, vr: .62, zoom: 1.28 },
-      { t: 3.3, ax: -130, ay: 0, af: 12, vx: 30, vy: 0, vf: 15, vr: .62, zoom: 1.12 },
-      { t: 4.02, ax: -12, ay: 0, af: 14, vx: 48, vy: 0, vf: 15, vr: 1.18, zoom: 1.34 },
-      { t: 5.35, ax: -118, ay: 0, af: 0, vx: 72, vy: 0, vf: 15, vr: 1.35, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .68, label: "RAM", sound: "heavy", power: .55 },
-      { t: 1.12, label: "RISING IRON", sound: "hit", power: .7 },
-      { t: 1.48, label: "SKYBREAKER", sound: "special", power: .9 },
-      { t: 2.5, label: "GROUND SLAM", sound: "heavy", power: 1.05 },
-      { t: 4.02, label: "FAULTLINE", sound: "final", power: 1.45, final: true },
-    ],
-  },
-  jez: {
-    combo: "NEON SEVEN-PALM",
-    duration: 5.25,
-    keys: [
-      { t: 0, ax: -305, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .38, ax: -150, ay: 0, af: 7, vx: 0, vy: 0, vf: 15, zoom: 1.07 },
-      { t: .58, ax: -42, ay: 0, af: 9, vx: 4, vy: 0, vf: 15, zoom: 1.12 },
-      { t: .86, ax: 48, ay: 0, af: 10, vx: -4, vy: 8, vf: 15, vr: .05, zoom: 1.15 },
-      { t: 1.13, ax: -50, ay: 0, af: 9, vx: 6, vy: 16, vf: 15, vr: -.08, zoom: 1.17 },
-      { t: 1.42, ax: 42, ay: 0, af: 10, vx: -8, vy: 28, vf: 15, vr: .12, zoom: 1.2 },
-      { t: 1.82, ax: -58, ay: 0, af: 13, vx: 22, vy: 115, vf: 15, vr: -.2, zoom: 1.2 },
-      { t: 2.25, ax: -5, ay: 155, af: 14, vx: 28, vy: 188, vf: 15, vr: -.5, zoom: 1.23 },
-      { t: 2.8, ax: 65, ay: 50, af: 13, vx: 18, vy: 60, vf: 15, vr: .72, zoom: 1.17 },
-      { t: 3.4, ax: -125, ay: 0, af: 12, vx: 18, vy: 0, vf: 15, vr: .72, zoom: 1.12 },
-      { t: 4.0, ax: -16, ay: 0, af: 14, vx: 42, vy: 0, vf: 15, vr: 1.18, zoom: 1.33 },
-      { t: 5.25, ax: -142, ay: 0, af: 0, vx: 64, vy: 0, vf: 15, vr: 1.35, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .58, label: "PALM ONE", sound: "light", power: .38 },
-      { t: .86, label: "PHASE STEP", sound: "hit", power: .48 },
-      { t: 1.13, label: "NEON THREE", sound: "light", power: .5 },
-      { t: 1.42, label: "SIGN FLASH", sound: "hit", power: .62 },
-      { t: 1.82, label: "LIFT", sound: "heavy", power: .8 },
-      { t: 2.25, label: "SKY PALM", sound: "special", power: .92 },
-      { t: 4.0, label: "NEON GUILLOTINE", sound: "final", power: 1.42, final: true },
-    ],
-  },
-  alan: {
-    combo: "SOUTH STREET SIX",
-    duration: 5.3,
-    keys: [
-      { t: 0, ax: -285, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .42, ax: -112, ay: 0, af: 6, vx: 0, vy: 0, vf: 15, zoom: 1.08 },
-      { t: .66, ax: -42, ay: 0, af: 9, vx: 8, vy: 0, vf: 15, zoom: 1.13 },
-      { t: .96, ax: -48, ay: 0, af: 10, vx: 16, vy: 4, vf: 15, vr: -.05, zoom: 1.14 },
-      { t: 1.28, ax: -32, ay: 0, af: 13, vx: 35, vy: 60, vf: 15, vr: -.14, zoom: 1.18 },
-      { t: 1.68, ax: -20, ay: 0, af: 14, vx: 58, vy: 188, vf: 15, vr: -.46, zoom: 1.24 },
-      { t: 2.18, ax: -72, ay: 145, af: 13, vx: 55, vy: 220, vf: 15, vr: -.55, zoom: 1.2 },
-      { t: 2.72, ax: 4, ay: 25, af: 14, vx: 24, vy: 0, vf: 15, vr: .78, zoom: 1.3 },
-      { t: 3.42, ax: -112, ay: 0, af: 8, vx: 24, vy: 0, vf: 15, vr: .78, zoom: 1.12 },
-      { t: 4.05, ax: -8, ay: 0, af: 13, vx: 52, vy: 0, vf: 15, vr: 1.22, zoom: 1.35 },
-      { t: 5.3, ax: -130, ay: 0, af: 0, vx: 70, vy: 0, vf: 15, vr: 1.38, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .66, label: "LEFT HOOK", sound: "light", power: .42 },
-      { t: .96, label: "RIGHT CROSS", sound: "hit", power: .55 },
-      { t: 1.28, label: "BODY BREAK", sound: "heavy", power: .72 },
-      { t: 1.68, label: "UPPERCUT", sound: "special", power: .95 },
-      { t: 2.72, label: "PILEDRIVER", sound: "heavy", power: 1.08 },
-      { t: 4.05, label: "HEAVY HAND", sound: "final", power: 1.46, final: true },
-    ],
-  },
-  post: {
-    combo: "FULL COVERAGE",
-    duration: 5.25,
-    keys: [
-      { t: 0, ax: -315, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .5, ax: -205, ay: 0, af: 8, vx: 0, vy: 0, vf: 15, zoom: 1.06 },
-      { t: .82, ax: -155, ay: 0, af: 10, vx: 8, vy: 6, vf: 15, zoom: 1.12 },
-      { t: 1.18, ax: -55, ay: 0, af: 9, vx: 18, vy: 12, vf: 15, vr: -.08, zoom: 1.15 },
-      { t: 1.58, ax: 48, ay: 0, af: 10, vx: -8, vy: 32, vf: 15, vr: .14, zoom: 1.18 },
-      { t: 1.96, ax: -35, ay: 0, af: 13, vx: 30, vy: 125, vf: 15, vr: -.28, zoom: 1.2 },
-      { t: 2.42, ax: -12, ay: 128, af: 14, vx: 38, vy: 185, vf: 15, vr: -.5, zoom: 1.22 },
-      { t: 2.92, ax: -85, ay: 0, af: 12, vx: 24, vy: 0, vf: 15, vr: .72, zoom: 1.14 },
-      { t: 3.48, ax: -155, ay: 0, af: 13, vx: 24, vy: 0, vf: 15, vr: .72, zoom: 1.12 },
-      { t: 4.0, ax: -28, ay: 0, af: 14, vx: 45, vy: 0, vf: 15, vr: 1.18, zoom: 1.34 },
-      { t: 5.25, ax: -155, ay: 0, af: 0, vx: 72, vy: 0, vf: 15, vr: 1.36, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .5, label: "PRIMER", sound: "special", power: .45 },
-      { t: .82, label: "SPRAY BURST", sound: "hit", power: .55 },
-      { t: 1.18, label: "ROLLER ONE", sound: "light", power: .55 },
-      { t: 1.58, label: "ROLLER TWO", sound: "heavy", power: .7 },
-      { t: 1.96, label: "PAINT LIFT", sound: "special", power: .88 },
-      { t: 4.0, label: "FULL COVERAGE", sound: "final", power: 1.45, final: true },
-    ],
-  },
-  benny: {
-    combo: "CIRCUIT BREAKER",
-    duration: 5.25,
-    keys: [
-      { t: 0, ax: -300, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .4, ax: -145, ay: 0, af: 7, vx: 0, vy: 0, vf: 15, zoom: 1.07 },
-      { t: .62, ax: -44, ay: 0, af: 9, vx: 6, vy: 0, vf: 15, zoom: 1.12 },
-      { t: .88, ax: 42, ay: 0, af: 10, vx: -4, vy: 10, vf: 15, vr: .05, zoom: 1.15 },
-      { t: 1.14, ax: -46, ay: 0, af: 9, vx: 8, vy: 22, vf: 15, vr: -.09, zoom: 1.17 },
-      { t: 1.45, ax: -28, ay: 0, af: 13, vx: 32, vy: 92, vf: 15, vr: -.2, zoom: 1.2 },
-      { t: 1.88, ax: -8, ay: 100, af: 14, vx: 50, vy: 195, vf: 15, vr: -.48, zoom: 1.24 },
-      { t: 2.4, ax: 55, ay: 65, af: 13, vx: 32, vy: 90, vf: 15, vr: .58, zoom: 1.2 },
-      { t: 3.08, ax: -145, ay: 0, af: 12, vx: 24, vy: 0, vf: 15, vr: .72, zoom: 1.12 },
-      { t: 3.96, ax: -22, ay: 0, af: 14, vx: 48, vy: 0, vf: 15, vr: 1.18, zoom: 1.34 },
-      { t: 5.25, ax: -145, ay: 0, af: 0, vx: 72, vy: 0, vf: 15, vr: 1.36, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .62, label: "HOT WIRE", sound: "light", power: .4 },
-      { t: .88, label: "CROSS CURRENT", sound: "hit", power: .52 },
-      { t: 1.14, label: "THREE-PHASE", sound: "light", power: .58 },
-      { t: 1.45, label: "VOLTAGE LIFT", sound: "heavy", power: .82 },
-      { t: 1.88, label: "ARC FLASH", sound: "special", power: 1 },
-      { t: 3.96, label: "CIRCUIT BREAKER", sound: "final", power: 1.46, final: true },
-    ],
-  },
-  donald: {
-    combo: "GOLDEN BACK NINE",
-    duration: 5.35,
-    keys: [
-      { t: 0, ax: -320, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .48, ax: -185, ay: 0, af: 6, vx: 0, vy: 0, vf: 15, zoom: 1.07 },
-      { t: .76, ax: -72, ay: 0, af: 9, vx: 10, vy: 0, vf: 15, zoom: 1.12 },
-      { t: 1.08, ax: -58, ay: 0, af: 10, vx: 20, vy: 22, vf: 15, vr: -.08, zoom: 1.15 },
-      { t: 1.48, ax: -115, ay: 0, af: 13, vx: 20, vy: 22, vf: 15, vr: -.08, zoom: 1.12 },
-      { t: 1.86, ax: -28, ay: 0, af: 14, vx: 58, vy: 178, vf: 15, vr: -.45, zoom: 1.25 },
-      { t: 2.32, ax: -80, ay: 112, af: 13, vx: 68, vy: 220, vf: 15, vr: -.58, zoom: 1.2 },
-      { t: 2.78, ax: 18, ay: 52, af: 14, vx: 32, vy: 0, vf: 15, vr: .72, zoom: 1.3 },
-      { t: 3.38, ax: -180, ay: 0, af: 13, vx: 32, vy: 0, vf: 15, vr: .72, zoom: 1.12 },
-      { t: 4.08, ax: -30, ay: 0, af: 14, vx: 65, vy: 0, vf: 15, vr: 1.2, zoom: 1.36 },
-      { t: 5.35, ax: -180, ay: 0, af: 0, vx: 90, vy: 0, vf: 15, vr: 1.38, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .76, label: "TEE SHOT", sound: "light", power: .42 },
-      { t: 1.08, label: "CHIP SHOT", sound: "hit", power: .58 },
-      { t: 1.86, label: "GOLDEN DRIVE", sound: "special", power: 1 },
-      { t: 2.78, label: "CLUBHOUSE DROP", sound: "heavy", power: 1.08 },
-      { t: 4.08, label: "YOU'RE FIRED", sound: "final", power: 1.5, final: true },
-    ],
-  },
-  cyraxx: {
-    combo: "FEEDBACK MELTDOWN",
-    duration: 5.3,
-    keys: [
-      { t: 0, ax: -320, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .46, ax: -195, ay: 0, af: 7, vx: 0, vy: 0, vf: 15, zoom: 1.06 },
-      { t: .72, ax: -90, ay: 0, af: 9, vx: 8, vy: 8, vf: 15, zoom: 1.12 },
-      { t: 1.02, ax: 45, ay: 0, af: 10, vx: -6, vy: 18, vf: 15, vr: .08, zoom: 1.15 },
-      { t: 1.34, ax: -48, ay: 0, af: 13, vx: 22, vy: 80, vf: 15, vr: -.18, zoom: 1.2 },
-      { t: 1.75, ax: -15, ay: 95, af: 14, vx: 50, vy: 185, vf: 15, vr: -.45, zoom: 1.24 },
-      { t: 2.2, ax: 70, ay: 80, af: 13, vx: 36, vy: 108, vf: 15, vr: .58, zoom: 1.2 },
-      { t: 2.72, ax: -90, ay: 0, af: 12, vx: 26, vy: 0, vf: 15, vr: .7, zoom: 1.14 },
-      { t: 3.3, ax: -165, ay: 0, af: 13, vx: 26, vy: 0, vf: 15, vr: .7, zoom: 1.12 },
-      { t: 4.0, ax: -25, ay: 0, af: 14, vx: 54, vy: 0, vf: 15, vr: 1.2, zoom: 1.35 },
-      { t: 5.3, ax: -165, ay: 0, af: 0, vx: 78, vy: 0, vf: 15, vr: 1.38, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .72, label: "MIC CHECK", sound: "light", power: .4 },
-      { t: 1.02, label: "STAFF SWEEP", sound: "hit", power: .56 },
-      { t: 1.34, label: "GAIN SPIKE", sound: "heavy", power: .78 },
-      { t: 1.75, label: "SONIC LIFT", sound: "special", power: 1 },
-      { t: 2.2, label: "BUFFER DROP", sound: "heavy", power: 1.05 },
-      { t: 4.0, label: "FEEDBACK BLACKOUT", sound: "final", power: 1.48, final: true },
-    ],
-  },
-  ali: {
-    combo: "WEST STAINES MASSIVE",
-    duration: 5.3,
-    keys: [
-      { t: 0, ax: -310, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .42, ax: -175, ay: 0, af: 6, vx: 0, vy: 0, vf: 15, zoom: 1.07 },
-      { t: .66, ax: -62, ay: 0, af: 9, vx: 8, vy: 5, vf: 15, zoom: 1.12 },
-      { t: .94, ax: 45, ay: 0, af: 10, vx: -5, vy: 14, vf: 15, vr: .06, zoom: 1.15 },
-      { t: 1.22, ax: -46, ay: 0, af: 9, vx: 12, vy: 30, vf: 15, vr: -.1, zoom: 1.17 },
-      { t: 1.55, ax: -32, ay: 0, af: 13, vx: 34, vy: 105, vf: 15, vr: -.24, zoom: 1.2 },
-      { t: 1.95, ax: -8, ay: 125, af: 14, vx: 54, vy: 195, vf: 15, vr: -.5, zoom: 1.25 },
-      { t: 2.42, ax: 62, ay: 75, af: 13, vx: 34, vy: 92, vf: 15, vr: .58, zoom: 1.2 },
-      { t: 3.05, ax: -150, ay: 0, af: 12, vx: 24, vy: 0, vf: 15, vr: .72, zoom: 1.12 },
-      { t: 3.98, ax: -20, ay: 0, af: 14, vx: 52, vy: 0, vf: 15, vr: 1.2, zoom: 1.35 },
-      { t: 5.3, ax: -150, ay: 0, af: 0, vx: 78, vy: 0, vf: 15, vr: 1.38, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .66, label: "MIC ONE", sound: "light", power: .4 },
-      { t: .94, label: "MIC TWO", sound: "hit", power: .52 },
-      { t: 1.22, label: "BOOYAKASHA", sound: "light", power: .58 },
-      { t: 1.55, label: "BASS LIFT", sound: "heavy", power: .82 },
-      { t: 1.95, label: "MASSIVE AIR", sound: "special", power: 1 },
-      { t: 2.42, label: "MIC DROP", sound: "heavy", power: 1.08 },
-      { t: 3.98, label: "WEST STAINES MASSIVE", sound: "final", power: 1.5, final: true },
-    ],
-  },
-  // Wave 17 — the Devil's ceremony is a hunt: a swoop in, talons, the horn
-  // charge, a screech that lifts the victim off the floor, and the wings
-  // closing for WING SHEAR like a trap springing shut.
-  devil: {
-    combo: "BARRENS CURSE",
-    duration: 5.3,
-    keys: [
-      { t: 0, ax: -315, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .4, ax: -170, ay: 0, af: 6, vx: 0, vy: 0, vf: 15, zoom: 1.07 },
-      { t: .64, ax: -52, ay: 0, af: 9, vx: 6, vy: 0, vf: 15, zoom: 1.12 },
-      { t: .92, ax: 44, ay: 0, af: 10, vx: -5, vy: 12, vf: 15, vr: .06, zoom: 1.15 },
-      { t: 1.24, ax: -44, ay: 0, af: 9, vx: 10, vy: 26, vf: 15, vr: -.1, zoom: 1.17 },
-      { t: 1.58, ax: -30, ay: 0, af: 13, vx: 34, vy: 100, vf: 15, vr: -.24, zoom: 1.2 },
-      { t: 1.98, ax: -6, ay: 130, af: 14, vx: 52, vy: 195, vf: 15, vr: -.5, zoom: 1.25 },
-      { t: 2.46, ax: 58, ay: 72, af: 13, vx: 34, vy: 95, vf: 15, vr: .58, zoom: 1.2 },
-      { t: 3.05, ax: -150, ay: 0, af: 12, vx: 26, vy: 0, vf: 15, vr: .72, zoom: 1.12 },
-      { t: 3.98, ax: -18, ay: 0, af: 14, vx: 50, vy: 0, vf: 15, vr: 1.2, zoom: 1.35 },
-      { t: 5.3, ax: -150, ay: 0, af: 0, vx: 76, vy: 0, vf: 15, vr: 1.38, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .64, label: "SWOOP IN", sound: "light", power: .4 },
-      { t: .92, label: "TALON RIP", sound: "hit", power: .54 },
-      { t: 1.24, label: "TAIL LASH", sound: "light", power: .58 },
-      { t: 1.58, label: "HORN CHARGE", sound: "heavy", power: .82 },
-      { t: 1.98, label: "SCREECH LIFT", sound: "special", power: 1 },
-      { t: 2.46, label: "PINE DROP", sound: "heavy", power: 1.06 },
-      { t: 3.98, label: "WING SHEAR", sound: "final", power: 1.46, final: true },
-    ],
-  },
-  // Wave 16 — the Commissioner's own ceremony: unhurried, procedural, cruel.
-  // Cane taps close the distance, the hook drags the victim to the book, and
-  // FINAL AUTHORITY lands like a sentence being read out.
-  commissioner: {
-    combo: "FINAL AUTHORITY",
-    duration: 5.4,
-    keys: [
-      { t: 0, ax: -310, ay: 0, af: 0, vx: 0, vy: 0, vf: 15, zoom: 1.02 },
-      { t: .5, ax: -215, ay: 0, af: 6, vx: 0, vy: 0, vf: 15, zoom: 1.06 },
-      { t: .8, ax: -120, ay: 0, af: 9, vx: 6, vy: 0, vf: 15, zoom: 1.11 },
-      { t: 1.14, ax: -58, ay: 0, af: 10, vx: 18, vy: 6, vf: 15, vr: -.06, zoom: 1.14 },
-      { t: 1.5, ax: -34, ay: 0, af: 13, vx: 34, vy: 52, vf: 15, vr: -.16, zoom: 1.18 },
-      { t: 1.92, ax: -14, ay: 0, af: 14, vx: 56, vy: 182, vf: 15, vr: -.44, zoom: 1.24 },
-      { t: 2.4, ax: -88, ay: 120, af: 13, vx: 60, vy: 216, vf: 15, vr: -.56, zoom: 1.19 },
-      { t: 2.9, ax: 6, ay: 20, af: 14, vx: 26, vy: 0, vf: 15, vr: .7, zoom: 1.29 },
-      { t: 3.5, ax: -140, ay: 0, af: 12, vx: 26, vy: 0, vf: 15, vr: .7, zoom: 1.12 },
-      { t: 4.1, ax: -16, ay: 0, af: 14, vx: 50, vy: 0, vf: 15, vr: 1.2, zoom: 1.35 },
-      { t: 5.4, ax: -132, ay: 0, af: 0, vx: 74, vy: 0, vf: 15, vr: 1.36, zoom: 1.08 },
-    ],
-    impacts: [
-      { t: .8, label: "CANE TAP", sound: "light", power: .42 },
-      { t: 1.14, label: "WRIT SERVED", sound: "hit", power: .55 },
-      { t: 1.5, label: "GAVEL CRACK", sound: "heavy", power: .78 },
-      { t: 1.92, label: "OVERRULE", sound: "special", power: .95 },
-      { t: 2.9, label: "CONTEMPT", sound: "heavy", power: 1.08 },
-      { t: 4.1, label: "FINAL AUTHORITY", sound: "final", power: 1.48, final: true },
-    ],
-  },
-};
+// v5.2 LOCOMOTION (bookends): the ten scripts live in engine/finisher-scripts
+// (timing, camera, zoom and rotation verbatim), where every key also names
+// the same-generation drawing the pose resolver puts over `af` / `vf` — see
+// cinematicPoseDescriptor. Coordinates are local to the victim: negative X
+// begins behind the attacker, Y is height above the floor, and `af` / `vf`
+// still address the 4x4 atlas grammar the sim stores in cinematicFrame.
+const finisherChoreography = FINISHER_CHOREOGRAPHY;
 
 // Release 1.8B PROJECTILE FOCUS: the assigned personal projectile owns all
 // three beats — prime, trap and kill. The restraint supports the object instead
@@ -1357,7 +1118,7 @@ function motion3KeyDrawable(fighterId, key) {
 // engine/fighter-kits.mjs and the routing list in fighterAnimationPose.
 // ---------------------------------------------------------------------------
 const fighterUnifiedAtlases = {};
-const unifiedBankState = { masks: null, extMasks: null, ext2Masks: null, ext3Masks: null, ext4Masks: null, requested: false, ready: null };
+const unifiedBankState = { masks: null, extMasks: null, ext2Masks: null, ext3Masks: null, ext4Masks: null, ext5Masks: null, requested: false, ready: null };
 
 /** Every unified sheet, main or ext, is this square once padded. */
 const UNIFIED_SHEET_PX = 1280;
@@ -1380,8 +1141,10 @@ function ensureUnifiedManifest() {
       // v5.0: the swing and reaction sheets gate per cell off the same main gate.
       unifiedBankState.ext3Masks = manifest ? buildSwingAcceptMasks(manifest, UNIFIED_EXT3_BANK, unifiedBankState.masks) : {};
       unifiedBankState.ext4Masks = manifest ? buildSwingAcceptMasks(manifest, UNIFIED_EXT4_BANK, unifiedBankState.masks) : {};
+      // v5.2: the locomotion sheet, the same per-cell gate off the main gate.
+      unifiedBankState.ext5Masks = manifest ? buildSwingAcceptMasks(manifest, UNIFIED_EXT5_BANK, unifiedBankState.masks) : {};
     })
-    .catch(() => { unifiedBankState.masks = {}; unifiedBankState.extMasks = {}; unifiedBankState.ext2Masks = {}; unifiedBankState.ext3Masks = {}; unifiedBankState.ext4Masks = {}; });
+    .catch(() => { unifiedBankState.masks = {}; unifiedBankState.extMasks = {}; unifiedBankState.ext2Masks = {}; unifiedBankState.ext3Masks = {}; unifiedBankState.ext4Masks = {}; unifiedBankState.ext5Masks = {}; });
   return unifiedBankState.ready;
 }
 
@@ -1538,10 +1301,14 @@ function unifiedFighterExt2Ready(fighterId) {
 // ---------------------------------------------------------------------------
 // v5.0 FULL SWING — the ext3 (strikes) and ext4 (reactions) sheets. Loaded
 // like ext2; gated per cell; consumed by swingSubstitute at pose resolution.
+// v5.2 LOCOMOTION — the ext5 sheet (dash, turnaround, air, presentation)
+// rides the same loader, gate and atlas table. Registered here; routed by the
+// locomotion pass (no track or substitution names an ext5 cell yet).
 // ---------------------------------------------------------------------------
-const fighterSwingAtlases = { [UNIFIED_EXT3_BANK]: {}, [UNIFIED_EXT4_BANK]: {} };
-const swingMaskKey = { [UNIFIED_EXT3_BANK]: "ext3Masks", [UNIFIED_EXT4_BANK]: "ext4Masks" };
-const swingSuffix = { [UNIFIED_EXT3_BANK]: "ext3", [UNIFIED_EXT4_BANK]: "ext4" };
+const swingBankList = Object.freeze([UNIFIED_EXT3_BANK, UNIFIED_EXT4_BANK, UNIFIED_EXT5_BANK]);
+const fighterSwingAtlases = { [UNIFIED_EXT3_BANK]: {}, [UNIFIED_EXT4_BANK]: {}, [UNIFIED_EXT5_BANK]: {} };
+const swingMaskKey = { [UNIFIED_EXT3_BANK]: "ext3Masks", [UNIFIED_EXT4_BANK]: "ext4Masks", [UNIFIED_EXT5_BANK]: "ext5Masks" };
+const swingSuffix = { [UNIFIED_EXT3_BANK]: "ext3", [UNIFIED_EXT4_BANK]: "ext4", [UNIFIED_EXT5_BANK]: "ext5" };
 
 function swingFighterWhole(fighterId, bank) {
   return Boolean(unifiedBankState[swingMaskKey[bank]]?.[fighterId]?.whole);
@@ -1584,11 +1351,25 @@ function unifiedFighterExtDescendReady(fighterId) {
   return unifiedExtCellDrawable(fighterId, UNIFIED_EXT_CELLS.jumpDescend);
 }
 
+/**
+ * v5.2 LOCOMOTION (ext5-air): the jump arc's `air` answer — the fighter's
+ * ext5 apex tuck, descent AND air recover all drawable, so the arc can own
+ * everything after the ascent on one family (jumpArcKeys). Asked as one
+ * answer, not per cell: a partial sheet would put a generation crossing back
+ * in the middle of the air, which is the configuration 3.0 measured and
+ * removed.
+ */
+function unifiedFighterAirReady(fighterId) {
+  return swingCellDrawable(fighterId, UNIFIED_EXT5_CELLS.apexTuck, UNIFIED_EXT5_BANK)
+    && swingCellDrawable(fighterId, UNIFIED_EXT5_CELLS.descent, UNIFIED_EXT5_BANK)
+    && swingCellDrawable(fighterId, UNIFIED_EXT5_CELLS.airRecover, UNIFIED_EXT5_BANK);
+}
+
 /** Bank-routed drawable gate for resolveMotionPose (all six authored banks). */
 function motionBankCellDrawable(fighterId, cell, bank) {
   if (bank === "motion3") return motion3KeyDrawable(fighterId, cell);
   if (bank === UNIFIED_EXT2_BANK) return unifiedExt2CellDrawable(fighterId, cell);
-  if (bank === UNIFIED_EXT3_BANK || bank === UNIFIED_EXT4_BANK) return swingCellDrawable(fighterId, cell, bank);
+  if (bank === UNIFIED_EXT3_BANK || bank === UNIFIED_EXT4_BANK || bank === UNIFIED_EXT5_BANK) return swingCellDrawable(fighterId, cell, bank);
   if (bank === UNIFIED_EXT_BANK) return unifiedExtCellDrawable(fighterId, cell);
   if (bank === UNIFIED_BANK) return unifiedCellDrawable(fighterId, cell);
   if (bank === "walk") return walkCellDrawable(fighterId, cell);
@@ -1670,8 +1451,8 @@ function preloadAuthoredBanks(fighterIds) {
       }
       // v4.9: the in-between sheet — its first use is the first jab.
       if (unifiedFighterExt2Whole(id)) decodeTracked(`${id}:ext2`, ensureUnifiedExt2Atlas(id));
-      // v5.0: strikes and reactions.
-      for (const swingBank of [UNIFIED_EXT3_BANK, UNIFIED_EXT4_BANK]) {
+      // v5.0: strikes and reactions. v5.2: and the locomotion sheet.
+      for (const swingBank of swingBankList) {
         if (!swingFighterWhole(id, swingBank)) continue;
         decodeTracked(`${id}:${swingSuffix[swingBank]}`, ensureSwingAtlas(id, swingBank));
       }
@@ -1748,6 +1529,7 @@ function unifiedGatesFor(fighterId) {
     ext2: unifiedFighterExt2Whole(fighterId),
     ext3: swingFighterWhole(fighterId, UNIFIED_EXT3_BANK),
     ext4: swingFighterWhole(fighterId, UNIFIED_EXT4_BANK),
+    ext5: swingFighterWhole(fighterId, UNIFIED_EXT5_BANK),
   };
 }
 
@@ -1759,6 +1541,7 @@ function sheetDrawableNow(fighterId, bank) {
     case "ext2": return live(fighterUnifiedExt2Atlases[fighterId]);
     case "ext3": return live(fighterSwingAtlases[UNIFIED_EXT3_BANK][fighterId]);
     case "ext4": return live(fighterSwingAtlases[UNIFIED_EXT4_BANK][fighterId]);
+    case "ext5": return live(fighterSwingAtlases[UNIFIED_EXT5_BANK][fighterId]);
     case "motion": return live(fighterMotionAtlases[fighterId]);
     case "motion2": return live(fighterMotion2Atlases[fighterId]);
     case "motion3": return live(fighterMotion3Atlases[fighterId]);
@@ -1966,7 +1749,7 @@ function altAtlasSource(fighterId, bank) {
   if (bank === UNIFIED_EXT2_BANK) {
     return { image: fighterUnifiedExt2Atlases[fighterId], key: `${fighterId}:unified-ext2` };
   }
-  if (bank === UNIFIED_EXT3_BANK || bank === UNIFIED_EXT4_BANK) {
+  if (bank === UNIFIED_EXT3_BANK || bank === UNIFIED_EXT4_BANK || bank === UNIFIED_EXT5_BANK) {
     return { image: fighterSwingAtlases[bank][fighterId], key: `${fighterId}:${bank}` };
   }
   const specials = bank === "specials" ? fighterMoveAtlases[fighterId] : null;
@@ -2018,7 +1801,7 @@ function paletteAtlas(fighterId, side, bank = "base") {
                 ? fighterUnifiedExtAtlases[fighterId] || fighterAtlases[fighterId]
                 : bank === UNIFIED_EXT2_BANK
                   ? fighterUnifiedExt2Atlases[fighterId] || fighterAtlases[fighterId]
-                  : bank === UNIFIED_EXT3_BANK || bank === UNIFIED_EXT4_BANK
+                  : bank === UNIFIED_EXT3_BANK || bank === UNIFIED_EXT4_BANK || bank === UNIFIED_EXT5_BANK
                     ? fighterSwingAtlases[bank][fighterId] || fighterAtlases[fighterId]
                     : fighterAtlases[fighterId];
   if (matchPalettes[side] !== 1) return base;
@@ -12124,7 +11907,7 @@ function finishRound(winner, type = -1) {
     // next round or the result screen takes over.
     // v2.9 FLOW round 2: the attract loop holds a plain KO a little shorter
     // (demo-only; every other mode keeps the full 4.9s beat).
-    state.phaseTime = state.mode === "demo" ? DEMO_KO_HOLD_SECONDS : 4.9;
+    state.phaseTime = roundWinHoldSeconds();
     duckMusic(0.28, 2600);
     // w51 announcer truth: the clock running out on two standing fighters is
     // a DECISION, not a knockout — the banner says so, the announcer opens on
@@ -12226,28 +12009,6 @@ function performFinisher(winner, type) {
   sound("final");
   // Slow-mo debt plus a long look at the aftermath before the result screen.
   return script.duration + 3.4;
-}
-
-function sampleFinisher(keys, elapsed) {
-  let from = keys[0];
-  let to = keys.at(-1);
-  for (let index = 0; index < keys.length - 1; index += 1) {
-    if (elapsed >= keys[index].t && elapsed <= keys[index + 1].t) {
-      from = keys[index];
-      to = keys[index + 1];
-      break;
-    }
-  }
-  const span = Math.max(.001, to.t - from.t);
-  const linear = clamp((elapsed - from.t) / span, 0, 1);
-  const eased = linear * linear * (3 - 2 * linear);
-  const mix = (field, fallback = 0) => lerp(from[field] ?? fallback, to[field] ?? from[field] ?? fallback, eased);
-  return {
-    ax: mix("ax"), ay: mix("ay"), vx: mix("vx"), vy: mix("vy"),
-    ar: mix("ar"), vr: mix("vr"), zoom: mix("zoom", 1.08),
-    af: linear < .5 ? from.af : to.af,
-    vf: linear < .5 ? from.vf : to.vf,
-  };
 }
 
 // Camera choreography is derived only from the current scripted beat. That
@@ -15450,10 +15211,14 @@ function updateFighter(fighter, opponent, input, dt) {
       // v2.7 FRAMES: ghosts stay base-bank smears — a motion pose (the dash
       // stretch cell) contributes its base fallback frame instead of muting
       // the trail.
+      // v5.2 LOCOMOTION (bookends): the dash draws the ext5 launch / stretch /
+      // brake now, whose fallback is the MOTION link it stands in for and only
+      // then the base cell — one level of fallback found no base frame and the
+      // trail went silent on every fighter whose ext5 sheet was decoded (the
+      // browser smoke's "a dash must leave a ghost trail" caught it once the
+      // sheet was ready before the probe). The chain is walked to its base cell.
       const ghostPose = fighterAnimationPose(fighter);
-      const ghostFrame = ghostPose.bank === "base" ? ghostPose.frame
-        : isAuthoredBank(ghostPose.bank) && ghostPose.fallback?.bank === "base"
-          ? ghostPose.fallback.frame : -1;
+      const ghostFrame = baseFallbackFrame(ghostPose);
       if (ghostFrame >= 0) {
         state.effects.push({
           kind: "afterimage", fighterId: fighter.def.id, side: fighter.side,
@@ -19224,12 +18989,43 @@ function recordPoseTrace(fighter, pose) {
 // deterministically between the kit victory cell, the motion alternate win
 // pose and the second signature — pure snapshotted sim state, never
 // Math.random, so rollback resimulation and both online peers agree.
-function showcasePoseDescriptor(fighter) {
+// v5.2 LOCOMOTION: the showcase is the fighter's OWN cell first — the ext5
+// victory under the curtain-call spotlight, the ext5 taunt for the taunt —
+// over the exact rotation below, which is what draws when the sheet is not
+// on the fighter (and what the kit's specials:15 read has always been).
+function showcasePick() {
+  return (((state.matchSeed >>> 0) + state.rounds[0] + state.rounds[1]) >>> 0) % 3;
+}
+
+function showcasePoseDescriptor(fighter, ext5Cell = UNIFIED_EXT5_CELLS.victory) {
   const victory = fighter.kit.victory;
-  const pick = (((state.matchSeed >>> 0) + state.rounds[0] + state.rounds[1]) >>> 0) % 3;
-  if (pick === 1) return motionPose(MOTION_CELLS.victory2, victory.bank, victory.frame);
-  if (pick === 2) return motionPose(MOTION_CELLS.sig2, victory.bank, victory.frame);
-  return { bank: victory.bank, frame: victory.frame };
+  const pick = showcasePick();
+  const rotation = pick === 1 ? motionPose(MOTION_CELLS.victory2, victory.bank, victory.frame)
+    : pick === 2 ? motionPose(MOTION_CELLS.sig2, victory.bank, victory.frame)
+      : { bank: victory.bank, frame: victory.frame };
+  return unifiedExt5Pose(ext5Cell, rotation);
+}
+
+// v5.2 LOCOMOTION (bookends): the plain-KO curtain call, by mode — the value
+// finishRound sets, read again by the win pose to know how far into the hold
+// it is (phaseTime counts down; both are snapshotted, so a resim agrees).
+function roundWinHoldSeconds() {
+  return state.mode === "demo" ? DEMO_KO_HOLD_SECONDS : ROUND_WIN_HOLD_SECONDS;
+}
+
+// v5.2 LOCOMOTION (bookends): a fighter inside a Final Blow draws the key's
+// same-generation cell over the base cell the sim stored in cinematicFrame
+// (engine/finisher-scripts, finisherCinematicPose). The victim's body at rest
+// is the ext4 KO cell only when his sprite is drawn WHOLE — under the graphic
+// fatality's band slicing the rest stays the upright-plan wall splat laid
+// down by the script's own rotation. Pure reads of snapshotted state plus the
+// gore toggle (presentation, like the atlas gate itself).
+function cinematicPoseDescriptor(fighter, fallback) {
+  const finisher = state.finisher;
+  if (!finisher || state.fighters?.length !== 2 || state.fighters[fighter.side] !== fighter) return fallback;
+  const role = fighter.side === finisher.winner ? "attacker" : "victim";
+  const plainBody = role === "victim" && !(state.graphicFatalities && finisher.fatalityTriggered);
+  return finisherCinematicPose(sampleFinisher(finisher.script.keys, finisher.elapsed), role, fallback, { plainBody });
 }
 
 // v4.0: the one options object every ext-aware beat track is handed, frozen so
@@ -19241,6 +19037,13 @@ const EXTENDED = Object.freeze({ extended: true });
 // handed this object unchanged, which keeps "one capability answer per pose"
 // true rather than nearly true.
 const EXTENDED_DESCEND = Object.freeze({ extended: true, descend: true });
+// v5.2 LOCOMOTION (ext5-air): the same three answers with `air` — the ext5
+// apex tuck, descent and air recover drawable — which only the jump arc
+// reads (every other track destructures what it knows and ignores the rest).
+// Frozen for the same reason: a track cannot mutate the caller's answer.
+const AIR = Object.freeze({ air: true });
+const EXTENDED_AIR = Object.freeze({ extended: true, air: true });
+const EXTENDED_DESCEND_AIR = Object.freeze({ extended: true, descend: true, air: true });
 // Idle breaths per second on a fighter with an ext sheet. Two drawings at 7.5/s
 // is 8 ticks each at 60fps — exactly MOTION_HOLD_BUDGET, so the most-seen beat
 // in the game sits precisely at the limit the budget sets rather than holding
@@ -19275,12 +19078,20 @@ function fighterPoseDescriptor(fighter) {
   const uni = (cell, pose) => unifiedPose(cell, pose);
   // v4.0 — THE EXT SHEET. `ext` is this fighter's ONE capability answer, read
   // once per pose so every beat below agrees about which key arrays to use.
-  // Five fighters have no ext sheet and take `false` through every branch,
-  // which is the byte-identical 3.5 read.
+  // A fighter whose ext sheet is not whole or not yet decoded takes `false`
+  // through every branch, which is the byte-identical 3.5 read (the five 3.0
+  // holdouts shipped that way until 4.1 / 5.2 put the whole roster on it).
   const ext = unifiedFighterExtReady(fighter.def.id);
+  // v5.2 LOCOMOTION (ext5-air): `air` rides the same object. A fighter with
+  // no ext sheet but the ext5 air cells (deathblow, post, donald, the devil)
+  // takes AIR, so his plain arc un-retires the unified rise and tuck ahead
+  // of the ext5 apex, descent and recover — one family, takeoff to touchdown.
+  const air = unifiedFighterAirReady(fighter.def.id);
   const extOpt = ext
-    ? (unifiedFighterExtDescendReady(fighter.def.id) ? EXTENDED_DESCEND : EXTENDED)
-    : undefined;
+    ? (unifiedFighterExtDescendReady(fighter.def.id)
+      ? (air ? EXTENDED_DESCEND_AIR : EXTENDED_DESCEND)
+      : (air ? EXTENDED_AIR : EXTENDED))
+    : (air ? AIR : undefined);
   // v4.9 IN-BETWEENS: the third capability answer. `beatOpt` carries the ext
   // answer and adds `inbetween` when this fighter's ext2 sheet is whole, so
   // the strike tracks (light cock, heavy load, recovery, throw reach/release)
@@ -19313,7 +19124,9 @@ function fighterPoseDescriptor(fighter) {
   // is a deep squat and base(13) an attack pose (or, on deathblow, a whole
   // different costume) on most of the roster. See BASE_CELL_ROLES.
   const roles = baseCellRoles(fighter.def.id);
-  if (fighter.cinematicFrame !== null) return base(fighter.cinematicFrame);
+  // v5.2 LOCOMOTION (bookends): a Final Blow draws the script's own
+  // same-generation cell over the base index the sim stores here.
+  if (fighter.cinematicFrame !== null) return cinematicPoseDescriptor(fighter, base(fighter.cinematicFrame));
   // v2.9 critic round (B4): the airborne `thrown` cell is gated to the actual
   // LIFT window. It was applied from grab frame 0, which snapped the victim
   // ~80 degrees from standing idle to flat-on-his-back in ONE tick and then
@@ -19391,6 +19204,10 @@ function fighterPoseDescriptor(fighter) {
     // chain. Routing the unified tuck into it put a 8.18 dE mean crossing
     // between them (7.56 on deathblow) to remove none; retired, it is
     // crossing-free.
+    // v5.2 LOCOMOTION (ext5-air): the substitution table draws this pair as
+    // the ext5 apex tuck (the ball) and the ext5 air recover (the tail) on a
+    // fighter with the sheet — both motion cells are accepted on all ten, so
+    // the table always sees them and the chain below needs no ext5 descriptor.
     return flip < 0.6
       ? motionPose(MOTION_CELLS.tuck, "base", 13)
       : motionPose(MOTION_CELLS.airrec, "base", 13);
@@ -19398,14 +19215,19 @@ function fighterPoseDescriptor(fighter) {
   // Release 1.7 wave 11: the taunt holds the fighter's victory pose frame
   // (v2.7: rotated with the motion alternates).
   if (fighter.tauntFrames > 0 && fighter.kit?.victory) {
-    return showcasePoseDescriptor(fighter);
+    return showcasePoseDescriptor(fighter, UNIFIED_EXT5_CELLS.taunt);
   }
   // v2.7 FRAMES: signature intro stance — each side holds its own manifest
   // signature cell through the walk-on, releasing to idle before FIGHT!.
-  if (state.phase === "intro" && state.phaseTime > 0.95 && fighter.grounded
-    && !fighter.attacking && fighter.kit?.victory) {
+  const entrance = state.phase === "intro" ? introEntranceCell(state.phaseTime) : null;
+  if (entrance !== null && fighter.grounded && !fighter.attacking && fighter.kit?.victory) {
     const cell = (((state.matchSeed >>> 0) + fighter.side) % 2) ? MOTION_CELLS.sig2 : MOTION_CELLS.sig1;
-    return motionPose(cell, "base", Math.floor(fighter.animTime * 5) % 4);
+    // v5.2 LOCOMOTION (bookends): the walk-on is TWO beats from the fighter's
+    // own sheet — entrance A (ext5:9) for the first half, entrance B (ext5:10)
+    // for the second, on both fighters — then the unified idle for the 0.95 s
+    // before FIGHT! (engine/bookends). The motion signature the seed-and-side
+    // pick chose rides under both beats, so a held ext5 sheet reads as before.
+    return unifiedExt5Pose(entrance, motionPose(cell, "base", Math.floor(fighter.animTime * 5) % 4));
   }
   // v2.7 FRAMES: round-win pose under the curtain-call spotlight — the winner
   // holds the showcase rotation (same convention the camera settle uses to
@@ -19416,7 +19238,13 @@ function fighterPoseDescriptor(fighter) {
     && fighter.hitstunFrames === 0 && fighter.knockdownFrames === 0) {
     const other = state.fighters[1 - fighter.side];
     const winner = fighter.side === 0 ? fighter.health >= other.health : fighter.health > other.health;
-    if (winner) return showcasePoseDescriptor(fighter);
+    // v5.2 LOCOMOTION (bookends): the victory through the "<name> WINS" call,
+    // then the taunt as the second beat on the picks that were the rotation's
+    // own second drawings (engine/bookends roundWinShowcaseCell).
+    if (winner) {
+      const hold = roundWinHoldSeconds();
+      return showcasePoseDescriptor(fighter, roundWinShowcaseCell(showcasePick(), hold - state.phaseTime, hold));
+    }
   }
   // MOTION FIX 4 + 11: victim REACTION TRACKS through the scripted super
   // storms — a pure function of both fighters' snapshotted sim state, so it
@@ -19619,10 +19447,15 @@ function fighterPoseDescriptor(fighter) {
   // same observer clock; the recovery bands are empty and resolve to the
   // crouch read the stance branch draws, so a fighter without the cell is
   // byte-identical and the flinch hands back to exactly the drawing it left.
+  // v5.2 LOCOMOTION: with the fighter's ext5 crouch guard flinch drawable
+  // (`flinch`, the capability answer for this track) the impact band opens
+  // on it and the crouch guard takes the settle — an impact and a settle,
+  // like the standing block. ali's flinch is held, so he reads the 5.1 track.
   if (fighter.blockstunFrames > 0 && fighter.crouch && fighter.grounded) {
     const blockTotal = Math.max(fighter.blockstunFrames, motionObs[fighter.side]?.blockstunTotal || 0);
     const blockPhase = clamp(1 - fighter.blockstunFrames / Math.max(1, blockTotal), 0, 0.999);
-    return beatPoseAt(crouchBlockstunKeys(), blockPhase, uni(UNIFIED_CELLS.crouch, base(roles.crouch)));
+    const flinch = swingCellDrawable(fighter.def.id, UNIFIED_EXT5_CELLS.crouchGuardFlinch, UNIFIED_EXT5_BANK);
+    return beatPoseAt(crouchBlockstunKeys({ flinch }), blockPhase, uni(UNIFIED_CELLS.crouch, base(roles.crouch)));
   }
   if (fighter.hitFlash > 0 || fighter.hitstunFrames > 21) {
     // v5.1: a BLOCKED contact's flash keeps the stance. The flash outlives a
@@ -19665,12 +19498,16 @@ function fighterPoseDescriptor(fighter) {
   // missing sheet changes nothing.
   const turnObs = motionObs[fighter.side];
   if (turnObs?.turnFrames > 0 && fighter.grounded && !fighter.attacking) {
-    return motion2Pose(MOTION2_CELLS.turnaround, "base",
+    // v5.2 LOCOMOTION: the pivot is the fighter's own (ext5:3, a mid-turn
+    // body seen from behind) over the exact 2.9 chain, so the three latch
+    // ticks sit between two unified rungs on one sheet family instead of
+    // dropping to the motion2 generation for the turn.
+    return unifiedExt5Pose(UNIFIED_EXT5_CELLS.turnaround, motion2Pose(MOTION2_CELLS.turnaround, "base",
       fighter.crouch ? roles.crouch
         : fighter.block ? roles.guard
           : Math.abs(fighter.vx) > 22
             ? 4 + Math.floor(fighter.walkTime * 10) % 4
-            : Math.floor(fighter.animTime * 5) % 4);
+            : Math.floor(fighter.animTime * 5) % 4));
   }
   // v2.9 FLOW: 2-3 ticks of the authored half-lowered in-between entering
   // crouch (the leave side lives past the movement branches below). The
@@ -19785,8 +19622,15 @@ function fighterPoseDescriptor(fighter) {
     // anywhere in the four banks, so the in-between has to be a transform, and
     // the drawing under it must be the chamber rather than the generic base
     // strike cell the un-handled beat used to fall through to.
+    // v5.2: the arc CONTINUES the compress band's drawing, so it degrades the
+    // same way that band does — through the fighter's own crouch transition
+    // before the base cell. The devil is the one fighter whose motion2:4 is
+    // rejected (an all-fours prowl), and base 13 is his AIRBORNE claw lunge:
+    // two ticks of it played between his compress and his kick on every
+    // heavy kick until his ext sheet put the unified read under it.
     if (beat?.beat === "kickArc") {
-      return motion2Pose(beat.cell, "base", frames[1]);
+      const arc = motion2Pose(beat.cell, "base", frames[1]);
+      return ext ? { ...arc, fallback: uni(UNIFIED_CELLS.crouchTrans, arc.fallback) } : arc;
     }
     if (beat?.beat === "airAttack") {
       return beatPoseAt(beat.keys, beat.phase, (key) => ({
@@ -19881,6 +19725,11 @@ function fighterPoseDescriptor(fighter) {
     // route — every band after it (tuck, apex, descent, air-recovery, landing
     // gather) is motion-family, and the first cut's unified tuck handed to
     // motion:11 at 7.56 dE and held it 15+ ticks in mid-air. See jumpArcKeys.
+    // v5.2 LOCOMOTION (ext5-air): with the `air` answer the arc above is one
+    // family end to end (the rise and tuck un-retired ahead of the ext5 apex
+    // tuck, descent and air recover, the ext3 gather, then the unified crouch
+    // transition below); this reduced-motion / non-neutral read keeps its
+    // motion2 rise and the land cell, which the substitution draws as ext3:10.
     if (fighter.vy < 0) return motion2Pose(MOTION2_CELLS.jumpRise, "base", 13);
     // BODY-FIRST (spec 4): the descent cell advances BEFORE touchdown — the
     // legs gather on the crouch cell through the last ~110px of the fall
@@ -19940,9 +19789,15 @@ function fighterPoseDescriptor(fighter) {
   // brake now owns the whole velocity decay, so the upright cell arrives only
   // once the fighter has genuinely stopped. The fallback is the base gather
   // cell the 2.7 bridge used, exactly as the in-dash brake key does.
+  // v5.2 LOCOMOTION: the exit tail wears the fighter's OWN brake (ext5:2),
+  // the same drawing the dash's last band left on, over the exact 2.9 chain.
+  // Emitted directly rather than through the substitution table because the
+  // devil's motion2 brake is rejected: for him the chain below resolves
+  // base:12, which the table never sees, and the dash would leave the family
+  // on its last four ticks.
   if (transObs?.dashExitFrames > 0 && fighter.grounded && !fighter.crouch
     && Math.abs(fighter.vx) > MOTION_RULES.dashBrakeReleaseSpeed) {
-    return motion2Pose(MOTION2_CELLS.dashBrake, "base", 12);
+    return unifiedExt5Pose(UNIFIED_EXT5_CELLS.dashBrake, motion2Pose(MOTION2_CELLS.dashBrake, "base", 12));
   }
   if (Math.abs(fighter.vx) > WALK_POSE_MIN_SPEED && !(transObs?.dashExitFrames > 0)) {
     // v2.10 WALK — the SELF-CONTAINED four-key cycle (assets/walk).
@@ -22041,7 +21896,11 @@ function drawFighter(fighter, time) {
 
   drawRhythmRings(fighter, time);
 
-  if (fighter.cinematicRotation) ctx.rotate(fighter.cinematicRotation);
+  // v5.2 LOCOMOTION (bookends): a prone cinematic cell (the victim's KO lie)
+  // sheds the lie it already carries before the script's rotation is applied
+  // — the same rule the CINEMA 3D rig reads through the host bridge.
+  const cineRotation = cinematicDrawRotation(pose.bank, frame, fighter.cinematicRotation || 0);
+  if (cineRotation) ctx.rotate(cineRotation);
   if (finisherHoldWinner) ctx.rotate(Math.sin(time * 0.0012 + 0.8) * 0.011);
   if (fighter.cinematicScale !== 1) ctx.scale(fighter.cinematicScale, fighter.cinematicScale);
 
@@ -22126,7 +21985,10 @@ function drawFighter(fighter, time) {
     // descriptor being emitted but falling back through the accept mask (the
     // pivot's own fallback cell). Instrumentation only.
     if (motionObs[fighter.side]?.turnFrames > 0) {
-      if (pose.bank === "motion2" && frame === MOTION2_CELLS.turnaround) {
+      // v5.2: the pivot is the ext5 turnaround on a fighter with the sheet,
+      // the motion2 key underneath it otherwise — both are the pivot drawn.
+      if ((pose.bank === "motion2" && frame === MOTION2_CELLS.turnaround)
+        || (pose.bank === UNIFIED_EXT5_BANK && frame === UNIFIED_EXT5_CELLS.turnaround)) {
         presentationDebug.turnaroundDraws += 1;
       } else {
         const blockedBy = `${pose.bank}:${frame}`;
@@ -22431,7 +22293,7 @@ function drawFighter(fighter, time) {
     }
     if (graphicFatality) {
       drawGraphicFatalityVictim(atlas, frame, renderSize, graphicFatality, time,
-        renderMirror, fighter.cinematicRotation || 0);
+        renderMirror, cineRotation);
     }
     else if (!reflectionPassActive && state.performance.shadows && battleDamageMarks[fighter.side].length) {
       // Accumulating battle damage: composite the accrued marks onto this
@@ -29484,7 +29346,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.1");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.2");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -30890,7 +30752,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.1-truth",
+  version: "5.2-locomotion",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -31088,7 +30950,7 @@ window.__finalBlowEngine = {
       })),
       crowd: crowdSnapshot(state.crowd, state.simulationTick, { viewLeft: 0, viewRight: W }),
       inbetweens: state.fighters.map((fighter) => unifiedFighterExt2Ready(fighter.def.id)),
-      swing: state.fighters.map((fighter) => [UNIFIED_EXT3_BANK, UNIFIED_EXT4_BANK].map((bank) => swingCellDrawable(fighter.def.id, 0, bank))),
+      swing: state.fighters.map((fighter) => swingBankList.map((bank) => swingCellDrawable(fighter.def.id, 0, bank))),
       crowdSprites: {
         manifest: Boolean(crowdSheets.manifest),
         ready: Boolean(state.crowd?.people?.some((person) => person.sprite && crowdSpriteCharacter(person))),
@@ -33053,6 +32915,9 @@ function ensureCinema3d() {
       // the warm-up must never mistake for an authored bank.
       downTiltRadians: DOWN_TILT_RADIANS,
       fighterBankSheet: (fighterId, bank) => altAtlasSource(fighterId, bank).image || null,
+      // v5.2 LOCOMOTION (bookends): the cinematic rotation a prone cell
+      // actually draws under (the victim's KO lie sheds its own lie first).
+      cinematicDrawRotation,
       crowdBillboards,
       crowdSheetImage: (name) => crowdSheets.images.get(name) || null,
       crowdMediaRequest: ensureCrowdMedia,

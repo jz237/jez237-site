@@ -24,6 +24,27 @@ import { ATTACK_LEVELS, GUARD_RULES, STUN_RULES } from "./defense.mjs";
 // (which starts at full amplitude) is already carrying the sway when it lands.
 export const REEL_ONSET_TICKS = 12;
 
+// v5.2 LOCOMOTION: the dizzy loop's own beat. After the reel the loop used
+// to hold the ext4 slump for the remaining ~116 ticks of a dizzy (14x the
+// hold budget) with the wobble transform doing all the work; it now
+// alternates the slump with the ext5 sway every DIZZY_SWAY_TICKS, keyed on
+// the ELAPSED ticks of the dizzy / guard-crush clock (sim state, so a
+// rollback resim and both renderers agree). The same 12 ticks as the reel,
+// so the whole loop — reel, slump, sway, slump, sway... — is one cadence, and
+// the 86-tick rotation sway in fighterMotionTransform rides across it.
+export const DIZZY_SWAY_TICKS = REEL_ONSET_TICKS;
+
+/** Parity of the dizzy / guard-crush clock, in DIZZY_SWAY_TICKS beats: true on the odd beats. */
+export function dizzySwayBeat(fighter) {
+  const elapsed = fighter.dizzyFrames > 0
+    ? (fighter.dizzyTotalFrames || STUN_RULES.dizzyFrames) - fighter.dizzyFrames
+    : fighter.guardCrushFrames > 0
+      ? (fighter.guardCrushTotalFrames || GUARD_RULES.crushFrames) - fighter.guardCrushFrames
+      : -1;
+  if (!(elapsed >= 0)) return false;
+  return Math.floor(elapsed / DIZZY_SWAY_TICKS) % 2 === 1;
+}
+
 /**
  * The substitution context for a fighter snapshot. The seven 5.0 fields plus
  * the three 5.1 reaction reads are what `swingSubstitute` reads; `crouchActive` is the one extra the resolver needs
@@ -68,6 +89,10 @@ export function swingContext(fighter, { roundDecided = false } = {}) {
     reeling: (fighter.dizzyFrames > 0 && fighter.dizzyFrames > (fighter.dizzyTotalFrames || STUN_RULES.dizzyFrames) - REEL_ONSET_TICKS)
       || (fighter.guardCrushFrames > 0 && fighter.guardCrushFrames > (fighter.guardCrushTotalFrames || GUARD_RULES.crushFrames) - REEL_ONSET_TICKS),
     ko: Boolean(roundDecided) && fighter.health <= 0,
+    // v5.2: the dizzy loop's beat — the odd DIZZY_SWAY_TICKS beats of the
+    // dizzy / guard-crush clock wear the ext5 sway, the even ones the ext4
+    // slump. Reeling wins for the onset (the table checks it first).
+    swayBeat: dizzySwayBeat(fighter),
     // In blockstun the settle band's fallback is the light-hit cell (motion3
     // block-settle is not accepted on every sheet); the table keeps the flinch
     // for a blocking fighter rather than snapping his head on a block.
@@ -87,9 +112,11 @@ export function swingContext(fighter, { roundDecided = false } = {}) {
  * game.js), not a swing-only one: a substitute may land on any authored bank
  * — ext3/ext4 mostly, but the unified crouch transition, the ext2 crouch
  * recover and the ext descent too. A target that cannot draw falls to its
- * `alt` when it has one and that can draw (the descent's chambered-air
- * fallback for the five sheets that never accepted their descent); otherwise
- * the resolved pose stands untouched, so timing never changes.
+ * `alt` when it has one and that can draw; an alt may carry an alt of its
+ * own (v5.2: the air recover's degrade path is the 5.0 chain in its order —
+ * the ext descent where a sheet accepted it, then the ext3 chamber), and the
+ * gate is asked down that chain until one draws; otherwise the resolved pose
+ * stands untouched, so timing never changes.
  */
 export function swingResolve(pose, ctx, drawable) {
   let sub = swingSubstitute(pose.bank, pose.frame, ctx);
@@ -101,9 +128,7 @@ export function swingResolve(pose, ctx, drawable) {
   // The substitute may land on ANY authored bank (ext3/ext4 mostly, but the
   // unified crouch transition, the ext2 crouch recover and the ext descent
   // too), so the gate is the bank-routed one, not the swing-only one.
-  if (sub && !drawable(sub.frame, sub.bank)) {
-    sub = sub.alt && drawable(sub.alt.frame, sub.alt.bank) ? sub.alt : null;
-  }
+  while (sub && !drawable(sub.frame, sub.bank)) sub = sub.alt || null;
   if (!sub) return pose;
   return { bank: sub.bank, frame: sub.frame, fallback: pose };
 }
