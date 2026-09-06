@@ -4,6 +4,355 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-09-06",
+      "historicDate": "1984-05-14",
+      "displayDate": "Week of May 14-20, 1984",
+      "edition": "Issue 094 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Cinematic videogame excitement on warm aged newsprint",
+        "motifs": [
+          "telephone modem",
+          "Atari XL keyboard",
+          "game cartridge",
+          "network lockout panel"
+        ],
+        "layout": "Dense seven-column 1984 computer weekly with bold red and blue rules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+        "dateline": "Week of May 14-20, 1984",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Lucasfilm Games banner with dominant fractal-world halftone",
+        "secondaryRail": "Input devices, word processing, charts and price watch",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "#9b1c1c",
+        "secondary": "#173f6b",
+        "texture": "warm newsprint grain and halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-05-14.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of May 14-20, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Dial-up networks answer intruders with new hardware while Atari rebuilds its home-computer line and Lucasfilm prepares a new kind of computer game.",
+      "morningLine": "The telephone line is becoming both the personal computer’s doorway and its newest lock.",
+      "lead": {
+        "headline": "Telenet Locks the Dial-Up Door",
+        "dek": "A new device promises to bar unauthorized callers from computer systems reached over telephone lines.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ],
+        "body": [
+          "WASHINGTON — GTE Telenet introduced a device Tuesday, May 15, designed to lock unauthorized users out of computer systems reached through telephone lines. The announcement turns the fast-growing worry over modem intrusion into a commercial hardware market.",
+          "Dial-up access is spreading beyond large institutions as lower-priced modems bring telecommunications within reach of homes and small offices. That convenience also means a computer can have a doorway far beyond the machine room, and network operators are now selling a lock for it.",
+          "The period report does not name a hacker crew or connect the product to a particular break-in. Its significance is broader: access control has become a product category, proof that remote computing is mature enough to demand both openness and defenses.",
+          "For home users, the same week’s magazine racks advertise comparisons of six modems below $100. The modem is moving from specialist equipment toward a mass-market peripheral just as the networks at the other end learn to question who is calling."
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Atari Pledges a Sober XL Comeback",
+          "sourceRefs": [
+            2
+          ],
+          "body": [
+            "After a half-billion-dollar loss in 1983, Atari says its recovery will rest on profitability, reliability and products customers actually want. Chief executive James Morgan’s program includes a 40 percent overhead reduction and fewer premature promises.",
+            "The 600XL and 800XL are cast as the workhorses. A roughly $100 model 1064 module can expand the 16K 600XL to 64K, while specifications for the ambitious 1450XLD remain under review.",
+            "Software is part of the repair job: SynFile+, SynCalc and SynTrend, acquired from Synapse, bring database, spreadsheet, graphing and statistics tools to Atari’s 8-bit line at $99.95 each."
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Lucasfilm Turns Its Cameras Toward Games",
+          "sourceRefs": [
+            1
+          ],
+          "body": [
+            "George Lucas’s company has entered the home video-game market, bringing film-production talent into interactive entertainment. The May 8 announcement was still fresh as this week began.",
+            "The venture stresses original play rather than a simple movie license. Its first Atari-computer projects would become Ballblazer, a futuristic split-screen sport, and Rescue on Fractalus!, a tense flight across an alien landscape."
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Sub-$100 Modems Call the Home Office",
+          "sourceRefs": [
+            3
+          ],
+          "body": [
+            "The May issue of Computers & Electronics puts six modems costing less than $100 on its cover, a vivid sign that data communications is crossing a consumer price threshold.",
+            "Micro-to-mainframe access, bulletin boards and online services are becoming practical ambitions for a household machine. The bargain modem expands the audience—and makes the week’s Telenet security announcement feel less remote."
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari 1064 Memory Module",
+          "summary": "About $100 to expand the 16K Atari 600XL to 64K.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "AtariLab Starter Set",
+          "summary": "An $89.95 interface and temperature module brings experiments to the 8-bit line.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "title": "Budget modems",
+          "summary": "A period comparison covers six models selling below $100.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "SynFile+",
+          "detail": "Atari database package, $99.95"
+        },
+        {
+          "name": "SynCalc",
+          "detail": "Linked spreadsheet with VisiCalc compatibility, $99.95"
+        },
+        {
+          "name": "SynTrend",
+          "detail": "Graphs, statistics and regression, $99.95"
+        },
+        {
+          "name": "Atari DOS 3",
+          "detail": "Bundled with the dual-density 1050 drive"
+        },
+        {
+          "name": "Atari-Artist",
+          "detail": "Bundled with the $89.95 Touch Tablet"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Ballblazer",
+            "Rescue on Fractalus!",
+            "The Legacy",
+            "Sabre Wulf",
+            "Pitstop"
+          ]
+        },
+        {
+          "label": "Top Movies",
+          "items": [
+            "The Natural",
+            "Breakin'",
+            "Romancing the Stone",
+            "Firestarter",
+            "Sixteen Candles"
+          ]
+        },
+        {
+          "label": "Hardware Counter",
+          "items": [
+            "Atari 1064 Memory Module",
+            "AtariLab Starter Set",
+            "Atari Touch Tablet",
+            "Sub-$100 modems"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Atari Syn-series software",
+          "price": "$99.95 each",
+          "note": "Database, spreadsheet, and graphics/statistics packages"
+        },
+        {
+          "item": "Atari Touch Tablet with Atari-Artist",
+          "price": "$89.95",
+          "note": "Drawing input package"
+        },
+        {
+          "item": "AtariLab Starter Set",
+          "price": "$89.95",
+          "note": "Interface and temperature module"
+        },
+        {
+          "item": "Budget modem category",
+          "price": "under $100",
+          "note": "Six models compared in period press"
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Atari keeps the 1450XLD under review",
+          "text": "The high-end model is now described as a demonstration of intent while specifications are reconsidered."
+        },
+        {
+          "headline": "DOS 3 accompanies the 1050",
+          "text": "Atari says existing 1050 owners will receive the new disk operating system without charge."
+        },
+        {
+          "headline": "Sell-through video tests $19.95",
+          "text": "Billboard reports feature programs headed to market at a price aimed at household ownership."
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Hello",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 2,
+          "title": "Against All Odds (Take a Look at Me Now)",
+          "artist": "Phil Collins"
+        },
+        {
+          "rank": 3,
+          "title": "Hold Me Now",
+          "artist": "Thompson Twins"
+        },
+        {
+          "rank": 4,
+          "title": "Footloose",
+          "artist": "Kenny Loggins"
+        },
+        {
+          "rank": 5,
+          "title": "Love Somebody",
+          "artist": "Rick Springfield"
+        }
+      ],
+      "periodAd": {
+        "headline": "64K FOR YOUR 600XL",
+        "summary": "Atari’s model 1064 memory module expands the 16K machine to 64K for about $100.",
+        "tagline": "More room for work, play and tomorrow."
+      },
+      "market": {
+        "headline": "Telecommunications Breaks the $100 Barrier",
+        "summary": "Six low-cost modems on a national magazine cover signal a widening home market for dial-up computing.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          3
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Soviet Boycott Reshapes the Los Angeles Olympics",
+        "summary": "The Soviet Union’s May 8 decision not to attend the 1984 Los Angeles Games—and allied withdrawals—continued to dominate international coverage.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Home Video Eyes a $19.95 Shelf Price",
+        "summary": "Billboard’s May 19 cover reports feature programs coming to market at $19.95, an effort to turn prerecorded video into a household purchase.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          4
+        ]
+      },
+      "bbsNote": {
+        "headline": "The Modem Moves Downmarket",
+        "summary": "With six modems under $100 drawing cover attention, more home computers can reach bulletin boards and remote services.",
+        "posts": [
+          {
+            "topic": "Price Watch",
+            "platform": "Dial-up",
+            "text": "Sub-$100 models widen the on-ramp to telecommunications."
+          },
+          {
+            "topic": "Security",
+            "platform": "Telenet",
+            "text": "Network operators answer unauthorized dialing with dedicated access-control hardware."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "A Laboratory in the Cartridge Slot",
+        "summary": "AtariLab turns an Atari computer into an instrument for measuring the physical world.",
+        "detail": "The $89.95 Starter Set includes an interface and temperature module; a $49.95 light module was planned as an add-on."
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "GTE Telenet access-control announcement",
+            "status": "Verified exact-date wire report",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Atari hardware, software and prices",
+            "status": "Verified in May 1984 period coverage",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "Music and movie rankings",
+            "status": "Verified with dated weekly chart listings",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          },
+          {
+            "claim": "Budget modem category",
+            "status": "Verified in May 1984 period magazine",
+            "sourceRefs": [
+              3
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "label": "UPI: GTE Telenet dial-up access lockout, May 15, 1984",
+          "url": "https://www.upi.com/Archives/1984/05/15/GTE-Telenet-introduced-a-device-Tuesday-that-locks-out/8642453441600/"
+        },
+        {
+          "label": "UPI: Lucasfilm 'force' enters video game market, May 8, 1984",
+          "url": "https://www.upi.com/Archives/1984/05/08/Lucasfilm-force-enters-video-game-market/9795452836800/"
+        },
+        {
+          "label": "Creative Computing: Outpost Atari, May 1984",
+          "url": "https://www.atarimagazines.com/creative/v10n5/191_Outpost_Atari_for_the_f.php"
+        },
+        {
+          "label": "Computers & Electronics, May 1984",
+          "url": "https://www.worldradiohistory.com/Archive-Poptronics/80s/1984/CE-1984-05.pdf"
+        },
+        {
+          "label": "Billboard, May 19, 1984",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-05-19.pdf"
+        },
+        {
+          "label": "Billboard Hot 100, May 19, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-05-19"
+        },
+        {
+          "label": "Box Office Mojo: Domestic Weekend 20, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W20/?sort=rank&sortDir=asc"
+        },
+        {
+          "label": "Personal Computer News RAM/C chart, May 19, 1984",
+          "url": "https://computerhits.org/archive/personal%20computer%20news_1984-05-19_all%20formats/"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-09-05",
       "historicDate": "1984-05-07",
       "displayDate": "Week of May 7-13, 1984",

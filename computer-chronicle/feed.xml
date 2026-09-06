@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 05 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 06 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of May 14-20, 1984 — Telenet Locks the Dial-Up Door</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-05-14</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-14</guid>
+      <pubDate>Sun, 06 Sep 2026 12:00:00 GMT</pubDate>
+      <description>A new device promises to bar unauthorized callers from computer systems reached over telephone lines. WASHINGTON — GTE Telenet introduced a device Tuesday, May 15, designed to lock unauthorized users out of computer systems reached through telephone lines. The announcement turns the fast-growing worry over modem intrusion into a commercial hardware market. Also this week: Atari Pledges a Sober XL Comeback · Lucasfilm Turns Its Cameras Toward Games · Sub-$100 Modems Call the Home Office.</description>
+    </item>
     <item>
       <title>Week of May 7-13, 1984 — Lucasfilm Brings the Force to Home Videogames</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-05-07</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-02</guid>
       <pubDate>Sun, 16 Aug 2026 12:00:00 GMT</pubDate>
       <description>Commodore draws the Winter CES crowds with two 64K machines, built-in productivity software and a new BASIC—while leaving price and compatibility questions open. The International Winter Consumer Electronics Show opened in Las Vegas on January 7 and ran through January 10; COMPUTE! estimated attendance at 80,000-90,000 and said the Commodore stand was crowded throughout the show. Commodore announced the 264 and speech-equipped 364V, both with 64K RAM and a 7501-family processor running at about 1.76 MHz. Also this week: Behind a secret CES door, Amiga shows &apos;Lorraine&apos; · Home-computer boom gives way to a fight for survival · Kodak jumps into home video with a one-piece 8mm camcorder.</description>
-    </item>
-    <item>
-      <title>Week of December 26, 1983-January 1, 1984 — The Little IBM Finally Arrives for Its Test</title>
-      <link>https://jez237.com/computer-chronicle/?date=1983-12-26</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1983-12-26</guid>
-      <pubDate>Sat, 15 Aug 2026 12:00:00 GMT</pubDate>
-      <description>PCjr leaves the brochure and meets the reviewer, with color, sound, PC DOS—and a long list of extras. IBM’s bid for the family room finally moved from announcement-stage promise to hands-on judgment this week. In a December 27 test, the New York Times examined the PCjr as a real machine rather than a specification sheet, asking whether the most famous name in business computing could translate its success to the home. Also this week: Lisa Opens a Line to IBM and DEC · Christmas Computer Boom Leaves a Price-War Hangover · Windows Proposes One Face for DOS Programs · Atari Finds a Holiday Bright Spot.</description>
     </item>
   </channel>
 </rss>
