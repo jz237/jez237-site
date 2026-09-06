@@ -498,6 +498,35 @@
           "https://www.openstreetmap.org/node/11383998380"
         ]
       ]
+    },
+    "Bauder Signs": {
+      "category": "Signs and graphics \u00b7 Philadelphia",
+      "facts": [
+        [
+          "Address",
+          "3613 Witte Street, Philadelphia, PA 19134"
+        ],
+        [
+          "Also listed as",
+          "Bauder Graphics"
+        ],
+        [
+          "Phone",
+          "215-288-8810"
+        ]
+      ],
+      "text": "Signmaking, vehicle lettering and graphics at the Witte Street address.",
+      "note": "Pin uses the City of Philadelphia address location.",
+      "sources": [
+        [
+          "Bauder Signs business listing",
+          "https://www.aecdaily.com/s/11239/corporate"
+        ],
+        [
+          "City address record",
+          "https://api.phila.gov/ais/v1/search/3613%20WITTE%20ST"
+        ]
+      ]
     }
   }
 }

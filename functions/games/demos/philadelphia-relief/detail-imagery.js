@@ -1,3 +1,5 @@
+import { IMAGERY_STATES } from '../../../../games/demos/philadelphia-relief/data/imagery-states.js';
+
 const SOURCE =
   "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/export";
 
@@ -54,25 +56,51 @@ export function detailRequest(searchParams) {
     south: lat - halfLat,
     north: lat + halfLat,
   };
-  const key = `local-v3,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
+  const key = `regional-v4,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
   const height = Math.round(size * spec.span.lat / spec.span.lon);
   return { tier, lon, lat, size, height, bounds, key };
 }
 
-// Keep whole cells inside verified coverage, rather than using imagery service
-// bounding boxes, which also include empty areas outside the actual mosaic.
+// Select by actual state boundaries, not the rectangular bounds of a mosaic.
+function inRing(x, y, ring) {
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const [xi, yi] = ring[i];
+    const [xj, yj] = ring[j];
+    if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) inside = !inside;
+  }
+  return inside;
+}
+
+export function imageryState(lon, lat) {
+  return Object.keys(IMAGERY_STATES).find((state) => {
+    const rings = IMAGERY_STATES[state];
+    return inRing(lon, lat, rings[0]) && !rings.slice(1).some((ring) => inRing(lon, lat, ring));
+  }) || null;
+}
+
+const STATE_SOURCES = {
+  PA: { name: 'Pennsylvania PEMA 2021-2023 / PASDA', layers: 'show:3',
+    url: 'https://services.pasda.psu.edu/server/rest/services/pasda/PEMAImagery2021_2023/MapServer/export' },
+  NJ: { name: 'New Jersey OGIS 2020',
+    url: 'https://maps.nj.gov/arcgis/rest/services/Basemap/Orthos_Natural_2020_NJ_WM/MapServer/export' },
+  DE: { name: 'Delaware FirstMap 2022 / Sanborn',
+    url: 'https://imagery.firstmap.delaware.gov/imagery/rest/services/DE_Imagery/DE_Imagery_2022/ImageServer/exportImage' },
+  MD: { name: 'Maryland iMAP / DoIT six-inch imagery',
+    url: 'https://mdgeodata.md.gov/imagery/rest/services/SixInch/SixInchImagery/ImageServer/exportImage' },
+};
+
 export function imagerySources(detail) {
   const b = detail.bounds;
-  const inside = (west, south, east, north) => b.west >= west && b.east <= east
-    && b.south >= south && b.north <= north;
   const sources = [];
-  if (inside(-75.23, 39.93, -75.12, 40.00)) {
-    sources.push({ name: 'City of Philadelphia 2024 / PASDA', layers: 'show:0,1,2,3',
-      url: 'https://maps.pasda.psu.edu/ArcGIS/rest/services/pasda/PhiladelphiaImagery2024/MapServer/export' });
-  }
-  if (inside(-74.94, 40.10, -74.85, 40.18)) {
-    sources.push({ name: 'Pennsylvania PEMA 2021-2023 / PASDA', layers: 'show:3',
-      url: 'https://services.pasda.psu.edu/server/rest/services/pasda/PEMAImagery2021_2023/MapServer/export' });
+  // Wide regional views use the inexpensive existing overview source.
+  if (detail.tier !== 'detail') {
+    if (b.west >= -75.23 && b.east <= -75.12 && b.south >= 39.93 && b.north <= 40.00) {
+      sources.push({ name: 'City of Philadelphia 2024 / PASDA', layers: 'show:0,1,2,3',
+        url: 'https://maps.pasda.psu.edu/ArcGIS/rest/services/pasda/PhiladelphiaImagery2024/MapServer/export' });
+    }
+    const state = imageryState((b.west + b.east) / 2, (b.south + b.north) / 2);
+    if (state) sources.push(STATE_SOURCES[state]);
   }
   sources.push({ name: 'USDA / USGS The National Map', url: SOURCE });
   return sources;

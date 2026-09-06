@@ -222,7 +222,7 @@ test('presets', async (t) => {
       assert.ok(getPreset(id), `missing preset ${id}`);
     }
     assert.equal(new Set(PRESET_IDS).size, PRESETS.length, 'preset ids must be unique');
-    assert.equal(PRESETS.length, 10);
+    assert.equal(PRESETS.length, 11);
     // Home restores the authored relief scene and its modeled skyline.
     assert.equal(HOME_PRESET, 'skyline');
     assert.equal(PRESETS[0].id, HOME_PRESET);
@@ -371,8 +371,8 @@ test('presets', async (t) => {
 
   await t.test('the tour opens on the skyline and visits every shot once', () => {
     assert.equal(TOUR[0].preset, HOME_PRESET);
-    assert.deepEqual([...new Set(TOUR.map((s) => s.preset))].sort(), PRESET_IDS.filter((id) => !['architecture', 'hidden-reef'].includes(id)).sort());
-    assert.equal(TOUR.length, PRESETS.length - 2);
+    assert.deepEqual([...new Set(TOUR.map((s) => s.preset))].sort(), PRESET_IDS.filter((id) => !['architecture', 'hidden-reef', 'bauder-signs'].includes(id)).sort());
+    assert.equal(TOUR.length, PRESETS.length - 3);
   });
 
   await t.test('discrete values snap once at the midpoint, never blend', () => {
