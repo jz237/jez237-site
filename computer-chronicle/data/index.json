@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-06",
+      "historicDate": "1984-05-14",
+      "displayDate": "Week of May 14-20, 1984",
+      "edition": "Issue 094 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The telephone line is becoming both the personal computer’s doorway and its newest lock.",
+      "leadHeadline": "Telenet Locks the Dial-Up Door",
+      "storyHeadlines": [
+        "Atari Pledges a Sober XL Comeback",
+        "Lucasfilm Turns Its Cameras Toward Games",
+        "Sub-$100 Modems Call the Home Office"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-05-14.jpg",
+      "thumb": "media/thumbs/1984-05-14.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-05",
       "historicDate": "1984-05-07",
       "displayDate": "Week of May 7-13, 1984",
