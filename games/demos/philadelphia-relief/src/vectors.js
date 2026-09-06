@@ -9,13 +9,14 @@
  * together instead of tearing them apart.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090605';
+import { hexToRgb } from './themes.js?v=philly-2026090606';
 
 const LINE_VERTEX = /* glsl */ `
   attribute vec3  aOther;      // the far end of this segment
   attribute float aSide;       // -1 / +1, which edge of the ribbon
   attribute float aElev;       // metres, this vertex
   attribute float aOtherElev;  // metres, far end
+  attribute vec4 aCrossing;    // distance from each end, and junction flags
 
   uniform vec2  uResolution;
   uniform float uWidth;        // device-independent pixels
@@ -26,6 +27,7 @@ const LINE_VERTEX = /* glsl */ `
 
   varying float vAlong;
   varying float vRoadPhase;
+  varying vec4 vCrossing;
   uniform float uStreetDetail;
 
   void main() {
@@ -36,6 +38,7 @@ const LINE_VERTEX = /* glsl */ `
     float directionSign = roadDir.x < 0.0 || (abs(roadDir.x) < 0.00001 && roadDir.y < 0.0) ? -1.0 : 1.0;
     roadDir *= directionSign;
     vRoadPhase = dot(a.xz, roadDir);
+    vCrossing = aCrossing;
     a.xz += vec2(-roadDir.y, roadDir.x) * aSide * uRoadWidth * 0.5 * uStreetDetail;
     vec4 va = modelViewMatrix * vec4(a, 1.0);
     vec4 vb = modelViewMatrix * vec4(b, 1.0);
@@ -73,7 +76,9 @@ const LINE_FRAGMENT = /* glsl */ `
   uniform float uOpacity;
   varying float vAlong;
   varying float vRoadPhase;
+  varying vec4 vCrossing;
   uniform float uStreetDetail;
+  uniform float uRoadWidth;
 
   void main() {
     // Soften the ribbon edge so thin lines do not crawl when the camera moves.
@@ -85,7 +90,20 @@ const LINE_FRAGMENT = /* glsl */ `
       float center = 1.0 - smoothstep(0.015, 0.015 + aa, abs(vAlong));
       float dash = step(0.5, fract(vRoadPhase / 12.0));
       vec3 street = mix(vec3(0.095, 0.11, 0.12), vec3(0.42, 0.40, 0.35), curb);
-      street = mix(street, vec3(0.74, 0.65, 0.38), center * dash);
+      float junctionGap = min(mix(1000.0, vCrossing.x, vCrossing.z),
+        mix(1000.0, vCrossing.y, vCrossing.w));
+      float lane = smoothstep(10.0, 13.0, junctionGap);
+      street = mix(street, vec3(0.74, 0.65, 0.38), center * dash * lane);
+      // Illustrative zebra crossings only at real multi-way street junctions.
+      float crossBand = smoothstep(5.5, 6.0, junctionGap)
+        * (1.0 - smoothstep(9.0, 9.5, junctionGap));
+      float stripeCoord = vAlong * uRoadWidth / 2.4;
+      float stripeAA = max(fwidth(stripeCoord), 0.02);
+      float stripe = smoothstep(0.15, 0.15 + stripeAA, fract(stripeCoord))
+        * (1.0 - smoothstep(0.65 - stripeAA, 0.65, fract(stripeCoord)));
+      float readable = 1.0 - smoothstep(0.35, 0.8, stripeAA);
+      street = mix(street, vec3(0.82, 0.83, 0.77),
+        crossBand * stripe * readable * (1.0 - curb));
       color = mix(color, street, uStreetDetail);
       edge = 1.0 - smoothstep(0.94, 1.0, abs(vAlong));
     }
@@ -231,6 +249,22 @@ export function collectRings(geojson, minArea = 0) {
   return rings;
 }
 
+/** Find true junctions by unique adjacent coordinates, excluding ordinary bends. */
+export function streetJunctions(parts) {
+  const neighbours = new Map();
+  const key = (point) => `${point[0]},${point[1]}`;
+  for (const part of parts) {
+    for (let i = 1; i < part.length; i += 1) {
+      const a = key(part[i - 1]), b = key(part[i]);
+      if (a === b) continue;
+      if (!neighbours.has(a)) neighbours.set(a, new Set());
+      if (!neighbours.has(b)) neighbours.set(b, new Set());
+      neighbours.get(a).add(b); neighbours.get(b).add(a);
+    }
+  }
+  return new Set([...neighbours].filter(([, adjacent]) => adjacent.size >= 3).map(([key]) => key));
+}
+
 /**
  * Build one ribbon mesh from a set of polylines.
  * Every segment becomes an independent quad, which keeps the buffer layout
@@ -238,6 +272,7 @@ export function collectRings(geojson, minArea = 0) {
  */
 export function buildLineMesh(THREE, parts, ctx, options) {
   const { projection, sampleElevation } = ctx;
+  const junctions = options.crosswalks ? streetJunctions(parts) : new Set();
   let segments = 0;
   for (const part of parts) segments += part.length - 1;
   if (segments <= 0) return null;
@@ -245,6 +280,7 @@ export function buildLineMesh(THREE, parts, ctx, options) {
   const positions = new Float32Array(segments * 4 * 3);
   const others = new Float32Array(segments * 4 * 3);
   const sides = new Float32Array(segments * 4);
+  const crossings = new Float32Array(segments * 4 * 4);
   const elevs = new Float32Array(segments * 4);
   const otherElevs = new Float32Array(segments * 4);
   const indices = new (segments * 4 > 65535 ? Uint32Array : Uint16Array)(segments * 6);
@@ -255,6 +291,9 @@ export function buildLineMesh(THREE, parts, ctx, options) {
     for (let p = 0; p < part.length - 1; p += 1) {
       const [ax, az] = toLocal(projection, part[p][0], part[p][1]);
       const [bx, bz] = toLocal(projection, part[p + 1][0], part[p + 1][1]);
+      const length = Math.hypot(bx - ax, bz - az);
+      const junctionA = junctions.has(`${part[p][0]},${part[p][1]}`) ? 1 : 0;
+      const junctionB = junctions.has(`${part[p + 1][0]},${part[p + 1][1]}`) ? 1 : 0;
       const ae = sampleElevation(part[p][0], part[p][1]);
       const be = sampleElevation(part[p + 1][0], part[p + 1][1]);
 
@@ -269,6 +308,7 @@ export function buildLineMesh(THREE, parts, ctx, options) {
         elevs[idx] = atStart ? ae : be;
         otherElevs[idx] = atStart ? be : ae;
         sides[idx] = k % 2 === 0 ? -1 : 1;
+        crossings.set([atStart ? 0 : length, atStart ? length : 0, junctionA, junctionB], idx * 4);
       }
       indices[i] = v; indices[i + 1] = v + 1; indices[i + 2] = v + 2;
       indices[i + 3] = v + 2; indices[i + 4] = v + 1; indices[i + 5] = v + 3;
@@ -281,6 +321,7 @@ export function buildLineMesh(THREE, parts, ctx, options) {
   geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
   geometry.setAttribute('aOther', new THREE.BufferAttribute(others, 3));
   geometry.setAttribute('aSide', new THREE.BufferAttribute(sides, 1));
+  geometry.setAttribute('aCrossing', new THREE.BufferAttribute(crossings, 4));
   geometry.setAttribute('aElev', new THREE.BufferAttribute(elevs, 1));
   geometry.setAttribute('aOtherElev', new THREE.BufferAttribute(otherElevs, 1));
   geometry.setIndex(new THREE.BufferAttribute(indices, 1));

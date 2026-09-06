@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090605';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090606';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -337,7 +337,8 @@ export function warpForDistance(distanceM) {
 }
 
 export function createTerrain(THREE, options) {
-  const { meta, grid, macro, imagery = null, cityImagery = null, quality = 'balanced' } = options;
+  const { meta, grid, macro, imagery = null, cityImagery = null, reefImagery = null,
+    quality = 'balanced' } = options;
   const { width, height } = meta;
   const regionW = meta.projection.widthM;
   const regionH = meta.projection.heightM;
@@ -350,10 +351,15 @@ export function createTerrain(THREE, options) {
   const rampTex = makeRampTexture(THREE, 'dusk');
   const imageryTex = makeImageryTexture(THREE, imagery);
   const cityTex = makeImageryTexture(THREE, cityImagery);
+  const reefTex = makeImageryTexture(THREE, reefImagery);
+  let reefDistrict = false;
   const b = meta.bounds;
   const cityBounds = new THREE.Vector4(
     (-75.235 - b.west) / (b.east - b.west), (b.north - 40.005) / (b.north - b.south),
     (-75.095 - b.west) / (b.east - b.west), (b.north - 39.90) / (b.north - b.south));
+  const reefBounds = new THREE.Vector4(
+    (-74.9067 - b.west) / (b.east - b.west), (b.north - 40.1548) / (b.north - b.south),
+    (-74.8587 - b.west) / (b.east - b.west), (b.north - 40.1188) / (b.north - b.south));
   let imageryDetailTex = makeImageryTexture(THREE, null, false);
   let imageryDetailPrevTex = makeImageryTexture(THREE, null, false);
   let hasDetail = false;
@@ -428,6 +434,15 @@ export function createTerrain(THREE, options) {
     segments,
     hasImagery: !!imagery,
 
+    setDistrict(lon, lat) {
+      const useReef = lon > -74.94 && lat > 40.10;
+      if (useReef === reefDistrict) return;
+      reefDistrict = useReef;
+      uniforms.uImageryCity.value = useReef ? reefTex : cityTex;
+      uniforms.uImageryCityBounds.value = useReef ? reefBounds : cityBounds;
+      uniforms.uImageryCityOn.value = (useReef ? reefImagery : cityImagery) ? 1 : 0;
+    },
+
     setDetailImagery(image, bounds, region, immediate = false) {
       const next = makeImageryTexture(THREE, image, false);
       imageryDetailPrevTex.dispose();
@@ -482,6 +497,7 @@ export function createTerrain(THREE, options) {
       rampTex.dispose();
       imageryTex.dispose();
       cityTex.dispose();
+      reefTex.dispose();
       imageryDetailTex.dispose();
       imageryDetailPrevTex.dispose();
     },

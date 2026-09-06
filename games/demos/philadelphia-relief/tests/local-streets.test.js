@@ -23,3 +23,20 @@ test('a missing supplemental city texture preserves the base imagery layer', () 
   assert.equal(assess(results).mode, 'full');
   assert.deepEqual(assess(results).disableLayers, []);
 });
+
+
+import { streetJunctions } from '../src/vectors.js';
+test('crosswalks require distinct junction branches, not bends or duplicate geometry', () => {
+  const bend = [[0, 0], [1, 0], [1, 1]];
+  assert.equal(streetJunctions([bend, bend]).size, 0);
+  const junctions = streetJunctions([bend, [[1, 0], [2, 0]]]);
+  assert.deepEqual([...junctions], ['1,0']);
+});
+
+test('Levittown local streets surround The Hidden Reef', () => {
+  const data = JSON.parse(readFileSync(new URL('../data/roads.geojson', import.meta.url)));
+  const local = data.features.find((f) => f.properties.district === 'levittown');
+  assert.ok(local.geometry.coordinates.length > 100);
+  const points = local.geometry.coordinates.flat();
+  assert.ok(points.some(([lon, lat]) => Math.hypot(lon + 74.8827262, lat - 40.1368222) < 0.002));
+});

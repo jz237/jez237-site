@@ -7,52 +7,52 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090605';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090606';
 
-import { createStore } from './state.js?v=philly-2026090605';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090605';
-import { effectiveLight } from './solar.js?v=philly-2026090605';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090605';
+import { createStore } from './state.js?v=philly-2026090606';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090606';
+import { effectiveLight } from './solar.js?v=philly-2026090606';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090606';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090605';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090605';
+} from './geo.js?v=philly-2026090606';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090606';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090605';
+} from './tours.js?v=philly-2026090606';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090605';
+} from './urlstate.js?v=philly-2026090606';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090605';
+} from './degraded.js?v=philly-2026090606';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090605';
-import { createImageryDetail } from './imagery-detail.js?v=philly-2026090605';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090605';
-import { createPostFX } from './postfx.js?v=philly-2026090605';
-import { createCameraRig } from './camera.js?v=philly-2026090605';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090605';
-import { createStructures } from './structures.js?v=philly-2026090605';
+} from './terrain.js?v=philly-2026090606';
+import { createImageryDetail } from './imagery-detail.js?v=philly-2026090606';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090606';
+import { createPostFX } from './postfx.js?v=philly-2026090606';
+import { createCameraRig } from './camera.js?v=philly-2026090606';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090606';
+import { createStructures } from './structures.js?v=philly-2026090606';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090605';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090605';
+} from './structures-data.js?v=philly-2026090606';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090606';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090605';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090605';
+} from './flood.js?v=philly-2026090606';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090606';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090605';
+} from './vectors.js?v=philly-2026090606';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090605';
-import { getTheme } from './themes.js?v=philly-2026090605';
+} from './ui.js?v=philly-2026090606';
+import { getTheme } from './themes.js?v=philly-2026090606';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -201,7 +201,8 @@ async function loadEverything() {
   // Schematic landmark models and their information cards are enhancements:
   // without them the map still draws every footprint and label.
   [data.landmarkModels, data.landmarkCards] = await Promise.all([
-    optionalJson('data/landmark-models.json?v=architecture1'), optionalJson('data/landmark-cards.json')]);
+    optionalJson('data/landmark-models.json?v=architecture2'),
+    optionalJson('data/landmark-cards.json?v=reef1')]);
 
   setProgress(0.82, 'Building the scene…');
   return { results, data };
@@ -316,7 +317,8 @@ async function boot() {
 
   const macro = buildMacroGrid(grid, meta.width, meta.height, 256);
   let terrain = createTerrain(THREE, {
-    meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery, quality: effectiveQuality,
+    meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
+    reefImagery: data.reefImagery, quality: effectiveQuality,
   });
   scene.add(terrain.mesh);
 
@@ -775,6 +777,7 @@ async function boot() {
 
     const camera = rig.camera;
     const now = rig.pose();
+    terrain.setDistrict(now.lon, now.lat);
 
     // Terrain detail follows the camera: the warp concentrates mesh density
     // around wherever the orbit target has landed.
@@ -964,7 +967,8 @@ async function boot() {
     scene.remove(terrain.mesh);
     terrain.dispose();
     terrain = createTerrain(THREE, {
-      meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery, quality });
+      meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
+      reefImagery: data.reefImagery, quality });
     imageryDetail.attachTerrain(terrain);
     terrain.setTheme(store.value('theme'));
     scene.add(terrain.mesh);
@@ -1079,6 +1083,7 @@ function buildOverlays(data, ctx, root) {
       const parts = byTier.get(tier);
       if (!parts) continue;
       add(buildLineMesh(THREE, parts, ctx, {
+        crosswalks: tier === 5,
         roadWidth: tier === 1 ? 25 : tier === 2 ? 18 : tier === 5 ? 9 : 13,
         width: tier === 1 ? 2.4 : tier === 2 ? 1.7 : tier === 5 ? 0.85 : 1.2,
         color: '#ffd9a8',
@@ -1467,6 +1472,7 @@ function wireInterface(deps) {
       }
       const landmark = landmarkByName(name);
       if (!landmark) return;
+      if (landmark.viewPreset) { motion.toPreset(landmark.viewPreset); return; }
       motion.flyTo({ lon: landmark.lon, lat: landmark.lat,
         camDist: Math.min(store.value('camDist'), 3200) }, { label: name });
     },
@@ -1521,6 +1527,8 @@ function wireInterface(deps) {
         store.set({ layers: { flood: true }, floodMode: entry.floodMode }, { source: 'search' });
         toast(entry.floodMode === 'slr'
           ? 'Sea level rise is on the map' : 'FEMA flood zones are on the map');
+      } else if (entry.viewPreset) {
+        motion.toPreset(entry.viewPreset);
       } else {
         motion.flyTo(entry.jump || entry, { label: entry.name });
       }

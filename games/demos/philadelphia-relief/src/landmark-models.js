@@ -44,7 +44,7 @@ export function validateModels(doc, landmarkNames) {
  */
 export function buildLandmarkModels(doc, ctx) {
   const { anchors, toWorld, groundAt } = ctx;
-  const out = { position: [], ground: [], info: [], model: [], style: [], year: [], index: [] };
+  const out = { position: [], ground: [], info: [], model: [], style: [], clock: [], year: [], index: [] };
   const models = [];
 
   (doc?.models || []).forEach((model, modelIndex) => {
@@ -101,6 +101,8 @@ export function buildLandmarkModels(doc, ctx) {
     for (let v = vertexStart; v < vertexEnd; v += 1) {
       out.year[v] = model.built || 0;
       out.style[v] = model.facade === 'glass' ? 1 : 0;
+      out.clock.push(ax + (model.clock?.x || 0), model.clock?.height || 0,
+        az + (model.clock?.z || 0), model.clock?.radius || 0);
     }
     models.push({
       id: model.id, landmark: model.landmark, index: modelIndex, built: model.built || 0,
@@ -116,6 +118,7 @@ export function buildLandmarkModels(doc, ctx) {
     info: new Float32Array(out.info),
     model: new Float32Array(out.model),
     style: new Float32Array(out.style),
+    clock: new Float32Array(out.clock),
     year: new Float32Array(out.year),
     index: new Uint32Array(out.index),
     vertexCount: out.position.length / 3,

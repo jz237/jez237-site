@@ -1,3 +1,19 @@
+## Levittown destination and street detail
+
+The Hidden Reef is now a searchable landmark and authored Levittown view (`#P=hidden-reef`).
+Its card provides the verified 4501 New Falls Road address, phone and official website.
+The pin uses OpenStreetMap node 11383998380 inside the mapped commercial building, checked
+against the official store address and Apple Maps location. A teal shop label distinguishes it.
+A bundled 2048 × 1536 USGS neighborhood image keeps the surrounding view sharp
+(`python tools/build_levittown_imagery.py` rebuilds it).
+581 local street segments around the store supplement the Center City network; rebuild with
+`python tools/build_levittown_streets.py` (optional `--source` accepts a saved Overpass response).
+
+The architectural street layer now adds illustrative zebra crossings at nodes with at least
+three distinct neighboring coordinates. Ordinary bends and duplicate segments do not create
+crossings. Marks fade below a readable pixel size. City Hall gains a decorative clock face;
+landmark cards now describe the current schematic models.
+
 ## Center City architecture update
 
 “Explore Center City in 3D” opens a close architectural view while Home retains the aerial overview.

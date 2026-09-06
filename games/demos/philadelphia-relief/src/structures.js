@@ -14,12 +14,12 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090605';
+import { hexToRgb } from './themes.js?v=philly-2026090606';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026090605';
-import { damp } from './geo.js?v=philly-2026090605';
+} from './structures-data.js?v=philly-2026090606';
+import { damp } from './geo.js?v=philly-2026090606';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute float aGround;     // DEM elevation under the structure, metres
@@ -30,6 +30,8 @@ const VERTEX_SHADER = /* glsl */ `
   varying float vStorey;
   varying float vStyle;
   #ifdef LANDMARK
+  attribute vec4 aClock;
+  varying vec4 vClock;
   attribute float aStyle;
   attribute float aModel;      // which schematic model this vertex belongs to
   varying float vModel;
@@ -49,6 +51,7 @@ const VERTEX_SHADER = /* glsl */ `
     float structural = position.y * uGrow;
     vModel = aModel;
     vStyle = aStyle;
+    vClock = vec4(aClock.x, aGround * uExag + aClock.y * uHScale, aClock.z, aClock.w);
     #else
     float structural = (aInfo.y + position.y) * uGrow;
     vStyle = smoothstep(24.0, 65.0, aInfo.x);
@@ -92,6 +95,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   varying float vStorey;
   varying float vStyle;
   #ifdef LANDMARK
+  varying vec4 vClock;
   uniform float uSelected;
   uniform vec3  uHighlight;
   uniform float uPulse;
@@ -144,6 +148,22 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec3 roofFinish = uRoof * mix(0.48, 0.82, variation);
     roofFinish = mix(roofFinish, vec3(0.12, 0.14, 0.14), roofDetail);
     base = mix(base, mix(facade, roofFinish, roof), uFacade);
+    #ifdef LANDMARK
+    if (vClock.w > 0.0 && roof < 0.1) {
+      vec2 dial = vec2(dot(vWorld.xz - vClock.xz, tangent.xz), vWorld.y - vClock.y) / vClock.w;
+      float ring = length(dial);
+      float clockAA = max(fwidth(ring), 0.015);
+      float disk = 1.0 - smoothstep(0.93, 0.93 + clockAA, ring);
+      vec3 clockColor = vec3(0.87, 0.83, 0.68);
+      float tick = step(0.90, cos(atan(dial.y, dial.x) * 12.0)) * smoothstep(0.7, 0.76, ring);
+      float minute = (1.0 - smoothstep(0.04, 0.07, abs(dot(dial, vec2(0.5, -0.866)))))
+        * step(0.0, dot(dial, vec2(0.866, 0.5))) * (1.0 - step(0.73, ring));
+      float hour = (1.0 - smoothstep(0.055, 0.085, abs(dot(dial, vec2(0.5, 0.866)))))
+        * step(0.0, dot(dial, vec2(-0.866, 0.5))) * (1.0 - step(0.5, ring));
+      clockColor = mix(clockColor, vec3(0.035, 0.045, 0.04), max(tick, max(minute, hour)));
+      base = mix(base, clockColor, disk);
+    }
+    #endif
 
     // A touch of darkening toward the base, where streets and neighbours
     // shadow the lower storeys.
@@ -516,6 +536,7 @@ export function createStructures(THREE, options) {
     const geometry = solidGeometry(landmarkModels);
     geometry.setAttribute('aModel', new THREE.BufferAttribute(landmarkModels.model, 1));
     geometry.setAttribute('aStyle', new THREE.BufferAttribute(landmarkModels.style, 1));
+    geometry.setAttribute('aClock', new THREE.BufferAttribute(landmarkModels.clock, 4));
     landmarkMesh = new THREE.Mesh(geometry, makeSolidMaterial(true));
     landmarkMesh.name = 'structures-landmarks';
     landmarkMesh.renderOrder = 23;

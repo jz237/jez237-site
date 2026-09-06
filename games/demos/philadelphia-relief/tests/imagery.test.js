@@ -55,7 +55,7 @@ test('aerial mode state', async (t) => {
     assert.equal(defaults().layers.structures, false);
     for (const preset of PRESETS) {
       const layers = presetPatch(preset.id).layers;
-      assert.equal(layers.imagery, ['skyline', 'architecture', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} imagery`);
+      assert.equal(layers.imagery, ['skyline', 'architecture', 'hidden-reef', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} imagery`);
       assert.equal(layers.structures, preset.id === 'architecture', `${preset.id} structures`);
     }
   });
