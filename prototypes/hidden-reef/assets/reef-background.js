@@ -1,6 +1,9 @@
 (function() {
   'use strict';
 
+  const reefAssetBase = new URL('.', document.currentScript.src);
+  const waterAsset = function(name) { return new URL('water-lab/' + name, reefAssetBase).href; };
+
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const motionScale = prefersReducedMotion ? 0 : 1;
   const canvas = document.querySelector('[data-reef-background]');
@@ -42,7 +45,7 @@
     const style = document.createElement('style');
     style.id = 'reef-background-glass-style';
     style.textContent = [
-      '.has-reef-background{background:#03182c url("/assets/water-lab/clear-reef-water-gpt-image-2.webp") center top/cover fixed no-repeat!important;}',
+      '.has-reef-background{background:#03182c url("' + waterAsset('clear-reef-water-gpt-image-2.webp') + '") center top/cover fixed no-repeat!important;}',
       '.has-reef-background body{background:transparent!important;}',
       '.has-reef-background .page{background:transparent!important;}',
       '.has-reef-background .header:not(.masthead),',
@@ -178,11 +181,24 @@
     });
 
     const updateCompactHeader = function() {
-      const threshold = Math.max(72, Math.round(brand.getBoundingClientRect().height * 0.55));
+      const header = nav.previousElementSibling;
+      const threshold = header.getBoundingClientRect().bottom + window.scrollY;
       document.documentElement.classList.toggle('has-compact-masthead', window.scrollY > threshold);
     };
     window.addEventListener('scroll', updateCompactHeader, { passive: true });
     updateCompactHeader();
+    const animation = document.querySelector('.animated-reef-header');
+    if (animation) {
+      let visible = true;
+      const tellHeader = function() {
+        animation.contentWindow.postMessage({ type: 'reef-header-visibility', visible: visible }, location.origin);
+      };
+      animation.addEventListener('load', tellHeader);
+      new IntersectionObserver(function(entries) {
+        visible = entries[0].isIntersecting;
+        tellHeader();
+      }).observe(animation);
+    }
   }
 
   function enhancePreviewNotice() {
@@ -416,11 +432,13 @@
       image.src = source;
     }
 
-    loadTexture(0, 'uClear', '/assets/water-lab/clear-reef-water-gpt-image-2.webp', 'clear');
-    loadTexture(1, 'uDeep', '/assets/water-lab/deep-aquarium-water-gpt-image-2.webp', 'deep');
+    loadTexture(0, 'uClear', waterAsset('clear-reef-water-gpt-image-2.webp'), 'clear');
+    loadTexture(1, 'uDeep', waterAsset('deep-aquarium-water-gpt-image-2.webp'), 'deep');
 
     function resizeWaterCanvas() {
-      const ratio = Math.min(window.devicePixelRatio || 1, 1.5);
+      // This soft background does not need retina-resolution shader passes.
+      const ratio = Math.min(window.devicePixelRatio || 1, 1,
+        Math.sqrt(1400000 / (window.innerWidth * window.innerHeight)));
       const nextWidth = Math.max(1, Math.round(window.innerWidth * ratio));
       const nextHeight = Math.max(1, Math.round(window.innerHeight * ratio));
       if (waterCanvas.width === nextWidth && waterCanvas.height === nextHeight) return;
@@ -471,7 +489,7 @@
   }
 
   function resize() {
-    dpr = Math.min(window.devicePixelRatio || 1, 1.65);
+    dpr = Math.min(window.devicePixelRatio || 1, 1.25);
     width = Math.max(1, window.innerWidth);
     height = Math.max(1, window.innerHeight);
     canvas.width = Math.round(width * dpr);
@@ -617,6 +635,12 @@
   }
 
   function draw(time) {
+    raf = 0;
+    if (document.hidden) return;
+    if (!prefersReducedMotion && time - last < 1000 / 30 - 1) {
+      raf = requestAnimationFrame(draw);
+      return;
+    }
     const dt = Math.min(48, time - last);
     last = time;
     ctx.clearRect(0, 0, width, height);
@@ -675,6 +699,14 @@
   if (prefersReducedMotion) {
     window.addEventListener('scroll', function() { draw(performance.now()); }, { passive: true });
   }
+  document.addEventListener('visibilitychange', function() {
+    cancelAnimationFrame(raf);
+    raf = 0;
+    if (!document.hidden) {
+      last = performance.now() - 1000 / 30;
+      draw(performance.now());
+    }
+  });
   resize();
   draw(prefersReducedMotion ? 0 : performance.now());
 })();

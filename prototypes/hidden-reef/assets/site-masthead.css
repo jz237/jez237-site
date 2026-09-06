@@ -1,3 +1,47 @@
+/* The iframe isolates the supplied animation from the storefront styles. */
+.header.masthead {
+  container-type: inline-size;
+  position: relative;
+}
+.header.masthead .animated-reef-header {
+  display: block;
+  width: 100%;
+  height: max(244.8px, 24cqw);
+  border: 0;
+  background: #003068;
+}
+.header.masthead .brand {
+  position: absolute !important;
+  z-index: 2;
+  top: 8px;
+  left: 8px;
+  width: auto !important;
+  height: auto !important;
+}
+.header.masthead .brand .header-home-label {
+  display: block !important;
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+.header.masthead .brand:focus-visible .header-home-label {
+  position: relative;
+  width: auto;
+  height: auto;
+  clip-path: none;
+  padding: 8px;
+  color: white;
+  background: #021c30;
+}
+@container (max-width: 800px) {
+  .header.masthead .animated-reef-header { height: max(252px, 43.636364cqw); }
+}
+@container (max-width: 480px) {
+  .header.masthead .animated-reef-header { height: max(280.8px, 72cqw); }
+}
+
 .header.masthead,
 .header.masthead + .main-nav,
 main.page > section,
@@ -437,7 +481,7 @@ main.page > section[aria-labelledby="paths-title"] {
 
 @media (max-width: 760px) {
   .header.masthead {
-    display: none !important;
+    display: block !important;
   }
 
   .header.masthead + .main-nav,
@@ -458,7 +502,7 @@ main.page > section[aria-labelledby="paths-title"] {
   }
 
   main.page {
-    padding-top: calc(58px + env(safe-area-inset-top)) !important;
+    padding-top: 0 !important;
   }
 
   .header.masthead + .main-nav .main-nav__compact-brand,
@@ -514,6 +558,18 @@ main.page > section[aria-labelledby="paths-title"] {
     gap: 7px;
     min-height: 38px !important;
     font-size: 13px !important;
+  }
+}
+
+@media (max-width: 760px) {
+  html:not(.has-compact-masthead) .header.masthead + .main-nav {
+    position: sticky !important;
+    top: 0 !important;
+    left: auto !important;
+    transform: none !important;
+    width: 100% !important;
+    margin: 0 0 12px !important;
+    border-radius: 0 0 8px 8px !important;
   }
 }
 
