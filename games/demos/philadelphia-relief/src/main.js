@@ -7,52 +7,52 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090601';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090602';
 
-import { createStore } from './state.js?v=philly-2026090601';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090601';
-import { effectiveLight } from './solar.js?v=philly-2026090601';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090601';
+import { createStore } from './state.js?v=philly-2026090602';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090602';
+import { effectiveLight } from './solar.js?v=philly-2026090602';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090602';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090601';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090601';
+} from './geo.js?v=philly-2026090602';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090602';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090601';
+} from './tours.js?v=philly-2026090602';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090601';
+} from './urlstate.js?v=philly-2026090602';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090601';
+} from './degraded.js?v=philly-2026090602';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090601';
-import { createImageryDetail } from './imagery-detail.js?v=philly-2026090601';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090601';
-import { createPostFX } from './postfx.js?v=philly-2026090601';
-import { createCameraRig } from './camera.js?v=philly-2026090601';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090601';
-import { createStructures } from './structures.js?v=philly-2026090601';
+} from './terrain.js?v=philly-2026090602';
+import { createImageryDetail } from './imagery-detail.js?v=philly-2026090602';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090602';
+import { createPostFX } from './postfx.js?v=philly-2026090602';
+import { createCameraRig } from './camera.js?v=philly-2026090602';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090602';
+import { createStructures } from './structures.js?v=philly-2026090602';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090601';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090601';
+} from './structures-data.js?v=philly-2026090602';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090602';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090601';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090601';
+} from './flood.js?v=philly-2026090602';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090602';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090601';
+} from './vectors.js?v=philly-2026090602';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090601';
-import { getTheme } from './themes.js?v=philly-2026090601';
+} from './ui.js?v=philly-2026090602';
+import { getTheme } from './themes.js?v=philly-2026090602';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -316,7 +316,7 @@ async function boot() {
 
   const macro = buildMacroGrid(grid, meta.width, meta.height, 256);
   let terrain = createTerrain(THREE, {
-    meta, grid, macro, imagery: data.imagery, quality: effectiveQuality,
+    meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery, quality: effectiveQuality,
   });
   scene.add(terrain.mesh);
 
@@ -847,7 +847,12 @@ async function boot() {
     for (const entry of overlays.lines) {
       const u = entry.material.uniforms;
       u.uExag.value = exaggeration;
-      u.uLift.value = lift;
+      u.uLift.value = entry.layer === 'roads' ? Math.min(16, lift * 0.6) : lift;
+      if (entry.kind === 'road-5') {
+        const streetFade = Math.max(0, Math.min(1, (18000 - now.dist) / 9000));
+        u.uOpacity.value = state.roadOpacity * 0.5 * streetFade;
+        entry.mesh.visible = state.layers.roads && state.era === 'present' && streetFade > 0.01;
+      }
       u.uNear.value = camera.near;
     }
     for (const entry of overlays.areas) {
@@ -956,7 +961,8 @@ async function boot() {
   function rebuildTerrain(quality) {
     scene.remove(terrain.mesh);
     terrain.dispose();
-    terrain = createTerrain(THREE, { meta, grid, macro, imagery: data.imagery, quality });
+    terrain = createTerrain(THREE, {
+      meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery, quality });
     imageryDetail.attachTerrain(terrain);
     terrain.setTheme(store.value('theme'));
     scene.add(terrain.mesh);
@@ -1067,11 +1073,11 @@ function buildOverlays(data, ctx, root) {
 
   if (data.roads) {
     const byTier = groupLines(data.roads, (p) => p.t);
-    for (const tier of [3, 4, 2, 1]) {
+    for (const tier of [5, 3, 4, 2, 1]) {
       const parts = byTier.get(tier);
       if (!parts) continue;
       add(buildLineMesh(THREE, parts, ctx, {
-        width: tier === 1 ? 2.2 : tier === 2 ? 1.4 : 0.9,
+        width: tier === 1 ? 2.4 : tier === 2 ? 1.7 : tier === 5 ? 0.85 : 1.2,
         color: '#ffd9a8',
         opacity: 1,
         renderOrder: 14 + (4 - tier),
@@ -1173,7 +1179,7 @@ function applyState(state, ctx) {
       // Secondary roads and ramps are context, not subject: at full strength
       // the network read as the map and buried the relief underneath it.
       uu.uOpacity.value = state.roadOpacity
-        * (tier === 1 ? 1 : tier === 2 ? 0.6 : tier === 3 ? 0.3 : 0.25)
+        * (tier === 1 ? 1 : tier === 2 ? 0.85 : tier === 3 ? 0.7 : tier === 5 ? 0.5 : 0.65)
         * (tier === 1 && era.motorways === 'ghost' ? 0.3 : 1);
     } else if (entry.layer === 'boundaries' && uu.uOpacity) {
       const level = Number(entry.kind.split('-')[1]);
@@ -1211,7 +1217,8 @@ function recolorOverlays(overlays, theme) {
       setVec3(u.uFogColor.value, theme.fog);
     } else if (entry.layer === 'roads') {
       const tier = Number(entry.kind.split('-')[1]);
-      setVec3(u.uColor.value, theme.road[Math.min(2, tier - 1)] || theme.road[0]);
+      setVec3(u.uColor.value, tier === 5 ? '#e6e6df'
+        : theme.road[Math.min(2, tier - 1)] || theme.road[0]);
     } else if (entry.layer === 'rail') {
       setVec3(u.uColor.value, theme.rail);
     } else if (entry.layer === 'boundaries') {

@@ -229,8 +229,8 @@ test('presets', async (t) => {
     assert.equal(defaults().preset, HOME_PRESET);
     const home = presetPatch(HOME_PRESET);
     assert.ok(home.camDist < 12000, `opening camera is ${home.camDist} m out`);
-    assert.equal(home.layers.imagery, false);
-    assert.equal(home.layers.structures, true);
+    assert.equal(home.layers.imagery, true);
+    assert.equal(home.layers.structures, false);
     assert.ok(home.structureDetail >= 0.6);
     // The regional view survives as its own card.
     assert.ok(presetPatch('overview').camDist > 60000);

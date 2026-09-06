@@ -14,24 +14,24 @@
  * Pure module — the tests drive every tour through every seam.
  */
 
-import { presetPatch, blendPatches, TOUR } from './presets.js?v=philly-2026090601';
-import { coercePatch } from './schema.js?v=philly-2026090601';
+import { presetPatch, blendPatches, TOUR } from './presets.js?v=philly-2026090602';
+import { coercePatch } from './schema.js?v=philly-2026090602';
 
 const OSM = 'OpenStreetMap contributors (ODbL); heights as measured in the OSM data';
 const REFS = 'Public reference values (rounded); see bridges.json and the About panel';
 const DEM = 'This map’s elevation data: USGS 3DEP / SRTM via AWS Terrain Tiles';
 const WIKI = 'Wikipedia (public reference)';
 
-const MODEL_PRESETS = new Set(['skyline', 'ben-franklin-bridge', 'night-metro']);
+const AERIAL_PRESETS = new Set(['skyline', 'ben-franklin-bridge', 'night-metro']);
 
-/** Tours that describe modelled structures explicitly switch that optional layer on. */
-function withStructures(shot) {
-  if (!MODEL_PRESETS.has(shot.preset)) return shot;
+/** City tours show real aerial detail and keep schematic structures optional. */
+function withAerial(shot) {
+  if (!AERIAL_PRESETS.has(shot.preset)) return shot;
   return {
     ...shot,
     override: {
       ...(shot.override || {}),
-      layers: { ...(shot.override?.layers || {}), structures: true },
+      layers: { ...(shot.override?.layers || {}), imagery: true, structures: false },
     },
   };
 }
@@ -45,7 +45,7 @@ const GRAND_CAPTIONS = {
   'ben-franklin-bridge': {
     title: 'Benjamin Franklin Bridge',
     text: 'Opened in 1926. Its 533 m main span was the longest suspension span in the ' +
-      'world until 1929. The towers and cables here are schematic.',
+      'world until 1929. It connects Philadelphia with Camden across the Delaware.',
     source: REFS },
   overview: {
     title: 'The Delaware Valley',
@@ -85,7 +85,7 @@ export const TOURS = [
     name: 'The Grand Tour',
     blurb: 'All eight shots: skyline, the bridge, and out across the whole valley.',
     // Derived from the flythrough definition so the two cannot drift apart.
-    shots: TOUR.map((s) => withStructures({ ...s, caption: GRAND_CAPTIONS[s.preset] })),
+    shots: TOUR.map((s) => withAerial({ ...s, caption: GRAND_CAPTIONS[s.preset] })),
   },
   {
     id: 'skyline',
@@ -122,7 +122,7 @@ export const TOURS = [
         title: 'Back to the skyline',
         text: 'Drag from any building to keep exploring; click a landmark for its card.',
         source: 'This map' } },
-    ].map(withStructures),
+    ].map(withAerial),
   },
   {
     id: 'crossings',
@@ -160,7 +160,7 @@ export const TOURS = [
           text: 'A cantilever truss with a main span about 501 m — among the longest of its ' +
             'kind in the world.',
           source: REFS } },
-    ].map(withStructures),
+    ].map(withAerial),
   },
   {
     id: 'rivers',
