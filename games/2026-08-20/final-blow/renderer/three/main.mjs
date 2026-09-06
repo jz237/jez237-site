@@ -23,6 +23,8 @@ import { MeshFighterLayer } from "./mesh-fighters.mjs";
 import { ImpactVfxLayer } from "./vfx.mjs";
 import { CrowdLayer } from "./crowd-layer.mjs";
 import { WorldObjectsLayer } from "./world-objects.mjs";
+import { ScarDecalLayer } from "./scar-decals.mjs";
+import { EffectsLayer } from "./effects-layer.mjs";
 import { buildSomersetStage } from "./stage-somerset.mjs";
 import { buildGenericStage } from "./stage-generic.mjs";
 // 5.1 (#45): per-stage sprite lighting — a stage builder may return its own
@@ -30,7 +32,7 @@ import { buildGenericStage } from "./stage-generic.mjs";
 import { spriteLightFor } from "./stage-lighting.mjs";
 // 5.1: the explicit list of everything this renderer reads off `host`, pinned
 // by tests/cinema-host.test.mjs against the literal game.js passes in.
-import { assertHostContract, CINEMA_HOST_MEMBERS } from "./host-contract.mjs";
+import { assertHostContract, CINEMA_HOST_MEMBERS, missingHostMembers } from "./host-contract.mjs";
 export { CINEMA_HOST_MEMBERS };
 
 const stageBuilders = new Map();
@@ -193,6 +195,20 @@ export function createRenderer(host) {
       scene.add(worldObjects.group);
       layers.set("worldObjects", worldObjects);
       renderer3d.worldObjects = worldObjects;
+      // 5.3 SPECTACLE: the arena wears the fight in 3D too — the 2D scar
+      // list as ground and arena-edge decals.
+      const scarDecals = new ScarDecalLayer(host);
+      scene.add(scarDecals.group);
+      layers.set("scarDecals", scarDecals);
+      renderer3d.scarDecals = scarDecals;
+      // 5.3 SPECTACLE (#47): the elemental flipbooks, the charging limb glow
+      // and the 2D particle pool — all of it was simulated every frame and
+      // drawn by nobody while the 3D world was on.
+      const effects = new EffectsLayer(host);
+      scene.add(effects.group);
+      layers.set("effects", effects);
+      renderer3d.effects = effects;
+      effects.setPixelScale(SIM_H * renderer.getPixelRatio() * 0.5);
       // Silhouette guard: fighter sprites darken their edges while an impact
       // flash is live, so bursts never erase the characters.
       fighters.getFlashLevel = () => vfx.flashLevel();
@@ -258,6 +274,9 @@ export function createRenderer(host) {
       lastPixelRatio = wantedRatio;
       renderer.setPixelRatio(wantedRatio);
       renderer.setSize(SIM_W, SIM_H, false);
+      // gl_PointSize is in framebuffer pixels: the mirrored particle cloud
+      // has to be told when the backing store moves.
+      layers.get("effects")?.setPixelScale(SIM_H * wantedRatio * 0.5);
       rebuildPost();
       // Stage shadow-map budgets differ per tier; rebuild lazily.
       stageId = null;
@@ -284,7 +303,15 @@ export function createRenderer(host) {
 
     const state = host.state;
     framing.update(state, host.cinematicCamera, freeze ? 0.0001 : dtSec, t);
-    stage.update?.(t, state);
+    // 5.3 SPECTACLE (#16/#43): the stage's own beat. `ambientPulse` is also
+    // where the KO pulse is LATCHED (it rode inside the 2D-only
+    // drawStageAmbient until 5.3), so this call is what makes a 3D KO flare
+    // at all; the crowd's drawn reaction rides along as the floor under it.
+    const ambientBeat = {
+      surge: host.ambientPulse ? host.ambientPulse() : null,
+      reaction: host.crowdReaction ? host.crowdReaction() : 0,
+    };
+    stage.update?.(t, state, ambientBeat);
     // Super freeze: ease the rim-lit silhouette dim while a grit super is in
     // flight (mirrors the 2D superDimLevel ease) + chromatic pulse on the
     // ignition frame. Read-only on sim state.
@@ -403,6 +430,13 @@ export function createRenderer(host) {
     // pizza / grounded weapon / wire trap actually reached the 3D frame).
     objects: renderer3d.worldObjects?.visibleCount ?? 0,
     objectKinds: renderer3d.worldObjects?.lastKinds ?? null,
+    // 5.3: battle scars drawn as decals this frame, and the tally by kind.
+    scars: renderer3d.scarDecals?.visibleCount ?? 0,
+    scarKinds: renderer3d.scarDecals?.lastKinds ?? null,
+    // 5.3: element sprites / mirrored motes / rings / charges drawn this
+    // frame, and how hard the stage's practicals are burning.
+    effects: renderer3d.effects?.stats?.() ?? null,
+    practicals: stage?.report?.() ?? null,
     tris: lastStatsFrame.triangles,
     fps: Math.round(fpsEstimate),
     quality,
@@ -451,6 +485,12 @@ export function createRenderer(host) {
     registerStage,
     registerLayer: renderer3d.registerLayer,
     registerImpactEffect: renderer3d.registerImpactEffect,
+    // 5.3 VERIFICATION HARNESS (sweep #54): the contract, checked against the
+    // LIVE host object rather than the literal in game.js's source. The unit
+    // test (tests/cinema-host.test.mjs) reads both ends statically; this is the
+    // only read that proves the object the renderer actually holds still has
+    // every member on it after the bridge was assembled and 3D booted.
+    hostContract: () => ({ members: CINEMA_HOST_MEMBERS, ...missingHostMembers(host) }),
     // Debug internals for QA probes (read-only use).
     get _internals() {
       return { renderer, scene, camera: framing?.camera, post, stage };

@@ -66,6 +66,24 @@ export const CINEMA_HOST_OPTIONAL = Object.freeze([
   "fighterBankSheet",      // (fighterId, bank) -> the bank's OWN sheet (Image/canvas) or null: the warm-up gate
   // 5.2 LOCOMOTION (bookends).
   "cinematicDrawRotation", // (bank, frame, cinematicRotation) -> the rotation a prone cinematic cell draws under
+  // 5.3 SPECIALS (the kit bank in the unified generation).
+  "moveSheetLegacyAdjust", // specials-legacy world-size table: the SHIPPED specials adjust, for a rejected cell
+  // 5.3 SPECTACLE (#19): the battle-scar list as decal descriptors
+  // (engine/stage-scars.mjs `scarDecals`) so CINEMA 3D wears the fight too.
+  "stageScars",            // () -> [{ x, y, kind, surface, wall, width, rot, alpha, heavy }]
+  // 5.3 SPECTACLE (#16/#43): the stage reacts. `ambientPulse` is also where
+  // the KO pulse is LATCHED — before 5.3 that latch lived inside
+  // drawStageAmbient, which never runs in 3D, so a 3D KO flared nothing.
+  "ambientPulse",          // () -> { level, age, ko, hold, pulseAge, kind, latchTick, frame, reduced }
+  "crowdReaction",         // () -> 0..1.4: the crowd's DRAWN reaction (held through the KO)
+  // 5.3 SPECTACLE (#47): effect parity — the elemental flipbooks, their
+  // sheets and the charging limb.
+  "elementSprites",        // () -> the live element flipbook pool (read-only)
+  "elementSheet",          // (name) -> { meta, image } for assets/vfx/<name>, or null until it loads
+  "elementCharge",         // (side) -> { level, x, y, tier, glow, core } | null
+  // 5.3 SPECTACLE (#48): battle damage on the 3D sprites.
+  "battleDamage",          // (side) -> { marks, revision, gore } | null
+  "paintBattleDamage",     // (ctx2d, side) -> paints the side's marks in 320px cell space
 ]);
 
 export const CINEMA_HOST_MEMBERS = Object.freeze([...CINEMA_HOST_REQUIRED, ...CINEMA_HOST_OPTIONAL]);

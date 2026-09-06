@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Final Blow: Philly After Dark — a playable 1990s-inspired weapon fighter prototype.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23080b13'/%3E%3Cpath d='M14 10h39l-4 12H29l-2 8h18l-4 11H24l-5 15H5z' fill='%23ef2c28'/%3E%3C/svg%3E">
-  <title>Final Blow 5.2: Locomotion</title>
-  <meta name="application-version" content="5.2">
+  <title>Final Blow 5.3: Spectacle</title>
+  <meta name="application-version" content="5.3">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -20,7 +20,7 @@
       <a class="mini-brand" href="#" id="homeLink" aria-label="Return to title">
         <span>FINAL</span><strong>BLOW</strong>
       </a>
-      <div class="build-tag">LOCOMOTION <b>5.2</b></div>
+      <div class="build-tag">SPECTACLE <b>5.3</b></div>
       <div id="offlineBadge" class="offline-badge" aria-live="polite">CACHE CHECK</div>
       <button id="trackButton" class="track-button" type="button" aria-label="Play next soundtrack">♫ PHILLY AFTER DARK</button>
       <div id="padStatus" class="pad-status" aria-live="polite"><i></i> KEYBOARD READY</div>
@@ -184,35 +184,48 @@
           <p class="eyebrow">A PHILADELPHIA WEAPON FIGHTER</p>
           <h1 id="gameTitle"><span>FINAL</span><strong>BLOW</strong></h1>
           <h2>PHILLY AFTER DARK</h2>
-          <p id="titleVersion" class="title-version" aria-label="Version 5.2">VERSION 5.2</p>
+          <p id="titleVersion" class="title-version" aria-label="Version 5.3">VERSION 5.3</p>
           <p class="hook">Ten fighters. Six stages. One last chance to finish it.</p>
         </div>
         <div id="titleNewcomer" class="title-newcomer" hidden>
           <span>NEW HERE?</span>
           <button id="titleNewcomerButton" type="button">FIGHT SCHOOL · 3 MIN</button>
         </div>
-        <div class="menu-stack">
-          <button class="arcade-button primary menu-focus" data-mode="arcade">1 PLAYER · ARCADE</button>
-          <button class="arcade-button" data-mode="survival">SURVIVAL · THE GAUNTLET</button>
-          <button class="arcade-button" data-mode="versus">2 PLAYER · LOCAL VERSUS</button>
-          <button class="arcade-button" data-mode="team">1–2 PLAYERS · TEAM BATTLE · 3V3</button>
-          <button class="arcade-button daily-button" id="dailyButton">DAILY JAWN<small id="dailyStatus">FRESH RUN READY</small></button>
-          <div class="menu-row">
-            <button class="arcade-button ledger-button" id="blackBookButton">THE BLACK BOOK<small id="blackBookStatus">0 / 35 INKED</small></button>
-            <button class="arcade-button ledger-button" id="recordsButton">FIGHT RECORDS<small id="recordsStatus">NO FIGHTS LOGGED</small></button>
-          </div>
-          <button class="arcade-button online-button" id="onlineButton">ONLINE · PRIVATE ROOM</button>
-          <button class="arcade-button" data-mode="training">TRAINING LAB</button>
-          <div class="menu-row">
-            <button class="arcade-button school-button" id="fightSchoolButton">FIGHT SCHOOL<small id="fightSchoolStatus">12 LESSONS · FREE</small></button>
-            <button class="arcade-button school-button" id="comboTrialsButton">COMBO TRIALS<small id="comboTrialsStatus">EARN MEDALS</small></button>
-          </div>
-          <button class="arcade-button bracket-button" id="phillyOpenButton">THE PHILLY OPEN · BRACKET<small id="phillyOpenStatus">4 OR 8 ENTRANTS · SINGLE ELIMINATION</small></button>
-          <div class="menu-row">
-            <button class="arcade-button demo-button" id="demoButton">WATCH DEMO · CPU VS CPU</button>
-            <button class="arcade-button demo-button" id="replayTheaterButton">REPLAY THEATER<small id="replayTheaterStatus">WATCH SAVED MATCHES</small></button>
-          </div>
-          <button class="arcade-button ghost" id="controlsButton">CONTROLS & OPTIONS</button>
+        <div class="menu-stack title-tiers">
+          <section class="menu-tier tier-play" aria-label="Play">
+            <p class="tier-label">PLAY</p>
+            <button class="arcade-button primary menu-focus" data-mode="arcade">1 PLAYER · ARCADE</button>
+            <button class="arcade-button" data-mode="versus">2 PLAYER · LOCAL VERSUS</button>
+          </section>
+          <section class="menu-tier tier-learn" aria-label="Learn">
+            <p class="tier-label">LEARN</p>
+            <button id="titleCoach" class="title-coach" type="button" hidden>
+              <b id="titleCoachHead">NEXT · LESSON 1 · FOOTWORK &amp; GUARD</b>
+              <small id="titleCoachReason">NO FIGHT ON THE BOOKS YET. START AT THE TOP.</small>
+            </button>
+            <div class="menu-row">
+              <button class="arcade-button school-button" id="fightSchoolButton">FIGHT SCHOOL<small id="fightSchoolStatus">12 LESSONS · FREE</small></button>
+              <button class="arcade-button school-button" id="comboTrialsButton">COMBO TRIALS<small id="comboTrialsStatus">EARN MEDALS</small></button>
+            </div>
+            <button class="arcade-button" data-mode="training">TRAINING LAB</button>
+          </section>
+          <section class="menu-tier tier-more" aria-label="More">
+            <p class="tier-label">MORE</p>
+            <button class="arcade-button" data-mode="survival">SURVIVAL · THE GAUNTLET</button>
+            <button class="arcade-button" data-mode="team">1–2 PLAYERS · TEAM BATTLE · 3V3</button>
+            <button class="arcade-button daily-button" id="dailyButton">DAILY JAWN<small id="dailyStatus">FRESH RUN READY</small></button>
+            <div class="menu-row">
+              <button class="arcade-button ledger-button" id="blackBookButton">THE BLACK BOOK<small id="blackBookStatus">0 / 35 INKED</small></button>
+              <button class="arcade-button ledger-button" id="recordsButton">FIGHT RECORDS<small id="recordsStatus">NO FIGHTS LOGGED</small></button>
+            </div>
+            <button class="arcade-button online-button" id="onlineButton">ONLINE · PRIVATE ROOM</button>
+            <button class="arcade-button bracket-button" id="phillyOpenButton">THE PHILLY OPEN · BRACKET<small id="phillyOpenStatus">4 OR 8 ENTRANTS · SINGLE ELIMINATION</small></button>
+            <div class="menu-row">
+              <button class="arcade-button demo-button" id="demoButton">WATCH DEMO · CPU VS CPU</button>
+              <button class="arcade-button demo-button" id="replayTheaterButton">REPLAY THEATER<small id="replayTheaterStatus">WATCH SAVED MATCHES</small></button>
+            </div>
+            <button class="arcade-button ghost" id="controlsButton">CONTROLS & OPTIONS</button>
+          </section>
         </div>
         <div class="start-hint">PRESS <kbd>ENTER</kbd> OR <span class="xbox-a">A</span> TO START</div>
       </section>
@@ -554,6 +567,11 @@
           <h2 id="resultTitle">DEATHBLOW WINS</h2>
           <div id="resultFinisher">FAULTLINE EXECUTION</div>
           <blockquote id="resultQuote">THE STREET MOVED FIRST.</blockquote>
+          <p id="resultRecap" class="result-recap" hidden>WHAT JUST HAPPENED · —</p>
+          <button id="resultCoach" class="title-coach result-coach" type="button" hidden>
+            <b id="resultCoachHead">NEXT · LESSON 1 · FOOTWORK &amp; GUARD</b>
+            <small id="resultCoachReason">—</small>
+          </button>
           <div id="setScoreCard" class="set-score-card" aria-label="Set scoreboard" hidden>
             <b id="setScoreTitle">WINNER STAYS</b>
             <div id="setScoreLine" class="set-score-line"></div>
@@ -621,9 +639,9 @@
           <p>LP JAB · HP HOOK · LK LIGHT KICK · HK ROUNDHOUSE</p>
           <p data-style-copy>SPECIALS: {commandSpecial} · {backSpecial} · {special} · {launcher} · {driveHeavy}</p>
           <p data-style-copy>ENHANCED: {enhanced} · SUPER: {super}</p>
-          <p>THROW: CLOSE + TOWARD/AWAY + LP OR LK · DASH: DOUBLE-TAP ← OR →</p>
-          <p>THROWABLE: ↓ ← + KICK (EX: LK&amp;HK) · STAGE WEAPON: ↓ + HP OVER IT, HP THROWS · TAUNT: ↓ ↓ + LK&amp;HK</p>
-          <p>FINAL BLOW: ANY DISTANCE · LP = A · LK = B · HP/HK DO NOT FINISH</p>
+          <p data-style-copy>THROW: {throw} · DASH: {dash}</p>
+          <p data-style-copy>THROWABLE: {throwObject} (EX: {enhancedThrowObject}) · STAGE WEAPON: {stageWeapon} · TAUNT: {taunt}</p>
+          <p data-style-copy>FINAL BLOW: {finalBlow} · HP/HK DO NOT FINISH</p>
         </section>
         <section>
           <h3>PLAYER 2 · KEYBOARD</h3>
@@ -633,9 +651,9 @@
           <p>LP JAB · HP HOOK · LK LIGHT KICK · HK ROUNDHOUSE</p>
           <p data-style-copy>SPECIALS: {commandSpecial} · {backSpecial} · {special} · {launcher} · {driveHeavy}</p>
           <p data-style-copy>ENHANCED: {enhanced} · SUPER: {super}</p>
-          <p>THROW: CLOSE + TOWARD/AWAY + LP OR LK · DASH: DOUBLE-TAP ← OR →</p>
-          <p>THROWABLE: ↓ ← + KICK (EX: LK&amp;HK) · STAGE WEAPON: ↓ + HP OVER IT, HP THROWS · TAUNT: ↓ ↓ + LK&amp;HK</p>
-          <p>FINAL BLOW: ANY DISTANCE · LP = A · LK = B · HP/HK DO NOT FINISH</p>
+          <p data-style-copy>THROW: {throw} · DASH: {dash}</p>
+          <p data-style-copy>THROWABLE: {throwObject} (EX: {enhancedThrowObject}) · STAGE WEAPON: {stageWeapon} · TAUNT: {taunt}</p>
+          <p data-style-copy>FINAL BLOW: {finalBlow} · HP/HK DO NOT FINISH</p>
         </section>
         <section>
           <h3>XINPUT / GAMEPAD</h3>
@@ -644,7 +662,7 @@
           <p>LP JAB · HP HOOK · LK LIGHT KICK · HK ROUNDHOUSE</p>
           <p id="padEquivalents">PLAYSTATION: □ LP · △ HP · ✕ LK · ○ HK — NINTENDO: Y LP · X HP · B LK · A HK</p>
           <p>SAME MOTIONS, CHORDS AND SINGLE-BUTTON FINAL BLOW AS KEYBOARD</p>
-          <p>DOUBLE-TAP DASH · ↓ ← + KICK THROWABLE · ↓ + HP STAGE WEAPON · ↓ ↓ + LK&amp;HK TAUNT</p>
+          <p data-style-copy>DASH: {dash} · THROWABLE: {throwObject} · STAGE WEAPON: {stageWeapon} · TAUNT: {taunt}</p>
         </section>
         <section class="options-panel">
           <h3>OPTIONS</h3>
@@ -672,11 +690,13 @@
           </div>
           <label class="music-picker"><span>SOUNDTRACK</span>
             <select id="musicSelect" aria-label="Soundtrack selection">
-              <option value="auto">AUTO ROTATE · ALL 4</option>
+              <option value="auto">AUTO ROTATE · ALL 6</option>
               <option value="0">PHILLY AFTER DARK</option>
               <option value="1">VET PARKING LOT</option>
               <option value="2">NEON SIGN WAR</option>
               <option value="3">SUBWAY AFTER MIDNIGHT</option>
+              <option value="4">BOARDWALK NEON</option>
+              <option value="5">DECK PARTY DISASTER</option>
             </select>
           </label>
           <label class="option-picker"><span>CPU DIFFICULTY</span>
@@ -777,6 +797,6 @@
 <script type="importmap">
     { "imports": { "three": "./renderer/vendor/three.module.js", "three/addons/": "./renderer/vendor/jsm/" } }
   </script>
-  <script type="module" src="game.js?v=final-blow-5.2"></script>
+  <script type="module" src="game.js?v=final-blow-5.3"></script>
 </body>
 </html>

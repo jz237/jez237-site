@@ -111,7 +111,7 @@ test("missingHostMembers / assertHostContract report by tier", () => {
 
 test("main.mjs asserts the contract first and registers the world-objects layer", () => {
   const main = threeSources["main.mjs"];
-  assert.match(main, /import \{ assertHostContract, CINEMA_HOST_MEMBERS \} from "\.\/host-contract\.mjs";/);
+  assert.match(main, /import \{ assertHostContract, CINEMA_HOST_MEMBERS, missingHostMembers \} from "\.\/host-contract\.mjs";/);
   const assertAt = main.indexOf("assertHostContract(host);");
   const rendererAt = main.indexOf("const renderer3d = {");
   assert.ok(assertAt > 0 && assertAt < rendererAt, "contract asserted before the renderer object is built");
@@ -178,8 +178,11 @@ test("the 3D fighter layer carries the super-ready read (rim uniform, aura, embe
   assert.match(fighters, /totalEmissiveRadiance \+= uFbReadyColor \* \(uFbReadyRim \* \(fbEdgeAny \* 1\.35 \+ 0\.05\)\);/);
   // A new uniform means a new program: the cache key must move with it.
   // v12 (5.1, #45): uFbTopTint — the per-stage top-light body multiplier;
-  // v13 (5.1, #28): the tempo-tell uniforms (uFbWhiffRim / uFbRearmDim).
-  assert.match(fighters, /customProgramCacheKey = \(\) => "fb-sprite-grade-v13"/);
+  // v13 (5.1, #28): the tempo-tell uniforms (uFbWhiffRim / uFbRearmDim);
+  // v14 (5.3, #48): uFbDamage / uFbDamageOn — the battle-damage decal sampler.
+  // Pin bumped because the uniform set genuinely changed: a stale program
+  // cache would hand the new shader source the old compiled program.
+  assert.match(fighters, /customProgramCacheKey = \(\) => "fb-sprite-grade-v14"/);
   assert.match(fighters, /bank\.fb\.readyRim\.value = superReady \? 0\.55 \+ readyPulse \* 0\.45 : 0;/);
   // Same ember formula as the 2D aura, hashed from the sim tick.
   assert.match(fighters, /const cycleFrames = 66 \+ \(ember % 3\) \* 14;/);
@@ -205,4 +208,20 @@ test("world-objects paints every live object through the host and keeps text on 
   // 1 canvas px = 1 sim px at 2x: the impostor is the same drawing.
   assert.match(objects, /const SUPERSAMPLE = 2;/);
   assert.match(objects, /const s = size \/ \(extentPx \* 2\);/);
+});
+
+// v5.3 VERIFICATION HARNESS (sweep #54). Everything above reads SOURCE: the
+// contract list against the `host.<member>` reads, and the list against the
+// object literal game.js writes. Neither can see the object the renderer is
+// actually holding after ensureCinema3d() assembled it. __finalBlowThree
+// .hostContract() is that read, and the browser smoke's `cinema-3d` probe
+// asserts it comes back with nothing missing on a real boot.
+test("the QA surface exposes the live host's contract for the browser probe", () => {
+  const main = threeSources["main.mjs"];
+  assert.match(main, /hostContract: \(\) => \(\{ members: CINEMA_HOST_MEMBERS, \.\.\.missingHostMembers\(host\) \}\),/);
+  const surfaceAt = main.indexOf("window.__finalBlowThree = {");
+  const contractAt = main.indexOf("hostContract: () =>");
+  assert.ok(surfaceAt > 0 && contractAt > surfaceAt, "hostContract is published on the QA surface");
+  // The reported member list is the union both ends are pinned against above.
+  assert.deepEqual(CINEMA_HOST_MEMBERS, [...CINEMA_HOST_REQUIRED, ...CINEMA_HOST_OPTIONAL]);
 });
