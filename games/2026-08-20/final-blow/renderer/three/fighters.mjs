@@ -1404,12 +1404,13 @@ export class FighterLayer {
     // to know the answer so its height reconciliations match the canvas.
     const unifiedActive = host.isUnifiedFighter
       ? host.isUnifiedFighter(fighter.def.id) : false;
-    const bank = rig.banks[bankName];
-    if (rig.currentBank !== bankName) {
+    const artBank = pose.artBank && this.ensureMotionBank(rig, fighter, pose.artBank) ? pose.artBank : bankName;
+    const bank = rig.banks[artBank];
+    if (rig.currentBank !== artBank) {
       rig.mesh.material = bank.material;
       rig.mesh.customDepthMaterial = bank.depthMaterial;
       rig.reflMesh.material = bank.reflMaterial;
-      rig.currentBank = bankName;
+      rig.currentBank = artBank;
     }
     applyAtlasFrame(bank.map, pose.frame);
     applyAtlasFrame(bank.normalMap, pose.frame);
@@ -1461,7 +1462,7 @@ export class FighterLayer {
       * (host.cellDrawAdjust
         ? host.cellDrawAdjust(fighter.def.id, bankName, pose.frame, { unified: unifiedActive })
         : host.baseCellDrawAdjust ? host.baseCellDrawAdjust(fighter.def.id, bankName, pose.frame) : 1);
-    const renderSize = host.fighterRenderSize(fighter.def.id) * sizeAdjust * PX;
+    const renderSize = host.fighterRenderSize(fighter.def.id) * sizeAdjust * PX * (artBank === pose.artBank ? (pose.artScale || 1) : 1);
     // v2.9 critic round (M5): per-cell floor registration in sim pixels — the
     // Commissioner's older base sheet bottoms out anywhere from 277 to 320.
     // v2.9 critic round 2 (B2): plus the ramped airborne body-centre anchor,

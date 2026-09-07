@@ -1,0 +1,886 @@
+{
+  "version": "5.4.7",
+  "note": "Jez/Benny scope. Companion drawings integrated for six authored banks. Per-sequence review status is retained separately from bank coverage; rows are not marked complete from asset counts alone.",
+  "fighters": {
+    "jez": {
+      "shared": [
+        {
+          "sequence": "idle",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "walk-forward",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "walk-backward",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-enter",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-idle",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-exit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "guard",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "guard-flinch",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-guard",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-guard-flinch",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "dash-forward",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "dash-backward",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "dash-brake",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "turnaround",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "jump-rise",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "jump-apex",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "jump-descent",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "landing",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "air-recovery",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "head-hit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "body-hit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "heavy-hit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "stagger",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "dizzy",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "launch-reaction",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "air-hit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "wall-splat",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "knockdown",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "floor-bounce",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "get-up",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "throw-reaction",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "knockout",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "entrance",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "victory",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "taunt",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "power-charge",
+          "status": "needs-frame-pass"
+        }
+      ],
+      "moves": [
+        {
+          "action": "airLight",
+          "id": "air-light",
+          "kind": "light",
+          "startup": 5,
+          "active": 8,
+          "recovery": 7,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "airHeavy",
+          "id": "air-heavy",
+          "kind": "heavy",
+          "startup": 9,
+          "active": 9,
+          "recovery": 10,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "airSpecial",
+          "id": "air-special",
+          "kind": "special",
+          "startup": 13,
+          "active": 12,
+          "recovery": 16,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "standLight",
+          "id": "jez-neon-jab",
+          "kind": "light",
+          "startup": 4,
+          "active": 5,
+          "recovery": 7,
+          "art": null,
+          "status": "basic-punch-kick-pass-5.4.6"
+        },
+        {
+          "action": "forwardLight",
+          "id": "jez-letter-opener",
+          "kind": "light",
+          "startup": 6,
+          "active": 6,
+          "recovery": 9,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "crouchLight",
+          "id": "jez-blue-line-low",
+          "kind": "light",
+          "startup": 4,
+          "active": 5,
+          "recovery": 8,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "standHeavy",
+          "id": "jez-channel-letter-chop",
+          "kind": "heavy",
+          "startup": 9,
+          "active": 7,
+          "recovery": 13,
+          "art": null,
+          "status": "basic-punch-kick-pass-5.4.6"
+        },
+        {
+          "action": "crouchHeavy",
+          "id": "jez-vinyl-sweep",
+          "kind": "heavy",
+          "startup": 9,
+          "active": 7,
+          "recovery": 16,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "overhead",
+          "id": "jez-marquee-axe",
+          "kind": "heavy",
+          "startup": 15,
+          "active": 6,
+          "recovery": 15,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "driveHeavy",
+          "id": "jez-window-letter-lunge",
+          "kind": "heavy",
+          "startup": 12,
+          "active": 8,
+          "recovery": 14,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "throw",
+          "id": "jez-signpost-trip",
+          "kind": "throw",
+          "startup": 4,
+          "active": 3,
+          "recovery": 20,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "special",
+          "id": "jez-neon-edge",
+          "kind": "special",
+          "startup": 10,
+          "active": 11,
+          "recovery": 13,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "commandSpecial",
+          "id": "jez-signline-lance",
+          "kind": "special",
+          "startup": 12,
+          "active": 12,
+          "recovery": 16,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "backSpecial",
+          "id": "jez-vinyl-step",
+          "kind": "special",
+          "startup": 7,
+          "active": 12,
+          "recovery": 12,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "launcher",
+          "id": "jez-signpost-rising",
+          "kind": "heavy",
+          "startup": 7,
+          "active": 8,
+          "recovery": 19,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              8,
+              9,
+              10,
+              11
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "enhanced",
+          "id": "jez-ex-neon-edge",
+          "kind": "special",
+          "startup": 7,
+          "active": 17,
+          "recovery": 11,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "enhancedCommandSpecial",
+          "id": "jez-ex-signline-lance",
+          "kind": "special",
+          "startup": 9,
+          "active": 19,
+          "recovery": 13,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "enhancedBackSpecial",
+          "id": "jez-ex-vinyl-step",
+          "kind": "special",
+          "startup": 4,
+          "active": 16,
+          "recovery": 15,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "enhancedLauncher",
+          "id": "jez-ex-signpost-rising",
+          "kind": "special",
+          "startup": 5,
+          "active": 14,
+          "recovery": 17,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              8,
+              9,
+              10,
+              11
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "super",
+          "id": "jez-seven-palm-neon-guillotine",
+          "kind": "special",
+          "startup": 6,
+          "active": 43,
+          "recovery": 21,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              12,
+              13,
+              14,
+              15
+            ]
+          },
+          "status": "needs-frame-pass"
+        }
+      ],
+      "finishers": {
+        "status": "needs-frame-pass",
+        "count": 2
+      }
+    },
+    "benny": {
+      "shared": [
+        {
+          "sequence": "idle",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "walk-forward",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "walk-backward",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-enter",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-idle",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-exit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "guard",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "guard-flinch",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-guard",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "crouch-guard-flinch",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "dash-forward",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "dash-backward",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "dash-brake",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "turnaround",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "jump-rise",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "jump-apex",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "jump-descent",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "landing",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "air-recovery",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "head-hit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "body-hit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "heavy-hit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "stagger",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "dizzy",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "launch-reaction",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "air-hit",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "wall-splat",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "knockdown",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "floor-bounce",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "get-up",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "throw-reaction",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "knockout",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "entrance",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "victory",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "taunt",
+          "status": "needs-frame-pass"
+        },
+        {
+          "sequence": "power-charge",
+          "status": "needs-frame-pass"
+        }
+      ],
+      "moves": [
+        {
+          "action": "airLight",
+          "id": "air-light",
+          "kind": "light",
+          "startup": 5,
+          "active": 8,
+          "recovery": 7,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "airHeavy",
+          "id": "air-heavy",
+          "kind": "heavy",
+          "startup": 9,
+          "active": 9,
+          "recovery": 10,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "airSpecial",
+          "id": "air-special",
+          "kind": "special",
+          "startup": 13,
+          "active": 12,
+          "recovery": 16,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "standLight",
+          "id": "benny-static-jab",
+          "kind": "light",
+          "startup": 3,
+          "active": 5,
+          "recovery": 6,
+          "art": null,
+          "status": "basic-punch-kick-pass-5.4.6"
+        },
+        {
+          "action": "forwardLight",
+          "id": "benny-hot-lead",
+          "kind": "light",
+          "startup": 5,
+          "active": 6,
+          "recovery": 7,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "crouchLight",
+          "id": "benny-ground-wire",
+          "kind": "light",
+          "startup": 3,
+          "active": 5,
+          "recovery": 7,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "standHeavy",
+          "id": "benny-breaker-cross",
+          "kind": "heavy",
+          "startup": 8,
+          "active": 7,
+          "recovery": 11,
+          "art": null,
+          "status": "basic-punch-kick-pass-5.4.6"
+        },
+        {
+          "action": "crouchHeavy",
+          "id": "benny-live-low",
+          "kind": "heavy",
+          "startup": 8,
+          "active": 7,
+          "recovery": 14,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "overhead",
+          "id": "benny-power-surge",
+          "kind": "heavy",
+          "startup": 14,
+          "active": 6,
+          "recovery": 13,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "driveHeavy",
+          "id": "benny-current-carry",
+          "kind": "heavy",
+          "startup": 10,
+          "active": 8,
+          "recovery": 12,
+          "art": null,
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "throw",
+          "id": "benny-ground-fault",
+          "kind": "throw",
+          "startup": 4,
+          "active": 3,
+          "recovery": 18,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "special",
+          "id": "benny-static-snap",
+          "kind": "special",
+          "startup": 6,
+          "active": 15,
+          "recovery": 10,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "commandSpecial",
+          "id": "benny-blitz",
+          "kind": "special",
+          "startup": 7,
+          "active": 22,
+          "recovery": 12,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "backSpecial",
+          "id": "benny-live-wire",
+          "kind": "special",
+          "startup": 4,
+          "active": 16,
+          "recovery": 14,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "launcher",
+          "id": "benny-circuit-riser",
+          "kind": "heavy",
+          "startup": 6,
+          "active": 9,
+          "recovery": 18,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              8,
+              9,
+              10,
+              11
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "enhanced",
+          "id": "benny-ex-static-snap",
+          "kind": "special",
+          "startup": 4,
+          "active": 22,
+          "recovery": 8,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "enhancedCommandSpecial",
+          "id": "benny-ex-blitz",
+          "kind": "special",
+          "startup": 5,
+          "active": 29,
+          "recovery": 9,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              0,
+              1,
+              2,
+              3
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "enhancedBackSpecial",
+          "id": "benny-ex-live-wire",
+          "kind": "special",
+          "startup": 2,
+          "active": 22,
+          "recovery": 18,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              4,
+              5,
+              6,
+              7
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "enhancedLauncher",
+          "id": "benny-ex-circuit-riser",
+          "kind": "special",
+          "startup": 4,
+          "active": 14,
+          "recovery": 15,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              8,
+              9,
+              10,
+              11
+            ]
+          },
+          "status": "needs-frame-pass"
+        },
+        {
+          "action": "super",
+          "id": "benny-circuit-breaker-super",
+          "kind": "special",
+          "startup": 5,
+          "active": 48,
+          "recovery": 19,
+          "art": {
+            "bank": "specials",
+            "frames": [
+              12,
+              13,
+              14,
+              15
+            ]
+          },
+          "status": "needs-frame-pass"
+        }
+      ],
+      "finishers": {
+        "status": "needs-frame-pass",
+        "count": 2
+      }
+    }
+  },
+  "scope": [
+    "jez",
+    "benny"
+  ],
+  "integratedBanks": [
+    "unified",
+    "unified-ext2",
+    "unified-ext3",
+    "unified-ext4",
+    "unified-ext5",
+    "specials"
+  ]
+}

@@ -1,3 +1,5 @@
+import { INBETWEEN_BANKS, companionBank, repairedCell, createInbetweenSelector } from "./engine/inbetweens.mjs";
+import { INBETWEEN_SCALE } from "./engine/inbetween-scale.mjs";
 import { clippedCell } from "./engine/clipped-cells.mjs";
 import { PAINTED_FLOW_BANK, PAINTED_FLOW_FIGHTERS, paintedFlowPose } from "./engine/painted-flow.mjs";
 import { captureMotion, interpolateMotion, interpolateBodyMotion, fixedDemoFrame } from "./engine/render-motion.mjs";
@@ -1377,6 +1379,33 @@ function specialsGenerationPose(fighterId, pose) {
 const fighterUnifiedAtlases = {};
 const paintedFlowAtlases = {};
 const paintedFlowAvailability = new WeakMap();
+const inbetweenAtlases = {};
+const selectInbetween = createInbetweenSelector();
+function ensureInbetweenAtlas(id, bank) {
+  if (!PAINTED_FLOW_FIGHTERS.includes(id) || !INBETWEEN_BANKS.includes(bank)) return null;
+  const key = `${id}:${companionBank(bank)}`;
+  if (!inbetweenAtlases[key]) {
+    const image = new Image();
+    image.src = `assets/inbetweens/${id}-${bank}-v1.webp`;
+    inbetweenAtlases[key] = image;
+    image.decode().catch(() => {});
+  }
+  return inbetweenAtlases[key];
+}
+function inbetweenReady(id, bank) {
+  const image = ensureInbetweenAtlas(id, bank);
+  return Boolean(image?.complete && image.naturalWidth);
+}
+function withInbetween(fighter, pose) {
+  const owner = state.fighters?.[fighter.side];
+  if (!owner || owner.def.id !== fighter.def.id) return pose;
+  const ready = inbetweenReady(fighter.def.id, pose.bank);
+  if (!ready && repairedCell(fighter.def.id, pose.bank, pose.frame)) return {bank: "unified", frame: 0};
+  const selected = selectInbetween(owner, pose, state.simulationTick,
+    ready, owner === fighter);
+  return selected.artBank ? {...selected, artScale: INBETWEEN_SCALE[`${fighter.def.id}-${pose.bank}`]?.[pose.frame] || 1} : selected;
+}
+
 function ensurePaintedFlowAtlas(id) {
   if (!PAINTED_FLOW_FIGHTERS.includes(id)) return null;
   if (!paintedFlowAtlases[id]) {
@@ -1656,9 +1685,10 @@ const MOTION_BANK_GATES = Object.freeze({
 });
 
 function motionBankCellDrawable(fighterId, cell, bank) {
+  if (repairedCell(fighterId, bank, cell) && inbetweenReady(fighterId, bank)) return true;
   const result = bankCellDrawable(fighterId, cell, bank, MOTION_BANK_GATES);
   const frame = typeof result === "number" ? result : cell;
-  return clippedCell(fighterId, bank, frame) ? false : result;
+  return clippedCell(fighterId, bank, frame) || repairedCell(fighterId, bank, frame) ? false : result;
 }
 
 // ---------------------------------------------------------------------------
@@ -1683,7 +1713,7 @@ function motionBankCellDrawable(fighterId, cell, bank) {
 function preloadAuthoredBanks(fighterIds) {
   const ids = (fighterIds || []).filter((id) => typeof id === "string" && id);
   if (!ids.length) return;
-  for (const id of ids) ensurePaintedFlowAtlas(id);
+  for (const id of ids) { ensurePaintedFlowAtlas(id); for (const bank of INBETWEEN_BANKS) ensureInbetweenAtlas(id, bank); }
   ensureMotionManifest();
   ensureMotion2Manifest();
   ensureMotion3Manifest();
@@ -2080,6 +2110,7 @@ let pendingPalettes = [0, 0];
 // shipped generation kept as the specials bank's per-cell fallback remaps,
 // silhouettes and builds a 3D texture like any other sheet (v5.3).
 function altAtlasSource(fighterId, bank) {
+  if (bank.startsWith("inbetween-")) return {image: inbetweenAtlases[`${fighterId}:${bank}`], key: `${fighterId}:${bank}`};
   if (bank === PAINTED_FLOW_BANK) return { image: paintedFlowAtlases[fighterId], key: `${fighterId}:${bank}` };
   return resolveAltAtlasSource(fighterId, bank, {
     motion: fighterMotionAtlases,
@@ -2123,7 +2154,7 @@ function ensureAltAtlas(fighterId, bank = "base") {
 
 /** The atlas a side should draw from, alt palette applied when selected. */
 function paletteAtlas(fighterId, side, bank = "base") {
-  const base = bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
+  const base = bank.startsWith("inbetween-") ? inbetweenAtlases[`${fighterId}:${bank}`] : bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
     ? fighterMoveAtlases[fighterId] || fighterAtlases[fighterId]
     // v5.3: the shipped specials generation, kept as the bank's per-cell
     // fallback; its own sheet, then the 5.3 sheet, then the combat atlas.
@@ -22001,7 +22032,7 @@ function fighterAnimationPose(fighter) {
   if (flow && !paintedFlowAvailability.has(fighter.attacking)) {
     paintedFlowAvailability.set(fighter.attacking, Boolean(flowAtlas?.complete && flowAtlas.naturalWidth));
   }
-  const pose = flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung);
+  const pose = withInbetween(fighter, flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung));
   recordPoseTrace(fighter, pose);
   return pose;
 }
@@ -22023,8 +22054,8 @@ function recordPoseTrace(fighter, pose) {
   if ((side !== 0 && side !== 1) || state.fighters?.[side] !== fighter) return;
   const ring = poseTrace[side];
   const last = ring.length ? ring[ring.length - 1] : null;
-  if (last && last.bank === pose.bank && last.frame === pose.frame) return;
-  ring.push({ tick: state.simulationTick, bank: pose.bank, frame: pose.frame });
+  if (last && last.bank === pose.bank && last.frame === pose.frame && last.artBank === pose.artBank) return;
+  ring.push({ tick: state.simulationTick, bank: pose.bank, frame: pose.frame, artBank: pose.artBank });
   if (ring.length > POSE_TRACE_SIZE) ring.shift();
 }
 
@@ -25051,7 +25082,7 @@ function drawFighter(fighter, time, measureOnly = false) {
     ? Math.sin((moving ? fighter.walkTime * 20 : fighter.animTime * 10) + fighter.side * 2) * (moving ? 1.8 : 2.7) : 0;
   const pose = fighterAnimationPose(fighter);
   // Wave 16: the side's palette pick decides which cached atlas draws.
-  const atlas = paletteAtlas(fighter.def.id, fighter.side, pose.bank);
+  const atlas = paletteAtlas(fighter.def.id, fighter.side, pose.artBank || pose.bank);
   const frame = pose.frame;
   const graphicFatality = activeGraphicFatality(fighter);
   const reality = finisherRealityAmount();
@@ -25074,7 +25105,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   const unifiedActive = unifiedFighterReady(fighter.def.id);
   const moveSheetAdjust = bankSheetAdjust(fighter.def.id, pose.bank)
     * cellDrawAdjust(fighter.def.id, pose.bank, frame, { unified: unifiedActive });
-  const renderSize = fighterRenderSize(fighter.def.id) * moveSheetAdjust;
+  const renderSize = fighterRenderSize(fighter.def.id) * moveSheetAdjust * (pose.artScale || 1);
   // v2.9 critic round (M5) + round 2 (B2): per-cell floor registration PLUS
   // the ramped airborne body-centre anchor, in world pixels. Floor-anchoring
   // an airborne cell is what made a 156px-tall tuck hand off from a 281px-tall
@@ -25539,7 +25570,7 @@ function drawFighter(fighter, time, measureOnly = false) {
     // skipped entirely mid-flip where the rotating transform would smear the
     // old cell across the sky.
     if (!reflectionPassActive && !graphicFatality && state.hitstop <= 0
-      && !attack && pose.bank !== PAINTED_FLOW_BANK && motionObs[fighter.side].fadeBank !== PAINTED_FLOW_BANK
+      && !attack && !PAINTED_FLOW_FIGHTERS.includes(fighter.def.id) && pose.bank !== PAINTED_FLOW_BANK && motionObs[fighter.side].fadeBank !== PAINTED_FLOW_BANK
       && Math.abs(motion.flipRotation) < 0.3) {
       const fadeObs = motionObs[fighter.side];
       if (fadeObs.fadeLeft > 0 && (fadeObs.fadeBank !== pose.bank || fadeObs.fadeFrame !== frame)) {
@@ -27435,15 +27466,9 @@ function drawFighterCastShadows() {
   ctx.clip();
   for (const fighter of state.fighters.map(renderFighter)) {
     const pose = fighterAnimationPose(fighter);
-    const atlas = pose.bank === "specials"
-      ? fighterMoveAtlases[fighter.def.id] || fighterAtlases[fighter.def.id]
-      : pose.bank === SPECIALS_LEGACY_BANK
-        ? fighterMoveLegacyAtlases[fighter.def.id] || fighterAtlases[fighter.def.id]
-        : pose.bank === "motion"
-        ? fighterMotionAtlases[fighter.def.id] || fighterAtlases[fighter.def.id]
-        : fighterAtlases[fighter.def.id];
+    const atlas = paletteAtlas(fighter.def.id, fighter.side, pose.artBank || pose.bank);
     if (!atlas?.complete || !atlas.naturalWidth) continue;
-    const renderSize = fighterRenderSize(fighter.def.id) * bankSheetAdjust(fighter.def.id, pose.bank);
+    const renderSize = fighterRenderSize(fighter.def.id) * bankSheetAdjust(fighter.def.id, pose.bank) * (pose.artScale || 1);
     const jump = Math.max(0, FLOOR - fighter.y);
     const airFade = clamp(1 - jump / 520, 0.25, 1);
     ctx.save();
@@ -32842,7 +32867,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.6");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.7");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34280,7 +34305,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.6-ringside",
+  version: "5.4.7-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -35714,6 +35739,8 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
           side: fighter.side,
           bank: resolved.bank,
           frame: resolved.frame,
+          artBank: resolved.artBank,
+          artScale: resolved.artScale || 1,
           attackCell: resolved.bank === "base" && roles.attack.includes(resolved.frame),
           unusableCell: resolved.bank === "base" && roles.unusable.includes(resolved.frame),
           grounded: fighter.grounded,
