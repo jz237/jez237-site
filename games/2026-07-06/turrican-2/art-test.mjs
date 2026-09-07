@@ -1,3 +1,4 @@
+import {ridgeGeometry,fracturedRock} from './src/geology.mjs';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 import {shellGeometry,reliefGeometry} from './src/artisan.mjs';
@@ -16,3 +17,5 @@ for(const [w,h] of [[844,390],[932,430],[1024,600],[960,540]]){
  assert.equal(viewOrigin(0,visible,4000),0);assert.ok(viewOrigin(3900,visible,4000)+visible<=4000);
 }
 console.log('Five world asset sets, relief geometry, unchanged collision data, and proportional landscape cameras verified.');
+
+for(const g of [ridgeGeometry(1,430),fracturedRock(20,7,5,9)]){assert.ok([...g.attributes.position.array].every(Number.isFinite));assert.ok(g.attributes.uv);g.dispose();}

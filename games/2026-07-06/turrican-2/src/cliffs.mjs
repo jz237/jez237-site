@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import {fracturedRock} from './geology.mjs';
 import {reliefGeometry,rockFace,pack,tube} from './artisan.mjs';
 import {part,mat,silver,dark,cyan,amber} from './models.mjs';
 
@@ -67,21 +68,17 @@ export function stoneMaterial(color,texture,industrial=false){
       `+shader.fragmentShader;
     shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
       vec2 rp=cliffPosition.xy;float layer=strata(rp*vec2(.012,.04));
-      float seams=abs(sin(rp.y*.32+strata(rp*vec2(.012,.045))*1.6+rp.x*.025));
+      float seams=abs(sin(rp.y*.21+rp.x*.038+strata(rp*.024)*.9));
       float fracture=abs(sin(rp.x*.19+rp.y*.025+strata(rp*.065)*2.));
       float cracks=smoothstep(.01,.05,seams)*mix(.9,1.,smoothstep(.005,.04,fracture));
-      diffuseColor.rgb*=(${industrial?'0.9+layer*.22':'0.54+layer*.75'})*mix(.76,1.,cracks);
+      diffuseColor.rgb*=(${industrial?'0.9+layer*.22':'0.54+layer*.75'})*mix(.94,1.,cracks);
       diffuseColor.rgb*=.91+rockNoise(rp*1.8)*.18;
       diffuseColor.rgb+=vec3(.025,.022,.014)*pow(max(0.,1.-abs(seams-.17)*9.),5.);
     `);
   };
   material.customProgramCacheKey=()=>industrial?'cliff-industrial-v1':'cliff-rock-v1';return material;
 }
-export function sculptRock(width,height,depth,seed=1){
-  const g=new THREE.SphereGeometry(1,18,14),p=g.attributes.position;
-  for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i);const n=1+.11*Math.sin(x*5+y*4+seed)+.06*Math.sin(z*9-y*5+seed*2)+.04*Math.cos(x*13+z*8);p.setXYZ(i,x*width*n,y*height*n,z*depth*n);}
-  g.computeVertexNormals();return g;
-}
+export function sculptRock(width,height,depth,seed=1){return fracturedRock(width,height,depth,seed);}
 export function dressCliffs(parent,level,material){
   const T=level.tile||20,industrial=[3,4].includes(level.world),wet=level.world===2;
   let rubble=0,moss=0,pipes=0,rims=0;
@@ -95,7 +92,7 @@ export function dressCliffs(parent,level,material){
       const n=Math.abs(Math.sin(x*13+a[1]*7));if(n>.63)continue;
       const g=sculptRock(3+n*5,1.3+n*1.2,3,x*.1);const stone=new THREE.Mesh(g,material);stone.position.set(x,a[1]+.6,-4);stone.rotation.y=x;stone.castShadow=true;stone.receiveShadow=true;parent.add(stone);rubble++;
       if(wet&&n<.4){const tuft=new THREE.Group();for(let k=0;k<5;k++){const leaf=part(tuft,'cone',[.65,3+k*.7,5],mat('#4d8161',.05,.95),[k*.8,1.2,-1],[0,0,(k-2)*.3]);}tuft.position.set(x+5,a[1],1);parent.add(tuft);moss++;}
-      if(!industrial&&n<.11){const c=new THREE.Group();for(let k=0;k<3;k++)part(c,'cone',[1.2,4+k,5],mat('#429ca9',.3,.3,.3),[k*1.3,k*.5,-2],[0,0,(k-1)*.2]);c.position.set(x-6,a[1]+1,-1);parent.add(c);}
+      if(!industrial&&n<.018){const c=new THREE.Group();for(let k=0;k<3;k++)part(c,'cone',[1.2,4+k,5],mat('#429ca9',.3,.3,.3),[k*1.3,k*.5,-2],[0,0,(k-1)*.2]);c.position.set(x-6,a[1]+1,-1);parent.add(c);}
       if(industrial&&n<.2){const curve=new THREE.CatmullRomCurve3([new THREE.Vector3(x-12,a[1]-12,2),new THREE.Vector3(x,a[1]-12,2),new THREE.Vector3(x+6,a[1]-19,2),new THREE.Vector3(x+6,a[1]-35,2)]);const pipe=new THREE.Mesh(new THREE.TubeGeometry(curve,14,1.4,8,false),silver);pipe.castShadow=true;parent.add(pipe);pipes++;}
     }
     // Protruding shelves below the walking edge create an undercut shadow.
@@ -118,9 +115,9 @@ export function landscapeRelief(parent,level,surface){
   const set=new THREE.Group();parent.add(set);let count=0;
   for(const loop of contours(level))for(let k=0;k<loop.length;k++){
     const a=loop[k],b=loop[(k+1)%loop.length],length=b[0]-a[0];if(a[1]!==b[1]||length<35)continue;
-    for(let x=a[0]+20;x<b[0]-18;x+=54){const n=(Math.sin(x*7.37)+1)*.5;
+    for(let x=a[0]+20;x<b[0]-18;x+=103){const n=(Math.sin(x*7.37)+1)*.5;
       if(natural){
-        for(let j=0;j<3;j++){const rock=new THREE.Mesh(rockFace(16+n*12,3+j*1.5,5+n*5,x+j),rockMat);rock.position.set(x+j*7,a[1]-5-j*7,1);rock.rotation.z=-.06+n*.12;rock.castShadow=true;rock.receiveShadow=true;set.add(rock);count++;}
+        for(let j=0;j<(n>.55?2:1);j++){const rock=new THREE.Mesh(fracturedRock(22+n*20,4+j*2,5+n*5,x+j),rockMat);rock.position.set(x+j*13,a[1]-8-j*9,1);rock.rotation.z=-.13+n*.18;rock.castShadow=true;rock.receiveShadow=true;set.add(rock);count++;}
         if(level.world===2||level.world===5){for(let i=0;i<4;i++){const leaf=tube([[x+i*2,a[1],-3],[x+i*2+2,a[1]+5,-3],[x+i*2-1,a[1]+10+n*12,-3]],.45,mat(level.world===2?'#4a8170':'#897849',.1,.8));set.add(leaf);}}
       }else{
         part(set,'box',[32,3,6],dark,[x,a[1]-5,3]);for(let i=0;i<4;i++)part(set,'box',[2,2,1],i%2?amber:silver,[x-12+i*7,a[1]-5,7]);
