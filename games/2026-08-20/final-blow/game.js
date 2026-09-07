@@ -1,4 +1,4 @@
-import { captureMotion, interpolateMotion, fixedDemoFrame } from "./engine/render-motion.mjs";
+import { captureMotion, interpolateMotion, interpolateBodyMotion, fixedDemoFrame } from "./engine/render-motion.mjs";
 import {
   DEFAULT_INPUT_BUFFER_FRAMES,
   DeterministicRng,
@@ -9340,6 +9340,7 @@ function updateMotionObservers() {
 // y-down/clockwise; scales are feet-anchored. flipRotation pivots about the
 // body CENTRE (the somersault axis), everything else about the feet.
 function fighterMotionTransform(fighter) {
+  if (fighter.renderBodyMotion) return fighter.renderBodyMotion;
   const scratch = motionScratch[fighter.side] || motionScratch[0];
   scratch.rotation = 0;
   scratch.flipRotation = 0;
@@ -25620,7 +25621,7 @@ function drawFighter(fighter, time, measureOnly = false) {
             const ceiling = sameCycle ? GHOST_CYCLE_ALPHA : GHOST_SOFT_ALPHA;
             ctx.globalCompositeOperation = "source-over";
             ctx.globalAlpha = Math.min(ceiling,
-              ceiling * (fadeObs.fadeLeft / MOTION_RULES.crossfadeFrames) + 0.05);
+              ceiling * (Math.max(0, fadeObs.fadeLeft - (fighter.renderBodyMotion ? state.simulationAlpha : 0)) / MOTION_RULES.crossfadeFrames) + 0.05);
             ctx.drawImage(ghost, -fadeSize * 0.5, -fadeSize, fadeSize, fadeSize);
             ctx.restore();
             presentationDebug.poseCrossfades += 1;
@@ -30008,12 +30009,17 @@ function clearLatchedInputEdges() {
 }
 
 const previousRenderMotion = new WeakMap();
+const previousBodyMotion = new WeakMap();
 let renderMotionCache = new WeakMap();
 function renderFighter(fighter) {
-  if (state.mode !== "demo" || state.qaManualMode || demoSpeed.paused
+  if (state.mode === "online" || state.qaManualMode || (demoSpeedActive() && demoSpeed.paused)
     || state.hitstop > 0 || state.finisher) return fighter;
   if (!renderMotionCache.has(fighter)) {
     const sample = interpolateMotion(fighter, previousRenderMotion.get(fighter), state.simulationAlpha);
+    if (sample !== fighter) {
+      sample.renderBodyMotion = interpolateBodyMotion(
+        { ...fighterMotionTransform(fighter) }, previousBodyMotion.get(fighter), state.simulationAlpha);
+    }
     renderMotionCache.set(fighter, sample);
     renderMotionCache.set(sample, sample);
   }
@@ -30021,8 +30027,11 @@ function renderFighter(fighter) {
 }
 
 function runSimulationStep(dt, tick) {
-  if (state.mode === "demo") {
-    for (const fighter of state.fighters) previousRenderMotion.set(fighter, captureMotion(fighter));
+  if (state.mode !== "online") {
+    for (const fighter of state.fighters) {
+      previousRenderMotion.set(fighter, captureMotion(fighter));
+      previousBodyMotion.set(fighter, { ...fighterMotionTransform(fighter) });
+    }
   }
   if (!(state.mode === "online" && onlineSession.rollback)) state.simulationTick = tick;
   // 5.x flick-to-dash: a queued flick plays its lift/tap/lift/tap on the
@@ -32843,7 +32852,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.4");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.5");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34281,7 +34290,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.4-ringside",
+  version: "5.4.5-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
