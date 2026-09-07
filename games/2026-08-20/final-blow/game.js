@@ -1,3 +1,4 @@
+import { captureMotion, interpolateMotion, fitFrame } from "./engine/render-motion.mjs";
 import {
   DEFAULT_INPUT_BUFFER_FRAMES,
   DeterministicRng,
@@ -11812,7 +11813,7 @@ function drawWallsplatEdgeCover() {
 }
 
 function drawForegroundOccluders(centre) {
-  if (!state.performance.shadows) return;
+  if (!state.performance.shadows || state.mode === "demo") return;
   let rig = occluderRigs[state.stage];
   if (!rig) {
     rig = buildOccluderRig(state.stage);
@@ -25003,7 +25004,8 @@ function drawRhythmRings(fighter, time) {
   ctx.restore();
 }
 
-function drawFighter(fighter, time) {
+function drawFighter(fighter, time, measureOnly = false) {
+  fighter = renderFighter(fighter);
   const jump = FLOOR - fighter.y;
   const attack = fighter.attacking;
   const attackProgress = attack ? clamp(fighter.attackTime / attack.duration, 0, 1) : 0;
@@ -25101,9 +25103,10 @@ function drawFighter(fighter, time) {
 
   ctx.save();
   ctx.translate(fighter.x, fighter.y);
-  drawContactShadow(fighter, jump, renderSize, lunge);
-
-  drawRhythmRings(fighter, time);
+  if (!measureOnly) {
+    drawContactShadow(fighter, jump, renderSize, lunge);
+    drawRhythmRings(fighter, time);
+  }
 
   // v5.2 LOCOMOTION (bookends): a prone cinematic cell (the victim's KO lie)
   // sheds the lie it already carries before the script's rotation is applied
@@ -25161,7 +25164,7 @@ function drawFighter(fighter, time) {
   // left- and right-facing art, so facing alone drew him looking away from
   // the opponent while his attacks still extended the right way.
   const renderMirror = fighter.facing * atlasFrameFacing(fighter.def.id, pose.bank, frame);
-  if (!reflectionPassActive) {
+  if (!reflectionPassActive && !measureOnly) {
     presentationDebug.lastFighterMirror[fighter.side] = {
       fighterId: fighter.def.id, bank: pose.bank, frame, facing: fighter.facing, mirror: renderMirror,
     };
@@ -25217,14 +25220,32 @@ function drawFighter(fighter, time) {
   // becomes chest travel over the sprite height, and the feet never move.
   const idlePulse = breath - bob / (renderSize * 0.85);
   if (idlePulse !== 0) ctx.scale(1, 1 + idlePulse);
-  if (breathing && !reflectionPassActive) presentationDebug.breathing += 1;
+  if (breathing && !reflectionPassActive && !measureOnly) presentationDebug.breathing += 1;
   if (exhausted > 0) ctx.rotate(0.085 * exhausted * (reducedMotion ? 0.5 : 1));
   // Impact squash-and-recover, decaying with the same hitFlash the smear uses.
   if (hitSmear > 0) ctx.scale(1 + hitSmear * 0.05, 1 - hitSmear * 0.06);
   // v2.6 MOTION squash & stretch: rise stretch / launch squat / landing squash
   // from the shared motion layer, feet-anchored like every scale above it.
   if (motion.scaleX !== 1 || motion.scaleY !== 1) ctx.scale(motion.scaleX, motion.scaleY);
-  if (motion.stretchActive && !reflectionPassActive) presentationDebug.squashStretchFrames += 1;
+  if (motion.stretchActive && !reflectionPassActive && !measureOnly) presentationDebug.squashStretchFrames += 1;
+
+  if (measureOnly) {
+    // Use precisely the transform that paints this pose, including its feet
+    // registration, flip pivot, lunge, squash and authored-facing mirror.
+    // Measuring the full cell also reserves transparent padding for weapons.
+    const matrix = ctx.getTransform();
+    const bounds = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+    for (const x of [-renderSize * 0.5, renderSize * 0.5]) {
+      for (const y of [-renderSize, 0]) {
+        const px = (matrix.a * x + matrix.c * y + matrix.e) / renderDpr;
+        const py = (matrix.b * x + matrix.d * y + matrix.f) / renderDpr;
+        bounds.left = Math.min(bounds.left, px - 8); bounds.right = Math.max(bounds.right, px + 8);
+        bounds.top = Math.min(bounds.top, py - 8); bounds.bottom = Math.max(bounds.bottom, py + 8);
+      }
+    }
+    ctx.restore();
+    return bounds;
+  }
 
   if (fighter.specialGlow > 0) {
     const glow = ctx.createRadialGradient(0, -135, 16, 0, -135, 178);
@@ -27375,7 +27396,7 @@ function drawFighterReflections(time) {
   ctx.translate(0, FLOOR * 2 + 8);
   ctx.scale(1, -1);
   reflectionPassActive = true;
-  for (const fighter of state.fighters) {
+  for (const fighter of state.fighters.map(renderFighter)) {
     // BODY-FIRST (spec 8): the mirror LETS GO with height — an airborne
     // fighter's mirrored sprite slid down the band and left orphan
     // leg-fragments (a juggled victim's sprawl cell read as detached shoe
@@ -27421,7 +27442,7 @@ function drawFighterCastShadows() {
   ctx.beginPath();
   ctx.rect(0, FLOOR + 1, W, REFLECTION_DEPTH);
   ctx.clip();
-  for (const fighter of state.fighters) {
+  for (const fighter of state.fighters.map(renderFighter)) {
     const pose = fighterAnimationPose(fighter);
     const atlas = pose.bank === "specials"
       ? fighterMoveAtlases[fighter.def.id] || fighterAtlases[fighter.def.id]
@@ -29676,7 +29697,39 @@ function drawSuperCutIn(dtMs) {
   }
 }
 
+let demoFitScale = 1;
+let demoFitDebug = null;
+function fitDemoFighters(dtMs) {
+  const matrix = ctx.getTransform();
+  const bounds = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
+  for (const fighter of state.fighters) {
+    const body = drawFighter(fighter, state.lastRenderTime, true);
+    bounds.left = Math.min(bounds.left, body.left); bounds.right = Math.max(bounds.right, body.right);
+    bounds.top = Math.min(bounds.top, body.top); bounds.bottom = Math.max(bounds.bottom, body.bottom);
+  }
+  const canvasRect = canvas.getBoundingClientRect();
+  const bugRect = $("#demoHud").getBoundingClientRect();
+  const bugTop = canvasRect.height > 0 && bugRect.height > 0
+    ? (bugRect.top - canvasRect.top) / canvasRect.height * H - 12 : H - 105;
+  const safe = { left: 24, right: W - 24, top: 105, bottom: Math.max(400, Math.min(H - 105, bugTop)) };
+  const fit = fitFrame(bounds, safe);
+  demoFitScale = Math.min(fit.scale, demoFitScale + (1 - demoFitScale) * (1 - Math.exp(-dtMs / 650)));
+  // Recompute translation at the slowly released scale so even a jump or a
+  // corner super stays inside the HUD/letterbox on the first affected frame.
+  const clampShift = (lo, hi) => clamp(0, lo, hi);
+  const x = clampShift(safe.left - bounds.left * demoFitScale, safe.right - bounds.right * demoFitScale);
+  const y = clampShift(safe.top - bounds.top * demoFitScale, safe.bottom - bounds.bottom * demoFitScale);
+  demoFitDebug = { safe, bounds: { left: bounds.left * demoFitScale + x,
+    right: bounds.right * demoFitScale + x, top: bounds.top * demoFitScale + y,
+    bottom: bounds.bottom * demoFitScale + y }, scale: demoFitScale };
+  ctx.setTransform(matrix.a * demoFitScale, matrix.b * demoFitScale,
+    matrix.c * demoFitScale, matrix.d * demoFitScale,
+    matrix.e * demoFitScale + x * renderDpr, matrix.f * demoFitScale + y * renderDpr);
+}
+
 function draw(time) {
+  if (state.mode !== "demo" || state.screen !== "fight") { demoFitScale = 1; demoFitDebug = null; }
+  renderMotionCache = new WeakMap();
   // Wave 5 HUD observers: phase-edge slash wipe and the hold-then-drain
   // damage ghosts, both driven from observed state in the render loop.
   const hudDtMs = clamp(time - hudFxLastTime, 0, 100) || 16.7;
@@ -29732,7 +29785,6 @@ function draw(time) {
   // Presentation-only: nothing here touches the sim.
   const demoPullback = state.mode === "demo" && state.screen === "fight" && !state.finisher && !cinema3dWorld;
   if (demoPullback) {
-    drawStage(time);
     ctx.translate(W * .5, FLOOR);
     ctx.scale(DEMO_PULLBACK_ZOOM, DEMO_PULLBACK_ZOOM);
     ctx.translate(-W * .5, -FLOOR);
@@ -29778,6 +29830,17 @@ function draw(time) {
     gritFlareLevel[1] = Math.max(0, gritFlareLevel[1] - 0.05);
   }
   if (!cinema3dWorld) {
+    // A cheap backdrop fills the revealed margins. Paint the full stage only
+    // once, through the SAME camera as the fighters so their feet stay on it.
+    if (demoPullback) {
+      ctx.save();
+      ctx.setTransform(renderDpr, 0, 0, renderDpr, 0, 0);
+      drawCover(stageImages[state.stage]);
+      ctx.fillStyle = "rgba(2,3,5,.55)";
+      ctx.fillRect(0, 0, W, H);
+      ctx.restore();
+      fitDemoFighters(hudDtMs);
+    }
     drawStage(time);
     if (state.screen === "fight") {
       drawWallsplatEdgeCover();
@@ -29963,7 +30026,23 @@ function clearLatchedInputEdges() {
   for (const token of [...touch]) if (token.endsWith(":pressed")) touch.delete(token);
 }
 
+const previousRenderMotion = new WeakMap();
+let renderMotionCache = new WeakMap();
+function renderFighter(fighter) {
+  if (state.mode !== "demo" || state.qaManualMode || demoSpeed.paused
+    || state.hitstop > 0 || state.finisher) return fighter;
+  if (!renderMotionCache.has(fighter)) {
+    const sample = interpolateMotion(fighter, previousRenderMotion.get(fighter), state.simulationAlpha);
+    renderMotionCache.set(fighter, sample);
+    renderMotionCache.set(sample, sample);
+  }
+  return renderMotionCache.get(fighter);
+}
+
 function runSimulationStep(dt, tick) {
+  if (state.mode === "demo") {
+    for (const fighter of state.fighters) previousRenderMotion.set(fighter, captureMotion(fighter));
+  }
   if (!(state.mode === "online" && onlineSession.rollback)) state.simulationTick = tick;
   // 5.x flick-to-dash: a queued flick plays its lift/tap/lift/tap on the
   // touch Set one real sim tick at a time, ahead of this tick's readInput.
@@ -32783,7 +32862,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.1");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.2");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34220,7 +34299,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.1-ringside",
+  version: "5.4.2-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -36102,6 +36181,14 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
         voiceBags: fighterVoiceBags.size,
       };
     },
+    renderMotion() {
+      return { alpha: state.simulationAlpha, fit: demoFitDebug,
+        fighters: state.fighters.map((fighter) => {
+          const sample = renderFighter(fighter);
+          return { sim: { x: fighter.x, y: fighter.y }, sample: { x: sample.x, y: sample.y },
+            previous: previousRenderMotion.get(fighter) || null };
+        }) };
+    },
     demoSpeed(rate = null) {
       if (rate !== null) {
         demoSpeed.setRate(rate);
@@ -36892,6 +36979,7 @@ function ensureCinema3d() {
       // v5.2 LOCOMOTION (bookends): the cinematic rotation a prone cell
       // actually draws under (the victim's KO lie sheds its own lie first).
       cinematicDrawRotation,
+      renderFighter,
       // 5.3 SPECTACLE (#19): the battle-scar list as decal descriptors, so
       // the 3D arena wears the fight the same way the canvas does.
       stageScars: stageScarDecals,

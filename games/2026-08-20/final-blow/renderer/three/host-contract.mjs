@@ -43,6 +43,7 @@ export const CINEMA_HOST_REQUIRED = Object.freeze([
 
 // Read behind a `host.x ? ... : fallback` / `host.x?.()` guard.
 export const CINEMA_HOST_OPTIONAL = Object.freeze([
+  "renderFighter", // presentation-only interpolation, identity outside demos
   "fighterAtlasFor",       // (fighter, bank) -> palette-resolved atlas image / canvas
   "fighterPaletteKey",     // (fighter) -> "" | "alt": invalidates a side's rig on a colour pick
   "hdSheetPath",           // (fighterId, bank) -> renderer/hd path or null (availability-gated)
