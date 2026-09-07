@@ -31,7 +31,7 @@ diffuseColor.a *= exp(-dot(centered,centered)*22.0) * (1.0-smoothstep(0.35,0.5,m
     const blocked=event.type==='block',low=event.move==='sweep';
     const pos=new THREE.Vector3(target.x+target.face*.30,low?.43:(event.move==='kick'?1.44:2.06),.6);
     const color=blocked?0x7bdcff:0xffcc79;
-    const heavy=['straight','uppercut','high','sweep'].includes(event.move);
+    const heavy=['cross','straight','uppercut','high','sweep'].includes(event.move);
     const count=this.reduced?5:heavy?26:18;
     for(let i=0;i<count;i++) {
       const a=Math.PI*2*i/count+Math.random()*.2,speed=1.2+Math.random()*2.8;
