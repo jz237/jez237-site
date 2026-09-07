@@ -41,7 +41,8 @@ import { FIGHTER_MASK_LAYER } from "./post.mjs";
 // drift from the 2D path on which banks exist (motion, motion2, walk).
 // v3.0: ...and on the unified bank's name, so the sheet-adjust branch below
 // cannot drift from the sim's idea of what that bank is called.
-import { AUTHORED_BANKS, SPECIALS_LEGACY_BANK, UNIFIED_BANK } from "../../engine/fighter-kits.mjs";
+import { AUTHORED_BANKS as LEGACY_AUTHORED_BANKS, SPECIALS_LEGACY_BANK, UNIFIED_BANK } from "../../engine/fighter-kits.mjs";
+const AUTHORED_BANKS = [...LEGACY_AUTHORED_BANKS, "painted-flow"];
 // v5.1 TEMPO TELLS: the SAME phase/strength function drawFighter's 2D pass
 // reads, so the whiff fringe and the re-arm wash land on identical ticks in
 // both renderers (no host member: it is pure engine code, not a game.js read).
@@ -1450,6 +1451,7 @@ export class FighterLayer {
           // v3.0 UNIFIED: also its own table. The unified sheets DO share the
           // motion banks' 306px standing convention, but a future sheet built
           // to another one must not inherit a correction fitted to this one.
+          : bankName === "painted-flow" ? (fighter.def.id === "benny" ? 292 / 254 : 292 / 286)
           : bankName === UNIFIED_BANK ? (host.unifiedSheetAdjust?.[fighter.def.id] || 1) : 1)
       // v2.9 critic round 2 (M4): cellDrawAdjust rolls the oversized-crouch
       // correction together with the guard-flinch height reconciliation, so

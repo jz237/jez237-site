@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'demo3dButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.4/);
-    assert.equal(title.version.text, 'VERSION 5.4.5');
+    assert.equal(title.version.text, 'VERSION 5.4.6');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.4.5-ringside');
+    assert.equal(title.engineVersion, '5.4.6-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -3659,7 +3659,28 @@ probe('announcer-decision', async () => {
   );
 });
 
+probe('painted-flow-frames', async () => {
+  await navigate(client, gameUrl);
+  await evaluate(client, `window.__finalBlowQa.fight('jez', 'benny')`);
+  await delay(1500);
+  for (const id of ['jez', 'benny']) for (const limb of ['punch', 'kick']) {
+    const frames = await evaluate(client, `(() => {
+      const qa = window.__finalBlowQa;
+      qa.fight('${id}', 'deathblow'); qa.positions(430, 950); qa.step(0.4);
+      qa.poseTraceReset(); qa.input(0, {heavy: true, limb: '${limb}'});
+      for (let tick = 0; tick < 60; tick++) { qa.step(1/60); qa.pose(); }
+      return qa.poseTrace(64, 0).filter(p => p.bank === 'painted-flow').map(p => p.frame);
+    })()`);
+    const expected = limb === 'kick' ? [8,9,10,11,12,13,14,15]
+      : id === 'jez' ? [0,1,2,3,4,5,7] : [0,1,2,3,4,5,6,7];
+    assert.deepEqual(frames, expected, `${id} ${limb} must actually draw the new sequence`);
+  }
+  await navigate(client, gameUrl);
+});
+
 probe('pose-trace-chains', async () => {
+  await evaluate(client, `window.__finalBlowQa.fight('jez', 'benny')`);
+  await delay(1500);
   // 5.0 FULL SWING recorded its acceptance as frame chains read off the screen
   // by eye ("Verified by frame attribution in real play (jez)" in
   // MOTION-ATLAS.md). poseTrace() is the ring those transitions land in, and
@@ -3701,8 +3722,8 @@ probe('pose-trace-chains', async () => {
   // its own ext5 cells). motion3:4 is still the one cross-generation cell on
   // the whole set, which is why it is written out rather than tolerated.
   const EXPECTED = {
-    jab: ['unified-ext2:0', 'unified-ext3:0', 'unified-ext3:2', 'unified-ext2:1', 'unified:7'],
-    heavyKick: ['unified-ext:6', 'unified-ext2:6', 'unified:6', 'unified-ext3:14', 'unified-ext3:11', 'unified-ext2:7', 'unified:7'],
+    jab: ['painted-flow:0', 'painted-flow:1', 'painted-flow:2', 'painted-flow:3', 'painted-flow:4', 'painted-flow:5', 'painted-flow:7'],
+    heavyKick: ['painted-flow:8', 'painted-flow:9', 'painted-flow:10', 'painted-flow:11', 'painted-flow:12', 'painted-flow:13', 'painted-flow:14', 'painted-flow:15'],
     crouchJab: ['unified-ext2:8', 'unified-ext3:4', 'unified-ext2:9', 'unified:7'],
     sweep: ['unified-ext2:10', 'unified-ext3:5', 'unified-ext3:15', 'unified-ext2:11'],
     airKick: ['unified-ext3:8', 'unified-ext3:7', 'motion3:4', 'unified-ext5:6', 'unified-ext3:10', 'unified:6'],
@@ -3718,9 +3739,9 @@ probe('pose-trace-chains', async () => {
   // and the air arc's single motion3 descent cell is the only exception left.
   for (const move of ['jab', 'heavyKick', 'crouchJab', 'sweep']) {
     assert.deepEqual(
-      EXPECTED[move].filter((cell) => !cell.startsWith('unified')),
+      EXPECTED[move].filter((cell) => !cell.startsWith('unified') && !cell.startsWith('painted-flow')),
       [],
-      `${move} must never leave the unified generation`,
+      `${move} must use an accepted painted bank`,
     );
   }
   assert.deepEqual(
@@ -4464,7 +4485,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.4/);
-    assert.equal(controlledReload.version, '5.4.5-ringside');
+    assert.equal(controlledReload.version, '5.4.6-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4482,7 +4503,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.4/);
-    assert.equal(offlineBoot.version, '5.4.5-ringside');
+    assert.equal(offlineBoot.version, '5.4.6-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4528,7 +4549,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.4.5');
+    assert.equal(landscape.version.text, 'VERSION 5.4.6');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);

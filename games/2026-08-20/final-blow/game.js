@@ -1,3 +1,5 @@
+import { clippedCell } from "./engine/clipped-cells.mjs";
+import { PAINTED_FLOW_BANK, PAINTED_FLOW_FIGHTERS, paintedFlowPose } from "./engine/painted-flow.mjs";
 import { captureMotion, interpolateMotion, interpolateBodyMotion, fixedDemoFrame } from "./engine/render-motion.mjs";
 import {
   DEFAULT_INPUT_BUFFER_FRAMES,
@@ -1373,6 +1375,18 @@ function specialsGenerationPose(fighterId, pose) {
 // engine/fighter-kits.mjs and the routing list in fighterAnimationPose.
 // ---------------------------------------------------------------------------
 const fighterUnifiedAtlases = {};
+const paintedFlowAtlases = {};
+const paintedFlowAvailability = new WeakMap();
+function ensurePaintedFlowAtlas(id) {
+  if (!PAINTED_FLOW_FIGHTERS.includes(id)) return null;
+  if (!paintedFlowAtlases[id]) {
+    const image = new Image();
+    image.src = `assets/painted-flow/${id}-v1.webp`;
+    paintedFlowAtlases[id] = image;
+    image.decode().catch(() => {});
+  }
+  return paintedFlowAtlases[id];
+}
 const unifiedBankState = { masks: null, extMasks: null, ext2Masks: null, ext3Masks: null, ext4Masks: null, ext5Masks: null, requested: false, ready: null };
 
 /** Every unified sheet, main or ext, is this square once padded. */
@@ -1642,7 +1656,9 @@ const MOTION_BANK_GATES = Object.freeze({
 });
 
 function motionBankCellDrawable(fighterId, cell, bank) {
-  return bankCellDrawable(fighterId, cell, bank, MOTION_BANK_GATES);
+  const result = bankCellDrawable(fighterId, cell, bank, MOTION_BANK_GATES);
+  const frame = typeof result === "number" ? result : cell;
+  return clippedCell(fighterId, bank, frame) ? false : result;
 }
 
 // ---------------------------------------------------------------------------
@@ -1667,6 +1683,7 @@ function motionBankCellDrawable(fighterId, cell, bank) {
 function preloadAuthoredBanks(fighterIds) {
   const ids = (fighterIds || []).filter((id) => typeof id === "string" && id);
   if (!ids.length) return;
+  for (const id of ids) ensurePaintedFlowAtlas(id);
   ensureMotionManifest();
   ensureMotion2Manifest();
   ensureMotion3Manifest();
@@ -2063,6 +2080,7 @@ let pendingPalettes = [0, 0];
 // shipped generation kept as the specials bank's per-cell fallback remaps,
 // silhouettes and builds a 3D texture like any other sheet (v5.3).
 function altAtlasSource(fighterId, bank) {
+  if (bank === PAINTED_FLOW_BANK) return { image: paintedFlowAtlases[fighterId], key: `${fighterId}:${bank}` };
   return resolveAltAtlasSource(fighterId, bank, {
     motion: fighterMotionAtlases,
     motion2: fighterMotion2Atlases,
@@ -2105,7 +2123,7 @@ function ensureAltAtlas(fighterId, bank = "base") {
 
 /** The atlas a side should draw from, alt palette applied when selected. */
 function paletteAtlas(fighterId, side, bank = "base") {
-  const base = bank === "specials"
+  const base = bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
     ? fighterMoveAtlases[fighterId] || fighterAtlases[fighterId]
     // v5.3: the shipped specials generation, kept as the bank's per-cell
     // fallback; its own sheet, then the 5.3 sheet, then the combat atlas.
@@ -21977,7 +21995,13 @@ function fighterAnimationPose(fighter) {
   // v5.3 SPECIALS: last, because it is the only rule that reads the KIT bank —
   // everything above resolves the authored banks and may still land on a
   // specials cell as its terminal fallback.
-  const pose = specialsGenerationPose(fighter.def.id, swung);
+  const flow = paintedFlowPose(fighter);
+  const flowAtlas = flow && ensurePaintedFlowAtlas(fighter.def.id);
+  // Loading a sheet mid-punch must not swap the fighter's artwork mid-move.
+  if (flow && !paintedFlowAvailability.has(fighter.attacking)) {
+    paintedFlowAvailability.set(fighter.attacking, Boolean(flowAtlas?.complete && flowAtlas.naturalWidth));
+  }
+  const pose = flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung);
   recordPoseTrace(fighter, pose);
   return pose;
 }
@@ -24733,6 +24757,7 @@ function downTiltFor(fighterId, bank, frame) {
 }
 
 function bankSheetAdjust(fighterId, bank) {
+  if (bank === PAINTED_FLOW_BANK) return fighterId === "benny" ? 292 / 254 : 292 / 286;
   if (bank === "specials") return MOVE_SHEET_ADJUST[fighterId] || 1;
   if (bank === SPECIALS_LEGACY_BANK) return MOVE_SHEET_LEGACY_ADJUST[fighterId] || 1;
   // v2.9 FLOW: the motion2 sheets share the motion bank's build
@@ -25341,44 +25366,8 @@ function drawFighter(fighter, time, measureOnly = false) {
   }
 
   if (atlas?.complete && atlas.naturalWidth) {
-    // BODY-FIRST (spec 8): trail copies stay OUT of the mirror — the band
-    // only ever shows fragments of them, which read as sprite debris.
-    const baseTrails = state.accessibility.reducedMotion || reflectionPassActive
-      ? 0
-      : attack ? (attackKind === "special" ? 3 : activePower > 0.8 ? 2 : 0) : 0;
-    const trails = Math.floor(baseTrails * state.performance.trailScale);
-    for (let index = trails; index >= 1; index -= 1) {
-      ctx.save();
-      ctx.translate(-index * (13 + activePower * 8), index * 1.5);
-      ctx.globalAlpha = 0.08 + (trails - index) * 0.045;
-      ctx.globalCompositeOperation = "screen";
-      ctx.filter = "saturate(1.65) brightness(1.35)";
-      ctx.shadowColor = fighter.def.accent;
-      ctx.shadowBlur = 22;
-      drawAtlasFrame(atlas, frame, renderSize);
-      ctx.restore();
-    }
-
-    // MOTION FIX 2 + 9: the attack echo, rebuilt to the echo caps. It now
-    // exists ONLY through the active window (the old startup echo sat behind
-    // long heavy wind-ups for 7 filmstrip frames as an idle-pose body
-    // double), always inherits the CURRENT atlas cell, and is capped at 30%
-    // alpha. Heavies drop the body copy entirely — their smear is the limb
-    // wedge below (a stretched arc of the swinging arm), which is the
-    // anime-smear read the body double was failing to be.
-    if (!reflectionPassActive && attack && !graphicFatality
-      && attackKind === "special"
-      && state.performance.trailScale > 0 && !reducedMotion && activePower > 0.3) {
-      ctx.save();
-      ctx.globalCompositeOperation = "screen";
-      ctx.globalAlpha = 0.28 * activePower;
-      ctx.rotate(-0.14 * activePower);
-      ctx.translate(-(15 + activePower * 13), -2);
-      ctx.scale(1 + 0.12 * activePower, 1 - 0.04 * activePower);
-      drawSilhouetteFrame(atlas, frame, renderSize, fighter.def.accent);
-      ctx.restore();
-      presentationDebug.attackSmears += 1;
-    }
+    // A strike has one painted body. Full-sprite echoes duplicated the fist
+    // behind the attacker; the limb ribbon and contact sparks carry the effect.
     // MOTION FIX 9: heavy limb smear — a tapered wedge of the swinging arm
     // stretched along the swing arc through the active frames, wide and hot
     // at the fist, thinning to nothing behind it. Shares the ribbon's pivot
@@ -25550,6 +25539,7 @@ function drawFighter(fighter, time, measureOnly = false) {
     // skipped entirely mid-flip where the rotating transform would smear the
     // old cell across the sky.
     if (!reflectionPassActive && !graphicFatality && state.hitstop <= 0
+      && !attack && pose.bank !== PAINTED_FLOW_BANK && motionObs[fighter.side].fadeBank !== PAINTED_FLOW_BANK
       && Math.abs(motion.flipRotation) < 0.3) {
       const fadeObs = motionObs[fighter.side];
       if (fadeObs.fadeLeft > 0 && (fadeObs.fadeBank !== pose.bank || fadeObs.fadeFrame !== frame)) {
@@ -32852,7 +32842,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.5");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.6");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34290,7 +34280,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.5-ringside",
+  version: "5.4.6-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
