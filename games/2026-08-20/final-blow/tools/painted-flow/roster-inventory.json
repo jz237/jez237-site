@@ -1,0 +1,835 @@
+[
+  {
+    "id": "alan",
+    "file": "assets/atlases/alan.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-atlases-alan.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/fighters/alan.webp",
+    "width": 220,
+    "height": 305,
+    "preview": "assets-fighters-alan.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/motion/alan.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion-alan.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/motion2/alan.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion2-alan.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/motion3/alan.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion3-alan.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/unified/alan.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-alan.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/unified/alan-ext.webp",
+    "width": 1280,
+    "height": 640,
+    "preview": "assets-unified-alan-ext.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/unified/alan-ext2.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-alan-ext2.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/unified/alan-ext3.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-alan-ext3.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/unified/alan-ext4.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-alan-ext4.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/unified/alan-ext5.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-alan-ext5.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/moves/alan-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-alan-specials.png"
+  },
+  {
+    "id": "alan",
+    "file": "assets/moves/legacy/alan-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-legacy-alan-specials.png"
+  },
+  {
+    "id": "alan",
+    "file": "renderer/hd/alan.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-alan.png"
+  },
+  {
+    "id": "alan",
+    "file": "renderer/hd/alan-specials.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-alan-specials.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/atlases/ali.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-atlases-ali.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/fighters/ali.webp",
+    "width": 494,
+    "height": 720,
+    "preview": "assets-fighters-ali.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/motion/ali.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion-ali.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/motion2/ali.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion2-ali.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/motion3/ali.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion3-ali.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/walk/ali.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-walk-ali.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/unified/ali.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-ali.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/unified/ali-ext.webp",
+    "width": 1280,
+    "height": 640,
+    "preview": "assets-unified-ali-ext.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/unified/ali-ext2.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-ali-ext2.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/unified/ali-ext3.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-ali-ext3.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/unified/ali-ext4.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-ali-ext4.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/unified/ali-ext5.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-ali-ext5.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/moves/ali-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-ali-specials.png"
+  },
+  {
+    "id": "ali",
+    "file": "assets/moves/legacy/ali-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-legacy-ali-specials.png"
+  },
+  {
+    "id": "ali",
+    "file": "renderer/hd/ali.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-ali.png"
+  },
+  {
+    "id": "ali",
+    "file": "renderer/hd/ali-specials.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-ali-specials.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/atlases/commissioner.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-atlases-commissioner.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/fighters/commissioner.webp",
+    "width": 800,
+    "height": 800,
+    "preview": "assets-fighters-commissioner.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/motion/commissioner.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion-commissioner.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/motion2/commissioner.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion2-commissioner.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/motion3/commissioner.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion3-commissioner.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/unified/commissioner.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-commissioner.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/unified/commissioner-ext.webp",
+    "width": 1280,
+    "height": 640,
+    "preview": "assets-unified-commissioner-ext.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/unified/commissioner-ext2.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-commissioner-ext2.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/unified/commissioner-ext3.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-commissioner-ext3.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/unified/commissioner-ext4.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-commissioner-ext4.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "assets/unified/commissioner-ext5.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-commissioner-ext5.png"
+  },
+  {
+    "id": "commissioner",
+    "file": "renderer/hd/commissioner.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-commissioner.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/atlases/cyraxx.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-atlases-cyraxx.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/fighters/cyraxx.webp",
+    "width": 588,
+    "height": 720,
+    "preview": "assets-fighters-cyraxx.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/motion/cyraxx.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion-cyraxx.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/motion2/cyraxx.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion2-cyraxx.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/motion3/cyraxx.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion3-cyraxx.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/walk/cyraxx.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-walk-cyraxx.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/unified/cyraxx.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-cyraxx.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/unified/cyraxx-ext.webp",
+    "width": 1280,
+    "height": 640,
+    "preview": "assets-unified-cyraxx-ext.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/unified/cyraxx-ext2.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-cyraxx-ext2.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/unified/cyraxx-ext3.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-cyraxx-ext3.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/unified/cyraxx-ext4.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-cyraxx-ext4.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/unified/cyraxx-ext5.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-cyraxx-ext5.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/moves/cyraxx-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-cyraxx-specials.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "assets/moves/legacy/cyraxx-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-legacy-cyraxx-specials.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "renderer/hd/cyraxx.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-cyraxx.png"
+  },
+  {
+    "id": "cyraxx",
+    "file": "renderer/hd/cyraxx-specials.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-cyraxx-specials.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/atlases/deathblow.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-atlases-deathblow.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/fighters/deathblow.webp",
+    "width": 453,
+    "height": 800,
+    "preview": "assets-fighters-deathblow.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/motion/deathblow.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion-deathblow.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/motion2/deathblow.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion2-deathblow.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/motion3/deathblow.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion3-deathblow.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/walk/deathblow.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-walk-deathblow.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/unified/deathblow.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-deathblow.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/unified/deathblow-ext.webp",
+    "width": 1280,
+    "height": 640,
+    "preview": "assets-unified-deathblow-ext.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/unified/deathblow-ext2.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-deathblow-ext2.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/unified/deathblow-ext3.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-deathblow-ext3.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/unified/deathblow-ext4.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-deathblow-ext4.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/unified/deathblow-ext5.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-deathblow-ext5.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/moves/deathblow-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-deathblow-specials.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "assets/moves/legacy/deathblow-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-legacy-deathblow-specials.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "renderer/hd/deathblow.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-deathblow.png"
+  },
+  {
+    "id": "deathblow",
+    "file": "renderer/hd/deathblow-specials.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-deathblow-specials.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/atlases/devil.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-atlases-devil.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/fighters/devil.webp",
+    "width": 588,
+    "height": 720,
+    "preview": "assets-fighters-devil.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/motion/devil.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion-devil.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/motion2/devil.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion2-devil.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/motion3/devil.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion3-devil.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/unified/devil.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-devil.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/unified/devil-ext.webp",
+    "width": 1280,
+    "height": 640,
+    "preview": "assets-unified-devil-ext.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/unified/devil-ext2.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-devil-ext2.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/unified/devil-ext3.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-devil-ext3.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/unified/devil-ext4.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-devil-ext4.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/unified/devil-ext5.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-devil-ext5.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/moves/devil-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-devil-specials.png"
+  },
+  {
+    "id": "devil",
+    "file": "assets/moves/legacy/devil-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-legacy-devil-specials.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/atlases/donald.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-atlases-donald.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/fighters/donald.webp",
+    "width": 521,
+    "height": 720,
+    "preview": "assets-fighters-donald.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/motion/donald.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion-donald.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/motion2/donald.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion2-donald.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/motion3/donald.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion3-donald.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/unified/donald.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-donald.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/unified/donald-ext.webp",
+    "width": 1280,
+    "height": 640,
+    "preview": "assets-unified-donald-ext.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/unified/donald-ext2.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-donald-ext2.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/unified/donald-ext3.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-donald-ext3.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/unified/donald-ext4.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-donald-ext4.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/unified/donald-ext5.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-donald-ext5.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/moves/donald-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-donald-specials.png"
+  },
+  {
+    "id": "donald",
+    "file": "assets/moves/legacy/donald-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-legacy-donald-specials.png"
+  },
+  {
+    "id": "donald",
+    "file": "renderer/hd/donald.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-donald.png"
+  },
+  {
+    "id": "donald",
+    "file": "renderer/hd/donald-specials.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-donald-specials.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/atlases/post.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-atlases-post.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/fighters/post.webp",
+    "width": 185,
+    "height": 306,
+    "preview": "assets-fighters-post.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/motion/post.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion-post.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/motion2/post.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion2-post.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/motion3/post.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-motion3-post.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/walk/post.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-walk-post.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/unified/post.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-post.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/unified/post-ext.webp",
+    "width": 1280,
+    "height": 640,
+    "preview": "assets-unified-post-ext.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/unified/post-ext2.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-post-ext2.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/unified/post-ext3.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-post-ext3.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/unified/post-ext4.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-post-ext4.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/unified/post-ext5.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-unified-post-ext5.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/moves/post-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-post-specials.png"
+  },
+  {
+    "id": "post",
+    "file": "assets/moves/legacy/post-specials.webp",
+    "width": 1280,
+    "height": 1280,
+    "preview": "assets-moves-legacy-post-specials.png"
+  },
+  {
+    "id": "post",
+    "file": "renderer/hd/post.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-post.png"
+  },
+  {
+    "id": "post",
+    "file": "renderer/hd/post-specials.webp",
+    "width": 2560,
+    "height": 2560,
+    "preview": "renderer-hd-post-specials.png"
+  }
+]

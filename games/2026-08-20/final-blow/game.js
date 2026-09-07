@@ -1,4 +1,4 @@
-import { INBETWEEN_BANKS, companionBank, repairedCell, createInbetweenSelector } from "./engine/inbetweens.mjs";
+import { INBETWEEN_FIGHTERS, INBETWEEN_BANKS, companionBank, repairedCell, createInbetweenSelector } from "./engine/inbetweens.mjs";
 import { INBETWEEN_SCALE } from "./engine/inbetween-scale.mjs";
 import { clippedCell } from "./engine/clipped-cells.mjs";
 import { PAINTED_FLOW_BANK, PAINTED_FLOW_FIGHTERS, paintedFlowPose } from "./engine/painted-flow.mjs";
@@ -1039,7 +1039,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.4.8` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.4.9` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1385,7 +1385,7 @@ const paintedFlowAvailability = new WeakMap();
 const inbetweenAtlases = {};
 const selectInbetween = createInbetweenSelector();
 function ensureInbetweenAtlas(id, bank) {
-  if (!PAINTED_FLOW_FIGHTERS.includes(id) || !INBETWEEN_BANKS.includes(bank)) return null;
+  if (!INBETWEEN_FIGHTERS.includes(id) || !INBETWEEN_BANKS.includes(bank) || (id === 'commissioner' && bank === 'specials')) return null;
   const key = `${id}:${companionBank(bank)}`;
   if (!inbetweenAtlases[key]) {
     const image = new Image();
@@ -25573,7 +25573,7 @@ function drawFighter(fighter, time, measureOnly = false) {
     // skipped entirely mid-flip where the rotating transform would smear the
     // old cell across the sky.
     if (!reflectionPassActive && !graphicFatality && state.hitstop <= 0
-      && !attack && !PAINTED_FLOW_FIGHTERS.includes(fighter.def.id) && pose.bank !== PAINTED_FLOW_BANK && motionObs[fighter.side].fadeBank !== PAINTED_FLOW_BANK
+      && !attack && !INBETWEEN_FIGHTERS.includes(fighter.def.id) && pose.bank !== PAINTED_FLOW_BANK && motionObs[fighter.side].fadeBank !== PAINTED_FLOW_BANK
       && Math.abs(motion.flipRotation) < 0.3) {
       const fadeObs = motionObs[fighter.side];
       if (fadeObs.fadeLeft > 0 && (fadeObs.fadeBank !== pose.bank || fadeObs.fadeFrame !== frame)) {
@@ -32870,7 +32870,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.8");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.9");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34308,7 +34308,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.8-ringside",
+  version: "5.4.9-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

@@ -7,8 +7,9 @@ import {readFile,mkdir,writeFile} from 'node:fs/promises';
 const root=fileURLToPath(new URL('../../',import.meta.url)),out=`${root}/assets/inbetweens`;
 await mkdir(out,{recursive:true});const records=JSON.parse(await readFile(new URL('./inbetween-sources.json',import.meta.url),'utf8'));
 function bounds(data,w,x0,y0,x1,y1){let l=x1,r=x0,t=y1,b=y0,n=0,sx=0;for(let y=y0;y<y1;y++)for(let x=x0;x<x1;x++)if(data[(y*w+x)*4+3]>140){l=Math.min(l,x);r=Math.max(r,x);t=Math.min(t,y);b=Math.max(b,y);n++;sx+=x;}return {l,r,t,b,n,cx:sx/n};}
-const metrics={};
+const metrics=process.argv[3]?{...(await import('../../engine/inbetween-scale.mjs')).INBETWEEN_SCALE}:{};
 for(const rec of records){
+ if(process.argv[3]&&`${rec.fighter}-${rec.bank}`!==process.argv[3])continue;
  const {data,info}=await sharp(resolve(masters,rec.source)).ensureAlpha().raw().toBuffer({resolveWithObject:true});const {width:w,height:h}=info;
  for(let i=0;i<data.length;i+=4){const k=Math.min(data[i],data[i+2])-data[i+1];data[i+3]=Math.max(0,Math.min(255,(85-k)*255/55));if(data[i+3]>0&&k>30){data[i]=Math.min(data[i],data[i+1]+30);data[i+2]=Math.min(data[i+2],data[i+1]+30);}}
  const reference=rec.bank==='specials'?`${root}/assets/moves/${rec.fighter}-specials.webp`:`${root}/assets/unified/${rec.fighter}${rec.bank==='unified'?'':'-'+rec.bank.split('-')[1]}.webp`;

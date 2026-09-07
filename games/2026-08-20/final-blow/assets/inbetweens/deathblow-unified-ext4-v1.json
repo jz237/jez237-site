@@ -1,0 +1,302 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        95,
+        47,
+        266,
+        321
+      ],
+      "rect": [
+        76,
+        39,
+        172,
+        275
+      ],
+      "scale": 1.0017324078649592,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 1,
+      "source": [
+        397,
+        32,
+        566,
+        323
+      ],
+      "rect": [
+        92,
+        10,
+        177,
+        304
+      ],
+      "scale": 1.0410958904109588,
+      "areaRatio": 0.96358680627539
+    },
+    {
+      "frame": 2,
+      "source": [
+        703,
+        102,
+        841,
+        320
+      ],
+      "rect": [
+        96,
+        82,
+        147,
+        232
+      ],
+      "scale": 1.0582381750771495,
+      "areaRatio": 0.9999999999999998
+    },
+    {
+      "frame": 3,
+      "source": [
+        930,
+        65,
+        1205,
+        321
+      ],
+      "rect": [
+        21,
+        47,
+        286,
+        267
+      ],
+      "scale": 1.037303319049975,
+      "areaRatio": 1
+    },
+    {
+      "frame": 4,
+      "source": [
+        80,
+        378,
+        289,
+        615
+      ],
+      "rect": [
+        76,
+        60,
+        224,
+        254
+      ],
+      "scale": 1.0653028992904041,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 5,
+      "source": [
+        373,
+        380,
+        548,
+        623
+      ],
+      "rect": [
+        70,
+        58,
+        185,
+        256
+      ],
+      "scale": 1.0499028818077887,
+      "areaRatio": 1
+    },
+    {
+      "frame": 6,
+      "source": [
+        634,
+        396,
+        901,
+        563
+      ],
+      "rect": [
+        37,
+        140,
+        277,
+        174
+      ],
+      "scale": 1.0353976184064433,
+      "areaRatio": 0.9999999999999997
+    },
+    {
+      "frame": 7,
+      "source": [
+        958,
+        366,
+        1121,
+        604
+      ],
+      "rect": [
+        78,
+        79,
+        161,
+        235
+      ],
+      "scale": 0.981349250335008,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 8,
+      "source": [
+        41,
+        680,
+        293,
+        904
+      ],
+      "rect": [
+        26,
+        77,
+        267,
+        237
+      ],
+      "scale": 1.0550174098150962,
+      "areaRatio": 1
+    },
+    {
+      "frame": 9,
+      "source": [
+        368,
+        728,
+        568,
+        892
+      ],
+      "rect": [
+        38,
+        143,
+        208,
+        171
+      ],
+      "scale": 1.035334950950258,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 10,
+      "source": [
+        657,
+        711,
+        918,
+        894
+      ],
+      "rect": [
+        30,
+        114,
+        284,
+        200
+      ],
+      "scale": 1.0851610898630855,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 11,
+      "source": [
+        979,
+        718,
+        1175,
+        894
+      ],
+      "rect": [
+        77,
+        118,
+        218,
+        196
+      ],
+      "scale": 1.10777243299949,
+      "areaRatio": 1.0000000000000002,
+      "reviewOverride": {
+        "sourceBank": "unified-ext4",
+        "sourceFrame": 11,
+        "flop": true,
+        "original": false,
+        "rect": [
+          59,
+          116,
+          218,
+          196
+        ]
+      }
+    },
+    {
+      "frame": 12,
+      "source": [
+        58,
+        1045,
+        295,
+        1194
+      ],
+      "rect": [
+        13,
+        147,
+        265,
+        167
+      ],
+      "scale": 1.1125595009144396,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 13,
+      "source": [
+        368,
+        984,
+        579,
+        1189
+      ],
+      "rect": [
+        51,
+        111,
+        209,
+        203
+      ],
+      "scale": 0.9869216273632376,
+      "areaRatio": 1
+    },
+    {
+      "frame": 14,
+      "source": [
+        671,
+        978,
+        902,
+        1149
+      ],
+      "rect": [
+        46,
+        135,
+        242,
+        179
+      ],
+      "scale": 1.0418133614141023,
+      "areaRatio": 1
+    },
+    {
+      "frame": 15,
+      "source": [
+        930,
+        1121,
+        1203,
+        1200
+      ],
+      "rect": [
+        15,
+        229,
+        290,
+        85
+      ],
+      "scale": 1.0571994909434157,
+      "areaRatio": 0.9999999999999998,
+      "reviewOverride": {
+        "sourceBank": "unified-ext4",
+        "sourceFrame": 15,
+        "flop": true,
+        "original": false,
+        "rect": [
+          23,
+          227,
+          289,
+          85
+        ]
+      }
+    }
+  ],
+  "source": "exec-82b41923-50f9-4d98-b675-f2b8f69f3e65.png",
+  "prompt": "Create a new painted animation in-between atlas for Deathblow, matching the reference identity exactly: muscular bearded man in olive cap, black shark-logo T-shirt, black cargo shorts, black sneakers and bulky glowing red-cracked metal forearm gauntlets.  Exactly sixteen new COMPLETE full-body painted reaction sprites, 4 columns x 4 rows. Attached image is ONLY identity/costume reference. New pose order: Row1: guard absorbing hit; small head recoil; hunched body hit; big backward recoil arms spread. Row2: stumbling; dizzy hunched; launched backward through air; upside-down air tumble. Row3: wall impact arms spread; crumple onto knee; falling backward; ground bounce legs in air. Row4: on hands and knees getting up; one-knee get-up; thrown through air; lying knocked out. Follow original head-to-feet directions in every pose. Face right in standing poses; airborne fall and KO have head left and feet right. Small transitional shifts toward these reactions. All figures must be complete and fit inside their own cell with 12% empty padding. No anatomy clipped inside drawing either. Same physical body size, lying/crouched figures naturally shorter. No extra figures or detached parts. Pure flat magenta #ff00ff background, no grid, text, shadows, blur, effects or stars."
+}

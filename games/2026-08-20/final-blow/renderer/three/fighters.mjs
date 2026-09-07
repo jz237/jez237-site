@@ -85,7 +85,7 @@ function loadHdImage(path) {
     const img = new Image();
     img.onload = () => resolve(img.naturalWidth ? img : null);
     img.onerror = () => resolve(null);
-    img.src = /\/(?:jez|benny)(?:[.-])/.test(path) ? `${path}${path.includes('?') ? '&' : '?'}v=5.4.8` : path;
+    img.src = /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(path) ? `${path}${path.includes('?') ? '&' : '?'}v=5.4.9` : path;
   });
   hdImageCache.set(path, promise);
   return promise;
