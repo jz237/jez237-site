@@ -433,7 +433,7 @@ probe('title-menu', async () => {
     }))()`);
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.4/);
-    assert.equal(title.version.text, 'VERSION 5.4.1');
+    assert.equal(title.version.text, 'VERSION 5.4.2');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -470,7 +470,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.4.1-ringside');
+    assert.equal(title.engineVersion, '5.4.2-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -3885,6 +3885,43 @@ probe('demo-mode', async () => {
 // coverage ledger and on both fighters' state. The card boundary is NOT
 // pinned — the 5 s result hold is a wall-clock timer, so card 2 opens on a
 // wall-clock tick (measured: same rounds, ticks offset by the hold jitter).
+probe('demo-render-motion', async () => {
+    await navigate(client, `${gameUrl}&demo=237`);
+    await evaluate(client, `window.__finalBlowQa.demoSpeed(1)`);
+    for (let attempt = 0; attempt < 80; attempt++) {
+      if (await evaluate(client, `window.__finalBlowEngine.snapshot().phase === 'fight'`)) break;
+      await delay(200);
+    }
+    await evaluate(client, `window.__finalBlowQa.demoSpeed(0.5)`);
+    const samples = await evaluate(client, `new Promise((resolve) => {
+      const rows = [];
+      function sample() {
+        rows.push(window.__finalBlowQa.renderMotion());
+        if (rows.length >= 240) resolve(rows);
+        else requestAnimationFrame(sample);
+      }
+      requestAnimationFrame(sample);
+    })`);
+    let fractional = 0, framed = 0;
+    for (const row of samples) {
+      for (const fighter of row.fighters) {
+        if (!fighter.previous) continue;
+        const low = Math.min(fighter.sim.x, fighter.previous.x);
+        const high = Math.max(fighter.sim.x, fighter.previous.x);
+        if (fighter.sample.x > low + 0.001 && fighter.sample.x < high - 0.001) fractional++;
+      }
+      if (row.fit) {
+        const { safe, bounds } = row.fit;
+        assert.ok(bounds.left >= safe.left - 0.01 && bounds.right <= safe.right + 0.01);
+        assert.ok(bounds.top >= safe.top - 0.01 && bounds.bottom <= safe.bottom + 0.01);
+        framed++;
+      }
+    }
+    assert.ok(fractional > 0, 'the real draw loop must render positions BETWEEN simulation ticks');
+    assert.ok(framed > 60, 'demo framing must run on rendered frames');
+    await navigate(client, gameUrl);
+});
+
 probe('demo-seed-url', async () => {
     const TARGET_TICK = 6000; // 100 s of sim: seed 237 card 1 settles 3 rounds by ~4300
     const capture = `(() => {
@@ -4403,7 +4440,7 @@ probe('offline-cache', async () => {
     // 5.1 added engine/{audio-manifest, ambient, announcer, crowd-voice, shared-sfx,
     // swing-resolve}.mjs to the shell: game.js imports them at boot.
     // (5.4 Fight Night: the attract loop's six demo modules joined the shell; 5.4.1 the voice pack's.)
-    assert.equal(offlineCache.entries, 35);
+    assert.equal(offlineCache.entries, 36);
     assert.equal(offlineCache.hasAtlasFacing, true);
     assert.equal(offlineCache.hasIndex, false);
     assert.equal(offlineCache.rootRedirected, false);
@@ -4425,7 +4462,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.4/);
-    assert.equal(controlledReload.version, '5.4.1-ringside');
+    assert.equal(controlledReload.version, '5.4.2-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4443,7 +4480,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.4/);
-    assert.equal(offlineBoot.version, '5.4.1-ringside');
+    assert.equal(offlineBoot.version, '5.4.2-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4489,7 +4526,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.4.1');
+    assert.equal(landscape.version.text, 'VERSION 5.4.2');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);

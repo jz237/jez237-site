@@ -166,7 +166,7 @@ test("the CINEMA 3D overlay pass draws the 2D-only reads after the world restore
   assert.match(gameSource, /const above = project\(simX, simY - 100\);/);
   assert.match(gameSource, /const scale = clamp\(\(at\.y - above\.y\) \/ 100, 0\.35, 2\.5\);/);
   // The 2D world pass still draws the same reads through the shared bodies.
-  assert.match(gameSource, /^  drawRhythmRings\(fighter, time\);$/m);
+  assert.match(gameSource, /if \(!measureOnly\) \{\s+drawContactShadow\(fighter, jump, renderSize, lunge\);\s+drawRhythmRings\(fighter, time\);/);
   assert.match(gameSource, /if \(effect\.kind === "combatText"\) \{\n\s+drawCombatTextBody\(effect, alpha\);/);
   assert.match(gameSource, /cinema3dOverlayReads: 0,/);
 });

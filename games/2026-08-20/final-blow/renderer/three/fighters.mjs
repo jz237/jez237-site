@@ -1378,6 +1378,7 @@ export class FighterLayer {
 
   poseRig(rig, fighter, state, timeSec, dtSec = 0) {
     const host = this.host;
+    fighter = host.renderFighter?.(fighter) || fighter;
     let pose = host.fighterAnimationPose(fighter);
     // The host only emits an authored bank once the sheet is loaded and the
     // manifest accepts the cell, but the rig's texture may still be a frame

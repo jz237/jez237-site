@@ -1,5 +1,13 @@
 # Watch Demo / Attract Mode
 
+## 5.4.2 — smooth playback and full-body framing
+
+- Demo fighter positions and continuous animation clocks interpolate between fixed simulation ticks, including slow motion. The 2D body, its floor cues and the 3D rig use the same presentation sample. Pause, manual stepping, teleports and fatalities keep exact poses.
+- The 2D demo camera measures the actual sprite transform before painting, then fits both full cells inside the canvas and above the broadcast HUD. It releases its pull-back gradually. The stage shares that camera, and foreground occluders yield during exhibitions.
+- The full stage/crowd/weather pass runs once per frame; a cheap backdrop fills exposed margins.
+- Physics, hitstop, attack data, AI decisions and seeded exhibition results are unchanged.
+
+
 Final Blow 1.0E can run a complete CPU-vs-CPU exhibition from the title screen.
 
 > **5.4 "Fight Night"** (2026-09-06): the attract show became a card of fights —
