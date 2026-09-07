@@ -1,4 +1,4 @@
-import {FightEffects} from './fight-effects.mjs?v=14';
+import {FightEffects} from './fight-effects.mjs?v=15';
 import {referenceMaterial} from './reference-materials.mjs?v=10';
 import {retargetMotion} from './retarget-motion.mjs?v=09';
 import {detailMaterial} from './character-materials.mjs?v=07';
@@ -106,6 +106,7 @@ $('#pause').onclick=()=>{paused=!paused;$('#pause').textContent=paused?'Resume f
 $('#restart').onclick=()=>{battle=new Combat((battle.seed+1)>>>0,visuals.map(v=>v.profiles));accumulator=0;hitstop=0;effects.clear();visuals.forEach(v=>{v.serial=-1;v.state=null;});};
 $('#quality').onchange=e=>{maximumQuality=e.target.value==='maximum';renderer.setPixelRatio(maximumQuality?Math.min(Math.max(devicePixelRatio,2),2.5):Math.min(devicePixelRatio,1.5));composer.setPixelRatio(renderer.getPixelRatio());occlusion.enabled=maximumQuality;resize();};
 $('#effects').onclick=()=>{effects.reduced=!effects.reduced;effects.clear();$('#effects').textContent=effects.reduced?'Effects: reduced':'Effects: full';};$('#effects').textContent=effects.reduced?'Effects: reduced':'Effects: full';
+$('#testEffects').onclick=()=>{effects.clear();for(let i=0;i<2;i++)effects.impact({type:i?'block':'hit',target:i,move:'straight'},battle.fighters[i],MOVES.straight);};
 $('#speed').onchange=e=>speed=Number(e.target.value);
 $('#sound').onclick=async()=>{audio??=new AudioContext();await audio.resume();sound=!sound;$('#sound').textContent=sound?'Sound on':'Sound off';};
 $('#full').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.querySelector('main').requestFullscreen();
