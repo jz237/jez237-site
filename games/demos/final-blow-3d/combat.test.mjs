@@ -7,8 +7,8 @@ test('seeded CPU fights finish rounds, keep bodies separated, and preserve healt
   const b=new Combat(seed);let finished=0;
   for(let tick=0;tick<60*120;tick++){
    b.step(1/60);
-   for(const f of b.fighters){assert.ok(Number.isFinite(f.x));assert.ok(Math.abs(f.x)<=1.430001);assert.ok(f.hp>=0&&f.hp<=100);}
-   assert.ok(b.fighters[1].x-b.fighters[0].x>=.839999);
+   for(const f of b.fighters){assert.ok(Number.isFinite(f.x));assert.ok(Math.abs(f.x)<=1.170001);assert.ok(f.hp>=0&&f.hp<=100);}
+   assert.ok(b.fighters[1].x-b.fighters[0].x>=1.049999);
    finished+=b.events.filter(e=>e.type==='ko').length;b.events.length=0;
   }
   assert.ok(finished>=2,`seed ${seed} must finish bouts`);assert.ok(b.hits>0);
