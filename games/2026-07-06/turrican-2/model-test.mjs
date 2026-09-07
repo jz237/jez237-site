@@ -14,3 +14,6 @@ for(const object of [hero,...['walker','hopper','turret','flyer','drifter','eel'
 assert.ok(crystal().children.length>=3);assert.ok(meshes>200);
 for(const key of ['warden','maw','gunship','colossus','queen','machine']){const b=boss(key);b.animate({open:true},.016,2);assert.ok(b.core.scale.x<.2&&b.core.scale.y<.2,'Boss core must remain inside its armor');}
 console.log(`Verified articulated poses, morph transitions, aiming, and ${meshes} lit meshes across all actors.`);
+
+for(const facing of [-1,1]){p.facing=facing;p.morph=false;for(let i=0;i<30;i++)hero.animate(p,1/60,6+i/60);assert.ok(Math.abs(hero.root.scale.x-facing*1.22)<.001);assert.ok(Math.abs(hero.root.scale.y-1.22)<.001);}
+p.morph=true;for(let i=0;i<30;i++)hero.animate(p,1/60,7+i/60);assert.ok(Math.abs(hero.root.scale.y-1)<.001,'Morph ball keeps original clearance');

@@ -1,3 +1,4 @@
+import {fern,expeditionSite} from './environment-detail.mjs';
 import * as THREE from 'three';
 import {part,mat,silver,dark,amber,cyan} from './models.mjs';
 import {fracturedRock} from './geology.mjs';
@@ -5,11 +6,23 @@ import {rockFace,tube,pack} from './artisan.mjs';
 
 export function buildVistas(world,texture=null){
   const group=new THREE.Group(),animated=[],palette={1:'#71827c',2:'#456b66',3:'#535e6a',4:'#74675b',5:'#6a535b'};
-  const stone=new THREE.MeshStandardMaterial({color:palette[world],map:texture,bumpMap:texture,bumpScale:1.1,metalness:.06,roughness:.95,vertexColors:true});
+  const stone=new THREE.MeshStandardMaterial({color:new THREE.Color(palette[world]).multiplyScalar(.70),map:texture,bumpMap:texture,bumpScale:1.1,metalness:.06,roughness:.95,vertexColors:true});
   for(let chunk=0;chunk<6;chunk++){
-    const g=new THREE.Group();g.position.set(chunk*310,-355,-75);group.add(g);
+    const g=new THREE.Group();g.position.set(chunk*310,-255,-75);group.add(g);
     if(world===1||world===2||world===5){
-      // Sparse talus and occasional weathered infrastructure leave open sightlines.
+      // Dense but varied geological outcrops frame weathered expedition remnants.
+      const foundation=new THREE.Mesh(fracturedRock(180,90,23,chunk+world*32),stone);foundation.position.set(145,-68,-50);g.add(foundation);
+      for(let j=0;j<14;j++){
+        const n=(Math.sin(chunk*19+j*7.17)+1)*.5;
+        const m=new THREE.Mesh(fracturedRock(18+n*30,18+n*83,12+n*16,world*91+chunk*17+j),stone);
+        m.position.set(j*24,12+n*25,-35-n*30);m.rotation.z=(n-.5)*.7;g.add(m);
+        for(let k=0;k<5;k++){
+          const chip=new THREE.Mesh(fracturedRock(10+n*10,2+n*4,3,chunk*13+j+k),stone);
+          chip.position.set(j*24-8+k*3,-5+n*45+k*(5+n*12),-17);chip.rotation.z=(n-.5)*.5;g.add(chip);
+        }
+      }
+      if(chunk%2===0)expeditionSite(g,chunk,world);
+      for(let j=0;j<8;j++)fern(g,j*39+11,-38,.7+(j%3)*.35,world);
       if(chunk%3===1){for(let j=0;j<3;j++){
         const m=new THREE.Mesh(fracturedRock(50+j*12,18+j*13,16,world*10+chunk+j),stone);
         m.position.set(70+j*47,14+j*11,-30);m.rotation.z=-.18+j*.07;g.add(m);
