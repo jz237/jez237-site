@@ -75,26 +75,47 @@ async function buildFighter(id,index){
  const guard=THREE.AnimationUtils.subclip(actions.jab.getClip(),'guard',0,5,30);actions.idle=mixer.clipAction(guard);actions.idle.setLoop(THREE.LoopPingPong);actions.idle.timeScale=.35;
  const contacts=[],bodySamples=[],point=new THREE.Vector3();model.updateMatrixWorld(true);model.traverse(o=>{if(!o.isSkinnedMesh)return;const n=o.geometry.attributes.position.count;for(let k=0;k<n;k+=12){o.getVertexPosition(k,point);point.applyMatrix4(o.matrixWorld);if(point.y<.25)contacts.push({mesh:o,index:k});if(k%120===0)bodySamples.push({mesh:o,index:k});}});
  const profiles={};for(const [move,m] of Object.entries(MOVES)){if(move==='doublejab')continue;const a=actions[m.clip];mixer.stopAllAction();a.reset().play();let best=-Infinity,peak=.3;const names=['kick','high','sweep'].includes(move)?['LeftFoot','RightFoot']:['LeftHand','RightHand'];const point=new THREE.Vector3();for(let k=0;k<=60;k++){a.time=a.getClip().duration*k/60;mixer.update(0);pivot.updateMatrixWorld(true);for(const name of names){const bone=model.getObjectByName(name);if(!bone)continue;bone.getWorldPosition(point);const reach=point.x*(index?-1:1);if(reach>best){best=reach;peak=k/60;}}}const clip=a.getClip(),oldDuration=clip.duration,contact=Math.max(.05,Math.min(.9,peak))*oldDuration;
- // Accelerate anticipation into contact, then retain a readable recovery.
- for(const track of clip.tracks)for(let j=0;j<track.times.length;j++){const t=track.times[j];track.times[j]=t<=contact?t/contact*m.hit:m.hit+(t-contact)/(oldDuration-contact)*(m.duration-m.hit);}
+ // Trim unused lead-in/tail motion, then resample a continuous-speed time map.
+ // Preserve the contact instant without a sudden velocity change at impact.
+ const foot=['kick','high','sweep'].includes(move),start=Math.max(0,contact-(foot?.48:.30)),end=Math.min(oldDuration,contact+(foot?.70:.45));
+ const left=(contact-start)/m.hit,right=(end-contact)/(m.duration-m.hit),join=Math.min(left,right);
+ const hermite=(u,y0,y1,d0,d1,span)=>(2*u*u*u-3*u*u+1)*y0+(u*u*u-2*u*u+u)*span*d0+(-2*u*u*u+3*u*u)*y1+(u*u*u-u*u)*span*d1;
+ for(const track of clip.tracks){const interpolant=track.createInterpolant(),size=track.getValueSize(),count=73,times=new Float32Array(count),values=new track.values.constructor(count*size);
+  for(let j=0;j<count;j++){const time=m.duration*j/(count-1);times[j]=time;const source=time<=m.hit?hermite(time/m.hit,start,contact,left,join,m.hit):hermite((time-m.hit)/(m.duration-m.hit),contact,end,join,right,m.duration-m.hit);values.set(interpolant.evaluate(source),j*size);}
+  track.times=times;track.values=values;
+ }
  clip.resetDuration();durations[m.clip]=clip.duration;
  profiles[move]={...m,range:Math.max(.85*1.25,Math.min(1.65*1.25,best+.28*1.25))};}
  // Chain two fully retargeted jabs, preserving each strike's contact timing.
  const doubleClip=actions.jab.getClip().clone();doubleClip.name='double_jab';
- for(const tr of doubleClip.tracks){const n=tr.times.length,times=new Float32Array(n*2),values=new tr.values.constructor(tr.values.length*2);times.set(tr.times);values.set(tr.values);for(let k=0;k<n;k++)times[n+k]=tr.times[k]+.30;values.set(tr.values,tr.values.length);tr.times=times;tr.values=values;}
+ for(const tr of doubleClip.tracks){const size=tr.getValueSize();for(let j=0;j<tr.times.length;j++){const x=Math.max(0,(tr.times[j]-.23)/.07),u=Math.min(1,x*x*(3-2*x));if(!u)continue;const offset=j*size;if(size===4&&tr.name.endsWith('.quaternion')){const q=new THREE.Quaternion().fromArray(tr.values,offset).slerp(new THREE.Quaternion().fromArray(tr.values,0),u);q.toArray(tr.values,offset);}else for(let c=0;c<size;c++)tr.values[offset+c]=THREE.MathUtils.lerp(tr.values[offset+c],tr.values[c],u);}const n=tr.times.length,times=new Float32Array(n*2),values=new tr.values.constructor(tr.values.length*2);times.set(tr.times);values.set(tr.values);for(let k=0;k<n;k++)times[n+k]=tr.times[k]+.30;values.set(tr.values,tr.values.length);tr.times=times;tr.values=values;}
  doubleClip.resetDuration();actions.double_jab=mixer.clipAction(doubleClip);actions.double_jab.setLoop(THREE.LoopOnce);actions.double_jab.clampWhenFinished=true;durations.double_jab=doubleClip.duration;profiles.doublejab={...MOVES.doublejab,range:profiles.jab.range};
- mixer.stopAllAction();const v={pivot,model,mixer,actions,durations,profiles,current:null,serial:-1,state:null,id,contacts,bodySamples,baseY:model.position.y,groundY:0};visuals[index]=v;return v;
+ mixer.stopAllAction();const v={pivot,model,mixer,actions,durations,profiles,bones:(()=>{const bones=[];model.traverse(o=>{if(o.isBone)bones.push(o);});return bones;})(),current:null,serial:-1,state:null,id,contacts,bodySamples,groundSamples:[...contacts,...bodySamples],baseY:model.position.y,groundY:0};visuals[index]=v;return v;
 }
-function play(v,name,duration,blend=.065){const a=v.actions[name]||v.actions.idle;if(a===v.current&&['idle','walk_fwd','walk_back'].includes(name))return;
- a.reset().setEffectiveWeight(1).setEffectiveTimeScale(duration?v.durations[name]/duration:name==='idle'?.35:1);a.enabled=true;a.play();if(v.current&&v.current!==a)v.current.crossFadeTo(a,Object.values(MOVES).some(m=>m.clip===name)?.035:blend,false);v.current=a;
+// Blend from the actual displayed pose, including interrupted reactions.
+// Only one mixer action owns the target pose; expired fades cannot accumulate.
+function play(v,name,duration){
+ const a=v.actions[name]||v.actions.idle;if(a===v.current&&['idle','walk_fwd','walk_back'].includes(name))return;
+ v.poseFrom=v.bones.map(b=>({position:b.position.clone(),quaternion:b.quaternion.clone()}));
+ v.blendTime=0;v.blendDuration=v.current?(Object.values(MOVES).some(m=>m.clip===name)?.10:name==='hit_body'?.09:.16):0;
+ v.mixer.stopAllAction();
+ const attack=Object.values(MOVES).some(m=>m.clip===name);
+ const rate=attack?1:name==='idle'?.35:name==='ko'?v.durations[name]/2.4:name==='victory'?v.durations[name]/2:Math.min(1.25,duration?v.durations[name]/duration:1);
+ a.reset().setEffectiveWeight(1).setEffectiveTimeScale(rate);a.enabled=true;a.play();v.current=a;
 }
-let battle=new Combat(237),accumulator=0,lastTime=0,paused=false,speed=1,hitstop=0,eventLife=0,sound=false,audio=null;
+let battle=new Combat(237),accumulator=0,lastTime=0,paused=false,speed=1,eventLife=0,sound=false,audio=null;
 const effects=new FightEffects(scene);
 function impact(event){effects.impact(event,battle.fighters[event.target],MOVES[event.move]);if(sound&&audio){const t=audio.currentTime,osc=audio.createOscillator(),gain=audio.createGain();osc.type='triangle';osc.frequency.setValueAtTime(event.type==='block'?220:110,t);osc.frequency.exponentialRampToValueAtTime(40,t+.13);gain.gain.setValueAtTime(.12,t);gain.gain.exponentialRampToValueAtTime(.001,t+.14);osc.connect(gain).connect(audio.destination);osc.start();osc.stop(t+.15);}}
 function renderActors(dt,alpha){for(let i=0;i<2;i++){const f=battle.fighters[i],v=visuals[i];if(v.serial!==f.serial||v.state!==f.state){const name=f.state==='attack'?MOVES[f.move].clip:({walk:'walk_fwd',back:'walk_back',hurt:'hit_body'})[f.state]||f.state;play(v,name,['attack','hurt','block','dodge'].includes(f.state)?f.duration:f.state==='ko'?2.4:f.state==='victory'?2:0);v.serial=f.serial;v.state=f.state;}
  v.pivot.position.x=THREE.MathUtils.lerp(f.previousX,f.x,alpha);v.mixer.update(dt);
+ if(v.blendDuration>0&&v.blendTime<v.blendDuration){v.blendTime+=dt;const x=Math.min(1,v.blendTime/v.blendDuration),u=x*x*(3-2*x);for(let k=0;k<v.bones.length;k++){const b=v.bones[k],from=v.poseFrom[k];b.position.lerpVectors(from.position,b.position,u);b.quaternion.slerpQuaternions(from.quaternion,b.quaternion,u);}}
+ // Filter residual keyframe jitter in the displayed pose, using seconds rather
+ // than frames so playback stays consistent on 30, 60, and 120 Hz displays.
+ if(!v.displayPose)v.displayPose=v.bones.map(b=>({position:b.position.clone(),quaternion:b.quaternion.clone()}));
+ const follow=f.state==='ko'?1:1-Math.exp(-dt/(f.state==='attack'?.045:.065));
+ for(let k=0;k<v.bones.length;k++){const b=v.bones[k],shown=v.displayPose[k];shown.position.lerp(b.position,follow);shown.quaternion.slerp(b.quaternion,follow);b.position.copy(shown.position);b.quaternion.copy(shown.quaternion);}
  // Ground the skinned shoe soles, rather than the static bind-pose bounds.
- v.model.position.y=v.baseY;v.pivot.updateMatrixWorld(true);let sole=Infinity;const point=new THREE.Vector3();for(const sample of ((f.state==='ko'||f.move==='sweep')?v.bodySamples:v.contacts)){sample.mesh.getVertexPosition(sample.index,point);point.applyMatrix4(sample.mesh.matrixWorld);sole=Math.min(sole,point.y);}if(Number.isFinite(sole)){v.model.position.y-=sole+.012;v.groundY=sole;}
+ v.model.position.y=v.baseY;v.pivot.updateMatrixWorld(true);let sole=Infinity;const point=new THREE.Vector3();for(const sample of v.groundSamples){sample.mesh.getVertexPosition(sample.index,point);point.applyMatrix4(sample.mesh.matrixWorld);sole=Math.min(sole,point.y);}if(Number.isFinite(sole)){v.model.position.y-=sole+.012;v.groundY=sole;}
  v.pivot.updateMatrixWorld(true);effects.trail(i,v,f,dt);
 }}
 function ui(){for(let i=0;i<2;i++){$(`#hp${i}`).style.width=`${battle.fighters[i].hp}%`;$(`#wins${i}`).textContent=Array.from({length:2},(_,n)=>n<battle.wins[i]?'●':'○').join(' ');}$('#timer').textContent=String(Math.ceil(battle.time)).padStart(2,'0');$('#round').textContent=`ROUND ${battle.round}`;
@@ -103,7 +124,7 @@ function ui(){for(let i=0;i<2;i++){$(`#hp${i}`).style.width=`${battle.fighters[i
 const composer=new EffectComposer(renderer);composer.addPass(new RenderPass(scene,camera));composer.renderTarget1.samples=4;composer.renderTarget2.samples=4;const occlusion=new SSAOPass(scene,camera,1,1,16);occlusion.kernelRadius=.16;occlusion.minDistance=.0003;occlusion.maxDistance=.035;composer.addPass(occlusion);composer.addPass(new OutputPass());let maximumQuality=true;
 function resize(){const r=canvas.parentElement.getBoundingClientRect();renderer.setSize(r.width,r.height,false);camera.left=-viewHeight*r.width/r.height/2;camera.right=-camera.left;camera.updateProjectionMatrix();composer.setSize(r.width,r.height);}addEventListener('resize',resize);resize();
 $('#pause').onclick=()=>{paused=!paused;$('#pause').textContent=paused?'Resume fight':'Pause fight';};
-$('#restart').onclick=()=>{battle=new Combat((battle.seed+1)>>>0,visuals.map(v=>v.profiles));accumulator=0;hitstop=0;effects.clear();visuals.forEach(v=>{v.serial=-1;v.state=null;});};
+$('#restart').onclick=()=>{battle=new Combat((battle.seed+1)>>>0,visuals.map(v=>v.profiles));accumulator=0;effects.clear();visuals.forEach(v=>{v.serial=-1;v.state=null;});};
 $('#quality').onchange=e=>{maximumQuality=e.target.value==='maximum';renderer.setPixelRatio(maximumQuality?Math.min(Math.max(devicePixelRatio,2),2.5):Math.min(devicePixelRatio,1.5));composer.setPixelRatio(renderer.getPixelRatio());occlusion.enabled=maximumQuality;resize();};
 $('#effects').onclick=()=>{effects.reduced=!effects.reduced;effects.clear();$('#effects').textContent=effects.reduced?'Effects: reduced':'Effects: full';};$('#effects').textContent=effects.reduced?'Effects: reduced':'Effects: full';
 $('#testEffects').onclick=()=>{effects.clear();for(let i=0;i<2;i++)effects.impact({type:i?'block':'hit',target:i,move:'straight'},battle.fighters[i],MOVES.straight);};
@@ -112,8 +133,8 @@ $('#sound').onclick=async()=>{audio??=new AudioContext();await audio.resume();so
 $('#full').onclick=()=>document.fullscreenElement?document.exitFullscreen():document.querySelector('main').requestFullscreen();
 document.addEventListener('visibilitychange',()=>{lastTime=0;accumulator=0;});
 try{await Promise.all([buildFighter('jez',0),buildFighter('benny',1)]);battle.profiles=visuals.map(v=>v.profiles);$('#loading').hidden=true;
- let frames=0,frameTime=0,slowWindows=0;renderer.setAnimationLoop(t=>{if(document.hidden)return;let realDt=lastTime?Math.min((t-lastTime)/1000,.05):0;lastTime=t;let dt=paused?0:realDt*speed;if(hitstop>0){hitstop-=dt;dt=0;}accumulator+=dt;while(accumulator>=1/60){battle.step(1/60);accumulator-=1/60;}
- for(const event of battle.events.splice(0)){if(event.type==='hit'||event.type==='block'){impact(event);hitstop=event.type==='hit'?(event.move==='straight'?.045:.03):.018;$('#event').textContent=event.type==='block'?'GUARD':`${MOVES[event.move].label||event.move.toUpperCase()}${event.combo>1?' · 2 HITS':''} · ${event.damage} DAMAGE`;eventLife=1.2;}else if(event.type==='fight')$('#event').textContent='CPU VS CPU';}
+ let frames=0,frameTime=0,slowWindows=0;renderer.setAnimationLoop(t=>{if(document.hidden)return;let realDt=lastTime?Math.min((t-lastTime)/1000,.05):0;lastTime=t;let dt=paused?0:realDt*speed;accumulator+=dt;while(accumulator>=1/60){battle.step(1/60);accumulator-=1/60;}
+ for(const event of battle.events.splice(0)){if(event.type==='hit'||event.type==='block'){impact(event);$('#event').textContent=event.type==='block'?'GUARD':`${MOVES[event.move].label||event.move.toUpperCase()}${event.combo>1?' · 2 HITS':''} · ${event.damage} DAMAGE`;eventLife=1.2;}else if(event.type==='fight')$('#event').textContent='CPU VS CPU';}
  eventLife-=dt;if(eventLife<0)$('#event').textContent='CPU VS CPU';renderActors(dt,accumulator*60);effects.update(dt);
  ui();composer.render();frames++;frameTime+=realDt;if(frameTime>1){const fps=frames/frameTime;slowWindows=fps<48?slowWindows+1:0;if(!maximumQuality&&slowWindows>=3&&renderer.getPixelRatio()>1){renderer.setPixelRatio(Math.max(1,renderer.getPixelRatio()-.25));resize();slowWindows=0;}$('#status').textContent=`${Math.round(frames/frameTime)} FPS · ${maximumQuality?'MAXIMUM':'BALANCED'} · FIXED CAMERA`;frameTime=0;frames=0;}
  });
