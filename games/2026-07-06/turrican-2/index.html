@@ -66,11 +66,11 @@
  #controls button{min-height:44px;padding:10px 12px;font-size:12px}
  #tactics{font-size:9px;bottom:6px;left:8px;max-width:95%}
 }
-@media(max-height:500px) and (orientation:landscape){
- #stage{width:min(100vw,calc((100dvh - 48px)*1.77778))}#wrap{padding-bottom:48px}
- #controls{top:auto;bottom:env(safe-area-inset-bottom,0px);right:10px;left:10px;justify-content:center}
+@media(orientation:landscape) and (max-height:600px), (orientation:landscape) and (pointer:coarse){
+ #wrap{padding:0}#stage{width:100vw;height:100dvh;max-height:none;aspect-ratio:auto;flex-shrink:0}
+ #controls{top:auto;bottom:max(6px,env(safe-area-inset-bottom,0px));right:max(8px,env(safe-area-inset-right,0px));left:auto;justify-content:flex-end}
  #controls button{min-height:44px;font-size:11px;padding:8px 12px}
- #tactics{font-size:9px;bottom:5px;left:8px}
+ #tactics{font-size:9px;bottom:8px;left:max(8px,env(safe-area-inset-left,0px));max-width:42%}
 }
 </style>
 
