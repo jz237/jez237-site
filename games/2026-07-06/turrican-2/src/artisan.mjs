@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
+import {mergeGeometries,mergeVertices} from 'three/addons/utils/BufferGeometryUtils.js';
 
 // Original authored forms and deterministic materials; no purchased assets.
 export function shellGeometry(w,h,d,style=0){
@@ -59,7 +59,7 @@ export function reliefGeometry(level,xStart=0,xEnd=level.cols){
       if(i<stride&&j<stride){const k=start+j*(stride+1)+i;idx.push(k,k+stride+1,k+1,k+1,k+stride+1,k+stride+2);}
     }
   }
-  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setIndex(idx);g.computeVertexNormals();return g;
+  const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setAttribute('color',new THREE.Float32BufferAttribute(colors,3));g.setIndex(idx);g.deleteAttribute('normal');const welded=mergeVertices(g,.001);welded.computeVertexNormals();g.dispose();return welded;
 }
 
 export function rockFace(w,h,d,seed){

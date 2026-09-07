@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {part,mat,silver,dark,amber,cyan} from './models.mjs';
+import {fracturedRock} from './geology.mjs';
 import {rockFace,tube,pack} from './artisan.mjs';
 
 export function buildVistas(world,texture=null){
@@ -8,23 +9,13 @@ export function buildVistas(world,texture=null){
   for(let chunk=0;chunk<6;chunk++){
     const g=new THREE.Group();g.position.set(chunk*310,-355,-75);group.add(g);
     if(world===1||world===2||world===5){
-      // A split arch, with stratified buttresses and a recessed cavern opening.
-      for(let side of [-1,1])for(let j=0;j<4;j++){
-        const m=new THREE.Mesh(rockFace(18+j*3,31,18,chunk*7+j+side),stone);m.position.set(130+side*(55-j*8),30+j*43,-30-j*4);m.rotation.z=side*.1;g.add(m);
-      }
-      const bridge=new THREE.Mesh(rockFace(56,12,22,chunk),stone);bridge.position.set(130,173,-50);g.add(bridge);
-      if(world===2){
-        for(let k=0;k<8;k++)g.add(tube([[k*21,0,5],[k*21+12,35,-2],[k*21-4,75+k*5,4]],1.1,mat('#496e62',.05,.88)));
-      }else if(world===5){
-        const nest=new THREE.Group();nest.position.set(130,75,-18);g.add(nest);
-        for(let k=0;k<7;k++){const a=k*Math.PI*2/7;nest.add(tube([[Math.cos(a)*45,Math.sin(a)*45,0],[Math.cos(a)*25,Math.sin(a)*25,9],[Math.cos(a)*12,Math.sin(a)*12,3]],2.5,mat('#685362',.2,.7)));}
-        part(nest,'sphere',[13,20,7],mat('#b4bf70',.1,.5,.22));animated.push({node:nest,type:'breath'});
-      }else{
-        // Weathered survey station gives the alien landscape a human scale.
-        part(g,'plate',[25,42,12],dark,[255,22,0]);part(g,'plate',[17,18,2],silver,[255,31,7]);
-        for(let k=0;k<3;k++)part(g,'box',[10,1,1],cyan,[255,27+k*3,9]);
-        g.add(tube([[247,17,3],[237,8,8],[219,5,6]],1.2,dark));
-      }
+      // Sparse talus and occasional weathered infrastructure leave open sightlines.
+      if(chunk%3===1){for(let j=0;j<3;j++){
+        const m=new THREE.Mesh(fracturedRock(50+j*12,18+j*13,16,world*10+chunk+j),stone);
+        m.position.set(70+j*47,14+j*11,-30);m.rotation.z=-.18+j*.07;g.add(m);
+      }}
+      if(world===2&&chunk%2===0)for(let k=0;k<3;k++)g.add(tube([[k*11,0,0],[k*11+4,18,-2],[k*11-2,29+k*4,0]],.65,mat('#344d43',.03,.92)));
+      if(world===1&&chunk===3){part(g,'plate',[18,30,10],dark,[255,15,0]);part(g,'box',[6,1,1],cyan,[255,21,6]);}
     }else{
       // Heavy machinery with layered ribs, conduits and rotating turbine hubs.
       for(let side of [-1,1]){
