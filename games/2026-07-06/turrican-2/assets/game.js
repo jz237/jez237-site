@@ -8,7 +8,7 @@
   const display = document.getElementById('game');
   const DW = 960, DH = 540;
   // DPR-aware backing store: everything draws in 960x540 logical units
-  const DPR = Math.min(2, window.devicePixelRatio || 1);
+  const DPR = Math.min(4, Math.max(2, (window.innerWidth / DW) * (window.devicePixelRatio || 1)));
   display.width = DW * DPR; display.height = DH * DPR;
   const dx = display.getContext('2d');
   dx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -21,13 +21,14 @@
   const titleImg = new Image();
   let titleReady = false;
   titleImg.onload = () => { titleReady = true; };
-  titleImg.src = 'assets/img/title-bg.jpg?v=' + D.VERSION;
+  titleImg.src = 'assets/img/crystalline-canyon.png';
 
   const STAGES_PER_WORLD = D.STAGES_PER_WORLD; // faithful blueprint: 5 worlds / 11 stages
   const PLAN = [];
   for (let w = 0; w < STAGES_PER_WORLD.length; w++)
     for (let s = 0; s < STAGES_PER_WORLD[w]; s++) PLAN.push({ world: w, stage: s });
 
+  let qaHold = false;
   let mode = 'title';        // title | playing | paused | stageclear | gameover | win
   let state = null;          // engine state
   let planIdx = 0;
@@ -39,9 +40,9 @@
   audio.onVoiceToast((text) => { voiceToast = { text, t: 2.6 }; });
 
   // ---- settings (persisted) ------------------------------------------------
-  const SETTINGS_KEY = 'turrican2_settings_v1';
+  const SETTINGS_KEY = 'turrican2_hd_settings_v2';
   const settings = Object.assign(
-    { master: 1, music: 1, sfx: 1, voice: 1, crt: true, difficulty: 'normal' },
+    { master: 1, music: 1, sfx: 1, voice: 1, crt: false, difficulty: 'normal' },
     (() => { try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch (e) { return {}; } })());
   function saveSettings() { try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings)); } catch (e) {} }
   function applySettings() {
@@ -59,29 +60,31 @@
   // Boots to the title; if nobody touches anything, the demo pilot plays the
   // whole campaign, then hands the title back and waits to do it again. Any
   // input at all drops the player straight back to the menu.
-  const ATTRACT_IDLE = 10;   // seconds of quiet on the title before the demo runs
+  const ATTRACT_IDLE = 4;   // seconds of quiet on the title before the demo runs
   const DEMO_DIFF = 'normal';
   let isDemo = false, pilot = null, demoAbort = false, idleT = 0, demoRetry = 0, winT = 0;
   const canDemo = () => !!(window.TDemo && window.TDemo.createPilot);
   const grabbed = (i) => i.startPressed || i.firePressed || i.jumpPressed || i.pausePressed ||
     i.leftPressed || i.rightPressed || i.upPressed || i.downPressed ||
     i.morphPressed || i.switchPressed || i.bombPressed || i.linePressed;
-  // catch every key/tap, not just the mapped ones — "press any key" should mean it
+  // Keyboard players can leave attract mode; touch viewers use the Play button.
   window.addEventListener('keydown', () => { if (isDemo) demoAbort = true; });
-  window.addEventListener('pointerdown', () => { if (isDemo) demoAbort = true; });
 
   function startDemo() {
+    qaHold = false;
     if (!canDemo()) return;
     isDemo = true; demoAbort = false; demoRetry = 0; winT = 0;
+    document.body.dataset.demo = 'true';
     pilot = window.TDemo.createPilot();
     audio.rollVoice();
     planIdx = 0; continues = 0; newBest = false;
-    carry = { lives: 3, score: 0, gems: 0, weapons: { spread: 2, beam: 0, bounce: 0 },
+    carry = { lives: 3, score: 0, gems: 0, weapons: { spread: 2, beam: 2, bounce: 2 },
       weapon: 'spread', bombs: 3, lines: 3 };
     loadStage();
   }
   function endDemo() {
     isDemo = false; pilot = null; demoAbort = false; idleT = 0;
+    document.body.dataset.demo = 'false';
     mode = 'title'; menuIdx = 0;
     audio.startMusic('title');
   }
@@ -105,30 +108,8 @@
   function cleanInitials(raw) {
     return (raw || 'AAA').toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 3) || 'AAA';
   }
-  async function fetchGlobalScores() {
-    if (globalFetchStarted) return;
-    globalFetchStarted = true;
-    try {
-      const res = await fetch(LB_URL);
-      if (!res.ok) return;
-      const rows = await res.json();
-      globalBest = Array.isArray(rows) && rows.length ? rows[0] : null;
-    } catch (e) {}
-  }
-  async function submitGlobalScore(score, stageLabel) {
-    if (!score) return;
-    const initials = cleanInitials(prompt('Global score initials?', localStorage.getItem(NAME_KEY) || 'AAA'));
-    localStorage.setItem(NAME_KEY, initials);
-    try {
-      await fetch(LB_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ initials, score, stage: stageLabel, diff: settings.difficulty })
-      });
-      globalFetchStarted = false;
-      fetchGlobalScores();
-    } catch (e) {}
-  }
+  async function fetchGlobalScores() {}
+  async function submitGlobalScore() {}
   function pushScore(score, stageLabel) {
     if (!score) return false;
     const scores = loadScores();
@@ -165,6 +146,7 @@
   }
 
   function newRun() {
+    qaHold = false;
     audio.rollVoice();   // a different announcer voice every game
     planIdx = 0;
     continues = 3;
@@ -322,15 +304,18 @@
     }
 
     // playing
+    if(qaHold){renderer.render(state,dt);return;}
     if (inp.pausePressed) { mode = 'paused'; pauseIdx = 0; return; }
     window.__tBeamAim = (state.player.weapon === 'beam' && inp.fire);
 
     acc += dt;
     let steps = 0;
+    const visualEvents=[];
     while (acc >= D.DT && steps < 5) {
       // the autopilot writes a fresh input frame per tick, exactly like a pad
       const tick = isDemo && pilot ? pilot.frame(state) : inp;
       E.step(state, tick, D.VIEW_W, D.VIEW_H);
+      visualEvents.push(...state.events.filter(e=>!["sfx","voice","music"].includes(e.type)));
       acc -= D.DT; steps++;
       // consume sfx / music events
       for (const ev of state.events) {
@@ -362,7 +347,7 @@
         break;
       }
     }
-    if (mode === 'playing') renderer.render(state, dt);
+    if (mode === 'playing') { state.events=visualEvents; renderer.render(state, dt); }
     drawVoiceToast(dt);
     if (isDemo && mode === 'playing') drawDemoTag();
   }
@@ -447,7 +432,7 @@
     dx.shadowColor = '#6cf3ff'; dx.shadowBlur = 8;
     centerText('THE FINAL FIGHT', DW / 2, DH / 2 - 44, 30, '#6cf3ff', 'bold');
     dx.restore();
-    centerText('— enhanced browser tribute —', DW / 2, DH / 2 - 10, 14, 'rgba(200,210,255,0.6)', 'normal');
+    centerText('— 2.5D · CRYSTAL EDITION —', DW / 2, DH / 2 - 10, 14, 'rgba(200,210,255,0.6)', 'normal');
     // menu
     const items = ['START MISSION', 'WATCH DEMO', 'OPTIONS'];
     for (let i = 0; i < items.length; i++) {
@@ -469,28 +454,10 @@
   }
   // attract-mode badge: below the HUD strip, above the boss bar's turf
   function drawDemoTag() {
-    const pulse = 0.55 + Math.sin(uiT * 3.2) * 0.45;
-    dx.save();
-    dx.textAlign = 'center'; dx.textBaseline = 'middle';
-    const label = 'DEMO PLAY';
-    dx.font = '900 15px "Trebuchet MS", system-ui, sans-serif';
-    const w = dx.measureText(label).width + 54;
-    dx.globalAlpha = 0.9;
-    dx.fillStyle = 'rgba(6,8,22,0.66)';
-    dx.fillRect(DW / 2 - w / 2, 50, w, 28);
-    dx.strokeStyle = 'rgba(108,243,255,0.45)'; dx.lineWidth = 1;
-    dx.strokeRect(DW / 2 - w / 2 + 0.5, 50.5, w - 1, 27);
-    dx.globalAlpha = 0.55 + Math.sin(uiT * 2) * 0.2;
-    dx.fillStyle = '#ff5d7a';
-    dx.beginPath(); dx.arc(DW / 2 - w / 2 + 18, 64, 5, 0, 7); dx.fill();
-    dx.globalAlpha = 1;
-    dx.fillStyle = '#6cf3ff'; dx.fillText(label, DW / 2 + 9, 65);
-    dx.globalAlpha = pulse;
-    dx.font = 'bold 14px "Trebuchet MS", system-ui, sans-serif';
-    dx.fillStyle = '#ffd23f';
-    dx.fillText('PRESS ANY KEY TO PLAY', DW / 2, 96);
-    dx.restore();
+    dx.save();dx.font='600 11px system-ui';dx.textAlign='center';dx.fillStyle='#8bdfe5';
+    dx.fillText('DEMO  ·  SELECT PLAY TO TAKE CONTROL',DW/2,69);dx.restore();
   }
+
   function drawOptions() {
     bgPanel();
     dx.save(); dx.shadowColor = '#6cf3ff'; dx.shadowBlur = 12;
@@ -623,6 +590,7 @@
       }
       // tapping the playfield acts as START/confirm on menu screens
       display.addEventListener('pointerdown', () => {
+        if (isDemo) return;
         if (mode === 'title' || mode === 'gameover' || mode === 'win' || mode === 'intro' || mode === 'stageclear') {
           input.setTouch('start', true);
           setTimeout(() => input.setTouch('start', false), 60);
@@ -718,7 +686,10 @@
   window.__turrican = {
     get mode() { return mode; },
     get state() { return state; },
-    start() { audio.resume(); newRun(); },
+    start() { if(isDemo)endDemo(); audio.resume(); newRun(); },
+    setQuality(scale) { renderer.setResolution(scale);display.width=DW*scale/1.5;display.height=DH*scale/1.5;dx.setTransform(scale/1.5,0,0,scale/1.5,0,0); },
+    get tactics() { return pilot ? pilot.stats.intent : ''; },
+    get graphics() { return window.__modernGraphics?.stats || {backend:'HD compatibility'}; },
     goToStage(i) { planIdx = i; loadStage(); },
     step(n, inp) { for (let k = 0; k < (n || 1); k++) E.step(state, inp || {}, D.VIEW_W, D.VIEW_H); return snap(); },
     snapshot: snap, plan: PLAN, D,
@@ -743,9 +714,7 @@
   }
 
   // installable PWA: offline cache + home-screen app (Android)
-  if ('serviceWorker' in navigator && location.protocol === 'https:') {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  }
+
 
   // adaptive quality: sustained slow frames -> drop DPR + heavy FX (one-way)
   let perfEma = 16, perfSlowT = 0, perfDropped = false;
@@ -757,11 +726,35 @@
       perfDropped = true;
       display.width = DW; display.height = DH;               // DPR 1
       dx.setTransform(1, 0, 0, 1, 0, 0);
-      renderer.setFX(false);
+      renderer.setFX(false); renderer.setResolution(2);
       console.log('[Turrican II] slow device: dropped to performance mode');
     }
   }
 
+  if(['localhost','127.0.0.1','::1'].includes(location.hostname)&&new URLSearchParams(location.search).has('qa')){
+    const poses=['normal','run','jump','crouch','beam','bounce','morph','freeze','boss'];
+    const preview=(i,pose)=>{
+      if(!Number.isInteger(i)||i<0||i>=PLAN.length||!poses.includes(pose))throw Error('Invalid scene');
+      isDemo=false;qaHold=true;planIdx=i;carry={lives:3,weapons:{spread:3,beam:3,bounce:3},weapon:'spread',bombs:3,lines:3};loadStage();mode='playing';
+      const p=state.player;for(let k=0;k<40;k++)E.step(state,{},D.VIEW_W,D.VIEW_H);
+      if(pose==='boss'&&state.boss){const b=state.boss;b.awake=true;b.open=true;p.x=b.x-145;p.y=b.y+b.h-p.h;state.cam.x=Math.max(0,b.x-350);state.cam.y=Math.max(0,b.y+b.h-300);}
+      if(pose==='run')p.vx=205;
+      if(pose==='jump'){p.y-=50;p.vy=-260;p.onGround=false;}
+      if(pose==='crouch'){p.crouch=true;p.h=22;p.y+=8;}
+      if(pose==='morph'){p.morph=true;p.h=16;p.w=16;p.y+=14;p.vx=210;state.mines.push({x:p.x-25,y:p.y+14,life:3});}
+      if(pose==='beam'){p.weapon='beam';p.beamActive=true;p.beamAngle=-.2;p.beam={ox:p.x+17,oy:p.y+11,dx:Math.cos(-.2),dy:Math.sin(-.2),len:240};}
+      if(pose==='bounce'){p.weapon='bounce';p.cooldown=.12;for(let k=0;k<5;k++)state.pshots.push({x:p.x+40+k*35,y:p.y+10+Math.sin(k)*15,vx:200,vy:k%2?70:-70,kind:'bounce',bounces:4,life:2});}
+      if(pose==='freeze'){state.freeze=4;state.events.push({type:'flash',x:p.x,y:p.y},{type:'explosion',x:p.x+70,y:p.y});}
+      renderer.render(state,.016);return {snapshot:snap(),graphics:window.__modernGraphics?.stats};
+    };
+    const panel=document.createElement('div');panel.id='qa-panel';panel.style.cssText='position:fixed;left:10px;top:45px;z-index:80;display:flex;gap:3px;font:10px system-ui';
+    const selector=document.createElement('select');PLAN.forEach((x,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(x.world+1)+'.'+(x.stage+1);selector.append(o);});panel.append(selector);
+    poses.forEach(pose=>{const b=document.createElement('button');b.textContent=pose;b.onclick=()=>preview(+selector.value,pose);panel.append(b);});document.body.append(panel);
+    const context=document.modelContext;if(context?.registerTool){
+      context.registerTool({name:'preview_scene',description:'Local graphics test: select a stage and animation or effect, using the visible test controls.',inputSchema:{type:'object',properties:{stage:{type:'integer',minimum:0,maximum:10},pose:{type:'string',enum:poses}},required:['stage','pose'],additionalProperties:false},execute:({stage,pose})=>preview(stage,pose)});
+      context.registerTool({name:'inspect_scene',description:'Inspect local 3D rendering and animation diagnostics.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true},execute:()=>({graphics:window.__modernGraphics?.stats,state:snap(),hero:{legs:window.__modernGraphics?.hero.legs.map(l=>({hip:l.hip.rotation.z,knee:l.knee.rotation.z})),arm:window.__modernGraphics?.hero.arm.rotation.z,ball:window.__modernGraphics?.hero.ball.visible},meshes:window.__modernGraphics?.scene.children.length})});
+    }
+  }
   applySettings();
   requestAnimationFrame(loop);
   console.log('[Turrican II Redux] v' + D.VERSION + ' booted');
