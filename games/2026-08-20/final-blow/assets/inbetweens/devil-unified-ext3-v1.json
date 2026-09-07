@@ -1,0 +1,278 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        49,
+        66,
+        297,
+        293
+      ],
+      "rect": [
+        30,
+        58,
+        279,
+        256
+      ],
+      "scale": 1.1220106009836917,
+      "areaRatio": 0.9999999999999998
+    },
+    {
+      "frame": 1,
+      "source": [
+        350,
+        71,
+        610,
+        296
+      ],
+      "rect": [
+        10,
+        51,
+        304,
+        263
+      ],
+      "scale": 1.1647509578544062,
+      "areaRatio": 0.9653904103813349
+    },
+    {
+      "frame": 2,
+      "source": [
+        659,
+        84,
+        857,
+        290
+      ],
+      "rect": [
+        26,
+        39,
+        264,
+        275
+      ],
+      "scale": 1.328244206939118,
+      "areaRatio": 1
+    },
+    {
+      "frame": 3,
+      "source": [
+        908,
+        97,
+        1213,
+        289
+      ],
+      "rect": [
+        6,
+        122,
+        304,
+        192
+      ],
+      "scale": 0.9934640522875817,
+      "areaRatio": 0.8537597062330716
+    },
+    {
+      "frame": 4,
+      "source": [
+        52,
+        401,
+        276,
+        561
+      ],
+      "rect": [
+        26,
+        117,
+        276,
+        197
+      ],
+      "scale": 1.2250392660561347,
+      "areaRatio": 1
+    },
+    {
+      "frame": 5,
+      "source": [
+        336,
+        403,
+        610,
+        563
+      ],
+      "rect": [
+        80,
+        177,
+        234,
+        137
+      ],
+      "scale": 0.8503699224202835,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 6,
+      "source": [
+        670,
+        331,
+        836,
+        551
+      ],
+      "rect": [
+        36,
+        15,
+        226,
+        299
+      ],
+      "scale": 1.3533287589827994,
+      "areaRatio": 1
+    },
+    {
+      "frame": 7,
+      "source": [
+        919,
+        358,
+        1186,
+        538
+      ],
+      "rect": [
+        24,
+        118,
+        290,
+        196
+      ],
+      "scale": 1.0820712193248607,
+      "areaRatio": 1
+    },
+    {
+      "frame": 8,
+      "source": [
+        81,
+        649,
+        222,
+        848
+      ],
+      "rect": [
+        67,
+        55,
+        184,
+        259
+      ],
+      "scale": 1.2966443420258318,
+      "areaRatio": 0.9999999999999998
+    },
+    {
+      "frame": 9,
+      "source": [
+        382,
+        594,
+        507,
+        887
+      ],
+      "rect": [
+        90,
+        10,
+        130,
+        304
+      ],
+      "scale": 1.034013605442177,
+      "areaRatio": 0.6729272242240059
+    },
+    {
+      "frame": 10,
+      "source": [
+        613,
+        717,
+        866,
+        869
+      ],
+      "rect": [
+        10,
+        131,
+        304,
+        183
+      ],
+      "scale": 1.1968503937007875,
+      "areaRatio": 0.9162160123262048
+    },
+    {
+      "frame": 11,
+      "source": [
+        918,
+        659,
+        1190,
+        871
+      ],
+      "rect": [
+        22,
+        86,
+        292,
+        228
+      ],
+      "scale": 1.0684482358322565,
+      "areaRatio": 1
+    },
+    {
+      "frame": 12,
+      "source": [
+        55,
+        996,
+        225,
+        1165
+      ],
+      "rect": [
+        37,
+        103,
+        213,
+        211
+      ],
+      "scale": 1.2431263202775438,
+      "areaRatio": 1
+    },
+    {
+      "frame": 13,
+      "source": [
+        341,
+        985,
+        616,
+        1165
+      ],
+      "rect": [
+        7,
+        115,
+        304,
+        199
+      ],
+      "scale": 1.1014492753623188,
+      "areaRatio": 0.8560747732566099
+    },
+    {
+      "frame": 14,
+      "source": [
+        659,
+        922,
+        865,
+        1169
+      ],
+      "rect": [
+        63,
+        13,
+        251,
+        301
+      ],
+      "scale": 1.2123170343721332,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 15,
+      "source": [
+        912,
+        1027,
+        1180,
+        1168
+      ],
+      "rect": [
+        6,
+        154,
+        304,
+        160
+      ],
+      "scale": 1.1301115241635689,
+      "areaRatio": 0.889224869055813
+    }
+  ],
+  "source": "exec-0991f47d-32cc-41b2-bbd9-6887d5abfa9b.png",
+  "prompt": "Create a new painted animation in-between atlas for devil, matching the reference identity exactly: winged brown-scaled horned dragon demon, gold pendant, green wrist/ankle wraps, long tail and claws. Preserve full horns, wings and tail.  Create exactly sixteen NEW COMPLETE attack sprites in 4 columns and 4 rows. Use reference ONLY for identity. New poses: Row1: straight punch; horizontal front kick; rotating punch follow-through; fast extended straight punch with a clearly drawn complete fist, NO smear. Row2: crouching punch; low sweep kick; airborne downward punch; airborne side kick. Row3: tucked knees in air; rising uppercut COMPLETE raised fist; low landing arms extended; turning side kick. Row4: crouch guard; lunging heavy straight punch; high diagonal kick with COMPLETE head and raised foot; low sweeping follow-through. Draw figures relatively SMALL with 15% empty margin around EVERY pose, ALL anatomy and props visible including complete feet at end of kicks, full fist on uppercut, full head above high kick. Face right. Detailed painted game art. No clipped anatomy, amputations, detached parts or figures at edges. Pure flat magenta #ff00ff background, no grid, text, shadows, blur or effects."
+}

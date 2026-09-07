@@ -1,0 +1,3486 @@
+{
+  "version": "5.4.9",
+  "baseline": "1a297c5e5c58979d0d12ce866182c6ab2d60a004",
+  "scope": [
+    "alan",
+    "ali",
+    "commissioner",
+    "cyraxx",
+    "deathblow",
+    "devil",
+    "donald",
+    "post"
+  ],
+  "reviewed": [
+    {
+      "file": "assets/atlases/alan.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/alan.webp",
+      "cells": 1
+    },
+    {
+      "file": "assets/motion/alan.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/alan.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/alan.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/alan.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/alan-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/alan-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/alan-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/alan-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/alan-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/alan-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/alan-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/alan.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/alan-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/atlases/ali.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/ali.webp",
+      "cells": 1
+    },
+    {
+      "file": "assets/motion/ali.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/ali.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/ali.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/walk/ali.webp",
+      "cells": 4
+    },
+    {
+      "file": "assets/unified/ali.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/ali-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/ali-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/ali-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/ali-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/ali-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/ali-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/ali-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/ali.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/ali-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/atlases/commissioner.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/commissioner.webp",
+      "cells": 1
+    },
+    {
+      "file": "assets/motion/commissioner.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/commissioner.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/commissioner.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/commissioner.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/commissioner-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/commissioner-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/commissioner-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/commissioner-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/commissioner-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/commissioner.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/atlases/cyraxx.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/cyraxx.webp",
+      "cells": 1
+    },
+    {
+      "file": "assets/motion/cyraxx.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/cyraxx.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/cyraxx.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/walk/cyraxx.webp",
+      "cells": 4
+    },
+    {
+      "file": "assets/unified/cyraxx.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/cyraxx-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/cyraxx-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/cyraxx-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/cyraxx-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/cyraxx-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/cyraxx-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/cyraxx-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/cyraxx.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/cyraxx-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/atlases/deathblow.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/deathblow.webp",
+      "cells": 1
+    },
+    {
+      "file": "assets/motion/deathblow.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/deathblow.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/deathblow.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/walk/deathblow.webp",
+      "cells": 4
+    },
+    {
+      "file": "assets/unified/deathblow.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/deathblow-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/deathblow-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/deathblow-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/deathblow-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/deathblow-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/deathblow-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/deathblow-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/deathblow.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/deathblow-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/atlases/devil.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/devil.webp",
+      "cells": 1
+    },
+    {
+      "file": "assets/motion/devil.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/devil.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/devil.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/devil.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/devil-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/devil-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/devil-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/devil-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/devil-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/devil-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/devil-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/atlases/donald.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/donald.webp",
+      "cells": 1
+    },
+    {
+      "file": "assets/motion/donald.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/donald.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/donald.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/donald.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/donald-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/donald-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/donald-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/donald-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/donald-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/donald-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/donald.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/donald-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/atlases/post.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/post.webp",
+      "cells": 1
+    },
+    {
+      "file": "assets/motion/post.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/post.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/post.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/walk/post.webp",
+      "cells": 4
+    },
+    {
+      "file": "assets/unified/post.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/post-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/post-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/post-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/post-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/post-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/post-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/post-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/post.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/post-specials.webp",
+      "cells": 16
+    }
+  ],
+  "repairs": [
+    {
+      "id": "alan",
+      "file": "assets/motion/alan.webp",
+      "frame": 0,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/motion/alan.webp",
+      "frame": 2,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/motion/alan.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/motion/alan.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/motion2/alan.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/motion3/alan.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/motion3/alan.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/motion3/alan.webp",
+      "frame": 6,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext2.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext3.webp",
+      "frame": 0,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext3.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext3.webp",
+      "frame": 5,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext3.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext4.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/unified/alan-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/moves/alan-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/moves/alan-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/moves/alan-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/moves/alan-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/moves/alan-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/moves/legacy/alan-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "assets/moves/legacy/alan-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "renderer/hd/alan-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "renderer/hd/alan-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "renderer/hd/alan-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "renderer/hd/alan-specials.webp",
+      "frame": 6,
+      "sourceBank": "specials",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "renderer/hd/alan-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "alan",
+      "file": "renderer/hd/alan-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/atlases/ali.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/atlases/ali.webp",
+      "frame": 11,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/atlases/ali.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/atlases/ali.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/atlases/ali.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/motion/ali.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/motion/ali.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/motion3/ali.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/motion3/ali.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/motion3/ali.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/motion3/ali.webp",
+      "frame": 5,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext2.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext3.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext4.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext4.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext4.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext5.webp",
+      "frame": 2,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext5.webp",
+      "frame": 5,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext5.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext5.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/unified/ali-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/moves/ali-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/moves/legacy/ali-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/moves/legacy/ali-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/moves/legacy/ali-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/moves/legacy/ali-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/moves/legacy/ali-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "assets/moves/legacy/ali-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali.webp",
+      "frame": 11,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "ali",
+      "file": "renderer/hd/ali-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/atlases/commissioner.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/atlases/commissioner.webp",
+      "frame": 10,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/atlases/commissioner.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/motion/commissioner.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/motion2/commissioner.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/motion2/commissioner.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/motion3/commissioner.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/motion3/commissioner.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/motion3/commissioner.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner.webp",
+      "frame": 11,
+      "sourceBank": "unified",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext.webp",
+      "frame": 3,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext.webp",
+      "frame": 4,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext2.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext2.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext2.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext3.webp",
+      "frame": 5,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext3.webp",
+      "frame": 6,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext3.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext4.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext5.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext5.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext5.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext5.webp",
+      "frame": 10,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "assets/unified/commissioner-ext5.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "renderer/hd/commissioner.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "renderer/hd/commissioner.webp",
+      "frame": 10,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "commissioner",
+      "file": "renderer/hd/commissioner.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/atlases/cyraxx.webp",
+      "frame": 0,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/atlases/cyraxx.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/atlases/cyraxx.webp",
+      "frame": 3,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/atlases/cyraxx.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/atlases/cyraxx.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/motion/cyraxx.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/motion/cyraxx.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/motion/cyraxx.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/motion2/cyraxx.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/motion3/cyraxx.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/motion3/cyraxx.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/motion3/cyraxx.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx.webp",
+      "frame": 8,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext2.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext2.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext4.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext4.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext5.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext5.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/unified/cyraxx-ext5.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/moves/cyraxx-specials.webp",
+      "frame": 4,
+      "sourceBank": "specials",
+      "sourceFrame": 4,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/moves/cyraxx-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/moves/cyraxx-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/moves/cyraxx-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/moves/cyraxx-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/moves/legacy/cyraxx-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/moves/legacy/cyraxx-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "assets/moves/legacy/cyraxx-specials.webp",
+      "frame": 7,
+      "sourceBank": "specials",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "renderer/hd/cyraxx.webp",
+      "frame": 0,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "renderer/hd/cyraxx.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "renderer/hd/cyraxx.webp",
+      "frame": 3,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "renderer/hd/cyraxx.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "renderer/hd/cyraxx.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "renderer/hd/cyraxx-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "renderer/hd/cyraxx-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "cyraxx",
+      "file": "renderer/hd/cyraxx-specials.webp",
+      "frame": 7,
+      "sourceBank": "specials",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/atlases/deathblow.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/atlases/deathblow.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/atlases/deathblow.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/motion/deathblow.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/motion/deathblow.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/motion/deathblow.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/motion2/deathblow.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/motion2/deathblow.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/motion3/deathblow.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/motion3/deathblow.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/motion3/deathblow.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow.webp",
+      "frame": 15,
+      "sourceBank": "unified",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext2.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext3.webp",
+      "frame": 5,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext3.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext3.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext4.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext4.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext5.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext5.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext5.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/unified/deathblow-ext5.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/deathblow-specials.webp",
+      "frame": 6,
+      "sourceBank": "specials",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/deathblow-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/deathblow-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/deathblow-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/deathblow-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/deathblow-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/legacy/deathblow-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/legacy/deathblow-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/legacy/deathblow-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "assets/moves/legacy/deathblow-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "renderer/hd/deathblow.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "renderer/hd/deathblow.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "renderer/hd/deathblow.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "renderer/hd/deathblow-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "renderer/hd/deathblow-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "renderer/hd/deathblow-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "deathblow",
+      "file": "renderer/hd/deathblow-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/atlases/devil.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/atlases/devil.webp",
+      "frame": 10,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/atlases/devil.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/atlases/devil.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/atlases/devil.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion/devil.webp",
+      "frame": 2,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion/devil.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion/devil.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion2/devil.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion2/devil.webp",
+      "frame": 3,
+      "sourceBank": "unified",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion2/devil.webp",
+      "frame": 4,
+      "sourceBank": "unified",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion2/devil.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion2/devil.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion3/devil.webp",
+      "frame": 0,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 4,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion3/devil.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion3/devil.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/motion3/devil.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil.webp",
+      "frame": 10,
+      "sourceBank": "unified",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil.webp",
+      "frame": 11,
+      "sourceBank": "unified",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil.webp",
+      "frame": 15,
+      "sourceBank": "unified",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext.webp",
+      "frame": 4,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext2.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext3.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext4.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/unified/devil-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/devil-specials.webp",
+      "frame": 0,
+      "sourceBank": "specials",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/devil-specials.webp",
+      "frame": 8,
+      "sourceBank": "specials",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/devil-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/devil-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/devil-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/devil-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/legacy/devil-specials.webp",
+      "frame": 0,
+      "sourceBank": "specials",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/legacy/devil-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/legacy/devil-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/legacy/devil-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "devil",
+      "file": "assets/moves/legacy/devil-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 0,
+      "sourceBank": "specials",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 6,
+      "sourceBank": "specials",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 7,
+      "sourceBank": "specials",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/legacy/donald-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/motion3/donald.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/motion3/donald.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/motion3/donald.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald.webp",
+      "frame": 15,
+      "sourceBank": "unified",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 6,
+      "sourceBank": "specials",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 7,
+      "sourceBank": "specials",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 11,
+      "sourceBank": "specials",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/moves/donald-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/motion2/donald.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/motion2/donald.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/motion2/donald.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext4.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext4.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/motion/donald.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/motion/donald.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/atlases/donald.webp",
+      "frame": 5,
+      "sourceBank": "unified",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/atlases/donald.webp",
+      "frame": 6,
+      "sourceBank": "unified",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/atlases/donald.webp",
+      "frame": 8,
+      "sourceBank": "specials",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/atlases/donald.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/atlases/donald.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/atlases/donald.webp",
+      "frame": 11,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/atlases/donald.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext3.webp",
+      "frame": 10,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext3.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "assets/unified/donald-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald.webp",
+      "frame": 5,
+      "sourceBank": "unified",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald.webp",
+      "frame": 6,
+      "sourceBank": "unified",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald.webp",
+      "frame": 8,
+      "sourceBank": "specials",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald.webp",
+      "frame": 11,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 0,
+      "sourceBank": "specials",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 6,
+      "sourceBank": "specials",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 7,
+      "sourceBank": "specials",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "donald",
+      "file": "renderer/hd/donald-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 6,
+      "sourceBank": "specials",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 7,
+      "sourceBank": "specials",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/legacy/post-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion3/post.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion3/post.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion3/post.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion3/post.webp",
+      "frame": 6,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext2.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext5.webp",
+      "frame": 0,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext5.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext5.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext5.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext5.webp",
+      "frame": 10,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext5.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/post-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/post-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/post-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/post-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/post-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/post-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/post-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/moves/post-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion2/post.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion2/post.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext4.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext4.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post.webp",
+      "frame": 15,
+      "sourceBank": "unified",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion/post.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion/post.webp",
+      "frame": 2,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion/post.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion/post.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion/post.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/motion/post.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext3.webp",
+      "frame": 0,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext3.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext3.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 11,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 3,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 6,
+      "sourceBank": "specials",
+      "sourceFrame": 6,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 7,
+      "sourceBank": "specials",
+      "sourceFrame": 7,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "renderer/hd/post-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    },
+    {
+      "id": "post",
+      "file": "assets/unified/post-ext.webp",
+      "frame": 3,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Visual audit: missing anatomy, cut extremity, or neighboring sprite/effect fragment."
+    }
+  ]
+}

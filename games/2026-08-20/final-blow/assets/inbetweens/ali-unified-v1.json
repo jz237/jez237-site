@@ -1,0 +1,278 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        81,
+        20,
+        260,
+        308
+      ],
+      "rect": [
+        82,
+        11,
+        189,
+        303
+      ],
+      "scale": 1.049129442794457,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 1,
+      "source": [
+        386,
+        15,
+        588,
+        309
+      ],
+      "rect": [
+        71,
+        10,
+        209,
+        304
+      ],
+      "scale": 1.0305084745762711,
+      "areaRatio": 0.9652218153833076
+    },
+    {
+      "frame": 2,
+      "source": [
+        697,
+        15,
+        908,
+        309
+      ],
+      "rect": [
+        74,
+        10,
+        218,
+        304
+      ],
+      "scale": 1.0305084745762711,
+      "areaRatio": 0.9733571442573963
+    },
+    {
+      "frame": 3,
+      "source": [
+        1025,
+        20,
+        1182,
+        309
+      ],
+      "rect": [
+        86,
+        10,
+        166,
+        304
+      ],
+      "scale": 1.0482758620689656,
+      "areaRatio": 0.9985982664849893
+    },
+    {
+      "frame": 4,
+      "source": [
+        96,
+        329,
+        231,
+        623
+      ],
+      "rect": [
+        98,
+        10,
+        140,
+        304
+      ],
+      "scale": 1.0305084745762711,
+      "areaRatio": 0.973737426292894
+    },
+    {
+      "frame": 5,
+      "source": [
+        399,
+        425,
+        546,
+        622
+      ],
+      "rect": [
+        86,
+        107,
+        155,
+        207
+      ],
+      "scale": 1.0446156422212747,
+      "areaRatio": 1.0000000000000004
+    },
+    {
+      "frame": 6,
+      "source": [
+        719,
+        369,
+        858,
+        623
+      ],
+      "rect": [
+        94,
+        49,
+        146,
+        265
+      ],
+      "scale": 1.040626189562478,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 7,
+      "source": [
+        1022,
+        343,
+        1197,
+        622
+      ],
+      "rect": [
+        84,
+        20,
+        185,
+        294
+      ],
+      "scale": 1.0492212346615966,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 8,
+      "source": [
+        94,
+        649,
+        223,
+        935
+      ],
+      "rect": [
+        94,
+        16,
+        135,
+        298
+      ],
+      "scale": 1.0392846339840385,
+      "areaRatio": 1.0000000000000004
+    },
+    {
+      "frame": 9,
+      "source": [
+        401,
+        744,
+        536,
+        915
+      ],
+      "rect": [
+        88,
+        137,
+        140,
+        177
+      ],
+      "scale": 1.0317422940729932,
+      "areaRatio": 1
+    },
+    {
+      "frame": 10,
+      "source": [
+        698,
+        663,
+        923,
+        935
+      ],
+      "rect": [
+        72,
+        30,
+        235,
+        284
+      ],
+      "scale": 1.0394101755242795,
+      "areaRatio": 1
+    },
+    {
+      "frame": 11,
+      "source": [
+        989,
+        668,
+        1240,
+        936
+      ],
+      "rect": [
+        52,
+        35,
+        261,
+        279
+      ],
+      "scale": 1.035778969244049,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 12,
+      "source": [
+        84,
+        959,
+        293,
+        1245
+      ],
+      "rect": [
+        86,
+        21,
+        214,
+        293
+      ],
+      "scale": 1.0191651924241834,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 13,
+      "source": [
+        392,
+        971,
+        613,
+        1244
+      ],
+      "rect": [
+        81,
+        39,
+        223,
+        275
+      ],
+      "scale": 1.0053429407407113,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 14,
+      "source": [
+        697,
+        1026,
+        929,
+        1247
+      ],
+      "rect": [
+        76,
+        87,
+        238,
+        227
+      ],
+      "scale": 1.0235084965838044,
+      "areaRatio": 1
+    },
+    {
+      "frame": 15,
+      "source": [
+        961,
+        1169,
+        1227,
+        1238
+      ],
+      "rect": [
+        26,
+        245,
+        261,
+        69
+      ],
+      "scale": 0.9791548997449203,
+      "areaRatio": 1
+    }
+  ],
+  "source": "exec-539fbdda-4ba8-4110-82ab-e1e73a1f5841.png",
+  "prompt": "Create a new painted animation in-between atlas for Ali, matching the reference identity exactly: slim man with red beanie, glasses, ornate yellow and black tracksuit, gold jewelry and speaker backpack. 16 COMPLETE separate full-body sprites in exactly 4 columns x 4 rows. Match reference cell order and facing direction. Each is a slightly EARLIER moment in the corresponding reference action, with genuinely different joint positions. Row1: ready weight shift; walking front-leg passing into extension; opposite walking foot lifting; opposite stride passing. Row2: rear walk leg passing; lowering into crouch; halfway crouch; forearms rising to guard. Row3: jump push-off arms partially raised; legs gathering into tuck; straight punch elbow halfway extended; front kick knee halfway unfolding. Row4: small hit recoil beginning; stronger backwards recoil beginning; backward stagger starting; body horizontal lying on back settling in SAME head/feet direction as reference cell15, full shoes and head. Preserve physical body size, naturally smaller crouch and lying silhouette. Entire figures including fingers and boots inside their OWN cell with 8% empty padding on all sides. No cropped anatomy, stray pieces or duplicates. Detailed painted game art like the reference. Background solid flat magenta #ff00ff for chroma key. No text, grids, effects or ground shadows."
+}
