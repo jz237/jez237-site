@@ -3,8 +3,8 @@
 // could make Chrome abort the page before it rendered. (Since 5.1 a fetched
 // media file is KEPT, in a second, capped, build-keyed cache — see
 // MEDIA_CACHE_NAME — which is a different thing from installing it.)
-// 5.4.4: add the hosted Jez vs Benny 3D exhibition to the title screen.
-const CACHE_NAME = "final-blow-shell-5.4.4";
+// 5.4.5: smooth painted fighter presentation; move the 3D test to the menu bottom.
+const CACHE_NAME = "final-blow-shell-5.4.5";
 // v5.1 #38 — the RUNTIME media cache. Sheets, audio, stage plates and the 3D
 // renderer's HD/vendor files are still fetched on demand (never at install:
 // the precache alternative is now 81 MB / ~560 files), but once a file has
