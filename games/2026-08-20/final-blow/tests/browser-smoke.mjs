@@ -433,7 +433,7 @@ probe('title-menu', async () => {
     }))()`);
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.4/);
-    assert.equal(title.version.text, 'VERSION 5.4.2');
+    assert.equal(title.version.text, 'VERSION 5.4.3');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -470,7 +470,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.4.2-ringside');
+    assert.equal(title.engineVersion, '5.4.3-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -3911,14 +3911,14 @@ probe('demo-render-motion', async () => {
         if (fighter.sample.x > low + 0.001 && fighter.sample.x < high - 0.001) fractional++;
       }
       if (row.fit) {
-        const { safe, bounds } = row.fit;
-        assert.ok(bounds.left >= safe.left - 0.01 && bounds.right <= safe.right + 0.01);
-        assert.ok(bounds.top >= safe.top - 0.01 && bounds.bottom <= safe.bottom + 0.01);
+        assert.deepEqual(row.fit.matrix, samples.find((sample) => sample.fit).fit.matrix,
+          'demo background transform must remain identical through movement and attacks');
+        assert.equal(row.fit.scale, 0.72);
         framed++;
       }
     }
     assert.ok(fractional > 0, 'the real draw loop must render positions BETWEEN simulation ticks');
-    assert.ok(framed > 60, 'demo framing must run on rendered frames');
+    assert.ok(framed > 60, 'fixed demo framing must be observed on rendered frames');
     await navigate(client, gameUrl);
 });
 
@@ -4462,7 +4462,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.4/);
-    assert.equal(controlledReload.version, '5.4.2-ringside');
+    assert.equal(controlledReload.version, '5.4.3-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4480,7 +4480,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.4/);
-    assert.equal(offlineBoot.version, '5.4.2-ringside');
+    assert.equal(offlineBoot.version, '5.4.3-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4526,7 +4526,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.4.2');
+    assert.equal(landscape.version.text, 'VERSION 5.4.3');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);

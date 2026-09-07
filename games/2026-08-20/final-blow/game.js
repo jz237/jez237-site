@@ -1,4 +1,4 @@
-import { captureMotion, interpolateMotion, fitFrame } from "./engine/render-motion.mjs";
+import { captureMotion, interpolateMotion, fixedDemoFrame } from "./engine/render-motion.mjs";
 import {
   DEFAULT_INPUT_BUFFER_FRAMES,
   DeterministicRng,
@@ -20457,7 +20457,7 @@ function drawRealityBreakAtmosphere(time, amount) {
 
 function drawStage(time) {
   const center = state.fighters.length ? (state.fighters[0].x + state.fighters[1].x) * 0.5 : W * 0.5;
-  const parallax = (center - W * 0.5) * -0.035;
+  const parallax = state.mode === "demo" ? 0 : (center - W * 0.5) * -0.035;
   const reality = finisherRealityAmount();
   drawCover(stageImages[state.stage], parallax);
   drawRackFocus(parallax);
@@ -29697,9 +29697,9 @@ function drawSuperCutIn(dtMs) {
   }
 }
 
-let demoFitScale = 1;
 let demoFitDebug = null;
-function fitDemoFighters(dtMs) {
+function observeDemoFrame() {
+  // Read-only QA: no camera correction is allowed to depend on these bounds.
   const matrix = ctx.getTransform();
   const bounds = { left: Infinity, right: -Infinity, top: Infinity, bottom: -Infinity };
   for (const fighter of state.fighters) {
@@ -29707,28 +29707,12 @@ function fitDemoFighters(dtMs) {
     bounds.left = Math.min(bounds.left, body.left); bounds.right = Math.max(bounds.right, body.right);
     bounds.top = Math.min(bounds.top, body.top); bounds.bottom = Math.max(bounds.bottom, body.bottom);
   }
-  const canvasRect = canvas.getBoundingClientRect();
-  const bugRect = $("#demoHud").getBoundingClientRect();
-  const bugTop = canvasRect.height > 0 && bugRect.height > 0
-    ? (bugRect.top - canvasRect.top) / canvasRect.height * H - 12 : H - 105;
-  const safe = { left: 24, right: W - 24, top: 105, bottom: Math.max(400, Math.min(H - 105, bugTop)) };
-  const fit = fitFrame(bounds, safe);
-  demoFitScale = Math.min(fit.scale, demoFitScale + (1 - demoFitScale) * (1 - Math.exp(-dtMs / 650)));
-  // Recompute translation at the slowly released scale so even a jump or a
-  // corner super stays inside the HUD/letterbox on the first affected frame.
-  const clampShift = (lo, hi) => clamp(0, lo, hi);
-  const x = clampShift(safe.left - bounds.left * demoFitScale, safe.right - bounds.right * demoFitScale);
-  const y = clampShift(safe.top - bounds.top * demoFitScale, safe.bottom - bounds.bottom * demoFitScale);
-  demoFitDebug = { safe, bounds: { left: bounds.left * demoFitScale + x,
-    right: bounds.right * demoFitScale + x, top: bounds.top * demoFitScale + y,
-    bottom: bounds.bottom * demoFitScale + y }, scale: demoFitScale };
-  ctx.setTransform(matrix.a * demoFitScale, matrix.b * demoFitScale,
-    matrix.c * demoFitScale, matrix.d * demoFitScale,
-    matrix.e * demoFitScale + x * renderDpr, matrix.f * demoFitScale + y * renderDpr);
+  demoFitDebug = { bounds, scale: fixedDemoFrame().scale,
+    matrix: [matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f].map((n) => n / renderDpr) };
 }
 
 function draw(time) {
-  if (state.mode !== "demo" || state.screen !== "fight") { demoFitScale = 1; demoFitDebug = null; }
+  if (state.mode !== "demo" || state.screen !== "fight") demoFitDebug = null;
   renderMotionCache = new WeakMap();
   // Wave 5 HUD observers: phase-edge slash wipe and the hold-then-drain
   // damage ghosts, both driven from observed state in the render loop.
@@ -29772,22 +29756,19 @@ function draw(time) {
   // so the flip reads through the chrome instead of being guillotined.
   updateCinema3dHudFade(cinema3dWorld, hudDtMs);
   ctx.save();
-  const shakeScale = state.accessibility.reducedMotion ? 0 : state.accessibility.shakeScale;
+  const stableDemo = state.mode === "demo" && state.screen === "fight" && !state.finisher;
+  const shakeScale = stableDemo || state.accessibility.reducedMotion ? 0 : state.accessibility.shakeScale;
   const shakeX = state.shake > 0 ? Math.sin((state.simulationTick + 1) * 12.9898) * state.shake * 9 * shakeScale : 0;
   const shakeY = state.shake > 0 ? Math.cos((state.simulationTick + 1) * 7.233) * state.shake * 6 * shakeScale : 0;
   // Recoil/handheld offsets ride beside the existing noise shake translate.
-  ctx.translate(shakeX + cinematicCamera.x, shakeY + cinematicCamera.y);
-  // 4.3 DEMO PULL-BACK (2D path): the attract demo is watched from the
-  // couch, so the whole world draws at DEMO_PULLBACK_ZOOM about the floor
-  // centre — feet stay on the floor line, both fighters and their moves sit
-  // well inside the frame. The unscaled stage is painted first so the
-  // revealed margins continue the backdrop instead of showing black.
-  // Presentation-only: nothing here touches the sim.
-  const demoPullback = state.mode === "demo" && state.screen === "fight" && !state.finisher && !cinema3dWorld;
+  if (!stableDemo) ctx.translate(shakeX + cinematicCamera.x, shakeY + cinematicCamera.y);
+  // 5.4.3: one stationary wide shot for the entire demo bout. Sprite poses,
+  // jumps and director zoom requests cannot resize or pan the background.
+  const demoPullback = stableDemo && !cinema3dWorld;
   if (demoPullback) {
-    ctx.translate(W * .5, FLOOR);
-    ctx.scale(DEMO_PULLBACK_ZOOM, DEMO_PULLBACK_ZOOM);
-    ctx.translate(-W * .5, -FLOOR);
+    const frame = fixedDemoFrame();
+    ctx.translate(frame.x, frame.y);
+    ctx.scale(frame.scale, frame.scale);
   }
   if (state.finisher) {
     const camera = finisherCameraTarget();
@@ -29796,7 +29777,7 @@ function draw(time) {
     if (cinematicCamera.rotation !== 0) ctx.rotate(cinematicCamera.rotation);
     ctx.scale(state.cinematicZoom, state.cinematicZoom);
     ctx.translate(-camera.x, -camera.y);
-  } else if (cinematicCamera.zoom !== 1 || cinematicCamera.rotation !== 0) {
+  } else if (!stableDemo && (cinematicCamera.zoom !== 1 || cinematicCamera.rotation !== 0)) {
     // Presentation-only zoom punch/dolly about its focus point. Zoom is always
     // >= 1 and the focus stays inside the frame, so the world always covers
     // the canvas; identity (the normal-play state) skips this entirely.
@@ -29839,7 +29820,7 @@ function draw(time) {
       ctx.fillStyle = "rgba(2,3,5,.55)";
       ctx.fillRect(0, 0, W, H);
       ctx.restore();
-      fitDemoFighters(hudDtMs);
+      observeDemoFrame();
     }
     drawStage(time);
     if (state.screen === "fight") {
@@ -32862,7 +32843,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.2");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.3");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34299,7 +34280,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.2-ringside",
+  version: "5.4.3-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -36673,7 +36654,6 @@ renderControlStyleCopy();
 // world-draw handoff happens per-frame in draw() via cinema3dWorldActive().
 // Battery performance profile refuses activation entirely.
 // ---------------------------------------------------------------------------
-const DEMO_PULLBACK_ZOOM = 0.86;
 const cinema3dBridge = { renderer: null, loading: false, onHit: null, onDust: null };
 
 function cinema3dAllowed() {

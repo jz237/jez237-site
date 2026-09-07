@@ -20,13 +20,8 @@ export function interpolateMotion(fighter, previous, alpha) {
   return result;
 }
 
-// Fit a transformed pair of sprite bounds inside the unobscured broadcast area.
-// Pull back immediately when needed; the caller eases the release only.
-export function fitFrame(bounds, safe) {
-  const scale = Math.min(1, (safe.right - safe.left) / Math.max(1, bounds.right - bounds.left),
-    (safe.bottom - safe.top) / Math.max(1, bounds.bottom - bounds.top));
-  const clamp = (n, lo, hi) => Math.max(lo, Math.min(hi, n));
-  return { scale,
-    x: clamp(0, safe.left - bounds.left * scale, safe.right - bounds.right * scale),
-    y: clamp(0, safe.top - bounds.top * scale, safe.bottom - bounds.bottom * scale) };
+// A fixed wide shot: independent of pose, spacing, HUD height or frame time.
+// Full-size stage coordinates are 1280x720 with the floor at y=600.
+export function fixedDemoFrame() {
+  return { scale: 0.72, x: 1280 * (1 - 0.72) / 2, y: 560 - 600 * 0.72 };
 }

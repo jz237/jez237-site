@@ -46,6 +46,7 @@ export class FramingCamera {
     // a slight pull-back beyond it, so both fighters and their moves stay in
     // frame even when the AIs close the gap.
     const demo = state.mode === "demo";
+    const stableDemo = demo && !state.finisher;
     const margin = demo ? 0.78 : FRAME_MARGIN;
     let mid = 0;
     let halfNeed = this.halfWidthAtPlane;
@@ -59,10 +60,12 @@ export class FramingCamera {
     } else {
       this.smoothedMid += (0 - this.smoothedMid) * ease;
     }
+    if (stableDemo) this.smoothedMid = 0;
     const camX = this.smoothedMid * PARALLAX_FOLLOW;
     const fillFloor = fighters.length === 2 ? (demo ? 1.1 : MIN_FILL) : 1;
     const distance = this.baseDistance * Math.max(fillFloor, halfNeed / (this.halfWidthAtPlane * 0.985));
-    this.smoothedDistance += (distance - this.smoothedDistance) * ease;
+    if (stableDemo) this.smoothedDistance = this.baseDistance * 1.18;
+    else this.smoothedDistance += (distance - this.smoothedDistance) * ease;
 
     // --- Cinematic presentation moves (KO punch-in, recoil, dutch tilt) ----
     // Demo: cinematic punch-ins stay, but capped so the pair never leaves frame
@@ -72,20 +75,20 @@ export class FramingCamera {
     // the shot frames one fighter on purpose, so "the pair never leaves
     // frame" is exactly what it is meant to break for a second.
     const demoCap = cinematic?.demoShot ? DEMO_3D_SHOT_ZOOM_CAP : 1.12;
-    const zoom = Math.min(demo ? demoCap : Infinity, Math.max(1, cinematic?.zoom ?? 1));
+    const zoom = stableDemo ? 1 : Math.min(demo ? demoCap : Infinity, Math.max(1, cinematic?.zoom ?? 1));
     const punch = 1 - 1 / zoom;
     const focusX = worldX(cinematic?.focusX ?? SIM_W * 0.5);
     const focusY = worldY(cinematic?.focusY ?? SIM_H * 0.5);
     // 2D translate offsets (px, y-down) become truck/pedestal moves.
-    const truckX = -(cinematic?.x ?? 0) * PX;
-    const truckY = (cinematic?.y ?? 0) * PX;
+    const truckX = stableDemo ? 0 : -(cinematic?.x ?? 0) * PX;
+    const truckY = stableDemo ? 0 : (cinematic?.y ?? 0) * PX;
     // Screen shake reuses the exact 2D noise driven by simulationTick.
-    const shakeScale = state.accessibility?.reducedMotion ? 0 : (state.accessibility?.shakeScale ?? 1);
+    const shakeScale = stableDemo || state.accessibility?.reducedMotion ? 0 : (state.accessibility?.shakeScale ?? 1);
     const shakeX = state.shake > 0 ? Math.sin((state.simulationTick + 1) * 12.9898) * state.shake * 9 * shakeScale * PX : 0;
     const shakeY = state.shake > 0 ? Math.cos((state.simulationTick + 1) * 7.233) * state.shake * 6 * shakeScale * PX : 0;
     // Subtle handheld drift so a static shot still breathes (freezes cleanly).
-    const driftX = Math.sin(timeSec * 0.31) * 0.014 + Math.sin(timeSec * 0.117) * 0.008;
-    const driftY = Math.cos(timeSec * 0.23) * 0.009;
+    const driftX = stableDemo ? 0 : Math.sin(timeSec * 0.31) * 0.014 + Math.sin(timeSec * 0.117) * 0.008;
+    const driftY = stableDemo ? 0 : Math.cos(timeSec * 0.23) * 0.009;
 
     const px = camX + truckX + shakeX + driftX;
     const py = EYE_HEIGHT + truckY + shakeY + driftY;
@@ -114,7 +117,7 @@ export class FramingCamera {
     const gazeY = THREE.MathUtils.lerp(lookY, focusY, punch);
     camera.lookAt(gazeX, gazeY, 0);
     // Dutch tilt -> genuine camera roll.
-    const roll = -(cinematic?.rotation ?? 0);
+    const roll = stableDemo ? 0 : -(cinematic?.rotation ?? 0);
     if (roll !== 0) camera.rotateZ(roll);
     camera.updateMatrixWorld();
   }
