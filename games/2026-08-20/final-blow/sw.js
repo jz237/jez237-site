@@ -3,8 +3,8 @@
 // could make Chrome abort the page before it rendered. (Since 5.1 a fetched
 // media file is KEPT, in a second, capped, build-keyed cache — see
 // MEDIA_CACHE_NAME — which is a different thing from installing it.)
-// 5.4.5: smooth painted fighter presentation; move the 3D test to the menu bottom.
-const CACHE_NAME = "final-blow-shell-5.4.5";
+// 5.4.6: new painted strike frames and cropped-cell rejection.
+const CACHE_NAME = "final-blow-shell-5.4.6";
 // v5.1 #38 — the RUNTIME media cache. Sheets, audio, stage plates and the 3D
 // renderer's HD/vendor files are still fetched on demand (never at install:
 // the precache alternative is now 81 MB / ~560 files), but once a file has
@@ -28,6 +28,8 @@ const SHELL = [
   "./icon.svg",
   "./engine/foundation.mjs",
   "./engine/render-motion.mjs",
+  "./engine/painted-flow.mjs",
+  "./engine/clipped-cells.mjs",
   "./engine/defense.mjs",
   "./engine/combos.mjs",
   "./engine/fighter-kits.mjs",
