@@ -32843,7 +32843,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.3");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.4");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33558,6 +33558,7 @@ function menuPadLoop() {
 $$('[data-mode]').forEach((button) => button.addEventListener("click", () => startSelect(button.dataset.mode)));
 $("#onlineButton").addEventListener("click", openOnlineLobby);
 $("#demoButton").addEventListener("click", () => startDemo());
+$("#demo3dButton").addEventListener("click", () => { window.location.href = "../../demos/final-blow-3d/"; });
 // 5.4 #30: the demo HUD's share bug. `click` only — the capture-phase
 // pointerdown guard above has already let this press through.
 $("#demoShareButton").addEventListener("click", (event) => {
@@ -34280,7 +34281,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.3-ringside",
+  version: "5.4.4-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
