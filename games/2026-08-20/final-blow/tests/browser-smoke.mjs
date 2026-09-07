@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'demo3dButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.4/);
-    assert.equal(title.version.text, 'VERSION 5.4.6');
+    assert.equal(title.version.text, 'VERSION 5.4.7');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.4.6-ringside');
+    assert.equal(title.engineVersion, '5.4.7-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -3678,6 +3678,26 @@ probe('painted-flow-frames', async () => {
   await navigate(client, gameUrl);
 });
 
+probe('painted-companions', async () => {
+  await evaluate(client, `window.__finalBlowQa.fight('jez','benny')`);
+  await delay(1600);
+  const coverage = await evaluate(client, `(() => {
+    const qa=window.__finalBlowQa, result={};
+    for (const id of ['jez','benny']) {
+      const seen=new Set();
+      const sample=()=>{ for(let i=0;i<80;i++){qa.step(1/60);qa.pose();} for(const p of qa.poseTrace(64,0)) if(p.artBank) seen.add(p.artBank); };
+      for(const input of [{right:true},{jump:true},{down:true,light:true},{down:true,heavy:true,limb:'kick'},{special:true},{taunt:true}]) {
+        qa.fight(id,id==='jez'?'benny':'jez');qa.positions(400,950);qa.step(.4);qa.poseTraceReset();qa.input(0,input,30);sample();
+      }
+      qa.fight(id,id==='jez'?'benny':'jez');qa.step(.4);qa.poseTraceReset();qa.fighter(0,{dizzyFrames:35});sample();
+      result[id]=[...seen].sort();
+    }
+    return result;
+  })()`);
+  const expected=['inbetween-specials','inbetween-unified','inbetween-unified-ext2','inbetween-unified-ext3','inbetween-unified-ext4','inbetween-unified-ext5'];
+  for(const id of ['jez','benny']) assert.deepEqual(coverage[id],expected,`${id} must use all six companion banks in live sequences`);
+});
+
 probe('pose-trace-chains', async () => {
   await evaluate(client, `window.__finalBlowQa.fight('jez', 'benny')`);
   await delay(1500);
@@ -3700,7 +3720,7 @@ probe('pose-trace-chains', async () => {
       window.__finalBlowQa.step(1 / 60);
       window.__finalBlowQa.pose();
     }
-    return window.__finalBlowQa.poseTrace(64, 0).map((entry) => entry.bank + ':' + entry.frame);
+    return window.__finalBlowQa.poseTrace(64, 0).map((entry) => entry.bank + ':' + entry.frame).filter((value,index,all)=>index===0 || value!==all[index-1]);
   })`;
   poseChains = await evaluate(client, `(() => {
     const run = ${CHAIN_PROBE};
@@ -4485,7 +4505,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.4/);
-    assert.equal(controlledReload.version, '5.4.6-ringside');
+    assert.equal(controlledReload.version, '5.4.7-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4503,7 +4523,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.4/);
-    assert.equal(offlineBoot.version, '5.4.6-ringside');
+    assert.equal(offlineBoot.version, '5.4.7-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4549,7 +4569,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.4.6');
+    assert.equal(landscape.version.text, 'VERSION 5.4.7');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);

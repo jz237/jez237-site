@@ -1,0 +1,278 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        81,
+        35,
+        294,
+        306
+      ],
+      "rect": [
+        85,
+        38,
+        217,
+        276
+      ],
+      "scale": 1.0132849912869786,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 1,
+      "source": [
+        392,
+        25,
+        570,
+        306
+      ],
+      "rect": [
+        81,
+        32,
+        179,
+        282
+      ],
+      "scale": 1.0011375580892157,
+      "areaRatio": 1
+    },
+    {
+      "frame": 2,
+      "source": [
+        714,
+        77,
+        862,
+        306
+      ],
+      "rect": [
+        89,
+        81,
+        151,
+        233
+      ],
+      "scale": 1.0118819726277801,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 3,
+      "source": [
+        971,
+        60,
+        1238,
+        306
+      ],
+      "rect": [
+        35,
+        66,
+        269,
+        248
+      ],
+      "scale": 1.0050429373453529,
+      "areaRatio": 0.9999999999999997
+    },
+    {
+      "frame": 4,
+      "source": [
+        71,
+        360,
+        309,
+        621
+      ],
+      "rect": [
+        70,
+        47,
+        244,
+        267
+      ],
+      "scale": 1.0192046412840123,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 5,
+      "source": [
+        408,
+        359,
+        544,
+        621
+      ],
+      "rect": [
+        96,
+        47,
+        139,
+        267
+      ],
+      "scale": 1.0163223771478103,
+      "areaRatio": 1
+    },
+    {
+      "frame": 6,
+      "source": [
+        655,
+        392,
+        929,
+        618
+      ],
+      "rect": [
+        43,
+        94,
+        266,
+        220
+      ],
+      "scale": 0.9690804468630778,
+      "areaRatio": 1
+    },
+    {
+      "frame": 7,
+      "source": [
+        1008,
+        378,
+        1174,
+        623
+      ],
+      "rect": [
+        74,
+        64,
+        169,
+        250
+      ],
+      "scale": 1.0145058978419192,
+      "areaRatio": 1
+    },
+    {
+      "frame": 8,
+      "source": [
+        34,
+        688,
+        300,
+        931
+      ],
+      "rect": [
+        36,
+        66,
+        271,
+        248
+      ],
+      "scale": 1.015606368252889,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 9,
+      "source": [
+        361,
+        775,
+        567,
+        923
+      ],
+      "rect": [
+        38,
+        164,
+        209,
+        150
+      ],
+      "scale": 1.0077427193360182,
+      "areaRatio": 0.9999999999999998
+    },
+    {
+      "frame": 10,
+      "source": [
+        647,
+        751,
+        907,
+        924
+      ],
+      "rect": [
+        26,
+        136,
+        267,
+        178
+      ],
+      "scale": 1.021763267398015,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 11,
+      "source": [
+        942,
+        742,
+        1206,
+        931
+      ],
+      "rect": [
+        6,
+        125,
+        263,
+        189
+      ],
+      "scale": 0.9933118138698379,
+      "areaRatio": 1
+    },
+    {
+      "frame": 12,
+      "source": [
+        14,
+        1097,
+        262,
+        1238
+      ],
+      "rect": [
+        6,
+        166,
+        259,
+        148
+      ],
+      "scale": 1.0401662009124581,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 13,
+      "source": [
+        374,
+        1010,
+        567,
+        1238
+      ],
+      "rect": [
+        54,
+        73,
+        204,
+        241
+      ],
+      "scale": 1.0538339706689328,
+      "areaRatio": 1
+    },
+    {
+      "frame": 14,
+      "source": [
+        641,
+        1073,
+        908,
+        1233
+      ],
+      "rect": [
+        8,
+        148,
+        277,
+        166
+      ],
+      "scale": 1.03304539649976,
+      "areaRatio": 0.9999999999999998
+    },
+    {
+      "frame": 15,
+      "source": [
+        951,
+        1166,
+        1243,
+        1238
+      ],
+      "rect": [
+        13,
+        239,
+        300,
+        75
+      ],
+      "scale": 1.0227312157480548,
+      "areaRatio": 1.0000000000000002
+    }
+  ],
+  "source": "exec-1cbe7798-a839-44f5-b569-7a27063cf585.png",
+  "prompt": "Create an ADDITIONAL IN-BETWEEN reaction sprite atlas matching this reference exactly in character identity, painted detail, costume, lighting and 4x4 cell order. Jez: white slicked hair, glasses, sleeveless blue gi, black belt and gloves, brown boots. Exactly sixteen complete separate full-body sprites, four columns four rows, facing the same direction as the corresponding reference pose. Pure flat MAGENTA #ff00ff background for chroma key, no shadows, text, grids, effects, blood or extra figures. Each pose is an EARLIER, LESS EXTREME stage of its corresponding reference pose: same action, but partway INTO it, not an identical copy. Row1: 0 guard arms halfway raised toward crossed protection; 1 head just starting to recoil with neck not fully arched; 2 torso starting to fold toward body blow, hands moving to abdomen; 3 weight moving backward but less reclined than reference big hit. Row2: 4 stagger with rear heel just lifting; 5 dizzy shoulders beginning to slump, head slightly higher; 6 airborne backwards launch body less arched; 7 airborne hit curled less tightly (same overall inverted orientation as source cell). Row3: 8 wall-splat arms and legs not yet fully spread; 9 crumple descending onto one knee, palms reaching down; 10 backwards fall, knees slightly less raised; 11 floor bounce with body a little lower and legs less elevated. Row4: 12 getup on hands/knees with hips beginning to rise; 13 getup halfway from kneel toward standing, hands lifting; 14 thrown body rotating toward horizontal; 15 lying on back nearly settled, knees minimally bent, head and arms on ground. Anatomically coherent small transitional changes. Keep SAME body scale across ALL cells: a crouching/lying figure is naturally shorter, NEVER enlarge a crouch to fill its cell. Entire bodies inside their own cells with at least 5% padding including stretched arms, full boots, head. Preserve faces and anatomy; no missing limbs, no clipping. These are transition drawings for a game, not a pose redesign."
+}

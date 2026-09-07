@@ -1,0 +1,278 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        49,
+        100,
+        258,
+        322
+      ],
+      "rect": [
+        23,
+        65,
+        234,
+        249
+      ],
+      "scale": 1.1155786491995867,
+      "areaRatio": 1.0000000000000004
+    },
+    {
+      "frame": 1,
+      "source": [
+        347,
+        133,
+        569,
+        327
+      ],
+      "rect": [
+        18,
+        127,
+        214,
+        187
+      ],
+      "scale": 0.9584799872927059,
+      "areaRatio": 1
+    },
+    {
+      "frame": 2,
+      "source": [
+        676,
+        124,
+        928,
+        326
+      ],
+      "rect": [
+        40,
+        101,
+        265,
+        213
+      ],
+      "scale": 1.0476846365405468,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 3,
+      "source": [
+        1038,
+        63,
+        1212,
+        322
+      ],
+      "rect": [
+        100,
+        39,
+        185,
+        275
+      ],
+      "scale": 1.0560238875392025,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 4,
+      "source": [
+        85,
+        438,
+        225,
+        625
+      ],
+      "rect": [
+        84,
+        116,
+        149,
+        198
+      ],
+      "scale": 1.0536310782819098,
+      "areaRatio": 1
+    },
+    {
+      "frame": 5,
+      "source": [
+        363,
+        363,
+        568,
+        589
+      ],
+      "rect": [
+        53,
+        60,
+        231,
+        254
+      ],
+      "scale": 1.1200424150321047,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 6,
+      "source": [
+        697,
+        365,
+        927,
+        585
+      ],
+      "rect": [
+        58,
+        69,
+        256,
+        245
+      ],
+      "scale": 1.1069843301676585,
+      "areaRatio": 1
+    },
+    {
+      "frame": 7,
+      "source": [
+        1022,
+        445,
+        1215,
+        614
+      ],
+      "rect": [
+        75,
+        129,
+        211,
+        185
+      ],
+      "scale": 1.0862479034172678,
+      "areaRatio": 1
+    },
+    {
+      "frame": 8,
+      "source": [
+        58,
+        662,
+        271,
+        935
+      ],
+      "rect": [
+        56,
+        29,
+        223,
+        285
+      ],
+      "scale": 1.0407786899716323,
+      "areaRatio": 0.9999999999999997
+    },
+    {
+      "frame": 9,
+      "source": [
+        409,
+        642,
+        552,
+        935
+      ],
+      "rect": [
+        99,
+        15,
+        147,
+        299
+      ],
+      "scale": 1.0175468693350223,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 10,
+      "source": [
+        680,
+        661,
+        904,
+        935
+      ],
+      "rect": [
+        58,
+        36,
+        228,
+        278
+      ],
+      "scale": 1.011679482565415,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 11,
+      "source": [
+        1039,
+        636,
+        1183,
+        938
+      ],
+      "rect": [
+        94,
+        10,
+        145,
+        304
+      ],
+      "scale": 1.0033003300330032,
+      "areaRatio": 0.9667526235061816
+    },
+    {
+      "frame": 12,
+      "source": [
+        46,
+        963,
+        224,
+        1239
+      ],
+      "rect": [
+        51,
+        16,
+        193,
+        298
+      ],
+      "scale": 1.076832564888185,
+      "areaRatio": 1
+    },
+    {
+      "frame": 13,
+      "source": [
+        394,
+        1037,
+        535,
+        1240
+      ],
+      "rect": [
+        85,
+        101,
+        148,
+        213
+      ],
+      "scale": 1.0434951594197472,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 14,
+      "source": [
+        664,
+        979,
+        925,
+        1241
+      ],
+      "rect": [
+        36,
+        35,
+        278,
+        279
+      ],
+      "scale": 1.0618497946011185,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 15,
+      "source": [
+        1049,
+        969,
+        1200,
+        1242
+      ],
+      "rect": [
+        103,
+        28,
+        159,
+        286
+      ],
+      "scale": 1.0453031966248159,
+      "areaRatio": 1.0000000000000002
+    }
+  ],
+  "source": "exec-b14db49b-d823-4a89-9e27-75515349f332.png",
+  "prompt": "Create 16 additional painted animation IN-BETWEEN sprites from this exact Benny sheet. Exact same character, grey baseball cap, black fitted T-shirt, khaki cargo trousers, belt and side pouch, black fingerless gloves and black boots, detailed hand-painted style. Exactly 4 columns x 4 rows, preserve reference cell order and each pose's action/direction. Pure solid MAGENTA #ff00ff backdrop, no text/grid/effects. Each figure is a distinct slightly EARLIER moment in the same action, not a duplicate: row1 dash push-off with rear boot still near ground; dash travelling with limbs halfway between drive and stretch; braking with knee starting to bend; torso halfway through a turnaround. Row2 knees gathering toward apex tuck; legs just beginning to unfold for descent; airborne legs halfway toward landing; airborne hit torso beginning to pitch forward. Row3 power-up chest expanding arms opening; entrance hand approaching cap brim; entrance opening hand toward opponent; victory arms HALFWAY raised overhead. Row4 taunt hand beginning its beckoning gesture; crouch guard forearms moving into cross; throw hands reaching halfway toward the opponent; dizzy weight starting to sag sideways. Keep pose categories and silhouettes close enough to interpolate with the corresponding original. CRITICAL: restore COMPLETE HEADS and COMPLETE HANDS on entrance, victory and taunt; the reference is cropped there and that defect must NOT be copied. ALL sprites fully contained with 6% clear margins. Same physical body scale across all sixteen, crouches/tucks are naturally shorter, never enlarged. No props, backgrounds, duplicates, extra limbs, detached hands or clipped head/hair."
+}

@@ -1,0 +1,278 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        42,
+        39,
+        278,
+        303
+      ],
+      "rect": [
+        29,
+        32,
+        252,
+        282
+      ],
+      "scale": 1.0653587726056402,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 1,
+      "source": [
+        316,
+        87,
+        647,
+        306
+      ],
+      "rect": [
+        8,
+        113,
+        304,
+        201
+      ],
+      "scale": 0.9156626506024096,
+      "areaRatio": 0.8312971243594499
+    },
+    {
+      "frame": 2,
+      "source": [
+        673,
+        98,
+        923,
+        306
+      ],
+      "rect": [
+        42,
+        99,
+        259,
+        215
+      ],
+      "scale": 1.03052383720183,
+      "areaRatio": 1
+    },
+    {
+      "frame": 3,
+      "source": [
+        1004,
+        24,
+        1209,
+        306
+      ],
+      "rect": [
+        64,
+        18,
+        215,
+        296
+      ],
+      "scale": 1.0449414104393489,
+      "areaRatio": 1
+    },
+    {
+      "frame": 4,
+      "source": [
+        16,
+        415,
+        272,
+        611
+      ],
+      "rect": [
+        6,
+        97,
+        283,
+        217
+      ],
+      "scale": 1.1010184326224801,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 5,
+      "source": [
+        348,
+        420,
+        566,
+        607
+      ],
+      "rect": [
+        6,
+        68,
+        286,
+        246
+      ],
+      "scale": 1.3075138279959269,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 6,
+      "source": [
+        639,
+        333,
+        912,
+        616
+      ],
+      "rect": [
+        14,
+        10,
+        293,
+        304
+      ],
+      "scale": 1.0704225352112675,
+      "areaRatio": 0.937328477326857
+    },
+    {
+      "frame": 7,
+      "source": [
+        983,
+        330,
+        1207,
+        615
+      ],
+      "rect": [
+        41,
+        11,
+        238,
+        303
+      ],
+      "scale": 1.0594081465388414,
+      "areaRatio": 1
+    },
+    {
+      "frame": 8,
+      "source": [
+        81,
+        711,
+        226,
+        929
+      ],
+      "rect": [
+        73,
+        76,
+        158,
+        238
+      ],
+      "scale": 1.0854141560775714,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 9,
+      "source": [
+        365,
+        633,
+        541,
+        930
+      ],
+      "rect": [
+        53,
+        10,
+        181,
+        304
+      ],
+      "scale": 1.0201342281879195,
+      "areaRatio": 0.8275206625459305
+    },
+    {
+      "frame": 10,
+      "source": [
+        705,
+        621,
+        864,
+        930
+      ],
+      "rect": [
+        89,
+        10,
+        157,
+        304
+      ],
+      "scale": 0.9806451612903225,
+      "areaRatio": 0.80616661783647
+    },
+    {
+      "frame": 11,
+      "source": [
+        950,
+        716,
+        1210,
+        930
+      ],
+      "rect": [
+        6,
+        79,
+        285,
+        235
+      ],
+      "scale": 1.0915971400776447,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 12,
+      "source": [
+        41,
+        952,
+        256,
+        1230
+      ],
+      "rect": [
+        30,
+        10,
+        235,
+        304
+      ],
+      "scale": 1.0896057347670252,
+      "areaRatio": 0.9856476961427626
+    },
+    {
+      "frame": 13,
+      "source": [
+        325,
+        975,
+        575,
+        1235
+      ],
+      "rect": [
+        6,
+        10,
+        292,
+        304
+      ],
+      "scale": 1.1647509578544062,
+      "areaRatio": 0.9956724406185657
+    },
+    {
+      "frame": 14,
+      "source": [
+        635,
+        941,
+        926,
+        1235
+      ],
+      "rect": [
+        13,
+        10,
+        301,
+        304
+      ],
+      "scale": 1.0305084745762711,
+      "areaRatio": 0.8326163610883718
+    },
+    {
+      "frame": 15,
+      "source": [
+        1005,
+        934,
+        1196,
+        1235
+      ],
+      "rect": [
+        69,
+        10,
+        193,
+        304
+      ],
+      "scale": 1.0066225165562914,
+      "areaRatio": 0.914627092751914
+    }
+  ],
+  "source": "exec-9dfe73dc-ac6a-448f-886e-e2703c08ef62.png",
+  "prompt": "Repair and expand this Jez special-move animation sheet with 16 new earlier transitional drawings. Exactly4 columns4 rows same cell actions: row1 energy blade windup, forward blade thrust halfway extending, blade punch retracting, blade guard settling; row2 low blade crouch preparation, dashing knee drive, turning blade elbow swing, blade guard recovery; row3 crouching launch, rising uppercut halfway extending with COMPLETE raised hand, airborne overhead slash with COMPLETE hand and blade, crouched landing; row4 energy charging palms, rapid palm strike with bent elbow, downward blade slash, victory with COMPLETE raised hand. Preserve character white hair glasses blue gi brown boots and highly detailed painted anatomy. Preserve blue magical energy accents but keep effects small and inside cells. PURE MAGENTA #ff00ff backdrop. All sixteen FULL bodies, full heads and hands/boots with 8% clear margin. No clipped source defects: reconstruct missing raised hands in cells9,10,14,15, and full blade tips. Each new pose slightly earlier than reference, no identical copies. Same physical size across frames, crouches naturally shorter, never enlarge them."
+}

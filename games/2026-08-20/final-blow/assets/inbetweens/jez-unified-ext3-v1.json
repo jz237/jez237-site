@@ -1,0 +1,278 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        58,
+        38,
+        290,
+        304
+      ],
+      "rect": [
+        58,
+        26,
+        252,
+        288
+      ],
+      "scale": 1.0799990712542693,
+      "areaRatio": 1
+    },
+    {
+      "frame": 1,
+      "source": [
+        378,
+        40,
+        618,
+        304
+      ],
+      "rect": [
+        60,
+        35,
+        254,
+        279
+      ],
+      "scale": 1.0546168729773258,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 2,
+      "source": [
+        664,
+        30,
+        880,
+        306
+      ],
+      "rect": [
+        47,
+        23,
+        228,
+        291
+      ],
+      "scale": 1.049317382564974,
+      "areaRatio": 1
+    },
+    {
+      "frame": 3,
+      "source": [
+        986,
+        44,
+        1216,
+        305
+      ],
+      "rect": [
+        58,
+        37,
+        244,
+        277
+      ],
+      "scale": 1.0571146235716342,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 4,
+      "source": [
+        48,
+        420,
+        282,
+        590
+      ],
+      "rect": [
+        47,
+        130,
+        253,
+        184
+      ],
+      "scale": 1.0774345773525182,
+      "areaRatio": 1
+    },
+    {
+      "frame": 5,
+      "source": [
+        352,
+        440,
+        615,
+        584
+      ],
+      "rect": [
+        85,
+        188,
+        229,
+        126
+      ],
+      "scale": 0.8656795841626209,
+      "areaRatio": 1
+    },
+    {
+      "frame": 6,
+      "source": [
+        672,
+        354,
+        894,
+        570
+      ],
+      "rect": [
+        53,
+        87,
+        233,
+        227
+      ],
+      "scale": 1.0452929642832405,
+      "areaRatio": 1
+    },
+    {
+      "frame": 7,
+      "source": [
+        970,
+        373,
+        1205,
+        572
+      ],
+      "rect": [
+        75,
+        111,
+        239,
+        203
+      ],
+      "scale": 1.0131615259299547,
+      "areaRatio": 1
+    },
+    {
+      "frame": 8,
+      "source": [
+        91,
+        639,
+        225,
+        842
+      ],
+      "rect": [
+        90,
+        102,
+        140,
+        212
+      ],
+      "scale": 1.0391927392930354,
+      "areaRatio": 1
+    },
+    {
+      "frame": 9,
+      "source": [
+        364,
+        621,
+        545,
+        909
+      ],
+      "rect": [
+        57,
+        10,
+        191,
+        304
+      ],
+      "scale": 1.0519031141868511,
+      "areaRatio": 0.9383989366578772
+    },
+    {
+      "frame": 10,
+      "source": [
+        665,
+        733,
+        862,
+        906
+      ],
+      "rect": [
+        48,
+        123,
+        218,
+        191
+      ],
+      "scale": 1.099320698349201,
+      "areaRatio": 1
+    },
+    {
+      "frame": 11,
+      "source": [
+        963,
+        651,
+        1208,
+        906
+      ],
+      "rect": [
+        45,
+        39,
+        265,
+        275
+      ],
+      "scale": 1.0761320837810402,
+      "areaRatio": 1
+    },
+    {
+      "frame": 12,
+      "source": [
+        73,
+        1022,
+        208,
+        1206
+      ],
+      "rect": [
+        80,
+        110,
+        150,
+        204
+      ],
+      "scale": 1.1035966155040573,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 13,
+      "source": [
+        309,
+        1009,
+        573,
+        1207
+      ],
+      "rect": [
+        12,
+        108,
+        275,
+        206
+      ],
+      "scale": 1.0375747927923133,
+      "areaRatio": 1
+    },
+    {
+      "frame": 14,
+      "source": [
+        686,
+        935,
+        878,
+        1208
+      ],
+      "rect": [
+        88,
+        27,
+        202,
+        287
+      ],
+      "scale": 1.0461046140527006,
+      "areaRatio": 0.9999999999999998
+    },
+    {
+      "frame": 15,
+      "source": [
+        931,
+        1046,
+        1210,
+        1207
+      ],
+      "rect": [
+        32,
+        151,
+        282,
+        163
+      ],
+      "scale": 1.0064217975896717,
+      "areaRatio": 1
+    }
+  ],
+  "source": "exec-6c62a54b-74b7-4da9-9065-c78673222ea0.png",
+  "prompt": "Create 16 detailed painted in-between combat sprites of Jez from this reference. White swept hair, glasses, blue gi, wraps and gloves, brown boots. EXACT4x4 ordering. Solid magenta #ff00ff background. Each sprite is a slightly earlier moment, with partially flexed joints, in the corresponding action. Row1: straight punch extending; front kick extending; punch follow through; fast straight punch with complete visible fist (NO smear). Row2: crouch punch extending; low sweep extending; airborne punch extending; airborne kick extending. Row3: airborne knee chamber; uppercut with elbow still bent, COMPLETE raised fist; landing crouch absorbing weight; turning kick halfway retracting. Row4: crouch guard forearms rising; heavy punch extending; high kick with knee partly bent and COMPLETE head and boot; sweep following through. CRITICAL: source has clipped bodies in cells3,9,13,14; restore missing anatomy, do not copy rectangular cuts. All sixteen must include entire head, hands and boots with 8 percent margin inside their own cells. Keep consistent physical anatomy/scale, natural short crouched bodies, no extra limbs or effects or grids/text. Not exact duplicate poses."
+}
