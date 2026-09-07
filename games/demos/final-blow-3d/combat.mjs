@@ -1,21 +1,21 @@
-export const MOVES={jab:{duration:.30,hit:.09,range:1.36,damage:5,clip:'jab'},hook:{duration:.42,hit:.12,range:1.32,damage:9,clip:'hook'},uppercut:{duration:.46,hit:.14,range:1.2,damage:11,clip:'uppercut'},kick:{duration:.60,hit:.23,range:1.78,damage:12,clip:'roundhouse'},high:{duration:.55,hit:.20,range:1.63,damage:10,clip:'high_kick'}};
+export const MOVES={sweep:{duration:.66,hit:.24,range:1.7,damage:11,clip:'sweep',label:'LOW SWEEP',limb:'foot',height:.35},straight:{duration:.44,hit:.14,range:1.6,damage:10,clip:'stance_punch',label:'POWER STRAIGHT'},doublejab:{duration:.60,hit:.09,hits:[.09,.39],range:1.5,damage:4,clip:'double_jab',label:'ONE–TWO JABS'},jab:{duration:.30,hit:.09,range:1.36,damage:5,clip:'jab'},hook:{duration:.42,hit:.12,range:1.32,damage:9,clip:'hook'},uppercut:{duration:.46,hit:.14,range:1.2,damage:11,clip:'uppercut'},kick:{duration:.60,hit:.23,range:1.78,damage:12,clip:'roundhouse'},high:{duration:.55,hit:.20,range:1.63,damage:10,clip:'high_kick'}};
 export class Combat {
  constructor(seed=237,profiles=[]){this.profiles=profiles;this.seed=seed>>>0;this.round=0;this.wins=[0,0];this.hits=0;this.blocks=0;this.events=[];this.resetRound();}
  move(f){return this.profiles[f.id]?.[f.move]||MOVES[f.move];}
  random(){this.seed=(Math.imul(this.seed,1664525)+1013904223)>>>0;return this.seed/4294967296;}
- resetRound(){this.round++;this.time=60;this.phase='intro';this.phaseTime=2.4;this.fighters=[0,1].map((id)=>({id,x:id?1.16:-1.16,previousX:id?1.16:-1.16,face:id?-1:1,hp:100,state:'idle',t:0,duration:0,move:null,hit:false,think:.3+id*.3,velocity:0,serial:0}));}
- act(f,state,duration,move=null){f.state=state;f.t=0;f.duration=duration;f.move=move;f.hit=false;f.serial++;}
+ resetRound(){this.round++;this.time=60;this.phase='intro';this.phaseTime=2.4;this.fighters=[0,1].map((id)=>({id,x:id?1.16:-1.16,previousX:id?1.16:-1.16,face:id?-1:1,hp:100,state:'idle',t:0,duration:0,move:null,hit:false,hitIndex:0,lastMove:null,think:.3+id*.3,velocity:0,serial:0}));}
+ act(f,state,duration,move=null){f.state=state;f.t=0;f.duration=duration;f.move=move;f.hit=false;f.hitIndex=0;f.comboHits=0;if(move)f.lastMove=move;f.serial++;}
  step(dt){
   for(const f of this.fighters)f.previousX=f.x;
   if(this.phase!=='fight'){this.phaseTime-=dt;if(this.phaseTime<=0){if(this.phase==='intro'){this.phase='fight';this.events.push({type:'fight'});}else{if(this.wins.some(n=>n===2)){this.round=0;this.wins=[0,0];}this.resetRound();}}return;}
   this.time=Math.max(0,this.time-dt);
   for(const f of this.fighters){const o=this.fighters[1-f.id];f.t+=dt;f.think-=dt;
    if(['attack','hurt','block','dodge'].includes(f.state)&&f.t>=f.duration)this.act(f,'idle',0);
-   if(f.state==='attack'){const m=this.move(f);if(!f.hit&&f.t>=m.hit){f.hit=true;const distance=Math.abs(o.x-f.x);if(distance<m.range&&o.state!=='dodge'){const blocked=o.state==='block';o.hp=Math.max(0,o.hp-(blocked?1:m.damage));this.hits++;if(blocked)this.blocks++;this.act(o,blocked?'block':'hurt',blocked?.24:.29);o.velocity=f.face*(blocked?.25:.6);this.events.push({type:blocked?'block':'hit',attacker:f.id,target:o.id,move:f.move,damage:blocked?1:m.damage});}}}
+   if(f.state==='attack'){const m=this.move(f);const hits=m.hits||[m.hit];if(f.hitIndex<hits.length&&f.t>=hits[f.hitIndex]){f.hitIndex++;f.hit=f.hitIndex===hits.length;const distance=Math.abs(o.x-f.x);if(distance<m.range&&o.state!=='dodge'){const blocked=o.state==='block';f.comboHits=(f.comboHits||0)+1;o.hp=Math.max(0,o.hp-(blocked?1:m.damage));this.hits++;if(blocked)this.blocks++;this.act(o,blocked?'block':'hurt',blocked?.24:.29);o.velocity=f.face*(blocked?.25:.6);this.events.push({type:blocked?'block':'hit',attacker:f.id,target:o.id,move:f.move,damage:blocked?1:m.damage,combo:f.comboHits});}}}
    if(['idle','walk','back'].includes(f.state)&&f.think<=0){const distance=Math.abs(o.x-f.x);f.think=.12+this.random()*.20;
     if(o.state==='attack'&&o.t<this.move(o).hit&&distance<1.65*1.25&&this.random()<.53)this.act(f,this.random()<.22?'dodge':'block',.4);
     else if(distance>1.16*1.25){if(f.state!=='walk')this.act(f,'walk',0);}
-    else if(this.random()<.67){const choices=distance>1.08*1.25?['kick','high']:['jab','jab','hook','uppercut','kick'];const move=choices[Math.floor(this.random()*choices.length)];this.act(f,'attack',MOVES[move].duration,move);f.think=MOVES[move].duration+.08;}
+    else if(this.random()<.67){const choices=(distance>1.08*1.25?['kick','high','sweep','straight']:['jab','doublejab','hook','uppercut','kick','sweep','straight']).filter(m=>m!==f.lastMove);const move=choices[Math.floor(this.random()*choices.length)];this.act(f,'attack',MOVES[move].duration,move);f.think=MOVES[move].duration+.08;}
     else if(this.random()<.45){if(f.state!=='back')this.act(f,'back',0);f.think=.35;}
     else this.act(f,'idle',0);
    }
