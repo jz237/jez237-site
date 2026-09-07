@@ -24,3 +24,34 @@ export function createInbetweenSelector() {
     return ready && (repair || transition) ? {...pose, artBank:companionBank(pose.bank)} : pose;
   };
 }
+
+
+// The extra drawings occupy preparation/retraction, never the contact window.
+// Canonical poses remain available to combat observers and replay checks.
+export function createApproachSelector() {
+  const availability = new WeakMap();
+  return (fighter, pose, ready) => {
+    const a = fighter.attacking;
+    if (!INBETWEEN_FIGHTERS.includes(fighter.def?.id) || !a) return pose;
+    if (!availability.has(a)) availability.set(a, ready);
+    if (!availability.get(a) || !ready || !['light','heavy'].includes(a.kind)
+      || a.animation || a.superMove || fighter.hitstunFrames > 0 || fighter.grabbed
+      || fighter.cinematicFrame != null) return pose;
+    const f = fighter.attackFrame, start = a.activeStartFrame, end = a.activeEndFrame;
+    const total = a.totalFrames || Math.round(a.duration * 60);
+    if (![f,start,end,total].every(Number.isFinite)) return pose;
+    const preparation = f >= Math.max(1, Math.floor(start * .35)) && f < Math.floor(start * .75);
+    const recovery = f >= end + Math.floor((total-end)*.25) && f < end + Math.floor((total-end)*.55);
+    if (!preparation && !recovery) return pose;
+    const kick = a.limb === 'kick';
+    const crouch = fighter.crouch || a.cancelProfileId?.startsWith('crouch');
+    const artFrame = !fighter.grounded ? (kick ? 7 : 6) : crouch ? (kick ? 5 : 4)
+      : a.kind === 'heavy' ? (kick ? 14 : 13) : (kick ? 1 : 0);
+    return {...pose, artBank:'inbetween-approach', artFrame};
+  };
+}
+
+export function presentationPose(pose) {
+  return pose.artBank === 'inbetween-approach' && Number.isInteger(pose.artFrame)
+    ? {...pose, bank:'unified-ext3', frame:pose.artFrame} : pose;
+}

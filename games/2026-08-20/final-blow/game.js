@@ -1,3 +1,4 @@
+import { createApproachSelector, presentationPose } from "./engine/inbetweens.mjs";
 import { INBETWEEN_FIGHTERS, INBETWEEN_BANKS, companionBank, repairedCell, createInbetweenSelector } from "./engine/inbetweens.mjs";
 import { INBETWEEN_SCALE } from "./engine/inbetween-scale.mjs";
 import { clippedCell } from "./engine/clipped-cells.mjs";
@@ -1039,7 +1040,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.4.9` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.5.0` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1384,6 +1385,19 @@ const paintedFlowAtlases = {};
 const paintedFlowAvailability = new WeakMap();
 const inbetweenAtlases = {};
 const selectInbetween = createInbetweenSelector();
+const selectApproach = createApproachSelector();
+function approachReady(id) {
+  if (!INBETWEEN_FIGHTERS.includes(id)) return false;
+  const key = `${id}:inbetween-approach`;
+  if (!inbetweenAtlases[key]) {
+    const image = new Image();
+    image.src = `assets/inbetweens/${id}-approach-v1.webp`;
+    inbetweenAtlases[key] = image;
+    image.decode().catch(() => {});
+  }
+  const image = inbetweenAtlases[key];
+  return Boolean(image.complete && image.naturalWidth);
+}
 function ensureInbetweenAtlas(id, bank) {
   if (!INBETWEEN_FIGHTERS.includes(id) || !INBETWEEN_BANKS.includes(bank) || (id === 'commissioner' && bank === 'specials')) return null;
   const key = `${id}:${companionBank(bank)}`;
@@ -1404,6 +1418,9 @@ function withInbetween(fighter, pose) {
   if (!owner || owner.def.id !== fighter.def.id) return pose;
   const ready = inbetweenReady(fighter.def.id, pose.bank);
   if (!ready && repairedCell(fighter.def.id, pose.bank, pose.frame)) return {bank: "unified", frame: 0};
+  const approach = selectApproach(fighter, pose, approachReady(fighter.def.id));
+  if (approach.artBank === 'inbetween-approach') return {...approach,
+    artScale: INBETWEEN_SCALE[`${fighter.def.id}-approach`]?.[approach.artFrame] || 1};
   const selected = selectInbetween(owner, pose, state.simulationTick,
     ready, owner === fighter);
   return selected.artBank ? {...selected, artScale: INBETWEEN_SCALE[`${fighter.def.id}-${pose.bank}`]?.[pose.frame] || 1} : selected;
@@ -1716,7 +1733,7 @@ function motionBankCellDrawable(fighterId, cell, bank) {
 function preloadAuthoredBanks(fighterIds) {
   const ids = (fighterIds || []).filter((id) => typeof id === "string" && id);
   if (!ids.length) return;
-  for (const id of ids) { ensurePaintedFlowAtlas(id); for (const bank of INBETWEEN_BANKS) ensureInbetweenAtlas(id, bank); }
+  for (const id of ids) { approachReady(id); ensurePaintedFlowAtlas(id); for (const bank of INBETWEEN_BANKS) ensureInbetweenAtlas(id, bank); }
   ensureMotionManifest();
   ensureMotion2Manifest();
   ensureMotion3Manifest();
@@ -4880,7 +4897,7 @@ async function shareDemoLink() {
 function isDemoShareTarget(event) {
   const target = event?.target;
   return Boolean(demoSession.active && target && typeof target.closest === "function"
-    && target.closest("#demoShareButton"));
+    && target.closest("#demoShareButton, #demoPaceButton, #demoPauseButton"));
 }
 
 // ---------------------------------------------------------------------------
@@ -5044,6 +5061,10 @@ let demoSpeedTagText = "";
 let demoSpeedTagTone = "";
 function syncDemoSpeedTag(force = false) {
   if (!demoSession.active) return;
+  const paceLabel = demoSpeed.cadenceLocked ? `PACE: ${demoSpeed.rate}×` : "PACE: AUTO";
+  const pauseLabel = demoSpeed.paused ? "RESUME" : "PAUSE";
+  if ($("#demoPaceButton").textContent !== paceLabel) $("#demoPaceButton").textContent = paceLabel;
+  if ($("#demoPauseButton").textContent !== pauseLabel) $("#demoPauseButton").textContent = pauseLabel;
   const speedTag = $("#demoHudSpeed");
   if (!speedTag) return;
   const tag = demoSpeedTag({
@@ -22057,8 +22078,8 @@ function recordPoseTrace(fighter, pose) {
   if ((side !== 0 && side !== 1) || state.fighters?.[side] !== fighter) return;
   const ring = poseTrace[side];
   const last = ring.length ? ring[ring.length - 1] : null;
-  if (last && last.bank === pose.bank && last.frame === pose.frame && last.artBank === pose.artBank) return;
-  ring.push({ tick: state.simulationTick, bank: pose.bank, frame: pose.frame, artBank: pose.artBank });
+  if (last && last.bank === pose.bank && last.frame === pose.frame && last.artBank === pose.artBank && last.artFrame === pose.artFrame) return;
+  ring.push({ tick: state.simulationTick, bank: pose.bank, frame: pose.frame, artBank: pose.artBank, artFrame: pose.artFrame });
   if (ring.length > POSE_TRACE_SIZE) ring.shift();
 }
 
@@ -25083,7 +25104,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   // shadow stayed planted, so the ground contact never agreed with itself.
   const bob = fighter.cinematicFrame === null && fighter.grounded && !fighter.stun && !fighter.block
     ? Math.sin((moving ? fighter.walkTime * 20 : fighter.animTime * 10) + fighter.side * 2) * (moving ? 1.8 : 2.7) : 0;
-  const pose = fighterAnimationPose(fighter);
+  const pose = presentationPose(fighterAnimationPose(fighter));
   // Wave 16: the side's palette pick decides which cached atlas draws.
   const atlas = paletteAtlas(fighter.def.id, fighter.side, pose.artBank || pose.bank);
   const frame = pose.frame;
@@ -27468,7 +27489,7 @@ function drawFighterCastShadows() {
   ctx.rect(0, FLOOR + 1, W, REFLECTION_DEPTH);
   ctx.clip();
   for (const fighter of state.fighters.map(renderFighter)) {
-    const pose = fighterAnimationPose(fighter);
+    const pose = presentationPose(fighterAnimationPose(fighter));
     const atlas = paletteAtlas(fighter.def.id, fighter.side, pose.artBank || pose.bank);
     if (!atlas?.complete || !atlas.naturalWidth) continue;
     const renderSize = fighterRenderSize(fighter.def.id) * bankSheetAdjust(fighter.def.id, pose.bank) * (pose.artScale || 1);
@@ -29418,7 +29439,7 @@ function latchSuperPresentation(fighter) {
   superCutInTick = state.simulationTick;
   // poseBank/poseFrame capture the live wind-up pose for the CINEMA 3D
   // close-up portrait; plain data, unread by the classic 2D banner path.
-  const pose = fighterAnimationPose(fighter);
+  const pose = presentationPose(fighterAnimationPose(fighter));
   superCutIn = {
     side: fighter.side,
     fighterId: fighter.def.id,
@@ -32870,7 +32891,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.9");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.5.0");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33593,6 +33614,20 @@ $("#demoShareButton").addEventListener("click", (event) => {
   event.stopPropagation();
   shareDemoLink();
 });
+$("#demoPaceButton").addEventListener("click", (event) => {
+  event.preventDefault(); event.stopPropagation();
+  if (!demoSpeedScoped()) return;
+  const next = !demoSpeed.cadenceLocked ? 0.5 : demoSpeed.rate === 0.5 ? 1 : null;
+  if (next === null) { demoSpeed.setRate(DEFAULT_DEMO_SPEED); demoSpeed.unlockCadence(); }
+  else { demoSpeed.setRate(next); demoSpeed.lockCadence(); }
+  syncDemoSpeedTag(true);
+});
+$("#demoPauseButton").addEventListener("click", (event) => {
+  event.preventDefault(); event.stopPropagation();
+  if (!demoSpeedScoped()) return;
+  demoSpeed.togglePause();
+  syncDemoSpeedTag(true);
+});
 // Wave 19: THE PHILLY OPEN bracket screen.
 $("#phillyOpenButton")?.addEventListener("click", showPhillyOpen);
 $("#bracketSize4Button")?.addEventListener("click", () => { bracketSession.setupSize = 4; renderBracketSetup(true); });
@@ -34308,7 +34343,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.9-ringside",
+  version: "5.5.0-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

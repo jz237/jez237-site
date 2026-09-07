@@ -1,3 +1,4 @@
+import { presentationPose } from "../../engine/inbetweens.mjs";
 // Fighter layer for CINEMA 3D.
 // The existing sprite atlases ARE the characters: each fighter renders as an
 // alpha-tested billboard standing in the 3D scene, but with everything needed
@@ -85,7 +86,7 @@ function loadHdImage(path) {
     const img = new Image();
     img.onload = () => resolve(img.naturalWidth ? img : null);
     img.onerror = () => resolve(null);
-    img.src = /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(path) ? `${path}${path.includes('?') ? '&' : '?'}v=5.4.9` : path;
+    img.src = /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(path) ? `${path}${path.includes('?') ? '&' : '?'}v=5.5.0` : path;
   });
   hdImageCache.set(path, promise);
   return promise;
@@ -1380,7 +1381,7 @@ export class FighterLayer {
   poseRig(rig, fighter, state, timeSec, dtSec = 0) {
     const host = this.host;
     fighter = host.renderFighter?.(fighter) || fighter;
-    let pose = host.fighterAnimationPose(fighter);
+    let pose = presentationPose(host.fighterAnimationPose(fighter));
     // The host only emits an authored bank once the sheet is loaded and the
     // manifest accepts the cell, but the rig's texture may still be a frame
     // behind — the descriptor's own fallback covers the gap.

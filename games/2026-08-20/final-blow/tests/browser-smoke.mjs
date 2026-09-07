@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'demo3dButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.4/);
-    assert.equal(title.version.text, 'VERSION 5.4.9');
+    assert.equal(title.version.text, 'VERSION 5.5.0');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.4.9-ringside');
+    assert.equal(title.engineVersion, '5.5.0-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -3669,7 +3669,7 @@ probe('painted-flow-frames', async () => {
       qa.fight('${id}', 'deathblow'); qa.positions(430, 950); qa.step(0.4);
       qa.poseTraceReset(); qa.input(0, {heavy: true, limb: '${limb}'});
       for (let tick = 0; tick < 60; tick++) { qa.step(1/60); qa.pose(); }
-      return qa.poseTrace(64, 0).filter(p => p.bank === 'painted-flow').map(p => p.frame);
+      return qa.poseTrace(64, 0).filter(p => p.bank === 'painted-flow').map(p => p.frame).filter((f,i,all)=>i===0 || f!==all[i-1]);
     })()`);
     const expected = limb === 'kick' ? [8,9,10,11,12,13,14,15]
       : id === 'jez' ? [0,1,2,3,4,5,7] : [0,1,2,3,4,5,6,7];
@@ -3694,10 +3694,38 @@ probe('painted-companions', async () => {
     }
     return result;
   })()`);
-  const expected=['inbetween-specials','inbetween-unified','inbetween-unified-ext2','inbetween-unified-ext3','inbetween-unified-ext4','inbetween-unified-ext5'];
+  const expected=['inbetween-approach','inbetween-specials','inbetween-unified','inbetween-unified-ext2','inbetween-unified-ext3','inbetween-unified-ext4','inbetween-unified-ext5'];
   for(const id of ['jez','benny']) assert.deepEqual(coverage[id],expected,`${id} must use all six companion banks in live sequences`);
 });
 
+probe('all-fighter-approach', async () => {
+  await evaluate(client, `window.__finalBlowQa.commissioner(true)`);
+  for (const id of ['jez','benny','alan','ali','commissioner','cyraxx','deathblow','devil','donald','post']) {
+    await evaluate(client, `window.__finalBlowQa.fight('${id}','jez')`);await delay(1200);
+    const result=await evaluate(client, `(() => {
+      const qa=window.__finalBlowQa, seen=new Set();
+      for(const input of [{light:true},{heavy:true,limb:'kick'},{down:true,light:true},{down:true,heavy:true,limb:'kick'}]) {
+        qa.fight('${id}','jez');qa.positions(400,950);qa.step(.4);qa.poseTraceReset();qa.input(0,input,20);
+        for(let i=0;i<70;i++){qa.step(1/60);qa.pose();}
+        for(const p of qa.poseTrace(64,0))if(p.artBank==='inbetween-approach')seen.add(p.artFrame);
+      }
+      return [...seen];
+    })()`);
+    assert.ok(result.length>=2,`${id} must show distinct new punch and kick drawings: ${result}`);
+  }
+});
+probe('demo-visible-transport', async () => {
+  const result=await evaluate(client, `(() => {
+    const qa=window.__finalBlowQa;qa.demo(550);
+    const click=(id)=>{document.querySelector(id).click();return qa.demoSpeed();};
+    const half=click('#demoPaceButton'),full=click('#demoPaceButton'),auto=click('#demoPaceButton');
+    const paused=click('#demoPauseButton'),resumed=click('#demoPauseButton');
+    return {half,full,auto,paused,resumed,mode:window.__finalBlowEngine.snapshot().mode};
+  })()`);
+  assert.equal(result.half.rate,.5);assert.equal(result.full.rate,1);
+  assert.equal(result.auto.cadenceLocked,false);assert.equal(result.paused.paused,true);
+  assert.equal(result.resumed.paused,false);assert.equal(result.mode,'demo');
+});
 probe('roster-painted-companions', async () => {
   await evaluate(client, `window.__finalBlowQa.commissioner(true)`);
   const ids=['alan','ali','commissioner','cyraxx','deathblow','devil','donald','post'];
@@ -3713,9 +3741,9 @@ probe('roster-painted-companions', async () => {
       qa.fight('${id}','jez');qa.step(.4);qa.poseTraceReset();qa.fighter(0,{dizzyFrames:35});sample();
       return [...seen].sort();
     })()`);
-    const expected=['inbetween-unified','inbetween-unified-ext2','inbetween-unified-ext3','inbetween-unified-ext4','inbetween-unified-ext5'];
+    const expected=['inbetween-approach','inbetween-unified','inbetween-unified-ext2','inbetween-unified-ext3','inbetween-unified-ext4','inbetween-unified-ext5'];
     if(id!=='commissioner')expected.unshift('inbetween-specials');
-    assert.deepEqual(result,expected,`${id} must display each new bank during live sequences`);
+    assert.deepEqual(result,expected.sort(),`${id} must display each new bank during live sequences`);
   }
 });
 
@@ -4526,7 +4554,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.4/);
-    assert.equal(controlledReload.version, '5.4.9-ringside');
+    assert.equal(controlledReload.version, '5.5.0-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4544,7 +4572,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.4/);
-    assert.equal(offlineBoot.version, '5.4.9-ringside');
+    assert.equal(offlineBoot.version, '5.5.0-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4590,7 +4618,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.4.9');
+    assert.equal(landscape.version.text, 'VERSION 5.5.0');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);

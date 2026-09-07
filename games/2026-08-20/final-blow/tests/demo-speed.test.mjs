@@ -217,7 +217,7 @@ test("an inactive transport passes wall-clock through untouched", () => {
 });
 
 test("game.js gates every transport call site on the scoping helper", async () => {
-  const game = await readFile(join(gameRoot, "game.js"), "utf8");
+  const game = (await readFile(join(gameRoot, "game.js"), "utf8")).replace(/\r\n/g, "\n");
   // The render loop must consult demoSpeedActive() before it scales anything.
   assert.match(game, /const speedScaled = demoSpeedActive\(\);/);
   assert.match(game, /const simSeconds = speedScaled \? demoSpeed\.scale\(elapsed\) : elapsed;/);
