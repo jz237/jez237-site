@@ -1038,6 +1038,9 @@ const finalBlowRealityImage = new Image();
 finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
+function fighterArtUrl(url) {
+  return /\/(?:jez|benny)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.4.8` : url;
+}
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
 // The boss def loads the Commissioner's art even when the playable def is in
@@ -1048,13 +1051,13 @@ for (const fighter of [...roster.filter(({ id }) => id !== ARCADE_BOSS_ID), arca
   image.src = `assets/fighters/${fighter.id}.webp`;
   fighterImages[fighter.id] = image;
   const atlas = new Image();
-  atlas.src = `assets/atlases/${fighter.id}.webp`;
+  atlas.src = fighterArtUrl(`assets/atlases/${fighter.id}.webp`);
   fighterAtlases[fighter.id] = atlas;
   if (fighter.boss) {
     fighterMoveAtlases[fighter.id] = atlas;
   } else if (getFighterKit(fighter.id)) {
     const moveAtlas = new Image();
-    moveAtlas.src = `assets/moves/${fighter.id}-specials.webp`;
+    moveAtlas.src = fighterArtUrl(`assets/moves/${fighter.id}-specials.webp`);
     fighterMoveAtlases[fighter.id] = moveAtlas;
   }
 }
@@ -1088,7 +1091,7 @@ function sheetPriority(bank) {
 function authoredSheetImage(bank, url) {
   const image = new Image();
   if ("fetchPriority" in image) image.fetchPriority = sheetPriority(bank);
-  image.src = url;
+  image.src = fighterArtUrl(url);
   return image;
 }
 
@@ -26462,7 +26465,7 @@ const HD_SHEETS = new Set([
 function hdSheetPath(fighterId, bank = "base") {
   // Only the combat atlas has an HD variant; every other bank is SD-only and
   // must never be requested from renderer/hd/.
-  return bank === "base" && HD_SHEETS.has(fighterId) ? `renderer/hd/${fighterId}.webp` : null;
+  return bank === "base" && HD_SHEETS.has(fighterId) ? fighterArtUrl(`renderer/hd/${fighterId}.webp`) : null;
 }
 
 function severedArmAtlasSource(victimId) {
@@ -32867,7 +32870,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.7");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.4.8");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34305,7 +34308,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.4.7-ringside",
+  version: "5.4.8-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

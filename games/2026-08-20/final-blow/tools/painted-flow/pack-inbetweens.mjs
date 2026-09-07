@@ -1,3 +1,4 @@
+import {execFileSync} from 'node:child_process';
 import {createRequire} from 'node:module';const sharp=createRequire(import.meta.url)(process.env.SHARP_PACKAGE || 'sharp');
 import {fileURLToPath} from 'node:url';
 import {resolve} from 'node:path';
@@ -11,7 +12,9 @@ for(const rec of records){
  const {data,info}=await sharp(resolve(masters,rec.source)).ensureAlpha().raw().toBuffer({resolveWithObject:true});const {width:w,height:h}=info;
  for(let i=0;i<data.length;i+=4){const k=Math.min(data[i],data[i+2])-data[i+1];data[i+3]=Math.max(0,Math.min(255,(85-k)*255/55));if(data[i+3]>0&&k>30){data[i]=Math.min(data[i],data[i+1]+30);data[i+2]=Math.min(data[i+2],data[i+1]+30);}}
  const reference=rec.bank==='specials'?`${root}/assets/moves/${rec.fighter}-specials.webp`:`${root}/assets/unified/${rec.fighter}${rec.bank==='unified'?'':'-'+rec.bank.split('-')[1]}.webp`;
- const ref=await sharp(reference).ensureAlpha().raw().toBuffer();const rows=Array(h).fill(0);
+ const relative='games/2026-08-20/final-blow/'+reference.slice(root.length).replace(/^[/\\]+/,'');
+ const baseline=execFileSync('git',['show',`4990e7df82552cbc0104117ba8776f197db20b91:${relative}`],{cwd:root,maxBuffer:32*1024*1024});
+ const ref=await sharp(baseline).ensureAlpha().raw().toBuffer();const rows=Array(h).fill(0);
  for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(data[(y*w+x)*4+3]>140)rows[y]++;
  const cuts=[0];for(let r=1;r<4;r++){const c=h*r/4;let y0=Math.floor(c-55);for(let y=y0;y<Math.min(h,c+55);y++)if(rows[y]<rows[y0])y0=y;cuts.push(y0);}cuts.push(h);
  const composites=[],cells=[];

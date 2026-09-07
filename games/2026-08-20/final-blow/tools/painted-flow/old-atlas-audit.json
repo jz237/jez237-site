@@ -1,0 +1,1069 @@
+{
+  "version": "5.4.8",
+  "scope": [
+    "jez",
+    "benny"
+  ],
+  "reviewed": [
+    {
+      "file": "assets/atlases/jez.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion/jez.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/jez.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/jez.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/walk/jez.webp",
+      "cells": 4
+    },
+    {
+      "file": "assets/moves/jez-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/jez-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/jez.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/jez-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/jez-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/jez-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/jez-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/jez-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/jez.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/jez-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/jez.webp",
+      "cells": 1,
+      "notes": "Portrait, not a fighting atlas; complete figure reviewed."
+    },
+    {
+      "file": "assets/atlases/benny.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion/benny.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion2/benny.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/motion3/benny.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/walk/benny.webp",
+      "cells": 4
+    },
+    {
+      "file": "assets/moves/benny-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/benny.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/benny-ext.webp",
+      "cells": 8
+    },
+    {
+      "file": "assets/unified/benny-ext2.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/benny-ext3.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/benny-ext4.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/unified/benny-ext5.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/benny.webp",
+      "cells": 16
+    },
+    {
+      "file": "renderer/hd/benny-specials.webp",
+      "cells": 16
+    },
+    {
+      "file": "assets/fighters/benny.webp",
+      "cells": 1,
+      "notes": "Portrait, not a fighting atlas; complete figure reviewed."
+    }
+  ],
+  "repairs": [
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext2.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 7,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext3.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 1,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext3.webp",
+      "frame": 5,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 5,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext3.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 7,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext3.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 11,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext3.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext4.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext4.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 12,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext4.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext5.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext5.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 9,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/jez-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/jez-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/jez-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/jez-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/jez-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/jez-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/jez-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny.webp",
+      "frame": 15,
+      "sourceBank": "unified",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext2.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 12,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext2.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 13,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext2.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 14,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext2.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext2",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext3.webp",
+      "frame": 0,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext3.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext3.webp",
+      "frame": 5,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 5,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext3.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 8,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext3.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext3.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 13,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext3.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext3.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext4.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 1,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext4.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext4.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 12,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext4.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext5.webp",
+      "frame": 0,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 0,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext5.webp",
+      "frame": 8,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 8,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext5.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 9,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext5.webp",
+      "frame": 11,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext5.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 12,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext5.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/benny-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/benny-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/benny-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/benny-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Visually cropped head, hand, foot, effect, or edge-touching extremity; replace whole cell with reviewed complete drawing."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 0,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 3,
+      "sourceBank": "unified",
+      "sourceFrame": 7,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 4,
+      "sourceBank": "unified",
+      "sourceFrame": 1,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 5,
+      "sourceBank": "unified",
+      "sourceFrame": 2,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 10,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 2,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 11,
+      "sourceBank": "unified",
+      "sourceFrame": 7,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/atlases/benny.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 0,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 1,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 0,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 3,
+      "sourceBank": "unified",
+      "sourceFrame": 7,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 4,
+      "sourceBank": "unified",
+      "sourceFrame": 1,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 5,
+      "sourceBank": "unified",
+      "sourceFrame": 2,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 9,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 10,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 2,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 11,
+      "sourceBank": "unified",
+      "sourceFrame": 7,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 14,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 14,
+      "sourceBank": "unified-ext4",
+      "sourceFrame": 3,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Detached neighboring boots/fists or missing extremities baked inside the cell."
+    },
+    {
+      "id": "benny",
+      "file": "assets/motion/benny.webp",
+      "frame": 3,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Raised fist/dash hand touches the cut edge."
+    },
+    {
+      "id": "benny",
+      "file": "assets/motion/benny.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Raised fist/dash hand touches the cut edge."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion/jez.webp",
+      "frame": 0,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Clipped strike hands, erased torso region or raised fist."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion/jez.webp",
+      "frame": 2,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 3,
+      "why": "Clipped strike hands, erased torso region or raised fist."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion/jez.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 9,
+      "why": "Clipped strike hands, erased torso region or raised fist."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion/jez.webp",
+      "frame": 7,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 1,
+      "why": "Clipped strike hands, erased torso region or raised fist."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion/jez.webp",
+      "frame": 13,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 11,
+      "why": "Clipped strike hands, erased torso region or raised fist."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion/jez.webp",
+      "frame": 15,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 0,
+      "why": "Clipped strike hands, erased torso region or raised fist."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion2/jez.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 14,
+      "why": "Throw reach has a boot clipped at the left boundary."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion3/jez.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Head/cap or raised fingertips touch the top crop."
+    },
+    {
+      "id": "jez",
+      "file": "assets/motion3/jez.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Head/cap or raised fingertips touch the top crop."
+    },
+    {
+      "id": "benny",
+      "file": "assets/motion2/benny.webp",
+      "frame": 12,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 14,
+      "why": "Throw reach has a boot clipped at the left boundary."
+    },
+    {
+      "id": "benny",
+      "file": "assets/motion3/benny.webp",
+      "frame": 1,
+      "sourceBank": "unified-ext3",
+      "sourceFrame": 8,
+      "why": "Head/cap or raised fingertips touch the top crop."
+    },
+    {
+      "id": "benny",
+      "file": "assets/motion3/benny.webp",
+      "frame": 2,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Head/cap or raised fingertips touch the top crop."
+    },
+    {
+      "id": "benny",
+      "file": "assets/motion3/benny.webp",
+      "frame": 3,
+      "sourceBank": "unified-ext5",
+      "sourceFrame": 5,
+      "why": "Head/cap or raised fingertips touch the top crop."
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext.webp",
+      "frame": 3,
+      "sourceBank": "unified",
+      "sourceFrame": 8,
+      "why": "Jump pose has an erased face/neck inside its otherwise empty margin."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 8,
+      "sourceBank": "specials",
+      "sourceFrame": 8,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 11,
+      "sourceBank": "specials",
+      "sourceFrame": 11,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "assets/moves/legacy/benny-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 8,
+      "sourceBank": "specials",
+      "sourceFrame": 8,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 9,
+      "sourceBank": "specials",
+      "sourceFrame": 9,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 10,
+      "sourceBank": "specials",
+      "sourceFrame": 10,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 11,
+      "sourceBank": "specials",
+      "sourceFrame": 11,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 12,
+      "sourceBank": "specials",
+      "sourceFrame": 12,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 13,
+      "sourceBank": "specials",
+      "sourceFrame": 13,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 14,
+      "sourceBank": "specials",
+      "sourceFrame": 14,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "benny",
+      "file": "renderer/hd/benny-specials.webp",
+      "frame": 15,
+      "sourceBank": "specials",
+      "sourceFrame": 15,
+      "why": "Clipped hand/head/boot or baked white separator bars."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/legacy/jez-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Cross-cell blade tip or dash-effect fragment."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/legacy/jez-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Cross-cell blade tip or dash-effect fragment."
+    },
+    {
+      "id": "jez",
+      "file": "assets/moves/legacy/jez-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Cross-cell blade tip or dash-effect fragment."
+    },
+    {
+      "id": "jez",
+      "file": "renderer/hd/jez-specials.webp",
+      "frame": 1,
+      "sourceBank": "specials",
+      "sourceFrame": 1,
+      "why": "Cross-cell blade tip or dash-effect fragment."
+    },
+    {
+      "id": "jez",
+      "file": "renderer/hd/jez-specials.webp",
+      "frame": 2,
+      "sourceBank": "specials",
+      "sourceFrame": 2,
+      "why": "Cross-cell blade tip or dash-effect fragment."
+    },
+    {
+      "id": "jez",
+      "file": "renderer/hd/jez-specials.webp",
+      "frame": 5,
+      "sourceBank": "specials",
+      "sourceFrame": 5,
+      "why": "Cross-cell blade tip or dash-effect fragment."
+    }
+  ]
+}

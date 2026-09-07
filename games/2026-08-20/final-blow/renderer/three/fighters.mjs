@@ -85,7 +85,7 @@ function loadHdImage(path) {
     const img = new Image();
     img.onload = () => resolve(img.naturalWidth ? img : null);
     img.onerror = () => resolve(null);
-    img.src = path;
+    img.src = /\/(?:jez|benny)(?:[.-])/.test(path) ? `${path}${path.includes('?') ? '&' : '?'}v=5.4.8` : path;
   });
   hdImageCache.set(path, promise);
   return promise;
