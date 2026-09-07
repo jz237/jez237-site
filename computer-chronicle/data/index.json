@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-07",
+      "historicDate": "1984-05-21",
+      "displayDate": "Week of May 21-27, 1984",
+      "edition": "Issue 095 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Monday, May 21, 1984: Atari bets that a new console can carry yesterday’s cartridges into tomorrow’s arcade.",
+      "leadHeadline": "Atari Bets on Compatibility with $140 7800 ProSystem",
+      "storyHeadlines": [
+        "Ashton-Tate Unwraps dBASE III for IBM PCs",
+        "NEC Breaks the $2,000 Barrier for a Complete 16-bit Business Micro",
+        "Telemail Intrusions Put Online Security on the Front Page"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-05-21.jpg",
+      "thumb": "media/thumbs/1984-05-21.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-06",
       "historicDate": "1984-05-14",
       "displayDate": "Week of May 14-20, 1984",
