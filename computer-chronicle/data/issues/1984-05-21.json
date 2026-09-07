@@ -1,0 +1,370 @@
+{
+  "currentDate": "2026-09-07",
+  "historicDate": "1984-05-21",
+  "displayDate": "Week of May 21-27, 1984",
+  "edition": "Issue 095 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Arcade optimism and business-computing momentum on warm aged newsprint",
+    "motifs": [
+      "Atari 7800 console",
+      "game cartridge",
+      "IBM PC database screen",
+      "300-baud modem"
+    ],
+    "layout": "Dense seven-column 1984 computer weekly with bold red and blue rules"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+    "dateline": "Week of May 21-27, 1984",
+    "price": "75¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Atari 7800 banner with dominant console-and-cartridge halftone",
+    "secondaryRail": "dBASE III, NEC micro, modem desk, charts and price watch",
+    "archiveNavigation": "Chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "#9b1c1c",
+    "secondary": "#173f6b",
+    "texture": "warm newsprint grain and halftone ink"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-05-21.jpg",
+    "alt": "GPT Image 2 newspaper front page for the week of May 21, 1984, led by the Atari 7800 ProSystem.",
+    "caption": "A GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Atari answers a battered game market with backward compatibility, while PC databases, low-cost business micros and dial-up security crowd a consequential week.",
+  "morningLine": "Monday, May 21, 1984: Atari bets that a new console can carry yesterday’s cartridges into tomorrow’s arcade.",
+  "lead": {
+    "headline": "Atari Bets on Compatibility with $140 7800 ProSystem",
+    "dek": "A sharper arcade-style machine promises to preserve the vast Atari 2600 cartridge shelf.",
+    "confidence": "Exact-date announcement; later release history supplied for context",
+    "sourceRefs": [
+      1,
+      2
+    ],
+    "body": [
+      "Atari unveiled the 7800 ProSystem on May 21, pitching a $140 console as the company’s answer to a home videogame business shaken by falling sales and crowded store shelves. The new machine promised more elaborate arcade-style action while meeting owners on familiar ground: it could also play Atari 2600 cartridges.",
+      "That compatibility was the heart of the wager. Millions of older cartridges already sat beneath American television sets, and Atari was asking families to upgrade without abandoning them. The system, designed by General Computer Corporation, paired that library with graphics hardware promoted as capable of moving roughly 100 objects on screen.",
+      "Atari’s announcement placed games back at the center of its consumer strategy just as retailers and publishers were questioning the console market. An advertised launch price of $140 put the ProSystem above bargain machines but below the cost of a complete home-computer setup.",
+      "The unveiling would prove to be only the beginning of a delayed story. Atari’s ownership transition stalled the intended 1984 rollout, and the 7800 did not reach broad U.S. commercial release until 1986. This week, however, its promise was immediate: better arcade pictures without making the old cartridge box obsolete."
+    ]
+  },
+  "stories": [
+    {
+      "headline": "Ashton-Tate Unwraps dBASE III for IBM PCs",
+      "confidence": "Same-week trade reporting",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "Ashton-Tate introduced dBASE III as a major expansion of the database package that had become a business standard on microcomputers. The PC-DOS release claimed capacity beyond two billion records, hardware permitting, with 128 fields per record and access to ten databases at once.",
+        "New date and memo fields brought date arithmetic and text entries up to 4,000 bytes. Menus, online help, full-screen editing, report generation, color setup and programmable keys aimed to make that increased reach manageable from an office desktop."
+      ]
+    },
+    {
+      "headline": "NEC Breaks the $2,000 Barrier for a Complete 16-bit Business Micro",
+      "confidence": "Same-week trade reporting",
+      "sourceRefs": [
+        0
+      ],
+      "body": [
+        "NEC Information Systems brought a complete 16-bit business microcomputer below $2,000, a threshold Computerworld said no other major micro vendor had crossed. The machine was headed for the Comdex/Spring exhibition opening May 22 in Atlanta.",
+        "The low price sharpened competition for buyers who wanted a business-ready system rather than a bare starter configuration. NEC’s concurrent endorsement of Unix also showed how strongly standardized operating environments were pulling at the fragmented microcomputer market."
+      ]
+    },
+    {
+      "headline": "Telemail Intrusions Put Online Security on the Front Page",
+      "confidence": "Same-week report with exact-date security response",
+      "sourceRefs": [
+        0,
+        3
+      ],
+      "body": [
+        "Four people were arraigned over allegations of illegally entering GTE Telenet’s Telemail service and accessing private and U.S. government mailboxes. The case moved electronic-mail security from specialist concern to an operational problem for commercial networks.",
+        "GTE Telenet had introduced a lockout device on May 15 to bar unauthorized users. The response arrived amid growing calls for computer-crime legislation and encryption, evidence that the expanding online world was already producing a contest between access and control."
+      ]
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Atari 7800 ProSystem",
+      "summary": "A $140 game console with Atari 2600 backward compatibility and enhanced sprite graphics.",
+      "confidence": "Exact-date",
+      "sourceRefs": [
+        1,
+        2
+      ]
+    },
+    {
+      "title": "dBASE III",
+      "summary": "Ashton-Tate expands its IBM PC database with larger records, ten open databases and a menu-driven Assistant.",
+      "confidence": "Same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "NEC 16-bit business micro",
+      "summary": "A complete configuration under $2,000 heads to Comdex/Spring ’84.",
+      "confidence": "Same-week",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Distributed desktops",
+      "summary": "AT&T, DEC and IBM machines revive plans to link local desktop processing with corporate systems.",
+      "confidence": "Exact-date analysis",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "title": "Telemail security",
+      "summary": "A new lockout device follows alleged unauthorized access to private and government mailboxes.",
+      "confidence": "Same-week",
+      "sourceRefs": [
+        0,
+        3
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "dBASE III",
+      "detail": "Ashton-Tate database for IBM PC-DOS"
+    },
+    {
+      "name": "Net/Master",
+      "detail": "Cincom management software for IBM networks"
+    },
+    {
+      "name": "dBASE Assistant",
+      "detail": "Prompts and menus for database work"
+    },
+    {
+      "name": "dBASE III memo fields",
+      "detail": "Text entries up to 4,000 bytes"
+    },
+    {
+      "name": "dBASE III date fields",
+      "detail": "Built-in date arithmetic"
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games",
+      "items": [
+        "Atari 7800 launch lineup",
+        "Ballblazer",
+        "Rescue on Fractalus!",
+        "The Legacy",
+        "Sabre Wulf"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "Indiana Jones and the Temple of Doom",
+        "The Natural",
+        "Breakin'",
+        "Romancing the Stone",
+        "Sixteen Candles"
+      ]
+    },
+    {
+      "label": "Hardware Counter",
+      "items": [
+        "Atari 7800 ProSystem",
+        "NEC 16-bit business micro",
+        "Sub-$100 modems",
+        "Byte-Back modem"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Atari 7800 ProSystem",
+      "price": "$140 announced",
+      "note": "Backward-compatible game console"
+    },
+    {
+      "item": "NEC complete 16-bit business micro",
+      "price": "Under $2,000",
+      "note": "Complete business configuration"
+    },
+    {
+      "item": "IBM 3080 performance option",
+      "price": "$16,000",
+      "note": "Mainframe performance upgrade"
+    },
+    {
+      "item": "Budget modem roundup",
+      "price": "Under $100 each",
+      "note": "Six 300-baud contenders"
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "AT&T toll rates set to fall",
+      "text": "FCC-driven tariffs were expected to cut switched-service rates an average 6.1 percent on May 25."
+    },
+    {
+      "headline": "32-bit workstations crowd graphics conference",
+      "text": "Single-user 32-bit machines dominated announcements at the Anaheim computer graphics gathering."
+    },
+    {
+      "headline": "Desktops seek the mainframe",
+      "text": "Vendors pursue links between local processing and corporate data despite persistent incompatibilities."
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Distant Early Warning",
+      "artist": "Rush"
+    },
+    {
+      "rank": 2,
+      "title": "Legs",
+      "artist": "ZZ Top"
+    },
+    {
+      "rank": 3,
+      "title": "No Way Out",
+      "artist": "Jefferson Starship"
+    },
+    {
+      "rank": 4,
+      "title": "Dancing in the Dark",
+      "artist": "Bruce Springsteen"
+    },
+    {
+      "rank": 5,
+      "title": "The Heart of Rock & Roll",
+      "artist": "Huey Lewis and the News"
+    }
+  ],
+  "periodAd": {
+    "headline": "The $140 Atari ProSystem",
+    "summary": "New arcade-style graphics meet the cartridges already in your house.",
+    "tagline": "Bring your 2600 library forward."
+  },
+  "market": {
+    "headline": "Long-distance prices dial down",
+    "summary": "AT&T tariffs were expected to lower domestic and international switched-service rates by an average 6.1 percent effective May 25.",
+    "confidence": "Same-week trade reporting",
+    "sourceRefs": [
+      0
+    ]
+  },
+  "worldAnchor": {
+    "headline": "Persian Gulf Tension Rises in Iran-Iraq War",
+    "summary": "U.S. television coverage on May 22 led with mounting danger to shipping and regional stability in the Persian Gulf.",
+    "confidence": "Exact-date broadcast archive",
+    "sourceRefs": [
+      8
+    ]
+  },
+  "bbsNote": {
+    "headline": "Budget Modems Put Online Services Within Reach",
+    "summary": "A May magazine tested six modems below $100 as 300-baud telecommunications moved into hobbyist budgets.",
+    "posts": [
+      {
+        "topic": "Budget modem roundup",
+        "platform": "Computer & Electronics",
+        "text": "Six sub-$100 modems make dial-up access a plausible add-on."
+      },
+      {
+        "topic": "Timex/Sinclair goes online",
+        "platform": "Family Computing",
+        "text": "The Byte-Back modem serves Timex/Sinclair 1000 and 1500 owners."
+      },
+      {
+        "topic": "Telemail security",
+        "platform": "GTE Telenet",
+        "text": "A new lockout device underscores commercial electronic mail’s access problem."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "Six Modems for Less Than $100 Apiece",
+    "summary": "Low price was the spectacle on the May Computer & Electronics cover.",
+    "detail": "With online time still billed by the hour, an entire sub-$100 comparison signaled rapid commoditization of 300-baud access."
+  },
+  "accuracyLedger": {
+    "items": [
+      {
+        "claim": "Atari 7800 announcement, price and compatibility",
+        "status": "Verified with exact-date newspaper coverage and hardware history",
+        "sourceRefs": [
+          1,
+          2
+        ]
+      },
+      {
+        "claim": "dBASE III, NEC micro and telecommunications rates",
+        "status": "Verified in May 21 trade coverage",
+        "sourceRefs": [
+          0
+        ]
+      },
+      {
+        "claim": "Music and movie rankings",
+        "status": "Verified with dated weekly chart listings",
+        "sourceRefs": [
+          6,
+          7
+        ]
+      },
+      {
+        "claim": "Budget modem category",
+        "status": "Verified in May 1984 period magazine",
+        "sourceRefs": [
+          4
+        ]
+      }
+    ]
+  },
+  "sources": [
+    {
+      "label": "Computerworld, Vol. XVIII No. 21, May 21, 1984",
+      "url": "https://archive.org/stream/computerworld1821unse/computerworld1821unse_djvu.txt"
+    },
+    {
+      "label": "The New York Times: Atari Video Game Unit Introduced, May 22, 1984",
+      "url": "https://www.nytimes.com/1984/05/22/business/atari-video-game-unit-introduced.html"
+    },
+    {
+      "label": "AtariAge: Atari 7800 ProSystem History",
+      "url": "https://www.atariage.com/7800/history.html"
+    },
+    {
+      "label": "UPI: GTE Telenet introduces lockout device, May 15, 1984",
+      "url": "https://www.upi.com/Archives/1984/05/15/GTE-Telenet-introduced-a-device-Tuesday-that-locks-out/8642453441600/"
+    },
+    {
+      "label": "Computer & Electronics, May 1984",
+      "url": "https://www.worldradiohistory.com/Archive-Poptronics/80s/1984/CE-1984-05.pdf"
+    },
+    {
+      "label": "Timex/Sinclair: Byte-Back Modem",
+      "url": "https://timexsinclair.com/article/whats-in-store-byte-back-modem-timex-sinclair-1000-1500/index.html"
+    },
+    {
+      "label": "Weekly Rock Top 20 for May 26, 1984",
+      "url": "https://tunecaster.com/charts/80/rock8421.html"
+    },
+    {
+      "label": "The Numbers: Weekend Box Office Chart for May 25, 1984",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/05/25"
+    },
+    {
+      "label": "ABC Evening News, May 22, 1984",
+      "url": "https://tvnews.vanderbilt.edu/programs/90029"
+    }
+  ]
+}

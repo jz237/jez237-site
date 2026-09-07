@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sun, 06 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 07 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of May 21-27, 1984 — Atari Bets on Compatibility with $140 7800 ProSystem</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-05-21</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-21</guid>
+      <pubDate>Mon, 07 Sep 2026 12:00:00 GMT</pubDate>
+      <description>A sharper arcade-style machine promises to preserve the vast Atari 2600 cartridge shelf. Atari unveiled the 7800 ProSystem on May 21, pitching a $140 console as the company’s answer to a home videogame business shaken by falling sales and crowded store shelves. The new machine promised more elaborate arcade-style action while meeting owners on familiar ground: it could also play Atari 2600 cartridges. Also this week: Ashton-Tate Unwraps dBASE III for IBM PCs · NEC Breaks the $2,000 Barrier for a Complete 16-bit Business Micro · Telemail Intrusions Put Online Security on the Front Page.</description>
+    </item>
     <item>
       <title>Week of May 14-20, 1984 — Telenet Locks the Dial-Up Door</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-05-14</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-09</guid>
       <pubDate>Mon, 17 Aug 2026 12:00:00 GMT</pubDate>
       <description>Founder’s surprise Friday resignation, days after his CES appearance, leaves the company’s next generation under a cloud. Jack Tramiel resigned as president and chief executive of Commodore International on Friday, January 13, an abrupt break at the company he had driven from office-machine roots into the center of the home-computer boom. The news followed only days after Tramiel personally championed Commodore’s new 264 family at the Winter Consumer Electronics Show. Also this week: Games Trade Finds Guarded Relief at CES · Commodore’s 264 Family Promises an Office in ROM · Coleco Builds an Adam Comeback Plan.</description>
-    </item>
-    <item>
-      <title>Week of January 2-8, 1984 — Commodore&apos;s 264 family steals a shakeout-era Winter CES</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-01-02</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-02</guid>
-      <pubDate>Sun, 16 Aug 2026 12:00:00 GMT</pubDate>
-      <description>Commodore draws the Winter CES crowds with two 64K machines, built-in productivity software and a new BASIC—while leaving price and compatibility questions open. The International Winter Consumer Electronics Show opened in Las Vegas on January 7 and ran through January 10; COMPUTE! estimated attendance at 80,000-90,000 and said the Commodore stand was crowded throughout the show. Commodore announced the 264 and speech-equipped 364V, both with 64K RAM and a 7501-family processor running at about 1.76 MHz. Also this week: Behind a secret CES door, Amiga shows &apos;Lorraine&apos; · Home-computer boom gives way to a fight for survival · Kodak jumps into home video with a one-piece 8mm camcorder.</description>
     </item>
   </channel>
 </rss>
