@@ -73,7 +73,7 @@ function createRenderer(display){
   const debrisMesh=new THREE.InstancedMesh(new THREE.TetrahedronGeometry(1),mat('#89837b',.5,.7),96);debrisMesh.instanceMatrix.setUsage(THREE.DynamicDrawUsage);debrisMesh.frustumCulled=false;fxGroup.add(debrisMesh);debrisMesh.count=0;
   const shield=new THREE.Mesh(new THREE.SphereGeometry(20,24,16),new THREE.MeshPhysicalMaterial({color:'#8cddff',roughness:.18,metalness:.1,transparent:true,opacity:.12,wireframe:true,depthWrite:false}));shield.visible=false;fxGroup.add(shield);
   const shadow=new THREE.Mesh(new THREE.PlaneGeometry(28,9),new THREE.MeshBasicMaterial({map:smokeMap,color:'#05080b',transparent:true,opacity:.55,depthWrite:false}));fxGroup.add(shadow);
-  const stats={artVersion:6,backend:'WebGL 2.5D',frames:0,drawCalls:0,triangles:0,lights:0,quality:initialQuality,world:0,models:0,events:{},assetsReady:false,frameMs:0};
+  const stats={artVersion:7,backend:'WebGL 2.5D',frames:0,drawCalls:0,triangles:0,lights:0,quality:initialQuality,world:0,models:0,events:{},assetsReady:false,frameMs:0};
   window.__modernGraphics={stats,get scene(){return scene;},get camera(){return camera;},get renderer(){return gl;},get hero(){return hero;},get enemies(){return enemyModels;},get effects(){return {sparks,rings};}};
   function clearGroup(g){const geometries=new Set(),materials=new Set();g.traverse(c=>{if(c.geometry)geometries.add(c.geometry);if(c.material)(Array.isArray(c.material)?c.material:[c.material]).forEach(m=>materials.add(m));});for(const c of [...g.children])g.remove(c);geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());}
   function dynamicLight(i,x,y,z,color,intensity=2,distance=110){if(i>=lightPool.length)return;const l=lightPool[i];l.position.set(x,-y,z);l.color.set(color);l.intensity=intensity;l.distance=distance;}
@@ -158,7 +158,7 @@ function createRenderer(display){
     const random=D.mulberry32(lv.world*1803),industrial=lv.world===3||lv.world===4;
     for(let layer=0;layer<3;layer++){
       const g=new THREE.Group();decor.add(g);const speed=[.12,.32,.56][layer],z=[-450,-260,-120][layer];
-      const dull=industrial?mat(layer===0?'#172a38':theme.rock,.65,.75):new THREE.MeshStandardMaterial({color:['#43565c','#3b4a4e','#414747'][layer],roughness:.96,metalness:.03,vertexColors:true});
+      const dull=industrial?mat(layer===0?'#172a38':theme.rock,.65,.75):stoneMaterial(['#667276','#586364','#58635f'][layer],mineralTexture,false);
       dull.vertexColors=!industrial;if(!industrial)dull.color.lerp(new THREE.Color(theme.fog),[.30,.16,.04][layer]);dull.map=industrial?rockTextures[lv.world-1]:mineralTexture;dull.bumpMap=industrial?null:mineralTexture;dull.bumpScale=2;dull.needsUpdate=true;
       if(!industrial){const ridge=new THREE.Mesh(ridgeGeometry(layer+lv.world,layer===0?430:layer===1?340:240),dull);ridge.position.set(-120,-400,z);g.add(ridge);}
       for(let i=0;i<(industrial?15:0);i++){

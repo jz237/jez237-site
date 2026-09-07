@@ -96,6 +96,37 @@ export function soldier(){
     part(hardware,'box',[.65,3,.4],amber,[.9,-3,2]);
     for(let side of [-1,1])part(hardware,'cylinder',[.35,.45,4.6],silver,[side*1.7,-3,0]);pack(hardware);
   }
+  // Fine hardware is attached to the existing articulated joints.
+  const detail=new THREE.Group();body.add(detail);
+  const ceramic=mat('#bbc1b4',.45,.48),seals=mat('#303b3b',.15,.8);
+  for(let side of [-1,1]){
+    for(let k=0;k<6;k++)part(detail,'box',[.7,.3,.35],ceramic,[side*3.6,2+k*1.1,4.7]);
+    detail.add(tube([[side*4,-2,3.8],[side*5,0,4],[side*4.8,5,4]],.23,silver));
+    for(let k=0;k<4;k++)part(detail,'box',[.8,.35,.2],seals,[side*2,7+k*.7,4.9]);
+  }
+  part(detail,'plate',[3.2,2.1,.4],ceramic,[0,7.4,4.9]);
+  part(detail,'box',[1.7,.27,.2],dark,[0,7.5,5.2]);
+  for(let k=0;k<3;k++)part(detail,'box',[.28,.9,.25],silver,[-.6+k*.6,-3.5,3.1]);
+  pack(detail);
+  const face=new THREE.Group();head.add(face);
+  part(face,'torus',[1.35,.25],silver,[-2,-.2,4.35]);
+  part(face,'sphere',[.6,.6,.2],dark,[-2,-.2,4.5]);
+  for(let k=0;k<5;k++)part(face,'box',[.3,1.1,.3],dark,[-2.3+k*.8,3.5,3.8]);
+  for(let side of [-1,1])part(face,'sphere',[.28,.28,.2],silver,[side*2.7,-2.3,3.7]);
+  face.add(tube([[-2,-1.7,4],[-1,-3,4],[1.8,-3.1,3.7]],.21,seals));pack(face);
+  for(const leg of legs){
+    const d=new THREE.Group();leg.hip.add(d);
+    for(let k=0;k<4;k++)part(d,'plate',[2.8,.8,.45],ceramic,[0,-2-k*.85,2]);
+    part(d,'torus',[1.05,.22],silver,[0,0,2.2]);pack(d);
+    const shin=new THREE.Group();leg.knee.add(shin);
+    for(let k=0;k<5;k++)part(shin,'box',[1.8,.22,.3],dark,[0,-2-k*.7,2.2]);
+    for(let side of [-1,1])part(shin,'sphere',[.25,.25,.2],silver,[side*.9,-1,2.3]);pack(shin);
+  }
+  const rail=new THREE.Group();gun.add(rail);
+  for(let k=0;k<9;k++)part(rail,'box',[.35,.5,2.2],silver,[-1+k*1.1,2.7,0]);
+  for(let k=0;k<4;k++)part(rail,'box',[.8,.6,.2],dark,[5+k*1.2,.2,1.6]);
+  part(rail,'plate',[3.7,2,.4],ceramic,[0,0,2.4]);
+  for(let k=0;k<3;k++)part(rail,'sphere',[.18,.18,.12],silver,[-1+k,0,2.7]);pack(rail);
   muzzle.userData.dynamic=true;pack(body);pack(head);pack(arm);pack(gun);for(const l of legs){pack(l.hip);pack(l.knee);}
   let morph=0,phase=0,wasGround=false,landing=0,previousVy=0;
   return {root,body,legs,arm,gun,ball,head,animate(p,dt,t){
@@ -106,7 +137,7 @@ export function soldier(){
     body.scale.setScalar(Math.max(.02,1-morph));body.position.y=20.5-13.5*morph;
     ball.scale.setScalar(Math.max(.02,morph));shell.rotation.z-=p.vx*dt*.1;
     rings.forEach((r,i)=>{r.rotation.y=t*(i+1)*.8;r.rotation.x=t*.9+i;});
-    root.scale.x=p.facing;root.rotation.y=-.22*p.facing;
+    const size=1.22-.22*morph;root.scale.set(p.facing*size,size,size);root.rotation.y=-.22*p.facing;
     const run=p.onGround&&Math.abs(p.vx)>20;
     body.position.y-=landing*2.1;
     body.position.y+=(run?Math.abs(Math.sin(phase*2))*.65:Math.sin(t*2)*.15)-(p.crouch?6:0);

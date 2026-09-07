@@ -15,3 +15,5 @@ Smooth quality uses smaller shadow maps, baked environmental shading and fewer p
 Validation: `npm test`, `npm run test:models`, `node terrain-test.mjs`, `node art-test.mjs`, and browser scene/portrait/landscape checks.
 
 Revision 6 removes the repeated arches, rounded mountain pillars and decorative crystal towers. Original shader atmospheres replace the busy natural-world backdrops. Fine grain, subdued seams and shared surface normals keep the ground restrained.
+
+Revision 7 adds dense chipped shale, crack traces, mineral inclusions, layered outcrops, survey gantries, pressure vessels, cables, ferns, ledge fragments and industrial vents. Ridgeline geometry has substantially finer subdivisions. The soldier is 22% larger with added helmet fittings, armour fasteners, thigh plates, shin vents and weapon rails. Morph returns to its original scale; gameplay collisions are unchanged. Static details are batched locally, and fern blades use lightweight geometry. All work uses existing tools and code, with no purchased assets or paid generation.

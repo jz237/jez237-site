@@ -17,13 +17,13 @@ export function fracturedRock(w,h,d,seed=1){
 // A continuous escarpment with long slopes, broken shelves and open valleys.
 export function ridgeGeometry(seed=1,height=180){
   const profile=[.11,.18,.30,.58,.63,.46,.39,.19,.09,.14,.38,.53,.84,.91,.74,.56,.31,.24,.18,.37,.44,.65,.60,.30,.13];
-  const pos=[],uv=[],color=[],idx=[],samples=(profile.length-1)*4+1;
+  const pos=[],uv=[],color=[],idx=[],samples=(profile.length-1)*12+1;
   for(let i=0;i<samples;i++){
-    const x=i*23,base=Math.floor(i/4),t=(i%4)/4,crest=(profile[(base+seed*3)%profile.length]*(1-t)+profile[(base+1+seed*3)%profile.length]*t)*height+Math.sin(i*7.13+seed)*5;
-    for(let j=0;j<12;j++){
-      const y=crest*(j/11),z=-Math.sin(i*.61+seed)*14-j*3+Math.sin(i*.83-j*.19)*9+Math.cos(i*.31+j*.63)*7;
-      pos.push(x,y,z);uv.push(x/110,y/110);const shade=.57+j*.018+Math.sin(i*.81-j*.17)*.045;color.push(shade,shade,shade);
-      if(i<samples-1&&j<11){const k=i*12+j;idx.push(k,k+12,k+1,k+1,k+12,k+13);}
+    const x=i*(23/3),base=Math.floor(i/12),t=(i%12)/12,crest=(profile[(base+seed*3)%profile.length]*(1-t)+profile[(base+1+seed*3)%profile.length]*t)*height+Math.sin(i*1.71+seed)*6+Math.sin(i*.51)*9;
+    for(let j=0;j<32;j++){
+      const y=crest*(j/31),z=-Math.sin(i*.21+seed)*19-j*.9+Math.abs(Math.sin(i*.43-j*.17))*18+Math.cos(i*.13+j*.63)*4+Math.sin(i*1.83+j*.7)*2.5;
+      pos.push(x,y,z);uv.push(x/110,y/110);const shade=.57+j*.007+Math.sin(i*.81-j*.17)*.045;color.push(shade,shade,shade);
+      if(i<samples-1&&j<31){const k=i*32+j;idx.push(k,k+32,k+1,k+1,k+32,k+33);}
     }
   }
   const g=new THREE.BufferGeometry();g.setAttribute('position',new THREE.Float32BufferAttribute(pos,3));g.setAttribute('uv',new THREE.Float32BufferAttribute(uv,2));g.setAttribute('color',new THREE.Float32BufferAttribute(color,3));g.setIndex(idx);g.computeVertexNormals();return g;
@@ -34,5 +34,5 @@ export function atmosphere(world){
   return new THREE.ShaderMaterial({depthWrite:false,fog:false,uniforms:{top:{value:new THREE.Color(top)},bottom:{value:new THREE.Color(bottom)}},vertexShader:'varying vec2 vUv;void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 vUv;uniform vec3 top;uniform vec3 bottom;
     float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
     float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1.,0.)),f.x),mix(hash(i+vec2(0.,1.)),hash(i+vec2(1.,1.)),f.x),f.y);}
-    void main(){float mist=noise(vUv*vec2(6.,11.))*.6+noise(vUv*vec2(18.,27.))*.4;vec3 c=mix(bottom,top,smoothstep(.05,1.,vUv.y));c+=vec3(mist*.025);gl_FragColor=vec4(c,1.);}`});
+    void main(){float mist=noise(vUv*vec2(6.,11.))*.6+noise(vUv*vec2(18.,27.))*.4;vec3 c=mix(bottom,top,smoothstep(.05,1.,vUv.y));c+=vec3(mist*.085);gl_FragColor=vec4(c,1.);}`});
 }

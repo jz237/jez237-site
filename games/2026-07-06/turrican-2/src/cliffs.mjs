@@ -1,3 +1,4 @@
+import {surfaceDetail,fern} from './environment-detail.mjs';
 import * as THREE from 'three';
 import {fracturedRock} from './geology.mjs';
 import {reliefGeometry,rockFace,pack,tube} from './artisan.mjs';
@@ -105,6 +106,11 @@ export function rockPlatform(parent,pl,material,industrial){
   if(industrial){part(parent,'box',[w,5,22],material,[x+w/2,y-2,-5]);part(parent,'box',[w-4,.7,1],cyan,[x+w/2,y+.1,7]);return;}
   const shape=new THREE.Shape();shape.moveTo(x+2,y);shape.lineTo(x+w-2,y);shape.quadraticCurveTo(x+w+2,y-5,x+w-7,y-9);shape.lineTo(x+w*.7,y-13);shape.lineTo(x+w*.4,y-19);shape.lineTo(x+7,y-10);shape.quadraticCurveTo(x-2,y-5,x+2,y);
   const g=new THREE.ExtrudeGeometry(shape,{depth:18,bevelEnabled:true,bevelSize:1,bevelThickness:1,bevelSegments:2,curveSegments:5});g.translate(0,0,-19);
+  const chips=new THREE.Group();parent.add(chips);
+  for(let k=0;k<Math.max(3,Math.floor(w/9));k++){
+    const t=(k+.5)/Math.max(3,Math.floor(w/9)),rock=new THREE.Mesh(fracturedRock(5,2.5,2.3,k+w),material);
+    rock.position.set(x+5+t*(w-10),y-3-Math.sin(t*Math.PI)*5,1);rock.rotation.z=(t-.5)*.3;chips.add(rock);
+  }pack(chips);
   const m=new THREE.Mesh(g,material);m.castShadow=true;m.receiveShadow=true;parent.add(m);part(parent,'box',[w-6,.55,1],mat('#87a9a4',.1,.7,.1),[x+w/2,y+.15,1]);
 }
 
@@ -127,5 +133,12 @@ export function landscapeRelief(parent,level,surface){
   }
   // Batch each local section, preserving frustum culling across the long level.
   const chunks=new Map();for(const child of [...set.children]){const key=Math.floor(child.position.x/240);if(!chunks.has(key)){const g=new THREE.Group();chunks.set(key,g);set.add(g);}chunks.get(key).add(child);}for(const group of chunks.values())pack(group);
+  surfaceDetail(parent,level,surface);
+  if(natural)for(const loop of contours(level))for(let k=0;k<loop.length;k++){
+    const a=loop[k],b=loop[(k+1)%loop.length];if(a[1]!==b[1]||b[0]-a[0]<60)continue;
+    const foliage=new THREE.Group();foliage.position.z=-9;parent.add(foliage);
+    for(let x=a[0]+23;x<b[0]-20;x+=89)fern(foliage,x,a[1],.35+(Math.sin(x)*.5+.5)*.4,level.world);
+    pack(foliage);
+  }
   parent.userData.relief={sculptedLayers:count,bakedCavities:natural};
 }
