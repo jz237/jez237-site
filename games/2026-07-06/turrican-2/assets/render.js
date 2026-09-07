@@ -10,8 +10,11 @@
 
   function createRenderer(display) {
     const buf = document.createElement('canvas');
-    buf.width = VIEW_W; buf.height = VIEW_H;
+    let resolution = 3;
+    buf.width = VIEW_W * resolution; buf.height = VIEW_H * resolution;
     const bx = buf.getContext('2d');
+    bx.setTransform(resolution,0,0,resolution,0,0);
+    bx.imageSmoothingQuality = 'high';
     const dx = display.getContext('2d');
     // bloom offscreen (quarter-res highlight buffer)
     const bloomC = document.createElement('canvas');
@@ -104,7 +107,7 @@
       tileAtlas = buildTileAtlas(lv.world);
       // try a world background image (optional, degrades gracefully)
       bgImg = null;
-      loadBg(`assets/img/world${lv.world}-bg.jpg?v=${D.VERSION}`, ++bgToken);
+      loadBg(lv.world === 1 ? 'assets/img/crystalline-canyon.png' : `assets/img/world${lv.world}-bg.jpg?v=${D.VERSION}`, ++bgToken);
     }
 
     // pre-render 4 base + 4 top-capped tile variants per world (crisp identity
@@ -552,7 +555,7 @@
         for (let tx = x0; tx <= x1; tx++) {
           const t = level.tiles[ty * level.cols + tx];
           if (t === T.EMPTY) continue;
-          const sx = Math.round(tx * TILE - cam.x), sy = Math.round(ty * TILE - cam.y);
+          const sx = (tx * TILE - cam.x), sy = (ty * TILE - cam.y);
           if (t === T.SOLID) drawBlock(sx, sy, tx, ty);
           else if (t === T.SPIKE) drawSpike(sx, sy);
           else if (t === T.CRATE) drawCrate(sx, sy);
@@ -637,7 +640,7 @@
         if (pl.belt) {
           // conveyor: scrolling chevrons show the drag direction
           bx.save(); bx.beginPath(); bx.rect(sx + 1, sy, w - 2, 8); bx.clip();
-          bx.strokeStyle = '#F2C037'; bx.lineWidth = 2; bx.globalAlpha = 0.85;
+          bx.strokeStyle = '#F2C037'; bx.lineWidth = 2; bx.globalAlpha = 0.32;
           const off = ((t * 26 * pl.belt) % 12 + 12) % 12;
           for (let i = -12; i < w + 12; i += 12) {
             const x0 = sx + i + off;
@@ -1247,6 +1250,15 @@
 
     // ---- player -----------------------------------------------------------
     // pixel-art hero sprite (idle + 6 run frames); procedural is the fallback
+    const heroHD = new Image(); let heroHDReady=false;
+    heroHD.onload=()=>{heroHDReady=true;};heroHD.src='assets/img/hero-hd.png';
+    const heroFrames=[[36,28,310,448],[356,58,416,407],[819,56,352,412],[1120,68,409,402],[12,560,430,405],[389,558,463,401],[865,525,300,316],[1177,668,351,295]];
+    const heroClips={
+      2:[[819,56],[1171,56],[1171,235],[1070,235],[1050,370],[1000,468],[819,468]],
+      3:[[1240,68],[1536,68],[1536,470],[1120,470],[1120,325],[1230,240]],
+      4:[[120,560],[442,560],[442,735],[370,760],[340,850],[180,965],[12,965],[12,830]],
+      5:[[550,558],[852,558],[852,959],[389,959],[389,800],[520,740]]
+    };
     const heroImg = { idle: null, run: [], loaded: false, tried: false };
     function loadHero() {
       if (heroImg.tried) return; heroImg.tried = true;
@@ -1262,7 +1274,7 @@
       const p = s.player;
       if (p.dead && p.deathTimer < 1.2) return;
       loadHero();
-      const sx = Math.round(p.x - cam.x), sy = Math.round(p.y - cam.y);
+      const sx = (p.x - cam.x), sy = (p.y - cam.y);
       if (p.invuln > 0 && Math.floor(p.invuln * 20) % 2 === 0) return;
       bx.save();
       const cx = sx + p.w / 2;
@@ -1317,6 +1329,20 @@
         return;
       }
 
+      // Native high-resolution artwork; source rectangles avoid sprite-cell clipping.
+      if(heroHDReady){
+        const run=Math.abs(p.vx)>20 && p.onGround;
+        const n=p.crouch?7:!p.onGround&&!p.inWater?6:run?1+Math.floor(performance.now()/90)%5:0;
+        const [ax,ay,aw,ah]=heroFrames[n];
+        const h=n===7?29:n===6?34:43,w=h*aw/ah;
+        bx.translate(cx,sy+p.h);bx.scale(p.facing,1);
+        bx.translate(-w*.43,-h);bx.scale(w/aw,h/ah);bx.translate(-ax,-ay);
+        bx.beginPath();const clip=heroClips[n];
+        if(clip){clip.forEach(([x,y],i)=>i?bx.lineTo(x,y):bx.moveTo(x,y));bx.closePath();}
+        else bx.rect(ax,ay,aw,ah);
+        bx.clip();bx.drawImage(heroHD,0,0);
+        bx.restore();return;
+      }
       // ---- pixel-art hero sprite (platform mode) ----
       if (heroImg.loaded) {
         const face = p.facing;
@@ -1737,11 +1763,12 @@
       }
     }
 
-    let crt = true, fx = true;
+    let crt = false, fx = true;
     function setCRT(on) { crt = on; }
     function setFX(on) { fx = on; } // performance mode: skip vignette + halve ambience
 
-    return { setLevel, render, setCRT, setFX, get buffer() { return buf; }, particles };
+    function setResolution(scale) { resolution=scale;buf.width=VIEW_W*scale;buf.height=VIEW_H*scale;bx.setTransform(scale,0,0,scale,0,0);bx.imageSmoothingQuality='high'; }
+    return { setLevel, render, setCRT, setFX, setResolution, get buffer() { return buf; }, particles };
   }
 
   return { createRenderer };

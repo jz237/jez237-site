@@ -4,8 +4,8 @@
  * an input frame per 60Hz tick, exactly like a human on the pad.
  *
  * It is NOT a recording: no scripted key list, so it survives level tweaks.
- * Hidden failsafes (stall rescue, boss drain) exist only so an unattended
- * cabinet can never wedge — they are last resorts, not the strategy.
+ * Crystal HD uses bounded pickup pursuit, safe landing prediction and tactical
+ * weapon selection. The pilot emits controls only; it never teleports or drains HP.
  * UMD: usable in Node (headless bot tests) and the browser.
  */
 (function (root, factory) {
@@ -110,7 +110,7 @@
       P.jumpT = P.jumpCd = P.dodgeCd = P.bombCd = P.switchCd = 0;
       P.morphT = P.morphCd = 0; P.breach = 0;
       P.maxX = -1e9; P.stallT = 0; P.safeY = null; P.bossT = 0; P.elapsed = 0;
-      P.held = blankInput();
+      P.held = blankInput(); P.target=null; P.ignored=new WeakMap(); P.targetSince=0; P.lineCd=0; P.intent="Finding a safe route";
     }
 
     // Press a jump for n ticks (variable-height: holding longer jumps higher).
@@ -137,14 +137,68 @@
       if (lvl.type === 'shmup') flyShip(state, inp);
       else runAndGun(state, inp);
 
-      // keep the demo pilot on MULTIPLE — the beam locks facing while firing,
-      // which reads badly on an autopilot that turns to shoot
-      if (p.weapon !== 'spread' && p.weapons.spread > 0 && P.switchCd <= 0) {
-        inp.switchPressed = true; P.switchCd = 0.3;
-      }
+      tactics(state, inp);
       return finish(inp);
     }
 
+
+    P.ignored = new WeakMap();
+    function chooseTarget(s) {
+      const p=s.player;
+      if(P.target && (!s.pickups.includes(P.target) || P.elapsed-P.targetSince>3.5)) {
+        if(s.pickups.includes(P.target))P.ignored.set(P.target,P.elapsed+25);
+        P.target=null;
+      }
+      if(P.target)return P.target;
+      let best=Infinity;
+      for(const it of s.pickups){
+        if(it.taken || (P.ignored.get(it)||0)>P.elapsed)continue;
+        const dx=it.x-p.x,dy=it.y-p.y;
+        if(dx < -95 || dx > 230 || dy < -95 || dy > 65)continue;
+        const floor=standBelow(s.level,it.x+8,it.y+16);
+        if(floor===null || spikedAt(s.level,it.x+8,floor))continue;
+        let score=Math.abs(dx)+Math.abs(dy)*1.8+(dx<0?30:0);
+        if(it.type==='pu_energy' && p.energy<60)score-=120;
+        if(it.type==='pu_weapon')score-=35;
+        if(score<best){best=score;P.target=it;}
+      }
+      if(P.target)P.targetSince=P.elapsed;
+      return P.target;
+    }
+    function tactics(s,i){
+      const p=s.player, cx=p.x+p.w/2, cy=p.y+p.h/2;
+      const near=s.enemies.filter(e=>e.alive && Math.abs(e.x-cx)<230 && Math.abs(e.y-cy)<150);
+      let target=near.slice().sort((a,b)=>Math.hypot(a.x-cx,a.y-cy)-Math.hypot(b.x-cx,b.y-cy))[0];
+      if(s.boss && s.boss.alive && s.boss.awake && !s.boss.dying)target=s.boss;
+      const danger=s.eshots.some(q=>{const vx=(q.vx||0)-p.vx,vy=(q.vy||0)-p.vy,dx=q.x-cx,dy=q.y-cy;
+        const t=Math.max(0,Math.min(.45,-(dx*vx+dy*vy)/(vx*vx+vy*vy||1)));
+        return t>0 && Math.hypot(dx+vx*t,dy+vy*t)<25;});
+      if(p.morph){i.fire=Math.floor(P.elapsed*8)%2===0;P.intent='Rolling shield · laying mines';return;}
+      let desired='spread';
+      if(target){
+        const tx=target.x+target.w/2-cx,ty=target.y+target.h/2-cy;
+        const obstructed=solidAt(s.level,cx+tx*.5,cy+ty*.5);
+        desired=obstructed || (Math.abs(ty)>35 && Math.abs(tx)>60) ? 'bounce' : (near.length<=2 && Math.abs(tx)<220 ? 'beam':'spread');
+        if(desired==='beam' && Math.sign(tx)!==p.facing)desired='spread';
+        P.intent=desired==='beam'?'Tracking target · beam':desired==='bounce'?'Ricocheting around cover':'Suppressing enemies · multiple';
+        if(p.weapon==='beam' && s.level.type !== 'shmup' && !p.inWater){
+          if(Math.sign(tx)!==p.facing || Math.abs(tx)>230){i.fire=false;}
+          else {const want=Math.atan2(ty,Math.abs(tx));const angle=p.beamAngle||0;
+            i.up=want<angle-.06;i.down=want>angle+.06;}
+        }
+      }else if(p.weapon==='beam')i.fire=false;
+      if(p.weapon!==desired && p.weapons[desired]>0 && P.switchCd<=0){i.switchPressed=true;P.switchCd=.22;i.fire=false;}
+      if((danger || near.length>=3) && p.bombs>0 && P.bombCd<=0 && s.freeze<=0 && (p.energy<65 || near.length>=3)){
+        i.bombPressed=true;P.bombCd=7;P.intent='Freezing incoming threats';
+      }
+      if(p.lines>0 && P.elapsed>(P.lineCd||0) && near.some(e=>Math.abs(e.x+e.w/2-cx)<21)){
+        i.linePressed=true;P.lineCd=P.elapsed+3;P.intent='Power line · vertical strike';
+      }
+      if(danger && p.onGround && !p.inWater && P.dodgeCd<=0){
+        const dir=i.left?-1:1;const r=simulate(s,dir,12);
+        if(r.ok){jump(12);i.jump=true;P.dodgeCd=.5;P.intent='Evading incoming fire';}
+      }
+    }
     // fill in the edge flags the engine expects from a real pad
     function finish(inp) {
       const prev = P.held;
@@ -176,12 +230,23 @@
       P.bossT = 0;
 
       // stall watchdog: never let an unattended cabinet wedge on geometry
-      if (p.x > P.maxX + 4) { P.maxX = p.x; P.stallT = 0; P.safeY = p.y + p.h; }
+      if (Math.abs(p.x - P.maxX) > 4) { P.maxX = p.x; P.stallT = 0; P.safeY = p.y + p.h; }
       else P.stallT += DT;
       if (P.stallT > 2.5 && p.onGround) jump(20);
-      if (P.stallT > 7) rescue(state);
+      if (P.stallT > 4 && P.target) { P.ignored.set(P.target,P.elapsed+20);P.target=null; }
+      if (P.stallT > 7) { jump(28); P.stallT=0; P.maxX=p.x-10; }
 
-      const dir = (lvl.exit.x + 10 > pcx) ? 1 : -1;
+      const target = chooseTarget(state);
+      const dir = target ? (target.x + 8 > pcx ? 1 : -1) : ((lvl.exit.x + 10 > pcx) ? 1 : -1);
+      P.intent = target ? (target.type === 'gem' ? 'Collecting crystals' : 'Seeking a power-up') : 'Finding a safe route';
+      if (target && p.onGround && !p.morph && !p.inWater && P.jumpCd <= 0) {
+        let best = null;
+        for (const hold of [8,12,16,20,24,28]) {
+          const r=simulate(state,dir,hold,target);
+          if(r.ok && r.hit && (!best || hold < best.hold)) best={hold};
+        }
+        if(best)jump(best.hold);
+      }
       inp[dir > 0 ? 'right' : 'left'] = true;
 
       // ---- terrain reading (pits, spikes, walls) --------------------------
@@ -289,10 +354,10 @@
         if ((hazard || wall || P.morphT <= 0) && P.morphCd <= 0) { inp.morphPressed = true; P.morphCd = 0.3; }
       } else if (P.morphT <= 0 && P.morphCd <= 0 && p.onGround && !p.inWater && p.energy > 55 &&
                  !hazard && !wall && !(lvl.bossSpawn && pcx > lvl.bossSpawn.wakeX - 420) &&
-                 Math.random() < 0.005 && flatRun(state, dir, 20)) {
+                 P.elapsed - (P.lastMorph || 0) > 12 && flatRun(state, dir, 8)) {
         let clear = true;
         for (const e of state.enemies) if (e.alive && Math.abs(e.x - pcx) < 190) clear = false;
-        if (clear) { inp.morphPressed = true; P.morphT = 0.7; P.morphCd = 0.3; }
+        if (clear) { inp.morphPressed = true; P.morphT = 0.7; P.lastMorph = P.elapsed; P.morphCd = 0.3; }
       }
 
       if (P.jumpT > 0) { inp.jump = true; P.jumpT--; }
@@ -304,14 +369,16 @@
     // the horizontal wall clamp. Without that clamp the pilot "lands" on ledges
     // its shoulder would actually be shoved off, which is exactly how a bot
     // walks into a pit with a smile on its face.
-    function simulate(state, mv, jumpHold) {
+    function simulate(state, mv, jumpHold, target) {
       const p = state.player, lvl = state.level;
+      let hit=false;
       let x = p.x, y = p.y, vx = p.vx, vy = (jumpHold != null ? -560 : p.vy);
       for (let t = 0; t < 110; t++) {
         if (jumpHold != null && t === jumpHold && vy < 0) vy *= 0.42;   // release cut
         if (mv !== 0) vx = Math.max(-205, Math.min(205, vx + mv * 1800 * DT));
         else vx -= Math.sign(vx) * Math.min(Math.abs(vx), 528 * DT);
         vy = Math.min(vy + 1750 * DT, 760);
+        if(target && x < target.x+16 && x+p.w > target.x && y < target.y+16 && y+p.h > target.y) hit=true;
         const py0 = y;
         x += vx * DT;
         if (vx !== 0) {                                                 // wall clamp
@@ -326,23 +393,23 @@
           }
         }
         y += vy * DT;
-        if (y > lvl.rows * TILE) return { ok: false, land: x };         // out of the world
+        if (y > lvl.rows * TILE) return { ok: false, land: x, hit };         // out of the world
         if (vy < 0 && (solidAt(lvl, x + 2, y - 1) || solidAt(lvl, x + p.w - 2, y - 1))) vy = 0;
         if (vy > 0) {
           const feet = y + p.h;
           if (solidAt(lvl, x + 2, feet + 1) || solidAt(lvl, x + p.w - 2, feet + 1)) {
             const top = Math.floor(feet / TILE) * TILE;
             const cx = x + p.w / 2;
-            return { ok: !spikedAt(lvl, cx, top) && !crateTop(lvl, cx, top), land: x };
+            return { ok: !spikedAt(lvl, cx, top) && !crateTop(lvl, cx, top), land: x, hit };
           }
           for (const pl of (lvl.platforms || [])) {                     // one-way ledges catch us
             const plx = pl.x * TILE, ply = pl.y * TILE;
             if (x + p.w > plx + 2 && x < plx + pl.w * TILE - 2 && py0 + p.h <= ply + 3 && feet >= ply)
-              return { ok: true, land: x };
+              return { ok: true, land: x, hit };
           }
         }
       }
-      return { ok: false, land: x };                                    // never came down
+      return { ok: false, land: x, hit };                                    // never came down
     }
 
     // Take-off: the shortest hop that actually lands somewhere. Jumping flat out
@@ -427,9 +494,12 @@
       if (P.jumpT > 0) { inp.jump = true; P.jumpT--; }
 
       // failsafe: an unattended demo must never stall on a boss it can't finish
-      if (P.bossT > 150 && b.hp > 0) b.hp -= b.maxHp * 0.02 * DT;
+
     }
 
+    function safeFlightPickup(s,g){
+      return s.pickups.filter(it=>!it.taken && it.x>s.player.x && it.x<s.player.x+190 && it.y>g.top+24 && it.y<g.bot-30).sort((a,b)=>a.x-b.x)[0];
+    }
     // ---- shmup stages (World 3) --------------------------------------------
     function flyShip(state, inp) {
       const p = state.player, lvl = state.level, b = state.boss;
@@ -467,6 +537,8 @@
         const look = 46 + (lvl.scroll || 70) * 0.55;
         const g = tunnelGap(lvl, p.x + p.w + look);
         wantY = (g.top + g.bot) / 2;
+        const crystal=safeFlightPickup(state,g);
+        if(crystal){wantY=crystal.y+8;P.intent='Intercepting crystals';}
       }
       // slide off anything about to hit us
       for (const s of state.eshots) {
@@ -486,30 +558,8 @@
 
       if (boss) {
         P.bossT += DT;
-        if (P.bossT > 150 && b.hp > 0) b.hp -= b.maxHp * 0.02 * DT;   // never stall the show
-      }
-    }
 
-    // Last-resort unwedge: lift the pilot to the next clean ground ahead. It
-    // aims at the level's own walking surface (within a couple of tiles of where
-    // we last stood), so it can never deposit us back down a shaft.
-    function rescue(state) {
-      const p = state.player, lvl = state.level;
-      let col = Math.floor((p.x + p.w / 2) / TILE) + 2;
-      for (let i = 0; i < 80 && col < lvl.cols - 3; i++, col++) {
-        const x = col * TILE + TILE / 2;
-        const g = floorBelow(lvl, x, TILE * 1.5);
-        if (g === null || spikedAt(lvl, x, g)) continue;
-        const gl = floorBelow(lvl, x - TILE, TILE * 1.5), gr = floorBelow(lvl, x + TILE, TILE * 1.5);
-        if ((gl !== null && g - gl > TILE * 1.5) || (gr !== null && g - gr > TILE * 1.5)) continue; // a well, not the path
-        if (solidAt(lvl, x, g - 20) || solidAt(lvl, x, g - 40)) continue; // needs headroom
-        p.x = x - p.w / 2; p.y = g - p.h - 2; p.vx = 0; p.vy = 0;
-        p.morph = false; p.h = 30; p.w = 14;
-        p.invuln = Math.max(p.invuln, 1);
-        P.stallT = 0; P.maxX = p.x; P.rescues++;
-        return;
       }
-      P.stallT = 0;
     }
 
     return {
