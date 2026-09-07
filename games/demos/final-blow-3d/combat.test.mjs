@@ -28,21 +28,7 @@ test('a strike applies its damage once and a block reduces damage',()=>{
   assert.equal(target.hp,blocked?99:95);assert.equal(b.hits,1);
  }
 });
-test('the two-jab combination lands twice, with no repeated damage between contacts',()=>{
- const b=new Combat(237);b.phase='fight';const [a,target]=b.fighters;
- a.x=-.55;target.x=.55;a.think=10;target.think=10;
- b.act(a,'attack',MOVES.doublejab.duration,'doublejab');
- for(let i=0;i<18;i++)b.step(1/60);
- assert.equal(target.hp,96);assert.equal(b.hits,1);
- for(let i=0;i<20;i++)b.step(1/60);
- assert.equal(target.hp,92);assert.equal(b.hits,2);
- assert.deepEqual(b.events.filter(e=>e.type==='hit').map(e=>e.combo),[1,2]);
-});
-test('the CPU uses all three added moves across seeded exhibitions',()=>{
- const seen=new Set();
- for(let seed=1;seed<=12;seed++){
-  const b=new Combat(seed);
-  for(let i=0;i<60*60;i++){b.step(1/60);for(const f of b.fighters)if(f.move)seen.add(f.move);b.events.length=0;}
- }
- for(const move of ['sweep','straight','doublejab'])assert.ok(seen.has(move),move);
+test('the CPU uses every rebuilt attack across seeded exhibitions',()=>{
+ const seen=new Set();for(let seed=1;seed<=12;seed++){const b=new Combat(seed);for(let i=0;i<60*60;i++){b.step(1/60);for(const f of b.fighters)if(f.move)seen.add(f.move);b.events.length=0;}}
+ for(const move of ['jab','cross','hook','kick'])assert.ok(seen.has(move),move);
 });

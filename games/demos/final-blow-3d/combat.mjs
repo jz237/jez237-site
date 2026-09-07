@@ -1,4 +1,4 @@
-export const MOVES={sweep:{duration:.66,hit:.24,range:1.7,damage:11,clip:'sweep',label:'LOW SWEEP',limb:'foot',height:.35},straight:{duration:.44,hit:.14,range:1.6,damage:10,clip:'stance_punch',label:'POWER STRAIGHT'},doublejab:{duration:.60,hit:.09,hits:[.09,.39],range:1.5,damage:4,clip:'double_jab',label:'ONE–TWO JABS'},jab:{duration:.30,hit:.09,range:1.36,damage:5,clip:'jab'},hook:{duration:.42,hit:.12,range:1.32,damage:9,clip:'hook'},uppercut:{duration:.46,hit:.14,range:1.2,damage:11,clip:'uppercut'},kick:{duration:.60,hit:.23,range:1.78,damage:12,clip:'roundhouse'},high:{duration:.55,hit:.20,range:1.63,damage:10,clip:'high_kick'}};
+export const MOVES={jab:{duration:.42,hit:.16,range:1.55,damage:5,clip:'jab',label:'JAB'},cross:{duration:.52,hit:.21,range:1.65,damage:10,clip:'cross',label:'CROSS'},hook:{duration:.58,hit:.24,range:1.4,damage:9,clip:'hook',label:'HOOK'},kick:{duration:.72,hit:.30,range:1.75,damage:11,clip:'lowkick',label:'LOW KICK'}};
 export class Combat {
  constructor(seed=237,profiles=[]){this.profiles=profiles;this.seed=seed>>>0;this.round=0;this.wins=[0,0];this.hits=0;this.blocks=0;this.events=[];this.resetRound();}
  move(f){return this.profiles[f.id]?.[f.move]||MOVES[f.move];}
@@ -15,7 +15,7 @@ export class Combat {
    if(['idle','walk','back'].includes(f.state)&&f.think<=0){const distance=Math.abs(o.x-f.x);f.think=.12+this.random()*.20;
     if(o.state==='attack'&&o.t<this.move(o).hit&&distance<1.65*1.25&&this.random()<.53)this.act(f,this.random()<.22?'dodge':'block',.4);
     else if(distance>1.16*1.25){if(f.state!=='walk')this.act(f,'walk',0);}
-    else if(this.random()<.67){const choices=(distance>1.08*1.25?['kick','high','sweep','straight']:['jab','doublejab','hook','uppercut','kick','sweep','straight']).filter(m=>m!==f.lastMove);const move=choices[Math.floor(this.random()*choices.length)];this.act(f,'attack',MOVES[move].duration,move);f.think=MOVES[move].duration+.08;}
+    else if(this.random()<.67){const choices=(distance>1.08*1.25?['kick','cross','jab']:['jab','cross','hook','kick']).filter(m=>m!==f.lastMove);const move=choices[Math.floor(this.random()*choices.length)];this.act(f,'attack',MOVES[move].duration,move);f.think=MOVES[move].duration+.08;}
     else if(this.random()<.45){if(f.state!=='back')this.act(f,'back',0);f.think=.35;}
     else this.act(f,'idle',0);
    }
