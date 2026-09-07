@@ -36,11 +36,11 @@
 import { DeterministicRng, hashSeed } from "./foundation.mjs";
 import { refillBag } from "./demo.mjs";
 
-/** The cadence policy's rates. `exchange` is the 4.3 couch default. */
+/** 5.5: readable footwork at 0.75x and exchanges at 0.6x. */
 export const DEMO_CADENCE_RATES = Object.freeze({
   intro: 0.75,
-  neutral: 1,
-  exchange: 0.75,
+  neutral: 0.75,
+  exchange: 0.6,
   ceremony: 0.75,
 });
 

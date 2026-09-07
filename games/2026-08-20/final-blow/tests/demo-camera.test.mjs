@@ -146,10 +146,10 @@ const fight = (tick, overrides = {}) => ({ phase: "fight", finisher: false, tick
 test("the policy: intro, neutral at range, exchange on contact or in range, ceremony after", () => {
   const cadence = createDemoCadence();
   assert.deepEqual(cadence.update({ phase: "intro", tick: 10 }), { beat: "intro", rate: DEMO_CADENCE_RATES.intro });
-  assert.deepEqual(cadence.update(fight(100)), { beat: "neutral", rate: 1 });
-  assert.deepEqual(cadence.update(fight(101, { engaged: true })), { beat: "exchange", rate: 0.75 });
-  assert.deepEqual(cadence.update(fight(200, { distance: DEMO_CONTACT_RANGE })), { beat: "exchange", rate: 0.75 }, "in range is an exchange before a button is pressed");
-  assert.deepEqual(cadence.update(fight(200 + DEMO_EXCHANGE_DWELL_TICKS + 1, { distance: DEMO_CONTACT_RANGE + 1 })), { beat: "neutral", rate: 1 });
+  assert.deepEqual(cadence.update(fight(100)), { beat: "neutral", rate: 0.75 });
+  assert.deepEqual(cadence.update(fight(101, { engaged: true })), { beat: "exchange", rate: 0.6 });
+  assert.deepEqual(cadence.update(fight(200, { distance: DEMO_CONTACT_RANGE })), { beat: "exchange", rate: 0.6 }, "in range is an exchange before a button is pressed");
+  assert.deepEqual(cadence.update(fight(200 + DEMO_EXCHANGE_DWELL_TICKS + 1, { distance: DEMO_CONTACT_RANGE + 1 })), { beat: "neutral", rate: 0.75 });
   assert.deepEqual(cadence.update({ phase: "roundover", tick: 400 }), { beat: "ceremony", rate: 0.75 });
   assert.deepEqual(cadence.update({ phase: "fight", finisher: true, tick: 401 }), { beat: "ceremony", rate: 0.75 }, "a Final Blow cinematic owns its own slow motion");
   assert.deepEqual(cadence.update({ phase: "result", tick: 402 }), { beat: "ceremony", rate: 0.75 });

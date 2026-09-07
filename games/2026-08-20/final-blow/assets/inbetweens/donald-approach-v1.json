@@ -1,0 +1,278 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        62,
+        39,
+        264,
+        304
+      ],
+      "rect": [
+        66,
+        22,
+        223,
+        292
+      ],
+      "scale": 1.096138764036631,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 1,
+      "source": [
+        365,
+        30,
+        523,
+        304
+      ],
+      "rect": [
+        65,
+        10,
+        176,
+        304
+      ],
+      "scale": 1.1054545454545455,
+      "areaRatio": 0.8169960849931357
+    },
+    {
+      "frame": 2,
+      "source": [
+        689,
+        37,
+        858,
+        304
+      ],
+      "rect": [
+        48,
+        13,
+        191,
+        301
+      ],
+      "scale": 1.124139620749107,
+      "areaRatio": 1
+    },
+    {
+      "frame": 3,
+      "source": [
+        988,
+        38,
+        1169,
+        306
+      ],
+      "rect": [
+        63,
+        10,
+        206,
+        304
+      ],
+      "scale": 1.1301115241635689,
+      "areaRatio": 0.9897021660125965
+    },
+    {
+      "frame": 4,
+      "source": [
+        62,
+        388,
+        258,
+        607
+      ],
+      "rect": [
+        60,
+        64,
+        224,
+        250
+      ],
+      "scale": 1.1347552924059932,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 5,
+      "source": [
+        364,
+        495,
+        574,
+        610
+      ],
+      "rect": [
+        86,
+        193,
+        219,
+        121
+      ],
+      "scale": 1.0398437216015695,
+      "areaRatio": 1
+    },
+    {
+      "frame": 6,
+      "source": [
+        704,
+        334,
+        863,
+        594
+      ],
+      "rect": [
+        82,
+        22,
+        179,
+        292
+      ],
+      "scale": 1.1177901581240506,
+      "areaRatio": 1
+    },
+    {
+      "frame": 7,
+      "source": [
+        1003,
+        361,
+        1141,
+        586
+      ],
+      "rect": [
+        67,
+        34,
+        172,
+        280
+      ],
+      "scale": 1.2390440512635041,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 8,
+      "source": [
+        101,
+        674,
+        224,
+        877
+      ],
+      "rect": [
+        92,
+        83,
+        140,
+        231
+      ],
+      "scale": 1.1320928092279856,
+      "areaRatio": 1
+    },
+    {
+      "frame": 9,
+      "source": [
+        364,
+        664,
+        528,
+        901
+      ],
+      "rect": [
+        77,
+        47,
+        185,
+        267
+      ],
+      "scale": 1.1215946063731492,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 10,
+      "source": [
+        674,
+        756,
+        870,
+        901
+      ],
+      "rect": [
+        54,
+        153,
+        218,
+        161
+      ],
+      "scale": 1.1041150147834724,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 11,
+      "source": [
+        989,
+        670,
+        1125,
+        899
+      ],
+      "rect": [
+        64,
+        21,
+        175,
+        293
+      ],
+      "scale": 1.2758985920068195,
+      "areaRatio": 1
+    },
+    {
+      "frame": 12,
+      "source": [
+        76,
+        1015,
+        215,
+        1191
+      ],
+      "rect": [
+        81,
+        112,
+        159,
+        202
+      ],
+      "scale": 1.1385161409447608,
+      "areaRatio": 1
+    },
+    {
+      "frame": 13,
+      "source": [
+        324,
+        995,
+        563,
+        1191
+      ],
+      "rect": [
+        6,
+        75,
+        291,
+        239
+      ],
+      "scale": 1.2123571091606387,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 14,
+      "source": [
+        676,
+        939,
+        833,
+        1190
+      ],
+      "rect": [
+        84,
+        16,
+        187,
+        298
+      ],
+      "scale": 1.181552203213799,
+      "areaRatio": 1
+    },
+    {
+      "frame": 15,
+      "source": [
+        997,
+        1043,
+        1204,
+        1192
+      ],
+      "rect": [
+        79,
+        145,
+        235,
+        169
+      ],
+      "scale": 1.1278023553439591,
+      "areaRatio": 1.0000000000000002
+    }
+  ],
+  "source": "exec-e0302b8b-9252-4b42-b542-b9a9e524af9f.png",
+  "prompt": "Use case: stylized-concept. Create an additional animation sheet for the reference fighter donald. Reference is identity/style and final poses, NOT edit target. Exact 4x4 equal grid, 16 full-body painted videogame sprites, solid flat magenta #ff00ff background. Each cell depicts the SAME corresponding attack as reference but about 60 milliseconds EARLIER: elbows and knees visibly bent, weight loading naturally before extension. Preserve outfit, face, physique, camera angle and facing. Row1: jab halfway extending; front kick knee chamber; cross punch torso turning; straight punch elbow bent. Row2: crouching jab halfway; sweep leg half extended; airborne punch halfway; airborne kick knee opening. Row3: airborne knee loading; uppercut fist at forehead height elbow bent; landing knees bending; turning kick knee opening. Row4: crouching guard arms rising; heavy punch halfway; high kick raised thigh bent knee; low sweep leg halfway. All heads fists boots accessories completely inside each cell with generous 12 percent empty margin on EVERY side. No cropping, no extra limbs, no blur, no effects, no duplicate overlapping bodies, no text or grid lines. Detailed painted rendering, precise consistent anatomy."
+}
