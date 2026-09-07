@@ -13,7 +13,7 @@ const $=s=>document.querySelector(s),canvas=$('#game');
 const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
 renderer.setPixelRatio(Math.min(Math.max(devicePixelRatio,2),2.5));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=.95;
 const scene=new THREE.Scene();scene.background=new THREE.Color('#141d2a');scene.fog=new THREE.Fog('#141d2a',13,35);
-const viewHeight=3.35;const camera=new THREE.OrthographicCamera(-viewHeight*16/18,viewHeight*16/18,viewHeight/2,-viewHeight/2,.1,70);camera.position.set(0,2.05,9);camera.lookAt(0,1.35,0);
+const viewHeight=3.35;const camera=new THREE.OrthographicCamera(-viewHeight*16/18,viewHeight*16/18,viewHeight/2,-viewHeight/2,.1,70);camera.position.set(0,2.22,9);camera.lookAt(0,1.52,0);
 const pmrem=new THREE.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=pmrem.fromScene(room,.04).texture;room.dispose();pmrem.dispose();scene.environmentIntensity=.3;
 scene.add(new THREE.HemisphereLight(0xc7e3ff,0x30303b,.55));
 function light(color,power,x,y,z){const l=new THREE.DirectionalLight(color,power);l.position.set(x,y,z);scene.add(l);return l;}
@@ -61,7 +61,7 @@ async function buildFighter(id,index){
  model.updateMatrixWorld(true);
  const targetRest=new Map(),targetParents=new Map();model.traverse(o=>{if(o.isBone){targetRest.set(o.name,o.getWorldQuaternion(new THREE.Quaternion()));targetParents.set(o.name,o.parent?.name);}});
  const bindPositions=new Map();model.traverse(o=>{if(o.isBone)bindPositions.set(o.name,o.position.clone());});
- const bounds=new THREE.Box3().setFromObject(model),scale=2.22/bounds.getSize(new THREE.Vector3()).y;model.scale.setScalar(scale);model.position.y=-bounds.min.y*scale;model.position.x=-(bounds.min.x+bounds.max.x)*scale/2;model.position.z=-(bounds.min.z+bounds.max.z)*scale/2;
+ const bounds=new THREE.Box3().setFromObject(model),scale=(2.22*1.25)/bounds.getSize(new THREE.Vector3()).y;model.scale.setScalar(scale);model.position.y=-bounds.min.y*scale;model.position.x=-(bounds.min.x+bounds.max.x)*scale/2;model.position.z=-(bounds.min.z+bounds.max.z)*scale/2;
  const pivot=new THREE.Group();pivot.add(model);pivot.rotation.y=index?-Math.PI/2:Math.PI/2;scene.add(pivot);
  const mixer=new THREE.AnimationMixer(model),actions={},durations={};
  const loadedClips=await Promise.all(clips.map(async name=>{const a=await loader.loadAsync(`../../2026-08-20/final-blow/3d/fighters/${id}/anim-${name}.glb`);$('#progress').textContent=`Loading movement ${++loaded} / ${clips.length*2}`;return [name,["exact-rig","grip-study","hair-study","groom-study","transplant-study","frames-study","clean-frames-study"].includes(variant)?retargetMotion(a.scene,a.animations[0],targetRest,targetParents):a.animations[0]];}));
@@ -77,14 +77,14 @@ async function buildFighter(id,index){
  // Accelerate anticipation into contact, then retain a readable recovery.
  for(const track of clip.tracks)for(let j=0;j<track.times.length;j++){const t=track.times[j];track.times[j]=t<=contact?t/contact*m.hit:m.hit+(t-contact)/(oldDuration-contact)*(m.duration-m.hit);}
  clip.resetDuration();durations[m.clip]=clip.duration;
- profiles[move]={...m,range:Math.max(.85,Math.min(1.65,best+.28))};}
+ profiles[move]={...m,range:Math.max(.85*1.25,Math.min(1.65*1.25,best+.28*1.25))};}
  mixer.stopAllAction();const v={pivot,model,mixer,actions,durations,profiles,current:null,serial:-1,state:null,id,contacts,bodySamples,baseY:model.position.y,groundY:0};visuals[index]=v;return v;
 }
 function play(v,name,duration,blend=.065){const a=v.actions[name]||v.actions.idle;if(a===v.current&&['idle','walk_fwd','walk_back'].includes(name))return;
  a.reset().setEffectiveWeight(1).setEffectiveTimeScale(duration?v.durations[name]/duration:name==='idle'?.35:1);a.enabled=true;a.play();if(v.current&&v.current!==a)v.current.crossFadeTo(a,clips.slice(0,5).includes(name)?.035:blend,false);v.current=a;
 }
 let battle=new Combat(237),accumulator=0,lastTime=0,paused=false,speed=1,hitstop=0,eventLife=0,sound=false,audio=null;
-const sparks=[];function impact(event){const target=battle.fighters[event.target],p=new THREE.Vector3(target.x-target.face*.24,event.move==='kick'?1.15:1.65,.22);for(let i=0;i<13;i++){const o=new THREE.Mesh(new THREE.SphereGeometry(.015,5,4),new THREE.MeshBasicMaterial({color:event.type==='block'?0x9de5ff:0xffc273}));o.position.copy(p);scene.add(o);sparks.push({o,v:new THREE.Vector3((Math.random()-.5)*3,Math.random()*2,(Math.random()-.3)*1.4),life:.2+Math.random()*.2});}if(sound&&audio){const t=audio.currentTime,osc=audio.createOscillator(),gain=audio.createGain();osc.type='triangle';osc.frequency.setValueAtTime(event.type==='block'?220:110,t);osc.frequency.exponentialRampToValueAtTime(40,t+.13);gain.gain.setValueAtTime(.12,t);gain.gain.exponentialRampToValueAtTime(.001,t+.14);osc.connect(gain).connect(audio.destination);osc.start();osc.stop(t+.15);}}
+const sparks=[];function impact(event){const target=battle.fighters[event.target],p=new THREE.Vector3(target.x-target.face*.24*1.25,(event.move==='kick'?1.15:1.65)*1.25,.22);for(let i=0;i<13;i++){const o=new THREE.Mesh(new THREE.SphereGeometry(.015,5,4),new THREE.MeshBasicMaterial({color:event.type==='block'?0x9de5ff:0xffc273}));o.position.copy(p);scene.add(o);sparks.push({o,v:new THREE.Vector3((Math.random()-.5)*3,Math.random()*2,(Math.random()-.3)*1.4),life:.2+Math.random()*.2});}if(sound&&audio){const t=audio.currentTime,osc=audio.createOscillator(),gain=audio.createGain();osc.type='triangle';osc.frequency.setValueAtTime(event.type==='block'?220:110,t);osc.frequency.exponentialRampToValueAtTime(40,t+.13);gain.gain.setValueAtTime(.12,t);gain.gain.exponentialRampToValueAtTime(.001,t+.14);osc.connect(gain).connect(audio.destination);osc.start();osc.stop(t+.15);}}
 function renderActors(dt,alpha){for(let i=0;i<2;i++){const f=battle.fighters[i],v=visuals[i];if(v.serial!==f.serial||v.state!==f.state){const name=f.state==='attack'?MOVES[f.move].clip:({walk:'walk_fwd',back:'walk_back',hurt:'hit_body'})[f.state]||f.state;play(v,name,['attack','hurt','block','dodge'].includes(f.state)?f.duration:f.state==='ko'?2.4:f.state==='victory'?2:0);v.serial=f.serial;v.state=f.state;}
  v.pivot.position.x=THREE.MathUtils.lerp(f.previousX,f.x,alpha);v.mixer.update(dt);
  // Ground the skinned shoe soles, rather than the static bind-pose bounds.
