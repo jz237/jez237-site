@@ -94,4 +94,6 @@ export const CLIPPED_CELLS = {
 // These authored cells were cropped before packing (the blank atlas margin
 // cannot reveal the missing raised hand / head). Visually inspected ext3 sheets.
 for (const id of ["jez", "benny"]) CLIPPED_CELLS[id]["unified-ext3"] = [3, 9, 14];
+// 5.4.9 physically repairs these fighters' old cells, including every entry above.
+for (const id of ['alan','ali','commissioner','cyraxx','deathblow','devil','donald','post']) delete CLIPPED_CELLS[id];
 export function clippedCell(id, bank, frame) { return CLIPPED_CELLS[id]?.[bank]?.includes(frame) || false; }

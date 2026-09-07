@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createInbetweenSelector, INBETWEEN_BANKS, REPAIRED_CELLS} from '../engine/inbetweens.mjs';
+import {createInbetweenSelector, INBETWEEN_BANKS, INBETWEEN_FIGHTERS, REPAIRED_CELLS} from '../engine/inbetweens.mjs';
 test('transition drawings settle without changing canonical pose or timing',()=>{
  const select=createInbetweenSelector(), f={def:{id:'jez'}}, p={bank:'unified',frame:1};
  assert.equal(select(f,p,10,true).artBank,'inbetween-unified');
@@ -23,7 +23,10 @@ test('every repaired head and hand stays repaired even on long holds',()=>{
   for(const tick of [0,1,2,120,600]) assert.equal(select(f,p,tick,true).artBank,`inbetween-${bank}`);
  }
 });
-test('scope remains Jez and Benny across all supported banks',()=>{
+test('all roster fighters receive drawings while unknown fighters keep their pose',()=>{
  const select=createInbetweenSelector();
- for(const bank of INBETWEEN_BANKS) assert.deepEqual(select({def:{id:'alan'}},{bank,frame:0},0,true),{bank,frame:0});
+ for(const id of INBETWEEN_FIGHTERS) for(const bank of INBETWEEN_BANKS){
+  const p={bank,frame:0};assert.equal(select({def:{id}},p,0,true).artBank,`inbetween-${bank}`);
+  assert.deepEqual(select({def:{id:'unknown'}},p,0,true),p);
+ }
 });

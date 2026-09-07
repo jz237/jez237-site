@@ -1,0 +1,302 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        92,
+        60,
+        243,
+        302
+      ],
+      "rect": [
+        81,
+        29,
+        178,
+        285
+      ],
+      "scale": 1.1728438519106583,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 1,
+      "source": [
+        377,
+        55,
+        542,
+        302
+      ],
+      "rect": [
+        80,
+        15,
+        200,
+        299
+      ],
+      "scale": 1.203743092239766,
+      "areaRatio": 1
+    },
+    {
+      "frame": 2,
+      "source": [
+        701,
+        102,
+        841,
+        302
+      ],
+      "rect": [
+        91,
+        77,
+        166,
+        237
+      ],
+      "scale": 1.176698882972742,
+      "areaRatio": 1
+    },
+    {
+      "frame": 3,
+      "source": [
+        928,
+        73,
+        1218,
+        301
+      ],
+      "rect": [
+        6,
+        75,
+        304,
+        239
+      ],
+      "scale": 1.0446735395189004,
+      "areaRatio": 0.815885201636194
+    },
+    {
+      "frame": 4,
+      "source": [
+        67,
+        363,
+        251,
+        583
+      ],
+      "rect": [
+        80,
+        65,
+        209,
+        249
+      ],
+      "scale": 1.1270639708916315,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 5,
+      "source": [
+        379,
+        387,
+        524,
+        581
+      ],
+      "rect": [
+        86,
+        70,
+        183,
+        244
+      ],
+      "scale": 1.25372928648547,
+      "areaRatio": 1
+    },
+    {
+      "frame": 6,
+      "source": [
+        649,
+        383,
+        903,
+        550
+      ],
+      "rect": [
+        15,
+        117,
+        299,
+        197
+      ],
+      "scale": 1.1742655011102807,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 7,
+      "source": [
+        982,
+        344,
+        1135,
+        586
+      ],
+      "rect": [
+        79,
+        49,
+        168,
+        265
+      ],
+      "scale": 1.0918092859613353,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 8,
+      "source": [
+        32,
+        641,
+        303,
+        883
+      ],
+      "rect": [
+        6,
+        42,
+        304,
+        272
+      ],
+      "scale": 1.1176470588235294,
+      "areaRatio": 0.9317120565379776
+    },
+    {
+      "frame": 9,
+      "source": [
+        391,
+        718,
+        544,
+        865
+      ],
+      "rect": [
+        51,
+        129,
+        193,
+        185
+      ],
+      "scale": 1.2525839846038471,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 10,
+      "source": [
+        641,
+        713,
+        898,
+        886
+      ],
+      "rect": [
+        10,
+        109,
+        304,
+        205
+      ],
+      "scale": 1.178294573643411,
+      "areaRatio": 0.9622494612322076
+    },
+    {
+      "frame": 11,
+      "source": [
+        962,
+        701,
+        1149,
+        868
+      ],
+      "rect": [
+        20,
+        136,
+        199,
+        178
+      ],
+      "scale": 1.0574854454690443,
+      "areaRatio": 1
+    },
+    {
+      "frame": 12,
+      "source": [
+        76,
+        1039,
+        271,
+        1174
+      ],
+      "rect": [
+        18,
+        144,
+        246,
+        170
+      ],
+      "scale": 1.2531159714090556,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 13,
+      "source": [
+        353,
+        991,
+        545,
+        1168
+      ],
+      "rect": [
+        46,
+        93,
+        240,
+        221
+      ],
+      "scale": 1.2416677210067357,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 14,
+      "source": [
+        622,
+        978,
+        880,
+        1109
+      ],
+      "rect": [
+        6,
+        159,
+        304,
+        155
+      ],
+      "scale": 1.1737451737451738,
+      "areaRatio": 0.947712915394104,
+      "reviewOverride": {
+        "sourceBank": "unified-ext4",
+        "sourceFrame": 6,
+        "flop": false,
+        "original": false,
+        "rect": [
+          24,
+          132,
+          273,
+          180
+        ]
+      }
+    },
+    {
+      "frame": 15,
+      "source": [
+        916,
+        1118,
+        1220,
+        1187
+      ],
+      "rect": [
+        6,
+        244,
+        304,
+        70
+      ],
+      "scale": 0.9967213114754099,
+      "areaRatio": 0.6668619885924472,
+      "reviewOverride": {
+        "sourceBank": "unified",
+        "sourceFrame": 15,
+        "flop": false,
+        "original": false,
+        "rect": [
+          8,
+          205,
+          304,
+          107
+        ]
+      }
+    }
+  ],
+  "source": "exec-54089ec7-8651-42b4-939e-467209e65cfe.png",
+  "prompt": "Create a new painted animation in-between atlas for post, matching the reference identity exactly: long-haired moustached man in orange sleeveless paint-splattered jumpsuit, black gloves and boots, holding silver spray can.  Exactly sixteen new COMPLETE full-body painted reaction sprites, 4 columns x 4 rows. Attached image is ONLY identity/costume reference. New pose order: Row1: guard absorbing hit; small head recoil; hunched body hit; big backward recoil arms spread. Row2: stumbling; dizzy hunched; launched backward through air; upside-down air tumble. Row3: wall impact arms spread; crumple onto knee; falling backward; ground bounce legs in air. Row4: on hands and knees getting up; one-knee get-up; thrown through air; lying knocked out. Follow original head-to-feet directions in every pose. Face right in standing poses; airborne fall and KO have head left and feet right. Small transitional shifts toward these reactions. All figures must be complete and fit inside their own cell with 12% empty padding. No anatomy clipped inside drawing either. Same physical body size, lying/crouched figures naturally shorter. No extra figures or detached parts. Pure flat magenta #ff00ff background, no grid, text, shadows, blur, effects or stars."
+}

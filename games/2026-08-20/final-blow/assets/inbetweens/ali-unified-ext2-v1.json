@@ -1,0 +1,290 @@
+{
+  "cells": [
+    {
+      "frame": 0,
+      "source": [
+        82,
+        82,
+        277,
+        325
+      ],
+      "rect": [
+        48,
+        19,
+        237,
+        295
+      ],
+      "scale": 1.21067382782923,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 1,
+      "source": [
+        401,
+        81,
+        574,
+        325
+      ],
+      "rect": [
+        71,
+        26,
+        204,
+        288
+      ],
+      "scale": 1.1740177025240883,
+      "areaRatio": 1
+    },
+    {
+      "frame": 2,
+      "source": [
+        728,
+        82,
+        868,
+        331
+      ],
+      "rect": [
+        76,
+        10,
+        171,
+        304
+      ],
+      "scale": 1.216,
+      "areaRatio": 0.9123375864022664
+    },
+    {
+      "frame": 3,
+      "source": [
+        1019,
+        81,
+        1157,
+        332
+      ],
+      "rect": [
+        92,
+        10,
+        168,
+        304
+      ],
+      "scale": 1.2063492063492063,
+      "areaRatio": 0.9480801103063509
+    },
+    {
+      "frame": 4,
+      "source": [
+        64,
+        386,
+        303,
+        625
+      ],
+      "rect": [
+        19,
+        19,
+        295,
+        295
+      ],
+      "scale": 1.230516552373674,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 5,
+      "source": [
+        390,
+        389,
+        588,
+        626
+      ],
+      "rect": [
+        55,
+        34,
+        234,
+        280
+      ],
+      "scale": 1.1764494526805243,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 6,
+      "source": [
+        700,
+        376,
+        863,
+        628
+      ],
+      "rect": [
+        68,
+        10,
+        197,
+        304
+      ],
+      "scale": 1.2015810276679841,
+      "areaRatio": 0.986372940813674
+    },
+    {
+      "frame": 7,
+      "source": [
+        988,
+        374,
+        1192,
+        631
+      ],
+      "rect": [
+        72,
+        10,
+        242,
+        304
+      ],
+      "scale": 1.178294573643411,
+      "areaRatio": 0.8604746906338508
+    },
+    {
+      "frame": 8,
+      "source": [
+        81,
+        701,
+        245,
+        874
+      ],
+      "rect": [
+        66,
+        101,
+        202,
+        213
+      ],
+      "scale": 1.222353915259036,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 9,
+      "source": [
+        401,
+        711,
+        573,
+        875
+      ],
+      "rect": [
+        83,
+        125,
+        198,
+        189
+      ],
+      "scale": 1.1439346755868918,
+      "areaRatio": 0.9999999999999998
+    },
+    {
+      "frame": 10,
+      "source": [
+        710,
+        717,
+        920,
+        880
+      ],
+      "rect": [
+        68,
+        129,
+        238,
+        185
+      ],
+      "scale": 1.129163703268973,
+      "areaRatio": 1.0000000000000002
+    },
+    {
+      "frame": 11,
+      "source": [
+        976,
+        730,
+        1191,
+        874
+      ],
+      "rect": [
+        48,
+        136,
+        266,
+        178
+      ],
+      "scale": 1.2298793371555863,
+      "areaRatio": 1
+    },
+    {
+      "frame": 12,
+      "source": [
+        83,
+        943,
+        287,
+        1182
+      ],
+      "rect": [
+        66,
+        24,
+        248,
+        290
+      ],
+      "scale": 1.2088584660723762,
+      "areaRatio": 0.9999999999999999
+    },
+    {
+      "frame": 13,
+      "source": [
+        397,
+        979,
+        544,
+        1183
+      ],
+      "rect": [
+        76,
+        70,
+        176,
+        244
+      ],
+      "scale": 1.1912492764208051,
+      "areaRatio": 1,
+      "reviewOverride": {
+        "sourceBank": "unified-ext2",
+        "sourceFrame": 13,
+        "flop": false,
+        "original": true,
+        "rect": [
+          52,
+          50,
+          217,
+          262
+        ]
+      }
+    },
+    {
+      "frame": 14,
+      "source": [
+        631,
+        969,
+        876,
+        1179
+      ],
+      "rect": [
+        6,
+        54,
+        303,
+        260
+      ],
+      "scale": 1.232309898533141,
+      "areaRatio": 1
+    },
+    {
+      "frame": 15,
+      "source": [
+        1008,
+        930,
+        1134,
+        1185
+      ],
+      "rect": [
+        88,
+        10,
+        151,
+        304
+      ],
+      "scale": 1.1875,
+      "areaRatio": 0.862080704040317
+    }
+  ],
+  "source": "exec-270c0dfa-6974-4e30-9af0-c535b04720e2.png",
+  "prompt": "Create a new painted animation in-between atlas for Ali, matching the reference identity exactly: slim man with red beanie, glasses, ornate yellow and black tracksuit, gold jewelry and speaker backpack.  Create exactly sixteen NEW full-body drawings, 4 columns x 4 rows, painted game animation. Use attached image ONLY for character identity and costume; the NEW POSES are these: Row1: punch wind-up with elbow back; punch recovery with elbow half withdrawn; front kick knee chamber; kick recovery lowering shin. Row2: heavy punch wind-up; heavy punch recovery; heavy kick knee chamber leaning back; heavy kick recovery. Row3: crouching punch wind-up; crouching punch recovery; low sweep wind-up knee bent; low sweep recovery. Row4: standing two-handed grab reach; bending into throw heave; throw follow-through; upright throw recovery. Face RIGHT throughout. Anatomically coherent, complete heads, both hands, both feet, all hair and held props. Draw each figure SMALLER inside its own cell with at least 12% blank margin around the entire silhouette. No anatomy may touch a grid boundary. Keep physical body proportions consistent, crouches naturally shorter. New poses are slightly transitional, natural bent joints and weight shifts. Pure flat magenta #ff00ff background, no text, grid, shadows, motion blur or effects."
+}
