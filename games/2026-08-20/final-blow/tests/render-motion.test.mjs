@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { captureMotion, interpolateMotion, fitFrame } from "../engine/render-motion.mjs";
+import { captureMotion, interpolateMotion, fixedDemoFrame } from "../engine/render-motion.mjs";
 
 test("slow-motion renders travel every display frame without mutating sim state", () => {
   for (const rate of [0.1, 0.25, 0.5, 0.75, 1]) {
@@ -34,18 +34,11 @@ test("teleports and cinematic poses snap; new attacks do not inherit old timers"
   assert.equal(interpolateMotion(cinema, captureMotion(old), 0.5), cinema);
 });
 
-test("camera keeps corner, jump and wide rotated bounds clear of HUD and canvas edges", () => {
-  const safe = { left: 24, right: 1256, top: 105, bottom: 615 };
-  for (const bounds of [
-    { left: -250, right: 1540, top: 130, bottom: 630 },
-    { left: 100, right: 1200, top: -380, bottom: 680 },
-    { left: -50, right: 700, top: 180, bottom: 950 },
-    { left: 300, right: 900, top: 220, bottom: 590 },
-  ]) {
-    const fit = fitFrame(bounds, safe);
-    assert.ok(bounds.left * fit.scale + fit.x >= safe.left - 1e-7);
-    assert.ok(bounds.right * fit.scale + fit.x <= safe.right + 1e-7);
-    assert.ok(bounds.top * fit.scale + fit.y >= safe.top - 1e-7);
-    assert.ok(bounds.bottom * fit.scale + fit.y <= safe.bottom + 1e-7);
-  }
+test("demo view is a fixed wide shot, with space at both arena edges", () => {
+  const first = fixedDemoFrame();
+  for (let frame = 0; frame < 240; frame++) assert.deepEqual(fixedDemoFrame(), first);
+  assert.equal(600 * first.scale + first.y, 560);
+  assert.ok((76 - 220) * first.scale + first.x > 0);
+  assert.ok((1204 + 220) * first.scale + first.x < 1280);
+  assert.ok(200 * first.scale + first.y > 100);
 });

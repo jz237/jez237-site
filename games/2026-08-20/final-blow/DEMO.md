@@ -1,5 +1,9 @@
 # Watch Demo / Attract Mode
 
+## 5.4.3 — stationary demo camera
+
+The reactive camera fit in 5.4.2 caused distracting background zoom. Demo bouts now use a constant wide shot, with no reactive scale, pan, shake or director punch-ins. The optional 3D demo camera is fixed too. Background parallax is disabled in demos. Movement interpolation, foreground visibility and the single stage draw remain. Scripted Final Blow cinematics retain their own camera.
+
 ## 5.4.2 — smooth playback and full-body framing
 
 - Demo fighter positions and continuous animation clocks interpolate between fixed simulation ticks, including slow motion. The 2D body, its floor cues and the 3D rig use the same presentation sample. Pause, manual stepping, teleports and fatalities keep exact poses.

@@ -316,15 +316,22 @@ test("game.js gates every camera/cadence call site on the demo, and the played m
   assert.ok(!view.includes("performance.now") && !view.includes("Date.now"), "tick-keyed, never wall-clock");
 });
 
-test("the CINEMA 3D camera lifts its demo cap only while a demo shot is live", async () => {
+test("the CINEMA 3D camera stays stationary during normal demo combat", async () => {
   const camera = await readFile(join(gameRoot, "renderer", "three", "camera.mjs"), "utf8");
   assert.match(camera, /const demoCap = cinematic\?\.demoShot \? DEMO_3D_SHOT_ZOOM_CAP : 1\.12;/);
-  assert.match(camera, /const zoom = Math\.min\(demo \? demoCap : Infinity, Math\.max\(1, cinematic\?\.zoom \?\? 1\)\);/);
+  assert.ok(camera.includes("const stableDemo = demo && !state.finisher;"));
+  assert.ok(camera.includes("if (stableDemo) this.smoothedMid = 0;"));
+  assert.ok(camera.includes("if (stableDemo) this.smoothedDistance = this.baseDistance * 1.18;"));
+  assert.ok(camera.includes("const zoom = stableDemo ? 1 : Math.min(demo ? demoCap : Infinity, Math.max(1, cinematic?.zoom ?? 1));"));
+  for (const motion of ["truckX", "truckY", "driftX", "driftY", "roll"]) {
+    assert.ok(camera.includes(`const ${motion} = stableDemo ? 0 :`), `${motion} is disabled during demo combat`);
+  }
+  assert.ok(camera.includes("const shakeScale = stableDemo || state.accessibility?.reducedMotion ? 0 :"));
   assert.match(camera, /import \{ DEMO_3D_SHOT_ZOOM_CAP \} from "\.\.\/\.\.\/engine\/demo-camera\.mjs";/);
   // The 4.3 demo framing (wide margin, fill floor) is untouched.
   assert.match(camera, /const margin = demo \? 0\.78 : FRAME_MARGIN;/);
   assert.match(camera, /\(demo \? 1\.1 : MIN_FILL\)/);
-  // The cap arithmetic: a 1.32 super pose is a real fov push in the demo.
+  // Cinematic finishers retain the existing cap arithmetic.
   const fov = (zoom, cap) => 30 / Math.min(cap, Math.max(1, zoom));
   assert.ok(fov(1.32, 1.12) > fov(1.32, DEMO_3D_SHOT_ZOOM_CAP) + 4, "the lifted cap narrows the fov by more than 4 degrees");
   assert.equal(fov(1.32, Infinity), fov(1.32, DEMO_3D_SHOT_ZOOM_CAP), "a played match's uncapped punch-in is unchanged");
