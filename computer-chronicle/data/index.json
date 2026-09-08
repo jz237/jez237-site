@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-08",
+      "historicDate": "1984-05-28",
+      "displayDate": "Week of May 28-June 3, 1984",
+      "edition": "Issue 096 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Monday, May 28, 1984: 851 suppliers crowd Comdex/Spring as personal computing’s boom widens.",
+      "leadHeadline": "Comdex/Spring Shows the Micro Market Still Surging",
+      "storyHeadlines": [
+        "Framework Bets $695 That Ideas Belong in an Outline",
+        "Delayed Windows Leaves PC Software on Islands",
+        "TeleVideo Puts PCs Around an $8,995 Multiuser Hub"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-05-28.jpg",
+      "thumb": "media/thumbs/1984-05-28.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-07",
       "historicDate": "1984-05-21",
       "displayDate": "Week of May 21-27, 1984",

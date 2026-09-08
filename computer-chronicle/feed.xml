@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 07 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 08 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of May 28-June 3, 1984 — Comdex/Spring Shows the Micro Market Still Surging</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-05-28</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-05-28</guid>
+      <pubDate>Tue, 08 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Atlanta fills with 851 suppliers, IBM-compatible machines and a new contest to put every office task inside one package. Comdex/Spring opened on a scale that made the personal-computer boom impossible to miss. Computerworld counted 851 suppliers, 158 of them first-time exhibitors, and expected well over 45,000 visitors. The aisles offered a working map of an industry still multiplying around the IBM PC standard. Also this week: Framework Bets $695 That Ideas Belong in an Outline · Delayed Windows Leaves PC Software on Islands · TeleVideo Puts PCs Around an $8,995 Multiuser Hub.</description>
+    </item>
     <item>
       <title>Week of May 21-27, 1984 — Atari Bets on Compatibility with $140 7800 ProSystem</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-05-21</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-16</guid>
       <pubDate>Tue, 18 Aug 2026 12:00:00 GMT</pubDate>
       <description>A stark Super Bowl film promises a new kind of personal computer before viewers have even seen the machine itself. During Super Bowl XVIII on January 22, Apple Computer used a single dramatic national broadcast to introduce the Macintosh as more than another machine. Ridley Scott’s film showed gray ranks of workers facing a giant screen until a lone runner smashed it, closing with Apple’s promise that 1984 would not resemble George Orwell’s 1984. Also this week: APPLE READIES A 32-BIT FAMILY AROUND MACINTOSH AND LISA 2 · COMMODORE 264 BETS ON SOFTWARE BUILT INTO THE MACHINE · COLECO PROMISES A LARGER ADAM WORLD AMID QUALITY QUESTIONS.</description>
-    </item>
-    <item>
-      <title>Week of January 9-15, 1984 — TRAMIEL QUITS COMMODORE</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-01-09</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-09</guid>
-      <pubDate>Mon, 17 Aug 2026 12:00:00 GMT</pubDate>
-      <description>Founder’s surprise Friday resignation, days after his CES appearance, leaves the company’s next generation under a cloud. Jack Tramiel resigned as president and chief executive of Commodore International on Friday, January 13, an abrupt break at the company he had driven from office-machine roots into the center of the home-computer boom. The news followed only days after Tramiel personally championed Commodore’s new 264 family at the Winter Consumer Electronics Show. Also this week: Games Trade Finds Guarded Relief at CES · Commodore’s 264 Family Promises an Office in ROM · Coleco Builds an Adam Comeback Plan.</description>
     </item>
   </channel>
 </rss>
