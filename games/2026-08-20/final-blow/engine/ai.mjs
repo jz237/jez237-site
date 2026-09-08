@@ -137,7 +137,7 @@ export function visibleOpponentObservation(opponent, frame, projectiles = []) {
   const attack = opponent?.attacking;
   return Object.freeze({
     frame,
-    projectiles: projectiles.filter(p=>p.ownerSide===opponent?.side).map(p=>({x:p.x,y:p.y,vx:p.vx,width:p.width,height:p.height,level:p.level,lifeFrames:p.lifeFrames,armFrames:p.armFrames||0})),
+    projectiles: projectiles.filter(p=>p.ownerSide===opponent?.side).map(p=>({x:p.x,y:p.y,vx:p.vx,vy:p.vy||0,gravity:p.gravity||0,width:p.width,height:p.height,level:p.level,lifeFrames:p.lifeFrames,armFrames:p.armFrames||0})),
     x: opponent?.x ?? 0,
     y: opponent?.y ?? 0,
     grounded: Boolean(opponent?.grounded),
@@ -248,8 +248,9 @@ export function meatyTiming(observation, frame, startup = 5) {
 export function whiffedThrowPunish(observation, frame) {
   if (!observation?.attacking || observation.attackLevel !== ATTACK_LEVELS.THROW) return false;
   if (observation.grabbing) return false;
-  const age = frame - observation.frame;
-  return (observation.attackFrame + age) >= observation.attackActiveEndFrame;
+  const age = Math.max(0,frame - observation.frame);
+  const current = observation.attackFrame + age;
+  return current > observation.attackActiveEndFrame && current < observation.attackTotalFrames;
 }
 
 // 5.4 PERSONAS: a dash intent is pressed the way a human presses it — two
@@ -476,14 +477,11 @@ export function decideAiIntent(brain, {
   // 5.3 CLOSE RANGE: punish a whiffed throw. The commitment band means a
   // grab pressed just outside its reach now runs 42-51 frames of tail; that
   // is the biggest free punish in the game and the brain must take it.
-  if (whiffedThrowPunish(observation, frame) && distance < 170
+  if (self.grounded && !self.attacking && !self.hitstunFrames && !self.blockstunFrames
+    && !self.wakeupFrames && whiffedThrowPunish(observation, frame)
     && mixRoll(roll, 34) < (settings.throwWhiffPunishChance || 0)) {
-    return {
-      movement: distance > 120 ? "advance" : "hold",
-      action: self.meter >= GRIT_RULES.superCost && mixRoll(roll, 35) < settings.meterChance
-        ? "super" : "heavy",
-      reason: "throw-whiff-punish",
-    };
+    const punish=selectRecoveryPunish(fighterId,distance,timing.recovery);
+    if(punish)return {...punish,reason:'throw-whiff-punish'};
   }
 
   if (self.grounded && !self.attacking && !self.hitstunFrames && !self.blockstunFrames

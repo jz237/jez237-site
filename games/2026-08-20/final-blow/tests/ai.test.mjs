@@ -324,20 +324,20 @@ function testCloseRangeReads() {
   // --- punishing a throw that already missed -------------------------------
   const whiffedGrab = visibleOpponentObservation(fighter("jez", {
     x: 600,
-    attacking: attack({ level: "throw", kind: "throw", activeStartFrame: 5, activeEndFrame: 8 }),
+    attacking: attack({ level: "throw", kind: "throw", activeStartFrame: 5, activeEndFrame: 8, totalFrames: 40 }),
     attackFrame: 12,
   }), 0);
   assert.equal(whiffedThrowPunish(whiffedGrab, 0), true);
   const liveGrab = visibleOpponentObservation(fighter("jez", {
     x: 600,
-    attacking: attack({ level: "throw", kind: "throw", activeStartFrame: 5, activeEndFrame: 8 }),
+    attacking: attack({ level: "throw", kind: "throw", activeStartFrame: 5, activeEndFrame: 8, totalFrames: 40 }),
     attackFrame: 2,
   }), 0);
   assert.equal(whiffedThrowPunish(liveGrab, 0), false, "a grab still in startup is a threat, not a punish");
   assert.equal(whiffedThrowPunish(liveGrab, 12), true, "the stale observation ages into the recovery");
   const landedGrab = visibleOpponentObservation(fighter("jez", {
     x: 600, grabbing: true,
-    attacking: attack({ level: "throw", kind: "throw", activeStartFrame: 5, activeEndFrame: 8 }),
+    attacking: attack({ level: "throw", kind: "throw", activeStartFrame: 5, activeEndFrame: 8, totalFrames: 40 }),
     attackFrame: 12,
   }), 0);
   assert.equal(whiffedThrowPunish(landedGrab, 0), false, "a grab that CONNECTED is not a punish, it is a clinch");

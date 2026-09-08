@@ -1,5 +1,8 @@
 import {MOVEMENT_RULES,FIGHTER_SCALE} from './defense.mjs';
 import {getFighterKit,getKitMoveProfile} from './fighter-kits.mjs';
+export function projectileHeightAt(shot,seconds){
+ return shot.y+(shot.vy||0)*seconds+.5*(shot.gravity||0)*seconds*seconds;
+}
 // The caller supplies only reaction-delayed snapshots of visible projectiles.
 export function projectileIntent(self,observation,frame,roll=.5){
  if(!self.grounded || self.attacking || self.down || self.grabbed || self.grabbing || self.wakeupFrames || self.hitstunFrames)return null;
@@ -10,7 +13,11 @@ export function projectileIntent(self,observation,frame,roll=.5){
   if(shot.vx && Math.sign(dx)!==Math.sign(shot.vx))continue;
   const distance=Math.max(0,Math.abs(dx)-(shot.width||0)/2-38);
   const eta=shot.vx?distance/Math.abs(shot.vx)*60:distance<55?0:Infinity;
-  if(eta<65)threats.push({...shot,eta,distance});
+  // Only extrapolate the observed flight. Future bounces remain uncertain,
+  // so retain low trajectories rather than assuming they disappear at the floor.
+  const arrivalY=projectileHeightAt(shot,(age+eta)/60);
+  if(arrivalY+shot.height/2<self.y-390)continue;
+  if(eta<65)threats.push({...shot,eta,distance,age});
  }
  threats.sort((a,b)=>a.eta-b.eta);const first=threats[0];
  if(!first)return null;
@@ -21,13 +28,14 @@ export function projectileIntent(self,observation,frame,roll=.5){
  // Counter with a real projectile clash, not a melee counter stance that
  // cannot catch fireballs in this engine.
  const ownY=self.y+(shot?.yOffsets?.[0]??-110)*FIGHTER_SCALE;
- if(!layered && shot?.speed>0 && Math.abs(ownY-first.y)<(shot.height*FIGHTER_SCALE+first.height)/2
+ if(!layered && shot?.speed>0 && !first.vy && !first.gravity && Math.abs(ownY-first.y)<(shot.height*FIGHTER_SCALE+first.height)/2
    && first.eta>(shot.spawnFrames?.[0]??counterMove.startupFrames)+8 && roll<.25)
   return {movement:'hold',action:counter,reason:'projectile-counter'};
  const landingRoom=observation.x>self.x?MOVEMENT_RULES.stageMaxX-self.x:self.x-MOVEMENT_RULES.stageMinX;
  const meet=first.distance/(Math.abs(first.vx)+MOVEMENT_RULES.forwardJumpVelocityX);
  const feet=self.y+MOVEMENT_RULES.jumpVelocityY*meet+.5*Math.round(2180*FIGHTER_SCALE)*meet*meet;
- const clears=feet+10<first.y-first.height/2;
+ const meetY=projectileHeightAt(first,first.age/60+meet);
+ const clears=feet+10<meetY-first.height/2;
  if(clears && first.vx && !layered && first.eta>=15 && first.eta<=38 && landingRoom>200 && roll<.42)
   return {movement:'advance',action:null,jump:true,reason:'projectile-jump'};
  if(first.eta<24 || layered || !first.vx)
