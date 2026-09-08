@@ -4,6 +4,416 @@
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
     {
+      "currentDate": "2026-09-08",
+      "historicDate": "1984-05-28",
+      "displayDate": "Week of May 28-June 3, 1984",
+      "edition": "Issue 096 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Comdex bustle and integrated-software ambition on warm aged newsprint",
+        "motifs": [
+          "crowded Comdex aisle",
+          "IBM-compatible desktop",
+          "Framework outline windows",
+          "portable LCD computer"
+        ],
+        "layout": "Dense seven-column 1984 computer weekly with bold red and blue rules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+        "dateline": "Week of May 28-June 3, 1984",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Comdex/Spring banner with a dominant crowded-show-floor halftone",
+        "secondaryRail": "Framework, PC software islands, modem desk, charts and price watch",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "#9b1c1c",
+        "secondary": "#173f6b",
+        "texture": "warm newsprint grain and halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-05-28.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of May 28, 1984, led by Comdex/Spring.",
+        "caption": "A GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Comdex/Spring packs Atlanta with IBM-compatible machines and integrated software, while Framework, multiuser PCs and dial-up security show where the market is heading.",
+      "morningLine": "Monday, May 28, 1984: 851 suppliers crowd Comdex/Spring as personal computing’s boom widens.",
+      "lead": {
+        "headline": "Comdex/Spring Shows the Micro Market Still Surging",
+        "dek": "Atlanta fills with 851 suppliers, IBM-compatible machines and a new contest to put every office task inside one package.",
+        "body": [
+          "Comdex/Spring opened on a scale that made the personal-computer boom impossible to miss. Computerworld counted 851 suppliers, 158 of them first-time exhibitors, and expected well over 45,000 visitors. The aisles offered a working map of an industry still multiplying around the IBM PC standard.",
+          "IBM PCs and compatible machines dominated the floor. Corona introduced its 8088-based Personal Best, including a $5,995 configuration with 512KB of memory, twin 5.25-inch floppy drives and a 10MB hard disk. TeleVideo showed its Telecolor PC, while Morrow’s nine-pound Pivot portable used a low-power 80C86 and a compact LCD.",
+          "The strongest crowds gathered around integrated software. Ashton-Tate’s Framework and Lotus Symphony promised to bring writing, calculation, graphics and data together, reducing the friction of passing office work among separate programs.",
+          "Apple’s Macintosh kept a lower profile, with hardware add-ons visible but relatively few applications on display. For this week, the market’s center of gravity remained the expanding family of IBM-compatible micros—and the software makers racing to make them more coherent."
+        ],
+        "confidence": "Exact-date trade coverage",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "stories": [
+        {
+          "headline": "Framework Bets $695 That Ideas Belong in an Outline",
+          "body": [
+            "Ashton-Tate’s Framework combines an outline editor, word processor, spreadsheet, graph generator, database manager and the Fred programming language in a $695 IBM PC package. It requires 256KB and two floppy drives.",
+            "Its unusual promise is fluid movement among kinds of work: a spreadsheet cell can contain a document, graphs and sheets can enter prose, and database results can become charts. Pull-down menus and keyboard commands provide the controls without requiring a mouse.",
+            "Developer Robert C.M. Carr argues that people do not think linearly. Framework makes that claim concrete by arranging material in nested outlines and movable frames, while Fred’s roughly 140 verbs open the package to customization."
+          ],
+          "confidence": "Exact-date magazine coverage",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "Delayed Windows Leaves PC Software on Islands",
+          "body": [
+            "At a Comdex session, consultant Esther Dyson warned that DOS programs still lacked a common operating environment linking integrated packages to one another. Shared interfaces and dependable data transfer, she argued, mattered as much as each suite’s growing list of features.",
+            "Microsoft Windows had missed its announced April shipment date, leaving developers to pursue separate answers. Dyson pointed to Visi On, Lotus Symphony add-ins and Quarterdeck’s Desq as competing approaches rather than one settled standard.",
+            "The Macintosh showed the other path: Apple’s prescribed environment restricted developers but gave users consistent behavior. On the PC, the abundance visible at Comdex also exposed the cost of fragmentation."
+          ],
+          "confidence": "Exact-date trade coverage",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "TeleVideo Puts PCs Around an $8,995 Multiuser Hub",
+          "body": [
+            "TeleVideo’s PM/16 proposes a shared center for IBM-compatible offices before IBM delivers its own microcomputer network. The 8MHz 80186 system includes 256KB of memory, a 46MB hard disk and the Infoshare operating system.",
+            "Connected PCs can keep running local applications while sharing central data, programs and printers. Infoshare supplies file and record locking, print spooling, online help and a hierarchical multiuser file system.",
+            "The $8,995 hub is due at the end of June, with adapters priced at $199 per PC. TeleVideo believes it has a two- to three-year opening in which to establish the idea."
+          ],
+          "confidence": "Exact-date trade coverage",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Corona Personal Best",
+          "summary": "An 8088 compatible with 512KB, twin floppies and a 10MB hard disk at $5,995.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "TeleVideo PM/16",
+          "summary": "An 80186 multiuser hub lets attached PCs share files, programs and printers.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Morrow Pivot",
+          "summary": "A nine-pound 80C86 portable starts below $2,500.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "IBM PCjr monitor",
+          "summary": "IBM adds a $429, 16-color display for the PCjr.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "AT&T 3B2 Model 300",
+          "summary": "A $9,950 32-bit UNIX System V machine supports up to 18 terminals.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Ashton-Tate Framework",
+          "detail": "$695 integrated outlining, word-processing, spreadsheet, graphics, database, and programming package for 256KB two-floppy IBM PCs."
+        },
+        {
+          "name": "IBM DisplayWrite",
+          "detail": "DisplayWrite 1 was $95 for 128KB PCs/PCjr; DisplayWrite 2 was $299 for 256KB PC, XT, Portable, and 3270-PC systems."
+        },
+        {
+          "name": "Turbo Pascal 2.0",
+          "detail": "Borland advertised version 2.0 at $49.95 in the May 29 PC Magazine, a striking price point for a documented, standard Pascal development system."
+        },
+        {
+          "name": "Lotus Symphony",
+          "detail": "Integrated IBM PC suite drawing Comdex attention"
+        },
+        {
+          "name": "Visi On",
+          "detail": "Graphical operating environment cited in the standards debate"
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Questron",
+            "Operation Whirlwind",
+            "Pitstop",
+            "Rails West",
+            "Ballblazer"
+          ]
+        },
+        {
+          "label": "Top Movies",
+          "items": [
+            "Indiana Jones and the Temple of Doom",
+            "The Natural",
+            "Breakin'",
+            "Firestarter",
+            "Sixteen Candles"
+          ]
+        },
+        {
+          "label": "Hardware Counter",
+          "items": [
+            "TeleVideo PM/16",
+            "Morrow Pivot",
+            "Corona Personal Best",
+            "TeleVideo Telecolor PC",
+            "Hercules Color Card"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Corona Personal Best",
+          "price": "$5,995",
+          "note": "512KB RAM, two 5.25-inch floppy drives, and 10MB hard disk.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "TeleVideo Telecolor PC",
+          "price": "$3,295 floppy / $4,795 hard disk",
+          "note": "IBM-compatible personal computer with 256KB RAM and 12-inch color screen.",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Davong hard disk system",
+          "price": "from $1,995",
+          "note": "Advertised complete IBM PC hard-disk system with portability to Apple II/IIe/III and Osborne via host adapters.",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "item": "IBM PCjr color monitor",
+          "price": "$429",
+          "note": "New 16-color display announced as IBM faced criticism of the PCjr's sales and keyboard.",
+          "sourceRefs": [
+            1
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "AT&T enters computers with a UNIX supermicro",
+          "summary": "PC Magazine described the 3B2 Model 300 as a $9,950, 32-bit UNIX System V machine supporting up to 18 terminals, including IBM PCs, while noting that AT&T offered no direct PC rival yet.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "headline": "IBM's older 3080 may beat its newer model on price",
+          "summary": "Computerworld calculated that an upgraded 3081 Model K could total $2.981 million, $284,000 below a newer $3.265 million system, after IBM's upgrade-price cuts and $16,000 performance enhancement.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Electronic playpens fill the living room",
+          "summary": "TIME describes TVs, cable, VCRs, videodiscs, stereos and game machines converging into home entertainment centers.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            9
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Let's Hear It for the Boy",
+          "artist": "Deniece Williams"
+        },
+        {
+          "rank": 2,
+          "title": "Time After Time",
+          "artist": "Cyndi Lauper"
+        },
+        {
+          "rank": 3,
+          "title": "The Reflex",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 4,
+          "title": "Hello",
+          "artist": "Lionel Richie"
+        },
+        {
+          "rank": 5,
+          "title": "Against All Odds (Take a Look at Me Now)",
+          "artist": "Phil Collins"
+        }
+      ],
+      "periodAd": {
+        "headline": "Turbo Pascal 2.0: $49.95",
+        "summary": "Borland offers a standard Pascal development system at a startling personal-computer price.",
+        "tagline": "Compile the future without an enterprise budget."
+      },
+      "market": {
+        "headline": "Integrated software draws the Comdex crowd",
+        "summary": "Framework and Lotus Symphony attract attention as buyers seek one environment for documents, figures, graphics and data.",
+        "confidence": "Exact-date trade reporting",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Indian Troops Move Into Punjab as Golden Temple Crisis Deepens",
+        "summary": "At the start of June, Indian troops entered Punjab and imposed controls as the confrontation around Sikh militants in Amritsar’s Golden Temple complex intensified.",
+        "confidence": "Exact-date",
+        "sourceRefs": [
+          8
+        ]
+      },
+      "bbsNote": {
+        "headline": "CompuServe Presses for Anti-Hacker Laws as Dial-Up Abuse Grows",
+        "summary": "At the Information Industry Association's Boston meeting, CompuServe vice president George Minot said unauthorized callers could steal services and occupy scarce ports; Massachusetts aide Jonathan Winer outlined a bill criminalizing intentional access and data theft or damage.",
+        "posts": [
+          {
+            "topic": "Dial-up system security",
+            "platform": "CompuServe and commercial database services",
+            "text": "Minot said one intrusion consumed a million dollars' worth of CompuServe services in two days, and urged providers to strengthen security, consult law enforcement before incidents, and display explicit no-trespassing notices. Computerworld reported a proposed Massachusetts misdemeanor penalty of up to one year in jail and a $5,000 fine for intentional intrusion, with felony treatment for data larceny."
+          },
+          {
+            "topic": "Timex/Sinclair users gather online",
+            "platform": "CompuServe CEM 450 SIG",
+            "text": "The June 1984 Timelinez guide documented a real user-group path onto CompuServe: Timex/Sinclair owners could use the CEM 450 Special Interest Group to read messages and exchange information, illustrating how machine-specific communities were forming inside national services."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "The Nine-Pound Portable with a Sixteen-Line Window",
+        "summary": "Morrow's Pivot compressed an MS-DOS computer into nine pounds, but its LCD showed only 16 rows of 80 characters.",
+        "detail": "The Comdex machine used Harris's low-power 80C86, shipped with 128KB RAM expandable to 512KB, and started below $2,500—an unusually vivid snapshot of the compromises behind 1984 portability."
+      },
+      "gadgetWatch": {
+        "headline": "The Television Becomes an Electronic Playpen",
+        "summary": "TIME's May 28 cover-date feature described households assembling TVs, cable, VCRs, videodisc players, stereos, and game machines into integrated entertainment centers—an exact-week consumer-electronics snapshot.",
+        "confidence": "Exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "Comdex attendance, exhibitors and products",
+            "status": "Verified in May 28 trade coverage",
+            "sourceRefs": [
+              0
+            ]
+          },
+          {
+            "claim": "Framework functions and $695 price",
+            "status": "Verified in the May 29 PC Magazine issue",
+            "sourceRefs": [
+              1
+            ]
+          },
+          {
+            "claim": "Music chart and movie standings",
+            "status": "Verified with dated weekly chart and box-office sources",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          },
+          {
+            "claim": "Punjab world-news bulletin",
+            "status": "Limited to developments reported by June 3",
+            "sourceRefs": [
+              8
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "Computerworld, Vol. 18 No. 22",
+          "url": "https://archive.org/details/sim_computerworld_1984-05-28_18_22",
+          "date": "1984-05-28"
+        },
+        {
+          "title": "PC Magazine, Vol. 3 No. 10",
+          "url": "https://archive.org/details/PC-Mag-1984-05-29",
+          "date": "1984-05-29"
+        },
+        {
+          "title": "COMPUTE! Issue 48",
+          "url": "https://archive.org/details/1984-05-compute-magazine",
+          "date": "1984-05"
+        },
+        {
+          "title": "COMPUTE! Issue 49",
+          "url": "https://www.atarimagazines.com/compute/issue49/",
+          "date": "1984-06"
+        },
+        {
+          "title": "Computer Gaming World 4.3: Questron review",
+          "url": "https://www.oldgames.sk/en/mags/article/13473",
+          "date": "1984-06"
+        },
+        {
+          "title": "Billboard Hot 100 chart week June 2, 1984",
+          "url": "https://www.elpee.jp/hot100/week/1984-06-02",
+          "date": "1984-06-02"
+        },
+        {
+          "title": "Indiana Jones sets several box-office records",
+          "url": "https://www.upi.com/Archives/1984/05/29/Indiana-Jones-sets-several-box-office-records/9186454651200/",
+          "date": "1984-05-29"
+        },
+        {
+          "title": "Iraqi missile blasts Turkish tanker",
+          "url": "https://www.upi.com/Archives/1984/06/03/Iraqi-missile-blasts-Turkish-tanker/3380455083200/",
+          "date": "1984-06-03"
+        },
+        {
+          "title": "June 3, 1984: Army in Punjab",
+          "url": "https://indianexpress.com/article/opinion/40-years-ago/june-3-1984-forty-years-ago-army-in-punjab-9368402/",
+          "date": "1984-06-03"
+        },
+        {
+          "title": "Life in the Electronic Playpen",
+          "url": "https://time.com/archive/6884194/life-in-the-electronic-playpen/",
+          "date": "1984-05-28"
+        }
+      ]
+    },
+    {
       "currentDate": "2026-09-07",
       "historicDate": "1984-05-21",
       "displayDate": "Week of May 21-27, 1984",
