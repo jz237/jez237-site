@@ -3510,5 +3510,123 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-08-factual-infographic-factual-infographic-franciscan-blister-",
+    "title": "Factual infographic: Franciscan Blister Beetle — The Living Bee Decoy",
+    "tests": "factual_subtype: bizarre-insect-life; accepted common name: Franciscan blister beetle; scientific name: Meloe franciscanus; verified mechanism: first-instar triungulins cooperate as a female-bee-sized visual and chemical decoy, board a male Habropoda bee, transfer to a female during mating contact, and ride her to the host nest; macro plan: enormous whole-larva hero plus large aggregation, hooked-foot, aggregation-texture, and larvae-on-bee close-ups; direct-canvas orthographic infographic; factual evidence restricted to the archived claim sheet; anti-repeat: cooperative sexual-deception phoresy in desert dunes, distinct from prior chemical-defense, anatomy, parasitoid, glow-worm, and predation infographics; Claude Opus 5 actual-pixel QA PASS, with no gross limb-count defect and only minor uncertain leg-attachment softness.",
+    "prompt": "Create a polished museum-quality direct-canvas factual infographic titled “FRANCISCAN BLISTER BEETLE — THE LIVING BEE DECOY.” The canvas itself is the finished information design, viewed perfectly straight-on and filling every edge: no paper, poster, page, frame, wall, screen, desk, room, cast shadow around the composition, hands, tools, specimen tray, or surrounding environment. Build an insect-first editorial layout in sunlit dune gold, Astragalus green, glossy larval charcoal, bee amber, ultraviolet violet, and restrained coral arrows. At least three quarters of the canvas must be large naturalistic insect imagery. Use one enormous scientifically believable extreme-macro hero of a real first-instar Meloe franciscanus triungulin: an approximately 2 mm long, clearly segmented, six-legged blister-beetle larva with correct head, thorax, abdomen, antennae, hooked feet, subtle translucency, living cuticle texture, and believable macro depth of field. Beside it, make a second dominant image of many triungulins cooperating as one tight dark female-bee-sized aggregation perched at the tip of desert vegetation, visibly composed of separate tiny larvae rather than a single blob. Add three further large macro windows: hooked larval feet gripping plant fibers; the living aggregation texture with individual six-legged bodies readable; and triungulins attached among the hairs on a male Habropoda pallida bee, with both insect anatomies coherent.\n\nOrganize the lower third as a concise, physically connected four-step visual journey with large pictures and minimal labels: “1 AGGREGATE” — newly emerged triungulins climb vegetation in a southwestern desert sand-dune habitat; “2 LURE + BOARD” — the female-bee-sized aggregation combines visual resemblance with a volatile chemical cue, attracting a male bee that contacts it and carries the larvae; “3 TRANSFER” — larvae move from the male to a female bee during mating contact; “4 ENTER THE NEST” — the female transports them to her nest, where they dismount and develop as nest parasites. Connect the exact same black triungulins through every stage so the causal transfer is unmistakable. Include a clean scale ladder comparing one approximately 2 mm triungulin, the cooperative aggregation, and a Habropoda bee. Include a compact evidence panel comparing three silhouette lures: visual model alone = not sufficient; larval chemical extract on a model = attracts males; living aggregation = visual plus chemical mimicry. Do not invent chemical structures or formulas. Include a narrow habitat cutaway showing Astragalus vegetation as scattered green resource patches in southwestern desert dunes. Include a restrained life-cycle ribbon: egg mass near plant base → first-instar triungulins → transport into solitary-bee nest → feeding on nest provisions and host egg → later beetle development, without gore.\n\nUse authoritative editorial typography, large readable headings, short labels only, generous hierarchy, integrated arrows and cutaways, and crisp biological illustration blended with photoreal extreme-macro specimen detail. Keep prose minimal. All factual implications must stay within the described mechanism. No bibliography or URLs. No monster scale, human motives, adult-beetle hero, gore, pseudo-text, extra legs, fused larvae, fantasy anatomy, fictional statistics, sensational claims, logos, or watermark.",
+    "image": "images/2026-09-08-factual-infographic-factual-infographic-franciscan-blister-.jpg",
+    "thumb": "thumbs/2026-09-08-factual-infographic-factual-infographic-franciscan-blister-.webp",
+    "color": "#91826f",
+    "date": "2026-09-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How Meloe franciscanus triungulin larvae cooperate to mimic a female Habropoda bee and hitchhike through a two-bee transfer into the host nest",
+      "description": "A direct-canvas macro-entomology infographic shows how tiny Franciscan blister beetle triungulins cooperate as a living female-bee decoy, transfer from male to female bee, and reach the host nest.",
+      "sourceNote": "Proceedings of the National Academy of Sciences — Phoretic nest parasites use sexual deception to obtain transport to their host’s nest https://pmc.ncbi.nlm.nih.gov/articles/PMC1599908/ ; Nature — Beetle larvae cooperate to mimic bees https://www.nature.com/articles/35011129 . Verified scope: taxonomy and larval stage, approximate scale, dune habitat, cooperative visual and chemical mimicry, male-bee boarding, transfer to a female bee, transport into the host nest, and nest-parasitic development.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-08T16:30:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Proceedings of the National Academy of Sciences",
+            "title": "Phoretic nest parasites use sexual deception to obtain transport to their host's nest",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC1599908/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Nature",
+            "title": "Beetle larvae cooperate to mimic bees",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/35011129"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Meloe franciscanus is a blister beetle whose first-instar larvae are called triungulins.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The triungulins are approximately two millimeters long, six-legged insect larvae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In the southwestern United States study system, Meloe franciscanus and its solitary-bee host Habropoda pallida inhabit desert sand dunes where Astragalus plants form scattered resource patches.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Newly emerged triungulins climb vegetation and cooperate in a tight dark aggregation positioned like a perched female host bee.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The larval aggregation mimics visual features of a female bee, including approximate size, color, and perching location.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The aggregation also produces a volatile chemical cue that mimics components of the female host bee's sex pheromone and attracts male bees.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Visual mimicry alone was not sufficient in field tests; chemical cues were the primary means of attracting male bees.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "When a male Habropoda pallida contacts the aggregation in an attempted mating interaction, the triungulins attach to his body as a group.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Triungulins can transfer from the male bee to a female bee during mating or attempted mating contact.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The female bee carries the triungulins to her nest, where they dismount and develop as nest parasites.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Inside the host nest, the beetle larvae consume pollen and nectar provisions and the host bee egg before completing development.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The complete transport sequence is vegetation aggregation to male bee to female bee to host nest.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
