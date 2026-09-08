@@ -145,13 +145,14 @@
         887
       ],
       "rect": [
-        74,
+        73,
         131,
-        182,
+        158,
         183
       ],
       "scale": 0.9973218708100208,
-      "areaRatio": 1
+      "areaRatio": 1,
+      "fistRepairSource": "exec-84515c0d-fc90-48eb-9806-5fa64bc40e79.png"
     },
     {
       "frame": 9,
@@ -162,13 +163,14 @@
         887
       ],
       "rect": [
-        79,
+        80,
         130,
-        167,
+        147,
         184
       ],
       "scale": 1.0143037078549435,
-      "areaRatio": 1.0000000000000002
+      "areaRatio": 1.0000000000000002,
+      "fistRepairSource": "exec-84515c0d-fc90-48eb-9806-5fa64bc40e79.png"
     },
     {
       "frame": 10,

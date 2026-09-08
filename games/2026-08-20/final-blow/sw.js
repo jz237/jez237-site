@@ -3,8 +3,8 @@
 // could make Chrome abort the page before it rendered. (Since 5.1 a fetched
 // media file is KEPT, in a second, capped, build-keyed cache — see
 // MEDIA_CACHE_NAME — which is a different thing from installing it.)
-// 5.6.6: cross-round learning, projectile defense, custom CPU matches and instant replays.
-const CACHE_NAME = "final-blow-shell-5.6.6";
+// 5.6.7: closed-fist crouching punch windup and recovery art for Jez and Benny.
+const CACHE_NAME = "final-blow-shell-5.6.7";
 // v5.1 #38 — the RUNTIME media cache. Sheets, audio, stage plates and the 3D
 // renderer's HD/vendor files are still fetched on demand (never at install:
 // the precache alternative is now 81 MB / ~560 files), but once a file has
