@@ -1046,7 +1046,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.6` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.7` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1409,7 +1409,8 @@ function ensureInbetweenAtlas(id, bank) {
   const key = `${id}:${companionBank(bank)}`;
   if (!inbetweenAtlases[key]) {
     const image = new Image();
-    image.src = `assets/inbetweens/${id}-${bank}-v1.webp`;
+    const fistRevision = ['jez','benny'].includes(id) && bank === 'unified-ext2' ? '?art=fists1' : '';
+    image.src = `assets/inbetweens/${id}-${bank}-v1.webp${fistRevision}`;
     inbetweenAtlases[key] = image;
     image.decode().catch(() => {});
   }
@@ -1603,7 +1604,8 @@ function unifiedFighterExt2Whole(fighterId) {
 function ensureUnifiedExt2Atlas(fighterId) {
   let atlas = fighterUnifiedExt2Atlases[fighterId];
   if (!atlas) {
-    atlas = authoredSheetImage("ext2", `assets/unified/${fighterId}-ext2.webp`);
+    const fistRevision = ['jez','benny'].includes(fighterId) ? '?art=fists1' : '';
+    atlas = authoredSheetImage("ext2", `assets/unified/${fighterId}-ext2.webp${fistRevision}`);
     fighterUnifiedExt2Atlases[fighterId] = atlas;
   }
   return atlas;
@@ -32921,7 +32923,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.6");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.7");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34407,7 +34409,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.6.6-ringside",
+  version: "5.6.7-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

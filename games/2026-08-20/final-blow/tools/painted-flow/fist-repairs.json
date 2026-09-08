@@ -1,0 +1,207 @@
+{
+  "generator": "built-in image_gen",
+  "source": "exec-84515c0d-fc90-48eb-9806-5fa64bc40e79.png",
+  "request": "Raised clenched fists throughout crouching punch windup and recovery; preserve painted identity, crouch, feet and full-body margins.",
+  "frames": [
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext2.webp",
+      "cell": 8,
+      "oldBounds": {
+        "left": 60,
+        "top": 102,
+        "width": 198,
+        "height": 213
+      },
+      "newBounds": {
+        "left": 60,
+        "top": 102,
+        "width": 193,
+        "height": 213
+      },
+      "sourceRect": [
+        0,
+        0,
+        443,
+        443
+      ],
+      "oldFoot": 79,
+      "newFoot": 78
+    },
+    {
+      "id": "jez",
+      "file": "assets/unified/jez-ext2.webp",
+      "cell": 9,
+      "oldBounds": {
+        "left": 19,
+        "top": 107,
+        "width": 282,
+        "height": 208
+      },
+      "newBounds": {
+        "left": 19,
+        "top": 107,
+        "width": 175,
+        "height": 208
+      },
+      "sourceRect": [
+        443,
+        0,
+        444,
+        443
+      ],
+      "oldFoot": 52.5,
+      "newFoot": 53
+    },
+    {
+      "id": "jez",
+      "file": "assets/inbetweens/jez-unified-ext2-v1.webp",
+      "cell": 8,
+      "oldBounds": {
+        "left": 54,
+        "top": 101,
+        "width": 204,
+        "height": 213
+      },
+      "newBounds": {
+        "left": 56,
+        "top": 101,
+        "width": 192,
+        "height": 213
+      },
+      "sourceRect": [
+        887,
+        0,
+        443,
+        443
+      ],
+      "oldFoot": 74,
+      "newFoot": 74
+    },
+    {
+      "id": "jez",
+      "file": "assets/inbetweens/jez-unified-ext2-v1.webp",
+      "cell": 9,
+      "oldBounds": {
+        "left": 24,
+        "top": 112,
+        "width": 211,
+        "height": 202
+      },
+      "newBounds": {
+        "left": 30,
+        "top": 112,
+        "width": 168,
+        "height": 202
+      },
+      "sourceRect": [
+        1330,
+        0,
+        444,
+        443
+      ],
+      "oldFoot": 62.5,
+      "newFoot": 63
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext2.webp",
+      "cell": 8,
+      "oldBounds": {
+        "left": 73,
+        "top": 130,
+        "width": 183,
+        "height": 185
+      },
+      "newBounds": {
+        "left": 73,
+        "top": 130,
+        "width": 158,
+        "height": 185
+      },
+      "sourceRect": [
+        0,
+        443,
+        443,
+        444
+      ],
+      "oldFoot": 90,
+      "newFoot": 89.5
+    },
+    {
+      "id": "benny",
+      "file": "assets/unified/benny-ext2.webp",
+      "cell": 9,
+      "oldBounds": {
+        "left": 78,
+        "top": 130,
+        "width": 168,
+        "height": 185
+      },
+      "newBounds": {
+        "left": 80,
+        "top": 130,
+        "width": 156,
+        "height": 185
+      },
+      "sourceRect": [
+        443,
+        443,
+        444,
+        444
+      ],
+      "oldFoot": 97.5,
+      "newFoot": 96.5
+    },
+    {
+      "id": "benny",
+      "file": "assets/inbetweens/benny-unified-ext2-v1.webp",
+      "cell": 8,
+      "oldBounds": {
+        "left": 74,
+        "top": 131,
+        "width": 182,
+        "height": 183
+      },
+      "newBounds": {
+        "left": 73,
+        "top": 131,
+        "width": 158,
+        "height": 183
+      },
+      "sourceRect": [
+        887,
+        443,
+        443,
+        444
+      ],
+      "oldFoot": 90,
+      "newFoot": 89.5
+    },
+    {
+      "id": "benny",
+      "file": "assets/inbetweens/benny-unified-ext2-v1.webp",
+      "cell": 9,
+      "oldBounds": {
+        "left": 79,
+        "top": 130,
+        "width": 167,
+        "height": 184
+      },
+      "newBounds": {
+        "left": 80,
+        "top": 130,
+        "width": 147,
+        "height": 184
+      },
+      "sourceRect": [
+        1330,
+        443,
+        444,
+        444
+      ],
+      "oldFoot": 98,
+      "newFoot": 97
+    }
+  ]
+}
