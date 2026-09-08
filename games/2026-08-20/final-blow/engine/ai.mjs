@@ -1,4 +1,5 @@
-import {fighterStyle,roundStrategy,strategicIntent,selectComboContinuation,meterOpportunity} from "./ai-strategy.mjs";
+import {projectileIntent} from "./ai-projectiles.mjs";
+import {fighterStyle,comboObjective,roundStrategy,strategicIntent,selectComboContinuation,meterOpportunity} from "./ai-strategy.mjs";
 import {createOpponentMemory, learnOpponent, opponentHabits} from "./ai-adaptation.mjs";
 import { ATTACK_LEVELS, DEFENSE_RULES, MOVEMENT_RULES, THROW_RULES } from "./defense.mjs";
 import { GRIT_RULES } from "./combos.mjs";
@@ -132,10 +133,11 @@ export function resetAiBrain(brain, difficulty = brain?.difficulty || DEFAULT_AI
   return brain;
 }
 
-export function visibleOpponentObservation(opponent, frame) {
+export function visibleOpponentObservation(opponent, frame, projectiles = []) {
   const attack = opponent?.attacking;
   return Object.freeze({
     frame,
+    projectiles: projectiles.filter(p=>p.ownerSide===opponent?.side).map(p=>({x:p.x,y:p.y,vx:p.vx,width:p.width,height:p.height,level:p.level,lifeFrames:p.lifeFrames,armFrames:p.armFrames||0})),
     x: opponent?.x ?? 0,
     y: opponent?.y ?? 0,
     grounded: Boolean(opponent?.grounded),
@@ -163,8 +165,8 @@ export function visibleOpponentObservation(opponent, frame) {
   });
 }
 
-export function recordAiObservation(brain, frame, opponent) {
-  const observation = visibleOpponentObservation(opponent, frame);
+export function recordAiObservation(brain, frame, opponent, projectiles = []) {
+  const observation = visibleOpponentObservation(opponent, frame, projectiles);
   brain.observations.push(observation);
   const retention = resolveAiSettings(brain.difficulty).reactionFrames + 90;
   while (brain.observations.length > retention) brain.observations.shift();
@@ -306,7 +308,7 @@ function comboFollowup(self, settings, roll, context = {}, observation = null) {
     if (mixRoll(chosenRoll,2)>=settings.comboChance)return null;
     const id=self.kitId||self.id||self.def?.kitId||self.def?.id;
     const action=selectComboContinuation(id,self,observation,mixRoll(chosenRoll,3));
-    return action ? {action,comboKey,confirmed:action==='super'} : null;
+    return action ? {action,comboKey,confirmed:action==='super',objective:comboObjective(self,observation)} : null;
   }
   // 5.4 GRIT POLICY (sweep #6, demo personas only — `superConfirmChance` is
   // unset on every player-facing tier). A full bar on a CONFIRMED hit is the
@@ -371,6 +373,7 @@ export function preferTacticalInput(brain, input, self) {
     return ['light','heavy','driveHeavy','super','special','commandSpecial','backSpecial','launcher','enhanced','enhancedCommandSpecial','enhancedBackSpecial','enhancedLauncher'].some(key=>input[key]);
   }
   if (self.attacking || !self.grounded) return false;
+  if(['projectile-block','projectile-counter','projectile-jump','projectile-advance'].includes(reason))return true;
   if(['corner-escape','corner-counter','corner-defense','corner-pressure','protect-lead','protect-poke','chase','exchange-reset','style-spacing','style-strike','meter-reserve'].includes(reason))return true;
   if (['low-block','high-block','bait-heavy','anticipate-low'].includes(reason)) return input.guard;
   return ['recovery-punish','guard-mix','anti-air','adaptive-anti-air','guard-break-throw','throw-whiff-punish','throw-tech','throw-evade'].includes(reason)
@@ -420,7 +423,7 @@ export function decideAiIntent(brain, {
   if (combo) {
     return {
       movement: "hold", action: combo.action,
-      reason: combo.confirmed ? "grit-confirm" : "hit-confirm", comboKey: combo.comboKey,
+      reason: combo.confirmed ? "grit-confirm" : "hit-confirm", comboKey: combo.comboKey, comboObjective:combo.objective,
     };
   }
 
@@ -463,6 +466,11 @@ export function decideAiIntent(brain, {
       return { movement: "hold", action: "light", reason: "air-tech" };
     }
     return { movement: "hold", action: null, reason: "juggled" };
+  }
+
+  if(context.exhibition && mixRoll(roll,47)<settings.defenseChance){
+    const response=projectileIntent(self,observation,frame,mixRoll(roll,48));
+    if(response)return response;
   }
 
   // 5.3 CLOSE RANGE: punish a whiffed throw. The commitment band means a
@@ -746,7 +754,7 @@ export function stepAiBrain(brain, {
   roll = 0.5,
   context = {},
 } = {}) {
-  recordAiObservation(brain, frame, opponent);
+  recordAiObservation(brain, frame, opponent, context.projectiles || []);
   // A passive brain never produces an input, whatever it can see.
   if (resolveAiSettings(brain.difficulty).inert) {
     brain.intent = { ...PASSIVE_INTENT };
@@ -757,7 +765,7 @@ export function stepAiBrain(brain, {
   if (!observation) return emptyInput();
   brain.lastObservedFrame = observation.frame;
   learnOpponent(brain.opponentMemory, observation);
-  brain.context=context;
+  brain.context={exhibition:context.exhibition,timeRemaining:context.timeRemaining};
   const id=self.kitId||self.id||self.def?.kitId||self.def?.id;
   brain.strategy=context.exhibition?{plan:roundStrategy(self,observation,context.timeRemaining),style:fighterStyle(id).name}:null;
   if(context.exhibition){
@@ -815,6 +823,7 @@ export function aiBrainSnapshot(brain) {
     decisions: brain.decisions,
     recentActions: [...brain.recentActions],
     opponentHabits: opponentHabits(brain.opponentMemory),
+    roundsRemembered:brain.opponentMemory.roundsRemembered||0,
     strategy:brain.strategy,
     exchangeUntil:brain.exchangeUntil,
     suppressedRepeats: brain.suppressedRepeats,

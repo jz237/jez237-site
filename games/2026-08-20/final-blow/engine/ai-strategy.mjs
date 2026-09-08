@@ -1,5 +1,5 @@
 import {MOVEMENT_RULES, THROW_RULES} from './defense.mjs';
-import {canCancelAttack, GRIT_RULES} from './combos.mjs';
+import {canCancelAttack, GRIT_RULES, COMBO_RULES} from './combos.mjs';
 import {getFighterKit,getKitMoveProfile,fighterActionGroup} from './fighter-kits.mjs';
 
 export const FIGHT_STYLES=Object.freeze({
@@ -30,6 +30,19 @@ export function moveReaches(move,distance){
   const trapReach=move.trap ? Math.max(0,...(move.trap.offsets||[]))+(move.trap.radius||0) : 0;
   return distance<=Math.max(move.range||0,projectileReach,trapReach);
 }
+export function comboObjective(self,opponent){
+ const room=opponent.x>self.x?MOVEMENT_RULES.stageMaxX-opponent.x:opponent.x-MOVEMENT_RULES.stageMinX;
+ return opponent.health<=24?'finish':room<170?'knockdown':'corner-carry';
+}
+export function scoreComboOption(option,self,opponent){
+ const {move,cost}=option;
+ const scale=COMBO_RULES.hitScales[Math.min(self.combo?.hits||0,COMBO_RULES.hitScales.length-1)];
+ const damage=(move.damage||0)*(1+Math.max(0,(move.maxHits||1)-1)*.52)*scale;
+ if(damage>=opponent.health)return 1000-cost*2-(move.startupFrames||0);
+ const objective=comboObjective(self,opponent);
+ const knockdown=Boolean(move.knockdown||move.knockdownOnFinal||move.launchVelocityY);
+ return damage-cost*.12+(objective==='corner-carry'?Math.min(30,(move.push||0)*.06):objective==='knockdown'&&knockdown?35:0);
+}
 export function selectComboContinuation(id,self,opponent,roll=.5){
   if(self.attackConnected!=='hit' || !self.attacking || self.confirmWindowFrames===0)return null;
   if(self.attacking.rhythmCancel && self.rhythmStacks<(self.attacking.rhythmCancelStacks||2))return null;
@@ -45,7 +58,7 @@ export function selectComboContinuation(id,self,opponent,roll=.5){
     if(cost && self.health<30 && self.meter-cost<GRIT_RULES.guardReversalCost && opponent.health>move.damage)continue;
     options.push({action,move,cost});
   }
-  options.sort((a,b)=>(b.move.damage-b.cost*.08)-(a.move.damage-a.cost*.08));
+  options.sort((a,b)=>scoreComboOption(b,self,opponent)-scoreComboOption(a,self,opponent));
   const best=options.find(option=>option.cost===0 || roll<.78);
   return best?.action || null;
 }
