@@ -1,3 +1,4 @@
+import {feintIntent,blockedStringAlternative} from "./ai-feints.mjs";
 import {deliberateDefense} from "./ai-defense.mjs";
 import {projectileIntent} from "./ai-projectiles.mjs";
 import {fighterStyle,comboObjective,roundStrategy,strategicIntent,selectComboContinuation,meterOpportunity} from "./ai-strategy.mjs";
@@ -107,6 +108,7 @@ export function createAiBrain(difficulty = DEFAULT_AI_DIFFICULTY) {
     lastHabitReadFrame: -Infinity,
     exchangeUntil:0, lastExchangeFrame:-Infinity, previousAttack:false, exchangeContact:false,
     confirmRoll:.5, strategy:null, context:{},
+    feint:null,lastFeintFrame:-Infinity,blockedPlanUntil:-Infinity,lastStringResult:"",signatureVariant:0,
     nextDecisionFrame: 0,
     intent: { movement: "hold", action: null, reason: "boot" },
     lastDecisionFrame: -Infinity,
@@ -138,6 +140,7 @@ export function visibleOpponentObservation(opponent, frame, projectiles = []) {
   const attack = opponent?.attacking;
   return Object.freeze({
     frame,
+    fighterId:opponent?.kitId||opponent?.id||opponent?.def?.id,
     projectiles: projectiles.filter(p=>p.ownerSide===opponent?.side).map(p=>({x:p.x,y:p.y,vx:p.vx,vy:p.vy||0,gravity:p.gravity||0,width:p.width,height:p.height,level:p.level,lifeFrames:p.lifeFrames,armFrames:p.armFrames||0})),
     x: opponent?.x ?? 0,
     y: opponent?.y ?? 0,
@@ -375,6 +378,7 @@ export function preferTacticalInput(brain, input, self) {
     return ['light','heavy','driveHeavy','super','special','commandSpecial','backSpecial','launcher','enhanced','enhancedCommandSpecial','enhancedBackSpecial','enhancedLauncher'].some(key=>input[key]);
   }
   if (self.attacking || !self.grounded) return false;
+  if(['feint-approach','feint-retreat','feint-watch','blocked-string-throw','blocked-string-low','blocked-string-reset'].includes(reason))return true;
   if(['projectile-block','projectile-counter','projectile-jump','projectile-advance'].includes(reason))return true;
   if(['corner-escape','corner-counter','corner-defense','corner-pressure','protect-lead','protect-poke','chase','exchange-reset','style-spacing','style-strike','meter-reserve'].includes(reason))return true;
   if (['low-block','high-block','bait-heavy','anticipate-low','spacing-defense','crouch-cover'].includes(reason)) return input.guard;
@@ -627,6 +631,10 @@ export function decideAiIntent(brain, {
 
   if (context.exhibition) {
     if (self.attacking && self.attackConnected==='block')return {movement:'hold',action:null,reason:'blocked-recovery'};
+    const alternate=blockedStringAlternative(brain,self,observation,frame,mixRoll(roll,52));
+    if(alternate)return alternate;
+    const feint=feintIntent(brain,self,observation,frame,mixRoll(roll,51),context.timeRemaining);
+    if(feint)return feint;
     const strategy=strategicIntent({id:fighterId,self,opponent:observation,frame,
       timeRemaining:context.timeRemaining,roll:mixRoll(roll,46),until:brain.exchangeUntil});
     if(strategy)return strategy;
@@ -773,7 +781,12 @@ export function stepAiBrain(brain, {
   const id=self.kitId||self.id||self.def?.kitId||self.def?.id;
   brain.strategy=context.exhibition?{plan:roundStrategy(self,observation,context.timeRemaining),style:fighterStyle(id).name}:null;
   if(context.exhibition){
-    if(self.attacking && self.attackConnected)brain.exchangeContact=true;
+    if(self.attacking && self.attackConnected){brain.exchangeContact=true;brain.lastStringResult=self.attackConnected;}
+    if(brain.previousAttack && !self.attacking){
+      if(brain.lastStringResult==='block')brain.blockedPlanUntil=frame+60;
+      if(brain.exchangeContact)brain.signatureVariant++;
+      brain.lastStringResult='';
+    }
     if(brain.previousAttack && !self.attacking && brain.exchangeContact){
       if(frame-brain.lastExchangeFrame>=150){brain.exchangeUntil=frame+fighterStyle(id).reset;brain.lastExchangeFrame=frame;}
       brain.exchangeContact=false;
@@ -807,7 +820,7 @@ export function stepAiBrain(brain, {
   // decision cadence, so without this the brain would only ever hit them by
   // luck. The take itself is already latched (okiTake / clinchTake), so this
   // buys timing, never extra probability.
-  const timedRead = brain.intent.reason === "oki-approach" || brain.intent.reason === "clinched"
+  const timedRead = brain.intent.reason.startsWith("feint-") || brain.intent.reason === "oki-approach" || brain.intent.reason === "clinched"
     || (context.exhibition && self.attacking && self.attackConnected==='hit' && confirmKey!==brain.lastComboKey);
   brain.nextDecisionFrame = timedRead ? frame + 1 : frame
     + resolveAiSettings(brain.difficulty).decisionFrames
@@ -830,6 +843,7 @@ export function aiBrainSnapshot(brain) {
     roundsRemembered:brain.opponentMemory.roundsRemembered||0,
     strategy:brain.strategy,
     exchangeUntil:brain.exchangeUntil,
+    signatureVariant:brain.signatureVariant,feint:brain.feint?{...brain.feint}:null,
     suppressedRepeats: brain.suppressedRepeats,
     intent: { ...brain.intent },
   };

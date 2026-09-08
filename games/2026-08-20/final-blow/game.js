@@ -1,3 +1,5 @@
+import {BRIDGE_BANK,BRIDGE_FIGHTERS,createBridgeSelector} from "./engine/painted-bridges.mjs";
+import {STRIKE_ANCHORS,projectStrikeTip} from "./engine/strike-anchors.mjs";
 import {createMoveViewer} from "./engine/move-viewer.mjs";
 import {createInstantReplay} from "./engine/instant-replay.mjs";
 import {normalizeSpectatorConfig,configuredDirector,spectatorConfigFromUrl,addSpectatorConfig} from "./engine/spectator-config.mjs";
@@ -1047,7 +1049,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.8` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.9` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1389,6 +1391,8 @@ function specialsGenerationPose(fighterId, pose) {
 // ---------------------------------------------------------------------------
 const fighterUnifiedAtlases = {};
 const paintedFlowAtlases = {};
+const bridgeAtlases = {};
+const selectBridge = createBridgeSelector();
 const paintedFlowAvailability = new WeakMap();
 const inbetweenAtlases = {};
 const selectInbetween = createInbetweenSelector();
@@ -1435,6 +1439,11 @@ function withInbetween(fighter, pose) {
   return selected.artBank ? {...selected, artScale: INBETWEEN_SCALE[`${fighter.def.id}-${pose.bank}`]?.[pose.frame] || 1} : selected;
 }
 
+function ensureBridgeAtlas(id) {
+ if(!BRIDGE_FIGHTERS.includes(id))return null;
+ if(!bridgeAtlases[id]){const image=new Image();image.src=`assets/bridges/${id}-v1.webp`;bridgeAtlases[id]=image;image.decode().catch(()=>{});}
+ return bridgeAtlases[id];
+}
 function ensurePaintedFlowAtlas(id) {
   if (!PAINTED_FLOW_FIGHTERS.includes(id)) return null;
   if (!paintedFlowAtlases[id]) {
@@ -1743,7 +1752,7 @@ function motionBankCellDrawable(fighterId, cell, bank) {
 function preloadAuthoredBanks(fighterIds) {
   const ids = (fighterIds || []).filter((id) => typeof id === "string" && id);
   if (!ids.length) return;
-  for (const id of ids) { approachReady(id); ensurePaintedFlowAtlas(id); for (const bank of INBETWEEN_BANKS) ensureInbetweenAtlas(id, bank); }
+  for (const id of ids) { approachReady(id); ensurePaintedFlowAtlas(id); ensureBridgeAtlas(id); for (const bank of INBETWEEN_BANKS) ensureInbetweenAtlas(id, bank); }
   ensureMotionManifest();
   ensureMotion2Manifest();
   ensureMotion3Manifest();
@@ -2140,6 +2149,7 @@ let pendingPalettes = [0, 0];
 // shipped generation kept as the specials bank's per-cell fallback remaps,
 // silhouettes and builds a 3D texture like any other sheet (v5.3).
 function altAtlasSource(fighterId, bank) {
+  if(bank===BRIDGE_BANK)return {image:bridgeAtlases[fighterId],key:`${fighterId}:${bank}`};
   if (bank.startsWith("inbetween-")) return {image: inbetweenAtlases[`${fighterId}:${bank}`], key: `${fighterId}:${bank}`};
   if (bank === PAINTED_FLOW_BANK) return { image: paintedFlowAtlases[fighterId], key: `${fighterId}:${bank}` };
   return resolveAltAtlasSource(fighterId, bank, {
@@ -2184,7 +2194,7 @@ function ensureAltAtlas(fighterId, bank = "base") {
 
 /** The atlas a side should draw from, alt palette applied when selected. */
 function paletteAtlas(fighterId, side, bank = "base") {
-  const base = bank.startsWith("inbetween-") ? inbetweenAtlases[`${fighterId}:${bank}`] : bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
+  const base = bank===BRIDGE_BANK ? bridgeAtlases[fighterId] : bank.startsWith("inbetween-") ? inbetweenAtlases[`${fighterId}:${bank}`] : bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
     ? fighterMoveAtlases[fighterId] || fighterAtlases[fighterId]
     // v5.3: the shipped specials generation, kept as the bank's per-cell
     // fallback; its own sheet, then the 5.3 sheet, then the combat atlas.
@@ -19583,7 +19593,7 @@ function hit(attacker, victim, attack, collision) {
     // flinch beat; the tiers below it only stir.
     splatX: impactTier === "super" || impactTier === "weapon" ? victim.x : null,
   });
-  const impact = collision?.point || { x: victim.x - attacker.facing * 22, y: victim.y - 105 };
+  const impact = paintedStrikePoint(attacker) || collision?.point || { x: victim.x - attacker.facing * 22, y: victim.y - 105 };
   spawnHit(impact.x, impact.y, attacker.def, impactTier, blocked, { direction: attacker.facing, counter });
   if (attack.superMove) {
     state.effects.push({ kind: "super", x: impact.x, y: impact.y, life: 0.55, max: 0.55, color: attacker.def.accent });
@@ -22097,7 +22107,9 @@ function fighterAnimationPose(fighter) {
   if (flow && !paintedFlowAvailability.has(fighter.attacking)) {
     paintedFlowAvailability.set(fighter.attacking, Boolean(flowAtlas?.complete && flowAtlas.naturalWidth));
   }
-  const pose = withInbetween(fighter, flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung));
+  const bridgeImage=ensureBridgeAtlas(fighter.def.id);
+  const bridge=selectBridge(fighter,Boolean(bridgeImage?.complete&&bridgeImage.naturalWidth),Boolean(flowAtlas?.complete&&flowAtlas.naturalWidth));
+  const pose = bridge || withInbetween(fighter, flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung));
   recordPoseTrace(fighter, pose);
   return pose;
 }
@@ -24853,6 +24865,7 @@ function downTiltFor(fighterId, bank, frame) {
 }
 
 function bankSheetAdjust(fighterId, bank) {
+  if (bank === BRIDGE_BANK) return UNIFIED_SHEET_ADJUST[fighterId] || 1;
   if (bank === PAINTED_FLOW_BANK) return PAINTED_FLOW_SCALE[fighterId] || 1;
   if (bank === "specials") return MOVE_SHEET_ADJUST[fighterId] || 1;
   if (bank === SPECIALS_LEGACY_BANK) return MOVE_SHEET_LEGACY_ADJUST[fighterId] || 1;
@@ -24875,6 +24888,17 @@ function bankSheetAdjust(fighterId, bank) {
   // UNIFIED_EXT_CELL_ADJUST instead, which both renderers read through
   // cellDrawAdjust. Adding it here as well would multiply the two.
   return 1;
+}
+
+function paintedStrikePoint(fighter) {
+ const a=fighter.attacking;
+ if(!a||!fighter.grounded||fighter.crouch||a.animation||a.superMove||a.advanceSpeed||!['light','heavy'].includes(a.kind))return null;
+ const pose=presentationPose(fighterAnimationPose(fighter));
+ const tip=STRIKE_ANCHORS[fighter.def.id]?.[`${pose.artBank||pose.bank}:${pose.frame}`];
+ if(!tip)return null;
+ const size=fighterRenderSize(fighter.def.id)*bankSheetAdjust(fighter.def.id,pose.bank)*cellDrawAdjust(fighter.def.id,pose.bank,pose.frame,{unified:unifiedFighterReady(fighter.def.id)})*(pose.artScale||1);
+ return projectStrikeTip(tip,{x:fighter.x,y:fighter.y,size,mirror:fighter.facing*atlasFrameFacing(fighter.def.id,pose.bank,pose.frame),
+   floor:cellVerticalOffset(fighter.def.id,pose.bank,pose.frame,0)/320*size,motion:fighterMotionTransform(fighter)});
 }
 
 function fighterRenderSize(fighterId) {
@@ -25130,7 +25154,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   fighter = renderFighter(fighter);
   const jump = FLOOR - fighter.y;
   const pose = presentationPose(fighterAnimationPose(fighter));
-  const authoredStrike = pose.bank === PAINTED_FLOW_BANK || (fighter.grounded && fighter.attacking
+  const authoredStrike = pose.bank === PAINTED_FLOW_BANK || pose.bank === BRIDGE_BANK || (fighter.grounded && fighter.attacking
     && fighter.attacking.limb !== "kick" && ["light", "heavy"].includes(fighter.attacking.kind)
     && !fighter.attacking.animation && !fighter.attacking.advanceSpeed);
   const attack = fighter.attacking;
@@ -25338,7 +25362,8 @@ function drawFighter(fighter, time, measureOnly = false) {
   ctx.translate(lunge - startupPower * 8,
     floorFix + crouchDrop - attackSwing * (attackKind === "special" ? 13 : 5));
   ctx.rotate(-attackSwing * (attackKind === "heavy" ? 0.07 : 0.025));
-  ctx.scale(1 + activePower * 0.045 - startupPower * 0.025, crouchScale + startupPower * 0.035 - activePower * 0.025);
+  const bodyPower=authoredStrike?0:activePower;
+  ctx.scale(1 + bodyPower * 0.045 - startupPower * 0.025, crouchScale + startupPower * 0.035 - bodyPower * 0.025);
   // Breathing + idle pulse + exhaustion posture: the origin sits at the feet,
   // so the chest-rise anchors correctly and the hunch pivots forward over the
   // toes. The bob rides the same feet-anchored scale — its pixel amplitude
@@ -32941,7 +32966,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.8");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.9");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33678,7 +33703,7 @@ const moveViewer = createMoveViewer({
   const fighter = makeFighter(0, 0, def);
   fighter.preview = true; fighter.previewTick = 0;
   await ensureUnifiedManifest();
-  const banks = ['base','specials','motion','motion2','motion3','walk','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','painted-flow',
+  const banks = ['base','specials','motion','motion2','motion3','walk','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','painted-flow',BRIDGE_BANK,
     ...INBETWEEN_BANKS.map(companionBank),'inbetween-approach'];
   await Promise.all(banks.map(bank => paletteAtlas(id,0,bank)?.decode?.().catch(()=>{})));
   // Padded atlases have no decode method; wait for their source-image jobs too.
@@ -34457,7 +34482,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.6.8-ringside",
+  version: "5.6.9-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

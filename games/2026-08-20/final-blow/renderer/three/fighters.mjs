@@ -44,7 +44,7 @@ import { FIGHTER_MASK_LAYER } from "./post.mjs";
 // v3.0: ...and on the unified bank's name, so the sheet-adjust branch below
 // cannot drift from the sim's idea of what that bank is called.
 import { AUTHORED_BANKS as LEGACY_AUTHORED_BANKS, SPECIALS_LEGACY_BANK, UNIFIED_BANK } from "../../engine/fighter-kits.mjs";
-const AUTHORED_BANKS = [...LEGACY_AUTHORED_BANKS, "painted-flow"];
+const AUTHORED_BANKS = [...LEGACY_AUTHORED_BANKS, "painted-flow", "painted-bridges"];
 // v5.1 TEMPO TELLS: the SAME phase/strength function drawFighter's 2D pass
 // reads, so the whiff fringe and the re-arm wash land on identical ticks in
 // both renderers (no host member: it is pure engine code, not a game.js read).
@@ -1428,10 +1428,10 @@ export class FighterLayer {
     // --- Same presentation math drawFighter uses (read-only sim fields) ----
     const attack = fighter.attacking;
     const attackProgress = attack ? THREE.MathUtils.clamp(fighter.attackTime / attack.duration, 0, 1) : 0;
-    const attackSwing = bankName !== "painted-flow" && attack ? Math.sin(attackProgress * Math.PI) : 0;
-    const startupPower = bankName !== "painted-flow" && attack && fighter.attackTime < attack.active[0]
+    const attackSwing = !(["painted-flow","painted-bridges"].includes(bankName)) && attack ? Math.sin(attackProgress * Math.PI) : 0;
+    const startupPower = !(["painted-flow","painted-bridges"].includes(bankName)) && attack && fighter.attackTime < attack.active[0]
       ? Math.sin((fighter.attackTime / attack.active[0]) * Math.PI) : 0;
-    const activePower = bankName !== "painted-flow" && attack && fighter.attackTime >= attack.active[0] && fighter.attackTime <= attack.active[1]
+    const activePower = !(["painted-flow","painted-bridges"].includes(bankName)) && attack && fighter.attackTime >= attack.active[0] && fighter.attackTime <= attack.active[1]
       ? 1 : attack ? Math.max(0, attackSwing * 0.42) : 0;
     const attackKind = attack?.kind;
     const moving = Math.abs(fighter.vx) > 22 && fighter.grounded && !attack;
@@ -1454,6 +1454,7 @@ export class FighterLayer {
           // v3.0 UNIFIED: also its own table. The unified sheets DO share the
           // motion banks' 306px standing convention, but a future sheet built
           // to another one must not inherit a correction fitted to this one.
+          : bankName === "painted-bridges" ? (host.unifiedSheetAdjust?.[fighter.def.id] || 1)
           : bankName === "painted-flow" ? (PAINTED_FLOW_SCALE[fighter.def.id] || 1)
           : bankName === UNIFIED_BANK ? (host.unifiedSheetAdjust?.[fighter.def.id] || 1) : 1)
       // v2.9 critic round 2 (M4): cellDrawAdjust rolls the oversized-crouch

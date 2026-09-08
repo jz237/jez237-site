@@ -1,3 +1,4 @@
+import {signatureNext} from "./signature-routes.mjs";
 import {MOVEMENT_RULES, THROW_RULES} from './defense.mjs';
 import {canCancelAttack, GRIT_RULES, COMBO_RULES} from './combos.mjs';
 import {getFighterKit,getKitMoveProfile,fighterActionGroup} from './fighter-kits.mjs';
@@ -58,7 +59,9 @@ export function selectComboContinuation(id,self,opponent,roll=.5){
     if(cost && self.health<30 && self.meter-cost<GRIT_RULES.guardReversalCost && opponent.health>move.damage)continue;
     options.push({action,move,cost});
   }
-  options.sort((a,b)=>scoreComboOption(b,self,opponent)-scoreComboOption(a,self,opponent));
+  const signature=signatureNext(id,self.attacking.kitAction,self.aiBrain?.signatureVariant||0);
+  const score=option=>scoreComboOption(option,self,opponent)+(signature.includes(option.action)?Math.max(0,24-signature.indexOf(option.action)*14):0);
+  options.sort((a,b)=>score(b)-score(a));
   const best=options.find(option=>option.cost===0 || roll<.78);
   return best?.action || null;
 }

@@ -1,0 +1,512 @@
+[
+  {
+    "id": "devil",
+    "source": "exec-520b4f8a-a0ad-4d57-90bb-eff61564fa22.png",
+    "scale": 0.6247240618101545,
+    "guardHeight": 283,
+    "newGuardHeight": 283,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 30,
+        "top": 29,
+        "right": 269,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 41,
+        "top": 50,
+        "right": 297,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 41,
+        "top": 32,
+        "right": 273,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 34,
+        "top": 43,
+        "right": 272,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 36,
+        "top": 52,
+        "right": 263,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 38,
+        "top": 35,
+        "right": 269,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "donald",
+    "source": "exec-d788bb6e-1601-4687-a8f1-381f9dc422de.png",
+    "scale": 0.6258992805755396,
+    "guardHeight": 261,
+    "newGuardHeight": 261,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 70,
+        "top": 51,
+        "right": 287,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 67,
+        "top": 60,
+        "right": 292,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 55,
+        "top": 55,
+        "right": 283,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 50,
+        "top": 52,
+        "right": 282,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 58,
+        "top": 59,
+        "right": 268,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 56,
+        "top": 38,
+        "right": 270,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "post",
+    "source": "exec-ab0e6ac9-7941-47f1-8bc4-ad33065f8e49.png",
+    "scale": 0.636986301369863,
+    "guardHeight": 279,
+    "newGuardHeight": 279,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 76,
+        "top": 33,
+        "right": 251,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 66,
+        "top": 36,
+        "right": 289,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 54,
+        "top": 38,
+        "right": 272,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 52,
+        "top": 42,
+        "right": 274,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 65,
+        "top": 48,
+        "right": 262,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 66,
+        "top": 35,
+        "right": 262,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "jez",
+    "source": "exec-bce002c6-6a87-4465-a263-d369b2d2c9fa.png",
+    "scale": 0.6295454545454545,
+    "guardHeight": 277,
+    "newGuardHeight": 277,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 78,
+        "top": 35,
+        "right": 259,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 76,
+        "top": 46,
+        "right": 297,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 70,
+        "top": 38,
+        "right": 268,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 72,
+        "top": 50,
+        "right": 266,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 74,
+        "top": 60,
+        "right": 263,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 71,
+        "top": 44,
+        "right": 266,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "benny",
+    "source": "exec-e69eb2a4-4ec1-4b2a-b5f7-0917847aebea.png",
+    "scale": 0.6283783783783784,
+    "guardHeight": 279,
+    "newGuardHeight": 279,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 69,
+        "top": 33,
+        "right": 254,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 65,
+        "top": 35,
+        "right": 307,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 61,
+        "top": 34,
+        "right": 262,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 54,
+        "top": 39,
+        "right": 270,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 52,
+        "top": 54,
+        "right": 272,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 63,
+        "top": 36,
+        "right": 261,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "alan",
+    "source": "exec-21408251-cdb0-475d-a018-363ccc56e132.png",
+    "scale": 0.6153846153846154,
+    "guardHeight": 274,
+    "newGuardHeight": 268.92307692307696,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 62,
+        "top": 43,
+        "right": 266,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 60,
+        "top": 54,
+        "right": 313,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 54,
+        "top": 48,
+        "right": 276,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 53,
+        "top": 52,
+        "right": 276,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 56,
+        "top": 63,
+        "right": 273,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 54,
+        "top": 47,
+        "right": 274,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "ali",
+    "source": "exec-94d8b31d-6838-416e-ab5f-86a27ce6ef71.png",
+    "scale": 0.6514161220043573,
+    "guardHeight": 299,
+    "newGuardHeight": 299,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 81,
+        "top": 13,
+        "right": 273,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 73,
+        "top": 35,
+        "right": 307,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 66,
+        "top": 36,
+        "right": 287,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 70,
+        "top": 35,
+        "right": 283,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 70,
+        "top": 43,
+        "right": 284,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 70,
+        "top": 29,
+        "right": 284,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "commissioner",
+    "source": "exec-3ea30d16-0b6f-441f-979e-82617172602c.png",
+    "scale": 0.6280087527352297,
+    "guardHeight": 287,
+    "newGuardHeight": 287,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 50,
+        "top": 25,
+        "right": 272,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 72,
+        "top": 36,
+        "right": 307,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 55,
+        "top": 37,
+        "right": 287,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 63,
+        "top": 37,
+        "right": 282,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 59,
+        "top": 51,
+        "right": 271,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 57,
+        "top": 38,
+        "right": 279,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "cyraxx",
+    "source": "exec-e922e4f5-c227-4b41-8704-1806d881f8c7.png",
+    "scale": 0.6297872340425532,
+    "guardHeight": 296,
+    "newGuardHeight": 296,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 73,
+        "top": 16,
+        "right": 241,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 75,
+        "top": 36,
+        "right": 304,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 60,
+        "top": 34,
+        "right": 255,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 60,
+        "top": 41,
+        "right": 260,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 62,
+        "top": 51,
+        "right": 251,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 65,
+        "top": 24,
+        "right": 248,
+        "bottom": 312
+      }
+    ]
+  },
+  {
+    "id": "deathblow",
+    "source": "exec-d17e9e3b-e303-466e-9147-d93ed19ab61b.png",
+    "scale": 0.6217303822937625,
+    "guardHeight": 272,
+    "newGuardHeight": 269.20925553319915,
+    "cells": [
+      {
+        "cell": 0,
+        "left": 70,
+        "top": 43,
+        "right": 247,
+        "bottom": 312
+      },
+      {
+        "cell": 1,
+        "left": 65,
+        "top": 47,
+        "right": 312,
+        "bottom": 312
+      },
+      {
+        "cell": 2,
+        "left": 60,
+        "top": 50,
+        "right": 255,
+        "bottom": 312
+      },
+      {
+        "cell": 3,
+        "left": 61,
+        "top": 55,
+        "right": 255,
+        "bottom": 312
+      },
+      {
+        "cell": 4,
+        "left": 58,
+        "top": 68,
+        "right": 258,
+        "bottom": 312
+      },
+      {
+        "cell": 5,
+        "left": 60,
+        "top": 56,
+        "right": 256,
+        "bottom": 312
+      }
+    ]
+  }
+]
