@@ -1,5 +1,117 @@
 [
   {
+    "id": "2026-09-08-factual-infographic-factual-infographic-opal-the-hidden-col",
+    "title": "Factual infographic: Opal — The Hidden Color Lattice",
+    "tests": "Tuesday general factual infographic; America/New_York quota slot 5/6; selected rewritten deck entry Opal's Hidden Color Lattice; exact topic unique across complete factual archive; real-world/non-fiction gemology and optical materials; source-verified claim sheet covers every causal arrow and label; direct-canvas orthographic museum infographic; dominant black-opal-to-silica-sphere cutaway; ordered-versus-disordered lattice comparison; four-stage white-light, diffraction, interference, spectral-color sequence; viewing-angle strip; sphere-size qualitative comparison; stacking-dislocation color domains; bodycolor and opal-type comparison; formation strip; scale ladder; structural-color-versus-pigment panel; cracking-risk note. Generated exactly once via synchronous openai/gpt-image-2 CLI with --quality high; exact same-run non-empty source verified; byte-identical hard-link QA mirror inspected at full resolution with Claude Opus 5; actual-pixel QA PASS for direct-canvas composition, readable title and labels, unmistakable structural-color mechanism, ordered/disordered comparison, and no mockup framing, logos, URLs, jewelry-ad styling, magical glow, or factual contradiction.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “OPAL: THE HIDDEN COLOR LATTICE,” explaining the real-world, non-fiction optical structure that produces play-of-color in precious opal. The generated canvas itself must be a polished museum-quality information design: perfectly front-facing, orthographic, straight-on, and edge-to-edge, with no visible paper edge, poster, placard, frame, border, cast shadow around the whole composition, wall, room, screen, desk, hands, tools, jewelry box, specimen tray, or environmental staging outside the designed layout. Use concise authoritative editorial typography, large readable labels, restrained leader lines, and no dense paragraphs.\n\nMake the stop-scroll anchor an enormous polished black-opal cabochon spanning the center, its brilliant red, green, blue, and violet play-of-color opening seamlessly into a huge magnified internal cutaway. Show a three-dimensional ordered array of translucent hydrated-silica spheres separated by tiny voids, with a clean white-light beam entering the lattice and selected spectral colors leaving toward the viewer. Connect GEM → COLOR DOMAIN → SILICA-SPHERE ARRAY with a bold continuous magnification tunnel so the structural cause of the color is unmistakable at thumbnail size. The opal is not glowing from within; all color must visibly follow incoming light, structure, and viewing direction.\n\nBuild at least ten concrete visual information layers around that central mechanism: (1) the dominant cabochon-to-sphere-lattice cutaway; (2) a four-stage light sequence labeled WHITE LIGHT ENTERS → ORDERED SPHERES DIFFRACT → WAVES REINFORCE OR CANCEL → SPECTRAL COLOR LEAVES; (3) two large lattice macro windows comparing regular similarly sized spheres in precious opal with irregular mixed-size spheres in common opal; (4) an angle-change strip showing the same color domain shifting as incident light and viewing angle change; (5) a sphere-size comparison showing smaller-scale arrays associated with shorter visible wavelengths and larger-scale arrays associated with longer visible wavelengths, only as a qualitative blue-to-red trend with no exact numbers; (6) a dislocation panel showing small stacking offsets creating bounded patches of color; (7) a bodycolor comparison showing white/light, dark/black, crystal, fire, and boulder opal, with a clear note that fire opal does not necessarily show play-of-color; (8) a formation strip showing silica-bearing water entering rock cracks, water loss, silica deposition, and hardened hydrated silica; (9) a scale ladder from whole gem to color patch to sphere array to one silica sphere and void; (10) a structure-versus-pigment comparison labeled STRUCTURAL COLOR / NOT RAINBOW PIGMENT; (11) a care panel showing that sudden or extreme temperature or humidity change can promote cracking because opal contains water; (12) a compact accuracy panel reading ORDER AND SCALE VARY — NOT EVERY OPAL SHOWS PLAY-OF-COLOR.\n\nUse a distinctive radial-crystalline editorial architecture unlike the earlier marine-anatomy and insect-behavior graphics: the giant opal occupies the center-left, the magnification tunnel crosses diagonally into a luminous but physically coherent sphere lattice at upper right, the white-light sequence arcs around the lattice, and comparison, formation, scale, type, and care modules form a disciplined lower band. Palette: velvet black, hydrated-silica pearl, electric spectral red, emerald, cobalt, violet, warm sandstone, pale cyan, and restrained gold. Blend photorealistic gem textures and scanning-electron-microscopy-style sphere arrays with crisp scientific cutaways and flat vector annotation, while keeping the overall infographic perfectly direct-canvas and orthographic.\n\nAccuracy constraints: opal is amorphous hydrated silica; precious opal contains a sufficiently regular three-dimensional array of similarly sized silica spheres and voids; that structure acts as a diffraction grating; interference reinforces some wavelengths and cancels others; sphere size and spacing influence the colors; small stacking dislocations create bounded color domains; viewing angle changes the observed pattern; common opal lacks comparable play-of-color because its sphere structure is not sufficiently regular. Do not imply a crystal lattice, internal flame, fluorescence, magical energy, pigment particles making the rainbow, or one universal sphere size. Do not invent exact wavelengths, sphere diameters, water percentages, formation times, temperatures, prices, rarity claims, or universal geographic claims.\n\nKeep visible text limited to the exact title and short labels such as PRECIOUS OPAL, COMMON OPAL, ORDERED SPHERES, MIXED SIZES, SILICA, VOID, WHITE LIGHT, DIFFRACTION, INTERFERENCE, COLOR DOMAIN, VIEWING ANGLE, STRUCTURAL COLOR, BODYCOLOR, FORMATION, SCALE, and AVOID SUDDEN EXTREMES. No bibliography, URLs, citations, QR codes, logos, watermark, signature, pseudo-text, misspelled labels, gemstone advertisement, jewelry glamour scene, fantasy glow, physical chart mockup, prompt-card instructions, or decorative panels without causal meaning.",
+    "image": "images/2026-09-08-factual-infographic-factual-infographic-opal-the-hidden-col.jpg",
+    "thumb": "thumbs/2026-09-08-factual-infographic-factual-infographic-opal-the-hidden-col.webp",
+    "color": "#bcbdbd",
+    "date": "2026-09-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How ordered silica spheres create play-of-color in precious opal",
+      "description": "A direct-canvas gemology infographic reveals how ordered hydrated-silica spheres and intervening voids diffract light, support interference, and create angle-dependent play-of-color in precious opal.",
+      "sourceNote": "Gemological Institute of America — Opal Description https://www.gia.edu/opal-description ; Australian Museum — Opal https://australian.museum/learn/minerals/gemstones/opal/ . Verified scope: hydrated-silica identity, ordered sphere-and-void structure, diffraction and interference, sphere-scale color relationships, viewing-angle color domains, precious-versus-common structure, formation context, opal types, and cracking risk.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-08T20:24:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Gemological Institute of America",
+            "title": "Opal Description",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.gia.edu/opal-description"
+          },
+          {
+            "id": "S2",
+            "publisher": "Australian Museum",
+            "title": "Opal",
+            "sourceType": "museum",
+            "url": "https://australian.museum/learn/minerals/gemstones/opal/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Opal is hydrated silica and is amorphous rather than having a definite crystal structure.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Precious opal displays play-of-color, while common opal does not.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Precious opal contains a regular three-dimensional array of submicroscopic, similarly sized hydrated-silica spheres separated by tiny voids.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The ordered sphere-and-void structure acts as a three-dimensional diffraction grating that separates white light into spectral colors.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Interference among diffracted wavelengths reinforces some colors and cancels others, producing play-of-color.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The size and spacing of the silica spheres influence which visible wavelengths are reinforced.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Small dislocations in the ordered stacking create bounded color domains whose appearance changes with the angle of incident light.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Common opal lacks play-of-color because its silica-sphere structure is not sufficiently regular and the spheres vary in size.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Opal can form when silica-bearing water deposits silica in cracks and spaces in rock as water is lost.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "White, black, crystal, fire, and boulder opal describe different combinations of body color, transparency, matrix, and play-of-color; fire opal does not necessarily show play-of-color.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Because opal contains water, sudden or extreme changes in temperature or humidity can cause cracking.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-08-factual-infographic-factual-infographic-nautilus-the-living",
     "title": "Factual infographic: Nautilus — The Living Buoyancy Spiral",
     "tests": "Tuesday general factual infographic; quota slot 3/6; selected and rewritten deck entry: Nautilus Buoyancy Spiral; exact topic verified unique against the complete factual archive; direct-canvas orthographic museum information design; dominant Nautilus pompilius spiral-shell cutaway; outermost living chamber and older gas-liquid chambers; siphuncle ion-transport and osmosis sequence; paired more-gas/more-lift versus more-liquid/less-lift sections; gas-transfer inset; shell-growth strip; buoyancy-versus-head-siphon jet-propulsion comparison; cautious submarine-ballast analogy; no unsupported exact numbers; independent Claude Opus 5 full-resolution pixel QA PASS with correct anatomy, coherent causal arrows, readable critical labels, no mockup framing, pseudo-text, logos, or watermarks.",
