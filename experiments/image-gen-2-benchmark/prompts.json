@@ -11860,5 +11860,115 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-08-factual-infographic-factual-infographic-epomis-circumscript",
+    "title": "Factual infographic: Epomis circumscriptus — The Larva That Lures Amphibians",
+    "tests": "factual_subtype: bizarre-insect-life; accepted names: Epomis ground beetle (Epomis circumscriptus); verified mechanism: larvae use alternating antenna-and-mandible movements to lure approaching amphibians, evade the tongue strike, and attach with specialized double-hooked mandibles; macro plan: one dominant whole-larva extreme macro plus four large close-ups of the head and mandibles, lure movement, tongue-strike evasion, and non-gory attachment; supporting layers: moist shelter habitat, relative scale, three instars, and larva-versus-adult diet comparison; direct-canvas orthographic layout; independent Claude Opus 5 pixel review PASS; anti-repeat: distinct from all prior factual archive topics, including other beetle defense, water collection, and parasite entries.",
+    "prompt": "Create one finished square 1024x1024 direct-canvas museum-quality factual infographic titled \"EPOMIS CIRCUMSCRIPTUS: THE LARVA THAT LURES AMPHIBIANS.\" This is a real-world, non-fiction entomology graphic about the Epomis ground beetle Epomis circumscriptus. Render the designed infographic itself straight-on, orthographic, edge-to-edge: no paper edge, poster, page, frame, wall, screen, desk, room, hands, tools, specimen tray, cast shadow around the composition, or environmental staging outside the designed panels.\n\nMake insect biology dominate at least two-thirds of the canvas. The stop-scroll anchor is one enormous naturalistic extreme-macro whole larva crossing diagonally from lower left toward center: correct insect anatomy with exactly six jointed legs, a clearly segmented long body, yellow legs and paired terminal urogomphi, dark mandibles with reddish tips, black-and-orange mottling over pale yellow-brown tissue, fine cuticle texture, tiny sensory hairs, grounded contact shadows, and believable shallow macro depth of field. Show the larva as a small living insect, never monster-sized. Beside it, include four additional large integrated macro views: (1) a frontal head portrait with paired antennae and the specialized double-hooked mandibles sharply resolved; (2) a side close-up of alternating antenna-and-mandible lure movements shown as three restrained sequential positions; (3) a tongue-strike close-up in which the larva visibly turns aside from a juvenile frog's extended tongue; and (4) a non-gory attachment close-up showing the hooked mandibles gripping superficial skin near the frog's mouth. Preserve correct six-legged anatomy and a single coherent larval body plan in every view.\n\nBuild a clear five-stage causal ribbon across the center-right with concise labels only: \"WAIT\" — larva remains still on moist ground; \"WAVE\" — antennae move up, down, and sideways; \"DRAW IN\" — an amphibian approaches the apparent prey; \"EVADE\" — the larva slips past the tongue strike; \"ATTACH\" — double-hooked mandibles secure the larva. Connect these stages with restrained arrows and continuous spatial logic. The sequence must communicate documented behavior without gore, sensational injury, invented motives, or universal claims.\n\nAdd four supporting information layers around the macro imagery without crowding it: a habitat cutaway of moist ground beneath one stone and a piece of wood debris shared with a small amphibian; a scale comparison showing the larva much smaller than the juvenile frog; a restrained three-instar strip labeled \"L1 / L2 / L3\" ending with a concealed molt and a return arrow toward another amphibian encounter; and a compact larva-versus-adult diet comparison labeled \"LARVA: AMPHIBIAN SPECIALIST\" and \"ADULT: GENERALIST PREDATOR.\" Include a small taxonomy line: \"GROUND BEETLE • CARABIDAE • EPOMIS CIRCUMSCRIPTUS.\" Do not include a map, conservation claim, exact measurement, statistic, bibliography, URL, citation, or paragraph text.\n\nUse a sophisticated wet-habitat palette of charcoal black, amber orange, reed green, damp umber, frog-skin olive, ivory, and restrained cyan accents. Make the whole-larva hero and the four macro windows photographic and tactile inside a crisp editorial information system, with authoritative readable typography, strong hierarchy, generous negative space between modules, precise alignment, fine annotation rules, and high visual density that remains legible at a glance. No fantasy, monster scale, blood, torn tissue, active injury, body horror, inaccurate extra limbs, spider anatomy, worm anatomy, adult beetle as the luminous focus, decorative charts, fake scientific numbers, tiny unreadable body copy, school-poster styling, pseudo-text, logos, QR codes, watermark, border, or physical infographic mockup.",
+    "image": "images/2026-09-08-factual-infographic-factual-infographic-epomis-circumscript.jpg",
+    "thumb": "thumbs/2026-09-08-factual-infographic-factual-infographic-epomis-circumscript.webp",
+    "color": "#4e4737",
+    "date": "2026-09-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How Epomis circumscriptus larvae lure amphibians with antenna-and-mandible movements, evade the resulting strike, and attach with double-hooked mandibles",
+      "description": "A direct-canvas macro-entomology infographic shows how the much smaller Epomis circumscriptus larva reverses the expected predator-prey encounter by luring an amphibian, evading its tongue, and attaching with hooked mandibles.",
+      "sourceNote": "PLOS ONE — An Unprecedented Role Reversal: Ground Beetle Larvae (Coleoptera: Carabidae) Lure Amphibians and Prey upon Them https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0025161 ; ZooKeys — Color variability and body size of larvae of two Epomis species (Coleoptera, Carabidae) in Israel, with a key to the larval stages https://pmc.ncbi.nlm.nih.gov/articles/PMC3192425/ . Verified scope: species identity, larval color and instars, moist shelter habitat, antenna-and-mandible luring, amphibian approach and tongue strike, evasion, double-hooked attachment anatomy, and predator-prey role reversal.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-08T09:04:24Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "PLOS ONE",
+            "title": "An Unprecedented Role Reversal: Ground Beetle Larvae (Coleoptera: Carabidae) Lure Amphibians and Prey upon Them",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0025161"
+          },
+          {
+            "id": "S2",
+            "publisher": "ZooKeys",
+            "title": "Color variability and body size of larvae of two Epomis species (Coleoptera, Carabidae) in Israel, with a key to the larval stages",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC3192425/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Epomis circumscriptus is a ground beetle in the family Carabidae, and the featured animal is its larval stage.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Epomis circumscriptus has three larval instars.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Later Epomis circumscriptus larvae can range from pale yellow-brown or whitish with black and orange markings to nearly black with orange markings; legs and terminal urogomphi are yellow, and dark mandibles have reddish tips.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Epomis larvae and amphibians co-occur in moist habitat and can share shelters such as stones and wood debris.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Unlike the more generalist adults, Epomis larvae are specialist predators of amphibians.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The larva lures amphibians while remaining in place by waving its antennae and by making alternating sideways antenna-and-mandible movements.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "An amphibian may approach, pounce, and extend its tongue toward the moving larva as if the larva were prey.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The larva can evade the tongue strike, counter toward the amphibian, and attach before beginning to feed.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Specialized double-hooked mandibles help the larva attach firmly to amphibian skin.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The larva is much smaller than the amphibian it attacks, creating a predator-prey role reversal.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "At the end of each larval instar, an Epomis larva leaves the amphibian, molts in a concealed place, and then seeks another amphibian host.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
