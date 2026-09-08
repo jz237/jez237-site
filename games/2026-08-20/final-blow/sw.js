@@ -4,7 +4,7 @@
 // media file is KEPT, in a second, capped, build-keyed cache — see
 // MEDIA_CACHE_NAME — which is a different thing from installing it.)
 // 5.7.0: painted-only presentation; retire the 3D renderer and model controls.
-const CACHE_NAME = "final-blow-shell-5.7.0-painted";
+const CACHE_NAME = "final-blow-shell-5.7.0-painted2";
 // v5.1 #38 — the RUNTIME media cache. Sheets, audio, stage plates and the 3D
 // renderer's HD/vendor files are still fetched on demand (never at install:
 // the precache alternative is now 81 MB / ~560 files), but once a file has
@@ -120,6 +120,12 @@ self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET" || requestUrl.origin !== self.location.origin) return;
 
   if (event.request.mode === "navigate") {
+    // Retired child pages must redirect before the cached root HTML is used;
+    // otherwise its relative script URL resolves inside the old /3d/ folder.
+    if (requestUrl.pathname.startsWith(new URL("./3d/", self.location.href).pathname)) {
+      event.respondWith(Promise.resolve(Response.redirect(new URL("./", self.location.href).href, 302)));
+      return;
+    }
     // Cloudflare Pages redirects /index.html to the directory URL. Returning
     // that redirected CacheStorage response from a navigation fetch event is
     // rejected by browsers as ERR_FAILED. The directory entry is the same

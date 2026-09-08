@@ -5188,6 +5188,10 @@ probe('painted-only', async () => {
   assert.equal(retired.three,'undefined');assert.equal(retired.controls,0);assert.equal(retired.imports,0);assert.deepEqual(retired.requests,[]);
   await evaluate(client, `window.__finalBlowQa.fight('jez','benny');window.__finalBlowQa.step(.5)`);
   assert.ok((await evaluate(client, `window.__finalBlowQa.pose()`)).every(p=>p.bank));
+  await navigate(client, new URL('./3d/',gameUrl).href);
+  await delay(1200);
+  assert.equal(await evaluate(client, `location.pathname`),new URL(gameUrl).pathname);
+  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.0-ringside');
 });
 
 probe('console-clean', async () => {
