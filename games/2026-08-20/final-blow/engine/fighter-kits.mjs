@@ -5915,6 +5915,13 @@ export function attackMotionBeat(attack, attackFrame, options = undefined) {
 export function attackAnimationPose(attack, attackFrame, options = undefined) {
   const animation = attack?.animation;
   if (!animation) return null;
+  // Rising attacks keep their own arc. The generic late-active follow-through
+  // is a horizontal cross, which made an uppercut snap sideways before landing.
+  if (['launcher','enhancedLauncher'].includes(attack.kitAction) || attack.cancelProfileId === 'rising-launcher') {
+    const index = attackFrame < attack.activeStartFrame ? 0 : attackFrame >= attack.activeEndFrame ? 3
+      : (attackFrame - attack.activeStartFrame) / Math.max(1,attack.activeEndFrame - attack.activeStartFrame) < .5 ? 1 : 2;
+    return {bank:animation.bank,frame:animation.frames[index]};
+  }
   // v5.0: a PLAIN special (no super, no EX charge) gathers on the fighter's
   // own special wind-up for the first half of its startup and settles on the
   // special recover for the tail of its recovery, both over the kit's own

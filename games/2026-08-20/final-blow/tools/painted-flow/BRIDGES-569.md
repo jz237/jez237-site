@@ -2,7 +2,7 @@
 
 50 new transition drawings, five per fighter across the ten-character roster. Each source sheet also includes one unused guard calibration drawing. The existing source atlases remain unchanged.
 
-The standing jab now retracts through two newly painted poses before the existing settling poses. Heavy punches load, extend, follow through, retract, and settle; preparation/recovery no longer reinsert a full-extension approach picture. Linked heavy attacks begin from an extended arm and launcher startup has two additional coiling/rising poses. Attack duration, active windows, damage and collision boxes are unchanged.
+The standing jab now retracts through two newly painted poses before the existing settling poses. Heavy punches load, extend, follow through, retract, and settle; preparation/recovery no longer reinsert a full-extension approach picture. Linked heavy attacks begin from an extended arm and launcher startup has two additional coiling/rising poses. Uppercuts retain their own rising-strike drawing through late contact instead of inserting a horizontal-cross follow-through before landing. Attack duration, active windows, damage and collision boxes are unchanged.
 
 Strike-effect origins are calibrated to visible fist/boot tips for painted standing normals, in both facing directions. These anchors affect presentation only.
 

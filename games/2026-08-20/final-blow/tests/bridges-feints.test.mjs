@@ -3,7 +3,7 @@ import {createBridgeSelector,BRIDGE_FIGHTERS} from '../engine/painted-bridges.mj
 import {feintIntent,blockedStringAlternative} from '../engine/ai-feints.mjs';
 import {signatureNext} from '../engine/signature-routes.mjs';
 import {projectStrikeTip,STRIKE_ANCHORS} from '../engine/strike-anchors.mjs';
-import {createFighterMove} from '../engine/fighter-kits.mjs';
+import {createFighterMove,attackAnimationPose} from '../engine/fighter-kits.mjs';
 for(const id of BRIDGE_FIGHTERS){
  const select=createBridgeSelector(),seen=new Set();
  for(const action of ['light','heavy','launcher']){
@@ -18,6 +18,12 @@ for(const id of BRIDGE_FIGHTERS){
  const a=createFighterMove(id,'light'),f={def:{id},grounded:true,attacking:a,attackFrame:a.activeEndFrame+2};
  assert.equal(select(f,false),null);assert.equal(select(f,true),null,'late loading cannot pop into an attack');
  assert.ok(signatureNext(id,'light').length);
+ for(const action of ['launcher','enhancedLauncher']){
+  const a=createFighterMove(id,action);
+  const end=attackAnimationPose(a,a.activeEndFrame-1,{inbetween:true});
+  assert.deepEqual(end,{bank:a.animation.bank,frame:a.animation.frames[2]},id+' rising arc cannot become a cross');
+  assert.deepEqual(attackAnimationPose(a,a.activeEndFrame),{bank:a.animation.bank,frame:a.animation.frames[3]});
+ }
  for(const tip of Object.values(STRIKE_ANCHORS[id]))assert.ok(tip.every(v=>v>0&&v<320));
 }
 const self={id:'jez',x:500,grounded:true,health:100},opp={fighterId:'benny',x:500+createFighterMove('benny','heavy').range+60,grounded:true};
