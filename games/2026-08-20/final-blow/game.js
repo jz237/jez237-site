@@ -32955,7 +32955,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.0-painted");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.0-painted2");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
