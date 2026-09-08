@@ -1,4 +1,5 @@
-import { ATTACK_LEVELS, DEFENSE_RULES, THROW_RULES } from "./defense.mjs";
+import {createOpponentMemory, learnOpponent, opponentHabits} from "./ai-adaptation.mjs";
+import { ATTACK_LEVELS, DEFENSE_RULES, MOVEMENT_RULES, THROW_RULES } from "./defense.mjs";
 import { GRIT_RULES } from "./combos.mjs";
 import { getFighterKit, getKitMoveProfile, selectKitAiIntent } from "./fighter-kits.mjs";
 
@@ -98,6 +99,9 @@ export function createAiBrain(difficulty = DEFAULT_AI_DIFFICULTY) {
   return {
     difficulty: id,
     observations: [],
+    opponentMemory: createOpponentMemory(),
+    lastConfirmReadKey: "",
+    lastHabitReadFrame: -Infinity,
     nextDecisionFrame: 0,
     intent: { movement: "hold", action: null, reason: "boot" },
     lastDecisionFrame: -Infinity,
@@ -132,6 +136,7 @@ export function visibleOpponentObservation(opponent, frame) {
     x: opponent?.x ?? 0,
     y: opponent?.y ?? 0,
     grounded: Boolean(opponent?.grounded),
+    juggled: Boolean(opponent?.pendingKnockdown || opponent?.airHitstunFrames > 0),
     crouching: Boolean(opponent?.crouch),
     guarding: Boolean(opponent?.guarding),
     down: Boolean(opponent?.down),
@@ -355,8 +360,8 @@ export function preferTacticalInput(brain, input, self) {
     return ['super','special','commandSpecial','launcher','enhanced','enhancedCommandSpecial','enhancedLauncher'].some(key=>input[key]);
   }
   if (self.attacking || !self.grounded) return false;
-  if (['low-block','high-block'].includes(reason)) return input.guard;
-  return ['recovery-punish','guard-mix','anti-air','throw-whiff-punish','throw-tech','throw-evade'].includes(reason)
+  if (['low-block','high-block','bait-heavy','anticipate-low'].includes(reason)) return input.guard;
+  return ['recovery-punish','guard-mix','anti-air','adaptive-anti-air','guard-break-throw','throw-whiff-punish','throw-tech','throw-evade'].includes(reason)
     && ['light','heavy','launcher','backSpecial','super','throw','jump'].some(key=>input[key]);
 }
 
@@ -387,6 +392,7 @@ export function decideAiIntent(brain, {
   const kit = getFighterKit(fighterId);
   const distance = Math.abs(observation.x - self.x);
   const timing = observedAttackTiming(observation, frame);
+  const habits = opponentHabits(brain.opponentMemory);
   const combo = comboFollowup({ ...self, aiBrain: brain }, settings, roll);
   if (combo) {
     return {
@@ -499,6 +505,32 @@ export function decideAiIntent(brain, {
   // through the same taunt input a human uses. Passive never reaches here.
   if (observation.down && distance > 190 && mixRoll(roll, 26) < (settings.tauntChance || 0)) {
     return { movement: "hold", action: "taunt", reason: "taunt" };
+  }
+
+  // Learned reads use only old, visible patterns and still take a fallible roll.
+  const canRead = self.grounded && !self.attacking && !self.hitstunFrames
+    && !self.blockstunFrames && !self.wakeupFrames && !self.down;
+  const readChance = Math.min(.88, settings.comboChance + .18);
+  if (canRead && mixRoll(roll, 45) < readChance) {
+    if (habits.jumps >= 3 && !observation.grounded && !observation.down && !observation.juggled) {
+      const action = kit?.ai.antiAirAction || 'launcher';
+      const move = getKitMoveProfile(fighterId, action);
+      if (move && distance <= move.range) return {movement:'hold',action,reason:'adaptive-anti-air'};
+    }
+    if (habits.holdsGuard && observation.guarding && observation.grounded && !timing.live
+      && distance < THROW_RULES.grabRange - 12) {
+      return {movement:'hold',action:'throw',reason:'guard-break-throw'};
+    }
+    const retreatRoom = observation.x > self.x ? self.x - MOVEMENT_RULES.stageMinX
+      : MOVEMENT_RULES.stageMaxX - self.x;
+    if (habits.repeatedHeavy && timing.live && observation.attackKind === 'heavy'
+      && distance > observation.attackRange * .65 && distance < observation.attackRange + 55 && retreatRoom > 85) {
+      return {movement:'retreat',action:null,guard:true,down:observation.attackLevel===ATTACK_LEVELS.LOW,reason:'bait-heavy'};
+    }
+    if (habits.repeatedLow && !observation.attacking && observation.grounded && distance < 150
+      && frame-brain.lastHabitReadFrame > 150) {
+      return {movement:'hold',action:null,guard:true,down:true,reason:'anticipate-low'};
+    }
   }
 
   // 5.4 PERSONAS: the counter-puncher answers a swing with the kit's AUTHORED
@@ -690,7 +722,12 @@ export function stepAiBrain(brain, {
   const observation = getReactionObservation(brain, frame);
   if (!observation) return emptyInput();
   brain.lastObservedFrame = observation.frame;
-  if (frame < brain.nextDecisionFrame) {
+  learnOpponent(brain.opponentMemory, observation);
+  const confirmKey = self.attacking && self.attackConnected === 'hit'
+    ? `${self.attackSerial || 0}:${self.attackHits || 0}` : '';
+  const freshConfirm = confirmKey && confirmKey !== brain.lastConfirmReadKey;
+  if (freshConfirm) brain.lastConfirmReadKey = confirmKey;
+  if (frame < brain.nextDecisionFrame && !freshConfirm) {
     return inputFromIntent(brain.intent, self, observation, false, frame, brain.lastDecisionFrame);
   }
 
@@ -700,6 +737,7 @@ export function stepAiBrain(brain, {
     resolveAiSettings(brain.difficulty),
     roll,
   );
+  if (brain.intent.reason === 'anticipate-low') brain.lastHabitReadFrame = frame;
   brain.recentActions.push(brain.intent.action || null);
   brain.recentActions = brain.recentActions.slice(-6);
   if (brain.intent.comboKey) brain.lastComboKey = brain.intent.comboKey;
@@ -728,6 +766,7 @@ export function aiBrainSnapshot(brain) {
     nextDecisionFrame: brain.nextDecisionFrame,
     decisions: brain.decisions,
     recentActions: [...brain.recentActions],
+    opponentHabits: opponentHabits(brain.opponentMemory),
     suppressedRepeats: brain.suppressedRepeats,
     intent: { ...brain.intent },
   };
