@@ -1053,7 +1053,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.4` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.5` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -20002,6 +20002,16 @@ function separateFighters() {
   const [a, b] = state.fighters;
   if (!a || !b) return;
   if (a.grabbing || b.grabbing || a.grabbed || b.grabbed) return;
+  // A connected phase-through move exits on the far side before hitstop.
+  // Keeping its original side switch avoids trapping the dash inside a body.
+  for (const [traveller, target] of [[a, b], [b, a]]) {
+    if (!traveller.attacking?.ignorePushbox || !traveller.attackConnected
+      || traveller.attackFrame > traveller.attacking.activeEndFrame) continue;
+    const ahead = (target.x - traveller.x) * traveller.facing;
+    if (ahead <= 0 || ahead >= 130) continue;
+    traveller.x = clamp(target.x + traveller.facing * 130, MOVEMENT_RULES.stageMinX, MOVEMENT_RULES.stageMaxX);
+    target.x = clamp(traveller.x - traveller.facing * 130, MOVEMENT_RULES.stageMinX, MOVEMENT_RULES.stageMaxX);
+  }
   if (attackPassesThrough(a) || attackPassesThrough(b)) return;
   const contact = a.hitstunFrames > 0 || b.hitstunFrames > 0;
   const positions = resolveArenaCollision(
@@ -32538,7 +32548,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.4-spacing");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.5-spacing");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34030,7 +34040,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.4-ringside",
+  version: "5.7.5-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

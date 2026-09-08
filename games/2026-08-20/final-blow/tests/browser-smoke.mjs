@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'controlsButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.7/);
-    assert.equal(title.version.text, 'VERSION 5.7.4');
+    assert.equal(title.version.text, 'VERSION 5.7.5');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.7.4-ringside');
+    assert.equal(title.engineVersion, '5.7.5-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -2242,7 +2242,7 @@ probe('crossup', async () => {
     crossup = await evaluate(client, `(() => {
       const out = {
         minGap: Infinity, unopposedFrames: 0, airborneFrames: 0,
-        releasedInsideDeadband: 0, settledWrong: 0, cases: 0,
+        releasedInsideDeadband: 0, stunnedOverlaps: 0, settledWrong: 0, cases: 0,
       };
       const committed = (f) => Boolean(f.attack) && f.attackFrame <= (f.activeEndFrame ?? Infinity);
       // Sweep the button timing: the stranded window opens only when a committed
@@ -2260,6 +2260,8 @@ probe('crossup', async () => {
           const [a, b] = window.__finalBlowEngine.snapshot().fighters;
           const posed = a.grabbing || a.grabbed || b.grabbing || b.grabbed;
           const gap = Math.abs(b.x - a.x);
+          if (!posed && (a.hitstunFrames > 0 || b.hitstunFrames > 0)
+            && Math.abs(a.y - b.y) < 260 && gap < 130 - 1e-6) out.stunnedOverlaps += 1;
           if (!a.grounded || !b.grounded) out.airborneFrames += 1;
           const nowCommitted = committed(a) || committed(b);
           // The exact frame an attack releases while still inside the overlap.
@@ -2279,10 +2281,9 @@ probe('crossup', async () => {
       crossup.minGap <= 14,
       `the cross-up probe must close inside the facing deadband, got ${crossup.minGap}`,
     );
-    assert.ok(
-      crossup.releasedInsideDeadband > 0,
-      "the sweep must land at least one attack release inside the overlap, or it never tests the stranded window",
-    );
+    // Connected jump-ins now separate before the hit hold; do not require the
+    // old body-stacking bug merely to exercise the facing regression.
+    assert.equal(crossup.stunnedOverlaps, 0, 'connected jump-ins must not hold both bodies on top of each other');
     assert.equal(crossup.unopposedFrames, 0, "a jump-in cross-up must never leave both fighters facing the same way");
     assert.equal(crossup.settledWrong, 0, `once the jump settles, both fighters must look at each other (${crossup.cases} timings swept)`);
 });
@@ -4687,7 +4688,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.7/);
-    assert.equal(controlledReload.version, '5.7.4-ringside');
+    assert.equal(controlledReload.version, '5.7.5-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4705,7 +4706,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.7/);
-    assert.equal(offlineBoot.version, '5.7.4-ringside');
+    assert.equal(offlineBoot.version, '5.7.5-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4751,7 +4752,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.7.4');
+    assert.equal(landscape.version.text, 'VERSION 5.7.5');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
@@ -5192,7 +5193,7 @@ probe('painted-only', async () => {
   await navigate(client, new URL('./3d/',gameUrl).href);
   await delay(1200);
   assert.equal(await evaluate(client, `location.pathname`),new URL(gameUrl).pathname);
-  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.4-ringside');
+  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.5-ringside');
 });
 
 probe('console-clean', async () => {
