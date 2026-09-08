@@ -1051,7 +1051,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.1` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.2` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -21887,43 +21887,25 @@ function drawPoolDeckAtmosphere(frame, centre, reaction) {
   ctx.restore();
 }
 
+let janneyCatAtlas;
 function drawVacantLotCat(cat, x, gait, paused, startled) {
-  const scale = cat.scale;
-  const step = paused ? 0 : Math.sin(gait) * 4.2;
-  const crouch = startled ? 2 : 0;
+  if (!janneyCatAtlas) {
+    janneyCatAtlas = new Image();
+    janneyCatAtlas.src = "assets/janney-cats-real-v1.webp";
+  }
+  if (!janneyCatAtlas.complete || !janneyCatAtlas.naturalWidth) return;
+  const coats = {"#17191d":1,"#302a25":0,"#5a554e":0,"#8a8176":3,"#c0b8aa":3,"#5b4435":2};
+  const row = coats[cat.coat] ?? 0;
+  const frame = paused ? 0 : Math.floor(((gait % (Math.PI * 2)) + Math.PI * 2) % (Math.PI * 2) / (Math.PI / 2));
   ctx.save();
-  ctx.translate(x, cat.y + crouch);
-  ctx.scale(scale * cat.direction, scale);
-  ctx.globalAlpha = 0.9;
-  ctx.fillStyle = "rgba(0,0,0,.55)";
-  ctx.beginPath();
-  ctx.ellipse(0, 3, 18, 4, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = cat.coat;
-  ctx.beginPath();
-  ctx.ellipse(0, -9, 17, 9, startled ? -0.08 : 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.arc(15, -15, 7, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.beginPath();
-  ctx.moveTo(10, -20); ctx.lineTo(12, -29); ctx.lineTo(16, -21);
-  ctx.moveTo(16, -21); ctx.lineTo(21, -28); ctx.lineTo(21, -18);
-  ctx.fill();
-  ctx.strokeStyle = cat.coat;
-  ctx.lineWidth = 5;
-  ctx.lineCap = "round";
-  ctx.beginPath();
-  ctx.moveTo(-14, -10);
-  ctx.quadraticCurveTo(-31, -23 - cat.tailCurl * 5, -27, -39 + cat.tailCurl * 4);
-  ctx.stroke();
-  ctx.lineWidth = 3.5;
-  ctx.beginPath();
-  ctx.moveTo(-8, -4); ctx.lineTo(-9 + step, 1);
-  ctx.moveTo(6, -4); ctx.lineTo(8 - step, 1);
-  ctx.stroke();
-  ctx.fillStyle = startled ? "#ffd96a" : "#9fc6a8";
-  ctx.beginPath(); ctx.arc(17, -16, 1.2, 0, Math.PI * 2); ctx.fill();
+  ctx.translate(x, cat.y);
+  ctx.scale(cat.scale * cat.direction, cat.scale);
+  ctx.fillStyle = "rgba(0,0,0,.25)";
+  ctx.beginPath();ctx.ellipse(0, 1, 23, 3, 0, 0, Math.PI * 2);ctx.fill();
+  // Full photographic bodies: authored paws and tails, no elastic limb warps.
+  ctx.globalAlpha = .94;
+  ctx.filter = "brightness(.72) saturate(.8)";
+  ctx.drawImage(janneyCatAtlas, frame * 320, row * 160, 320, 160, -38, -34.2, 76, 38);
   ctx.restore();
 }
 
@@ -32972,7 +32954,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.1-footwork");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.2-cats");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34464,7 +34446,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.1-ringside",
+  version: "5.7.2-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
