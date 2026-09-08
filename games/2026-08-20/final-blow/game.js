@@ -1,3 +1,6 @@
+import {createInstantReplay} from "./engine/instant-replay.mjs";
+import {normalizeSpectatorConfig,configuredDirector,spectatorConfigFromUrl,addSpectatorConfig} from "./engine/spectator-config.mjs";
+import {carryOpponentMemory} from "./engine/ai-adaptation.mjs";
 import { createApproachSelector, presentationPose } from "./engine/inbetweens.mjs";
 import { INBETWEEN_FIGHTERS, INBETWEEN_BANKS, companionBank, repairedCell, createInbetweenSelector } from "./engine/inbetweens.mjs";
 import { INBETWEEN_SCALE } from "./engine/inbetween-scale.mjs";
@@ -500,6 +503,7 @@ import {
   demoMatchupKey,
   demoStoryFor,
   demoStoryTierFor,
+  demoPersonaFor,
   parseDemoBootRequest,
 } from "./engine/demo.mjs";
 import { DEMO_COVERAGE_BLEND, createDemoChoreographer } from "./engine/demo-choreo.mjs";
@@ -1042,7 +1046,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.4` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.5` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -4618,6 +4622,7 @@ function demoSnapshot() {
     active: demoSession.active,
     attract: demoSession.attract,
     qa: demoSession.qa,
+    matchConfig:demoSession.matchConfig ? {...demoSession.matchConfig} : null,
     cycle: demoSession.cycle ? { ...demoSession.cycle, picks: [...demoSession.cycle.picks] } : null,
     matches: demoSession.matches,
     superSide: demoSession.superSide,
@@ -4674,7 +4679,7 @@ function demoSnapshot() {
 // 5.4 #30: the link for the exhibition on screen (null outside a demo).
 function demoShareUrl() {
   if (!demoSession.active || demoSession.seed === null) return null;
-  return buildDemoShareUrl(location.href, { seed: demoSession.seed, cycle: demoSession.cycle?.cycle || 1 });
+  return addSpectatorConfig(buildDemoShareUrl(location.href, { seed: demoSession.seed, cycle: demoSession.cycle?.cycle || 1 }),demoSession.matchConfig);
 }
 
 // 5.4 #30: the round ledger entry. Demo-only, reporting-only — the sim never
@@ -4900,7 +4905,7 @@ async function shareDemoLink() {
 function isDemoShareTarget(event) {
   const target = event?.target;
   return Boolean(demoSession.active && target && typeof target.closest === "function"
-    && target.closest("#demoShareButton, #demoPaceButton, #demoPauseButton"));
+    && target.closest("#demoShareButton, #demoPaceButton, #demoPauseButton, #demoReplayToggle, #demoReplayLast, #instantReplayDialog"));
 }
 
 // ---------------------------------------------------------------------------
@@ -5190,6 +5195,7 @@ function endDemoSession() {
   if (demoSession.tickerBefore) $("#stageTicker").textContent = demoSession.tickerBefore;
   demoSession.tickerBefore = "";
   demoSession.active = false;
+  demoSession.matchConfig=null;
   demoSession.attract = false;
   demoSession.qa = false;
   demoSession.director = null;
@@ -5360,6 +5366,13 @@ function startNextDemoMatch() {
   // 5.4 SESSION LAYER: the STORY names the opener and the lead seat, the
   // bout of the card the format (see demoResolveShow).
   demoResolveShow(cycle, showOverride);
+  if(demoSession.matchConfig){
+    const best=demoSession.matchConfig.bestOf;
+    demoSession.story={...demoStoryFor('grudge'),label:'CUSTOM MATCH'};
+    demoSession.show.story='grudge';
+    demoSession.show.format='standard';demoSession.show.opener='dash-in';
+    demoSession.show.bout={...demoSession.show.bout,kind:best===1?'quick':best===3?'co-main':'main',label:'CUSTOM MATCH',format:`BEST OF ${best}`,roundsToWin:(best+1)/2};
+  }
   demoSession.openerShown = false;
   demoSession.openerTick = -1;
   demoSession.openerAction = "";
@@ -5467,7 +5480,7 @@ function demoResolveShow(cycle, override = {}) {
  * `cycle` opens on card n by advancing the director through the same
  * startNextDemoMatch loop qa.demoCycles uses; `source` is bookkeeping only.
  */
-function startDemo({ attract = false, qa = false, seed = null, cycle = 1, source = null } = {}) {
+function startDemo({ attract = false, qa = false, seed = null, cycle = 1, source = null, matchConfig = null } = {}) {
   if (onlineSession.role) disconnectOnline(true);
   if (demoSession.active) endDemoSession();
   clearIdleDemoTimer();
@@ -5475,6 +5488,7 @@ function startDemo({ attract = false, qa = false, seed = null, cycle = 1, source
     enterImmersiveMode();
     unlockAudio();
   }
+  demoSession.matchConfig=normalizeSpectatorConfig(matchConfig,roster.map(f=>f.id),Object.keys(stages));
   demoSession.active = true;
   demoSession.attract = Boolean(attract);
   demoSession.qa = Boolean(qa);
@@ -5557,6 +5571,7 @@ function startDemo({ attract = false, qa = false, seed = null, cycle = 1, source
     trackCount: musicTracks.length,
     seed: demoSeed,
   });
+  demoSession.director=configuredDirector(demoSession.director,demoSession.matchConfig);
   demoSession.seed = demoSeed;
   // 5.4 SESSION LAYER: tonight's ledger opens on the build-keyed standings
   // board (a reload resumes the standings; a new build opens a clean board).
@@ -13712,6 +13727,7 @@ function resetRound() {
   cancelFightAnnouncement();
   resetMusicDuck();
   const carriedGrit = state.fighters.map((fighter) => fighter.meter);
+  const carriedReads = state.mode === "demo" ? state.fighters.map(f=>carryOpponentMemory(f.aiBrain.opponentMemory,state.simulationTick)) : null;
   state.round += 1;
   // R2.1 STREETS: a manually-stepped replay stays manual across the round
   // break (qaManualMode is meta — never checksummed).
@@ -13724,7 +13740,7 @@ function resetRound() {
   else seedMatch(state.round);
   state.fighters = makeMatchFighters();
   warmFighterAudio();
-  state.fighters.forEach((fighter, side) => { fighter.meter = carriedGrit[side] || 0; });
+  state.fighters.forEach((fighter, side) => { fighter.meter = carriedGrit[side] || 0; if(carriedReads)fighter.aiBrain.opponentMemory=carriedReads[side]; });
   if (state.matchRules.infiniteGrit) state.fighters.forEach((fighter) => { fighter.meter = GRIT_RULES.maximum; });
   // 5.4 SESSION LAYER (sweep #3): ROOKIE VS VETERAN — the rookie's late
   // comeback. When the veteran reaches match point the rookie opens the round
@@ -16151,6 +16167,7 @@ function syncDemoLowerThird() {
 // card's format tier (clock or the demo baseline) for the clock and the
 // snapshot, the per-seat tier is on each fighter's brain.
 function demoAiTier(kitId) {
+  if(demoSession.matchConfig)return demoSession.matchConfig.difficulty==='auto'?demoPersonaFor(kitId):demoSession.matchConfig.difficulty;
   const clock = demoSession.show?.format === "clock" && !demoSession.decisionShown && state.round <= 2;
   demoSession.fightersTier = clock ? DEMO_CLOCK_AI_DIFFICULTY : DEMO_AI_DIFFICULTY;
   // 5.4 SESSION LAYER: the story's per-seat overlay on the persona (the
@@ -16332,7 +16349,7 @@ function aiInput(fighter, opponent, dt) {
     self: fighter,
     opponent,
     roll: random(),
-    context: {exhibition:state.mode === "demo",timeRemaining:state.timer},
+    context: {exhibition:state.mode === "demo",timeRemaining:state.timer,projectiles:state.projectiles},
   });
   // The director supplies showcase variety; the live brain owns strategic
   // positioning, defense and checked hit confirms. The shared arbiter also
@@ -30139,6 +30156,7 @@ function loop(now) {
   state.simulationDroppedSeconds = frame.droppedSeconds;
   if (frame.steps + steppedFrames > 0) clearLatchedInputEdges();
   draw(now);
+  instantReplay.update(now,[$('#cinema3d'),$('#game')]);
   requestAnimationFrame(loop);
 }
 
@@ -32903,7 +32921,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.4");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.5");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33617,6 +33635,40 @@ function menuPadLoop() {
 
 $$('[data-mode]').forEach((button) => button.addEventListener("click", () => startSelect(button.dataset.mode)));
 $("#onlineButton").addEventListener("click", openOnlineLobby);
+const instantReplay=createInstantReplay({
+ dialog:$('#instantReplayDialog'),canvas:$('#instantReplayCanvas'),toggle:$('#demoReplayToggle'),watch:$('#demoReplayLast'),
+ isPaused:()=>demoSpeed.paused,setPaused:value=>demoSpeed.setPaused(value),
+ onPlaybackChange:playing=>{
+  if(playing)freezeDemoResultTimer(performance.now());
+  else if(demoSession.active&&state.screen==='result'&&!demoHold.frozen()&&demoSession.resultRemainingMs!==null)armDemoResultTimer(demoSession.resultRemainingMs);
+ },
+ getState:()=>({active:state.mode==='demo'&&demoSession.active,key:`${state.matchSerial}:${state.round}`,phase:state.phase,tick:state.simulationTick,
+  counter:state.fighters.some(f=>f.counterTriggered&&f.attackConnected==='hit'),
+  caption:state.fighters.map(f=>`${f.def.name} ${Math.ceil(f.health)}`).join('   VS   ')}),
+});
+
+function openSpectatorSetup(){
+ const fill=(selector,rows)=>{const el=$(selector);el.replaceChildren(...rows.map(([value,label])=>new Option(label,value)));};
+ fill('#spectatorFirst',roster.map(f=>[f.id,f.name]));fill('#spectatorSecond',roster.map(f=>[f.id,f.name]));
+ fill('#spectatorStage',[['random','RANDOM STAGE'],...Object.entries(stages).map(([id,stage])=>[id,stage.name])]);
+ const saved=storedJson('final-blow-spectator-config',null);
+ const config=normalizeSpectatorConfig(saved,roster.map(f=>f.id),Object.keys(stages))||{first:'jez',second:'benny',stage:'random',difficulty:'auto',bestOf:3};
+ for(const [key,id] of Object.entries({first:'First',second:'Second',stage:'Stage',difficulty:'Difficulty',bestOf:'BestOf'}))$('#spectator'+id).value=config[key];
+ $('#spectatorReplays').checked=instantReplay.enabled;$('#spectatorSetupError').textContent='';
+ $('#spectatorSetupDialog').showModal();clearIdleDemoTimer();
+}
+$('#spectatorSetupButton').addEventListener('click',openSpectatorSetup);
+$('#spectatorSetupClose').addEventListener('click',()=>$('#spectatorSetupDialog').close());
+$('#spectatorSetupForm').addEventListener('submit',event=>{
+ event.preventDefault();
+ const raw={first:$('#spectatorFirst').value,second:$('#spectatorSecond').value,stage:$('#spectatorStage').value,difficulty:$('#spectatorDifficulty').value,bestOf:$('#spectatorBestOf').value};
+ const config=normalizeSpectatorConfig(raw,roster.map(f=>f.id),Object.keys(stages));
+ if(!config){$('#spectatorSetupError').textContent='Choose two different fighters.';return;}
+ try{localStorage.setItem('final-blow-spectator-config',JSON.stringify(config));}catch{}
+ instantReplay.setEnabled($('#spectatorReplays').checked);$('#spectatorSetupDialog').close();startDemo({matchConfig:config});
+});
+document.addEventListener('keydown',event=>{if($('#spectatorSetupDialog').open||$('#instantReplayDialog').open)event.stopPropagation();},true);
+
 $("#demoButton").addEventListener("click", () => startDemo());
 $("#demo3dButton").addEventListener("click", () => { window.location.href = "../../demos/final-blow-3d/"; });
 // 5.4 #30: the demo HUD's share bug. `click` only — the capture-phase
@@ -34355,7 +34407,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.6.4-ringside",
+  version: "5.6.5-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -35562,6 +35614,7 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       this.fight("deathblow", "jez");
       return { difficulty, seconds: durationFrames / SIMULATION_HZ, matchups };
     },
+    instantReplay() {return instantReplay.snapshot();},
     demoStages() {
       // The stage list the attract director shuffles through.
       return Object.keys(stages);
@@ -35576,8 +35629,8 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
     // 5.4 #30: qa.demo(seed, cycle) and the ?demo=<seed>&cycle=<n> boot router
     // are the SAME call into startDemo — only the clock differs (manual here,
     // wall clock from a link). See demoRounds()/demoShareUrl() below.
-    demo(seed = 237, cycle = 1) {
-      startDemo({ qa: true, seed, cycle, source: "qa" });
+    demo(seed = 237, cycle = 1, matchConfig = null) {
+      startDemo({ qa: true, seed, cycle, source: "qa", matchConfig });
       return window.__finalBlowEngine.snapshot();
     },
     // 5.4 #30: the demo round ledger — one entry per settled round, stamped
@@ -37140,7 +37193,7 @@ if (pendingOnlineInvite) {
   if (bootDemo) {
     showScreen("title");
     suppressImmersivePrompt = true;
-    startDemo({ attract: true, seed: bootDemo.seed, cycle: bootDemo.cycle, source: "url" });
+    startDemo({ attract: true, seed: bootDemo.seed, cycle: bootDemo.cycle, source: "url", matchConfig:spectatorConfigFromUrl(location.href) });
   } else if (bootMode === "arcade" || bootMode === "survival") {
     showScreen("title");
     suppressImmersivePrompt = true;

@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'demo3dButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.6/);
-    assert.equal(title.version.text, 'VERSION 5.6.4');
+    assert.equal(title.version.text, 'VERSION 5.6.5');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.6.4-ringside');
+    assert.equal(title.engineVersion, '5.6.5-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -4605,6 +4605,7 @@ probe('offline-cache', async () => {
         hasRollback: Boolean(cache && await cache.match('./engine/rollback.mjs')),
         hasDemo: Boolean(cache && await cache.match('./engine/demo.mjs')),
         hasAiMemory: Boolean(cache && await cache.match('./engine/ai-adaptation.mjs')),
+        hasSpectatorUpgrades: (await Promise.all(['ai-projectiles','spectator-config','instant-replay'].map(id=>cache.match('./engine/'+id+'.mjs')))).every(Boolean),
         hasAiStrategy: Boolean(cache && await cache.match('./engine/ai-strategy.mjs')),
         hasFatalities: Boolean(cache && await cache.match('./engine/fatalities.mjs')),
         hasFighterAudioEngine: Boolean(cache && await cache.match('./engine/fighter-audio.mjs')),
@@ -4623,8 +4624,9 @@ probe('offline-cache', async () => {
     // swing-resolve}.mjs to the shell: game.js imports them at boot.
     // (5.4 Fight Night: the attract loop's six demo modules joined the shell; 5.4.1 the voice pack's.)
     // Painted animation modules and the adaptive AI memory are also boot dependencies.
-    assert.equal(offlineCache.entries, 42);
+    assert.equal(offlineCache.entries, 45);
     assert.equal(offlineCache.hasAiStrategy, true);
+    assert.equal(offlineCache.hasSpectatorUpgrades, true);
     assert.equal(offlineCache.hasAiMemory, true);
     assert.equal(offlineCache.hasAtlasFacing, true);
     assert.equal(offlineCache.hasIndex, false);
@@ -4647,7 +4649,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.6/);
-    assert.equal(controlledReload.version, '5.6.4-ringside');
+    assert.equal(controlledReload.version, '5.6.5-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4665,7 +4667,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.6/);
-    assert.equal(offlineBoot.version, '5.6.4-ringside');
+    assert.equal(offlineBoot.version, '5.6.5-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4711,7 +4713,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.6.4');
+    assert.equal(landscape.version.text, 'VERSION 5.6.5');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);

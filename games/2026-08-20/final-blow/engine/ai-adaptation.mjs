@@ -7,8 +7,8 @@ export function learnOpponent(memory, observation) {
   const prior=memory.last;
   if(prior && observation.frame<=prior.frame)return;
   const frame=observation.frame;
-  memory.events=memory.events.filter(event=>frame-event.frame<=900);
-  memory.guards=memory.guards.filter(sample=>frame-sample.frame<=900);
+  memory.events=memory.events.filter(event=>event.expires ? frame<=event.expires : frame-event.frame<=900);
+  memory.guards=memory.guards.filter(sample=>sample.expires ? frame<=sample.expires : frame-sample.frame<=900);
   if(prior){
     if(prior.grounded && !observation.grounded && !observation.down && !observation.juggled)
       memory.events.push({frame,type:'jump'});
@@ -33,4 +33,12 @@ export function opponentHabits(memory) {
     repeatedHeavy:attacks.length>=3 && count('kind','heavy')/attacks.length>=.6,
     holdsGuard:guards.length>=6 && guards.filter(sample=>sample.guarding).length/guards.length>=.65,
   };
+}
+
+export function carryOpponentMemory(memory,frame) {
+  const carried=createOpponentMemory();
+  carried.events=(memory?.events||[]).slice(-8).map(event=>({...event,expires:frame+900}));
+  carried.guards=(memory?.guards||[]).slice(-4).map(sample=>({...sample,expires:frame+600}));
+  carried.roundsRemembered=(memory?.roundsRemembered||0)+1;
+  return carried;
 }

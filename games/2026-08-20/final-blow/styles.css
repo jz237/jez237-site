@@ -4390,3 +4390,16 @@ body.reduced-motion .set-score-card.crowned { animation: none; }
   .title-coach b { font-size: 8px; }
   .title-coach small { font-size: 7px; }
 }
+
+.spectator-dialog {width:min(720px,94vw);max-height:90dvh;overflow:auto;}
+.spectator-grid {display:grid;grid-template-columns:1fr 1fr;gap:18px;}
+.spectator-grid label {display:flex;flex-direction:column;gap:8px;font:700 12px system-ui;color:#c6d6df;}
+.spectator-grid select {width:100%;padding:12px;background:#101d28;color:#fff;border:1px solid #637a8d;border-radius:4px;font:700 15px system-ui;}
+.spectator-grid .spectator-check {flex-direction:row;align-items:center;}
+#spectatorSetupError {min-height:1.2em;color:#ff9c92;}
+.instant-replay-dialog {padding:0;border:2px solid #ffc943;background:#080e16;color:#fff;width:min(1060px,96vw);max-height:94dvh;overflow:auto;}
+.instant-replay-dialog::backdrop {background:rgba(0,0,0,.88);}
+.instant-replay-dialog header {display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px;font:700 15px system-ui;color:#ffd46b;}
+.instant-replay-dialog button {padding:10px;border:1px solid #ffd46b;background:#151e2a;color:#fff;cursor:pointer;}
+#instantReplayCanvas {position:static;inset:auto;transform:none;z-index:auto;display:block;width:100%;height:auto;max-height:76dvh;object-fit:contain;}
+@media(max-width:600px){.spectator-grid{grid-template-columns:1fr}.spectator-dialog form{padding:16px}.instant-replay-dialog header{font-size:11px;}}
