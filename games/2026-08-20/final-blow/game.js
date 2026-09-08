@@ -167,6 +167,7 @@ import {
   registerAiDifficulty,
   resetAiBrain,
   stepAiBrain,
+  preferTacticalInput,
 } from "./engine/ai.mjs";
 import {
   DAILY_RULES,
@@ -1041,7 +1042,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.1` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.2` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -16339,6 +16340,7 @@ function aiInput(fighter, opponent, dt) {
     const view = demoChoreoView();
     if (fighter.side === 0) demoSession.choreo.observe(view);
     const scripted = demoSession.choreo.step(fighter.side, view);
+    if (preferTacticalInput(fighter.aiBrain, brainInput, fighter)) return brainInput;
     if (scripted) return scripted;
   }
   return brainInput;
@@ -32901,7 +32903,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.1");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.2");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34353,7 +34355,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.6.1-ringside",
+  version: "5.6.2-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
