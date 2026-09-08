@@ -394,6 +394,7 @@ import {
   cinematicDrawRotation,
   finisherCinematicPose,
   sampleFinisher,
+  spaceFinisherPose,
 } from "./engine/finisher-scripts.mjs";
 import {
   KO_COLLAPSE_CRUMPLE_TICKS,
@@ -1052,7 +1053,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.3` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.4` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -14307,7 +14308,7 @@ function finisherCinematicCamera(poseZoom = 1.18) {
     ? lerp(baseY, projectile.y, shot === "aftermath" ? (goreAftermath ? .2 : .32) : .55)
     : baseY;
   return {
-    x: cameraX,
+    x: clamp(cameraX, midpointX - 75, midpointX + 75),
     y: clamp(cameraY, H * .3, H * .59),
     zoom,
     nominalZoom,
@@ -14853,7 +14854,7 @@ function updateFinisher(dt) {
     finisher.aftermathSeconds = (finisher.aftermathSeconds || 0) + dt * (slowMo ? 0.38 : 1);
   }
   finisher.beatLife = Math.max(0, finisher.beatLife - dt);
-  const pose = sampleFinisher(finisher.script.keys, finisher.elapsed);
+  const pose = spaceFinisherPose(sampleFinisher(finisher.script.keys, finisher.elapsed));
 
   attacker.x = finisher.anchor + finisher.direction * pose.ax;
   attacker.y = FLOOR - pose.ay;
@@ -19993,6 +19994,7 @@ const SEPARATION_MAX_STEP_X = 14;
 // and the eased correction walks the pair apart through the recovery.
 function attackPassesThrough(fighter) {
   return Boolean(fighter.attacking?.ignorePushbox)
+    && !fighter.attackConnected
     && fighter.attackFrame <= fighter.attacking.activeEndFrame;
 }
 
@@ -20001,25 +20003,29 @@ function separateFighters() {
   if (!a || !b) return;
   if (a.grabbing || b.grabbing || a.grabbed || b.grabbed) return;
   if (attackPassesThrough(a) || attackPassesThrough(b)) return;
+  const contact = a.hitstunFrames > 0 || b.hitstunFrames > 0;
   const positions = resolveArenaCollision(
     {
       x: a.x,
       y: a.y,
       grounded: a.grounded,
+      hitstun: a.hitstunFrames > 0,
       side: a.side,
-      halfWidth: a.crouch ? a.movement.crouchingPushboxHalfWidth : a.movement.standingPushboxHalfWidth,
+      halfWidth: contact ? 65 : a.crouch ? a.movement.crouchingPushboxHalfWidth : a.movement.standingPushboxHalfWidth,
     },
     {
       x: b.x,
       y: b.y,
       grounded: b.grounded,
+      hitstun: b.hitstunFrames > 0,
       side: b.side,
-      halfWidth: b.crouch ? b.movement.crouchingPushboxHalfWidth : b.movement.standingPushboxHalfWidth,
+      halfWidth: contact ? 65 : b.crouch ? b.movement.crouchingPushboxHalfWidth : b.movement.standingPushboxHalfWidth,
     },
     { floorY: FLOOR },
   );
-  a.x += clamp(positions.aX - a.x, -SEPARATION_MAX_STEP_X, SEPARATION_MAX_STEP_X);
-  b.x += clamp(positions.bX - b.x, -SEPARATION_MAX_STEP_X, SEPARATION_MAX_STEP_X);
+  const step = contact ? Infinity : SEPARATION_MAX_STEP_X;
+  a.x += clamp(positions.aX - a.x, -step, step);
+  b.x += clamp(positions.bX - b.x, -step, step);
 }
 
 // Offset of the opponent along the fighter's own facing: positive in front,
@@ -24802,7 +24808,9 @@ function drawFighter(fighter, time, measureOnly = false) {
   const floorFix = cellVerticalOffset(fighter.def.id, pose.bank, frame,
     fighter.grounded ? 0 : Math.max(0, FLOOR - fighter.y)) / 320 * renderSize;
   const attackKind = attack?.kind;
-  const lunge = attackSwing * (attackKind === "special" ? 68 : attackKind === "heavy" ? 46 : 29);
+  const opponent = state.fighters[1 - fighter.side];
+  const extensionRoom = Math.max(0, (Math.abs((opponent?.x ?? fighter.x) - fighter.x) - 130) * .35);
+  const lunge = Math.min(extensionRoom, attackSwing * (attackKind === "special" ? 68 : attackKind === "heavy" ? 46 : 29));
   const crouchScale = fighter.crouch ? 0.88 : 1;
   const crouchDrop = fighter.crouch ? 21 : 0;
   const reducedMotion = state.accessibility.reducedMotion;
@@ -24888,7 +24896,9 @@ function drawFighter(fighter, time, measureOnly = false) {
   // v2.6 BODY-FIRST: the shared world-space body offset — attack-extension
   // lunge toward the target / victim stagger step away from it. Applied
   // PRE-mirror so mixed-authored sheets can never flip the direction.
-  if (motion.offsetX !== 0 || motion.offsetY !== 0) ctx.translate(motion.offsetX, motion.offsetY);
+  const bodyOffsetX = motion.offsetX * fighter.facing > 0
+    ? fighter.facing * Math.min(Math.abs(motion.offsetX), Math.max(0, extensionRoom - lunge)) : motion.offsetX;
+  if (bodyOffsetX !== 0 || motion.offsetY !== 0) ctx.translate(bodyOffsetX, motion.offsetY);
   // MOTION FIX 4: victims never freeze solid — a 1-2px pose shiver rides
   // every hold window (hitstop and the multi-hit super storms), re-hashed
   // per sim tick so it trembles through the freeze instead of pinning.
@@ -24988,6 +24998,15 @@ function drawFighter(fighter, time, measureOnly = false) {
     }
     ctx.restore();
     return bounds;
+  }
+
+  // The floor receives only the dim body silhouette. Hit filters, auras, and
+  // reaction effects must never replace its opacity or create loose limbs.
+  if (reflectionPassActive) {
+    ctx.shadowBlur = 0;
+    if (atlas?.complete && atlas.naturalWidth) drawAtlasFrame(atlas, frame, renderSize);
+    ctx.restore();
+    return;
   }
 
   if (fighter.specialGlow > 0) {
@@ -27067,6 +27086,8 @@ function drawFighterReflections(time) {
   ctx.scale(1, -1);
   reflectionPassActive = true;
   for (const fighter of state.fighters.map(renderFighter)) {
+    if (!fighter.grounded || fighter.down || fighter.hitstunFrames > 0
+      || fighter.knockdownFrames > 0 || fighter.grabbed || fighter.grabbing || state.finisher) continue;
     // BODY-FIRST (spec 8): the mirror LETS GO with height — an airborne
     // fighter's mirrored sprite slid down the band and left orphan
     // leg-fragments (a juggled victim's sprawl cell read as detached shoe
@@ -32517,7 +32538,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.3-props");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.4-spacing");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34009,7 +34030,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.3-ringside",
+  version: "5.7.4-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

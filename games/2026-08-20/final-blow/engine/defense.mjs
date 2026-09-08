@@ -936,7 +936,10 @@ export function resolveArenaCollision(a, b, {
 } = {}) {
   const aClearance = a.grounded === false ? floorY - a.y : 0;
   const bClearance = b.grounded === false ? floorY - b.y : 0;
-  const legalCrossup = Math.max(aClearance, bClearance) >= COLLISION_RULES.crossupClearance;
+  // Two bodies at the same airborne height still collide. A launched victim
+  // is not voluntarily jumping over the attacker during a multi-hit combo.
+  const clearance = Math.abs(aClearance - bClearance);
+  const legalCrossup = clearance >= (a.hitstun || b.hitstun ? 260 : COLLISION_RULES.crossupClearance);
   if (legalCrossup) {
     return { aX: a.x, bX: b.x, overlap: 0, legalCrossup: true };
   }
