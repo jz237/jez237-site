@@ -167,7 +167,7 @@ import {
   registerAiDifficulty,
   resetAiBrain,
   stepAiBrain,
-  preferTacticalInput,
+  resolveDemoCpuInput,
 } from "./engine/ai.mjs";
 import {
   DAILY_RULES,
@@ -1042,7 +1042,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.3` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.4` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -16332,16 +16332,16 @@ function aiInput(fighter, opponent, dt) {
     self: fighter,
     opponent,
     roll: random(),
+    context: {exhibition:state.mode === "demo",timeRemaining:state.timer},
   });
-  // v2.9 FLOW: the demo choreographer rides on top of the live brain. The
-  // brain still observes every tick (so natural windows resume seamlessly);
-  // a scripted input simply outranks it while a showcase directive runs.
+  // The director supplies showcase variety; the live brain owns strategic
+  // positioning, defense and checked hit confirms. The shared arbiter also
+  // prevents showcase commands from bypassing block recovery or meter policy.
   if (state.mode === "demo" && demoSession.choreo) {
     const view = demoChoreoView();
     if (fighter.side === 0) demoSession.choreo.observe(view);
     const scripted = demoSession.choreo.step(fighter.side, view);
-    if (preferTacticalInput(fighter.aiBrain, brainInput, fighter)) return brainInput;
-    if (scripted) return scripted;
+    return resolveDemoCpuInput(fighter.aiBrain, brainInput, scripted, fighter, state.simulationTick);
   }
   return brainInput;
 }
@@ -32903,7 +32903,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.3");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.4");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34355,7 +34355,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.6.3-ringside",
+  version: "5.6.4-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

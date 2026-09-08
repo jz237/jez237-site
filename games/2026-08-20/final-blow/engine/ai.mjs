@@ -1,3 +1,4 @@
+import {fighterStyle,roundStrategy,strategicIntent,selectComboContinuation,meterOpportunity} from "./ai-strategy.mjs";
 import {createOpponentMemory, learnOpponent, opponentHabits} from "./ai-adaptation.mjs";
 import { ATTACK_LEVELS, DEFENSE_RULES, MOVEMENT_RULES, THROW_RULES } from "./defense.mjs";
 import { GRIT_RULES } from "./combos.mjs";
@@ -102,6 +103,8 @@ export function createAiBrain(difficulty = DEFAULT_AI_DIFFICULTY) {
     opponentMemory: createOpponentMemory(),
     lastConfirmReadKey: "",
     lastHabitReadFrame: -Infinity,
+    exchangeUntil:0, lastExchangeFrame:-Infinity, previousAttack:false, exchangeContact:false,
+    confirmRoll:.5, strategy:null, context:{},
     nextDecisionFrame: 0,
     intent: { movement: "hold", action: null, reason: "boot" },
     lastDecisionFrame: -Infinity,
@@ -294,10 +297,17 @@ function enhancedVersion(action) {
   }[action] || action;
 }
 
-function comboFollowup(self, settings, roll) {
+function comboFollowup(self, settings, roll, context = {}, observation = null) {
   if (!self.attacking || self.attackConnected !== "hit") return null;
   const comboKey = `${self.attackSerial || 0}:${self.attackHits || 0}`;
   if (self.aiBrain?.lastComboKey === comboKey) return null;
+  if (context.exhibition && observation) {
+    const chosenRoll=self.aiBrain?.confirmRoll ?? roll;
+    if (mixRoll(chosenRoll,2)>=settings.comboChance)return null;
+    const id=self.kitId||self.id||self.def?.kitId||self.def?.id;
+    const action=selectComboContinuation(id,self,observation,mixRoll(chosenRoll,3));
+    return action ? {action,comboKey,confirmed:action==='super'} : null;
+  }
   // 5.4 GRIT POLICY (sweep #6, demo personas only — `superConfirmChance` is
   // unset on every player-facing tier). A full bar on a CONFIRMED hit is the
   // super, ahead of the combo roll: the same confirm window the sim opens for
@@ -356,13 +366,25 @@ export function preferTacticalInput(brain, input, self) {
   if (self.down || self.grabbed || self.grabbing || self.wakeupFrames > 0
     || self.hitstunFrames > 0 || self.blockstunFrames > 0) return false;
   const reason = brain.intent?.reason;
+  if(['blocked-recovery','attack-commit'].includes(reason) && self.attacking)return true;
   if (['hit-confirm','grit-confirm'].includes(reason)) {
-    return ['super','special','commandSpecial','launcher','enhanced','enhancedCommandSpecial','enhancedLauncher'].some(key=>input[key]);
+    return ['light','heavy','driveHeavy','super','special','commandSpecial','backSpecial','launcher','enhanced','enhancedCommandSpecial','enhancedBackSpecial','enhancedLauncher'].some(key=>input[key]);
   }
   if (self.attacking || !self.grounded) return false;
+  if(['corner-escape','corner-counter','corner-defense','corner-pressure','protect-lead','protect-poke','chase','exchange-reset','style-spacing','style-strike','meter-reserve'].includes(reason))return true;
   if (['low-block','high-block','bait-heavy','anticipate-low'].includes(reason)) return input.guard;
   return ['recovery-punish','guard-mix','anti-air','adaptive-anti-air','guard-break-throw','throw-whiff-punish','throw-tech','throw-evade'].includes(reason)
     && ['light','heavy','launcher','backSpecial','super','throw','jump'].some(key=>input[key]);
+}
+
+export function resolveDemoCpuInput(brain, input, scripted, self, frame) {
+  if(self.attacking && self.attackConnected==='block')return emptyInput();
+  if(preferTacticalInput(brain,input,self))return input;
+  if(self.attacking)return emptyInput(); // Only the brain may choose a checked cancel route.
+  const observation=brain.opponentMemory.last;
+  if(scripted && observation && ['super','enhanced','enhancedCommandSpecial','enhancedBackSpecial','enhancedLauncher']
+    .some(action=>scripted[action] && !meterOpportunity(self,observation,frame,action)))return input;
+  return scripted || input;
 }
 
 export const PASSIVE_INTENT = Object.freeze({ movement: "hold", action: null, reason: "passive" });
@@ -385,6 +407,7 @@ export function decideAiIntent(brain, {
   self,
   observation,
   roll = 0.5,
+  context = {},
 } = {}) {
   const settings = resolveAiSettings(brain.difficulty);
   if (settings.inert) return { ...PASSIVE_INTENT };
@@ -393,13 +416,16 @@ export function decideAiIntent(brain, {
   const distance = Math.abs(observation.x - self.x);
   const timing = observedAttackTiming(observation, frame);
   const habits = opponentHabits(brain.opponentMemory);
-  const combo = comboFollowup({ ...self, aiBrain: brain }, settings, roll);
+  const combo = comboFollowup({ ...self, aiBrain: brain }, settings, roll, context, observation);
   if (combo) {
     return {
       movement: "hold", action: combo.action,
       reason: combo.confirmed ? "grit-confirm" : "hit-confirm", comboKey: combo.comboKey,
     };
   }
+
+  if(context.exhibition && self.attacking)return {movement:'hold',action:null,
+    reason:self.attackConnected==='block'?'blocked-recovery':'attack-commit'};
 
   // Release 1.7: downed — pick a wake-up option through the same inputs a
   // human uses (Up pulse quick-rises, Down held delays the getaway).
@@ -587,6 +613,13 @@ export function decideAiIntent(brain, {
     return { movement: "hold", action: null, guard: true, down: mixRoll(roll, 9) < 0.36, reason: "wakeup-block" };
   }
 
+  if (context.exhibition) {
+    if (self.attacking && self.attackConnected==='block')return {movement:'hold',action:null,reason:'blocked-recovery'};
+    const strategy=strategicIntent({id:fighterId,self,opponent:observation,frame,
+      timeRemaining:context.timeRemaining,roll:mixRoll(roll,46),until:brain.exchangeUntil});
+    if(strategy)return strategy;
+  }
+
   // 5.3 CLOSE RANGE: the brain grabs strictly inside the throw's REACH, not
   // the wider commit band — pressing in the band is now a whiffed throw with
   // a real punish window, and a CPU that mashed it there would be feeding.
@@ -711,6 +744,7 @@ export function stepAiBrain(brain, {
   self,
   opponent,
   roll = 0.5,
+  context = {},
 } = {}) {
   recordAiObservation(brain, frame, opponent);
   // A passive brain never produces an input, whatever it can see.
@@ -723,20 +757,33 @@ export function stepAiBrain(brain, {
   if (!observation) return emptyInput();
   brain.lastObservedFrame = observation.frame;
   learnOpponent(brain.opponentMemory, observation);
+  brain.context=context;
+  const id=self.kitId||self.id||self.def?.kitId||self.def?.id;
+  brain.strategy=context.exhibition?{plan:roundStrategy(self,observation,context.timeRemaining),style:fighterStyle(id).name}:null;
+  if(context.exhibition){
+    if(self.attacking && self.attackConnected)brain.exchangeContact=true;
+    if(brain.previousAttack && !self.attacking && brain.exchangeContact){
+      if(frame-brain.lastExchangeFrame>=150){brain.exchangeUntil=frame+fighterStyle(id).reset;brain.lastExchangeFrame=frame;}
+      brain.exchangeContact=false;
+    }
+    brain.previousAttack=Boolean(self.attacking);
+  }
   const confirmKey = self.attacking && self.attackConnected === 'hit'
     ? `${self.attackSerial || 0}:${self.attackHits || 0}` : '';
   const freshConfirm = confirmKey && confirmKey !== brain.lastConfirmReadKey;
-  if (freshConfirm) brain.lastConfirmReadKey = confirmKey;
+  if (freshConfirm) {brain.lastConfirmReadKey = confirmKey;brain.confirmRoll=roll;}
   if (frame < brain.nextDecisionFrame && !freshConfirm) {
     return inputFromIntent(brain.intent, self, observation, false, frame, brain.lastDecisionFrame);
   }
 
   brain.intent = applyRepetitionGuard(
     brain,
-    decideAiIntent(brain, { frame, self, observation, roll }),
+    decideAiIntent(brain, { frame, self, observation, roll, context }),
     resolveAiSettings(brain.difficulty),
     roll,
   );
+  if(context.exhibition && brain.intent.action && !meterOpportunity(self,observation,frame,brain.intent.action))
+    brain.intent={movement:'hold',action:null,guard:true,reason:'meter-reserve'};
   if (brain.intent.reason === 'anticipate-low') brain.lastHabitReadFrame = frame;
   brain.recentActions.push(brain.intent.action || null);
   brain.recentActions = brain.recentActions.slice(-6);
@@ -748,7 +795,8 @@ export function stepAiBrain(brain, {
   // decision cadence, so without this the brain would only ever hit them by
   // luck. The take itself is already latched (okiTake / clinchTake), so this
   // buys timing, never extra probability.
-  const timedRead = brain.intent.reason === "oki-approach" || brain.intent.reason === "clinched";
+  const timedRead = brain.intent.reason === "oki-approach" || brain.intent.reason === "clinched"
+    || (context.exhibition && self.attacking && self.attackConnected==='hit' && confirmKey!==brain.lastComboKey);
   brain.nextDecisionFrame = timedRead ? frame + 1 : frame
     + resolveAiSettings(brain.difficulty).decisionFrames
     + Math.floor(mixRoll(roll, 16) * 4);
@@ -767,6 +815,8 @@ export function aiBrainSnapshot(brain) {
     decisions: brain.decisions,
     recentActions: [...brain.recentActions],
     opponentHabits: opponentHabits(brain.opponentMemory),
+    strategy:brain.strategy,
+    exchangeUntil:brain.exchangeUntil,
     suppressedRepeats: brain.suppressedRepeats,
     intent: { ...brain.intent },
   };

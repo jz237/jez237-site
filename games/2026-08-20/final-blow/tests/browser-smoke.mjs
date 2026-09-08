@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'demo3dButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.6/);
-    assert.equal(title.version.text, 'VERSION 5.6.3');
+    assert.equal(title.version.text, 'VERSION 5.6.4');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.6.3-ringside');
+    assert.equal(title.engineVersion, '5.6.4-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -4001,29 +4001,62 @@ probe('demo-mode', async () => {
 // coverage ledger and on both fighters' state. The card boundary is NOT
 // pinned — the 5 s result hold is a wall-clock timer, so card 2 opens on a
 // wall-clock tick (measured: same rounds, ticks offset by the hold jitter).
+probe('cpu-round-strategy', async () => {
+ await navigate(client, gameUrl);
+ await evaluate(client, `window.__finalBlowQa.demo(549)`);await delay(1200);
+ const result=await evaluate(client, `(()=>{
+  const qa=window.__finalBlowQa,engine=window.__finalBlowEngine;
+  qa.step(5);
+  for(let i=0;i<900;i++){const s=engine.snapshot();if(s.phase==='fight'&&s.fighters.every(f=>!f.attack&&!f.hitstunFrames)&&qa.pose().every(f=>f.grounded&&!f.down&&!f.wakeup))break;qa.step(1/60);}
+  qa.positions(400,950);qa.fighter(0,{health:90});qa.fighter(1,{health:45});qa.setTimer(20);
+  const plans=[new Set(),new Set()],reasons=[new Set(),new Set()];
+  for(let i=0;i<100;i++){qa.step(1/60);const s=engine.snapshot();s.fighters.forEach((f,side)=>{plans[side].add(f.ai.strategy?.plan);reasons[side].add(f.ai.intent.reason);});}
+  return {plans:plans.map(p=>[...p]),reasons:reasons.map(p=>[...p])};
+ })()`);
+ assert.ok(result.plans[0].includes('protect-lead'),JSON.stringify(result));
+ assert.ok(result.plans[1].includes('chase'),JSON.stringify(result));
+ assert.ok(result.reasons[0].includes('protect-lead'),JSON.stringify(result));
+ assert.ok(result.reasons[1].includes('chase'),JSON.stringify(result));
+ await evaluate(client, `window.__finalBlowQa.demo(757)`);await delay(1200);
+ const corner=await evaluate(client, `(()=>{
+  const qa=window.__finalBlowQa,engine=window.__finalBlowEngine;qa.step(5);
+  for(let i=0;i<900;i++){const s=engine.snapshot();if(s.phase==='fight'&&s.fighters.every(f=>!f.attack&&!f.hitstunFrames)&&qa.pose().every(f=>f.grounded&&!f.down&&!f.wakeup))break;qa.step(1/60);}
+  qa.positions(90,290);
+  const reasons=new Set();let escaped=false;
+  for(let i=0;i<240;i++){qa.step(1/60);const s=engine.snapshot();reasons.add(s.fighters[0].ai.intent.reason);if(s.fighters[0].x>170)escaped=true;}
+  return {reasons:[...reasons],escaped};
+ })()`);
+ assert.ok(corner.reasons.some(r=>r==='corner-escape'||r==='corner-counter'),JSON.stringify(corner));
+ assert.ok(corner.escaped,JSON.stringify(corner));
+});
+
 probe('cpu-tactics-matches', async () => {
   await navigate(client, gameUrl);
-  const reasons = new Set();
+  const reasons = new Set();let peakCombo=0,confirmedLinks=0;
   for (const seed of [237,549,757,991,2372]) {
     await evaluate(client, `window.__finalBlowQa.demo(${seed})`); await delay(1200);
     const result = await evaluate(client, `(() => {
       const qa=window.__finalBlowQa, engine=window.__finalBlowEngine;
-      const decisions=[-1,-1], reasons=new Set();
+      const decisions=[-1,-1], reasons=new Set();let peakCombo=0,confirmedLinks=0;
       for(let tick=0;tick<7200;tick++) {
         qa.step(1/60);
         const s=engine.snapshot();
         for(let side=0;side<2;side++) {
-          const ai=s.fighters[side].ai;
+          const ai=s.fighters[side].ai;peakCombo=Math.max(peakCombo,s.fighters[side].combo.peakHits);if(s.fighters[side].cancelledFrom && s.fighters[side].attackConnected==='hit')confirmedLinks++;
           if(ai.lastDecisionFrame!==decisions[side]) {decisions[side]=ai.lastDecisionFrame;reasons.add(ai.intent.reason);}
           if(!Number.isFinite(s.fighters[side].x)||!Number.isFinite(s.fighters[side].health))throw Error('Invalid CPU state');
         }
-        if(qa.demoRounds().length) return {rounds:qa.demoRounds().length,reasons:[...reasons],fighters:s.fighters.map(f=>f.id)};
+        if(qa.demoRounds().length) return {rounds:qa.demoRounds().length,peakCombo,confirmedLinks,reasons:[...reasons],fighters:s.fighters.map(f=>f.id)};
       }
       return {rounds:0,reasons:[...reasons]};
     })()`);
     assert.ok(result.rounds>0,`CPU match ${seed} must finish: ${JSON.stringify(result)}`);
     for(const reason of result.reasons)reasons.add(reason);
+    peakCombo=Math.max(peakCombo,result.peakCombo||0);confirmedLinks+=result.confirmedLinks||0;
   }
+  assert.ok(confirmedLinks>0,`a checked combo continuation must land in real CPU fights`);
+  assert.ok(peakCombo>=2,`CPUs must still land combinations: ${peakCombo}`);
+  assert.ok(reasons.has('exchange-reset'),`CPUs must reposition between exchanges: ${[...reasons]}`);
   assert.ok(['adaptive-anti-air','guard-break-throw','bait-heavy','anticipate-low'].some(reason=>reasons.has(reason)), `live CPUs must adapt: ${[...reasons]}`);
   for(const reason of ['recovery-punish','guard-mix','close-to-range'])
     assert.ok(reasons.has(reason),`live CPUs must use ${reason}: ${[...reasons]}`);
@@ -4572,6 +4605,7 @@ probe('offline-cache', async () => {
         hasRollback: Boolean(cache && await cache.match('./engine/rollback.mjs')),
         hasDemo: Boolean(cache && await cache.match('./engine/demo.mjs')),
         hasAiMemory: Boolean(cache && await cache.match('./engine/ai-adaptation.mjs')),
+        hasAiStrategy: Boolean(cache && await cache.match('./engine/ai-strategy.mjs')),
         hasFatalities: Boolean(cache && await cache.match('./engine/fatalities.mjs')),
         hasFighterAudioEngine: Boolean(cache && await cache.match('./engine/fighter-audio.mjs')),
         hasAtlasFacing: Boolean(cache && await cache.match('./engine/atlas-facing.mjs')),
@@ -4589,7 +4623,8 @@ probe('offline-cache', async () => {
     // swing-resolve}.mjs to the shell: game.js imports them at boot.
     // (5.4 Fight Night: the attract loop's six demo modules joined the shell; 5.4.1 the voice pack's.)
     // Painted animation modules and the adaptive AI memory are also boot dependencies.
-    assert.equal(offlineCache.entries, 41);
+    assert.equal(offlineCache.entries, 42);
+    assert.equal(offlineCache.hasAiStrategy, true);
     assert.equal(offlineCache.hasAiMemory, true);
     assert.equal(offlineCache.hasAtlasFacing, true);
     assert.equal(offlineCache.hasIndex, false);
@@ -4612,7 +4647,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.6/);
-    assert.equal(controlledReload.version, '5.6.3-ringside');
+    assert.equal(controlledReload.version, '5.6.4-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4630,7 +4665,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.6/);
-    assert.equal(offlineBoot.version, '5.6.3-ringside');
+    assert.equal(offlineBoot.version, '5.6.4-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4676,7 +4711,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.6.3');
+    assert.equal(landscape.version.text, 'VERSION 5.6.4');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
