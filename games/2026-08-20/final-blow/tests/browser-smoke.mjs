@@ -434,8 +434,8 @@ probe('title-menu', async () => {
     }))()`);
     assert.equal(title.lastTitleButton, 'demo3dButton');
     assert.match(title.title, /Final Blow/);
-    assert.match(title.build, /5\.4/);
-    assert.equal(title.version.text, 'VERSION 5.5.0');
+    assert.match(title.build, /5\.6/);
+    assert.equal(title.version.text, 'VERSION 5.6.0');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.5.0-ringside');
+    assert.equal(title.engineVersion, '5.6.0-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -3663,7 +3663,11 @@ probe('painted-flow-frames', async () => {
   await navigate(client, gameUrl);
   await evaluate(client, `window.__finalBlowQa.fight('jez', 'benny')`);
   await delay(1500);
-  for (const id of ['jez', 'benny']) for (const limb of ['punch', 'kick']) {
+  await evaluate(client, `window.__finalBlowQa.commissioner(true)`);
+  for (const id of ['jez','benny','alan','ali','commissioner','cyraxx','deathblow','devil','donald','post']) {
+    await evaluate(client, `window.__finalBlowQa.fight('${id}', 'jez')`);
+    await delay(1200);
+    for (const limb of ['punch', 'kick']) {
     const frames = await evaluate(client, `(() => {
       const qa = window.__finalBlowQa;
       qa.fight('${id}', 'deathblow'); qa.positions(430, 950); qa.step(0.4);
@@ -3672,8 +3676,9 @@ probe('painted-flow-frames', async () => {
       return qa.poseTrace(64, 0).filter(p => p.bank === 'painted-flow').map(p => p.frame).filter((f,i,all)=>i===0 || f!==all[i-1]);
     })()`);
     const expected = limb === 'kick' ? [8,9,10,11,12,13,14,15]
-      : id === 'jez' ? [0,1,2,3,4,5,7] : [0,1,2,3,4,5,6,7];
+      : [0,1,2,3,4,5,6,7];
     assert.deepEqual(frames, expected, `${id} ${limb} must actually draw the new sequence`);
+  }
   }
   await navigate(client, gameUrl);
 });
@@ -3791,7 +3796,7 @@ probe('pose-trace-chains', async () => {
   // its own ext5 cells). motion3:4 is still the one cross-generation cell on
   // the whole set, which is why it is written out rather than tolerated.
   const EXPECTED = {
-    jab: ['painted-flow:0', 'painted-flow:1', 'painted-flow:2', 'painted-flow:3', 'painted-flow:4', 'painted-flow:5', 'painted-flow:7'],
+    jab: ['painted-flow:0', 'painted-flow:1', 'painted-flow:2', 'painted-flow:4', 'painted-flow:5', 'painted-flow:6', 'painted-flow:7'],
     heavyKick: ['painted-flow:8', 'painted-flow:9', 'painted-flow:10', 'painted-flow:11', 'painted-flow:12', 'painted-flow:13', 'painted-flow:14', 'painted-flow:15'],
     crouchJab: ['unified-ext2:8', 'unified-ext3:4', 'unified-ext2:9', 'unified:7'],
     sweep: ['unified-ext2:10', 'unified-ext3:5', 'unified-ext3:15', 'unified-ext2:11'],
@@ -4526,7 +4531,7 @@ probe('offline-cache', async () => {
       };
     })()`);
     assert.equal(offlineCache.controlled, true);
-    assert.match(offlineCache.name, /final-blow-shell-5\.4/);
+    assert.match(offlineCache.name, /final-blow-shell-5\.6/);
     // 1.9E added engine/atlas-facing.mjs to the shell: game.js imports it, so
     // offline boot needs it cached.
     // 5.1 added engine/{audio-manifest, ambient, announcer, crowd-voice, shared-sfx,
@@ -4553,8 +4558,8 @@ probe('offline-cache', async () => {
       version: window.__finalBlowEngine?.version,
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
-    assert.match(controlledReload.build, /5\.4/);
-    assert.equal(controlledReload.version, '5.5.0-ringside');
+    assert.match(controlledReload.build, /5\.6/);
+    assert.equal(controlledReload.version, '5.6.0-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4571,8 +4576,8 @@ probe('offline-cache', async () => {
       badge: document.querySelector('#offlineBadge').textContent,
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
-    assert.match(offlineBoot.build, /5\.4/);
-    assert.equal(offlineBoot.version, '5.5.0-ringside');
+    assert.match(offlineBoot.build, /5\.6/);
+    assert.equal(offlineBoot.version, '5.6.0-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4618,7 +4623,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.5.0');
+    assert.equal(landscape.version.text, 'VERSION 5.6.0');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);

@@ -35,6 +35,7 @@ import {
   elementSpriteAlpha,
   particleChannel,
   particleMote,
+  readableVfx,
 } from "../../engine/vfx-bridge.mjs";
 
 const SPRITES_PER_SHEET = 96;
@@ -272,7 +273,9 @@ export class EffectsLayer {
     let drawn = 0;
     if (particles && host.elementSheet) {
       const tick = state.simulationTick || 0;
-      for (const particle of particles) {
+      for (const sourceParticle of particles) {
+        const particle=readableVfx(sourceParticle,state.mode==="demo" && state.phase==="fight");
+        if(!particle) continue;
         const sheet = host.elementSheet(particle.sheet);
         if (!sheet) continue;
         const index = elementFrameIndex(sheet.meta, particle, tick);
@@ -351,7 +354,9 @@ export class EffectsLayer {
     const particles = state.particles || [];
     let motes = 0;
     let rings = 0;
-    for (const particle of particles) {
+    for (const sourceParticle of particles) {
+        const particle=readableVfx(sourceParticle,state.mode==="demo" && state.phase==="fight");
+        if(!particle) continue;
       const channel = particleChannel(particle.kind);
       if (channel === "skip") continue;
       if (channel === "ring") {

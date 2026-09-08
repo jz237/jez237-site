@@ -1,3 +1,4 @@
+import { PAINTED_FLOW_SCALE } from "../../engine/painted-flow.mjs";
 import { presentationPose } from "../../engine/inbetweens.mjs";
 // Fighter layer for CINEMA 3D.
 // The existing sprite atlases ARE the characters: each fighter renders as an
@@ -1427,10 +1428,10 @@ export class FighterLayer {
     // --- Same presentation math drawFighter uses (read-only sim fields) ----
     const attack = fighter.attacking;
     const attackProgress = attack ? THREE.MathUtils.clamp(fighter.attackTime / attack.duration, 0, 1) : 0;
-    const attackSwing = attack ? Math.sin(attackProgress * Math.PI) : 0;
-    const startupPower = attack && fighter.attackTime < attack.active[0]
+    const attackSwing = bankName !== "painted-flow" && attack ? Math.sin(attackProgress * Math.PI) : 0;
+    const startupPower = bankName !== "painted-flow" && attack && fighter.attackTime < attack.active[0]
       ? Math.sin((fighter.attackTime / attack.active[0]) * Math.PI) : 0;
-    const activePower = attack && fighter.attackTime >= attack.active[0] && fighter.attackTime <= attack.active[1]
+    const activePower = bankName !== "painted-flow" && attack && fighter.attackTime >= attack.active[0] && fighter.attackTime <= attack.active[1]
       ? 1 : attack ? Math.max(0, attackSwing * 0.42) : 0;
     const attackKind = attack?.kind;
     const moving = Math.abs(fighter.vx) > 22 && fighter.grounded && !attack;
@@ -1453,7 +1454,7 @@ export class FighterLayer {
           // v3.0 UNIFIED: also its own table. The unified sheets DO share the
           // motion banks' 306px standing convention, but a future sheet built
           // to another one must not inherit a correction fitted to this one.
-          : bankName === "painted-flow" ? (fighter.def.id === "benny" ? 292 / 254 : 292 / 286)
+          : bankName === "painted-flow" ? (PAINTED_FLOW_SCALE[fighter.def.id] || 1)
           : bankName === UNIFIED_BANK ? (host.unifiedSheetAdjust?.[fighter.def.id] || 1) : 1)
       // v2.9 critic round 2 (M4): cellDrawAdjust rolls the oversized-crouch
       // correction together with the guard-flinch height reconciliation, so

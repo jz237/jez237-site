@@ -289,6 +289,33 @@ const STAGED_BEATS = Object.freeze([
 // Every draw comes from the private rng in the order the sim reports events,
 // so a seed replays the same show; the choreographer only exists in a demo.
 // ---------------------------------------------------------------------------
+// A short defensive reset after completed exchanges, never inside a combo.
+export const READABLE_RESET = Object.freeze({duration:30, rearm:240, distance:240, edge:85});
+export function createReadableReset() {
+  let completed=0, pending=false, until=0, lastEnd=-Infinity, count=0, ticks=0, lastTick=-1;
+  return {
+    completed() { if (++completed >= 2) pending=true; },
+    clear() { completed=0; pending=false; until=0; },
+    step(side, view, allowed=true) {
+      if (view.phase!=='fight') {this.clear();return null;}
+      const pair=view.fighters;
+      const safe=pair.every(f=>actionable(f) && !f.attacking && !f.grabbed && !f.grabbing);
+      if (pending && !until && allowed && safe && view.tick-lastEnd>=READABLE_RESET.rearm) {
+        until=view.tick+READABLE_RESET.duration; pending=false; completed=0;count++;
+      }
+      if (!until) return null;
+      if (view.tick>=until || !safe) {lastEnd=view.tick;until=0;return null;}
+      if(lastTick!==view.tick){ticks++;lastTick=view.tick;}
+      const self=pair[side],other=pair[1-side];
+      const awaySign=self.x<other.x?-1:1;
+      const room=awaySign<0?self.x-view.stageMinX:view.stageMaxX-self.x;
+      const retreat=Math.abs(self.x-other.x)<READABLE_RESET.distance && room>READABLE_RESET.edge;
+      return {...emptyInput(),guard:true,...(retreat?awayInput(self,other):{})};
+    },
+    snapshot() {return {count,ticks,until,pending};},
+  };
+}
+
 export const NEUTRAL_WINDOW_FRAMES = Object.freeze({ min: 90, max: 150 });
 // Besides the bait, a window allows ONE read-attack in total (the punish of
 // the bait's whiff, or an edge poke): measured with a poke AND a punish per
@@ -1150,6 +1177,7 @@ export function createDemoChoreographer({
     throwOpportunities: 0,
   };
   const previous = [null, null];
+  const readableReset = createReadableReset();
   // 5.4 FIGHT NIGHT: the two persona profiles this pair plays the okizeme
   // family with, and each side's own footsies band (see the header).
   const profiles = pair.map((fighterId) => demoOkiProfile(fighterId));
@@ -2590,6 +2618,7 @@ export function createDemoChoreographer({
 
   function finishDirective(directive, view, completed, cause = "") {
     const side = directive.side;
+    if (completed && directive.executed && ['ground','pressure','counter','juggle','wallsplat','air'].includes(directive.spec?.kind)) readableReset.completed();
     stats[completed ? "completed" : "timedOut"] += 1;
     if (!completed) {
       const key = cause || "unknown";
@@ -2759,6 +2788,15 @@ export function createDemoChoreographer({
       return emptyInput();
     }
     if (!self.attacking && actionable(self)) {
+      // A buffered opener can expire during a defensive transition. Once
+      // neutral again, re-space and retry once rather than abandon the move.
+      // Confirm-only links never retry as raw attacks.
+      if (directive.spec.kind === "ground" && !directive.chaining && !directive.pressRetry) {
+        directive.pressRetry = true;
+        directive.spaceAway = undefined;
+        enterPhase(directive, openingPhase(directive.spec));
+        return emptyInput();
+      }
       finishDirective(directive, view, false, "noMove");
       return emptyInput();
     }
@@ -3495,6 +3533,7 @@ export function createDemoChoreographer({
       if (neutral.until > 0) endNeutral(view);
       neutral.roundStart = -1;
       neutral.pending = null;
+      readableReset.clear();
       return null;
     }
     // 5.4 FIGHT NIGHT (sweep #4): a live knockdown plan owns both fighters —
@@ -3509,6 +3548,16 @@ export function createDemoChoreographer({
     if (neutral.until > view.tick && neutral.plan) {
       if (side === 0) stats.neutralTicks += 1;
       return liveliness(side, view, footsiesInput(side, view));
+    }
+    const readable = readableReset.step(side, view,
+      blend > 0 && lanes.every(lane => !lane));
+    if (readable) {
+      for(let seat=0;seat<2;seat++) {
+        if(lanes[seat]?.role==='lead') stats.preempted++;
+        lanes[seat]=null;
+        nextDecision[seat]=Math.max(nextDecision[seat],readableReset.snapshot().until);
+      }
+      return readable;
     }
     const lane = lanes[side];
     if (lane?.role === "lead") {
@@ -3647,6 +3696,7 @@ export function createDemoChoreographer({
     coverage: coverageSnapshot,
     stats: () => ({
       ...stats,
+      readableReset: readableReset.snapshot(),
       itemPicks: { ...itemPicks },
       neutralBy: { ...stats.neutralBy },
       neutralReads: { ...stats.neutralReads },

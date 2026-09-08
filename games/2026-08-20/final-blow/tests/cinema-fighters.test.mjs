@@ -26,7 +26,7 @@ import { bleedPixels, normalPixels, footMetricsFromPixels, IdleQueue } from "../
 
 const testDir = dirname(fileURLToPath(import.meta.url));
 const root = join(testDir, "..");
-const gameSource = readFileSync(join(root, "game.js"), "utf8");
+const gameSource = readFileSync(join(root, "game.js"), "utf8").replace(/\r\n/g, "\n");
 const fightersSource = readFileSync(join(root, "renderer", "three", "fighters.mjs"), "utf8");
 const mainSource = readFileSync(join(root, "renderer", "three", "main.mjs"), "utf8");
 const PX = 0.005;
