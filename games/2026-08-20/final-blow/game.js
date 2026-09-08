@@ -1,3 +1,4 @@
+import {createMoveViewer} from "./engine/move-viewer.mjs";
 import {createInstantReplay} from "./engine/instant-replay.mjs";
 import {normalizeSpectatorConfig,configuredDirector,spectatorConfigFromUrl,addSpectatorConfig} from "./engine/spectator-config.mjs";
 import {carryOpponentMemory} from "./engine/ai-adaptation.mjs";
@@ -1046,7 +1047,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.7` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.8` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1422,14 +1423,14 @@ function inbetweenReady(id, bank) {
 }
 function withInbetween(fighter, pose) {
   if (pose.bank === PAINTED_FLOW_BANK) return pose;
-  const owner = state.fighters?.[fighter.side];
+  const owner = fighter.preview ? fighter : state.fighters?.[fighter.side];
   if (!owner || owner.def.id !== fighter.def.id) return pose;
   const ready = inbetweenReady(fighter.def.id, pose.bank);
   if (!ready && repairedCell(fighter.def.id, pose.bank, pose.frame)) return {bank: "unified", frame: 0};
   const approach = selectApproach(fighter, pose, approachReady(fighter.def.id));
   if (approach.artBank === 'inbetween-approach') return {...approach,
     artScale: INBETWEEN_SCALE[`${fighter.def.id}-approach`]?.[approach.artFrame] || 1};
-  const selected = selectInbetween(owner, pose, state.simulationTick,
+  const selected = selectInbetween(owner, pose, fighter.preview ? fighter.previewTick : state.simulationTick,
     ready, owner === fighter);
   return selected.artBank ? {...selected, artScale: INBETWEEN_SCALE[`${fighter.def.id}-${pose.bank}`]?.[pose.frame] || 1} : selected;
 }
@@ -5642,10 +5643,10 @@ function scheduleIdleDemo() {
   // Wave 15: CABINET MODE always attracts — a cabinet with the demo switched
   // off is just a dark TV.
   const attracts = state.attractEnabled || state.cabinetMode;
-  if (!attracts || demoSession.active || state.screen !== "title" || document.hidden) return;
+  if (!attracts || demoSession.active || state.screen !== "title" || document.hidden || document.querySelector("dialog[open]")) return;
   demoSession.idleTimer = window.setTimeout(() => {
     demoSession.idleTimer = 0;
-    if ((state.attractEnabled || state.cabinetMode) && state.screen === "title" && !document.hidden && !$("#controlsDialog").open) startDemo({ attract: true });
+    if ((state.attractEnabled || state.cabinetMode) && state.screen === "title" && !document.hidden && !document.querySelector("dialog[open]")) startDemo({ attract: true });
   }, DEMO_IDLE_DELAY_MS);
   // 5.4 (sweep #27): the attract loop's FIRST pair used to be the one pair
   // nothing could warm — the director only existed once the demo started.
@@ -8682,6 +8683,8 @@ function makeFighter(index, side, overrideDef = null) {
     // data — it chooses a drawing, never a sim outcome — so it is snapshotted
     // with lastHitResult and stays out of the combat checksum like it.
     lastHitLevel: "",
+    lastHitHeavy: false,
+    lastImpactTick: -Infinity,
     hitFlash: 0,
     specialGlow: 0,
     animTime: visualRandom() * 2,
@@ -9553,7 +9556,7 @@ function fighterMotionTransform(fighter) {
   }
 
   // Dash lean (~4°) / walk lean (~2°), eased by the observer.
-  if (!reducedMotion && Math.abs(obs.leanLevel) > 0.0025 && fighter.grounded && !fighter.down) {
+  if (!reducedMotion && Math.abs(obs.leanLevel) > 0.0025 && fighter.grounded && !fighter.down && !fighter.attacking) {
     scratch.rotation += obs.leanLevel;
     scratch.stretchActive = true;
   }
@@ -9583,7 +9586,10 @@ function fighterMotionTransform(fighter) {
   // state). Consumed by drawFighter AND the CINEMA 3D poseRig, and
   // elementLimbPoint adds the same offset so elemental FX decorate the
   // moving body (core 3).
-  if (fighter.attacking && !fighter.down) {
+  const plantedPunch = fighter.grounded && fighter.attacking && fighter.attacking.limb !== "kick"
+    && ["light", "heavy"].includes(fighter.attacking.kind) && !fighter.attacking.animation
+    && !fighter.attacking.advanceSpeed && !fighter.attacking.superMove;
+  if (fighter.attacking && !fighter.down && !plantedPunch) {
     const attack = fighter.attacking;
     const startup = attack.active[0];
     const activeEnd = attack.active[1];
@@ -12124,7 +12130,7 @@ const rollbackPresentationFighterFields = new Set([
   // stays out of the combat checksum exactly as walkTime always has.
   "animTime", "walkTime", "strideTime", "hitFlash", "specialGlow", "cinematicFrame", "cinematicRotation", "cinematicScale", "lastHitResult",
   // v5.1: the last contact's level, same class of field as lastHitResult.
-  "lastHitLevel",
+  "lastHitLevel", "lastHitHeavy", "lastImpactTick",
 ]);
 
 function cloneRollbackValue(value) {
@@ -18105,6 +18111,8 @@ function triggerPaintTrap(trap, victim) {
   victim.vx = owner.facing * trap.push * (blocked ? 0.26 : 1);
   victim.lastHitResult = blocked ? "blocked-low-trap" : "paint-trap";
   victim.lastHitLevel = ATTACK_LEVELS.LOW;
+  victim.lastHitHeavy = false;
+  victim.lastImpactTick = state.simulationTick;
   victim.hitFlash = 0.13;
   if (!blocked) {
     victim.attacking = null;
@@ -18401,6 +18409,8 @@ function triggerProjectile(projectile, victim) {
   const resultKind = projectile.style === "feedback" ? "feedback-echo" : "projectile";
   victim.lastHitResult = blocked ? `blocked-${projectile.level}-${resultKind}` : armored ? "armor" : counter ? `counter-${resultKind}` : projectile.style === "feedback" ? "feedback-echo" : `${projectile.level}-projectile`;
   victim.lastHitLevel = projectile.level;
+  victim.lastHitHeavy = (projectile.damage || 0) >= 12;
+  victim.lastImpactTick = state.simulationTick;
   victim.hitFlash = 0.13;
   if (!blocked && !armored) {
     // Release 1.8 GRIND: score attack — projectiles/thrown objects score as
@@ -19244,6 +19254,9 @@ function triggerSouthpawCounter(counterFighter, incomingFighter, incomingAttack,
   incomingFighter.airHitstunFrames = 0;
   incomingFighter.vy = stance.counterLaunchVelocityY;
   incomingFighter.lastHitResult = "southpaw-countered";
+  incomingFighter.lastHitLevel = ATTACK_LEVELS.MID;
+  incomingFighter.lastHitHeavy = true;
+  incomingFighter.lastImpactTick = state.simulationTick;
   incomingFighter.hitFlash = 0.17;
   incomingFighter.dashFrames = 0;
   incomingFighter.queuedDashDirection = 0;
@@ -19467,6 +19480,8 @@ function hit(attacker, victim, attack, collision) {
     : blocked ? (perfect ? "perfect-guard" : `blocked-${attack.level}`)
       : armored ? "armor" : counter ? "counter" : attack.level;
   victim.lastHitLevel = attack.level;
+  victim.lastHitHeavy = attack.kind !== "light";
+  victim.lastImpactTick = state.simulationTick;
   if (!blocked && !armored) {
     // Release 1.8 GRIND: score attack — clean hits score by move class
     // (guarded meta bookkeeping inside; never touches sim state).
@@ -22075,7 +22090,8 @@ function fighterAnimationPose(fighter) {
   // v5.3 SPECIALS: last, because it is the only rule that reads the KIT bank —
   // everything above resolves the authored banks and may still land on a
   // specials cell as its terminal fallback.
-  const flow = paintedFlowPose(fighter);
+  const heavyPunch = fighter.attacking?.kind === "heavy" && fighter.attacking.limb !== "kick";
+  const flow = heavyPunch ? null : paintedFlowPose(fighter);
   const flowAtlas = flow && ensurePaintedFlowAtlas(fighter.def.id);
   // Loading a sheet mid-punch must not swap the fighter's artwork mid-move.
   if (flow && !paintedFlowAvailability.has(fighter.attacking)) {
@@ -22467,9 +22483,8 @@ function fighterPoseDescriptor(fighter) {
   // authored super-storm tracks above stay the strongest versions. Airborne
   // victims keep the flying hit cell (the juggle read).
   if (fighter.hitstunFrames > 0 && fighter.grounded && fighter.knockdownFrames === 0
-    && fighter.cinematicFrame === null && state.fighters?.length === 2) {
-    const striker = state.fighters[1 - fighter.side];
-    const sinceHit = state.simulationTick - (striker?.combo?.lastHitFrame ?? -Infinity);
+    && fighter.cinematicFrame === null) {
+    const sinceHit = (fighter.preview ? fighter.previewTick : state.simulationTick) - fighter.lastImpactTick;
     if (sinceHit >= 0 && sinceHit <= 44) {
       // v2.9 final round (R4): the per-hit alternation is gone. It selected
       // between `roles.hit` and `fold`, which are the same frame on seven of
@@ -22501,7 +22516,7 @@ function fighterPoseDescriptor(fighter) {
       // flinch. The tail hands back to the IDLE CYCLE rather than freezing on
       // the guard cell, so the last third of a long reaction breathes.
       // motion3's react-mid pair drops into the second band of each track.
-      const heavyTrack = Boolean(striker.attacking && striker.attacking.kind !== "light");
+      const heavyTrack = fighter.lastHitHeavy;
       // v2.9 final round (R4) — THE TAIL COLLAPSE. Round 2's ladder read
       // `base(hitKey ? roles.hit : fold)` at 0.30 and `base(fold)` at 0.44,
       // and `fold` IS `roles.hit` on seven of ten fighters (only deathblow,
@@ -22523,7 +22538,8 @@ function fighterPoseDescriptor(fighter) {
       // The BASE read below is untouched 2.9: snap / fold / settle-or-idle /
       // idle over the same band groups, so a non-unified fighter is
       // byte-identical.
-      return beatPoseAt(reactionTrackKeys(heavyTrack, extOpt), sinceHit / 44, (key) => {
+      const reactionProgress = sinceHit / Math.max(1, sinceHit + fighter.hitstunFrames);
+      return beatPoseAt(reactionTrackKeys(heavyTrack, extOpt), reactionProgress, (key) => {
         const at = key ? key.at : 0;
         const idle = () => rolesIdle();
         const rung = unifiedReactionCellAt(at, heavyTrack, extOpt);
@@ -25114,13 +25130,15 @@ function drawFighter(fighter, time, measureOnly = false) {
   fighter = renderFighter(fighter);
   const jump = FLOOR - fighter.y;
   const pose = presentationPose(fighterAnimationPose(fighter));
-  const authoredStrike = pose.bank === PAINTED_FLOW_BANK;
+  const authoredStrike = pose.bank === PAINTED_FLOW_BANK || (fighter.grounded && fighter.attacking
+    && fighter.attacking.limb !== "kick" && ["light", "heavy"].includes(fighter.attacking.kind)
+    && !fighter.attacking.animation && !fighter.attacking.advanceSpeed);
   const attack = fighter.attacking;
   const attackProgress = attack ? clamp(fighter.attackTime / attack.duration, 0, 1) : 0;
   const attackSwing = attack && !authoredStrike ? Math.sin(attackProgress * Math.PI) : 0;
   const startupPower = !authoredStrike && attack && fighter.attackTime < attack.active[0]
     ? Math.sin((fighter.attackTime / attack.active[0]) * Math.PI) : 0;
-  const activePower = !authoredStrike && attack && fighter.attackTime >= attack.active[0] && fighter.attackTime <= attack.active[1]
+  const activePower = attack && fighter.attackTime >= attack.active[0] && fighter.attackTime <= attack.active[1]
     ? 1 : attack ? Math.max(0, attackSwing * 0.42) : 0;
   const moving = Math.abs(fighter.vx) > 22 && fighter.grounded && !attack;
   // Idle/walk pulse in pixels of chest travel. Applied further down as a
@@ -25129,7 +25147,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   // reads as hovering. The old whole-sprite bob translate was exactly that
   // hover — the contact shadow rode up and down with it while the cast
   // shadow stayed planted, so the ground contact never agreed with itself.
-  const bob = fighter.cinematicFrame === null && fighter.grounded && !fighter.stun && !fighter.block
+  const bob = fighter.cinematicFrame === null && fighter.grounded && !fighter.stun && !fighter.block && !attack
     ? Math.sin((moving ? fighter.walkTime * 20 : fighter.animTime * 10) + fighter.side * 2) * (moving ? 1.8 : 2.7) : 0;
   // Wave 16: the side's palette pick decides which cached atlas draws.
   const atlas = paletteAtlas(fighter.def.id, fighter.side, pose.artBank || pose.bank);
@@ -32923,7 +32941,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.7");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.8");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33649,6 +33667,34 @@ const instantReplay=createInstantReplay({
   caption:state.fighters.map(f=>`${f.def.name} ${Math.ceil(f.health)}`).join('   VS   ')}),
 });
 
+
+const viewerRoster = roster.some(f=>f.id==='commissioner') ? [...roster] : [...roster,commissionerPlayableDef];
+const moveViewer = createMoveViewer({
+ dialog: $('#moveViewerDialog'), roster: viewerRoster,
+ onOpen: () => clearIdleDemoTimer(),
+ onClose: () => scheduleIdleDemo(),
+ async prepare(id) {
+  const def = viewerRoster.find(f=>f.id===id);
+  const fighter = makeFighter(0, 0, def);
+  fighter.preview = true; fighter.previewTick = 0;
+  await ensureUnifiedManifest();
+  const banks = ['base','specials','motion','motion2','motion3','walk','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','painted-flow',
+    ...INBETWEEN_BANKS.map(companionBank),'inbetween-approach'];
+  await Promise.all(banks.map(bank => paletteAtlas(id,0,bank)?.decode?.().catch(()=>{})));
+  return fighter;
+ },
+ move: (fighter, action, context) => createFighterMove(fighter.kitId, action, context),
+ sample(fighter) {
+  const pose = presentationPose(fighterAnimationPose(fighter));
+  const atlas = paletteAtlas(fighter.def.id,0,pose.artBank || pose.bank);
+  const scale = bankSheetAdjust(fighter.def.id,pose.bank) * cellDrawAdjust(fighter.def.id,pose.bank,pose.frame,{unified:unifiedFighterReady(fighter.def.id)}) * (pose.artScale || 1);
+  return {atlas,frame:pose.frame,scale, facing:atlasFrameFacing(fighter.def.id,pose.bank,pose.frame),
+    floor:cellVerticalOffset(fighter.def.id,pose.bank,pose.frame,0)/320,
+    bank:pose.artBank || pose.bank};
+ }
+});
+$('#moveViewerButton').addEventListener('click',()=>moveViewer.open());
+
 function openSpectatorSetup(){
  const fill=(selector,rows)=>{const el=$(selector);el.replaceChildren(...rows.map(([value,label])=>new Option(label,value)));};
  fill('#spectatorFirst',roster.map(f=>[f.id,f.name]));fill('#spectatorSecond',roster.map(f=>[f.id,f.name]));
@@ -33669,7 +33715,7 @@ $('#spectatorSetupForm').addEventListener('submit',event=>{
  try{localStorage.setItem('final-blow-spectator-config',JSON.stringify(config));}catch{}
  instantReplay.setEnabled($('#spectatorReplays').checked);$('#spectatorSetupDialog').close();startDemo({matchConfig:config});
 });
-document.addEventListener('keydown',event=>{if($('#spectatorSetupDialog').open||$('#instantReplayDialog').open)event.stopPropagation();},true);
+document.addEventListener('keydown',event=>{if($('#spectatorSetupDialog').open||$('#instantReplayDialog').open||$('#moveViewerDialog').open)event.stopPropagation();},true);
 
 $("#demoButton").addEventListener("click", () => startDemo());
 $("#demo3dButton").addEventListener("click", () => { window.location.href = "../../demos/final-blow-3d/"; });
@@ -34409,7 +34455,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.6.7-ringside",
+  version: "5.6.8-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

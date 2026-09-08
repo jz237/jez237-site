@@ -1,3 +1,4 @@
+import {deliberateDefense} from "./ai-defense.mjs";
 import {projectileIntent} from "./ai-projectiles.mjs";
 import {fighterStyle,comboObjective,roundStrategy,strategicIntent,selectComboContinuation,meterOpportunity} from "./ai-strategy.mjs";
 import {createOpponentMemory, learnOpponent, opponentHabits} from "./ai-adaptation.mjs";
@@ -376,8 +377,8 @@ export function preferTacticalInput(brain, input, self) {
   if (self.attacking || !self.grounded) return false;
   if(['projectile-block','projectile-counter','projectile-jump','projectile-advance'].includes(reason))return true;
   if(['corner-escape','corner-counter','corner-defense','corner-pressure','protect-lead','protect-poke','chase','exchange-reset','style-spacing','style-strike','meter-reserve'].includes(reason))return true;
-  if (['low-block','high-block','bait-heavy','anticipate-low'].includes(reason)) return input.guard;
-  return ['recovery-punish','guard-mix','anti-air','adaptive-anti-air','guard-break-throw','throw-whiff-punish','throw-tech','throw-evade'].includes(reason)
+  if (['low-block','high-block','bait-heavy','anticipate-low','spacing-defense','crouch-cover'].includes(reason)) return input.guard;
+  return ['windup-interrupt','counter-read','recovery-punish','guard-mix','anti-air','adaptive-anti-air','guard-break-throw','throw-whiff-punish','throw-tech','throw-evade'].includes(reason)
     && ['light','heavy','launcher','backSpecial','super','throw','jump'].some(key=>input[key]);
 }
 
@@ -563,6 +564,11 @@ export function decideAiIntent(brain, {
       && frame-brain.lastHabitReadFrame > 150) {
       return {movement:'hold',action:null,guard:true,down:true,reason:'anticipate-low'};
     }
+  }
+
+  if (canRead && mixRoll(roll, 46) < settings.defenseChance) {
+    const defense = deliberateDefense(self, observation, frame, mixRoll(roll, 47));
+    if (defense) return defense;
   }
 
   // 5.4 PERSONAS: the counter-puncher answers a swing with the kit's AUTHORED

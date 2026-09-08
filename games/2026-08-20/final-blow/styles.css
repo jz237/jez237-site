@@ -4403,3 +4403,26 @@ body.reduced-motion .set-score-card.crowned { animation: none; }
 .instant-replay-dialog button {padding:10px;border:1px solid #ffd46b;background:#151e2a;color:#fff;cursor:pointer;}
 #instantReplayCanvas {position:static;inset:auto;transform:none;z-index:auto;display:block;width:100%;height:auto;max-height:76dvh;object-fit:contain;}
 @media(max-width:600px){.spectator-grid{grid-template-columns:1fr}.spectator-dialog form{padding:16px}.instant-replay-dialog header{font-size:11px;}}
+
+.move-viewer-dialog {width:min(960px,94vw);max-height:94dvh;overflow:auto;padding:18px;background:#131820;color:#f1e8d6;}
+.move-viewer-dialog header {display:flex;align-items:center;justify-content:space-between;gap:12px;}
+#moveViewerCanvas {position:static;inset:auto;transform:none;z-index:auto;display:block;width:100%;height:auto;max-height:48dvh;object-fit:contain;margin:10px auto;background:#202a34;border:1px solid #566270;}
+#moveViewerFrame {width:100%;accent-color:#ffd54a;}
+#moveViewerStatus {min-height:1.5em;margin:8px 0;font-size:14px;}
+.move-viewer-controls {display:flex;flex-wrap:wrap;align-items:center;gap:8px;}
+.move-viewer-controls button,.move-viewer-controls select {min-height:44px;padding:8px 12px;}
+.move-viewer-controls label {display:flex;align-items:center;gap:8px;font-size:12px;}
+.move-viewer-hint {font-size:12px;color:#b9c5d1;}
+@media(max-height:480px){.move-viewer-dialog{padding:10px;}.move-viewer-dialog h2{margin:0;font-size:18px;}#moveViewerCanvas{max-height:38dvh;}.move-viewer-hint{display:none;}}
+@media(max-height:480px) and (min-width:620px){
+ .move-viewer-dialog {display:grid;grid-template-columns:1fr 1fr;gap:6px 12px;align-items:start;}
+ .move-viewer-dialog:not([open]) {display:none;}
+ .move-viewer-dialog header {grid-column:1 / -1;}
+ .move-viewer-dialog .spectator-grid {grid-column:2;grid-row:2;gap:6px;}
+ .move-viewer-dialog .spectator-grid select {padding:6px;min-height:36px;}
+ #moveViewerCanvas {grid-column:1;grid-row:2 / 6;max-height:72dvh;margin:0;align-self:center;}
+ #moveViewerStatus {grid-column:2;grid-row:3;margin:0;font-size:11px;}
+ #moveViewerFrame {grid-column:2;grid-row:4;}
+ .move-viewer-controls {grid-column:2;grid-row:5;gap:5px;}
+ .move-viewer-controls button,.move-viewer-controls select {padding:6px;font-size:11px;}
+}
