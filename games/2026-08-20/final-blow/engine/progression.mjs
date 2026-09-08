@@ -519,7 +519,8 @@ export function blackBookObserve(progress, observation) {
         case "taunt": tallies.taunts += 1; break;
         case "wallBounce": tallies.wallBounces += 1; break;
         case "exThrowable": tallies.exThrowables += 1; break;
-        case "cinema3d": tallies.cinemaActivations += 1; break;
+        case "cinema3d": // Compatibility with saved event histories.
+        case "paintedViewer": tallies.cinemaActivations += 1; break;
         case "fightSchool": tallies.schoolGraduations += 1; break;
         case "throwableLand":
           if (observation.fighterId) progress.sets.throwables[String(observation.fighterId)] = 1;
@@ -850,8 +851,8 @@ export const BLACK_BOOK_ENTRIES = Object.freeze([
   {
     id: "the-picture-show",
     title: "THE PICTURE SHOW",
-    line: "Rolled the fight in CINEMA 3D. Philly never looked so expensive.",
-    hint: "Switch on CINEMA 3D for the first time.",
+    line: "Studied the painted fighters, one frame at a time.",
+    hint: "Open the painted Move Viewer for the first time.",
     test: (p) => p.tallies.cinemaActivations >= 1,
   },
   {
