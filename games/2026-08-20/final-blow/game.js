@@ -1,3 +1,4 @@
+import {PROP_RECTS} from "./engine/world-props.mjs";
 import {hitRegion,victoryCell} from "./engine/combat-presentation.mjs";
 import {FOOTWORK_BANK,FOOTWORK_FIGHTERS,createFootworkSelector} from "./engine/painted-footwork.mjs";
 import {BRIDGE_BANK,BRIDGE_FIGHTERS,createBridgeSelector} from "./engine/painted-bridges.mjs";
@@ -1051,7 +1052,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.2` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.3` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1761,6 +1762,7 @@ function motionBankCellDrawable(fighterId, cell, bank) {
 function preloadAuthoredBanks(fighterIds) {
   const ids = (fighterIds || []).filter((id) => typeof id === "string" && id);
   if (!ids.length) return;
+  ensureWorldProps();
   for (const id of ids) { approachReady(id); ensureFootworkAtlas(id); ensurePaintedFlowAtlas(id); ensureBridgeAtlas(id); for (const bank of INBETWEEN_BANKS) ensureInbetweenAtlas(id, bank); }
   ensureMotionManifest();
   ensureMotion2Manifest();
@@ -23929,40 +23931,14 @@ function drawPaintTraps(time) {
   }
 }
 
-// The trap drawing itself, origin at the trap's floor point, on ANY 2D
-// context: the 2D world pass hands it the game canvas; CINEMA 3D paints it
-// into an impostor canvas over the host bridge (world-objects.mjs), so both
-// renderers draw Post's hazard from one function. Presentation-only reads.
+// Grounded paint hazard, with a subtle marker for its unchanged active area.
 function drawPaintTrapWith(c, trap, time) {
-  const armed = trap.armFrames <= 0;
-  const life = clamp(trap.lifeFrames / trap.maxLifeFrames, 0, 1);
-  const pulse = 1 + Math.sin(time * 0.009 + trap.x * 0.02) * 0.08;
-  c.globalAlpha = Math.min(1, life * 1.8) * (armed ? 0.9 : 0.58);
-  c.fillStyle = trap.color;
-  c.shadowColor = trap.color;
-  c.shadowBlur = armed ? 21 : 9;
-  c.beginPath();
-  c.ellipse(0, 1, trap.radius * 0.86 * pulse, 14 * pulse, 0, 0, Math.PI * 2);
-  c.fill();
-  c.globalAlpha *= 0.55;
-  c.fillStyle = "#fff2c6";
-  for (let spot = 0; spot < 6; spot += 1) {
-    const angle = spot * 2.4;
-    c.beginPath();
-    c.ellipse(Math.cos(angle) * trap.radius * 0.52, -3 + Math.sin(angle) * 7, 6 + spot % 3 * 2, 3, angle, 0, Math.PI * 2);
-    c.fill();
-  }
-  c.globalAlpha = Math.min(1, life * 1.8);
-  c.fillStyle = "#d9d9d9";
-  c.fillRect(-7, -23, 14, 25);
-  c.fillStyle = trap.color;
-  c.fillRect(-7, -18, 14, 10);
-  c.strokeStyle = armed ? "#fff" : trap.color;
-  c.lineWidth = armed ? 3 : 2;
-  c.globalAlpha *= armed ? 0.75 : 0.35;
-  c.beginPath();
-  c.ellipse(0, 0, trap.radius * pulse, 20 * pulse, 0, 0, Math.PI * 2);
-  c.stroke();
+  const armed=trap.armFrames<=0,life=clamp(trap.lifeFrames/trap.maxLifeFrames,0,1);
+  c.save();c.globalAlpha=Math.min(1,life*1.8)*(armed?.95:.65);
+  c.fillStyle='rgba(0,0,0,.25)';c.beginPath();c.ellipse(0,2,trap.radius*.85,8,0,0,Math.PI*2);c.fill();
+  c.translate(0,-15);c.filter='brightness(.85) saturate(.8)';drawPhysicalProp(c,'paint',trap.radius*1.8,40);c.filter='none';
+  // A fine ground mark communicates the armed area without a luminous disc.
+  c.translate(0,15);c.globalAlpha*=armed?.35:.15;c.strokeStyle=trap.color;c.lineWidth=1.2;c.beginPath();c.ellipse(0,1,trap.radius,12,0,0,Math.PI*2);c.stroke();c.restore();
 }
 
 // Each personal object is drawn as a recognisable physical thing rather than a
@@ -23971,415 +23947,40 @@ function drawThrowable(projectile, time, life) {
   drawThrowableWith(ctx, projectile, time, life);
 }
 
-// Same drawing on ANY 2D context. CINEMA 3D paints each live object through
-// this into a per-object impostor canvas (renderer/three/world-objects.mjs),
-// so the painted pizza wheel, cane, needle... are the SAME drawings in both
-// renderers. `options.cable === false` skips the mouse's trailing cable
-// (world-space geometry the 3D layer draws as its own line).
-function drawThrowableWith(c, projectile, time, life, options = {}) {
-  const w = projectile.width;
-  const h = projectile.height;
-  const angle = projectile.spinAngle || 0;
-  const wobble = projectile.wobble ? Math.sin(time * 0.02) * projectile.wobble * 0.01 : 0;
-  c.globalAlpha = Math.min(1, life * 2.2);
-  switch (projectile.style) {
-    case "pizza": {
-      if (cinema3dDressingActive()) {
-        // CINEMA 3D: the painted pizza-on-cutter wheel (crust blisters,
-        // mottled cheese, cupped pepperoni, rusted steel rim with a cold
-        // specular) + radial motion smear ghosts trailing the spin. The
-        // classic 2D primitives below stay byte-identical with 3D off.
-        const hd = fatalityPizzaCanvas();
-        const rim = fatalityPizzaRimCanvas();
-        c.rotate(angle + wobble);
-        const d = w * 1.04;
-        c.drawImage(hd, -d / 2, -d / 2, d, d);
-        // trailing RIM ghosts: the motion blur lives on the spinning edge —
-        // the face detail stays printed once (no doubled pepperoni).
-        c.save();
-        c.globalAlpha *= 0.3;
-        c.rotate(-0.1);
-        c.drawImage(rim, -d / 2, -d / 2, d, d);
-        c.rotate(-0.12);
-        c.globalAlpha *= 0.55;
-        c.drawImage(rim, -d / 2, -d / 2, d, d);
-        c.restore();
-        // rim speed smears: short bright arcs whipping off the cutting edge
-        c.strokeStyle = "rgba(255,244,225,0.55)";
-        c.lineCap = "round";
-        c.lineWidth = Math.max(1.5, w * 0.02);
-        for (let s = 0; s < 3; s += 1) {
-          const a0 = s * 2.1 + 0.4;
-          c.beginPath();
-          c.arc(0, 0, w * 0.52, a0, a0 + 0.5);
-          c.stroke();
-        }
-        break;
-      }
-      c.rotate(angle + wobble);
-      c.fillStyle = "#e8b23a";
-      c.beginPath();
-      c.arc(0, 0, w * 0.5, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "#c9812a";
-      c.beginPath();
-      c.arc(0, 0, w * 0.42, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "#f2e2b4";
-      c.beginPath();
-      c.arc(0, 0, w * 0.36, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "#c4402a";
-      for (let i = 0; i < 6; i += 1) {
-        const a = (i / 6) * Math.PI * 2;
-        c.beginPath();
-        c.arc(Math.cos(a) * w * 0.2, Math.sin(a) * w * 0.2, w * 0.06, 0, Math.PI * 2);
-        c.fill();
-      }
-      c.strokeStyle = "rgba(120,70,20,.5)";
-      c.lineWidth = 2;
-      for (let i = 0; i < 8; i += 1) {
-        const a = (i / 8) * Math.PI * 2;
-        c.beginPath();
-        c.moveTo(0, 0);
-        c.lineTo(Math.cos(a) * w * 0.5, Math.sin(a) * w * 0.5);
-        c.stroke();
-      }
-      break;
-    }
-    case "mouse": {
-      // Cable trailing back toward the thrower.
-      const owner = state.fighters[projectile.ownerSide];
-      if (owner && options.cable !== false) {
-        const back = (owner.x - projectile.x) * (Math.sign(projectile.vx) || 1);
-        c.strokeStyle = "#8a93a5";
-        c.lineWidth = 3;
-        c.beginPath();
-        c.moveTo(0, 0);
-        for (let i = 1; i <= 8; i += 1) {
-          const t = i / 8;
-          c.lineTo(back * t, Math.sin(t * Math.PI * 2 + time * 0.02) * 9 * (1 - t));
-        }
-        c.stroke();
-      }
-      c.rotate(Math.sin(angle) * 0.2);
-      c.fillStyle = "#e3e8f0";
-      c.beginPath();
-      c.ellipse(0, 0, w * 0.5, h * 0.5, 0, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "#5b6474";
-      c.fillRect(-w * 0.06, -h * 0.5, w * 0.12, h * 0.42);
-      c.fillStyle = "#7fe9ff";
-      c.beginPath();
-      c.arc(w * 0.18, 0, h * 0.14, 0, Math.PI * 2);
-      c.fill();
-      break;
-    }
-    case "loogie": {
-      c.fillStyle = "#b9e37a";
-      c.beginPath();
-      c.ellipse(0, 0, w * 0.5, h * 0.42, Math.atan2(projectile.vy, projectile.vx) * 0.35, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "rgba(223,243,184,.75)";
-      c.beginPath();
-      c.ellipse(-w * 0.12, -h * 0.12, w * 0.18, h * 0.16, 0, 0, Math.PI * 2);
-      c.fill();
-      c.strokeStyle = "rgba(137,184,79,.7)";
-      c.lineWidth = 2;
-      c.beginPath();
-      c.moveTo(-w * 0.5, h * 0.1);
-      c.quadraticCurveTo(-w * 0.9, 0, -w * 1.2, h * 0.2);
-      c.stroke();
-      break;
-    }
-    case "wires": {
-      const uncoiled = projectile.hazard;
-      c.strokeStyle = "#4f5b70";
-      c.lineWidth = 4;
-      const coils = uncoiled ? 5 : 7;
-      for (let i = 0; i < coils; i += 1) {
-        const spread = uncoiled ? w * 0.5 : w * 0.3;
-        c.strokeStyle = i % 2 ? "#4f5b70" : "#7b3fa0";
-        c.beginPath();
-        if (uncoiled) {
-          c.moveTo(-spread + (i / coils) * spread * 2, h * 0.2);
-          c.quadraticCurveTo(
-            -spread + ((i + 0.5) / coils) * spread * 2,
-            h * 0.2 - 16 - Math.sin(time * 0.01 + i) * 5,
-            -spread + ((i + 1) / coils) * spread * 2,
-            h * 0.2,
-          );
-        } else {
-          c.arc(0, 0, w * 0.2 + i * 3, angle + i, angle + i + 4.2);
-        }
-        c.stroke();
-      }
-      break;
-    }
-    case "xacto": {
-      c.save();
-      c.globalCompositeOperation = "screen";
-      c.globalAlpha = 0.35 + Math.abs(Math.sin(time * 0.022)) * 0.55;
-      c.strokeStyle = "#ffffff";
-      c.lineWidth = 2;
-      c.beginPath(); c.moveTo(-w * 0.85, 0); c.lineTo(-w * 0.2, 0); c.stroke();
-      c.restore();
-      c.rotate(Math.atan2(projectile.vy, Math.abs(projectile.vx)));
-      c.fillStyle = "#2b3038";
-      c.fillRect(-w * 0.5, -h * 0.5, w * 0.45, h);
-      c.fillStyle = "#dfe6f0";
-      c.beginPath();
-      c.moveTo(-w * 0.05, -h * 0.5);
-      c.lineTo(w * 0.5, 0);
-      c.lineTo(-w * 0.05, h * 0.5);
-      c.closePath();
-      c.fill();
-      c.strokeStyle = "rgba(255,255,255,.7)";
-      c.lineWidth = 1.5;
-      c.beginPath();
-      c.moveTo(-w * 0.05, 0);
-      c.lineTo(w * 0.5, 0);
-      c.stroke();
-      break;
-    }
-    case "golfball": {
-      c.globalAlpha *= 0.52;
-      c.fillStyle = "#ffffff";
-      for (let trail = 1; trail <= 3; trail += 1) {
-        c.beginPath();
-        c.arc(-w * (0.55 + trail * 0.32), 0, Math.max(2, w * (0.15 - trail * 0.025)), 0, Math.PI * 2);
-        c.fill();
-      }
-      c.globalAlpha = Math.min(1, life * 2.2);
-      c.rotate(angle);
-      c.fillStyle = "#ffffff";
-      c.beginPath();
-      c.arc(0, 0, w * 0.5, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "rgba(150,165,185,.55)";
-      for (let i = 0; i < 7; i += 1) {
-        const a = (i / 7) * Math.PI * 2;
-        c.beginPath();
-        c.arc(Math.cos(a) * w * 0.24, Math.sin(a) * w * 0.24, w * 0.06, 0, Math.PI * 2);
-        c.fill();
-      }
-      break;
-    }
-    case "bedbugs": {
-      const swarm = projectile.hazard ? 9 : 6;
-      for (let i = 0; i < swarm; i += 1) {
-        const phase = time * 0.01 + i * 1.7;
-        const bx = Math.cos(phase) * w * (projectile.hazard ? 0.45 : 0.28);
-        const by = Math.sin(phase * 1.4) * h * 0.3;
-        c.fillStyle = i % 3 ? "#7a3a2c" : "#c4552f";
-        c.beginPath();
-        c.ellipse(bx, by, 6, 4.4, phase, 0, Math.PI * 2);
-        c.fill();
-        c.strokeStyle = "rgba(40,20,14,.8)";
-        c.lineWidth = 1.2;
-        for (let leg = -1; leg <= 1; leg += 2) {
-          c.beginPath();
-          c.moveTo(bx, by);
-          c.lineTo(bx + leg * 6, by + Math.sin(phase * 3) * 4);
-          c.stroke();
-        }
-      }
-      break;
-    }
-    case "vinyl": {
-      c.save();
-      c.globalAlpha = 0.22 + Math.abs(Math.sin(time * 0.018)) * 0.2;
-      c.strokeStyle = "#ff4fb9";
-      c.lineWidth = 2;
-      for (let ring = 1; ring <= 2; ring += 1) {
-        c.beginPath();
-        c.ellipse(0, 0, w * (0.5 + ring * 0.22), h * (0.32 + ring * 0.12), 0, 0, Math.PI * 2);
-        c.stroke();
-      }
-      c.restore();
-      c.rotate(angle);
-      c.fillStyle = "#16161a";
-      c.beginPath();
-      c.arc(0, 0, w * 0.5, 0, Math.PI * 2);
-      c.fill();
-      c.strokeStyle = "rgba(216,216,210,.28)";
-      c.lineWidth = 1.4;
-      for (let r = 3; r < 5; r += 1) {
-        c.beginPath();
-        c.arc(0, 0, w * 0.5 * (r / 6), 0, Math.PI * 2);
-        c.stroke();
-      }
-      c.fillStyle = "#ff4fb9";
-      c.beginPath();
-      c.arc(0, 0, w * 0.17, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "#16161a";
-      c.beginPath();
-      c.arc(0, 0, w * 0.04, 0, Math.PI * 2);
-      c.fill();
-      break;
-    }
-    // Wave 16 — the Commissioner's steel cane: a hard end-over-end steel shaft
-    // with a gold crook and ferrule, so the flat authority throw reads at a
-    // glance against every other object in the set.
-    case "cane": {
-      c.rotate(angle);
-      const shaft = w * 0.94;
-      // steel shaft with a cold top highlight
-      c.fillStyle = "#3b4150";
-      c.fillRect(-shaft * 0.5, -h * 0.18, shaft, h * 0.36);
-      c.fillStyle = "rgba(214,222,236,.5)";
-      c.fillRect(-shaft * 0.5, -h * 0.18, shaft, h * 0.12);
-      // gold crook handle
-      c.strokeStyle = "#d6b56b";
-      c.lineWidth = h * 0.3;
-      c.beginPath();
-      c.arc(-shaft * 0.5, -h * 0.5, h * 0.42, Math.PI * 0.15, Math.PI * 1.2);
-      c.stroke();
-      // gold ferrule tip
-      c.fillStyle = "#d6b56b";
-      c.fillRect(shaft * 0.5 - w * 0.08, -h * 0.22, w * 0.08, h * 0.44);
-      break;
-    }
-    case "needle": {
-      c.rotate(Math.atan2(projectile.vy, Math.abs(projectile.vx) || 1));
-      c.fillStyle = "#cfd6e2";
-      c.fillRect(-w * 0.5, -h * 0.35, w * 0.7, h * 0.7);
-      c.fillStyle = "#e9edf5";
-      c.beginPath();
-      c.moveTo(w * 0.2, -h * 0.2);
-      c.lineTo(w * 0.5, 0);
-      c.lineTo(w * 0.2, h * 0.2);
-      c.closePath();
-      c.fill();
-      c.fillStyle = "#ff6b5a";
-      c.fillRect(-w * 0.5, -h * 0.5, w * 0.16, h);
-      break;
-    }
-    case "bottle": {
-      c.rotate(angle);
-      c.fillStyle = "rgba(96,148,72,.92)";
-      c.beginPath();
-      c.moveTo(-w * 0.32, h * 0.5);
-      c.lineTo(w * 0.32, h * 0.5);
-      c.lineTo(w * 0.32, -h * 0.05);
-      c.lineTo(w * 0.14, -h * 0.3);
-      c.lineTo(w * 0.14, -h * 0.5);
-      c.lineTo(-w * 0.14, -h * 0.5);
-      c.lineTo(-w * 0.14, -h * 0.3);
-      c.lineTo(-w * 0.32, -h * 0.05);
-      c.closePath();
-      c.fill();
-      c.fillStyle = "rgba(240,248,220,.55)";
-      c.fillRect(-w * 0.2, -h * 0.02, w * 0.1, h * 0.42);
-      c.fillStyle = "#d8b24a";
-      c.fillRect(-w * 0.3, h * 0.06, w * 0.6, h * 0.2);
-      break;
-    }
-    case "pigeon": {
-      c.rotate(angle * 0.6);
-      c.fillStyle = "#6f7684";
-      c.beginPath();
-      c.ellipse(0, 0, w * 0.42, h * 0.32, 0, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "#8c93a3";
-      c.beginPath();
-      c.ellipse(-w * 0.28, -h * 0.1, w * 0.16, h * 0.2, 0.4, 0, Math.PI * 2);
-      c.fill();
-      c.fillStyle = "#585f6c";
-      c.beginPath();
-      c.ellipse(w * 0.3, -h * 0.16, w * 0.14, h * 0.16, 0, 0, Math.PI * 2);
-      c.fill();
-      c.strokeStyle = "#ff9a4a";
-      c.lineWidth = 3;
-      c.beginPath();
-      c.moveTo(-w * 0.1, h * 0.28);
-      c.lineTo(-w * 0.24, h * 0.5);
-      c.stroke();
-      break;
-    }
-    case "tongs": {
-      c.rotate(angle);
-      c.strokeStyle = "#d5dce8";
-      c.lineWidth = 4;
-      c.beginPath();
-      c.moveTo(-w * 0.5, -h * 0.4);
-      c.lineTo(w * 0.5, 0);
-      c.moveTo(-w * 0.5, h * 0.4);
-      c.lineTo(w * 0.5, 0);
-      c.stroke();
-      c.strokeStyle = "#9fb0c6";
-      c.lineWidth = 2;
-      c.beginPath();
-      c.arc(-w * 0.5, 0, h * 0.4, -1.4, 1.4);
-      c.stroke();
-      break;
-    }
-    case "cup": {
-      c.rotate(angle * 0.5);
-      c.fillStyle = "#ff5aa8";
-      c.beginPath();
-      c.moveTo(-w * 0.34, -h * 0.5);
-      c.lineTo(w * 0.34, -h * 0.5);
-      c.lineTo(w * 0.22, h * 0.5);
-      c.lineTo(-w * 0.22, h * 0.5);
-      c.closePath();
-      c.fill();
-      c.fillStyle = "rgba(255,255,255,.55)";
-      c.fillRect(-w * 0.3, -h * 0.44, w * 0.6, h * 0.12);
-      c.strokeStyle = "#7fe9ff";
-      c.lineWidth = 4;
-      c.beginPath();
-      c.moveTo(w * 0.1, -h * 0.5);
-      c.lineTo(w * 0.34, -h * 0.9);
-      c.stroke();
-      break;
-    }
-    // 5.3 SPECTACLE: Janney's half brick. A fired-clay block with a broken
-    // end (the half it snapped at), a mortar crumb line along the bottom and
-    // a lit top face, so it reads as masonry at 48x26 rather than a red bar.
-    case "brick": {
-      c.rotate(angle);
-      const bw = w * 0.5;
-      const bh = h * 0.5;
-      c.fillStyle = "#8d4432";
-      c.beginPath();
-      c.moveTo(-bw, -bh);
-      c.lineTo(bw * 0.78, -bh);
-      // the snapped end: a ragged vertical break
-      c.lineTo(bw, -bh * 0.42);
-      c.lineTo(bw * 0.84, 0);
-      c.lineTo(bw, bh * 0.5);
-      c.lineTo(bw * 0.8, bh);
-      c.lineTo(-bw, bh);
-      c.closePath();
-      c.fill();
-      // sunlit top face
-      c.fillStyle = "rgba(214,132,92,0.85)";
-      c.fillRect(-bw, -bh, bw * 1.72, bh * 0.42);
-      // shadowed underside + clinging mortar crumbs
-      c.fillStyle = "rgba(48,24,16,0.55)";
-      c.fillRect(-bw, bh * 0.46, bw * 1.7, bh * 0.54);
-      c.fillStyle = "rgba(206,198,182,0.75)";
-      for (let crumb = 0; crumb < 4; crumb += 1) {
-        const cx = -bw + bw * 0.42 * crumb + bw * 0.1;
-        c.fillRect(cx, bh * 0.52, bw * 0.2, bh * 0.24);
-      }
-      // pitted face: three dark aggregate specks
-      c.fillStyle = "rgba(58,28,18,0.5)";
-      for (let pit = 0; pit < 3; pit += 1) {
-        c.fillRect(-bw * 0.6 + pit * bw * 0.52, -bh * 0.1 + (pit % 2) * bh * 0.3, bw * 0.14, bh * 0.18);
-      }
-      break;
-    }
-    default: {
-      c.fillStyle = projectile.color;
-      c.beginPath();
-      c.arc(0, 0, w * 0.5, 0, Math.PI * 2);
-      c.fill();
-    }
+// Shared physical art for thrown objects, grounded pickups, and finishers.
+const worldPropImages = {};
+function ensureWorldProps() {
+  for (const name of ['world-props-real-v1','charm-real-v1']) {
+    if (!worldPropImages[name]) {const image=new Image();image.src=`assets/${name}.webp`;worldPropImages[name]=image;}
   }
-  c.globalAlpha = 1;
+}
+function drawPhysicalProp(c, style, w, h) {
+  ensureWorldProps();
+  const rect=PROP_RECTS[style];
+  if (!rect) return false;
+  const image=worldPropImages[style==='charm'?'charm-real-v1':'world-props-real-v1'];
+  if (!image.complete || !image.naturalWidth) return true;
+  const scale = Math.min(w / rect[2], h / rect[3]);
+  const width = rect[2] * scale, height = rect[3] * scale;
+  c.drawImage(image, ...rect, -width / 2, -height / 2, width, height);
+  return true;
+}
+function drawThrowableWith(c, projectile, time, life, options = {}) {
+  const w=projectile.width,h=projectile.height;
+  c.save();
+  c.globalAlpha *= Math.min(1,life*2.2);
+  c.shadowBlur=0;
+  if(projectile.style==='mouse'&&options.cable!==false){
+    const owner=state.fighters[projectile.ownerSide];
+    if(owner){const back=(owner.x-projectile.x)*(Math.sign(projectile.vx)||1);c.strokeStyle='#393536';c.lineWidth=1.6;c.beginPath();c.moveTo(-w*.3,0);c.quadraticCurveTo(back*.5,12,back,0);c.stroke();}
+  }
+  const angle=projectile.spinAngle||0;
+  if(['pizza','vinyl','golfball','bottle','cane','tongs','brick'].includes(projectile.style))c.rotate(angle);
+  else if(['xacto','needle'].includes(projectile.style))c.rotate(Math.atan2(projectile.vy||0,Math.abs(projectile.vx)||1));
+  else if(projectile.style==='mouse')c.rotate(Math.sin(angle)*.12);
+  c.filter='brightness(.9) saturate(.85)';
+  drawPhysicalProp(c,projectile.style,w,h);
+  c.restore();
 }
 
 // The grounded weapon and its arrival telegraph. Both fighters can see exactly
@@ -27132,53 +26733,15 @@ function drawSeveredLimb(effect, alpha) {
 }
 
 function drawFatalityProjectile(effect, alpha) {
-  const reveal = clamp((1 - alpha) * 12, 0, 1);
-  // 2.8 critic round (M3): once the killing blow lands (gore on), the sigil
-  // treatment dies with the collapse — no halo ring, no glow, no floating
-  // label. The murder weapon simply rests in the scene at prop scale so the
-  // systole window over the body is READABLE.
-  const killResting = Boolean(state.finisher?.fatalityTriggered) && state.graphicFatalities;
-  ctx.save();
-  ctx.globalCompositeOperation = "source-over";
-  ctx.globalAlpha = Math.min(1, alpha * 3) * reveal;
-  ctx.shadowColor = effect.color;
-  // 3D mode: halve the halo glow — the painted wheel carries its own values,
-  // and the old glow + bloom washed the face to a soft gold disc.
-  const dressedHalo = cinema3dDressingActive();
-  if (!killResting) {
-    ctx.shadowBlur = (effect.landed ? 22 : 12) * (dressedHalo ? 0.5 : 1);
-    ctx.strokeStyle = effect.color;
-    ctx.lineWidth = (effect.landed ? 6 : 3) * (dressedHalo ? 0.6 : 1);
-    ctx.beginPath();
-    ctx.arc(0, 0, Math.max(effect.width, effect.height) * (.58 + (1 - alpha) * .08), 0, Math.PI * 2);
-    ctx.stroke();
-  } else {
-    ctx.shadowBlur = 0;
-    ctx.globalAlpha *= 0.92;
-  }
-  ctx.save();
-  ctx.scale(effect.phase === "kill" ? 1.24 : 1.12, effect.phase === "kill" ? 1.24 : 1.12);
-  drawThrowable(effect, state.simulationTick * 1000 / SIMULATION_HZ, alpha);
-  ctx.restore();
-  // The floating world-space focus label collides with the fatality banner
-  // (and with the money shot itself) — dropped for every renderer once the
-  // fatality is triggered.
-  if (!(killResting || (cinema3dDressingActive() && state.finisher?.fatalityTriggered))) {
-    ctx.globalAlpha = Math.min(1, alpha * 4);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.font = "1000 13px Arial Narrow, Arial, sans-serif";
-    ctx.lineWidth = 5;
-    ctx.strokeStyle = "rgba(0,0,0,.92)";
-    ctx.fillStyle = "#fff0df";
-    const focusLabel = `${effect.name} · ${effect.phase.toUpperCase()}`;
-    ctx.strokeText(focusLabel, 0, -Math.max(38, effect.height * .72));
-    ctx.fillText(focusLabel, 0, -Math.max(38, effect.height * .72));
-  }
+  const limits={pizza:115,mouse:66,loogie:55,wires:105,xacto:100,golfball:30,bedbugs:90,vinyl:100,cane:140,needle:85,bottle:65,pigeon:90,tongs:90,cup:60,brick:75,charm:70};
+  const scale=Math.min(1,(limits[effect.style]||100)/Math.max(effect.width,effect.height));
+  ctx.save();ctx.globalCompositeOperation='source-over';ctx.globalAlpha=Math.min(1,alpha*3);ctx.shadowBlur=0;
+  drawThrowable({...effect,width:effect.width*scale,height:effect.height*scale},state.simulationTick*1000/SIMULATION_HZ,alpha);
   ctx.restore();
 }
 
 function drawProjectileFocusBurst(effect, alpha) {
+  if(effect.phase!=="kill")return;
   const growth = 1 - alpha;
   const radius = (effect.phase === "kill" ? 86 : 52) + growth * (effect.phase === "kill" ? 240 : 145);
   // 3D mode + pizza/vinyl: the burst's energy stays OUTSIDE the painted
@@ -32954,7 +32517,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.2-cats");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.3-props");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34446,7 +34009,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.2-ringside",
+  version: "5.7.3-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
