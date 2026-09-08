@@ -33681,6 +33681,8 @@ const moveViewer = createMoveViewer({
   const banks = ['base','specials','motion','motion2','motion3','walk','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','painted-flow',
     ...INBETWEEN_BANKS.map(companionBank),'inbetween-approach'];
   await Promise.all(banks.map(bank => paletteAtlas(id,0,bank)?.decode?.().catch(()=>{})));
+  // Padded atlases have no decode method; wait for their source-image jobs too.
+  await Promise.all([...authoredDecodeState].filter(([key])=>key.startsWith(id+":" )).map(([,entry])=>entry.promise));
   return fighter;
  },
  move: (fighter, action, context) => createFighterMove(fighter.kitId, action, context),
