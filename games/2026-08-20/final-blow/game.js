@@ -1,3 +1,5 @@
+import {hitRegion,victoryCell} from "./engine/combat-presentation.mjs";
+import {FOOTWORK_BANK,FOOTWORK_FIGHTERS,createFootworkSelector} from "./engine/painted-footwork.mjs";
 import {BRIDGE_BANK,BRIDGE_FIGHTERS,createBridgeSelector} from "./engine/painted-bridges.mjs";
 import {STRIKE_ANCHORS,projectStrikeTip} from "./engine/strike-anchors.mjs";
 import {createMoveViewer} from "./engine/move-viewer.mjs";
@@ -1049,7 +1051,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.0` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.1` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1391,6 +1393,8 @@ function specialsGenerationPose(fighterId, pose) {
 // ---------------------------------------------------------------------------
 const fighterUnifiedAtlases = {};
 const paintedFlowAtlases = {};
+const footworkAtlases = {};
+const selectFootwork = createFootworkSelector();
 const bridgeAtlases = {};
 const selectBridge = createBridgeSelector();
 const paintedFlowAvailability = new WeakMap();
@@ -1439,6 +1443,11 @@ function withInbetween(fighter, pose) {
   return selected.artBank ? {...selected, artScale: INBETWEEN_SCALE[`${fighter.def.id}-${pose.bank}`]?.[pose.frame] || 1} : selected;
 }
 
+function ensureFootworkAtlas(id) {
+ if(!FOOTWORK_FIGHTERS.includes(id))return null;
+ if(!footworkAtlases[id]){const image=new Image();image.src=`assets/footwork/${id}-v1.webp`;footworkAtlases[id]=image;image.decode().catch(()=>{});}
+ return footworkAtlases[id];
+}
 function ensureBridgeAtlas(id) {
  if(!BRIDGE_FIGHTERS.includes(id))return null;
  if(!bridgeAtlases[id]){const image=new Image();image.src=`assets/bridges/${id}-v1.webp`;bridgeAtlases[id]=image;image.decode().catch(()=>{});}
@@ -1752,7 +1761,7 @@ function motionBankCellDrawable(fighterId, cell, bank) {
 function preloadAuthoredBanks(fighterIds) {
   const ids = (fighterIds || []).filter((id) => typeof id === "string" && id);
   if (!ids.length) return;
-  for (const id of ids) { approachReady(id); ensurePaintedFlowAtlas(id); ensureBridgeAtlas(id); for (const bank of INBETWEEN_BANKS) ensureInbetweenAtlas(id, bank); }
+  for (const id of ids) { approachReady(id); ensureFootworkAtlas(id); ensurePaintedFlowAtlas(id); ensureBridgeAtlas(id); for (const bank of INBETWEEN_BANKS) ensureInbetweenAtlas(id, bank); }
   ensureMotionManifest();
   ensureMotion2Manifest();
   ensureMotion3Manifest();
@@ -2149,6 +2158,7 @@ let pendingPalettes = [0, 0];
 // shipped generation kept as the specials bank's per-cell fallback remaps,
 // silhouettes and builds a 3D texture like any other sheet (v5.3).
 function altAtlasSource(fighterId, bank) {
+  if(bank===FOOTWORK_BANK)return {image:footworkAtlases[fighterId],key:`${fighterId}:${bank}`};
   if(bank===BRIDGE_BANK)return {image:bridgeAtlases[fighterId],key:`${fighterId}:${bank}`};
   if (bank.startsWith("inbetween-")) return {image: inbetweenAtlases[`${fighterId}:${bank}`], key: `${fighterId}:${bank}`};
   if (bank === PAINTED_FLOW_BANK) return { image: paintedFlowAtlases[fighterId], key: `${fighterId}:${bank}` };
@@ -2194,7 +2204,7 @@ function ensureAltAtlas(fighterId, bank = "base") {
 
 /** The atlas a side should draw from, alt palette applied when selected. */
 function paletteAtlas(fighterId, side, bank = "base") {
-  const base = bank===BRIDGE_BANK ? bridgeAtlases[fighterId] : bank.startsWith("inbetween-") ? inbetweenAtlases[`${fighterId}:${bank}`] : bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
+  const base = bank===FOOTWORK_BANK ? footworkAtlases[fighterId] : bank===BRIDGE_BANK ? bridgeAtlases[fighterId] : bank.startsWith("inbetween-") ? inbetweenAtlases[`${fighterId}:${bank}`] : bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
     ? fighterMoveAtlases[fighterId] || fighterAtlases[fighterId]
     // v5.3: the shipped specials generation, kept as the bank's per-cell
     // fallback; its own sheet, then the 5.3 sheet, then the combat atlas.
@@ -8686,6 +8696,7 @@ function makeFighter(index, side, overrideDef = null) {
     // data — it chooses a drawing, never a sim outcome — so it is snapshotted
     // with lastHitResult and stays out of the combat checksum like it.
     lastHitLevel: "",
+    lastHitRegion: "",
     lastHitHeavy: false,
     lastImpactTick: -Infinity,
     hitFlash: 0,
@@ -12133,7 +12144,7 @@ const rollbackPresentationFighterFields = new Set([
   // stays out of the combat checksum exactly as walkTime always has.
   "animTime", "walkTime", "strideTime", "hitFlash", "specialGlow", "cinematicFrame", "cinematicRotation", "cinematicScale", "lastHitResult",
   // v5.1: the last contact's level, same class of field as lastHitResult.
-  "lastHitLevel", "lastHitHeavy", "lastImpactTick",
+  "lastHitLevel", "lastHitRegion", "lastHitHeavy", "lastImpactTick",
 ]);
 
 function cloneRollbackValue(value) {
@@ -18114,6 +18125,7 @@ function triggerPaintTrap(trap, victim) {
   victim.vx = owner.facing * trap.push * (blocked ? 0.26 : 1);
   victim.lastHitResult = blocked ? "blocked-low-trap" : "paint-trap";
   victim.lastHitLevel = ATTACK_LEVELS.LOW;
+  victim.lastHitRegion = "legs";
   victim.lastHitHeavy = false;
   victim.lastImpactTick = state.simulationTick;
   victim.hitFlash = 0.13;
@@ -18412,6 +18424,7 @@ function triggerProjectile(projectile, victim) {
   const resultKind = projectile.style === "feedback" ? "feedback-echo" : "projectile";
   victim.lastHitResult = blocked ? `blocked-${projectile.level}-${resultKind}` : armored ? "armor" : counter ? `counter-${resultKind}` : projectile.style === "feedback" ? "feedback-echo" : `${projectile.level}-projectile`;
   victim.lastHitLevel = projectile.level;
+  victim.lastHitRegion = hitRegion(projectile,victim,projectile);
   victim.lastHitHeavy = (projectile.damage || 0) >= 12;
   victim.lastImpactTick = state.simulationTick;
   victim.hitFlash = 0.13;
@@ -19258,6 +19271,7 @@ function triggerSouthpawCounter(counterFighter, incomingFighter, incomingAttack,
   incomingFighter.vy = stance.counterLaunchVelocityY;
   incomingFighter.lastHitResult = "southpaw-countered";
   incomingFighter.lastHitLevel = ATTACK_LEVELS.MID;
+  incomingFighter.lastHitRegion = "head";
   incomingFighter.lastHitHeavy = true;
   incomingFighter.lastImpactTick = state.simulationTick;
   incomingFighter.hitFlash = 0.17;
@@ -19483,6 +19497,7 @@ function hit(attacker, victim, attack, collision) {
     : blocked ? (perfect ? "perfect-guard" : `blocked-${attack.level}`)
       : armored ? "armor" : counter ? "counter" : attack.level;
   victim.lastHitLevel = attack.level;
+  victim.lastHitRegion = hitRegion(attack,victim,collision?.point);
   victim.lastHitHeavy = attack.kind !== "light";
   victim.lastImpactTick = state.simulationTick;
   if (!blocked && !armored) {
@@ -22102,7 +22117,9 @@ function fighterAnimationPose(fighter) {
   }
   const bridgeImage=ensureBridgeAtlas(fighter.def.id);
   const bridge=selectBridge(fighter,Boolean(bridgeImage?.complete&&bridgeImage.naturalWidth),Boolean(flowAtlas?.complete&&flowAtlas.naturalWidth));
-  const pose = bridge || withInbetween(fighter, flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung));
+  const footworkImage=ensureFootworkAtlas(fighter.def.id);
+  const footwork=selectFootwork(fighter.preview?fighter:state.fighters[fighter.side],fighter,fighter.preview?fighter.previewTick:state.simulationTick,Boolean(footworkImage?.complete&&footworkImage.naturalWidth));
+  const pose = footwork || bridge || withInbetween(fighter, flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung));
   recordPoseTrace(fighter, pose);
   return pose;
 }
@@ -22387,7 +22404,7 @@ function fighterPoseDescriptor(fighter) {
     // own second drawings (engine/bookends roundWinShowcaseCell).
     if (winner) {
       const hold = roundWinHoldSeconds();
-      return showcasePoseDescriptor(fighter, roundWinShowcaseCell(showcasePick(), hold - state.phaseTime, hold));
+      return showcasePoseDescriptor(fighter, victoryCell(fighter.def.id, hold - state.phaseTime));
     }
   }
   // MOTION FIX 4 + 11: victim REACTION TRACKS through the scripted super
@@ -24858,7 +24875,7 @@ function downTiltFor(fighterId, bank, frame) {
 }
 
 function bankSheetAdjust(fighterId, bank) {
-  if (bank === BRIDGE_BANK) return UNIFIED_SHEET_ADJUST[fighterId] || 1;
+  if (bank === BRIDGE_BANK || bank === FOOTWORK_BANK) return UNIFIED_SHEET_ADJUST[fighterId] || 1;
   if (bank === PAINTED_FLOW_BANK) return PAINTED_FLOW_SCALE[fighterId] || 1;
   if (bank === "specials") return MOVE_SHEET_ADJUST[fighterId] || 1;
   if (bank === SPECIALS_LEGACY_BANK) return MOVE_SHEET_LEGACY_ADJUST[fighterId] || 1;
@@ -25147,7 +25164,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   fighter = renderFighter(fighter);
   const jump = FLOOR - fighter.y;
   const pose = presentationPose(fighterAnimationPose(fighter));
-  const authoredStrike = pose.bank === PAINTED_FLOW_BANK || pose.bank === BRIDGE_BANK || (fighter.grounded && fighter.attacking
+  const authoredStrike = pose.bank === PAINTED_FLOW_BANK || pose.bank === BRIDGE_BANK || pose.bank === FOOTWORK_BANK || (fighter.grounded && fighter.attacking
     && fighter.attacking.limb !== "kick" && ["light", "heavy"].includes(fighter.attacking.kind)
     && !fighter.attacking.animation && !fighter.attacking.advanceSpeed);
   const attack = fighter.attacking;
@@ -32955,7 +32972,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.0-painted2");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.1-footwork");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33692,7 +33709,7 @@ const moveViewer = createMoveViewer({
   const fighter = makeFighter(0, 0, def);
   fighter.preview = true; fighter.previewTick = 0;
   await ensureUnifiedManifest();
-  const banks = ['base','specials','motion','motion2','motion3','walk','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','painted-flow',BRIDGE_BANK,
+  const banks = ['base','specials','motion','motion2','motion3','walk','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','painted-flow',BRIDGE_BANK,FOOTWORK_BANK,
     ...INBETWEEN_BANKS.map(companionBank),'inbetween-approach'];
   await Promise.all(banks.map(bank => paletteAtlas(id,0,bank)?.decode?.().catch(()=>{})));
   // Padded atlases have no decode method; wait for their source-image jobs too.
@@ -34447,7 +34464,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.0-ringside",
+  version: "5.7.1-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

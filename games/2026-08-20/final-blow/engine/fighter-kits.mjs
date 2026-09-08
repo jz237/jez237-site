@@ -2714,7 +2714,7 @@ export const CELL_FLOOR_OFFSET = Object.freeze({
 
 /** Downward shift, in cell pixels of 320, that plants this cell's content. */
 export function cellFloorOffset(fighterId, bank, frame) {
-  if(bank==="painted-bridges")return 4;
+  if(bank==="painted-bridges"||bank==="painted-footwork")return 4;
   return CELL_FLOOR_OFFSET[fighterId]?.[bank]?.[frame] || 0;
 }
 

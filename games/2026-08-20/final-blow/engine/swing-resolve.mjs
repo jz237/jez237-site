@@ -12,6 +12,7 @@
 // bank-routed drawable gate exactly as resolveMotionPose takes it.
 // ---------------------------------------------------------------------------
 import {
+  UNIFIED_EXT4_BANK, UNIFIED_EXT4_CELLS,
   UNIFIED_EXT3_BANK,
   UNIFIED_EXT3_CELLS,
   swingSubstitute,
@@ -85,7 +86,8 @@ export function swingContext(fighter, { roundDecided = false } = {}) {
     //             knockdown drawing once he is down. Never a plain
     //             knockdown's cell, so the wake-up chain is untouched.
     bodyBlow: fighter.hitstunFrames > 0
-      && (Boolean(fighter.crouch) || fighter.lastHitLevel === ATTACK_LEVELS.LOW),
+      && (fighter.lastHitRegion?fighter.lastHitRegion==='body':Boolean(fighter.crouch) || fighter.lastHitLevel === ATTACK_LEVELS.LOW),
+    legHit: fighter.hitstunFrames>0 && fighter.grounded && !fighter.down && !fighter.pendingKnockdown && fighter.lastHitRegion==='legs',
     reeling: (fighter.dizzyFrames > 0 && fighter.dizzyFrames > (fighter.dizzyTotalFrames || STUN_RULES.dizzyFrames) - REEL_ONSET_TICKS)
       || (fighter.guardCrushFrames > 0 && fighter.guardCrushFrames > (fighter.guardCrushTotalFrames || GUARD_RULES.crushFrames) - REEL_ONSET_TICKS),
     ko: Boolean(roundDecided) && fighter.health <= 0,
@@ -119,7 +121,7 @@ export function swingContext(fighter, { roundDecided = false } = {}) {
  * stands untouched, so timing never changes.
  */
 export function swingResolve(pose, ctx, drawable) {
-  let sub = swingSubstitute(pose.bank, pose.frame, ctx);
+  let sub = ctx.legHit?{bank:UNIFIED_EXT4_BANK,frame:UNIFIED_EXT4_CELLS.crumple}:swingSubstitute(pose.bank, pose.frame, ctx);
   // A crouching normal's active window has no motion cell at all (it draws a
   // base cell); the crouch extension / sweep stand in for it directly.
   if (!sub && ctx.crouchActive && pose.bank === "base") {

@@ -85,7 +85,7 @@ function testContextFromSnapshot() {
   assert.deepEqual(swingContext(snapshot()), {
     limb: "punch", heavy: false, crouching: false, attacking: false, airborne: false,
     victimAirborne: false, falling: false, crouchActive: false,
-    bodyBlow: false, reeling: false, ko: false, blocking: false, swayBeat: false,
+    bodyBlow: false, legHit: false, reeling: false, ko: false, blocking: false, swayBeat: false,
   });
   // v5.2: the dizzy loop's beat — 12-tick parity of the ELAPSED dizzy /
   // guard-crush clock; the reel owns the first beat (the table checks it

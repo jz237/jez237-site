@@ -636,7 +636,7 @@ export function decideAiIntent(brain, {
     const feint=feintIntent(brain,self,observation,frame,mixRoll(roll,51),context.timeRemaining);
     if(feint)return feint;
     const strategy=strategicIntent({id:fighterId,self,opponent:observation,frame,
-      timeRemaining:context.timeRemaining,roll:mixRoll(roll,46),until:brain.exchangeUntil});
+      timeRemaining:context.timeRemaining,roll:mixRoll(roll,46),until:brain.exchangeUntil,previousMovement:brain.intent?.movement});
     if(strategy)return strategy;
   }
 

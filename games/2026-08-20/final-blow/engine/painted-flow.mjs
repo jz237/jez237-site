@@ -1,3 +1,4 @@
+import {recoveryProgress} from "./combat-presentation.mjs";
 // Authored eight-pose standing normals. Frame selection never changes combat timing.
 export const PAINTED_FLOW_BANK = "painted-flow";
 export const PAINTED_FLOW_FIGHTERS = ["jez", "benny", "alan", "ali", "commissioner", "cyraxx", "deathblow", "devil", "donald", "post"];
@@ -18,7 +19,7 @@ export function paintedFlowPose(fighter) {
   const recovery = kick ? [13, 14, 15] : [5, 6, 7];
   const cell = frame < start ? startup[Math.min(3, Math.floor(Math.max(0, frame - 1) / Math.max(1, start - 1) * 4))]
     : frame < end ? active
-    : recovery[Math.min(2, Math.floor((frame - end) / Math.max(1, total - end) * 3))];
+    : recovery[Math.min(2, Math.floor(recoveryProgress(fighter,(frame - end) / Math.max(1, total - end)) * 3))];
   return { bank: PAINTED_FLOW_BANK, frame: cell };
 }
 
