@@ -1,5 +1,93 @@
 [
   {
+    "id": "2026-09-08-factual-infographic-factual-infographic-hagfish-slime-a-fib",
+    "title": "Factual infographic: Hagfish Slime — A Fiber Net in Seawater",
+    "tests": "Tuesday general factual infographic; evidence-verified two-component deployment mechanism; direct-canvas orthographic layout; central whole-hagfish and slime-gland cutaway; five-stage hydration-versus-mixing sequence; two microscopy windows; network cross-section; defense context; scale ladder; no unsupported numbers; independent Claude Opus 5 pixel QA PASS.",
+    "prompt": "Create a finished square museum-quality factual infographic titled “HAGFISH SLIME: A FIBER NET IN SEAWATER.” The image canvas itself is the infographic: straight-on, orthographic, edge-to-edge 2D editorial information design, with no paper edge, poster, frame, wall, room, desk, screen, hands, tools, cast shadow, or surrounding environment.\n\nMake the stop-scroll anchor a large naturalistic Atlantic hagfish in cool deep-sea blue-gray water, occupying the center-left, with visible rows of lateral slime pores and one integrated anatomical cutaway into a slime gland. From that cutaway, show a continuous, clearly causal transformation into a translucent pearl-white fibrous slime cloud in seawater. Use authoritative marine-biology illustration and photorealistic macro detail, restrained labels, strong hierarchy, and a palette of graphite gray, cold teal, pearl white, translucent aqua, and small coral-orange accents.\n\nBuild these specific information layers:\n1. CENTRAL CUTAWAY — whole hagfish → lateral pore → slime gland → two stored components. Label only: “THREAD SKEINS” and “MUCIN VESICLES.”\n2. FIVE-STAGE DEPLOYMENT RIBBON — “THREAT” → “EXUDATE RELEASED” → “VESICLES HYDRATE AND RUPTURE” → “MIXING HELPS SKEINS UNCOIL” → “FIBROUS HYDROGEL TRAPS SEAWATER.” Use large, visually distinct sequential vignettes, not prose.\n3. TWO LARGE MICROSCOPY WINDOWS — one tightly coiled protein thread skein; one cluster of mucin-containing vesicles. Show them as different biological structures, not generic bubbles.\n4. UNCOILING MECHANISM — a three-frame close-up where moving seawater and stretched mucus strands transmit mixing forces while one skein opens into a long thread. Make clear that water exposure hydrates mucus while agitation helps deploy the thread; do not imply that water alone explains every step.\n5. NETWORK CROSS-SECTION — unraveled protein threads form a sparse load-bearing mesh while hydrated mucus occupies the spaces and the combined network holds seawater. Label “THREAD NETWORK + HYDRATED MUCUS.”\n6. DEFENSE CONTEXT — a concise non-gory vignette of an attacking fish pulling away as slime interferes around its mouth and gills; no injury, no monster styling.\n7. SCALE LADDER — whole body → pore row → gland → skein and vesicle, using silhouettes and magnification circles without unsupported measurements.\n8. TWO-COMPONENT COMPARISON — small paired swatches: “SKEINS: COILED PROTEIN THREADS” and “VESICLES: MUCIN CARGO.”\n\nAll factual relationships and every visible label must stay within those statements. Keep text minimal and readable, with no bibliography, URLs, invented numbers, laboratory protocol, universal claims, brand marks, QR codes, decorative charts, fantasy glow, animal harm, or sensational language. The decisive story should be obvious at thumbnail size: two stored microscopic components deploy through seawater and mixing into one expanding defensive fiber-and-mucus network.",
+    "image": "images/2026-09-08-factual-infographic-factual-infographic-hagfish-slime-a-fib.jpg",
+    "thumb": "thumbs/2026-09-08-factual-infographic-factual-infographic-hagfish-slime-a-fib.webp",
+    "color": "#61788f",
+    "date": "2026-09-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How hagfish slime deploys thread skeins and mucin in seawater to form a defensive fibrous hydrogel",
+      "description": "A direct-canvas marine-biology infographic shows how coiled protein thread skeins and mucin vesicles deploy in seawater into a water-trapping defensive slime network.",
+      "sourceNote": "University of Guelph — Hagfish: ‘They’re Gross, but They’re Really Neat Too.’ https://news.uoguelph.ca/2010/07/hagfish-theyre-gross-but-theyre-really-neat-too/ ; Scientific Reports — Effect of ionic strength and seawater cations on hagfish slime formation https://www.nature.com/articles/s41598-018-27975-0 . Verified scope: component identity, water-triggered mucin release, mixing-assisted skein deployment, fibrous hydrogel formation, and defensive function.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-08T04:27:20Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "University of Guelph",
+            "title": "Hagfish: ‘They’re Gross, but They’re Really Neat Too.’",
+            "sourceType": "university",
+            "url": "https://news.uoguelph.ca/2010/07/hagfish-theyre-gross-but-theyre-really-neat-too/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Scientific Reports",
+            "title": "Effect of ionic strength and seawater cations on hagfish slime formation",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s41598-018-27975-0"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Hagfish release defensive slime exudate from rows of glands or pores along the sides of the body when provoked or attacked.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The exudate has two major functional components: coiled protein thread skeins and mucin-containing vesicles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "On contact with water, mucin vesicles swell, rupture, and release mucus.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Agitation and mixing stretch mucin strands and help transmit forces that rapidly unravel the coiled thread skeins; adding water alone does not fully explain deployment.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The hydrated mucus and unraveled protein-thread network together form a coherent fibrous hydrogel that traps seawater.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hagfish slime functions in defense and can interfere with the mouth and gills of attacking fish.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A body-to-pore-to-gland-to-skein-and-vesicle scale sequence accurately represents where the stored slime components originate and how they enter seawater.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-06-outer-space-exploration-outer-space-exploration-triton-nitr",
     "title": "Outer space exploration: Triton Nitrogen-Geyser Traverse",
     "tests": "Sunday outer-space journey space image 2/4 and daily quota 2/6; scheduled_slot=2; fired run approximately 08:20 ET; selected entry: Outer Space Exploration: Triton Nitrogen-Geyser Traverse; distance/scale: outer solar system, human-scale robotic fieldwork on Triton beneath planet-scale Neptune, advancing outward after today’s Solar Polar Sail Observatory; phenomenon: one cold dark nitrogen-geyser plume rising from a fissure, bending into a wind-sheared fan and leaving a coherent downwind deposit; observation status: scientifically informed realistic artist impression, not literal mission photography; reality status: Triton, Neptune, nitrogen frost and Voyager-observed dark plumes are real subjects, while this exact rover, mission, sampling action, viewpoint and specific geyser mechanism are explicitly fictional or interpretive; craft: exactly one compact eight-wheel cryogenic rover with grounded articulated wheels, protected sampler, stereo navigation, infrared spectrometer, particle counter, protected inlet, high-gain dish, radioisotope power, insulation, radiators and credible maintenance hardware; mission: cautious fresh-fallout sampling at safe standoff; capture: independent very-low 24 mm virtual expedition camera, weak distant sunlight, near-black sky, crisp vacuum-like shadows, restrained peach/lavender frost and cobalt Neptune; anti-repeat: Triton surface plume sampling rather than today’s solar polar-sail observatory or recent Io plume flyby, Phobos seismic relay, Saturn ring-rain skimmer, Titan sea buoy, generic nebula, galaxy, black-hole disk, astronaut silhouette or interchangeable spacecraft. Generated exactly once via synchronous openai/gpt-image-2 CLI; exact same-run non-empty 1536x1024 PNG provenance verified; byte-identical hard-link QA mirror inspected at full resolution by Claude Opus 5; strict actual-pixel QA PASS for exactly one coherent rover, eight-wheel bogie structure, complete sampler contact, one cold vertical-to-sheared plume, aligned dark deposit, Triton color/terrain, integrated Neptune, near-vacuum lighting, clear mission causality, depth, composition and absence of text, logos, astronauts, extra craft, hot volcanism, fantasy effects, malformed hardware or generic space imagery; reviewer noted only non-dispositive tight rover contact shading and partial far-wheel occlusion.",
