@@ -11970,5 +11970,102 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-08-factual-infographic-factual-infographic-nautilus-the-living",
+    "title": "Factual infographic: Nautilus — The Living Buoyancy Spiral",
+    "tests": "Tuesday general factual infographic; quota slot 3/6; selected and rewritten deck entry: Nautilus Buoyancy Spiral; exact topic verified unique against the complete factual archive; direct-canvas orthographic museum information design; dominant Nautilus pompilius spiral-shell cutaway; outermost living chamber and older gas-liquid chambers; siphuncle ion-transport and osmosis sequence; paired more-gas/more-lift versus more-liquid/less-lift sections; gas-transfer inset; shell-growth strip; buoyancy-versus-head-siphon jet-propulsion comparison; cautious submarine-ballast analogy; no unsupported exact numbers; independent Claude Opus 5 full-resolution pixel QA PASS with correct anatomy, coherent causal arrows, readable critical labels, no mockup framing, pseudo-text, logos, or watermarks.",
+    "prompt": "Create one finished 1024x1024 factual infographic titled “NAUTILUS: THE LIVING BUOYANCY SPIRAL,” explaining the real-world, non-fiction anatomy and physics of how a chambered nautilus regulates buoyancy. Render the generated canvas itself as a polished museum-quality information design: perfectly front-facing, orthographic, straight-on, and edge-to-edge, with no visible paper edge, poster, page, placard, frame, border, cast shadow around the whole composition, wall, room, screen, desk, tools, hands, specimen tray, or environmental staging outside the designed layout. Use concise authoritative editorial typography, short readable labels, precise leader lines, and no dense paragraphs.\n\nMake the stop-scroll visual anchor an enormous photorealistic chambered nautilus, Nautilus pompilius, spanning the center, with half of its striped pearly shell opened as a clean anatomical cutaway. Clearly show the animal occupying only the large outermost living chamber, while the older sealed chambers form a luminous spiral behind it. Thread one continuous narrow tube of living tissue—the SIPHUNCLE—through the older chambers. In several chambers show different proportions of pale-blue liquid and transparent gas space, with crisp meniscus lines. Keep the animal anatomically credible: natural hood, pinhole eye, many slender suckerless tentacles, mantle, and a separate funnel-like head SIPHON for jet swimming.\n\nBuild at least ten concrete information layers around and within the central spiral:\n1. The dominant whole-animal shell cutaway labeled LIVING CHAMBER, OLDER CHAMBERS, SEPTA, GAS SPACE, CHAMBER LIQUID, and SIPHUNCLE.\n2. A four-step “MORE LIFT” sequence: IONS MOVE OUT OF CHAMBER FLUID → OSMOSIS DRAWS WATER TOWARD SIPHUNCULAR TISSUE → LIQUID VOLUME FALLS AND GAS SPACE EXPANDS → OVERALL DENSITY FALLS, BUOYANCY INCREASES.\n3. A mirrored three-step “LESS LIFT” sequence: IONS MOVE INTO CHAMBER FLUID → WATER ENTERS BY OSMOSIS → MORE LIQUID RAISES OVERALL DENSITY AND REDUCES BUOYANCY.\n4. Two large paired chamber cross-sections, MORE GAS / MORE LIFT and MORE LIQUID / LESS LIFT, using identical chamber geometry so the change is unmistakable.\n5. A large siphuncle macro window showing living tissue crossing one septum, ion symbols moving across the tissue boundary, and water arrows following the osmotic gradient; keep this qualitative, not a cellular protocol.\n6. A gas-transfer inset showing dissolved gas diffusing into a lower-pressure chamber and coming out of solution as the gas space expands; use only a few restrained bubbles and no invented gas percentages.\n7. A shell-growth strip: SMALLER JUVENILE SHELL → NEW LARGER CHAMBER FORMS AT THE OPEN END → ANIMAL MOVES FORWARD → OLD LIVING SPACE BECOMES PART OF THE CHAMBERED SPIRAL.\n8. A bold comparison panel, BUOYANCY IS NOT STEERING: shell chambers regulate lift and trim, while the separate head siphon expels water for directional jet swimming. Show the siphuncle and siphon in different colors and never connect them.\n9. A habitat context vignette showing a naturally striped nautilus holding level beside an Indo-Pacific reef slope, with a subtle up/down water-column arrow and no exact depth numbers.\n10. A cautious engineering analogy: NAUTILUS versus SUBMARINE BALLAST, showing that both alter density, but the nautilus uses living tissue, ion transport, and osmosis rather than a rapid flood valve.\n11. A compact accuracy panel: “BUOYANCY ADJUSTMENT IS CONTROLLED AND GRADUAL; JET PROPULSION PROVIDES MOVEMENT.”\n\nUse a distinctive spiral-led editorial architecture unlike the earlier vertical atmosphere and insect-macro infographics: let the shell spiral organize the information flow, with “more lift” following an outward cyan arc and “less lift” following an inward coral arc. Place paired chamber sections at upper right, siphuncle macro at lower left, shell growth along the bottom, and the buoyancy-versus-steering comparison in a clear lower-right block. Palette: pearly cream, shell umber stripes, abyssal navy, marine teal, pale chamber cyan, warm coral for inward water, soft gold for ion transport, and restrained white typography. Photorealistic shell nacre, living tissue, seawater, tentacles, and reef imagery may appear only as content inside the direct infographic.\n\nAccuracy constraints: among living cephalopods the nautilus has an external chambered shell; the animal occupies the outermost living chamber; older chambers are linked by a living siphuncle; active ion transport establishes osmotic gradients that move chamber water; changing the balance of chamber liquid and gas changes overall density and buoyancy; gas can diffuse into the lower-pressure chamber as liquid is removed; the reverse process increases chamber liquid and reduces buoyancy; as the animal grows it builds a new larger living chamber and leaves older chambers behind; directional swimming is separate jet propulsion through the head siphon. Keep all relationships qualitative. Do not claim instantaneous ascent or descent, perfect neutral buoyancy, a rapid daily pump cycle, exact chamber counts, exact depths, exact pressures, exact rates, universal gas composition, or that the shell works exactly like a submarine tank.\n\nNo physical poster or chart mockup, paper texture, room staging, exhibit case, aquarium-window frame around the whole layout, classroom worksheet, dense prose, tiny citations, URLs, bibliography, fake measurements, equations, logo, QR code, watermark, pseudo-text, fantasy anatomy, ammonite reconstruction, octopus suckers, cartoon shell, glowing sci-fi controls, rapid flood-valve depiction, or confusion between SIPHUNCLE and SIPHON. The finished image must be the infographic itself and must make the shell-chamber buoyancy mechanism unmistakable at thumbnail size.",
+    "image": "images/2026-09-08-factual-infographic-factual-infographic-nautilus-the-living.jpg",
+    "thumb": "thumbs/2026-09-08-factual-infographic-factual-infographic-nautilus-the-living.webp",
+    "color": "#405665",
+    "date": "2026-09-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How the chambered nautilus controls buoyancy with its siphuncle and shell chambers",
+      "description": "A direct-canvas anatomy and physics infographic showing how ion transport, osmosis, chamber liquid, and gas change a chambered nautilus's overall density while a separate head siphon provides directional jet propulsion.",
+      "sourceNote": "Verified against Australian Museum, 'Chambered Nautilus' (https://australian.museum/learn/animals/molluscs/chambered-nautilus/), for shell chambers, siphuncle anatomy, buoyancy role, growth, habitat, and jet propulsion; and Biomimicry Institute AskNature, 'Siphuncle Controls Buoyancy' (https://asknature.org/strategy/siphuncle-controls-buoyancy/), for ion transport, osmosis, chamber liquid/gas exchange, density change, and the cautious ballast analogy. Claims are qualitative and variation-aware; no unsupported exact rates or thresholds are asserted.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-08T12:29:17Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Australian Museum",
+            "title": "Chambered Nautilus",
+            "sourceType": "museum",
+            "url": "https://australian.museum/learn/animals/molluscs/chambered-nautilus/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Biomimicry Institute — AskNature",
+            "title": "Siphuncle Controls Buoyancy",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://asknature.org/strategy/siphuncle-controls-buoyancy/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Among living cephalopods, the nautilus has an external chambered shell, and the animal occupies the outermost living chamber.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Older shell chambers are connected by a tube of living tissue called the siphuncle.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The siphuncle regulates the relative volumes of liquid and gas in the shell chambers, changing the animal's overall density and buoyancy.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Active ion transport creates osmotic gradients that move water between chamber liquid and siphuncular tissue.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "When ions and then water leave a chamber, its gas space expands; dissolved gases diffuse into the lower-pressure chamber and come out of solution, reducing overall density and increasing buoyancy.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The reverse process increases chamber liquid, increases overall density, and reduces buoyancy.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "As a nautilus grows, it adds a new larger living chamber and leaves older chambers behind within the spiral shell.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Buoyancy regulation sets lift or trim, while directional swimming is produced separately by jet propulsion through a siphon near the head.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A simplified submarine-ballast comparison is useful, but the nautilus moves chamber liquid through living siphuncular tissue rather than opening a flood valve.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
