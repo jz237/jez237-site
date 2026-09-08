@@ -376,6 +376,16 @@ export function sampleFinisher(keys, elapsed) {
   };
 }
 
+// Preserve the camera midpoint and the authored beats while leaving room for
+// two complete painted torsos, including the victim's sideways impact poses.
+export function spaceFinisherPose(pose) {
+  const gap = pose.vx - pose.ax;
+  const required = 170 + Math.min(45, Math.abs(pose.vr || 0) * 35);
+  if (gap >= required) return pose;
+  const correction = (required - gap) * .5;
+  return { ...pose, ax: pose.ax - correction, vx: pose.vx + correction };
+}
+
 /**
  * The descriptor the pose resolver hands on for a fighter inside a Final Blow:
  * the key's same-generation cell OVER the base cell the sim stored (the exact
