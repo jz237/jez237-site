@@ -33,19 +33,32 @@ export function createApproachSelector() {
   return (fighter, pose, ready) => {
     const a = fighter.attacking;
     if (!INBETWEEN_FIGHTERS.includes(fighter.def?.id) || !a) return pose;
-    if (!availability.has(a)) availability.set(a, ready);
-    if (!availability.get(a) || !ready || !['light','heavy'].includes(a.kind)
+    if (!availability.has(a)) availability.set(a, {
+      ready,
+      airborne: !fighter.grounded || a.cancelProfileId?.startsWith('air'),
+      crouch: fighter.crouch || a.cancelProfileId?.startsWith('crouch'),
+    });
+    const origin = availability.get(a);
+    if (!origin.ready || !ready || !['light','heavy'].includes(a.kind)
       || a.animation || a.superMove || fighter.hitstunFrames > 0 || fighter.grabbed
-      || fighter.cinematicFrame != null) return pose;
+      || fighter.blockstunFrames > 0 || fighter.wakeupFrames > 0 || fighter.down
+      || fighter.grabbing || fighter.dizzyFrames > 0 || fighter.cinematicFrame != null
+      || (origin.airborne && fighter.grounded)) return pose;
     const f = fighter.attackFrame, start = a.activeStartFrame, end = a.activeEndFrame;
     const total = a.totalFrames || Math.round(a.duration * 60);
     if (![f,start,end,total].every(Number.isFinite)) return pose;
     const preparation = f >= Math.max(1, Math.floor(start * .35)) && f < Math.floor(start * .75);
-    const recovery = f >= end + Math.floor((total-end)*.25) && f < end + Math.floor((total-end)*.55);
+    const settling = origin.airborne || origin.crouch;
+    const recoveryEnd = settling ? total - 1 : end + Math.floor((total-end)*.55);
+    const recovery = f >= end + Math.max(1, Math.floor((total-end)*(settling ? .2 : .25))) && f < recoveryEnd;
     if (!preparation && !recovery) return pose;
     const kick = a.limb === 'kick';
-    const crouch = fighter.crouch || a.cancelProfileId?.startsWith('crouch');
-    const artFrame = !fighter.grounded ? (kick ? 7 : 6) : crouch ? (kick ? 5 : 4)
+    const crouch = origin.crouch;
+    // Retraction must not play the extending fist/sweep a second time. These
+    // authored bookends also keep their own air/crouch registration metadata.
+    const settle = origin.airborne ? 8 : crouch ? 12 : null;
+    const artFrame = recovery && settle !== null ? settle
+      : origin.airborne ? (kick ? 7 : 6) : crouch ? (kick ? 5 : 4)
       : a.kind === 'heavy' ? (kick ? 14 : 13) : (kick ? 1 : 0);
     return {...pose, artBank:'inbetween-approach', artFrame};
   };

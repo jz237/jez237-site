@@ -4,9 +4,10 @@ export const PAINTED_FLOW_FIGHTERS = ["jez", "benny", "alan", "ali", "commission
 export function paintedFlowPose(fighter) {
   const a = fighter.attacking;
   if (!PAINTED_FLOW_FIGHTERS.includes(fighter.def?.id) || !a || !fighter.grounded
-    || fighter.crouch || a.cancelProfileId?.startsWith("crouch")
+    || fighter.crouch || a.cancelProfileId?.startsWith("crouch") || a.cancelProfileId?.startsWith("air")
     || !["light", "heavy"].includes(a.kind) || a.superMove || a.animation
-    || fighter.hitstunFrames > 0 || fighter.grabbed || fighter.cinematicFrame != null) return null;
+    || fighter.hitstunFrames > 0 || fighter.blockstunFrames > 0 || fighter.wakeupFrames > 0
+    || fighter.down || fighter.dizzyFrames > 0 || fighter.grabbing || fighter.grabbed || fighter.cinematicFrame != null) return null;
   const frame = fighter.attackFrame;
   const start = a.activeStartFrame, end = a.activeEndFrame;
   if (![frame, start, end].every(Number.isFinite)) return null;
