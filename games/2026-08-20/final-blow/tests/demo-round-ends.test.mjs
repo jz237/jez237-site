@@ -270,7 +270,7 @@ test("swing 1 is the authored kit table bit for bit; swing 0.3 swings less and n
 // ---------------------------------------------------------------------------
 
 test("game.js reaches the closer, the opener, the clock brain and the clock only through state.mode === \"demo\"", async () => {
-  const game = await readFile(join(gameRoot, "game.js"), "utf8");
+  const game = (await readFile(join(gameRoot, "game.js"), "utf8")).replace(/\r\n/g, "\n");
   // checkKnockout: the plan is asked for on the demo branch only, and only a
   // plain demo plan shortens the window / withholds the FINISH THEM promise.
   assert.match(game, /const plainDemoKo = state\.mode === "demo" && !demoPlanCloser\(winner\)\.finisher;/);

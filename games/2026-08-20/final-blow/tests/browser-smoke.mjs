@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'demo3dButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.6/);
-    assert.equal(title.version.text, 'VERSION 5.6.1');
+    assert.equal(title.version.text, 'VERSION 5.6.2');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.6.1-ringside');
+    assert.equal(title.engineVersion, '5.6.2-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -4001,6 +4001,33 @@ probe('demo-mode', async () => {
 // coverage ledger and on both fighters' state. The card boundary is NOT
 // pinned — the 5 s result hold is a wall-clock timer, so card 2 opens on a
 // wall-clock tick (measured: same rounds, ticks offset by the hold jitter).
+probe('cpu-tactics-matches', async () => {
+  await navigate(client, gameUrl);
+  const reasons = new Set();
+  for (const seed of [237,549,757,991,2372]) {
+    await evaluate(client, `window.__finalBlowQa.demo(${seed})`); await delay(1200);
+    const result = await evaluate(client, `(() => {
+      const qa=window.__finalBlowQa, engine=window.__finalBlowEngine;
+      const decisions=[-1,-1], reasons=new Set();
+      for(let tick=0;tick<7200;tick++) {
+        qa.step(1/60);
+        const s=engine.snapshot();
+        for(let side=0;side<2;side++) {
+          const ai=s.fighters[side].ai;
+          if(ai.lastDecisionFrame!==decisions[side]) {decisions[side]=ai.lastDecisionFrame;reasons.add(ai.intent.reason);}
+          if(!Number.isFinite(s.fighters[side].x)||!Number.isFinite(s.fighters[side].health))throw Error('Invalid CPU state');
+        }
+        if(qa.demoRounds().length) return {rounds:qa.demoRounds().length,reasons:[...reasons],fighters:s.fighters.map(f=>f.id)};
+      }
+      return {rounds:0,reasons:[...reasons]};
+    })()`);
+    assert.ok(result.rounds>0,`CPU match ${seed} must finish: ${JSON.stringify(result)}`);
+    for(const reason of result.reasons)reasons.add(reason);
+  }
+  for(const reason of ['recovery-punish','guard-mix','close-to-range'])
+    assert.ok(reasons.has(reason),`live CPUs must use ${reason}: ${[...reasons]}`);
+});
+
 probe('demo-render-motion', async () => {
     await navigate(client, `${gameUrl}&demo=237`);
     await evaluate(client, `window.__finalBlowQa.demoSpeed(1)`);
@@ -4115,6 +4142,9 @@ probe('demo-seed-url', async () => {
     // The share bug: a real pointer on it must NOT end the demo; one anywhere
     // else still must. (Clipboard is available in headless; the label flips.)
     await navigate(client, `${gameUrl}&demo=237`);
+    // Windows exposes native share in headless Chrome, but its OS dialog
+    // cannot complete here. Exercise the browser clipboard fallback explicitly.
+    await evaluate(client, `Object.defineProperty(navigator, 'share', {value:undefined, configurable:true})`);
     const bug = await evaluate(client, `(() => { const r = document.querySelector('#demoShareButton').getBoundingClientRect(); return { x: r.left + r.width / 2, y: r.top + r.height / 2, width: r.width, height: r.height }; })()`);
     assert.ok(bug.height >= 28 && bug.width >= 40, `the bug must be a real target, got ${bug.width}x${bug.height}`);
     for (const type of ['mousePressed', 'mouseReleased']) {
@@ -4578,7 +4608,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.6/);
-    assert.equal(controlledReload.version, '5.6.1-ringside');
+    assert.equal(controlledReload.version, '5.6.2-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4596,7 +4626,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.6/);
-    assert.equal(offlineBoot.version, '5.6.1-ringside');
+    assert.equal(offlineBoot.version, '5.6.2-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4642,7 +4672,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.6.1');
+    assert.equal(landscape.version.text, 'VERSION 5.6.2');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
