@@ -96,7 +96,7 @@ export function particleMote(particle) {
   const kind = particle.kind;
   const quiet = kind === "dust" || kind === "mist" || kind === "steam";
   return {
-    alpha: quiet ? alpha * 0.42 : alpha,
+    alpha: (quiet ? alpha * 0.42 : alpha) * (particle.readabilityOpacity ?? 1),
     size: Math.max(1.5, particle.size || 4) * (kind === "mist" || kind === "steam" ? 1 + (1 - alpha) * 1.5 : 1),
     additive: kind === "sparkLine" || kind === "hitSpark" || kind === "guardSpark" || kind === "sparkle",
   };
@@ -126,4 +126,27 @@ export function damageDecalKey(revision, gore) {
 
 function clamp01(value) {
   return value < 0 ? 0 : value > 1 ? 1 : value;
+}
+
+// Read-only presentation policy: the simulation keeps original effect lifetimes.
+// Keep the contact spark; clear smoke and broad flashes before they mask recovery.
+export function readableVfx(source, enabled=false) {
+  if (!enabled) return source;
+  const quiet=['dust','mist','steam'].includes(source.kind)
+    || /smoke|dust|steam/.test(source.sheet || '');
+  const spark=source.kind==='hitSpark';
+  const broad=['impactFlash','counterFocus','bloodBurst','shockRing'].includes(source.kind);
+  const label=source.kind==='combatText';
+  if (!quiet && !spark && !broad && !label) return source;
+  const duration=quiet ? 0.5 : spark ? 0.8 : label ? 0.7 : 0.6;
+  const max=(source.max || .9)*duration;
+  const age=(source.max || .9)-source.life;
+  if(age>=max) return null;
+  return {...source,life:max-age,max,
+    size: source.size == null ? source.size : source.size*(quiet ? 0.65 : spark ? 0.68 : broad ? 0.75 : 1),
+    alpha: (source.alpha ?? 1)*(quiet ? 0.5 : 1),
+    readabilityOpacity:quiet ? 0.5 : 1,
+    visualScale: ['impactFlash', 'counterFocus', 'bloodBurst'].includes(source.kind) ? 0.7 : 1,
+    ...(spark?{shards:Math.min(4,source.shards || 4)}:{}),
+  };
 }

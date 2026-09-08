@@ -2,7 +2,7 @@ import { createApproachSelector, presentationPose } from "./engine/inbetweens.mj
 import { INBETWEEN_FIGHTERS, INBETWEEN_BANKS, companionBank, repairedCell, createInbetweenSelector } from "./engine/inbetweens.mjs";
 import { INBETWEEN_SCALE } from "./engine/inbetween-scale.mjs";
 import { clippedCell } from "./engine/clipped-cells.mjs";
-import { PAINTED_FLOW_BANK, PAINTED_FLOW_FIGHTERS, paintedFlowPose } from "./engine/painted-flow.mjs";
+import { PAINTED_FLOW_BANK, PAINTED_FLOW_FIGHTERS, PAINTED_FLOW_SCALE, paintedFlowPose } from "./engine/painted-flow.mjs";
 import { captureMotion, interpolateMotion, interpolateBodyMotion, fixedDemoFrame } from "./engine/render-motion.mjs";
 import {
   DEFAULT_INPUT_BUFFER_FRAMES,
@@ -675,6 +675,7 @@ import {
   elementFrameIndex,
   elementSpriteAlpha,
   particleMote,
+  readableVfx,
 } from "./engine/vfx-bridge.mjs";
 import {
   FIGHTER_THROWABLES,
@@ -1040,7 +1041,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.5.0` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.0` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1414,6 +1415,7 @@ function inbetweenReady(id, bank) {
   return Boolean(image?.complete && image.naturalWidth);
 }
 function withInbetween(fighter, pose) {
+  if (pose.bank === PAINTED_FLOW_BANK) return pose;
   const owner = state.fighters?.[fighter.side];
   if (!owner || owner.def.id !== fighter.def.id) return pose;
   const ready = inbetweenReady(fighter.def.id, pose.bank);
@@ -1430,7 +1432,7 @@ function ensurePaintedFlowAtlas(id) {
   if (!PAINTED_FLOW_FIGHTERS.includes(id)) return null;
   if (!paintedFlowAtlases[id]) {
     const image = new Image();
-    image.src = `assets/painted-flow/${id}-v1.webp`;
+    image.src = `assets/painted-flow/${id}-v2.webp`;
     paintedFlowAtlases[id] = image;
     image.decode().catch(() => {});
   }
@@ -10397,7 +10399,9 @@ function drawElementalVfx() {
     ctx.fill();
     ctx.restore();
   }
-  for (const particle of elementParticles) {
+  for (const sourceParticle of elementParticles) {
+    const particle=readableVfx(sourceParticle,state.mode==="demo" && state.phase==="fight");
+    if(!particle) continue;
     const meta = elementSheets.manifest?.[particle.sheet];
     const image = elementSheets.images.get(particle.sheet);
     const fade = clamp(particle.life / particle.max, 0, 1);
@@ -24812,7 +24816,7 @@ function downTiltFor(fighterId, bank, frame) {
 }
 
 function bankSheetAdjust(fighterId, bank) {
-  if (bank === PAINTED_FLOW_BANK) return fighterId === "benny" ? 292 / 254 : 292 / 286;
+  if (bank === PAINTED_FLOW_BANK) return PAINTED_FLOW_SCALE[fighterId] || 1;
   if (bank === "specials") return MOVE_SHEET_ADJUST[fighterId] || 1;
   if (bank === SPECIALS_LEGACY_BANK) return MOVE_SHEET_LEGACY_ADJUST[fighterId] || 1;
   // v2.9 FLOW: the motion2 sheets share the motion bank's build
@@ -25088,12 +25092,14 @@ function drawRhythmRings(fighter, time) {
 function drawFighter(fighter, time, measureOnly = false) {
   fighter = renderFighter(fighter);
   const jump = FLOOR - fighter.y;
+  const pose = presentationPose(fighterAnimationPose(fighter));
+  const authoredStrike = pose.bank === PAINTED_FLOW_BANK;
   const attack = fighter.attacking;
   const attackProgress = attack ? clamp(fighter.attackTime / attack.duration, 0, 1) : 0;
-  const attackSwing = attack ? Math.sin(attackProgress * Math.PI) : 0;
-  const startupPower = attack && fighter.attackTime < attack.active[0]
+  const attackSwing = attack && !authoredStrike ? Math.sin(attackProgress * Math.PI) : 0;
+  const startupPower = !authoredStrike && attack && fighter.attackTime < attack.active[0]
     ? Math.sin((fighter.attackTime / attack.active[0]) * Math.PI) : 0;
-  const activePower = attack && fighter.attackTime >= attack.active[0] && fighter.attackTime <= attack.active[1]
+  const activePower = !authoredStrike && attack && fighter.attackTime >= attack.active[0] && fighter.attackTime <= attack.active[1]
     ? 1 : attack ? Math.max(0, attackSwing * 0.42) : 0;
   const moving = Math.abs(fighter.vx) > 22 && fighter.grounded && !attack;
   // Idle/walk pulse in pixels of chest travel. Applied further down as a
@@ -25104,7 +25110,6 @@ function drawFighter(fighter, time, measureOnly = false) {
   // shadow stayed planted, so the ground contact never agreed with itself.
   const bob = fighter.cinematicFrame === null && fighter.grounded && !fighter.stun && !fighter.block
     ? Math.sin((moving ? fighter.walkTime * 20 : fighter.animTime * 10) + fighter.side * 2) * (moving ? 1.8 : 2.7) : 0;
-  const pose = presentationPose(fighterAnimationPose(fighter));
   // Wave 16: the side's palette pick decides which cached atlas draws.
   const atlas = paletteAtlas(fighter.def.id, fighter.side, pose.artBank || pose.bank);
   const frame = pose.frame;
@@ -27833,7 +27838,9 @@ function drawCombatTextBody(effect, alpha) {
 }
 
 function drawParticles() {
-  for (const particle of state.particles) {
+  for (const sourceParticle of state.particles) {
+    const particle=readableVfx(sourceParticle,state.mode==="demo" && state.phase==="fight");
+    if(!particle) continue;
     const alpha = clamp(particle.life / particle.max, 0, 1);
     ctx.save();
     // 5.3 SPECTACLE (#47): the quiet-kind knock-down lives in
@@ -27948,10 +27955,13 @@ function drawParticles() {
     ctx.restore();
   }
   ctx.globalAlpha = 1;
-  for (const effect of state.effects) {
+  for (const sourceEffect of state.effects) {
+    const effect=readableVfx(sourceEffect,state.mode==="demo" && state.phase==="fight");
+    if(!effect) continue;
     const alpha = clamp(effect.life / (effect.max || 0.9), 0, 1);
     ctx.save();
     ctx.translate(effect.x, effect.y);
+    ctx.scale(effect.visualScale || 1, effect.visualScale || 1);
     ctx.globalAlpha = alpha;
     ctx.strokeStyle = effect.color;
     ctx.shadowBlur = 25;
@@ -32891,7 +32901,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.5.0");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.0");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34343,7 +34353,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.5.0-ringside",
+  version: "5.6.0-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

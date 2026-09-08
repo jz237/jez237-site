@@ -194,7 +194,8 @@ function runWorld({ pair, stageId = "somerset", seed, frames = ONE_EXHIBITION_FR
   let neutralTicks = 0;
   let lanesDuringWindows = 0;
   let okiTicks = 0;
-  for (let frame = 0; frame < frames; frame += 1) {
+  for (let frame = 0; frame - world.choreo.stats().readableReset.ticks < frames; frame += 1) {
+    assert.ok(frame < frames * 1.2, 'reset duty must stay below 20%');
     world.tick();
     const stats = world.choreo.stats();
     if (stats.neutralLive) {

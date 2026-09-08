@@ -316,7 +316,12 @@ const ONE_EXHIBITION_FRAMES = 3200;
 function runExhibitions(frames = ONE_EXHIBITION_FRAMES) {
   return NATURALNESS_RUNS.map(([pair, stageId, seed]) => {
     const world = createMockWorld({ pair, stageId, hasStageWeapon: true, seed });
-    for (let frame = 0; frame < frames; frame += 1) world.tick();
+    // Compare equal fighting time; the new defensive resets are intentional
+    // extra presentation time, separately bounded to prevent stalled shows.
+    for (let frame = 0; frame - world.choreo.stats().readableReset.ticks < frames; frame += 1) {
+      assert.ok(frame < frames * 1.2, 'reset duty must stay below 20%');
+      world.tick();
+    }
     return {
       pair,
       seed,
