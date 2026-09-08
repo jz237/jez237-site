@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { readFile } from "node:fs/promises";
+import { readFile, stat } from "node:fs/promises";
 import { dirname, join } from "node:path";
 import test from "node:test";
 import { fileURLToPath } from "node:url";
@@ -21,10 +21,21 @@ test("Final Blow service worker stays small and Cloudflare-navigation safe", asy
   assert.ok(shellSource, "worker must declare a small SHELL list");
   const shell = [...shellSource.matchAll(/"([^"\n]+)"/g)].map((match) => match[1]);
 
-  // 5.1: six engine modules joined the shell (announcer, audio manifest, ambient,
-  // crowd voice, shared sfx, swing resolve) — all imported by game.js at boot.
-  // (5.4 Fight Night: the attract loop's six demo modules joined the shell — 34 entries.)
-  assert.ok(shell.length <= 40, `worker shell grew to ${shell.length} entries`);
+  // 5.6.9 has 51 startup files (2,794,508 bytes). Keep both request count
+  // and actual uncompressed bytes bounded as the engine is split into modules.
+  assert.ok(shell.length <= 60, `worker shell grew to ${shell.length} entries`);
+  const shellFiles = new Set(["./", "./styles.css", "./game.js", "./manifest.webmanifest", "./icon.svg"]);
+  for (const entry of shell) {
+    assert.ok(shellFiles.has(entry) || /^\.\/engine\/[a-z0-9-]+\.mjs$/.test(entry),
+      `non-shell file must not be precached: ${entry}`);
+  }
+  const sizes = await Promise.all(shell.map(async (entry) => {
+    const info = await stat(join(gameRoot, entry === "./" ? "index.html" : entry));
+    assert.ok(info.isFile(), `shell entry must be a file: ${entry}`);
+    return info.size;
+  }));
+  const shellBytes = sizes.reduce((total, bytes) => total + bytes, 0);
+  assert.ok(shellBytes <= 3 * 1024 * 1024, `worker shell grew to ${shellBytes} bytes (3 MiB limit)`);
   assert.equal(new Set(shell).size, shell.length, "worker shell contains duplicate entries");
   assert.ok(shell.includes("./"), "worker shell must cache the directory URL");
   assert.ok(shell.includes("./game.js"), "worker shell must cache game.js");
