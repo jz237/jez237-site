@@ -1,0 +1,58 @@
+{
+  "mode": "built-in image_gen",
+  "sources": [
+    {
+      "id": "alan",
+      "path": "exec-0ce3dd0e-e36a-4a2b-b1d8-060838f8c5d0.png",
+      "prompt": "Edit this atlas. Replace ALL checkerboard background with pure flat magenta #ff00ff. Preserve the 16 full figures, detailed painted art and identity, arrange them into an exactly equal 4x4 grid with extra magenta margins around each full body. Correct cell12 (bottom-left) to a BENT retracting kick rather than an extended leg; cell14 (bottom row third) fist must be RETRACTED not extended. Preserve anatomical scale across all cells. Keep props throughout all poses. No cropping, shadows or text."
+    },
+    {
+      "id": "ali",
+      "path": "exec-249dcc50-5612-4b15-ac52-755374dd83c2.png",
+      "prompt": "Edit this atlas. Replace ALL checkerboard background with pure flat magenta #ff00ff. Preserve the 16 full figures, detailed painted art and identity, arrange them into an exactly equal 4x4 grid with extra magenta margins around each full body. Correct cell12 (bottom-left) to a BENT retracting kick rather than an extended leg; cell14 (bottom row third) fist must be RETRACTED not extended. Preserve anatomical scale across all cells. Keep props throughout all poses. No cropping, shadows or text."
+    },
+    {
+      "id": "benny",
+      "path": "exec-8d0ce7ae-5a1d-45e3-9e66-1e8b93cb5358.png",
+      "prompt": "Edit this atlas. Replace ALL checkerboard background with pure flat magenta #ff00ff. Preserve the 16 full figures, detailed painted art and identity, arrange them into an exactly equal 4x4 grid with extra magenta margins around each full body. Correct cell12 (bottom-left) to a BENT retracting kick rather than an extended leg; cell14 (bottom row third) fist must be RETRACTED not extended. Preserve anatomical scale across all cells. Keep props throughout all poses. No cropping, shadows or text."
+    },
+    {
+      "id": "commissioner",
+      "path": "exec-46573cb0-e06c-48a2-aba7-4f8e47616027.png",
+      "prompt": "Edit this atlas. Replace ALL checkerboard background with pure flat magenta #ff00ff. Preserve the 16 full figures, detailed painted art and identity, arrange them into an exactly equal 4x4 grid with extra magenta margins around each full body. Correct cell12 (bottom-left) to a BENT retracting kick rather than an extended leg; cell14 (bottom row third) fist must be RETRACTED not extended. Preserve anatomical scale across all cells. Keep props throughout all poses. No cropping, shadows or text.",
+      "correction": "Restore visible held cane in all sixteen poses."
+    },
+    {
+      "id": "cyraxx",
+      "path": "exec-104c61e8-8f64-4938-924c-ac2b215153ed.png",
+      "prompt": "Production painted fighting-game sprite atlas of the exact reference character. Preserve identity, age, costume, accessories and richly painted texture. Precisely equal 4x4 grid of SIXTEEN complete full-body drawings, all facing RIGHT. Common anatomical scale, full heads, fists, toes, props inside each cell, generous blank margins. Solid flat pure magenta #ff00ff background; NO checkerboard, shadows, text, borders, labels, effects. Closed fists; preserve props gripped appropriately. Fighter shuffles without crossing feet.\nCells left-to-right then down: 0 upright guard calibration; 1 forward shuffle lead right foot stepping out; 2 rear left foot gathers forward restoring guard; 3 backward shuffle rear left foot steps back first; 4 lead right foot gathers backward restoring guard; 5 guarded stopping pose knees absorb weight; 6 high block both forearms protect head/chest; 7 low block deep crouch both forearms cover; 8 upright high block recoil slightly leaned back; 9 crouched low block recoil; 10 standing kick chamber one knee waist height supporting foot planted; 11 crouching punch windup closed fist at ribs; 12 crouching kick retraction with striking knee BENT bringing foot back under body; 13 airborne kick chamber knee drawn in both feet fully visible; 14 airborne punch recovery fist RETRACTED toward chest legs tucked; 15 landing crouch knees absorb weight fists guard.\nCrouching poses bend knees, never shrink body anatomy. Match reference details precisely. No anatomy crosses cell boundaries."
+    },
+    {
+      "id": "deathblow",
+      "path": "exec-aedd25d8-bd3b-485b-be2a-ea479a3b38c7.png",
+      "prompt": "Production painted fighting-game sprite atlas of the exact reference character. Preserve identity, age, costume, accessories and richly painted texture. Precisely equal 4x4 grid of SIXTEEN complete full-body drawings, all facing RIGHT. Common anatomical scale, full heads, fists, toes, props inside each cell, generous blank margins. Solid flat pure magenta #ff00ff background; NO checkerboard, shadows, text, borders, labels, effects. Closed fists; preserve props gripped appropriately. Fighter shuffles without crossing feet.\nCells left-to-right then down: 0 upright guard calibration; 1 forward shuffle lead right foot stepping out; 2 rear left foot gathers forward restoring guard; 3 backward shuffle rear left foot steps back first; 4 lead right foot gathers backward restoring guard; 5 guarded stopping pose knees absorb weight; 6 high block both forearms protect head/chest; 7 low block deep crouch both forearms cover; 8 upright high block recoil slightly leaned back; 9 crouched low block recoil; 10 standing kick chamber one knee waist height supporting foot planted; 11 crouching punch windup closed fist at ribs; 12 crouching kick retraction with striking knee BENT bringing foot back under body; 13 airborne kick chamber knee drawn in both feet fully visible; 14 airborne punch recovery fist RETRACTED toward chest legs tucked; 15 landing crouch knees absorb weight fists guard.\nCrouching poses bend knees, never shrink body anatomy. Match reference details precisely. No anatomy crosses cell boundaries.",
+      "correction": "Correct retracted fists and preserve held props throughout atlas."
+    },
+    {
+      "id": "devil",
+      "path": "exec-2b02fa97-5b11-4ef7-aa8c-edbc5f1491b9.png",
+      "prompt": "Production painted fighting-game sprite atlas of the exact reference character. Preserve identity, age, costume, accessories and richly painted texture. Precisely equal 4x4 grid of SIXTEEN complete full-body drawings, all facing RIGHT. Common anatomical scale, full heads, fists, toes, props inside each cell, generous blank margins. Solid flat pure magenta #ff00ff background; NO checkerboard, shadows, text, borders, labels, effects. Closed fists; preserve props gripped appropriately. Fighter shuffles without crossing feet.\nCells left-to-right then down: 0 upright guard calibration; 1 forward shuffle lead right foot stepping out; 2 rear left foot gathers forward restoring guard; 3 backward shuffle rear left foot steps back first; 4 lead right foot gathers backward restoring guard; 5 guarded stopping pose knees absorb weight; 6 high block both forearms protect head/chest; 7 low block deep crouch both forearms cover; 8 upright high block recoil slightly leaned back; 9 crouched low block recoil; 10 standing kick chamber one knee waist height supporting foot planted; 11 crouching punch windup closed fist at ribs; 12 crouching kick retraction with striking knee BENT bringing foot back under body; 13 airborne kick chamber knee drawn in both feet fully visible; 14 airborne punch recovery fist RETRACTED toward chest legs tucked; 15 landing crouch knees absorb weight fists guard.\nCrouching poses bend knees, never shrink body anatomy. Match reference details precisely. No anatomy crosses cell boundaries."
+    },
+    {
+      "id": "donald",
+      "path": "exec-bb2b6ab0-3e7a-48d5-8f83-62a970e2508d.png",
+      "prompt": "Production painted fighting-game sprite atlas of the exact reference character. Preserve identity, age, costume, accessories and richly painted texture. Precisely equal 4x4 grid of SIXTEEN complete full-body drawings, all facing RIGHT. Common anatomical scale, full heads, fists, toes, props inside each cell, generous blank margins. Solid flat pure magenta #ff00ff background; NO checkerboard, shadows, text, borders, labels, effects. Closed fists; preserve props gripped appropriately. Fighter shuffles without crossing feet.\nCells left-to-right then down: 0 upright guard calibration; 1 forward shuffle lead right foot stepping out; 2 rear left foot gathers forward restoring guard; 3 backward shuffle rear left foot steps back first; 4 lead right foot gathers backward restoring guard; 5 guarded stopping pose knees absorb weight; 6 high block both forearms protect head/chest; 7 low block deep crouch both forearms cover; 8 upright high block recoil slightly leaned back; 9 crouched low block recoil; 10 standing kick chamber one knee waist height supporting foot planted; 11 crouching punch windup closed fist at ribs; 12 crouching kick retraction with striking knee BENT bringing foot back under body; 13 airborne kick chamber knee drawn in both feet fully visible; 14 airborne punch recovery fist RETRACTED toward chest legs tucked; 15 landing crouch knees absorb weight fists guard.\nCrouching poses bend knees, never shrink body anatomy. Match reference details precisely. No anatomy crosses cell boundaries.",
+      "correction": "Correct retracted fists and preserve held props throughout atlas."
+    },
+    {
+      "id": "jez",
+      "path": "exec-40a7aa17-894a-4e8a-b62b-54453fbc9a2e.png",
+      "prompt": "Edit this atlas. Replace ALL checkerboard background with pure flat magenta #ff00ff. Preserve the 16 full figures, detailed painted art and identity, arrange them into an exactly equal 4x4 grid with extra magenta margins around each full body. Correct cell12 (bottom-left) to a BENT retracting kick rather than an extended leg; cell14 (bottom row third) fist must be RETRACTED not extended. Preserve anatomical scale across all cells. Keep props throughout all poses. No cropping, shadows or text."
+    },
+    {
+      "id": "post",
+      "path": "exec-662140eb-eb42-4dd1-80da-6cfa8f7e48d9.png",
+      "prompt": "Production painted fighting-game sprite atlas of the exact reference character. Preserve identity, age, costume, accessories and richly painted texture. Precisely equal 4x4 grid of SIXTEEN complete full-body drawings, all facing RIGHT. Common anatomical scale, full heads, fists, toes, props inside each cell, generous blank margins. Solid flat pure magenta #ff00ff background; NO checkerboard, shadows, text, borders, labels, effects. Closed fists; preserve props gripped appropriately. Fighter shuffles without crossing feet.\nCells left-to-right then down: 0 upright guard calibration; 1 forward shuffle lead right foot stepping out; 2 rear left foot gathers forward restoring guard; 3 backward shuffle rear left foot steps back first; 4 lead right foot gathers backward restoring guard; 5 guarded stopping pose knees absorb weight; 6 high block both forearms protect head/chest; 7 low block deep crouch both forearms cover; 8 upright high block recoil slightly leaned back; 9 crouched low block recoil; 10 standing kick chamber one knee waist height supporting foot planted; 11 crouching punch windup closed fist at ribs; 12 crouching kick retraction with striking knee BENT bringing foot back under body; 13 airborne kick chamber knee drawn in both feet fully visible; 14 airborne punch recovery fist RETRACTED toward chest legs tucked; 15 landing crouch knees absorb weight fists guard.\nCrouching poses bend knees, never shrink body anatomy. Match reference details precisely. No anatomy crosses cell boundaries."
+    }
+  ]
+}

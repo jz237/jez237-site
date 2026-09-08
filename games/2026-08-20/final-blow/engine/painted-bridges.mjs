@@ -1,3 +1,4 @@
+import {recoveryProgress} from "./combat-presentation.mjs";
 // Six newly painted cells: guard calibration plus five transition poses.
 export const BRIDGE_BANK='painted-bridges';
 export const BRIDGE_FIGHTERS=['jez','benny','alan','ali','commissioner','cyraxx','deathblow','devil','donald','post'];
@@ -25,7 +26,7 @@ export function createBridgeSelector(){
   }
   // Never replace a contact drawing, or alter combat timing to fit a picture.
   if(f<end)return null;
-  const progress=(f-end)/Math.max(1,total-end);
+  const progress=recoveryProgress(fighter,(f-end)/Math.max(1,total-end));
   if(a.kind==='light'){
    const slot=Math.min(4,Math.floor(progress*5));
    if(slot<2)return pose(slot+1);

@@ -79,7 +79,7 @@ export function meterOpportunity(self,opponent,frame,action){
   const recovery=opponent.attacking && now>opponent.attackActiveEndFrame ? opponent.attackTotalFrames-now : 0;
   return !opponent.guarding && recovery>=move.startupFrames+2;
 }
-export function strategicIntent({id,self,opponent,frame,timeRemaining,roll,until=0}){
+export function strategicIntent({id,self,opponent,frame,timeRemaining,roll,until=0,previousMovement}){
   if(!self.grounded || self.attacking || self.down || self.wakeupFrames || self.hitstunFrames || self.blockstunFrames || self.grabbed || self.grabbing)return null;
   const style=fighterStyle(id), kit=getFighterKit(id)?.ai;
   const distance=Math.abs(self.x-opponent.x), right=opponent.x>self.x;
@@ -112,11 +112,13 @@ export function strategicIntent({id,self,opponent,frame,timeRemaining,roll,until
     return attack || {movement:'advance',action:null,dash:distance>240,reason:'chase'};
   }
   if(roll>.68)return null; // Leave room for the existing kit choices and showcase variety.
-  if(distance>style.range+35){
+  // Hysteresis lets a shuffle finish through the preferred range instead of
+  // reversing each decision. Urgent defense above this layer still interrupts.
+  if(distance>style.range+(previousMovement==='advance'?12:35)){
     if(roll<style.initiative*.35){const ranged=move(kit?.rangedAction,'style-strike');if(ranged)return ranged;}
     return {movement:'advance',action:null,dash:distance>240&&roll<style.dash,reason:'style-spacing'};
   }
-  if(distance<style.range-35 && room>100 && style.initiative<.6)
+  if(distance<style.range-(previousMovement==='retreat'?12:35) && room>100 && style.initiative<.6)
     return {movement:'retreat',action:null,guard:true,reason:'style-spacing'};
   if(roll<style.initiative*.6){
     if(id==='deathblow'&&distance<THROW_RULES.grabRange-12)return {movement:'hold',action:'throw',reason:'style-strike'};

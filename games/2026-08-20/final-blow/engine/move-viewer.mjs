@@ -8,8 +8,9 @@ for (const [action,label] of [['light','Light'],['heavy','Heavy']]) {
  }
 }
 export const VIEWER_MOVES = [...normals,
+ ...[['forward','Forward shuffle and stop'],['back','Backward shuffle and stop'],['high','High block and recoil'],['low','Low block and recoil'],['landing','Landing and settle']].map(([pose,label])=>({id:`footwork-${pose}`,pose,label})),
  ...[['throw','Throw'],['enhanced','Enhanced special'],['launcher','Rising uppercut / launcher'],['overhead','Overhead'],['special','Signature special'],['commandSpecial','Forward special'],['backSpecial','Back special'],['enhancedLauncher','Enhanced launcher'],['enhancedCommandSpecial','Enhanced forward special'],['enhancedBackSpecial','Enhanced back special'],['super','Super']].map(([action,label])=>({id:action,action,label,context:{}})),
- ...[['head','Head hit'],['body','Body hit'],['heavy','Heavy hit']].map(([reaction,label])=>({id:`reaction-${reaction}`,reaction,label}))];
+ ...[['head','Head hit'],['body','Body hit'],['heavy','Heavy hit'],['legs','Low leg hit']].map(([reaction,label])=>({id:`reaction-${reaction}`,reaction,label}))];
 
 export function viewerPhase(frame,attack) {
  if (!attack) return frame<30?'REACTION':'READY';
@@ -32,8 +33,19 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
   fighter.attackFrame=tick;fighter.attackTime=tick/60;fighter.attacking=attack&&tick>0&&tick<=attack.totalFrames?attack:null;
   fighter.crouch=Boolean(selection.context?.crouching);fighter.grounded=!selection.context?.airborne;
   fighter.hitstunFrames=selection.reaction?Math.max(0,30-tick):0;
+  fighter.lastHitRegion=selection.reaction==='heavy'?'head':selection.reaction;
   fighter.lastHitHeavy=selection.reaction==='heavy';fighter.lastHitLevel=selection.reaction==='body'?'low':'mid';
   fighter.lastImpactTick=0;fighter.stun=fighter.hitstunFrames/60;
+  fighter.vx=0;fighter.x=0;fighter.block=false;fighter.guarding=false;fighter.blockstunFrames=0;
+  if(selection.pose){
+   const mode=selection.pose,walking=mode==='forward'||mode==='back';
+   fighter.vx=walking&&tick<42?(mode==='forward'?150:-150):0;
+   fighter.x=walking?Math.min(tick,42)*(mode==='forward'?2.5:-2.5):0;
+   fighter.walkTime=walking?tick/60:0;fighter.strideTime=fighter.walkTime;
+   fighter.crouch=mode==='low';fighter.block=mode==='high'||mode==='low';
+   fighter.blockstunFrames=fighter.block&&tick<18?18-tick:0;
+   fighter.grounded=mode!=='landing'||tick>=12;
+  }
   return sample(fighter);
  }
  function draw() {
@@ -50,7 +62,7 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
    ctx.save();ctx.translate(480,510+pose.floor*size-(selection.context?.airborne?55:0));ctx.scale(direction*pose.facing,1);
    ctx.drawImage(pose.atlas,(pose.frame%4)*320,Math.floor(pose.frame/4)*320,320,320,-size/2,-size,size,size);ctx.restore();
   }
-  const phase=viewerPhase(frame,attack);
+  const phase=selection.pose?(selection.pose==='landing'?(frame<12?'AIR':frame<18?'LAND':'READY'):selection.pose==='high'||selection.pose==='low'?(frame<18?'BLOCK RECOIL':'GUARD'):frame<42?'STEP':'SETTLE'):viewerPhase(frame,attack);
   ctx.fillStyle=phase==='CONTACT'?'#ffd54a':'#d4dfeb';ctx.font='bold 22px sans-serif';ctx.fillText(phase,24,38);
   const start=attack?.activeStartFrame,end=attack?.activeEndFrame;
   if(attack){ctx.fillStyle='#536273';ctx.fillRect(24,542,912,6);ctx.fillStyle='#ffd54a';ctx.fillRect(24+912*start/total,542,912*(end-start)/total,6);ctx.fillStyle='#fff';ctx.fillRect(24+912*frame/total,538,3,14);}
@@ -64,7 +76,7 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
    const next=await prepare(fighterSelect.value);if(token!==request||!dialog.open)return;
    fighter=next;
    const previous=moveSelect.value;
-   const available=VIEWER_MOVES.filter(row=>row.reaction||move(fighter,row.action,row.context));
+   const available=VIEWER_MOVES.filter(row=>row.pose||row.reaction||move(fighter,row.action,row.context));
    moveSelect.replaceChildren(...available.map(row=>new Option(row.label,row.id)));
    if(available.some(row=>row.id===previous))moveSelect.value=previous;
    ready=true;select();
@@ -73,8 +85,8 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
  function select(){
   if(!ready)return;
   selection=VIEWER_MOVES.find(row=>row.id===moveSelect.value);
-  attack=selection.reaction?null:move(fighter,selection.action,selection.context);
-  frame=0;carry=0;total=attack?attack.totalFrames+12:42;
+  attack=selection.pose||selection.reaction?null:move(fighter,selection.action,selection.context);
+  frame=0;carry=0;total=attack?attack.totalFrames+12:selection.pose?54:42;
   // New objects reset the companion-frame history when scrubbing backwards.
   fighter={...fighter};poses=Array.from({length:total+1},(_,tick)=>sampleFrame(tick));el('Frame').max=total;draw();
  }
