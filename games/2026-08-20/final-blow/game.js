@@ -1049,7 +1049,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.6.9` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.0` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -2604,16 +2604,9 @@ const state = {
   // enlarges the fight HUD and keeps the attract loop cycling. Render/UI
   // only — never part of any rollback snapshot.
   cabinetMode: localStorage.getItem("final-blow-cabinet-mode") === "1",
-  // CINEMA 3D experimental Three.js presentation renderer. Persisted like the
-  // other toggles; ?renderer=3d forces it on for the session without
-  // persisting. Battery profile refuses activation (see cinema3dAllowed).
-  cinema3d: new URLSearchParams(location.search).get("renderer") === "3d"
-    || localStorage.getItem("final-blow-cinema-3d") === "1",
-  // 4.3 MESH FIGHTERS: rigged 3D characters inside CINEMA 3D. Off by default
-  // (the sprite billboards stay the CINEMA 3D default too); ?fighters=3d
-  // forces it on for the session without persisting.
-  meshFighters: new URLSearchParams(location.search).get("fighters") === "3d"
-    || localStorage.getItem("final-blow-mesh-fighters") === "1",
+  // Painted rendering ignores retired preferences and old URL flags.
+  cinema3d: false,
+  meshFighters: false,
   performance: null,
   // Captions label every sound event over the fight — invaluable when you
   // need them, permanent UI noise when you don't. Opt-in as of the
@@ -4224,9 +4217,9 @@ function progressionHighScore(rank) {
   saveBlackBookLedger();
 }
 
-// CINEMA 3D first activation — fired from the options toggle (DOM path).
-function progressionCinemaActivated() {
-  blackBookObserve(blackBookLedger, { type: "event", kind: "cinema3d" });
+// Viewing painted artwork keeps the Picture Show achievement attainable.
+function progressionArtworkViewed() {
+  blackBookObserve(blackBookLedger, { type: "event", kind: "paintedViewer" });
   progressionEvaluateLedger();
   saveBlackBookLedger();
 }
@@ -30201,7 +30194,7 @@ function loop(now) {
   state.simulationDroppedSeconds = frame.droppedSeconds;
   if (frame.steps + steppedFrames > 0) clearLatchedInputEdges();
   draw(now);
-  instantReplay.update(now,[$('#cinema3d'),$('#game')]);
+  instantReplay.update(now,[$('#game')]);
   requestAnimationFrame(loop);
 }
 
@@ -30523,10 +30516,6 @@ function applyPerformanceSettings() {
   $("#sharpRenderToggle").checked = Boolean(state.sharpRender);
   $("#crtModeToggle").checked = Boolean(state.crtMode);
   if ($("#cabinetModeToggle")) $("#cabinetModeToggle").checked = Boolean(state.cabinetMode);
-  $("#cinema3dToggle").checked = Boolean(state.cinema3d);
-  if ($("#meshFightersToggle")) $("#meshFightersToggle").checked = Boolean(state.meshFighters);
-  // Profile switches can grant/revoke CINEMA 3D eligibility (battery refuses).
-  ensureCinema3d();
   $("#pausePerformance").textContent = `${state.visualQuality.toUpperCase()} VISUALS · ${state.performance.id.toUpperCase()} PROFILE · ${state.performance.particleBudget} FX BUDGET`;
   // Wave 7: quality switches re-apply the DPR-sharp backing store.
   applyBackingStoreResolution();
@@ -32966,7 +32955,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.6.9-bridges2");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.0-painted");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33696,7 +33685,7 @@ const instantReplay=createInstantReplay({
 const viewerRoster = roster.some(f=>f.id==='commissioner') ? [...roster] : [...roster,commissionerPlayableDef];
 const moveViewer = createMoveViewer({
  dialog: $('#moveViewerDialog'), roster: viewerRoster,
- onOpen: () => clearIdleDemoTimer(),
+ onOpen: () => { clearIdleDemoTimer(); progressionArtworkViewed(); },
  onClose: () => scheduleIdleDemo(),
  async prepare(id) {
   const def = viewerRoster.find(f=>f.id===id);
@@ -33745,7 +33734,6 @@ $('#spectatorSetupForm').addEventListener('submit',event=>{
 document.addEventListener('keydown',event=>{if($('#spectatorSetupDialog').open||$('#instantReplayDialog').open||$('#moveViewerDialog').open)event.stopPropagation();},true);
 
 $("#demoButton").addEventListener("click", () => startDemo());
-$("#demo3dButton").addEventListener("click", () => { window.location.href = "../../demos/final-blow-3d/"; });
 // 5.4 #30: the demo HUD's share bug. `click` only — the capture-phase
 // pointerdown guard above has already let this press through.
 $("#demoShareButton").addEventListener("click", (event) => {
@@ -33926,29 +33914,6 @@ $("#cabinetModeToggle").addEventListener("change", (event) => {
   }
   applyCabinetMode();
   scheduleIdleDemo();
-});
-$("#cinema3dToggle").addEventListener("change", (event) => {
-  state.cinema3d = event.target.checked;
-  localStorage.setItem("final-blow-cinema-3d", state.cinema3d ? "1" : "0");
-  // v2.1 PROGRESSION: first CINEMA 3D activation inks THE PICTURE SHOW
-  // (pure DOM path — the ledger dedupes via its unlocked map).
-  if (state.cinema3d) progressionCinemaActivated();
-  // Live-switch: the module lazy-loads on first activation; toggling off just
-  // hides the 3D canvas and resumes the 2D world draw next frame.
-  ensureCinema3d();
-});
-$("#meshFightersToggle")?.addEventListener("change", (event) => {
-  state.meshFighters = event.target.checked;
-  localStorage.setItem("final-blow-mesh-fighters", state.meshFighters ? "1" : "0");
-  // The rigs only draw inside CINEMA 3D; flipping this on turns CINEMA 3D on
-  // too so the switch never looks dead.
-  if (state.meshFighters && !state.cinema3d) {
-    state.cinema3d = true;
-    localStorage.setItem("final-blow-cinema-3d", "1");
-    $("#cinema3dToggle").checked = true;
-    progressionCinemaActivated();
-  }
-  ensureCinema3d();
 });
 $("#soundCaptionsToggle").addEventListener("change", (event) => {
   state.soundCaptions = event.target.checked;
@@ -34482,7 +34447,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.6.9-ringside",
+  version: "5.7.0-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -36853,385 +36818,13 @@ buildMoveListSelect();
 renderMoveList();
 renderControlStyleCopy();
 // ---------------------------------------------------------------------------
-// CINEMA 3D bridge — experimental Three.js presentation renderer.
-// The module lazy-loads on first activation (toggle or ?renderer=3d) so the
-// 2D game never pays its cost. The 3D renderer only READS sim state; the
-// world-draw handoff happens per-frame in draw() via cinema3dWorldActive().
-// Battery performance profile refuses activation entirely.
-// ---------------------------------------------------------------------------
-const cinema3dBridge = { renderer: null, loading: false, onHit: null, onDust: null };
-
-function cinema3dAllowed() {
-  return state.performance?.id !== "battery";
-}
-
-function cinema3dWorldActive() {
-  return Boolean(
-    cinema3dBridge.renderer?.ready
-    && state.cinema3d
-    && cinema3dAllowed()
-    && state.screen === "fight"
-    // Scripted fatality finishers keep their bespoke 2D cinematic presentation.
-    && !state.finisher,
-  );
-}
-
-// MOTION FIX 12: render-side HUD fade so a CINEMA 3D jump apex is never
-// guillotined behind the top HUD band. Pure presentation state on the
-// superDimLevel pattern — measured DOM band height cached ~0.5s, eased
-// opacity written straight to the #hud element, snapped back to stylesheet
-// control the moment nothing is behind it.
-let cinema3dHudFadeLevel = 0;
-let cinema3dHudBandLogical = -1;
-let cinema3dHudBandMeasuredMs = 0;
-
-function updateCinema3dHudFade(active, dtMs) {
-  const hud = $("#hud");
-  if (!hud) return;
-  let target = 0;
-  if (active && cinema3dBridge.renderer?.projectSim
-    && state.fighters?.length === 2 && state.screen === "fight") {
-    const nowMs = performance.now();
-    if (cinema3dHudBandLogical < 0 || nowMs - cinema3dHudBandMeasuredMs > 500) {
-      cinema3dHudBandMeasuredMs = nowMs;
-      const canvasRect = canvas.getBoundingClientRect();
-      const hudRect = hud.getBoundingClientRect();
-      cinema3dHudBandLogical = canvasRect.height > 0
-        ? Math.max(0, (hudRect.bottom - canvasRect.top) / canvasRect.height * H)
-        : H * 0.12;
-    }
-    for (const fighter of state.fighters) {
-      // Sprite top with the flip taken into account: mid-somersault the
-      // rotated cell reaches a full render-cell above the feet (legs/fists
-      // sweep well past head height), which is exactly the pose that was
-      // clipping behind the band. Generous approach margin: the fade eases
-      // IN while the fighter closes on the band, so a genuine overlap is
-      // already soft.
-      const obs = motionObs[fighter.side];
-      const flipping = Boolean(obs?.flipEligible) && !fighter.grounded;
-      const reachAbove = Math.max(
-        (fighter.height || 180) * 1.22,
-        flipping ? fighterRenderSize(fighter.def.id) * 1.04 : 0,
-      );
-      const top = cinema3dBridge.renderer.projectSim(fighter.x, fighter.y - reachAbove);
-      // QA latch (render-only): the projection vs band, for burst probes.
-      if (top && (!window.__finalBlowHudFade || top.y < window.__finalBlowHudFade.topY
-        || window.__finalBlowHudFade.tick !== state.simulationTick)) {
-        window.__finalBlowHudFade = {
-          topY: Math.round(top.y),
-          band: Math.round(cinema3dHudBandLogical),
-          level: Number(cinema3dHudFadeLevel.toFixed(3)),
-          tick: state.simulationTick,
-        };
-      }
-      if (top && top.y < cinema3dHudBandLogical + 34) {
-        target = 1;
-        break;
-      }
-    }
-  }
-  const ease = clamp((dtMs || 16.7) / 1000, 0, 0.05) * (target > cinema3dHudFadeLevel ? 14 : 6);
-  cinema3dHudFadeLevel = clamp(
-    cinema3dHudFadeLevel + (target > cinema3dHudFadeLevel ? ease : -ease), 0, 1,
-  );
-  const opacity = 1 - cinema3dHudFadeLevel * 0.7;
-  hud.style.opacity = opacity >= 0.999 ? "" : opacity.toFixed(3);
-}
-
-// CINEMA 3D gameplay reads (overlay pass). Runs after the world ctx.restore()
-// while the 3D world is live, on the transparent 2D canvas that sits ON TOP
-// of the 3D one. Every marker here is pure 2D screen art the world pass skips
-// in 3D (it never ran: drawDizzyStars / drawGuardCrushMarker / the combatText
-// branch of drawParticles all live inside `if (!cinema3dWorld)`), so a 3D
-// player was getting dizzied, crushed and countered without a single tell.
-// Each marker is drawn by the SAME function the 2D path uses, re-anchored:
-// the sim point it draws about is projected through the live framing camera
-// (renderer.projectSim, the CRT-punch pattern) and the drawing is scaled by
-// the projected size of 100 sim px at that point, so a punch-in or the
-// corner-vs-corner pull-back scales the read with the fighter it belongs to.
-// Render-only reads of snapshotted state; nothing here touches the sim.
-function cinema3dOverlayAnchor(simX, simY) {
-  const project = cinema3dBridge.renderer?.projectSim;
-  if (!project) return null;
-  const at = project(simX, simY);
-  const above = project(simX, simY - 100);
-  if (!at || !above) return null;
-  const scale = clamp((at.y - above.y) / 100, 0.35, 2.5);
-  return { x: at.x, y: at.y, scale };
-}
-
-function drawCinema3dOverlayReads(time) {
-  if (!cinema3dBridge.renderer?.projectSim) return;
-  let drawn = 0;
-  // A drawing authored about (originX, originY) in sim space, replayed about
-  // the projected point at the projected scale.
-  const replay = (originX, originY, paint) => {
-    const anchor = cinema3dOverlayAnchor(originX, originY);
-    if (!anchor) return;
-    ctx.save();
-    ctx.translate(anchor.x, anchor.y);
-    ctx.scale(anchor.scale, anchor.scale);
-    ctx.translate(-originX, -originY);
-    paint();
-    ctx.restore();
-    drawn += 1;
-  };
-  for (const fighter of state.fighters) {
-    // Rhythm rings are authored about the feet (drawFighter translates to
-    // fighter.x/y before drawing them).
-    if (fighter.def.id === "ali" && fighter.rhythmStacks > 0) {
-      replay(fighter.x, fighter.y, () => {
-        ctx.translate(fighter.x, fighter.y);
-        drawRhythmRings(fighter, time);
-      });
-    }
-    // The markers anchor themselves above the DRAWN sprite height; replaying
-    // about that same point keeps the drain bar over the head in 3D too.
-    const markerY = fighter.y - fighterRenderSize(fighter.def.id) * 0.956 - 26;
-    if (fighter.dizzyFrames > 0) {
-      replay(fighter.x, markerY, () => drawDizzyStars(fighter, time));
-    } else if (fighter.guardCrushFrames > 0) {
-      replay(fighter.x, markerY, () => drawGuardCrushMarker(fighter, time));
-    }
-  }
-  const weapon = state.stageWeapon;
-  const profile = weapon && (weapon.phase === "telegraph" || weapon.phase === "ground")
-    ? stageWeaponProfile() : null;
-  if (profile) {
-    // Name tag: the object is identifiable without knowing the stage (the
-    // world-objects layer draws the object itself; text stays on this pass).
-    const telegraphing = weapon.phase === "telegraph";
-    const progress = telegraphing ? clamp(weapon.frames / Math.max(1, profile.telegraphFrames), 0, 1) : 1;
-    const remaining = telegraphing ? 1 : 1 - clamp(weapon.frames / Math.max(1, profile.groundFrames), 0, 1);
-    const tagY = FLOOR - profile.height * FIGHTER_SCALE - 26;
-    replay(weapon.x, tagY, () => {
-      ctx.globalAlpha = telegraphing ? progress : 0.55 + remaining * 0.45;
-      ctx.font = "900 15px system-ui, sans-serif";
-      ctx.textAlign = "center";
-      ctx.fillStyle = "#ffd54a";
-      ctx.strokeStyle = "rgba(0,0,0,.75)";
-      ctx.lineWidth = 4;
-      ctx.strokeText(profile.name, weapon.x, tagY);
-      ctx.fillText(profile.name, weapon.x, tagY);
-    });
-  }
-  for (const effect of state.effects) {
-    if (effect.kind !== "combatText") continue;
-    const alpha = clamp(effect.life / (effect.max || 0.9), 0, 1);
-    replay(effect.x, effect.y, () => {
-      ctx.translate(effect.x, effect.y);
-      ctx.shadowBlur = 25;
-      ctx.shadowColor = effect.color;
-      drawCombatTextBody(effect, alpha);
-    });
-  }
-  presentationDebug.cinema3dOverlayReads += drawn;
-}
-
-// ---------------------------------------------------------------------------
-// 5.3 SPECTACLE (#16/#43/#47/#48) — the reads CINEMA 3D was missing.
-//
-// Everything below is a READ of state the 2D pass already owns. They exist as
-// named functions (not inline arrows in the host literal) because each one
-// carries a rule the 3D side must not re-derive.
-// ---------------------------------------------------------------------------
-
-// The one "how hard is the stage reacting" number both renderers draw from.
-// CRITICAL: stageSurge() is also where the KO pulse is LATCHED (the phase
-// edge into finish/roundover, via readAmbientPulse -> ambientPhaseChange). In
-// 2D that latch rode inside drawStageAmbient, whose only caller lives in the
-// `!cinema3dWorld` branch — so before 5.3 a KO in CINEMA 3D never even
-// latched a pulse, and MOTION-ATLAS v5.0's "+27 mean brightness at the KO
-// tick" measured 0 in 3D. The 3D stage layer calling this every frame is what
-// fires it. The latch is one-shot per phase edge and the hold latch is
-// idempotent, so being called from both renderers changes nothing.
-function cinema3dAmbientPulse() {
-  const surge = stageSurge(state.simulationTick);
-  return {
-    level: surge.level,
-    age: surge.age,
-    ko: surge.ko,
-    hold: surge.hold,
-    pulseAge: surge.pulseAge,
-    kind: ambientObs.pulseKind,
-    // The latch tick seeds the firework scatter, exactly as the 2D bursts do.
-    latchTick: ambientObs.pulseTick,
-    frame: state.simulationTick,
-    reduced: Boolean(state.accessibility.reducedMotion),
-  };
-}
-
-// The crowd's DRAWN reaction (the sim value, or the held KO reaction during
-// the roundover hold) — the same number drawCrowd and drawPracticalLights use.
-function cinema3dCrowdReaction() {
-  return crowdDrawReaction();
-}
-
-// The live elemental flipbook pool. Handed over raw: the 3D layer reads it
-// once per frame and never mutates it, and the array is already capped at
-// elementBudgetCap() by the spawner.
-function cinema3dElementSprites() {
-  return elementParticles;
-}
-
-// One element sheet, resolved: null until the lazy fetch lands, so the 3D
-// layer simply draws nothing for that sheet in the meantime (the 2D pass
-// falls back to a procedural glow; in 3D the charge light covers the gap).
-function cinema3dElementSheet(name) {
-  const meta = elementSheets.manifest?.[name];
-  const image = elementSheets.images.get(name);
-  if (!meta || !image?.complete || !image.naturalWidth) return null;
-  return { meta, image };
-}
-
-// The charging limb: where it is, how hot, and the kit's colours. Radius and
-// alpha are engine/vfx-bridge.mjs so the 3D point light swells with the 2D
-// halo instead of near it.
-function cinema3dElementCharge(side) {
-  const obs = elementObs[side];
-  if (!obs || obs.chargeLevel <= 0.02) return null;
-  const fighter = state.fighters[side];
-  const kit = fighterElementKit(fighter?.def);
-  if (!kit) return null;
-  const tier = fighter.attacking ? elementTier(fighter.attacking) : 0;
-  return {
-    level: obs.chargeLevel, x: obs.limbX, y: obs.limbY, tier,
-    glow: kit.glow, core: kit.core,
-  };
-}
-
-// The battle-damage list for one side plus its revision, so the 3D decal is
-// rebuilt on exactly the pushes the 2D scratch cache invalidates on.
-function cinema3dBattleDamage(side) {
-  if (side !== 0 && side !== 1) return null;
-  return {
-    marks: battleDamageMarks[side],
-    revision: battleDamageRevision[side],
-    gore: Boolean(state.graphicFatalities),
-  };
-}
-
-function ensureCinema3d() {
-  if (!state.cinema3d || !cinema3dAllowed()) {
-    cinema3dBridge.renderer?.setVisible(false);
-    return;
-  }
-  if (cinema3dBridge.renderer || cinema3dBridge.loading) return;
-  cinema3dBridge.loading = true;
-  import("./renderer/three/main.mjs").then((module) => {
-    const renderer3d = module.createRenderer({
-      state,
-      cinematicCamera,
-      stageImages,
-      fighterAtlases,
-      fighterMoveAtlases,
-      // Wave 16: the 3D rigs consume the same palette-remapped atlas canvases
-      // the 2D renderer draws (canvas shimmed with Image-like fields). The
-      // palette key invalidates a side's rig when its color pick changes.
-      fighterAtlasFor: (fighter, bank) => paletteAtlas(fighter.def.id, fighter.side, bank),
-      fighterPaletteKey: (fighter) => (matchPalettes[fighter.side] === 1 ? "alt" : ""),
-      // 2.7 critic round: availability-gated HD lookup — null for fighters/
-      // banks with no sheet under renderer/hd/, so the 3D layer never 404s.
-      hdSheetPath,
-      fighterRenderSize,
-      fighterAnimationPose,
-      // v2.6 MOTION: the shared movement-animation transform (jump flips,
-      // squash & stretch, leans, wobble, dizzy sway) so poseRig animates
-      // identically to drawFighter. Canvas rotation convention (y-down).
-      fighterMotionTransform,
-      moveSheetAdjust: MOVE_SHEET_ADJUST,
-      // v5.3: the fallback generation keeps the SHIPPED sheet adjust, so a
-      // rejected specials cell is the same size in the rig as on the canvas.
-      moveSheetLegacyAdjust: MOVE_SHEET_LEGACY_ADJUST,
-      // v2.7 FRAMES: motion-bank world-size correction for the 3D rigs.
-      motionSheetAdjust: MOTION_SHEET_ADJUST,
-      // v2.10 WALK: the walk bank's own (currently empty) correction table.
-      walkSheetAdjust: WALK_SHEET_ADJUST,
-      // v3.0 UNIFIED: the unified bank's world-size correction, and the gate
-      // that says whether this fighter is drawing his standing guard from it —
-      // both renderers must answer that question identically or the 2D canvas
-      // and the CINEMA 3D rig will disagree about the guard-flinch height.
-      unifiedSheetAdjust: UNIFIED_SHEET_ADJUST,
-      isUnifiedFighter: unifiedFighterReady,
-      downTiltFor,
-      // 5.1 CINEMA 3D fighter layer: the prone settle's full-tilt reference
-      // (so the 3D `share` cannot drift from the 2D constant), and the
-      // bank's OWN sheet for the idle-time bank warm-up — paletteAtlas falls
-      // back to the base sheet for a bank a fighter does not have, which
-      // the warm-up must never mistake for an authored bank.
-      downTiltRadians: DOWN_TILT_RADIANS,
-      fighterBankSheet: (fighterId, bank) => altAtlasSource(fighterId, bank).image || null,
-      // v5.2 LOCOMOTION (bookends): the cinematic rotation a prone cell
-      // actually draws under (the victim's KO lie sheds its own lie first).
-      cinematicDrawRotation,
-      renderFighter,
-      // 5.3 SPECTACLE (#19): the battle-scar list as decal descriptors, so
-      // the 3D arena wears the fight the same way the canvas does.
-      stageScars: stageScarDecals,
-      // 5.3 SPECTACLE (#16/#43): the ambient surge (and, critically, its KO
-      // latch) and the crowd's drawn reaction — the two numbers every 3D
-      // stage's practicals now answer.
-      ambientPulse: cinema3dAmbientPulse,
-      crowdReaction: cinema3dCrowdReaction,
-      // 5.3 SPECTACLE (#47): the elemental flipbook pool, its sheets and the
-      // charging limb, so a curse special is curse-green flipbooks in 3D too
-      // and not just a re-tinted spark burst.
-      elementSprites: cinema3dElementSprites,
-      elementSheet: cinema3dElementSheet,
-      elementCharge: cinema3dElementCharge,
-      // 5.3 SPECTACLE (#48): the bruises and cuts, plus the SAME painter the
-      // 2D compositor uses, handed a foreign context.
-      battleDamage: cinema3dBattleDamage,
-      paintBattleDamage: (context, side) => paintBattleDamageWith(context, side),
-      crowdBillboards,
-      crowdSheetImage: (name) => crowdSheets.images.get(name) || null,
-      crowdMediaRequest: ensureCrowdMedia,
-      // v2.9 critic round: the per-cell corrections travel the same bridge so
-      // CINEMA 3D plants and scales identically to the 2D path (M3 oversized
-      // crouch cells, M5 the Commissioner's base-bank floor registration).
-      baseCellDrawAdjust,
-      cellDrawAdjust,
-      cellFloorOffset,
-      cellVerticalOffset,
-      gritSuperCost: GRIT_RULES.superCost,
-      // CINEMA 3D gameplay reads (world-objects layer): the SAME 2D painters
-      // that draw projectiles, thrown objects, the stage weapon and Post's
-      // wire traps, handed a foreign 2D context so the 3D layer can print
-      // each live object into an impostor canvas — one drawing per object in
-      // both renderers, never a second art set. Presentation-only reads.
-      paintProjectile: (context, projectile, timeMs, options) => {
-        const life = projectile.maxLifeFrames
-          ? clamp(projectile.lifeFrames / projectile.maxLifeFrames, 0, 1) : 1;
-        // `throwable` is the sim's own split (drawProjectiles keys on it);
-        // the 3D layer marks its synthetic stage-weapon descriptors the same
-        // way the 2D drawStageWeapon call would.
-        if (projectile.throwable) {
-          drawThrowableWith(context, projectile, timeMs, life, options);
-          return;
-        }
-        const pulse = 1 + Math.sin(timeMs * 0.018 + projectile.x * 0.03) * 0.11;
-        drawProjectileBodyWith(context, projectile, timeMs, life, pulse);
-      },
-      paintTrap: (context, trap, timeMs) => drawPaintTrapWith(context, trap, timeMs),
-      stageWeaponProfile,
-      fighterScale: FIGHTER_SCALE,
-      gameCanvas: canvas,
-      isRollbackResimulating: () => rollbackResimulating,
-      // 4.3 MESH FIGHTERS switch (options panel / ?fighters=3d), read per frame.
-      meshFightersEnabled: () => Boolean(state.meshFighters),
-      getPerformanceProfile: () => state.performance,
-      isWorldActive: () => cinema3dWorldActive(),
-    });
-    cinema3dBridge.renderer = renderer3d;
-    cinema3dBridge.onHit = (payload) => renderer3d.onHit(payload);
-    // MOTION FIX 12: dust parity latch (takeoff / landing / dash ground work).
-    cinema3dBridge.onDust = (payload) => renderer3d.onDust?.(payload);
-  }).catch((error) => {
-    console.warn("CINEMA 3D failed to load; staying on the 2D renderer.", error);
-  }).finally(() => {
-    cinema3dBridge.loading = false;
-  });
-}
+// Painted rendering is the sole presentation path. Null hooks preserve shared
+// effects/prewarm interfaces without importing experimental renderers.
+const cinema3dBridge = Object.freeze({renderer:null,onHit:null,onDust:null});
+function cinema3dAllowed() { return false; }
+function cinema3dWorldActive() { return false; }
+function updateCinema3dHudFade() {}
+function drawCinema3dOverlayReads() {}
 
 renderBindings();
 applyAccessibilitySettings();

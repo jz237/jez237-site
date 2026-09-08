@@ -432,10 +432,10 @@ probe('title-menu', async () => {
       engine: window.__finalBlowEngine?.snapshot(),
       simHz: window.__finalBlowEngine?.simulationHz,
     }))()`);
-    assert.equal(title.lastTitleButton, 'demo3dButton');
+    assert.equal(title.lastTitleButton, 'controlsButton');
     assert.match(title.title, /Final Blow/);
-    assert.match(title.build, /5\.6/);
-    assert.equal(title.version.text, 'VERSION 5.6.9');
+    assert.match(title.build, /5\.7/);
+    assert.equal(title.version.text, 'VERSION 5.7.0');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.6.9-ringside');
+    assert.equal(title.engineVersion, '5.7.0-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -2948,6 +2948,7 @@ probe('training-ui', async () => {
 });
 
 probe('controls-ui', async () => {
+    await evaluate(client, `document.querySelector('#controlsButton').click()`);
     controlsUi = await evaluate(client, `(() => {
       const controlStyle = document.querySelector('#controlStyleSelect');
       controlStyle.value = 'modern';
@@ -4653,7 +4654,7 @@ probe('offline-cache', async () => {
       };
     })()`);
     assert.equal(offlineCache.controlled, true);
-    assert.match(offlineCache.name, /final-blow-shell-5\.6/);
+    assert.match(offlineCache.name, /final-blow-shell-5\.7/);
     // 1.9E added engine/atlas-facing.mjs to the shell: game.js imports it, so
     // offline boot needs it cached.
     // 5.1 added engine/{audio-manifest, ambient, announcer, crowd-voice, shared-sfx,
@@ -4684,8 +4685,8 @@ probe('offline-cache', async () => {
       version: window.__finalBlowEngine?.version,
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
-    assert.match(controlledReload.build, /5\.6/);
-    assert.equal(controlledReload.version, '5.6.9-ringside');
+    assert.match(controlledReload.build, /5\.7/);
+    assert.equal(controlledReload.version, '5.7.0-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4702,8 +4703,8 @@ probe('offline-cache', async () => {
       badge: document.querySelector('#offlineBadge').textContent,
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
-    assert.match(offlineBoot.build, /5\.6/);
-    assert.equal(offlineBoot.version, '5.6.9-ringside');
+    assert.match(offlineBoot.build, /5\.7/);
+    assert.equal(offlineBoot.version, '5.7.0-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4749,7 +4750,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.6.9');
+    assert.equal(landscape.version.text, 'VERSION 5.7.0');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
@@ -5179,122 +5180,14 @@ probe('portrait-gate', async () => {
     assert.equal(portrait.gateVisible, true);
 });
 
-probe('cinema-3d', async () => {
-  // 5.3 VERIFICATION HARNESS (sweep #54). renderer/three is ~9,000 lines that
-  // no test ever booted: 4.3 Mesh Fighters and 4.8 Front Row shipped with no
-  // automated check, and a broken 3D toggle is a black screen the owner would
-  // find on his phone before any test did. This runs LAST because it reloads
-  // the page under ?renderer=3d, which forces CINEMA 3D on for the session
-  // without persisting the toggle.
-  //
-  // Headless Chrome draws this through SwiftShader on the smoke's existing
-  // flags (no --use-angle needed): measured ~242 draw calls / ~4,300 triangles
-  // on the Somerset fight frame.
-  //
-  // CINEMA 3D refuses to activate on the battery profile (cinema3dAllowed), and
-  // by this point in the run the mobile section has driven the quality governor
-  // down to it and the fatality section has left reduced motion on. Both are
-  // persisted preferences, so they survive the reload below — put the session
-  // back on a profile that can actually draw a 3D frame first.
-  await evaluate(client, `(() => {
-    const reduced = document.querySelector('#reducedMotionToggle');
-    reduced.checked = false;
-    reduced.dispatchEvent(new Event('change', { bubbles: true }));
-    window.__finalBlowQa.governorForget();
-    return window.__finalBlowQa.quality('high');
-  })()`);
-  await client.send("Emulation.setTouchEmulationEnabled", { enabled: false, maxTouchPoints: 1 });
-  await client.send("Emulation.setDeviceMetricsOverride", {
-    width: 1440,
-    height: 900,
-    deviceScaleFactor: 1,
-    mobile: false,
-  });
-  await navigate(client, `${gameUrl}&renderer=3d`);
+probe('painted-only', async () => {
+  await evaluate(client, `localStorage.setItem('final-blow-cinema-3d','1');localStorage.setItem('final-blow-mesh-fighters','1')`);
+  await navigate(client, `${gameUrl}&renderer=3d&fighters=3d`);
   await delay(1200);
-  cinemaBoot = await evaluate(client, `(() => ({
-    present: typeof window.__finalBlowThree,
-    cinema3d: window.__finalBlowEngine.snapshot().cinema3d ?? null,
-    performance: window.__finalBlowEngine.snapshot().performance,
-    reduced: window.__finalBlowEngine.snapshot().accessibility.reducedMotion,
-    controller: Boolean(navigator.serviceWorker && navigator.serviceWorker.controller),
-    active: window.__finalBlowThree ? window.__finalBlowThree.active : null,
-    statsKeys: window.__finalBlowThree ? Object.keys(window.__finalBlowThree.stats()).sort() : null,
-  }))()`);
-  assert.equal(cinemaBoot.present, 'object', `?renderer=3d must boot CINEMA 3D and publish its QA surface (${JSON.stringify(cinemaBoot)})`);
-  assert.equal(cinemaBoot.active, false, 'the world is idle on the title screen (isWorldActive)');
-  // The stats() shape every later assertion (and the 5.1 #40 bank report) reads.
-  for (const key of ['banks', 'crowd', 'drawcalls', 'fps', 'objectKinds', 'objects', 'programs', 'quality', 'scars', 'stage', 'tris']) {
-    assert.ok(cinemaBoot.statsKeys.includes(key), `stats() must report ${key}, got ${cinemaBoot.statsKeys.join(', ')}`);
-  }
-
-  // (a) The host contract, checked against the LIVE bridge object rather than
-  // the literal in game.js's source, which is all the unit test can see.
-  cinemaHost = await evaluate(client, `window.__finalBlowThree.hostContract()`);
-  assert.deepEqual(cinemaHost.required, [], 'the live CINEMA 3D host must carry every required member');
-  assert.deepEqual(cinemaHost.optional, [], 'the live CINEMA 3D host must carry every optional member');
-  assert.deepEqual(
-    cinemaHost.members,
-    [...CINEMA_HOST_REQUIRED, ...CINEMA_HOST_OPTIONAL],
-    'renderer/three/host-contract.mjs and the running renderer must agree on the member list',
-  );
-
-  // (b) A fight renders: draw calls and triangles after real painted frames.
-  await evaluate(client, `(() => {
-    window.__finalBlowQa.stage('somerset');
-    window.__finalBlowQa.fight('deathblow', 'jez');
-    window.__finalBlowQa.positions(480, 800);
-    window.__finalBlowQa.step(1);
-    return true;
-  })()`);
-  await delay(700);
-  cinemaFight = await evaluate(client, `(() => {
-    const stats = window.__finalBlowThree.stats();
-    return { active: window.__finalBlowThree.active, drawcalls: stats.drawcalls, tris: stats.tris, crowd: stats.crowd, programs: stats.programs, stage: stats.stage, quality: stats.quality, banksBuilt: stats.banks ? stats.banks.built : -1 };
-  })()`);
-  assert.equal(cinemaFight.active, true, 'the 3D world must be active on the fight screen');
-  assert.ok(cinemaFight.drawcalls > 0, `a rendered fight must issue draw calls, saw ${cinemaFight.drawcalls}`);
-  assert.ok(cinemaFight.tris > 0, `a rendered fight must draw triangles, saw ${cinemaFight.tris}`);
-  assert.ok(cinemaFight.programs > 0, 'the renderer must have compiled its shader programs');
-  assert.ok(cinemaFight.crowd > 0, '4.8 FRONT ROW: the painted crowd must reach the 3D frame');
-  assert.ok(cinemaFight.banksBuilt > 0, 'the fighter layer must have built at least one sheet bank');
-  assert.equal(cinemaFight.stage, 'somerset');
-
-  // (c) world-objects: the 5.1 gameplay layer (#42). A forced stage weapon on
-  // the floor and a live projectile both have to reach the 3D frame — they
-  // were invisible in 3D until 5.1, which is the regression this pins.
-  await evaluate(client, `(() => { window.__finalBlowQa.forceStageWeapon(640); window.__finalBlowQa.step(0.2); return true; })()`);
-  cinemaWeapon = await peakOverFrames(
-    `(() => { const stats = window.__finalBlowThree.stats(); return { objects: stats.objects, weapon: stats.objectKinds.weapon === 'ground' ? 1 : 0 }; })()`,
-    10,
-    40,
-  );
-  assert.ok(cinemaWeapon.objects >= 1, `the grounded stage weapon must be drawn in 3D, saw ${cinemaWeapon.objects}`);
-  assert.equal(cinemaWeapon.weapon, 1, 'the weapon impostor must report the grounded phase');
-
-  await evaluate(client, `(() => {
-    window.__finalBlowQa.fight('donald', 'benny');
-    window.__finalBlowQa.positions(200, 1180);
-    window.__finalBlowQa.input(0, { commandSpecial: true });
-    window.__finalBlowQa.step(0.25);
-    return window.__finalBlowEngine.snapshot().projectiles.length;
-  })()`);
-  cinemaProjectile = await peakOverFrames(
-    `(() => { const stats = window.__finalBlowThree.stats(); return { projectiles: stats.objectKinds.projectiles, objects: stats.objects }; })()`,
-    12,
-    40,
-  );
-  assert.ok(cinemaProjectile.projectiles >= 1, `a live projectile must be drawn in 3D, saw ${cinemaProjectile.projectiles}`);
-
-  // (d) The artifact: a real screenshot of the 3D world, kept for the eye, and
-  // measured so a black frame fails here instead of at the next release.
-  await evaluate(client, `window.__finalBlowEngine.toggleDebug(false)`);
-  await delay(120);
-  cinemaShot = await captureArtifact('cinema-3d.png');
-  assert.equal(cinemaShot.width, 1440);
-  assert.equal(cinemaShot.height, 900);
-  assert.ok(cinemaShot.mean > 8, `the 3D frame must not be black, mean luma ${cinemaShot.mean}`);
-  assert.ok(cinemaShot.litFraction > 0.2, `most of the 3D frame must carry image, lit ${cinemaShot.litFraction}`);
+  const retired = await evaluate(client, `({three:typeof window.__finalBlowThree,controls:document.querySelectorAll('#cinema3dToggle,#meshFightersToggle,#demo3dButton').length,imports:document.querySelectorAll('script[type="importmap"]').length,requests:performance.getEntriesByType('resource').filter(r=>r.name.includes('/renderer/three/')||r.name.includes('/renderer/vendor/')||r.name.includes('.glb')).map(r=>r.name)})`);
+  assert.equal(retired.three,'undefined');assert.equal(retired.controls,0);assert.equal(retired.imports,0);assert.deepEqual(retired.requests,[]);
+  await evaluate(client, `window.__finalBlowQa.fight('jez','benny');window.__finalBlowQa.step(.5)`);
+  assert.ok((await evaluate(client, `window.__finalBlowQa.pose()`)).every(p=>p.bank));
 });
 
 probe('console-clean', async () => {
