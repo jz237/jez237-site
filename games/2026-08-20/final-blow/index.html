@@ -9,8 +9,8 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="Final Blow: Philly After Dark — a playable 1990s-inspired weapon fighter prototype.">
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23080b13'/%3E%3Cpath d='M14 10h39l-4 12H29l-2 8h18l-4 11H24l-5 15H5z' fill='%23ef2c28'/%3E%3C/svg%3E">
-  <title>Final Blow 5.6.7: Ringside</title>
-  <meta name="application-version" content="5.6.7">
+  <title>Final Blow 5.6.8: Ringside</title>
+  <meta name="application-version" content="5.6.8">
   <link rel="manifest" href="manifest.webmanifest">
   <link rel="stylesheet" href="styles.css">
 </head>
@@ -20,7 +20,7 @@
       <a class="mini-brand" href="#" id="homeLink" aria-label="Return to title">
         <span>FINAL</span><strong>BLOW</strong>
       </a>
-      <div class="build-tag">RINGSIDE <b>5.6.7</b></div>
+      <div class="build-tag">RINGSIDE <b>5.6.8</b></div>
       <div id="offlineBadge" class="offline-badge" aria-live="polite">CACHE CHECK</div>
       <button id="trackButton" class="track-button" type="button" aria-label="Play next soundtrack">♫ PHILLY AFTER DARK</button>
       <div id="padStatus" class="pad-status" aria-live="polite"><i></i> KEYBOARD READY</div>
@@ -184,7 +184,7 @@
           <p class="eyebrow">A PHILADELPHIA WEAPON FIGHTER</p>
           <h1 id="gameTitle"><span>FINAL</span><strong>BLOW</strong></h1>
           <h2>PHILLY AFTER DARK</h2>
-          <p id="titleVersion" class="title-version" aria-label="Version 5.6.7">VERSION 5.6.7</p>
+          <p id="titleVersion" class="title-version" aria-label="Version 5.6.8">VERSION 5.6.8</p>
           <p class="hook">Ten fighters. Six stages. One last chance to finish it.</p>
         </div>
         <div id="titleNewcomer" class="title-newcomer" hidden>
@@ -222,6 +222,7 @@
             <button class="arcade-button bracket-button" id="phillyOpenButton">THE PHILLY OPEN · BRACKET<small id="phillyOpenStatus">4 OR 8 ENTRANTS · SINGLE ELIMINATION</small></button>
             <div class="menu-row">
               <button class="arcade-button demo-button" id="demoButton">WATCH DEMO · CPU VS CPU</button>
+              <button class="arcade-button demo-button" id="moveViewerButton" type="button">MOVE VIEWER<small>SLOW MOTION · PAUSE · FRAME BY FRAME</small></button>
               <button class="arcade-button demo-button" id="spectatorSetupButton" type="button">CUSTOM CPU MATCH<small>FIGHTERS · STAGE · DIFFICULTY · SERIES</small></button>
               <button class="arcade-button demo-button" id="replayTheaterButton">REPLAY THEATER<small id="replayTheaterStatus">WATCH SAVED MATCHES</small></button>
             </div>
@@ -799,7 +800,7 @@
 <script type="importmap">
     { "imports": { "three": "./renderer/vendor/three.module.js", "three/addons/": "./renderer/vendor/jsm/" } }
   </script>
-  <script type="module" src="game.js?v=final-blow-5.6.7"></script>
+  <script type="module" src="game.js?v=final-blow-5.6.8"></script>
 <dialog id="spectatorSetupDialog" class="controls-dialog spectator-dialog" aria-labelledby="spectatorSetupTitle">
  <form id="spectatorSetupForm">
  <header><h2 id="spectatorSetupTitle">YOUR FIGHT CARD</h2><button type="button" id="spectatorSetupClose" class="dialog-close" aria-label="Close matchup setup">×</button></header>
@@ -816,6 +817,15 @@
  <dialog id="instantReplayDialog" class="instant-replay-dialog" aria-labelledby="instantReplayTitle">
  <header><strong id="instantReplayTitle">INSTANT REPLAY · ½ SPEED</strong><button type="button" id="instantReplayClose">RETURN TO LIVE</button></header>
  <canvas id="instantReplayCanvas" width="960" height="540" aria-label="Replay of the previous exchange"></canvas>
+ </dialog>
+<dialog id="moveViewerDialog" class="controls-dialog move-viewer-dialog" aria-labelledby="moveViewerTitle">
+ <header><h2 id="moveViewerTitle">MOVE VIEWER</h2><button id="moveViewerClose" type="button" class="dialog-close" aria-label="Close move viewer">×</button></header>
+ <div class="spectator-grid"><label>FIGHTER<select id="moveViewerFighter"></select></label><label>MOVE<select id="moveViewerMove"></select></label></div>
+ <canvas id="moveViewerCanvas" width="960" height="560" aria-label="Painted fighter animation preview"></canvas>
+ <p id="moveViewerStatus" role="status">Choose a fighter and move.</p>
+ <input id="moveViewerFrame" type="range" min="0" max="60" value="0" aria-label="Animation frame">
+ <div class="move-viewer-controls"><button type="button" id="moveViewerPrevious" aria-label="Previous frame">◀ FRAME</button><button type="button" id="moveViewerPlay">PLAY</button><button type="button" id="moveViewerNext" aria-label="Next frame">FRAME ▶</button><label>SPEED<select id="moveViewerSpeed"><option value="0.25">¼ SPEED</option><option value="0.5" selected>½ SPEED</option><option value="1">NORMAL</option></select></label><button type="button" id="moveViewerFlip">FACE LEFT</button></div>
+ <p class="move-viewer-hint">Drag the timeline or use the arrow keys to inspect each frame. Space plays or pauses. Contact frames are marked in gold.</p>
  </dialog>
 </body>
 </html>
