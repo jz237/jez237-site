@@ -19,3 +19,9 @@ test("specials, crouching and airborne attacks retain their own artwork",()=>{
 test("known chopped raised-hand and head cells are rejected without blocking complete punches",()=>{
  for(const id of ["jez","benny"]){for(const frame of [3,9,14])assert.ok(clippedCell(id,"unified-ext3",frame));assert.equal(clippedCell(id,"unified-ext3",0),false);}
 });
+
+test('standing artwork cannot replace an air attack on touchdown or a defensive interruption',()=>{
+ const f=fighter('benny','kick',16);
+ for(const patch of [{attacking:{...f.attacking,cancelProfileId:'air-heavy'}},{blockstunFrames:2},{wakeupFrames:2},{down:true},{dizzyFrames:2},{grabbing:true}])
+  assert.equal(paintedFlowPose({...f,...patch}),null);
+});
