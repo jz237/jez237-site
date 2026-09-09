@@ -1,4 +1,4 @@
-import { triangulate } from './vectors.js?v=philly-2026090902';
+import { triangulate } from './vectors.js?v=philly-2026090903';
 
 export function metres(value) {
   const number = parseFloat(value);
@@ -20,6 +20,7 @@ export function neighborhoodBuildings(doc, projection) {
       name: tags.name || '', address: [tags['addr:housenumber'],
       tags['addr:street']].filter(Boolean).join(' '),
       named: !!tags.name, year: 0, roofShape: tags['roof:shape'] || 'unknown',
+      material: tags['building:material'] || '', color: tags['building:colour'] || '',
       roofHeight: Math.min(height * 0.7, metres(tags['roof:height'])
         || (metres(tags['roof:levels']) || 1) * 2.5),
       roofAcross: tags['roof:orientation'] === 'across',
@@ -64,6 +65,7 @@ export function roofProfile(building) {
 /** Consolidated local geometry retains precise footprints and subdivides mapped pitched roofs. */
 export function localBuildingSolids(buildings, groundAt) {
   const position = [], ground = [], info = [], year = [], index = [], buildingEnd = [], facadeOrigin = [];
+  const finish = [];
   for (const b of buildings) {
     const ring = [];
     for (let i = 0; i < b.poly.length; i += 2) ring.push([b.poly[i],b.poly[i+1]]);
@@ -72,9 +74,11 @@ export function localBuildingSolids(buildings, groundAt) {
     const cx = ring.reduce((a,p) => a+p[0],0)/ring.length;
     const cz = ring.reduce((a,p) => a+p[1],0)/ring.length;
     const roof = roofProfile(b);
+    const tint = buildingFinish(b);
     const vertex = (p,h) => {
       index.push(position.length/3); position.push(p[0],h,p[1]);
       facadeOrigin.push(cx,cz);
+      finish.push(...tint);
       ground.push(g); info.push(b.height,b.minHeight); year.push(0);
     };
     for (let i = 0; i < ring.length; i++) {
@@ -102,9 +106,32 @@ export function localBuildingSolids(buildings, groundAt) {
   }
   return { position: new Float32Array(position), ground: new Float32Array(ground),
     facadeOrigin: new Float32Array(facadeOrigin),
+    finish: new Float32Array(finish),
     info: new Float32Array(info), year: new Float32Array(year), index: new Uint32Array(index),
     buildingEnd: new Uint32Array(buildingEnd), vertexCount: position.length/3,
     indexCount: index.length, buildingCount: buildings.length };
+}
+
+/** Documented wall colours/materials; zero alpha means use illustrative finishes. */
+export function buildingFinish(building) {
+  const colors = { red: '#9f4938', brown: '#80634b', white: '#d9d6c8', grey: '#8a9090',
+    gray: '#8a9090', beige: '#b9aa8d', black: '#353b3e' };
+  const materials = { brick: '#a16d52', stone: '#b1aa91', concrete: '#a2a49b',
+    glass: '#60818c', wood: '#94734e', metal: '#88969a' };
+  const raw = String(building.color || '').toLowerCase();
+  const color = colors[raw] || (/^#[0-9a-f]{6}$/.test(raw) ? raw : null)
+    || materials[building.material];
+  if (!color) return [0,0,0,0];
+  return [1,3,5].map(i => Math.pow(parseInt(color.slice(i,i+2),16)/255,2.2)).concat(1);
+}
+
+export function streetWidth(tags) {
+  const mapped = metres(tags.width);
+  if (mapped) return Math.max(2, Math.min(35, mapped));
+  const lanes = parseInt(tags.lanes,10);
+  if (lanes > 0 && lanes < 9) return Math.max(4, lanes * 3.1 + 2);
+  return ({ motorway: 15, trunk: 13, primary: 12, secondary: 10, tertiary: 9,
+    residential: 8, service: 5, footway: 2.2, path: 2, cycleway: 2.5 })[tags.highway] || 7;
 }
 
 export function neighborhoodLabels(doc) {

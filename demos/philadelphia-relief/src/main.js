@@ -1,4 +1,5 @@
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090902';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090903';
+import { createOrientation } from './orientation.js?v=philly-2026090903';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -8,53 +9,53 @@ import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090902';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090903';
 
-import { createStore } from './state.js?v=philly-2026090902';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090902';
-import { effectiveLight } from './solar.js?v=philly-2026090902';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090902';
+import { createStore } from './state.js?v=philly-2026090903';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090903';
+import { effectiveLight } from './solar.js?v=philly-2026090903';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090903';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090902';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090902';
+} from './geo.js?v=philly-2026090903';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090903';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090902';
+} from './tours.js?v=philly-2026090903';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090902';
+} from './urlstate.js?v=philly-2026090903';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090902';
+} from './degraded.js?v=philly-2026090903';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090902';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026090902';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090902';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090902';
-import { createPostFX } from './postfx.js?v=philly-2026090902';
-import { createCameraRig } from './camera.js?v=philly-2026090902';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090902';
-import { createStructures } from './structures.js?v=philly-2026090902';
+} from './terrain.js?v=philly-2026090903';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026090903';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090903';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090903';
+import { createPostFX } from './postfx.js?v=philly-2026090903';
+import { createCameraRig } from './camera.js?v=philly-2026090903';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090903';
+import { createStructures } from './structures.js?v=philly-2026090903';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090902';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090902';
+} from './structures-data.js?v=philly-2026090903';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090903';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090902';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090902';
+} from './flood.js?v=philly-2026090903';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090903';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090902';
+} from './vectors.js?v=philly-2026090903';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090902';
-import { getTheme } from './themes.js?v=philly-2026090902';
+} from './ui.js?v=philly-2026090903';
+import { getTheme } from './themes.js?v=philly-2026090903';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -203,8 +204,8 @@ async function loadEverything() {
   // Schematic landmark models and their information cards are enhancements:
   // without them the map still draws every footprint and label.
   [data.landmarkModels, data.landmarkCards] = await Promise.all([
-    optionalJson('data/landmark-models.json?v=architecture2'),
-    optionalJson('data/landmark-cards.json?v=bauder1')]);
+    optionalJson('data/landmark-models.json?v=skyline3'),
+    optionalJson('data/landmark-cards.json?v=skyline3')]);
 
   setProgress(0.82, 'Building the scene…');
   return { results, data };
@@ -323,7 +324,7 @@ async function boot() {
     reefImagery: data.reefImagery, quality: effectiveQuality,
   });
   scene.add(terrain.mesh);
-  const diorama = createDiorama(THREE, { terrain, projection, sampleElevation, imagery: data.imagery });
+  const diorama = createDiorama(THREE, { terrain, projection, sampleElevation, woodland: data.woodland });
   scene.add(diorama.group);
 
   const imageryDetail = createImageryTiles(THREE, {
@@ -334,6 +335,7 @@ async function boot() {
     onTile: (cell, image) => diorama.addTile(cell, image),
     onTileRemoved: key => diorama.dropTile(key),
     maxAnisotropy: renderer.capabilities.getMaxAnisotropy(),
+    reducedMotion: REDUCED_MOTION,
     onStatus(detail) {
       const credit = $('imageryCredit');
       if (!credit) return;
@@ -476,6 +478,7 @@ async function boot() {
     onData(doc, names) {
       neighborhoodNames = names;
       structures?.setLocalDetail(doc);
+      diorama.setLocalDetail(doc);
       refreshLabels();
     },
   });
@@ -488,6 +491,8 @@ async function boot() {
 
   const motion = createMotion(store, projection);
   const ui = wireInterface({ store, motion, data, projection, rig, structures });
+  const orientation = createOrientation({ host: $('orientation'), projection, water: data.water,
+    onVisit: id => ui.visitPreset(id) });
 
   // Comparison modes bring their required counterpart into view. The choices
   // remain ordinary state, so the resulting split survives a shared URL.
@@ -810,8 +815,11 @@ async function boot() {
 
     const camera = rig.camera;
     const now = rig.pose();
+    orientation.update(now, viewW / viewH, dt);
     const miniature = dioramaAmount(now.dist, state.diorama && state.layers.terrain
       && state.era === 'present' && state.compareMode === 'off');
+    const modelWater = state.diorama && state.layers.terrain && state.layers.structures
+      && state.era === 'present' && state.compareMode === 'off' ? Math.max(miniature,.24) : miniature;
     const exaggeration = displayExaggeration(state, now.dist);
     document.body.classList.toggle('diorama-view', miniature > .1);
     terrain.uniforms.uDiorama.value = miniature;
@@ -909,6 +917,11 @@ async function boot() {
         entry.mesh.visible = state.layers.roads && state.era === 'present';
       }
       u.uNear.value = camera.near;
+      if (entry.kind === 'shoreline') {
+        entry.mesh.visible = state.layers.water || modelWater > .01;
+        u.uOpacity.value = state.layers.water ? .3 : modelWater * .36;
+        u.uLift.value = Math.min(3,lift*.15) + .1;
+      }
     }
     for (const entry of overlays.areas) {
       const u = entry.material.uniforms;
@@ -919,8 +932,8 @@ async function boot() {
       u.uFogDensity.value = terrain.uniforms.uFogDensity.value;
       if (u.uComparePosition) u.uComparePosition.value = state.comparePosition;
       if (entry.kind === 'water') {
-        entry.mesh.visible = state.layers.water || miniature > .01;
-        u.uOpacity.value = state.layers.water ? 1 : miniature * .86;
+        entry.mesh.visible = state.layers.water || modelWater > .01;
+        u.uOpacity.value = state.layers.water ? 1 : modelWater * .86;
         u.uSunDir.value.copy(sunDir);
         u.uTime.value = elapsed;
       }
@@ -1049,7 +1062,7 @@ async function boot() {
   finishLoading();
 
   window.addEventListener('pagehide', () => {
-    imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
+    imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose(); orientation.dispose();
   },
       { once: true });
 
@@ -1122,6 +1135,9 @@ function buildOverlays(data, ctx, root) {
     add(buildAreaMesh(THREE, rings, ctx, {
       kind: 'water', color: '#12283f', renderOrder: 6, name: 'water-areas',
     }), 'water', 'water');
+    add(buildLineMesh(THREE, rings.flatMap(p => [p.ring,...p.holes]), ctx, {
+      width: 1.8, color: '#adc4a0', opacity: .35, renderOrder: 7, name: 'mapped-shorelines',
+    }), 'water', 'shoreline');
 
     const byRank = groupLines(data.water, (p) => (p.rank <= 2 ? 'major' : 'minor'));
     for (const [rank, parts] of byRank) {
@@ -1975,6 +1991,7 @@ function wireInterface(deps) {
 
   const api = {
     layerToggles,
+    visitPreset,
     store,
     openCard(name, options) { return card.open(name, options); },
     openBuilding(name, record, options) { return card.openCustom(name, record, options); },

@@ -1,3 +1,26 @@
+## September 2026 miniature refinement
+
+The opening composition brings the model forward and reduces empty tabletop space.
+Woodland crowns now follow 7,729 OpenStreetMap woodland polygons, preserving interior
+clearings instead of inferring forests from green imagery. Rebuild the attributed
+dataset with `python tools/build_woodland.py`; individual crowns remain illustrative.
+Neighborhood extracts include mapped individual trees and documented building materials.
+Missing facade details remain illustrative; unknown roof forms remain flat.
+
+One and Two Liberty Place have sourced schematic crowns at their mapped anchors and
+published architectural heights. Thin regional silhouette outlines preserve footprint
+positions while helping distant towers remain readable. Bridge decks no longer add
+their base height twice; the main suspended span stays clear of intermediate piers.
+Parapets, tower bracing, pier caps and more hangers enrich the schematic bridges.
+Water has scale-sensitive reflections and ripples, with a restrained mapped shoreline.
+
+Visible aerial previews and refinements have priority over nearby look-ahead. Travel
+direction persists briefly after a drag, speculative requests yield to new visible
+work, and the existing bounded cache retains recent areas. Both incoming tiles and
+higher-resolution replacements crossfade, respecting reduced-motion preferences.
+A collapsible north-up locator shows the viewport and quick returns to Center City,
+Bauder Signs, The Hidden Reef and the whole valley. It opens compactly on phones.
+
 ## Levittown destination and street detail
 
 The Hidden Reef is now a searchable landmark and authored Levittown view (`#P=hidden-reef`).

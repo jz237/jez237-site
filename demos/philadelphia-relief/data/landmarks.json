@@ -112,7 +112,7 @@
       "lat": 39.8729,
       "c": "transport",
       "r": 2,
-      "d": "Built on the Delaware River tidal flats \u2014 among the lowest ground in the region.",
+      "d": "Built on the Delaware River tidal flats — among the lowest ground in the region.",
       "since": 1940
     },
     {
@@ -130,7 +130,7 @@
       "lat": 40.0555,
       "c": "park",
       "r": 1,
-      "d": "A 60 m deep gorge cut into the Piedmont \u2014 the sharpest relief inside the city."
+      "d": "A 60 m deep gorge cut into the Piedmont — the sharpest relief inside the city."
     },
     {
       "n": "Manayunk",
@@ -219,7 +219,7 @@
       "lat": 40.0218,
       "c": "town",
       "r": 2,
-      "d": "On the Main Line ridge \u2014 the drainage divide the railroad was built along."
+      "d": "On the Main Line ridge — the drainage divide the railroad was built along."
     },
     {
       "n": "Ardmore",
@@ -428,6 +428,24 @@
       "d": "Bauder Signs / Bauder Graphics at 3613 Witte Street, Philadelphia.",
       "viewPreset": "bauder-signs",
       "source": "Address: https://www.aecdaily.com/s/11239/corporate ; City of Philadelphia AIS address point: https://api.phila.gov/ais/v1/search/3613%20WITTE%20ST"
+    },
+    {
+      "n": "One Liberty Place",
+      "lon": -75.1681355,
+      "lat": 39.9525698,
+      "c": "civic",
+      "r": 2,
+      "d": "A stepped glass crown in the heart of the Center City skyline.",
+      "since": 1987
+    },
+    {
+      "n": "Two Liberty Place",
+      "lon": -75.1674547,
+      "lat": 39.9516785,
+      "c": "civic",
+      "r": 2,
+      "d": "A stepped glass crown in the heart of the Center City skyline.",
+      "since": 1990
     }
   ]
 }

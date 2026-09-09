@@ -14,16 +14,18 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090902';
+import { hexToRgb } from './themes.js?v=philly-2026090903';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026090902';
-import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026090902';
-import { damp } from './geo.js?v=philly-2026090902';
+} from './structures-data.js?v=philly-2026090903';
+import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026090903';
+import { damp } from './geo.js?v=philly-2026090903';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute vec2 aFacadeOrigin;
+  attribute vec4 aFinish;
+  varying vec4 vFinish;
   varying vec2 vFacadeXZ;
   varying vec3 vViewPosition;
   attribute float aGround;     // DEM elevation under the structure, metres
@@ -66,6 +68,7 @@ const VERTEX_SHADER = /* glsl */ `
     vWorld = p;
     vViewPosition = (modelViewMatrix * vec4(p, 1.0)).xyz;
     vFacadeXZ = position.xz - aFacadeOrigin;
+    vFinish = aFinish;
     vElev = aGround;
     vRel = aInfo.x > 0.0 ? clamp((position.y - aInfo.y) / aInfo.x, 0.0, 1.0) : 0.0;
     vYear = aYear;
@@ -75,6 +78,7 @@ const VERTEX_SHADER = /* glsl */ `
 
 const FRAGMENT_SHADER = /* glsl */ `
   precision highp float;
+  varying vec4 vFinish;
 
   varying vec2 vFacadeXZ;
   varying vec3 vViewPosition;
@@ -145,19 +149,31 @@ const FRAGMENT_SHADER = /* glsl */ `
     vec2 opening = smoothstep(vec2(0.16), vec2(0.16) + aa, cell)
       * (1.0 - smoothstep(vec2(0.78) - aa, vec2(0.78), cell));
     float window = opening.x * opening.y * (1.0 - roof) * legible * uFacade;
-    float variation = fract(sin(floor(vHeight) * 71.17) * 43758.54);
+    vec2 buildingAnchor = vWorld.xz - vFacadeXZ;
+    float variation = fract(sin(dot(floor(buildingAnchor), vec2(.173,.271))
+      + floor(vHeight) * 71.17) * 43758.54);
     vec3 masonry = mix(vec3(0.25, 0.10, 0.065), vec3(0.48, 0.38, 0.27), variation);
     #ifdef LANDMARK
     masonry = vec3(0.64, 0.60, 0.49);
     #endif
     vec3 glass = mix(vec3(0.018, 0.052, 0.08), vec3(0.09, 0.19, 0.25), max(0.0, n.y + 0.45));
     vec3 facade = mix(masonry, vec3(0.18, 0.24, 0.28), vStyle);
+    facade = mix(facade, vFinish.rgb, vFinish.a);
+    vec2 brickGrid = vec2(across / .32, vStorey / .105);
+    brickGrid.x += mod(floor(brickGrid.y), 2.0) * .5;
+    vec2 brickAA = max(fwidth(brickGrid), vec2(.025));
+    vec2 mortar = 1.0 - smoothstep(vec2(.06), vec2(.06) + brickAA, fract(brickGrid));
+    float brickLegible = 1.0 - smoothstep(.2,.7,max(brickAA.x,brickAA.y));
+    facade = mix(facade, facade * .62, max(mortar.x,mortar.y) * brickLegible * (1.0-vStyle) * .5);
     // Glazing reflects a broad sky gradient; stone and brick retain a tactile finish.
     float pane = fract(sin(dot(floor(bay), vec2(41.17, 19.43))) * 17371.3);
     float skyBand = .5 + .5 * sin(vRel * 7.0 + n.x * 2.0 + n.z * 3.0);
     glass = mix(glass, vec3(.23, .34, .39), skyBand * vStyle * .55);
     glass *= .82 + pane * .35;
     facade = mix(facade, glass, window);
+    float door = (1.0 - smoothstep(.15,.18,abs(cell.x-.5)))
+      * (1.0 - smoothstep(2.1,2.3,vStorey)) * (1.0-roof) * legible * (1.0-vStyle);
+    facade = mix(facade, vec3(.05,.065,.06), door * .7);
     float mullion = (1.0 - smoothstep(.025, .025 + aa.x, cell.x)) * legible;
     facade = mix(facade, vec3(.40, .43, .41), mullion * vStyle * .48);
     float course = (1.0 - smoothstep(0.03, 0.03 + aa.y, cell.y)) * legible;
@@ -413,6 +429,8 @@ export function createStructures(THREE, options) {
     geometry.setAttribute('position', new THREE.BufferAttribute(packed.position, 3));
     geometry.setAttribute('aFacadeOrigin', new THREE.BufferAttribute(
       packed.facadeOrigin || new Float32Array(packed.vertexCount * 2), 2));
+    geometry.setAttribute('aFinish', new THREE.BufferAttribute(
+      packed.finish || new Float32Array(packed.vertexCount * 4), 4));
     geometry.setAttribute('aGround', new THREE.BufferAttribute(packed.ground, 1));
     geometry.setAttribute('aInfo', new THREE.BufferAttribute(packed.info, 2));
     geometry.setAttribute('aYear', new THREE.BufferAttribute(
@@ -588,6 +606,7 @@ export function createStructures(THREE, options) {
   // against it would land in the wrong place; the proxies are placed in world
   // space every frame with the current exaggeration.
   let landmarkMesh = null;
+  let skylineEdges = null;
   const proxies = [];
   let selectedModel = -1;
   if (landmarkModels && landmarkModels.vertexCount > 0) {
@@ -600,6 +619,31 @@ export function createStructures(THREE, options) {
     landmarkMesh.renderOrder = 23;
     landmarkMesh.frustumCulled = false;
     group.add(landmarkMesh);
+    // A fine cartographic edge keeps subpixel tower silhouettes readable at
+    // regional scale without widening or moving their actual footprints.
+    const edgeGeometry = new THREE.EdgesGeometry(geometry, 28), edgePos = edgeGeometry.attributes.position;
+    const segments = [];
+    const groundLookup = new Map();
+    const pointKey = (x,y,z) => `${x.toFixed(2)},${y.toFixed(2)},${z.toFixed(2)}`;
+    for (let i=0; i<landmarkModels.vertexCount; i++) {
+      const m = landmarkModels.models.find(model => i >= model.vertexStart && i < model.vertexEnd);
+      if (m?.top > 100) groundLookup.set(pointKey(...landmarkModels.position.slice(i*3,i*3+3)), m);
+    }
+    for (let i=0; i<edgePos.count; i+=2) {
+      const x=edgePos.getX(i), y=edgePos.getY(i), z=edgePos.getZ(i);
+      const m=groundLookup.get(pointKey(x,y,z));
+      if (!m) continue;
+      segments.push({a:[x,z],b:[edgePos.getX(i+1),edgePos.getZ(i+1)],
+        ga:m.ground,gb:m.ground,sa:y,sb:edgePos.getY(i+1),year:m.built});
+    }
+    edgeGeometry.dispose();
+    if (segments.length) {
+      skylineEdges=buildLineSegments(THREE,segments);
+      skylineEdges.mesh.name='regional-skyline-edges'; skylineEdges.mesh.renderOrder=24;
+      const u=skylineEdges.material.uniforms;
+      u.uWidth.value=1.4; u.uColor.value.set(.065,.12,.15);
+      u.uEraYear=sharedUniforms.uEraYear; group.add(skylineEdges.mesh);
+    }
     for (const m of landmarkModels.models) {
       const proxy = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1));
       proxy.visible = false;
@@ -719,6 +763,12 @@ export function createStructures(THREE, options) {
     }
 
     // Bridges are big enough to keep at every range the tall tier uses.
+    if (skylineEdges) {
+      const u=skylineEdges.material.uniforms, amount=ctx.miniature || 0;
+      skylineEdges.mesh.visible=amount>.01;
+      u.uOpacity.value=amount*.78; u.uExag.value=exaggeration;
+      u.uHScale.value=hScale; u.uNear.value=camera.near;
+    }
     const bridgeGrow = tiers.length ? Math.max(0.35, tiers.reduce((m, t) => Math.max(m, t.grow), 0)) : 1;
     if (bridgeSolid) {
       bridgeSolid.mesh.material.uniforms.uGrow.value = 1;
@@ -864,6 +914,7 @@ export function createStructures(THREE, options) {
 
     setResolution(w, h) {
       if (bridgeLines) bridgeLines.material.uniforms.uResolution.value.set(w, h);
+      if (skylineEdges) skylineEdges.material.uniforms.uResolution.value.set(w,h);
       sharedUniforms.uViewportWidth.value = w;
     },
 
@@ -900,6 +951,7 @@ export function createStructures(THREE, options) {
         landmarkMesh.geometry.dispose();
         landmarkMesh.material.dispose();
       }
+      if (skylineEdges) { skylineEdges.mesh.geometry.dispose(); skylineEdges.material.dispose(); }
       for (const proxy of proxies) proxy.geometry.dispose();
       setSelectedBuilding(null);
       inspectionGroup.parent?.remove(inspectionGroup);

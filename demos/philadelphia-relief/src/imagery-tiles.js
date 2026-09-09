@@ -1,5 +1,5 @@
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
-import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090902';
+import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090903';
 
 export const TILE_SPECS = [
   { tier: 'tile-inspection', lon: 0.0032, lat: 0.0024, range: 600 },
@@ -120,17 +120,20 @@ export function createTileStream({ region, projection, load = fetchTile, install
   let lastStatus = { state: 'regional' };
   let finalSize = 2048;
   let direction = { lon: 0, lat: 0 };
+  let travelledAt = 0;
   function report() {
     const shown = desired.map(c => cache.get(c.key)).filter(Boolean);
     const first = shown[0];
-    lastStatus = { state: !active ? 'regional' : pending.size ? 'loading' : shown.length
+    const visiblePending = desired.filter(c => pending.has(c.key)).length;
+    lastStatus = { state: !active ? 'regional' : visiblePending ? 'loading' : shown.length
       ? 'active' : 'unavailable',
       active: !!shown.length, tier: first?.cell.tier.replace('tile-', '') || null,
       size: first?.size || 0, resolutionM: first ? detailResolutionM(first.cell, first.size,
       projection) : null,
       source: [...new Set(shown.map(e => e.source))].join(' · ') || null,
       visible: desired.length, loaded: shown.length, pending: pending.size,
-      refining: shown.length === desired.length && !!pending.size };
+      refining: shown.length === desired.length && !!visiblePending,
+      preparing: pending.size - visiblePending };
     onStatus(lastStatus);
   }
   function evict() {
@@ -148,14 +151,15 @@ export function createTileStream({ region, projection, load = fetchTile, install
       .map(cell => ({ cell, size: finalSize }));
     const queue = [
       ...desired.filter(c => !cache.has(c.key)).map(cell => ({ cell, size: 512 })),
-      ...refinements.slice(0,1),
-      ...ahead.filter(c => !cache.has(c.key)).map(cell => ({ cell, size: 512 })),
-      ...refinements.slice(1),
+      ...refinements,
+      ...(desired.every(c => cache.get(c.key)?.size >= finalSize)
+        ? ahead.filter(c => !cache.has(c.key)).map(cell => ({ cell, size: 512, speculative: true })) : []),
     ];
-    for (const { cell, size } of queue) {
+    for (const { cell, size, speculative = false } of queue) {
       if (pending.size >= 3) break;
       if (pending.has(cell.key) || (failed.get(cell.key) || 0) > Date.now()) continue;
       const controller = new AbortController();
+      controller.speculative = speculative;
       pending.set(cell.key, controller);
       load(cell, size, controller.signal).then(result => {
         if (disposed || controller.signal.aborted) return;
@@ -176,18 +180,25 @@ export function createTileStream({ region, projection, load = fetchTile, install
         const lon = pose.lon - previous.lon, lat = pose.lat - previous.lat;
         if (Math.hypot(lon * projection.metersPerDegLon, lat * projection.metersPerDegLat) > 2) {
           direction = { lon, lat };
+          travelledAt = Date.now();
         }
         if (Math.abs(pose.dist - previous.dist) > pose.dist * 0.25) direction = { lon: 0, lat: 0 };
       }
+      if (Date.now() - travelledAt > 3500) direction = { lon: 0, lat: 0 };
       const lookBehind = { ...pose, lon: pose.lon - direction.lon, lat: pose.lat - direction.lat };
       const plan = enabled ? planImageryTiles(pose, region, projection, width / height, mode,
-      previous) : { visible: [], ahead: [] };
+      lookBehind) : { visible: [], ahead: [] };
       previous = { ...pose }; desired = plan.visible; ahead = plan.ahead;
       // Keep memory bounded even at a steep angle spanning many detail levels.
       finalSize = mode === 'data' || (quality === 'performance' && mode !== 'maximum')
         || desired.length > 12 ? 1024 : 2048;
       const wanted = new Set([...desired, ...ahead].map(c => c.key));
-      for (const [key, controller] of pending) if (!wanted.has(key)) controller.abort();
+      const visibleWork = desired.some(c => (cache.get(c.key)?.size || 0) < finalSize);
+      for (const [key, controller] of pending) {
+        if (!wanted.has(key) || controller.speculative && visibleWork && !desired.some(c => c.key === key)) {
+          controller.abort(); pending.delete(key);
+        }
+      }
       for (const cell of desired) if (cache.has(cell.key)) cache.get(cell.key).used = ++clock;
       evict(); pump(); report();
     },
@@ -214,6 +225,7 @@ export function createImageryTiles(THREE, options) {
   `;
   const fragmentShader = `
     uniform sampler2D uTile; uniform float uCompareMode; uniform float uComparePosition;
+    uniform sampler2D uPrevious; uniform float uBlend; uniform float uArrival;
     uniform float uViewportWidth; uniform vec3 uCameraPos; uniform float uFogDensity;
     uniform vec3 uFogColor; uniform float uImageryOn; varying vec2 vUv;
     varying vec3 vWorld; varying float vElev;
@@ -221,16 +233,21 @@ export function createImageryTiles(THREE, options) {
       if (uCompareMode > 0.5 && uCompareMode < 2.5) {
         if (gl_FragCoord.x / max(uViewportWidth, 1.0) > uComparePosition) discard;
       } else if (uImageryOn < 0.5) discard;
-      vec3 c = texture2D(uTile, vUv).rgb;
+      vec3 c = mix(texture2D(uPrevious, vUv).rgb, texture2D(uTile, vUv).rgb, uBlend);
       c = pow(max(c, vec3(0.0)), vec3(0.98));
       c = mix(vec3(dot(c, vec3(0.2126,0.7152,0.0722))), c, 1.08);
       c = clamp((c - 0.5) * 1.055 + 0.5, 0.0, 1.0);
       float depth = length(vWorld-uCameraPos) * uFogDensity * exp(-max(0.0,vElev)/260.0);
-      gl_FragColor = vec4(mix(c, uFogColor, clamp(1.0-exp(-depth*depth),0.0,1.0)), 1.0);
+      vec2 edgeDistance = min(vUv, 1.0-vUv);
+      vec2 aa = max(fwidth(vUv), vec2(.00001));
+      float edge = smoothstep(0.0, aa.x*.6, edgeDistance.x) * smoothstep(0.0, aa.y*.6, edgeDistance.y);
+      gl_FragColor = vec4(mix(c, uFogColor, clamp(1.0-exp(-depth*depth),0.0,1.0)), uArrival * edge);
     }
   `;
   function remove(key) {
     const entry = entries.get(key); if (!entry) return;
+    const previous = entry.material.uniforms.uPrevious.value;
+    if (previous !== entry.material.uniforms.uTile.value) previous.dispose();
     group.remove(entry); entry.geometry.dispose(); entry.material.uniforms.uTile.value.dispose();
     entry.material.dispose(); entries.delete(key); options.onTileRemoved?.(key);
   }
@@ -241,8 +258,12 @@ export function createImageryTiles(THREE, options) {
       tex.minFilter = THREE.LinearMipmapLinearFilter; tex.magFilter = THREE.LinearFilter;
       tex.anisotropy = Math.min(8, options.maxAnisotropy || 8); tex.needsUpdate = true;
       const existing = entries.get(cell.key);
-      if (existing) { existing.material.uniforms.uTile.value.dispose();
-      existing.material.uniforms.uTile.value = tex; return; }
+      if (existing) {
+        const u = existing.material.uniforms;
+        if (u.uPrevious.value !== u.uTile.value) u.uPrevious.value.dispose();
+        u.uPrevious.value = u.uTile.value; u.uTile.value = tex;
+        u.uBlend.value = options.reducedMotion ? 1 : 0; return;
+      }
       const b = cell.bounds;
       const segments = Math.min(128, Math.max(16,
       Math.ceil((b.east-b.west)*projection.metersPerDegLon / 22)));
@@ -256,8 +277,10 @@ export function createImageryTiles(THREE, options) {
       (region.north-lat)/(region.north-region.south), sceneProjection.lonToX(lon));
         normal.setXYZ(i, sceneProjection.latToZ(lat), 0, 0); uv.setXY(i, u, v);
       }
-      const material = new THREE.ShaderMaterial({ uniforms: { ...terrain.uniforms, uTile: { value: tex } },
-        vertexShader, fragmentShader, depthWrite: false, side: THREE.DoubleSide,
+      const material = new THREE.ShaderMaterial({ uniforms: { ...terrain.uniforms, uTile: { value: tex },
+        uPrevious: { value: tex }, uBlend: { value: 1 },
+        uArrival: { value: options.reducedMotion ? 1 : 0 } },
+        vertexShader, fragmentShader, transparent: true, depthWrite: false, side: THREE.DoubleSide,
         polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
       const mesh = new THREE.Mesh(geometry, material); mesh.frustumCulled = false;
       mesh.renderOrder = 1 + (3 - cell.level) * 0.1;
@@ -277,9 +300,19 @@ export function createImageryTiles(THREE, options) {
         }).slice(0,4).map(mesh => ({ texture: mesh.material.uniforms.uTile.value,
           bounds: mesh.userData.cell.bounds }));
     },
-    tick() {},
+    tick(dt) {
+      for (const mesh of entries.values()) {
+        const u = mesh.material.uniforms;
+        u.uBlend.value = Math.min(1, u.uBlend.value + dt / .45);
+        u.uArrival.value = Math.min(1, u.uArrival.value + dt / .35);
+        if (u.uBlend.value === 1 && u.uPrevious.value !== u.uTile.value) {
+          u.uPrevious.value.dispose(); u.uPrevious.value = u.uTile.value;
+        }
+      }
+    },
     attachTerrain(next) { terrain = next; for (const mesh of entries.values()) {
-      const tile = mesh.material.uniforms.uTile; mesh.material.uniforms = { ...next.uniforms, uTile: tile };
+      const { uTile, uPrevious, uBlend, uArrival } = mesh.material.uniforms;
+      mesh.material.uniforms = { ...next.uniforms, uTile, uPrevious, uBlend, uArrival };
     } },
   };
 }

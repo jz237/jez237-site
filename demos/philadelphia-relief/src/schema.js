@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090902';
-import { ERA_IDS } from './eras.js?v=philly-2026090902';
+import { WEATHERS } from './solar.js?v=philly-2026090903';
+import { ERA_IDS } from './eras.js?v=philly-2026090903';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -209,15 +209,15 @@ export const LAYERS = {
 
 /** Camera pose. Kept in the same store so presets and URLs stay uniform. */
 export const CAMERA = {
-  camLon: { k: 'x', min: -75.8, max: -74.7, def: -75.25, prec: 4 },
-  camLat: { k: 'y', min: 39.7, max: 40.55, def: 40.095, prec: 4 },
+  camLon: { k: 'x', min: -75.8, max: -74.7, def: -75.28, prec: 4 },
+  camLat: { k: 'y', min: 39.7, max: 40.55, def: 39.98, prec: 4 },
   // Orbit radius in metres from the target.
   // Local aerial imagery and inspection cells support roof / parking detail.
-  camDist: { k: 'd', min: 200, max: 190000, def: 143000, prec: 0 },
+  camDist: { k: 'd', min: 200, max: 190000, def: 132000, prec: 0 },
   // Map convention: 0 deg = north-up, increasing clockwise.
-  camBearing: { k: 'b', min: 0, max: 360, def: 28, wrap: 360, prec: 1 },
+  camBearing: { k: 'b', min: 0, max: 360, def: 25, wrap: 360, prec: 1 },
   // Map convention: 0 deg = straight down, 85 deg = near the horizon.
-  camPitch: { k: 'p', min: 0, max: 85, def: 55, prec: 1 },
+  camPitch: { k: 'p', min: 0, max: 85, def: 49, prec: 1 },
 };
 
 export const GROUPS = [

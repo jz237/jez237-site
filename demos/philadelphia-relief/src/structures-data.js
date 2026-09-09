@@ -16,7 +16,7 @@
  * regional shot without becoming needles up close.
  */
 
-import { triangulate } from './vectors.js?v=philly-2026090902';
+import { triangulate } from './vectors.js?v=philly-2026090903';
 
 export const TIER_ORDER = ['tall', 'mid', 'low'];
 
@@ -376,6 +376,9 @@ export function buildBridge(spec, worldLine, groundAt) {
   const total = polylineLength(pts);
   if (total < 20) return null;
   const width = spec.deck_width_m || 20;
+  const mainSpan = Math.min(spec.main_span_m || total * 0.5, total * 0.9);
+  const tA = 0.5 - mainSpan / total / 2;
+  const tB = 0.5 + mainSpan / total / 2;
   const gA = Math.max(0, groundAt(pts[0][0], pts[0][1]));
   const gB = Math.max(0, groundAt(pts[pts.length - 1][0], pts[pts.length - 1][1]));
 
@@ -410,24 +413,37 @@ export function buildBridge(spec, worldLine, groundAt) {
     quad(solids, v0 + 7, v0 + 6, v0 + 5, v0 + 4);
     quad(solids, v0 + 4, v0 + 5, v0 + 1, v0);
     quad(solids, v0 + 3, v0 + 2, v0 + 6, v0 + 7);
+    // Parapets follow the mapped deck.
+    for (const side of [-1, 1]) {
+      const first = base();
+      for (const [p, up] of [[a,0],[b,0],[b,1.15],[a,1.15]]) {
+        pushVertex(solids, p.x + p.nx * side * (width / 2 - .3), p.struct + up,
+          p.z + p.nz * side * (width / 2 - .3), p.ground, 1.15, 0);
+      }
+      quad(solids, first,first+1,first+2,first+3);
+      lines.push({ a: [a.x + a.nx * side * width / 2,a.z + a.nz * side * width / 2],
+        b: [b.x + b.nx * side * width / 2,b.z + b.nz * side * width / 2],
+        ga: a.ground, gb: b.ground, sa: a.struct + 1.15, sb: b.struct + 1.15 });
+    }
   }
 
   // ---- piers every ~90 m, from the ground up to the deck -------------------
   const pierEvery = spec.type === 'suspension' ? 120 : 90;
   const pierCount = Math.max(1, Math.floor(total / pierEvery));
-  for (let p = 1; p < pierCount; p += 1) {
-    const t = p / pierCount;
+  const pierPositions = Array.from({ length: pierCount - 1 }, (_,p) => (p+1)/pierCount)
+    .filter(t => spec.type === 'girder' || t < tA-.025 || t > tB+.025);
+  if (spec.type !== 'suspension' && spec.type !== 'girder') pierPositions.push(tA,tB);
+  for (const t of pierPositions) {
     const d = sampleDeck(deck, t);
     if (!d) continue;
     const g = Math.max(0, groundAt(d.x, d.z));
     box(solids, d.x, d.z, Math.min(width * 0.55, 14), 5, g, 0, d.struct - deckDepth + (d.ground - g));
+    beam(solids, d.x-d.nx*width*.42, d.z-d.nz*width*.42,
+      d.x+d.nx*width*.42, d.z+d.nz*width*.42, 3.5, g,
+      d.struct-deckDepth-2+(d.ground-g), d.struct-deckDepth+(d.ground-g));
   }
 
   // ---- type-specific form -------------------------------------------------
-  const mainSpan = Math.min(spec.main_span_m || total * 0.5, total * 0.9);
-  const tA = 0.5 - mainSpan / total / 2;
-  const tB = 0.5 + mainSpan / total / 2;
-
   if (spec.type === 'suspension') {
     const towerH = spec.tower_height_m || 100;
     const towers = [];
@@ -447,6 +463,11 @@ export function buildBridge(spec, worldLine, groundAt) {
       for (const h of [d.struct + 8, towerH - 6]) {
         beam(solids, l.x, l.z, r.x, r.z, 4, g, h - 4, h);
       }
+      for (let h = d.struct + 12; h < towerH - 15; h += 18) {
+        const top = Math.min(h + 18, towerH - 6);
+        lines.push({ a: [l.x,l.z], b: [r.x,r.z], ga:g, gb:g, sa:h, sb:top },
+          { a: [r.x,r.z], b: [l.x,l.z], ga:g, gb:g, sa:h, sb:top });
+      }
     }
     // Main cables: anchorage (deck level at the ends) -> tower top -> sag -> tower top -> anchorage.
     for (const side of [-1, 1]) {
@@ -461,7 +482,7 @@ export function buildBridge(spec, worldLine, groundAt) {
       const sagLow = p1.d.struct + 6;
       cableCurve(lines, p0, p1, p0.d.struct, towerH, 12);
       // parabola between the towers
-      const segs = 24;
+      const segs = 48;
       let prev = null;
       for (let s = 0; s <= segs; s += 1) {
         const u = s / segs;
@@ -471,8 +492,7 @@ export function buildBridge(spec, worldLine, groundAt) {
         const cur = { x: p.x, z: p.z, g: 0, s: h, ds: p.d.struct };
         if (prev) lines.push({ a: [prev.x, prev.z], b: [cur.x, cur.z], ga: prev.g, gb: cur.g,
           sa: prev.s, sb: cur.s });
-        // hangers every third sample
-        if (s % 3 === 0 && s > 0 && s < segs) {
+        if (s % 2 === 0 && s > 0 && s < segs) {
           lines.push({ a: [cur.x, cur.z], b: [cur.x, cur.z], ga: 0, gb: p.d.ground,
             sa: cur.s, sb: cur.ds });
         }
@@ -551,6 +571,9 @@ export function buildBridge(spec, worldLine, groundAt) {
     }
   }
 
+  // Bridge vertices already contain absolute structural heights; do not add
+  // the building-style base offset again in the shared vertex shader.
+  for (let i = 1; i < solids.info.length; i += 2) solids.info[i] = 0;
   return {
     solids: {
       position: new Float32Array(solids.position),

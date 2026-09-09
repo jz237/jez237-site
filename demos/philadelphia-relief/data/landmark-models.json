@@ -450,7 +450,7 @@
       "built": 1901,
       "facade": "stone",
       "replaceRadius": 67,
-      "source": "https://www.asce.org/about-civil-engineering/history-and-heritage/historic-landmarks/philadelphia-city-hall/ \u2014 548 ft overall. Courtyard, pavilions and tower proportions are illustrative.",
+      "source": "https://www.asce.org/about-civil-engineering/history-and-heritage/historic-landmarks/philadelphia-city-hall/ — 548 ft overall. Courtyard, pavilions and tower proportions are illustrative.",
       "parts": [
         {
           "type": "box",
@@ -714,7 +714,7 @@
       "facade": "glass",
       "replaceRadius": 40,
       "replaceMinHeight": 100,
-      "source": "https://www.fosterandpartners.com/projects/comcast-technology-center/ \u2014 341 m height and industrial vertical campus design; structural ribs and dimensions are illustrative.",
+      "source": "https://www.fosterandpartners.com/projects/comcast-technology-center/ — 341 m height and industrial vertical campus design; structural ribs and dimensions are illustrative.",
       "parts": [
         {
           "type": "box",
@@ -940,6 +940,178 @@
           "d": 1.8,
           "h": 234,
           "base": 15
+        }
+      ]
+    },
+    {
+      "id": "one-liberty",
+      "landmark": "One Liberty Place",
+      "lon": -75.1681355,
+      "lat": 39.9525698,
+      "facade": "glass",
+      "built": 1987,
+      "replaces": [
+        "One Liberty Place"
+      ],
+      "replaceRadius": 29,
+      "replaceMinHeight": 35,
+      "source": "CTBUH architectural height 288 m (https://www.skyscrapercenter.com/building/one-liberty-place/593); OSM way 42784982 anchor. Crown and plan dimensions are rounded schematic approximations.",
+      "parts": [
+        {
+          "type": "box",
+          "w": 42,
+          "d": 42,
+          "h": 190,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 34,
+          "d": 34,
+          "h": 18,
+          "base": 190,
+          "rot": 9
+        },
+        {
+          "type": "pyramid",
+          "w": 34,
+          "d": 34,
+          "h": 34,
+          "base": 208,
+          "rot": 9
+        },
+        {
+          "type": "cylinder",
+          "r": 1.5,
+          "h": 46,
+          "base": 242,
+          "segs": 8
+        },
+        {
+          "type": "box",
+          "w": 42.7,
+          "d": 42.7,
+          "h": 0.7,
+          "base": 38,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 42.7,
+          "d": 42.7,
+          "h": 0.7,
+          "base": 76,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 42.7,
+          "d": 42.7,
+          "h": 0.7,
+          "base": 114,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 42.7,
+          "d": 42.7,
+          "h": 0.7,
+          "base": 152,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 42.7,
+          "d": 42.7,
+          "h": 0.7,
+          "base": 188,
+          "rot": 9
+        }
+      ]
+    },
+    {
+      "id": "two-liberty",
+      "landmark": "Two Liberty Place",
+      "lon": -75.1674547,
+      "lat": 39.9516785,
+      "facade": "glass",
+      "built": 1990,
+      "replaces": [
+        "Two Liberty Place"
+      ],
+      "replaceRadius": 29,
+      "replaceMinHeight": 35,
+      "source": "CTBUH architectural height 258.5 m (https://www.skyscrapercenter.com/building/two-liberty-place/783); OSM way 42785013 anchor. Crown and plan dimensions are rounded schematic approximations.",
+      "parts": [
+        {
+          "type": "box",
+          "w": 46,
+          "d": 46,
+          "h": 190,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 40,
+          "d": 40,
+          "h": 20,
+          "base": 190,
+          "rot": 9
+        },
+        {
+          "type": "pyramid",
+          "w": 40,
+          "d": 40,
+          "h": 32,
+          "base": 210,
+          "rot": 9
+        },
+        {
+          "type": "cylinder",
+          "r": 2,
+          "h": 16.5,
+          "base": 242,
+          "segs": 8
+        },
+        {
+          "type": "box",
+          "w": 46.7,
+          "d": 46.7,
+          "h": 0.7,
+          "base": 38,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 46.7,
+          "d": 46.7,
+          "h": 0.7,
+          "base": 76,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 46.7,
+          "d": 46.7,
+          "h": 0.7,
+          "base": 114,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 46.7,
+          "d": 46.7,
+          "h": 0.7,
+          "base": 152,
+          "rot": 9
+        },
+        {
+          "type": "box",
+          "w": 46.7,
+          "d": 46.7,
+          "h": 0.7,
+          "base": 188,
+          "rot": 9
         }
       ]
     }

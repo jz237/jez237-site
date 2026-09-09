@@ -56,7 +56,7 @@ test('aerial mode state', async (t) => {
     for (const preset of PRESETS) {
       const layers = presetPatch(preset.id).layers;
       assert.equal(layers.imagery, ['diorama', 'skyline', 'architecture', 'hidden-reef', 'bauder-signs', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} imagery`);
-      assert.equal(layers.structures, ['architecture', 'diorama'].includes(preset.id), `${preset.id} structures`);
+      assert.equal(layers.structures, true, `${preset.id} retains miniature structures`);
     }
   });
 

@@ -9,7 +9,7 @@
  * together instead of tearing them apart.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090902';
+import { hexToRgb } from './themes.js?v=philly-2026090903';
 
 const LINE_VERTEX = /* glsl */ `
   attribute vec3  aOther;      // the far end of this segment
@@ -176,10 +176,17 @@ const WATER_FRAGMENT = /* glsl */ `
     float w1 = sin(vWorld.x * 0.0016 + uTime * 0.30);
     float w2 = sin(vWorld.z * 0.0021 - uTime * 0.24);
     float w3 = sin((vWorld.x + vWorld.z) * 0.0009 + uTime * 0.17);
-    vec3 normal = normalize(vec3((w1 + w3) * 0.05, 1.0, (w2 - w3) * 0.05));
+    float nearMix = 1.0 - smoothstep(1500.0,18000.0,length(uCameraPos-vWorld));
+    vec2 finePhase = vWorld.xz * .16 + vec2(uTime*.34,-uTime*.22);
+    float ripple = sin(finePhase.x + sin(finePhase.y*.63)) * sin(finePhase.y);
+    float rippleAA = 1.0 - smoothstep(.5,2.5,max(fwidth(finePhase.x),fwidth(finePhase.y)));
+    vec3 normal = normalize(vec3((w1 + w3) * .035 + ripple*nearMix*rippleAA*.024,
+      1.0, (w2 - w3) * .035 + ripple*nearMix*rippleAA*.018));
 
     float fresnel = pow(1.0 - clamp(dot(normal, view), 0.0, 1.0), 3.0);
-    vec3 body = mix(uColor, uShallow, fresnel * 0.85);
+    vec3 body = mix(uColor, uShallow, .18 + fresnel * .64);
+    vec3 reflectedSky = mix(vec3(.18,.26,.28),uSpecColor,.35 + view.y*.25);
+    body = mix(body,reflectedSky,fresnel*.28*uIntensity);
 
     vec3 halfVec = normalize(uSunDir + view);
     float glint = pow(max(0.0, dot(normal, halfVec)), 220.0);
@@ -273,7 +280,7 @@ export function streetJunctions(parts) {
  */
 export function buildLineMesh(THREE, parts, ctx, options) {
   const { projection, sampleElevation } = ctx;
-  const junctions = options.crosswalks ? streetJunctions(parts) : new Set();
+  const junctions = options.crosswalks ? options.junctions || streetJunctions(parts) : new Set();
   let segments = 0;
   for (const part of parts) segments += part.length - 1;
   if (segments <= 0) return null;
@@ -474,10 +481,16 @@ export function buildAreaMesh(THREE, rings, ctx, options) {
     const base = positions.length / 3;
     const all = [pts, ...holes];
     const allLocal = [local, ...localHoles];
+    // Shore vertices often sample the raised bank. Interpolating those heights
+    // across open water creates visible triangular ramps. A conservative local
+    // water plane sits below the banks; the DEM/photograph remain authoritative.
+    const waterSamples = options.kind === 'water'
+      ? all.flat().map(([lon,lat]) => sampleElevation(lon,lat)).sort((a,b) => a-b) : null;
+    const waterLevel = waterSamples ? Math.max(0, waterSamples[Math.floor(waterSamples.length*.12)]) : 0;
     for (let r = 0; r < all.length; r += 1) {
       for (let i = 0; i < all[r].length; i += 1) {
         positions.push(allLocal[r][i][0], 0, allLocal[r][i][1]);
-        elevs.push(sampleElevation(all[r][i][0], all[r][i][1]));
+        elevs.push(waterSamples ? waterLevel : sampleElevation(all[r][i][0], all[r][i][1]));
       }
     }
     for (const t of tris) indices.push(base + t);

@@ -379,7 +379,7 @@
       "facts": [
         [
           "Encampment",
-          "the Continental Army's winter of 1777\u201378"
+          "the Continental Army's winter of 1777–78"
         ],
         [
           "Park",
@@ -403,7 +403,7 @@
       "facts": [
         [
           "Built",
-          "1952\u20131958 by Levitt & Sons"
+          "1952–1958 by Levitt & Sons"
         ],
         [
           "Houses",
@@ -455,7 +455,7 @@
         ],
         [
           "Architect",
-          "C\u00e9sar Pelli"
+          "César Pelli"
         ]
       ],
       "text": "Beside 30th Street Station on the west bank of the Schuylkill, drawn from its OpenStreetMap footprint at its measured height.",
@@ -467,7 +467,7 @@
       ]
     },
     "The Hidden Reef": {
-      "category": "Aquarium store \u00b7 Levittown",
+      "category": "Aquarium store · Levittown",
       "facts": [
         [
           "Address",
@@ -483,7 +483,7 @@
         ]
       ],
       "text": "A local aquarium destination in Levittown. The pin uses the OpenStreetMap store point within its commercial building footprint.",
-      "note": "Business location \u00b7 address verified September 2026",
+      "note": "Business location · address verified September 2026",
       "sources": [
         [
           "Official store website",
@@ -500,7 +500,7 @@
       ]
     },
     "Bauder Signs": {
-      "category": "Signs and graphics \u00b7 Philadelphia",
+      "category": "Signs and graphics · Philadelphia",
       "facts": [
         [
           "Address",
@@ -525,6 +525,64 @@
         [
           "City address record",
           "https://api.phila.gov/ais/v1/search/3613%20WITTE%20ST"
+        ]
+      ]
+    },
+    "One Liberty Place": {
+      "category": "Architecture",
+      "model": "one-liberty",
+      "text": "A recognizable stepped crown on the Center City skyline. The model uses the mapped location and published overall height; its facade and roof construction are schematic.",
+      "facts": [
+        [
+          "Architectural height",
+          "288 m"
+        ],
+        [
+          "Completed",
+          "1987"
+        ],
+        [
+          "Model",
+          "Rounded schematic form; not a survey"
+        ]
+      ],
+      "sources": [
+        [
+          "CTBUH · The Skyscraper Center",
+          "https://www.skyscrapercenter.com/building/one-liberty-place/593"
+        ],
+        [
+          "OpenStreetMap building",
+          "https://www.openstreetmap.org/way/42784982"
+        ]
+      ]
+    },
+    "Two Liberty Place": {
+      "category": "Architecture",
+      "model": "two-liberty",
+      "text": "A recognizable stepped crown on the Center City skyline. The model uses the mapped location and published overall height; its facade and roof construction are schematic.",
+      "facts": [
+        [
+          "Architectural height",
+          "258.5 m"
+        ],
+        [
+          "Completed",
+          "1990"
+        ],
+        [
+          "Model",
+          "Rounded schematic form; not a survey"
+        ]
+      ],
+      "sources": [
+        [
+          "CTBUH · The Skyscraper Center",
+          "https://www.skyscrapercenter.com/building/two-liberty-place/783"
+        ],
+        [
+          "OpenStreetMap building",
+          "https://www.openstreetmap.org/way/42785013"
         ]
       ]
     }

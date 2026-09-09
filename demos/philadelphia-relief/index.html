@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026090902" />
+<link rel="stylesheet" href="app.css?v=philly-2026090903" />
 </head>
 <body data-theme="dusk">
 
@@ -37,6 +37,19 @@
 </div>
 
 <!-- ── draggable comparison divider ───────────────────────────────────── -->
+<aside id="orientation" class="orientation" aria-label="Your place in the Delaware Valley" hidden>
+  <details>
+    <summary>Locate this view <span aria-hidden="true">⌖</span></summary>
+    <canvas role="img" aria-label="North-up overview showing the current view within the Delaware Valley"></canvas>
+    <p class="orientation-position"></p>
+    <nav aria-label="Return to a favorite place">
+      <button type="button" data-destination="architecture">Center City</button>
+      <button type="button" data-destination="bauder-signs">Bauder Signs</button>
+      <button type="button" data-destination="hidden-reef">The Hidden Reef</button>
+      <button type="button" data-destination="diorama">Whole valley ↗</button>
+    </nav>
+  </details>
+</aside>
 <div id="compareBar" class="compare-bar" hidden>
   <span id="compareLeft" class="compare-side compare-left">Aerial</span>
   <label class="visually-hidden" for="compareSlider">Comparison divider</label>
@@ -295,13 +308,11 @@
           <a href="https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer"
              target="_blank" rel="noopener">USGS Imagery Only</a> from The National Map,
           principally USDA National Agriculture Imagery Program orthoimagery in this region.
-          A 4096 × 4096 north-up regional texture is baked over the exact terrain bounds.
-          Below 16 km camera distance, Jez237.com's edge loads and caches an overlapping
-          city-detail window. Below 4.8 km it cross-fades to a smaller block-detail cell;
-          below 1.6 km, a tightly cropped roof-detail cell follows the camera at roughly
-          0.25–0.5 m/px sampling, depending on device and data mode. Source photography may
-          resolve less detail than that sampling rate. Neighboring cells are
-          prefetched after the camera settles. All photography is draped directly over the
+          A north-up regional texture is baked over the exact terrain bounds.
+          Inside 24 km, tiles cover the visible ground and progressively refine from
+          district to block, roof and inspection detail. The displayed credit identifies
+          the actual source and delivered sampling; native photographic detail varies by source.
+          Nearby previews load after visible tiles finish refining. All photography is draped directly over the
           elevation mesh; the regional image stays visible whenever detail is unavailable.
           U.S. federal map services and data are
           public domain. Credit: USDA, USGS The National Map: Orthoimagery.
@@ -449,8 +460,10 @@
     </p>
     <p>The diorama follows the real elevation grid, roads and building footprints. Regional relief
       is enlarged up to 15× and returns to your chosen scale as you zoom in. Tree crowns are
-      illustrative, inferred from green aerial pixels; facade finishes and the cutaway earth
-      layers are artistic. They are not surveyed trees, materials or geological strata.
+      illustrative and constrained to mapped OpenStreetMap woodland, including clearings.
+      Individually mapped trees appear near street level. Building colours and roof shapes
+      follow available tags; additional facade finishes, bridge details and the cutaway earth
+      layers are artistic. The cutaway does not represent geological strata.
       Switch to Classic map in Customize, or use Street inspection for an unobstructed aerial view.</p>
 
     <p class="about-foot">
@@ -511,7 +524,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026090902"></script>
+<script type="module" src="src/main.js?v=philly-2026090903"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
