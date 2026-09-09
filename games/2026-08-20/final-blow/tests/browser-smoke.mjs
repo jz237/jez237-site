@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'controlsButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.7/);
-    assert.equal(title.version.text, 'VERSION 5.7.13');
+    assert.equal(title.version.text, 'VERSION 5.7.14');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.7.13-ringside');
+    assert.equal(title.engineVersion, '5.7.14-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -3684,7 +3684,7 @@ probe('move-viewer', async () => {
   assert.ok(result.rows.every(p=>p.bank&&Number.isInteger(Number(p.cell))));
  }
  await evaluate(client,`(()=>{const r=document.querySelector('#moveViewerFrame');r.value=0;r.dispatchEvent(new Event('input'));document.querySelector('#moveViewerNext').click();})()`);
- assert.equal(await evaluate(client,`document.querySelector('#moveViewerFrame').value`),'1');
+ assert.equal(await evaluate(client,`document.querySelector('#moveViewerFrame').value`),'0.125');
  await evaluate(client,`document.querySelector('#moveViewerPlay').click()`);await delay(350);
  assert.ok(Number(await evaluate(client,`document.querySelector('#moveViewerFrame').value`))>1);
  await evaluate(client,`document.querySelector('#moveViewerPlay').click()`);
@@ -4692,7 +4692,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.7/);
-    assert.equal(controlledReload.version, '5.7.13-ringside');
+    assert.equal(controlledReload.version, '5.7.14-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4710,7 +4710,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.7/);
-    assert.equal(offlineBoot.version, '5.7.13-ringside');
+    assert.equal(offlineBoot.version, '5.7.14-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4756,7 +4756,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.7.13');
+    assert.equal(landscape.version.text, 'VERSION 5.7.14');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
@@ -5203,7 +5203,7 @@ probe('painted-only', async () => {
   await navigate(client, new URL('./3d/',gameUrl).href);
   await delay(1200);
   assert.equal(await evaluate(client, `location.pathname`),new URL(gameUrl).pathname);
-  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.13-ringside');
+  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.14-ringside');
 });
 
 probe('console-clean', async () => {
