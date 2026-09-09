@@ -14,17 +14,18 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090612';
+import { hexToRgb } from './themes.js?v=philly-2026090901';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026090612';
-import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026090612';
-import { damp } from './geo.js?v=philly-2026090612';
+} from './structures-data.js?v=philly-2026090901';
+import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026090901';
+import { damp } from './geo.js?v=philly-2026090901';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute vec2 aFacadeOrigin;
   varying vec2 vFacadeXZ;
+  varying vec3 vViewPosition;
   attribute float aGround;     // DEM elevation under the structure, metres
   attribute vec2  aInfo;       // (structure height, base offset), metres
   attribute float aYear;       // documented construction year, 0 = undated
@@ -63,6 +64,7 @@ const VERTEX_SHADER = /* glsl */ `
     vHeight = aInfo.x;
     vStorey = position.y;
     vWorld = p;
+    vViewPosition = (modelViewMatrix * vec4(p, 1.0)).xyz;
     vFacadeXZ = position.xz - aFacadeOrigin;
     vElev = aGround;
     vRel = aInfo.x > 0.0 ? clamp((position.y - aInfo.y) / aInfo.x, 0.0, 1.0) : 0.0;
@@ -75,6 +77,8 @@ const FRAGMENT_SHADER = /* glsl */ `
   precision highp float;
 
   varying vec2 vFacadeXZ;
+  varying vec3 vViewPosition;
+  uniform mat3 uViewToWorld;
   uniform float uFacade;
   uniform vec4 uLocalBounds;
   uniform float uLocalClip;
@@ -123,7 +127,8 @@ const FRAGMENT_SHADER = /* glsl */ `
         && vWorld.z > uLocalBounds.y && vWorld.z < uLocalBounds.w) discard;
     // Flat face normal from screen-space derivatives: no normal attribute,
     // shared ring vertices, crisp edges.
-    vec3 n = normalize(cross(dFdx(vWorld), dFdy(vWorld)));
+    // Camera-relative derivatives avoid precision noise far from the region origin.
+    vec3 n = normalize(uViewToWorld * cross(dFdx(vViewPosition), dFdy(vViewPosition)));
     vec3 viewDir = normalize(uCameraPos - vWorld);
     if (dot(n, viewDir) < 0.0) n = -n;
 
@@ -147,7 +152,14 @@ const FRAGMENT_SHADER = /* glsl */ `
     #endif
     vec3 glass = mix(vec3(0.018, 0.052, 0.08), vec3(0.09, 0.19, 0.25), max(0.0, n.y + 0.45));
     vec3 facade = mix(masonry, vec3(0.18, 0.24, 0.28), vStyle);
+    // Glazing reflects a broad sky gradient; stone and brick retain a tactile finish.
+    float pane = fract(sin(dot(floor(bay), vec2(41.17, 19.43))) * 17371.3);
+    float skyBand = .5 + .5 * sin(vRel * 7.0 + n.x * 2.0 + n.z * 3.0);
+    glass = mix(glass, vec3(.23, .34, .39), skyBand * vStyle * .55);
+    glass *= .82 + pane * .35;
     facade = mix(facade, glass, window);
+    float mullion = (1.0 - smoothstep(.025, .025 + aa.x, cell.x)) * legible;
+    facade = mix(facade, vec3(.40, .43, .41), mullion * vStyle * .48);
     float course = (1.0 - smoothstep(0.03, 0.03 + aa.y, cell.y)) * legible;
     facade = mix(facade, vec3(0.53, 0.49, 0.40), course * (1.0 - vStyle) * 0.55);
     float cornice = smoothstep(0.96, 0.985, vRel) * (1.0 - roof);
@@ -212,7 +224,10 @@ const FRAGMENT_SHADER = /* glsl */ `
     // Keep the aerial overlay chromatically neutral even under the warm dusk
     // sun.  The geometry is a survey aid here, not a second painted city.
     float reflection = pow(1.0 - max(0.0, dot(n, viewDir)), 3.0);
-    color += uSkyColor * reflection * window * vStyle * 0.32;
+    color += uSkyColor * reflection * window * vStyle * 0.38;
+    vec3 halfVector = normalize(uSunDir + viewDir);
+    color += uSunColor * pow(max(0.0, dot(n, halfVector)), 65.0)
+      * window * vStyle * .22;
     float occupied = step(0.64, fract(sin(dot(floor(bay), vec2(12.9898, 78.233))) * 43758.5));
     color += vec3(1.0, 0.67, 0.28) * occupied * window * uGlowAmount * 1.8;
 
@@ -345,6 +360,7 @@ export function createStructures(THREE, options) {
   const emptyRoof = new THREE.DataTexture(new Uint8Array([96,96,96,255]),1,1);
   emptyRoof.needsUpdate = true;
   const sharedUniforms = {
+    uViewToWorld: { value: new THREE.Matrix3() },
     uExag: { value: 10 },
     uHScale: { value: 1 },
     uSunDir: { value: new THREE.Vector3(0.5, 0.5, 0.5) },
@@ -631,7 +647,7 @@ export function createStructures(THREE, options) {
     const { camera, state, exaggeration, dt, sunDir, fogDensity } = ctx;
     const on = !!state.layers.structures;
     group.visible = on;
-    const hScale = heightScale(exaggeration, state.structureHeight);
+    const hScale = heightScale(exaggeration, state.structureHeight) * (1 + (ctx.miniature || 0) * 1.3);
     const hybrid = 0; // Detailed facades remain opaque over aerial photography.
     if (buildingOutline && selectedBuilding) {
       const shownAsVolume = on && hybrid < 0.98;
@@ -648,6 +664,7 @@ export function createStructures(THREE, options) {
     camXZ.x = camera.position.x;
     camXZ.z = camera.position.z;
 
+    sharedUniforms.uViewToWorld.value.setFromMatrix4(camera.matrixWorld);
     sharedUniforms.uExag.value = exaggeration;
     sharedUniforms.uHScale.value = hScale;
     sharedUniforms.uSunDir.value.copy(sunDir);
@@ -665,7 +682,7 @@ export function createStructures(THREE, options) {
     const tierStats = [];
     for (const t of tiers) {
       const d = distanceToBox(camXZ.x, camXZ.z, t.box);
-      const target = tierGrow(t.tier, d, q, detail);
+      const target = t.tier === 'tall' && ctx.miniature > .1 ? 1 : tierGrow(t.tier, d, q, detail);
       t.grow = damp(t.grow, target, target > t.grow ? 0.18 : 0.1, dt);
       if (t.grow < 0.01) t.grow = target > 0 ? t.grow : 0;
       const localActive = !!localBounds && state.era === 'present' && state.camDist < 3200;

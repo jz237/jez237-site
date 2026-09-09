@@ -9,7 +9,7 @@
  * together instead of tearing them apart.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026090612';
+import { hexToRgb } from './themes.js?v=philly-2026090901';
 
 const LINE_VERTEX = /* glsl */ `
   attribute vec3  aOther;      // the far end of this segment
@@ -162,6 +162,7 @@ const WATER_FRAGMENT = /* glsl */ `
   uniform vec3  uFogTint;
   uniform float uFogDensity;
   uniform float uIntensity;
+  uniform float uOpacity;
   uniform float uTime;
   varying vec3  vWorld;
   varying float vElev;
@@ -198,7 +199,7 @@ const WATER_FRAGMENT = /* glsl */ `
     float towardSun = max(0.0, dot(normalize(vWorld - uCameraPos), uSunDir));
     color = mix(color, mix(uFogColor, uFogTint, pow(towardSun, 3.0)), clamp(fog, 0.0, 1.0));
 
-    gl_FragColor = vec4(color, 1.0);
+    gl_FragColor = vec4(color, uOpacity);
   }
 `;
 
@@ -518,8 +519,8 @@ export function buildAreaMesh(THREE, rings, ctx, options) {
     uniforms,
     vertexShader: AREA_VERTEX,
     fragmentShader: isWater ? WATER_FRAGMENT : AREA_FRAGMENT,
-    transparent: !isWater,
-    depthWrite: isWater,
+    transparent: true,
+    depthWrite: false,
     side: THREE.DoubleSide,
   });
   setVec3(material.uniforms.uColor.value, options.color || '#ffffff');
