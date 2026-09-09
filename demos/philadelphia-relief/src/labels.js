@@ -1,4 +1,5 @@
-import { labelBudget, nearbyLabel, overlapsBox, controlBoxes } from './label-policy.js?v=philly-2026090904';
+import { labelBudget, nearbyLabel, overlapsBox, controlBoxes, labelPriority }
+  from './label-policy.js?v=philly-2026090904';
 /**
  * Projected map labels.
  *
@@ -66,7 +67,7 @@ export function createLabelLayer(THREE, options) {
         });
       }
       // Stable priority order once, so the per-frame pass is a linear scan.
-      candidates.sort((a, b) => (a.rank - b.rank) || (b.pop || 0) - (a.pop || 0));
+      candidates.sort((a, b) => (labelPriority(a) - labelPriority(b)) || (b.pop || 0) - (a.pop || 0));
     },
 
     setVisible(on) {

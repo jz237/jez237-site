@@ -53,6 +53,7 @@
   </details>
 </aside>
 <nav id="mapNavigation" class="map-navigation" aria-label="Map camera">
+  <output class="camera-caption" aria-live="off"></output>
   <button type="button" data-camera="in" aria-label="Zoom in" title="Zoom in">+</button>
   <button type="button" data-camera="out" aria-label="Zoom out" title="Zoom out">−</button>
   <button type="button" data-camera="north" aria-label="Face north" title="Face north"><span aria-hidden="true">↑</span> N</button>
@@ -184,6 +185,7 @@
   <div class="readout-main">
     <div class="readout-preset">
       <span class="story-eyebrow">FIELD NOTES / DELAWARE VALLEY</span>
+      <button id="toggleNotes" class="notes-toggle" type="button" aria-expanded="true">Hide notes</button>
       <span class="readout-preset-name" id="outPreset">A whole valley, in miniature</span>
       <span class="readout-preset-blurb" id="outBlurb"></span>
       <button type="button" class="story-tour" id="storyArchitecture">Explore Center City in 3D <span aria-hidden="true">↗</span></button>
