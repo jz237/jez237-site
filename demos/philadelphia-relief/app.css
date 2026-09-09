@@ -1384,3 +1384,36 @@ body.notes-collapsed .readout-preset-name { font-size: 23px; }
 .saved-row button:last-child { width: 42px; }
 .saved-views button:focus-visible, .look-undo:focus-visible,
 .timeline-track:focus-visible { outline: 2px solid #edbb70; outline-offset: 3px; }
+
+.orientation [data-destination]::before { display: inline-grid; place-items: center; width: 16px; height: 16px; border-radius: 50%; margin-right: 4px; background: #417375; color: #fff4d5; font: bold 9px var(--font); }
+.orientation [data-destination="architecture"]::before { content: 'C'; }
+.orientation [data-destination="bauder-signs"]::before { content: 'B'; }
+.orientation [data-destination="hidden-reef"]::before { content: 'H'; }
+@media (pointer: coarse) {
+  .notes-toggle { min-height: 36px; }
+  .saved-views summary, .orientation summary { min-height: 44px; box-sizing: border-box; }
+  .look-undo, .saved-entry button { min-height: 44px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .map-label, .panel, .look-card, .saved-views { transition: none !important; scroll-behavior: auto; }
+}
+@media (max-width: 820px) and (max-height: 650px) {
+  .readout, .caption { display: none; }
+  .panel { max-height: calc(100dvh - 90px); }
+  .orientation { top: 90px; max-height: calc(100dvh - 165px); overflow-y: auto; }
+  .map-navigation { top: auto; bottom: 76px; flex-direction: row; }
+  .diorama-status { top: auto; bottom: 76px; right: 12px; }
+  .imagery-credit { top: 65px; left: 12px; right: 12px; font-size: 8px; }
+  .topbar { padding-bottom: 0; }
+}
+
+@media (min-width: 600px) and (max-width: 820px) and (max-height: 650px) {
+  .topbar { flex-wrap: nowrap; gap: 10px; padding-top: 10px; }
+  .brand-title { font-size: 14px; }
+  .brand-subtitle { display: none; }
+  .search { order: 1; flex: 1 1 180px; width: auto; min-width: 120px; }
+  .topbar-actions { order: 2; flex-shrink: 0; }
+  .topbar-actions button { width: 34px; height: 34px; padding: 6px; }
+  .orientation { top: 98px; }
+  .imagery-credit { top: 57px; }
+}

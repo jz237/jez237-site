@@ -683,3 +683,28 @@ rendered geometry without blurring photographic detail. Regional building height
 cartographically enlarged; this multiplier returns smoothly to one before close inspection.
 Adaptive terrain replacement rebinds borrowed height uniforms, and imagery eviction releases
 its dependent foliage. The classic presentation and historical/flood tools remain available.
+
+
+### Four further refinement rounds (9 September 2026)
+
+Each round addresses four distinct areas, preserving geographic coordinates,
+measured relief, mapped footprints and the existing aerial imagery sources.
+
+| Round | Areas improved |
+| --- | --- |
+| 1 | Landmark label priority; camera direction/scale caption; imagery progress and attribution; collapsible field notes. |
+| 2 | Varied woodland crowns; recessed masonry window shading; road-width-aware markings and surface shading; antialiased water glints. |
+| 3 | Six personal saved views on the current device; one-step lighting undo; keyboard tour seeking and elapsed/total time; coordinate-bearing PNG filenames. |
+| 4 | Faster woodland containment queries; address/alias-aware search; locator island holes and favorite markers; mobile touch, reduced-motion and landscape layouts. |
+
+Saved views fall back to the current session when device storage is unavailable.
+Address search uses the existing verified landmark cards, including Bauder Signs
+at 3613 Witte Street and The Hidden Reef at 4501 New Falls Road. Explore cards use
+available scene or aerial previews instead of requesting missing thumbnail files.
+
+Validation: 282 automated checks plus desktop and phone browser checks, including
+740 by 390 landscape and 390 by 844 portrait, saved-view restore/removal, lighting
+undo, address search and five-second keyboard seeking. A deterministic benchmark
+of 200,000 woodland queries returned identical coverage before and after the
+optimization; local query time fell from 372 ms to 137 ms (about 2.7 times faster).
+This measures the query helper, not overall map frame rate.

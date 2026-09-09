@@ -1,12 +1,12 @@
-import { overviewLocation } from './navigation.js?v=philly-2026090904';
-import { groundPoint } from './imagery-tiles.js?v=philly-2026090904';
+import { overviewLocation } from './navigation.js?v=philly-2026090905';
+import { groundPoint } from './imagery-tiles.js?v=philly-2026090905';
 
 export function overviewPoint(lon, lat, bounds, width = 220, height = 150) {
   return [12 + (lon - bounds.west) / (bounds.east - bounds.west) * (width - 24),
     8 + (bounds.north - lat) / (bounds.north - bounds.south) * (height - 16)];
 }
 
-export function createOrientation({ host, projection, water, onVisit, onNavigate }) {
+export function createOrientation({ host, projection, water, landmarks, onVisit, onNavigate }) {
   if (!host) return { update() {}, dispose() {} };
   const canvas = host.querySelector('canvas'), ctx = canvas.getContext('2d');
   const details = host.querySelector('details'), note = host.querySelector('.orientation-position');
@@ -23,19 +23,18 @@ export function createOrientation({ host, projection, water, onVisit, onNavigate
     const g = feature.geometry;
     if (g.type.includes('Line') && feature.properties?.rank > 1) continue;
     if (g.type.includes('Polygon') && (feature.properties?.area || 0) < 200000) continue;
-    const rings = g.type === 'Polygon' ? g.coordinates : g.type === 'MultiPolygon'
-      ? g.coordinates.flat() : g.type === 'LineString' ? [g.coordinates]
-        : g.type === 'MultiLineString' ? g.coordinates : [];
-    for (const ring of rings) {
-      if (ring.length < 2) continue;
+    for (const path of overviewPaths(g)) {
       base.beginPath();
-      const stride = Math.max(1, Math.floor(ring.length / 350));
-      ring.filter((_, i) => i % stride === 0 || i === ring.length - 1).forEach(([lon,lat], i) => {
-        const [x,y] = point(lon,lat); if (!i) base.moveTo(x,y); else base.lineTo(x,y);
-      });
-      base.strokeStyle = '#41717a'; base.lineWidth = .8;
-      if (g.type.includes('Polygon')) { base.fillStyle = '#5d8281'; base.fill('evenodd'); }
-      else base.stroke();
+      for (const ring of path.rings) {
+        if (ring.length<2) continue;
+        const stride=Math.max(1,Math.floor(ring.length/350));
+        ring.filter((_,i) => i%stride===0 || i===ring.length-1).forEach(([lon,lat],i) => {
+          const [x,y]=point(lon,lat); if (!i) base.moveTo(x,y); else base.lineTo(x,y);
+        });
+        if (path.fill) base.closePath();
+      }
+      base.strokeStyle='#41717a'; base.lineWidth=.8;
+      if (path.fill) { base.fillStyle='#5d8281'; base.fill('evenodd'); } else base.stroke();
     }
   }
   base.font = '9px system-ui'; base.fillStyle = '#253e41';
@@ -46,6 +45,15 @@ export function createOrientation({ host, projection, water, onVisit, onNavigate
     base.fillText(name, Math.min(width - name.length * 4.8 - 4, x+4), y-4);
   }
   base.font = 'bold 10px system-ui'; base.fillText('N ↑', 15, 22);
+  for (const [name,letter] of [['Philadelphia City Hall','C'],
+      ['Bauder Signs','B'],['The Hidden Reef','H']]) {
+    const landmark=landmarks?.landmarks?.find(p => p.n===name);
+    if (!landmark) continue;
+    const [x,y]=point(landmark.lon,landmark.lat);
+    base.beginPath(); base.arc(x,y,5,0,Math.PI*2); base.fillStyle='#204e51'; base.fill();
+    base.fillStyle='#fff4d5'; base.font='bold 7px system-ui'; base.textAlign='center';
+    base.fillText(letter,x,y+2.5); base.textAlign='left';
+  }
   canvas.width = width * 2; canvas.height = height * 2;
   const click = event => {
     const button = event.target.closest('button[data-destination]');
@@ -97,4 +105,13 @@ export function createOrientation({ host, projection, water, onVisit, onNavigate
     dispose() { host.removeEventListener('click',click);
       canvas.removeEventListener('click',navigate); canvas.removeEventListener('keydown',keydown); },
   };
+}
+
+export function overviewPaths(geometry) {
+  if (geometry.type==='Polygon') return [{rings:geometry.coordinates,fill:true}];
+  if (geometry.type==='MultiPolygon') return geometry.coordinates.map(rings => ({rings,fill:true}));
+  if (geometry.type==='LineString') return [{rings:[geometry.coordinates],fill:false}];
+  if (geometry.type==='MultiLineString') return geometry.coordinates
+    .map(ring => ({rings:[ring],fill:false}));
+  return [];
 }

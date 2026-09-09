@@ -1,3 +1,4 @@
+import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026090905';
 /**
  * The control studio, preset list, search and dialogs.
  *
@@ -6,13 +7,13 @@
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090904';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090904';
-import { getEra } from './eras.js?v=philly-2026090904';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090904';
-import { TOURS } from './tours.js?v=philly-2026090904';
-import { ERAS } from './eras.js?v=philly-2026090904';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090904';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090905';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090905';
+import { getEra } from './eras.js?v=philly-2026090905';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090905';
+import { TOURS } from './tours.js?v=philly-2026090905';
+import { ERAS } from './eras.js?v=philly-2026090905';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090905';
 
 const ENUM_LABELS = {
   diorama: v => v ? 'Miniature' : 'Classic map',
@@ -196,7 +197,10 @@ export function buildPresets(host, onSelect) {
     // A baked preview of the shot (assets/previews, made by tools/previews.mjs).
     const thumb = document.createElement('img');
     thumb.className = 'p-thumb';
-    thumb.src = `assets/previews/${preset.id}.jpg`;
+    const preview = { diorama: 'assets/previews/overview.jpg',
+      architecture: 'assets/previews/skyline.jpg', 'hidden-reef': 'data/imagery-levittown.webp',
+      'bauder-signs': 'data/imagery-city.webp' };
+    thumb.src = preview[preset.id] || `assets/previews/${preset.id}.jpg`;
     thumb.alt = '';
     thumb.width = 64;
     thumb.height = 34;
@@ -242,25 +246,14 @@ export function createSearch(options) {
   let matches = [];
   let active = -1;
 
-  function norm(s) {
-    // Strip combining marks so "Bryn Mawr" matches regardless of how the
-    // query was typed or pasted.
-    return String(s).toLowerCase().normalize('NFKD').replace(/[\u0300-\u036f]/g, '');
-  }
-
-  function score(entry, q) {
-    const name = norm(entry.name);
-    if (name === q) return 0;
-    if (name.startsWith(q)) return 1;
-    if (name.split(/[\s\-/]+/).some((w) => w.startsWith(q))) return 2;
-    if (name.includes(q)) return 3;
-    return Infinity;
-  }
+  const norm=normalizeSearch;
+  const score=searchScore;
 
   function render() {
     results.innerHTML = '';
     if (!matches.length) {
-      const empty = el('li', 'search-empty', 'Nothing matches that name.');
+      const empty = el('li', 'search-empty',
+        'No match. Try a place name, listed address, or bridge: followed by a name.');
       empty.setAttribute('role', 'presentation');
       results.appendChild(empty);
       results.hidden = false;
@@ -291,6 +284,7 @@ export function createSearch(options) {
     results.hidden = false;
     input.setAttribute('aria-expanded', 'true');
     input.setAttribute('aria-activedescendant', active >= 0 ? `search-opt-${active}` : '');
+    results.querySelector('[aria-selected="true"]')?.scrollIntoView({block:'nearest'});
   }
 
   function close() {
@@ -420,6 +414,8 @@ export function buildSearchIndex(placesGeojson, landmarksDoc, extras = {}) {
       name: l.n, kind: 'landmark', kindLabel: category || 'Landmark', group: 'Landmarks',
       lon: l.lon, lat: l.lat, note: l.d, viewPreset: l.viewPreset, priority: 2 + (l.r ?? 2) * 0.1,
       card: !!cards[l.n],
+      searchText:(cards[l.n]?.facts || []).filter(([key]) => /address|also listed/i.test(key))
+        .map(([,value]) => value).join(' '),
     });
   }
   for (const feature of placesGeojson?.features || []) {

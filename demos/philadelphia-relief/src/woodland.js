@@ -20,17 +20,19 @@ export function woodlandIndex(doc) {
       const xs = rings[0].map(p => p[0]), ys = rings[0].map(p => p[1]);
       const west = Math.max(-75.8, Math.min(...xs)), east = Math.min(-74.7, Math.max(...xs));
       const south = Math.max(39.7, Math.min(...ys)), north = Math.min(40.55, Math.max(...ys));
+      const polygon={rings,holes:rings.slice(1),west,east,south,north};
       for (let x = Math.floor(west / size); x <= Math.floor(east / size); x++) {
         for (let y = Math.floor(south / size); y <= Math.floor(north / size); y++) {
           const key = `${x},${y}`;
           if (!buckets.has(key)) buckets.set(key, []);
-          buckets.get(key).push(rings);
+          buckets.get(key).push(polygon);
         }
       }
     }
   }
   return (lon, lat) => (buckets.get(`${Math.floor(lon / size)},${Math.floor(lat / size)}`) || [])
-    .some(rings => inRing(lon, lat, rings[0]) && !rings.slice(1).some(r => inRing(lon, lat, r)));
+    .some(p => lon>=p.west && lon<=p.east && lat>=p.south && lat<=p.north
+      && inRing(lon,lat,p.rings[0]) && !p.holes.some(r => inRing(lon,lat,r)));
 }
 
 /** Keep the enlarged illustrative crown inside the mapped forest's edge. */
