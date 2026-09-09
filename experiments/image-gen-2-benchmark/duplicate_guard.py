@@ -39,6 +39,11 @@ ARCHIVE_FILENAMES = (
     "galactic-pictures-data.json",
 )
 
+ALAN_SMITHEE_DISCORD_ID = "485646922141532169"
+DEFAULT_STYLE_APPROVALS_PATH = Path(
+    "/home/jez237/.openclaw/workspace/state/daily-image-style-approvals.json"
+)
+
 TITLE_PREFIX_RE = re.compile(
     r"^(?:random rendering style|factual infographic|outer space exploration|"
     r"ocean exploration|intense phobia situation|machine dream|near[- ]future "
@@ -178,6 +183,38 @@ def entry_style_keys(entry: dict) -> set[str]:
     return {key for key in keys if key}
 
 
+def is_thumbs_up(value: object) -> bool:
+    """Accept the Unicode thumbs-up with or without a skin-tone modifier."""
+    text = str(value or "").replace("\ufe0f", "")
+    text = "".join(char for char in text if not "\U0001f3fb" <= char <= "\U0001f3ff")
+    return text == "👍"
+
+
+def load_approved_style_keys(path: Path = DEFAULT_STYLE_APPROVALS_PATH) -> set[str]:
+    """Load only approvals backed by Alan's thumbs-up reaction evidence."""
+    if not path.is_file():
+        return set()
+    payload = json.loads(path.read_text())
+    records = payload.get("approvals") if isinstance(payload, dict) else None
+    if not isinstance(records, list):
+        raise ValueError(f"Style approvals must contain an approvals array: {path}")
+    approved: set[str] = set()
+    for record in records:
+        if not isinstance(record, dict):
+            continue
+        if str(record.get("approverId") or "") != ALAN_SMITHEE_DISCORD_ID:
+            continue
+        if not is_thumbs_up(record.get("emoji")):
+            continue
+        if not str(record.get("discordMessageId") or "").isdigit():
+            continue
+        families = record.get("styleFamilies")
+        if not isinstance(families, list):
+            families = [record.get("styleFamily")]
+        approved.update(normalize_key(item) for item in families if normalize_key(item))
+    return approved
+
+
 def hamming(left: str, right: str) -> int:
     return (int(left, 16) ^ int(right, 16)).bit_count()
 
@@ -231,6 +268,7 @@ def find_duplicates(
     concept_key: str,
     style_family: str = "",
     image: Path | None = None,
+    style_approvals_path: Path = DEFAULT_STYLE_APPROVALS_PATH,
 ) -> list[dict]:
     candidate_core = core_title(title)
     candidate_key = normalize_key(concept_key)
@@ -246,6 +284,8 @@ def find_duplicates(
         candidate_style_keys.update(canonical_style_keys(f"{style_family} {title}"))
     if len(candidate_key_tokens) < 3:
         return [{"reason": "weak-concept-key", "message": "Concept key must contain at least three meaningful terms."}]
+
+    approved_style_keys = load_approved_style_keys(style_approvals_path)
 
     candidate_hash = image_fingerprint(image) if image else None
     duplicates: list[dict] = []
@@ -285,12 +325,14 @@ def find_duplicates(
         ):
             duplicates.append({"reason": "concept-contained", "id": entry_id, "title": entry_title})
 
-        if candidate_style_keys and candidate_style_keys & entry_style_keys(entry):
+        colliding_style_keys = candidate_style_keys & entry_style_keys(entry)
+        unapproved_style_keys = colliding_style_keys - approved_style_keys
+        if unapproved_style_keys:
             duplicates.append({
                 "reason": "rendering-style-family",
                 "id": entry_id,
                 "title": entry_title,
-                "styleFamilies": sorted(candidate_style_keys & entry_style_keys(entry)),
+                "styleFamilies": sorted(unapproved_style_keys),
             })
 
         if candidate_hash:
@@ -340,6 +382,7 @@ def main() -> None:
     parser.add_argument("--concept-key", required=True)
     parser.add_argument("--style-family", default="")
     parser.add_argument("--image", type=Path)
+    parser.add_argument("--style-approvals", type=Path, default=DEFAULT_STYLE_APPROVALS_PATH)
     args = parser.parse_args()
     prompt = args.prompt_file.read_text() if args.prompt_file else args.prompt
     duplicates = find_duplicates(
@@ -350,6 +393,7 @@ def main() -> None:
         concept_key=args.concept_key,
         style_family=args.style_family,
         image=args.image.resolve() if args.image else None,
+        style_approvals_path=args.style_approvals.resolve(),
     )
     print(json.dumps({"unique": not duplicates, "duplicates": duplicates}, indent=2, ensure_ascii=False))
 
