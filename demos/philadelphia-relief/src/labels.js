@@ -1,3 +1,4 @@
+import { labelBudget, nearbyLabel, overlapsBox, controlBoxes } from './label-policy.js?v=philly-2026090904';
 /**
  * Projected map labels.
  *
@@ -81,8 +82,9 @@ export function createLabelLayer(THREE, options) {
       if (!width || !height) return 0;
 
       const placed = [];
+      const blocked = controlBoxes();
       const streetSeen = new Set();
-      const budget = Math.round(6 + density * (MAX_NODES - 6));
+      const budget = Math.min(MAX_NODES, labelBudget(width, height, density));
       // Density also gates *which* ranks are eligible, so turning it down
       // thins the map by importance rather than by whatever happens to fit.
       const rankCutoff = 1 + density * 3.4;
@@ -94,6 +96,7 @@ export function createLabelLayer(THREE, options) {
         const local = item.kind === 'street' || item.kind === 'address';
         if (!local && item.rank > rankCutoff) continue;
         if (local) {
+          if (ctx.pose && !nearbyLabel(item, ctx.pose, projection)) continue;
           if (!ctx.showStreets || ctx.distance > (item.kind === 'address' ? 650 : 4200)) continue;
           if (item.kind === 'street' && streetSeen.has(item.name)) continue;
         } else if (item.kind === 'landmark' ? !showLandmarks : !showPlaces) continue;
@@ -119,8 +122,9 @@ export function createLabelLayer(THREE, options) {
         if (box.l < 6 || box.r > width - 6) continue;
         if (box.b < 0 || box.t > height) continue;
 
+        if (blocked.some(p => overlapsBox(p, box, 8))) continue;
         if (isOccluded(camera, item, worldY, exaggeration)) continue;
-        if (placed.some((p) => overlaps(p, box))) continue;
+        if (placed.some((p) => overlapsBox(p, box, local ? 16 : 8))) continue;
         placed.push(box);
         if (item.kind === 'street') streetSeen.add(item.name);
 
@@ -191,10 +195,6 @@ export function createLabelLayer(THREE, options) {
     }
     return false;
   }
-}
-
-function overlaps(a, b) {
-  return !(a.r < b.l || a.l > b.r || a.b < b.t || a.t > b.b);
 }
 
 /**

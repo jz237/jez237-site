@@ -1299,3 +1299,15 @@ body.cinema .diorama-status { display: none; }
   body.sheet-open .orientation { display: none; }
 }
 @media (max-height: 650px) { .orientation { top: 104px; } }
+
+/* Neighborhood views give more of the screen back to the miniature. */
+body.neighborhood-view .readout-preset { max-width: 330px; padding: 20px; }
+body.neighborhood-view .readout-preset-name { font-size: 25px; }
+body.neighborhood-view .readout-preset .story-tour,
+body.neighborhood-view .readout-preset .gesture-hint { display: none; }
+body.neighborhood-view .readout-preset-blurb { font-size: 12px; line-height: 1.5; }
+@media (max-width: 820px) {
+  body.neighborhood-view .readout-preset { max-width: none; padding: 0; }
+  body.neighborhood-view .readout-preset-blurb { display: none; }
+  body.neighborhood-view .readout-preset-name { font-size: 20px; }
+}

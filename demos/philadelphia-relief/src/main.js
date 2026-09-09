@@ -822,6 +822,7 @@ async function boot() {
       && state.era === 'present' && state.compareMode === 'off' ? Math.max(miniature,.24) : miniature;
     const exaggeration = displayExaggeration(state, now.dist);
     document.body.classList.toggle('diorama-view', miniature > .1);
+    document.body.classList.toggle('neighborhood-view', now.dist < 6500);
     terrain.uniforms.uDiorama.value = miniature;
     terrain.uniforms.uFogDensity.value = fogDensityFor(effectiveLight(state, LIGHT_BOUNDS).fogDensity)
       * (1 - miniature * .96);
@@ -976,7 +977,7 @@ async function boot() {
           showPlaces: state.layers.places,
           showLandmarks: state.layers.landmarks,
           showStreets: state.layers.roads && state.era === 'present',
-          distance: now.dist,
+          distance: now.dist, pose: now,
         });
       }
     }
