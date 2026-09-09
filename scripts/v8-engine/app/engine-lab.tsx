@@ -448,23 +448,23 @@ export default function EngineLab() {
           {view === 'cutaway' && !transparent && (
             <div className="section-control">
               <div className="range-label">
-                <span id="section-label">Section plane</span>
-                <button onClick={() => setSection(-0.12)}>Center</button>
+                <span id="section-label">Interior reveal</span>
+                <button onClick={() => setSection(-0.12)}>Reset</button>
               </div>
               <label className="learning-toggle"><span>Two-cylinder windows</span><Switch aria-label="Two-cylinder windows" checked={windows} onCheckedChange={setWindows}/></label>
               <Slider
                 aria-labelledby="section-label"
                 value={[section]}
-                min={-3.8}
-                max={3.8}
+                min={-0.35}
+                max={1.1}
                 step={0.05}
                 onValueChange={(v) =>
                   setSection(Array.isArray(v) ? v[0] : (v as number))
                 }
               />
               <div className="range-ends">
-                <span>Remove more</span>
-                <span>Reveal casting</span>
+                <span>Open housings</span>
+                <span>Close housings</span>
               </div>
               <div className="section-presets" aria-label="Section presets">
                 {[
@@ -488,7 +488,7 @@ export default function EngineLab() {
                 ))}
               </div>
               <p className="subtle">
-                {windows ? 'Cuts only through cylinders 1 and 3. Turn off windows to section the whole engine.' : 'Sections all engine parts. Drag the amber handle or use this slider.'}
+                {windows ? 'Opens two housing windows. All moving parts stay intact.' : 'Peels back the outer housings to expose the mechanism. Moving parts and the far bank stay intact.'}
               </p>
             </div>
           )}

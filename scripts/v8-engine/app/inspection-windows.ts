@@ -1,3 +1,4 @@
+export const REVEAL_MIN=-0.35, REVEAL_MAX=1.1;
 import * as T from 'three';
 export const inspectionWindows = {value:0};
 // Cylinders 1 and 3, leaving cylinders 5 and 7 assembled on the near bank.
@@ -20,13 +21,14 @@ export function windowClipping(material:T.Material,cap=false) {
   material.needsUpdate=true;
 }
 
-// Register by engine ownership, not by part name or material family. This also
-// covers newly added fasteners, accessories and moving components.
-export function sectionEngine(root:T.Object3D,plane:T.Plane) {
+// Only outer housings participate in the reveal; the mechanism stays intact.
+export function sectionEngine(root:T.Object3D,plane:T.Plane,housings:Set<T.Material>) {
   const materials=new Set<T.Material>();
   root.traverse(object=>{
     if(object.userData.sectionHelper || !(object instanceof T.Mesh || object instanceof T.Points))return;
-    for(const material of Array.isArray(object.material)?object.material:[object.material]) {
+    const eligible=(Array.isArray(object.material)?object.material:[object.material]).filter(m=>housings.has(m));
+    if(!eligible.length)return;
+    for(const material of eligible) {
       materials.add(material);
       material.clippingPlanes=[plane];
       material.clipShadows=true;
