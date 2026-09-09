@@ -1,0 +1,260 @@
+{
+  "version": "5.7.14",
+  "definition": "Populated stored atlas cells, including fallback and support banks; not a count of unique live poses.",
+  "counts": {
+    "alan": {
+      "sheets": 23,
+      "before": 342,
+      "added": 342,
+      "after": 684
+    },
+    "ali": {
+      "sheets": 24,
+      "before": 346,
+      "added": 346,
+      "after": 692
+    },
+    "commissioner": {
+      "sheets": 20,
+      "before": 294,
+      "added": 294,
+      "after": 588
+    },
+    "cyraxx": {
+      "sheets": 24,
+      "before": 346,
+      "added": 346,
+      "after": 692
+    },
+    "deathblow": {
+      "sheets": 24,
+      "before": 346,
+      "added": 346,
+      "after": 692
+    },
+    "devil": {
+      "sheets": 23,
+      "before": 342,
+      "added": 342,
+      "after": 684
+    },
+    "donald": {
+      "sheets": 23,
+      "before": 342,
+      "added": 342,
+      "after": 684
+    },
+    "post": {
+      "sheets": 24,
+      "before": 346,
+      "added": 346,
+      "after": 692
+    }
+  },
+  "movement": [
+    {
+      "id": "alan",
+      "moves": 48,
+      "samples": 20400,
+      "companionBanks": [
+        "full-painted-flow",
+        "full-painted-recovery",
+        "full-unified",
+        "full-unified-ext",
+        "full-inbetween-unified",
+        "full-inbetween-approach",
+        "full-painted-footwork",
+        "full-inbetween-unified-ext3",
+        "full-unified-ext3",
+        "full-motion3",
+        "full-inbetween-unified-ext5",
+        "full-painted-bridges",
+        "full-inbetween-unified-ext2",
+        "full-unified-ext2",
+        "full-unified-ext5",
+        "full-inbetween-unified-ext4",
+        "full-unified-ext4",
+        "full-inbetween-specials",
+        "full-specials"
+      ]
+    },
+    {
+      "id": "ali",
+      "moves": 48,
+      "samples": 18904,
+      "companionBanks": [
+        "full-painted-flow",
+        "full-painted-recovery",
+        "full-unified",
+        "full-unified-ext",
+        "full-inbetween-unified",
+        "full-inbetween-approach",
+        "full-painted-footwork",
+        "full-inbetween-unified-ext3",
+        "full-unified-ext3",
+        "full-motion3",
+        "full-inbetween-unified-ext5",
+        "full-painted-bridges",
+        "full-unified-ext5",
+        "full-inbetween-unified-ext4",
+        "full-unified-ext4",
+        "full-inbetween-specials",
+        "full-specials",
+        "full-inbetween-unified-ext2",
+        "full-unified-ext2"
+      ]
+    },
+    {
+      "id": "commissioner",
+      "moves": 48,
+      "samples": 20376,
+      "companionBanks": [
+        "full-painted-flow",
+        "full-painted-recovery",
+        "full-unified-ext",
+        "full-inbetween-unified",
+        "full-unified",
+        "full-inbetween-approach",
+        "full-painted-footwork",
+        "full-inbetween-unified-ext3",
+        "full-unified-ext3",
+        "full-motion3",
+        "full-inbetween-unified-ext5",
+        "full-painted-bridges",
+        "full-unified-ext5",
+        "full-inbetween-unified-ext4",
+        "full-unified-ext4",
+        "full-inbetween-unified-ext2"
+      ]
+    },
+    {
+      "id": "cyraxx",
+      "moves": 48,
+      "samples": 19480,
+      "companionBanks": [
+        "full-painted-flow",
+        "full-painted-recovery",
+        "full-unified",
+        "full-unified-ext",
+        "full-inbetween-unified",
+        "full-inbetween-approach",
+        "full-painted-footwork",
+        "full-inbetween-unified-ext3",
+        "full-unified-ext3",
+        "full-motion3",
+        "full-inbetween-unified-ext5",
+        "full-painted-bridges",
+        "full-inbetween-unified-ext2",
+        "full-unified-ext2",
+        "full-unified-ext5",
+        "full-inbetween-unified-ext4",
+        "full-unified-ext4",
+        "full-inbetween-specials",
+        "full-specials"
+      ]
+    },
+    {
+      "id": "deathblow",
+      "moves": 48,
+      "samples": 20464,
+      "companionBanks": [
+        "full-painted-flow",
+        "full-painted-recovery",
+        "full-unified",
+        "full-unified-ext",
+        "full-inbetween-unified",
+        "full-inbetween-approach",
+        "full-painted-footwork",
+        "full-inbetween-unified-ext3",
+        "full-unified-ext3",
+        "full-inbetween-unified-ext5",
+        "full-painted-bridges",
+        "full-unified-ext5",
+        "full-inbetween-unified-ext4",
+        "full-unified-ext4",
+        "full-inbetween-specials",
+        "full-specials",
+        "full-inbetween-unified-ext2",
+        "full-unified-ext2"
+      ]
+    },
+    {
+      "id": "devil",
+      "moves": 48,
+      "samples": 19960,
+      "companionBanks": [
+        "full-painted-flow",
+        "full-painted-recovery",
+        "full-unified",
+        "full-unified-ext",
+        "full-inbetween-unified",
+        "full-inbetween-approach",
+        "full-painted-footwork",
+        "full-inbetween-unified-ext3",
+        "full-unified-ext3",
+        "full-motion3",
+        "full-inbetween-unified-ext5",
+        "full-painted-bridges",
+        "full-inbetween-unified-ext2",
+        "full-unified-ext2",
+        "full-unified-ext5",
+        "full-inbetween-unified-ext4",
+        "full-unified-ext4",
+        "full-inbetween-specials",
+        "full-specials",
+        "full-specials-legacy"
+      ]
+    },
+    {
+      "id": "donald",
+      "moves": 48,
+      "samples": 20200,
+      "companionBanks": [
+        "full-painted-flow",
+        "full-painted-recovery",
+        "full-unified",
+        "full-unified-ext",
+        "full-inbetween-unified",
+        "full-inbetween-approach",
+        "full-painted-footwork",
+        "full-inbetween-unified-ext3",
+        "full-unified-ext3",
+        "full-inbetween-unified-ext5",
+        "full-painted-bridges",
+        "full-unified-ext5",
+        "full-inbetween-unified-ext4",
+        "full-unified-ext4",
+        "full-inbetween-specials",
+        "full-specials",
+        "full-inbetween-unified-ext2",
+        "full-unified-ext2"
+      ]
+    },
+    {
+      "id": "post",
+      "moves": 48,
+      "samples": 19480,
+      "companionBanks": [
+        "full-painted-flow",
+        "full-painted-recovery",
+        "full-unified",
+        "full-unified-ext",
+        "full-inbetween-unified",
+        "full-inbetween-approach",
+        "full-painted-footwork",
+        "full-inbetween-unified-ext3",
+        "full-unified-ext3",
+        "full-motion3",
+        "full-inbetween-unified-ext5",
+        "full-painted-bridges",
+        "full-unified-ext5",
+        "full-inbetween-unified-ext4",
+        "full-unified-ext4",
+        "full-inbetween-specials",
+        "full-specials",
+        "full-inbetween-unified-ext2",
+        "full-unified-ext2"
+      ]
+    }
+  ]
+}
