@@ -45,3 +45,5 @@ The optional feature-detected WebMCP tool load_aquascape_scenario uses the same 
 ## Dependencies
 
 React, React DOM and Three.js use their upstream licenses. Artwork is generated for this exhibit. Runtime is fully static, with no accounts, server storage or tracking added by this demo.
+
+Plant motion uses ten authored, rooted displacement regions with phase-delayed bending, stronger motion in tall leaves and minimal carpet motion. Red stems move as coherent image regions too. Filter flow controls the amplitude with a smoothed response; pause and reduced motion still freeze animation. This remains image deformation rather than a volumetric plant simulation.
