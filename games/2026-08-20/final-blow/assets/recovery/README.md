@@ -11,3 +11,12 @@ Packing: chroma-key/despill, isolate complete connected figures, use one anatomi
 Shared roster fixes: standing normals no longer receive an extra procedural lunge/tilt, direction changes settle for three ticks before entering the opposite shuffle, block recoil begins immediately and differs by strength, and body-hit torso motion folds toward the hit instead of using the head-hit backward arch. Pilot cover poses do not receive a second procedural block squash.
 
 Validation: 38 Move Viewer sequences each for Jez/Benny (3,678 timeline samples), crop bounds and decoded assets checked, 233 unique drawn cells inspected for border proximity (12 legacy cells have tight but nonzero margins). Six contrasting CPU rounds completed (Benny/Allan, Deathblow/Donald, Post/Jez; seeds 237 and 549), plus standard roster/CPU/combo/controls/offline tests. Screenshots reviewed for punch recovery and high/low heavy defense. Newly authored images are limited to the two pilots; shared mechanics and presentation fixes apply across the roster.
+
+
+## Complete roster — 5.7.10
+
+The same sixteen-pose layout now covers Allan, Ali G, the Commissioner, Cyraxx, Deathblow, the Pinelands Devil, Donald, and Post: 128 additional drawings. Each sheet uses that fighter's existing painted-flow/v2 artwork as its identity reference. All ten fighters now use painted recovery and defense when their atlas has decoded; the neutral reference cell remains unused by the recovery selector.
+
+Full connected silhouettes are isolated before packing, so an extended hand or accessory crossing the source's nominal column boundary is preserved. Every packed figure has at least eight pixels of padding. One anatomical scale is used throughout each fighter's sheet, and kick recovery uses the existing support-foot anchor (including the Commissioner's render scale correction). The original pilot atlases are unchanged. Sources and per-cell bounds for the eight additions are recorded separately in sources-roster-v1.json and audit-roster-v1.json.
+
+Validation: all eight additions passed all 38 Move Viewer timelines (15,844 timeline samples), decoded asset and crop-bound checks, and eight completed CPU rounds across four pairings and two seeds. Packed sheets and representative punch/kick/high-block/low-block screenshots were visually reviewed. Seven recovery unit checks and nine selected browser probes passed, including roster normal sequences, specials, supers, combos, CPU tactics, console errors, and offline cache startup.

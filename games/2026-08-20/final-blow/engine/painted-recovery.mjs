@@ -1,5 +1,5 @@
 export const RECOVERY_BANK='painted-recovery';
-export const RECOVERY_FIGHTERS=['jez','benny'];
+export const RECOVERY_FIGHTERS=['jez','benny','alan','ali','commissioner','cyraxx','deathblow','devil','donald','post'];
 
 // Authored movement owns weight transfer; translating the entire standing
 // normal also drags its supporting boot across the floor.
