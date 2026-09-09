@@ -1,10 +1,17 @@
 import {ArcadeGame} from './game';
+import {DefenderSound} from './DefenderSound';
+import type {SoundEvent} from './DefenderSound';
 type Foe={x:number;y:number;kind:number;phase:number;alive:boolean;cooldown?:number};
 type RescuePhase='descend'|'lift'|'intercept'|'fall'|'return';
 type Rescue={lander:Foe;humanIndex:number;x:number;y:number;vy:number;phase:RescuePhase;age:number;dir:number};
 type Spark={x:number;y:number;vx:number;vy:number;life:number;max:number;color:string};
 /** Autonomous, original rendering of a Defender-inspired attract sequence. No ROM or player input. */
 export class DefenderShow extends ArcadeGame {
+ sound?:DefenderSound;
+ override unlock(){super.unlock();this.sound??=new DefenderSound(this.audio!);this.sound.state(this.power&&!this.demoPaused,false,this.volume,this.keys.has('KeyT'));}
+ effect(event:SoundEvent){this.lastAudio=performance.now();this.sound?.effect(event);}
+ override tone(_frequency=180,_duration=.07,_type:OscillatorType='square'){this.effect('credit');}
+
  mines:{x:number;y:number;life:number}[]=[];charges:{x:number;y:number;vx:number;vy:number;life:number}[]=[]; cameraOffset=310;waveClock=0;escapeClock=0;
  world=4800; cameraX=0; shotClock=0; spawnClock=0; rescueClock=0; demoPaused=false; flash=0;
  foes:Foe[]=[]; sparks:Spark[]=[]; lasers:{x:number;y:number;dir:number;life:number}[]=[];
@@ -16,7 +23,7 @@ export class DefenderShow extends ArcadeGame {
  populateDemo(){this.foes=Array.from({length:14},(_,i)=>({x:this.wrap(this.x+200+i*331),y:150+(i*83)%350,kind:i%4,phase:i*1.37,alive:true}));}
  wrap(x:number){return (x%this.world+this.world)%this.world;}
  delta(x:number){return ((x-this.x+this.world*1.5)%this.world)-this.world*.5;}
- burst(x:number,y:number,color:string){for(let i=0;i<32;i++){const a=this.rand()*Math.PI*2,v=50+this.rand()*200,life=.3+this.rand()*.7;this.sparks.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life,max:life,color})}this.rings.push({x,y,life:.6,color});this.tone(100,.13,'sawtooth');}
+ burst(x:number,y:number,color:string){for(let i=0;i<32;i++){const a=this.rand()*Math.PI*2,v=50+this.rand()*200,life=.3+this.rand()*.7;this.sparks.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life,max:life,color})}this.rings.push({x,y,life:.6,color});this.effect('explosion');}
  groundY(x:number){const heights=[672,672,660,624,642,591,615,663,663,648,675,675,630,606,633,651,651,672,642,618,645,675,675,657,627,657,672,672,639,612,642,672];const z=this.wrap(x)/150,i=Math.floor(z);return heights[i]+(heights[(i+1)%heights.length]-heights[i])*(z-i);}
  moveX(target:number,speed:number,dt:number){this.x=this.wrap(this.x+Math.max(-speed*dt,Math.min(speed*dt,this.delta(target))));}
  moveY(target:number,speed:number,dt:number){this.y+=Math.max(-speed*dt,Math.min(speed*dt,target-this.y));}
@@ -26,7 +33,7 @@ export class DefenderShow extends ArcadeGame {
  updateRescue(dt:number){const r=this.mission!;r.age+=dt;this.dir=r.dir;const ground=this.groundY(r.x);
  if(r.phase==='descend'){
   r.lander.y=Math.min(ground-39,r.lander.y+85*dt);this.moveX(this.wrap(r.x-r.dir*290),170,dt);this.moveY(r.lander.y-105,190,dt);
-  if(r.lander.y>=ground-39){r.y=r.lander.y+24;this.rescueEvents.pickedUp++;this.rescuePhase('lift');this.tone(390,.2,'sine');}
+  if(r.lander.y>=ground-39){r.y=r.lander.y+24;this.rescueEvents.pickedUp++;this.rescuePhase('lift');this.effect('abduct');}
  }else if(r.phase==='lift'){
   r.lander.y-=65*dt;r.y=r.lander.y+24;this.moveX(this.wrap(r.x-r.dir*290),170,dt);this.moveY(r.lander.y-105,190,dt);
   if(r.lander.y<=ground-205)this.rescuePhase('intercept');
@@ -36,19 +43,19 @@ export class DefenderShow extends ArcadeGame {
   r.vy=Math.min(170,r.vy+115*dt);r.y+=r.vy*dt;
   if(r.y>=ground-15){r.y=ground-15;this.carrying=false;this.mission=undefined;this.nextRescue=this.time+8;return;}
   if(r.age>.28){this.moveX(r.x,360,dt);this.moveY(r.y-18,340,dt);}
-  if(Math.abs(this.delta(r.x))<23&&r.y-this.y>3&&r.y-this.y<34){this.carrying=true;this.score+=500;this.rescueEvents.caught++;this.rescuePhase('return');this.tone(920,.18,'sine');this.rings.push({x:this.x,y:this.y,life:.6,color:'#baff8e'});}
+  if(Math.abs(this.delta(r.x))<23&&r.y-this.y>3&&r.y-this.y<34){this.carrying=true;this.score+=500;this.rescueEvents.caught++;this.rescuePhase('return');this.effect('catch');this.rings.push({x:this.x,y:this.y,life:.6,color:'#baff8e'});}
  }else {
   this.moveX(this.wrap(r.x+r.dir*105),160,dt);const target=r.age<.7?r.y-75:this.groundY(this.x)-30;this.moveY(target,145,dt);
-  if(r.age>1&&Math.abs(this.y-(this.groundY(this.x)-30))<3){this.demoHumans[r.humanIndex]=this.x;this.carrying=false;this.rescued++;this.score+=500;this.rescueEvents.delivered++;this.tone(660,.2,'sine');this.mission=undefined;this.nextRescue=this.time+8+this.rand()*5;}
+  if(r.age>1&&Math.abs(this.y-(this.groundY(this.x)-30))<3){this.demoHumans[r.humanIndex]=this.x;this.carrying=false;this.rescued++;this.score+=500;this.rescueEvents.delivered++;this.effect('delivery');this.mission=undefined;this.nextRescue=this.time+8+this.rand()*5;}
  }
  }
- override update(step:number){const dt=Math.max(0,Math.min(step,.04));if(!this.power){this.draw();return}if(this.demoPaused)return;
+ override update(step:number){this.sound?.state(this.power&&!this.demoPaused,!this.audio||this.muted,this.volume,this.keys.has('KeyT'));const dt=Math.max(0,Math.min(step,.04));if(!this.power){this.draw();return}if(this.demoPaused)return;
  this.time+=dt;this.flash=Math.max(0,this.flash-dt*2);this.rescueClock+=dt;this.spawnClock+=dt;this.waveClock+=dt;this.escapeClock=Math.max(0,this.escapeClock-dt);
  const oldY=this.y,oldX=this.x,oldDir=this.dir;if(!this.mission){this.dir=Math.floor(this.time/38)%2===0?1:-1;if(this.time>=this.nextRescue)this.beginRescue();}
  if(this.mission)this.updateRescue(dt);
  else {this.x=this.wrap(this.x+this.dir*245*dt);const target=this.foes.filter(e=>e.alive&&this.delta(e.x)*this.dir>80&&this.delta(e.x)*this.dir<750).sort((a,b)=>Math.abs(this.delta(a.x))-Math.abs(this.delta(b.x)))[0];const desired=target?target.y:310+Math.sin(this.time*.9)*120;this.y+=(desired-this.y)*Math.min(1,dt*3.2);}
  this.y=Math.max(140,Math.min(685,this.y));this.shotClock-=dt;
- if(this.shotClock<=0){this.lasers.push({x:this.x+this.dir*26,y:this.y,dir:this.dir,life:.8});this.shotClock=.16+this.rand()*.1;this.tone(850,.045);}
+ if(this.shotClock<=0){this.lasers.push({x:this.x+this.dir*26,y:this.y,dir:this.dir,life:.8});this.shotClock=.16+this.rand()*.1;this.effect('fire');}
  for(const e of this.foes){if(!e.alive||e===this.mission?.lander)continue;
  const dx=-this.delta(e.x),dy=this.y-e.y;e.cooldown=(e.cooldown??(1+this.rand()*3))-dt;
  if(e.kind===0){e.x=this.wrap(e.x+Math.sin(e.phase)*25*dt);e.y+=Math.sign(this.groundY(e.x)-55-e.y)*28*dt;}
@@ -65,7 +72,7 @@ export class DefenderShow extends ArcadeGame {
  if(!this.foes.length&&!this.mission){this.wave++;this.waveClock=0;this.populateDemo();this.mines=[];this.charges=[];}
  if(this.waveClock>25&&this.spawnClock>9&&this.foes.length<28){this.spawnClock=0;this.foes.push({x:this.wrap(this.x+this.dir*850),y:180+this.rand()*280,kind:5,phase:this.rand()*8,alive:true});}
  while(this.foes.length>38){const i=this.foes.findIndex(e=>e!==this.mission?.lander);this.foes.splice(i,1);}
- if(!this.mission&&this.escapeClock===0&&[...this.foes,...this.mines,...this.charges].some(e=>Math.abs(this.delta(e.x))<24&&Math.abs(e.y-this.y)<22)){this.burst(this.x,this.y,'#fff');this.x=this.wrap(this.x+this.dir*580);this.y=210+this.rand()*230;this.escapeClock=8;this.tone(160,.2,'sawtooth');}
+ if(!this.mission&&this.escapeClock===0&&[...this.foes,...this.mines,...this.charges].some(e=>Math.abs(this.delta(e.x))<24&&Math.abs(e.y-this.y)<22)){this.burst(this.x,this.y,'#fff');this.x=this.wrap(this.x+this.dir*580);this.y=210+this.rand()*230;this.escapeClock=8;this.effect('hyperspace');}
  this.cameraOffset+=((this.dir===1?310:650)-this.cameraOffset)*Math.min(1,dt*3);this.cameraX=this.x-this.cameraOffset;
  // The attract program's virtual input is visible in the hardware demonstration.
  this.keys.clear();if(Math.abs(this.x-oldX)>.01)this.keys.add('KeyT');if(this.dir!==oldDir)this.keys.add('KeyR');if(this.escapeClock>7.8)this.keys.add('KeyH');this.keys.add(this.dir===1?'ArrowRight':'ArrowLeft');if(Math.abs(this.y-oldY)>.1)this.keys.add(this.y<oldY?'ArrowUp':'ArrowDown');if(this.shotClock>.13)this.keys.add('Space');this.draw();
