@@ -44,7 +44,7 @@ export class DefenderShow extends ArcadeGame {
  }
  override update(step:number){const dt=Math.max(0,Math.min(step,.04));if(!this.power){this.draw();return}if(this.demoPaused)return;
  this.time+=dt;this.flash=Math.max(0,this.flash-dt*2);this.rescueClock+=dt;this.spawnClock+=dt;this.waveClock+=dt;this.escapeClock=Math.max(0,this.escapeClock-dt);
- const oldY=this.y;if(!this.mission){this.dir=Math.floor(this.time/38)%2===0?1:-1;if(this.time>=this.nextRescue)this.beginRescue();}
+ const oldY=this.y,oldX=this.x,oldDir=this.dir;if(!this.mission){this.dir=Math.floor(this.time/38)%2===0?1:-1;if(this.time>=this.nextRescue)this.beginRescue();}
  if(this.mission)this.updateRescue(dt);
  else {this.x=this.wrap(this.x+this.dir*245*dt);const target=this.foes.filter(e=>e.alive&&this.delta(e.x)*this.dir>80&&this.delta(e.x)*this.dir<750).sort((a,b)=>Math.abs(this.delta(a.x))-Math.abs(this.delta(b.x)))[0];const desired=target?target.y:310+Math.sin(this.time*.9)*120;this.y+=(desired-this.y)*Math.min(1,dt*3.2);}
  this.y=Math.max(140,Math.min(685,this.y));this.shotClock-=dt;
@@ -68,7 +68,7 @@ export class DefenderShow extends ArcadeGame {
  if(!this.mission&&this.escapeClock===0&&[...this.foes,...this.mines,...this.charges].some(e=>Math.abs(this.delta(e.x))<24&&Math.abs(e.y-this.y)<22)){this.burst(this.x,this.y,'#fff');this.x=this.wrap(this.x+this.dir*580);this.y=210+this.rand()*230;this.escapeClock=8;this.tone(160,.2,'sawtooth');}
  this.cameraOffset+=((this.dir===1?310:650)-this.cameraOffset)*Math.min(1,dt*3);this.cameraX=this.x-this.cameraOffset;
  // The attract program's virtual input is visible in the hardware demonstration.
- this.keys.clear();this.keys.add(this.dir===1?'ArrowRight':'ArrowLeft');if(Math.abs(this.y-oldY)>.1)this.keys.add(this.y<oldY?'ArrowUp':'ArrowDown');if(this.shotClock>.13)this.keys.add('Space');this.draw();
+ this.keys.clear();if(Math.abs(this.x-oldX)>.01)this.keys.add('KeyT');if(this.dir!==oldDir)this.keys.add('KeyR');if(this.escapeClock>7.8)this.keys.add('KeyH');this.keys.add(this.dir===1?'ArrowRight':'ArrowLeft');if(Math.abs(this.y-oldY)>.1)this.keys.add(this.y<oldY?'ArrowUp':'ArrowDown');if(this.shotClock>.13)this.keys.add('Space');this.draw();
  }
  sprite(pattern:string[],x:number,y:number,scale:number,colors:Record<string,string>){const c=this.ctx;for(let row=0;row<pattern.length;row++)for(let col=0;col<pattern[row].length;col++){const color=colors[pattern[row][col]];if(color){c.fillStyle=color;c.fillRect(Math.round(x+col*scale),Math.round(y+row*scale),scale,scale)}}}
  pixelText(text:string,x:number,y:number,color:string){const glyphs:Record<string,string>={'0':'111101101101111','1':'010110010010111','2':'111001111100111','3':'111001111001111','4':'101101111001001','5':'111100111001111','6':'111100111101111','7':'111001010010010','8':'111101111101111','9':'111101111001111'};for(const ch of text){const bits=glyphs[ch];if(bits){this.ctx.fillStyle=color;for(let i=0;i<15;i++)if(bits[i]==='1')this.ctx.fillRect(x+i%3,y+Math.floor(i/3),1,1);}x+=4;}}
