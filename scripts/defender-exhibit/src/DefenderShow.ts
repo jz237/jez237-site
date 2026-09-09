@@ -34,6 +34,7 @@ export class DefenderShow extends ArcadeGame {
   r.y=r.lander.y+24;this.moveX(this.wrap(r.x-r.dir*290),170,dt);this.moveY(r.lander.y,220,dt);
  }else if(r.phase==='fall'){
   r.vy=Math.min(170,r.vy+115*dt);r.y+=r.vy*dt;
+  if(r.y>=ground-15){r.y=ground-15;this.carrying=false;this.mission=undefined;this.nextRescue=this.time+8;return;}
   if(r.age>.28){this.moveX(r.x,360,dt);this.moveY(r.y-18,340,dt);}
   if(Math.abs(this.delta(r.x))<23&&r.y-this.y>3&&r.y-this.y<34){this.carrying=true;this.score+=500;this.rescueEvents.caught++;this.rescuePhase('return');this.tone(920,.18,'sine');this.rings.push({x:this.x,y:this.y,life:.6,color:'#baff8e'});}
  }else {
@@ -58,7 +59,7 @@ export class DefenderShow extends ArcadeGame {
  }
  for(const m of this.mines)m.life-=dt;this.mines=this.mines.filter(m=>m.life>0).slice(-45);
  for(const b of this.charges){b.x=this.wrap(b.x+b.vx*dt);b.y+=b.vy*dt;b.life-=dt;}this.charges=this.charges.filter(b=>b.life>0).slice(-40);
- for(const l of this.lasers){l.x=this.wrap(l.x+l.dir*1400*dt);l.life-=dt;for(const e of this.foes){const distance=Math.abs(((e.x-l.x+this.world*1.5)%this.world)-this.world*.5);if(e.alive&&(e!==this.mission?.lander||this.mission.phase==='intercept')&&distance<38&&Math.abs(e.y-l.y)<26){e.alive=false;l.life=0;if(e===this.mission?.lander){this.rescueEvents.dropped++;this.mission.vy=25;this.rescuePhase('fall');}this.score+=[150,150,250,1000,150,200][e.kind];this.kills++;this.burst(e.x,e.y,['#44ff22','#ff33dd','#cc55ff','#ff33dd','#ffffff','#44ff22'][e.kind]);if(e.kind===3)for(let j=0;j<4;j++)this.foes.push({x:this.wrap(e.x+(j-2)*24),y:e.y+(j-2)*18,kind:4,phase:j*1.6,alive:true});break}}}
+ for(const l of this.lasers){l.x=this.wrap(l.x+l.dir*1400*dt);l.life-=dt;for(const e of this.foes){const distance=Math.abs(((e.x-l.x+this.world*1.5)%this.world)-this.world*.5);if(e.alive&&(e!==this.mission?.lander||this.mission.phase==='intercept')&&distance<38&&Math.abs(e.y-l.y)<26){e.alive=false;l.life=0;if(e===this.mission?.lander){this.rescueEvents.dropped++;this.mission.vy=25;this.rescuePhase('fall');}this.score+=[150,150,250,1000,150,200][e.kind];this.kills++;this.burst(e.x,e.y,['#44ff22','#ff33dd','#cc55ff','#ff33dd','#ff3434','#44ff22'][e.kind]);if(e.kind===3)for(let j=0;j<4;j++)this.foes.push({x:this.wrap(e.x+(j-2)*24),y:e.y+(j-2)*18,kind:4,phase:j*1.6,alive:true});break}}}
  this.lasers=this.lasers.filter(l=>l.life>0);for(const s of this.sparks){s.x=this.wrap(s.x+s.vx*dt);s.y+=s.vy*dt;s.vy+=50*dt;s.life-=dt}this.sparks=this.sparks.filter(s=>s.life>0);this.rings.forEach(r=>r.life-=dt);this.rings=this.rings.filter(r=>r.life>0);
  this.foes=this.foes.filter(e=>e.alive);
  if(!this.foes.length&&!this.mission){this.wave++;this.waveClock=0;this.populateDemo();this.mines=[];this.charges=[];}
@@ -73,15 +74,15 @@ export class DefenderShow extends ArcadeGame {
  pixelText(text:string,x:number,y:number,color:string){const glyphs:Record<string,string>={'0':'111101101101111','1':'010110010010111','2':'111001111100111','3':'111001111001111','4':'101101111001001','5':'111100111001111','6':'111100111101111','7':'111001010010010','8':'111101111101111','9':'111101111001111'};for(const ch of text){const bits=glyphs[ch];if(bits){this.ctx.fillStyle=color;for(let i=0;i<15;i++)if(bits[i]==='1')this.ctx.fillRect(x+i%3,y+Math.floor(i/3),1,1);}x+=4;}}
  override draw(){const c=this.ctx,w=294,h=240;c.shadowBlur=0;c.globalAlpha=1;c.fillStyle='#000';c.fillRect(0,0,w,h);if(!this.power)return;
  const sx=(x:number)=>{let v=this.wrap(x-this.cameraX);if(v>this.world-200)v-=this.world;return Math.round(v*w/960)};const sy=(y:number)=>Math.round(y/3);
- const colors=['#45ff26','#ef39e8','#b555ff','#ff35e7','#fff','#48ff30'];
+ const colors=['#45ff26','#ef39e8','#b555ff','#ff35e7','#ff3434','#48ff30'];
  const human=(x:number,y:number,fall=false)=>this.sprite(fall?['..Y..','W.W.W','.WWW.','..W..','.W.W.']:['.Y.','.W.','WWW','.W.','W.W'],x-(fall?2:1),y,1,{Y:'#ffff71',W:'#bfff59'});
  const ship=(x:number,y:number,dir:number,small=false)=>{const p=['....C...........','MMWWWWWWWWYY....','..MMMMGGGG......','....G...........'];c.save();c.translate(x,y);c.scale(dir*(small?.6:1),small?.6:1);this.sprite(p,-8,-2,1,{C:'#44ffff',M:'#ff35df',W:'#fff',Y:'#ffff45',G:'#48ff54'});c.restore();};
  c.save();c.beginPath();c.rect(0,36,w,204);c.clip();
  for(let i=0;i<45;i++){const x=sx(i*107+31);if(x<0||x>=w)continue;c.fillStyle=['#a72cac','#2c7dc0','#aaa22d','#448c45'][i%4];c.fillRect(x,43+(i*71)%145,1,1);}
  c.fillStyle='#bb791f';let prev=sy(this.groundY(this.cameraX));for(let x=0;x<w;x++){const y=sy(this.groundY(this.cameraX+x*960/w));c.fillRect(x,Math.min(y,prev),1,Math.abs(y-prev)+1);prev=y;}
  for(const [i,x] of this.demoHumans.entries()){if(this.mission?.humanIndex===i&&this.mission.phase!=='descend')continue;human(sx(x),sy(this.groundY(x))-5);}
- const patterns=[['..GGG..','.G.Y.G.','G..Y..G','..GGG..','.G.G.G.','G..G..G'],['..MM...','.MMMM..','M.WW.M.','..MM...','.M..M..','M....M.'],['PPPPP','P...P','P.W.P','P...P','PPPPP'],['...P...','.P.P.P.','..PPP..','PPPWPPP','..PPP..','.P.P.P.','...P...'],['.W.W.','WWWWW','..W..','.W.W.'],['..GGGGG..','.G.....G.','GGGGGGGGG']];
- for(const e of this.foes){if(!e.alive)continue;const x=sx(e.x);if(x<-10||x>w+10)continue;const pattern=patterns[e.kind];this.sprite(pattern,x-Math.floor(pattern[0].length/2),sy(e.y)-3,1,{G:colors[e.kind],M:colors[e.kind],P:colors[e.kind],W:'#fff',Y:'#ffff31'});}
+ const patterns=[['..GGG..','.G.Y.G.','G..Y..G','..GGG..','.G.G.G.','G..G..G'],['..MM...','.MMMM..','M.WW.M.','..MM...','.M..M..','M....M.'],['PPPPP','P...P','P.W.P','P...P','PPPPP'],['...P...','.P.P.P.','..PPP..','PPPWPPP','..PPP..','.P.P.P.','...P...'],['.R.R.','RRRRR','..R..','.R.R.'],['..GGGGG..','.G.....G.','GGGGGGGGG']];
+ for(const e of this.foes){if(!e.alive)continue;const x=sx(e.x);if(x<-10||x>w+10)continue;const pattern=patterns[e.kind];this.sprite(pattern,x-Math.floor(pattern[0].length/2),sy(e.y)-3,1,{G:colors[e.kind],M:colors[e.kind],P:colors[e.kind],R:colors[e.kind],W:'#fff',Y:'#ffff31'});}
  for(const m of this.mines)this.sprite(['.W.','WWW','.W.'],sx(m.x)-1,sy(m.y)-1,1,{W:'#ddd'});
  for(const b of this.charges){c.fillStyle='#fff';c.fillRect(sx(b.x),sy(b.y),1,1);}
  const r=this.mission;if(r&&['lift','intercept','fall'].includes(r.phase))human(sx(r.x),sy(r.y),r.phase==='fall');
