@@ -54,3 +54,5 @@ Depth pass: fish use authored wood/rock silhouettes and color-based foliage mask
 
 Visual QA follow-up: mobile now uses a compact readings strip and a dock with all six modes visible; movement sliders remain in the scrollable Environment panel. Fixed camera-menu state after leaving macro mode and negative first-frame timing display.
 
+
+Free 3D trial: one cardinal tetra uses an original rounded mesh built from elliptical cross-sections, photographic UV mapping from the existing project artwork, separate translucent fin membranes, raised eyes, dynamic normals and body/tail bending. No purchased assets, paid generation, or new dependencies. Inspect 3D tetra tracks the prototype; the other fish remain image cutouts. This is a procedural prototype, not a commissioned anatomical model, skeletal rig or exported GLB.

@@ -32,3 +32,5 @@
  .clean .view-tools,.clean .chemistry{display:none}
 }
 .view-tools,.transport,.modes{z-index:4}@media(max-width:700px){.drawer,.chemistry-detail,.equipment-card,.lesson,.inspector{max-height:calc(100% - 510px)}}
+
+.view-tools>.prototype-control{grid-column:1/-1;color:#c9eab5}@media(max-width:700px){.view-tools{bottom:234px}.view-tools>.prototype-control{grid-row:1}.drawer,.chemistry-detail,.equipment-card,.lesson,.inspector{max-height:calc(100% - 558px)}}
