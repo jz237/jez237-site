@@ -8,8 +8,39 @@
     "image": "assets/v8-engine.jpg",
     "imageAlt": "Machined V8 engine illuminated on a dark circular exhibit platform",
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/v8-engine",
-    "features": ["Cutaway & exploded views", "Clickable components", "Guided walkthrough", "Motion charts"],
-    "facts": ["8 cylinders", "16 valves", "720° cycle"],
+    "features": [
+      "Cutaway & exploded views",
+      "Clickable components",
+      "Guided walkthrough",
+      "Motion charts"
+    ],
+    "facts": [
+      "8 cylinders",
+      "16 valves",
+      "720° cycle"
+    ],
     "note": "WebGL 2 · Desktop & mobile · Idealized teaching model"
+  },
+  {
+    "id": "002",
+    "title": "Cyberdyne Systems · SKYNET",
+    "category": "3D · Sci-fi sculpture",
+    "description": "Chrome armor. A glowing neural core. Explore an animated Cyberdyne Systems sculpture with mechanical rings, cinematic lighting, and a living network of signals.",
+    "url": "skynet-3d/",
+    "image": "assets/skynet.png",
+    "imageAlt": "Chrome and red Cyberdyne Systems Skynet concept artwork that inspired the interactive sculpture",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/skynet-3d",
+    "features": [
+      "Drag to orbit",
+      "Cinematic intro",
+      "Adjustable glow",
+      "Fullscreen showcase"
+    ],
+    "facts": [
+      "Procedural 3D",
+      "Animated neural core",
+      "Mouse & touch"
+    ],
+    "note": "Desktop & mobile · Interactive sculpture · Preview shows concept artwork"
   }
 ]
