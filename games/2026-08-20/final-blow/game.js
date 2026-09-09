@@ -1061,7 +1061,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.14` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.15` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -32542,7 +32542,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.14-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.15-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -32847,7 +32847,7 @@ window.addEventListener("keydown", (event) => {
   }
   if (demoSession.active) {
     event.preventDefault();
-    noteUserActivity();
+    if (event.code === "Escape") exitDemo();
     return;
   }
   if (pendingKeyBinding) {
@@ -32877,14 +32877,25 @@ window.addEventListener("keydown", (event) => {
 window.addEventListener("keyup", (event) => keys.delete(event.code));
 window.addEventListener("blur", () => { keys.clear(); pressed.clear(); });
 // 5.4: the TAP FOR SOUND chip (sweep #19) arms the gate and keeps the show
-// running; a press on the COPY LINK bug (#30) arms it too and must not count
-// as "the viewer wants out"; any other press arms it AND exits (the exit
-// gesture is what arms the next idle cycle). A touch press is not activation
+// running. Mouse clicks on the demo toggle its transport; controls retain
+// their own actions and Escape exits. A touch press is not activation
 // in Chrome — its release is, so pointerup arms too (idempotent).
 document.addEventListener("pointerdown", (event) => {
   if (attractSoundChipPress(event)) return;
   armAttractAudio(event);
   if (isDemoShareTarget(event)) return;
+  if (demoSession.active && event.pointerType === "mouse") {
+    const target = event.target;
+    if (event.button === 0 && target instanceof Element
+        && target.closest("#gameFrame")
+        && !target.closest("button, a, input, select, textarea, dialog, [role=button]")) {
+      event.preventDefault();
+      demoSpeed.togglePause();
+      noteDemoPresence();
+      syncDemoSpeedTag(true);
+    }
+    return;
+  }
   noteUserActivity();
 }, true);
 document.addEventListener("pointerup", (event) => { armAttractAudio(event); }, true);
@@ -34035,7 +34046,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.14-ringside",
+  version: "5.7.15-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
