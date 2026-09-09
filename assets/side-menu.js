@@ -52,6 +52,7 @@
       label: 'Projects',
       tone: 'projects',
       items: [
+        ['demos', 'demos/', 'ops', 'Website Demos'],
         ['hidden-reef', 'https://hidden-reef.pages.dev/', 'reef', 'Hidden Reef Demo'],
         ['ops', 'ops/', 'ops', 'Operations & Statistics'],
         ['stocks', 'https://jz237.github.io/stock-command-center/', 'stocks', 'Stock Command Center']
