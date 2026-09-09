@@ -1,3 +1,4 @@
+import { REVEAL_MIN, REVEAL_MAX } from './inspection-windows';
 import * as T from 'three';
 import type { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 const V = (x: number, y: number, z: number) => new T.Vector3(x, y, z);
@@ -26,11 +27,11 @@ export function createOverlays(
   scene.add(guide);
   const handle = document.createElement('button');
   handle.className = 'section-handle';
-  handle.textContent = '↔ Section';
-  handle.setAttribute('aria-label', 'Drag section plane');
+  handle.textContent = '↔ Reveal';
+  handle.setAttribute('aria-label', 'Drag interior reveal');
   handle.setAttribute('role', 'slider');
-  handle.setAttribute('aria-valuemin', '-3.8');
-  handle.setAttribute('aria-valuemax', '3.8');
+  handle.setAttribute('aria-valuemin', String(REVEAL_MIN));
+  handle.setAttribute('aria-valuemax', String(REVEAL_MAX));
   host.appendChild(handle);
   let value = 0,
     drag:
@@ -60,8 +61,8 @@ export function createOverlays(
         d.value +
           ((e.clientX - d.x) * d.dx + (e.clientY - d.y) * d.dy) /
             (d.dx * d.dx + d.dy * d.dy),
-        -3.8,
-        3.8,
+        REVEAL_MIN,
+        REVEAL_MAX,
       ),
     );
   };
@@ -77,13 +78,13 @@ export function createOverlays(
       e.preventDefault();
       onSection(
         e.key === 'Home'
-          ? -3.8
+          ? REVEAL_MIN
           : e.key === 'End'
-            ? 3.8
+            ? REVEAL_MAX
             : T.MathUtils.clamp(
                 value + (e.key === 'ArrowRight' ? 0.1 : -0.1),
-                -3.8,
-                3.8,
+                REVEAL_MIN,
+                REVEAL_MAX,
               ),
       );
     }

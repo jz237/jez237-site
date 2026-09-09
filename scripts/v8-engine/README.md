@@ -25,4 +25,4 @@ Two-cylinder windows reveal cylinders 1 and 3 while retaining cylinders 5 and 7 
 
 Validation: `npx tsc --noEmit` and `node --experimental-strip-types lib/features.test.mjs`. The latter checks belt wrap and clearance, continuous accessory ratios across cycle boundaries, selected inspection windows, opening cancellation/replay/reduced motion, and linkage geometry across two cycles.
 
-The default section now clips every engine mesh (including pistons, crankshaft, valvetrain, headers, leads and accessories). Two-cylinder windows are opt-in. Section registration is centralized by assembly ownership, and shadow depth materials use the same window shader. Transparent, assembled and exploded views restore the complete geometry.
+Interior reveal peels back outer housings only. Pistons, rods, crankshaft, valvetrain, headers and accessories remain intact. Slider, drag handle, keyboard and renderer share a bounded near-bank reveal range; the far bank remains assembled. Two-cylinder windows remain optional.
