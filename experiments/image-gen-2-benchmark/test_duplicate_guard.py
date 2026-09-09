@@ -36,6 +36,8 @@ class DuplicateGuardTests(unittest.TestCase):
             "prompt": "photorealistic ocean canyon",
         }]
         (self.root / "gallery-data.json").write_text(json.dumps(entries))
+        self.approvals = self.root / "style-approvals.json"
+        self.approvals.write_text(json.dumps({"version": 1, "approvals": []}))
 
     def tearDown(self) -> None:
         self.temp.cleanup()
@@ -47,6 +49,7 @@ class DuplicateGuardTests(unittest.TestCase):
             "slot": "random-image-style",
             "concept_key": "microbial fuel cell orchard",
             "style_family": "copperplate engraving",
+            "style_approvals_path": self.approvals,
         }
         values.update(overrides)
         return find_duplicates(self.root, **values)
@@ -60,6 +63,54 @@ class DuplicateGuardTests(unittest.TestCase):
         self.assertIn("concept-key", reasons)
 
     def test_used_style_is_rejected_for_new_subject(self) -> None:
+        matches = self.check(
+            title="Scratchboard Lunar Bakery",
+            concept_key="lunar bakery night shift",
+            style_family="scratchboard",
+        )
+        self.assertTrue(any(item["reason"] == "rendering-style-family" for item in matches))
+
+    def test_alans_thumbs_up_allows_style_reuse_only(self) -> None:
+        self.approvals.write_text(json.dumps({"version": 1, "approvals": [{
+            "styleFamilies": ["scratchboard"],
+            "discordMessageId": "1547144184266489886",
+            "approverId": "485646922141532169",
+            "emoji": "👍🏼",
+        }]}))
+        self.assertEqual([], self.check(
+            title="Scratchboard Lunar Bakery",
+            concept_key="lunar bakery night shift",
+            style_family="scratchboard",
+        ))
+
+        concept_reasons = {item["reason"] for item in self.check(
+            title="Scratchboard Floodgate Fish Passage",
+            concept_key="scratchboard floodgate fish passage",
+            style_family="scratchboard",
+        )}
+        self.assertIn("concept-key", concept_reasons)
+
+    def test_other_users_thumbs_up_does_not_allow_style_reuse(self) -> None:
+        self.approvals.write_text(json.dumps({"version": 1, "approvals": [{
+            "styleFamilies": ["scratchboard"],
+            "discordMessageId": "1547144184266489886",
+            "approverId": "470002248894906368",
+            "emoji": "👍🏼",
+        }]}))
+        matches = self.check(
+            title="Scratchboard Lunar Bakery",
+            concept_key="lunar bakery night shift",
+            style_family="scratchboard",
+        )
+        self.assertTrue(any(item["reason"] == "rendering-style-family" for item in matches))
+
+    def test_alans_non_thumbs_up_does_not_allow_style_reuse(self) -> None:
+        self.approvals.write_text(json.dumps({"version": 1, "approvals": [{
+            "styleFamilies": ["scratchboard"],
+            "discordMessageId": "1547144184266489886",
+            "approverId": "485646922141532169",
+            "emoji": "👎🏼",
+        }]}))
         matches = self.check(
             title="Scratchboard Lunar Bakery",
             concept_key="lunar bakery night shift",
