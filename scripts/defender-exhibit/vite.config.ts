@@ -1,0 +1,3 @@
+import {defineConfig} from 'vite';
+import react from '@vitejs/plugin-react';
+export default defineConfig({base:'./',plugins:[react()],build:{outDir:'../../demos/defender-exhibit',emptyOutDir:true,chunkSizeWarningLimit:1200}});

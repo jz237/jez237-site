@@ -1,0 +1,13 @@
+import {test} from 'node:test';
+import assert from 'node:assert/strict';
+const context=new Proxy({}, {get:(o,k)=>o[k]??(()=>{}),set:(o,k,v)=>(o[k]=v,true)});
+globalThis.document={createElement:()=>({width:0,height:0,setAttribute(){},getContext:()=>context})};
+globalThis.localStorage={getItem:()=>null,setItem(){}};
+Object.defineProperty(globalThis,'navigator',{value:{getGamepads:()=>[]},configurable:true});
+const {ArcadeGame}=await import('../src/game.ts');
+const make=()=>{const g=new ArcadeGame();g.start();g.active=true;return g};
+test('keyboard flight and fire move the world and produce a projectile',()=>{const g=make();g.enemies=[{x:2500,y:100,phase:0}];g.keys.add('ArrowRight');g.keys.add('Space');const x=g.x;g.update(.03);assert.ok(g.x>x);assert.equal(g.bullets.length,1);});
+test('survivors are picked up at ground level and delivered for points',()=>{const g=make();g.x=350;g.y=475;g.update(.016);assert.equal(g.carrying,true);assert.equal(g.humans.length,6);g.x=100;g.update(.016);assert.equal(g.carrying,false);assert.equal(g.score,500);assert.equal(g.rescued,1);});
+test('collision costs one life with a grace period, then game over records score',()=>{const g=make();g.enemies=[{x:g.x,y:g.y,phase:0}];g.invincible=0;g.update(.016);assert.equal(g.lives,2);g.update(.016);assert.equal(g.lives,2);g.lives=1;g.invincible=0;g.score=650;g.update(.016);assert.equal(g.running,false);assert.equal(g.best,650);});
+test('power and leaving Play pause a running game without teleporting',()=>{const g=make();g.keys.add('ArrowRight');g.power=false;g.update(.02);assert.equal(g.x,600);g.power=true;g.active=false;g.update(.02);assert.equal(g.x,600);});
+test('clearing enemies advances a wave and resets enemies',()=>{const g=make();g.enemies=[];g.update(.016);assert.equal(g.wave,2);assert.equal(g.score,1000);assert.ok(g.enemies.length>0);});
