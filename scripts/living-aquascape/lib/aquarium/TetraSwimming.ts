@@ -2,11 +2,11 @@ import {createFishBrain,thinkFish,rememberPlant,type FishBrain,type FishSenses} 
 export const MAX_TETRA_PITCH=.24;
 export const MAX_TETRA_VERTICAL_SPEED=5;
 export type TetraBehavior='cruising'|'burst'|'gliding'|'approaching'|'inspecting'|'foraging';
-export type TetraSwim={x:number;y:number;vx:number;vy:number;yaw:number;pitch:number;speed:number;direction:1|-1;sinceTurn:number;elapsed:number;behavior:TetraBehavior;remaining:number;targetX:number;targetY:number;cruiseSpeed:number;effort:number;pectoralEffort:number;seed:number;wasFeeding:boolean;turnRate:number;depthTarget:number;depthRemaining:number;depthBand:number;brain:FishBrain};
+export type TetraSwim={x:number;y:number;vx:number;vy:number;yaw:number;pitch:number;speed:number;direction:1|-1;sinceTurn:number;elapsed:number;behavior:TetraBehavior;remaining:number;targetX:number;targetY:number;cruiseSpeed:number;effort:number;pectoralEffort:number;seed:number;wasFeeding:boolean;turnRate:number;depthTarget:number;depthRemaining:number;depthBand:number;brain:FishBrain;z:number;vz:number;targetZ:number;depthHeading:number;depthTimer:number};
 const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,n));
 const ease=(a:number,b:number,rate:number,dt:number)=>a+(b-a)*(1-Math.exp(-dt*rate));
 function random(s:TetraSwim){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
-export function createTetraSwim(seed=237):TetraSwim{return {x:1110,y:330,vx:16,vy:0,yaw:0,pitch:0,speed:16,direction:1,sinceTurn:10,elapsed:0,behavior:'cruising',remaining:2.6,targetX:1190,targetY:345,cruiseSpeed:16,effort:.7,pectoralEffort:.35,seed,wasFeeding:false,turnRate:.8,depthTarget:445,depthRemaining:20,depthBand:2,brain:createFishBrain()};}
+export function createTetraSwim(seed=237):TetraSwim{return {x:1110,y:330,vx:16,vy:0,yaw:0,pitch:0,speed:16,direction:1,sinceTurn:10,elapsed:0,behavior:'cruising',remaining:2.6,targetX:1190,targetY:345,cruiseSpeed:16,effort:.7,pectoralEffort:.35,seed,wasFeeding:false,turnRate:.8,depthTarget:445,depthRemaining:20,depthBand:2,z:.62,vz:0,targetZ:.18,depthHeading:0,depthTimer:0,brain:createFishBrain()};}
 function enter(s:TetraSwim,behavior:TetraBehavior){
  s.behavior=behavior;
  const r=random(s);
@@ -28,7 +28,7 @@ function enter(s:TetraSwim,behavior:TetraBehavior){
 /** Stable upright locomotion, with time-based decisions rather than per-frame randomness. */
 export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxygen=false,senses?:FishSenses){
  const dt=clamp(Number.isFinite(seconds)?seconds:0,0,.1);if(!dt)return;
- const intent=senses?thinkFish(s.brain,dt,s.x,s.y,s.speed,senses):null;
+ const intent=senses?thinkFish(s.brain,dt,s.x,s.y,s.speed,senses,s.z):null;
  if(intent)feeding=intent.kind==='feed';
  s.elapsed+=dt;s.sinceTurn+=dt;s.remaining-=dt;
  if(!feeding){s.depthRemaining-=dt;if(s.depthRemaining<=0&&Math.abs(s.depthTarget-s.y)<24){s.depthBand=(s.depthBand+1+(random(s)<.25?1:0))%3;const bands=[[267,305],[345,390],[440,485]];const band=bands[s.depthBand];s.depthTarget=band[0]+random(s)*(band[1]-band[0]);s.depthRemaining=18+random(s)*18;}}
@@ -75,6 +75,14 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
  s.vy=ease(s.vy,wantedVy,2,dt);
  s.vx=s.speed*Math.cos(s.yaw);s.x+=s.vx*dt;s.y+=s.vy*dt;
  const wantedPitch=turning?0:holding?Math.sin(s.elapsed*.9)*.025:clamp(Math.atan2(-s.vy,Math.max(1,s.speed)),-MAX_TETRA_PITCH,MAX_TETRA_PITCH);
+ // Depth is normalized back-to-front. Commit to a destination, then linger before choosing another.
+ s.depthTimer-=dt;
+ if(Math.abs(s.z-s.targetZ)<.045&&s.depthTimer<=0){s.targetZ=s.targetZ<.5?.72+random(s)*.2:.08+random(s)*.22;s.depthTimer=8+random(s)*10;}
+ const targetZ=intent?.target?.z??(feeding?.65:s.targetZ);
+ const desiredVz=holding||turning?0:clamp((targetZ-s.z)*.15,-s.speed*.65/180,s.speed*.65/180);
+ s.vz=ease(s.vz,desiredVz,1.6,dt);s.z=clamp(s.z+s.vz*dt,.06,.94);
+ const depthAngle=turning?0:Math.atan2(-s.vz*180,Math.max(2,s.speed))*s.direction;
+ s.depthHeading+=clamp(depthAngle-s.depthHeading,-.25*dt,.25*dt);
  s.pitch+=clamp((wantedPitch-s.pitch)*(1-Math.exp(-dt*2)),-.25*dt,.25*dt);
 }
 export function tetraBehaviorLabel(s:TetraSwim){if(s.brain.intent.kind==='rest')return 'Resting';if(s.brain.intent.kind==='school')return 'Following the school';if(s.brain.intent.kind==='space')return 'Making space';return {cruising:'Exploring',burst:'Short swimming burst',gliding:'Gliding',approaching:'Approaching a leaf',inspecting:'Inspecting the planting',foraging:'Looking for food'}[s.behavior];}

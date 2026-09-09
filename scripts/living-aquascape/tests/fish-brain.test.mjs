@@ -47,3 +47,17 @@ test('hungry tetra can intercept a sinking flake from a different depth',()=>{
   assert.ok(ate,`should reach food from depth ${startY}`);
  }
 });
+test('food at a different front-back depth cannot be eaten through the tank',()=>{
+ const b=createFishBrain();thinkFish(b,.016,1000,350,10,{food:[{id:1,x:1000,y:350,z:.9}],neighbors:[]},.1);assert.equal(b.consumedFood,null);
+});
+test('tetra visits front, back and intermediate water with smooth depth steering',()=>{
+ for(const seed of [237,42,1234]){
+  const s=createTetraSwim(seed);let min=1,max=0;const bins=new Set();
+  for(let i=0;i<60*400;i++){
+   const z=s.z,angle=s.depthHeading;advanceTetraSwim(s,1/60,false,false,{food:[],neighbors:[]});
+   min=Math.min(min,s.z);max=Math.max(max,s.z);bins.add(Math.floor(s.z*5));
+   assert.ok(s.z>=.06&&s.z<=.94);assert.ok(Math.abs(s.z-z)<.003);assert.ok(Math.abs(s.depthHeading-angle)<=.25/60+1e-9);
+  }
+  assert.ok(min<.3&&max>.7,`${seed}: ${min} to ${max}`);assert.ok(bins.size>=4);
+ }
+});
