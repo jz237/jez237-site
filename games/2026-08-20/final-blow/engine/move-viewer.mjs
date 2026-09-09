@@ -8,7 +8,7 @@ for (const [action,label] of [['light','Light'],['heavy','Heavy']]) {
  }
 }
 export const VIEWER_MOVES = [...normals,
- ...[['forward','Forward shuffle and stop'],['back','Backward shuffle and stop'],['high','High block and recoil'],['low','Low block and recoil'],['landing','Landing and settle']].map(([pose,label])=>({id:`footwork-${pose}`,pose,label})),
+ ...[['forward','Forward shuffle and stop'],['back','Backward shuffle and stop'],['high','Light high block and recoil'],['high-heavy','Heavy high block and recoil'],['low','Light low block and recoil'],['low-heavy','Heavy low block and recoil'],['landing','Landing and settle']].map(([pose,label])=>({id:`footwork-${pose}`,pose,label})),
  ...[['throw','Throw'],['enhanced','Enhanced special'],['launcher','Rising uppercut / launcher'],['overhead','Overhead'],['special','Signature special'],['commandSpecial','Forward special'],['backSpecial','Back special'],['enhancedLauncher','Enhanced launcher'],['enhancedCommandSpecial','Enhanced forward special'],['enhancedBackSpecial','Enhanced back special'],['super','Super']].map(([action,label])=>({id:action,action,label,context:{}})),
  ...[['head','Head hit'],['body','Body hit'],['heavy','Heavy hit'],['legs','Low leg hit']].map(([reaction,label])=>({id:`reaction-${reaction}`,reaction,label}))];
 
@@ -42,7 +42,7 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
    fighter.vx=walking&&tick<42?(mode==='forward'?150:-150):0;
    fighter.x=walking?Math.min(tick,42)*(mode==='forward'?2.5:-2.5):0;
    fighter.walkTime=walking?tick/60:0;fighter.strideTime=fighter.walkTime;
-   fighter.crouch=mode==='low';fighter.block=mode==='high'||mode==='low';
+   fighter.crouch=mode.startsWith('low');fighter.block=mode.startsWith('high')||mode.startsWith('low');fighter.lastHitHeavy=mode.endsWith('heavy');
    fighter.blockstunFrames=fighter.block&&tick<18?18-tick:0;
    fighter.grounded=mode!=='landing'||tick>=12;
   }
@@ -62,7 +62,7 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
    ctx.save();ctx.translate(480,510+pose.floor*size-(selection.context?.airborne?55:0));ctx.scale(direction*pose.facing,1);
    ctx.drawImage(pose.atlas,(pose.frame%4)*320,Math.floor(pose.frame/4)*320,320,320,-size/2,-size,size,size);ctx.restore();
   }
-  const phase=selection.pose?(selection.pose==='landing'?(frame<12?'AIR':frame<18?'LAND':'READY'):selection.pose==='high'||selection.pose==='low'?(frame<18?'BLOCK RECOIL':'GUARD'):frame<42?'STEP':'SETTLE'):viewerPhase(frame,attack);
+  const phase=selection.pose?(selection.pose==='landing'?(frame<12?'AIR':frame<18?'LAND':'READY'):selection.pose.startsWith('high')||selection.pose.startsWith('low')?(frame<18?'BLOCK RECOIL':'GUARD'):frame<42?'STEP':'SETTLE'):viewerPhase(frame,attack);
   ctx.fillStyle=phase==='CONTACT'?'#ffd54a':'#d4dfeb';ctx.font='bold 22px sans-serif';ctx.fillText(phase,24,38);
   const start=attack?.activeStartFrame,end=attack?.activeEndFrame;
   if(attack){ctx.fillStyle='#536273';ctx.fillRect(24,542,912,6);ctx.fillStyle='#ffd54a';ctx.fillRect(24+912*start/total,542,912*(end-start)/total,6);ctx.fillStyle='#fff';ctx.fillRect(24+912*frame/total,538,3,14);}

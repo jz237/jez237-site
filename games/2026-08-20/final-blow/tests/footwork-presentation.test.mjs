@@ -13,8 +13,8 @@ test('footwork follows distance in both directions and settles after a stop',()=
  }
 });
 test('block recoil, landing and attack contact are separate from gait',()=>{
- const select=createFootworkSelector(),f=fighter();f.vx=0;f.blockstunFrames=15;f.lastImpactTick=0;
- assert.equal(select(f,f,0,true).frame,6);assert.equal(select(f,f,4,true).frame,8);
+ const select=createFootworkSelector(),f=fighter();f.vx=0;f.blockstunFrames=15;f.lastImpactTick=0;f.lastHitHeavy=true;
+ assert.equal(select(f,f,0,true).frame,8);assert.equal(select(f,f,4,true).frame,8);
  f.crouch=true;assert.equal(select(f,f,5,true).frame,9);
  f.blockstunFrames=0;f.crouch=false;f.grounded=false;select(f,f,6,true);f.grounded=true;assert.equal(select(f,f,7,true).frame,15);
  f.attacking={limb:'kick',activeStartFrame:10,activeEndFrame:15,totalFrames:30};f.attackFrame=12;

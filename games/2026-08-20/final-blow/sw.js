@@ -3,8 +3,8 @@
 // could make Chrome abort the page before it rendered. (Since 5.1 a fetched
 // media file is KEPT, in a second, capped, build-keyed cache — see
 // MEDIA_CACHE_NAME — which is a different thing from installing it.)
-// 5.7.8: painted-only presentation; retire the 3D renderer and model controls.
-const CACHE_NAME = "final-blow-shell-5.7.8-exchanges";
+// 5.7.9: painted-only presentation; retire the 3D renderer and model controls.
+const CACHE_NAME = "final-blow-shell-5.7.9-recovery";
 // v5.1 #38 — the RUNTIME media cache. Sheets, audio, stage plates and the 3D
 // renderer's HD/vendor files are still fetched on demand (never at install:
 // the precache alternative is now 81 MB / ~560 files), but once a file has
@@ -46,6 +46,7 @@ const SHELL = [
   "./engine/signature-routes.mjs",
   "./engine/painted-bridges.mjs",
   "./engine/painted-footwork.mjs",
+  "./engine/painted-recovery.mjs",
   "./engine/combat-presentation.mjs",
   "./engine/world-props.mjs",
   "./engine/move-foley.mjs",

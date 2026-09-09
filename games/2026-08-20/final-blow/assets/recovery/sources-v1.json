@@ -1,0 +1,15 @@
+{
+  "generator": "built-in image_gen",
+  "reference": "assets/painted-flow/<fighter>-v2.webp",
+  "sources": {
+    "jez": {
+      "id": "jez",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-c186dee3-3780-46af-871e-d58f46682e8e.png"
+    },
+    "benny": {
+      "id": "benny",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-acc2972e-4b40-4fdc-899e-3455ee924279.png"
+    }
+  },
+  "promptSpec": "Strict four-by-four right-facing full-body sprite sheet on pure magenta; preserve reference identity, clothing, closed fists and painted detail; four retraction punch poses, four kick recovery poses, four block strength/height poses, four slip/guard poses; same anatomical scale and planted support foot, generous padding, no effects or labels."
+}
