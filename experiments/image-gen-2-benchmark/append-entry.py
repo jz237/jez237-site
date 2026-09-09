@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import datetime as dt
+import fcntl
 import json
 import mimetypes
 import os
@@ -18,6 +19,8 @@ import subprocess
 from pathlib import Path
 from PIL import Image, ImageOps
 from urllib.parse import urlparse
+
+from duplicate_guard import assert_unique_candidate, build_metadata
 
 ROOT = Path(__file__).resolve().parent
 DATA = ROOT / "gallery-data.json"
@@ -47,6 +50,7 @@ DEFAULT_R2_PREFIX = "image-gen-2-benchmark/images"
 DEFAULT_R2_THUMB_PREFIX = "image-gen-2-benchmark/thumbs"
 DEFAULT_R2_PUBLIC_BASE_URL = "https://pub-26279ae8f18243e38be5748fbfb75f4c.r2.dev/image-gen-2-benchmark/images/"
 GENERATED_SOURCE_ROOT = Path("/home/jez237/.openclaw/media/tool-image-generation").resolve()
+APPEND_LOCK = Path("/home/jez237/.openclaw/state/daily-image-archive-append.lock")
 FACTUAL_SOURCE_TYPES = {
     "government-agency",
     "university",
@@ -277,6 +281,9 @@ def main() -> None:
     ap.add_argument("--batch", default="Daily Prompt")
     ap.add_argument("--model", default="openai/gpt-image-2")
     ap.add_argument("--size", default="1024x1024")
+    ap.add_argument("--enforce-unique", action="store_true", help="Reject archive-wide duplicate concepts, styles, and image pixels")
+    ap.add_argument("--concept-key", default="", help="Stable subject/action/setting identity used by the duplicate gate")
+    ap.add_argument("--style-family", default="", help="Canonical broad rendering family; required for scheduled random-style entries")
     ap.add_argument("--world-name", default="")
     ap.add_argument("--world-description", default="")
     ap.add_argument("--world-continuity", default="")
@@ -329,6 +336,12 @@ def main() -> None:
     ap.add_argument("--wrangler-bin", default=os.environ.get("WRANGLER_BIN", "wrangler"))
     args = ap.parse_args()
 
+    # Serialize check-and-append so two scheduler/retry processes cannot both
+    # pass uniqueness against the same archive snapshot.
+    APPEND_LOCK.parent.mkdir(parents=True, exist_ok=True)
+    append_lock_handle = APPEND_LOCK.open("a+")
+    fcntl.flock(append_lock_handle.fileno(), fcntl.LOCK_EX)
+
     is_factual_infographic = (
         args.factual_topic.strip()
         or args.slot == "factual-infographic"
@@ -356,6 +369,19 @@ def main() -> None:
         raise SystemExit(
             "Refusing source deletion outside the generated-image directory: "
             f"{GENERATED_SOURCE_ROOT}"
+        )
+
+    if args.enforce_unique:
+        if not args.concept_key.strip():
+            raise SystemExit("--enforce-unique requires --concept-key.")
+        assert_unique_candidate(
+            ROOT,
+            title=args.title,
+            prompt=args.prompt,
+            slot=args.slot,
+            concept_key=args.concept_key,
+            style_family=args.style_family,
+            image=src,
         )
 
     IMAGES.mkdir(parents=True, exist_ok=True)
@@ -389,6 +415,8 @@ def main() -> None:
         "model": args.model,
         "size": args.size,
     }
+    if args.enforce_unique:
+        entry["dedup"] = build_metadata(args.concept_key, args.style_family, src)
     if args.world_name.strip():
         entry["world"] = {
             "name": args.world_name.strip(),
