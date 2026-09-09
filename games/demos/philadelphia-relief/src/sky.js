@@ -7,7 +7,7 @@
  * as atmosphere rather than as a model on a backdrop.
  */
 
-import { hexToRgb, getTheme } from './themes.js?v=philly-2026090612';
+import { hexToRgb, getTheme } from './themes.js?v=philly-2026090901';
 
 const SKY_VERTEX = /* glsl */ `
   varying vec3 vDir;
@@ -29,6 +29,7 @@ const SKY_FRAGMENT = /* glsl */ `
   uniform vec3  uSunDir;
   uniform float uSunAltitude;   // degrees
   uniform float uHaze;
+  uniform float uDiorama;
   uniform float uNight;
   varying vec3  vDir;
 
@@ -50,6 +51,7 @@ const SKY_FRAGMENT = /* glsl */ `
     color += uSunColor * smoothstep(0.99955, 0.99985, toSun) * 2.2;  // disc
 
     color *= mix(1.0, 0.12, uNight);
+    color = mix(color, vec3(.79, .765, .72), uDiorama);
     gl_FragColor = vec4(color, 1.0);
   }
 `;
@@ -63,6 +65,7 @@ export function createSky(THREE) {
     uSunAltitude: { value: 20 },
     uHaze: { value: 0.4 },
     uNight: { value: 0 },
+    uDiorama: { value: 0 },
   };
 
   const material = new THREE.ShaderMaterial({

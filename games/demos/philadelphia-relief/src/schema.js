@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090612';
-import { ERA_IDS } from './eras.js?v=philly-2026090612';
+import { WEATHERS } from './solar.js?v=philly-2026090901';
+import { ERA_IDS } from './eras.js?v=philly-2026090901';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -25,6 +25,11 @@ const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
  * unique and stable — changing one invalidates existing shared links.
  */
 export const CONTROLS = {
+  diorama: {
+    k: 'dm', kind: 'enum', values: [1, 0], def: 1, group: 'scene', label: 'Diorama presentation',
+    hint: 'A cutaway landscape with illustrative woodland crowns and enlarged relief at regional scale. '
+      + 'Automatically returns to the chosen elevation scale near street level.',
+  },
   // ---- terrain -----------------------------------------------------------
   exaggeration: {
     k: 'ex', kind: 'range', min: 1, max: 25, step: 0.5, def: 2,
@@ -198,21 +203,21 @@ export const LAYERS = {
   boundaries: { k: 'Lb', def: false, label: 'County / municipal lines' },
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
   landmarks: { k: 'Lm', def: true, label: 'Landmarks' },
-  structures: { k: 'Lx', def: false, label: '3D buildings & bridges' },
+  structures: { k: 'Lx', def: true, label: '3D buildings & bridges' },
   flood: { k: 'Lf', def: false, label: 'Flood hazard' },
 };
 
 /** Camera pose. Kept in the same store so presets and URLs stay uniform. */
 export const CAMERA = {
-  camLon: { k: 'x', min: -75.8, max: -74.7, def: -75.1655, prec: 4 },
-  camLat: { k: 'y', min: 39.7, max: 40.55, def: 39.9505, prec: 4 },
+  camLon: { k: 'x', min: -75.8, max: -74.7, def: -75.25, prec: 4 },
+  camLat: { k: 'y', min: 39.7, max: 40.55, def: 40.095, prec: 4 },
   // Orbit radius in metres from the target.
   // Local aerial imagery and inspection cells support roof / parking detail.
-  camDist: { k: 'd', min: 200, max: 190000, def: 4600, prec: 0 },
+  camDist: { k: 'd', min: 200, max: 190000, def: 143000, prec: 0 },
   // Map convention: 0 deg = north-up, increasing clockwise.
-  camBearing: { k: 'b', min: 0, max: 360, def: 32, wrap: 360, prec: 1 },
+  camBearing: { k: 'b', min: 0, max: 360, def: 28, wrap: 360, prec: 1 },
   // Map convention: 0 deg = straight down, 85 deg = near the horizon.
-  camPitch: { k: 'p', min: 0, max: 85, def: 58, prec: 1 },
+  camPitch: { k: 'p', min: 0, max: 85, def: 55, prec: 1 },
 };
 
 export const GROUPS = [
@@ -242,7 +247,7 @@ export function defaults() {
   for (const [id, c] of Object.entries(CAMERA)) out[id] = c.def;
   out.layers = {};
   for (const [id, l] of Object.entries(LAYERS)) out.layers[id] = l.def;
-  out.preset = 'skyline';
+  out.preset = 'diorama';
   return out;
 }
 

@@ -1,3 +1,4 @@
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090901';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -7,53 +8,53 @@
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090612';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090901';
 
-import { createStore } from './state.js?v=philly-2026090612';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090612';
-import { effectiveLight } from './solar.js?v=philly-2026090612';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090612';
+import { createStore } from './state.js?v=philly-2026090901';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090901';
+import { effectiveLight } from './solar.js?v=philly-2026090901';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090901';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090612';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090612';
+} from './geo.js?v=philly-2026090901';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090901';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090612';
+} from './tours.js?v=philly-2026090901';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090612';
+} from './urlstate.js?v=philly-2026090901';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090612';
+} from './degraded.js?v=philly-2026090901';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090612';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026090612';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090612';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090612';
-import { createPostFX } from './postfx.js?v=philly-2026090612';
-import { createCameraRig } from './camera.js?v=philly-2026090612';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090612';
-import { createStructures } from './structures.js?v=philly-2026090612';
+} from './terrain.js?v=philly-2026090901';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026090901';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090901';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090901';
+import { createPostFX } from './postfx.js?v=philly-2026090901';
+import { createCameraRig } from './camera.js?v=philly-2026090901';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090901';
+import { createStructures } from './structures.js?v=philly-2026090901';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090612';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090612';
+} from './structures-data.js?v=philly-2026090901';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090901';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090612';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090612';
+} from './flood.js?v=philly-2026090901';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090901';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090612';
+} from './vectors.js?v=philly-2026090901';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090612';
-import { getTheme } from './themes.js?v=philly-2026090612';
+} from './ui.js?v=philly-2026090901';
+import { getTheme } from './themes.js?v=philly-2026090901';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -322,12 +323,16 @@ async function boot() {
     reefImagery: data.reefImagery, quality: effectiveQuality,
   });
   scene.add(terrain.mesh);
+  const diorama = createDiorama(THREE, { terrain, projection, sampleElevation, imagery: data.imagery });
+  scene.add(diorama.group);
 
   const imageryDetail = createImageryTiles(THREE, {
     terrain,
     region: projection.bounds,
     projection: meta.projection,
     sceneProjection: projection,
+    onTile: (cell, image) => diorama.addTile(cell, image),
+    onTileRemoved: key => diorama.dropTile(key),
     maxAnisotropy: renderer.capabilities.getMaxAnisotropy(),
     onStatus(detail) {
       const credit = $('imageryCredit');
@@ -434,7 +439,7 @@ async function boot() {
     dom: dom.stage,
     projection,
     sampleElevation,
-    getExaggeration: () => (store.isLayerOn('terrain') ? store.value('exaggeration') : 0),
+    getExaggeration: distance => displayExaggeration(store.get(), distance),
     onInteract: () => motion.interrupt(),
   });
 
@@ -534,7 +539,7 @@ async function boot() {
       plane.constant = -groundY;
       if (!picker.ray.intersectPlane(plane, point)) return;
       groundY = sampleElevation(projection.xToLon(point.x), projection.zToLat(point.z))
-        * (store.isLayerOn('terrain') ? store.value('exaggeration') : 0);
+        * displayExaggeration(store.get());
     }
     const building = structures.pickBuildingAt(point.x, point.z);
     if (!building) return;
@@ -800,12 +805,19 @@ async function boot() {
     motion.update(dt);
 
     const state = store.get();
-    const exaggeration = state.layers.terrain ? state.exaggeration : 0;
     const pose = rig.update(dt, { snap: false });
     rig.setAspect(viewW / viewH);
 
     const camera = rig.camera;
     const now = rig.pose();
+    const miniature = dioramaAmount(now.dist, state.diorama && state.layers.terrain
+      && state.era === 'present' && state.compareMode === 'off');
+    const exaggeration = displayExaggeration(state, now.dist);
+    document.body.classList.toggle('diorama-view', miniature > .1);
+    terrain.uniforms.uDiorama.value = miniature;
+    terrain.uniforms.uFogDensity.value = fogDensityFor(effectiveLight(state, LIGHT_BOUNDS).fogDensity)
+      * (1 - miniature * .96);
+    sky.uniforms.uDiorama.value = miniature;
     terrain.setDistrict(now.lon, now.lat);
 
     // Terrain detail follows the camera: the warp concentrates mesh density
@@ -872,6 +884,7 @@ async function boot() {
     sky.uniforms.uHaze.value = light.fogDensity;
     sky.uniforms.uNight.value = 1 - light.twilight;
 
+    diorama.update(miniature, exaggeration, sunDir, state, now);
     elapsed += dt * state.animationSpeed;
     // During roof inspection the vector overlays should hug the photography,
     // not float tens of metres above it. Restore the established separation
@@ -906,6 +919,8 @@ async function boot() {
       u.uFogDensity.value = terrain.uniforms.uFogDensity.value;
       if (u.uComparePosition) u.uComparePosition.value = state.comparePosition;
       if (entry.kind === 'water') {
+        entry.mesh.visible = state.layers.water || miniature > .01;
+        u.uOpacity.value = state.layers.water ? 1 : miniature * .86;
         u.uSunDir.value.copy(sunDir);
         u.uTime.value = elapsed;
       }
@@ -917,7 +932,7 @@ async function boot() {
       structures.setRoofImagery(imageryDetail.roofTiles(now),
         state.layers.imagery && state.era === 'present');
       structures.update({
-        camera, state, exaggeration, dt, sunDir, light,
+        camera, state, exaggeration, dt, sunDir, light, miniature,
         fogDensity: terrain.uniforms.uFogDensity.value,
       });
     }
@@ -927,6 +942,8 @@ async function boot() {
     renderer.render(scene, camera);
     // Snapshot before the post-FX passes reset the counters.
     lastRenderInfo = { calls: renderer.info.render.calls, triangles: renderer.info.render.triangles };
+    postfx.setPresentation(camera, state.diorama && state.layers.structures
+      && state.era === 'present' && state.compareMode === 'off', miniature);
     postfx.composite();
 
     labelClock += dt;
@@ -951,7 +968,7 @@ async function boot() {
       }
     }
 
-    ui.updateReadout({ pose: now, groundY: pose.groundY, viewH, dt });
+    ui.updateReadout({ pose: now, groundY: pose.groundY, viewH, dt, exaggeration });
   }
 
   function tick(timestamp) {
@@ -1013,6 +1030,7 @@ async function boot() {
       meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
       reefImagery: data.reefImagery, quality });
     imageryDetail.attachTerrain(terrain);
+    diorama.attachTerrain(terrain);
     terrain.setTheme(store.value('theme'));
     scene.add(terrain.mesh);
     applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
@@ -1030,7 +1048,9 @@ async function boot() {
   requestAnimationFrame(tick);
   finishLoading();
 
-  window.addEventListener('pagehide', () => { imageryDetail.dispose(); neighborhood.dispose(); },
+  window.addEventListener('pagehide', () => {
+    imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
+  },
       { once: true });
 
   // The visible field notes and gesture hint introduce the map without a blocking dialog.
@@ -1975,14 +1995,21 @@ function wireInterface(deps) {
     setFps(value) { fps = value; },
     setCapture(fn) { captureFn = fn; },
 
-    updateReadout({ pose, groundY, viewH, dt }) {
+    updateReadout({ pose, groundY, viewH, dt, exaggeration }) {
       readoutClock += dt;
       if (readoutClock < 0.1) return;
       readoutClock = 0;
 
       const state = store.get();
-      const exag = state.layers.terrain ? state.exaggeration : 1;
+      const exag = exaggeration;
       const elevation = exag > 0 ? groundY / exag : 0;
+      const modelNote = $('dioramaStatus');
+      if (modelNote) {
+        modelNote.hidden = !state.diorama || state.era !== 'present' || state.compareMode !== 'off';
+        modelNote.textContent = pose.dist > 9000
+          ? `MINIATURE LANDSCAPE · ${exag.toFixed(1)}× relief`
+          : state.layers.structures ? 'NEIGHBORHOOD MODEL · MAPPED FOOTPRINTS' : 'AERIAL INSPECTION';
+      }
       const mpp = metersPerPixel(pose.dist, pose.fov, viewH);
 
       dom.outCoords.textContent = formatLatLon(pose.lat, pose.lon);

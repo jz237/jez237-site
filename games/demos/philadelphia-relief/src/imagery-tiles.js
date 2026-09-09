@@ -1,5 +1,5 @@
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
-import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090612';
+import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090901';
 
 export const TILE_SPECS = [
   { tier: 'tile-inspection', lon: 0.0032, lat: 0.0024, range: 600 },
@@ -232,10 +232,11 @@ export function createImageryTiles(THREE, options) {
   function remove(key) {
     const entry = entries.get(key); if (!entry) return;
     group.remove(entry); entry.geometry.dispose(); entry.material.uniforms.uTile.value.dispose();
-    entry.material.dispose(); entries.delete(key);
+    entry.material.dispose(); entries.delete(key); options.onTileRemoved?.(key);
   }
   const stream = createTileStream({ region, projection, onStatus, remove,
     install({ cell, image }) {
+      options.onTile?.(cell, image);
       const tex = new THREE.Texture(image); tex.flipY = false; tex.colorSpace = THREE.SRGBColorSpace;
       tex.minFilter = THREE.LinearMipmapLinearFilter; tex.magFilter = THREE.LinearFilter;
       tex.anisotropy = Math.min(8, options.maxAnisotropy || 8); tex.needsUpdate = true;

@@ -10,8 +10,8 @@
  * without a renderer.
  */
 
-import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090612';
-import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090612';
+import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090901';
+import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090901';
 
 /** Keys that are angles and must take the short way round when blending. */
 const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
@@ -24,12 +24,34 @@ const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
  * selecting a shot must not stomp on either.
  */
 export const PRESET_EXCLUDED = new Set(['quality', 'animationSpeed', 'floodMode', 'seaLevelRise',
-  'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era', 'imageryDetail',
+  'diorama', 'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era', 'imageryDetail',
   'compareMode', 'comparePosition']);
 /** Layers that are the viewer's own choice: a preset never switches them. */
 export const PRESET_EXCLUDED_LAYERS = new Set(['flood']);
 
 export const PRESETS = [
+  {
+    id: 'diorama',
+    name: 'A whole valley, in miniature',
+    blurb:
+      'Follow two rivers through a landscape of wooded ridges, towns and a city of towers. ' +
+      'Real terrain and aerial photography, presented as a living miniature. ' +
+      'Zoom in to discover the streets and rooftops beneath the model.',
+    camera: {
+      camLon: -75.25, camLat: 40.095, camDist: 143000, camBearing: 28, camPitch: 55,
+    },
+    settings: {
+      theme: 'dusk', fov: 40, exaggeration: 2,
+      sunAzimuth: 208, sunAltitude: 28, keyLight: 1.1, ambient: 0.68,
+      fogDensity: 0.32, glow: 0.16, waterIntensity: 0.85,
+      contourStrength: 0.18, contourInterval: 25,
+      roadOpacity: 0.65, boundaryOpacity: 0.15, labelDensity: 0.28, labelSize: 1,
+      structureDetail: 0.75, structureHeight: 1,
+    },
+    layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
+      parks: false, roads: true, rail: false, boundaries: false,
+      places: true, landmarks: true, structures: true },
+  },
   {
     id: 'skyline',
     name: 'Philadelphia, between two rivers',

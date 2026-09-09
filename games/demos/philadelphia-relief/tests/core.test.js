@@ -216,21 +216,21 @@ test('store', async (t) => {
 
 // ---------------------------------------------------------------------------
 test('presets', async (t) => {
-  await t.test('the eight cinematic shots all exist and the skyline opens', () => {
+  await t.test('the cinematic shots survive and the diorama opens', () => {
     for (const id of ['skyline', 'ben-franklin-bridge', 'overview', 'dawn-delaware',
       'schuylkill-flyover', 'wissahickon', 'main-line-ridge', 'night-metro']) {
       assert.ok(getPreset(id), `missing preset ${id}`);
     }
     assert.equal(new Set(PRESET_IDS).size, PRESETS.length, 'preset ids must be unique');
-    assert.equal(PRESETS.length, 11);
+    assert.equal(PRESETS.length, 12);
     // Home restores the authored relief scene and its modeled skyline.
-    assert.equal(HOME_PRESET, 'skyline');
+    assert.equal(HOME_PRESET, 'diorama');
     assert.equal(PRESETS[0].id, HOME_PRESET);
     assert.equal(defaults().preset, HOME_PRESET);
     const home = presetPatch(HOME_PRESET);
-    assert.ok(home.camDist < 12000, `opening camera is ${home.camDist} m out`);
+    assert.ok(home.camDist > 100000, `opening camera is ${home.camDist} m out`);
     assert.equal(home.layers.imagery, true);
-    assert.equal(home.layers.structures, false);
+    assert.equal(home.layers.structures, true);
     assert.ok(home.structureDetail >= 0.6);
     // The regional view survives as its own card.
     assert.ok(presetPatch('overview').camDist > 60000);
@@ -298,7 +298,7 @@ test('presets', async (t) => {
     // 26x on a 5.6 km shot put the camera inside the hillside: the surrounding
     // uplands reared to 5 km while the eye sat at 2.8 km. Vertical stretch has
     // to shrink as the horizontal frame does.
-    const shots = PRESETS.map((p) => presetPatch(p.id))
+    const shots = PRESETS.filter(p => p.id !== 'diorama').map((p) => presetPatch(p.id))
       .sort((a, b) => a.camDist - b.camDist);
     for (let i = 1; i < shots.length; i += 1) {
       assert.ok(shots[i].exaggeration >= shots[i - 1].exaggeration,
@@ -370,9 +370,9 @@ test('presets', async (t) => {
   });
 
   await t.test('the tour opens on the skyline and visits every shot once', () => {
-    assert.equal(TOUR[0].preset, HOME_PRESET);
-    assert.deepEqual([...new Set(TOUR.map((s) => s.preset))].sort(), PRESET_IDS.filter((id) => !['architecture', 'hidden-reef', 'bauder-signs'].includes(id)).sort());
-    assert.equal(TOUR.length, PRESETS.length - 3);
+    assert.equal(TOUR[0].preset, 'skyline');
+    assert.deepEqual([...new Set(TOUR.map((s) => s.preset))].sort(), PRESET_IDS.filter((id) => !['diorama', 'architecture', 'hidden-reef', 'bauder-signs'].includes(id)).sort());
+    assert.equal(TOUR.length, PRESETS.length - 4);
   });
 
   await t.test('discrete values snap once at the midpoint, never blend', () => {

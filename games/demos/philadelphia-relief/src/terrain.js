@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090612';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090901';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -96,6 +96,8 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uViewportWidth;
   uniform float uWaterLevel;
   uniform float uExposure;
+  uniform float uDiorama;
+  uniform vec2 uRegionSize;
   uniform vec2  uSpacing;        // metres between height samples, x and z
   uniform vec2  uTexel;
 
@@ -208,6 +210,20 @@ const FRAGMENT_SHADER = /* glsl */ `
     // directional shape. A full material-light multiplication made roofs and
     // streets nearly black at dusk, which defeated the point of the imagery.
     float aerialShade = clamp(0.97 + ndl * 0.03, 0.94, 1.03);
+    // A sculpted miniature at regional scale, with terrain self-shadowing.
+    float castShade = 1.0;
+    for (int i = 1; i <= 7; i++) {
+      float reach = float(i * i) * 115.0;
+      vec2 probe = vUv + uSunDir.xz * reach / uRegionSize;
+      float ridge = texture2D(uHeight, clamp(probe, 0.0, 1.0)).r * uExag;
+      float ray = vWorld.y + reach * uSunDir.y;
+      castShade = min(castShade, 1.0 - smoothstep(0.0, 260.0, ridge - ray) * .40);
+    }
+    float miniatureShade = (.75 + max(ndl, 0.0) * .42) * mix(.86, 1.0, ao) * castShade;
+    aerialShade = mix(aerialShade, miniatureShade, uDiorama);
+    float green = smoothstep(.008, .045, aerialBase.g - aerialBase.r)
+      * smoothstep(.01, .06, aerialBase.g - aerialBase.b);
+    aerialBase = mix(aerialBase, aerialBase * vec3(1.08, 1.13, .85), green * uDiorama * .7);
     vec3 aerialLit = aerialBase * aerialShade;
     vec3 lit = mix(reliefLit, aerialLit, surfaceImagery);
 
@@ -221,7 +237,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     // in GLSL ES 3.0, which is what three compiles to on WebGL 2.
     vec3 reliefFlat = reliefBase * (uAmbient * 0.6 + 0.75) * uExposure * 0.8;
     vec3 flatShade = mix(reliefFlat, aerialBase, surfaceImagery);
-    float effectiveHillshade = mix(uHillshade, uHillshade * 0.18, surfaceImagery);
+    float effectiveHillshade = mix(uHillshade, uHillshade * mix(0.18, 1.0, uDiorama), surfaceImagery);
     vec3 color = mix(flatShade, lit, effectiveHillshade);
 
     // ---- contours ------------------------------------------------------
@@ -263,7 +279,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     // distance rather than as a cliff at the end of the world.
     vec2 toEdge = min(vUv, 1.0 - vUv);
     float edgeFade = smoothstep(0.0, 0.045, min(toEdge.x, toEdge.y));
-    color = mix(fogColor, color, edgeFade);
+    color = mix(fogColor, color, mix(edgeFade, 1.0, uDiorama));
 
     gl_FragColor = vec4(color, 1.0);
   }
@@ -409,6 +425,7 @@ export function createTerrain(THREE, options) {
     uViewportWidth: { value: 1 },
     uWaterLevel: { value: 2 },
     uExposure: { value: 1.7 },
+    uDiorama: { value: 0 },
   };
 
   const material = new THREE.ShaderMaterial({

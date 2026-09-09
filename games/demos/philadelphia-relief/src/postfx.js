@@ -59,12 +59,38 @@ const COMPOSITE_FRAGMENT = /* glsl */ `
   uniform sampler2D uBloom;
   uniform float uIntensity;
   uniform float uVignette;
+  uniform sampler2D uDepth;
+  uniform mat4 uInverseProjection;
+  uniform vec2 uTexel;
+  uniform float uContact;
+  uniform float uRadius;
   varying vec2 vUv;
 
+  vec3 viewPosition(vec2 uv) {
+    float depth = texture2D(uDepth, uv).r;
+    vec4 view = uInverseProjection * vec4(uv * 2.0 - 1.0, depth * 2.0 - 1.0, 1.0);
+    return view.xyz / view.w;
+  }
   void main() {
     vec3 scene = texture2D(uScene, vUv).rgb;
     vec3 bloom = texture2D(uBloom, vUv).rgb;
     vec3 color = scene + bloom * uIntensity;
+    // Contact occlusion uses the actual rendered geometry and preserves image sharpness.
+    if (uContact > .001 && texture2D(uDepth, vUv).r < .999999) {
+      vec3 center = viewPosition(vUv);
+      vec3 normal = normalize(cross(dFdx(center), dFdy(center)));
+      float radius = clamp(uRadius / max(1.0, -center.z) / uTexel.y, 2.0, 16.0);
+      float occlusion = 0.0;
+      for (int i = 0; i < 8; i++) {
+        float angle = float(i) * 2.39996;
+        vec2 offset = vec2(cos(angle), sin(angle)) * radius * (.4 + float(i) * .085) * uTexel;
+        vec3 delta = viewPosition(clamp(vUv + offset, .001, .999)) - center;
+        float len = length(delta);
+        occlusion += max(0.0, dot(normal, delta / max(len, .001)) - .18)
+          * (1.0 - smoothstep(uRadius * .4, uRadius * 2.0, len));
+      }
+      color *= 1.0 - min(.26, occlusion * .075) * uContact;
+    }
 
     // A whisper of vignette to settle the frame; never enough to read as one.
     vec2 d = vUv - 0.5;
@@ -94,6 +120,7 @@ export function createPostFX(THREE, renderer) {
   };
 
   const sceneRT = new THREE.WebGLRenderTarget(1, 1, rtOptions);
+  sceneRT.depthTexture = new THREE.DepthTexture(1, 1, THREE.UnsignedIntType);
   const brightRT = new THREE.WebGLRenderTarget(1, 1, { ...rtOptions, depthBuffer: false });
   const blurRT = new THREE.WebGLRenderTarget(1, 1, { ...rtOptions, depthBuffer: false });
 
@@ -126,6 +153,11 @@ export function createPostFX(THREE, renderer) {
       uBloom: { value: blurRT.texture },
       uIntensity: { value: 0.38 },
       uVignette: { value: 0.5 },
+      uDepth: { value: sceneRT.depthTexture },
+      uInverseProjection: { value: new THREE.Matrix4() },
+      uTexel: { value: new THREE.Vector2(1, 1) },
+      uContact: { value: 0 },
+      uRadius: { value: 25 },
     },
     vertexShader: QUAD_VERTEX,
     fragmentShader: COMPOSITE_FRAGMENT,
@@ -164,6 +196,14 @@ export function createPostFX(THREE, renderer) {
       sceneRT.setSize(width, height);
       brightRT.setSize(bloomWidth, bloomHeight);
       blurRT.setSize(bloomWidth, bloomHeight);
+    },
+
+    setPresentation(camera, enabled, amount) {
+      const u = compositeMat.uniforms;
+      u.uInverseProjection.value.copy(camera.projectionMatrixInverse);
+      u.uTexel.value.set(1 / width, 1 / height);
+      u.uContact.value = enabled ? 1 : 0;
+      u.uRadius.value = 22 + amount * 350;
     },
 
     setIntensity(value) {

@@ -48,15 +48,15 @@ test('aerial imagery asset', async (t) => {
 });
 
 test('aerial mode state', async (t) => {
-  await t.test('opens with aerial detail without block buildings', () => {
+  await t.test('opens with aerial detail and a dimensional skyline', () => {
     assert.equal(LAYERS.imagery.def, true);
-    assert.equal(LAYERS.structures.def, false);
+    assert.equal(LAYERS.structures.def, true);
     assert.equal(defaults().layers.imagery, true);
-    assert.equal(defaults().layers.structures, false);
+    assert.equal(defaults().layers.structures, true);
     for (const preset of PRESETS) {
       const layers = presetPatch(preset.id).layers;
-      assert.equal(layers.imagery, ['skyline', 'architecture', 'hidden-reef', 'bauder-signs', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} imagery`);
-      assert.equal(layers.structures, preset.id === 'architecture', `${preset.id} structures`);
+      assert.equal(layers.imagery, ['diorama', 'skyline', 'architecture', 'hidden-reef', 'bauder-signs', 'ben-franklin-bridge'].includes(preset.id), `${preset.id} imagery`);
+      assert.equal(layers.structures, ['architecture', 'diorama'].includes(preset.id), `${preset.id} structures`);
     }
   });
 
@@ -69,13 +69,13 @@ test('aerial mode state', async (t) => {
 
   await t.test('both surface choices survive a shared URL', () => {
     const store = createStore();
-    store.set({ layers: { imagery: false, structures: true } });
+    store.set({ layers: { imagery: false, structures: false } });
     const hash = encodeState(store.get());
     assert.match(hash, /(?:^|&)Li=0(?:&|$)/);
-    assert.match(hash, /(?:^|&)Lx=1(?:&|$)/);
+    assert.match(hash, /(?:^|&)Lx=0(?:&|$)/);
     const restored = createStore(decodeState(`#${hash}`));
     assert.equal(restored.get().layers.imagery, false);
-    assert.equal(restored.get().layers.structures, true);
+    assert.equal(restored.get().layers.structures, false);
   });
 });
 

@@ -614,3 +614,27 @@ remain available. The extract is retried after a cooldown; imagery is independen
 Validation: `npm run check`, including viewport coverage across rotation/aspect/
 zoom, server/client tile bounds, request cancellation/concurrency, mapped address
 provenance, roof geometry and existing map behavior.
+
+### Continuous diorama presentation (September 2026)
+
+The opening scene is a tabletop view of the full, geographically positioned region.
+The new `diorama` preference (Customize → Scene → Miniature / Classic map) is shareable
+and remains a viewer preference across Explore scenes. Its visible scale badge reports
+the effective relief exaggeration. Regional terrain approaches 15× smoothly between
+9 and 45 km camera distance, returning to the chosen scale before close inspection.
+Coordinates, DEM elevations, footprint polygons, roads and photographic tiles are unchanged.
+The camera target, labels, structures and cutaway all use the same effective terrain scale.
+
+The stage has a DEM-matched edge mesh, decorative earth strata, a studio floor and soft
+contact shadow. Woodland crowns are illustrative, inferred from green pixels in existing
+aerial photography, with small crowns generated from cached close imagery. This requires
+no additional network imagery requests. Close foliage is limited to 8 visible patches,
+20 retained patches, and never draws over Street inspection or historical/comparison views.
+Woodland crowns are not surveyed tree positions, and the base is not a geological model.
+
+Modeled architecture keeps actual mapped footprints and available heights/roof forms,
+with illustrative glass, masonry, mullions and windows. Depth-based contact shading uses
+rendered geometry without blurring photographic detail. Regional building heights are
+cartographically enlarged; this multiplier returns smoothly to one before close inspection.
+Adaptive terrain replacement rebinds borrowed height uniforms, and imagery eviction releases
+its dependent foliage. The classic presentation and historical/flood tools remain available.

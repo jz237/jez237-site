@@ -13,8 +13,8 @@
  *   two-finger drag         orbit; pinch distance zooms at the same time
  */
 
-import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026090612';
-import { CAMERA } from './schema.js?v=philly-2026090612';
+import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026090901';
+import { CAMERA } from './schema.js?v=philly-2026090901';
 
 const DEG = Math.PI / 180;
 
@@ -309,7 +309,7 @@ export function createCameraRig(THREE, options) {
         now.bearing = want.bearing;
       }
 
-      const exag = getExaggeration();
+      const exag = getExaggeration(now.dist);
       const groundY = sampleElevation(now.lon, now.lat) * exag;
       targetVec.set(projection.lonToX(now.lon), groundY, projection.latToZ(now.lat));
 
