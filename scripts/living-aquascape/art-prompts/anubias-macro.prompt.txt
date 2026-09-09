@@ -1,0 +1,8 @@
+Use case: photorealistic-natural
+Asset type: landscape 16:9 continuous Biology inspection view inside a premium aquarium exhibit.
+Primary request: Photoreal extreme macro of a fresh submerged Anubias leaf with fine veins, pinhead oxygen pearls attached along the leaf edge, subtle biofilm, and one tiny translucent Amano shrimp grazing at the edge.
+Scene/backdrop: Dark softly blurred planted freshwater aquarium, clear water.
+Composition/framing: Landscape 16:9. Leaf centered and extending toward the right. Usable dark black-green negative space across the left for real application UI. Extreme macro photographic detail on the leaf, oxygen pearls, and shrimp.
+Lighting/mood: Natural subdued aquarium lighting, restrained emerald color, quiet observational mood.
+Materials/textures: Authentic fresh Anubias leaf veins and surface, small attached oxygen bubbles, delicate translucent shrimp antennae and legs, subtle natural biofilm.
+Constraints: No labels, text, icons, graphics, watermarks, or interface. Photographic realism.

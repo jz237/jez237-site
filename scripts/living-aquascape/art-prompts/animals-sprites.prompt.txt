@@ -1,0 +1,8 @@
+Use case: photorealistic-natural
+Asset type: transparent photographic sprite sheet for an animated realistic aquarium.
+Primary request: A square 2x2 sprite sheet of exactly four isolated live aquatic animals, one animal in each equal quadrant. Top-left: one single cardinal tetra in exact side profile facing RIGHT. Top-right: one single harlequin rasbora in exact side profile facing RIGHT. Bottom-left: one single adult pearl gourami in exact side profile facing RIGHT with complete translucent fins and threadlike feelers. Bottom-right: one single Amano shrimp in exact side profile facing RIGHT with full delicate antennae and legs.
+Composition/framing: Square canvas. Four equal quadrants with NO visible dividers. Each subject entirely contained within its own quadrant, centered within that quadrant, generous transparent padding around all extremities. No overlap between quadrants. Full bodies, full tails, full fins, all feelers and antennae visible.
+Style/medium: Premium natural macro aquarium photography. Correct anatomy, realistic individual scales, translucent fin membranes, realistic shrimp shell and delicate appendages. Photographic living animals, not illustration.
+Lighting/mood: Subdued studio light from upper left, natural restrained color.
+Scene/backdrop: Genuine RGBA transparency across all empty canvas. Transparent PNG alpha, no opaque background.
+Constraints: Exactly four animals. All animals face RIGHT. NO shadows, NO background, NO checkerboard, NO text, NO labels, NO border. No cartoon. Preserve authentic photographic textures.
