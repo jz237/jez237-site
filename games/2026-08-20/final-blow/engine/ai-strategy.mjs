@@ -16,6 +16,15 @@ export const FIGHT_STYLES=Object.freeze({
   post:{name:'trap keepaway',range:250,initiative:.38,dash:.07,reset:38},
 });
 export function fighterStyle(id){return FIGHT_STYLES[id] || FIGHT_STYLES.jez;}
+// Number of distinct committed moves, rather than hits in a multi-hit special.
+export const EXCHANGE_STYLES=Object.freeze({
+ jez:{moves:3,bait:.22,punish:.9}, benny:{moves:3,bait:.06,punish:.7},
+ alan:{moves:2,bait:.25,punish:.96}, ali:{moves:4,bait:.1,punish:.75},
+ commissioner:{moves:2,bait:.18,punish:.9}, cyraxx:{moves:2,bait:.16,punish:.7},
+ deathblow:{moves:2,bait:.08,punish:.8}, devil:{moves:3,bait:.09,punish:.78},
+ donald:{moves:2,bait:.2,punish:.76}, post:{moves:2,bait:.18,punish:.74},
+});
+export function exchangeStyle(id){return EXCHANGE_STYLES[id]||EXCHANGE_STYLES.jez;}
 export function roundStrategy(self,opponent,timeRemaining=99){
   const lead=self.health-opponent.health;
   if(timeRemaining<=12 && lead<0)return 'desperation';
@@ -46,6 +55,11 @@ export function scoreComboOption(option,self,opponent){
 }
 export function selectComboContinuation(id,self,opponent,roll=.5){
   if(self.attackConnected!=='hit' || !self.attacking || self.confirmWindowFrames===0)return null;
+  const moves=self.aiBrain?.exchangeMoves||1;
+  const budget=exchangeStyle(id).moves;
+  // A successful opener earns a short route. A nearly defeated opponent can
+  // justify one extra finisher, but never an unbounded succession of cancels.
+  if(moves>=budget+(opponent.health<=24?1:0))return null;
   if(self.attacking.rhythmCancel && self.rhythmStacks<(self.attacking.rhythmCancelStacks||2))return null;
   const distance=Math.abs(self.x-opponent.x);
   const actions=['light','heavy','special','commandSpecial','backSpecial','launcher','enhanced','enhancedCommandSpecial','enhancedBackSpecial','enhancedLauncher','super'];
@@ -60,7 +74,9 @@ export function selectComboContinuation(id,self,opponent,roll=.5){
     options.push({action,move,cost});
   }
   const signature=signatureNext(id,self.attacking.kitAction,self.aiBrain?.signatureVariant||0);
-  const score=option=>scoreComboOption(option,self,opponent)+(signature.includes(option.action)?Math.max(0,24-signature.indexOf(option.action)*14):0);
+  const score=option=>scoreComboOption(option,self,opponent)
+    +(signature.includes(option.action)?Math.max(0,36-signature.indexOf(option.action)*18):0)
+    +(moves>=budget-1&&(option.move.knockdown||option.move.knockdownOnFinal||option.move.launchVelocityY)?28:0);
   options.sort((a,b)=>score(b)-score(a));
   const best=options.find(option=>option.cost===0 || roll<.78);
   return best?.action || null;

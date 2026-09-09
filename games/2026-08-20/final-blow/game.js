@@ -1,7 +1,7 @@
 import {PROP_RECTS} from "./engine/world-props.mjs";
 import {MoveFoleyPlayer, moveFoleyLayers} from "./engine/move-foley.mjs";
 const moveFoleyPlayer = new MoveFoleyPlayer();
-import {hitRegion,victoryCell} from "./engine/combat-presentation.mjs";
+import {hitRegion,victoryCell,contactPoint,boundedBodyOffset} from "./engine/combat-presentation.mjs";
 import {FOOTWORK_BANK,FOOTWORK_FIGHTERS,createFootworkSelector} from "./engine/painted-footwork.mjs";
 import {BRIDGE_BANK,BRIDGE_FIGHTERS,createBridgeSelector} from "./engine/painted-bridges.mjs";
 import {STRIKE_ANCHORS,projectStrikeTip} from "./engine/strike-anchors.mjs";
@@ -1055,7 +1055,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.7` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.8` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -19610,7 +19610,8 @@ function hit(attacker, victim, attack, collision) {
     // flinch beat; the tiers below it only stir.
     splatX: impactTier === "super" || impactTier === "weapon" ? victim.x : null,
   });
-  const impact = paintedStrikePoint(attacker) || collision?.point || { x: victim.x - attacker.facing * 22, y: victim.y - 105 };
+  const impact = contactPoint(attack,{...victim,height:fighterRenderSize(victim.def.id)*.85},attacker.facing,paintedStrikePoint(attacker),collision?.point);
+  if(!rollbackResimulating)presentationDebug.lastContact={fighterId:attacker.def.id,pose:presentationPose(fighterAnimationPose(attacker)),tip:paintedStrikePoint(attacker),impact};
   spawnHit(impact.x, impact.y, attacker.def, impactTier, blocked, { direction: attacker.facing, counter });
   if (attack.superMove) {
     state.effects.push({ kind: "super", x: impact.x, y: impact.y, life: 0.55, max: 0.55, color: attacker.def.accent });
@@ -19809,9 +19810,9 @@ function updateComboState() {
 // keeps reading and buffering through it — so the longer stops make the fight
 // easier to follow without loosening a single link.
 const VIOLENCE_TIERS = Object.freeze({
-  light: Object.freeze({ particles: 10, speed: 250, life: 0.72, size: 4.2, shake: 0.16, hitstop: 0.1, crowd: 0.12, decal: false }),
-  heavy: Object.freeze({ particles: 22, speed: 430, life: 1.08, size: 6.2, shake: 0.31, hitstop: 0.167, crowd: 0.34, decal: true }),
-  special: Object.freeze({ particles: 30, speed: 520, life: 1.24, size: 7.2, shake: 0.43, hitstop: 0.2, crowd: 0.56, decal: true }),
+  light: Object.freeze({ particles: 5, speed: 210, life: 0.28, size: 2.8, shake: 0.055, hitstop: 0.05, crowd: 0.12, decal: false }),
+  heavy: Object.freeze({ particles: 12, speed: 350, life: 0.52, size: 4.2, shake: 0.18, hitstop: 0.1, crowd: 0.34, decal: true }),
+  special: Object.freeze({ particles: 18, speed: 440, life: 0.65, size: 5.2, shake: 0.28, hitstop: 0.117, crowd: 0.56, decal: true }),
   throw: Object.freeze({ particles: 26, speed: 470, life: 1.18, size: 7, shake: 0.46, hitstop: 0.2, crowd: 0.62, decal: true }),
   weapon: Object.freeze({ particles: 28, speed: 540, life: 1.28, size: 7.6, shake: 0.5, hitstop: 0.217, crowd: 0.68, decal: true }),
   super: Object.freeze({ particles: 44, speed: 700, life: 1.58, size: 9, shake: 0.76, hitstop: 0.25, crowd: 1.05, decal: true }),
@@ -19827,14 +19828,14 @@ function applyViolenceResponse(kind, { blocked = false, counter = false, final =
   // live inside combatHaptic).
   combatHaptic(kind, { damage, blocked, counter });
   if (blocked) {
-    state.shake = Math.max(state.shake, 0.1);
-    state.hitstop = Math.max(state.hitstop, 0.067);
+    state.shake = Math.max(state.shake, 0.035);
+    state.hitstop = Math.max(state.hitstop, 0.04);
     return;
   }
   const profile = violenceTier(kind);
   const counterScale = counter ? 1.22 : 1;
   state.shake = Math.max(state.shake, profile.shake * counterScale);
-  const hitstop = kind === "super" && !final ? 0.15 : profile.hitstop;
+  const hitstop = kind === "super" && !final ? 0.075 : profile.hitstop;
   state.hitstop = Math.max(state.hitstop, hitstop * counterScale);
   // v5.3 CROWD DEPTH: the attacker's side rides the stir, so half the crowd
   // cheers this hit and half winces at it.
@@ -19914,7 +19915,7 @@ function spawnHit(x, y, def, attackKind, blocked, { direction = 1, counter = fal
   // spark colour. Carried on the existing impactFlash effect (same life/max,
   // so sparkLine/shockRing/impactFlash counts are untouched); the flash toggle
   // gates it at push time exactly like the full-screen flashes.
-  const spillTier = ["heavy", "special", "super", "weapon"].includes(tierName) || counter;
+  const spillTier = ["super", "weapon"].includes(tierName) || counter;
   state.effects.push({
     kind: "impactFlash", tier: tierName, x, y,
     life: tierName === "super" ? 0.22 : 0.12,
@@ -24512,8 +24513,10 @@ function paintedStrikePoint(fighter) {
  const tip=STRIKE_ANCHORS[fighter.def.id]?.[`${pose.artBank||pose.bank}:${pose.frame}`];
  if(!tip)return null;
  const size=fighterRenderSize(fighter.def.id)*bankSheetAdjust(fighter.def.id,pose.bank)*cellDrawAdjust(fighter.def.id,pose.bank,pose.frame,{unified:unifiedFighterReady(fighter.def.id)})*(pose.artScale||1);
+ const motion={...fighterMotionTransform(fighter)};
+ motion.offsetX=boundedBodyOffset(motion.offsetX,fighter.facing,Math.abs((state.fighters[1-fighter.side]?.x??fighter.x)-fighter.x));
  return projectStrikeTip(tip,{x:fighter.x,y:fighter.y,size,mirror:fighter.facing*atlasFrameFacing(fighter.def.id,pose.bank,pose.frame),
-   floor:cellVerticalOffset(fighter.def.id,pose.bank,pose.frame,0)/320*size,motion:fighterMotionTransform(fighter)});
+   floor:cellVerticalOffset(fighter.def.id,pose.bank,pose.frame,0)/320*size,motion});
 }
 
 function fighterRenderSize(fighterId) {
@@ -24912,8 +24915,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   // v2.6 BODY-FIRST: the shared world-space body offset — attack-extension
   // lunge toward the target / victim stagger step away from it. Applied
   // PRE-mirror so mixed-authored sheets can never flip the direction.
-  const bodyOffsetX = motion.offsetX * fighter.facing > 0
-    ? fighter.facing * Math.min(Math.abs(motion.offsetX), Math.max(0, extensionRoom - lunge)) : motion.offsetX;
+  const bodyOffsetX = boundedBodyOffset(motion.offsetX,fighter.facing,Math.abs((opponent?.x??fighter.x)-fighter.x),lunge);
   if (bodyOffsetX !== 0 || motion.offsetY !== 0) ctx.translate(bodyOffsetX, motion.offsetY);
   // MOTION FIX 4: victims never freeze solid — a 1-2px pose shiver rides
   // every hold window (hitstop and the multi-hit super storms), re-hashed
@@ -29505,7 +29507,7 @@ function draw(time) {
     // for the same reason and more sharply: zeroing it swaps the map for a
     // number, and the very next per-cell write would throw in module strict
     // mode and take the whole draw pass down with it.
-    if (key === "lastFighterMirror" || key === "lastWalkKey"
+    if (key === "lastContact" || key === "lastFighterMirror" || key === "lastWalkKey"
       || key === "motion2CellDraws"
       // v2.9 final round: cumulative session tallies, not per-frame counts.
       || key === "reactionDrawPriority" || key === "turnaroundDraws"
@@ -32567,7 +32569,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.7-audio");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.8-exchanges");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34059,7 +34061,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.7-ringside",
+  version: "5.7.8-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -34366,6 +34368,7 @@ window.__finalBlowEngine = {
         // pivot-key audit (T6) — real draws of motion2:5 versus, keyed by
         // bank:frame, whatever drew instead while the latch was live.
         reactionDrawPriority: presentationDebug.reactionDrawPriority,
+        lastContact:presentationDebug.lastContact||null,
         turnaroundDraws: presentationDebug.turnaroundDraws,
         turnaroundBlocked: { ...presentationDebug.turnaroundBlocked },
         skidSmokes: motionFxDebug.skidSmokes,

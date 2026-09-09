@@ -1,7 +1,7 @@
 import {feintIntent,blockedStringAlternative} from "./ai-feints.mjs";
-import {deliberateDefense} from "./ai-defense.mjs";
+import {deliberateDefense,recoveryApproach} from "./ai-defense.mjs";
 import {projectileIntent} from "./ai-projectiles.mjs";
-import {fighterStyle,comboObjective,roundStrategy,strategicIntent,selectComboContinuation,meterOpportunity} from "./ai-strategy.mjs";
+import {fighterStyle,exchangeStyle,comboObjective,roundStrategy,strategicIntent,selectComboContinuation,meterOpportunity} from "./ai-strategy.mjs";
 import {createOpponentMemory, learnOpponent, opponentHabits} from "./ai-adaptation.mjs";
 import { ATTACK_LEVELS, DEFENSE_RULES, MOVEMENT_RULES, THROW_RULES } from "./defense.mjs";
 import { GRIT_RULES } from "./combos.mjs";
@@ -107,6 +107,7 @@ export function createAiBrain(difficulty = DEFAULT_AI_DIFFICULTY) {
     lastConfirmReadKey: "",
     lastHabitReadFrame: -Infinity,
     exchangeUntil:0, lastExchangeFrame:-Infinity, previousAttack:false, exchangeContact:false,
+    exchangeMoves:0, exchangeSerial:-1,
     confirmRoll:.5, strategy:null, context:{},
     feint:null,lastFeintFrame:-Infinity,blockedPlanUntil:-Infinity,lastStringResult:"",signatureVariant:0,
     nextDecisionFrame: 0,
@@ -378,6 +379,7 @@ export function preferTacticalInput(brain, input, self) {
     return ['light','heavy','driveHeavy','super','special','commandSpecial','backSpecial','launcher','enhanced','enhancedCommandSpecial','enhancedBackSpecial','enhancedLauncher'].some(key=>input[key]);
   }
   if (self.attacking || !self.grounded) return false;
+  if(reason==='recovery-approach')return true;
   if(['feint-approach','feint-retreat','feint-watch','blocked-string-throw','blocked-string-low','blocked-string-reset'].includes(reason))return true;
   if(['projectile-block','projectile-counter','projectile-jump','projectile-advance'].includes(reason))return true;
   if(['corner-escape','corner-counter','corner-defense','corner-pressure','protect-lead','protect-poke','chase','exchange-reset','style-spacing','style-strike','meter-reserve'].includes(reason))return true;
@@ -492,9 +494,14 @@ export function decideAiIntent(brain, {
   if (self.grounded && !self.attacking && !self.hitstunFrames && !self.blockstunFrames
     && !self.wakeupFrames && !observation.down && observation.grounded
     && observation.attackLevel !== ATTACK_LEVELS.THROW && timing.recovery > 0
-    && mixRoll(roll, 43) < settings.defenseChance) {
+    && mixRoll(roll, 43) < (context.exhibition?Math.min(.97,settings.defenseChance*exchangeStyle(fighterId).punish/.76):settings.defenseChance)) {
     const punish = selectRecoveryPunish(fighterId, distance, timing.recovery);
     if (punish) return punish;
+  }
+
+  if(context.exhibition){
+    const approach=recoveryApproach(self,observation,frame);
+    if(approach)return approach;
   }
 
   // 5.3 OKIZEME: the meaty. The last rising frames carry hurtboxes now, so a
@@ -631,6 +638,13 @@ export function decideAiIntent(brain, {
 
   if (context.exhibition) {
     if (self.attacking && self.attackConnected==='block')return {movement:'hold',action:null,reason:'blocked-recovery'};
+    // The reset owns ordinary neutral decisions. Live defense and a punish
+    // above this branch may interrupt it, but a feint cannot erase it.
+    if(frame<brain.exchangeUntil){
+      const reset=strategicIntent({id:fighterId,self,opponent:observation,frame,
+        timeRemaining:context.timeRemaining,roll,until:brain.exchangeUntil});
+      if(reset)return reset;
+    }
     const alternate=blockedStringAlternative(brain,self,observation,frame,mixRoll(roll,52));
     if(alternate)return alternate;
     const feint=feintIntent(brain,self,observation,frame,mixRoll(roll,51),context.timeRemaining);
@@ -781,15 +795,22 @@ export function stepAiBrain(brain, {
   const id=self.kitId||self.id||self.def?.kitId||self.def?.id;
   brain.strategy=context.exhibition?{plan:roundStrategy(self,observation,context.timeRemaining),style:fighterStyle(id).name}:null;
   if(context.exhibition){
+    if(self.attacking && self.attackSerial!==brain.exchangeSerial){
+      brain.exchangeSerial=self.attackSerial;
+      brain.exchangeMoves++;
+    }
     if(self.attacking && self.attackConnected){brain.exchangeContact=true;brain.lastStringResult=self.attackConnected;}
     if(brain.previousAttack && !self.attacking){
       if(brain.lastStringResult==='block')brain.blockedPlanUntil=frame+60;
       if(brain.exchangeContact)brain.signatureVariant++;
       brain.lastStringResult='';
     }
-    if(brain.previousAttack && !self.attacking && brain.exchangeContact){
-      if(frame-brain.lastExchangeFrame>=150){brain.exchangeUntil=frame+fighterStyle(id).reset;brain.lastExchangeFrame=frame;}
+    if(brain.previousAttack && !self.attacking){
+      brain.exchangeUntil=frame+Math.round(fighterStyle(id).reset*(brain.exchangeContact?1:.6));
+      brain.lastExchangeFrame=frame;
+      brain.nextDecisionFrame=frame;
       brain.exchangeContact=false;
+      brain.exchangeMoves=0;
     }
     brain.previousAttack=Boolean(self.attacking);
   }
@@ -820,7 +841,7 @@ export function stepAiBrain(brain, {
   // decision cadence, so without this the brain would only ever hit them by
   // luck. The take itself is already latched (okiTake / clinchTake), so this
   // buys timing, never extra probability.
-  const timedRead = brain.intent.reason.startsWith("feint-") || brain.intent.reason === "oki-approach" || brain.intent.reason === "clinched"
+  const timedRead = brain.intent.reason==='recovery-approach' || brain.intent.reason.startsWith("feint-") || brain.intent.reason === "oki-approach" || brain.intent.reason === "clinched"
     || (context.exhibition && self.attacking && self.attackConnected==='hit' && confirmKey!==brain.lastComboKey);
   brain.nextDecisionFrame = timedRead ? frame + 1 : frame
     + resolveAiSettings(brain.difficulty).decisionFrames
@@ -843,6 +864,7 @@ export function aiBrainSnapshot(brain) {
     roundsRemembered:brain.opponentMemory.roundsRemembered||0,
     strategy:brain.strategy,
     exchangeUntil:brain.exchangeUntil,
+    exchangeMoves:brain.exchangeMoves,
     signatureVariant:brain.signatureVariant,feint:brain.feint?{...brain.feint}:null,
     suppressedRepeats: brain.suppressedRepeats,
     intent: { ...brain.intent },
