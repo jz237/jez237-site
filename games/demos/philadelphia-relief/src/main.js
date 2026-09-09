@@ -1,4 +1,4 @@
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090901';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090902';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -8,53 +8,53 @@ import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090901';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090902';
 
-import { createStore } from './state.js?v=philly-2026090901';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090901';
-import { effectiveLight } from './solar.js?v=philly-2026090901';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090901';
+import { createStore } from './state.js?v=philly-2026090902';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090902';
+import { effectiveLight } from './solar.js?v=philly-2026090902';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090902';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090901';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090901';
+} from './geo.js?v=philly-2026090902';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090902';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090901';
+} from './tours.js?v=philly-2026090902';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090901';
+} from './urlstate.js?v=philly-2026090902';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090901';
+} from './degraded.js?v=philly-2026090902';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090901';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026090901';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090901';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090901';
-import { createPostFX } from './postfx.js?v=philly-2026090901';
-import { createCameraRig } from './camera.js?v=philly-2026090901';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090901';
-import { createStructures } from './structures.js?v=philly-2026090901';
+} from './terrain.js?v=philly-2026090902';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026090902';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090902';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090902';
+import { createPostFX } from './postfx.js?v=philly-2026090902';
+import { createCameraRig } from './camera.js?v=philly-2026090902';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090902';
+import { createStructures } from './structures.js?v=philly-2026090902';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090901';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090901';
+} from './structures-data.js?v=philly-2026090902';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090902';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090901';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090901';
+} from './flood.js?v=philly-2026090902';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090902';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090901';
+} from './vectors.js?v=philly-2026090902';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090901';
-import { getTheme } from './themes.js?v=philly-2026090901';
+} from './ui.js?v=philly-2026090902';
+import { getTheme } from './themes.js?v=philly-2026090902';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -1477,7 +1477,7 @@ function wireInterface(deps) {
 
   const controls = buildControls(store, dom.studioGroups);
   const layerToggles = buildLayerToggles(store, dom.layerToggles);
-  const presets = buildPresets(dom.presetList, (id) => motion.toPreset(id));
+  const presets = buildPresets(dom.presetList, (id) => visitPreset(id));
   buildQuickJumps(dom.quickJumps, (jump) => motion.flyTo(jump, { label: jump.name }));
   buildQuickJumps($('structureJumps'), (jump) => motion.flyTo(jump, { label: jump.name }),
     'structures');
@@ -1536,7 +1536,7 @@ function wireInterface(deps) {
       }
       const landmark = landmarkByName(name);
       if (!landmark) return;
-      if (landmark.viewPreset) { motion.toPreset(landmark.viewPreset); return; }
+      if (landmark.viewPreset) { visitPreset(landmark.viewPreset); return; }
       motion.flyTo({ lon: landmark.lon, lat: landmark.lat,
         camDist: Math.min(store.value('camDist'), 3200) }, { label: name });
     },
@@ -1581,7 +1581,7 @@ function wireInterface(deps) {
     entries: searchEntries,
     onSelect: (entry) => {
       if (entry.kind === 'preset') {
-        motion.toPreset(entry.presetId);
+        visitPreset(entry.presetId);
       } else if (entry.kind === 'tour') {
         motion.setTour(entry.tourId);
         motion.play();
@@ -1592,7 +1592,7 @@ function wireInterface(deps) {
         toast(entry.floodMode === 'slr'
           ? 'Sea level rise is on the map' : 'FEMA flood zones are on the map');
       } else if (entry.viewPreset) {
-        motion.toPreset(entry.viewPreset);
+        visitPreset(entry.viewPreset);
       } else {
         motion.flyTo(entry.jump || entry, { label: entry.name });
       }
@@ -1637,6 +1637,10 @@ function wireInterface(deps) {
     studioPanel.set(false); dom.studioToggle.focus();
   });
   let inspectionSnapshot = null;
+  function visitPreset(id) {
+    if (inspectionSnapshot) setInspection(false);
+    motion.toPreset(id);
+  }
   function setInspection(enabled) {
     motion.stop();
     if (enabled && !inspectionSnapshot) {
@@ -1666,7 +1670,7 @@ function wireInterface(deps) {
       $('btnInspect').textContent = 'Street inspection';
     }
   });
-  $('storyArchitecture').addEventListener('click', () => motion.toPreset('architecture'));
+  $('storyArchitecture').addEventListener('click', () => visitPreset('architecture'));
   $('storyTour').addEventListener('click', () => {
     motion.setTour('rivers'); motion.play();
   });
@@ -1810,12 +1814,12 @@ function wireInterface(deps) {
     btn.addEventListener('click', () => { sh.set(!sh.isCollapsed()); syncMobileBar(); });
   }
   for (const sh of sheets) sh.panel.querySelector('.panel-toggle').addEventListener('click', syncMobileBar);
-  $('mbHome').addEventListener('click', () => motion.toPreset(HOME_PRESET));
+  $('mbHome').addEventListener('click', () => visitPreset(HOME_PRESET));
   $('mbPlay').addEventListener('click', () => motion.toggle());
   $('mbCinema').addEventListener('click', () => setCinema(true));
 
   // ---- top bar actions ----------------------------------------------------
-  $('btnHome').addEventListener('click', () => motion.toPreset(HOME_PRESET));
+  $('btnHome').addEventListener('click', () => visitPreset(HOME_PRESET));
   $('btnAbout').addEventListener('click', () => dialogs.open('about'));
   $('btnKeys').addEventListener('click', () => dialogs.open('shortcuts'));
   $('btnFull').addEventListener('click', toggleFullscreen);
@@ -1855,7 +1859,7 @@ function wireInterface(deps) {
     const shift = event.shiftKey;
 
     if (key >= '1' && key <= String(Math.min(9, PRESETS.length))) {
-      motion.toPreset(PRESETS[Number(key) - 1].id);
+      visitPreset(PRESETS[Number(key) - 1].id);
       event.preventDefault();
       return;
     }
@@ -1866,7 +1870,7 @@ function wireInterface(deps) {
         event.preventDefault();
         break;
       case 'h': case 'H':
-        motion.toPreset(HOME_PRESET);
+        visitPreset(HOME_PRESET);
         break;
       case 'f': case 'F':
         toggleFullscreen();
