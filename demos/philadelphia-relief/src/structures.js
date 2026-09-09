@@ -171,6 +171,11 @@ const FRAGMENT_SHADER = /* glsl */ `
     glass = mix(glass, vec3(.23, .34, .39), skyBand * vStyle * .55);
     glass *= .82 + pane * .35;
     facade = mix(facade, glass, window);
+    // Shallow recess shadow and a restrained sill make masonry openings read in depth.
+    float recess = smoothstep(.52,.76,cell.y) * opening.x * opening.y * legible;
+    facade *= 1.0 - recess * (1.0-vStyle) * .22;
+    float sill = (1.0-smoothstep(.025,.025+aa.y,abs(cell.y-.15))) * opening.x * legible;
+    facade = mix(facade, masonry * 1.22, sill * (1.0-vStyle) * .65);
     float door = (1.0 - smoothstep(.15,.18,abs(cell.x-.5)))
       * (1.0 - smoothstep(2.1,2.3,vStorey)) * (1.0-roof) * legible * (1.0-vStyle);
     facade = mix(facade, vec3(.05,.065,.06), door * .7);

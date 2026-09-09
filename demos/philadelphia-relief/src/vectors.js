@@ -88,11 +88,21 @@ const LINE_FRAGMENT = /* glsl */ `
       float curb = smoothstep(0.74, 0.82, abs(vAlong));
       float aa = max(fwidth(vAlong), 0.012);
       float center = 1.0 - smoothstep(0.015, 0.015 + aa, abs(vAlong));
-      float dash = step(0.5, fract(vRoadPhase / 12.0));
+      float dashPhase = vRoadPhase / 12.0;
+      float dashAA = max(fwidth(dashPhase),.01);
+      float dash = smoothstep(.08,.08+dashAA,fract(dashPhase))
+        * (1.0-smoothstep(.52-dashAA,.52,fract(dashPhase)));
+      dash *= 1.0-smoothstep(.3,.7,dashAA);
       vec3 street = mix(vec3(0.095, 0.11, 0.12), vec3(0.42, 0.40, 0.35), curb);
       float junctionGap = min(mix(1000.0, vCrossing.x, vCrossing.z),
         mix(1000.0, vCrossing.y, vCrossing.w));
-      float lane = smoothstep(10.0, 13.0, junctionGap);
+      float lane = smoothstep(10.0, 13.0, junctionGap) * smoothstep(5.2,6.4,uRoadWidth);
+      // Subtle longitudinal aggregate and gutter shading, never arbitrary lane geometry.
+      float grainPhase = vRoadPhase * 1.7 + vAlong * uRoadWidth * 3.1;
+      float grainAA = 1.0-smoothstep(.4,1.2,fwidth(grainPhase));
+      street *= .98 + sin(grainPhase) * .025 * grainAA;
+      float gutter = smoothstep(.62,.70,abs(vAlong)) * (1.0-smoothstep(.73,.78,abs(vAlong)));
+      street *= 1.0-gutter*.18;
       street = mix(street, vec3(0.74, 0.65, 0.38), center * dash * lane);
       // Illustrative zebra crossings only at real multi-way street junctions.
       float crossBand = smoothstep(5.5, 6.0, junctionGap)
@@ -103,7 +113,7 @@ const LINE_FRAGMENT = /* glsl */ `
         * (1.0 - smoothstep(0.65 - stripeAA, 0.65, fract(stripeCoord)));
       float readable = 1.0 - smoothstep(0.35, 0.8, stripeAA);
       street = mix(street, vec3(0.82, 0.83, 0.77),
-        crossBand * stripe * readable * (1.0 - curb));
+        crossBand * stripe * readable * (1.0 - curb) * smoothstep(4.0,5.0,uRoadWidth));
       color = mix(color, street, uStreetDetail);
       edge = 1.0 - smoothstep(0.94, 1.0, abs(vAlong));
     }
@@ -189,12 +199,17 @@ const WATER_FRAGMENT = /* glsl */ `
     body = mix(body,reflectedSky,fresnel*.28*uIntensity);
 
     vec3 halfVec = normalize(uSunDir + view);
-    float glint = pow(max(0.0, dot(normal, halfVec)), 220.0);
+    // Widen subpixel glints while preserving their energy to prevent sparkling aliasing.
+    float roughness = clamp(length(fwidth(normal))*18.0,0.0,1.0);
+    float power = mix(220.0,42.0,roughness);
+    float glint = pow(max(0.0, dot(normal, halfVec)), power) * power/220.0;
     float sheen = pow(max(0.0, dot(normal, halfVec)), 24.0) * 0.25;
 
     // Water has to survive being 100 km away through haze, so it carries a
     // sky term of its own rather than relying on the glint alone.
-    vec3 color = body + uSpecColor * (glint * 2.2 + sheen) * uIntensity;
+    float highlight = glint * 2.2 + sheen;
+    highlight = highlight / (1.0 + highlight*.65);
+    vec3 color = body + uSpecColor * highlight * uIntensity;
     color += uSpecColor * fresnel * 0.34 * uIntensity;
     color += uShallow * 0.22 * uIntensity;
 

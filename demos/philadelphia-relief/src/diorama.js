@@ -86,10 +86,12 @@ const TREE_VERTEX = /* glsl */ `
   varying vec3 vLocal;
   varying float vSeed;
   void main() {
-    vNormal = normal; vLocal = position; vSeed = fract(aSize * .317);
+    vLocal = position; vSeed = fract(aSize * .317);
+    vec3 profile = vec3(.85 + vSeed * .15, 1.05 + vSeed * .55, 1.0 - vSeed * .18);
+    vNormal = normalize(normal / profile);
     float lobes = 1.0 + .12 * sin(position.x * 9.0 + vSeed * 12.0)
       * sin(position.z * 7.0 - position.y * 6.0);
-    vec3 p = position * lobes * vec3(aSize, aSize * (1.1 + vSeed * .5), aSize) * uAmount;
+    vec3 p = position * lobes * vec3(aSize) * profile * uAmount;
     p.y += aSize * .9 * uAmount;
     p += vec3(aTree.x, aTree.y * uExag, aTree.z);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
@@ -103,7 +105,9 @@ const TREE_FRAGMENT = /* glsl */ `
   varying vec3 vLocal;
   varying float vSeed;
   void main() {
-    float light = max(0.0, dot(normalize(vNormal), uSunDir));
+    vec3 crownNormal = normalize(vNormal + .13 * vec3(sin(vLocal.y*11.0),
+      sin(vLocal.z*9.0),sin(vLocal.x*12.0)));
+    float light = max(0.0, dot(crownNormal, uSunDir));
     float foliage = sin(vLocal.x * 28.0) * sin(vLocal.y * 32.0) * sin(vLocal.z * 26.0);
     vec3 green = mix(vec3(.043, .084, .029), vec3(.18, .235, .072), vSeed);
     float aa = 1.0 - smoothstep(.12, .5, max(fwidth(vLocal.x), fwidth(vLocal.y)) * 28.0);
