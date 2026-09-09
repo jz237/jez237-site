@@ -1,3 +1,5 @@
+import {FULL_LIBRARY_FIGHTERS,FULL_LIBRARY_BANKS,createFullLibrarySelector,sourceLibraryBank,fullLibraryAttackFrame} from './engine/full-library.mjs';
+import {FULL_REGISTRATION} from './engine/full-registration.mjs';
 import {SMOOTH_FIGHTERS,SMOOTH_BANKS,createSmoothSelector,smoothAttackFrame,smoothVerticalOffset} from './engine/painted-smooth.mjs';
 import {RECOVERY_BANK,RECOVERY_FIGHTERS,createRecoverySelector,plantedNormal} from './engine/painted-recovery.mjs';
 import {PROP_RECTS} from "./engine/world-props.mjs";
@@ -1059,7 +1061,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.12` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.13` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1403,6 +1405,18 @@ const fighterUnifiedAtlases = {};
 const paintedFlowAtlases = {};
 const recoveryAtlases={};
 const smoothAtlases={};
+// The comparison switch keeps the previous presentation available to QA.
+const fullLibraryEnabled=new URLSearchParams(location.search).get('fullLibrary')!=='0';
+const fullAtlases={};
+const selectFullLibrary=createFullLibrarySelector();
+const selectFullLibraryRender=createFullLibrarySelector();
+function ensureFullAtlas(id,bank){
+ const source=sourceLibraryBank(bank);
+ if(!fullLibraryEnabled||!FULL_LIBRARY_FIGHTERS.includes(id)||!FULL_LIBRARY_BANKS.includes(source))return null;
+ const key=`${id}:${source}`;
+ if(!fullAtlases[key]){const image=new Image();image.src=`assets/full-library/${id}-${source}-v1.webp`;fullAtlases[key]=image;image.decode().catch(()=>{});}
+ return fullAtlases[key];
+}
 const selectSmooth=createSmoothSelector();
 function ensureSmoothAtlas(id,bank){
  if(!SMOOTH_FIGHTERS.includes(id)||!SMOOTH_BANKS.includes(bank))return null;
@@ -1795,6 +1809,7 @@ function preloadAuthoredBanks(fighterIds) {
   // fighter whose manifest block rejects a cell.
   ensureMovesManifest();
   for (const id of ids) {
+    if(fullLibraryEnabled&&FULL_LIBRARY_FIGHTERS.includes(id))for(const bank of FULL_LIBRARY_BANKS)ensureFullAtlas(id,bank);
     // Counting only FIRST preloads keeps the probe meaningful: makeFighter is
     // also the rollback rebuild path, and a resimulation must not look like a
     // fresh preload. (5.1: the select screen preloads too, so a browsed
@@ -2183,6 +2198,7 @@ let pendingPalettes = [0, 0];
 // shipped generation kept as the specials bank's per-cell fallback remaps,
 // silhouettes and builds a 3D texture like any other sheet (v5.3).
 function altAtlasSource(fighterId, bank) {
+  if(bank.startsWith("full-"))return {image:ensureFullAtlas(fighterId,bank),key:`${fighterId}:${bank}`};
   if(SMOOTH_BANKS.includes(bank))return {image:smoothAtlases[`${fighterId}:${bank}`],key:`${fighterId}:${bank}`};
   if(bank===RECOVERY_BANK)return {image:recoveryAtlases[fighterId],key:`${fighterId}:${bank}`};
   if(bank===FOOTWORK_BANK)return {image:footworkAtlases[fighterId],key:`${fighterId}:${bank}`};
@@ -2231,7 +2247,7 @@ function ensureAltAtlas(fighterId, bank = "base") {
 
 /** The atlas a side should draw from, alt palette applied when selected. */
 function paletteAtlas(fighterId, side, bank = "base") {
-  const base = SMOOTH_BANKS.includes(bank) ? ensureSmoothAtlas(fighterId,bank) : bank===RECOVERY_BANK ? ensureRecoveryAtlas(fighterId) : bank===FOOTWORK_BANK ? footworkAtlases[fighterId] : bank===BRIDGE_BANK ? bridgeAtlases[fighterId] : bank.startsWith("inbetween-") ? inbetweenAtlases[`${fighterId}:${bank}`] : bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
+  const base = bank.startsWith("full-") ? ensureFullAtlas(fighterId,bank) : SMOOTH_BANKS.includes(bank) ? ensureSmoothAtlas(fighterId,bank) : bank===RECOVERY_BANK ? ensureRecoveryAtlas(fighterId) : bank===FOOTWORK_BANK ? footworkAtlases[fighterId] : bank===BRIDGE_BANK ? bridgeAtlases[fighterId] : bank.startsWith("inbetween-") ? inbetweenAtlases[`${fighterId}:${bank}`] : bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
     ? fighterMoveAtlases[fighterId] || fighterAtlases[fighterId]
     // v5.3: the shipped specials generation, kept as the bank's per-cell
     // fallback; its own sheet, then the 5.3 sheet, then the combat atlas.
@@ -22147,8 +22163,14 @@ function fighterAnimationPose(fighter) {
   const recovery=selectRecovery(fighter,fighter.preview?fighter.previewTick:state.simulationTick,Boolean(recoveryImage?.complete&&recoveryImage.naturalWidth),fighter.preview?null:state.fighters[1-fighter.side]);
   const smooth=selectSmooth(fighter.preview?fighter:state.fighters[fighter.side],fighter,fighter.preview?fighter.previewTick:state.simulationTick,smoothReady(fighter.def.id),fighter.preview?null:state.fighters[1-fighter.side]);
   const pose = smooth || recovery || footwork || bridge || withInbetween(fighter, flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung));
-  recordPoseTrace(fighter, pose);
-  return pose;
+  const shown=presentationPose(pose);
+  const image=fullLibraryEnabled&&ensureFullAtlas(fighter.def.id,shown.artBank||shown.bank);
+  const owner=fighter.preview?fighter:state.fighters?.[fighter.side];
+  const render=owner!==fighter;
+  const tick=fighter.preview?fighter.previewTick:state.simulationTick+(render?state.simulationAlpha-1:0);
+  const finalPose=fullLibraryEnabled?(render?selectFullLibraryRender:selectFullLibrary)(owner,fighter,shown,tick,Boolean(image?.complete&&image.naturalWidth)):pose;
+  recordPoseTrace(fighter, finalPose);
+  return finalPose;
 }
 
 // v5.0 QA (engineering pass): the pose TRANSITIONS per side, so a probe can
@@ -24500,8 +24522,11 @@ function downTiltFor(fighterId, bank, frame) {
   return tilt;
 }
 
-function presentationVerticalOffset(id,bank,frame,height) {
-  return smoothVerticalOffset(id,bank,frame,height) ?? cellVerticalOffset(id,bank,frame,height);
+function presentationVerticalOffset(id,bank,frame,height,artBank=bank) {
+  const base=smoothVerticalOffset(id,bank,frame,height) ?? cellVerticalOffset(id,bank,frame,height);
+  const registration=FULL_REGISTRATION[id]?.[artBank]?.[frame];
+  const air=Math.max(0,Math.min(1,height/110));
+  return base+(registration?registration.floor*(1-air)+registration.center*air:0);
 }
 
 function bankSheetAdjust(fighterId, bank) {
@@ -24534,13 +24559,13 @@ function paintedStrikePoint(fighter) {
  const a=fighter.attacking;
  if(!a||!fighter.grounded||fighter.crouch||a.animation||a.superMove||a.advanceSpeed||!['light','heavy'].includes(a.kind))return null;
  const pose=presentationPose(fighterAnimationPose(fighter));
- const tip=STRIKE_ANCHORS[fighter.def.id]?.[`${pose.artBank||pose.bank}:${pose.frame}`];
+ const tip=STRIKE_ANCHORS[fighter.def.id]?.[`${pose.sourceArtBank||pose.artBank||pose.bank}:${pose.frame}`];
  if(!tip)return null;
  const size=fighterRenderSize(fighter.def.id)*bankSheetAdjust(fighter.def.id,pose.bank)*cellDrawAdjust(fighter.def.id,pose.bank,pose.frame,{unified:unifiedFighterReady(fighter.def.id)})*(pose.artScale||1);
  const motion={...fighterMotionTransform(fighter)};
  motion.offsetX=boundedBodyOffset(motion.offsetX,fighter.facing,Math.abs((state.fighters[1-fighter.side]?.x??fighter.x)-fighter.x));
  return projectStrikeTip(tip,{x:fighter.x,y:fighter.y,size,mirror:fighter.facing*atlasFrameFacing(fighter.def.id,pose.bank,pose.frame),
-   floor:presentationVerticalOffset(fighter.def.id,pose.bank,pose.frame,0)/320*size,motion});
+   floor:presentationVerticalOffset(fighter.def.id,pose.bank,pose.frame,0,pose.artBank)/320*size,motion});
 }
 
 function fighterRenderSize(fighterId) {
@@ -24847,7 +24872,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   // airborne bank switch can move the body at all; the correction ramps to
   // zero at ground contact so takeoff and touchdown stay feet-planted.
   const floorFix = presentationVerticalOffset(fighter.def.id, pose.bank, frame,
-    fighter.grounded ? 0 : Math.max(0, FLOOR - fighter.y)) / 320 * renderSize;
+    fighter.grounded ? 0 : Math.max(0, FLOOR - fighter.y),pose.artBank) / 320 * renderSize;
   const attackKind = attack?.kind;
   const opponent = state.fighters[1 - fighter.side];
   const extensionRoom = Math.max(0, (Math.abs((opponent?.x ?? fighter.x) - fighter.x) - 130) * .35);
@@ -29667,8 +29692,9 @@ function renderFighter(fighter) {
     || state.hitstop > 0 || state.finisher) return fighter;
   if (!renderMotionCache.has(fighter)) {
     let sample = interpolateMotion(fighter, previousRenderMotion.get(fighter), state.simulationAlpha);
-    const visualFrame = smoothAttackFrame(fighter, previousAttackMotion.get(fighter), state.simulationAlpha);
+    const visualFrame = (fullLibraryEnabled?fullLibraryAttackFrame:smoothAttackFrame)(fighter, previousAttackMotion.get(fighter), state.simulationAlpha);
     if (visualFrame !== fighter.attackFrame) sample = { ...sample, attackFrame: visualFrame };
+    if (fullLibraryEnabled && FULL_LIBRARY_FIGHTERS.includes(fighter.def.id) && sample===fighter) sample={...fighter};
     if (sample !== fighter) {
       sample.renderBodyMotion = interpolateBodyMotion(
         { ...fighterMotionTransform(fighter) }, previousBodyMotion.get(fighter), state.simulationAlpha);
@@ -32516,7 +32542,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.12-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.13-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33251,11 +33277,12 @@ const moveViewer = createMoveViewer({
  async prepare(id) {
   const def = viewerRoster.find(f=>f.id===id);
   const fighter = makeFighter(0, 0, def);
-  fighter.preview = true; fighter.previewTick = 0;
+  fighter.preview = true; fighter.previewTick = 0; fighter.previewFloor=fighter.y;
   await ensureUnifiedManifest();
   const banks = ['base','specials','motion','motion2','motion3','walk','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','painted-flow',BRIDGE_BANK,FOOTWORK_BANK,RECOVERY_BANK,...SMOOTH_BANKS,
     ...INBETWEEN_BANKS.map(companionBank),'inbetween-approach'];
   await Promise.all(banks.map(bank => paletteAtlas(id,0,bank)?.decode?.().catch(()=>{})));
+  if(fullLibraryEnabled)await Promise.all(FULL_LIBRARY_BANKS.map(bank=>ensureFullAtlas(id,bank)?.decode?.().catch(()=>{})));
   // Padded atlases have no decode method; wait for their source-image jobs too.
   await Promise.all([...authoredDecodeState].filter(([key])=>key.startsWith(id+":" )).map(([,entry])=>entry.promise));
   return fighter;
@@ -33265,8 +33292,8 @@ const moveViewer = createMoveViewer({
   const pose = presentationPose(fighterAnimationPose(fighter));
   const atlas = paletteAtlas(fighter.def.id,0,pose.artBank || pose.bank);
   const scale = bankSheetAdjust(fighter.def.id,pose.bank) * cellDrawAdjust(fighter.def.id,pose.bank,pose.frame,{unified:unifiedFighterReady(fighter.def.id)}) * (pose.artScale || 1);
-  return {atlas,frame:pose.frame,scale, facing:atlasFrameFacing(fighter.def.id,pose.bank,pose.frame),
-    floor:presentationVerticalOffset(fighter.def.id,pose.bank,pose.frame,0)/320,
+  return {atlas,frame:pose.frame,scale,height:Math.max(0,FLOOR-fighter.y), facing:atlasFrameFacing(fighter.def.id,pose.bank,pose.frame),
+    floor:presentationVerticalOffset(fighter.def.id,pose.bank,pose.frame,0,pose.artBank)/320,
     bank:pose.artBank || pose.bank};
  }
 });
@@ -34008,7 +34035,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.12-ringside",
+  version: "5.7.13-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -35726,13 +35753,15 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       updateFacings();
       return window.__finalBlowEngine.snapshot();
     },
-    ready(id, type = 0) {
+    ready(id, type = 0, victimId = null) {
       const index = roster.findIndex((fighter) => fighter.id === id);
       if (index < 0) throw new Error(`Unknown fighter: ${id}`);
       state.mode = "versus";
       state.arcadeRun = null;
       state.qaManualMode = true;
-      state.picks = [index, index === 1 ? 0 : 1];
+      const victimIndex = victimId === null ? (index === 1 ? 0 : 1) : roster.findIndex(fighter => fighter.id === victimId);
+      if (victimIndex < 0) throw new Error(`Unknown victim: ${victimId}`);
+      state.picks = [index, victimIndex];
       state.rounds = [0, 0];
       state.round = 1;
       state.matchSerial += 1;
@@ -35788,8 +35817,8 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
         camera: { zoom: Number(state.cinematicZoom.toFixed(2)) },
       };
     },
-    graphicFatality(id, type = 0, seconds = 4.7, enabled = true) {
-      this.ready(id, type);
+    graphicFatality(id, type = 0, seconds = 4.7, enabled = true, victimId = null) {
+      this.ready(id, type, victimId);
       state.graphicFatalities = Boolean(enabled);
       $("#goreToggle").checked = state.graphicFatalities;
       finishRound(0, type);
