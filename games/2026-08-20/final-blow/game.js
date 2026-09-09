@@ -1,4 +1,6 @@
 import {PROP_RECTS} from "./engine/world-props.mjs";
+import {MoveFoleyPlayer, moveFoleyLayers} from "./engine/move-foley.mjs";
+const moveFoleyPlayer = new MoveFoleyPlayer();
 import {hitRegion,victoryCell} from "./engine/combat-presentation.mjs";
 import {FOOTWORK_BANK,FOOTWORK_FIGHTERS,createFootworkSelector} from "./engine/painted-footwork.mjs";
 import {BRIDGE_BANK,BRIDGE_FIGHTERS,createBridgeSelector} from "./engine/painted-bridges.mjs";
@@ -1053,7 +1055,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.6` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.7` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -16667,7 +16669,7 @@ function beginAttack(fighter, action, input = {}, { reversal = false, force = fa
   // training data, but normal play no longer narrates each attack over the
   // fighters. Tactical callouts such as COUNTER, LOW and GUARD CRUSH remain.
   updateHud();
-  sound(attackSwingCue(fighter.attacking, actionGroup), fighter);
+  sound(attackSwingCue(fighter.attacking, actionGroup), fighter, { deferFoley: true });
   // Release 1.6 LOUD: synthesized pre-impact whoosh layered under the swing
   // sample (guards + tier gating live inside).
   impactSwingWhoosh(fighter.attacking);
@@ -17996,6 +17998,10 @@ function updateFighter(fighter, opponent, input, dt) {
     fighter.attackFrame += 1;
     fighter.attackTime = fighter.attackFrame * SIMULATION_STEP_SECONDS;
     const attack = fighter.attacking;
+    if (fighter.attackFrame === Math.max(1, attack.activeStartFrame - 2)) {
+      const cue = attackSwingCue(attack, attack.kind);
+      if (!playMoveFoley(cue, fighter, attack) && impactAudioAllowed()) proceduralSound(fallbackSoundKinds[cue] || cue);
+    }
     maybeDeployTrap(fighter, attack);
     maybeSpawnThrowable(fighter, attack);
     maybeSpawnProjectile(fighter, attack);
@@ -19652,7 +19658,7 @@ function hit(attacker, victim, attack, collision) {
     });
     spawnCombatText(impact.x, impact.y - 80, "PERFECT", "#63f2ff");
   }
-  sound(attackImpactCue(attack, blocked), blocked ? victim : attacker);
+  sound(attackImpactCue(attack, blocked), blocked ? victim : attacker, { move: attack });
   // The distinct 'tink' variant layered over the block cue on a just-defend.
   if (perfect) perfectGuardTink();
   updateHud();
@@ -30322,6 +30328,7 @@ function duckMusic(amount, duration) {
 }
 
 function stopSfx() {
+  moveFoleyPlayer.stop();
   [...Object.values(sfxPools).flat(), ...[...fighterSfxPools.values()].flat(), ...[...crowdVoiceBanks.values()].flat()].forEach((sample) => {
     sample.pause();
     sample.currentTime = 0;
@@ -30568,6 +30575,7 @@ const FIGHTER_VOICE_TOPUP_MS = 2400;
 let fighterVoiceTopupTimer = 0;
 
 function warmFighterAudio(fighters = state.fighters) {
+  void moveFoleyPlayer.warm(state.audio);
   for (const fighter of fighters) {
     const fighterId = fighterSoundId(fighter);
     for (const cue of FIGHTER_AUDIO_CUES) {
@@ -30609,7 +30617,7 @@ function unlockAudio() {
     if (state.audio?.state === "suspended") state.audio.resume();
     // Release 1.6 LOUD: the shared master gain -> limiter bus rides the same
     // first-gesture lazy-init path, so nothing audio-graph runs at boot.
-    if (state.audio) ensureAudioGraph();
+    if (state.audio) { ensureAudioGraph(); void moveFoleyPlayer.warm(state.audio); }
   }
   syncMusic();
 }
@@ -30642,7 +30650,15 @@ function attackImpactCue(attack, blocked) {
   return attack.kind === "light" ? "hit-light" : "hit-heavy";
 }
 
-function sound(kind, fighter = null) {
+function playMoveFoley(kind, fighter = null, move = null) {
+  if (!impactAudioAllowed()) return false;
+  unlockAudio();
+  return moveFoleyPlayer.play(state.audio, masterBusInput(), kind, fighterSoundId(fighter), {
+    move: move || fighter?.attacking, x: fighter?.x ?? W * .5, level: state.sfxVolume,
+  });
+}
+
+function sound(kind, fighter = null, options = {}) {
   if (rollbackResimulating) return;
   const fighterId = fighterSoundId(fighter);
   const fallbackKind = fallbackSoundKinds[kind] || kind;
@@ -30657,6 +30673,7 @@ function sound(kind, fighter = null) {
   if (!$("#soundToggle").checked) return;
   if (attractAudioHeld()) return;
   unlockAudio();
+  const foley = !options.deferFoley && playMoveFoley(kind, fighter, options.move);
   // Wave 9: signature cues route through the variant banks (no-repeat
   // rotation + micro-variation + reactive placeholders). playbackRate and
   // preservesPitch are set explicitly on every play because pool elements
@@ -30674,12 +30691,13 @@ function sound(kind, fighter = null) {
     sample.currentTime = 0;
     sample.preservesPitch = take.rate === 1;
     sample.playbackRate = take.rate;
-    sample.volume = (sfxVolumes[kind] ?? 0.62) * state.sfxVolume;
+    sample.volume = (sfxVolumes[kind] ?? 0.62) * state.sfxVolume * (foley ? .75 : 1);
     const playback = sample.play();
     if (playback?.catch) playback.catch(() => proceduralSound(fallbackKind));
     return;
   }
   if (synthesised) return;
+  if (foley || (options.deferFoley && moveFoleyLayers(kind, fighterId).length)) return;
   const pool = sfxPools[fallbackKind];
   if (!pool?.length) {
     proceduralSound(fallbackKind);
@@ -30843,6 +30861,7 @@ function perfectGuardTink() {
 function objectSound(styleId) {
   if (!$("#soundToggle").checked) return;
   if (attractAudioHeld()) return;
+  if (playMoveFoley(`object-${styleId}`)) return;
   unlockAudio();
   if (!state.audio) return;
   const settings = OBJECT_SOUNDS[styleId];
@@ -32548,7 +32567,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.6-dock");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.7-audio");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34040,7 +34059,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.6-ringside",
+  version: "5.7.7-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -34079,6 +34098,7 @@ window.__finalBlowEngine = {
       fatalityAudit,
       fighterAudioAudit,
       audio: {
+        moveFoley: moveFoleyPlayer.snapshot(),
         audit: fighterAudioAudit,
         lastEvent: lastSoundEvent ? { ...lastSoundEvent } : null,
         loadedPalettes: new Set([...fighterSfxPools.keys()].map((key) => key.split(":")[0])).size,

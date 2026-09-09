@@ -89,7 +89,7 @@ test("no source file still points at a rejected or withheld recording", async ()
         continue;
       }
       if (!extensions.has(extname(entry.name))) continue;
-      const rel = relative(gameRoot, absolute);
+      const rel = relative(gameRoot, absolute).replaceAll('\\', '/');
       if (exempt.has(rel)) continue;
       const text = readFileSync(absolute, "utf8");
       for (const path of guarded) {
