@@ -1,10 +1,10 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { planImageryTiles, groundPoint, createTileStream } from '../src/imagery-tiles.js';
-import { detailRequest } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
-import { streetCell, compactStreets, streetQuery } from '../../../../functions/games/demos/philadelphia-relief/street-detail.js';
+import { detailRequest } from '../../../functions/demos/philadelphia-relief/detail-imagery.js';
+import { streetCell, compactStreets, streetQuery } from '../../../functions/demos/philadelphia-relief/street-detail.js';
 import { roofProfile, localBuildingSolids, neighborhoodLabels, metres } from '../src/neighborhood-data.js';
-import { onRequest as neighborhoodRequest } from '../../../../functions/games/demos/philadelphia-relief/street-detail.js';
+import { onRequest as neighborhoodRequest } from '../../../functions/demos/philadelphia-relief/street-detail.js';
 
 const region = { west:-75.8,east:-74.7,south:39.7,north:40.55 };
 const projection = { metersPerDegLon:85220,metersPerDegLat:111033 };
@@ -101,8 +101,8 @@ test('hosted neighborhood endpoint falls back when a provider is busy and caches
       : new Response(JSON.stringify({elements:[]}));
   };
   try {
-    const request = new Request('https://jez237.com/games/demos/philadelphia-relief/street-detail?lon=-75.16&lat=39.95',
-      {headers:{referer:'https://jez237.com/games/demos/philadelphia-relief/'}});
+    const request = new Request('https://jez237.com/demos/philadelphia-relief/street-detail?lon=-75.16&lat=39.95',
+      {headers:{referer:'https://jez237.com/demos/philadelphia-relief/'}});
     const tasks = [];
     const response = await neighborhoodRequest({request,waitUntil:p=>tasks.push(p)});
     await Promise.all(tasks);

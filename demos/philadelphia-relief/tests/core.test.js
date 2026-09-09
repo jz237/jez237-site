@@ -520,12 +520,12 @@ test('url state', async (t) => {
   await t.test('buildShareUrl replaces an existing hash', () => {
     const store = createStore(presetPatch('wissahickon'));
     const url = buildShareUrl(
-      'https://jez237.com/games/demos/philadelphia-relief/#old=1',
+      'https://jez237.com/demos/philadelphia-relief/#old=1',
       store.get(),
     );
     assert.equal(
       url,
-      'https://jez237.com/games/demos/philadelphia-relief/#P=wissahickon',
+      'https://jez237.com/demos/philadelphia-relief/#P=wissahickon',
     );
     assert.equal(buildShareUrl('https://x/', createStore().get()), 'https://x/');
   });

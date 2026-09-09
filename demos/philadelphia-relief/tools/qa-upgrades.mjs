@@ -9,7 +9,7 @@ const argOf = (name, fallback) => {
   const i = args.indexOf(name);
   return i >= 0 && args[i + 1] ? args[i + 1] : fallback;
 };
-const URL = argOf('--url', 'http://127.0.0.1:8731/games/demos/philadelphia-relief/');
+const URL = argOf('--url', 'http://127.0.0.1:8731/demos/philadelphia-relief/');
 const OUT = argOf('--out', '/tmp/philly-upgrades-qa');
 const chrome = ['/usr/bin/google-chrome', '/usr/bin/chromium'].find(existsSync);
 const views = [

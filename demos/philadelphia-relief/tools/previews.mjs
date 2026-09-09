@@ -7,7 +7,7 @@
  * images are static assets committed with the site; nothing is fetched from
  * anywhere at run time.
  *
- *   node tools/previews.mjs --url http://127.0.0.1:8731/games/demos/philadelphia-relief/
+ *   node tools/previews.mjs --url http://127.0.0.1:8731/demos/philadelphia-relief/
  */
 import { chromium } from 'playwright';
 import { existsSync } from 'node:fs';
@@ -21,7 +21,7 @@ const argOf = (flag, fallback) => {
   const i = process.argv.indexOf(flag);
   return i >= 0 && process.argv[i + 1] ? process.argv[i + 1] : fallback;
 };
-const URL = argOf('--url', 'http://127.0.0.1:8731/games/demos/philadelphia-relief/');
+const URL = argOf('--url', 'http://127.0.0.1:8731/demos/philadelphia-relief/');
 const chrome = ['/usr/bin/google-chrome', '/usr/bin/chromium', '/usr/bin/chromium-browser'].find((p) => existsSync(p));
 
 await mkdir(OUT, { recursive: true });

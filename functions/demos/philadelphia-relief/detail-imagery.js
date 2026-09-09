@@ -1,4 +1,4 @@
-import { IMAGERY_STATES } from '../../../../games/demos/philadelphia-relief/data/imagery-states.js';
+import { IMAGERY_STATES } from '../../../demos/philadelphia-relief/data/imagery-states.js';
 
 const SOURCE =
   "https://basemap.nationalmap.gov/arcgis/rest/services/USGSImageryOnly/MapServer/export";
