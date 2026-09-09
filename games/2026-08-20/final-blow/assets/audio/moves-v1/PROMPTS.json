@@ -1,0 +1,146 @@
+[
+  {
+    "id": "jab-a",
+    "prompt": "One single fast bare fist jab striking a leather boxing pad, sharp dry slap and tight low thud. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.5,
+    "requestId": "01a08422-2952-7e73-bfbb-d1fb0c76553f"
+  },
+  {
+    "id": "jab-b",
+    "prompt": "One single compact bare knuckle body punch striking a padded torso, crisp meaty pop and short cloth snap. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.5,
+    "requestId": "01a08422-3d00-7c91-b019-3423d7838d8c"
+  },
+  {
+    "id": "heavy-a",
+    "prompt": "One single powerful heavy hook punch landing on a leather body shield, hard slap over dense deep chest thump. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.6,
+    "requestId": "01a08422-743b-7e41-8edc-cbc3e8d3b2cc"
+  },
+  {
+    "id": "heavy-b",
+    "prompt": "One single devastating uppercut impact on a heavy boxing body pad, sharp crack with weighty low punch and brief cloth crunch. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.6,
+    "requestId": "01a08422-9a29-78a3-a17c-00b11ee9945b"
+  },
+  {
+    "id": "kick-a",
+    "prompt": "One single fast sneaker kick striking a heavy padded torso, broad leather smack, compact woody body thud. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.5,
+    "requestId": "01a08422-4f76-7fa3-a88b-3eb882bdbc68"
+  },
+  {
+    "id": "kick-b",
+    "prompt": "One single powerful roundhouse kick landing on a dense leather kick shield, sharp wide whack with deep short thump. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.65,
+    "requestId": "01a08422-61d6-78d0-8535-0eec235cc1e8"
+  },
+  {
+    "id": "block-a",
+    "prompt": "One single punch blocked by two leather gloves and forearms, tight dry padded clap, muffled low knock, no body crunch. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.5,
+    "requestId": "01a08422-8850-71f0-b4f9-5bfde228a778"
+  },
+  {
+    "id": "block-b",
+    "prompt": "One single hard kick blocked by a leather forearm guard, solid dry double knock and leather creak. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.55,
+    "requestId": "01a08422-ace6-7c53-8ba9-230ff37b2030"
+  },
+  {
+    "id": "whoosh-light",
+    "prompt": "One single very fast short fist swing through air, close sharp cloth sleeve swish, quick fssht, no impact. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.5,
+    "requestId": "01a08422-bfb9-7e53-8e47-f79faf3b2804"
+  },
+  {
+    "id": "whoosh-heavy",
+    "prompt": "One single powerful roundhouse swing through air, fast broad low cloth whip whoosh with a crisp ending, no impact. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.55,
+    "requestId": "01a08422-e4e5-7bc2-b2d8-ad7fb92111bb"
+  },
+  {
+    "id": "throw",
+    "prompt": "One single forceful martial arts hip throw release, heavy jacket cloth grab and short rushing body movement, no landing. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.7,
+    "requestId": "01a08422-d1bf-7e92-ad25-b74083946a4e"
+  },
+  {
+    "id": "fall",
+    "prompt": "One single heavy padded body landing on concrete, dense low slam with clothing slap and brief gritty debris rattle. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.7,
+    "requestId": "01a08422-f735-78d3-8d2f-6f3801ef43a6"
+  },
+  {
+    "id": "deathblow",
+    "prompt": "One single seismic fist blast, immediate deep rock-cracking impact, crunching gravel and short powerful low rumble. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 1,
+    "requestId": "01a08423-23c9-72d3-9b71-02b471a8ca0d"
+  },
+  {
+    "id": "jez",
+    "prompt": "One single martial arts neon palm blast, fast airy palm whip into tight resonant bass pulse and short bright electrical crack. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.85,
+    "requestId": "01a08423-0922-7110-a380-641d5a414230"
+  },
+  {
+    "id": "alan",
+    "prompt": "One single wet projectile bursting, short sticky splat and quick bubbly squelch, heavy physical liquid Foley. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.7,
+    "requestId": "01a08423-3612-7b40-94c3-88c9366bbc7d"
+  },
+  {
+    "id": "post",
+    "prompt": "One single pressurized spray-paint attack, metallic aerosol click into forceful short paint hiss and gritty splatter. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.8,
+    "requestId": "01a08423-80d6-7030-81bc-382206ee19cd"
+  },
+  {
+    "id": "benny",
+    "prompt": "One single high voltage lightning strike from a fast fighter, immediate sharp electrical snap with dense buzzing crackle dying quickly. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.85,
+    "requestId": "01a08423-48bb-7590-8548-f08c0155acca"
+  },
+  {
+    "id": "donald",
+    "prompt": "One single powerful golf club swing striking a golf ball, crisp metallic club ting and sharp hard ball crack with short swish. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.7,
+    "requestId": "01a08423-5b28-7731-a7b8-4ac8d445e6d3"
+  },
+  {
+    "id": "cyraxx",
+    "prompt": "One single ugly crawling insect magic blast, dry chitin clicks and raspy insect wings into a gritty crunchy impact. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.8,
+    "requestId": "01a08423-6d5a-7183-b90b-66fffe2eff0e"
+  },
+  {
+    "id": "ali",
+    "prompt": "One single aggressive vinyl record scratch attack, fast turntable chirp and gritty record scratch ending in a deep punchy bass hit. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.8,
+    "requestId": "01a08423-a5fc-7fe3-874b-70d03dce3c26"
+  },
+  {
+    "id": "devil",
+    "prompt": "One single supernatural forest curse attack, rush of dark wind, rattling dry bones and a low rough haunting resonance, no human voices. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 1,
+    "requestId": "01a08423-9379-7620-9922-0d10ed9c130a"
+  },
+  {
+    "id": "commissioner",
+    "prompt": "One single heavy metal walking cane strike, sharp steel clank with woody low thud and brief metallic ring. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.7,
+    "requestId": "01a08423-b87a-7273-8cd9-df56f0ee691c"
+  },
+  {
+    "id": "metal",
+    "prompt": "One single small steel knife ricochet, crisp metallic tick and short bright blade ring. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.5,
+    "requestId": "01a08423-cef8-7e93-9c55-aa9a4a8c1852"
+  },
+  {
+    "id": "wire",
+    "prompt": "One single heavy coiled electrical cable whipped onto concrete, rubber slap and short coarse cable rattle. Professional high-detail cinematic fighting game sound effect. ONE isolated event immediately at the start, quick natural decay to silence. Dry close studio Foley, controlled bass, no clipping, no long reverb. No speech, no grunts, no music, no background ambience.",
+    "duration": 0.5,
+    "requestId": "01a08423-e1a5-71e3-8a7f-bb4435ebb1d9"
+  }
+]
