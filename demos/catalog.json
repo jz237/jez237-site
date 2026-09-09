@@ -42,5 +42,27 @@
       "Mouse & touch"
     ],
     "note": "Desktop & mobile · Interactive sculpture · Preview shows concept artwork"
+  },
+  {
+    "id": "003",
+    "title": "Fluid Lab",
+    "category": "WebGL · Fluid simulation",
+    "description": "Stir color into motion. Paint flowing dye, build swirling currents, and explore a real-time fluid simulation with hands-on controls.",
+    "url": "fluid-lab/",
+    "image": "assets/fluid-lab.svg",
+    "imageAlt": "Illustrated cyan, violet and pink currents swirling across a dark background",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/fluid-lab",
+    "features": [
+      "Drag to stir",
+      "Touch controls",
+      "Pressure & vorticity",
+      "Bloom & dye settings"
+    ],
+    "facts": [
+      "GPU simulation",
+      "Live controls",
+      "Mouse & touch"
+    ],
+    "note": "WebGL · Desktop & mobile · Interactive fluid sandbox"
   }
 ]
