@@ -1,4 +1,5 @@
 // Uses independent preview fighters; never advances or rewinds a live match.
+import {FULL_LIBRARY_FIGHTERS} from './full-library.mjs';
 const normals = [];
 for (const [action,label] of [['light','Light'],['heavy','Heavy']]) {
  for (const [limb,word] of [['punch','punch'],['kick','kick']]) {
@@ -91,7 +92,7 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
   const token=++request;ready=false;playing=false;controls();el('Status').textContent='Loading painted artwork…';
   try{
    const next=await prepare(fighterSelect.value);if(token!==request||!dialog.open)return;
-   fighter=next;step=['jez','benny'].includes(fighter.def.id)?.125:1;el('Frame').step=step;
+   fighter=next;step=FULL_LIBRARY_FIGHTERS.includes(fighter.def.id)?.125:1;el('Frame').step=step;
    const previous=moveSelect.value;
    const available=VIEWER_MOVES.filter(row=>row.motion||row.pose||row.reaction||move(fighter,row.action,row.context));
    moveSelect.replaceChildren(...available.map(row=>new Option(row.label,row.id)));

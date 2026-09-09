@@ -1,4 +1,4 @@
-import {FULL_LIBRARY_FIGHTERS,FULL_LIBRARY_BANKS,createFullLibrarySelector,sourceLibraryBank,fullLibraryAttackFrame} from './engine/full-library.mjs';
+import {FULL_LIBRARY_FIGHTERS,fullLibraryBanks,createFullLibrarySelector,sourceLibraryBank,fullLibraryAttackFrame} from './engine/full-library.mjs';
 import {FULL_REGISTRATION} from './engine/full-registration.mjs';
 import {SMOOTH_FIGHTERS,SMOOTH_BANKS,createSmoothSelector,smoothAttackFrame,smoothVerticalOffset} from './engine/painted-smooth.mjs';
 import {RECOVERY_BANK,RECOVERY_FIGHTERS,createRecoverySelector,plantedNormal} from './engine/painted-recovery.mjs';
@@ -1061,7 +1061,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.13` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.14` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1412,7 +1412,7 @@ const selectFullLibrary=createFullLibrarySelector();
 const selectFullLibraryRender=createFullLibrarySelector();
 function ensureFullAtlas(id,bank){
  const source=sourceLibraryBank(bank);
- if(!fullLibraryEnabled||!FULL_LIBRARY_FIGHTERS.includes(id)||!FULL_LIBRARY_BANKS.includes(source))return null;
+ if(!fullLibraryEnabled||!fullLibraryBanks(id).includes(source))return null;
  const key=`${id}:${source}`;
  if(!fullAtlases[key]){const image=new Image();image.src=`assets/full-library/${id}-${source}-v1.webp`;fullAtlases[key]=image;image.decode().catch(()=>{});}
  return fullAtlases[key];
@@ -1809,7 +1809,7 @@ function preloadAuthoredBanks(fighterIds) {
   // fighter whose manifest block rejects a cell.
   ensureMovesManifest();
   for (const id of ids) {
-    if(fullLibraryEnabled&&FULL_LIBRARY_FIGHTERS.includes(id))for(const bank of FULL_LIBRARY_BANKS)ensureFullAtlas(id,bank);
+    if(fullLibraryEnabled)for(const bank of fullLibraryBanks(id))ensureFullAtlas(id,bank);
     // Counting only FIRST preloads keeps the probe meaningful: makeFighter is
     // also the rollback rebuild path, and a resimulation must not look like a
     // fresh preload. (5.1: the select screen preloads too, so a browsed
@@ -32542,7 +32542,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.13-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.14-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -33282,7 +33282,7 @@ const moveViewer = createMoveViewer({
   const banks = ['base','specials','motion','motion2','motion3','walk','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','painted-flow',BRIDGE_BANK,FOOTWORK_BANK,RECOVERY_BANK,...SMOOTH_BANKS,
     ...INBETWEEN_BANKS.map(companionBank),'inbetween-approach'];
   await Promise.all(banks.map(bank => paletteAtlas(id,0,bank)?.decode?.().catch(()=>{})));
-  if(fullLibraryEnabled)await Promise.all(FULL_LIBRARY_BANKS.map(bank=>ensureFullAtlas(id,bank)?.decode?.().catch(()=>{})));
+  if(fullLibraryEnabled)await Promise.all(fullLibraryBanks(id).map(bank=>ensureFullAtlas(id,bank)?.decode?.().catch(()=>{})));
   // Padded atlases have no decode method; wait for their source-image jobs too.
   await Promise.all([...authoredDecodeState].filter(([key])=>key.startsWith(id+":" )).map(([,entry])=>entry.promise));
   return fighter;
@@ -34035,7 +34035,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.13-ringside",
+  version: "5.7.14-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

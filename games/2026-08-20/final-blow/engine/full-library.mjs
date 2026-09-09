@@ -1,9 +1,17 @@
-// Presentation-only companions for every populated Jez/Benny movement bank.
+// Presentation-only companions for every populated roster movement bank.
 // The original pose descriptor remains authoritative for combat and anatomy.
-export const FULL_LIBRARY_FIGHTERS=['jez','benny'];
+import {recoveryProgress} from './combat-presentation.mjs';
+export const FULL_LIBRARY_FIGHTERS=['jez','benny','alan','ali','commissioner','cyraxx','deathblow','devil','donald','post'];
 export const fullLibraryBank=bank=>`full-${bank}`;
 export const sourceLibraryBank=bank=>bank.startsWith('full-')?bank.slice(5):bank;
 export const FULL_LIBRARY_BANKS=['base','motion','motion2','motion3','walk','specials','specials-legacy','unified','unified-ext','unified-ext2','unified-ext3','unified-ext4','unified-ext5','inbetween-unified','inbetween-unified-ext2','inbetween-unified-ext3','inbetween-unified-ext4','inbetween-unified-ext5','inbetween-specials','inbetween-approach','painted-flow','painted-bridges','painted-footwork','painted-recovery','smooth-flow','smooth-footwork','smooth-approach','smooth-contact'];
+export function fullLibraryBanks(id){
+ if(!FULL_LIBRARY_FIGHTERS.includes(id))return [];
+ if(id==='jez'||id==='benny')return FULL_LIBRARY_BANKS;
+ return FULL_LIBRARY_BANKS.filter(bank=>!bank.startsWith('smooth-')
+  &&(bank!=='walk'||['ali','cyraxx','deathblow','post'].includes(id))
+  &&(id!=='commissioner'||!['specials','specials-legacy','inbetween-specials'].includes(bank)));
+}
 
 const fraction=n=>n-Math.floor(n);
 export function fullLibraryAttackFrame(f,previous,alpha){
@@ -20,9 +28,12 @@ export function normalLibraryPhase(f,source){
  if(![n,start,end,total].every(Number.isFinite))return null;
  if(source==='smooth-contact')return Math.min(.999999,Math.max(0,(n-start)/Math.max(1,end-start)));
  if(!['smooth-flow','painted-flow','painted-recovery','smooth-approach'].includes(source))return null;
- const p=n<start?Math.max(0,n-1)/Math.max(1,start-1):(n-end)/Math.max(1,total-end);
+ let p=n<start?Math.max(0,n-1)/Math.max(1,start-1):(n-end)/Math.max(1,total-end);
  if(n>=start&&n<end)return null;
- const slots=source==='smooth-approach'?2:a.advanceSpeed?(n<start?4:3):8;
+ // Match each bank's original selector, including the missed-strike recoil.
+ if(source==='painted-recovery'&&n<start)return null;
+ if(source==='painted-flow'&&n>=end)p=recoveryProgress(f,p);
+ const slots=source==='smooth-approach'?2:source==='painted-recovery'?4:source==='painted-flow'?(n<start?4:3):8;
  return fraction(Math.max(0,Math.min(.999999,p))*slots);
 }
 
@@ -34,6 +45,7 @@ export function createFullLibrarySelector(){
   if(f.attacking&&f.attackFrame>=f.attacking.totalFrames)return pose;
   const source=pose.artBank||pose.bank,frame=pose.frame;
   if(!Number.isInteger(frame)||source.startsWith('full-'))return pose;
+  if(!fullLibraryBanks(f.def.id).includes(source))return pose;
   const key=`${source}:${frame}`;
   let entry=entries.get(owner);
   if(!entry||entry.key!==key||tick<entry.tick){
