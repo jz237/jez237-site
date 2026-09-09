@@ -1,6 +1,5 @@
 import * as T from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
-import { RoomEnvironment } from 'three/addons/environments/RoomEnvironment.js';
 import { chargeState } from '@/lib/learning';
 import { RoundedBoxGeometry } from 'three/addons/geometries/RoundedBoxGeometry.js';
 import { RectAreaLightUniformsLib } from 'three/addons/lights/RectAreaLightUniformsLib.js';
@@ -88,12 +87,21 @@ export function createEngineScene(
     'aria-label',
     'Interactive 3D V8 engine. Drag to orbit, scroll to zoom, right-drag to pan.',
   );
-  const pmrem = new T.PMREMGenerator(renderer),
-    room = new RoomEnvironment();
-  const environment = pmrem.fromScene(room, 0.04);
+  const pmrem = new T.PMREMGenerator(renderer), room = new T.Scene();
+  // Dark studio with distinct softboxes: broad white-room reflections flatten
+  // metallic castings, while these strips describe curvature and bevels.
+  room.background = new T.Color(0x45515d);
+  for (const [x,y,z,w,h,power,color] of [
+    [4,5,3,3,7,5,0xffeee0],[-5,3,1,2,8,4,0xc5dfff],
+    [0,6,-5,7,2,6,0xf1f8ff],[1,-3,4,5,1,1.5,0x758798],
+  ]) {
+    const panel = new T.Mesh(new T.PlaneGeometry(w,h), new T.MeshBasicMaterial({color:new T.Color(color).multiplyScalar(power),side:T.DoubleSide}));
+    panel.position.set(x,y,z); panel.lookAt(0,0,0); room.add(panel);
+  }
+  const environment = pmrem.fromScene(room, 0.025);
   scene.environment = environment.texture;
   scene.environmentIntensity = 0.65;
-  room.dispose();
+  room.traverse(o => { if(o instanceof T.Mesh) { o.geometry.dispose(); (o.material as T.Material).dispose(); } });
   const camera = new T.PerspectiveCamera(35, 1, 0.1, 100);
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.listenToKeyEvents(renderer.domElement);
@@ -101,11 +109,11 @@ export function createEngineScene(
   controls.minDistance = 1.2;
   controls.maxDistance = 26;
   controls.maxPolarAngle = Math.PI * 0.91;
-  const cameraTarget = V(10, 5.7, 7.5);
-  const orbitTarget = V(0, 0.9, 0);
+  const cameraTarget = V(9.4, 4.8, 7.2);
+  const orbitTarget = V(0, 1.25, 0);
   let cameraTransition = false;
   camera.position.copy(cameraTarget);
-  controls.target.set(0, 0.9, 0);
+  controls.target.set(0, 1.25, 0);
   controls.addEventListener('start', () => {
     cameraTransition = false;
   });
@@ -140,6 +148,9 @@ export function createEngineScene(
   key.shadow.bias = -0.00015;
   key.shadow.radius = 3;
   scene.add(key);
+  const sectionFill = new T.DirectionalLight(0xd8e8ff, 1.1);
+  sectionFill.position.set(7, -1, 5);
+  scene.add(sectionFill);
   [
     [0xffe1be, 100, 4, 8, 4],
     [0xa1c5ff, 90, -5, 4, 1],
@@ -154,12 +165,12 @@ export function createEngineScene(
   const mat = (color: number, metalness = 0.8, roughness = 0.3) =>
     new T.MeshPhysicalMaterial({ color, metalness, roughness });
   const steel = mat(0xa7b3bd, 0.92, 0.24),
-    aluminum = mat(0xd2d7d7, 0.78, 0.32),
+    aluminum = mat(0x9ca8b1, 0.88, 0.32),
     dark = mat(0x30383e, 0.78, 0.33),
     black = mat(0x121920, 0.35, 0.42),
     brass = mat(0xbba16c, 0.8, 0.29);
-  const blockMat = mat(0x75818b, 0.7, 0.43),
-    headMat = mat(0x8c979d, 0.8, 0.32),
+  const blockMat = mat(0x596873, 0.8, 0.43),
+    headMat = mat(0x7b8892, 0.85, 0.32),
     coverMat = mat(0x424c55, 0.82, 0.29);
   const castTexture = surfaceTexture('cast'),
     brushedTexture = surfaceTexture('brushed'),
@@ -190,7 +201,9 @@ export function createEngineScene(
   brass.name = 'Brass / bronze finish';
   blockMat.name = headMat.name = 'Cast aluminum';
   coverMat.name = 'Coated aluminum';
-  const cutPlane = new T.Plane(V(-1, 0, 0), 0.16),
+  // Section parallel to the near cylinder axes, retaining the inner half of
+  // that bank rather than deleting the whole bank at the engine centerline.
+  const cutPlane = new T.Plane(V(-Math.SQRT1_2, Math.SQRT1_2, 0), -0.12),
     pickables: T.Object3D[] = [];
   const part = (name: string, description: string, cylinder?: number) => ({
     name,
@@ -446,12 +459,19 @@ export function createEngineScene(
     const shape = new T.Shape();
     shape.moveTo(-0.52, -2.7);
     shape.lineTo(0.52, -2.7);
-    shape.lineTo(0.68, -2.54);
-    shape.lineTo(0.68, 2.54);
-    shape.lineTo(0.52, 2.7);
-    shape.lineTo(-0.52, 2.7);
-    shape.lineTo(-0.68, 2.54);
-    shape.lineTo(-0.68, -2.54);
+    if (top < 2.6 && height > 0.1) {
+      // Scalloped water-jacket casting, fuller around bores and relieved between them.
+      for (let j=0;j<4;j++) shape.bezierCurveTo(0.83,-2.7+j*1.35+0.25,0.83,-2.7+j*1.35+1.10,0.52,-2.7+(j+1)*1.35);
+      shape.lineTo(-0.52,2.7);
+      for (let j=0;j<4;j++) shape.bezierCurveTo(-0.83,2.7-j*1.35-0.25,-0.83,2.7-j*1.35-1.10,-0.52,2.7-(j+1)*1.35);
+    } else {
+      shape.lineTo(0.68, -2.54);
+      shape.lineTo(0.68, 2.54);
+      shape.lineTo(0.52, 2.7);
+      shape.lineTo(-0.52, 2.7);
+      shape.lineTo(-0.68, 2.54);
+      shape.lineTo(-0.68, -2.54);
+    }
     shape.closePath();
     for (let j = 0; j < 4; j++) {
       for (const x of top > 2.6 ? [-0.21, 0.21] : [0]) {
@@ -498,7 +518,7 @@ export function createEngineScene(
     heads.add(head);
     valveGroup.add(valve);
     slabWithBores(bank, blockMat, 2.48, 1.27, sign);
-    slabWithBores(head, headMat, 2.7, 0.2, sign);
+    slabWithBores(head, headMat, 2.79, 0.29, sign);
     for (const side of [-1, 1]) {
       for (const y of [1.3, 2.32])
         box(
@@ -566,7 +586,7 @@ export function createEngineScene(
         V(0, 3.45, 0),
         part(
           'Valve cover',
-          'Protects the rocker arms and valve springs. The near-bank cover is removed in cutaway view; the far cover remains for context.',
+          'Protects the rocker arms and valve springs. The longitudinal section opens the near cover while retaining its inner wall and the complete far-bank cover.',
         ),
       ),
     );
@@ -1103,17 +1123,18 @@ export function createEngineScene(
         z = cylinderState(id, 0).z;
       const hi = part(
         `Exhaust header · cylinder ${id}`,
-        'Carries hot exhaust gas away from the cylinder head. Welded primary pipes are shown; the downstream collector is omitted.',
+        'Carries hot exhaust gas away from the cylinder head through a curved primary pipe into the common collector. Routing is illustrative, not tuned for a particular engine.',
         id,
       );
       tube(
         [
           V(sign * 0.7, 2.61, z),
-          V(sign * 1.02, 2.61, z),
-          V(sign * 1.3, 2.35, z),
-          V(sign * 1.42, 1.88, z),
+          V(sign * 1.10, 2.66, z),
+          V(sign * 1.63, 2.25, z - 0.10),
+          V(sign * 1.77, 1.54, z - 0.30),
+          V(sign * 1.53, 1.10, z - 0.42),
         ],
-        0.145,
+        0.17,
         steel,
         head,
         hi,
@@ -1587,6 +1608,7 @@ export function createEngineScene(
           o.material = (o.material as T.MeshStandardMaterial).clone();
         } else if (o instanceof T.Mesh) {
           const m = (o.material as T.MeshStandardMaterial).clone();
+          m.userData.exterior = /Exhaust|Header|Ignition lead|Spark plug/.test(o.userData.part?.name || '');
           o.material = m;
           castingMaterials.push(m);
         }
@@ -1640,8 +1662,10 @@ export function createEngineScene(
         'Cylinder head',
         'Intake plenum',
         'Multi-layer head gasket',
+        'Cast rocker-cover wall',
+        'Valve cover',
       ].includes(o.userData.part?.name) &&
-      o.geometry.type === 'ExtrudeGeometry',
+      (o.geometry.type === 'ExtrudeGeometry' || o.userData.part?.name === 'Valve cover'),
   ) as T.Mesh[];
   const caps = cappedObjects.map((o, i) =>
     sectionCap(o, cutPlane, scene, 20 + i * 3),
@@ -1831,10 +1855,10 @@ export function createEngineScene(
           ? [2.5, 2.5, 2]
           : style === 'dramatic'
             ? [3, 0.65, 4]
-            : [2.6, 1.8, 3.2];
+            : [4.5, 1.6, 5.2];
       studioLights.forEach((l, i) => (l.intensity = intensities[i]));
       hemisphere.intensity =
-        style === 'technical' ? 1.3 : style === 'dramatic' ? 0.3 : 0.75;
+        style === 'technical' ? 1.3 : style === 'dramatic' ? 0.3 : 0.38;
       key.intensity =
         style === 'technical' ? 1.3 : style === 'dramatic' ? 1.9 : 1.5;
       renderer.toneMappingExposure =
@@ -1898,13 +1922,13 @@ export function createEngineScene(
       previousView !== view &&
       (view === 'exploded' || previousView === 'exploded')
     ) {
-      orbitTarget.set(0, view === 'exploded' ? 1.5 : 0.9, 0);
-      cameraTarget.copy(view === 'exploded' ? V(10, 7.2, 12.5) : V(10, 5.7, 7.5));
+      orbitTarget.set(0, view === 'exploded' ? 1.5 : 1.25, 0);
+      cameraTarget.copy(view === 'exploded' ? V(10, 7.2, 12.5) : V(9.4, 4.8, 7.2));
       cameraTransition = true;
     }
     if (previousView !== view || previousTransparent !== transparent) {
       castingMaterials.forEach((m) => {
-        m.clippingPlanes = [cutPlane];
+        m.clippingPlanes = m.userData.exterior ? [] : [cutPlane];
         m.clipShadows = true;
         m.transparent = transparent;
         m.opacity = transparent ? 0.16 : 1;
@@ -1917,16 +1941,16 @@ export function createEngineScene(
     }
     coverAlpha = T.MathUtils.damp(
       coverAlpha,
-      view === 'cutaway' || transparent ? 0 : 1,
+      transparent ? 0 : 1,
       8,
       dt,
     );
     banks.forEach((b) =>
       b.covers.forEach((c) => {
-        // Keep the far-bank cover for context while exposing the near rockers.
-        const alpha = b.sign === -1 && !transparent ? 1 : coverAlpha;
+        const alpha = coverAlpha;
         c.visible = alpha > 0.01;
         const m = (c as T.Mesh).material as T.MeshStandardMaterial;
+        m.clippingPlanes = [cutPlane];
         m.transparent = alpha < 0.999 || !!m.map;
         m.opacity = alpha;
         m.depthWrite = alpha > 0.95 && !m.map;
@@ -2215,13 +2239,13 @@ export function createEngineScene(
     },
     preset(name: string) {
       const presets: Record<string, T.Vector3> = {
-        perspective: V(10, 5.7, 7.5),
+        perspective: V(9.4, 4.8, 7.2),
         front: V(0, 2, 15),
         side: V(14, 3, 0),
         top: V(0, 16, 0.01),
       };
       cameraTarget.copy(presets[name] || presets.perspective);
-      orbitTarget.set(0, 0.9, 0);
+      orbitTarget.set(0, 1.25, 0);
       cameraTransition = true;
     },
     dispose() {

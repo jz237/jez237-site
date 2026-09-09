@@ -5,9 +5,9 @@ export function pistonGeometry() {
     new T.Vector2(0, 0.13),
     new T.Vector2(0.38, 0.13),
     new T.Vector2(0.405, 0.08),
-    new T.Vector2(0.405, -0.2),
-    new T.Vector2(0.442, -0.2),
-    new T.Vector2(0.454, -0.16),
+    new T.Vector2(0.405, -0.42),
+    new T.Vector2(0.432, -0.42),
+    new T.Vector2(0.454, -0.36),
     new T.Vector2(0.458, 0.17),
     new T.Vector2(0.445, 0.23),
   ];
@@ -26,7 +26,7 @@ export function pistonGeometry() {
     if (y < -0.07)
       p.setY(
         i,
-        y + (0.085 * Math.pow(Math.abs(z) / 0.458, 4) * (-0.07 - y)) / 0.13,
+        y + (0.19 * Math.pow(Math.abs(z) / 0.458, 4) * (-0.07 - y)) / 0.35,
       );
   }
   g.computeVertexNormals();
@@ -106,8 +106,10 @@ export function sectionCap(
   }
   const material = new T.MeshStandardMaterial({
     color: 0xe5a24f,
-    metalness: 0.6,
-    roughness: 0.48,
+    metalness: 0.12,
+    roughness: 0.65,
+    emissive: 0x9d5214,
+    emissiveIntensity: 0.28,
     side: T.DoubleSide,
     stencilWrite: true,
     stencilRef: 0,
@@ -137,7 +139,7 @@ export function sectionCap(
       );
   };
   const cap = new T.Mesh(new T.PlaneGeometry(18, 18), material);
-  cap.rotation.y = Math.PI / 2;
+  cap.quaternion.setFromUnitVectors(new T.Vector3(0, 0, 1), plane.normal);
   cap.renderOrder = order + 1;
   cap.userData.sectionHelper = true;
   cap.onAfterRender = (renderer) => renderer.clearStencil();
@@ -155,7 +157,7 @@ export function sectionCap(
       special.forEach((o) => {
         o.visible = visible;
       });
-      cap.position.set(plane.constant, 1.5, 0);
+      plane.coplanarPoint(cap.position);
     },
   };
 }
