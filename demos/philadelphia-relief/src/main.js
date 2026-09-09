@@ -1,3 +1,4 @@
+import { wireNavigation } from './navigation.js?v=philly-2026090904';
 import { wireLooks } from './looks.js?v=philly-2026090904';
 import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090903';
 import { createOrientation } from './orientation.js?v=philly-2026090903';
@@ -494,7 +495,8 @@ async function boot() {
   const ui = wireInterface({ store, motion, data, projection, rig, structures });
   const disposeLooks = wireLooks($('lookChoices'), store, () => motion.stop());
   const orientation = createOrientation({ host: $('orientation'), projection, water: data.water,
-    onVisit: id => ui.visitPreset(id) });
+    onVisit: id => ui.visitPreset(id), onNavigate: target => motion.flyTo(target) });
+  const navigation=wireNavigation($('mapNavigation'),rig,motion);
 
   // Comparison modes bring their required counterpart into view. The choices
   // remain ordinary state, so the resulting split survives a shared URL.
@@ -817,7 +819,7 @@ async function boot() {
 
     const camera = rig.camera;
     const now = rig.pose();
-    orientation.update(now, viewW / viewH, dt);
+    orientation.update(now, viewW / viewH, dt); navigation.update(now);
     const miniature = dioramaAmount(now.dist, state.diorama && state.layers.terrain
       && state.era === 'present' && state.compareMode === 'off');
     const modelWater = state.diorama && state.layers.terrain && state.layers.structures
@@ -1066,7 +1068,7 @@ async function boot() {
 
   window.addEventListener('pagehide', () => {
     imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
-    orientation.dispose(); disposeLooks();
+    orientation.dispose(); navigation.dispose(); disposeLooks();
   },
       { once: true });
 
