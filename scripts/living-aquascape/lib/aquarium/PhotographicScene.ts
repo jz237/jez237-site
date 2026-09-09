@@ -1,5 +1,6 @@
 import * as T from 'three';
 import {waterSurface} from './WaterSurface';
+import {plantMotion,depthOcclusion} from './SceneDepth';
 import {illumination,type Ecology,type Environment} from './Ecosystem';
 export type FishInfo={id:number;species:string;size:number;speed:number;hunger:number;mood:string;preferredDepth:string};
 type Swimmer={mesh:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;x:number;y:number;vx:number;vy:number;targetX:number;targetY:number;size:number;phase:number;depth:number;species:number;turn:number};
@@ -16,35 +17,17 @@ float box(vec2 p,vec2 a,vec2 b,float edge){
  return lo.x*lo.y*hi.x*hi.y;
 }
 ${waterSurface}
-vec2 plant(vec2 p,vec2 base,vec2 extent,float phase,float flexibility){
- float h=(p.y-base.y)/extent.y;
- float width=1.0-smoothstep(.55,1.0,abs(p.x-base.x)/extent.x);
- float tip=smoothstep(0.0,.85,h)*(1.0-smoothstep(.9,1.12,h));
- float current=sin(time*.95+phase-h*1.15)*.72+sin(time*1.63+phase*2.1-h*.7)*.28;
- // The outlet pushes upper leaves left; elastic stems recoil, with fixed bases.
- float bend=flow*flexibility*width*tip;
- return vec2(bend*(.30+current)*.0065,bend*sin(time*1.15+phase-h)*.0009);
-}
+${plantMotion}
 void main(){
  vec2 p=vUv;
  float tank=box(p,vec2(.168,.292),vec2(.799,.815),.012);
- vec2 drift=vec2(0.0);
- drift+=plant(p,vec2(.203,.555),vec2(.034,.19),.3,.85);
- drift+=plant(p,vec2(.272,.552),vec2(.054,.205),1.2,1.05);
- drift+=plant(p,vec2(.478,.660),vec2(.051,.135),2.6,1.0);
- drift+=plant(p,vec2(.554,.538),vec2(.038,.157),3.4,1.15);
- drift+=plant(p,vec2(.602,.486),vec2(.048,.159),4.1,1.05);
- drift+=plant(p,vec2(.656,.450),vec2(.037,.126),5.5,.95);
- drift+=plant(p,vec2(.727,.410),vec2(.048,.222),.9,1.3);
- drift+=plant(p,vec2(.786,.430),vec2(.016,.300),2.1,1.35);
- drift+=plant(p,vec2(.372,.443),vec2(.024,.089),4.9,.55);
- // Carpet remains nearly still; taller, supple plants carry the movement.
- drift+=plant(p,vec2(.430,.325),vec2(.22,.076),3.7,.12);
+ vec2 drift=plantingOffset(p);
  p+=drift*tank;
  vec3 col=surfaceWater(vUv,texture2D(photograph,p).rgb);
  float leaf=smoothstep(.015,.11,col.g-max(col.r,col.b));
  float shimmer=sin(p.x*140.0+p.y*45.0-time*.4)*sin(p.y*89.0-time*.31);
- col+=vec3(.55,.75,.72)*shimmer*.004*tank*day;
+ float caustic=pow(max(0.0,sin(p.x*115.0+p.y*39.0+time*.48)*sin(p.y*96.0-p.x*25.0-time*.37)),8.0);
+ col+=vec3(.55,.75,.72)*(shimmer*.004+caustic*.035*leaf)*tank*day;
  float oldleaf=leaf*tank*(1.0-smoothstep(.3,.65,p.y));
  col=mix(col,col*vec3(.70,.84,.54),clamp(algae*oldleaf*.8,0.0,.6));
  float lamp=box(p,vec2(.215,.867),vec2(.773,.913),.008);
@@ -68,6 +51,7 @@ export class PhotographicScene{
  private flow=new T.Group();private roots=new T.Group();private bubbles=new T.Group();private food=new T.Group();
  private bubbleData:{mesh:T.Mesh;x:number;y:number;originX:number;originY:number;speed:number;phase:number;co2:boolean}[]=[];
  private arrows:{mesh:T.Mesh;path:T.CatmullRomCurve3;phase:number}[]=[];
+ private markers:{button:HTMLButtonElement;x:number;y:number;mode:string}[]=[];
  private dust:T.Points;private time=0;private mode='Living';private destroyed=false;private seed=237;private quality='High';
  private zoomTarget=1;private zoomCurrent=1;private centerX=0;private centerY=0;private targetX=0;private targetY=0;
  private pointer:{startX:number;startY:number;cx:number;cy:number;distance:number}|null=null;
@@ -89,6 +73,7 @@ export class PhotographicScene{
  this.dust=new T.Points(dustGeometry,new T.PointsMaterial({size:1.1,color:0xc7d7c6,transparent:true,opacity:.18,depthWrite:false}));this.scene.add(this.dust);
  const ringGeometry=new T.RingGeometry(.65,1.15,10);const pearlMaterial=new T.MeshBasicMaterial({color:0xd5eee3,transparent:true,opacity:.45,side:T.DoubleSide,depthWrite:false});
  for(let i=0;i<62;i++){const co2=i<30;const x=co2?1252+this.random()*12:520+this.random()*665,y=co2?602:465+this.random()*150;const mesh=new T.Mesh(ringGeometry,pearlMaterial);mesh.position.copy(this.pos(x,y,3));mesh.scale.setScalar(co2?.7:1);this.bubbles.add(mesh);this.bubbleData.push({mesh,x,y:205+this.random()*(y-205),originX:x,originY:y,speed:co2?10+this.random()*6:14+this.random()*12,phase:this.random()*6,co2});}
+ for(const [label,x,y,mode] of [['Plant',458,351,'plants'],['Roots',1000,609,'roots'],['Filter',1463,437,'equipment']] as const){const button=document.createElement('button');button.className='scene-hotspot';button.textContent='+ '+label;button.setAttribute('aria-label','Inspect '+label.toLowerCase());button.onclick=()=>this.onInspect?.(mode);host.appendChild(button);this.markers.push({button,x,y,mode});}
  this.setMode('Living');this.resize();window.addEventListener('resize',this.resize);
  this.canvas.addEventListener('pointerdown',this.down);this.canvas.addEventListener('pointermove',this.move);this.canvas.addEventListener('pointerup',this.up);this.canvas.addEventListener('pointercancel',this.cancel);this.canvas.addEventListener('wheel',this.wheel,{passive:false});
  }
@@ -105,10 +90,16 @@ export class PhotographicScene{
  for(let i=0;i<25;i++){const species=i<16?0:i<22?1:i===22?2:3;
  const size=species===2?105:species===3?38:30+this.random()*11;
  const texture=this.sprites[species],art=texture.image as HTMLCanvasElement,ratio=art.height/art.width;
- const material=new T.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{map:{value:texture},time:{value:this.random()*30},activity:{value:1},light:{value:1},opacity:{value:species===3?.85:.88}},vertexShader:'uniform float time,activity;varying vec2 vUv;void main(){vUv=uv;vec3 p=position;float tail=pow(1.0-uv.x,3.0);p.y+=sin(time*9.0-uv.x*8.0)*tail*1.2*activity;p.y+=sin(time*5.0)*sin(uv.y*3.14159)*.12;gl_Position=projectionMatrix*modelViewMatrix*vec4(p,1.0);}',fragmentShader:'uniform sampler2D map;uniform float light,opacity;varying vec2 vUv;void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;c.rgb*=vec3(.84,.94,.93)*(.45+light*.55);gl_FragColor=vec4(c.rgb,c.a*opacity);\n#include <colorspace_fragment>\n}'});
- const mesh=new T.Mesh(new T.PlaneGeometry(size,size*ratio,24,6),material);mesh.renderOrder=3;
+ const material=new T.ShaderMaterial({transparent:true,depthWrite:false,uniforms:{map:{value:texture},time:{value:this.random()*30},activity:{value:1},light:{value:1},opacity:{value:.96},photograph:{value:this.photograph},depth:{value:1},flow:{value:.65},sceneTime:{value:0}},vertexShader:"uniform float time,activity;varying vec2 vUv;varying vec2 sceneUv;void main(){vUv=uv;vec3 p=position;float tail=pow(1.0-uv.x,3.0);p.y+=sin(time*9.0-uv.x*8.0)*tail*1.2*activity;p.y+=sin(time*5.0)*sin(uv.y*3.14159)*.12;vec4 world=modelMatrix*vec4(p,1.0);sceneUv=vec2(world.x/1672.0+.5,world.y/941.0+.5);gl_Position=projectionMatrix*viewMatrix*world;}",fragmentShader:`uniform sampler2D map,photograph;uniform float light,opacity,depth,flow,sceneTime;varying vec2 vUv;varying vec2 sceneUv;
+#define time sceneTime
+${plantMotion}
+${depthOcclusion}
+void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;vec2 uv=sceneUv+plantingOffset(sceneUv);float cover=sceneOcclusion(uv,depth);c.rgb*=mix(vec3(.69,.83,.84),vec3(.91,.98,.96),depth)*(.45+light*.55);gl_FragColor=vec4(c.rgb,c.a*opacity*(1.0-cover));
+#include <colorspace_fragment>
+}`});
+ const mesh=new T.Mesh(new T.PlaneGeometry(size,size*ratio,24,6),material);material.side=T.DoubleSide;mesh.renderOrder=3;
  const x=species===3?640+this.random()*560:610+this.random()*610,y=species===3?580+this.random()*30:species===2?420:280+this.random()*235;
- const f={mesh,x,y,vx:(this.random()>.5?1:-1)*18,vy:0,targetX:x,targetY:y,size,phase:this.random()*30,depth:this.random(),species,turn:1};this.fish.push(f);this.scene.add(mesh);
+ const f={mesh,x,y,vx:(this.random()>.5?1:-1)*18,vy:0,targetX:x,targetY:y,size,phase:this.random()*30,depth:species===3?1:.18+this.random()*.65,species,turn:0};this.fish.push(f);this.scene.add(mesh);
  }
  }
  private buildFlow(){for(let i=0;i<9;i++){const y=i*6;const path=new T.CatmullRomCurve3([this.pos(1265,228+y),this.pos(1080,268+y),this.pos(770,282+y),this.pos(385,350+y),this.pos(520,553+y),this.pos(1060,565+y),this.pos(1260,463+y),this.pos(1265,228+y)]);
@@ -133,31 +124,38 @@ export class PhotographicScene{
  this.camera.zoom=this.zoomCurrent;this.camera.position.set(this.centerX,this.centerY,30);this.camera.updateProjectionMatrix();
  this.macroBlend+=((this.mode==='Biology'?1:0)-this.macroBlend)*smooth;const u=this.background.material.uniforms;
  u.time.value=this.time;u.flow.value+=(e.flow/100-u.flow.value)*(1-Math.exp(-dt*4));u.agitation.value+=(e.agitation/100-u.agitation.value)*(1-Math.exp(-dt*4));u.day.value=Math.min(1,illumination(s,e));u.algae.value=s.algae;u.biomass.value=s.biomass;u.macroBlend.value=this.macroBlend;
- this.dust.visible=this.mode!=='Biology';this.bubbles.visible=this.mode!=='Biology';this.food.visible=this.mode!=='Biology';this.dust.rotation.z=Math.sin(this.time*.015)*.003;this.roots.scale.y=.7+s.biomass*.3;this.roots.position.y=(H/2-578)*(1-this.roots.scale.y);
+ this.dust.visible=this.mode!=='Biology';this.bubbles.visible=this.mode!=='Biology';this.food.visible=this.mode!=='Biology';const motes=this.dust.geometry.getAttribute('position') as T.BufferAttribute;
+ if(moveDt){for(let n=0;n<motes.count;n++){let x=motes.getX(n),y=motes.getY(n);const upper=y>50;x+=moveDt*(upper?-1:1)*(2+e.flow*.08);y+=Math.sin(this.time*.4+n)*moveDt*.65;if(x<320-W/2)x=1280-W/2;if(x>1280-W/2)x=320-W/2;motes.setXY(n,x,y);}motes.needsUpdate=true;}this.roots.scale.y=.7+s.biomass*.3;this.roots.position.y=(H/2-578)*(1-this.roots.scale.y);
  for(let i=0;i<this.fish.length;i++){const f=this.fish[i],shrimp=f.species===3;f.mesh.visible=this.mode!=='Biology';
  if(moveDt>0){const bounds=shrimp?[430,1280,563,619]:[350,1290,240,565];if(Math.hypot(f.targetX-f.x,f.targetY-f.y)<45||Math.sin(this.time*.22+f.phase)>.997){f.targetX=bounds[0]+this.random()*(bounds[1]-bounds[0]);f.targetY=bounds[2]+this.random()*(bounds[3]-bounds[2]);}
  if(this.feeding&&!shrimp){f.targetX=1000+Math.sin(f.phase)*80;f.targetY=246+Math.sin(f.phase*2)*20;}
- let ax=(f.targetX-f.x)*.014,ay=(f.targetY-f.y)*.014;
+ const hover=!this.feeding&&Math.sin(this.time*.33+f.phase)>.88;let ax=(f.targetX-f.x)*.028,ay=(f.targetY-f.y)*.028;if(hover){f.vx*=Math.exp(-moveDt*1.8);f.vy*=Math.exp(-moveDt*1.8);ax*=.12;ay*=.12;}
  for(const other of this.fish){if(f===other)continue;const dx=other.x-f.x,dy=other.y-f.y,d=Math.hypot(dx,dy);if(d<28&&d>0){ax-=dx*.12;ay-=dy*.12;}else if(d<140&&f.species===other.species&&!shrimp){ax+=dx*.0008+(other.vx-f.vx)*.016;ay+=dy*.0007+(other.vy-f.vy)*.016;}}
- const pace=shrimp?1.1:f.species===2?9:(s.oxygen<4?9:18)*(this.feeding?1.5:1);
+ const pace=shrimp?1.1:f.species===2?(this.feeding?17:9):(s.oxygen<4?9:18)*(this.feeding?1.5:1);
  f.vx+=ax*moveDt;f.vy+=ay*moveDt;const speed=Math.hypot(f.vx,f.vy);if(speed>pace){f.vx*=pace/speed;f.vy*=pace/speed;}f.x=T.MathUtils.clamp(f.x+f.vx*moveDt,bounds[0],bounds[1]);f.y=T.MathUtils.clamp(f.y+f.vy*moveDt,bounds[2],bounds[3]);
  }
- f.turn+=((f.vx>=0?1:-1)-f.turn)*Math.min(1,moveDt*2);f.mesh.position.copy(this.pos(f.x,f.y,2+f.depth));f.mesh.scale.x=Math.abs(f.turn)<.12?(f.turn>=0?.12:-.12):f.turn;f.mesh.rotation.z=T.MathUtils.clamp(-f.vy*.008,-.12,.12)*(f.vx>0?1:-1);f.mesh.material.uniforms.time.value=this.time+f.phase;f.mesh.material.uniforms.light.value=u.day.value;f.mesh.material.uniforms.activity.value=shrimp?.08:Math.hypot(f.vx,f.vy)/18;
+ const desired=f.vx>=0?0:Math.PI;f.turn+=(desired-f.turn)*(1-Math.exp(-moveDt*2.4));
+ f.mesh.position.copy(this.pos(f.x,f.y+Math.sin(this.time*1.1+f.phase)*.6,2+f.depth));
+ f.mesh.rotation.y=f.turn;f.mesh.scale.setScalar(.82+f.depth*.18);
+ f.mesh.rotation.z=T.MathUtils.clamp(-f.vy*.008,-.15,.15)*(f.vx>0?1:-1);
+ const fu=f.mesh.material.uniforms;fu.time.value=this.time+f.phase;fu.sceneTime.value=this.time;fu.flow.value=u.flow.value;fu.photograph.value=this.photograph;fu.depth.value=f.depth;fu.light.value=u.day.value;fu.activity.value=shrimp?.08:Math.max(.22,Math.hypot(f.vx,f.vy)/18);
+
  }
  for(let i=0;i<this.bubbleData.length;i++){const b=this.bubbleData[i];b.mesh.visible=i<(this.quality==='Performance'?24:62)&&(b.co2?e.co2>0&&u.day.value>.1:s.oxygen>8.35);if(moveDt){b.y-=b.speed*moveDt*(b.co2?Math.max(.2,e.co2/24):Math.max(.2,s.oxygen/8));if(b.y<200){b.y=b.originY;b.x=b.originX;}}const rise=(b.originY-b.y)/Math.max(1,b.originY-200);const scale=b.co2?Math.max(.12,.75*(1-rise)):1+rise*.1;b.mesh.scale.setScalar(scale);b.mesh.position.copy(this.pos(b.x+Math.sin(this.time*.6+b.phase)*2+rise*e.flow*.13,b.y,4));}
  for(const a of this.arrows){const t=T.MathUtils.euclideanModulo(this.flowPhase+a.phase,1);a.mesh.position.copy(a.path.getPointAt(t));a.mesh.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),a.path.getTangentAt(t));}
  this.food.children.forEach(o=>{o.position.y-=moveDt*4;});if(this.feeding<=0&&this.food.children.length){for(const o of [...this.food.children]){(o as T.Mesh).geometry.dispose();((o as T.Mesh).material as T.Material).dispose();this.food.remove(o);}}
  if(this.selected!==null&&this.time-this.lastReport>.5){this.lastReport=this.time;const f=this.fish[this.selected];if(f)this.report(f,this.selected);}
+ for(const marker of this.markers){const screen=this.pos(marker.x,marker.y,0).project(this.camera);marker.button.style.left=((screen.x+1)*.5*this.host.clientWidth)+'px';marker.button.style.top=((1-screen.y)*.5*this.host.clientHeight)+'px';marker.button.hidden=this.mode!=='Living'||Math.abs(screen.x)>.92||Math.abs(screen.y)>.84;}
  this.renderer.render(this.scene,this.camera);
  }
  private report(f:Swimmer,id:number){this.onSelectedFish?.({id,species:['Cardinal tetra','Harlequin rasbora','Pearl gourami','Amano shrimp'][f.species],size:f.size,speed:Math.hypot(f.vx,f.vy),hunger:0,mood:this.feeding?'Foraging':f.species===3?'Grazing':'Exploring',preferredDepth:f.species===3?'Planted foreground':'Midwater'});}
  private world(clientX:number,clientY:number){const r=this.canvas.getBoundingClientRect(),v=new T.Vector3((clientX-r.left)/r.width*2-1,-(clientY-r.top)/r.height*2+1,0);v.unproject(this.camera);return {x:v.x+W/2,y:H/2-v.y};}
  private down=(event:PointerEvent)=>{this.canvas.setPointerCapture(event.pointerId);this.pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});this.pointer={startX:event.clientX,startY:event.clientY,cx:this.targetX,cy:this.targetY,distance:0};if(this.pointers.size===2){const p=[...this.pointers.values()];this.pinch=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);this.pinchZoom=this.zoomTarget;}};
  private move=(event:PointerEvent)=>{if(!this.pointers.has(event.pointerId))return;this.pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});if(this.pointers.size===2){const p=[...this.pointers.values()];this.zoom(this.pinchZoom*Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)/Math.max(1,this.pinch));if(this.pointer)this.pointer.distance=100;return;}if(!this.pointer)return;const dx=event.clientX-this.pointer.startX,dy=event.clientY-this.pointer.startY;this.pointer.distance=Math.hypot(dx,dy);const scale=(this.camera.right-this.camera.left)/(this.host.clientWidth*this.zoomCurrent);this.targetX=this.pointer.cx-dx*scale;this.targetY=this.pointer.cy+dy*scale;this.clampCamera();};
- private up=(event:PointerEvent)=>{if(this.pointer&&this.pointer.distance<8){const p=this.world(event.clientX,event.clientY);let nearest=-1,distance=Infinity;this.fish.forEach((f,i)=>{const d=Math.hypot(p.x-f.x,p.y-f.y);if(d<Math.max(18,f.size*.5)&&d<distance){nearest=i;distance=d;}});if(nearest>=0){this.selected=nearest;this.report(this.fish[nearest],nearest);}else if(p.x>1370)this.onInspect?.('equipment');else if(p.y>550)this.onInspect?.('roots');else if(p.x<850&&p.y>300)this.onInspect?.('plants');}this.cancel(event);};
+ private up=(event:PointerEvent)=>{if(this.pointer&&this.pointer.distance<8){const p=this.world(event.clientX,event.clientY);let nearest=-1,distance=Infinity;this.fish.forEach((f,i)=>{const d=Math.hypot(p.x-f.x,p.y-f.y);if(d<Math.max(18,f.size*.5)&&d<distance){nearest=i;distance=d;}});if(nearest>=0){this.selected=nearest;this.report(this.fish[nearest],nearest);}}this.cancel(event);};
  private cancel=(event:PointerEvent)=>{this.pointers.delete(event.pointerId);this.pointer=null;if(this.canvas.hasPointerCapture(event.pointerId))this.canvas.releasePointerCapture(event.pointerId);};
  private wheel=(event:WheelEvent)=>{event.preventDefault();this.zoom(this.zoomTarget*Math.exp(-event.deltaY*.001));};
  resize=()=>{const width=Math.max(1,this.host.clientWidth),height=Math.max(1,this.host.clientHeight),aspect=width/height,viewHeight=aspect>W/H?W/aspect:H;this.camera.left=-viewHeight*aspect/2;this.camera.right=viewHeight*aspect/2;this.camera.top=viewHeight/2;this.camera.bottom=-viewHeight/2;this.camera.updateProjectionMatrix();this.renderer.setPixelRatio(Math.min(devicePixelRatio,this.quality==='Performance'?1:this.quality==='High'?1.5:2));this.renderer.setSize(width,height);this.clampCamera();};
  capture(){this.renderer.render(this.scene,this.camera);const a=document.createElement('a');a.download='living-aquascape.png';a.href=this.canvas.toDataURL('image/png');a.click();}
- dispose(){this.destroyed=true;window.removeEventListener('resize',this.resize);this.canvas.removeEventListener('pointerdown',this.down);this.canvas.removeEventListener('pointermove',this.move);this.canvas.removeEventListener('pointerup',this.up);this.canvas.removeEventListener('pointercancel',this.cancel);this.canvas.removeEventListener('wheel',this.wheel);const geometries=new Set<T.BufferGeometry>(),materials=new Set<T.Material>();this.scene.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line||o instanceof T.Points){geometries.add(o.geometry);(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>materials.add(m));}});geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());this.sprites.forEach(t=>t.dispose());this.photograph.dispose();this.macro.dispose();this.renderer.dispose();this.canvas.remove();}
+ dispose(){this.destroyed=true;window.removeEventListener('resize',this.resize);this.canvas.removeEventListener('pointerdown',this.down);this.canvas.removeEventListener('pointermove',this.move);this.canvas.removeEventListener('pointerup',this.up);this.canvas.removeEventListener('pointercancel',this.cancel);this.canvas.removeEventListener('wheel',this.wheel);const geometries=new Set<T.BufferGeometry>(),materials=new Set<T.Material>();this.scene.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line||o instanceof T.Points){geometries.add(o.geometry);(Array.isArray(o.material)?o.material:[o.material]).forEach(m=>materials.add(m));}});geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());this.sprites.forEach(t=>t.dispose());this.photograph.dispose();this.macro.dispose();this.renderer.dispose();this.canvas.remove();this.markers.forEach(m=>m.button.remove());}
 }
