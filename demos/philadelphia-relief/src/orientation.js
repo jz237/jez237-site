@@ -1,5 +1,5 @@
-import { overviewLocation } from './navigation.js?v=philly-2026090905';
-import { groundPoint } from './imagery-tiles.js?v=philly-2026090905';
+import { overviewLocation } from './navigation.js?v=philly-2026090906';
+import { groundPoint } from './imagery-tiles.js?v=philly-2026090906';
 
 export function overviewPoint(lon, lat, bounds, width = 220, height = 150) {
   return [12 + (lon - bounds.west) / (bounds.east - bounds.west) * (width - 24),

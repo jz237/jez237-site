@@ -1,4 +1,4 @@
-import { compassPoint } from './geo.js?v=philly-2026090905';
+import { compassPoint } from './geo.js?v=philly-2026090906';
 export function overviewLocation(x, y, bounds, width=220, height=150) {
   const unit=v => Math.min(1,Math.max(0,v));
   return {lon:bounds.west + unit((x-12)/(width-24))*(bounds.east-bounds.west),

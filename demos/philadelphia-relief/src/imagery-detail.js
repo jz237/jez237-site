@@ -106,7 +106,7 @@ export function detailUrl(cell, size) {
     tier: cell.tier || 'detail', lon: cell.lon.toFixed(4),
     lat: cell.lat.toFixed(4), size: String(size),
   });
-  return `detail-imagery?${query}&v=pan5`;
+  return `detail-imagery?${query}&v=pan6`;
 }
 
 export function detailResolutionM(cell, size, projection) {

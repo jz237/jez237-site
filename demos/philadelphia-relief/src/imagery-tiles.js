@@ -1,5 +1,5 @@
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
-import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090905';
+import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090906';
 
 export const TILE_SPECS = [
   { tier: 'tile-inspection', lon: 0.0032, lat: 0.0024, range: 600 },
@@ -100,7 +100,7 @@ export function planImageryTiles(pose, region, projection, aspect = 1, mode = 's
 export async function fetchTile(cell, size, signal) {
   const query = new URLSearchParams({ tier: cell.tier, lon: cell.lon.toFixed(4),
       lat: cell.lat.toFixed(4), size: String(size) });
-  const response = await fetch(`detail-imagery?${query}&v=tiles1`, { signal, credentials: 'same-origin' });
+  const response = await fetch(`detail-imagery?${query}&v=tiles2`, { signal, credentials: 'same-origin' });
   if (!response.ok) throw new Error('Imagery tile unavailable');
   const blob = await response.blob();
   const url = URL.createObjectURL(blob);
