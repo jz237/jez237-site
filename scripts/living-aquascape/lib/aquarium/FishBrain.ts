@@ -30,7 +30,7 @@ export function thinkFish(b:FishBrain,dt:number,x:number,y:number,speed:number,s
    const cx=school.length?school.reduce((v,f)=>v+f.x,0)/count:x,cy=school.length?school.reduce((v,f)=>v+f.y,0)/count:y,cz=school.length?school.reduce((v,f)=>v+(f.z??z),0)/count:z;
    const vx=school.reduce((v,f)=>v+(f.vx??0),0)/count;
    // Cohesion and heading alignment share a slowly roaming goal; individuals retain spacing and timing.
-   b.intent={kind:'school',reason:`Swimming with the tetra school.`,target:{id:-2,x:goal?cx*.35+goal.x*.65+vx*2:cx+vx*5,y:goal?cy*.5+goal.y*.5:cy,z:goal?cz*.35+(goal.z??cz)*.65:cz,vx}};b.decisionIn=1.8+random(b)*2;
+   b.intent={kind:'school',reason:`Swimming with the tetra school.`,target:{id:-2,x:goal?goal.x:cx+vx*5,y:goal?goal.y:cy,z:goal?(goal.z??cz):cz,vx:goal?.vx??vx}};b.decisionIn=1.8+random(b)*2;
   }
   else {b.intent={kind:'explore',reason:b.curiosity>.6?'Looking for an unfamiliar leaf to inspect.':'Exploring between the plants.'};b.decisionIn=4+random(b)*4;}
  }

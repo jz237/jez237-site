@@ -1,3 +1,4 @@
+import {createSchoolRoute,advanceSchoolRoute,schoolLane} from './SchoolRoute';
 import {separateFish} from './FishCollisions';
 import * as T from 'three';
 import {Tetra3D} from './Tetra3D';
@@ -49,6 +50,7 @@ export class PhotographicScene{
  onInspect:((name:string)=>void)|null=null;
  private background:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;
  private fish:Swimmer[]=[];
+ private schoolRoute=createSchoolRoute();
  private tetras=new Map<number,{model:Tetra3D;swim:TetraSwim}>();
  private sprites:T.Texture[]=[];
  private photograph:T.Texture;private macro:T.Texture;
@@ -136,8 +138,8 @@ void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;vec2 uv=sceneUv+planti
  if(moveDt){for(let n=0;n<motes.count;n++){let x=motes.getX(n),y=motes.getY(n);const upper=y>50;x+=moveDt*(upper?-1:1)*(2+e.flow*.08);y+=Math.sin(this.time*.4+n)*moveDt*.65;if(x<320-W/2)x=1280-W/2;if(x>1280-W/2)x=320-W/2;motes.setXY(n,x,y);}motes.needsUpdate=true;}this.roots.scale.y=.7+s.biomass*.3;this.roots.position.y=(H/2-578)*(1-this.roots.scale.y);
  // Every tetra senses the same pre-step snapshot, avoiding update-order bias.
  const schoolSnapshot=this.fish.map((f,id)=>({id,x:f.x,y:f.y,z:f.depth,vx:f.vx,vy:f.vy,radius:f.size*.68})).filter(f=>this.tetras.has(f.id));
- const schoolGoal={id:-3,x:935+245*Math.sin(this.time*.021),y:365+78*Math.sin(this.time*.014),z:.5+.34*Math.sin(this.time*.019)};
- for(const [i,tetra] of this.tetras){const f=this.fish[i]; if(tetra){const swim=tetra.swim;advanceTetraSwim(swim,moveDt,this.feeding>0,s.oxygen<4,{food:this.food.children.map(o=>({id:o.id,z:.65,x:o.position.x+W/2,y:H/2-o.position.y})),neighbors:schoolSnapshot.filter(n=>n.id!==i),schoolGoal});const eaten=this.food.children.find(o=>o.id===swim.brain.consumedFood);if(eaten instanceof T.Mesh){this.food.remove(eaten);eaten.geometry.dispose();(eaten.material as T.Material).dispose();}swim.brain.consumedFood=null;f.x=swim.x;f.y=swim.y;f.vx=swim.vx;f.vy=swim.vy;f.turn=swim.yaw;f.depth=swim.z;}}
+ const schoolGoal=advanceSchoolRoute(this.schoolRoute,moveDt,schoolSnapshot);
+ for(const [i,tetra] of this.tetras){const f=this.fish[i]; if(tetra){const swim=tetra.swim;advanceTetraSwim(swim,moveDt,this.feeding>0,s.oxygen<4,{food:this.food.children.map(o=>({id:o.id,z:.65,x:o.position.x+W/2,y:H/2-o.position.y})),neighbors:schoolSnapshot.filter(n=>n.id!==i),schoolGoal:schoolLane(schoolGoal,i)});const eaten=this.food.children.find(o=>o.id===swim.brain.consumedFood);if(eaten instanceof T.Mesh){this.food.remove(eaten);eaten.geometry.dispose();(eaten.material as T.Material).dispose();}swim.brain.consumedFood=null;f.x=swim.x;f.y=swim.y;f.vx=swim.vx;f.vy=swim.vy;f.turn=swim.yaw;f.depth=swim.z;}}
  if(moveDt){const bodies=[...this.tetras].map(([id])=>{const f=this.fish[id];return {id,x:f.x,y:f.y,z:f.depth,radius:f.size*.68};});separateFish(bodies);for(const b of bodies){const f=this.fish[b.id],swim=this.tetras.get(b.id)!.swim;f.x=swim.x=b.x;f.y=swim.y=b.y;f.depth=swim.z=b.z;}}
  for(let i=0;i<this.fish.length;i++){const f=this.fish[i],shrimp=f.species===3,tetra=this.tetras.get(i);f.mesh.visible=this.mode!=='Biology'&&!tetra;
  if(moveDt>0&&!tetra){const bounds=shrimp?[430,1280,563,619]:[350,1290,240,565];if(Math.hypot(f.targetX-f.x,f.targetY-f.y)<45||Math.sin(this.time*.22+f.phase)>.997){f.targetX=bounds[0]+this.random()*(bounds[1]-bounds[0]);f.targetY=bounds[2]+this.random()*(bounds[3]-bounds[2]);}
