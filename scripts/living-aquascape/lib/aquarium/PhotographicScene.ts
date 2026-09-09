@@ -138,14 +138,14 @@ void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;vec2 uv=sceneUv+planti
  const hover=!this.feeding&&Math.sin(this.time*.33+f.phase)>.88;let ax=(f.targetX-f.x)*.028,ay=(f.targetY-f.y)*.028;if(hover){f.vx*=Math.exp(-moveDt*1.8);f.vy*=Math.exp(-moveDt*1.8);ax*=.12;ay*=.12;}
  for(const other of this.fish){if(f===other)continue;const dx=other.x-f.x,dy=other.y-f.y,d=Math.hypot(dx,dy);if(d<28&&d>0){ax-=dx*.12;ay-=dy*.12;}else if(d<140&&f.species===other.species&&!shrimp){ax+=dx*.0008+(other.vx-f.vx)*.016;ay+=dy*.0007+(other.vy-f.vy)*.016;}}
  const pace=shrimp?1.1:f.species===2?(this.feeding?17:9):(s.oxygen<4?9:18)*(this.feeding?1.5:1);
- f.vx+=ax*moveDt;f.vy+=ay*moveDt;const speed=Math.hypot(f.vx,f.vy);if(speed>pace){f.vx*=pace/speed;f.vy*=pace/speed;}f.x=T.MathUtils.clamp(f.x+f.vx*moveDt,bounds[0],bounds[1]);f.y=T.MathUtils.clamp(f.y+f.vy*moveDt,bounds[2],bounds[3]);
+ f.vx+=ax*moveDt;f.vy+=ay*moveDt;const speed=Math.hypot(f.vx,f.vy);if(speed>pace){f.vx*=pace/speed;f.vy*=pace/speed;}const thrust=i===0?Math.max(0,Math.cos(f.turn)*(f.vx>=0?1:-1)):1;f.x=T.MathUtils.clamp(f.x+f.vx*moveDt*thrust,bounds[0],bounds[1]);f.y=T.MathUtils.clamp(f.y+f.vy*moveDt*(i===0?.25+.75*thrust:1),bounds[2],bounds[3]);
  }
  const desired=f.vx>=0?0:Math.PI;f.turn+=(desired-f.turn)*(1-Math.exp(-moveDt*2.4));
  f.mesh.position.copy(this.pos(f.x,f.y+Math.sin(this.time*1.1+f.phase)*.6,2+f.depth));
  f.mesh.rotation.y=f.turn;f.mesh.scale.setScalar(.82+f.depth*.18);
  f.mesh.rotation.z=T.MathUtils.clamp(-f.vy*.008,-.15,.15)*(f.vx>0?1:-1);
  const fu=f.mesh.material.uniforms;fu.time.value=this.time+f.phase;fu.sceneTime.value=this.time;fu.flow.value=u.flow.value;fu.photograph.value=this.photograph;fu.depth.value=f.depth;fu.light.value=u.day.value;fu.activity.value=shrimp?.08:Math.max(.22,Math.hypot(f.vx,f.vy)/18);
- if(i===0&&this.tetra){this.tetra.group.visible=this.mode!=='Biology';this.tetra.group.position.copy(this.pos(f.x,f.y,4));this.tetra.group.rotation.set(0,f.turn,f.mesh.rotation.z);this.tetra.group.scale.setScalar(f.size);this.tetra.update(this.time,fu.activity.value,this.photograph,u.flow.value,f.depth,u.day.value);}
+ if(i===0&&this.tetra){this.tetra.group.visible=this.mode!=='Biology';this.tetra.group.position.copy(this.pos(f.x,f.y,4));this.tetra.group.rotation.set(0,f.turn,Math.atan2(-f.vy,Math.max(3,Math.abs(f.vx)))*(f.vx>=0?1:-1));this.tetra.group.scale.setScalar(f.size);this.tetra.update(this.time,fu.activity.value,this.photograph,u.flow.value,f.depth,u.day.value,moveDt);}
 
  }
  for(let i=0;i<this.bubbleData.length;i++){const b=this.bubbleData[i];b.mesh.visible=i<(this.quality==='Performance'?24:62)&&(b.co2?e.co2>0&&u.day.value>.1:s.oxygen>8.35);if(moveDt){b.y-=b.speed*moveDt*(b.co2?Math.max(.2,e.co2/24):Math.max(.2,s.oxygen/8));if(b.y<200){b.y=b.originY;b.x=b.originX;}}const rise=(b.originY-b.y)/Math.max(1,b.originY-200);const scale=b.co2?Math.max(.12,.75*(1-rise)):1+rise*.1;b.mesh.scale.setScalar(scale);b.mesh.position.copy(this.pos(b.x+Math.sin(this.time*.6+b.phase)*2+rise*e.flow*.13,b.y,4));}
