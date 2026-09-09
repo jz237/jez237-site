@@ -1,3 +1,4 @@
+import { wireLooks } from './looks.js?v=philly-2026090904';
 import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090903';
 import { createOrientation } from './orientation.js?v=philly-2026090903';
 /**
@@ -491,6 +492,7 @@ async function boot() {
 
   const motion = createMotion(store, projection);
   const ui = wireInterface({ store, motion, data, projection, rig, structures });
+  const disposeLooks = wireLooks($('lookChoices'), store, () => motion.stop());
   const orientation = createOrientation({ host: $('orientation'), projection, water: data.water,
     onVisit: id => ui.visitPreset(id) });
 
@@ -1063,7 +1065,8 @@ async function boot() {
   finishLoading();
 
   window.addEventListener('pagehide', () => {
-    imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose(); orientation.dispose();
+    imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
+    orientation.dispose(); disposeLooks();
   },
       { once: true });
 
