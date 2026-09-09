@@ -90,6 +90,15 @@ STOPWORDS = {
     "factual", "infographic", "scene", "study", "view", "project",
 }
 
+TOKEN_ALIASES = {
+    "census": "survey", "count": "survey", "counted": "survey", "counting": "survey",
+    "spillway": "floodgate", "sluice": "floodgate", "gate": "floodgate",
+    "salmon": "fish", "fishes": "fish",
+    "apiaries": "apiary", "beehive": "apiary", "beehives": "apiary",
+    "rooftops": "rooftop", "greenhouses": "greenhouse",
+    "observatories": "observatory", "laboratories": "laboratory", "labs": "laboratory",
+}
+
 
 def ascii_text(value: object) -> str:
     text = unicodedata.normalize("NFKD", str(value or ""))
@@ -107,7 +116,8 @@ def core_title(value: object) -> str:
 
 def concept_tokens(value: object) -> set[str]:
     return {
-        token for token in re.findall(r"[a-z0-9]+", ascii_text(value))
+        TOKEN_ALIASES.get(token, token)
+        for token in re.findall(r"[a-z0-9]+", ascii_text(value))
         if len(token) > 2 and token not in STOPWORDS
     }
 
@@ -224,6 +234,7 @@ def find_duplicates(
 ) -> list[dict]:
     candidate_core = core_title(title)
     candidate_key = normalize_key(concept_key)
+    candidate_key_tokens = concept_tokens(candidate_key)
     candidate_tokens = concept_tokens(candidate_core)
     candidate_style_keys: set[str] = set()
     if slot == "random-image-style":
@@ -233,7 +244,7 @@ def find_duplicates(
         # Scheduled random-style titles must name the positive medium. Do not
         # mine the prompt because negative clauses deliberately name old media.
         candidate_style_keys.update(canonical_style_keys(f"{style_family} {title}"))
-    if len(concept_tokens(candidate_key)) < 3:
+    if len(candidate_key_tokens) < 3:
         return [{"reason": "weak-concept-key", "message": "Concept key must contain at least three meaningful terms."}]
 
     candidate_hash = image_fingerprint(image) if image else None
@@ -256,6 +267,23 @@ def find_duplicates(
             common = candidate_tokens & existing_tokens
             if len(common) >= 3 and len(common) / max(1, min(len(candidate_tokens), len(existing_tokens))) >= 0.80:
                 duplicates.append({"reason": "near-title", "id": entry_id, "title": entry_title})
+
+        # The explicit key is intentionally compact. Requiring all of its
+        # canonical subject/action/setting terms to be absent from every old
+        # record catches renamed and lightly paraphrased concepts.
+        existing_concept_blob = " ".join(str(value or "") for value in (
+            entry_title,
+            entry.get("prompt"),
+            entry.get("tests"),
+            (entry.get("factualInfographic") or {}).get("topic")
+            if isinstance(entry.get("factualInfographic"), dict) else "",
+        ))
+        existing_title_tokens = concept_tokens(entry_title)
+        if (
+            candidate_key_tokens <= concept_tokens(existing_concept_blob)
+            and len(candidate_key_tokens & existing_title_tokens) >= 2
+        ):
+            duplicates.append({"reason": "concept-contained", "id": entry_id, "title": entry_title})
 
         if candidate_style_keys and candidate_style_keys & entry_style_keys(entry):
             duplicates.append({
