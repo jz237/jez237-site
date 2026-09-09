@@ -62,7 +62,7 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
   drive=pace/24;fan=pace<3?.8:.4;
   if(s.behavior==='approaching'&&Math.abs(s.targetX-s.x)<19&&Math.abs(s.targetY-s.y)<17){enter(s,'inspecting');pace=0;drive=.02;fan=.9;}
  }
- if(intent?.kind==='school')pace=clamp(Math.abs(s.targetX-s.x)*.18,5,20);
+ if(intent?.kind==='school'){pace=clamp(Math.abs(intent.target?.vx??12)*.5+Math.abs(s.targetX-s.x)*.16,6,23);drive=pace/28;}
  if(intent?.kind==='rest'){pace=0;drive=.015;fan=.85;s.behavior='gliding';s.remaining=2;}
  if(turning){pace=Math.min(pace,8);drive=.3;fan=.7;}
  if(lowOxygen){pace=Math.min(pace,11);drive=Math.min(drive,.55);}

@@ -12,14 +12,15 @@ export class Tetra3D {
  private originals=new Map<T.BufferGeometry,Float32Array>();
  private shaders:{uniforms:Record<string,T.IUniform>}[]=[];
  private eyes:T.Mesh[]=[];
- constructor(texture:T.Texture){
+ constructor(texture:T.Texture,phaseOffset=0,detailed=true){
+  this.phase=phaseOffset;this.pectoralPhase=phaseOffset*1.7;
   const skin=new T.MeshPhysicalMaterial({map:texture,roughness:.43,metalness:.12,clearcoat:.35,clearcoatRoughness:.25});
   const fin=skin.clone();fin.transparent=true;fin.opacity=.65;fin.alphaTest=.12;fin.side=T.DoubleSide;fin.depthWrite=false;fin.roughness=.55;
   const pectoral=fin.clone();pectoral.map=null;pectoral.color.set(0xb8d2c8);pectoral.opacity=.48;pectoral.alphaTest=.01;
   // Elliptical cross-sections are joined into a continuous, closed body.
   const profile=[[-.32,.025],[-.26,.041],[-.14,.073],[0,.106],[.14,.115],[.27,.101],[.37,.075],[.445,.038],[.49,.003]];
   const pos:number[]=[],uv:number[]=[],idx:number[]=[];
-  const rings=65,sides=32;
+  const rings=detailed?65:33,sides=detailed?32:16;
   for(let i=0;i<rings;i++){const x=-.32+i/(rings-1)*.81;let k=0;while(k<profile.length-2&&profile[k+1][0]<x)k++;const a=profile[k],b=profile[k+1],t=T.MathUtils.smoothstep(x,a[0],b[0]),radius=T.MathUtils.lerp(a[1],b[1],t);
    for(let j=0;j<=sides;j++){const theta=j/sides*Math.PI*2,y=-.035+Math.cos(theta)*radius,z=Math.sin(theta)*radius*.52;pos.push(x,y,z);uv.push(x+.5,.5+y/.45);if(i<rings-1&&j<sides){const n=i*(sides+1)+j;idx.push(n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1);}}
   }

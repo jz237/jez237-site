@@ -1,5 +1,5 @@
 export type FishPoint={id:number;x:number;y:number;z?:number;vx?:number;vy?:number};
-export type FishSenses={food:FishPoint[];neighbors:FishPoint[]};
+export type FishSenses={food:FishPoint[];neighbors:FishPoint[];schoolGoal?:FishPoint};
 export type FishIntent={kind:'explore'|'feed'|'school'|'rest'|'space';reason:string;target?:FishPoint};
 export type FishBrain={hunger:number;energy:number;curiosity:number;decisionIn:number;biteIn:number;seed:number;intent:FishIntent;consumedFood:number|null;visited:{x:number;y:number;age:number}[]};
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
@@ -20,12 +20,18 @@ export function thinkFish(b:FishBrain,dt:number,x:number,y:number,speed:number,s
   return b.intent;
  }
  b.decisionIn=.7+random(b)*.8;
- if(close)b.intent={kind:'space',reason:'Giving a nearby fish more room.',target:{id:-1,x:x+(x>=close.x?65:-65),y:y+(y>=close.y?22:-22)}};
+ if(close)b.intent={kind:'space',reason:'Giving a nearby fish more room.',target:{id:-1,x:x+(x>=close.x?65:-65),y:y+(y>=close.y?22:-22),z:clamp(z+(z>=(close.z??z)?.09:-.09))}};
  else if(food&&b.hunger>.18)b.intent={kind:'feed',reason:'Food detected — approaching a flake.',target:food};
  else if(b.energy<.28||(b.intent.kind==='rest'&&b.energy<.62))b.intent={kind:'rest',reason:'Resting and fanning its fins to hold position.'};
  else {
   const school=senses.neighbors.filter(f=>distance(f)<260&&distance(f)>45);
-  if(school.length>=2&&random(b)<.48){const count=school.length;b.intent={kind:'school',reason:`Following ${count} nearby tetras.`,target:{id:-2,x:school.reduce((v,f)=>v+f.x,0)/count,y:school.reduce((v,f)=>v+f.y,0)/count,z:school.reduce((v,f)=>v+(f.z??z),0)/count}};b.decisionIn=4+random(b)*3;}
+  if((school.length>=2||senses.schoolGoal)&&random(b)<(senses.schoolGoal?.88:.48)){
+   const count=Math.max(1,school.length),goal=senses.schoolGoal;
+   const cx=school.length?school.reduce((v,f)=>v+f.x,0)/count:x,cy=school.length?school.reduce((v,f)=>v+f.y,0)/count:y,cz=school.length?school.reduce((v,f)=>v+(f.z??z),0)/count:z;
+   const vx=school.reduce((v,f)=>v+(f.vx??0),0)/count;
+   // Cohesion and heading alignment share a slowly roaming goal; individuals retain spacing and timing.
+   b.intent={kind:'school',reason:`Swimming with the tetra school.`,target:{id:-2,x:goal?cx*.35+goal.x*.65+vx*2:cx+vx*5,y:goal?cy*.5+goal.y*.5:cy,z:goal?cz*.35+(goal.z??cz)*.65:cz,vx}};b.decisionIn=1.8+random(b)*2;
+  }
   else {b.intent={kind:'explore',reason:b.curiosity>.6?'Looking for an unfamiliar leaf to inspect.':'Exploring between the plants.'};b.decisionIn=4+random(b)*4;}
  }
  return b.intent;
