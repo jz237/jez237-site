@@ -7,14 +7,16 @@ export function createFootworkSelector(){
  return (owner,f,tick,ready)=>{
   if(!owner||!FOOTWORK_FIGHTERS.includes(f.def?.id))return null;
   let h=history.get(owner);
-  if(!h||tick<h.tick){h={tick,x:f.x||0,distance:0,moving:false,grounded:f.grounded,stop:-Infinity,land:-Infinity};history.set(owner,h);}
+  if(!h||tick<h.tick){h={tick,x:f.x||0,distance:0,moving:false,grounded:f.grounded,stop:-Infinity,land:-Infinity,turn:-Infinity,direction:Math.sign(f.vx||0)};history.set(owner,h);}
   const moving=f.grounded&&!f.attacking&&Math.abs(f.vx||0)>20;
   if(tick>h.tick){
+   const direction=Math.sign(f.vx||0);
+   if(moving&&h.moving&&direction!==h.direction){h.turn=tick;h.distance=0;}
    if(moving&&h.moving)h.distance+=Math.min(40,Math.abs((f.x||0)-h.x));
    if(!moving&&h.moving)h.stop=tick;
    if(f.grounded&&!h.grounded)h.land=tick;
    if(moving&&!h.moving)h.distance=0;
-   Object.assign(h,{tick,x:f.x||0,moving,grounded:f.grounded});
+   Object.assign(h,{tick,x:f.x||0,moving,grounded:f.grounded,direction});
   }
   const a=f.attacking;
   if(a&&!attacks.has(a))attacks.set(a,ready);
@@ -36,10 +38,10 @@ export function createFootworkSelector(){
   if(!f.grounded||f.dashFrames>0)return null;
   if(f.blockstunFrames>0){
    const low=f.crouch,age=tick-(f.lastImpactTick??tick);
-   return pose(age>=3&&age<8?(low?9:8):(low?7:6));
+   return pose(age>=0&&age<(f.lastHitHeavy?7:3)?(low?9:8):(low?7:6));
   }
   if(tick-h.land<6)return pose(15);
-  if(moving){const step=Math.floor(h.distance/24)%4;return pose((f.vx*f.facing>=0?[0,1,2,5]:[0,3,4,5])[step]);}
+  if(moving){if(tick-h.turn<3)return pose(5);const step=Math.floor(h.distance/24)%4;return pose((f.vx*f.facing>=0?[0,1,2,5]:[0,3,4,5])[step]);}
   if(tick-h.stop<6)return pose(5);
   if(f.block||f.guarding)return pose(f.crouch?7:6);
   return null;
