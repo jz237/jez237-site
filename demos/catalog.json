@@ -1,0 +1,15 @@
+[
+  {
+    "id": "001",
+    "title": "V8 Engine Laboratory",
+    "category": "3D · Mechanics",
+    "description": "Eight cylinders. One synchronized machine. Slice through a working cross-plane V8 and follow the motion from ignition to crankshaft.",
+    "url": "v8-engine/",
+    "image": "assets/v8-engine.jpg",
+    "imageAlt": "Machined V8 engine illuminated on a dark circular exhibit platform",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/v8-engine",
+    "features": ["Cutaway & exploded views", "Clickable components", "Guided walkthrough", "Motion charts"],
+    "facts": ["8 cylinders", "16 valves", "720° cycle"],
+    "note": "WebGL 2 · Desktop & mobile · Idealized teaching model"
+  }
+]

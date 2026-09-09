@@ -16,7 +16,7 @@ use these instructions before writing code or snippets.
 
 ## Current site map
 
-- `/demos/` - website demo gallery, linked from the home card grid and Projects navigation.
+- `/demos/` - website demo gallery, linked from the home card grid and Projects navigation. Add entries to `demos/catalog.json` and run `node scripts/build-demos.mjs` to rebuild the static cards; the first entry is featured. See `demos/README.md`.
 - `/demos/v8-engine/` - public static V8 Engine Laboratory. Source and build instructions: `scripts/v8-engine/`. Run `npm ci && npm run build` there to regenerate only this demo's assets. Use relative links for the GitHub Pages mirror.
 
 - `/` - home dashboard and section hub. The footer has a tiny contact
