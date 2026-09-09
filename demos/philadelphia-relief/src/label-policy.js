@@ -27,3 +27,7 @@ export function controlBoxes(root = document) {
     return {l:r.left, r:r.right, t:r.top, b:r.bottom};
   }).filter(r => r.r > r.l && r.b > r.t);
 }
+
+export function labelPriority(item) {
+  return (item.kind==='landmark' ? -10 : item.kind==='place' ? 0 : 10) + (item.rank || 0);
+}

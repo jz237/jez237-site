@@ -1,3 +1,4 @@
+import { updateImageryCredit, wireFieldNotes } from './experience.js?v=philly-2026090905';
 import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026090904';
 import { wireLooks } from './looks.js?v=philly-2026090904';
 import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090904';
@@ -341,14 +342,7 @@ async function boot() {
     onStatus(detail) {
       const credit = $('imageryCredit');
       if (!credit) return;
-      const suffix = detail.state === 'active'
-        ? ` · ${detail.resolutionM.toFixed(2)} m sampling · ${detail.tier === 'inspection'
-          ? 'close inspection' : detail.tier === 'rooftop' ? 'roof detail' : 'aerial detail'}`
-        : detail.state === 'loading'
-          ? detail.refining ? ' · refining to full detail…' : ' · loading sharper imagery…'
-          : detail.state === 'unavailable' ? ' · detail unavailable; showing cached imagery' : '';
-      credit.dataset.loading = String(detail.state === 'loading');
-      credit.textContent = `Aerial imagery: ${detail.source || 'USDA / USGS The National Map'}${suffix}`;
+      updateImageryCredit(credit,detail);
       setValueNote('imageryDetail', detail.state === 'active'
         ? `${detail.resolutionM.toFixed(2)} m sampling` : '');
     },
@@ -493,6 +487,7 @@ async function boot() {
 
   const motion = createMotion(store, projection);
   const ui = wireInterface({ store, motion, data, projection, rig, structures });
+  const disposeNotes=wireFieldNotes($('toggleNotes'));
   const disposeLooks = wireLooks($('lookChoices'), store, () => motion.stop());
   const orientation = createOrientation({ host: $('orientation'), projection, water: data.water,
     onVisit: id => ui.visitPreset(id), onNavigate: target => motion.flyTo(target) });
@@ -1070,7 +1065,7 @@ async function boot() {
 
   window.addEventListener('pagehide', () => {
     imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
-    orientation.dispose(); navigation.dispose(); disposeLooks();
+    orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes();
   },
       { once: true });
 
