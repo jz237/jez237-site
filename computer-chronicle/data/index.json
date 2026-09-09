@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-09",
+      "historicDate": "1984-06-04",
+      "displayDate": "Week of June 4-10, 1984",
+      "edition": "Issue 097 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Monday, June 4, 1984: the personal-computer market braces for lower IBM prices and a livelier summer software season.",
+      "leadHeadline": "IBM Cuts Prices Across the PC Line",
+      "storyHeadlines": [
+        "Postal Service Votes to Abandon E-COM",
+        "Computer Games Start Learning New Tricks",
+        "Copy Protection Draws Fire from Paying Customers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-06-04.jpg",
+      "thumb": "media/thumbs/1984-06-04.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-08",
       "historicDate": "1984-05-28",
       "displayDate": "Week of May 28-June 3, 1984",
