@@ -17,7 +17,8 @@ export function overlapsBox(a, b, padding = 0) {
 }
 
 export function controlBoxes(root = document) {
-  const selectors = '.topbar,.explore-nav,.readout-preset,.readout,.orientation,.mobile-bar,.caption';
+  const selectors = '.topbar,.explore-nav,.readout-preset,.readout,.orientation'
+    + ',.mobile-bar,.caption,.map-navigation';
   return [...root.querySelectorAll(selectors)].filter(el => {
     const style = getComputedStyle(el);
     return !el.hidden && style.display !== 'none' && style.visibility !== 'hidden';

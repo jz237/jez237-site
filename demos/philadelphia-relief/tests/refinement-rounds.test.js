@@ -29,3 +29,17 @@ test('lighting looks preserve geographic state and remain fully shareable', () =
     assert.equal(matchingLook({...state,glow:.99}),undefined);
   }
 });
+
+import { overviewLocation, cameraAction } from '../src/navigation.js';
+import { overviewPoint } from '../src/orientation.js';
+
+test('locator navigation round-trips geography and clamps clicks to map bounds', () => {
+  const bounds={west:-75.8,east:-74.7,south:39.7,north:40.55};
+  const point=overviewPoint(-75.16,39.95,bounds);
+  assert.deepEqual(overviewLocation(...point,bounds),{lon:-75.16,lat:39.95});
+  assert.deepEqual(overviewLocation(-100,999,bounds),{lon:bounds.west,lat:bounds.south});
+  const pose={lon:-75.16,lat:39.95,dist:1700,pitch:50};
+  assert.deepEqual(cameraAction('north',pose),{lon:pose.lon,lat:pose.lat,camDist:1700,camBearing:0});
+  assert.equal(cameraAction('overhead',pose).camPitch,0);
+  assert.equal(cameraAction('overhead',{...pose,pitch:0}).camPitch,50);
+});

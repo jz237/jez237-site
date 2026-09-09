@@ -40,7 +40,9 @@
 <aside id="orientation" class="orientation" aria-label="Your place in the Delaware Valley" hidden>
   <details>
     <summary>Locate this view <span aria-hidden="true">⌖</span></summary>
-    <canvas role="img" aria-label="North-up overview showing the current view within the Delaware Valley"></canvas>
+    <canvas role="img" tabindex="0" aria-label="Interactive north-up overview"
+      aria-describedby="orientationHelp"></canvas>
+    <p id="orientationHelp" class="orientation-help">Click to travel · Arrow keys to pan</p>
     <p class="orientation-position"></p>
     <nav aria-label="Return to a favorite place">
       <button type="button" data-destination="architecture">Center City</button>
@@ -50,6 +52,12 @@
     </nav>
   </details>
 </aside>
+<nav id="mapNavigation" class="map-navigation" aria-label="Map camera">
+  <button type="button" data-camera="in" aria-label="Zoom in" title="Zoom in">+</button>
+  <button type="button" data-camera="out" aria-label="Zoom out" title="Zoom out">−</button>
+  <button type="button" data-camera="north" aria-label="Face north" title="Face north"><span aria-hidden="true">↑</span> N</button>
+  <button type="button" data-camera="overhead" aria-label="Toggle overhead view" aria-pressed="false" title="Overhead / angled view">▱</button>
+</nav>
 <div id="compareBar" class="compare-bar" hidden>
   <span id="compareLeft" class="compare-side compare-left">Aerial</span>
   <label class="visually-hidden" for="compareSlider">Comparison divider</label>

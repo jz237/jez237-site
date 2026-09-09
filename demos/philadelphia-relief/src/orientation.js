@@ -1,3 +1,4 @@
+import { overviewLocation } from './navigation.js?v=philly-2026090904';
 import { groundPoint } from './imagery-tiles.js?v=philly-2026090903';
 
 export function overviewPoint(lon, lat, bounds, width = 220, height = 150) {
@@ -5,7 +6,7 @@ export function overviewPoint(lon, lat, bounds, width = 220, height = 150) {
     8 + (bounds.north - lat) / (bounds.north - bounds.south) * (height - 16)];
 }
 
-export function createOrientation({ host, projection, water, onVisit }) {
+export function createOrientation({ host, projection, water, onVisit, onNavigate }) {
   if (!host) return { update() {}, dispose() {} };
   const canvas = host.querySelector('canvas'), ctx = canvas.getContext('2d');
   const details = host.querySelector('details'), note = host.querySelector('.orientation-position');
@@ -51,10 +52,26 @@ export function createOrientation({ host, projection, water, onVisit }) {
     if (button) onVisit(button.dataset.destination);
   };
   host.addEventListener('click', click);
-  let clock = 0;
+  let clock = 0, currentPose = null;
+  const navigate = event => {
+    if (!onNavigate || !currentPose) return;
+    const rect=canvas.getBoundingClientRect();
+    const target=overviewLocation((event.clientX-rect.left)/rect.width*width,
+      (event.clientY-rect.top)/rect.height*height,bounds,width,height);
+    onNavigate({...target,camDist:currentPose.dist});
+  };
+  const keydown = event => {
+    const delta={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,1],ArrowDown:[0,-1]}[event.key];
+    if (!delta || !onNavigate || !currentPose) return;
+    event.preventDefault(); event.stopPropagation();
+    const step=Math.max(250,currentPose.dist*.3);
+    onNavigate({lon:currentPose.lon+delta[0]*step/projection.metersPerDegLon,
+      lat:currentPose.lat+delta[1]*step/projection.metersPerDegLat,camDist:currentPose.dist});
+  };
+  canvas.addEventListener('click',navigate); canvas.addEventListener('keydown',keydown);
   return {
     update(pose, aspect, dt) {
-      clock += dt;
+      currentPose=pose; clock += dt;
       if (clock < .12) return;
       clock = 0; host.hidden = pose.dist > 28000;
       if (host.hidden || !ctx) return;
@@ -77,6 +94,7 @@ export function createOrientation({ host, projection, water, onVisit }) {
       ctx.beginPath(); ctx.moveTo(-3,-7); ctx.lineTo(0,-11); ctx.lineTo(3,-7);
       ctx.stroke(); ctx.restore();
     },
-    dispose() { host.removeEventListener('click',click); },
+    dispose() { host.removeEventListener('click',click);
+      canvas.removeEventListener('click',navigate); canvas.removeEventListener('keydown',keydown); },
   };
 }
