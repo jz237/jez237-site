@@ -21,6 +21,7 @@ export function createOverlays(
   );
   frame.rotation.y = Math.PI / 2;
   frame.position.y = 1.1;
+  guide.rotation.z = -Math.PI / 4;
   guide.add(frame);
   scene.add(guide);
   const handle = document.createElement('button');
@@ -41,8 +42,8 @@ export function createOverlays(
     handle.setPointerCapture(e.pointerId);
     controls.enabled = false;
     const r = host.getBoundingClientRect(),
-      a = V(value, 1.1, 3.15).project(camera),
-      b = V(value + 1, 1.1, 3.15).project(camera);
+      a = V(value, 1.1, 3.15).applyAxisAngle(V(0,0,1), -Math.PI/4).project(camera),
+      b = V(value + 1, 1.1, 3.15).applyAxisAngle(V(0,0,1), -Math.PI/4).project(camera);
     let dx = ((b.x - a.x) * r.width) / 2,
       dy = (-(b.y - a.y) * r.height) / 2;
     if (Math.hypot(dx, dy) < 12) {
@@ -158,12 +159,12 @@ export function createOverlays(
       angle: number,
     ) {
       value = section;
-      guide.visible = showSection;
-      guide.position.x = section;
+      guide.visible = showSection && !!drag;
+      guide.position.set(section * Math.SQRT1_2, -section * Math.SQRT1_2, 0);
       handle.hidden = !showSection;
       if (showSection) {
         const r = host.getBoundingClientRect(),
-          p = V(section, 1.1, 3.15).project(camera);
+          p = V(section, 1.1, 3.15).applyAxisAngle(V(0,0,1), -Math.PI/4).project(camera);
         handle.hidden = p.z > 1 || p.z < -1;
         handle.style.left = `${T.MathUtils.clamp(((p.x + 1) * r.width) / 2, 55, r.width - 55)}px`;
         handle.style.top = `${T.MathUtils.clamp(((-p.y + 1) * r.height) / 2, 40, r.height - 40)}px`;

@@ -57,7 +57,7 @@ export default function EngineLab() {
     [error, setError] = useState(''),
     [info, setInfo] = useState(false),
     [camera, setCamera] = useState('perspective');
-  const [section, setSection] = useState(0.16),
+  const [section, setSection] = useState(-0.12),
     [teaching, setTeaching] = useState(false),
     [isolate, setIsolate] = useState(false),
     [tour, setTour] = useState(-1);
@@ -442,7 +442,7 @@ export default function EngineLab() {
             <div className="section-control">
               <div className="range-label">
                 <span id="section-label">Section plane</span>
-                <button onClick={() => setSection(0.16)}>Center</button>
+                <button onClick={() => setSection(-0.12)}>Center</button>
               </div>
               <Slider
                 aria-labelledby="section-label"
@@ -460,9 +460,9 @@ export default function EngineLab() {
               </div>
               <div className="section-presets" aria-label="Section presets">
                 {[
-                  ['Crankshaft', 0],
-                  ['Pistons', 1.2],
-                  ['Valves', 2.1],
+                  ['Crankshaft', -0.28],
+                  ['Pistons', 0.05],
+                  ['Valves', 0.24],
                 ].map(([name, x]) => (
                   <button
                     key={name}

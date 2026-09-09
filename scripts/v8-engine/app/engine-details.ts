@@ -62,13 +62,18 @@ export function addExhibitDetails(c:DetailContext) {
         bolt(fasteners,V());
       }
       // Visible circumferential welds follow the actual header centerline tangent.
-      const path=new T.CatmullRomCurve3([V(sign*.7,2.61,z),V(sign*1.02,2.61,z),V(sign*1.3,2.35,z),V(sign*1.42,1.88,z)]);
+      const path=new T.CatmullRomCurve3([V(sign*.7,2.61,z),V(sign*1.10,2.66,z),V(sign*1.63,2.25,z-.10),V(sign*1.77,1.54,z-.30),V(sign*1.53,1.10,z-.42)]);
       for(const t of [.17,.53,.88]) {
-        const weld=ring(.146,.011,copper,head,path.getPoint(t),false,part(`Header weld · cylinder ${id}`,'A circumferential weld joins the formed stainless primary pipe sections.',id));
+        const weld=ring(.171,.011,copper,head,path.getPoint(t),false,part(`Header weld · cylinder ${id}`,'A circumferential weld joins the formed stainless primary pipe sections.',id));
         weld.quaternion.setFromUnitVectors(V(0,0,1),path.getTangent(t));
       }
-      const outlet=ring(.145,.018,steel,head,path.getPoint(1),false,part(`Header outlet · cylinder ${id}`,'Open end of the primary pipe; the exhaust collector is outside this teaching model.',id));
+      const outlet=ring(.17,.018,steel,head,path.getPoint(1),false,part(`Header outlet · cylinder ${id}`,'The primary pipe joins the longitudinal exhaust collector at this welded socket.',id));
       outlet.quaternion.setFromUnitVectors(V(0,0,1),path.getTangent(1));
+    }
+    tube([V(sign*1.53,1.10,2.0),V(sign*1.53,1.10,-1.4),V(sign*1.62,.95,-2.65),V(sign*1.78,.76,-3.0)],.24,dark,head,part('Exhaust collector','The four primary pipes merge into a common outlet. This compact routing is illustrative, not tuned for a particular engine.'));
+    for(const z of [-2.5,1.95]) {
+      const flange=ring(.25,.035,steel,head,V(sign*1.53,1.10,z),false,part('Exhaust collector collar','Reinforced collar around the common exhaust collector.'));
+      if(z < 0) flange.position.set(sign*1.61,.96,-2.6);
     }
   });
   // A perimeter-only front casting leaves both timing sprockets and chain visible.
