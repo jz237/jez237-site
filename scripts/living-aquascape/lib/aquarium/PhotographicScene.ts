@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {Tetra3D} from './Tetra3D';
-import {createTetraSwim,advanceTetraSwim} from './TetraSwimming';
+import {createTetraSwim,advanceTetraSwim,tetraBehaviorLabel} from './TetraSwimming';
 import {waterSurface} from './WaterSurface';
 import {plantMotion,depthOcclusion} from './SceneDepth';
 import {illumination,type Ecology,type Environment} from './Ecosystem';
@@ -147,7 +147,7 @@ void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;vec2 uv=sceneUv+planti
  f.mesh.rotation.y=f.turn;f.mesh.scale.setScalar(.82+f.depth*.18);
  f.mesh.rotation.z=T.MathUtils.clamp(-f.vy*.008,-.15,.15)*(f.vx>0?1:-1);
  const fu=f.mesh.material.uniforms;fu.time.value=this.time+f.phase;fu.sceneTime.value=this.time;fu.flow.value=u.flow.value;fu.photograph.value=this.photograph;fu.depth.value=f.depth;fu.light.value=u.day.value;fu.activity.value=shrimp?.08:Math.max(.22,Math.hypot(f.vx,f.vy)/18);
- if(i===0&&this.tetra){this.tetra.group.visible=this.mode!=='Biology';this.tetra.group.position.copy(this.pos(f.x,f.y,4));this.tetra.group.rotation.set(0,this.tetraSwim.yaw,this.tetraSwim.pitch,'YXZ');this.tetra.group.scale.setScalar(f.size);this.tetra.update(this.time,fu.activity.value,this.photograph,u.flow.value,f.depth,u.day.value,moveDt);}
+ if(i===0&&this.tetra){this.tetra.group.visible=this.mode!=='Biology';this.tetra.group.position.copy(this.pos(f.x,f.y,4));this.tetra.group.rotation.set(0,this.tetraSwim.yaw,this.tetraSwim.pitch,'YXZ');this.tetra.group.scale.setScalar(f.size);this.tetra.update(this.time,this.tetraSwim.effort,this.photograph,u.flow.value,f.depth,u.day.value,moveDt,this.tetraSwim.pectoralEffort);}
 
  }
  for(let i=0;i<this.bubbleData.length;i++){const b=this.bubbleData[i];b.mesh.visible=i<(this.quality==='Performance'?24:62)&&(b.co2?e.co2>0&&u.day.value>.1:s.oxygen>8.35);if(moveDt){b.y-=b.speed*moveDt*(b.co2?Math.max(.2,e.co2/24):Math.max(.2,s.oxygen/8));if(b.y<200){b.y=b.originY;b.x=b.originX;}}const rise=(b.originY-b.y)/Math.max(1,b.originY-200);const scale=b.co2?Math.max(.12,.75*(1-rise)):1+rise*.1;b.mesh.scale.setScalar(scale);b.mesh.position.copy(this.pos(b.x+Math.sin(this.time*.6+b.phase)*2+rise*e.flow*.13,b.y,4));}
@@ -157,7 +157,7 @@ void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;vec2 uv=sceneUv+planti
  for(const marker of this.markers){const screen=this.pos(marker.x,marker.y,0).project(this.camera);marker.button.style.left=((screen.x+1)*.5*this.host.clientWidth)+'px';marker.button.style.top=((1-screen.y)*.5*this.host.clientHeight)+'px';marker.button.hidden=this.mode!=='Living'||Math.abs(screen.x)>.92||Math.abs(screen.y)>.84;}
  this.renderer.render(this.scene,this.camera);
  }
- private report(f:Swimmer,id:number){this.onSelectedFish?.({id,species:[id===0?'Cardinal tetra · 3D prototype':'Cardinal tetra','Harlequin rasbora','Pearl gourami','Amano shrimp'][f.species],size:f.size,speed:Math.hypot(f.vx,f.vy),hunger:0,mood:this.feeding?'Foraging':f.species===3?'Grazing':'Exploring',preferredDepth:f.species===3?'Planted foreground':'Midwater'});}
+ private report(f:Swimmer,id:number){this.onSelectedFish?.({id,species:[id===0?'Cardinal tetra · 3D prototype':'Cardinal tetra','Harlequin rasbora','Pearl gourami','Amano shrimp'][f.species],size:f.size,speed:Math.hypot(f.vx,f.vy),hunger:0,mood:id===0?tetraBehaviorLabel(this.tetraSwim):this.feeding?'Foraging':f.species===3?'Grazing':'Exploring',preferredDepth:f.species===3?'Planted foreground':'Midwater'});}
  private world(clientX:number,clientY:number){const r=this.canvas.getBoundingClientRect(),v=new T.Vector3((clientX-r.left)/r.width*2-1,-(clientY-r.top)/r.height*2+1,0);v.unproject(this.camera);return {x:v.x+W/2,y:H/2-v.y};}
  private down=(event:PointerEvent)=>{this.canvas.setPointerCapture(event.pointerId);this.pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});this.pointer={startX:event.clientX,startY:event.clientY,cx:this.targetX,cy:this.targetY,distance:0};if(this.pointers.size===2){const p=[...this.pointers.values()];this.pinch=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);this.pinchZoom=this.zoomTarget;}};
  private move=(event:PointerEvent)=>{if(!this.pointers.has(event.pointerId))return;this.pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});if(this.pointers.size===2){const p=[...this.pointers.values()];this.zoom(this.pinchZoom*Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)/Math.max(1,this.pinch));if(this.pointer)this.pointer.distance=100;return;}if(!this.pointer)return;const dx=event.clientX-this.pointer.startX,dy=event.clientY-this.pointer.startY;this.pointer.distance=Math.hypot(dx,dy);const scale=(this.camera.right-this.camera.left)/(this.host.clientWidth*this.zoomCurrent);this.targetX=this.pointer.cx-dx*scale;this.targetY=this.pointer.cy+dy*scale;this.clampCamera();};

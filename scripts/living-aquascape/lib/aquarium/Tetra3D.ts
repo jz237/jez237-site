@@ -7,6 +7,7 @@ export class Tetra3D {
  readonly group=new T.Group();
  private meshes:T.Mesh[]=[];
  private phase=0;
+ private pectoralPhase=0;
  private fins=new Map<T.Mesh,{kind:FinKind;side:number}>();
  private originals=new Map<T.BufferGeometry,Float32Array>();
  private shaders:{uniforms:Record<string,T.IUniform>}[]=[];
@@ -41,9 +42,10 @@ export class Tetra3D {
   this.group.traverse(object=>{if(object instanceof T.Mesh){object.renderOrder=3;const material=object.material as T.MeshPhysicalMaterial;material.onBeforeCompile=shader=>{shader.uniforms.photograph={value:texture};shader.uniforms.flow={value:.65};shader.uniforms.sceneTime={value:0};shader.uniforms.depth={value:.55};shader.uniforms.daylight={value:1};shader.vertexShader='varying vec2 sceneUv;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nvec4 scenePosition=modelMatrix*vec4(transformed,1.0);sceneUv=vec2(scenePosition.x/1672.0+.5,scenePosition.y/941.0+.5);');shader.fragmentShader='uniform sampler2D photograph;uniform float flow,sceneTime,depth,daylight;varying vec2 sceneUv;\n#define time sceneTime\n'+plantMotion+depthOcclusion+'\n'+shader.fragmentShader;shader.fragmentShader=shader.fragmentShader.replace('#include <dithering_fragment>','gl_FragColor.rgb*=.35+.65*daylight;gl_FragColor.a*=1.0-sceneOcclusion(sceneUv+plantingOffset(sceneUv),depth);if(gl_FragColor.a<.08)discard;\n#include <dithering_fragment>');this.shaders.push(shader);};material.customProgramCacheKey=()=> 'tetra-depth-v1';}});
  }
  private add(geometry:T.BufferGeometry,material:T.MeshPhysicalMaterial,kind:FinKind='body',side=1){const mesh=new T.Mesh(geometry,material);this.meshes.push(mesh);this.fins.set(mesh,{kind,side});this.originals.set(geometry,new Float32Array(geometry.getAttribute('position').array));this.group.add(mesh);}
- update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number){
+ update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number,pectoralEffort=.35){
   this.phase=swimPhase(this.phase,dt,activity);
-  for(const mesh of this.meshes){const p=mesh.geometry.getAttribute('position') as T.BufferAttribute,rest=this.originals.get(mesh.geometry)!;for(let i=0;i<p.count;i++){const x=rest[i*3],y=rest[i*3+1],z=rest[i*3+2],fin=this.fins.get(mesh)!;const position=bendTetra(x,y,z,this.phase,activity,fin.kind,fin.side);p.setXYZ(i,...position);}p.needsUpdate=true;mesh.geometry.computeVertexNormals();}
+  this.pectoralPhase+=dt*(5+pectoralEffort*13);
+  for(const mesh of this.meshes){const p=mesh.geometry.getAttribute('position') as T.BufferAttribute,rest=this.originals.get(mesh.geometry)!;for(let i=0;i<p.count;i++){const x=rest[i*3],y=rest[i*3+1],z=rest[i*3+2],fin=this.fins.get(mesh)!;const position=bendTetra(x,y,z,this.phase,activity,fin.kind,fin.side,this.pectoralPhase,pectoralEffort);p.setXYZ(i,...position);}p.needsUpdate=true;mesh.geometry.computeVertexNormals();}
   for(const shader of this.shaders){shader.uniforms.photograph.value=photo;shader.uniforms.sceneTime.value=time;shader.uniforms.flow.value=flow;shader.uniforms.depth.value=depth;shader.uniforms.daylight.value=daylight;}
  }
  dispose(){const materials=new Set<T.Material>();this.group.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();materials.add(o.material as T.Material);}});materials.forEach(m=>m.dispose());}
