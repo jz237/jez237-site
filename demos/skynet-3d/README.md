@@ -2,9 +2,9 @@
 
 A finished, live Three.js interpretation of the Cyberdyne Systems / Skynet concept image. The sculpture uses solid extruded lettering and crest plates, animated mechanical rings, a neural globe, red core lights, particles, and an illuminated platform. The reference PNG is displayed only by the Reference control; it is not used as a substitute for the 3D model.
 
-Live demo: https://jez237.com/games/demos/skynet-3d/
+Live demo: https://jez237.com/demos/skynet-3d/
 
-Listed with a **Demo** badge in the finished **Playable Games** section of https://jez237.com/games/.
+Listed in the **Website Demos** collection at https://jez237.com/demos/. The former games URL redirects here.
 
 ## Controls
 
