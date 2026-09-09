@@ -1,5 +1,6 @@
-/** A zoom-dependent miniature stage. Vegetation is illustrative, sampled from
- * green aerial pixels; its enlarged crowns are never shown at inspection scale. */
+import { woodlandIndex, woodlandCrown } from './woodland.js?v=philly-2026090903';
+/** A zoom-dependent miniature stage. Crowns follow mapped woodland boundaries;
+ * enlarged regional crowns shrink to individual trees as the camera approaches. */
 export function dioramaAmount(distance, enabled = true) {
   const t = enabled ? Math.min(1, Math.max(0, (distance - 9000) / 36000)) : 0;
   return t * t * (3 - 2 * t);
@@ -41,14 +42,17 @@ const WALL_FRAGMENT = /* glsl */ `
   varying vec3 vNormal;
   float hash(vec2 p) { return fract(sin(dot(p, vec2(127.1, 311.7))) * 43758.5453); }
   void main() {
-    float grain = hash(floor(vPos.xz * .08) + floor(vPos.y * .12));
+    float grain = hash(floor(vPos.xz * .13) + floor(vPos.y * .21));
     float strata = sin(vPos.y * .036 + sin(vPos.x * .0008 + vPos.z * .001) * 1.3);
     float fine = sin(vPos.y * .17 + sin(vPos.x * .008 + vPos.z * .007));
     vec3 earth = mix(vec3(.24, .15, .085), vec3(.48, .35, .20),
       clamp((vPos.y + 2200.0) / 3100.0, 0.0, 1.0));
-    earth *= .88 + strata * .08 + fine * .025 + grain * .12;
+    float fissure = pow(max(0.0, sin(vPos.x * .012 + vPos.z * .015 + sin(vPos.y * .004))), 28.0);
+    earth *= .92 + strata * .09 + fine * .045 + grain * .08 - fissure * .13;
     earth *= .72 + .42 * max(0.0, dot(vNormal, normalize(vec3(-.6, .7, .4))));
-    earth = mix(earth, vec3(.085, .061, .040), 1.0 - smoothstep(-1900.0, -1800.0, vPos.y));
+    float timber = .045 * sin(vPos.x * .008 + vPos.z * .013 + sin(vPos.y * .09));
+    earth = mix(earth, vec3(.16 + timber, .105 + timber * .6, .065),
+      1.0 - smoothstep(-1900.0, -1820.0, vPos.y));
     gl_FragColor = vec4(earth, 1.0);
   }
 `;
@@ -63,10 +67,10 @@ const FLOOR_FRAGMENT = /* glsl */ `
   uniform vec2 uSize;
   varying vec3 vPos;
   void main() {
-    vec2 p = abs(vPos.xz - vec2(1200.0, -800.0)) - uSize * .5;
+    vec2 p = abs(vPos.xz - vec2(1600.0, -1100.0)) - uSize * .5;
     float distance = length(max(p, 0.0));
-    float shadow = exp(-distance / 3200.0) * .26 + exp(-distance / 700.0) * .12;
-    vec3 paper = vec3(.79, .765, .72);
+    float shadow = exp(-distance / 2800.0) * .23 + exp(-distance / 500.0) * .18;
+    vec3 paper = vec3(.85, .827, .79);
     paper *= 1.0 - shadow;
     gl_FragColor = vec4(paper, 1.0);
   }
@@ -82,7 +86,9 @@ const TREE_VERTEX = /* glsl */ `
   varying float vSeed;
   void main() {
     vNormal = normal; vLocal = position; vSeed = fract(aSize * .317);
-    vec3 p = position * vec3(aSize, aSize * 1.35, aSize) * uAmount;
+    float lobes = 1.0 + .12 * sin(position.x * 9.0 + vSeed * 12.0)
+      * sin(position.z * 7.0 - position.y * 6.0);
+    vec3 p = position * lobes * vec3(aSize, aSize * (1.1 + vSeed * .5), aSize) * uAmount;
     p.y += aSize * .9 * uAmount;
     p += vec3(aTree.x, aTree.y * uExag, aTree.z);
     gl_Position = projectionMatrix * modelViewMatrix * vec4(p, 1.0);
@@ -96,20 +102,15 @@ const TREE_FRAGMENT = /* glsl */ `
   void main() {
     float light = max(0.0, dot(normalize(vNormal), uSunDir));
     float foliage = sin(vLocal.x * 28.0) * sin(vLocal.y * 32.0) * sin(vLocal.z * 26.0);
-    vec3 green = mix(vec3(.060, .105, .030), vec3(.23, .28, .065), vSeed);
+    vec3 green = mix(vec3(.043, .084, .029), vec3(.18, .235, .072), vSeed);
     green *= (.68 + light * .95) * (1.0 + foliage * .13);
     green *= smoothstep(-1.2, .5, vLocal.y) * .5 + .5;
     gl_FragColor = vec4(green, 1.0);
   }
 `;
 
-function makeTrees(THREE, imagery, projection, sampleElevation, uniforms, bounds = null) {
-  if (!imagery) return null;
-  const canvas = document.createElement('canvas');
-  canvas.width = canvas.height = 1024;
-  const ctx = canvas.getContext('2d', { willReadFrequently: true });
-  ctx.drawImage(imagery, 0, 0, 1024, 1024);
-  const pixels = ctx.getImageData(0, 0, 1024, 1024).data;
+function makeTrees(THREE, coverage, projection, sampleElevation, uniforms, bounds = null) {
+  if (!coverage) return null;
   const positions = [], sizes = [];
   let seed = 237;
   const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
@@ -117,21 +118,24 @@ function makeTrees(THREE, imagery, projection, sampleElevation, uniforms, bounds
   const h = bounds ? (bounds.north - bounds.south) * projection.metersPerDegLat : projection.heightM;
   const ox = bounds ? projection.lonToX((bounds.west + bounds.east) / 2) : 0;
   const oz = bounds ? projection.latToZ((bounds.north + bounds.south) / 2) : 0;
-  const step = bounds ? 18 : 245, inset = bounds ? 9 : 250;
+  const step = bounds ? 20 : 210, inset = bounds ? 8 : 100;
   for (let z = -h / 2 + inset; z < h / 2 - inset; z += step) {
     for (let x = -w / 2 + inset; x < w / 2 - inset; x += step) {
       const px = x + (random() - .5) * step * .9, pz = z + (random() - .5) * step * .9;
-      const ix = Math.floor((px / w + .5) * 1023), iz = Math.floor((pz / h + .5) * 1023);
-      const at = (iz * 1024 + ix) * 4;
-      const r = pixels[at], g = pixels[at + 1], b = pixels[at + 2];
-      // Dark green canopy, not pale fields, roads, roofs or water.
-      if (g < 42 || g > 143 || g < r * 1.08 || g < b * 1.20 || g - r < 9) continue;
-      const elev = sampleElevation(projection.xToLon(px + ox), projection.zToLat(pz + oz));
-      if (elev < 4) continue;
+      const lon = projection.xToLon(px + ox), lat = projection.zToLat(pz + oz);
+      const radius = bounds ? 3.2 + random() * 3.8 : 48 + random() * 55;
+      const edge = woodlandCrown(lon, lat, radius, coverage, projection);
+      if (!edge) continue;
+      const elev = sampleElevation(lon, lat);
+      if (elev < 1) continue;
       positions.push(px + ox, elev, pz + oz);
-      sizes.push(bounds ? 2.6 + random() * 2.8 : 85 + random() * 105);
+      sizes.push(radius * edge);
     }
   }
+  return treeMesh(THREE, positions, sizes, uniforms);
+}
+
+function treeMesh(THREE, positions, sizes, uniforms) {
   const base = new THREE.SphereGeometry(1, 7, 5);
   const geometry = new THREE.InstancedBufferGeometry().copy(base);
   base.dispose();
@@ -146,7 +150,7 @@ function makeTrees(THREE, imagery, projection, sampleElevation, uniforms, bounds
   return mesh;
 }
 
-export function createDiorama(THREE, { terrain, projection, sampleElevation, imagery }) {
+export function createDiorama(THREE, { terrain, projection, sampleElevation, woodland }) {
   const group = new THREE.Group();
   group.name = 'diorama stage';
   const w = projection.widthM, h = projection.heightM;
@@ -179,9 +183,11 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, ima
   const closeCanopies = new Map();
   const treeUniforms = { uExag: { value: 1 }, uAmount: { value: 1 },
     uSunDir: { value: new THREE.Vector3(-.5, .8, .3).normalize() } };
-  const trees = makeTrees(THREE, imagery, projection, sampleElevation, treeUniforms);
+  const coverage = woodland ? woodlandIndex(woodland) : null;
+  const trees = makeTrees(THREE, coverage, projection, sampleElevation, treeUniforms);
   if (trees) group.add(trees);
   const closeUniforms = { ...treeUniforms, uAmount: { value: 1 } };
+  let streetTrees = null;
   const dropTile = key => {
     const mesh = closeCanopies.get(key);
     if (!mesh) return;
@@ -189,9 +195,26 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, ima
   };
   return {
     group,
-    addTile(cell, image) {
+    setLocalDetail(doc) {
+      if (streetTrees) {
+        group.remove(streetTrees); streetTrees.geometry.dispose(); streetTrees.material.dispose();
+        streetTrees = null;
+      }
+      const positions = [], sizes = [];
+      for (const e of doc?.elements || []) {
+        if (e.tags?.natural !== 'tree' || !Number.isFinite(e.lon) || !Number.isFinite(e.lat)) continue;
+        positions.push(projection.lonToX(e.lon), sampleElevation(e.lon, e.lat), projection.latToZ(e.lat));
+        const height = parseFloat(e.tags.height);
+        sizes.push(Number.isFinite(height) ? Math.max(1.5, Math.min(12, height / 2.4)) : 4);
+      }
+      if (sizes.length) {
+        streetTrees = treeMesh(THREE, positions, sizes, closeUniforms);
+        streetTrees.name = 'mapped individual trees'; group.add(streetTrees);
+      }
+    },
+    addTile(cell) {
       if (cell.level > 1 || closeCanopies.has(cell.key)) return;
-      const mesh = makeTrees(THREE, image, projection, sampleElevation, closeUniforms, cell.bounds);
+      const mesh = makeTrees(THREE, coverage, projection, sampleElevation, closeUniforms, cell.bounds);
       if (!mesh) return;
       mesh.userData.cell = cell; mesh.visible = false;
       closeCanopies.set(cell.key, mesh); group.add(mesh);
@@ -206,7 +229,7 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, ima
       const enabled = state.diorama && state.era === 'present' && state.compareMode === 'off';
       group.visible = enabled && state.layers.terrain;
       floor.visible = wall.visible = amount > .001;
-      const imageryOn = state.layers.imagery && state.layers.structures;
+      const imageryOn = state.layers.structures;
       const near = [...closeCanopies.values()].sort((a, b) => {
         const distance = m => Math.hypot(m.userData.cell.lon - pose.lon, m.userData.cell.lat - pose.lat);
         return distance(a) - distance(b);
@@ -218,11 +241,12 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, ima
           && (!fine || mesh.userData.cell.level === 0) && shown++ < 8;
       }
       closeUniforms.uAmount.value = Math.min(1, Math.max(0, (6500 - pose.dist) / 1800));
+      if (streetTrees) streetTrees.visible = imageryOn && pose.dist < 6500;
       treeUniforms.uExag.value = exaggeration;
-      treeUniforms.uAmount.value = .035 + amount * .965;
+      treeUniforms.uAmount.value = .045 + amount * .955;
       treeUniforms.uSunDir.value.copy(sunDir);
       if (trees) {
-        trees.visible = state.layers.imagery && (imageryOn || amount > .1);
+        trees.visible = imageryOn || amount > .1;
       }
     },
     dispose() {

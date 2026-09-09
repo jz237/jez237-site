@@ -11,11 +11,12 @@ export function streetCell(params) {
 }
 export function streetQuery(cell) {
   const b = cell.bounds, bbox = [b.south,b.west,b.north,b.east].map(n => n.toFixed(6)).join(',');
-  return `[out:json][timeout:20][maxsize:16777216];(way["highway"]["area"!="yes"](${bbox});way["building"]["building"!="no"](${bbox});node["addr:housenumber"](${bbox}););out geom;`;
+  return `[out:json][timeout:20][maxsize:16777216];(way["highway"]["area"!="yes"](${bbox});way["building"]["building"!="no"](${bbox});node["addr:housenumber"](${bbox});node["natural"="tree"](${bbox}););out geom;`;
 }
 const keys = ['name','highway','oneway','lanes','width','bridge','tunnel','layer','building',
   'height','min_height','building:levels','roof:shape','roof:height','roof:levels','roof:orientation',
-  'roof:direction','roof:colour','building:colour','addr:housenumber','addr:street'];
+  'roof:direction','roof:colour','building:colour','building:material','natural','leaf_type',
+  'addr:housenumber','addr:street'];
 export function compactStreets(raw, cell) {
   if (raw.remark || !Array.isArray(raw.elements) || raw.elements.length > 6000) throw new Error('Incomplete neighborhood extract');
   const elements = raw.elements.map(e => ({ id: e.id, type: e.type,
@@ -49,7 +50,7 @@ export async function onRequest(context) {
   } catch { return fail(403, 'Forbidden'); }
   const cell = streetCell(url.searchParams);
   if (!cell) return fail(400, 'Invalid neighborhood');
-  const key = new Request(`${url.origin}${url.pathname}?cell=${cell.key}&v=1`);
+  const key = new Request(`${url.origin}${url.pathname}?cell=${cell.key}&v=2`);
   const cached = await caches.default.match(key); if (cached) return cached;
   for (const endpoint of ['https://overpass.private.coffee/api/interpreter',
     'https://overpass-api.de/api/interpreter']) {

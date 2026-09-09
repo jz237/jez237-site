@@ -10,8 +10,8 @@
  * without a renderer.
  */
 
-import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090902';
-import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090902';
+import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026090903';
+import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026090903';
 
 /** Keys that are angles and must take the short way round when blending. */
 const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
@@ -38,7 +38,7 @@ export const PRESETS = [
       'Real terrain and aerial photography, presented as a living miniature. ' +
       'Zoom in to discover the streets and rooftops beneath the model.',
     camera: {
-      camLon: -75.25, camLat: 40.095, camDist: 143000, camBearing: 28, camPitch: 55,
+      camLon: -75.28, camLat: 39.98, camDist: 132000, camBearing: 25, camPitch: 49,
     },
     settings: {
       theme: 'dusk', fov: 40, exaggeration: 2,
@@ -72,7 +72,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
       parks: false, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'hidden-reef',
@@ -93,7 +93,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
       parks: false, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'bauder-signs',
@@ -114,7 +114,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
       parks: false, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'architecture',
@@ -158,7 +158,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: true, hillshade: true, contours: false, water: false,
       parks: false, roads: true, rail: true, boundaries: false,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'overview',
@@ -180,7 +180,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: false, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: false, boundaries: true,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'dawn-delaware',
@@ -202,7 +202,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: false, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'schuylkill-flyover',
@@ -225,7 +225,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: false, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: true, boundaries: false,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'wissahickon',
@@ -247,7 +247,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: false, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: false, boundaries: false,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'main-line-ridge',
@@ -270,7 +270,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: false, hillshade: true, contours: true, water: true,
       parks: true, roads: true, rail: true, boundaries: true,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
   {
     id: 'night-metro',
@@ -292,7 +292,7 @@ export const PRESETS = [
     },
     layers: { terrain: true, imagery: false, hillshade: true, contours: true, water: true,
       parks: false, roads: true, rail: true, boundaries: true,
-      places: true, landmarks: true, structures: false },
+      places: true, landmarks: true, structures: true },
   },
 ];
 

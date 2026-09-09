@@ -1,5 +1,5 @@
-import { buildLineMesh } from './vectors.js?v=philly-2026090902';
-import { neighborhoodLabels } from './neighborhood-data.js?v=philly-2026090902';
+import { buildLineMesh, streetJunctions } from './vectors.js?v=philly-2026090903';
+import { neighborhoodLabels, streetWidth } from './neighborhood-data.js?v=philly-2026090903';
 
 export function createNeighborhood(THREE, options) {
   const { projection, sampleElevation, onData } = options;
@@ -22,7 +22,19 @@ export function createNeighborhood(THREE, options) {
       { width: 1, color: '#e8dfbd', opacity: 0.68 }]) {
       const entry = buildLineMesh(THREE, parts, { projection, sampleElevation },
         { ...style, renderOrder: 19, name: 'neighborhood-roads' });
-      if (entry) { lines.push(entry); group.add(entry.mesh); }
+      if (entry) { entry.detail = false; lines.push(entry); group.add(entry.mesh); }
+    }
+    const junctions = streetJunctions(parts), widths = new Map();
+    for (const road of roads.filter(e => !e.tags.bridge || e.tags.bridge === 'no')) {
+      const width = Math.round(streetWidth(road.tags));
+      if (!widths.has(width)) widths.set(width, []);
+      widths.get(width).push(road.geometry);
+    }
+    for (const [roadWidth, paths] of widths) {
+      const entry = buildLineMesh(THREE, paths, { projection, sampleElevation }, {
+        width: 1, roadWidth, color: '#dad1b6', opacity: .9, junctions,
+        crosswalks: roadWidth >= 5, renderOrder: 18, name: 'mapped-neighborhood-streets' });
+      if (entry) { entry.detail = true; lines.push(entry); group.add(entry.mesh); }
     }
     onData(doc, neighborhoodLabels(doc));
   }
@@ -49,7 +61,7 @@ export function createNeighborhood(THREE, options) {
       if (pending) pending.controller.abort();
       const controller = new AbortController(), revision = ++generation;
       pending = { key, controller };
-      fetch(`street-detail?lon=${lon.toFixed(4)}&lat=${lat.toFixed(4)}`, {
+      fetch(`street-detail?lon=${lon.toFixed(4)}&lat=${lat.toFixed(4)}&v=2`, {
         signal: controller.signal, credentials: 'same-origin',
       }).then(response => {
         if (!response.ok) throw new Error('Neighborhood detail unavailable');
@@ -65,8 +77,10 @@ export function createNeighborhood(THREE, options) {
     },
     update(camera, state, exaggeration, width, height) {
       group.visible = !!current && state.layers.roads && state.era === 'present' && state.camDist < 3200;
-      for (const { material } of lines) {
+      for (const { material, mesh, detail } of lines) {
         const u = material.uniforms;
+        mesh.visible = detail === !!state.layers.structures;
+        u.uStreetDetail.value = detail ? 1 : 0;
         u.uExag.value = exaggeration; u.uLift.value = 0.65;
         u.uNear.value = camera.near; u.uResolution.value.set(width,height);
       }

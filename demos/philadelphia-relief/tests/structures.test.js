@@ -476,7 +476,7 @@ test('structures state plumbing', async (t) => {
       const patch = presetPatch(preset.id);
       assert.ok(Number.isFinite(patch.structureDetail), `${preset.id} detail`);
       assert.ok(Number.isFinite(patch.structureHeight), `${preset.id} height`);
-      assert.equal(patch.layers.structures, ['architecture', 'diorama'].includes(preset.id), `${preset.id} layers`);
+      assert.equal(patch.layers.structures, true, `${preset.id} retains miniature structures`);
     }
     assert.ok(presetPatch('night-metro').structureDetail > presetPatch('overview').structureDetail,
       'the night shot is the dense one');
