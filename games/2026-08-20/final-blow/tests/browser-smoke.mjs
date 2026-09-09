@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'controlsButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.7/);
-    assert.equal(title.version.text, 'VERSION 5.7.5');
+    assert.equal(title.version.text, 'VERSION 5.7.6');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.7.5-ringside');
+    assert.equal(title.engineVersion, '5.7.6-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -4325,15 +4325,15 @@ probe('demo-hud', async () => {
     assert.match(demoHudBug.matchup, /^[A-Z0-9 .'-]+ VS [A-Z0-9 .'-]+$/);
     assert.match(demoHudBug.cycle, /^CYCLE 1 · /);
     assert.equal(demoHudBug.prompt, 'PRESS ANY BUTTON TO PLAY');
-    assert.notEqual(demoHudBug.promptDisplay, 'none');
+    assert.equal(demoHudBug.promptDisplay, 'none');
     // TV-safe: the matchup line is the bug's loudest text and at least twice
     // the old 8.35 px chip on this 1440-wide viewport.
     assert.ok(demoHudBug.matchupSize >= 17, `matchup line should read from the couch, got ${demoHudBug.matchupSize}px`);
     assert.ok(demoHudBug.fontSize >= 10, `bug base size ${demoHudBug.fontSize}px`);
-    // A stable corner: bottom-left, inside the frame, under the floor line.
+    // The playback dock is outside the entire fight, including reflections.
     assert.ok(demoHudBug.bug.left >= demoHudBug.frame.left && demoHudBug.bug.right <= demoHudBug.frame.right);
-    assert.ok(demoHudBug.bug.bottom <= demoHudBug.frame.bottom);
-    assert.ok(demoHudBug.bug.top >= demoHudBug.frame.top + demoHudBug.frame.height * 0.78, 'the bug sits in the reflection band, clear of the fighters');
+    assert.ok(demoHudBug.bug.top >= demoHudBug.frame.bottom, 'the dock must not overlap the game canvas');
+    assert.ok(demoHudBug.bug.bottom - demoHudBug.bug.top <= 84, 'the dock stays compact');
     assert.ok(demoHudBug.bug.left < demoHudBug.frame.left + demoHudBug.frame.width * 0.1);
     // The rate is a tag in the bug, not a 20 px canvas chip.
     assert.equal(demoHudBug.speed.text, '0.75×');
@@ -4688,7 +4688,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.7/);
-    assert.equal(controlledReload.version, '5.7.5-ringside');
+    assert.equal(controlledReload.version, '5.7.6-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4706,7 +4706,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.7/);
-    assert.equal(offlineBoot.version, '5.7.5-ringside');
+    assert.equal(offlineBoot.version, '5.7.6-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4752,7 +4752,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.7.5');
+    assert.equal(landscape.version.text, 'VERSION 5.7.6');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
@@ -5193,7 +5193,7 @@ probe('painted-only', async () => {
   await navigate(client, new URL('./3d/',gameUrl).href);
   await delay(1200);
   assert.equal(await evaluate(client, `location.pathname`),new URL(gameUrl).pathname);
-  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.5-ringside');
+  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.6-ringside');
 });
 
 probe('console-clean', async () => {
