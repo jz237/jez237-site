@@ -92,6 +92,8 @@
     previousIssue: document.querySelector("[data-previous-issue]"),
     nextIssue: document.querySelector("[data-next-issue]"),
     frontPageIndex: document.querySelector("[data-front-page-index]"),
+    continuedPanel: document.querySelector("[data-continued-panel]"),
+    continued: document.querySelector("[data-continued]"),
     searchForm: document.querySelector("[data-search-form]"),
     searchInput: document.querySelector("[data-search-input]"),
   };
@@ -118,6 +120,28 @@
     shelf: { label: "Shelf Watch", accent: "cc-accent-green", icon: "box" },
     modems: { label: "Modems", accent: "cc-accent-cyan", icon: "wave" },
   };
+
+  /* ===== fixed page map: the front page's printed jump lines resolve to these pages ===== */
+  const PAGE_MAP = [
+    { id: "top-story", page: 2 }, { id: "feature-desk", page: 3 }, { id: "underground-desk", page: 4 },
+    { id: "hardware-history", page: 5 }, { id: "game-reviews", page: 6 }, { id: "software-reviews", page: 7 },
+    { id: "picture-desk", page: 8 }, { id: "vintage-ads", page: 9 }, { id: "classifieds", page: 9 },
+    { id: "world-this-week", page: 10 }, { id: "rock-radio", page: 11 }, { id: "this-week", page: 12 },
+    { id: "price-watch", page: 13 }, { id: "market-desk", page: 14 }, { id: "shelf-watch", page: 15 },
+    { id: "modem-desk", page: 16 }, { id: "gadget-desk", page: 17 }, { id: "curiosity", page: 18 },
+    { id: "other-news", page: 19 },
+  ];
+
+  function pageOf(id) {
+    const entry = PAGE_MAP.find((item) => item.id === id);
+    return entry ? entry.page : null;
+  }
+
+  function sectionVisible(id) {
+    const el = document.getElementById(id);
+    return Boolean(el) && !el.hidden;
+  }
+
 
   function isoDate(date) {
     const copy = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
@@ -393,24 +417,28 @@
         icon: "joystick",
         accent: "cc-accent-magenta",
         text: game && game.title,
+        href: "#game-reviews",
       },
       {
         kicker: chrome(issue, "lead", "label", "Top Story"),
         icon: "news",
         accent: "cc-accent-cyan",
         text: issue.lead && issue.lead.headline,
+        href: "#top-story",
       },
       {
         kicker: chrome(issue, "bbs", "label", "Modem Desk"),
         icon: "wave",
         accent: "cc-accent-green",
         text: bbs && bbs.headline,
+        href: "#modem-desk",
       },
       {
         kicker: chrome(issue, "music", "label", "Rock Radio"),
         icon: "doc",
         accent: "cc-accent-cyan",
         text: rockPick && `${rockPick.title} - ${rockPick.artist}`,
+        href: "#rock-radio",
       },
     ].filter((item) => item.text);
   }
@@ -419,13 +447,109 @@
     if (!els.frontPageIndex) return;
     els.frontPageIndex.innerHTML = frontPageItems(issue).map((item) => `
       <li>
-        ${chip(item.icon, item.accent)}
-        <div class="cc-glance-copy">
-          <span class="cc-glance-kicker ${item.accent}">${escapeHtml(item.kicker || "Desk")}</span>
-          <strong>${escapeHtml(item.text)}</strong>
-        </div>
+        <a class="cc-glance-link" href="${escapeHtml(item.href || "#top-story")}">
+          ${chip(item.icon, item.accent)}
+          <div class="cc-glance-copy">
+            <span class="cc-glance-kicker ${item.accent}">${escapeHtml(item.kicker || "Desk")}</span>
+            <strong>${escapeHtml(item.text)}</strong>
+          </div>
+        </a>
       </li>
     `).join("");
+  }
+
+  /* ===== continued inside: every front-page story → its full article ===== */
+  function continuedRows(issue) {
+    const rows = [];
+    const push = (kicker, text, anchorId, sectionId) => {
+      const section = sectionId || anchorId;
+      const page = pageOf(section);
+      if (!text || !page || !sectionVisible(section)) return;
+      rows.push({ kicker: kicker || "Inside", text: cleanPublicCopy(text), href: `#${anchorId}`, page });
+    };
+    push(chrome(issue, "lead", "label", "Top Story"), issue.lead && issue.lead.headline, "top-story");
+    (Array.isArray(issue.stories) ? issue.stories : []).forEach((story, index) => {
+      push(itemLabel(story, "") || chrome(issue, "stories", "label", "Feature Desk"),
+        story && (story.headline || itemTitle(story)), `feature-desk-${index + 1}`, "feature-desk");
+    });
+    const underground = objectSection(issue.undergroundDesk);
+    push(chrome(issue, "underground", "label", "Underground Desk"), underground && underground.headline, "underground-desk");
+    const notes = (issue.computerItems || []).map((item) => item && (item.headline || itemTitle(item))).filter(Boolean);
+    if (notes.length) {
+      push("Computer Desk", `${notes.slice(0, 4).join(" · ")}${notes.length > 4 ? " …" : ""}`, "hardware-history");
+    }
+    const world = objectSection(issue.worldAnchor);
+    push("The World This Week", world && world.headline, "world-this-week");
+    const market = objectSection(issue.market);
+    push(chrome(issue, "market", "label", "Market Desk"), market && market.headline, "market-desk");
+    const bbs = objectSection(issue.bbsNote);
+    push(chrome(issue, "bbs", "label", "Modem Desk"), bbs && bbs.headline, "modem-desk");
+    const gadget = objectSection(issue.gadgetWatch);
+    push(chrome(issue, "gadget", "label", "Gadget Desk"), gadget && gadget.headline, "gadget-desk");
+    const curiosity = objectSection(issue.curiosity);
+    push(chrome(issue, "curiosity", "label", "Today's Curiosity"), curiosity && curiosity.headline, "curiosity");
+    return rows;
+  }
+
+  function alsoInsideLinks(issue) {
+    const links = [];
+    const add = (text, id) => {
+      const page = pageOf(id);
+      if (page && sectionVisible(id)) links.push({ text, href: `#${id}`, page });
+    };
+    add("Top 5 games, movies & platforms", "game-reviews");
+    add(chrome(issue, "software", "label", "Software Shelf"), "software-reviews");
+    add("Rock Radio full chart", "rock-radio");
+    add(chrome(issue, "priceWatch", "label", "Computer Price Watch"), "price-watch");
+    add("This Week briefs", "this-week");
+    add(chrome(issue, "pictureDesk", "label", "Picture Desk"), "picture-desk");
+    add("Ads & classifieds", sectionVisible("vintage-ads") ? "vintage-ads" : "classifieds");
+    return links;
+  }
+
+  function renderContinued(issue) {
+    if (!els.continued || !els.continuedPanel) return;
+    const rows = issue ? continuedRows(issue) : [];
+    const also = issue ? alsoInsideLinks(issue) : [];
+    els.continuedPanel.hidden = rows.length === 0;
+    els.continued.innerHTML = rows.map((row) => `
+      <li>
+        <a href="${escapeHtml(row.href)}">
+          <span class="cc-jump-kicker">${escapeHtml(row.kicker)}</span>
+          <strong>${escapeHtml(row.text)}</strong>
+          <em>Continued on Page ${row.page} →</em>
+        </a>
+      </li>
+    `).join("");
+    const alsoEl = els.continuedPanel.querySelector("[data-continued-also]");
+    if (alsoEl) {
+      alsoEl.hidden = also.length === 0;
+      alsoEl.innerHTML = also.length
+        ? `Also inside: ${also.map((link) => `<a href="${escapeHtml(link.href)}">${escapeHtml(link.text)} — Page ${link.page}</a>`).join(" · ")}`
+        : "";
+    }
+  }
+
+  /* ===== page tags: sections wear the page number the print edition points at ===== */
+  function applyPageTags() {
+    document.querySelectorAll(".cc-page-tag").forEach((tag) => tag.remove());
+    PAGE_MAP.forEach((entry) => {
+      const section = document.getElementById(entry.id);
+      if (!section || section.hidden) return;
+      const head = section.querySelector(".cc-panel-head, .cc-side-head, .cc-world-kicker, .cc-ad-kicker");
+      const tag = document.createElement("span");
+      tag.className = "cc-page-tag";
+      tag.textContent = `Page ${entry.page}`;
+      if (head) head.append(tag); else section.prepend(tag);
+    });
+  }
+
+  // Sections start hidden, so the browser's own #hash scroll misses; redo it after render.
+  function scrollToHash() {
+    const id = decodeURIComponent((window.location.hash || "").slice(1));
+    if (!id) return;
+    const target = document.getElementById(id);
+    if (target && !target.hidden) target.scrollIntoView({ block: "start" });
   }
 
   /* ===== front page banner line ===== */
@@ -747,11 +871,11 @@
     els.storiesPanel.hidden = stories.length === 0;
     setText(els.storiesLabel, chrome(issue, "stories", "label", "Feature Desk"));
     setText(els.storiesTitle, chrome(issue, "stories", "title", "The Week's Stories"));
-    els.stories.innerHTML = stories.map((story) => {
+    els.stories.innerHTML = stories.map((story, index) => {
       const paragraphs = bodyParagraphs(story.body || story.summary || story.text || "");
       const kicker = itemLabel(story, "");
       return `
-        <article class="cc-story">
+        <article class="cc-story" id="feature-desk-${index + 1}">
           ${kicker ? `<span class="cc-panel-label cc-label-cyan">${escapeHtml(kicker)}</span>` : ""}
           <h3>${escapeHtml(story.headline || itemTitle(story) || "Story")}</h3>
           ${story.dek ? `<p class="cc-dek">${escapeHtml(cleanPublicCopy(story.dek))}</p>` : ""}
@@ -765,10 +889,10 @@
 
   function renderComputerItems(issue) {
     if (!els.computerItems) return;
-    els.computerItems.innerHTML = (issue.computerItems || []).map((item) => {
+    els.computerItems.innerHTML = (issue.computerItems || []).map((item, index) => {
       const label = itemLabel(item, "");
       return `
-        <article>
+        <article id="computer-desk-${index + 1}">
           ${label ? `<span class="cc-panel-label cc-label-cyan">${escapeHtml(label)}</span>` : ""}
           <h3>${escapeHtml(item.headline || itemTitle(item) || "Computer story")}</h3>
           ${articleVisual(item.image)}
@@ -934,6 +1058,8 @@
       if (els.worldPanel) els.worldPanel.hidden = true;
       renderWeekScan(null);
       if (els.frontPageIndex) els.frontPageIndex.innerHTML = "";
+      if (els.continuedPanel) els.continuedPanel.hidden = true;
+      if (els.continued) els.continued.innerHTML = "";
       setText(els.editorNote, "Personal computers and personal computer gaming are the editorial priority when source choices compete.");
       return;
     }
@@ -963,6 +1089,9 @@
     renderGadgetWatch(issue);
     renderCuriosity(issue);
     renderFallback(issue);
+    renderContinued(issue);
+    applyPageTags();
+    scrollToHash();
   }
 
   /* ===== issue selection / navigation ===== */
