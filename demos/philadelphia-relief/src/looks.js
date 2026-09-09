@@ -24,18 +24,31 @@ export function wireLooks(host, store, onChoose) {
     title.textContent=look.name; note.textContent=look.note;
     button.append(title,note); host.append(button);
   }
+  let previous=null;
+  const undo=document.createElement('button'); undo.type='button'; undo.className='look-undo';
+  undo.textContent='Undo lighting change'; undo.disabled=true; host.append(undo);
+  const restore=() => {
+    if (!previous) return;
+    onChoose(); const patch=previous; previous=null; undo.disabled=true;
+    store.set(patch,{source:'look-undo'});
+  };
+  undo.addEventListener('click',restore);
   const update = state => {
     const selected=matchingLook(state);
-    for (const button of host.querySelectorAll('button')) {
+    for (const button of host.querySelectorAll('button[data-look]')) {
       button.setAttribute('aria-pressed', String(button.dataset.look===selected));
     }
   };
   const click = event => {
     const id=event.target.closest('button[data-look]')?.dataset.look;
     const look=LOOKS.find(x => x.id===id);
-    if (look) { onChoose(); store.set(look.patch, {source:'look'}); }
+    if (look) {
+      previous=Object.fromEntries(Object.keys(look.patch).map(k => [k,store.get()[k]]));
+      undo.disabled=false; onChoose(); store.set(look.patch, {source:'look'});
+    }
   };
   host.addEventListener('click',click); update(store.get());
   const off=store.subscribe(update);
-  return () => { off(); host.removeEventListener('click',click); };
+  return () => { off(); host.removeEventListener('click',click);
+    undo.removeEventListener('click',restore); };
 }

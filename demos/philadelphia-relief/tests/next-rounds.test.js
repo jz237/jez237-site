@@ -12,3 +12,18 @@ test('landmark labels win over local addresses and image status distinguishes pr
   assert.match(cameraCaption({dist:200,pitch:0,bearing:0}),/Overhead/);
   assert.match(cameraCaption({dist:80000,pitch:50,bearing:90}),/Region/);
 });
+
+import { savedViews } from '../src/saved-views.js';
+import { timelineSeek, captureName } from '../src/experience.js';
+
+test('saved views validate storage and timeline keyboard seeking stays inside the tour', () => {
+  assert.deepEqual(savedViews({}),[]);
+  assert.deepEqual(savedViews([{name:'Broken',state:{camLon:'bad',camLat:40}}]),[]);
+  const views=savedViews([{name:'River',state:{camLon:-75.1,camLat:40,camDist:999999,unknown:42}}]);
+  assert.equal(views[0].state.camDist,190000); assert.equal(views[0].state.unknown,undefined);
+  assert.equal(timelineSeek('ArrowLeft',2,100),0);
+  assert.equal(timelineSeek('ArrowRight',99,100),99.99);
+  assert.equal(timelineSeek('Escape',10,100),null);
+  assert.equal(captureName({camLon:-75.1234,camLat:40.1234},'20260909'),
+    'philadelphia-relief-40.1234N-75.1234W-20260909.png');
+});

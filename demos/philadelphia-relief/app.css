@@ -1369,3 +1369,18 @@ body.notes-collapsed .readout-preset-name { font-size: 23px; }
   body.notes-collapsed .readout-preset { padding: 0; max-width: none; }
   body.notes-collapsed .readout-preset-name { font-size: 18px; }
 }
+
+.look-undo, .saved-entry button { background: #26434c; color: #f6d49c; border: 1px solid #abc4c33d; border-radius: 8px; padding: 10px; cursor: pointer; }
+.look-undo:disabled { opacity: .4; cursor: default; }
+.saved-views { margin-bottom: 22px; padding: 14px; border: 1px solid #b6cecf33; border-radius: 12px; }
+.saved-views summary { cursor: pointer; color: #f2d7a8; font-weight: 600; }
+.saved-views label { display: block; margin: 14px 0 7px; font-size: 12px; }
+.saved-entry { display: flex; gap: 6px; }
+.saved-entry input { min-width: 0; flex: 1; padding: 10px; border-radius: 8px; border: 1px solid #b6cecf33; color: #edf1eb; background: #102c37; }
+.saved-hint, .saved-status { font-size: 11px; color: #b3c8cf; line-height: 1.5; }
+.saved-row { display: flex; margin-top: 6px; gap: 5px; }
+.saved-row button { color: #e5eade; background: #193640; border: 1px solid #b6cecf33; border-radius: 7px; padding: 11px; cursor: pointer; }
+.saved-row button:first-child { flex: 1; text-align: left; overflow-wrap: anywhere; }
+.saved-row button:last-child { width: 42px; }
+.saved-views button:focus-visible, .look-undo:focus-visible,
+.timeline-track:focus-visible { outline: 2px solid #edbb70; outline-offset: 3px; }
