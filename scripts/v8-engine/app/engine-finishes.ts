@@ -105,7 +105,7 @@ export function sectionCap(
     special.push(stencil);
   }
   const material = new T.MeshStandardMaterial({
-    color: 0xca9065,
+    color: 0xe5a24f,
     metalness: 0.6,
     roughness: 0.48,
     side: T.DoubleSide,

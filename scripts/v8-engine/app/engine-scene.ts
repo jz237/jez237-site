@@ -18,6 +18,7 @@ import {
   markingTexture,
 } from './engine-finishes';
 import { createOverlays, type FlowMode } from './engine-overlays';
+import { addExhibitDetails } from './engine-details';
 import {
   cylinderState,
   R,
@@ -91,7 +92,7 @@ export function createEngineScene(
     room = new RoomEnvironment();
   const environment = pmrem.fromScene(room, 0.04);
   scene.environment = environment.texture;
-  scene.environmentIntensity = 0.45;
+  scene.environmentIntensity = 0.65;
   room.dispose();
   const camera = new T.PerspectiveCamera(35, 1, 0.1, 100);
   const controls = new OrbitControls(camera, renderer.domElement);
@@ -100,7 +101,7 @@ export function createEngineScene(
   controls.minDistance = 1.2;
   controls.maxDistance = 26;
   controls.maxPolarAngle = Math.PI * 0.91;
-  const cameraTarget = V(8, 5.8, 10);
+  const cameraTarget = V(10, 5.7, 7.5);
   const orbitTarget = V(0, 0.9, 0);
   let cameraTransition = false;
   camera.position.copy(cameraTarget);
@@ -159,7 +160,7 @@ export function createEngineScene(
     brass = mat(0xbba16c, 0.8, 0.29);
   const blockMat = mat(0x75818b, 0.7, 0.43),
     headMat = mat(0x8c979d, 0.8, 0.32),
-    coverMat = mat(0x173c43, 0.72, 0.31);
+    coverMat = mat(0x424c55, 0.82, 0.29);
   const castTexture = surfaceTexture('cast'),
     brushedTexture = surfaceTexture('brushed'),
     rubberTexture = surfaceTexture('rubber');
@@ -167,14 +168,14 @@ export function createEngineScene(
     material.bumpMap = castTexture;
     material.bumpScale = 0.008;
     material.roughnessMap = castTexture;
-    material.roughness = 0.85;
+    material.roughness = 0.66;
   }
   aluminum.bumpMap = brushedTexture;
   aluminum.bumpScale = 0.0015;
-  aluminum.roughness = 0.46;
+  aluminum.roughness = 0.34;
   steel.bumpMap = brushedTexture;
   steel.bumpScale = 0.001;
-  steel.roughness = 0.3;
+  steel.roughness = 0.24;
   steel.clearcoat = 0.16;
   steel.clearcoatRoughness = 0.22;
   black.bumpMap = rubberTexture;
@@ -307,6 +308,8 @@ export function createEngineScene(
         'Spreads the fastener load across the machined mounting surface.',
       ),
     );
+    cyl(0.027, 0.002, black, p, pos.clone().add(V(0, 0.036, 0)),
+      part('Recessed fastener drive', 'The socket accepts a tool for tightening the fastener.'), 6);
   }
   function link(m: T.Mesh, a: T.Vector3, b: T.Vector3) {
     m.position.copy(a).add(b).multiplyScalar(0.5);
@@ -350,17 +353,17 @@ export function createEngineScene(
     [-0.43, 0.43].forEach((dz) => {
       const web = box(0.34, 1, 0.16, dark, crank, V(), crankInfo);
       link(web, V(-x * 0.82, -y * 0.82, z + dz), V(x, y, z + dz));
-      axisCylinder(
-        0.3,
-        0.17,
-        dark,
-        crank,
-        V(-x * 0.7, -y * 0.7, z + dz),
-        part(
-          'Counterweight',
-          'Counterweights oppose the rotating crankpins and help balance the rotating assembly.',
-        ),
-      );
+      const weightShape = new T.Shape();
+      weightShape.moveTo(-0.17, 0.12);
+      weightShape.lineTo(0.17, 0.12);
+      weightShape.absarc(0, 0, 0.60, -0.48, -Math.PI + 0.48, true);
+      weightShape.closePath();
+      const weight = mesh(new T.ExtrudeGeometry(weightShape, {
+        depth: 0.15, bevelEnabled: true, bevelSize: 0.018,
+        bevelThickness: 0.01, bevelSegments: 3, curveSegments: 32,
+      }), dark, crank, V(0, 0, z + dz - 0.075), part('Forged crank counterweight',
+        'Broad crescent-shaped masses oppose the crankpins. This illustrative profile fits within the crankcase; exact balance masses are not calculated.'));
+      weight.rotation.z = -phase * RAD;
     });
   });
   axisCylinder(
@@ -563,7 +566,7 @@ export function createEngineScene(
         V(0, 3.45, 0),
         part(
           'Valve cover',
-          'Protects the rocker arms and valve springs. Removed in cutaway view.',
+          'Protects the rocker arms and valve springs. The near-bank cover is removed in cutaway view; the far cover remains for context.',
         ),
       ),
     );
@@ -1014,7 +1017,7 @@ export function createEngineScene(
       new T.CatmullRomCurve3(points),
       40,
       radius,
-      10,
+      20,
       false,
     );
     if (
@@ -1100,7 +1103,7 @@ export function createEngineScene(
         z = cylinderState(id, 0).z;
       const hi = part(
         `Exhaust header · cylinder ${id}`,
-        'Carries hot exhaust gas away from the cylinder head. Individual primary pipes are shown; the downstream collector is omitted.',
+        'Carries hot exhaust gas away from the cylinder head. Welded primary pipes are shown; the downstream collector is omitted.',
         id,
       );
       tube(
@@ -1110,7 +1113,7 @@ export function createEngineScene(
           V(sign * 1.3, 2.35, z),
           V(sign * 1.42, 1.88, z),
         ],
-        0.115,
+        0.145,
         steel,
         head,
         hi,
@@ -1353,25 +1356,36 @@ export function createEngineScene(
     'A common air chamber distributes the incoming charge to eight intake runners. Internal flow is shown schematically.',
   );
   const plenumShape = new T.Shape();
-  plenumShape.moveTo(-0.42, -2.3);
-  plenumShape.lineTo(0.42, -2.3);
-  plenumShape.lineTo(0.42, 2.3);
-  plenumShape.lineTo(-0.42, 2.3);
+  plenumShape.moveTo(-0.48, 3.08);
+  plenumShape.lineTo(0.48, 3.08);
+  plenumShape.lineTo(0.48, 3.46);
+  plenumShape.lineTo(0.34, 3.6);
+  plenumShape.lineTo(-0.34, 3.6);
+  plenumShape.lineTo(-0.48, 3.46);
   plenumShape.closePath();
+  const plenumBore = new T.Path();
+  plenumBore.moveTo(-0.38, 3.18);
+  plenumBore.lineTo(-0.38, 3.42);
+  plenumBore.lineTo(-0.30, 3.50);
+  plenumBore.lineTo(0.30, 3.50);
+  plenumBore.lineTo(0.38, 3.42);
+  plenumBore.lineTo(0.38, 3.18);
+  plenumBore.closePath();
+  plenumShape.holes.push(plenumBore);
   const plenum = mesh(
     new T.ExtrudeGeometry(plenumShape, {
-      depth: 0.38,
+      depth: 4.6,
       bevelEnabled: true,
-      bevelSize: 0.12,
-      bevelThickness: 0.1,
+      bevelSize: 0.025,
+      bevelThickness: 0.025,
       bevelSegments: 4,
     }),
     aluminum,
     intakeAssembly,
-    V(0, 3.5, 0),
+    V(0, 0, -2.3),
     plenumInfo,
   );
-  plenum.rotation.x = Math.PI / 2;
+  for (const z of [-2.3, 2.3]) box(0.92, 0.48, 0.045, aluminum, intakeAssembly, V(0, 3.34, z), plenumInfo);
   const throttleInfo = part(
     'Throttle body',
     'The throttle meters air entering the intake plenum. Its plate is shown partially open; throttle response is not simulated.',
@@ -1563,6 +1577,9 @@ export function createEngineScene(
       'Removes particles from lubricating oil before it returns to the engine’s oil galleries.',
     ),
   );
+  addExhibitDetails({ T, banks, block, crank, pan, lower, upper, chainLinks,
+    steel, aluminum, dark, black, blockMat, headMat, coverMat, copper,
+    mesh, box, cyl, axisCylinder, ring, bolt, tube, part, markingTexture, markingTextures });
   banks.forEach((b) =>
     [b.block, b.head].forEach((g) =>
       g.traverse((o) => {
@@ -1882,7 +1899,7 @@ export function createEngineScene(
       (view === 'exploded' || previousView === 'exploded')
     ) {
       orbitTarget.set(0, view === 'exploded' ? 1.5 : 0.9, 0);
-      cameraTarget.copy(view === 'exploded' ? V(10, 7.2, 12.5) : V(8, 5.8, 10));
+      cameraTarget.copy(view === 'exploded' ? V(10, 7.2, 12.5) : V(10, 5.7, 7.5));
       cameraTransition = true;
     }
     if (previousView !== view || previousTransparent !== transparent) {
@@ -1906,11 +1923,13 @@ export function createEngineScene(
     );
     banks.forEach((b) =>
       b.covers.forEach((c) => {
-        c.visible = coverAlpha > 0.01;
+        // Keep the far-bank cover for context while exposing the near rockers.
+        const alpha = b.sign === -1 && !transparent ? 1 : coverAlpha;
+        c.visible = alpha > 0.01;
         const m = (c as T.Mesh).material as T.MeshStandardMaterial;
-        m.transparent = coverAlpha < 0.999;
-        m.opacity = coverAlpha;
-        m.depthWrite = coverAlpha > 0.95;
+        m.transparent = alpha < 0.999 || !!m.map;
+        m.opacity = alpha;
+        m.depthWrite = alpha > 0.95 && !m.map;
       }),
     );
     crank.rotation.z = -angle * RAD;
@@ -2196,7 +2215,7 @@ export function createEngineScene(
     },
     preset(name: string) {
       const presets: Record<string, T.Vector3> = {
-        perspective: V(8, 5.8, 10),
+        perspective: V(10, 5.7, 7.5),
         front: V(0, 2, 15),
         side: V(14, 3, 0),
         top: V(0, 16, 0.01),
