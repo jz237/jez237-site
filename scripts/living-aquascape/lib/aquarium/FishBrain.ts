@@ -1,4 +1,4 @@
-export type FishPoint={id:number;x:number;y:number;z?:number;vx?:number;vy?:number};
+export type FishPoint={radius?:number;id:number;x:number;y:number;z?:number;vx?:number;vy?:number};
 export type FishSenses={food:FishPoint[];neighbors:FishPoint[];schoolGoal?:FishPoint};
 export type FishIntent={kind:'explore'|'feed'|'school'|'rest'|'space';reason:string;target?:FishPoint};
 export type FishBrain={hunger:number;energy:number;curiosity:number;decisionIn:number;biteIn:number;seed:number;intent:FishIntent;consumedFood:number|null;visited:{x:number;y:number;age:number}[]};
@@ -36,3 +36,5 @@ export function thinkFish(b:FishBrain,dt:number,x:number,y:number,speed:number,s
  }
  return b.intent;
 }
+
+

@@ -6,10 +6,10 @@ export function swimPhase(previous:number,dt:number,activity:number){
 export function tetraSpine(x:number,phase:number,activity:number){
  const effort=Math.max(0,Math.min(1.5,activity));
  const u=Math.max(0,Math.min(1.3,(.33-x)/.65));
- const amplitude=.002+effort*.155,travel=phase-u*3.3;
- const envelope=Math.pow(u,1.4);
+ const amplitude=.002+effort*.195,travel=phase-u*3.3;
+ const envelope=Math.pow(u,1.25);
  const z=amplitude*envelope*Math.sin(travel);
- const slope=u>0?-amplitude/.65*(1.4*Math.pow(u,.4)*Math.sin(travel)-3.3*envelope*Math.cos(travel)):0;
+ const slope=u>0?-amplitude/.65*(1.25*Math.pow(u,.25)*Math.sin(travel)-3.3*envelope*Math.cos(travel)):0;
  return {x,z,angle:Math.atan(slope)};
 }
 function alongSpine(x:number,y:number,z:number,phase:number,effort:number):[number,number,number]{

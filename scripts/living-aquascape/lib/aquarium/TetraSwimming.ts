@@ -66,6 +66,8 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
  if(intent?.kind==='rest'){pace=0;drive=.015;fan=.85;s.behavior='gliding';s.remaining=2;}
  if(turning){pace=Math.min(pace,8);drive=.3;fan=.7;}
  if(lowOxygen){pace=Math.min(pace,11);drive=Math.min(drive,.55);}
+ // Anticipate a close approach before the hard contact constraint is needed.
+ if(senses){for(const other of senses.neighbors){const dx=other.x-s.x,dy=other.y-s.y,dz=((other.z??s.z)-s.z)*180;const distance=Math.hypot(dx,dy,dz);const ahead=dx*s.direction>0;const closing=(s.vx-(other.vx??0))*dx+(s.vy-(other.vy??0))*dy;if(ahead&&closing>0&&distance<90&&Math.abs(dy)<38&&Math.abs(dz)<45){pace=Math.min(pace,Math.max(4,(distance-55)*.35));fan=Math.max(fan,.85);drive=Math.min(drive,.18);}}}
  s.speed=ease(s.speed,pace,s.behavior==='gliding'?.65:1.65,dt);
  s.effort=ease(s.effort,drive,3,dt);s.pectoralEffort=ease(s.pectoralEffort,fan,3,dt);
  const holding=s.behavior==='inspecting'||intent?.kind==='rest';
