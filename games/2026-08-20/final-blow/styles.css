@@ -4473,3 +4473,6 @@ body.demo-active #app:fullscreen .game-frame { height: calc(100dvh - var(--demo-
   #app > .demo-hud .demo-hud-actions { justify-content: flex-start; }
   #app > .demo-hud .demo-share, #app > .demo-hud .demo-hud-sound { font-size: 10px; padding-inline: 7px; }
 }
+
+/* Keep cinematic action clear of competing animated announcement layers. */
+body.finisher-active #announcer, body.finisher-active #bookStampToast { visibility: hidden; }

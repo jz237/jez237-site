@@ -395,6 +395,7 @@ import {
 import {
   FINISHER_CHOREOGRAPHY,
   cinematicDrawRotation,
+  directProjectileFinisher, finisherLens,
   finisherCinematicPose,
   sampleFinisher,
   spaceFinisherPose,
@@ -997,6 +998,7 @@ function projectileFinisherScript(fighterId, variant = 0) {
   };
   return {
     ...script,
+    keys: directProjectileFinisher(script, script.impacts),
     combo: `${fatality.special} FATALITY`,
     signatureSpecial: fatality.special,
     signatureProjectile: fatality.projectileId,
@@ -1056,7 +1058,7 @@ finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.10` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.11` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -14302,23 +14304,12 @@ function finisherCinematicCamera(poseZoom = 1.18) {
   // bodies apart, then settle the vertical focus onto the victim at impact.
   const separation = Math.abs(attacker.x - victim.x);
   const framingLimit = clamp((W * .72) / Math.max(340, separation), 1.18, 1.68);
-  zoom = Math.min(zoom, framingLimit);
+  zoom = Math.min(finisherLens(elapsed, finisher.fatalityAt, state.accessibility.reducedMotion), framingLimit);
   const nominalZoom = zoom;
   if (state.accessibility.reducedMotion) zoom = Math.min(zoom, shot === "final-impact" ? 1.4 : 1.32);
-  const midpointY = (attacker.y + victim.y) * .5 - 150;
-  const impactY = victim.y - (shot === "final-impact" ? 132 : 145);
   const midpointX = (attacker.x + victim.x) * .5;
-  const baseY = inImpactWindow || shot === "aftermath" ? lerp(midpointY, impactY, .68) : midpointY;
-  // 2.8 critic round (M3): once the gore aftermath owns the frame the camera
-  // favours the BODY — the resting weapon only gets a light pull, so the
-  // money shot stays centred on the kill instead of drifting to a prop.
-  const goreAftermath = shot === "aftermath" && finisher.fatalityTriggered && state.graphicFatalities;
-  const cameraX = projectileFocused && !state.accessibility.reducedMotion
-    ? lerp(midpointX, projectile.x, shot === "aftermath" ? (goreAftermath ? .22 : .42) : shot === "final-impact" ? .55 : .72)
-    : midpointX;
-  const cameraY = projectileFocused && !state.accessibility.reducedMotion
-    ? lerp(baseY, projectile.y, shot === "aftermath" ? (goreAftermath ? .2 : .32) : .55)
-    : baseY;
+  const cameraX = midpointX;
+  const cameraY = FLOOR - 178 - Math.max(0, FLOOR - Math.min(attacker.y,victim.y)) * .18;
   return {
     x: clamp(cameraX, midpointX - 75, midpointX + 75),
     y: clamp(cameraY, H * .3, H * .59),
@@ -14326,7 +14317,7 @@ function finisherCinematicCamera(poseZoom = 1.18) {
     nominalZoom,
     shot,
     intensity,
-    focus: projectileFocused ? "projectile" : "fighters",
+    focus: "fighters",
     projectileId: projectileFocused ? projectile.projectileId : null,
   };
 }
@@ -14658,15 +14649,15 @@ function triggerFinisherImpact(finisher, impact) {
     : { x: victim.x - finisher.direction * 12, y: victim.y - 125 };
   const pointX = wound.x;
   const pointY = wound.y;
-  const count = Math.round((finalImpact ? 52 : 12) * impact.power * (gore ? 1.35 : 1));
+  const count = Math.round((finalImpact ? 20 : 7) * impact.power);
 
   victim.hitFlash = finalImpact ? .22 : .11;
   attacker.specialGlow = finalImpact ? 1.1 : .45;
   // The long final-frame hold reads as time dilation without changing the
   // authored pose timeline or introducing a second simulation clock.
-  state.hitstop = Math.max(state.hitstop, finalImpact ? .26 : .055 + impact.power * .032);
-  state.shake = Math.max(state.shake, finalImpact ? 1.1 : .16 + impact.power * .22);
-  if (finalImpact && $("#flashToggle").checked) state.flash = .34;
+  state.hitstop = Math.max(state.hitstop, finalImpact ? .16 : .035 + impact.power * .018);
+  state.shake = Math.max(state.shake, finalImpact ? .46 : .1 + impact.power * .1);
+  if (finalImpact && $("#flashToggle").checked) state.flash = .12;
   // Wave 7: the killing blow tears the screen — distortion ring from the
   // impact point plus a short RGB-split impulse (render-only latches).
   if (finalImpact) latchFatalImpactPresentation(pointX, pointY);
@@ -14679,6 +14670,7 @@ function triggerFinisherImpact(finisher, impact) {
   }
   // Release 1.6 LOUD: synth heft under the scripted cinematic impacts too.
   impactLayerAudio(finalImpact ? "super" : "heavy", { counter: false });
+  if (!finalImpact) playMoveFoley(impact.projectilePhase === "prime" ? "throw" : `object-${finisher.signatureProjectileId}`, attacker);
   // Wave 9: the victim's fatality scream on the killing blow — a distinct
   // cue from the shared ko bell (guarded + tick-deduped inside).
   if (finalImpact) fighterReactiveCue(victim, "scream");
@@ -14880,6 +14872,10 @@ function updateFinisher(dt) {
   state.facingAxis = state.fighters[0].facing;
   attacker.grounded = pose.ay < 2;
   victim.grounded = pose.vy < 2;
+  if (!finisher.landingFoleyPlayed && finisher.elapsed >= finisher.fatalityAt + .48) {
+    finisher.landingFoleyPlayed = true;
+    playMoveFoley("ko", victim);
+  }
   attacker.cinematicFrame = pose.af;
   victim.cinematicFrame = pose.vf;
   attacker.cinematicRotation = pose.ar * finisher.direction;
@@ -23699,10 +23695,10 @@ function drawGraphicFatalityVictim(atlas, frame, size, fatality, time, mirror = 
     const pulse = (Math.sin(time * .045) + 1) * .5;
     if (settle < .62) {
       whole({
-        x: (pulse - .5) * 18,
-        filter: pulse > .46 ? "brightness(2.2) contrast(1.7) grayscale(1)" : "brightness(.18) contrast(2)",
+        x: (pulse - .5) * 5,
+        filter: pulse > .46 ? "brightness(1.25) contrast(1.12)" : "brightness(.78) contrast(1.12)",
       });
-      drawFatalitySkeleton(size, fatality, pulse);
+      // Keep the painted body visible instead of a diagrammatic skeleton.
     } else {
       // the charred pieces let go and drop once the arc releases (~.71s in)
       scatterPiece(0, .26, -52, -70, -.58, { filter: "brightness(.2) saturate(0)" }, .71);
@@ -25528,6 +25524,8 @@ function drawWeapon(fighter, handX, handY, swing) {
 }
 
 function drawFinisherImpact(effect, alpha) {
+  ctx.scale(.42, .42);
+  ctx.shadowBlur = 8;
   const spread = (effect.final ? 155 : 72) * effect.power;
   const growth = 1 - alpha;
   ctx.globalCompositeOperation = "screen";
@@ -26955,44 +26953,6 @@ function drawCinematicGoreOverlay() {
       }
     }
 
-    // Family accent marks dry off within ~1.5s of the kill instead of
-    // sitting printed on the glass for the whole hold (M5).
-    const accentFade = clamp(1 - (age - 0.9) / 0.6, 0, 1);
-    if (accentFade > 0.02) {
-    ctx.fillStyle = effect.color;
-    ctx.strokeStyle = effect.secondary;
-    ctx.globalAlpha = alpha * .56 * accentFade;
-    ctx.lineCap = "round";
-    if (["slice", "rupture", "launch"].includes(effect.family)) {
-      ctx.lineWidth = effect.family === "slice" ? 19 : 13;
-      ctx.beginPath();
-      ctx.moveTo(W * .08, H * (effect.family === "launch" ? .76 : .68));
-      ctx.quadraticCurveTo(W * .48, H * .25, W * .94, H * (effect.family === "rupture" ? .18 : .34));
-      ctx.stroke();
-    } else if (["crush", "implode"].includes(effect.family)) {
-      ctx.fillStyle = effect.secondary;
-      ctx.beginPath();
-      ctx.ellipse(W * .5, H * .93, W * .43, H * .1, 0, 0, Math.PI * 2);
-      ctx.fill();
-    } else if (effect.family === "electrocute") {
-      ctx.globalCompositeOperation = "screen";
-      ctx.strokeStyle = "#ff3048";
-      ctx.lineWidth = 6;
-      for (let bolt = 0; bolt < 6; bolt += 1) {
-        ctx.beginPath();
-        ctx.moveTo((bolt + 1) * W / 7, 0);
-        ctx.lineTo((bolt + .7) * W / 7, H * .2);
-        ctx.lineTo((bolt + 1.25) * W / 7, H * .42);
-        ctx.stroke();
-      }
-    } else {
-      ctx.fillStyle = effect.color;
-      for (let strip = 0; strip < 8; strip += 1) {
-        ctx.globalAlpha = alpha * accentFade * (.18 + strip % 3 * .1);
-        ctx.fillRect((strip * 191 + familySeed) % W, H * (.12 + strip * .1), W * (.08 + strip % 3 * .04), 5 + strip % 3 * 5);
-      }
-    }
-    }
     ctx.restore();
   }
 }
@@ -27641,6 +27601,7 @@ function drawParticles() {
     } else if (effect.kind === "fatalityProjectile") {
       drawFatalityProjectile(effect, alpha);
     } else if (effect.kind === "projectileFocusBurst") {
+      ctx.scale(.6, .6);
       drawProjectileFocusBurst(effect, alpha);
     } else if (effect.kind === "fatalityPool") {
       drawFatalityPool(effect, alpha);
@@ -28072,7 +28033,7 @@ function drawFinisherOverlay() {
   const attacker = state.fighters[finisher.winner];
   const progress = finisher.elapsed / finisher.script.duration;
   const cinematic = finisherCinematicCamera(state.cinematicZoom);
-  const barHeight = 30 + cinematic.intensity * 30 + Math.sin(clamp(progress * 2, 0, 1) * Math.PI * .5) * 7;
+  const barHeight = 40 + Math.sin(clamp(progress * 3, 0, 1) * Math.PI * .5) * 6;
   const tint = ctx.createRadialGradient(W * .5, H * .48, 90, W * .5, H * .48, W * .72);
   tint.addColorStop(0, `${attacker.def.accent}${cinematic.shot === "final-impact" ? "2f" : "16"}`);
   tint.addColorStop(.62, "rgba(60,0,8,.08)");
@@ -28093,25 +28054,25 @@ function drawFinisherOverlay() {
   // shipping blocker). All three meta labels move into the BOTTOM bar, which
   // is actually visible. 2D-off path is byte-identical.
   const dressedOverlay = cinema3dDressingActive();
-  const metaY = dressedOverlay ? H - 10 : barHeight - 11;
+  const metaY = H - 12;
   ctx.save();
   ctx.textAlign = "left";
   ctx.font = "900 11px Arial Narrow, Arial";
   ctx.fillStyle = attacker.def.accent;
   ctx.globalAlpha = .82;
-  ctx.fillText(`CINEMATIC · ${cinematic.shot.replaceAll("-", " ").toUpperCase()}`, 24, metaY);
+  ctx.fillText(attacker.def.name.toUpperCase(), 24, metaY);
   if (state.graphicFatalities) {
     const attackerId = attacker.def.finisherScriptId || attacker.def.id;
     const fatality = getGraphicFatality(attackerId, finisher.type);
     ctx.textAlign = "center";
     ctx.fillStyle = "#d90b19";
-    ctx.fillText(`REALITY BREAK · ${fatality.special} FATALITY`, W * .5, metaY);
+    ctx.fillText(fatality.special, W * .5, metaY);
   }
   if (cinematic.shot === "final-impact") {
     ctx.textAlign = "right";
     ctx.fillStyle = "#fff0df";
     ctx.font = "1000 14px Arial Narrow, Arial";
-    ctx.fillText("FINAL-HIT SLOW MOTION", W - 24, metaY);
+    ctx.fillText("FINAL BLOW", W - 24, metaY);
   }
   ctx.restore();
 
@@ -28127,61 +28088,16 @@ function drawFinisherOverlay() {
     ctx.fillStyle = "white";
     ctx.shadowColor = "black";
     ctx.shadowBlur = 8;
-    ctx.fillText(finisher.beatLabel, W * .5, H - barHeight - 16);
+    ctx.fillText(finisher.beatLabel, W * .5, H - barHeight + 17);
     ctx.font = "900 11px Arial";
     ctx.fillStyle = attacker.def.accent;
     // 3D mode: the beats counter rides just under its beat label, clear of
     // the meta line now living in the bottom bar.
-    ctx.fillText(`${finisher.impactIndex} / 3 PROJECTILE BEATS`, W * .5,
-      dressedOverlay ? H - barHeight - 2 : H - barHeight + 19);
+
     ctx.restore();
   }
 
-  if (finisher.fatalityTriggered) {
-    const attackerId = attacker.def.finisherScriptId || attacker.def.id;
-    const fatality = graphicFatalitySnapshot(attackerId, finisher.type, finisher.elapsed, finisher.fatalityAt);
-    fatality.aftermath = Math.max(fatality.aftermath, finisherAftermathSeconds(finisher));
-    const reveal = fatality.reveal;
-    // 2.8 critic round (M3): the title card gets its intro beat (~1s) parked
-    // over the frame, then LIFTS out of the victim's screen region — it
-    // tucks up under the top letterbox bar at reduced scale while the
-    // caption stack fades out, so the strongest arterial window is readable.
-    const lift = clamp((fatality.aftermath - 1.05) / 0.5, 0, 1);
-    const titleY = lerp(H * .23, barHeight + 30, lift);
-    ctx.save();
-    ctx.globalAlpha = Math.sin(reveal * Math.PI * .5) * clamp(1.45 - fatality.aftermath * .14, .55, 1);
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-    ctx.shadowColor = "rgba(0,0,0,.95)";
-    ctx.shadowBlur = 18;
-    ctx.lineWidth = Math.round(lerp(12, 7, lift));
-    ctx.strokeStyle = "rgba(0,0,0,.92)";
-    ctx.fillStyle = fatality.palette[0];
-    ctx.font = `1000 ${Math.round(lerp(52, 28, lift))}px Arial Narrow, Impact, sans-serif`;
-    ctx.strokeText("GRAPHIC FATALITY", W * .5, titleY);
-    ctx.fillText("GRAPHIC FATALITY", W * .5, titleY);
-    if (lift < 0.98) {
-      const captionAlpha = 1 - lift;
-      ctx.globalAlpha *= captionAlpha;
-      ctx.font = "900 18px Arial Narrow, Arial, sans-serif";
-      ctx.lineWidth = 7;
-      ctx.fillStyle = "#fff0df";
-      // 3D mode: ONE title line under the header (round-3, critic item 2) —
-      // the cinematic carries the story; the caption stack is gone.
-      const titleLine = dressedOverlay ? fatality.caption : `${fatality.title} · ${fatality.caption}`;
-      ctx.strokeText(titleLine, W * .5, titleY + H * .07);
-      ctx.fillText(titleLine, W * .5, titleY + H * .07);
-      if (!dressedOverlay) {
-        ctx.font = "900 14px Arial Narrow, Arial, sans-serif";
-        ctx.lineWidth = 6;
-        ctx.fillStyle = attacker.def.accent;
-        const signatureLine = `${fatality.projectileFinale} · ${fatality.device}`;
-        ctx.strokeText(signatureLine, W * .5, titleY + H * .115);
-        ctx.fillText(signatureLine, W * .5, titleY + H * .115);
-      }
-    }
-    ctx.restore();
-  }
+
 }
 
 // R1.9: hex + alpha helper for the viewer's translucent fills.
@@ -29634,13 +29550,14 @@ function draw(time) {
   }
   drawIntroLetterbox();
   drawElementalWash();
+  document.body.classList.toggle("finisher-active", Boolean(state.finisher));
   drawFinisherOverlay();
   if (state.flash > 0) {
 // CINEMA 3D carries its own layered impact flash (hit-masked white pop,
     // shockwave ring, embers in the world), so the screen wash is nearly off
     // there. The 2D path keeps the 1.9E cap: at 0.9 the flash erased the
     // whole frame on every multi-hit; supers and finishers still reach it.
-    const flashAlpha = cinema3dWorld
+    const flashAlpha = (cinema3dWorld || state.finisher)
       ? clamp(state.flash * 0.4, 0, 0.08)
       : clamp(state.flash * 3, 0, 0.5);
     ctx.fillStyle = `rgba(255,245,220,${flashAlpha})`;
@@ -32579,7 +32496,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.10-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.11-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34071,7 +33988,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.10-ringside",
+  version: "5.7.11-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

@@ -435,7 +435,7 @@ probe('title-menu', async () => {
     assert.equal(title.lastTitleButton, 'controlsButton');
     assert.match(title.title, /Final Blow/);
     assert.match(title.build, /5\.7/);
-    assert.equal(title.version.text, 'VERSION 5.7.10');
+    assert.equal(title.version.text, 'VERSION 5.7.11');
     assert.notEqual(title.version.display, 'none');
     assert.ok(title.version.left >= 0 && title.version.top >= 0);
     assert.ok(title.version.right <= 1440 && title.version.bottom <= 900);
@@ -472,7 +472,7 @@ probe('title-menu', async () => {
     assert.equal(title.engine.demo.idleScheduled, true);
     assert.equal(title.onlineSecurityBadges, 4);
     assert.equal(title.aiDifficulty, 'street');
-    assert.equal(title.engineVersion, '5.7.10-ringside');
+    assert.equal(title.engineVersion, '5.7.11-ringside');
     assert.deepEqual(title.engine.presentationRules, {
       hitFlashFilter: 'brightness(1.55) saturate(1.12)',
       attackNamePopups: false,
@@ -3198,12 +3198,12 @@ probe('graphic-fatalities', async () => {
       assert.ok(fatality.lensBlood >= 1, `${fatality.fatalityId} must splatter the camera lens`);
       assert.ok(fatality.cinematicCuts >= 4, `${fatality.fatalityId} must use multiple cinematic cuts`);
       assert.equal(fatality.impactCloseUps, 3, `${fatality.fatalityId} must stay focused on exactly three execution beats`);
-      assert.ok(fatality.peakZoom >= 1.6, `${fatality.fatalityId} must reach an extreme final-impact close-up`);
+      assert.ok(fatality.peakZoom >= 1.26, `${fatality.fatalityId} must make a restrained cinematic push`);
       assert.equal(fatality.slowMotionHits, 1, `${fatality.fatalityId} must hold exactly one final hit in slow motion`);
       assert.equal(fatality.camera.mode, 'finisher');
       assert.ok(['final-impact', 'aftermath'].includes(fatality.camera.shot));
-      assert.ok(fatality.camera.zoom >= 1.48, `${fatality.fatalityId} aftermath zoom ${fatality.camera.zoom} (${fatality.camera.shot})`);
-      assert.equal(fatality.camera.focus, 'projectile', `${fatality.fatalityId} camera must prioritize the assigned projectile`);
+      assert.ok(fatality.camera.zoom >= 1.24, `${fatality.fatalityId} aftermath zoom ${fatality.camera.zoom} (${fatality.camera.shot})`);
+      assert.equal(fatality.camera.focus, 'fighters', `${fatality.fatalityId} camera must keep the complete exchange framed`);
       assert.equal(fatality.camera.projectileId, assignedProjectile.id);
       assert.ok(fatality.cameraOffset < 90, `${fatality.fatalityId} projectile framing drifted ${fatality.cameraOffset}px from the fight`);
       assert.equal(fatality.cinematicArtStyle, 'photorealistic');
@@ -3255,13 +3255,13 @@ probe('gore-off', async () => {
     assert.equal(goreOff.status.signatureProjectiles, 1, 'the assigned projectile remains visible when only gore is disabled');
     assert.equal(goreOff.status.projectileFocusBeats, 3, 'gore-off still preserves all three projectile beats');
     assert.equal(goreOff.status.projectilePhase, 'kill');
-    assert.equal(goreOff.snapshot.camera.focus, 'projectile');
+    assert.equal(goreOff.snapshot.camera.focus, 'fighters');
     assert.equal(goreOff.snapshot.camera.projectileId, 'pizza');
     assert.equal(goreOff.snapshot.finalBlowArt.style, 'photorealistic');
     assert.equal(goreOff.snapshot.finalBlowArt.transition, 1);
     assert.ok(goreOff.snapshot.finalBlowArt.portraitPasses >= 2, 'gore-off preserves realistic detail on both complete fighters');
     assert.ok(goreOff.status.cinematicCuts >= 4, `gore-off cinematic cuts ${goreOff.status.cinematicCuts} at ${goreOff.status.cinematicShot}`);
-    assert.ok(goreOff.status.peakZoom >= 1.6);
+    assert.ok(goreOff.status.peakZoom >= 1.26);
     assert.equal(goreOff.status.slowMotionHits, 1);
 
     await evaluate(client, `(() => {
@@ -3275,7 +3275,7 @@ probe('gore-off', async () => {
     })()`);
     reducedFinisher = await evaluate(client, `window.__finalBlowEngine.snapshot()`);
     assert.equal(reducedFinisher.accessibility.reducedMotion, true);
-    assert.ok(reducedFinisher.camera.peakZoom >= 1.6, 'reduced motion keeps the authored cinematic coverage');
+    assert.ok(reducedFinisher.camera.peakZoom >= 1.26, 'reduced motion keeps a gentle cinematic push');
     assert.ok(reducedFinisher.camera.zoom <= 1.4, 'reduced motion must cap the rendered camera snap');
     assert.equal(reducedFinisher.finalBlowArt.style, 'photorealistic');
     assert.equal(reducedFinisher.finalBlowArt.transition, 1, 'reduced motion preserves the finished realistic-art treatment');
@@ -4688,7 +4688,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(controlledReload.title, /Final Blow/);
     assert.match(controlledReload.build, /5\.7/);
-    assert.equal(controlledReload.version, '5.7.10-ringside');
+    assert.equal(controlledReload.version, '5.7.11-ringside');
 
     await client.send('Network.emulateNetworkConditions', {
       offline: true, latency: 0, downloadThroughput: 0, uploadThroughput: 0,
@@ -4706,7 +4706,7 @@ probe('offline-cache', async () => {
     }))()`);
     assert.match(offlineBoot.title, /Final Blow/);
     assert.match(offlineBoot.build, /5\.7/);
-    assert.equal(offlineBoot.version, '5.7.10-ringside');
+    assert.equal(offlineBoot.version, '5.7.11-ringside');
     assert.match(offlineBoot.badge, /OFFLINE (READY|PLAY)/);
     await client.send('Network.emulateNetworkConditions', {
       offline: false, latency: 0, downloadThroughput: -1, uploadThroughput: -1,
@@ -4752,7 +4752,7 @@ probe('mobile-landscape', async () => {
     assert.equal(landscape.mobileLandscape, true);
     assert.equal(landscape.orientationBlocked, false);
     assert.ok(landscape.frameWidth >= 840 && landscape.frameHeight >= 385);
-    assert.equal(landscape.version.text, 'VERSION 5.7.10');
+    assert.equal(landscape.version.text, 'VERSION 5.7.11');
     assert.notEqual(landscape.version.display, 'none');
     assert.ok(landscape.version.left >= 0 && landscape.version.top >= 0);
     assert.ok(landscape.version.right <= 844 && landscape.version.bottom <= 390);
@@ -5068,6 +5068,12 @@ probe('governor-and-touch-meter', async () => {
 });
 
 probe('touch-finisher', async () => {
+    // This probe can run independently of the full mobile menu/dock suite.
+    await client.send('Emulation.setTouchEmulationEnabled', {enabled:true,maxTouchPoints:5});
+    await client.send('Emulation.setDeviceMetricsOverride', {width:844,height:390,deviceScaleFactor:1,mobile:true});
+    await reload(client);
+    await evaluate(client, `(()=>{const e=document.querySelector('#reducedMotionToggle');e.checked=true;e.dispatchEvent(new Event('change',{bubbles:true}));})()`);
+
     touchFinisherSetup = await evaluate(client, `(() => {
       window.__finalBlowQa.ready('deathblow', 1);
       window.__finalBlowQa.positions(80, 1200);
@@ -5100,7 +5106,7 @@ probe('touch-finisher', async () => {
     mobileFinisherMidpoint = (mobileFinisher.fighters[0].x + mobileFinisher.fighters[1].x) * .5;
     assert.equal(mobileFinisher.camera.mode, 'finisher');
     assert.ok(['final-impact', 'aftermath'].includes(mobileFinisher.camera.shot));
-    assert.ok(mobileFinisher.camera.peakZoom >= 1.6);
+    assert.ok(mobileFinisher.camera.peakZoom >= 1.26);
     assert.ok(mobileFinisher.camera.zoom <= 1.4, 'mobile reduced-motion zoom must remain capped');
     assert.ok(Math.abs(mobileFinisher.camera.x - mobileFinisherMidpoint) < .001);
     assert.ok(mobileFinisher.violence.goreFragments >= 12);
@@ -5193,7 +5199,7 @@ probe('painted-only', async () => {
   await navigate(client, new URL('./3d/',gameUrl).href);
   await delay(1200);
   assert.equal(await evaluate(client, `location.pathname`),new URL(gameUrl).pathname);
-  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.10-ringside');
+  assert.equal(await evaluate(client, `window.__finalBlowEngine.version`),'5.7.11-ringside');
 });
 
 probe('console-clean', async () => {
