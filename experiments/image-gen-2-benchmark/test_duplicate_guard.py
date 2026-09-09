@@ -67,6 +67,16 @@ class DuplicateGuardTests(unittest.TestCase):
         )
         self.assertTrue(any(item["reason"] == "rendering-style-family" for item in matches))
 
+    def test_renamed_concept_with_synonyms_is_rejected(self) -> None:
+        matches = self.check(
+            title="Nocturnal Salmon Census at Spillway",
+            prompt="engraved river monitoring scene",
+            slot="ocean-exploration",
+            concept_key="salmon census spillway",
+            style_family="",
+        )
+        self.assertTrue(any(item["reason"] == "concept-contained" and item.get("id") == "old-floodgate" for item in matches))
+
     def test_negative_prompt_style_is_not_mistaken_for_positive_style(self) -> None:
         matches = self.check(
             title="Scratchboard Lunar Bakery",
