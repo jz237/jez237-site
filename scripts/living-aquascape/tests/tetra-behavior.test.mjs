@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {createTetraSwim,advanceTetraSwim} from '../lib/aquarium/TetraSwimming.ts';
+import {createTetraSwim,advanceTetraSwim,MAX_TETRA_PITCH,MAX_TETRA_VERTICAL_SPEED} from '../lib/aquarium/TetraSwimming.ts';
 test('behavior produces bursts, coasting and low-speed inspection with active paired fins',()=>{
  const s=createTetraSwim(),seen=new Set();let burst=0,glide=0,inspections=0;
  for(let i=0;i<60*300;i++){
@@ -17,7 +17,7 @@ test('varied behavior retains upright turns across different seeds and reacts to
   const s=createTetraSwim(seed);
   for(let i=0;i<60*120;i++){
    const yaw=s.yaw;advanceTetraSwim(s,1/60,i>900&&i<1800);
-   assert.ok(Math.abs(s.pitch)<=.120001);assert.ok(Math.abs(s.yaw-yaw)<=.9/60+1e-9);
+   assert.ok(Math.abs(s.pitch)<=MAX_TETRA_PITCH+1e-6);assert.ok(Math.abs(s.yaw-yaw)<=.9/60+1e-9);
    assert.ok(s.x>600&&s.x<1260);assert.ok(Number.isFinite(s.speed));
    if(i===902)assert.equal(s.behavior,'foraging');
   }

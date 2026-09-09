@@ -1,19 +1,21 @@
+export const MAX_TETRA_PITCH=.24;
+export const MAX_TETRA_VERTICAL_SPEED=5;
 export type TetraBehavior='cruising'|'burst'|'gliding'|'approaching'|'inspecting'|'foraging';
-export type TetraSwim={x:number;y:number;vx:number;vy:number;yaw:number;pitch:number;speed:number;direction:1|-1;sinceTurn:number;elapsed:number;behavior:TetraBehavior;remaining:number;targetX:number;targetY:number;cruiseSpeed:number;effort:number;pectoralEffort:number;seed:number;wasFeeding:boolean;turnRate:number};
+export type TetraSwim={x:number;y:number;vx:number;vy:number;yaw:number;pitch:number;speed:number;direction:1|-1;sinceTurn:number;elapsed:number;behavior:TetraBehavior;remaining:number;targetX:number;targetY:number;cruiseSpeed:number;effort:number;pectoralEffort:number;seed:number;wasFeeding:boolean;turnRate:number;depthTarget:number;depthRemaining:number;depthBand:number};
 const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,n));
 const ease=(a:number,b:number,rate:number,dt:number)=>a+(b-a)*(1-Math.exp(-dt*rate));
 function random(s:TetraSwim){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
-export function createTetraSwim(seed=237):TetraSwim{return {x:1110,y:330,vx:16,vy:0,yaw:0,pitch:0,speed:16,direction:1,sinceTurn:10,elapsed:0,behavior:'cruising',remaining:2.6,targetX:1190,targetY:345,cruiseSpeed:16,effort:.7,pectoralEffort:.35,seed,wasFeeding:false,turnRate:.8};}
+export function createTetraSwim(seed=237):TetraSwim{return {x:1110,y:330,vx:16,vy:0,yaw:0,pitch:0,speed:16,direction:1,sinceTurn:10,elapsed:0,behavior:'cruising',remaining:2.6,targetX:1190,targetY:345,cruiseSpeed:16,effort:.7,pectoralEffort:.35,seed,wasFeeding:false,turnRate:.8,depthTarget:445,depthRemaining:20,depthBand:2};}
 function enter(s:TetraSwim,behavior:TetraBehavior){
  s.behavior=behavior;
  const r=random(s);
- if(behavior==='cruising'){s.remaining=3+r*5;s.cruiseSpeed=11+random(s)*10;s.targetY=300+random(s)*105;}
+ if(behavior==='cruising'){s.remaining=3+r*5;s.cruiseSpeed=11+random(s)*10;s.targetY=s.depthTarget;}
  if(behavior==='burst'){s.remaining=.7+r*1.1;s.cruiseSpeed=24+random(s)*7;}
  if(behavior==='gliding')s.remaining=1.8+r*2.6;
  if(behavior==='inspecting')s.remaining=2.2+r*3.5;
  if(behavior==='approaching'){
   // Leaf and branch margins in the photographic planting, kept near the current depth.
-  const sites=[[1170,380],[1090,397],[975,382],[890,327],[760,355],[690,340]];
+  const sites=[[1170,380],[1090,397],[975,382],[890,327],[760,355],[690,340],[1180,480],[1060,465],[950,490],[810,465],[820,287],[990,275],[1150,290]];
   const ahead=sites.filter(([x,y])=>(x-s.x)*s.direction>25&&(x-s.x)*s.direction<250&&Math.abs(y-s.y)<85);
   const pool=ahead.length?ahead:sites.filter(([,y])=>Math.abs(y-s.y)<85);
   const chosen=pool[Math.floor(r*pool.length)]||sites[2];
@@ -26,6 +28,7 @@ function enter(s:TetraSwim,behavior:TetraBehavior){
 export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxygen=false){
  const dt=clamp(Number.isFinite(seconds)?seconds:0,0,.1);if(!dt)return;
  s.elapsed+=dt;s.sinceTurn+=dt;s.remaining-=dt;
+ if(!feeding){s.depthRemaining-=dt;if(s.depthRemaining<=0&&Math.abs(s.depthTarget-s.y)<24){s.depthBand=(s.depthBand+1+(random(s)<.25?1:0))%3;const bands=[[267,305],[345,390],[440,485]];const band=bands[s.depthBand];s.depthTarget=band[0]+random(s)*(band[1]-band[0]);s.depthRemaining=18+random(s)*18;}}
  if(feeding&&!s.wasFeeding)enter(s,'foraging');
  if(!feeding&&s.wasFeeding)enter(s,'gliding');
  s.wasFeeding=feeding;
@@ -34,7 +37,7 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
   else if(s.behavior==='burst')enter(s,'gliding');
   else if(s.behavior==='approaching')enter(s,'inspecting');
   else if(s.behavior==='inspecting')enter(s,random(s)<.6?'burst':'cruising');
-  else {const roll=random(s);enter(s,roll<.36?'approaching':roll<.70?'burst':'cruising');}
+  else {const roll=random(s);enter(s,roll<.36&&Math.abs(s.depthTarget-s.y)<30?'approaching':roll<.70?'burst':'cruising');}
  }
  if(s.sinceTurn>6&&((s.direction===1&&s.x>1210)||(s.direction===-1&&s.x<660))){s.direction=s.direction===1?-1:1;s.sinceTurn=0;s.turnRate=.65+random(s)*.2;if(!feeding)enter(s,'cruising');}
  if(feeding&&s.sinceTurn>6&&(s.targetX-s.x)*s.direction<-22){s.direction=s.direction===1?-1:1;s.sinceTurn=0;}
@@ -59,10 +62,12 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
  s.speed=ease(s.speed,pace,s.behavior==='gliding'?.65:1.65,dt);
  s.effort=ease(s.effort,drive,3,dt);s.pectoralEffort=ease(s.pectoralEffort,fan,3,dt);
  const holding=s.behavior==='inspecting';
- const wantedVy=turning||holding?0:clamp((s.targetY-s.y)*.12,-1.7,1.7);
+ const goalY=s.behavior==='approaching'||s.behavior==='foraging'?s.targetY:s.depthTarget;
+ const climbLimit=Math.min(MAX_TETRA_VERTICAL_SPEED,Math.max(1,s.speed)*Math.tan(MAX_TETRA_PITCH));
+ const wantedVy=turning||holding?0:clamp((goalY-s.y)*.16,-climbLimit,climbLimit);
  s.vy=ease(s.vy,wantedVy,2,dt);
  s.vx=s.speed*Math.cos(s.yaw);s.x+=s.vx*dt;s.y+=s.vy*dt;
- const wantedPitch=turning?0:holding?Math.sin(s.elapsed*.9)*.025:clamp(Math.atan2(-s.vy,Math.max(10,s.speed)),-.12,.12);
- s.pitch=ease(s.pitch,wantedPitch,2,dt);
+ const wantedPitch=turning?0:holding?Math.sin(s.elapsed*.9)*.025:clamp(Math.atan2(-s.vy,Math.max(1,s.speed)),-MAX_TETRA_PITCH,MAX_TETRA_PITCH);
+ s.pitch+=clamp((wantedPitch-s.pitch)*(1-Math.exp(-dt*2)),-.25*dt,.25*dt);
 }
 export function tetraBehaviorLabel(s:TetraSwim){return {cruising:'Exploring',burst:'Short swimming burst',gliding:'Gliding',approaching:'Approaching a leaf',inspecting:'Inspecting the planting',foraging:'Looking for food'}[s.behavior];}
