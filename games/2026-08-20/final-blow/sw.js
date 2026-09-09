@@ -3,8 +3,8 @@
 // could make Chrome abort the page before it rendered. (Since 5.1 a fetched
 // media file is KEPT, in a second, capped, build-keyed cache — see
 // MEDIA_CACHE_NAME — which is a different thing from installing it.)
-// 5.7.12: doubled Jez/Benny normal transitions, shuffles and sub-tick visual sampling.
-const CACHE_NAME = "final-blow-shell-5.7.12-recovery";
+// 5.7.13: companions across the complete Jez/Benny painted movement library.
+const CACHE_NAME = "final-blow-shell-5.7.13-recovery";
 // v5.1 #38 — the RUNTIME media cache. Sheets, audio, stage plates and the 3D
 // renderer's HD/vendor files are still fetched on demand (never at install:
 // the precache alternative is now 81 MB / ~560 files), but once a file has
@@ -30,6 +30,8 @@ const SHELL = [
   "./engine/render-motion.mjs",
   "./engine/painted-flow.mjs",
   "./engine/painted-smooth.mjs",
+  "./engine/full-library.mjs",
+  "./engine/full-registration.mjs",
   "./engine/smooth-registration.mjs",
   "./engine/inbetweens.mjs",
   "./engine/inbetween-scale.mjs",
