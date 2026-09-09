@@ -8,6 +8,6 @@ export const parts=[
  {id:'speaker',title:'Speaker',code:'07 / SOUND',text:'A paper cone moves air in response to the audio signal. A simple cabinet speaker can turn a few synthesized tones into an unforgettable atmosphere.',repair:'Check the cone for tears and mounting points for vibration. Sound in this exhibit is generated in the browser.',signal:'Violet pulses connect the logic assembly to the speaker.'},
  {id:'ventilation',title:'Ventilation',code:'08 / AIRFLOW',text:'Openings and a modeled fan illustrate how warm air leaves the enclosure. Actual cabinet cooling arrangements vary by revision.',repair:'Keep ventilation openings clear of dust and obstructions.',signal:'Blue particles illustrate rising cooling airflow.'},
 ] as const;
-export type Mode='Hero'|'Exploded'|'X-Ray'|'Play';
+export type Mode='Hero'|'Exploded'|'X-Ray'|'Watch';
 export type Signal='all'|'input'|'video'|'audio'|'credit'|'power'|'airflow';
 export const offsets:Record<string,[number,number,number]>={left_panel:[-1.22,0,0],right_panel:[1.65,0,0],back_panel:[0,0,-1.05],marquee:[0,.32,0],crt:[0,0,.52],controls:[0,-.04,.87],coin:[0,-.04,.81],logic:[1.3,.1,-.06],power:[1.18,-.02,.15],speaker:[1.28,.52,.12],ventilation:[1.88,.02,.14],chassis:[0,0,0],details:[0,0,0]};

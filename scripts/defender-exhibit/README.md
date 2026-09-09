@@ -16,9 +16,7 @@ To replace the model, retain the assembly/node names checked in `tests/model.tes
 
 Mouse: drag to orbit, scroll to zoom, right-drag to pan; click assemblies to inspect. Touch: one finger to orbit, pinch to zoom, two fingers to pan. The component selector exposes the same notes to keyboard users. Number keys 1–4 switch modes when focus is outside a control. Reset restores the mode's camera position.
 
-Starward: arrows or WASD fly, Space fires, Enter starts a fresh game. A mouse drag aims vertically, moves horizontally, and fires; touch direction and Fire buttons support simultaneous pointers. A standard gamepad uses the left stick and primary button. Pick up survivors near the ground and return them to the cyan base for 500 points. Enemies award 150; clearing a wave awards 1,000. Three collisions end the game. The best score is stored locally on the device. Leaving Play or switching off power pauses the game.
-
-Controls inspection provides hold-to-test direction and fire buttons, animating the joystick, buttons, and leaf contacts. Coin inspection offers a test credit with a travelling coin. Input and credit signal pulses respond to these events; speaker vibration follows synthesized audio events. The exploded view opens assemblies in staged groups and compacts its spacing on mobile.
+The CRT now runs an autonomous Defender-inspired attract sequence implemented in `src/DefenderShow.ts`: target tracking, laser collisions, alien formations, humanoid rescue cycles, radar, layered terrain, particles and phosphor glow. It is an original visual recreation, not the original ROM. Watch keeps the physical cabinet visible and moves the camera closer. Pause display and cabinet power stop the sequence; reduced motion pauses it as well. There is no playable overlay or gameplay keyboard/touch input. The original game module remains as the shared audio/state base and for its existing regression tests.
 
 The 0.1–2× slider changes exhibit animation only, keeping gameplay consistent. Sound is opt-in and synthesized with Web Audio; narration uses the browser's speech synthesis where available. Every tour chapter remains readable as a caption in its component card. There are seven tour chapters plus additional ventilation notes.
 
@@ -30,7 +28,7 @@ High quality caps DPR at 1.75, uses one 2048px shadow map, restrained bloom, and
 
 This is an interpretive educational model, not a measured restoration scan, factory schematic, or safe repair procedure. Cabinet layout, electrical paths, game logic, cooling, and control arrangement are simplified. Internal CRT servicing requires trained expertise.
 
-Defender is used as a historical reference. The playable **Starward** game, marquee, side-panel homage artwork, and synthesized audio are original; no Williams ROMs, original cabinet graphics, or proprietary audio ship here. User-supplied reference-image rights remain with its owner. A legally supplied ROM would require a separately licensed emulator and integration; none is bundled or downloaded by this exhibit.
+Defender is used as a historical reference. The autonomous display renderer, marquee, side-panel homage artwork, and synthesized audio are original; no Williams ROMs, original cabinet graphics, or proprietary audio ship here. User-supplied reference-image rights remain with its owner. A legally supplied ROM would require a separately licensed emulator and integration; none is bundled or downloaded by this exhibit.
 
 ## Publishing
 
