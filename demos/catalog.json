@@ -86,5 +86,27 @@
       "Mouse & touch"
     ],
     "note": "WebGL 2 · Desktop & mobile · Real map data with illustrative miniature details"
+  },
+  {
+    "id": "005",
+    "title": "Defender — Inside the Arcade",
+    "category": "3D · Arcade preservation",
+    "description": "Open an early-1980s arcade cabinet. Separate its assemblies, trace the circuits, and play Starward, an original space rescue game on a glowing CRT.",
+    "url": "defender-exhibit/",
+    "image": "assets/defender-exhibit.webp",
+    "imageAlt": "Concept reference for the Defender cabinet exhibit, showing separated panels and internal components in a dark arcade; the interactive demo uses an original 3D homage model",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/defender-exhibit",
+    "features": [
+      "Hero, exploded & X-ray views",
+      "Inspectable components",
+      "Seven-chapter guided tour",
+      "Original playable space game"
+    ],
+    "facts": [
+      "13 assemblies",
+      "Original cabinet art",
+      "Keyboard, touch & gamepad"
+    ],
+    "note": "WebGL · Desktop & mobile · Interpretive model · Preview shows concept artwork"
   }
 ]
