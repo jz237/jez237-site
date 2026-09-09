@@ -1,0 +1,62 @@
+{
+  "version": "5.7.12",
+  "generator": "OpenAI image generation",
+  "date": "2026-09-09",
+  "reference_assets": [
+    "assets/recovery/{fighter}-v1.webp",
+    "assets/painted-flow/{fighter}-v2.webp",
+    "assets/footwork/{fighter}-v1.webp"
+  ],
+  "preparation": "Magenta key and despill; isolate complete connected figures; preserve one scale per sheet; register supporting feet; pack 320px cells with at least 8px intended padding. Measure final decoded bounds and airborne body centres.",
+  "review": "Corrected both standing punch-return rows and both low/air punch rows before packing. Contact sheets retain original extended poses; corrected sheets provide preparation and retraction. Reordered standing return tracks to avoid re-extending the hand.",
+  "sources": [
+    {
+      "fighter": "benny",
+      "bank": "approach",
+      "source": "exec-426fb83e-76ed-46c6-a3d2-18f96cd81d2a.png",
+      "asset": "benny-approach-v1.webp"
+    },
+    {
+      "fighter": "benny",
+      "bank": "contact",
+      "source": "exec-0e83d5b9-817a-4360-a058-99e70b04309c.png",
+      "asset": "benny-contact-v1.webp"
+    },
+    {
+      "fighter": "benny",
+      "bank": "flow",
+      "source": "exec-fb069a7c-0a65-4306-87c0-ffe2fad0f908.png",
+      "asset": "benny-flow-v1.webp"
+    },
+    {
+      "fighter": "benny",
+      "bank": "footwork",
+      "source": "exec-47e4c881-5069-4cf0-93ef-815002fd808f.png",
+      "asset": "benny-footwork-v1.webp"
+    },
+    {
+      "fighter": "jez",
+      "bank": "approach",
+      "source": "exec-484401aa-14a3-40f5-bee6-6fb82aba6178.png",
+      "asset": "jez-approach-v1.webp"
+    },
+    {
+      "fighter": "jez",
+      "bank": "contact",
+      "source": "exec-bbd60bea-93e9-48ad-8648-4b9475769e25.png",
+      "asset": "jez-contact-v1.webp"
+    },
+    {
+      "fighter": "jez",
+      "bank": "flow",
+      "source": "exec-15a0dcb3-fc39-4859-bd0a-cd0463af4598.png",
+      "asset": "jez-flow-v1.webp"
+    },
+    {
+      "fighter": "jez",
+      "bank": "footwork",
+      "source": "exec-be1f1e57-558d-437e-9a01-b315957a6fce.png",
+      "asset": "jez-footwork-v1.webp"
+    }
+  ]
+}

@@ -24,6 +24,7 @@ export function viewerPhase(frame,attack) {
 export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClose}) {
  const el=id=>dialog.querySelector('#moveViewer'+id);
  const canvas=el('Canvas'),ctx=canvas.getContext('2d'),fighterSelect=el('Fighter'),moveSelect=el('Move');
+ let step=1;
  let fighter,attack,selection,frame=0,total=60,playing=false,last=0,carry=0,direction=1,request=0,raf=0,ready=false,poses=[];
  fighterSelect.replaceChildren(...roster.map(f=>new Option(f.name,f.id)));
  fighterSelect.value='jez';
@@ -74,7 +75,7 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
   const token=++request;ready=false;playing=false;controls();el('Status').textContent='Loading painted artwork…';
   try{
    const next=await prepare(fighterSelect.value);if(token!==request||!dialog.open)return;
-   fighter=next;
+   fighter=next;step=['jez','benny'].includes(fighter.def.id)?.25:1;el('Frame').step=step;
    const previous=moveSelect.value;
    const available=VIEWER_MOVES.filter(row=>row.pose||row.reaction||move(fighter,row.action,row.context));
    moveSelect.replaceChildren(...available.map(row=>new Option(row.label,row.id)));
@@ -88,17 +89,17 @@ export function createMoveViewer({dialog,roster,prepare,move,sample,onOpen,onClo
   attack=selection.pose||selection.reaction?null:move(fighter,selection.action,selection.context);
   frame=0;carry=0;total=attack?attack.totalFrames+12:selection.pose?54:42;
   // New objects reset the companion-frame history when scrubbing backwards.
-  fighter={...fighter};poses=Array.from({length:total+1},(_,tick)=>sampleFrame(tick));el('Frame').max=total;draw();
+  fighter={...fighter};poses={};for(let tick=0;tick<=total;tick+=step)poses[tick]=sampleFrame(tick);el('Frame').max=total;draw();
  }
  function seek(value){if(!ready)return;playing=false;carry=0;frame=Math.max(0,Math.min(total,value));fighter={...fighter};draw();}
  function update(now){
   if(!dialog.open)return;
-  if(ready&&playing){carry+=Math.min(.1,(now-last)/1000)*60*Number(el('Speed').value);const count=Math.floor(carry);if(count){carry-=count;frame=(frame+count)%(total+1);if(frame<count)fighter={...fighter};draw();}}
+  if(ready&&playing){carry+=Math.min(.1,(now-last)/1000)*60*Number(el('Speed').value);const count=Math.floor(carry/step)*step;if(count){carry-=count;frame=(frame+count)%(total+step);if(frame<count)fighter={...fighter};draw();}}
   last=now;raf=requestAnimationFrame(update);
  }
  fighterSelect.addEventListener('change',load);moveSelect.addEventListener('change',select);
  el('Play').addEventListener('click',()=>{if(ready){playing=!playing;carry=0;controls();}});
- el('Previous').addEventListener('click',()=>seek(frame-1));el('Next').addEventListener('click',()=>seek(frame+1));
+ el('Previous').addEventListener('click',()=>seek(frame-step));el('Next').addEventListener('click',()=>seek(frame+step));
  el('Frame').addEventListener('input',event=>seek(Number(event.target.value)));
  el('Flip').addEventListener('click',()=>{direction*=-1;el('Flip').textContent=direction===1?'FACE LEFT':'FACE RIGHT';draw();});
  el('Close').addEventListener('click',()=>dialog.close());
