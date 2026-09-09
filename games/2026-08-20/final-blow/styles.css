@@ -4426,3 +4426,50 @@ body.reduced-motion .set-score-card.crowned { animation: none; }
  .move-viewer-controls {grid-column:2;grid-row:5;gap:5px;}
  .move-viewer-controls button,.move-viewer-controls select {padding:6px;font-size:11px;}
 }
+
+/* CPU playback lives below the canvas, never over the painted fighters. */
+body.demo-active { --demo-dock-height: 68px; }
+body.demo-active #app { width: min(100%, 1510px, calc((100svh - 150px) * var(--frame-ratio))); }
+body.demo-active .footer-strip { display: none; }
+#app > .demo-hud {
+  position: relative; inset: auto; width: 100%; height: var(--demo-dock-height, 68px);
+  grid-template-columns: max-content minmax(0, 1fr) auto;
+  grid-template-rows: 18px 36px;
+  grid-template-areas: "matchup line speed" "actions actions actions";
+  justify-content: stretch; gap: 3px 16px; padding: 4px 12px;
+  border: 1px solid #3a4654; border-top: 2px solid var(--amber);
+  background: #090e16; box-shadow: none; font-size: 11px;
+  animation: none; transform: none; transition: none; opacity: 1;
+}
+#app > .demo-hud > b,
+#app > .demo-hud > em,
+#app > .demo-hud > small,
+#app > .demo-hud .demo-hud-story,
+#app > .demo-hud .demo-hud-room { display: none; }
+#app > .demo-hud #demoHudMatchup { font-size: 18px; }
+#app > .demo-hud .demo-hud-line {
+  min-width: 0; overflow: hidden; text-overflow: ellipsis;
+  margin: 0; padding: 0 0 0 10px; background: none;
+  font-family: inherit; font-size: 11px; line-height: 16px;
+  animation: none;
+}
+#app > .demo-hud .demo-hud-actions {
+  flex-wrap: nowrap; justify-content: flex-end; gap: 6px;
+  min-width: 0; overflow-x: auto; scrollbar-width: thin;
+}
+#app > .demo-hud .demo-share,
+#app > .demo-hud .demo-hud-sound {
+  flex: 0 0 auto; min-height: 36px; margin: 0; padding: 5px 10px;
+  font-size: 11px; letter-spacing: .04em; animation: none;
+}
+body.demo-active.mobile-landscape #app,
+body.demo-active #app:fullscreen { width: 100dvw; }
+body.demo-active.mobile-landscape .game-frame,
+body.demo-active #app:fullscreen .game-frame { height: calc(100dvh - var(--demo-dock-height)); }
+@media (max-width: 760px) {
+  #app > .demo-hud { gap: 3px 8px; padding: 4px max(8px, env(safe-area-inset-right)) 4px max(8px, env(safe-area-inset-left)); }
+  #app > .demo-hud #demoHudMatchup { font-size: 15px; }
+  #app > .demo-hud .demo-hud-line { font-size: 10px; }
+  #app > .demo-hud .demo-hud-actions { justify-content: flex-start; }
+  #app > .demo-hud .demo-share, #app > .demo-hud .demo-hud-sound { font-size: 10px; padding-inline: 7px; }
+}
