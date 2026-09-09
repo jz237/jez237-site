@@ -1,8 +1,409 @@
 {
-  "generatedAt": "2026-09-07",
+  "generatedAt": "2026-09-09T12:00:00.000Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-09",
+      "historicDate": "1984-06-04",
+      "displayDate": "Week of June 4-10, 1984",
+      "edition": "Issue 097 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "IBM price-war urgency and Commodore game culture on warm aged newsprint",
+        "motifs": [
+          "IBM PC desktop and price tags",
+          "Commodore 64 game screens",
+          "modem and telephone handset",
+          "Ghostbusters marquee"
+        ],
+        "layout": "Dense seven-column 1984 computer weekly with bold red and blue rules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+        "dateline": "Week of June 4-10, 1984",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "IBM price-cut banner above a large PC showroom halftone",
+        "secondaryRail": "Games, E-COM, modem desk, charts and price watch",
+        "archiveNavigation": "Chronological weekly archive"
+      },
+      "sectionChrome": {
+        "primary": "#9b1c1c",
+        "secondary": "#173f6b",
+        "texture": "warm newsprint grain and halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-06-04.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of June 4, 1984, led by IBM PC price cuts.",
+        "caption": "A GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "IBM cuts PC-family prices while Washington retreats from E-COM and home-computer owners debate smarter games, software prices and copy protection.",
+      "morningLine": "Monday, June 4, 1984: the personal-computer market braces for lower IBM prices and a livelier summer software season.",
+      "lead": {
+        "headline": "IBM Cuts Prices Across the PC Line",
+        "dek": "Lower tags on personal computers, drives, displays and adapters turn up the pressure in an increasingly crowded compatible market.",
+        "body": [
+          "IBM moved to sharpen its position in personal computing this week with price reductions across portions of the PC line. The changes reached beyond a single box: the company’s June hardware list covered the PC, XT, Portable PC, disk drives, displays and adapters, giving dealers and buyers a fresh schedule for assembling complete systems.",
+          "The cuts matter because IBM’s list prices set a powerful reference point for the entire market. Compatible makers have been selling on lower cost, added memory or bundled storage; a cheaper genuine IBM system narrows their room and forces every showroom comparison to be recalculated.",
+          "For business buyers, the headline price is only the beginning. A useful desk system still needs a monitor, storage, printer or communications hardware and software. Reductions among those supporting parts can change a purchase order as much as a cut to the computer itself.",
+          "The move confirms that the PC market has entered a more competitive phase. IBM remains the standard other makers invoke, but buyers now have enough alternatives to make price a weapon—and the summer of 1984 is opening with that weapon drawn."
+        ],
+        "sourceRefs": [
+          0,
+          1
+        ],
+        "confidence": "Exact-date"
+      },
+      "stories": [
+        {
+          "headline": "Postal Service Votes to Abandon E-COM",
+          "body": [
+            "The U.S. Postal Service’s governors voted June 6 to end E-COM, the hybrid electronic-mail service that accepted messages electronically and delivered printed copies through the mail. The retreat closes a costly government experiment after private carriers argued they could serve electronic messaging without postal competition.",
+            "E-COM never became the universal bridge its planners imagined. Its end leaves commercial data services, office networks and private electronic-message firms to define more of the emerging market—while ordinary home modem users continue discovering online communication one dial-up connection at a time."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "Exact-date"
+        },
+        {
+          "headline": "Computer Games Start Learning New Tricks",
+          "body": [
+            "June’s home-computer press asked whether games could begin to think for themselves. Designers were moving beyond fixed arcade patterns toward opponents and worlds that reacted to a player’s choices, a natural fit for disk-based machines with more memory than consoles.",
+            "The ambition is visible on store shelves: M.U.L.E. turns competition into a shifting economic contest, while Bruce Lee advertises twenty settings and two distinct adversaries. The attraction is no longer merely faster action but the feeling that the machine can surprise its owner."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "Same-month"
+        },
+        {
+          "headline": "Copy Protection Draws Fire from Paying Customers",
+          "body": [
+            "A June COMPUTE!'s Gazette exchange put software piracy and copy protection on the same page. A retailer argued that high prices and restrictions on backup copies could alienate legitimate customers even as publishers tried to stop unauthorized duplication.",
+            "The magazine’s own Gazette Disk supplied a pointed contrast: the editor reported that it was selling well while remaining unprotected. The debate exposes a problem with no easy answer—protecting a program without making the honest buyer’s disk more fragile or less useful."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "Same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "IBM PC Family",
+          "summary": "June price reductions cover the PC line and supporting hardware.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Commodore 64",
+          "summary": "A software and gaming ecosystem large enough to support Gazette circulation above 300,000.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Bruce Lee",
+          "summary": "Datasoft’s 20-setting action game arrives for Atari and Commodore 64.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "M.U.L.E.",
+          "summary": "Ozark Softscape’s multiplayer economic game receives a designer profile.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Gateway to Apshai",
+          "summary": "No. 2 on Computer Entertainer’s June game-system sellers list.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Easy Script",
+          "detail": "Word processor for the Commodore 64, reviewed in the June Gazette."
+        },
+        {
+          "name": "Gazette Disk",
+          "detail": "Companion program disk sold without copy protection."
+        },
+        {
+          "name": "Bruce Lee",
+          "detail": "Datasoft action game for Atari and Commodore 64, $34.95 suggested retail."
+        },
+        {
+          "name": "M.U.L.E.",
+          "detail": "Ozark Softscape economic strategy game for Atari 8-bit and Commodore 64."
+        },
+        {
+          "name": "Gateway to Apshai",
+          "detail": "ColecoVision adventure ranked No. 2 among June game-system sellers."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top Computer Games",
+          "items": [
+            "Burgertime",
+            "Gateway to Apshai",
+            "Bruce Lee",
+            "M.U.L.E.",
+            "Panther"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Easy Script",
+            "Gazette Disk",
+            "Bruce Lee",
+            "M.U.L.E.",
+            "Gateway to Apshai"
+          ]
+        },
+        {
+          "label": "At the Movies",
+          "items": [
+            "Ghostbusters",
+            "Gremlins",
+            "Indiana Jones and the Temple of Doom"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Bruce Lee",
+          "price": "$34.95",
+          "note": "Suggested retail.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Panther",
+          "price": "$29.95 / $15.95",
+          "note": "Commodore 64 disk / VIC-20 cassette.",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "COMPUTE!'s Gazette",
+          "price": "$2.50",
+          "note": "Newsstand; $20 for 12 domestic issues.",
+          "sourceRefs": [
+            3
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Gazette Tops 300,000",
+          "summary": "The editor reports paid circulation above 300,000 after only twelve issues.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "headline": "Ghostbusters and Gremlins Open Together",
+          "summary": "The two new releases lead a landmark June 8 genre weekend, just ahead of Indiana Jones.",
+          "confidence": "Exact-date",
+          "sourceRefs": [
+            6
+          ]
+        },
+        {
+          "headline": "Gateway Trails Only Burgertime",
+          "summary": "Computer Entertainer ranks Gateway to Apshai second on its June game-system sellers list.",
+          "confidence": "Same-month",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Time After Time",
+          "artist": "Cyndi Lauper"
+        },
+        {
+          "rank": 2,
+          "title": "Let's Hear It for the Boy",
+          "artist": "Deniece Williams"
+        },
+        {
+          "rank": 3,
+          "title": "The Reflex",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 4,
+          "title": "Self Control",
+          "artist": "Laura Branigan"
+        },
+        {
+          "rank": 5,
+          "title": "Sister Christian",
+          "artist": "Night Ranger"
+        }
+      ],
+      "periodAd": {
+        "headline": "Bruce Lee: $34.95",
+        "summary": "Datasoft promises twenty settings for Atari and Commodore 64, with Apple II and IBM versions coming soon.",
+        "tagline": "Climb, leap and battle through the fortress."
+      },
+      "market": {
+        "headline": "IBM Makes Price the Week’s Weapon",
+        "summary": "Cuts across PC-family hardware pressure compatible makers and refresh business buyers’ calculations.",
+        "confidence": "Exact-date",
+        "sourceRefs": [
+          0,
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Allied Leaders Mark D-Day’s 40th Anniversary",
+        "summary": "President Ronald Reagan spoke at Pointe du Hoc in Normandy on June 6, commemorating the Rangers who scaled the cliffs on D-Day.",
+        "confidence": "Exact-date",
+        "sourceRefs": [
+          7
+        ]
+      },
+      "bbsNote": {
+        "headline": "Home telecomputing moves from novelty to regular beat",
+        "summary": "The June Gazette devoted a standing Home Telecommunications column to getting Commodore owners online, while the Postal Service's E-COM retreat underscored the growing boundary between private online services and public hybrid electronic mail.",
+        "posts": [
+          {
+            "topic": "Home Telecommunications",
+            "platform": "VIC-20 and Commodore 64",
+            "text": "Robert Sims's monthly column gave owners practical context for modem use and online communication."
+          },
+          {
+            "topic": "E-COM closes",
+            "platform": "USPS electronic mail",
+            "text": "The June 6 vote to end E-COM left private electronic-message firms with less government competition."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "A magazine disk shipped without copy protection",
+        "summary": "At the height of the software-piracy debate, COMPUTE!'s Gazette made a conspicuous consumer-friendly choice.",
+        "detail": "The editor told readers the new Gazette Disk was doing well and was still unprotected, then printed a retailer's argument that copy protection alienated legitimate buyers who wanted backups."
+      },
+      "undergroundDesk": {
+        "headline": "Copy-Protection Backlash Reaches the Letters Page",
+        "dek": "Publishers confront piracy while customers demand usable backups.",
+        "body": [
+          "A June Gazette exchange described unauthorized copying as a genuine threat to software makers, but it also recorded a growing backlash from paying customers. Retailers warned that restrictive protection and high prices could make the conflict worse.",
+          "No crew or bulletin board was named, and the dispute offered no simple cure. The magazine’s unprotected companion disk became a quiet test of whether convenience and fair pricing could earn customer loyalty."
+        ],
+        "groups": [],
+        "sourceRefs": [
+          3
+        ],
+        "confidence": "Same-month"
+      },
+      "accuracyLedger": {
+        "items": [
+          {
+            "claim": "IBM PC-family price cuts",
+            "status": "Verified in exact-week reporting and June hardware list",
+            "sourceRefs": [
+              0,
+              1
+            ]
+          },
+          {
+            "claim": "E-COM termination vote",
+            "status": "Verified in June 6 wire reporting",
+            "sourceRefs": [
+              2
+            ]
+          },
+          {
+            "claim": "Music chart and movie standings",
+            "status": "Verified with dated weekly chart and box-office sources",
+            "sourceRefs": [
+              5,
+              6
+            ]
+          },
+          {
+            "claim": "D-Day anniversary bulletin",
+            "status": "Verified by Reagan Library transcript",
+            "sourceRefs": [
+              7
+            ]
+          }
+        ]
+      },
+      "sources": [
+        {
+          "title": "I.B.M. Cuts Prices on PC Line",
+          "url": "https://www.nytimes.com/1984/06/08/business/ibm-cuts-prices-on-pc-line.html",
+          "date": "1984-06-08"
+        },
+        {
+          "title": "IBM Personal Computer Hardware Prices, June 1984",
+          "url": "https://vtda.org/docs/computing/IBM/Micro/PC/IBM_PC_HardwarePricesJune84.pdf",
+          "date": "1984-06"
+        },
+        {
+          "title": "Postal service to end electronic mail",
+          "url": "https://www.upi.com/Archives/1984/06/06/Postal-service-to-end-electronic-mail/5051455342400/",
+          "date": "1984-06-06"
+        },
+        {
+          "title": "COMPUTE!'s Gazette Issue 12",
+          "url": "https://archive.org/stream/1984-06-computegazette/Compute_Gazette_Issue_12_1984_Jun_djvu.txt",
+          "date": "1984-06"
+        },
+        {
+          "title": "Computer Entertainer, June 1984",
+          "url": "http://www.digitpress.com/library/newsletters/computer_ent/computer_ent_jun84.pdf",
+          "date": "1984-06"
+        },
+        {
+          "title": "Billboard Hot 100, week of June 9, 1984",
+          "url": "https://billboard.elpee.jp/hot100/week/1984-06-09",
+          "date": "1984-06-09"
+        },
+        {
+          "title": "Weekend Domestic Box Office Chart for June 8, 1984",
+          "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/06/08",
+          "date": "1984-06-08"
+        },
+        {
+          "title": "Remarks at Pointe du Hoc",
+          "url": "https://www.reaganlibrary.gov/archives/speech/remarks-commemorating-40th-anniversary-normandy-landings-d-day-pointe-du-hoc",
+          "date": "1984-06-06"
+        },
+        {
+          "title": "Operation Blue Star",
+          "url": "https://www.britannica.com/event/Operation-Blue-Star",
+          "date": "1984-06"
+        }
+      ]
+    },
     {
       "currentDate": "2026-09-08",
       "historicDate": "1984-05-28",

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 08 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 09 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 4-10, 1984 — IBM Cuts Prices Across the PC Line</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-06-04</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-04</guid>
+      <pubDate>Wed, 09 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Lower tags on personal computers, drives, displays and adapters turn up the pressure in an increasingly crowded compatible market. IBM moved to sharpen its position in personal computing this week with price reductions across portions of the PC line. The changes reached beyond a single box: the company’s June hardware list covered the PC, XT, Portable PC, disk drives, displays and adapters, giving dealers and buyers a fresh schedule for assembling complete systems. Also this week: Postal Service Votes to Abandon E-COM · Computer Games Start Learning New Tricks · Copy Protection Draws Fire from Paying Customers.</description>
+    </item>
     <item>
       <title>Week of May 28-June 3, 1984 — Comdex/Spring Shows the Micro Market Still Surging</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-05-28</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-23</guid>
       <pubDate>Wed, 19 Aug 2026 12:00:00 GMT</pubDate>
       <description>The compact 128K machine brings Lisa-style windows, icons and graphics to a far wider market—and seeks a place beside the Apple II and IBM PC. CUPERTINO, Calif.—Apple Computer unveiled the Macintosh on January 24, placing a mouse-controlled graphical desktop inside a compact 20-pound machine carrying a suggested retail price of $2,495. Apple chairman Steven P. Jobs declared that the company expected Macintosh to become a third industry standard alongside the Apple II and IBM PC. Also this week: Lisa 2 Family Cuts the Price of Apple’s Workstation · MacWrite and MacPaint Lead the Software Parade · Atari Reorders the Front Office as the Game Crash Bites · Satellite Television Aims Straight at the Home.</description>
-    </item>
-    <item>
-      <title>Week of January 16-22, 1984 — APPLE&apos;S ‘1984’ SPOT PUTS MACINTOSH ON THE NATIONAL STAGE</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-01-16</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-16</guid>
-      <pubDate>Tue, 18 Aug 2026 12:00:00 GMT</pubDate>
-      <description>A stark Super Bowl film promises a new kind of personal computer before viewers have even seen the machine itself. During Super Bowl XVIII on January 22, Apple Computer used a single dramatic national broadcast to introduce the Macintosh as more than another machine. Ridley Scott’s film showed gray ranks of workers facing a giant screen until a lone runner smashed it, closing with Apple’s promise that 1984 would not resemble George Orwell’s 1984. Also this week: APPLE READIES A 32-BIT FAMILY AROUND MACINTOSH AND LISA 2 · COMMODORE 264 BETS ON SOFTWARE BUILT INTO THE MACHINE · COLECO PROMISES A LARGER ADAM WORLD AMID QUALITY QUESTIONS.</description>
     </item>
   </channel>
 </rss>
