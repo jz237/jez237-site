@@ -40,7 +40,7 @@ Flow and roots are educational diagrams; equipment mode is a photographic functi
 
 Replace the image layers with independently authored textured GLB assets to support full orbit. Add a depth atlas for stronger occlusion, species-specific growth models, calibrated carbon/oxygen chemistry, nutrient mass balance, and detailed equipment geometry if expanding beyond the cinematic exhibit.
 
-The optional feature-detected WebMCP tool load_aquascape_scenario uses the same scenario action as the UI and validates the name. No supported WebMCP test context was available during this build, so live registration was not verified. Browser UI testing was not requested; validation covers TypeScript, production compilation, pure-model tests and deployment asset availability.
+The optional feature-detected WebMCP tool load_aquascape_scenario uses the same scenario action as the UI and validates the name. No supported WebMCP test context was available during this build, so live registration was not verified. Browser validation on 2026-09-09 covered desktop (1440 × 900), mobile (390 × 844), screenshots, console errors, feeding, plant inspection, camera transitions, reset and movement sliders. TypeScript, production compilation, pure-model tests and deployed asset availability are also checked. Image-based occlusion and deformation remain approximate.
 
 ## Dependencies
 
@@ -51,3 +51,6 @@ Plant motion uses ten authored, rooted displacement regions with phase-delayed b
 Water surface uses crossing waves and damped outlet ripples to perturb reflected imagery, refract the surface, and break overhead highlights into moving ribbons. Surface agitation and filter flow drive wave strength. The authored surface mask excludes the emergent wood and glass pipe. It remains an image-based approximation, not full scene ray tracing.
 
 Depth pass: fish use authored wood/rock silhouettes and color-based foliage masks sampled at the same displaced coordinates as the plants. This is approximate occlusion for the fixed image, not reconstructed 3D geometry. Gradual yaw, brief hovering, current-driven particles and restrained leaf caustics add depth cues. Marked Plant/Roots/Filter inspection buttons replace broad invisible click zones; Reset view and Feed fish are directly accessible.
+
+Visual QA follow-up: mobile now uses a compact readings strip and a dock with all six modes visible; movement sliders remain in the scrollable Environment panel. Fixed camera-menu state after leaving macro mode and negative first-frame timing display.
+
