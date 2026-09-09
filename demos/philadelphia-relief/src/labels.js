@@ -11,7 +11,7 @@ import { labelBudget, nearbyLabel, overlapsBox, controlBoxes } from './label-pol
  * occlusion test so a name never floats over the ridge that is hiding it.
  */
 
-import { clamp } from './geo.js?v=philly-2026090903';
+import { clamp } from './geo.js?v=philly-2026090904';
 
 const MAX_NODES = 90;
 

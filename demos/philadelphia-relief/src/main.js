@@ -1,7 +1,7 @@
-import { wireNavigation } from './navigation.js?v=philly-2026090904';
+import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026090904';
 import { wireLooks } from './looks.js?v=philly-2026090904';
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090903';
-import { createOrientation } from './orientation.js?v=philly-2026090903';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090904';
+import { createOrientation } from './orientation.js?v=philly-2026090904';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -11,53 +11,53 @@ import { createOrientation } from './orientation.js?v=philly-2026090903';
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090903';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090904';
 
-import { createStore } from './state.js?v=philly-2026090903';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090903';
-import { effectiveLight } from './solar.js?v=philly-2026090903';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090903';
+import { createStore } from './state.js?v=philly-2026090904';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090904';
+import { effectiveLight } from './solar.js?v=philly-2026090904';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090904';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090903';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090903';
+} from './geo.js?v=philly-2026090904';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090904';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090903';
+} from './tours.js?v=philly-2026090904';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090903';
+} from './urlstate.js?v=philly-2026090904';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090903';
+} from './degraded.js?v=philly-2026090904';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090903';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026090903';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090903';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090903';
-import { createPostFX } from './postfx.js?v=philly-2026090903';
-import { createCameraRig } from './camera.js?v=philly-2026090903';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090903';
-import { createStructures } from './structures.js?v=philly-2026090903';
+} from './terrain.js?v=philly-2026090904';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026090904';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090904';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090904';
+import { createPostFX } from './postfx.js?v=philly-2026090904';
+import { createCameraRig } from './camera.js?v=philly-2026090904';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090904';
+import { createStructures } from './structures.js?v=philly-2026090904';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090903';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090903';
+} from './structures-data.js?v=philly-2026090904';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090904';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090903';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090903';
+} from './flood.js?v=philly-2026090904';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090904';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090903';
+} from './vectors.js?v=philly-2026090904';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090903';
-import { getTheme } from './themes.js?v=philly-2026090903';
+} from './ui.js?v=philly-2026090904';
+import { getTheme } from './themes.js?v=philly-2026090904';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -800,6 +800,7 @@ async function boot() {
   let last = performance.now();
   let labelClock = 0;
   let lastLabelKey = '';
+  let labelLayoutAge = 0;
   let zoneClock = 0;
   let imageryClock = 0;
   const zoneFrustum = new THREE.Frustum();
@@ -897,7 +898,7 @@ async function boot() {
     sky.uniforms.uHaze.value = light.fogDensity;
     sky.uniforms.uNight.value = 1 - light.twilight;
 
-    diorama.update(miniature, exaggeration, sunDir, state, now);
+    diorama.update(miniature, exaggeration, sunDir, state, now, light);
     elapsed += dt * state.animationSpeed;
     // During roof inspection the vector overlays should hug the photography,
     // not float tens of metres above it. Restore the established separation
@@ -964,13 +965,14 @@ async function boot() {
       && state.era === 'present' && state.compareMode === 'off', miniature);
     postfx.composite();
 
-    labelClock += dt;
+    labelClock += dt; labelLayoutAge += dt;
     if (labelClock > 1 / 24) {
       labelClock = 0;
       const labelKey = `${rig.revision}:${labelDataRevision}:${viewW}:${viewH}:${exaggeration}:`
         + `${state.labelDensity}:${state.labelSize}:${state.layers.places}:`
         + `${state.layers.landmarks}:${state.era}`;
-      if (labelKey !== lastLabelKey) {
+      if (labelKey !== lastLabelKey || labelLayoutAge > .5) {
+        labelLayoutAge = 0;
         lastLabelKey = labelKey;
         labels.update(camera, {
           width: viewW,
@@ -2011,10 +2013,12 @@ function wireInterface(deps) {
       const preset = getPreset(state.preset);
       // A shared link can carry a name; it heads the readout until a preset
       // restages the view.
-      dom.outPreset.textContent = viewName || (preset ? preset.name : 'Custom view');
+      const away=awayFromPreset(preset,state,projection);
+      dom.outPreset.textContent = viewName || (away ? 'Exploring the Delaware Valley' : preset.name);
       dom.outBlurb.textContent = viewName
         ? (preset ? `${preset.name}, shared by link.` : 'A named view shared by link.')
-        : (preset ? preset.blurb : 'Your own framing and light.');
+        : (away ? 'Follow the mapped streets and terrain. '
+          + 'Use the locator to find your way back.' : preset.blurb);
     },
     get viewName() { return viewName; },
     setViewName(name) { viewName = cleanViewName(name); this.syncControls(store.get()); },

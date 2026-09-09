@@ -1,4 +1,5 @@
-import { woodlandIndex, woodlandCrown } from './woodland.js?v=philly-2026090903';
+import { canopySites, canopyLevel } from './canopy-layout.js?v=philly-2026090904';
+import { woodlandIndex } from './woodland.js?v=philly-2026090904';
 /** A zoom-dependent miniature stage. Crowns follow mapped woodland boundaries;
  * enlarged regional crowns shrink to individual trees as the camera approaches. */
 export function dioramaAmount(distance, enabled = true) {
@@ -96,6 +97,8 @@ const TREE_VERTEX = /* glsl */ `
 `;
 const TREE_FRAGMENT = /* glsl */ `
   uniform vec3 uSunDir;
+  uniform float uKeyStrength;
+  uniform float uSkyFill;
   varying vec3 vNormal;
   varying vec3 vLocal;
   varying float vSeed;
@@ -103,7 +106,11 @@ const TREE_FRAGMENT = /* glsl */ `
     float light = max(0.0, dot(normalize(vNormal), uSunDir));
     float foliage = sin(vLocal.x * 28.0) * sin(vLocal.y * 32.0) * sin(vLocal.z * 26.0);
     vec3 green = mix(vec3(.043, .084, .029), vec3(.18, .235, .072), vSeed);
-    green *= (.68 + light * .95) * (1.0 + foliage * .13);
+    float aa = 1.0 - smoothstep(.12, .5, max(fwidth(vLocal.x), fwidth(vLocal.y)) * 28.0);
+    vec3 sunlight = mix(vec3(1.18,.80,.48),vec3(1.02,1.02,.88),smoothstep(.08,.5,uSunDir.y));
+    green *= vec3(.40 + uSkyFill * .55) + sunlight * light * uKeyStrength * .85;
+    green *= 1.0 + foliage * .1 * aa;
+    green += vec3(.025,.033,.012) * pow(max(0.0,vLocal.y),3.0) * uKeyStrength;
     green *= smoothstep(-1.2, .5, vLocal.y) * .5 + .5;
     gl_FragColor = vec4(green, 1.0);
   }
@@ -111,27 +118,7 @@ const TREE_FRAGMENT = /* glsl */ `
 
 function makeTrees(THREE, coverage, projection, sampleElevation, uniforms, bounds = null) {
   if (!coverage) return null;
-  const positions = [], sizes = [];
-  let seed = 237;
-  const random = () => { seed = (Math.imul(seed, 1664525) + 1013904223) >>> 0; return seed / 4294967296; };
-  const w = bounds ? (bounds.east - bounds.west) * projection.metersPerDegLon : projection.widthM;
-  const h = bounds ? (bounds.north - bounds.south) * projection.metersPerDegLat : projection.heightM;
-  const ox = bounds ? projection.lonToX((bounds.west + bounds.east) / 2) : 0;
-  const oz = bounds ? projection.latToZ((bounds.north + bounds.south) / 2) : 0;
-  const step = bounds ? 20 : 210, inset = bounds ? 8 : 100;
-  for (let z = -h / 2 + inset; z < h / 2 - inset; z += step) {
-    for (let x = -w / 2 + inset; x < w / 2 - inset; x += step) {
-      const px = x + (random() - .5) * step * .9, pz = z + (random() - .5) * step * .9;
-      const lon = projection.xToLon(px + ox), lat = projection.zToLat(pz + oz);
-      const radius = bounds ? 3.2 + random() * 3.8 : 48 + random() * 55;
-      const edge = woodlandCrown(lon, lat, radius, coverage, projection);
-      if (!edge) continue;
-      const elev = sampleElevation(lon, lat);
-      if (elev < 1) continue;
-      positions.push(px + ox, elev, pz + oz);
-      sizes.push(radius * edge);
-    }
-  }
+  const { positions, sizes } = canopySites(coverage, projection, sampleElevation, bounds);
   return treeMesh(THREE, positions, sizes, uniforms);
 }
 
@@ -182,6 +169,7 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
   floor.frustumCulled = false; group.add(floor);
   const closeCanopies = new Map();
   const treeUniforms = { uExag: { value: 1 }, uAmount: { value: 1 },
+    uKeyStrength: {value:1}, uSkyFill: {value:.7},
     uSunDir: { value: new THREE.Vector3(-.5, .8, .3).normalize() } };
   const coverage = woodland ? woodlandIndex(woodland) : null;
   const trees = makeTrees(THREE, coverage, projection, sampleElevation, treeUniforms);
@@ -225,28 +213,29 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
       wallUniforms.uHeight = next.uniforms.uHeight;
       wallUniforms.uExag = next.uniforms.uExag;
     },
-    update(amount, exaggeration, sunDir, state, pose) {
+    update(amount, exaggeration, sunDir, state, pose, light=state) {
       const enabled = state.diorama && state.era === 'present' && state.compareMode === 'off';
       group.visible = enabled && state.layers.terrain;
       floor.visible = wall.visible = amount > .001;
-      const imageryOn = state.layers.structures;
+      const modelOn = state.layers.structures;
       const near = [...closeCanopies.values()].sort((a, b) => {
         const distance = m => Math.hypot(m.userData.cell.lon - pose.lon, m.userData.cell.lat - pose.lat);
         return distance(a) - distance(b);
       });
-      const fine = near.some(mesh => mesh.userData.cell.level === 0);
+      const level = canopyLevel(near.map(mesh => mesh.userData.cell),pose);
       let shown = 0;
       for (const mesh of near) {
-        mesh.visible = imageryOn && pose.dist < 6500
-          && (!fine || mesh.userData.cell.level === 0) && shown++ < 8;
+        mesh.visible = modelOn && pose.dist < 6500
+          && mesh.userData.cell.level === level && shown++ < 8;
       }
       closeUniforms.uAmount.value = Math.min(1, Math.max(0, (6500 - pose.dist) / 1800));
-      if (streetTrees) streetTrees.visible = imageryOn && pose.dist < 6500;
+      if (streetTrees) streetTrees.visible = modelOn && pose.dist < 6500;
       treeUniforms.uExag.value = exaggeration;
       treeUniforms.uAmount.value = .045 + amount * .955;
       treeUniforms.uSunDir.value.copy(sunDir);
+      treeUniforms.uKeyStrength.value=light.keyLight; treeUniforms.uSkyFill.value=light.ambient;
       if (trees) {
-        trees.visible = imageryOn || amount > .1;
+        trees.visible = modelOn || amount > .1;
       }
     },
     dispose() {

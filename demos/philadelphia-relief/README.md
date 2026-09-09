@@ -1,3 +1,25 @@
+## Four review rounds — September 9, 2026
+
+1. **Readability:** label budgets follow screen area, local street names stay near
+   the view target, and labels avoid visible controls. Neighborhood field notes
+   are compact, with a smaller title-only card on phones.
+2. **Lighting:** Daylight, Golden hour and Soft overcast coordinate the existing
+   lighting controls without moving the camera or changing terrain, layers or era.
+   Selection follows the actual control values and survives shared URLs.
+3. **Navigation:** the north-up locator accepts clicks and arrow keys. Dedicated
+   zoom, north-up and overhead controls work with the existing camera, preserve
+   the current location and respect camera bounds and reduced-motion behavior.
+4. **Continuity and polish:** a world-aligned tree lattice preserves positions
+   across tile resolutions; distant cached fine tiles do not suppress nearby
+   coarse woodland. Crown lighting follows the simulated sun and sky fill, with
+   antialiased foliage detail. Mobile credits and controls have separate space.
+   Labels refresh after panel layout changes; field notes stop naming a preset
+   once the camera has traveled away from it.
+
+Validation: 279 tests, desktop/mobile browser review, lighting selection and shared
+URL checks, locator click/keyboard travel, and bounded camera controls. Actual
+terrain, source imagery, footprint coordinates and woodland boundaries are unchanged.
+
 ## September 2026 miniature refinement
 
 The opening composition brings the model forward and reduces empty tabletop space.
