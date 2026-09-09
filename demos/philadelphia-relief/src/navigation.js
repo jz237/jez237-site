@@ -33,3 +33,11 @@ export function wireNavigation(host, rig, motion) {
     dispose() { host.removeEventListener('click',click); },
   };
 }
+
+export function awayFromPreset(preset, state, projection) {
+  if (!preset) return true;
+  const dx=(state.camLon-preset.camera.camLon)*projection.metersPerDegLon;
+  const dz=(state.camLat-preset.camera.camLat)*projection.metersPerDegLat;
+  const radius=Math.max(1200,Math.min(20000,preset.camera.camDist*.8));
+  return Math.hypot(dx,dz)>radius || (preset.camera.camDist>45000 && state.camDist<9000);
+}
