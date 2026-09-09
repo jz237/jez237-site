@@ -1,0 +1,1 @@
+{"extends":"./tsconfig.json","compilerOptions":{"incremental":false},"include":["static/main.tsx","components/LivingAquascape.tsx","lib/aquarium/PhotographicScene.ts","lib/aquarium/Ecosystem.ts"],"exclude":["node_modules"]}
