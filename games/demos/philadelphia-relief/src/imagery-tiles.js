@@ -1,5 +1,5 @@
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
-import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090901';
+import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090902';
 
 export const TILE_SPECS = [
   { tier: 'tile-inspection', lon: 0.0032, lat: 0.0024, range: 600 },
