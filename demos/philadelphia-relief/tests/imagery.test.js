@@ -314,3 +314,16 @@ test('first detail leaves the backdrop visible and refinement keeps the neighbou
   assert.deepEqual(map.uniforms.uImageryDetailPrevBounds.value.toArray(), firstBounds);
   map.dispose();
 });
+
+
+test('cross-river detail tiles avoid partial state mosaics at every resolution', () => {
+  for (const size of [512,2048]) {
+    const tile=detailRequest(new URLSearchParams({tier:'tile-ultra',
+      lon:'-75.1344',lat:'39.9304',size:String(size)}));
+    assert.equal(imageryState(tile.lon,tile.lat),'NJ');
+    assert.deepEqual(imagerySources(tile).map(s => s.name),['USDA / USGS The National Map']);
+  }
+  const inland=detailRequest(new URLSearchParams({tier:'tile-rooftop',
+    lon:'-75.4',lat:'40.09',size:'2048'}));
+  assert.match(imagerySources(inland)[0].name,/Pennsylvania PEMA/);
+});

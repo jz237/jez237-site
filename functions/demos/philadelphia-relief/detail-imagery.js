@@ -60,7 +60,7 @@ export function detailRequest(searchParams) {
     south: lat - halfLat,
     north: lat + halfLat,
   };
-  const key = `pan-v5,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
+  const key = `pan-v6,${tier},${lon.toFixed(4)},${lat.toFixed(4)},${size}`;
   const height = Math.round(size * spec.span.lat / spec.span.lon);
   return { tier, lon, lat, size, height, bounds, key };
 }
@@ -83,6 +83,32 @@ export function imageryState(lon, lat) {
   }) || null;
 }
 
+// A source must cover the entire tile. The center alone can be across a river.
+function segmentTouchesBounds(a, z, b) {
+  const dx=z[0]-a[0], dy=z[1]-a[1];
+  let enter=0, leave=1;
+  for (const [p,q] of [[-dx,a[0]-b.west],[dx,b.east-a[0]],
+    [-dy,a[1]-b.south],[dy,b.north-a[1]]]) {
+    if (p===0) { if (q<0) return false; continue; }
+    const t=q/p;
+    if (p<0) enter=Math.max(enter,t); else leave=Math.min(leave,t);
+    if (enter>leave) return false;
+  }
+  return true;
+}
+
+export function imageryTileState(b) {
+  const state=imageryState((b.west+b.east)/2,(b.south+b.north)/2);
+  if (!state) return null;
+  // Includes interior rings: a tile containing a boundary or hole uses regional imagery.
+  for (const ring of IMAGERY_STATES[state]) {
+    for (let i=0,j=ring.length-1;i<ring.length;j=i++) {
+      if (segmentTouchesBounds(ring[j],ring[i],b)) return null;
+    }
+  }
+  return state;
+}
+
 const STATE_SOURCES = {
   PA: { name: 'Pennsylvania PEMA 2021-2023 / PASDA', layers: 'show:3',
     url: 'https://services.pasda.psu.edu/server/rest/services/pasda/PEMAImagery2021_2023/MapServer/export' },
@@ -99,11 +125,11 @@ export function imagerySources(detail) {
   const sources = [];
   // Wide regional views use the inexpensive existing overview source.
   if (detail.tier !== 'detail' && detail.tier !== 'tile-detail') {
-    if (b.west >= -75.23 && b.east <= -75.12 && b.south >= 39.93 && b.north <= 40.00) {
+    const state = imageryTileState(b);
+    if (state === 'PA' && b.west >= -75.23 && b.east <= -75.12 && b.south >= 39.93 && b.north <= 40.00) {
       sources.push({ name: 'City of Philadelphia 2024 / PASDA', layers: 'show:0,1,2,3',
         url: 'https://maps.pasda.psu.edu/ArcGIS/rest/services/pasda/PhiladelphiaImagery2024/MapServer/export' });
     }
-    const state = imageryState((b.west + b.east) / 2, (b.south + b.north) / 2);
     if (state) sources.push(STATE_SOURCES[state]);
   }
   sources.push({ name: 'USDA / USGS The National Map', url: SOURCE });

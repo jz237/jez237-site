@@ -702,9 +702,14 @@ Address search uses the existing verified landmark cards, including Bauder Signs
 at 3613 Witte Street and The Hidden Reef at 4501 New Falls Road. Explore cards use
 available scene or aerial previews instead of requesting missing thumbnail files.
 
-Validation: 282 automated checks plus desktop and phone browser checks, including
+Validation: 283 automated checks plus desktop and phone browser checks, including
 740 by 390 landscape and 390 by 844 portrait, saved-view restore/removal, lighting
 undo, address search and five-second keyboard seeking. A deterministic benchmark
 of 200,000 woodland queries returned identical coverage before and after the
 optimization; local query time fell from 372 ms to 137 ms (about 2.7 times faster).
 This measures the query helper, not overall map frame rate.
+
+Release QA also corrected source selection for tiles crossing a state boundary.
+Boundary-segment checks include interior rings and choose the regional source for
+cross-border tiles, preventing a partial state mosaic from painting white areas
+across the river. Inland close views retain their high-resolution local sources.

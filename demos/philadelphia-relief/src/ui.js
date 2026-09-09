@@ -1,4 +1,4 @@
-import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026090905';
+import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026090906';
 /**
  * The control studio, preset list, search and dialogs.
  *
@@ -7,13 +7,13 @@ import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026090
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090905';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090905';
-import { getEra } from './eras.js?v=philly-2026090905';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090905';
-import { TOURS } from './tours.js?v=philly-2026090905';
-import { ERAS } from './eras.js?v=philly-2026090905';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090905';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090906';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090906';
+import { getEra } from './eras.js?v=philly-2026090906';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090906';
+import { TOURS } from './tours.js?v=philly-2026090906';
+import { ERAS } from './eras.js?v=philly-2026090906';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090906';
 
 const ENUM_LABELS = {
   diorama: v => v ? 'Miniature' : 'Classic map',
