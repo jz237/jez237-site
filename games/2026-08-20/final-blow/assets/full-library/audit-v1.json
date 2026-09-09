@@ -1,0 +1,6314 @@
+{
+  "version": "5.7.13",
+  "generator": "Built-in image generation, original painted sheets supplied as references",
+  "countPerFighter": 410,
+  "nonLegacyCountPerFighter": 394,
+  "legacyFallbackCountPerFighter": 16,
+  "notes": [
+    "Counts are populated sprite cells, not unique live poses.",
+    "Includes fallback banks and companions of retired cells; retired originals remain excluded by the existing repair routing.",
+    "New drawings use padded atlas cells and per-cell floor/air registration."
+  ],
+  "sheets": [
+    {
+      "fighter": "jez",
+      "bank": "base",
+      "file": "jez-base-v1.webp",
+      "source": "exec-a5e4c082-917f-481b-8b61-67d79076d045.png",
+      "frames": 16,
+      "sha256": "d89e52b207340d6b96f6c1b3865b630c677c15a8a837310c88d2d76b2a2329db",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 84,
+          "top": 8,
+          "right": 283,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 73,
+          "top": 8,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 60,
+          "top": 8,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 76,
+          "top": 8,
+          "right": 279,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 58,
+          "top": 8,
+          "right": 270,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 73,
+          "top": 8,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 12,
+          "top": 8,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 24,
+          "top": 8,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 8,
+          "top": 8,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 8,
+          "top": 8,
+          "right": 288,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 8,
+          "top": 24,
+          "right": 290,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 59,
+          "top": 8,
+          "right": 283,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 80,
+          "top": 8,
+          "right": 235,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 82,
+          "top": 8,
+          "right": 223,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 8,
+          "right": 295,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 68,
+          "top": 8,
+          "right": 255,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "motion",
+      "file": "jez-motion-v1.webp",
+      "source": "exec-fabe34fc-05b3-47cf-b4af-17e9926841c2.png",
+      "frames": 16,
+      "sha256": "026960642bc574aa48a37d5b574682495e907c8c18be1aae05421e85ee7ea6c7",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 54,
+          "top": 24,
+          "right": 294,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 32,
+          "top": 44,
+          "right": 233,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 50,
+          "top": 35,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 38,
+          "top": 8,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 18,
+          "top": 39,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 88,
+          "top": 137,
+          "right": 220,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 8,
+          "top": 120,
+          "right": 284,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 12,
+          "top": 122,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 62,
+          "top": 74,
+          "right": 305,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 81,
+          "top": 139,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 34,
+          "top": 76,
+          "right": 301,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 13,
+          "top": 70,
+          "right": 297,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 8,
+          "top": 30,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 94,
+          "top": 14,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 47,
+          "top": 8,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 41,
+          "top": 24,
+          "right": 280,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "motion2",
+      "file": "jez-motion2-v1.webp",
+      "source": "exec-b2ccfdee-6e09-4e47-b199-6c9ce5587d95.png",
+      "frames": 16,
+      "sha256": "2cb036b4484848974945cbeb0c0936d753e2cc76e776f51899eb5127ab10142d",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 71,
+          "top": 26,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 84,
+          "top": 8,
+          "right": 248,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 22,
+          "top": 10,
+          "right": 209,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 70,
+          "top": 19,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 18,
+          "top": 74,
+          "right": 223,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 101,
+          "top": 28,
+          "right": 227,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 8,
+          "top": 89,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 75,
+          "top": 53,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 67,
+          "top": 57,
+          "right": 310,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 53,
+          "top": 44,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 102,
+          "top": 53,
+          "right": 261,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 14,
+          "top": 103,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 45,
+          "top": 25,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 24,
+          "top": 25,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 123,
+          "right": 202,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 73,
+          "top": 93,
+          "right": 255,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "motion3",
+      "file": "jez-motion3-v1.webp",
+      "source": "exec-43c43995-7f7c-4a1c-abca-23abd151278d.png",
+      "frames": 8,
+      "sha256": "8548fdeaf350793b0cf5030943491268493c3a0d9a25f1526d44fe7685aafe8e",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 88,
+          "top": 44,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 87,
+          "top": 8,
+          "right": 220,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 81,
+          "top": 39,
+          "right": 218,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 105,
+          "top": 44,
+          "right": 301,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 45,
+          "top": 45,
+          "right": 253,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 51,
+          "top": 126,
+          "right": 310,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 80,
+          "top": 18,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 32,
+          "top": 53,
+          "right": 265,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "walk",
+      "file": "jez-walk-v1.webp",
+      "source": "exec-d38ddef2-b369-40b0-b3f9-ee19c6ef7a48.png",
+      "frames": 4,
+      "sha256": "b67b37b58fb701d5c44b0b5e3381745d59491383285ebd5295775270823afab7",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 97,
+          "top": 33,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 136,
+          "top": 9,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 84,
+          "top": 32,
+          "right": 293,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 145,
+          "top": 8,
+          "right": 261,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "specials",
+      "file": "jez-specials-v1.webp",
+      "source": "exec-8048969e-a6f2-46f7-8827-398b1e929df0.png",
+      "frames": 16,
+      "sha256": "20ea520c6e1a44d6a234abc8c866965ac69c2d717ad9458fc01e17c6e7bfd1ce",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 39,
+          "top": 28,
+          "right": 302,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 8,
+          "top": 111,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 65,
+          "top": 97,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 59,
+          "top": 12,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 21,
+          "top": 85,
+          "right": 278,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 18,
+          "top": 66,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 8,
+          "top": 8,
+          "right": 241,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 36,
+          "top": 8,
+          "right": 289,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 72,
+          "top": 71,
+          "right": 235,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 52,
+          "top": 8,
+          "right": 239,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 93,
+          "top": 8,
+          "right": 224,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 8,
+          "top": 75,
+          "right": 290,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 29,
+          "top": 8,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 12,
+          "top": 37,
+          "right": 293,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 82,
+          "top": 8,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 93,
+          "top": 8,
+          "right": 291,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "specials-legacy",
+      "file": "jez-specials-legacy-v1.webp",
+      "source": "exec-4e5f2b07-7b37-494c-8dad-0535d98b4b45.png",
+      "frames": 16,
+      "sha256": "7410724dcb0480318e35f7b80e4939260a9d67234d3ecaf2f09a4265994533d0",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 29,
+          "top": 25,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 8,
+          "top": 111,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 43,
+          "top": 97,
+          "right": 310,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 101,
+          "top": 19,
+          "right": 293,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 13,
+          "top": 79,
+          "right": 274,
+          "bottom": 301
+        },
+        {
+          "frame": 5,
+          "left": 24,
+          "top": 66,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 94,
+          "top": 12,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 64,
+          "top": 19,
+          "right": 266,
+          "bottom": 311
+        },
+        {
+          "frame": 8,
+          "left": 80,
+          "top": 66,
+          "right": 219,
+          "bottom": 298
+        },
+        {
+          "frame": 9,
+          "left": 67,
+          "top": 8,
+          "right": 252,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 53,
+          "top": 8,
+          "right": 176,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 35,
+          "top": 67,
+          "right": 306,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 87,
+          "top": 8,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 17,
+          "top": 11,
+          "right": 242,
+          "bottom": 303
+        },
+        {
+          "frame": 14,
+          "left": 126,
+          "top": 8,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 117,
+          "top": 8,
+          "right": 277,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "unified-ext",
+      "file": "jez-unified-ext-v1.webp",
+      "source": "exec-c4ace3da-056d-40bf-b55e-1c794da4f6d1.png",
+      "frames": 8,
+      "sha256": "81088ab2d5d993ad4c6259c5f52e633880c79f8eff9c80e597b698ca8f1251b1",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 116,
+          "top": 34,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 64,
+          "top": 13,
+          "right": 225,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 69,
+          "top": 16,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 90,
+          "top": 28,
+          "right": 233,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 91,
+          "top": 62,
+          "right": 305,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 61,
+          "top": 47,
+          "right": 245,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 80,
+          "top": 33,
+          "right": 228,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 94,
+          "top": 79,
+          "right": 234,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "unified-ext2",
+      "file": "jez-unified-ext2-v1.webp",
+      "source": "exec-02776044-a3b1-4ed7-8412-3faef04476bc.png",
+      "frames": 16,
+      "sha256": "08acd3d6e5463b76eb92b374505fc39cc24ab50ae69c3024ebe8c0e9caf414a6",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 55,
+          "top": 8,
+          "right": 295,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 52,
+          "top": 8,
+          "right": 273,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 63,
+          "top": 8,
+          "right": 229,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 92,
+          "top": 8,
+          "right": 244,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 31,
+          "top": 16,
+          "right": 308,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 8,
+          "top": 99,
+          "right": 274,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 45,
+          "top": 21,
+          "right": 245,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 21,
+          "top": 21,
+          "right": 254,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 58,
+          "top": 99,
+          "right": 253,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 8,
+          "top": 104,
+          "right": 197,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 8,
+          "top": 123,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 76,
+          "top": 110,
+          "right": 283,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 16,
+          "top": 12,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 60,
+          "top": 43,
+          "right": 284,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 39,
+          "top": 18,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 60,
+          "top": 9,
+          "right": 312,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "unified-ext3",
+      "file": "jez-unified-ext3-v1.webp",
+      "source": "exec-04a62018-4d30-4883-aac0-c0269dad12b9.png",
+      "frames": 16,
+      "sha256": "00c1c2a5744e1bc746a0d84bd554859e9f7c95ec23f8c6e6f9727f6e66b31e19",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 13,
+          "top": 16,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 52,
+          "top": 33,
+          "right": 299,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 32,
+          "top": 16,
+          "right": 274,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 48,
+          "top": 35,
+          "right": 290,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 36,
+          "top": 124,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 68,
+          "top": 186,
+          "right": 301,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 60,
+          "top": 90,
+          "right": 301,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 8,
+          "top": 112,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 77,
+          "top": 103,
+          "right": 210,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 25,
+          "top": 8,
+          "right": 254,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 8,
+          "top": 124,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 43,
+          "top": 37,
+          "right": 295,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 59,
+          "top": 107,
+          "right": 225,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 8,
+          "top": 117,
+          "right": 279,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 73,
+          "top": 25,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 27,
+          "top": 149,
+          "right": 306,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "unified-ext4",
+      "file": "jez-unified-ext4-v1.webp",
+      "source": "exec-606db297-5ab4-4b7c-856b-d75808d45edf.png",
+      "frames": 16,
+      "sha256": "a27701bf6d28fd13535083f606e1735106b9261ca698d522ad6da8a8a021b1b0",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 69,
+          "top": 31,
+          "right": 309,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 72,
+          "top": 20,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 71,
+          "top": 75,
+          "right": 236,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 47,
+          "top": 64,
+          "right": 305,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 46,
+          "top": 44,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 85,
+          "top": 40,
+          "right": 230,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 8,
+          "top": 96,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 49,
+          "top": 54,
+          "right": 241,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 36,
+          "top": 55,
+          "right": 311,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 45,
+          "top": 172,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 33,
+          "top": 125,
+          "right": 295,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 11,
+          "top": 111,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 44,
+          "top": 164,
+          "right": 299,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 45,
+          "top": 69,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 142,
+          "right": 292,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 23,
+          "top": 237,
+          "right": 312,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "unified-ext5",
+      "file": "jez-unified-ext5-v1.webp",
+      "source": "exec-6edb02ce-c2c1-4a9e-af1b-c00d86d80faa.png",
+      "frames": 16,
+      "sha256": "e7e3f1acbda5db4b16ace8666cbbec030b614e35990b8dcf2b8d47b1f0b4c106",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 8,
+          "top": 61,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 10,
+          "top": 122,
+          "right": 227,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 28,
+          "top": 126,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 118,
+          "top": 21,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 99,
+          "top": 110,
+          "right": 238,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 61,
+          "top": 27,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 58,
+          "top": 20,
+          "right": 301,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 8,
+          "top": 76,
+          "right": 308,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 59,
+          "top": 33,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 105,
+          "top": 15,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 59,
+          "top": 23,
+          "right": 293,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 80,
+          "top": 14,
+          "right": 249,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 44,
+          "top": 8,
+          "right": 236,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 77,
+          "top": 79,
+          "right": 279,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 26,
+          "top": 24,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 91,
+          "top": 20,
+          "right": 254,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "unified",
+      "file": "jez-unified-v1.webp",
+      "source": "exec-baa7c079-200a-49ea-af73-4548d3abfd64.png",
+      "frames": 16,
+      "sha256": "4580298e28e2f06659189dbb35b87f65e305a49b7b383025de86da288207d8a1",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 61,
+          "top": 35,
+          "right": 234,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 38,
+          "top": 8,
+          "right": 237,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 84,
+          "top": 10,
+          "right": 215,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 56,
+          "top": 8,
+          "right": 177,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 109,
+          "top": 16,
+          "right": 233,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 83,
+          "top": 94,
+          "right": 220,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 62,
+          "top": 71,
+          "right": 200,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 66,
+          "top": 41,
+          "right": 229,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 84,
+          "top": 12,
+          "right": 220,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 117,
+          "top": 144,
+          "right": 244,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 54,
+          "top": 51,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 46,
+          "top": 52,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 67,
+          "top": 45,
+          "right": 226,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 60,
+          "top": 35,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 52,
+          "top": 30,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 81,
+          "top": 242,
+          "right": 304,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "inbetween-approach",
+      "file": "jez-inbetween-approach-v1.webp",
+      "source": "exec-99ae898c-914f-4866-879e-b9225cac8dce.png",
+      "frames": 16,
+      "sha256": "25e7f6c949f8f060f3fbff375726f153bd89715951f2b3bb1ab755b3a89f67b2",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 47,
+          "top": 29,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 82,
+          "top": 26,
+          "right": 217,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 43,
+          "top": 33,
+          "right": 251,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 62,
+          "top": 31,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 49,
+          "top": 127,
+          "right": 278,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 97,
+          "top": 185,
+          "right": 306,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 54,
+          "top": 66,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 93,
+          "top": 68,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 85,
+          "top": 94,
+          "right": 225,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 44,
+          "top": 8,
+          "right": 251,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 30,
+          "top": 107,
+          "right": 242,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 59,
+          "top": 8,
+          "right": 240,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 69,
+          "top": 103,
+          "right": 211,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 16,
+          "top": 106,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 102,
+          "top": 21,
+          "right": 248,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 35,
+          "top": 146,
+          "right": 292,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "inbetween-specials",
+      "file": "jez-inbetween-specials-v1.webp",
+      "source": "exec-d28934ca-8ad1-4283-9b7f-193190bc523b.png",
+      "frames": 16,
+      "sha256": "4a2d67fca863591adecd36d09efd2cd483e4fde77c408e5fb499584ed4d4d89e",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 22,
+          "top": 30,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 8,
+          "top": 111,
+          "right": 291,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 40,
+          "top": 97,
+          "right": 304,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 62,
+          "top": 16,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 21,
+          "top": 95,
+          "right": 289,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 21,
+          "top": 66,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 23,
+          "top": 8,
+          "right": 296,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 41,
+          "top": 9,
+          "right": 290,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 71,
+          "top": 74,
+          "right": 230,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 52,
+          "top": 8,
+          "right": 228,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 79,
+          "top": 8,
+          "right": 207,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 39,
+          "top": 77,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 8,
+          "top": 8,
+          "right": 246,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 14,
+          "top": 8,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 104,
+          "top": 8,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 29,
+          "top": 8,
+          "right": 220,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "inbetween-unified-ext2",
+      "file": "jez-inbetween-unified-ext2-v1.webp",
+      "source": "exec-980fc18b-ea44-48d4-ad98-0513639be43e.png",
+      "frames": 16,
+      "sha256": "2f7b84a1c86a5ead5511034a584157ceac67420f93bc1d8f0946463856d2c302",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 39,
+          "top": 17,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 67,
+          "top": 14,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 86,
+          "top": 8,
+          "right": 245,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 97,
+          "top": 15,
+          "right": 249,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 27,
+          "top": 8,
+          "right": 248,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 32,
+          "top": 87,
+          "right": 240,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 53,
+          "top": 27,
+          "right": 249,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 25,
+          "top": 21,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 57,
+          "top": 99,
+          "right": 233,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 33,
+          "top": 110,
+          "right": 194,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 8,
+          "top": 125,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 70,
+          "top": 104,
+          "right": 292,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 35,
+          "top": 12,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 19,
+          "top": 38,
+          "right": 242,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 62,
+          "top": 25,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 17,
+          "top": 9,
+          "right": 230,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "inbetween-unified-ext3",
+      "file": "jez-inbetween-unified-ext3-v1.webp",
+      "source": "exec-3f1edf66-1247-461d-990c-7fc004b9e42c.png",
+      "frames": 16,
+      "sha256": "15c2f817fbb2eee9e206c82e703f4caab32b312bb9dc31be18281f57eae62fa4",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 61,
+          "top": 24,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 60,
+          "top": 33,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 42,
+          "top": 21,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 56,
+          "top": 35,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 52,
+          "top": 128,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 77,
+          "top": 186,
+          "right": 283,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 53,
+          "top": 85,
+          "right": 237,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 78,
+          "top": 109,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 94,
+          "top": 100,
+          "right": 218,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 30,
+          "top": 8,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 52,
+          "top": 121,
+          "right": 239,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 38,
+          "top": 37,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 64,
+          "top": 108,
+          "right": 211,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 12,
+          "top": 106,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 83,
+          "top": 25,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 8,
+          "top": 149,
+          "right": 257,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "inbetween-unified-ext4",
+      "file": "jez-inbetween-unified-ext4-v1.webp",
+      "source": "exec-e3946e2e-ed4f-40c1-b46c-34ba6c5c255a.png",
+      "frames": 16,
+      "sha256": "7a54582a4bd8332ebc87a3bb38a7addadefeb614d24dc8dc84832a3a63e250cd",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 23,
+          "top": 36,
+          "right": 214,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 90,
+          "top": 30,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 93,
+          "top": 79,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 27,
+          "top": 64,
+          "right": 301,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 50,
+          "top": 45,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 94,
+          "top": 45,
+          "right": 239,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 34,
+          "top": 92,
+          "right": 311,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 75,
+          "top": 62,
+          "right": 229,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 33,
+          "top": 64,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 13,
+          "top": 162,
+          "right": 219,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 19,
+          "top": 134,
+          "right": 304,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 8,
+          "top": 123,
+          "right": 289,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 23,
+          "top": 164,
+          "right": 252,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 59,
+          "top": 71,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 146,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 64,
+          "top": 237,
+          "right": 298,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "inbetween-unified-ext5",
+      "file": "jez-inbetween-unified-ext5-v1.webp",
+      "source": "exec-eba1b97d-d22c-46a4-a55c-704c1febd921.png",
+      "frames": 16,
+      "sha256": "23d59e148fa227cc5feff1e4ec57b4f5e390fde8a4c6ac93b0c0ccc0eb3bfbb6",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 19,
+          "top": 56,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 10,
+          "top": 122,
+          "right": 210,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 42,
+          "top": 120,
+          "right": 271,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 113,
+          "top": 27,
+          "right": 235,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 85,
+          "top": 112,
+          "right": 226,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 93,
+          "top": 44,
+          "right": 290,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 93,
+          "top": 37,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 10,
+          "top": 87,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 60,
+          "top": 33,
+          "right": 249,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 73,
+          "top": 15,
+          "right": 238,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 78,
+          "top": 27,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 94,
+          "top": 14,
+          "right": 257,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 38,
+          "top": 8,
+          "right": 223,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 13,
+          "top": 77,
+          "right": 211,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 21,
+          "top": 25,
+          "right": 301,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 85,
+          "top": 19,
+          "right": 251,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "inbetween-unified",
+      "file": "jez-inbetween-unified-v1.webp",
+      "source": "exec-48691da1-10a4-4c48-94f2-de764d692b6a.png",
+      "frames": 16,
+      "sha256": "0171c8c7598b9818d495c3f12fe95e783ccd5b17ddcdbba26015aec3f70283d2",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 137,
+          "top": 44,
+          "right": 309,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 29,
+          "top": 20,
+          "right": 220,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 103,
+          "top": 32,
+          "right": 229,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 72,
+          "top": 36,
+          "right": 236,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 13,
+          "top": 40,
+          "right": 197,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 110,
+          "top": 109,
+          "right": 245,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 84,
+          "top": 81,
+          "right": 227,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 98,
+          "top": 53,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 80,
+          "top": 39,
+          "right": 232,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 105,
+          "top": 146,
+          "right": 208,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 54,
+          "top": 59,
+          "right": 258,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 47,
+          "top": 61,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 90,
+          "top": 54,
+          "right": 239,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 67,
+          "top": 42,
+          "right": 271,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 70,
+          "top": 56,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 61,
+          "top": 243,
+          "right": 220,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "painted-flow",
+      "file": "jez-painted-flow-v1.webp",
+      "source": "exec-599d1d61-0415-44f0-be6d-377b704a3840.png",
+      "frames": 16,
+      "sha256": "f0a5a542007fc05014d87102751da6f9a3d18944709ef710f876f9b989506cdd",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 97,
+          "top": 48,
+          "right": 267,
+          "bottom": 306
+        },
+        {
+          "frame": 1,
+          "left": 98,
+          "top": 51,
+          "right": 274,
+          "bottom": 306
+        },
+        {
+          "frame": 2,
+          "left": 95,
+          "top": 51,
+          "right": 277,
+          "bottom": 306
+        },
+        {
+          "frame": 3,
+          "left": 96,
+          "top": 53,
+          "right": 288,
+          "bottom": 306
+        },
+        {
+          "frame": 4,
+          "left": 95,
+          "top": 53,
+          "right": 295,
+          "bottom": 306
+        },
+        {
+          "frame": 5,
+          "left": 91,
+          "top": 54,
+          "right": 264,
+          "bottom": 306
+        },
+        {
+          "frame": 6,
+          "left": 89,
+          "top": 54,
+          "right": 262,
+          "bottom": 306
+        },
+        {
+          "frame": 7,
+          "left": 91,
+          "top": 51,
+          "right": 266,
+          "bottom": 306
+        },
+        {
+          "frame": 8,
+          "left": 87,
+          "top": 48,
+          "right": 251,
+          "bottom": 306
+        },
+        {
+          "frame": 9,
+          "left": 51,
+          "top": 47,
+          "right": 199,
+          "bottom": 306
+        },
+        {
+          "frame": 10,
+          "left": 67,
+          "top": 46,
+          "right": 187,
+          "bottom": 306
+        },
+        {
+          "frame": 11,
+          "left": 63,
+          "top": 46,
+          "right": 209,
+          "bottom": 306
+        },
+        {
+          "frame": 12,
+          "left": 62,
+          "top": 46,
+          "right": 261,
+          "bottom": 306
+        },
+        {
+          "frame": 13,
+          "left": 68,
+          "top": 46,
+          "right": 245,
+          "bottom": 306
+        },
+        {
+          "frame": 14,
+          "left": 79,
+          "top": 46,
+          "right": 199,
+          "bottom": 306
+        },
+        {
+          "frame": 15,
+          "left": 134,
+          "top": 48,
+          "right": 279,
+          "bottom": 306
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "painted-bridges",
+      "file": "jez-painted-bridges-v1.webp",
+      "source": "exec-84c27797-8359-489b-a2ed-f038907d37ae.png",
+      "frames": 6,
+      "sha256": "e87812814502f19db09d534896a7650c7d5c03600bcd013c8b8aa60372a2520a",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 107,
+          "top": 35,
+          "right": 290,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 98,
+          "top": 46,
+          "right": 298,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 82,
+          "top": 38,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 119,
+          "top": 50,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 128,
+          "top": 60,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 107,
+          "top": 44,
+          "right": 302,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "painted-footwork",
+      "file": "jez-painted-footwork-v1.webp",
+      "source": "exec-c88e9b63-96cf-44ac-842a-f723a6f8f75e.png",
+      "frames": 16,
+      "sha256": "2a5742dd85818fa440cd0ee3ed5310adbcd324baf397a2c2447d65662aa0c83c",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 96,
+          "top": 35,
+          "right": 294,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 80,
+          "top": 44,
+          "right": 289,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 72,
+          "top": 42,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 68,
+          "top": 50,
+          "right": 271,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 76,
+          "top": 55,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 92,
+          "top": 55,
+          "right": 291,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 69,
+          "top": 57,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 68,
+          "top": 128,
+          "right": 229,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 124,
+          "top": 56,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 106,
+          "top": 125,
+          "right": 236,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 130,
+          "top": 38,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 20,
+          "top": 108,
+          "right": 228,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 147,
+          "top": 66,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 137,
+          "top": 67,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 144,
+          "top": 90,
+          "right": 309,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 62,
+          "top": 63,
+          "right": 271,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "painted-recovery",
+      "file": "jez-painted-recovery-v1.webp",
+      "source": "exec-070f7c5c-f406-415f-8643-e7651f8859d5.png",
+      "frames": 16,
+      "sha256": "b5bf8a9f078485549cf2d3b29a28ce925ff79aebff6c466fe90f86ce38dbc92a",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 50,
+          "top": 35,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 62,
+          "top": 35,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 64,
+          "top": 35,
+          "right": 278,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 64,
+          "top": 35,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 58,
+          "top": 34,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 69,
+          "top": 32,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 79,
+          "top": 32,
+          "right": 252,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 60,
+          "top": 33,
+          "right": 273,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 69,
+          "top": 39,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 71,
+          "top": 41,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 78,
+          "top": 102,
+          "right": 254,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 21,
+          "top": 94,
+          "right": 203,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 58,
+          "top": 36,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 67,
+          "top": 71,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 61,
+          "top": 34,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 68,
+          "top": 33,
+          "right": 280,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "smooth-approach",
+      "file": "jez-smooth-approach-v1.webp",
+      "source": "exec-e74d23e5-9d9f-4bd9-82b8-9f4b5eaaadf4.png",
+      "frames": 16,
+      "sha256": "a972eefd45021729c5897095ce8ca09fbcfca1fd82a3230bceb960fc2a133c9b",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 76,
+          "top": 114,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 72,
+          "top": 111,
+          "right": 302,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 70,
+          "top": 105,
+          "right": 270,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 75,
+          "top": 104,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 99,
+          "top": 114,
+          "right": 302,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 46,
+          "top": 129,
+          "right": 304,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 51,
+          "top": 115,
+          "right": 271,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 98,
+          "top": 126,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 103,
+          "top": 46,
+          "right": 278,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 93,
+          "top": 51,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 90,
+          "top": 50,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 106,
+          "top": 48,
+          "right": 283,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 140,
+          "top": 26,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 54,
+          "top": 41,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 126,
+          "top": 61,
+          "right": 295,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 108,
+          "top": 74,
+          "right": 268,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "smooth-contact",
+      "file": "jez-smooth-contact-v1.webp",
+      "source": "exec-554971a4-f20d-46fe-8022-b30231948b9b.png",
+      "frames": 16,
+      "sha256": "1febf2cf8878550306f6abcc9d01a482fdeb212bee98ef9966cc83f937431f72",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 37,
+          "top": 114,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 53,
+          "top": 111,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 66,
+          "top": 107,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 72,
+          "top": 105,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 26,
+          "top": 114,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 40,
+          "top": 129,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 80,
+          "top": 115,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 82,
+          "top": 126,
+          "right": 253,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 93,
+          "top": 46,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 41,
+          "top": 50,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 86,
+          "top": 50,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 93,
+          "top": 48,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 127,
+          "top": 25,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 37,
+          "top": 40,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 126,
+          "top": 60,
+          "right": 301,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 102,
+          "top": 73,
+          "right": 267,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "smooth-flow",
+      "file": "jez-smooth-flow-v1.webp",
+      "source": "exec-2bf54098-8448-49f1-a6d6-3863e39210f7.png",
+      "frames": 16,
+      "sha256": "e9ee4d2808f068884f555420d1d4d85860066d279fb2e9e1692cdbf59dad7477",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 66,
+          "top": 35,
+          "right": 279,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 67,
+          "top": 34,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 69,
+          "top": 34,
+          "right": 288,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 65,
+          "top": 35,
+          "right": 284,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 53,
+          "top": 32,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 63,
+          "top": 32,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 63,
+          "top": 32,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 64,
+          "top": 32,
+          "right": 278,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 84,
+          "top": 32,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 78,
+          "top": 32,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 77,
+          "top": 32,
+          "right": 241,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 71,
+          "top": 30,
+          "right": 297,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 50,
+          "top": 34,
+          "right": 297,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 77,
+          "top": 33,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 77,
+          "top": 34,
+          "right": 270,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 81,
+          "top": 34,
+          "right": 284,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "jez",
+      "bank": "smooth-footwork",
+      "file": "jez-smooth-footwork-v1.webp",
+      "source": "exec-50870330-e299-4d36-b1a9-beb466bce8a8.png",
+      "frames": 16,
+      "sha256": "b90c6b9650f18e6e04e07335b34696a67dd4570cdf0334419e50e3b0f1fe3aec",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 60,
+          "top": 35,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 51,
+          "top": 34,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 68,
+          "top": 34,
+          "right": 271,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 68,
+          "top": 35,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 64,
+          "top": 34,
+          "right": 274,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 51,
+          "top": 33,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 56,
+          "top": 35,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 71,
+          "top": 35,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 61,
+          "top": 33,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 59,
+          "top": 32,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 57,
+          "top": 79,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 60,
+          "top": 103,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 62,
+          "top": 29,
+          "right": 279,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 60,
+          "top": 86,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 59,
+          "top": 32,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 65,
+          "top": 78,
+          "right": 278,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "base",
+      "file": "benny-base-v1.webp",
+      "source": "exec-63c896b7-638c-4ee3-b3a4-34a14d3ab773.png",
+      "frames": 16,
+      "sha256": "6b4468d45822c83ebd3f42c4c09d91495f88b1bd755d0f3d17e16f84eb9267d6",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 66,
+          "top": 37,
+          "right": 241,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 62,
+          "top": 37,
+          "right": 239,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 63,
+          "top": 37,
+          "right": 244,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 69,
+          "top": 43,
+          "right": 252,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 68,
+          "top": 22,
+          "right": 257,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 65,
+          "top": 39,
+          "right": 244,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 8,
+          "top": 8,
+          "right": 190,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 70,
+          "top": 8,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 14,
+          "top": 8,
+          "right": 221,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 48,
+          "top": 23,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 59,
+          "top": 18,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 76,
+          "top": 43,
+          "right": 254,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 45,
+          "top": 8,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 75,
+          "top": 36,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 61,
+          "top": 27,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 81,
+          "top": 8,
+          "right": 263,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "motion",
+      "file": "benny-motion-v1.webp",
+      "source": "exec-6e8259a0-0356-4a53-baa5-c5950635c652.png",
+      "frames": 16,
+      "sha256": "fcd9e477d7d5551732cb6ea56e34b358f6328e5acd3774253838897daef4f6fe",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 8,
+          "top": 58,
+          "right": 222,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 34,
+          "top": 49,
+          "right": 195,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 13,
+          "top": 97,
+          "right": 218,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 101,
+          "top": 8,
+          "right": 254,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 44,
+          "top": 51,
+          "right": 273,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 100,
+          "top": 161,
+          "right": 227,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 28,
+          "top": 149,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 18,
+          "top": 125,
+          "right": 205,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 30,
+          "top": 75,
+          "right": 292,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 39,
+          "top": 157,
+          "right": 215,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 42,
+          "top": 61,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 8,
+          "top": 64,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 32,
+          "top": 44,
+          "right": 307,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 62,
+          "top": 8,
+          "right": 227,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 13,
+          "top": 8,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 13,
+          "top": 41,
+          "right": 300,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "motion2",
+      "file": "benny-motion2-v1.webp",
+      "source": "exec-dcebcb7a-fd7c-4988-b486-5b58dc7ebf8a.png",
+      "frames": 16,
+      "sha256": "d7717b18ce172454bdc46a54583a7ed188b17e81b844b42aa6881b17d4f0048e",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 51,
+          "top": 22,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 83,
+          "top": 8,
+          "right": 237,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 59,
+          "top": 8,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 48,
+          "top": 11,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 60,
+          "top": 79,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 94,
+          "top": 27,
+          "right": 222,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 14,
+          "top": 50,
+          "right": 293,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 63,
+          "top": 9,
+          "right": 248,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 54,
+          "top": 37,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 62,
+          "top": 30,
+          "right": 248,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 84,
+          "top": 44,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 17,
+          "top": 66,
+          "right": 307,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 33,
+          "top": 33,
+          "right": 290,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 15,
+          "top": 17,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 49,
+          "top": 107,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 64,
+          "top": 69,
+          "right": 255,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "motion3",
+      "file": "benny-motion3-v1.webp",
+      "source": "exec-f237d738-fc8f-4d72-9b36-5fe36148e77d.png",
+      "frames": 8,
+      "sha256": "46319ad21246b90cd6f2176abfc7191e9131169841898770408377397be35184",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 36,
+          "top": 8,
+          "right": 215,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 90,
+          "top": 51,
+          "right": 205,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 76,
+          "top": 15,
+          "right": 210,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 101,
+          "top": 58,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 65,
+          "top": 8,
+          "right": 212,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 8,
+          "top": 89,
+          "right": 204,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 39,
+          "top": 8,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 45,
+          "top": 39,
+          "right": 289,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "walk",
+      "file": "benny-walk-v1.webp",
+      "source": "exec-ce85376b-7817-4d74-9c47-38e909032648.png",
+      "frames": 4,
+      "sha256": "899cc1e34477fc891062c46f29324d113575c9f87aee9e172a42d5090276edd1",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 59,
+          "top": 17,
+          "right": 217,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 105,
+          "top": 8,
+          "right": 211,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 104,
+          "top": 17,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 102,
+          "top": 8,
+          "right": 199,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "specials",
+      "file": "benny-specials-v1.webp",
+      "source": "exec-cc12f664-039f-413a-a3ff-43f84200c887.png",
+      "frames": 16,
+      "sha256": "459d72eb3a1b6a0161afce429c1b16728cedc3f6769235169c0a6d8f8c965e82",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 51,
+          "top": 17,
+          "right": 251,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 37,
+          "top": 27,
+          "right": 256,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 11,
+          "top": 63,
+          "right": 257,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 56,
+          "top": 19,
+          "right": 251,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 33,
+          "top": 113,
+          "right": 239,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 14,
+          "top": 76,
+          "right": 270,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 46,
+          "top": 72,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 76,
+          "top": 33,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 51,
+          "top": 127,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 99,
+          "top": 8,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 71,
+          "top": 8,
+          "right": 199,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 73,
+          "top": 134,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 25,
+          "top": 15,
+          "right": 236,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 20,
+          "top": 21,
+          "right": 232,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 46,
+          "right": 225,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 79,
+          "top": 8,
+          "right": 234,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "specials-legacy",
+      "file": "benny-specials-legacy-v1.webp",
+      "source": "exec-a8b95c51-79a2-4a7f-9590-1a0f039f318a.png",
+      "frames": 16,
+      "sha256": "e709cda9135c528b7ded52a3ca623830f8bac4efad6cf8da9f958d6b77f8f191",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 73,
+          "top": 49,
+          "right": 249,
+          "bottom": 297
+        },
+        {
+          "frame": 1,
+          "left": 56,
+          "top": 30,
+          "right": 294,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 37,
+          "top": 68,
+          "right": 245,
+          "bottom": 288
+        },
+        {
+          "frame": 3,
+          "left": 54,
+          "top": 49,
+          "right": 225,
+          "bottom": 297
+        },
+        {
+          "frame": 4,
+          "left": 64,
+          "top": 78,
+          "right": 230,
+          "bottom": 246
+        },
+        {
+          "frame": 5,
+          "left": 14,
+          "top": 72,
+          "right": 248,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 45,
+          "top": 54,
+          "right": 254,
+          "bottom": 260
+        },
+        {
+          "frame": 7,
+          "left": 53,
+          "top": 43,
+          "right": 220,
+          "bottom": 276
+        },
+        {
+          "frame": 8,
+          "left": 52,
+          "top": 132,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 101,
+          "top": 8,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 77,
+          "top": 8,
+          "right": 205,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 70,
+          "top": 136,
+          "right": 293,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 59,
+          "top": 15,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 50,
+          "top": 20,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 36,
+          "right": 261,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 85,
+          "top": 8,
+          "right": 234,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "unified-ext",
+      "file": "benny-unified-ext-v1.webp",
+      "source": "exec-8671ecfa-9de3-41df-9b4c-17c3d3bed4db.png",
+      "frames": 8,
+      "sha256": "def75b1454264cd10e26c39279f56a2aa5d56b8ed6e77c4923c9fea789505a5a",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 92,
+          "top": 30,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 86,
+          "top": 19,
+          "right": 222,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 88,
+          "top": 21,
+          "right": 240,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 81,
+          "top": 15,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 66,
+          "top": 41,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 30,
+          "top": 48,
+          "right": 236,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 107,
+          "top": 21,
+          "right": 222,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 94,
+          "top": 110,
+          "right": 242,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "unified-ext2",
+      "file": "benny-unified-ext2-v1.webp",
+      "source": "exec-0f0f8e63-428a-49de-a506-6b3729584036.png",
+      "frames": 16,
+      "sha256": "5898ab122067f6881b5643e2cfdcfae390b8a981c9817920df499a722ab83c89",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 58,
+          "top": 8,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 67,
+          "top": 8,
+          "right": 279,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 89,
+          "top": 8,
+          "right": 251,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 102,
+          "top": 8,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 8,
+          "top": 18,
+          "right": 291,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 8,
+          "top": 45,
+          "right": 252,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 118,
+          "top": 17,
+          "right": 270,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 25,
+          "top": 29,
+          "right": 246,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 73,
+          "top": 127,
+          "right": 233,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 96,
+          "top": 127,
+          "right": 246,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 56,
+          "top": 154,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 60,
+          "top": 123,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 59,
+          "top": 11,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 89,
+          "top": 23,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 75,
+          "top": 15,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 63,
+          "top": 11,
+          "right": 277,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "unified-ext3",
+      "file": "benny-unified-ext3-v1.webp",
+      "source": "exec-8b259807-7f7f-475e-bdc1-fbf1f1439034.png",
+      "frames": 16,
+      "sha256": "611a6593918c29316507c10ade5f808fba605202a10992005bf2311f81bdf8c0",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 12,
+          "top": 23,
+          "right": 289,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 46,
+          "top": 9,
+          "right": 214,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 27,
+          "top": 10,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 47,
+          "top": 33,
+          "right": 311,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 49,
+          "top": 106,
+          "right": 300,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 88,
+          "top": 196,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 63,
+          "top": 76,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 72,
+          "top": 79,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 75,
+          "top": 51,
+          "right": 224,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 85,
+          "top": 38,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 28,
+          "top": 120,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 43,
+          "top": 52,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 70,
+          "top": 101,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 8,
+          "top": 83,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 65,
+          "top": 36,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 8,
+          "top": 172,
+          "right": 245,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "unified-ext4",
+      "file": "benny-unified-ext4-v1.webp",
+      "source": "exec-d459ecfa-54ea-4c18-972f-23ee73d491e4.png",
+      "frames": 16,
+      "sha256": "2a4c92e5e8b7e0953e54aafb145e8c178c0d22356aa68bee23f05a9faff3c1da",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 72,
+          "top": 8,
+          "right": 297,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 110,
+          "top": 8,
+          "right": 309,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 20,
+          "top": 66,
+          "right": 228,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 32,
+          "top": 27,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 46,
+          "top": 66,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 77,
+          "top": 33,
+          "right": 251,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 15,
+          "top": 38,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 76,
+          "top": 45,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 64,
+          "top": 60,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 8,
+          "top": 137,
+          "right": 233,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 29,
+          "top": 138,
+          "right": 295,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 8,
+          "top": 110,
+          "right": 283,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 40,
+          "top": 120,
+          "right": 310,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 29,
+          "top": 54,
+          "right": 253,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 31,
+          "top": 170,
+          "right": 310,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 78,
+          "top": 225,
+          "right": 311,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "unified-ext5",
+      "file": "benny-unified-ext5-v1.webp",
+      "source": "exec-958cf5f6-4d01-49ff-bf01-cfe9750c37c9.png",
+      "frames": 16,
+      "sha256": "452e7dbfc81b2753e1c0da5c27734de9af06a27b4277953eb7de3971fc48702e",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 18,
+          "top": 63,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 8,
+          "top": 159,
+          "right": 191,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 72,
+          "top": 111,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 166,
+          "top": 38,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 76,
+          "top": 111,
+          "right": 220,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 41,
+          "top": 33,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 69,
+          "top": 21,
+          "right": 295,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 94,
+          "top": 106,
+          "right": 289,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 50,
+          "top": 27,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 105,
+          "top": 13,
+          "right": 261,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 54,
+          "top": 31,
+          "right": 271,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 64,
+          "top": 8,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 41,
+          "top": 14,
+          "right": 251,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 55,
+          "top": 99,
+          "right": 223,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 34,
+          "right": 302,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 124,
+          "top": 26,
+          "right": 285,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "unified",
+      "file": "benny-unified-v1.webp",
+      "source": "exec-8d985f3b-084b-417a-98cf-2839bf9d3e2c.png",
+      "frames": 16,
+      "sha256": "c033c919541319e758de27f2e843b8ebc7d8e43ee3bd657951247335abbf1407",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 21,
+          "top": 33,
+          "right": 205,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 65,
+          "top": 16,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 62,
+          "top": 16,
+          "right": 214,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 86,
+          "top": 13,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 112,
+          "top": 8,
+          "right": 226,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 92,
+          "top": 117,
+          "right": 214,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 91,
+          "top": 96,
+          "right": 244,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 77,
+          "top": 38,
+          "right": 258,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 71,
+          "top": 8,
+          "right": 230,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 105,
+          "top": 163,
+          "right": 221,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 35,
+          "top": 48,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 35,
+          "top": 64,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 97,
+          "top": 33,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 49,
+          "top": 41,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 99,
+          "top": 40,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 98,
+          "top": 244,
+          "right": 256,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "inbetween-approach",
+      "file": "benny-inbetween-approach-v1.webp",
+      "source": "exec-1706c9c1-e31c-48d0-af45-4e2f5f5c6601.png",
+      "frames": 16,
+      "sha256": "e9e5e7b86a80feb64ff8b8991f5c21410d3eb54371e39a1be03c1994a0bd1605",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 8,
+          "top": 27,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 67,
+          "top": 8,
+          "right": 229,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 46,
+          "top": 23,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 8,
+          "top": 22,
+          "right": 234,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 40,
+          "top": 102,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 76,
+          "top": 193,
+          "right": 297,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 42,
+          "top": 72,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 101,
+          "top": 34,
+          "right": 249,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 96,
+          "top": 47,
+          "right": 233,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 90,
+          "top": 54,
+          "right": 246,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 72,
+          "top": 100,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 76,
+          "top": 31,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 80,
+          "top": 93,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 8,
+          "top": 70,
+          "right": 298,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 95,
+          "top": 23,
+          "right": 239,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 8,
+          "top": 169,
+          "right": 258,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "inbetween-specials",
+      "file": "benny-inbetween-specials-v1.webp",
+      "source": "exec-9916553f-ad7e-4059-8365-d0feefecb304.png",
+      "frames": 16,
+      "sha256": "666f692e86a355262e87fd818339ff85a07a0a2930fd6e7c667e1f9a110d9d6c",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 62,
+          "top": 23,
+          "right": 253,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 57,
+          "top": 30,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 13,
+          "top": 50,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 76,
+          "top": 24,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 39,
+          "top": 113,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 14,
+          "top": 72,
+          "right": 273,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 13,
+          "top": 41,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 62,
+          "top": 40,
+          "right": 258,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 105,
+          "top": 132,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 91,
+          "top": 8,
+          "right": 253,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 64,
+          "top": 8,
+          "right": 186,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 119,
+          "top": 136,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 89,
+          "top": 15,
+          "right": 291,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 86,
+          "top": 20,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 36,
+          "right": 211,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 102,
+          "top": 8,
+          "right": 242,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "inbetween-unified-ext2",
+      "file": "benny-inbetween-unified-ext2-v1.webp",
+      "source": "exec-09d8d669-6e5c-41b5-8e6a-7a5c5be6c68e.png",
+      "frames": 16,
+      "sha256": "3ab0272e9497dc9e04f470dc9d4429951dc07411d385fa1f10db80491dc1d680",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 44,
+          "top": 11,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 65,
+          "top": 13,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 90,
+          "top": 9,
+          "right": 221,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 107,
+          "top": 15,
+          "right": 246,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 18,
+          "top": 31,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 22,
+          "top": 42,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 70,
+          "top": 12,
+          "right": 279,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 104,
+          "top": 34,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 70,
+          "top": 129,
+          "right": 201,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 90,
+          "top": 128,
+          "right": 225,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 74,
+          "top": 158,
+          "right": 307,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 54,
+          "top": 126,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 69,
+          "top": 11,
+          "right": 296,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 79,
+          "top": 23,
+          "right": 277,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 47,
+          "top": 15,
+          "right": 284,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 51,
+          "top": 11,
+          "right": 263,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "inbetween-unified-ext3",
+      "file": "benny-inbetween-unified-ext3-v1.webp",
+      "source": "exec-93f8dcfc-950b-4f17-9551-0ebf4c04ecc1.png",
+      "frames": 16,
+      "sha256": "5cdccdbeffc6955acdd38fdcaa30795c5e1efe69e224390e603289d01a03a9fd",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 14,
+          "top": 23,
+          "right": 254,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 37,
+          "top": 15,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 37,
+          "top": 18,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 47,
+          "top": 33,
+          "right": 271,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 56,
+          "top": 103,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 81,
+          "top": 196,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 52,
+          "top": 81,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 81,
+          "top": 74,
+          "right": 294,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 84,
+          "top": 51,
+          "right": 219,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 79,
+          "top": 38,
+          "right": 239,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 73,
+          "top": 111,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 40,
+          "top": 46,
+          "right": 274,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 80,
+          "top": 93,
+          "right": 238,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 8,
+          "top": 81,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 77,
+          "top": 36,
+          "right": 299,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 35,
+          "top": 172,
+          "right": 286,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "inbetween-unified-ext4",
+      "file": "benny-inbetween-unified-ext4-v1.webp",
+      "source": "exec-8397644d-ac34-4a98-88a9-b52f892db9a2.png",
+      "frames": 16,
+      "sha256": "e13ec3c1fd9dc7ffcf33449e3fd91731a356f250692230793de105c14f3a387f",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 91,
+          "top": 8,
+          "right": 289,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 88,
+          "top": 8,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 75,
+          "top": 47,
+          "right": 253,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 25,
+          "top": 27,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 88,
+          "top": 65,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 84,
+          "top": 25,
+          "right": 244,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 27,
+          "top": 51,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 87,
+          "top": 67,
+          "right": 288,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 53,
+          "top": 61,
+          "right": 297,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 50,
+          "top": 136,
+          "right": 248,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 47,
+          "top": 136,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 9,
+          "top": 114,
+          "right": 291,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 77,
+          "top": 120,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 33,
+          "top": 56,
+          "right": 221,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 8,
+          "top": 180,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 81,
+          "top": 225,
+          "right": 312,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "inbetween-unified-ext5",
+      "file": "benny-inbetween-unified-ext5-v1.webp",
+      "source": "exec-8e9dc4fd-5b09-4076-82e8-9178960eec52.png",
+      "frames": 16,
+      "sha256": "fcfa9b7ca544808a10861d117fa686d030dbd7a35803e81b836c91ebd073d1d4",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 8,
+          "top": 63,
+          "right": 252,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 8,
+          "top": 125,
+          "right": 187,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 97,
+          "top": 99,
+          "right": 304,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 76,
+          "top": 37,
+          "right": 254,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 89,
+          "top": 114,
+          "right": 242,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 99,
+          "top": 58,
+          "right": 306,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 50,
+          "top": 67,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 87,
+          "top": 127,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 70,
+          "top": 27,
+          "right": 280,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 101,
+          "top": 13,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 61,
+          "top": 34,
+          "right": 286,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 85,
+          "top": 8,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 53,
+          "top": 14,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 82,
+          "top": 99,
+          "right": 225,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 22,
+          "top": 33,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 105,
+          "top": 26,
+          "right": 261,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "inbetween-unified",
+      "file": "benny-inbetween-unified-v1.webp",
+      "source": "exec-4fb8cb31-60b6-4326-a204-570fcac6f68b.png",
+      "frames": 16,
+      "sha256": "bc0e837214dce2b32ac1c61f66fba709b0299167aaa23693fe0d86ca626d500d",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 55,
+          "top": 37,
+          "right": 224,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 79,
+          "top": 22,
+          "right": 251,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 83,
+          "top": 39,
+          "right": 233,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 85,
+          "top": 23,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 110,
+          "top": 18,
+          "right": 217,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 99,
+          "top": 121,
+          "right": 234,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 104,
+          "top": 91,
+          "right": 250,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 107,
+          "top": 43,
+          "right": 273,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 84,
+          "top": 15,
+          "right": 247,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 100,
+          "top": 165,
+          "right": 212,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 64,
+          "top": 51,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 42,
+          "top": 66,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 105,
+          "top": 41,
+          "right": 270,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 72,
+          "top": 48,
+          "right": 299,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 100,
+          "top": 40,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 113,
+          "top": 244,
+          "right": 241,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "painted-flow",
+      "file": "benny-painted-flow-v1.webp",
+      "source": "exec-c7f16473-0211-438f-8d90-c071d5953f93.png",
+      "frames": 16,
+      "sha256": "b2f925da9eba015e8dfad63d2e1282c49b5609c0e7dbe8062657b5b86b1d2dfa",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 63,
+          "top": 33,
+          "right": 247,
+          "bottom": 306
+        },
+        {
+          "frame": 1,
+          "left": 61,
+          "top": 32,
+          "right": 247,
+          "bottom": 306
+        },
+        {
+          "frame": 2,
+          "left": 69,
+          "top": 32,
+          "right": 265,
+          "bottom": 306
+        },
+        {
+          "frame": 3,
+          "left": 50,
+          "top": 32,
+          "right": 238,
+          "bottom": 306
+        },
+        {
+          "frame": 4,
+          "left": 75,
+          "top": 37,
+          "right": 278,
+          "bottom": 306
+        },
+        {
+          "frame": 5,
+          "left": 75,
+          "top": 37,
+          "right": 259,
+          "bottom": 306
+        },
+        {
+          "frame": 6,
+          "left": 74,
+          "top": 37,
+          "right": 259,
+          "bottom": 306
+        },
+        {
+          "frame": 7,
+          "left": 70,
+          "top": 37,
+          "right": 256,
+          "bottom": 306
+        },
+        {
+          "frame": 8,
+          "left": 88,
+          "top": 33,
+          "right": 268,
+          "bottom": 306
+        },
+        {
+          "frame": 9,
+          "left": 90,
+          "top": 32,
+          "right": 241,
+          "bottom": 306
+        },
+        {
+          "frame": 10,
+          "left": 44,
+          "top": 31,
+          "right": 157,
+          "bottom": 306
+        },
+        {
+          "frame": 11,
+          "left": 73,
+          "top": 30,
+          "right": 275,
+          "bottom": 306
+        },
+        {
+          "frame": 12,
+          "left": 68,
+          "top": 40,
+          "right": 291,
+          "bottom": 306
+        },
+        {
+          "frame": 13,
+          "left": 34,
+          "top": 41,
+          "right": 150,
+          "bottom": 306
+        },
+        {
+          "frame": 14,
+          "left": 74,
+          "top": 42,
+          "right": 246,
+          "bottom": 306
+        },
+        {
+          "frame": 15,
+          "left": 109,
+          "top": 45,
+          "right": 276,
+          "bottom": 306
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "painted-bridges",
+      "file": "benny-painted-bridges-v1.webp",
+      "source": "exec-0e0b9b24-ff20-43c3-86db-cfad6100b084.png",
+      "frames": 6,
+      "sha256": "b14a4c28be09595af0dacdeff01fdeb06b9dce6eef11eae2491c6b241b0ce209",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 91,
+          "top": 33,
+          "right": 281,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 74,
+          "top": 35,
+          "right": 282,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 67,
+          "top": 34,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 60,
+          "top": 39,
+          "right": 261,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 61,
+          "top": 54,
+          "right": 258,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 51,
+          "top": 36,
+          "right": 261,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "painted-footwork",
+      "file": "benny-painted-footwork-v1.webp",
+      "source": "exec-1b51cdc3-26cb-4dd6-9f22-5c078890a414.png",
+      "frames": 16,
+      "sha256": "7e59aab60560e5568f5f1c1973b8c1c2f362c4b3be571fa2fb8d734b6155d223",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 91,
+          "top": 33,
+          "right": 274,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 71,
+          "top": 39,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 57,
+          "top": 34,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 54,
+          "top": 37,
+          "right": 273,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 59,
+          "top": 36,
+          "right": 256,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 49,
+          "top": 45,
+          "right": 254,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 49,
+          "top": 47,
+          "right": 256,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 78,
+          "top": 126,
+          "right": 249,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 75,
+          "top": 48,
+          "right": 276,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 90,
+          "top": 114,
+          "right": 245,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 129,
+          "top": 37,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 51,
+          "top": 100,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 140,
+          "top": 75,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 123,
+          "top": 84,
+          "right": 244,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 127,
+          "top": 101,
+          "right": 252,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 67,
+          "top": 86,
+          "right": 259,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "painted-recovery",
+      "file": "benny-painted-recovery-v1.webp",
+      "source": "exec-3438575b-8b8c-44aa-a59a-ee0656987442.png",
+      "frames": 16,
+      "sha256": "4a86d2aec4813f395305a9ab83e7484e195cdbbbd3963ee32e08c3dd3113a2d8",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 62,
+          "top": 33,
+          "right": 289,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 62,
+          "top": 33,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 62,
+          "top": 33,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 63,
+          "top": 33,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 49,
+          "top": 32,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 70,
+          "top": 31,
+          "right": 232,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 69,
+          "top": 30,
+          "right": 243,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 69,
+          "top": 32,
+          "right": 270,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 61,
+          "top": 23,
+          "right": 257,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 65,
+          "top": 29,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 64,
+          "top": 74,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 63,
+          "top": 87,
+          "right": 261,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 61,
+          "top": 31,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 79,
+          "top": 74,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 56,
+          "top": 42,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 66,
+          "top": 39,
+          "right": 268,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "smooth-approach",
+      "file": "benny-smooth-approach-v1.webp",
+      "source": "exec-62922645-8356-4a99-b0dd-8604d5aee303.png",
+      "frames": 16,
+      "sha256": "d8666fb000e5a082c3822bd87714b494c7ad7f6326424252aef1ab7c34bd58f4",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 56,
+          "top": 89,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 53,
+          "top": 90,
+          "right": 306,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 50,
+          "top": 89,
+          "right": 270,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 54,
+          "top": 90,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 65,
+          "top": 95,
+          "right": 262,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 47,
+          "top": 105,
+          "right": 278,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 113,
+          "top": 99,
+          "right": 304,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 89,
+          "top": 123,
+          "right": 241,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 116,
+          "top": 36,
+          "right": 295,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 60,
+          "top": 29,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 65,
+          "top": 29,
+          "right": 257,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 109,
+          "top": 38,
+          "right": 275,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 116,
+          "top": 30,
+          "right": 287,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 60,
+          "top": 64,
+          "right": 306,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 108,
+          "top": 72,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 99,
+          "top": 66,
+          "right": 257,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "smooth-contact",
+      "file": "benny-smooth-contact-v1.webp",
+      "source": "exec-d8d8b0f6-43e6-4be4-b27a-1442d92a05b1.png",
+      "frames": 16,
+      "sha256": "7d6ff1b038b583112de537b8f8e0477ed6c4cddc239047be6f77a1df00ccf328",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 41,
+          "top": 89,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 35,
+          "top": 89,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 49,
+          "top": 89,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 53,
+          "top": 90,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 43,
+          "top": 94,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 45,
+          "top": 106,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 106,
+          "top": 99,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 88,
+          "top": 123,
+          "right": 246,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 33,
+          "top": 37,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 31,
+          "top": 29,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 42,
+          "top": 29,
+          "right": 237,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 84,
+          "top": 38,
+          "right": 261,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 127,
+          "top": 30,
+          "right": 288,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 39,
+          "top": 64,
+          "right": 312,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 109,
+          "top": 72,
+          "right": 253,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 104,
+          "top": 66,
+          "right": 259,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "smooth-flow",
+      "file": "benny-smooth-flow-v1.webp",
+      "source": "exec-a8e61e9d-d366-4be4-b8d9-7271deac1ff9.png",
+      "frames": 16,
+      "sha256": "643c6c937a4741f2edadecb73d71ec6be89acd3c61f6c2c91fe8b7358bfaaf30",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 61,
+          "top": 33,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 61,
+          "top": 32,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 59,
+          "top": 32,
+          "right": 265,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 61,
+          "top": 32,
+          "right": 268,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 61,
+          "top": 30,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 62,
+          "top": 29,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 60,
+          "top": 30,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 63,
+          "top": 29,
+          "right": 267,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 61,
+          "top": 29,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 69,
+          "top": 27,
+          "right": 236,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 37,
+          "top": 27,
+          "right": 162,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 68,
+          "top": 27,
+          "right": 279,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 69,
+          "top": 36,
+          "right": 305,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 32,
+          "top": 35,
+          "right": 163,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 99,
+          "top": 35,
+          "right": 303,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 62,
+          "top": 34,
+          "right": 264,
+          "bottom": 312
+        }
+      ]
+    },
+    {
+      "fighter": "benny",
+      "bank": "smooth-footwork",
+      "file": "benny-smooth-footwork-v1.webp",
+      "source": "exec-ed510612-4d50-4264-bc2d-911067c54b98.png",
+      "frames": 16,
+      "sha256": "85cf65ff91bd732fad029e2f4cec443d3abe378f104b3f0eba44afe744d19d2f",
+      "cells": [
+        {
+          "frame": 0,
+          "left": 59,
+          "top": 33,
+          "right": 263,
+          "bottom": 312
+        },
+        {
+          "frame": 1,
+          "left": 27,
+          "top": 36,
+          "right": 226,
+          "bottom": 312
+        },
+        {
+          "frame": 2,
+          "left": 98,
+          "top": 35,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 3,
+          "left": 75,
+          "top": 34,
+          "right": 256,
+          "bottom": 312
+        },
+        {
+          "frame": 4,
+          "left": 53,
+          "top": 35,
+          "right": 245,
+          "bottom": 312
+        },
+        {
+          "frame": 5,
+          "left": 66,
+          "top": 35,
+          "right": 259,
+          "bottom": 312
+        },
+        {
+          "frame": 6,
+          "left": 64,
+          "top": 35,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 7,
+          "left": 74,
+          "top": 36,
+          "right": 260,
+          "bottom": 312
+        },
+        {
+          "frame": 8,
+          "left": 64,
+          "top": 29,
+          "right": 269,
+          "bottom": 312
+        },
+        {
+          "frame": 9,
+          "left": 56,
+          "top": 26,
+          "right": 266,
+          "bottom": 312
+        },
+        {
+          "frame": 10,
+          "left": 82,
+          "top": 66,
+          "right": 272,
+          "bottom": 312
+        },
+        {
+          "frame": 11,
+          "left": 51,
+          "top": 78,
+          "right": 255,
+          "bottom": 312
+        },
+        {
+          "frame": 12,
+          "left": 60,
+          "top": 27,
+          "right": 264,
+          "bottom": 312
+        },
+        {
+          "frame": 13,
+          "left": 33,
+          "top": 79,
+          "right": 237,
+          "bottom": 312
+        },
+        {
+          "frame": 14,
+          "left": 65,
+          "top": 41,
+          "right": 261,
+          "bottom": 312
+        },
+        {
+          "frame": 15,
+          "left": 65,
+          "top": 59,
+          "right": 267,
+          "bottom": 312
+        }
+      ]
+    }
+  ]
+}
