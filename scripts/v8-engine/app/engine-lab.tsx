@@ -62,6 +62,7 @@ export default function EngineLab() {
     [isolate, setIsolate] = useState(false),
     [tour, setTour] = useState(-1);
   const [depthOfField, setDepthOfField] = useState(false);
+  const [windows,setWindows]=useState(true), [combustion,setCombustion]=useState(true), [following,setFollowing]=useState(false);
   const [lighting, setLighting] = useState<'studio' | 'technical' | 'dramatic'>(
     'studio',
   );
@@ -92,6 +93,7 @@ export default function EngineLab() {
     presentation,
     quality,
     lighting,
+    windows, combustion,
   });
   useEffect(() => {
     Object.assign(state.current, {
@@ -111,6 +113,7 @@ export default function EngineLab() {
       presentation,
       quality,
       lighting,
+      windows, combustion,
     });
   }, [
     playing,
@@ -129,6 +132,7 @@ export default function EngineLab() {
     presentation,
     quality,
     lighting,
+    windows, combustion,
   ]);
   useEffect(() => {
     let cancelled = false,
@@ -147,6 +151,7 @@ export default function EngineLab() {
             state.current.section = x;
             setSection(x);
           },
+          setFollowing,
         );
         scene.current = engine;
         cleanup = () => engine.dispose();
@@ -154,13 +159,15 @@ export default function EngineLab() {
         let last = performance.now(),
           lastUI = 0;
         const animate = (time: number) => {
-          const dt = Math.min((time - last) / 1000, 0.05);
+          const dt = Math.max(0, Math.min((time - last) / 1000, 0.05));
           last = time;
           const s = state.current;
-          if (s.playing) s.angle = mod(s.angle + dt * 60 * s.speed);
+          // Keep the physical shaft angle continuous. Only the four-stroke
+          // display wraps, so non-integer accessory ratios cannot jump at 720°.
+          if (s.playing) s.angle += dt * 60 * s.speed;
           engine.render(s, dt);
           if (time - lastUI > 80) {
-            setAngle(s.angle);
+            setAngle(mod(s.angle));
             lastUI = time;
           }
           frame = requestAnimationFrame(animate);
@@ -444,6 +451,7 @@ export default function EngineLab() {
                 <span id="section-label">Section plane</span>
                 <button onClick={() => setSection(-0.12)}>Center</button>
               </div>
+              <label className="learning-toggle"><span>Two-cylinder windows</span><Switch aria-label="Two-cylinder windows" checked={windows} onCheckedChange={setWindows}/></label>
               <Slider
                 aria-labelledby="section-label"
                 value={[section]}
@@ -746,6 +754,7 @@ export default function EngineLab() {
               </p>
             )}
             <div className="inspection-actions">
+              <button disabled={part===initialPart || !ready} aria-pressed={following} onClick={()=>scene.current?.follow(!following)}>{following?'Stop following':'Follow this part'}</button>
               <button
                 disabled={part === initialPart || !ready}
                 onClick={() => scene.current?.focus()}
@@ -784,6 +793,9 @@ export default function EngineLab() {
           </section>
           <section className="control-section">
             <h2>Explore systems</h2>
+            <label className="learning-toggle"><span>Combustion lighting</span><Switch aria-label="Combustion lighting" checked={combustion} onCheckedChange={setCombustion}/></label>
+            <button className="learning-button" onClick={()=>{setView('cutaway');setTransparent(false);scene.current?.replayIntro();}}>Replay opening view</button>
+            <p className="subtle">The opening is skipped when reduced motion is enabled. Dragging the view or pressing a key skips it too.</p>
             <label className="learning-toggle" htmlFor="motion-traces">
               <span>Motion charts</span>
               <Switch
@@ -1059,7 +1071,10 @@ export default function EngineLab() {
               Colored charge particles, the ignition flash, wiring, and blue
               coolant channels are explanatory overlays and simplified geometry,
               not fluid, electrical, or thermal simulations. The throttle is
-              fixed; the water-pump accessory drive and radiator are omitted.
+              fixed; the radiator is omitted. The no-slip accessory belt uses
+              illustrative pitch radii of 45 / 32 / 25 mm for crank, pump, and
+              alternator. Two inspection windows reveal cylinders 1 and 3;
+              disable that option for a continuous longitudinal section.
               Exploded offsets are for inspection; the core crank linkage
               remains assembled.
             </dd>

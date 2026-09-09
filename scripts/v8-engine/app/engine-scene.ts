@@ -18,6 +18,9 @@ import {
 } from './engine-finishes';
 import { createOverlays, type FlowMode } from './engine-overlays';
 import { addExhibitDetails } from './engine-details';
+import { createAccessories } from './engine-accessories';
+import { inspectionWindows, inInspectionWindow, windowClipping } from './inspection-windows';
+import { OpeningSequence } from '@/lib/opening';
 import {
   cylinderState,
   R,
@@ -59,13 +62,24 @@ export type Settings = {
   presentation: boolean;
   quality: 'performance' | 'balanced' | 'ultra';
   lighting: 'studio' | 'technical' | 'dramatic';
+  windows: boolean;
+  combustion: boolean;
 };
 const V = (x = 0, y = 0, z = 0) => new T.Vector3(x, y, z);
 export function createEngineScene(
   host: HTMLElement,
   onPick: (p: Part) => void,
   onSection: (x: number) => void,
+  onFollowing: (value:boolean) => void = () => {},
 ) {
+  let following=false, followCenter:T.Vector3|undefined;
+  const reducedMotion=window.matchMedia('(prefers-reduced-motion: reduce)');
+  const opening=new OpeningSequence(reducedMotion.matches);
+  const cancelIntro=()=>opening.cancel();
+  const motionPreference=()=>opening.setReduced(reducedMotion.matches);
+  reducedMotion.addEventListener('change',motionPreference);
+  window.addEventListener('pointerdown',cancelIntro,{capture:true});
+  window.addEventListener('keydown',cancelIntro,{capture:true});
   const scene = new T.Scene();
   scene.background = new T.Color().setRGB(0.012, 0.02, 0.026);
   const renderer = new T.WebGLRenderer({
@@ -116,6 +130,7 @@ export function createEngineScene(
   controls.target.set(0, 1.25, 0);
   controls.addEventListener('start', () => {
     cameraTransition = false;
+    following=false; followCenter=undefined; onFollowing(false);
   });
   const hemisphere = new T.HemisphereLight(0xc4dcff, 0x2a231e, 0.9);
   scene.add(hemisphere);
@@ -1406,7 +1421,11 @@ export function createEngineScene(
     V(0, 0, -2.3),
     plenumInfo,
   );
-  for (const z of [-2.3, 2.3]) box(0.92, 0.48, 0.045, aluminum, intakeAssembly, V(0, 3.34, z), plenumInfo);
+  plenum.geometry.dispose();
+  const shellProfile=[[-2.3,.25],[-2.15,.35],[-1.8,.47],[-1.2,.53],[0,.56],[1.2,.53],[1.8,.47],[2.15,.35],[2.3,.25]];
+  plenum.geometry=new T.LatheGeometry([...shellProfile.map(([z,r])=>new T.Vector2(r,z)),...shellProfile.slice().reverse().map(([z,r])=>new T.Vector2(r-.065,z))],64);
+  plenum.geometry.rotateX(Math.PI/2); plenum.geometry.scale(1,.7,1);
+  plenum.position.set(0,3.2,0);
   const throttleInfo = part(
     'Throttle body',
     'The throttle meters air entering the intake plenum. Its plate is shown partially open; throttle response is not simulated.',
@@ -1415,7 +1434,7 @@ export function createEngineScene(
     new T.CylinderGeometry(0.25, 0.25, 0.38, 40, 1, true),
     steel,
     intakeAssembly,
-    V(0, 3.28, 2.55),
+    V(0, 3.2, 2.47),
     throttleInfo,
   );
   throttle.rotation.x = Math.PI / 2;
@@ -1424,20 +1443,14 @@ export function createEngineScene(
     0.02,
     brass,
     intakeAssembly,
-    V(0, 3.28, 2.56),
+    V(0, 3.2, 2.49),
     throttleInfo,
   );
   plate.rotation.y = 0.65;
-  for (let j = 0; j < 6; j++)
-    box(
-      0.8,
-      0.035,
-      0.06,
-      dark,
-      intakeAssembly,
-      V(0, 3.63, -1.9 + j * 0.75),
-      plenumInfo,
-    );
+  for(const z of [-1.7,-.85,0,.85,1.7]) {
+    const rib=ring(.56-Math.abs(z)*.04,.018,steel,intakeAssembly,V(0,3.2,z),false,part('Intake plenum reinforcement','Raised ribs stiffen the rounded hollow plenum.'));
+    rib.scale.y=.7;
+  }
   const coolantMat = mat(0x238da8, 0.45, 0.25);
   coolantMat.emissive.set(0x084753);
   coolantMat.emissiveIntensity = 0.2;
@@ -1448,8 +1461,8 @@ export function createEngineScene(
       // End points are expressed in the head frame, then follow that assembly.
       const inlet = V((-sign * 3.2) / Math.sqrt(2), 3.2 / Math.sqrt(2), z);
       tube(
-        [V(-sign * 0.72, 2.61, z), V(-sign * 1.0, 2.8, z), inlet],
-        0.13,
+        [V(-sign * 0.72, 2.61, z), V(-sign * 1.05, 2.83, z+.10), inlet.clone().add(V(sign*.25,.05,.10)), inlet],
+        0.155,
         aluminum,
         head,
         part(
@@ -1574,7 +1587,7 @@ export function createEngineScene(
     V(0, 1.85, 3.05),
     part(
       'Water-pump housing',
-      'Circulates coolant through the block and heads in a real engine. The accessory drive is omitted.',
+      'The crank-driven accessory belt turns this pump at 1.40625 times crank speed. Coolant flow is illustrative; the radiator is outside the exhibit.',
     ),
   );
   tube(
@@ -1601,6 +1614,7 @@ export function createEngineScene(
   addExhibitDetails({ T, banks, block, crank, pan, lower, upper, chainLinks,
     steel, aluminum, dark, black, blockMat, headMat, coverMat, copper,
     mesh, box, cyl, axisCylinder, ring, bolt, tube, part, markingTexture, markingTextures });
+  const accessories=createAccessories(block,crank,(m,info)=>{m.userData.part={...info,material:'Machined accessory assembly'};pickables.push(m);});
   banks.forEach((b) =>
     [b.block, b.head].forEach((g) =>
       g.traverse((o) => {
@@ -1665,12 +1679,21 @@ export function createEngineScene(
         'Cast rocker-cover wall',
         'Valve cover',
       ].includes(o.userData.part?.name) &&
-      (o.geometry.type === 'ExtrudeGeometry' || o.userData.part?.name === 'Valve cover'),
+      (o.geometry.type === 'ExtrudeGeometry' || ['Valve cover','Intake plenum'].includes(o.userData.part?.name)),
   ) as T.Mesh[];
   const caps = cappedObjects.map((o, i) =>
     sectionCap(o, cutPlane, scene, 20 + i * 3),
   );
   const helpers = caps.flatMap((c) => c.special);
+  castingMaterials.forEach(m=>windowClipping(m));
+  banks.forEach(b=>b.covers.forEach(o=>windowClipping((o as T.Mesh).material as T.Material)));
+  caps.forEach(c=>c.special.forEach((m,i)=>windowClipping(m.material as T.Material,i===2)));
+  const ignitionLights=pistons.map(p=>{
+    const light=new T.PointLight(0xff9a35,0,1.25,2);scene.add(light);
+    const material=new T.MeshBasicMaterial({color:0xffab38,transparent:true,opacity:0,depthWrite:false,blending:T.AdditiveBlending});
+    const glow=new T.Mesh(new T.CylinderGeometry(.425,.425,1,32),material);pistonGroup.add(glow);
+    return {id:p.id,light,glow,material};
+  });
   const target = new T.WebGLRenderTarget(1, 1, {
     type: T.HalfFloatType,
     stencilBuffer: true,
@@ -1723,8 +1746,9 @@ export function createEngineScene(
   host.appendChild(labelLine);
   host.appendChild(selectedLabel);
   const overlays = createOverlays(scene, camera, host, controls, onSection);
-  let coverAlpha = 0;
-  let cutProgress = 1;
+  let coverAlpha = 1;
+  let cutProgress = reducedMotion.matches ? 1 : 0;
+  let openingWasActive=!reducedMotion.matches;
   let explosion = 0,
     previousView: View | undefined,
     previousTransparent: boolean | undefined;
@@ -1734,6 +1758,7 @@ export function createEngineScene(
   hoverLabel.hidden = true;
   host.appendChild(hoverLabel);
   let activeObject: T.Object3D | undefined;
+  let hoveredObject:T.Object3D|undefined;
   const ghostMaterials = new Map<
     T.Mesh,
     { original: T.Material | T.Material[]; ghost: T.Material }
@@ -1747,6 +1772,7 @@ export function createEngineScene(
     restoreGhosts();
     clearSelection();
     activeObject = object;
+    following=false;followCenter=undefined;onFollowing(false);
     onPick(object.userData.part);
   }
   function focusObject() {
@@ -1793,15 +1819,15 @@ export function createEngineScene(
         o = o.parent;
       }
       const m = (h.object as T.Mesh).material as T.MeshStandardMaterial;
-      return (
-        !(m?.transparent && m.opacity < 0.25) &&
-        !m?.clippingPlanes?.some((p) => p.distanceToPoint(h.point) < 0)
-      );
+      const clipped=(inspectionWindows.value<.5 || inInspectionWindow(h.point.z)) && m?.clippingPlanes?.some(p=>p.distanceToPoint(h.point)<0);
+      return !(m?.transparent && m.opacity<.25) && !clipped;
     });
     return hits[0];
   }
   function move(e: PointerEvent) {
     const hit = e.buttons ? undefined : hitAt(e);
+    hoveredObject=hit?.object;
+    host.dataset.hoveredPart=hit?.object.userData.part?.name || '';
     hoverLabel.hidden = !hit;
     renderer.domElement.style.cursor = hit ? 'pointer' : 'grab';
     if (hit) {
@@ -1814,6 +1840,8 @@ export function createEngineScene(
   }
   function leave() {
     hoverLabel.hidden = true;
+    hoveredObject=undefined;
+    host.dataset.hoveredPart='';
   }
   function up(e: PointerEvent) {
     if (
@@ -1902,9 +1930,18 @@ export function createEngineScene(
       sampleStart = performance.now();
     }
     restoreGhosts();
-    const { angle, view, layers, transparent, colors } = settings;
-    if (previousView !== view || previousTransparent !== transparent)
+    const { angle, layers, transparent, colors } = settings;
+    const intro=opening.sample(performance.now());
+    if(openingWasActive&&!intro.active)cutProgress=1;
+    openingWasActive=intro.active;
+    const view:View=intro.assembled ? 'assembled' : settings.view;
+    inspectionWindows.value=settings.windows && view==='cutaway' && !transparent ? 1 : 0;
+    host.dataset.opening=intro.active?'running':'complete';
+    accessories.update(angle);
+    if (previousView !== view || previousTransparent !== transparent) {
       clearSelection();
+      following=false;followCenter=undefined;onFollowing(false);
+    }
     explosion = T.MathUtils.damp(explosion, view === 'exploded' ? 1 : 0, 5, dt);
     cutProgress = T.MathUtils.damp(
       cutProgress,
@@ -1913,6 +1950,7 @@ export function createEngineScene(
       dt,
     );
     cutPlane.constant = 6 - (6 - settings.section) * cutProgress;
+    if(intro.active){cutProgress=intro.cut;cutPlane.constant=6-(6-settings.section)*cutProgress;}
     block.visible = layers.block;
     heads.visible = layers.heads;
     crank.visible = layers.crankshaft;
@@ -1957,6 +1995,13 @@ export function createEngineScene(
       }),
     );
     crank.rotation.z = -angle * RAD;
+    ignitionLights.forEach(({id,light,glow,material})=>{
+      const s=cylinderState(id,angle),burn=s.cycle<100?Math.sin(Math.PI*s.cycle/100)**2:0;
+      const enabled=settings.combustion&&layers.pistons&&view!=='exploded'&&!settings.isolate;
+      const height=Math.max(.025,2.48-s.distance-.23),distance=s.distance+.23+height/2;
+      glow.position.set(Math.sin(s.beta)*distance,Math.cos(s.beta)*distance,s.z);glow.rotation.z=-s.beta;glow.scale.y=height;
+      light.position.copy(glow.position);light.intensity=enabled?burn*5:0;material.opacity=enabled?burn*.42:0;glow.visible=enabled&&burn>0;
+    });
     cam.rotation.z = (-angle * RAD) / 2;
     lower.rotation.z = -angle * RAD;
     upper.rotation.z = (-angle * RAD) / 2;
@@ -2129,6 +2174,8 @@ export function createEngineScene(
       if (camera.position.distanceTo(cameraTarget) < 0.01)
         cameraTransition = false;
     }
+    if(following && activeObject){engine.updateMatrixWorld(true);const center=activeObject.getWorldPosition(V());if(followCenter){const delta=center.clone().sub(followCenter);camera.position.add(delta);controls.target.add(delta);cameraTarget.add(delta);orbitTarget.add(delta);}followCenter=center;}
+    host.dataset.following=following?'true':'false';
     controls.autoRotate = settings.presentation;
     controls.autoRotateSpeed = 0.35;
     controls.update(dt);
@@ -2156,8 +2203,8 @@ export function createEngineScene(
       ancestor = ancestor.parent || undefined;
     }
     outline.selectedObjects =
-      selectionVisible && activeObject ? [activeObject] : [];
-    outline.enabled = selectionVisible;
+      hoveredObject ? [hoveredObject] : selectionVisible && activeObject ? [activeObject] : [];
+    outline.enabled = selectionVisible || !!hoveredObject;
     bokeh.enabled =
       settings.depthOfField &&
       settings.quality !== 'performance' &&
@@ -2238,6 +2285,7 @@ export function createEngineScene(
       return true;
     },
     preset(name: string) {
+      following=false;followCenter=undefined;onFollowing(false);
       const presets: Record<string, T.Vector3> = {
         perspective: V(9.4, 4.8, 7.2),
         front: V(0, 2, 15),
@@ -2249,6 +2297,9 @@ export function createEngineScene(
       cameraTransition = true;
     },
     dispose() {
+      window.removeEventListener('pointerdown',cancelIntro,{capture:true});
+      window.removeEventListener('keydown',cancelIntro,{capture:true});
+      reducedMotion.removeEventListener('change',motionPreference);
       markingTextures.forEach((t) => t.dispose());
       contactTexture.dispose();
       overlays.dispose();
@@ -2293,5 +2344,7 @@ export function createEngineScene(
         triangles: renderer.info.render.triangles,
       };
     },
+    follow(value:boolean){following=value&&!!activeObject;followCenter=undefined;onFollowing(following);if(following)focusObject();},
+    replayIntro(){opening.replay();if(!reducedMotion.matches)cutProgress=0;},
   };
 }

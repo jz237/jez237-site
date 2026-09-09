@@ -105,7 +105,7 @@ export function addExhibitDetails(c:DetailContext) {
     box(.065,.2,.085,aluminum,pan,V(side*.74,0,-2.3+j*.92),part('Sump flange reinforcement','Reinforced tabs support the bolted oil-pan flange.'));
   }
   // Pump volute and hose clamps add serviceable hardware without a fictitious drive.
-  const pump=part('Water-pump mounting flange','Machined pump mounting face. The accessory belt drive is omitted in this exhibit.');
+  const pump=part('Water-pump mounting flange','Machined mounting face behind the belt-driven water-pump pulley.');
   axisCylinder(.34,.075,headMat,block,V(0,1.85,2.92),pump);
   ring(.245,.025,steel,block,V(0,1.85,3.2),false,pump);
   for(let n=0;n<4;n++) {
