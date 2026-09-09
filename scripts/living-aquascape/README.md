@@ -56,3 +56,5 @@ Visual QA follow-up: mobile now uses a compact readings strip and a dock with al
 
 
 Free 3D trial: one cardinal tetra uses an original rounded mesh built from elliptical cross-sections, photographic UV mapping from the existing project artwork, separate translucent fin membranes, raised eyes, dynamic normals and body/tail bending. No purchased assets, paid generation, or new dependencies. Inspect 3D tetra tracks the prototype; the other fish remain image cutouts. This is a procedural prototype, not a commissioned anatomical model, skeletal rig or exported GLB.
+
+Fin-motion correction: subdivided membranes now have separate tail, dorsal, anal and paired-fin animation. The fin cycle integrates elapsed time to avoid phase jumps with speed changes; tail and shoulder attachments are regression-tested. Forward travel is reduced while the prototype turns, and its pitch follows vertical velocity. Ten automated tests pass.
