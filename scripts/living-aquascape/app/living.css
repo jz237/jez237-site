@@ -10,3 +10,5 @@
 @media(min-width:1300px){.story{width:200px}.story h2{font-size:1.4rem}.story p:not(.eyebrow){font-size:.875rem}.modes button{padding:14px 18px}}
 @media(max-width:700px){.equipment-card,.lesson{left:18px;top:157px;width:calc(100% - 36px);max-height:calc(100% - 333px);z-index:6}.equipment-card h2{font-size:1.2rem}.equipment-steps button{padding:9px}.loading-poster p{max-width:90%;width:max-content;text-align:center}.left-tools{z-index:12}.view-tools{bottom:206px}}
 @media(prefers-reduced-motion:reduce){.chrome{transition:none}}
+
+.story .current-control{pointer-events:auto;background:#081212d9;border:1px solid var(--line);padding:12px;margin-top:14px}.story .current-control small{display:block;font-size:.7rem}.current-control input{min-height:28px}

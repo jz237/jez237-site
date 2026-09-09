@@ -4,7 +4,55 @@ export type FishInfo={id:number;species:string;size:number;speed:number;hunger:n
 type Swimmer={mesh:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;x:number;y:number;vx:number;vy:number;targetX:number;targetY:number;size:number;phase:number;depth:number;species:number;turn:number};
 const W=1672,H=941;
 const vertex='varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}';
-const fragment='precision highp float; uniform sampler2D photograph,macroPhoto; uniform float time,flow,day,algae,biomass,macroBlend; varying vec2 vUv; float box(vec2 p,vec2 a,vec2 b,float edge){vec2 lo=smoothstep(a,a+edge,p),hi=1.0-smoothstep(b-edge,b,p);return lo.x*lo.y*hi.x*hi.y;} void main(){vec2 p=vUv;vec3 original=texture2D(photograph,p).rgb;float tank=box(p,vec2(.163,.282),vec2(.808,.824),.008);float leaf=smoothstep(.015,.11,original.g-max(original.r,original.b));float surface=box(p,vec2(.165,.765),vec2(.81,.825),.012);float motion=(.3+flow)*tank;p.x+=motion*(sin(p.y*109.0+time*.72)*.00013+leaf*sin(time*.62+p.y*23.0)*.00021);p.y+=surface*sin(p.x*185.0-time*1.3)*.00032+leaf*tank*(biomass-1.0)*.003;vec3 col=texture2D(photograph,p).rgb;float shimmer=sin(p.x*140.0+p.y*45.0-time*.4)*sin(p.y*89.0-time*.31);col+=vec3(.55,.75,.72)*shimmer*.004*tank*day;float oldleaf=leaf*tank*(1.0-smoothstep(.3,.65,p.y));col=mix(col,col*vec3(.70,.84,.54),clamp(algae*oldleaf*.8,0.0,.6));float lamp=box(p,vec2(.215,.867),vec2(.773,.913),.008);col*=mix(1.0,.27+day*.73,clamp(tank+lamp,0.0,1.0));col=mix(col,texture2D(macroPhoto,vUv).rgb,macroBlend);gl_FragColor=vec4(col,1.0);\n#include <colorspace_fragment>\n}';
+// Broad, rooted displacement fields move whole stems together, including red plants.
+// Positions are authored against the foundation image; no whole-tank wobble.
+const fragment=`precision highp float;
+uniform sampler2D photograph,macroPhoto;
+uniform float time,flow,day,algae,biomass,macroBlend;
+varying vec2 vUv;
+float box(vec2 p,vec2 a,vec2 b,float edge){
+ vec2 lo=smoothstep(a,a+edge,p),hi=1.0-smoothstep(b-edge,b,p);
+ return lo.x*lo.y*hi.x*hi.y;
+}
+vec2 plant(vec2 p,vec2 base,vec2 extent,float phase,float flexibility){
+ float h=(p.y-base.y)/extent.y;
+ float width=1.0-smoothstep(.55,1.0,abs(p.x-base.x)/extent.x);
+ float tip=smoothstep(0.0,.85,h)*(1.0-smoothstep(.9,1.12,h));
+ float current=sin(time*.95+phase-h*1.15)*.72+sin(time*1.63+phase*2.1-h*.7)*.28;
+ // The outlet pushes upper leaves left; elastic stems recoil, with fixed bases.
+ float bend=flow*flexibility*width*tip;
+ return vec2(bend*(.30+current)*.0065,bend*sin(time*1.15+phase-h)*.0009);
+}
+void main(){
+ vec2 p=vUv;
+ float tank=box(p,vec2(.168,.292),vec2(.799,.815),.012);
+ vec2 drift=vec2(0.0);
+ drift+=plant(p,vec2(.203,.555),vec2(.034,.19),.3,.85);
+ drift+=plant(p,vec2(.272,.552),vec2(.054,.205),1.2,1.05);
+ drift+=plant(p,vec2(.478,.660),vec2(.051,.135),2.6,1.0);
+ drift+=plant(p,vec2(.554,.538),vec2(.038,.157),3.4,1.15);
+ drift+=plant(p,vec2(.602,.486),vec2(.048,.159),4.1,1.05);
+ drift+=plant(p,vec2(.656,.450),vec2(.037,.126),5.5,.95);
+ drift+=plant(p,vec2(.727,.410),vec2(.048,.222),.9,1.3);
+ drift+=plant(p,vec2(.786,.430),vec2(.016,.300),2.1,1.35);
+ drift+=plant(p,vec2(.372,.443),vec2(.024,.089),4.9,.55);
+ // Carpet remains nearly still; taller, supple plants carry the movement.
+ drift+=plant(p,vec2(.430,.325),vec2(.22,.076),3.7,.12);
+ p+=drift*tank;
+ float surface=box(vUv,vec2(.168,.765),vec2(.799,.815),.012);
+ p.y+=surface*sin(p.x*185.0-time*1.3)*(.00012+flow*.0005);
+ vec3 col=texture2D(photograph,p).rgb;
+ float leaf=smoothstep(.015,.11,col.g-max(col.r,col.b));
+ float shimmer=sin(p.x*140.0+p.y*45.0-time*.4)*sin(p.y*89.0-time*.31);
+ col+=vec3(.55,.75,.72)*shimmer*.004*tank*day;
+ float oldleaf=leaf*tank*(1.0-smoothstep(.3,.65,p.y));
+ col=mix(col,col*vec3(.70,.84,.54),clamp(algae*oldleaf*.8,0.0,.6));
+ float lamp=box(p,vec2(.215,.867),vec2(.773,.913),.008);
+ col*=mix(1.0,.27+day*.73,clamp(tank+lamp,0.0,1.0));
+ col=mix(col,texture2D(macroPhoto,vUv).rgb,macroBlend);
+ gl_FragColor=vec4(col,1.0);
+ #include <colorspace_fragment>
+}`;
 export class PhotographicScene{
  readonly canvas:HTMLCanvasElement;
  readonly renderer:T.WebGLRenderer;
@@ -84,7 +132,7 @@ export class PhotographicScene{
  const smooth=reduced?1:Math.min(1,dt*3.2);this.zoomCurrent+=(this.zoomTarget-this.zoomCurrent)*smooth;this.centerX+=(this.targetX-this.centerX)*smooth;this.centerY+=(this.targetY-this.centerY)*smooth;
  this.camera.zoom=this.zoomCurrent;this.camera.position.set(this.centerX,this.centerY,30);this.camera.updateProjectionMatrix();
  this.macroBlend+=((this.mode==='Biology'?1:0)-this.macroBlend)*smooth;const u=this.background.material.uniforms;
- u.time.value=this.time;u.flow.value=e.flow/100;u.day.value=Math.min(1,illumination(s,e));u.algae.value=s.algae;u.biomass.value=s.biomass;u.macroBlend.value=this.macroBlend;
+ u.time.value=this.time;u.flow.value+=(e.flow/100-u.flow.value)*(1-Math.exp(-dt*4));u.day.value=Math.min(1,illumination(s,e));u.algae.value=s.algae;u.biomass.value=s.biomass;u.macroBlend.value=this.macroBlend;
  this.dust.visible=this.mode!=='Biology';this.bubbles.visible=this.mode!=='Biology';this.food.visible=this.mode!=='Biology';this.dust.rotation.z=Math.sin(this.time*.015)*.003;this.roots.scale.y=.7+s.biomass*.3;this.roots.position.y=(H/2-578)*(1-this.roots.scale.y);
  for(let i=0;i<this.fish.length;i++){const f=this.fish[i],shrimp=f.species===3;f.mesh.visible=this.mode!=='Biology';
  if(moveDt>0){const bounds=shrimp?[430,1280,563,619]:[350,1290,240,565];if(Math.hypot(f.targetX-f.x,f.targetY-f.y)<45||Math.sin(this.time*.22+f.phase)>.997){f.targetX=bounds[0]+this.random()*(bounds[1]-bounds[0]);f.targetY=bounds[2]+this.random()*(bounds[3]-bounds[2]);}
