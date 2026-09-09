@@ -108,5 +108,27 @@
       "Keyboard, touch & gamepad"
     ],
     "note": "WebGL · Desktop & mobile · Interpretive model · Preview captured from the live exhibit"
+  },
+  {
+    "id": "006",
+    "title": "The Living Aquascape",
+    "category": "Photographic · Living systems",
+    "description": "A small world, in balance. Watch a densely planted aquarium come to life, follow its circulation, inspect a leaf at macro scale and explore how light, carbon and biology interact.",
+    "url": "living-aquascape/",
+    "image": "assets/living-aquascape.png",
+    "imageAlt": "Original photographic artwork of a lush rimless aquarium with branching wood, layered plants and polished filtration equipment",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/living-aquascape",
+    "features": [
+      "Animated photographic scene",
+      "Six exploration modes",
+      "Ten ecosystem scenarios",
+      "Time-lapse & live chemistry"
+    ],
+    "facts": [
+      "Original photographic art",
+      "Macro inspection",
+      "Mouse, touch & keyboard"
+    ],
+    "note": "WebGL · Desktop & touch · Image-based cinematic exhibit · Illustrative ecosystem model"
   }
 ]
