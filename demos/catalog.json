@@ -1,0 +1,134 @@
+[
+  {
+    "id": "001",
+    "title": "V8 Engine Laboratory",
+    "category": "3D · Mechanics",
+    "description": "Eight cylinders. One synchronized machine. Slice through a working cross-plane V8 and follow the motion from ignition to crankshaft.",
+    "url": "v8-engine/",
+    "image": "assets/v8-engine.jpg",
+    "imageAlt": "Machined V8 engine illuminated on a dark circular exhibit platform",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/v8-engine",
+    "features": [
+      "Cutaway & exploded views",
+      "Clickable components",
+      "Guided walkthrough",
+      "Motion charts"
+    ],
+    "facts": [
+      "8 cylinders",
+      "16 valves",
+      "720° cycle"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Idealized teaching model"
+  },
+  {
+    "id": "002",
+    "title": "Cyberdyne Systems · SKYNET",
+    "category": "3D · Sci-fi sculpture",
+    "description": "Chrome armor. A glowing neural core. Explore an animated Cyberdyne Systems sculpture with mechanical rings, cinematic lighting, and a living network of signals.",
+    "url": "skynet-3d/",
+    "image": "assets/skynet.png",
+    "imageAlt": "Chrome and red Cyberdyne Systems Skynet concept artwork that inspired the interactive sculpture",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/skynet-3d",
+    "features": [
+      "Drag to orbit",
+      "Cinematic intro",
+      "Adjustable glow",
+      "Fullscreen showcase"
+    ],
+    "facts": [
+      "Procedural 3D",
+      "Animated neural core",
+      "Mouse & touch"
+    ],
+    "note": "Desktop & mobile · Interactive sculpture · Preview shows concept artwork"
+  },
+  {
+    "id": "003",
+    "title": "Fluid Lab",
+    "category": "WebGL · Fluid simulation",
+    "description": "Stir color into motion. Paint flowing dye, build swirling currents, and explore a real-time fluid simulation with hands-on controls.",
+    "url": "fluid-lab/",
+    "image": "assets/fluid-lab.svg",
+    "imageAlt": "Illustrated cyan, violet and pink currents swirling across a dark background",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/fluid-lab",
+    "features": [
+      "Drag to stir",
+      "Touch controls",
+      "Pressure & vorticity",
+      "Bloom & dye settings"
+    ],
+    "facts": [
+      "GPU simulation",
+      "Live controls",
+      "Mouse & touch"
+    ],
+    "note": "WebGL · Desktop & mobile · Interactive fluid sandbox"
+  },
+  {
+    "id": "004",
+    "title": "Philadelphia Relief Diorama",
+    "category": "3D · Geography",
+    "description": "The Delaware Valley, in miniature. Follow wooded ridges and two rivers into Philadelphia, then zoom down to mapped streets, buildings and detailed aerial photography.",
+    "url": "philadelphia-relief/",
+    "image": "assets/philadelphia-relief.png",
+    "imageAlt": "The live Philadelphia Relief diorama: wooded terrain, rivers and a raised cutaway base on a light backdrop",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/philadelphia-relief",
+    "features": [
+      "Continuous zoom",
+      "Detailed aerial imagery",
+      "Mapped buildings",
+      "Street inspection"
+    ],
+    "facts": [
+      "Real elevation data",
+      "Delaware Valley",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Real map data with illustrative miniature details"
+  },
+  {
+    "id": "005",
+    "title": "Defender — Inside the Arcade",
+    "category": "3D · Arcade preservation",
+    "description": "Explore a weathered arcade cabinet after closing. Separate 13 assemblies, trace its circuitry, and watch an autonomous Defender-inspired battle on the glowing CRT.",
+    "url": "defender-exhibit/",
+    "image": "assets/defender-exhibit.webp",
+    "imageAlt": "Live exploded Defender exhibit with a detailed cabinet and autonomous space battle on its CRT",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/defender-exhibit",
+    "features": [
+      "Hero, exploded & X-ray views",
+      "Autonomous Defender display",
+      "Seven-chapter guided tour",
+      "CRT close-up watch mode"
+    ],
+    "facts": [
+      "13 assemblies",
+      "Original cabinet art",
+      "Automatic combat & rescues"
+    ],
+    "note": "WebGL · Desktop & mobile · Interpretive model · Preview captured from the live exhibit"
+  },
+  {
+    "id": "006",
+    "title": "The Living Aquascape",
+    "category": "Photographic · Living systems",
+    "description": "A small world, in balance. Watch a densely planted aquarium come to life, follow its circulation, inspect a leaf at macro scale and explore how light, carbon and biology interact.",
+    "url": "living-aquascape/",
+    "image": "assets/living-aquascape.png",
+    "imageAlt": "Original photographic artwork of a lush rimless aquarium with branching wood, layered plants and polished filtration equipment",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/living-aquascape",
+    "features": [
+      "Animated photographic scene",
+      "Six exploration modes",
+      "Ten ecosystem scenarios",
+      "Time-lapse & live chemistry"
+    ],
+    "facts": [
+      "Original photographic art",
+      "Macro inspection",
+      "Mouse, touch & keyboard"
+    ],
+    "note": "WebGL · Desktop & touch · Image-based cinematic exhibit · Illustrative ecosystem model"
+  }
+]
