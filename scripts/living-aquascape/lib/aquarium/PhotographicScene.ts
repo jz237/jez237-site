@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {waterSurface} from './WaterSurface';
 import {illumination,type Ecology,type Environment} from './Ecosystem';
 export type FishInfo={id:number;species:string;size:number;speed:number;hunger:number;mood:string;preferredDepth:string};
 type Swimmer={mesh:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;x:number;y:number;vx:number;vy:number;targetX:number;targetY:number;size:number;phase:number;depth:number;species:number;turn:number};
@@ -8,12 +9,13 @@ const vertex='varying vec2 vUv; void main(){vUv=uv;gl_Position=projectionMatrix*
 // Positions are authored against the foundation image; no whole-tank wobble.
 const fragment=`precision highp float;
 uniform sampler2D photograph,macroPhoto;
-uniform float time,flow,day,algae,biomass,macroBlend;
+uniform float time,flow,agitation,day,algae,biomass,macroBlend;
 varying vec2 vUv;
 float box(vec2 p,vec2 a,vec2 b,float edge){
  vec2 lo=smoothstep(a,a+edge,p),hi=1.0-smoothstep(b-edge,b,p);
  return lo.x*lo.y*hi.x*hi.y;
 }
+${waterSurface}
 vec2 plant(vec2 p,vec2 base,vec2 extent,float phase,float flexibility){
  float h=(p.y-base.y)/extent.y;
  float width=1.0-smoothstep(.55,1.0,abs(p.x-base.x)/extent.x);
@@ -39,9 +41,7 @@ void main(){
  // Carpet remains nearly still; taller, supple plants carry the movement.
  drift+=plant(p,vec2(.430,.325),vec2(.22,.076),3.7,.12);
  p+=drift*tank;
- float surface=box(vUv,vec2(.168,.765),vec2(.799,.815),.012);
- p.y+=surface*sin(p.x*185.0-time*1.3)*(.00012+flow*.0005);
- vec3 col=texture2D(photograph,p).rgb;
+ vec3 col=surfaceWater(vUv,texture2D(photograph,p).rgb);
  float leaf=smoothstep(.015,.11,col.g-max(col.r,col.b));
  float shimmer=sin(p.x*140.0+p.y*45.0-time*.4)*sin(p.y*89.0-time*.31);
  col+=vec3(.55,.75,.72)*shimmer*.004*tank*day;
@@ -78,7 +78,7 @@ export class PhotographicScene{
  this.renderer.setClearColor(0x050908);this.renderer.outputColorSpace=T.SRGBColorSpace;
  this.canvas=this.renderer.domElement;this.canvas.tabIndex=0;this.canvas.setAttribute('aria-label','Living aquascape. Drag to look around, scroll or pinch to zoom. Arrow keys pan; plus and minus zoom. Select a fish for details.');this.canvas.style.touchAction='none';host.appendChild(this.canvas);
  const loader=new T.TextureLoader();this.photograph=new T.Texture();this.macro=new T.Texture();
- this.background=new T.Mesh(new T.PlaneGeometry(W,H),new T.ShaderMaterial({vertexShader:vertex,fragmentShader:fragment,uniforms:{photograph:{value:this.photograph},macroPhoto:{value:this.macro},time:{value:0},flow:{value:.65},day:{value:1},algae:{value:.04},biomass:{value:1},macroBlend:{value:0}},depthTest:false}));
+ this.background=new T.Mesh(new T.PlaneGeometry(W,H),new T.ShaderMaterial({vertexShader:vertex,fragmentShader:fragment,uniforms:{photograph:{value:this.photograph},macroPhoto:{value:this.macro},time:{value:0},flow:{value:.65},agitation:{value:.4},day:{value:1},algae:{value:.04},biomass:{value:1},macroBlend:{value:0}},depthTest:false}));
  this.background.position.z=-10;this.background.renderOrder=-10;this.scene.add(this.background,this.flow,this.roots,this.bubbles,this.food);
  const photoPromise=loader.loadAsync('./aquascape.png').then(texture=>{if(this.destroyed){texture.dispose();return;}texture.colorSpace=T.SRGBColorSpace;texture.anisotropy=this.renderer.capabilities.getMaxAnisotropy();this.photograph.dispose();this.photograph=texture;this.background.material.uniforms.photograph.value=texture;});
  const macroPromise=loader.loadAsync('./leaf-macro.png').then(texture=>{if(this.destroyed){texture.dispose();return;}texture.colorSpace=T.SRGBColorSpace;this.macro.dispose();this.macro=texture;this.background.material.uniforms.macroPhoto.value=texture;});
@@ -132,7 +132,7 @@ export class PhotographicScene{
  const smooth=reduced?1:Math.min(1,dt*3.2);this.zoomCurrent+=(this.zoomTarget-this.zoomCurrent)*smooth;this.centerX+=(this.targetX-this.centerX)*smooth;this.centerY+=(this.targetY-this.centerY)*smooth;
  this.camera.zoom=this.zoomCurrent;this.camera.position.set(this.centerX,this.centerY,30);this.camera.updateProjectionMatrix();
  this.macroBlend+=((this.mode==='Biology'?1:0)-this.macroBlend)*smooth;const u=this.background.material.uniforms;
- u.time.value=this.time;u.flow.value+=(e.flow/100-u.flow.value)*(1-Math.exp(-dt*4));u.day.value=Math.min(1,illumination(s,e));u.algae.value=s.algae;u.biomass.value=s.biomass;u.macroBlend.value=this.macroBlend;
+ u.time.value=this.time;u.flow.value+=(e.flow/100-u.flow.value)*(1-Math.exp(-dt*4));u.agitation.value+=(e.agitation/100-u.agitation.value)*(1-Math.exp(-dt*4));u.day.value=Math.min(1,illumination(s,e));u.algae.value=s.algae;u.biomass.value=s.biomass;u.macroBlend.value=this.macroBlend;
  this.dust.visible=this.mode!=='Biology';this.bubbles.visible=this.mode!=='Biology';this.food.visible=this.mode!=='Biology';this.dust.rotation.z=Math.sin(this.time*.015)*.003;this.roots.scale.y=.7+s.biomass*.3;this.roots.position.y=(H/2-578)*(1-this.roots.scale.y);
  for(let i=0;i<this.fish.length;i++){const f=this.fish[i],shrimp=f.species===3;f.mesh.visible=this.mode!=='Biology';
  if(moveDt>0){const bounds=shrimp?[430,1280,563,619]:[350,1290,240,565];if(Math.hypot(f.targetX-f.x,f.targetY-f.y)<45||Math.sin(this.time*.22+f.phase)>.997){f.targetX=bounds[0]+this.random()*(bounds[1]-bounds[0]);f.targetY=bounds[2]+this.random()*(bounds[3]-bounds[2]);}

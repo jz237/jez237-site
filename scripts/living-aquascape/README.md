@@ -47,3 +47,5 @@ The optional feature-detected WebMCP tool load_aquascape_scenario uses the same 
 React, React DOM and Three.js use their upstream licenses. Artwork is generated for this exhibit. Runtime is fully static, with no accounts, server storage or tracking added by this demo.
 
 Plant motion uses ten authored, rooted displacement regions with phase-delayed bending, stronger motion in tall leaves and minimal carpet motion. Red stems move as coherent image regions too. Filter flow controls the amplitude with a smoothed response; pause and reduced motion still freeze animation. This remains image deformation rather than a volumetric plant simulation.
+
+Water surface uses crossing waves and damped outlet ripples to perturb reflected imagery, refract the surface, and break overhead highlights into moving ribbons. Surface agitation and filter flow drive wave strength. The authored surface mask excludes the emergent wood and glass pipe. It remains an image-based approximation, not full scene ray tracing.
