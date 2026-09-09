@@ -56,7 +56,7 @@ export async function onRequest(context) {
     try {
       const upstream = await fetch(endpoint, {
         method: 'POST', body: new URLSearchParams({ data: streetQuery(cell) }),
-        headers: { 'User-Agent': 'PhiladelphiaRelief/2.0 (https://jez237.com/games/demos/philadelphia-relief/)' },
+        headers: { 'User-Agent': 'PhiladelphiaRelief/2.0 (https://jez237.com/demos/philadelphia-relief/)' },
         signal: AbortSignal.timeout(25000),
       });
       if (!upstream.ok) {

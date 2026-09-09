@@ -64,5 +64,27 @@
       "Mouse & touch"
     ],
     "note": "WebGL · Desktop & mobile · Interactive fluid sandbox"
+  },
+  {
+    "id": "004",
+    "title": "Philadelphia Relief Diorama",
+    "category": "3D · Geography",
+    "description": "The Delaware Valley, in miniature. Follow wooded ridges and two rivers into Philadelphia, then zoom down to mapped streets, buildings and detailed aerial photography.",
+    "url": "philadelphia-relief/",
+    "image": "assets/philadelphia-relief.png",
+    "imageAlt": "The live Philadelphia Relief diorama: wooded terrain, rivers and a raised cutaway base on a light backdrop",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/philadelphia-relief",
+    "features": [
+      "Continuous zoom",
+      "Detailed aerial imagery",
+      "Mapped buildings",
+      "Street inspection"
+    ],
+    "facts": [
+      "Real elevation data",
+      "Delaware Valley",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Real map data with illustrative miniature details"
   }
 ]

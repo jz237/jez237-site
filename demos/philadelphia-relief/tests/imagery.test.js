@@ -13,7 +13,7 @@ import {
   createImageryDetail, detailCellFor, detailImageSize,
   detailResolutionM, detailUrl, imageryTierFor, imageryFocus, neighbourCells,
 } from '../src/imagery-detail.js';
-import { detailRequest, imagerySources, imageryState, onRequestGet } from '../../../../functions/games/demos/philadelphia-relief/detail-imagery.js';
+import { detailRequest, imagerySources, imageryState, onRequestGet } from '../../../functions/demos/philadelphia-relief/detail-imagery.js';
 
 const dataUrl = new URL('../data/', import.meta.url);
 const imagery = JSON.parse(await readFile(new URL('imagery.json', dataUrl), 'utf8'));

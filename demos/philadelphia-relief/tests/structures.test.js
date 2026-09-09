@@ -520,7 +520,7 @@ test('structures state plumbing', async (t) => {
       ['preset blurbs', PRESETS.map((p) => `${p.name}: ${p.blurb}`).join('\n')],
       ['index.html', await readFile(new URL('../index.html', import.meta.url), 'utf8')],
       ['README.md', await readFile(new URL('../README.md', import.meta.url), 'utf8')],
-      ['games catalog', await readFile(new URL('../../../index.html', import.meta.url), 'utf8')],
+      ['demos catalog', await readFile(new URL('../../index.html', import.meta.url), 'utf8')],
     ];
     for (const [label, text] of sources) {
       for (const re of forbidden) {

@@ -51,7 +51,7 @@ suburbs — Center City, Port Richmond, Northeast and Northwest Philadelphia, th
 Delaware, Montgomery, Chester and Bucks Counties, across the river into Camden,
 Cherry Hill and the Burlington County plain.
 
-Live path: `/games/demos/philadelphia-relief/`
+Live path: `/demos/philadelphia-relief/`
 
 **Concept and prompt by Jez. Built collaboratively with Claude via Traycer and
 GPT-5.6.**
@@ -88,7 +88,7 @@ rectangle. Three decisions do the work of making it legible:
 ## Architecture
 
 ```
-games/demos/philadelphia-relief/
+demos/philadelphia-relief/
   index.html            page shell; all widgets are generated from the schema
   app.css               interface; every colour is a custom property the theme rewrites
   src/
@@ -386,15 +386,15 @@ cut roads from 1.6 MB to 387 KB and improved the simplification at the same time
 ## Running it
 
 ```bash
-cd games/demos/philadelphia-relief
-npm run dev          # static server on http://127.0.0.1:8731/games/demos/philadelphia-relief/
+cd demos/philadelphia-relief
+npm run dev          # static server on http://127.0.0.1:8731/demos/philadelphia-relief/
 npm run check        # lint + tests
 npm test             # node --test over the pure modules (92 assertions)
 npm run lint         # dependency-free lint; see below
 npm run qa           # headless-Chrome QA: console errors, interaction pass, screenshots
 ```
 
-There is nothing to build for deployment — `games/demos/philadelphia-relief/` is the artefact.
+There is nothing to build for deployment — `demos/philadelphia-relief/` is the artefact.
 
 `npm run lint` has no dependencies. It enforces the rules that actually matter
 for shipping this to a static host: **no credential-shaped strings**, **no
