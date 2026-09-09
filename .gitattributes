@@ -1,1 +1,3 @@
 demos/living-aquascape/assets/*.js linguist-generated=true -whitespace
+scripts/living-aquascape/static/index.html text eol=lf
+demos/living-aquascape/index.html text eol=lf

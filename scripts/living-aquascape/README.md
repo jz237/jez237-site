@@ -21,7 +21,7 @@ lib/aquarium/Ecosystem.ts contains the pure model, reset states and scenario des
 
 The pH estimate assumes carbonate-only alkalinity: 7 - log10(CO2 / (3 * KH)). It is not valid for arbitrary aquasoil or organic-buffer systems. Rate constants are illustrative and not empirical calibration. The model omits complete mass balances, species-specific chemistry and trace nutrient compartments. See static/public/about.html for biological references and detailed limits.
 
-Six tests check deterministic resets, gas/biomass timescales, overfeeding effects, water-change behavior, 60-day finite bounds and integration consistency.
+Seven tests check deterministic resets, gas/biomass timescales, overfeeding effects, water-change behavior, 60-day finite bounds and integration consistency, plus the first-frame timing regression.
 
 ## Rendering and assets
 
