@@ -2,7 +2,7 @@ import assert from 'node:assert/strict';
 import * as T from 'three';
 import { createAccessories, beltPath, DRIVE } from '../app/engine-accessories.ts';
 import { OpeningSequence } from './opening.ts';
-import { inInspectionWindow } from '../app/inspection-windows.ts';
+import { inInspectionWindow, sectionEngine, windowClipping } from '../app/inspection-windows.ts';
 import { cylinderState, ORDER, L } from './mechanics.ts';
 
 const root=new T.Group(),crank=new T.Group(),parts=[];root.add(crank);
@@ -28,4 +28,24 @@ const reduced=new OpeningSequence(true);assert.equal(reduced.sample(0).active,fa
 opening.replay();opening.setReduced(true);assert.equal(opening.sample(5000).active,false);
 for(let a=0;a<=1440;a++)for(let id=1;id<=8;id++){const s=cylinderState(id,a);assert.ok(Math.abs(Math.hypot(s.x-s.pinX,s.y-s.pinY)-L)<1e-10);}
 ORDER.forEach((id,i)=>assert.equal(cylinderState(id,i*90).cycle,0));
+// Registration must include arbitrary future parts and every material slot,
+// while leaving the exhibit stage and stencil helpers alone.
+const engine=new T.Group(),outside=new T.Mesh(new T.BoxGeometry(),new T.MeshStandardMaterial());
+const plane=new T.Plane(new T.Vector3(1,0,0),0);
+const nested=new T.Group();engine.add(nested);
+const shell=new T.Mesh(new T.BoxGeometry(),[new T.MeshStandardMaterial(),new T.MeshBasicMaterial()]);
+shell.castShadow=true;nested.add(shell);
+const particles=new T.Points(new T.BufferGeometry(),new T.PointsMaterial());nested.add(particles);
+const helper=new T.Mesh(new T.BoxGeometry(),new T.MeshBasicMaterial());helper.userData.sectionHelper=true;nested.add(helper);
+const registered=sectionEngine(engine,plane);
+assert.equal(registered.size,3);
+for(const material of [...shell.material,particles.material])assert.equal(material.clippingPlanes[0],plane);
+assert.equal(shell.customDepthMaterial.clippingPlanes[0],plane);
+assert.equal(outside.material.clippingPlanes,null);assert.equal(helper.material.clippingPlanes,null);
+const shader={uniforms:{},vertexShader:'#include <common>\n#include <project_vertex>',fragmentShader:'#include <common>\n#include <clipping_planes_fragment>'};
+windowClipping(shell.material[0]);shell.material[0].onBeforeCompile(shader,{});
+assert.equal(shader.fragmentShader.match(/uniform float inspectionWindows/g).length,1);
+assert.ok(shader.fragmentShader.includes('inspectionWindows<0.5'));
+assert.ok(shader.vertexShader.includes('modelMatrix*vec4(transformed,1.0)'));
+console.log('Verified whole-engine section registration, material arrays, window shader, shadow clipping and helper exclusions.');
 console.log('Verified belt tangency/wrap, continuous pulley ratios across 720°, window selection, opening/replay/cancel/reduced-motion, and linkage motion across two cycles.');

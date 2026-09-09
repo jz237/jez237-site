@@ -19,7 +19,7 @@ import {
 import { createOverlays, type FlowMode } from './engine-overlays';
 import { addExhibitDetails } from './engine-details';
 import { createAccessories } from './engine-accessories';
-import { inspectionWindows, inInspectionWindow, windowClipping } from './inspection-windows';
+import { inspectionWindows, inInspectionWindow, windowClipping, sectionEngine } from './inspection-windows';
 import { OpeningSequence } from '@/lib/opening';
 import {
   cylinderState,
@@ -1622,7 +1622,6 @@ export function createEngineScene(
           o.material = (o.material as T.MeshStandardMaterial).clone();
         } else if (o instanceof T.Mesh) {
           const m = (o.material as T.MeshStandardMaterial).clone();
-          m.userData.exterior = /Exhaust|Header|Ignition lead|Spark plug/.test(o.userData.part?.name || '');
           o.material = m;
           castingMaterials.push(m);
         }
@@ -1685,8 +1684,6 @@ export function createEngineScene(
     sectionCap(o, cutPlane, scene, 20 + i * 3),
   );
   const helpers = caps.flatMap((c) => c.special);
-  castingMaterials.forEach(m=>windowClipping(m));
-  banks.forEach(b=>b.covers.forEach(o=>windowClipping((o as T.Mesh).material as T.Material)));
   caps.forEach(c=>c.special.forEach((m,i)=>windowClipping(m.material as T.Material,i===2)));
   const ignitionLights=pistons.map(p=>{
     const light=new T.PointLight(0xff9a35,0,1.25,2);scene.add(light);
@@ -1694,6 +1691,8 @@ export function createEngineScene(
     const glow=new T.Mesh(new T.CylinderGeometry(.425,.425,1,32),material);pistonGroup.add(glow);
     return {id:p.id,light,glow,material};
   });
+  const sectionMaterials=sectionEngine(engine,cutPlane);
+  host.dataset.sectionMaterials=String(sectionMaterials.size);
   const target = new T.WebGLRenderTarget(1, 1, {
     type: T.HalfFloatType,
     stencilBuffer: true,
@@ -1949,8 +1948,14 @@ export function createEngineScene(
       7,
       dt,
     );
-    cutPlane.constant = 6 - (6 - settings.section) * cutProgress;
-    if(intro.active){cutProgress=intro.cut;cutPlane.constant=6-(6-settings.section)*cutProgress;}
+    cutPlane.constant = transparent ? 6 : 6 - (6 - settings.section) * cutProgress;
+    if(intro.active){cutProgress=intro.cut;cutPlane.constant=transparent?6:6-(6-settings.section)*cutProgress;}
+    pickables.forEach(o=>{
+      if(o instanceof T.Sprite)o.visible=!(
+        (inspectionWindows.value<.5||inInspectionWindow(o.position.z)) &&
+        cutPlane.distanceToPoint(o.position)<0
+      );
+    });
     block.visible = layers.block;
     heads.visible = layers.heads;
     crank.visible = layers.crankshaft;
@@ -1966,7 +1971,7 @@ export function createEngineScene(
     }
     if (previousView !== view || previousTransparent !== transparent) {
       castingMaterials.forEach((m) => {
-        m.clippingPlanes = m.userData.exterior ? [] : [cutPlane];
+        m.clippingPlanes = [cutPlane];
         m.clipShadows = true;
         m.transparent = transparent;
         m.opacity = transparent ? 0.16 : 1;
@@ -2240,6 +2245,7 @@ export function createEngineScene(
       angle.toFixed(2),
       explosion.toFixed(3),
       cutPlane.constant.toFixed(3),
+      inspectionWindows.value,
       transparent,
       ...Object.values(layers),
     ].join(':');
@@ -2325,6 +2331,7 @@ export function createEngineScene(
       scene.traverse((o) => {
         if (o instanceof T.Mesh) {
           o.geometry.dispose();
+          o.customDepthMaterial?.dispose();
           const mats = Array.isArray(o.material) ? o.material : [o.material];
           mats.forEach((m) => m.dispose());
         }

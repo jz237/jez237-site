@@ -62,7 +62,7 @@ export default function EngineLab() {
     [isolate, setIsolate] = useState(false),
     [tour, setTour] = useState(-1);
   const [depthOfField, setDepthOfField] = useState(false);
-  const [windows,setWindows]=useState(true), [combustion,setCombustion]=useState(true), [following,setFollowing]=useState(false);
+  const [windows,setWindows]=useState(false), [combustion,setCombustion]=useState(true), [following,setFollowing]=useState(false);
   const [lighting, setLighting] = useState<'studio' | 'technical' | 'dramatic'>(
     'studio',
   );
@@ -488,7 +488,7 @@ export default function EngineLab() {
                 ))}
               </div>
               <p className="subtle">
-                Drag the amber handle on the model, or use this slider.
+                {windows ? 'Cuts only through cylinders 1 and 3. Turn off windows to section the whole engine.' : 'Sections all engine parts. Drag the amber handle or use this slider.'}
               </p>
             </div>
           )}
