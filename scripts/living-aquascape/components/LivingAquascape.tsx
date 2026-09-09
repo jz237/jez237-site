@@ -24,7 +24,7 @@ export default function LivingAquascape(){
  const host=useRef<HTMLDivElement>(null),engine=useRef<PhotographicScene|null>(null);
  const eco=useRef(initial()),env=useRef(defaults()),speedRef=useRef(1),pauseRef=useRef(false),reducedRef=useRef(false),audio=useRef<AudioContext|null>(null),audioGain=useRef<GainNode|null>(null),volumeRef=useRef(20);
  const [mode,setMode]=useState('Living'),[error,setError]=useState(''),[controls,setControls]=useState(false),[readings,setReadings]=useState(false),[snapshot,setSnapshot]=useState(initial()),[environment,setEnvironment]=useState(defaults()),[scenario,setScenario]=useState<string>(scenarios[0]),[explanation,setExplanation]=useState(preset(scenarios[0]).explanation),[speed,setSpeed]=useState(1),[paused,setPaused]=useState(false),[reduced,setReduced]=useState(false),[clean,setClean]=useState(false),[sound,setSound]=useState(false),[volume,setVolume]=useState(20),[quality,setQuality]=useState('High'),[recommended,setRecommended]=useState('High'),[frame,setFrame]=useState(0),[selected,setSelected]=useState<SelectedFishInfo|null>(null),[lesson,setLesson]=useState('Nitrogen cycle'),[part,setPart]=useState('Biological media'),[notice,setNotice]=useState(''),[camera,setCamera]=useState('Gallery'),[loading,setLoading]=useState(true);
- const changeCamera=(name:string)=>{setCamera(name);if(name==='Leaf macro'){changeMode('Biology');}else {if(mode==='Biology')changeMode('Living');engine.current?.cameraPreset(name);}};
+ const changeCamera=(name:string)=>{if(name==='Leaf macro'){changeMode('Biology');}else {if(mode==='Biology')changeMode('Living');engine.current?.cameraPreset(name);setCamera(name);}};
  const changeMode=(m:string)=>{setMode(m);engine.current?.setMode(m);setSelected(null);setCamera(m==='Equipment'?'Equipment':m==='Roots'?'Root zone':m==='Biology'?'Leaf macro':'Gallery');};
  const changeSpeed=(s:number)=>{speedRef.current=s;setSpeed(s);};
  const changeEnv=(key:keyof Environment,value:number)=>{env.current={...env.current,[key]:value};setEnvironment({...env.current});};
@@ -42,7 +42,7 @@ export default function LivingAquascape(){
  }}catch{setLoading(false);setError('This browser cannot start WebGL. The static gallery and ecosystem controls remain available.');}
  if(saved==='Photography'){pauseRef.current=true;setPaused(true);}
  let request=0,last=performance.now(),report=0,frames=0,elapsed=0,gamepadPress=false;
- const loop=(now:number)=>{const raw=(now-last)/1000,dt=frameDelta(now,last);last=now;
+ const loop=(now:number)=>{const raw=Math.max(0,(now-last)/1000),dt=frameDelta(now,last);last=now;
  if(!pauseRef.current)advance(eco.current,env.current,dt*speedRef.current/3600);
  const gamepad=navigator.getGamepads?.()[0];if(gamepad&&e){const x=Math.abs(gamepad.axes[0]||0)>.15?gamepad.axes[0]:0,y=Math.abs(gamepad.axes[1]||0)>.15?gamepad.axes[1]:0;e.nudge(x*dt*200,-y*dt*200);if(gamepad.buttons[0]?.pressed&&!gamepadPress){pauseRef.current=!pauseRef.current;setPaused(pauseRef.current);}gamepadPress=!!gamepad.buttons[0]?.pressed;}
  e?.update(dt,eco.current,env.current,reducedRef.current,pauseRef.current);

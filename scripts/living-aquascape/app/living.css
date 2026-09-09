@@ -14,3 +14,21 @@
 .story .current-control{pointer-events:auto;background:#081212d9;border:1px solid var(--line);padding:12px;margin-top:14px}.story .current-control small{display:block;font-size:.7rem}.current-control input{min-height:28px}
 
 .scene-hotspot{position:absolute;transform:translate(-50%,-50%);z-index:2;padding:6px 10px;background:#0715139c;border:1px solid #c9e2b775;border-radius:20px;font-size:12px;color:#e7f2df;box-shadow:0 2px 12px #0006}.scene-hotspot:hover{background:#213e31}.scene-hotspot[hidden],.clean .scene-hotspot{display:none}.view-tools{flex-wrap:wrap;max-width:calc(100% - 40px);justify-content:center}.view-tools>button{font-size:.8rem;padding:8px 11px}
+
+/* Responsive control dock: keep the scene open and every control reachable. */
+.view-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px}.view-tools>label{grid-column:1/-1}.view-tools>button{min-height:40px}.view-tools>button:nth-last-child(-n+2){grid-column:1/-1}
+@media(max-width:700px){
+ .exhibit{min-height:700px}header{top:12px;left:14px}h1{font-size:16px;margin:12px 0 8px}header p{font-size:9px;letter-spacing:.15em;margin:0}
+ .left-tools{top:92px;left:12px}.left-tools button{min-height:40px}
+ .chemistry{top:140px;left:12px;right:12px;width:auto;display:flex;align-items:center;justify-content:space-between;padding:7px 9px;gap:5px}
+ .chemistry span{border:0;padding:0;font-size:11px;white-space:nowrap}.chemistry small{font-size:9px}.chemistry span small{display:none}.chemistry .balance{display:none}
+ .story{display:none}
+ .view-tools{left:12px;right:12px;bottom:234px;width:auto;max-width:none;display:grid;grid-template-columns:1fr 44px 44px;gap:6px;background:#071312df;border:1px solid var(--line);padding:8px}
+ .view-tools>label{grid-column:auto;justify-content:center}.view-tools>label select{min-height:40px}.view-tools>button{padding:6px;min-height:44px}.view-tools>button:nth-last-child(2){grid-column:1/2}.view-tools>button:last-child{grid-column:2/4}
+ .transport{bottom:184px;min-height:42px}.modes{bottom:87px;display:grid;grid-template-columns:repeat(3,1fr);overflow:visible;gap:3px}.modes button{min-height:40px;font-size:12px}
+ .photo-tools{bottom:34px}.audio-tools{bottom:34px}.audio-tools small{display:none}.model-note{font-size:10px}
+ .drawer,.chemistry-detail,.equipment-card,.lesson,.inspector{top:140px;left:12px;right:12px;width:auto;max-height:calc(100% - 386px);z-index:15;background:#081212f5}
+ .drawer .range input{min-height:32px}.toast{bottom:375px}.scene-hotspot{min-height:36px}
+ .clean .view-tools,.clean .chemistry{display:none}
+}
+.view-tools,.transport,.modes{z-index:4}@media(max-width:700px){.drawer,.chemistry-detail,.equipment-card,.lesson,.inspector{max-height:calc(100% - 510px)}}
