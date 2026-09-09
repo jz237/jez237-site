@@ -1,5 +1,95 @@
 [
   {
+    "id": "2026-09-08-factual-infographic-factual-infographic-regimbartia-attenua",
+    "title": "Factual infographic: Regimbartia attenuata — The Beetle That Escapes Through a Frog",
+    "tests": "factual_subtype: bizarre-insect-life; species: aquatic water scavenger beetle (Regimbartia attenuata); verified mechanism: adult beetles actively survive passage through a frog digestive tract and exit alive, with gut-stimulation explicitly labeled as a proposal rather than demonstrated mechanism; macro plan: dominant whole-adult hero plus dorsal, head-and-antennae, and ventral six-legged close-ups; direct-canvas orthographic infographic; five-step swallow-to-cloaca sequence; 3.8–5.0 mm scale; Japanese paddy-field habitat; three larval instars shown only as immature-stage context; high-quality mode; actual pixels independently inspected and passed by claude-opus-5; anti-repeat: first Regimbartia attenuata topic in the complete factual archive.",
+    "prompt": "Create a polished museum-quality direct-canvas factual infographic, square 1024x1024, titled REGIMBARTIA ATTENUATA: THE BEETLE THAT ESCAPES THROUGH A FROG. The canvas itself is the finished infographic: perfectly straight-on, orthographic, edge-to-edge, no paper edge, frame, poster, wall, screen, desk, room, hands, specimen tray, cast shadow, or environmental staging around it. Make accurate insect imagery occupy most of the canvas. CENTRAL HERO: an enormous naturalistic extreme-macro portrait of the real adult aquatic water scavenger beetle Regimbartia attenuata, compact oval dark bronze-brown body, coherent head-thorax-abdomen segmentation, exactly six legs, fine wet cuticle, believable paddy-water droplets, with a clear 3.8–5.0 mm scale bar. THREE LARGE MACRO WINDOWS: dorsal whole-body anatomy; head and antennae with living wet detail; ventral six-legged body and jointed legs, all observational and without assigning an unverified propulsion mechanism. MAIN CAUSAL SEQUENCE: five large, visually connected cutaway frames of a Japanese paddy-field frog Pelophylax nigromaculatus swallowing the adult beetle, the beetle remaining intact, moving through esophagus and stomach, continuing through small and large intestine, then exiting alive through the cloacal aperture. Use restrained arrows and make clear that movement through the tract was observed, while a concise label MAY STIMULATE GUT TO PROMOTE EXCRETION is explicitly marked PROPOSED, NOT YET DEMONSTRATED. EVIDENCE PANEL: bold comparison showing 93.3% emerged alive and active within 6 hours, observed passage 0.1–3.5 hours, versus other undigested prey remains taking more than 24 hours. HABITAT PANEL: a small integrated Japanese rice-paddy cross-section showing beetle and frog sharing shallow water, not a separate surrounding scene. IMMATURE-STAGE STRIP: three restrained larval-instars silhouettes labeled LARVAL STAGES DESCRIBED; do not imply that larvae perform the adult escape behavior. Use a sophisticated editorial information architecture with a deep teal, wet olive, bronze, and warm ivory palette, crisp authoritative typography, thick readable labels, diagram lines that remain legible at thumbnail scale, scientific naturalism, abundant macro detail, and strong visual hierarchy. Every text label must be concise and spelled correctly. No bibliography, URLs, fake data, sensational gore, internal injury, monster scale, humanlike motive, invented anatomy, impossible body parts, decorative charts, or school-poster styling.",
+    "image": "images/2026-09-08-factual-infographic-factual-infographic-regimbartia-attenua.jpg",
+    "thumb": "thumbs/2026-09-08-factual-infographic-factual-infographic-regimbartia-attenua.webp",
+    "color": "#3e544b",
+    "date": "2026-09-08",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1024",
+    "factualInfographic": {
+      "topic": "How the aquatic water scavenger beetle Regimbartia attenuata actively escapes through a frog's digestive tract after being swallowed",
+      "description": "A source-verified direct-canvas museum infographic showing the tiny aquatic beetle, its macro anatomy, the observed live passage through a frog, the carefully qualified gut-stimulation hypothesis, paddy-field context, scale, and known larval instars.",
+      "sourceNote": "Kobe University, An insect species can actively escape from the vents of predators via the digestive system, https://www.kobe-u.ac.jp/en/news/article/2020_08_04_01/ ; Acta Entomologica Musei Nationalis Pragae, Description of the larval stages of the berosine genera Berosus and Regimbartia, https://www.aemnp.eu/acta-entomologica/volume-55-1/1561/description-of-the-larval-stages-of-the-berosine-genera-berosus-and-regimbartia-based-on-the-japanese-species-b-japonicus-and-r-attenuata-coleoptera-hydrophilidae.html ; scope: adult gut-escape observations, body length, paddy-field predator context, and documented three larval instars.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-09T02:18:11Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Kobe University",
+            "title": "An insect species can actively escape from the vents of predators via the digestive system",
+            "sourceType": "university",
+            "url": "https://www.kobe-u.ac.jp/en/news/article/2020_08_04_01/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Acta Entomologica Musei Nationalis Pragae",
+            "title": "Description of the larval stages of the berosine genera Berosus and Regimbartia based on the Japanese species B. japonicus and R. attenuata (Coleoptera: Hydrophilidae)",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.aemnp.eu/acta-entomologica/volume-55-1/1561/description-of-the-larval-stages-of-the-berosine-genera-berosus-and-regimbartia-based-on-the-japanese-species-b-japonicus-and-r-attenuata-coleoptera-hydrophilidae.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Regimbartia attenuata (Fabricius, 1801) is an aquatic water scavenger beetle in the family Hydrophilidae and tribe Berosini.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adults used in the laboratory study measured 3.8–5.0 mm long.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Regimbartia attenuata and the frog Pelophylax nigromaculatus frequently occur together in Japanese paddy fields, where the frog can attack aquatic insects.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In laboratory feeding trials, frogs readily swallowed adult Regimbartia attenuata, yet 93.3% of the swallowed beetles were excreted alive and active within six hours; observed passage times were 0.1–3.5 hours.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The study's observations indicate that swallowed beetles actively moved through the esophagus, stomach, small intestine, and large intestine toward the frog's cloacal aperture rather than passing only as inert remains.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Because the frog's sphincter normally keeps the vent closed, the authors cautiously proposed that the beetle may stimulate the frog's gut to promote excretion; this is an inference rather than a directly demonstrated mechanism.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Undigested remains of other prey took more than 24 hours to be excreted in the comparison described by the study.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "All three larval instars of Regimbartia attenuata have been described from reared and field-collected Japanese material, supporting a distinct immature-stage context without implying that larvae perform the adult gut-escape behavior.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-08-factual-infographic-factual-infographic-opal-the-hidden-col",
     "title": "Factual infographic: Opal — The Hidden Color Lattice",
     "tests": "Tuesday general factual infographic; America/New_York quota slot 5/6; selected rewritten deck entry Opal's Hidden Color Lattice; exact topic unique across complete factual archive; real-world/non-fiction gemology and optical materials; source-verified claim sheet covers every causal arrow and label; direct-canvas orthographic museum infographic; dominant black-opal-to-silica-sphere cutaway; ordered-versus-disordered lattice comparison; four-stage white-light, diffraction, interference, spectral-color sequence; viewing-angle strip; sphere-size qualitative comparison; stacking-dislocation color domains; bodycolor and opal-type comparison; formation strip; scale ladder; structural-color-versus-pigment panel; cracking-risk note. Generated exactly once via synchronous openai/gpt-image-2 CLI with --quality high; exact same-run non-empty source verified; byte-identical hard-link QA mirror inspected at full resolution with Claude Opus 5; actual-pixel QA PASS for direct-canvas composition, readable title and labels, unmistakable structural-color mechanism, ordered/disordered comparison, and no mockup framing, logos, URLs, jewelry-ad styling, magical glow, or factual contradiction.",
