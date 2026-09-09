@@ -578,12 +578,12 @@ export function createEngineScene(
     const covers: T.Object3D[] = [];
     covers.push(
       box(
-        1.16,
+        1.48,
         0.22,
         5.18,
         coverMat,
         head,
-        V(0, 3.45, 0),
+        V(-sign * 0.16, 3.58, 0),
         part(
           'Valve cover',
           'Protects the rocker arms and valve springs. The longitudinal section opens the near cover while retaining its inner wall and the complete far-bank cover.',
@@ -598,7 +598,7 @@ export function createEngineScene(
           4.72,
           aluminum,
           head,
-          V(x, 3.58, 0),
+          V(x, 3.71, 0),
           part(
             'Valve-cover fin',
             'Raised aluminum ribs stiffen the cover and increase its surface area.',
@@ -1216,7 +1216,7 @@ export function createEngineScene(
           0.06,
           steel,
           head,
-          V(x, 3.59, z),
+          V(x, 3.72, z),
           part(
             'Valve-cover screw',
             'Secures the protective cover over the rocker mechanism.',
@@ -1230,7 +1230,7 @@ export function createEngineScene(
       0.11,
       black,
       head,
-      V(0, 3.63, -1.6),
+      V(0, 3.76, -1.6),
       part('Oil filler cap', 'Removable access for adding engine oil.'),
     );
     covers.push(cap);

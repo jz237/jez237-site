@@ -26,24 +26,27 @@ export function addExhibitDetails(c:DetailContext) {
   banks.forEach(({sign,head,block:bank,covers})=>{
     // A hollow cover: roof already exists; walls surround, rather than fill, the rockers.
     for(const side of [-1,1]) {
+      // Rockers extend 0.72 toward the valley. Allow clearance for their full
+      // swept envelope instead of putting the inner cover wall through them.
+      const wallX = side * .55 + (side === -sign ? -sign * .32 : 0);
       const outline=new T.Shape();
       outline.moveTo(-2.55,3.07); outline.lineTo(2.55,3.07);
-      outline.lineTo(2.55,3.28); outline.lineTo(2.3,3.48);
-      outline.lineTo(-2.3,3.48); outline.lineTo(-2.55,3.28); outline.closePath();
-      const wall=mesh(new T.ExtrudeGeometry(outline,{depth:.055,bevelEnabled:true,bevelSize:.018,bevelThickness:.015,bevelSegments:3}),coverMat,head,V(side*.55,0,0),casting);
+      outline.lineTo(2.55,3.48); outline.lineTo(2.3,3.50);
+      outline.lineTo(-2.3,3.50); outline.lineTo(-2.55,3.48); outline.closePath();
+      const wall=mesh(new T.ExtrudeGeometry(outline,{depth:.055,bevelEnabled:true,bevelSize:.018,bevelThickness:.015,bevelSegments:3}),coverMat,head,V(wallX,0,0),casting);
       wall.rotation.y=Math.PI/2; covers.push(wall);
-      covers.push(box(.12,.065,5.25,aluminum,head,V(side*.56,3.06,0),part('Machined cover flange','A flat machined rail distributes clamp load evenly along the cover gasket.')));
-      covers.push(box(.12,.018,5.24,black,head,V(side*.56,3.015,0),part('Rocker-cover gasket','Elastomer sealing strip prevents oil leakage at the cover joint.')));
+      covers.push(box(.12,.065,5.25,aluminum,head,V(wallX,3.06,0),part('Machined cover flange','A flat machined rail distributes clamp load evenly along the cover gasket.')));
+      covers.push(box(.12,.018,5.24,black,head,V(wallX,3.015,0),part('Rocker-cover gasket','Elastomer sealing strip prevents oil leakage at the cover joint.')));
       for(const z of [-2.35,-1.18,0,1.18,2.35]) {
-        covers.push(cyl(.105,.085,coverMat,head,V(side*.61,3.095,z),casting));
-        covers.push(cyl(.06,.075,steel,head,V(side*.61,3.16,z),part('Cover flange screw','Clamps the rocker cover to its gasket.'),6));
-        covers.push(cyl(.025,.003,black,head,V(side*.61,3.199,z),part('Cover screw socket','Recess for the fastener tool.'),6));
+        covers.push(cyl(.105,.085,coverMat,head,V(wallX+side*.06,3.095,z),casting));
+        covers.push(cyl(.06,.075,steel,head,V(wallX+side*.06,3.16,z),part('Cover flange screw','Clamps the rocker cover to its gasket.'),6));
+        covers.push(cyl(.025,.003,black,head,V(wallX+side*.06,3.199,z),part('Cover screw socket','Recess for the fastener tool.'),6));
       }
     }
-    for(const z of [-2.53,2.53]) covers.push(box(1.08,.33,.065,coverMat,head,V(0,3.23,z),casting));
+    for(const z of [-2.53,2.53]) covers.push(box(1.4,.43,.065,coverMat,head,V(-sign*.16,3.285,z),casting));
     const texture=c.markingTexture('V8  /  CROSS-PLANE'); c.markingTextures.push(texture);
     const labelMat=new T.MeshStandardMaterial({map:texture,transparent:true,depthWrite:false,roughness:.5,metalness:.6});
-    const label=mesh(new T.PlaneGeometry(2.1,.43),labelMat,head,V(0,3.593,0),part('V8 cover identification','Eight cylinders in two banks, with a cross-plane crankshaft.'));
+    const label=mesh(new T.PlaneGeometry(2.1,.43),labelMat,head,V(0,3.723,0),part('V8 cover identification','Eight cylinders in two banks, with a cross-plane crankshaft.'));
     label.rotation.x=-Math.PI/2; label.rotation.z=Math.PI/2; covers.push(label);
     for(let j=0;j<4;j++) {
       const id=j*2+(sign===1?1:2),z=1.95-j*1.3+sign*.14;
