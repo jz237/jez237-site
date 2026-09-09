@@ -1,0 +1,40 @@
+{
+  "generator": "built-in image_gen",
+  "reference": "assets/painted-flow/<fighter>-v2.webp",
+  "sources": {
+    "alan": {
+      "id": "alan",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-b4a4572e-9b7c-4739-bc8e-f6e478fcf6fd.png"
+    },
+    "ali": {
+      "id": "ali",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-4c3cd26b-5d01-4301-8ad9-850d62f58662.png"
+    },
+    "commissioner": {
+      "id": "commissioner",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-076b9ee5-e3e6-4cea-a8a8-6a5ad5f90c6f.png"
+    },
+    "cyraxx": {
+      "id": "cyraxx",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-d200f7b6-17f1-4448-adab-ebc7b058f2f6.png"
+    },
+    "deathblow": {
+      "id": "deathblow",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-5a2623e6-0698-4679-86d0-7661ade4a2a9.png"
+    },
+    "devil": {
+      "id": "devil",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-999272f0-a041-4a7d-abaf-50e23fad5034.png"
+    },
+    "donald": {
+      "id": "donald",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-c4e43772-83e2-4247-9e75-288e53abfe7d.png"
+    },
+    "post": {
+      "id": "post",
+      "path": "C:/Users/jrb04/.codex/generated_images/01a07964-bcfe-7530-b1d2-5b3658a8d2ae/exec-45cf5e8f-4aaf-475b-b7a5-c70ca486a32a.png"
+    }
+  },
+  "promptSpec": "Strict four-by-four full-body right-facing poses; match existing painted reference identity and accessories; closed punching fists; four punch recoveries, four kick recoveries, four blocks, three slips/returns and neutral reference. Magenta background keyed during packing; all silhouettes isolated and padded.",
+  "packingNote": "Donald source contains five kick-row drawings; chosen left-to-right source indices 0,2,1,4 produce contact, chamber, lowering, guard. Duplicate standing pose omitted."
+}
