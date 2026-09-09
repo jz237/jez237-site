@@ -62,12 +62,12 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
   drive=pace/24;fan=pace<3?.8:.4;
   if(s.behavior==='approaching'&&Math.abs(s.targetX-s.x)<19&&Math.abs(s.targetY-s.y)<17){enter(s,'inspecting');pace=0;drive=.02;fan=.9;}
  }
- if(intent?.kind==='school'){pace=clamp(Math.abs(intent.target?.vx??12)*.5+Math.abs(s.targetX-s.x)*.16,6,23);drive=pace/28;}
+ if(intent?.kind==='school'){pace=clamp(Math.abs(intent.target?.vx??12)*.8+Math.abs(s.targetX-s.x)*.025,13,23);drive=pace/28;}
  if(intent?.kind==='rest'){pace=0;drive=.015;fan=.85;s.behavior='gliding';s.remaining=2;}
  if(turning){pace=Math.min(pace,8);drive=.3;fan=.7;}
  if(lowOxygen){pace=Math.min(pace,11);drive=Math.min(drive,.55);}
  // Anticipate a close approach before the hard contact constraint is needed.
- if(senses){for(const other of senses.neighbors){const dx=other.x-s.x,dy=other.y-s.y,dz=((other.z??s.z)-s.z)*180;const distance=Math.hypot(dx,dy,dz);const ahead=dx*s.direction>0;const closing=(s.vx-(other.vx??0))*dx+(s.vy-(other.vy??0))*dy;if(ahead&&closing>0&&distance<90&&Math.abs(dy)<38&&Math.abs(dz)<45){pace=Math.min(pace,Math.max(4,(distance-55)*.35));fan=Math.max(fan,.85);drive=Math.min(drive,.18);}}}
+ if(senses){for(const other of senses.neighbors){const dx=other.x-s.x,dy=other.y-s.y,dz=((other.z??s.z)-s.z)*180;const distance=Math.hypot(dx,dy,dz);const ahead=dx*s.direction>0;const closing=(s.vx-(other.vx??0))*dx+(s.vy-(other.vy??0))*dy;if(ahead&&closing>0&&distance<90&&Math.abs(dy)<38&&Math.abs(dz)<45){pace=Math.min(pace,Math.max(8,(distance-55)*.35));fan=Math.max(fan,.85);drive=Math.min(drive,.18);}}}
  s.speed=ease(s.speed,pace,s.behavior==='gliding'?.65:1.65,dt);
  s.effort=ease(s.effort,drive,3,dt);s.pectoralEffort=ease(s.pectoralEffort,fan,3,dt);
  const holding=s.behavior==='inspecting'||intent?.kind==='rest';
