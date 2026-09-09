@@ -80,7 +80,7 @@ export class PhotographicScene{
  selectFish(id:number|null){this.selected=id;if(id===null)this.onSelectedFish?.(null);}
  feedAt(){this.feeding=15;for(let i=0;i<16;i++){const flake=new T.Mesh(new T.CircleGeometry(1.1,5),new T.MeshBasicMaterial({color:0x9b7e42,transparent:true,opacity:.85}));flake.position.copy(this.pos(1000+(this.random()-.5)*180,220+this.random()*25,3));this.food.add(flake);}}
  update(dt:number,s:Ecology,e:Environment,reduced:boolean,paused:boolean){
- const moveDt=reduced||paused?0:dt;this.time+=moveDt;this.flowPhase+=moveDt*.015*e.flow/65;this.feeding=Math.max(0,this.feeding-moveDt);
+ dt=Number.isFinite(dt)?Math.max(0,Math.min(dt,.1)):0;const moveDt=reduced||paused?0:dt;this.time+=moveDt;this.flowPhase+=moveDt*.015*e.flow/65;this.feeding=Math.max(0,this.feeding-moveDt);
  const smooth=reduced?1:Math.min(1,dt*3.2);this.zoomCurrent+=(this.zoomTarget-this.zoomCurrent)*smooth;this.centerX+=(this.targetX-this.centerX)*smooth;this.centerY+=(this.targetY-this.centerY)*smooth;
  this.camera.zoom=this.zoomCurrent;this.camera.position.set(this.centerX,this.centerY,30);this.camera.updateProjectionMatrix();
  this.macroBlend+=((this.mode==='Biology'?1:0)-this.macroBlend)*smooth;const u=this.background.material.uniforms;
@@ -97,7 +97,7 @@ export class PhotographicScene{
  f.turn+=((f.vx>=0?1:-1)-f.turn)*Math.min(1,moveDt*2);f.mesh.position.copy(this.pos(f.x,f.y,2+f.depth));f.mesh.scale.x=Math.abs(f.turn)<.12?(f.turn>=0?.12:-.12):f.turn;f.mesh.rotation.z=T.MathUtils.clamp(-f.vy*.008,-.12,.12)*(f.vx>0?1:-1);f.mesh.material.uniforms.time.value=this.time+f.phase;f.mesh.material.uniforms.light.value=u.day.value;f.mesh.material.uniforms.activity.value=shrimp?.08:Math.hypot(f.vx,f.vy)/18;
  }
  for(let i=0;i<this.bubbleData.length;i++){const b=this.bubbleData[i];b.mesh.visible=i<(this.quality==='Performance'?24:62)&&(b.co2?e.co2>0&&u.day.value>.1:s.oxygen>8.35);if(moveDt){b.y-=b.speed*moveDt*(b.co2?Math.max(.2,e.co2/24):Math.max(.2,s.oxygen/8));if(b.y<200){b.y=b.originY;b.x=b.originX;}}const rise=(b.originY-b.y)/Math.max(1,b.originY-200);const scale=b.co2?Math.max(.12,.75*(1-rise)):1+rise*.1;b.mesh.scale.setScalar(scale);b.mesh.position.copy(this.pos(b.x+Math.sin(this.time*.6+b.phase)*2+rise*e.flow*.13,b.y,4));}
- for(const a of this.arrows){const t=(this.flowPhase+a.phase)%1;a.mesh.position.copy(a.path.getPointAt(t));a.mesh.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),a.path.getTangentAt(t));}
+ for(const a of this.arrows){const t=T.MathUtils.euclideanModulo(this.flowPhase+a.phase,1);a.mesh.position.copy(a.path.getPointAt(t));a.mesh.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),a.path.getTangentAt(t));}
  this.food.children.forEach(o=>{o.position.y-=moveDt*4;});if(this.feeding<=0&&this.food.children.length){for(const o of [...this.food.children]){(o as T.Mesh).geometry.dispose();((o as T.Mesh).material as T.Material).dispose();this.food.remove(o);}}
  if(this.selected!==null&&this.time-this.lastReport>.5){this.lastReport=this.time;const f=this.fish[this.selected];if(f)this.report(f,this.selected);}
  this.renderer.render(this.scene,this.camera);

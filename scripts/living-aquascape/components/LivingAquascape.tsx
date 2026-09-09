@@ -1,4 +1,5 @@
 "use client";
+import {frameDelta} from '../lib/aquarium/frame';
 import {useEffect,useRef,useState} from 'react';
 import {PhotographicScene,type FishInfo as SelectedFishInfo} from '../lib/aquarium/PhotographicScene';
 import {advance,balance,defaults,factors,illumination,initial,preset,scenarios,waterChange,type Environment} from '../lib/aquarium/Ecosystem';
@@ -41,7 +42,7 @@ export default function LivingAquascape(){
  }}catch{setLoading(false);setError('This browser cannot start WebGL. The static gallery and ecosystem controls remain available.');}
  if(saved==='Photography'){pauseRef.current=true;setPaused(true);}
  let request=0,last=performance.now(),report=0,frames=0,elapsed=0,gamepadPress=false;
- const loop=(now:number)=>{const raw=(now-last)/1000,dt=Math.min(raw,.1);last=now;
+ const loop=(now:number)=>{const raw=(now-last)/1000,dt=frameDelta(now,last);last=now;
  if(!pauseRef.current)advance(eco.current,env.current,dt*speedRef.current/3600);
  const gamepad=navigator.getGamepads?.()[0];if(gamepad&&e){const x=Math.abs(gamepad.axes[0]||0)>.15?gamepad.axes[0]:0,y=Math.abs(gamepad.axes[1]||0)>.15?gamepad.axes[1]:0;e.nudge(x*dt*200,-y*dt*200);if(gamepad.buttons[0]?.pressed&&!gamepadPress){pauseRef.current=!pauseRef.current;setPaused(pauseRef.current);}gamepadPress=!!gamepad.buttons[0]?.pressed;}
  e?.update(dt,eco.current,env.current,reducedRef.current,pauseRef.current);
