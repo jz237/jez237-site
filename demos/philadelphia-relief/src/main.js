@@ -1,10 +1,10 @@
 import { wireSavedViews } from './saved-views.js?v=philly-2026090905';
 import { updateImageryCredit, wireFieldNotes, timelineSeek, captureName }
   from './experience.js?v=philly-2026090905';
-import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026090904';
-import { wireLooks } from './looks.js?v=philly-2026090904';
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090904';
-import { createOrientation } from './orientation.js?v=philly-2026090904';
+import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026090905';
+import { wireLooks } from './looks.js?v=philly-2026090905';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090905';
+import { createOrientation } from './orientation.js?v=philly-2026090905';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -14,53 +14,53 @@ import { createOrientation } from './orientation.js?v=philly-2026090904';
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090904';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090905';
 
-import { createStore } from './state.js?v=philly-2026090904';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090904';
-import { effectiveLight } from './solar.js?v=philly-2026090904';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090904';
+import { createStore } from './state.js?v=philly-2026090905';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090905';
+import { effectiveLight } from './solar.js?v=philly-2026090905';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090905';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090904';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090904';
+} from './geo.js?v=philly-2026090905';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090905';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090904';
+} from './tours.js?v=philly-2026090905';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090904';
+} from './urlstate.js?v=philly-2026090905';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090904';
+} from './degraded.js?v=philly-2026090905';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090904';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026090904';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090904';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090904';
-import { createPostFX } from './postfx.js?v=philly-2026090904';
-import { createCameraRig } from './camera.js?v=philly-2026090904';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090904';
-import { createStructures } from './structures.js?v=philly-2026090904';
+} from './terrain.js?v=philly-2026090905';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026090905';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090905';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090905';
+import { createPostFX } from './postfx.js?v=philly-2026090905';
+import { createCameraRig } from './camera.js?v=philly-2026090905';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090905';
+import { createStructures } from './structures.js?v=philly-2026090905';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090904';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090904';
+} from './structures-data.js?v=philly-2026090905';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090905';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090904';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090904';
+} from './flood.js?v=philly-2026090905';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090905';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090904';
+} from './vectors.js?v=philly-2026090905';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090904';
-import { getTheme } from './themes.js?v=philly-2026090904';
+} from './ui.js?v=philly-2026090905';
+import { getTheme } from './themes.js?v=philly-2026090905';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -491,7 +491,8 @@ async function boot() {
   const ui = wireInterface({ store, motion, data, projection, rig, structures });
   const disposeNotes=wireFieldNotes($('toggleNotes'));
   const disposeLooks = wireLooks($('lookChoices'), store, () => motion.stop());
-  const orientation = createOrientation({ host: $('orientation'), projection, water: data.water,
+  const orientation = createOrientation({ host: $('orientation'), projection,
+    water: data.water, landmarks:data.landmarks,
     onVisit: id => ui.visitPreset(id), onNavigate: target => motion.flyTo(target) });
   const navigation=wireNavigation($('mapNavigation'),rig,motion);
 
@@ -1727,6 +1728,7 @@ function wireInterface(deps) {
     });
   }
   buildMarkers(motion.tour);
+  dom.timelineTime.textContent = `0:00 / ${formatClock(motion.duration)}`;
 
   dom.btnPlay.addEventListener('click', () => motion.toggle());
   $('btnPrevShot').addEventListener('click', () => motion.step(-1));

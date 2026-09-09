@@ -27,3 +27,17 @@ test('saved views validate storage and timeline keyboard seeking stays inside th
   assert.equal(captureName({camLon:-75.1234,camLat:40.1234},'20260909'),
     'philadelphia-relief-40.1234N-75.1234W-20260909.png');
 });
+
+import { searchScore } from '../src/search-match.js';
+import { overviewPaths } from '../src/orientation.js';
+
+test('search handles listed addresses, abbreviations and reordered words without unrelated matches', () => {
+  const entry={name:'Bauder Signs',searchText:'3613 Witte Street Philadelphia Bauder Graphics'};
+  assert.ok(Number.isFinite(searchScore(entry,'3613 witte st')));
+  assert.ok(Number.isFinite(searchScore(entry,'graphics bauder')));
+  assert.equal(searchScore(entry,'9999 Witte Street'),Infinity);
+  assert.ok(searchScore(entry,'Bauder Signs') < searchScore(entry,'3613 witte'));
+  const outer=[[0,0],[1,0],[1,1],[0,0]], hole=[[.2,.2],[.3,.2],[.3,.3],[.2,.2]];
+  const paths=overviewPaths({type:'Polygon',coordinates:[outer,hole]});
+  assert.equal(paths.length,1); assert.equal(paths[0].rings.length,2);
+});
