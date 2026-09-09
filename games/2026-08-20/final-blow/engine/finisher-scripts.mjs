@@ -364,9 +364,9 @@ export function sampleFinisher(keys, elapsed) {
   const linear = clamp((elapsed - from.t) / span, 0, 1);
   const eased = linear * linear * (3 - 2 * linear);
   const mix = (field, fallback = 0) => lerp(from[field] ?? fallback, to[field] ?? from[field] ?? fallback, eased);
-  const key = linear < .5 ? from : to;
+  const key = linear < (to.contact ? 1 : .5) ? from : to;
   return {
-    ax: mix("ax"), ay: mix("ay"), vx: mix("vx"), vy: mix("vy"),
+    ax: mix("ax"), ay: mix("ay"), vx: mix("vx"), vy: to.gravity ? lerp(from.vy || 0, to.vy || 0, linear * linear) : mix("vy"),
     ar: mix("ar"), vr: mix("vr"), zoom: mix("zoom", 1.08),
     af: key.af,
     vf: key.vf,
@@ -450,4 +450,39 @@ export function finisherKeyTokens(scriptId) {
   const script = FINISHER_CHOREOGRAPHY[scriptId];
   if (!script) return null;
   return script.keys.map((key) => ({ t: key.t, af: key.af, vf: key.vf, a: key.a ?? null, v: key.v ?? null, vPlain: key.vPlain ?? null }));
+}
+
+
+// One physical sequence for the live three-beat projectile system. Retain
+// each character's authored poses, but remove the obsolete intervening combo.
+export function directProjectileFinisher(script, impacts) {
+  const [prime,trap,finish]=impacts;
+  const at=t=>script.keys.reduce((a,b)=>Math.abs(a.t-t)<Math.abs(b.t-t)?a:b);
+  const first=script.keys[0], release=at(prime.t), bind=at(trap.t), strike=at(finish.t), last=script.keys.at(-1);
+  const key=(t,source,extra={})=>({...source,t,ax:-205,ay:0,vx:0,vy:0,ar:0,vr:0,zoom:1.28,v:'ext4:5',vf:15,...extra});
+  return [
+    key(0,first,{ax:-290}),
+    key(prime.t-.18,first,{ax:-220}),
+    key(prime.t,release,{ax:-198,contact:true}),
+    key(prime.t+.1,release,{ax:-205}),
+    key(trap.t-.08,bind,{ax:-204}),
+    key(trap.t,bind,{ax:-190,v:'ext4:2',vx:8,contact:true}),
+    key(trap.t+.14,bind,{ax:-198,v:'ext4:2',vx:28,vr:-.07}),
+    key(trap.t+.42,first,{ax:-218,v:'ext4:5',vx:24}),
+    key(finish.t-.42,first,{ax:-224,v:'ext4:5',vx:24}),
+    key(finish.t-.1,bind,{ax:-208,v:'ext4:5',vx:24}),
+    key(finish.t,strike,{ax:-190,v:'ext4:4',vx:24,contact:true}),
+    key(finish.t+.12,strike,{ax:-194,v:'ext4:3',vx:43,vy:38,vr:.18}),
+    key(finish.t+.48,last,{ax:-222,v:'ext4:8',vx:72,vy:0,vr:1.22,gravity:true}),
+    key(script.duration,last,{ax:-238,v:'ext4:8',vPlain:'ext4:15',vx:80,vr:1.35}),
+  ];
+}
+
+export function finisherLens(elapsed, finalAt, reducedMotion=false) {
+  const ease=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
+  // A single slow push, held through contact, then a measured release.
+  // Never pulse the background scale on every individual impact.
+  const push=ease((elapsed-.42)/Math.max(.1,finalAt-.62));
+  const release=ease((elapsed-finalAt-.65)/1.1);
+  return 1.24+(reducedMotion ? .035 : .09)*push-.025*release;
 }
