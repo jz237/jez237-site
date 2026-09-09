@@ -1,5 +1,6 @@
 import {createFighterMove} from './fighter-kits.mjs';
 import {MOVEMENT_RULES,THROW_RULES} from './defense.mjs';
+import {exchangeStyle} from './ai-strategy.mjs';
 
 // A short, committed approach -> retreat -> watch sequence. These are ordinary
 // movement inputs, so an opponent can hit the bait and no fake strike deals damage.
@@ -16,7 +17,8 @@ export function feintIntent(brain,self,opponent,frame,roll,timeRemaining=99) {
   return {movement:phase==='approach'?'advance':phase==='retreat'?'retreat':'hold',action:null,guard:phase!=='approach',reason:'feint-'+phase};
  }
  const reach=createFighterMove(opponent.fighterId||'jez','heavy')?.range||170;
- if(frame-(brain.lastFeintFrame??-Infinity)<300||roll>=.12||distance<Math.max(THROW_RULES.grabRange+60,reach+20)||distance>reach+110||opponent.guarding)return null;
+ const style=exchangeStyle(self.kitId||self.id||self.def?.id);
+ if(frame-(brain.lastFeintFrame??-Infinity)<300||roll>=style.bait||distance<Math.max(THROW_RULES.grabRange+60,reach+20)||distance>reach+110||opponent.guarding)return null;
  brain.lastFeintFrame=frame;brain.feint={started:frame,direction};
  return {movement:'advance',action:null,reason:'feint-approach'};
 }

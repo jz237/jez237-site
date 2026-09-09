@@ -2,8 +2,25 @@
 export function hitRegion(attack,victim,point){
  if(attack.level==='low')return 'legs';
  if(attack.level==='overhead'||attack.kitAction?.includes('Launcher')||attack.kitAction==='launcher')return 'head';
+ if(['light','heavy'].includes(attack.kind)&&!attack.animation&&!attack.advanceSpeed&&!attack.superMove)
+   return attack.limb==='kick'||victim.crouch?'body':'head';
  const height=Math.max(1,victim.height||180);
  return point&&Number.isFinite(point.y)?(victim.y-point.y)/height>=.7?'head':'body':victim.crouch?'body':'head';
+}
+export function contactPoint(attack,victim,direction,tip,fallback){
+ const height=Math.max(1,victim.height||180), width=Math.max(24,victim.width||78);
+ const region=hitRegion(attack,victim,fallback);
+ const target={x:victim.x-direction*width*.32,y:victim.y-height*(region==='legs'?.25:region==='head'?.83:.55)};
+ // A measured painted tip is useful only at the receiving body. Reject
+ // stale pose anchors that would put a hit spark in empty space or behind it.
+ if(tip&&Math.abs(tip.x-victim.x)<=width*1.15&&tip.y>=victim.y-height*1.08&&tip.y<=victim.y-height*.12)
+   return {x:Math.max(victim.x-width*.35,Math.min(victim.x+width*.35,tip.x)),y:tip.y};
+ if(['light','heavy'].includes(attack.kind))return target;
+ return fallback&&Math.abs(fallback.x-victim.x)<=width
+   ? {x:fallback.x,y:Math.max(victim.y-height,Math.min(victim.y-height*.12,fallback.y))}:target;
+}
+export function boundedBodyOffset(offset,facing,distance,lunge=0){
+ return offset*facing>0?facing*Math.min(Math.abs(offset),Math.max(0,(distance-130)*.35-lunge)):offset;
 }
 export function recoveryProgress(fighter,progress){
  // A missed strike carries through, then retracts briskly. Contact retains its
