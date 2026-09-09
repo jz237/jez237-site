@@ -22,7 +22,7 @@ The 0.1–2× slider changes exhibit animation only, keeping gameplay consistent
 
 ## Performance and access
 
-High quality caps DPR at 1.75, uses one 2048px shadow map, restrained bloom, and a 768 × 512 floor reflection. Postprocessing caps DPR at 1.3. Performance mode uses DPR 1, no renderer shadows or floor reflector, direct rendering, and fewer dust particles. Mobile defaults to Performance. Reduced motion honors the OS preference initially and can be changed in Help: it disables orbit, particles, fan/cone motion, and animated circuit travel and makes transitions immediate. Interactive gameplay remains animated. The page includes focus styles, labeled controls, a focus-trapped drawer with Escape dismissal, and a fallback illustration. No account or external game service is required.
+High quality caps DPR at 1.75, uses one 2048px shadow map, restrained bloom, and a 768 × 512 floor reflection. Postprocessing caps DPR at 1.3. Performance mode uses DPR 1, no renderer shadows or floor reflector, direct rendering, and fewer dust particles. Mobile defaults to Performance. Reduced motion honors the OS preference initially and can be changed in Help: it disables orbit, particles, fan/cone motion, and animated circuit travel and makes transitions immediate. The autonomous display pauses under reduced motion. The page includes focus styles, labeled controls, a focus-trapped drawer with Escape dismissal, and a fallback illustration. No account or external game service is required.
 
 ## Historical and licensing boundaries
 
