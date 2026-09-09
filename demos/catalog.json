@@ -91,21 +91,21 @@
     "id": "005",
     "title": "Defender — Inside the Arcade",
     "category": "3D · Arcade preservation",
-    "description": "Explore a detailed, weathered arcade cabinet after closing. Separate 13 assemblies, test its controls, follow circuit signals, and play the original Starward rescue game.",
+    "description": "Explore a weathered arcade cabinet after closing. Separate 13 assemblies, trace its circuitry, and watch an autonomous Defender-inspired battle on the glowing CRT.",
     "url": "defender-exhibit/",
     "image": "assets/defender-exhibit.webp",
-    "imageAlt": "Live 3D exhibit with an exploded vintage arcade cabinet, populated circuit boards, original Starward artwork, and a dark arcade environment",
+    "imageAlt": "Live exploded Defender exhibit with a detailed cabinet and autonomous space battle on its CRT",
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/defender-exhibit",
     "features": [
       "Hero, exploded & X-ray views",
-      "Inspectable components",
+      "Autonomous Defender display",
       "Seven-chapter guided tour",
-      "Original playable space game"
+      "CRT close-up watch mode"
     ],
     "facts": [
       "13 assemblies",
       "Original cabinet art",
-      "Keyboard, touch & gamepad"
+      "Automatic combat & rescues"
     ],
     "note": "WebGL · Desktop & mobile · Interpretive model · Preview captured from the live exhibit"
   },
