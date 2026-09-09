@@ -1,6 +1,6 @@
 import * as T from 'three';
 import {Tetra3D} from './Tetra3D';
-import {createTetraSwim,advanceTetraSwim,tetraBehaviorLabel} from './TetraSwimming';
+import {createTetraSwim,advanceTetraSwim,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
 import {waterSurface} from './WaterSurface';
 import {plantMotion,depthOcclusion} from './SceneDepth';
 import {illumination,type Ecology,type Environment} from './Ecosystem';
@@ -48,8 +48,7 @@ export class PhotographicScene{
  onInspect:((name:string)=>void)|null=null;
  private background:T.Mesh<T.PlaneGeometry,T.ShaderMaterial>;
  private fish:Swimmer[]=[];
- private tetra:Tetra3D|null=null;
- private tetraSwim=createTetraSwim();
+ private tetras=new Map<number,{model:Tetra3D;swim:TetraSwim}>();
  private sprites:T.Texture[]=[];
  private photograph:T.Texture;private macro:T.Texture;
  private flow=new T.Group();private roots=new T.Group();private bubbles=new T.Group();private food=new T.Group();
@@ -105,7 +104,7 @@ void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;vec2 uv=sceneUv+planti
  const mesh=new T.Mesh(new T.PlaneGeometry(size,size*ratio,24,6),material);material.side=T.DoubleSide;mesh.renderOrder=3;
  const x=species===3?640+this.random()*560:610+this.random()*610,y=species===3?580+this.random()*30:species===2?420:280+this.random()*235;
  const f={mesh,x,y,vx:(this.random()>.5?1:-1)*18,vy:0,targetX:x,targetY:y,size,phase:this.random()*30,depth:species===3?1:.18+this.random()*.65,species,turn:0};this.fish.push(f);this.scene.add(mesh);
- if(i===0){this.tetra=new Tetra3D(texture);this.scene.add(this.tetra.group);f.size=48;f.x=1110;f.y=330;f.depth=.62;}
+ if(species===0){const model=new Tetra3D(texture,i*.83,i===0),swim=createTetraSwim(237+i*7919);f.size=i===0?48:36+this.random()*8;f.x=860+(i%4)*65;f.y=315+Math.floor(i/4)*38;f.depth=.3+(i%3)*.17;Object.assign(swim,{x:f.x,y:f.y,z:f.depth,elapsed:i*.7,remaining:2+i*.23});swim.brain.seed=723+i*3571;swim.brain.energy=.72+this.random()*.22;swim.brain.hunger=.4+this.random()*.25;this.tetras.set(i,{model,swim});this.scene.add(model.group);}
  }
  }
  private buildFlow(){for(let i=0;i<9;i++){const y=i*6;const path=new T.CatmullRomCurve3([this.pos(1265,228+y),this.pos(1080,268+y),this.pos(770,282+y),this.pos(385,350+y),this.pos(520,553+y),this.pos(1060,565+y),this.pos(1260,463+y),this.pos(1265,228+y)]);
@@ -134,20 +133,23 @@ void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;vec2 uv=sceneUv+planti
  u.time.value=this.time;u.flow.value+=(e.flow/100-u.flow.value)*(1-Math.exp(-dt*4));u.agitation.value+=(e.agitation/100-u.agitation.value)*(1-Math.exp(-dt*4));u.day.value=Math.min(1,illumination(s,e));u.algae.value=s.algae;u.biomass.value=s.biomass;u.macroBlend.value=this.macroBlend;
  this.dust.visible=this.mode!=='Biology';this.bubbles.visible=this.mode!=='Biology';this.food.visible=this.mode!=='Biology';const motes=this.dust.geometry.getAttribute('position') as T.BufferAttribute;
  if(moveDt){for(let n=0;n<motes.count;n++){let x=motes.getX(n),y=motes.getY(n);const upper=y>50;x+=moveDt*(upper?-1:1)*(2+e.flow*.08);y+=Math.sin(this.time*.4+n)*moveDt*.65;if(x<320-W/2)x=1280-W/2;if(x>1280-W/2)x=320-W/2;motes.setXY(n,x,y);}motes.needsUpdate=true;}this.roots.scale.y=.7+s.biomass*.3;this.roots.position.y=(H/2-578)*(1-this.roots.scale.y);
- for(let i=0;i<this.fish.length;i++){const f=this.fish[i],shrimp=f.species===3;f.mesh.visible=this.mode!=='Biology'&&i!==0;
- if(moveDt>0&&i!==0){const bounds=shrimp?[430,1280,563,619]:[350,1290,240,565];if(Math.hypot(f.targetX-f.x,f.targetY-f.y)<45||Math.sin(this.time*.22+f.phase)>.997){f.targetX=bounds[0]+this.random()*(bounds[1]-bounds[0]);f.targetY=bounds[2]+this.random()*(bounds[3]-bounds[2]);}
+ // Every tetra senses the same pre-step snapshot, avoiding update-order bias.
+ const schoolSnapshot=this.fish.map((f,id)=>({id,x:f.x,y:f.y,z:f.depth,vx:f.vx,vy:f.vy})).filter(f=>this.tetras.has(f.id));
+ const schoolGoal={id:-3,x:935+245*Math.sin(this.time*.021),y:365+78*Math.sin(this.time*.014),z:.5+.34*Math.sin(this.time*.019)};
+ for(let i=0;i<this.fish.length;i++){const f=this.fish[i],shrimp=f.species===3,tetra=this.tetras.get(i);f.mesh.visible=this.mode!=='Biology'&&!tetra;
+ if(moveDt>0&&!tetra){const bounds=shrimp?[430,1280,563,619]:[350,1290,240,565];if(Math.hypot(f.targetX-f.x,f.targetY-f.y)<45||Math.sin(this.time*.22+f.phase)>.997){f.targetX=bounds[0]+this.random()*(bounds[1]-bounds[0]);f.targetY=bounds[2]+this.random()*(bounds[3]-bounds[2]);}
  if(this.feeding&&!shrimp){f.targetX=1000+Math.sin(f.phase)*80;f.targetY=246+Math.sin(f.phase*2)*20;}
  const hover=!this.feeding&&Math.sin(this.time*.33+f.phase)>.88;let ax=(f.targetX-f.x)*.028,ay=(f.targetY-f.y)*.028;if(hover){f.vx*=Math.exp(-moveDt*1.8);f.vy*=Math.exp(-moveDt*1.8);ax*=.12;ay*=.12;}
  for(const other of this.fish){if(f===other)continue;const dx=other.x-f.x,dy=other.y-f.y,d=Math.hypot(dx,dy);if(d<28&&d>0){ax-=dx*.12;ay-=dy*.12;}else if(d<140&&f.species===other.species&&!shrimp){ax+=dx*.0008+(other.vx-f.vx)*.016;ay+=dy*.0007+(other.vy-f.vy)*.016;}}
  const pace=shrimp?1.1:f.species===2?(this.feeding?17:9):(s.oxygen<4?9:18)*(this.feeding?1.5:1);
  f.vx+=ax*moveDt;f.vy+=ay*moveDt;const speed=Math.hypot(f.vx,f.vy);if(speed>pace){f.vx*=pace/speed;f.vy*=pace/speed;}const thrust=i===0?Math.max(0,Math.cos(f.turn)*(f.vx>=0?1:-1)):1;f.x=T.MathUtils.clamp(f.x+f.vx*moveDt*thrust,bounds[0],bounds[1]);f.y=T.MathUtils.clamp(f.y+f.vy*moveDt*(i===0?.25+.75*thrust:1),bounds[2],bounds[3]);
  }
- if(i===0){advanceTetraSwim(this.tetraSwim,moveDt,this.feeding>0,s.oxygen<4,{food:this.food.children.map(o=>({id:o.id,z:.65,x:o.position.x+W/2,y:H/2-o.position.y})),neighbors:this.fish.slice(1).filter(n=>n.species===0).map((n,id)=>({id,x:n.x,y:n.y,z:n.depth,vx:n.vx,vy:n.vy}))});const eaten=this.food.children.find(o=>o.id===this.tetraSwim.brain.consumedFood);if(eaten instanceof T.Mesh){this.food.remove(eaten);eaten.geometry.dispose();(eaten.material as T.Material).dispose();}this.tetraSwim.brain.consumedFood=null;const swim=this.tetraSwim;f.x=swim.x;f.y=swim.y;f.vx=swim.vx;f.vy=swim.vy;f.turn=swim.yaw;f.depth=swim.z;}else {const desired=f.vx>=0?0:Math.PI;f.turn+=(desired-f.turn)*(1-Math.exp(-moveDt*2.4));}
+ if(tetra){const swim=tetra.swim;advanceTetraSwim(swim,moveDt,this.feeding>0,s.oxygen<4,{food:this.food.children.map(o=>({id:o.id,z:.65,x:o.position.x+W/2,y:H/2-o.position.y})),neighbors:schoolSnapshot.filter(n=>n.id!==i),schoolGoal});const eaten=this.food.children.find(o=>o.id===swim.brain.consumedFood);if(eaten instanceof T.Mesh){this.food.remove(eaten);eaten.geometry.dispose();(eaten.material as T.Material).dispose();}swim.brain.consumedFood=null;f.x=swim.x;f.y=swim.y;f.vx=swim.vx;f.vy=swim.vy;f.turn=swim.yaw;f.depth=swim.z;}else {const desired=f.vx>=0?0:Math.PI;f.turn+=(desired-f.turn)*(1-Math.exp(-moveDt*2.4));}
  f.mesh.position.copy(this.pos(f.x,f.y+Math.sin(this.time*1.1+f.phase)*.6,2+f.depth));
  f.mesh.rotation.y=f.turn;f.mesh.scale.setScalar(.82+f.depth*.18);
  f.mesh.rotation.z=T.MathUtils.clamp(-f.vy*.008,-.15,.15)*(f.vx>0?1:-1);
  const fu=f.mesh.material.uniforms;fu.time.value=this.time+f.phase;fu.sceneTime.value=this.time;fu.flow.value=u.flow.value;fu.photograph.value=this.photograph;fu.depth.value=f.depth;fu.light.value=u.day.value;fu.activity.value=shrimp?.08:Math.max(.22,Math.hypot(f.vx,f.vy)/18);
- if(i===0&&this.tetra){this.tetra.group.visible=this.mode!=='Biology';this.tetra.group.position.copy(this.pos(f.x,f.y,1+f.depth*6));this.tetra.group.rotation.set(0,this.tetraSwim.yaw+this.tetraSwim.depthHeading,this.tetraSwim.pitch,'YXZ');this.tetra.group.scale.setScalar(f.size*(.72+f.depth*.48));this.tetra.update(this.time,this.tetraSwim.effort,this.photograph,u.flow.value,f.depth,u.day.value,moveDt,this.tetraSwim.pectoralEffort);}
+ if(tetra){const {model,swim}=tetra;model.group.visible=this.mode!=='Biology';model.group.position.copy(this.pos(f.x,f.y,1+f.depth*6));model.group.rotation.set(0,swim.yaw+swim.depthHeading,swim.pitch,'YXZ');model.group.scale.setScalar(f.size*(.72+f.depth*.48));model.update(this.time,swim.effort,this.photograph,u.flow.value,f.depth,u.day.value,moveDt,swim.pectoralEffort);}
 
  }
  for(let i=0;i<this.bubbleData.length;i++){const b=this.bubbleData[i];b.mesh.visible=i<(this.quality==='Performance'?24:62)&&(b.co2?e.co2>0&&u.day.value>.1:s.oxygen>8.35);if(moveDt){b.y-=b.speed*moveDt*(b.co2?Math.max(.2,e.co2/24):Math.max(.2,s.oxygen/8));if(b.y<200){b.y=b.originY;b.x=b.originX;}}const rise=(b.originY-b.y)/Math.max(1,b.originY-200);const scale=b.co2?Math.max(.12,.75*(1-rise)):1+rise*.1;b.mesh.scale.setScalar(scale);b.mesh.position.copy(this.pos(b.x+Math.sin(this.time*.6+b.phase)*2+rise*e.flow*.13,b.y,4));}
@@ -157,7 +159,7 @@ void main(){vec4 c=texture2D(map,vUv);if(c.a<.015)discard;vec2 uv=sceneUv+planti
  for(const marker of this.markers){const screen=this.pos(marker.x,marker.y,0).project(this.camera);marker.button.style.left=((screen.x+1)*.5*this.host.clientWidth)+'px';marker.button.style.top=((1-screen.y)*.5*this.host.clientHeight)+'px';marker.button.hidden=this.mode!=='Living'||Math.abs(screen.x)>.92||Math.abs(screen.y)>.84;}
  this.renderer.render(this.scene,this.camera);
  }
- private report(f:Swimmer,id:number){this.onSelectedFish?.({id,species:[id===0?'Cardinal tetra · 3D prototype':'Cardinal tetra','Harlequin rasbora','Pearl gourami','Amano shrimp'][f.species],size:f.size,speed:Math.hypot(f.vx,f.vy),hunger:id===0?this.tetraSwim.brain.hunger:0,energy:id===0?this.tetraSwim.brain.energy:undefined,reason:id===0?this.tetraSwim.brain.intent.reason:undefined,mood:id===0?tetraBehaviorLabel(this.tetraSwim):this.feeding?'Foraging':f.species===3?'Grazing':'Exploring',preferredDepth:id===0?((f.y<310?'Upper water':f.y>420?'Lower planting':'Midwater')+' / '+(f.depth>.68?'Near front glass':f.depth<.32?'Back planting':'Tank interior')):f.species===3?'Planted foreground':'Midwater'});}
+ private report(f:Swimmer,id:number){const swim=this.tetras.get(id)?.swim;this.onSelectedFish?.({id,species:['Cardinal tetra · 3D school','Harlequin rasbora','Pearl gourami','Amano shrimp'][f.species],size:f.size,speed:Math.hypot(f.vx,f.vy),hunger:swim?swim.brain.hunger:0,energy:swim?swim.brain.energy:undefined,reason:swim?swim.brain.intent.reason:undefined,mood:swim?tetraBehaviorLabel(swim):this.feeding?'Foraging':f.species===3?'Grazing':'Exploring',preferredDepth:swim?((f.y<310?'Upper water':f.y>420?'Lower planting':'Midwater')+' / '+(f.depth>.68?'Near front glass':f.depth<.32?'Back planting':'Tank interior')):f.species===3?'Planted foreground':'Midwater'});}
  private world(clientX:number,clientY:number){const r=this.canvas.getBoundingClientRect(),v=new T.Vector3((clientX-r.left)/r.width*2-1,-(clientY-r.top)/r.height*2+1,0);v.unproject(this.camera);return {x:v.x+W/2,y:H/2-v.y};}
  private down=(event:PointerEvent)=>{this.canvas.setPointerCapture(event.pointerId);this.pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});this.pointer={startX:event.clientX,startY:event.clientY,cx:this.targetX,cy:this.targetY,distance:0};if(this.pointers.size===2){const p=[...this.pointers.values()];this.pinch=Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y);this.pinchZoom=this.zoomTarget;}};
  private move=(event:PointerEvent)=>{if(!this.pointers.has(event.pointerId))return;this.pointers.set(event.pointerId,{x:event.clientX,y:event.clientY});if(this.pointers.size===2){const p=[...this.pointers.values()];this.zoom(this.pinchZoom*Math.hypot(p[0].x-p[1].x,p[0].y-p[1].y)/Math.max(1,this.pinch));if(this.pointer)this.pointer.distance=100;return;}if(!this.pointer)return;const dx=event.clientX-this.pointer.startX,dy=event.clientY-this.pointer.startY;this.pointer.distance=Math.hypot(dx,dy);const scale=(this.camera.right-this.camera.left)/(this.host.clientWidth*this.zoomCurrent);this.targetX=this.pointer.cx-dx*scale;this.targetY=this.pointer.cy+dy*scale;this.clampCamera();};
