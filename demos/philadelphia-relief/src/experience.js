@@ -4,7 +4,8 @@ export function detailMessage(detail) {
   if (detail.state==='loading') return detail.refining ? 'Sharpening rooftops…'
     : `Loading view · ${detail.loaded || 0}/${detail.visible || 0} areas`;
   const resolution=Number(detail.resolutionM);
-  return Number.isFinite(resolution) && resolution>0 ? `${resolution.toFixed(2)} m sampling` : 'Aerial ready';
+  return Number.isFinite(resolution) && resolution>0
+    ? `${resolution.toFixed(2)} m sampling` : 'Aerial ready';
 }
 
 export function updateImageryCredit(host, detail) {
@@ -31,4 +32,19 @@ export function wireFieldNotes(button) {
   };
   button.addEventListener('click',click);
   return () => button.removeEventListener('click',click);
+}
+
+export function timelineSeek(key, seconds, total) {
+  const max=Math.max(0,total-.01);
+  if (key==='Home') return 0;
+  if (key==='End') return max;
+  if (key==='ArrowLeft') return Math.max(0,seconds-5);
+  if (key==='ArrowRight') return Math.min(max,seconds+5);
+  return null;
+}
+
+export function captureName(state, timestamp) {
+  const part=(n,positive,negative) => `${Math.abs(Number(n)||0).toFixed(4)}${n<0 ? negative : positive}`;
+  const lat=part(state.camLat,'N','S'),lon=part(state.camLon,'E','W');
+  return `philadelphia-relief-${lat}-${lon}-${timestamp}.png`;
 }

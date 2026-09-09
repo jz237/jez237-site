@@ -1,4 +1,6 @@
-import { updateImageryCredit, wireFieldNotes } from './experience.js?v=philly-2026090905';
+import { wireSavedViews } from './saved-views.js?v=philly-2026090905';
+import { updateImageryCredit, wireFieldNotes, timelineSeek, captureName }
+  from './experience.js?v=philly-2026090905';
 import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026090904';
 import { wireLooks } from './looks.js?v=philly-2026090904';
 import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090904';
@@ -1065,7 +1067,7 @@ async function boot() {
 
   window.addEventListener('pagehide', () => {
     imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
-    orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes();
+    orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes(); ui.disposeSaved?.();
   },
       { once: true });
 
@@ -1734,6 +1736,12 @@ function wireInterface(deps) {
     motion.seek(((event.clientX - rect.left) / rect.width) * motion.duration);
   });
 
+  dom.timelineTrack.addEventListener('keydown',event => {
+    if (event.target!==dom.timelineTrack) return;
+    const next=timelineSeek(event.key,motion.tourTime,motion.duration);
+    if (next===null) return;
+    event.preventDefault(); event.stopPropagation(); motion.pause(); motion.seek(next);
+  });
   const captionEl = $('caption');
   const captionTitle = $('captionTitle');
   const captionText = $('captionText');
@@ -1752,7 +1760,7 @@ function wireInterface(deps) {
     dom.playIcon.textContent = playing ? '❚❚' : '▶';
     const total = tourDuration(tour) || 1;
     dom.timelineFill.style.width = `${(tourTime / total) * 100}%`;
-    dom.timelineTime.textContent = formatClock(tourTime);
+    dom.timelineTime.textContent = `${formatClock(tourTime)} / ${formatClock(total)}`;
     const frame = tourFrame(tour, tourTime);
     [...dom.timelineShots.children].forEach((node, i) => {
       node.setAttribute('aria-current', String(frame?.index === i));
@@ -2050,6 +2058,9 @@ function wireInterface(deps) {
       dom.scaleLabel.textContent = bar.label;
     },
   };
+  api.disposeSaved=wireSavedViews($('savedViews'),store,(state,name) => {
+    motion.stop(); store.set(state,{source:'saved-view'}); api.setViewName(name);
+  },() => viewName || dom.outPreset.textContent);
   return api;
 }
 
@@ -2109,6 +2120,7 @@ function saveScreenshot(captureFn, store) {
   if (!captureFn) return;
   try {
     const canvas = captureFn();
+    const captureState=store.get();
     if (!canvas.toBlob) {
       toast('This browser cannot export the canvas');
       return;
@@ -2121,7 +2133,7 @@ function saveScreenshot(captureFn, store) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `philadelphia-relief-${store.value('preset')}-${stamp()}.png`;
+      a.download = captureName(captureState,stamp());
       document.body.appendChild(a);
       a.click();
       a.remove();

@@ -171,6 +171,14 @@
     </button>
   </header>
   <div class="panel-body" id="shotsBody">
+    <details id="savedViews" class="saved-views">
+      <summary>Your saved views</summary>
+      <label for="savedViewName">Name this view</label>
+      <div class="saved-entry"><input id="savedViewName" maxlength="60" placeholder="e.g. My river view" />
+        <button type="button" data-save-view>Save view</button></div>
+      <p class="saved-hint">Up to six views, stored on this device.</p>
+      <div class="saved-list"></div><p role="status" class="saved-status"></p>
+    </details>
     <div class="group-head-row"><h3 class="group-head">Cinematic presets</h3></div>
     <div id="presetList" class="preset-list" role="group" aria-label="Cinematic presets"></div>
     <div class="group-head-row"><h3 class="group-head">Quick jump</h3></div>
@@ -213,7 +221,8 @@
       <span id="playIcon">▶</span>
     </button>
     <button type="button" class="step-btn" id="btnNextShot" aria-label="Next shot (])">›</button>
-    <div class="timeline-track" id="timelineTrack">
+    <div class="timeline-track" id="timelineTrack" tabindex="0"
+         aria-label="Tour timeline. Left and right arrows seek five seconds; Home restarts." role="group">
       <div class="timeline-fill" id="timelineFill"></div>
       <div class="timeline-shots" id="timelineShots"></div>
     </div>
