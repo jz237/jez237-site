@@ -16,3 +16,16 @@ test('close street labels cannot float over distant neighborhoods', () => {
   assert.equal(nearbyLabel({kind:'street',lon:-75.16,lat:40.0},pose,projection),false);
   assert.equal(nearbyLabel({kind:'landmark',lon:-75.16,lat:40.0},pose,projection),true);
 });
+
+import { LOOKS, matchingLook } from '../src/looks.js';
+import { coercePatch, defaults } from '../src/schema.js';
+
+test('lighting looks preserve geographic state and remain fully shareable', () => {
+  for (const look of LOOKS) {
+    assert.deepEqual(coercePatch(look.patch), look.patch);
+    assert.ok(Object.keys(look.patch).every(k => !k.startsWith('cam') && k !== 'exaggeration'));
+    const state={...defaults(),...look.patch};
+    assert.equal(matchingLook(state),look.id);
+    assert.equal(matchingLook({...state,glow:.99}),undefined);
+  }
+});

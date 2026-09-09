@@ -1311,3 +1311,14 @@ body.neighborhood-view .readout-preset-blurb { font-size: 12px; line-height: 1.5
   body.neighborhood-view .readout-preset-blurb { display: none; }
   body.neighborhood-view .readout-preset-name { font-size: 20px; }
 }
+
+.look-choices { display: grid; gap: 8px; }
+.look-card { position: relative; padding: 16px 16px 16px 62px; min-height: 66px; text-align: left; border: 1px solid #ffffff24; border-radius: 12px; background: #19313d; color: #e9f0ed; cursor: pointer; }
+.look-card::before { content: ''; position: absolute; left: 16px; top: 17px; width: 30px; height: 30px; border-radius: 50%; background: linear-gradient(135deg,#f9e7ac,#72a5b6); box-shadow: 0 0 16px #b7e7fa22; }
+.look-golden::before { background: linear-gradient(135deg,#ffdc85,#b46945); }
+.look-overcast::before { background: linear-gradient(135deg,#e3e5df,#80979f); }
+.look-card strong { display: block; font: 600 14px var(--font); }
+.look-card span { display: block; margin-top: 4px; color: #b5c7cb; font: 12px var(--font); }
+.look-card:hover, .look-card[aria-pressed="true"] { border-color: #e5b46c; background: #29414a; }
+.look-card:focus-visible { outline: 2px solid #e5b46c; outline-offset: 3px; }
+.look-hint { margin: 10px 0 0; font-size: 11px; line-height: 1.5; color: #a9bdc6; }
