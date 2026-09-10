@@ -1,0 +1,3 @@
+import test from 'node:test';import assert from 'node:assert/strict';import {advanceSpray} from '../spray-physics.js';
+test('a jet droplet emitted below the moving surface retains upward momentum',()=>{const p={vx:0,vy:4.2,vz:-4,size:.06},xyz=new Float32Array([0,-.1,0]);advanceSpray(p,xyz,0,1/60,0,()=>0);assert.ok(p.vy>4);for(let i=0;i<15;i++)advanceSpray(p,xyz,0,1/60,0,()=>0);assert.ok(xyz[1]>.5);});
+test('descending droplets settle onto the water and lose horizontal speed',()=>{const p={vx:2,vy:-3,vz:1,size:.06},xyz=new Float32Array([0,.01,0]);advanceSpray(p,xyz,0,1/60,0,()=>0);assert.equal(xyz[1],0);assert.equal(p.vy,0);assert.ok(p.vx<2&&p.size>.06);});

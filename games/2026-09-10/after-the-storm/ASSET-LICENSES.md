@@ -1,0 +1,13 @@
+# Asset licenses
+
+Photographic terrain and bark maps are by Poly Haven contributors and distributed under CC0 1.0 (public domain). No purchase or subscription was used. The bundled images are unmodified original JPEG maps at 1K/2K resolution.
+
+- [Coast Sand 02 — Rob Tuytel](https://polyhaven.com/a/coast_sand_02)
+- [Coast Sand Rocks 02 — Rob Tuytel](https://polyhaven.com/a/coast_sand_rocks_02)
+- [Forest Ground 01](https://polyhaven.com/a/forrest_ground_01)
+- [Bark Brown 02](https://polyhaven.com/a/bark_brown_02)
+- [Poly Haven license](https://polyhaven.com/license) · [CC0 deed](https://creativecommons.org/publicdomain/zero/1.0/)
+
+Exact download URLs and SHA-256 hashes are recorded in `assets/terrain/manifest.json`. All textures load locally; the game makes no runtime request to Poly Haven.
+
+Tree, grass, shrub, pebble and driftwood geometry in `coastal-scenery.js` is original procedural work. Jet-ski and rider geometry is original Blender work, with editable sources under `source/blender/`. Three.js is bundled under the MIT license; see `vendor/THREE-LICENSE.txt`.
