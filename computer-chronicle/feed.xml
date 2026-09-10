@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 09 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 10 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 11-17, 1984 — Police Seize a Bulletin Board: Is the Sysop Liable for What Users Post?</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-06-11</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-11</guid>
+      <pubDate>Thu, 10 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Los Angeles authorities confiscate MOG-UR’s HBBS equipment after telephone access codes appear among user messages. Los Angeles police have seized the computer equipment behind MOG-UR’s HBBS, thrusting a three-year-old hobbyist bulletin board into an unfamiliar legal contest over responsibility for messages left by users. Pacific Telephone security investigators alerted police after finding a telephone credit-card code and two Sprint access numbers among posts on the system. Also this week: Fido Wants to Travel: Hobbyist Boards Begin to Form a Network · Novelists Move from Type to Bytes at Summer CES · Morrow&apos;s Pivot Puts a PC-Compatible Computer on a Shoulder Strap · Apple IIc Interest Runs Ahead of Complete Systems.</description>
+    </item>
     <item>
       <title>Week of June 4-10, 1984 — IBM Cuts Prices Across the PC Line</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-06-04</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-30</guid>
       <pubDate>Thu, 20 Aug 2026 12:00:00 GMT</pubDate>
       <description>Steve Jobs brings Apple’s new graphical computer before the Boston Computer Society for its first public demonstration. BOSTON, Jan. 30 — Six days after Apple formally introduced Macintosh, Steve Jobs carried the compact computer onto the Boston Computer Society stage for what the society’s founder remembers as its first public showing. Before a room of experienced personal-computer users, the machine’s windows, icons and mouse moved from advertising promise to a working demonstration. Also this week: IBM Takes the Clone War to Court · Lisa 2 Becomes Macintosh’s Elder Sibling · MacWrite and MacPaint Make the Desktop Tangible · Computer Games Ask What Comes After the Crash.</description>
-    </item>
-    <item>
-      <title>Week of January 23-29, 1984 — Macintosh Arrives: Apple Bets $2,495 on the Mouse</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-01-23</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-23</guid>
-      <pubDate>Wed, 19 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The compact 128K machine brings Lisa-style windows, icons and graphics to a far wider market—and seeks a place beside the Apple II and IBM PC. CUPERTINO, Calif.—Apple Computer unveiled the Macintosh on January 24, placing a mouse-controlled graphical desktop inside a compact 20-pound machine carrying a suggested retail price of $2,495. Apple chairman Steven P. Jobs declared that the company expected Macintosh to become a third industry standard alongside the Apple II and IBM PC. Also this week: Lisa 2 Family Cuts the Price of Apple’s Workstation · MacWrite and MacPaint Lead the Software Parade · Atari Reorders the Front Office as the Game Crash Bites · Satellite Television Aims Straight at the Home.</description>
     </item>
   </channel>
 </rss>

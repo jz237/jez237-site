@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-10",
+      "historicDate": "1984-06-11",
+      "displayDate": "Week of June 11-17, 1984",
+      "edition": "Issue 098 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Modems make a village—and bring the law to its door.",
+      "leadHeadline": "Police Seize a Bulletin Board: Is the Sysop Liable for What Users Post?",
+      "storyHeadlines": [
+        "Fido Wants to Travel: Hobbyist Boards Begin to Form a Network",
+        "Novelists Move from Type to Bytes at Summer CES",
+        "Morrow's Pivot Puts a PC-Compatible Computer on a Shoulder Strap",
+        "Apple IIc Interest Runs Ahead of Complete Systems"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-06-11.jpg",
+      "thumb": "media/thumbs/1984-06-11.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-09",
       "historicDate": "1984-06-04",
       "displayDate": "Week of June 4-10, 1984",
