@@ -1,6 +1,6 @@
 # Cinematic knockout and fatality upgrade
 
-Goal: implement every cinematic suggestion from the conversation for all ten fighters. This is in progress; 5.7.15 remains the published release.
+Goal: implement every cinematic suggestion from the conversation for all ten fighters. Historical checkpoints follow; current release evidence is recorded at the end of this document.
 
 Required delivery:
 - One character-specific knockout and two distinct staged fatalities per fighter.
@@ -757,3 +757,16 @@ Previous goal turn classified as progress. This continuation adds2 generated and
 - Corrected singlefighter probe now lands at35ticks, progresses6..15 and settles by89ticks. Fullsuite782/782PASS. All10fighter airborne/rollback browser probe launched as next verification. Fix not yet published; remaining cinematic wall/continuous-motion/audio review requirements stay open.
 
 - All10fighter airborne landing/rollback probe completed PASS, evidence airborne-ko-roster.json. Preparing5.8.3 publication of the freeze fix.
+
+## Weapon and wall visual review
+
+- Reviewed16pose rendered strips for Donald0/1, Commissioner0/1, Post0/1 (final-review-*.png). Visible weapons remain joined to hands, bodies separated through contact/fall, final poses complete. Donald shaft projection varies by viewpoint; no detached shaft/head in the reviewed on-screen sequence. Post wire release is continuous into floor aftermath. These strips preserve earlier runtime captures, so unchanged artwork/choreography is covered, not new unrelated state.
+- Captured actual KO wall rebound every5ticks in close versus framing (wall-ko-visual-review.png). Found attacker remained beneath rebounding/landing victim. New local finish-window retreat moves grounded winning fighter away at260px/sec until280px spacing while opponent is airborne/down; does not change fight-phase hit detection or authored finishing scripts.
+- Updated capture wall-landing-clearance.jpg shows separate torsos at rest; fullsuite782/782PASS.20caseallvictim/facingclearance probe in progress. Close-view wall strike can still temporarily meet viewport edge; CPU uses its fixed wide framing. Do not claim this review proves all near-edge poses are unclipped. Local retreat update remains unpublished.
+
+##5.8.4 release preparation
+
+- Wall landing retreat completed20cases all10victims/bothdirections with minimum250px settled root spacing. Source/trace work/probe-cinema584-wall-clearance.mjs and wall-ko-roster.json.
+- Cyraxx DEAD AIR now has locally synthesized feedback-release.mp3,0.46sec. No paid API. Metadata beside asset. Browser playback probe confirms exactlyoneplay at1.94sec release, no replay whilepaused, decodedpeak.5263/RMS.1714; gain.42. Evidence feedback-runtime.json. This establishes routing/level/timing, not subjective listening.
+- Removed residual close-view ending zoom/rotation drift; endingcamera usesfixedscale and retains a horizontal boundary reveal for nearby wall victims. Wider existing edge shadow covers revealed offstage area. New wall impact/landing captures reviewed: head, hands, feet visible. Firstimpact offset applied immediately toavoid a few clipped easingframes; CPU fixedwide framing retained.
+- Fullsuite783/783PASS before version bump; new regression follows.5.8.4 bundles wall clearance, endingframing and feedbackaudio. Release/public checks still required.
