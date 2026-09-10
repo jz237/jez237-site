@@ -1120,7 +1120,7 @@ function ensureCinemaAtlas(id, bank = 'cinema-ko') {
 }
 const ensureCinemaKoAtlas = id => ensureCinemaAtlas(id);
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.2` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.3` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -8828,6 +8828,7 @@ function makeFighter(index, side, overrideDef = null) {
     // forward walk keeps the shipped cadence byte-for-byte.
     strideTime: 0,
     cinematicFrame: null,
+    cinemaTouchdownTick: null,
     cinematicRotation: 0,
     cinematicScale: 1,
     down: false,
@@ -14215,6 +14216,9 @@ function presentCinemaVictory() {
     pendingCinemaVictory = null;
     return;
   }
+  const victim=state.fighters[1-call.winner];
+  if(!victim.grounded)return;
+  if(victim.cinemaTouchdownTick!=null && (state.simulationTick-victim.cinemaTouchdownTick)/SIMULATION_HZ<1.05)return;
   if (roundWinHoldSeconds() - state.phaseTime < (state.koScene?.impact || 0) + CINEMATIC_KO_VICTORY_SECONDS) return;
   pendingCinemaVictory = null;
   announce(call.main, call.sub, 2.4, {speak:call.speak});
@@ -17479,7 +17483,7 @@ function advanceFighterTimers(fighter) {
     } else {
       fighter.knockdownFrames = Math.max(0, fighter.knockdownFrames - 1);
       const landingTick = CINEMATIC_FIGHTERS.includes(fighter.def.id)
-        ? fighter.knockdownFrames === DEFENSE_RULES.knockdownFrames - CINEMATIC_KO_LANDING_TICK
+        ? fighter.knockdownFrames === DEFENSE_RULES.knockdownFrames - (fighter.cinemaTouchdownTick==null?CINEMATIC_KO_LANDING_TICK:7)
         : koCollapseThudTick(fighter.knockdownFrames, DEFENSE_RULES.knockdownFrames);
       if (koLie && landingTick && !state.koScene) {
         spawnKoCollapseLanding(fighter);
@@ -17997,7 +18001,19 @@ function updateFighter(fighter, opponent, input, dt) {
   fighter.crouch = false;
 
   if (tryFinish(fighter.side, input)) return;
-  if (state.phase !== "fight") return;
+  if (state.phase !== "fight") {
+    // A decided round stops attacks, not an airborne body's momentum.
+    if (!fighter.grounded && !state.finisher && !state.koScene
+      && (state.phase === 'finish' || state.phase === 'roundover')) {
+      applyFighterPhysics(fighter, dt);
+      if (fighter.grounded && fighter.health <= 0 && state.phase === 'roundover') {
+        collapseKoLoser(fighter);
+        fighter.cinemaTouchdownTick = state.simulationTick;
+        state.phaseTime = Math.max(state.phaseTime, 1.8);
+      }
+    }
+    return;
+  }
   // A live grab owns both fighters until updateGrabHolds releases them.
   if (fighter.grabbed) {
     fighter.inputBuffer.clear();
@@ -22392,7 +22408,8 @@ function fighterAnimationPose(fighter) {
       const image = ensureCinemaKoAtlas(fighter.def.id);
       if (!cinemaKoAvailability.has(owner)) cinemaKoAvailability.set(owner,Boolean(image?.complete&&image.naturalWidth));
       if (cinemaKoAvailability.get(owner)) {
-        const pose={bank:'cinema-ko',frame:knockoutFrame(roundWinHoldSeconds()-state.phaseTime)};
+        const fallTime=fighter.cinemaTouchdownTick==null?roundWinHoldSeconds()-state.phaseTime:.4+(state.simulationTick-fighter.cinemaTouchdownTick)/SIMULATION_HZ;
+        const pose={bank:'cinema-ko',frame:knockoutFrame(fallTime)};
         recordPoseTrace(fighter,pose);
         return pose;
       }
@@ -33079,7 +33096,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.2-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.3-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34583,7 +34600,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.8.2-ringside",
+  version: "5.8.3-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
