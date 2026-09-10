@@ -1,6 +1,6 @@
-export type SoundEvent='fire'|'explosion'|'bomber'|'mutant'|'pod'|'swarmer'|'abduct'|'fall'|'catch'|'delivery'|'hyperspace'|'credit'|'thrust'|'start';
+export type SoundEvent='fire'|'explosion'|'bomber'|'mutant'|'pod'|'swarmer'|'abduct'|'fall'|'catch'|'delivery'|'hyperspace'|'credit'|'thrust'|'start'|'bomb'|'death'|'extra'|'planet';
 // Priorities come from the original game's SNDLD tables (defa7.src).
-const priorities:Record<SoundEvent,number>={fire:0xc0,explosion:0xd0,pod:0xd0,bomber:0xd0,mutant:0xd0,swarmer:0xc0,abduct:0xd0,fall:0xd8,catch:0xe0,delivery:0xe0,hyperspace:0xd0,credit:0xff,thrust:0,start:0xf0};
+const priorities:Record<SoundEvent,number>={bomb:0xe8,death:0xf0,extra:0xff,planet:0xe8,fire:0xc0,explosion:0xd0,pod:0xd0,bomber:0xd0,mutant:0xd0,swarmer:0xc0,abduct:0xd0,fall:0xd8,catch:0xe0,delivery:0xe0,hyperspace:0xd0,credit:0xff,thrust:0,start:0xf0};
 export class DefenderSound {
  private master:GainNode;private thrustGain:GainNode;private analyser:AnalyserNode;private buffers=new Map<SoundEvent,AudioBuffer>();
  private voice?:{source:AudioBufferSourceNode;until:number;priority:number};private playing=false;private output=0;private engine=false;private last='';private count=0;private loadError='';
