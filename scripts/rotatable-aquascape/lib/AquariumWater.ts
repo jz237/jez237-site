@@ -30,4 +30,3 @@ export class AquariumWater extends T.Group {
  }
  update(time:number,cameraY:number){this.surfaces.forEach((s,i)=>{s.visible=(cameraY<5.36)===(i===0);(s.material as T.ShaderMaterial).uniforms.time.value=time;});}
 }
-

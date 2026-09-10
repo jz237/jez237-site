@@ -1,3 +1,4 @@
+import {leafSurfaceTexture} from './LeafSurface';
 import * as T from 'three';
 import {fitLeaf} from './TankSpace';
 
@@ -10,7 +11,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  const dummy=new T.Object3D();
  for(const species of ['stem','rotala','sword','anubias','carpet','moss'] as Species[]){
   const p:number[]=[],uv:number[]=[],idx:number[]=[];
-  const rows=species==='sword'?24:species==='anubias'?14:species==='carpet'||species==='moss'?6:12,cols=species==='sword'?8:4;
+  const rows=species==='sword'?20:species==='anubias'?10:6,cols=species==='sword'?6:species==='anubias'?4:2;
   for(let i=0;i<=rows;i++){
    const t=i/rows,blade=Math.max(0,(t-.08)/.92);
    const outline=species==='anubias'?Math.pow(Math.sin(blade*Math.PI),.54):species==='sword'?Math.pow(Math.sin(blade*Math.PI),.9):Math.pow(Math.sin(blade*Math.PI),.67);
@@ -34,15 +35,15 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  const stem=(a:T.Vector3,b:T.Vector3,r:number,color:number)=>stems.push({a,b,r,color:new T.Color(color)});
  // Clusters spread through depth; height varies gradually around each colony.
  const colonies=[[-4.1,-1.55,1.15,4.55,false],[-2.7,-1.7,.95,4.4,false],[-.65,-1.55,1.0,4.1,true],[.8,-1.65,.9,4.15,true],[2.2,-1.5,.95,3.65,true],[3.6,-1.55,1.1,4.45,false],[4.2,-.75,.6,3.5,false]] as const;
- for(const [cx,cz,spread,maxH,red] of colonies)for(let i=0;i<54;i++){
-  const x=T.MathUtils.clamp(cx+(random()-.5)*spread*1.6,-4.85,4.85),z=T.MathUtils.clamp(cz+(random()-.5)*.8,-2.1,1.5),base=height(x,z),h=maxH*(.65+random()*.35),leanX=(random()-.5)*.5,leanZ=(random()-.5)*.25,phase=random()*6;
+ for(const [cx,cz,spread,maxH,red] of colonies)for(let i=0;i<(red?33:49);i++){
+  const x=T.MathUtils.clamp(cx+(random()-.5)*spread*1.6,-4.85,4.85),z=T.MathUtils.clamp(cz+(random()-.5)*.8,-2.1,1.5),base=height(x,z),h=Math.min(5.22-base,maxH*(.60+random()*.40)),leanX=(random()-.5)*.5,leanZ=(random()-.5)*.25,phase=random()*6;
   const point=(t:number)=>V(x+leanX*t+Math.sin(t*3+phase)*.065*t,base+h*t,z+leanZ*t);
   const nodes=21+Math.floor(random()*7);let previous=point(0);
   for(let j=1;j<=nodes;j++){
    const t=j/nodes,at=point(t);stem(previous,at,.009*(1-t*.6),red?0x756239:0x617b30);previous=at;
    for(let side=0;side<2;side++){
     const a=j*Math.PI*.51+phase+side*Math.PI,length=(.23+random()*.15)*(1-t*.25);
-    add(red?'rotala':'stem',at,V(Math.cos(a),.25+random()*.7,Math.sin(a)),length,length*(red?.28:.34),red?.012+random()*.035:.20+random()*.065,red?.63:.71,red?.22+random()*.10:.25+random()*.12,random()*.6);
+    add(red?'rotala':'stem',at,V(Math.cos(a),.25+random()*.7,Math.sin(a)),length,length*(red?.28:.34),red?.03+random()*.018+(1-t)*.05:.20+random()*.065,red?.62:.71,red?.24+random()*.10:.25+random()*.12,random()*.6);
    }
   }
  }
@@ -52,22 +53,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   for(let j=0;j<11;j++){const a=j*2.399+i,l=.8+random()*1.65;add('sword',V(x,b,z),V(Math.cos(a)*.46,.55+random()*.5,Math.sin(a)*.5),l,.13+random()*.19,.20+random()*.045,.68,.24+random()*.095,random()*.65);}
  }
  // Oval epiphytes sit on petioles, with clear spaces between leaves.
- for(let i=0;i<140;i++){
+ for(let i=0;i<70;i++){
   const x=-4.6+random()*4.9,z=-.5+random()*2.5,b=height(x,z)+.02;
   for(let j=0;j<5;j++){
-   const a=j*2.399+i,l=.16+random()*.24,origin=V(x,b,z),tip=origin.clone().add(V(Math.cos(a)*.15,.08+random()*.15,Math.sin(a)*.15));stem(origin,tip,.007,0x425b24);
+   const a=j*2.399+i,l=.13+random()*.15,origin=V(x,b,z),tip=origin.clone().add(V(Math.cos(a)*.15,.04+random()*.08,Math.sin(a)*.15));stem(origin,tip,.007,0x425b24);
    add('anubias',tip,V(Math.cos(a)*.65,.2+random()*.5,Math.sin(a)*.65),l,l*.7,.22+random()*.025,.65,.18+random()*.07,random());
-  }
- }
- // Fine fern pinnae grow along arching midribs.
- for(let i=0;i<65;i++){
-  const x=-4+random()*3.2,z=-.6+random()*1.9,b=height(x,z)+.05;
-  for(let j=0;j<4;j++){
-   const a=j*2.4+i,len=.45+random()*.85,dir=V(Math.cos(a)*.6,.85,Math.sin(a)*.6),origin=V(x,b,z);let previous=origin;
-   for(let k=1;k<=12;k++){
-    const t=k/12,point=origin.clone().addScaledVector(dir,len*t);point.y-=t*t*.22;stem(previous,point,.004,0x496e2c);previous=point;
-    for(const sign of [-1,1])add('stem',point,V(Math.cos(a+sign*1.1),.25,Math.sin(a+sign*1.1)),.14*(1-t*.7),.045*(1-t*.6),.23,.69,.24+random()*.10);
-   }
   }
  }
  // Dense, irregular carpeting with rounded small blades and an open sand channel.
@@ -77,12 +67,9 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const b=height(x,z)+.015;
   for(let j=0;j<4;j++){const a=random()*Math.PI*2,l=.06+random()*.10;add('carpet',V(x,b,z),V(Math.cos(a)*.8,.35+random()*.7,Math.sin(a)*.8),l,l*.73,.19+random()*.07,.70,.25+random()*.14);}
  }
- for(let i=0;i<1200;i++){
-  const t=random(),x=-2.85+t*1.45+(random()-.5)*.42,y=1.2+t*2.5,z=-.1-t*.8+(random()-.5)*.4;
-  const a=random()*6.28;add('moss',V(x,y,z),V(Math.cos(a)*.5,.7,Math.sin(a)*.5),.05+random()*.1,.018+random()*.035,.21+random()*.06,.73,.23+random()*.16);
- }
+ const tissue=leafSurfaceTexture();
  for(const [species,batch] of batches){
-  const material=new T.MeshStandardMaterial({color:0xffffff,roughness:species==='anubias'?.38:.62,side:T.DoubleSide});
+  const material=new T.MeshStandardMaterial({color:0xffffff,map:tissue,bumpMap:tissue,bumpScale:species==='sword'?.035:.012,roughness:species==='anubias'?.48:.67,side:T.DoubleSide});
   material.onBeforeCompile=shader=>{
    shader.uniforms.waterTime=time;shader.vertexShader='uniform float waterTime;varying vec2 botanicalUv;\n'+shader.vertexShader;
    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>\nbotanicalUv=uv;vec3 root=instanceMatrix[3].xyz;transformed.z+=sin(waterTime*.8+root.x*1.2+root.z*2.)*.035*uv.y*uv.y;transformed.x+=sin(waterTime*.55+root.x*2.)*.016*uv.y*uv.y;`);
