@@ -518,7 +518,11 @@ function testGameMirror() {
     assert.ok(branch.includes(line), `kit-less strike branch still has: ${line}`);
   }
   // And the QA trace hook the browser probe reads the same chains from.
-  assert.match(gameSource, /recordPoseTrace\(fighter, pose\);/);
+  // Trace the final displayed pose after full-library selection, not the
+  // intermediate pose before the added animation frames are selected.
+  const poseResolver = gameSource.slice(gameSource.indexOf('function fighterAnimationPose('), gameSource.indexOf('function recordPoseTrace('));
+  assert.match(poseResolver, /recordPoseTrace\(fighter,\s*(\w+)\);\s*return \1;\s*\}/);
+  assert.match(poseResolver, /recordPoseTrace\(fighter,\s*finalPose\);\s*return finalPose;/);
   assert.match(gameSource, /poseTrace\(count = POSE_TRACE_SIZE, side = null\)/);
 }
 

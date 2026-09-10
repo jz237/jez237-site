@@ -911,8 +911,8 @@ function testBankRegistryAndWiring() {
   assert.match(rendererSource, /host\.cellDrawAdjust\(fighter\.def\.id, bankName, pose\.frame, \{ unified: unifiedActive \}\)/);
   assert.ok(!/hdFor\(["']unified["']\)|hdSheetPath\([^)]*unified/.test(rendererSource),
     "there are no HD unified sheets — 3D must resolve this bank from assets/unified only");
-  assert.match(gameSource, /isUnifiedFighter: unifiedFighterReady,/,
-    "both renderers must answer the unified question from ONE gate");
+  assert.match(gameSource, /const unifiedActive = unifiedFighterReady\(fighter\.def\.id\);/,
+    "painted rendering uses the unified readiness gate");
   // B5's crossfade exemption is "adjacent keys of ONE CYCLE". Cells 0-4 of
   // this bank are one cycle by construction, so they keep the crisp
   // cross-dissolve instead of taking the softened big-delta ghost.
@@ -975,6 +975,6 @@ test("U-E routing through one bank lengthens no hold and collapses no band", tes
 test("U-E the prop prohibition survives, and no unified cell is a prop-action cell", testPropProhibitionSurvives);
 test("U-E airborne body-centre anchoring covers the unified airborne cells", testAirborneAnchoringExtends);
 test("U-E the guard-flinch and wake-up height targets moved with the guard and idle", testHeightReconciliationsMoved);
-test("U-E the bank is registered in every loader, adjust table and both renderers", testBankRegistryAndWiring);
+test("U-E the bank is registered in every loader and painted size adjustment", testBankRegistryAndWiring);
 test("U-F the bank owns CONNECTED REGIONS — no track mixes generations, no retired cell is routed", testConnectedRegions);
 test("U-G the idle<->walk height agrees and the reaction ladder is monotonic", testIdleWalkHeightAndLadder);

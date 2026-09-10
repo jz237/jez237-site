@@ -36,19 +36,6 @@ function stripComments(source) {
   return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
 }
 
-// The object literal passed to createRenderer in ensureCinema3d(): keys are
-// one per line, shorthand (`state,`) or `key: value`, comments excluded.
-function hostLiteralKeys() {
-  const start = gameSource.indexOf("module.createRenderer({");
-  assert.ok(start > 0, "game.js builds the host with module.createRenderer({ ... })");
-  const end = gameSource.indexOf("\n    });", start);
-  assert.ok(end > start, "host literal closes");
-  const literal = stripComments(gameSource.slice(start, end));
-  const keys = new Set();
-  for (const match of literal.matchAll(/^\s*([A-Za-z_$][\w$]*)\s*[:,]/gm)) keys.add(match[1]);
-  return keys;
-}
-
 function hostReads() {
   const reads = new Map();
   for (const [name, source] of Object.entries(threeSources)) {
@@ -82,12 +69,14 @@ test("every host member the 3D layer reads is declared in the contract", () => {
   }
 });
 
-test("game.js hands createRenderer every contract member, and nothing undeclared", () => {
-  const keys = hostLiteralKeys();
-  const missing = CINEMA_HOST_MEMBERS.filter((name) => !keys.has(name));
-  assert.deepEqual(missing, [], `host literal lacks: ${missing.join(", ")}`);
-  const extra = [...keys].filter((name) => !CINEMA_HOST_MEMBERS.includes(name));
-  assert.deepEqual(extra, [], `host literal passes undeclared members: ${extra.join(", ")}`);
+test("the painted game cannot start the retired 3D renderer", () => {
+  for (const name of ["cinema3dAllowed", "cinema3dWorldActive"]) {
+    const declaration = gameSource.match(new RegExp("function " + name + "\\(\\) \\{[^}]*\\}"))?.[0];
+    assert.ok(declaration, name);
+    assert.equal(new Function(declaration + ";return " + name + "();")(), false);
+  }
+  assert.doesNotMatch(gameSource, /module\.createRenderer\(/);
+  assert.doesNotMatch(gameSource, /(?:from\s*|import\s*\()["'][^"']*renderer\/three\//);
 });
 
 test("missingHostMembers / assertHostContract report by tier", () => {
@@ -124,7 +113,7 @@ test("the 2D painters take a foreign context and the 2D world pass still uses th
   // The refactor must leave the 2D path drawing through the same functions.
   assert.match(gameSource, /function drawThrowable\(projectile, time, life\) \{\n  drawThrowableWith\(ctx, projectile, time, life\);\n\}/);
   assert.match(gameSource, /function drawThrowableWith\(c, projectile, time, life, options = \{\}\)/);
-  assert.match(gameSource, /if \(owner && options\.cable !== false\) \{/);
+  assert.match(gameSource, /if\(projectile\.style==='mouse'&&options\.cable!==false\)\{/);
   assert.match(gameSource, /drawPaintTrapWith\(ctx, trap, time\);/);
   assert.match(gameSource, /function drawPaintTrapWith\(c, trap, time\)/);
   assert.match(gameSource, /drawProjectileBodyWith\(ctx, projectile, time, life, pulse\);/);
@@ -137,38 +126,15 @@ test("the 2D painters take a foreign context and the 2D world pass still uses th
     const body = gameSource.slice(start, end);
     assert.ok(!/\bctx\./.test(body), `${name} never touches the module ctx`);
   }
-  // The host exposes them, keyed on the sim's own throwable split.
-  assert.match(gameSource, /paintProjectile: \(context, projectile, timeMs, options\) => \{/);
-  assert.match(gameSource, /if \(projectile\.throwable\) \{\n\s+drawThrowableWith\(context, projectile, timeMs, life, options\);/);
-  assert.match(gameSource, /drawProjectileBodyWith\(context, projectile, timeMs, life, pulse\);/);
-  assert.match(gameSource, /paintTrap: \(context, trap, timeMs\) => drawPaintTrapWith\(context, trap, timeMs\),/);
+
 });
 
-test("the CINEMA 3D overlay pass draws the 2D-only reads after the world restore", () => {
-  // Runs exactly once, after ctx.restore(), only while the 3D world is live
-  // on the fight screen.
-  const restoreAt = gameSource.indexOf("if (distortionRing) worldScreenTransform = ctx.getTransform();\n  ctx.restore();");
-  assert.ok(restoreAt > 0);
-  const callAt = gameSource.indexOf('if (cinema3dWorld && state.screen === "fight") drawCinema3dOverlayReads(time);');
-  assert.ok(callAt > restoreAt && callAt - restoreAt < 600, "overlay pass follows the world restore");
-  assert.equal(gameSource.split("drawCinema3dOverlayReads(time)").length, 3, "one definition, one call");
-  const start = gameSource.indexOf("function drawCinema3dOverlayReads(time) {");
-  const body = gameSource.slice(start, gameSource.indexOf("\n}\n", start));
-  // Every read the 2D world pass owns, replayed through the same function.
-  assert.match(body, /drawRhythmRings\(fighter, time\)/);
-  assert.match(body, /drawDizzyStars\(fighter, time\)/);
-  assert.match(body, /drawGuardCrushMarker\(fighter, time\)/);
-  assert.match(body, /drawCombatTextBody\(effect, alpha\)/);
-  assert.match(body, /strokeText\(profile\.name, weapon\.x, tagY\)/);
-  assert.match(body, /presentationDebug\.cinema3dOverlayReads \+= drawn;/);
-  // Anchored through the live framing camera, scaled by the projected size
-  // of 100 sim px (the CRT-punch pattern), never a fixed screen size.
-  assert.match(gameSource, /const above = project\(simX, simY - 100\);/);
-  assert.match(gameSource, /const scale = clamp\(\(at\.y - above\.y\) \/ 100, 0\.35, 2\.5\);/);
-  // The 2D world pass still draws the same reads through the shared bodies.
-  assert.match(gameSource, /if \(!measureOnly\) \{\s+drawContactShadow\(fighter, jump, renderSize, lunge\);\s+drawRhythmRings\(fighter, time\);/);
+test("the painted world owns the combat reads", () => {
+  assert.match(gameSource, /state\.fighters\.forEach\(\(fighter\) => drawDizzyStars\(fighter, time\)\);/);
+  assert.match(gameSource, /state\.fighters\.forEach\(\(fighter\) => drawGuardCrushMarker\(fighter, time\)\);/);
+  assert.match(gameSource, /drawRhythmRings\(fighter, time\);/);
   assert.match(gameSource, /if \(effect\.kind === "combatText"\) \{\n\s+drawCombatTextBody\(effect, alpha\);/);
-  assert.match(gameSource, /cinema3dOverlayReads: 0,/);
+  assert.match(gameSource, /function drawCinema3dOverlayReads\(\) \{\}/);
 });
 
 test("the 3D fighter layer carries the super-ready read (rim uniform, aura, embers)", () => {

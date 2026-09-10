@@ -30,7 +30,8 @@ const gameRoot = dirname(dirname(fileURLToPath(import.meta.url)));
 const resolve = (path) => join(gameRoot, path);
 const raw = JSON.parse(readFileSync(resolve(AUDIO_MANIFEST_PATH), "utf8"));
 const manifest = parseAudioManifest(raw);
-const gameSource = readFileSync(resolve("game.js"), "utf8");
+// Source assertions must work with both Git's LF and Windows CRLF checkouts.
+const gameSource = readFileSync(resolve("game.js"), "utf8").replace(/\r\n/g, "\n");
 
 // Every mp3 the tree ships under assets/audio, keyed the way the manifest
 // sections are: announcer/<file>, fighters/<id>/<file>, <file> (shared).

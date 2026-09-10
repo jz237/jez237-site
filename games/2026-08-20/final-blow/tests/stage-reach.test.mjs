@@ -1,5 +1,7 @@
 import assert from "node:assert/strict";
 import test from "node:test";
+import { runInNewContext } from "node:vm";
+import { PROP_RECTS } from "../engine/world-props.mjs";
 import { readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -74,7 +76,27 @@ test("every stage has a weapon, and Janney's is the loose brick", () => {
 });
 
 test("the brick has its own painter, clatter and pickup sound", () => {
-  assert.match(gameSource, /case "brick": \{/);
+  // Exercise the shipped painted-prop renderer, including its loading gate.
+  const source = gameSource.slice(gameSource.indexOf("function drawPhysicalProp("),
+    gameSource.indexOf("// The grounded weapon"));
+  const calls = [];
+  const atlas = { complete: true, naturalWidth: 1280 };
+  const context = {
+    PROP_RECTS, ensureWorldProps() {},
+    worldPropImages: { "world-props-real-v1": atlas },
+    state: { fighters: [] },
+  };
+  const paint = runInNewContext(`${source}\ndrawThrowableWith`, context);
+  const c = { globalAlpha: 1, save() {}, restore() {}, rotate() {},
+    drawImage(...args) { calls.push(args); } };
+  paint(c, { style: "brick", width: 75, height: 45, spinAngle: 0 }, 0, 1);
+  assert.equal(calls.length, 1, "brick is painted from its atlas");
+  assert.equal(calls[0][0], atlas);
+  assert.deepEqual(calls[0].slice(1, 5), PROP_RECTS.brick);
+  assert.ok(calls[0][7] <= 75 && calls[0][8] <= 45, "prop fits its bounds");
+  atlas.complete = false;
+  paint(c, { style: "brick", width: 75, height: 45 }, 0, 1);
+  assert.equal(calls.length, 1, "unloaded art is not drawn");
   assert.ok(STAGE_WEAPON_CLATTER.brick, "the brick has its own clatter material");
   const params = weaponClatterParams("brick", { draw: 0, level: 1 });
   assert.equal(params.style, "brick");
@@ -261,10 +283,10 @@ test("the decal view carries what CINEMA 3D needs and nothing else", () => {
   assert.equal(scarDecals([]).length, 0);
 });
 
-test("game.js pushes scars from all three causes and hands them to the bridge", () => {
+test("game.js pushes scars from all three causes and paints them in the world", () => {
   // Knockdown (the 5.0 site), wall splat (the arena edge) and stage-weapon
   // impacts — the whole point of #19 is that this list is longer than one.
-  assert.match(gameSource, /pushStageScar\(fighter\.x, force, \{ cause: "knockdown" \}\)/);
+  assert.match(gameSource, /pushStageScar\(fighter\.x, force, \{ cause: "knockdown", kind:landing\?\.surface\.mark \}\)/);
   assert.match(gameSource, /\{ cause: "wall", wall: wallDirection, y: impactY \}/);
   assert.match(gameSource, /pushStageScar\(projectile\.x, 1\.05, \{ cause: "weapon", weaponStyle: projectile\.style \}\)/);
   // A stage weapon has bounces: 0, so the landing phase is "expired" — the
@@ -281,7 +303,8 @@ test("game.js pushes scars from all three causes and hands them to the bridge", 
   // The model comes from the engine module, and the bridge view is exported.
   assert.match(gameSource, /from "\.\/engine\/stage-scars\.mjs"/);
   assert.match(gameSource, /function stageScarDecals\(\) \{\n  return scarDecals\(stageScars\);\n\}/);
-  assert.match(gameSource, /stageScars: stageScarDecals,/);
+  assert.match(gameSource, /function drawStageScars\(/);
+  assert.match(gameSource, /\n  drawStageScars\(\);/);
   // Still module-level, still rollback-guarded, still capped and deduped.
   assert.match(gameSource, /function pushStageScar\(x, force = 1, options = \{\}\) \{\n  if \(rollbackResimulating\) return null;/);
   assert.match(gameSource, /scar\.tick === tick && scar\.wall === wall && Math\.abs\(scar\.x - x\) < 1/);

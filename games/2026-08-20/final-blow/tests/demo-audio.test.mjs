@@ -277,7 +277,9 @@ test("the card hook runs BEFORE both ROUND announces and the bell closes the win
 test("the listeners arm on the gesture: exit key, any press, the chip, and a touch release", () => {
   const keydown = slice('window.addEventListener("keydown", (event) => {', "\n});");
   assert.ok(keydown.indexOf("armAttractAudio(event);") < keydown.indexOf("handleDemoSpeedKey(event)"), "arm before the transport claims keys");
-  assert.match(gameSource, /document\.addEventListener\("pointerdown", \(event\) => \{\n\s+if \(attractSoundChipPress\(event\)\) return;\n\s+armAttractAudio\(event\);\n\s+if \(isDemoShareTarget\(event\)\) return;\n\s+noteUserActivity\(\);\n\}, true\);/);
+  // Audio is armed before share/control/pause routing; the live listener's
+  // pause/resume and outside-demo behavior is exercised in demo-input.test.
+  assert.match(gameSource, /document\.addEventListener\("pointerdown", \(event\) => \{\s*if \(attractSoundChipPress\(event\)\) return;\s*armAttractAudio\(event\);\s*if \(isDemoShareTarget\(event\)\) return;/);
   assert.match(gameSource, /document\.addEventListener\("pointerup", \(event\) => \{ armAttractAudio\(event\); \}, true\);/);
   assert.match(functionBody("attractSoundChipPress"), /closest\?\.\("#demoHudSound"\)/);
   // The chip lives on the demo HUD, is the one thing on it that takes a pointer, and survives the phone layout.

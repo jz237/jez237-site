@@ -1,3 +1,7 @@
+import {CINEMATIC_FIGHTERS,CINEMATIC_KO_LANDING_TICK,CINEMATIC_KO_VICTORY_SECONDS,knockoutFrame,createKnockoutScene,sampleKnockoutScene,cinematicPortraitOpacity,cinematicScene,paintedFatalityScript,paintedFatalityFrame} from './engine/cinematic-scenes.mjs';
+import {cinematicLanding,cinematicContactParticles,settleCinematicParticle} from './engine/cinematic-scenes.mjs';
+import {cinematicDiscFlight,cinematicBassPulse,cinematicFeedbackPulse,cinematicSwarm,cinematicGroundWave,cinematicTeeBall,postWireGrip,postWireHeight,releasedPostWire,cinematicFoleyBetween,cinematicMusicGain,cinematicBanks} from './engine/cinematic-scenes.mjs';
+import {cinematicFatalityProfile as getGraphicFatality} from './engine/cinematic-scenes.mjs';
 import {FULL_LIBRARY_FIGHTERS,fullLibraryBanks,createFullLibrarySelector,sourceLibraryBank,fullLibraryAttackFrame} from './engine/full-library.mjs';
 import {FULL_REGISTRATION} from './engine/full-registration.mjs';
 import {SMOOTH_FIGHTERS,SMOOTH_BANKS,createSmoothSelector,smoothAttackFrame,smoothVerticalOffset} from './engine/painted-smooth.mjs';
@@ -18,7 +22,7 @@ import { INBETWEEN_FIGHTERS, INBETWEEN_BANKS, companionBank, repairedCell, creat
 import { INBETWEEN_SCALE } from "./engine/inbetween-scale.mjs";
 import { clippedCell } from "./engine/clipped-cells.mjs";
 import { PAINTED_FLOW_BANK, PAINTED_FLOW_FIGHTERS, PAINTED_FLOW_SCALE, paintedFlowPose } from "./engine/painted-flow.mjs";
-import { captureMotion, interpolateMotion, interpolateBodyMotion, fixedDemoFrame } from "./engine/render-motion.mjs";
+import { captureMotion, interpolateMotion, interpolateBodyMotion, fixedDemoFrame } from "./engine/cinematic-scenes.mjs";
 import {
   DEFAULT_INPUT_BUFFER_FRAMES,
   DeterministicRng,
@@ -601,7 +605,6 @@ import {
 } from "./engine/demo-voice.mjs";
 import {
   auditGraphicFatalities,
-  getGraphicFatality,
   graphicFatalitySnapshot,
 } from "./engine/fatalities.mjs";
 import {
@@ -993,6 +996,7 @@ const finisherScripts = Object.freeze(Object.fromEntries(
 
 function projectileFinisherScript(fighterId, variant = 0) {
   const script = finisherScripts[fighterId];
+  const directed=paintedFatalityScript(fighterId,variant,{...script,keys:directProjectileFinisher(script,script.impacts)});
   const fatality = getGraphicFatality(fighterId, variant);
   const labels = {
     prime: fatality.projectileSetup,
@@ -1000,14 +1004,13 @@ function projectileFinisherScript(fighterId, variant = 0) {
     kill: fatality.projectileFinale,
   };
   return {
-    ...script,
-    keys: directProjectileFinisher(script, script.impacts),
-    combo: `${fatality.special} FATALITY`,
-    signatureSpecial: fatality.special,
+    ...directed,
+    combo: directed.combo || `${fatality.special} FATALITY`,
+    signatureSpecial: directed.signatureSpecial || fatality.special,
     signatureProjectile: fatality.projectileId,
-    impacts: script.impacts.map((impact) => ({
+    impacts: directed.impacts.map((impact) => ({
       ...impact,
-      label: labels[impact.projectilePhase] || impact.label,
+      label: directed.paintedBank?impact.label:labels[impact.projectilePhase] || impact.label,
     })),
   };
 }
@@ -1060,8 +1063,64 @@ const finalBlowRealityImage = new Image();
 finalBlowRealityImage.src = "assets/final-blow-reality.webp";
 
 const fighterImages = {};
+const cinemaAtlases = {};
+const cinemaPortraits = {};
+// A failed Image is otherwise permanent for this page's lifetime. Retry it
+// after connectivity returns; the active scene's readiness latch stays fixed.
+window.addEventListener('online',()=>{
+  for(const images of [cinemaAtlases,cinemaPortraits])for(const [key,image] of Object.entries(images)){
+    if(image.complete&&!image.naturalWidth)delete images[key];
+  }
+});
+
+function ensureCinemaPortrait(id) {
+  if(!cinematicBanks(id).includes('portrait'))return null;
+  if(!cinemaPortraits[id]) {
+    const image=new Image();image.src=`assets/cinema/${id}-portrait-v1.webp`;
+    cinemaPortraits[id]=image;trackSheetDecode(`${id}:portrait`,image);
+  }
+  return cinemaPortraits[id];
+}
+const cinemaKoAvailability = new WeakMap();
+const cinemaPresentationAvailability = new WeakMap();
+// Scene objects are rebuilt by rollback. Keep a bounded local presentation
+// record under their match/round identity, without adding it to combat state.
+const cinemaPresentationHistory = new Map();
+function cinemaPresentationReady(scene) {
+  if(!scene)return {bodies:false,portrait:false};
+  if(!cinemaPresentationAvailability.has(scene)) {
+    const attacker=state.fighters[scene.winner],victim=state.fighters[1-scene.winner];
+    const key=JSON.stringify([state.matchSeed,state.round,state.rounds,attacker.def.id,victim.def.id,
+      scene.winner,scene.type??'ko',scene.anchor??null,scene.attackerX??null,scene.victimX??null]);
+    if(cinemaPresentationHistory.has(key)) {
+      const choice=cinemaPresentationHistory.get(key);
+      cinemaPresentationAvailability.set(scene,choice);return choice;
+    }
+    const live=image=>Boolean(image?.complete&&image.naturalWidth);
+    const bank=scene.script?.paintedBank||scene.attackerBank||'cinema-strike';
+    cinemaPresentationAvailability.set(scene,{
+      bodies:live(ensureCinemaAtlas(attacker.def.id,bank))&&live(ensureCinemaAtlas(victim.def.id,scene.script?.victimBanks?.[victim.def.id]||scene.script?.victimBank||scene.victimBank||'cinema-ko'))&&(!scene.script?.discFlight||live(ensureCinemaAtlas(attacker.def.id,'disc'))),
+      portrait:live(ensureCinemaPortrait(attacker.def.id)),
+    });
+    cinemaPresentationHistory.set(key,cinemaPresentationAvailability.get(scene));
+    while(cinemaPresentationHistory.size>64)cinemaPresentationHistory.delete(cinemaPresentationHistory.keys().next().value);
+  }
+  return cinemaPresentationAvailability.get(scene);
+}
+function ensureCinemaAtlas(id, bank = 'cinema-ko') {
+  if (bank==='portrait'||!cinematicBanks(id).includes(bank)) return null;
+  const key = `${id}:${bank}`;
+  if (!cinemaAtlases[key]) {
+    const image = new Image();
+    image.src = `assets/cinema/${id}-${bank}-v1.webp`;
+    cinemaAtlases[key] = image;
+    trackSheetDecode(key,image);
+  }
+  return cinemaAtlases[key];
+}
+const ensureCinemaKoAtlas = id => ensureCinemaAtlas(id);
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.7.15` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.0` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -1809,6 +1868,14 @@ function preloadAuthoredBanks(fighterIds) {
   // fighter whose manifest block rejects a cell.
   ensureMovesManifest();
   for (const id of ids) {
+    ensureCinemaKoAtlas(id);
+    ensureCinemaAtlas(id, 'cinema-strike'); if(id==='post')ensureCinemaAtlas(id, 'cinema-strike-low');
+    ensureCinemaAtlas(id, 'cinema-body-ko');
+    if(id==='ali')ensureCinemaAtlas(id,'disc');
+    if(['jez','benny','alan','ali','commissioner','cyraxx','deathblow','donald','post','devil'].includes(id))ensureCinemaAtlas(id,'cinema-overhead-ko');
+    ensureCinemaPortrait(id);
+    ensureCinemaAtlas(id,'cinema-fatal-0');
+    ensureCinemaAtlas(id,'cinema-fatal-1');
     if(fullLibraryEnabled)for(const bank of fullLibraryBanks(id))ensureFullAtlas(id,bank);
     // Counting only FIRST preloads keeps the probe meaningful: makeFighter is
     // also the rollback rebuild path, and a resimulation must not look like a
@@ -1955,6 +2022,8 @@ function unifiedGatesFor(fighterId) {
 
 function sheetDrawableNow(fighterId, bank) {
   const live = (image) => Boolean(image && image.complete && image.naturalWidth);
+  if(bank==='portrait')return live(cinemaPortraits[fighterId]);
+  if(bank.startsWith('cinema-'))return live(cinemaAtlases[`${fighterId}:${bank}`]);
   switch (bank) {
     case "unified": return live(fighterUnifiedAtlases[fighterId]);
     case "ext": return Boolean(ensureUnifiedExtAtlas(fighterId));
@@ -1976,7 +2045,7 @@ function fighterArtReadiness(fighterId) {
   if (!gates) {
     return { id: fighterId, manifest: false, ready: false, pending: ["manifest"], failed: [], banks: {} };
   }
-  const family = unifiedFamilyFor(gates);
+  const family = [...unifiedFamilyFor(gates),...cinematicBanks(fighterId)];
   const summary = readinessSummary(family.map((bank) => ({
     name: `${fighterId}:${bank}`,
     drawable: sheetDrawableNow(fighterId, bank),
@@ -2198,6 +2267,7 @@ let pendingPalettes = [0, 0];
 // shipped generation kept as the specials bank's per-cell fallback remaps,
 // silhouettes and builds a 3D texture like any other sheet (v5.3).
 function altAtlasSource(fighterId, bank) {
+  if(bank.startsWith('cinema-'))return {image:ensureCinemaAtlas(fighterId,bank),key:`${fighterId}:${bank}`};
   if(bank.startsWith("full-"))return {image:ensureFullAtlas(fighterId,bank),key:`${fighterId}:${bank}`};
   if(SMOOTH_BANKS.includes(bank))return {image:smoothAtlases[`${fighterId}:${bank}`],key:`${fighterId}:${bank}`};
   if(bank===RECOVERY_BANK)return {image:recoveryAtlases[fighterId],key:`${fighterId}:${bank}`};
@@ -2247,6 +2317,10 @@ function ensureAltAtlas(fighterId, bank = "base") {
 
 /** The atlas a side should draw from, alt palette applied when selected. */
 function paletteAtlas(fighterId, side, bank = "base") {
+  if (bank.startsWith('cinema-')) {
+    const base = ensureCinemaAtlas(fighterId,bank);
+    return matchPalettes[side] === 1 ? ensureAltAtlas(fighterId,bank) || base : base;
+  }
   const base = bank.startsWith("full-") ? ensureFullAtlas(fighterId,bank) : SMOOTH_BANKS.includes(bank) ? ensureSmoothAtlas(fighterId,bank) : bank===RECOVERY_BANK ? ensureRecoveryAtlas(fighterId) : bank===FOOTWORK_BANK ? footworkAtlases[fighterId] : bank===BRIDGE_BANK ? bridgeAtlases[fighterId] : bank.startsWith("inbetween-") ? inbetweenAtlases[`${fighterId}:${bank}`] : bank === PAINTED_FLOW_BANK ? paintedFlowAtlases[fighterId] : bank === "specials"
     ? fighterMoveAtlases[fighterId] || fighterAtlases[fighterId]
     // v5.3: the shipped specials generation, kept as the bank's per-cell
@@ -2592,6 +2666,7 @@ const state = {
   finishWinner: -1,
   finisherType: 0,
   finisher: null,
+  koScene: null,
   // Which way the pair is oriented: +1 when side 1 stands right of side 0. Both
   // fighters derive their facing from this single value, so they can never end
   // up pointing the same way. It is simulation state, not presentation — it
@@ -10370,6 +10445,14 @@ function updateElementalVfx(nowMs) {
     elementLastObservedTick = -1;
     return;
   }
+  // Authored end scenes own their effects. A defeated fighter can retain its
+  // last attack descriptor; it must not keep emitting its combat special.
+  if(state.phase !== 'fight') {
+    elementObs.forEach(resetElementObserver);
+    elementWash.level=Math.max(0,elementWash.level-dtSec*3);
+    elementLastObservedTick=state.simulationTick;
+    return;
+  }
   const tickAdvanced = state.simulationTick !== elementLastObservedTick;
   elementLastObservedTick = state.simulationTick;
 
@@ -10379,7 +10462,7 @@ function updateElementalVfx(nowMs) {
     const obs = elementObs[side];
     const attack = fighter.attacking;
     const kit = fighterElementKit(fighter.def);
-    const elemental = attack && kit && attack.kind === "special" && !fighter.cinematicFrame;
+    const elemental = attack && kit && attack.kind === "special" && fighter.cinematicFrame == null;
     if (!elemental) {
       obs.attackSerial = -1;
       obs.hadLimb = false;
@@ -11454,6 +11537,7 @@ function pushStageScar(x, force = 1, options = {}) {
     y: wall ? clamp(options.y ?? FLOOR - 150, 180, FLOOR - 20) : FLOOR - 46 + visualRandom() * 54,
     stageId: state.stage,
     cause: options.cause || "knockdown",
+    kind: options.kind || null,
     weaponStyle: options.weaponStyle || null,
     force,
     tick,
@@ -12246,6 +12330,7 @@ function saveRollbackState() {
     finishWinner: state.finishWinner,
     finisherType: state.finisherType,
     finisher,
+    koScene: cloneRollbackValue(state.koScene),
     facingAxis: state.facingAxis,
     cinematicZoom: state.cinematicZoom,
     shake: state.shake,
@@ -12283,6 +12368,7 @@ function restoreRollbackState(snapshot) {
   state.phaseTime = snapshot.phaseTime;
   state.finishWinner = snapshot.finishWinner;
   state.finisherType = snapshot.finisherType;
+  state.koScene = cloneRollbackValue(snapshot.koScene ?? null);
   // Older peers predate the pair axis; fall back to side 0's stored facing so a
   // mixed-build resimulation still restores a coherent orientation.
   state.facingAxis = snapshot.facingAxis ?? snapshot.fighters[0]?.values?.facing ?? 1;
@@ -13790,6 +13876,7 @@ function startOnlineMatch(config) {
 }
 
 function resetRound() {
+  state.koScene = null;
   cancelFightAnnouncement();
   resetMusicDuck();
   const carriedGrit = state.fighters.map((fighter) => fighter.meter);
@@ -13872,6 +13959,9 @@ function resetRound() {
 
 function announce(main, sub = "", duration = 1, { speak = null } = {}) {
   if (rollbackResimulating) return;
+  // Unlock/toast timers must not interrupt the body landing or speak over it.
+  if (pendingCinemaVictory && state.phase === 'roundover' && !state.finisher
+    && state.fighters[pendingCinemaVictory.winner] === pendingCinemaVictory.fighter) return;
   const box = $("#announcer");
   const strong = box.querySelector("strong");
   const text = String(main);
@@ -14113,8 +14203,27 @@ function trySkipFightFlow(input0 = {}, input1 = {}) {
   return false;
 }
 
+// Presentation-only pending call. Its clock follows phaseTime, so pausing a
+// demo cannot announce the winner halfway through a frozen fall.
+let pendingCinemaVictory = null;
+function presentCinemaVictory() {
+  const call = pendingCinemaVictory;
+  if (!call || rollbackResimulating) return;
+  if (state.screen !== 'fight' || state.phase !== 'roundover' || state.finisher
+    || state.fighters[call.winner] !== call.fighter) {
+    pendingCinemaVictory = null;
+    return;
+  }
+  if (roundWinHoldSeconds() - state.phaseTime < (state.koScene?.impact || 0) + CINEMATIC_KO_VICTORY_SECONDS) return;
+  pendingCinemaVictory = null;
+  announce(call.main, call.sub, 2.4, {speak:call.speak});
+  queueStoryCallouts(call.winner, -1);
+}
+
 function finishRound(winner, type = -1) {
   if (state.phase === "roundover" || state.phase === "result") return;
+  state.koScene = null;
+  if (!rollbackResimulating) pendingCinemaVictory = null;
   for (const fighter of state.fighters) clearGrabState(fighter);
   for (const fighter of state.fighters) { fighter.carriedWeapon = null; fighter.carryFrames = 0; }
   if (state.stageWeapon) state.stageWeapon.phase = "gone";
@@ -14165,19 +14274,36 @@ function finishRound(winner, type = -1) {
     // incremented above) earns the "<id>-wins" bank.
     const loser = state.fighters[1 - winner];
     const cause = roundEndCause({ finisherType: type, timer: state.timer, loserHealth: loser.health });
+    if (cause === ROUND_END_CAUSES.knockout && loser.grounded && state.fighters[winner].grounded) {
+      state.koScene = createKnockoutScene(winDef.id,winner,state.fighters[winner].x,loser.x,W,loser.def.id);
+      if(state.koScene) {
+        state.phaseTime = state.koScene.duration;
+        loser.down = false;
+        loser.knockdownFrames = 0;
+        loser.stun = 99;
+        loser.hitstunFrames = 5940;
+      }
+    }
     const matchWon = state.rounds[winner] >= roundsToWinValue();
     const speak = roundEndAnnouncerPlan({ cause, matchWon, fighterId: winDef.id });
-    announce(`${winDef.name} WINS`, roundEndBannerSub(cause), 2.4, { speak });
+    if (cause === ROUND_END_CAUSES.knockout) {
+      if (!rollbackResimulating) {
+        pendingCinemaVictory = {winner, fighter:state.fighters[winner],
+          main:`${winDef.name} WINS`, sub:roundEndBannerSub(cause), speak};
+        $('#announcer').classList.add('hidden');
+      }
+    } else announce(`${winDef.name} WINS`, roundEndBannerSub(cause), 2.4, { speak });
     // v5.3 SPECTACLE: the musical punctuation the round bookends never had —
     // a KO stab, a sour TIME OVER figure, or the match-win fanfare, played on
     // the stinger channel over the bed the duck above just lowered. The
     // decision is engine/music musicStingerForRoundEnd (a Final Blow returns
     // null there: performFinisher's 0.1 duck hands the frame to the gore mix,
     // and that branch never reaches here anyway).
-    playMusicStinger(musicStingerForRoundEnd({ cause, matchWon, finisher: type >= 0 }), {
+    if(state.koScene) state.koScene.stinger=musicStingerForRoundEnd({cause,matchWon,finisher:false});
+    else playMusicStinger(musicStingerForRoundEnd({ cause, matchWon, finisher: type >= 0 }), {
       source: `round${state.round}:${cause}`,
     });
-    if (cause !== ROUND_END_CAUSES.decision) sound("ko", loser);
+    if (cause !== ROUND_END_CAUSES.decision && !state.koScene) sound("ko", loser);
     // v5.3 SPECTACLE (ko-collapse): THE BODY GOES DOWN. checkKnockout stood
     // the victim up for the Final Blow stand-off (down=false, stun=99,
     // hitstunFrames=5940); when that window expires unspent the loser was
@@ -14186,13 +14312,13 @@ function finishRound(winner, type = -1) {
     // only a fighter still standing on the ground — so a DECISION and a
     // FINAL BLOW are both untouched (the finisher branch above never reaches
     // here at all). Everything after this is the ORDINARY knockdown path.
-    if (koCollapseOnRoundEnd({
+    if (!state.koScene && koCollapseOnRoundEnd({
       cause, health: loser.health, down: loser.down, grounded: loser.grounded,
     })) collapseKoLoser(loser);
   }
   // Wave 9: round-story callouts (FLAWLESS / COMEBACK / time-over / fatality)
   // layered after the primary call — guarded + deduped like announce().
-  if (!rollbackResimulating) queueStoryCallouts(winner, type);
+  if (!rollbackResimulating && !pendingCinemaVictory) queueStoryCallouts(winner, type);
   // Release 1.8 GRIND: bank the SF2 tally bonuses for this round (score is
   // meta, tracked outside the checksummed state) and, in Block War, layer the
   // elimination callout behind the KO banner via the announcer busy window.
@@ -14219,6 +14345,42 @@ function finishRound(winner, type = -1) {
   updateHud();
 }
 
+function updateKnockoutScene() {
+  const scene=state.koScene;
+  if(!scene || state.phase!=='roundover' || state.finisher)return;
+  const elapsed=scene.duration-state.phaseTime;
+  const pose=sampleKnockoutScene(scene,elapsed);
+  const attacker=state.fighters[scene.winner],victim=state.fighters[1-scene.winner];
+  attacker.x=pose.attackerX;victim.x=pose.victimX;
+  attacker.y=victim.y=FLOOR;
+  attacker.grounded=victim.grounded=true;
+  attacker.facing=scene.direction;victim.facing=-scene.direction;
+  attacker.vx=pose.walking?(scene.attackerTarget-scene.attackerX)/scene.approach:0;
+  attacker.walkTime=elapsed;
+  victim.vx=0;
+  attacker.attacking=null;
+  if(elapsed>=scene.impact-.14&&!scene.windPlayed) {
+    scene.windPlayed=true;
+    playCinematicFoley(scene.swingCue||'heavy',attacker);
+    duckMusic(.08,1100);
+  }
+  if(pose.impact&&!scene.impactPlayed) {
+    scene.impactPlayed=true;
+    collapseKoLoser(victim);
+    // Keep the knockout voice here, but save the physical fall for landing.
+    sound('ko',victim,{deferFoley:true});
+    playMusicStinger(scene.stinger,{source:`round${state.round}:cinema-ko`});
+    playCinematicFoley(scene.impactCue||'hit-heavy',attacker);
+    if(scene.objectCue)playCinematicFoley(scene.objectCue,attacker);
+    spawnHit(victim.x-scene.direction*(scene.hitOffset??55),FLOOR-fighterRenderSize(victim.def.id)*(scene.hitHeight??.65),attacker.def,'heavy',false,{direction:scene.direction});
+    duckMusic(.08,900);
+  }
+  if(pose.landing&&!scene.landingPlayed) {
+    scene.landingPlayed=true;
+    spawnKoCollapseLanding(victim);
+  }
+}
+
 function performFinisher(winner, type) {
   const attacker = state.fighters[winner];
   const victim = state.fighters[1 - winner];
@@ -14227,7 +14389,9 @@ function performFinisher(winner, type) {
   const fatality = getGraphicFatality(scriptId, type);
   const fatalityAt = script.impacts.find((impact) => impact.final)?.t ?? script.duration;
   const direction = attacker.x <= victim.x ? 1 : -1;
-  const anchor = clamp(victim.x, 390, W - 390);
+  // Painted scenes use the reviewed central staging in either direction.
+  // Their opening portrait covers relocation from a corner without zooming.
+  const anchor = script.paintedBank ? W*.5+direction*200 : clamp(victim.x, 390, W - 390);
   attacker.attacking = null;
   attacker.vx = 0;
   attacker.vy = 0;
@@ -14251,7 +14415,7 @@ function performFinisher(winner, type) {
     cinematicShot: "establishing",
     cinematicCuts: 0,
     impactCloseUps: 0,
-    peakZoom: 1.24,
+    peakZoom: 1,
     slowMotionHits: 0,
     signatureProjectileTriggered: false,
     signatureProjectileId: null,
@@ -14261,7 +14425,7 @@ function performFinisher(winner, type) {
     projectileBeatLabels: [],
     projectilePhase: "waiting",
   };
-  state.cinematicZoom = 1.24;
+  state.cinematicZoom = 1;
   state.shake = .16;
   if (!rollbackResimulating) {
     setTouchPrompt("");
@@ -14360,9 +14524,20 @@ function finisherAftermathSeconds(finisher) {
 }
 
 function fatalityWoundPoint(victim, fatality, direction) {
-  const leg = fatality.limb.endsWith("leg");
+  const paintedBenny=state.finisher?.script.paintedBank&&state.fighters[state.finisher.winner]?.def.id==='benny';
+  const leg = fatality.limb.endsWith("leg")&&!paintedBenny;
   const side = fatality.limb.startsWith("left") ? -1 : 1;
   const finisher = state.finisher;
+  if(finisher?.script.paintedBank&&finisher.elapsed>=finisher.fatalityAt) {
+    const progress=clamp((finisher.elapsed-finisher.fatalityAt)/1.3,0,1);
+    const size=fighterRenderSize(victim.def.id);
+    return {x:victim.x+direction*size*(leg?-.17:progress*.23),
+      y:FLOOR-size*(leg?.12:.65*(1-progress)+.11*progress)};
+  }
+  if(paintedBenny) {
+    const size=fighterRenderSize(victim.def.id);
+    return {x:victim.x-direction*size*.11,y:victim.y-size*(finisher.type===1?.78:.64)};
+  }
   // Pre-kill (projectile targeting, scripted impacts): the authored
   // standing-pose offsets, exactly as before.
   if (!(finisher?.fatalityTriggered && state.graphicFatalities
@@ -14670,8 +14845,17 @@ function triggerFinisherImpact(finisher, impact) {
   const gore = state.graphicFatalities;
   const scriptId = attacker.def.finisherScriptId || attacker.def.id;
   const fatalityProfile = getGraphicFatality(scriptId, finisher.type);
+  if(finisher.script.paintedBank&&impact.projectilePhase==='prime') {
+    focusFinisherProjectile(finisher,attacker,victim,fatalityProfile,'prime');
+    finisher.beatLabel=impact.label;
+    finisher.beatLife=.48;
+    playCinematicFoley(`object-${fatalityProfile.projectileId}`,attacker);
+    return;
+  }
   const fatality = finalImpact && gore ? fatalityProfile : null;
-  const wound = impact.projectilePhase
+  const wound = Number.isFinite(impact.hitHeight)
+    ? {x:victim.x-finisher.direction*(impact.hitOffset??12),y:victim.y-victim.height*impact.hitHeight}
+    : impact.projectilePhase
     ? fatalityWoundPoint(victim, fatalityProfile, finisher.direction)
     : { x: victim.x - finisher.direction * 12, y: victim.y - 125 };
   const pointX = wound.x;
@@ -14679,7 +14863,7 @@ function triggerFinisherImpact(finisher, impact) {
   const count = Math.round((finalImpact ? 20 : 7) * impact.power);
 
   victim.hitFlash = finalImpact ? .22 : .11;
-  attacker.specialGlow = finalImpact ? 1.1 : .45;
+  attacker.specialGlow = finisher.script.paintedBank?.08:finalImpact ? 1.1 : .45;
   // The long final-frame hold reads as time dilation without changing the
   // authored pose timeline or introducing a second simulation clock.
   state.hitstop = Math.max(state.hitstop, finalImpact ? .16 : .035 + impact.power * .018);
@@ -14687,7 +14871,7 @@ function triggerFinisherImpact(finisher, impact) {
   if (finalImpact && $("#flashToggle").checked) state.flash = .12;
   // Wave 7: the killing blow tears the screen — distortion ring from the
   // impact point plus a short RGB-split impulse (render-only latches).
-  if (finalImpact) latchFatalImpactPresentation(pointX, pointY);
+  if (finalImpact && !finisher.script.paintedBank) latchFatalImpactPresentation(pointX, pointY);
   finisher.beatLabel = impact.label;
   finisher.beatLife = finalImpact ? 1.05 : .48;
   finisher.impactCloseUps += 1;
@@ -14697,11 +14881,17 @@ function triggerFinisherImpact(finisher, impact) {
   }
   // Release 1.6 LOUD: synth heft under the scripted cinematic impacts too.
   impactLayerAudio(finalImpact ? "super" : "heavy", { counter: false });
-  if (!finalImpact) playMoveFoley(impact.projectilePhase === "prime" ? "throw" : `object-${finisher.signatureProjectileId}`, attacker);
+  if (impact.foley) playCinematicFoley(impact.foley,attacker);
+  else if (!finalImpact) playCinematicFoley(impact.projectilePhase === "prime" ? "throw" : `object-${finisher.signatureProjectileId}`, attacker);
+  if (impact.audioCue) sound(impact.audioCue,attacker);
   // Wave 9: the victim's fatality scream on the killing blow — a distinct
   // cue from the shared ko bell (guarded + tick-deduped inside).
   if (finalImpact) fighterReactiveCue(victim, "scream");
 
+  if(finisher.script.paintedBank&&!(finalImpact&&gore)) {
+    state.particles.push(...cinematicContactParticles(pointX,pointY,finisher.direction*(finisher.script.wirePull?-1:1),{
+      quality:state.performance.particleScale,reducedMotion:state.accessibility.reducedMotion,random:visualRandom}));
+  } else
   for (let index = 0; index < count; index += 1) {
     const angle = visualRandom() * Math.PI * 2;
     const speed = 100 + visualRandom() * (finalImpact ? 670 : 330) * impact.power;
@@ -14744,10 +14934,12 @@ function triggerFinisherImpact(finisher, impact) {
     // Time dilation for the killing blow, then a pumping wound. Both are plain
     // numbers on the finisher, so rollback snapshots reproduce them exactly.
     finisher.slowMotionTicks = 42;
-    finisher.arterialFrames = ARTERIAL_FRAMES;
+    // Blunt-impact choreography leaves the painted body intact, without
+    // the severed-limb emitter inherited from the projectile finishers.
+    finisher.arterialFrames = finisher.script.intactImpact ? 0 : ARTERIAL_FRAMES;
     finisher.fatalityLimb = fatality.limb;
     finisher.fatalitySpecial = fatality.special;
-    finisher.beatLabel = fatality.projectileFinale;
+    finisher.beatLabel = finisher.script.paintedBank?impact.label:fatality.projectileFinale;
     finisher.beatLife = 1.45;
     // 2.8: the fatality decals (pool, lens blood, severed limb) must survive
     // the whole cinematic hold INCLUDING the longer pressure-model bleed-out —
@@ -14757,7 +14949,7 @@ function triggerFinisherImpact(finisher, impact) {
       kind: "fatalityPool",
       profileId: fatality.id,
       family: fatality.family,
-      x: victim.x,
+      x: victim.x+(finisher.script.paintedBank?65*finisher.direction:0),
       y: FLOOR + 4,
       age: 0,
       life: decalLife,
@@ -14766,6 +14958,9 @@ function triggerFinisherImpact(finisher, impact) {
       secondary: bloodDeep,
       direction: finisher.direction,
       scale: fatality.blood,
+      painted: Boolean(finisher.script.paintedBank),
+      intact: Boolean(finisher.script.intactImpact),
+      wet: ["somerset","cruise"].includes(state.stage),
     });
     const goreCount = Math.round(42 * fatality.blood * state.performance.particleScale);
     for (let index = 0; index < goreCount; index += 1) {
@@ -14783,7 +14978,7 @@ function triggerFinisherImpact(finisher, impact) {
         color: visualRandom() > .28 ? bloodBright : bloodDeep,
       });
     }
-    const fragmentCount = Math.max(12, Math.round(30 * fatality.separation * state.performance.particleScale));
+    const fragmentCount = finisher.script.paintedBank ? 0 : Math.max(12, Math.round(30 * fatality.separation * state.performance.particleScale));
     for (let index = 0; index < fragmentCount; index += 1) {
       const angle = -Math.PI * (.08 + visualRandom() * .84);
       const speed = 230 + visualRandom() * 760 * fatality.separation;
@@ -14805,7 +15000,7 @@ function triggerFinisherImpact(finisher, impact) {
         color: index % 4 ? bloodBright : bloodDeep,
       });
     }
-    state.effects.push({
+    if(!finisher.script.paintedBank)state.effects.push({
       kind: "goreShockwave",
       family: fatality.family,
       direction: finisher.direction,
@@ -14817,7 +15012,7 @@ function triggerFinisherImpact(finisher, impact) {
       secondary: bloodDeep,
       scale: fatality.separation,
     });
-    state.effects.push({
+    if(!finisher.script.paintedBank)state.effects.push({
       kind: "lensBlood",
       family: fatality.family,
       variant: finisher.type,
@@ -14832,7 +15027,7 @@ function triggerFinisherImpact(finisher, impact) {
     // One unmistakable complete limb, not an abstract meat fragment. It arcs
     // out of the signature-special impact, bounces once, and stays in the
     // aftermath beside its own blood trail for the full cinematic hold.
-    state.effects.push({
+    if(!finisher.script.paintedBank)state.effects.push({
       kind: "severedLimb",
       profileId: fatality.id,
       limb: fatality.limb,
@@ -14859,10 +15054,10 @@ function triggerFinisherImpact(finisher, impact) {
     // 2.8: impact aerosol — heavy hits throw a low blood mist that hangs.
     spawnGoreMist(pointX, pointY, 7 + Math.round(5 * fatality.blood), 1.2);
     // 2.8: the fighter's bespoke signature gore beat (engine/gore.mjs table).
-    spawnSignatureGoreBeat(scriptId, fatality, pointX, pointY, finisher.direction);
+    if(!finisher.script.intactImpact)spawnSignatureGoreBeat(scriptId, fatality, pointX, pointY, finisher.direction);
     // 2.8 gore audio: wet tear + bone report layered under the 'fatal' hit.
     goreSfx("gore-squelch", victim);
-    goreSfx("gore-bone");
+    if(!finisher.script.intactImpact)goreSfx("gore-bone");
   }
   sound(finalImpact ? "fatal" : impact.sound, attacker);
 }
@@ -14874,7 +15069,12 @@ function updateFinisher(dt) {
   const victim = state.fighters[1 - finisher.winner];
   const slowMo = (finisher.slowMotionTicks || 0) > 0;
   if (slowMo) finisher.slowMotionTicks -= 1;
+  const previousElapsed=finisher.elapsed;
   finisher.elapsed = Math.min(finisher.script.duration, finisher.elapsed + dt * (slowMo ? 0.38 : 1));
+  if(!rollbackResimulating)for(const cue of cinematicFoleyBetween(finisher.script,previousElapsed,finisher.elapsed)) {
+    if(cue.audioCue) sound(cue.audioCue,attacker);
+    else playCinematicFoley(cue.kind,attacker);
+  }
   // 2.8 critic round (M1/M3/M6 keystone): finisher.elapsed SATURATES at the
   // script duration, so every aftermath derived from it froze ~0.5s after
   // the killing blow — scattered pieces hung mid-flight, the collapse
@@ -14885,7 +15085,12 @@ function updateFinisher(dt) {
     finisher.aftermathSeconds = (finisher.aftermathSeconds || 0) + dt * (slowMo ? 0.38 : 1);
   }
   finisher.beatLife = Math.max(0, finisher.beatLife - dt);
-  const pose = spaceFinisherPose(sampleFinisher(finisher.script.keys, finisher.elapsed));
+  let pose = spaceFinisherPose(sampleFinisher(finisher.script.keys, finisher.elapsed));
+  if(finisher.script.paintedBank)pose={...pose,vy:0,vr:0};
+  // Apply the painted matchup's clearance for the whole scene so feet do
+  // not jump apart at contact. Direction is applied below for either facing.
+  const victimClearance=finisher.script.victimSpacing?.[victim.def.id]||0;
+  if(victimClearance)pose={...pose,ax:pose.ax-victimClearance};
 
   attacker.x = finisher.anchor + finisher.direction * pose.ax;
   attacker.y = FLOOR - pose.ay;
@@ -14899,9 +15104,10 @@ function updateFinisher(dt) {
   state.facingAxis = state.fighters[0].facing;
   attacker.grounded = pose.ay < 2;
   victim.grounded = pose.vy < 2;
-  if (!finisher.landingFoleyPlayed && finisher.elapsed >= finisher.fatalityAt + .48) {
+  if (!finisher.landingFoleyPlayed && finisher.elapsed >= finisher.fatalityAt + (finisher.script.paintedBank?CINEMATIC_KO_LANDING_TICK/60:.48)) {
     finisher.landingFoleyPlayed = true;
-    playMoveFoley("ko", victim);
+    playCinematicFoley("ko", victim);
+    if(finisher.script.paintedBank)spawnKoCollapseLanding(victim);
   }
   attacker.cinematicFrame = pose.af;
   victim.cinematicFrame = pose.vf;
@@ -14927,7 +15133,7 @@ function updateFinisher(dt) {
       effect.targetY = projectileTarget.y;
     }
   }
-  if (finisher.fatalityTriggered && state.graphicFatalities && !state.accessibility.reducedMotion
+  if (!finisher.script.paintedBank && finisher.fatalityTriggered && state.graphicFatalities && !state.accessibility.reducedMotion
     && finisher.elapsed > finisher.fatalityAt) {
     const aftermath = finisherAftermathSeconds(finisher);
     // 2.8 collapse weight (engine/gore.mjs): a half-second beat of stillness,
@@ -14979,7 +15185,7 @@ function updateFinisher(dt) {
       }
     }
   }
-  attacker.specialGlow = Math.max(attacker.specialGlow, .28 + Math.sin(finisher.elapsed * 9) * .08);
+  attacker.specialGlow = Math.max(attacker.specialGlow, finisher.script.paintedBank?.06:.28 + Math.sin(finisher.elapsed * 9) * .08);
   attacker.block = false;
   victim.block = false;
   attacker.crouch = false;
@@ -17271,7 +17477,10 @@ function advanceFighterTimers(fighter) {
       fighter.knockdownFrames = 1;
     } else {
       fighter.knockdownFrames = Math.max(0, fighter.knockdownFrames - 1);
-      if (koLie && koCollapseThudTick(fighter.knockdownFrames, DEFENSE_RULES.knockdownFrames)) {
+      const landingTick = CINEMATIC_FIGHTERS.includes(fighter.def.id)
+        ? fighter.knockdownFrames === DEFENSE_RULES.knockdownFrames - CINEMATIC_KO_LANDING_TICK
+        : koCollapseThudTick(fighter.knockdownFrames, DEFENSE_RULES.knockdownFrames);
+      if (koLie && landingTick && !state.koScene) {
         spawnKoCollapseLanding(fighter);
       }
       if (fighter.knockdownFrames === 0) {
@@ -17386,7 +17595,14 @@ function spawnSweat(fighter, count, energy = 1) {
 
 function spawnKnockdownImpact(fighter, landingVelocity) {
   const force = clamp(Math.abs(landingVelocity) / 760, 0.55, 1.35);
-  const count = Math.max(5, Math.round(14 * force * state.performance.particleScale));
+  const cinematic=state.phase==='roundover'&&(state.finisher||state.koScene||fighter.health<=0);
+  const landing=cinematic?cinematicLanding(state.stage,fighter.x,FLOOR,{force,
+    quality:state.performance.particleScale,reducedMotion:state.accessibility.reducedMotion,random:visualRandom}):null;
+  if(landing) {
+    state.particles.push(...landing.particles);
+    if(landing.ripple)state.effects.push(landing.ripple);
+  }
+  const count = landing?0:Math.max(5, Math.round(14 * force * state.performance.particleScale));
   for (let index = 0; index < count; index += 1) {
     const direction = visualRandom() < 0.5 ? -1 : 1;
     state.particles.push({
@@ -17403,7 +17619,7 @@ function spawnKnockdownImpact(fighter, landingVelocity) {
       color: visualRandom() > 0.4 ? "#777067" : "#4e4a46",
     });
   }
-  state.effects.push({
+  if(!landing?.surface.wet)state.effects.push({
     kind: "floorImpact", x: fighter.x, y: FLOOR - 4,
     width: 62 + force * 74, life: 0.44, max: 0.44, color: "#b7a99a",
   });
@@ -17411,7 +17627,7 @@ function spawnKnockdownImpact(fighter, landingVelocity) {
   // flavour this stage's floor leaves (5.3: crack/skid on asphalt, splinter
   // on the boards, splash on the wet deck, cracked tile and spilled food at
   // the buffet, a dented rut in Janney's rubble).
-  pushStageScar(fighter.x, force, { cause: "knockdown" });
+  pushStageScar(fighter.x, force, { cause: "knockdown", kind:landing?.surface.mark });
   if (state.graphicFatalities) {
     const life = 2.4 + force;
     state.effects.push({
@@ -17423,7 +17639,9 @@ function spawnKnockdownImpact(fighter, landingVelocity) {
     side: state.fighters[1 - fighter.side] ? 1 - fighter.side : -1,
     splatX: fighter.x,
   });
-  sound("hit-heavy", state.fighters[state.lastImpactSide] || fighter);
+  // Cinematic landings are body weight hitting the floor, not another punch.
+  sound("hit-heavy", cinematic ? fighter : state.fighters[state.lastImpactSide] || fighter,
+    cinematic ? {move:{kind:'throw',profileId:'cinematic-landing'}} : {});
 }
 
 // --- Corner wall-splat (wave 4): the arena edge answers a slammed fighter ---
@@ -20230,6 +20448,7 @@ function simulatePreparedGameTick(dt, input0 = {}, input1 = {}) {
   const fatalitySpotActive = Boolean(state.finisher?.fatalityTriggered) && state.graphicFatalities;
   fatalitySpotLevel = clamp(fatalitySpotLevel + (fatalitySpotActive ? 0.05 : -0.07), 0, 1);
   if (state.finisher) updateFinisher(dt);
+  else if (state.koScene && state.phase === 'roundover') updateKnockoutScene();
   else {
     updateProjectiles(dt);
     updatePaintTraps();
@@ -20302,6 +20521,7 @@ function advanceVisualEffects(dt) {
     particle.y += particle.vy * dt;
     particle.vx *= particle.drag ?? 0.985;
     if (Number.isFinite(particle.spin)) particle.rotation = (particle.rotation || 0) + particle.spin * dt;
+    settleCinematicParticle(particle);
     if (particle.kind === "arterial" && particle.y >= FLOOR - 2 && particle.vy > 0) {
       particle.life = 0;
       // 2.8: budgets live in engine/gore.mjs — floor + wall stains sum to the
@@ -20607,7 +20827,7 @@ function drawCover(image, offsetX = 0) {
 
 function finisherRealityAmount() {
   const finisher = state.finisher;
-  if (!finisher) return 0;
+  if (!finisher || finisher.script.paintedBank) return 0;
   const duration = state.accessibility.reducedMotion ? .16 : .42;
   const linear = clamp(finisher.elapsed / duration, 0, 1);
   return linear * linear * (3 - 2 * linear);
@@ -20688,6 +20908,7 @@ function drawStage(time) {
   }
   drawRealityBreakAtmosphere(time, reality);
   updateRoundWinBeatLatch();
+  presentCinemaVictory();
   drawRoundWinBeat(state.simulationTick, center);
 }
 
@@ -22130,6 +22351,52 @@ function drawVetAtmosphere(time) {
 // the pre-2.7 cell) draws. Every consumer — drawFighter, the observers, the
 // CINEMA 3D bridge — reads through here, so both renderers always agree.
 function fighterAnimationPose(fighter) {
+  const owner = state.fighters?.[fighter.side];
+  if (!fighter.preview && owner) {
+    if(state.finisher?.script.paintedBank&&cinemaPresentationReady(state.finisher).bodies&&fighter.side===state.finisher.winner) {
+      const bank=state.finisher.script.paintedBank;
+      const image=ensureCinemaAtlas(fighter.def.id,bank);
+      if(image?.complete&&image.naturalWidth) {
+        const pose={bank,frame:paintedFatalityFrame(state.finisher.script,state.finisher.elapsed)};
+        recordPoseTrace(fighter,pose);return pose;
+      }
+    }
+    if(state.finisher?.script.paintedBank&&cinemaPresentationReady(state.finisher).bodies&&fighter.side!==state.finisher.winner) {
+      const victimBank=state.finisher.script.victimBanks?.[fighter.def.id]||state.finisher.script.victimBank||'cinema-ko';
+      const image=ensureCinemaAtlas(fighter.def.id,victimBank);
+      if(image?.complete&&image.naturalWidth) {
+        const relative=state.finisher.elapsed-state.finisher.fatalityAt;
+        const trapped=state.finisher.impactIndex>=2;
+        const brace=state.finisher.script.victimBraceFrames;
+        const frame=relative>=0?Math.max(1,brace?paintedFatalityFrame({paintedFrames:brace},state.finisher.elapsed):0,knockoutFrame(relative)):brace
+          ?paintedFatalityFrame({paintedFrames:brace},state.finisher.elapsed):trapped?1:0;
+        const pose={bank:victimBank,frame};recordPoseTrace(fighter,pose);return pose;
+      }
+    }
+    const scene=state.phase==='roundover'&&!state.finisher?state.koScene:null;
+    if(scene&&cinemaPresentationReady(scene).bodies) {
+      const beat=sampleKnockoutScene(scene,scene.duration-state.phaseTime);
+      const attacker=fighter.side===scene.winner;
+      const bank=attacker?(scene.attackerBank||'cinema-strike'):scene.victimBank||'cinema-ko';
+      const image=ensureCinemaAtlas(fighter.def.id,bank);
+      if(!beat.walking && (attacker?!beat.victory:beat.victimFrame!==null) && image?.complete&&image.naturalWidth) {
+        const pose={bank,frame:attacker?beat.attackerFrame:beat.victimFrame};
+        recordPoseTrace(fighter,pose);return pose;
+      }
+      if(!attacker && beat.victimFrame===null) return image?.complete&&image.naturalWidth
+        ? {bank,frame:0} : {bank:UNIFIED_EXT4_BANK,frame:5};
+    }
+    if (state.phase !== 'roundover') cinemaKoAvailability.delete(owner);
+    if (!scene && state.phase === 'roundover' && !state.finisher && fighter.health <= 0 && fighter.grounded) {
+      const image = ensureCinemaKoAtlas(fighter.def.id);
+      if (!cinemaKoAvailability.has(owner)) cinemaKoAvailability.set(owner,Boolean(image?.complete&&image.naturalWidth));
+      if (cinemaKoAvailability.get(owner)) {
+        const pose={bank:'cinema-ko',frame:knockoutFrame(roundWinHoldSeconds()-state.phaseTime)};
+        recordPoseTrace(fighter,pose);
+        return pose;
+      }
+    }
+  }
   // v2.9 critic round 2 (B4): a move with no kit art of its own draws from the
   // shared banks, and those banks are where a prop can leak into a bare-handed
   // swing. The gate is passed here, at the single resolution choke point, so
@@ -22165,10 +22432,10 @@ function fighterAnimationPose(fighter) {
   const pose = smooth || recovery || footwork || bridge || withInbetween(fighter, flow && paintedFlowAvailability.get(fighter.attacking) ? flow : specialsGenerationPose(fighter.def.id, swung));
   const shown=presentationPose(pose);
   const image=fullLibraryEnabled&&ensureFullAtlas(fighter.def.id,shown.artBank||shown.bank);
-  const owner=fighter.preview?fighter:state.fighters?.[fighter.side];
-  const render=owner!==fighter;
+  const animationOwner=fighter.preview?fighter:state.fighters?.[fighter.side];
+  const render=animationOwner!==fighter;
   const tick=fighter.preview?fighter.previewTick:state.simulationTick+(render?state.simulationAlpha-1:0);
-  const finalPose=fullLibraryEnabled?(render?selectFullLibraryRender:selectFullLibrary)(owner,fighter,shown,tick,Boolean(image?.complete&&image.naturalWidth)):pose;
+  const finalPose=fullLibraryEnabled?(render?selectFullLibraryRender:selectFullLibrary)(animationOwner,fighter,shown,tick,Boolean(image?.complete&&image.naturalWidth)):pose;
   recordPoseTrace(fighter, finalPose);
   return finalPose;
 }
@@ -22220,6 +22487,7 @@ function showcasePoseDescriptor(fighter, ext5Cell = UNIFIED_EXT5_CELLS.victory) 
 // finishRound sets, read again by the win pose to know how far into the hold
 // it is (phaseTime counts down; both are snapshotted, so a resim agrees).
 function roundWinHoldSeconds() {
+  if(state.phase==='roundover'&&!state.finisher&&state.koScene)return state.koScene.duration;
   return state.mode === "demo" ? DEMO_KO_HOLD_SECONDS : ROUND_WIN_HOLD_SECONDS;
 }
 
@@ -22453,7 +22721,9 @@ function fighterPoseDescriptor(fighter) {
     // own second drawings (engine/bookends roundWinShowcaseCell).
     if (winner) {
       const hold = roundWinHoldSeconds();
-      return showcasePoseDescriptor(fighter, victoryCell(fighter.def.id, hold - state.phaseTime));
+      const delay = other.health <= 0 ? (state.koScene?.impact || 0) + CINEMATIC_KO_VICTORY_SECONDS : 0;
+      if (hold - state.phaseTime < delay) return {bank:'unified',frame:0};
+      return showcasePoseDescriptor(fighter, victoryCell(fighter.def.id, hold - state.phaseTime - delay));
     }
   }
   // MOTION FIX 4 + 11: victim REACTION TRACKS through the scripted super
@@ -23266,6 +23536,7 @@ function drawDamagedAtlasFrame(side, atlas, frame, size) {
 
 function activeGraphicFatality(fighter) {
   const finisher = state.finisher;
+  if(finisher?.script.paintedBank)return null;
   if (!state.graphicFatalities || !finisher?.fatalityTriggered || fighter.side === finisher.winner) return null;
   const attacker = state.fighters[finisher.winner];
   const scriptId = attacker?.def.finisherScriptId || attacker?.def.id || "deathblow";
@@ -24523,6 +24794,7 @@ function downTiltFor(fighterId, bank, frame) {
 }
 
 function presentationVerticalOffset(id,bank,frame,height,artBank=bank) {
+  if (bank.startsWith('cinema-')) return 10;
   const base=smoothVerticalOffset(id,bank,frame,height) ?? cellVerticalOffset(id,bank,frame,height);
   const registration=FULL_REGISTRATION[id]?.[artBank]?.[frame];
   const air=Math.max(0,Math.min(1,height/110));
@@ -24530,6 +24802,20 @@ function presentationVerticalOffset(id,bank,frame,height,artBank=bank) {
 }
 
 function bankSheetAdjust(fighterId, bank) {
+  if (bank.startsWith('cinema-')) {
+    // Guard heights measured from the packed audit, relative to the KO bank.
+    const registration=fighterId==='jez'?(bank==='cinema-overhead-ko'?272/283:bank==='cinema-fatal-0'?272/246:bank==='cinema-fatal-1'?272/283:bank==='cinema-body-ko'?272/304:1)
+      :fighterId==='benny'?(bank==='cinema-overhead-ko'?296/297:bank==='cinema-fatal-0'?296/299:bank==='cinema-fatal-1'?296/276:bank==='cinema-body-ko'?296/304:1)
+      :fighterId==='alan'?(bank==='cinema-overhead-ko'?275/263:bank==='cinema-fatal-1'?275/258:bank==='cinema-fatal-0'?275/302:bank==='cinema-strike'?275/304:bank==='cinema-body-ko'?275/256:1)
+      :fighterId==='ali'?(bank==='cinema-fatal-1'?293/297:bank==='cinema-overhead-ko'?293/304:bank==='cinema-fatal-0'?293/262:bank==='cinema-strike'?293/296:bank==='cinema-body-ko'?293/282:1)
+      :fighterId==='commissioner'?(bank==='cinema-fatal-0'?294/284:bank==='cinema-fatal-1'?294/247:bank==='cinema-overhead-ko'?294/304:bank==='cinema-strike'?294/266:bank==='cinema-body-ko'?294/285:1)
+      :fighterId==='cyraxx'?(bank==='cinema-fatal-0'?301/277:bank==='cinema-fatal-1'?301/288:bank==='cinema-overhead-ko'?301/304:bank==='cinema-strike'?301/304:bank==='cinema-body-ko'?301/288:1)
+      :fighterId==='deathblow'?(bank==='cinema-fatal-0'?286/281:bank==='cinema-fatal-1'?286/255:bank==='cinema-overhead-ko'?286/281:bank==='cinema-strike'?286/289:bank==='cinema-body-ko'?286/260:1)
+      :fighterId==='devil'?(bank==='cinema-fatal-0'?246/188:bank==='cinema-fatal-1'?246/285:bank==='cinema-overhead-ko'?246/286:bank==='cinema-strike'?246/200:bank==='cinema-body-ko'?246/245:1)
+      :fighterId==='donald'?(bank==='cinema-fatal-1'?282/290:bank==='cinema-fatal-0'?282/242:bank==='cinema-overhead-ko'?282/290:bank==='cinema-strike'?282/247:bank==='cinema-body-ko'?282/252:1)
+      :fighterId==='post'?(bank==='cinema-fatal-1'?292/288:bank==='cinema-fatal-0'?292/291:bank==='cinema-overhead-ko'?292/304:bank.startsWith('cinema-strike')?292/304:bank==='cinema-body-ko'?292/260:1):1;
+    return (UNIFIED_SHEET_ADJUST[fighterId] || 1)*registration;
+  }
   if (SMOOTH_BANKS.includes(bank) || bank === RECOVERY_BANK || bank === BRIDGE_BANK || bank === FOOTWORK_BANK) return UNIFIED_SHEET_ADJUST[fighterId] || 1;
   if (bank === PAINTED_FLOW_BANK) return PAINTED_FLOW_SCALE[fighterId] || 1;
   if (bank === "specials") return MOVE_SHEET_ADJUST[fighterId] || 1;
@@ -24836,7 +25122,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   // reads as hovering. The old whole-sprite bob translate was exactly that
   // hover — the contact shadow rode up and down with it while the cast
   // shadow stayed planted, so the ground contact never agreed with itself.
-  const bob = fighter.cinematicFrame === null && fighter.grounded && !fighter.stun && !fighter.block && !attack
+  const bob = !pose.bank.startsWith('cinema-') && fighter.cinematicFrame === null && fighter.grounded && !fighter.stun && !fighter.block && !attack
     ? Math.sin((moving ? fighter.walkTime * 20 : fighter.animTime * 10) + fighter.side * 2) * (moving ? 1.8 : 2.7) : 0;
   // Wave 16: the side's palette pick decides which cached atlas draws.
   const atlas = paletteAtlas(fighter.def.id, fighter.side, pose.artBank || pose.bank);
@@ -24877,8 +25163,8 @@ function drawFighter(fighter, time, measureOnly = false) {
   const opponent = state.fighters[1 - fighter.side];
   const extensionRoom = Math.max(0, (Math.abs((opponent?.x ?? fighter.x) - fighter.x) - 130) * .35);
   const lunge = Math.min(extensionRoom, attackSwing * (attackKind === "special" ? 68 : attackKind === "heavy" ? 46 : 29));
-  const crouchScale = fighter.crouch ? 0.88 : 1;
-  const crouchDrop = fighter.crouch ? 21 : 0;
+  const crouchScale = fighter.crouch && !pose.bank.startsWith('cinema-') ? 0.88 : 1;
+  const crouchDrop = fighter.crouch && !pose.bank.startsWith('cinema-') ? 21 : 0;
   const reducedMotion = state.accessibility.reducedMotion;
   // Breathing idle: chest-rise scaleY whose rate and depth grow as health
   // drops, so a gassed fighter visibly heaves before any UI is checked.
@@ -24933,7 +25219,7 @@ function drawFighter(fighter, time, measureOnly = false) {
   if (fighter.cinematicScale !== 1) ctx.scale(fighter.cinematicScale, fighter.cinematicScale);
 
   // v4.6 PRONE: tilt the drawing only as far as it still needs to lie down.
-  const downTilt = fighter.down ? downTiltFor(fighter.def.id, pose.bank, frame) : 0;
+  const downTilt = fighter.down && !pose.bank.startsWith('cinema-') ? downTiltFor(fighter.def.id, pose.bank, frame) : 0;
   if (downTilt > 0) {
     const share = downTilt / DOWN_TILT_RADIANS;
     ctx.rotate(-fighter.facing * downTilt);
@@ -24951,7 +25237,9 @@ function drawFighter(fighter, time, measureOnly = false) {
   // about the body centre (the somersault axis); dash/walk lean, recoil
   // wobble and dizzy sway pivot about the feet. Same layer feeds poseRig in
   // the 3D renderer, so both worlds animate identically.
-  const motion = fighterMotionTransform(fighter);
+  const motion = pose.bank.startsWith('cinema-')
+    ? {flipRotation:0,rotation:0,offsetX:0,offsetY:0,scaleX:1,scaleY:1,stretchActive:false}
+    : fighterMotionTransform(fighter);
   if (motion.flipRotation !== 0) {
     const flipPivot = renderSize * 0.52;
     ctx.translate(0, -flipPivot);
@@ -24963,6 +25251,9 @@ function drawFighter(fighter, time, measureOnly = false) {
   // lunge toward the target / victim stagger step away from it. Applied
   // PRE-mirror so mixed-authored sheets can never flip the direction.
   const bodyOffsetX = boundedBodyOffset(motion.offsetX,fighter.facing,Math.abs((opponent?.x??fighter.x)-fighter.x),lunge);
+  // The punch sheet registers the rear shoe, preserving extension room.
+  // Restore its standing-body origin without fitting or cropping the arm.
+  if(pose.bank.startsWith('cinema-strike')||pose.bank.startsWith('cinema-fatal-'))ctx.translate(fighter.facing*(fighter.def.id==='jez'?80:fighter.def.id==='alan'?75:fighter.def.id==='ali'?40:67)/320*renderSize,0);
   if (bodyOffsetX !== 0 || motion.offsetY !== 0) ctx.translate(bodyOffsetX, motion.offsetY);
   // MOTION FIX 4: victims never freeze solid — a 1-2px pose shiver rides
   // every hold window (hitstop and the multi-hit super storms), re-hashed
@@ -26105,6 +26396,26 @@ function fatalityRivuletCanvas() {
 }
 
 function drawFatalityPool(effect, alpha) {
+  if(effect.painted){
+    // A shallow irregular stain on the stage plane, starting after the fall.
+    const age=Math.max(0,(effect.age||0)-.5),spread=1-Math.exp(-age*1.3);
+    const width=(effect.intact?48:82)*Math.max(.5,Math.min(1.5,effect.scale||1))*spread;
+    if(width<.1)return;
+    ctx.save();ctx.shadowBlur=0;ctx.globalCompositeOperation='source-over';
+    ctx.globalAlpha=Math.min(1,alpha*1.6)*Math.min(1,age*4);
+    ctx.fillStyle=effect.wet?'#310c11':'#3a1817';
+    ctx.beginPath();
+    for(let i=0;i<32;i++){
+      const angle=i/32*Math.PI*2,radius=1+.08*Math.sin(i*2.3)+.06*Math.cos(i*4.1);
+      const x=Math.cos(angle)*width*radius,y=Math.sin(angle)*width*.15*radius;
+      if(i===0)ctx.moveTo(x,y);else ctx.lineTo(x,y);
+    }
+    ctx.closePath();ctx.fill();
+    ctx.globalAlpha*=.3;ctx.fillStyle=effect.wet?'#a08078':'#241413';
+    ctx.beginPath();ctx.ellipse(width*.18,-1,width*.35,1.1,0,0,Math.PI*2);ctx.fill();
+    ctx.restore();return;
+  }
+
   // 2.8 critic round (M2): the pool spreads and soaks on its own AGE clock,
   // which keeps running while the fatality hold freezes decal lifetimes —
   // the aftermath accumulates monotonically instead of dissolving mid-hold.
@@ -27534,7 +27845,8 @@ function drawParticles() {
       // spin/rotation integration the gore fragments already use.
       ctx.translate(particle.x, particle.y);
       ctx.rotate(particle.rotation || 0);
-      ctx.fillRect(-particle.size, -particle.size * 0.42, particle.size * 2, particle.size * 0.84);
+      const slender=particle.cinematicMaterial==='wood';
+      ctx.fillRect(-particle.size, -particle.size * (slender?.16:.42), particle.size * 2, particle.size * (slender?.32:.84));
       ctx.restore();
       continue;
     }
@@ -27638,12 +27950,14 @@ function drawParticles() {
     if (effect.kind === "combatText") {
       drawCombatTextBody(effect, alpha);
     } else if (effect.kind === "finisherImpact") {
-      drawFinisherImpact(effect, alpha);
+      if(!state.finisher?.script.paintedBank)drawFinisherImpact(effect, alpha);
     } else if (effect.kind === "fatalityProjectile") {
-      drawFatalityProjectile(effect, alpha);
+      if(!state.finisher?.script.paintedBank)drawFatalityProjectile(effect, alpha);
     } else if (effect.kind === "projectileFocusBurst") {
-      ctx.scale(.6, .6);
-      drawProjectileFocusBurst(effect, alpha);
+      if(!state.finisher?.script.paintedBank) {
+        ctx.scale(.6, .6);
+        drawProjectileFocusBurst(effect, alpha);
+      }
     } else if (effect.kind === "fatalityPool") {
       drawFatalityPool(effect, alpha);
     } else if (effect.kind === "severedLimb") {
@@ -27872,6 +28186,14 @@ function drawParticles() {
           ctx.fill();
         }
       }
+    } else if (effect.kind === "cinematicRipple") {
+      ctx.shadowBlur=0;ctx.strokeStyle=effect.color;ctx.lineWidth=1.3;
+      const growth=effect.still?.55:1-alpha;
+      for(let ring=0;ring<2;ring++) {
+        const width=effect.width*(.3+growth*.7+ring*.22);
+        ctx.globalAlpha=alpha*(ring?.18:.32);
+        ctx.beginPath();ctx.ellipse(0,0,width,width*.105,0,0,Math.PI*2);ctx.stroke();
+      }
     } else if (effect.kind === "floorImpact") {
       ctx.shadowBlur = 0;
       ctx.globalAlpha = alpha * 0.55;
@@ -28066,6 +28388,189 @@ function drawParticles() {
     }
     ctx.restore();
   }
+}
+
+function drawCinematicPaintSpray() {
+  const finisher=state.finisher;
+  if(!finisher?.script.paintSpray||finisher.elapsed<.8||finisher.elapsed>=1.3||!cinemaPresentationReady(finisher).bodies)return;
+  const attacker=state.fighters[finisher.winner],victim=state.fighters[1-finisher.winner];
+  const size=fighterRenderSize('post')*bankSheetAdjust('post','cinema-fatal-1');
+  const x=attacker.x+finisher.direction*(67+275-160)/320*size;
+  const y=attacker.y+(60-310)/320*size;
+  const reach=(victim.x-x)*Math.min(1,(finisher.elapsed-.8)/.16);
+  const fade=Math.min(1,(1.3-finisher.elapsed)/.12);
+  ctx.save();ctx.globalAlpha=.28*fade;
+  const mist=ctx.createLinearGradient(x,y,x+reach,y);
+  mist.addColorStop(0,'rgba(190,95,168,.1)');mist.addColorStop(.45,'rgba(190,95,168,.65)');mist.addColorStop(1,'rgba(190,95,168,0)');
+  ctx.fillStyle=mist;ctx.beginPath();ctx.moveTo(x,y-2);ctx.lineTo(x+reach,y-28);ctx.quadraticCurveTo(x+reach+10*finisher.direction,y,x+reach,y+28);ctx.lineTo(x,y+2);ctx.closePath();ctx.fill();ctx.restore();
+}
+function drawCinematicPostWire() {
+  const finisher=state.finisher;
+  if(!finisher?.script.wirePull||finisher.elapsed<.25||!cinemaPresentationReady(finisher).bodies)return;
+  const released=finisher.elapsed>=2.5;
+  const grip=postWireGrip(released?9:paintedFatalityFrame(finisher.script,finisher.elapsed));if(!grip)return;
+  const attacker=state.fighters[finisher.winner],victim=state.fighters[1-finisher.winner];
+  const size=fighterRenderSize('post')*bankSheetAdjust('post','cinema-fatal-0');
+  const releasePose=released?spaceFinisherPose(sampleFinisher(finisher.script.keys,2.5)):null;
+  const attackerX=released?finisher.anchor+finisher.direction*(releasePose.ax-(finisher.script.victimSpacing?.[victim.def.id]||0)):attacker.x;
+  const victimX=released?finisher.anchor+finisher.direction*releasePose.vx:victim.x;
+  let x=attackerX+finisher.direction*(67+grip[0]-160)/320*size;
+  let y=(released?FLOOR:attacker.y)+(grip[1]-310)/320*size;
+  let targetX=victimX-28*finisher.direction;
+  let targetY=(released?FLOOR:victim.y)-victim.height*postWireHeight(Math.min(2.5,finisher.elapsed));
+  const sag=finisher.elapsed<1.05?18:3;
+  let controlX=(x+targetX)/2,controlY=(y+targetY)/2+sag;
+  if(released){
+    const wire=releasedPostWire(finisher.elapsed,{x,y},{x:targetX,y:targetY},FLOOR-2,finisher.direction);
+    x=wire.start.x;y=wire.start.y;targetX=wire.end.x;targetY=wire.end.y;
+    controlX=wire.control.x;controlY=wire.control.y;
+  }
+  ctx.save();ctx.lineCap='round';ctx.strokeStyle='#272723';ctx.lineWidth=3;
+  ctx.beginPath();ctx.moveTo(x,y);ctx.quadraticCurveTo(controlX,controlY,targetX,targetY);ctx.stroke();
+  ctx.strokeStyle='#b1a997';ctx.lineWidth=.9;ctx.stroke();
+  ctx.beginPath();ctx.ellipse(targetX+28*finisher.direction,targetY,28,7,0,0,Math.PI*2);
+  ctx.strokeStyle='#272723';ctx.lineWidth=2.5;ctx.stroke();
+  ctx.strokeStyle='#b1a997';ctx.lineWidth=.8;ctx.stroke();ctx.restore();
+}
+function drawCinematicTeeBall() {
+  const finisher=state.finisher;
+  if(!finisher?.script.teeBall||!cinemaPresentationReady(finisher).bodies)return;
+  const ball=cinematicTeeBall(finisher.elapsed);if(!ball)return;
+  const victim=state.fighters[1-finisher.winner];
+  const startX=finisher.anchor-215*finisher.direction,startY=FLOOR-12;
+  const targetX=victim.x-12*finisher.direction,targetY=victim.y-victim.height*.95;
+  const x=startX+(targetX-startX)*ball.travel-ball.rebound*25*finisher.direction;
+  const y=startY+(targetY-startY)*ball.travel+ball.rebound*40;
+  ctx.save();ctx.globalAlpha=ball.alpha;ctx.translate(x,y);
+  const shade=ctx.createRadialGradient(-2,-2,1,0,0,7);
+  shade.addColorStop(0,'#fff8e7');shade.addColorStop(.65,'#c8c6b9');shade.addColorStop(1,'#615f58');
+  ctx.fillStyle=shade;ctx.beginPath();ctx.arc(0,0,7,0,Math.PI*2);ctx.fill();
+  ctx.fillStyle='rgba(75,72,60,.4)';
+  for(let i=0;i<7;i++){const a=i*2.4;ctx.beginPath();ctx.arc(Math.cos(a)*4,Math.sin(a)*4,.6,0,Math.PI*2);ctx.fill();}
+  ctx.restore();
+}
+function drawCinematicGroundWave() {
+  const finisher=state.finisher;
+  if(!finisher?.script.groundWave||!cinemaPresentationReady(finisher).bodies)return;
+  const wave=cinematicGroundWave(finisher.elapsed);if(!wave)return;
+  const victim=state.fighters[1-finisher.winner];
+  const start=finisher.anchor+(finisher.script.groundOrigin??-290)*finisher.direction;
+  const end=victim.x;
+  ctx.save();ctx.globalAlpha=wave.alpha*.65;
+  ctx.strokeStyle='#52463c';ctx.lineWidth=2;ctx.beginPath();ctx.moveTo(start,FLOOR-3);
+  for(let i=1;i<=12;i++) {
+    const p=i/12*wave.travel;ctx.lineTo(start+(end-start)*p,FLOOR-3+(i%2?3:-2));
+  }
+  ctx.stroke();
+  for(let i=0;i<16;i++) {
+    const p=i/15;if(p>wave.travel)continue;
+    const age=Math.max(0,wave.age-p*.18);
+    const hop=state.accessibility.reducedMotion?0:Math.max(0,Math.sin(Math.min(1,age/.5)*Math.PI))*(9+i%4*4);
+    const x=start+(end-start)*p+(i%3-1)*4;
+    ctx.fillStyle=finisher.script.groundEmbers?(i%2?'#be6935':'#5c3626'):(i%2?'#958577':'#4c443d');ctx.beginPath();
+    ctx.moveTo(x-3,FLOOR-4-hop);ctx.lineTo(x+2,FLOOR-7-hop);
+    ctx.lineTo(x+4,FLOOR-2-hop);ctx.lineTo(x-1,FLOOR-hop);ctx.closePath();ctx.fill();
+  }
+  ctx.restore();
+}
+function drawCinematicSwarm() {
+  const finisher=state.finisher;
+  if(!finisher?.script.swarmRise||!cinemaPresentationReady(finisher).bodies)return;
+  const bugs=cinematicSwarm(finisher.elapsed,state.accessibility.reducedMotion);
+  const victim=state.fighters[1-finisher.winner];
+  const startX=finisher.anchor-230*finisher.direction;
+  const targetX=victim.x-25*finisher.direction;
+  const targetY=FLOOR-victim.height*1.05;
+  ctx.save();
+  for(const bug of bugs) {
+    const x=startX+(targetX-startX)*bug.progress+bug.spread*finisher.direction;
+    const rise=(FLOOR-22)+(targetY-(FLOOR-22))*bug.progress-bug.lift;
+    const y=rise+(FLOOR-12-rise)*bug.settle+bug.drift;
+    ctx.save();ctx.translate(x,y);ctx.rotate(-.6*finisher.direction);
+    ctx.globalAlpha=bug.alpha*.85;ctx.strokeStyle='#342019';ctx.lineWidth=.8;
+    for(let leg=-1;leg<=1;leg++) {
+      ctx.beginPath();ctx.moveTo(-bug.size*.6,leg*1.4);ctx.lineTo(-bug.size-2,leg*2.4+1);
+      ctx.moveTo(bug.size*.6,leg*1.4);ctx.lineTo(bug.size+2,leg*2.4+1);ctx.stroke();
+    }
+    ctx.fillStyle='#663c2b';ctx.beginPath();ctx.ellipse(0,0,bug.size,bug.size*1.4,0,0,Math.PI*2);ctx.fill();
+    ctx.strokeStyle='#b48358';ctx.beginPath();ctx.moveTo(-.6,-bug.size);ctx.lineTo(-.6,bug.size*.6);ctx.stroke();
+    ctx.fillStyle='#291a16';ctx.beginPath();ctx.arc(0,-bug.size*1.35,1.3,0,Math.PI*2);ctx.fill();
+    ctx.restore();
+  }
+  ctx.restore();
+}
+function drawCinematicFeedbackPulse() {
+  const finisher=state.finisher;
+  if(!finisher?.script.feedbackPulse||!cinemaPresentationReady(finisher).bodies)return;
+  const pulse=cinematicFeedbackPulse(finisher.elapsed,state.accessibility.reducedMotion);
+  if(!pulse)return;
+  const victim=state.fighters[1-finisher.winner];
+  const startX=finisher.anchor-240*finisher.direction,startY=FLOOR-290;
+  const endX=victim.x-12*finisher.direction,endY=victim.y-victim.height*1.05;
+  ctx.save();ctx.strokeStyle='#d8c8e8';ctx.lineWidth=1.5;
+  for(let i=0;i<3;i++) {
+    const travel=Math.max(0,pulse.travel-i*.1);
+    ctx.globalAlpha=pulse.alpha*(1-i*.25);
+    ctx.beginPath();ctx.ellipse(startX+(endX-startX)*travel,startY+(endY-startY)*travel,
+      7+travel*8,pulse.radius-i*3,0,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawCinematicBassPulse() {
+  const finisher=state.finisher;
+  if(!finisher?.script.bassPulse||!cinemaPresentationReady(finisher).bodies)return;
+  const pulse=cinematicBassPulse(finisher.elapsed,state.accessibility.reducedMotion);
+  if(!pulse)return;
+  ctx.save();ctx.translate(finisher.anchor+pulse.x*finisher.direction,FLOOR+pulse.y);
+  ctx.strokeStyle='#ffdba1';ctx.lineWidth=2;ctx.shadowColor='#d79c4d';ctx.shadowBlur=8;
+  for(let i=0;i<3;i++) {
+    ctx.globalAlpha=pulse.alpha*(1-i*.26);
+    ctx.beginPath();ctx.ellipse(-i*12*finisher.direction,0,9+i*3,pulse.radius-i*5,0,0,Math.PI*2);ctx.stroke();
+  }
+  ctx.restore();
+}
+function drawCinematicDisc() {
+  const finisher=state.finisher;
+  if(!finisher?.script.discFlight||!cinemaPresentationReady(finisher).bodies)return;
+  const flight=cinematicDiscFlight(finisher.elapsed);if(!flight)return;
+  ctx.save();ctx.translate(finisher.anchor+flight.x*finisher.direction,FLOOR+flight.y);
+  const disc=ensureCinemaAtlas('ali','disc');
+  ctx.scale(1,.72+.28*Math.min(1,(finisher.elapsed-1.25)/1.6));
+  ctx.rotate(flight.spin*finisher.direction);ctx.drawImage(disc,-35,-35,70,70);
+  ctx.restore();
+}
+function drawCinematicPortrait() {
+  if(state.screen!=='fight'||state.phase!=='roundover')return;
+  const scene=state.koScene,finisher=state.finisher;
+  if(!scene&&!finisher)return;
+  if(!cinemaPresentationReady(finisher||scene).portrait)return;
+  const winner=finisher?.winner??scene.winner;
+  const fighter=state.fighters[winner];
+  const image=ensureCinemaPortrait(fighter.def.id);
+  const relative=finisher?finisher.elapsed-(finisher.script.portraitAt??finisher.fatalityAt):scene.duration-state.phaseTime-scene.impact;
+  // The opening insert covers the cut into the staged positions. The second
+  // insert builds intent, then clears before physical contact.
+  const alpha=finisher?.script.paintedBank&&finisher.elapsed<.42
+    ? (state.accessibility.reducedMotion?1:Math.min(1,(.42-finisher.elapsed)/.08))
+    : cinematicPortraitOpacity(relative,state.accessibility.reducedMotion);
+  if(alpha<=0||!image?.complete||!image.naturalWidth)return;
+  const direction=finisher?.direction??scene.direction;
+  const height=H*.88,width=height*image.naturalWidth/image.naturalHeight;
+  ctx.save();ctx.globalAlpha=alpha;
+  ctx.fillStyle='#080a10';ctx.fillRect(0,0,W,H);
+  ctx.save();
+  if(direction<0){ctx.translate(W,0);ctx.scale(-1,1);}
+  ctx.drawImage(image,0,(H-height)/2,width,height);
+  ctx.restore();
+  const title=cinematicScene(fighter.def.id,finisher?'fatality':'knockout',finisher?.type||0)?.title||fighter.def.name;
+  const x=direction>0?W*.78:W*.22;
+  ctx.textAlign='center';ctx.fillStyle=fighter.def.accent;
+  ctx.font='bold 18px system-ui';ctx.fillText(fighter.def.name.toUpperCase(),x,H*.42);
+  ctx.fillStyle='#fff';ctx.font='900 30px system-ui';
+  const words=title.split(' '),split=Math.ceil(words.length/2);
+  ctx.fillText(words.slice(0,split).join(' '),x,H*.49,W*.31);
+  ctx.fillText(words.slice(split).join(' '),x,H*.55,W*.31);
+  ctx.restore();
 }
 
 function drawFinisherOverlay() {
@@ -29556,6 +30061,14 @@ function draw(time) {
         }
       }
       ordered.forEach((fighter) => drawFighter(fighter, time));
+      drawCinematicDisc();
+      drawCinematicBassPulse();
+      drawCinematicFeedbackPulse();
+      drawCinematicSwarm();
+      drawCinematicGroundWave();
+      drawCinematicTeeBall();
+      drawCinematicPostWire();
+      drawCinematicPaintSpray();
       state.fighters.forEach((fighter) => drawDizzyStars(fighter, time));
       state.fighters.forEach((fighter) => drawGuardCrushMarker(fighter, time));
       drawParticles();
@@ -29593,6 +30106,7 @@ function draw(time) {
   drawElementalWash();
   document.body.classList.toggle("finisher-active", Boolean(state.finisher));
   drawFinisherOverlay();
+  drawCinematicPortrait();
   if (state.flash > 0) {
 // CINEMA 3D carries its own layered impact flash (hit-masked white pop,
     // shockwave ring, embers in the world), so the screen wash is nearly off
@@ -30261,6 +30775,14 @@ function applyAutoStageMusic() {
   stageMusicAutoApplied = true;
 }
 
+function effectiveMusicDuck() {
+  let relative=null;
+  if(state.screen==='fight'&&state.phase==='roundover') {
+    if(state.finisher?.script?.paintedBank)relative=state.finisher.elapsed-state.finisher.fatalityAt;
+    else if(state.koScene&&!state.finisher)relative=state.koScene.duration-state.phaseTime-state.koScene.impact;
+  }
+  return Math.min(state.musicDuck,relative===null?1:cinematicMusicGain(relative));
+}
 function syncMusic() {
   if (!state.audioUnlocked) return;
   const enabled = Boolean($("#musicToggle")?.checked);
@@ -30272,7 +30794,7 @@ function syncMusic() {
   // until the stem starts arriving, so nothing about the ordinary mix moves.
   // 5.4: bedFadeLevel is 1 outside the attract gate's opening card.
   fightMusic.volume = clamp(
-    musicBaseVolume() * state.musicDuck * state.musicVolume * dangerStemBedGain(dangerStemLevel) * bedFadeLevel,
+    musicBaseVolume() * effectiveMusicDuck() * state.musicVolume * dangerStemBedGain(dangerStemLevel) * bedFadeLevel,
     0,
     1,
   );
@@ -30633,6 +31155,20 @@ function playMoveFoley(kind, fighter = null, move = null) {
   });
 }
 
+// Cinematic one-shots must sound at the authored beat, even on a cold bank.
+// Never queue a decoded sample to play after the visible contact has passed.
+function playCinematicFoley(kind, fighter = null) {
+  if (!impactAudioAllowed()) return 'muted';
+  if (playMoveFoley(kind, fighter)) return 'sample';
+  if (!state.audio || state.audio.state !== 'running') return 'locked';
+  if (kind.startsWith('object-') && OBJECT_SOUNDS[kind.slice(7)]) {
+    objectSound(kind.slice(7), true);
+  } else {
+    proceduralSound(fallbackSoundKinds[kind] || kind);
+  }
+  return 'fallback';
+}
+
 function sound(kind, fighter = null, options = {}) {
   if (rollbackResimulating) return;
   const fighterId = fighterSoundId(fighter);
@@ -30833,10 +31369,10 @@ function perfectGuardTink() {
   oscillator.stop(now + 0.11);
 }
 
-function objectSound(styleId) {
+function objectSound(styleId, skipFoley = false) {
   if (!$("#soundToggle").checked) return;
   if (attractAudioHeld()) return;
-  if (playMoveFoley(`object-${styleId}`)) return;
+  if (!skipFoley && playMoveFoley(`object-${styleId}`)) return;
   unlockAudio();
   if (!state.audio) return;
   const settings = OBJECT_SOUNDS[styleId];
@@ -31696,7 +32232,7 @@ function stopDangerStem() {
 
 /** Element side of the crossfade: level, and start/stop at the mix edges. */
 function syncDangerStem() {
-  const wanted = dangerStemGain(dangerStemLevel) * state.musicDuck * musicBaseVolume() * state.musicVolume;
+  const wanted = dangerStemGain(dangerStemLevel) * effectiveMusicDuck() * musicBaseVolume() * state.musicVolume;
   dangerStem.volume = clamp(wanted, 0, 1);
   const live = dangerStemLevel > 0.002
     && Boolean($("#musicToggle")?.checked)
@@ -31737,7 +32273,7 @@ function updateMusicLayer(dt) {
   }
   // Only touch the elements when the mix is actually moving or sounding —
   // syncMusic is otherwise the sole owner of fightMusic.volume.
-  if (Math.abs(dangerStemLevel - previous) > 0.0005 || dangerStemPlaying) syncMusic();
+  if (Math.abs(dangerStemLevel - previous) > 0.0005 || dangerStemPlaying || state.koScene || state.finisher?.script?.paintedBank) syncMusic();
 }
 
 // --- Feature: per-stage ambience beds --------------------------------------
@@ -31979,7 +32515,7 @@ function updateAmbienceAudio(time, dt) {
   const preview = state.screen === "stage" ? 0.5 : 1;
   const pauseDuck = state.paused ? 0.35 : 1;
   // Follows musicDuck so cinematic ducks pull the bed down with the music.
-  const target = clamp(state.sfxVolume, 0, 1) * cinematicDuck * preview * pauseDuck * (0.35 + 0.65 * state.musicDuck);
+  const target = clamp(state.sfxVolume, 0, 1) * cinematicDuck * preview * pauseDuck * (0.35 + 0.65 * effectiveMusicDuck());
   ambienceRig.master.gain.setTargetAtTime(Math.max(0.0001, target), now, 0.25);
   // Somerset: El-train rumble loosely follows the moving train-light layer.
   const trainLayer = ambienceRig.layers.find((layer) => layer.spec.train);
@@ -32542,7 +33078,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.7.15-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.0-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34046,7 +34582,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.7.15-ringside",
+  version: "5.8.0-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
@@ -35001,6 +35537,9 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
       applyPerformanceSettings();
       return { ...state.performance };
     },
+    cinematicSoundCue(kind = 'heavy') {
+      return playCinematicFoley(kind, state.fighters[0]);
+    },
     soundCue(fighterId = "deathblow", cue = "special") {
       const fighter = roster.find(({ id }) => id === fighterId);
       if (!fighter || !FIGHTER_AUDIO_CUES.includes(cue)) throw new Error(`Unknown fighter audio cue: ${fighterId}/${cue}`);
@@ -35568,6 +36107,7 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
         intensity: Number(musicIntensityLevel.toFixed(3)),
         bedVolume: Number(fightMusic.volume.toFixed(4)),
         duck: Number(state.musicDuck.toFixed(3)),
+        effectiveDuck: Number(effectiveMusicDuck().toFixed(3)),
         stingerPlays: audioFxDebug.stingerPlays,
         stingerRecent: musicStingerRecent.slice(),
         lastEvent: lastMusicSting,
@@ -35828,8 +36368,10 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
         camera: { zoom: Number(state.cinematicZoom.toFixed(2)) },
       };
     },
-    graphicFatality(id, type = 0, seconds = 4.7, enabled = true, victimId = null) {
+    graphicFatality(id, type = 0, seconds = 4.7, enabled = true, victimId = null, facing = 1, startPositions = null) {
       this.ready(id, type, victimId);
+      if(facing===-1)this.positions(840,440);
+      if(Array.isArray(startPositions)&&startPositions.length===2&&startPositions.every(Number.isFinite))this.positions(...startPositions);
       state.graphicFatalities = Boolean(enabled);
       $("#goreToggle").checked = state.graphicFatalities;
       finishRound(0, type);
@@ -36098,6 +36640,16 @@ if (["127.0.0.1", "localhost"].includes(location.hostname)) {
         checksumMutated,
         checksumAfter,
       };
+    },
+    cinematicAftermath() {
+      return {stage:state.stage,floor:FLOOR,
+        particles:state.particles.filter(p=>p.cinematicMaterial).map(p=>({...p})),
+        ripples:state.effects.filter(e=>e.kind==='cinematicRipple').map(e=>({...e}))};
+    },
+    cinemaScene() {
+      const scene=state.phase==='roundover'?state.koScene:null;
+      return scene?{...structuredClone(scene),elapsed:scene.duration-state.phaseTime,
+        portraitAlpha:cinematicPortraitOpacity(scene.duration-state.phaseTime-scene.impact,state.accessibility.reducedMotion)}:null;
     },
     // --- R2.1 STREETS wave 18 probes ---------------------------------------
     netQol() {

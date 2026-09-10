@@ -161,21 +161,19 @@ test("browser-smoke registers a probe per section, with unique names", () => {
   }
 });
 
-test("browser-smoke keeps the 5.3 verification probes and runs CINEMA 3D last", () => {
+test("browser-smoke keeps painted verification probes and finishes with console checks", () => {
   for (const name of [
     "ambient-ko-pulse",
     "crowd-ko-hold",
     "tempo-tells",
     "announcer-decision",
     "pose-trace-chains",
-    "cinema-3d",
     "console-clean",
   ]) {
     assert.ok(probeNames.includes(name), `browser-smoke must register ${name}`);
   }
-  // cinema-3d reloads the page under ?renderer=3d, so nothing but the
-  // console/network sweep may follow it.
-  assert.deepEqual(probeNames.slice(-2), ["cinema-3d", "console-clean"]);
+  assert.ok(!probeNames.includes("cinema-3d"), "retired mode is not launched");
+  assert.equal(probeNames.at(-1), "console-clean");
 });
 
 test("browser-smoke answers --list before it launches anything", () => {

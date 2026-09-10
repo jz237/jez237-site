@@ -10,6 +10,7 @@ import assert from "node:assert/strict";
 import { existsSync, readFileSync, statSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import {altAtlasSource as resolveAltAtlasSource} from '../engine/banks.mjs';
 import {
   AUTHORED_BANKS,
   FIGHTER_KITS,
@@ -30,7 +31,6 @@ const root = join(testDir, "..");
 const manifest = JSON.parse(readFileSync(join(root, "assets", "moves", "MANIFEST.json"), "utf8"));
 const gameSource = readFileSync(join(root, "game.js"), "utf8");
 const kitSource = readFileSync(join(root, "engine", "fighter-kits.mjs"), "utf8");
-const threeSource = readFileSync(join(root, "renderer", "three", "fighters.mjs"), "utf8");
 
 // The nine fighters who HAVE a specials sheet. The Commissioner is the tenth
 // roster member and deliberately absent: his kit poses address his combat
@@ -187,7 +187,10 @@ function testGameWiring() {
   // The redirect runs at the single pose-resolution choke point, after the
   // swing resolver, so every consumer (drawFighter, the observers, the cast
   // shadow, the CINEMA 3D bridge, the QA pose hook) reads the same answer.
-  assert.match(gameSource, /const pose = specialsGenerationPose\(fighter\.def\.id, swung\);/);
+  // Authored flow/footwork/recovery may supersede the swing. When they do
+  // not, the specials redirect still precedes in-between selection.
+  const resolver=gameSource.slice(gameSource.indexOf('function fighterAnimationPose('),gameSource.indexOf('function recordPoseTrace('));
+  assert.match(resolver, /withInbetween\(fighter, flow && paintedFlowAvailability\.get\(fighter\.attacking\) \? flow : specialsGenerationPose\(fighter\.def\.id, swung\)\)/);
   assert.match(gameSource, /function specialsGenerationPose\(fighterId, pose\)/);
   // No manifest entry means no gate — the Commissioner and the boss share
   // their combat atlas as their specials bank and must never be redirected.
@@ -197,12 +200,18 @@ function testGameWiring() {
   // Both banks size through bankSheetAdjust, from their own tables.
   assert.match(gameSource, /if \(bank === "specials"\) return MOVE_SHEET_ADJUST\[fighterId\] \|\| 1;\n\s*if \(bank === SPECIALS_LEGACY_BANK\) return MOVE_SHEET_LEGACY_ADJUST\[fighterId\] \|\| 1;/);
   // ...and resolve to an atlas everywhere an atlas is resolved by bank.
-  for (const fn of ["altAtlasSource", "paletteAtlas"]) {
+  for (const fn of ["paletteAtlas"]) {
     const body = gameSource.slice(gameSource.indexOf(`function ${fn}(`), gameSource.indexOf(`function ${fn}(`) + 2600);
     assert.ok(body.includes("SPECIALS_LEGACY_BANK"), `${fn} resolves the fallback bank`);
   }
-  assert.match(gameSource, /fighterMoveLegacyAtlases\[fighter\.def\.id\] \|\| fighterAtlases\[fighter\.def\.id\]/,
-    "the cast-shadow pass resolves it too");
+  const legacyImage={complete:true,naturalWidth:1280};
+  assert.equal(resolveAltAtlasSource('jez',SPECIALS_LEGACY_BANK,{specialsLegacy:{jez:legacyImage}}).image,legacyImage);
+  const altBody=gameSource.slice(gameSource.indexOf('function altAtlasSource('),gameSource.indexOf('function ensureAltAtlas('));
+  assert.match(altBody,/return resolveAltAtlasSource\(fighterId, bank,/);
+  assert.match(altBody,/specialsLegacy: fighterMoveLegacyAtlases,/);
+  const shadowBody=gameSource.slice(gameSource.indexOf('function drawFighterCastShadows(')).split('\n}')[0];
+  assert.match(shadowBody,/paletteAtlas\(fighter\.def\.id, fighter\.side, pose\.artBank \|\| pose\.bank\)/,
+    "the cast shadow uses the same palette and displayed bank as the body");
   // The gate and its sheet are warm before the first special, not on it.
   assert.match(gameSource, /ensureWalkManifest\(\);\n(?:\s*\/\/[^\n]*\n)*\s*ensureMovesManifest\(\);/);
 }
@@ -213,7 +222,7 @@ function testHdRetired() {
   // specials bank on the old generation while the canvas ran the new one.
   assert.ok(!/-specials"/.test(gameSource.slice(gameSource.indexOf("const HD_SHEETS"),
     gameSource.indexOf("const HD_SHEETS") + 400)), "HD_SHEETS lists no specials sheet");
-  assert.match(gameSource, /return bank === "base" && HD_SHEETS\.has\(fighterId\) \? `renderer\/hd\/\$\{fighterId\}\.webp` : null;/);
+  assert.match(gameSource, /return bank === "base" && HD_SHEETS\.has\(fighterId\) \? fighterArtUrl\(`renderer\/hd\/\$\{fighterId\}\.webp`\) : null;/);
   for (const id of SHEET_IDS) {
     assert.ok(!existsSync(join(root, "renderer", "hd", `${id}-specials.webp`)), `${id} HD specials is gone`);
   }
@@ -224,13 +233,14 @@ function testHdRetired() {
 }
 
 function testCinemaWiring() {
-  // The 3D layer reads the fallback bank the same lazy way it reads motion:
-  // SD only, no renderer/hd request, and its own sheet-adjust table.
-  assert.match(threeSource, /import \{ AUTHORED_BANKS, SPECIALS_LEGACY_BANK, UNIFIED_BANK \}/);
-  assert.match(threeSource, /pose\.bank === SPECIALS_LEGACY_BANK && !this\.ensureMotionBank\(rig, fighter, pose\.bank\)/);
-  assert.match(threeSource, /: pose\.bank === SPECIALS_LEGACY_BANK && rig\.banks\[SPECIALS_LEGACY_BANK\] \? SPECIALS_LEGACY_BANK/);
-  assert.match(threeSource, /bankName === SPECIALS_LEGACY_BANK \? \(host\.moveSheetLegacyAdjust\?\.\[fighter\.def\.id\] \|\| 1\)/);
-  assert.ok(!/hdFor\("specials"?-?legacy?"?\)/.test(threeSource));
+  // The user retired the 3D mode. Its archived source is no longer an
+  // active renderer contract; prevent it from being re-enabled or loaded.
+  for(const name of ['cinema3dAllowed','cinema3dWorldActive']) {
+    const declaration=gameSource.match(new RegExp('function '+name+'\\(\\) \\{[^}]*\\}'))?.[0];
+    assert.ok(declaration,name+' gate exists');
+    assert.equal(new Function(declaration+';return '+name+'();')(),false);
+  }
+  assert.doesNotMatch(gameSource,/(?:from\s*|import\s*\()["'][^"']*renderer\/three\//);
 }
 
 testManifestShape();

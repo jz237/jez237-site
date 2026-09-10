@@ -577,21 +577,23 @@ export function decideAiIntent(brain, {
     }
   }
 
-  if (canRead && mixRoll(roll, 46) < settings.defenseChance) {
-    const defense = deliberateDefense(self, observation, frame, mixRoll(roll, 47));
-    if (defense) return defense;
-  }
-
   // 5.4 PERSONAS: the counter-puncher answers a swing with the kit's AUTHORED
   // counter (alan's backSpecial, counterRange 172) at `counterFirstChance`
   // before the block roll gets to it. On every player-facing tier that knob
   // is unset and the defense branch below runs first exactly as in 5.3 —
   // which is why, sampled, alan's authored counter fired on 0% of swings on
   // the flat demo tier and the "counter-puncher" read as a wall.
-  if ((settings.counterFirstChance || 0) > 0 && timing.live && kit?.ai?.counterAction
+  if (canRead && (settings.counterFirstChance || 0) > 0 && timing.live && kit?.ai?.counterAction
     && distance < (kit.ai.counterRange || 160) && self.grounded
     && mixRoll(roll, 42) < settings.counterFirstChance) {
     return { movement: "hold", action: kit.ai.counterAction, reason: "counter-read" };
+  }
+
+  // Preserve a counter specialist's first read before generic slips/parries
+  // consume the same opportunity. Other tiers have no counter-first chance.
+  if (canRead && mixRoll(roll, 46) < settings.defenseChance) {
+    const defense = deliberateDefense(self, observation, frame, mixRoll(roll, 47));
+    if (defense) return defense;
   }
 
   const incomingRange = Math.min(300, (observation.attackRange || 105) + 42);

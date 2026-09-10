@@ -1,15 +1,15 @@
 // Keep offline startup reliable. Images and audio are intentionally fetched on
 // demand: preloading the complete game was a 19 MB / 162-request install that
 // could make Chrome abort the page before it rendered. (Since 5.1 a fetched
-// media file is KEPT, in a second, capped, build-keyed cache — see
-// MEDIA_CACHE_NAME — which is a different thing from installing it.)
-// 5.7.15: companions across the complete painted movement libraries of all ten fighters.
-const CACHE_NAME = "final-blow-shell-5.7.15-recovery";
-// v5.1 #38 — the RUNTIME media cache. Sheets, audio, stage plates and the 3D
+// media file is KEPT, in a second, capped, build-keyed cache â€” see
+// MEDIA_CACHE_NAME â€” which is a different thing from installing it.)
+// 5.8.0: companions across the complete painted movement libraries of all ten fighters.
+const CACHE_NAME = "final-blow-shell-5.8.0-recovery";
+// v5.1 #38 â€” the RUNTIME media cache. Sheets, audio, stage plates and the 3D
 // renderer's HD/vendor files are still fetched on demand (never at install:
 // the precache alternative is now 81 MB / ~560 files), but once a file has
 // been fetched it stays, keyed by the build, so the second fight of a session
-// — and the second session — do not re-download or re-validate 30-40 URLs.
+// â€” and the second session â€” do not re-download or re-validate 30-40 URLs.
 // The hosts' defaults (GitHub Pages max-age=600) made every fight after the
 // first ten minutes a conditional re-request per sheet; a phone that evicts
 // its HTTP cache repeated the whole 12-22 MB first-fight download.
@@ -27,7 +27,7 @@ const SHELL = [
   "./manifest.webmanifest",
   "./icon.svg",
   "./engine/foundation.mjs",
-  "./engine/render-motion.mjs",
+  "./engine/cinematic-scenes.mjs",
   "./engine/painted-flow.mjs",
   "./engine/painted-smooth.mjs",
   "./engine/full-library.mjs",
@@ -86,7 +86,7 @@ const SHELL = [
 self.addEventListener("install", (event) => {
   // cache: "reload" bypasses the browser HTTP cache for every shell fetch. A
   // new worker only ever installs because the BUILD changed, so it must never
-  // fill its cache with heuristically HTTP-cached bytes — measured during the
+  // fill its cache with heuristically HTTP-cached bytes â€” measured during the
   // 3.3 update-flow verification: without this, the fresh CacheStorage cache
   // held the PREVIOUS index.html and the update-reload landed the player on a
   // mixed-version shell.
@@ -95,17 +95,17 @@ self.addEventListener("install", (event) => {
     .then(() => self.skipWaiting()));
 });
 
-// v3.3 FRESH — the update contract. skipWaiting + clients.claim mean a new
+// v3.3 FRESH â€” the update contract. skipWaiting + clients.claim mean a new
 // worker takes over every open window the moment it finishes installing, and
 // the PAGE decides what to do about it: 3.3+ shells listen for
-// controllerchange and reload themselves when it is safe (never mid-match —
+// controllerchange and reload themselves when it is safe (never mid-match â€”
 // see the freshness block next to registerOfflineGame in game.js). Shells
-// OLDER than 3.3 have no such listener — they show their stale build one
+// OLDER than 3.3 have no such listener â€” they show their stale build one
 // final time while this worker installs and claims, and every navigation
 // after that serves the fresh cache. (A worker-side client.navigate() rescue
 // for that one visit was built and rejected: timers inside the activate
 // waitUntil died before firing and repeatedly wedged the verification
-// browser — not a risk the offline path can carry for a one-visit win.)
+// browser â€” not a risk the offline path can carry for a one-visit win.)
 self.addEventListener("message", (event) => {
   // Lets a page tell a re-registration echo apart from a real update: a
   // takeover whose shell matches the page's own build needs no reload.
@@ -152,7 +152,7 @@ self.addEventListener("fetch", (event) => {
 });
 
 // Only the intentionally small shell is cached here. Do not add runtime media
-// to THIS path; doing so would quietly recreate the oversized installation —
+// to THIS path; doing so would quietly recreate the oversized installation â€”
 // media goes through mediaResponse and its cap.
 function shellResponse(request) {
   return caches.match(request, { ignoreSearch: true }).then((cached) => cached || fetch(request));
@@ -207,7 +207,11 @@ function trimMediaCache(cache, addedBytes) {
     if (mediaBytes <= MEDIA_CACHE_CAP_BYTES) return;
     // keys() lists entries oldest-first in every engine that ships this
     // worker; dropping from the front is the LRU-by-insertion the cap wants.
-    for (const key of await cache.keys()) {
+    // Keep the small painted cinematic library ahead of optional older media.
+    // Both groups remain insertion-ordered and the same total cap still applies.
+    const keys = await cache.keys();
+    keys.sort((a,b)=>Number(a.url.includes('/assets/cinema/'))-Number(b.url.includes('/assets/cinema/')));
+    for (const key of keys) {
       if (mediaBytes <= MEDIA_CACHE_CAP_BYTES) break;
       const entry = await cache.match(key);
       const bytes = entry ? sizeOf(entry) : 0;
