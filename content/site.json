@@ -50,6 +50,12 @@
   ],
   "games": [
     {
+      "name": "🌊 After the Storm: Coastal Racing",
+      "desc": "Jet-ski racing and free riding with realistic water interaction, detailed coasts, nine venues, stunts and split screen.",
+      "status": "live",
+      "link": "/games/2026-09-10/after-the-storm/race.html"
+    },
+    {
       "name": "👷 Hard Hat Mac",
       "desc": "The 1983 Apple II classic, fully remastered — 4 levels, power-ups, chiptune music, global scores.",
       "status": "live",
