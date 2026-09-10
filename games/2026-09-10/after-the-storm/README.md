@@ -29,6 +29,8 @@ Keyboard steering is 20% gentler; analogue steering is unchanged. After a brief 
 
 In solo modes, arrow keys also drive. Drag to orbit and scroll to zoom; each split-screen half controls its own camera. Forward ramp trim gives a lower, shorter jump; rearward trim gives a higher, longer jump.
 
+Free ride includes four floating ramps and twelve air, surface and dive rings in each venue. The first ramp is ahead of the start; the HUD points toward the nearest ramp. There is no stunt timer. Collected rings return after ten seconds, and missed rings can be retried after two seconds. Long swells are 2.1 times taller and longer, with unchanged fine ripples; rendering, buoyancy and floating ramp contact use the same surface model.
+
 Stunts: hold 1 for a flip, 2/3 for barrel rolls, then release before landing. 4/5/6 select standing, handstand and backward poses; 7 somersaults from standing; F dives during descent.
 
 Standard gamepads: left stick steering/trim, right trigger throttle, left trigger brake, right shoulder slide, bottom face button absorb, top face button camera, Start pause. For stunts, hold left shoulder with the top face button for flip, left/right face buttons for rolls, D-pad up/right/down for poses, bottom face button for somersault, and left trigger for dive. Physical gamepad hardware has not been tested.
