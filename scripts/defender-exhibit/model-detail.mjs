@@ -65,6 +65,15 @@ export function buildDetailedCabinet(){
  // Cable loom, individual insulation colors, support ties and plug bodies.
  for(let i=0;i<12;i++){const x=.39+i*.009;const color=[m.redwire,m.bluewire,m.yellowwire,m.whitewire][i%4];tube(frame,[[x,.49,-.37],[x,.69,-.34],[x-.04,1.2,-.36],[x-.01,1.5,-.38],[x,2.4,-.38],[x-.05,2.79,-.27]],.004,color,40);}
  for(const y of [.67,1.07,1.49,2.04,2.48]){box(frame,[.14,.014,.016],[.431,y,-.36],m.trim);screw(frame,[.535,y,-.359]);}
+ // Door hinge knuckles, recessed escutcheon, latch tongue and retaining washers.
+ for(let i=0;i<15;i++)cyl(coin,.009,.041,[-.31,.64+i*.051,.65],i%2?m.zinc:m.black);
+ ring(coin,.030,.003,[.244,1,.666],m.zinc);box(coin,[.075,.024,.008],[.217,1,.593],m.steel);
+ for(const x of [-.29,.29])for(const y of [.68,1.326])ring(coin,.011,.002,[x,y,.659],m.steel);
+ // Laminate edge layers and rubbed hand-rest edge, rather than uniform fresh paint.
+ for(let i=0;i<7;i++)box(cp,[1.29,.002,.005],[0,1.624+i*.004,.908],i%2?m.raw:m.wood,0);
+ for(let i=0;i<23;i++){const x=-.62+i*.053;box(cp,[.012+(i%4)*.008,.0018,.005],[x,1.722,.907],m.steel,0);}
+ // Coin-door back: switch terminals, strain relief and a service loop.
+ for(const x of [-.158,.158]){box(coin,[.075,.026,.028],[x,.955,.36],m.ink);for(const dx of [-.025,.025])box(coin,[.012,.022,.004],[x+dx,.94,.372],m.brass);tube(coin,[[x,.94,.37],[x+.07,.84,.28],[x+.1,.91,.2],[.26,1.2,.25]],.003,m.whitewire,18);}
  // Clear the bezel overhang while retaining assembly-local animation pivots.
  for(const o of cp.children)o.position.z+=.18;
  // Batch static geometry by material inside each independently movable assembly.
