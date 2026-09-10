@@ -105,6 +105,34 @@
       "duration": 1.28,
       "schedule": "1.024:b",
       "sha256": "33c76c81363347a8de7e973d5805a8ed88836706b4272cb2164285545e5abfbb"
+    },
+    "bomb": {
+      "file": "bomb.wav",
+      "command": "0x11",
+      "duration": 0.64,
+      "schedule": "0.064:11,0.128:11,0.192:11,0.256:11,0.320:11,0.384:17",
+      "sha256": "43a1d14b71d5341c64afbd0255b3124e5130e91e8c8b666513df077270e6c776"
+    },
+    "death": {
+      "file": "death.wav",
+      "command": "0x11",
+      "duration": 0.768,
+      "schedule": "0.128:11,0.256:17",
+      "sha256": "d9362559a309aed4023e09a647a0527b9324cc57b92a8f0400be20ed175ad5e1"
+    },
+    "extra": {
+      "file": "extra.wav",
+      "command": "0x1e",
+      "duration": 0.512,
+      "schedule": "",
+      "sha256": "22f85305ca3907cbcc10b6beb21e69f91493bf5873ffb31245ee5962ccb8a242"
+    },
+    "planet": {
+      "file": "planet.wav",
+      "command": "0x14",
+      "duration": 0.576,
+      "schedule": "0.064:11,0.160:11,0.256:17,0.416:17",
+      "sha256": "787230d29e8dbe7b3886423f2b032ed767a8e28aa8443e83c4d4d8c935c718b6"
     }
   }
 }

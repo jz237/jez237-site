@@ -4,6 +4,7 @@ import argparse,tempfile
 p=argparse.ArgumentParser();p.add_argument('--rom',required=True);p.add_argument('--renderer',required=True);args=p.parse_args();assert hashlib.sha1(Path(args.rom).read_bytes()).hexdigest()=='ceb0d18483f0691978c604db94417e6941ad7ff2'
 scratch=Path(tempfile.mkdtemp(prefix='defender-audio-'));root=Path(__file__).resolve().parents[2];out=root/'public/audio';out.mkdir(exist_ok=True)
 effects={'fire':(0x14,.768,''),'explosion':(6,.16,''),'pod':(5,.256,''),'bomber':(1,.16,''),'mutant':(0x17,.128,''),'swarmer':(7,.128,''),'abduct':(0x0b,.256,''),'fall':(0x1a,.256,''),'catch':(8,.48,'0.16:8,0.32:8'),'delivery':(0x1f,.384,''),'hyperspace':(0x15,.768,''),'credit':(0x19,.384,''),'thrust':(0x16,2,''),'start':(0x0a,1.28,'1.024:b')}
+effects.update({'bomb':(0x11,.64,'0.064:11,0.128:11,0.192:11,0.256:11,0.320:11,0.384:17'),'death':(0x11,.768,'0.128:11,0.256:17'),'extra':(0x1e,.512,''),'planet':(0x14,.576,'0.064:11,0.160:11,0.256:17,0.416:17')})
 records={}
 for name,(command,duration,schedule) in effects.items():
  raw=scratch/(name+'.f32');subprocess.run([str(Path(args.renderer).resolve()),str(Path(args.rom).resolve()),hex(command),str(duration),str(raw),schedule],check=True)
