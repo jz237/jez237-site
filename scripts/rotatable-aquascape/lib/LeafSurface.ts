@@ -7,7 +7,8 @@ export function leafSurfaceTexture(seed=2731){
   const u=x/512,v=y/1024,index=(y*512+x)*4;
   const tissue=Math.sin(x*.087+Math.sin(y*.031)*2.2)*Math.sin(y*.063+Math.sin(x*.053))*5;
   const broad=Math.sin(u*17.+Math.sin(v*14.))*Math.sin(v*22.)*6;
-  const tone=180+26*Math.sin(v*Math.PI)+tissue+broad+(random()-.5)*16;
+  // Tissue modulates chlorophyll color without darkening every blade twice.
+  const tone=207+20*Math.sin(v*Math.PI)+tissue*.7+broad+(random()-.5)*10;
   pixels.data[index]=pixels.data[index+1]=pixels.data[index+2]=tone;pixels.data[index+3]=255;
  }
  context.putImageData(pixels,0,0);
