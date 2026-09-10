@@ -1,4 +1,6 @@
+import {AquariumWater} from './AquariumWater';
 import * as T from 'three';
+import {buildBotanicalPlants} from './BotanicalPlants';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {mergeVertices} from 'three/addons/utils/BufferGeometryUtils.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
@@ -7,7 +9,7 @@ import {createTetraSwim,advanceTetraSwim,tetraBehaviorLabel,type TetraSwim} from
 import {createSchoolRoute,advanceSchoolRoute,schoolLane} from './SchoolRoute';
 import {separateFish} from './FishCollisions';
 
-import {fishPosition,fishCoordinates,clearHardscape,fitLeaf,type Obstacle} from './TankSpace';
+import {fishPosition,fishCoordinates,clearHardscape,type Obstacle} from './TankSpace';
 
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
 const clamp=T.MathUtils.clamp;
@@ -36,7 +38,7 @@ export class Aquarium{
  private food:{mesh:T.Mesh;age:number}[]=[];
  private dust:T.Points;
  private bubbles:T.InstancedMesh;
- private water:T.Mesh;
+ private water:AquariumWater;
  private frame=0;
  private resizeObserver:ResizeObserver;
  constructor(private host:HTMLElement){
@@ -52,7 +54,7 @@ export class Aquarium{
   this.scene.background=new T.Color(0x080f12);
   this.scene.fog=new T.FogExp2(0x0a161b,.023);
   const pmrem=new T.PMREMGenerator(this.renderer),environment=new RoomEnvironment();
-  this.scene.environment=pmrem.fromScene(environment,.035).texture;this.scene.environmentIntensity=.18;
+  this.scene.environment=pmrem.fromScene(environment,.035).texture;this.scene.environmentIntensity=.10;
   environment.dispose();pmrem.dispose();
   this.controls=new OrbitControls(this.camera,this.renderer.domElement);
   this.controls.target.set(0,2.75,0);
@@ -62,13 +64,13 @@ export class Aquarium{
   this.controls.minDistance=10.8;this.controls.maxDistance=29;
   this.controls.rotateSpeed=.55;this.controls.zoomSpeed=.7;
   this.controls.addEventListener('start',()=>this.targetCamera=null);
-  this.camera.position.set(10,7.6,18.5);
+  this.camera.position.set(0,3.3,21.5);
   this.scene.add(this.fill,this.key);
   this.key.position.set(-1.5,8,1.7);this.key.target.position.set(0,1,-.5);this.scene.add(this.key.target);
   this.key.castShadow=true;this.key.shadow.mapSize.set(2048,2048);this.key.shadow.bias=-.0003;this.key.shadow.normalBias=.035;this.key.shadow.radius=3;
-  const rim=new T.DirectionalLight(0xa1cbd5,.9);rim.position.set(-5,6,-3);this.scene.add(rim);
+  const rim=new T.DirectionalLight(0xd2dfbf,.65);rim.position.set(-5,6,-3);this.scene.add(rim);
   const warm=new T.PointLight(0xffd9ad,7,18,2);warm.position.set(6,5,5);this.scene.add(warm);
-  this.buildTank();this.buildLandscape();this.buildPlants();
+  this.buildTank();this.buildLandscape();buildBotanicalPlants(this.scene,(x,z)=>this.height(x,z),this.swimShader);
   this.water=this.buildWater();
   this.dust=this.buildParticles();
   this.bubbles=new T.InstancedMesh(new T.SphereGeometry(.018,7,5),new T.MeshPhysicalMaterial({color:0xd2eee0,roughness:.05,metalness:.1,transparent:true,opacity:.36,depthWrite:false}),48);
@@ -82,17 +84,21 @@ export class Aquarium{
  private mesh(g:T.BufferGeometry,m:T.Material,p:T.Vector3,shadow=true){const o=new T.Mesh(g,m);o.position.copy(p);o.castShadow=shadow;o.receiveShadow=shadow;this.scene.add(o);return o;}
  private box(w:number,h:number,d:number,material:T.Material,p:T.Vector3,shadow=true){return this.mesh(new T.BoxGeometry(w,h,d),material,p,shadow);}
  private texturedMaterial(base:string,kind:'stone'|'soil'|'wood'){
+  if(kind!=='soil'){
+   const id=kind==='wood'?'bark_brown_01':'mossy_rock',loader=new T.TextureLoader();
+   const load=(suffix:string,color=false)=>{const t=loader.load(`./materials/${id}_${suffix}_2k.jpg`);if(color)t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(kind==='wood'?1:1.2,kind==='wood'?.7:1.2);t.anisotropy=8;return t;};
+   const material=new T.MeshStandardMaterial({map:load('diff',true),normalMap:load('nor_gl'),roughnessMap:load('rough'),normalScale:new T.Vector2(.85,.85),roughness:.92,color:kind==='wood'?0x827562:0x959f91});
+   this.caustics(material);return material;
+  }
   const c=document.createElement('canvas');c.width=c.height=512;const ctx=c.getContext('2d')!;
   ctx.fillStyle=base;ctx.fillRect(0,0,512,512);
   for(let i=0;i<28000;i++){
    const x=this.random()*512,y=this.random()*512,v=this.random();
    ctx.fillStyle=v>.5?`rgba(205,201,167,${this.random()*.20})`:`rgba(5,11,9,${this.random()*.35})`;
-   if(kind==='wood'){ctx.fillRect(x,y,.5+this.random()*2,7+this.random()*55);}
-   else{const r=kind==='soil'?.7+this.random()*3:.5+this.random()*1.5;ctx.beginPath();ctx.ellipse(x,y,r,r*.65,0,0,Math.PI*2);ctx.fill();}
+   const r=.4+this.random()*1.9;ctx.beginPath();ctx.ellipse(x,y,r,r*.65,0,0,Math.PI*2);ctx.fill();
   }
-  if(kind==='stone')for(let j=0;j<17;j++){ctx.strokeStyle='rgba(181,191,177,.19)';ctx.lineWidth=.5+this.random()*2;ctx.beginPath();let y=this.random()*512;ctx.moveTo(0,y);for(let x=0;x<520;x+=10){y+=this.random()*12-5;ctx.lineTo(x,y);}ctx.stroke();}
-  const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(kind==='wood'?3:2,kind==='wood'?1:2);map.anisotropy=8;
-  const material=new T.MeshStandardMaterial({map,bumpMap:map,bumpScale:kind==='wood'?.08:.055,roughness:kind==='stone'?.81:.94});
+  const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(8,8);map.anisotropy=8;
+  const material=new T.MeshStandardMaterial({map,bumpMap:map,bumpScale:.018,roughness:.94});
   this.caustics(material);return material;
  }
  private caustics(material:T.MeshStandardMaterial){
@@ -106,7 +112,7 @@ export class Aquarium{
  }
  private buildTank(){
   const dark=new T.MeshStandardMaterial({color:0x111c1e,roughness:.35,metalness:.65});
-  const floor=new T.MeshStandardMaterial({color:0x10191d,roughness:.48,metalness:.22});
+  const floor=new T.MeshBasicMaterial({color:0x080e10});
   this.box(100,.2,100,floor,V(0,-1.1,0));
   this.box(10.45,.88,4.95,dark,V(0,-.51,0));
   this.box(10.7,.13,5.1,new T.MeshStandardMaterial({color:0x182123,metalness:.75,roughness:.28}),V(0,-.035,0));
@@ -116,7 +122,7 @@ export class Aquarium{
   const glass=new T.MeshPhysicalMaterial({color:0xabcfc8,metalness:0,roughness:.06,transparent:true,opacity:.055,transmission:.15,ior:1.5,thickness:.06,side:T.DoubleSide,depthWrite:false,envMapIntensity:.6});
   const pane=(w:number,h:number,p:T.Vector3,ry=0)=>{const m=this.mesh(new T.PlaneGeometry(w,h),glass,p,false);m.rotation.y=ry;m.renderOrder=8;};
   pane(10.2,5.55,V(0,2.8,2.36));pane(10.2,5.55,V(0,2.8,-2.36));pane(4.72,5.55,V(-5.1,2.8,0),Math.PI/2);pane(4.72,5.55,V(5.1,2.8,0),Math.PI/2);
-  const edge=new T.MeshPhysicalMaterial({color:0x9dd1cb,transparent:true,opacity:.43,roughness:.16,metalness:.25,depthWrite:false});
+  const edge=new T.MeshBasicMaterial({color:0x9cc8b9,transparent:true,opacity:.56,depthWrite:false});
   for(const x of [-5.1,5.1])for(const z of [-2.36,2.36])this.box(.025,5.6,.025,edge,V(x,2.8,z),false);
   for(const z of [-2.36,2.36])for(const y of [.06,5.59])this.box(10.2,.023,.025,edge,V(0,y,z),false);
   for(const x of [-5.1,5.1])for(const y of [.06,5.59])this.box(.025,.023,4.72,edge,V(x,y,0),false);
@@ -143,7 +149,7 @@ export class Aquarium{
   const pathPositions:number[]=[],uv:number[]=[],indices:number[]=[];
   for(let j=0;j<=65;j++){const z=2.29-j/65*4.5,cx=1.5+Math.sin(z*1.05)*.65,width=.42+(z+2.2)*.16;for(let k=0;k<=12;k++){const x=cx+(k/12-.5)*width*2;pathPositions.push(x,this.height(x,z)+.026,z);uv.push(k/5,j/10);if(j<65&&k<12){const a=j*13+k;indices.push(a,a+1,a+13,a+1,a+14,a+13);}}}
   const sandGeo=new T.BufferGeometry();sandGeo.setAttribute('position',new T.Float32BufferAttribute(pathPositions,3));sandGeo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));sandGeo.setIndex(indices);sandGeo.computeVertexNormals();
-  const sand=this.texturedMaterial('#95866b','soil');sand.bumpScale=.025;this.mesh(sandGeo,sand,V(0,0,0));
+  const sand=this.texturedMaterial('#b9ae92','soil');sand.bumpScale=.025;this.mesh(sandGeo,sand,V(0,0,0));
   const rock=this.texturedMaterial('#383b33','stone');
   const rocks=[[-3.5,.6,.1,1.0,1.3,.83],[-2.2,.55,-.7,.9,.86,.72],[-4,.45,-1.45,.8,.9,.7],[-.8,.45,-1.25,.8,.9,.65],[-2.9,.4,1.1,.85,.5,.55],[.1,.33,.2,.55,.48,.47],[3.6,.43,-.9,.9,.62,.67],[4.3,.3,.9,.54,.52,.42],[2.8,.3,-1.8,.55,.6,.4]];
   for(const [x,y,z,sx,sy,sz] of rocks){
@@ -174,83 +180,16 @@ export class Aquarium{
  private wood(points:number[][],radius:number,material:T.Material){
   const curve=new T.CatmullRomCurve3(points.map(p=>V(...p as [number,number,number]))),frames=curve.computeFrenetFrames(60,false),positions:number[]=[],uv:number[]=[],index:number[]=[];
   for(let i=0;i<=60;i++){
-   const t=i/60,center=curve.getPointAt(t),r=radius*(.98-Math.pow(t,1.5)*.93);
+   const t=i/60,center=curve.getPointAt(t),r=radius*(.98-Math.pow(t,1.22)*.95)*(1+.10*Math.sin(t*35)+.07*Math.sin(t*63));
    if(i%8===0&&t<.86)this.obstacles.push({center:center.clone(),radius:r+.04});
-   for(let j=0;j<=14;j++){const a=j/14*Math.PI*2,furrow=1+.13*Math.sin(a*7+t*5)+.065*Math.sin(a*13-t*9),p=center.clone().addScaledVector(frames.normals[i],Math.cos(a)*r*furrow).addScaledVector(frames.binormals[i],Math.sin(a)*r*furrow);positions.push(p.x,p.y,p.z);uv.push(j/14,t*4);if(i<60&&j<14){const n=i*15+j;index.push(n,n+1,n+15,n+1,n+16,n+15);}}
+   for(let j=0;j<=14;j++){const a=j/14*Math.PI*2,furrow=1+.22*Math.sin(a*5+t*3)+.105*Math.sin(a*11-t*6),p=center.clone().addScaledVector(frames.normals[i],Math.cos(a)*r*furrow).addScaledVector(frames.binormals[i],Math.sin(a)*r*furrow);positions.push(p.x,p.y,p.z);uv.push(j/14,t*2.2);if(i<60&&j<14){const n=i*15+j;index.push(n,n+1,n+15,n+1,n+16,n+15);}}
   }
   const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setIndex(index);geo.computeVertexNormals();this.mesh(geo,material,V(0,0,0));
  }
- private leafGeometry(){
-  const p:number[]=[],uv:number[]=[],idx:number[]=[];
-  for(let i=0;i<=12;i++){const t=i/12,w=Math.pow(Math.sin(t*Math.PI),.8)*.23;for(let j=0;j<=4;j++){const s=j/4*2-1;p.push(s*w,t,Math.sin(t*Math.PI)*.08+Math.abs(s)*w*.25-t*t*.42);uv.push(j/4,t);if(i<12&&j<4){const n=i*5+j;idx.push(n,n+1,n+5,n+1,n+6,n+5);}}}
-  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;
- }
- private buildPlants(){
-  const material=new T.MeshStandardMaterial({color:0xffffff,roughness:.58,metalness:.025,side:T.DoubleSide});
-  material.onBeforeCompile=shader=>{
-   shader.uniforms.waterTime=this.swimShader;
-   shader.vertexShader='uniform float waterTime;varying vec2 leafUv;\n'+shader.vertexShader;
-   shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>\nleafUv=uv;vec3 root=instanceMatrix[3].xyz;transformed.z+=sin(waterTime*.85+root.x*1.7+root.z*2.3)*.065*uv.y*uv.y;transformed.x+=sin(waterTime*.61+root.z*3.)*.025*uv.y*uv.y;`);
-   shader.fragmentShader='varying vec2 leafUv;\n'+shader.fragmentShader;
-   shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>\nfloat vein=exp(-abs(leafUv.x-.5)*100.);float fine=pow(max(0.,cos((leafUv.y+abs(leafUv.x-.5)*.45)*120.)),14.);diffuseColor.rgb*=.77+.2*sin(leafUv.y*3.14159)+vein*.2+fine*.035;`);
-  };
-  const leafGeometry=this.leafGeometry(),leafPositions=leafGeometry.getAttribute('position') as T.BufferAttribute;
-  const matrices:T.Matrix4[]=[],colors:T.Color[]=[],dummy=new T.Object3D();
-  const add=(pos:T.Vector3,dir:T.Vector3,len:number,width:number,hue:number,sat:number,light:number,twist=0)=>{
-   dummy.position.copy(pos);dummy.quaternion.setFromUnitVectors(up,dir.normalize());dummy.rotateY(twist);dummy.scale.set(width,len,len);dummy.updateMatrix();fitLeaf(dummy,leafPositions);matrices.push(dummy.matrix.clone());colors.push(new T.Color().setHSL(hue,sat,light).convertSRGBToLinear());
-  };
-  // Back planting: branching Rotala stems, each leaf has a curved mesh and midrib.
-  const stemPoints:number[]=[];
-  for(let i=0;i<230;i++){
-   const x=-4.7+this.random()*9.3,z=-1.6-this.random()*.53;
-   const red=x>-.9&&x<2.65,height=(red?2.5:2.2)+this.random()*1.75,base=this.height(x,z),lean=(this.random()-.5)*.45;
-   stemPoints.push(x,base,z,x+lean,base+height,z+.1);
-   const nodes=11+Math.floor(this.random()*7);
-   for(let j=1;j<=nodes;j++){
-    const t=j/nodes,angle=j*2.39+i*.7;
-    for(let s=0;s<2;s++){const a=angle+s*Math.PI,l=(.25+this.random()*.18)*(1-t*.35);add(V(x+lean*t,base+height*t,z+.1*t),V(Math.cos(a)*.75,.55+this.random()*.3,Math.sin(a)*.75),l,l*(red?.53:.7),red?.025+this.random()*.055:.21+this.random()*.08,red?.4:.52,red?.22+this.random()*.12:.18+this.random()*.11,this.random());}
-   }
-  }
-  const stems=new T.BufferGeometry();stems.setAttribute('position',new T.Float32BufferAttribute(stemPoints,3));this.scene.add(new T.LineSegments(stems,new T.LineBasicMaterial({color:0x465632,transparent:true,opacity:.8})));
-  // Broad sword leaves on the left and right banks.
-  for(const [cx,cz,n] of [[-4,-.4,9],[-3.7,-1.25,8],[3.9,-1,7],[4.5,.1,5],[-1.1,-1.3,4]]){
-   for(let k=0;k<n;k++){const x=cx+(this.random()-.5)*.7,z=cz+(this.random()-.5)*.6,b=this.height(x,z);
-    for(let j=0;j<9;j++){const a=j*2.4+k,h=.7+this.random()*1.85;add(V(x,b,z),V(Math.cos(a)*.55,.5+this.random()*.55,Math.sin(a)*.6),h,h*(.25+this.random()*.2),.20+this.random()*.06,.53,.20+this.random()*.10,this.random()*.5);}
-   }
-  }
-  // Anubias and low crypts nestle around the rocks and wood.
-  for(let i=0;i<150;i++){
-   const x=-4.6+this.random()*5.4,z=-.7+this.random()*2.7;if(x>-.6&&z>1)continue;
-   const b=this.height(x,z)+.05;
-   for(let j=0;j<5;j++){const a=j*2.4+i;const len=.22+this.random()*.45;add(V(x,b,z),V(Math.cos(a)*.75,.5+this.random()*.6,Math.sin(a)*.75),len,len*1.1,.23+this.random()*.07,.48,.15+this.random()*.09,this.random()*2);}
-  }
-  // Fern fronds: paired pinnae arranged along arched axes.
-  for(let i=0;i<42;i++){
-   const x=-3.9+this.random()*3,z=-.8+this.random()*1.5,b=this.height(x,z)+.08;
-   for(let j=0;j<5;j++){const a=j*2.4+i,len=.55+this.random()*.85,dir=V(Math.cos(a)*.6,.7,Math.sin(a)*.6);
-    for(let k=1;k<=9;k++){const t=k/10,p=V(x,b,z).addScaledVector(dir,len*t);for(const sign of [-1,1])add(p,V(Math.cos(a+sign*1.1),.45,Math.sin(a+sign*1.1)),.19*(1-t*.6),.095,.23,.55,.19+this.random()*.1);}
-   }
-  }
-  // Foreground carpet with a deliberately open sand channel.
-  for(let i=0;i<1550;i++){
-   const x=(this.random()-.5)*9.8,z=(this.random()-.5)*4.4,path=1.5+Math.sin(z*1.05)*.65,width=.42+(z+2.2)*.16;if(Math.abs(x-path)<width+.14)continue;
-   if(z<-.8&&this.random()<.65)continue;
-   const b=this.height(x,z)+.018;
-   for(let j=0;j<3;j++){const a=this.random()*Math.PI*2,len=.09+this.random()*.18;add(V(x,b,z),V(Math.cos(a)*.7,.7,Math.sin(a)*.7),len,len*.65,.20+this.random()*.07,.58,.18+this.random()*.14);}
-  }
-  // Epiphyte moss attached to the trunk, with real depth from individual sprigs.
-  for(let i=0;i<380;i++){
-   const t=this.random(),x=-2.85+t*1.45+(this.random()-.5)*.4,y=1.2+t*2.5,z=-.1-t*.8+(this.random()-.5)*.4;
-   add(V(x,y,z),V(this.random()-.5,.7,this.random()-.5),.07+this.random()*.14,.09,.20+this.random()*.1,.63,.18+this.random()*.15);
-  }
-  const leaves=new T.InstancedMesh(leafGeometry,material,matrices.length);
-  matrices.forEach((m,i)=>{leaves.setMatrixAt(i,m);leaves.setColorAt(i,colors[i]);});leaves.castShadow=true;leaves.receiveShadow=true;leaves.computeBoundingSphere();this.scene.add(leaves);
- }
  private buildWater(){
-  const material=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,uniforms:{time:this.swimShader},vertexShader:`uniform float time;varying vec3 p;void main(){p=position;vec3 v=position;v.z+=sin(position.x*4.+time*.8)*sin(position.y*4.5-time*.65)*.012;gl_Position=projectionMatrix*modelViewMatrix*vec4(v,1.);}`,fragmentShader:`uniform float time;varying vec3 p;void main(){float a=sin(p.x*9.+sin(p.y*6.+time*.6)+time*.8)*sin(p.y*13.-time*.6+sin(p.x*5.)*.7);float ripple=pow(max(0.,a),18.);float light=exp(-pow(p.y+.2,2.)*45.)*.19;gl_FragColor=vec4(vec3(.31,.57,.54)+ripple*.35+light,.075+ripple*.17+light);}`});
-  const water=this.mesh(new T.PlaneGeometry(10.08,4.6,100,45),material,V(0,5.36,0),false);water.rotation.x=-Math.PI/2;water.renderOrder=7;
-  const line=new T.MeshBasicMaterial({color:0xaad5c9,transparent:true,opacity:.35,depthWrite:false});
-  for(const z of [-2.3,2.3])this.box(10.08,.018,.012,line,V(0,5.36,z),false);
+  const water=new AquariumWater();this.scene.add(water);
+  const line=new T.MeshBasicMaterial({color:0xc5e3d1,transparent:true,opacity:.5,depthWrite:false});
+  for(const z of [-2.3,2.3])this.box(10.08,.015,.012,line,V(0,5.36,z),false);
   return water;
  }
  private buildParticles(){
@@ -279,11 +218,11 @@ export class Aquarium{
   for(let i=0;i<12;i++){const m=this.mesh(new T.IcosahedronGeometry(.028,0),new T.MeshStandardMaterial({color:0xbba471,roughness:1}),V(.65+(this.random()-.5)*1.6,5.12+this.random()*.13,.62+(this.random()-.5)*.3),false);m.scale.set(1,.35,.8);this.food.push({mesh:m,age:0});}
  }
  zoom(scale:number){this.targetCamera=null;const offset=this.camera.position.clone().sub(this.controls.target);offset.setLength(clamp(offset.length()*scale,this.controls.minDistance,this.controls.maxDistance));this.camera.position.copy(this.controls.target).add(offset);this.controls.update();}
- view(name:string){const portrait=this.host.clientWidth/this.host.clientHeight<.9,dist=portrait?23:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?5.2:7.5,Math.cos(angle)*dist);}
+ view(name:string){const portrait=this.host.clientWidth/this.host.clientHeight<.9,dist=portrait?23:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?3.3:7.5,Math.cos(angle)*dist);}
  private resize(){
   const w=this.host.clientWidth,h=this.host.clientHeight;this.camera.aspect=w/h;
   // Widen vertical field of view on narrow screens to retain the entire tank.
-  this.camera.fov=w/h<.8?65:w/h<1.1?48:33;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);
+  this.camera.fov=w/h<.8?52:w/h<1.1?48:33;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);
  }
  private avoidSolid(s:TetraSwim){
   const p=fishPosition(s.x,s.y,s.z),before=p.clone();clearHardscape(p,this.obstacles);
@@ -297,7 +236,7 @@ export class Aquarium{
   if(this.targetCamera){this.camera.position.lerp(this.targetCamera,1-Math.exp(-wallDt*4));if(this.camera.position.distanceTo(this.targetCamera)<.02)this.targetCamera=null;}
   this.controls.update();
   this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
-  this.key.intensity=95*this.daylight;this.fill.intensity=.35+this.daylight*.6;this.renderer.toneMappingExposure=.8+.32*this.daylight;
+  this.key.intensity=155*this.daylight;this.fill.intensity=.18+this.daylight*.40;this.renderer.toneMappingExposure=.8+.32*this.daylight;
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
@@ -312,6 +251,8 @@ export class Aquarium{
   for(let i=this.food.length-1;i>=0;i--){const f=this.food[i];f.age+=dt;f.mesh.position.y-=dt*.07;f.mesh.rotation.y+=dt*.5;if(f.age>48){this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();this.food.splice(i,1);}}
   const d=new T.Object3D();for(let i=0;i<48;i++){const t=(this.time*(.11+(i%4)*.015)+i*.137)%1;d.position.set(4.36+Math.sin(t*8+i)*.045+t*.16,.85+t*4.46,-1.7+Math.cos(t*6+i)*.06);d.scale.setScalar(.4+(1-t)*.6);d.updateMatrix();this.bubbles.setMatrixAt(i,d.matrix);}this.bubbles.instanceMatrix.needsUpdate=true;
   const p=this.dust.geometry.getAttribute('position') as T.BufferAttribute;if(dt){for(let i=0;i<p.count;i++){let x=p.getX(i)+Math.sin(i+this.time*.2)*dt*.018,y=p.getY(i)+dt*.006;if(y>5.3)y=.7;p.setXY(i,x,y);}p.needsUpdate=true;}
+  this.water.update(this.time,this.camera.position.y);
   this.renderer.render(this.scene,this.camera);
  };
 }
+

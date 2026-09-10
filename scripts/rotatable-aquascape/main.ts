@@ -9,7 +9,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
  <div class="scene-note"><span class="live-dot"></span><span>Cardinal tetra school</span><span class="note-divider">/</span><span id="status">Preparing the aquarium</span></div>
  <div id="loading" role="status">Growing a small world<span></span></div>
  <aside class="help"><span>EXPLORE THE TANK</span><p>Drag to rotate<br>Scroll or pinch to zoom</p></aside>
- <footer><div class="views" role="group" aria-label="Camera view"><button data-view="front">Front</button><button data-view="angle" class="active">Three-quarter</button><button data-view="side">Side</button></div>
+ <footer><div class="views" role="group" aria-label="Camera view"><button data-view="front" class="active">Front</button><button data-view="angle">Three-quarter</button><button data-view="side">Side</button></div>
  <div class="actions"><button id="zoomIn" aria-label="Zoom in">＋</button><button id="zoomOut" aria-label="Zoom out">−</button><span class="divider"></span><button id="feed">Feed fish</button><button id="pause" aria-pressed="false">Pause</button><button id="light" aria-pressed="false">Evening</button><button id="reset" aria-label="Reset camera">Reset view</button></div></footer>
  <div class="bottom-note">A separate 3D study <span>·</span> All scenery has volume</div>
 </main>`;
