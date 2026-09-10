@@ -1,0 +1,86 @@
+[
+  {
+    "file": "assets/terrain/coast_sand_02_diff.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/coast_sand_02/coast_sand_02_diff_2k.jpg",
+    "assetPage": "https://polyhaven.com/a/coast_sand_02",
+    "license": "CC0-1.0",
+    "sha256": "3dba77f23cecaa8ab16889fe9b30f2018a24f2afb002d1c046143b9a5e097946"
+  },
+  {
+    "file": "assets/terrain/coast_sand_02_nor_gl.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/coast_sand_02/coast_sand_02_nor_gl_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/coast_sand_02",
+    "license": "CC0-1.0",
+    "sha256": "285a9b5c7f39215a1446c51a69d81228a01277ebafc48b9aeebd115066b4f796"
+  },
+  {
+    "file": "assets/terrain/coast_sand_02_rough.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/coast_sand_02/coast_sand_02_rough_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/coast_sand_02",
+    "license": "CC0-1.0",
+    "sha256": "f2b99b9f81c7bd467107f61551ab6517cfa090efcdb10cc19bc2fc4ea347fd7f"
+  },
+  {
+    "file": "assets/terrain/coast_sand_rocks_02_diff.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/coast_sand_rocks_02/coast_sand_rocks_02_diff_2k.jpg",
+    "assetPage": "https://polyhaven.com/a/coast_sand_rocks_02",
+    "license": "CC0-1.0",
+    "sha256": "98a8850f24cba18e4c99e46c56f5675f910809ee7f75df3e8587ec9e27088ed6"
+  },
+  {
+    "file": "assets/terrain/coast_sand_rocks_02_nor_gl.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/coast_sand_rocks_02/coast_sand_rocks_02_nor_gl_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/coast_sand_rocks_02",
+    "license": "CC0-1.0",
+    "sha256": "52776374a8f64aaa8334a87ef8484048baa6f689428a9f8b812004871417ef3e"
+  },
+  {
+    "file": "assets/terrain/coast_sand_rocks_02_rough.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/coast_sand_rocks_02/coast_sand_rocks_02_rough_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/coast_sand_rocks_02",
+    "license": "CC0-1.0",
+    "sha256": "02209fc6bb56673585fa29ab78f96651975317839292c31a96844ab7d90a413d"
+  },
+  {
+    "file": "assets/terrain/forrest_ground_01_diff.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/2k/forrest_ground_01/forrest_ground_01_diff_2k.jpg",
+    "assetPage": "https://polyhaven.com/a/forrest_ground_01",
+    "license": "CC0-1.0",
+    "sha256": "e4d557ff61a0b42712a58e8a2e91c6010738977d4e172b7af47abd7d406ae735"
+  },
+  {
+    "file": "assets/terrain/forrest_ground_01_nor_gl.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_nor_gl_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/forrest_ground_01",
+    "license": "CC0-1.0",
+    "sha256": "32528a7cdee962cc0b248ee4023a74d0df175737ea90e1eb425122351e0bdab4"
+  },
+  {
+    "file": "assets/terrain/forrest_ground_01_rough.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/forrest_ground_01/forrest_ground_01_rough_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/forrest_ground_01",
+    "license": "CC0-1.0",
+    "sha256": "30d8b56a03d7b12da16f58011b675662a40e58e1cdc768119a5f03968140058c"
+  },
+  {
+    "file": "assets/terrain/bark_brown_02_diff.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_brown_02/bark_brown_02_diff_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/bark_brown_02",
+    "license": "CC0-1.0",
+    "sha256": "920fa0bed0c9d78c1d530e99795113afd532d7db746de440f4a85d7c83ed0f1a"
+  },
+  {
+    "file": "assets/terrain/bark_brown_02_nor_gl.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_brown_02/bark_brown_02_nor_gl_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/bark_brown_02",
+    "license": "CC0-1.0",
+    "sha256": "0d5e691e8ad8bcd093a3587887fda2a6b4a948b5708a4f256f7919584c6eb857"
+  },
+  {
+    "file": "assets/terrain/bark_brown_02_rough.jpg",
+    "source": "https://dl.polyhaven.org/file/ph-assets/Textures/jpg/1k/bark_brown_02/bark_brown_02_rough_1k.jpg",
+    "assetPage": "https://polyhaven.com/a/bark_brown_02",
+    "license": "CC0-1.0",
+    "sha256": "68125592de36e15bae7aa6db85c4d135aeb7e5653199ba226483a70f6d69837d"
+  }
+]
