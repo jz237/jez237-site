@@ -13,19 +13,21 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  const dummy=new T.Object3D();
  for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet'] as Species[])for(let variant=0;variant<3;variant++){
   const p:number[]=[],uv:number[]=[],idx:number[]=[];
-  const rows=species==='sword'?20:species==='anubias'||species==='bacopa'?10:species==='rotala'?8:6,cols=species==='sword'?6:species==='carpet'?2:4;
+  const rows=species==='sword'?24:species==='carpet'?8:16,cols=species==='carpet'?4:8;
   for(let i=0;i<=rows;i++){
    const t=i/rows,blade=Math.max(0,(t-.08)/.92);
    const profile=species==='bacopa'?Math.pow(blade,1.3):species==='ludwigia'?Math.pow(blade,.8):blade;
    const outline=species==='anubias'||species==='bacopa'?Math.pow(Math.sin(profile*Math.PI),.46):species==='sword'?Math.pow(Math.sin(blade*Math.PI),.9):Math.pow(Math.sin(profile*Math.PI),species==='ludwigia'?.56:.67);
-   const width=t<.08?.012:outline*.5;
+   // A continuous petiole-to-blade transition avoids the old abrupt shoulder.
+   const width=t<.08?.008:T.MathUtils.lerp(.008,outline*.5,T.MathUtils.smoothstep(t,.08,.18));
    for(let j=0;j<=cols;j++){
     const u=j/cols,s=u*2-1;
     // Arched midrib, modest edge waviness and a rolled tip make a thin living blade.
-    const edge=Math.abs(s),wave=Math.sin(t*22+s*3)*edge*edge*(species==='sword'?.03:.012);
-    const curl=(species==='sword'?.25:species==='bacopa'?.055:.085)*t*t*(.72+variant*.28);
+    const edge=Math.abs(s),wave=Math.sin(t*22+s*3+variant*.9)*edge*edge*(species==='sword'?.018:.006)*Math.sin(t*Math.PI);
+    const curl=(species==='sword'?.28:species==='bacopa'?.07:.14)*t*t*(.65+variant*.35);
     const asymmetry=(variant-1)*Math.sin(t*Math.PI);
-    p.push(s*width*(1+s*asymmetry*.14)+asymmetry*.035,t,-curl+edge*edge*(.035+variant*.020)*Math.sin(t*Math.PI)+wave);
+    const arch=Math.sin(t*Math.PI)*(.025+variant*.014);
+    p.push(s*width*(1+s*asymmetry*.14)+asymmetry*.035,t,arch-curl+edge*edge*(.020+variant*.014)*Math.sin(t*Math.PI)+wave+s*width*(variant-1)*t*.17);
     uv.push(u,t);
     if(i<rows&&j<cols){const n=i*(cols+1)+j;idx.push(n,n+1,n+cols+1,n+1,n+cols+2,n+cols+1);}
    }
@@ -58,7 +60,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   plantRoot=V(x,base,z);plantFlex=.24+random()*.17;
   const leanX=Math.cos(angle)*(.12+random()*.33),leanZ=(random()-.5)*.40;
   const point=(t:number)=>V(T.MathUtils.clamp(x+leanX*t*t+Math.sin(t*4+phase)*.13*t,-4.65,4.65),base+h*t,T.MathUtils.clamp(z+leanZ*t*t,-1.95,1.9));
-  const hue=red?.022+random()*.022:.205+random()*.035,light=.26+random()*.065;
+  const hue=red?-.018+random()*.026:.205+random()*.035,light=.26+random()*.065;
   const roundLeaf=!red&&(cx< -3.8||cx>3.7||maxH<2.5)&&i%3!==0;
   const broadRed=red&&(cx>.4?i%3!==0:i%4===0);
   const grow=(start:number,end:number,offset:T.Vector3,vigor=1)=>{
