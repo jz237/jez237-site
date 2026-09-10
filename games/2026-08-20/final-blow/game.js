@@ -1120,7 +1120,7 @@ function ensureCinemaAtlas(id, bank = 'cinema-ko') {
 }
 const ensureCinemaKoAtlas = id => ensureCinemaAtlas(id);
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.3` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.4` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -2380,6 +2380,7 @@ const audioAssets = {
 const elementAudioAssets = Object.freeze({
   "vfx-flame": "assets/audio/vfx/flame-whoosh.mp3",
   "vfx-electric": "assets/audio/vfx/electric-crackle.mp3",
+  "vfx-feedback": "assets/audio/vfx/feedback-release.mp3",
   "vfx-seismic": "assets/audio/vfx/seismic-rumble.mp3",
   "vfx-spark": "assets/audio/vfx/spark-hiss.mp3",
   "vfx-smoke": "assets/audio/vfx/smoke-puff.mp3",
@@ -2450,6 +2451,7 @@ const sfxVolumes = {
   // v2.6 ELEMENTS: elemental layers sit under the existing swing/impact cues.
   "vfx-flame": 0.46,
   "vfx-electric": 0.44,
+  "vfx-feedback": 0.42,
   "vfx-seismic": 0.5,
   "vfx-spark": 0.4,
   "vfx-smoke": 0.5,
@@ -11177,6 +11179,22 @@ function updateCinematicCamera(dtMs) {
   // the splat framing while it is alive; the phase branches above keep the
   // pose for every played match. null outside a demo — the played game's
   // "identity by default" contract is untouched.
+  // Ending shots keep the painted stage at a fixed scale. A close wall
+  // rebound retains only the horizontal reveal needed to show the victim.
+  if(!finisher && (phase==='finish' || phase==='roundover')) {
+    targetZoom=cameraPhaseZoom=1;
+    targetRotation=cameraPhaseRotation=0;
+    cameraPunch=null;
+    if(!state.koScene) {
+      const victim=first.health<=0?first:second.health<=0?second:null;
+      if(victim && Math.abs(first.x-second.x)<600) {
+        const half=fighterRenderSize(victim.def.id)*.6;
+        splatShiftTarget=Math.max(0,half+12-victim.x)-Math.max(0,victim.x+half+12-W);
+        splatPin=splatShiftTarget<0?1:splatShiftTarget>0?-1:0;
+      }
+    }
+    wallsplatShift=splatShiftTarget;
+  }
   const demoPose = demoCameraPose(dt, phase, finisher, reduced);
   if (demoPose) {
     targetZoom = demoPose.zoom;
@@ -12039,7 +12057,7 @@ function buildOccluderRig(stageId) {
 function drawWallsplatEdgeCover() {
   if (wallsplatShift === 0) return;
   const rightWall = wallsplatShift < 0;
-  const reach = Math.min(130, Math.abs(wallsplatShift) * 1.6 + 70);
+  const reach = Math.min(400, Math.abs(wallsplatShift) * 1.6 + 70);
   ctx.save();
   ctx.fillStyle = "#05070b";
   if (rightWall) ctx.fillRect(W - 1, -8, reach, H + 16);
@@ -18002,6 +18020,19 @@ function updateFighter(fighter, opponent, input, dt) {
 
   if (tryFinish(fighter.side, input)) return;
   if (state.phase !== "fight") {
+    // Give a defeated airborne body room to rebound and land before the
+    // finish-window approach resumes. This moves the grounded winner only.
+    if(state.phase==='finish' && !state.finisher && fighter.health>0 && fighter.grounded && opponent.health<=0) {
+      fighter.vx=0;
+      if(!opponent.grounded || opponent.down) {
+        const away=fighter.x<=opponent.x?-1:1;
+        const gap=Math.abs(fighter.x-opponent.x);
+        const step=Math.min(Math.max(0,280-gap),260*dt);
+        fighter.x=clamp(fighter.x+away*step,MOVEMENT_RULES.stageMinX,MOVEMENT_RULES.stageMaxX);
+        fighter.vx=away*step/dt;
+        if(step>0)fighter.walkTime+=dt;
+      }
+    }
     // A decided round stops attacks, not an airborne body's momentum.
     if (!fighter.grounded && !state.finisher && !state.koScene
       && (state.phase === 'finish' || state.phase === 'roundover')) {
@@ -33096,7 +33127,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.3-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.4-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34600,7 +34631,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.8.3-ringside",
+  version: "5.8.4-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

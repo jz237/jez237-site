@@ -425,3 +425,11 @@ test('edge staging reserves the full distance of kick and uppercut recoil',()=>{
   assert.equal(Math.abs(end.victimX-scene.victimTarget),scene.reactionTravel);
  }
 });
+
+test('feedback audio starts at the visible pressure-wave release',()=>{
+ const script=paintedFatalityScript('cyraxx',1,FINISHER_CHOREOGRAPHY.cyraxx);
+ assert.equal(cinematicFeedbackPulse(1.939),null);
+ assert.ok(cinematicFeedbackPulse(1.94));
+ assert.equal(cinematicFoleyBetween(script,1.93,1.94)[0].audioCue,'vfx-feedback');
+ assert.deepEqual(cinematicFoleyBetween(script,1.94,1.94),[]);
+});

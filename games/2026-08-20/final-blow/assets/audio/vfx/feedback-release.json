@@ -1,0 +1,11 @@
+{
+  "file": "feedback-release.mp3",
+  "origin": "local deterministic synthesis; no external service",
+  "durationSeconds": 0.46,
+  "seed": 237,
+  "sampleRate": 44100,
+  "description": "Tapered falling feedback tone with breath onset and low-frequency body; peak normalized before MP3 encoding.",
+  "scene": "Cyraxx DEAD AIR, release at1.94seconds",
+  "decodedPeak": 0.526334285736084,
+  "playbackGain": 0.42
+}

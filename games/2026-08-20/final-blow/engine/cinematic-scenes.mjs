@@ -354,6 +354,7 @@ function cyraxxFeedbackScript(script) {
  const key=(t,vx=0,v='ext4:5')=>({...script.keys[0],t,ax:-360,ay:0,vx,vy:0,ar:0,vr:0,zoom:1,v,vf:15});
  return {...script,duration:4.25,combo:'DEAD AIR',intactImpact:true,feedbackPulse:true,paintedBank:'cinema-fatal-1',victimBank:'cinema-body-ko',
   victimBraceFrames:[{t:0,frame:0}],
+  foleyCues:[{t:1.94,kind:'object-bedbugs',audioCue:'vfx-feedback'}],
   keys:[key(0),key(1.94),{...key(2.1,0,'ext4:4'),contact:true},key(2.4,35,'ext4:3'),key(3,85,'ext4:15'),key(4.25,85,'ext4:15')],
   impacts:[{...script.impacts.at(-1),t:2.1,label:'FEEDBACK RELEASE',final:true,projectilePhase:null,foley:'hit-heavy',hitHeight:1.05}],
   paintedFrames:times.map((t,frame)=>({t,frame}))};
