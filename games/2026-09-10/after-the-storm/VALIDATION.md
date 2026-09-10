@@ -182,3 +182,17 @@ Water datum / floating scenery verification (2026-09-10):
 - Citadel inspection held at 77.950 seconds on lap two with the sluice raised and three riders approaching its interior. Shared waves, wake/foam, the lifted grille and reflected sign were visible.
 - No runtime errors appeared in these browser checks. Verification uses ordinary helm input with a 4x simulation clock. No records from these runs were saved.
 - Corrected route checkpoint ordering, carved the shortcut floor, lengthened entrance funnels, kept stunt guidance through mandatory checkpoints, and added camera collision. Static rock bases now sample nearby terrain so they sit into slopes; the outer-channel sign has support posts.
+
+
+## Larger waves and free-ride stunt playground — September 10, 2026
+
+- 85 automated tests pass. Existing race, championship, timed stunt, split-screen, speed, shore recovery, tide and salvage loops remain covered.
+- Four long-wave bands have 2.1x amplitude and wavelength, with deep-water dispersion recalculated. The ten smaller bands retain their previous scale. CPU buoyancy and GPU displacement share the spectrum.
+- Every free-ride venue now has four floating ramps and twelve rings. Ramp footprints and landing corridors are verified in water in all 36 venue/class combinations.
+- Ordinary helm verification launches from the first ramp, collects an air ring, lands, and brakes in all nine venues under calm, chop and storm conditions (27 runs).
+- Free ride remains active beyond the timed mode's deadline. Ring cooldowns permit another collection. New sessions reset score and rings. Floating visual decks, hull contact and attached rings share the same tide/swell height function.
+- A browser free-ride run on Tempest Island in storm swell completed the jump, ring and landing: 50 points, one ring, approximately 4.54 m peak clearance above the sampled water; no JavaScript errors.
+- Ramp frames, pontoons, contrasting edges, chevrons and signs were visually checked. Labels face the approach. A compact HUD gives the nearest ramp direction, score and trick keys.
+- Ramps are rigid platforms with filtered wave heave; they do not simulate mooring ropes or structural flex. Rings are arcade stunt targets.
+
+- Browser timed Stunt Run on Tempest Island / storm: completed in 71.30 simulation seconds, 4/4 checkpoints, 8 rings, 6 tricks, 6 landings, 6,616 points. High graphics; final frame-rate window 60 FPS. No JavaScript errors.

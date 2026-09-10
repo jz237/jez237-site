@@ -2,8 +2,9 @@ import {impactHeight} from './surface-impulses.js';
 export const waterLevel={value:0};
 export const DURATION=480, CAPACITY=3, DOCK={x:0,z:142};
 export const JOBS=[{name:'Medical supplies',x:-66,z:46,weight:1,value:450,seconds:22,depth:1.9},{name:'Survey instruments',x:74,z:-46,weight:2,value:900,seconds:34,depth:2.8},{name:'Wreck strongbox',x:-32,z:-164,weight:2,value:1400,seconds:46,depth:3.5}];
-// Directional wind-wave spectrum; phases and dispersive speeds break synchronized bands.
-export const WAVES=Array.from({length:14},(_,i)=>{const angle=.78+Math.sin(i*2.399)*1.05,k=.085*Math.pow(1.34,i);return [Math.cos(angle),Math.sin(angle),k,.18*Math.pow(.73,i),Math.sqrt(9.81*k),(i*2.39996323+.71)%(Math.PI*2)];});
+// Long swells are 2.1x taller; fine ripples keep their scale. This spectrum drives rendering AND hull support.
+// Directional phases and dispersive speeds break synchronized bands.
+export const WAVES=Array.from({length:14},(_,i)=>{const angle=.78+Math.sin(i*2.399)*1.05,k=.085*Math.pow(1.34,i)/(i<4?2.1:1);return [Math.cos(angle),Math.sin(angle),k,.18*Math.pow(.73,i)*(i<4?2.1:1),Math.sqrt(9.81*k),(i*2.39996323+.71)%(Math.PI*2)];});
 export const craftField={x:10000,z:10000,heading:0,power:0};
 export const craftFields=[craftField,...Array.from({length:3},()=>({x:10000,z:10000,heading:0,power:0}))];
 export function jetWake(x,z){let result=0;for(const c of craftFields){if(c.power<=0)continue;const dx=x-c.x,dz=z-c.z,s=Math.sin(c.heading),co=Math.cos(c.heading),along=dx*s+dz*co,across=dx*co-dz*s;let h=Math.exp(-((along-1.1)**2*2.5+across*across*.9))*.075;const aft=-along;if(aft>1&&aft<36){const edge=Math.abs(across)-(.4+aft*.24);h+=Math.cos(edge*4.2)*Math.exp(-edge*edge*.9)*.095*Math.exp(-aft*.035);h-=Math.exp(-across*across*2-(aft-2.4)**2)*.08;}result+=h*c.power;}return result;}
