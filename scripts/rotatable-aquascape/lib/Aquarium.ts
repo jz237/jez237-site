@@ -38,6 +38,7 @@ export class Aquarium{
  private daylight=1;
  private key=new T.SpotLight(0xe8f8ed,200,26,.94,.65,1.1);
  private stripLight=new T.RectAreaLight(0xf3ffe9,32,8.7,.28);
+ private ledMaterial=new T.MeshStandardMaterial({color:0xe0f9ee,emissive:0xe0f9ee,emissiveIntensity:3});
  private fill=new T.HemisphereLight(0xc2e2e6,0x5b6a49,.9);
  private swimShader={value:0};
  private waterIllumination={value:1};
@@ -131,8 +132,7 @@ export class Aquarium{
   for(const x of [-2.6,0,2.6])this.box(.012,.7,.012,seam,V(x,-.53,2.479),false);
   buildAquariumGlass(this.scene,this.reflections);
   this.box(9.2,.12,.65,dark,V(0,6.4,-.15));
-  const led=new T.MeshStandardMaterial({color:0xe0f9ee,emissive:0xe0f9ee,emissiveIntensity:3});
-  for(let i=0;i<3;i++)this.box(8.75,.018,.105,led,V(0,6.335,-.37+i*.2),false);
+  for(let i=0;i<3;i++)this.box(8.75,.018,.105,this.ledMaterial,V(0,6.335,-.37+i*.2),false);
   for(const x of [-3.8,3.8]){this.box(.019,4,.019,dark,V(x,8.45,-.15),false);}
   // Transparent return pipe and intake, both physically outside the planting.
   const pipeMat=new T.MeshPhysicalMaterial({color:0xe5f0e9,transparent:true,opacity:1,transmission:.96,thickness:.035,ior:1.5,roughness:.025,metalness:0,depthWrite:false,envMapIntensity:1.2});
@@ -194,6 +194,7 @@ export class Aquarium{
   this.controls.update();
   this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
   this.waterIllumination.value=this.daylight;
+  this.ledMaterial.emissiveIntensity=3*this.daylight;
   this.key.intensity=130*this.daylight;this.stripLight.intensity=32*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=.8+.32*this.daylight;
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
