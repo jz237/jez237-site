@@ -1,5 +1,5 @@
 import React,{Suspense,useCallback,useEffect,useRef,useState} from 'react';
-import {PCFShadowMap} from 'three';
+import {PCFSoftShadowMap} from 'three';
 import {Canvas} from '@react-three/fiber';
 import {Power,Lightbulb,Sun,Volume2,VolumeX,RotateCcw,Maximize,HelpCircle,BookOpen,X,ArrowRight,ArrowLeft,ChevronRight,Pause,Play,Move,ChevronDown} from 'lucide-react';
 import {Scene} from './Scene';
@@ -25,7 +25,7 @@ export default function App(){const [mode,setMode]=useState<Mode>('Hero'),[speed
  const words=copy[mode];return <main className={'mode-'+mode.toLowerCase()+(reduced?' reduced':'')+(selected?' inspecting':'')}>
  <header><a href="/demos/">← JEZ237 / EXHIBITS</a><h1>DEFENDER <span>— 1981 ARCADE SYSTEM</span></h1><p><i/> EXHIBIT 005</p></header>
  <div className="scene" aria-label="Interactive arcade cabinet. Drag to orbit, scroll to zoom. Use the component selector for keyboard inspection." style={{cursor:hover?'pointer':'grab'}}>
- {!fallback&&<SceneBoundary onError={onError}><Canvas shadows={quality==='high'?{type:PCFShadowMap}:false} dpr={quality==='high'?[1,1.75]:1} camera={{position:[3.7,2.45,5.7],fov:38,near:.1,far:60}} gl={{antialias:true,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.domElement.addEventListener('webglcontextlost',onError,{once:true});}} fallback={<button onClick={onError}>View illustrated exhibit</button>}><Suspense fallback={null}><Scene mode={mode} speed={speed} power={power} cabinetLight={cabinetLight} roomLight={roomLight} reduced={reduced} quality={quality} reset={reset} selected={selected} signal={signal} game={game} onSelect={selectPart} onReady={onReady} onHover={setHover}/></Suspense></Canvas></SceneBoundary>}
+ {!fallback&&<SceneBoundary onError={onError}><Canvas shadows={quality==='high'?{type:PCFSoftShadowMap}:false} dpr={quality==='high'?[1,1.75]:1} camera={{position:[3.7,2.45,5.7],fov:38,near:.1,far:60}} gl={{antialias:true,powerPreference:'high-performance'}} onCreated={({gl})=>{gl.domElement.addEventListener('webglcontextlost',onError,{once:true});}} fallback={<button onClick={onError}>View illustrated exhibit</button>}><Suspense fallback={null}><Scene mode={mode} speed={speed} power={power} cabinetLight={cabinetLight} roomLight={roomLight} reduced={reduced} quality={quality} reset={reset} selected={selected} signal={signal} game={game} onSelect={selectPart} onReady={onReady} onHover={setHover}/></Suspense></Canvas></SceneBoundary>}
  {fallback&&<img className="fallback" src="./concept.webp" alt="Concept illustration of a vintage arcade cabinet with its internal components exposed"/>}
  </div><div className="vignette"/>
  {!ready&&<div className="loading" role="status"><span>ARCADE SYSTEM / 1981</span><strong>WARMING PHOSPHORS<span className="blink">_</span></strong><p>CHECKING DISPLAY · LOADING ASSEMBLIES</p><button onClick={onError}>Open illustrated fallback</button></div>}

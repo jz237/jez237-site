@@ -74,6 +74,13 @@ export function buildDetailedCabinet(){
  for(let i=0;i<23;i++){const x=-.62+i*.053;box(cp,[.012+(i%4)*.008,.0018,.005],[x,1.722,.907],m.steel,0);}
  // Coin-door back: switch terminals, strain relief and a service loop.
  for(const x of [-.158,.158]){box(coin,[.075,.026,.028],[x,.955,.36],m.ink);for(const dx of [-.025,.025])box(coin,[.012,.022,.004],[x+dx,.94,.372],m.brass);tube(coin,[[x,.94,.37],[x+.07,.84,.28],[x+.1,.91,.2],[.26,1.2,.25]],.003,m.whitewire,18);}
+ // Control hinge pin and underside fastener washers reveal how the deck is mounted.
+ for(let i=0;i<18;i++)cyl(cp,.009,.064,[-.6+i*.07,1.62,.345],i%2?m.zinc:m.black,[0,0,Math.PI/2]);
+ for(const x of [-.61,.61])for(const z of [.39,.83])ring(cp,.017,.002,[x,1.749,z],m.zinc,[Math.PI/2,0,0]);
+ // Bonding braid and solder tags on the coin door, plus a rolled door edge.
+ for(const x of [-.29,.29])tube(coin,[[x,.68,.64],[x,1,.642],[x,1.325,.64]],.004,m.black,12);
+ for(let i=0;i<3;i++)tube(coin,[[-.23,1.33,.56],[-.24+i*.004,1.37,.44],[-.3+i*.004,1.31,.33]],.002,m.copper,10);
+ for(const x of [-.23,-.3])ring(coin,.014,.003,[x,1.32,.56],m.brass);
  // Clear the bezel overhang while retaining assembly-local animation pivots.
  for(const o of cp.children)o.position.z+=.18;
  // Batch static geometry by material inside each independently movable assembly.
