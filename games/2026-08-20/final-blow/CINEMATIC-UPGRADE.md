@@ -727,3 +727,10 @@ Previous goal turn classified as progress. This continuation adds2 generated and
 - Prior status-only turn was no progress; revalidated current worktree and fetched origin/main. Upstream Final Blow changes are confined to signaling dependency files, outside cinematic edits.
 - Post spray now uses the existing paint-spray effect at .8sec; Cyraxx swarm plays its object cue at1.05sec. Timeline crossing tests cover each release and paused repeat suppression. Full regression780/780PASS. This is routing/timing evidence, not a subjective listening claim.
 - Prepared title, engine, asset cache, service worker and smoke-test version markers for5.8.0. Release remains unpublished until remote verification. Remaining visual limitations include projected weapon-length variation and approximate contact anchors.
+
+## Public release verification and banner correction
+
+- Published5.8.0 as6cd87add713cadb240b85ac96011e374ef28c2f5; Cloudflare and GitHub Pages checks completed successfully. All76 checked code/art files match local SHA256. Served HTML differs only through site analytics and Cloudflare injection; application-version5.8.0 verified.
+- Public unmodified CPU demo Jez/Benny rendered15 observed KO atlas cells and settled victory with zero browser exceptions. Evidence work/cinema580/public-cpu-cinema.json and public-cpu-ending.jpg. Local QA controls are intentionally unavailable in production; replaced the initial incompatible QA-based public probe with observational Canvas draw instrumentation and normal demo URL.
+- Public screenshot exposed victory banner obscuring raised hands.5.8.1 positions all roundover announcements at25percent height with half-size headline, including story follow-ups that replace the victory text. Local browser verified Jez/Benny both facings, paused/rollback timing and full fall before announcement. Reviewed latest screenshot: headline above whole upright fighter, no head/hand overlap.
+- Original outstanding cause-specific airborne/wall reaction and detailed motion/audio quality requirements are not proven by this layout change. Goal remains open.

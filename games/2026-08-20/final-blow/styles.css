@@ -4476,3 +4476,7 @@ body.demo-active #app:fullscreen .game-frame { height: calc(100dvh - var(--demo-
 
 /* Keep cinematic action clear of competing animated announcement layers. */
 body.finisher-active #announcer, body.finisher-active #bookStampToast { visibility: hidden; }
+
+/* Keep the settled winner and raised hands visible beneath the result. */
+.announcer.cinema-victory { top: 25%; }
+.announcer.cinema-victory strong { font-size: clamp(24px, 4vw, 64px); }
