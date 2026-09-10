@@ -1,8 +1,440 @@
 {
-  "generatedAt": "2026-09-09T12:00:00.000Z",
+  "generatedAt": "2026-09-10T08:00:00-04:00",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-10",
+      "historicDate": "1984-06-11",
+      "displayDate": "Week of June 11-17, 1984",
+      "edition": "Issue 098 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Urgent modem-age city desk on warm newsprint",
+        "motifs": [
+          "acoustic coupler",
+          "CRT bulletin board",
+          "floppy disks",
+          "Chicago show floor"
+        ],
+        "layout": "Dense multi-column weekly with a BBS seizure lead and games-rich feature rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "Week of June 11-17, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "BBS seizure dominates above the fold",
+        "secondaryRail": "Interactive fiction, portable hardware, charts and shelves",
+        "archiveNavigation": "Previous and next weekly issues with calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "#a52a2a",
+        "secondary": "#214f78",
+        "texture": "Warm aged newsprint with halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-06-11.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for June 11-17, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A police seizure turns a neighborhood bulletin board into a test of who is responsible for messages online, while Fido boards prepare to link up and novelists discover interactive fiction.",
+      "morningLine": "Modems make a village—and bring the law to its door.",
+      "lead": {
+        "headline": "Police Seize a Bulletin Board: Is the Sysop Liable for What Users Post?",
+        "dek": "Los Angeles authorities confiscate MOG-UR’s HBBS equipment after telephone access codes appear among user messages.",
+        "body": [
+          "Los Angeles police have seized the computer equipment behind MOG-UR’s HBBS, thrusting a three-year-old hobbyist bulletin board into an unfamiliar legal contest over responsibility for messages left by users. Pacific Telephone security investigators alerted police after finding a telephone credit-card code and two Sprint access numbers among posts on the system.",
+          "Officers took a Heathkit terminal, monitor, 5.25-inch floppy drive and roughly 150 disks from consultant and programmer Tom Tcimpidis. Felony charges remained under consideration by the district attorney. Tcimpidis said the board had been reached by about 5,000 users and held some 2,700 messages, and that he regularly warned callers not to post illicit material.",
+          "The central question reaches beyond one machine room: can a sysop reasonably be held liable for every item a caller places on an electronic board? Attorney Charles Lindner compared the case to blaming a supermarket for a notice pinned to its public bulletin board. The analogy fits a medium whose operators provide space but cannot continuously inspect a rapidly changing conversation.",
+          "Even the warrant hearing showed how new the territory is. Judge Robert Fratianne said WarGames helped him understand the problem. For the fast-growing BBS community, the seizure is both a warning about telephone fraud and an early test of whether the law can distinguish a system operator from the people using the system."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "exact-date"
+      },
+      "stories": [
+        {
+          "headline": "Fido Wants to Travel: Hobbyist Boards Begin to Form a Network",
+          "body": [
+            "Hundreds of independent bulletin boards now serve local computer owners, but Tom Jennings wants his Fido software to carry mail between them. Eight Fido systems were operating from Missouri and Georgia to Oregon and Maui after Jennings put his own board online in November 1983 and shared the software.",
+            "Jennings expects networking software within about four months. Each board would call another during inexpensive late-night or weekend hours, compress addressed messages and pass them onward automatically—at a cost he estimated below a penny per message.",
+            "The plan points toward an electronic village larger than any single local telephone call. CompuServe already counted 130,000 members, while user groups such as the First Osborne Group were exploring links between boards and software libraries."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "exact-date"
+        },
+        {
+          "headline": "Novelists Move from Type to Bytes at Summer CES",
+          "body": [
+            "At the June Consumer Electronics Show in Chicago, Spinnaker subsidiary Trillium introduced six adventures tied to major authors: Amazon, Rendezvous with Rama, Starman Jones, Fahrenheit 451, Dragonworld and Shadowkeep. Michael Crichton designed Amazon from a large flowchart, while Arthur C. Clarke, Robert Heinlein and Ray Bradbury supplied worlds already familiar to readers.",
+            "The projects treat interactive fiction as more than a licensed cover. Warner Books planned to release Alan Dean Foster’s Shadowkeep novel alongside the game, reversing the familiar path from book to adaptation. Apple II and Commodore 64 versions led the program, with several Atari editions planned.",
+            "Writers remain divided over what the machine can do. Crichton sees a new form waiting to be used more imaginatively; Bradbury cautions that a machine cannot reproduce the novel’s art of the aside. Their debate is becoming part of the game itself."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "exact-date"
+        },
+        {
+          "headline": "Morrow's Pivot Puts a PC-Compatible Computer on a Shoulder Strap",
+          "body": [
+            "Morrow’s Pivot prototype abandons the bulky briefcase look for a narrow case carried by shoulder strap. Opening the flip-down keyboard reveals an 80-column, 16-line LCD, one or two one-third-height 5.25-inch drives and a built-in 300-baud modem.",
+            "Three MS-DOS configurations were promised for August at $2,500 to $3,000, weighing nine to 13 pounds. The base system carries 128K; a four-hour battery pack adds $50. IBM-style parallel, programmable serial and telephone connections are built in.",
+            "Lotus 1-2-3 ran without modification, though Flight Simulator did not because of the LCD’s graphics limitations. The compromise defines this road machine: business compatibility first, with shape and weight designed around how travelers actually carry computers."
+          ],
+          "sourceRefs": [
+            0,
+            9
+          ],
+          "confidence": "exact-date"
+        },
+        {
+          "headline": "Apple IIc Interest Runs Ahead of Complete Systems",
+          "body": [
+            "Apple’s compact IIc is drawing attention faster than dealers can assemble complete systems. Product manager Ed Colby said allocations of green-screen monitors and second disk drives constrained sales, while Rainbow Computing reported that machines were not disappearing from shelves immediately.",
+            "Some IIe programs also stumbled over the IIc’s handling of spiral-recording and other copy-protection schemes, requiring continued testing and conversion. Apple expected a stronger back-to-school season; meanwhile, the reduced-price IIe was selling briskly at a $995 entry price."
+          ],
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "exact-date"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Trillium interactive-fiction line",
+          "summary": "Six author-linked graphical and text adventures debut at Summer CES.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Epyx Computer Activity Toys",
+          "summary": "Barbie, Hot Wheels and G.I. Joe activity games are previewed for the Commodore 64.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Morrow Pivot",
+          "summary": "A shoulder-strap MS-DOS portable includes an LCD and 300-baud modem.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "HP LaserJet",
+          "summary": "HP’s $3,495 desktop laser printer brings the technology far below recent $16,000 machines.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "Quadram Quadnet",
+          "summary": "Three networking tiers promise PC links from 300 Kbps to 10 Mbps.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Amazon",
+          "detail": "Michael Crichton-designed Trillium adventure for Apple II and Commodore 64."
+        },
+        {
+          "name": "Fahrenheit 451",
+          "detail": "Ray Bradbury story adapted for interactive play."
+        },
+        {
+          "name": "Wings Out of Shadow",
+          "detail": "Baen game based on Fred Saberhagen’s Berserker stories."
+        },
+        {
+          "name": "SkiWriter II",
+          "detail": "$69.95 ROM cartridge combining writing and telecommunications."
+        },
+        {
+          "name": "Microsoft Project",
+          "detail": "$250 scheduling package for IBM PCs."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Amazon",
+            "Rendezvous with Rama",
+            "Fahrenheit 451",
+            "Shadowkeep",
+            "Wings Out of Shadow"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Ghostbusters",
+            "Gremlins",
+            "Indiana Jones and the Temple of Doom",
+            "Star Trek III: The Search for Spock",
+            "The Natural"
+          ]
+        },
+        {
+          "label": "Hardware Counter",
+          "items": [
+            "Morrow Pivot — $2,500-$3,000",
+            "HP LaserJet — $3,495",
+            "Apple IIe — $995",
+            "Model 100 — $799 (8K)",
+            "Hayes Smartmodem 1200 — $413-$489"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Radio Shack Model 100",
+          "price": "$799 for 8K; $999 for 24K after a temporary $200 promotion ended",
+          "note": "Advertised or reported this week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Hayes Smartmodem 1200",
+          "price": "$413 in one mail-order ad; $489 in another, against a listed retail price of $699",
+          "note": "Advertised or reported this week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Lotus 1-2-3",
+          "price": "$329 mail-order",
+          "note": "Advertised or reported this week",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "item": "Apple IIe",
+          "price": "$995 entry price; $1,795 for 128K system with monitor and DuoDisk",
+          "note": "Advertised or reported this week",
+          "sourceRefs": [
+            0
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "DEC reorganizes business computing",
+          "summary": "Digital Equipment Corporation formed a Business Computer Group under Ward MacKenzie, combining commercial OEM, small-business, and personal-computer retail operations effective July 1.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Radio Shack rules out a 1984 Model 100 successor",
+          "summary": "Market-planning director Ed Juge denied reports of an enhanced Model 100 with larger display and memory during 1984, questioning demand for heavier, costlier lap computers.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "headline": "Compact discs command the gadget desk",
+          "summary": "Summer electronics coverage puts new digital audio players among the show-season attractions.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            7,
+            1
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "Time After Time",
+          "artist": "Cyndi Lauper"
+        },
+        {
+          "rank": 2,
+          "title": "The Reflex",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 3,
+          "title": "Let's Hear It for the Boy",
+          "artist": "Deniece Williams"
+        },
+        {
+          "rank": 4,
+          "title": "Self Control",
+          "artist": "Laura Branigan"
+        },
+        {
+          "rank": 5,
+          "title": "Dancing in the Dark",
+          "artist": "Bruce Springsteen"
+        }
+      ],
+      "periodAd": {
+        "headline": "Microsoft Project Keeps the Job on Schedule",
+        "summary": "Spreadsheet-like planning from start to completion for the IBM PC, with budgeting-data exchange.",
+        "tagline": "Microsoft Project — list price $250"
+      },
+      "market": {
+        "headline": "Apple IIc Demand Waits on a Complete Package",
+        "summary": "Monitor and drive allocations restrain configured IIc sales while the lower-priced Apple IIe moves strongly.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Enrico Berlinguer Dies, Leaving Europe's Largest Communist Party Without Its Leader",
+        "summary": "Italian Communist Party chief Enrico Berlinguer died June 11 at age 62 after a cerebral hemorrhage suffered at a Padua rally. He had led the party since 1972 and was a principal figure in Eurocommunism.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          4,
+          5
+        ]
+      },
+      "bbsNote": {
+        "headline": "The Electronic Village Starts Linking Its Islands",
+        "summary": "InfoWorld's June 18 communications package paired a legal warning—the seizure of a sysop's equipment—with evidence of extraordinary growth. Hundreds of BBSs, national service forums, user-group boards, and the first plans to connect independently run Fido systems were turning modems into a social medium.",
+        "posts": [
+          {
+            "topic": "Fido networking",
+            "platform": "Fido BBS",
+            "text": "Tom Jennings said eight Fido systems were running around the country and described software under development to dial peer systems and exchange addressed mail automatically during low-rate hours."
+          },
+          {
+            "topic": "Special-interest forums",
+            "platform": "CompuServe",
+            "text": "CompuServe's 130,000-member service hosted forums for aviation, medicine, writing, and many other interests; forum sponsors supplied editorial labor while users paid for connect time."
+          },
+          {
+            "topic": "User-group libraries",
+            "platform": "FOG RCP/M",
+            "text": "The First Osborne Group used Bye, XModem, and Metal across two Daly City boards and was planning to network BBS access to its software library."
+          },
+          {
+            "topic": "Modem prices",
+            "platform": "Mail-order market",
+            "text": "The same issue advertised a Hayes Smartmodem 1200 for $413-$489 and a Prometheus Pro-Modem 1200 for $359, showing the price of joining the online world."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "Buy a DEC, Get an Apple Free",
+        "summary": "A San Jose dealer paired a business micro with a home machine in one of the period's stranger bundles.",
+        "detail": "ACP Technology Center advertised a DEC Rainbow 100 with 5MB hard disk at its $3,995 retail price and threw in an Apple IIe free; buyers of a $6,295 10MB Rainbow 100 Plus could receive a $1,295 Apple IIc. Sales manager Manny Lucro pitched the Apple as the educational family computer alongside DEC's business system."
+      },
+      "gadgetWatch": {
+        "headline": "Compact Disc Players Crowd Summer Electronics Coverage",
+        "summary": "Audio magazine's June 1984 equipment profile tested the Micro Seiki CD-M1, specifying 20Hz-20kHz response within plus/minus 0.5dB; Billboard's June 16 Summer CES report framed new audio and video technology as a central show theme.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          7,
+          1
+        ]
+      },
+      "undergroundDesk": {
+        "headline": "Phone-Fraud Posting Brings a BBS Seizure",
+        "dek": "The MOG-UR case puts the underground’s posted access codes—and a sysop’s responsibility—before authorities.",
+        "body": [
+          "Pacific Telephone investigators found a calling-card code and two Sprint access numbers among messages on MOG-UR’s HBBS. Los Angeles police responded by seizing the board’s hardware and disks while prosecutors weighed possible felony charges.",
+          "Tcimpidis said he did not know the data was present and routinely warned users against illicit posts. The episode shows the collision between open electronic conversation and enforcement against telephone fraud; no working codes or methods are reproduced here."
+        ],
+        "groups": [
+          {
+            "name": "MOG-UR's HBBS",
+            "note": "The seized hobbyist bulletin-board system."
+          },
+          {
+            "name": "The Underground",
+            "note": "A named user area or scene referenced in period coverage."
+          }
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "exact-date"
+      },
+      "accuracyLedger": {
+        "items": [
+          "Exact-week computing reports are drawn from InfoWorld dated June 18, 1984.",
+          "Music ranks use the Billboard Hot 100 for June 16; the fifth shelf position is a period chart supplement.",
+          "Movie shelf uses the June 15-17 domestic weekend; The Natural fills the fifth period slot from the same release season.",
+          "Website text and sources are canonical; generated newspaper art is illustrative."
+        ]
+      },
+      "sources": [
+        {
+          "title": "InfoWorld, Volume 6, Issue 25",
+          "url": "https://archive.org/stream/bub_gb_wi4EAAAAMBAJ/bub_gb_wi4EAAAAMBAJ_djvu.txt",
+          "date": "1984-06-18"
+        },
+        {
+          "title": "Billboard",
+          "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-06-16.pdf",
+          "date": "1984-06-16"
+        },
+        {
+          "title": "Billboard Hot 100 archive, June 16, 1984",
+          "url": "https://musicchartsarchive.com/singles-chart/1984-06-16",
+          "date": "1984-06-16"
+        },
+        {
+          "title": "Domestic Weekend 24, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W24/",
+          "date": "1984-06-17"
+        },
+        {
+          "title": "UPI: Enrico Berlinguer profile and death coverage",
+          "url": "https://www.upi.com/Archives/1984/06/11/Enrico-Berlinguer-leader-of-Italian-Communist-Party/9539455774400/",
+          "date": "1984-06-11"
+        },
+        {
+          "title": "Washington Post: Italy's Communist Chief Dies",
+          "url": "https://www.washingtonpost.com/archive/politics/1984/06/12/italys-communist-chief-enrico-berlinguer-dies-after-four-days-in-coma/f466bdb7-f01e-49c7-9ebe-42b8a7e371a3/",
+          "date": "1984-06-12"
+        },
+        {
+          "title": "UPI: Iran-Iraq limited cease-fire",
+          "url": "https://www.upi.com/Archives/1984/06/13/Iran-and-Iraq-observed-a-limited-cease-fire-for-a/9810455947200/",
+          "date": "1984-06-13"
+        },
+        {
+          "title": "Micro Seiki CD-M1 Equipment Profile",
+          "url": "https://www.gammaelectronics.xyz/audio_06-1984_micro-seiki.html",
+          "date": "1984-06"
+        },
+        {
+          "title": "Fahrenheit 451 release record",
+          "url": "https://www.mobygames.com/game/12337/fahrenheit-451/",
+          "date": "1984"
+        },
+        {
+          "title": "Morrow Pivot reference",
+          "url": "http://www.oldcomputers.net/morrow-pivot.html",
+          "date": "1984"
+        }
+      ]
+    },
     {
       "currentDate": "2026-09-09",
       "historicDate": "1984-06-04",
