@@ -7,7 +7,7 @@ export class EpiphyteMoss{
  private colors:T.Color[]=[];
  private seed=74519;
  private random(){this.seed=(Math.imul(this.seed,1664525)+1013904223)>>>0;return this.seed/4294967296;}
- sample(mesh:T.Mesh,density:number){
+ sample(mesh:T.Mesh,density:number,shootScale=1){
   mesh.updateMatrixWorld();
   const positions=mesh.geometry.getAttribute('position'),index=mesh.geometry.index;
   const a=new T.Vector3(),b=new T.Vector3(),c=new T.Vector3(),normal=new T.Vector3(),ab=new T.Vector3(),ac=new T.Vector3(),dummy=new T.Object3D();
@@ -24,7 +24,7 @@ export class EpiphyteMoss{
    const u=Math.sqrt(this.random()),v=this.random();
    dummy.position.copy(a).multiplyScalar(1-u).addScaledVector(b,u*(1-v)).addScaledVector(c,u*v).addScaledVector(normal,-.006);
    const direction=normal.clone().multiplyScalar(.42).add(V(0,.58,0)).normalize();dummy.quaternion.setFromUnitVectors(V(0,1,0),direction);dummy.rotateY(this.random()*Math.PI*2);
-   dummy.scale.setScalar(.65+this.random()*.80);dummy.updateMatrix();this.matrices.push(dummy.matrix.clone());
+   dummy.scale.setScalar((.65+this.random()*.80)*shootScale);dummy.updateMatrix();this.matrices.push(dummy.matrix.clone());
    this.colors.push(new T.Color().setHSL(.205+this.random()*.04,.55+this.random()*.12,.20+this.random()*.105).convertSRGBToLinear());
   }
  }

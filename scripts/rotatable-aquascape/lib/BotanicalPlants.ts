@@ -94,7 +94,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   }
  }
  // Sword rosettes use fewer, longer ribbon-like blades with different inclinations.
- for(const [cx,cz,count] of [[-4.1,-.2,7],[-3.6,-1.1,4],[3.95,-.35,6],[3.5,-1.05,4],[-1.35,-1.3,3]])for(let i=0;i<count;i++){
+ for(const [cx,cz,count] of [[-4.25,-1.5,7],[-3.6,-1.5,4],[3.95,-.35,6],[3.5,-1.05,4],[-1.35,-1.3,3]])for(let i=0;i<count;i++){
   const x=cx+(random()-.5)*.8,z=cz+(random()-.5)*.7,b=height(x,z);
   plantRoot=V(x,b,z);plantFlex=.7;
   for(let j=0;j<11;j++){const a=j*2.399+i,l=.8+random()*1.65+(cx<0?.30:0);add('sword',V(x,b,z),V(Math.cos(a)*.46,.55+random()*.5,Math.sin(a)*.5),l,.13+random()*.19,.20+random()*.045,.68,.24+random()*.095,random()*.65);}
