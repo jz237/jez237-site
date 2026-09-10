@@ -2,6 +2,787 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-10",
+      "historicDate": "1984-06-11",
+      "displayDate": "Week of June 11-17, 1984",
+      "edition": "Issue 098 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Modems make a village—and bring the law to its door.",
+      "leadHeadline": "Police Seize a Bulletin Board: Is the Sysop Liable for What Users Post?",
+      "storyHeadlines": [
+        "Fido Wants to Travel: Hobbyist Boards Begin to Form a Network",
+        "Novelists Move from Type to Bytes at Summer CES",
+        "Morrow's Pivot Puts a PC-Compatible Computer on a Shoulder Strap",
+        "Apple IIc Interest Runs Ahead of Complete Systems"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-06-11.jpg",
+      "thumb": "media/thumbs/1984-06-11.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-09",
+      "historicDate": "1984-06-04",
+      "displayDate": "Week of June 4-10, 1984",
+      "edition": "Issue 097 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Monday, June 4, 1984: the personal-computer market braces for lower IBM prices and a livelier summer software season.",
+      "leadHeadline": "IBM Cuts Prices Across the PC Line",
+      "storyHeadlines": [
+        "Postal Service Votes to Abandon E-COM",
+        "Computer Games Start Learning New Tricks",
+        "Copy Protection Draws Fire from Paying Customers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-06-04.jpg",
+      "thumb": "media/thumbs/1984-06-04.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-08",
+      "historicDate": "1984-05-28",
+      "displayDate": "Week of May 28-June 3, 1984",
+      "edition": "Issue 096 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Monday, May 28, 1984: 851 suppliers crowd Comdex/Spring as personal computing’s boom widens.",
+      "leadHeadline": "Comdex/Spring Shows the Micro Market Still Surging",
+      "storyHeadlines": [
+        "Framework Bets $695 That Ideas Belong in an Outline",
+        "Delayed Windows Leaves PC Software on Islands",
+        "TeleVideo Puts PCs Around an $8,995 Multiuser Hub"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-05-28.jpg",
+      "thumb": "media/thumbs/1984-05-28.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-07",
+      "historicDate": "1984-05-21",
+      "displayDate": "Week of May 21-27, 1984",
+      "edition": "Issue 095 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Monday, May 21, 1984: Atari bets that a new console can carry yesterday’s cartridges into tomorrow’s arcade.",
+      "leadHeadline": "Atari Bets on Compatibility with $140 7800 ProSystem",
+      "storyHeadlines": [
+        "Ashton-Tate Unwraps dBASE III for IBM PCs",
+        "NEC Breaks the $2,000 Barrier for a Complete 16-bit Business Micro",
+        "Telemail Intrusions Put Online Security on the Front Page"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-05-21.jpg",
+      "thumb": "media/thumbs/1984-05-21.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-06",
+      "historicDate": "1984-05-14",
+      "displayDate": "Week of May 14-20, 1984",
+      "edition": "Issue 094 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The telephone line is becoming both the personal computer’s doorway and its newest lock.",
+      "leadHeadline": "Telenet Locks the Dial-Up Door",
+      "storyHeadlines": [
+        "Atari Pledges a Sober XL Comeback",
+        "Lucasfilm Turns Its Cameras Toward Games",
+        "Sub-$100 Modems Call the Home Office"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-05-14.jpg",
+      "thumb": "media/thumbs/1984-05-14.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-05",
+      "historicDate": "1984-05-07",
+      "displayDate": "Week of May 7-13, 1984",
+      "edition": "Issue 093 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "From a fractal alien mountain to the printed page, this is the week home computers learned new tricks.",
+      "leadHeadline": "Lucasfilm Brings the Force to Home Videogames",
+      "storyHeadlines": [
+        "Pens and Tablets Challenge the Keyboard",
+        "Home Word Processing Drops Below $100",
+        "Atari Searches for a New Mission"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-05-07.jpg",
+      "thumb": "media/thumbs/1984-05-07.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-04",
+      "historicDate": "1984-04-30",
+      "displayDate": "Week of April 30-May 6, 1984",
+      "edition": "Issue 092 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "From Hanover's packed aisles to the local modem line, computers are getting smaller, more musical and more connected.",
+      "leadHeadline": "Hanover's 650,000 Visitors See the Portable Future",
+      "storyHeadlines": [
+        "Chuck Peddle Rides Back to Victor with the PlusPC",
+        "One Box, Two Computer Worlds",
+        "Can a Computer Teach Music?",
+        "Early Macintosh Verdict: Brilliant, but Boxed In"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-04-30.jpg",
+      "thumb": "media/thumbs/1984-04-30.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-03",
+      "historicDate": "1984-04-23",
+      "displayDate": "Week of April 23-29, 1984",
+      "edition": "Issue 091 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Apple II Forever: a familiar computer slips into a carryable new case.",
+      "leadHeadline": "Apple Puts the II in a Carrying Case",
+      "storyHeadlines": [
+        "Apple II Forever, Apple III No More",
+        "IBM’s PCjr Stumbles Out of the Gate",
+        "Software Becomes the Machine’s Magic",
+        "April’s Game Shelf Spans Machines"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-04-23.jpg",
+      "thumb": "media/thumbs/1984-04-23.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-09-02",
+      "historicDate": "1984-04-16",
+      "displayDate": "Week of April 16-22, 1984",
+      "edition": "Issue 090 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The box still draws the eye, but the programs inside it are becoming the reason to buy.",
+      "leadHeadline": "Software Steps Into the Spotlight",
+      "storyHeadlines": [
+        "Macintosh Meets the User-Group Crowd",
+        "Atari Sends Arcade Names to Rival Machines",
+        "PCjr and Macintosh Court the Newcomer"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-04-16.jpg",
+      "thumb": "media/thumbs/1984-04-16.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-01",
+      "historicDate": "1984-04-09",
+      "displayDate": "Week of April 9-15, 1984",
+      "edition": "Issue 089 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "HomeWord turns six writing chores into pictures while Atari sends its arcade catalog onto competitors' machines.",
+      "leadHeadline": "HomeWord Brings Icons to Three Computer Camps",
+      "storyHeadlines": [
+        "Atari's Games Defect to the Competition",
+        "War Games Grow Up on the Commodore 64",
+        "The $100 Home Computer Is No Longer a Fantasy",
+        "Color Graphics Become a $39.95 C64 Tool"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-04-09.jpg",
+      "thumb": "media/thumbs/1984-04-09.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-31",
+      "historicDate": "1984-04-02",
+      "displayDate": "Week of April 2-8, 1984",
+      "edition": "Issue 088 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "IBM's Peanut and Apple's Macintosh go head to head on the newsstand while Atari sells its arcade library to everybody else's hardware.",
+      "leadHeadline": "The Peanut Meets the Mac: IBM and Apple Fight for the Next Home Buyer",
+      "storyHeadlines": [
+        "Atari Invades Rival Machines With a Dozen Atarisoft Games",
+        "PC Boom Turns Into a Stock-Market Crapshoot",
+        "Mindset Pushes PC Graphics Beyond the IBM Mold",
+        "Jobs Sells the Macintosh as a Mission, Not Just a Machine"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-04-02.jpg",
+      "thumb": "media/thumbs/1984-04-02.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-29",
+      "historicDate": "1984-03-26",
+      "displayDate": "Week of March 26-April 1, 1984",
+      "edition": "Issue 087 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Unix steps onto the commercial main stage while microcomputer shelves fill with new drives, games and sharper enforcement against counterfeit tapes.",
+      "leadHeadline": "AT&T Throws Down a Unix Gauntlet With Six 3B Computers",
+      "storyHeadlines": [
+        "Police Raids Put Britain’s Games-Cassette Pirates Under Pressure",
+        "IBM Rations PCs and XTs as the Component Squeeze Bites",
+        "Sinclair Microdrives Reach London Shops",
+        "Macintosh Commands the West Coast Computer Faire"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-03-26.jpg",
+      "thumb": "media/thumbs/1984-03-26.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-28",
+      "historicDate": "1984-03-19",
+      "displayDate": "Week of March 19-25, 1984",
+      "edition": "Issue 086 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The Mindset PC gambles on color, speed and a distinctive visual identity.",
+      "leadHeadline": "Mindset PC Bets on Custom Color Graphics",
+      "storyHeadlines": [
+        "Microcomputers Become Tools of Independence",
+        "Laserdiscs Point Toward an Arcade-Style Future at Home",
+        "Chequered Flag Takes the British Micro Pole"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-03-19.jpg",
+      "thumb": "media/thumbs/1984-03-19.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-26",
+      "historicDate": "1984-03-12",
+      "displayDate": "Week of March 12-18, 1984",
+      "edition": "Issue 085 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Timex leaves the Sinclair computer business while Softcon fills New Orleans with software, graphics and argument.",
+      "leadHeadline": "Timex Pulls the Plug on Its Sinclair Home Computers",
+      "storyHeadlines": [
+        "Mindset Bets Its PC Future on Spectacular Graphics",
+        "VisiCalc Partners Carry Their Feud to Softcon",
+        "Model 100 Gains a Desktop-Sized Disk Drive"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-03-12.jpg",
+      "thumb": "media/thumbs/1984-03-12.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-25",
+      "historicDate": "1984-03-05",
+      "displayDate": "Week of March 5-11, 1984",
+      "edition": "Issue 084 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Software takes center stage while IBM’s junior PC meets the reviewers.",
+      "leadHeadline": "Software Steps Out of Hardware’s Shadow",
+      "storyHeadlines": [
+        "IBM’s PCjr Arrives to a Skeptical Reception",
+        "Micro Games Crowd the Chart",
+        "Industry Seeks Laws Against “Electronic Trespassers”"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-03-05.jpg",
+      "thumb": "media/thumbs/1984-03-05.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-24",
+      "historicDate": "1984-02-27",
+      "displayDate": "Week of February 27-March 4, 1984",
+      "edition": "Issue 083 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: IBM’s 30-pound portable arrives, the West Coast Computer Faire opens, and software takes center stage.",
+      "leadHeadline": "IBM Packs the PC Into a 30-Pound Portable",
+      "storyHeadlines": [
+        "West Coast Computer Faire Throws Open Its Doors",
+        "Software Becomes the Industry’s Main Event",
+        "PCjr Brings Better Games—and Awkward Compromises"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-02-27.jpg",
+      "thumb": "media/thumbs/1984-02-27.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-23",
+      "historicDate": "1984-02-20",
+      "displayDate": "Week of February 20-26, 1984",
+      "edition": "Issue 082 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Zenith joins the compatible rush while software, mice and modems crowd the personal-computer marketplace.",
+      "leadHeadline": "Zenith Joins the IBM-Compatible Rush With New 16-Bit PCs",
+      "storyHeadlines": [
+        "IBM and Eagle Settle Firmware Copyright Fight",
+        "Software Industry Comes Into Its Own",
+        "PC Magazine Pits Apple Experience Against IBM Momentum"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-02-20.jpg",
+      "thumb": "media/thumbs/1984-02-20.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-22",
+      "historicDate": "1984-02-13",
+      "displayDate": "Week of February 13-19, 1984",
+      "edition": "Issue 081 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The computer road warrior now has an IBM badge, an amber screen and a very sturdy carrying arm.",
+      "leadHeadline": "IBM Packs the PC into a 30-Pound Suitcase",
+      "storyHeadlines": [
+        "Sinclair Sets a $499 American Course for the QL",
+        "CBS, IBM and Sears Bet on a Videotex Home",
+        "Coleco Courts Publishers for Adam “Best Of” Albums"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-02-13.jpg",
+      "thumb": "media/thumbs/1984-02-13.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-21",
+      "historicDate": "1984-02-06",
+      "displayDate": "Week of February 6-12, 1984",
+      "edition": "Issue 080 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Good morning from 1984: the clones are gathering, Adam is back on the line, and Punch-Out!! is ringing the arcade bell.",
+      "leadHeadline": "IBM Compatibility Becomes the Industry’s New Battleground",
+      "storyHeadlines": [
+        "Coleco Restarts Adam Lines After a Gentleman’s C",
+        "“Best Of” Game Albums Promised for Adam",
+        "One Printer Attempts Double Duty"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-02-06.jpg",
+      "thumb": "media/thumbs/1984-02-06.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-20",
+      "historicDate": "1984-01-30",
+      "displayDate": "Week of January 30-February 5, 1984",
+      "edition": "Issue 079 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The mouse takes the stage in Boston while the clone business heads for court.",
+      "leadHeadline": "Macintosh Meets the Public in Boston",
+      "storyHeadlines": [
+        "IBM Takes the Clone War to Court",
+        "Lisa 2 Becomes Macintosh’s Elder Sibling",
+        "MacWrite and MacPaint Make the Desktop Tangible",
+        "Computer Games Ask What Comes After the Crash"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-30.jpg",
+      "thumb": "media/thumbs/1984-01-30.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-19",
+      "historicDate": "1984-01-23",
+      "displayDate": "Week of January 23-29, 1984",
+      "edition": "Issue 078 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Cupertino opens a new window on personal computing while Atari regroups and home-computer shelves keep moving.",
+      "leadHeadline": "Macintosh Arrives: Apple Bets $2,495 on the Mouse",
+      "storyHeadlines": [
+        "Lisa 2 Family Cuts the Price of Apple’s Workstation",
+        "MacWrite and MacPaint Lead the Software Parade",
+        "Atari Reorders the Front Office as the Game Crash Bites",
+        "Satellite Television Aims Straight at the Home"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-23.jpg",
+      "thumb": "media/thumbs/1984-01-23.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-18",
+      "historicDate": "1984-01-16",
+      "displayDate": "Week of January 16-22, 1984",
+      "edition": "Issue 077 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Macintosh steps from the trade press onto America’s biggest screen.",
+      "leadHeadline": "APPLE'S ‘1984’ SPOT PUTS MACINTOSH ON THE NATIONAL STAGE",
+      "storyHeadlines": [
+        "APPLE READIES A 32-BIT FAMILY AROUND MACINTOSH AND LISA 2",
+        "COMMODORE 264 BETS ON SOFTWARE BUILT INTO THE MACHINE",
+        "COLECO PROMISES A LARGER ADAM WORLD AMID QUALITY QUESTIONS"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-16.jpg",
+      "thumb": "media/thumbs/1984-01-16.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-17",
+      "historicDate": "1984-01-09",
+      "displayDate": "Week of January 9-15, 1984",
+      "edition": "Issue 076 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The billion-dollar home-computer giant awakens without the man who built its low-price empire.",
+      "leadHeadline": "TRAMIEL QUITS COMMODORE",
+      "storyHeadlines": [
+        "Games Trade Finds Guarded Relief at CES",
+        "Commodore’s 264 Family Promises an Office in ROM",
+        "Coleco Builds an Adam Comeback Plan"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-09.jpg",
+      "thumb": "media/thumbs/1984-01-09.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-16",
+      "historicDate": "1984-01-02",
+      "displayDate": "Week of January 2-8, 1984",
+      "edition": "Issue 075 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "LAS VEGAS — A crowded Commodore stand and a secret Amiga demonstration set the pace as the home-computer business enters its shakeout year.",
+      "leadHeadline": "Commodore's 264 family steals a shakeout-era Winter CES",
+      "storyHeadlines": [
+        "Behind a secret CES door, Amiga shows 'Lorraine'",
+        "Home-computer boom gives way to a fight for survival",
+        "Kodak jumps into home video with a one-piece 8mm camcorder"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-01-02.jpg",
+      "thumb": "media/thumbs/1984-01-02.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-15",
+      "historicDate": "1983-12-26",
+      "displayDate": "Week of December 26, 1983-January 1, 1984",
+      "edition": "Issue 074 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Junior arrives for inspection as the home-computer price war closes out a turbulent year.",
+      "leadHeadline": "The Little IBM Finally Arrives for Its Test",
+      "storyHeadlines": [
+        "Lisa Opens a Line to IBM and DEC",
+        "Christmas Computer Boom Leaves a Price-War Hangover",
+        "Windows Proposes One Face for DOS Programs",
+        "Atari Finds a Holiday Bright Spot"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-12-26.jpg",
+      "thumb": "media/thumbs/1983-12-26.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-14",
+      "historicDate": "1983-12-19",
+      "displayDate": "Week of December 19-25, 1983",
+      "edition": "Issue 073 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Big Blue defines the PC standard, Radio Shack refreshes the Color Computer, and holiday buyers hunt scarce drives and machines.",
+      "leadHeadline": "Big Blue Paints the Personal-Computer Standard",
+      "storyHeadlines": [
+        "Home-Computer Price War Eases After a Savage 1983",
+        "Radio Shack Refreshes the Color Computer Line",
+        "Lotus 1-2-3 Overtakes the Spreadsheet Pioneer",
+        "Christmas Computer Boom Meets Empty Shelves"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-12-19.jpg",
+      "thumb": "media/thumbs/1983-12-19.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-13",
+      "historicDate": "1983-12-12",
+      "displayDate": "Week of December 12-18, 1983",
+      "edition": "Issue 072 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Visi On reaches the IBM PC, Nintendo sends Donkey Kong Jr. to arithmetic class, and the home-computer price war begins to cool.",
+      "leadHeadline": "The Window Wars Reach the IBM PC",
+      "storyHeadlines": [
+        "Home-Computer Price War Finally Cools",
+        "Donkey Kong Jr. Clambers Into Arithmetic",
+        "A Christmas Bounce for Atari Amid the Crash",
+        "Software Moves from Boxes to Parcels"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-12-12.jpg",
+      "thumb": "media/thumbs/1983-12-12.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-12",
+      "historicDate": "1983-12-05",
+      "displayDate": "Week of December 5-11, 1983",
+      "edition": "Issue 071 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "IBM compatibility commands COMDEX while interactive fiction and home computers contest the Christmas shelf.",
+      "leadHeadline": "COMDEX Becomes Las Vegas's Biggest Show as IBM Compatibility Takes Command",
+      "storyHeadlines": [
+        "Interactive Fiction Turns the Floppy Disk into a Bestseller Shelf",
+        "Home Computers Move to the Center of the Christmas Battle",
+        "Windows Become Software’s New Battleground"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-12-05.jpg",
+      "thumb": "media/thumbs/1983-12-05.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-11",
+      "historicDate": "1983-11-28",
+      "displayDate": "Week of November 28-December 4, 1983",
+      "edition": "Issue 070 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "COMDEX opens, graphical desktops beckon, and home computers crowd the Christmas counter.",
+      "leadHeadline": "At COMDEX, IBM Compatibility Becomes the Winning Bet",
+      "storyHeadlines": [
+        "Windows and Visi On Put the Graphical Desktop in View",
+        "Holiday Buyers Enter a Crowded, Cut-Price Computer Market",
+        "Electronic Arts Mixes Chess Strategy with Arcade Action",
+        "BYTE Asks Software to Become Easier"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-11-28.jpg",
+      "thumb": "media/thumbs/1983-11-28.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-10",
+      "historicDate": "1983-11-21",
+      "displayDate": "Week of November 21-27, 1983",
+      "edition": "Issue 069 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Microsoft opens a window on the DOS world while Thanksgiving shoppers confront a bruising home-computer price war.",
+      "leadHeadline": "Microsoft Opens a Window on the DOS Desktop",
+      "storyHeadlines": [
+        "Holiday Buyers Enter a Home-Computer Shakeout",
+        "IBM's PCjr Sets a $669 Floor for Big Blue at Home",
+        "Computer Chess Programs Learn to Outsmart One Another",
+        "An Eyebrow-Controlled Computer Gives a Scientist His Voice"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-11-21.jpg",
+      "thumb": "media/thumbs/1983-11-21.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-09",
+      "historicDate": "1983-11-14",
+      "displayDate": "Week of November 14-20, 1983",
+      "edition": "Issue 068 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "J.C. Penney backs away from Coleco’s Adam just as the Christmas computer contest reaches full volume.",
+      "leadHeadline": "Penney Drops Coleco's Adam From Holiday Line",
+      "storyHeadlines": [
+        "Microsoft Opens a Window on DOS",
+        "Video Games Enter Christmas Under a Cloud",
+        "Schools Add Ethics to Computer Literacy"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-11-14.jpg",
+      "thumb": "media/thumbs/1983-11-14.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-08",
+      "historicDate": "1983-11-07",
+      "displayDate": "Week of November 7-13, 1983",
+      "edition": "Issue 067 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Menus, tiled windows and a mouse move onto Microsoft’s drawing board while games crowd the holiday shelves.",
+      "leadHeadline": "Microsoft Opens a Window on the PC’s Graphical Future",
+      "storyHeadlines": [
+        "A Self-Replicating Program Earns a New Name: Computer Virus",
+        "Computer Magazines Ride the Home-Micro Boom",
+        "IBM-Hitachi Settlement Reported Near $300 Million"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-11-07.jpg",
+      "thumb": "media/thumbs/1983-11-07.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-07",
+      "historicDate": "1983-10-31",
+      "displayDate": "Week of October 31-November 6, 1983",
+      "edition": "Issue 066 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "IBM comes home, Apple gets arcade muscle, and Activision moves two cartridge hits onto Atari computers.",
+      "leadHeadline": "IBM Cracks Open 'Peanut' and Sends PCjr Into the Home",
+      "storyHeadlines": [
+        "Apple II Gets an Arcade Board",
+        "Activision Moves River Raid and Kaboom! to Atari Computers",
+        "Touch-Sensitive PowerPad Offers a New Way to Control Home Computers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-31.jpg",
+      "thumb": "media/thumbs/1983-10-31.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-06",
+      "historicDate": "1983-10-24",
+      "displayDate": "Week of October 24-30, 1983",
+      "edition": "Issue 065 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Arcade hits travel to rival machines, Big Blue brings the mainframe to the desk, and DEC puts VAX power into a microcomputer.",
+      "leadHeadline": "Atari Takes Its Games to Rival Machines",
+      "storyHeadlines": [
+        "IBM Links the PC Desk to the Mainframe",
+        "DEC Shrinks 32-Bit VAX Power Into a Microcomputer",
+        "FBI Seizes Gear in Multicity Hacker Inquiry"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-24.jpg",
+      "thumb": "media/thumbs/1983-10-24.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-05",
+      "historicDate": "1983-10-17",
+      "displayDate": "Week of October 17-23, 1983",
+      "edition": "Issue 064 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Networks link the desks, Adam reaches the shops, and a new generation of computer games fills the shelf.",
+      "leadHeadline": "Info ’83 Turns the Personal Computer Into an Office Workstation",
+      "storyHeadlines": [
+        "Coleco’s $700 Adam Enters the Holiday Computer Fight",
+        "Desktop Networks and Electronic Mail Move Downmarket",
+        "Portable and Multiuser Micros Crowd the Show"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-17.jpg",
+      "thumb": "media/thumbs/1983-10-17.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-04",
+      "historicDate": "1983-10-10",
+      "displayDate": "Week of October 10-16, 1983",
+      "edition": "Issue 063 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week: Xerox steps behind stranded Osborne owners, a battery portable promises ten hours, and computer games gain an auteur-minded publisher.",
+      "leadHeadline": "Xerox Service Lifeline Reaches Osborne Owners",
+      "storyHeadlines": [
+        "Xerox Sunrise Claims a Ten-Hour Workday",
+        "FBI Raids Bring Modem Intrusion Home",
+        "Electronic Arts Puts Designers in the Spotlight"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-10.jpg",
+      "thumb": "media/thumbs/1983-10-10.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-03",
+      "historicDate": "1983-10-03",
+      "displayDate": "Week of October 3-9, 1983",
+      "edition": "Issue 062 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "The BBC Micro arrives in America, Spectrum owners meet a compatibility snag, and the IBM-compatible field gets more crowded.",
+      "leadHeadline": "Britain's BBC Micro Makes Its American Debut",
+      "storyHeadlines": [
+        "Issue 3 Spectrum Change Breaks Some Existing Programs",
+        "Sanyo's $2,100 Challenger Joins the IBM-Compatible Charge",
+        "Hewlett-Packard Puts 'Magic' at Your Fingertips"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-10-03.jpg",
+      "thumb": "media/thumbs/1983-10-03.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-08-02",
+      "historicDate": "1983-09-26",
+      "displayDate": "Week of September 26-October 2, 1983",
+      "edition": "Issue 061 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "A free Unix-compatible system is proposed, Atari buries surplus stock, and Apple cuts the Lisa by $3,000.",
+      "leadHeadline": "Atari Dumps Truckloads of Games in New Mexico Landfill",
+      "storyHeadlines": [
+        "GNU Call Asks Programmers to Build a Free Unix-Compatible System",
+        "Apple Cuts Lisa to $6,995 and Points Dealers Toward Macintosh",
+        "IBM’s Unannounced ‘Peanut’ Has the Home Market Guessing"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-09-26.jpg",
+      "thumb": "media/thumbs/1983-09-26.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-08-01",
+      "historicDate": "1983-09-19",
+      "displayDate": "Week of September 19-25, 1983",
+      "edition": "Issue 060 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "The graphical future gets a cheaper price tag, and the home-computer aisle gains a formidable new package.",
+      "leadHeadline": "Apple Slashes Lisa by $3,000 as Sculley Resets the Company",
+      "storyHeadlines": [
+        "FCC Clears Coleco’s Adam for the Holiday Computer Battle",
+        "Portable Computers Crowd the Road-Warrior Market",
+        "IBM’s Shadow Lengthens Across Personal Computing"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-09-19.jpg",
+      "thumb": "media/thumbs/1983-09-19.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-07-31",
+      "historicDate": "1983-09-12",
+      "displayDate": "Week of September 12-18, 1983",
+      "edition": "Issue 059 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Osborne falls, Electronic Arts plays on, and portable computing sheds twenty pounds.",
+      "leadHeadline": "OSBORNE CRASHES INTO BANKRUPTCY",
+      "storyHeadlines": [
+        "Shakeout Reaches Computers and Cartridges",
+        "M.U.L.E. and Archon Turn Rivalry into Art",
+        "A Portable That Really Fits the Lap"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-09-12.jpg",
+      "thumb": "media/thumbs/1983-09-12.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-07-30",
+      "historicDate": "1983-09-05",
+      "displayDate": "Week of September 5-11, 1983",
+      "edition": "Issue 058 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Big Blue sets the standard, telephone lines promise games and software, and personal computers enter the drafting room.",
+      "leadHeadline": "BIG BLUE SETS THE STANDARD",
+      "storyHeadlines": [
+        "Games by Telephone Move Closer to Home",
+        "Draft-Aide Puts CAD on the Personal Computer",
+        "Young Computer Experts Teach the Teachers"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-09-05.jpg",
+      "thumb": "media/thumbs/1983-09-05.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-07-29",
+      "historicDate": "1983-08-29",
+      "displayDate": "Week of August 29-September 4, 1983",
+      "edition": "Issue 057 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "IBM compatibility, portable-computer turmoil, and Ultima III define the week.",
+      "leadHeadline": "IBM's PC Standard Tightens Its Grip",
+      "storyHeadlines": [
+        "Ultima III Makes the Quest a Team Affair",
+        "Portable Computers Crowd the Departure Gate",
+        "Cellular Service Moves Toward the Marketplace"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-29.jpg",
+      "thumb": "media/thumbs/1983-08-29.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-07-28",
+      "historicDate": "1983-08-22",
+      "displayDate": "Week of August 22-28, 1983",
+      "edition": "Issue 056 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Campus computers, arcade animation, and a sub-$1,000 price war define the week.",
+      "leadHeadline": "A Desktop for Every Freshman",
+      "storyHeadlines": [
+        "Christmas Computer War Crowds the Aisles",
+        "Dragon's Lair Turns the Arcade into a Cartoon",
+        "Atari Clears the Deck for XL"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-22.jpg",
+      "thumb": "media/thumbs/1983-08-22.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-07-27",
+      "historicDate": "1983-08-15",
+      "displayDate": "Week of August 15-21, 1983",
+      "edition": "Issue 055 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week in 1983: Lisa developers weigh their tools, M.U.L.E. and Suspended show new game ambitions, and Hurricane Alicia strikes Texas.",
+      "leadHeadline": "Apple Developers Confront the Lisa Software Puzzle",
+      "storyHeadlines": [
+        "Computer Games Grow Up: M.U.L.E. and Suspended Lead the Summer",
+        "A $16.95 3-D Space Game Lands on Timex/Sinclair",
+        "IBM's ‘Peanut’ Rumor Keeps the Market Guessing"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-15.jpg",
+      "thumb": "media/thumbs/1983-08-15.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-07-26",
+      "historicDate": "1983-08-08",
+      "displayDate": "Week of August 8-14, 1983",
+      "edition": "Issue 054 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week, Apple gathers developers around the mouse while Atari and Coleco reset the low end for a make-or-break Christmas.",
+      "leadHeadline": "Apple Courts Independent Programmers on 'Lisa Day'",
+      "storyHeadlines": [
+        "Atari Erases the 1200XL and Bets on Four New Computers",
+        "Coleco's Adam Forces the Home-Computer Market to Scramble",
+        "Laserdisc Cartoon and a Colony Auction Headline the Summer Games"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-08.jpg",
+      "thumb": "media/thumbs/1983-08-08.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-07-24",
+      "historicDate": "1983-08-01",
+      "displayDate": "Week of August 1-7, 1983",
+      "edition": "Issue 053 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "This week, four joysticks turn an Atari into a noisy frontier marketplace while a wave of new machines crowds the fall starting line.",
+      "leadHeadline": "M.U.L.E. Turns the Atari Into a Four-Player Marketplace",
+      "storyHeadlines": [
+        "Seventeen New Computers Crowd the Fall Starting Line",
+        "Atari Sweeps Away Its Old Line for Four XL Computers",
+        "C and Scientific Software Reach the Personal-Computer Desk"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-08-01.jpg",
+      "thumb": "media/thumbs/1983-08-01.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-07-23",
+      "historicDate": "1983-07-25",
+      "displayDate": "Week of July 25-31, 1983",
+      "edition": "Issue 052 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "The Commodore 64 gets cheaper, the Aquarius reaches the shops, and a red-and-white game machine begins its first full week.",
+      "leadHeadline": "Commodore Slashes 64 Price to £229",
+      "storyHeadlines": [
+        "Aquarius Finally Reaches Launch Day",
+        "Nintendo Brings the Arcade Home",
+        "KoalaPad Makes the Screen a Drawing Board"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-07-25.jpg",
+      "thumb": "media/thumbs/1983-07-25.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-07-22",
+      "historicDate": "1983-07-18",
+      "displayDate": "Week of July 18-24, 1983",
+      "edition": "Issue 051 - Weekly 1983 Computer & Culture Chronicle",
+      "morningLine": "Apple counts to a million; Commodore prepares to cut the price of what those machines run.",
+      "leadHeadline": "Apple II Sales Reach One Million",
+      "storyHeadlines": [
+        "Commodore Threatens to Halve Software Prices",
+        "Whole Earth Maps a 40,000-Program Jungle",
+        "More Memory for Less in the Home-Computer War"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1983-07-18.jpg",
+      "thumb": "media/thumbs/1983-07-18.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-07-21",
       "historicDate": "1983-07-11",
       "displayDate": "Week of July 11-17, 1983",
