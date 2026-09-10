@@ -1,0 +1,222 @@
+// Keep offline startup reliable. Images and audio are intentionally fetched on
+// demand: preloading the complete game was a 19 MB / 162-request install that
+// could make Chrome abort the page before it rendered. (Since 5.1 a fetched
+// media file is KEPT, in a second, capped, build-keyed cache â€” see
+// MEDIA_CACHE_NAME â€” which is a different thing from installing it.)
+// 5.8.4: companions across the complete painted movement libraries of all ten fighters.
+const CACHE_NAME = "final-blow-shell-5.8.4-recovery";
+// v5.1 #38 â€” the RUNTIME media cache. Sheets, audio, stage plates and the 3D
+// renderer's HD/vendor files are still fetched on demand (never at install:
+// the precache alternative is now 81 MB / ~560 files), but once a file has
+// been fetched it stays, keyed by the build, so the second fight of a session
+// â€” and the second session â€” do not re-download or re-validate 30-40 URLs.
+// The hosts' defaults (GitHub Pages max-age=600) made every fight after the
+// first ten minutes a conditional re-request per sheet; a phone that evicts
+// its HTTP cache repeated the whole 12-22 MB first-fight download.
+// Derived from the shell name so the one version bump per release keys both.
+const MEDIA_CACHE_NAME = CACHE_NAME.replace("final-blow-shell-", "final-blow-media-");
+// Soft cap on the media cache, in bytes, so it can never recreate the
+// oversized install: the whole assets tree is ~81 MB, so the cap is a full
+// roster plus headroom, and the oldest entries go first when it is crossed.
+const MEDIA_CACHE_CAP_BYTES = 120 * 1024 * 1024;
+const MEDIA_PATHS = ["/assets/", "/renderer/hd/", "/renderer/vendor/"];
+const SHELL = [
+  "./",
+  "./styles.css",
+  "./game.js",
+  "./manifest.webmanifest",
+  "./icon.svg",
+  "./engine/foundation.mjs",
+  "./engine/cinematic-scenes.mjs",
+  "./engine/painted-flow.mjs",
+  "./engine/painted-smooth.mjs",
+  "./engine/full-library.mjs",
+  "./engine/full-registration.mjs",
+  "./engine/smooth-registration.mjs",
+  "./engine/inbetweens.mjs",
+  "./engine/inbetween-scale.mjs",
+  "./engine/clipped-cells.mjs",
+  "./engine/defense.mjs",
+  "./engine/combos.mjs",
+  "./engine/fighter-kits.mjs",
+  "./engine/ai.mjs",
+  "./engine/ai-adaptation.mjs",
+  "./engine/ai-strategy.mjs",
+  "./engine/instant-replay.mjs",
+  "./engine/spectator-config.mjs",
+  "./engine/ai-projectiles.mjs",
+  "./engine/ai-defense.mjs",
+  "./engine/ai-feints.mjs",
+  "./engine/signature-routes.mjs",
+  "./engine/painted-bridges.mjs",
+  "./engine/painted-footwork.mjs",
+  "./engine/painted-recovery.mjs",
+  "./engine/combat-presentation.mjs",
+  "./engine/world-props.mjs",
+  "./engine/move-foley.mjs",
+  "./engine/strike-anchors.mjs",
+  "./engine/move-viewer.mjs",
+  "./engine/arcade.mjs",
+  "./engine/controls.mjs",
+  "./engine/training.mjs",
+  "./engine/polish.mjs",
+  "./engine/rooms.mjs",
+  "./engine/facing.mjs",
+  "./engine/webrtc.mjs",
+  "./engine/rollback.mjs",
+  "./engine/demo.mjs",
+  "./engine/demo-audio.mjs",
+  "./engine/demo-hud.mjs",
+  "./engine/demo-camera.mjs",
+  "./engine/demo-versus.mjs",
+  "./engine/demo-session.mjs",
+  "./engine/demo-commentary.mjs",
+  "./engine/demo-voice.mjs",
+  "./engine/fatalities.mjs",
+  "./engine/fighter-audio.mjs",
+  "./engine/atlas-facing.mjs",
+  "./engine/audio-manifest.mjs",
+  "./engine/ambient.mjs",
+  "./engine/announcer.mjs",
+  "./engine/crowd-voice.mjs",
+  "./engine/shared-sfx.mjs",
+  "./engine/swing-resolve.mjs",
+];
+
+self.addEventListener("install", (event) => {
+  // cache: "reload" bypasses the browser HTTP cache for every shell fetch. A
+  // new worker only ever installs because the BUILD changed, so it must never
+  // fill its cache with heuristically HTTP-cached bytes â€” measured during the
+  // 3.3 update-flow verification: without this, the fresh CacheStorage cache
+  // held the PREVIOUS index.html and the update-reload landed the player on a
+  // mixed-version shell.
+  event.waitUntil(caches.open(CACHE_NAME)
+    .then((cache) => cache.addAll(SHELL.map((url) => new Request(url, { cache: "reload" }))))
+    .then(() => self.skipWaiting()));
+});
+
+// v3.3 FRESH â€” the update contract. skipWaiting + clients.claim mean a new
+// worker takes over every open window the moment it finishes installing, and
+// the PAGE decides what to do about it: 3.3+ shells listen for
+// controllerchange and reload themselves when it is safe (never mid-match â€”
+// see the freshness block next to registerOfflineGame in game.js). Shells
+// OLDER than 3.3 have no such listener â€” they show their stale build one
+// final time while this worker installs and claims, and every navigation
+// after that serves the fresh cache. (A worker-side client.navigate() rescue
+// for that one visit was built and rejected: timers inside the activate
+// waitUntil died before firing and repeatedly wedged the verification
+// browser â€” not a risk the offline path can carry for a one-visit win.)
+self.addEventListener("message", (event) => {
+  // Lets a page tell a re-registration echo apart from a real update: a
+  // takeover whose shell matches the page's own build needs no reload.
+  if (event.data?.type === "fb-shell-version?") event.ports[0]?.postMessage({ version: CACHE_NAME });
+});
+
+self.addEventListener("activate", (event) => {
+  event.waitUntil(Promise.all([
+    // Every cache of an older build goes, the media one included: a media
+    // file is addressed by an un-versioned URL, so the build key on the cache
+    // name is what keeps a 5.0 sheet from drawing under a 5.1 manifest.
+    caches.keys().then((names) => Promise.all(names
+      .filter((name) => name.startsWith("final-blow-") && name !== CACHE_NAME && name !== MEDIA_CACHE_NAME)
+      .map((name) => caches.delete(name)))),
+    self.clients.claim(),
+  ]));
+});
+
+self.addEventListener("fetch", (event) => {
+  const requestUrl = new URL(event.request.url);
+  if (event.request.method !== "GET" || requestUrl.origin !== self.location.origin) return;
+
+  if (event.request.mode === "navigate") {
+    // Retired child pages must redirect before the cached root HTML is used;
+    // otherwise its relative script URL resolves inside the old /3d/ folder.
+    if (requestUrl.pathname.startsWith(new URL("./3d/", self.location.href).pathname)) {
+      event.respondWith(Promise.resolve(Response.redirect(new URL("./", self.location.href).href, 302)));
+      return;
+    }
+    // Cloudflare Pages redirects /index.html to the directory URL. Returning
+    // that redirected CacheStorage response from a navigation fetch event is
+    // rejected by browsers as ERR_FAILED. The directory entry is the same
+    // document without a redirect history, so it is safe to use offline.
+    event.respondWith(caches.match("./").then((cached) => cached || fetch(event.request)));
+    return;
+  }
+
+  if (isMediaRequest(event.request, requestUrl)) {
+    event.respondWith(mediaResponse(event.request));
+    return;
+  }
+
+  event.respondWith(shellResponse(event.request));
+});
+
+// Only the intentionally small shell is cached here. Do not add runtime media
+// to THIS path; doing so would quietly recreate the oversized installation â€”
+// media goes through mediaResponse and its cap.
+function shellResponse(request) {
+  return caches.match(request, { ignoreSearch: true }).then((cached) => cached || fetch(request));
+}
+
+function isMediaRequest(request, requestUrl) {
+  // A media element fetching a byte range must reach the network: a 206
+  // cannot be served as a whole file, and caching it would poison later
+  // full reads of the same URL.
+  if (request.headers.has("range")) return false;
+  const path = requestUrl.pathname;
+  return MEDIA_PATHS.some((prefix) => path.includes(prefix));
+}
+
+// Cache-first. On a miss the network response is stored (a full, plain 200
+// only) and the cache is trimmed to the cap; on a network failure with no
+// cached copy the failure propagates exactly as it did before this cache
+// existed, so the game's own fallback chains stay the safety net.
+function mediaResponse(request) {
+  return caches.open(MEDIA_CACHE_NAME).then((cache) => cache.match(request, { ignoreSearch: true })
+    .then((cached) => cached || fetch(request).then((response) => {
+      if (response.ok && response.status === 200 && response.type === "basic") {
+        const copy = response.clone();
+        cache.put(request, copy).then(() => trimMediaCache(cache, sizeOf(response))).catch(() => {});
+      }
+      return response;
+    })));
+}
+
+function sizeOf(response) {
+  const length = Number(response.headers.get("content-length"));
+  return Number.isFinite(length) && length > 0 ? length : 0;
+}
+
+// Byte tally of the media cache for this worker's life. The first insert
+// after a worker starts recounts from the stored headers (one pass over the
+// keys); every later insert adds its own length, so trimming is cheap.
+let mediaBytes = -1;
+let mediaTrim = Promise.resolve();
+
+function trimMediaCache(cache, addedBytes) {
+  mediaTrim = mediaTrim.then(async () => {
+    if (mediaBytes < 0) {
+      mediaBytes = 0;
+      for (const key of await cache.keys()) {
+        const entry = await cache.match(key);
+        mediaBytes += entry ? sizeOf(entry) : 0;
+      }
+    } else {
+      mediaBytes += addedBytes;
+    }
+    if (mediaBytes <= MEDIA_CACHE_CAP_BYTES) return;
+    // keys() lists entries oldest-first in every engine that ships this
+    // worker; dropping from the front is the LRU-by-insertion the cap wants.
+    // Keep the small painted cinematic library ahead of optional older media.
+    // Both groups remain insertion-ordered and the same total cap still applies.
+    const keys = await cache.keys();
+    keys.sort((a,b)=>Number(a.url.includes('/assets/cinema/'))-Number(b.url.includes('/assets/cinema/')));
+    for (const key of keys) {
+      if (mediaBytes <= MEDIA_CACHE_CAP_BYTES) break;
+      const entry = await cache.match(key);
+      const bytes = entry ? sizeOf(entry) : 0;
+      if (await cache.delete(key)) mediaBytes -= bytes;
+    }
+  }).catch(() => { mediaBytes = -1; });
+  return mediaTrim;
+}

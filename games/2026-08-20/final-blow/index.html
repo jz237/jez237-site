@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#080b13">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="description" content="Final Blow: Philly After Dark — a playable 1990s-inspired weapon fighter prototype.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='10' fill='%23080b13'/%3E%3Cpath d='M14 10h39l-4 12H29l-2 8h18l-4 11H24l-5 15H5z' fill='%23ef2c28'/%3E%3C/svg%3E">
+  <title>Final Blow 5.8.4: Ringside</title>
+  <meta name="application-version" content="5.8.4">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main id="app">
+    <header class="topbar" aria-label="Game status bar">
+      <a class="mini-brand" href="#" id="homeLink" aria-label="Return to title">
+        <span>FINAL</span><strong>BLOW</strong>
+      </a>
+      <div class="build-tag">RINGSIDE <b>5.8.4</b></div>
+      <div id="offlineBadge" class="offline-badge" aria-live="polite">CACHE CHECK</div>
+      <button id="trackButton" class="track-button" type="button" aria-label="Play next soundtrack">♫ PHILLY AFTER DARK</button>
+      <div id="padStatus" class="pad-status" aria-live="polite"><i></i> KEYBOARD READY</div>
+    </header>
+
+    <section id="gameFrame" class="game-frame" aria-label="Final Blow game">
+      <canvas id="game" width="1280" height="720" tabindex="0" aria-label="Fighting game canvas"></canvas>
+
+      <div id="hud" class="hud hidden" aria-hidden="true">
+        <div class="fighter-hud p1-hud">
+          <div class="hud-name"><span class="side-tag">P1</span><b id="p1Name">DEATHBLOW</b><span id="p1Rounds" class="round-pips"></span></div>
+          <div class="health-shell"><i id="p1Health"></i><em id="p1Damage"></em><s id="p1GuardGauge" class="guard-gauge"></s></div>
+          <div class="grit-row"><span>GRIT</span><div class="meter-shell"><i id="p1Meter"></i></div><b id="p1Grit">0</b><span id="p1ObjectName" class="object-name">—</span><span id="p1Objects" class="object-pips" aria-label="Throwable objects left"></span></div>
+        </div>
+        <div class="timer-wrap"><span id="roundLabel">ROUND 1</span><b id="timer">99</b></div>
+        <div class="fighter-hud p2-hud">
+          <div class="hud-name"><span id="p2Rounds" class="round-pips"></span><b id="p2Name">JEZ</b><span class="side-tag">P2</span></div>
+          <div class="health-shell"><i id="p2Health"></i><em id="p2Damage"></em><s id="p2GuardGauge" class="guard-gauge"></s></div>
+          <div class="grit-row"><span id="p2Objects" class="object-pips" aria-label="Throwable objects left"></span><span id="p2ObjectName" class="object-name">—</span><b id="p2Grit">0</b><div class="meter-shell"><i id="p2Meter"></i></div><span>GRIT</span></div>
+        </div>
+      </div>
+      <div id="onlineHud" class="online-hud" aria-live="polite" hidden>
+        <b id="onlineHudState">ROLLBACK SYNC</b><span id="onlineHudPing">— MS</span><span id="onlineHudDelay">2F DELAY</span><span id="onlineHudRollbacks">0 RB</span><span id="onlineHudSet" hidden>SET 0–0</span>
+        <button id="connMeter" class="conn-meter" type="button" aria-label="Connection quality, tap for detail" data-grade="green">
+          <i></i><i></i><i></i><i></i><b id="connMeterLabel">GREEN</b>
+        </button>
+        <div id="connMeterDetail" class="conn-meter-detail" hidden></div>
+      </div>
+      <div id="connToast" class="conn-toast" aria-live="polite" hidden></div>
+      <div id="updateToast" class="update-toast" role="status" aria-live="polite" hidden>
+        <button id="updateReloadButton" type="button">NEW VERSION READY · PRESS TO RELOAD</button>
+        <button id="updateDismissButton" type="button" aria-label="Dismiss update notice — keep playing this build">×</button>
+      </div>
+      <div id="syncCountdown" class="sync-countdown" aria-hidden="true" hidden>3</div>
+      <div id="replayHud" class="replay-hud" aria-label="Replay controls" hidden>
+        <b class="replay-hud-tag">REPLAY</b>
+        <span id="replayHudLabel">—</span>
+        <em id="replayHudFrame">0 / 0F</em>
+        <div class="replay-hud-buttons">
+          <button id="replayPauseButton" type="button" aria-label="Pause or resume replay">⏸</button>
+          <button id="replayStepButton" type="button" aria-label="Step one frame">⏭</button>
+          <button id="replaySpeedButton" type="button" aria-label="Cycle playback speed">1×</button>
+          <button id="replayExitButton" type="button" aria-label="Close replay">✕</button>
+        </div>
+      </div>
+      <div id="spectateHud" class="spectate-hud" aria-live="polite" hidden>
+        <b>SPECTATING</b><span id="spectateHudDetail">LIVE · A BEAT BEHIND</span>
+      </div>
+      <div id="onlineInterruption" class="online-interruption" aria-live="assertive" hidden>
+        <strong id="onlineInterruptionTitle">RECONNECTING</strong><span id="onlineInterruptionDetail">Holding the match while the encrypted link returns…</span>
+      </div>
+      <div id="p1Combo" class="combo-readout p1-combo" aria-live="polite"><b>0</b><span>HIT COMBO</span><em>0 DAMAGE</em></div>
+      <div id="p2Combo" class="combo-readout p2-combo" aria-live="polite"><b>0</b><span>HIT COMBO</span><em>0 DAMAGE</em></div>
+
+      <aside id="trainingPanel" class="training-panel" aria-label="Training controls" hidden>
+        <div class="training-stats">
+          <span><small>DAMAGE</small><b id="trainingDamage">0</b></span>
+          <span><small>COMBO</small><b id="trainingCombo">0</b></span>
+          <span><small>FRAME DATA</small><b id="trainingFrames">—</b></span>
+          <span><small>ADVANTAGE</small><b id="trainingAdvantage">—</b></span>
+          <span><small>PERFECT GUARD</small><b id="trainingPerfectGuards">0</b></span>
+        </div>
+        <div class="training-tools">
+          <label>DUMMY <select id="trainingDummySelect">
+            <option value="stand">STAND</option><option value="guard">AUTO GUARD</option>
+            <option value="guard-after-first">GUARD AFTER 1ST</option><option value="reversal">REVERSAL</option>
+            <option value="wakeup">WAKEUP DRILL</option><option value="crouch">CROUCH</option>
+            <option value="jump">JUMP</option><option value="record">RECORDING P2</option>
+            <option value="playback">PLAY RECORDED</option><option value="cpu">CPU</option>
+          </select></label>
+          <label><input id="trainingRecoverToggle" type="checkbox" checked> AUTO LIFE</label>
+          <label><input id="trainingGritToggle" type="checkbox" checked> INFINITE GRIT</label>
+          <label><input id="trainingHitboxToggle" type="checkbox"> HITBOXES</label>
+          <label><input id="trainingFrameMeterToggle" type="checkbox"> FRAME METER</label>
+          <button id="trainingRecordButton" type="button">RECORD P2</button>
+          <button id="trainingPlaybackButton" type="button" disabled>PLAY LOOP</button>
+          <button id="trainingResetButton" type="button">RESET POSITION</button>
+          <button id="trainingWeaponButton" type="button">SPAWN STAGE WEAPON</button>
+        </div>
+        <div class="training-slot-tools" aria-label="Training situation slots">
+          <b>SITUATION</b>
+          <button data-slot-save="0" type="button">SAVE 1</button><button data-slot-load="0" type="button" disabled>LOAD 1</button>
+          <button data-slot-save="1" type="button">SAVE 2</button><button data-slot-load="1" type="button" disabled>LOAD 2</button>
+          <button data-slot-save="2" type="button">SAVE 3</button><button data-slot-load="2" type="button" disabled>LOAD 3</button>
+        </div>
+        <div class="training-trial-tools">
+          <label>COMBO TRIAL <select id="trainingTrialSelect"></select></label>
+          <button id="trainingTrialResetButton" type="button">RESET TRIAL</button>
+          <button id="trainingTrialDemoButton" type="button">WATCH DEMO</button>
+          <b id="trainingTrialStatus">READY</b>
+          <span id="trainingTrialMedals" class="training-trial-medals"></span>
+        </div>
+        <div id="trainingInputs" class="training-inputs">INPUT: —</div>
+        <div id="trainingTrialSteps" class="training-trial-steps">TRIAL: —</div>
+        <div id="trainingGrabHint" class="training-grab-hint">GRAB: STEP IN CLOSE, THEN TOWARD OR AWAY + LP OR LK</div>
+      </aside>
+
+      <div id="inputHistoryColumn" class="input-history-column" aria-label="Input history" hidden></div>
+
+      <aside id="schoolPanel" class="school-panel" aria-label="Fight School lesson" hidden>
+        <div class="school-head"><b>FIGHT SCHOOL</b><span id="schoolLessonCounter">LESSON 1 / 7</span></div>
+        <h3 id="schoolLessonName">FOOTWORK &amp; GUARD</h3>
+        <p id="schoolLessonIntro"></p>
+        <div id="schoolSteps" class="school-steps"></div>
+        <div class="school-actions">
+          <button id="schoolSkipButton" type="button">SKIP LESSON</button>
+          <button id="schoolExitButton" type="button">LEAVE SCHOOL</button>
+        </div>
+      </aside>
+
+      <div id="announcer" class="announcer hidden" aria-live="assertive">
+        <strong></strong><span></span>
+      </div>
+      <div id="flowSkipHint" class="flow-skip-hint" hidden>ANY ATTACK / START · SKIP</div>
+      <aside id="controlCard" class="control-card" aria-label="First fight controls" hidden>
+        <div class="control-card-head"><b>YOUR CONTROLS</b><button id="controlCardClose" type="button" aria-label="Dismiss">×</button></div>
+        <div id="controlCardLines" class="control-card-lines"></div>
+        <p>FIGHT SCHOOL TEACHES THE REST · TAP TO DISMISS</p>
+      </aside>
+      <div id="artHold" class="art-hold" aria-live="polite" hidden><b>LOADING FIGHTERS</b><span></span></div>
+      <div id="introDialogue" class="intro-dialogue" aria-live="polite" hidden></div>
+      <div id="soundCaption" class="sound-caption" aria-live="polite" hidden></div>
+      <div id="screenWipe" class="screen-wipe" aria-hidden="true"></div>
+      <div id="bookStampToast" class="book-stamp-toast" aria-live="polite" hidden>
+        <span class="stamp-seal" aria-hidden="true"><b>INKED</b></span>
+        <strong></strong>
+        <span class="stamp-sub">THE BLACK BOOK · ENTRY INKED</span>
+      </div>
+
+      <section id="pausePanel" class="pause-panel" aria-labelledby="pauseTitle" hidden>
+        <p class="eyebrow">THE STREET WAITS</p>
+        <h2 id="pauseTitle">PAUSED</h2>
+        <div id="pausePerformance" class="pause-performance">AUTO VISUALS</div>
+        <div id="pauseReason" class="pause-reason" hidden></div>
+        <div class="menu-stack">
+          <button id="resumeButton" class="arcade-button primary menu-focus" type="button">RESUME</button>
+          <button id="restartButton" class="arcade-button" type="button">RESTART ROUND</button>
+          <button id="pauseMoveListButton" class="arcade-button" type="button">MOVE LIST</button>
+          <button id="pauseOptionsButton" class="arcade-button" type="button">CONTROLS &amp; OPTIONS</button>
+          <button id="pauseSelectButton" class="arcade-button ghost" type="button">SELECT FIGHTERS</button>
+        </div>
+        <p>ESC / P / START TO RESUME</p>
+        <section id="moveListOverlay" class="move-list-overlay" aria-labelledby="moveListOverlayName" hidden>
+          <header>
+            <div><p class="eyebrow" id="moveListOverlayStyle">CLASSIC CONTROLS</p><h3 id="moveListOverlayName">DEATHBLOW</h3></div>
+            <button id="moveListOverlayClose" class="arcade-button compact" type="button">BACK</button>
+          </header>
+          <div id="moveListOverlayIdentity" class="move-list-identity"></div>
+          <div id="moveListOverlayRows" class="move-list-rows frame-data"></div>
+          <div id="moveListOverlayExtras" class="move-list-extras"></div>
+        </section>
+      </section>
+
+      <section id="titleScreen" class="screen title-screen active" aria-labelledby="gameTitle">
+        <div class="title-glow"></div>
+        <div id="cabinetMarquee" class="cabinet-marquee" aria-hidden="true" hidden>PRESS ANY BUTTON</div>
+        <div class="title-lockup">
+          <p class="eyebrow">A PHILADELPHIA WEAPON FIGHTER</p>
+          <h1 id="gameTitle"><span>FINAL</span><strong>BLOW</strong></h1>
+          <h2>PHILLY AFTER DARK</h2>
+          <p id="titleVersion" class="title-version" aria-label="Version 5.8.4">VERSION 5.8.4</p>
+          <p class="hook">Ten fighters. Six stages. One last chance to finish it.</p>
+        </div>
+        <div id="titleNewcomer" class="title-newcomer" hidden>
+          <span>NEW HERE?</span>
+          <button id="titleNewcomerButton" type="button">FIGHT SCHOOL · 3 MIN</button>
+        </div>
+        <div class="menu-stack title-tiers">
+          <section class="menu-tier tier-play" aria-label="Play">
+            <p class="tier-label">PLAY</p>
+            <button class="arcade-button primary menu-focus" data-mode="arcade">1 PLAYER · ARCADE</button>
+            <button class="arcade-button" data-mode="versus">2 PLAYER · LOCAL VERSUS</button>
+          </section>
+          <section class="menu-tier tier-learn" aria-label="Learn">
+            <p class="tier-label">LEARN</p>
+            <button id="titleCoach" class="title-coach" type="button" hidden>
+              <b id="titleCoachHead">NEXT · LESSON 1 · FOOTWORK &amp; GUARD</b>
+              <small id="titleCoachReason">NO FIGHT ON THE BOOKS YET. START AT THE TOP.</small>
+            </button>
+            <div class="menu-row">
+              <button class="arcade-button school-button" id="fightSchoolButton">FIGHT SCHOOL<small id="fightSchoolStatus">12 LESSONS · FREE</small></button>
+              <button class="arcade-button school-button" id="comboTrialsButton">COMBO TRIALS<small id="comboTrialsStatus">EARN MEDALS</small></button>
+            </div>
+            <button class="arcade-button" data-mode="training">TRAINING LAB</button>
+          </section>
+          <section class="menu-tier tier-more" aria-label="More">
+            <p class="tier-label">MORE</p>
+            <button class="arcade-button" data-mode="survival">SURVIVAL · THE GAUNTLET</button>
+            <button class="arcade-button" data-mode="team">1–2 PLAYERS · TEAM BATTLE · 3V3</button>
+            <button class="arcade-button daily-button" id="dailyButton">DAILY JAWN<small id="dailyStatus">FRESH RUN READY</small></button>
+            <div class="menu-row">
+              <button class="arcade-button ledger-button" id="blackBookButton">THE BLACK BOOK<small id="blackBookStatus">0 / 35 INKED</small></button>
+              <button class="arcade-button ledger-button" id="recordsButton">FIGHT RECORDS<small id="recordsStatus">NO FIGHTS LOGGED</small></button>
+            </div>
+            <button class="arcade-button online-button" id="onlineButton">ONLINE · PRIVATE ROOM</button>
+            <button class="arcade-button bracket-button" id="phillyOpenButton">THE PHILLY OPEN · BRACKET<small id="phillyOpenStatus">4 OR 8 ENTRANTS · SINGLE ELIMINATION</small></button>
+            <div class="menu-row">
+              <button class="arcade-button demo-button" id="demoButton">WATCH DEMO · CPU VS CPU</button>
+              <button class="arcade-button demo-button" id="moveViewerButton" type="button">MOVE VIEWER<small>SLOW MOTION · PAUSE · FRAME BY FRAME</small></button>
+              <button class="arcade-button demo-button" id="spectatorSetupButton" type="button">CUSTOM CPU MATCH<small>FIGHTERS · STAGE · DIFFICULTY · SERIES</small></button>
+              <button class="arcade-button demo-button" id="replayTheaterButton">REPLAY THEATER<small id="replayTheaterStatus">WATCH SAVED MATCHES</small></button>
+            </div>
+            <button class="arcade-button ghost" id="controlsButton">CONTROLS & OPTIONS</button>
+          </section>
+        </div>
+        <div class="start-hint">PRESS <kbd>ENTER</kbd> OR <span class="xbox-a">A</span> TO START</div>
+      </section>
+
+      <section id="onlineScreen" class="screen online-screen" aria-labelledby="onlineTitle">
+        <div class="online-copy">
+          <p class="eyebrow">HEAD-TO-HEAD · INVITE ONLY</p>
+          <h2 id="onlineTitle">PRIVATE<br><strong>ROOMS</strong></h2>
+          <p>Create a sealed two-player room, share one private invite, then connect directly over encrypted WebRTC.</p>
+          <div class="online-security" aria-label="Private room security">
+            <span>🔒 TOKEN AUTH</span><span>◉ P2P ENCRYPTED</span><span>⌛ 15 MINUTES</span><span>2 SEATS ONLY</span>
+          </div>
+          <p class="online-checkpoint-note">LIVE ROLLBACK · INPUT PREDICTION · DESYNC GUARD · RECONNECT &amp; REMATCH</p>
+        </div>
+        <div class="online-terminal">
+          <div id="onlineStatus" class="online-status idle" aria-live="polite">
+            <i></i><div><strong id="onlineStatusTitle">ROOM SYSTEM READY</strong><span id="onlineStatusDetail">Create a room or open a private invite.</span></div>
+          </div>
+          <div id="onlineActions" class="online-actions">
+            <button id="onlineCreateButton" class="arcade-button primary" type="button">CREATE PRIVATE ROOM</button>
+            <div class="online-divider"><span>OR JOIN AN INVITE</span></div>
+            <label for="onlineInviteInput">PASTE PRIVATE INVITE LINK</label>
+            <input id="onlineInviteInput" type="text" inputmode="url" autocomplete="off" spellcheck="false" placeholder="https://…/#online=join…">
+            <button id="onlineJoinButton" class="arcade-button" type="button">JOIN PRIVATE ROOM</button>
+            <div class="online-divider"><span>STREET LIST · OPEN CHALLENGES</span></div>
+            <div id="streetListPanel" class="street-list-panel" aria-label="Street List public challenges">
+              <div class="street-list-head">
+                <b>ANSWER A CHALLENGE</b>
+                <button id="streetListRefreshButton" class="arcade-button ghost compact" type="button">REFRESH</button>
+              </div>
+              <div id="streetListRows" class="street-list-rows" role="list"></div>
+              <p id="streetListStatus" class="street-list-status" aria-live="polite">PRESS REFRESH TO SCAN THE BOARD</p>
+            </div>
+          </div>
+          <div id="onlineRoomDetails" class="online-room-details" hidden>
+            <div class="online-room-head"><span>ROOM FINGERPRINT</span><b id="onlineFingerprint">—</b><small id="onlineExpiry">EXPIRES IN 15:00</small></div>
+            <label for="onlineInviteLink">PRIVATE GUEST INVITE</label>
+            <div class="online-copy-row"><input id="onlineInviteLink" type="text" readonly><button id="onlineCopyButton" type="button">COPY</button></div>
+            <div id="onlineQrBlock" class="online-qr-block" hidden>
+              <canvas id="onlineQrCanvas" width="196" height="196" aria-label="Invite QR code — scan to join as guest"></canvas>
+              <div class="online-qr-side">
+                <small>SCAN ON A PHONE<br>LANDS IN THE GUEST SEAT</small>
+                <button id="onlineShareButton" class="arcade-button compact" type="button" hidden>SHARE INVITE</button>
+                <button id="onlineWatchLinkButton" class="arcade-button ghost compact" type="button" hidden>COPY WATCH LINK</button>
+              </div>
+            </div>
+            <div id="streetPostRow" class="street-post-row" hidden>
+              <label>STREET&nbsp;<select id="streetTagSelect" aria-label="Street List tag"></select></label>
+              <button id="streetPostButton" class="arcade-button compact" type="button">POST TO STREET LIST</button>
+              <b id="streetPostStatus" aria-live="polite"></b>
+            </div>
+            <div class="online-seats">
+              <span id="onlineHostSeat"><i></i><b>HOST</b><em>WAITING</em></span>
+              <span id="onlineGuestSeat"><i></i><b>GUEST</b><em>WAITING</em></span>
+            </div>
+            <div class="online-link-readout"><span>DIRECT LINK</span><b id="onlineLatency">NEGOTIATING</b></div>
+            <div id="onlineMatchSetup" class="online-match-setup" hidden>
+              <div class="online-match-grid">
+                <label>YOUR FIGHTER<select id="onlineFighterSelect" aria-label="Your online fighter">
+                  <option value="deathblow">DEATHBLOW</option><option value="jez">JEZ</option>
+                  <option value="alan">ALLAN</option><option value="post">POST</option>
+                  <option value="benny">BENNY</option><option value="donald">DONALD TRUMP</option>
+                  <option value="cyraxx">CYRAXX</option><option value="ali">ALI G</option>
+                  <option value="devil">PINELANDS DEVIL</option>
+                </select></label>
+                <div class="online-opponent"><span>OPPONENT</span><b id="onlineOpponentFighter">CHOOSING…</b></div>
+                <label>COLORS<select id="onlinePaletteSelect" aria-label="Your fighter colors">
+                  <option value="0">COLOR 1 · PRIMARY</option><option value="1">COLOR 2 · ALT</option>
+                </select></label>
+                <label>STAGE <small id="onlineStageOwner" class="stage-owner-note">HOST PICKS</small><select id="onlineStageSelect" aria-label="Online stage">
+                  <option value="somerset">SOMERSET SEPTA STATION</option><option value="vet">THE VET PARKING LOT</option>
+                  <option value="wildwood">WILDWOOD BOARDWALK</option><option value="buffet">CHINESE BUFFET</option>
+                  <option value="cruise">CRUISE POOL DECK</option><option value="janney">JANNEY STREET VACANT LOT</option>
+                </select></label>
+                <label>INPUT DELAY<select id="onlineDelaySelect" aria-label="Online input delay">
+                  <option value="auto">AUTO · PING TUNED</option><option value="0">0 FRAMES</option><option value="1">1 FRAME</option>
+                  <option value="2">2 FRAMES</option><option value="3">3 FRAMES</option><option value="4">4 FRAMES</option>
+                </select></label>
+                <label>SET LENGTH<select id="onlineSetSelect" aria-label="First-to-N set length">
+                  <option value="1">SINGLE MATCH</option><option value="2">FIRST TO 2</option>
+                  <option value="3">FIRST TO 3</option><option value="5">FIRST TO 5</option>
+                </select></label>
+              </div>
+              <p id="lobbyConnBadge" class="lobby-conn-badge" data-grade="" hidden>CONNECTION · MEASURING…</p>
+              <button id="onlineReadyButton" class="arcade-button primary" type="button">READY FOR ROLLBACK</button>
+              <p id="onlineMatchStatus">LINK BOTH SEATS TO ARM THE MATCH</p>
+            </div>
+            <button id="onlineDisconnectButton" class="arcade-button ghost compact" type="button">CLOSE ROOM</button>
+          </div>
+          <p id="onlineError" class="online-error" role="alert" hidden></p>
+          <button class="text-button online-back" data-back="title">← BACK TO TITLE</button>
+        </div>
+      </section>
+
+      <section id="selectScreen" class="screen select-screen" aria-labelledby="selectTitle">
+        <header class="screen-header">
+          <p>CHOOSE YOUR WEAPON</p>
+          <h2 id="selectTitle">SELECT FIGHTER</h2>
+          <div id="selectPrompt">PLAYER 1 — CHOOSE</div>
+          <div id="paletteHint" class="palette-hint">LIGHT CONFIRM · COLOR 1 &nbsp;·&nbsp; HEAVY CONFIRM · COLOR 2</div>
+        </header>
+        <div id="rosterGrid" class="roster-grid" role="listbox" aria-label="Fighter roster"></div>
+        <div id="teamOpponentChoice" class="team-opponent-choice" role="group" aria-label="Block War opponent" hidden>
+          <span class="difficulty-title">WHO'S ACROSS THE STREET?</span>
+          <div class="menu-row">
+            <button class="arcade-button primary" type="button" data-team-opponent="cpu">VS CPU · AUTO-DRAFT<small>THE CPU PULLS THREE YOU DIDN'T</small></button>
+            <button class="arcade-button" type="button" data-team-opponent="player">VS PLAYER 2<small>SECOND SEAT PICKS THREE</small></button>
+          </div>
+        </div>
+        <div id="difficultyBar" class="difficulty-bar" role="radiogroup" aria-label="CPU difficulty" hidden>
+          <span class="difficulty-title">CPU DIFFICULTY</span>
+          <div id="difficultyOptions" class="difficulty-options"></div>
+          <p id="difficultyHint" class="difficulty-hint"></p>
+        </div>
+        <div class="selection-footer">
+          <button class="text-button" data-back="title">← BACK</button>
+          <div id="selectionReadout"><span>P1</span> DEATHBLOW <i>VS</i> <span>P2</span> JEZ</div>
+          <button id="fighterContinue" class="arcade-button compact" disabled>STAGE SELECT →</button>
+        </div>
+      </section>
+
+      <section id="stageScreen" class="screen stage-screen" aria-labelledby="stageTitle">
+        <header class="screen-header">
+          <p>WHERE WILL IT END?</p>
+          <h2 id="stageTitle">SELECT STAGE</h2>
+        </header>
+        <div id="arcadeRoutePreview" class="arcade-route-preview" aria-label="Arcade ladder" hidden></div>
+        <div id="stageGrid" class="stage-grid">
+          <button class="stage-card menu-focus selected" data-stage="somerset">
+            <span class="stage-preview somerset-preview"></span>
+            <strong>SOMERSET SEPTA STATION</strong>
+            <small>STREET ENTRANCE · AFTER MIDNIGHT</small>
+          </button>
+          <button class="stage-card" data-stage="vet">
+            <span class="stage-preview vet-preview"></span>
+            <strong>THE VET PARKING LOT</strong>
+            <small>VETERANS STADIUM · 1999</small>
+          </button>
+          <button class="stage-card" data-stage="wildwood">
+            <span class="stage-preview wildwood-preview"></span>
+            <strong>WILDWOOD BOARDWALK</strong>
+            <small>NEW JERSEY · AFTER DARK</small>
+          </button>
+          <button class="stage-card" data-stage="buffet">
+            <span class="stage-preview buffet-preview"></span>
+            <strong>CHINESE BUFFET</strong>
+            <small>CRAB-LEG SECTION · 11PM</small>
+          </button>
+          <button class="stage-card" data-stage="cruise">
+            <span class="stage-preview cruise-preview"></span>
+            <strong>CRUISE POOL DECK</strong>
+            <small>DECK 11 · SAILING SOMEWHERE</small>
+          </button>
+          <button class="stage-card" data-stage="janney">
+            <span class="stage-preview janney-preview"></span>
+            <strong>JANNEY STREET VACANT LOT</strong>
+            <small>PHILADELPHIA · EARLY DUSK</small>
+          </button>
+        </div>
+        <div id="mutatorBar" class="mutator-bar" aria-label="House Rules match mutators" hidden>
+          <span class="mutator-title">HOUSE RULES</span>
+          <div id="mutatorOptions" class="mutator-options"></div>
+          <p id="mutatorHint" class="mutator-hint">OPTIONAL HOUSE RULES · STACK AS MANY AS YOU WANT</p>
+        </div>
+        <div id="setLengthBar" class="set-length-bar" aria-label="First-to-N set length" hidden>
+          <span class="mutator-title">SET</span>
+          <div id="setLengthOptions" class="set-length-options"></div>
+          <p id="setLengthHint" class="mutator-hint">ONE MATCH · NO SCOREBOARD</p>
+        </div>
+        <div class="selection-footer">
+          <button class="text-button" data-back="select">← FIGHTERS</button>
+          <div id="stageReadout">SOMERSET SEPTA STATION</div>
+          <button id="fightButton" class="arcade-button compact primary">FIGHT →</button>
+        </div>
+      </section>
+
+      <section id="ladderScreen" class="screen ladder-screen" aria-labelledby="arcadeLadderTitle">
+        <div class="ladder-boss" aria-hidden="true">
+          <img src="assets/fighters/commissioner.webp" alt="" draggable="false">
+          <span>THE COMMISSIONER</span>
+        </div>
+        <div class="ladder-copy">
+          <p class="eyebrow" id="arcadeLadderCounter">BOUT 2 / 8</p>
+          <h2 id="arcadeLadderTitle">THE STREET OPENS</h2>
+          <p id="arcadeLadderMessage">One name crossed out. Seven remain.</p>
+          <div id="arcadeLadderNodes" class="arcade-ladder-nodes" aria-label="Arcade route"></div>
+          <button id="arcadeContinueButton" class="arcade-button primary menu-focus">NEXT FIGHT →</button>
+        </div>
+      </section>
+
+      <section id="tallyScreen" class="screen tally-screen" aria-labelledby="tallyTitle">
+        <div class="tally-panel">
+          <p class="eyebrow" id="tallySub">BONUS TALLY</p>
+          <h2 id="tallyTitle">BOUT CLEARED</h2>
+          <div id="tallyRows" class="tally-rows"></div>
+          <div class="tally-total-block">
+            <div class="tally-multiplier" id="tallyMultiplier">DIFFICULTY MULTIPLIER ×1</div>
+            <div class="tally-total"><span>BOUT TOTAL</span><b id="tallyBoutTotal">0</b></div>
+            <div class="tally-run-total"><span>RUN SCORE</span><b id="tallyRunTotal">0</b></div>
+          </div>
+          <button id="tallyContinueButton" class="arcade-button primary menu-focus">CONTINUE →</button>
+        </div>
+      </section>
+
+      <section id="initialsScreen" class="screen initials-screen" aria-labelledby="initialsTitle">
+        <div class="initials-panel">
+          <p class="eyebrow">YOU MADE THE BOARD</p>
+          <h2 id="initialsTitle">ENTER YOUR INITIALS</h2>
+          <div class="initials-context"><b id="initialsScore">0 PTS</b><span id="initialsMode">ARCADE</span></div>
+          <div id="initialsSlots" class="initials-slots" aria-label="Three letter initials">
+            <button type="button" class="initials-slot cursor">A</button>
+            <button type="button" class="initials-slot">A</button>
+            <button type="button" class="initials-slot">A</button>
+          </div>
+          <p class="initials-hint">TYPE LETTERS · ↑↓ CYCLE · ←→ MOVE · TAP A SLOT TO SPIN IT</p>
+          <button id="initialsConfirmButton" class="arcade-button primary menu-focus">LOCK IT IN</button>
+        </div>
+      </section>
+
+      <div id="attractScores" class="attract-scores" aria-hidden="true" hidden>
+        <p class="eyebrow">FINAL BLOW · TOP FIGHTERS</p>
+        <h3>HIGH SCORES</h3>
+        <div id="attractScoresRows" class="attract-score-rows"></div>
+        <small>PRESS ANY BUTTON TO PLAY</small>
+      </div>
+
+      <section id="blackbookScreen" class="screen black-book-screen" aria-labelledby="blackBookTitle">
+        <header class="screen-header">
+          <p>THE COMMISSIONER'S LEDGER · EVERYTHING HE NEVER WANTED FINISHED</p>
+          <h2 id="blackBookTitle">THE BLACK BOOK</h2>
+          <div id="blackBookCount" class="black-book-count">0 / 35 INKED</div>
+        </header>
+        <div id="blackBookList" class="black-book-list" role="list" aria-label="Black Book entries"></div>
+        <div class="selection-footer">
+          <button class="text-button" data-back="title">← BACK TO TITLE</button>
+          <div class="black-book-footnote">LOCKED PAGES STAY REDACTED UNTIL THE STREET SAYS OTHERWISE</div>
+        </div>
+      </section>
+
+      <section id="recordsScreen" class="screen records-screen" aria-labelledby="recordsTitle">
+        <header class="screen-header">
+          <p>EVERY MATCH LEAVES A MARK</p>
+          <h2 id="recordsTitle">FIGHT RECORDS</h2>
+          <div id="recordsLifetime" class="records-lifetime" aria-label="Lifetime totals"></div>
+        </header>
+        <div id="recordsGrid" class="records-grid" role="list" aria-label="Per-fighter records"></div>
+        <div class="selection-footer">
+          <button class="text-button" data-back="title">← BACK TO TITLE</button>
+          <div id="recordsStreaks" class="records-streaks">—</div>
+        </div>
+      </section>
+
+      <section id="endingScreen" class="screen ending-screen" aria-labelledby="endingTitle">
+        <div id="endingPanels" class="ending-panels" hidden>
+          <div id="endingPanel" class="ending-panel" data-treat="night">
+            <div id="endingPanelArt" class="ending-panel-art" aria-hidden="true"><i class="panel-grain"></i></div>
+            <div class="ending-panel-copy">
+              <span id="endingPanelIndex" class="ending-panel-index">PART I</span>
+              <h3 id="endingPanelTitle">THE LAST BELL</h3>
+              <p id="endingPanelText"></p>
+            </div>
+          </div>
+          <div class="ending-skip-hint">ANY ATTACK BUTTON · NEXT PANEL</div>
+        </div>
+        <div id="endingCredits" class="ending-credits" hidden>
+          <div id="endingCreditsCrawl" class="credits-crawl"></div>
+          <div class="ending-skip-hint">ANY ATTACK BUTTON · SKIP CREDITS</div>
+        </div>
+        <div id="endingArt" class="ending-art" aria-hidden="true"></div>
+        <div class="ending-copy">
+          <p class="eyebrow">ARCADE CLEARED · PHILLY AFTER DARK</p>
+          <h2 id="endingTitle">THE GROUND REMEMBERS</h2>
+          <blockquote id="endingQuote">THE LAST BELL RANG UNDER HIS FEET.</blockquote>
+          <p id="endingStory"></p>
+          <div class="ending-stamp"><span>THE COMMISSIONER</span><b>DEFEATED</b></div>
+          <div id="dailyEndingBanner" class="daily-banner" hidden>
+            <b>DAILY JAWN</b><em>—</em>
+            <button id="shareDailyEndingButton" class="arcade-button compact" type="button">COPY SHARE TEXT</button>
+          </div>
+          <div class="menu-stack horizontal">
+            <button id="endingReplayButton" class="arcade-button primary menu-focus">NEW ARCADE RUN</button>
+            <button class="arcade-button ghost" data-back="title">TITLE</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="bracketScreen" class="screen bracket-screen" aria-labelledby="bracketTitle">
+        <header class="screen-header">
+          <p id="bracketEyebrow">SINGLE ELIMINATION · WINNER TAKES THE STREET</p>
+          <h2 id="bracketTitle">THE PHILLY OPEN</h2>
+        </header>
+        <div id="bracketSetup" class="bracket-setup" hidden>
+          <div class="bracket-setup-row">
+            <span class="mutator-title">DRAW SIZE</span>
+            <button id="bracketSize4Button" class="arcade-button compact" data-size="4">4 ENTRANTS</button>
+            <button id="bracketSize8Button" class="arcade-button ghost compact" data-size="8">8 ENTRANTS</button>
+          </div>
+          <div id="bracketEntrantRows" class="bracket-entrant-rows"></div>
+          <button id="bracketStartButton" class="arcade-button primary menu-focus" type="button">OPEN THE BRACKET →</button>
+        </div>
+        <div id="bracketBoard" class="bracket-board" hidden></div>
+        <div id="bracketCeremony" class="bracket-ceremony" hidden>
+          <p class="eyebrow">UNDISPUTED · THE PHILLY OPEN</p>
+          <img id="bracketChampionArt" class="bracket-champion-art" src="" alt="" draggable="false">
+          <h3 id="bracketChampionName">—</h3>
+          <blockquote id="bracketChampionQuote">THE STREET MOVED FIRST.</blockquote>
+          <div class="ending-stamp"><span id="bracketChampionLabel">CHAMPION</span><b>CROWNED</b></div>
+          <div id="bracketCeremonyRoll" class="bracket-ceremony-roll"></div>
+        </div>
+        <div class="selection-footer">
+          <button class="text-button" data-back="title">← BACK TO TITLE</button>
+          <div id="bracketStatus" class="bracket-status">SET THE DRAW</div>
+          <div class="bracket-footer-actions">
+            <button id="bracketResetButton" class="arcade-button ghost compact" type="button" hidden>NEW OPEN</button>
+            <button id="bracketNextButton" class="arcade-button primary compact" type="button" hidden>NEXT MATCH →</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="replaysScreen" class="screen replays-screen" aria-labelledby="replaysTitle">
+        <header class="screen-header">
+          <p>EVERY GREAT SET, SAVED TO THE STREET</p>
+          <h2 id="replaysTitle">REPLAY THEATER</h2>
+          <div id="replayStatus" class="replay-status" aria-live="polite">LAST 10 MATCHES KEPT · EXPORT SHARES A .FBR FILE</div>
+        </header>
+        <div id="replayList" class="replay-list" role="list" aria-label="Saved replays"></div>
+        <div class="selection-footer">
+          <button class="text-button" data-back="title">← BACK TO TITLE</button>
+          <div class="replay-footnote">SPACE · PAUSE&nbsp;&nbsp;→ · STEP&nbsp;&nbsp;F · SPEED&nbsp;&nbsp;ESC · CLOSE</div>
+          <button id="replayImportButton" class="arcade-button compact" type="button">IMPORT .FBR</button>
+        </div>
+        <input id="replayImportInput" type="file" accept=".fbr,application/json,.json" hidden>
+      </section>
+
+      <section id="resultScreen" class="screen result-screen" aria-labelledby="resultTitle">
+        <div id="victoryPose" class="victory-pose" aria-hidden="true"></div>
+        <div class="result-copy">
+          <p class="eyebrow" id="resultEyebrow">MATCH COMPLETE</p>
+          <h2 id="resultTitle">DEATHBLOW WINS</h2>
+          <div id="resultFinisher">FAULTLINE EXECUTION</div>
+          <blockquote id="resultQuote">THE STREET MOVED FIRST.</blockquote>
+          <p id="resultRecap" class="result-recap" hidden>WHAT JUST HAPPENED · —</p>
+          <button id="resultCoach" class="title-coach result-coach" type="button" hidden>
+            <b id="resultCoachHead">NEXT · LESSON 1 · FOOTWORK &amp; GUARD</b>
+            <small id="resultCoachReason">—</small>
+          </button>
+          <div id="setScoreCard" class="set-score-card" aria-label="Set scoreboard" hidden>
+            <b id="setScoreTitle">WINNER STAYS</b>
+            <div id="setScoreLine" class="set-score-line"></div>
+            <div id="setScorePips" class="set-score-pips" aria-hidden="true"></div>
+            <small id="setScoreSub">FIRST TO 3</small>
+          </div>
+          <p id="onlineRematchStatus" class="online-rematch-status" hidden>REMATCH VOTES · 0 / 2</p>
+          <p id="demoResultStatus" class="demo-result-status" hidden>NEXT RANDOM FIGHT IN 3 SECONDS · PRESS ANY BUTTON TO PLAY</p>
+          <div id="dailyResultBanner" class="daily-banner" hidden>
+            <b>DAILY JAWN</b><em>—</em>
+            <button id="shareDailyButton" class="arcade-button compact" type="button">COPY SHARE TEXT</button>
+          </div>
+          <div class="menu-stack horizontal">
+            <button id="rematchButton" class="arcade-button primary menu-focus">REMATCH</button>
+            <button id="newStageButton" class="arcade-button">SAME FIGHTERS · NEW STAGE</button>
+            <button id="changeFightersButton" class="arcade-button" hidden>CHANGE FIGHTERS</button>
+            <button id="reselectButton" class="arcade-button">SELECT FIGHTERS</button>
+            <button id="bracketContinueButton" class="arcade-button primary" hidden>BACK TO THE BRACKET →</button>
+            <button class="arcade-button ghost" data-back="title">TITLE</button>
+          </div>
+        </div>
+      </section>
+
+      <div id="touchControls" class="touch-controls" aria-label="Touch controls">
+        <div class="touch-move" role="group" aria-label="Movement pad">
+          <button data-touch="up left" aria-label="Jump back">◤</button>
+          <button data-touch="up" aria-label="Jump">▲</button>
+          <button data-touch="up right" aria-label="Jump forward">◥</button>
+          <button data-touch="left" aria-label="Walk left, or block when facing right">◀</button>
+          <span class="touch-center" aria-hidden="true"></span>
+          <button data-touch="right" aria-label="Walk right, or block when facing left">▶</button>
+          <button data-touch="down left" aria-label="Crouch block left">◣</button>
+          <button data-touch="down" aria-label="Crouch">▼</button>
+          <button data-touch="down right" aria-label="Crouch block right">◢</button>
+        </div>
+        <div class="touch-action" role="group" aria-label="Attack buttons">
+          <button class="touch-lp" data-touch="lp" aria-label="Light punch, jab">LP</button>
+          <button class="touch-hp" data-touch="hp" aria-label="Heavy punch, hook">HP</button>
+          <button class="touch-lk" data-touch="lk" aria-label="Light kick">LK</button>
+          <button class="touch-hk" data-touch="hk" aria-label="Heavy kick, roundhouse">HK</button>
+        </div>
+        <div id="touchPrompt" class="touch-prompt" aria-live="polite" hidden></div>
+      </div>
+      <button id="touchPauseButton" class="touch-pause" type="button" aria-label="Pause game">Ⅱ</button>
+    </section>
+
+      <div id="demoHud" class="demo-hud" aria-live="polite" hidden>
+        <b>WATCH DEMO · CPU VS CPU</b><i id="demoHudSpeed" class="demo-hud-speed" data-tone="slow">0.75×</i><span id="demoHudMatchup">DEATHBLOW VS JEZ</span><strong id="demoHudStory" class="demo-hud-story" hidden>GRUDGE MATCH · BOUT 1 OF 6 · QUICK BOUT · BEST OF 1</strong><strong id="demoHudLine" class="demo-hud-line" hidden></strong><data id="demoHudRoom" class="demo-hud-room" value="" hidden></data><em id="demoHudCycle">CYCLE 1</em><small>CLICK: PAUSE / RESUME · ESC: MENU</small><div class="demo-hud-actions"><button id="demoPaceButton" class="demo-share" type="button" aria-label="Cycle CPU playback pace">PACE: AUTO</button><button id="demoPauseButton" class="demo-share" type="button">PAUSE</button><i id="demoHudLoading" class="demo-hud-loading" hidden>LOADING</i><button id="demoReplayToggle" class="demo-share" type="button" aria-pressed="false">REPLAYS: OFF</button><button id="demoReplayLast" class="demo-share" type="button" disabled>WATCH REPLAY</button><button id="demoShareButton" class="demo-share" type="button" title="Copy a link that replays this exhibition" hidden>COPY LINK</button><button type="button" id="demoHudSound" class="demo-hud-sound" hidden>TAP FOR SOUND</button></div>
+      </div>
+
+    <footer class="footer-strip">
+      <span id="stageTicker">SOMERSET SEPTA STATION // STREET ENTRANCE // PHILADELPHIA</span>
+      <span>CHAINS · CANCELS · JUGGLES · GRIT SUPERS · FINAL BLOWS</span>
+    </footer>
+  </main>
+
+  <dialog id="controlsDialog" class="controls-dialog">
+    <form method="dialog">
+      <header>
+        <div><p>SYSTEM CONFIG</p><h2>CONTROLS &amp; OPTIONS</h2></div>
+        <button class="dialog-close" value="close" aria-label="Close">×</button>
+      </header>
+      <div class="controls-grid">
+        <section>
+          <h3>PLAYER 1 · KEYBOARD</h3>
+          <p><kbd>A</kbd><kbd>D</kbd> WALK · HOLD AWAY TO BLOCK · <kbd>W</kbd> JUMP · <kbd>S</kbd> CROUCH</p>
+          <p>DOWN-AWAY CROUCH-BLOCKS LOWS · NO GUARD BUTTON</p>
+          <p><kbd>J</kbd> LP · <kbd>K</kbd> HP · <kbd>N</kbd> LK · <kbd>M</kbd> HK</p>
+          <p>LP JAB · HP HOOK · LK LIGHT KICK · HK ROUNDHOUSE</p>
+          <p data-style-copy>SPECIALS: {commandSpecial} · {backSpecial} · {special} · {launcher} · {driveHeavy}</p>
+          <p data-style-copy>ENHANCED: {enhanced} · SUPER: {super}</p>
+          <p data-style-copy>THROW: {throw} · DASH: {dash}</p>
+          <p data-style-copy>THROWABLE: {throwObject} (EX: {enhancedThrowObject}) · STAGE WEAPON: {stageWeapon} · TAUNT: {taunt}</p>
+          <p data-style-copy>FINAL BLOW: {finalBlow} · HP/HK DO NOT FINISH</p>
+        </section>
+        <section>
+          <h3>PLAYER 2 · KEYBOARD</h3>
+          <p><kbd>←</kbd><kbd>→</kbd> WALK · HOLD AWAY TO BLOCK · <kbd>↑</kbd> JUMP · <kbd>↓</kbd> CROUCH</p>
+          <p>DOWN-AWAY CROUCH-BLOCKS LOWS · NO GUARD BUTTON</p>
+          <p><kbd>NUM 1</kbd> LP · <kbd>NUM 2</kbd> HP · <kbd>NUM 4</kbd> LK · <kbd>NUM 5</kbd> HK</p>
+          <p>LP JAB · HP HOOK · LK LIGHT KICK · HK ROUNDHOUSE</p>
+          <p data-style-copy>SPECIALS: {commandSpecial} · {backSpecial} · {special} · {launcher} · {driveHeavy}</p>
+          <p data-style-copy>ENHANCED: {enhanced} · SUPER: {super}</p>
+          <p data-style-copy>THROW: {throw} · DASH: {dash}</p>
+          <p data-style-copy>THROWABLE: {throwObject} (EX: {enhancedThrowObject}) · STAGE WEAPON: {stageWeapon} · TAUNT: {taunt}</p>
+          <p data-style-copy>FINAL BLOW: {finalBlow} · HP/HK DO NOT FINISH</p>
+        </section>
+        <section>
+          <h3>XINPUT / GAMEPAD</h3>
+          <p>STICK / D-PAD IS THE WHOLE MOVEMENT CONTROL · UP JUMPS · AWAY BLOCKS</p>
+          <p><span class="xbox-x">X</span> LP · <span class="xbox-y">Y</span> HP · <span class="xbox-a">A</span> LK · <span class="xbox-b">B</span> HK</p>
+          <p>LP JAB · HP HOOK · LK LIGHT KICK · HK ROUNDHOUSE</p>
+          <p id="padEquivalents">PLAYSTATION: □ LP · △ HP · ✕ LK · ○ HK — NINTENDO: Y LP · X HP · B LK · A HK</p>
+          <p>SAME MOTIONS, CHORDS AND SINGLE-BUTTON FINAL BLOW AS KEYBOARD</p>
+          <p data-style-copy>DASH: {dash} · THROWABLE: {throwObject} · STAGE WEAPON: {stageWeapon} · TAUNT: {taunt}</p>
+        </section>
+        <section class="options-panel">
+          <h3>OPTIONS</h3>
+          <label><input id="goreToggle" type="checkbox" checked><span>GRAPHIC FATALITIES · ARCADE SPLATTER</span></label>
+          <label><input id="stageWeaponToggle" type="checkbox" checked><span>STAGE WEAPONS · ONE PER ROUND</span></label>
+          <label><input id="flashToggle" type="checkbox" checked><span>SCREEN FLASH</span></label>
+          <label><input id="sharpRenderToggle" type="checkbox" checked><span>SHARP RENDER · NATIVE DPI</span></label>
+          <label><input id="crtModeToggle" type="checkbox"><span>CRT MODE · ARCADE MONITOR</span></label>
+          <label><input id="cabinetModeToggle" type="checkbox"><span>ARCADE CABINET · BIG-SCREEN TV PRESET</span></label>
+          <label><input id="musicToggle" type="checkbox" checked><span>ELEVENLABS MUSIC</span></label>
+          <label><input id="soundToggle" type="checkbox" checked><span>ELEVENLABS SFX</span></label>
+          <label><input id="reducedMotionToggle" type="checkbox"><span>REDUCED MOTION</span></label>
+          <label><input id="highContrastToggle" type="checkbox"><span>HIGH CONTRAST HUD</span></label>
+          <label><input id="soundCaptionsToggle" type="checkbox"><span>VISUAL SOUND CUES</span></label>
+          <label><input id="attractModeToggle" type="checkbox" checked><span>IDLE WATCH DEMO · 45 SECONDS</span></label>
+          <div class="volume-control">
+            <label for="musicVolume"><span>MUSIC VOLUME</span><output id="musicVolumeValue">100%</output></label>
+            <input id="musicVolume" type="range" min="0" max="100" step="1" value="100">
+          </div>
+          <div class="volume-control">
+            <label for="sfxVolume"><span>SFX VOLUME</span><output id="sfxVolumeValue">100%</output></label>
+            <input id="sfxVolume" type="range" min="0" max="100" step="1" value="100">
+          </div>
+          <label class="music-picker"><span>SOUNDTRACK</span>
+            <select id="musicSelect" aria-label="Soundtrack selection">
+              <option value="auto">AUTO ROTATE · ALL 6</option>
+              <option value="0">PHILLY AFTER DARK</option>
+              <option value="1">VET PARKING LOT</option>
+              <option value="2">NEON SIGN WAR</option>
+              <option value="3">SUBWAY AFTER MIDNIGHT</option>
+              <option value="4">BOARDWALK NEON</option>
+              <option value="5">DECK PARTY DISASTER</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>CPU DIFFICULTY</span>
+            <select id="aiDifficultySelect" aria-label="CPU difficulty">
+              <option value="passive">PASSIVE · INERT PRACTICE DUMMY</option>
+              <option value="rookie">ROOKIE · PATIENT LEARNER</option>
+              <option value="street">STREET · BALANCED</option>
+              <option value="pro">PRO · SHARP</option>
+              <option value="final">FINAL · RELENTLESS</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>CONTROL STYLE</span>
+            <select id="controlStyleSelect" aria-label="Control style">
+              <option value="classic">CLASSIC · MOTION COMMANDS</option>
+              <option value="modern">MODERN · DIRECTION + BUTTON</option>
+              <option value="legend">LEGEND · ONE-BUTTON SPECIALS</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>COLOR ASSIST</span>
+            <select id="colorAssistSelect" aria-label="Color assistance palette">
+              <option value="standard">STANDARD</option>
+              <option value="deuteranopia">DEUTERANOPIA</option>
+              <option value="protanopia">PROTANOPIA</option>
+              <option value="tritanopia">TRITANOPIA</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>SCREEN SHAKE</span>
+            <select id="shakeSelect" aria-label="Screen shake intensity">
+              <option value="1">FULL</option><option value="0.5">LOW</option><option value="0">OFF</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>VISUAL QUALITY</span>
+            <select id="visualQualitySelect" aria-label="Visual quality">
+              <option value="auto">AUTO · DEVICE AWARE</option><option value="high">HIGH</option>
+              <option value="balanced">BALANCED</option><option value="battery">BATTERY SAVER</option>
+            </select>
+          </label>
+          <label class="option-picker"><span>TOUCH LAYOUT</span>
+            <select id="touchHandednessSelect" aria-label="Touch control layout">
+              <option value="standard">STANDARD</option><option value="left">LEFT-HANDED</option>
+            </select>
+          </label>
+          <div class="volume-control">
+            <label for="touchScale"><span>TOUCH SIZE</span><output id="touchScaleValue">100%</output></label>
+            <input id="touchScale" type="range" min="80" max="130" step="5" value="100">
+          </div>
+          <div class="volume-control">
+            <label for="touchOpacity"><span>TOUCH OPACITY</span><output id="touchOpacityValue">82%</output></label>
+            <input id="touchOpacity" type="range" min="40" max="100" step="2" value="82">
+          </div>
+          <label><input id="touchHapticsToggle" type="checkbox" checked><span>HAPTICS · TOUCH, HITS &amp; PAD RUMBLE</span></label>
+          <button id="installButton" class="install-button" type="button" hidden>INSTALL OFFLINE GAME</button>
+        </section>
+        <section class="remap-panel">
+          <header><h3>COMPLETE INPUT REMAP</h3><button id="resetBindingsButton" type="button">RESTORE DEFAULTS</button></header>
+          <p>Choose any keyboard action, then press a key. Duplicate assignments swap automatically.</p>
+          <div class="remap-columns"><div><h4>PLAYER 1 KEYBOARD</h4><div id="p1KeyBindings" class="binding-grid"></div></div><div><h4>PLAYER 2 KEYBOARD</h4><div id="p2KeyBindings" class="binding-grid"></div></div></div>
+          <h4>XINPUT / GAMEPAD</h4><div id="padBindings" class="pad-binding-grid"></div>
+        </section>
+        <section class="move-list-panel">
+          <header>
+            <div><h3>FEATURED FIGHTER MOVE LIST</h3><p>Unique frame data, specials and enhanced routes.</p></div>
+            <select id="moveListSelect" aria-label="Choose fighter move list">
+              <option value="deathblow">DEATHBLOW</option>
+              <option value="jez">JEZ</option>
+              <option value="alan">ALLAN</option>
+              <option value="post">POST</option>
+              <option value="benny">BENNY</option>
+              <option value="donald">DONALD</option>
+              <option value="cyraxx">CYRAXX</option>
+              <option value="ali">ALI G</option>
+            </select>
+          </header>
+          <div id="moveListIdentity" class="move-list-identity"></div>
+          <div id="moveListRows" class="move-list-rows"></div>
+        </section>
+      </div>
+      <p class="dialog-note">Hit-confirm normals into chains or specials. Enhanced moves cost 25 Grit; during blockstun, Enhanced or Forward + Special triggers a 30-Grit guard reversal. Supers cost 100. Post-KO FB still performs each fighter's unique Final Blow.</p>
+      <button class="arcade-button primary dialog-done" value="close">DONE</button>
+    </form>
+  </dialog>
+
+  <aside id="iosCoachMark" class="ios-coach" role="note" aria-label="Install on iPhone" hidden>
+    <b>ADD TO HOME SCREEN</b>
+    <span>Tap <i class="ios-share-glyph" aria-hidden="true">⎋</i> Share, then “Add to Home Screen” for fullscreen offline play.</span>
+    <button id="iosCoachDismiss" type="button" aria-label="Dismiss install tip">×</button>
+  </aside>
+
+  <aside id="rotateGate" class="rotate-gate" aria-live="polite" aria-label="Rotate phone to play">
+    <div class="phone-turn" aria-hidden="true"><i></i><b>↻</b></div>
+    <p>FULL-SCREEN FIGHT MODE</p>
+    <h2>TURN YOUR PHONE SIDEWAYS</h2>
+    <span id="rotateGateHint">Final Blow requires landscape on mobile.</span>
+    <button id="fullscreenButton" class="arcade-button primary" type="button">ENTER FULLSCREEN</button>
+    <button id="copyGameLinkButton" class="arcade-button ghost" type="button" hidden>COPY GAME LINK</button>
+  </aside>
+
+<script type="module" src="game.js?v=final-blow-5.8.4-recovery"></script>
+<dialog id="spectatorSetupDialog" class="controls-dialog spectator-dialog" aria-labelledby="spectatorSetupTitle">
+ <form id="spectatorSetupForm">
+ <header><h2 id="spectatorSetupTitle">YOUR FIGHT CARD</h2><button type="button" id="spectatorSetupClose" class="dialog-close" aria-label="Close matchup setup">×</button></header>
+ <div class="spectator-grid">
+ <label>FIRST FIGHTER<select id="spectatorFirst" required></select></label>
+ <label>SECOND FIGHTER<select id="spectatorSecond" required></select></label>
+ <label>STAGE<select id="spectatorStage"></select></label>
+ <label>CPU DIFFICULTY<select id="spectatorDifficulty"><option value="auto">CHARACTER PERSONALITY</option><option value="rookie">ROOKIE</option><option value="street">STREET</option><option value="pro">PRO</option><option value="final">FINAL</option></select></label>
+ <label>SERIES<select id="spectatorBestOf"><option value="1">ONE ROUND</option><option value="3" selected>BEST OF 3 ROUNDS</option><option value="5">BEST OF 5 ROUNDS</option></select></label>
+ <label class="spectator-check"><input id="spectatorReplays" type="checkbox">AUTOMATIC INSTANT REPLAYS</label>
+ </div><p id="spectatorSetupError" role="alert"></p>
+ <button type="submit" class="arcade-button primary dialog-done">START CPU FIGHT</button>
+ </form></dialog>
+ <dialog id="instantReplayDialog" class="instant-replay-dialog" aria-labelledby="instantReplayTitle">
+ <header><strong id="instantReplayTitle">INSTANT REPLAY · ½ SPEED</strong><button type="button" id="instantReplayClose">RETURN TO LIVE</button></header>
+ <canvas id="instantReplayCanvas" width="960" height="540" aria-label="Replay of the previous exchange"></canvas>
+ </dialog>
+<dialog id="moveViewerDialog" class="controls-dialog move-viewer-dialog" aria-labelledby="moveViewerTitle">
+ <header><h2 id="moveViewerTitle">MOVE VIEWER</h2><button id="moveViewerClose" type="button" class="dialog-close" aria-label="Close move viewer">×</button></header>
+ <div class="spectator-grid"><label>FIGHTER<select id="moveViewerFighter"></select></label><label>MOVE<select id="moveViewerMove"></select></label></div>
+ <canvas id="moveViewerCanvas" width="960" height="560" aria-label="Painted fighter animation preview"></canvas>
+ <p id="moveViewerStatus" role="status">Choose a fighter and move.</p>
+ <input id="moveViewerFrame" type="range" min="0" max="60" value="0" aria-label="Animation frame">
+ <div class="move-viewer-controls"><button type="button" id="moveViewerPrevious" aria-label="Previous frame">◀ FRAME</button><button type="button" id="moveViewerPlay">PLAY</button><button type="button" id="moveViewerNext" aria-label="Next frame">FRAME ▶</button><label>SPEED<select id="moveViewerSpeed"><option value="0.25">¼ SPEED</option><option value="0.5" selected>½ SPEED</option><option value="1">NORMAL</option></select></label><button type="button" id="moveViewerFlip">FACE LEFT</button></div>
+ <p class="move-viewer-hint">Drag the timeline or use the arrow keys to inspect each frame. Space plays or pauses. Contact frames are marked in gold.</p>
+ </dialog>
+</body>
+</html>
