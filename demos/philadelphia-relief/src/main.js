@@ -1,10 +1,10 @@
-import { wireSavedViews } from './saved-views.js?v=philly-2026090906';
+import { wireSavedViews } from './saved-views.js?v=philly-2026090907';
 import { updateImageryCredit, wireFieldNotes, timelineSeek, captureName }
-  from './experience.js?v=philly-2026090906';
-import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026090906';
-import { wireLooks } from './looks.js?v=philly-2026090906';
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090906';
-import { createOrientation } from './orientation.js?v=philly-2026090906';
+  from './experience.js?v=philly-2026090907';
+import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026090907';
+import { wireLooks } from './looks.js?v=philly-2026090907';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090907';
+import { createOrientation } from './orientation.js?v=philly-2026090907';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -14,53 +14,53 @@ import { createOrientation } from './orientation.js?v=philly-2026090906';
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090906';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026090907';
 
-import { createStore } from './state.js?v=philly-2026090906';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090906';
-import { effectiveLight } from './solar.js?v=philly-2026090906';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090906';
+import { createStore } from './state.js?v=philly-2026090907';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090907';
+import { effectiveLight } from './solar.js?v=philly-2026090907';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090907';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090906';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090906';
+} from './geo.js?v=philly-2026090907';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090907';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090906';
+} from './tours.js?v=philly-2026090907';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090906';
+} from './urlstate.js?v=philly-2026090907';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090906';
+} from './degraded.js?v=philly-2026090907';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090906';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026090906';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090906';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090906';
-import { createPostFX } from './postfx.js?v=philly-2026090906';
-import { createCameraRig } from './camera.js?v=philly-2026090906';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090906';
-import { createStructures } from './structures.js?v=philly-2026090906';
+} from './terrain.js?v=philly-2026090907';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026090907';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090907';
+import { createSky, sunDirection } from './sky.js?v=philly-2026090907';
+import { createPostFX } from './postfx.js?v=philly-2026090907';
+import { createCameraRig } from './camera.js?v=philly-2026090907';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090907';
+import { createStructures } from './structures.js?v=philly-2026090907';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090906';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090906';
+} from './structures-data.js?v=philly-2026090907';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090907';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090906';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090906';
+} from './flood.js?v=philly-2026090907';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090907';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090906';
+} from './vectors.js?v=philly-2026090907';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090906';
-import { getTheme } from './themes.js?v=philly-2026090906';
+} from './ui.js?v=philly-2026090907';
+import { getTheme } from './themes.js?v=philly-2026090907';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -800,7 +800,7 @@ async function boot() {
   let lastLabelKey = '';
   let labelLayoutAge = 0;
   let zoneClock = 0;
-  let imageryClock = 0;
+  let imageryClock = 0, neighborhoodClock = 0;
   const zoneFrustum = new THREE.Frustum();
   const zoneMatrix = new THREE.Matrix4();
   const zoneBox = new THREE.Box3();
@@ -841,12 +841,15 @@ async function boot() {
     terrain.uniforms.uCameraPos.value.copy(camera.position);
     terrain.uniforms.uExag.value = exaggeration;
 
-    imageryClock += dt;
+    imageryClock += dt; neighborhoodClock += dt;
     imageryDetail.tick(dt);
-    if (imageryClock >= 0.5) {
-      imageryClock = 0;
+    if (neighborhoodClock >= .5) {
+      neighborhoodClock = 0;
       if (now.dist < 4200) ensureStreetNames();
       neighborhood.consider(now, state);
+    }
+    if (imageryClock >= .2) {
+      imageryClock = 0;
       imageryDetail.consider(
         now,
         state.layers.imagery && terrain.hasImagery

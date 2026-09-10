@@ -630,9 +630,10 @@ ODbL 1.0; elevation is from the AWS Terrain Tiles open data set.
 
 The camera now streams a multi-resolution mosaic over its visible ground footprint,
 including wide screens and tilted views. `src/imagery-tiles.js` plans continuous
-cells, schedules three requests at a time, shows 512-pixel previews first, then
-refines to 1024 or 2048 pixels per tile. Directional look-ahead queues two adjacent
-previews after visible work. Data saver disables speculation. Cached tiles remain
+cells, starts with three concurrent requests, shows 512-pixel previews first, then
+refines to 1024 or 2048 pixels per tile. Central refinement now precedes peripheral
+previews. Directional look-ahead queues two adjacent previews after visible work;
+zoom prediction can prepare two next-level cells while the current view loads. Data saver disables speculation. Cached tiles remain
 available while panning; the cache evicts stale textures and caps desired coverage
 at 24 tiles. Beyond the 24 km detail horizon the regional backdrop remains visible.
 Sampling depends on camera distance, quality and native imagery coverage.
@@ -713,3 +714,35 @@ Release QA also corrected source selection for tiles crossing a state boundary.
 Boundary-segment checks include interior rings and choose the regional source for
 cross-border tiles, preventing a partial state mosaic from painting white areas
 across the river. Inland close views retain their high-resolution local sources.
+
+
+### Faster zoom loading (9 September 2026)
+
+- Central tiles refine before peripheral previews finish. The camera replans imagery
+  every 200 ms; neighborhood geometry retains its existing 500 ms cadence.
+- Zooming inward prepares up to two cells from the next closer level. At most one
+  speculative download runs at once, and preparation becomes normal visible work
+  when the camera arrives. Data saver and limited connections disable speculation.
+- The browser keeps original JPEG responses in Cache Storage, bounded to 96 MB and
+  96 entries. Cached full-resolution files satisfy preview requests directly. Source
+  expiry, HTTP age and no-store directives are honored; storage denial, corruption
+  or eviction falls back to network loading. No new paid service is required.
+- Network concurrency adapts from three initial requests to two through five based
+  on completed network requests. Disk hits do not inflate it. One additional rescue
+  slot (six maximum) can unblock central detail behind slow peripheral downloads.
+- One nearly completed, nearby download can survive a small pan for up to 1.5 seconds.
+  Actual transfer progress and recent request duration guide retention. Far jumps,
+  disabled imagery and disposal cancel irrelevant work. Late results never reduce
+  the resolution of a cached tile.
+
+Image resolution policy, tile coverage, source routing, terrain and geometry remain
+unchanged. The exact image bytes are stored without re-encoding. Upstream response
+speed still bounds uncached first visits.
+
+Validation: 295 automated checks pass. A controlled ten-tile comparison with the
+same 500 ms previews and 800 ms full-image responses reached central full detail in
+1.3 s versus 2.3 s, and all full detail in 3.4 s versus 4.7 s. Both schedules made
+20 requests and delivered the same ten 2048-pixel tiles. This is a deterministic
+scheduler simulation, not a guaranteed internet loading time. Chrome's real Cache
+Storage check reused a decoded image after page reload with zero network image
+requests; close zooms at The Hidden Reef were also checked in the browser.
