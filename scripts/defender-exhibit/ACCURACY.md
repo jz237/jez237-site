@@ -33,7 +33,7 @@ Monitor: Wells-Gardner K4600 family, supported by its service manual and a docum
 | Monitor | K4600-family main board, upright cards, neck board, socket, yoke, convergence/purity rings, wedges, flyback and HV lead | Family-level construction; not component-for-component chassis emulation |
 | CRT image | Curved display, derivative-filtered scanlines, RGB phosphor mask, restrained convergence/halo, glass reflection, mipmapped display | A shader approximation, not electron-beam simulation |
 | Game | Autonomous abduction, laser release, falling catch, delivery, red pod swarmers and persistent bomber mines retained | Original implementation inspired by Defender; no original game ROM/emulator; timing and scoring are not cycle-accurate |
-| Sound | Newly synthesized event-specific firing, thrust, explosion, abduction, catch, delivery, hyperspace and credit effects; 8-bit quantization and filtered speaker output | Explicitly labeled approximation, not original sound or instruction-level emulation |
+| Sound | Original VSNDRM1 sound program executed through 6800/PIA/DAC emulation offline; fourteen rendered PCM effects replace the synth; original command numbers, catch repetitions and priorities | Rendered sample playback rather than live board emulation; repeated thrust loop, 30 Hz DC removal and short edge fades; not a full analog amplifier/speaker model |
 | Signals | Control-to-interface-to-CPU, ROM/sound/speaker and supply connections; input-driven activity | Illustrative functional paths, not measured electrical waveforms or a complete wiring loom |
 | Materials | Original procedural fiber, surface wear, dust and roughness variation; distinct label atlases | Wear patterns and arcade room are artistic reconstruction |
 | Orbit | Drag-distance threshold prevents accidental selection; foreground scenery cutaway prevents wall occlusion; camera stays above floor | Scenery cutaway is an exhibit interaction device |
@@ -43,8 +43,14 @@ Monitor: Wells-Gardner K4600 family, supported by its service manual and a docum
 - Cabinet CAD: https://www.classicarcadecabinets.com/uploads/4/9/8/2/49822065/defender.dxf . The source estimates 96% accuracy and notes donor variation. The exhibit does not claim toleranced manufacturing accuracy.
 - Sound source inspected: https://github.com/historicalsource/williams-soundroms/blob/main/VSNDRM1.SRC . Availability is not public redistribution authorization.
 
-## Exact sound asset needed
-A lawfully usable copy of `video_sound_rom_1.ic12`, 2048 bytes, CRC32 `fefd5b48`, SHA-1 `ceb0d18483f0691978c604db94417e6941ad7ff2`, together with permission covering public redistribution on this website. The identity is from the MAME Williams driver. No ROM was downloaded or bundled. Supplying a ROM would still require implementing and validating the corresponding sound CPU/PIA/DAC emulation; the current synth must not be described as authentic original audio.
+## Original sound replacement (2026-09-09)
+The earlier asset-blocked approach and synthesized substitutes have been replaced. The existing Joust implementation demonstrated the site's rendered-ROM audio workflow.
+
+- Sound program: Computer Archeology's preserved `defend.snd`, 2048 bytes, CRC32 `fefd5b48`, SHA-1 `ceb0d18483f0691978c604db94417e6941ad7ff2`: https://github.com/topherCantrell/computerarcheology/blob/master/content/Arcade/Defender/defendRED/defend.snd . The ROM is a rendering input, not shipped in the website.
+- Event mapping: Williams' `defa7.src` sound table: https://github.com/mwenge/defender/blob/master/src/defa7.src . Laser $14, lander hit $06, falling human $1A, catch $08 three times, delivery $1F, materialize $15, credit $19 and thrust $16.
+- CPU: EmulatorKit 6800 core at commit `b145b9003d94af73f92cca7f73c0ab1c6be6951d`, vendored with GPL COPYING under `tools/sound/`. https://github.com/EtchedPixels/EmulatorKit . CPU timing is instruction-based; the browser is not running a live emulator.
+- Independently compared the catch output with Defender Sound Studio's algorithm implementation: matching dominant frequencies (275, 281.25, 287.5 Hz over the first 160 ms) and approximately 0.876 normalized waveform correlation after alignment. This is a sanity check, not proof of bit-identical analog output. https://www.zapspace.net/defender_sound/defender.js . Comparison code was not bundled.
+- `public/audio/manifest.json` records every command, duration, repetition schedule and rendered-file SHA-256. The original sounds remain Williams material; no new ownership or blanket license claim is made here.
 
 ## Implementation and visual-review passes
 1. Historical geometry/electronics: replaced generic repeated boards, generic power box and unsupported fan. Traced major layouts, extracted measured cabinet outline, rebuilt monitor and corrected clearances. Browser close-ups exposed a glTF optimization issue merging label materials and mobile cards obscuring boards; distinct atlases and isolated, repositioned board cameras fixed these.
@@ -52,7 +58,7 @@ A lawfully usable copy of `video_sound_rom_1.ic12`, 2048 bytes, CRC32 `fefd5b48`
 3. Interaction/performance: cropped unused atlas space, batched geometry by material and excluded hidden closed-cabinet electronics. Added chip selection. Full-orbit visual review caught wall occlusion and accidental selection even though the first automated script passed. Added scenery cutaway and click-distance guard; strengthened QA to require actual camera movement and no selection during drags. Final desktop/mobile matrix passed with actual camera movement and no drag selections; screenshots of all four modes and chip close-ups reviewed. Closed the rear crown seam and changed the monitor surround to a matte diffuse material after the final visual review. Detached ribbons are hidden during isolated board inspection.
 
 ## Validation snapshot (2026-09-09)
-- Production build passes TypeScript and Vite. 18 source/model/sound tests pass. The autonomous-display tests explicitly forbid ground pickups; a separate legacy playable-game test is not the displayed demo.
+- Production build passes TypeScript and Vite. 19 source/model/sound tests pass. The autonomous-display tests explicitly forbid ground pickups; a separate legacy playable-game test is not the displayed demo.
 - Optimized cabinet: 187 meshes, approximately 389,000 triangles, 5,195,984 bytes; bounds 1.22 × 3.40 × 1.56 model units.
 - Desktop Chrome and a mobile-sized Chrome viewport tested. Mobile viewport is not evidence of physical iPhone/Android GPU performance or Safari compatibility.
 - Prior measured high-quality frame submission approximately 334–613 draw calls across modes including shadows/postprocessing; mobile performance setting approximately 129–221. Final figures may change with visibility and camera angle.
