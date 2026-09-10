@@ -5,6 +5,7 @@ import {buildAquariumGlass} from './AquariumGlass';
 import {ReflectionPool} from './ReflectionPool';
 import {applyWaterDepth} from './WaterDepth';
 import {buildAquariumSubstrate} from './Substrate';
+import {AquariumLighting} from './AquariumLighting';
 import * as T from 'three';
 import {buildBotanicalPlants} from './BotanicalPlants';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -25,6 +26,8 @@ export class Aquarium{
  evening=false;
  status='Exploring';
  private renderer:T.WebGLRenderer;
+ private lighting:AquariumLighting;
+ private lightingInspection=import.meta.env.DEV?new URLSearchParams(location.search).get('inspect'):null;
  private scene=new T.Scene();
  private camera=new T.PerspectiveCamera(37,1,.1,100);
  private controls:OrbitControls;
@@ -58,6 +61,7 @@ export class Aquarium{
   this.renderer.toneMapping=T.ACESFilmicToneMapping;
   this.renderer.toneMappingExposure=1.12;
   this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;
+  this.lighting=new AquariumLighting(this.scene,this.camera);
   host.appendChild(this.renderer.domElement);
   this.renderer.domElement.tabIndex=0;
   this.renderer.domElement.setAttribute('aria-label','Aquarium. Drag to rotate, use the view and zoom buttons below.');
@@ -101,8 +105,25 @@ export class Aquarium{
  private box(w:number,h:number,d:number,material:T.Material,p:T.Vector3,shadow=true){return this.mesh(new T.BoxGeometry(w,h,d),material,p,shadow);}
  private buildTank(){
   const dark=new T.MeshStandardMaterial({color:0x111c1e,roughness:.35,metalness:.65});
-  const floor=new T.MeshBasicMaterial({color:0x080e10});
-  this.box(100,.2,100,floor,V(0,-1.1,0));
+  const floor=new T.MeshStandardMaterial({color:0x141e21,roughness:.56,metalness:.12});
+  floor.onBeforeCompile=shader=>{
+   shader.uniforms.roomBackground={value:this.scene.background};
+   shader.fragmentShader='uniform vec3 roomBackground;\n'+shader.fragmentShader;
+   shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`
+    // Soft footprint of the stationary cabinet, independent of camera angle.
+    vec3 floorWorld=cameraPosition-inverseTransformDirection(normalize(vViewPosition),viewMatrix)*length(vViewPosition);
+    vec2 cabinetDistance=abs(floorWorld.xz)-vec2(5.225,2.475);
+    float cabinetEdge=length(max(cabinetDistance,0.))+min(max(cabinetDistance.x,cabinetDistance.y),0.);
+    outgoingLight*=mix(.16,1.,smoothstep(-.05,.72,cabinetEdge));
+    float studioFade=1.-exp(-pow(max(0.,length(vViewPosition)-23.)*.075,2.));
+    outgoingLight=mix(outgoingLight,roomBackground,studioFade);
+    #include <opaque_fragment>`);
+  };
+  const ground=this.mesh(new T.PlaneGeometry(180,180),floor,V(0,-1.0,0),false);
+  ground.rotation.x=-Math.PI/2;
+  // A low, broad room bounce reveals the floor beneath the cabinet.
+  const roomBounce=new T.RectAreaLight(0xc1dcdd,1.9,11,4);
+  roomBounce.position.set(0,3.5,4);roomBounce.lookAt(0,-1,4);this.scene.add(roomBounce);
   this.box(10.45,.88,4.95,dark,V(0,-.51,0));
   this.box(10.7,.13,5.1,new T.MeshStandardMaterial({color:0x182123,metalness:.75,roughness:.28}),V(0,-.035,0));
   // Cabinet shadow seams and a fine metal lip give the glass a physical support.
@@ -158,6 +179,7 @@ export class Aquarium{
   const w=this.host.clientWidth,h=this.host.clientHeight;this.camera.aspect=w/h;
   // Widen vertical field of view on narrow screens to retain the entire tank.
   this.camera.fov=w/h<.8?52:w/h<1.1?48:33;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);
+  const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);
  }
  private avoidSolid(s:TetraSwim){
   const p=fishPosition(s.x,s.y,s.z),before=p.clone();clearHardscape(p,this.obstacles);
@@ -189,9 +211,9 @@ export class Aquarium{
   const p=this.dust.geometry.getAttribute('position') as T.BufferAttribute;if(dt){for(let i=0;i<p.count;i++){let x=p.getX(i)+Math.sin(i+this.time*.2)*dt*.018,y=p.getY(i)+dt*.006;if(y>5.3)y=.7;p.setXY(i,x,y);}p.needsUpdate=true;}
   this.water.update(this.time,this.camera.position.y);
   const renderStart=performance.now();
-  this.renderer.render(this.scene,this.camera);
+  const sceneTriangles=this.lighting.render(this.renderer,this.lightingInspection);
   if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
-  if(import.meta.env.DEV){this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(this.renderer.info.render.triangles);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
+  if(import.meta.env.DEV){this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
 
  };
 }
