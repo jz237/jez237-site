@@ -1120,7 +1120,7 @@ function ensureCinemaAtlas(id, bank = 'cinema-ko') {
 }
 const ensureCinemaKoAtlas = id => ensureCinemaAtlas(id);
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.0` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.1` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -13965,6 +13965,7 @@ function announce(main, sub = "", duration = 1, { speak = null } = {}) {
   const box = $("#announcer");
   const strong = box.querySelector("strong");
   const text = String(main);
+  box.classList.toggle('cinema-victory', state.phase === 'roundover');
   // Wave 9: every banner also books its spoken announcer call (captions
   // always; audio only once real takes exist in assets/audio/announcer/).
   // w51: a caller that knows more than the banner text (finishRound knows
@@ -33078,7 +33079,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.0-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.1-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34582,7 +34583,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.8.0-ringside",
+  version: "5.8.1-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);
