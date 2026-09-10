@@ -122,11 +122,14 @@ export function createKnockoutScene(id,winner,attackerX,victimX,width=1280,victi
  // Shorter victims use a dedicated bent-knee shoulder sequence.
  if(id==='post'&&!cinematicBanks(victimId).includes('cinema-body-ko'))return null;
  const direction=attackerX<=victimX?1:-1;
- const victimTarget=clamp(victimX,direction===1?540:220,direction===1?width-220:width-540);
+ const reactionTravel=id==='ali'?60:id==='deathblow'?35:0;
+ const outerMargin=220+reactionTravel;
+ const victimTarget=clamp(victimX,direction===1?540:outerMargin,direction===1?width-outerMargin:width-540);
  const attackerTarget=victimTarget-direction*(id==='post'&&victimId==='devil'?200:id==='post'?(['alan','ali','commissioner','deathblow','donald','post','devil'].includes(victimId)?150:120):id==='alan'?190:id==='deathblow'?210:id==='ali'?220:id==='cyraxx'?230:320);
  const approach=Math.max(.35,Math.abs(attackerTarget-attackerX)/350);
  const impact=approach+.5;
  return {id,winner,direction,attackerX,victimX,attackerTarget,victimTarget,approach,impact,
+  reactionTravel,reactionLift:id==='deathblow'?52:0,
   attackerBank:id==='post'&&victimId==='devil'?'cinema-strike-low':'cinema-strike', victimBank:['post','alan'].includes(id)?'cinema-body-ko':'cinema-ko',
   hitHeight:id==='post'&&victimId==='devil'?.45:id==='alan'?.60:id==='deathblow'?.85:id==='commissioner'?.75:.65,hitOffset:id==='post'?(['alan','ali','commissioner','deathblow','donald','post','devil'].includes(victimId)?70:50):['alan','cyraxx','deathblow'].includes(id)?0:['ali','commissioner'].includes(id)?25:55,
   swingCue:id==='ali'?'roundhouse-swing':'heavy',impactCue:id==='ali'?'roundhouse-impact':'hit-heavy',
@@ -136,9 +139,12 @@ export function createKnockoutScene(id,winner,attackerX,victimX,width=1280,victi
 export function sampleKnockoutScene(scene,elapsed) {
  const approach=clamp(elapsed/scene.approach,0,1);
  const relative=elapsed-scene.impact;
+ const recoil=clamp(relative/.65,0,1);
+ const arc=clamp(relative/(CINEMATIC_KO_LANDING_TICK/60),0,1);
  return {
   attackerX:scene.attackerX+(scene.attackerTarget-scene.attackerX)*approach,
-  victimX:scene.victimX+(scene.victimTarget-scene.victimX)*approach,
+  victimX:scene.victimX+(scene.victimTarget-scene.victimX)*approach+scene.direction*(scene.reactionTravel||0)*(1-(1-recoil)**3),
+  victimLift:(scene.reactionLift||0)*4*arc*(1-arc),
   walking:elapsed<scene.approach,
   attackerFrame:cinematicStrikeFrame(scene.id,relative,scene.attackerBank),
   victimFrame:relative>=0?knockoutFrame(relative):null,
