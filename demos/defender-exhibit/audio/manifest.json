@@ -1,0 +1,110 @@
+{
+  "source": "Williams VSNDRM1 original sound program (Sam Dicker, 1980)",
+  "romSha1": "ceb0d18483f0691978c604db94417e6941ad7ff2",
+  "romCrc32": "fefd5b48",
+  "romSource": "https://github.com/topherCantrell/computerarcheology/blob/master/content/Arcade/Defender/defendRED/defend.snd",
+  "commandSource": "https://github.com/mwenge/defender/blob/master/src/defa7.src",
+  "cpuClockHz": 894886.25,
+  "sampleRate": 44100,
+  "rendering": "6800 instruction emulation; PIA port A DAC output; box integration to 44.1 kHz; 30 Hz DC removal; 2/3 ms edge fades. Game-table command durations and catch repetitions. Thrust is a rendered loop, not live emulation.",
+  "effects": {
+    "fire": {
+      "file": "fire.wav",
+      "command": "0x14",
+      "duration": 0.768,
+      "schedule": "",
+      "sha256": "3025fab7c430fd1cf454aabfa3bcbbd3b855ad081f7eae3718fa87a6ba40fb5f"
+    },
+    "explosion": {
+      "file": "explosion.wav",
+      "command": "0x6",
+      "duration": 0.16,
+      "schedule": "",
+      "sha256": "8d0f96b3a96a8d70512432f1189d8f503a1f0efe62a61f4758f6b3e98c32f0cd"
+    },
+    "pod": {
+      "file": "pod.wav",
+      "command": "0x5",
+      "duration": 0.256,
+      "schedule": "",
+      "sha256": "bfc93191c8899cec05afe1ce13e20b488911836efb9cb240cb3269873c3e7b77"
+    },
+    "bomber": {
+      "file": "bomber.wav",
+      "command": "0x1",
+      "duration": 0.16,
+      "schedule": "",
+      "sha256": "28dfc49ac58e7789956e694c5fce249b7fee6a14581c8825141e2fdc8eb8fe91"
+    },
+    "mutant": {
+      "file": "mutant.wav",
+      "command": "0x17",
+      "duration": 0.128,
+      "schedule": "",
+      "sha256": "78d58726cf89f39fb61253b54e68f772e1b4ec11ea8d67189a8856ea774a2653"
+    },
+    "swarmer": {
+      "file": "swarmer.wav",
+      "command": "0x7",
+      "duration": 0.128,
+      "schedule": "",
+      "sha256": "0159a60b629f8aabb5db5f54bbf594188c59bb0ac41b8863fbc09840fe9315dd"
+    },
+    "abduct": {
+      "file": "abduct.wav",
+      "command": "0xb",
+      "duration": 0.256,
+      "schedule": "",
+      "sha256": "1c0fda46d1111aa06f76fef96f332057596c6fce5196223761ca01f845019d38"
+    },
+    "fall": {
+      "file": "fall.wav",
+      "command": "0x1a",
+      "duration": 0.256,
+      "schedule": "",
+      "sha256": "7c08d232a4b573e260f1e2d4d6dfe01d71984cdde4dab7f6005dbc8cc85cc721"
+    },
+    "catch": {
+      "file": "catch.wav",
+      "command": "0x8",
+      "duration": 0.48,
+      "schedule": "0.16:8,0.32:8",
+      "sha256": "d5c2834edbf3fcb62f10bc15986975fbd6d4a00df214d1319e8b67688ed00f5e"
+    },
+    "delivery": {
+      "file": "delivery.wav",
+      "command": "0x1f",
+      "duration": 0.384,
+      "schedule": "",
+      "sha256": "4d98e9b1ab3312c06d96519e754b4103b9374ec4105fb55bbf8c2cb72ad336f9"
+    },
+    "hyperspace": {
+      "file": "hyperspace.wav",
+      "command": "0x15",
+      "duration": 0.768,
+      "schedule": "",
+      "sha256": "cfec52ef208d2ce87b61d88531ed12b718a1fb3b3323cace0532aa600a2a6e34"
+    },
+    "credit": {
+      "file": "credit.wav",
+      "command": "0x19",
+      "duration": 0.384,
+      "schedule": "",
+      "sha256": "7fdb9eb2f0ef2766bb952651d10dab18d65d363bc47533c6f1cd08e29aaa3693"
+    },
+    "thrust": {
+      "file": "thrust.wav",
+      "command": "0x16",
+      "duration": 2,
+      "schedule": "",
+      "sha256": "227b5cb9441a1847812facd55587791853ccbc6a47c7ff3120d83f3400990517"
+    },
+    "start": {
+      "file": "start.wav",
+      "command": "0xa",
+      "duration": 1.28,
+      "schedule": "1.024:b",
+      "sha256": "33c76c81363347a8de7e973d5805a8ed88836706b4272cb2164285545e5abfbb"
+    }
+  }
+}

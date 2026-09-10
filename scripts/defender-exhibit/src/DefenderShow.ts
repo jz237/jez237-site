@@ -23,7 +23,7 @@ export class DefenderShow extends ArcadeGame {
  populateDemo(){this.foes=Array.from({length:14},(_,i)=>({x:this.wrap(this.x+200+i*331),y:150+(i*83)%350,kind:i%4,phase:i*1.37,alive:true}));}
  wrap(x:number){return (x%this.world+this.world)%this.world;}
  delta(x:number){return ((x-this.x+this.world*1.5)%this.world)-this.world*.5;}
- burst(x:number,y:number,color:string){for(let i=0;i<32;i++){const a=this.rand()*Math.PI*2,v=50+this.rand()*200,life=.3+this.rand()*.7;this.sparks.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life,max:life,color})}this.rings.push({x,y,life:.6,color});this.effect('explosion');}
+ burst(x:number,y:number,color:string,event:SoundEvent='explosion'){for(let i=0;i<32;i++){const a=this.rand()*Math.PI*2,v=50+this.rand()*200,life=.3+this.rand()*.7;this.sparks.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life,max:life,color})}this.rings.push({x,y,life:.6,color});this.effect(event);}
  groundY(x:number){const heights=[672,672,660,624,642,591,615,663,663,648,675,675,630,606,633,651,651,672,642,618,645,675,675,657,627,657,672,672,639,612,642,672];const z=this.wrap(x)/150,i=Math.floor(z);return heights[i]+(heights[(i+1)%heights.length]-heights[i])*(z-i);}
  moveX(target:number,speed:number,dt:number){this.x=this.wrap(this.x+Math.max(-speed*dt,Math.min(speed*dt,this.delta(target))));}
  moveY(target:number,speed:number,dt:number){this.y+=Math.max(-speed*dt,Math.min(speed*dt,target-this.y));}
@@ -40,6 +40,7 @@ export class DefenderShow extends ArcadeGame {
  }else if(r.phase==='intercept'){
   r.y=r.lander.y+24;this.moveX(this.wrap(r.x-r.dir*290),170,dt);this.moveY(r.lander.y,220,dt);
  }else if(r.phase==='fall'){
+  if(r.age>=.16&&r.age-dt<.16)this.effect('fall');
   r.vy=Math.min(170,r.vy+115*dt);r.y+=r.vy*dt;
   if(r.y>=ground-15){r.y=ground-15;this.carrying=false;this.mission=undefined;this.nextRescue=this.time+8;return;}
   if(r.age>.28){this.moveX(r.x,360,dt);this.moveY(r.y-18,340,dt);}
@@ -66,7 +67,7 @@ export class DefenderShow extends ArcadeGame {
  }
  for(const m of this.mines)m.life-=dt;this.mines=this.mines.filter(m=>m.life>0).slice(-45);
  for(const b of this.charges){b.x=this.wrap(b.x+b.vx*dt);b.y+=b.vy*dt;b.life-=dt;}this.charges=this.charges.filter(b=>b.life>0).slice(-40);
- for(const l of this.lasers){l.x=this.wrap(l.x+l.dir*1400*dt);l.life-=dt;for(const e of this.foes){const distance=Math.abs(((e.x-l.x+this.world*1.5)%this.world)-this.world*.5);if(e.alive&&(e!==this.mission?.lander||this.mission.phase==='intercept')&&distance<38&&Math.abs(e.y-l.y)<26){e.alive=false;l.life=0;if(e===this.mission?.lander){this.rescueEvents.dropped++;this.mission.vy=25;this.rescuePhase('fall');}this.score+=[150,150,250,1000,150,200][e.kind];this.kills++;this.burst(e.x,e.y,['#44ff22','#ff33dd','#cc55ff','#ff33dd','#ff3434','#44ff22'][e.kind]);if(e.kind===3)for(let j=0;j<4;j++)this.foes.push({x:this.wrap(e.x+(j-2)*24),y:e.y+(j-2)*18,kind:4,phase:j*1.6,alive:true});break}}}
+ for(const l of this.lasers){l.x=this.wrap(l.x+l.dir*1400*dt);l.life-=dt;for(const e of this.foes){const distance=Math.abs(((e.x-l.x+this.world*1.5)%this.world)-this.world*.5);if(e.alive&&(e!==this.mission?.lander||this.mission.phase==='intercept')&&distance<38&&Math.abs(e.y-l.y)<26){e.alive=false;l.life=0;if(e===this.mission?.lander){this.rescueEvents.dropped++;this.mission.vy=25;this.rescuePhase('fall');}this.score+=[150,150,250,1000,150,200][e.kind];this.kills++;this.burst(e.x,e.y,['#44ff22','#ff33dd','#cc55ff','#ff33dd','#ff3434','#44ff22'][e.kind],e.kind===3?'pod':e.kind===2?'bomber':e.kind===1?'mutant':e.kind===4||e.kind===5?'swarmer':'explosion');if(e.kind===3)for(let j=0;j<4;j++)this.foes.push({x:this.wrap(e.x+(j-2)*24),y:e.y+(j-2)*18,kind:4,phase:j*1.6,alive:true});break}}}
  this.lasers=this.lasers.filter(l=>l.life>0);for(const s of this.sparks){s.x=this.wrap(s.x+s.vx*dt);s.y+=s.vy*dt;s.vy+=50*dt;s.life-=dt}this.sparks=this.sparks.filter(s=>s.life>0);this.rings.forEach(r=>r.life-=dt);this.rings=this.rings.filter(r=>r.life>0);
  this.foes=this.foes.filter(e=>e.alive);
  if(!this.foes.length&&!this.mission){this.wave++;this.waveClock=0;this.populateDemo();this.mines=[];this.charges=[];}
