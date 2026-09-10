@@ -122,9 +122,10 @@ export class Aquarium{
   };
   const ground=this.mesh(new T.PlaneGeometry(180,180),floor,V(0,-1.0,0),false);
   ground.rotation.x=-Math.PI/2;
-  // A low, broad room bounce reveals the floor beneath the cabinet.
-  const roomBounce=new T.RectAreaLight(0xc1dcdd,1.9,11,4);
-  roomBounce.position.set(0,3.5,4);roomBounce.lookAt(0,-1,4);this.scene.add(roomBounce);
+  // Keep the studio softbox above the viewing axis: a low emitter reflected as
+  // an artificial horizontal bar through the middle of the clear front pane.
+  const roomBounce=new T.RectAreaLight(0xc1dcdd,3.6,11,4);
+  roomBounce.position.set(0,8,7);roomBounce.lookAt(0,-1,5);this.scene.add(roomBounce);
   this.box(10.45,.88,4.95,dark,V(0,-.51,0));
   this.box(10.7,.13,5.1,new T.MeshStandardMaterial({color:0x182123,metalness:.75,roughness:.28}),V(0,-.035,0));
   // Cabinet shadow seams and a fine metal lip give the glass a physical support.
