@@ -748,3 +748,12 @@ Previous goal turn classified as progress. This continuation adds2 generated and
 - Initial mirror-match failures were instrumentation errors: palette canvases use alt-palette:id:bank names, which the old bounds probe did not recognize; it consequently sampled a reflection. Corrected audit name mapping; no gameplay/palette change for this instrumentation issue.
 - work/probe-cinema582-reaction-bounds.mjs PASS80cases:2attackers/all10victims/bothfacings/bothstartingedges. Each100steps captures2actual sprite bounds;16,000shapes zero offscreen bounds. Evidence work/cinema580/reaction-bounds.json. Fullsuite782/782PASS.
 -5.8.1 public normal CPU banner check alsoPASS and screenshot reviewed: Benny head and raisedhands clear beneath header.5.8.2 prepared for the recoil/spatial followup; public verification still required.
+
+## Public5.8.2 and airborne KO diagnosis
+
+-5.8.2 Cloudflare deployment completed.77 checked assets match88f4ba0ca873011e1dd5bafc6eece579352986ae. Ordinary public Ali/Deathblow CPU match produced painted KO and clear victory header, zero browser exceptions; screenshot and trace work/cinema580/public582-cpu-*.
+- Initial airborne probe setup was invalid: QA fighter setter ignores y/grounded, and input() queues frames rather than stepping. Corrected by sending jump then stepping .2sec before zero-health round end. Reproduced victim frozen at y457.04 through180simulationsteps. Root cause updateFighter returned before physics whenever phase was notfight.
+- Local fix continues airborne physics during finish/roundover when no authored scene owns the fighters. On roundover touchdown, clear stunned pose, start collapse and store snapshotted cinemaTouchdownTick. Painted floor transition begins atframe6 and advances to15; floor thud at7ticks aligns with frame8; winner call waits until body settles. Fighter initialization includes nullable field, generic rollback snapshot already stores it.
+- Corrected singlefighter probe now lands at35ticks, progresses6..15 and settles by89ticks. Fullsuite782/782PASS. All10fighter airborne/rollback browser probe launched as next verification. Fix not yet published; remaining cinematic wall/continuous-motion/audio review requirements stay open.
+
+- All10fighter airborne landing/rollback probe completed PASS, evidence airborne-ko-roster.json. Preparing5.8.3 publication of the freeze fix.
