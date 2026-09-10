@@ -5,6 +5,7 @@ import * as T from 'three';
 import {buildBotanicalPlants} from './BotanicalPlants';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
+import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import {Tetra3D} from './Tetra3D';
 import {createTetraSwim,advanceTetraSwim,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
 import {createSchoolRoute,advanceSchoolRoute,schoolLane} from './SchoolRoute';
@@ -29,6 +30,7 @@ export class Aquarium{
  private seed=237;
  private daylight=1;
  private key=new T.SpotLight(0xe8f8ed,200,26,.94,.65,1.1);
+ private stripLight=new T.RectAreaLight(0xf3ffe9,32,8.7,.28);
  private fill=new T.HemisphereLight(0xc2e2e6,0x283122,1.65);
  private swimShader={value:0};
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
@@ -66,7 +68,9 @@ export class Aquarium{
   this.controls.rotateSpeed=.55;this.controls.zoomSpeed=.7;
   this.controls.addEventListener('start',()=>this.targetCamera=null);
   this.camera.position.set(0,3.3,21.5);
-  this.scene.add(this.fill,this.key);
+  RectAreaLightUniformsLib.init();
+  this.stripLight.position.set(0,6.29,-.15);this.stripLight.lookAt(0,0,-.15);
+  this.scene.add(this.fill,this.key,this.stripLight);
   this.key.position.set(-1.5,8,1.7);this.key.target.position.set(0,1,-.5);this.scene.add(this.key.target);
   this.key.castShadow=true;this.key.shadow.mapSize.set(2048,2048);this.key.shadow.bias=-.0003;this.key.shadow.normalBias=.035;this.key.shadow.radius=3;
   const rim=new T.DirectionalLight(0xd2dfbf,.65);rim.position.set(-5,6,-3);this.scene.add(rim);
@@ -200,7 +204,7 @@ export class Aquarium{
   if(this.targetCamera){this.camera.position.lerp(this.targetCamera,1-Math.exp(-wallDt*4));if(this.camera.position.distanceTo(this.targetCamera)<.02)this.targetCamera=null;}
   this.controls.update();
   this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
-  this.key.intensity=155*this.daylight;this.fill.intensity=.18+this.daylight*.40;this.renderer.toneMappingExposure=.8+.32*this.daylight;
+  this.key.intensity=130*this.daylight;this.stripLight.intensity=32*this.daylight;this.fill.intensity=.18+this.daylight*.40;this.renderer.toneMappingExposure=.8+.32*this.daylight;
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
