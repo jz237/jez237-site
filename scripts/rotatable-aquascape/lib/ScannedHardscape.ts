@@ -1,10 +1,12 @@
 import * as T from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import type {Obstacle} from './TankSpace';
+import {EpiphyteMoss} from './EpiphyteMoss';
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
 /** Free photogrammetric surfaces retain their scan UVs while wood bends into the composition. */
 export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],height:(x:number,z:number)=>number){
  const loader=new GLTFLoader();
+ const moss=new EpiphyteMoss();
  const [woodFile,rockFile]=await Promise.all([
   loader.loadAsync('./models/dead_tree_trunk_02/dead_tree_trunk_02_2k.gltf'),
   loader.loadAsync('./models/rock_moss_set_01/rock_moss_set_01_2k.gltf')
@@ -26,6 +28,7 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
   }
   geometry.computeVertexNormals();geometry.computeBoundingBox();geometry.computeBoundingSphere();
   const mesh=new T.Mesh(geometry,woodMaterial);mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
+  moss.sample(mesh,155);
   // Conservative chain of body-sized contact envelopes around the complete log, including the ends.
   for(let i=0;i<=24;i++)obstacles.push({center:curve.getPointAt(i/24),radius:thickness*.40+.025});
  };
@@ -47,7 +50,9 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
   const geo=sourceRocks[id].geometry.clone();geo.computeBoundingBox();const box=geo.boundingBox!,center=box.getCenter(new T.Vector3());geo.translate(-center.x,-box.min.y,-center.z);const extent=box.getSize(new T.Vector3()),scale=size/Math.max(extent.x,extent.z);
   const mesh=new T.Mesh(geo,rockMaterial);mesh.scale.setScalar(scale);mesh.rotation.set(tilt,yaw,.15);mesh.position.set(x,height(x,z)-.12,z);mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
   mesh.updateMatrixWorld();const worldBox=new T.Box3().setFromObject(mesh),sphere=worldBox.getBoundingSphere(new T.Sphere());obstacles.push({center:sphere.center,radius:sphere.radius*.81});
+  moss.sample(mesh,200);
  }
+ moss.build(scene);
 }
 
 /** Photographic fern fronds on curved fixed meshes, with restrained current movement. */
