@@ -1,0 +1,6 @@
+import{test}from'node:test';import assert from'node:assert/strict';import{decidePilot}from'../src/DefenderPilot.ts';
+const world=()=>({x:1000,y:300,dir:1,velocityX:0,world:4800,carried:0,foes:[],falls:[],hazards:[],ground:()=>660});
+test('pilot prioritizes a reachable falling human without mutating the simulation',()=>{const w=world();w.falls=[{x:1100,y:400,vy:80,index:2}];w.foes=[{x:1200,y:300,kind:0,alive:true}];const before=JSON.stringify(w);const d=decidePilot(w);assert.equal(d.action,'fall');assert.equal(d.human,2);assert.equal(d.fire,false);assert.equal(JSON.stringify(w),before);});
+test('pilot collects another reachable fall while already carrying and otherwise lands',()=>{const w=world();w.carried=1;w.falls=[{x:1020,y:400,vy:60,index:3}];assert.equal(decidePilot(w).action,'fall');w.falls=[];assert.equal(decidePilot(w).action,'return');});
+test('pilot does not choose an impossible rescue across the world',()=>{const w=world();w.falls=[{x:3200,y:640,vy:170,index:2}];assert.notEqual(decidePilot(w).action,'fall');});
+test('low abducting carrier is approached before firing so the human can be caught',()=>{const w=world();w.y=600;w.foes=[{x:1300,y:600,kind:0,alive:true,captive:1}];const d=decidePilot(w);assert.equal(d.action,'intercept');assert.equal(d.fire,false);assert.equal(d.x,1235);w.x=1220;assert.equal(decidePilot(w).fire,true);});
