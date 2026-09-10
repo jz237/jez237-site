@@ -12,14 +12,17 @@
     "types": "wrangler types worker-configuration.d.ts --include-runtime false"
   },
   "devDependencies": {
-    "@cloudflare/vitest-plugin": "1.0.0",
-    "@cloudflare/workers-types": "5.20260820.1",
+    "@cloudflare/vitest-plugin": "1.1.6",
+    "@cloudflare/workers-types": "5.20260910.1",
     "typescript": "7.0.2",
     "vitest": "4.1.11",
-    "wrangler": "4.125.0",
+    "wrangler": "4.130.0",
     "ws": "8.21.3"
   },
   "allowScripts": {
-    "workerd@1.20260820.1": true
+    "workerd@1.20260908.1": true
+  },
+  "overrides": {
+    "sharp": "0.35.4"
   }
 }
