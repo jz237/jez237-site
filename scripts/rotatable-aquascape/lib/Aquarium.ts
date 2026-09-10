@@ -1,6 +1,9 @@
 /// <reference types="vite/client" />
 import {buildScannedHardscape,buildScannedFerns} from './ScannedHardscape';
 import {AquariumWater} from './AquariumWater';
+import {buildAquariumGlass} from './AquariumGlass';
+import {ReflectionPool} from './ReflectionPool';
+import {applyWaterDepth} from './WaterDepth';
 import * as T from 'three';
 import {buildBotanicalPlants} from './BotanicalPlants';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -33,6 +36,7 @@ export class Aquarium{
  private stripLight=new T.RectAreaLight(0xf3ffe9,32,8.7,.28);
  private fill=new T.HemisphereLight(0xc2e2e6,0x283122,1.65);
  private swimShader={value:0};
+ private waterIllumination={value:1};
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
  private school=createSchoolRoute();
  private texture=new T.Texture();
@@ -41,9 +45,11 @@ export class Aquarium{
  private dust:T.Points;
  private bubbles:T.InstancedMesh;
  private water:AquariumWater;
+ private reflections=new ReflectionPool();
  private frame=0;
  private diagnosticTime=0;private diagnosticFrames=0;
  private resizeObserver:ResizeObserver;
+ private inspection:{scene:T.Scene;camera:T.Camera;material:T.MeshBasicMaterial}|null=null;
  constructor(private host:HTMLElement){
   this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
   this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));
@@ -55,7 +61,7 @@ export class Aquarium{
   this.renderer.domElement.tabIndex=0;
   this.renderer.domElement.setAttribute('aria-label','Aquarium. Drag to rotate, use the view and zoom buttons below.');
   this.scene.background=new T.Color(0x080f12);
-  this.scene.fog=new T.FogExp2(0x0a161b,.023);
+  this.scene.fog=new T.FogExp2(0x0a161b,.008);
   const pmrem=new T.PMREMGenerator(this.renderer),environment=new RoomEnvironment();
   this.scene.environment=pmrem.fromScene(environment,.035).texture;this.scene.environmentIntensity=.10;
   environment.dispose();pmrem.dispose();
@@ -77,11 +83,15 @@ export class Aquarium{
   const warm=new T.PointLight(0xffd9ad,7,18,2);warm.position.set(6,5,5);this.scene.add(warm);
   this.buildTank();this.buildLandscape();buildBotanicalPlants(this.scene,(x,z)=>this.height(x,z),this.swimShader);
   this.water=this.buildWater();
+  if(import.meta.env.DEV&&new URLSearchParams(location.search).get('inspect')==='reflection'){
+   const scene=new T.Scene(),camera=new T.OrthographicCamera(-1,1,1,-1,0,1),material=new T.MeshBasicMaterial({map:this.water.reflectionTexture});
+   scene.add(new T.Mesh(new T.PlaneGeometry(2,2),material));this.inspection={scene,camera,material};
+  }
   this.dust=this.buildParticles();
   this.bubbles=new T.InstancedMesh(new T.SphereGeometry(.018,7,5),new T.MeshPhysicalMaterial({color:0xd2eee0,roughness:.05,metalness:.1,transparent:true,opacity:.36,depthWrite:false}),48);
   this.scene.add(this.bubbles);
   this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(host);this.resize();
-  this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z))]).then(()=>{});
+  this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z))]).then(()=>{applyWaterDepth(this.scene,this.waterIllumination);});
   this.frame=requestAnimationFrame(this.animate);
   document.addEventListener('visibilitychange',()=>{this.last=0;});
  }
@@ -118,13 +128,7 @@ export class Aquarium{
   // Cabinet shadow seams and a fine metal lip give the glass a physical support.
   const seam=new T.MeshBasicMaterial({color:0x04090b});
   for(const x of [-2.6,0,2.6])this.box(.012,.7,.012,seam,V(x,-.53,2.479),false);
-  const glass=new T.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:.005,transparent:true,opacity:.14,transmission:.985,ior:1.5,thickness:.035,side:T.DoubleSide,depthWrite:false,envMapIntensity:.7,attenuationColor:new T.Color(0xc6e1d4),attenuationDistance:12});
-  const pane=(w:number,h:number,p:T.Vector3,ry=0)=>{const m=this.mesh(new T.BoxGeometry(w,h,.024),glass,p,false);m.rotation.y=ry;m.renderOrder=8;};
-  pane(10.2,5.55,V(0,2.8,2.36));pane(10.2,5.55,V(0,2.8,-2.36));pane(4.72,5.55,V(-5.1,2.8,0),Math.PI/2);pane(4.72,5.55,V(5.1,2.8,0),Math.PI/2);
-  const edge=new T.MeshBasicMaterial({color:0x9cc8b9,transparent:true,opacity:.56,depthWrite:false});
-  for(const x of [-5.1,5.1])for(const z of [-2.36,2.36])this.box(.025,5.6,.025,edge,V(x,2.8,z),false);
-  for(const z of [-2.36,2.36])for(const y of [.06,5.59])this.box(10.2,.023,.025,edge,V(0,y,z),false);
-  for(const x of [-5.1,5.1])for(const y of [.06,5.59])this.box(.025,.023,4.72,edge,V(x,y,0),false);
+  buildAquariumGlass(this.scene,this.reflections);
   this.box(9.2,.12,.65,dark,V(0,6.4,-.15));
   const led=new T.MeshStandardMaterial({color:0xe0f9ee,emissive:0xe0f9ee,emissiveIntensity:3});
   for(let i=0;i<3;i++)this.box(8.75,.018,.105,led,V(0,6.335,-.37+i*.2),false);
@@ -155,7 +159,7 @@ export class Aquarium{
   for(let i=0;i<700;i++){const x=(this.random()-.5)*10,z=(this.random()-.5)*4.5,s=.025+this.random()*.057;dummy.position.set(x,this.height(x,z)+s*.35,z);dummy.scale.set(s,s*.65,s*.8);dummy.rotation.set(this.random()*3,this.random()*3,this.random());dummy.updateMatrix();pebbles.setMatrixAt(i,dummy.matrix);pebbles.setColorAt(i,new T.Color().setHSL(.13,.12,.55+this.random()*.3));}pebbles.receiveShadow=true;this.scene.add(pebbles);
  }
  private buildWater(){
-  const water=new AquariumWater();this.scene.add(water);
+  const water=new AquariumWater(this.reflections);this.scene.add(water);
   const line=new T.MeshBasicMaterial({color:0xc5e3d1,transparent:true,opacity:.5,depthWrite:false});
   for(const z of [-2.3,2.3])this.box(10.08,.015,.012,line,V(0,5.36,z),false);
   return water;
@@ -204,6 +208,7 @@ export class Aquarium{
   if(this.targetCamera){this.camera.position.lerp(this.targetCamera,1-Math.exp(-wallDt*4));if(this.camera.position.distanceTo(this.targetCamera)<.02)this.targetCamera=null;}
   this.controls.update();
   this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
+  this.waterIllumination.value=this.daylight;
   this.key.intensity=130*this.daylight;this.stripLight.intensity=32*this.daylight;this.fill.intensity=.18+this.daylight*.40;this.renderer.toneMappingExposure=.8+.32*this.daylight;
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
@@ -222,6 +227,7 @@ export class Aquarium{
   this.water.update(this.time,this.camera.position.y);
   const renderStart=performance.now();
   this.renderer.render(this.scene,this.camera);
+  if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
   if(import.meta.env.DEV){this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(this.renderer.info.render.triangles);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
 
  };
