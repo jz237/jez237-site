@@ -4,6 +4,7 @@ import {AquariumWater} from './AquariumWater';
 import {buildAquariumGlass} from './AquariumGlass';
 import {ReflectionPool} from './ReflectionPool';
 import {applyWaterDepth} from './WaterDepth';
+import {buildAquariumSubstrate} from './Substrate';
 import * as T from 'three';
 import {buildBotanicalPlants} from './BotanicalPlants';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -34,7 +35,7 @@ export class Aquarium{
  private daylight=1;
  private key=new T.SpotLight(0xe8f8ed,200,26,.94,.65,1.1);
  private stripLight=new T.RectAreaLight(0xf3ffe9,32,8.7,.28);
- private fill=new T.HemisphereLight(0xc2e2e6,0x283122,1.65);
+ private fill=new T.HemisphereLight(0xc2e2e6,0x5b6a49,.9);
  private swimShader={value:0};
  private waterIllumination={value:1};
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
@@ -81,7 +82,7 @@ export class Aquarium{
   this.key.castShadow=true;this.key.shadow.mapSize.set(2048,2048);this.key.shadow.bias=-.0003;this.key.shadow.normalBias=.035;this.key.shadow.radius=3;
   const rim=new T.DirectionalLight(0xd2dfbf,.65);rim.position.set(-5,6,-3);this.scene.add(rim);
   const warm=new T.PointLight(0xffd9ad,7,18,2);warm.position.set(6,5,5);this.scene.add(warm);
-  this.buildTank();this.buildLandscape();buildBotanicalPlants(this.scene,(x,z)=>this.height(x,z),this.swimShader);
+  this.buildTank();buildAquariumSubstrate(this.scene,(x,z)=>this.height(x,z),this.swimShader);buildBotanicalPlants(this.scene,(x,z)=>this.height(x,z),this.swimShader);
   this.water=this.buildWater();
   if(import.meta.env.DEV&&new URLSearchParams(location.search).get('inspect')==='reflection'){
    const scene=new T.Scene(),camera=new T.OrthographicCamera(-1,1,1,-1,0,1),material=new T.MeshBasicMaterial({map:this.water.reflectionTexture});
@@ -98,27 +99,6 @@ export class Aquarium{
  private random(){this.seed=(Math.imul(this.seed,1664525)+1013904223)>>>0;return this.seed/4294967296;}
  private mesh(g:T.BufferGeometry,m:T.Material,p:T.Vector3,shadow=true){const o=new T.Mesh(g,m);o.position.copy(p);o.castShadow=shadow;o.receiveShadow=shadow;this.scene.add(o);return o;}
  private box(w:number,h:number,d:number,material:T.Material,p:T.Vector3,shadow=true){return this.mesh(new T.BoxGeometry(w,h,d),material,p,shadow);}
- private soilMaterial(base:string){
-  const c=document.createElement('canvas');c.width=c.height=512;const ctx=c.getContext('2d')!;
-  ctx.fillStyle=base;ctx.fillRect(0,0,512,512);
-  for(let i=0;i<28000;i++){
-   const x=this.random()*512,y=this.random()*512,v=this.random();
-   ctx.fillStyle=v>.5?`rgba(205,201,167,${this.random()*.20})`:`rgba(5,11,9,${this.random()*.35})`;
-   const r=.4+this.random()*1.9;ctx.beginPath();ctx.ellipse(x,y,r,r*.65,0,0,Math.PI*2);ctx.fill();
-  }
-  const map=new T.CanvasTexture(c);map.colorSpace=T.SRGBColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(8,8);map.anisotropy=8;
-  const material=new T.MeshStandardMaterial({map,bumpMap:map,bumpScale:.018,roughness:.94});
-  this.caustics(material);return material;
- }
- private caustics(material:T.MeshStandardMaterial){
-  material.onBeforeCompile=shader=>{
-   shader.uniforms.waterTime=this.swimShader;
-   shader.vertexShader='varying vec3 waterWorld;\n'+shader.vertexShader;
-   shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nwaterWorld=(modelMatrix*vec4(transformed,1.)).xyz;');
-   shader.fragmentShader='uniform float waterTime;varying vec3 waterWorld;\n'+shader.fragmentShader;
-   shader.fragmentShader=shader.fragmentShader.replace('#include <dithering_fragment>',`float ca=sin(waterWorld.x*7.+sin(waterWorld.z*5.+waterTime*.31)*1.9+waterTime*.42)*sin(waterWorld.z*8.-waterTime*.37+sin(waterWorld.x*4.)*1.6);float pool=pow(max(0.,ca),12.);gl_FragColor.rgb+=pool*.047*vec3(.68,1.,.83);\n#include <dithering_fragment>`);
-  };
- }
  private buildTank(){
   const dark=new T.MeshStandardMaterial({color:0x111c1e,roughness:.35,metalness:.65});
   const floor=new T.MeshBasicMaterial({color:0x080e10});
@@ -141,23 +121,6 @@ export class Aquarium{
   }
  }
  private height(x:number,z:number){return .3+.55*Math.exp(-((x+2.5)**2/6+(z+.8)**2/2))+.22*(1-(z+2.3)/4.6)+.035*Math.sin(x*2+z)*Math.cos(z*3);}
- private buildLandscape(){
-  const soil=this.soilMaterial('#34332a');
-  const g=new T.PlaneGeometry(10.12,4.64,110,55);g.rotateX(-Math.PI/2);
-  const p=g.getAttribute('position') as T.BufferAttribute;
-  for(let i=0;i<p.count;i++)p.setY(i,this.height(p.getX(i),p.getZ(i))+(this.random()-.5)*.035);
-  g.computeVertexNormals();this.mesh(g,soil,V(0,0,0));
-  this.box(10.13,.32,4.64,soil,V(0,.17,0));
-  // Pale sand bends between the planting islands; the surface follows the substrate.
-  const pathPositions:number[]=[],uv:number[]=[],indices:number[]=[];
-  for(let j=0;j<=65;j++){const z=2.29-j/65*4.5,cx=1.5+Math.sin(z*1.05)*.65,width=.42+(z+2.2)*.16;for(let k=0;k<=12;k++){const x=cx+(k/12-.5)*width*2;pathPositions.push(x,this.height(x,z)+.026,z);uv.push(k/5,j/10);if(j<65&&k<12){const a=j*13+k;indices.push(a,a+1,a+13,a+1,a+14,a+13);}}}
-  const sandGeo=new T.BufferGeometry();sandGeo.setAttribute('position',new T.Float32BufferAttribute(pathPositions,3));sandGeo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));sandGeo.setIndex(indices);sandGeo.computeVertexNormals();
-  const sand=this.soilMaterial('#b9ae92');sand.bumpScale=.025;this.mesh(sandGeo,sand,V(0,0,0));
-  const rock=new T.MeshStandardMaterial({color:0x838879,roughness:.95});
-  // Pebbles are actual small solids, with deterministic color and scale variation.
-  const pebbles=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),rock,700),dummy=new T.Object3D();
-  for(let i=0;i<700;i++){const x=(this.random()-.5)*10,z=(this.random()-.5)*4.5,s=.025+this.random()*.057;dummy.position.set(x,this.height(x,z)+s*.35,z);dummy.scale.set(s,s*.65,s*.8);dummy.rotation.set(this.random()*3,this.random()*3,this.random());dummy.updateMatrix();pebbles.setMatrixAt(i,dummy.matrix);pebbles.setColorAt(i,new T.Color().setHSL(.13,.12,.55+this.random()*.3));}pebbles.receiveShadow=true;this.scene.add(pebbles);
- }
  private buildWater(){
   const water=new AquariumWater(this.reflections);this.scene.add(water);
   const line=new T.MeshBasicMaterial({color:0xc5e3d1,transparent:true,opacity:.5,depthWrite:false});
@@ -209,7 +172,7 @@ export class Aquarium{
   this.controls.update();
   this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
   this.waterIllumination.value=this.daylight;
-  this.key.intensity=130*this.daylight;this.stripLight.intensity=32*this.daylight;this.fill.intensity=.18+this.daylight*.40;this.renderer.toneMappingExposure=.8+.32*this.daylight;
+  this.key.intensity=130*this.daylight;this.stripLight.intensity=32*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=.8+.32*this.daylight;
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
