@@ -5,3 +5,5 @@ Asset: https://upload.wikimedia.org/wikipedia/commons/f/fc/Defender_Logo.svg
 Commons identifies this as PD-textlogo. Williams trademark retained.
 Retrieved 2026-09-09. SVG unchanged; transparent margins cropped when drawing into the exhibit marquee.
 The surrounding starfield is an exhibit illustration, not a scan of the original marquee.
+
+Material textures (2026-09-10): painted-wood-v2.webp and galvanized-zinc.webp are original AI-generated surface textures made for this exhibit; they are not scans of historical hardware.
