@@ -13,7 +13,7 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
   loader.loadAsync('./models/rock_moss_set_01/rock_moss_set_01_2k.gltf')
  ]);
  const wood=woodFile.scene.children[0] as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;
- const woodMaterial=wood.material.clone();woodMaterial.color.set(0xa99174);woodMaterial.roughness=.86;woodMaterial.normalScale.set(.95,.95);woodMaterial.side=T.FrontSide;woodMaterial.vertexColors=true;
+ const woodMaterial=new T.MeshPhysicalMaterial({map:wood.material.map,normalMap:wood.material.normalMap,roughnessMap:wood.material.roughnessMap,color:0x9d805b,roughness:.9,normalScale:new T.Vector2(.95,.95),side:T.FrontSide,vertexColors:true,metalness:0,ior:1.22,specularIntensity:.65});
  for(const texture of [woodMaterial.map,woodMaterial.normalMap,woodMaterial.roughnessMap])if(texture)texture.anisotropy=8;
  for(const branch of aquascapeBranches){
   const {geometry,obstacles:contacts}=bendScannedBranch(wood.geometry,branch);

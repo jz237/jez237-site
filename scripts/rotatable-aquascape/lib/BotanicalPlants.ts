@@ -50,8 +50,8 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   [-4.2,-1.65,.55,.34,4.42,22,false],[-3.25,-1.7,.65,.30,4.65,24,false],[-2.18,-1.72,.50,.32,3.62,16,false],
   [-1.25,-1.68,.52,.32,3.65,18,true],[-.20,-1.60,.70,.38,3.96,29,true],[.92,-1.62,.53,.40,3.50,23,true],
   [2.1,-1.65,.55,.34,3.04,18,true],[3.18,-1.55,.62,.38,4.70,25,false],[4.28,-1.24,.37,.49,4.45,22,false],
-  [-4.38,-.52,.28,.38,2.70,13,false],[-1.2,-.58,.38,.30,1.35,11,false],[2.88,-.45,.40,.33,2.27,15,false],
-  [3.90,.10,.35,.39,1.57,13,false],[.05,-.20,.38,.28,1.15,9,false]
+  [-4.38,-.52,.28,.38,2.70,13,false],[-1.2,-.58,.38,.30,.95,4,false],[2.88,-.45,.40,.33,2.27,15,false],
+  [3.90,.10,.35,.39,1.57,13,false],[.05,-.20,.38,.28,.80,3,false]
  ] as const;
  for(const [cx,cz,spreadX,spreadZ,maxH,count,red] of colonies)for(let i=0;i<count;i++){
   const radius=Math.sqrt(random()),angle=random()*Math.PI*2;
@@ -96,7 +96,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   }
  }
  // Sword rosettes use fewer, longer ribbon-like blades with different inclinations.
- for(const [cx,cz,count] of [[-4.25,-1.5,7],[-3.6,-1.5,4],[3.95,-.35,6],[3.5,-1.05,4],[-1.35,-1.3,3]])for(let i=0;i<count;i++){
+ for(const [cx,cz,count] of [[-4.25,-1.5,7],[-3.6,-1.5,4],[3.95,-.35,3],[3.5,-1.05,2]])for(let i=0;i<count;i++){
   const x=cx+(random()-.5)*.8,z=cz+(random()-.5)*.7,b=height(x,z);
   plantRoot=V(x,b,z);plantFlex=.7;
   for(let j=0;j<11;j++){const a=j*2.399+i,l=.8+random()*1.65+(cx<0?.30:0);add('sword',V(x,b,z),V(Math.cos(a)*.46,.55+random()*.5,Math.sin(a)*.5),l,.13+random()*.19,.20+random()*.045,.68,.24+random()*.095,random()*.65);}
