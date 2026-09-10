@@ -9,7 +9,7 @@ export function applyWaterDepth(scene:T.Scene,illumination:{value:number}){
    if(!(material instanceof T.MeshStandardMaterial)||seen.has(material))continue;
    seen.add(material);
    // Transmissive glass samples the already-shaded scene; avoid counting its water path twice.
-   if(material instanceof T.MeshPhysicalMaterial&&material.transmission>0)continue;
+   if(material.userData.skipWaterDepth||material instanceof T.MeshPhysicalMaterial&&material.transmission>0)continue;
    const compile=material.onBeforeCompile,cacheKey=material.customProgramCacheKey();
    material.onBeforeCompile=(shader,renderer)=>{
     compile.call(material,shader,renderer);
