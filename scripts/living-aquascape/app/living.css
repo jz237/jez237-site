@@ -34,3 +34,14 @@
 .view-tools,.transport,.modes{z-index:4}@media(max-width:700px){.drawer,.chemistry-detail,.equipment-card,.lesson,.inspector{max-height:calc(100% - 510px)}}
 
 .view-tools>.prototype-control{grid-column:1/-1;color:#c9eab5}@media(max-width:700px){.view-tools{bottom:234px}.view-tools>.prototype-control{grid-row:1}.drawer,.chemistry-detail,.equipment-card,.lesson,.inspector{max-height:calc(100% - 558px)}}
+
+/* Mobile opens as an unobstructed exhibit. Secondary camera controls remain
+   one tap away instead of permanently covering the aquascape. */
+.mobile-explore-toggle{display:none}
+.filter-loading{position:fixed;inset:0;z-index:40;display:grid;place-items:center;background:#030807e8;color:#dbe9d4;font:400 1rem Georgia,serif;letter-spacing:.08em}
+@media(max-width:700px){
+ .mobile-explore-toggle{display:block;position:absolute;right:12px;bottom:234px;z-index:6;min-height:44px;padding:8px 13px;background:#071312e8;border-color:#bed7af66}
+ .view-tools{display:none;bottom:286px;z-index:7;box-shadow:0 18px 50px #000b}
+ .view-tools.mobile-open{display:grid}
+ .clean .mobile-explore-toggle{display:none}
+}
