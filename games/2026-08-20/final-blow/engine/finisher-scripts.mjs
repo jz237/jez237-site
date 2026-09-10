@@ -479,10 +479,7 @@ export function directProjectileFinisher(script, impacts) {
 }
 
 export function finisherLens(elapsed, finalAt, reducedMotion=false) {
-  const ease=t=>{t=clamp(t,0,1);return t*t*(3-2*t);};
-  // A single slow push, held through contact, then a measured release.
-  // Never pulse the background scale on every individual impact.
-  const push=ease((elapsed-.42)/Math.max(.1,finalAt-.62));
-  const release=ease((elapsed-finalAt-.65)/1.1);
-  return 1.24+(reducedMotion ? .035 : .09)*push-.025*release;
+  // The arena stays at native scale. Close-ups belong in separately framed
+  // painted inserts, never in a zoom that makes the whole street breathe.
+  return 1;
 }

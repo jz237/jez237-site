@@ -128,7 +128,19 @@ function testGameJsGateTable() {
   for (const kind of new Set(Object.values(BANK_GATE_KIND))) {
     assert.match(table, new RegExp(`\\n\\s*${kind}: \\w+,`), `game.js must supply the ${kind} gate`);
   }
-  assert.match(gameSource, /function motionBankCellDrawable\(fighterId, cell, bank\) \{\s*\n\s*return bankCellDrawable\(fighterId, cell, bank, MOTION_BANK_GATES\);\s*\n\}/);
+  const gateBody=gameSource.match(/function motionBankCellDrawable\(fighterId, cell, bank\) \{([\s\S]*?)\n\}/)?.[1];
+  assert.ok(gateBody, 'the live motion gate must exist');
+  const buildGate=(repaired,ready,clipped,result)=>new Function(
+    'repairedCell','inbetweenReady','clippedCell','bankCellDrawable','MOTION_BANK_GATES',
+    `return function(fighterId,cell,bank){${gateBody}}`,
+  )((id,bank,cell)=>repaired.includes(cell),()=>ready,
+    (id,bank,cell)=>clipped.includes(cell),()=>result,{});
+  assert.equal(buildGate([],false,[],true)('jez',4,'motion'),true);
+  assert.equal(buildGate([],false,[],false)('jez',4,'motion'),false);
+  assert.equal(buildGate([],false,[4],true)('jez',4,'motion'),false,'clipped original cannot draw');
+  assert.equal(buildGate([4],false,[],true)('jez',4,'motion'),false,'repair must load before acceptance');
+  assert.equal(buildGate([4],true,[4],false)('jez',4,'motion'),true,'loaded replacement supersedes rejected original');
+  assert.equal(buildGate([],false,[7],7)('jez',4,'motion'),false,'remapped clipped cell cannot draw');
 }
 
 // --- the swing family tables ----------------------------------------------

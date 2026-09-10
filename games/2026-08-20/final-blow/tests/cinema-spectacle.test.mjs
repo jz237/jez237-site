@@ -317,21 +317,12 @@ test("main.mjs latches the pulse and hands both stages the beat", () => {
   assert.match(mainSource, /practicals: stage\?\.report\?\.\(\) \?\? null,/);
 });
 
-test("game.js latches the KO pulse THROUGH the bridge, and hands over every read", () => {
-  // The bug: the KO latch lived inside drawStageAmbient, whose only caller is
-  // inside `if (!cinema3dWorld)`. cinema3dAmbientPulse is the 3D path to it.
-  assert.match(gameSource, /function cinema3dAmbientPulse\(\) \{\n  const surge = stageSurge\(state\.simulationTick\);/);
-  assert.match(gameSource, /latchTick: ambientObs\.pulseTick,/);
+test("the painted stage reads and latches the KO pulse", () => {
   assert.match(gameSource, /function readAmbientPulse\(frame, reduced\) \{\n  const koPulse = ambientPhaseChange\(ambientObs, state\.phase, state\.screen\);/);
-  for (const member of ["ambientPulse: cinema3dAmbientPulse",
-    "crowdReaction: cinema3dCrowdReaction",
-    "elementSprites: cinema3dElementSprites",
-    "elementSheet: cinema3dElementSheet",
-    "elementCharge: cinema3dElementCharge",
-    "battleDamage: cinema3dBattleDamage"]) {
-    assert.ok(gameSource.includes(member), `the host literal carries ${member}`);
-  }
-  assert.match(gameSource, /paintBattleDamage: \(context, side\) => paintBattleDamageWith\(context, side\),/);
+  assert.match(gameSource, /if \(koPulse\) pulseAmbient\(koPulse\.kind, koPulse\.amount\);/);
+  assert.match(gameSource, /function stageSurge\(frame, reduced = state\.accessibility\.reducedMotion\) \{\n  const level = readAmbientPulse\(frame, reduced\);/);
+  assert.match(gameSource, /const \{ pulseAge, pulse, ko \} = readAmbientPulse\(frame, reduced\);/);
+  assert.match(gameSource, /paintBattleDamageWith\(scratchCtx, side\);/);
 });
 
 test("the 2D pass draws through the SAME shared functions the 3D layer reads", () => {

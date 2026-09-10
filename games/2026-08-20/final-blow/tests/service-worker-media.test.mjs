@@ -192,3 +192,23 @@ test("activate purges every older build's caches and keeps this build's shell AN
   await worker.dispatchActivate();
   assert.deepEqual((await worker.caches.keys()).sort(), [`final-blow-media-${version}`, `final-blow-shell-${version}`, "unrelated-cache"]);
 });
+
+
+test('cache pressure retains painted cinema before older optional media while honoring the total cap', async()=>{
+ const mb=1024*1024;
+ const worker=await loadWorker({responses:{
+  '/assets/cinema/jez-cinema-fatal-0-v1.webp':media(20*mb),
+  '/assets/audio/large.mp3':media(80*mb),
+  '/assets/backgrounds/new.webp':media(40*mb),
+  '/assets/cinema/oversized.webp':media(130*mb),
+ }});
+ for(const path of ['/assets/cinema/jez-cinema-fatal-0-v1.webp','/assets/audio/large.mp3','/assets/backgrounds/new.webp']){
+  await worker.dispatchFetch(path);await worker.settle();
+ }
+ assert.ok(await worker.caches.match('/assets/cinema/jez-cinema-fatal-0-v1.webp'));
+ assert.equal(await worker.caches.match('/assets/audio/large.mp3'),undefined);
+ await worker.dispatchFetch('/assets/cinema/oversized.webp');await worker.settle();
+ let total=0;
+ for(const name of await worker.caches.keys())for(const response of (await worker.caches.open(name)).entries.values())total+=Number(response.headers.get('content-length'))||0;
+ assert.ok(total<=120*mb,'cinema priority never bypasses the byte cap');
+});

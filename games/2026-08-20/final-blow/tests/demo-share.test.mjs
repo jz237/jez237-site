@@ -124,10 +124,10 @@ test("the boot router, the title button, the attract timer and qa.demo all enter
   // ONE ENTRY. The URL path is an attract start with the link's seed and card.
   assert.match(gameSource, /const bootDemo = parseDemoBootRequest\(location\.search\);/);
   assert.match(gameSource,
-    /if \(bootDemo\) \{\s*showScreen\("title"\);\s*suppressImmersivePrompt = true;\s*startDemo\(\{ attract: true, seed: bootDemo\.seed, cycle: bootDemo\.cycle, source: "url" \}\);/,
+    /if \(bootDemo\) \{\s*showScreen\("title"\);\s*suppressImmersivePrompt = true;\s*startDemo\(\{ attract: true, seed: bootDemo\.seed, cycle: bootDemo\.cycle, source: "url", matchConfig:\s*spectatorConfigFromUrl\(location\.href\) \}\);/,
     "a ?demo= boot must be startDemo({ attract: true, seed, cycle }) after the title, with the immersive prompt suppressed (no gesture)");
   // ...qa.demo(seed, cycle) is the same call under the manual clock.
-  assert.match(gameSource, /demo\(seed = 237, cycle = 1\) \{\s*startDemo\(\{ qa: true, seed, cycle, source: "qa" \}\);/);
+  assert.match(gameSource, /demo\(seed = 237, cycle = 1, matchConfig = null\) \{\s*startDemo\(\{ qa: true, seed, cycle, source: "qa", matchConfig \}\);/);
   // ...and the button and the idle timer are unchanged entries.
   assert.match(gameSource, /\$\("#demoButton"\)\.addEventListener\("click", \(\) => startDemo\(\)\);/);
   assert.match(gameSource, /startDemo\(\{ attract: true \}\);/);
@@ -144,7 +144,7 @@ test("the boot router, the title button, the attract timer and qa.demo all enter
 test("the seed is kept raw on the session and the link is built from it", () => {
   assert.match(gameSource, /const demoSeed = seed \?\? pendingSeed \?\? hashSeed\(Date\.now\(\), performance\.now\(\), state\.rng\.nextUint32\(\)\);/);
   assert.match(gameSource, /demoSession\.seed = demoSeed;/);
-  assert.match(gameSource, /return buildDemoShareUrl\(location\.href, \{ seed: demoSession\.seed, cycle: demoSession\.cycle\?\.cycle \|\| 1 \}\);/);
+  assert.match(gameSource, /return addSpectatorConfig\(buildDemoShareUrl\(location\.href, \{ seed: demoSession\.seed, cycle: demoSession\.cycle\?\.cycle \|\| 1 \}\),\s*demoSession\.matchConfig\);/);
   // The seed rewind (matchSerial / rng / tick domain) stays exactly where it
   // was: only an EXPLICIT seed rewinds the page to cold.
   assert.match(gameSource, /if \(seed !== null\) \{\s*state\.matchSerial = 0;/);
@@ -168,12 +168,19 @@ test("everything new is demo-gated: a played match is byte-identical", () => {
   assert.match(gameSource, /if \(bootDemo\) \{/);
 });
 
-test("a press on the share bug is the one pointer that does not end the demo", () => {
-  // The capture-phase pointerdown listener is the any-input-exits rule; it
-  // must consult the share guard FIRST, and the guard must be demo-scoped.
+test("a press on the share control bypasses demo pause routing", () => {
+  // Share must be claimed before pause routing, and remain demo-scoped.
   assert.match(gameSource,
-    /document\.addEventListener\("pointerdown", \(event\) => \{\s*if \(attractSoundChipPress\(event\)\) return;\s*armAttractAudio\(event\);\s*if \(isDemoShareTarget\(event\)\) return;\s*noteUserActivity\(\);\s*\}, true\);/);
-  assert.match(gameSource, /function isDemoShareTarget\(event\) \{[\s\S]*?demoSession\.active && target[\s\S]*?target\.closest\("#demoShareButton"\)/);
+    /document\.addEventListener\("pointerdown", \(event\) => \{\s*if \(attractSoundChipPress\(event\)\) return;\s*armAttractAudio\(event\);\s*if \(isDemoShareTarget\(event\)\) return;\s*if \(demoSession\.active && event\.pointerType === "mouse"\)/);
+  const guardSource=gameSource.slice(gameSource.indexOf('function isDemoShareTarget(')).split('\n}')[0]+'\n}';
+  const session={active:true};
+  const guard=new Function('demoSession',guardSource+';return isDemoShareTarget;')(session);
+  for(const id of ['demoShareButton','demoPaceButton','demoPauseButton','demoReplayToggle','demoReplayLast','instantReplayDialog']) {
+    const event={target:{closest:selector=>selector.split(',').map(s=>s.trim()).includes('#'+id)}};
+    assert.equal(guard(event),true,id+' keeps its own action');
+    session.active=false;assert.equal(guard(event),false,id+' is demo-scoped');session.active=true;
+  }
+  assert.equal(guard({target:{}}),false);
   // The click handler stops its own propagation so nothing downstream reads
   // it as menu input, and share/clipboard/fallback are all handled.
   assert.match(gameSource, /\$\("#demoShareButton"\)\.addEventListener\("click", \(event\) => \{\s*event\.preventDefault\(\);\s*event\.stopPropagation\(\);\s*shareDemoLink\(\);/);

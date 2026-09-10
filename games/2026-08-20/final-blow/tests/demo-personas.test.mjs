@@ -336,7 +336,16 @@ test("game.js gates the persona pick and the Grit policy on the demo", async () 
   assert.ok(source.includes("return clock ? DEMO_CLOCK_AI_DIFFICULTY : demoStoryTierFor(kitId, demoStoryOverlayFor(kitId));"),
     "a standard card's seat plays its persona under the story's overlay");
   assert.equal(source.match(/demoStoryTierFor\(/g).length, 1, "demoStoryTierFor has exactly one call site");
-  assert.equal(source.match(/demoPersonaFor\(/g), null, "game.js no longer resolves the persona itself");
+  // Custom CPU matchups bypass the story director: auto keeps the fighter's
+  // persona, while an explicit difficulty must honor the viewer's choice.
+  const tierSource=source.slice(source.indexOf('function demoAiTier(')).split('\n}')[0]+'\n}';
+  const session={matchConfig:{difficulty:'auto'}};
+  const customTier=new Function('demoSession','demoPersonaFor',tierSource+';return demoAiTier;')(session,demoPersonaFor);
+  assert.equal(customTier('alan'),demoPersonaFor('alan'));
+  for(const difficulty of ['rookie','street','pro','final']) {
+    session.matchConfig.difficulty=difficulty;
+    assert.equal(customTier('alan'),difficulty);
+  }
   assert.ok(source.includes("personas: (state.fighters || []).map((fighter) => fighter.aiBrain?.difficulty || null)"),
     "demoSnapshot must report the persona per seat");
 });

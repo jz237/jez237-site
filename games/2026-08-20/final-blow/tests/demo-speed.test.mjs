@@ -230,10 +230,10 @@ test("game.js gates every transport call site on the scoping helper", async () =
   assert.doesNotMatch(game, /SIMULATION_STEP_SECONDS\s*\*\s*demoSpeed/);
   assert.doesNotMatch(game, /demoSpeed\.rate\s*\*\s*SIMULATION_STEP_SECONDS/);
   assert.doesNotMatch(game, /runSimulationStep\([^)]*demoSpeed/);
-  // The transport keys have to be claimed before the any-key-exits-the-demo
-  // rule, or every one of them would quit the demo on first press.
+  // The transport keys must be claimed before demo keyboard handling.
+  // Ordinary keys stay in the demo; Escape is its explicit exit.
   const transportAt = game.indexOf("if (handleDemoSpeedKey(event)) {");
-  const exitAt = game.indexOf("if (demoSession.active) {\n    event.preventDefault();\n    noteUserActivity();");
+  const exitAt = game.indexOf('if (demoSession.active) {\n    event.preventDefault();\n    if (event.code === "Escape") exitDemo();');
   assert.ok(transportAt > 0 && exitAt > 0 && transportAt < exitAt,
     "the transport keys must be handled before the demo-exit rule");
   // ...but it must never steal a key that belongs to a player binding, a

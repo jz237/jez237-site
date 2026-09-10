@@ -821,7 +821,7 @@ test("IdleQueue: priority order, FIFO within a priority, key cancel, chained pus
   assert.equal(queue.pending, 0);
 });
 
-test("fighters.mjs builds nothing synchronously past the raw shell, and game.js hands over the warm-up gate", () => {
+test("archived fighters.mjs queues bank construction past the raw shell", () => {
   const stripped = fightersSource.replace(/\/\/.*$/gm, "");
   // poseRig / ensureMotionBank never call the kernels directly any more.
   const poseStart = stripped.indexOf("  poseRig(rig, fighter, state, timeSec, dtSec = 0) {");
@@ -843,8 +843,7 @@ test("fighters.mjs builds nothing synchronously past the raw shell, and game.js 
   // adopted prewarm set's), so disposal cancels every key it carries.
   assert.match(fightersSource, /for \(const key of rig\.keys \|\| \[rig\.key\]\) this\.queue\.cancel\(key\);/);
   assert.match(fightersSource, /this\.bankStats\.evicted \+= releaseAtlasCaches\(image\);/);
-  assert.match(gameSource, /fighterBankSheet: \(fighterId, bank\) => altAtlasSource\(fighterId, bank\)\.image \|\| null,/);
-  assert.match(gameSource, /downTiltRadians: DOWN_TILT_RADIANS,/);
+  assert.doesNotMatch(gameSource, /module\.createRenderer\(/, "archived renderer has no live game host");
   assert.match(mainSource, /banks: layers\.get\("fighters"\)\?\.bankReport\?\.\(\) \?\? null,/);
   assert.match(mainSource, /drainBankQueue: renderer3d\.drainBankQueue,/);
 });

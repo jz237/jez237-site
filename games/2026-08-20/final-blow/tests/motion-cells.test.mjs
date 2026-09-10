@@ -54,19 +54,32 @@ function testFallbackResolution() {
 
 function testCyraxxSmearVFallsBack() {
   const masks = buildMotionAcceptMasks(manifest);
-  const riser = createFighterMove("cyraxx", "launcher");
-  const pose = attackAnimationPose(riser, riser.activeStartFrame - 1);
-  assert.equal(pose.bank, "motion");
-  assert.equal(pose.frame, MOTION_CELLS.smearV, "a rising launcher must ask for the vertical smear");
+  // The acceptance/fallback contract remains valid for explicit smear poses.
+  // Launchers now retain their authored rising arc rather than substituting
+  // the generic smear and horizontal follow-through.
+  const pose = motionPose(MOTION_CELLS.smearV, "base", 13);
   const resolved = resolveMotionPose(pose, (cell) => masks.cyraxx.accept[cell]);
   assert.equal(resolved.bank, "motion", "the regenerated cyraxx smear-v is accepted and must hold");
   // Mask-driven rejection still falls back to the exact base-bank beat.
   const rejected = resolveMotionPose(pose, (cell) => cell !== MOTION_CELLS.smearV);
   assert.deepEqual(rejected, pose.fallback, "a rejected smear-v must fall back to the base-bank beat");
   // The same beat on an accepted sheet keeps the motion cell.
-  const jezRiser = createFighterMove("jez", "launcher");
-  const jezPose = attackAnimationPose(jezRiser, jezRiser.activeStartFrame - 1);
+  const jezPose = motionPose(MOTION_CELLS.smearV, "base", 13);
   assert.equal(resolveMotionPose(jezPose, (cell) => masks.jez.accept[cell]).bank, "motion");
+}
+
+function testLaunchersKeepRisingArc() {
+  for(const id of ROSTER)for(const action of ['launcher','enhancedLauncher']) {
+    const move=createFighterMove(id,action);
+    if(!move?.animation)continue;
+    for(let tick=0;tick<=move.totalFrames;tick++) {
+      const pose=attackAnimationPose(move,tick);
+      assert.equal(pose.bank,move.animation.bank,id+' uses its own launcher bank');
+      const allowed=tick<move.activeStartFrame?[move.animation.frames[0]]
+        :tick>=move.activeEndFrame?[move.animation.frames[3]]:move.animation.frames.slice(1,3);
+      assert.ok(allowed.includes(pose.frame),id+' retains a rising contact pose until recovery at tick '+tick);
+    }
+  }
 }
 
 function testStrikeBeatContracts() {
@@ -134,6 +147,7 @@ function testDescriptorDeterminism() {
 testManifestAcceptMasks();
 testFallbackResolution();
 testCyraxxSmearVFallsBack();
+testLaunchersKeepRisingArc();
 testStrikeBeatContracts();
 testDescriptorDeterminism();
 

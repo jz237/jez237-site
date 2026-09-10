@@ -121,7 +121,7 @@ test("matchupPreloadIds: both seats, boss substitution, Block War rosters, de-du
 
 test("game.js wiring: family-first preload, select-screen warm, the hold and the frozen clock", async () => {
   const [game, index, css] = await Promise.all([
-    readFile(join(gameRoot, "game.js"), "utf8"),
+    readFile(join(gameRoot, "game.js"), "utf8").then(text=>text.replace(/\r\n/g,'\n')),
     readFile(join(gameRoot, "index.html"), "utf8"),
     readFile(join(gameRoot, "styles.css"), "utf8"),
   ]);

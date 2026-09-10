@@ -363,13 +363,13 @@ test("the plain KO traced: the 5.2 hold drew ext4:1 for all 294 ticks; the colla
 
 test("the collapse is wired: finishRound lays the loser down, the countdown floors, and the landing is the knockdown impact", () => {
   const gameSource = readFileSync(join(testDir, "..", "game.js"), "utf8");
-  assert.match(gameSource, /if \(koCollapseOnRoundEnd\(\{\s*\n\s*cause, health: loser\.health, down: loser\.down, grounded: loser\.grounded,\s*\n\s*\}\)\) collapseKoLoser\(loser\);/);
+  assert.match(gameSource, /if \(!state\.koScene && koCollapseOnRoundEnd\(\{\s*\n\s*cause, health: loser\.health, down: loser\.down, grounded: loser\.grounded,\s*\n\s*\}\)\) collapseKoLoser\(loser\);/);
   // The collapse IS enterKnockdown — no parallel knockdown path.
   assert.match(gameSource, /function collapseKoLoser\(fighter\) \{[\s\S]*?enterKnockdown\(fighter\);\s*\n\}/);
   // and it clears the stand-off's daze, which outranks the down read.
   assert.match(gameSource, /function collapseKoLoser\(fighter\) \{[\s\S]*?fighter\.hitstunFrames = 0;[\s\S]*?fighter\.dizzyFrames = 0;/);
   assert.match(gameSource, /if \(koLie && fighter\.knockdownFrames <= 1\) \{\s*\n\s*fighter\.knockdownFrames = 1;/);
-  assert.match(gameSource, /if \(koLie && koCollapseThudTick\(fighter\.knockdownFrames, DEFENSE_RULES\.knockdownFrames\)\) \{\s*\n\s*spawnKoCollapseLanding\(fighter\);/);
+  assert.match(gameSource, /if \(koLie && landingTick && !state\.koScene\) \{\s*\n\s*spawnKoCollapseLanding\(fighter\);/);
   assert.match(gameSource, /function spawnKoCollapseLanding\(fighter\) \{\s*\n\s*spawnKnockdownImpact\(fighter, KO_COLLAPSE_LANDING_VELOCITY\);/);
   // The crumple band is the shared constant, not a second 7.
   assert.match(gameSource, /fighter\.knockdownFrames > DEFENSE_RULES\.knockdownFrames - KO_COLLAPSE_CRUMPLE_TICKS/);

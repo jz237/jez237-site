@@ -264,7 +264,10 @@ function testRegistryAndWiring() {
   // `pose` is now the FINAL resolved cell. The pin still asserts the swing
   // resolution happens exactly once, at this choke point, with the same gate.
   assert.match(gameSource, /const swung = swingResolve\(resolvedPose, swingContext\(fighter, \{ roundDecided: [^}]+\}\), \(cell, bank\) => motionBankCellDrawable\(fighter\.def\.id, cell, bank\)\);/);
-  assert.match(gameSource, /const pose = specialsGenerationPose\(fighter\.def\.id, swung\);\n  recordPoseTrace\(fighter, pose\);/);
+  assert.match(gameSource, /const pose = smooth \|\| recovery \|\| footwork \|\| bridge \|\| withInbetween\(fighter, flow && paintedFlowAvailability\.get\(fighter\.attacking\) \? flow : specialsGenerationPose\(fighter\.def\.id, swung\)\);/);
+  // The expanded painted library runs after the legacy redirect. Diagnostics
+  // must record the cell actually returned to the renderer.
+  assert.match(gameSource, /recordPoseTrace\(fighter,\s*finalPose\);\s*return finalPose;/);
   assert.match(gameSource, /import \{ swingContext, swingResolve \} from "\.\/engine\/swing-resolve\.mjs";/);
   assert.ok(!/^function swingResolve\(/m.test(gameSource), "no second resolver in game.js");
   // v5.3 (sweep #52): the routing and the alt-palette keys are
@@ -303,8 +306,9 @@ function testRegistryAndWiring() {
   assert.equal(contactPoseBranch({ blockstunFrames: 8, crouch: true, grounded: true }), POSE_BRANCHES.blockstunCrouch);
   assert.equal(contactPoseBranch({ blockstunFrames: 8, crouch: false, grounded: true }), POSE_BRANCHES.blockstunStanding);
   assert.match(gameSource, /if \(contact === POSE_BRANCHES\.blockstunCrouch\) \{[\s\S]{0,700}beatPoseAt\(crouchBlockstunKeys\(\{ flinch \}\),[\s\S]{0,200}uni\(UNIFIED_CELLS\.crouch, base\(roles\.crouch\)\)\)/);
-  // The flinch-exit bridge rides a crouched block too, off the SAME clock.
-  assert.match(gameSource, /if \(fighter\.blockstunFrames > 0 && fighter\.grounded && !reducedMotion\) \{\s*\n\s*const bridge = blockRecoverTransform\(blockstunPhase\(fighter\.blockstunFrames, obs\.blockstunTotal\)\);/);
+  // The legacy flinch bridge uses the same clock, but must not deform the
+  // dedicated painted recovery frames once their atlas is available.
+  assert.match(gameSource, /if \(fighter\.blockstunFrames > 0 && fighter\.grounded && !reducedMotion\s*&& !recoveryAtlases\[fighter\.def\.id\]\?\.naturalWidth\) \{\s*const bridge = blockRecoverTransform\(blockstunPhase\(fighter\.blockstunFrames, obs\.blockstunTotal\)\);/);
   // The engine's sheet fold mirrors the correction game.js applies to the
   // unified bank, so an on-screen comparison puts it on the right side.
   assert.match(gameSource, /const UNIFIED_SHEET_ADJUST = Object\.freeze\(\{ commissioner: 1\.033 \}\);/);
@@ -588,7 +592,9 @@ function testExt5GroundRouted() {
   assert.match(gameSource, /const entrance = state\.phase === "intro" \? introEntranceCell\(state\.phaseTime\) : null;\s*\n\s*if \(entrance !== null && fighter\.grounded && !fighter\.attacking && fighter\.kit\?\.victory\) \{[\s\S]{0,900}return unifiedExt5Pose\(entrance, motionPose\(cell, "base", Math\.floor\(fighter\.animTime \* 5\) % 4\)\);/);
   assert.match(gameSource, /function showcasePoseDescriptor\(fighter, ext5Cell = UNIFIED_EXT5_CELLS\.victory\) \{[\s\S]{0,700}return unifiedExt5Pose\(ext5Cell, rotation\);/);
   assert.match(gameSource, /return showcasePoseDescriptor\(fighter, UNIFIED_EXT5_CELLS\.taunt\);/);
-  assert.match(gameSource, /return showcasePoseDescriptor\(fighter, roundWinShowcaseCell\(showcasePick\(\), hold - state\.phaseTime, hold\)\);/);
+  assert.match(gameSource, /const delay = other\.health <= 0 \? \(state\.koScene\?\.impact \|\| 0\) \+ CINEMATIC_KO_VICTORY_SECONDS : 0;/);
+  assert.match(gameSource, /if \(hold - state\.phaseTime < delay\) return \{bank:'unified',frame:0\};/);
+  assert.match(gameSource, /return showcasePoseDescriptor\(fighter, victoryCell\(fighter\.def\.id, hold - state\.phaseTime - delay\)\);/);
   // The Final Blow draws through the engine's scripts (tests/fatalities-poses pins the cells).
   assert.match(gameSource, /if \(fighter\.cinematicFrame !== null\) return cinematicPoseDescriptor\(fighter, base\(fighter\.cinematicFrame\)\);/);
   assert.match(gameSource, /const finisherChoreography = FINISHER_CHOREOGRAPHY;/);
