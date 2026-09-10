@@ -1,0 +1,193 @@
+import assert from "node:assert/strict";
+import test from "node:test";
+import { readFileSync, readdirSync } from "node:fs";
+import { dirname, join } from "node:path";
+import { fileURLToPath } from "node:url";
+import {
+  CINEMA_HOST_MEMBERS,
+  CINEMA_HOST_OPTIONAL,
+  CINEMA_HOST_REQUIRED,
+  assertHostContract,
+  missingHostMembers,
+} from "../renderer/three/host-contract.mjs";
+
+// 5.1 CINEMA 3D host contract + gameplay reads.
+//
+// renderer/three imports "three" through the browser import map, so Node
+// cannot load main.mjs; the contract therefore lives in its own dependency-
+// free module and this suite pins it from both ends over the SOURCE:
+//   (a) every `host.<member>` the 3D layer reads is declared in the contract;
+//   (b) every declared member is a key of the literal game.js hands to
+//       createRenderer (the bridge cannot silently lose a member);
+//   (c) main.mjs actually asserts the contract before it builds anything.
+// Plus the 5.1 read wiring: the 2D painters take a foreign context, the host
+// exposes them, and the overlay pass runs after the world restore.
+
+const testDir = dirname(fileURLToPath(import.meta.url));
+const root = join(testDir, "..");
+const gameSource = readFileSync(join(root, "game.js"), "utf8");
+const threeDir = join(root, "renderer", "three");
+const threeSources = Object.fromEntries(readdirSync(threeDir)
+  .filter((name) => name.endsWith(".mjs"))
+  .map((name) => [name, readFileSync(join(threeDir, name), "utf8")]));
+
+// Line comments and block comments carry prose like `host.x` — strip them.
+function stripComments(source) {
+  return source.replace(/\/\*[\s\S]*?\*\//g, "").replace(/^[ \t]*\/\/.*$/gm, "");
+}
+
+function hostReads() {
+  const reads = new Map();
+  for (const [name, source] of Object.entries(threeSources)) {
+    for (const match of stripComments(source).matchAll(/\bhost\??\.([A-Za-z_$][\w$]*)/g)) {
+      if (!reads.has(match[1])) reads.set(match[1], new Set());
+      reads.get(match[1]).add(name);
+    }
+  }
+  return reads;
+}
+
+test("contract lists are disjoint, non-empty and frozen", () => {
+  assert.ok(CINEMA_HOST_REQUIRED.length >= 12);
+  assert.ok(CINEMA_HOST_OPTIONAL.length >= 10);
+  const overlap = CINEMA_HOST_REQUIRED.filter((name) => CINEMA_HOST_OPTIONAL.includes(name));
+  assert.deepEqual(overlap, []);
+  assert.equal(new Set(CINEMA_HOST_MEMBERS).size, CINEMA_HOST_MEMBERS.length, "no duplicate member");
+  assert.ok(Object.isFrozen(CINEMA_HOST_MEMBERS));
+});
+
+test("every host member the 3D layer reads is declared in the contract", () => {
+  const reads = hostReads();
+  const undeclared = [...reads.keys()].filter((name) => !CINEMA_HOST_MEMBERS.includes(name));
+  assert.deepEqual(undeclared, [], `undeclared host reads: ${undeclared.map((name) => `${name} (${[...reads.get(name)].join(", ")})`).join("; ")}`);
+  // ...and the contract carries no dead members either.
+  const unread = CINEMA_HOST_MEMBERS.filter((name) => !reads.has(name));
+  assert.deepEqual(unread, [], `contract members nothing reads: ${unread.join(", ")}`);
+  // The 5.1 reads are real reads, not just declarations.
+  for (const name of ["paintProjectile", "paintTrap", "stageWeaponProfile", "fighterScale"]) {
+    assert.ok(reads.get(name)?.has("world-objects.mjs"), `${name} is read by world-objects.mjs`);
+  }
+});
+
+test("the painted game cannot start the retired 3D renderer", () => {
+  for (const name of ["cinema3dAllowed", "cinema3dWorldActive"]) {
+    const declaration = gameSource.match(new RegExp("function " + name + "\\(\\) \\{[^}]*\\}"))?.[0];
+    assert.ok(declaration, name);
+    assert.equal(new Function(declaration + ";return " + name + "();")(), false);
+  }
+  assert.doesNotMatch(gameSource, /module\.createRenderer\(/);
+  assert.doesNotMatch(gameSource, /(?:from\s*|import\s*\()["'][^"']*renderer\/three\//);
+});
+
+test("missingHostMembers / assertHostContract report by tier", () => {
+  assert.deepEqual(missingHostMembers({}), {
+    required: [...CINEMA_HOST_REQUIRED],
+    optional: [...CINEMA_HOST_OPTIONAL],
+  });
+  const full = Object.fromEntries(CINEMA_HOST_MEMBERS.map((name) => [name, () => null]));
+  assert.deepEqual(missingHostMembers(full), { required: [], optional: [] });
+  const warnings = [];
+  assert.equal(assertHostContract(full, { warn: (message) => warnings.push(message) }), true);
+  assert.deepEqual(warnings, []);
+  const { paintTrap, ...noTrap } = full;
+  assert.throws(() => assertHostContract(noTrap, { warn: () => {} }), /missing required member\(s\) paintTrap/);
+  const { crowdBillboards, ...noCrowd } = full;
+  assert.equal(assertHostContract(noCrowd, { warn: (message) => warnings.push(message) }), true);
+  assert.equal(warnings.length, 1);
+  assert.match(warnings[0], /crowdBillboards/);
+  assert.equal(missingHostMembers(null).required.length, CINEMA_HOST_REQUIRED.length);
+});
+
+test("main.mjs asserts the contract first and registers the world-objects layer", () => {
+  const main = threeSources["main.mjs"];
+  assert.match(main, /import \{ assertHostContract, CINEMA_HOST_MEMBERS, missingHostMembers \} from "\.\/host-contract\.mjs";/);
+  const assertAt = main.indexOf("assertHostContract(host);");
+  const rendererAt = main.indexOf("const renderer3d = {");
+  assert.ok(assertAt > 0 && assertAt < rendererAt, "contract asserted before the renderer object is built");
+  assert.match(main, /new WorldObjectsLayer\(host\)/);
+  assert.match(main, /layers\.set\("worldObjects", worldObjects\)/);
+  assert.match(main, /objects: renderer3d\.worldObjects\?\.visibleCount \?\? 0/);
+});
+
+test("the 2D painters take a foreign context and the 2D world pass still uses them", () => {
+  // The refactor must leave the 2D path drawing through the same functions.
+  assert.match(gameSource, /function drawThrowable\(projectile, time, life\) \{\n  drawThrowableWith\(ctx, projectile, time, life\);\n\}/);
+  assert.match(gameSource, /function drawThrowableWith\(c, projectile, time, life, options = \{\}\)/);
+  assert.match(gameSource, /if\(projectile\.style==='mouse'&&options\.cable!==false\)\{/);
+  assert.match(gameSource, /drawPaintTrapWith\(ctx, trap, time\);/);
+  assert.match(gameSource, /function drawPaintTrapWith\(c, trap, time\)/);
+  assert.match(gameSource, /drawProjectileBodyWith\(ctx, projectile, time, life, pulse\);/);
+  assert.match(gameSource, /function drawProjectileBodyWith\(c, projectile, time, life, pulse\)/);
+  // No painter body still touches the module `ctx` (it would draw on the
+  // game canvas while the 3D layer thinks it is painting an impostor).
+  for (const name of ["drawThrowableWith", "drawPaintTrapWith", "drawProjectileBodyWith"]) {
+    const start = gameSource.indexOf(`function ${name}(`);
+    const end = gameSource.indexOf("\n}\n", start);
+    const body = gameSource.slice(start, end);
+    assert.ok(!/\bctx\./.test(body), `${name} never touches the module ctx`);
+  }
+
+});
+
+test("the painted world owns the combat reads", () => {
+  assert.match(gameSource, /state\.fighters\.forEach\(\(fighter\) => drawDizzyStars\(fighter, time\)\);/);
+  assert.match(gameSource, /state\.fighters\.forEach\(\(fighter\) => drawGuardCrushMarker\(fighter, time\)\);/);
+  assert.match(gameSource, /drawRhythmRings\(fighter, time\);/);
+  assert.match(gameSource, /if \(effect\.kind === "combatText"\) \{\n\s+drawCombatTextBody\(effect, alpha\);/);
+  assert.match(gameSource, /function drawCinema3dOverlayReads\(\) \{\}/);
+});
+
+test("the 3D fighter layer carries the super-ready read (rim uniform, aura, embers)", () => {
+  const fighters = threeSources["fighters.mjs"];
+  assert.match(fighters, /uniform float uFbReadyRim;/);
+  assert.match(fighters, /uniform vec3 uFbReadyColor;/);
+  assert.match(fighters, /totalEmissiveRadiance \+= uFbReadyColor \* \(uFbReadyRim \* \(fbEdgeAny \* 1\.35 \+ 0\.05\)\);/);
+  // A new uniform means a new program: the cache key must move with it.
+  // v12 (5.1, #45): uFbTopTint — the per-stage top-light body multiplier;
+  // v13 (5.1, #28): the tempo-tell uniforms (uFbWhiffRim / uFbRearmDim);
+  // v14 (5.3, #48): uFbDamage / uFbDamageOn — the battle-damage decal sampler.
+  // Pin bumped because the uniform set genuinely changed: a stale program
+  // cache would hand the new shader source the old compiled program.
+  assert.match(fighters, /customProgramCacheKey = \(\) => "fb-sprite-grade-v14"/);
+  assert.match(fighters, /bank\.fb\.readyRim\.value = superReady \? 0\.55 \+ readyPulse \* 0\.45 : 0;/);
+  // Same ember formula as the 2D aura, hashed from the sim tick.
+  assert.match(fighters, /const cycleFrames = 66 \+ \(ember % 3\) \* 14;/);
+  assert.match(fighters, /hash01\(Math\.floor\(clock \/ cycleFrames\) \* 13 \+ ember \* 7 \+ fighter\.side \* 101\)/);
+  assert.match(fighters, /const emberY = sizePx \* \(0\.66 \+ progress \* 0\.32\);/);
+  // Gated exactly like the 2D pass: reduced motion / battery trail scale.
+  assert.match(fighters, /const showEmbers = superReady && !reducedMotion && trailScale > 0;/);
+  assert.match(fighters, /rig\.aura\.geometry\.dispose\(\);/);
+});
+
+test("world-objects paints every live object through the host and keeps text on the overlay", () => {
+  const objects = threeSources["world-objects.mjs"];
+  assert.match(objects, /host\.paintProjectile\(c, projectile, timeMs, \{ cable: false \}\)/);
+  assert.match(objects, /host\.paintTrap\(c, trap, timeMs\)/);
+  assert.match(objects, /host\.stageWeaponProfile\(\)/);
+  for (const phase of ['"telegraph"', '"ground"']) assert.ok(objects.includes(phase), `handles ${phase}`);
+  assert.match(objects, /fighter\.carriedWeapon/);
+  // Reads sit in front of the fighter plane; the carried weapon behind it
+  // (the 2D hand covers it), never text on a quad.
+  assert.match(objects, /const OBJECT_Z = 0\.1;/);
+  assert.match(objects, /const CARRY_Z = -0\.03;/);
+  assert.ok(!/fillText|strokeText/.test(objects), "no text painted into impostors");
+  // 1 canvas px = 1 sim px at 2x: the impostor is the same drawing.
+  assert.match(objects, /const SUPERSAMPLE = 2;/);
+  assert.match(objects, /const s = size \/ \(extentPx \* 2\);/);
+});
+
+// v5.3 VERIFICATION HARNESS (sweep #54). Everything above reads SOURCE: the
+// contract list against the `host.<member>` reads, and the list against the
+// object literal game.js writes. Neither can see the object the renderer is
+// actually holding after ensureCinema3d() assembled it. __finalBlowThree
+// .hostContract() is that read, and the browser smoke's `cinema-3d` probe
+// asserts it comes back with nothing missing on a real boot.
+test("the QA surface exposes the live host's contract for the browser probe", () => {
+  const main = threeSources["main.mjs"];
+  assert.match(main, /hostContract: \(\) => \(\{ members: CINEMA_HOST_MEMBERS, \.\.\.missingHostMembers\(host\) \}\),/);
+  const surfaceAt = main.indexOf("window.__finalBlowThree = {");
+  const contractAt = main.indexOf("hostContract: () =>");
+  assert.ok(surfaceAt > 0 && contractAt > surfaceAt, "hostContract is published on the QA surface");
+  // The reported member list is the union both ends are pinned against above.
+  assert.deepEqual(CINEMA_HOST_MEMBERS, [...CINEMA_HOST_REQUIRED, ...CINEMA_HOST_OPTIONAL]);
+});

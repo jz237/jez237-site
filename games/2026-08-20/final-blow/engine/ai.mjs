@@ -1,0 +1,874 @@
+import {feintIntent,blockedStringAlternative} from "./ai-feints.mjs";
+import {deliberateDefense,recoveryApproach} from "./ai-defense.mjs";
+import {projectileIntent} from "./ai-projectiles.mjs";
+import {fighterStyle,exchangeStyle,comboObjective,roundStrategy,strategicIntent,selectComboContinuation,meterOpportunity} from "./ai-strategy.mjs";
+import {createOpponentMemory, learnOpponent, opponentHabits} from "./ai-adaptation.mjs";
+import { ATTACK_LEVELS, DEFENSE_RULES, MOVEMENT_RULES, THROW_RULES } from "./defense.mjs";
+import { GRIT_RULES } from "./combos.mjs";
+import { getFighterKit, getKitMoveProfile, selectKitAiIntent } from "./fighter-kits.mjs";
+
+export const AI_DIFFICULTIES = Object.freeze({
+  // Passive is an inert practice opponent. Every chance is zero and the brain
+  // short-circuits before it can produce an input at all, so it never advances,
+  // chases, attacks, throws, techs, jumps, blocks, reverses, spends meter or
+  // takes a Final Blow. It exists to be hit.
+  passive: Object.freeze({
+    id: "passive", label: "PASSIVE", reactionFrames: 24, decisionFrames: 24,
+    defenseChance: 0, antiAirChance: 0, comboChance: 0,
+    throwChance: 0, meterChance: 0, wakeupReversalChance: 0, errorChance: 0,
+    throwTechChance: 0, grabPressureChance: 0,
+    meatyChance: 0, clinchTechChance: 0, throwWhiffPunishChance: 0,
+    quickRiseChance: 0, wakeDelayChance: 0, airRecoveryChance: 0, perfectGuardChance: 0,
+    tauntChance: 0,
+    repeatLimit: 0, inert: true,
+  }),
+  rookie: Object.freeze({
+    id: "rookie", label: "ROOKIE", reactionFrames: 20, decisionFrames: 18,
+    defenseChance: 0.46, antiAirChance: 0.38, comboChance: 0.22,
+    throwChance: 0.09, meterChance: 0.24, wakeupReversalChance: 0.16, errorChance: 0.24,
+    throwTechChance: 0.12, grabPressureChance: 0.1,
+    meatyChance: 0.1, clinchTechChance: 0.08, throwWhiffPunishChance: 0.15,
+    quickRiseChance: 0.14, wakeDelayChance: 0.08, airRecoveryChance: 0.12, perfectGuardChance: 0.05,
+    tauntChance: 0.35,
+    repeatLimit: 2,
+  }),
+  street: Object.freeze({
+    id: "street", label: "STREET", reactionFrames: 14, decisionFrames: 13,
+    defenseChance: 0.62, antiAirChance: 0.55, comboChance: 0.42,
+    throwChance: 0.15, meterChance: 0.44, wakeupReversalChance: 0.31, errorChance: 0.14,
+    throwTechChance: 0.3, grabPressureChance: 0.2,
+    meatyChance: 0.26, clinchTechChance: 0.22, throwWhiffPunishChance: 0.4,
+    quickRiseChance: 0.32, wakeDelayChance: 0.12, airRecoveryChance: 0.28, perfectGuardChance: 0.12,
+    tauntChance: 0.12,
+    repeatLimit: 2,
+  }),
+  pro: Object.freeze({
+    id: "pro", label: "PRO", reactionFrames: 9, decisionFrames: 9,
+    defenseChance: 0.76, antiAirChance: 0.72, comboChance: 0.65,
+    throwChance: 0.22, meterChance: 0.68, wakeupReversalChance: 0.52, errorChance: 0.08,
+    throwTechChance: 0.56, grabPressureChance: 0.34,
+    meatyChance: 0.5, clinchTechChance: 0.44, throwWhiffPunishChance: 0.66,
+    quickRiseChance: 0.55, wakeDelayChance: 0.16, airRecoveryChance: 0.5, perfectGuardChance: 0.24,
+    tauntChance: 0.05,
+    repeatLimit: 3,
+  }),
+  final: Object.freeze({
+    id: "final", label: "FINAL", reactionFrames: 6, decisionFrames: 7,
+    defenseChance: 0.87, antiAirChance: 0.84, comboChance: 0.8,
+    throwChance: 0.29, meterChance: 0.84, wakeupReversalChance: 0.7, errorChance: 0.04,
+    throwTechChance: 0.78, grabPressureChance: 0.48,
+    meatyChance: 0.72, clinchTechChance: 0.66, throwWhiffPunishChance: 0.84,
+    quickRiseChance: 0.78, wakeDelayChance: 0.2, airRecoveryChance: 0.68, perfectGuardChance: 0.38,
+    tauntChance: 0.02,
+    repeatLimit: 3,
+  }),
+});
+
+export const DEFAULT_AI_DIFFICULTY = "street";
+
+// Ordered easiest to hardest for the difficulty pickers.
+export const AI_DIFFICULTY_ORDER = Object.freeze(["passive", "rookie", "street", "pro", "final"]);
+
+// Release 1.8 GRIND: registered custom difficulty tiers (the survival ramp
+// lerps between the named tiers and registers the blend per bout). The
+// registry is deterministic-derived config — never written from a sim path —
+// and the persisted difficulty picker still only ever sees the named tiers
+// because normalizeAiDifficulty deliberately ignores custom entries.
+const CUSTOM_AI_DIFFICULTIES = new Map();
+
+export function registerAiDifficulty(id, settings) {
+  if (AI_DIFFICULTIES[id]) throw new Error(`Cannot override built-in AI difficulty: ${id}`);
+  CUSTOM_AI_DIFFICULTIES.set(String(id), Object.freeze({ ...settings, id: String(id) }));
+  return CUSTOM_AI_DIFFICULTIES.get(String(id));
+}
+
+export function resolveAiSettings(id) {
+  return AI_DIFFICULTIES[id] || CUSTOM_AI_DIFFICULTIES.get(id) || AI_DIFFICULTIES[DEFAULT_AI_DIFFICULTY];
+}
+
+function isKnownAiDifficulty(id) {
+  return Boolean(AI_DIFFICULTIES[id] || CUSTOM_AI_DIFFICULTIES.has(id));
+}
+
+export function isPassiveDifficulty(difficulty) {
+  return normalizeAiDifficulty(difficulty) === "passive";
+}
+
+export function normalizeAiDifficulty(id) {
+  return AI_DIFFICULTIES[id] ? id : DEFAULT_AI_DIFFICULTY;
+}
+
+export function createAiBrain(difficulty = DEFAULT_AI_DIFFICULTY) {
+  const id = isKnownAiDifficulty(difficulty) ? String(difficulty) : DEFAULT_AI_DIFFICULTY;
+  return {
+    difficulty: id,
+    observations: [],
+    opponentMemory: createOpponentMemory(),
+    lastConfirmReadKey: "",
+    lastHabitReadFrame: -Infinity,
+    exchangeUntil:0, lastExchangeFrame:-Infinity, previousAttack:false, exchangeContact:false,
+    exchangeMoves:0, exchangeSerial:-1,
+    confirmRoll:.5, strategy:null, context:{},
+    feint:null,lastFeintFrame:-Infinity,blockedPlanUntil:-Infinity,lastStringResult:"",signatureVariant:0,
+    nextDecisionFrame: 0,
+    intent: { movement: "hold", action: null, reason: "boot" },
+    lastDecisionFrame: -Infinity,
+    lastObservedFrame: -1,
+    lastComboKey: "",
+    // 5.3 CLOSE RANGE: the two close-range reads are COMMITMENTS, not a fresh
+    // coin flip per frame. `roll` is a new RNG draw every tick, and both reads
+    // need the brain to look every frame (a meaty is a 4-8 frame window; a
+    // clinch tech is 7), so the decision is latched once per knockdown and
+    // once per clinch and only the TIMING is re-evaluated after that.
+    okiWindowEnd: -1,
+    okiTake: false,
+    clinchTick: -1,
+    clinchTake: false,
+    recentActions: [],
+    suppressedRepeats: 0,
+    decisions: 0,
+  };
+}
+
+export function resetAiBrain(brain, difficulty = brain?.difficulty || DEFAULT_AI_DIFFICULTY) {
+  const fresh = createAiBrain(difficulty);
+  if (!brain) return fresh;
+  Object.assign(brain, fresh);
+  return brain;
+}
+
+export function visibleOpponentObservation(opponent, frame, projectiles = []) {
+  const attack = opponent?.attacking;
+  return Object.freeze({
+    frame,
+    fighterId:opponent?.kitId||opponent?.id||opponent?.def?.id,
+    projectiles: projectiles.filter(p=>p.ownerSide===opponent?.side).map(p=>({x:p.x,y:p.y,vx:p.vx,vy:p.vy||0,gravity:p.gravity||0,width:p.width,height:p.height,level:p.level,lifeFrames:p.lifeFrames,armFrames:p.armFrames||0})),
+    x: opponent?.x ?? 0,
+    y: opponent?.y ?? 0,
+    grounded: Boolean(opponent?.grounded),
+    juggled: Boolean(opponent?.pendingKnockdown || opponent?.airHitstunFrames > 0),
+    crouching: Boolean(opponent?.crouch),
+    guarding: Boolean(opponent?.guarding),
+    down: Boolean(opponent?.down),
+    wakeupFrames: opponent?.wakeupFrames || 0,
+    // 5.3 OKIZEME / CLOSE RANGE: the knockdown clock (so the brain can walk
+    // in before the rise instead of reacting to it) and the swing's total
+    // length (so it can tell a live throw from one that has already whiffed).
+    // Both are on-screen facts — the animation says them — not hidden state.
+    knockdownFrames: opponent?.knockdownFrames || 0,
+    attackTotalFrames: attack?.totalFrames ?? 0,
+    attacking: Boolean(attack),
+    attackLevel: attack?.level || null,
+    attackKind: attack?.kind || null,
+    attackFrame: opponent?.attackFrame || 0,
+    attackStartupFrame: attack?.activeStartFrame ?? Infinity,
+    attackActiveEndFrame: attack?.activeEndFrame ?? -Infinity,
+    attackRange: attack?.range || 0,
+    grabbing: Boolean(opponent?.grabbing),
+    health: opponent?.health ?? 100,
+    meter: opponent?.meter ?? 0,
+  });
+}
+
+export function recordAiObservation(brain, frame, opponent, projectiles = []) {
+  const observation = visibleOpponentObservation(opponent, frame, projectiles);
+  brain.observations.push(observation);
+  const retention = resolveAiSettings(brain.difficulty).reactionFrames + 90;
+  while (brain.observations.length > retention) brain.observations.shift();
+  return observation;
+}
+
+export function getReactionObservation(brain, frame) {
+  const cutoff = frame - resolveAiSettings(brain.difficulty).reactionFrames;
+  for (let index = brain.observations.length - 1; index >= 0; index -= 1) {
+    if (brain.observations[index].frame <= cutoff) return brain.observations[index];
+  }
+  return null;
+}
+
+function mixRoll(roll, salt) {
+  const value = Math.sin((Number(roll) || 0) * 917.17 + salt * 61.73) * 43758.5453;
+  return value - Math.floor(value);
+}
+
+function emptyInput() {
+  return {
+    left: false, right: false, down: false, guard: false, jump: false,
+    light: false, heavy: false, special: false, enhanced: false, throw: false,
+    super: false, final: false,
+  };
+}
+
+function applyMovement(input, movement, self, observation) {
+  const towardRight = observation.x > self.x;
+  if (movement === "advance") {
+    input.right = towardRight;
+    input.left = !towardRight;
+  } else if (movement === "retreat") {
+    input.right = !towardRight;
+    input.left = towardRight;
+  }
+}
+
+/**
+ * Release 1.7: just-defend gate. A justDefend intent only actually holds the
+ * guard input once the observed attack is within the Perfect Guard window of
+ * going active (compensating for how stale the reaction-delayed observation
+ * is), so the AI's block STARTS just before impact exactly like a human
+ * tapping back late. Pure frame math on the visible observation — no reads of
+ * hidden opponent state.
+ */
+export function justDefendHold(observation, frame) {
+  if (!observation?.attacking) return false;
+  const observationAge = frame - observation.frame;
+  const framesUntilActive = (observation.attackStartupFrame - observation.attackFrame) - observationAge;
+  return framesUntilActive <= 4;
+}
+
+/**
+ * 5.3 OKIZEME — meaty timing. The last `wakeupVulnerableFrames` of a rise
+ * carry hurtboxes (engine/defense.mjs), so a strike started `startup` frames
+ * before that window opens is active on it. This compensates for the
+ * reaction-delayed observation exactly like justDefendHold does, and reads
+ * only the visible wake clock — never the hidden wake option, which is
+ * precisely the thing the attacker is supposed to be guessing.
+ *
+ * Returns true through the whole window (not just its first frame) so a brain
+ * whose decision tick lands late still swings instead of freezing.
+ */
+export function meatyTiming(observation, frame, startup = 5) {
+  if (!observation || observation.wakeupFrames <= 0) return false;
+  const age = frame - observation.frame;
+  const untilVulnerable = (observation.wakeupFrames - DEFENSE_RULES.wakeupVulnerableFrames) - age;
+  return untilVulnerable <= startup && untilVulnerable > -DEFENSE_RULES.wakeupVulnerableFrames;
+}
+
+/**
+ * 5.3 CLOSE RANGE — is the opponent's live swing a THROW that has already
+ * missed? A whiffed throw now runs its full 32-39 frames plus the 0.25 whiff
+ * tax, which is the punish window this pass created; the brain reads it off
+ * the same visible fields a player reads off the animation (a grab that is
+ * past its active frames with nobody in its hands).
+ */
+export function whiffedThrowPunish(observation, frame) {
+  if (!observation?.attacking || observation.attackLevel !== ATTACK_LEVELS.THROW) return false;
+  if (observation.grabbing) return false;
+  const age = Math.max(0,frame - observation.frame);
+  const current = observation.attackFrame + age;
+  return current > observation.attackActiveEndFrame && current < observation.attackTotalFrames;
+}
+
+// 5.4 PERSONAS: a dash intent is pressed the way a human presses it — two
+// toward-edges inside MOVEMENT_RULES.dashTapWindowFrames. The brain's input
+// is a held state, so the release has to be explicit: neutral, toward,
+// neutral, toward-and-hold over the four ticks after the decision. Only a
+// `dash: true` intent takes this path.
+function applyDashMovement(input, self, observation, age) {
+  const towardRight = observation.x > self.x;
+  if (age === 0 || age === 2) return;
+  input.right = towardRight;
+  input.left = !towardRight;
+}
+
+function inputFromIntent(intent, self, observation, pulseAction = false, frame = observation.frame, decidedAt = -Infinity) {
+  const input = emptyInput();
+  if (intent.dash) applyDashMovement(input, self, observation, frame - decidedAt);
+  else applyMovement(input, intent.movement, self, observation);
+  input.guard = Boolean(intent.guard) && (!intent.justDefend || justDefendHold(observation, frame));
+  input.down = Boolean(intent.down);
+  input.jump = Boolean(intent.jump && pulseAction);
+  if (pulseAction && intent.action) input[intent.action] = true;
+  // Release 1.7 wave 11: a kick-limbed normal rides the same limb selector a
+  // human uses, so advancing lights and heavies naturally come out as the
+  // forward command kicks.
+  if (pulseAction && intent.limb === "kick" && (intent.action === "light" || intent.action === "heavy")) {
+    input.limb = "kick";
+    input.kick = true;
+  }
+  if (intent.action === "throw") {
+    // Grabs are a direction plus LP/LK, so hold toward or away from the opponent
+    // exactly like a human would.
+    const towardRight = observation.x > self.x;
+    input.right = intent.throwBack ? !towardRight : towardRight;
+    input.left = intent.throwBack ? towardRight : !towardRight;
+    input.throwBack = Boolean(intent.throwBack);
+  }
+  return input;
+}
+
+function enhancedVersion(action) {
+  return {
+    special: "enhanced",
+    commandSpecial: "enhancedCommandSpecial",
+    backSpecial: "enhancedBackSpecial",
+    launcher: "enhancedLauncher",
+  }[action] || action;
+}
+
+function comboFollowup(self, settings, roll, context = {}, observation = null) {
+  if (!self.attacking || self.attackConnected !== "hit") return null;
+  const comboKey = `${self.attackSerial || 0}:${self.attackHits || 0}`;
+  if (self.aiBrain?.lastComboKey === comboKey) return null;
+  if (context.exhibition && observation) {
+    const chosenRoll=self.aiBrain?.confirmRoll ?? roll;
+    if (mixRoll(chosenRoll,2)>=settings.comboChance)return null;
+    const id=self.kitId||self.id||self.def?.kitId||self.def?.id;
+    const action=selectComboContinuation(id,self,observation,mixRoll(chosenRoll,3));
+    return action ? {action,comboKey,confirmed:action==='super',objective:comboObjective(self,observation)} : null;
+  }
+  // 5.4 GRIT POLICY (sweep #6, demo personas only — `superConfirmChance` is
+  // unset on every player-facing tier). A full bar on a CONFIRMED hit is the
+  // super, ahead of the combo roll: the same confirm window the sim opens for
+  // a human (fighter.confirmWindowFrames, set at every contact site) is the
+  // gate, and attackConnected is the fallback for a view without the field.
+  // Measured before this: a demo fighter sat on 100 Grit for 30-39% of the
+  // fight and 20 of 32 rounds ended with the bar still full.
+  if ((settings.superConfirmChance || 0) > 0
+    && self.meter >= GRIT_RULES.superCost
+    && (self.confirmWindowFrames === undefined || self.confirmWindowFrames > 0)
+    && mixRoll(roll, 40) < settings.superConfirmChance) {
+    return { action: "super", comboKey, confirmed: true };
+  }
+  if (mixRoll(roll, 2) >= settings.comboChance) return null;
+  if (self.meter >= GRIT_RULES.superCost && mixRoll(roll, 3) < settings.meterChance) return { action: "super", comboKey };
+  const current = self.attacking.kitAction;
+  let action = ["light", "heavy", "driveHeavy"].includes(current) ? "special"
+    : current === "special" ? "commandSpecial"
+      : current === "commandSpecial" ? "launcher"
+        : "special";
+  if (self.meter >= GRIT_RULES.enhancedSpecialCost && mixRoll(roll, 4) < settings.meterChance) {
+    action = enhancedVersion(action);
+  }
+  return { action, comboKey };
+}
+
+// Project only the animation already observed through the reaction delay.
+// Once its active window has ended, a strike is an opening, not a threat.
+export function observedAttackTiming(observation, frame) {
+  const age = Math.max(0, frame - observation.frame);
+  const now = (observation.attackFrame ?? 0) + age;
+  const activeEnd = observation.attackActiveEndFrame ?? Infinity;
+  return {
+    live: observation.attacking && now <= activeEnd,
+    recovery: observation.attacking && now > activeEnd
+      ? Math.max(0, (observation.attackTotalFrames ?? 0) - now) : 0,
+  };
+}
+
+export function selectRecoveryPunish(fighterId, distance, recovery) {
+  const choices = [];
+  for (const action of ['light', 'heavy']) for (const limb of ['punch', 'kick']) {
+    const move = getKitMoveProfile(fighterId, action, {limb});
+    if (move && distance <= move.range && move.startupFrames + 2 <= recovery) {
+      choices.push({action, limb, damage: move.damage, startup: move.startupFrames});
+    }
+  }
+  choices.sort((a,b) => b.damage - a.damage || a.startup - b.startup);
+  const best = choices[0];
+  return best ? {movement:'hold', action:best.action, limb:best.limb, reason:'recovery-punish'} : null;
+}
+
+// The exhibition director still supplies variety and pacing. A real defensive
+// read or confirmed opportunity wins while the fighter can legally act.
+export function preferTacticalInput(brain, input, self) {
+  if (self.down || self.grabbed || self.grabbing || self.wakeupFrames > 0
+    || self.hitstunFrames > 0 || self.blockstunFrames > 0) return false;
+  const reason = brain.intent?.reason;
+  if(['blocked-recovery','attack-commit'].includes(reason) && self.attacking)return true;
+  if (['hit-confirm','grit-confirm'].includes(reason)) {
+    return ['light','heavy','driveHeavy','super','special','commandSpecial','backSpecial','launcher','enhanced','enhancedCommandSpecial','enhancedBackSpecial','enhancedLauncher'].some(key=>input[key]);
+  }
+  if (self.attacking || !self.grounded) return false;
+  if(reason==='recovery-approach')return true;
+  if(['feint-approach','feint-retreat','feint-watch','blocked-string-throw','blocked-string-low','blocked-string-reset'].includes(reason))return true;
+  if(['projectile-block','projectile-counter','projectile-jump','projectile-advance'].includes(reason))return true;
+  if(['corner-escape','corner-counter','corner-defense','corner-pressure','protect-lead','protect-poke','chase','exchange-reset','style-spacing','style-strike','meter-reserve'].includes(reason))return true;
+  if (['low-block','high-block','bait-heavy','anticipate-low','spacing-defense','crouch-cover'].includes(reason)) return input.guard;
+  return ['windup-interrupt','counter-read','recovery-punish','guard-mix','anti-air','adaptive-anti-air','guard-break-throw','throw-whiff-punish','throw-tech','throw-evade'].includes(reason)
+    && ['light','heavy','launcher','backSpecial','super','throw','jump'].some(key=>input[key]);
+}
+
+export function resolveDemoCpuInput(brain, input, scripted, self, frame) {
+  if(self.attacking && self.attackConnected==='block')return emptyInput();
+  if(preferTacticalInput(brain,input,self))return input;
+  if(self.attacking)return emptyInput(); // Only the brain may choose a checked cancel route.
+  const observation=brain.opponentMemory.last;
+  if(scripted && observation && ['super','enhanced','enhancedCommandSpecial','enhancedBackSpecial','enhancedLauncher']
+    .some(action=>scripted[action] && !meterOpportunity(self,observation,frame,action)))return input;
+  return scripted || input;
+}
+
+export const PASSIVE_INTENT = Object.freeze({ movement: "hold", action: null, reason: "passive" });
+
+function applyRepetitionGuard(brain, intent, settings, roll) {
+  if (!intent.action || !settings.repeatLimit) return intent;
+  const consecutive = [...brain.recentActions].reverse().findIndex((action) => action !== intent.action);
+  const repeated = consecutive < 0 ? brain.recentActions.length : consecutive;
+  if (repeated < settings.repeatLimit) return intent;
+  brain.suppressedRepeats += 1;
+  return {
+    movement: mixRoll(roll, 21) < 0.5 ? "advance" : "retreat",
+    action: null,
+    reason: "reposition-break",
+  };
+}
+
+export function decideAiIntent(brain, {
+  frame,
+  self,
+  observation,
+  roll = 0.5,
+  context = {},
+} = {}) {
+  const settings = resolveAiSettings(brain.difficulty);
+  if (settings.inert) return { ...PASSIVE_INTENT };
+  const fighterId = self.kitId || self.def?.kitId || self.id || self.def?.id;
+  const kit = getFighterKit(fighterId);
+  const distance = Math.abs(observation.x - self.x);
+  const timing = observedAttackTiming(observation, frame);
+  const habits = opponentHabits(brain.opponentMemory);
+  const combo = comboFollowup({ ...self, aiBrain: brain }, settings, roll, context, observation);
+  if (combo) {
+    return {
+      movement: "hold", action: combo.action,
+      reason: combo.confirmed ? "grit-confirm" : "hit-confirm", comboKey: combo.comboKey, comboObjective:combo.objective,
+    };
+  }
+
+  if(context.exhibition && self.attacking)return {movement:'hold',action:null,
+    reason:self.attackConnected==='block'?'blocked-recovery':'attack-commit'};
+
+  // Release 1.7: downed — pick a wake-up option through the same inputs a
+  // human uses (Up pulse quick-rises, Down held delays the getaway).
+  if (self.down && self.knockdownFrames > 0) {
+    if (mixRoll(roll, 22) < (settings.quickRiseChance || 0)) {
+      return { movement: "hold", action: null, jump: true, reason: "quick-rise" };
+    }
+    if (mixRoll(roll, 23) < (settings.wakeDelayChance || 0)) {
+      return { movement: "hold", action: null, down: true, reason: "delay-wakeup" };
+    }
+    return { movement: "hold", action: null, guard: true, reason: "downed" };
+  }
+
+  // 5.3 CLOSE RANGE: caught in a clinch — the REACTION tech. The hold runs
+  // 11-18 frames and its first `clinchTechWindowFrames` accept a fresh grab
+  // of your own, so the CPU answers with the same →+LP a human would inside
+  // the same window. Sits above every other branch because a grabbed fighter
+  // has no other legal option.
+  if (self.grabbed) {
+    const startTick = self.grabbed.startTick ?? -1;
+    if (brain.clinchTick !== startTick) {
+      brain.clinchTick = startTick;
+      brain.clinchTake = mixRoll(roll, 33) < (settings.clinchTechChance ?? settings.throwTechChance ?? 0);
+    }
+    if (brain.clinchTake && (self.grabbed.frame || 0) <= DEFENSE_RULES.clinchTechWindowFrames) {
+      return { movement: "hold", action: "throw", reason: "clinch-tech" };
+    }
+    return { movement: "hold", action: null, reason: "clinched" };
+  }
+
+  // Release 1.7: juggled — tech out with an attack button once the sim's
+  // escape window opens, at the difficulty's configured rate.
+  if (!self.grounded && self.pendingKnockdown) {
+    if (self.airTechArmed && mixRoll(roll, 24) < (settings.airRecoveryChance || 0)) {
+      return { movement: "hold", action: "light", reason: "air-tech" };
+    }
+    return { movement: "hold", action: null, reason: "juggled" };
+  }
+
+  if(context.exhibition && mixRoll(roll,47)<settings.defenseChance){
+    const response=projectileIntent(self,observation,frame,mixRoll(roll,48));
+    if(response)return response;
+  }
+
+  // 5.3 CLOSE RANGE: punish a whiffed throw. The commitment band means a
+  // grab pressed just outside its reach now runs 42-51 frames of tail; that
+  // is the biggest free punish in the game and the brain must take it.
+  if (self.grounded && !self.attacking && !self.hitstunFrames && !self.blockstunFrames
+    && !self.wakeupFrames && whiffedThrowPunish(observation, frame)
+    && mixRoll(roll, 34) < (settings.throwWhiffPunishChance || 0)) {
+    const punish=selectRecoveryPunish(fighterId,distance,timing.recovery);
+    if(punish)return {...punish,reason:'throw-whiff-punish'};
+  }
+
+  if (self.grounded && !self.attacking && !self.hitstunFrames && !self.blockstunFrames
+    && !self.wakeupFrames && !observation.down && observation.grounded
+    && observation.attackLevel !== ATTACK_LEVELS.THROW && timing.recovery > 0
+    && mixRoll(roll, 43) < (context.exhibition?Math.min(.97,settings.defenseChance*exchangeStyle(fighterId).punish/.76):settings.defenseChance)) {
+    const punish = selectRecoveryPunish(fighterId, distance, timing.recovery);
+    if (punish) return punish;
+  }
+
+  if(context.exhibition){
+    const approach=recoveryApproach(self,observation,frame);
+    if(approach)return approach;
+  }
+
+  // 5.3 OKIZEME: the meaty. The last rising frames carry hurtboxes now, so a
+  // knockdown is finally worth pressure: walk in while the opponent is still
+  // down, watch the rise, and swing so the active window lands on the 4-8
+  // vulnerable frames. A command grab is legal on the way up after a STRIKE
+  // knockdown (the 40-frame throw immunity is reserved for throws and techs),
+  // so grapplers mix it in — that is the strike/throw half of the read, and
+  // quick-rise/delayed-rise is what makes it a guess rather than a script.
+  //
+  // The take is decided ONCE per knockdown (the roll is a fresh RNG draw every
+  // tick, and stepAiBrain re-decides every frame while the reason is
+  // "oki-approach" so the press can be timed). Being early is not free: the
+  // strike meets the hurtbox-less half of the rise, pays the whiff tax and
+  // eats the reversal — the same risk a human takes guessing the rise.
+  const opponentRising = Boolean(observation.down) || observation.wakeupFrames > 0;
+  if (opponentRising && distance <= 240) {
+    if (frame > (brain.okiWindowEnd ?? -1)) {
+      brain.okiWindowEnd = frame + DEFENSE_RULES.knockdownFrames + DEFENSE_RULES.wakeupFrames + 30;
+      brain.okiTake = mixRoll(roll, 36) < (settings.meatyChance || 0);
+    }
+    if (brain.okiTake) {
+      if (meatyTiming(observation, frame, 5) && distance <= 170) {
+        const grabMeaty = distance <= THROW_RULES.grabRange
+          && mixRoll(roll, 37) < (settings.grabPressureChance || 0);
+        if (grabMeaty) return { movement: "hold", action: "throw", reason: "meaty-throw" };
+        return {
+          movement: "hold",
+          action: "light",
+          limb: mixRoll(roll, 38) < 0.45 ? "kick" : "punch",
+          down: mixRoll(roll, 39) < 0.4,
+          reason: "meaty",
+        };
+      }
+      return {
+        movement: distance > 118 ? "advance" : "hold",
+        action: null,
+        reason: "oki-approach",
+      };
+    }
+  }
+
+  // Release 1.7 wave 11: disrespect. With the opponent visibly down and the
+  // spacing safe, low difficulties sometimes burn the knockdown on a taunt —
+  // through the same taunt input a human uses. Passive never reaches here.
+  if (observation.down && distance > 190 && mixRoll(roll, 26) < (settings.tauntChance || 0)) {
+    return { movement: "hold", action: "taunt", reason: "taunt" };
+  }
+
+  // Learned reads use only old, visible patterns and still take a fallible roll.
+  const canRead = self.grounded && !self.attacking && !self.hitstunFrames
+    && !self.blockstunFrames && !self.wakeupFrames && !self.down;
+  const readChance = Math.min(.88, settings.comboChance + .18);
+  if (canRead && mixRoll(roll, 45) < readChance) {
+    if (habits.jumps >= 3 && !observation.grounded && !observation.down && !observation.juggled) {
+      const action = kit?.ai.antiAirAction || 'launcher';
+      const move = getKitMoveProfile(fighterId, action);
+      if (move && distance <= move.range) return {movement:'hold',action,reason:'adaptive-anti-air'};
+    }
+    if (habits.holdsGuard && observation.guarding && observation.grounded && !timing.live
+      && distance < THROW_RULES.grabRange - 12) {
+      return {movement:'hold',action:'throw',reason:'guard-break-throw'};
+    }
+    const retreatRoom = observation.x > self.x ? self.x - MOVEMENT_RULES.stageMinX
+      : MOVEMENT_RULES.stageMaxX - self.x;
+    if (habits.repeatedHeavy && timing.live && observation.attackKind === 'heavy'
+      && distance > observation.attackRange * .65 && distance < observation.attackRange + 55 && retreatRoom > 85) {
+      return {movement:'retreat',action:null,guard:true,down:observation.attackLevel===ATTACK_LEVELS.LOW,reason:'bait-heavy'};
+    }
+    if (habits.repeatedLow && !observation.attacking && observation.grounded && distance < 150
+      && frame-brain.lastHabitReadFrame > 150) {
+      return {movement:'hold',action:null,guard:true,down:true,reason:'anticipate-low'};
+    }
+  }
+
+  // 5.4 PERSONAS: the counter-puncher answers a swing with the kit's AUTHORED
+  // counter (alan's backSpecial, counterRange 172) at `counterFirstChance`
+  // before the block roll gets to it. On every player-facing tier that knob
+  // is unset and the defense branch below runs first exactly as in 5.3 —
+  // which is why, sampled, alan's authored counter fired on 0% of swings on
+  // the flat demo tier and the "counter-puncher" read as a wall.
+  if (canRead && (settings.counterFirstChance || 0) > 0 && timing.live && kit?.ai?.counterAction
+    && distance < (kit.ai.counterRange || 160) && self.grounded
+    && mixRoll(roll, 42) < settings.counterFirstChance) {
+    return { movement: "hold", action: kit.ai.counterAction, reason: "counter-read" };
+  }
+
+  // Preserve a counter specialist's first read before generic slips/parries
+  // consume the same opportunity. Other tiers have no counter-first chance.
+  if (canRead && mixRoll(roll, 46) < settings.defenseChance) {
+    const defense = deliberateDefense(self, observation, frame, mixRoll(roll, 47));
+    if (defense) return defense;
+  }
+
+  const incomingRange = Math.min(300, (observation.attackRange || 105) + 42);
+  if (timing.live && distance <= incomingRange) {
+    const defend = mixRoll(roll, 5) < settings.defenseChance;
+    if (observation.attackLevel === ATTACK_LEVELS.THROW && defend) {
+      // Teching means answering with a grab of your own inside the tech window.
+      if (mixRoll(roll, 17) < (settings.throwTechChance || 0)) {
+        return { movement: "hold", action: "throw", reason: "throw-tech" };
+      }
+      return mixRoll(roll, 6) < 0.52
+        ? { movement: "retreat", action: null, jump: true, reason: "throw-evade" }
+        : { movement: "retreat", action: "backSpecial", reason: "throw-evade" };
+    }
+    if (defend) {
+      // Release 1.7: sometimes time the block as a just-defend — the guard
+      // input is then withheld until the attack is about to land (see
+      // justDefendHold), which is exactly how a human fishes for a Perfect
+      // Guard instead of holding back all day.
+      const justDefend = mixRoll(roll, 25) < (settings.perfectGuardChance || 0);
+      return {
+        movement: "hold",
+        action: null,
+        guard: true,
+        justDefend,
+        down: observation.attackLevel === ATTACK_LEVELS.LOW,
+        reason: observation.attackLevel === ATTACK_LEVELS.LOW ? "low-block" : "high-block",
+      };
+    }
+  }
+
+  if (!observation.grounded && !observation.down && distance < 190
+    && mixRoll(roll, 7) < settings.antiAirChance) {
+    return { movement: "hold", action: kit?.ai.antiAirAction || "launcher", reason: "anti-air" };
+  }
+
+  if ((self.justWoke || (self.wakeupFrames > 0 && self.wakeupFrames <= 4))) {
+    if (self.meter >= GRIT_RULES.enhancedSpecialCost
+      && mixRoll(roll, 8) < settings.wakeupReversalChance) {
+      return { movement: "hold", action: "enhancedLauncher", reason: "wakeup-reversal" };
+    }
+    return { movement: "hold", action: null, guard: true, down: mixRoll(roll, 9) < 0.36, reason: "wakeup-block" };
+  }
+
+  if (context.exhibition) {
+    if (self.attacking && self.attackConnected==='block')return {movement:'hold',action:null,reason:'blocked-recovery'};
+    // The reset owns ordinary neutral decisions. Live defense and a punish
+    // above this branch may interrupt it, but a feint cannot erase it.
+    if(frame<brain.exchangeUntil){
+      const reset=strategicIntent({id:fighterId,self,opponent:observation,frame,
+        timeRemaining:context.timeRemaining,roll,until:brain.exchangeUntil});
+      if(reset)return reset;
+    }
+    const alternate=blockedStringAlternative(brain,self,observation,frame,mixRoll(roll,52));
+    if(alternate)return alternate;
+    const feint=feintIntent(brain,self,observation,frame,mixRoll(roll,51),context.timeRemaining);
+    if(feint)return feint;
+    const strategy=strategicIntent({id:fighterId,self,opponent:observation,frame,
+      timeRemaining:context.timeRemaining,roll:mixRoll(roll,46),until:brain.exchangeUntil,previousMovement:brain.intent?.movement});
+    if(strategy)return strategy;
+  }
+
+  // 5.3 CLOSE RANGE: the brain grabs strictly inside the throw's REACH, not
+  // the wider commit band — pressing in the band is now a whiffed throw with
+  // a real punish window, and a CPU that mashed it there would be feeding.
+  if (distance < Math.min(THROW_RULES.grabRange - 12, 96 * (settings.spacing || 1))
+    && mixRoll(roll, 10) < settings.throwChance) {
+    // Corner-carry with a back throw sometimes, forward throw otherwise.
+    const back = mixRoll(roll, 18) < (settings.grabPressureChance || 0) * 0.5;
+    return { movement: "hold", action: "throw", throwBack: back, reason: back ? "back-throw" : "throw" };
+  }
+
+  // Respond to the visible guard instead of repeatedly feeding the same block.
+  // This remains a fallible, delayed read; the opponent can switch stance.
+  if (observation.guarding && observation.grounded && !timing.live && self.grounded
+    && mixRoll(roll, 44) < settings.comboChance) {
+    const crouching = !observation.crouching;
+    const action = crouching ? 'light' : 'heavy';
+    const move = getKitMoveProfile(fighterId, action, {crouching, forwardHeld:!crouching});
+    if (move && distance <= move.range) return {
+      movement: crouching ? 'hold' : 'advance', action, down:crouching, reason:'guard-mix',
+    };
+  }
+
+  // 4.3 DEMO SPACING: when a patient (attract-mode) brain finds itself deep
+  // inside the clinch with nothing incoming, it opens the gap first — a
+  // back-jump a third of the time, a back-walk otherwise — so the next
+  // exchange is readable from a distance.
+  // 5.4 PERSONAS: `spaceRange` is the persona's own clinch line (150 as
+  // before when unset). A grappler or a rushdown persona sets it to 0 — the
+  // clinch IS their game — which is what removed the walk reversals measured
+  // at 21-33 per minute per fighter.
+  if ((settings.patience || 0) > 0 && !observation.attacking && self.grounded
+    && distance < (settings.spaceRange ?? 150) && mixRoll(roll, 30) < settings.patience) {
+    // (5.4: the demo CLOCK tier sets spaceJumpShare 0 — a back-jump into
+    // the other brain's anti-air launcher was the juggle that floored a bar
+    // in 15 s on a round meant to reach the buzzer.)
+    return mixRoll(roll, 31) < (settings.spaceJumpShare ?? 0.34)
+      ? { movement: "retreat", action: null, jump: true, reason: "demo-space-jump" }
+      : { movement: "retreat", action: null, reason: "demo-space" };
+  }
+
+  // 5.4 PERSONAS: the persona's band weights ride into the kit table. Every
+  // one is undefined on the built-in tiers, which selectKitAiIntent resolves
+  // to its identity default, so a played match reads the 5.3 tables exactly.
+  let intent = selectKitAiIntent(fighterId, {
+    distance,
+    opponentAirborne: !observation.grounded,
+    opponentAttacking: timing.live,
+    meter: self.meter,
+    roll: mixRoll(roll, 11),
+    spacing: settings.spacing || 1,
+    patience: settings.patience || 0,
+    // 5.4: only the demo CLOCK tier sets `swing`; every other tier is 1.
+    swing: settings.swing ?? 1,
+    floors: settings.spacingFloors,
+    approachSpacing: settings.approachSpacing,
+    pokeWeight: settings.pokeWeight,
+    rangedWeight: settings.rangedWeight,
+    throwWeight: settings.throwWeight,
+    closeWeight: settings.closeWeight,
+    counterChance: settings.counterChance,
+    holdSlack: settings.holdSlack,
+  }) || { movement: "hold", action: null };
+
+  // 5.4 PERSONAS: the rushdown dash-in. An empty-handed walk-in from the
+  // approach band sometimes becomes a double-tap dash (see inputFromIntent) —
+  // the same →→ a human presses — at the persona's share. Zero on every
+  // player-facing tier.
+  if ((settings.dashInChance || 0) > 0 && intent.movement === "advance" && !intent.action
+    && self.grounded && distance > 200 && mixRoll(roll, 41) < settings.dashInChance) {
+    intent = { movement: "advance", action: null, dash: true, reason: "dash-in" };
+  }
+
+  // 5.4 GRIT POLICY knobs (unset on the built-in tiers = the 5.3 numbers):
+  // `meterSuperShare` is the standalone super's share of meterChance inside
+  // `superRange`; `exShare` the EX conversion's share on a half bar.
+  if (self.meter >= GRIT_RULES.superCost
+    && distance < (settings.superRange ?? 270)
+    && mixRoll(roll, 12) < settings.meterChance * (settings.meterSuperShare ?? 0.38)) {
+    intent = { movement: "hold", action: "super", reason: "meter-super" };
+  } else if (intent.action
+    && self.meter >= GRIT_RULES.enhancedSpecialCost
+    && mixRoll(roll, 13) < settings.meterChance * (settings.exShare ?? 0.5)) {
+    intent = { ...intent, action: enhancedVersion(intent.action), reason: "enhanced-special" };
+  }
+
+  if (mixRoll(roll, 14) < settings.errorChance) {
+    return mixRoll(roll, 15) < 0.55
+      ? { movement: "hold", action: null, reason: "hesitation" }
+      : { movement: intent.movement === "advance" ? "retreat" : "advance", action: null, reason: "spacing-error" };
+  }
+  // Release 1.7 wave 11: normals split between limbs, so held-position pokes
+  // mix the kick normals into ordinary move selection…
+  if (["light", "heavy"].includes(intent.action) && mixRoll(roll, 27) < 0.4) {
+    intent = { ...intent, limb: "kick" };
+  }
+  // …and an empty-handed approach sometimes walks in behind an advancing kick
+  // — which is exactly the forward command normals, reached through the same
+  // forward-held + kick-limb inputs a human uses.
+  // (Demo spacing: a patient brain walks in empty-handed instead of kicking
+  // its way into the clinch.)
+  if (intent.movement === "advance" && !intent.action && distance < 190 && mixRoll(roll, 28) < 0.35 * (1 - (settings.patience || 0))) {
+    intent = {
+      ...intent,
+      action: mixRoll(roll, 29) < 0.5 ? "light" : "heavy",
+      limb: "kick",
+      reason: "advancing-kick",
+    };
+  }
+  // Grounded normals should be selected at their real reach, including the
+  // forward/crouching variants the eventual input will actually produce.
+  if (['light','heavy'].includes(intent.action) && self.grounded) {
+    const move = getKitMoveProfile(fighterId, intent.action, {
+      limb:intent.limb, crouching:Boolean(intent.down), forwardHeld:intent.movement === 'advance',
+    });
+    if (move && distance > move.range) return {movement:'advance', action:null, reason:'close-to-range'};
+  }
+  return { ...intent, reason: intent.reason || "archetype" };
+}
+
+export function stepAiBrain(brain, {
+  frame,
+  self,
+  opponent,
+  roll = 0.5,
+  context = {},
+} = {}) {
+  recordAiObservation(brain, frame, opponent, context.projectiles || []);
+  // A passive brain never produces an input, whatever it can see.
+  if (resolveAiSettings(brain.difficulty).inert) {
+    brain.intent = { ...PASSIVE_INTENT };
+    brain.lastObservedFrame = frame;
+    return emptyInput();
+  }
+  const observation = getReactionObservation(brain, frame);
+  if (!observation) return emptyInput();
+  brain.lastObservedFrame = observation.frame;
+  learnOpponent(brain.opponentMemory, observation);
+  brain.context={exhibition:context.exhibition,timeRemaining:context.timeRemaining};
+  const id=self.kitId||self.id||self.def?.kitId||self.def?.id;
+  brain.strategy=context.exhibition?{plan:roundStrategy(self,observation,context.timeRemaining),style:fighterStyle(id).name}:null;
+  if(context.exhibition){
+    if(self.attacking && self.attackSerial!==brain.exchangeSerial){
+      brain.exchangeSerial=self.attackSerial;
+      brain.exchangeMoves++;
+    }
+    if(self.attacking && self.attackConnected){brain.exchangeContact=true;brain.lastStringResult=self.attackConnected;}
+    if(brain.previousAttack && !self.attacking){
+      if(brain.lastStringResult==='block')brain.blockedPlanUntil=frame+60;
+      if(brain.exchangeContact)brain.signatureVariant++;
+      brain.lastStringResult='';
+    }
+    if(brain.previousAttack && !self.attacking){
+      brain.exchangeUntil=frame+Math.round(fighterStyle(id).reset*(brain.exchangeContact?1:.6));
+      brain.lastExchangeFrame=frame;
+      brain.nextDecisionFrame=frame;
+      brain.exchangeContact=false;
+      brain.exchangeMoves=0;
+    }
+    brain.previousAttack=Boolean(self.attacking);
+  }
+  const confirmKey = self.attacking && self.attackConnected === 'hit'
+    ? `${self.attackSerial || 0}:${self.attackHits || 0}` : '';
+  const freshConfirm = confirmKey && confirmKey !== brain.lastConfirmReadKey;
+  if (freshConfirm) {brain.lastConfirmReadKey = confirmKey;brain.confirmRoll=roll;}
+  if (frame < brain.nextDecisionFrame && !freshConfirm) {
+    return inputFromIntent(brain.intent, self, observation, false, frame, brain.lastDecisionFrame);
+  }
+
+  brain.intent = applyRepetitionGuard(
+    brain,
+    decideAiIntent(brain, { frame, self, observation, roll, context }),
+    resolveAiSettings(brain.difficulty),
+    roll,
+  );
+  if(context.exhibition && brain.intent.action && !meterOpportunity(self,observation,frame,brain.intent.action))
+    brain.intent={movement:'hold',action:null,guard:true,reason:'meter-reserve'};
+  if (brain.intent.reason === 'anticipate-low') brain.lastHabitReadFrame = frame;
+  brain.recentActions.push(brain.intent.action || null);
+  brain.recentActions = brain.recentActions.slice(-6);
+  if (brain.intent.comboKey) brain.lastComboKey = brain.intent.comboKey;
+  brain.lastDecisionFrame = frame;
+  brain.decisions += 1;
+  // 5.3 CLOSE RANGE: the two timed reads look again NEXT FRAME. A meaty
+  // window is 4-8 frames and a clinch tech 7, both far inside the 7-18-frame
+  // decision cadence, so without this the brain would only ever hit them by
+  // luck. The take itself is already latched (okiTake / clinchTake), so this
+  // buys timing, never extra probability.
+  const timedRead = brain.intent.reason==='recovery-approach' || brain.intent.reason.startsWith("feint-") || brain.intent.reason === "oki-approach" || brain.intent.reason === "clinched"
+    || (context.exhibition && self.attacking && self.attackConnected==='hit' && confirmKey!==brain.lastComboKey);
+  brain.nextDecisionFrame = timedRead ? frame + 1 : frame
+    + resolveAiSettings(brain.difficulty).decisionFrames
+    + Math.floor(mixRoll(roll, 16) * 4);
+  return inputFromIntent(brain.intent, self, observation, true, frame, brain.lastDecisionFrame);
+}
+
+export function aiBrainSnapshot(brain) {
+  const settings = resolveAiSettings(brain.difficulty);
+  return {
+    difficulty: brain.difficulty,
+    reactionFrames: settings.reactionFrames,
+    decisionFrames: settings.decisionFrames,
+    lastDecisionFrame: brain.lastDecisionFrame,
+    lastObservedFrame: brain.lastObservedFrame,
+    nextDecisionFrame: brain.nextDecisionFrame,
+    decisions: brain.decisions,
+    recentActions: [...brain.recentActions],
+    opponentHabits: opponentHabits(brain.opponentMemory),
+    roundsRemembered:brain.opponentMemory.roundsRemembered||0,
+    strategy:brain.strategy,
+    exchangeUntil:brain.exchangeUntil,
+    exchangeMoves:brain.exchangeMoves,
+    signatureVariant:brain.signatureVariant,feint:brain.feint?{...brain.feint}:null,
+    suppressedRepeats: brain.suppressedRepeats,
+    intent: { ...brain.intent },
+  };
+}
