@@ -403,3 +403,25 @@ test('paint spray and swarm audio start with their visible release poses',()=>{
  assert.deepEqual(cinematicFoleyBetween(spray,.8,.8),[]);
  assert.deepEqual(cinematicFoleyBetween(swarm,1.05,1.05),[]);
 });
+
+test('kick recoil and uppercut flight are continuous, mirrored and settled at landing',()=>{
+ for(const facing of [1,-1])for(const id of ['ali','deathblow']){
+  const scene=createKnockoutScene(id,0,facing===1?350:950,facing===1?950:350,1280,'jez');
+  const start=sampleKnockoutScene(scene,scene.impact),mid=sampleKnockoutScene(scene,scene.impact+.25),land=sampleKnockoutScene(scene,scene.impact+31/60),rest=sampleKnockoutScene(scene,scene.impact+1.3);
+  assert.equal(start.victimLift,0);assert.equal(start.victimX,scene.victimTarget);
+  assert.ok((mid.victimX-start.victimX)*facing>0);
+  assert.ok(id==='deathblow'?mid.victimLift>50:mid.victimLift===0);
+  assert.ok(Math.abs(land.victimLift)<1e-9);assert.equal(rest.victimLift,0);
+  assert.equal(rest.victimX,scene.victimTarget+facing*scene.reactionTravel);
+  assert.deepEqual(sampleKnockoutScene(scene,scene.impact+.25),mid);
+ }
+});
+
+test('edge staging reserves the full distance of kick and uppercut recoil',()=>{
+ for(const id of ['ali','deathblow'])for(const facing of [1,-1]){
+  const scene=createKnockoutScene(id,0,facing===1?1100:180,facing===1?1230:50,1280,'jez');
+  const end=sampleKnockoutScene(scene,scene.impact+2);
+  assert.ok(end.victimX>=220&&end.victimX<=1060);
+  assert.equal(Math.abs(end.victimX-scene.victimTarget),scene.reactionTravel);
+ }
+});

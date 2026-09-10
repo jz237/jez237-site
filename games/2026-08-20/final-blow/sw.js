@@ -3,8 +3,8 @@
 // could make Chrome abort the page before it rendered. (Since 5.1 a fetched
 // media file is KEPT, in a second, capped, build-keyed cache â€” see
 // MEDIA_CACHE_NAME â€” which is a different thing from installing it.)
-// 5.8.1: companions across the complete painted movement libraries of all ten fighters.
-const CACHE_NAME = "final-blow-shell-5.8.1-recovery";
+// 5.8.2: companions across the complete painted movement libraries of all ten fighters.
+const CACHE_NAME = "final-blow-shell-5.8.2-recovery";
 // v5.1 #38 â€” the RUNTIME media cache. Sheets, audio, stage plates and the 3D
 // renderer's HD/vendor files are still fetched on demand (never at install:
 // the precache alternative is now 81 MB / ~560 files), but once a file has

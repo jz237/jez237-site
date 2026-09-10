@@ -1120,7 +1120,7 @@ function ensureCinemaAtlas(id, bank = 'cinema-ko') {
 }
 const ensureCinemaKoAtlas = id => ensureCinemaAtlas(id);
 function fighterArtUrl(url) {
-  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.1` : url;
+  return /\/(?:jez|benny|alan|ali|commissioner|cyraxx|deathblow|devil|donald|post)(?:[.-])/.test(url) ? `${url}${url.includes('?') ? '&' : '?'}v=5.8.2` : url;
 }
 const fighterAtlases = {};
 const fighterMoveAtlases = {};
@@ -14353,7 +14353,7 @@ function updateKnockoutScene() {
   const pose=sampleKnockoutScene(scene,elapsed);
   const attacker=state.fighters[scene.winner],victim=state.fighters[1-scene.winner];
   attacker.x=pose.attackerX;victim.x=pose.victimX;
-  attacker.y=victim.y=FLOOR;
+  attacker.y=FLOOR;victim.y=FLOOR-(pose.victimLift||0);
   attacker.grounded=victim.grounded=true;
   attacker.facing=scene.direction;victim.facing=-scene.direction;
   attacker.vx=pose.walking?(scene.attackerTarget-scene.attackerX)/scene.approach:0;
@@ -33079,7 +33079,7 @@ async function registerOfflineGame() {
     return;
   }
   try {
-    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.1-recovery");
+    await navigator.serviceWorker.register("./sw.js?v=final-blow-5.8.2-recovery");
     await navigator.serviceWorker.ready;
     state.offlineReady = true;
     updateOfflineBadge();
@@ -34583,7 +34583,7 @@ function capturePointer(element, pointerId) {
 })();
 
 window.__finalBlowEngine = {
-  version: "5.8.1-ringside",
+  version: "5.8.2-ringside",
   simulationHz: SIMULATION_HZ,
   toggleDebug(enabled = !state.debug) {
     state.debug = Boolean(enabled);

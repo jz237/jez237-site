@@ -734,3 +734,17 @@ Previous goal turn classified as progress. This continuation adds2 generated and
 - Public unmodified CPU demo Jez/Benny rendered15 observed KO atlas cells and settled victory with zero browser exceptions. Evidence work/cinema580/public-cpu-cinema.json and public-cpu-ending.jpg. Local QA controls are intentionally unavailable in production; replaced the initial incompatible QA-based public probe with observational Canvas draw instrumentation and normal demo URL.
 - Public screenshot exposed victory banner obscuring raised hands.5.8.1 positions all roundover announcements at25percent height with half-size headline, including story follow-ups that replace the victory text. Local browser verified Jez/Benny both facings, paused/rollback timing and full fall before announcement. Reviewed latest screenshot: headline above whole upright fighter, no head/hand overlap.
 - Original outstanding cause-specific airborne/wall reaction and detailed motion/audio quality requirements are not proven by this layout change. Goal remains open.
+
+## Cause-specific KO travel follow-up
+
+- Previous turn progress: banner fix committed/pushed asbe27c602278a4a5b85b7ccc37c052552a3e542a8. This turn Cloudflare/GitHub deployment succeeded;77 release assets including CSS match committed bytes.
+- Found kick and uppercut KO victim paths were fixed-position. Added deterministic kick recoil60px and uppercut35px recoil/52px parabolic lift, ending lift at existing31/60sec landing cue. No sprite rotation/stretch or new image edits.
+- Fullsuite781/781PASS. Browser work/probe-cinema581-reactions.mjs completed40cases: Ali/Deathblow against all10 victims, bothfacings, all16reactionframes, zeroexceptions. Reviewed Jez reaction strips for both attackers: entire figures, lift settles, backward kick movement. These runtime checks do not independently prove bounds/anatomy for every captured frame. Changes remain local pending final visual/edge review and publication.
+- Audited actual defeat flow: checkKnockout clears pending knockdown to establish finish window before signature endscene. Preservation of the original airborne/wall impact remains a separate incomplete requirement; these signature reaction improvements do not claim that requirement complete.
+
+## Reaction edge audit and5.8.2
+
+- Current goal turn progress: found real clipping at the recoil-side edge. Reserve reactionTravel in scene victimTarget outer margin before recoil; preserves full60px kick and35px uppercut movement rather than clipping/truncating it.
+- Initial mirror-match failures were instrumentation errors: palette canvases use alt-palette:id:bank names, which the old bounds probe did not recognize; it consequently sampled a reflection. Corrected audit name mapping; no gameplay/palette change for this instrumentation issue.
+- work/probe-cinema582-reaction-bounds.mjs PASS80cases:2attackers/all10victims/bothfacings/bothstartingedges. Each100steps captures2actual sprite bounds;16,000shapes zero offscreen bounds. Evidence work/cinema580/reaction-bounds.json. Fullsuite782/782PASS.
+-5.8.1 public normal CPU banner check alsoPASS and screenshot reviewed: Benny head and raisedhands clear beneath header.5.8.2 prepared for the recoil/spatial followup; public verification still required.
