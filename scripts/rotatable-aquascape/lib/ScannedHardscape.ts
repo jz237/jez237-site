@@ -3,6 +3,7 @@ import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import type {Obstacle} from './TankSpace';
 import {EpiphyteMoss} from './EpiphyteMoss';
 import {aquascapeBranches,bendScannedBranch} from './ScannedBranch';
+import {rockPlacements,shapeScannedRock} from './ScannedRock';
 /** Free photogrammetric surfaces retain their scan UVs while wood bends into the composition. */
 export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],height:(x:number,z:number)=>number){
  const loader=new GLTFLoader();
@@ -12,7 +13,7 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
   loader.loadAsync('./models/rock_moss_set_01/rock_moss_set_01_2k.gltf')
  ]);
  const wood=woodFile.scene.children[0] as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;
- const woodMaterial=wood.material.clone();woodMaterial.color.set(0xc6ad8d);woodMaterial.roughness=.96;woodMaterial.normalScale.set(.85,.85);woodMaterial.side=T.FrontSide;
+ const woodMaterial=wood.material.clone();woodMaterial.color.set(0xa99174);woodMaterial.roughness=.86;woodMaterial.normalScale.set(.95,.95);woodMaterial.side=T.FrontSide;woodMaterial.vertexColors=true;
  for(const texture of [woodMaterial.map,woodMaterial.normalMap,woodMaterial.roughnessMap])if(texture)texture.anisotropy=8;
  for(const branch of aquascapeBranches){
   const {geometry,obstacles:contacts}=bendScannedBranch(wood.geometry,branch);
@@ -20,18 +21,20 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
   moss.sample(mesh,155);obstacles.push(...contacts);
  }
  const sourceRocks=rockFile.scene.children.filter(o=>o instanceof T.Mesh) as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>[];
- const rockMaterial=sourceRocks[0].material.clone();rockMaterial.color.set(0xa1b0a1);rockMaterial.normalScale.set(.9,.9);rockMaterial.roughness=.92;
+ const rockSource=sourceRocks[0].material;
+ const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockSource.aoMap,color:0xa1b0a1,normalScale:new T.Vector2(.8,.8),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
+ rockMaterial.onBeforeCompile=shader=>{
+  shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+   float mineralLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
+   diffuseColor.rgb=mix(vec3(mineralLuma),diffuseColor.rgb,.34)*vec3(.68,.72,.76);
+  `);
+ };
  for(const t of [rockMaterial.map,rockMaterial.normalMap,rockMaterial.roughnessMap])if(t)t.anisotropy=8;
- const placements=[
-  [3,-3.58,.26,2.55,.55,-.25], [2,-2.85,-.85,1.34,1.45,.15], [0,-4.12,-1.38,1.3,.7,.1],
-  [1,-2.83,1.27,1.18,-.7,.0], [4,-1.7,.50,.88,1.0,.1], [2,-.55,-.72,.95,-.8,.25],
-  [5,3.74,-.7,1.23,.5,.1], [3,4.2,1.06,.78,-1.2,.12], [1,2.9,-1.77,.72,.1,.1]
- ];
- for(const [id,x,z,size,yaw,tilt] of placements){
-  const geo=sourceRocks[id].geometry.clone();geo.computeBoundingBox();const box=geo.boundingBox!,center=box.getCenter(new T.Vector3());geo.translate(-center.x,-box.min.y,-center.z);const extent=box.getSize(new T.Vector3()),scale=size/Math.max(extent.x,extent.z);
-  const mesh=new T.Mesh(geo,rockMaterial);mesh.scale.setScalar(scale);mesh.rotation.set(tilt,yaw,.15);mesh.position.set(x,height(x,z)-.12,z);mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
-  mesh.updateMatrixWorld();const worldBox=new T.Box3().setFromObject(mesh),sphere=worldBox.getBoundingSphere(new T.Sphere());obstacles.push({center:sphere.center,radius:sphere.radius*.81});
-  moss.sample(mesh,200);
+ for(const [id,x,z,size,yaw,tilt] of rockPlacements){
+  const geo=shapeScannedRock(sourceRocks[id].geometry,size,yaw,tilt);
+  const mesh=new T.Mesh(geo,rockMaterial);mesh.position.set(x,height(x,z)-.12,z);mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
+  mesh.updateMatrixWorld();const sphere=geo.boundingSphere!.clone().applyMatrix4(mesh.matrixWorld);obstacles.push({center:sphere.center,radius:sphere.radius});
+  moss.sample(mesh,70,.7);
  }
  moss.build(scene);
 }

@@ -1,1 +1,1 @@
-{"compilerOptions":{"target":"ES2022","module":"ESNext","moduleResolution":"bundler","strict":true,"allowImportingTsExtensions":true,"noEmit":true,"skipLibCheck":true,"lib":["ES2022","DOM"]},"include":["main.ts","lib/**/*.ts"]}
+{"compilerOptions":{"target":"ES2022","module":"ESNext","moduleResolution":"bundler","strict":true,"allowImportingTsExtensions":true,"noEmit":true,"skipLibCheck":true,"lib":["ES2022","DOM"]},"include":["main.ts","rock-study.ts","lib/**/*.ts"]}
