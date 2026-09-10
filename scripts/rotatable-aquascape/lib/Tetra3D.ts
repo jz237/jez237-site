@@ -14,9 +14,19 @@ export class Tetra3D {
  private eyes:T.Mesh[]=[];
  constructor(texture:T.Texture,phaseOffset=0,detailed=true){
   this.phase=phaseOffset;this.pectoralPhase=phaseOffset*1.7;
-  const skin=new T.MeshPhysicalMaterial({map:texture,roughness:.43,metalness:.12,clearcoat:.35,clearcoatRoughness:.25});
-  const fin=skin.clone();fin.transparent=true;fin.opacity=.65;fin.alphaTest=.12;fin.side=T.DoubleSide;fin.depthWrite=false;fin.roughness=.55;
-  const pectoral=fin.clone();pectoral.map=null;pectoral.color.set(0xb8d2c8);pectoral.opacity=.48;pectoral.alphaTest=.01;
+  // A submerged wet surface has far less interface contrast than a metallic,
+  // clear-coated object in air. Keep the painted scale detail and colored band.
+  const skin=new T.MeshPhysicalMaterial({map:texture,color:0xd4dfd9,roughness:.49,metalness:0,ior:1.16,specularIntensity:.65,clearcoat:.06,clearcoatRoughness:.42,bumpMap:texture,bumpScale:.00065});
+  const fin=new T.MeshPhysicalMaterial({map:texture,color:0xa5beb3,transparent:true,opacity:.27,alphaTest:.015,side:T.DoubleSide,depthWrite:false,roughness:.62,metalness:0,ior:1.12,specularIntensity:.5});
+  const pectoral=fin.clone();pectoral.map=null;pectoral.color.set(0x819e91);pectoral.opacity=.18;pectoral.alphaTest=0;
+  // Preserve the pigmented tissue where the red tail root meets its clear rays.
+  fin.onBeforeCompile=shader=>{
+   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+float finPigment=smoothstep(1.2,2.,diffuseColor.r/(max(diffuseColor.g,diffuseColor.b)+.003))*smoothstep(.015,.06,diffuseColor.r);
+diffuseColor.a*=mix(1.,3.15,finPigment);
+`);
+  };
+  fin.customProgramCacheKey=()=> 'tetra-pigmented-fin-root-v1';
   // Elliptical cross-sections are joined into a continuous, closed body.
   const profile=[[-.32,.025],[-.26,.041],[-.14,.073],[0,.106],[.14,.115],[.27,.101],[.37,.075],[.445,.038],[.49,.003]];
   const pos:number[]=[],uv:number[]=[],idx:number[]=[];
