@@ -15,23 +15,30 @@ vec4 leafBend(vec3 p){
  float phase=waterTime*leafMotion.z*1.55+leafMotion.x+.32*sin(waterTime*.43+plantRoot.x*.47+plantRoot.z*.71);
  float flowPhase=plantRoot.x*.47+plantRoot.z*.71;
  float surge=.85+.15*sin(waterTime*.37+flowPhase);
- float a=phase-p.y*.9,b=waterTime*.63+flowPhase-p.y*1.4,c=phase*2.7-p.y*4.5;
- float ripple=(1.08*sin(a)+.16*sin(b)+.10*sin(c))*surge;
- float dr=(-.972*cos(a)-.224*cos(b)-.45*cos(c))*surge;
- float twist=.48*sin(phase*.81-p.y*.6+1.2)+.12*sin(phase*2.1-p.y*3.);
- float dt=-.288*cos(phase*.81-p.y*.6+1.2)-.36*cos(phase*2.1-p.y*3.);
+ float a=phase-p.y*1.8,b=waterTime*.63+flowPhase-p.y*1.4,c=phase*2.7-p.y*5.5;
+ float ripple=(1.12*sin(a)+.16*sin(b)+.10*sin(c))*surge;
+ float dr=(-2.016*cos(a)-.224*cos(b)-.55*cos(c))*surge;
+ float twist=.25*sin(phase*.81-p.y*.6+1.2)+.08*sin(phase*2.1-p.y*3.);
+ float dt=-.15*cos(phase*.81-p.y*.6+1.2)-.24*cos(phase*2.1-p.y*3.);
  return vec4(ripple,dr,twist,dt);
 }
 vec3 animatedLeaf(vec3 p){
  vec4 bend=leafBend(p);
- p.z+=leafMotion.y*(bend.x*p.y*(.65+.35*p.y)+p.x*p.y*bend.z);
+ // Quadratic flexibility curves the midrib rather than pivoting a rigid sheet.
+ // A second, smaller component lets blades flutter sideways as well as up/down.
+ float sidePhase=waterTime*leafMotion.z*1.13+leafMotion.x*.73-p.y*2.2;
+ p.z+=leafMotion.y*(bend.x*p.y*p.y+p.x*p.y*bend.z);
+ p.x+=leafMotion.y*.22*p.y*p.y*sin(sidePhase);
  return p;
 }
 vec3 animatedLeafNormal(vec3 p,vec3 n){
  vec4 bend=leafBend(p);
+ float sidePhase=waterTime*leafMotion.z*1.13+leafMotion.x*.73-p.y*2.2;
+ float sideSlope=leafMotion.y*.22*(2.*p.y*sin(sidePhase)-2.2*p.y*p.y*cos(sidePhase));
  float dx=leafMotion.y*p.y*bend.z;
- float dy=leafMotion.y*((.65+.7*p.y)*bend.x+p.y*(.65+.35*p.y)*bend.y+p.x*(bend.z+p.y*bend.w));
- return vec3(n.x-dx*n.z,n.y-dy*n.z,n.z);
+ float dy=leafMotion.y*(2.*p.y*bend.x+p.y*p.y*bend.y+p.x*(bend.z+p.y*bend.w));
+ float nx=n.x-dx*n.z;
+ return vec3(nx,n.y-sideSlope*nx-dy*n.z,n.z);
 }
 `:''}
 vec3 bendPlant(vec3 p){
@@ -100,7 +107,7 @@ reflectedLight.directDiffuse += directLight.color * leafTransmissionTint * leafT
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v9-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v10-${flutter}-${material.type}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){
