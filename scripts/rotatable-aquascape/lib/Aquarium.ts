@@ -115,7 +115,7 @@ export class Aquarium{
  private box(w:number,h:number,d:number,material:T.Material,p:T.Vector3,shadow=true){return this.mesh(new T.BoxGeometry(w,h,d),material,p,shadow);}
  private buildTank(){
   const dark=new T.MeshStandardMaterial({color:0x111c1e,roughness:.35,metalness:.65});
-  const floor=new T.MeshStandardMaterial({color:0x141e21,roughness:.56,metalness:.12});
+  const floor=new T.MeshStandardMaterial({color:0x101819,roughness:.82,metalness:0});
   floor.onBeforeCompile=shader=>{
    shader.uniforms.roomBackground={value:this.scene.background};
    shader.fragmentShader='uniform vec3 roomBackground;\n'+shader.fragmentShader;
@@ -133,8 +133,8 @@ export class Aquarium{
   ground.rotation.x=-Math.PI/2;
   // Keep the studio softbox above the viewing axis: a low emitter reflected as
   // an artificial horizontal bar through the middle of the clear front pane.
-  const roomBounce=new T.RectAreaLight(0xc1dcdd,3.6,11,4);
-  roomBounce.position.set(0,8,7);roomBounce.lookAt(0,-1,5);this.scene.add(roomBounce);
+  const roomBounce=new T.RectAreaLight(0xc1dcdd,2.2,11,4);
+  roomBounce.position.set(0,8,7);roomBounce.lookAt(0,2,0);this.scene.add(roomBounce);
   this.box(10.45,.88,4.95,dark,V(0,-.51,0));
   this.box(10.7,.13,5.1,new T.MeshStandardMaterial({color:0x182123,metalness:.75,roughness:.28}),V(0,-.035,0));
   // Cabinet shadow seams and a fine metal lip give the glass a physical support.

@@ -25,7 +25,9 @@ export function buildAquariumSubstrate(scene:T.Scene,height:(x:number,z:number)=
    shader.uniforms.waterTime=time;shader.vertexShader='varying vec3 substrateWorld;\n'+shader.vertexShader;
    shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nsubstrateWorld=(modelMatrix*vec4(transformed,1.)).xyz;');
    shader.fragmentShader='uniform float waterTime;varying vec3 substrateWorld;\n'+shader.fragmentShader;
-   shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`float ca=sin(substrateWorld.x*7.+sin(substrateWorld.z*5.+waterTime*.31)*1.9+waterTime*.42)*sin(substrateWorld.z*8.-waterTime*.37+sin(substrateWorld.x*4.)*1.6);outgoingLight+=diffuseColor.rgb*pow(max(0.,ca),12.)*.24;\n#include <opaque_fragment>`);
+   // Approximate caustic concentration redistributes received light rather
+   // than adding an emissive pattern to unlit sand and shaded soil.
+   shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`float ca=sin(substrateWorld.x*7.+sin(substrateWorld.z*5.+waterTime*.31)*1.9+waterTime*.42)*sin(substrateWorld.z*8.-waterTime*.37+sin(substrateWorld.x*4.)*1.6);outgoingLight*=.996+pow(max(0.,ca),12.)*.16;\n#include <opaque_fragment>`);
   };
   return mat;
  };
