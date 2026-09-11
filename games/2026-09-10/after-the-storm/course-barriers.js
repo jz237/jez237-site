@@ -1,9 +1,10 @@
+import {waterLevel} from './simulation.js';
 import {polygonDistance} from './classic-courses.js';
 // Finite raised walls: a ski can clear the top or dive below the underside.
 // Dimensions are shared with the visible mesh; metres in world coordinates.
 export function barrierCollision(barriers,x,y,z,radius=.85,hullHeight=1.1){
- for(const b of barriers||[]){if(b.outline){if(polygonDistance(b.outline,x,z)<radius&&y<b.top&&y+hullHeight>b.bottom)return true;continue;}for(const p of barrierPiles(b))if(Math.hypot(x-p.x,z-p.z)<p.radius+radius&&y<p.top&&y+hullHeight>p.bottom)return true;const dx=x-b.x,dz=z-b.z,along=dx*b.tx+dz*b.tz,across=-dx*b.tz+dz*b.tx;
-  if(Math.abs(along)<b.length/2+radius&&Math.abs(across)<b.depth/2+radius&&y<b.top&&y+hullHeight>b.bottom)return true;
+ for(const b of barriers||[]){const localY=y-(b.floating?waterLevel.value:0);if(b.outline){if(polygonDistance(b.outline,x,z)<radius&&localY<b.top&&localY+hullHeight>b.bottom)return true;continue;}for(const p of barrierPiles(b))if(Math.hypot(x-p.x,z-p.z)<p.radius+radius&&y<p.top&&y+hullHeight>p.bottom)return true;const dx=x-b.x,dz=z-b.z,along=dx*b.tx+dz*b.tz,across=-dx*b.tz+dz*b.tx;
+  if(Math.abs(along)<b.length/2+radius&&Math.abs(across)<b.depth/2+radius&&localY<b.top&&localY+hullHeight>b.bottom)return true;
  }return false;
 }
 export function barrierCamera(barriers,target,desired){
