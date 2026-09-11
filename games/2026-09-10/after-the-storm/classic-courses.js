@@ -1,3 +1,4 @@
+import {cityStuntLayout} from './city-stunts.js';
 import {portStuntLayout} from './port-stunts.js';
 import {fortStuntLayout} from './fort-stunts.js';
 import {drakeStuntLayout} from './drake-stunts.js';
@@ -183,7 +184,7 @@ const cityReverseAnchors=cityMap(cityReversePath.map(([x,z])=>[517-x,581-z]));
 const city={
  shortcut:{kind:'jump-dive',from:cityMap([[269,390]])[0],to:cityMap([[229,30]])[0],width:8,via:cityMap([[269,360],[269,315],[269,285],[269,260],[269,236],[269,200],[269,160],[269,75],[260,45]]),structure:cityMap([[269,390],[269,70]])},
  crossbars:[{x:(269-200)*.8,z:(234-275)*.8,tx:1,tz:0,length:32.8,depth:.9,bottom:.45,top:1.35}],
- name:'Twilight City',theme:'city',tag:'06 / TWILIGHT CITY',layoutRevision:3,boundary:cityWater,
+ name:'Twilight City',theme:'city',tag:'06 / TWILIGHT CITY',layoutRevision:4,boundary:cityWater,stuntLayout:cityStuntLayout(),
  buoysByClass:[cityForwardBuoys,cityForwardBuoys,cityForwardBuoys,cityReverseBuoys],retainRouteControls:true,
  finishLine:cityMap([[240,428],[319,428]]),anchorsByClass:[null,null,null,cityReverseAnchors],
  description:'Floodlit waterways and metal buoys. The inner wall offers a jump shortcut; Expert moves the ramp back, requiring F during descent to dive beneath it. The outer route stays open.',
@@ -226,6 +227,8 @@ const southernBuoys=rows=>rows.map(([x,z,side])=>({x:(x-210)*.8,z:(z-325)*.8,sid
 const southernNormalBuoys=southernBuoys([[368,227,1],[368,151,-1],[262,84,-1],[179,152,-1],[139,188,1],[88,213,-1],[83,343,-1],[160,423,1],[151,544,-1],[375,488,-1],[352,445,1]]);
 const southernHardBuoys=southernBuoys([[368,227,1],[368,151,-1],[262,84,-1],[205,158,1],[143,191,-1],[86,254,1],[83,343,-1],[160,423,1],[151,544,-1],[375,488,-1],[352,445,1]]);
 // Expert map adds a 128 pixel margin to the left of the same geography.
+// The Hard buoy beside the ship requires establishing its legal side after the bend.
+southernHardBuoys[3].recoverWrongSide=true;
 const southernExpertBuoys=southernBuoys([[495,227,1],[496,151,-1],[390,84,-1],[319,152,-1],[266,190,1],[213,228,-1],[210,343,-1],[230,366,-1],[297,435,1],[279,545,-1],[503,487,-1],[480,445,1]].map(([x,z,side])=>[x-128,z,side]));
 // Reverse map rotates the 425 x 652 course geography; its right text margin is excluded.
 const southernReverseBuoys=southernBuoys([[37,211,1],[54,167,-1],[273,107,1],[279,199,1],[302,301,-1],[358,387,-1],[316,448,1],[260,459,-1],[239,498,1],[163,566,-1],[69,507,-1],[42,425,1]].map(([x,z,side])=>[425-x,652-z,side]));

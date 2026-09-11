@@ -17,3 +17,18 @@ test('a fixed race ramp blocks a backward approach without granting lift, but al
  const flying=approach(4);assert.equal(flying.z,8.9);assert.equal(flying.vz,-18);assert.equal(flying.collision,0);
  const bypass=approach(0,8);assert.equal(bypass.z,8.9);assert.equal(bypass.vz,-18);assert.equal(bypass.collision,0);
 });
+
+
+test('authored stunt allowances apply at creation and reset to the next section without carryover',()=>{
+ const course={rings:[],checkpoints:[20,15,11,9].map((limit,i)=>({x:0,z:i*10,tx:0,tz:1,width:10,limit}))};
+ const s=createStunt(course),r=createRace().racers[0];
+ assert.equal(s.remaining,20);s.remaining=2.016;r.x=0;r.z=1;
+ stepStunt(s,r,course,{},.016,0,-1,0);
+ assert.equal(s.nextCheckpoint,1);assert.equal(s.remaining,15);assert.equal(s.score,100);
+ r.z=11;stepStunt(s,r,course,{},.016,0,9,0);
+ assert.equal(s.remaining,11);assert.equal(s.nextCheckpoint,2);
+ assert.equal(createStunt().remaining,38);
+ const city=createRace({mode:'stunt',course:getCourse('neon')});
+ assert.equal(city.racers[0].stunt.remaining,20);
+ assert.deepEqual(city.course.checkpoints.map(c=>c.limit),[20,15,15,15]);
+});

@@ -60,13 +60,15 @@ export function verificationInput(state,r){
   const guide=r.pierSurface,path=state.course.reverse?[[355,580],[310,602],[260,602],[236,590],[236,560],[236,495],[210,470],[170,455]]:[[160,450],[168,484],[236,495],[236,542],[260,580],[310,602],[355,580]];
   if(guide&&guide.lap===r.lap&&guide.stage<path.length){
    const point=path[guide.stage],x=(point[0]-210)*.8,z=(point[1]-325)*.8;
-   if(state.course.reverse&&guide.stage===4&&Math.hypot(x-r.x,z-r.z)<5){
-    const clear=[1.5,2,2.5,3,3.5].every(t=>wave(x,(526-325)*.8,state.time+t,state.weather.storm)<-.7);
+   if(guide.stage===(state.course.reverse?4:2)&&Math.hypot(x-r.x,z-r.z)<(state.course.reverse?5:3)){
+    const samples=state.course.reverse?[1.5,2,2.5,3,3.5]:[2,2.5,3,3.5,4];
+    const clear=samples.every(t=>wave(x,(526-325)*.8,state.time+t,state.weather.storm)<-.7);
     if(!clear)return {throttle:0,brake:true,dampen:true};
    }
    if(Math.hypot(x-r.x,z-r.z)<(guide.stage===(state.course.reverse?4:2)?2:5))guide.stage++;
    const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);
-   return {throttle:.65,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
+   const desiredSpeed=guide.stage===2?7:guide.stage===3?10:14;
+   return {throttle:state.course.reverse?.65:clamp(.53+(desiredSpeed-r.speed)*.16,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1||!state.course.reverse&&r.speed>desiredSpeed+2,dampen:true};
   }
  }
 
@@ -74,11 +76,12 @@ export function verificationInput(state,r){
   const a=state.course.ramps.find(a=>a.id===151);
   if(a&&(r.next===state.course.gates.findIndex(g=>g.width===110)&&!state.course.reverse&&r.lap===1||r.pierDiveStage!==undefined)){
    r.pierDiveStage??=0;const stage=r.pierDiveStage,h=r.hydro;
-   // Expert approaches from its extra western buoy; use the southern side of the same pile gap.
-   const path=[{x:a.x-a.tx*10,z:a.z-a.tz*10},{x:((state.difficulty===2?232:235)-210)*.8,z:(540-325)*.8},{x:(260-210)*.8,z:(580-325)*.8},{x:(310-210)*.8,z:(602-325)*.8},{x:(355-210)*.8,z:(580-325)*.8}];
+   // Line up before the ramp, then aim between the two rows of pier supports.
+   const path=[{x:a.x-a.tx*25,z:a.z-a.tz*25},{x:(242-210)*.8,z:(540-325)*.8},{x:(260-210)*.8,z:(580-325)*.8},{x:(310-210)*.8,z:(602-325)*.8},{x:(355-210)*.8,z:(580-325)*.8}];
    const target=path[stage];if(Math.hypot(target.x-r.x,target.z-r.z)<(stage===0?3:6)){r.pierDiveStage++;if(r.pierDiveStage===5)return aiInput(state,r);}
    const error=angleDelta(Math.atan2(target.x-r.x-r.vx*.15,target.z-r.z-r.vz*.15)-r.heading);
-   return {throttle:1,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true,dive:stage===1&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.6};
+   const desiredSpeed=stage===0?12:stage===1?24:25;
+   return {throttle:clamp(.53+(desiredSpeed-r.speed)*.16,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1||r.speed>desiredSpeed+2,dampen:true,dive:stage===1&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.6};
   }
  }
 
@@ -140,13 +143,21 @@ function authoredParkInput(state,r){
 // Authored stunt routes have different object counts and spacing per venue.
 function authoredStuntInput(state,r){
  if(state.phase==='countdown')return {};
- const targets=state.course.stuntLayout.verificationTargets,v=r.authoredStuntDriver||={index:0},h=r.hydro,s=r.stunt;
- if(h.onRamp){v.rampJump=true;v.rampLanding=h.landingId;}else if(h.landingId>v.rampLanding)v.rampJump=false;
+ const targets=state.verifyStuntOuter?state.course.stuntLayout.outerVerificationTargets:state.course.stuntLayout.verificationTargets,v=r.authoredStuntDriver||={index:0},h=r.hydro,s=r.stunt;
+ if(h.onRamp){v.rampJump=true;v.rampLanding=h.landingId;v.diveJump=!!state.course.ramps.find(a=>a.diveJump&&Math.hypot(a.x-r.x,a.z-r.z)<a.length)?.diveJump;}else if(h.landingId>v.rampLanding)v.rampJump=false;
  let q=targets[Math.min(v.index,targets.length-1)],along=(r.x-q.x)*q.tx+(r.z-q.z)*q.tz;
- if(along>(q.kind==='ramp'?q.length/2:1)&&v.index<targets.length-1)q=targets[++v.index];
+ // Crossing an infinite waypoint plane far to one side does not complete a
+ // corner approach. Physical rings still use their own scoring collision.
+ const lateral=-(r.x-q.x)*q.tz+(r.z-q.z)*q.tx;
+ if(along>(q.kind==='ramp'?q.length/2:1)&&(q.kind!=='waypoint'||Math.abs(lateral)<2)&&v.index<targets.length-1)q=targets[++v.index];
  const aim=q.kind==='ramp'?q.length/2+4:1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
- const input={throttle:clamp(.53+((q.speed??13)-r.speed)*.16,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.1,dampen:true,lean:q.kind==='ramp'?-1:0};
- if(v.rampJump&&h.airborne&&(h.y-h.waterHeight>1.2||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||'flip';
+ // Settle heading and yaw while still on water: a steering correction after
+ // leaving a ramp cannot redirect the airborne hull onto the next ring.
+ const rampMisaligned=q.kind==='ramp'&&!h.onRamp&&!h.airborne&&(Math.abs(angleDelta(Math.atan2(q.tx,q.tz)-r.heading))>.2||Math.abs(r.yawVelocity||0)>.4);
+ const desired=rampMisaligned?Math.min(q.speed??13,7):q.speed??13;
+ const input={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.1||r.speed>desired+2,dampen:true,lean:q.kind==='ramp'?-1:0};
+ if(v.diveJump&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.45)input.dive=true;
+ if(v.rampJump&&!v.diveJump&&h.airborne&&(h.y-h.waterHeight>1.2||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||'flip';
  else if(!h.airborne&&h.wet>.5&&q.kind!=='ramp')input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';
  return input;
 }

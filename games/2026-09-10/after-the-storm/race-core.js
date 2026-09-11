@@ -31,7 +31,7 @@ export function createRace({mode='race',rider=0,tune={},laps=3,difficulty=0,cour
  setCourseWaveTrain(course.waveTrain);clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;
  if(mode==='stunt'||mode==='practice')course=stuntCourse(course,{freeRide:mode==='practice'});
  const ids=mode==='versus'?[rider,secondRider]:[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)],g=course.gates[0];
- const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:['practice','stunt'].includes(mode)?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(),raceTime:0};});
+ const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:['practice','stunt'].includes(mode)?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(course),raceTime:0};});
  return {swapColours:!!swapColours,passageOpenedAt:Infinity,mode,seaState,handicap:!!handicap,phase:'countdown',countdown:3,time:0,course,racers,laps:mode==='stunt'?1:clamp(laps,3,9),difficulty,events:[],result:null,weather:conditions(course,0),finishWait:0};
 }
 export function gateCoordinates(g,x,z){return {forward:(x-g.x)*g.tx+(z-g.z)*g.tz,lateral:-(x-g.x)*g.tz+(z-g.z)*g.tx};}
@@ -60,6 +60,9 @@ export function adjudicateGate(s,r,ox,oz){
 export function courseDistance(course,x,z){let best=Infinity;for(let i=0;i<course.gates.length;i++){const a=course.gates[i],b=course.gates[(i+1)%course.gates.length],dx=b.x-a.x,dz=b.z-a.z,t=clamp(((x-a.x)*dx+(z-a.z)*dz)/(dx*dx+dz*dz),0,1);best=Math.min(best,Math.hypot(x-a.x-dx*t,z-a.z-dz*t));}return best;}
 export function outsideCourse(course,x,z){return course.boundary?polygonDistance(course.boundary,x,z)>0:courseDistance(course,x,z)>30;}
 export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z-r.z),next=s.course.gates[(r.next+1)%s.course.gates.length];
+ // Freestanding obstacle detours need a braking phase with the faster engine.
+ // Roof/pier supports retain their existing passage approach and tide timing.
+ let avoidingObstacle=false;
  // Authored approaches guide the helm through closely spaced obstacles.
  // Reaching a waypoint never changes checkpoint or lap progress. An optional
  // activation range keeps a distant approach from cutting across intervening land.
@@ -76,9 +79,9 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
  // Plan a local detour around a solid obstacle that intersects the intended
  // line. Keep the original checkpoint; avoiding a post never grants progress.
  if(s.course.layoutRevision){const dx=tx-r.x,dz=tz-r.z,length=Math.max(1,Math.hypot(dx,dz)),ux=dx/length,uz=dz/length;
-  const obstacles=[...(s.course.rocks||[]).map(q=>({...obstaclePosition(q,s.time),r:q.r})),...(s.course.crossbars||[]).filter(b=>b.bottom>r.hydro.waterHeight+1.1).flatMap(b=>barrierPiles(b).map(p=>({...p,r:p.radius})))];
+  const obstacles=[...(s.course.rocks||[]).map(q=>({...obstaclePosition(q,s.time),r:q.r})),...(s.course.crossbars||[]).filter(b=>b.bottom>r.hydro.waterHeight+1.1).flatMap(b=>barrierPiles(b).map(p=>({...p,r:p.radius,fixedSupport:true})))];
   const threats=obstacles.filter(q=>{const ahead=(q.x-r.x)*ux+(q.z-r.z)*uz,side=(q.x-r.x)*uz-(q.z-r.z)*ux;return ahead>-.5&&ahead<Math.min(18,length)&&Math.abs(side)<q.r+1.8;}).sort((a,b)=>Math.hypot(a.x-r.x,a.z-r.z)-Math.hypot(b.x-r.x,b.z-r.z));
-  if(threats.length){const q=threats[0],space=q.r+3.1,choices=[-1,1].map(side=>{const x=q.x+g.tz*side*space+ux*(q.r+3),z=q.z-g.tx*side*space+uz*(q.r+3),coords=gateCoordinates(g,x,z);let cost=Math.hypot(x-r.x,z-r.z)+Math.hypot(tx-x,tz-z);if(s.course.ground(x,z)>-.8)cost+=1000;for(const o of obstacles)if(Math.hypot(x-o.x,z-o.z)<o.r+1.5)cost+=1000;if(Math.abs(coords.forward)<18&&g.side&&(coords.lateral+g.side*g.offset)*g.side<1)cost+=100;return {x,z,cost};}).sort((a,b)=>a.cost-b.cost);tx=choices[0].x;tz=choices[0].z;}
+  if(threats.length){avoidingObstacle=!threats[0].fixedSupport;const q=threats[0],space=q.r+3.1,choices=[-1,1].map(side=>{const x=q.x+g.tz*side*space+ux*(q.r+3),z=q.z-g.tx*side*space+uz*(q.r+3),coords=gateCoordinates(g,x,z);let cost=Math.hypot(x-r.x,z-r.z)+Math.hypot(tx-x,tz-z);if(s.course.ground(x,z)>-.8)cost+=1000;for(const o of obstacles)if(Math.hypot(x-o.x,z-o.z)<o.r+1.5)cost+=1000;if(Math.abs(coords.forward)<18&&g.side&&(coords.lateral+g.side*g.offset)*g.side<1)cost+=100;return {x,z,cost};}).sort((a,b)=>a.cost-b.cost);tx=choices[0].x;tz=choices[0].z;}
  }
  // Fixed ramps are obstacles from behind. Approach a rear corner before
  // following its side; aiming straight at the next buoy can pin a reversed ski.
@@ -91,7 +94,12 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
  // A late channel entry can be beyond an unpassed checkpoint. Turn back to
  // its approach side instead of orbiting the target; scoring still requires
  // the normal forward crossing on the following approach.
- const approachKey=r.lap+':'+r.next,forward=gateCoordinates(g,r.x,r.z).forward;
+ const approachKey=r.lap+':'+r.next,coords=gateCoordinates(g,r.x,r.z),forward=coords.forward;
+ // After an obstacle detour, establish the legal side before crossing the
+ // buoy plane. Aim upstream instead of cutting across it while still outside.
+ if(g.recoverWrongSide&&g.side&&d<24&&forward>-12&&forward<0&&(coords.lateral+g.side*(g.offset??7))*g.side<2){
+  const lateral=g.side*4;tx=g.x-g.tx*8-g.tz*lateral;tz=g.z-g.tz*8+g.tx*lateral;
+ }
  if(g.channel&&d<25&&forward>.5)r.channelRecovery=approachKey;
  if(r.channelRecovery===approachKey){if(forward< -4)r.channelRecovery=null;else{tx=g.x-g.tx*7;tz=g.z-g.tz*7;}}
  const desired=Math.atan2(tx-r.x-r.vx*.18,tz-r.z-r.vz*.18),error=angleDelta(desired-r.heading),bend=Math.abs(angleDelta(Math.atan2(next.tx,next.tz)-Math.atan2(g.tx,g.tz)));
@@ -100,7 +108,7 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
  // Player controls retain the full power range, including in free ride and split screen.
  const bar=s.course.crossbars?.[0],shortcut=!['stunt','practice'].includes(s.mode)&&s.course.passage?.kind==='jump-dive'&&!s.course.reverse&&r.passageRoute!=='outer'&&bar&&Math.abs(r.x-bar.x)<15&&r.z-bar.z> -12&&r.z-bar.z<140;
  const train=s.course.waveTrain,rollers=train&&Math.abs(r.x-train[0])<28&&r.z>train[1]-15&&r.z<train[1]+train[2]*2+18;
- return {lean:rollers?1:0,throttle:shortcut?Math.max(.95,cruise*.53):cruise*.53*(rollers?.8:1),dive:!!(shortcut&&s.difficulty>=2&&r.hydro.airborne&&r.hydro.vy<0&&r.hydro.y-r.hydro.waterHeight<1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,r.onIce?-.34:-1,r.onIce?.34:1),brake:Math.abs(error)>1.1,dampen:true};
+ return {lean:rollers?1:0,throttle:avoidingObstacle?Math.min(.28,cruise*.53):shortcut?Math.max(.95,cruise*.53):cruise*.53*(rollers?.8:1),dive:!!(shortcut&&s.difficulty>=2&&r.hydro.airborne&&r.hydro.vy<0&&r.hydro.y-r.hydro.waterHeight<1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,r.onIce?-.34:-1,r.onIce?.34:1),brake:Math.abs(error)>1.1||avoidingObstacle&&r.speed>9,dampen:true};
 }
 export function raceOrder(s){return [...s.racers].sort((a,b)=>{if(s.phase==='countdown'||s.time===0)return a.grid-b.grid;if(Boolean(a.dq)!==Boolean(b.dq))return a.dq?1:-1;if(a.finishTime!==null||b.finishTime!==null)return (a.finishTime??Infinity)-(b.finishTime??Infinity);if(a.passed!==b.passed)return b.passed-a.passed;const ga=s.course.gates[a.next],gb=s.course.gates[b.next];return Math.hypot(a.x-ga.x,a.z-ga.z)-Math.hypot(b.x-gb.x,b.z-gb.z);});}
 // Catch-up assistance changes available power, never position or buoy progress.
@@ -117,7 +125,11 @@ export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')
  const ice=iceContact(s.course,r);r.onIce=ice?.id||'';if(ice)supportOnIce(r,ice,0);r.turn+=((c.steer||0)-r.turn)*(1-Math.exp(-dt*7));r.throttle=clamp(c.throttle||0,0,1);
  r.handicapBoost=handicapBoost(s,r);const maximum=stats.speed*1.10*(.64+r.power*.072)*(1+r.handicapBoost),velocity=Math.hypot(r.vx,r.vz),steering=stats.handling*r.turn*clamp(velocity/4,0,1);
  r.quickTurn=quickTurn(c,velocity,r.hydro.wet);r.yawVelocity??=0;const targetYaw=steering*(1+r.quickTurn*.65)*(c.slide?1.35:1)*(.78+.22*r.throttle);r.yawVelocity+=(targetYaw-r.yawVelocity)*(1-Math.exp(-dt*7*r.hydro.wet));r.yawVelocity*=Math.exp(-dt*.18*(1-r.hydro.wet));if(ice)r.yawVelocity*=Math.exp(-dt*9);r.heading+=r.yawVelocity*dt;const fx=Math.sin(r.heading),fz=Math.cos(r.heading),forward=r.vx*fx+r.vz*fz;
- const acceleration=ice?0:stats.accel*1.1*(1+r.handicapBoost)*r.throttle*r.hydro.intake-(forward/maximum)**2*stats.accel*(.08+.92*r.hydro.wet)-(c.brake?velocity*2*r.hydro.wet:0);r.vx+=fx*acceleration*dt;r.vz+=fz*acceleration*dt;
+ // Source HUD launch samples: 16/68/95 km/h at .3/1.3/2.3 seconds.
+ // Planing craft retain thrust through mid speed, then approach their existing
+ // rated maximum. Intake contact still gates propulsion on waves and in air.
+ const ratio=clamp(forward/maximum,-1.5,1.5),response=1+r.throttle*(.85+2.4*ratio**2);
+ const acceleration=ice?0:response*(stats.accel*1.1*(1+r.handicapBoost)*r.throttle*r.hydro.intake-ratio**2*stats.accel*(.08+.92*r.hydro.wet))-(c.brake?velocity*2*r.hydro.wet:0);r.vx+=fx*acceleration*dt;r.vz+=fz*acceleration*dt;
  const rx=fz,rz=-fx,lateral=r.vx*rx+r.vz*rz,grip=ice?0:stats.grip*(1+r.quickTurn*.42)*(c.slide?.28:1)*(.04+.96*r.hydro.wet);r.vx-=rx*lateral*(1-Math.exp(-grip*dt));r.vz-=rz*lateral*(1-Math.exp(-grip*dt));
  if(!r.throttle){const coast=Math.exp(-(.015+.285*r.hydro.wet)*dt);r.vx*=coast;r.vz*=coast;}if(r.recover){r.vx*=Math.exp(-4*dt);r.vz*=Math.exp(-4*dt);}
  const waterResponse=ice?(supportOnIce(r,ice,dt,(x,z)=>wave(x,z,s.time,s.weather.storm)),{slopeX:0,slopeZ:0,landing:false}):stepHydro(r.hydro,r,s.time,dt,(x,z,t)=>wave(x,z,t,s.weather.storm),{dampen:!!c.dampen,lean:c.lean||0,dive:!!c.dive});
