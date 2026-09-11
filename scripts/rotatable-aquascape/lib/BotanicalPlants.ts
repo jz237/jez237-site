@@ -47,11 +47,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  const stem=(a:T.Vector3,b:T.Vector3,r:number,color:number)=>stems.push({a,b,r,color:new T.Color(color),root:plantRoot.clone(),flex:plantFlex});
  // Uneven colonies overlap through depth, leaving lower growth and openings around the wood.
  const colonies=[
-  [-4.2,-1.65,.55,.34,4.42,22,false],[-3.25,-1.7,.65,.30,4.65,24,false],[-2.18,-1.72,.50,.32,3.62,16,false],
-  [-1.25,-1.68,.52,.32,3.65,18,true],[-.20,-1.60,.70,.38,3.96,29,true],[.92,-1.62,.53,.40,3.50,23,true],
-  [2.1,-1.65,.55,.34,3.04,18,true],[3.18,-1.55,.62,.38,4.70,25,false],[4.28,-1.24,.37,.49,4.45,22,false],
-  [-4.38,-.52,.28,.38,2.70,13,false],[-1.2,-.58,.38,.30,.95,4,false],[2.88,-.45,.40,.33,2.27,15,false],
-  [3.90,.10,.35,.39,1.57,13,false],[.05,-.20,.38,.28,.80,3,false]
+  [-4.2,-1.65,.55,.34,4.42,12,false],[-3.25,-1.7,.65,.30,4.65,14,false],[-2.18,-1.72,.50,.32,3.62,8,false],
+  [-1.25,-1.68,.52,.32,3.65,9,true],[-.20,-1.60,.70,.38,3.96,14,true],[.92,-1.62,.53,.40,3.50,12,true],
+  [2.1,-1.65,.55,.34,3.04,9,true],[3.18,-1.55,.62,.38,4.70,14,false],[4.28,-1.24,.37,.49,4.45,12,false],
+  [-4.38,-.52,.28,.38,2.70,7,false],[-1.2,-.58,.38,.30,.95,3,false],[2.88,-.45,.40,.33,2.27,8,false],
+  [3.90,.10,.35,.39,1.57,7,false],[.05,-.20,.38,.28,.80,3,false]
  ] as const;
  for(const [cx,cz,spreadX,spreadZ,maxH,count,red] of colonies)for(let i=0;i<count;i++){
   const radius=Math.sqrt(random()),angle=random()*Math.PI*2;
@@ -64,7 +64,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const roundLeaf=!red&&(cx< -3.8||cx>3.7||maxH<2.5)&&i%3!==0;
   const broadRed=red&&(cx>.4?i%3!==0:i%4===0);
   const grow=(start:number,end:number,offset:T.Vector3,vigor=1)=>{
-   const span=(end-start)*h,nodes=Math.max(5,Math.floor(span*(red?7.2:6.8))),nodeAngle=random()*6.28,spiral=Math.PI*.5+(random()-.5)*.22;
+   const span=(end-start)*h,nodes=Math.max(4,Math.floor(span*(red?5.2:5.0))),nodeAngle=random()*6.28,spiral=Math.PI*.5+(random()-.5)*.22;
    let previous=point(start);
    for(let j=1;j<=nodes;j++){
     const growth=1-Math.pow(1-j/nodes,1.34),t=start+(end-start)*growth;
@@ -86,11 +86,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   };
   grow(0,1,V(0,0,0));
   // Pruned shoots fork; each offshoot has its own growing tip and node rhythm.
-  if(i%5!==0){
+  if(i%3===1){
    const start=.28+random()*.26,a=angle+(random()-.5)*2.0,reach=.25+random()*.42;
    grow(start,.72+random()*.22,V(Math.cos(a)*reach,0,Math.sin(a)*reach*.65),.74+random()*.15);
   }
-  if(i%4===1){
+  if(i%11===2){
    const a=angle+Math.PI+random()*.8;
    grow(.18+random()*.20,.56+random()*.18,V(Math.cos(a)*.38,0,Math.sin(a)*.24),.70);
   }
