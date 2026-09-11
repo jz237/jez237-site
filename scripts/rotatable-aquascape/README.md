@@ -86,3 +86,11 @@ Shadow maps refresh once before each main frame and are reused by the water and 
 The leaf-anatomy pass separates chlorophyll color, vein relief and cuticle roughness into three material channels. Narrow stem leaves, rounded leaves and sword blades use distinct vein patterns; sword ribs run along the blade rather than sharing the branching pattern of every other plant. Sword blades have fuller, varied outlines and modeled petioles of different lengths. The stalks share each plant's rooted current deformation and now cast and receive shadows, with a matching deformed depth material.
 
 The textures are generated locally and shared by plant type; only the color channel uses sRGB, while bump and roughness retain linear data. Front and closer three-quarter views were inspected for the leaf/stalk transition and surface response. Build and all 31 existing tests pass; these tests do not prove botanical accuracy or material realism. The plants remain artistic procedural models, and further work is needed to match the reference photograph. No new dependencies, downloads, paid services or fish behavior changes were introduced.
+
+## Plant spacing and rear backing
+
+The stem colonies now contain 132 main shoots, with more space between leaf nodes and fewer lateral branches. This opens views of individual stems and the scanned wood instead of forming an opaque wall of overlapping leaves. Tall rear planting, shorter middle growth, rosettes, epiphytes, and carpet retain their separate depths and shared current movement.
+
+A thin matte backing is modeled just outside the rear glass. It receives the actual canopy illumination and plant shadows, giving open water a subdued dark background. The front and side panes remain clear; the backing is visible as a physical object in oblique views. This is an aquarium background panel, not volumetric light scattering.
+
+Front, side, and three-quarter evening views were visually compared at 720 by 1280. The local preview reported 60 fps and 6.8 ms synchronous render time in the evening view. Build and all 31 existing behavior/geometry tests pass. Procedural plant shapes and water highlights still differ from the photographic reference; the realism goal remains active.

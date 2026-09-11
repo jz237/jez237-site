@@ -141,6 +141,10 @@ export class Aquarium{
   const seam=new T.MeshBasicMaterial({color:0x04090b});
   for(const x of [-2.6,0,2.6])this.box(.012,.7,.012,seam,V(x,-.53,2.479),false);
   buildAquariumGlass(this.scene,this.reflections);
+  // A matte aquarium backing sits outside the rear pane. Unlike a black scene
+  // void it catches the canopy light and the plants' shadows through the water.
+  const backing=new T.MeshStandardMaterial({color:0x172224,roughness:.94,metalness:0});
+  this.box(10.12,5.48,.018,backing,V(0,2.79,-2.407));
   this.box(9.2,.12,.65,dark,V(0,6.4,-.15));
   for(let i=0;i<3;i++)this.box(8.75,.018,.105,this.ledMaterial,V(0,6.335,-.37+i*.2),false);
   for(const x of [-3.8,3.8]){this.box(.019,4,.019,dark,V(x,8.45,-.15),false);}
