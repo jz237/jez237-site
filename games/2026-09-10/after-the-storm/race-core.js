@@ -32,7 +32,7 @@ export function createRace({mode='race',rider=0,tune={},laps=3,difficulty=0,cour
 }
 export function gateCoordinates(g,x,z){return {forward:(x-g.x)*g.tx+(z-g.z)*g.tz,lateral:-(x-g.x)*g.tz+(z-g.z)*g.tx};}
 function announce(r,s,text){r.event=text;r.eventTime=s.time;s.events.push({rider:r.id,text,time:s.time});if(s.events.length>20)s.events.shift();}
-export function adjudicateGate(s,r,ox,oz){const p=s.course.passage,branch=p?.branchGates?.[r.next],useBranch=branch&&s.mode!=='stunt'&&passageOpening(p,s.time,s.passageOpenedAt)>.98&&Math.min(passageDistance(p,ox,oz),passageDistance(p,r.x,r.z))<p.width+3,g=useBranch?branch:s.course.gates[r.next],before=gateCoordinates(g,ox,oz),after=gateCoordinates(g,r.x,r.z);if(before.forward>0||after.forward<0||after.forward-before.forward<1e-7)return false;
+export function adjudicateGate(s,r,ox,oz){const p=s.course.passage,branch=p?.branchGates?.[r.next],useBranch=branch&&Math.hypot(r.x-branch.x,r.z-branch.z)<Math.hypot(r.x-s.course.gates[r.next].x,r.z-s.course.gates[r.next].z)&&s.mode!=='stunt'&&passageOpening(p,s.time,s.passageOpenedAt)>.98&&Math.min(passageDistance(p,ox,oz),passageDistance(p,r.x,r.z))<p.width+3,g=useBranch?branch:s.course.gates[r.next],before=gateCoordinates(g,ox,oz),after=gateCoordinates(g,r.x,r.z);if(before.forward>0||after.forward<0||after.forward-before.forward<1e-7)return false;
  const f=-before.forward/(after.forward-before.forward),side=before.lateral+(after.lateral-before.lateral)*f;
  const correct=Math.abs(side)<g.width&&(g.side===0||(side+g.side*(g.offset??7))*g.side>1);
  if(s.mode==='stunt'){}else if(correct){if(g.side){r.power=Math.min(5,r.power+1);announce(r,s,r.power===5?'MAX POWER':'Clean buoy · power '+r.power);}}

@@ -16,7 +16,7 @@ test('Sunset Bay has distinct L-shaped geography and a race-mode ramp with a wet
  const reversed=getCourse('amber',3).ramps[0];assert.equal(reversed.tz,-ramp.tz);
 });
 test('reconstructed routes are in water without cutting the authored shorelines',()=>{
- for(const id of ['greyhaven','amber','reed']){const c=getCourse(id);for(const p of sampleRoute(c.anchors,240))assert.ok(c.ground(p.x,p.z)<-.8,id+' '+JSON.stringify(p));}
+ for(const id of ['greyhaven','amber','reed','citadel','port']){const c=getCourse(id);for(const p of sampleRoute(c.anchors,240))assert.ok(c.ground(p.x,p.z)<-.8,id+' '+JSON.stringify(p));}
 });
 test('Drake Lake weeds have bounded elliptical resistance only during water contact',()=>{
  const c=getCourse('reed'),p=c.resistance[0];assert.equal(c.name,'Drake Lake');assert.equal(c.rocks.filter(o=>o.type==='post').length,8);
@@ -49,4 +49,11 @@ test('an airborne hull clears a low breakwater but contacts it when it descends'
  const c=getCourse('greyhaven'),s=createRace({mode:'time',course:{...c,ground:()=>1,rocks:[]}}),r=s.racers[0];s.phase='running';r.hydro.initialized=true;r.hydro.y=8;r.hydro.vy=0;
  stepRace(s,{},1/60);assert.equal(r.collision,0);assert.ok(r.hydro.y>7);
  r.hydro.y=.9;r.hydro.vy=-2;stepRace(s,{},1/60);assert.ok(r.collision>0);
+});
+
+test('Port Blue preserves the tanker, dock basin and narrow winding inner channel',()=>{
+ const c=getCourse('port',2);assert.equal(c.name,'Port Blue');assert.ok(c.ground((125-220)*.8,(300-285)*.8)>4);
+ assert.ok(c.ground((385-220)*.8,(245-285)*.8)<-3);assert.ok(c.ground((310-220)*.8,(170-285)*.8)>4);
+ assert.ok(c.shipOutline.length>8);assert.ok(c.passage.continuous);assert.ok(c.passage.structurePath.length>8);
+ for(const q of c.passage.path)assert.ok(c.ground(q.x,q.z)<-3);
 });

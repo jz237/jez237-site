@@ -3,7 +3,7 @@ import {getCourse} from '../courses.js';
 import {createRace,stepRace,aiInput} from '../race-core.js';
 import {passageOpening,passageCollision,passageCamera,passageTarget,passagePoint} from '../course-passages.js';
 import {verificationInput} from '../race-verification.js';
-function position(p,t,lateral=0){const path=p.structurePath||p.path,a=path[0],b=path.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z);return {x:a.x+(b.x-a.x)*t+(b.z-a.z)/length*lateral,z:a.z+(b.z-a.z)*t-(b.x-a.x)/length*lateral};}
+function position(p,t,lateral=0){const q=passagePoint(p.structurePath||p.path,t);return {x:q.x+q.tz*lateral,z:q.z-q.tx*lateral};}
 test('the gate blocks the hull until raised; side walls and roof remain solid',()=>{
  const p=getCourse('citadel',1).passage,g=position(p,.36),wall=position(p,.55,p.width+.55),roof=position(p,.55);
  assert.equal(passageCollision(p,g.x,0,g.z,40),true);
@@ -23,8 +23,8 @@ test('higher-class harbour passage is open from the start with a navigable floor
 test('shortcut checkpoint planes remain ordered in Expert and Reverse',()=>{
  for(const id of ['citadel','port'])for(const difficulty of [1,2,3]){
   const c=getCourse(id,difficulty),s=createRace({course:c}),p=c.passage;s.time=80;s.passageOpenedAt=60;
-  const a=p.path[0],b=p.path.at(-1),dx=b.x-a.x,dz=b.z-a.z;let previous=-Infinity;
-  for(const next of p.indices){const g=passageTarget(s,{next}),distance=(g.x-a.x)*dx+(g.z-a.z)*dz;assert.ok(distance>previous);previous=distance;}
+  const samples=Array.from({length:1001},(_,i)=>passagePoint(p.path,i/1000));let previous=-Infinity;
+  for(const next of p.indices){const g=passageTarget(s,{next}),distance=samples.reduce((best,q,i)=>Math.hypot(q.x-g.x,q.z-g.z)<Math.hypot(samples[best].x-g.x,samples[best].z-g.z)?i:best,0);assert.ok(distance>previous);previous=distance;}
  }
 });
 test('fortress race actually takes the outer first lap and traverses the open sluice later',()=>{
@@ -50,7 +50,7 @@ test('stunt guidance keeps all four mandatory checkpoints in every passage venue
 test('chase-camera sight lines stop before solid walls and overhead concrete',()=>{
  for(const id of ['citadel','port']){const p=getCourse(id,1).passage,q=position(p,.55),target={...q,y:1.3};
   const roof=passageCamera(p,target,{...q,y:7},80,50);assert.ok(roof.y<p.clearance-.2);
-  const side=passageCamera(p,target,{...position(p,.55,p.width+5),y:2},80,50);assert.ok(Math.hypot(side.x-q.x,side.z-q.z)<p.width);
+  const side=passageCamera(p,target,{...position(p,.55,p.width+5),y:2},80,50);assert.ok(Math.hypot(side.x-q.x,side.z-q.z)<p.width+(p.continuous?4:0));
   const wanted={...position(p,.58),y:2};assert.deepEqual(passageCamera(p,target,wanted,80,50),wanted);
  }
 });

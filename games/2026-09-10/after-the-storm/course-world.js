@@ -1,7 +1,7 @@
 import {rampWaterOffset,ringHeight} from './stunts.js';
 import {makeCoastalScenery} from './coastal-scenery.js';
 import {rockMaterial,barkMaterial} from './land-materials.js';
-import {passageOpening} from './course-passages.js';
+import {passageOpening,passageWalls} from './course-passages.js';
 import * as T from './vendor/three.module.js';
 import {makeTerrain,skyColors,shared} from './ocean.js';
 import {wave} from './simulation.js';
@@ -19,8 +19,8 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  const theme=course.theme,night=theme==='city',cold=theme==='ice';
  const palette=cold?{sand:0x94bdc9,rock:0xadc8d5,grass:0xe5f0f0}:theme==='port'||night?{sand:0x737e81,rock:0x899091,grass:0x828b83}:theme==='beach'||theme==='resort'||theme==='island'?{sand:0xd8c99c,rock:0xa7a58a,grass:0x759358}:{};
  const scenery=makeCoastalScenery(root,course);
- const terrain=makeTerrain(root,course.ground,palette);materials.push(terrain.material);geometries.push(terrain.geometry);
- const n=256,data=new Uint8Array(n*n*4);for(let z=0;z<n;z++)for(let x=0;x<n;x++){const h=course.ground((x/(n-1)-.5)*920,(z/(n-1)-.5)*920),v=Math.round(T.MathUtils.clamp((h+16)/100,0,1)*65535),i=(z*n+x)*4;data[i]=v>>8;data[i+1]=v&255;data[i+3]=255;}
+ const renderGround=course.renderGround||course.ground;const terrain=makeTerrain(root,renderGround,palette);materials.push(terrain.material);geometries.push(terrain.geometry);
+ const n=256,data=new Uint8Array(n*n*4);for(let z=0;z<n;z++)for(let x=0;x<n;x++){const h=renderGround((x/(n-1)-.5)*920,(z/(n-1)-.5)*920),v=Math.round(T.MathUtils.clamp((h+16)/100,0,1)*65535),i=(z*n+x)*4;data[i]=v>>8;data[i+1]=v&255;data[i+3]=255;}
  const heightMap=new T.DataTexture(data,n,n,T.RGBAFormat);heightMap.minFilter=heightMap.magFilter=T.LinearFilter;heightMap.needsUpdate=true;textures.push(heightMap);ocean.mat.uniforms.terrainMap.value=heightMap;ocean.mat.uniforms.customTerrain.value=1;
  ocean.mat.uniforms.reefs.value.forEach((r,i)=>{const p=course.rocks[i];r.set(p?.x??10000,p?.z??10000,p?.r??0);});
  skyColors.skyNight.value=night?1:0;skyColors.skyHorizon.value.setHex(course.sky[0]);skyColors.skyZenith.value.setHex(course.sky[1]);skyColors.skySun.value.set(theme==='resort'?-.7:-.35,theme==='resort'?.13:night?.45:.32,-.9).normalize();ocean.mat.uniforms.sun.value.copy(skyColors.skySun.value);shared.storm.value=course.storm;
@@ -91,7 +91,24 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  }
  function crane(x,z,angle){const y=course.ground(x,z);if(y<1)return;const g=new T.Group();g.position.set(x,y,z);g.rotation.y=angle;root.add(g);for(const side of[-1,1]){box(side*5,12,0,.7,24,.7,yellow,g);rod([side*5,0,0],[side*5,24,-5],.2,steel,g);}box(0,25,-11,13,1,35,yellow,g);box(0,23,1,6,4,5,white,g);rod([0,25,-24],[0,5,-24],.06,steel,g);box(0,4.8,-24,7,.4,2,black,g);}
  if(theme==='port'){
-  const cargoMats=[mat(0xa6533d),mat(0x496e83),mat(0xe0b557),mat(0x557567)];for(let i=0;i<45;i++){const x=(i%9-4)*15,z=Math.floor(i/9)*10-20,y=course.ground(x,z);if(y<1||routeDistance(course,x,z)<42)continue;box(x,y+1.7,z,12,3.4,5,cargoMats[i%4]);for(let k=-5;k<6;k++)box(x+k,y+1.7,z-2.55,.08,3.1,.08,steel);if(i%3===0)box(x,y+5.1,z,12,3.4,5,cargoMats[(i+1)%4]);}for(let i=0;i<5;i++)crane(-155,80-i*40,Math.PI/2);for(let i=0;i<4;i++)building(165,-85+i*55,35,38,14,white);label('PORT MERIDIAN / 07',165,18,75,40);for(let i=0;i<4;i++)pier(-150,110-i*45,Math.PI/2,18);
+  const cargoMats=[mat(0xa6533d),mat(0x496e83),mat(0xe0b557),mat(0x557567)];for(let i=0;i<45;i++){const x=(i%9-4)*15,z=Math.floor(i/9)*10-20,y=course.ground(x,z);if(y<1||routeDistance(course,x,z)<42)continue;box(x,y+1.7,z,12,3.4,5,cargoMats[i%4]);for(let k=-5;k<6;k++)box(x+k,y+1.7,z-2.55,.08,3.1,.08,steel);if(i%3===0)box(x,y+5.1,z,12,3.4,5,cargoMats[(i+1)%4]);}for(let i=0;i<5;i++)crane(-155,80-i*40,Math.PI/2);for(let i=0;i<4;i++)building(165,-85+i*55,35,38,14,white);if(!course.shipOutline)label('PORT MERIDIAN / 07',165,18,75,40);for(let i=0;i<4;i++)pier(-150,110-i*45,Math.PI/2,18);
+ }
+ if(course.dockOutline){
+  const shape=new T.Shape();course.dockOutline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();
+  const quay=new T.ExtrudeGeometry(shape,{depth:8,bevelEnabled:false});quay.rotateX(-Math.PI/2);add(quay,stone,0,-2,0);
+  for(const [mx,mz] of [[309,153],[315,223]])crane((mx-220)*.8,(mz-285)*.8,-Math.PI/2);
+  for(let i=0;i<6;i++){const x=(292+i%2*17-220)*.8,z=(141+Math.floor(i/2)*22-285)*.8;box(x,8,z,11,4,6,i%2?steel:yellow);}
+ }
+ if(course.shipOutline){
+  const hullMaterial=mat(0x343e41,.55,.35),deckMaterial=mat(0x616b43,.8,.1),outline=new T.Shape();
+  course.shipOutline.forEach(([x,z],i)=>i?outline.lineTo(x,-z):outline.moveTo(x,-z));outline.closePath();
+  const hull=new T.ExtrudeGeometry(outline,{depth:9,bevelEnabled:false});hull.rotateX(-Math.PI/2);add(hull,hullMaterial,0,-2,0);
+  const deck=new T.ShapeGeometry(outline);deck.rotateX(-Math.PI/2);add(deck,deckMaterial,0,7.02,0);
+  // Bridge at the stern, long deck pipework and tank fittings toward the bow.
+  const cx=(126-220)*.8;box(cx,11,(155-285)*.8,25,8,28,white);box(cx,16,(157-285)*.8,28,3,17,black);
+  for(const side of [-1,1]){rod([cx+side*10,8,-70],[cx+side*10,8,130],.4,steel);for(let z=-50;z<125;z+=23)cylinder(cx+side*7,8.2,z,2,2.2,steel);}
+  for(let i=0;i<course.shipOutline.length;i++){const a=course.shipOutline[i],b=course.shipOutline[(i+1)%course.shipOutline.length];rod([a[0],8.2,a[1]],[b[0],8.2,b[1]],.12,white);}
+  cylinder(cx,20,-98,1.5,10,black);label('PORT BLUE',cx,16,-85,23);
  }
  if(night){
   for(let i=0;i<90;i++){const a=i*2.3999,r=165+random()*115,x=Math.sin(a)*r,z=Math.cos(a)*r,w=12+random()*16,d=12+random()*16,h=20+random()*80,y=building(x,z,w,d,h,i%3?glass:stone);if(!y)continue;for(let floor=3;floor<h-2;floor+=5)for(let col=-w/2+2;col<w/2;col+=4){if(random()>.2){const glow=random()>.3?warm:cityLight;for(const side of [-1,1])box(x+col,y+floor,z+side*(d/2+.03),1.4,2.2,.05,glow);for(const side of [-1,1])box(x+side*(w/2+.03),y+floor,z+col*d/w,.05,2.2,1.4,glow);}}}
@@ -101,7 +118,16 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  if(cold){for(let i=0;i<50;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(52+random()*35),z=g.z-g.tx*side*(52+random()*35);rock(x,z,9+random()*16,true);}building(-170,125,25,16,8,white);label('ARCTIC RESEARCH / 64',-170,14,134,28);}
  // Navigable masonry/harbour passage; dimensions are shared with collision.
  const passage=course.passage;let gateMesh=null,gateSignal=null;
- if(passage){const geometry=passage.structurePath||passage.path,a=geometry[0],b=geometry.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z),g=new T.Group();g.position.set(a.x,0,a.z);g.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);root.add(g);const m=passage.kind==='gate'?stone:steel,w=passage.width;
+ if(passage?.continuous){
+  const walls=passageWalls(passage),path=passage.structurePath;
+  for(const edge of walls)for(let i=1;i<edge.length;i++){const a=edge[i-1],b=edge[i],g=new T.Group();g.position.set((a.x+b.x)/2,0,(a.z+b.z)/2);g.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);root.add(g);box(0,2.5,0,1.1,11,Math.hypot(b.x-a.x,b.z-a.z),steel,g);}
+  const shape=new T.Shape(),outline=[...walls[0],...walls[1].slice().reverse()];outline.forEach((q,i)=>i?shape.lineTo(q.x,-q.z):shape.moveTo(q.x,-q.z));shape.closePath();
+  const roof=new T.ExtrudeGeometry(shape,{depth:8-passage.clearance,bevelEnabled:false});roof.rotateX(-Math.PI/2);add(roof,steel,0,passage.clearance,0);
+  const a=path[0],b=path[1],entrance=new T.Group();entrance.position.set(a.x,0,a.z);entrance.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);root.add(entrance);
+  if(!passage.enabled){for(let x=-passage.width;x<=passage.width;x+=.65)box(x,3,0,.12,8,.2,black,entrance);}
+  label(passage.enabled?'PORT BLUE / INNER CHANNEL':'INNER CHANNEL CLOSED',0,8.8,0,18,entrance).rotation.y=Math.PI;
+ }
+ if(passage&&!passage.continuous){const geometry=passage.structurePath||passage.path,a=geometry[0],b=geometry.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z),g=new T.Group();g.position.set(a.x,0,a.z);g.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);root.add(g);const m=passage.kind==='gate'?stone:steel,w=passage.width;
   for(const side of [-1,1]){box(side*(w+.55),2.5,length*.57,1.1,11,length*.50,m,g);for(let z=length*.34;z<length*.81;z+=6){box(side*(w+.52),6.3,z,1.8,1.2,1.6,stone,g);}}
   box(0,(passage.clearance+8)/2,length*.57,w*2+2.2,8-passage.clearance,length*.50,m,g);
   gateMesh=new T.Group();gateMesh.userData.dynamic=true;gateMesh.position.set(0,-1,length*.36);g.add(gateMesh);
