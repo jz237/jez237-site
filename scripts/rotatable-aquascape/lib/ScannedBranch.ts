@@ -24,10 +24,16 @@ export function bendScannedBranch(sourceGeometry:T.BufferGeometry,branch:typeof 
  const curve=new T.CatmullRomCurve3(branch.points.map(p=>new T.Vector3(p[0],p[1],p[2]))),frames=curve.computeFrenetFrames(160,false);
  const contactRadii=new Array<number>(25).fill(0),geometry=sourceGeometry.clone(),positions=geometry.getAttribute('position') as T.BufferAttribute,colors:number[]=[];
  for(let i=0;i<source.count;i++){
-  const fraction=(source.getX(i)-bounds.min.x)/length,t=branch.reverse?1-fraction:fraction,step=Math.min(159,Math.floor(t*160)),f=t*160-step;
+  const fraction=(source.getX(i)-bounds.min.x)/length,along=branch.reverse?1-fraction:fraction;
+  const azimuth=Math.atan2(source.getZ(i)-centerZ,source.getY(i)-centerY);
+  // Unequal exposed fibers give a broken end rather than a symmetrical needle.
+  const terminal=T.MathUtils.smoothstep(along,.82,1);
+  const rake=(.5+.3*Math.sin(azimuth*3+branch.roll)+.2*Math.sin(azimuth*7-branch.roll))*.025;
+  const t=along-terminal*rake,step=Math.min(159,Math.floor(t*160)),f=t*160-step;
   const normal=frames.normals[step].clone().lerp(frames.normals[step+1],f).normalize(),binormal=frames.binormals[step].clone().lerp(frames.binormals[step+1],f).normalize();
-  // Retain the substantial branch body; narrow the terminal section into a fine tip.
-  const taper=(1-.90*Math.pow(t,3.6))*(1+.18*Math.exp(-t*12)),y=(source.getY(i)-centerY)*branch.thickness*taper,z=(source.getZ(i)-centerZ)*branch.thickness*taper;
+  // Older limbs retain a blunt remnant; thin twigs still taper more strongly.
+  const tipRatio=branch.thickness>.6?.24:.13;
+  const taper=(1-(1-tipRatio)*Math.pow(along,3.6))*(1+.18*Math.exp(-along*12)),y=(source.getY(i)-centerY)*branch.thickness*taper,z=(source.getZ(i)-centerZ)*branch.thickness*taper;
   // A swelling collar and restrained crevice darkening connect each limb to its parent.
   const shade=.66+.34*T.MathUtils.smoothstep(t,0,.19);colors.push(shade,shade,shade);
   const radius=Math.hypot(y,z),lower=Math.floor(t*24),upper=Math.min(24,lower+1);
