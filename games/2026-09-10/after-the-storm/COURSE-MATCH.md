@@ -26,7 +26,7 @@ still require their own source comparison before they can be signed off.
 | Course | Distinctive requirements | State |
 | --- | --- | --- |
 | Sunny Beach | Long sandbar, parallel straights, tight ends, open sea and mainland, difficulty-specific slalom | Rebuilt sandbar; original class buoy maps and metal-ball rows transcribed and race-tested; final shoreline/visual sign-off pending |
-| Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/ramp, original class buoy sequences, Expert slalom, steel balls and physical piers; all-class under-pier traversal verified; final-lap bypass and visual sign-off pending |
+| Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/ramp, original class buoy sequences, Expert slalom, steel balls and physical piers; all-class under-pier traversal verified; final-lap bypass with miss penalties verified; visual sign-off pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
 | Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; original buoy patterns and final visual/scale matching pending |
@@ -387,3 +387,17 @@ Full-suite follow-up initially found 163/165 passing in 69.96 s. One stale fixtu
 Post-fix Hard browser inspection: 31.483 s, hull y 0.087 m, underside 2.8 m, zero collisions/misses and no browser errors. The craft remains visible between the piles beneath the deck, with the ramp visible beyond.
 
 Final full regression: 165/165 passed in 107.18 s (work/sunset-piers-full-tests-fixed.log). This proves the current automated coverage, not complete original-course parity. Changes remain local.
+
+### Sunset Bay final-lap outside shortcut — 2026-09-11
+
+Inspected the original Normal map and its accompanying text again. The finish line extends from map (250,300) to (420,300), while the driving lane starts near (290,302). The earlier symmetric 46 m checkpoint could not accept the source shortcut. The finish now uses the mapped horizontal span while retaining the original starting lane, and the visible gantry uses the same endpoints. Reverse reverses the finish direction but does not inherit the forward bypass rule. Layout revision is 4.
+
+The final hairpin can be exited at approximately (468,455), steering toward (410,290). The ordinary-input driver passes the hairpin buoy, incurs two misses along the outbound line, then reaches the extended finish before the next buoy's crossing plane. At this authored finish, remaining bypassed buoys are charged as misses, with the existing power reset and five-miss disqualification. A finish crossing cannot bypass more than the final three buoys, run backward, or extend beyond the mapped endpoints. No clean checkpoint credit, teleportation or course-out exemption is introduced. The rule also retains penalties if attempted on an earlier lap; the verification driver chooses the last lap, as the source recommends.
+
+Four focused tests pass in 4.75 s: finish endpoints/start lane, three skipped-buoy penalties with zero/one/two prior misses, rejection of remote/backward/early crossings, and complete three-lap ordinary-input races in Normal/Hard/Expert. Shortcut races finish in 247.67 / 283.95 / 260.10 s with exactly three misses, zero collisions during the shortcut, and 2.72 / 2.73 / 2.77 seconds outside the boundary. Two prior misses cause disqualification before any finish time is awarded. These tests establish the route and penalty behavior; they do not establish the original guide's approximately two-second time gain, which remains a scale/handling calibration requirement. The verifier uses full throttle during the shortcut, whereas default navigation uses conservative part throttle.
+
+The source also describes three fixed consecutive waves after the jump, and moored boats appear at the pier ends. Those details and final visual comparison remain outstanding; do not sign off Sunset Bay yet.
+
+Browser Normal shortcut run completed first in 4:07.667 with exactly three misses, 45 adjudicated checkpoints, course sea state and high graphics (59 FPS in the final measurement). Browser error log is empty. The result confirms successful delivery of the final-lap shortcut in the rendered game; final gantry/source visual matching remains part of the course sign-off.
+
+Full regression after the finish/shortcut change: 169/169 passed in 108.34 s (work/sunset-shortcut-full-tests.log). No publication; full course parity remains incomplete.

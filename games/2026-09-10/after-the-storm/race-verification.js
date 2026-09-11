@@ -25,6 +25,11 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
+ if(state.verifySunsetShortcut&&state.course.id==='amber'&&!state.course.reverse&&r.lap===state.laps){
+  if(r.next===state.course.gates.length-4&&r.z<(455-275)*.75&&r.x>(445-245)*.75)r.sunsetShortcut=true;
+  if(r.sunsetShortcut){const x=(410-245)*.75,z=(290-275)*.75,error=angleDelta(Math.atan2(x-r.x-r.vx*.18,z-r.z-r.vz*.18)-r.heading);return {throttle:1,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};}
+ }
+
  if(state.verifyPierSurface&&r.lap>1){
   if(r.next===state.course.gates.findIndex(g=>g.width===110)&&r.pierSurface?.lap!==r.lap)r.pierSurface={lap:r.lap,stage:0};
   const guide=r.pierSurface,path=state.course.reverse?[[355,580],[310,602],[260,602],[236,590],[236,560],[236,495],[210,470],[170,455]]:[[160,450],[168,484],[236,495],[236,542],[260,580],[310,602],[355,580]];
