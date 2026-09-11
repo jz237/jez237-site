@@ -75,7 +75,7 @@ const lakeExpertWeeds=[...lakeWeedMarkers,[20.5,175,8,6.5],[54.5,218.5,5,5],[24.
 const lakeWeeds=(rows,dx=0,dz=0)=>rows.map(([x,z,rx,rz])=>({x:(x+dx-200)*.75,z:(z+dz-240)*.75,rx:rx*.75,rz:rz*.75,drag:.65}));
 const lakeNorth=[[374,274],[366,188],[366,91],[341,60],[306,63],[246,54],[178,54],[122,61],[84,67],[59,86],[31,160],[40,212],[31,269],[52,325],[74,372],[123,404]];
 const lake={
- name:'Drake Lake',theme:'lake',tag:'03 / DRAKE LAKE',layoutRevision:3,
+ name:'Drake Lake',theme:'lake',tag:'03 / DRAKE LAKE',layoutRevision:3,boundary:lakeOuter,
  finishLinesByClass:[lakeMap([[357,267],[408,267]]),lakeMap([[357,267],[408,267]]),lakeMap([[357,267],[408,267]]),lakeMap([[361,269],[412,269]])],
  buoysByClass:[lakeNormalBuoys,lakeHardBuoys,lakeExpertBuoys,lakeReverseBuoys],
  anchorsByClass:{1:lakeMap([...lakeNorth,[180,409],[225,396],[258,361],[289,367],[326,381],[353,362],[369,317]]),2:lakeMap([...lakeNorth.slice(0,-1),[109,397],[142,380],[166,386],[201,389],[231,381],[268,377],[306,378],[343,365],[370,333]])},

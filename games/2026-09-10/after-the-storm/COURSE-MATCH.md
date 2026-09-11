@@ -481,3 +481,13 @@ The narrower, northward finish changes the starting grid heading and exposed a R
 Northern-island inner/outer navigation and full visual/handling calibration remain unfinished. No course sign-off or publication.
 
 Final finish-line regression: 188/188 passed in 112.59 s (work/drake-finish-full-tests.log). The rendered Reverse race finished second in 4:33.000 with zero misses, 51 adjudicated checkpoints, high graphics/course sea state and final 60 FPS. Browser error log was empty. The results overlay obscures the gantry in the final screenshot, so this is race/runtime verification, not full visual sign-off of the finish structure.
+
+### Drake Lake island route access — 2026-09-11
+
+The Normal source diagram explicitly describes the inner/right island route as faster with a sharper next bend, and the outer/left route as gentler but longer. Added an ordinary-input inspection driver for the inner passage in both directions. It does not move the craft or bypass checkpoint rules. Tests now drive both the existing outer route and the inner passage for all three laps in every class, proving physical traversal through separate north/south observation bands, zero missed buoys, and zero island passage collision frames.
+
+The initial Reverse probe stayed in navigable water but accumulated 3.97 seconds of an out-of-course warning: Drake previously used distance from the checkpoint polyline as its boundary. The course now uses its existing mapped nineteen-vertex outer shoreline polygon. Both island channels remain inside; points beyond the outer shore remain outside. All eight complete route/class runs have zero out-of-course time after that correction. Land collision is unchanged.
+
+The verification helm uses cautious 0.32 throttle and short waypoints to avoid the sharp mainland entrance; it is not reconstructed opponent strategy or proof of the original shortcut time advantage. Forward and Reverse clean traversal is now established, but relative route timing, exit handling and full visual/source calibration remain unverified. All eleven focused Drake tests pass in 12.74 seconds. Full regression and rendered passage inspection follow below.
+
+Final regression: 190/190 passed in 115.35 s (work/drake-island-full-tests.log). Reverse browser inspection held at 90.367 s in the narrow inner channel, with visible water between island and mainland, zero collision timer, zero misses and zero out-of-course time. Continuing the same race finished fourth in 5:25.133, zero misses, 51 checkpoints, high graphics/course sea state and final 53 FPS. Error log remained empty. The slow verification result is not evidence of a competitive shortcut. No publication or full parity sign-off.
