@@ -27,10 +27,12 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
  const rockSource=sourceRocks[0].material;
  rockOcclusion.flipY=false;rockOcclusion.anisotropy=8;
  const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockOcclusion,aoMapIntensity:.65,color:0xb8c0b9,normalScale:new T.Vector2(.95,.95),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
+ const mineral={saturation:.58,tint:[.76,.78,.81]};
+ rockMaterial.userData.bakeDiffuse=mineral;
  rockMaterial.onBeforeCompile=shader=>{
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
    float mineralLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
-   diffuseColor.rgb=mix(vec3(mineralLuma),diffuseColor.rgb,.58)*vec3(.76,.78,.81);
+   diffuseColor.rgb=mix(vec3(mineralLuma),diffuseColor.rgb,${mineral.saturation})*vec3(${mineral.tint.join(',')});
   `);
  };
  for(const t of [rockMaterial.map,rockMaterial.normalMap,rockMaterial.roughnessMap])if(t)t.anisotropy=8;

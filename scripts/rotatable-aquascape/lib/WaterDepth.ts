@@ -1,11 +1,13 @@
 import * as T from 'three';
 
+export const WATER_LEVEL=5.45;
+
 // Shared by direct surfaces and the viewing leg of underwater reflections.
 export const waterOpticsShader=`
 float waterPath(vec3 origin,vec3 direction,float distanceToSurface){
  vec3 safeDirection=(step(vec3(0.),direction)*2.-1.)*max(abs(direction),vec3(.00001));
  vec3 a=(vec3(-5.06,.12,-2.31)-origin)/safeDirection;
- vec3 b=(vec3(5.06,5.36,2.31)-origin)/safeDirection;
+ vec3 b=(vec3(5.06,${WATER_LEVEL},2.31)-origin)/safeDirection;
  vec3 nearHit=min(a,b),farHit=max(a,b);
  float entry=max(max(nearHit.x,nearHit.y),nearHit.z);
  float exit=min(min(farHit.x,farHit.y),farHit.z);

@@ -209,3 +209,13 @@ Individual leaves now flex farther at normal aquarium viewing distance. A slowly
 Blade motion is capped in world distance. Glass-fitting clearance now accounts for the largest blade excursion rather than assuming one fixed allowance. A geometry check covers this additional clearance; the static diffuse field is rebuilt for the slightly revised leaf placement. This is procedural water-responsive animation, not a hydrodynamic solver. Fish behavior and materials are unchanged; no assets, services, or dependencies were purchased.
 
 Verified individual blade changes over time, full front and close angled views, and pause/resume. The angled preview reported 60 fps / 5.6 ms synchronous render submission. All 38 tests and the production build pass. The static field was rebuilt against 6,392,823 triangles in 19.21 seconds. Full photographic fidelity remains unfinished.
+
+## Irregular surface reflections and a narrower waterline gap
+
+Crossing ripple scales now use a slowly varying coordinate warp to avoid long repeating reflection stripes. Shorter waves create more varied green and copper reflections from the actual planting. The surface grid is 320 by 128, with conservative displacement bounds. LED-reflection pixel coverage is capped to prevent grazing rays from spreading the narrow light strips into excessive white glare.
+
+The shared water level is 5.45, reducing the dark air gap below the glass top. Surface placement, above/below selection, water-path attenuation and bake inclusion use this value consistently. This remains a procedural surface with depth-guided planar captures, not a complete fluid or refraction simulation.
+
+During verification, the bake exporter was found to use an older, darker rock-color transform. The renderer and exporter now share the rock material's saturation/tint descriptor, and bake provenance includes the exporter and water-depth source. The indirect field is rebuilt for this correction. No new assets, dependencies or paid services are used.
+
+Front daylight, elevated three-quarter and settled side/evening views were inspected without browser errors. One 47 fps sample recovered to 60 fps / 7.6 ms synchronous render submission. The corrected light field was rebuilt against 6,392,823 triangles in 19.4 seconds. The production build and four targeted reflection/lighting checks pass. Plant and fish animation are unchanged. The overall rendering remains less detailed and photographic than the reference, so the realism goal remains active.
