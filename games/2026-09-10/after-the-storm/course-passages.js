@@ -4,19 +4,38 @@ export function passageDistance(p,x,z){let d=Infinity;for(let i=1;i<p.path.lengt
 export function passagePoint(path,f){const lengths=path.slice(1).map((b,i)=>Math.hypot(b.x-path[i].x,b.z-path[i].z)),total=lengths.reduce((a,b)=>a+b,0);let distance=clamp(f,0,1)*total;
  for(let i=0;i<lengths.length;i++){const length=lengths[i];if(distance<=length||i===lengths.length-1){const a=path[i],b=path[i+1],t=clamp(distance/length,0,1);return {x:a.x+(b.x-a.x)*t,z:a.z+(b.z-a.z)*t,tx:(b.x-a.x)/length,tz:(b.z-a.z)/length};}distance-=length;}
 }
+function nearestPassageFraction(path,x,z){
+ let along=0,best=0,distance=Infinity;
+ for(let i=1;i<path.length;i++){const q=coordinates(path[i-1],path[i],x,z),t=clamp(q.along,0,q.length),d=Math.hypot(q.across,q.along-t);if(d<distance){distance=d;best=along+t;}along+=q.length;}
+ return best/along;
+}
 export function configurePassage(course){
  if(!['citadel','port','neon'].includes(course.id))return;
  // Select the same geographical bend in every sampling density and direction.
  const near=(x,z)=>course.gates.reduce((best,g,i)=>Math.hypot(g.x-x,g.z-z)<Math.hypot(course.gates[best].x-x,course.gates[best].z-z)?i:best,0);
- const authored=course.shortcut;let first=near(...(authored?.from||[50,108])),last=near(...(authored?.to||[85,-6]));if(course.id==='citadel'&&course.buoysByClass){first=course.gates.reduce((best,g,i)=>g.side&&Math.hypot(g.bx-authored.from[0],g.bz-authored.from[1])<Math.hypot(course.gates[best].bx-authored.from[0],course.gates[best].bz-authored.from[1])?i:best,course.gates.findIndex(g=>g.side));}if(course.reverse)[first,last]=[last,first];
+ const authored=course.shortcut;let first=near(...(authored?.from||[50,108])),last=near(...(authored?.to||[85,-6]));if(course.id==='citadel'&&course.buoysByClass){first=course.gates.reduce((best,g,i)=>g.side&&Math.hypot(g.bx-authored.from[0],g.bz-authored.from[1])<Math.hypot(course.gates[best].bx-authored.from[0],course.gates[best].bz-authored.from[1])?i:best,course.gates.findIndex(g=>g.side));}if(course.id==='port'&&course.buoysByClass){
+  const sourceGate=(x,z)=>course.gates.reduce((best,g,i)=>g.side&&Math.hypot(g.bx-x,g.bz-z)<Math.hypot(course.gates[best].bx-x,course.gates[best].bz-z)?i:best,course.gates.findIndex(g=>g.side));
+  first=sourceGate((122-220)*.8,(94-285)*.8);last=sourceGate((194-220)*.8,(307-285)*.8);
+ }if(course.reverse)[first,last]=[last,first];
  const a=course.gates[first],b=course.gates[last],via=(authored?.via||[]).map(([x,z])=>({x,z}));if(course.reverse)via.reverse();const path=[{x:a.x,z:a.z},...via,{x:b.x,z:b.z}];
  const p={kind:authored?.kind||(course.id==='citadel'?'gate':'tunnel'),first,last,path,width:authored?.width||(course.id==='citadel'?8:6),clearance:authored?.clearance||(course.id==='citadel'?5.5:4.3),enabled:course.difficulty>0||authored?.kind==='jump-dive',indices:[]};
  if(authored){p.structurePath=authored.structure.map(([x,z])=>({x,z}));p.continuous=!!authored.continuous;}
  let i=(first+1)%course.gates.length;
- while(i!==last){p.indices.push(i);const g=course.gates[i];g.side=0;if(!authored){g.tx=(b.x-a.x)/Math.hypot(b.x-a.x,b.z-a.z);g.tz=(b.z-a.z)/Math.hypot(b.x-a.x,b.z-a.z);g.width=65;}g.channel=true;g.bx=g.x;g.bz=g.z;i=(i+1)%course.gates.length;}
- if(authored&&!course.requiredPassage){p.branchGates={};p.indices.forEach((index,i)=>p.branchGates[index]={...passagePoint(path,(i+1)/(p.indices.length+1)),side:0,width:p.width+2,channel:true});}
+ while(i!==last){p.indices.push(i);const g=course.gates[i];g.side=0;if(!authored){g.tx=(b.x-a.x)/Math.hypot(b.x-a.x,b.z-a.z);g.tz=(b.z-a.z)/Math.hypot(b.x-a.x,b.z-a.z);g.width=65;}g.channel=true;if(authored&&course.requiredPassage&&p.continuous)g.pathFraction=nearestPassageFraction(path,g.x,g.z);g.bx=g.x;g.bz=g.z;i=(i+1)%course.gates.length;}
+ if(authored&&!course.requiredPassage){p.branchGates={};p.indices.forEach((index,i)=>p.branchGates[index]={...passagePoint(path,(i+1)/(p.indices.length+1)),side:0,width:p.width+2,channel:true,pathFraction:(i+1)/(p.indices.length+1)});}
  course.passage=p;
  if(!authored)course.rocks=course.rocks.filter(q=>passageDistance(p,q.x,q.z)>p.width+4);
+}
+// Follow the bends of an optional channel before aiming through its next gate.
+// This changes only the helm target; checkpoint planes stay in place.
+export function passageAim(p,g,x,z,lookahead=5){
+ const lengths=p.path.slice(1).map((b,i)=>Math.hypot(b.x-p.path[i].x,b.z-p.path[i].z)),total=lengths.reduce((a,b)=>a+b,0),limit=total*g.pathFraction;
+ let along=0,best=0,distance=Infinity;
+ for(let i=0;i<lengths.length&&along<=limit;i++){
+  const a=p.path[i],b=p.path[i+1],q=coordinates(a,b,x,z),t=clamp(q.along,0,Math.min(lengths[i],limit-along)),d=Math.hypot(q.across,q.along-t);
+  if(d<distance){distance=d;best=along+t;}along+=lengths[i];
+ }
+ return passagePoint(p.path,Math.min(limit,best+lookahead)/total);
 }
 export function passageOpening(p,time,openedAt=Infinity){if(!p?.enabled)return 0;if(p.kind==='tunnel'||p.kind==='jump-dive')return 1;return clamp((time-openedAt)/3,0,1);}
 export function passageTarget(s,r){

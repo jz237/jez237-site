@@ -131,9 +131,19 @@ const portDock=portMap([[200,95],[330,96],[331,124],[371,164],[373,223],[331,266
 const portNorth=portMap([[90,-120],[600,-120],[600,120],[400,99],[369,66],[333,67],[330,77],[199,77],[174,40],[162,35],[110,35],[91,17]]);
 const portRamp=(id,x,z,width,length=12)=>({id,name:'BOW JUMP',x:(x-220)*.8,z:(z-285)*.8,tx:-.36,tz:Math.sqrt(1-.36*.36),width,length,height:2.1,floating:false});
 const portSmallRamps=[[165,476],[188,461],[202,442]].map(([x,z],i)=>portRamp(110+i,x,z,10));
+const portBuoys=rows=>rows.map(([x,z,side])=>({x:(x-220)*.8,z:(z-285)*.8,side}));
+const portNormalBuoys=portBuoys([[51,240,1],[69,176,-1],[84,130,-1],[122,94,-1],[194,307,1],[186,335,1],[190,362,1],[49,461,1]]);
+const portHigherBuoys=portBuoys([[51,240,1],[69,176,-1],[84,130,-1],[122,94,-1],[194,307,1],[186,335,1],[190,362,1],[78,439,-1],[49,461,1]]);
+// Reverse reference coordinates normalize by (438-x,569-y).
+const portReverseBuoys=portBuoys([[82,466,1],[168,354,1],[169,322,1],[181,292,1],[106,85,-1],[73,137,-1],[52,187,-1],[51,267,1],[49,428,-1]]);
+portReverseBuoys[7].approach={x:(38-220)*.8,z:(240-285)*.8,throttle:.4,radius:3,range:35};
+const portReverseAnchors=portMap([[60,384],[60,260],[60,184],[69,140],[87,103],[123,84],[162,101],[194,114],[227,120],[246,137],[249,155],[236,171],[220,186],[216,203],[222,214],[245,213],[263,222],[272,243],[273,270],[254,290],[223,289],[195,291],[175,325],[167,417],[148,471],[124,500],[96,480],[79,438],[65,410]]);
 const port={
  boundary:portMap([[10,80],[30,22],[65,7],[89,7],[90,36],[164,36],[199,77],[330,77],[333,66],[368,66],[430,127],[430,259],[369,320],[235,320],[235,532],[210,563],[35,563],[9,543]]),
- name:'Port Blue',theme:'port',tag:'05 / PORT BLUE',layoutRevision:2,
+ name:'Port Blue',theme:'port',tag:'05 / PORT BLUE',layoutRevision:3,
+ buoysByClass:[portNormalBuoys,portHigherBuoys,portHigherBuoys,portReverseBuoys],retainRouteControls:true,
+ anchorsByClass:[null,null,null,portReverseAnchors],
+ finishLinesByClass:[portMap([[31,267],[89,267]]),portMap([[31,267],[89,267]]),portMap([[31,267],[89,267]]),portMap([[34,384],[86,384]])],
  description:'A long tanker divides the harbor. Normal uses the outer dock basin. Hard offers both routes; Expert and Reverse require the winding inner channel.',
  anchors:portMap([[60,260],[60,184],[69,140],[87,103],[123,84],[200,82],[315,86],[348,105],[386,157],[391,214],[366,260],[337,292],[290,300],[244,294],[195,291],[175,325],[167,417],[148,471],[124,500],[96,480],[79,438],[65,355]]),
  expertAnchors:portMap([[60,260],[60,184],[69,140],[87,103],[123,84],[162,101],[194,114],[227,120],[246,137],[249,155],[236,171],[220,186],[216,203],[222,214],[245,213],[263,222],[272,243],[273,270],[254,290],[223,289],[195,291],[175,325],[167,417],[148,471],[124,500],[96,480],[79,438],[65,355]]),
