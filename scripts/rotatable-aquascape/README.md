@@ -219,3 +219,11 @@ The shared water level is 5.45, reducing the dark air gap below the glass top. S
 During verification, the bake exporter was found to use an older, darker rock-color transform. The renderer and exporter now share the rock material's saturation/tint descriptor, and bake provenance includes the exporter and water-depth source. The indirect field is rebuilt for this correction. No new assets, dependencies or paid services are used.
 
 Front daylight, elevated three-quarter and settled side/evening views were inspected without browser errors. One 47 fps sample recovered to 60 fps / 7.6 ms synchronous render submission. The corrected light field was rebuilt against 6,392,823 triangles in 19.4 seconds. The production build and four targeted reflection/lighting checks pass. Plant and fish animation are unchanged. The overall rendering remains less detailed and photographic than the reference, so the realism goal remains active.
+
+## Exposed fractured stone and embedded footing
+
+The main scanned rock now faces the front with its pitted, ledged side instead of its broad smooth back. Tilting it exposes the scan's actual fractures under the canopy light. A smaller scanned stone joins the foreground at its base, and burial depth scales with stone size so larger irregular rocks sit into the substrate rather than balancing on one low vertex. Original scan UVs, normal maps and surface-sampled moss are retained. Collision spheres continue to derive from the final placed geometry.
+
+This is a composition and placement correction using existing free assets. The static indirect field is rebuilt for the changed stone geometry and grounding. Fish behavior, plant motion, water and the photographic original remain unchanged.
+
+Front and three-quarter views were compared with the previous smooth-face arrangement; the settled side view was checked for glass clearance. No browser warnings/errors appeared, and the side preview reported 60 fps / 8.0 ms synchronous render submission. The indirect field was rebuilt against 6,403,819 triangles in 21.14 seconds. All 38 tests and the production build pass. No money was spent; full photographic fidelity remains unfinished.
