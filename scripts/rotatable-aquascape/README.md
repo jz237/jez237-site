@@ -356,3 +356,9 @@ The regenerated scene has 29,724 botanical leaf instances. An export audit check
 The scanned wood uses a restrained scene-linear reflectance curve (exponent 1.18, gain 1.12) to deepen bark while retaining pale exposed fibers. Occlusion strength is .9, normal strength 1.15 and roughness .82. This is an artistic submerged appearance, not a measured wet-wood model. The diffuse exporter applies the same curve after texture and vertex pigment, matching the runtime shader order.
 
 Red colonies use deeper copper pigment with warmer growing tips and individual variation. A stronger red trial was moderated after viewing it in the tank. Geometry, placement, motion, fish behavior and the separate photographic demo are unchanged. The static bounced-light field was regenerated for the new material colors. No paid assets or services were used; full photographic fidelity remains unfinished.
+
+### Leaf cross-section refinement
+
+Veins, transverse ribs, edge ripples and twist now use a species-level width/length estimate instead of scaling all relief with leaf length. This reduces exaggerated folds on long narrow blades while retaining their longitudinal bend. Margins have shallow unequal curvature. A close-up comparison with the previous geometry exposed excessive cupping on the first round-leaf trial; their original cup depth was retained with the new asymmetry.
+
+The 29,724 leaf instances retain the same layout and animation. A static export audit found all blade vertices finite and inside the glass. Bounced lighting was rebuilt against the unchanged 8,973,091-triangle count in 22.09 seconds. This remains an artistic species-level approximation rather than measured leaf anatomy. No paid assets or services were used; photographic parity remains unproven.
