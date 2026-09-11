@@ -99,9 +99,12 @@ const fortExpertBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],
 const fortReverseBuoys=fortBuoys([[176,320,1],[118,382,1],[274,394,1],[311,425,-1],[309,463,1],[399,362,1]].map(([x,z,side])=>[465-x,564-z,side]));
 fortReverseBuoys[3].approach={x:(169-210)*.8,z:(160-300)*.8,throttle:.4,radius:3};
 fortReverseBuoys[5].approach={x:(58-210)*.8,z:(183-300)*.8,throttle:.4,radius:3};
+const fortArchSpans=[[[120,494],[120,560],25],[[159,493],[170,553],26],[[192,484],[213,533],25],[[224,476],[253,506],25]];
+const fortArches=fortArchSpans.flatMap(([a,b,width],arch)=>{const [[ax,az],[bx,bz]]=fortMap([a,b]),length=Math.hypot(bx-ax,bz-az),tx=(bx-ax)/length,tz=(bz-az)/length,n=16;return Array.from({length:n},(_,i)=>{const f=(i+.5)/n,u=2*f-1;return {kind:'stone-arch',arch,x:ax+(bx-ax)*f,z:az+(bz-az)*f,tx,tz,length:length/n+.02,depth:width*.8,bottom:i===0||i===n-1?-10:7.5*Math.sqrt(1-u*u)-.7,top:11,material:'stone'};});});
+for(const b of fortArches){const parts=fortArches.filter(p=>p.arch===b.arch),i=parts.indexOf(b);b.soffitBefore=parts[Math.max(0,i-1)].bottom;b.soffitAfter=parts[Math.min(parts.length-1,i+1)].bottom;}
 const fort={
  name:'Marine Fortress',theme:'fortress',tag:'04 / MARINE FORTRESS',layoutRevision:3,
- finishLine:fortMap([[9,272],[108,272]]),
+ finishLine:fortMap([[9,272],[108,272]]),crossbars:fortArches,
  buoysByClass:[fortNormalBuoys,fortHardBuoys,fortExpertBuoys,fortReverseBuoys],retainRouteControls:true,
  description:'Rough grey water around a stone fort. Floating crates crowd the eastern arm; Hard and above open a curved inner route after the first lap.',
  anchors:fortMap([[81,273],[81,192],[53,178],[37,156],[38,128],[54,89],[79,68],[104,60],[125,63],[148,94],[176,144],[201,160],[264,179],[337,185],[374,204],[384,227],[373,247],[307,251],[290,270],[283,345],[279,423],[260,466],[225,493],[168,510],[105,516],[81,499],[76,461],[80,360]]),

@@ -2,9 +2,12 @@ import {waterLevel} from './simulation.js';
 import {polygonDistance} from './classic-courses.js';
 // Finite raised walls: a ski can clear the top or dive below the underside.
 // Dimensions are shared with the visible mesh; metres in world coordinates.
+export function barrierUnderside(b,along=0){if(b.kind!=='stone-arch')return b.bottom;const t=Math.min(1,Math.abs(along)/b.length),neighbor=along<0?b.soffitBefore:b.soffitAfter;return b.bottom+(neighbor-b.bottom)*t;}
 export function barrierCollision(barriers,x,y,z,radius=.85,hullHeight=1.1){
  for(const b of barriers||[]){const localY=y-(b.floating?waterLevel.value:0);if(b.outline){if(polygonDistance(b.outline,x,z)<radius&&localY<b.top&&localY+hullHeight>b.bottom)return true;continue;}for(const p of barrierPiles(b))if(Math.hypot(x-p.x,z-p.z)<p.radius+radius&&y<p.top&&y+hullHeight>p.bottom)return true;const dx=x-b.x,dz=z-b.z,along=dx*b.tx+dz*b.tz,across=-dx*b.tz+dz*b.tx;
-  if(Math.abs(along)<b.length/2+radius&&Math.abs(across)<b.depth/2+radius&&localY<b.top&&localY+hullHeight>b.bottom)return true;
+  if(Math.abs(along)>=b.length/2+radius||Math.abs(across)>=b.depth/2+radius||localY>=b.top)continue;
+  const underside=b.kind==='stone-arch'?Math.min(...[along-radius,along,along+radius].map(a=>barrierUnderside(b,Math.max(-b.length/2,Math.min(b.length/2,a))))):b.bottom;
+  if(localY+hullHeight>underside)return true;
  }return false;
 }
 export function barrierCamera(barriers,target,desired){
