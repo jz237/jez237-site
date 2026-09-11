@@ -1,0 +1,121 @@
+{
+  "samples": [
+    {
+      "name": "flap_down",
+      "file": "flap_down.ogg",
+      "sha256": "b3fd63c22c0bd487a49e36ae99f26119e54745eb8da225c47ee59b6f110258cb"
+    },
+    {
+      "name": "flap_up",
+      "file": "flap_up.ogg",
+      "sha256": "686120b5e961631fd886979454f0aea0a93d6ebca2e67c3481f5e662b16fbcd2"
+    },
+    {
+      "name": "run1",
+      "file": "run1.ogg",
+      "sha256": "5f583ba72b6073a571676a186440ff11d5d0dedcce7ec52f4d23795fb5e0a4dc"
+    },
+    {
+      "name": "run2",
+      "file": "run2.ogg",
+      "sha256": "18b2c36f8e93601b573c3a816767fa1103d2c980de7206dcbe3f6d1716a2e3e1"
+    },
+    {
+      "name": "skid",
+      "file": "skid.ogg",
+      "sha256": "1901f6c5d1e5cb9d52508ed034ba31223d468ecfeb019b7338344096a2da65f7"
+    },
+    {
+      "name": "skid_end",
+      "file": "skid_end.ogg",
+      "sha256": "06d0559ae2755ec2191e7e8effbae6a6a340ceee51b272e27363f2de12e16b93"
+    },
+    {
+      "name": "thud",
+      "file": "thud.ogg",
+      "sha256": "d7586488814218dc98d60d2ce3c059ebc8f58c2f582daa5ea5301839df60ddd7"
+    },
+    {
+      "name": "cliff_thud",
+      "file": "cliff_thud.ogg",
+      "sha256": "97fd9c345384dd2909fcad38c18e95e92a92232312e3bc4596d67d4896ab537e"
+    },
+    {
+      "name": "egg",
+      "file": "egg.ogg",
+      "sha256": "0217a121355a81fc0d51b37d4091e8a98abcf116a92c8700140ea8a55c49bcfc"
+    },
+    {
+      "name": "egg_hatch",
+      "file": "egg_hatch.ogg",
+      "sha256": "f05c8c8881161803a237cde4ddd45a7e1e104c5910445d596135398236086bdf"
+    },
+    {
+      "name": "die",
+      "file": "die.ogg",
+      "sha256": "0aeb044793a3db5561e62285c50c320e241d44bbe28ac877f43c8ca4a7778e9c"
+    },
+    {
+      "name": "ptero_scream",
+      "file": "ptero_scream.ogg",
+      "sha256": "70eb088f982c5d341f6e5f5e8828eddaf47a69978cc3434f57698decdcc0d185"
+    },
+    {
+      "name": "ptero_intro",
+      "file": "ptero_intro.ogg",
+      "sha256": "1b311f063cc87ae1385916d6ef1b61eba04cb6d5e8ae71926584118076dfb941"
+    },
+    {
+      "name": "troll",
+      "file": "troll.ogg",
+      "sha256": "aed89a082211ccb8eae8ba905be14cfd38620c991951a71ff1deb866c243b181"
+    },
+    {
+      "name": "lava",
+      "file": "lava.ogg",
+      "sha256": "5ddd8cb2af7a1a47d694ae2a97ecc53ed50aaa702604479e3ba5f1dd555d68c8"
+    },
+    {
+      "name": "transporter_enemy",
+      "file": "transporter_enemy.ogg",
+      "sha256": "14a8a5a587f1b1ba13add4098551c60c8652a6f98e54d95bfacb582c455cdaff"
+    },
+    {
+      "name": "transporter_player",
+      "file": "transporter_player.ogg",
+      "sha256": "3ebbf4078e300a64a0a5d1fd7fa187a7fe01ce01c442483c1095a75fdb328cc8"
+    },
+    {
+      "name": "mount",
+      "file": "mount.ogg",
+      "sha256": "26430cef977effc67b81b769b15f48491b580abe57864cf2b8c199bc884f3c6e"
+    },
+    {
+      "name": "bounty",
+      "file": "bounty.ogg",
+      "sha256": "42924935bd6ccd19c4c2f183eb11f7713cae72ec9c47b69e7c9457cb30586e53"
+    },
+    {
+      "name": "cliff",
+      "file": "cliff.ogg",
+      "sha256": "d4205b82e83976908d636361dca28f56379a22fa03b67ee623982de21856ee90"
+    },
+    {
+      "name": "extra_man",
+      "file": "extra_man.ogg",
+      "sha256": "277dc82f67f7ab1a8efc4625985a00cf9784a2c918c659f4d76cae106b7b0d11"
+    },
+    {
+      "name": "game_start",
+      "file": "game_start.ogg",
+      "sha256": "2e0e1935932695f06eb83d1bdcefddc156aaff0671be986e8ce93b082b33959b"
+    },
+    {
+      "name": "credit",
+      "file": "credit.ogg",
+      "sha256": "c48bb63d23641777198d4314450241e96b378533a680843efa0c89c6da9c3677"
+    }
+  ],
+  "source": "/games/2026-07-05/joust/retro/assets/audio/",
+  "soundProgram": "Williams VSNDRM4"
+}
