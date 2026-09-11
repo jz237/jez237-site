@@ -192,3 +192,11 @@ The main left stone now uses the more deeply fractured scan from the existing se
 The source GLTF had no ambient-occlusion texture assigned. Its original CC0 2K AO map is now bundled locally and applied at restrained intensity. More of the original color variation is retained instead of strongly desaturating every rock. The download's byte count and MD5 were verified against Poly Haven metadata; AO_PROVENANCE.json records the source and checksum. This is a scanned terrestrial rock adapted for the aquarium, not a reconstruction of the reference stone.
 
 Front and enlarged three-quarter views were inspected. One brief 9 fps sample recovered to 60 fps with 8.8 ms synchronous render submission on recheck; no browser errors appeared, and the school continued traveling through different heights and depths. The light field was rebuilt against 6,331,945 triangles in 16.47 seconds. All 35 tests and the production build pass, including rock grounding, glass containment and collision coverage. No money was spent. Photographic fidelity remains incomplete.
+
+## Terrain-following granular soil volume
+
+The old rectangular soil layer stretched a square texture over a front face more than thirty times wider than it was tall. It now uses walls built from the actual terrain boundary, with consistent world-scaled texture coordinates and a closed bottom. The top and side walls share exact boundary vertices. The soil footprint is slightly recessed within the glass, with small exposed grain caps along the front. An initially regular grain arrangement was replaced after visual review with irregular placement.
+
+Two geometry tests verify that the combined terrain volume closes without gaps or inconsistent seam winding, and that side/bottom texture scale matches world distance. The static light field was rebuilt against 6,392,823 triangles, including the corrected soil volume and grains. All 37 tests and the production build pass.
+
+Front and enlarged three-quarter views were inspected; the close preview reported 60 fps and 7.9 ms synchronous render submission, with no browser warnings/errors. Fish behavior and the photographic original are unchanged. No assets, dependencies or paid services were introduced. This improves the foreground material scale and depth; the whole scene still does not match the reference photograph.

@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {substrateVolume} from './SubstrateVolume';
 
 /** A shared, irregular boundary keeps the sand and encroaching carpet in agreement. */
 export function sandChannel(z:number){
@@ -32,11 +33,11 @@ export function buildAquariumSubstrate(scene:T.Scene,height:(x:number,z:number)=
   return mat;
  };
  const soil=material(false),sand=material(true);
- const terrain=new T.PlaneGeometry(10.12,4.64,110,55);terrain.rotateX(-Math.PI/2);
+ const terrain=new T.PlaneGeometry(10.12,4.6,110,55);terrain.rotateX(-Math.PI/2);
  const positions=terrain.getAttribute('position') as T.BufferAttribute,uv=terrain.getAttribute('uv') as T.BufferAttribute;
  for(let i=0;i<positions.count;i++){const x=positions.getX(i),z=positions.getZ(i);positions.setY(i,height(x,z)+(random()-.5)*.003);uv.setXY(i,x/2.2,z/2.2);}
  terrain.computeVertexNormals();const ground=new T.Mesh(terrain,soil);ground.receiveShadow=true;scene.add(ground);
- const layer=new T.Mesh(new T.BoxGeometry(10.13,.32,4.64),soil);layer.position.y=.17;layer.receiveShadow=true;scene.add(layer);
+ const layer=new T.Mesh(substrateVolume(terrain,110,55),soil);layer.receiveShadow=true;scene.add(layer);
  const p:number[]=[],tex:number[]=[],indices:number[]=[];
  for(let j=0;j<=96;j++){
   const z=2.29-j/96*4.5,{left,right}=sandChannel(z);
@@ -63,5 +64,14 @@ export function buildAquariumSubstrate(scene:T.Scene,height:(x:number,z:number)=
   const inSand=x>left&&x<right;
   dummy.position.set(x,height(x,z)+(inSand?.023:0)+s*.5,z);dummy.rotation.set(random()*3,random()*6.28,random()*3);dummy.scale.set(s,s*.8,s*(.7+random()*.5));dummy.updateMatrix();soilGrains.setMatrixAt(i,dummy.matrix);soilGrains.setColorAt(i,soilColors[i%soilColors.length]);
  }
- for(const grains of [quartz,soilGrains]){grains.castShadow=true;grains.receiveShadow=true;grains.computeBoundingSphere();scene.add(grains);}
+ // Exposed pellet caps meet the front glass without a flat, stretched soil band.
+ const frontGrains=new T.InstancedMesh(grainGeometry,grainMaterial,3000);let frontCount=0;
+ for(let i=0;i<3000;i++){
+  const x=-5.01+random()*10.02,y=.036+random()*(height(x,2.3)-.06),r=.012+random()*.007;
+  if(y+r>height(x,2.3)-.007)continue;
+  dummy.position.set(x,y,2.292);dummy.rotation.set(random()*3,random()*6.28,random()*3);dummy.scale.set(r,r*(.8+random()*.2),r);dummy.updateMatrix();
+  frontGrains.setMatrixAt(frontCount,dummy.matrix);frontGrains.setColorAt(frontCount,soilColors[frontCount%soilColors.length]);frontCount++;
+ }
+ frontGrains.count=frontCount;
+ for(const grains of [quartz,soilGrains,frontGrains]){grains.castShadow=true;grains.receiveShadow=true;grains.computeBoundingSphere();scene.add(grains);}
 }
