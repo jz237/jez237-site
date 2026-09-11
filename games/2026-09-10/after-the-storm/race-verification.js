@@ -145,7 +145,7 @@ function authoredStuntInput(state,r){
  let q=targets[Math.min(v.index,targets.length-1)],along=(r.x-q.x)*q.tx+(r.z-q.z)*q.tz;
  if(along>(q.kind==='ramp'?q.length/2:1)&&v.index<targets.length-1)q=targets[++v.index];
  const aim=q.kind==='ramp'?q.length/2+4:1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
- const input={throttle:clamp(.53+(13-r.speed)*.16,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.1,dampen:true,lean:q.kind==='ramp'?-1:0};
+ const input={throttle:clamp(.53+((q.speed??13)-r.speed)*.16,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.1,dampen:true,lean:q.kind==='ramp'?-1:0};
  if(v.rampJump&&h.airborne&&(h.y-h.waterHeight>1.2||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||'flip';
  else if(!h.airborne&&h.wet>.5&&q.kind!=='ramp')input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';
  return input;
