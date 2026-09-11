@@ -29,7 +29,7 @@ Remaining diagrams still require inspection before their buoy layouts are author
 | Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/route and race ramp; piers, bypasses and buoy placement pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
-| Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel and corrected required Expert/Reverse inner route; race jump, original buoy patterns and final visual matching pending |
+| Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; original buoy patterns and final visual/scale matching pending |
 | Twilight City | Angular urban channel, walls, race ramps and alternate routes | Existing generic course; full reconstruction pending |
 | Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Existing generic course; full reconstruction pending |
 | Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Existing generic course; full reconstruction pending |
@@ -101,3 +101,13 @@ The bow jump is still pending. This correction is not a full course-parity sign-
 - Focused ramp/geography tests: 18/18 passed, including backward contact, airborne clearance, lateral bypass and forward launch behavior.
 - This implements the backward-obstacle behavior described in the Reverse Sunset source. Port Blue's class-specific jump geometry remains to be authored. Exact ramp dimensions, original buoy placements and scenery fidelity remain subject to final course comparison.
 - Full suite: 118/118 passed in 75.91 seconds. Browser Reverse Sunset Bay / venue conditions: 222.133 seconds, 96 checkpoints, zero misses, three wave landings, third place. High graphics, final 60 FPS; no runtime errors. This is traversal evidence, not a substitute for exact source-level buoy and obstacle matching.
+
+## Port Blue bow jump milestone — September 10, 2026
+
+- Normal and Reverse have three separated small ramps at the bow. Hard has a wider jump with an outside water gap; Expert's larger jump spans the racing corridor. Dimensions are reconstruction estimates from the illustrated reference maps, not extracted original geometry.
+- Port Blue now uses an explicit mapped course boundary for out-of-bounds adjudication and visible perimeter floats. The old fixed 30-metre distance from generated checkpoints wrongly excluded Hard's outside bypass. Other courses retain their existing boundary behavior pending their original layouts.
+- A real-step Hard bypass test crosses the jump area without ramp contact or leaving the boundary. An ordinary-input Expert race contacts the bow jump and lands on every lap, with zero missed checkpoints.
+- Focused geography/ramp checks: 13/13 passed. Exact original buoy coordinates, jump scale/detail comparison and the remaining courses still require work.
+- Full suite: 120/120 passed in 74.67 seconds. Browser Expert / venue conditions: 201.483 seconds, 96 checkpoints, zero misses, three jump landings, third place. High graphics, final 60 FPS.
+- Extended the existing verification-only apex/landing controls to race ramps. The first apex inspection caught an oversized sign obstructing the camera; wide ramps now use a capped side-mounted sign. The game physics did not change after the full-suite run.
+- Reinspection after the sign fix showed the ski visibly airborne beyond the ramp, with an unobstructed forward view: apex 2.569 metres above the local wave surface at 52.19 km/h, zero wet contact, zero compression/load. Runtime errors were empty. This proves the rendered jump interaction; original scale and final detailing are still estimates pending comparison.

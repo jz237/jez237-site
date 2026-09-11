@@ -56,7 +56,10 @@ const portMap=points=>fromMap(points,220,285,.8);
 const portShip=portMap([[119,103],[145,103],[163,132],[165,276],[160,409],[145,461],[124,492],[103,466],[89,426],[89,158],[104,117]]);
 const portDock=portMap([[200,95],[330,96],[331,124],[371,164],[373,223],[331,266],[331,283],[295,283],[282,271],[280,230],[260,204],[231,205],[231,189],[260,161],[261,136],[239,111],[204,111]]);
 const portNorth=portMap([[90,-120],[600,-120],[600,120],[400,99],[369,66],[333,67],[330,77],[199,77],[174,40],[162,35],[110,35],[91,17]]);
+const portRamp=(id,x,z,width,length=12)=>({id,name:'BOW JUMP',x:(x-220)*.8,z:(z-285)*.8,tx:-.36,tz:Math.sqrt(1-.36*.36),width,length,height:2.1,floating:false});
+const portSmallRamps=[[165,476],[188,461],[202,442]].map(([x,z],i)=>portRamp(110+i,x,z,10));
 const port={
+ boundary:portMap([[10,80],[30,22],[65,7],[89,7],[90,36],[164,36],[199,77],[330,77],[333,66],[368,66],[430,127],[430,259],[369,320],[235,320],[235,532],[210,563],[35,563],[9,543]]),
  name:'Port Blue',theme:'port',tag:'05 / PORT BLUE',layoutRevision:2,
  description:'A long tanker divides the harbor. Normal uses the outer dock basin. Hard offers both routes; Expert and Reverse require the winding inner channel.',
  anchors:portMap([[60,260],[60,184],[69,140],[87,103],[123,84],[200,82],[315,86],[348,105],[386,157],[391,214],[366,260],[337,292],[290,300],[244,294],[195,291],[175,325],[167,417],[148,471],[124,500],[96,480],[79,438],[65,355]]),
@@ -64,7 +67,7 @@ const port={
  expertClosedAreas:[portMap([[194,76],[336,76],[336,96],[194,96]]),portMap([[280,283],[439,283],[439,328],[280,328]])],
  ground(x,z){return Math.max(port.renderGround(x,z),clamp(-polygonDistance(portShip,x,z)*.8,-10,6),clamp(-polygonDistance(portDock,x,z)*.8,-10,6));},
  renderGround(x,z){return clamp(Math.max(-polygonDistance(portNorth,x,z)*.8,(x-(430-220)*.8)*.8),-10,6);},
- obstacles:[],resistance:[],raceRamps:[],shipOutline:portShip,dockOutline:portDock,
+ obstacles:[],resistance:[],raceRamps:[],raceRampsByClass:[portSmallRamps,[portRamp(110,184,463,64,18)],[portRamp(110,187,463,84,18)],portSmallRamps],shipOutline:portShip,dockOutline:portDock,
  shortcut:{kind:'tunnel',from:portMap([[123,84]])[0],to:portMap([[175,325]])[0],width:6,clearance:4.3,continuous:true,
  via:portMap([[162,101],[194,114],[227,120],[246,137],[249,155],[236,171],[220,186],[216,203],[222,214],[245,213],[263,222],[272,243],[273,270],[254,290],[223,289]]),
  structure:portMap([[194,114],[227,120],[246,137],[249,155],[236,171],[220,186],[216,203],[222,214],[245,213],[263,222],[272,243],[273,270],[263,279]])}
