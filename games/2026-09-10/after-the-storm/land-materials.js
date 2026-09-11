@@ -2,6 +2,9 @@ import {waterLevel} from './simulation.js';
 export const coastalLighting={time:{value:0},storm:{value:0},seaLevel:waterLevel};
 import * as T from './vendor/three.module.js';
 
+const dryAtlas=new T.DataTexture(new Uint8Array([0,0,0,255]),1,1);dryAtlas.needsUpdate=true;
+export const shoreline={shoreMap:{value:dryAtlas},shoreCenter:{value:new T.Vector2()},shoreSpan:{value:240}};
+
 // Local CC0 photographic surfaces; all instances share the same GPU textures.
 const loader=new T.TextureLoader();
 const names={sand:'coast_sand_02',rock:'coast_sand_rocks_02',soil:'forrest_ground_01',bark:'bark_brown_02'};
@@ -28,11 +31,12 @@ vec3 triNormal(sampler2D tex,vec3 p,vec3 weights,vec3 n){
 
 export function configureTerrainMaterial(mat,{palette={},waterDetail,waterLevel,time,storm}){
  mat.onBeforeCompile=s=>{
-  Object.assign(s.uniforms,{landSand:{value:new T.Color(palette.sand??0xdcc9a5)},landRock:{value:new T.Color(palette.rock??0xbabaae)},landGrass:{value:new T.Color(palette.grass??0x7b9349)},seaLevel:waterLevel,time,storm,detailMap:{value:waterDetail},snowCover:{value:palette.grass===0xe5f0f0?1:0}});
+  Object.assign(s.uniforms,{...shoreline,landSand:{value:new T.Color(palette.sand??0xdcc9a5)},landRock:{value:new T.Color(palette.rock??0xbabaae)},landGrass:{value:new T.Color(palette.grass??0x7b9349)},seaLevel:waterLevel,time,storm,detailMap:{value:waterDetail},snowCover:{value:palette.grass===0xe5f0f0?1:0}});
   for(const k of ['sand','rock','soil'])for(const [key,channel]of [['Color','diff'],['Normal','nor_gl'],['Rough','rough']])s.uniforms[k+key]={value:landMaps[k][channel]};
   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 landP;varying vec3 landN;').replace('#include <begin_vertex>','#include <begin_vertex>\nlandP=position;landN=normal;');
   s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
 varying vec3 landP;varying vec3 landN;uniform vec3 landSand,landRock,landGrass;uniform float seaLevel,time,storm,snowCover;
+uniform sampler2D shoreMap;uniform vec2 shoreCenter;uniform float shoreSpan;
 uniform sampler2D sandColor,sandNormal,sandRough,rockColor,rockNormal,rockRough,soilColor,soilNormal,soilRough,detailMap;
 ${sampling}`);
   s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
@@ -47,7 +51,11 @@ vec3 rocky=triColor(rockColor,rockUV,tw)*mix(vec3(1.),landRock,.15);
 vec3 grassy=triColor(soilColor,soilUV,tw)*mix(vec3(1.),landGrass,.68);
 vec3 earth=mix(mix(sandy,rocky,stoneWeight),grassy,plantWeight)*(.80+macro*.33);
 earth=mix(earth,vec3(.76,.86,.89)*(0.85+macro*.2),snowCover*smoothstep(.15,.8,ln.y));
-float wet=1.-smoothstep(.05,1.7,altitude);earth*=1.-wet*.38;
+vec2 shoreUV=(landP.xz-shoreCenter)/shoreSpan+.5;
+float shoreInside=step(0.,shoreUV.x)*step(shoreUV.x,1.)*step(0.,shoreUV.y)*step(shoreUV.y,1.);
+float recentWash=texture2D(shoreMap,shoreUV).b*shoreInside;
+float wet=max(1.-smoothstep(-.15,.4,altitude),recentWash)*(1.-plantWeight*.85)*(1.-snowCover);
+earth*=1.-wet*.40;
 vec2 cuv=landP.xz*.19+vec2(time*.012,-time*.007);
 float c1=texture2D(detailMap,cuv).b,c2=texture2D(detailMap,mat2(.8,-.6,.6,.8)*landP.xz*.237-vec2(time*.009,0)).b;
 float caustic=max(0.,min(c1,c2)*3.-.65),submerged=seaLevel-landP.y;
@@ -60,7 +68,7 @@ roughnessFactor=clamp(mix(mix(sr,rr,stoneWeight),gr,plantWeight)*.5+.42-wet*.25,
 vec3 surfaceN=normalize(mix(mix(triNormal(sandNormal,sandUV,tw,ln),triNormal(rockNormal,rockUV,tw,ln),stoneWeight),triNormal(soilNormal,soilUV,tw,ln),plantWeight));
 normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7))),0.)).xyz);`);
  };
- mat.customProgramCacheKey=()=>`photographic-coast-v1-${palette.grass??0}`;
+ mat.customProgramCacheKey=()=>`photographic-coast-wash-v2-${palette.grass??0}`;
 }
 
 export function rockMaterial(){

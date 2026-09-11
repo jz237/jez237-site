@@ -70,7 +70,7 @@ void main(){
  float spec=distribution*smithV*smithL*.0204/max(.02,4.*nv*nl);
  col+=vec3(1.,.80,.53)*min(12.,spec)*nl*2.4*(1.-storm*.88)*(1.-night*.97);
  float turbulence=noise(p*2.7+vec2(time*.07,-time*.04))*.6+noise(p*8.1-time*.025)*.4;
- vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float foam=history.r*smoothstep(.27,.78,turbulence)*.75,bubbles=history.g*.4;
+ vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float foam=history.r*smoothstep(.34,.78,turbulence)*.50,bubbles=history.g*.4;
  // Landing wash expands from the contact point and breaks apart, remaining in
  // world space after the rider has left. Its ring follows the shared pressure wave.
  for(int i=0;i<12;i++){vec4 w=impactWaves[i];float age=time-w.z;if(w.w<=0.||age<0.||age>7.)continue;
@@ -78,9 +78,14 @@ void main(){
   foam+=exp(-front*front*2.5-age*.85)*w.w*6.*smoothstep(.22,.72,turbulence)*(1.-exp(-age*12.));
   bubbles+=exp(-radius*radius/(1.+age*2.))*exp(-age*.9)*w.w*3.;
  }
- // Wash follows the changing shoreline and breaks into patches as it drains back.
- float shore=(1.-smoothstep(.10,.85,verticalDepth))*smoothstep(-.10,.08,verticalDepth);
- float wash=smoothstep(.33,.76,turbulence+.12*sin(time*.8+p.x*.16));foam+=shore*wash*.65;
+ // A narrow advancing foam lip, broken lace behind it, and aerated shallow wash.
+ // Depth is measured against the moving surface, so the edge travels up the beach.
+ float shore=1.-smoothstep(.12,1.45,verticalDepth);
+ float lip=exp(-pow((verticalDepth-.13)/.16,2.));
+ float lace=noise(p*1.25+surface.yz*.4-vec2(time*.13,time*.09));
+ float wash=smoothstep(.28,.70,lace*.65+turbulence*.35);
+ foam+=lip*(.42+.75*wash)+shore*wash*(.26+history.r*.65);
+ bubbles+=shore*.2;
  for(int r=0;r<7;r++){float gap=length(p-reefs[r].xy)-reefs[r].z;foam+=exp(-gap*gap*3.)*smoothstep(.42,.8,turbulence+.12*sin(time*1.7+float(r)))*(.20+storm*.12);}
  for(int i=0;i<64;i++){vec4 w=wake[i];float age=time-w.z;if(age>=0.&&age<18.&&w.w>.02){vec2 delta=p-w.xy-vec2(.16,-.11)*storm*age;float spread=.55+age*.65;if(dot(delta,delta)<(spread+3.)*(spread+3.)){
   float along=dot(delta,vec2(sin(wakeHeading[i]),cos(wakeHeading[i]))),across=dot(delta,vec2(cos(wakeHeading[i]),-sin(wakeHeading[i])));
@@ -90,8 +95,19 @@ void main(){
   foam+=(arms+churn)*trail*fade*(.15+.85*foamPatch);
   bubbles+=exp(-across*across/(.5+age*.28))*trail*exp(-age*.19)*.24;
  }}}
- // Only steep, wind-driven crests break; uniform white caps at a fixed height are avoided.
- float steepness=length(surface.yz);foam+=smoothstep(.15,.30,steepness)*smoothstep(.12,.6,storm)*smoothstep(.38,.72,turbulence)*.6;
+ // Scattered spilling caps on elevated, steep crests, including fair-weather surf.
+ // Large patches survive at distance; fine lace is filtered away toward the horizon.
+ float steepness=length(surface.yz);
+ float capPatch=noise(p*.15+surface.yz*.8-vec2(time*.10,time*.06));
+ vec2 px=dFdx(p),py=dFdy(p),gx=dFdx(surface.yz),gy=dFdy(surface.yz);
+ float determinant=px.x*py.y-px.y*py.x;
+ float curvature=-(gx.x*py.y-gy.x*px.y+gy.y*px.x-gx.y*py.x)
+  /(abs(determinant)>.000001?determinant:.000001);
+ float cap=smoothstep(.55,1.5,surface.x)*smoothstep(.024,.085,curvature)
+  *(1.-smoothstep(.32,.70,steepness))
+  *smoothstep(.40,.67,capPatch);
+ float capLace=mix(smoothstep(.24,.65,turbulence),.72,smoothstep(55.,180.,dist));
+ foam+=cap*capLace*1.35;
  // Subsurface aeration persists after the white surface foam disperses.
  col=mix(col,mix(vec3(.10,.32,.30),vec3(.055,.15,.17),storm),clamp(bubbles,0.,.65)*(1.-fresnel));
  float cells=texture2D(detailMap,p*1.9+drift-flow*.6).b;
