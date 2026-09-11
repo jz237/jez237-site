@@ -5,7 +5,7 @@ import {EpiphyteMoss} from './EpiphyteMoss';
 import {aquascapeBranches,bendScannedBranch} from './ScannedBranch';
 import {rockPlacements,shapeScannedRock} from './ScannedRock';
 /** Free photogrammetric surfaces retain their scan UVs while wood bends into the composition. */
-export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],height:(x:number,z:number)=>number){
+export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],height:(x:number,z:number)=>number,time:{value:number}){
  const loader=new GLTFLoader();
  const moss=new EpiphyteMoss();
  const [woodFile,rockFile]=await Promise.all([
@@ -38,7 +38,7 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
   mesh.updateMatrixWorld();const sphere=geo.boundingSphere!.clone().applyMatrix4(mesh.matrixWorld);obstacles.push({center:sphere.center,radius:sphere.radius});
   moss.sample(mesh,70,.7);
  }
- moss.build(scene);
+ await moss.build(scene,time);
 }
 
 /** Photographic fern fronds on curved fixed meshes, with restrained current movement. */

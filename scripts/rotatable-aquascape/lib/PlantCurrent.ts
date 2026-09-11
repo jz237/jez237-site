@@ -10,16 +10,18 @@ attribute float plantFlex;
 ${flutter?`attribute vec3 leafMotion;
 vec3 animatedLeaf(vec3 p){
  float phase=waterTime*leafMotion.z+leafMotion.x;
- float ripple=sin(phase+p.y*2.8)+.3*sin(phase*1.9+.7);
+ float surge=.78+.22*sin(waterTime*.37+leafMotion.x*.43);
+ float ripple=(sin(phase+p.y*2.8)+.3*sin(phase*1.9+.7))*surge;
  p.z+=leafMotion.y*(ripple*p.y*p.y+.8*p.x*p.y*sin(phase*.8+1.2));
  return p;
 }
 vec3 animatedLeafNormal(vec3 p,vec3 n){
  float phase=waterTime*leafMotion.z+leafMotion.x;
- float ripple=sin(phase+p.y*2.8)+.3*sin(phase*1.9+.7);
+ float surge=.78+.22*sin(waterTime*.37+leafMotion.x*.43);
+ float ripple=(sin(phase+p.y*2.8)+.3*sin(phase*1.9+.7))*surge;
  float twist=sin(phase*.8+1.2);
  float dx=leafMotion.y*.8*p.y*twist;
- float dy=leafMotion.y*(2.*p.y*ripple+2.8*p.y*p.y*cos(phase+p.y*2.8)+.8*p.x*twist);
+ float dy=leafMotion.y*(2.*p.y*ripple+2.8*p.y*p.y*cos(phase+p.y*2.8)*surge+.8*p.x*twist);
  return vec3(n.x-dx*n.z,n.y-dy*n.z,n.z);
 }
 `:''}
@@ -80,7 +82,7 @@ reflectedLight.directDiffuse += directLight.color * material.diffuseColor * leaf
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v5-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v6-${flutter}-${material.type}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){

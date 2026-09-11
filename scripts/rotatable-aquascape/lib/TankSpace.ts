@@ -18,8 +18,8 @@ export function fitLeaf(dummy:T.Object3D,positions:T.BufferAttribute){
   point.fromBufferAttribute(positions,i).applyMatrix4(dummy.matrix).sub(root);
   for(const [axis,bound] of [['x',4.96],['z',2.20],['y',5.25]] as const){
    const d=point[axis],origin=root[axis];
-   if(d>0)scale=Math.min(scale,(bound-origin)/(d+.05));
-   if(d<0&&axis!=='y')scale=Math.min(scale,(-bound-origin)/(d-.05));
+   if(d>0)scale=Math.min(scale,(bound-origin)/(d+.14));
+   if(d<0&&axis!=='y')scale=Math.min(scale,(-bound-origin)/(d-.14));
   }
  }
  if(scale<1){dummy.scale.multiplyScalar(Math.max(.02,scale));dummy.updateMatrix();}

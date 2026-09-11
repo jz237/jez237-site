@@ -16,22 +16,24 @@
     2.15
   ],
   "samples": 1536,
-  "triangles": 5538528,
+  "triangles": 5420778,
   "bytes": 60480,
   "coefficientRange": [
-    -1.433167815208435,
-    1.3462601900100708
+    -1.4332098960876465,
+    1.3461391925811768
   ],
-  "hits": 635714,
-  "seconds": 16.39,
-  "model": "single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds excluded",
+  "hits": 630115,
+  "seconds": 15.82,
+  "model": "single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds/moss excluded",
   "sourceHashes": {
-    "lib/BotanicalPlants.ts": "253a418fc286b1803db2ee842965fcab53d6a714849a1cb21bab5ad79d2c5ae8",
+    "lib/BotanicalPlants.ts": "3adbb12dc7944000d984a5c796bcbed3df00a4466460a4448cb014c93d8c3d6e",
     "lib/ScannedBranch.ts": "e8ee396791177d805799019a8bf753d485f344a64fb650b46d8607ca0b289ddd",
     "lib/ScannedRock.ts": "68735e5566650f70b7940a58ffb5f20b53173814534adfb0d5849387db695ddb",
-    "lib/ScannedHardscape.ts": "5460d57660171ad18f1e897588a43dcb18db7c421b1e6cedf3a278c87abdf05b",
+    "lib/ScannedHardscape.ts": "8ea11412b9b2d198cd46d521c856025042a12bccca494dd6055838deee447af0",
+    "lib/EpiphyteMoss.ts": "3eede7a5e5c6f14e72914759734af560ddd87424f72420914c43f94800605d51",
+    "lib/TankSpace.ts": "c3db71ab235b048293f1f15c2e6bdbd0cb60a6488b397fcbe60f04185c9596e8",
     "lib/Substrate.ts": "2a768a7a6eb388f2880c85fe5420fea3f7334c68c53bed25df4397af0f8978c7",
     "lib/LeafSurface.ts": "fc6534040b278715b0dc578f13e5781b34faadf5d79b02a5748e238325c0103c"
   },
-  "binarySHA256": "9e2d1ab0203ca82568e248b671473ab2ced3578e7fc6b60e0ff8df8094bded1c"
+  "binarySHA256": "2268c3a8f30987a585be263dade72acb72ef5c4cf0c6f99a6c2662794528d273"
 }
