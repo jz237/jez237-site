@@ -19,14 +19,15 @@ const sub=(a,b)=>v(a.x-b.x,a.y-b.y,a.z-b.z);
 const dot=(a,b)=>a.x*b.x+a.y*b.y+a.z*b.z;
 
 test('leaf petioles stay attached while free tips sweep and midribs curve',()=>{
- const tips=[];let curvature=0;
+ const tips=[],midribs=[];let curvature=0;
  for(let t=0;t<30;t+=.15){
   const f=motion(t,v(1.7,.3,.8),v(2,1,-1)).position;
   assert.deepEqual(f(v(0,0,0)),v(0,0,0));
-  const tip=f(v(0,1,0)),middle=f(v(0,.5,0));tips.push(tip.z);
+  const tip=f(v(0,1,0)),middle=f(v(0,.5,0));tips.push(tip.z);midribs.push(middle.z);
   curvature=Math.max(curvature,Math.abs(middle.z-tip.z*.5));
  }
  assert.ok(Math.max(...tips)-Math.min(...tips)>.5,'broad leaves must visibly flex');
+ assert.ok(Math.max(...midribs)-Math.min(...midribs)>.23,'the middle of the blade must flex visibly too');
  assert.ok(curvature>.04,'a moving blade must curve, not only rotate as a rigid sheet');
 });
 

@@ -332,3 +332,15 @@ Large scanned limbs retain a blunter terminal remnant, while thin twigs still na
 Front and three-quarter views were compared, with bark detail and irregular terminal silhouettes retained. The angled preview reported 60 fps / 7.4 ms. Moss sampling follows the altered wood surface and may redistribute nearby shoots. No new assets or paid services were used. Photographic fidelity remains unfinished.
 
 Seven targeted wood-collision, moss, reflection and lighting checks and the production build pass. The indirect field was re-exported and rebuilt against 8,415,147 triangles in 21.67 seconds for the altered branch shape.
+
+## Finer surface ripple spectrum
+
+The water uses smaller broad swells and several independently directed fine ripples, with faster short-wave motion and a more localized return-pipe ripple. This reduces the large repeating lobes in reflected foliage while retaining a lightly disturbed aquarium surface. Pixel-footprint filtering fades the finest normal detail before it becomes unresolved on small or distant views. The raised glass contact edge, real displaced surface, Fresnel response, depth-guided reflection and lamp intersection are retained.
+
+The new conservative height bound is at most .056 world units, within the existing .075 displacement allowance. This is a procedural artistic wave spectrum, not a fluid simulation. Static opaque geometry and diffuse-bake inputs are unchanged, and no assets or paid services were added. Full photographic fidelity remains unfinished.
+
+### More visible leaf response
+
+Leaf bends now spread through the midrib using a rooted cubic flexibility profile. The attachment and its tangent remain fixed while the mid-blade moves more, and the free tip stays within the existing planting clearance. Each leaf keeps its own phase and response rate; faster blade response rides the slower, spatially varying whole-plant current. The analytic normal and shadow deformation follow the same motion. The tissue roughness map now modulates a softer surface response to reduce the polished plastic appearance without flattening the leaf's pigment or transmitted light.
+
+Plant-current tests cover attachment, visible mid-blade motion, clearance and deformed normals. Static plant geometry, pigment, fish behavior and the baked diffuse-light field are unchanged.

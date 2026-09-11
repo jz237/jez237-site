@@ -12,7 +12,7 @@ ${flutter?`attribute vec3 leafMotion;
 // The petiole stays attached; local flexibility increases toward the free tip.
 vec4 leafBend(vec3 p){
  // Faster blade response rides a slow shared current, with no long near-static trough.
- float phase=waterTime*leafMotion.z*1.55+leafMotion.x+.32*sin(waterTime*.43+plantRoot.x*.47+plantRoot.z*.71);
+ float phase=waterTime*leafMotion.z*2.25+leafMotion.x+.32*sin(waterTime*.43+plantRoot.x*.47+plantRoot.z*.71);
  float flowPhase=plantRoot.x*.47+plantRoot.z*.71;
  float surge=.85+.15*sin(waterTime*.37+flowPhase);
  float a=phase-p.y*1.8,b=waterTime*.63+flowPhase-p.y*1.4,c=phase*2.7-p.y*5.5;
@@ -24,19 +24,21 @@ vec4 leafBend(vec3 p){
 }
 vec3 animatedLeaf(vec3 p){
  vec4 bend=leafBend(p);
- // Quadratic flexibility curves the midrib rather than pivoting a rigid sheet.
+ // Distributed flexibility carries the bend through the midrib, with zero slope at the petiole.
  // A second, smaller component lets blades flutter sideways as well as up/down.
  float sidePhase=waterTime*leafMotion.z*1.13+leafMotion.x*.73-p.y*2.2;
- p.z+=leafMotion.y*(bend.x*p.y*p.y+p.x*p.y*bend.z);
- p.x+=leafMotion.y*.22*p.y*p.y*sin(sidePhase);
+ float flex=p.y*p.y*(2.-p.y);
+ p.z+=leafMotion.y*(bend.x*flex+p.x*p.y*bend.z);
+ p.x+=leafMotion.y*.22*flex*sin(sidePhase);
  return p;
 }
 vec3 animatedLeafNormal(vec3 p,vec3 n){
  vec4 bend=leafBend(p);
  float sidePhase=waterTime*leafMotion.z*1.13+leafMotion.x*.73-p.y*2.2;
- float sideSlope=leafMotion.y*.22*(2.*p.y*sin(sidePhase)-2.2*p.y*p.y*cos(sidePhase));
+ float flex=p.y*p.y*(2.-p.y),slope=p.y*(4.-3.*p.y);
+ float sideSlope=leafMotion.y*.22*(slope*sin(sidePhase)-2.2*flex*cos(sidePhase));
  float dx=leafMotion.y*p.y*bend.z;
- float dy=leafMotion.y*(2.*p.y*bend.x+p.y*p.y*bend.y+p.x*(bend.z+p.y*bend.w));
+ float dy=leafMotion.y*(slope*bend.x+flex*bend.y+p.x*(bend.z+p.y*bend.w));
  float nx=n.x-dx*n.z;
  return vec3(nx,n.y-sideSlope*nx-dy*n.z,n.z);
 }
@@ -44,15 +46,15 @@ vec3 animatedLeafNormal(vec3 p,vec3 n){
 vec3 bendPlant(vec3 p){
  float h=max(0.,p.y-plantRoot.y);
  float phase=plantRoot.x*.47+plantRoot.z*.71;
- float current=sin(waterTime*.61+phase)*.035+sin(waterTime*.93+phase*1.7)*.013;
+ float current=sin(waterTime*.82+phase)*.035+sin(waterTime*1.19+phase*1.7)*.013;
  p.x+=current*h*h*plantFlex*clamp((4.96-abs(p.x))*2.,0.,1.);
- p.z+=sin(waterTime*.48+phase+.8)*.029*h*h*plantFlex*clamp((2.20-abs(p.z))*2.,0.,1.);
+ p.z+=sin(waterTime*.67+phase+.8)*.029*h*h*plantFlex*clamp((2.20-abs(p.z))*2.,0.,1.);
  return p;
 }
 vec3 bendPlantNormal(vec3 p,vec3 n){
  float h=max(0.,p.y-plantRoot.y),phase=plantRoot.x*.47+plantRoot.z*.71;
- float c=(sin(waterTime*.61+phase)*.035+sin(waterTime*.93+phase*1.7)*.013)*plantFlex;
- float d=sin(waterTime*.48+phase+.8)*.029*plantFlex;
+ float c=(sin(waterTime*.82+phase)*.035+sin(waterTime*1.19+phase*1.7)*.013)*plantFlex;
+ float d=sin(waterTime*.67+phase+.8)*.029*plantFlex;
  float fx=clamp((4.96-abs(p.x))*2.,0.,1.),fz=clamp((2.20-abs(p.z))*2.,0.,1.);
  float dfx=fx>0.&&fx<1.?-2.*sign(p.x):0.,dfz=fz>0.&&fz<1.?-2.*sign(p.z):0.;
  // Inverse transpose of the actual rooted bend, after the instance transform.
@@ -81,6 +83,10 @@ transformedNormal = normalMatrix * transformedNormal;
   if(flutter&&material instanceof T.MeshStandardMaterial){
    shader.uniforms.leafOpticalDensity={value:material.userData.leafOpticalDensity??1};
    shader.fragmentShader='uniform float leafOpticalDensity;\n'+shader.fragmentShader;
+   // Keep the tissue map variation without a slick, uniformly polished surface.
+   shader.fragmentShader=shader.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+roughnessFactor=mix(${material.roughness<.7?'.68':'.78'},1.,roughnessFactor);
+`);
    shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
 // A paler abaxial face and thicker veins break the uniform plastic-sheet response.
 if(!gl_FrontFacing){
@@ -107,7 +113,7 @@ reflectedLight.directDiffuse += directLight.color * leafTransmissionTint * leafT
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v10-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v11-${flutter}-${material.type}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){
