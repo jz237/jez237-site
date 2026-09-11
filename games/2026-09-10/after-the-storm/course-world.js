@@ -130,7 +130,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   if(!passage.enabled){for(let x=-passage.width;x<=passage.width;x+=.65)box(x,3,0,.12,8,.2,black,entrance);}
   label(passage.enabled?'PORT BLUE / INNER CHANNEL':'INNER CHANNEL CLOSED',0,8.8,0,18,entrance).rotation.y=Math.PI;
  }
- if(passage&&!passage.continuous){const geometry=passage.structurePath||passage.path,a=geometry[0],b=geometry.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z),g=new T.Group();g.position.set(a.x,0,a.z);g.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);root.add(g);const m=passage.kind==='gate'?stone:steel,w=passage.width;
+ if(passage&&!passage.continuous&&passage.kind!=='jump-dive'){const geometry=passage.structurePath||passage.path,a=geometry[0],b=geometry.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z),g=new T.Group();g.position.set(a.x,0,a.z);g.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);root.add(g);const m=passage.kind==='gate'?stone:steel,w=passage.width;
   for(const side of [-1,1]){box(side*(w+.55),2.5,length*.57,1.1,11,length*.50,m,g);for(let z=length*.34;z<length*.81;z+=6){box(side*(w+.52),6.3,z,1.8,1.2,1.6,stone,g);}}
   box(0,(passage.clearance+8)/2,length*.57,w*2+2.2,8-passage.clearance,length*.50,m,g);
   gateMesh=new T.Group();gateMesh.userData.dynamic=true;gateMesh.position.set(0,-1,length*.36);g.add(gateMesh);
@@ -139,6 +139,9 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   const signal=mat(0xc65a32,.4,.1,0x8e3018);gateSignal=signal;cylinder(-w-.65,passage.clearance+.7,length*.31,.25,.5,signal,g);
   label(passage.kind==='gate'?(passage.enabled?'SLUICE / OPENS LAP 2':'SLUICE CLOSED'):(passage.enabled?'SHORT CHANNEL / LOW ROOF':'SERVICE CHANNEL CLOSED'),0,7.2,length*.32-.08,w*1.8,g).rotation.y=Math.PI;
   label('MAIN CHANNEL →',-w-7,3,length*.29,10,g).rotation.y=Math.PI;for(const side of [-1,1])box(-w-7+side*3.8,-2,length*.29,.12,10,.12,steel,g);
+ }
+ for(const b of course.crossbars||[]){const g=new T.Group();g.position.set(b.x,0,b.z);g.rotation.y=Math.atan2(b.tx,b.tz);root.add(g);box(0,(b.bottom+b.top)/2,0,b.depth,b.top-b.bottom,b.length,stone,g);
+  for(let z=-b.length/2+1;z<b.length/2;z+=2.5)box(-b.depth/2-.02,b.top-.12,z,.04,.16,1.2,yellow,g);
  }
  // Merge static scenery by material. Thousands of windows/leaves become a few draw calls.
  terrain.userData.dynamic=true;animated.forEach(a=>a.o.userData.dynamic=true);root.updateMatrixWorld(true);const batches=new Map(),remove=[];const pos=new T.Vector3(),normal=new T.Vector3(),normalMatrix=new T.Matrix3();

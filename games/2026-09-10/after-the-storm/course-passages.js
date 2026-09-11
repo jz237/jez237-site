@@ -5,12 +5,12 @@ export function passagePoint(path,f){const lengths=path.slice(1).map((b,i)=>Math
  for(let i=0;i<lengths.length;i++){const length=lengths[i];if(distance<=length||i===lengths.length-1){const a=path[i],b=path[i+1],t=clamp(distance/length,0,1);return {x:a.x+(b.x-a.x)*t,z:a.z+(b.z-a.z)*t,tx:(b.x-a.x)/length,tz:(b.z-a.z)/length};}distance-=length;}
 }
 export function configurePassage(course){
- if(!['citadel','port'].includes(course.id))return;
+ if(!['citadel','port','neon'].includes(course.id))return;
  // Select the same geographical bend in every sampling density and direction.
  const near=(x,z)=>course.gates.reduce((best,g,i)=>Math.hypot(g.x-x,g.z-z)<Math.hypot(course.gates[best].x-x,course.gates[best].z-z)?i:best,0);
  const authored=course.shortcut;let first=near(...(authored?.from||[50,108])),last=near(...(authored?.to||[85,-6]));if(course.reverse)[first,last]=[last,first];
  const a=course.gates[first],b=course.gates[last],via=(authored?.via||[]).map(([x,z])=>({x,z}));if(course.reverse)via.reverse();const path=[{x:a.x,z:a.z},...via,{x:b.x,z:b.z}];
- const p={kind:authored?.kind||(course.id==='citadel'?'gate':'tunnel'),first,last,path,width:authored?.width||(course.id==='citadel'?8:6),clearance:authored?.clearance||(course.id==='citadel'?5.5:4.3),enabled:course.difficulty>0,indices:[]};
+ const p={kind:authored?.kind||(course.id==='citadel'?'gate':'tunnel'),first,last,path,width:authored?.width||(course.id==='citadel'?8:6),clearance:authored?.clearance||(course.id==='citadel'?5.5:4.3),enabled:course.difficulty>0||authored?.kind==='jump-dive',indices:[]};
  if(authored){p.structurePath=authored.structure.map(([x,z])=>({x,z}));p.continuous=!!authored.continuous;}
  let i=(first+1)%course.gates.length;
  while(i!==last){p.indices.push(i);const g=course.gates[i];g.side=0;if(!authored){g.tx=(b.x-a.x)/Math.hypot(b.x-a.x,b.z-a.z);g.tz=(b.z-a.z)/Math.hypot(b.x-a.x,b.z-a.z);g.width=65;}g.channel=true;g.bx=g.x;g.bz=g.z;i=(i+1)%course.gates.length;}
@@ -18,9 +18,10 @@ export function configurePassage(course){
  course.passage=p;
  if(!authored)course.rocks=course.rocks.filter(q=>passageDistance(p,q.x,q.z)>p.width+4);
 }
-export function passageOpening(p,time,openedAt=Infinity){if(!p?.enabled)return 0;if(p.kind==='tunnel')return 1;return clamp((time-openedAt)/3,0,1);}
+export function passageOpening(p,time,openedAt=Infinity){if(!p?.enabled)return 0;if(p.kind==='tunnel'||p.kind==='jump-dive')return 1;return clamp((time-openedAt)/3,0,1);}
 export function passageTarget(s,r){
  const g=s.course.gates[r.next],p=s.course.passage;
+ if(p?.kind==='jump-dive'&&s.course.reverse)return g;
  if(s.course.requiredPassage||s.mode==='stunt'||r.passageRoute==='outer'||!p||!(p.indices.includes(r.next)||r.next===p.first)||passageOpening(p,s.time,s.passageOpenedAt)<.98)return g;
  if(p.branchGates)return p.branchGates[r.next]||g;
  // Intersection with the original checkpoint plane: no progress is granted here.
@@ -35,7 +36,7 @@ export function passageWalls(p){const path=p.structurePath||p.path;return [-1,1]
  return {x:q.x+nx*scale,z:q.z+nz*scale};
 }));}
 export function passageCollision(p,x,y,z,time,openedAt=Infinity,radius=.85,hullHeight=1.1){
- if(!p)return false;
+ if(!p||p.kind==='jump-dive')return false;
  const geometry=p.structurePath||p.path;
  if(p.continuous){
   const distance=passageDistance({path:geometry},x,z),first=geometry[0],last=geometry.at(-1),entry=coordinates(first,geometry[1],x,z),exit=coordinates(geometry.at(-2),last,x,z);
