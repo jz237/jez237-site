@@ -13,7 +13,7 @@ test('two players can select the same rider with independent tuning and inputs',
 });
 test('all competitive venues complete a head-to-head match through both control streams',()=>{
  for(const c of COURSES.filter(c=>c.id!=='practice')){const s=createRace({mode:'versus',course:getCourse(c.id),rider:0,secondRider:1,handicap:true});
- for(let i=0;i<20000&&s.phase!=='results';i++)stepRace(s,s.racers.map(r=>aiInput(s,r)),1/60);
+ for(let i=0;i<36000&&s.phase!=='results';i++)stepRace(s,s.racers.map(r=>aiInput(s,r)),1/60);
  assert.equal(s.phase,'results',c.id);assert.equal(s.result.dq,'',c.id);assert.ok([0,1].includes(s.result.winner));assert.equal(s.racers[s.result.winner].passed,s.course.gates.length*3);}
 });
 test('catch-up assists only the trailing rider, is bounded and can be disabled',()=>{

@@ -99,10 +99,10 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
   points.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(p.rx??0,p.angle,p.rz??0);dummy.scale.set(p.scale,p.scale*(p.stretch??1),p.scale);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);if(m.vertexColors)mesh.setColorAt(i,new T.Color().setScalar(.78+p.tint*.3));});
   mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);meshes.push(mesh);return mesh;
  }
- const cold=course.theme==='ice',urban=['port','city','fortress'].includes(course.theme),tropical=['island','resort','park'].includes(course.theme),points={palm:[],pine:[],broad:[]},grassPoints=[],rockPoints=[],logPoints=[];
+ const cold=course.theme==='ice',urban=['port','city','fortress'].includes(course.theme),tropical=['beach','island','resort','park'].includes(course.theme),points={palm:[],pine:[],broad:[]},grassPoints=[],rockPoints=[],logPoints=[];
  for(let i=0;i<3000;i++){
   const x=(random()-.5)*670,z=(random()-.5)*670,y=course.ground(x,z),d=routeDistance(course,x,z);
-  if(y<1.5||d<46)continue;
+  if(y<1.5||d<(course.layoutRevision?24:46)||course.renderGround&&y>course.renderGround(x,z)+.5)continue;
   const slope=Math.hypot(course.ground(x+1,z)-course.ground(x-1,z),course.ground(x,z+1)-course.ground(x,z-1))/2;
   const common={x,y:y-.12,z,angle:random()*Math.PI*2,scale:.72+random()*.65,tint:random()};
   const cluster=Math.sin(x*.047+Math.sin(z*.032)*2)*Math.cos(z*.039);

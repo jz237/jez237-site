@@ -1,0 +1,35 @@
+{
+  "status": "Local acceleration candidate follows the three observed launch samples; course traversal regressions and dimensions remain unresolved",
+  "reference": {
+    "url": "https://www.youtube.com/watch?v=-y1Du4ftw0k",
+    "title": "Wave Race 64 - [N64 - HD] - Stunt Mode - Twilight City",
+    "method": "Paused video, ordinary seek and single-frame controls; full HUD inspected after restoring page scroll. Race elapsed is 20 minus the visible remaining timer, not the rounded video seek label.",
+    "samples": [
+      {"remainingSeconds": 19.7, "elapsedSeconds": 0.3, "speedKmh": 16, "state": "On water below green start lights"},
+      {"remainingSeconds": 18.7, "elapsedSeconds": 1.3, "speedKmh": 68, "state": "On water approaching opening ramp"},
+      {"remainingSeconds": 17.7, "elapsedSeconds": 2.3, "speedKmh": 95, "state": "On water approaching opening ramp"}
+    ],
+    "unknowns": ["Exact rider identity and tuning were not verified from a selection screen", "Throttle timing cannot be established from HUD alone", "HUD speed may not provide exact world distance without independent scale calibration"]
+  },
+  "localProbe": {
+    "version": "Baseline before the acceleration response candidate; retained for comparison. Running the command now measures the current implementation.",
+    "command": "node source/probe-launch.mjs",
+    "fixture": "Calm deep water, default tuning, ordinary full-throttle input; no obstacles or course-progress claim. Countdown retained. Compare held throttle against throttle pressed at GO for every rider.",
+    "sampleSeconds": [0.3, 1.3, 2.3],
+    "speedKmh": {
+      "Mara Vale": [8.591, 35.340, 56.411],
+      "Jonas Reed": [7.353, 30.690, 50.654],
+      "Nia Sol": [10.707, 42.785, 64.499],
+      "Eli North": [8.591, 35.309, 56.281]
+    },
+    "launchComparison": "All samples are identical for both countdown inputs. Pressed-at-GO sets rocketStarted; held throttle does not. Current rocketStart only sets power=5, already the starting power in practice/stunt mode. No additional velocity or acceleration boost exists. This does not prove the original uses the same start implementation."
+  },
+  "candidate": {
+    "model": "Multiply the existing net longitudinal engine response by 1 + throttle * (0.85 + 2.4 * speedRatioSquared). Wave intake, hull drag, brakes, rider ratings and checkpoint allowances remain active. No velocity jump or timed artificial boost.",
+    "rider": "Mara Vale, default tuning, calm deep-water fixture",
+    "sampleSeconds": [0.3, 1.3, 2.3, 3, 5, 10],
+    "speedKmhRounded": [15.93, 67.22, 95.87, 101.51, 101.18, 100.92],
+    "scope": "Three-point acceleration fit, not proof of original physics or course parity. Earlier sixth-power resistance candidates changed partial-throttle cruising excessively and were replaced. Existing traversal checks remain mandatory."
+  },
+  "nextCalibration": "Recheck guided approaches and jump distances under the calibrated response, identify the reference rider/tuning or collect another known setup, then compare original route pace. The verification driver also targets approximately 13 m/s, well below the reference straight speed. Retain the observed 20/15/15/15 checkpoint allowances. Do not infer a uniform map scale from the timeout alone."
+}

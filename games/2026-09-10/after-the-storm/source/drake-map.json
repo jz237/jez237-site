@@ -1,0 +1,20 @@
+{
+  "source": "https://assets.topics.apps-jp.nintendo.com/uploads/files/2022/08/03/00/27/03/820845/53229_1996_12_02.pdf",
+  "page": 13,
+  "printedPage": 91,
+  "mode": "stunt",
+  "status": "Connected to drake-stunts.js at layout revision4, using a manually fitted correspondence to the existing race shoreline. Hand-drawn coordinates are approximate; the illustration is not a metric survey.",
+  "coordinates": {"units":"pixels","xDirection":"right","zDirection":"down","renderLongEdge":4000,"crop":[3130,220,860,670]},
+  "mainlandShore": [[242,196],[260,180],[287,179],[320,191],[373,199],[439,204],[497,209],[553,212],[616,209],[670,204],[706,204],[705,230],[695,270],[687,313],[685,366],[683,418],[682,458],[676,492],[637,511],[601,521],[562,506],[536,504],[505,526],[469,519],[433,513],[412,497],[386,501],[351,485],[316,490],[283,495],[254,494],[237,480],[237,466],[253,440],[270,402],[288,367],[301,339],[288,301],[272,268],[257,236]],
+  "islandShore": [[111,319],[126,291],[145,270],[167,258],[185,258],[199,272],[211,300],[220,329],[222,349],[211,376],[196,398],[179,408],[160,407],[142,397],[127,376],[117,351]],
+  "outerWaterShore": [[17,488],[25,435],[38,381],[40,325],[31,270],[28,226],[39,191],[63,163],[86,134],[110,107],[137,78],[161,57],[202,45],[251,43],[299,53],[350,59],[403,66],[454,70],[501,73],[542,86],[585,87],[630,81],[672,67],[712,64],[754,77],[799,78],[818,67],[835,101],[843,143],[846,186],[839,225],[841,281],[847,332],[845,378],[843,418],[830,457],[821,497],[814,543],[791,574],[753,591],[711,605],[666,613],[618,620],[574,622],[531,610],[478,615],[432,614],[389,617],[346,626],[307,619],[273,627],[233,626],[194,612],[154,592],[120,574],[90,555],[56,530],[33,509]],
+  "startSpan": [[674,98],[671,190]],
+  "checkpointsInTravelOrder": [[[257,82],[258,170]],[[245,506],[196,579]],[[690,520],[762,568]],[[674,98],[671,190]]],
+  "ringCentersInTravelOrder": [[550,183],[443,112],[352,155],[194,157],[130,226],[86,281],[80,320],[82,355],[92,393],[110,477],[185,522],[628,578],[670,554],[745,386],[760,333],[755,281]],
+  "rampCentersInTravelOrder": [[326,561],[414,561],[502,560]],
+  "rampDirection": [1,0],
+  "visiblePostCenters": [[740,310],[798,316],[700,350],[820,357],[789,380],[763,418],[740,457]],
+  "visibleWeedClumpCenters": [[48,225],[90,241],[73,263],[150,442],[192,458],[172,478]],
+  "sectionSequence": [["ring0","ring1","ring2","checkpoint0"],["ring3","ring4","ring5","ring6","ring7","ring8","ring9","ring10","checkpoint1"],["ramp0","ramp1","ramp2","ring11","ring12","checkpoint2"],["ring13","ring14","ring15","checkpoint3"]],
+  "remaining": ["Fit rotated source to race geography without moving ring lines onto land","Confirm posts and weed counts in continuous stunt footage; illustration may omit objects","Calibrate ring elevations, grouped-ramp spacing and dimensions","Measure checkpoint time allowances and original run duration","Verify the rendered original object sequence and grouped jumps","Final visual comparison against original gameplay"]
+}
