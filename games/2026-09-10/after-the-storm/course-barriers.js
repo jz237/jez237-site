@@ -16,6 +16,7 @@ export function barrierPiles(b){
  if(!b.pileSpacing||b.outline)return [];
  if(pileCache.has(b))return pileCache.get(b);
  const count=Math.ceil(b.length/b.pileSpacing),out=[];
- for(let i=0;i<=count;i++)for(const side of [-1,1]){const along=-b.length/2+b.length*i/count,across=side*(b.depth/2-.45);out.push({x:b.x+b.tx*along-b.tz*across,z:b.z+b.tz*along+b.tx*across,radius:.42,bottom:-12,top:b.bottom});}
+ const offsets=b.pileOffsets||Array.from({length:count+1},(_,i)=>-b.length/2+b.length*i/count);
+ for(const along of offsets)for(const side of [-1,1]){const across=side*(b.depth/2-.45);out.push({x:b.x+b.tx*along-b.tz*across,z:b.z+b.tz*along+b.tx*across,radius:.42,bottom:-12,top:b.bottom});}
  pileCache.set(b,out);return out;
 }
