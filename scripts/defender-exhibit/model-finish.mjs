@@ -2,6 +2,7 @@ import * as T from 'three';
 
 /** Close-up construction in assembly coordinates, before remounting and batching. */
 export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube,mesh,screw,m,mat}){
+ const oxide=mat('oxidized_recess','#555b41',.32,.91);
  const scuff=mat('contact_scuff','#737365',.35,.61);
  const fiber=mat('exposed_particleboard','#92734d',0,.96);
  const polished=mat('grip_polish','#9b271d',0,.27);
@@ -48,7 +49,8 @@ export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube
   for(const dx of [-.089,.089])for(const y of [1.104,1.304])screw(coin,[x+dx,y,.695],'z',.006);
   for(let j=0;j<12;j++){const a=j*2.399;const xx=x+Math.cos(a)*(.054+(j%3)*.009),yy=1.13+Math.sin(a)*.036;const scratch=box(coin,[.009+j%4*.003,.0008,.0007],[xx,yy,.698],scuff,0);scratch.rotation.z=a*.2;}
  }
- ring(coin,.025,.0015,[.244,1,.670],scuff);
+ ring(coin,.025,.0015,[.244,1,.670],oxide);
+ const coinGuide=new T.Group();coinGuide.name='coin_demo_anchor';coinGuide.position.set(.158,1.04,.37);coin.add(coinGuide);
  for(const y of [.62,1.35]){box(coin,[.04,.032,.014],[-.315,y,.643],m.zinc,.002);screw(coin,[-.315,y,.654],'z',.006);}
  // T-molding splice on the low rear edge, and irregular exposed substrate at feet.
  for(const [id,x]of [['left_panel',-.714],['right_panel',.714]]){
@@ -76,5 +78,13 @@ export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube
  box(back,[.34,.18,.003],[-.20,2.15,-.756],m.paper,.001,'inspection_label');
  box(frame,[.27,.11,.002],[.24,1.07,-.31],m.paper,.001,'harness_label');
  box(cp,[.32,.065,.002],[0,1.60,.331],m.paper,.001,'controls_service_label');
+ // Discrete plug bodies and pin legends provide close-up targets and moving wire endpoints.
+ for(const [g,name,x,y,z]of [[cp,'control_harness_plug',.27,1.56,.33],[coin,'coin_harness_plug',.25,.98,.33],[frame,'cabinet_control_socket',.44,2.20,-.32],[frame,'cabinet_coin_socket',.44,1.45,-.32]]){
+  box(g,[.085,.035,.026],[x,y,z],m.ivory,.003,name);
+  box(g,[.064,.010,.002],[x,y+.003,z+.014],m.paper,0,name+'_pins');
+  for(let i=0;i<4;i++)box(g,[.005,.012,.003],[x-.028+i*.018,y-.012,z+.014],m.brass,0);
+ }
+ for(const [i,z]of [[0,-.084],[1,.084]]){box(cp,[.075,.004,.022],[-.48,1.536,.57+z],m.brass,0,'joystick_contact_'+i);box(cp,[.075,.004,.022],[-.48,1.528,.57+z],m.brass,0);}
+ box(coin,[.060,.003,.025],[.158,.929,.392],m.brass,0,'coin_credit_contact');
  root.userData.finishDetails={version:1,areas:['controls','crt','cabinet-edges','coin-door','marquee','interior','electronics'],copperRouting:'Illustrative routing between populated footprints; not original copper artwork.'};
 }
