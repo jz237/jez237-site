@@ -112,23 +112,25 @@
   {
     "id": "006",
     "title": "The Living Aquascape",
-    "category": "Photographic · Living systems",
-    "description": "A small world, in balance. Watch a densely planted aquarium come to life, follow its circulation, inspect a leaf at macro scale and explore how light, carbon and biology interact.",
-    "url": "living-aquascape/",
-    "image": "assets/living-aquascape.png",
-    "imageAlt": "Original photographic artwork of a lush rimless aquarium with branching wood, layered plants and polished filtration equipment",
-    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/living-aquascape",
+    "category": "3D & photographic · Living systems",
+    "description": "Explore a planted aquarium in 3D: orbit the glass tank, follow a school of cardinal tetras and watch flowing plants and rippling water. Switch to the photographic aquarium to explore its ecosystem, circulation and leaf details.",
+    "url": "rotatable-aquascape/",
+    "image": "assets/rotatable-aquascape.jpg",
+    "imageAlt": "Actual 3D aquarium with a tetra school, branching driftwood, red and green plants, and a winding sand path",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/rotatable-aquascape",
     "features": [
-      "Animated photographic scene",
-      "Six exploration modes",
-      "Ten ecosystem scenarios",
-      "Time-lapse & live chemistry"
+      "Drag to orbit & zoom",
+      "Feed fish & change lighting",
+      "Photographic aquarium option",
+      "Ecosystem & macro exploration"
     ],
     "facts": [
-      "Original photographic art",
-      "Macro inspection",
-      "Mouse, touch & keyboard"
+      "3D by default",
+      "Two aquarium views",
+      "Mouse & touch"
     ],
-    "note": "WebGL · Desktop & touch · Image-based cinematic exhibit · Illustrative ecosystem model"
+    "note": "WebGL 2 · Desktop & touch · Switch views inside the aquarium",
+    "alternateUrl": "living-aquascape/",
+    "alternateLabel": "Photographic aquarium"
   }
 ]
