@@ -38,7 +38,9 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
  for(const t of [rockMaterial.map,rockMaterial.normalMap,rockMaterial.roughnessMap])if(t)t.anisotropy=8;
  for(const [id,x,z,size,yaw,tilt] of rockPlacements){
   const geo=shapeScannedRock(sourceRocks[id].geometry,size,yaw,tilt);
-  const mesh=new T.Mesh(geo,rockMaterial);mesh.position.set(x,height(x,z)-.12,z);mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
+  // Embed larger stones more deeply so an irregular scan does not balance on
+  // one low vertex with a conspicuous air pocket beneath the rest of its base.
+  const mesh=new T.Mesh(geo,rockMaterial);mesh.position.set(x,height(x,z)-size*.12,z);mesh.castShadow=mesh.receiveShadow=true;scene.add(mesh);
   mesh.updateMatrixWorld();const sphere=geo.boundingSphere!.clone().applyMatrix4(mesh.matrixWorld);obstacles.push({center:sphere.center,radius:sphere.radius});
   moss.sample(mesh,70,.7);
  }
