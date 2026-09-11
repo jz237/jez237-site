@@ -76,7 +76,8 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
    let previous=point(start);
    for(let j=1;j<=nodes;j++){
     const node=j===nodes?1:(j+Math.sin(j*2.4+phase)*.16)/nodes;
-    const growth=1-Math.pow(1-node,1.34),t=start+(end-start)*growth;
+    const tipDensity=1.02+.52*(Math.sin(phase*1.2+start*3.)*.5+.5);
+    const growth=1-Math.pow(1-node,tipDensity),t=start+(end-start)*growth;
     const at=point(t).addScaledVector(offset,Math.sin(growth*Math.PI*.5));
     at.x=T.MathUtils.clamp(at.x,-4.7,4.7);at.z=T.MathUtils.clamp(at.z,-2.05,2.05);
     stem(previous,at,(red?.0055:.0065)*(1-growth*.60),red?0x6d4930:0x496124);previous=at;
@@ -84,13 +85,18 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
     for(let side=0;side<leafCount;side++){
      // Full-sized mature leaves persist below a compact tip; a sine profile made
      // every stem look like the same triangular miniature conifer.
-     const a=nodeAngle+j*spiral+side*Math.PI+(random()-.5)*.35;
+     const a=nodeAngle+j*spiral+side*Math.PI+Math.sin(j*1.17+phase)*.22+(random()-.5)*.35;
      const tip=T.MathUtils.smoothstep(growth,.77,1),length=(broadRed?.34:red?.38:roundLeaf?.29:.40)*(1-tip*.48)*(.78+random()*.40)*vigor;
-     // Mature blades spread below the compact, upward-facing growing tip.
-     const direction=V(Math.cos(a),-.12+tip*.95+random()*.64,Math.sin(a));
+     // Varied ascending blades break the old stack of nearly horizontal pairs.
+     const inclination=.12+tip*.65+(Math.sin(phase*1.37+j*.93)*.5+.5)*.28+random()*.66;
+     const direction=V(Math.cos(a),inclination,Math.sin(a));
      const redGrowth=T.MathUtils.smoothstep(t,.25,.91);
-     const leafHue=red?T.MathUtils.lerp(.18,hue,redGrowth):hue,leafLight=red?.29+redGrowth*.065+random()*.035:light+(random()-.5)*.045;
-     add(broadRed?'ludwigia':red?'rotala':roundLeaf?'bacopa':'stem',at,direction,length,length*(broadRed?.60:red?.25:roundLeaf?.56:.27),leafHue,red?.37:.59,leafLight,(random()-.5)*.75+.35);
+     // Copper mature leaves and salmon tips avoid the old green-to-yellow hue
+     // ramp. Some broad-leaf shoots retain green lower growth among the reds.
+     const palette=Math.sin(phase*2.7)*.5+.5,greenBase=red&&broadRed&&t<.20+palette*.24;
+     const leafHue=red?(greenBase?.205:T.MathUtils.lerp(.022+palette*.035,hue,redGrowth)):hue;
+     const leafLight=red?.26+redGrowth*.08+random()*.035:light+(random()-.5)*.045;
+     add(broadRed?'ludwigia':red?'rotala':roundLeaf?'bacopa':'stem',at,direction,length,length*(broadRed?.60:red?.25:roundLeaf?.56:.27),leafHue,red?(greenBase?.53:.36+palette*.075):.59,leafLight,(random()-.5)*.75+.35);
     }
    }
   };

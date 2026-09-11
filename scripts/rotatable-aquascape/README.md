@@ -227,3 +227,11 @@ The main scanned rock now faces the front with its pitted, ledged side instead o
 This is a composition and placement correction using existing free assets. The static indirect field is rebuilt for the changed stone geometry and grounding. Fish behavior, plant motion, water and the photographic original remain unchanged.
 
 Front and three-quarter views were compared with the previous smooth-face arrangement; the settled side view was checked for glass clearance. No browser warnings/errors appeared, and the side preview reported 60 fps / 8.0 ms synchronous render submission. The indirect field was rebuilt against 6,403,819 triangles in 21.14 seconds. All 38 tests and the production build pass. No money was spent; full photographic fidelity remains unfinished.
+
+## Varied stem growth and mature copper foliage
+
+Stem colonies now vary the concentration of nodes near their tips, with additional variation in leaf azimuth and ascending inclination. This breaks the previous stack of almost horizontal, similarly spaced pairs while retaining the modeled blades, attachments and current animation.
+
+The central red colonies now use plant-specific mature copper tones and lighter tips. A subset of broad-leaf shoots retains green lower growth. The previous HSL interpolation from green through yellow gave much of the mature growth an ochre cast. An initial uniformly red revision was rejected after visual review and softened into this mixed palette. These colors are an artistic match to the reference, not a calibrated botanical reconstruction. No new assets or paid services are used.
+
+The close three-quarter preview reported 60 fps / 6.6 ms synchronous render submission without browser errors. The light field was rebuilt against 6,403,819 triangles in 19.79 seconds. Six targeted lighting/tank-space checks and the production build pass. Exported geometry checks cover all 19,785 leaf instances at rest inside the physical tank volume; animated clearance is also reviewed visually. No fish behavior or controls changed. Full photographic fidelity remains unfinished.
