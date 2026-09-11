@@ -82,7 +82,7 @@ export class Aquarium{
   this.controls.minDistance=10.8;this.controls.maxDistance=29;
   this.controls.rotateSpeed=.55;this.controls.zoomSpeed=.7;
   this.controls.addEventListener('start',()=>this.targetCamera=null);
-  this.camera.position.set(0,3.3,21.5);
+  this.camera.position.set(0,2.45,21.5);
   RectAreaLightUniformsLib.init();
   this.stripLight.position.set(0,6.29,-.15);this.stripLight.lookAt(0,0,-.15);
   this.scene.add(this.fill,this.stripLight);
@@ -139,8 +139,8 @@ export class Aquarium{
   ground.rotation.x=-Math.PI/2;
   // Keep the studio softbox above the viewing axis: a low emitter reflected as
   // an artificial horizontal bar through the middle of the clear front pane.
-  const roomBounce=new T.RectAreaLight(0xc1dcdd,2.2,11,4);
-  roomBounce.position.set(0,8,7);roomBounce.lookAt(0,2,0);this.scene.add(roomBounce);
+  const roomBounce=new T.RectAreaLight(0xc1dcdd,3.2,11,4);
+  roomBounce.position.set(0,11,7);roomBounce.lookAt(0,2,0);this.scene.add(roomBounce);
   this.box(10.45,.88,4.95,dark,V(0,-.51,0));
   this.box(10.7,.13,5.1,new T.MeshStandardMaterial({color:0x182123,metalness:.75,roughness:.28}),V(0,-.035,0));
   // Cabinet shadow seams and a fine metal lip give the glass a physical support.
@@ -194,7 +194,7 @@ export class Aquarium{
   for(let i=0;i<12;i++){const m=this.mesh(new T.IcosahedronGeometry(.028,0),new T.MeshStandardMaterial({color:0xbba471,roughness:1}),V(.65+(this.random()-.5)*1.6,5.12+this.random()*.13,.62+(this.random()-.5)*.3),false);m.scale.set(1,.35,.8);this.food.push({mesh:m,age:0});}
  }
  zoom(scale:number){this.targetCamera=null;const offset=this.camera.position.clone().sub(this.controls.target);offset.setLength(clamp(offset.length()*scale,this.controls.minDistance,this.controls.maxDistance));this.camera.position.copy(this.controls.target).add(offset);this.controls.update();}
- view(name:string){const portrait=this.host.clientWidth/this.host.clientHeight<.9,dist=portrait?23:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?3.3:7.5,Math.cos(angle)*dist);}
+ view(name:string){const portrait=this.host.clientWidth/this.host.clientHeight<.9,dist=portrait?23:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?2.45:7.5,Math.cos(angle)*dist);}
  private resize(){
   const w=this.host.clientWidth,h=this.host.clientHeight;this.camera.aspect=w/h;
   // Widen vertical field of view on narrow screens to retain the entire tank.
