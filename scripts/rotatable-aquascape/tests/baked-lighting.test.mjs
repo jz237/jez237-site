@@ -11,6 +11,8 @@ const hash=value=>createHash('sha256').update(value).digest('hex');
 test('indirect-light field matches the geometry/material sources used to bake it',()=>{
  assert.equal(metadata.version,1);
  assert.ok(Object.keys(metadata.sourceHashes).length>=6);
+ assert.ok(metadata.sourceHashes['lib/CanopyLighting.json'],'canopy settings must be covered by bake provenance');
+ assert.ok(metadata.sourceHashes['bake-lighting.py'],'bake algorithm must be covered by provenance');
  for(const [file,expected] of Object.entries(metadata.sourceHashes)){
   const current=readFileSync(new URL(file,root),'utf8').replaceAll('\r\n','\n');
   assert.equal(hash(current),expected,`${file} changed: re-export and bake indirect lighting`);

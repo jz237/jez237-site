@@ -258,3 +258,12 @@ Front-lit and backlit blade studies and the full aquarium were reviewed. The sta
 Broad blades use more rings, concentrated near their shoulders and tips, to remove visible polygon corners in close views. Anubias now has a more pointed apex than bacopa. Small unequal margins and a gently wandering midrib vary the six modeled forms. Texture coordinates follow the revised geometry, while the existing attached-base current and analytical normals remain unchanged.
 
 The leaf study and full tank were reviewed. A static bounds audit covers all 19,785 leaf instances inside the physical tank; motion is checked visually and the existing clearance tests pass. The indirect field was rebuilt against 7,388,395 triangles in 20.36 seconds. Eight targeted tank-space, reflection and lighting checks and the production build pass. No paid assets or services were used. This improves close-up geometry; the overall scene still does not match the reference photograph.
+
+
+## Brighter canopy with matched indirect lighting
+
+The three shadowed canopy samples now use intensity 60 rather than 36, revealing more wood grain and leaf layers from the front. The continuous strip and camera exposure remain unchanged, and the floor material is slightly darker to restrain the surrounding light pool. A cast-floor-shadow trial produced distracting sharp plant silhouettes and was removed after review.
+
+Canopy color, positions, intensity, cone and decay settings now come from one JSON configuration shared by the renderer and offline bake. The bake also uses the actual sRGB light color conversion and the renderer's distance cutoff. Provenance checks cover both the shared configuration and bake script. The indirect field was refreshed against unchanged 7,388,395-triangle geometry in 20.43 seconds.
+
+Front daylight and three-quarter evening views were checked; the evening preview reported 60 fps / 7.5 ms with no browser warnings/errors. Four targeted lighting/reflection checks and the production build pass. No paid services or assets were used. Fine planting structure and the overall photographic match remain incomplete.
