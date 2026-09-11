@@ -24,6 +24,17 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
+ if(state.verifyPierDive&&r.pierDiveStage!==5){
+  const a=state.course.ramps.find(a=>a.id===151);
+  if(a&&(r.next===state.course.gates.findIndex(g=>g.width===110)&&!state.course.reverse&&r.lap===1||r.pierDiveStage!==undefined)){
+   r.pierDiveStage??=0;const stage=r.pierDiveStage,h=r.hydro;
+   const path=[{x:a.x-a.tx*10,z:a.z-a.tz*10},{x:(235-210)*.8,z:(540-325)*.8},{x:(260-210)*.8,z:(580-325)*.8},{x:(310-210)*.8,z:(602-325)*.8},{x:(355-210)*.8,z:(580-325)*.8}];
+   const target=path[stage];if(Math.hypot(target.x-r.x,target.z-r.z)<(stage===0?3:6)){r.pierDiveStage++;if(r.pierDiveStage===5)return aiInput(state,r);}
+   const error=angleDelta(Math.atan2(target.x-r.x-r.vx*.15,target.z-r.z-r.vz*.15)-r.heading);
+   return {throttle:1,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true,dive:stage===1&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.6};
+  }
+ }
+
  if(state.verifyShipJump&&r.shipJumpStage!==2){
   if(r.hydro.onRamp)r.shipJumpLanding=r.hydro.landingId;
   if(r.shipJumpLanding!==undefined&&r.hydro.landingId>r.shipJumpLanding){r.shipJumpStage=2;return aiInput(state,r);}
