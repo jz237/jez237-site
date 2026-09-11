@@ -85,3 +85,8 @@ test('Twilight City has separated quays, a narrow straight, a low sand point and
  const c=getCourse('neon',1),at=(x,z)=>c.ground((x-200)*.8,(z-275)*.8);assert.equal(c.name,'Twilight City');assert.ok(at(240,120)>4);assert.ok(at(305,120)>4);assert.ok(at(269,120)<-3);assert.ok(at(100,330)<-3);assert.ok(at(120,490)<-3);assert.ok(at(195,47)>0&&at(195,47)<=1.1);
  assert.equal(c.ramps.length,4);assert.ok(getCourse('neon',2).ramps[0].z>c.ramps[0].z);assert.ok(getCourse('neon',2).rocks.length>c.rocks.length);assert.ok(c.rocks.every(q=>q.type==='ball'));
 });
+
+test('Twilight City uses the mapped five-plus-four Hard/Reverse clusters and seven-plus-seven Expert clusters',()=>{
+ for(const [d,count,north,south] of [[0,9,5,4],[1,9,5,4],[2,14,7,7],[3,9,5,4]]){const c=getCourse('neon',d);assert.equal(c.rocks.length,count);assert.equal(c.rocks.filter(q=>q.z<0).length,north);assert.equal(c.rocks.filter(q=>q.z>0).length,south);assert.ok(c.rocks.every(q=>c.ground(q.x,q.z)<-.4));}
+ const hard=getCourse('neon',1),reverse=getCourse('neon',3);assert.deepEqual(reverse.rocks,hard.rocks);hard.rocks[0].x=999;assert.notEqual(getCourse('neon',1).rocks[0].x,999);
+});

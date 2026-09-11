@@ -77,7 +77,8 @@ const cityWater=cityMap([[154,20],[337,20],[385,67],[372,100],[373,141],[390,152
 const cityCenter=cityMap([[206,65],[224,51],[257,58],[258,174],[248,180],[248,226],[253,231],[253,466],[241,472],[56,470],[52,454],[52,387],[139,310],[186,278],[186,258],[223,221],[223,177],[206,165]]);
 const cityEast=cityMap([[277,37],[295,37],[329,70],[329,160],[315,175],[289,232],[277,231],[277,177]]);
 const citySand=cityMap([[184,36],[223,51],[206,65]]);
-const cityBalls=cityMap([[181,135],[193,135],[181,150],[193,150],[108,485],[108,497],[108,508],[108,519]]);
+const cityBalls=cityMap([[179,134],[192,134],[186,141],[180,150],[192,150],[108,485],[108,496],[108,507],[108,518]]).map(([x,z])=>({x,z,r:.7,type:'ball'}));
+const cityExpertBalls=[...cityBalls,...cityMap([[186,135],[186,157],[119,487],[119,498],[119,509]]).map(([x,z])=>({x,z,r:.7,type:'ball'}))];
 const cityRamp=(id,x,z,tx,tz,width,length=14)=>({id,name:'CITY JUMP',x:(x-200)*.8,z:(z-275)*.8,tx,tz,width,length,height:2.1,floating:false});
 const cityLateRamps=[cityRamp(121,185,113,0,1,9),cityRamp(122,84,488,1,0,14),cityRamp(123,189,489,1,0,13)];
 const city={
@@ -86,8 +87,7 @@ const city={
  anchors:cityMap([[269,420],[288,341],[322,281],[342,239],[336,212],[352,181],[368,160],[358,139],[358,114],[374,68],[333,31],[277,29],[229,29],[182,27],[173,55],[174,96],[178,133],[190,169],[207,200],[204,218],[174,244],[141,278],[116,321],[87,349],[48,383],[24,429],[23,458],[38,472],[77,478],[131,486],[179,501],[212,513],[244,483],[266,456]]),
  ground(x,z){return Math.max(city.renderGround(x,z),clamp(-polygonDistance(cityCenter,x,z)*.8,-10,6),clamp(-polygonDistance(cityEast,x,z)*.8,-10,6));},
  renderGround(x,z){return clamp(Math.max(polygonDistance(cityWater,x,z)*.8,Math.min(1.1,1.1-polygonDistance(citySand,x,z)*.6)),-10,8);},
- quayOutlines:[cityCenter,cityEast],obstacles:cityBalls.map(([x,z])=>({x,z,r:.7,type:'ball'})),
- extraObstacles:cityMap([[186,133],[185,145],[118,485],[119,496],[119,507],[118,519]]).map(([x,z])=>({x,z,r:.7,type:'ball'})),
+ quayOutlines:[cityCenter,cityEast],obstaclesByClass:[cityBalls,cityBalls,cityExpertBalls,cityBalls],
  raceRampsByClass:[[cityRamp(120,270,260,0,-1,10),...cityLateRamps],[cityRamp(120,270,260,0,-1,10),...cityLateRamps],[cityRamp(120,270,285,0,-1,10),...cityLateRamps],[cityRamp(120,270,285,0,-1,10),...cityLateRamps]],resistance:[]
 };
 export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort,port,neon:city};
