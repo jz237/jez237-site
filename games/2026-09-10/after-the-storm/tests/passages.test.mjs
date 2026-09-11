@@ -1,6 +1,6 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {getCourse} from '../courses.js';
-import {createRace,stepRace,aiInput} from '../race-core.js';
+import {createRace,stepRace,aiInput,gateCoordinates} from '../race-core.js';
 import {passageOpening,passageCollision,passageCamera,passageTarget,passagePoint} from '../course-passages.js';
 import {verificationInput} from '../race-verification.js';
 function position(p,t,lateral=0){const q=passagePoint(p.structurePath||p.path,t);return {x:q.x+q.tz*lateral,z:q.z-q.tx*lateral};}
@@ -53,4 +53,10 @@ test('chase-camera sight lines stop before solid walls and overhead concrete',()
   const side=passageCamera(p,target,{...position(p,.55,p.width+5),y:2},80,50);assert.ok(Math.hypot(side.x-q.x,side.z-q.z)<p.width+(p.continuous?4:0));
   const wanted={...position(p,.58),y:2};assert.deepEqual(passageCamera(p,target,wanted,80,50),wanted);
  }
+});
+
+test('late entry into a channel returns behind the unpassed gate and crosses it normally',()=>{
+ const s=createRace({mode:'time',course:getCourse('neon',1),difficulty:1}),r=s.racers[0];s.phase='running';Object.assign(r,{x:53.247,z:47.359,next:2,lap:3,heading:Math.PI,passageRoute:'open'});const g=passageTarget(s,r);let min=Infinity;
+ for(let i=0;i<1800&&r.next===2;i++){stepRace(s,aiInput(s,r),1/60);min=Math.min(min,gateCoordinates(g,r.x,r.z).forward);if(min>=0)assert.equal(r.passed,0);}
+ assert.ok(min< -4);assert.equal(r.next,3);assert.equal(r.passed,1);assert.equal(r.misses,0);assert.equal(r.dq,'');
 });

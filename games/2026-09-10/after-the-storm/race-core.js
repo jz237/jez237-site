@@ -83,6 +83,12 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
   const options=[-1,1].map(side=>{const x=ramp.x+ramp.tx*forward+ramp.tz*side*(ramp.width/2+3),z=ramp.z+ramp.tz*forward-ramp.tx*side*(ramp.width/2+3);return {x,z,cost:Math.hypot(x-r.x,z-r.z)+Math.hypot(tx-x,tz-z)+(s.course.ground(x,z)>-.8?1000:0)};}).sort((a,b)=>a.cost-b.cost);tx=options[0].x;tz=options[0].z;
  }
  for(const sheet of s.course.iceSheets||[]){const path=s.course.reverse?sheet.reverseApproach:sheet.approach;if(!path||sheet.guideLevels&&!sheet.guideLevels.includes(s.difficulty)||s.mode==='practice'||s.mode==='stunt'&&sheet.guideGate)continue;const key=sheet.id+':'+r.lap;r.iceGuides??={};let phase=r.iceGuides[key];if(phase===undefined&&sheet.guideGate&&r.next!==sheet.guideGate)continue;if(phase===undefined&&Math.hypot(r.x-path[0][0],r.z-path[0][1])<45)phase=0;if(phase===undefined||phase>=path.length)continue;let target=path[phase];if(Math.hypot(r.x-target[0],r.z-target[1])<5||(phase===path.length-2&&r.onIce===sheet.id)){phase++;target=path[phase];}r.iceGuides[key]=phase;if(target){tx=target[0];tz=target[1];}}
+ // A late channel entry can be beyond an unpassed checkpoint. Turn back to
+ // its approach side instead of orbiting the target; scoring still requires
+ // the normal forward crossing on the following approach.
+ const approachKey=r.lap+':'+r.next,forward=gateCoordinates(g,r.x,r.z).forward;
+ if(g.channel&&d<25&&forward>.5)r.channelRecovery=approachKey;
+ if(r.channelRecovery===approachKey){if(forward< -4)r.channelRecovery=null;else{tx=g.x-g.tx*7;tz=g.z-g.tz*7;}}
  const desired=Math.atan2(tx-r.x-r.vx*.18,tz-r.z-r.vz*.18),error=angleDelta(desired-r.heading),bend=Math.abs(angleDelta(Math.atan2(next.tx,next.tz)-Math.atan2(g.tx,g.tz)));
  const cruise=clamp(.84+Math.min(2,s.difficulty)*.045-Math.abs(error)*.25-(d<28?bend*.2:0),.35,1);
  // Rivals use part throttle to preserve their safe course pace with the stronger engine.
