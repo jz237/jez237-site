@@ -3,7 +3,7 @@
   "page": 13,
   "printedPages": "90-91",
   "mode": "stunt",
-  "status": "Reference transcription; not yet connected to runtime. Positions are approximate readings of a hand-drawn guide, not original engine coordinates.",
+  "status": "Connected to dolphin-course.js at layout revision1. Approximate hand-drawn map readings; original scale, heights, timing and warm-up props remain uncalibrated.",
   "coordinates": {
     "units": "pixels",
     "xDirection": "right",
@@ -29,5 +29,5 @@
   "ringCentersInTravelOrder": [[500,409],[527,344],[549,280],[532,129],[483,89],[407,78],[335,81],[109,378],[132,424],[359,540]],
   "rampCentersInTravelOrder": [[192,149],[150,197],[124,253],[185,465]],
   "boundary": [[35,337],[37,292],[47,244],[65,199],[88,164],[113,135],[136,110],[169,85],[205,67],[246,49],[284,38],[328,30],[374,26],[418,22],[468,23],[518,23],[565,30],[610,41],[654,54],[695,75],[734,101],[764,126],[797,158],[821,196],[820,295],[819,393],[814,437],[786,477],[748,516],[702,547],[659,567],[615,579],[516,588],[466,587],[413,587],[350,587],[295,583],[246,574],[196,558],[149,533],[111,501],[82,468],[61,429],[45,385]],
-  "remaining": ["Confirm tunnel axis and roof from footage", "Distinguish warm-up props from stunt props", "Calibrate world scale and ramp dimensions", "Transcribe checkpoint time limits from continuous footage", "Implement and verify ordinary-input traversal"]
+  "remaining": ["Confirm tunnel axis and roof from footage", "Distinguish warm-up props from stunt props", "Calibrate world scale and ramp dimensions", "Transcribe checkpoint time limits from continuous footage", "Final source-to-runtime visual comparison"]
 }

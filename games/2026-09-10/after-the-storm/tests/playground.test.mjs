@@ -16,7 +16,7 @@ test('long swells are 2.1 times taller and longer while small ripples retain the
 test('four free-ride ramps and their landing corridors are in navigable water in all venue classes',()=>{
  for(const c of COURSES)for(let difficulty=0;difficulty<4;difficulty++){
   const s=createRace({course:getCourse(c.id,difficulty),mode:'practice'});
-  assert.equal(s.course.ramps.length,4);assert.equal(s.course.rings.length,12);assert.equal(s.course.checkpoints.length,0);
+  assert.equal(s.course.ramps.length,4);assert.equal(s.course.rings.length,c.id==='practice'?10:12);assert.equal(s.course.checkpoints.length,0);
   for(const r of s.course.ramps)for(const [along,across] of [[-7,-5],[-7,5],[7,-5],[7,5],[25,0]])
    assert.ok(s.course.ground(r.x+r.tx*along+r.tz*across,r.z+r.tz*along-r.tx*across)<-.5,c.id+'/'+difficulty+'/'+r.id);
  }

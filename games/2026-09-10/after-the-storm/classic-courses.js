@@ -1,3 +1,4 @@
+import {createDolphinCourse} from './dolphin-course.js';
 // Authored reconstruction from course observations, in metres. Map coordinates
 // describe geography, not a texture or mesh extracted from the Nintendo game.
 // Source/remaining fidelity checks: COURSE-MATCH.md.
@@ -238,5 +239,5 @@ const southern={
  raceRamps:[{id:150,name:'BOAT JUMP',x:(253-210)*.8,z:(117-325)*.8,tx:-Math.SQRT1_2,tz:Math.SQRT1_2,width:10,length:12,height:4.2,floating:true},{id:151,name:'PIER DIVE',x:(189-210)*.8,z:(477-325)*.8,tx:Math.SQRT1_2,tz:Math.SQRT1_2,width:13,length:10,height:2.1,floating:true}],
  obstacles:[],resistance:[]
 };
-export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort,port,neon:city,glacier,tempest:southern};
+export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort,port,neon:city,glacier,tempest:southern,practice:createDolphinCourse(polygonDistance)};
 export function courseResistance(course,x,z,wet=1){let drag=0;for(const p of course.resistance||[]){const q=((x-p.x)/p.rx)**2+((z-p.z)/p.rz)**2;drag=Math.max(drag,p.drag*clamp((1-q)*3,0,1));}return drag*clamp(wet,0,1);}
