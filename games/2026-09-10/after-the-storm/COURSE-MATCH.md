@@ -471,3 +471,13 @@ The same selected class-specific resistance array drives scenery placement and w
 The northern-island inner/outer traversal, finish alignment, exact weed shape/drag calibration and final source/visual matching remain outstanding. The field renderer is still a lightweight instanced-leaf approximation.
 
 Final regression: 186/186 passed in 115.20 s (work/drake-weeds-full-tests.log). The final renderer replaces rectangular leaves with tapered curved blades and per-instance color variation; this visual-only refinement was inspected in the browser at the northern island (28.95 s, six Expert beds, zero misses). The completed Expert browser race finished second in 4:02.850, zero misses, 51 checkpoints, high graphics/course sea state, final 52 FPS, and an empty error log. The inspection is near a bed, not evidence of entering it; actual wet-hull slowdown is covered by the coasting physics test. No publication or full parity claim.
+
+### Drake Lake source finish span — 2026-09-11
+
+All three forward diagrams show the finish stripe across map x 357–408 at z 267. The Reverse diagram has x 8–59 at z 209; its established 420-x / 478-z normalization gives x 361–412 at z 269. Added per-class finish lines using those endpoints, preserving the starting lane while replacing the generated oblique crossing plane and width. The existing shared finish geometry drives the visible gantry and checkpoint span. Coordinates remain map-derived estimates, not extracted original world data. Drake gains no Sunset-style checkpoint bypass.
+
+The narrower, northward finish changes the starting grid heading and exposed a Reverse first-lap post contact near map (242.5,392.5). An ordinary-helm approach at (254,398) before Reverse buoy 4 clears that row; it changes steering only, not race progress. All four classes now complete three laps with zero missed buoys and zero collision frames in the complete thirteen-post region. Eleven focused tests pass (6.21 s), including exact class finish endpoints, valid crossings near either bank, rejection of backward crossings, and existing Sunset finish/shortcut behavior. Full regression and browser verification are recorded below when complete.
+
+Northern-island inner/outer navigation and full visual/handling calibration remain unfinished. No course sign-off or publication.
+
+Final finish-line regression: 188/188 passed in 112.59 s (work/drake-finish-full-tests.log). The rendered Reverse race finished second in 4:33.000 with zero misses, 51 adjudicated checkpoints, high graphics/course sea state and final 60 FPS. Browser error log was empty. The results overlay obscures the gantry in the final screenshot, so this is race/runtime verification, not full visual sign-off of the finish structure.
