@@ -12,6 +12,7 @@ import {routeDistance,insideRoute} from './courses.js';
 
 // Each venue has its own architecture, vegetation, banks, lighting and palette.
 export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
+ const authoredStunts=!!(course.stuntLayout&&(course.stunt||course.freeStunts));
  const root=new T.Group();scene.add(root);let seed=course.id.split('').reduce((s,c)=>s+c.charCodeAt(0),19);const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  const materials=[],geometries=[],textures=[],buoys=[],animated=[],lights=[],weedMeshes=[],floatingBarriers=[],mooredMeshes=[];
  const mat=(color,roughness=.8,metalness=0,emissive=0)=>{const m=new T.MeshStandardMaterial({color,roughness,metalness,emissive,emissiveIntensity:emissive?1.1:0});materials.push(m);return m;};
@@ -32,7 +33,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  function rod(a,b,r,m=steel,parent=root){const av=new T.Vector3(...a),bv=new T.Vector3(...b),delta=bv.clone().sub(av),o=add(new T.CylinderGeometry(r,r,delta.length(),8),m,0,0,0,parent);o.position.copy(av.add(bv).multiplyScalar(.5));o.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),delta.normalize());return o;}
  function label(text,x,y,z,w=15,parent=root,color='#f3dab0'){const c=document.createElement('canvas');c.width=1024;c.height=128;const ctx=c.getContext('2d');ctx.fillStyle='#183c4b';ctx.fillRect(0,0,1024,128);ctx.fillStyle=color;ctx.font='bold 49px sans-serif';ctx.textAlign='center';ctx.fillText(text,512,84);const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;textures.push(tex);const m=new T.MeshBasicMaterial({map:tex,side:T.DoubleSide});materials.push(m);return add(new T.PlaneGeometry(w,w/8),m,x,y,z,parent);}
  function buoy(x,z,m,s=1){const g=new T.Group();g.userData.dynamic=true;g.position.set(x,0,z);root.add(g);add(new T.CylinderGeometry(.3*s,.6*s,.7*s,12),m,0,.35*s,0,g);add(new T.CylinderGeometry(.4*s,.5*s,.1*s,12),white,0,.44*s,0,g);cylinder(0,.98*s,0,.025,.7*s,black,g);buoys.push({g,x,z});}
- const red=mat(0xef503e,.35),yellow=mat(0xf5ce46,.35),pink=mat(0xd06aa9,.4);for(const g of freeRide||course.stuntLayout?[]:course.gates){if(g.side)buoy(g.bx,g.bz,g.side>0?red:yellow,1.25);if(!course.boundary)for(const side of [-1,1])buoy(g.x+g.tz*29*side,g.z-g.tx*29*side,pink,.6);}
+ const red=mat(0xef503e,.35),yellow=mat(0xf5ce46,.35),pink=mat(0xd06aa9,.4);for(const g of freeRide||authoredStunts?[]:course.gates){if(g.side)buoy(g.bx,g.bz,g.side>0?red:yellow,1.25);if(!course.boundary)for(const side of [-1,1])buoy(g.x+g.tz*29*side,g.z-g.tx*29*side,pink,.6);}
  if(course.boundary&&!freeRide)for(let i=0;i<course.boundary.length;i++){const a=course.boundary[i],b=course.boundary[(i+1)%course.boundary.length],count=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/7);for(let j=0;j<count;j++){const x=a[0]+(b[0]-a[0])*j/count,z=a[1]+(b[1]-a[1])*j/count;if(course.ground(x,z)<-.2)buoy(x,z,pink,.6);}}
  // Visible weed leaves occupy the same elliptical patches used by hull drag.
  if(course.resistance?.length){const weedMaterial=mat(0x536b27,.93);weedMaterial.side=T.DoubleSide;const leafShape=new T.Shape();leafShape.moveTo(0,-.35);leafShape.quadraticCurveTo(.18,.03,0,.4);leafShape.quadraticCurveTo(-.15,.04,0,-.35);const leaf=new T.ShapeGeometry(leafShape,5),lp=leaf.attributes.position;for(let i=0;i<lp.count;i++)lp.setZ(i,.07*Math.sin((lp.getY(i)+.35)/.75*Math.PI));leaf.computeVertexNormals();geometries.push(leaf);const dummy=new T.Object3D();
@@ -40,7 +41,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
    for(let i=0;i<180;i++){const a=random()*Math.PI*2,r=Math.sqrt(random())*.94;dummy.position.set(Math.cos(a)*r*patch.rx,-.10+random()*.13,Math.sin(a)*r*patch.rz);dummy.rotation.set(.5+random()*.7,a,(random()-.5)*.8);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);mesh.setColorAt(i,new T.Color().setHSL(.20+random()*.055,.38+random()*.2,.55+random()*.18));}mesh.instanceMatrix.needsUpdate=true;
   }
  }
- if(!freeRide&&!course.stuntLayout){
+ if(!freeRide&&!authoredStunts){
  const finish=course.gates[0],finishMin=finish.spanMin??-21,finishMax=finish.spanMax??21,finishCenter=(finishMin+finishMax)/2,finishWidth=finishMax-finishMin,gantry=new T.Group();gantry.position.set(finish.x-finish.tz*finishCenter,0,finish.z+finish.tx*finishCenter);gantry.rotation.y=Math.atan2(finish.tx,finish.tz);root.add(gantry);for(const x of[-finishWidth/2,finishWidth/2]){cylinder(x,3.4,0,.16,7,steel,gantry);box(x,.15,0,2,.5,3,yellow,gantry);}box(0,6.7,0,finishWidth,1.6,.4,black,gantry);label(course.name.toUpperCase()+' / FINISH',0,6.8,.25,34,gantry);label(course.name.toUpperCase()+' / FINISH',0,6.8,-.25,34,gantry).rotation.y=Math.PI;
  }
  function building(x,z,w,d,h,m=stone){const y=course.ground(x,z);if(y<1)return;box(x,y+h/2,z,w,h,d,m);box(x,y+h+.2,z,w+.6,.4,d+.6,steel);return y;}
@@ -67,7 +68,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   const edge=mooredBoatOutline(boat);for(let i=0;i<edge.length;i++){const a=edge[i],b=edge[(i+1)%edge.length];rod([a[0],.74,a[1]],[b[0],.74,b[1]],.055,black,g);}
  }
  // Floating stunt decks use the same water offset as hull contact.
- const parkDeck=course.stuntLayout?mat(0xb99562,.87):null,plankSeam=course.stuntLayout?mat(0x70563b,.95):null;
+ const parkDeck=authoredStunts?mat(0xb99562,.87):null,plankSeam=authoredStunts?mat(0x70563b,.95):null;
  const rampMeshes=[],deckMat=mat(0x24535a,.82),ringGlow=mat(0xffca57,.32,.2,0x684012),waterRingMat=mat(0x6de5cf,.34,.12,0x164e45);
  for(const ramp of course.ramps||[]){
   const g=new T.Group();g.userData.dynamic=true;g.position.set(ramp.x,0,ramp.z);g.rotation.y=Math.atan2(ramp.tx,ramp.tz);root.add(g);rampMeshes.push({g,ramp});
@@ -84,13 +85,15 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
    box(side*(ramp.width/2+.5),ramp.height+1.8,ramp.length/2,.6,.7,.12,ringGlow,g);
   }
   for(let k=0;k<5;k++){const z=-ramp.length*.37+k*ramp.length*.17,y=(z/ramp.length+.5)*ramp.height+.25;for(const side of [-1,1])box(side*.8,y,z,2.2,.035,.23,white,g).rotation.set(angle,side*.5,0);}
-  const signWidth=Math.min(10,ramp.width*.83);if(ramp.id!==150&&!course.stuntLayout)label(ramp.name,ramp.width>18?ramp.width/2-signWidth/2:0,ramp.height+.9,ramp.length/2-.18,signWidth,g).rotation.y=Math.PI;
+  const signWidth=Math.min(10,ramp.width*.83);if(ramp.id!==150&&!authoredStunts)label(ramp.name,ramp.width>18?ramp.width/2-signWidth/2:0,ramp.height+.9,ramp.length/2-.18,signWidth,g).rotation.y=Math.PI;
  }
+ const authoredRingMaterial=authoredStunts?mat(0xffffff,.35):null;if(authoredRingMaterial)authoredRingMaterial.vertexColors=true;
  const ringMeshes=[];for(const [i,r] of (course.rings||[]).entries()){
-  const ring=add(new T.TorusGeometry(r.radius,r.type==='air'?.21:.15,10,48),r.type==='dive'?iceMat:r.type==='air'?ringGlow:waterRingMat,r.x,r.y,r.z);ring.rotation.y=Math.atan2(r.tx,r.tz);ring.userData.dynamic=true;
+  const ringGeometry=new T.TorusGeometry(r.radius,r.type==='air'?.21:.15,10,48);if(authoredRingMaterial){const colors=[],palette=[white.color,red.color];for(let j=0;j<=10;j++)for(let i=0;i<=48;i++){const color=palette[Math.floor((i%48)/6)%2];colors.push(color.r,color.g,color.b);}ringGeometry.setAttribute('color',new T.Float32BufferAttribute(colors,3));}
+  const ring=add(ringGeometry,authoredRingMaterial|| (r.type==='dive'?iceMat:r.type==='air'?ringGlow:waterRingMat),r.x,r.y,r.z);ring.rotation.y=Math.atan2(r.tx,r.tz);ring.userData.dynamic=true;
   add(new T.TorusGeometry(r.radius-.08,.035,5,48),white,0,0,.08,ring);ringMeshes.push({ring,index:i,definition:r});
  }
- for(const cp of course.checkpoints||[]){const g=new T.Group();g.position.set(cp.x,0,cp.z);g.rotation.y=Math.atan2(cp.tx,cp.tz);root.add(g);for(const side of [-1,1]){cylinder(side*cp.width,3.2,0,.15,6.4,steel,g);box(side*cp.width,.1,0,2,.5,3,white,g);}label(course.stuntLayout&&cp.section===3?'START / FINISH':'CHECKPOINT '+(cp.section+1),0,6.3,0,course.stuntLayout?18:30,g);label(course.stuntLayout&&cp.section===3?'START / FINISH':'CHECKPOINT '+(cp.section+1),0,6.3,-.05,course.stuntLayout?18:30,g).rotation.y=Math.PI;}
+ for(const cp of course.checkpoints||[]){const g=new T.Group();g.position.set(cp.x,0,cp.z);g.rotation.y=Math.atan2(cp.tx,cp.tz);root.add(g);for(const side of [-1,1]){cylinder(side*cp.width,3.2,0,.15,6.4,steel,g);box(side*cp.width,.1,0,2,.5,3,white,g);}label(authoredStunts&&cp.section===3?'START / FINISH':'CHECKPOINT '+(cp.section+1),0,6.3,0,authoredStunts?18:30,g);label(authoredStunts&&cp.section===3?'START / FINISH':'CHECKPOINT '+(cp.section+1),0,6.3,-.05,authoredStunts?18:30,g).rotation.y=Math.PI;}
  // Small waterfront structures include railings, planks, lamps, mooring posts and ladders.
  function pier(x,z,angle=0,length=16){const y=Math.max(1,course.ground(x,z)),g=new T.Group();g.position.set(x,y,z);g.rotation.y=angle;root.add(g);box(0,0,0,5,.3,length,wood,g);for(let i=0;i<length;i+=1.1)box(0,.18,-length/2+i,5,.025,.05,black,g);for(const side of[-1,1])for(let i=-length/2;i<=length/2;i+=4){cylinder(side*2.2,-1.5,i,.18,4,wood,g);cylinder(side*2.2,.4,i,.10,1,white,g);}return g;}
  if(theme==='beach'||theme==='coast'||theme==='resort'||theme==='island'||theme==='park'){

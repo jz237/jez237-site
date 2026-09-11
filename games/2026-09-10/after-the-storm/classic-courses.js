@@ -1,3 +1,4 @@
+import {sunnyStuntLayout} from './sunny-stunts.js';
 import {createDolphinCourse} from './dolphin-course.js';
 // Authored reconstruction from course observations, in metres. Map coordinates
 // describe geography, not a texture or mesh extracted from the Nintendo game.
@@ -19,7 +20,7 @@ const sunnyExpertBuoys=sunnyBuoys([[179,165,-1],[167,87,1],[99,30,-1],[91,78,-1]
 const sunnyReverseBuoys=sunnyBuoys([[147,165,1],[158,69,-1],[231,75,-1],[243,131,1],[243,243,-1],[240,276,1],[247,338,-1],[235,395,1],[243,443,-1],[163,438,1],[153,358,-1]].map(([x,z,side])=>[358-x,522-z,side])).map((b,i)=>i===9?{...b,offset:2}:b);
 const sunnyBalls=points=>sunnyMap(points).map(([x,z])=>({x,z,r:.55,type:'ball'}));
 const sunny={
- name:'Sunny Beach',theme:'beach',tag:'01 / SUNNY BEACH',layoutRevision:3,
+ name:'Sunny Beach',theme:'beach',tag:'01 / SUNNY BEACH',layoutRevision:4,stuntLayout:sunnyStuntLayout(),
  buoysByClass:[sunnyNormalBuoys,sunnyHardBuoys,sunnyExpertBuoys,sunnyReverseBuoys],
  boundary:sunnyMap([[94,0],[96,459],[104,497],[120,511],[202,515],[238,500],[273,470],[273,0]]),
  obstaclesByClass:[[],sunnyBalls([[107,327],[130,327],[153,327]]),sunnyBalls([[106,327],[119,327],[132,327],[145,327],[159,327]]),sunnyBalls([[208,195],[221,195],[234,195],[247,195],[260,195]].map(([x,z])=>[358-x,522-z]))],
