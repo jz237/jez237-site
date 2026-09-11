@@ -8,7 +8,7 @@ export function configurePassage(course){
  if(!['citadel','port','neon'].includes(course.id))return;
  // Select the same geographical bend in every sampling density and direction.
  const near=(x,z)=>course.gates.reduce((best,g,i)=>Math.hypot(g.x-x,g.z-z)<Math.hypot(course.gates[best].x-x,course.gates[best].z-z)?i:best,0);
- const authored=course.shortcut;let first=near(...(authored?.from||[50,108])),last=near(...(authored?.to||[85,-6]));if(course.reverse)[first,last]=[last,first];
+ const authored=course.shortcut;let first=near(...(authored?.from||[50,108])),last=near(...(authored?.to||[85,-6]));if(course.id==='citadel'&&course.buoysByClass){first=course.gates.reduce((best,g,i)=>g.side&&Math.hypot(g.bx-authored.from[0],g.bz-authored.from[1])<Math.hypot(course.gates[best].bx-authored.from[0],course.gates[best].bz-authored.from[1])?i:best,course.gates.findIndex(g=>g.side));}if(course.reverse)[first,last]=[last,first];
  const a=course.gates[first],b=course.gates[last],via=(authored?.via||[]).map(([x,z])=>({x,z}));if(course.reverse)via.reverse();const path=[{x:a.x,z:a.z},...via,{x:b.x,z:b.z}];
  const p={kind:authored?.kind||(course.id==='citadel'?'gate':'tunnel'),first,last,path,width:authored?.width||(course.id==='citadel'?8:6),clearance:authored?.clearance||(course.id==='citadel'?5.5:4.3),enabled:course.difficulty>0||authored?.kind==='jump-dive',indices:[]};
  if(authored){p.structurePath=authored.structure.map(([x,z])=>({x,z}));p.continuous=!!authored.continuous;}
