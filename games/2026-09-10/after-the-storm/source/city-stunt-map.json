@@ -1,0 +1,291 @@
+{
+  "source": "https://assets.topics.apps-jp.nintendo.com/uploads/files/2022/08/03/00/27/03/820845/53229_1996_12_02.pdf",
+  "page": 14,
+  "printedPage": 92,
+  "mode": "stunt",
+  "coordinates": {
+    "units": "pixels",
+    "xDirection": "right",
+    "zDirection": "down",
+    "renderLongEdge": 4000,
+    "crop": [
+      1750,
+      350,
+      1230,
+      1000
+    ]
+  },
+  "status": "Preliminary runtime candidate. Original20/15/15/15 section allowances are now applied. Both guided branches currently fail their timing checks; the earlier fourteen-ring inner completion used estimated38-second sections and is not a current pass. Exact course dimensions, full finish geography and original visuals remain unverified.",
+  "openingRoutes": {
+    "shortcut": {
+      "ringsInTravelOrder": [
+        [
+          722,
+          404
+        ],
+        [
+          692,
+          404
+        ],
+        [
+          663,
+          404
+        ],
+        [
+          578,
+          402
+        ],
+        [
+          392,
+          399
+        ],
+        [
+          267,
+          399
+        ]
+      ],
+      "submergedCandidates": [
+        0,
+        1,
+        2
+      ],
+      "rampCenter": [
+        800,
+        402
+      ],
+      "wallSpan": [
+        [
+          615,
+          349
+        ],
+        [
+          615,
+          445
+        ]
+      ],
+      "note": "Guide describes a submarine shortcut with six rings. Confirm submerged-ring count and depth from continuous footage."
+    },
+    "outer": {
+      "ringsInTravelOrder": [
+        [
+          304,
+          164
+        ],
+        [
+          217,
+          195
+        ],
+        [
+          136,
+          245
+        ]
+      ],
+      "note": "Guide says the shortcut has three more rings than the outer route. Keep both branches; do not demand both in one normal lap."
+    }
+  },
+  "sharedAfterFirstCheckpoint": {
+    "rampCenter": [
+      420,
+      640
+    ],
+    "ringAfterRamp": [
+      464,
+      636
+    ],
+    "ringClusterAfterSecondCheckpoint": [
+      [
+        809,
+        711
+      ],
+      [
+        878,
+        719
+      ],
+      [
+        829,
+        784
+      ],
+      [
+        908,
+        814
+      ],
+      [
+        972,
+        753
+      ]
+    ]
+  },
+  "finishEdge": {
+    "partialRings": [
+      [
+        1210,
+        525
+      ],
+      [
+        1210,
+        615
+      ]
+    ],
+    "partialRampVisibleY": [
+      560,
+      665
+    ],
+    "note": "Centers extend beyond page edge; x values for partial rings are edge observations, not full object centers. Guide text describes two consecutive finish ramps."
+  },
+  "checkpointSpans": [
+    [
+      [
+        60,
+        461
+      ],
+      [
+        186,
+        461
+      ]
+    ],
+    [
+      [
+        788,
+        640
+      ],
+      [
+        727,
+        738
+      ]
+    ],
+    [
+      [
+        1150,
+        710
+      ],
+      [
+        null,
+        710
+      ]
+    ],
+    [
+      [
+        1007,
+        290
+      ],
+      [
+        1007,
+        446
+      ]
+    ]
+  ],
+  "originalFootage": {
+    "url": "https://www.youtube.com/watch?v=J2P3ChbV2vU",
+    "inspectedSeconds": [
+      10,
+      12,
+      14,
+      15,
+      25,
+      30,
+      32,
+      35,
+      40,
+      60,
+      65,
+      70,
+      75,
+      80,
+      85,
+      87
+    ],
+    "notes": [
+      "Recording description says using pause trick; do not use elapsed video time or its high score for normal timer calibration.",
+      "At10s rider approaches opening ramp;12s airborne;14s returns toward water and rings;15s a wall support is visible. These sparse frames do not yet prove the exact dive timing or submerged count.",
+      "At65s a650 ring award is visible amid metal obstacles near the finish. That is evidence of a13-ring chain at that instant, not total course ring count.",
+      "Frame stepping with the paused player period key advances about1/30 second; finer inspection is available.",
+      "At65s four spiked metal floats span the channel between the two finish jumps. Their type, row count and relative placement are visible; exact world spacing remains uncalibrated.",
+      "At approximately87s the final breakdown shows TIME00000,STUNTS41012,RINGS05250,TOTAL46262. The ring score equals a fourteen-ring uninterrupted chain (50 times1 through14), consistent with the provisional inner-route count; it does not prove there are no additional optional rings.",
+      "At25s the rider is in the stone-walled inner shortcut with a250 ring award;30s shows the broad northern turn;32s shows the first gantry and the next ramp ahead. These views were insufficient to establish precise world coordinates or justify moving the current checkpoint."
+    ]
+  },
+  "remaining": [
+    "Confirm complete right-edge geometry and ring count from another map or footage",
+    "Inspect dive descent frame-by-frame and identify which rings are submerged",
+    "Implement both opening routes and their separate valid ring counts",
+    "Fit second jump, five-ring cluster and two final jumps to source geography",
+    "Preserve physical wall and metal hazards; verify powered dive passage and outer bypass",
+    "Calibrate original timing using footage without pause manipulation"
+  ],
+  "finishMetalRow": {
+    "raceMapPositions": [
+      [
+        108,
+        485
+      ],
+      [
+        108,
+        496
+      ],
+      [
+        108,
+        507
+      ],
+      [
+        108,
+        518
+      ]
+    ],
+    "status": "Four spiked floats confirmed from footage at65s. Coordinates provisionally reuse the mapped race row; verify exact stunt distances."
+  },
+  "originalTiming": {
+    "source": "https://www.youtube.com/watch?v=-y1Du4ftw0k",
+    "title": "Wave Race 64 - [N64 - HD] - Stunt Mode - Twilight City",
+    "sectionAllowancesSeconds": [
+      20,
+      15,
+      15,
+      15
+    ],
+    "observations": [
+      {
+        "videoSeconds": 5,
+        "timeRemaining": 20.0,
+        "note": "Start lights; stationary rider."
+      },
+      {
+        "videoSeconds": 10,
+        "timeRemaining": 15.7,
+        "note": "Opening jump."
+      },
+      {
+        "videoSeconds": 20,
+        "timeRemaining": 5.7,
+        "note": "Northern turn."
+      },
+      {
+        "videoSeconds": 23,
+        "timeRemaining": 2.7,
+        "note": "Approaching first checkpoint."
+      },
+      {
+        "videoSeconds": 24,
+        "timeRemaining": 14.8,
+        "timeBonus": 100,
+        "note": "TIME EXTEND after checkpoint one;15-second reset, no carryover."
+      },
+      {
+        "videoSeconds": 34,
+        "timeRemaining": 4.7,
+        "note": "Approaching checkpoint two."
+      },
+      {
+        "videoSeconds": 35,
+        "timeRemaining": 14.1,
+        "timeBonus": 230,
+        "note": "TIME EXTEND after checkpoint two."
+      },
+      {
+        "videoSeconds": 42,
+        "timeRemaining": 14.9,
+        "note": "TIME EXTEND after checkpoint three, facing the first finish ramp."
+      }
+    ],
+    "precision": "Frame-step timestamps near whole seconds are approximate; HUD tenths were read directly. The visible start and checkpoint resets establish the20/15/15/15 schedule. Need frame-by-frame original route pace and dimensions, not a larger substitute timer."
+  }
+}
