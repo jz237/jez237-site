@@ -9,6 +9,7 @@ import {buildAquariumSubstrate} from './Substrate';
 import {AquariumLighting} from './AquariumLighting';
 import {buildAquariumPlumbing} from './AquariumPlumbing';
 import canopy from './CanopyLighting.json';
+import {aquariumFieldOfView,orbitToward} from './CameraFraming';
 import * as T from 'three';
 import {buildBotanicalPlants} from './BotanicalPlants';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -35,6 +36,7 @@ export class Aquarium{
  private camera=new T.PerspectiveCamera(37,1,.1,100);
  private controls:OrbitControls;
  private targetCamera:T.Vector3|null=null;
+ private targetFov:number|null=null;
  private time=0;
  private last=0;
  private seed=237;
@@ -85,7 +87,7 @@ export class Aquarium{
   this.controls.minPolarAngle=Math.PI*.31;this.controls.maxPolarAngle=Math.PI*.515;
   this.controls.minDistance=10.8;this.controls.maxDistance=29;
   this.controls.rotateSpeed=.55;this.controls.zoomSpeed=.7;
-  this.controls.addEventListener('start',()=>this.targetCamera=null);
+  this.controls.addEventListener('start',()=>{this.targetCamera=null;this.targetFov=null;});
   this.camera.position.set(0,2.45,21.5);
   RectAreaLightUniformsLib.init();
   this.stripLight.position.set(0,canopy.height,canopy.depth);this.stripLight.lookAt(0,0,canopy.depth);
@@ -189,12 +191,15 @@ export class Aquarium{
   if(this.food.length>12)return;
   for(let i=0;i<12;i++){const m=this.mesh(new T.IcosahedronGeometry(.028,0),new T.MeshStandardMaterial({color:0xbba471,roughness:1}),V(.65+(this.random()-.5)*1.6,5.12+this.random()*.13,.62+(this.random()-.5)*.3),false);m.scale.set(1,.35,.8);this.food.push({mesh:m,age:0});}
  }
- zoom(scale:number){this.targetCamera=null;const offset=this.camera.position.clone().sub(this.controls.target);offset.setLength(clamp(offset.length()*scale,this.controls.minDistance,this.controls.maxDistance));this.camera.position.copy(this.controls.target).add(offset);this.controls.update();}
- view(name:string){const portrait=this.host.clientWidth/this.host.clientHeight<.9,dist=portrait?23:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?2.45:7.5,Math.cos(angle)*dist);}
+ zoom(scale:number){this.targetCamera=null;this.targetFov=null;const offset=this.camera.position.clone().sub(this.controls.target);offset.setLength(clamp(offset.length()*scale,this.controls.minDistance,this.controls.maxDistance));this.camera.position.copy(this.controls.target).add(offset);this.controls.update();}
+ view(name:string){const dist=21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?2.45:7.5,Math.cos(angle)*dist);this.targetFov=aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera);}
  private resize(){
-  const w=this.host.clientWidth,h=this.host.clientHeight;this.camera.aspect=w/h;
-  // Widen vertical field of view on narrow screens to retain the entire tank.
-  this.camera.fov=w/h<.8?52:w/h<1.1?48:33;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);
+  const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;
+  // Fit continuously across viewport shapes while retaining the user's zoom distance.
+  const framingPosition=this.camera.position.clone().sub(this.controls.target).setLength(21.5).add(this.controls.target);
+  this.camera.fov=aquariumFieldOfView(w,h,framingPosition);
+  if(this.targetCamera)this.targetFov=aquariumFieldOfView(w,h,this.targetCamera);
+  this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);
   const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);
  }
  private avoidSolid(s:TetraSwim){
@@ -206,7 +211,15 @@ export class Aquarium{
   this.frame=requestAnimationFrame(this.animate);
   const elapsed=this.last?(now-this.last)/1000:0,wallDt=Math.min(elapsed,.05);this.last=now;
   const dt=this.paused||document.hidden?0:wallDt;this.time+=dt;this.swimShader.value=this.time;
-  if(this.targetCamera){this.camera.position.lerp(this.targetCamera,1-Math.exp(-wallDt*4));if(this.camera.position.distanceTo(this.targetCamera)<.02)this.targetCamera=null;}
+  if(this.targetCamera){
+   const ease=1-Math.exp(-wallDt*4);this.camera.position.copy(orbitToward(this.camera.position,this.targetCamera,ease));
+   // Keep the intermediate diagonal silhouette in view too. Preserve a deliberate
+   // close-up while its camera distance eases back toward the selected preset.
+   const fittingPosition=this.camera.position.clone().sub(this.controls.target).setLength(this.targetCamera.distanceTo(this.controls.target)).add(this.controls.target);
+   const required=aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,fittingPosition);
+   this.camera.fov=Math.max(required,T.MathUtils.lerp(this.camera.fov,this.targetFov??required,ease));this.camera.updateProjectionMatrix();
+   if(this.camera.position.distanceTo(this.targetCamera)<.02){this.camera.position.copy(this.targetCamera);this.camera.fov=this.targetFov??this.camera.fov;this.camera.updateProjectionMatrix();this.targetCamera=null;this.targetFov=null;}
+  }
   this.controls.update();
   this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
   this.waterIllumination.value=this.daylight;
