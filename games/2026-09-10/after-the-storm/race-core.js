@@ -56,7 +56,14 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
  // line. Keep the original checkpoint; avoiding a post never grants progress.
  if(s.course.layoutRevision){const dx=tx-r.x,dz=tz-r.z,length=Math.max(1,Math.hypot(dx,dz)),ux=dx/length,uz=dz/length;
   const threats=(s.course.rocks||[]).map(q=>({...obstaclePosition(q,s.time),r:q.r})).filter(q=>{const ahead=(q.x-r.x)*ux+(q.z-r.z)*uz,side=(q.x-r.x)*uz-(q.z-r.z)*ux;return ahead>-.5&&ahead<Math.min(18,length)&&Math.abs(side)<q.r+1.8;}).sort((a,b)=>Math.hypot(a.x-r.x,a.z-r.z)-Math.hypot(b.x-r.x,b.z-r.z));
-  if(threats.length){const q=threats[0],space=q.r+3.1,choices=[-1,1].map(side=>{const x=q.x+g.tz*side*space,z=q.z-g.tx*side*space,coords=gateCoordinates(g,x,z);let cost=Math.hypot(x-r.x,z-r.z)+Math.hypot(tx-x,tz-z);if(s.course.ground(x,z)>-.8)cost+=1000;for(const o of s.course.rocks)if(Math.hypot(x-o.x,z-o.z)<o.r+1.5)cost+=1000;if(Math.abs(coords.forward)<5&&g.side&&(coords.lateral+g.side*g.offset)*g.side<1)cost+=100;return {x,z,cost};}).sort((a,b)=>a.cost-b.cost);tx=choices[0].x;tz=choices[0].z;}
+  if(threats.length){const q=threats[0],space=q.r+3.1,choices=[-1,1].map(side=>{const x=q.x+g.tz*side*space+ux*(q.r+3),z=q.z-g.tx*side*space+uz*(q.r+3),coords=gateCoordinates(g,x,z);let cost=Math.hypot(x-r.x,z-r.z)+Math.hypot(tx-x,tz-z);if(s.course.ground(x,z)>-.8)cost+=1000;for(const o of s.course.rocks)if(Math.hypot(x-o.x,z-o.z)<o.r+1.5)cost+=1000;if(Math.abs(coords.forward)<18&&g.side&&(coords.lateral+g.side*g.offset)*g.side<1)cost+=100;return {x,z,cost};}).sort((a,b)=>a.cost-b.cost);tx=choices[0].x;tz=choices[0].z;}
+ }
+ // Fixed ramps are obstacles from behind. Approach a rear corner before
+ // following its side; aiming straight at the next buoy can pin a reversed ski.
+ for(const ramp of s.course.ramps||[]){if(!ramp.solidBack)continue;const dx=r.x-ramp.x,dz=r.z-ramp.z,along=dx*ramp.tx+dz*ramp.tz,across=dx*ramp.tz-dz*ramp.tx;
+  if((tx-r.x)*ramp.tx+(tz-r.z)*ramp.tz>=0||along< -ramp.length/2-3||along>ramp.length/2+10||Math.abs(across)>ramp.width/2+5)continue;
+  const forward=Math.abs(across)<ramp.width/2+2?ramp.length/2+3:-ramp.length/2-3;
+  const options=[-1,1].map(side=>{const x=ramp.x+ramp.tx*forward+ramp.tz*side*(ramp.width/2+3),z=ramp.z+ramp.tz*forward-ramp.tx*side*(ramp.width/2+3);return {x,z,cost:Math.hypot(x-r.x,z-r.z)+Math.hypot(tx-x,tz-z)+(s.course.ground(x,z)>-.8?1000:0)};}).sort((a,b)=>a.cost-b.cost);tx=options[0].x;tz=options[0].z;
  }
  const desired=Math.atan2(tx-r.x-r.vx*.18,tz-r.z-r.vz*.18),error=angleDelta(desired-r.heading),bend=Math.abs(angleDelta(Math.atan2(next.tx,next.tz)-Math.atan2(g.tx,g.tz)));
  const cruise=clamp(.84+Math.min(2,s.difficulty)*.045-Math.abs(error)*.25-(d<28?bend*.2:0),.35,1);
