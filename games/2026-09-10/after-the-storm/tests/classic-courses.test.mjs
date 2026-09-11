@@ -13,7 +13,7 @@ test('Sunny Beach has a long dry sandbar, two wet straights and open water beyon
 test('Sunset Bay has distinct L-shaped geography and a race-mode ramp with a wet bypass',()=>{
  const c=getCourse('amber');assert.equal(c.name,'Sunset Bay');assert.ok(c.ground(-34,40)>0);assert.ok(c.ground(90,127)>0);assert.ok(c.ground(65,30)<-4);
  const s=createRace({course:c}),ramp=s.course.ramps[0];assert.equal(ramp.name,'SUNSET JUMP');assert.ok(c.ground(ramp.x-15,ramp.z)<-3);assert.equal(s.mode,'race');
- const reversed=getCourse('amber',3).ramps[0];assert.equal(reversed.tz,-ramp.tz);
+ const reversed=getCourse('amber',3).ramps[0];assert.equal(reversed.tz,ramp.tz);
 });
 test('reconstructed routes are in water without cutting the authored shorelines',()=>{
  for(const id of ['greyhaven','amber','reed','citadel','port']){const c=getCourse(id);for(const p of sampleRoute(c.anchors,240))assert.ok(c.ground(p.x,p.z)<-.8,id+' '+JSON.stringify(p));}
