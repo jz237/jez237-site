@@ -11,3 +11,5 @@ The third cabinet reuses the existing site's **retro Joust** engine, original de
 All three machines keep independent simulations. Selecting a cabinet closes the previous inspection, moves the cabinets to separate foreground/left/right positions, and routes sound only from the selected cabinet. Hero, Exploded, X-Ray, Watch, service access, mechanical demonstrations, chip notes, reduced cabinet motion and mobile controls remain shared.
 
 Validation: `node --test tests/*.test.mjs`, TypeScript/build checks, and browser review of all three machines across desktop/mobile modes, rotation, sound, selection, swapping, service panels and chip close-ups. Joust tests cover six minutes of unattended combat/egg collection, progression, pause/power, two-way control construction and original sample identity.
+
+The exhibit pilot now plans body-clearance routes around live shelves, including wrapped passages, and recalculates for moving targets. Defeat events forward the existing FL1/FL2/FL3 sprite animation and brief feather/ash bursts from the games-page renderer. Tests exercise ascent, descent, upper shelves and edge wrapping through the unchanged engine collision code.
