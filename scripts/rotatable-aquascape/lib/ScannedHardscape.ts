@@ -13,7 +13,9 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
   loader.loadAsync('./models/rock_moss_set_01/rock_moss_set_01_2k.gltf')
  ]);
  const wood=woodFile.scene.children[0] as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;
- const woodMaterial=new T.MeshPhysicalMaterial({map:wood.material.map,normalMap:wood.material.normalMap,roughnessMap:wood.material.roughnessMap,color:0x9d805b,roughness:.9,normalScale:new T.Vector2(.95,.95),side:T.FrontSide,vertexColors:true,metalness:0,ior:1.22,specularIntensity:.65});
+ // The scan already contains brown weathering. A restrained neutral tint keeps
+ // its pale exposed grain visible; the packed ARM red channel restores crevices.
+ const woodMaterial=new T.MeshPhysicalMaterial({map:wood.material.map,normalMap:wood.material.normalMap,roughnessMap:wood.material.roughnessMap,aoMap:wood.material.roughnessMap,aoMapIntensity:.7,color:0xb7aea0,roughness:.9,normalScale:new T.Vector2(.95,.95),side:T.FrontSide,vertexColors:true,metalness:0,ior:1.22,specularIntensity:.65});
  for(const texture of [woodMaterial.map,woodMaterial.normalMap,woodMaterial.roughnessMap])if(texture)texture.anisotropy=8;
  for(const branch of aquascapeBranches){
   const {geometry,obstacles:contacts}=bendScannedBranch(wood.geometry,branch);
@@ -22,7 +24,7 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
  }
  const sourceRocks=rockFile.scene.children.filter(o=>o instanceof T.Mesh) as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>[];
  const rockSource=sourceRocks[0].material;
- const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockSource.aoMap,color:0x7f9286,normalScale:new T.Vector2(.95,.95),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
+ const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockSource.aoMap,color:0xb8c0b9,normalScale:new T.Vector2(.95,.95),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
  rockMaterial.onBeforeCompile=shader=>{
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
    float mineralLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
