@@ -368,3 +368,9 @@ The 29,724 leaf instances retain the same layout and animation. A static export 
 A close-up isolation test traced the broad gray veil on the front pane to the shared studio environment map. The flat glass faces now use .02 environment intensity instead of .10. Their physical Fresnel response, transmitted scene, polished edges, silicone and internal side-wall reflections remain. The edge material retains its separate .7 response, so the tank still has a visible rimless-glass boundary. Water reflections and scene illumination are unchanged.
 
 This is a studio-reflection adjustment, not a change to water clarity or attenuation. Transparent glass is excluded from the static diffuse bake, which remains valid. No paid assets or services were used; full reference parity is still unfinished.
+
+### Layered lower planting
+
+Two low colonies on the planted banks bridge the carpet and tall red stems. Low stem colonies now mix narrow blades with one-third round-leaf shoots, reducing a uniform broad-leaf mass. A sampled audit of the entire new colony root rectangles found at least .0719/.0737 world units clearance from the winding sand channel. Leaves may overhang their planted bank naturally. The shared seeded regeneration also shifts individual later rosettes and carpet instances.
+
+The scene contains 29,998 botanical leaves and 8,639,431 exported triangles; the narrower-leaf mixture reduces the triangle count despite adding shoots. Every static leaf vertex was checked finite and within the glass. Bounced lighting rebuilt in 20.67 seconds. Motion and fish behavior remain unchanged. No paid assets or services were used; the reference match remains unfinished.
