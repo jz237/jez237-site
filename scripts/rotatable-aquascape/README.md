@@ -274,3 +274,10 @@ Front daylight and three-quarter evening views were checked; the evening preview
 Glass edges and pipes now explicitly share the studio environment texture. Inspection of the installed Three renderer showed that a null material envMap makes the renderer use scene.environmentIntensity, ignoring the per-material envMapIntensity. The scene's .10 intensity had therefore kept the edge and pipe reflections much dimmer than intended. Broad panes retain .10 to preserve clarity; polished edges use .7 and pipes .4. An initial 1.2 pipe setting was reduced after angled review looked too metallic.
 
 Trials with thicker bevels and different edge tint were reverted after identifying the actual intensity binding issue. Geometry, scene illumination and the static bake remain unchanged. Front and angled views were reviewed; the angled preview reported 60 fps / 6.6 ms with no browser warnings/errors. Four targeted reflection/lighting checks and the production build pass. No new assets or paid services were used. Full photographic fidelity remains incomplete.
+
+
+## Hollow glass plumbing and mounted intake details
+
+The two simple tube surfaces are replaced by distinct hollow intake and return assemblies. Both have inner walls and annular end rims; the return curves into the tank and flares into an open mouth with a rolled lip. The intake has an open glass cage, and small suction-cup supports connect the pipe necks to the rear pane. Geometry is modeled in 3D and uses the existing shared studio reflection map. Glass transmission remains the renderer's approximation, not a multi-bounce optical simulation.
+
+New geometry tests verify manifold wall construction, consistent winding, finite normals, open center passages, and correctly facing inner/outer surfaces. Six targeted geometry/reflection/lighting checks and the production build pass. Front and angled views were reviewed; the angled preview reported 60 fps / 7.2 ms with no browser warnings/errors. Transparent plumbing is excluded from the static diffuse bake, which is retained. No new assets, dependencies or paid services were used. The full reference match remains unfinished.
