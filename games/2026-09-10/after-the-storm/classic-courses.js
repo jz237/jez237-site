@@ -119,15 +119,25 @@ const glacier={
  resistance:[]
 };
 const southernMap=points=>fromMap(points,210,325,.8);
+// Buoy centers transcribed from the original class maps. R is red (+1), L yellow (-1).
+const southernBuoys=rows=>rows.map(([x,z,side])=>({x:(x-210)*.8,z:(z-325)*.8,side}));
+const southernNormalBuoys=southernBuoys([[368,227,1],[368,151,-1],[262,84,-1],[179,152,-1],[139,188,1],[88,213,-1],[83,343,-1],[160,423,1],[151,544,-1],[375,488,-1],[352,445,1]]);
+const southernHardBuoys=southernBuoys([[368,227,1],[368,151,-1],[262,84,-1],[205,158,1],[143,191,-1],[86,254,1],[83,343,-1],[160,423,1],[151,544,-1],[375,488,-1],[352,445,1]]);
+// Expert map adds a 128 pixel margin to the left of the same geography.
+const southernExpertBuoys=southernBuoys([[495,227,1],[496,151,-1],[390,84,-1],[319,152,-1],[266,190,1],[213,228,-1],[210,343,-1],[230,366,-1],[297,435,1],[279,545,-1],[503,487,-1],[480,445,1]].map(([x,z,side])=>[x-128,z,side]));
+// Reverse map rotates the 425 x 652 course geography; its right text margin is excluded.
+const southernReverseBuoys=southernBuoys([[37,211,1],[54,167,-1],[273,107,1],[279,199,1],[302,301,-1],[358,387,-1],[316,448,1],[260,459,-1],[239,498,1],[163,566,-1],[69,507,-1],[42,425,1]].map(([x,z,side])=>[425-x,652-z,side]));
 const southernCore=southernMap([[313,101],[329,115],[329,170],[320,247],[329,294],[335,342],[348,379],[338,420],[332,463],[337,510],[326,539],[302,541],[292,529],[295,504],[310,475],[314,407],[313,351],[310,290],[306,235],[312,178],[295,132],[296,116]]);
 const southernShoal=southernMap([[313,70],[340,79],[359,102],[364,132],[354,175],[345,224],[347,282],[364,331],[377,370],[375,409],[368,451],[372,505],[358,551],[336,576],[311,584],[279,572],[265,551],[264,524],[275,492],[298,462],[301,412],[298,363],[300,324],[295,285],[292,240],[299,191],[287,164],[270,145],[266,111],[281,89]]);
 function southernPier(ax,az,bx,bz,depth=6){const [[x,z],[ex,ez]]=southernMap([[ax,az],[bx,bz]]),length=Math.hypot(ex-x,ez-z);return {x:(x+ex)/2,z:(z+ez)/2,tx:(ex-x)/length,tz:(ez-z)/length,length,depth,bottom:.65,top:1.05,material:'wood',pileSpacing:12};}
 const southernPlatform=southernMap([[316,318],[329,329],[342,353],[340,387],[321,418],[300,397],[289,353],[301,338]]);
 const southern={
- name:'Southern Island',theme:'island',tag:'08 / SOUTHERN ISLAND',layoutRevision:2,
+ name:'Southern Island',theme:'island',tag:'08 / SOUTHERN ISLAND',layoutRevision:3,
+ boundary:southernMap([[10,254],[29,195],[91,131],[171,72],[269,14],[326,11],[380,38],[405,83],[412,500],[383,588],[350,637],[268,637],[205,604],[153,540],[109,490],[65,421],[11,331]]),
+ buoysByClass:[southernNormalBuoys,southernHardBuoys,southernExpertBuoys,southernReverseBuoys],
  description:'An eastern sand island and a western islet joined by piers. The falling tide opens clearance beneath the decks while exposing the surrounding shoals.',
- anchors:southernMap([[397,368],[397,288],[388,215],[388,140],[372,91],[338,40],[298,38],[260,76],[238,115],[248,156],[214,176],[181,177],[142,173],[118,186],[99,224],[66,251],[57,287],[65,320],[94,355],[116,398],[140,446],[157,494],[168,537],[194,578],[251,609],[309,611],[354,591],[384,551],[399,495],[399,422]]),
- ground(x,z){const [ix,iz]=southernMap([[117,287]])[0],distance=Math.hypot(x-ix,z-iz),core=-polygonDistance(southernCore,x,z)*.32,shoalDistance=polygonDistance(southernShoal,x,z),fringe=Math.min(-.1,-.45-shoalDistance*(shoalDistance>0?.3:.13)),islet=(27*.8-distance)*.35,isletFringe=Math.min(-.1,-.45+(45*.8-distance)*.13);return Math.min(clamp(Math.max(core,fringe,islet,isletFringe),-10,5),.35+Math.max(0,polygonDistance(southernPlatform,x,z))*.5);},
+ anchors:southernMap([[390,368],[390,288],[383,227],[363,180],[354,151],[370,103],[363,71],[338,40],[298,38],[260,76],[238,115],[248,156],[214,176],[181,177],[142,173],[118,186],[99,224],[66,251],[57,287],[65,320],[94,355],[116,398],[140,446],[157,494],[168,537],[194,578],[251,609],[309,611],[354,591],[374,551],[361,488],[372,445],[390,422]]),
+ ground(x,z){const [ix,iz]=southernMap([[117,287]])[0],distance=Math.hypot(x-ix,z-iz),core=-polygonDistance(southernCore,x,z)*.32,shoalDistance=polygonDistance(southernShoal,x,z),fringe=Math.min(-.1,-3-shoalDistance*(shoalDistance>0?.3:.13)),islet=(27*.8-distance)*.35,isletFringe=Math.min(-.1,-.45+(45*.8-distance)*.13);return Math.min(clamp(Math.max(core,fringe,islet,isletFringe),-10,5),.35+Math.max(0,polygonDistance(southernPlatform,x,z))*.5);},
  crossbars:[southernPier(314,119,315,528,6),southernPier(117,287,315,352,6),southernPier(172,526,315,526,8),southernPier(216,526,216,541,8),{outline:southernPlatform,bottom:.65,top:1.05,material:'wood'},{kind:'ship',outline:southernMap([[227,118],[235,130],[235,163],[220,163],[220,130]]),bottom:-1.5,top:1.4,material:'ship',floating:true},{kind:'cabin',x:(227-210)*.8,z:(153-325)*.8,tx:0,tz:1,length:7,depth:5,bottom:1.4,top:3.4,material:'white',floating:true}],
  raceRamps:[{id:150,name:'BOAT JUMP',x:(253-210)*.8,z:(117-325)*.8,tx:-Math.SQRT1_2,tz:Math.SQRT1_2,width:10,length:12,height:4.2,floating:true}],
  obstacles:[],resistance:[]
