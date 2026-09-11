@@ -32,10 +32,12 @@ print(f'BVH ready in {time.time()-started:.1f}s',flush=True)
 
 # Match the scene's three shadowed canopy samples. The continuous strip and
 # studio fill remain runtime lighting; they are not counted twice in this bake.
-lamps=[Vector((x,6.29,-.15)) for x in (-2.8,0,2.8)]
-targets=[Vector((x*.8,.6,-.15)) for x in (-2.8,0,2.8)]
+canopy=json.loads((folder/'lib/CanopyLighting.json').read_text())
+lamps=[Vector((x,canopy['height'],canopy['depth'])) for x in canopy['samplePositions']]
+targets=[Vector((x*canopy['targetXScale'],canopy['targetHeight'],canopy['depth'])) for x in canopy['samplePositions']]
 lamp_axes=[(target-lamp).normalized() for target,lamp in zip(targets,lamps)]
-lamp_color=np.array((.9,1.,.81))
+srgb=np.array([int(canopy['color'][i:i+2],16)/255. for i in (1,3,5)])
+lamp_color=np.where(srgb<=.04045,srgb/12.92,((srgb+.055)/1.055)**2.4)
 cache={}
 def radiance(face,normal,ray):
     flip=normal.dot(ray)>0
@@ -50,12 +52,13 @@ def radiance(face,normal,ray):
         incidence=n.dot(direction)
         cosine=max(0.,incidence)+(max(0.,-incidence)*.35 if double[face] else 0.)
         cone=(-direction).dot(axis)
-        low=math.cos(.94); high=math.cos(.94*(1.-.72))
+        low=math.cos(canopy['angle']); high=math.cos(canopy['angle']*(1.-canopy['penumbra']))
         falloff=max(0.,min(1.,(cone-low)/(high-low)));falloff=falloff*falloff*(3.-2.*falloff)
         if cosine<.001 or falloff<.001:continue
         hit=tree.ray_cast(center+direction*.008,direction,max(0.,distance-.016))
         if hit[2] is not None and hit[2]!=face:continue
-        result+=lamp_color*(36./max(distance**1.1,.01))*cosine*falloff
+        cutoff=max(0.,1.-(distance/canopy['distance'])**4)**2
+        result+=lamp_color*(canopy['sampleIntensity']/max(distance**canopy['decay'],.01))*cosine*falloff*cutoff
     value=result*albedo[face]/math.pi
     cache[key]=value
     return value
@@ -93,7 +96,7 @@ packed=np.zeros((nz,ny,nx*4,4),dtype='<f4')
 for i in range(4):packed[:,:,i*nx:(i+1)*nx,:3]=coefficients[:,:,:,i,:]
 output=folder/'public/lighting';output.mkdir(exist_ok=True)
 (output/'diffuse-probes.bin').write_bytes(packed.tobytes())
-inputs=['lib/BakeExport.ts','lib/WaterDepth.ts','lib/BotanicalPlants.ts','lib/ScannedBranch.ts','lib/ScannedRock.ts','lib/ScannedHardscape.ts','lib/EpiphyteMoss.ts','lib/TankSpace.ts','lib/Substrate.ts','lib/SubstrateVolume.ts','lib/LeafSurface.ts']
+inputs=['bake-lighting.py','lib/CanopyLighting.json','lib/BakeExport.ts','lib/WaterDepth.ts','lib/BotanicalPlants.ts','lib/ScannedBranch.ts','lib/ScannedRock.ts','lib/ScannedHardscape.ts','lib/EpiphyteMoss.ts','lib/TankSpace.ts','lib/Substrate.ts','lib/SubstrateVolume.ts','lib/LeafSurface.ts']
 metadata={'version':1,'dimensions':[nx,ny,nz],'minimum':minimum.tolist(),'maximum':maximum.tolist(),'samples':samples,'triangles':int(len(faces)),'bytes':int(packed.nbytes),'coefficientRange':[float(coefficients.min()),float(coefficients.max())],'hits':hits,'seconds':round(time.time()-started,2),'model':'single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds/moss excluded','sourceHashes':{p:hashlib.sha256((folder/p).read_bytes().replace(b'\r\n',b'\n')).hexdigest() for p in inputs},'binarySHA256':hashlib.sha256(packed.tobytes()).hexdigest()}
 (output/'diffuse-probes.json').write_text(json.dumps(metadata,indent=2))
 print(json.dumps(metadata),flush=True)

@@ -7,6 +7,7 @@ import {applyWaterDepth} from './WaterDepth';
 import {applyBakedIrradiance} from './BakedIrradiance';
 import {buildAquariumSubstrate} from './Substrate';
 import {AquariumLighting} from './AquariumLighting';
+import canopy from './CanopyLighting.json';
 import * as T from 'three';
 import {buildBotanicalPlants} from './BotanicalPlants';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
@@ -38,7 +39,7 @@ export class Aquarium{
  private seed=237;
  private daylight=1;
  private canopyLights:T.SpotLight[]=[];
- private stripLight=new T.RectAreaLight(0xf3ffe9,20,8.7,.50);
+ private stripLight=new T.RectAreaLight(canopy.color,canopy.stripIntensity,8.7,.50);
  private ledMaterial=new T.MeshStandardMaterial({color:0xe0f9ee,emissive:0xe0f9ee,emissiveIntensity:3});
  private fill=new T.HemisphereLight(0xc2e2e6,0x74846a,.9);
  private swimShader={value:0};
@@ -86,13 +87,13 @@ export class Aquarium{
   this.controls.addEventListener('start',()=>this.targetCamera=null);
   this.camera.position.set(0,2.45,21.5);
   RectAreaLightUniformsLib.init();
-  this.stripLight.position.set(0,6.29,-.15);this.stripLight.lookAt(0,0,-.15);
+  this.stripLight.position.set(0,canopy.height,canopy.depth);this.stripLight.lookAt(0,0,canopy.depth);
   this.scene.add(this.fill,this.stripLight);
   // Three shadowed samples along the actual luminaire approximate a long emitter.
   // The area light supplies the continuous highlight between those samples.
-  for(const x of [-2.8,0,2.8]){
-   const light=new T.SpotLight(0xf3ffe9,36,20,.94,.72,1.1);
-   light.position.set(x,6.29,-.15);light.target.position.set(x*.8,.6,-.15);
+  for(const x of canopy.samplePositions){
+   const light=new T.SpotLight(canopy.color,canopy.sampleIntensity,canopy.distance,canopy.angle,canopy.penumbra,canopy.decay);
+   light.position.set(x,canopy.height,canopy.depth);light.target.position.set(x*canopy.targetXScale,canopy.targetHeight,canopy.depth);
    light.castShadow=true;light.shadow.mapSize.set(1536,1536);light.shadow.camera.near=.1;light.shadow.camera.far=20;
    light.shadow.bias=-.00015;light.shadow.normalBias=.018;light.shadow.radius=3;
    this.canopyLights.push(light);this.scene.add(light,light.target);
@@ -122,7 +123,7 @@ export class Aquarium{
  private box(w:number,h:number,d:number,material:T.Material,p:T.Vector3,shadow=true){return this.mesh(new T.BoxGeometry(w,h,d),material,p,shadow);}
  private buildTank(){
   const dark=new T.MeshStandardMaterial({color:0x111c1e,roughness:.35,metalness:.65});
-  const floor=new T.MeshStandardMaterial({color:0x0c151d,roughness:.82,metalness:0});
+  const floor=new T.MeshStandardMaterial({color:0x0a1219,roughness:.82,metalness:0});
   floor.onBeforeCompile=shader=>{
    shader.uniforms.roomBackground={value:this.scene.background};
    shader.fragmentShader='uniform vec3 roomBackground;\n'+shader.fragmentShader;
@@ -214,8 +215,8 @@ export class Aquarium{
   this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
   this.waterIllumination.value=this.daylight;
   this.ledMaterial.emissiveIntensity=3*this.daylight;
-  for(const light of this.canopyLights)light.intensity=36*this.daylight;
-  this.stripLight.intensity=20*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=.8+.32*this.daylight;
+  for(const light of this.canopyLights)light.intensity=canopy.sampleIntensity*this.daylight;
+  this.stripLight.intensity=canopy.stripIntensity*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=.8+.32*this.daylight;
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));

@@ -1,1 +1,1 @@
-{"compilerOptions":{"target":"ES2022","module":"ESNext","moduleResolution":"bundler","strict":true,"allowImportingTsExtensions":true,"noEmit":true,"skipLibCheck":true,"lib":["ES2022","DOM"]},"include":["main.ts","rock-study.ts","fish-study.ts","lib/**/*.ts"]}
+{"compilerOptions":{"target":"ES2022","module":"ESNext","moduleResolution":"bundler","strict":true,"allowImportingTsExtensions":true,"noEmit":true,"skipLibCheck":true,"lib":["ES2022","DOM"],"resolveJsonModule":true},"include":["main.ts","rock-study.ts","fish-study.ts","lib/**/*.ts"]}
