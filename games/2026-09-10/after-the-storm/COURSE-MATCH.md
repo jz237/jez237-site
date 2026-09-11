@@ -30,7 +30,7 @@ Remaining diagrams still require inspection before their buoy layouts are author
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
 | Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; original buoy patterns and final visual/scale matching pending |
-| Twilight City | Angular urban channel, jump-or-dive wall, low sand point, four race ramps and metal balls | Rebuilt channel/quays, sand point, ramps and metal props; wall shortcut, original buoys and exact per-class obstacle counts pending |
+| Twilight City | Angular urban channel, jump-or-dive wall, low sand point, four race ramps and metal balls | Rebuilt channel/quays, sand point, ramps and metal props; wall shortcut, original buoys and final visual matching pending |
 | Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Existing generic course; full reconstruction pending |
 | Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Existing generic course; full reconstruction pending |
 | Dolphin Park | Enclosed basin, kidney island, two main ramps, jetties and tunnel | Existing generic course; full reconstruction pending |
@@ -124,3 +124,14 @@ The bow jump is still pending. This correction is not a full course-parity sign-
 
 This is local only and has not been published. Glacier Coast, Southern Island and Dolphin Park still need geography reconstruction.
 - Corrected browser Reverse / venue conditions completed in 288.200 seconds: 96 checkpoints, zero misses, one landing, third place. High graphics, final 60 FPS; runtime errors empty.
+
+## Twilight City obstacle correction — September 10, 2026
+
+- Magnified the Hard, Expert and Reverse reference diagrams to distinguish dots partly covered by the plotted route. Hard/Reverse show five balls in the northern cluster and four in the southern row. Expert shows seven in each cluster. This supersedes the earlier rough count and shared extra-obstacle rule.
+- Added explicit per-class obstacle arrays: Hard/Reverse have nine balls; Expert has fourteen. The optional Normal version uses the Hard layout, since the original Normal championship does not include Twilight City. Instantiation clones these arrays so runtime state cannot alter the authored layout.
+- Updated cluster positions from the diagrams, including the middle northern balls and staggered Expert southern row. Exact world scale remains an estimate; the diagrams are references, not shipped artwork.
+- All four classes completed ordinary-input direct simulations with zero misses: Normal 271.083 s, Hard 276.383 s, Expert 287.583 s, Reverse 288.050 s.
+- The wall shortcut and original race buoy placement remain outstanding. No publication or full-parity sign-off is implied.
+- Full regression suite: 122/122 passed in 78.91 seconds. The rendered Expert cluster was inspected during the browser race, with no runtime errors.
+- Next wall-shortcut work must support both over-wall jump clearance and below-wall dive clearance using shared visible/collision geometry. Existing submarine control only triggers during airborne descent and lasts 1.25 seconds; verify the actual timing window rather than assuming a moved ramp automatically makes the dive possible.
+- Browser Expert / venue conditions finished in 287.583 seconds, with 96 checkpoints, zero misses, six landings and second place. High graphics and final 60 FPS.
