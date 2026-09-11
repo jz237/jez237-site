@@ -25,3 +25,16 @@ test('Defeat events play the existing three-frame effect and expire during simul
  assert.deepEqual(g.renderer.effects[0].frames,['FL1','FL2','FL3']);assert.equal(g.renderer.effects[0].x,100);assert.equal(g.renderer.effects[0].y,72);assert.equal(g.renderer.particles.length,10);
  g.renderer.updateFx(8);assert.equal(g.renderer.effects.length,1);g.renderer.updateFx(40);assert.equal(g.renderer.effects.length,0);assert.equal(g.renderer.particles.length,0);
 });
+test('Pilot commits to contact instead of hovering above riders on a shelf or safe floor',()=>{
+ for(const [name,x,y,count] of [['shelf cluster',132,156,3],['safe bottom platform',146,204,1],['upper shelf',124,74,1]]){
+  const g=new JoustShow(),e=g.engine,p=e.players[0],base=e.enemies[0];
+  e.enemies=Array.from({length:count},(_,i)=>({...base,id:900+i,x:x+i*12,y,alive:true,materializing:0,onGround:true}));e.eggs=[];e.pteros=[];
+  Object.assign(p,{x,y:y-38,vx:0,vy:0,vxi:0,alive:true,materializing:0,safe:0,onGround:false});
+  const before=e.enemies.length;let tick=0;
+  for(;tick<480&&p.alive&&e.enemies.every(v=>v.alive);tick++){
+   const input=g.pilot();e.animFrame++;e.controlPlayer(p,input);e.integrate(p);e.resolveCollisions();
+  }
+  console.log(name,{frames:tick,alive:p.alive,defeated:e.enemies.filter(v=>!v.alive).length});
+  assert(p.alive,name+' survives the attack');assert(e.enemies.some(v=>!v.alive),name+' defeats a rider within eight seconds');
+ }
+});

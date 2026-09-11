@@ -8,7 +8,7 @@ const {JoustEngine,wrapDelta}=API as any;
 const {WORLD,PHYS}=DATA;
 /** The existing site's source-faithful Joust engine, driven by an exhibit-only pilot. */
 export class JoustShow extends ArcadeGame{
- sound?:JoustSound;demoPaused=false;engine:any;renderer:any;accumulator=0;restartTime=0;flapTick=0;kills=0;eggsCollected=0;seed=1982;route:any[]=[];routeAge=0;routeTarget:any=null;
+ sound?:JoustSound;demoPaused=false;engine:any;renderer:any;accumulator=0;restartTime=0;flapTick=0;kills=0;eggsCollected=0;seed=1982;route:any[]=[];routeAge=0;routeTarget:any=null;huntTarget:any=null;huntTicks=0;
  constructor(){super();this.canvas.width=292;this.canvas.height=240;this.canvas.setAttribute('aria-label','Autonomous Williams Joust');this.engine=new JoustEngine({mode:'1p',lives:5,seed:this.seed,holdUntilInput:false});this.renderer=new (Renderer as any)(this.canvas);Object.assign(this.renderer,{scale:1,scaleX:1,scaleY:1,ox:0,oy:0});this.running=true;this.draw();}
  override unlock(){super.unlock();this.sound??=new JoustSound(this.audio!);this.sound.state(this.power&&!this.demoPaused,this.muted,this.volume);}
  override tone(){this.sound?.effect('credit');this.lastAudio=performance.now();}
@@ -50,20 +50,29 @@ export class JoustShow extends ArcadeGame{
  pilot(){
   const p=this.engine.players[0],input={left:false,right:false,flap:false};if(!p?.alive||p.materializing>0)return input;
   this.flapTick++;const flap=(n:number)=>{input.flap=this.flapTick%n===0;};
-  const nearLava=p.y>WORLD.FLOOR-48;
+  const nearLava=this.engine.overLava(p.x)&&p.y>WORLD.FLOOR-28;
   const danger=this.engine.enemies.find((e:any)=>e.alive&&e.materializing<=0&&Math.abs(wrapDelta(p.x,e.x))<26&&e.y<p.y+2&&p.y-e.y<32&&this.clearPath(p,e));
   const ptero=this.engine.pteros.find((e:any)=>e.alive&&Math.abs(wrapDelta(p.x,e.x))<46&&Math.abs(e.y-p.y)<40);
   if(danger||ptero){const e=danger||ptero,dx=wrapDelta(p.x,e.x);input.left=dx>0;input.right=dx<0;flap(4);return input;}
   const eggs=this.engine.eggs.filter((e:any)=>!e.dead&&['egg','shake','walking','mounting','hatching'].includes(e.state)&&e.y<WORLD.FLOOR-6);
   const foes=this.engine.enemies.filter((e:any)=>e.alive&&e.materializing<=0);
   const nearest=(items:any[])=>items.sort((a,b)=>Math.abs(wrapDelta(p.x,a.x))+Math.abs(a.y-p.y)*.7-Math.abs(wrapDelta(p.x,b.x))-Math.abs(b.y-p.y)*.7)[0];
-  const egg=nearest(eggs),target=egg||nearest(foes);
-  if(target){const goal={x:target.x,y:egg?target.y-2:Math.max(38,target.y-17)},waypoint=this.navigate(p,goal);const dx=wrapDelta(p.x,waypoint.x),aim=waypoint.y;const brake=(p.vx||0)*(this.route.length?5:9);
+  const closeFoe=nearest(foes),closestEgg=nearest(eggs);
+  // Hold one opponent long enough to finish the pass rather than averaging a cluster.
+  const retained=this.huntTarget&&foes.includes(this.huntTarget)&&this.huntTicks-- >0;
+  const foe=retained?this.huntTarget:closeFoe;
+  if(!retained){this.huntTarget=foe;this.huntTicks=150;}
+  const engaging=foe&&Math.abs(wrapDelta(p.x,foe.x))<38&&Math.abs(p.y-foe.y)<52&&this.clearPath(p,{x:foe.x,y:foe.y-6});
+  const egg=engaging?null:closestEgg,target=egg||foe;
+  if(target){const attacking=!egg&&engaging;const goal={x:target.x,y:egg?target.y-2:Math.max(WORLD.CEIL+3,target.y-(attacking?6:17))},waypoint=this.navigate(p,goal);const dx=wrapDelta(p.x,waypoint.x),aim=waypoint.y;const brake=(p.vx||0)*(this.route.length?5:9);
    input.left=dx-brake< -4;input.right=dx-brake>4;
    const predicted=p.y+(p.vy||0)*10;
    if(nearLava||predicted>aim+5)flap(nearLava?4:5);else if(predicted>=aim-7)flap(egg?12:9);
    // Airborne steering takes effect on wing strokes, including braking at a turn.
    if((input.left&&p.vx>0)||(input.right&&p.vx<0))flap(7);
+   // A height advantage must become contact. Let gravity close the final gap;
+   // altitude-holding strokes here otherwise hover just outside the sprite masks.
+   if(attacking&&Math.abs(wrapDelta(p.x,target.x))<22&&p.y<target.y-6&&!nearLava)input.flap=false;
   }else{input.right=Math.floor(this.time/4)%2===0;input.left=!input.right;if(p.y>120||nearLava)flap(6);else if(p.y>85)flap(15);}
   return input;
  }
@@ -72,7 +81,7 @@ export class JoustShow extends ArcadeGame{
    const snap=this.engine.tick([input]);for(const e of snap.events){this.sound?.effect(e.type);this.defeatEffect(e);this.lastAudio=performance.now();if(e.type==='enemyDie')this.kills++;if(e.type==='eggCollect')this.eggsCollected++;}
    if(this.engine.waveCleared&&this.engine.clearTimer<=0)this.engine.nextWave();
    this.renderer.updateFx(1);this.renderer.time=this.engine.animFrame;const p=this.engine.players[0];this.x=p.x;this.y=p.y;this.score=p.score;this.lives=p.lives;this.wave=this.engine.wave;this.rescued=this.eggsCollected;
-   if(this.engine.gameOver){this.restartTime+=step;if(this.restartTime>3){this.engine=new JoustEngine({mode:'1p',lives:5,seed:++this.seed,holdUntilInput:false});this.restartTime=0;this.route=[];this.routeTarget=null;this.sound?.effect('start');}}else this.restartTime=0;
+   if(this.engine.gameOver){this.restartTime+=step;if(this.restartTime>3){this.engine=new JoustEngine({mode:'1p',lives:5,seed:++this.seed,holdUntilInput:false});this.restartTime=0;this.route=[];this.routeTarget=null;this.huntTarget=null;this.huntTicks=0;this.sound?.effect('start');}}else this.restartTime=0;
   }this.draw();
  }
  text(text:string,x:number,y:number,color:string){this.ctx.fillStyle=color;for(const ch of text){const rows=defenderFont[ch];if(rows)for(let j=0;j<rows.length;j++)for(let i=0;i<rows[j].length;i++)if(rows[j][i]!=='0')this.ctx.fillRect(x+i,y+j,1,1);x+=7;}}
