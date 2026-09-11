@@ -26,7 +26,7 @@ still require their own source comparison before they can be signed off.
 | Course | Distinctive requirements | State |
 | --- | --- | --- |
 | Sunny Beach | Long sandbar, parallel straights, tight ends, open sea and mainland, difficulty-specific slalom | Rebuilt sandbar; original class buoy maps and metal-ball rows transcribed and race-tested; final shoreline/visual sign-off pending |
-| Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/ramp, original class buoy sequences and Expert slalom; physical piers, metal barriers, final-lap bypass and visual sign-off pending |
+| Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/ramp, original class buoy sequences and Expert slalom; physical piers, final-lap bypass and visual sign-off pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
 | Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; original buoy patterns and final visual/scale matching pending |
@@ -362,3 +362,12 @@ Expert's tighter western and southern slalom requires its own approach route. A 
 Three focused tests pass in 5.86 s: original counts/full color sequences/selected coordinates and ordered gates; isolated Expert route selection without tunnel-rule leakage; and ordinary-input three-lap completion in all four classes with zero misses/DQ. Total races Normal/Hard/Expert/Reverse: 264.12 / 300.95 / 277.95 / 290.20 s. Another 25 classic-course, passage and Sunny Beach tests pass in 9.25 s. These checks do not prove Sunset Bay's original metal-ball cluster, physical piers or final-lap out-of-bounds shortcut, all still pending, nor full visual parity. Layout revision is now 3; record-key separation remains pending before release.
 
 Browser Expert race completed in 4:37.950, second place, zero misses, 51 passed checkpoints, high graphics and course sea state. The rendered slalom was inspected and no browser errors were logged. This does not sign off the still-pending source-specific scenery or shortcuts.
+
+
+### Sunset Bay metal-ball clusters — 2026-09-11
+
+Added ten physical steel balls to Hard, Expert and Reverse; Normal stays clear. Hard/Expert use three staggered rows of 3/4/3 at the illustrated bend. Reverse uses its separately mapped 3/4/3 cluster. Pixel connected-component measurements of the dark dots distinguished the ten cluster objects from adjacent dotted boundary markers; those boundary markers were not converted to obstacles. Sphere radius 0.85 m is a reconstruction estimate because the guide symbols are not physical-scale drawings.
+
+All four Sunset tests pass in 6.07 s, including ordinary-input three-lap races on every class without missed buoys, original buoy transcription, exact cluster counts/rows and collision/separation against the actual steel obstacles. Rendering uses the existing floating steel-ball model shared with collision positions. Physical piers, final-lap shortcut and final visual sign-off remain unfinished.
+
+Browser visual check: Reverse held at 6.683 s with zero misses. Steel spheres are visible along the left edge of the racing line, separate from colored navigation buoys. The debug-only Inspect metal cluster button holds near existing metal obstacles for repeatable visual review; the full ten-object count is covered by source transcription and tests, not claimed from the cropped camera view. No browser errors were observed.

@@ -26,3 +26,14 @@ test('all Sunset Bay classes finish three laps through the mapped buoys without 
   assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.dq,'');assert.equal(r.lap,4);
  }
 });
+
+test('Sunset Bay has ten physical steel balls in the harder classes, separate from boundary markers',()=>{
+ const normal=getCourse('amber',0),hard=getCourse('amber',1),expert=getCourse('amber',2),reverse=getCourse('amber',3);
+ assert.equal(normal.rocks.length,0);assert.deepEqual(hard.rocks,expert.rocks);assert.notDeepEqual(hard.rocks,reverse.rocks);
+ for(const c of [hard,expert,reverse]){
+  assert.equal(c.rocks.length,10);assert.ok(c.rocks.every(o=>o.type==='ball'));
+  assert.deepEqual([...new Set(c.rocks.map(o=>o.z))].sort((a,b)=>a-b).map(z=>c.rocks.filter(o=>o.z===z).length),[3,4,3]);
+  const s=createRace({mode:'time',course:c,difficulty:c.difficulty}),r=s.racers[0],o=c.rocks[4];s.phase='running';r.x=o.x;r.z=o.z;r.vz=3;
+  stepRace(s,{},1/60);assert.ok(r.collision>0);assert.ok(Math.hypot(r.x-o.x,r.z-o.z)>=o.r+1);
+ }
+});

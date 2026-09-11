@@ -36,9 +36,14 @@ const sunsetNormalBuoys=sunsetBuoys([[258,134,-1],[203,66,1],[140,52,-1],[125,95
 const sunsetHardBuoys=sunsetBuoys([[264,134,-1],[209,66,1],[146,52,-1],[132,95,-1],[154,166,1],[140,283,-1],[144,342,1],[204,504,-1],[279,495,1],[357,506,-1],[419,490,1],[488,405,-1],[433,389,-1],[388,405,1],[324,370,-1]].map(([x,z,side])=>[x-7,z,side]));
 const sunsetExpertBuoys=sunsetBuoys([[197,134,-1],[142,66,1],[79,52,-1],[65,95,-1],[76,166,1],[79,266,-1],[78,342,1],[126,497,-1],[149,492,-1],[212,495,1],[292,495,-1],[352,490,1],[421,405,-1],[366,398,-1],[322,402,1],[257,370,-1]].map(([x,z,side])=>[x+60,z,side]));
 const sunsetReverseBuoys=sunsetBuoys([[192,175,-1],[128,147,1],[81,148,-1],[90,48,1],[154,60,-1],[239,48,1],[288,64,-1],[382,214,1],[365,288,-1],[381,464,-1],[295,492,1],[251,407,-1]].map(([x,z,side])=>[512-x,552-z,side]));
+// Ten metal balls, excluding the adjoining dotted course boundary.
+const sunsetBalls=points=>sunsetMap(points).map(([x,z])=>({x,z,r:.85,type:'ball'}));
+const sunsetForwardBalls=sunsetBalls([[364,350],[375,350],[388,350],[359,358],[369,358],[380,358],[390,358],[364,366],[374,366],[385,366]]);
+const sunsetReverseBalls=sunsetBalls([[124,183],[135,183],[145,183],[119,191],[129,191],[140,191],[150,191],[121,199],[134,199],[145,199]].map(([x,z])=>[512-x,552-z]));
 const sunset={
  name:'Sunset Bay',theme:'resort',tag:'02 / SUNSET BAY',layoutRevision:3,
  buoysByClass:[sunsetNormalBuoys,sunsetHardBuoys,sunsetExpertBuoys,sunsetReverseBuoys],
+ obstaclesByClass:[[],sunsetForwardBalls,sunsetForwardBalls,sunsetReverseBalls],
  anchorsByClass:{2:sunsetMap([[290,302],[281,222],[258,163],[217,80],[194,49],[167,52],[142,93],[131,165],[103,190],[99,219],[150,260],[140,333],[158,402],[180,458],[209,478],[268,510],[310,512],[352,480],[412,508],[448,486],[468,455],[448,420],[385,398],[317,376],[298,350]])},
  boundary:sunsetMap([[76,48],[91,17],[118,7],[220,7],[250,28],[280,72],[311,120],[326,163],[333,291],[348,322],[389,350],[475,384],[499,411],[499,498],[481,530],[445,539],[115,541],[80,518],[74,446]]),
  description:'Orange evening water wraps around an L-shaped island. A race ramp offers a jump beside the pier-lined western straight.',
