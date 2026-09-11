@@ -156,9 +156,16 @@ export class DefenderShow extends ArcadeGame {
 
  override update(step:number){
   this.sound?.state(this.power&&!this.demoPaused,!this.audio||this.muted,this.volume,this.thrusting);
-  if(!this.power){this.draw();return;}if(this.demoPaused)return;const dt=Math.max(0,Math.min(step,.04));if(!dt)return;
+  if(!this.power){this.draw();return;}if(this.demoPaused||!Number.isFinite(step)||step<=0)return;
+  // Catch up slow frames without oversized collision steps or repeated canvas draws.
+  // Bound recovery after a suspended tab/debugger so one frame cannot spiral.
+  let remaining=Math.min(step,2);
+  while(remaining>1e-8){const dt=Math.min(remaining,1/60);this.advanceSimulation(dt);remaining-=dt;}
+  this.draw();
+ }
+ private advanceSimulation(dt:number){
   this.time+=dt;this.invincible=Math.max(0,this.invincible-dt);this.bombClock=Math.max(0,this.bombClock-dt);this.escapeClock=Math.max(0,this.escapeClock-dt);this.flash=Math.max(0,this.flash-dt*1.5);this.updateEffects(dt);
-  if(this.stage!=='battle'){this.thrusting=false;this.advanceStage(dt);this.draw();return;}
+  if(this.stage!=='battle'){this.thrusting=false;this.advanceStage(dt);return;}
   this.waveClock+=dt;this.updateSpawns(dt);this.updateEnemies(dt);
   const hazards=[...this.foes.filter(e=>e.alive&&(e.spawn??0)<=0),...this.mines,...this.charges];
   const decision=decidePilot({x:this.x,y:this.y,dir:this.dir,velocityX:this.velocityX,world:this.world,carried:this.carriedHumans.length,previous:this.pilotTarget,foes:this.foes,falls:this.looseHumans,hazards,ground:x=>this.groundY(x)});
@@ -178,7 +185,6 @@ export class DefenderShow extends ArcadeGame {
   if(this.stage==='battle'&&this.landerReserve===0&&!this.foes.some(e=>e.kind!==5)&&!this.looseHumans.length&&!this.carriedHumans.length)this.completeWave();
   this.cameraOffset+=((this.dir===1?310:650)-this.cameraOffset)*Math.min(1,dt*3);this.cameraX=this.x-this.cameraOffset;
   this.keys.clear();if(this.stage==='battle'){if(this.bombClock>0)this.keys.add('KeyB');if(this.thrusting)this.keys.add('KeyT');if(this.dir!==oldDir)this.keys.add('KeyR');if(this.escapeClock>7.8)this.keys.add('KeyH');if(Math.abs(this.y-oldY)>.1)this.keys.add(this.y<oldY?'ArrowUp':'ArrowDown');if(this.shotClock>.08)this.keys.add('Space');}
-  this.draw();
  }
 
  sprite(pattern:string[],x:number,y:number,scale:number,colors:Record<string,string>){const c=this.ctx;for(let row=0;row<pattern.length;row++)for(let col=0;col<pattern[row].length;col++){const color=colors[pattern[row][col]];if(color){c.fillStyle=color;c.fillRect(Math.round(x+col*scale),Math.round(y+row*scale),scale,scale)}}}

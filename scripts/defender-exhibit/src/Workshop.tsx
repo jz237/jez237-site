@@ -1,5 +1,5 @@
 import {closeups,type Panels,type Demonstration} from './Mechanics';
-type Props={credits:number;open:boolean;setOpen:(v:boolean)=>void;panels:Panels;setPanels:(v:Panels)=>void;focus:string;setFocus:(v:string)=>void;demo:Demonstration;run:(kind:'coin'|'button'|'joystick')=>void;reduced:boolean;unavailable:boolean};
+type Props={mobile:boolean;credits:number;open:boolean;setOpen:(v:boolean)=>void;panels:Panels;setPanels:(v:Panels)=>void;focus:string;setFocus:(v:string)=>void;demo:Demonstration;run:(kind:'coin'|'button'|'joystick')=>void;reduced:boolean;unavailable:boolean};
 export function Workshop(p:Props){return <section className={'workshop '+(p.open?'expanded':'')} aria-label="Explore mechanisms">
  <button className="workshop-toggle" aria-expanded={p.open} onClick={()=>p.setOpen(!p.open)}>{p.open?'CLOSE MECHANISMS':'EXPLORE MECHANISMS'} <span>{p.open?'−':'+'}</span></button>
  {p.focus&&<button className="return-view" onClick={()=>p.setFocus('')}>← RETURN TO PREVIOUS VIEW</button>}
@@ -11,7 +11,7 @@ export function Workshop(p:Props){return <section className={'workshop '+(p.open
  <p>Credits registered: {p.credits}</p>
  <p role="status">{p.demo?(p.demo.kind==='coin'?'Coin → acceptor → credit contact → chute':p.demo.kind==='button'?'Button travel → leaf contact closes → release':'Lever travel → upper/lower contact → neutral'):''}</p>
  {p.reduced&&<p>Motion is reduced. You can still open panels and inspect close-ups.</p>}
- <label>Look closer<select aria-label="Mechanism close-up" value={p.focus.startsWith('chip:')?'':p.focus} disabled={p.unavailable} onChange={e=>p.setFocus(e.target.value)}><option value="">Choose a detail</option>{closeups.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label>
+ <label>Look closer<select size={p.mobile?4:undefined} aria-label="Mechanism close-up" value={p.focus.startsWith('chip:')?'':p.focus} disabled={p.unavailable} onChange={e=>p.setFocus(e.target.value)}><option value="">Choose a detail</option>{closeups.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label>
  <p className="mechanism-note">Select a chip on an inspected board for its close-up. Sound follows the speaker as you orbit.</p>
  </div>}
  </section>}

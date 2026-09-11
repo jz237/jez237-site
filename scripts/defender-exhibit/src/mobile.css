@@ -1,0 +1,35 @@
+/* Reserve real scene space: no mobile menu is positioned over the canvas. */
+.controls{display:contents}.mobile-controls-toggle{display:none}
+@media(max-width:760px),(max-height:500px) and (max-width:1000px){
+ main{--dock:112px;min-height:0;height:100svh}
+ main.controls-open{--dock:clamp(210px,40svh,360px)}
+ header{top:0;left:14px;right:14px;height:48px;gap:10px}
+ header a{font-size:9px}header h1{font-size:12px;letter-spacing:2px}header h1 span,header p{display:none}
+ .scene,.vignette,.loading{top:48px;bottom:var(--dock)}
+ .controls{display:flex;flex-direction:column;position:absolute;inset:auto 0 0;height:var(--dock);overflow:auto;overscroll-behavior:contain;background:#151910;border-top:1px solid #635c44;z-index:12;padding:0 12px max(8px,env(safe-area-inset-bottom));gap:10px}
+ .mobile-controls-toggle{display:block;flex-shrink:0;position:sticky;top:0;z-index:15;order:-10;width:100%;min-height:44px;text-align:left;padding:10px 4px;background:#151910;border:0;color:#dfc393;font:11px monospace;letter-spacing:.1em}.mobile-controls-toggle span{float:right}
+ .controls footer{display:contents}
+ .controls .modes{position:static;transform:none;order:-9;flex-shrink:0;display:flex;width:100%;margin:0;padding:2px;box-shadow:none}
+ .controls .modes button{min-width:0;flex:1;font-size:16px;min-height:44px;padding:8px 4px;letter-spacing:.5px}.controls .modes small{display:none}
+ main:not(.controls-open) .controls>:not(.mobile-controls-toggle):not(footer),main:not(.controls-open) footer>:not(.modes){display:none!important}
+ .controls .top-tools,.controls .intro,.controls .workshop,.controls .part-card,.controls .signal-select,.controls .tour-bar,.controls .switches,.controls .utilities,.controls .fallback-note,.controls .notice{position:static!important;inset:auto!important;transform:none;width:100%;max-width:none;max-height:none!important;flex-shrink:0;margin:0;visibility:visible}
+ .controls .top-tools{order:-8;align-items:stretch;flex-direction:row;flex-wrap:wrap;gap:8px}.controls .top-tools>button,.controls .inspect{flex:1}.controls .top-tools button{font-size:10px;min-height:44px;justify-content:center}.controls .inspect select{width:100%;max-width:none;min-height:44px;font-size:10px}
+ .controls .part-card{order:-7;display:block;padding:12px;overflow:visible}.controls .workshop{order:-6;overflow:visible}.controls .workshop.expanded~.part-card{display:block}.controls .workshop-toggle,.controls .return-view{position:static;min-height:44px}
+ .controls .signal-select{order:-5;min-height:44px}.controls .tour-bar{order:-4;white-space:normal}.controls .tour-bar>span{font-size:10px}
+ .controls .switches,.controls .utilities{justify-content:center;min-height:48px}.controls .utilities .speed{display:flex}.controls .intro{pointer-events:auto}.controls .intro .exhibit-caption,.controls .intro .eyebrow{display:none}.controls .intro .tour-start{display:flex;font-size:10px;min-height:44px;padding:8px;margin:0}
+ .controls .labels,.controls .orbit-hint{display:none}
+ .controls .scrim{position:sticky;inset:auto;bottom:0;order:-8;flex-shrink:0;height:calc(var(--dock) - 54px);background:#151910;backdrop-filter:none}
+ .controls .drawer{inset:0;width:100%;padding:16px 20px 30px;border:1px solid #555b46}.controls .drawer-top{position:sticky;top:-16px;background:inherit;z-index:2;margin-bottom:16px;min-height:44px}.controls .drawer h2{font-size:36px}.controls .drawer p,.controls .drawer dd{font-size:13px;line-height:1.6}
+ .controls:has(.scrim)>:not(.scrim):not(.mobile-controls-toggle){display:none!important}
+}
+@media(max-height:500px) and (min-width:600px) and (max-width:1000px){
+ main{--dock:160px}main.controls-open{--dock:clamp(270px,36vw,360px)}
+ .scene,.vignette,.loading{top:48px;right:var(--dock);bottom:0}
+ .controls{top:48px;left:auto;width:var(--dock);height:calc(100svh - 48px);border-top:0;border-left:1px solid #635c44}
+ .controls .modes{flex-wrap:wrap}.controls .modes button{flex:1 0 45%}
+ .controls .scrim{height:calc(100svh - 112px)}
+}
+@media(max-width:760px),(max-height:500px) and (max-width:1000px){
+ .controls .top-tools{align-items:flex-start}.controls .inspect{min-width:190px}.controls .inspect svg{display:none}
+ .controls select[size]{padding:4px!important;max-width:100%;font-size:11px!important}.controls select[size] option{padding:10px 8px;min-height:36px}
+}

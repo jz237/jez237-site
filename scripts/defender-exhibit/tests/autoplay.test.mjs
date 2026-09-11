@@ -23,3 +23,18 @@ test('survivor bonus scales and the fifth wave restores the planet',()=>{const g
 test('momentum brakes through reversal and swept lasers select the closest wrapped target',()=>{const g=make();g.velocityX=245;g.fly(-245,.04);assert(g.velocityX>0);for(let i=0;i<30;i++)g.fly(-245,.04);assert(g.velocityX<0);const near=foe(8,250),far=foe(30,250);g.foes=[far,near];g.fireLaser({x:4780,y:250,dir:1,life:.8},.04);assert(!near.alive);assert(far.alive);});
 test('scanner follows multiple carried humans and excludes lost humans',()=>{const g=make();g.carriedHumans=[0,1];g.x=1000;g.y=400;assert.equal(g.humanPosition(0).y,420);assert.notEqual(g.humanPosition(0).x,g.humanPosition(1).x);g.deadHumans.add(2);assert.equal(g.humanPosition(2),undefined);});
 test('reactive pilot can collect two nearby falls and deliver both without scripted phases',()=>{const g=make();g.foes=[foe(3500,200,2)];g.landerReserve=0;g.invincible=100;g.x=1000;g.y=380;g.looseHumans=[{x:1100,y:410,vy:40,index:0},{x:1120,y:410,vy:40,index:1}];for(let i=0;i<600&&g.rescued<2;i++)g.update(1/60);assert.equal(g.maxCarried,2);assert.equal(g.rescued,2);});
+
+test('slow rendering advances the same battle as 60 Hz and draws only once per visible frame',()=>{
+ const fast=make(),slow=make();let draws=0;slow.draw=()=>draws++;
+ for(let i=0;i<600;i++)fast.update(1/60);
+ for(let i=0;i<100;i++)slow.update(.1);
+ assert(Math.abs(slow.time-10)<1e-8);assert.equal(draws,100);
+ for(const key of ['x','y','score','wave','kills','rescued','stage'])assert.equal(slow[key],fast[key],key);
+ assert.deepEqual(slow.foes,fast.foes);
+});
+test('irregular and very slow frames continue running with bounded recovery after suspension',()=>{
+ const g=make();for(const dt of [.2,.033,.3,.067,.4])g.update(dt);
+ assert(Math.abs(g.time-1)<1e-8);assert.equal(g.demoPaused,false);g.update(1);assert(Math.abs(g.time-2)<1e-8);
+ const before=g.time;g.update(60);assert(Math.abs(g.time-before-2)<1e-8);
+ g.update(NaN);g.update(Infinity);g.update(-1);assert(Number.isFinite(g.time));
+});
