@@ -7,3 +7,5 @@ https://www.jez237.com/* https://jez237.com/:splat 301
 
 /games/demos/philadelphia-relief /demos/philadelphia-relief/ 301
 /games/demos/philadelphia-relief/* /demos/philadelphia-relief/:splat 301
+/games/2026-07-23/aquarium-laboratory /demos/rotatable-aquascape/ 301
+/games/2026-07-23/aquarium-laboratory/* /demos/rotatable-aquascape/ 301

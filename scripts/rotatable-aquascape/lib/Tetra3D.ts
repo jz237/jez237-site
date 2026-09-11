@@ -1,5 +1,6 @@
 import * as T from 'three';
-import {bendTetra,swimPhase,type FinKind} from './TetraKinematics';
+import {swimPhase,type FinKind} from './TetraKinematics.ts';
+import {createTetraDeformation} from './TetraDeformation.ts';
 
 
 /** One authored, rounded tetra prototype; dimensions are relative to body length. */
@@ -9,9 +10,10 @@ export class Tetra3D {
  private phase=0;
  private pectoralPhase=0;
  private fins=new Map<T.Mesh,{kind:FinKind;side:number}>();
- private originals=new Map<T.BufferGeometry,Float32Array>();
+ private deformers=new Map<T.BufferGeometry,ReturnType<typeof createTetraDeformation>>();
  private shaders:{uniforms:Record<string,T.IUniform>}[]=[];
  private eyes:T.Mesh[]=[];
+ get eyeMeshes():readonly T.Mesh[]{return this.eyes;}
  constructor(texture:T.Texture,phaseOffset=0,detailed=true){
   this.phase=phaseOffset;this.pectoralPhase=phaseOffset*1.7;
   // A submerged wet surface has far less interface contrast than a metallic,
@@ -52,11 +54,11 @@ diffuseColor.a*=mix(1.,3.15,finPigment);
   for(const side of [-1,1]){const eye=new T.Mesh(new T.SphereGeometry(.027,16,12),iris);eye.scale.set(1,1,.45);eye.position.set(.426,-.022,side*.034);this.group.add(eye);this.eyes.push(eye);const center=new T.Mesh(new T.SphereGeometry(.018,16,12),pupil);center.scale.set(1,1,.3);center.position.set(.426,-.022,side*.047);this.group.add(center);this.eyes.push(center);}
 
  }
- private add(geometry:T.BufferGeometry,material:T.MeshPhysicalMaterial,kind:FinKind='body',side=1){const mesh=new T.Mesh(geometry,material);this.meshes.push(mesh);this.fins.set(mesh,{kind,side});this.originals.set(geometry,new Float32Array(geometry.getAttribute('position').array));this.group.add(mesh);}
+ private add(geometry:T.BufferGeometry,material:T.MeshPhysicalMaterial,kind:FinKind='body',side=1){const mesh=new T.Mesh(geometry,material);this.meshes.push(mesh);this.fins.set(mesh,{kind,side});const rest=new Float32Array(geometry.getAttribute('position').array);this.deformers.set(geometry,createTetraDeformation(rest,kind,side));(geometry.getAttribute('position') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);(geometry.getAttribute('normal') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);this.group.add(mesh);}
  update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number,pectoralEffort=.35){
   this.phase=swimPhase(this.phase,dt,activity);
   this.pectoralPhase+=dt*(5+pectoralEffort*13);
-  for(const mesh of this.meshes){const p=mesh.geometry.getAttribute('position') as T.BufferAttribute,rest=this.originals.get(mesh.geometry)!;for(let i=0;i<p.count;i++){const x=rest[i*3],y=rest[i*3+1],z=rest[i*3+2],fin=this.fins.get(mesh)!;const position=bendTetra(x,y,z,this.phase,activity,fin.kind,fin.side,this.pectoralPhase,pectoralEffort);p.setXYZ(i,...position);}p.needsUpdate=true;mesh.geometry.computeVertexNormals();}
+  for(const mesh of this.meshes){const p=mesh.geometry.getAttribute('position') as T.BufferAttribute;this.deformers.get(mesh.geometry)!(p.array as Float32Array,this.phase,activity,this.pectoralPhase,pectoralEffort);p.needsUpdate=true;mesh.geometry.computeVertexNormals();}
   for(const shader of this.shaders){shader.uniforms.photograph.value=photo;shader.uniforms.sceneTime.value=time;shader.uniforms.flow.value=flow;shader.uniforms.depth.value=depth;shader.uniforms.daylight.value=daylight;}
  }
  dispose(){const materials=new Set<T.Material>();this.group.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();materials.add(o.material as T.Material);}});materials.forEach(m=>m.dispose());}
