@@ -6,12 +6,12 @@ export const HULL_PATCHES=[-1.2,-.4,.4,1.2].flatMap(z=>[-1,0,1].map(side=>({x:si
 export function createHydro(){return {initialized:false,y:0,vy:0,pitch:0,roll:0,pitchVelocity:0,rollVelocity:0,waterHeight:0,waterVelocity:0,wet:1,bowWet:1,sternWet:1,portWet:1,starboardWet:1,intake:1,load:1,airborne:false,launched:false,airTime:0,impact:0,landingId:0,previousSpeed:0,diveRemaining:0,diveUsed:false,onRamp:false,patches:HULL_PATCHES.map(()=>({water:0,force:0,wet:0})),compression:0,compressionVelocity:0,drag:0};}
 export function stepHydro(h,craft,time,dt,surface,{dampen=false,lean=0,dive=false}={}){
  const fx=Math.sin(craft.heading),fz=Math.cos(craft.heading),rx=fz,rz=-fx,speed=Math.hypot(craft.vx||0,craft.vz||0)||Math.abs(craft.speed||0),planing=clamp((speed-3)/17,0,1);
- if(dive&&h.airborne&&h.vy<0&&!h.diveUsed){h.diveRemaining=1.25;h.diveUsed=true;}h.diveRemaining=Math.max(0,h.diveRemaining-dt);if(!dive&&!h.airborne&&h.diveRemaining===0)h.diveUsed=false;
+ if(dive&&h.airborne&&h.vy<0&&!h.diveUsed){h.diveRemaining=1.5;h.diveUsed=true;}h.diveRemaining=Math.max(0,h.diveRemaining-dt);if(!dive&&!h.airborne&&h.diveRemaining===0)h.diveUsed=false;
  let water=0;const heights=HULL_PATCHES.map(p=>{const v=surface(craft.x+fx*p.z+rx*p.x,craft.z+fz*p.z+rz*p.x,time);water+=v*p.weight;return v;});
  if(!h.initialized){h.initialized=true;h.y=water+.025;h.waterHeight=water;h.previousSpeed=speed;heights.forEach((w,i)=>h.patches[i].water=w);}
  const waterVelocity=clamp((water-h.waterHeight)/Math.max(dt,.001),-12,12);h.waterVelocity+=(waterVelocity-h.waterVelocity)*(1-Math.exp(-dt*12));h.waterHeight=water;
  let support=0,pitchMoment=0,rollMoment=0,wet=0,bow=0,stern=0,port=0,starboard=0,relativeSum=0,slamming=0;
- const draft=.245-(h.diveRemaining>0?.95:0),damping=dampen?10:7.2;
+ const draft=.245-(h.diveRemaining>0?2:0),damping=dampen?10:7.2;
  for(let i=0;i<HULL_PATCHES.length;i++){
   const p=HULL_PATCHES[i],q=h.patches[i],pointY=h.y-h.pitch*p.z+h.roll*p.x-draft,depth=heights[i]-pointY;
   const localVelocity=h.vy-h.pitchVelocity*p.z+h.rollVelocity*p.x,wv=clamp((heights[i]-q.water)/dt,-14,14),relative=wv-localVelocity;

@@ -135,3 +135,14 @@ This is local only and has not been published. Glacier Coast, Southern Island an
 - Full regression suite: 122/122 passed in 78.91 seconds. The rendered Expert cluster was inspected during the browser race, with no runtime errors.
 - Next wall-shortcut work must support both over-wall jump clearance and below-wall dive clearance using shared visible/collision geometry. Existing submarine control only triggers during airborne descent and lasts 1.25 seconds; verify the actual timing window rather than assuming a moved ramp automatically makes the dive possible.
 - Browser Expert / venue conditions finished in 287.583 seconds, with 96 checkpoints, zero misses, six landings and second place. High graphics and final 60 FPS.
+
+
+## Twilight City wall shortcut — September 10, 2026
+
+- Implemented the inner jump/dive shortcut with a finite raised concrete wall. Its visible mesh, hull collision and camera obstruction share the same dimensions. The main outer route remains available; Reverse guidance uses that route.
+- Hard's nearer first ramp launches over the wall. Expert's farther ramp requires a descending submarine dive. The dive now lasts 1.5 seconds and targets a deeper submerged draft so the existing larger waves do not force the hull into the wall underside. Activation still requires airborne descent; ordinary stunt activation and resurfacing tests pass.
+- Actual-step tests verify three Hard over-wall crossings and three Expert below-wall crossings, zero wall impacts and zero missed checkpoints. A separate Expert outer-route run completes all checkpoints. Surface collision, finite ends and camera clearance are also covered.
+- All 127 regression tests passed in 81.32 seconds. This includes the new shortcut tests and existing stunt/playground coverage. No expectations were relaxed. Subsequent edits only clarify the course description and add F dive on descent to the visible controls.
+- Browser Expert / venue conditions: inspected at the wall at 18.833 seconds, hull y -1.21 metres with 0.23 seconds of dive remaining. Rendered wall and underwater route were visible. Completed in 275.300 seconds, second place, 96 checkpoints, zero misses, High graphics and final 60 FPS. No runtime errors were reported at the inspection.
+- The course shape, scale and generated checkpoint sequence remain reconstruction estimates. This milestone supersedes the earlier missing-wall notes; it does not establish full original-course parity. Glacier Coast, Southern Island, Dolphin Park, original buoy sequences and remaining course details still require work. Local only; not published.
+- Browser Hard wall inspection: 14.750 seconds, hull y 2.27 metres above the 1.35-metre wall top, no dive active, 60 km/h. The ski was visibly airborne above the wall and the chase view was unobstructed. No runtime errors.

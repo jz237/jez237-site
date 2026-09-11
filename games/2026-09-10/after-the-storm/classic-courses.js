@@ -79,11 +79,13 @@ const cityEast=cityMap([[277,37],[295,37],[329,70],[329,160],[315,175],[289,232]
 const citySand=cityMap([[184,36],[223,51],[206,65]]);
 const cityBalls=cityMap([[179,134],[192,134],[186,141],[180,150],[192,150],[108,485],[108,496],[108,507],[108,518]]).map(([x,z])=>({x,z,r:.7,type:'ball'}));
 const cityExpertBalls=[...cityBalls,...cityMap([[186,135],[186,157],[119,487],[119,498],[119,509]]).map(([x,z])=>({x,z,r:.7,type:'ball'}))];
-const cityRamp=(id,x,z,tx,tz,width,length=14)=>({id,name:'CITY JUMP',x:(x-200)*.8,z:(z-275)*.8,tx,tz,width,length,height:2.1,floating:false});
+const cityRamp=(id,x,z,tx,tz,width,length=14)=>({id,name:'CITY JUMP',x:(x-200)*.8,z:(z-275)*.8,tx,tz,width,length,height:id===120?2.7:2.1,floating:false});
 const cityLateRamps=[cityRamp(121,185,113,0,1,9),cityRamp(122,84,488,1,0,14),cityRamp(123,189,489,1,0,13)];
 const city={
+ shortcut:{kind:'jump-dive',from:cityMap([[269,390]])[0],to:cityMap([[229,30]])[0],width:6,via:cityMap([[269,360],[269,315],[269,285],[269,260],[269,236],[269,200],[269,160],[269,75],[260,45]]),structure:cityMap([[269,390],[269,70]])},
+ crossbars:[{x:(269-200)*.8,z:(234-275)*.8,tx:1,tz:0,length:32.8,depth:.9,bottom:.45,top:1.35}],
  name:'Twilight City',theme:'city',tag:'06 / TWILIGHT CITY',layoutRevision:2,
- description:'Floodlit urban waterways: a fast eastern straight, a tight northern bend and a diagonal basin crowded with metal buoys.',
+ description:'Floodlit waterways and metal buoys. The inner wall offers a jump shortcut; Expert moves the ramp back, requiring F during descent to dive beneath it. The outer route stays open.',
  anchors:cityMap([[269,420],[288,341],[322,281],[342,239],[336,212],[352,181],[368,160],[358,139],[358,114],[374,68],[333,31],[277,29],[229,29],[182,27],[173,55],[174,96],[178,133],[190,169],[207,200],[204,218],[174,244],[141,278],[116,321],[87,349],[48,383],[24,429],[23,458],[38,472],[77,478],[131,486],[179,501],[212,513],[244,483],[266,456]]),
  ground(x,z){return Math.max(city.renderGround(x,z),clamp(-polygonDistance(cityCenter,x,z)*.8,-10,6),clamp(-polygonDistance(cityEast,x,z)*.8,-10,6));},
  renderGround(x,z){return clamp(Math.max(polygonDistance(cityWater,x,z)*.8,Math.min(1.1,1.1-polygonDistance(citySand,x,z)*.6)),-10,8);},
