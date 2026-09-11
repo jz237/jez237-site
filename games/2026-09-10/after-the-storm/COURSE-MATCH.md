@@ -33,7 +33,7 @@ still require their own source comparison before they can be signed off.
 | Twilight City | Angular urban channel, jump-or-dive wall, low sand point, four race ramps and metal balls | Rebuilt channel/quays, mapped Hard/Expert/Reverse buoy patterns and Reverse route, four ramps, class-specific metal props and jump/dive wall; final source precision and visual matching pending |
 | Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Reconstructed peninsula, original Expert/Reverse buoys, four fixed ramps, rideable ice and balance wipeouts; final source/visual sign-off pending |
 | Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Reconstructed islands, physical piers/ship, all four buoy maps and two ramps; grid-start ship jump, forward first-lap dives and all-class later-lap passages verified; final source/visual sign-off pending |
-| Dolphin Park | Enclosed basin, kidney island, two main ramps, jetties and tunnel | Existing generic course; full reconstruction pending |
+| Dolphin Park | Curved island, jetties, tunnel; distinct warm-up and stunt props | Original stunt-map coordinates transcribed in source/dolphin-map.json; runtime remains generic, reconstruction pending |
 
 Each course requires visual comparison, ordinary-input traversal on all classes,
 actual obstacle/ramp/shortcut interactions, and regression checks for stunts and
@@ -632,3 +632,13 @@ Final regression for the complete Twilight reconstruction and repairs:208/208 te
 
 
 Final-file Reverse browser race finished first in345.283 s,lap times120.467/117.433/107.383,75 adjudicated checks,zero misses,zero landings,High graphics and final60 FPS. Runtime error log empty. Together with the Hard/Expert visual checks and208-test final suite, this closes the identified reconstruction regressions. Exact source timing, final geography/material comparison, original stunt layouts and whole-goal parity remain unverified or incomplete. The game is still unpublished at this checkpoint.
+
+### Dolphin Park source reconstruction — 2026-09-11
+
+Located Nintendo's official reprint of 64DREAM December1996, printed pp90–91 (PDF page13). The illustrated stunt map shows a C-shaped main island, zigzag jetty, two eastern islets, ten rings, three western ramps and one southwestern ramp. Transcribed approximate pixel coordinates, checkpoint order and boundary into source/dolphin-map.json. This is reference data, not a runtime change. Scale, ramp sizes and tunnel alignment remain uncalibrated. The guide's other stunt maps are available on PDF pages13–14 for subsequent reconstruction.
+
+Source: https://assets.topics.apps-jp.nintendo.com/uploads/files/2022/08/03/00/27/03/820845/53229_1996_12_02.pdf
+
+Inspected original gameplay https://www.youtube.com/watch?v=KkOAS5kXZ_I at15,20,25,30,35,40,45,50 seconds. The last sampled ring awards500; the map independently establishes ten rings. The starting view places the jetty left and rock arch right. The route passes three grouped ramps before its final section. Timer values observed13.8 at15s,13.4 at25s,8.4 at30s,10.8 at45s; continuous frame inspection is still needed to establish reset rules. Do not retain the generated twelve-ring arrangement as original parity or replace timers from these isolated samples alone.
+
+Local PDFs and inspection renders are outside the shipped tree in work/course-reference. Both downloads and all19 page renders completed. Previous208-test result remains valid for unchanged runtime; no new gameplay validation claimed. Nothing published.
