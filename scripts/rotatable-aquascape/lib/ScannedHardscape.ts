@@ -22,7 +22,7 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
  }
  const sourceRocks=rockFile.scene.children.filter(o=>o instanceof T.Mesh) as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>[];
  const rockSource=sourceRocks[0].material;
- const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockSource.aoMap,color:0xa1b0a1,normalScale:new T.Vector2(.8,.8),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
+ const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockSource.aoMap,color:0x7f9286,normalScale:new T.Vector2(.95,.95),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
  rockMaterial.onBeforeCompile=shader=>{
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
    float mineralLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
