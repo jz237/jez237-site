@@ -7,7 +7,7 @@ import {quickTurn,rocketStart,beginWipeout,stepWipeout,collideRiders} from './ri
 import {clearWakeTrail,recordWake} from './wake-field.js';
 import {shoreRecovery} from './shore-recovery.js';
 import {lapComparison} from './race-feedback.js';
-import {passageTarget,passageOpening,passageDistance,passageCollision} from './course-passages.js';
+import {passageAim,passageTarget,passageOpening,passageDistance,passageCollision} from './course-passages.js';
 import {obstaclePosition} from './course-environment.js';
 import {addImpact,clearImpacts} from './surface-impulses.js';
 import {stuntCourse,createStunt,stepStunt,applyRamp} from './stunts.js';
@@ -72,6 +72,7 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
   for(let i=Math.floor(start)-2;i<=Math.ceil(end);i++){const q=route[(i+count)%count],v=Math.hypot(q.x-r.x,q.z-r.z);if(v<distance){distance=v;best=i;}}
   const q0=route[(best+count)%count],q1=route[(best+1+count)%count],spacing=Math.max(1,Math.hypot(q1.x-q0.x,q1.z-q0.z)),ahead=Math.min(Math.ceil(end),best+Math.ceil((5+r.speed*.35)/spacing)),q=route[(ahead+count)%count];tx=q.x;tz=q.z;
  }
+ if(g.pathFraction!==undefined&&s.course.passage?.continuous&&d>6){const q=passageAim(s.course.passage,g,r.x,r.z,4+r.speed*.15);tx=q.x;tz=q.z;}
  // Plan a local detour around a solid obstacle that intersects the intended
  // line. Keep the original checkpoint; avoiding a post never grants progress.
  if(s.course.layoutRevision){const dx=tx-r.x,dz=tz-r.z,length=Math.max(1,Math.hypot(dx,dz)),ux=dx/length,uz=dz/length;
