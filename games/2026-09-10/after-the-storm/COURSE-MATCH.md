@@ -308,3 +308,12 @@ Browser inspection at 77.80 s confirms the rider and ski submerged between the p
 Follow-up class verification: Hard also clears the first-lap dive with zero collisions/misses and finishes in 314.48 s. The regression now covers both Normal and Hard, and passes after selecting the approach checkpoint by its authored span rather than a fixed sequence number. Expert is explicitly still failing the intended early shortcut: the trial collides at the pier until the tide falls (6,900 collision frames), despite eventually finishing without missed buoys; that eventual finish is not shortcut parity. Reverse is excluded from this forward-ramp inspection path.
 
 Full regression suite: 155/155 passed in 98.67 s (`work/southern-pier-dive-full-tests.log`). The subsequent Normal/Hard targeted check passed in 4.47 s. Browser Normal shortcut race completed first in 4:58.667 with zero misses, 36 passed checkpoints, and course sea state/high graphics. No publication yet.
+
+
+### Expert first-lap pier dive corrected — 2026-09-11
+
+Expert now targets map x232 instead of x235 at the same south-side exit, accommodating the different approach after its extra western buoy. All movement still comes from ordinary throttle, steering and late-dive inputs. The four-rider run records zero shortcut collision frames, 30 frames physically below the deck, exits the approach at 79.60 s on lap one, and finishes in 299.32 s with zero misses. No geometry, dive duration, engine power or gate logic changed.
+
+The full grid-start shortcut regression now covers Normal, Hard and Expert and passes in 6.68 s. It still requires ramp contact, no collision throughout the shortcut, more than ten frames beneath the deck with an active dive, exit before 90 s on lap one, and clean three-lap completion. Expert remains submerged briefly as buoyancy raises it after the dive timer expires; the test now counts active-dive frames rather than incorrectly requiring the timer to stay active on every subsequent submerged frame. Reverse and later-lap surface shortcut routes remain outstanding.
+
+Expert browser inspection at 79.05 s: lap one, zero misses, 63.77 km/h, hull y -3.013 m, dive remaining 0.333 s. The rider is visibly submerged beneath the deck between its supports; no logged browser errors.

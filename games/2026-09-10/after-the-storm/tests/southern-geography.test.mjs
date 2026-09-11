@@ -117,14 +117,14 @@ test('the southern checkpoint accepts both mapped routes and still rejects the w
  }
 });
 
-test('Normal and Hard grid-start races take the first-lap pier dive and rejoin all buoys',()=>{
- for(const difficulty of [0,1]){
+test('Normal Hard and Expert grid-start races take the first-lap pier dive and rejoin all buoys',()=>{
+ for(const difficulty of [0,1,2]){
  const s=createRace({course:getCourse('tempest',difficulty),difficulty}),r=s.racers[0];s.verifyPierDive=true;let under=0,contact=false,clearedAt=0;
  for(let i=0;i<36000&&s.phase!=='results';i++){
   stepRace(s,verificationInput(s,r),1/60);
   if(r.pierDiveStage===1){
    contact ||=r.hydro.onRamp;assert.equal(r.collision,0);
-   if(r.z>map(0,521)[1]&&r.z<map(0,531)[1]&&r.hydro.y+1.1<.65){under++;assert.ok(r.hydro.diveRemaining>0);}
+   if(r.z>map(0,521)[1]&&r.z<map(0,531)[1]&&r.hydro.y+1.1<.65&&r.hydro.diveRemaining>0){under++;}
   }
   if(!clearedAt&&r.pierDiveStage===2){clearedAt=s.time;assert.equal(r.lap,1);}
  }
