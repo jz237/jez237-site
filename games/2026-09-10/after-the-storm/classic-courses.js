@@ -1,3 +1,4 @@
+import {portStuntLayout} from './port-stunts.js';
 import {fortStuntLayout} from './fort-stunts.js';
 import {drakeStuntLayout} from './drake-stunts.js';
 import {sunsetStuntLayout} from './sunset-stunts.js';
@@ -145,7 +146,7 @@ portReverseBuoys[7].approach={x:(38-220)*.8,z:(240-285)*.8,throttle:.4,radius:3,
 const portReverseAnchors=portMap([[60,384],[60,260],[60,184],[69,140],[87,103],[123,84],[162,101],[194,114],[227,120],[246,137],[249,155],[236,171],[220,186],[216,203],[222,214],[245,213],[263,222],[272,243],[273,270],[254,290],[223,289],[195,291],[175,325],[167,417],[148,471],[124,500],[96,480],[79,438],[65,410]]);
 const port={
  boundary:portMap([[10,80],[30,22],[65,7],[89,7],[90,36],[164,36],[199,77],[330,77],[333,66],[368,66],[430,127],[430,259],[369,320],[235,320],[235,532],[210,563],[35,563],[9,543]]),
- name:'Port Blue',theme:'port',tag:'05 / PORT BLUE',layoutRevision:3,
+ name:'Port Blue',theme:'port',tag:'05 / PORT BLUE',layoutRevision:4,stuntLayout:portStuntLayout(),
  buoysByClass:[portNormalBuoys,portHigherBuoys,portHigherBuoys,portReverseBuoys],retainRouteControls:true,
  anchorsByClass:[null,null,null,portReverseAnchors],
  finishLinesByClass:[portMap([[31,267],[89,267]]),portMap([[31,267],[89,267]]),portMap([[31,267],[89,267]]),portMap([[34,384],[86,384]])],
