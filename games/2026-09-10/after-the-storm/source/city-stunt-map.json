@@ -1,0 +1,203 @@
+{
+  "source": "https://assets.topics.apps-jp.nintendo.com/uploads/files/2022/08/03/00/27/03/820845/53229_1996_12_02.pdf",
+  "page": 14,
+  "printedPage": 92,
+  "mode": "stunt",
+  "coordinates": {
+    "units": "pixels",
+    "xDirection": "right",
+    "zDirection": "down",
+    "renderLongEdge": 4000,
+    "crop": [
+      1750,
+      350,
+      1230,
+      1000
+    ]
+  },
+  "status": "Reference transcription only. Right edge is clipped in the source page itself; complete finish positions and total ring count need corroboration. Runtime remains generated.",
+  "openingRoutes": {
+    "shortcut": {
+      "ringsInTravelOrder": [
+        [
+          722,
+          404
+        ],
+        [
+          692,
+          404
+        ],
+        [
+          663,
+          404
+        ],
+        [
+          578,
+          402
+        ],
+        [
+          392,
+          399
+        ],
+        [
+          267,
+          399
+        ]
+      ],
+      "submergedCandidates": [
+        0,
+        1,
+        2
+      ],
+      "rampCenter": [
+        800,
+        402
+      ],
+      "wallSpan": [
+        [
+          615,
+          349
+        ],
+        [
+          615,
+          445
+        ]
+      ],
+      "note": "Guide describes a submarine shortcut with six rings. Confirm submerged-ring count and depth from continuous footage."
+    },
+    "outer": {
+      "ringsInTravelOrder": [
+        [
+          304,
+          164
+        ],
+        [
+          217,
+          195
+        ],
+        [
+          136,
+          245
+        ]
+      ],
+      "note": "Guide says the shortcut has three more rings than the outer route. Keep both branches; do not demand both in one normal lap."
+    }
+  },
+  "sharedAfterFirstCheckpoint": {
+    "rampCenter": [
+      420,
+      640
+    ],
+    "ringAfterRamp": [
+      464,
+      636
+    ],
+    "ringClusterAfterSecondCheckpoint": [
+      [
+        809,
+        711
+      ],
+      [
+        878,
+        719
+      ],
+      [
+        829,
+        784
+      ],
+      [
+        908,
+        814
+      ],
+      [
+        972,
+        753
+      ]
+    ]
+  },
+  "finishEdge": {
+    "partialRings": [
+      [
+        1210,
+        525
+      ],
+      [
+        1210,
+        615
+      ]
+    ],
+    "partialRampVisibleY": [
+      560,
+      665
+    ],
+    "note": "Centers extend beyond page edge; x values for partial rings are edge observations, not full object centers. Guide text describes two consecutive finish ramps."
+  },
+  "checkpointSpans": [
+    [
+      [
+        60,
+        461
+      ],
+      [
+        186,
+        461
+      ]
+    ],
+    [
+      [
+        788,
+        640
+      ],
+      [
+        727,
+        738
+      ]
+    ],
+    [
+      [
+        1150,
+        710
+      ],
+      [
+        null,
+        710
+      ]
+    ],
+    [
+      [
+        1007,
+        290
+      ],
+      [
+        1007,
+        446
+      ]
+    ]
+  ],
+  "originalFootage": {
+    "url": "https://www.youtube.com/watch?v=J2P3ChbV2vU",
+    "inspectedSeconds": [
+      10,
+      12,
+      14,
+      15,
+      65,
+      70,
+      75
+    ],
+    "notes": [
+      "Recording description says using pause trick; do not use elapsed video time or its high score for normal timer calibration.",
+      "At10s rider approaches opening ramp;12s airborne;14s returns toward water and rings;15s a wall support is visible. These sparse frames do not yet prove the exact dive timing or submerged count.",
+      "At65s a650 ring award is visible amid metal obstacles near the finish. That is evidence of a13-ring chain at that instant, not total course ring count.",
+      "Frame stepping with the paused player period key advances about1/30 second; finer inspection is available."
+    ]
+  },
+  "remaining": [
+    "Confirm complete right-edge geometry and ring count from another map or footage",
+    "Inspect dive descent frame-by-frame and identify which rings are submerged",
+    "Implement both opening routes and their separate valid ring counts",
+    "Fit second jump, five-ring cluster and two final jumps to source geography",
+    "Preserve physical wall and metal hazards; verify powered dive passage and outer bypass",
+    "Calibrate original timing using footage without pause manipulation"
+  ]
+}
