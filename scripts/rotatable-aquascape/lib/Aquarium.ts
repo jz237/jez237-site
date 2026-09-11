@@ -16,11 +16,12 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import {Tetra3D} from './Tetra3D';
+import {calmSwordLeaves} from './SwordCurrent';
 import {SchoolEyes} from './SchoolEyes';
 import {optimizeLeafIndexOrder} from './LeafIndexOrder';
 import {GpuFrameTimer} from './GpuFrameTimer';
-import {createTetraSwim,advanceTetraSwim,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
-import {createSchoolRoute,advanceSchoolRoute,schoolLane} from './SchoolRoute';
+import {createTetraSwim,advanceTetraSwim,startleTetra,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
+import {createSchoolRoute,advanceSchoolRoute,schoolActivity} from './SchoolRoute';
 import {separateFish} from './FishCollisions';
 
 import {fishPosition,fishCoordinates,clearHardscape,type Obstacle} from './TankSpace';
@@ -96,6 +97,7 @@ export class Aquarium{
   this.controls.rotateSpeed=.55;this.controls.zoomSpeed=.7;
   this.controls.addEventListener('start',()=>{this.targetCamera=null;this.targetFov=null;});
   this.camera.position.set(0,2.45,21.5);
+  this.installGlassTap();
   RectAreaLightUniformsLib.init();
   this.stripLight.position.set(0,canopy.height,canopy.depth);this.stripLight.lookAt(0,0,canopy.depth);
   this.scene.add(this.fill,this.stripLight);
@@ -121,6 +123,7 @@ export class Aquarium{
   this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(host);this.resize();
   this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader)]).then(async()=>{
    if(!(import.meta.env.DEV&&new URLSearchParams(location.search).has('originalIndices')))optimizeLeafIndexOrder(this.scene);
+   calmSwordLeaves(this.scene);
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
@@ -134,6 +137,20 @@ export class Aquarium{
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
   document.addEventListener('visibilitychange',()=>{this.last=0;});
+ }
+ private installGlassTap(){
+  const canvas=this.renderer.domElement;
+  let down:{x:number;y:number;at:number;id:number}|null=null;
+  canvas.addEventListener('pointerdown',e=>{if(!e.isPrimary){down=null;return;}down={x:e.clientX,y:e.clientY,at:performance.now(),id:e.pointerId};});
+  canvas.addEventListener('pointercancel',()=>{down=null;});
+  canvas.addEventListener('pointerup',e=>{
+   const tap=down;down=null;
+   if(!tap||tap.id!==e.pointerId||this.paused||performance.now()-tap.at>300||Math.hypot(e.clientX-tap.x,e.clientY-tap.y)>6)return;
+   const rect=canvas.getBoundingClientRect(),ray=new T.Raycaster();
+   ray.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),this.camera);
+   const hit=ray.ray.intersectBox(new T.Box3(V(-5.05,.1,-2.35),V(5.05,5.4,2.35)),new T.Vector3());
+   if(hit){this.fishes.forEach(({swim})=>startleTetra(swim));if(import.meta.env.DEV)this.host.dataset.glassTaps=String(Number(this.host.dataset.glassTaps??0)+1);}
+  });
  }
  private random(){this.seed=(Math.imul(this.seed,1664525)+1013904223)>>>0;return this.seed/4294967296;}
  private mesh(g:T.BufferGeometry,m:T.Material,p:T.Vector3,shadow=true){const o=new T.Mesh(g,m);o.position.copy(p);o.castShadow=shadow;o.receiveShadow=shadow;this.scene.add(o);return o;}
@@ -218,8 +235,16 @@ export class Aquarium{
   const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);
  }
  private avoidSolid(s:TetraSwim){
+  // Look ahead before contact and select the nearer open side of a branch.
+  const ahead=fishPosition(s.x+s.vx*.8,s.y+s.vy*.8,s.z+s.vz*.8);
+  if(s.avoidanceRemaining<=0)for(const obstacle of this.obstacles){
+   if(ahead.distanceToSquared(obstacle.center)<(obstacle.radius+.34)**2){
+    const center=fishCoordinates(obstacle.center),side=s.z>=center.z?1:-1;
+    s.avoidanceZ=clamp(center.z+side*(obstacle.radius+.40)/2.52,-.26,1.26);s.avoidanceRemaining=2.5;break;
+   }
+  }
   const p=fishPosition(s.x,s.y,s.z),before=p.clone();clearHardscape(p,this.obstacles);
-  if(p.distanceToSquared(before)>.000001){s.targetZ=clamp(s.z+.1,.1,.9);s.depthTarget=Math.max(260,s.y-30);}
+  if(p.distanceToSquared(before)>.000001){s.avoidanceZ=clamp(s.z+(p.z>=before.z?.27:-.27),-.26,1.26);s.avoidanceRemaining=2.5;s.depthTarget=Math.max(260,s.y-30);}
   Object.assign(s,fishCoordinates(p));
  }
  private animate=(now:number)=>{
@@ -247,11 +272,12 @@ export class Aquarium{
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
   this.fishes.forEach(({swim:s},i)=>{
-   advanceTetraSwim(s,dt,false,false,{food,neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:schoolLane(goal,i)});
+   const activity=schoolActivity(this.school,goal,i);
+   advanceTetraSwim(s,dt,false,false,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,depthBounds:[-.26,1.26]});
    if(dt)this.avoidSolid(s);
    if(s.brain.consumedFood!==null){const idx=this.food.findIndex(f=>f.mesh.id===s.brain.consumedFood);if(idx>=0){const f=this.food.splice(idx,1)[0];this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();}s.brain.consumedFood=null;}
   });
-  if(dt){const bodies=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,radius:25}));separateFish(bodies);bodies.forEach((b,i)=>Object.assign(this.fishes[i].swim,{x:b.x,y:b.y,z:b.z}));}
+  if(dt){const bodies=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,radius:25}));separateFish(bodies,[-.40,1.40]);bodies.forEach((b,i)=>{Object.assign(this.fishes[i].swim,{x:b.x,y:b.y,z:b.z});this.avoidSolid(this.fishes[i].swim);});}
   this.fishes.forEach(({model,swim:s})=>{model.group.position.copy(fishPosition(s.x,s.y,s.z));model.group.rotation.set(0,s.yaw+s.depthHeading,s.pitch,'YXZ');model.update(this.time,s.effort,this.texture,.65,s.z,1,dt,s.pectoralEffort);});
   this.status=this.food.length?'Foraging':this.fishes.length?tetraBehaviorLabel(this.fishes[0].swim):'Exploring';
   for(let i=this.food.length-1;i>=0;i--){const f=this.food[i];f.age+=dt;f.mesh.position.y-=dt*.07;f.mesh.rotation.y+=dt*.5;if(f.age>48){this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();this.food.splice(i,1);}}
@@ -271,7 +297,7 @@ export class Aquarium{
   if(import.meta.env.DEV){
    this.frameSamples.push([elapsed*1000,renderStart-updateStart,performance.now()-renderStart,this.renderer.info.render.calls,this.renderer.info.render.triangles]);
    if(this.frameSamples.length>=240){const samples=this.frameSamples;const q=(column:number,p:number)=>{const sorted=samples.map(s=>s[column]).sort((a,b)=>a-b);return +sorted[Math.floor((sorted.length-1)*p)].toFixed(2);};this.host.dataset.frameProfile=JSON.stringify({frames:samples.length,frameMsP50:q(0,.5),frameMsP95:q(0,.95),updateMsP50:q(1,.5),updateMsP95:q(1,.95),renderCpuMsP50:q(2,.5),renderCpuMsP95:q(2,.95),drawCalls:q(3,.5),triangles:q(4,.5)});this.frameSamples=[];}
-   this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
+   this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishBehavior=JSON.stringify(this.fishes.map(({swim:s})=>({speed:+s.speed.toFixed(1),behavior:s.behavior,intent:s.brain.intent.kind,energy:+s.brain.energy.toFixed(2)})));this.host.dataset.foodCount=String(this.food.length);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
 
  };
 }
