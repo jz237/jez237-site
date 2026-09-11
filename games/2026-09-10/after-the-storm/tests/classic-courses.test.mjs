@@ -32,7 +32,7 @@ test('a hull starting overlapped by a post is separated and can drive away',()=>
 });
 test('Marine Fortress has an eastern arm, distinct crate counts and a curved inner route',()=>{
  const c=getCourse('citadel');assert.equal(c.name,'Marine Fortress');assert.ok(c.ground(110,-63)>0);assert.ok(c.ground(155,-63)<-3);assert.ok(c.ground(-15,85)>0);
- assert.equal(c.rocks.filter(o=>o.type==='crate').length,3);assert.equal(getCourse('citadel',1).rocks.length,7);assert.equal(getCourse('citadel',2).rocks.length,10);
+ assert.equal(c.rocks.filter(o=>o.type==='crate').length,3);assert.equal(getCourse('citadel',1).rocks.length,7);assert.equal(getCourse('citadel',2).rocks.length,11);
  assert.ok(c.passage.path.length>5);assert.equal(c.passage.structurePath.length,2);assert.ok(c.passage.path.some(p=>p.x<-60));
 });
 test('a late gate opening cannot redirect a rider already committed to the outer route',()=>{

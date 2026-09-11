@@ -507,3 +507,15 @@ Full regression: 192/192 passed in 115.48 s (work/fortress-buoys-full-tests.log)
 Reverse browser continuation finished second in 4:46.117, zero misses, 78 adjudicated checks (including invisible route controls), twelve landings, high graphics/course sea state and final 60 FPS. Error log remained empty. This verifies the race and gate behavior, not exact original art or timing.
 
 Reloaded final renderer and confirmed “FOLLOW THE COURSE” during a neutral Normal-class route check on lap two (1:47.117), with zero misses and no browser errors.
+
+### Marine Fortress crate and timber layouts — 2026-09-11
+
+Read exact brown marker components (RGB 121,75,51) from all four diagrams. The 20-pixel diamonds and 21-pixel narrow rectangles identify distinct obstacle silhouettes: Normal has three crates; Hard four crates and three narrow debris markers; Expert/Reverse seven crates and four narrow debris markers. The prior 3/7/10/10 reconstruction incorrectly treated all objects as crates and placed both shortcut obstacles far from their source centers. The corrected 3/7/11/11 layout includes the Expert shortcut crates at map (178,266) and (126,329). Source marker centers are rounded to whole map pixels.
+
+The reversed obstacle diagram aligns exactly with Expert under (465-x,564-z), so Expert and Reverse now share the same normalized object positions. This pixel-component evidence refines the earlier approximate x=466 buoy alignment; that one-pixel buoy alignment discrepancy remains to be reconciled in the next course alignment pass. No claim of original extracted world coordinates.
+
+Narrow markers now render as floating timber boards (1.6 by 0.3 m, 0.22 m thick) with shared wave pitch/roll instead of crates. Dimensions and material appearance are reconstruction choices. Their conservative circular contact radius is 0.82 m; full oriented timber collision and free drift are not implemented. Three-dimensional crate art is unchanged. All four class races and optional/mandatory gate-route tests remain clean: ten focused tests pass in 9.92 s. An independent source-count/type/position test also passes. The legacy Expert obstacle-count assertion was corrected from ten to eleven.
+
+Full regression ran 193 tests in 113.64 s: 192 passed, with only the obsolete ten-obstacle assertion failing (work/fortress-obstacles-full-tests.log). After correcting that assertion to the independently transcribed eleven-marker source layout, all fifteen classic-course tests passed in 1.46 s. Runtime code did not change for that correction; the full suite was not redundantly rerun. Expert browser inspection at 38.017 s visibly shows crates and low timber on the water, seven crates/four timber in status, zero misses and no errors. The same race continues below.
+
+Expert browser continuation finished fourth in 4:13.400 with zero misses, 75 adjudicated checks, fourteen landings, high graphics/course sea state and final 60 FPS. Browser error log remained empty. No publication or complete course-parity claim.
