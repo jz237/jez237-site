@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
 
 /** Sample the scanned surfaces themselves so moss grows out of bark and rock crevices. */
@@ -28,27 +29,42 @@ export class EpiphyteMoss{
    this.colors.push(new T.Color().setHSL(.205+this.random()*.04,.55+this.random()*.12,.20+this.random()*.105).convertSRGBToLinear());
   }
  }
- build(scene:T.Scene){
-  const positions:number[]=[],indices:number[]=[];
-  const triangle=(a:T.Vector3,b:T.Vector3,c:T.Vector3)=>{const n=positions.length/3;positions.push(...a.toArray(),...b.toArray(),...c.toArray());indices.push(n,n+1,n+2);};
-  // Three feathery shoots, each with paired pointed leaflets at staggered nodes.
-  for(let shoot=0;shoot<3;shoot++){
-   const angle=shoot*2.399,side=V(Math.cos(angle),0,Math.sin(angle)),front=V(-Math.sin(angle),0,Math.cos(angle));
-   const at=(t:number)=>V(0,t*(.092+shoot*.011),0).addScaledVector(front,t*t*.048);
-   for(let j=0;j<5;j++){
-    const t=.12+j*.17,p=at(t),tip=at(t+.19),width=.003;
-    triangle(p.clone().addScaledVector(side,-width),p.clone().addScaledVector(side,width),tip);
-    for(const sign of [-1,1]){
-     const end=p.clone().addScaledVector(side,sign*(.032-t*.015)).addScaledVector(front,.013).add(V(0,.013,0));
-     const mid=p.clone().lerp(end,.45).addScaledVector(front,.008);
-     triangle(p,mid,end);triangle(p,end,mid.clone().addScaledVector(front,-.012));
-    }
+ async build(scene:T.Scene,time:{value:number}){
+  const [file,alpha]=await Promise.all([new GLTFLoader().loadAsync('./models/moss_01/moss_01_2k.gltf'),new T.TextureLoader().loadAsync('./models/moss_01/textures/moss_01_alpha_2k.png')]);
+  alpha.flipY=false;alpha.anisotropy=8;
+  const shoots=file.scene.children.filter(o=>o instanceof T.Mesh) as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>[];
+  const material=shoots[0].material.clone();material.alphaMap=alpha;material.alphaTest=.32;material.alphaToCoverage=true;material.transparent=false;material.depthWrite=true;material.side=T.DoubleSide;material.color.set(0xe0e9cb);material.roughness=.88;material.normalScale.set(.65,.65);
+  for(const map of [material.map,material.normalMap,material.roughnessMap])if(map)map.anisotropy=8;
+  const current=(surface:T.Material)=>{
+   surface.onBeforeCompile=shader=>{
+    shader.uniforms.mossTime=time;
+    shader.vertexShader=`uniform float mossTime;attribute float mossPhase;
+vec3 mossBend(vec3 p){float h=max(0.,p.y);p.x+=sin(mossTime*.8+mossPhase+h*8.)*h*h*.35;p.z+=sin(mossTime*.65+mossPhase)*h*h*.2;return p;}
+`+shader.vertexShader;
+    shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntransformed=mossBend(transformed);');
+    shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
+float h=max(0.,position.y),phase=mossTime*.8+mossPhase+h*8.;
+objectNormal.y-=(2.*h*sin(phase)+h*h*8.*cos(phase))*.35*objectNormal.x+2.*h*sin(mossTime*.65+mossPhase)*.2*objectNormal.z;
+`);
+   };surface.customProgramCacheKey=()=>`scanned-moss-current-v1-${surface.type}`;
+  };
+  current(material);
+  const batches=shoots.map(source=>({geometry:source.geometry.clone(),matrices:[] as T.Matrix4[],colors:[] as T.Color[],phases:[] as number[]}));
+  const shootTransform=new T.Object3D();
+  this.matrices.forEach((anchor,i)=>{
+   for(let j=0;j<3;j++){
+    const batch=batches[(i*7+j*3)%batches.length],angle=i*2.399+j*2.1;
+    shootTransform.position.set(Math.cos(angle)*.009,0,Math.sin(angle)*.009);shootTransform.rotation.set(Math.sin(angle)*.16,angle,Math.cos(angle)*.16);shootTransform.scale.setScalar(.78+(Math.sin(i*1.3+j)*.5+.5)*.44);shootTransform.updateMatrix();
+    batch.matrices.push(new T.Matrix4().multiplyMatrices(anchor,shootTransform.matrix));batch.colors.push(this.colors[i].clone().lerp(new T.Color(0xffffff),.9));batch.phases.push(i*.71+j*1.83);
    }
+  });
+  for(const batch of batches){
+   const geometry=batch.geometry;geometry.computeBoundingBox();const bounds=geometry.boundingBox!,center=bounds.getCenter(new T.Vector3()),height=bounds.max.y-bounds.min.y;
+   geometry.translate(-center.x,-bounds.min.y,-center.z);geometry.scale(.13/height,.13/height,.13/height);geometry.computeBoundingSphere();
+   geometry.setAttribute('mossPhase',new T.InstancedBufferAttribute(new Float32Array(batch.phases),1));
+   const moss=new T.InstancedMesh(geometry,material,batch.matrices.length);batch.matrices.forEach((matrix,i)=>{moss.setMatrixAt(i,matrix);moss.setColorAt(i,batch.colors[i]);});
+   const depth=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,alphaMap:alpha,alphaTest:.32,side:T.DoubleSide});current(depth);moss.customDepthMaterial=depth;
+   moss.castShadow=moss.receiveShadow=true;moss.computeBoundingSphere();moss.boundingSphere!.radius+=.03;scene.add(moss);
   }
-  const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(positions,3));geometry.setIndex(indices);geometry.computeVertexNormals();
-  const material=new T.MeshStandardMaterial({roughness:.88,side:T.DoubleSide});
-  const moss=new T.InstancedMesh(geometry,material,this.matrices.length);
-  this.matrices.forEach((m,i)=>{moss.setMatrixAt(i,m);moss.setColorAt(i,this.colors[i]);});
-  moss.receiveShadow=true;moss.castShadow=true;moss.computeBoundingSphere();scene.add(moss);
  }
 }

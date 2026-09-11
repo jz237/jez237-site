@@ -93,7 +93,7 @@ packed=np.zeros((nz,ny,nx*4,4),dtype='<f4')
 for i in range(4):packed[:,:,i*nx:(i+1)*nx,:3]=coefficients[:,:,:,i,:]
 output=folder/'public/lighting';output.mkdir(exist_ok=True)
 (output/'diffuse-probes.bin').write_bytes(packed.tobytes())
-inputs=['lib/BotanicalPlants.ts','lib/ScannedBranch.ts','lib/ScannedRock.ts','lib/ScannedHardscape.ts','lib/Substrate.ts','lib/LeafSurface.ts']
-metadata={'version':1,'dimensions':[nx,ny,nz],'minimum':minimum.tolist(),'maximum':maximum.tolist(),'samples':samples,'triangles':int(len(faces)),'bytes':int(packed.nbytes),'coefficientRange':[float(coefficients.min()),float(coefficients.max())],'hits':hits,'seconds':round(time.time()-started,2),'model':'single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds excluded','sourceHashes':{p:hashlib.sha256((folder/p).read_bytes().replace(b'\r\n',b'\n')).hexdigest() for p in inputs},'binarySHA256':hashlib.sha256(packed.tobytes()).hexdigest()}
+inputs=['lib/BotanicalPlants.ts','lib/ScannedBranch.ts','lib/ScannedRock.ts','lib/ScannedHardscape.ts','lib/EpiphyteMoss.ts','lib/TankSpace.ts','lib/Substrate.ts','lib/LeafSurface.ts']
+metadata={'version':1,'dimensions':[nx,ny,nz],'minimum':minimum.tolist(),'maximum':maximum.tolist(),'samples':samples,'triangles':int(len(faces)),'bytes':int(packed.nbytes),'coefficientRange':[float(coefficients.min()),float(coefficients.max())],'hits':hits,'seconds':round(time.time()-started,2),'model':'single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds/moss excluded','sourceHashes':{p:hashlib.sha256((folder/p).read_bytes().replace(b'\r\n',b'\n')).hexdigest() for p in inputs},'binarySHA256':hashlib.sha256(packed.tobytes()).hexdigest()}
 (output/'diffuse-probes.json').write_text(json.dumps(metadata,indent=2))
 print(json.dumps(metadata),flush=True)
