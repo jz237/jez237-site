@@ -316,3 +316,11 @@ The indirect field was re-exported and rebuilt against the unchanged 8,415,147-t
 The scanned rocks use a darker mineral body color, stronger crevice occlusion and slightly more distinct scan-normal detail. Roughness is reduced moderately to retain small surface highlights against the darker stone. The adjustment targets the pale, chalky rock appearance in the reference comparison while preserving the actual scan textures and moss separation. Geometry, grounding, collision envelopes and plant placement are unchanged. No new assets or paid services were used.
 
 Front and three-quarter views were reviewed; the angled preview reported 60 fps / 7.8 ms without browser warnings/errors. Six targeted rock/moss/reflection/lighting checks and the production build pass. The static indirect field was rebuilt against the unchanged 8,415,147-triangle scene in 21.50 seconds to include the revised mineral reflectance. Photographic fidelity remains unfinished.
+
+## Continuous camera fitting and orbital view transitions
+
+Camera field of view now fits the perspective-projected tank, stand, lamp and return-pipe bounds instead of jumping between fixed aspect-ratio thresholds. This fills more of the desktop canvas while keeping the complete tank on narrow phones. Front, three-quarter and side presets share the framing calculation. Resizing keeps the current zoom distance, and manual orbit/zoom cancels a pending preset transition.
+
+Preset transitions interpolate around the target on an orbit rather than cutting inward along a straight line. Intermediate diagonal views receive sufficient field of view for their wider silhouette. Three new tests check projected bounds across seven viewport sizes, continuity at the old breakpoints, and preserved orbit radius. The local, ignored iframe fixture was used for visual phone-layout checks, including front/side and zoom-to-preset behavior. It is not part of the published demo. Geometry, material and baked-light sources are unchanged. The overall photographic match remains incomplete.
+
+All 48 tests and the production build pass. Phone layouts at 390x844 and 360x640 (the reference aspect ratio), plus the desktop view, were visually inspected. The larger desktop front view reported 60 fps / 9.9 ms. The static lighting field is unchanged and its provenance tests still pass.
