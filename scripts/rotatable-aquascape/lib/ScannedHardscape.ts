@@ -8,9 +8,10 @@ import {rockPlacements,shapeScannedRock} from './ScannedRock';
 export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],height:(x:number,z:number)=>number,time:{value:number}){
  const loader=new GLTFLoader();
  const moss=new EpiphyteMoss();
- const [woodFile,rockFile]=await Promise.all([
+ const [woodFile,rockFile,rockOcclusion]=await Promise.all([
   loader.loadAsync('./models/dead_tree_trunk_02/dead_tree_trunk_02_2k.gltf'),
-  loader.loadAsync('./models/rock_moss_set_01/rock_moss_set_01_2k.gltf')
+  loader.loadAsync('./models/rock_moss_set_01/rock_moss_set_01_2k.gltf'),
+  new T.TextureLoader().loadAsync('./models/rock_moss_set_01/textures/rock_moss_set_01_ao_2k.jpg')
  ]);
  const wood=woodFile.scene.children[0] as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;
  // The scan already contains brown weathering. A restrained neutral tint keeps
@@ -24,11 +25,12 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
  }
  const sourceRocks=rockFile.scene.children.filter(o=>o instanceof T.Mesh) as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>[];
  const rockSource=sourceRocks[0].material;
- const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockSource.aoMap,color:0xb8c0b9,normalScale:new T.Vector2(.95,.95),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
+ rockOcclusion.flipY=false;rockOcclusion.anisotropy=8;
+ const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockOcclusion,aoMapIntensity:.65,color:0xb8c0b9,normalScale:new T.Vector2(.95,.95),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
  rockMaterial.onBeforeCompile=shader=>{
   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
    float mineralLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
-   diffuseColor.rgb=mix(vec3(mineralLuma),diffuseColor.rgb,.34)*vec3(.68,.72,.76);
+   diffuseColor.rgb=mix(vec3(mineralLuma),diffuseColor.rgb,.58)*vec3(.76,.78,.81);
   `);
  };
  for(const t of [rockMaterial.map,rockMaterial.normalMap,rockMaterial.roughnessMap])if(t)t.anisotropy=8;

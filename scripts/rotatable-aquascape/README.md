@@ -184,3 +184,11 @@ Removed the fixed unlit bars that marked the front and rear waterline. The water
 Close inspection exposed broad studio-light glare near the waterline. The high room fill intensity is now .8 rather than 3.2, leaving the canopy more dominant. Front, close front, elevated three-quarter and side/evening views were checked. The final side preview reported 60 fps and 7.5 ms synchronous render submission, with no browser warnings/errors.
 
 TypeScript and production build pass, as do all four targeted reflection and baked-field tests. The previously passing fish behavior suite was not repeated because fish code is unchanged. Transparent water and unlit bars are outside the static bounce bake; the three canopy samples and baked geometry remain unchanged, so the validated field is retained. No paid services, new assets or dependencies were used. The scene still falls short of the reference photograph; the realism goal remains active.
+
+## Fractured main stone and restored crevice shading
+
+The main left stone now uses the more deeply fractured scan from the existing set, oriented after comparing six rotations in the local rock study. A smaller irregular foreground stone replaces the broad pale slab. Both are grounded after rotation and keep collision spheres derived from their final geometry. Original scan UVs and surface-sampled moss are retained.
+
+The source GLTF had no ambient-occlusion texture assigned. Its original CC0 2K AO map is now bundled locally and applied at restrained intensity. More of the original color variation is retained instead of strongly desaturating every rock. The download's byte count and MD5 were verified against Poly Haven metadata; AO_PROVENANCE.json records the source and checksum. This is a scanned terrestrial rock adapted for the aquarium, not a reconstruction of the reference stone.
+
+Front and enlarged three-quarter views were inspected. One brief 9 fps sample recovered to 60 fps with 8.8 ms synchronous render submission on recheck; no browser errors appeared, and the school continued traveling through different heights and depths. The light field was rebuilt against 6,331,945 triangles in 16.47 seconds. All 35 tests and the production build pass, including rock grounding, glass containment and collision coverage. No money was spent. Photographic fidelity remains incomplete.
