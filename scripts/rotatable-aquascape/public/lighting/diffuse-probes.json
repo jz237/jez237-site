@@ -19,16 +19,16 @@
   "triangles": 6403819,
   "bytes": 60480,
   "coefficientRange": [
-    -1.4451483488082886,
-    1.390270471572876
+    -1.44426691532135,
+    1.3908730745315552
   ],
-  "hits": 646856,
-  "seconds": 21.14,
+  "hits": 650839,
+  "seconds": 19.79,
   "model": "single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds/moss excluded",
   "sourceHashes": {
     "lib/BakeExport.ts": "2e98e04551eda48df2ce235e6e7f4186080a893b858fbc3a7382ecf939102840",
     "lib/WaterDepth.ts": "ec5a7100b6f51eee084044c935ebc0cba549d3db6661c67024655c832e4f1179",
-    "lib/BotanicalPlants.ts": "ccf5efd58867d7320e18ae5545786d0311a29f30b284331a6f8b1c12154ddca4",
+    "lib/BotanicalPlants.ts": "366b968433f5fc856fffb013a99f9c90f35d6e03245e6f3e9cb1954f71c1a9e4",
     "lib/ScannedBranch.ts": "e8ee396791177d805799019a8bf753d485f344a64fb650b46d8607ca0b289ddd",
     "lib/ScannedRock.ts": "c82fcd9cfac2ba8b5f23f8f6d9a56579cbb3362107cb13482e03a1a2d29976f9",
     "lib/ScannedHardscape.ts": "0ae279f6223c914edc39cc2e429af98cf82dec392765fb8757bb9e11d7b35df6",
@@ -38,5 +38,5 @@
     "lib/SubstrateVolume.ts": "56fd05a3a76161cf15866ca66f2888fb50664f25fb3b8aab8d0e60e141ea1a6b",
     "lib/LeafSurface.ts": "7e904078170abd2eaadab87331486243de1592d93ee1c5004dc0eaa2f010078a"
   },
-  "binarySHA256": "171f89929d3705f9e4923045fddb35fe9790dbd6e9efa5b6135a503d9f68dd58"
+  "binarySHA256": "24e064835a7707d0fa5f776145e9a05fcf0c1e21fb5a44fb2ecf5a29063f2401"
 }
