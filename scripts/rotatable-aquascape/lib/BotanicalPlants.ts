@@ -1,4 +1,4 @@
-import {leafSurfaceTexture} from './LeafSurface';
+import {leafSurfaceMaps} from './LeafSurface';
 import * as T from 'three';
 import {fitLeaf} from './TankSpace';
 import {plantCurrent,setPlantRoots} from './PlantCurrent';
@@ -16,8 +16,8 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const rows=species==='sword'?24:species==='carpet'?8:16,cols=species==='carpet'?4:8;
   for(let i=0;i<=rows;i++){
    const t=i/rows,blade=Math.max(0,(t-.08)/.92);
-   const profile=species==='bacopa'?Math.pow(blade,1.3):species==='ludwigia'?Math.pow(blade,.8):blade;
-   const outline=species==='anubias'||species==='bacopa'?Math.pow(Math.sin(profile*Math.PI),.46):species==='sword'?Math.pow(Math.sin(blade*Math.PI),.9):Math.pow(Math.sin(profile*Math.PI),species==='ludwigia'?.56:.67);
+   const profile=species==='bacopa'?Math.pow(blade,1.3):species==='ludwigia'?Math.pow(blade,.8):species==='sword'?Math.pow(blade,.84+variant*.08):blade;
+   const outline=species==='anubias'||species==='bacopa'?Math.pow(Math.sin(profile*Math.PI),.46):species==='sword'?Math.pow(Math.sin(profile*Math.PI),.72):Math.pow(Math.sin(profile*Math.PI),species==='ludwigia'?.56:.67);
    // A continuous petiole-to-blade transition avoids the old abrupt shoulder.
    const width=t<.08?.008:T.MathUtils.lerp(.008,outline*.5,T.MathUtils.smoothstep(t,.08,.18));
    for(let j=0;j<=cols;j++){
@@ -99,7 +99,13 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  for(const [cx,cz,count] of [[-4.25,-1.5,7],[-3.6,-1.5,4],[3.95,-.35,3],[3.5,-1.05,2]])for(let i=0;i<count;i++){
   const x=cx+(random()-.5)*.8,z=cz+(random()-.5)*.7,b=height(x,z);
   plantRoot=V(x,b,z);plantFlex=.7;
-  for(let j=0;j<11;j++){const a=j*2.399+i,l=.8+random()*1.65+(cx<0?.30:0);add('sword',V(x,b,z),V(Math.cos(a)*.46,.55+random()*.5,Math.sin(a)*.5),l,.13+random()*.19,.20+random()*.045,.68,.24+random()*.095,random()*.65);}
+  for(let j=0;j<11;j++){
+   const a=j*2.399+i,l=.8+random()*1.65+(cx<0?.30:0),direction=V(Math.cos(a)*.46,.55+random()*.5,Math.sin(a)*.5).normalize();
+   const origin=V(x,b,z),petiole=l*(.16+(j%3)*.035),tip=origin.clone().addScaledVector(direction,petiole);
+   tip.x=T.MathUtils.clamp(tip.x,-4.87,4.87);tip.z=T.MathUtils.clamp(tip.z,-2.1,2.1);
+   stem(origin,tip,.006+l*.0015,0x52752d);
+   add('sword',tip,direction,l-petiole,.13+random()*.19,.20+random()*.045,.68,.24+random()*.095,random()*.65);
+  }
  }
  // Low rosettes screen the bare lower nodes without closing the sand channel.
  for(const [cx,cz] of [[-.28,-.95],[2.05,-.82]])for(let i=0;i<5;i++){
@@ -128,10 +134,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   plantRoot=V(x,b,z);plantFlex=.4;
   for(let j=0;j<4;j++){const a=random()*Math.PI*2,l=.06+random()*.10;add('carpet',V(x,b,z),V(Math.cos(a)*.8,.35+random()*.7,Math.sin(a)*.8),l,l*.73,.19+random()*.07,.70,.25+random()*.14);}
  }
- const tissue=leafSurfaceTexture();
+ const tissues={fine:leafSurfaceMaps('fine'),round:leafSurfaceMaps('round',2732),sword:leafSurfaceMaps('sword',2733)};
  for(const batch of batches.values()){
   const {species}=batch;
-  const material=new T.MeshPhysicalMaterial({color:0xffffff,map:tissue,bumpMap:tissue,bumpScale:species==='sword'?.012:.003,roughness:species==='anubias'||species==='bacopa'?.46:.61,ior:1.18,specularIntensity:.8,side:T.DoubleSide});
+  const tissue=tissues[species==='sword'?'sword':species==='anubias'||species==='bacopa'||species==='ludwigia'?'round':'fine'];
+  const material=new T.MeshPhysicalMaterial({color:0xffffff,map:tissue.color,bumpMap:tissue.bump,roughnessMap:tissue.roughness,bumpScale:species==='sword'?.007:.002,roughness:species==='anubias'||species==='bacopa'?.58:.74,ior:1.18,specularIntensity:.8,side:T.DoubleSide});
   plantCurrent(material,time,true);setPlantRoots(batch.geometry,batch.roots,batch.flex);
   const leaves=new T.InstancedMesh(batch.geometry,material,batch.matrices.length);batch.matrices.forEach((m,i)=>{leaves.setMatrixAt(i,m);leaves.setColorAt(i,batch.colors[i]);});leaves.castShadow=true;leaves.receiveShadow=true;leaves.computeBoundingSphere();
   leaves.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,side:T.DoubleSide});plantCurrent(leaves.customDepthMaterial,time,true);scene.add(leaves);
@@ -139,4 +146,6 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  const stemsMesh=new T.InstancedMesh(new T.CylinderGeometry(1,1,1,5),new T.MeshStandardMaterial({roughness:.85}),stems.length);
  stems.forEach(({a,b,r,color},i)=>{dummy.position.copy(a).add(b).multiplyScalar(.5);dummy.quaternion.setFromUnitVectors(up,b.clone().sub(a).normalize());dummy.scale.set(r,a.distanceTo(b),r);dummy.updateMatrix();stemsMesh.setMatrixAt(i,dummy.matrix);stemsMesh.setColorAt(i,color);});stemsMesh.computeBoundingSphere();scene.add(stemsMesh);
  setPlantRoots(stemsMesh.geometry,stems.flatMap(s=>s.root.toArray()),stems.map(s=>s.flex));plantCurrent(stemsMesh.material as T.Material,time);
+ stemsMesh.castShadow=stemsMesh.receiveShadow=true;
+ stemsMesh.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking});plantCurrent(stemsMesh.customDepthMaterial,time);
 }
