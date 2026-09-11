@@ -110,6 +110,7 @@ export function verificationInput(state,r){
   const stop=v.landed&&along>35;v.done=stop&&r.speed<1;
   return {throttle:stop?0:.92,steer:clamp(error*1.6,-1,1),brake:stop||Math.abs(error)>1.1,dampen:true};
  }
+ if(state.mode==='stunt'&&state.course.stuntLayout?.verificationTargets)return authoredStuntInput(state,r);
  const input=aiInput(state,r);if(state.mode!=='stunt')return input;
  const s=r.stunt,h=r.hydro,kind=['flip','left','right','flip'][s.nextCheckpoint%4];
  if(h.airborne&&(h.y-h.waterHeight>1.5||s.trick)&&Math.abs(s.angle)<6.20)input.trick=s.trick||kind;
@@ -133,5 +134,18 @@ function authoredParkInput(state,r){
  const input={throttle:clamp(.53+(desired-r.speed)*.15,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.2,dampen:true,lean:q.kind==='ramp'?-1:0};
  if(h.airborne&&driver.activeRamp>=0){const kind=['flip','left','right','flip'][driver.activeRamp];if(h.y-h.waterHeight>1.2||s.trick){if(Math.abs(s.angle)<6.2)input.trick=s.trick||kind;}if(driver.activeRamp===3&&h.vy<0)input.dive=true;}
  if(!h.airborne&&h.wet>.5){const done=s.completedTricks;if(!done.somersault)input.trick=s.pose==='stand'&&s.poseTime>1?'somersault':s.pose==='somersault'?'':'stand';else if(!done.handstand)input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';else if(!done.backwards)input.trick=s.pose==='backwards'&&s.poseTime>2?'':'backwards';}
+ return input;
+}
+
+// Authored stunt routes have different object counts and spacing per venue.
+function authoredStuntInput(state,r){
+ if(state.phase==='countdown')return {};
+ const targets=state.course.stuntLayout.verificationTargets,v=r.authoredStuntDriver||={index:0},h=r.hydro,s=r.stunt;
+ let q=targets[Math.min(v.index,targets.length-1)],along=(r.x-q.x)*q.tx+(r.z-q.z)*q.tz;
+ if(along>(q.kind==='ramp'?q.length/2:1)&&v.index<targets.length-1)q=targets[++v.index];
+ const aim=q.kind==='ramp'?q.length/2+4:1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
+ const input={throttle:clamp(.53+(13-r.speed)*.16,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.1,dampen:true,lean:q.kind==='ramp'?-1:0};
+ if(h.airborne&&(h.y-h.waterHeight>1.2||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||'flip';
+ else if(!h.airborne&&h.wet>.5&&q.kind!=='ramp')input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';
  return input;
 }
