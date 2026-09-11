@@ -7,6 +7,22 @@ export function plantCurrent(material:T.Material,time:{value:number},flutter=fal
   shader.vertexShader=`uniform float waterTime;
 attribute vec3 plantRoot;
 attribute float plantFlex;
+${flutter?`attribute vec3 leafMotion;
+vec3 animatedLeaf(vec3 p){
+ float phase=waterTime*leafMotion.z+leafMotion.x;
+ float ripple=sin(phase+p.y*2.8)+.3*sin(phase*1.9+.7);
+ p.z+=leafMotion.y*(ripple*p.y*p.y+.8*p.x*p.y*sin(phase*.8+1.2));
+ return p;
+}
+vec3 animatedLeafNormal(vec3 p,vec3 n){
+ float phase=waterTime*leafMotion.z+leafMotion.x;
+ float ripple=sin(phase+p.y*2.8)+.3*sin(phase*1.9+.7);
+ float twist=sin(phase*.8+1.2);
+ float dx=leafMotion.y*.8*p.y*twist;
+ float dy=leafMotion.y*(2.*p.y*ripple+2.8*p.y*p.y*cos(phase+p.y*2.8)+.8*p.x*twist);
+ return vec3(n.x-dx*n.z,n.y-dy*n.z,n.z);
+}
+`:''}
 vec3 bendPlant(vec3 p){
  float h=max(0.,p.y-plantRoot.y);
  float phase=plantRoot.x*.47+plantRoot.z*.71;
@@ -27,15 +43,14 @@ vec3 bendPlantNormal(vec3 p,vec3 n){
 }
 `+shader.vertexShader;
   if(flutter)shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
-transformed.z+=sin(waterTime*1.1+plantRoot.x*2.1+position.y*3.)*.022*uv.y*uv.y;
+transformed=animatedLeaf(transformed);
 `);
   if(flutter)shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
-float leafPhase=waterTime*1.1+plantRoot.x*2.1+position.y*3.;
-objectNormal.y-=.022*(3.*cos(leafPhase)*position.y*position.y+2.*sin(leafPhase)*position.y)*objectNormal.z;
+objectNormal=animatedLeafNormal(position,objectNormal);
 `);
   shader.vertexShader=shader.vertexShader.replace('#include <defaultnormal_vertex>',T.ShaderChunk.defaultnormal_vertex.replace('transformedNormal = normalMatrix * transformedNormal;',`
 vec3 plantNormalPosition=position;
-${flutter?'plantNormalPosition.z+=sin(waterTime*1.1+plantRoot.x*2.1+position.y*3.)*.022*position.y*position.y;':''}
+${flutter?'plantNormalPosition=animatedLeaf(plantNormalPosition);':''}
 #ifdef USE_INSTANCING
  plantNormalPosition=(instanceMatrix*vec4(plantNormalPosition,1.)).xyz;
 #endif
@@ -53,7 +68,7 @@ reflectedLight.directDiffuse += directLight.color * material.diffuseColor * .38 
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v3-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v4-${flutter}-${material.type}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){
