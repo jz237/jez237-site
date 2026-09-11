@@ -27,7 +27,7 @@ export class DefenderShow extends ArcadeGame {
  rescueEvents={pickedUp:0,dropped:0,caught:0,delivered:0};
 
  constructor(){super();this.canvas.width=294;this.canvas.height=240;this.canvas.setAttribute('aria-label','Autonomous Defender space rescue');this.running=true;this.populateDemo();this.draw();}
- override unlock(){super.unlock();this.sound??=new DefenderSound(this.audio!);this.sound.state(this.power&&!this.demoPaused,false,this.volume,this.thrusting);}
+ override unlock(){super.unlock();this.sound??=new DefenderSound(this.audio!);this.sound.state(this.power&&!this.demoPaused,this.muted,this.volume,this.thrusting);}
  effect(event:SoundEvent){this.lastAudio=performance.now();this.sound?.effect(event);}
  override tone(_frequency=180,_duration=.07,_type:OscillatorType='square'){this.effect('credit');}
  rand(){this.seed=(this.seed*1664525+1013904223)>>>0;return this.seed/4294967296;}
