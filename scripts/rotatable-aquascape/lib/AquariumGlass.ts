@@ -9,7 +9,7 @@ export function buildAquariumGlass(scene:T.Scene,reflections:ReflectionPool){
  // details, which the renderer's opaque-only transmission buffer cannot contain.
  // The physical BRDF already weights the reflected RGB by Fresnel. Composite it
  // once, leaving the complementary transmitted scene beneath the surface.
- const glass=new T.MeshPhysicalMaterial({color:0x000000,metalness:0,roughness:.025,transparent:true,opacity:1,ior:1.5,side:T.FrontSide,depthWrite:false,envMapIntensity:.10,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor});
+ const glass=new T.MeshPhysicalMaterial({color:0x000000,metalness:0,roughness:.025,transparent:true,opacity:1,ior:1.5,side:T.FrontSide,depthWrite:false,envMapIntensity:.02,blending:T.CustomBlending,blendSrc:T.OneFactor,blendDst:T.OneMinusSrcAlphaFactor});
  glass.onBeforeCompile=shader=>{
   shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`
 float glassCosine=abs(dot(normal,normalize(vViewPosition)));
@@ -19,8 +19,9 @@ diffuseColor.a=.04+.96*pow(1.-glassCosine,5.);
  glass.customProgramCacheKey=()=> 'clear-fresnel-pane-v1';
  glass.userData.skipWaterDepth=true;
  // With envMap=null Three uses scene.environmentIntensity and ignores the
- // per-material intensity. Explicitly bind this shared studio map so the glass
- // can have visible reflections without adding diffuse fill to the planting.
+ // per-material intensity. Bind the shared studio map explicitly, with a faint
+ // face reflection: the bright studio panels otherwise veil the clear water.
+ // The polished edges keep their separate, stronger environment response.
  glass.envMap=scene.environment;
  const polishedEdge=new T.MeshPhysicalMaterial({color:0xd9eee3,roughness:.065,transmission:.88,transparent:true,opacity:.8,ior:1.5,thickness:1.4,attenuationColor:new T.Color(0x72b591),attenuationDistance:2.4,depthWrite:false,envMapIntensity:.7});
  polishedEdge.envMap=scene.environment;
