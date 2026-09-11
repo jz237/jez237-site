@@ -91,3 +91,7 @@ The earlier asset-blocked approach and synthesized substitutes have been replace
 - Original letter/digit bitmaps are decoded from `mess0.src`: https://github.com/mwenge/defender/blob/master/src/mess0.src . Human fall/landing behavior is informed by AFALL/ALAND in `defb6.src`; squad replenishment by GEX11/GEX2 in `defa7.src`. These original bitmap assets remain Williams material.
 - Added growing multicolor laser trails, radial explosion streaks, materializing enemy pixels, per-human score popups, and scanner viewport brackets that follow the actual camera offset.
 - A deterministic ten-minute run records dozens of completed reactive rescues, multiple waves, bomb use and ship losses. Tests check human-state uniqueness on every update. A browser scenario on desktop and mobile verifies two passengers caught together and then both delivered (1000 catch + 1000 delivery points). All 33 updated tests pass; original audio assets are unchanged.
+
+## September 11 detail update
+
+Added physical cover layers, localized construction/contact wear, connectors and service labels. Short copper pad fan-outs are illustrative rather than traced original artwork. Resistor color bands, capacitor legends and service stickers are interpretive finishing details; they do not establish component values or factory labeling. The existing board identities and empty ROM position remain unchanged. Model budgets remain below 240 meshes and 6 MB.
