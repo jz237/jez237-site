@@ -9,3 +9,7 @@ test('all sixteen original Robotron effects match manifests and contain PCM soun
 
 
 test('Robotron slow-frame substeps preserve speed and reject invalid deltas',()=>{const g=make();const before=g.time;g.update(.5);assert(Math.abs(g.time-before-.5)<1e-8);const t=g.time;g.update(NaN);g.update(-1);assert.equal(g.time,t);});
+
+test('pilot withholds shots off the eight-way lanes and behind a blocking hulk',()=>{const g=make();g.actors=[];g.people=[];g.x=40;g.y=100;g.add('quark',160,130);g.actors[0].vx=g.actors[0].vy=0;assert.equal(g.chooseShot(),null);g.actors[0].y=100;assert(g.chooseShot());g.add('hulk',80,100);assert.equal(g.chooseShot(),null);});
+test('pilot closes on a distant final generator instead of firing forever from a corner',()=>{const g=make();g.actors=[];g.people=[];g.phase='battle';g.x=260;g.y=210;g.invincible=100;g.add('quark',35,55);g.actors[0].vx=g.actors[0].vy=0;g.actors[0].timer=100;const start={x:g.x,y:g.y};for(let i=0;i<12*60&&g.wave===1;i++)g.update(1/60);assert(g.kills>=1);assert(g.wave>=2);assert(g.shotsFired<40);assert(Math.hypot(g.x-start.x,g.y-start.y)>60);});
+test('pilot deliberately reaches a safe nearby family member',()=>{const g=make();g.phase='battle';g.actors=[];g.people=[{x:110,y:100,kind:0,alive:true}];g.x=65;g.y=100;g.invincible=100;g.add('quark',265,205);g.actors[0].vx=g.actors[0].vy=0;g.actors[0].timer=100;for(let i=0;i<120;i++)g.update(1/60);assert(g.rescued>=1);});
