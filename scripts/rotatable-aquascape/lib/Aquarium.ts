@@ -7,6 +7,7 @@ import {applyWaterDepth} from './WaterDepth';
 import {applyBakedIrradiance} from './BakedIrradiance';
 import {buildAquariumSubstrate} from './Substrate';
 import {AquariumLighting} from './AquariumLighting';
+import {buildAquariumPlumbing} from './AquariumPlumbing';
 import canopy from './CanopyLighting.json';
 import * as T from 'three';
 import {buildBotanicalPlants} from './BotanicalPlants';
@@ -156,13 +157,7 @@ export class Aquarium{
   this.box(9.2,.12,.65,dark,V(0,6.4,-.15));
   for(let i=0;i<3;i++)this.box(8.75,.018,.105,this.ledMaterial,V(0,6.335,-.37+i*.2),false);
   for(const x of [-3.8,3.8]){this.box(.019,4,.019,dark,V(x,8.45,-.15),false);}
-  // Transparent return pipe and intake, both physically outside the planting.
-  const pipeMat=new T.MeshPhysicalMaterial({color:0xe5f0e9,transparent:true,opacity:1,transmission:.96,thickness:.035,ior:1.5,roughness:.025,metalness:0,depthWrite:false,envMapIntensity:.4});
-  pipeMat.envMap=this.scene.environment;
-  for(const x of [4.4,4.77]){
-   const pts=[V(x,1.1,-1.99),V(x,5.1,-1.99),V(x,5.79,-1.99),V(x,5.84,-2.55),V(x,3.5,-2.62)];
-   this.mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),96,.065,24,false),pipeMat,V(0,0,0),false);
-  }
+  buildAquariumPlumbing(this.scene);
  }
  private height(x:number,z:number){return .3+.55*Math.exp(-((x+2.5)**2/6+(z+.8)**2/2))+.22*(1-(z+2.3)/4.6)+.035*Math.sin(x*2+z)*Math.cos(z*3);}
  private buildWater(){
