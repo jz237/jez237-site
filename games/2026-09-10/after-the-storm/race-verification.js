@@ -25,6 +25,20 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
+ if(state.verifyFortressRidge&&state.course.id==='citadel'&&!state.course.reverse&&r.lap===1){
+  const z=r.z/.8+300;
+  if(z<195&&!r.fortressRidge)r.fortressRidge={waitAt:null,done:false};
+  const guide=r.fortressRidge;
+  if(guide&&!guide.done){
+   if(z<126)guide.done=true;
+   else{if(z<175&&guide.waitAt===null)guide.waitAt=state.time;
+    const waiting=guide.waitAt!==null&&state.time<guide.waitAt+(state.ridgeWait??4.5);
+    const error=angleDelta(Math.atan2((81-210)*.8-r.x-r.vx*.12,(100-300)*.8-r.z-r.vz*.12)-r.heading);
+    return {throttle:waiting?0:1,brake:waiting,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),lean:1,dampen:true};
+   }
+  }
+ }
+
  if(state.verifyDrakeInner&&state.course.id==='reed'){
   if(r.next===(state.course.reverse?14:4)&&r.drakeInner?.lap!==r.lap)r.drakeInner={lap:r.lap,stage:0};
   const guide=r.drakeInner,path=[[277,77],[269,84],[251,96],[239,state.course.reverse?101:103],[200,107],[168,103],[139,93],[112,78]];

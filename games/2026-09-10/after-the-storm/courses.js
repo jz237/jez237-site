@@ -43,7 +43,7 @@ export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c
  let route=sampleRoute(anchors,384);if(reverse)route=[route[0],...route.slice(1).reverse()];const course={...base,anchors,resistance:base.resistanceByClass?.[difficulty]||base.resistance||[],closedAreas:level===2?base.expertClosedAreas||[]:[],requiredPassage:level===2&&!!base.expertAnchors,difficulty,reverse,route,gates:buildGates(points,level),rocks:(base.obstaclesByClass?.[difficulty]||[...(base.obstacles||[]),...(level?(base.extraObstacles||[]).slice(0,level===1?4:99):[])]).map(o=>({...o})),ramps:(base.raceRampsByClass?.[difficulty]||base.raceRamps||[]).map(r=>({...r,solidBack:true}))};
  if(base.buoysByClass?.[difficulty]){
   const mapped=mappedGates(route,base.buoysByClass[difficulty]);
-  if(base.retainRouteControls){const controls=mappedGates(route,(reverse?[...sampleRoute(anchors,24)].slice(1).reverse():sampleRoute(anchors,24).slice(1)).map(p=>({...p,side:0,offset:0,width:23}))).slice(1);course.gates=[mapped[0],...[...mapped.slice(1),...controls.filter(g=>mapped.slice(1).every(b=>Math.hypot(b.x-g.x,b.z-g.z)>20))].sort((a,b)=>a.routeIndex-b.routeIndex)];}
+  if(base.retainRouteControls){const controls=mappedGates(route,(reverse?[...sampleRoute(anchors,24)].slice(1).reverse():sampleRoute(anchors,24).slice(1)).map(p=>({...p,side:0,offset:0,width:23}))).slice(1);course.gates=[mapped[0],...[...mapped.slice(1),...controls.filter(g=>(base.routeControlMinZ===undefined||g.z>base.routeControlMinZ)&&mapped.slice(1).every(b=>Math.hypot(b.x-g.x,b.z-g.z)>20))].sort((a,b)=>a.routeIndex-b.routeIndex)];}
   else course.gates=mapped;
  }
  const finishLine=base.finishLinesByClass?.[difficulty]||base.finishLine;
