@@ -24,6 +24,8 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
+ if(state.verifyShipJump){const a=state.course.ramps.find(a=>a.id===150);if(a&&(state.time>10&&Math.hypot(r.x-a.x,r.z-a.z)<90||r.shipJumpStage!==undefined)){r.shipJumpStage??=0;const along=r.shipJumpStage===0?-18:100,x=a.x+a.tx*along,z=a.z+a.tz*along;if(r.shipJumpStage===0&&Math.hypot(r.x-x,r.z-z)<4)r.shipJumpStage=1;const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);return {throttle:r.shipJumpStage===0?.55:.85,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};}}
+
  if(state.verifyIceBalance&&r.onIce&&!r.wipeout)return {...aiInput(state,r),throttle:1,steer:1};
  if(state.mode==='practice'){
   const ramp=state.course.ramps[0],v=r.playgroundVerification||=( {contact:false,airborne:false,landed:false,peak:0,done:false} );
