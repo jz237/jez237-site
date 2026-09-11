@@ -17,6 +17,8 @@ import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import {Tetra3D} from './Tetra3D';
 import {SchoolEyes} from './SchoolEyes';
+import {optimizeLeafIndexOrder} from './LeafIndexOrder';
+import {GpuFrameTimer} from './GpuFrameTimer';
 import {createTetraSwim,advanceTetraSwim,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
 import {createSchoolRoute,advanceSchoolRoute,schoolLane} from './SchoolRoute';
 import {separateFish} from './FishCollisions';
@@ -51,6 +53,7 @@ export class Aquarium{
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
  private school=createSchoolRoute();
  private schoolEyes:SchoolEyes|null=null;
+ private gpuTimer:GpuFrameTimer|null=null;
  private texture=new T.Texture();
  private obstacles:Obstacle[]=[];
  private food:{mesh:T.Mesh;age:number}[]=[];
@@ -64,8 +67,9 @@ export class Aquarium{
  private resizeObserver:ResizeObserver;
  private inspection:{scene:T.Scene;camera:T.Camera;material:T.MeshBasicMaterial}|null=null;
  constructor(private host:HTMLElement){
-  this.renderer=new T.WebGLRenderer({antialias:true,alpha:false,powerPreference:'high-performance'});
+  this.renderer=new T.WebGLRenderer({antialias:false,depth:false,stencil:false,alpha:false,powerPreference:'high-performance'});
   this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));
+  if(import.meta.env.DEV)this.gpuTimer=new GpuFrameTimer(this.renderer.getContext() as WebGL2RenderingContext,host);
   this.renderer.outputColorSpace=T.SRGBColorSpace;
   this.renderer.toneMapping=T.ACESFilmicToneMapping;
   this.renderer.toneMappingExposure=1.12;
@@ -116,6 +120,7 @@ export class Aquarium{
   this.scene.add(this.bubbles);
   this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(host);this.resize();
   this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader)]).then(async()=>{
+   if(!(import.meta.env.DEV&&new URLSearchParams(location.search).has('originalIndices')))optimizeLeafIndexOrder(this.scene);
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
@@ -258,9 +263,11 @@ export class Aquarium{
   this.schoolEyes?.update();
   const renderStart=performance.now();
   if(import.meta.env.DEV){this.renderer.info.autoReset=false;this.renderer.info.reset();}
+  this.gpuTimer?.begin();
   this.renderer.shadowMap.needsUpdate=true;
   const sceneTriangles=this.lighting.render(this.renderer,this.lightingInspection);
   if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
+  this.gpuTimer?.end();
   if(import.meta.env.DEV){
    this.frameSamples.push([elapsed*1000,renderStart-updateStart,performance.now()-renderStart,this.renderer.info.render.calls,this.renderer.info.render.triangles]);
    if(this.frameSamples.length>=240){const samples=this.frameSamples;const q=(column:number,p:number)=>{const sorted=samples.map(s=>s[column]).sort((a,b)=>a-b);return +sorted[Math.floor((sorted.length-1)*p)].toFixed(2);};this.host.dataset.frameProfile=JSON.stringify({frames:samples.length,frameMsP50:q(0,.5),frameMsP95:q(0,.95),updateMsP50:q(1,.5),updateMsP95:q(1,.95),renderCpuMsP50:q(2,.5),renderCpuMsP95:q(2,.95),drawCalls:q(3,.5),triangles:q(4,.5)});this.frameSamples=[];}
