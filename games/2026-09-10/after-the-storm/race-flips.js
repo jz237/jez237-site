@@ -1,7 +1,9 @@
 const TAU=Math.PI*2;
 export function demoFlipInput(r,input){
  const h=r.hydro,s=r.stunt;
- const safe=h.airborne&&h.vy>4.5&&h.y-h.waterHeight>.5&&h.airTime<.2;
+ const ready=r.raceTime>(s.nextDemoFlip??(12+r.id*4));
+ const safe=ready&&h.airborne&&h.vy>4.5&&h.y-h.waterHeight>.5&&h.airTime<.2;
+ if(safe&&!s.trick)s.nextDemoFlip=r.raceTime+30+r.id*4;
  return safe||s.trick?{...input,trick:'flip'}:input;
 }
 // One optional rotation per jump. Incomplete rotations lose speed on landing.
