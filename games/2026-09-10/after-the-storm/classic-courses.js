@@ -96,11 +96,12 @@ const fortBuoys=rows=>rows.map(([x,z,side])=>({x:(x-210)*.8,z:(z-300)*.8,side}))
 const fortNormalBuoys=fortBuoys([[69,203,1],[160,64,1],[170,94,1],[155,138,-1],[201,156,1],[350,174,1],[360,269,1],[306,267,1]]);
 const fortHardBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],[350,174,1],[295,260,1]]);
 const fortExpertBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],[350,168,1],[295,260,1]]);
-const fortReverseBuoys=fortBuoys([[176,320,1],[118,382,1],[274,394,1],[311,425,-1],[309,463,1],[399,362,1]].map(([x,z,side])=>[466-x,564-z,side]));
+const fortReverseBuoys=fortBuoys([[176,320,1],[118,382,1],[274,394,1],[311,425,-1],[309,463,1],[399,362,1]].map(([x,z,side])=>[465-x,564-z,side]));
 fortReverseBuoys[3].approach={x:(169-210)*.8,z:(160-300)*.8,throttle:.4,radius:3};
 fortReverseBuoys[5].approach={x:(58-210)*.8,z:(183-300)*.8,throttle:.4,radius:3};
 const fort={
  name:'Marine Fortress',theme:'fortress',tag:'04 / MARINE FORTRESS',layoutRevision:3,
+ finishLine:fortMap([[9,272],[108,272]]),
  buoysByClass:[fortNormalBuoys,fortHardBuoys,fortExpertBuoys,fortReverseBuoys],retainRouteControls:true,
  description:'Rough grey water around a stone fort. Floating crates crowd the eastern arm; Hard and above open a curved inner route after the first lap.',
  anchors:fortMap([[81,273],[81,192],[53,178],[37,156],[38,128],[54,89],[79,68],[104,60],[125,63],[148,94],[176,144],[201,160],[264,179],[337,185],[374,204],[384,227],[373,247],[307,251],[290,270],[283,345],[279,423],[260,466],[225,493],[168,510],[105,516],[81,499],[76,461],[80,360]]),
