@@ -16,6 +16,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import {Tetra3D} from './Tetra3D';
+import {SchoolEyes} from './SchoolEyes';
 import {createTetraSwim,advanceTetraSwim,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
 import {createSchoolRoute,advanceSchoolRoute,schoolLane} from './SchoolRoute';
 import {separateFish} from './FishCollisions';
@@ -49,6 +50,7 @@ export class Aquarium{
  private waterIllumination={value:1};
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
  private school=createSchoolRoute();
+ private schoolEyes:SchoolEyes|null=null;
  private texture=new T.Texture();
  private obstacles:Obstacle[]=[];
  private food:{mesh:T.Mesh;age:number}[]=[];
@@ -58,6 +60,7 @@ export class Aquarium{
  private reflections=new ReflectionPool();
  private frame=0;
  private diagnosticTime=0;private diagnosticFrames=0;
+ private frameSamples:number[][]=[];
  private resizeObserver:ResizeObserver;
  private inspection:{scene:T.Scene;camera:T.Camera;material:T.MeshBasicMaterial}|null=null;
  constructor(private host:HTMLElement){
@@ -116,9 +119,15 @@ export class Aquarium{
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
+   // Prepare the final material variants before revealing the aquarium. The warm
+   // frame also initializes shadow, reflection and postprocessing programs.
+   this.controls.update();this.scene.updateMatrixWorld();this.schoolEyes?.update();
+   this.water.update(this.time,this.camera.position.y,this.daylight);
+   await this.lighting.prepare(this.renderer);
+   this.renderer.shadowMap.needsUpdate=true;this.lighting.render(this.renderer,this.lightingInspection);
+   this.frame=requestAnimationFrame(this.animate);
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
-  this.frame=requestAnimationFrame(this.animate);
   document.addEventListener('visibilitychange',()=>{this.last=0;});
  }
  private random(){this.seed=(Math.imul(this.seed,1664525)+1013904223)>>>0;return this.seed/4294967296;}
@@ -186,6 +195,7 @@ export class Aquarium{
    model.group.scale.setScalar(size);model.group.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=!(o.material as T.Material).transparent;o.receiveShadow=true;o.renderOrder=0;}});
    this.fishes.push({model,swim,size});this.scene.add(model.group);
   }
+  this.schoolEyes=new SchoolEyes(this.scene,this.fishes.map(f=>f.model));
  }
  feed(){
   if(this.food.length>12)return;
@@ -209,6 +219,8 @@ export class Aquarium{
  }
  private animate=(now:number)=>{
   this.frame=requestAnimationFrame(this.animate);
+  if(document.hidden){this.last=0;return;}
+  const updateStart=performance.now();
   const elapsed=this.last?(now-this.last)/1000:0,wallDt=Math.min(elapsed,.05);this.last=now;
   const dt=this.paused||document.hidden?0:wallDt;this.time+=dt;this.swimShader.value=this.time;
   if(this.targetCamera){
@@ -241,11 +253,18 @@ export class Aquarium{
   const d=new T.Object3D();for(let i=0;i<48;i++){const t=(this.time*(.11+(i%4)*.015)+i*.137)%1;d.position.set(4.36+Math.sin(t*8+i)*.045+t*.16,.85+t*4.46,-1.7+Math.cos(t*6+i)*.06);d.scale.setScalar(.4+(1-t)*.6);d.updateMatrix();this.bubbles.setMatrixAt(i,d.matrix);}this.bubbles.instanceMatrix.needsUpdate=true;
   const p=this.dust.geometry.getAttribute('position') as T.BufferAttribute;if(dt){for(let i=0;i<p.count;i++){let x=p.getX(i)+Math.sin(i+this.time*.2)*dt*.018,y=p.getY(i)+dt*.006;if(y>5.3)y=.7;p.setXY(i,x,y);}p.needsUpdate=true;}
   this.water.update(this.time,this.camera.position.y,this.daylight);
+  // All passes share the same world transforms for this simulation frame.
+  this.scene.updateMatrixWorld();this.scene.matrixWorldAutoUpdate=false;
+  this.schoolEyes?.update();
   const renderStart=performance.now();
+  if(import.meta.env.DEV){this.renderer.info.autoReset=false;this.renderer.info.reset();}
   this.renderer.shadowMap.needsUpdate=true;
   const sceneTriangles=this.lighting.render(this.renderer,this.lightingInspection);
   if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
-  if(import.meta.env.DEV){this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
+  if(import.meta.env.DEV){
+   this.frameSamples.push([elapsed*1000,renderStart-updateStart,performance.now()-renderStart,this.renderer.info.render.calls,this.renderer.info.render.triangles]);
+   if(this.frameSamples.length>=240){const samples=this.frameSamples;const q=(column:number,p:number)=>{const sorted=samples.map(s=>s[column]).sort((a,b)=>a-b);return +sorted[Math.floor((sorted.length-1)*p)].toFixed(2);};this.host.dataset.frameProfile=JSON.stringify({frames:samples.length,frameMsP50:q(0,.5),frameMsP95:q(0,.95),updateMsP50:q(1,.5),updateMsP95:q(1,.95),renderCpuMsP50:q(2,.5),renderCpuMsP95:q(2,.95),drawCalls:q(3,.5),triangles:q(4,.5)});this.frameSamples=[];}
+   this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
 
  };
 }
