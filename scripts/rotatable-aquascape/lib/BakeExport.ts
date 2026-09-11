@@ -32,7 +32,13 @@ export function installBakeExport(scene:T.Scene){
      if(material.map&&uv)color.multiply(pixel(material.map,uv.getX(i),uv.getY(i)));
      if(material.vertexColors&&vertexColor)color.multiply(new T.Color(vertexColor.getX(i),vertexColor.getY(i),vertexColor.getZ(i)));
      const remap=material.userData.bakeDiffuse;
-     if(remap){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),1-remap.saturation).multiply(new T.Color(remap.tint[0],remap.tint[1],remap.tint[2]));}
+     if(remap){
+      const l=color.r*.2126+color.g*.7152+color.b*.0722;
+      color.lerp(new T.Color(l,l,l),1-remap.saturation).multiply(new T.Color(remap.tint[0],remap.tint[1],remap.tint[2]));
+      // Match the runtime curve after the map and baked-in vertex color.
+      if(remap.exponent!==undefined)color.setRGB(Math.pow(Math.max(0,color.r),remap.exponent),Math.pow(Math.max(0,color.g),remap.exponent),Math.pow(Math.max(0,color.b),remap.exponent));
+      color.multiplyScalar(remap.gain??1);
+     }
      colors.set(color.toArray(),i*3);
     }
     const index=g.index?new Uint32Array(g.index.array):Uint32Array.from({length:p.count},(_,i)=>i);

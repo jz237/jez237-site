@@ -350,3 +350,9 @@ Plant-current tests cover attachment, visible mid-blade motion, clearance and de
 Tall rear colonies now extend closer to the water surface, reducing the broad empty band above the vegetation. Mature shoots keep their established leaf spacing as they gain height; individual tip ceilings and lower colony margins avoid a uniformly clipped canopy. Foreground colony height rules remain the same. The seeded regeneration also redistributes individual leaves, rosettes and carpet instances.
 
 The regenerated scene has 29,724 botanical leaf instances. An export audit checks every static blade vertex for finite coordinates and placement inside the tank; plant-current and tank-clearance tests cover the retained motion allowances. Bounced lighting was rebuilt against 8,973,091 triangles in 21.42 seconds. This remains a procedural botanical approximation; the reference's individual leaf shapes and hardscape composition are not yet fully matched. No paid assets or services were used.
+
+### Submerged bark and copper foliage
+
+The scanned wood uses a restrained scene-linear reflectance curve (exponent 1.18, gain 1.12) to deepen bark while retaining pale exposed fibers. Occlusion strength is .9, normal strength 1.15 and roughness .82. This is an artistic submerged appearance, not a measured wet-wood model. The diffuse exporter applies the same curve after texture and vertex pigment, matching the runtime shader order.
+
+Red colonies use deeper copper pigment with warmer growing tips and individual variation. A stronger red trial was moderated after viewing it in the tank. Geometry, placement, motion, fish behavior and the separate photographic demo are unchanged. The static bounced-light field was regenerated for the new material colors. No paid assets or services were used; full photographic fidelity remains unfinished.
