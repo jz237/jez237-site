@@ -1,4 +1,20 @@
-# Current realism upgrade — September 10, 2026
+# Current feature-parity and ElevenLabs update — September 10, 2026
+
+This section supersedes older sound/gameplay descriptions below.
+
+- Final full suite: **106/106 passed**, 63.95 seconds. Includes all 36 venue/class routes, four championships, split-screen, scoring/unlocks/records, failures/restart, shore rescue, salvage and water physics.
+- New integration checks prove rocket starts, quick-turn contact restrictions, fast shoreline ejection, bounded remount tapping, mass-dependent craft collisions and momentum conservation.
+- Browser park mastery: 52.217 seconds, 12/12 rings, eight required moves, four checkpoints, no crashes, 10,539 points. The same ordinary-input driver passes in Node. The browser granted the saved bonus and rendered the dolphin in Free ride. High-quality final window: 60 FPS; no JavaScript errors.
+- Wipeout inspection intentionally released an incomplete flip and held at 5.80 seconds. The rider separates from the hull, which slows, then returns through a continuous remount. Inspection identified and corrected the inward fall direction before publication.
+- Eight ElevenLabs WAV exports were generated in the authenticated web UI from original speech-free prompts, using 868 existing credits and no purchase. Local MP3s use -20 LUFS / -2 dBTP normalization. PROVENANCE.json records their hashes. Browser status confirmed all 8/8 decoded. Tests cover throttle revving, ventilation, stereo, mono, dolphin engine muting, bounded one shots and missing-file fallback. No announcer or TTS is used.
+- The dolphin has a travelling vertical body wave, independent fins/flukes, a safe-water guide route and a saved bonus mount. Its ride uses arcade hull response rather than a biological swimming simulation.
+- Both HTML pages version all 41 browser modules. The package includes the new source, local clips and original WAV exports.
+
+Subjective listening quality and physical gamepad hardware remain unverified. Water is an analytic surface approximation; course layouts and assets are original. See PARITY.md for the reference matrix.
+
+---
+
+# Previous realism upgrade — September 10, 2026
 
 This section supersedes historical physics, clock and performance descriptions below.
 

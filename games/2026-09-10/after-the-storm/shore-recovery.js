@@ -25,7 +25,7 @@ export function recoverToWater(s,r){
  if(!target)return false;
  const heading=Math.atan2(target.x-r.x,target.z-r.z);
  Object.assign(r,{x:target.x,z:target.z,heading:Number.isFinite(heading)?heading:target.heading,
-  vx:0,vz:0,speed:0,turn:0,throttle:0,recover:0,collision:0,out:0,groundedTime:0,hydro:createHydro()});
+  vx:0,vz:0,speed:0,turn:0,throttle:0,recover:0,collision:0,out:0,groundedTime:0,wipeout:null,hydro:createHydro()});
  return true;
 }
 

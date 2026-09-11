@@ -1,6 +1,6 @@
 import {COURSES} from './courses.js';
 const KEY='after-the-storm-racing-v1';
-export const initialSave=()=>({version:1,records:{},scores:{},settings:{},names:[],unlocked:0,reached:['greyhaven','practice'],audio:{mode:'stereo',music:false,volume:.8,enabled:true},preferences:{graphics:'auto',laps:3,seaState:'course'}});
+export const initialSave=()=>({version:1,dolphin:false,records:{},scores:{},settings:{},names:[],unlocked:0,reached:['greyhaven','practice'],audio:{mode:'stereo',music:false,volume:.8,enabled:true},preferences:{graphics:'auto',laps:3,seaState:'course'}});
 export const recordKey=({course,difficulty=0,laps=3})=>`${course}/${difficulty}/${laps}`;
 export function cleanInitials(value){return String(value).toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,3)||'YOU';}
 export function readSave(storage){try{return validateSave(JSON.parse(storage.getItem(KEY)));}catch{return initialSave();}}
@@ -22,7 +22,7 @@ function recordParts(key,count){const p=key.split('/');if(p.length!==count||!cou
 // into live state before all nested records and settings have been validated.
 export function validateSave(value){
  if(!object(value)||value.version!==1||!object(value.records))fail('This is not a supported After the Storm save.');
- const out=initialSave();if(!integer(value.unlocked??0,0,3))fail('Invalid championship unlock.');out.unlocked=value.unlocked??0;
+ const out=initialSave();if(value.dolphin!==undefined&&typeof value.dolphin!=='boolean')fail('Invalid park bonus.');out.dolphin=!!value.dolphin;if(!integer(value.unlocked??0,0,3))fail('Invalid championship unlock.');out.unlocked=value.unlocked??0;
  if(value.reached!==undefined){if(!Array.isArray(value.reached)||value.reached.length>9||value.reached.some(id=>!courseIds.has(id)))fail('Invalid reached courses.');out.reached=[...new Set(['greyhaven','practice',...value.reached])];}
  if(Object.keys(value.records).length>180)fail('Too many course records.');
  for(const [key,entry] of Object.entries(value.records)){recordParts(key,3);if(!object(entry)||!Array.isArray(entry.times)||entry.times.length>3)fail('Invalid leaderboard.');out.records[key]={times:entry.times.map(timeRow).sort((a,b)=>a.time-b.time),lap:entry.lap?timeRow(entry.lap):null};if(out.records[key].times.length&&!out.records[key].lap)fail('Missing best lap.');}

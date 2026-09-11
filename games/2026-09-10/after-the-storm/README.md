@@ -25,6 +25,8 @@ No build, npm install, API key, account or paid service is required. This folder
 | Camera | C | / |
 | Pause | Escape or Enter in two-player mode | Escape or Enter |
 
+A fresh throttle press as GO appears gives maximum power. Hold rearward trim while steering for a quick turn. Hard collisions and bad stunt landings can eject the rider; tap throttle to remount faster.
+
 Keyboard steering is 20% gentler; analogue steering is unchanged. After a brief period stuck on shore, the ski returns to its last safe water position, facing away from the beach. R (P2: Backspace) recovers immediately when stranded. If the tide has exposed that spot, recovery searches nearby water. Lap and buoy progress are preserved.
 
 In solo modes, arrow keys also drive. Drag to orbit and scroll to zoom; each split-screen half controls its own camera. Forward ramp trim gives a lower, shorter jump; rearward trim gives a higher, longer jump.
@@ -52,6 +54,10 @@ Recover three cargoes and return before an eight-minute storm window closes. WAS
 Capacity is three units; the objectives weigh 1/2/2. More cargo reduces acceleration, turning and top speed. Recoveries take 22/34/46 seconds; unloading takes three seconds. Shallows, reefs, dock piles, wreck impacts and late storm exposure threaten the hull. Success, partial delivery, failure and restart are implemented.
 
 ## Records, sound and saves
+
+Pelican Park has a swimming dolphin guide. Complete its timed run through all twelve rings, with a flip, both rolls, standing, handstand, backwards ride, somersault and submarine dive, to unlock **Ride the dolphin** in Pelican Park Free ride. The bonus survives reload and portable saves. The dolphin has an animated flexible body, fins and flukes, and no engine sound.
+
+Eight local ElevenLabs clips provide idle/load engines, water rush, wind, splash, hull impact, race cues and an optional instrumental loop. Pitch and mix respond to throttle, speed and water contact. Split-screen engines are independent. No announcer or narration is used. Generation consumed 868 existing credits with no purchase; playing requires no account or service call. A synthesized fallback handles missing files.
 
 Options & saves manages rider names, tuning, graphics, sea preferences, stereo/mono/headphones, volume and original optional music. Sound begins only after starting. Solo results support initials, top-three times, best laps and stunt scores; custom sea states are unranked. Reached-course and class restrictions follow championship progress.
 
@@ -89,11 +95,11 @@ The GPU and CPU share fourteen dispersive wave bands with horizontal trochoidal 
 
 A reprojected foam atlas retains foam and bubbles after breaking crests and shallow shoreline breakers. Water includes depth-dependent absorption/refraction, roughness-filtered planar reflections with a sky fallback, forward light scattering through backlit crests, sun glints, fine ripples, caustics and rain rings. Environment lighting refreshes with weather; wet rocks change color and roughness, and ground-conforming contact shadows anchor vegetation. Adaptive graphics reduces reflection, foam and screen resolution when needed.
 
-This remains an interactive approximation rather than CFD. Waves do not overturn into fully simulated water volumes; foam and spray use a surface atlas, sheets and particles. Reflections remain planar. The ebb is compressed into a race, and stunt poses/dives are arcade maneuvers. Ramps heave as rigid platforms. The jet ski and riders are modeled in Blender; scenery remains procedural. The original salvage mode retains its earlier driving rules but shares the upgraded water rendering. Sound is synthesized; physical gamepad hardware and mobile touch input are not verified.
+This remains an interactive approximation rather than CFD. Waves do not overturn into fully simulated water volumes; foam and spray use a surface atlas, sheets and particles. Reflections remain planar. The ebb is compressed into a race, and stunt poses/dives are arcade maneuvers. Ramps heave as rigid platforms. The jet ski and riders are modeled in Blender; scenery remains procedural. The original salvage mode retains its earlier driving rules but shares the upgraded water rendering. Sound uses local ElevenLabs clips with synthesized fallback; physical gamepad hardware and mobile touch input are not verified.
 
 ## Source and verification
 
-`npm test` runs the automated suite. The 92-test full suite passed; the added spray-attachment test and 14 focused checks also pass (93 tests in total), covering all 36 course/class routes, championship scoring/unlocks/restart, salvage outcomes, stunts, two-player controls, water response, moving hazards/passages, saves and sound graphs.
+`npm test` runs the automated suite. All 106 tests pass, covering all 36 course/class routes, championship scoring/unlocks/restart, salvage outcomes, full park mastery, rider actions, two-player controls, water response, moving hazards/passages, saves and audio assets/mixing.
 
 Use `race.html?verify=1` for visible development controls. The verification driver supplies ordinary helm input at either real time or a 4x verification clock; it does not teleport or grant progress. The salvage harness at `/?verify=1` includes a full voyage and bounded seeded failure scenarios. These panels are absent from normal play.
 
