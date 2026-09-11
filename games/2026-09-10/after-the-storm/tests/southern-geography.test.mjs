@@ -117,8 +117,8 @@ test('the southern checkpoint accepts both mapped routes and still rejects the w
  }
 });
 
-test('Normal Hard and Expert grid-start races take the first-lap pier dive and rejoin all buoys',()=>{
- for(const difficulty of [0,1,2]){
+test('Normal Hard and Expert grid-start races take the first-lap pier dive and rejoin all buoys',async t=>{
+ for(const difficulty of [0,1,2])await t.test(['Normal','Hard','Expert'][difficulty],()=>{
  const s=createRace({course:getCourse('tempest',difficulty),difficulty}),r=s.racers[0];s.verifyPierDive=true;let under=0,contact=false,clearedAt=0;
  for(let i=0;i<36000&&s.phase!=='results';i++){
   stepRace(s,verificationInput(s,r),1/60);
@@ -130,7 +130,7 @@ test('Normal Hard and Expert grid-start races take the first-lap pier dive and r
  }
  assert.ok(contact&&under>10);assert.ok(clearedAt>0&&clearedAt<90);
  assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.dq,'');assert.equal(r.lap,4);
- }
+ });
 });
 
 test('all forward classes take the low-tide pier route on laps two and three without jumping or diving',()=>{

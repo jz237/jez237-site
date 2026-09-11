@@ -1,0 +1,17 @@
+{
+  "status": "Source inspection started; original stunt layout not yet reconstructed",
+  "source": "https://www.youtube.com/watch?v=1L0akpI2nuk",
+  "title": "Wave Race 64 - [N64 - HD] - Stunt Mode - Glacier Coast",
+  "author": "Cyberman65",
+  "observations": [
+    {
+      "videoSecondsApproximate": 4,
+      "timeRemaining": 20.0,
+      "speedKmh": 0,
+      "description": "Stationary rider below red start lights. Bright blue daytime sky, snowy coast, broad open starting water."
+    }
+  ],
+  "verification": "Paused original recording inspected through the browser; seek to five seconds then step backward thirty frames. Full HUD visible. Video timestamp is approximate; 20.0 timer and zero speed are read directly.",
+  "outstanding": ["Trace ring and ramp sequence", "Measure checkpoint resets independently", "Map original stunt branches and ice obstacles", "Calibrate dimensions and lap pace", "Implement and verify the original route"],
+  "limits": "This observation proves only the initial allowance and visible starting scene. It does not establish subsequent checkpoint allowances, object counts, exact positions or runtime parity."
+}

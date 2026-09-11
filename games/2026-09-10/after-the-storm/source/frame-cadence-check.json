@@ -1,0 +1,13 @@
+{
+  "date": "2026-09-11",
+  "context": "Local Chrome tab, race.html?verify=1, initial Sunny Beach menu scene, High graphics",
+  "method": "Read the visible verification performance panel; compare the ordinary Render scene checkbox enabled, disabled, then enabled again. No browser settings changed.",
+  "samples": [
+    {"rendering": true, "visibility": "visible", "focused": true, "frameIntervalMs": 1000, "cpuFrameMs": 5.9},
+    {"rendering": false, "visibility": "visible", "focused": true, "frameIntervalMs": 1000, "cpuFrameMs": 0.1},
+    {"rendering": true, "visibility": "visible", "focused": true, "frameIntervalMs": 1000, "cpuFrameMs": 5.5}
+  ],
+  "conclusion": "The one-second animation callback cadence persists with visual updates and rendering disabled. It is not sufficient evidence that water rendering causes the low observed FPS. Scheduling/environment behavior remains unresolved.",
+  "limits": "CPU frame duration measures synchronous JavaScript, not GPU completion. This experiment does not identify the exact scheduler cause, establish GPU performance, or prove smooth foreground gameplay. The document reported visible/focused throughout; do not claim it was demonstrably hidden.",
+  "finalState": "Rendering restored; empty browser console error log. Debug control and telemetry exist only with the verify query parameter. No publication."
+}

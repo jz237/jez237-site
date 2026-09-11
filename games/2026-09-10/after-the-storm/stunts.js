@@ -40,7 +40,7 @@ export function stuntCourse(base,{freeRide=false}={}){
  }
  return course;
 }
-export function createStunt(){return {score:0,rings:0,chain:0,nextCheckpoint:0,remaining:38,ringStatus:[],ringCooldown:[],trick:null,angle:0,airDuration:0,pose:null,poseTime:0,poseAward:0,used:{},completedTricks:{},lastCommand:'',lastLanding:0,event:'',eventId:0,tricks:0,crashes:0,complete:false};}
+export function createStunt(course){return {score:0,rings:0,chain:0,nextCheckpoint:0,remaining:course?.checkpoints?.[0]?.limit??38,ringStatus:[],ringCooldown:[],trick:null,angle:0,airDuration:0,pose:null,poseTime:0,poseAward:0,used:{},completedTricks:{},lastCommand:'',lastLanding:0,event:'',eventId:0,tricks:0,crashes:0,complete:false};}
 function event(s,text){s.event=text;s.eventId++;}
 function crossing(g,ox,oz,x,z){const before=(ox-g.x)*g.tx+(oz-g.z)*g.tz,after=(x-g.x)*g.tx+(z-g.z)*g.tz;if(before>0||after<0||after-before<1e-6)return null;const f=-before/(after-before);return {f,lateral:-(ox+(x-ox)*f-g.x)*g.tz+(oz+(z-oz)*f-g.z)*g.tx};}
 export function stepStunt(s,r,course,input,dt,ox,oz,oldY,storm=0){if(s.complete)return;const free=!!course.freeStunts;if(!free)s.remaining-=dt;if(!free&&s.remaining<=0){r.dq='Stunt checkpoint time expired';event(s,'TIME UP');return;}const command=input.trick||'';
@@ -56,7 +56,7 @@ export function stepStunt(s,r,course,input,dt,ox,oz,oldY,storm=0){if(s.complete)
  for(let i=0;i<course.rings.length;i++){if(free&&s.ringStatus[i]&&r.raceTime>=(s.ringCooldown[i]||0))s.ringStatus[i]=null;if(s.ringStatus[i])continue;const ring=course.rings[i],hit=crossing(ring,ox,oz,r.x,r.z);if(!hit||Math.abs(hit.lateral)>25)continue;const y=oldY+(r.hydro.y-oldY)*hit.f+.85,through=Math.hypot(hit.lateral,y-ringHeight(ring,course,r.raceTime,storm))<ring.radius&&(ring.type!=='dive'||r.hydro.y<r.hydro.waterHeight-.45);
   s.ringStatus[i]=through?'hit':'miss';if(free)s.ringCooldown[i]=r.raceTime+(through?10:2);if(through){s.chain++;s.rings++;const points=50*s.chain;s.score+=points;event(s,'Ring '+s.chain+' +'+points);}else{s.chain=0;event(s,'Ring missed · chain reset');}
  }
- const cp=course.checkpoints[s.nextCheckpoint];if(cp){const hit=crossing(cp,ox,oz,r.x,r.z);if(hit&&Math.abs(hit.lateral)<cp.width){const bonus=Math.floor(Math.max(0,s.remaining)*10)*5;s.score+=bonus;s.nextCheckpoint++;s.used={};event(s,'Checkpoint '+s.nextCheckpoint+'/4 · time bonus +'+bonus);s.remaining=38;if(s.nextCheckpoint===4){s.complete=true;r.finishTime=r.raceTime;}}}
+ const cp=course.checkpoints[s.nextCheckpoint];if(cp){const hit=crossing(cp,ox,oz,r.x,r.z);if(hit&&Math.abs(hit.lateral)<cp.width){const bonus=Math.floor(Math.max(0,s.remaining)*10)*5;s.score+=bonus;s.nextCheckpoint++;s.used={};event(s,'Checkpoint '+s.nextCheckpoint+'/4 · time bonus +'+bonus);s.remaining=course.checkpoints[s.nextCheckpoint]?.limit??38;if(s.nextCheckpoint===4){s.complete=true;r.finishTime=r.raceTime;}}}
  if(!free&&s.remaining<=0&&!s.complete){r.dq='Stunt checkpoint time expired';event(s,'TIME UP');}
 }
 export function applyRamp(r,ramps,oldX,oldZ,lean=0,time=0,storm=0){let contact=false;for(const ramp of ramps||[]){const along=(r.x-ramp.x)*ramp.tx+(r.z-ramp.z)*ramp.tz,across=-(r.x-ramp.x)*ramp.tz+(r.z-ramp.z)*ramp.tx;const previous=(oldX-ramp.x)*ramp.tx+(oldZ-ramp.z)*ramp.tz,back=ramp.length/2+.65;
