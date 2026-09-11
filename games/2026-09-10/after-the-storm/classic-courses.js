@@ -64,6 +64,11 @@ const lakeNormalBuoys=lakeBuoys([[371,146,-1],[357,88,1],[279,58,-1],[116,65,-1]
 const lakeHardBuoys=lakeBuoys([[371,146,-1],[357,88,1],[279,58,-1],[116,65,-1],[35,140,-1],[45,170,1],[35,206,-1],[46,244,1],[37,284,-1],[120,393,1],[212,390,1],[250,393,-1],[325,368,1]]);
 const lakeExpertBuoys=lakeBuoys([[371,146,-1],[357,88,1],[279,58,-1],[116,65,-1],[35,140,-1],[45,170,1],[35,206,-1],[46,244,1],[37,284,-1],[103,407,-1],[152,388,1],[190,398,-1],[229,367,1],[258,393,-1],[299,368,1],[360,358,-1]]);
 const lakeReverseBuoys=lakeBuoys([[70,129,-1],[103,101,1],[161,105,-1],[182,67,1],[221,99,-1],[270,84,1],[316,102,-1],[367,195,-1],[378,239,1],[373,269,-1],[380,314,1],[374,341,-1],[297,405,-1],[134,405,-1],[53,387,1],[63,335,-1]].map(([x,z,side])=>[420-x,478-z,side]));
+lakeNormalBuoys[11].approach={x:(293-200)*.75,z:(395-240)*.75,throttle:.4,radius:3};
+lakeHardBuoys[11].approach={x:(228-200)*.75,z:(382-240)*.75,throttle:.4,radius:3};
+lakeReverseBuoys[2].approach={x:(277-200)*.75,z:(383-240)*.75,throttle:.4,radius:3};
+const lakePosts=[[253.5,358.5],[264.5,369.5],[239.5,374.5],[283.5,375.5],[182.5,380.5],[224.5,380.5],[252.5,381.5],[290.5,385.5],[268.5,387.5],[200.5,388.5],[238.5,389.5],[222.5,399.5],[249.5,402.5]];
+const lakePostObstacles=(dx=0,dz=0)=>lakeMap(lakePosts.map(([x,z])=>[x+dx,z+dz])).map(([x,z])=>({x,z,r:.45,type:'post'}));
 const lakeNorth=[[374,274],[366,188],[366,91],[341,60],[306,63],[246,54],[178,54],[122,61],[84,67],[59,86],[31,160],[40,212],[31,269],[52,325],[74,372],[123,404]];
 const lake={
  name:'Drake Lake',theme:'lake',tag:'03 / DRAKE LAKE',layoutRevision:3,
@@ -72,7 +77,7 @@ const lake={
  description:'A misty freshwater circuit with irregular wooded banks, a small island, timber posts and weed beds that slow a wet hull.',
  anchors:fromMap([[374,274],[366,188],[366,91],[341,60],[306,63],[246,54],[178,54],[122,61],[84,67],[59,86],[31,160],[40,212],[31,269],[52,325],[74,372],[123,404],[186,416],[243,407],[307,376],[356,336]],200,240),
  ground(x,z){return clamp(Math.max(-polygonDistance(lakeLand,x,z),-polygonDistance(lakeIsland,x,z),polygonDistance(lakeOuter,x,z))*.4,-8,13);},
- obstacles:fromMap([[182,381],[224,370],[254,355],[267,373],[290,382],[269,401],[240,391],[214,392]],200,240).map(([x,z])=>({x,z,r:.45,type:'post'})),
+ obstacles:lakePostObstacles(),obstaclesByClass:[lakePostObstacles(),lakePostObstacles(),lakePostObstacles(),lakePostObstacles(4,3)],
  resistance:[{x:(320-200)*.75,z:(352-240)*.75,rx:13,rz:9,drag:.75},{x:(129-200)*.75,z:(88-240)*.75,rx:12,rz:5,drag:.65}],raceRamps:[]
 };
 const fortMap=points=>fromMap(points,210,300,.8);
