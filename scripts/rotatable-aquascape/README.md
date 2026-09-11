@@ -112,3 +112,9 @@ The full front view and close three-quarter daylight/evening views were visually
 Tall green colonies now favor slender leaves, and the red groups favor narrow blades with occasional broad leaves. Rounded foliage remains concentrated in shorter plants. Six modeled profiles per plant type vary the widest part of the blade, curvature, asymmetry and handed twist; normals and glass fitting use the resulting geometry. Leaf nodes have slightly irregular spacing while keeping opposite leaf pairs and compact growing tips. These remain artistic plant models, not botanical reconstructions.
 
 Front, close three-quarter and side/evening views were checked visually. The close preview reported 60 fps and 4.6 ms synchronous render time, with no browser warnings/errors. Build and all 31 existing tests pass; those tests cover behavior and geometry utilities, not the photographic accuracy of the new silhouettes. Fish behavior, current deformation and the original photographic aquarium are unchanged.
+
+## Studio lighting balance
+
+The studio floor is darker, rougher and nonmetallic, reducing the broad bright pool that distracted from the aquarium. The high softbox now aims toward the tank at lower intensity, retaining the canopy as the principal light while helping shaded surfaces read. Its elevated placement avoids a broad reflection across the front pane.
+
+The substrate's procedural caustic pattern now modulates received light instead of adding diffuse-colored emission. Shadowed and evening surfaces therefore retain their lighting response. This remains a restrained visual approximation rather than simulated refracted irradiance. Front daylight and three-quarter evening views were checked, with no browser shader errors; TypeScript and the production build pass. Fish and geometry code are unchanged, and the previously passing behavior tests were not repeated for this lighting-only pass.
