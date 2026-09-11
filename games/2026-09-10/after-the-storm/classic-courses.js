@@ -1,3 +1,4 @@
+import {sunsetStuntLayout} from './sunset-stunts.js';
 import {sunnyStuntLayout} from './sunny-stunts.js';
 import {createDolphinCourse} from './dolphin-course.js';
 // Authored reconstruction from course observations, in metres. Map coordinates
@@ -43,7 +44,7 @@ const sunsetBalls=points=>sunsetMap(points).map(([x,z])=>({x,z,r:.85,type:'ball'
 const sunsetForwardBalls=sunsetBalls([[364,350],[375,350],[388,350],[359,358],[369,358],[380,358],[390,358],[364,366],[374,366],[385,366]]);
 const sunsetReverseBalls=sunsetBalls([[124,183],[135,183],[145,183],[119,191],[129,191],[140,191],[150,191],[121,199],[134,199],[145,199]].map(([x,z])=>[512-x,552-z]));
 const sunset={
- name:'Sunset Bay',theme:'resort',tag:'02 / SUNSET BAY',layoutRevision:4,
+ name:'Sunset Bay',theme:'resort',tag:'02 / SUNSET BAY',layoutRevision:5,stuntLayout:sunsetStuntLayout(),
  finishLine:sunsetMap([[250,300],[420,300]]),finishBypass:3,
  waveTrain:[(130-245)*.75,(223-275)*.75,14,.9],
  mooredBoats:[[90,146],[93,299]].map(([x,z],i)=>({id:'sunset-mooring-'+i,x:(x-245)*.75,z:(z-275)*.75,width:3.5,length:10,heading:0})),
