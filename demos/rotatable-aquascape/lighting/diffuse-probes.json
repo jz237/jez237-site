@@ -19,11 +19,11 @@
   "triangles": 6403819,
   "bytes": 60480,
   "coefficientRange": [
-    -1.44426691532135,
-    1.3908730745315552
+    -1.4445439577102661,
+    1.3905296325683594
   ],
   "hits": 650839,
-  "seconds": 19.79,
+  "seconds": 19.34,
   "model": "single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds/moss excluded",
   "sourceHashes": {
     "lib/BakeExport.ts": "2e98e04551eda48df2ce235e6e7f4186080a893b858fbc3a7382ecf939102840",
@@ -36,7 +36,7 @@
     "lib/TankSpace.ts": "7778538c968f10f4634c2527aa61e0292c272c695d464d0371b8a328ecee271f",
     "lib/Substrate.ts": "73611157aa8a831849689e0c0b8da6e68c999c7a939c9a83465660a9c3c1e9a8",
     "lib/SubstrateVolume.ts": "56fd05a3a76161cf15866ca66f2888fb50664f25fb3b8aab8d0e60e141ea1a6b",
-    "lib/LeafSurface.ts": "7e904078170abd2eaadab87331486243de1592d93ee1c5004dc0eaa2f010078a"
+    "lib/LeafSurface.ts": "b36a27bbb868c26fd62e00245ae6f30ccf1d45cc1545350e699539f69688d0d8"
   },
-  "binarySHA256": "24e064835a7707d0fa5f776145e9a05fcf0c1e21fb5a44fb2ecf5a29063f2401"
+  "binarySHA256": "0987b7966f82dccb5b834e7acdb2682b47064d4f4e186cb1aacf538960e207fb"
 }
