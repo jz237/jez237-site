@@ -121,13 +121,14 @@ const glacier={
 const southernMap=points=>fromMap(points,210,325,.8);
 const southernCore=southernMap([[313,101],[329,115],[329,170],[320,247],[329,294],[335,342],[348,379],[338,420],[332,463],[337,510],[326,539],[302,541],[292,529],[295,504],[310,475],[314,407],[313,351],[310,290],[306,235],[312,178],[295,132],[296,116]]);
 const southernShoal=southernMap([[313,70],[340,79],[359,102],[364,132],[354,175],[345,224],[347,282],[364,331],[377,370],[375,409],[368,451],[372,505],[358,551],[336,576],[311,584],[279,572],[265,551],[264,524],[275,492],[298,462],[301,412],[298,363],[300,324],[295,285],[292,240],[299,191],[287,164],[270,145],[266,111],[281,89]]);
-function southernPier(ax,az,bx,bz,depth=6){const [[x,z],[ex,ez]]=southernMap([[ax,az],[bx,bz]]),length=Math.hypot(ex-x,ez-z);return {x:(x+ex)/2,z:(z+ez)/2,tx:(ex-x)/length,tz:(ez-z)/length,length,depth,bottom:.65,top:1.05,material:'wood'};}
+function southernPier(ax,az,bx,bz,depth=6){const [[x,z],[ex,ez]]=southernMap([[ax,az],[bx,bz]]),length=Math.hypot(ex-x,ez-z);return {x:(x+ex)/2,z:(z+ez)/2,tx:(ex-x)/length,tz:(ez-z)/length,length,depth,bottom:.65,top:1.05,material:'wood',pileSpacing:12};}
+const southernPlatform=southernMap([[316,318],[329,329],[342,353],[340,387],[321,418],[300,397],[289,353],[301,338]]);
 const southern={
  name:'Southern Island',theme:'island',tag:'08 / SOUTHERN ISLAND',layoutRevision:2,
  description:'An eastern sand island and a western islet joined by piers. The falling tide opens clearance beneath the decks while exposing the surrounding shoals.',
  anchors:southernMap([[397,368],[397,288],[388,215],[388,140],[372,91],[338,40],[298,38],[260,76],[238,115],[235,151],[214,176],[181,177],[142,173],[118,186],[99,224],[66,251],[57,287],[65,320],[94,355],[116,398],[140,446],[157,494],[168,537],[194,578],[251,609],[309,611],[354,591],[384,551],[399,495],[399,422]]),
- ground(x,z){const [ix,iz]=southernMap([[117,287]])[0],distance=Math.hypot(x-ix,z-iz),core=-polygonDistance(southernCore,x,z)*.32,fringe=Math.min(-.1,-.45-polygonDistance(southernShoal,x,z)*.13),islet=(27*.8-distance)*.35,isletFringe=Math.min(-.1,-.45+(45*.8-distance)*.13);return clamp(Math.max(core,fringe,islet,isletFringe),-10,5);},
- crossbars:[southernPier(314,119,315,528,6),southernPier(117,287,315,352,6),southernPier(172,526,315,526,8),southernPier(216,526,216,541,8)],
+ ground(x,z){const [ix,iz]=southernMap([[117,287]])[0],distance=Math.hypot(x-ix,z-iz),core=-polygonDistance(southernCore,x,z)*.32,fringe=Math.min(-.1,-.45-polygonDistance(southernShoal,x,z)*.13),islet=(27*.8-distance)*.35,isletFringe=Math.min(-.1,-.45+(45*.8-distance)*.13);return Math.min(clamp(Math.max(core,fringe,islet,isletFringe),-10,5),.35+Math.max(0,polygonDistance(southernPlatform,x,z))*.5);},
+ crossbars:[southernPier(314,119,315,528,6),southernPier(117,287,315,352,6),southernPier(172,526,315,526,8),southernPier(216,526,216,541,8),{outline:southernPlatform,bottom:.65,top:1.05,material:'wood'}],
  obstacles:[],resistance:[]
 };
 export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort,port,neon:city,glacier,tempest:southern};

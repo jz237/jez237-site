@@ -1,3 +1,4 @@
+import {barrierCollision} from './course-barriers.js';
 import {iceSurfaceAt} from './ice-surfaces.js';
 import {ground,waterLevel} from './simulation.js';
 import {obstaclePosition} from './course-environment.js';
@@ -10,7 +11,7 @@ function safeWater(s,x,z){
  for(const [dx,dz] of [[0,0],[1.5,0],[-1.5,0],[0,1.5],[0,-1.5]])
   if(floor(x+dx,z+dz)>waterLevel.value-1.2)return false;
  if((s.course.rocks||[]).some(q=>{const p=obstaclePosition(q,s.time);return Math.hypot(x-p.x,z-p.z)<q.r+2;}))return false;
- return !passageCollision(s.course.passage,x,waterLevel.value,z,s.time,s.passageOpenedAt);
+ return !barrierCollision(s.course.crossbars,x,waterLevel.value,z)&&!passageCollision(s.course.passage,x,waterLevel.value,z,s.time,s.passageOpenedAt);
 }
 
 export function rememberWater(s,r){
