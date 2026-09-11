@@ -27,7 +27,8 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
  const sourceRocks=rockFile.scene.children.filter(o=>o instanceof T.Mesh) as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>[];
  const rockSource=sourceRocks[0].material;
  rockOcclusion.flipY=false;rockOcclusion.anisotropy=8;
- const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockOcclusion,aoMapIntensity:.65,color:0xb8c0b9,normalScale:new T.Vector2(.95,.95),roughness:.9,metalness:0,ior:1.22,specularIntensity:.75});
+ // Submerged stone keeps dark mineral body color beneath small surface highlights.
+ const rockMaterial=new T.MeshPhysicalMaterial({map:rockSource.map,normalMap:rockSource.normalMap,roughnessMap:rockSource.roughnessMap,aoMap:rockOcclusion,aoMapIntensity:.8,color:0x949f99,normalScale:new T.Vector2(1.1,1.1),roughness:.84,metalness:0,ior:1.22,specularIntensity:.75});
  const mineral={saturation:.58,tint:[.76,.78,.81]};
  rockMaterial.userData.bakeDiffuse=mineral;
  rockMaterial.onBeforeCompile=shader=>{

@@ -310,3 +310,9 @@ The sand path and its individual quartz grains use a warmer, lower diffuse refle
 Front and three-quarter comparisons show a cream mineral path with retained grain detail instead of the previous broad white strip. The angled preview reported 60 fps / 7.5 ms with no warnings/errors. Existing substrate-shell and tank-space checks pass. No new assets or paid services were used. Full photographic fidelity remains unfinished.
 
 The indirect field was re-exported and rebuilt against the unchanged 8,415,147-triangle scene in 21.41 seconds, incorporating the revised sand/grain reflectance and vertex pigment. Ten targeted substrate/tank-space/reflection/lighting checks and the production build pass.
+
+## Submerged mineral rock response
+
+The scanned rocks use a darker mineral body color, stronger crevice occlusion and slightly more distinct scan-normal detail. Roughness is reduced moderately to retain small surface highlights against the darker stone. The adjustment targets the pale, chalky rock appearance in the reference comparison while preserving the actual scan textures and moss separation. Geometry, grounding, collision envelopes and plant placement are unchanged. No new assets or paid services were used.
+
+Front and three-quarter views were reviewed; the angled preview reported 60 fps / 7.8 ms without browser warnings/errors. Six targeted rock/moss/reflection/lighting checks and the production build pass. The static indirect field was rebuilt against the unchanged 8,415,147-triangle scene in 21.50 seconds to include the revised mineral reflectance. Photographic fidelity remains unfinished.
