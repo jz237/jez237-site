@@ -344,3 +344,9 @@ The new conservative height bound is at most .056 world units, within the existi
 Leaf bends now spread through the midrib using a rooted cubic flexibility profile. The attachment and its tangent remain fixed while the mid-blade moves more, and the free tip stays within the existing planting clearance. Each leaf keeps its own phase and response rate; faster blade response rides the slower, spatially varying whole-plant current. The analytic normal and shadow deformation follow the same motion. The tissue roughness map now modulates a softer surface response to reduce the polished plastic appearance without flattening the leaf's pigment or transmitted light.
 
 Plant-current tests cover attachment, visible mid-blade motion, clearance and deformed normals. Static plant geometry, pigment, fish behavior and the baked diffuse-light field are unchanged.
+
+### Mature rear planting
+
+Tall rear colonies now extend closer to the water surface, reducing the broad empty band above the vegetation. Mature shoots keep their established leaf spacing as they gain height; individual tip ceilings and lower colony margins avoid a uniformly clipped canopy. Foreground colony height rules remain the same. The seeded regeneration also redistributes individual leaves, rosettes and carpet instances.
+
+The regenerated scene has 29,724 botanical leaf instances. An export audit checks every static blade vertex for finite coordinates and placement inside the tank; plant-current and tank-clearance tests cover the retained motion allowances. Bounced lighting was rebuilt against 8,973,091 triangles in 21.42 seconds. This remains a procedural botanical approximation; the reference's individual leaf shapes and hardscape composition are not yet fully matched. No paid assets or services were used.
