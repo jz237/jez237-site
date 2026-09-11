@@ -29,7 +29,7 @@ export function addFinish({robotron=false,joust=false,root,cp,coin,crt,marquee,f
  mesh(joy,grip,polished,[0,.15,0]);
  ring(joy,.011,.0015,[0,.006,0],m.trim,[Math.PI/2,0,0]);
  // Concentric scratches and short broken scuffs cluster around the button rims.
- const controls=joust?[[-.25,.58],[.48,.58],[-.08,.46],[.08,.46]]:robotron?[[.52,.49],[.52,.67]]:[[-.36,.73],[.32,.49],[.46,.49],[.24,.65],[0,.80],[-.12,.46],[.12,.46]];
+ const controls=joust?[[-.244,.600],[.427,.600],[-.080,.466],[.083,.466]]:robotron?[[.516,.517],[.516,.732]]:[[-.36,.73],[.32,.49],[.46,.49],[.24,.65],[0,.80],[-.12,.46],[.12,.46]];
  controls.forEach(([x,z],i)=>{
   for(let j=0;j<5;j++){
    const points=[];const r=.046+j*.0013;
