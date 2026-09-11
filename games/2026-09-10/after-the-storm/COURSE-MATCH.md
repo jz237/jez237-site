@@ -255,3 +255,10 @@ Resolved the original-buoy race failure described above by reshaping the eastern
 All 17 focused tests pass, including ordinary-input three-lap completion with zero misses and no disqualification in all four classes, original buoy transcription, wet eastern yellow approaches at low tide, exposed inner shoal, physical pier clearance, supporting piles and high/low-water ship jumps. These do not prove original shortcut parity or a valid grid-start ship-jump landing, which remain pending. Browser inspection shows correct buoy rendering and no logged errors during the race. Full regression: 149/149 tests passed in 98.14 seconds (`work/southern-original-buoys-tests.log`). No publication yet.
 
 Browser completion: Normal, course sea state, high graphics, 5:05.983 total, zero misses, 36 checkpoints passed, first place, 24 landings, no logged browser errors. Reported 60 fps at the finish; this is a single end-of-race reading, not a performance benchmark.
+
+
+### Grid-start ship-jump audit — 2026-09-11
+
+The previous inspection activated within 90 m of the ramp while still beside the island, cutting across the northern land and missing the third buoy. It now stays on the race route until the first two buoys are passed and the island tip is rounded. A focused test verifies first ramp contact with three legitimately earned power units and zero misses, using ordinary helm inputs from the grid.
+
+The landing remains incomplete: default course-sea run reaches the ramp at 35.20 s / 16.51 m/s, but contacts the ship before landing at 37.48 s. Full-throttle and longer/aligned run-up experiments, a northern ramp lane, and an earned-full-power lap-two attempt also hit the ship in course waves. Those experimental driver changes were removed; the retained change only fixes premature activation. No ship geometry, ramp geometry, physics, power awards or buoy adjudication was changed. The clean high-speed seeded jump tests must not be presented as evidence of a successful grid-start approach. Next work must resolve the actual launch trajectory/landing clearance and verify the return to the remaining original buoy sequence.
