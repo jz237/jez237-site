@@ -157,7 +157,8 @@ export class Aquarium{
   for(let i=0;i<3;i++)this.box(8.75,.018,.105,this.ledMaterial,V(0,6.335,-.37+i*.2),false);
   for(const x of [-3.8,3.8]){this.box(.019,4,.019,dark,V(x,8.45,-.15),false);}
   // Transparent return pipe and intake, both physically outside the planting.
-  const pipeMat=new T.MeshPhysicalMaterial({color:0xe5f0e9,transparent:true,opacity:1,transmission:.96,thickness:.035,ior:1.5,roughness:.025,metalness:0,depthWrite:false,envMapIntensity:1.2});
+  const pipeMat=new T.MeshPhysicalMaterial({color:0xe5f0e9,transparent:true,opacity:1,transmission:.96,thickness:.035,ior:1.5,roughness:.025,metalness:0,depthWrite:false,envMapIntensity:.4});
+  pipeMat.envMap=this.scene.environment;
   for(const x of [4.4,4.77]){
    const pts=[V(x,1.1,-1.99),V(x,5.1,-1.99),V(x,5.79,-1.99),V(x,5.84,-2.55),V(x,3.5,-2.62)];
    this.mesh(new T.TubeGeometry(new T.CatmullRomCurve3(pts),96,.065,24,false),pipeMat,V(0,0,0),false);

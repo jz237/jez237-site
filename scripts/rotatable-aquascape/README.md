@@ -267,3 +267,10 @@ The three shadowed canopy samples now use intensity 60 rather than 36, revealing
 Canopy color, positions, intensity, cone and decay settings now come from one JSON configuration shared by the renderer and offline bake. The bake also uses the actual sRGB light color conversion and the renderer's distance cutoff. Provenance checks cover both the shared configuration and bake script. The indirect field was refreshed against unchanged 7,388,395-triangle geometry in 20.43 seconds.
 
 Front daylight and three-quarter evening views were checked; the evening preview reported 60 fps / 7.5 ms with no browser warnings/errors. Four targeted lighting/reflection checks and the production build pass. No paid services or assets were used. Fine planting structure and the overall photographic match remain incomplete.
+
+
+## Restored polished-glass environment reflections
+
+Glass edges and pipes now explicitly share the studio environment texture. Inspection of the installed Three renderer showed that a null material envMap makes the renderer use scene.environmentIntensity, ignoring the per-material envMapIntensity. The scene's .10 intensity had therefore kept the edge and pipe reflections much dimmer than intended. Broad panes retain .10 to preserve clarity; polished edges use .7 and pipes .4. An initial 1.2 pipe setting was reduced after angled review looked too metallic.
+
+Trials with thicker bevels and different edge tint were reverted after identifying the actual intensity binding issue. Geometry, scene illumination and the static bake remain unchanged. Front and angled views were reviewed; the angled preview reported 60 fps / 6.6 ms with no browser warnings/errors. Four targeted reflection/lighting checks and the production build pass. No new assets or paid services were used. Full photographic fidelity remains incomplete.
