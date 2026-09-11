@@ -6,14 +6,29 @@ const ripple=`
 float rippleHeight(vec2 p){
  float inlet=length(p-vec2(4.25,-1.6));
  float agitation=.55+.45*exp(-inlet*.32);
- float broad=sin(p.x*3.1+p.y*4.2-time*1.07)*.019;
- float cross=sin(p.x*7.3-p.y*5.6-time*1.63+sin(p.y*1.7)*.30)*.006;
- float fine=sin(p.x*17.2+p.y*13.8-time*2.21)*.0012;
- float rings=sin(inlet*18.-time*3.1)*exp(-inlet*.58)*.007;
+ float broad=sin(p.x*3.1+p.y*4.2-time*1.07)*.027;
+ float cross=sin(p.x*7.3-p.y*5.6-time*1.63+sin(p.y*1.7)*.30)*.009;
+ float fine=sin(p.x*17.2+p.y*13.8-time*2.21)*.0015;
+ float rings=sin(inlet*18.-time*3.1)*exp(-inlet*.58)*.009;
  float edge=min(5.04-abs(p.x),2.30-abs(p.y));
- return ((broad+cross+fine)*agitation+rings)*smoothstep(0.,.18,edge);
+ // A narrow raised meniscus meets the glass; the contact line retains a
+ // small part of the passing wave instead of becoming a rigid straight bar.
+ float wetEdge=.015*exp(-max(0.,edge)/.025);
+ float wallMotion=.12+.88*smoothstep(0.,.18,edge);
+ return ((broad+cross+fine)*agitation+rings)*wallMotion+wetEdge;
 }
 `;
+/** Concentrate real surface vertices around the curved glass contact zone. */
+function waterSurfaceGeometry(){
+ const geometry=new T.PlaneGeometry(10.08,4.6,192,96),positions=geometry.getAttribute('position');
+ for(let i=0;i<positions.count;i++){
+  positions.setXY(i,Math.sin(positions.getX(i)/5.04*Math.PI*.5)*5.04,Math.sin(positions.getY(i)/2.3*Math.PI*.5)*2.3);
+ }
+ positions.needsUpdate=true;geometry.computeBoundingBox();geometry.computeBoundingSphere();
+ // Shader displacement includes the raised contact edge and passing waves.
+ geometry.boundingSphere!.radius+=.05;
+ return geometry;
+}
 /** Two-sided scene captures with depth-guided reflection rays across the moving surface. */
 export class AquariumWater extends T.Group {
  private surfaces:Reflector[]=[];
@@ -21,7 +36,7 @@ export class AquariumWater extends T.Group {
  constructor(reflections:ReflectionPool){
   super();
   for(const underside of [true,false]){
-   const surface=new Reflector(new T.PlaneGeometry(10.08,4.6,160,72),{textureWidth:1024,textureHeight:1024,clipBias:.002,multisample:2,shader:{
+   const surface=new Reflector(waterSurfaceGeometry(),{textureWidth:1024,textureHeight:1024,clipBias:.002,multisample:2,shader:{
     name:'AquariumWaterReflection',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},illumination:{value:1},underside:{value:underside?1:0}},
     vertexShader:`uniform mat4 textureMatrix;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
     void main(){vec3 displaced=position;world=(modelMatrix*vec4(position,1.)).xyz;float wave=rippleHeight(world.xz);displaced.z+=wave*(underside>.5?-1.:1.);world.y+=wave;reflectionUv=textureMatrix*vec4(displaced,1.);gl_Position=projectionMatrix*modelViewMatrix*vec4(displaced,1.);}`,

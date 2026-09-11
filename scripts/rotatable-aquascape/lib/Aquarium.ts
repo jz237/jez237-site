@@ -139,7 +139,7 @@ export class Aquarium{
   ground.rotation.x=-Math.PI/2;
   // Keep the studio softbox above the viewing axis: a low emitter reflected as
   // an artificial horizontal bar through the middle of the clear front pane.
-  const roomBounce=new T.RectAreaLight(0xc1dcdd,3.2,11,4);
+  const roomBounce=new T.RectAreaLight(0xc1dcdd,.8,11,4);
   roomBounce.position.set(0,11,7);roomBounce.lookAt(0,2,0);this.scene.add(roomBounce);
   this.box(10.45,.88,4.95,dark,V(0,-.51,0));
   this.box(10.7,.13,5.1,new T.MeshStandardMaterial({color:0x182123,metalness:.75,roughness:.28}),V(0,-.035,0));
@@ -164,8 +164,6 @@ export class Aquarium{
  private height(x:number,z:number){return .3+.55*Math.exp(-((x+2.5)**2/6+(z+.8)**2/2))+.22*(1-(z+2.3)/4.6)+.035*Math.sin(x*2+z)*Math.cos(z*3);}
  private buildWater(){
   const water=new AquariumWater(this.reflections);this.scene.add(water);
-  const line=new T.MeshBasicMaterial({color:0xc5e3d1,transparent:true,opacity:.5,depthWrite:false});
-  for(const z of [-2.3,2.3])this.box(10.08,.015,.012,line,V(0,5.36,z),false);
   return water;
  }
  private buildParticles(){
