@@ -1,0 +1,392 @@
+# Rotatable Living Aquascape
+
+Independent comparison to the photographic Living Aquascape. Public route: `/demos/rotatable-aquascape/`. The original lives at `/demos/living-aquascape/`; its scene and application bundle are unchanged by this project.
+
+## Run
+
+Requires Node 22.13 or newer. From this directory:
+
+```sh
+npm ci
+npm run dev
+npm run build
+npm test
+```
+
+The production build is in `dist/`. Copy its contents into `demos/rotatable-aquascape/` before site publication. Vite uses relative asset URLs; the demo can also be served independently from any static web server. No API keys, external CDNs, paid services, or external API calls are needed.
+
+## Scene and controls
+
+Three.js perspective scene with a limited front-and-side orbit. Drag to rotate; wheel/pinch or buttons to zoom. Front, three-quarter, and side presets ease to their destination. Pause freezes fish, food, water, plant sway, and bubbles while the camera remains usable. Evening dims the lighting. Feeding releases actual sinking particles that individual fish perceive and consume.
+
+The landscape combines procedural glass, substrate, sand, planting, plumbing, light fixture and cabinet with freely licensed scanned hardscape. Poly Haven Dead Tree Trunk 02 retains its scanned geometry, UVs and physical material maps while being bent into asymmetric branches. Rock Moss Set 01 supplies independently placed irregular stones. Fern 02 supplies textured curved fronds with alpha-tested edges. The botanical plant meshes have modeled blades and petioles, varied proportions, tissue textures, venation and restrained current movement. See public/models/ATTRIBUTION.md for authors and CC0 source links. Water uses an actual two-sided planar scene reflection with moving distortion; the underside reflects planting and the top reflects the light fixture. The tetra skin reuses the user's existing `living-species.png` artwork; no new assets were purchased or generated using paid services.
+
+## Fish
+
+`Tetra3D` is adapted from the existing Living Aquascape mesh. The photographic depth-mask shader is removed; normal depth testing handles occlusion. `TetraKinematics`, `TetraSwimming`, `FishBrain`, `FishCollisions`, and `SchoolRoute` retain the established traveling body wave, steady head, independently animated fins, bursts/glides, inspections, upright turns, individual needs, memory, schooling, and continuous depth movement. The scene maps the behavior coordinates uniformly into world units; fish do not change scale as a fake substitute for perspective. `TankSpace` adds world-space hardscape contact and confines plant geometry to the glass.
+
+31 automated tests cover the reused locomotion, body/fin motion, needs, food perception, schooling, depth and spacing, plus world-coordinate conversion, solid contact, leaf confinement, bounded reflection capture, and collision coverage of every vertex of the six tapered wood scans and all nine placed rock scans. Browser checks cover the camera presets, drag, zoom, feeding, pause, lighting, responsive controls and comparison navigation.
+
+## Limits
+
+This is a real-time 3D composition using both procedural planting and photogrammetric hardscape, not a path-traced reconstruction of the reference photograph. The reference-driven realism goal remains active: the plant materials, wood junctions, illumination and optical detail still fall short of the reference. The fern assets are artistic ornamental stand-ins, not species-accurate aquatic specimens. Glass reflections, surface ripples and caustics are approximations; the tank is not a fluid simulation. The LED area light supplements three shadowed samples along the fixture; the continuous area light itself does not cast shadows. Hardscape avoidance uses conservative spherical envelopes, and small leaves are not individual collision obstacles. The fish behavior is illustrative, not a biological research model. The detailed scene needs WebGL and will be more demanding on older mobile GPUs.
+
+## Realism iteration checks
+
+The scan files are bundled locally; their download MD5s were checked against the source manifest. GLTF loading completes before the loading overlay is removed. Front and side views were inspected with the new meshes. All 27 fish/tank tests still pass. The development build exposes FPS, synchronous renderer time, rendered triangle count and fish positions as data attributes on the scene element for inspection; those diagnostics are absent from the production build. Carpet blades use 24 triangles, slender stem leaves 48, red leaves 64 and rounded leaves 80 to retain their different silhouettes.
+
+The planting pass adds uneven colonies at different depths, curved stems, forked growing tips and varying leaf-node spacing. `PlantCurrent` deforms each plant around its root, keeping leaves, stems and cast shadows attached. Thin-leaf backlighting uses the point/spot/directional lights' attenuated and shadowed irradiance. `EpiphyteMoss` samples the scanned triangle surfaces for attached patches of modeled moss. Surface ripples now displace the water mesh and distort the scene reflection according to the bent reflection ray, including ripples near the filter return. A rectangular light follows the physical LED strip and dims with evening mode.
+
+The revised scene was visually checked at desktop and 720×1280 portrait sizes, including the front and side presets, feeding, pause and evening mode. The in-app preview measured approximately 60 fps on the development machine; this is not a performance guarantee for other devices. Background Chrome was throttled to approximately 1 fps and is unsuitable for motion assessment in that state.
+
+The optics pass adds filtered, mipmapped reflection captures to suppress glittering at grazing angles. Water displacement fades to a fixed contact line at the glass. `AquariumGlass` models thicker clear panes, green edges and live internal side-wall reflections that fade with viewing angle. `ReflectionPool` prevents recursive scene capture; secondary mirrors use their last complete image. `WaterDepth` computes the viewing ray's distance inside the water and applies subtle RGB absorption, replacing most of the previous room-wide haze. Glass transmission samples the already-shaded scene, so it is excluded from that second attenuation step. These effects approximate aquarium optics rather than tracing every refracted light path.
+
+The optics build passed all 29 tests, including two reflection recursion/recovery checks. Front, three-quarter and side views were inspected; camera reflections continue updating while the fish are paused. The preview remained near 60 fps on this machine with no browser warnings or errors. In development, `?inspect=reflection` displays the actual water reflection buffer for visual diagnosis; the inspection view is unavailable in production.
+
+The leaf/substrate pass orients each upper leaf surface toward the light, mixes rounded and slender blades, reduces their specular highlight strength and adds green lower growth beneath warmer new leaves. Low rosettes soften exposed lower stems. `Substrate` uses a shared irregular channel boundary for sand and carpeting, world-scaled grain textures, 12,000 modeled quartz grains and 2,700 darker soil granules, replacing the smooth strip and oversized scattered pebbles. `ScannedBranch` retains substantial wood bodies while tapering the ends into finer tips. Its collision envelopes follow the actual deformed vertices; a test checks all six branches against the bundled scan and confirms that shaping does not mutate the shared source mesh. All 30 tests pass.
+
+The contact-lighting pass renders scene color and depth together into a multisampled floating-point buffer. `AquariumLighting` reconstructs normals from that depth for a restrained, denoised GTAO pass, so real plant deformation and alpha-tested fern outlines remain aligned. Glass and water retain `depthWrite=false`; no override material converts them into opaque walls. The final output pass applies exposure, ACES tone mapping and sRGB conversion once. This is screen-space occlusion, not full indirect illumination: off-screen geometry and reflected views cannot contribute, and the subtle result is composited over transparent highlights too. Development-only `?inspect=contact` and `?inspect=unshaded` views support comparison.
+
+A shaded studio floor replaces the unlit black slab. A broad room light, soft stationary cabinet-footprint approximation, and distant fade create a pool of illumination without a sharp horizon. The footer has stronger contrast over the lit floor. Front and side lighting, evening mode and the actual occlusion buffer were checked visually; the preview remained near 60 fps on this machine. All 30 behavior/geometry tests pass. The realism goal remains active; repeated planting silhouettes, wood joins, and optical detail still differ visibly from the reference.
+
+The stem-morphology pass replaces the shared triangular mature-leaf profile with full-size lower blades and compact growing tips. Opposite leaf pairs have individually varied inclinations and node rotation. Most stems now carry a lateral shoot, with occasional second forks at different heights; the paths remain rooted and use the existing shared current deformation. Broad Ludwigia-like red leaves join the slender red and rounded green types, with greener mature growth below warm new tips. Every species has three modeled blade variants with different curvature, asymmetry and cupping, and normals are computed from each actual geometry. Front, three-quarter and side views were compared; an overly flat initial leaf-angle trial was corrected before publication. This remains an artistic planting composition, with further photographic fidelity work outstanding.
+
+The hardscape pass adds a restrained swelling collar and vertex-colored crevice shade to the bases of scanned branches, with darker bark and retained UV detail. Stone uses a less saturated mineral albedo and lower interface reflectance to restrain white underwater highlights. `ScannedRock` orients each scan before sizing and grounding it; the old order could bury or lift a tilted base. The main stone presents a more upright, fractured face. Collision spheres now enclose actual oriented scan vertices instead of shrinking a box-derived sphere. A new test checks all nine placements for finite geometry, grounding, containment inside the glass, full vertex coverage and an unchanged source scan. All 31 tests pass. The local `/rock-study.html` page compares the six bundled scans for authoring; it is not an entry in the public build. No new assets were downloaded or purchased.
+The left sword rosettes sit farther behind the main stone, and shorter, sparser rock moss leaves more scanned surface exposed. Wood moss retains its previous density.
+
+The water-ray pass attaches depth textures to both real scene-reflection captures. Each surface fragment follows its reflected wave direction through captured depth (28 bounded steps with four refinement steps), then samples the color where that ray meets visible geometry. This brings plant colors into the underside ripples instead of merely nudging a flat reflection image. The matrices are copied from the actual reflection camera after its oblique clip-plane modification; depth reconstruction uses that final inverse projection. Missed rays fall back to a restrained planar sample. Slightly stronger shallow waves retain fixed glass contact edges. The method remains limited to geometry visible in the capture and is not full ray tracing or a fluid simulation.
+
+The reflection capture, front and three-quarter views were inspected during development. All 31 existing behavior/geometry/recursion tests pass; the shader effect is verified visually rather than by those unit tests. The preview remained around 60 fps on the development machine, with increased synchronous rendering time around 8 ms. No new dependencies, downloads or paid services are used.
+The visible LED emission now dims with the evening transition, matching the light intensity and its reflection. Paused side-view reflections continue responding to camera movement.
+
+The blade-lighting pass gives small modeled leaves a smoother silhouette and continuous petiole transition, with gentler cupping, varied tip droop and torsion. The tissue map retains veins without multiplying the entire planting by an overly dark base; red new growth shifts from muddy orange toward rose. Shader normals now follow both the local flutter and the rooted current bend, including the attenuation near glass, so moving leaves and stems carry their lighting with them. These remain modeled artistic leaves rather than scanned aquatic specimens.
+
+Front, three-quarter, side and 720x1280 evening views were inspected with no browser warnings or errors. The development preview measured around 58-60 fps and 8.3 ms synchronous render submission in the three-quarter view on this machine. Smoother blades increase geometry cost, so this is not a mobile performance guarantee. The production build and all 31 existing behavior/geometry tests pass; visual fidelity and GPU shading were checked in the browser, not proved by the unit tests. No fish behavior, controls, original photographic assets, dependencies or paid services changed.
+
+The clear-glass pass replaces the uniformly bright green rails with rounded pane edges and narrow, translucent silicone joints. Broad pane faces composite the physical reflected light with a Fresnel-weighted alpha, preserving the sharp scene and water reflections underneath. This is a thin-glass approximation: flat faces do not refract the background. Polished edge faces retain tinted physical transmission for a sense of material thickness. The pane shader is excluded from water-distance attenuation so its reflected light is not tinted as submerged scenery.
+
+A trial using full screen-space transmission blurred the plants; it was discarded. The studio softbox moved above the viewing axis after inspection traced an unwanted middle-of-tank reflection to the former low light. Front, three-quarter and side views were checked visually; the development preview measured 60 fps and roughly 5.7 ms synchronous rendering submission in the three-quarter view, with no browser warnings or errors. The build and all 31 existing tests pass. The tests do not establish optical realism; visual comparison against the reference remains necessary, and the goal is still active.
+
+The tetra-material pass replaces the metallic, strong clear coat with a restrained submerged-surface approximation (lower interface contrast and a softer highlight). The existing atlas supplies scale detail and a very small relief bump. The fin membranes are more translucent; their red pigmented roots retain greater opacity to keep the tail attached visually. Transparent fins no longer cast solid shadow silhouettes, while the body still casts and receives shadows. Body geometry, traveling spine wave, independent fin animation, swimming, perception, spacing and schooling are unchanged.
+
+The local-only `/fish-study.html` authoring view displays the actual model and atlas at close range from both sides and through a turning view; it is typechecked but excluded from the public build. Full-tank front and three-quarter views and feeding were inspected with no browser warnings or errors. The preview measured 60 fps and roughly 5.5 ms synchronous render submission here. The build and all 31 behavior/geometry tests pass. The material is an artistic approximation using an atlas with baked highlights, not a spectral model of fish scales; the reference realism goal remains active. No assets, dependencies or paid services were added.
+
+The trunk-composition pass increases the mass of the four main scanned limbs, lowers the left broken tip and starts the ascending fork lower in the shared root. Its scan is rolled to show more grain rather than the former broad pale face. Wood now uses a warmer physical material with restrained underwater interface reflectance; scan color, normal and roughness maps are retained. Fewer tall foreground shoots and central sword rosettes expose the branch structure, while background colonies, moss, epiphytes and carpeting remain lush.
+
+Collision envelopes are still derived from the actual deformed vertices. All 31 tests pass, including the check that every vertex of every changed branch is inside its collision envelope; build and typecheck pass. Front and three-quarter views were compared, and live fish position samples showed the school travelling between different parts of the tank after the geometry change. The preview remained at 60 fps and about 5.8 ms synchronous rendering submission here. The original photographic demo and fish behavior code are unchanged. This improves composition and material balance but remains visibly short of the reference's photographic realism; no new assets, dependencies or paid services were used.
+
+The rock-composition pass uses a different bundled scan for the main stone, oriented as a broad sloping face, with a smaller fractured scan at its front base. A different rear stone avoids repeating the main shape. Mineral albedo is darker and normal-map detail slightly stronger, reducing the former pale smooth-looking face while retaining the scanned surfaces and attached moss. Low and overly upright orientation trials were rejected through visual comparison before settling on the current arrangement.
+
+Front and three-quarter views were compared; the preview measured 60 fps and about 6.4 ms synchronous render submission on this machine, with no browser warnings or errors. Build and all 31 tests pass, including every placed rock's grounding, glass containment and actual-vertex collision coverage. The scene still falls short of the reference's photographic lighting and natural planting. No new assets, dependencies, fish behavior changes or paid services were introduced.
+
+The distributed-light pass replaces the single offset spotlight with three shadowed samples placed beneath the actual LED fixture. A wider continuous area emitter spans the visible strips, and a greener low-level fill approximates reflected light from the planted substrate. Thin-leaf backlighting uses a stronger contribution from each light's already-shadowed irradiance, retaining dark occluded clumps. All three samples, the continuous emitter and LED emission dim together in evening mode. This is a finite-sample approximation of an extended source, not a fully path-traced area light.
+
+Shadow maps refresh once before each main frame and are reused by the water and glass reflection captures, avoiding repeated shadow rendering inside those captures. Each of the three maps is 1536x1536. The first shader compilation produced a temporary slowdown; the warmed development preview returned to 60 fps, with roughly 6.4 ms synchronous render submission in the three-quarter view. Alternative AgX and Neutral color transforms were visually compared and discarded; ACES remains the final output transform. Build and all 31 existing tests pass; visual light/shadow fidelity was checked in the browser, not established by those tests. No new dependencies, paid services, geometry or fish behavior changes were introduced. The reference realism goal remains active.
+
+The leaf-anatomy pass separates chlorophyll color, vein relief and cuticle roughness into three material channels. Narrow stem leaves, rounded leaves and sword blades use distinct vein patterns; sword ribs run along the blade rather than sharing the branching pattern of every other plant. Sword blades have fuller, varied outlines and modeled petioles of different lengths. The stalks share each plant's rooted current deformation and now cast and receive shadows, with a matching deformed depth material.
+
+The textures are generated locally and shared by plant type; only the color channel uses sRGB, while bump and roughness retain linear data. Front and closer three-quarter views were inspected for the leaf/stalk transition and surface response. Build and all 31 existing tests pass; these tests do not prove botanical accuracy or material realism. The plants remain artistic procedural models, and further work is needed to match the reference photograph. No new dependencies, downloads, paid services or fish behavior changes were introduced.
+
+## Plant spacing and rear backing
+
+The stem colonies now contain 132 main shoots, with more space between leaf nodes and fewer lateral branches. This opens views of individual stems and the scanned wood instead of forming an opaque wall of overlapping leaves. Tall rear planting, shorter middle growth, rosettes, epiphytes, and carpet retain their separate depths and shared current movement.
+
+A thin matte backing is modeled just outside the rear glass. It receives the actual canopy illumination and plant shadows, giving open water a subdued dark background. The front and side panes remain clear; the backing is visible as a physical object in oblique views. This is an aquarium background panel, not volumetric light scattering.
+
+Front, side, and three-quarter evening views were visually compared at 720 by 1280. The local preview reported 60 fps and 6.8 ms synchronous render time in the evening view. Build and all 31 existing behavior/geometry tests pass. Procedural plant shapes and water highlights still differ from the photographic reference; the realism goal remains active.
+
+## Water reflectance and return ripples
+
+Water reflection now uses the unpolarized dielectric Fresnel equations for air/water (IOR 1.333), including total internal reflection when viewed from below. This replaces the fixed reflective opacity floor and broad hand-tuned critical-angle transition. The transition is filtered over the pixel footprint. Formula reference: https://www.pbr-book.org/4ed/Reflection_Models/Specular_Reflection_and_Transmission .
+
+Gentler directional waves combine with rings near the return; their amplitude falls with distance from that outlet and stays fixed at the glass contact line. The same height function drives mesh displacement and shading normals. From above, the bent reflection ray is also intersected with the three modeled LED strips; pixel coverage preserves narrow highlights that were unstable in the reflection capture. Their radiance follows evening dimming. Plant and room reflections still use depth-guided scene captures, and transmission remains alpha-composited without full refractive ray tracing. This is an optical improvement, not a claim of full fluid simulation or photographic parity.
+
+## Hardscape texture visibility
+
+The wood material now uses a lighter neutral tint so the scan's own brown weathering and pale exposed grain remain visible. The red ambient-occlusion channel from its existing packed ARM texture restores local crevice shading at strength 0.7; it shares the original UVs and texture with roughness. Rock tint is lighter while the existing mineral desaturation remains, revealing surface variation on the lit faces. Geometry, normal maps, collision envelopes and moss placement are unchanged.
+
+The full front view and close three-quarter daylight/evening views were visually checked for grain, crevices and bright patches; browser warnings/errors were empty. TypeScript and the production build pass. This material-only pass does not change fish or physics code, so the previously passing behavior suite was not repeated. The hardscape is more legible, but plant geometry and the full lighting still differ from the reference photograph.
+
+## Finer stem foliage and varied blade profiles
+
+Tall green colonies now favor slender leaves, and the red groups favor narrow blades with occasional broad leaves. Rounded foliage remains concentrated in shorter plants. Six modeled profiles per plant type vary the widest part of the blade, curvature, asymmetry and handed twist; normals and glass fitting use the resulting geometry. Leaf nodes have slightly irregular spacing while keeping opposite leaf pairs and compact growing tips. These remain artistic plant models, not botanical reconstructions.
+
+Front, close three-quarter and side/evening views were checked visually. The close preview reported 60 fps and 4.6 ms synchronous render time, with no browser warnings/errors. Build and all 31 existing tests pass; those tests cover behavior and geometry utilities, not the photographic accuracy of the new silhouettes. Fish behavior, current deformation and the original photographic aquarium are unchanged.
+
+## Studio lighting balance
+
+The studio floor is darker, rougher and nonmetallic, reducing the broad bright pool that distracted from the aquarium. The high softbox now aims toward the tank at lower intensity, retaining the canopy as the principal light while helping shaded surfaces read. Its elevated placement avoids a broad reflection across the front pane.
+
+The substrate's procedural caustic pattern now modulates received light instead of adding diffuse-colored emission. Shadowed and evening surfaces therefore retain their lighting response. This remains a restrained visual approximation rather than simulated refracted irradiance. Front daylight and three-quarter evening views were checked, with no browser shader errors; TypeScript and the production build pass. Fish and geometry code are unchanged, and the previously passing behavior tests were not repeated for this lighting-only pass.
+
+## Independent leaf movement and bounced light
+
+Each modeled leaf now has its own phase and flutter rate, with a flexing tip and gentle torsion. The petiole remains attached to its stem. Amplitude is bounded by blade length, and the existing rooted stem bend still provides a shared slow current. Analytic normals follow the deformation, and the shadow depth material uses the same leaf motion. This is procedural motion, not a fluid or plant-mechanics simulation.
+
+A 15 by 9 by 7 directional irradiance field adds one diffuse bounce from the static planting, wood, rocks and substrate. It was calculated locally against 3.17 million exported triangles using 1,536 rays per probe and three shadowed canopy-light samples. The 60 KB field is sampled at each surface's current position and normal and dims in evening mode. Live direct lighting, shadows and animation remain active. Loading failures retain the live lighting.
+
+The calculation uses Blender's BVH API in background mode, not Cycles. Glass, alpha-cut fronds, refraction, multiple bounces and motion-dependent indirect occlusion are excluded. Low-order interpolation can spread light across nearby surfaces; this is an approximation, not path-traced photographic parity.
+
+To rebuild the field, run the local Vite server, open `/?inspect=bake`, wait for scenery to load and click **Export lighting geometry**. From this package, run `blender --background --factory-startup --python bake-lighting.py` using an installed Blender executable. The ignored `.bake/scene.json` stays local; commit the generated `public/lighting` files. Run `npm test` and `npm run build`, then publish the built lighting assets with the demo. Geometry/material source hashes and the binary checksum catch stale or damaged committed data. Changes to canopy lighting or bake parameters also require re-exporting and rebaking. The local `/?inspect=indirect` comparison checkbox starts with bounced light off; the public demo enables it automatically.
+
+All 33 tests and the production build pass. Front and side views were inspected with no browser warnings/errors; the side view reported 60 fps and 7.2 ms synchronous render submission on this machine. These checks do not establish photographic fidelity or performance on other devices. No paid assets, services or new dependencies were used.
+
+## Blade structure and surface response
+
+Modeled leaves now have a raised central rib; sword blades also have restrained longitudinal folds. Extra segments smooth the broad rounded silhouettes. The material maps carry clearer primary veins, fine tissue variation and uneven roughness. An initial blotchy pigment trial was softened after inspecting actual leaves at enlarged scale. Undersides have a slightly paler response, and raised vein regions reduce the existing thin-leaf backlighting term. These are artistic approximations of leaf structure and thickness, not measured optical tissue properties.
+
+The local-only `leaf-study.html` view isolates the aquarium's actual sword, rounded and narrow blade geometry/materials, with motion pause and upper/underside controls. It is typechecked and excluded from the public entry. Upper and lower faces were inspected there, then front and close three-quarter views in the aquarium. The latter measured 60 fps and 4.7 ms synchronous render submission here, with no browser warnings/errors. More geometry increases rendering cost on other devices; this measurement is not a mobile guarantee.
+
+The static light field was exported and recalculated for the changed leaves against 5,028,360 triangles. Build and all 33 existing tests pass, including the field provenance checks. Fish behavior and the separate photographic demo are unchanged. The scene remains visibly procedural relative to the reference, so the broader realism goal is not complete. No paid assets, services or dependencies were introduced.
+
+## Connected driftwood forks and buttress roots
+
+Six smaller scanned limbs now connect the main wood into a more branched structure: a secondary upright fork, a fine lateral branch, wrapping buttress roots, and a root reaching toward the foreground. They start within their parent limbs and taper into the planting or substrate. Original scan UVs, surface detail and surface-sampled moss remain in use. These are overlapping shaped scans, not a single watertight remeshed tree.
+
+Every changed branch derives its collision envelopes from its actual vertices. A new test samples fish-sized contacts around the combined junctions and verifies that contact resolution leaves them outside the wood. All 34 tests and the production build pass. Front, three-quarter and side views were checked, with no browser warnings/errors; live fish telemetry showed the school continuing to travel through different regions and depths. The three-quarter preview reported 60 fps and 7.2 ms synchronous render submission here.
+
+The static diffuse-light field was re-exported and recalculated against 5,538,528 triangles. No new assets, dependencies, fish behavior changes, paid services or edits to the photographic original were introduced. This strengthens the branching composition, but does not establish photographic fidelity; the full realism goal remains active.
+
+## Waterline viewpoint and underwater reflections
+
+The front camera now sits at height 2.45 rather than 3.3, showing a broader band of the surface underside, closer to the reference composition. Slightly fuller overlapping ripples direct the existing depth-guided reflection rays toward more of the real foliage. The studio area light moved from height 8 to 11, with intensity 3.2, after the lower viewpoint exposed a rectangular glare from its former position. Side and three-quarter presets retain their elevated views.
+
+Direct surfaces and water reflections now share the bounded water-path and attenuation shader. Underwater reflections include the real viewing segment from the camera through the glass to the surface, in addition to attenuation already present in the captured scenery. The narrow wet-edge highlight follows evening illumination. Surface displacement, Fresnel reflection and ray search remain approximations rather than a fluid simulation or complete refractive transport.
+
+The actual reflection capture was inspected before changing the waves. Front daylight/evening and elevated three-quarter views were checked at 720 by 1280; the elevated preview reported 60 fps and 6.2 ms synchronous render submission here. A stale Vite module initially blocked the local preview after the shared shader export was added; refreshing the watched source and reloading resolved it. No new shader errors occurred in the subsequent checks. Build and all 34 tests pass. Static geometry and the three canopy samples used for the diffuse bake are unchanged, so its validated field was retained. No paid assets, services or dependencies were used; photographic parity remains unproven.
+
+## More visible leaf flex and textured moss
+
+Long sword blades now flex farther, while thicker anubias leaves remain calmer. Individual phase/rate differences and a slowly changing strength envelope keep the leaf tips from moving identically. Root attachments, analytic shading normals and shadow deformation remain matched. The glass-fitting allowance increased to accommodate the added movement. This remains a procedural current, not a fluid simulation.
+
+The old geometric moss tufts were replaced by twelve original curved shoots from Poly Haven's CC0 Moss 01 by Rob Tuytel, scattered on the actual bark and rock surfaces with independent anchored tip motion. Original color, normal, roughness and alpha maps are bundled locally with source URLs and verified checksums. These fixed curved cutout meshes never face the camera automatically. The terrestrial source is an ornamental artistic adaptation, not an exact aquatic moss species.
+
+The static single-bounce lighting field was rebuilt against 5,420,778 triangles. Alpha-cut moss and fern shoots are excluded from that bake; their live direct shadows remain active. All 35 tests and the production build pass, including source-file integrity and lighting provenance checks. Photographic parity remains unfinished. No money was spent and no dependencies were added.
+
+## Layered mature planting and fine foreground grass
+
+Mature stem leaves now spread closer to horizontal, while the growing tips remain compact and upright. Internode density varies between plants, with more side shoots filling the middle layer. The red colonies use a softer copper tone rather than the previous saturated pink. These are artistic growth patterns, not exact botanical reconstructions.
+
+Three irregular foreground patches add thin, tapered, curved grass blades alongside the rounded carpet. Each tuft has varied length, lean and density; the existing leaf animation keeps individual blades moving from fixed roots. The sand channel remains open and all leaves retain their geometry when viewed from the side.
+
+Front and enlarged three-quarter views were compared visually with the reference. The close preview reported 60 fps and 5.3 ms synchronous render submission here, with no browser errors. The diffuse field was rebuilt against 6,324,802 triangles; all 35 tests and the production build pass. Added geometry may cost more on other devices. No assets, dependencies or paid services were introduced. Fish behavior is unchanged. The scene still differs from the photograph in fine plant structure, lighting and overall material richness, so the realism goal remains active.
+
+## Leaf tissue density and transmitted light
+
+Light transmission now varies across each leaf and between plant types. The roughness texture's unused red channel stores optical tissue density, with denser midribs and veins and thinner lamina tissue; its green roughness channel is retained. A per-species density multiplier keeps thick rounded leaves less translucent than narrow blades. Oblique light is attenuated over a longer approximate path, with pigment tint calculated separately from surface reflectance. This is an artistic thin-sheet approximation, not measured leaf optics or a spectral transport model.
+
+The local leaf study gained a backlight toggle. Front-lit and backlit leaves were inspected there before reviewing front daylight and close three-quarter evening views in the aquarium. The latter reported 60 fps and 7.4 ms synchronous render submission, with no browser warnings/errors. Leaf geometry, motion, fish and controls are unchanged. The single-bounce static field retains its simpler backface-lighting approximation; it was refreshed for current material provenance. All 35 tests and the production build pass. No paid services, assets or dependencies were used. The realism goal remains active: this adds internal leaf structure under lighting but does not establish photographic fidelity.
+
+## Curved water contact edge and quieter front-glass glare
+
+Removed the fixed unlit bars that marked the front and rear waterline. The water mesh now rises slightly into a narrow curved contact edge, retaining a small part of the passing wave there. A sine-spaced surface grid concentrates vertices near the glass so that curvature exists in the geometry. Fuller overlapping ripples show more actual plant reflections after removing the white bars that had also appeared in the reflection capture. This remains a procedural surface and an approximate meniscus, not a fluid solver.
+
+Close inspection exposed broad studio-light glare near the waterline. The high room fill intensity is now .8 rather than 3.2, leaving the canopy more dominant. Front, close front, elevated three-quarter and side/evening views were checked. The final side preview reported 60 fps and 7.5 ms synchronous render submission, with no browser warnings/errors.
+
+TypeScript and production build pass, as do all four targeted reflection and baked-field tests. The previously passing fish behavior suite was not repeated because fish code is unchanged. Transparent water and unlit bars are outside the static bounce bake; the three canopy samples and baked geometry remain unchanged, so the validated field is retained. No paid services, new assets or dependencies were used. The scene still falls short of the reference photograph; the realism goal remains active.
+
+## Fractured main stone and restored crevice shading
+
+The main left stone now uses the more deeply fractured scan from the existing set, oriented after comparing six rotations in the local rock study. A smaller irregular foreground stone replaces the broad pale slab. Both are grounded after rotation and keep collision spheres derived from their final geometry. Original scan UVs and surface-sampled moss are retained.
+
+The source GLTF had no ambient-occlusion texture assigned. Its original CC0 2K AO map is now bundled locally and applied at restrained intensity. More of the original color variation is retained instead of strongly desaturating every rock. The download's byte count and MD5 were verified against Poly Haven metadata; AO_PROVENANCE.json records the source and checksum. This is a scanned terrestrial rock adapted for the aquarium, not a reconstruction of the reference stone.
+
+Front and enlarged three-quarter views were inspected. One brief 9 fps sample recovered to 60 fps with 8.8 ms synchronous render submission on recheck; no browser errors appeared, and the school continued traveling through different heights and depths. The light field was rebuilt against 6,331,945 triangles in 16.47 seconds. All 35 tests and the production build pass, including rock grounding, glass containment and collision coverage. No money was spent. Photographic fidelity remains incomplete.
+
+## Terrain-following granular soil volume
+
+The old rectangular soil layer stretched a square texture over a front face more than thirty times wider than it was tall. It now uses walls built from the actual terrain boundary, with consistent world-scaled texture coordinates and a closed bottom. The top and side walls share exact boundary vertices. The soil footprint is slightly recessed within the glass, with small exposed grain caps along the front. An initially regular grain arrangement was replaced after visual review with irregular placement.
+
+Two geometry tests verify that the combined terrain volume closes without gaps or inconsistent seam winding, and that side/bottom texture scale matches world distance. The static light field was rebuilt against 6,392,823 triangles, including the corrected soil volume and grains. All 37 tests and the production build pass.
+
+Front and enlarged three-quarter views were inspected; the close preview reported 60 fps and 7.9 ms synchronous render submission, with no browser warnings/errors. Fish behavior and the photographic original are unchanged. No assets, dependencies or paid services were introduced. This improves the foreground material scale and depth; the whole scene still does not match the reference photograph.
+
+
+## Visible blade movement in the current
+
+Individual leaves now flex farther at normal aquarium viewing distance. A slowly varying current envelope drives a broad bend, while smaller traveling ripples and torsion disturb the tip and edges. Sword blades move more slowly, short grass responds faster, and thick anubias remains restrained. Per-leaf phase and rate variation avoids identical synchronized loops. The petiole position stays attached to the stem, and analytical shading normals and shadow geometry use the same deformation.
+
+Blade motion is capped in world distance. Glass-fitting clearance now accounts for the largest blade excursion rather than assuming one fixed allowance. A geometry check covers this additional clearance; the static diffuse field is rebuilt for the slightly revised leaf placement. This is procedural water-responsive animation, not a hydrodynamic solver. Fish behavior and materials are unchanged; no assets, services, or dependencies were purchased.
+
+Verified individual blade changes over time, full front and close angled views, and pause/resume. The angled preview reported 60 fps / 5.6 ms synchronous render submission. All 38 tests and the production build pass. The static field was rebuilt against 6,392,823 triangles in 19.21 seconds. Full photographic fidelity remains unfinished.
+
+## Irregular surface reflections and a narrower waterline gap
+
+Crossing ripple scales now use a slowly varying coordinate warp to avoid long repeating reflection stripes. Shorter waves create more varied green and copper reflections from the actual planting. The surface grid is 320 by 128, with conservative displacement bounds. LED-reflection pixel coverage is capped to prevent grazing rays from spreading the narrow light strips into excessive white glare.
+
+The shared water level is 5.45, reducing the dark air gap below the glass top. Surface placement, above/below selection, water-path attenuation and bake inclusion use this value consistently. This remains a procedural surface with depth-guided planar captures, not a complete fluid or refraction simulation.
+
+During verification, the bake exporter was found to use an older, darker rock-color transform. The renderer and exporter now share the rock material's saturation/tint descriptor, and bake provenance includes the exporter and water-depth source. The indirect field is rebuilt for this correction. No new assets, dependencies or paid services are used.
+
+Front daylight, elevated three-quarter and settled side/evening views were inspected without browser errors. One 47 fps sample recovered to 60 fps / 7.6 ms synchronous render submission. The corrected light field was rebuilt against 6,392,823 triangles in 19.4 seconds. The production build and four targeted reflection/lighting checks pass. Plant and fish animation are unchanged. The overall rendering remains less detailed and photographic than the reference, so the realism goal remains active.
+
+## Exposed fractured stone and embedded footing
+
+The main scanned rock now faces the front with its pitted, ledged side instead of its broad smooth back. Tilting it exposes the scan's actual fractures under the canopy light. A smaller scanned stone joins the foreground at its base, and burial depth scales with stone size so larger irregular rocks sit into the substrate rather than balancing on one low vertex. Original scan UVs, normal maps and surface-sampled moss are retained. Collision spheres continue to derive from the final placed geometry.
+
+This is a composition and placement correction using existing free assets. The static indirect field is rebuilt for the changed stone geometry and grounding. Fish behavior, plant motion, water and the photographic original remain unchanged.
+
+Front and three-quarter views were compared with the previous smooth-face arrangement; the settled side view was checked for glass clearance. No browser warnings/errors appeared, and the side preview reported 60 fps / 8.0 ms synchronous render submission. The indirect field was rebuilt against 6,403,819 triangles in 21.14 seconds. All 38 tests and the production build pass. No money was spent; full photographic fidelity remains unfinished.
+
+## Varied stem growth and mature copper foliage
+
+Stem colonies now vary the concentration of nodes near their tips, with additional variation in leaf azimuth and ascending inclination. This breaks the previous stack of almost horizontal, similarly spaced pairs while retaining the modeled blades, attachments and current animation.
+
+The central red colonies now use plant-specific mature copper tones and lighter tips. A subset of broad-leaf shoots retains green lower growth. The previous HSL interpolation from green through yellow gave much of the mature growth an ochre cast. An initial uniformly red revision was rejected after visual review and softened into this mixed palette. These colors are an artistic match to the reference, not a calibrated botanical reconstruction. No new assets or paid services are used.
+
+The close three-quarter preview reported 60 fps / 6.6 ms synchronous render submission without browser errors. The light field was rebuilt against 6,403,819 triangles in 19.79 seconds. Six targeted lighting/tank-space checks and the production build pass. Exported geometry checks cover all 19,785 leaf instances at rest inside the physical tank volume; animated clearance is also reviewed visually. No fish behavior or controls changed. Full photographic fidelity remains unfinished.
+
+
+## More visible blade response and calmer studio lighting
+
+Leaf response is 55% faster with a slowly changing shared phase, stronger broad bending and a higher minimum current envelope. Flex extends farther down the blade while petiole positions remain fixed. Smaller tip ripples and torsion retain independent phase/rate variation; analytical normals and shadow deformation follow the same curve. Existing species-specific amplitude limits and glass-fitting allowances remain in place. Rest geometry and materials are unchanged, so the existing validated static diffuse field is retained. This is procedural animation rather than a fluid solver.
+
+The studio backdrop and fog now share a scene-linear blue-gray radiance. A small warm point light that produced a distracting pipe highlight is removed, and the floor is cooler. Production retains ACES tone mapping; the temporary developer AgX comparison is removed.
+
+Eight targeted tank-space, reflection and baked-field checks and the production build pass. Front and angled frames show changing leaf silhouettes; the angled preview reported 60 fps and 7.9 ms synchronous render submission without browser warnings/errors. No fish behavior, assets, dependencies or paid services changed. Full photographic fidelity remains unfinished.
+
+
+## Irregular pigment and cuticle detail
+
+Leaf maps now use deterministic smooth noise at three scales for nonperiodic pigment, relief, optical density and roughness variation. A slightly rougher cuticle breaks the uniform broad-leaf sheen, and secondary veins vary their reach and attachment spacing. An initially stronger pigment treatment was reduced after the leaf study showed excessive mottling. Texture resolution and geometry are unchanged; current animation is retained.
+
+Front-lit and backlit blade studies and the full aquarium were reviewed. The static diffuse field was rebuilt for the changed surface colors against 6,403,819 triangles in 19.34 seconds. Four targeted reflection and baked-field checks and the production build pass. This remains an artistic leaf material, not measured botanical reflectance. No paid assets, services or dependencies were introduced. The photographic realism goal remains unfinished.
+
+
+## Smooth broad-leaf outlines and species-specific tips
+
+Broad blades use more rings, concentrated near their shoulders and tips, to remove visible polygon corners in close views. Anubias now has a more pointed apex than bacopa. Small unequal margins and a gently wandering midrib vary the six modeled forms. Texture coordinates follow the revised geometry, while the existing attached-base current and analytical normals remain unchanged.
+
+The leaf study and full tank were reviewed. A static bounds audit covers all 19,785 leaf instances inside the physical tank; motion is checked visually and the existing clearance tests pass. The indirect field was rebuilt against 7,388,395 triangles in 20.36 seconds. Eight targeted tank-space, reflection and lighting checks and the production build pass. No paid assets or services were used. This improves close-up geometry; the overall scene still does not match the reference photograph.
+
+
+## Brighter canopy with matched indirect lighting
+
+The three shadowed canopy samples now use intensity 60 rather than 36, revealing more wood grain and leaf layers from the front. The continuous strip and camera exposure remain unchanged, and the floor material is slightly darker to restrain the surrounding light pool. A cast-floor-shadow trial produced distracting sharp plant silhouettes and was removed after review.
+
+Canopy color, positions, intensity, cone and decay settings now come from one JSON configuration shared by the renderer and offline bake. The bake also uses the actual sRGB light color conversion and the renderer's distance cutoff. Provenance checks cover both the shared configuration and bake script. The indirect field was refreshed against unchanged 7,388,395-triangle geometry in 20.43 seconds.
+
+Front daylight and three-quarter evening views were checked; the evening preview reported 60 fps / 7.5 ms with no browser warnings/errors. Four targeted lighting/reflection checks and the production build pass. No paid services or assets were used. Fine planting structure and the overall photographic match remain incomplete.
+
+
+## Restored polished-glass environment reflections
+
+Glass edges and pipes now explicitly share the studio environment texture. Inspection of the installed Three renderer showed that a null material envMap makes the renderer use scene.environmentIntensity, ignoring the per-material envMapIntensity. The scene's .10 intensity had therefore kept the edge and pipe reflections much dimmer than intended. Broad panes retain .10 to preserve clarity; polished edges use .7 and pipes .4. An initial 1.2 pipe setting was reduced after angled review looked too metallic.
+
+Trials with thicker bevels and different edge tint were reverted after identifying the actual intensity binding issue. Geometry, scene illumination and the static bake remain unchanged. Front and angled views were reviewed; the angled preview reported 60 fps / 6.6 ms with no browser warnings/errors. Four targeted reflection/lighting checks and the production build pass. No new assets or paid services were used. Full photographic fidelity remains incomplete.
+
+
+## Hollow glass plumbing and mounted intake details
+
+The two simple tube surfaces are replaced by distinct hollow intake and return assemblies. Both have inner walls and annular end rims; the return curves into the tank and flares into an open mouth with a rolled lip. The intake has an open glass cage, and small suction-cup supports connect the pipe necks to the rear pane. Geometry is modeled in 3D and uses the existing shared studio reflection map. Glass transmission remains the renderer's approximation, not a multi-bounce optical simulation.
+
+New geometry tests verify manifold wall construction, consistent winding, finite normals, open center passages, and correctly facing inner/outer surfaces. Six targeted geometry/reflection/lighting checks and the production build pass. Front and angled views were reviewed; the angled preview reported 60 fps / 7.2 ms with no browser warnings/errors. Transparent plumbing is excluded from the static diffuse bake, which is retained. No new assets, dependencies or paid services were used. The full reference match remains unfinished.
+
+
+## Finer stem colonies and foreground carpet
+
+Stem plants now have smaller blades on thinner stems, more shoots per colony and closer leaf-node spacing. The foreground carpet also uses smaller, more numerous leaves. This reduces the coarse leaf scale relative to the reference while keeping dense coverage. Narrow stem/rotala blades use 20 longitudinal by 8 cross-blade segments; broad leaves retain their existing denser meshes. Curvature, texture detail and current-driven deformation remain in place.
+
+The regenerated planting contains 28,194 leaf instances. A static export audit confirms finite positions inside the physical tank. Existing tank-space checks pass, and the indirect field was rebuilt against 8,415,147 triangles in 21.15 seconds. Eight targeted tank-space/reflection/lighting checks and the production build pass. Front and angled comparisons show finer foliage; the angled preview reported 60 fps / 7.4 ms. The deterministic planting regeneration also redistributes individual rosettes and carpet placements. No fish behavior, paid assets or services changed. Full photographic fidelity remains unfinished.
+
+## Flexible leaf blades in the current
+
+Broad sword leaves have a larger flex range, and the shared blade deformation now uses a curved midrib with a traveling wave and a separate sideways flutter. Each leaf keeps its existing individual phase and rate; petioles remain attached to the rooted plant. Analytic normals follow the two-axis deformation so lighting follows the moving surface. The visible and shadow materials share the same motion. Leaf placement reserves clearance for the increased flex.
+
+Three new tests execute the shader's scalar deformation helpers to check attached petioles, visible tip travel and curved midribs, bounded displacement, and normals perpendicular to the moving surface. All 43 tests and the production build pass. The static indirect-light field was refreshed for the resized planting (8,415,147 triangles, 22.69 seconds). This is an artistic current model, with a static indirect-light bake; photographic fidelity remains unfinished. No paid assets or services were used.
+
+## Fern surface response and moving shadows
+
+The scanned foreground ferns now use a physical material with restrained underwater-style reflectance (IOR 1.18, specular intensity .7), higher roughness and the scan's packed occlusion channel. The source diffuse map remains unchanged. This reduces the broad white sheen that obscured its green leaf detail under the canopy. Alpha-to-coverage softens fine frond cutouts where multisampling is available.
+
+The low fronds now have stronger rooted current deformation. Visible surfaces and depth shadows share the same helper, and analytic normals follow both bend directions. Previously, the fern shader displaced only visible positions while normals and depth shadows remained static. Two numerical shader-helper tests check anchored roots, finite bounded travel, and lighting normals against the deformed surface. Front and three-quarter views were reviewed; the angled preview reported 60 fps / 6.8 ms with no warnings/errors. Alpha-cut fronds remain outside the static indirect-light geometry. No assets or paid services were added. The overall photographic reference match remains unfinished.
+
+Nine targeted fern/leaf-motion, reflection and lighting-field checks and the production build pass. Re-exporting and baking the unchanged opaque scene completed in 21.37 seconds; the probe binary is identical, with updated source provenance.
+
+## Fine mineral sand with restrained highlights
+
+The sand path and its individual quartz grains use a warmer, lower diffuse reflectance and restrained physical specular response. The sand bump scale is reduced from .016 to .006 so fine grains do not read as coarse craters under the canopy. The path's vertex colors add gentle mineral variation and mixed-soil color at the planted margins; the lighting export includes those colors. Geometry and deterministic placement are unchanged.
+
+Front and three-quarter comparisons show a cream mineral path with retained grain detail instead of the previous broad white strip. The angled preview reported 60 fps / 7.5 ms with no warnings/errors. Existing substrate-shell and tank-space checks pass. No new assets or paid services were used. Full photographic fidelity remains unfinished.
+
+The indirect field was re-exported and rebuilt against the unchanged 8,415,147-triangle scene in 21.41 seconds, incorporating the revised sand/grain reflectance and vertex pigment. Ten targeted substrate/tank-space/reflection/lighting checks and the production build pass.
+
+## Submerged mineral rock response
+
+The scanned rocks use a darker mineral body color, stronger crevice occlusion and slightly more distinct scan-normal detail. Roughness is reduced moderately to retain small surface highlights against the darker stone. The adjustment targets the pale, chalky rock appearance in the reference comparison while preserving the actual scan textures and moss separation. Geometry, grounding, collision envelopes and plant placement are unchanged. No new assets or paid services were used.
+
+Front and three-quarter views were reviewed; the angled preview reported 60 fps / 7.8 ms without browser warnings/errors. Six targeted rock/moss/reflection/lighting checks and the production build pass. The static indirect field was rebuilt against the unchanged 8,415,147-triangle scene in 21.50 seconds to include the revised mineral reflectance. Photographic fidelity remains unfinished.
+
+## Continuous camera fitting and orbital view transitions
+
+Camera field of view now fits the perspective-projected tank, stand, lamp and return-pipe bounds instead of jumping between fixed aspect-ratio thresholds. This fills more of the desktop canvas while keeping the complete tank on narrow phones. Front, three-quarter and side presets share the framing calculation. Resizing keeps the current zoom distance, and manual orbit/zoom cancels a pending preset transition.
+
+Preset transitions interpolate around the target on an orbit rather than cutting inward along a straight line. Intermediate diagonal views receive sufficient field of view for their wider silhouette. Three new tests check projected bounds across seven viewport sizes, continuity at the old breakpoints, and preserved orbit radius. The local, ignored iframe fixture was used for visual phone-layout checks, including front/side and zoom-to-preset behavior. It is not part of the published demo. Geometry, material and baked-light sources are unchanged. The overall photographic match remains incomplete.
+
+All 48 tests and the production build pass. Phone layouts at 390x844 and 360x640 (the reference aspect ratio), plus the desktop view, were visually inspected. The larger desktop front view reported 60 fps / 9.9 ms. The static lighting field is unchanged and its provenance tests still pass.
+
+## Uneven weathered driftwood ends
+
+Large scanned limbs retain a blunter terminal remnant, while thin twigs still narrow more strongly. A small variation around each branch's circumference pulls the terminal fibers back by different amounts, replacing the uniform needle-like termination with an uneven broken end. Original scanned UVs and bark textures are retained. The same deformed positions drive collision envelopes; all source vertices remain inside those envelopes and fish-sized junction contacts resolve outside the wood.
+
+Front and three-quarter views were compared, with bark detail and irregular terminal silhouettes retained. The angled preview reported 60 fps / 7.4 ms. Moss sampling follows the altered wood surface and may redistribute nearby shoots. No new assets or paid services were used. Photographic fidelity remains unfinished.
+
+Seven targeted wood-collision, moss, reflection and lighting checks and the production build pass. The indirect field was re-exported and rebuilt against 8,415,147 triangles in 21.67 seconds for the altered branch shape.
+
+## Finer surface ripple spectrum
+
+The water uses smaller broad swells and several independently directed fine ripples, with faster short-wave motion and a more localized return-pipe ripple. This reduces the large repeating lobes in reflected foliage while retaining a lightly disturbed aquarium surface. Pixel-footprint filtering fades the finest normal detail before it becomes unresolved on small or distant views. The raised glass contact edge, real displaced surface, Fresnel response, depth-guided reflection and lamp intersection are retained.
+
+The new conservative height bound is at most .056 world units, within the existing .075 displacement allowance. This is a procedural artistic wave spectrum, not a fluid simulation. Static opaque geometry and diffuse-bake inputs are unchanged, and no assets or paid services were added. Full photographic fidelity remains unfinished.
+
+### More visible leaf response
+
+Leaf bends now spread through the midrib using a rooted cubic flexibility profile. The attachment and its tangent remain fixed while the mid-blade moves more, and the free tip stays within the existing planting clearance. Each leaf keeps its own phase and response rate; faster blade response rides the slower, spatially varying whole-plant current. The analytic normal and shadow deformation follow the same motion. The tissue roughness map now modulates a softer surface response to reduce the polished plastic appearance without flattening the leaf's pigment or transmitted light.
+
+Plant-current tests cover attachment, visible mid-blade motion, clearance and deformed normals. Static plant geometry, pigment, fish behavior and the baked diffuse-light field are unchanged.
+
+### Mature rear planting
+
+Tall rear colonies now extend closer to the water surface, reducing the broad empty band above the vegetation. Mature shoots keep their established leaf spacing as they gain height; individual tip ceilings and lower colony margins avoid a uniformly clipped canopy. Foreground colony height rules remain the same. The seeded regeneration also redistributes individual leaves, rosettes and carpet instances.
+
+The regenerated scene has 29,724 botanical leaf instances. An export audit checks every static blade vertex for finite coordinates and placement inside the tank; plant-current and tank-clearance tests cover the retained motion allowances. Bounced lighting was rebuilt against 8,973,091 triangles in 21.42 seconds. This remains a procedural botanical approximation; the reference's individual leaf shapes and hardscape composition are not yet fully matched. No paid assets or services were used.
+
+### Submerged bark and copper foliage
+
+The scanned wood uses a restrained scene-linear reflectance curve (exponent 1.18, gain 1.12) to deepen bark while retaining pale exposed fibers. Occlusion strength is .9, normal strength 1.15 and roughness .82. This is an artistic submerged appearance, not a measured wet-wood model. The diffuse exporter applies the same curve after texture and vertex pigment, matching the runtime shader order.
+
+Red colonies use deeper copper pigment with warmer growing tips and individual variation. A stronger red trial was moderated after viewing it in the tank. Geometry, placement, motion, fish behavior and the separate photographic demo are unchanged. The static bounced-light field was regenerated for the new material colors. No paid assets or services were used; full photographic fidelity remains unfinished.
+
+### Leaf cross-section refinement
+
+Veins, transverse ribs, edge ripples and twist now use a species-level width/length estimate instead of scaling all relief with leaf length. This reduces exaggerated folds on long narrow blades while retaining their longitudinal bend. Margins have shallow unequal curvature. A close-up comparison with the previous geometry exposed excessive cupping on the first round-leaf trial; their original cup depth was retained with the new asymmetry.
+
+The 29,724 leaf instances retain the same layout and animation. A static export audit found all blade vertices finite and inside the glass. Bounced lighting was rebuilt against the unchanged 8,973,091-triangle count in 22.09 seconds. This remains an artistic species-level approximation rather than measured leaf anatomy. No paid assets or services were used; photographic parity remains unproven.
+
+### Clearer front-pane reflection
+
+A close-up isolation test traced the broad gray veil on the front pane to the shared studio environment map. The flat glass faces now use .02 environment intensity instead of .10. Their physical Fresnel response, transmitted scene, polished edges, silicone and internal side-wall reflections remain. The edge material retains its separate .7 response, so the tank still has a visible rimless-glass boundary. Water reflections and scene illumination are unchanged.
+
+This is a studio-reflection adjustment, not a change to water clarity or attenuation. Transparent glass is excluded from the static diffuse bake, which remains valid. No paid assets or services were used; full reference parity is still unfinished.
+
+### Layered lower planting
+
+Two low colonies on the planted banks bridge the carpet and tall red stems. Low stem colonies now mix narrow blades with one-third round-leaf shoots, reducing a uniform broad-leaf mass. A sampled audit of the entire new colony root rectangles found at least .0719/.0737 world units clearance from the winding sand channel. Leaves may overhang their planted bank naturally. The shared seeded regeneration also shifts individual later rosettes and carpet instances.
+
+The scene contains 29,998 botanical leaves and 8,639,431 exported triangles; the narrower-leaf mixture reduces the triangle count despite adding shoots. Every static leaf vertex was checked finite and within the glass. Bounced lighting rebuilt in 20.67 seconds. Motion and fish behavior remain unchanged. No paid assets or services were used; the reference match remains unfinished.
+
+
+### Full-detail frame pacing
+
+Fish deformation reuses equal body cross-sections, the tail transform and duplicate fin vertices. A regression test checks Float32 output against the original deformation at 25 speed/phase combinations for every body/fin vertex. Mesh topology and recomputed normals stay intact. All 64 eyes use two instanced draws with the same complete sphere geometry, materials, scale and independent world transforms. World matrices update once per simulation frame and are shared by shadow/reflection passes. Dynamic fish buffers use dynamic upload hints. Shader preparation and an initial shadow/reflection/postprocessing frame finish before the loading message is removed; hidden tabs skip rendering.
+
+At the same 1116 × 1237 desktop viewport, repeated 240-frame development samples reduced median simulation/update CPU time from 6.4 ms to 2.2 ms and typical draw calls from about 2,072 to 1,703 (fish visibility varies). The final front sample held 60 fps with 16.7 ms median and 95th-percentile frame intervals. Earlier samples varied with GPU load, so this is a local measurement, not a guarantee for every device. Triangle detail (about 89 million submissions including all passes), texture sizes, pixel ratio, shadow/reflection resolution, AO, plant animation and fish behavior are unchanged. Development-only frame percentiles remain available on the scene element for subsequent profiling.
+
+
+### Mobile GPU work reduction
+
+The final AO multiplication now runs inside the existing tone-mapping output shader. It uses the same denoised full-resolution GTAO texture and .48 blend intensity, removing the intermediate HDR copy and blend draws and their extra render target. Main scene anti-aliasing remains at two samples; the default framebuffer no longer allocates redundant multisampling/depth for a full-screen image that is already anti-aliased. AO/denoise targets no longer allocate depth buffers their shaders never test or write. Water/reflection resolution, AO sample counts, pixel ratio, all geometry and texture detail are unchanged.
+
+Fine stem/rotala and sword leaf triangle indices are visited in small tiles. Every oriented triangle, vertex attribute and instance remains intact. A vertex-cache model predicts fewer repeated vertex evaluations at both 16 and 32 entries for these recipes; tests verify exact oriented-face preservation. This is a draw-order change, not mesh simplification.
+
+At a 390 × 844 CSS viewport on the development computer, GPU query medians changed from 12.52 ms to 11.04 ms (about 12%); p95 changed from 14.61 to 12.59 ms. These are desktop GPU measurements at phone dimensions, not a physical-phone FPS claim. The experimental per-root CPU current cache and depth-first material sorting did not show a reliable benefit and were discarded. Nonblocking GPU queries are development-only and ignore disjoint results. Fifty-two tests cover retained triangle topology, full-resolution AO and beauty multisampling, rendering state restoration, fish behavior and lighting/plant regressions.

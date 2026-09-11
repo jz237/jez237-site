@@ -1,0 +1,18 @@
+{
+  "color": "#f3ffe9",
+  "sampleIntensity": 60,
+  "stripIntensity": 20,
+  "height": 6.29,
+  "depth": -0.15,
+  "samplePositions": [
+    -2.8,
+    0,
+    2.8
+  ],
+  "distance": 20,
+  "angle": 0.94,
+  "penumbra": 0.72,
+  "decay": 1.1,
+  "targetHeight": 0.6,
+  "targetXScale": 0.8
+}

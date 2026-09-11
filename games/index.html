@@ -1147,6 +1147,10 @@
     .arcade-svg .du-boom { animation: svgDuBoom 2.8s linear infinite; }
     @keyframes svgDuBoom { 0%, 37% { transform: scale(.2); opacity: 0; } 41% { transform: scale(1.2); opacity: 1; } 51%, 100% { transform: scale(1.5); opacity: 0; } }
 
+    .arcade-icon.icon-skynet { background: radial-gradient(ellipse at 50% 70%, #ff173925, transparent 62%), linear-gradient(180deg,#080d17,#03060c); }
+    @media (prefers-reduced-motion: reduce) {
+      .icon-skynet .an { animation: none !important; }
+    }
     /* de-sync icons from one another while keeping each icon's own
        stages in lockstep — must stay after the animation shorthands */
     .arcade-svg .an { animation-delay: calc(var(--d, 0s) + var(--sd, 0s)); }
@@ -1251,6 +1255,7 @@
       }
     }
   </style>
+  <link rel="stylesheet" href="card-art.css?v=20260905-1">
 </head>
 <body class="arcade-galaxy-page">
   <iframe id="globe-bg" src="../experiments/blueforest-globe/?bg=1&r=0.125&v=globe-big7" title="" aria-hidden="true" tabindex="-1" scrolling="no" loading="eager"></iframe>
@@ -1294,27 +1299,35 @@
     </footer>
   </main>
 
+  <script src="card-art.js?v=20260911-aquascape"></script>
   <script>
     const SITE_BASE = './';
     const gameHref = g => g.href || `${SITE_BASE}${g.path}`;
     const games = [
-      { title: 'Stunt Car Racer HD', path: '2026-07-17/stunt-car-racer/source.html', emoji: '🏎️', date: 'Jul 21', cat: 'arcade', tag: 'featured', desc: 'Full HD remaster of Geoff Crammond\'s 1989 stunt-racing classic, running on the original game logic. Photo-real cockpit with a clear view of the track, photo-textured world — worn asphalt, desert scrub, riveted red-and-white walls — real-sky backdrop, and an all-new sound pack: V8 engine that tracks your speed, boost roar, crashes, landings and a synthwave title theme (🔊 HD button switches back to original audio; add ?classic=1 to the game URL for the original flat-shaded look). All eight tracks are playable in Practice, four-division Season and Super League modes, with local hot-seat and linked championships, damage, boost, records, portable saves, keyboard and gamepad support, plus notch-safe phone controls. Tap Forward once while the opening crane sweeps; the command stays queued and the car accelerates as soon as it is safely released.' },
-      { title: 'VOIDFORGE', href: 'https://voidforge.jez237.com/', emoji: '🚀', date: 'Jul 18', cat: 'arcade', tag: 'experimental', external: true, desc: 'Build 01.38 — an original high-resolution multidirectional space shooter. Mine Flux Shards, intercept Fabricators before they assemble the Dread Engine, survive its pursuit, and destroy it with homing Nova Charges. Includes guided first-flight voice, adaptive synthesized audio, keyboard, gamepad, faster touch flight, slower readable enemy fire, and a three-segment mobile impact shield.' },
+      { title: 'After the Storm: Coastal Racing', path: '2026-09-10/after-the-storm/race.html', emoji: '🌊', date: 'Sep 10', cat: 'arcade', tag: 'featured', desc: 'Detailed jet skis and riders across nine coastal venues. Feel shared waves, buoyancy, spray, wakes and storm weather against photographic shore textures, wind-swept palms, pines and coastal vegetation. Free ride, races, championships, stunts, two-player split screen and a salvage voyage. Keyboard or gamepad; adaptive WebGL graphics.' },
+      { title: 'Final Blow: Philly After Dark', path: '2026-08-20/final-blow/', emoji: '🥊', date: 'Aug 20', cat: 'arcade', tag: 'featured', desc: 'A full 1990s-inspired Philadelphia weapon fighter with eight distinct combat styles, fixed-step frame-based combat, combos, throws, supers, Grit Gauge strategy, rollback private rooms, arcade and training modes, and a self-playing CPU-vs-CPU attract mode. Each fighter has bespoke movement and attack animation, two graphic Final Blow fatalities, and a unique ElevenLabs sound palette across movement, strikes, reactions, specials, supers and finishers. Four selectable soundtracks, keyboard, touch, XInput, remapping, accessibility controls, landscape fullscreen mobile play, and offline install support.' },
+      { title: 'Pinball Illusions', path: '2026-08-01/pinball-illusions/', emoji: '🎱', date: 'Aug 1', cat: 'arcade', tag: 'classic', desc: 'Reconstruction of the 1995 Amiga AGA original, built from the four floppy disks — playfield geometry, artwork, mission scripts, award values, the multiball lock ladders, lamp inserts and even the physics constants are decoded from the disks rather than guessed. All three tables (Law \'n Justice, BabeWatch, Extreme Sports) play start to finish on a deterministic 50 Hz fixed-point engine, with timed missions, up to three-ball multiball earned through the original lock ladders, blinking playfield lamps, the original menu fonts and tumbling-chrome attract animation, the original boot intro, score-panel text and animations set in the machine\'s own dot-matrix faces, and the original soundtrack — the front-end tune, per-table music modules and every sound effect decoded from the game\'s own sound banks. Ball physics verified frame-by-frame against the real machine running under emulation, and the table rules refereed shot-for-shot the same way. Faithfully has no options screen, because the original shipped without one. Keyboard, touch and gamepad controls; source on GitHub.' },
+      { title: 'Pinball Fantasies HD', path: '2026-07-28/pinball-fantasies/', emoji: '🃏', date: 'Jul 28', cat: 'arcade', tag: 'classic', desc: 'High-definition browser rebuild of the 1992 Amiga classic — all four tables playable: Party Land, Speed Devils, Billion Dollar Gameshow and Stones ’n’ Bones. Runs on a deterministic recreation of the original 68000 rules recovered from the disks: scoring, timers, holes, lamps, mode sequencing and both collision planes, with the real Amiga playfields upscaled to HD and the original music and effects lifted from the game’s own sound banks. Four-table select screen, an opt-in Amiga camera that frames the board exactly as the original did, keyboard and touch controls, and global leaderboards.' },
+      { title: 'Pinball Dreams HD', path: '2026-07-14/pinball-dreams-ii/', href: 'https://jez237.com/games/2026-07-14/pinball-dreams-ii/?release=1.0.3', emoji: '🕹️', date: 'Jul 14', cat: 'arcade', tag: 'featured', desc: 'High-definition browser remaster of all four Pinball Dreams tables with modern detailed artwork, native HD lamps and effects, original gameplay and physics, saved high scores, and keyboard, touch and gamepad controls.' },
+      { title: 'Commando HD', path: '2026-08-01/commando/', emoji: '🎖️', date: 'Aug 2', cat: 'arcade', tag: 'classic', desc: 'A tribute to Elite\u2019s 1989 Amiga port of Capcom\u2019s Commando, rebuilt in the browser from the original floppies. Movement, fire rate and enemy speeds are not eyeballed \u2014 they are measured off the real disk running under emulation and asserted in automated tests: 2 px/frame horizontal, 1 vertical at 50 Hz, a ten-frame turn penalty, one shot per press. The enemy AI was mined the same way, from filmstrips of the real game: soldiers enter from a screen edge and cross on a fixed line rather than homing, and grenades arc in from dug-in throwers. Everything you see and hear is new \u2014 the terrain is full-scene painted art laid out to a fixed 26-metre metric with collision derived from its own pixels, characters have hand-painted run, fire, crouch and death cycles, and fuel drums chain-detonate and leave wreckage you can walk through. Three areas that loop harder, POW rescues, finite ammo with droppable supplies, motorcycles and mortar crews. Dual soundtrack: Rob Hubbard\u2019s C64 SID played through the same engine as the site\u2019s SID player, or an all-new ElevenLabs score \u2014 switch live with M. Checkpoints and continues by default with an Arcade mode for original rules, an Amiga-style retro filter, keyboard, gamepad and purpose-built touch controls.' },
+      { title: 'Volcano', path: '2026-07-24/volcano/', emoji: '🌋', date: 'Jul 24', cat: 'arcade', tag: 'demo', desc: 'Unfinished real-time eruption \u2014 a photoreal composite, not pre-rendered video. The volcano, sky, ridges and foreground rock are photographic plates generated with fal; the ash column and pyroclastic surge are simulated live by an Eulerian Stable-Fluids solver; 16,384 GPU particles carrying embers, lava bombs and ash fall are advected by that same fluid velocity field; the rumble, blast, rockfall, surge and thunder come from ElevenLabs and are triggered by real events in the simulation. The cone\u2019s alpha channel is rasterised into the solver\u2019s collision mask every frame, so the plume genuinely flows around that exact photographed silhouette and rolls down its gullies. Click to trigger a fresh blast, drag to push the wind, wheel to zoom, and open the panel for around twenty live controls covering buoyancy, vorticity, turbulence, embers, bloom, heat haze and the film grade. Mouse, touch and keyboard.' },
+      { title: 'Smoke Lab', path: '2026-07-24/smoke-lab/', emoji: '💨', date: 'Jul 24', cat: 'arcade', tag: 'demo', desc: 'Unfinished physics sandbox — a real Eulerian fluid solver (Stam\'s Stable Fluids) running on the GPU in WebGL2, not a particle effect. Semi-Lagrangian advection, Jacobi pressure projection on a staggered grid, vorticity confinement, and buoyancy coupled to a temperature field, so hot smoke rises, cools, and stops climbing. Drag boxes, spheres and airfoils through the plume: obstacles are rasterised into a solid mask every frame and take part in the pressure solve, so smoke genuinely flows around them, and the speed of your drag is injected into the fluid to leave a wake. Around forty live sliders cover viscosity, dissipation, vorticity, buoyancy, wind, turbulence, emitters and rendering, with debug views for velocity, pressure, divergence, vorticity and the obstacle mask. Six presets from Campfire to Wind Tunnel. Falls back to a smaller CPU grid where float render targets are unavailable. Mouse, touch and keyboard.' },
+      { title: 'Living Aquascape — 3D', path: '../demos/rotatable-aquascape/', emoji: '🐠', date: 'Sep 11', cat: 'arcade', tag: 'demo', desc: 'Explore a fully rotatable planted aquarium with textured driftwood and stone, flowing plants, rippling water and a school of sixteen independently animated cardinal tetras. Orbit the tank, switch between front, three-quarter and side views, zoom in, feed the fish and change the lighting.' },
+      { title: 'Skyhook: Ruin Runner', path: '2026-07-22/skyhook/', emoji: '🪝', date: 'Jul 22', cat: 'arcade', tag: 'experimental', desc: 'v1.3.1 — an accessible one-finger sky-swing arcade run through a sunlit world of broken floating citadels. The opening auto-latches to a safe beacon; after that, hold anywhere to hook to the best reachable line and release to slingshot. Lower gravity, long tethers, rescue beacons, and Cloud Lift recovery catch missed timing and floor/lightning grazes; upper citadels are scenic so they cannot trap the flight. Catch relics, chain hooks for momentum, and survive procedural cloud layers, particle-rich impacts, synthesised flight sounds, touch-first controls, and a persistent local top-10 Hall of Wind.' },
+      { title: 'Chrome Riot', path: '2026-07-22/chrome-riot/', emoji: '🤖', date: 'Jul 24', cat: 'arcade', tag: 'experimental', desc: 'v3.10.0 — Desktop mouse play now uses a compact RIOT STICK: click anywhere in the arena to open it, drag in one of eight directions, and the courier moves and fires that way together until release. Combat Clarity makes the mobile tracking camera tactical: edge markers point toward off-screen family members, enemies, wardens and incoming fire, while stronger courier/family silhouettes stay readable over a subdued battlefield. Operator Options includes floating or fixed mobile sticks plus size, sensitivity and opacity, the .6×–1.4× zoom range, a clarity toggle, and independent music/SFX levels. Rescue chains ignite three escalating Overcharge tiers — rapid thrust and fire, twin volleys, then piercing plasma with a one-hit Aegis shield. The soundtrack adds threat-reactive layers for crowded waves, last-life pressure, maximum rescue chains and bosses. Sector Wardens arrive with camera pullback, warning silhouettes, full name cards and themed entrances, then die in unique foundry, reactor, cathedral or orbital destruction sequences. Arcade, Overdrive, Daily Riot, isolated local/global ScoreNet boards, champion replays, touch, keyboard, mouse and gamepad controls remain intact.' },
+      { title: 'Stunt Car Racer HD', path: '2026-07-17/stunt-car-racer/source.html', emoji: '🏎️', date: 'Jul 21', cat: 'arcade', tag: 'experimental', desc: 'Full HD remaster of Geoff Crammond\'s 1989 stunt-racing classic, running on the original game logic. Photo-real cockpit with a clear view of the track, photo-textured world — worn asphalt, desert scrub, riveted red-and-white walls — real-sky backdrop, and an all-new sound pack: V8 engine that tracks your speed, boost roar, crashes, landings and a synthwave title theme (🔊 HD button switches back to original audio; add ?classic=1 to the game URL for the original flat-shaded look). All eight tracks are playable in Practice, four-division Season and Super League modes, with local hot-seat and linked championships, damage, boost, records, portable saves, keyboard and gamepad support, plus notch-safe phone controls. Tap Forward once while the opening crane sweeps; the command stays queued and the car accelerates as soon as it is safely released.' },
+      { title: 'VOIDFORGE', href: 'https://voidforge.jez237.com/', emoji: '🚀', date: 'Jul 28', cat: 'arcade', tag: 'experimental', external: true, desc: 'Build 01.39 — an original high-resolution multidirectional space shooter. The mobile overhaul adds a clear live objective, configurable floating twin sticks, three aim-and-fire modes, gentle aim assist, smart mining, a three-hit shield, bounded enemy volleys, adaptive graphics, haptics, rotation-safe pausing, fullscreen play, and installable app support. Keyboard and gamepad remain fully supported.' },
       { title: 'LUMEN', path: '2026-07-16/lumen/', emoji: '🪸', date: 'Jul 16', cat: 'arcade', tag: 'featured', desc: 'v2.13 — a bioluminescent tower defence in a living alien grove at permanent dusk. Grow seven species of light-organism — then FUSE adjacent masters into five apex hybrids (PRISMBLOOM, STORMBRIAR, GLACIAL COIL, CAUSTIC FURNACE, LANCE CHORUS) whose every hit triggers colour reactions. Three true bosses rotate through the deep waves: THE UNLIT eats your light, THE TIDECALLER summons behind a cycling shield, THE MYCELIAL divides and heals its brood. Reactions stain the battlefield and towers standing on their own colour grow attuned. Threat-reactive music, a grove-spirit announcer, battle-scarred ground, tower veterancy, endless mutators, a shared DAILY GROVE seed with its own leaderboard, photo mode, and a self-playing attract demo. Mouse + keyboard on desktop, full touch play on phones (landscape).' },
-      { title: 'Pinball Dreams HD', path: '2026-07-14/pinball-dreams-ii/', href: 'https://jez237.com/games/2026-07-14/pinball-dreams-ii/', emoji: '🕹️', date: 'Jul 14', cat: 'arcade', tag: 'featured', desc: 'High-definition browser remaster of all four Pinball Dreams tables with modern detailed artwork, native HD lamps and effects, original gameplay and physics, saved high scores, and keyboard, touch and gamepad controls.' },
-      { title: 'Marble Madness (Practice Build)', path: '2026-07-13/marble-madness/', emoji: 'o', date: 'Jul 13', cat: 'arcade', tag: 'experimental', desc: 'Unfinished clean-room browser recreation of the Amiga game — All six races playable start to finish, solo or local two-player — Practice, Beginner, Intermediate, Aerial, the upside-down Silly Race, and the Ultimate Race over a starfield — with the Steelie rival, munchers, acid pools, moving hills, hammers, pistons, a vacuum, a catapult, squashable critters, per-player clocks with winner bonuses and a catch-up rule, time carryover, original FM-style music for every race (the Silly Race soundtrack speeds up the longer you dawdle), a proper ending, and an arcade-style high-score table. Projection and palette are measured from arcade reference shots. Still a work in progress: playability tuning and visual fidelity are actively being refined. Keyboard, mouse-trackball, touch, and gamepad controls.' },
-      { title: 'Vector Arena 3D',               path: '2026-07-11/vector-arena-3d/',       emoji: '✴️', date: 'Jul 11', cat: 'arcade',   tag: 'featured',     desc: 'True-3D twin-stick survival built on Three.js — chase camera over a glowing grid arena, six enemy types from splitters to lead-predicting hunters, burst-spawned waves that swarm past fifty on screen, gem multipliers to ×10, Triple Stream and Overclock powerups, screen-clearing bombs, milestone extra ships, all-synth audio with zero assets, and local + global leaderboards. Keyboard/mouse + gamepad + touch' },
+      { title: 'Marble Madness', path: '2026-07-13/marble-madness/', emoji: 'o', date: 'Jul 13', cat: 'arcade', tag: 'experimental', desc: 'Clean-room browser recreation of the 1986 Amiga game, built against the original running in an emulator — its colours, HUD digit font, rolling marble sprite, arch gates, floor arrows, options screen and race clocks are all measured from the real disk rather than guessed. All six races solo or local two-player — Practice, Beginner, Intermediate, Aerial, the upside-down Silly Race and the Ultimate Race over a starfield — with the Steelie rival, munchers, acid pools, moving hills, hammers, pistons, a vacuum, a catapult and squashable critters. Includes the Amiga-exclusive options screen (players, input device, Difficulty 0-7 scaling every clock) and its turbocharge button, plus per-player clocks with winner bonuses and a catch-up rule, time carryover, original FM-style music for every race (the Silly Race speeds up the longer you dawdle), an ending and a high-score table. Still being refined: course layouts past each opening are drawn from arcade maps, and playability tuning continues. Keyboard, mouse-trackball, touch and gamepad.' },
       // Featured (polished)
-      { title: 'Shatter Storm',                 path: '2026-03-11/shatter-storm/',             emoji: '🧱', date: 'Jul 10', cat: 'arcade',   tag: 'featured',     desc: 'Two complete editions in one: Amiga Edition combines fast neon play, an authentic Amiga music playlist, genuine Paula sound effects, handcrafted rounds, lasers and multiball; Crystal Edition preserves the original stained-glass game with explosive and regenerating panes, boss walls, rose-window skies, voice announcer and gamepad support. Mobile + fullscreen' },
+      { title: 'Shatter Storm',                 path: '2026-03-11/shatter-storm/',             emoji: '🧱', date: 'Jul 10', cat: 'arcade',   tag: 'featured',     desc: 'Two complete editions in one: Amiga Edition now plays all 33 arcade Arkanoid screens with the 7 classic capsules, Konerd-to-Opopo enemies, Break gates and the DOH boss, backed by real Amiga music and Paula sound effects; Crystal Edition preserves the original stained-glass game with explosive and regenerating panes, boss walls, rose-window skies, voice announcer and gamepad support. Mobile + fullscreen' },
       { title: 'Missile Command',               path: 'missile-command/',                      emoji: '🎯', date: 'Jul 9',  cat: 'arcade',   tag: 'featured',     desc: 'Pick your edition — six hand-built looks of the classic: photoreal Realistic 3D (warheads streak in from a real skyline), real WebGL toon 3D, flat-vector, cut-paper collage, claymation, and cinematic Aurora Siege. Special waves, self-playing demo, options, AI-generated art' },
       { title: 'Turrican II',                   path: '2026-07-06/turrican-2/',            emoji: '🛡️', date: 'Jul 7',  cat: 'arcade',   tag: 'featured',     desc: 'v1.24.0 full campaign — a faithful, enhanced browser tribute to the 1991 Amiga run-and-gun classic. Six boss guardians with sealed arenas and weakpoint windows (ending vs the 3-phase MACHINE), a true on-rails shmup Corridor world, all-directional swimming in the flooded dungeon, wind climbs, waterfalls, conveyor belts and buried secret vaults. Morph into the wheel, sweep the rotatable lightning BEAM, aim up/down, freeze-bomb boss cores open. Arcade attract-mode DEMO plays the whole campaign itself on the title screen (or pick WATCH DEMO) — press any key to jump in. Per-world enemy fauna, composed chiptune per world + boss theme, a mission-control voice announcer with variant callouts, checkpoints, continues, difficulty levels, options and local high scores. 100% original art, audio & voice homage. Keyboard + gamepad (rumble) + touch' },      { title: 'Joust',                         path: '2026-07-05/joust/',                 emoji: '🐦', date: 'Jul 5',  cat: 'arcade',   tag: 'featured',     desc: 'Williams\' 1982 arcade classic, TWO ways to play from one menu: the faithful RETRO remake (physics ported from the original 6809 source, real ROM sprites, bit-exact emulated sound-board audio, CRT filter) and a fully MODERNIZED 3D edition driven by the very same engine — real-time volcanic arena, achievements, kill-cam, gamepad rumble, own global leaderboard. All wave types, pterodactyl, lava troll, egg ladder, 2 players, touch controls' },
-      { title: 'Corner Pocket II: Back Room',   path: '2026-07-03/corner-pocket-2/',       emoji: '💵', date: 'Jul 3',  cat: 'arcade',    tag: 'featured',    desc: 'Board two of Corner Pocket — the after-hours money game. A gen-two physics engine simulates every ball at once: true 3-ball MULTIBALL with real ball-to-ball collisions, and a live mini pool table ON the playfield — 3 captive balls, 2 real pockets, scratches included. Back-room wagers and physical ball locks, Massé magnet saves, an inner-loop spinner, kickback, dice bumpers, a trash-talking hustler, and global scores. Keyboard + touch' },
       { title: 'Vector Arena',                  path: '2026-06-19/neon-vector-arena/',     emoji: '✴️', date: 'Jun 19', cat: 'arcade',   tag: 'featured',     desc: 'Geometry Wars-grade twin-stick shooter — four game modes (Classic, Turret, Pacifism, Boss Rush) each with its own global leaderboard, deforming neon grid, geom multipliers, gravity wells, bosses, procedural synth soundtrack, full options menu, and two-player online co-op. Keyboard/mouse + gamepad + touch' },
       { title: 'Steel Ribbon Racer',            path: '2026-06-29/steel-ribbon-racer/',    emoji: '🏎️', date: 'Jun 29', cat: 'arcade',    tag: 'featured', desc: 'Stunt Car Racer-inspired open-city racer — run a 4-race season against three rivals on elevated ribbon tracks, or free-roam: steal cars (each with its own engine sound), outrun a 5-star police heat with roadblocks and spike strips, run timed delivery jobs, chain drift combos, hit flip ramps and thread aerial hoops in slow-mo, fly the helicopter, toggle day/night and rain with wet-grip physics. Four selectable cars, ghost laps, minimap, generated soundtrack. Keyboard + mobile touch' },
       { title: 'Steel Duel',                    path: '2026-06-14/steel-duel/',            emoji: '🔫', date: 'Jun 14', cat: 'arcade',    tag: 'featured',    desc: 'HD remaster of Atari TANK (1974), the first tank-combat arcade game — a top-down duel through a walled maze and a deadly central minefield, now with a full 12-level single-player &amp; co-op CAMPAIGN: fight waves of six distinct enemy tank types (scouts, brutes, snipers, mine-layers, front-armored wardens) across open arenas and battle three multi-phase bosses — the Bastion, the Mauler, and the Iron Warlord. Smart A*-pathfinding CPU with a Stupid→Can\'t-Defeat skill slider (it routes around walls and never suicides on mines), an attract-mode title where two AIs duel, online rooms, local/online co-op against enemy tanks, mouse-aimed independent turret + WASD on desktop, twin-stick on mobile, destructible walls you can blast open, a one-click 1974 CRT mode, particle juice + screen shake, and global scores. Campaign (1P + 2P co-op), 1P vs CPU, 2P duel, survival co-op, keyboard/mouse + touch, synth audio' },
       { title: 'Snake Awakening',               path: '2026-06-22/snake-awakening/',       emoji: '🐍', date: 'Jun 22', cat: 'arcade',    tag: 'featured',    desc: 'A self-playing, genre-bending snake game where the snake gradually realizes it is inside a snake game, then turns that awareness into mechanics. Classic snake mutates into meta arcade, RTS command mode, cozy farming, bullet-hell patch storm, and a rule-breaking escape finale. Keyboard + touch, local and global high scores' },
       { title: 'Pay Dirt',                      path: '2026-06-12/pay-dirt/',              emoji: '💰', date: 'Jun 12', cat: 'arcade',    tag: 'featured',    desc: 'Modernized Lode Runner — dig traps under claim-jumping guards, grab every nugget, climb out before the holes seal. HD pixel art with dynamic lantern lighting and particle juice, 13 handcrafted claims plus a seeded Daily Dig, power-ups (TNT, speed boots, phase cloak, gold magnet, power shovel), conveyor/crumble/one-way/TNT-crate tiles, scout & mason guard variants, combo multipliers, global leaderboards. Keyboard + touch, synth audio' },
-      { title: 'Corner Pocket',                 path: '2026-06-11/corner-pocket/',         emoji: '🎱', date: 'Jun 11', cat: 'arcade',    tag: 'featured',    desc: 'Trash-talking pool-hall pinball with real swept-collision physics, in the scrolling style of Amiga Pinball Illusions. Sink the rack, shoot the 8-ball corner pocket, spell POCKET for a replay — bonus carryover, 5× multipliers, voice callouts, synth audio, global scores. Keyboard + touch' },
       { title: 'Eddy',                          path: '2026-06-10/eddy/',                  emoji: '🌀', date: 'Jun 10', cat: 'arcade',    tag: 'featured',    desc: 'Fluid-dynamics herding — you ARE the current. Swipe real simulated water to shepherd a glowing spore bloom past undertows, geysers, cold pockets and anglerfish into the home ring. 10 tides plus a daily seeded tide, streak scoring, tide-settings sliders, global leaderboards. Touch-first, synth audio' },
       { title: 'Iron Ridge',                    path: '2026-06-10/iron-ridge/',            emoji: '🪖', date: 'Jun 10', cat: 'arcade',    tag: 'featured',    desc: 'Open-field 3D tank combat — real rigid-body physics, rolling procedural forests, destructible everything, ballistic shells, and AI tank duels with global scores. Three.js + cannon-es, keyboard/mouse + touch' },
       { title: 'Glimmer Grotto',                path: '2026-06-10/glimmer-grotto/',        emoji: '✨', date: 'Jun 10', cat: 'adventure', tag: 'featured',    desc: 'Quiet, no-fail puzzle adventure — carry Mica and Luma through five sleeping cave gardens, turn crystals, wake root-songs, collect 15 hidden keeper memories, and restore the Heartbloom. Full 20-room journey with playable afterglow, local saves, offline install, keyboard + gamepad + touch, adaptive Canvas fallback, synth audio' },
@@ -1327,11 +1340,9 @@
       { title: 'Plasma Pong',                   path: '2026-03-10/plasma-pong/',               emoji: '🏓', date: 'Mar 10', cat: 'arcade',   tag: 'featured',     desc: 'Neon pong with plasma trails' },
       { title: 'Asteroids HD',                  path: '2026-03-09/asteroids-hd/',              emoji: '🚀', date: 'Mar 9',  cat: 'arcade',   tag: 'featured',     desc: 'v4.2: named threat levels (comet showers, golden asteroids, magnetic anomalies), scaling bosses every 5th, nebula skies, voice, gamepad' },
       { title: 'Invaders',                      path: '2026-06-05/invaders/',               emoji: '🛸', date: 'Jun 5',  cat: 'arcade',   tag: 'featured',     desc: 'Mobile-first Space Invaders remix v2.0: a seeded Daily Challenge with rotating modifiers, three boss warships, combo Overdrive, smart bombs, splitter and kamikaze foes, global scores, and pro synthwave audio' },
-      { title: 'Fluid Lab',                     path: '2026-06-09/fluid/',                 emoji: '💧', date: 'Jun 9',  cat: 'arcade',   tag: 'demo',         desc: 'Interactive WebGL fluid simulation with dye, bloom, pressure, vorticity, and touchscreen stirring controls' },
       { title: 'Particle Graphics Cat',         path: 'particle-graphics-cat/', href: '../experiments/particle-graphics-cat/', emoji: '🐈', date: 'Jun 24', cat: 'arcade', tag: 'demo', desc: 'Particle graphics demo — an interactive Three.js point-cloud cat with tap-and-hold ripple physics, collapsible tuning sliders, blinking eyes, whiskers, and GPU particle animation' },
       { title: 'Stellar Drift',                 path: '2026-03-25/stellar-drift/',             emoji: '✨', date: 'Mar 25', cat: 'arcade',   tag: 'featured',     desc: 'One-finger auto-fire space shooter' },
       { title: 'SUPER STAR TREK',               path: '2026-03-27/star-trek/',                 emoji: '🖖', date: 'Mar 27', cat: 'retro70s', tag: 'featured',     desc: 'The 70s computer classic — reborn with LCARS visuals' },
-      { title: 'Asteroids',                     path: '2026-03-08/asteroids/',                 emoji: '☄️', date: 'Mar 8',  cat: 'arcade',   tag: 'featured',     desc: 'Classic asteroids, mobile controls' },
       { title: 'Lunar Lander',                  path: 'lunar-lander/lunar-lander.html',        emoji: '🌕', date: 'Apr 7',  cat: 'arcade',   tag: 'featured',     desc: 'v2.4: real Houston mission-control voice, ambient space score, 3 difficulty tiers, gamepad, ghosts, global scores' },
       { title: 'Neon Qix',                      path: '2026-04-09/quix-modern/',               emoji: '⚡', date: 'Apr 9',  cat: 'arcade',   tag: 'featured',     desc: 'Full arcade Qix: Sparx, Fuse, twin-Qix splits, slow-cut 2×, options menu + original synth score' },
       { title: 'Sky Joust',                      path: '2026-05-11/sky-joust/',                 emoji: '🦅', date: 'May 11', cat: 'arcade',   tag: 'featured',     desc: 'Aerial jousting over molten lava — knights on ostriches battle for the sky' },
@@ -1343,14 +1354,9 @@
       // Experimental
       { title: 'PRIMORDIA',                     path: '2026-07-06/primordia/',             emoji: '🌌', date: 'Jul 6',  cat: 'arcade',   tag: 'demo',         desc: 'Self-running artificial-life aquarium — watch more than play. An unscripted neon-abyss ecosystem: plankton, boid grazers and hunting predators with heritable mutating genes, so real Lotka-Volterra population cycles and a live evolutionary arms race emerge on their own (the grazers get faster than their ancestors, generation by generation). Director camera + click-to-inspect genes/lineage, hydrothermal vents, swaying kelp, cinematic slow-mo kills, a nature-documentary narrator, generative synthwave, and live population + gene-drift charts. A genesis event reseeds the world on extinction; it runs forever. Drag to stir the current, double-click to feed · S stats · G genes · M sound' },
       { title: 'Choplifter: Rescue Run',        path: '2026-06-09/choplifter/',            emoji: '🚁', date: 'Jun 9',  cat: 'arcade',   tag: 'featured',     desc: 'v2: mission-control voice callouts, 80s synth score, nose spotlight, wave-shifting skies, gamepad, difficulty, global scores' },
-      { title: 'GPT 5.5 Fluid Simulator Demo',  path: '2026-06-09/sci-fi-data-chamber-loop/', emoji: '💧', date: 'Jun 9',  cat: 'arcade',   tag: 'demo',         desc: 'High-resolution WebGL2 fluid dynamics lab with ray-lit refraction, caustics, vorticity, pressure solving, and live sliders' },
       { title: 'Subway Siege: Blackout',        path: '2026-06-09/subway-siege-blackout/', emoji: '🔦', date: 'Jun 9',  cat: 'arcade',   tag: 'featured',     desc: 'v3: patrol nine blacked-out districts with five weapons, flares and EMPs — the dark answers back. Living city props and weather, steam vents and power surges, light-hunting hostiles, Daily Patrol shared-seed runs, ElevenLabs audio, 16 medals, global scores' },
-      { title: 'Vector Tempest',                path: '2026-06-25/vector-drift/',           emoji: '✳️', date: 'Jun 25', cat: 'arcade',   tag: 'featured',     desc: 'A faithful tribute to Atari\'s 1981 Tempest: a glowing vector tube shooter with a tilted 16-lane web, the yellow claw, flippers, tankers, spikers, fuseballs, pulsars, the superzapper, per-level shapes and colours, and the AVOID SPIKES level warp.' },
       { title: 'Subway Siege',                  path: '2026-05-30/subway-siege/',          emoji: '🚇', date: 'May 30', cat: 'arcade',   tag: 'experimental', desc: 'Cinematic touch-first subway tunnel defender with raiders, drones, trains, shields, and charge blasts' },
-      { title: 'Vortex: Storm Eater',           path: '2026-03-04/vortex/',                    emoji: '🌪️', date: 'Mar 4', cat: 'arcade',   tag: 'experimental', desc: 'Early-build storm shooter' },
       { title: 'Slash',                         path: '2026-03-04/slash/',                     emoji: '⚡', date: 'Mar 4',  cat: 'arcade',   tag: 'experimental', desc: 'Reflex swipe-action test' },
-      { title: 'Void Surge',                    path: '2026-03-29/void-arcade/',               emoji: '🌌', date: 'Mar 29', cat: 'arcade',   tag: 'experimental', desc: 'Deep-space arcade prototype with touch controls, difficulty modes, high scores, and glowing tunnel-survival action' },
-      { title: 'Void Echo',                     path: '2026-03-03/void-echo/',                 emoji: '🌌', date: 'Mar 3',  cat: 'arcade',   tag: 'experimental', desc: 'Space-ambient exploration' },
       { title: 'Gravity Weaver',                path: '2026-03-03/gravity-weaver/',            emoji: '🕸️', date: 'Mar 3', cat: 'puzzle',   tag: 'experimental', desc: 'Gravity-puzzle prototype' }
     ];
 
@@ -1361,18 +1367,30 @@
     let currentFilter = 'all';
 
     const UNFINISHED = new Set([
-      'voidforge',
-      'corner pocket', 'corner pocket ii back room',
-      'crystal cavern', 'crystal tavern', 'shatter storm', 'plasma pong',
-      'super star trek', 'depth charge', 'asteroids',
-      'neon invaders', 'vortex storm eater',
-      'void surge', 'void echo', 'gravity weaver', 'storm echo', 'vector arena demo',
-      'vector arena 3d', 'vector tempest',
-      'marble madness practice build', 'lumen',
-      'stunt car racer hd'
+      // 'pinball fantasies hd' promoted to Playable 2026-07-31 (owner's call).
+      'crystal cavern', 'crystal tavern', 'plasma pong',
+      'super star trek', 'depth charge',
+      'neon invaders',
+      'gravity weaver', 'storm echo', 'vector arena demo',
+      // 'marble madness practice build' was the old title; the slug must match the CURRENT one
+      'marble madness', 'marble madness practice build', 'lumen',
+      'stunt car racer', 'stunt car racer hd', 'skyhook ruin runner',
+      'smoke lab', 'volcano',
+      'commando hd'
     ]);
     const slugTitle = t => t.toLowerCase().replace(/[^a-z0-9]+/g, ' ').trim();
-    games.forEach(g => { g.status = UNFINISHED.has(slugTitle(g.title)) ? 'unfinished' : 'released'; });
+    const FEATURED_TITLES = new Set([
+      'after the storm coastal racing',
+      'final blow philly after dark', 'pinball fantasies hd', 'pinball dreams hd', 'chrome riot',
+      'missile command', 'joust', 'vector arena', 'iron ridge',
+      'hollow deep', 'emerald mine ii', 'neon qix'
+    ]);
+    games.forEach(g => {
+      const title = slugTitle(g.title);
+      if (FEATURED_TITLES.has(title)) g.tag = 'featured';
+      else if (g.tag === 'featured') g.tag = 'experimental';
+      g.status = UNFINISHED.has(title) ? 'unfinished' : 'released';
+    });
 
     function tagLabel(t, status) {
       if (status === 'unfinished') return '🚧 Unreleased';
@@ -1393,7 +1411,11 @@
       ['#ff6bcb', '#8b5cf6', '#22d3ee', '#fff1fb']
     ];
     const ICON_EFFECTS = [
+      ['after the storm', 'wave'],
+      ['skynet', 'skynet'],
       ['vector arena', 'vectorship'],
+      ['final blow', 'sword'],
+      ['pinball fantasies', 'pinball'],
       ['pinball dreams', 'pinball'],
       ['pay dirt', 'paydirt'], ['corner pocket', 'cornerpocket'],
       ['millipede', 'millipede'], ['emerald', 'crystal'], ['crystal', 'crystal'], ['firework', 'fireworks'],
@@ -1404,8 +1426,9 @@
       ['blackout', 'tank'], ['subway', 'train'], ['glassrail', 'train'], ['vortex', 'storm'],
       ['slash', 'lightning'], ['void', 'void'], ['gravity', 'web'],
       ['fluid', 'fluid'], ['invaders', 'invaders'], ['choplifter', 'chopper'],
-      ['particle', 'fluid'],
+      ['particle', 'fluid'], ['smoke', 'fluid'], ['volcano', 'fireworks'],
       ['snake awakening', 'serpent'],
+      ['commando', 'tank'],
       ['serpent', 'serpent'],
       ['steel ribbon', 'ribbon'],
       ['steel duel', 'steelduel']
@@ -1421,6 +1444,7 @@
       return g.cat === 'puzzle' ? 'crystal' : 'star';
     }
     function iconStyle(g, index) {
+      if (iconEffect(g) === 'skynet') return '--icon-a:#dce9f4;--icon-b:#52687d;--icon-c:#ff1739;--icon-hot:#ffe2e8;--icon-cool:#ff1739';
       const p = ICON_PALETTES[(index + slugTitle(g.title).length) % ICON_PALETTES.length];
       return `--icon-a:${p[0]};--icon-b:${p[1]};--icon-c:${p[2]};--icon-hot:${p[3]};--icon-cool:${p[0]}`;
     }
@@ -1440,6 +1464,20 @@
       const star10 = 'M32 13 L37 25.8 L50.6 26.6 L40.2 35.4 L43.4 48.6 L32 41.2 L20.6 48.6 L23.8 35.4 L13.4 26.6 L27 25.8Z';
       const gem = 'M32 9 L48 25 L39 53 L25 53 L16 25Z';
       const art = {
+        skynet: `<defs><linearGradient id="sk-metal-${uid}" x1="0" y1="0" x2="0" y2="1"><stop stop-color="#e5f0fa"/><stop offset=".36" stop-color="#62788d"/><stop offset=".5" stop-color="#ecf4fa"/><stop offset=".58" stop-color="#263647"/><stop offset="1" stop-color="#8d9cac"/></linearGradient></defs>
+          <ellipse cx="32" cy="58" rx="25" ry="4" fill="#131c2a" stroke="#647687" stroke-width=".8"/><ellipse cx="32" cy="57" rx="21" ry="2.7" fill="none" stroke="#ff1739" stroke-width=".7"/>
+          <circle cx="32" cy="27" r="23" fill="#060b13" stroke="#516578" stroke-width="1.4"/>
+          <g class="an fx-spin-slow" style="transform-box:view-box;transform-origin:32px 27px"><circle cx="32" cy="27" r="22" fill="none" stroke="url(#sk-metal-${uid})" stroke-width="2" stroke-dasharray="9 2 3 2"/><circle cx="32" cy="27" r="20" fill="none" stroke="#ff1739" stroke-width="1" stroke-dasharray="11 8 2 4"/></g>
+          <g class="an fx-spin-rev" style="transform-box:view-box;transform-origin:32px 27px"><circle cx="32" cy="27" r="17.5" fill="none" stroke="#a3b5c4" stroke-width=".9" stroke-dasharray="14 5 2 5"/></g>
+          <path d="M32 7 32 45M13 19 51 35M13 35 51 19M18 12 46 42M18 42 46 12" fill="none" stroke="#47667b" stroke-width=".45" opacity=".7"/>
+          <path d="m32 10 11 12-11 10-11-10Zm-13 14 10 15H9Zm26 0 10 15H35Z" fill="#0a111b" stroke="url(#sk-metal-${uid})" stroke-width="1.1"/>
+          <circle cx="32" cy="33" r="6.5" fill="#09111b" stroke="#b4c5d2" stroke-width="1.2"/>
+          <g class="an fx-spin" style="transform-box:view-box;transform-origin:32px 33px"><circle cx="32" cy="33" r="5" fill="none" stroke="#ff1739" stroke-width="1.2" stroke-dasharray="4 2"/></g>
+          <circle class="an fx-tw" cx="32" cy="33" r="2.2" fill="#ff1739"/><circle cx="32" cy="33" r=".8" fill="#fff1f3"/>
+          <circle cx="32" cy="22" r="2.7" fill="#0c111a" stroke="#a9bbcd" stroke-width=".8"/><path class="an fx-spin-rev" style="transform-box:view-box;transform-origin:32px 22px" d="M32 20a2 2 0 0 1 0 4" fill="none" stroke="#ff1739" stroke-width=".9"/>
+          <path d="M7 42h50l2 13H5Z" fill="#0b111b" stroke="#798999" stroke-width=".8"/><path d="M8 43h48M6 55h52" stroke="#ff1739" stroke-width=".7"/>
+          <text x="32" y="52" text-anchor="middle" font-family="Arial,sans-serif" font-weight="900" font-size="8.6" letter-spacing=".6" fill="url(#sk-metal-${uid})">SKYNET</text>
+          <circle class="an fx-tw" style="--sd:-.8s" cx="13" cy="18" r="1" fill="#ff1739"/><circle class="an fx-tw" style="--sd:-1.7s" cx="49" cy="15" r=".9" fill="#d1eeff"/><circle class="an fx-tw" style="--sd:-2.6s" cx="52" cy="36" r="1" fill="#ff1739"/>`,
         rocket: `<path class="neon soft an fx-streak" style="--sd:-.2s" d="M14 10 V20"/><path class="neon soft an fx-streak" style="--sd:-.7s" d="M50 8 V16"/><circle class="hot an fx-tw" style="--sd:-1.1s" cx="12" cy="40" r="1.5"/><circle class="hot an fx-tw" style="--sd:-2.2s" cx="53" cy="30" r="1.3"/><g class="an fx-bob"><g class="an fx-flame"><path class="c" d="M26.5 45 L32 60 L37.5 45Z"/><path class="hot" d="M29.5 45 L32 53.5 L34.5 45Z"/></g><path class="hot" d="M32 5 C38.5 12 40 28 38 45 H26 C24 28 25.5 12 32 5Z"/><path class="a" d="M26.4 28 L14 43 L26 45Z"/><path class="b" d="M37.6 28 L50 43 L38 45Z"/><circle class="a" cx="32" cy="20" r="4.6"/><circle fill="#081024" cx="32" cy="20" r="2.4"/></g>`,
         fireworks: `<circle class="hot an fx-tw" style="--sd:-.6s" cx="12" cy="14" r="1.4"/><circle class="a an fx-tw" style="--sd:-1.9s" cx="54" cy="22" r="1.4"/><g class="an fw-shell"><circle class="hot" cx="32" cy="30" r="2.2"/><path class="neon soft" d="M32 33 L32 42"/></g><g class="an fw-burst">${[0,45,90,135,180,225,270,315].map(a=>`<g transform="rotate(${a} 32 30)"><path class="neon" d="M32 19 L32 11"/><circle class="c" cx="32" cy="9.5" r="1.8"/></g>`).join('')}</g><circle class="hot an fw-core" cx="32" cy="30" r="4.5"/><circle class="b an fw-ember" style="--sd:.05s" cx="22" cy="36" r="1.7"/><circle class="c an fw-ember" style="--sd:.14s" cx="41" cy="34" r="1.5"/><circle class="hot an fw-ember" style="--sd:.22s" cx="32" cy="41" r="1.4"/><g class="an fw-burst" style="--sd:-1.5s">${[0,60,120,180,240,300].map(a=>`<path class="neon soft" transform="rotate(${a} 51 13)" d="M51 8.5 L51 5"/>`).join('')}</g>`,
         missile: `<circle class="hot an fx-tw" style="--sd:-.6s" cx="11" cy="11" r="1.3"/><circle class="a an fx-tw" style="--sd:-1.9s" cx="55" cy="15" r="1.2"/><path class="neon soft an fx-streak" style="--sd:-.2s" d="M13 5 L21 21"/><path class="neon soft cool-stroke an fx-streak" style="--sd:-.9s" d="M52 3 L45 17"/><g class="an fx-tw" style="--sd:-1.2s"><circle class="neon soft cool-stroke" cx="32" cy="24" r="7.5" fill="none" stroke-width="1.3"/><path class="neon soft cool-stroke" d="M32 13.5 V17.5 M32 30.5 V34.5 M21.5 24 H25.5 M38.5 24 H42.5" stroke-width="1.3"/></g><g class="an fw-shell"><circle class="hot" cx="32" cy="28" r="2"/><path class="neon soft" d="M32 31 L32 44"/></g><g class="an fw-burst">${[0,45,90,135,180,225,270,315].map(a=>`<g transform="rotate(${a} 32 24)"><path class="neon" d="M32 15 L32 10"/><circle class="c" cx="32" cy="8.8" r="1.5"/></g>`).join('')}</g><circle class="hot an fw-core" cx="32" cy="24" r="4.2"/><circle class="neon soft an fx-ring" cx="32" cy="24" r="9" fill="none"/><path class="a" d="M9 54 V45 H14 V54Z M16 54 V40.5 H21 V54Z"/><path class="b" d="M43 54 V42.5 H48 V54Z M50 54 V46.5 H55 V54Z"/><path class="hot" d="M27 54 a5 5 0 0 1 10 0Z"/><rect class="c" x="31" y="46.8" width="2" height="2" rx=".5"/><path class="neon soft an fx-flow" d="M6 54 H58"/>`,
@@ -1482,6 +1520,8 @@
       return `<svg ${common}>${art[effect] || art.star}</svg>`;
     }
     function gameIcon(g, index) {
+      const cover = window.GameCardArt?.render(g, index);
+      if (cover) return cover;
       const effect = iconEffect(g);
       const seed = `${index}:${slugTitle(g.title)}:${effect}`;
       return `
@@ -1760,6 +1800,7 @@
           svg.style.setProperty('--d', (-Math.random() * 4).toFixed(2) + 's');
         });
         ParticleIconRuntime.mount();
+        window.GameCardArt?.mount();
       });
     }
 
@@ -2034,6 +2075,31 @@
       }
       for(let i=0;i<4;i++)createRocket(rand(.18,.82),null,rand(state.h*.12,state.h*.42),i===1);
       requestAnimationFrame(loop);
+    })();
+  </script>
+  <script>
+    // Final Blow workers before 1.3e cached a redirected /index.html response.
+    // Browsers reject that response for navigation with ERR_FAILED, so repair
+    // only those legacy registrations when a visitor reaches this catalog.
+    (async () => {
+      if (!("serviceWorker" in navigator) || !("caches" in globalThis)) return;
+      try {
+        const legacyScope = "/games/2026-08-20/final-blow/";
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        const legacy = registrations.filter((registration) => {
+          const scope = new URL(registration.scope).pathname;
+          const scriptUrl = registration.active?.scriptURL || registration.waiting?.scriptURL || registration.installing?.scriptURL || "";
+          return scope === legacyScope && !scriptUrl.includes("final-blow-1.3e");
+        });
+        if (!legacy.length) return;
+        await Promise.all(legacy.map((registration) => registration.unregister()));
+        const cacheNames = await caches.keys();
+        await Promise.all(cacheNames
+          .filter((name) => name.startsWith("final-blow-") && name !== "final-blow-shell-1.3e")
+          .map((name) => caches.delete(name)));
+      } catch {
+        // The catalog remains fully usable if a browser blocks storage access.
+      }
     })();
   </script>
   <script src="../assets/site-enhance.js" defer></script>
