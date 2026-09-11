@@ -1,3 +1,4 @@
+import {surfStrength} from './surf-waves.js';
 import {setCourseWaveTrain} from './course-wave-train.js';
 import {wakeHeight} from './wake-field.js';
 import {impactHeight} from './surface-impulses.js';
@@ -12,7 +13,7 @@ export function jetWake(x,z){let result=0;for(const c of craftFields){if(c.power
 export function wave(x,z,t,storm=0){return waterLevel.value+sampleSwell(x,z,t,storm)+jetWake(x,z)+impactHeight(x,z,t)+wakeHeight(x,z,t,storm);}
 export function ground(x,z){const outer=Math.sqrt((x/1.04)**2+((z+15)/1.25)**2);let g=-7+Math.max(0,outer-125)*.22;g+=Math.sin(x*.04)*.5+Math.sin(z*.053+x*.025)*.65;g+=5.8*Math.exp(-((x+77)**2+(z-25)**2)/1500);g+=5.4*Math.exp(-((x-87)**2+(z+52)**2)/1350);g+=2.4*Math.exp(-((x+32)**2+(z+166)**2)/1600);if(z<-170)g-=Math.min(16,(-z-170)*.16)*Math.exp(-(x*x)/12500);if(g>5){const blend=Math.min(1,(g-5)/12);g+=blend*(Math.sin(x*.029+Math.cos(z*.019))*6+Math.sin(z*.028+x*.012)*4);g-=Math.max(0,outer-245)*.29;}return g;}
 export const ROCKS=[{x:-84,z:28,r:9},{x:-63,z:16,r:5},{x:-90,z:51,r:6},{x:92,z:-44,r:8},{x:65,z:-65,r:4},{x:100,z:-80,r:6},{x:-43,z:-152,r:5}];
-export function createState(){setCourseWaveTrain();waterLevel.value=0;return {mode:'intro',x:0,z:139,heading:Math.PI,speed:0,turn:0,throttle:0,acceleration:0,hull:100,time:0,load:[],delivered:[],jobs:JOBS.map(j=>({...j,status:'waiting',progress:0})),recovery:null,dockProgress:0,collisionCooldown:0,event:'',eventId:0,departed:false};}
+export function createState(){surfStrength.value=0;setCourseWaveTrain();waterLevel.value=0;return {mode:'intro',x:0,z:139,heading:Math.PI,speed:0,turn:0,throttle:0,acceleration:0,hull:100,time:0,load:[],delivered:[],jobs:JOBS.map(j=>({...j,status:'waiting',progress:0})),recovery:null,dockProgress:0,collisionCooldown:0,event:'',eventId:0,departed:false};}
 export function emit(s,message){s.event=message;s.eventId++;}
 export const loadWeight=s=>s.load.reduce((a,i)=>a+s.jobs[i].weight,0);
 export const stormLevel=s=>Math.min(1,Math.max(0,(s.time-60)/(DURATION-60)));
