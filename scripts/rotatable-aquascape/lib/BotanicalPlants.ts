@@ -11,23 +11,25 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  let seed=84237;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  const batches=new Map<string,{species:Species;geometry:T.BufferGeometry;matrices:T.Matrix4[];colors:T.Color[];roots:number[];flex:number[]}>();
  const dummy=new T.Object3D();
- for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet'] as Species[])for(let variant=0;variant<3;variant++){
+ const variants=6;
+ for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet'] as Species[])for(let variant=0;variant<variants;variant++){
+  const form=variant/(variants-1),handedness=variant%2?1:-1;
   const p:number[]=[],uv:number[]=[],idx:number[]=[];
   const rows=species==='sword'?24:species==='carpet'?8:16,cols=species==='carpet'?4:8;
   for(let i=0;i<=rows;i++){
    const t=i/rows,blade=Math.max(0,(t-.08)/.92);
-   const profile=species==='bacopa'?Math.pow(blade,1.3):species==='ludwigia'?Math.pow(blade,.8):species==='sword'?Math.pow(blade,.84+variant*.08):blade;
-   const outline=species==='anubias'||species==='bacopa'?Math.pow(Math.sin(profile*Math.PI),.46):species==='sword'?Math.pow(Math.sin(profile*Math.PI),.72):Math.pow(Math.sin(profile*Math.PI),species==='ludwigia'?.56:.67);
+   const profile=species==='bacopa'?Math.pow(blade,1.2+form*.2):species==='ludwigia'?Math.pow(blade,.72+form*.18):species==='sword'?Math.pow(blade,.82+form*.24):Math.pow(blade,.78+form*.32);
+   const outline=species==='anubias'||species==='bacopa'?Math.pow(Math.sin(profile*Math.PI),.46):species==='sword'?Math.pow(Math.sin(profile*Math.PI),.72):Math.pow(Math.sin(profile*Math.PI),species==='ludwigia'?.56:.82);
    // A continuous petiole-to-blade transition avoids the old abrupt shoulder.
    const width=t<.08?.008:T.MathUtils.lerp(.008,outline*.5,T.MathUtils.smoothstep(t,.08,.18));
    for(let j=0;j<=cols;j++){
     const u=j/cols,s=u*2-1;
     // Arched midrib, modest edge waviness and a rolled tip make a thin living blade.
     const edge=Math.abs(s),wave=Math.sin(t*22+s*3+variant*.9)*edge*edge*(species==='sword'?.018:.006)*Math.sin(t*Math.PI);
-    const curl=(species==='sword'?.28:species==='bacopa'?.07:.14)*t*t*(.65+variant*.35);
-    const asymmetry=(variant-1)*Math.sin(t*Math.PI);
-    const arch=Math.sin(t*Math.PI)*(.025+variant*.014);
-    p.push(s*width*(1+s*asymmetry*.14)+asymmetry*.035,t,arch-curl+edge*edge*(.020+variant*.014)*Math.sin(t*Math.PI)+wave+s*width*(variant-1)*t*.17);
+    const curl=(species==='sword'?.28:species==='bacopa'?.07:.18)*t*t*(.55+form*.95);
+    const asymmetry=handedness*(.25+form*.75)*Math.sin(t*Math.PI);
+    const arch=Math.sin(t*Math.PI)*(.018+form*.055);
+    p.push(s*width*(1+s*asymmetry*.14)+asymmetry*.035,t,arch-curl+edge*edge*(.016+form*.027)*Math.sin(t*Math.PI)+wave+s*width*handedness*t*(.06+form*.18));
     uv.push(u,t);
     if(i<rows&&j<cols){const n=i*(cols+1)+j;idx.push(n,n+1,n+cols+1,n+1,n+cols+2,n+cols+1);}
    }
@@ -36,7 +38,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  }
  let plantRoot=V(0,0,0),plantFlex=.35;
  const add=(species:Species,pos:T.Vector3,dir:T.Vector3,length:number,width:number,h:number,s:number,l:number,twist=0)=>{
-  const variant=Math.abs(Math.floor(pos.x*117+pos.y*83+pos.z*31+dir.x*7))%3;
+  const variant=Math.abs(Math.floor(pos.x*117+pos.y*83+pos.z*31+dir.x*7))%variants;
   const batch=batches.get(`${species}-${variant}`)!;dummy.position.copy(pos);dir.normalize();
   // Orient the upper lamina toward the light, instead of leaving leaf faces vertical.
   const across=dir.clone().cross(up);if(across.lengthSq()<.0001)across.set(1,0,0);across.normalize();
@@ -61,13 +63,14 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const leanX=Math.cos(angle)*(.12+random()*.33),leanZ=(random()-.5)*.40;
   const point=(t:number)=>V(T.MathUtils.clamp(x+leanX*t*t+Math.sin(t*4+phase)*.13*t,-4.65,4.65),base+h*t,T.MathUtils.clamp(z+leanZ*t*t,-1.95,1.9));
   const hue=red?-.018+random()*.026:.205+random()*.035,light=.26+random()*.065;
-  const roundLeaf=!red&&(cx< -3.8||cx>3.7||maxH<2.5)&&i%3!==0;
-  const broadRed=red&&(cx>.4?i%3!==0:i%4===0);
+  const roundLeaf=!red&&(maxH<2.5||(cx< -3.8||cx>3.7)&&i%5===0);
+  const broadRed=red&&i%5===0;
   const grow=(start:number,end:number,offset:T.Vector3,vigor=1)=>{
    const span=(end-start)*h,nodes=Math.max(4,Math.floor(span*(red?5.2:5.0))),nodeAngle=random()*6.28,spiral=Math.PI*.5+(random()-.5)*.22;
    let previous=point(start);
    for(let j=1;j<=nodes;j++){
-    const growth=1-Math.pow(1-j/nodes,1.34),t=start+(end-start)*growth;
+    const node=j===nodes?1:(j+Math.sin(j*2.4+phase)*.16)/nodes;
+    const growth=1-Math.pow(1-node,1.34),t=start+(end-start)*growth;
     const at=point(t).addScaledVector(offset,Math.sin(growth*Math.PI*.5));
     at.x=T.MathUtils.clamp(at.x,-4.7,4.7);at.z=T.MathUtils.clamp(at.z,-2.05,2.05);
     stem(previous,at,(red?.0055:.0065)*(1-growth*.60),red?0x6d4930:0x496124);previous=at;
@@ -76,11 +79,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
      // Full-sized mature leaves persist below a compact tip; a sine profile made
      // every stem look like the same triangular miniature conifer.
      const a=nodeAngle+j*spiral+side*Math.PI+(random()-.5)*.35;
-     const tip=T.MathUtils.smoothstep(growth,.77,1),length=(broadRed?.34:red?.32:roundLeaf?.29:.37)*(1-tip*.48)*(.78+random()*.40)*vigor;
+     const tip=T.MathUtils.smoothstep(growth,.77,1),length=(broadRed?.34:red?.38:roundLeaf?.29:.40)*(1-tip*.48)*(.78+random()*.40)*vigor;
      const direction=V(Math.cos(a),.42+tip*.50+random()*.60,Math.sin(a));
      const redGrowth=T.MathUtils.smoothstep(t,.25,.91);
      const leafHue=red?T.MathUtils.lerp(.18,hue,redGrowth):hue,leafLight=red?.29+redGrowth*.065+random()*.035:light+(random()-.5)*.045;
-     add(broadRed?'ludwigia':red?'rotala':roundLeaf?'bacopa':'stem',at,direction,length,length*(broadRed?.60:red?.36:roundLeaf?.56:.34),leafHue,red?.49:.63,leafLight,(random()-.5)*.75+.35);
+     add(broadRed?'ludwigia':red?'rotala':roundLeaf?'bacopa':'stem',at,direction,length,length*(broadRed?.60:red?.25:roundLeaf?.56:.27),leafHue,red?.49:.63,leafLight,(random()-.5)*.75+.35);
     }
    }
   };
