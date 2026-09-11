@@ -1,3 +1,4 @@
+import {wave} from './simulation.js';
 import {aiInput,angleDelta,clamp} from './race-core.js';
 // A full park routine using only helm, throttle, trim and stunt inputs.
 export function parkMasteryInput(state,r){
@@ -24,12 +25,16 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
- if(state.verifyPierSurface&&!state.course.reverse&&r.lap>1){
+ if(state.verifyPierSurface&&r.lap>1){
   if(r.next===state.course.gates.findIndex(g=>g.width===110)&&r.pierSurface?.lap!==r.lap)r.pierSurface={lap:r.lap,stage:0};
-  const guide=r.pierSurface;
-  if(guide&&guide.lap===r.lap&&guide.stage<7){
-   const path=[[160,450],[168,484],[236,495],[236,542],[260,580],[310,602],[355,580]],point=path[guide.stage],x=(point[0]-210)*.8,z=(point[1]-325)*.8;
-   if(Math.hypot(x-r.x,z-r.z)<(guide.stage===2?2:5))guide.stage++;
+  const guide=r.pierSurface,path=state.course.reverse?[[355,580],[310,602],[260,602],[236,590],[236,560],[236,495],[210,470],[170,455]]:[[160,450],[168,484],[236,495],[236,542],[260,580],[310,602],[355,580]];
+  if(guide&&guide.lap===r.lap&&guide.stage<path.length){
+   const point=path[guide.stage],x=(point[0]-210)*.8,z=(point[1]-325)*.8;
+   if(state.course.reverse&&guide.stage===4&&Math.hypot(x-r.x,z-r.z)<5){
+    const clear=[1.5,2,2.5,3,3.5].every(t=>wave(x,(526-325)*.8,state.time+t,state.weather.storm)<-.7);
+    if(!clear)return {throttle:0,brake:true,dampen:true};
+   }
+   if(Math.hypot(x-r.x,z-r.z)<(guide.stage===(state.course.reverse?4:2)?2:5))guide.stage++;
    const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);
    return {throttle:.65,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
   }

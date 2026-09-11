@@ -17,9 +17,9 @@ prove this course-matching goal. None of the nine courses is signed off yet.
 
 Illustrated maps are inspection references in work/course-reference; they are
 not shipped game textures. World distances are reconstruction estimates.
-The four difficulty pages have been retrieved, and all eight Reverse diagrams,
-all six Normal diagrams, plus Expert City/Glacier and Hard/Expert Beach inspected.
-Remaining diagrams still require inspection before their buoy layouts are authored.
+The four difficulty pages and local diagrams have been retrieved. Per-course
+transcription and verification evidence is recorded below. Untouched buoy layouts
+still require their own source comparison before they can be signed off.
 
 ## Course requirements and current state
 
@@ -30,9 +30,9 @@ Remaining diagrams still require inspection before their buoy layouts are author
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
 | Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; original buoy patterns and final visual/scale matching pending |
-| Twilight City | Angular urban channel, jump-or-dive wall, low sand point, four race ramps and metal balls | Rebuilt channel/quays, sand point, ramps and metal props; wall shortcut, original buoys and final visual matching pending |
-| Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Existing generic course; full reconstruction pending |
-| Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Existing generic course; full reconstruction pending |
+| Twilight City | Angular urban channel, jump-or-dive wall, low sand point, four race ramps and metal balls | Rebuilt channel/quays, four ramps, class-specific metal props and tested jump/dive wall; original buoys and final visual matching pending |
+| Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Reconstructed peninsula, original Expert/Reverse buoys, four fixed ramps, rideable ice and balance wipeouts; final source/visual sign-off pending |
+| Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Reconstructed islands, physical piers/ship, all four buoy maps and two ramps; grid-start ship jump, forward first-lap dives and all-class later-lap passages verified; final source/visual sign-off pending |
 | Dolphin Park | Enclosed basin, kidney island, two main ramps, jetties and tunnel | Existing generic course; full reconstruction pending |
 
 Each course requires visual comparison, ordinary-input traversal on all classes,
@@ -326,3 +326,14 @@ Added an ordinary-input inspection route for the low-tide southern pier passage 
 The new grid-start regression covers Normal, Hard and Expert for all three laps. On both later laps it requires over ten frames physically under the deck, zero shortcut collisions, no ramp contact, zero dive timer, and clean race completion. It passes in 6.92 s. Recorded total races: Normal 302.90 s, Hard 412.50 s, Expert 314.58 s; all zero misses. Hard's slower approach is not claimed as an optimized original racing line. A browser Inspect low-tide pier button holds the same route under the deck on lap two. Reverse still needs its own later-lap approach.
 
 Browser inspection confirms the Normal surface passage at 181.35 s on lap two: speed 48.43 km/h, hull y -2.185 m, dive remaining zero, no missed buoys and no browser errors. The ski is visibly riding the water beneath the exposed deck between supports. All 19 Southern geography/buoy tests passed in 25.72 s.
+
+
+### Reverse later-lap pier route — 2026-09-11
+
+Reverse now has a separate verification path that retains the outer first lap, aligns south of the pier on laps two and three, crosses north between its supports, and rejoins the original reversed buoy sequence without using the fixed ramp backwards. Earlier diagonal entries hit the southern spur or piles and were replaced by two straight alignment points. A remaining lap-two collision came from a wave lifting the hull into the deck, not a misplaced obstacle.
+
+The retained driver samples the shared wave model for the approaching entry window and issues normal brake input at the alignment point when clearance is insufficient. This is predictive verification guidance, not a change to player physics or an exact reproduction of original rival AI. It never changes position, tide, collision, power, progress or dive state. With the brief clearance wait it completes at 318.78 s with zero misses/collisions, 35 under-deck frames on lap two and 61 on lap three. No jump or dive input is used.
+
+The new regression checks the outer first lap, actual braking, physical clearance on both later laps, no ramp contact or diving, and clean three-lap completion. It and the three-forward-class surface regression pass in 9.19 s. The browser low-tide inspection now selects the corresponding Reverse crossing stage. This establishes one viable Reverse surface route; it does not establish parity for the remaining courses or original rival behavior.
+
+Reverse browser inspection: 139.93 s, lap two, zero misses, speed 47.36 km/h, hull y -3.037 m and dive remaining zero. The ski is visible riding beneath the pier between supports; no browser errors.

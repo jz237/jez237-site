@@ -146,3 +146,17 @@ test('all forward classes take the low-tide pier route on laps two and three wit
   assert.ok(under[2]>10&&under[3]>10);assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.dq,'');assert.equal(r.lap,4);
  }
 });
+
+test('Reverse keeps the outer first lap and clears the low-tide pier on both later laps',()=>{
+ const s=createRace({course:getCourse('tempest',3),difficulty:3}),r=s.racers[0];s.verifyPierSurface=true;const under={2:0,3:0};let brakeFrames=0;
+ for(let i=0;i<36000&&s.phase!=='results';i++){
+  const input=verificationInput(s,r);stepRace(s,input,1/60);
+  if(r.lap===1)assert.equal(r.pierSurface,undefined);
+  if(r.pierSurface?.stage<8){
+   assert.equal(r.collision,0);assert.equal(r.hydro.onRamp,false);assert.equal(r.hydro.diveRemaining,0);
+   if(input.brake&&input.throttle===0)brakeFrames++;
+   if(r.z>map(0,521)[1]&&r.z<map(0,531)[1]&&r.hydro.y+1.1<.65)under[r.lap]++;
+  }
+ }
+ assert.ok(brakeFrames>0);assert.ok(under[2]>10&&under[3]>10);assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.dq,'');assert.equal(r.lap,4);
+});
