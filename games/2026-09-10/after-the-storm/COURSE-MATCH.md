@@ -188,3 +188,21 @@ This is local only and has not been published. Glacier Coast, Southern Island an
 - Added a verification-only ice-slide hold. Browser inspection at 16.183 seconds on south-4 showed hull y 0.56 m, zero water contact and 39.28 km/h over the rendered slab; no runtime errors. Ice shapes/materials are still simplified and some buoy/ice edge detail needs final visual alignment.
 - Final full regression suite: 135/135 passed in 87.91 seconds, covering every venue/class, stunt checkpoints, two-player races, ice contact and recovery. Local only; not published.
 - Final browser Reverse verification after the exit-target fix: 328.583 seconds, second place, 48 checkpoints, zero misses, six landings, High graphics and final 60 FPS. Runtime errors empty.
+
+
+## Ice balance — work in progress
+
+- Added speed-dependent balance strain from sustained hard steering on ice. The hull visibly rolls as strain builds; continuing to hold throttle once tilted increases strain. Releasing steering restores balance. Crossing the limit uses the existing physical wipeout/remount flow and displays an ice-specific warning.
+- The guided rider uses small steering corrections on ice rather than holding full steering indefinitely. This does not grant hull steering grip or propulsion. Existing momentum support, wave refresh and rescue behavior remain.
+- Focused ice, rider-action and shore-recovery tests: 16/16 passed, including actual race-loop ice wipeout and releasing steering before the tip. Full course integration is not signed off: latest Expert direct run finishes in 373.700 seconds with one missed buoy. The earlier zero-miss route changed when the controls/roll behavior changed; final-floe approach still needs correction. Do not relax the zero-miss assertion.
+- No full regression rerun or browser balance inspection yet. These new balance changes remain uncommitted and unpublished; the previous committed ice/buoy milestone remains 07497110e.
+
+
+## Glacier Coast balance and slalom correction — September 10, 2026
+
+- Sustained hard steering on moving ice now builds balance strain and visible lean; continuing throttle while tilted worsens it. Releasing steering restores balance without changing horizontal momentum. Tipping uses the existing wipeout/remount system. The AI keeps corrections small on ice rather than holding full steering indefinitely.
+- Revisited the guide instruction to avoid the middle floes on Expert and slide over the last one. Corrected the southern route, which had incorrectly crossed the middle sheets, and removed the old final-floe guide. Buoy world positions and side rules are unchanged; checkpoint tangents follow the corrected course line.
+- Direct final three-lap runs all have zero misses: Normal 324.300 s, Hard 316.950 s, Expert 303.417 s, Reverse 326.617 s. This resolves the previous balance-integration miss without relaxing its test.
+- Focused ice, rider-action and shore-recovery checks passed 16/16. Added ordinary-input verification for deliberately holding hard steering on ice. Browser inspection triggered a wipeout at 18.250 seconds and exposed the fallen rider intersecting the slab. The rendered fallen-rider bounds are now lifted above the ice surface; the correction only applies where an ice polygon exists.
+- Balance thresholds and detailed original ice dimensions still need fidelity review. Full original course parity remains incomplete and this work is not published.
+- Full regression suite: 137/137 passed in 87.73 seconds. After the render-only clearance fix, the browser reinspection showed the whole fallen rider above the ice with no runtime errors. Local only; not published.

@@ -16,3 +16,13 @@ test('a ski stopped on ice is rescued to open water without changing race progre
  const {s,r}=run();r.x=0;r.z=0;r.vx=r.vz=r.speed=0;r.lastWater={x:105,z:0,heading:0};const passed=r.passed,lap=r.lap;
  stepRace(s,{rescue:true},1/60);assert.equal(iceSurfaceAt(s.course,r.x,r.z),null);assert.equal(r.passed,passed);assert.equal(r.lap,lap);assert.equal(r.hydro.initialized,false);
 });
+
+test('sustained hard steering on moving ice tips the rider, but coasting does not',()=>{
+ const hard=run(1),coast=run(0);assert.ok(hard.r.iceBalance>.4);assert.ok(Math.abs(hard.r.hydro.roll)>.1);assert.equal(hard.r.wipeout,undefined);
+ for(let i=0;i<45;i++){stepRace(hard.s,{throttle:1,steer:1},1/60);stepRace(coast.s,{throttle:1,steer:0},1/60);}
+ assert.ok(hard.r.wipeout);assert.ok(!coast.r.wipeout);assert.equal(coast.r.iceBalance,0);
+});
+test('releasing steering before the tip restores balance without redirecting momentum',()=>{
+ const {s,r}=run(1),vx=r.vx;for(let i=0;i<45;i++)stepRace(s,{throttle:0,steer:0},1/60);
+ assert.ok(!r.wipeout);assert.equal(r.iceBalance,0);assert.ok(Math.abs(r.vx-vx)<.1);assert.ok(Math.abs(r.hydro.roll)<.08);
+});
