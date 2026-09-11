@@ -4,7 +4,7 @@ import {recoverToWater} from '../shore-recovery.js';
 import {waterLevel} from '../simulation.js';
 import {barrierCollision,barrierPiles} from '../course-barriers.js';
 import test from 'node:test';import assert from 'node:assert/strict';
-import {getCourse} from '../courses.js';import {createRace,stepRace,aiInput} from '../race-core.js';
+import {getCourse} from '../courses.js';import {createRace,stepRace,aiInput,adjudicateGate} from '../race-core.js';
 const map=(x,z)=>[(x-210)*.8,(z-325)*.8];
 test('Southern Island has separate eastern land and western islet with open water between',()=>{
  const c=getCourse('tempest');assert.equal(c.name,'Southern Island');for(const p of [[117,287],[318,130],[320,510]])assert.ok(c.ground(...map(...p))>1);for(const p of [[210,300],[57,287],[399,422]])assert.ok(c.ground(...map(...p))< -1.5);assert.equal(c.crossbars.length,7);
@@ -86,4 +86,33 @@ test('southern pier jump follows the map location and retains its direction in R
  let contact=false,airborne=false;
  for(let i=0;i<120;i++){stepRace(s,{throttle:1,dampen:true},1/60);contact ||=r.hydro.onRamp;airborne ||=contact&&r.hydro.airborne&&r.hydro.y-r.hydro.waterHeight>1;}
  assert.ok(contact);assert.ok(airborne);
+});
+
+test('a late dive clears the high-water southern deck while a surface landing hits it',()=>{
+ function run(dive){
+  const s=createRace({mode:'time',course:getCourse('tempest'),seaState:'calm'}),r=s.racers[0],a=s.course.ramps.find(a=>a.id===151);
+  s.phase='running';r.x=a.x-a.tx*15;r.z=a.z-a.tz*15;r.heading=Math.atan2(a.tx,a.tz)-.08;r.vx=Math.sin(r.heading)*20;r.vz=Math.cos(r.heading)*20;r.speed=20;r.power=5;
+  let hit=false,contact=false,under=0;
+  for(let i=0;i<400;i++){
+   const h=r.hydro;stepRace(s,{throttle:1,dampen:true,dive:dive&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.6},1/60);
+   hit ||=r.collision>0;contact ||=h.onRamp;
+   if(r.z>map(0,521)[1]&&r.z<map(0,531)[1]&&h.y+1.1<.65)under++;
+   if(r.z>map(0,533)[1])break;
+  }
+  return {hit,contact,under,passed:r.z>map(0,533)[1]};
+ }
+ const surface=run(false),dive=run(true);assert.ok(surface.contact&&surface.hit&&!surface.passed);
+ assert.ok(dive.contact&&dive.passed&&!dive.hit);assert.ok(dive.under>5);
+});
+test('the southern checkpoint accepts both mapped routes and still rejects the wrong side',()=>{
+ for(const difficulty of [0,1,2,3]){
+  const c=getCourse('tempest',difficulty),index=c.gates.findIndex(g=>Math.abs(g.bx-map(151,544)[0])<2&&Math.abs(g.bz-map(151,544)[1])<2),g=c.gates[index];
+  assert.ok(index>0);
+  for(const lane of [0,g.side*65,-g.side*15]){
+   const s=createRace({mode:'time',course:c,difficulty}),r=s.racers[0];r.next=index;
+   const x=g.x-g.tz*lane,z=g.z+g.tx*lane;r.x=x+g.tx;r.z=z+g.tz;
+   assert.ok(adjudicateGate(s,r,x-g.tx,z-g.tz));
+   assert.equal(r.misses,lane===-g.side*15?1:0);
+  }
+ }
 });

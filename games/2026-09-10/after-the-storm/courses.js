@@ -21,7 +21,7 @@ export function mappedGates(route,buoys){
  const finish=buildGates(route)[0];finish.routeIndex=0;
  return [finish,...buoys.map(b=>{let best=0;for(let i=1;i<route.length;i++)if(Math.hypot(route[i].x-b.x,route[i].z-b.z)<Math.hypot(route[best].x-b.x,route[best].z-b.z))best=i;
  const a=route[(best+route.length-1)%route.length],c=route[(best+1)%route.length],length=Math.hypot(c.x-a.x,c.z-a.z),tx=(c.x-a.x)/length,tz=(c.z-a.z)/length,offset=7;
- return {x:b.x-tz*b.side*offset,z:b.z+tx*b.side*offset,tx,tz,side:b.side,offset,bx:b.x,bz:b.z,width:23,routeIndex:best};})];
+ return {x:b.x-tz*b.side*offset,z:b.z+tx*b.side*offset,tx,tz,side:b.side,offset,bx:b.x,bz:b.z,width:b.width??23,routeIndex:best};})];
 }
 export function routeDistance(course,x,z){let best=Infinity;const gates=course.gates;for(let i=0;i<gates.length;i++){const a=gates[i],b=gates[(i+1)%gates.length],dx=b.x-a.x,dz=b.z-a.z,t=clamp(((x-a.x)*dx+(z-a.z)*dz)/(dx*dx+dz*dz),0,1);best=Math.min(best,Math.hypot(x-a.x-dx*t,z-a.z-dz*t));}return best;}
 export function insideRoute(course,x,z){let inside=false;const p=course.gates;for(let i=0,j=p.length-1;i<p.length;j=i++){if((p[i].z>z)!==(p[j].z>z)&&x<(p[j].x-p[i].x)*(z-p[i].z)/(p[j].z-p[i].z)+p[i].x)inside=!inside;}return inside;}

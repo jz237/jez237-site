@@ -120,7 +120,8 @@ const glacier={
 };
 const southernMap=points=>fromMap(points,210,325,.8);
 // Buoy centers transcribed from the original class maps. R is red (+1), L yellow (-1).
-const southernBuoys=rows=>rows.map(([x,z,side])=>({x:(x-210)*.8,z:(z-325)*.8,side}));
+// The southern buoy covers both the outer bend and the original under-pier route.
+const southernBuoys=rows=>rows.map(([x,z,side])=>({x:(x-210)*.8,z:(z-325)*.8,side,width:Math.abs(x-151)<2&&z>540&&z<550?110:23}));
 const southernNormalBuoys=southernBuoys([[368,227,1],[368,151,-1],[262,84,-1],[179,152,-1],[139,188,1],[88,213,-1],[83,343,-1],[160,423,1],[151,544,-1],[375,488,-1],[352,445,1]]);
 const southernHardBuoys=southernBuoys([[368,227,1],[368,151,-1],[262,84,-1],[205,158,1],[143,191,-1],[86,254,1],[83,343,-1],[160,423,1],[151,544,-1],[375,488,-1],[352,445,1]]);
 // Expert map adds a 128 pixel margin to the left of the same geography.
