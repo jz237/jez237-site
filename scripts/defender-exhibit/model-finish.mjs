@@ -1,11 +1,11 @@
 import * as T from 'three';
 
 /** Close-up construction in assembly coordinates, before remounting and batching. */
-export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube,mesh,screw,m,mat}){
+export function addFinish({robotron=false,joust=false,root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube,mesh,screw,m,mat}){
  const oxide=mat('oxidized_recess','#555b41',.32,.91);
  const scuff=mat('contact_scuff','#737365',.35,.61);
  const fiber=mat('exposed_particleboard','#92734d',0,.96);
- const polished=mat('grip_polish','#9b271d',0,.27);
+ const polished=mat('grip_polish',joust?'#e5cb3c':'#9b271d',0,.27);
  const rubber=mat('edge_joint','#080908',0,.91);
  const glass=mat('cover_glass','#c9dfd9',0,.13);glass.transparent=true;glass.opacity=.07;glass.depthWrite=false;
  // A second curved face sits in front of the phosphor, with a visible perimeter lip.
@@ -29,7 +29,7 @@ export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube
  mesh(joy,grip,polished,[0,.15,0]);
  ring(joy,.011,.0015,[0,.006,0],m.trim,[Math.PI/2,0,0]);
  // Concentric scratches and short broken scuffs cluster around the button rims.
- const controls=[[-.36,.73],[.32,.49],[.46,.49],[.24,.65],[0,.80],[-.12,.46],[.12,.46]];
+ const controls=joust?[[-.244,.600],[.427,.600],[-.080,.466],[.083,.466]]:robotron?[[.516,.517],[.516,.732]]:[[-.36,.73],[.32,.49],[.46,.49],[.24,.65],[0,.80],[-.12,.46],[.12,.46]];
  controls.forEach(([x,z],i)=>{
   for(let j=0;j<5;j++){
    const points=[];const r=.046+j*.0013;
@@ -41,8 +41,9 @@ export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube
  // Coin acceptor throats have lips, a dark recessed slot and a separate return lens.
  const red=mat('coin_return_lens','#ae2017',0,.24);
  for(const x of [-.158,.158]){
-  for(const dx of [-.039,.039])box(coin,[.008,.027,.019],[x+dx,1.263,.712],m.zinc,.002);
-  for(const dy of [-.012,.012])box(coin,[.080,.006,.017],[x,1.263+dy,.713],m.zinc,.001);
+  // Original Coinco entry: vertical opening beside, never across, the price lens.
+  for(const dx of [-.011,.011])box(coin,[.006,.122,.019],[x-.049+dx,1.232,.712],m.zinc,.002);
+  for(const dy of [-.058,.058])box(coin,[.028,.006,.017],[x-.049,1.232+dy,.713],m.zinc,.001);
   box(coin,[.091,.049,.009],[x,1.132,.711],m.trim,.003);
   box(coin,[.079,.037,.010],[x,1.132,.718],red,.006,'coin_return_'+(x<0?'left':'right'));
   for(let i=0;i<6;i++)box(coin,[.055,.001,.001],[x,1.119+i*.005,.724],scuff,0);
@@ -84,7 +85,7 @@ export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube
   box(g,[.064,.010,.002],[x,y+.003,z+.014],m.paper,0,name+'_pins');
   for(let i=0;i<4;i++)box(g,[.005,.012,.003],[x-.028+i*.018,y-.012,z+.014],m.brass,0);
  }
- for(const [i,z]of [[0,-.084],[1,.084]]){box(cp,[.075,.004,.022],[-.48,1.536,.57+z],m.brass,0,'joystick_contact_'+i);box(cp,[.075,.004,.022],[-.48,1.528,.57+z],m.brass,0);}
+ for(const [i,z]of (robotron?[]:[[0,-.084],[1,.084]])){box(cp,[.075,.004,.022],[-.48,1.536,.57+z],m.brass,0,'joystick_contact_'+i);box(cp,[.075,.004,.022],[-.48,1.528,.57+z],m.brass,0);}
  box(coin,[.060,.003,.025],[.158,.929,.392],m.brass,0,'coin_credit_contact');
  root.userData.finishDetails={version:1,areas:['controls','crt','cabinet-edges','coin-door','marquee','interior','electronics'],copperRouting:'Illustrative routing between populated footprints; not original copper artwork.'};
 }
