@@ -18,7 +18,7 @@ export function ringHeight(ring,course,time=0,storm=0){
  return ring.y+(ramp?rampWaterOffset(ramp,time,storm):ring.floating?waterLevel.value+(wave(ring.x,ring.z,time,storm)-waterLevel.value)*.55:0);
 }
 export function stuntCourse(base,{freeRide=false}={}){
- if(base.stuntLayout&&(!freeRide||base.id==='practice')){const layout=base.stuntLayout,anchors=layout.anchors||base.anchors;return {...base,anchors,boundary:layout.boundary||base.boundary,rocks:[],reverse:false,gates:buildGates(sampleRoute(anchors,24)),route:sampleRoute(anchors,384),stunt:!freeRide,freeStunts:freeRide,ramps:layout.ramps.map(r=>({...r})),rings:layout.rings.map(r=>({...r})),checkpoints:freeRide?[]:layout.checkpoints.map(c=>({...c}))};}
+ if(base.stuntLayout&&(!freeRide||base.id==='practice')){const layout=base.stuntLayout,anchors=layout.anchors||base.anchors;return {...base,anchors,boundary:layout.boundary||base.boundary,rocks:(layout.rocks||[]).map(o=>({...o})),resistance:layout.resistance||base.resistance,reverse:false,gates:buildGates(sampleRoute(anchors,24)),route:sampleRoute(anchors,384),stunt:!freeRide,freeStunts:freeRide,ramps:layout.ramps.map(r=>({...r})),rings:layout.rings.map(r=>({...r})),checkpoints:freeRide?[]:layout.checkpoints.map(c=>({...c}))};}
  if(base.buoysByClass){let points=sampleRoute(base.anchors,24);if(base.reverse)points=[points[0],...points.slice(1).reverse()];base={...base,gates:buildGates(points)};}
  const course={...base,stuntLayout:undefined,stunt:!freeRide,freeStunts:freeRide,ramps:[],rings:[],checkpoints:[]},n=base.gates.length;
  for(let section=0;section<4;section++){
