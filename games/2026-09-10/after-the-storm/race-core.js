@@ -61,8 +61,9 @@ export function courseDistance(course,x,z){let best=Infinity;for(let i=0;i<cours
 export function outsideCourse(course,x,z){return course.boundary?polygonDistance(course.boundary,x,z)>0:courseDistance(course,x,z)>30;}
 export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z-r.z),next=s.course.gates[(r.next+1)%s.course.gates.length];
  // Authored approaches guide the helm through closely spaced obstacles.
- // Reaching a waypoint never changes checkpoint or lap progress.
- if(g.approach){const key=r.lap+':'+r.next,a=g.approach;r.gateApproaches??={};if(!r.gateApproaches[key]){if(Math.hypot(a.x-r.x,a.z-r.z)<a.radius)r.gateApproaches[key]=true;else{const error=angleDelta(Math.atan2(a.x-r.x-r.vx*.18,a.z-r.z-r.vz*.18)-r.heading);return {throttle:a.throttle,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};}}}
+ // Reaching a waypoint never changes checkpoint or lap progress. An optional
+ // activation range keeps a distant approach from cutting across intervening land.
+ if(g.approach&&(!g.approach.range||Math.hypot(g.approach.x-r.x,g.approach.z-r.z)<g.approach.range)){const key=r.lap+':'+r.next,a=g.approach;r.gateApproaches??={};if(!r.gateApproaches[key]){if(Math.hypot(a.x-r.x,a.z-r.z)<a.radius)r.gateApproaches[key]=true;else{const error=angleDelta(Math.atan2(a.x-r.x-r.vx*.18,a.z-r.z-r.vz*.18)-r.heading);return {throttle:a.throttle,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};}}}
  // Aim beyond the crossing plane. Steering toward the buoy itself causes last-moment stalls.
  const lane=-g.side*(g.routeIndex!==undefined?Math.min(4,g.offset*.5+.5):1.1)+(r.id-1.5)*.5;let tx=g.x+g.tx*3+g.tz*lane,tz=g.z+g.tz*3-g.tx*lane;
  // Follow the authored bend between checkpoint planes rather than cutting a
