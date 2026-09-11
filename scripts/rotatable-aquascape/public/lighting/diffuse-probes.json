@@ -1,0 +1,37 @@
+{
+  "version": 1,
+  "dimensions": [
+    15,
+    9,
+    7
+  ],
+  "minimum": [
+    -4.85,
+    0.35,
+    -2.15
+  ],
+  "maximum": [
+    4.85,
+    5.2,
+    2.15
+  ],
+  "samples": 1536,
+  "triangles": 3172360,
+  "bytes": 60480,
+  "coefficientRange": [
+    -1.4325926303863525,
+    1.346920132637024
+  ],
+  "hits": 633612,
+  "seconds": 13.8,
+  "model": "single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds excluded",
+  "sourceHashes": {
+    "lib/BotanicalPlants.ts": "a18e53369a1a802d88ae421ecbe107d554989c064e489726587489a22b19b390",
+    "lib/ScannedBranch.ts": "c318b02296cae9c2215e9e8336820f2ff48891c7f6fbb6e5294fce33c8bafb9f",
+    "lib/ScannedRock.ts": "68735e5566650f70b7940a58ffb5f20b53173814534adfb0d5849387db695ddb",
+    "lib/ScannedHardscape.ts": "5460d57660171ad18f1e897588a43dcb18db7c421b1e6cedf3a278c87abdf05b",
+    "lib/Substrate.ts": "2a768a7a6eb388f2880c85fe5420fea3f7334c68c53bed25df4397af0f8978c7",
+    "lib/LeafSurface.ts": "e3ba1c1b585d178b8183b6e45c1f7a9946c3adea24fb503d50d2355db89a969c"
+  },
+  "binarySHA256": "c001724a1314d29d386d7fa4f5dee62fe3e3ea4296a3d92f252bb101c03c8f34"
+}

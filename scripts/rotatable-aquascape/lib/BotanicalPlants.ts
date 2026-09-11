@@ -9,7 +9,7 @@ const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),up=V(0,1,0);
 /** Modeled leaf blades, petioles and branching stems. Nothing faces the camera. */
 export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>number,time:{value:number}){
  let seed=84237;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
- const batches=new Map<string,{species:Species;geometry:T.BufferGeometry;matrices:T.Matrix4[];colors:T.Color[];roots:number[];flex:number[]}>();
+ const batches=new Map<string,{species:Species;geometry:T.BufferGeometry;matrices:T.Matrix4[];colors:T.Color[];roots:number[];flex:number[];motion:number[]}>();
  const dummy=new T.Object3D();
  const variants=6;
  for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet'] as Species[])for(let variant=0;variant<variants;variant++){
@@ -34,7 +34,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
     if(i<rows&&j<cols){const n=i*(cols+1)+j;idx.push(n,n+1,n+cols+1,n+1,n+cols+2,n+cols+1);}
    }
   }
-  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();batches.set(`${species}-${variant}`,{species,geometry:g,matrices:[],colors:[],roots:[],flex:[]});
+  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();batches.set(`${species}-${variant}`,{species,geometry:g,matrices:[],colors:[],roots:[],flex:[],motion:[]});
  }
  let plantRoot=V(0,0,0),plantFlex=.35;
  const add=(species:Species,pos:T.Vector3,dir:T.Vector3,length:number,width:number,h:number,s:number,l:number,twist=0)=>{
@@ -44,6 +44,8 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const across=dir.clone().cross(up);if(across.lengthSq()<.0001)across.set(1,0,0);across.normalize();
   const normal=across.clone().cross(dir).normalize();dummy.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(across,dir,normal));
   dummy.rotateY(twist-.35);dummy.scale.set(width,length,length);dummy.updateMatrix();fitLeaf(dummy,batch.geometry.getAttribute('position') as T.BufferAttribute);batch.matrices.push(dummy.matrix.clone());batch.colors.push(new T.Color().setHSL(h,s,l).convertSRGBToLinear());batch.roots.push(plantRoot.x,plantRoot.y,plantRoot.z);batch.flex.push(plantFlex);
+  const phase=pos.x*13.7+pos.y*9.3+pos.z*17.1+dir.x*4.2;
+  batch.motion.push(phase,Math.min(.085,.032/Math.max(length,.01)),.8+(Math.sin(phase*1.7)*.5+.5)*.75);
  };
  const stems:{a:T.Vector3;b:T.Vector3;r:number;color:T.Color;root:T.Vector3;flex:number}[]=[];
  const stem=(a:T.Vector3,b:T.Vector3,r:number,color:number)=>stems.push({a,b,r,color:new T.Color(color),root:plantRoot.clone(),flex:plantFlex});
@@ -143,6 +145,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const tissue=tissues[species==='sword'?'sword':species==='anubias'||species==='bacopa'||species==='ludwigia'?'round':'fine'];
   const material=new T.MeshPhysicalMaterial({color:0xffffff,map:tissue.color,bumpMap:tissue.bump,roughnessMap:tissue.roughness,bumpScale:species==='sword'?.007:.002,roughness:species==='anubias'||species==='bacopa'?.58:.74,ior:1.18,specularIntensity:.8,side:T.DoubleSide});
   plantCurrent(material,time,true);setPlantRoots(batch.geometry,batch.roots,batch.flex);
+  batch.geometry.setAttribute('leafMotion',new T.InstancedBufferAttribute(new Float32Array(batch.motion),3));
   const leaves=new T.InstancedMesh(batch.geometry,material,batch.matrices.length);batch.matrices.forEach((m,i)=>{leaves.setMatrixAt(i,m);leaves.setColorAt(i,batch.colors[i]);});leaves.castShadow=true;leaves.receiveShadow=true;leaves.computeBoundingSphere();
   leaves.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,side:T.DoubleSide});plantCurrent(leaves.customDepthMaterial,time,true);scene.add(leaves);
  }
