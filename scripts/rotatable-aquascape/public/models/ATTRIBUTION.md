@@ -11,3 +11,4 @@ Original GLTF geometry and 2K maps are served locally. Wood is bent at runtime w
 
 - Moss 01, Rob Tuytel. https://polyhaven.com/a/moss_01 — CC0.
   Original curved shoot meshes and 2K color, normal, packed roughness and alpha maps are bundled locally. Scattered on bark and rock as ornamental moss; the terrestrial source is an artistic adaptation, not an exact aquatic species. See moss_01/PROVENANCE.json for original download URLs and checksums.
+- Rock Moss Set 01 also uses its original 2K ambient-occlusion map to retain crevice shading. Source download URL and checksum: rock_moss_set_01/AO_PROVENANCE.json.
