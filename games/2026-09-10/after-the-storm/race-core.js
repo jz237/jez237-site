@@ -107,8 +107,11 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
  // Rivals use part throttle to preserve their safe course pace with the stronger engine.
  // Player controls retain the full power range, including in free ride and split screen.
  const bar=s.course.crossbars?.[0],shortcut=!['stunt','practice'].includes(s.mode)&&s.course.passage?.kind==='jump-dive'&&!s.course.reverse&&r.passageRoute!=='outer'&&bar&&Math.abs(r.x-bar.x)<15&&r.z-bar.z> -12&&r.z-bar.z<140;
+ const demoPace=s.demoRun&&s.mode==='race';
+ const targetSpeed=clamp(27/(1+Math.abs(error)*1.8+(d<38?bend*.8:0)),9,27);
+ const raceThrottle=demoPace?clamp(.53+(targetSpeed-r.speed)*.16,0,1):cruise*.53;
  const train=s.course.waveTrain,rollers=train&&Math.abs(r.x-train[0])<28&&r.z>train[1]-15&&r.z<train[1]+train[2]*2+18;
- return {lean:rollers?1:0,throttle:avoidingObstacle?Math.min(.28,cruise*.53):shortcut?Math.max(.95,cruise*.53):cruise*.53*(rollers?.8:1),dive:!!(shortcut&&s.difficulty>=2&&r.hydro.airborne&&r.hydro.vy<0&&r.hydro.y-r.hydro.waterHeight<1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,r.onIce?-.34:-1,r.onIce?.34:1),brake:Math.abs(error)>1.1||avoidingObstacle&&r.speed>9,dampen:true};
+ return {lean:rollers?1:0,throttle:avoidingObstacle?Math.min(.28,cruise*.53):shortcut?Math.max(.95,cruise*.53):raceThrottle*(rollers?.8:1),dive:!!(shortcut&&s.difficulty>=2&&r.hydro.airborne&&r.hydro.vy<0&&r.hydro.y-r.hydro.waterHeight<1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,r.onIce?-.34:-1,r.onIce?.34:1),brake:Math.abs(error)>1.1||avoidingObstacle&&r.speed>9||demoPace&&r.speed>targetSpeed+2,dampen:true};
 }
 export function raceOrder(s){return [...s.racers].sort((a,b)=>{if(s.phase==='countdown'||s.time===0)return a.grid-b.grid;if(Boolean(a.dq)!==Boolean(b.dq))return a.dq?1:-1;if(a.finishTime!==null||b.finishTime!==null)return (a.finishTime??Infinity)-(b.finishTime??Infinity);if(a.passed!==b.passed)return b.passed-a.passed;const ga=s.course.gates[a.next],gb=s.course.gates[b.next];return Math.hypot(a.x-ga.x,a.z-ga.z)-Math.hypot(b.x-gb.x,b.z-gb.z);});}
 // Catch-up assistance changes available power, never position or buoy progress.
