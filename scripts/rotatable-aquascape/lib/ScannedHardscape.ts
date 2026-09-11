@@ -4,6 +4,7 @@ import type {Obstacle} from './TankSpace';
 import {EpiphyteMoss} from './EpiphyteMoss';
 import {aquascapeBranches,bendScannedBranch} from './ScannedBranch';
 import {rockPlacements,shapeScannedRock} from './ScannedRock';
+import {fernCurrent} from './FernCurrent';
 /** Free photogrammetric surfaces retain their scan UVs while wood bends into the composition. */
 export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],height:(x:number,z:number)=>number,time:{value:number}){
  const loader=new GLTFLoader();
@@ -52,16 +53,14 @@ export async function buildScannedFerns(scene:T.Scene,height:(x:number,z:number)
  const [file,alpha]=await Promise.all([new GLTFLoader().loadAsync('./models/fern_02/fern_02_2k.gltf'),new T.TextureLoader().loadAsync('./models/fern_02/textures/fern_02_alpha_2k.png')]);
  alpha.flipY=false;alpha.anisotropy=8;
  const plants=file.scene.children as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>[];
- const material=plants[0].material.clone();material.alphaMap=alpha;material.alphaTest=.4;material.transparent=false;material.side=T.DoubleSide;material.color.set(0xc9e3a2);material.roughness=.7;material.normalScale.set(.55,.55);
+ const source=plants[0].material;
+ const material=new T.MeshPhysicalMaterial({map:source.map,normalMap:source.normalMap,roughnessMap:source.roughnessMap,aoMap:source.roughnessMap,aoMapIntensity:.55,alphaMap:alpha,alphaTest:.4,alphaToCoverage:true,side:T.DoubleSide,color:0xc9e3a2,roughness:.9,normalScale:new T.Vector2(.55,.55),ior:1.18,specularIntensity:.7});
  for(const t of [material.map,material.normalMap,material.roughnessMap])if(t)t.anisotropy=8;
- material.onBeforeCompile=shader=>{
-  shader.uniforms.waterTime=time;shader.vertexShader='uniform float waterTime;\n'+shader.vertexShader;
-  shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>\nfloat h=max(0.,position.y);transformed.x+=sin(waterTime*.7+position.x*2.+modelMatrix[3].x)*.035*h*h;transformed.z+=sin(waterTime*.5+position.z*3.)*.022*h*h;`);
- };
+ fernCurrent(material,time);
  const placements=[[0,-3.5,.92,1.6,1.0],[1,-2.65,1.55,1.1,.0],[2,-2.05,.73,1.35,2.2],[3,-1.1,.10,1.5,1.5],[0,-4.45,-.4,1.2,.8],[3,-3.48,-.95,1.4,2.1],[2,-.05,-1.2,1.05,.7],[1,3.0,-.5,1.3,2.5],[0,4.26,.45,1.0,1.5],[2,3.73,1.56,.8,1.6]];
  for(const [id,x,z,width,yaw] of placements){
   const geo=plants[id].geometry.clone();geo.computeBoundingBox();const box=geo.boundingBox!,center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());geo.translate(-center.x,-box.min.y,-center.z);
   const mesh=new T.Mesh(geo,material);mesh.scale.setScalar(width/Math.max(size.x,size.z));mesh.position.set(x,height(x,z)+.035,z);mesh.rotation.y=yaw;mesh.castShadow=mesh.receiveShadow=true;
-  mesh.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,alphaMap:alpha,alphaTest:.4,side:T.DoubleSide});scene.add(mesh);
+  mesh.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,alphaMap:alpha,alphaTest:.4,side:T.DoubleSide});fernCurrent(mesh.customDepthMaterial,time);scene.add(mesh);
  }
 }
