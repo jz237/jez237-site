@@ -1,9 +1,9 @@
 import test from 'node:test';import assert from 'node:assert/strict';
 import {getCourse} from '../courses.js';
 import {createRace,stepRace,aiInput} from '../race-core.js';
-import {passageOpening,passageCollision,passageCamera,passageTarget} from '../course-passages.js';
+import {passageOpening,passageCollision,passageCamera,passageTarget,passagePoint} from '../course-passages.js';
 import {verificationInput} from '../race-verification.js';
-function position(p,t,lateral=0){const a=p.path[0],b=p.path.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z);return {x:a.x+(b.x-a.x)*t+(b.z-a.z)/length*lateral,z:a.z+(b.z-a.z)*t-(b.x-a.x)/length*lateral};}
+function position(p,t,lateral=0){const path=p.structurePath||p.path,a=path[0],b=path.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z);return {x:a.x+(b.x-a.x)*t+(b.z-a.z)/length*lateral,z:a.z+(b.z-a.z)*t-(b.x-a.x)/length*lateral};}
 test('the gate blocks the hull until raised; side walls and roof remain solid',()=>{
  const p=getCourse('citadel',1).passage,g=position(p,.36),wall=position(p,.55,p.width+.55),roof=position(p,.55);
  assert.equal(passageCollision(p,g.x,0,g.z,40),true);
@@ -29,7 +29,7 @@ test('shortcut checkpoint planes remain ordered in Expert and Reverse',()=>{
 });
 test('fortress race actually takes the outer first lap and traverses the open sluice later',()=>{
  for(const difficulty of [1,2,3]){const s=createRace({course:getCourse('citadel',difficulty),difficulty}),r=s.racers[0],p=s.course.passage,visits=[0,0,0,0];
-  for(let i=0;i<22000&&s.phase!=='results';i++){stepRace(s,aiInput(s,r),1/60);const q=position(p,.6);if(Math.hypot(r.x-q.x,r.z-q.z)<p.width-1)visits[Math.min(3,r.lap)]++;}
+  for(let i=0;i<22000&&s.phase!=='results';i++){stepRace(s,aiInput(s,r),1/60);const q=passagePoint(p.path,.6);if(Math.hypot(r.x-q.x,r.z-q.z)<p.width-1)visits[Math.min(3,r.lap)]++;}
   assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(visits[1],0);assert.ok(visits[2]>0);assert.ok(visits[3]>0);assert.ok(Number.isFinite(s.passageOpenedAt));
   assert.equal(createRace({course:getCourse('citadel',difficulty)}).passageOpenedAt,Infinity);
  }
