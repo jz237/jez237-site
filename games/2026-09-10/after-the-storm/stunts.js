@@ -53,6 +53,13 @@ export function stepStunt(s,r,course,input,dt,ox,oz,oldY,storm=0){if(s.complete)
  const cp=course.checkpoints[s.nextCheckpoint];if(cp){const hit=crossing(cp,ox,oz,r.x,r.z);if(hit&&Math.abs(hit.lateral)<cp.width){const bonus=Math.floor(Math.max(0,s.remaining)*10)*5;s.score+=bonus;s.nextCheckpoint++;s.used={};event(s,'Checkpoint '+s.nextCheckpoint+'/4 · time bonus +'+bonus);s.remaining=38;if(s.nextCheckpoint===4){s.complete=true;r.finishTime=r.raceTime;}}}
  if(!free&&s.remaining<=0&&!s.complete){r.dq='Stunt checkpoint time expired';event(s,'TIME UP');}
 }
-export function applyRamp(r,ramps,oldX,oldZ,lean=0,time=0,storm=0){let contact=false;for(const ramp of ramps||[]){const along=(r.x-ramp.x)*ramp.tx+(r.z-ramp.z)*ramp.tz,across=-(r.x-ramp.x)*ramp.tz+(r.z-ramp.z)*ramp.tx;if(Math.abs(across)>ramp.width/2||along< -ramp.length/2||along>ramp.length/2)continue;const previous=(oldX-ramp.x)*ramp.tx+(oldZ-ramp.z)*ramp.tz;if(previous>along)continue;const height=rampWaterOffset(ramp,time,storm)+.08+(along/ramp.length+.5)*ramp.height;
+export function applyRamp(r,ramps,oldX,oldZ,lean=0,time=0,storm=0){let contact=false;for(const ramp of ramps||[]){const along=(r.x-ramp.x)*ramp.tx+(r.z-ramp.z)*ramp.tz,across=-(r.x-ramp.x)*ramp.tz+(r.z-ramp.z)*ramp.tx;const previous=(oldX-ramp.x)*ramp.tx+(oldZ-ramp.z)*ramp.tz,back=ramp.length/2+.65;
+  // Authored ramps keep their world orientation in Reverse. Their raised rear
+  // is a solid obstacle, but a hull flying above the deck clears it.
+  if(ramp.solidBack&&Math.abs(across)<ramp.width/2+.65&&previous>=back&&along<back&&r.hydro.y<rampWaterOffset(ramp,time,storm)+ramp.height+.3){
+   const depth=back-along;r.x+=ramp.tx*depth;r.z+=ramp.tz*depth;const into=r.vx*ramp.tx+r.vz*ramp.tz;
+   if(into<0){r.vx-=ramp.tx*into*1.2;r.vz-=ramp.tz*into*1.2;}r.speed=Math.hypot(r.vx,r.vz);r.collision=1;continue;
+  }
+  if(Math.abs(across)>ramp.width/2||along< -ramp.length/2||along>ramp.length/2||previous>along)continue;const height=rampWaterOffset(ramp,time,storm)+.08+(along/ramp.length+.5)*ramp.height;
   if(r.hydro.y<height+.12&&r.speed>1){r.hydro.y=height+.12;r.hydro.vy=Math.max(0,(r.vx*ramp.tx+r.vz*ramp.tz))*ramp.height/ramp.length*(1-clamp(lean,-1,1)*.28)+(rampWaterOffset(ramp,time+.025,storm)-rampWaterOffset(ramp,time-.025,storm))/.05;r.hydro.pitch=-Math.atan2(ramp.height,ramp.length);r.hydro.pitchVelocity=0;r.hydro.wet=0;r.hydro.airborne=false;r.hydro.launched=true;contact=true;}
  }r.hydro.onRamp=contact;}

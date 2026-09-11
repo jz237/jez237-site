@@ -50,6 +50,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   const g=new T.Group();g.userData.dynamic=true;g.position.set(ramp.x,0,ramp.z);g.rotation.y=Math.atan2(ramp.tx,ramp.tz);root.add(g);rampMeshes.push({g,ramp});
   const angle=-Math.atan2(ramp.height,ramp.length),length=Math.hypot(ramp.length,ramp.height);
   box(0,ramp.height/2+.08,0,ramp.width,.24,length,deckMat,g).rotation.x=angle;
+  if(ramp.solidBack)box(0,ramp.height/2,ramp.length/2,ramp.width,ramp.height,.16,deckMat,g);
   for(const side of [-1,1]){
    const pontoon=add(new T.CylinderGeometry(.65,.65,ramp.length+1,16),black,side*(ramp.width/2-.45),-.2,0,g);pontoon.rotation.x=Math.PI/2;
    box(side*(ramp.width/2-.17),ramp.height/2+.23,0,.32,.08,length,yellow,g).rotation.x=angle;
