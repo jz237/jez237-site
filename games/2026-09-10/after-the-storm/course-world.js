@@ -35,9 +35,9 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  const red=mat(0xef503e,.35),yellow=mat(0xf5ce46,.35),pink=mat(0xd06aa9,.4);for(const g of freeRide?[]:course.gates){if(g.side)buoy(g.bx,g.bz,g.side>0?red:yellow,1.25);if(!course.boundary)for(const side of [-1,1])buoy(g.x+g.tz*29*side,g.z-g.tx*29*side,pink,.6);}
  if(course.boundary&&!freeRide)for(let i=0;i<course.boundary.length;i++){const a=course.boundary[i],b=course.boundary[(i+1)%course.boundary.length],count=Math.ceil(Math.hypot(b[0]-a[0],b[1]-a[1])/7);for(let j=0;j<count;j++){const x=a[0]+(b[0]-a[0])*j/count,z=a[1]+(b[1]-a[1])*j/count;if(course.ground(x,z)<-.2)buoy(x,z,pink,.6);}}
  // Visible weed leaves occupy the same elliptical patches used by hull drag.
- if(course.resistance?.length){const weedMaterial=mat(0x536b27,.93);weedMaterial.side=T.DoubleSide;const leaf=new T.PlaneGeometry(.32,.75);geometries.push(leaf);const dummy=new T.Object3D();
+ if(course.resistance?.length){const weedMaterial=mat(0x536b27,.93);weedMaterial.side=T.DoubleSide;const leafShape=new T.Shape();leafShape.moveTo(0,-.35);leafShape.quadraticCurveTo(.18,.03,0,.4);leafShape.quadraticCurveTo(-.15,.04,0,-.35);const leaf=new T.ShapeGeometry(leafShape,5),lp=leaf.attributes.position;for(let i=0;i<lp.count;i++)lp.setZ(i,.07*Math.sin((lp.getY(i)+.35)/.75*Math.PI));leaf.computeVertexNormals();geometries.push(leaf);const dummy=new T.Object3D();
   for(const patch of course.resistance){const mesh=new T.InstancedMesh(leaf,weedMaterial,180);mesh.userData.dynamic=true;mesh.position.set(patch.x,0,patch.z);root.add(mesh);weedMeshes.push({mesh,patch});
-   for(let i=0;i<180;i++){const a=random()*Math.PI*2,r=Math.sqrt(random())*.94;dummy.position.set(Math.cos(a)*r*patch.rx,-.10+random()*.13,Math.sin(a)*r*patch.rz);dummy.rotation.set(.5+random()*.7,a,(random()-.5)*.8);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);}mesh.instanceMatrix.needsUpdate=true;
+   for(let i=0;i<180;i++){const a=random()*Math.PI*2,r=Math.sqrt(random())*.94;dummy.position.set(Math.cos(a)*r*patch.rx,-.10+random()*.13,Math.sin(a)*r*patch.rz);dummy.rotation.set(.5+random()*.7,a,(random()-.5)*.8);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);mesh.setColorAt(i,new T.Color().setHSL(.20+random()*.055,.38+random()*.2,.55+random()*.18));}mesh.instanceMatrix.needsUpdate=true;
   }
  }
  if(!freeRide){

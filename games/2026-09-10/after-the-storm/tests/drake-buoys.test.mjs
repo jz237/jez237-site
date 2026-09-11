@@ -7,7 +7,7 @@ test('Drake Lake retains each original class buoy count and ordered color sequen
  assert.deepEqual(pixel(getCourse('reed',0).gates[9]),[51,343,-1]);assert.deepEqual(pixel(getCourse('reed',1).gates[12]),[250,393,-1]);assert.deepEqual(pixel(getCourse('reed',2).gates[13]),[229,367,1]);assert.deepEqual(pixel(getCourse('reed',3).gates[4]),[238,411,1]);
 });
 test('Hard and Expert have distinct post-field routes without acquiring tunnel rules',()=>{
- const n=getCourse('reed'),h=getCourse('reed',1),e=getCourse('reed',2),r=getCourse('reed',3);assert.notDeepEqual(n.anchors,h.anchors);assert.notDeepEqual(h.anchors,e.anchors);assert.deepEqual(r.anchors,n.anchors);for(const c of [n,h,e,r]){assert.equal(c.requiredPassage,false);assert.equal(c.rocks.length,13);assert.equal(c.ramps.length,0);assert.equal(c.resistance.length,2);}
+ const n=getCourse('reed'),h=getCourse('reed',1),e=getCourse('reed',2),r=getCourse('reed',3);assert.notDeepEqual(n.anchors,h.anchors);assert.notDeepEqual(h.anchors,e.anchors);assert.deepEqual(r.anchors,n.anchors);for(const c of [n,h,e,r]){assert.equal(c.requiredPassage,false);assert.equal(c.rocks.length,13);assert.equal(c.ramps.length,0);assert.equal(c.resistance.length,c.difficulty<2?3:6);}
 });
 test('all Drake classes finish the mapped three-lap sequence without missed buoys',()=>{
  for(let difficulty=0;difficulty<4;difficulty++){const c=getCourse('reed',difficulty),s=createRace({course:c,difficulty}),r=s.racers[0],postLaps=new Set();let postHits=0;

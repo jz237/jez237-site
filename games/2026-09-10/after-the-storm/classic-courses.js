@@ -69,6 +69,9 @@ lakeHardBuoys[11].approach={x:(228-200)*.75,z:(382-240)*.75,throttle:.4,radius:3
 lakeReverseBuoys[2].approach={x:(277-200)*.75,z:(383-240)*.75,throttle:.4,radius:3};
 const lakePosts=[[253.5,358.5],[264.5,369.5],[239.5,374.5],[283.5,375.5],[182.5,380.5],[224.5,380.5],[252.5,381.5],[290.5,385.5],[268.5,387.5],[200.5,388.5],[238.5,389.5],[222.5,399.5],[249.5,402.5]];
 const lakePostObstacles=(dx=0,dz=0)=>lakeMap(lakePosts.map(([x,z])=>[x+dx,z+dz])).map(([x,z])=>({x,z,r:.45,type:'post'}));
+const lakeWeedMarkers=[[200.5,49.5,7,6],[132.5,87,6,4.5],[192,107.5,5.5,4]];
+const lakeExpertWeeds=[...lakeWeedMarkers,[20.5,175,8,6.5],[54.5,218.5,5,5],[24.5,249.5,7,6]];
+const lakeWeeds=(rows,dx=0,dz=0)=>rows.map(([x,z,rx,rz])=>({x:(x+dx-200)*.75,z:(z+dz-240)*.75,rx:rx*.75,rz:rz*.75,drag:.65}));
 const lakeNorth=[[374,274],[366,188],[366,91],[341,60],[306,63],[246,54],[178,54],[122,61],[84,67],[59,86],[31,160],[40,212],[31,269],[52,325],[74,372],[123,404]];
 const lake={
  name:'Drake Lake',theme:'lake',tag:'03 / DRAKE LAKE',layoutRevision:3,
@@ -78,7 +81,7 @@ const lake={
  anchors:fromMap([[374,274],[366,188],[366,91],[341,60],[306,63],[246,54],[178,54],[122,61],[84,67],[59,86],[31,160],[40,212],[31,269],[52,325],[74,372],[123,404],[186,416],[243,407],[307,376],[356,336]],200,240),
  ground(x,z){return clamp(Math.max(-polygonDistance(lakeLand,x,z),-polygonDistance(lakeIsland,x,z),polygonDistance(lakeOuter,x,z))*.4,-8,13);},
  obstacles:lakePostObstacles(),obstaclesByClass:[lakePostObstacles(),lakePostObstacles(),lakePostObstacles(),lakePostObstacles(4,3)],
- resistance:[{x:(320-200)*.75,z:(352-240)*.75,rx:13,rz:9,drag:.75},{x:(129-200)*.75,z:(88-240)*.75,rx:12,rz:5,drag:.65}],raceRamps:[]
+ resistance:lakeWeeds(lakeWeedMarkers),resistanceByClass:[lakeWeeds(lakeWeedMarkers),lakeWeeds(lakeWeedMarkers),lakeWeeds(lakeExpertWeeds),lakeWeeds(lakeExpertWeeds,4,3)],raceRamps:[]
 };
 const fortMap=points=>fromMap(points,210,300,.8);
 const fortLand=fortMap([[110,135],[111,84],[117,74],[123,83],[127,121],[139,153],[159,176],[203,189],[293,200],[360,215],[370,225],[319,228],[267,228],[267,264],[259,292],[268,430],[249,467],[216,491],[132,507],[104,500],[108,360],[125,351],[136,290],[151,274],[159,277],[180,277],[194,261],[207,263],[207,244],[181,250],[153,264],[130,286],[119,330],[110,339],[106,325],[107,166],[43,155],[41,143],[57,135]]);
