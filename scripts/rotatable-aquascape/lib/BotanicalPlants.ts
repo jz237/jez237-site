@@ -74,7 +74,10 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   [-1.25,-1.68,.52,.32,3.65,9,true],[-.20,-1.60,.70,.38,3.96,14,true],[.92,-1.62,.53,.40,3.50,12,true],
   [2.1,-1.65,.55,.34,3.04,9,true],[3.18,-1.55,.62,.38,4.70,14,false],[4.28,-1.24,.37,.49,4.45,12,false],
   [-4.38,-.52,.28,.38,2.70,7,false],[-1.2,-.58,.38,.30,.95,3,false],[2.88,-.45,.40,.33,2.27,8,false],
-  [3.90,.10,.35,.39,1.57,7,false],[.05,-.20,.38,.28,.80,3,false]
+  [3.90,.10,.35,.39,1.57,7,false],[.05,-.20,.38,.28,.80,3,false],
+  // Low mixed shoots bridge the carpet and red stems on both planted banks.
+  // Their roots remain outside the winding sand channel.
+  [-.18,-.85,.36,.22,1.32,8,false],[2.06,-.95,.24,.22,1.07,6,false]
  ] as const;
  for(const [cx,cz,spreadX,spreadZ,maxH,count,red] of colonies)for(let i=0;i<Math.ceil(count*(maxH>2.5?1.4:1.1));i++){
   const radius=Math.sqrt(random()),angle=random()*Math.PI*2;
@@ -88,7 +91,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const leanX=Math.cos(angle)*(.12+random()*.33),leanZ=(random()-.5)*.40;
   const point=(t:number)=>V(T.MathUtils.clamp(x+leanX*t*t+Math.sin(t*4+phase)*.13*t,-4.65,4.65),base+h*t,T.MathUtils.clamp(z+leanZ*t*t,-1.95,1.9));
   const hue=red?.007+random()*.026:.205+random()*.035,light=.26+random()*.065;
-  const roundLeaf=!red&&(maxH<2.5||(cx< -3.8||cx>3.7)&&i%5===0);
+  const roundLeaf=!red&&(maxH<2.5?i%3===0:(cx< -3.8||cx>3.7)&&i%5===0);
   const broadRed=red&&i%5===0;
   const grow=(start:number,end:number,offset:T.Vector3,vigor=1)=>{
    const span=(end-start)*h,nodes=Math.max(4,Math.floor(span*(red?7.5:7.2)*(.88+.24*(Math.sin(phase*2.7)*.5+.5)))),nodeAngle=random()*6.28,spiral=Math.PI*.5+(random()-.5)*.22;

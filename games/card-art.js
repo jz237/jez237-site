@@ -9,7 +9,7 @@
     'Commando HD':['commando','#d5c27c','#a0bc6a',0],
     'Volcano':['volcano','#ff723d','#b898c8',0],
     'Smoke Lab':['smoke','#db83ed','#63d9ed',0],
-    'Aquarium Laboratory':['aquarium','#6adee9','#ffb55d',0],
+    'Living Aquascape — 3D':['aquarium','#6adee9','#ffb55d',0],
     'Skyhook: Ruin Runner':['skyhook','#f1d396','#7fcfce',0],
     'Chrome Riot':['robot','#fa627b','#65e3dc',0],
     'Stunt Car Racer HD':['racer','#f4a756','#84bbe3',0],
