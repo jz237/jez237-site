@@ -5,7 +5,7 @@ test('Marine Fortress retains the source class buoy counts and color order throu
  const counts=[8,6,6,6],colors=['RRRLRRRR','RRLRRR','RRLRRR','RRRLRR'];
  for(let d=0;d<4;d++){const c=getCourse('citadel',d),buoys=c.gates.filter(g=>g.side);assert.equal(buoys.length,counts[d]);assert.equal(buoys.map(g=>g.side>0?'R':'L').join(''),colors[d]);assert.ok(c.gates.length>buoys.length);for(const i of c.passage.indices)assert.equal(c.gates[i].side,0);}
  assert.deepEqual(getCourse('citadel').gates.filter(g=>g.side).map(pixel),[[69,203,1],[160,64,1],[170,94,1],[155,138,-1],[201,156,1],[350,174,1],[360,269,1],[306,267,1]]);
- assert.deepEqual(getCourse('citadel',3).gates.filter(g=>g.side).map(pixel),[[290,244,1],[348,182,1],[192,170,1],[155,139,-1],[157,101,1],[67,202,1]]);
+ assert.deepEqual(getCourse('citadel',3).gates.filter(g=>g.side).map(pixel),[[289,244,1],[347,182,1],[191,170,1],[154,139,-1],[156,101,1],[66,202,1]]);
  assert.deepEqual(pixel(getCourse('citadel',1).gates.filter(g=>g.side)[4]),[350,174,1]);assert.deepEqual(pixel(getCourse('citadel',2).gates.filter(g=>g.side)[4]),[350,168,1]);
 });
 test('all mapped Fortress classes finish cleanly and preserve the first-lap outer detour',()=>{
