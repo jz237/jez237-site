@@ -1,14 +1,15 @@
 import * as T from 'three';
 import {Reflector} from 'three/addons/objects/Reflector.js';
 import {ReflectionPool} from './ReflectionPool';
+import {waterOpticsShader} from './WaterDepth';
 const ripple=`
 float rippleHeight(vec2 p){
  float inlet=length(p-vec2(4.25,-1.6));
- float agitation=.38+.62*exp(-inlet*.32);
- float broad=sin(p.x*3.1+p.y*4.2-time*1.07)*.010;
- float cross=sin(p.x*7.3-p.y*5.6-time*1.63+sin(p.y*1.7)*.30)*.004;
- float fine=sin(p.x*17.2+p.y*13.8-time*2.21)*.00085;
- float rings=sin(inlet*18.-time*3.1)*exp(-inlet*.58)*.005;
+ float agitation=.55+.45*exp(-inlet*.32);
+ float broad=sin(p.x*3.1+p.y*4.2-time*1.07)*.019;
+ float cross=sin(p.x*7.3-p.y*5.6-time*1.63+sin(p.y*1.7)*.30)*.006;
+ float fine=sin(p.x*17.2+p.y*13.8-time*2.21)*.0012;
+ float rings=sin(inlet*18.-time*3.1)*exp(-inlet*.58)*.007;
  float edge=min(5.04-abs(p.x),2.30-abs(p.y));
  return ((broad+cross+fine)*agitation+rings)*smoothstep(0.,.18,edge);
 }
@@ -24,7 +25,7 @@ export class AquariumWater extends T.Group {
     name:'AquariumWaterReflection',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},illumination:{value:1},underside:{value:underside?1:0}},
     vertexShader:`uniform mat4 textureMatrix;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
     void main(){vec3 displaced=position;world=(modelMatrix*vec4(position,1.)).xyz;float wave=rippleHeight(world.xz);displaced.z+=wave*(underside>.5?-1.:1.);world.y+=wave;reflectionUv=textureMatrix*vec4(displaced,1.);gl_Position=projectionMatrix*modelViewMatrix*vec4(displaced,1.);}`,
-    fragmentShader:`uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
+    fragmentShader:`uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}${waterOpticsShader}
     // Unpolarized dielectric Fresnel, including the water-to-air critical angle.
     // See PBRT, Specular Reflection and Transmission (FrDielectric).
     float waterFresnel(float cosine){
@@ -82,6 +83,13 @@ export class AquariumWater extends T.Group {
      vec2 planarUv=reflectionUv.xy/reflectionUv.w;
      vec2 reflectedUv=traceReflection(world,wavyRay,planarUv+distortion*.25);
      vec3 reflection=texture2D(tDiffuse,reflectedUv).rgb;
+     // The captured plants already include their path toward the surface.
+     // Account separately for the real camera-to-surface segment inside water.
+     if(underside>.5){
+      vec3 incident=world-cameraPosition;
+      float opticalDistance=waterPath(cameraPosition,normalize(incident),length(incident));
+      reflection=attenuateWater(reflection,opticalDistance,illumination);
+     }
      // Intersect the reflected ray with the actual three LED strips. Sampling
      // their narrow shapes only from a capture made the highlight break into
      // isolated white pixels. Pixel-footprint coverage keeps the emitter intact.
@@ -102,7 +110,7 @@ export class AquariumWater extends T.Group {
      float strength=.5*(waterFresnel(clamp(cosine-footprint,0.,1.))+waterFresnel(clamp(cosine+footprint,0.,1.)));
      // A very narrow wet edge catches light where the surface meets the glass.
      float edge=min(5.04-abs(world.x),2.30-abs(world.z));
-     float meniscus=exp(-max(0.,edge)*180.)*.028;
+     float meniscus=exp(-max(0.,edge)*180.)*.028*illumination;
      gl_FragColor=vec4(reflection*vec3(.96,1.,.97)+meniscus*vec3(.65,.84,.72),strength);
      #include <tonemapping_fragment>
      #include <colorspace_fragment>
