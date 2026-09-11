@@ -273,3 +273,10 @@ The new regression starts a four-rider Normal race at the grid in course waves, 
 Visual inspection confirms the ski above the forward deck at the 35.60 s apex (6.21 m above local water, 60.99 km/h). The landing-inspection button now resumes a held jump rather than restarting a different race, so apex and landing can be inspected as one continuous trajectory.
 
 Continuous browser landing inspection: 36.833 s, 40.57 km/h, full water contact, 0.133 compression, load 8.59, zero misses, no console errors. The game correctly reports HARD LANDING. The deck briefly occludes the chase view during water contact; ship-jump camera clearance remains a visual refinement to address.
+
+
+### Ship landing camera clearance — 2026-09-11
+
+Changed both chase cameras' raised-barrier visibility origin from the smoothed look-ahead target to the actual ski hull position plus 0.15 m. Looking ahead could leave a clear target ray while the ship deck occluded the player behind it. A head-height origin also left the lower ski hidden and was rejected during visual inspection. Hull-based clearance moves the camera in front of the obstructing deck during the hard water landing, then normal smoothing restores follow distance.
+
+Replayed the same grid-start ship jump in the browser: at the unchanged 36.833 s landing, the rider, ski and contact foam are visible instead of the ship filling the foreground. No browser errors. All 12 existing barrier and passage checks passed. The split-screen camera uses the same fix; split-screen rendering was not separately inspected in this pass. This is a camera-only change; jump physics, race rules and buoy geometry are unchanged.
