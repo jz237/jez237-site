@@ -33,3 +33,5 @@
  .controls .top-tools{align-items:flex-start}.controls .inspect{min-width:190px}.controls .inspect svg{display:none}
  .controls select[size]{padding:4px!important;max-width:100%;font-size:11px!important}.controls select[size] option{padding:10px 8px;min-height:36px}
 }
+
+@media(max-width:760px),(max-height:500px) and (max-width:1000px){main{--dock:176px}.controls .machine-picker{position:static;display:flex;order:-8;margin:0;flex-shrink:0;gap:6px}.machine-picker button{flex:1;padding:8px;font-size:10px;min-height:48px}.machine-picker small{font-size:8px;margin-top:4px}main:not(.controls-open) #exhibit-controls>.machine-picker{display:flex!important}}

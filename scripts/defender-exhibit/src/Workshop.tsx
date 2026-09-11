@@ -1,5 +1,5 @@
 import {closeups,type Panels,type Demonstration} from './Mechanics';
-type Props={mobile:boolean;credits:number;open:boolean;setOpen:(v:boolean)=>void;panels:Panels;setPanels:(v:Panels)=>void;focus:string;setFocus:(v:string)=>void;demo:Demonstration;run:(kind:'coin'|'button'|'joystick')=>void;reduced:boolean;unavailable:boolean};
+type Props={machine?:string;mobile:boolean;credits:number;open:boolean;setOpen:(v:boolean)=>void;panels:Panels;setPanels:(v:Panels)=>void;focus:string;setFocus:(v:string)=>void;demo:Demonstration;run:(kind:'coin'|'button'|'joystick')=>void;reduced:boolean;unavailable:boolean};
 export function Workshop(p:Props){return <section className={'workshop '+(p.open?'expanded':'')} aria-label="Explore mechanisms">
  <button className="workshop-toggle" aria-expanded={p.open} onClick={()=>p.setOpen(!p.open)}>{p.open?'CLOSE MECHANISMS':'EXPLORE MECHANISMS'} <span>{p.open?'−':'+'}</span></button>
  {p.focus&&<button className="return-view" onClick={()=>p.setFocus('')}>← RETURN TO PREVIOUS VIEW</button>}
@@ -7,11 +7,11 @@ export function Workshop(p:Props){return <section className={'workshop '+(p.open
  <p>Open the cabinet, follow a moving contact, or look closer.</p>
  <fieldset disabled={p.unavailable}><legend>Service access</legend><div className="workshop-panels">{(['coin','controls','rear'] as const).map(id=><button key={id} aria-pressed={p.panels[id]} onClick={()=>p.setPanels({...p.panels,[id]:!p.panels[id]})}>{p.panels[id]?'Close':'Open'} {id==='coin'?'coin door':id==='controls'?'control panel':'rear panel'}</button>)}</div>
  <button className="text-button" onClick={()=>p.setPanels({coin:false,controls:false,rear:false})}>CLOSE ALL PANELS</button></fieldset>
- <fieldset disabled={p.unavailable||p.reduced}><legend>Mechanical demonstrations</legend><div className="workshop-panels"><button onClick={()=>p.run('coin')}>Follow a coin</button><button onClick={()=>p.run('button')}>Press fire button</button><button onClick={()=>p.run('joystick')}>Move joystick</button></div></fieldset>
+ <fieldset disabled={p.unavailable||p.reduced}><legend>Mechanical demonstrations</legend><div className="workshop-panels"><button onClick={()=>p.run('coin')}>Follow a coin</button><button onClick={()=>p.run('button')}>{p.machine==='robotron'?'Move firing stick':'Press fire button'}</button><button onClick={()=>p.run('joystick')}>{p.machine==='robotron'?'Move movement stick':'Move joystick'}</button></div></fieldset>
  <p>Credits registered: {p.credits}</p>
- <p role="status">{p.demo?(p.demo.kind==='coin'?'Coin → acceptor → credit contact → chute':p.demo.kind==='button'?'Button travel → leaf contact closes → release':'Lever travel → upper/lower contact → neutral'):''}</p>
+ <p role="status">{p.demo?(p.demo.kind==='coin'?'Coin → acceptor → credit contact → chute':p.demo.kind==='button'?(p.machine==='robotron'?'Firing stick → directional leaf contacts → neutral':'Button travel → leaf contact closes → release'):'Lever travel → upper/lower contact → neutral'):''}</p>
  {p.reduced&&<p>Motion is reduced. You can still open panels and inspect close-ups.</p>}
- <label>Look closer<select size={p.mobile?4:undefined} aria-label="Mechanism close-up" value={p.focus.startsWith('chip:')?'':p.focus} disabled={p.unavailable} onChange={e=>p.setFocus(e.target.value)}><option value="">Choose a detail</option>{closeups.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label>
+ <label>Look closer<select size={p.mobile?4:undefined} aria-label="Mechanism close-up" value={p.focus.startsWith('chip:')?'':p.focus} disabled={p.unavailable} onChange={e=>p.setFocus(e.target.value)}><option value="">Choose a detail</option>{(p.machine==='robotron'?[['joystick','Movement joystick'],['joystick_fire','Firing joystick'],['stick_leaf_joystick_0','Movement leaf contact'],['stick_leaf_joystick_fire_0','Firing leaf contact'],...closeups.filter(([id])=>!['joystick','button_2','leaf_2','joystick_contact_0'].includes(id))]:closeups).map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label>
  <p className="mechanism-note">Select a chip on an inspected board for its close-up. Sound follows the speaker as you orbit.</p>
  </div>}
  </section>}

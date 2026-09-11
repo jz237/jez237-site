@@ -1,0 +1,217 @@
+{
+  "source": "Williams Video Sound ROM 3 (1982)",
+  "sha1": "15afefef11bfc3ab78f61ab046701db78d160ec3",
+  "crc32": "c56c1d28",
+  "sourceUrl": "https://github.com/synamaxmusic/WiLL-i-ROMS/blob/master/Video%20Sound%20ROMS/Video%20Sound%20ROM%203.asm",
+  "commands": "https://github.com/historicalsource/robotron",
+  "rendering": "6800 instruction emulation at 3579545/4 Hz; original PIA DAC output; 44.1 kHz PCM; game-command sequence timing at 60 Hz. Not live emulation.",
+  "effects": {
+    "fire": {
+      "priority": 208,
+      "sequence": [
+        [
+          1,
+          8,
+          1
+        ]
+      ],
+      "duration": 0.13333333333333333,
+      "sha256": "53503467a236aac0be0121eef4ac99f3bc08928bc2a22f54c423f5a3a65af2c5"
+    },
+    "robot": {
+      "priority": 208,
+      "sequence": [
+        [
+          1,
+          12,
+          20
+        ],
+        [
+          1,
+          8,
+          23
+        ]
+      ],
+      "duration": 0.33333333333333337,
+      "sha256": "6009c7b991d0cf2721540bbd9c9bebcfc8d63ad870fc3dd21812de9af66122da"
+    },
+    "step": {
+      "priority": 192,
+      "sequence": [
+        [
+          1,
+          10,
+          6
+        ]
+      ],
+      "duration": 0.16666666666666666,
+      "sha256": "ff10116544e5598080ded60c8103b3f95a3342370fcfb84a13d6a38d04b4cd5d"
+    },
+    "human": {
+      "priority": 224,
+      "sequence": [
+        [
+          1,
+          32,
+          13
+        ]
+      ],
+      "duration": 0.5333333333333333,
+      "sha256": "6f494254f430fbf20b7cc9be4b8d472957042d9e8b375bb5828516331e4190c8"
+    },
+    "humanLost": {
+      "priority": 224,
+      "sequence": [
+        [
+          1,
+          24,
+          26
+        ]
+      ],
+      "duration": 0.4,
+      "sha256": "9d8c328117693013edf8c781dbedd8b799c104041cd98c78baa59902e9b4a9bd"
+    },
+    "start": {
+      "priority": 240,
+      "sequence": [
+        [
+          1,
+          16,
+          40
+        ]
+      ],
+      "duration": 0.26666666666666666,
+      "sha256": "e18c985a4a49418bbdc20cbe4a14bd8e2f3fd30f6c13ced2a64b200b7f4d569d"
+    },
+    "wave": {
+      "priority": 224,
+      "sequence": [
+        [
+          29,
+          4,
+          14
+        ]
+      ],
+      "duration": 1.9333333333333331,
+      "sha256": "c172ce8bb43e5d0d82aee75305e3ab01fd701a264865145803d2018ad17e5a4e"
+    },
+    "death": {
+      "priority": 238,
+      "sequence": [
+        [
+          2,
+          8,
+          17
+        ],
+        [
+          1,
+          32,
+          23
+        ]
+      ],
+      "duration": 0.8,
+      "sha256": "f2b3c0aa1cc998fa2842158854b8a49fbd369cbfec39ecc4879af0daf5916122"
+    },
+    "credit": {
+      "priority": 255,
+      "sequence": [
+        [
+          1,
+          32,
+          12
+        ]
+      ],
+      "duration": 0.5333333333333333,
+      "sha256": "03faf900e0f0e1b50c61b816b43e0657a0afe71954510d747e3acf05cde05f95"
+    },
+    "extra": {
+      "priority": 239,
+      "sequence": [
+        [
+          1,
+          32,
+          30
+        ]
+      ],
+      "duration": 0.5333333333333333,
+      "sha256": "c9c8e0c6ebdc4957a546a63ca83305a6e24f3dd2b15257183839bee03308f7aa"
+    },
+    "spawn": {
+      "priority": 216,
+      "sequence": [
+        [
+          1,
+          8,
+          24
+        ]
+      ],
+      "duration": 0.13333333333333333,
+      "sha256": "39dc66d93b059c95884445eac2b47574f01083c4e8d5ddf9083642cd2103f360"
+    },
+    "enforcer": {
+      "priority": 208,
+      "sequence": [
+        [
+          1,
+          8,
+          29
+        ]
+      ],
+      "duration": 0.13333333333333333,
+      "sha256": "e59aac7bc880d92ec62a9a1e71cf0aa809c9f3f3852cccdff7836f4ccb4280c3"
+    },
+    "brain": {
+      "priority": 200,
+      "sequence": [
+        [
+          1,
+          8,
+          21
+        ],
+        [
+          1,
+          8,
+          20
+        ]
+      ],
+      "duration": 0.26666666666666666,
+      "sha256": "eec2727c609a8d5f8f250eb208bb228dc4b6850ce76756e9087468e6b4813a7e"
+    },
+    "tank": {
+      "priority": 200,
+      "sequence": [
+        [
+          1,
+          8,
+          4
+        ]
+      ],
+      "duration": 0.13333333333333333,
+      "sha256": "94d49a9050d8a0c55843bed0f477ec30085ddb4e16573fd1b3973934d972be8d"
+    },
+    "hulk": {
+      "priority": 208,
+      "sequence": [
+        [
+          1,
+          16,
+          6
+        ]
+      ],
+      "duration": 0.26666666666666666,
+      "sha256": "60195030fdb1ec681cc3b8dfb45b3e11217f908e04cdc249345c9ea6ef305c29"
+    },
+    "convert": {
+      "priority": 208,
+      "sequence": [
+        [
+          2,
+          3,
+          18
+        ]
+      ],
+      "duration": 0.1,
+      "sha256": "d4e8f0d0ab34076c1646ad51972fee68fcec2d92693d9e48ad17686717b7b1ce"
+    }
+  }
+}

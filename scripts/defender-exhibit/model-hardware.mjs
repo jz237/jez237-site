@@ -3,7 +3,7 @@ import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {boardLayouts} from './hardware-layout.mjs';
 
 // Electronics are batched per board/material; small parts do not each cost a draw call.
-export function addHardware({root,part,box,cyl,tube,ring,screw,m,mesh,mat}){
+export function addHardware({root,part,box,cyl,tube,ring,screw,m,mesh,mat,layouts=boardLayouts}){
  const labelSets={};
  const bands=[m.ink,m.redwire,m.brass];
  const solder=mat('solder_joint','#a4a8a0',.78,.35);
@@ -25,7 +25,7 @@ export function addHardware({root,part,box,cyl,tube,ring,screw,m,mesh,mat}){
  function axial(g,x,y){cyl(g,.0027,.011,[x,y,.015],m.amber,[0,0,Math.PI/2],'',8);box(g,[.023,.001,.001],[x,y,.012],m.zinc,0);for(let i=0;i<3;i++)cyl(g,.00285,.0012,[x-.0035+i*.0035,y,.015],bands[i],[0,0,Math.PI/2],'',8);for(const dx of [-.010,.010])cyl(g,.002,.001,[x+dx,y,-.004],solder,[Math.PI/2,0,0],'',8);}
  const logic=part('logic'),tray=new T.Group();tray.name='board_tray';logic.add(tray);tray.position.set(-.57,1.90,-.17);tray.rotation.set(0,Math.PI/2,Math.PI/2);
  const placements={cpu:[.64,0,Math.PI/2],rom:[-.055,-.20,0],interface:[-.075,.37,0],sound:[-.80,-.26,0]};
- for(const [id,layout]of Object.entries(boardLayouts)){
+ for(const [id,layout]of Object.entries(layouts)){
   const g=new T.Group();g.name='board_'+id;g.userData={width:layout.width,height:layout.height,inspectId:id==='cpu'?'logic':id,sourceSheet:layout.sheet};tray.add(g);const [x,y,r]=placements[id];g.position.set(x,y,0);g.rotation.z=r;const {width:w,height:h}=layout;const label=labels(g,id);
   box(g,[w,h,.006],[0,0,0],m.pcb,.001);for(const xx of [-w/2+.013,w/2-.013])for(const yy of [-h/2+.013,h/2-.013]){ring(g,.008,.001,[xx,yy,.0035],m.trace);cyl(g,.004,.025,[xx,yy,-.01],m.ivory,[Math.PI/2,0,0],'',8);screw(g,[xx,yy,.008],'z',.0045);}
   label(layout.title,w*.60,.014,0,-h/2+.013,.004);
@@ -40,7 +40,7 @@ export function addHardware({root,part,box,cyl,tube,ring,screw,m,mesh,mat}){
    for(let i=0;i<3;i++){const bx=.30+i*.055;box(g,[.045,.171,.012],[bx,-.28,.009],m.trim,.002);cyl(g,.020,.136,[bx,-.28,.034],m.ivory,[0,0,0],'',12);for(const by of [-.353,-.207])box(g,[.035,.009,.028],[bx,by,.023],m.zinc,.001);label('AA 1.5V',.10,.018,bx,-.28,.055,Math.PI/2);}
    box(g,[.034,.010,.014],[-.35,-.29,.015],m.zinc,.005);label('CR1 12 MHz',.082,.012,-.35,-.31,.007);for(let i=0;i<3;i++)capacitor(g,-.463,-.28-i*.045,.011,.023);
   }else if(id==='interface'){
-   for(let i=0;i<19;i++)axial(g,-.126,-.124+i*.0115);label('W1 CLOSED  /  RED ROM',.17,.01,.095,.11,.007);
+   for(let i=0;i<19;i++)axial(g,-.126,-.124+i*.0115);label(layouts===boardLayouts?'W1 CLOSED  /  RED ROM':'TWIN STICK INPUT',.17,.01,.095,.11,.007);
   }else if(id==='rom'){
    for(const c of layout.chips.filter(c=>c.red)){axial(g,(c.u-.5)*w-.054,(.5-c.v)*h);}
    for(let i=0;i<4;i++){cyl(g,.004,.007,[.135+i*.016,.205,.012],m.red,[Math.PI/2,0,0],'',10);axial(g,.135+i*.016,.238);}
