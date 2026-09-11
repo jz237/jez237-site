@@ -1,3 +1,4 @@
+import {barrierPiles} from './course-barriers.js';
 import {rampWaterOffset,ringHeight} from './stunts.js';
 import {makeCoastalScenery} from './coastal-scenery.js';
 import {rockMaterial,barkMaterial} from './land-materials.js';
@@ -142,7 +143,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   label(passage.kind==='gate'?(passage.enabled?'SLUICE / OPENS LAP 2':'SLUICE CLOSED'):(passage.enabled?'SHORT CHANNEL / LOW ROOF':'SERVICE CHANNEL CLOSED'),0,7.2,length*.32-.08,w*1.8,g).rotation.y=Math.PI;
   label('MAIN CHANNEL →',-w-7,3,length*.29,10,g).rotation.y=Math.PI;for(const side of [-1,1])box(-w-7+side*3.8,-2,length*.29,.12,10,.12,steel,g);
  }
- for(const b of course.crossbars||[]){const g=new T.Group();g.position.set(b.x,0,b.z);g.rotation.y=Math.atan2(b.tx,b.tz);root.add(g);box(0,(b.bottom+b.top)/2,0,b.depth,b.top-b.bottom,b.length,b.material==='wood'?wood:stone,g);
+ for(const b of course.crossbars||[]){if(b.outline){const shape=new T.Shape();b.outline.forEach(([x,z],i)=>i?shape.lineTo(x,z):shape.moveTo(x,z));shape.closePath();const platform=add(new T.ExtrudeGeometry(shape,{depth:b.top-b.bottom,bevelEnabled:false,steps:1}),wood,0,b.top,0);platform.rotation.x=Math.PI/2;continue;}for(const p of barrierPiles(b)){const floor=Math.max(p.bottom,course.ground(p.x,p.z)-.3);if(floor<p.top)cylinder(p.x,(floor+p.top)/2,p.z,p.radius,p.top-floor,wood);}const g=new T.Group();g.position.set(b.x,0,b.z);g.rotation.y=Math.atan2(b.tx,b.tz);root.add(g);box(0,(b.bottom+b.top)/2,0,b.depth,b.top-b.bottom,b.length,b.material==='wood'?wood:stone,g);
   for(let z=-b.length/2+1;z<b.length/2;z+=2.5)box(-b.depth/2-.02,b.top-.12,z,.04,.16,1.2,yellow,g);
  }
  // Merge static scenery by material. Thousands of windows/leaves become a few draw calls.

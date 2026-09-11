@@ -218,3 +218,12 @@ This is local only and has not been published. Glacier Coast, Southern Island an
 - Still required: the ship and jump, original buoy sequences and class-specific racing lines, checkpoint-compatible inner shortcuts, pier supports/central platform detail, proper course signage and original stunt locations. The physical tide-dependent underpass alone does not establish shortcut parity. Local only, not published.
 - Full regression suite: 140/140 passed in 90.11 seconds. Browser Expert / venue conditions finished in 263.583 seconds, third place, 96 checkpoints, zero misses and 29 wave landings; High graphics, final 60 FPS. Added a verification-only pier-approach hold for closer visual inspection after the regression run; gameplay code is unchanged.
 - Pier-approach browser hold at 59.833 seconds confirmed the wooden deck location and unobstructed outer bypass, with no runtime errors. Decks currently lack supporting piles and central platform detail; those remain required visual/physical work.
+
+
+## Southern Island pier supports — September 10, 2026
+
+- Added paired supporting piles along the mapped wooden decks and a polygonal central platform matching the diagram's broad junction. The terrain is graded below the platform so it does not protrude through the timber deck. Pile spacing, diameters and vertical dimensions remain reconstruction estimates pending original-detail comparison.
+- Rendering, hull collision and camera obstruction share pile centers/radii and platform boundaries. Pile geometry is cached per fixed deck rather than rebuilt for every collision query. Gaps between piles retain low-tide clearance; supporting piles themselves remain solid below the deck.
+- Focused barrier/geography checks passed 10/10, covering Southern Island high/low-tide crossings, actual outer-route completion, platform collision, pile contact and Twilight City wall behavior. A subsequent rescue fix rejects destinations inside raised decks or piles; Southern Island/shore-recovery checks passed 10/10 after that change.
+- Browser hold at 59.833 seconds confirms visible piles beneath the southern deck and an unobstructed outer bypass, with no runtime errors. The course still needs its ship/jump, original buoy sequences, checkpoint-compatible inner shortcuts and remaining detail; this does not establish full course parity. Local only, not published.
+- Full regression run for the pile/platform change: 142/142 passed in 92.99 seconds. The later rescue-destination edit was verified by the focused Southern Island/shore-recovery run noted above.
