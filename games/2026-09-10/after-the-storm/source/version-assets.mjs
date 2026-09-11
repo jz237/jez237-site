@@ -1,0 +1,6 @@
+import {readFileSync,writeFileSync,readdirSync,existsSync} from 'node:fs';
+import {createHash} from 'node:crypto';import {fileURLToPath} from 'node:url';import {join} from 'node:path';
+const packageRoot=fileURLToPath(new URL('../',import.meta.url)),root=existsSync(join(packageRoot,'dist'))?join(packageRoot,'dist'):packageRoot,hash=name=>createHash('sha256').update(readFileSync(join(root,name),'utf8').replaceAll('\r\n','\n')).digest('hex').slice(0,12);
+const modules=readdirSync(root).filter(n=>n.endsWith('.js')).sort(),imports=Object.fromEntries(modules.map(n=>['./'+n,'./'+n+'?v='+hash(n)]));
+for(const [name,entry] of [['race.html','race-view.js'],['index.html','main.js']]){let html=readFileSync(join(root,name),'utf8').replace(/<script type="importmap">[\s\S]*?<\/script>\s*/g,'');html=html.replace('<script type="module"','<script type="importmap">'+JSON.stringify({imports})+'</script>\n<script type="module"');html=html.replace(new RegExp('src="\\./'+entry.replaceAll('.','\\.')+'(?:\\?[^" ]*)?"'),'src="'+imports['./'+entry]+'"');html=html.replace(/href="\.\/([^"?]+\.css)(?:\?[^" ]*)?"/g,(_,css)=>'href="./'+css+'?v='+hash(css)+'"');writeFileSync(join(root,name),html);}
+console.log('Versioned '+modules.length+' modules and both page styles.');

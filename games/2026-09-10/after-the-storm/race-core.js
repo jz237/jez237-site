@@ -1,3 +1,4 @@
+import {clearWakeTrail,recordWake} from './wake-field.js';
 import {shoreRecovery} from './shore-recovery.js';
 import {lapComparison} from './race-feedback.js';
 import {passageTarget,passageOpening,passageDistance,passageCollision} from './course-passages.js';
@@ -21,7 +22,7 @@ export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
 export function settings(rider=0,tune={}){const r=RIDERS[rider];const engine=clamp(Number(tune.engine)||0,-1,1),grip=clamp(Number(tune.grip)||0,-1,1),handling=clamp(Number(tune.handling)||0,-1,1);return {...r,speed:r.speed+engine*1.4-grip*.7,accel:r.accel-engine*.8,grip:r.grip+grip*1.4,handling:r.handling+handling*.35};}
 export function createRace({mode='race',rider=0,tune={},laps=3,difficulty=0,course=COVE,gridOrder=null,seaState='course',secondRider=1,secondTune={},handicap=false,swapColours=false}={}){
- clearImpacts();waterLevel.value=conditions(course,0).seaLevel;
+ clearImpacts();clearWakeTrail();waterLevel.value=conditions(course,0).seaLevel;
  if(mode==='stunt'||mode==='practice')course=stuntCourse(course,{freeRide:mode==='practice'});
  const ids=mode==='versus'?[rider,secondRider]:[rider,...RIDERS.map((_,i)=>i).filter(i=>i!==rider)],g=course.gates[0];
  const racers=ids.slice(0,mode==='versus'?2:['race','championship'].includes(mode)?4:1).map((id,i)=>{const grid=mode==='versus'?i:gridOrder?gridOrder.indexOf(id):i===0?3:i-1,lateral=(grid%2?1:-1)*2.4,back=7+Math.floor(grid/2)*5;return {id,grid,human:i===0||mode==='versus',player:i===0?0:mode==='versus'?1:null,stats:settings(id,i===0?tune:mode==='versus'?secondTune:{}),x:g.x-g.tx*back+g.tz*lateral,z:g.z-g.tz*back-g.tx*lateral,heading:Math.atan2(g.tx,g.tz),vx:0,vz:0,speed:0,turn:0,throttle:0,power:['practice','stunt'].includes(mode)?5:0,misses:0,next:1,passed:0,lap:1,lapStart:0,lapTimes:[],finishTime:null,dq:'',out:0,collision:0,recover:0,event:'',eventTime:0,previousWave:0,hydro:createHydro(),stunt:createStunt(),raceTime:0};});
@@ -42,11 +43,11 @@ export function courseDistance(course,x,z){let best=Infinity;for(let i=0;i<cours
 export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z-r.z),next=s.course.gates[(r.next+1)%s.course.gates.length];
  // Aim beyond the crossing plane. Steering toward the buoy itself causes last-moment stalls.
  const lane=-g.side*1.1+(r.id-1.5)*.5,tx=g.x+g.tx*3+g.tz*lane,tz=g.z+g.tz*3-g.tx*lane;
- const desired=Math.atan2(tx-r.x,tz-r.z),error=angleDelta(desired-r.heading),bend=Math.abs(angleDelta(Math.atan2(next.tx,next.tz)-Math.atan2(g.tx,g.tz)));
+ const desired=Math.atan2(tx-r.x-r.vx*.18,tz-r.z-r.vz*.18),error=angleDelta(desired-r.heading),bend=Math.abs(angleDelta(Math.atan2(next.tx,next.tz)-Math.atan2(g.tx,g.tz)));
  const cruise=clamp(.84+Math.min(2,s.difficulty)*.045-Math.abs(error)*.25-(d<28?bend*.2:0),.35,1);
  // Rivals use part throttle to preserve their safe course pace with the stronger engine.
  // Player controls retain the full power range, including in free ride and split screen.
- return {throttle:cruise*.6,steer:clamp(error*2.0,-1,1),brake:Math.abs(error)>1.1,dampen:true};
+ return {throttle:cruise*.53,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
 }
 export function raceOrder(s){return [...s.racers].sort((a,b)=>{if(s.phase==='countdown'||s.time===0)return a.grid-b.grid;if(Boolean(a.dq)!==Boolean(b.dq))return a.dq?1:-1;if(a.finishTime!==null||b.finishTime!==null)return (a.finishTime??Infinity)-(b.finishTime??Infinity);if(a.passed!==b.passed)return b.passed-a.passed;const ga=s.course.gates[a.next],gb=s.course.gates[b.next];return Math.hypot(a.x-ga.x,a.z-ga.z)-Math.hypot(b.x-gb.x,b.z-gb.z);});}
 // Catch-up assistance changes available power, never position or buoy progress.
@@ -61,16 +62,16 @@ export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')
  craftFields.forEach((c,i)=>{const r=s.racers[i];Object.assign(c,r?{x:r.x,z:r.z,heading:r.heading,power:Math.min(1,r.speed/18)*r.hydro.wet}:{power:0});});
  for(const r of s.racers){if(r.finishTime!==null||r.dq)continue;const c=r.human?(Array.isArray(input)?input[r.player]||{}:r.player===0?input:{}):aiInput(s,r),stats=r.stats;const ox=r.x,oz=r.z,oldY=r.hydro.y;r.raceTime=s.time;r.collision=Math.max(0,r.collision-dt);r.recover=Math.max(0,r.recover-dt);
  r.turn+=((c.steer||0)-r.turn)*(1-Math.exp(-dt*7));r.throttle=clamp(c.throttle||0,0,1);
- r.handicapBoost=handicapBoost(s,r);const maximum=stats.speed*(.64+r.power*.072)*(1+r.handicapBoost),velocity=Math.hypot(r.vx,r.vz),steering=stats.handling*r.turn*clamp(velocity/4,0,1);
- r.heading+=steering*dt*(c.slide?1.35:1)*(.12+.88*r.hydro.wet);const fx=Math.sin(r.heading),fz=Math.cos(r.heading),forward=r.vx*fx+r.vz*fz;
- const acceleration=stats.accel*(1+r.handicapBoost)*r.throttle*r.hydro.intake-(forward/maximum)**2*stats.accel*(.08+.92*r.hydro.wet)-(c.brake?velocity*2*r.hydro.wet:0);r.vx+=fx*acceleration*dt;r.vz+=fz*acceleration*dt;
+ r.handicapBoost=handicapBoost(s,r);const maximum=stats.speed*1.10*(.64+r.power*.072)*(1+r.handicapBoost),velocity=Math.hypot(r.vx,r.vz),steering=stats.handling*r.turn*clamp(velocity/4,0,1);
+ r.yawVelocity??=0;const targetYaw=steering*(c.slide?1.35:1)*(.78+.22*r.throttle);r.yawVelocity+=(targetYaw-r.yawVelocity)*(1-Math.exp(-dt*7*r.hydro.wet));r.yawVelocity*=Math.exp(-dt*.18*(1-r.hydro.wet));r.heading+=r.yawVelocity*dt;const fx=Math.sin(r.heading),fz=Math.cos(r.heading),forward=r.vx*fx+r.vz*fz;
+ const acceleration=stats.accel*1.1*(1+r.handicapBoost)*r.throttle*r.hydro.intake-(forward/maximum)**2*stats.accel*(.08+.92*r.hydro.wet)-(c.brake?velocity*2*r.hydro.wet:0);r.vx+=fx*acceleration*dt;r.vz+=fz*acceleration*dt;
  const rx=fz,rz=-fx,lateral=r.vx*rx+r.vz*rz,grip=stats.grip*(c.slide?.28:1)*(.04+.96*r.hydro.wet);r.vx-=rx*lateral*(1-Math.exp(-grip*dt));r.vz-=rz*lateral*(1-Math.exp(-grip*dt));
  if(!r.throttle){const coast=Math.exp(-(.015+.285*r.hydro.wet)*dt);r.vx*=coast;r.vz*=coast;}if(r.recover){r.vx*=Math.exp(-4*dt);r.vz*=Math.exp(-4*dt);}
  const waterResponse=stepHydro(r.hydro,r,s.time,dt,(x,z,t)=>wave(x,z,t,s.weather.storm),{dampen:!!c.dampen,lean:c.lean||0,dive:!!c.dive});
- r.vx+=waterResponse.slopeX*dt*3.5*r.hydro.wet;r.vz+=waterResponse.slopeZ*dt*3.5*r.hydro.wet;
+ const hullDrag=Math.exp(-r.hydro.drag*dt);r.vx*=hullDrag;r.vz*=hullDrag;r.vx+=waterResponse.slopeX*dt*3.5*r.hydro.wet;r.vz+=waterResponse.slopeZ*dt*3.5*r.hydro.wet;
  if(waterResponse.landing){addImpact(r.x,r.z,s.time,r.hydro.impact);const loss=Math.exp(-Math.max(0,r.hydro.impact-2)*.027);r.vx*=loss;r.vz*=loss;announce(r,s,r.hydro.impact>5?'HARD LANDING':'Wave landing');if(r.hydro.impact>8&&!c.dampen)r.recover=.65;}
 
- r.x+=r.vx*dt;r.z+=r.vz*dt;r.speed=Math.hypot(r.vx,r.vz);applyRamp(r,s.course.ramps,ox,oz,c.lean||0,s.time,s.weather.storm);
+ r.x+=r.vx*dt;r.z+=r.vz*dt;r.speed=Math.hypot(r.vx,r.vz);if(r.hydro.wet>.15&&r.speed>3&&s.time>=(r.nextWake||0)){recordWake(r.x-fx*1.9,r.z-fz*1.9,s.time,r.heading,Math.min(1.4,r.speed/18)*r.hydro.wet);r.nextWake=s.time+.24;}applyRamp(r,s.course.ramps,ox,oz,c.lean||0,s.time,s.weather.storm);
  const rock=(s.course.rocks||ROCKS).find(q=>{const p=obstaclePosition(q,s.time);return Math.hypot(r.x-p.x,r.z-p.z)<q.r+1&&r.hydro.y<r.hydro.waterHeight+(q.type==='ice'?2.5:1.1);});const landHit=(s.course.ground||ground)(r.x,r.z)>waterLevel.value-.4;if(landHit||rock||passageCollision(s.course.passage,r.x,r.hydro.y,r.z,s.time,s.passageOpenedAt)){r.x=ox;r.z=oz;r.vx*=-.25;r.vz*=-.25;if(!r.collision){r.collision=1;announce(r,s,'IMPACT');if(r.speed>12+stats.stability){r.recover=1.5;announce(r,s,'Wipeout · remounting');}}}
  if(shoreRecovery(s,r,landHit,!!c.rescue,dt)){announce(r,s,'BACK IN THE WATER');continue;}
  if(s.mode==='stunt'||s.mode==='practice'){stepStunt(r.stunt,r,s.course,c,dt,ox,oz,oldY,s.weather.storm);if(r.stunt.eventId!==r.stuntEventId){r.stuntEventId=r.stunt.eventId;if(r.stunt.event){r.event=r.stunt.event;r.eventTime=s.time;}}}

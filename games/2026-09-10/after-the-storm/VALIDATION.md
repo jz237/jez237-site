@@ -1,3 +1,24 @@
+# Current realism upgrade — September 10, 2026
+
+This section supersedes historical physics, clock and performance descriptions below.
+
+- Full regression suite: 92/92 passed. After the final hull-attached spray refinement, 14 focused physics/rider/wake/spray checks passed, including one new test; 93 distinct tests are now covered. The full suite includes all 36 venue/class routes, four championships, timed stunts, split-screen, shore rescue, salvage success/failure, restart, saves and audio graphs.
+- Twelve immersion patches produce independent pressure, relative-water damping and planing lift, summed into heave and angular moments. Tests verify asymmetric waves roll/pitch the hull, planing raises it, unsupported gravity, landing loads and 60/120 Hz convergence.
+- CPU inverse queries agree with horizontally displaced wave vertices within 4 mm in the tested grid across calm/chop/storm. A denser exploratory storm sweep found approximately 1.01 mm maximum difference. The GPU and CPU use the same spectrum and four inverse iterations.
+- Wake packets remain in world space and alter hull response after their emitter leaves. Fine mist responds to wind more strongly than ballistic droplets. Chine/nozzle origins follow hull pitch, roll and local vertical velocity. Rider IK keeps arm/leg lengths and planted boots while tracking rotating grips through suspension compression.
+- Deep-water, full-throttle Mara benchmark: calm 97.09 km/h, chop 94.26 km/h, storm 88.39 km/h (final-ten-second mean). 0–60 km/h: 2.52 / 2.52 / 2.53 seconds respectively. Storm produced ten measured landings. Actual course speeds depend on contact, steering and power.
+- Browser real-time Tempest/storm free ride: ramp launch, ring collection, landing and braking completed in 6.733 simulation seconds / 6.980 wall seconds including startup overhead. Rate explicitly 1. Peak sampled clearance 4.916 m; one ring / 50 points. The speed-dependent camera widened to about 69 degrees at 65 km/h.
+- Browser airborne inspection: 4.916 m clearance, zero load/wet contact. Landing inspection: suspension compression 0.130 m, approximately 8.18 g support load, fully wet hull; spray/foam and rider pose inspected. Camera clearance was extended over floating ramps after noticing a foreground obstruction.
+- Browser full Tempest/storm race: 183.167 seconds, all 72 gates, zero misses, 40 landings. Adaptive graphics retained High, final measured window 60 FPS. Some startup verification windows measured 46–53 FPS; these are host measurements rather than a universal guarantee.
+- Browser Amber/chop split-screen on Low: P1 won at 166.417 seconds with 72 gates; P2 had 70 gates when the match ended. Both had zero misses. Final measured window 60 FPS. Both views use the shared wake field; the foam atlas expands to include both human riders.
+- Rendering includes a reprojected/advection/decay foam atlas, shallow-breaker sources, ballistic chine sheets, droplets and wind-dragged mist. Reflections have filtered roughness and edge sky fallback; backlit crests scatter light. Environment reflections refresh with weather. Wet rock roughness/color and terrain-conforming vegetation contact shadows were visually checked. Excess foam coverage was reduced after visual inspection.
+- No JavaScript errors in the rendered jump, race or split-screen checks. Earlier shader compiler warnings predate the final floor-height function cleanup.
+- Content-versioned module import maps cover every first-party browser module. `source/version-assets.mjs` regenerates the maps and stylesheet URLs for the published and downloadable layouts.
+
+Physical limitations: analytic height-field water does not overturn into volumes. Hull lift/drag/pressure are calibrated game approximations, not CFD. Reflections remain planar; spray uses sheets and particles, and foam uses an atlas. Ramps heave rigidly. The earlier salvage mode retains its original driving rules.
+
+---
+
 # Coastline publication validation — 2026-09-10
 
 - `npm test`: 79/79 passing after shared terrain-height changes (19.95 seconds).

@@ -1,3 +1,5 @@
+import {waterLevel} from './simulation.js';
+export const coastalLighting={time:{value:0},storm:{value:0},seaLevel:waterLevel};
 import * as T from './vendor/three.module.js';
 
 // Local CC0 photographic surfaces; all instances share the same GPU textures.
@@ -64,12 +66,13 @@ normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7
 export function rockMaterial(){
  const mat=new T.MeshStandardMaterial({color:0xd0cbbd,roughness:.88});
  mat.onBeforeCompile=s=>{
-  Object.assign(s.uniforms,{cliffColor:{value:landMaps.rock.diff},cliffNormal:{value:landMaps.rock.nor_gl}});
-  s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 cliffP;varying vec3 cliffN;').replace('#include <begin_vertex>','#include <begin_vertex>\ncliffP=position;cliffN=normal;');
-  s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 cliffP;varying vec3 cliffN;uniform sampler2D cliffColor,cliffNormal;${sampling}`)
-   .replace('#include <color_fragment>',`#include <color_fragment>\nvec3 cn=normalize(cliffN),cw=pow(abs(cn),vec3(4.));cw/=dot(cw,vec3(1.));diffuseColor.rgb*=triColor(cliffColor,cliffP*.21,cw);`)
-   .replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>\nvec3 texN=triNormal(cliffNormal,cliffP*.21,cw,cn);normal=normalize(normal+vec3(texN.x,texN.y,0.)*.32);`);
- };mat.customProgramCacheKey=()=> 'coastal-rock-v1';return mat;
+  Object.assign(s.uniforms,{cliffColor:{value:landMaps.rock.diff},cliffNormal:{value:landMaps.rock.nor_gl},cliffSea:coastalLighting.seaLevel,cliffTime:coastalLighting.time,cliffStorm:coastalLighting.storm});
+  s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 cliffP;varying vec3 cliffN;varying vec3 cliffWorld;').replace('#include <begin_vertex>','#include <begin_vertex>\ncliffP=position;cliffN=normal;vec4 rockPoint=vec4(position,1.);\n#ifdef USE_INSTANCING\nrockPoint=instanceMatrix*rockPoint;\n#endif\ncliffWorld=(modelMatrix*rockPoint).xyz;');
+  s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>\nvarying vec3 cliffP;varying vec3 cliffN;varying vec3 cliffWorld;uniform sampler2D cliffColor,cliffNormal;uniform float cliffSea,cliffTime,cliffStorm;${sampling}`)
+   .replace('#include <color_fragment>',`#include <color_fragment>\nvec3 cn=normalize(cliffN),cw=pow(abs(cn),vec3(4.));cw/=dot(cw,vec3(1.));diffuseColor.rgb*=triColor(cliffColor,cliffP*.21,cw);float cliffWet=clamp(1.-smoothstep(cliffSea+.08,cliffSea+1.25,cliffWorld.y)+cliffStorm*.18,0.,1.);diffuseColor.rgb*=1.-cliffWet*.3;`)
+   .replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>\nroughnessFactor=mix(roughnessFactor,.15,cliffWet*.82);`)
+   .replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>\nvec3 wn=inverseTransformDirection(normal,viewMatrix),weights=pow(abs(wn),vec3(4.));weights/=dot(weights,vec3(1.));vec3 texN=triNormal(cliffNormal,cliffWorld*.21,weights,wn);normal=normalize((viewMatrix*vec4(normalize(mix(wn,texN,.5)),0.)).xyz);`);
+ };mat.customProgramCacheKey=()=> 'coastal-rock-wet-v2';return mat;
 }
 
 export function barkMaterial(){return new T.MeshStandardMaterial({map:landMaps.bark.diff,normalMap:landMaps.bark.nor_gl,normalScale:new T.Vector2(.7,.7),roughnessMap:landMaps.bark.rough,roughness:.96,color:0xb0a698});}
