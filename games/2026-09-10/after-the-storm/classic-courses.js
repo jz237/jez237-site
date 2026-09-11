@@ -66,6 +66,7 @@ const lakeExpertBuoys=lakeBuoys([[371,146,-1],[357,88,1],[279,58,-1],[116,65,-1]
 const lakeReverseBuoys=lakeBuoys([[70,129,-1],[103,101,1],[161,105,-1],[182,67,1],[221,99,-1],[270,84,1],[316,102,-1],[367,195,-1],[378,239,1],[373,269,-1],[380,314,1],[374,341,-1],[297,405,-1],[134,405,-1],[53,387,1],[63,335,-1]].map(([x,z,side])=>[420-x,478-z,side]));
 lakeNormalBuoys[11].approach={x:(293-200)*.75,z:(395-240)*.75,throttle:.4,radius:3};
 lakeHardBuoys[11].approach={x:(228-200)*.75,z:(382-240)*.75,throttle:.4,radius:3};
+lakeReverseBuoys[3].approach={x:(254-200)*.75,z:(398-240)*.75,throttle:.4,radius:3};
 lakeReverseBuoys[2].approach={x:(277-200)*.75,z:(383-240)*.75,throttle:.4,radius:3};
 const lakePosts=[[253.5,358.5],[264.5,369.5],[239.5,374.5],[283.5,375.5],[182.5,380.5],[224.5,380.5],[252.5,381.5],[290.5,385.5],[268.5,387.5],[200.5,388.5],[238.5,389.5],[222.5,399.5],[249.5,402.5]];
 const lakePostObstacles=(dx=0,dz=0)=>lakeMap(lakePosts.map(([x,z])=>[x+dx,z+dz])).map(([x,z])=>({x,z,r:.45,type:'post'}));
@@ -75,6 +76,7 @@ const lakeWeeds=(rows,dx=0,dz=0)=>rows.map(([x,z,rx,rz])=>({x:(x+dx-200)*.75,z:(
 const lakeNorth=[[374,274],[366,188],[366,91],[341,60],[306,63],[246,54],[178,54],[122,61],[84,67],[59,86],[31,160],[40,212],[31,269],[52,325],[74,372],[123,404]];
 const lake={
  name:'Drake Lake',theme:'lake',tag:'03 / DRAKE LAKE',layoutRevision:3,
+ finishLinesByClass:[lakeMap([[357,267],[408,267]]),lakeMap([[357,267],[408,267]]),lakeMap([[357,267],[408,267]]),lakeMap([[361,269],[412,269]])],
  buoysByClass:[lakeNormalBuoys,lakeHardBuoys,lakeExpertBuoys,lakeReverseBuoys],
  anchorsByClass:{1:lakeMap([...lakeNorth,[180,409],[225,396],[258,361],[289,367],[326,381],[353,362],[369,317]]),2:lakeMap([...lakeNorth.slice(0,-1),[109,397],[142,380],[166,386],[201,389],[231,381],[268,377],[306,378],[343,365],[370,333]])},
  description:'A misty freshwater circuit with irregular wooded banks, a small island, timber posts and weed beds that slow a wet hull.',
