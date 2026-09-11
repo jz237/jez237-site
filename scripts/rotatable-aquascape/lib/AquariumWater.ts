@@ -3,12 +3,14 @@ import {Reflector} from 'three/addons/objects/Reflector.js';
 import {ReflectionPool} from './ReflectionPool';
 const ripple=`
 float rippleHeight(vec2 p){
- float broad=sin(p.x*5.4+p.y*7.1+time*1.15)*.016;
- float cross=sin(p.x*11.7-p.y*8.3-time*1.46+sin(p.y*2.1)*.65)*.009;
- float fine=sin(p.x*24.3+p.y*17.8+time*1.83)*.0015;
  float inlet=length(p-vec2(4.25,-1.6));
+ float agitation=.38+.62*exp(-inlet*.32);
+ float broad=sin(p.x*3.1+p.y*4.2-time*1.07)*.010;
+ float cross=sin(p.x*7.3-p.y*5.6-time*1.63+sin(p.y*1.7)*.30)*.004;
+ float fine=sin(p.x*17.2+p.y*13.8-time*2.21)*.00085;
+ float rings=sin(inlet*18.-time*3.1)*exp(-inlet*.58)*.005;
  float edge=min(5.04-abs(p.x),2.30-abs(p.y));
- return (broad+cross+fine+sin(inlet*23.-time*3.2)*exp(-inlet*.6)*.0025)*smoothstep(0.,.18,edge);
+ return ((broad+cross+fine)*agitation+rings)*smoothstep(0.,.18,edge);
 }
 `;
 /** Two-sided scene captures with depth-guided reflection rays across the moving surface. */
@@ -19,10 +21,22 @@ export class AquariumWater extends T.Group {
   super();
   for(const underside of [true,false]){
    const surface=new Reflector(new T.PlaneGeometry(10.08,4.6,160,72),{textureWidth:1024,textureHeight:1024,clipBias:.002,multisample:2,shader:{
-    name:'AquariumWaterReflection',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},underside:{value:underside?1:0}},
+    name:'AquariumWaterReflection',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},illumination:{value:1},underside:{value:underside?1:0}},
     vertexShader:`uniform mat4 textureMatrix;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
     void main(){vec3 displaced=position;world=(modelMatrix*vec4(position,1.)).xyz;float wave=rippleHeight(world.xz);displaced.z+=wave*(underside>.5?-1.:1.);world.y+=wave;reflectionUv=textureMatrix*vec4(displaced,1.);gl_Position=projectionMatrix*modelViewMatrix*vec4(displaced,1.);}`,
-    fragmentShader:`uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
+    fragmentShader:`uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
+    // Unpolarized dielectric Fresnel, including the water-to-air critical angle.
+    // See PBRT, Specular Reflection and Transmission (FrDielectric).
+    float waterFresnel(float cosine){
+     float incident=mix(1.,1.333,underside),transmitted=mix(1.333,1.,underside);
+     float ratio=incident/transmitted;
+     float sinTransmitted2=ratio*ratio*max(0.,1.-cosine*cosine);
+     if(sinTransmitted2>=1.)return 1.;
+     float ct=sqrt(1.-sinTransmitted2);
+     float parallel=(transmitted*cosine-incident*ct)/max(.00001,transmitted*cosine+incident*ct);
+     float perpendicular=(incident*cosine-transmitted*ct)/max(.00001,incident*cosine+transmitted*ct);
+     return .5*(parallel*parallel+perpendicular*perpendicular);
+    }
     float reflectedDepth(vec2 uv){
      float depth=texture2D(reflectionDepth,uv).x;
      if(depth>.999999)return -10000.;
@@ -68,9 +82,24 @@ export class AquariumWater extends T.Group {
      vec2 planarUv=reflectionUv.xy/reflectionUv.w;
      vec2 reflectedUv=traceReflection(world,wavyRay,planarUv+distortion*.25);
      vec3 reflection=texture2D(tDiffuse,reflectedUv).rgb;
-     float fresnel=.02+.98*pow(1.-cosine,5.);
-     float internalReflection=1.-smoothstep(.62,.71,cosine);
-     float strength=mix(.15+.8*fresnel,.15+.84*internalReflection,underside);
+     // Intersect the reflected ray with the actual three LED strips. Sampling
+     // their narrow shapes only from a capture made the highlight break into
+     // isolated white pixels. Pixel-footprint coverage keeps the emitter intact.
+     if(underside<.5){
+      vec3 lampHit=world+wavyRay*((6.326-world.y)/max(wavyRay.y,.0001));
+      vec2 aa=max(fwidth(lampHit.xz),vec2(.003));
+      float along=1.-smoothstep(4.375-aa.x,4.375+aa.x,abs(lampHit.x));
+      float across=0.;
+      for(int strip=0;strip<3;strip++){
+       float z=-.37+float(strip)*.2;
+       across+=1.-smoothstep(.0525-aa.y,.0525+aa.y,abs(lampHit.z-z));
+      }
+      float coverage=along*min(across,1.)*step(.0001,wavyRay.y);
+      reflection=mix(reflection,vec3(.745,.947,.855)*3.3*illumination,coverage);
+     }
+     // Filter the steep critical-angle transition across the pixel footprint.
+     float footprint=max(fwidth(cosine)*.5,.0001);
+     float strength=.5*(waterFresnel(clamp(cosine-footprint,0.,1.))+waterFresnel(clamp(cosine+footprint,0.,1.)));
      // A very narrow wet edge catches light where the surface meets the glass.
      float edge=min(5.04-abs(world.x),2.30-abs(world.z));
      float meniscus=exp(-max(0.,edge)*180.)*.028;
@@ -95,5 +124,5 @@ export class AquariumWater extends T.Group {
    surface.position.y=5.36;surface.rotation.x=underside?Math.PI/2:-Math.PI/2;surface.renderOrder=6;(surface.material as T.ShaderMaterial).transparent=true;(surface.material as T.ShaderMaterial).depthWrite=false;this.add(surface);this.surfaces.push(surface);
   }
  }
- update(time:number,cameraY:number){this.surfaces.forEach((s,i)=>{s.visible=(cameraY<5.36)===(i===0);(s.material as T.ShaderMaterial).uniforms.time.value=time;});}
+ update(time:number,cameraY:number,illumination=1){this.surfaces.forEach((s,i)=>{s.visible=(cameraY<5.36)===(i===0);const uniforms=(s.material as T.ShaderMaterial).uniforms;uniforms.time.value=time;uniforms.illumination.value=illumination;});}
 }
