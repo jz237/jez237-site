@@ -1,3 +1,4 @@
+import {WATER_LEVEL} from './WaterDepth';
 import * as T from 'three';
 
 /** Development-only geometry snapshot for the offline indirect-light study. */
@@ -23,14 +24,15 @@ export function installBakeExport(scene:T.Scene){
     const material=object.material;
     if(!(material instanceof T.MeshStandardMaterial)||material.transparent||material.alphaTest>0||material.emissiveIntensity>0&&material.emissive.getHex()!==0)continue;
     if(material instanceof T.MeshPhysicalMaterial&&material.transmission>0)continue;
-    const bounds=new T.Box3().setFromObject(object);if(bounds.max.y<.1||bounds.min.y>5.36||bounds.max.z< -2.35||bounds.min.z>2.35)continue;
+    const bounds=new T.Box3().setFromObject(object);if(bounds.max.y<.1||bounds.min.y>WATER_LEVEL||bounds.max.z< -2.35||bounds.min.z>2.35)continue;
     const g=object.geometry,p=g.getAttribute('position'),uv=g.getAttribute('uv'),vertexColor=g.getAttribute('color');
     const positions=new Float32Array(p.count*3),colors=new Float32Array(p.count*3);
     for(let i=0;i<p.count;i++){
      positions.set([p.getX(i),p.getY(i),p.getZ(i)],i*3);const color=material.color.clone();
      if(material.map&&uv)color.multiply(pixel(material.map,uv.getX(i),uv.getY(i)));
      if(material.vertexColors&&vertexColor)color.multiply(new T.Color(vertexColor.getX(i),vertexColor.getY(i),vertexColor.getZ(i)));
-     if((material.map?.image as {src?:string}|undefined)?.src?.includes('rock_moss')){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),.66).multiply(new T.Color(.68,.72,.76));}
+     const remap=material.userData.bakeDiffuse;
+     if(remap){const l=color.r*.2126+color.g*.7152+color.b*.0722;color.lerp(new T.Color(l,l,l),1-remap.saturation).multiply(new T.Color(remap.tint[0],remap.tint[1],remap.tint[2]));}
      colors.set(color.toArray(),i*3);
     }
     const index=g.index?new Uint32Array(g.index.array):Uint32Array.from({length:p.count},(_,i)=>i);

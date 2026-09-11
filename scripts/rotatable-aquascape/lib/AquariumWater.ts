@@ -1,32 +1,36 @@
 import * as T from 'three';
 import {Reflector} from 'three/addons/objects/Reflector.js';
 import {ReflectionPool} from './ReflectionPool';
-import {waterOpticsShader} from './WaterDepth';
+import {waterOpticsShader,WATER_LEVEL} from './WaterDepth';
 const ripple=`
 float rippleHeight(vec2 p){
  float inlet=length(p-vec2(4.25,-1.6));
- float agitation=.55+.45*exp(-inlet*.32);
- float broad=sin(p.x*3.1+p.y*4.2-time*1.07)*.027;
- float cross=sin(p.x*7.3-p.y*5.6-time*1.63+sin(p.y*1.7)*.30)*.009;
- float fine=sin(p.x*17.2+p.y*13.8-time*2.21)*.0015;
+ float agitation=.65+.35*exp(-inlet*.32);
+ // Several crossing ripple scales break up the long, regular mirror stripes.
+ // Shorter waves change reflection direction without making large water swells.
+ vec2 q=p+vec2(sin(p.y*1.9+p.x*.7-time*.29),sin(p.x*1.3-p.y*.8+time*.23))*.16;
+ float broad=sin(q.x*2.7+q.y*3.6-time*1.07)*.018;
+ float cross=sin(q.x*8.3-q.y*6.8-time*1.83+sin(q.y*1.7)*.65)*.018;
+ float secondary=sin(q.x*12.1+q.y*9.7-time*2.27+sin(q.x*.8-time*.23)*.7)*.011;
+ float fine=sin(q.x*23.2-q.y*17.8-time*3.21)*.0025;
  float rings=sin(inlet*18.-time*3.1)*exp(-inlet*.58)*.009;
  float edge=min(5.04-abs(p.x),2.30-abs(p.y));
  // A narrow raised meniscus meets the glass; the contact line retains a
  // small part of the passing wave instead of becoming a rigid straight bar.
  float wetEdge=.015*exp(-max(0.,edge)/.025);
  float wallMotion=.12+.88*smoothstep(0.,.18,edge);
- return ((broad+cross+fine)*agitation+rings)*wallMotion+wetEdge;
+ return ((broad+cross+secondary+fine)*agitation+rings)*wallMotion+wetEdge;
 }
 `;
 /** Concentrate real surface vertices around the curved glass contact zone. */
 function waterSurfaceGeometry(){
- const geometry=new T.PlaneGeometry(10.08,4.6,192,96),positions=geometry.getAttribute('position');
+ const geometry=new T.PlaneGeometry(10.08,4.6,320,128),positions=geometry.getAttribute('position');
  for(let i=0;i<positions.count;i++){
   positions.setXY(i,Math.sin(positions.getX(i)/5.04*Math.PI*.5)*5.04,Math.sin(positions.getY(i)/2.3*Math.PI*.5)*2.3);
  }
  positions.needsUpdate=true;geometry.computeBoundingBox();geometry.computeBoundingSphere();
  // Shader displacement includes the raised contact edge and passing waves.
- geometry.boundingSphere!.radius+=.05;
+ geometry.boundingSphere!.radius+=.075;
  return geometry;
 }
 /** Two-sided scene captures with depth-guided reflection rays across the moving surface. */
@@ -110,7 +114,7 @@ export class AquariumWater extends T.Group {
      // isolated white pixels. Pixel-footprint coverage keeps the emitter intact.
      if(underside<.5){
       vec3 lampHit=world+wavyRay*((6.326-world.y)/max(wavyRay.y,.0001));
-      vec2 aa=max(fwidth(lampHit.xz),vec2(.003));
+      vec2 aa=clamp(fwidth(lampHit.xz),vec2(.003),vec2(.10));
       float along=1.-smoothstep(4.375-aa.x,4.375+aa.x,abs(lampHit.x));
       float across=0.;
       for(int strip=0;strip<3;strip++){
@@ -144,8 +148,8 @@ export class AquariumWater extends T.Group {
     uniforms.reflectionInverseProjection.value.copy(camera.projectionMatrix).invert();
    };
    reflections.add(surface);
-   surface.position.y=5.36;surface.rotation.x=underside?Math.PI/2:-Math.PI/2;surface.renderOrder=6;(surface.material as T.ShaderMaterial).transparent=true;(surface.material as T.ShaderMaterial).depthWrite=false;this.add(surface);this.surfaces.push(surface);
+   surface.position.y=WATER_LEVEL;surface.rotation.x=underside?Math.PI/2:-Math.PI/2;surface.renderOrder=6;(surface.material as T.ShaderMaterial).transparent=true;(surface.material as T.ShaderMaterial).depthWrite=false;this.add(surface);this.surfaces.push(surface);
   }
  }
- update(time:number,cameraY:number,illumination=1){this.surfaces.forEach((s,i)=>{s.visible=(cameraY<5.36)===(i===0);const uniforms=(s.material as T.ShaderMaterial).uniforms;uniforms.time.value=time;uniforms.illumination.value=illumination;});}
+ update(time:number,cameraY:number,illumination=1){this.surfaces.forEach((s,i)=>{s.visible=(cameraY<WATER_LEVEL)===(i===0);const uniforms=(s.material as T.ShaderMaterial).uniforms;uniforms.time.value=time;uniforms.illumination.value=illumination;});}
 }
