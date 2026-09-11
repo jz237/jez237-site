@@ -19,7 +19,7 @@ test('reconstructed routes are in water without cutting the authored shorelines'
  for(const id of ['greyhaven','amber','reed','citadel','port','neon']){const c=getCourse(id);for(const p of sampleRoute(c.anchors,240))assert.ok(c.ground(p.x,p.z)<-.8,id+' '+JSON.stringify(p));}
 });
 test('Drake Lake weeds have bounded elliptical resistance only during water contact',()=>{
- const c=getCourse('reed'),p=c.resistance[0];assert.equal(c.name,'Drake Lake');assert.equal(c.rocks.filter(o=>o.type==='post').length,8);
+ const c=getCourse('reed'),p=c.resistance[0];assert.equal(c.name,'Drake Lake');assert.equal(c.rocks.filter(o=>o.type==='post').length,13);
  assert.ok(courseResistance(c,p.x,p.z,1)>.5);assert.equal(courseResistance(c,p.x+p.rx*1.01,p.z,1),0);assert.equal(courseResistance(c,p.x,p.z,0),0);
  assert.equal(courseResistance(c,p.x,p.z,.5),courseResistance(c,p.x,p.z,1)*.5);
  function coast(resistance){const s=createRace({mode:'time',course:{...c,resistance,ground:()=>-8,rocks:[]}}),r=s.racers[0];s.phase='running';r.x=p.x;r.z=p.z-3;r.heading=0;r.vz=10;for(let i=0;i<30;i++)stepRace(s,{},1/60);return r;}
