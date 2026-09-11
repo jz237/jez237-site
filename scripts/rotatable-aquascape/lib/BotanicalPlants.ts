@@ -17,6 +17,8 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const p:number[]=[],uv:number[]=[],idx:number[]=[];
   // Narrow stem blades need fewer cross-blade segments than the broad rosettes.
   const fineBlade=species==='stem'||species==='rotala';
+  // Scale cross-blade relief using the species typical width-to-length ratio.
+  const crossAspect=species==='sword'?.18:species==='grass'?.075:species==='anubias'?.70:species==='bacopa'?.56:species==='ludwigia'?.60:species==='carpet'?.73:.27;
   const rows=species==='grass'?16:species==='sword'?40:species==='carpet'?8:species==='bacopa'||species==='anubias'?64:fineBlade?20:24,cols=species==='grass'?2:species==='carpet'?4:species==='sword'?16:fineBlade?8:12;
   for(let i=0;i<=rows;i++){
    // Concentrate rings at the shoulders and tip: those high-curvature areas
@@ -40,7 +42,12 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
     // Subtle unequal margins and a wandering midrib avoid a stamped silhouette.
     const margin=1+(Math.sin(t*29+s*1.7+variant)*.016+Math.sin(t*53+variant*2.1+s)*.007)*bladeWeight*edge;
     const midribDrift=Math.sin(blade*Math.PI)*Math.sin(blade*4.2+variant)*.012;
-    p.push(s*width*(1+s*asymmetry*.14)*margin+asymmetry*.035+midribDrift,t,arch-curl+midrib+ribbing+edge*edge*(.016+form*.027)*Math.sin(t*Math.PI)+wave+s*width*handedness*t*(.06+form*.18));
+    // A shallow, unequal cup and a gently rolled margin replace the deep
+    // length-scaled flutes that made narrow leaves look like molded plastic.
+    const cupDepth=species==='sword'||species==='grass'?.07+form*.09:(.016+form*.027)/crossAspect;
+    const cup=edge*edge*cupDepth*(1+s*handedness*.22)*bladeWeight;
+    const crossRelief=(midrib+ribbing+cup+wave+s*width*handedness*t*(.06+form*.18))*crossAspect;
+    p.push(s*width*(1+s*asymmetry*.14)*margin+asymmetry*.035+midribDrift,t,arch-curl+crossRelief);
     uv.push(u,t);
     if(i<rows&&j<cols){const n=i*(cols+1)+j;idx.push(n,n+1,n+cols+1,n+1,n+cols+2,n+cols+1);}
    }
