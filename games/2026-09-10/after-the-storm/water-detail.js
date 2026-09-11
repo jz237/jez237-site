@@ -27,7 +27,7 @@ void main(){
  vec2 wakeSlope=vec2(jetWake(p+vec2(e,0))+impactHeight(p+vec2(e,0))-jetWake(p-vec2(e,0))-impactHeight(p-vec2(e,0)),jetWake(p+vec2(0,e))+impactHeight(p+vec2(0,e))-jetWake(p-vec2(0,e))-impactHeight(p-vec2(0,e)))/(2.*e)+wakeSurface(p).yz;
  vec2 flow=vec2(time*.013,-time*.009);vec2 r1=texture2D(detailMap,p*.145+flow).rg*2.-1.;
  vec2 rotated=mat2(.8,-.6,.6,.8)*p;vec2 r2=texture2D(detailMap,rotated*.37-flow*1.7).rg*2.-1.;
- float detailStrength=(.105+storm*.12)*(1.-smoothstep(75.,300.,dist)*.6);
+ float detailStrength=(.055+storm*.075)*(1.-smoothstep(75.,300.,dist)*.6);
  // Capillary ripples travel with the longer waves instead of sliding as a single sheet.
  vec2 drift=surface.yz*.24;
  vec2 r3=texture2D(detailMap,p*.82+drift-flow*2.3).rg*2.-1.;
@@ -54,6 +54,11 @@ void main(){
  vec3 reflectedRay=reflect(-V,N);vec3 skyFallback=mix(skyHorizon,skyZenith,pow(max(0.,reflectedRay.y),.4))*(1.-storm*.65)*(1.-night*.75);
  float mirrorEdge=max(abs(reflectUV.x-.5),abs(reflectUV.y-.5));reflected=mix(reflected,skyFallback,smoothstep(.46,.5,mirrorEdge));
  vec3 col=mix(refracted,reflected,fresnel);
+ // Broad wave-face lighting is intentionally stronger than capillary detail:
+ // reveal the existing displaced troughs and crests at racing distance.
+ float faceLight=smoothstep(-.16,.22,-dot(surface.yz,sun.xz));
+ col*=.80+.28*faceLight;
+ col+=vec3(.004,.026,.024)*smoothstep(.1,1.2,worldP.y-seaLevel)*faceLight*(1.-night);
  // Forward scattering through thinner, backlit crests gives water depth without
  // a uniform neon rim. It vanishes under thick storm cloud or at night.
  float backlight=pow(max(0.,dot(V,-sun)),4.),crest=clamp((worldP.y-seaLevel+.15)*.65,0.,1.);
@@ -86,7 +91,7 @@ void main(){
   bubbles+=exp(-across*across/(.5+age*.28))*trail*exp(-age*.19)*.24;
  }}}
  // Only steep, wind-driven crests break; uniform white caps at a fixed height are avoided.
- float steepness=length(surface.yz);foam+=smoothstep(.18,.32,steepness)*smoothstep(.3,.8,storm)*smoothstep(.5,.8,turbulence)*.35;
+ float steepness=length(surface.yz);foam+=smoothstep(.15,.30,steepness)*smoothstep(.12,.6,storm)*smoothstep(.38,.72,turbulence)*.6;
  // Subsurface aeration persists after the white surface foam disperses.
  col=mix(col,mix(vec3(.10,.32,.30),vec3(.055,.15,.17),storm),clamp(bubbles,0.,.65)*(1.-fresnel));
  float cells=texture2D(detailMap,p*1.9+drift-flow*.6).b;
