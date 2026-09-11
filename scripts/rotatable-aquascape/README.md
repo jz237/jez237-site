@@ -281,3 +281,16 @@ Trials with thicker bevels and different edge tint were reverted after identifyi
 The two simple tube surfaces are replaced by distinct hollow intake and return assemblies. Both have inner walls and annular end rims; the return curves into the tank and flares into an open mouth with a rolled lip. The intake has an open glass cage, and small suction-cup supports connect the pipe necks to the rear pane. Geometry is modeled in 3D and uses the existing shared studio reflection map. Glass transmission remains the renderer's approximation, not a multi-bounce optical simulation.
 
 New geometry tests verify manifold wall construction, consistent winding, finite normals, open center passages, and correctly facing inner/outer surfaces. Six targeted geometry/reflection/lighting checks and the production build pass. Front and angled views were reviewed; the angled preview reported 60 fps / 7.2 ms with no browser warnings/errors. Transparent plumbing is excluded from the static diffuse bake, which is retained. No new assets, dependencies or paid services were used. The full reference match remains unfinished.
+
+
+## Finer stem colonies and foreground carpet
+
+Stem plants now have smaller blades on thinner stems, more shoots per colony and closer leaf-node spacing. The foreground carpet also uses smaller, more numerous leaves. This reduces the coarse leaf scale relative to the reference while keeping dense coverage. Narrow stem/rotala blades use 20 longitudinal by 8 cross-blade segments; broad leaves retain their existing denser meshes. Curvature, texture detail and current-driven deformation remain in place.
+
+The regenerated planting contains 28,194 leaf instances. A static export audit confirms finite positions inside the physical tank. Existing tank-space checks pass, and the indirect field was rebuilt against 8,415,147 triangles in 21.15 seconds. Eight targeted tank-space/reflection/lighting checks and the production build pass. Front and angled comparisons show finer foliage; the angled preview reported 60 fps / 7.4 ms. The deterministic planting regeneration also redistributes individual rosettes and carpet placements. No fish behavior, paid assets or services changed. Full photographic fidelity remains unfinished.
+
+## Flexible leaf blades in the current
+
+Broad sword leaves have a larger flex range, and the shared blade deformation now uses a curved midrib with a traveling wave and a separate sideways flutter. Each leaf keeps its existing individual phase and rate; petioles remain attached to the rooted plant. Analytic normals follow the two-axis deformation so lighting follows the moving surface. The visible and shadow materials share the same motion. Leaf placement reserves clearance for the increased flex.
+
+Three new tests execute the shader's scalar deformation helpers to check attached petioles, visible tip travel and curved midribs, bounded displacement, and normals perpendicular to the moving surface. All 43 tests and the production build pass. The static indirect-light field was refreshed for the resized planting (8,415,147 triangles, 22.69 seconds). This is an artistic current model, with a static indirect-light bake; photographic fidelity remains unfinished. No paid assets or services were used.

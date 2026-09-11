@@ -15,7 +15,9 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet','grass'] as Species[])for(let variant=0;variant<variants;variant++){
   const form=variant/(variants-1),handedness=variant%2?1:-1;
   const p:number[]=[],uv:number[]=[],idx:number[]=[];
-  const rows=species==='grass'?16:species==='sword'?40:species==='carpet'?8:species==='bacopa'||species==='anubias'?64:24,cols=species==='grass'?2:species==='carpet'?4:species==='sword'?16:12;
+  // Narrow stem blades need fewer cross-blade segments than the broad rosettes.
+  const fineBlade=species==='stem'||species==='rotala';
+  const rows=species==='grass'?16:species==='sword'?40:species==='carpet'?8:species==='bacopa'||species==='anubias'?64:fineBlade?20:24,cols=species==='grass'?2:species==='carpet'?4:species==='sword'?16:fineBlade?8:12;
   for(let i=0;i<=rows;i++){
    // Concentrate rings at the shoulders and tip: those high-curvature areas
    // exposed straight polygon edges in the old uniformly spaced broad blades.
@@ -51,7 +53,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const batch=batches.get(`${species}-${variant}`)!;dummy.position.copy(pos);dir.normalize();
   // Orient the upper lamina toward the light, instead of leaving leaf faces vertical.
   const across=dir.clone().cross(up);if(across.lengthSq()<.0001)across.set(1,0,0);across.normalize();
-  const leafAmplitude=Math.min(species==='anubias'?.10:species==='grass'?.42:.34,(species==='sword'?.18:.11)/Math.max(length,.01));
+  const leafAmplitude=Math.min(species==='anubias'?.20:species==='grass'?.48:species==='sword'?.40:.38,(species==='sword'?.30:.13)/Math.max(length,.01));
   const normal=across.clone().cross(dir).normalize();dummy.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(across,dir,normal));
   dummy.rotateY(twist-.35);dummy.scale.set(width,length,length);dummy.updateMatrix();fitLeaf(dummy,batch.geometry.getAttribute('position') as T.BufferAttribute,Math.max(.14,leafAmplitude*length*1.6));batch.matrices.push(dummy.matrix.clone());batch.colors.push(new T.Color().setHSL(h,s,l).convertSRGBToLinear());batch.roots.push(plantRoot.x,plantRoot.y,plantRoot.z);batch.flex.push(plantFlex);
   const phase=pos.x*13.7+pos.y*9.3+pos.z*17.1+dir.x*4.2;
@@ -67,7 +69,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   [-4.38,-.52,.28,.38,2.70,7,false],[-1.2,-.58,.38,.30,.95,3,false],[2.88,-.45,.40,.33,2.27,8,false],
   [3.90,.10,.35,.39,1.57,7,false],[.05,-.20,.38,.28,.80,3,false]
  ] as const;
- for(const [cx,cz,spreadX,spreadZ,maxH,count,red] of colonies)for(let i=0;i<count;i++){
+ for(const [cx,cz,spreadX,spreadZ,maxH,count,red] of colonies)for(let i=0;i<Math.ceil(count*(maxH>2.5?1.4:1.1));i++){
   const radius=Math.sqrt(random()),angle=random()*Math.PI*2;
   const x=cx+Math.cos(angle)*radius*spreadX,z=cz+Math.sin(angle)*radius*spreadZ,base=height(x,z);
   const h=Math.min(5.15-base,maxH*(.78-.19*radius*radius+random()*.23)),phase=random()*Math.PI*2;
@@ -78,7 +80,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const roundLeaf=!red&&(maxH<2.5||(cx< -3.8||cx>3.7)&&i%5===0);
   const broadRed=red&&i%5===0;
   const grow=(start:number,end:number,offset:T.Vector3,vigor=1)=>{
-   const span=(end-start)*h,nodes=Math.max(4,Math.floor(span*(red?6.4:5.8)*(.88+.24*(Math.sin(phase*2.7)*.5+.5)))),nodeAngle=random()*6.28,spiral=Math.PI*.5+(random()-.5)*.22;
+   const span=(end-start)*h,nodes=Math.max(4,Math.floor(span*(red?7.5:7.2)*(.88+.24*(Math.sin(phase*2.7)*.5+.5)))),nodeAngle=random()*6.28,spiral=Math.PI*.5+(random()-.5)*.22;
    let previous=point(start);
    for(let j=1;j<=nodes;j++){
     const node=j===nodes?1:(j+Math.sin(j*2.4+phase)*.16)/nodes;
@@ -86,13 +88,13 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
     const growth=1-Math.pow(1-node,tipDensity),t=start+(end-start)*growth;
     const at=point(t).addScaledVector(offset,Math.sin(growth*Math.PI*.5));
     at.x=T.MathUtils.clamp(at.x,-4.7,4.7);at.z=T.MathUtils.clamp(at.z,-2.05,2.05);
-    stem(previous,at,(red?.0055:.0065)*(1-growth*.60),red?0x6d4930:0x496124);previous=at;
+    stem(previous,at,(red?.0045:.0055)*(1-growth*.60),red?0x6d4930:0x496124);previous=at;
     const leafCount=2;
     for(let side=0;side<leafCount;side++){
      // Full-sized mature leaves persist below a compact tip; a sine profile made
      // every stem look like the same triangular miniature conifer.
      const a=nodeAngle+j*spiral+side*Math.PI+Math.sin(j*1.17+phase)*.22+(random()-.5)*.35;
-     const tip=T.MathUtils.smoothstep(growth,.77,1),length=(broadRed?.34:red?.38:roundLeaf?.29:.40)*(1-tip*.48)*(.78+random()*.40)*vigor;
+     const tip=T.MathUtils.smoothstep(growth,.77,1),length=(broadRed?.30:red?.28:roundLeaf?.25:.29)*(1-tip*.48)*(.78+random()*.40)*vigor;
      // Varied ascending blades break the old stack of nearly horizontal pairs.
      const inclination=.12+tip*.65+(Math.sin(phase*1.37+j*.93)*.5+.5)*.28+random()*.66;
      const direction=V(Math.cos(a),inclination,Math.sin(a));
@@ -161,13 +163,13 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   }
  }
  // Dense, irregular carpeting with rounded small blades and an open sand channel.
- for(let i=0;i<4800;i++){
+ for(let i=0;i<6400;i++){
   const x=(random()-.5)*9.85,z=(random()-.5)*4.4,{left,right}=sandChannel(z);
   const inside=Math.min(x-left,right-x);
   if(inside>.10||inside>-.07&&random()<(inside+.07)/.17||z<-.75&&random()<.70)continue;
   const b=height(x,z)+.015;
   plantRoot=V(x,b,z);plantFlex=.4;
-  for(let j=0;j<4;j++){const a=random()*Math.PI*2,l=.06+random()*.10;add('carpet',V(x,b,z),V(Math.cos(a)*.8,.35+random()*.7,Math.sin(a)*.8),l,l*.73,.19+random()*.07,.70,.25+random()*.14);}
+  for(let j=0;j<4;j++){const a=random()*Math.PI*2,l=.05+random()*.085;add('carpet',V(x,b,z),V(Math.cos(a)*.8,.35+random()*.7,Math.sin(a)*.8),l,l*.73,.19+random()*.07,.70,.25+random()*.14);}
  }
  const tissues={fine:leafSurfaceMaps('fine'),round:leafSurfaceMaps('round',2732),sword:leafSurfaceMaps('sword',2733)};
  for(const batch of batches.values()){
