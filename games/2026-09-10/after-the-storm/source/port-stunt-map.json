@@ -1,0 +1,190 @@
+{
+  "source": "https://assets.topics.apps-jp.nintendo.com/uploads/files/2022/08/03/00/27/03/820845/53229_1996_12_02.pdf",
+  "page": 13,
+  "printedPage": 91,
+  "mode": "stunt",
+  "coordinates": {
+    "units": "pixels",
+    "xDirection": "right",
+    "zDirection": "down",
+    "renderLongEdge": 4000,
+    "crop": [
+      3080,
+      1880,
+      910,
+      670
+    ]
+  },
+  "ringCentersInTravelOrder": [
+    [
+      246,
+      575
+    ],
+    [
+      155,
+      560
+    ],
+    [
+      94,
+      483
+    ],
+    [
+      115,
+      101
+    ],
+    [
+      141,
+      71
+    ],
+    [
+      193,
+      51
+    ],
+    [
+      270,
+      51
+    ],
+    [
+      293,
+      51
+    ],
+    [
+      346,
+      66
+    ],
+    [
+      368,
+      87
+    ],
+    [
+      401,
+      303
+    ],
+    [
+      416,
+      347
+    ],
+    [
+      452,
+      365
+    ],
+    [
+      695,
+      377
+    ],
+    [
+      741,
+      366
+    ],
+    [
+      775,
+      397
+    ]
+  ],
+  "rampCentersInTravelOrder": [
+    [
+      415,
+      560
+    ],
+    [
+      772,
+      540
+    ],
+    [
+      721,
+      581
+    ]
+  ],
+  "checkpointsInTravelOrder": [
+    [
+      [
+        67,
+        384
+      ],
+      [
+        147,
+        405
+      ]
+    ],
+    [
+      [
+        494,
+        293
+      ],
+      [
+        494,
+        377
+      ]
+    ],
+    [
+      [
+        784,
+        459
+      ],
+      [
+        869,
+        459
+      ]
+    ],
+    [
+      [
+        595,
+        528
+      ],
+      [
+        595,
+        623
+      ]
+    ]
+  ],
+  "visibleDockCargoCenters": [
+    [
+      160,
+      55
+    ],
+    [
+      321,
+      54
+    ]
+  ],
+  "status": "Approximate hand-drawn map coordinates, not a metric survey. Pending runtime fit; original roof extents, ring elevations, cargo positions and timing need footage comparison.",
+  "sectionSequence": [
+    [
+      "ramp0",
+      "ring0",
+      "ring1",
+      "ring2",
+      "checkpoint0"
+    ],
+    [
+      "ring3",
+      "ring4",
+      "ring5",
+      "ring6",
+      "ring7",
+      "ring8",
+      "ring9",
+      "ring10",
+      "ring11",
+      "ring12",
+      "checkpoint1"
+    ],
+    [
+      "ring13",
+      "ring14",
+      "ring15",
+      "checkpoint2"
+    ],
+    [
+      "ramp1",
+      "ramp2",
+      "checkpoint3"
+    ]
+  ],
+  "implementationRisks": [
+    "Normal race passage.enabled is false; stunt tunnel must be independently open.",
+    "Expert/Reverse race closedAreas must not leak into the forward stunt geography.",
+    "Current ground closures capture the original getCourse object; changing a copied closedAreas array alone does not remove them.",
+    "Do not distribute seven dock rings over arbitrary tunnel fractions until original footage confirms their relationship to the winding roofed section."
+  ]
+}
