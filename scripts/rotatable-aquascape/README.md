@@ -251,3 +251,10 @@ Eight targeted tank-space, reflection and baked-field checks and the production 
 Leaf maps now use deterministic smooth noise at three scales for nonperiodic pigment, relief, optical density and roughness variation. A slightly rougher cuticle breaks the uniform broad-leaf sheen, and secondary veins vary their reach and attachment spacing. An initially stronger pigment treatment was reduced after the leaf study showed excessive mottling. Texture resolution and geometry are unchanged; current animation is retained.
 
 Front-lit and backlit blade studies and the full aquarium were reviewed. The static diffuse field was rebuilt for the changed surface colors against 6,403,819 triangles in 19.34 seconds. Four targeted reflection and baked-field checks and the production build pass. This remains an artistic leaf material, not measured botanical reflectance. No paid assets, services or dependencies were introduced. The photographic realism goal remains unfinished.
+
+
+## Smooth broad-leaf outlines and species-specific tips
+
+Broad blades use more rings, concentrated near their shoulders and tips, to remove visible polygon corners in close views. Anubias now has a more pointed apex than bacopa. Small unequal margins and a gently wandering midrib vary the six modeled forms. Texture coordinates follow the revised geometry, while the existing attached-base current and analytical normals remain unchanged.
+
+The leaf study and full tank were reviewed. A static bounds audit covers all 19,785 leaf instances inside the physical tank; motion is checked visually and the existing clearance tests pass. The indirect field was rebuilt against 7,388,395 triangles in 20.36 seconds. Eight targeted tank-space, reflection and lighting checks and the production build pass. No paid assets or services were used. This improves close-up geometry; the overall scene still does not match the reference photograph.
