@@ -44,6 +44,7 @@ const sunset={
  name:'Sunset Bay',theme:'resort',tag:'02 / SUNSET BAY',layoutRevision:4,
  finishLine:sunsetMap([[250,300],[420,300]]),finishBypass:3,
  waveTrain:[(130-245)*.75,(223-275)*.75,14,.9],
+ mooredBoats:[[90,146],[93,299]].map(([x,z],i)=>({id:'sunset-mooring-'+i,x:(x-245)*.75,z:(z-275)*.75,width:3.5,length:10,heading:0})),
  buoysByClass:[sunsetNormalBuoys,sunsetHardBuoys,sunsetExpertBuoys,sunsetReverseBuoys],
  obstaclesByClass:[[],sunsetForwardBalls,sunsetForwardBalls,sunsetReverseBalls],
  anchorsByClass:{2:sunsetMap([[290,302],[281,222],[258,163],[217,80],[194,49],[167,52],[142,93],[131,165],[103,190],[99,219],[150,260],[140,333],[158,402],[180,458],[209,478],[268,510],[310,512],[352,480],[412,508],[448,486],[468,455],[448,420],[385,398],[317,376],[298,350]])},
@@ -52,7 +53,7 @@ const sunset={
  anchors:fromMap([[290,302],[281,222],[258,163],[217,80],[194,49],[167,52],[142,93],[131,165],[103,190],[99,219],[117,260],[140,333],[158,402],[180,458],[268,495],[366,515],[435,494],[468,455],[448,420],[385,398],[317,376],[298,350]],245,275),
  ground(x,z){return clamp(-polygonDistance(sunsetLand,x,z)*.48,-10,5);},
  obstacles:[],resistance:[],raceRamps:[{id:100,name:'SUNSET JUMP',x:(130-245)*.75,z:(198-275)*.75,tx:0,tz:1,width:12,length:17,height:2.1,floating:false}],
- crossbars:[{x:(133-245)*.75,z:(144-275)*.75,tx:1,tz:0,length:61,depth:3.2,bottom:2.8,top:3.2,material:'wood',pileSpacing:14},{x:(132-245)*.75,z:(299-275)*.75,tx:1,tz:0,length:68,depth:3.2,bottom:2.8,top:3.2,material:'wood',pileSpacing:14}]
+ crossbars:[{x:(133-245)*.75,z:(144-275)*.75,tx:1,tz:0,length:61,depth:3.2,bottom:2.8,top:3.2,material:'wood',pileSpacing:14},{x:(137.5-245)*.75,z:(299-275)*.75,tx:1,tz:0,length:57.75,depth:3.2,bottom:2.8,top:3.2,material:'wood',pileSpacing:14,pileOffsets:[-24.525,-10.925,2.675,16.275,28.875]}]
 };
 const lakeLand=fromMap([[67,108],[104,98],[174,116],[229,109],[320,76],[334,107],[329,194],[345,246],[326,295],[294,329],[273,348],[228,351],[173,343],[126,368],[77,350],[70,293],[63,254],[72,215],[62,174]],200,240);
 const lakeIsland=fromMap([[127,72],[166,63],[207,66],[252,85],[224,96],[193,99],[153,88]],200,240);
