@@ -50,3 +50,17 @@ header:before{content:"";position:fixed;inset:0 0 auto;height:250px;background:l
 @media(max-height:500px){#demoPanel{width:min(490px,calc(100% - 24px));padding:8px 12px;bottom:8px}#demoPanel strong{font-size:12px}.demo-buttons{margin-top:6px}.demo-active .telemetry{bottom:145px;left:14px}.demo-active #chart{bottom:145px;width:65px;height:77px}.demo-active .position{top:65px}.demo-active .position b{font-size:32px}.demo-active .timing{top:65px;padding:6px}.demo-active .timing b{font-size:20px}}
 
 @media(max-width:650px){.demo-active .telemetry{left:14px;gap:12px}.demo-active .telemetry>b{font-size:30px}.demo-active #power i{width:12px}.demo-active #chart{right:14px;width:82px;height:97px}}
+
+/* Phone viewing: the demo defaults to unobstructed water and a single control chip. */
+#demoToggle,#demoPause{display:none}
+@media(max-width:900px),(pointer:coarse){
+ .demo-active #racehud,.demo-active #splitHud,.demo-active header{display:none!important}
+ .demo-active #demoPanel{display:none}
+ .demo-active.demo-controls-open #demoPanel{display:block;bottom:calc(64px + env(safe-area-inset-bottom));width:min(460px,calc(100% - 24px));padding:10px 12px;background:#123440d9}
+ .demo-active #demoToggle{display:block;position:fixed;z-index:5;right:max(12px,env(safe-area-inset-right));bottom:max(10px,env(safe-area-inset-bottom));min-height:44px;padding:10px 14px;border-radius:22px;font-size:12px;background:#153944a8;border-color:#d0e4db55}
+ #demoPause{display:block}.demo-buttons{flex-wrap:wrap;gap:5px}.demo-buttons button{padding:8px 10px}#demoPanel small,#demoAction{display:none!important}#demoPanel strong{font-size:12px;margin:0 0 6px}
+ .mobile-riding:not(.demo-active) header a{font-size:10px;letter-spacing:.08em}.mobile-riding header:before{display:none}.mobile-riding:not(.demo-active) .position,.mobile-riding:not(.demo-active) #chart,.mobile-riding:not(.demo-active) .timing,.mobile-riding:not(.demo-active) .telemetry>div{display:none}
+ .mobile-riding:not(.demo-active) .telemetry{left:14px;bottom:185px}.mobile-riding:not(.demo-active) #speed{font-size:24px}.mobile-riding:not(.demo-active) #next{top:29%;font-size:10px}.mobile-riding:not(.demo-active) #notice{top:65px;font-size:11px;left:15%;width:70%}
+ .mobile-riding:not(.demo-active) #freeStunts{background:transparent!important;padding:0!important;top:65px!important;left:14px!important}.mobile-riding:not(.demo-active) #freeStunts small,.mobile-riding:not(.demo-active) #stuntScore{display:none!important}.mobile-riding:not(.demo-active) #stuntGuide{font-size:10px}
+}
+@media(max-height:500px) and (max-width:900px){.mobile-riding:not(.demo-active) .telemetry{bottom:132px}.demo-active.demo-controls-open #demoPanel{left:12px;transform:none;width:min(450px,calc(100% - 170px));bottom:max(10px,env(safe-area-inset-bottom))}}
