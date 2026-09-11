@@ -16,7 +16,7 @@ test('Sunset Bay has distinct L-shaped geography and a race-mode ramp with a wet
  const reversed=getCourse('amber',3).ramps[0];assert.equal(reversed.tz,ramp.tz);
 });
 test('reconstructed routes are in water without cutting the authored shorelines',()=>{
- for(const id of ['greyhaven','amber','reed','citadel','port']){const c=getCourse(id);for(const p of sampleRoute(c.anchors,240))assert.ok(c.ground(p.x,p.z)<-.8,id+' '+JSON.stringify(p));}
+ for(const id of ['greyhaven','amber','reed','citadel','port','neon']){const c=getCourse(id);for(const p of sampleRoute(c.anchors,240))assert.ok(c.ground(p.x,p.z)<-.8,id+' '+JSON.stringify(p));}
 });
 test('Drake Lake weeds have bounded elliptical resistance only during water contact',()=>{
  const c=getCourse('reed'),p=c.resistance[0];assert.equal(c.name,'Drake Lake');assert.equal(c.rocks.filter(o=>o.type==='post').length,8);
@@ -79,4 +79,9 @@ test('ordinary Expert helm inputs launch from the bow ramp and land on every lap
  const s=createRace({course:getCourse('port',2),difficulty:2}),r=s.racers[0],contacts=new Set();let previous=0,landings=0;
  for(let i=0;i<18000&&s.phase!=='results';i++){stepRace(s,aiInput(s,r),1/60);if(r.hydro.onRamp)contacts.add(r.lap);if(r.hydro.landingId>previous){landings++;previous=r.hydro.landingId;}}
  assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.deepEqual([...contacts],[1,2,3]);assert.ok(landings>=3);
+});
+
+test('Twilight City has separated quays, a narrow straight, a low sand point and four fixed race ramps',()=>{
+ const c=getCourse('neon',1),at=(x,z)=>c.ground((x-200)*.8,(z-275)*.8);assert.equal(c.name,'Twilight City');assert.ok(at(240,120)>4);assert.ok(at(305,120)>4);assert.ok(at(269,120)<-3);assert.ok(at(100,330)<-3);assert.ok(at(120,490)<-3);assert.ok(at(195,47)>0&&at(195,47)<=1.1);
+ assert.equal(c.ramps.length,4);assert.ok(getCourse('neon',2).ramps[0].z>c.ramps[0].z);assert.ok(getCourse('neon',2).rocks.length>c.rocks.length);assert.ok(c.rocks.every(q=>q.type==='ball'));
 });

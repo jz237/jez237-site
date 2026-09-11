@@ -22,10 +22,10 @@ export function stuntCourse(base,{freeRide=false}={}){
   const index=Math.floor(section*n/4);let g=base.gates[(index+2)%n];
   if(freeRide&&section===0){
    const start=base.gates[0],candidate={...start,x:start.x+start.tx*29,z:start.z+start.tz*29};
-   const clear=[[-7,-6],[-7,6],[7,-6],[7,6],[22,0]].every(([along,across])=>base.ground(candidate.x+candidate.tx*along+candidate.tz*across,candidate.z+candidate.tz*along-candidate.tx*across)<-1.5);
+   const clear=[[-7,-6],[-7,6],[7,-6],[7,6],[25,0]].every(([along,across])=>base.ground(candidate.x+candidate.tx*along+candidate.tz*across,candidate.z+candidate.tz*along-candidate.tx*across)<-1.5);
    if(clear)g=candidate;
   }
-  if(base.layoutRevision){const safe=q=>[[-7,-6],[-7,6],[7,-6],[7,6],[22,0],...(base.id==='citadel'?[[36,0],[48,0]]:[])].every(([along,across])=>base.ground(q.x+q.tx*along+q.tz*across,q.z+q.tz*along-q.tx*across)<-1.5);if(!safe(g)){const candidates=Array.from({length:Math.floor(n/4)-1},(_,j)=>base.gates[(index+1+j)%n]);g=candidates.find(safe)||g;}}
+  if(base.layoutRevision){const safe=q=>[[-7,-6],[-7,6],[7,-6],[7,6],[25,0],...(base.id==='citadel'?[[36,0],[48,0]]:[])].every(([along,across])=>base.ground(q.x+q.tx*along+q.tz*across,q.z+q.tz*along-q.tx*across)<-1.5);if(!safe(g)){const candidates=Array.from({length:freeRide?n-1:Math.floor(n/4)-1},(_,j)=>base.gates[(index+1+j)%n]);g=candidates.find(q=>safe(q)&&course.ramps.every(r=>Math.hypot(r.x-q.x,r.z-q.z)>30))||g;}}
   const ramp={id:section,name:['KICKER','BIG AIR','STEP UP','COAST JUMP'][section],x:g.x,z:g.z,tx:g.tx,tz:g.tz,width:freeRide?11:9,length:14,height:freeRide?[3.6,4,3.2,3.8][section]:3.1,floating:true};course.ramps.push(ramp);
   course.rings.push({x:g.x+g.tx*18,z:g.z+g.tz*18,y:ramp.height+1.2,tx:g.tx,tz:g.tz,radius:2.6,type:'air',rampId:section});
   const water=base.id==='practice'?{x:g.x+g.tx*52,z:g.z+g.tz*52,tx:g.tx,tz:g.tz}:base.gates[(index+4)%n];course.rings.push({...water,y:1.35,radius:2.8,type:'water',floating:true});

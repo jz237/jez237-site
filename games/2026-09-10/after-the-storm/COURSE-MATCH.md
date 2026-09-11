@@ -30,7 +30,7 @@ Remaining diagrams still require inspection before their buoy layouts are author
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
 | Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; original buoy patterns and final visual/scale matching pending |
-| Twilight City | Angular urban channel, walls, race ramps and alternate routes | Existing generic course; full reconstruction pending |
+| Twilight City | Angular urban channel, jump-or-dive wall, low sand point, four race ramps and metal balls | Rebuilt channel/quays, sand point, ramps and metal props; wall shortcut, original buoys and exact per-class obstacle counts pending |
 | Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Existing generic course; full reconstruction pending |
 | Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Existing generic course; full reconstruction pending |
 | Dolphin Park | Enclosed basin, kidney island, two main ramps, jetties and tunnel | Existing generic course; full reconstruction pending |
@@ -111,3 +111,16 @@ The bow jump is still pending. This correction is not a full course-parity sign-
 - Full suite: 120/120 passed in 74.67 seconds. Browser Expert / venue conditions: 201.483 seconds, 96 checkpoints, zero misses, three jump landings, third place. High graphics, final 60 FPS.
 - Extended the existing verification-only apex/landing controls to race ramps. The first apex inspection caught an oversized sign obstructing the camera; wide ramps now use a capped side-mounted sign. The game physics did not change after the full-suite run.
 - Reinspection after the sign fix showed the ski visibly airborne beyond the ramp, with an unobstructed forward view: apex 2.569 metres above the local wave surface at 52.19 km/h, zero wet contact, zero compression/load. Runtime errors were empty. This proves the rendered jump interaction; original scale and final detailing are still estimates pending comparison.
+
+## Twilight City geography milestone — September 10, 2026
+
+- Rebuilt the outer race route, narrow northern bend, diagonal return basin, central/eastern quays and low sand point from the Hard/Expert maps, also inspecting the Reverse diagram. Added four fixed race ramps; the first moves farther from the future wall position in Expert/Reverse, as shown in the reference.
+- Metal balls now render as buoyant steel spheres using their physical obstacle positions. Concrete quay meshes are separated from rendered seabed vegetation. The existing night skyline and reflected windows remain; architecture/material fidelity is not yet signed off.
+- The jump-or-dive shortcut wall is NOT implemented. The current guided route uses the outer route. Original buoy positions are still generated. Exact obstacle counts also need class-specific review: the shared Hard extra-obstacle rule currently adds four, while the city Hard reference appears to show the baseline clusters. Do not treat this milestone as final obstacle parity.
+- Improved guidance around fixed ramp backs and aimed obstacle detours beyond the obstacle. Starting rear-ramp avoidance too far away caused a nearby Reverse buoy miss; closer avoidance fixes it. Free-ride ramp placement now checks the longer landing corridor and can use another safe part of the course when a quarter is too narrow, while keeping ramps separated.
+- Full suite: 121/121 passed in 80.93 seconds. All classes finish via ordinary inputs under the existing regression limits. No test expectations were relaxed.
+- Browser Hard / venue conditions before the final navigation refinements: 289.183 seconds, 84 checkpoints, zero misses, four landings, fourth place; High graphics and final 60 FPS, no runtime errors.
+- Visual inspection during the corrected Reverse run confirmed the concrete waterfront, reflected city windows and distinct diagonal course shape. The final course-match audit must still compare the shortcut, buoys, obstacle counts and original stunt placements.
+
+This is local only and has not been published. Glacier Coast, Southern Island and Dolphin Park still need geography reconstruction.
+- Corrected browser Reverse / venue conditions completed in 288.200 seconds: 96 checkpoints, zero misses, one landing, third place. High graphics, final 60 FPS; runtime errors empty.

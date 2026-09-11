@@ -72,5 +72,23 @@ const port={
  via:portMap([[162,101],[194,114],[227,120],[246,137],[249,155],[236,171],[220,186],[216,203],[222,214],[245,213],[263,222],[272,243],[273,270],[254,290],[223,289]]),
  structure:portMap([[194,114],[227,120],[246,137],[249,155],[236,171],[220,186],[216,203],[222,214],[245,213],[263,222],[272,243],[273,270],[263,279]])}
 };
-export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort,port};
+const cityMap=points=>fromMap(points,200,275,.8);
+const cityWater=cityMap([[154,20],[337,20],[385,67],[372,100],[373,141],[390,152],[377,187],[359,195],[348,211],[358,232],[306,370],[306,524],[249,524],[249,498],[241,499],[229,524],[16,524],[14,334],[123,225],[140,225],[149,234],[176,234],[200,215],[200,198],[177,177],[177,141],[167,130],[167,86],[154,70]]);
+const cityCenter=cityMap([[206,65],[224,51],[257,58],[258,174],[248,180],[248,226],[253,231],[253,466],[241,472],[56,470],[52,454],[52,387],[139,310],[186,278],[186,258],[223,221],[223,177],[206,165]]);
+const cityEast=cityMap([[277,37],[295,37],[329,70],[329,160],[315,175],[289,232],[277,231],[277,177]]);
+const citySand=cityMap([[184,36],[223,51],[206,65]]);
+const cityBalls=cityMap([[181,135],[193,135],[181,150],[193,150],[108,485],[108,497],[108,508],[108,519]]);
+const cityRamp=(id,x,z,tx,tz,width,length=14)=>({id,name:'CITY JUMP',x:(x-200)*.8,z:(z-275)*.8,tx,tz,width,length,height:2.1,floating:false});
+const cityLateRamps=[cityRamp(121,185,113,0,1,9),cityRamp(122,84,488,1,0,14),cityRamp(123,189,489,1,0,13)];
+const city={
+ name:'Twilight City',theme:'city',tag:'06 / TWILIGHT CITY',layoutRevision:2,
+ description:'Floodlit urban waterways: a fast eastern straight, a tight northern bend and a diagonal basin crowded with metal buoys.',
+ anchors:cityMap([[269,420],[288,341],[322,281],[342,239],[336,212],[352,181],[368,160],[358,139],[358,114],[374,68],[333,31],[277,29],[229,29],[182,27],[173,55],[174,96],[178,133],[190,169],[207,200],[204,218],[174,244],[141,278],[116,321],[87,349],[48,383],[24,429],[23,458],[38,472],[77,478],[131,486],[179,501],[212,513],[244,483],[266,456]]),
+ ground(x,z){return Math.max(city.renderGround(x,z),clamp(-polygonDistance(cityCenter,x,z)*.8,-10,6),clamp(-polygonDistance(cityEast,x,z)*.8,-10,6));},
+ renderGround(x,z){return clamp(Math.max(polygonDistance(cityWater,x,z)*.8,Math.min(1.1,1.1-polygonDistance(citySand,x,z)*.6)),-10,8);},
+ quayOutlines:[cityCenter,cityEast],obstacles:cityBalls.map(([x,z])=>({x,z,r:.7,type:'ball'})),
+ extraObstacles:cityMap([[186,133],[185,145],[118,485],[119,496],[119,507],[118,519]]).map(([x,z])=>({x,z,r:.7,type:'ball'})),
+ raceRampsByClass:[[cityRamp(120,270,260,0,-1,10),...cityLateRamps],[cityRamp(120,270,260,0,-1,10),...cityLateRamps],[cityRamp(120,270,285,0,-1,10),...cityLateRamps],[cityRamp(120,270,285,0,-1,10),...cityLateRamps]],resistance:[]
+};
+export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort,port,neon:city};
 export function courseResistance(course,x,z,wet=1){let drag=0;for(const p of course.resistance||[]){const q=((x-p.x)/p.rx)**2+((z-p.z)/p.rz)**2;drag=Math.max(drag,p.drag*clamp((1-q)*3,0,1));}return drag*clamp(wet,0,1);}
