@@ -1,3 +1,4 @@
+import {verificationInput} from '../race-verification.js';
 import {polygonDistance} from '../classic-courses.js';
 import {recoverToWater} from '../shore-recovery.js';
 import {waterLevel} from '../simulation.js';
@@ -46,4 +47,16 @@ test('original eastern yellow buoy approaches remain wet at low tide',()=>{
  const c=getCourse('tempest');
  for(const p of [[354,151],[361,488]])assert.ok(c.ground(...map(...p))< -1.45);
  assert.ok(c.ground(...map(344,450))> -1.05);
+});
+
+test('ship inspection rounds the island and earns three buoys before ramp contact',()=>{
+ const s=createRace({course:getCourse('tempest')}),r=s.racers[0];s.verifyShipJump=true;
+ let contact=false;
+ for(let i=0;i<3600;i++){
+  stepRace(s,verificationInput(s,r),1/60);
+  assert.equal(r.misses,0);
+  if(r.hydro.onRamp){contact=true;break;}
+ }
+ assert.ok(contact);assert.equal(r.power,3);assert.equal(r.next,4);
+ // This verifies the entry only. A clean ship landing is still unproven.
 });
