@@ -147,7 +147,7 @@
       54
     ]
   ],
-  "status": "Approximate hand-drawn map coordinates, not a metric survey. Pending runtime fit; original roof extents, ring elevations, cargo positions and timing need footage comparison.",
+  "status": "Preliminary runtime fit in port-stunts.js, layout revision4. The source sequence is preserved, but exact dock-ring positions, roof extents, cargo and timing still need original footage comparison.",
   "sectionSequence": [
     [
       "ramp0",
