@@ -23,6 +23,11 @@ export class AquariumLighting {
   this.beauty.setSize(width,height);this.shaded.setSize(width,height);
   this.contact.setSize(width,height);
  }
+ async prepare(renderer:T.WebGLRenderer){
+  const target=renderer.getRenderTarget();
+  try{renderer.setRenderTarget(this.beauty);await renderer.compileAsync(this.scene,this.camera);}
+  finally{renderer.setRenderTarget(target);}
+ }
  render(renderer:T.WebGLRenderer,inspect:string|null){
   const target=renderer.getRenderTarget();
   try{
