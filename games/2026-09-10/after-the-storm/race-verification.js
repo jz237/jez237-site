@@ -2,6 +2,7 @@ import {wave} from './simulation.js';
 import {aiInput,angleDelta,clamp} from './race-core.js';
 // A full park routine using only helm, throttle, trim and stunt inputs.
 export function parkMasteryInput(state,r){
+ if(state.course.stuntLayout)return authoredParkInput(state,r);
  if(state.phase==='countdown')return {};
  const s=r.stunt,h=r.hydro,section=Math.min(3,s.nextCheckpoint),ramp=state.course.ramps[section],rings=state.course.rings,airIndex=section*3,waterIndex=airIndex+1,diveIndex=airIndex+2;
  const along=(r.x-ramp.x)*ramp.tx+(r.z-ramp.z)*ramp.tz;
@@ -98,6 +99,7 @@ export function verificationInput(state,r){
  }
 
  if(state.verifyIceBalance&&r.onIce&&!r.wipeout)return {...aiInput(state,r),throttle:1,steer:1};
+ if(state.mode==='practice'&&state.course.stuntLayout){const h=r.hydro,v=r.playgroundVerification||={contact:false,airborne:false,landed:false,peak:0,done:false};if(h.onRamp&&!v.contact){v.contact=true;v.landing=h.landingId;}if(v.contact){v.airborne||=h.airborne;v.peak=Math.max(v.peak,h.y-h.waterHeight);v.landed||=h.landingId>v.landing;v.done=v.landed&&r.stunt.rings>0;}return authoredParkInput(state,r);}
  if(state.mode==='practice'){
   const ramp=state.course.ramps[0],v=r.playgroundVerification||=( {contact:false,airborne:false,landed:false,peak:0,done:false} );
   v.contact ||= r.hydro.onRamp;v.airborne ||= v.contact&&r.hydro.airborne;v.peak=Math.max(v.peak,r.hydro.y-r.hydro.waterHeight);
@@ -112,5 +114,24 @@ export function verificationInput(state,r){
  const s=r.stunt,h=r.hydro,kind=['flip','left','right','flip'][s.nextCheckpoint%4];
  if(h.airborne&&(h.y-h.waterHeight>1.5||s.trick)&&Math.abs(s.angle)<6.20)input.trick=s.trick||kind;
  else if(!h.airborne&&h.wet>.5&&r.next%6>=4){input.trick=['stand','handstand','backwards','stand'][s.nextCheckpoint%4];if(s.pose==='stand'&&s.poseTime>1.2)input.trick='somersault';}
+ return input;
+}
+
+// Follow the original park objects using ordinary inputs; only the simulation
+// may mark rings, tricks and checkpoint crossings.
+function authoredParkInput(state,r){
+ if(state.phase==='countdown')return {};
+ const c=state.course,s=r.stunt,h=r.hydro;
+ const driver=r.authoredParkDriver||={index:0,activeRamp:-1};
+ const ring=i=>({...c.rings[i],kind:'ring'}),cp=i=>({...c.stuntLayout.checkpoints[i],kind:'checkpoint'}),ramp=i=>({...c.ramps[i],kind:'ramp',rampIndex:i});
+ const targets=[ring(0),ring(1),ring(2),cp(0),ring(3),ring(4),ring(5),ring(6),cp(1),ramp(0),ramp(1),ramp(2),cp(2),ring(7),ring(8),ramp(3),ring(9),cp(3)];
+ let q=targets[Math.min(driver.index,targets.length-1)];
+ const along=(r.x-q.x)*q.tx+(r.z-q.z)*q.tz;
+ if(q.kind==='ramp'&&along> -10&&along<8)driver.activeRamp=q.rampIndex;
+ if(along>(q.kind==='ramp'?q.length/2:1)&&driver.index<targets.length-1){driver.index++;q=targets[driver.index];}
+ const aim=q.kind==='ramp'?q.length/2+5:5,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.15,q.z+q.tz*aim-r.z-r.vz*.15)-r.heading),desired=q.kind==='ramp'?12:13;
+ const input={throttle:clamp(.53+(desired-r.speed)*.15,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.2,dampen:true,lean:q.kind==='ramp'?-1:0};
+ if(h.airborne&&driver.activeRamp>=0){const kind=['flip','left','right','flip'][driver.activeRamp];if(h.y-h.waterHeight>1.2||s.trick){if(Math.abs(s.angle)<6.2)input.trick=s.trick||kind;}if(driver.activeRamp===3&&h.vy<0)input.dive=true;}
+ if(!h.airborne&&h.wet>.5){const done=s.completedTricks;if(!done.somersault)input.trick=s.pose==='stand'&&s.poseTime>1?'somersault':s.pose==='somersault'?'':'stand';else if(!done.handstand)input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';else if(!done.backwards)input.trick=s.pose==='backwards'&&s.poseTime>2?'':'backwards';}
  return input;
 }

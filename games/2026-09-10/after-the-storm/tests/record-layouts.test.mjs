@@ -15,7 +15,7 @@ test('layout revisions, class and lap count isolate record scopes, including era
  for(const entry of [a,b]){addRecord(save,{...entry,time:200,bestLap:50,rider:0,initials:'ABC'});addScore(save,{...entry,score:500,rider:0,initials:'ABC'});}
  assert.notEqual(recordKey(a),recordKey(b));assert.notEqual(scoreKey(a),scoreKey(b));assert.notEqual(recordKey(a),recordKey({...a,laps:4}));assert.notEqual(scoreKey(a),scoreKey({...a,difficulty:1}));
  const before=structuredClone(save),undo=eraseRecords(save,{...b,kind:'time'});assert.equal(save.records[recordKey(b)],undefined);assert.deepEqual(save.records[recordKey(a)],before.records[recordKey(a)]);restoreRecords(save,undo);assert.deepEqual(save,before);
- assert.equal(recordKey({course:'practice'}),'practice/0/3');assert.equal(scoreKey({course:'practice'}),'practice/0');
+ assert.equal(recordKey({course:'practice'}),'practice/0/3/layout-1');assert.equal(scoreKey({course:'practice'}),'practice/0/layout-1');assert.equal(recordKey({course:'practice',layoutRevision:0}),'practice/0/3');
 });
 test('import accepts archived revisions but rejects malformed layout keys',()=>{
  for(const suffix of ['layout-0','layout--1','layout-1x','layout-1000','__proto__','layout-1/extra']){const save=initialSave();save.records['citadel/0/3/'+suffix]={times:[],lap:null};assert.throws(()=>validateSave(save));}
