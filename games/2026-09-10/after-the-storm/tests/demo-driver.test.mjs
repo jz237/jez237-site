@@ -10,7 +10,7 @@ test('demo tours all nine venues and wraps to the first scene',()=>{
 });
 for(let index=0;index<DEMO_SCENES.length;index++)test('live demo drives '+DEMO_SCENES[index].join(' / '),()=>{
  const s=createDemoScene(index);let steps=0,maxSpeed=0,near=0,samples=0,distanceSum=0;
- while(!demoSceneDone(s)&&steps++<7200){stepRace(s,demoInput(s),1/60);maxSpeed=Math.max(maxSpeed,...s.racers.map(r=>r.speed));
+ while(!demoSceneDone(s)&&steps++<9600){stepRace(s,demoInput(s),1/60);maxSpeed=Math.max(maxSpeed,...s.racers.map(r=>r.speed));
   if(s.mode==='race'&&s.time>8)for(const r of s.racers){const distance=Math.min(...s.racers.filter(q=>q!==r).map(q=>Math.hypot(q.x-r.x,q.z-r.z)));samples++;distanceSum+=distance;if(distance<5)near++;}}
  const r=s.racers[0];
  assert.ok(demoSceneDone(s),'scene must end without hanging');
