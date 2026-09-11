@@ -1,0 +1,131 @@
+{
+  "source": "https://assets.topics.apps-jp.nintendo.com/uploads/files/2022/08/03/00/27/03/820845/53229_1996_12_02.pdf",
+  "page": 13,
+  "printedPage": 91,
+  "mode": "stunt",
+  "coordinates": {
+    "units": "pixels",
+    "renderLongEdge": 4000,
+    "crop": [
+      1980,
+      1030,
+      860,
+      680
+    ]
+  },
+  "ringCentersInTravelOrder": [
+    [
+      150,
+      520
+    ],
+    [
+      25,
+      460
+    ],
+    [
+      85,
+      396
+    ],
+    [
+      167,
+      358
+    ],
+    [
+      221,
+      300
+    ],
+    [
+      324,
+      82
+    ],
+    [
+      385,
+      227
+    ],
+    [
+      448,
+      247
+    ],
+    [
+      593,
+      208
+    ],
+    [
+      697,
+      225
+    ],
+    [
+      758,
+      295
+    ],
+    [
+      770,
+      366
+    ],
+    [
+      646,
+      529
+    ],
+    [
+      610,
+      558
+    ],
+    [
+      559,
+      520
+    ]
+  ],
+  "rampCentersInTravelOrder": [
+    [
+      389,
+      145
+    ],
+    [
+      755,
+      505
+    ]
+  ],
+  "checkpointsInTravelOrder": [
+    [
+      [
+        208,
+        257
+      ],
+      [
+        295,
+        257
+      ]
+    ],
+    [
+      [
+        505,
+        179
+      ],
+      [
+        505,
+        269
+      ]
+    ],
+    [
+      [
+        720,
+        430
+      ],
+      [
+        806,
+        430
+      ]
+    ],
+    [
+      [
+        319,
+        503
+      ],
+      [
+        319,
+        598
+      ]
+    ]
+  ],
+  "status": "Approximate diagram transcription. Second ring is clipped at the illustration edge. Manual fit to existing race shoreline, not uniform metric conversion. Original ring heights, timers, ramp dimensions and exact arch alignment remain uncalibrated."
+}
