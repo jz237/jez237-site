@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-11",
+      "historicDate": "1984-06-18",
+      "displayDate": "Week of June 18-24, 1984",
+      "edition": "Issue 099 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The workstation screen is becoming a shared piece of the network.",
+      "leadHeadline": "MIT's Project Athena Opens a New Window",
+      "storyHeadlines": [
+        "VisiCorp Tries to Re-enter the Business-Software Race",
+        "Apple IIc Packs the Apple II into 7.5 Pounds",
+        "Stolen Password Exposes the Fragility of Online Credit Files"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-06-18.jpg",
+      "thumb": "media/thumbs/1984-06-18.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-10",
       "historicDate": "1984-06-11",
       "displayDate": "Week of June 11-17, 1984",

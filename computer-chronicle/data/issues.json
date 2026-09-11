@@ -1,8 +1,401 @@
 {
-  "generatedAt": "2026-09-10T08:00:00-04:00",
+  "generatedAt": "2026-09-11T12:00:00Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-11",
+      "historicDate": "1984-06-18",
+      "displayDate": "Week of June 18-24, 1984",
+      "edition": "Issue 099 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Networked workstation lab meets bright home-computer counter on warm newsprint",
+        "motifs": [
+          "MIT workstation display",
+          "Apple IIc carry handle",
+          "floppy disks",
+          "acoustic modem"
+        ],
+        "layout": "Dense multi-column weekly with X Window lead, Apple hardware feature and colorful shelf rail"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "Week of June 18-24, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Project Athena window-system lead dominates above the fold",
+        "secondaryRail": "Apple IIc, VisiCorp, security, charts and modem culture",
+        "archiveNavigation": "Previous and next weekly issues with calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "#a52a2a",
+        "secondary": "#214f78",
+        "texture": "Warm aged newsprint with halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-06-18.jpg",
+        "alt": "GPT Image 2 vintage Computer Chronicle front page for June 18-24, 1984",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A window opens across the network at MIT, while Apple shrinks the II into a carryable package and VisiCorp tries to recover its business-software footing.",
+      "morningLine": "The workstation screen is becoming a shared piece of the network.",
+      "lead": {
+        "headline": "MIT's Project Athena Opens a New Window",
+        "dek": "Robert Scheifler announces the X Window System, separating graphical programs from the screens that display them.",
+        "body": [
+          "Robert Scheifler at MIT's Project Athena announced the X Window System on June 19, giving the laboratory's networked workstations a new way to draw and manage graphical displays. The first implementation was written for a VAX VS100, but its central idea reaches beyond a single machine.",
+          "X separates an application from the display on which its windows appear. A program can run on one computer while sending its graphical output across a network to another screen—an arrangement well suited to Athena, where students and researchers share computing resources rather than sit before isolated personal machines.",
+          "That division also gives workstation makers and software writers a common architectural problem to solve. Instead of every program owning the whole screen, a window system can let several tasks share it, move their output between machines and leave room for different user-interface conventions above the basic display machinery.",
+          "The announcement is modest beside a finished commercial product, but its network-first design makes it one of the week's most consequential experiments. Project Athena is building for a campus full of linked machines, and X suggests that the graphical desktop may belong as much to the network as to the computer on the desk."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "exact-date"
+      },
+      "stories": [
+        {
+          "headline": "VisiCorp Tries to Re-enter the Business-Software Race",
+          "body": [
+            "VisiCorp used a June 18 product announcement to rebuild a business line battered by fierce competition. The company that turned VisiCalc into the early personal computer's defining spreadsheet introduced several products and presented the program as a return to the mainstream business market.",
+            "Among the announcements was a floppy-disk-based version of Visi On, the graphical office environment whose ambitions had been constrained by demanding hardware and a fast-moving IBM PC market. The new approach aims to put its visual shell and integrated tools within reach of more installed machines.",
+            "VisiCorp's comeback bid arrives while Lotus 1-2-3 and a widening field of IBM-compatible software redefine buyers' expectations. A pioneering name now has to prove that graphical presentation can be more than an expensive preview of tomorrow."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "exact-date"
+        },
+        {
+          "headline": "Apple IIc Packs the Apple II into 7.5 Pounds",
+          "body": [
+            "Apple's IIc compresses the long-lived Apple II family into a 7.5-pound case with a built-in 5.25-inch disk drive. Inside are a 1.02 MHz 65C02, 128K of RAM and 16K of ROM; outside, ports serve a display, printer, modem, mouse, joystick and second drive.",
+            "The $1,295 machine is intended to travel, though it still needs an external screen and wall power for ordinary use. Apple says roughly 90 percent of about 10,000 Apple II programs should run on it, a compatibility promise that turns the enormous software shelf into its chief advantage.",
+            "A $199 green-phosphor monitor and $329 external drive make a fuller desk system, while a $99 mouse with MousePaint points toward Apple's increasingly graphical identity. The IIc is less a new software world than a familiar one folded into a smaller package."
+          ],
+          "sourceRefs": [
+            3
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Stolen Password Exposes the Fragility of Online Credit Files",
+          "body": [
+            "The New York Times reported June 22 that a password used to reach credit files had been stolen, a concise warning about the vulnerability of records moving behind dial-up connections and shared credentials.",
+            "The incident shows how a single reusable secret can stand between an outsider and sensitive personal information. As businesses centralize records and make terminals more useful, identity checks and accountability become part of the system rather than an afterthought.",
+            "No named crew, handle or bulletin board is reliably identified in the available report. The lesson is institutional: online information is only as secure as the controls surrounding the password that opens it."
+          ],
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "exact-date"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "X Window System",
+          "summary": "Project Athena announces a networked graphical display architecture on June 19.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0
+          ]
+        },
+        {
+          "title": "VisiCorp business line",
+          "summary": "The VisiCalc pioneer announces products including a floppy-based Visi On offering.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            1
+          ]
+        },
+        {
+          "title": "Apple IIc",
+          "summary": "A 7.5-pound Apple II with 128K and a built-in drive lists for $1,295.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Apple Scribe",
+          "summary": "Apple pairs the IIc era with a $299 thermal-transfer text and graphics printer.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "title": "Online credit files",
+          "summary": "A stolen password highlights the risks surrounding remotely accessible records.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "X Window System",
+          "detail": "Networked graphical window system announced at MIT Project Athena."
+        },
+        {
+          "name": "Visi On",
+          "detail": "VisiCorp's graphical business environment gains a floppy-based offering."
+        },
+        {
+          "name": "Olympiad",
+          "detail": "A challenging June magazine game for VIC-20, Commodore 64 and Atari 8-bit."
+        },
+        {
+          "name": "The Hulk",
+          "detail": "Adventure International's licensed text adventure appears across home-computer formats."
+        },
+        {
+          "name": "MousePaint",
+          "detail": "Bundled with Apple's $99 IIc mouse for a graphical drawing setup."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Olympiad",
+            "The Hulk",
+            "Gateway to Apshai",
+            "Pitfall II",
+            "Jumpman Jr."
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Ghostbusters",
+            "Gremlins",
+            "Indiana Jones and the Temple of Doom",
+            "Star Trek III: The Search for Spock",
+            "The Natural"
+          ]
+        },
+        {
+          "label": "Hardware Counter",
+          "items": [
+            "Apple IIc — $1,295",
+            "Apple Scribe — $299",
+            "IIc monitor — $199",
+            "IIc external drive — $329",
+            "IIc mouse with MousePaint — $99"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple IIc",
+          "price": "$1,295",
+          "note": "Contemporary list price",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Apple IIc mouse with MousePaint",
+          "price": "$99",
+          "note": "Contemporary list price",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "Apple IIc green-phosphor monitor",
+          "price": "$199",
+          "note": "Contemporary list price",
+          "sourceRefs": [
+            3
+          ]
+        },
+        {
+          "item": "CompuServe starter kit",
+          "price": "$19.95-$39.95 including one to five free hours",
+          "note": "Period service survey",
+          "sourceRefs": [
+            4
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "IBM changes reported",
+          "summary": "The New York Times reported management changes at IBM on June 20.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "headline": "IBM's June hardware price book",
+          "summary": "A dated IBM catalog records contemporary PC-family hardware prices.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            8
+          ]
+        },
+        {
+          "headline": "The Hulk reaches home computers",
+          "summary": "Adventure International's licensed text adventure appears across Atari, Spectrum and Commodore formats.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            11
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "The Reflex",
+          "artist": "Duran Duran"
+        },
+        {
+          "rank": 2,
+          "title": "Time After Time",
+          "artist": "Cyndi Lauper"
+        },
+        {
+          "rank": 3,
+          "title": "Let's Hear It for the Boy",
+          "artist": "Deniece Williams"
+        },
+        {
+          "rank": 4,
+          "title": "Dancing in the Dark",
+          "artist": "Bruce Springsteen"
+        },
+        {
+          "rank": 5,
+          "title": "Self Control",
+          "artist": "Laura Branigan"
+        }
+      ],
+      "periodAd": {
+        "headline": "Apple IIc: The Apple II to Go",
+        "summary": "128K, a built-in disk drive and familiar Apple II software in a 7.5-pound case.",
+        "tagline": "Apple IIc — $1,295"
+      },
+      "market": {
+        "headline": "VisiCorp Bets on a Business-Software Return",
+        "summary": "A June 18 product push, including a floppy-based Visi On offering, seeks to restore the VisiCalc pioneer in a market now crowded with IBM PC rivals.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          1
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Discovery Readied for Maiden Flight",
+        "summary": "On June 22, the Christian Science Monitor reported the third U.S. space shuttle ready for its first mission; the launch would later be delayed.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          9
+        ]
+      },
+      "bbsNote": {
+        "headline": "CompuServe Turns the Home Modem into a Newsroom and Clubhouse",
+        "summary": "A period survey describes CompuServe and The Source as the two large information utilities, with starter kits sold by dealers for $19.95-$39.95.",
+        "posts": [
+          {
+            "topic": "CB and electronic mail",
+            "platform": "CompuServe",
+            "text": "The Home Services menu offered CB conferencing, E-Mail, a national bulletin board and special-interest groups."
+          },
+          {
+            "topic": "Online news",
+            "platform": "CompuServe",
+            "text": "Subscribers could reach newspaper, wire, weather, sports and entertainment services."
+          },
+          {
+            "topic": "Access networks",
+            "platform": "CompuServe",
+            "text": "CompuServe access numbers supplemented Tymnet, Telenet and Canadian Datapac links."
+          }
+        ]
+      },
+      "curiosity": {
+        "headline": "Apple Promises a $600 Flat Screen for the IIc",
+        "summary": "Apple previews an 80-column by 24-row low-power LCD intended to make the compact IIc genuinely portable.",
+        "detail": "Creative Computing reported the flat display was scheduled for fall 1984 at $600; paired with a battery pack, it would remove the need for a television or AC-powered monitor."
+      },
+      "accuracyLedger": {
+        "items": [
+          "Exact-week computing reports anchor the X Window, VisiCorp and credit-password stories.",
+          "Apple IIc specifications and prices come from contemporary same-month coverage.",
+          "Music ranks use the Billboard Hot 100 for June 23; movie rankings use the June 22-24 domestic weekend, with two period films completing the shelf.",
+          "Game shelf combines titles documented in June 1984 magazine and seller sources; it is a period shelf, not a universal sales ranking.",
+          "Website text and sources are canonical; generated newspaper art is illustrative."
+        ]
+      },
+      "sources": [
+        {
+          "title": "30 Years of X",
+          "url": "https://www.linux.com/news/30-years-x/",
+          "date": "2014-06-19"
+        },
+        {
+          "title": "VisiCorp hopes to regain position with new biz line",
+          "url": "http://www.edesber.com/PDFs/ComputerResellerNewsVisiCorp06-18-1984b.pdf",
+          "date": "1984-06-18"
+        },
+        {
+          "title": "Credit File Password Is Stolen",
+          "url": "https://www.nytimes.com/1984/06/22/business/credit-file-password-is-stolen.html",
+          "date": "1984-06-22"
+        },
+        {
+          "title": "Apple announces the IIc",
+          "url": "https://www.atarimagazines.com/creative/v10n7/116_Apple_announces_the_IIc.php",
+          "date": "1984-07"
+        },
+        {
+          "title": "Telecommunications Talk",
+          "url": "https://www.atarimagazines.com/creative/v10n4/196_Telecommunications_talk.php",
+          "date": "1984-04"
+        },
+        {
+          "title": "COMPUTE! Issue 49",
+          "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/Compute%20(Clean)/Compute_Issue_049_1984_Jun.pdf",
+          "date": "1984-06"
+        },
+        {
+          "title": "Billboard Hot 100 archive, June 23, 1984",
+          "url": "https://musicchartsarchive.com/singles-chart/1984-06-23",
+          "date": "1984-06-23"
+        },
+        {
+          "title": "Domestic box office weekend 25, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W25/",
+          "date": "1984-06-24"
+        },
+        {
+          "title": "IBM Personal Computer Hardware Prices, June 1984",
+          "url": "https://vtda.org/docs/computing/IBM/Micro/PC/IBM_PC_HardwarePricesJune84.pdf",
+          "date": "1984-06"
+        },
+        {
+          "title": "Shuttle Discovery's maiden flight",
+          "url": "https://www.csmonitor.com/1984/0622/062232.html",
+          "date": "1984-06-22"
+        },
+        {
+          "title": "Computer Entertainer, June 1984",
+          "url": "http://www.digitpress.com/library/newsletters/computer_ent/computer_ent_jun84.pdf",
+          "date": "1984-06"
+        },
+        {
+          "title": "The Hulk release record",
+          "url": "https://computerhits.org/thehulk/",
+          "date": "1984-06"
+        }
+      ]
+    },
     {
       "currentDate": "2026-09-10",
       "historicDate": "1984-06-11",
