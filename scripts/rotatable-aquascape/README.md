@@ -324,3 +324,11 @@ Camera field of view now fits the perspective-projected tank, stand, lamp and re
 Preset transitions interpolate around the target on an orbit rather than cutting inward along a straight line. Intermediate diagonal views receive sufficient field of view for their wider silhouette. Three new tests check projected bounds across seven viewport sizes, continuity at the old breakpoints, and preserved orbit radius. The local, ignored iframe fixture was used for visual phone-layout checks, including front/side and zoom-to-preset behavior. It is not part of the published demo. Geometry, material and baked-light sources are unchanged. The overall photographic match remains incomplete.
 
 All 48 tests and the production build pass. Phone layouts at 390x844 and 360x640 (the reference aspect ratio), plus the desktop view, were visually inspected. The larger desktop front view reported 60 fps / 9.9 ms. The static lighting field is unchanged and its provenance tests still pass.
+
+## Uneven weathered driftwood ends
+
+Large scanned limbs retain a blunter terminal remnant, while thin twigs still narrow more strongly. A small variation around each branch's circumference pulls the terminal fibers back by different amounts, replacing the uniform needle-like termination with an uneven broken end. Original scanned UVs and bark textures are retained. The same deformed positions drive collision envelopes; all source vertices remain inside those envelopes and fish-sized junction contacts resolve outside the wood.
+
+Front and three-quarter views were compared, with bark detail and irregular terminal silhouettes retained. The angled preview reported 60 fps / 7.4 ms. Moss sampling follows the altered wood surface and may redistribute nearby shoots. No new assets or paid services were used. Photographic fidelity remains unfinished.
+
+Seven targeted wood-collision, moss, reflection and lighting checks and the production build pass. The indirect field was re-exported and rebuilt against 8,415,147 triangles in 21.67 seconds for the altered branch shape.
