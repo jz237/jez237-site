@@ -29,7 +29,7 @@ Remaining diagrams still require inspection before their buoy layouts are author
 | Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/route and race ramp; piers, bypasses and buoy placement pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
-| Port Blue | Tanker, working dock, winding narrow tunnel and outer route | Existing generic course; full reconstruction pending |
+| Port Blue | Tanker, working dock, winding narrow tunnel, outer route and class-specific jump | Rebuilt tanker/dock geography and continuous winding tunnel; race jump, original buoy patterns, dock detail and final visual matching pending |
 | Twilight City | Angular urban channel, walls, race ramps and alternate routes | Existing generic course; full reconstruction pending |
 | Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Existing generic course; full reconstruction pending |
 | Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Existing generic course; full reconstruction pending |
@@ -65,3 +65,16 @@ This milestone is local only. Production still serves the previous completed gam
 - Inspected Normal, Hard and Expert Port Blue reference diagrams for the next reconstruction. No Port Blue geometry has been changed in this milestone.
 
 This remains a local reconstruction milestone, not a publication or a course-parity sign-off.
+
+## Port Blue geography milestone — September 10, 2026
+
+- Reconstructed the long tanker and outer dock basin using the inspected Normal/Hard/Expert diagrams. The tanker has a solid collision footprint, hull/deck mesh, stern bridge, pipework and railings. Its mesh is separated from the rendered seabed to prevent rocky terrain protruding beneath its sides.
+- Hard and above can take the winding low-roof inner channel; Normal keeps it closed. Both sides of the continuous tunnel use shared mitered wall centerlines for rendering and hull/camera collision. The outer route remains available.
+- Fixed ambiguous checkpoint selection where the branch and outer route approach each other: the nearer checkpoint supplies the crossing plane. No stationary or arbitrary progress is granted.
+- Focused geography/passage checks: 17/17 passed. Full suite: 116/116 passed in 74.49 seconds. After separating rendered ship/dock meshes from the seabed and adding concrete quays/cranes, all 10 geography tests passed again. The collision height field retains the same maximum of ship, dock and shore heights.
+- Browser Expert / venue conditions: 208.767 seconds, 96 gates, zero misses, no wave landings, third place. High graphics and 60 FPS in the final measurement window; runtime errors empty. Inspected the water-filled bent tunnel and tanker side during ordinary-input traversal.
+- Browser Normal / venue conditions: 220.683 seconds, 72 gates, zero misses, no wave landings, third place; High graphics and final 60 FPS.
+- Added explicit concrete quay meshes and working-harbor cranes/containers, and excluded vegetation from ship/dock footprints.
+- Original class-dependent bow jump is not implemented yet. Original buoy placement, port fittings and final material/detail comparison remain outstanding. These are required before course parity can be signed off.
+
+Local-only milestone; production remains on the previous gameplay release.
