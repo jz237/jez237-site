@@ -1,5 +1,7 @@
 # Wave Race parity audit
 
+> Course reconstruction is in progress. This earlier gameplay audit does not establish original-course parity. See COURSE-MATCH.md for the current scope, evidence and outstanding work.
+
 Target: an original browser implementation of Wave Race 64's gameplay features, with modern water graphics. Preserve the user's priority: believable water and jet-ski response come before secondary content. The salvage voyage remains at index.html; race.html hosts racing and free riding.
 
 ## Reference requirements
