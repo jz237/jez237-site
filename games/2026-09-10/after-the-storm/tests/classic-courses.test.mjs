@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {getCourse,sampleRoute} from '../courses.js';
 import {courseResistance} from '../classic-courses.js';
-import {createRace,stepRace,adjudicateGate} from '../race-core.js';
+import {createRace,stepRace,adjudicateGate,aiInput,outsideCourse} from '../race-core.js';
 import {passageTarget} from '../course-passages.js';
 
 test('Sunny Beach has a long dry sandbar, two wet straights and open water beyond its western boundary',()=>{
@@ -64,4 +64,19 @@ test('Port Blue closes the outer dock route on Expert and Reverse, retaining the
   assert.equal(c.requiredPassage,d>=2);if(d>=2){assert.ok(c.anchors.some(([x,z])=>Math.hypot(x-(216-220)*.8,z-(203-285)*.8)<.1));assert.equal(c.passage.branchGates,undefined);}
  }
  const c=getCourse('port',2),s=createRace({mode:'time',course:c}),r=s.racers[0];s.phase='running';r.x=north.x;r.z=north.z;r.hydro.initialized=true;r.hydro.y=0;r.hydro.vy=0;stepRace(s,{throttle:1},1/60);assert.ok(r.collision>0);
+});
+
+test('Port Blue bow jumps vary by class and Hard retains a legal outside bypass',()=>{
+ const n=getCourse('port',0),h=getCourse('port',1),e=getCourse('port',2),rev=getCourse('port',3);assert.equal(n.ramps.length,3);assert.equal(rev.ramps.length,3);assert.equal(h.ramps.length,1);assert.equal(e.ramps.length,1);assert.ok(e.ramps[0].width>h.ramps[0].width);
+ function edge(c){const r=c.ramps[0];return {x:r.x+r.tz*(r.width/2+2),z:r.z-r.tx*(r.width/2+2)};}
+ const gap=edge(h),closed=edge(e);assert.equal(outsideCourse(h,gap.x,gap.z),false);assert.equal(outsideCourse(e,closed.x,closed.z),true);assert.ok(h.ground(gap.x,gap.z)<-3);
+ const run=createRace({mode:'time',course:h,difficulty:1}),r=run.racers[0],jump=h.ramps[0];run.phase='running';r.x=gap.x-jump.tx*14;r.z=gap.z-jump.tz*14;r.heading=Math.atan2(jump.tx,jump.tz);r.vx=jump.tx*12;r.vz=jump.tz*12;r.speed=12;let hit=false;
+ for(let i=0;i<180;i++){stepRace(run,{throttle:.45,dampen:true},1/60);hit ||= r.hydro.onRamp;assert.equal(outsideCourse(h,r.x,r.z),false);}assert.equal(hit,false);assert.equal(r.dq,'');
+
+ for(let i=0;i<3;i++){assert.equal(rev.ramps[i].tx,n.ramps[i].tx);assert.equal(rev.ramps[i].tz,n.ramps[i].tz);}
+});
+test('ordinary Expert helm inputs launch from the bow ramp and land on every lap',()=>{
+ const s=createRace({course:getCourse('port',2),difficulty:2}),r=s.racers[0],contacts=new Set();let previous=0,landings=0;
+ for(let i=0;i<18000&&s.phase!=='results';i++){stepRace(s,aiInput(s,r),1/60);if(r.hydro.onRamp)contacts.add(r.lap);if(r.hydro.landingId>previous){landings++;previous=r.hydro.landingId;}}
+ assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.deepEqual([...contacts],[1,2,3]);assert.ok(landings>=3);
 });
