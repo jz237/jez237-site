@@ -12577,5 +12577,24 @@
       "imageSha256": "2215a4e077210b87d0057fe84920b55cad7c8467c45942df0f43baa73a5e38f1",
       "imageDHash": "39bbac31923a3bb8"
     }
+  },
+  {
+    "id": "2026-09-11-intense-phobia-situation-intense-phobia-situation-between-t",
+    "title": "Intense phobia situation: Between the Mirror Shipping Racks",
+    "tests": "Friday catch-up lane 3/4. Phobia: Eisoptrophobia. Fictional photorealistic warehouse mirror-rack inspection; close reflective planes, repeated receding reflection, shoulder-width aisle, overhead retaining bar and blocked doorway sightlines create immediate proximity and enclosure. Ordinary specular geometry, one coherent middle-aged woman, secured padded racks and fluorescent lighting are prompt constraints. Fresh mirror-reflection shipping-rack concept distinct from lifetime phobia history. Exact same-run PNG decoded; concept and pixel gates unique. No visual review under explicit Friday override. Requested square 1024x1024; provider returned portrait 1024x1536.",
+    "prompt": "Create a fully photorealistic documentary photograph expressing eisoptrophobia, fear of mirrors, from the eye-level viewpoint of a worker standing sideways in a narrow mirror-factory inspection aisle. Full-height ordinary silvered-glass mirrors held securely in opposing padded steel shipping racks fill ninety percent of the frame. Their slightly converging reflective planes multiply the same worker's face into a compressed, physically correct corridor of receding reflections. The actual worker is a middle-aged woman with brown skin, short salt-and-pepper curls, clear safety glasses and a rust-colored work shirt. Only her reflected face and shoulder are visible; every reflection is the same real person at the correct angle, expression and scale. No duplicate physical people.\nMake the fear immediate through the face-close mirror edge almost touching the lens, the reflected face appearing at several diminishing depths in both side planes, the shoulder-width aisle, and the tall racks blocking any sight of a doorway. A padded horizontal retaining bar crosses the upper foreground and the frames continue beyond every crop edge. Give one dominant close reflected face and a coherent receding chain instead of a random collage of faces. She is quietly checking the racks, not panicking, and the mirrors are intact and safely secured. No supernatural mismatch: every reflected gaze, hand, light and rack must obey specular geometry; all expressions are identical neutral concentration.\nPhotograph through an ordinary rectilinear 35 mm lens in a plain working warehouse under a single broad overhead fluorescent fixture. Show restrained silver-gray and warm brown colors, believable glass thickness, small dust specks, edge protectors, padded steel clamps, rubbed floor paint and natural exposure falloff through the reflected corridor. Reflections, close planes and loss of peripheral sight must dominate, not the warehouse. No broken glass, sharp exposed edges, injury, distortion, impossible reflections, independent faces, ghosts, horror lighting, text, logos, watermark, poster or gallery installation styling.",
+    "image": "images/2026-09-11-intense-phobia-situation-intense-phobia-situation-between-t.jpg",
+    "thumb": "thumbs/2026-09-11-intense-phobia-situation-intense-phobia-situation-between-t.webp",
+    "color": "#564e48",
+    "date": "2026-09-11",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "mirror-reflections-shipping-rack-inspector",
+      "imageSha256": "fcef379a3ff7e6b54b9591ff5f90f77eeaa59b040d23f422eeb3c9c3ab6e9488",
+      "imageDHash": "d2dbdbfbf2dcdade"
+    }
   }
 ]
