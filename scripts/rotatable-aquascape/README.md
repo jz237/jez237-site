@@ -302,3 +302,11 @@ The scanned foreground ferns now use a physical material with restrained underwa
 The low fronds now have stronger rooted current deformation. Visible surfaces and depth shadows share the same helper, and analytic normals follow both bend directions. Previously, the fern shader displaced only visible positions while normals and depth shadows remained static. Two numerical shader-helper tests check anchored roots, finite bounded travel, and lighting normals against the deformed surface. Front and three-quarter views were reviewed; the angled preview reported 60 fps / 6.8 ms with no warnings/errors. Alpha-cut fronds remain outside the static indirect-light geometry. No assets or paid services were added. The overall photographic reference match remains unfinished.
 
 Nine targeted fern/leaf-motion, reflection and lighting-field checks and the production build pass. Re-exporting and baking the unchanged opaque scene completed in 21.37 seconds; the probe binary is identical, with updated source provenance.
+
+## Fine mineral sand with restrained highlights
+
+The sand path and its individual quartz grains use a warmer, lower diffuse reflectance and restrained physical specular response. The sand bump scale is reduced from .016 to .006 so fine grains do not read as coarse craters under the canopy. The path's vertex colors add gentle mineral variation and mixed-soil color at the planted margins; the lighting export includes those colors. Geometry and deterministic placement are unchanged.
+
+Front and three-quarter comparisons show a cream mineral path with retained grain detail instead of the previous broad white strip. The angled preview reported 60 fps / 7.5 ms with no warnings/errors. Existing substrate-shell and tank-space checks pass. No new assets or paid services were used. Full photographic fidelity remains unfinished.
+
+The indirect field was re-exported and rebuilt against the unchanged 8,415,147-triangle scene in 21.41 seconds, incorporating the revised sand/grain reflectance and vertex pigment. Ten targeted substrate/tank-space/reflection/lighting checks and the production build pass.
