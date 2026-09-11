@@ -12,8 +12,8 @@ test('the falling tide opens a physical passage beneath the southern pier',()=>{
  function cross(time){const s=createRace({mode:'time',course:getCourse('tempest'),seaState:'calm'}),r=s.racers[0];s.phase='running';s.time=time;[r.x,r.z]=map(250,515);r.heading=0;r.vx=0;r.vz=10;r.speed=10;let hit=false;for(let i=0;i<120;i++){stepRace(s,{throttle:.5},1/60);hit ||=r.collision>0;}return {r,hit};}
  const high=cross(0),low=cross(160);assert.equal(high.hit,true);assert.equal(low.hit,false);assert.ok(low.r.z>map(250,533)[1]);
 });
-test('Normal Expert and Reverse complete the outer tide-safe route without misses',()=>{
- for(const difficulty of [0,2,3]){const s=createRace({course:getCourse('tempest',difficulty),difficulty}),r=s.racers[0];for(let i=0;i<36000&&s.phase!=='results';i++)stepRace(s,aiInput(s,r),1/60);assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.misses,0);}
+test('All four classes complete the outer tide-safe route without misses',()=>{
+ for(const difficulty of [0,1,2,3]){const s=createRace({course:getCourse('tempest',difficulty),difficulty}),r=s.racers[0];for(let i=0;i<36000&&s.phase!=='results';i++)stepRace(s,aiInput(s,r),1/60);assert.equal(s.phase,'results');assert.equal(r.dq,'');assert.equal(r.misses,0);}
 });
 
 test('pier piles stay solid below the deck while wide gaps remain navigable',()=>{
@@ -39,4 +39,11 @@ test('the boat jump clears the physical ship and lands at high and low tide',()=
   assert.ok(contact);assert.ok(over>0);assert.ok(r.hydro.landingId>0);
  }
  const normal=getCourse('tempest'),reverse=getCourse('tempest',3);assert.deepEqual(reverse.ramps,normal.ramps);
+});
+
+// Outer green fringe stays navigable; the inner shoal still emerges at low tide.
+test('original eastern yellow buoy approaches remain wet at low tide',()=>{
+ const c=getCourse('tempest');
+ for(const p of [[354,151],[361,488]])assert.ok(c.ground(...map(...p))< -1.45);
+ assert.ok(c.ground(...map(344,450))> -1.05);
 });
