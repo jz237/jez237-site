@@ -21,8 +21,14 @@ export function configurePassage(course){
  const p={kind:authored?.kind||(course.id==='citadel'?'gate':'tunnel'),first,last,path,width:authored?.width||(course.id==='citadel'?8:6),clearance:authored?.clearance||(course.id==='citadel'?5.5:4.3),enabled:course.difficulty>0||authored?.kind==='jump-dive',indices:[]};
  if(authored){p.structurePath=authored.structure.map(([x,z])=>({x,z}));p.continuous=!!authored.continuous;}
  let i=(first+1)%course.gates.length;
- while(i!==last){p.indices.push(i);const g=course.gates[i];g.side=0;if(!authored){g.tx=(b.x-a.x)/Math.hypot(b.x-a.x,b.z-a.z);g.tz=(b.z-a.z)/Math.hypot(b.x-a.x,b.z-a.z);g.width=65;}g.channel=true;if(authored&&course.requiredPassage&&p.continuous)g.pathFraction=nearestPassageFraction(path,g.x,g.z);g.bx=g.x;g.bz=g.z;i=(i+1)%course.gates.length;}
+ while(i!==last){p.indices.push(i);const g=course.gates[i];if(course.id!=='neon'||!course.buoysByClass)g.side=0;if(!authored){g.tx=(b.x-a.x)/Math.hypot(b.x-a.x,b.z-a.z);g.tz=(b.z-a.z)/Math.hypot(b.x-a.x,b.z-a.z);g.width=65;}g.channel=true;if(authored&&course.requiredPassage&&p.continuous)g.pathFraction=nearestPassageFraction(path,g.x,g.z);if(!g.side){g.bx=g.x;g.bz=g.z;}i=(i+1)%course.gates.length;}
  if(authored&&!course.requiredPassage){p.branchGates={};p.indices.forEach((index,i)=>p.branchGates[index]={...passagePoint(path,(i+1)/(p.indices.length+1)),side:0,width:p.width+2,channel:true,pathFraction:(i+1)/(p.indices.length+1)});}
+ // The city entrance opens into a broad basin before narrowing at the wall.
+ // Its neutral crossing spans the actual water rather than a fixed-width tube.
+ if(course.id==='neon'&&course.buoysByClass&&p.branchGates){for(const g of Object.values(p.branchGates)){
+  const edge=side=>{let distance=0;for(let d=.5;d<=50;d+=.5){const x=g.x-g.tz*d*side,z=g.z+g.tx*d*side;if(course.ground(x,z)>-.4)break;distance=d;}return Math.max(.5,distance-.85)*side;};
+  g.spanMin=edge(-1);g.spanMax=edge(1);
+ }}
  course.passage=p;
  if(!authored)course.rocks=course.rocks.filter(q=>passageDistance(p,q.x,q.z)>p.width+4);
 }
@@ -40,7 +46,7 @@ export function passageAim(p,g,x,z,lookahead=5){
 export function passageOpening(p,time,openedAt=Infinity){if(!p?.enabled)return 0;if(p.kind==='tunnel'||p.kind==='jump-dive')return 1;return clamp((time-openedAt)/3,0,1);}
 export function passageTarget(s,r){
  const g=s.course.gates[r.next],p=s.course.passage;
- if(p?.kind==='jump-dive'&&s.course.reverse)return g;
+ if(p?.kind==='jump-dive'&&(s.course.reverse||(r.next!==p.first&&passageDistance(p,r.x,r.z)>p.width+6)))return g;
  if(s.course.requiredPassage||s.mode==='stunt'||r.passageRoute==='outer'||!p||!(p.indices.includes(r.next)||r.next===p.first)||passageOpening(p,s.time,s.passageOpenedAt)<.98)return g;
  if(p.branchGates)return p.branchGates[r.next]||g;
  // Intersection with the original checkpoint plane: no progress is granted here.

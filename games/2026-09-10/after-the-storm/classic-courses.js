@@ -164,16 +164,28 @@ const cityBalls=cityMap([[179,134],[192,134],[186,141],[180,150],[192,150],[108,
 const cityExpertBalls=[...cityBalls,...cityMap([[186,135],[186,157],[119,487],[119,498],[119,509]]).map(([x,z])=>({x,z,r:.7,type:'ball'}))];
 const cityRamp=(id,x,z,tx,tz,width,length=14)=>({id,name:'CITY JUMP',x:(x-200)*.8,z:(z-275)*.8,tx,tz,width,length,height:id===120?2.7:2.1,floating:false});
 const cityLateRamps=[cityRamp(121,185,113,0,1,9),cityRamp(122,84,488,1,0,14),cityRamp(123,189,489,1,0,13)];
+// Forward markers border the sand point and quays; keep helm targets close
+// to those buoys. Reverse has its own line and retains the wider approach.
+const cityBuoys=(rows,offset=3.5)=>rows.map(([x,z,side])=>({x:(x-200)*.8,z:(z-275)*.8,side,offset}));
+const cityForwardBuoys=cityBuoys([[325,308,-1],[352,236,-1],[360,176,-1],[358,114,-1],[312,26,-1],[235,26,-1],[170,27,-1],[150,290,1],[95,333,-1],[59,378,1],[31,453,1],[25,508,-1],[66,498,-1],[171,499,-1],[293,480,-1]]);
+const cityReverseBuoys=cityBuoys([[238,103,-1],[352,85,-1],[457,87,-1],[491,72,-1],[494,130,1],[476,207,1],[418,244,-1],[387,308,1],[345,460,1],[338,544,-1],[281,554,1],[206,538,-1],[155,478,1],[166,411,-1],[199,336,-1],[210,273,-1]].map(([x,z,side])=>[517-x,581-z,side]),7);
+// The two western red markers run beside a projecting quay corner.
+cityReverseBuoys[4].approach={x:(30-200)*.8,z:(475-275)*.8,throttle:.38,radius:2,range:35};
+cityReverseBuoys[5].approach={x:(31-200)*.8,z:(405-275)*.8,throttle:.4,radius:2,range:30};
+const cityReversePath=[[230,153],[225,204],[203,262],[193,305],[187,340],[174,378],[154,404],[152,425],[161,454],[158,487],[175,531],[197,548],[213,549],[248,548],[278,554],[311,558],[339,557],[354,548],[355,536],[343,517],[328,496],[324,479],[325,458],[334,436],[331,416],[316,392],[309,374],[311,358],[339,328],[361,304],[398,269],[431,238],[450,217],[466,181],[480,151],[492,113],[500,89],[499,69],[475,65],[439,68],[385,68],[331,68],[306,69],[289,80],[269,98],[257,100],[244,86],[237,82],[229,86],[225,96],[230,136]];
+const cityReverseAnchors=cityMap(cityReversePath.map(([x,z])=>[517-x,581-z]));
 const city={
- shortcut:{kind:'jump-dive',from:cityMap([[269,390]])[0],to:cityMap([[229,30]])[0],width:6,via:cityMap([[269,360],[269,315],[269,285],[269,260],[269,236],[269,200],[269,160],[269,75],[260,45]]),structure:cityMap([[269,390],[269,70]])},
+ shortcut:{kind:'jump-dive',from:cityMap([[269,390]])[0],to:cityMap([[229,30]])[0],width:8,via:cityMap([[269,360],[269,315],[269,285],[269,260],[269,236],[269,200],[269,160],[269,75],[260,45]]),structure:cityMap([[269,390],[269,70]])},
  crossbars:[{x:(269-200)*.8,z:(234-275)*.8,tx:1,tz:0,length:32.8,depth:.9,bottom:.45,top:1.35}],
- name:'Twilight City',theme:'city',tag:'06 / TWILIGHT CITY',layoutRevision:2,
+ name:'Twilight City',theme:'city',tag:'06 / TWILIGHT CITY',layoutRevision:3,boundary:cityWater,
+ buoysByClass:[cityForwardBuoys,cityForwardBuoys,cityForwardBuoys,cityReverseBuoys],retainRouteControls:true,
+ finishLine:cityMap([[240,428],[319,428]]),anchorsByClass:[null,null,null,cityReverseAnchors],
  description:'Floodlit waterways and metal buoys. The inner wall offers a jump shortcut; Expert moves the ramp back, requiring F during descent to dive beneath it. The outer route stays open.',
  anchors:cityMap([[269,420],[288,341],[322,281],[342,239],[336,212],[352,181],[368,160],[358,139],[358,114],[374,68],[333,31],[277,29],[229,29],[182,27],[173,55],[174,96],[178,133],[190,169],[207,200],[204,218],[174,244],[141,278],[116,321],[87,349],[48,383],[24,429],[23,458],[38,472],[77,478],[131,486],[179,501],[212,513],[244,483],[266,456]]),
  ground(x,z){return Math.max(city.renderGround(x,z),clamp(-polygonDistance(cityCenter,x,z)*.8,-10,6),clamp(-polygonDistance(cityEast,x,z)*.8,-10,6));},
  renderGround(x,z){return clamp(Math.max(polygonDistance(cityWater,x,z)*.8,Math.min(1.1,1.1-polygonDistance(citySand,x,z)*.6)),-10,8);},
  quayOutlines:[cityCenter,cityEast],obstaclesByClass:[cityBalls,cityBalls,cityExpertBalls,cityBalls],
- raceRampsByClass:[[cityRamp(120,270,260,0,-1,10),...cityLateRamps],[cityRamp(120,270,260,0,-1,10),...cityLateRamps],[cityRamp(120,270,285,0,-1,10),...cityLateRamps],[cityRamp(120,270,285,0,-1,10),...cityLateRamps]],resistance:[]
+ raceRampsByClass:[[cityRamp(120,270,260,0,-1,12,22),...cityLateRamps],[cityRamp(120,270,260,0,-1,12,22),...cityLateRamps],[cityRamp(120,270,285,0,-1,12,22),...cityLateRamps],[cityRamp(120,270,285,0,-1,12,22),...cityLateRamps]],resistance:[]
 };
 const glacierMap=points=>fromMap(points,205,280,.8);
 const glacierLand=glacierMap([[76,118],[92,99],[143,97],[191,98],[251,98],[276,103],[283,113],[275,132],[251,159],[221,190],[196,219],[181,241],[175,275],[176,309],[192,336],[207,358],[207,373],[187,387],[148,409],[111,431],[97,434],[82,421],[76,400],[82,373],[83,348],[79,320],[77,290],[80,267],[74,238],[74,202],[69,168]]);
