@@ -94,3 +94,9 @@ The stem colonies now contain 132 main shoots, with more space between leaf node
 A thin matte backing is modeled just outside the rear glass. It receives the actual canopy illumination and plant shadows, giving open water a subdued dark background. The front and side panes remain clear; the backing is visible as a physical object in oblique views. This is an aquarium background panel, not volumetric light scattering.
 
 Front, side, and three-quarter evening views were visually compared at 720 by 1280. The local preview reported 60 fps and 6.8 ms synchronous render time in the evening view. Build and all 31 existing behavior/geometry tests pass. Procedural plant shapes and water highlights still differ from the photographic reference; the realism goal remains active.
+
+## Water reflectance and return ripples
+
+Water reflection now uses the unpolarized dielectric Fresnel equations for air/water (IOR 1.333), including total internal reflection when viewed from below. This replaces the fixed reflective opacity floor and broad hand-tuned critical-angle transition. The transition is filtered over the pixel footprint. Formula reference: https://www.pbr-book.org/4ed/Reflection_Models/Specular_Reflection_and_Transmission .
+
+Gentler directional waves combine with rings near the return; their amplitude falls with distance from that outlet and stays fixed at the glass contact line. The same height function drives mesh displacement and shading normals. From above, the bent reflection ray is also intersected with the three modeled LED strips; pixel coverage preserves narrow highlights that were unstable in the reflection capture. Their radiance follows evening dimming. Plant and room reflections still use depth-guided scene captures, and transmission remains alpha-composited without full refractive ray tracing. This is an optical improvement, not a claim of full fluid simulation or photographic parity.
