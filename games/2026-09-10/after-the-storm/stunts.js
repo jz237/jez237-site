@@ -8,6 +8,10 @@ export function rampWaterOffset(ramp,time=0,storm=0){
  const d=ramp.length*.35;
  return waterLevel.value+((wave(ramp.x,ramp.z,time,storm)+wave(ramp.x+ramp.tx*d,ramp.z+ramp.tz*d,time,storm)+wave(ramp.x-ramp.tx*d,ramp.z-ramp.tz*d,time,storm))/3-waterLevel.value)*.55;
 }
+export function rampCameraHeight(position,course,time,storm){let minimum=-Infinity;
+ for(const ramp of course.ramps||[]){const dx=position.x-ramp.x,dz=position.z-ramp.z,along=dx*ramp.tx+dz*ramp.tz,across=dx*ramp.tz-dz*ramp.tx;if(Math.abs(across)<ramp.width/2+2&&Math.abs(along)<ramp.length/2+4)minimum=Math.max(minimum,rampWaterOffset(ramp,time,storm)+ramp.height+1.5);}
+ return minimum;
+}
 export function ringHeight(ring,course,time=0,storm=0){
  const ramp=ring.rampId===undefined?null:course.ramps?.find(r=>r.id===ring.rampId);
  return ring.y+(ramp?rampWaterOffset(ramp,time,storm):ring.floating?waterLevel.value+(wave(ring.x,ring.z,time,storm)-waterLevel.value)*.55:0);

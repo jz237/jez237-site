@@ -130,6 +130,12 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
  // Low shrubs fill the tree line without a repeated grid of identical plants.
  const shrubs=points.broad.slice(0,34).map(p=>({...p,x:p.x+3,z:p.z+2,scale:.18,y:course.ground(p.x+3,p.z+2)})).filter(p=>p.y>1.7);
  if(shrubs.length){const shrub=tree('broad',725);instances(shrub.wood,wood,shrubs);instances(shrub.leaf,broadMat,shrubs);}
+ // Soft ambient contact under trunks and canopies supplements directional
+ // shadows. Each quad conforms to the shared terrain instead of hovering.
+ const contactCanvas=document.createElement('canvas');contactCanvas.width=contactCanvas.height=64;const ctx=contactCanvas.getContext('2d'),gradient=ctx.createRadialGradient(32,32,0,32,32,32);gradient.addColorStop(0,'rgba(0,0,0,.8)');gradient.addColorStop(.18,'rgba(0,0,0,.35)');gradient.addColorStop(.65,'rgba(0,0,0,.10)');gradient.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=gradient;ctx.fillRect(0,0,64,64);
+ const contactTexture=new T.CanvasTexture(contactCanvas),contactMaterial=new T.MeshBasicMaterial({map:contactTexture,transparent:true,opacity:.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1});materials.push(contactMaterial);
+ const cp=[],cu=[];for(const point of Object.values(points).flat()){const radius=3.2*point.scale;for(const [x,z] of [[-1,-1],[-1,1],[1,-1],[1,-1],[-1,1],[1,1]]){const px=point.x+x*radius,pz=point.z+z*radius;cp.push(px,course.ground(px,pz)+.035,pz);cu.push((x+1)/2,(z+1)/2);}}
+ const contactGeometry=new T.BufferGeometry();contactGeometry.setAttribute('position',new T.Float32BufferAttribute(cp,3));contactGeometry.setAttribute('uv',new T.Float32BufferAttribute(cu,2));geometries.push(contactGeometry);const contacts=new T.Mesh(contactGeometry,contactMaterial);contacts.userData.dynamic=true;contacts.renderOrder=1;root.add(contacts);
  root.userData.sceneryCounts={trees:Object.values(points).reduce((n,p)=>n+p.length,0),grass:grassPoints.length,pebbles:rockPoints.length,driftwood:logPoints.length};
- return{update(t,storm,quality){time.value=t;strength.value=storm;distance.value=quality==='low'?200:quality==='medium'?280:380;if(grassMesh)grassMesh.visible=quality!=='low';},dispose(){for(const m of meshes){m.removeFromParent();m.dispose();}for(const g of new Set(geometries))g.dispose();for(const m of materials)m.dispose();}};
+ return{update(t,storm,quality){time.value=t;strength.value=storm;distance.value=quality==='low'?200:quality==='medium'?280:380;if(grassMesh)grassMesh.visible=quality!=='low';},dispose(){contacts.removeFromParent();contactTexture.dispose();for(const m of meshes){m.removeFromParent();m.dispose();}for(const g of new Set(geometries))g.dispose();for(const m of materials)m.dispose();}};
 }

@@ -75,25 +75,29 @@ Editable source with pose bones and jet-ski context: **source/blender/Coastal Ri
 
 ## On-screen pace
 
-Racing and free riding play at **2x real time** for twice the on-screen motion. Hull physics, shared waves, wakes, spray and chase cameras advance together in fixed simulation steps. Countdown and menu remain normal speed. The HUD speed is the simulated speed; race clocks, weather progression and timed challenges run twice as fast in real time. Pause still stops play. The development driver retains its separate 4x rate.
+Racing and free riding now run in **real seconds**, using fixed 1/60-second physics steps. Gravity, waves, weather, animation and race clocks share that clock. Speed feel comes from actual acceleration plus a progressively lower chase camera and a smoothly widening 58–76 degree field of view. Both split-screen cameras respond independently. Camera clearance includes wave crests, ramps and enclosed passages.
 
-## Faster engine update
+## Engine and hull response
 
-All four riders now have 30% higher rated top speed and 50% more engine acceleration. In an unobstructed full-throttle test, the default Mara ski sustained about 86 km/h in calm water (previously 66), reaching 60 km/h in 2.9 seconds (previously 5.85). Storm swell reduced sustained speed to about 81 km/h. Actual course speed depends on turns, buoy power and water contact. Rivals use part throttle to maintain a safe course pace.
+The default Mara ski reached 60 km/h in approximately 2.52 seconds on calm water in the unobstructed benchmark, sustaining about 97 km/h. Storm swell reduced cruise to about 88 km/h. These are actual simulated speeds; turns, contact, intake ventilation and impacts affect the result. Rivals use predictive steering and part throttle to negotiate the stronger wave response.
+
+Twelve hull patches apply independent immersion pressure, relative-water damping and planing lift. Their forces generate heave, pitch and roll through rotational inertia. Steering has yaw inertia, contact-dependent authority and side grip. An unsupported hull follows gravity; landing pressure produces drag, spray and suspension load. The rider bends knees and elbows while fixed-length inverse kinematics keeps gloves on the steering grips and boots on the footwells.
 
 ## Water and physical approximations
 
-The GPU and CPU share fourteen dispersive wave bands, craft disturbances, landing pressure waves and the water-level datum. Hull support samples bow/stern/edges; heave, pitch/roll, planing, gravity, ventilation of the jet intake, airborne motion and impact loss affect handling. Spray carries hull momentum. The water uses depth-dependent absorption, refraction, Fresnel reflection, HDR reflection targets, sun glints, fine ripples, caustics, shoreline wash, rain rings and persistent aerated wakes.
+The GPU and CPU share fourteen dispersive wave bands with horizontal trochoidal displacement. CPU height queries invert that displacement, matching the rendered surface. World-space wake packets remain after the emitting ski has left, affect subsequent hull contact, spread and decay. Bow sheets, ballistic droplets and fine wind-dragged mist respond to contact and motion.
 
-This is a real-time approximation, not CFD. Reflections are planar; spray, foam, caustics and currents are procedural. The ebb is compressed into a race. Stunt poses/dives are arcade maneuvers. The jet ski and riders are modeled in Blender; scenery remains procedural. Sound is synthesized and subjective listening quality remains unverified. The original salvage mode retains its earlier handling model. Mobile touch controls are not provided.
+A reprojected foam atlas retains foam and bubbles after breaking crests and shallow shoreline breakers. Water includes depth-dependent absorption/refraction, roughness-filtered planar reflections with a sky fallback, forward light scattering through backlit crests, sun glints, fine ripples, caustics and rain rings. Environment lighting refreshes with weather; wet rocks change color and roughness, and ground-conforming contact shadows anchor vegetation. Adaptive graphics reduces reflection, foam and screen resolution when needed.
+
+This remains an interactive approximation rather than CFD. Waves do not overturn into fully simulated water volumes; foam and spray use a surface atlas, sheets and particles. Reflections remain planar. The ebb is compressed into a race, and stunt poses/dives are arcade maneuvers. Ramps heave as rigid platforms. The jet ski and riders are modeled in Blender; scenery remains procedural. The original salvage mode retains its earlier driving rules but shares the upgraded water rendering. Sound is synthesized; physical gamepad hardware and mobile touch input are not verified.
 
 ## Source and verification
 
-`npm test` runs the automated suite. The latest full run passed 79 tests covering all 36 course/class routes, championship scoring/unlocks/restart, salvage outcomes, stunts, two-player controls, water response, moving hazards/passages, saves and sound graphs.
+`npm test` runs the automated suite. The 92-test full suite passed; the added spray-attachment test and 14 focused checks also pass (93 tests in total), covering all 36 course/class routes, championship scoring/unlocks/restart, salvage outcomes, stunts, two-player controls, water response, moving hazards/passages, saves and sound graphs.
 
-Use `race.html?verify=1` for visible development controls. The verification driver supplies ordinary helm input at a 4x clock; it does not teleport or grant progress. The salvage harness at `/?verify=1` includes a full voyage and bounded seeded failure scenarios. These panels are absent from normal play.
+Use `race.html?verify=1` for visible development controls. The verification driver supplies ordinary helm input at either real time or a 4x verification clock; it does not teleport or grant progress. The salvage harness at `/?verify=1` includes a full voyage and bounded seeded failure scenarios. These panels are absent from normal play.
 
-Core files: dist/race-core.js and championship.js (rules), hydrodynamics.js (hull), simulation.js/ocean.js/water-detail.js (shared water), course-world.js/courses.js/course-passages.js (venues), race-view.js (presentation), race-options.js/race-records.js (saves), and audio.js (sound). See PARITY.md for the requirement audit and VALIDATION.md for browser evidence.
+Core browser modules: race-core.js and championship.js (rules), hydrodynamics.js (hull), simulation.js/ocean.js/water-detail.js (shared water), course-world.js/courses.js/course-passages.js (venues), race-view.js (presentation), race-options.js/race-records.js (saves), and audio.js (sound). See PARITY.md for the requirement audit and VALIDATION.md for browser evidence.
 
 ## Photographic coastline update — September 10, 2026
 
@@ -110,3 +114,5 @@ The ground textures are photographs; trees and terrain remain procedural real-ti
 - [Games catalog](https://jez237.com/games/)
 
 Source is maintained in `jz237/jez237-site`, on the separate worktree branch `codex/after-the-storm-coast-20260910`. The route contains source, assets, tests and Blender files and can be served as a static directory.
+
+After changing browser modules or styles, run `node source/version-assets.mjs` to regenerate both HTML import maps and content-versioned asset URLs. It supports the published flat layout and the downloadable package with a `dist/` folder.
