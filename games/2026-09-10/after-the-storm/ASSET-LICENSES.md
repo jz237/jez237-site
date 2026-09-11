@@ -1,5 +1,7 @@
 # Asset licenses
 
+Eight clips in assets/audio were generated with the user's ElevenLabs account from original prompts on September 10, 2026. They are provided under the applicable account terms, not represented as CC0. No Nintendo audio was sampled and no narration or voice imitation was requested. PROVENANCE.json records file hashes and processing. Original WAV exports accompany the downloadable source. The procedural Web Audio effects remain as a fallback. Dolphin geometry is original procedural work.
+
 Photographic terrain and bark maps are by Poly Haven contributors and distributed under CC0 1.0 (public domain). No purchase or subscription was used. The bundled images are unmodified original JPEG maps at 1K/2K resolution.
 
 - [Coast Sand 02 — Rob Tuytel](https://polyhaven.com/a/coast_sand_02)

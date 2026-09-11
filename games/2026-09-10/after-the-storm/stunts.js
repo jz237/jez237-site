@@ -27,25 +27,25 @@ export function stuntCourse(base,{freeRide=false}={}){
   }
   const ramp={id:section,name:['KICKER','BIG AIR','STEP UP','COAST JUMP'][section],x:g.x,z:g.z,tx:g.tx,tz:g.tz,width:freeRide?11:9,length:14,height:freeRide?[3.6,4,3.2,3.8][section]:3.1,floating:true};course.ramps.push(ramp);
   course.rings.push({x:g.x+g.tx*18,z:g.z+g.tz*18,y:ramp.height+1.2,tx:g.tx,tz:g.tz,radius:2.6,type:'air',rampId:section});
-  const water=base.gates[(index+4)%n];course.rings.push({...water,y:1.35,radius:2.8,type:'water',floating:true});
+  const water=base.id==='practice'?{x:g.x+g.tx*52,z:g.z+g.tz*52,tx:g.tx,tz:g.tz}:base.gates[(index+4)%n];course.rings.push({...water,y:1.35,radius:2.8,type:'water',floating:true});
   course.rings.push({x:g.x+g.tx*28,z:g.z+g.tz*28,y:-.45,tx:g.tx,tz:g.tz,radius:1.8,type:'dive',optional:true,floating:true});
   if(!freeRide){const finish=base.gates[Math.floor((section+1)*n/4)%n];course.checkpoints.push({...finish,width:21,limit:38,section});}
  }
  return course;
 }
-export function createStunt(){return {score:0,rings:0,chain:0,nextCheckpoint:0,remaining:38,ringStatus:[],ringCooldown:[],trick:null,angle:0,airDuration:0,pose:null,poseTime:0,poseAward:0,used:{},lastCommand:'',lastLanding:0,event:'',eventId:0,tricks:0,crashes:0,complete:false};}
+export function createStunt(){return {score:0,rings:0,chain:0,nextCheckpoint:0,remaining:38,ringStatus:[],ringCooldown:[],trick:null,angle:0,airDuration:0,pose:null,poseTime:0,poseAward:0,used:{},completedTricks:{},lastCommand:'',lastLanding:0,event:'',eventId:0,tricks:0,crashes:0,complete:false};}
 function event(s,text){s.event=text;s.eventId++;}
 function crossing(g,ox,oz,x,z){const before=(ox-g.x)*g.tx+(oz-g.z)*g.tz,after=(x-g.x)*g.tx+(z-g.z)*g.tz;if(before>0||after<0||after-before<1e-6)return null;const f=-before/(after-before);return {f,lateral:-(ox+(x-ox)*f-g.x)*g.tz+(oz+(z-oz)*f-g.z)*g.tx};}
 export function stepStunt(s,r,course,input,dt,ox,oz,oldY,storm=0){if(s.complete)return;const free=!!course.freeStunts;if(!free)s.remaining-=dt;if(!free&&s.remaining<=0){r.dq='Stunt checkpoint time expired';event(s,'TIME UP');return;}const command=input.trick||'';
  if(r.hydro.airborne){s.airDuration+=dt;if(!s.trick&&['flip','left','right'].includes(command)){s.trick=command;s.angle=0;}if(s.trick&&command===s.trick)s.angle+=dt*6.0*(command==='right'?-1:1);}
- if(r.hydro.landingId!==s.lastLanding){s.lastLanding=r.hydro.landingId;if(s.trick){const turns=Math.round(Math.abs(s.angle)/TAU),error=Math.abs(Math.atan2(Math.sin(s.angle),Math.cos(s.angle))),clean=turns>0&&error<.55;const points=Math.round(s.airDuration*240*(clean?1:.35));if(turns>0){s.score+=points;s.tricks++;event(s,(clean?'Clean ':'Rough ')+TRICKS[s.trick]+' +'+points);}if(!clean){r.recover=1.1;r.vx*=.6;r.vz*=.6;s.crashes++;event(s,'Wipeout · land upright');}s.trick=null;s.angle=0;}s.airDuration=0;}
+ if(r.hydro.landingId!==s.lastLanding){s.lastLanding=r.hydro.landingId;if(s.trick){const turns=Math.round(Math.abs(s.angle)/TAU),error=Math.abs(Math.atan2(Math.sin(s.angle),Math.cos(s.angle))),clean=turns>0&&error<.55;if(clean)s.completedTricks[s.trick]=true;const points=Math.round(s.airDuration*240*(clean?1:.35));if(turns>0){s.score+=points;s.tricks++;event(s,(clean?'Clean ':'Rough ')+TRICKS[s.trick]+' +'+points);}if(!clean){r.recover=1.1;r.vx*=.6;r.vz*=.6;s.crashes++;event(s,'Wipeout · land upright');}s.trick=null;s.angle=0;}s.airDuration=0;}
  if(!r.hydro.airborne&&r.hydro.wet>.3&&r.speed>3){
   if(['stand','handstand','backwards'].includes(command)){if(s.pose!==command){s.pose=command;s.poseTime=0;s.poseAward=0;}s.poseTime+=dt;const available=Math.floor(Math.min(5,s.poseTime)*70/(1+(s.used[command]||0)));const add=available-s.poseAward;if(add>0){s.score+=add;s.poseAward=available;}}
-  else if(command==='somersault'&&s.pose==='stand'&&s.lastCommand!=='somersault'){s.pose='somersault';s.poseTime=0;}
-  else if(s.pose==='somersault'){s.poseTime+=dt;if(s.poseTime>1.05){const points=Math.round(350/(1+(s.used.somersault||0)));s.score+=points;s.tricks++;s.used.somersault=(s.used.somersault||0)+1;s.pose=null;event(s,'Rider somersault +'+points);}}
-  else if(s.pose&&command!==s.pose){if(s.poseTime>.7){s.used[s.pose]=(s.used[s.pose]||0)+1;s.tricks++;event(s,TRICKS[s.pose]+' +'+s.poseAward);}s.pose=null;s.poseTime=0;}
+  else if(command==='somersault'&&s.pose==='stand'&&s.lastCommand!=='somersault'){s.completedTricks.stand=true;s.pose='somersault';s.poseTime=0;}
+  else if(s.pose==='somersault'){s.poseTime+=dt;if(s.poseTime>1.05){const points=Math.round(350/(1+(s.used.somersault||0)));s.score+=points;s.tricks++;s.used.somersault=(s.used.somersault||0)+1;s.completedTricks.somersault=true;s.pose=null;event(s,'Rider somersault +'+points);}}
+  else if(s.pose&&command!==s.pose){if(s.poseTime>.7){s.used[s.pose]=(s.used[s.pose]||0)+1;s.completedTricks[s.pose]=true;s.tricks++;event(s,TRICKS[s.pose]+' +'+s.poseAward);}s.pose=null;s.poseTime=0;}
  }else if(s.pose){s.pose=null;s.poseTime=0;}
- s.lastCommand=command;
+ if(r.hydro.diveRemaining>0&&r.hydro.y<r.hydro.waterHeight-.6)s.completedTricks.dive=true;s.lastCommand=command;
  for(let i=0;i<course.rings.length;i++){if(free&&s.ringStatus[i]&&r.raceTime>=(s.ringCooldown[i]||0))s.ringStatus[i]=null;if(s.ringStatus[i])continue;const ring=course.rings[i],hit=crossing(ring,ox,oz,r.x,r.z);if(!hit||Math.abs(hit.lateral)>25)continue;const y=oldY+(r.hydro.y-oldY)*hit.f+.85,through=Math.hypot(hit.lateral,y-ringHeight(ring,course,r.raceTime,storm))<ring.radius&&(ring.type!=='dive'||r.hydro.y<r.hydro.waterHeight-.45);
   s.ringStatus[i]=through?'hit':'miss';if(free)s.ringCooldown[i]=r.raceTime+(through?10:2);if(through){s.chain++;s.rings++;const points=50*s.chain;s.score+=points;event(s,'Ring '+s.chain+' +'+points);}else{s.chain=0;event(s,'Ring missed · chain reset');}
  }

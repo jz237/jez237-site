@@ -10,7 +10,17 @@ Firsthand course observations: [Disco1960 course FAQ](https://gamefaqs.gamespot.
 
 ## Current implementation and evidence
 
-`npm test`: all 79 tests pass. Test files are in tests/. Detailed browser evidence and earlier milestones are in VALIDATION.md.
+`npm test`: all 106 tests pass. Test files are in tests/. Detailed browser evidence and earlier milestones are in VALIDATION.md.
+
+The baseline is the original 1996 release described in the Nintendo booklet and [Nintendo operation card scan](https://nintendo64.pl/wp-content/uploads/Wave-Race-64-USA-Quick-Reference-Card.pdf). Course names, layouts, music and visual assets are original. This is gameplay feature equivalence, not an emulated ROM. The later Japanese Shindou edition's ghost/rumble extensions are not represented as part of this baseline.
+
+| Newly closed gap | Current evidence |
+| --- | --- |
+| Rocket start | A fresh throttle edge near green grants maximum power; early held and late inputs do not. Integrated countdown test passes. |
+| Quick turn | Rearward trim plus steering increases contact-dependent yaw/grip with a speed cost. Turn comparison and airborne restrictions pass. |
+| Collision stability, wipeout and remount | Rider masses vary with stability; collision impulses conserve momentum. Hard shore/craft collisions and bad stunts eject the rider. Throttle tapping shortens a continuous remount. Real shoreline test and rendered wipeout inspection pass. |
+| Practice dolphin and bonus mount | Flexible original dolphin and safe-water guide. All twelve rings and eight moves in a timed park run unlock the mount. Ordinary-input and browser runs earned 10,539 points in 52.217 seconds, without crashes; saved unlock and rendered mount verified. |
+| ElevenLabs sound with minimal voice | Eight local generated clips: engine layers, water, wind, splash, impact, cue and optional instrumental. No announcer/TTS. Browser decoded 8/8; stereo, pause, mute, fallback and asset checks pass. Used 868 existing credits, no purchase. |
 
 | Requirement | Current evidence |
 | --- | --- |
@@ -38,4 +48,4 @@ Firsthand course observations: [Disco1960 course FAQ](https://gamefaqs.gamespot.
 
 ## Deliberate approximations and verification limits
 
-Buoyancy uses distributed support, not CFD. Reflection is planar. Foam, caustics, spray and current paths are procedural approximations. Tempest's ebb is compressed into a race. Stunt dive/poses are arcade maneuvers. Sound is synthesized; subjective listening quality and physical gamepad hardware remain unverified. The original salvage mode retains its earlier handling model. Nintendo assets and course layouts are not reproduced.
+Buoyancy uses distributed support, not CFD. Reflection is planar. Foam, caustics, spray and current paths are procedural approximations. Tempest's ebb is compressed into a race. Stunt dive/poses are arcade maneuvers. Sound uses local ElevenLabs clips with synthesized fallback; subjective listening quality and physical gamepad hardware remain unverified. The original salvage mode retains its earlier handling model. Nintendo assets and course layouts are not reproduced.

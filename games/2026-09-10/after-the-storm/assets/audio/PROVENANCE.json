@@ -1,0 +1,66 @@
+{
+  "provider": "ElevenLabs",
+  "generated": "2026-09-10",
+  "method": "Signed-in ElevenCreative Sound Effects web app; generated privately from original prompts",
+  "voice": "No speech or narration requested in any clip",
+  "creditsUsed": 868,
+  "purchases": 0,
+  "exports": [
+    {
+      "file": "coastal-theme.mp3",
+      "sha256": "9e37d0d22ac17eb91352c2e98d3a64642744809dc74c8a4de39351ccbb2d13ed",
+      "bytes": 384984,
+      "source": "coastal-theme.wav",
+      "processing": "48 kHz WAV export, loudnorm -20 LUFS / -2 dBTP, 44.1 kHz MP3 128 kbit/s"
+    },
+    {
+      "file": "engine-fast.mp3",
+      "sha256": "0bb06bd7d4fb9afeb7386213b2daf9957413eba24d063cdd884513946743eb37",
+      "bytes": 129193,
+      "source": "engine-fast.wav",
+      "processing": "48 kHz WAV export, loudnorm -20 LUFS / -2 dBTP, 44.1 kHz MP3 128 kbit/s"
+    },
+    {
+      "file": "engine-idle.mp3",
+      "sha256": "27d762b62bec6976a53aa76c1a8170db89a9876939e4121621538c3d342383b5",
+      "bytes": 129193,
+      "source": "engine-idle.wav",
+      "processing": "48 kHz WAV export, loudnorm -20 LUFS / -2 dBTP, 44.1 kHz MP3 128 kbit/s"
+    },
+    {
+      "file": "hull-impact.mp3",
+      "sha256": "e9563ad1ad5b44830c176ce7e2ef40007b9e92627d0c288217706a1d715d76a6",
+      "bytes": 48945,
+      "source": "hull-impact.wav",
+      "processing": "48 kHz WAV export, loudnorm -20 LUFS / -2 dBTP, 44.1 kHz MP3 128 kbit/s"
+    },
+    {
+      "file": "race-cue.mp3",
+      "sha256": "6342d5edf34275705e1de68b2bd96f66a6f8d5a53e5121a98a32354ae3588fd0",
+      "bytes": 48945,
+      "source": "race-cue.wav",
+      "processing": "48 kHz WAV export, loudnorm -20 LUFS / -2 dBTP, 44.1 kHz MP3 128 kbit/s"
+    },
+    {
+      "file": "splash.mp3",
+      "sha256": "2e8a6d9c05d7e909658683d9f73812f9f6b618fe952cb4a5f08808dfbe123f76",
+      "bytes": 48945,
+      "source": "splash.wav",
+      "processing": "48 kHz WAV export, loudnorm -20 LUFS / -2 dBTP, 44.1 kHz MP3 128 kbit/s"
+    },
+    {
+      "file": "water-rush.mp3",
+      "sha256": "8a1972f99f289b20db2dea673b773489fec3c5ba419ca78e8908f75336cd2dc4",
+      "bytes": 129193,
+      "source": "water-rush.wav",
+      "processing": "48 kHz WAV export, loudnorm -20 LUFS / -2 dBTP, 44.1 kHz MP3 128 kbit/s"
+    },
+    {
+      "file": "wind.mp3",
+      "sha256": "4a04435fd5c3605d29a2e2a328f7e2b8a58cfc8d5bd5253ddba2684668b52de3",
+      "bytes": 129193,
+      "source": "wind.wav",
+      "processing": "48 kHz WAV export, loudnorm -20 LUFS / -2 dBTP, 44.1 kHz MP3 128 kbit/s"
+    }
+  ]
+}
