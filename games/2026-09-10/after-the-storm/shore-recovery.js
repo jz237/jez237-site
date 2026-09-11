@@ -1,9 +1,11 @@
+import {iceSurfaceAt} from './ice-surfaces.js';
 import {ground,waterLevel} from './simulation.js';
 import {obstaclePosition} from './course-environment.js';
 import {passageCollision} from './course-passages.js';
 import {createHydro} from './hydrodynamics.js';
 
 function safeWater(s,x,z){
+ if(iceSurfaceAt(s.course,x,z))return false;
  const floor=s.course.ground||ground;
  for(const [dx,dz] of [[0,0],[1.5,0],[-1.5,0],[0,1.5],[0,-1.5]])
   if(floor(x+dx,z+dz)>waterLevel.value-1.2)return false;
@@ -30,7 +32,7 @@ export function recoverToWater(s,r){
 }
 
 export function shoreRecovery(s,r,landHit,request,dt){
- const grounded=(s.course.ground||ground)(r.x,r.z)>waterLevel.value-.4;
+ const grounded=(s.course.ground||ground)(r.x,r.z)>waterLevel.value-.4||!!r.onIce&&r.speed<1;
  const pinned=r.groundedTime>0&&r.speed<3&&!safeWater(s,r.x,r.z);
  r.groundedTime=landHit||grounded||pinned?(r.groundedTime||0)+dt:Math.max(0,(r.groundedTime||0)-dt*2);
  if((r.groundedTime>=1.5||request&&(landHit||grounded||r.groundedTime>0))&&recoverToWater(s,r))return true;
