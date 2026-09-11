@@ -69,8 +69,10 @@ export class Aquarium{
   host.appendChild(this.renderer.domElement);
   this.renderer.domElement.tabIndex=0;
   this.renderer.domElement.setAttribute('aria-label','Aquarium. Drag to rotate, use the view and zoom buttons below.');
-  this.scene.background=new T.Color(0x080f12);
-  this.scene.fog=new T.FogExp2(0x0a161b,.008);
+  // Scene-linear backdrop radiance: ACES otherwise crushes the dark reference
+  // blue-gray almost to black when a display-space swatch is used directly.
+  this.scene.background=new T.Color(.0087,.0147,.0173);
+  this.scene.fog=new T.FogExp2(this.scene.background,.008);
   const pmrem=new T.PMREMGenerator(this.renderer),environment=new RoomEnvironment();
   this.scene.environment=pmrem.fromScene(environment,.035).texture;this.scene.environmentIntensity=.10;
   environment.dispose();pmrem.dispose();
@@ -96,7 +98,6 @@ export class Aquarium{
    this.canopyLights.push(light);this.scene.add(light,light.target);
   }
   const rim=new T.DirectionalLight(0xd2dfbf,.65);rim.position.set(-5,6,-3);this.scene.add(rim);
-  const warm=new T.PointLight(0xffd9ad,7,18,2);warm.position.set(6,5,5);this.scene.add(warm);
   this.buildTank();buildAquariumSubstrate(this.scene,(x,z)=>this.height(x,z),this.swimShader);buildBotanicalPlants(this.scene,(x,z)=>this.height(x,z),this.swimShader);
   this.water=this.buildWater();
   if(import.meta.env.DEV&&new URLSearchParams(location.search).get('inspect')==='reflection'){
@@ -121,7 +122,7 @@ export class Aquarium{
  private box(w:number,h:number,d:number,material:T.Material,p:T.Vector3,shadow=true){return this.mesh(new T.BoxGeometry(w,h,d),material,p,shadow);}
  private buildTank(){
   const dark=new T.MeshStandardMaterial({color:0x111c1e,roughness:.35,metalness:.65});
-  const floor=new T.MeshStandardMaterial({color:0x101819,roughness:.82,metalness:0});
+  const floor=new T.MeshStandardMaterial({color:0x0c151d,roughness:.82,metalness:0});
   floor.onBeforeCompile=shader=>{
    shader.uniforms.roomBackground={value:this.scene.background};
    shader.fragmentShader='uniform vec3 roomBackground;\n'+shader.fragmentShader;
