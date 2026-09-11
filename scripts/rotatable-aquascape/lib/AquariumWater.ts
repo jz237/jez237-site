@@ -8,12 +8,20 @@ float rippleHeight(vec2 p){
  float agitation=.65+.35*exp(-inlet*.32);
  // Several crossing ripple scales break up the long, regular mirror stripes.
  // Shorter waves change reflection direction without making large water swells.
- vec2 q=p+vec2(sin(p.y*1.9+p.x*.7-time*.29),sin(p.x*1.3-p.y*.8+time*.23))*.16;
- float broad=sin(q.x*2.7+q.y*3.6-time*1.07)*.018;
- float cross=sin(q.x*8.3-q.y*6.8-time*1.83+sin(q.y*1.7)*.65)*.018;
- float secondary=sin(q.x*12.1+q.y*9.7-time*2.27+sin(q.x*.8-time*.23)*.7)*.011;
- float fine=sin(q.x*23.2-q.y*17.8-time*3.21)*.0025;
- float rings=sin(inlet*18.-time*3.1)*exp(-inlet*.58)*.009;
+ vec2 q=p+vec2(sin(p.y*1.9+p.x*.7-time*.29),sin(p.x*1.3-p.y*.8+time*.23))*.09;
+ float broad=sin(q.x*2.7+q.y*3.6-time*1.8)*.011;
+ float cross=sin(q.x*8.3-q.y*6.8-time*3.2+sin(q.y*1.7)*.65)*.012;
+ float secondary=sin(q.x*12.1+q.y*9.7-time*4.8+sin(q.x*.8-time*.23)*.7)*.007;
+ // Small, differently directed ripples break the large repeating reflection lobes.
+ float fine=sin(q.x*23.2-q.y*17.8-time*7.1)*.002;
+ fine+=sin(q.x*31.7+q.y*11.9-time*8.6+sin(q.y*2.3)*.25)*.0014;
+ fine+=sin(-q.x*15.3+q.y*37.4-time*10.3)*.0011;
+ #ifdef WATER_FRAGMENT
+ // Suppress unresolved capillary detail on distant/mobile pixels, rather than sparkle.
+ float footprint=max(length(dFdx(p)),length(dFdy(p)));
+ fine*=1.-smoothstep(.03,.07,footprint);
+ #endif
+ float rings=sin(inlet*18.-time*5.4)*exp(-inlet*.8)*.006;
  float edge=min(5.04-abs(p.x),2.30-abs(p.y));
  // A narrow raised meniscus meets the glass; the contact line retains a
  // small part of the passing wave instead of becoming a rigid straight bar.
@@ -44,7 +52,8 @@ export class AquariumWater extends T.Group {
     name:'AquariumWaterReflection',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},illumination:{value:1},underside:{value:underside?1:0}},
     vertexShader:`uniform mat4 textureMatrix;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
     void main(){vec3 displaced=position;world=(modelMatrix*vec4(position,1.)).xyz;float wave=rippleHeight(world.xz);displaced.z+=wave*(underside>.5?-1.:1.);world.y+=wave;reflectionUv=textureMatrix*vec4(displaced,1.);gl_Position=projectionMatrix*modelViewMatrix*vec4(displaced,1.);}`,
-    fragmentShader:`uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}${waterOpticsShader}
+    fragmentShader:`#define WATER_FRAGMENT
+    uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}${waterOpticsShader}
     // Unpolarized dielectric Fresnel, including the water-to-air critical angle.
     // See PBRT, Specular Reflection and Transmission (FrDielectric).
     float waterFresnel(float cosine){
