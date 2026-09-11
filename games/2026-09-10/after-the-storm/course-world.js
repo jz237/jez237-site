@@ -43,7 +43,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  function building(x,z,w,d,h,m=stone){const y=course.ground(x,z);if(y<1)return;box(x,y+h/2,z,w,h,d,m);box(x,y+h+.2,z,w+.6,.4,d+.6,steel);return y;}
  function rock(x,z,r=5,ice=false){let y=course.ground(x,z);for(let j=0;j<8;j++){const a=j*Math.PI/4;y=Math.min(y,course.ground(x+Math.cos(a)*r*.55,z+Math.sin(a)*r*.55));}const geo=ice?new T.IcosahedronGeometry(r,2):new T.SphereGeometry(r,24,16),p=geo.attributes.position;for(let i=0;i<p.count;i++){const scale=.93+.11*Math.sin(p.getX(i)*.17+p.getZ(i)*.23)+.045*Math.sin(p.getY(i)*.7+p.getX(i)*.4);p.setXYZ(i,p.getX(i)*scale,p.getY(i)*scale*.65,p.getZ(i)*scale);}geo.computeVertexNormals();return add(geo,ice?iceMat:naturalRock,x,y+r*.15,z);}
  const iceMat=mat(0x9fd2e2,.22,.15);const glass=mat(night?0x263e59:0x608897,.2,.55);const cityLight=mat(0xa7dced,.4,.15,0x62a6cb);
- for(const obstacle of course.rocks){if(obstacle.type==='ice'){const o=rock(obstacle.x,obstacle.z,obstacle.r,true);animated.push({o,obstacle,offset:.3});}else if(obstacle.type==='post'){cylinder(obstacle.x,.65,obstacle.z,.28,3.8,wood);cylinder(obstacle.x,1.3,obstacle.z,.32,.2,white);}else buoy(obstacle.x,obstacle.z,yellow,1.0);}
+ for(const obstacle of course.rocks){if(obstacle.type==='ice'){const o=rock(obstacle.x,obstacle.z,obstacle.r,true);animated.push({o,obstacle,offset:.3});}else if(obstacle.type==='post'){cylinder(obstacle.x,.65,obstacle.z,.28,3.8,wood);cylinder(obstacle.x,1.3,obstacle.z,.32,.2,white);}else if(obstacle.type==='crate'){const g=new T.Group();g.userData.dynamic=true;root.add(g);box(0,0,0,1.5,1.5,1.5,wood,g);for(const side of [-1,1]){box(side*.64,0,0,.12,1.57,1.57,steel,g);box(0,0,side*.64,1.57,1.57,.12,steel,g);}animated.push({o:g,obstacle,offset:.38});}else buoy(obstacle.x,obstacle.z,yellow,1.0);}
  // Floating stunt decks use the same water offset as hull contact.
  const rampMeshes=[],deckMat=mat(0x24535a,.82),ringGlow=mat(0xffca57,.32,.2,0x684012),waterRingMat=mat(0x6de5cf,.34,.12,0x164e45);
  for(const ramp of course.ramps||[]){
@@ -81,8 +81,13 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   // Reed clumps are instanced to keep the shoreline detail inexpensive.
   const reeds=new T.InstancedMesh(new T.CylinderGeometry(.035,.045,1.4,4),green,700),dummy=new T.Object3D();root.add(reeds);geometries.push(reeds.geometry);for(let i=0;i<700;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(39+random()*5)+(random()-.5)*9,z=g.z-g.tx*side*(39+random()*5)+(random()-.5)*9;dummy.position.set(x,course.ground(x,z)+.6,z);dummy.rotation.z=(random()-.5)*.3;dummy.updateMatrix();reeds.setMatrixAt(i,dummy.matrix);}pier(-125,120,.6,20);building(-155,140,16,12,7,wood);
  }
- if(theme==='fortress'){
+ if(theme==='fortress'&&!course.fortWalls){
   const y=course.ground(0,0);box(0,y+3,0,85,6,68,stone);for(const x of [-42,42])for(const z of [-34,34]){cylinder(x,y+11,z,8,22,stone);cylinder(x,y+22,z,8.5,1,black);for(let i=0;i<10;i++){const a=i*Math.PI*.2;box(x+Math.sin(a)*7.3,y+23,z+Math.cos(a)*7.3,2,2,2,stone);}}for(let i=-38;i<=38;i+=5)for(const z of [-34,34])box(i,y+7,z,2.6,2,3,stone);building(0,0,30,22,19,stone);for(let i=0;i<25;i++){const a=i/25*Math.PI*2;rock(Math.sin(a)*165,Math.cos(a)*177,4+random()*6);}label('CITADEL SOUND',0,y+10,35,28);
+ }
+ if(course.fortWalls){
+  const path=course.fortWalls;for(let i=1;i<path.length;i++){const a=path[i-1],b=path[i],distance=Math.hypot(b[0]-a[0],b[1]-a[1]),steps=Math.ceil(distance/5);for(let j=0;j<steps;j++){const t=(j+.5)/steps,x=a[0]+(b[0]-a[0])*t,z=a[1]+(b[1]-a[1])*t,y=course.ground(x,z);if(y<1.5)continue;const wall=box(x,y+2,z,2.8,4,distance/steps+.08,stone);wall.rotation.y=Math.atan2(b[0]-a[0],b[1]-a[1]);box(x,y+4.1,z,3.3,.3,3.3,white);}}
+  building(-25,60,24,22,11,stone);building(15,75,20,30,7,stone);for(const [x,z] of [[-32,20],[-5,110]]){const y=course.ground(x,z);if(y>2){cylinder(x,y+7,z,4.5,14,stone);cylinder(x,y+14,z,5,.7,white);}}
+  label('MARINE FORTRESS',-24,19,47,26);
  }
  function crane(x,z,angle){const y=course.ground(x,z);if(y<1)return;const g=new T.Group();g.position.set(x,y,z);g.rotation.y=angle;root.add(g);for(const side of[-1,1]){box(side*5,12,0,.7,24,.7,yellow,g);rod([side*5,0,0],[side*5,24,-5],.2,steel,g);}box(0,25,-11,13,1,35,yellow,g);box(0,23,1,6,4,5,white,g);rod([0,25,-24],[0,5,-24],.06,steel,g);box(0,4.8,-24,7,.4,2,black,g);}
  if(theme==='port'){
@@ -96,7 +101,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  if(cold){for(let i=0;i<50;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(52+random()*35),z=g.z-g.tx*side*(52+random()*35);rock(x,z,9+random()*16,true);}building(-170,125,25,16,8,white);label('ARCTIC RESEARCH / 64',-170,14,134,28);}
  // Navigable masonry/harbour passage; dimensions are shared with collision.
  const passage=course.passage;let gateMesh=null,gateSignal=null;
- if(passage){const a=passage.path[0],b=passage.path.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z),g=new T.Group();g.position.set(a.x,0,a.z);g.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);root.add(g);const m=passage.kind==='gate'?stone:steel,w=passage.width;
+ if(passage){const geometry=passage.structurePath||passage.path,a=geometry[0],b=geometry.at(-1),length=Math.hypot(b.x-a.x,b.z-a.z),g=new T.Group();g.position.set(a.x,0,a.z);g.rotation.y=Math.atan2(b.x-a.x,b.z-a.z);root.add(g);const m=passage.kind==='gate'?stone:steel,w=passage.width;
   for(const side of [-1,1]){box(side*(w+.55),2.5,length*.57,1.1,11,length*.50,m,g);for(let z=length*.34;z<length*.81;z+=6){box(side*(w+.52),6.3,z,1.8,1.2,1.6,stone,g);}}
   box(0,(passage.clearance+8)/2,length*.57,w*2+2.2,8-passage.clearance,length*.50,m,g);
   gateMesh=new T.Group();gateMesh.userData.dynamic=true;gateMesh.position.set(0,-1,length*.36);g.add(gateMesh);

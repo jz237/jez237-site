@@ -2,7 +2,8 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {getCourse,sampleRoute} from '../courses.js';
 import {courseResistance} from '../classic-courses.js';
-import {createRace,stepRace} from '../race-core.js';
+import {createRace,stepRace,adjudicateGate} from '../race-core.js';
+import {passageTarget} from '../course-passages.js';
 
 test('Sunny Beach has a long dry sandbar, two wet straights and open water beyond its western boundary',()=>{
  const c=getCourse('greyhaven');assert.equal(c.name,'Sunny Beach');
@@ -28,4 +29,24 @@ test('a hull starting overlapped by a post is separated and can drive away',()=>
  const c=getCourse('reed'),q={x:0,z:0,r:.45,type:'post'},s=createRace({mode:'time',course:{...c,ground:()=>-8,rocks:[q],resistance:[]}}),r=s.racers[0];
  s.phase='running';r.x=r.z=0;r.vx=r.vz=0;r.heading=0;stepRace(s,{},1/60);assert.ok(Math.hypot(r.x,r.z)>=1.45);
  r.heading=Math.atan2(r.x,r.z);for(let i=0;i<120;i++)stepRace(s,{throttle:1},1/60);assert.ok(Math.hypot(r.x,r.z)>5);assert.ok(r.speed>4);
+});
+test('Marine Fortress has an eastern arm, distinct crate counts and a curved inner route',()=>{
+ const c=getCourse('citadel');assert.equal(c.name,'Marine Fortress');assert.ok(c.ground(110,-63)>0);assert.ok(c.ground(155,-63)<-3);assert.ok(c.ground(-15,85)>0);
+ assert.equal(c.rocks.filter(o=>o.type==='crate').length,3);assert.equal(getCourse('citadel',1).rocks.length,7);assert.equal(getCourse('citadel',2).rocks.length,10);
+ assert.ok(c.passage.path.length>5);assert.equal(c.passage.structurePath.length,2);assert.ok(c.passage.path.some(p=>p.x<-60));
+});
+test('a late gate opening cannot redirect a rider already committed to the outer route',()=>{
+ const s=createRace({course:getCourse('citadel',1)}),p=s.course.passage,r=s.racers[0],g=s.course.gates[p.first];s.time=30;r.next=p.first;r.x=g.x+g.tx*2;r.z=g.z+g.tz*2;
+ assert.equal(adjudicateGate(s,r,g.x-g.tx*2,g.z-g.tz*2),true);assert.equal(r.passageRoute,'outer');
+ s.passageOpenedAt=31;s.time=40;assert.equal(passageTarget(s,r),s.course.gates[r.next]);assert.equal(r.passed,1);
+});
+test('curved shortcut progress requires crossing each actual checkpoint plane',()=>{
+ const s=createRace({course:getCourse('citadel',2)}),p=s.course.passage,r=s.racers[0];s.time=70;s.passageOpenedAt=60;r.passageRoute='open';r.next=p.indices[3];const g=p.branchGates[r.next];r.x=g.x;r.z=g.z;
+ assert.equal(adjudicateGate(s,r,r.x,r.z),false);assert.equal(r.passed,0);
+ r.x=g.x+g.tx*2;r.z=g.z+g.tz*2;assert.equal(adjudicateGate(s,r,g.x-g.tx*2,g.z-g.tz*2),true);assert.equal(r.passed,1);
+});
+test('an airborne hull clears a low breakwater but contacts it when it descends',()=>{
+ const c=getCourse('greyhaven'),s=createRace({mode:'time',course:{...c,ground:()=>1,rocks:[]}}),r=s.racers[0];s.phase='running';r.hydro.initialized=true;r.hydro.y=8;r.hydro.vy=0;
+ stepRace(s,{},1/60);assert.equal(r.collision,0);assert.ok(r.hydro.y>7);
+ r.hydro.y=.9;r.hydro.vy=-2;stepRace(s,{},1/60);assert.ok(r.collision>0);
 });

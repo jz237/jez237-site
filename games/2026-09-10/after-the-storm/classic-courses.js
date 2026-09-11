@@ -36,5 +36,21 @@ const lake={
  obstacles:fromMap([[182,381],[224,370],[254,355],[267,373],[290,382],[269,401],[240,391],[214,392]],200,240).map(([x,z])=>({x,z,r:.45,type:'post'})),
  resistance:[{x:(320-200)*.75,z:(352-240)*.75,rx:13,rz:9,drag:.75},{x:(129-200)*.75,z:(88-240)*.75,rx:12,rz:5,drag:.65}],raceRamps:[]
 };
-export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake};
+const fortMap=points=>fromMap(points,210,300,.8);
+const fortLand=fortMap([[110,135],[111,84],[117,74],[123,83],[127,121],[139,153],[159,176],[203,189],[293,200],[360,215],[370,225],[319,228],[267,228],[267,264],[259,292],[268,430],[249,467],[216,491],[132,507],[104,500],[108,360],[125,351],[136,290],[151,274],[159,277],[180,277],[194,261],[207,263],[207,244],[181,250],[153,264],[130,286],[119,330],[110,339],[106,325],[107,166],[43,155],[41,143],[57,135]]);
+const fortCrates=fortMap([[261,172],[295,195],[334,200],[247,179],[274,181],[307,194],[322,207],[351,205],[177,298],[94,328]]);
+const fort={
+ name:'Marine Fortress',theme:'fortress',tag:'04 / MARINE FORTRESS',layoutRevision:2,
+ description:'Rough grey water around a stone fort. Floating crates crowd the eastern arm; Hard and above open a curved inner route after the first lap.',
+ anchors:fortMap([[81,273],[81,192],[53,178],[37,156],[38,128],[54,89],[79,68],[104,60],[125,63],[148,94],[176,144],[201,160],[264,179],[337,185],[374,204],[384,227],[373,247],[307,251],[290,270],[283,345],[279,423],[260,466],[225,493],[168,510],[105,516],[81,499],[76,461],[80,360]]),
+ ground(x,z){return clamp(-polygonDistance(fortLand,x,z)*.7,-11,6.5);},
+ obstacles:fortCrates.slice(0,3).map(([x,z])=>({x,z,r:1.0,type:'crate'})),
+ extraObstacles:fortCrates.slice(3).map(([x,z])=>({x,z,r:1.05,type:'crate'})),
+ resistance:[],raceRamps:[],
+ shortcut:{kind:'gate',from:fortMap([[307,251]])[0],to:fortMap([[81,310]])[0],width:7,clearance:5.5,
+  via:fortMap([[258,246],[207,253],[173,268],[153,293],[134,327],[117,343],[99,338],[83,326]]),
+  structure:fortMap([[179,263],[143,310]])},
+ fortWalls:fortMap([[117,100],[140,172],[227,202],[337,218],[249,263],[249,420],[228,467],[143,490],[123,384]])
+};
+export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort};
 export function courseResistance(course,x,z,wet=1){let drag=0;for(const p of course.resistance||[]){const q=((x-p.x)/p.rx)**2+((z-p.z)/p.rz)**2;drag=Math.max(drag,p.drag*clamp((1-q)*3,0,1));}return drag*clamp(wet,0,1);}
