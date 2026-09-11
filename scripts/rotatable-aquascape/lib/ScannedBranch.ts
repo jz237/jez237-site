@@ -6,7 +6,15 @@ export const aquascapeBranches=[
  {points:[[-2.68,1.8,-.22],[-1.86,2.15,-.31],[-1.02,2.72,-.52],[.2,3.3,-.8],[1.4,3.55,-.99]],thickness:.94,roll:.7,reverse:true},
  {points:[[-2.68,1.55,-.12],[-2.28,2.55,-.48],[-1.6,3.65,-.68],[-.8,4.54,-.87]],thickness:.78,roll:.8},
  {points:[[-1.02,2.7,-.51],[-.64,3.19,-.6],[-.12,3.52,-.69]],thickness:.28,roll:.4,reverse:true},
- {points:[[-3.04,.72,.47],[-3.64,.56,.92],[-4.3,.4,1.52]],thickness:.40,roll:1.9}
+ {points:[[-3.04,.72,.47],[-3.64,.56,.92],[-4.3,.4,1.52]],thickness:.40,roll:1.9},
+ // Smaller forks emerge within the main limbs, and buttress roots wrap the
+ // shared base into the substrate instead of leaving separate intersecting logs.
+ {points:[[-2.74,2.31,-.26],[-3.12,2.66,-.18],[-3.54,3.10,-.07],[-3.66,3.56,-.03]],thickness:.33,roll:2.3,reverse:true},
+ {points:[[-2.63,1.52,.17],[-2.63,.99,.55],[-2.29,.76,.84],[-1.75,.43,1.09]],thickness:.44,roll:2.7},
+ {points:[[-2.62,1.45,-.05],[-2.39,1.41,-.65],[-2.35,.90,-1.14],[-2.05,.47,-1.5]],thickness:.35,roll:.15,reverse:true},
+ {points:[[-1.66,2.33,-.43],[-.75,2.30,-.10],[.25,2.51,-.11],[.79,2.88,-.21]],thickness:.24,roll:2.1},
+ {points:[[-1.22,1.09,.69],[-.88,.77,1.05],[-.45,.47,1.64],[-.22,.42,1.94]],thickness:.23,roll:1.1,reverse:true},
+ {points:[[-2.65,1.10,.4],[-2.40,1.61,.36],[-2.05,1.90,.25],[-1.44,2.31,-.16]],thickness:.26,roll:2.85}
 ];
 
 /** Preserve scanned detail while shaping a branch, and derive collision envelopes from it. */
