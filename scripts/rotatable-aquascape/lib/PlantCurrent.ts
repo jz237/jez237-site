@@ -63,26 +63,35 @@ transformedNormal = normalMatrix * transformedNormal;
   shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',T.ShaderChunk.project_vertex.replace('mvPosition = modelViewMatrix * mvPosition;','mvPosition.xyz = bendPlant(mvPosition.xyz);\nmvPosition = modelViewMatrix * mvPosition;'));
   shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>',T.ShaderChunk.worldpos_vertex.replace('worldPosition = modelMatrix * worldPosition;','worldPosition.xyz = bendPlant(worldPosition.xyz);\nworldPosition = modelMatrix * worldPosition;'));
   if(flutter&&material instanceof T.MeshStandardMaterial){
+   shader.uniforms.leafOpticalDensity={value:material.userData.leafOpticalDensity??1};
+   shader.fragmentShader='uniform float leafOpticalDensity;\n'+shader.fragmentShader;
    shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
 // A paler abaxial face and thicker veins break the uniform plastic-sheet response.
 if(!gl_FrontFacing){
  float tissueLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
  diffuseColor.rgb=mix(diffuseColor.rgb,vec3(tissueLuma),.12)*vec3(1.08,1.12,.99);
 }
-float leafTranslucency=.38;
-#ifdef USE_BUMPMAP
- float veinRelief=texture2D(bumpMap,vBumpMapUv).r;
- leafTranslucency*=1.-clamp((veinRelief-.52)*2.2,0.,.62);
+float leafTissueDensity=.27;
+#ifdef USE_ROUGHNESSMAP
+ leafTissueDensity=texture2D(roughnessMap,vRoughnessMapUv).r;
 #endif
+float leafOpticalDepth=max(.05,leafTissueDensity*leafOpticalDensity)*3.5;
 `);
    // Use each light's attenuated, shadowed irradiance for thin-leaf transmission.
    const direct='RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, reflectedLight );';
    shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_begin>',T.ShaderChunk.lights_fragment_begin.replaceAll(direct,direct+`
-reflectedLight.directDiffuse += directLight.color * material.diffuseColor * leafTranslucency * RECIPROCAL_PI * pow(saturate(dot(-geometryNormal,directLight.direction)),.8);
+{ // Each unrolled light needs its own local scope.
+// Oblique light travels farther through the blade; dense veins transmit less.
+float leafBackCos=saturate(dot(-geometryNormal,directLight.direction));
+float leafTransmittance=.52*exp(-leafOpticalDepth/max(.28,leafBackCos));
+// A pigment tint approximates transmitted color separately from surface reflectance.
+vec3 leafTransmissionTint=pow(max(material.diffuseColor,vec3(0.)),vec3(.65));
+reflectedLight.directDiffuse += directLight.color * leafTransmissionTint * leafTransmittance * RECIPROCAL_PI * pow(leafBackCos,.8);
+}
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v6-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v7-${flutter}-${material.type}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){

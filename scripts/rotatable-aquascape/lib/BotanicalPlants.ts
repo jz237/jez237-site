@@ -161,6 +161,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const {species}=batch;
   const tissue=tissues[species==='sword'||species==='grass'?'sword':species==='anubias'||species==='bacopa'||species==='ludwigia'?'round':'fine'];
   const material=new T.MeshPhysicalMaterial({color:0xffffff,map:tissue.color,bumpMap:tissue.bump,roughnessMap:tissue.roughness,bumpScale:species==='sword'?.011:.004,roughness:species==='anubias'||species==='bacopa'?.66:.79,ior:1.18,specularIntensity:.7,side:T.DoubleSide});
+  material.userData.leafOpticalDensity=species==='anubias'?2.2:species==='bacopa'?1.7:species==='sword'?1.15:species==='carpet'?1.2:.85;
   plantCurrent(material,time,true);setPlantRoots(batch.geometry,batch.roots,batch.flex);
   batch.geometry.setAttribute('leafMotion',new T.InstancedBufferAttribute(new Float32Array(batch.motion),3));
   const leaves=new T.InstancedMesh(batch.geometry,material,batch.matrices.length);batch.matrices.forEach((m,i)=>{leaves.setMatrixAt(i,m);leaves.setColorAt(i,batch.colors[i]);});leaves.castShadow=true;leaves.receiveShadow=true;leaves.computeBoundingSphere();

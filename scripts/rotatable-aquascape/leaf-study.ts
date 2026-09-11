@@ -15,7 +15,8 @@ for(const [index,species] of ['sword','bacopa','stem'].entries()){
 }
 const camera=new T.PerspectiveCamera(37,1,.1,100);camera.position.set(0,0,13);
 const resize=()=>{renderer.setSize(innerWidth,innerHeight);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();};resize();addEventListener('resize',resize);
-let paused=false,back=false,last=0;
+let paused=false,back=false,backlit=false,last=0;
 document.querySelector<HTMLButtonElement>('#pause')!.onclick=()=>{paused=!paused;document.querySelector('#pause')!.textContent=paused?'Resume motion':'Pause motion';};
 document.querySelector<HTMLButtonElement>('#turn')!.onclick=()=>{back=!back;document.querySelector('#turn')!.textContent=back?'Show upper faces':'Show undersides';};
+document.querySelector<HTMLButtonElement>('#backlight')!.onclick=()=>{backlit=!backlit;key.position.z=backlit?-5:5;document.querySelector('#backlight')!.textContent=backlit?'Light from front':'Backlight leaves';};
 renderer.setAnimationLoop(now=>{const dt=last?Math.min((now-last)/1000,.05):0;last=now;if(!paused)time.value+=dt;for(const sample of samples)sample.rotation.y=T.MathUtils.damp(sample.rotation.y,back?Math.PI:0,5,dt);renderer.render(scene,camera);});

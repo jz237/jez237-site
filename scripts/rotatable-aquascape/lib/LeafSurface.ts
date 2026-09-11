@@ -16,13 +16,15 @@ export function leafSurfaceMaps(kind:LeafSurfaceKind,seed=2731){
   for(let channel=0;channel<3;channel++){
    const data=pixels[channel].data;data[index]=data[index+1]=data[index+2]=values[channel];
    if(channel===0){data[index]+=broad*2;data[index+1]+=2;data[index+2]-=3+edge*3;}
+   // Pack optical tissue density in red; Three uses green for roughness.
+   if(channel===2)data[index]=68-edge*edge*15+broad*10+cells*5+tissue*2;
    data[index+3]=255;
   }
  }
  contexts.forEach((context,i)=>context.putImageData(pixels[i],0,0));
  const vein=(path:(context:CanvasRenderingContext2D)=>void,width:number,major=false)=>{
   contexts.forEach((context,i)=>{
-   context.strokeStyle=i===0?`rgba(239,249,211,${major?.55:.22})`:i===1?`rgba(230,230,230,${major?.78:.42})`:`rgba(172,172,172,${major?.50:.26})`;
+   context.strokeStyle=i===0?`rgba(239,249,211,${major?.55:.22})`:i===1?`rgba(230,230,230,${major?.78:.42})`:`rgba(250,172,172,${major?.72:.40})`;
    context.lineWidth=width*(i===1?1.3:1);context.beginPath();path(context);context.stroke();
   });
  };
