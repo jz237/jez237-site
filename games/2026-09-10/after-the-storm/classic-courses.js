@@ -43,6 +43,7 @@ const sunsetReverseBalls=sunsetBalls([[124,183],[135,183],[145,183],[119,191],[1
 const sunset={
  name:'Sunset Bay',theme:'resort',tag:'02 / SUNSET BAY',layoutRevision:4,
  finishLine:sunsetMap([[250,300],[420,300]]),finishBypass:3,
+ waveTrain:[(130-245)*.75,(223-275)*.75,14,.9],
  buoysByClass:[sunsetNormalBuoys,sunsetHardBuoys,sunsetExpertBuoys,sunsetReverseBuoys],
  obstaclesByClass:[[],sunsetForwardBalls,sunsetForwardBalls,sunsetReverseBalls],
  anchorsByClass:{2:sunsetMap([[290,302],[281,222],[258,163],[217,80],[194,49],[167,52],[142,93],[131,165],[103,190],[99,219],[150,260],[140,333],[158,402],[180,458],[209,478],[268,510],[310,512],[352,480],[412,508],[448,486],[468,455],[448,420],[385,398],[317,376],[298,350]])},
