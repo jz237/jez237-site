@@ -24,16 +24,19 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
- if(state.verifyShipJump){
+ if(state.verifyShipJump&&r.shipJumpStage!==2){
+  if(r.hydro.onRamp)r.shipJumpLanding=r.hydro.landingId;
+  if(r.shipJumpLanding!==undefined&&r.hydro.landingId>r.shipJumpLanding){r.shipJumpStage=2;return aiInput(state,r);}
   const a=state.course.ramps.find(a=>a.id===150);
   // Stay on the race line until the first two buoys are cleared and the
   // northern island tip has been rounded. Distance alone cuts across land.
   if(a&&(r.next===3&&r.x<72&&r.z< -180||r.shipJumpStage!==undefined)){
    r.shipJumpStage??=0;
-   const along=r.shipJumpStage===0?-18:100,x=a.x+a.tx*along,z=a.z+a.tz*along;
-   if(r.shipJumpStage===0&&Math.hypot(r.x-x,r.z-z)<4)r.shipJumpStage=1;
+   // Cross the lower forward hull on a westward takeoff line, avoiding the cabin.
+   const heading=Math.atan2(a.tx,a.tz)-(r.shipJumpStage===1?.4:0),along=r.shipJumpStage===0?-30:60,x=a.x+Math.sin(heading)*along,z=a.z+Math.cos(heading)*along;
+   if(r.shipJumpStage===0&&Math.hypot(r.x-x,r.z-z)<3)r.shipJumpStage=1;
    const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);
-   return {throttle:r.shipJumpStage===0?.55:.85,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
+   return {throttle:1,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
   }
  }
 

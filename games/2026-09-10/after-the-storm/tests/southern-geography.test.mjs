@@ -60,3 +60,19 @@ test('ship inspection rounds the island and earns three buoys before ramp contac
  assert.ok(contact);assert.equal(r.power,3);assert.equal(r.next,4);
  // This verifies the entry only. A clean ship landing is still unproven.
 });
+
+test('grid-start ship jump clears the hull, lands cleanly and rejoins all three laps',()=>{
+ const s=createRace({course:getCourse('tempest')}),r=s.racers[0],ship=s.course.crossbars.find(b=>b.kind==='ship');
+ s.verifyShipJump=true;let contact=false,landed=false,over=0,landingId=0;
+ for(let i=0;i<36000&&s.phase!=='results';i++){
+  stepRace(s,verificationInput(s,r),1/60);
+  if(r.hydro.onRamp&&!contact){contact=true;landingId=r.hydro.landingId;assert.equal(r.power,3);}
+  if(contact&&!landed){
+   assert.equal(r.collision,0);
+   if(polygonDistance(ship.outline,r.x,r.z)<0){over++;assert.ok(r.hydro.y>waterLevel.value+ship.top);}
+   if(r.hydro.landingId>landingId){landed=true;assert.ok(polygonDistance(ship.outline,r.x,r.z)>1);assert.ok(r.speed>10);}
+  }
+ }
+ assert.ok(contact);assert.ok(over>10);assert.ok(landed);assert.equal(r.shipJumpStage,2);
+ assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.dq,'');assert.equal(r.lap,4);
+});
