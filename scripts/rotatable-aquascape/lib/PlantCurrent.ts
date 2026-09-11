@@ -11,25 +11,26 @@ ${flutter?`attribute vec3 leafMotion;
 // A shared slow current carries individual blade bends and smaller tip ripples.
 // The petiole stays attached; local flexibility increases toward the free tip.
 vec4 leafBend(vec3 p){
- float phase=waterTime*leafMotion.z+leafMotion.x;
+ // Faster blade response rides a slow shared current, with no long near-static trough.
+ float phase=waterTime*leafMotion.z*1.55+leafMotion.x+.32*sin(waterTime*.43+plantRoot.x*.47+plantRoot.z*.71);
  float flowPhase=plantRoot.x*.47+plantRoot.z*.71;
- float surge=.70+.30*sin(waterTime*.37+flowPhase);
+ float surge=.85+.15*sin(waterTime*.37+flowPhase);
  float a=phase-p.y*.9,b=waterTime*.63+flowPhase-p.y*1.4,c=phase*2.7-p.y*4.5;
- float ripple=(.82*sin(a)+.18*sin(b)+.12*sin(c))*surge;
- float dr=(-.738*cos(a)-.252*cos(b)-.54*cos(c))*surge;
- float twist=.65*sin(phase*.81-p.y*.6+1.2)+.18*sin(phase*2.1-p.y*3.);
- float dt=-.39*cos(phase*.81-p.y*.6+1.2)-.54*cos(phase*2.1-p.y*3.);
+ float ripple=(1.08*sin(a)+.16*sin(b)+.10*sin(c))*surge;
+ float dr=(-.972*cos(a)-.224*cos(b)-.45*cos(c))*surge;
+ float twist=.48*sin(phase*.81-p.y*.6+1.2)+.12*sin(phase*2.1-p.y*3.);
+ float dt=-.288*cos(phase*.81-p.y*.6+1.2)-.36*cos(phase*2.1-p.y*3.);
  return vec4(ripple,dr,twist,dt);
 }
 vec3 animatedLeaf(vec3 p){
  vec4 bend=leafBend(p);
- p.z+=leafMotion.y*(bend.x*p.y*(.35+.65*p.y)+p.x*p.y*bend.z);
+ p.z+=leafMotion.y*(bend.x*p.y*(.65+.35*p.y)+p.x*p.y*bend.z);
  return p;
 }
 vec3 animatedLeafNormal(vec3 p,vec3 n){
  vec4 bend=leafBend(p);
  float dx=leafMotion.y*p.y*bend.z;
- float dy=leafMotion.y*((.35+1.3*p.y)*bend.x+p.y*(.35+.65*p.y)*bend.y+p.x*(bend.z+p.y*bend.w));
+ float dy=leafMotion.y*((.65+.7*p.y)*bend.x+p.y*(.65+.35*p.y)*bend.y+p.x*(bend.z+p.y*bend.w));
  return vec3(n.x-dx*n.z,n.y-dy*n.z,n.z);
 }
 `:''}
@@ -99,7 +100,7 @@ reflectedLight.directDiffuse += directLight.color * leafTransmissionTint * leafT
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v8-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v9-${flutter}-${material.type}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){

@@ -235,3 +235,12 @@ Stem colonies now vary the concentration of nodes near their tips, with addition
 The central red colonies now use plant-specific mature copper tones and lighter tips. A subset of broad-leaf shoots retains green lower growth. The previous HSL interpolation from green through yellow gave much of the mature growth an ochre cast. An initial uniformly red revision was rejected after visual review and softened into this mixed palette. These colors are an artistic match to the reference, not a calibrated botanical reconstruction. No new assets or paid services are used.
 
 The close three-quarter preview reported 60 fps / 6.6 ms synchronous render submission without browser errors. The light field was rebuilt against 6,403,819 triangles in 19.79 seconds. Six targeted lighting/tank-space checks and the production build pass. Exported geometry checks cover all 19,785 leaf instances at rest inside the physical tank volume; animated clearance is also reviewed visually. No fish behavior or controls changed. Full photographic fidelity remains unfinished.
+
+
+## More visible blade response and calmer studio lighting
+
+Leaf response is 55% faster with a slowly changing shared phase, stronger broad bending and a higher minimum current envelope. Flex extends farther down the blade while petiole positions remain fixed. Smaller tip ripples and torsion retain independent phase/rate variation; analytical normals and shadow deformation follow the same curve. Existing species-specific amplitude limits and glass-fitting allowances remain in place. Rest geometry and materials are unchanged, so the existing validated static diffuse field is retained. This is procedural animation rather than a fluid solver.
+
+The studio backdrop and fog now share a scene-linear blue-gray radiance. A small warm point light that produced a distracting pipe highlight is removed, and the floor is cooler. Production retains ACES tone mapping; the temporary developer AgX comparison is removed.
+
+Eight targeted tank-space, reflection and baked-field checks and the production build pass. Front and angled frames show changing leaf silhouettes; the angled preview reported 60 fps and 7.9 ms synchronous render submission without browser warnings/errors. No fish behavior, assets, dependencies or paid services changed. Full photographic fidelity remains unfinished.
