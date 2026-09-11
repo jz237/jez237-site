@@ -11,3 +11,12 @@ export function supportOnIce(r,p,dt,surface){
 
  const friction=Math.exp(-.09*dt);r.vx*=friction;r.vz*=friction;
 }
+
+// Leaning against a sliding hull cannot turn it, but can upset the rider.
+export function stepIceBalance(r,input,dt,onIce){
+ const speed=Math.hypot(r.vx,r.vz),steer=Math.max(0,(Math.abs(input.steer||0)-.35)/.65),moving=Math.max(0,Math.min(1,(speed-3)/6));
+ const strain=onIce&&!r.wipeout?steer*moving:0;
+ r.iceBalance=Math.max(0,Math.min(1.4,(r.iceBalance||0)+dt*(strain>0?strain*(.85+((r.iceBalance||0)>.4?(input.throttle||0)*.45:0)):-1.5)));
+ if(onIce){if(strain>0)r.iceLeanSide=Math.sign(input.steer);const target=-(r.iceLeanSide||1)*r.iceBalance*.65;r.hydro.roll+=(target-r.hydro.roll)*(1-Math.exp(-dt*12));}
+ return onIce&&r.iceBalance>=1.15;
+}

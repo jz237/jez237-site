@@ -24,6 +24,7 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
+ if(state.verifyIceBalance&&r.onIce&&!r.wipeout)return {...aiInput(state,r),throttle:1,steer:1};
  if(state.mode==='practice'){
   const ramp=state.course.ramps[0],v=r.playgroundVerification||=( {contact:false,airborne:false,landed:false,peak:0,done:false} );
   v.contact ||= r.hydro.onRamp;v.airborne ||= v.contact&&r.hydro.airborne;v.peak=Math.max(v.peak,r.hydro.y-r.hydro.waterHeight);

@@ -104,15 +104,15 @@ const glacier={
  boundary:glacierMap([[14,65],[235,55],[417,43],[348,124],[336,151],[310,181],[285,214],[257,248],[228,284],[225,306],[245,331],[276,348],[285,373],[280,396],[257,420],[202,458],[128,505],[68,534],[27,529],[15,503]]),
  buoysByClass:[glacierExpertBuoys,glacierExpertBuoys,glacierExpertBuoys,glacierReverseBuoys],
  name:'Glacier Coast',theme:'ice',tag:'07 / GLACIER COAST',layoutRevision:2,
- description:'Race around a long ice peninsula, through the narrow western straight and past floating ice on the eastern return. Line up before the ice: steering and propulsion return when you slide back into water.',
- anchors:glacierMap([[34,351],[33,306],[32,269],[31,235],[31,201],[31,166],[40,133],[64,113],[97,96],[147,95],[187,94],[214,85],[243,91],[281,96],[301,107],[306,122],[290,142],[267,163],[254,183],[232,203],[215,223],[211,250],[211,278],[211,307],[219,334],[223,359],[218,383],[204,409],[180,411],[161,424],[144,441],[125,456],[102,459],[78,447],[53,419],[37,390]]),
+ description:'Race around a long ice peninsula, through the narrow western straight and past floating ice on the eastern return. Line up before the ice and release hard steering to keep your balance. Water handling returns when you slide off.',
+ anchors:glacierMap([[34,351],[33,306],[32,269],[31,235],[31,201],[31,166],[40,133],[64,113],[97,96],[147,95],[187,94],[214,85],[243,91],[281,96],[301,107],[306,122],[290,142],[267,163],[254,183],[232,203],[215,223],[211,250],[211,278],[211,307],[219,334],[223,359],[218,383],[204,409],[180,411],[148,418],[138,425],[133,436],[123,443],[104,449],[78,447],[53,419],[37,390]]),
  ground(x,z){return clamp(Math.max(-polygonDistance(glacierLand,x,z),-polygonDistance(glacierNorth,x,z))*.85,-10,38);},
  iceSheets:[
   {id:'north-shelf',height:.45,approach:glacierMap([[207,84],[225,84],[325,105]]),reverseApproach:glacierMap([[340,112],[324,103],[221,90]]),outline:glacierMap([[231,62],[292,54],[353,57],[339,96],[307,110],[284,114],[275,103],[251,98],[229,97]])},
   {id:'south-1',height:.32,guideGate:5,reverseApproach:glacierMap([[191,420],[211,391]]),outline:glacierMap([[172,402],[183,400],[196,405],[187,417],[176,418],[163,412]])},
   {id:'south-2',height:.38,outline:glacierMap([[151,418],[162,424],[167,445],[157,458],[142,451],[138,438]])},
   {id:'south-3',height:.3,outline:glacierMap([[128,430],[143,439],[135,455],[123,461],[115,453]])},
-  {id:'south-4',height:.34,guideLevels:[0,1],guideGate:14,approach:glacierMap([[142,443],[95,443]]),outline:glacierMap([[112,447],[125,452],[121,467],[105,463],[101,453]])}
+  {id:'south-4',height:.34,outline:glacierMap([[112,447],[125,452],[121,467],[105,463],[101,453]])}
  ],
  obstacles:glacierIceBalls,
  raceRamps:[glacierRamp(130,59,256,0,-1,17,34),glacierRamp(131,49,207,0,-1,18,34),glacierRamp(132,57,161,0,-1,17,34),glacierRamp(133,185,312,0,1,16,17)],
