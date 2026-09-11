@@ -1,4 +1,4 @@
-import {surfStrength} from './surf-waves.js';
+import {surfStrength,surfSeed} from './surf-waves.js';
 import {courseWaveTrain} from './course-wave-train.js';
 import {makeFoamField} from './foam-field.js';
 import {wakeGLSL,wakeTrail} from './wake-field.js';
@@ -8,7 +8,7 @@ import {impactWaves,impactGLSL} from './surface-impulses.js';
 import * as T from './vendor/three.module.js';
 import {waterDetail,waterFragment} from './water-detail.js';
 import {WAVES,ground,wave,ROCKS,craftFields,waterLevel} from './simulation.js';
-export const shared={surfStrength,courseWaveTrain,seaLevel:waterLevel,time:{value:0},storm:{value:0}};
+export const shared={surfSeed,surfStrength,courseWaveTrain,seaLevel:waterLevel,time:{value:0},storm:{value:0}};
 export const skyColors={skyNight:{value:0},skyHorizon:{value:new T.Color(.53,.64,.66)},skyZenith:{value:new T.Color(.10,.27,.43)},skySun:{value:new T.Vector3(-.35,.25,-.90).normalize()}};
 const common=`uniform float seaLevel;uniform float time;uniform float storm;uniform vec4 craft;uniform float craftTurn;uniform vec4 craftSources[4];
 ${impactGLSL}

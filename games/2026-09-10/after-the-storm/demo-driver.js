@@ -7,12 +7,12 @@ export const DEMO_SCENES=[
  ['citadel','stunt'],['port','race'],['port','stunt'],['neon','race'],
  ['glacier','race'],['tempest','race'],['practice','race']
 ];
-export function createDemoScene(index=0){
+export function createDemoScene(index=0,waveSeed=17){
  const [course,mode]=DEMO_SCENES[((index%DEMO_SCENES.length)+DEMO_SCENES.length)%DEMO_SCENES.length];
- const s=createRace({seaState:mode==='race'?'surf':'course',course:getCourse(course,0),mode,rider:0,difficulty:0,laps:3});
+ const s=createRace({waveSeed,seaState:mode==='race'?'surf':'course',course:getCourse(course,0),mode,rider:0,difficulty:0,laps:3});
  s.demoRun=true;
  // Exhibition starts at full engine power for the entire pack.
- for(const r of s.racers)r.power=5;
+ for(const r of s.racers){r.power=5;if(s.course.passage?.kind==='jump-dive')r.passageRoute='outer';}
  return s;
 }
 export function demoSceneDone(s){return s.phase==='results'||s.time>=150||(s.mode!=='stunt'&&s.racers[0].lap>1);}
