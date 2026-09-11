@@ -1,7 +1,7 @@
 import * as T from 'three';
 
 /** Close-up construction in assembly coordinates, before remounting and batching. */
-export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube,mesh,screw,m,mat}){
+export function addFinish({robotron=false,root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube,mesh,screw,m,mat}){
  const oxide=mat('oxidized_recess','#555b41',.32,.91);
  const scuff=mat('contact_scuff','#737365',.35,.61);
  const fiber=mat('exposed_particleboard','#92734d',0,.96);
@@ -29,7 +29,7 @@ export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube
  mesh(joy,grip,polished,[0,.15,0]);
  ring(joy,.011,.0015,[0,.006,0],m.trim,[Math.PI/2,0,0]);
  // Concentric scratches and short broken scuffs cluster around the button rims.
- const controls=[[-.36,.73],[.32,.49],[.46,.49],[.24,.65],[0,.80],[-.12,.46],[.12,.46]];
+ const controls=robotron?[[.52,.49],[.52,.67]]:[[-.36,.73],[.32,.49],[.46,.49],[.24,.65],[0,.80],[-.12,.46],[.12,.46]];
  controls.forEach(([x,z],i)=>{
   for(let j=0;j<5;j++){
    const points=[];const r=.046+j*.0013;
@@ -84,7 +84,7 @@ export function addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube
   box(g,[.064,.010,.002],[x,y+.003,z+.014],m.paper,0,name+'_pins');
   for(let i=0;i<4;i++)box(g,[.005,.012,.003],[x-.028+i*.018,y-.012,z+.014],m.brass,0);
  }
- for(const [i,z]of [[0,-.084],[1,.084]]){box(cp,[.075,.004,.022],[-.48,1.536,.57+z],m.brass,0,'joystick_contact_'+i);box(cp,[.075,.004,.022],[-.48,1.528,.57+z],m.brass,0);}
+ for(const [i,z]of (robotron?[]:[[0,-.084],[1,.084]])){box(cp,[.075,.004,.022],[-.48,1.536,.57+z],m.brass,0,'joystick_contact_'+i);box(cp,[.075,.004,.022],[-.48,1.528,.57+z],m.brass,0);}
  box(coin,[.060,.003,.025],[.158,.929,.392],m.brass,0,'coin_credit_contact');
  root.userData.finishDetails={version:1,areas:['controls','crt','cabinet-edges','coin-door','marquee','interior','electronics'],copperRouting:'Illustrative routing between populated footprints; not original copper artwork.'};
 }
