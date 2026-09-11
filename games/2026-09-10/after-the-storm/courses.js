@@ -1,4 +1,4 @@
-import {CLASSIC_COURSES} from './classic-courses.js';
+import {CLASSIC_COURSES,polygonDistance} from './classic-courses.js';
 import {configurePassage,passageDistance} from './course-passages.js';
 import {tideLevel} from './course-environment.js';
 // Course geometry is shared by navigation, collision, terrain and presentation.
@@ -33,11 +33,11 @@ export function terrainHeight(course,x,z){if(CLASSIC_COURSES[course.id])return C
  return Math.min(theme==='ice'?65:theme==='lake'?45:22,h)+erosion*clamp((d-45)/24,0,1);
 }
 export const COURSES=definitions.map(original=>{const d={...original,...CLASSIC_COURSES[original.id]};return {...d,gates:buildGates(sampleRoute(d.anchors)),rocks:[],laps:3};});
-export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c=>c.id===id)||COURSES[0],reverse=difficulty===3,level=Math.min(2,difficulty);let points=sampleRoute(base.anchors,24+level*4);if(reverse)points=[points[0],...points.slice(1).reverse()];
- let route=sampleRoute(base.anchors,384);if(reverse)route=[route[0],...route.slice(1).reverse()];const course={...base,difficulty,reverse,route,gates:buildGates(points,level),rocks:[...(base.obstacles||[]),...(level?(base.extraObstacles||[]).slice(0,level===1?4:99):[])].map(o=>({...o})),ramps:(base.raceRamps||[]).map(r=>({...r,tx:reverse?-r.tx:r.tx,tz:reverse?-r.tz:r.tz}))};
+export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c=>c.id===id)||COURSES[0],reverse=difficulty===3,level=Math.min(2,difficulty),anchors=level===2&&base.expertAnchors?base.expertAnchors:base.anchors;let points=sampleRoute(anchors,24+level*4);if(reverse)points=[points[0],...points.slice(1).reverse()];
+ let route=sampleRoute(anchors,384);if(reverse)route=[route[0],...route.slice(1).reverse()];const course={...base,anchors,closedAreas:level===2?base.expertClosedAreas||[]:[],requiredPassage:level===2&&!!base.expertAnchors,difficulty,reverse,route,gates:buildGates(points,level),rocks:[...(base.obstacles||[]),...(level?(base.extraObstacles||[]).slice(0,level===1?4:99):[])].map(o=>({...o})),ramps:(base.raceRamps||[]).map(r=>({...r,tx:reverse?-r.tx:r.tx,tz:reverse?-r.tz:r.tz}))};
  // Navigation obstacles grow with difficulty, but keep a safe central racing line.
  for(let i=3;!CLASSIC_COURSES[id]&&i<course.gates.length;i+=level===2?3:5){const g=course.gates[i],side=i%2?1:-1;course.rocks.push({x:g.x+g.tz*side*(15-level),z:g.z-g.tx*side*(15-level),r:level?1.6:1.1,type:base.theme==='ice'?'ice':base.theme==='lake'?'post':'float'});}
- configurePassage(course);const passageFloor=(x,z)=>course.passage?-5.8+Math.max(0,passageDistance(course.passage,x,z)-course.passage.width-2)*.8:Infinity;course.ground=(x,z)=>Math.min(terrainHeight(course,x,z),passageFloor(x,z));if(base.renderGround)course.renderGround=(x,z)=>Math.min(base.renderGround(x,z),passageFloor(x,z));return course;
+ configurePassage(course);const passageFloor=(x,z)=>course.passage?-5.8+Math.max(0,passageDistance(course.passage,x,z)-course.passage.width-2)*.8:Infinity;const closure=(x,z)=>course.closedAreas.some(area=>polygonDistance(area,x,z)<0)?6:-Infinity;course.ground=(x,z)=>Math.max(closure(x,z),Math.min(terrainHeight(course,x,z),passageFloor(x,z)));if(base.renderGround)course.renderGround=(x,z)=>Math.min(base.renderGround(x,z),passageFloor(x,z));return course;
 }
 export function conditions(course,time,lap=1){const rising=course.id==='tempest'?Math.min(.5,(lap-1)*.20+time*.0005):Math.sin(time*.018)*.035;return {seaLevel:tideLevel(course,time),storm:clamp(course.storm+rising,0,1),fog:course.theme==='lake'?Math.max(.003,.017-time*.00011):course.theme==='ice'?.0035:course.theme==='city'?.002:.0018,night:course.theme==='city'};}
 export const CIRCUITS=[['greyhaven','amber','reed','citadel','port','tempest'],['greyhaven','amber','reed','citadel','port','neon','tempest'],['greyhaven','amber','reed','citadel','port','neon','glacier','tempest']];

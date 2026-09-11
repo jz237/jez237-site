@@ -57,3 +57,11 @@ test('Port Blue preserves the tanker, dock basin and narrow winding inner channe
  assert.ok(c.shipOutline.length>8);assert.ok(c.passage.continuous);assert.ok(c.passage.structurePath.length>8);
  for(const q of c.passage.path)assert.ok(c.ground(q.x,q.z)<-3);
 });
+
+test('Port Blue closes the outer dock route on Expert and Reverse, retaining the Hard choice',()=>{
+ const north={x:(260-220)*.8,z:(85-285)*.8},south={x:(365-220)*.8,z:(305-285)*.8};
+ for(let d=0;d<4;d++){const c=getCourse('port',d);for(const q of [north,south])assert.ok(d<2?c.ground(q.x,q.z)<-.5:c.ground(q.x,q.z)>5);
+  assert.equal(c.requiredPassage,d>=2);if(d>=2){assert.ok(c.anchors.some(([x,z])=>Math.hypot(x-(216-220)*.8,z-(203-285)*.8)<.1));assert.equal(c.passage.branchGates,undefined);}
+ }
+ const c=getCourse('port',2),s=createRace({mode:'time',course:c}),r=s.racers[0];s.phase='running';r.x=north.x;r.z=north.z;r.hydro.initialized=true;r.hydro.y=0;r.hydro.vy=0;stepRace(s,{throttle:1},1/60);assert.ok(r.collision>0);
+});

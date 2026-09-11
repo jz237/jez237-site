@@ -14,14 +14,14 @@ export function configurePassage(course){
  if(authored){p.structurePath=authored.structure.map(([x,z])=>({x,z}));p.continuous=!!authored.continuous;}
  let i=(first+1)%course.gates.length;
  while(i!==last){p.indices.push(i);const g=course.gates[i];g.side=0;if(!authored){g.tx=(b.x-a.x)/Math.hypot(b.x-a.x,b.z-a.z);g.tz=(b.z-a.z)/Math.hypot(b.x-a.x,b.z-a.z);g.width=65;}g.channel=true;g.bx=g.x;g.bz=g.z;i=(i+1)%course.gates.length;}
- if(authored){p.branchGates={};p.indices.forEach((index,i)=>p.branchGates[index]={...passagePoint(path,(i+1)/(p.indices.length+1)),side:0,width:p.width+2,channel:true});}
+ if(authored&&!course.requiredPassage){p.branchGates={};p.indices.forEach((index,i)=>p.branchGates[index]={...passagePoint(path,(i+1)/(p.indices.length+1)),side:0,width:p.width+2,channel:true});}
  course.passage=p;
  if(!authored)course.rocks=course.rocks.filter(q=>passageDistance(p,q.x,q.z)>p.width+4);
 }
 export function passageOpening(p,time,openedAt=Infinity){if(!p?.enabled)return 0;if(p.kind==='tunnel')return 1;return clamp((time-openedAt)/3,0,1);}
 export function passageTarget(s,r){
  const g=s.course.gates[r.next],p=s.course.passage;
- if(s.mode==='stunt'||r.passageRoute==='outer'||!p||!(p.indices.includes(r.next)||r.next===p.first)||passageOpening(p,s.time,s.passageOpenedAt)<.98)return g;
+ if(s.course.requiredPassage||s.mode==='stunt'||r.passageRoute==='outer'||!p||!(p.indices.includes(r.next)||r.next===p.first)||passageOpening(p,s.time,s.passageOpenedAt)<.98)return g;
  if(p.branchGates)return p.branchGates[r.next]||g;
  // Intersection with the original checkpoint plane: no progress is granted here.
  const a=p.path[0],b=p.path.at(-1),dx=b.x-a.x,dz=b.z-a.z,den=dx*g.tx+dz*g.tz;
