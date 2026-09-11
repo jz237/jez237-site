@@ -7,7 +7,7 @@ import {createRace,stepRace} from '../race-core.js';
 import {createHydro,stepHydro} from '../hydrodynamics.js';
 
 test('ebb changes navigable depth smoothly without a step at lap boundaries',()=>{
- const c=getCourse('tempest'),bottom=c.ground(101,72);
+ const c=getCourse('tempest'),bottom=c.ground(118.4,100);
  assert.ok(tideLevel(c,0)-bottom>.4);
  assert.ok(tideLevel(c,160)<bottom);
  let previous=tideLevel(c,0);
@@ -26,7 +26,7 @@ test('hull settles on the changing wave datum and restarting restores high water
  createState();assert.equal(waterLevel.value,0);
 });
 test('the same reef can be crossed at high water but stops a hull at low water',()=>{
- function crossing(time){const s=createRace({mode:'practice',course:getCourse('tempest')});s.phase='running';s.time=time;const r=s.racers[0];r.x=101;r.z=72;r.vz=3;stepRace(s,{},1/60);return r;}
+ function crossing(time){const s=createRace({mode:'practice',course:getCourse('tempest')});s.phase='running';s.time=time;const r=s.racers[0];r.x=118.4;r.z=100;r.vz=3;stepRace(s,{},1/60);return r;}
  assert.equal(crossing(0).collision,0);
  assert.ok(crossing(160).collision>0);
 });

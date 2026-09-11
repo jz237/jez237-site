@@ -77,7 +77,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   for(let i=0;i<20;i++){const a=random()*Math.PI*2,x=Math.sin(a)*185,z=Math.cos(a)*185;if(course.ground(x,z)>0)rock(x,z,3+random()*7);}
   if(theme==='coast'){const x=0,z=-30,y=course.ground(x,z);cylinder(x,y+12,z,4,24,white);for(let j=0;j<8;j++)cylinder(x+Math.sin(j*.785)*4.2,y+25,z+Math.cos(j*.785)*4.2,.12,3,steel);add(new T.ConeGeometry(5.5,3,16),steel,x,y+28,z);cylinder(x,y+24,z,4.7,.6,black);}
   if(theme==='resort'){for(let i=0;i<7;i++){const x=-30+i*14,z=170,y=building(x,z,11,12,5,white);if(y){add(new T.ConeGeometry(9,4,4),wood,x,y+7,z).rotation.y=Math.PI/4;box(x,y+2.8,z-6.1,6,2.5,.1,glass);}}for(let i=0;i<12;i++){const x=110+i%4*10,z=130+Math.floor(i/4)*11,y=course.ground(x,z);if(y>1){cylinder(x,y+2,z,.05,4,steel);add(new T.ConeGeometry(3.2,.7,12),i%2?white:yellow,x,y+4,z);box(x+1,y+.4,z+2,1,.25,3,wood);}}}
-  if(theme==='island'){for(let i=0;i<6;i++){const a=i*1.04,x=Math.sin(a)*22,z=Math.cos(a)*24,y=building(x,z,8,7,3,wood);if(y)add(new T.ConeGeometry(6.5,3,5),sand,x,y+5,z);}rock(0,-10,12);}
+  if(theme==='island'){for(let i=0;i<6;i++){const a=i*1.04,x=Math.sin(a)*22,z=Math.cos(a)*24,y=building(x,z,8,7,3,wood);if(y)add(new T.ConeGeometry(6.5,3,5),sand,x,y+5,z);}if(course.ground(0,-10)>2)rock(0,-10,12);}
   if(theme==='park'){for(let i=0;i<4;i++)pier(-100+i*16,105,0,15);label('PELICAN PARK / TRAINING WATER',-65,9,118,35);for(let i=0;i<10;i++){const x=-110+i*22,z=145,y=building(x,z,6,7,3,i%2?white:yellow);if(y)box(x,y+4,z,7,.3,8,steel);}}
  }
  if(theme==='lake'){
@@ -142,7 +142,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   label(passage.kind==='gate'?(passage.enabled?'SLUICE / OPENS LAP 2':'SLUICE CLOSED'):(passage.enabled?'SHORT CHANNEL / LOW ROOF':'SERVICE CHANNEL CLOSED'),0,7.2,length*.32-.08,w*1.8,g).rotation.y=Math.PI;
   label('MAIN CHANNEL →',-w-7,3,length*.29,10,g).rotation.y=Math.PI;for(const side of [-1,1])box(-w-7+side*3.8,-2,length*.29,.12,10,.12,steel,g);
  }
- for(const b of course.crossbars||[]){const g=new T.Group();g.position.set(b.x,0,b.z);g.rotation.y=Math.atan2(b.tx,b.tz);root.add(g);box(0,(b.bottom+b.top)/2,0,b.depth,b.top-b.bottom,b.length,stone,g);
+ for(const b of course.crossbars||[]){const g=new T.Group();g.position.set(b.x,0,b.z);g.rotation.y=Math.atan2(b.tx,b.tz);root.add(g);box(0,(b.bottom+b.top)/2,0,b.depth,b.top-b.bottom,b.length,b.material==='wood'?wood:stone,g);
   for(let z=-b.length/2+1;z<b.length/2;z+=2.5)box(-b.depth/2-.02,b.top-.12,z,.04,.16,1.2,yellow,g);
  }
  // Merge static scenery by material. Thousands of windows/leaves become a few draw calls.
