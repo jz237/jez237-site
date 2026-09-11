@@ -162,3 +162,11 @@ Long sword blades now flex farther, while thicker anubias leaves remain calmer. 
 The old geometric moss tufts were replaced by twelve original curved shoots from Poly Haven's CC0 Moss 01 by Rob Tuytel, scattered on the actual bark and rock surfaces with independent anchored tip motion. Original color, normal, roughness and alpha maps are bundled locally with source URLs and verified checksums. These fixed curved cutout meshes never face the camera automatically. The terrestrial source is an ornamental artistic adaptation, not an exact aquatic moss species.
 
 The static single-bounce lighting field was rebuilt against 5,420,778 triangles. Alpha-cut moss and fern shoots are excluded from that bake; their live direct shadows remain active. All 35 tests and the production build pass, including source-file integrity and lighting provenance checks. Photographic parity remains unfinished. No money was spent and no dependencies were added.
+
+## Layered mature planting and fine foreground grass
+
+Mature stem leaves now spread closer to horizontal, while the growing tips remain compact and upright. Internode density varies between plants, with more side shoots filling the middle layer. The red colonies use a softer copper tone rather than the previous saturated pink. These are artistic growth patterns, not exact botanical reconstructions.
+
+Three irregular foreground patches add thin, tapered, curved grass blades alongside the rounded carpet. Each tuft has varied length, lean and density; the existing leaf animation keeps individual blades moving from fixed roots. The sand channel remains open and all leaves retain their geometry when viewed from the side.
+
+Front and enlarged three-quarter views were compared visually with the reference. The close preview reported 60 fps and 5.3 ms synchronous render submission here, with no browser errors. The diffuse field was rebuilt against 6,324,802 triangles; all 35 tests and the production build pass. Added geometry may cost more on other devices. No assets, dependencies or paid services were introduced. Fish behavior is unchanged. The scene still differs from the photograph in fine plant structure, lighting and overall material richness, so the realism goal remains active.
