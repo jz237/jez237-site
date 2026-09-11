@@ -5,17 +5,24 @@ import {boardLayouts} from './hardware-layout.mjs';
 // Electronics are batched per board/material; small parts do not each cost a draw call.
 export function addHardware({root,part,box,cyl,tube,ring,screw,m,mesh,mat}){
  const labelSets={};
+ const bands=[m.ink,m.redwire,m.brass];
+ const solder=mat('solder_joint','#a4a8a0',.78,.35);
+ const copperTrack=mat('illustrative_copper','#527451',.30,.65);
  const batch=g=>{g.updateMatrixWorld(true);const bins=new Map();for(const o of [...g.children])if(o.isMesh&&!o.name){const key=o.material.uuid;const items=bins.get(key)||[];items.push(o);bins.set(key,items);}for(const items of bins.values()){if(items.length<2)continue;const geometries=items.map(o=>{const a=o.geometry.clone().applyMatrix4(o.matrix);return a.index?a.toNonIndexed():a;});const merged=mergeGeometries(geometries,false);items.forEach(o=>g.remove(o));mesh(g,merged,items[0].material);geometries.forEach(x=>x.dispose());}};
  const labels=(g,id)=>{const material=mat('hardware_labels_'+id,{cpu:'#fffefe',rom:'#fefffe',interface:'#fefeff',sound:'#fffffe',power:'#feffff'}[id],0,.88);const entries=[];labelSets[id]=entries;return (text,w,h,x,y,z,rotation=0,red=false)=>{const index=entries.length;entries.push({text,red});const geo=new T.PlaneGeometry(w,h);const uv=geo.attributes.uv;for(let k=0;k<uv.count;k++)uv.setXY(k,((index%8)+uv.getX(k))/8,1-(Math.floor(index/8)+1-uv.getY(k))/16);const plane=mesh(g,geo,material,[x,y,z]);plane.rotation.z=rotation;};};
- const pin=(g,x,y,z)=>{box(g,[.002,.0028,.010],[x,y,z],m.zinc,0);ring(g,.0025,.0005,[x,y,.009],m.brass,[0,0,0],8);};
+ const pin=(g,x,y,z)=>{box(g,[.002,.0028,.010],[x,y,z],m.zinc,0);mesh(g,new T.RingGeometry(.0018,.0028,8),m.brass,[x,y,.009]);const joint=mesh(g,new T.ConeGeometry(.0022,.0014,6),solder,[x,y,-.004]);joint.rotation.x=-Math.PI/2;};
  const header=(g,entry,width,height,label)=>{const {u,v,n,ref,rotation=0}=entry;const x=(u-.5)*width,y=(.5-v)*height,h=new T.Group();h.position.set(x,y,.008);h.rotation.z=rotation;g.add(h);const rows=n>=20?2:1,cols=n/rows,pitch=.007;box(h,[cols*pitch+.011,rows*.008+.008,.015],[0,0,.0075],m.ivory,.001);for(let r=0;r<rows;r++)for(let k=0;k<cols;k++)box(h,[.002,.002,.018],[(k-(cols-1)/2)*pitch,(r-(rows-1)/2)*.008,.014],m.zinc,0);batch(h);label(ref,.055,.011,x,y+.019,.010);};
  function dip(g,c,label){const {family,ref,pins,u,v,rotation=0,socket=false,empty=false,red=false}=c;const {width,height}=g.userData;const x=(u-.5)*width,y=(.5-v)*height;const pitch=.0065,length=(pins/2-1)*pitch+.010,bw=pins>=22?.031:.017;const chip=new T.Group();chip.position.set(x,y,0);chip.rotation.z=rotation;g.add(chip);
   if(socket){box(chip,[bw+.012,length+.008,.008],[0,0,.012],m.trim,.001);for(const sign of [-1,1])for(let p=0;p<pins/2;p++)box(chip,[.002,.003,.002],[sign*(bw/2+.004),(p-(pins/2-1)/2)*pitch,.017],m.brass,0);}
-  if(!empty){const z=socket?.021:.014;box(chip,[bw,length,.009],[0,0,z],m.chip,.0015);for(const sign of [-1,1])for(let p=0;p<pins/2;p++)pin(chip,sign*(bw/2+.003),(p-(pins/2-1)/2)*pitch,z-.004);cyl(chip,.002,.0006,[-bw*.24,length*.38,z+.0048],m.ivory,[Math.PI/2,0,0],'',8);label([family,ref].join('|'),length-.003,bw*.82,x,y,z+.005,rotation-Math.PI/2,red);}else label('IC5|UNPOPULATED',length,.018,x,y,.018,rotation-Math.PI/2);
+  if(!empty){const z=socket?.021:.014;box(chip,[bw,length,.009],[0,0,z],m.chip,.0015);for(const sign of [-1,1])for(let p=0;p<pins/2;p++)pin(chip,sign*(bw/2+.003),(p-(pins/2-1)/2)*pitch,z-.004);const notch=mesh(chip,new T.TorusGeometry(bw*.20,.0008,4,12,Math.PI),m.ink,[0,length/2-.001,z+.0049]);notch.rotation.z=Math.PI;
+  cyl(chip,.002,.0006,[-bw*.24,length*.38,z+.0048],m.ivory,[Math.PI/2,0,0],'',8);label([family,ref].join('|'),length-.003,bw*.82,x,y,z+.005,rotation-Math.PI/2,red);}else label('IC5|UNPOPULATED',length,.018,x,y,.018,rotation-Math.PI/2);
   batch(chip);
  }
- function capacitor(g,x,y,r=.006,h=.019){cyl(g,r,h,[x,y,.008+h/2],m.blue,[Math.PI/2,0,0],'',10);cyl(g,r*.83,.0008,[x,y,.008+h],m.zinc,[Math.PI/2,0,0],'',10);box(g,[r*1.4,.0007,.001],[x,y,.009+h],m.ink,0);}
- function axial(g,x,y){cyl(g,.0027,.011,[x,y,.015],m.amber,[0,0,Math.PI/2],'',8);box(g,[.023,.001,.001],[x,y,.012],m.zinc,0);}
+ function capacitor(g,x,y,r=.006,h=.019,label){cyl(g,r,h,[x,y,.008+h/2],m.blue,[Math.PI/2,0,0],'',10);cyl(g,r*.83,.0008,[x,y,.008+h],m.zinc,[Math.PI/2,0,0],'',10);box(g,[r*1.4,.0007,.001],[x,y,.009+h],m.ink,0);box(g,[.001,r*1.2,.001],[x,y,.009+h],m.ink,0);
+  box(g,[r*.28,r*.85,h*.80],[x+r*.77,y,.008+h/2],m.ivory,0);
+  for(const dx of [-r*.4,r*.4])cyl(g,.0018,.002,[x+dx,y,-.004],solder,[Math.PI/2,0,0],'',8);
+  if(label)label('ELECTROLYTIC|NEGATIVE STRIPE',r*1.6,r*.9,x,y,.010+h);}
+ function axial(g,x,y){cyl(g,.0027,.011,[x,y,.015],m.amber,[0,0,Math.PI/2],'',8);box(g,[.023,.001,.001],[x,y,.012],m.zinc,0);for(let i=0;i<3;i++)cyl(g,.00285,.0012,[x-.0035+i*.0035,y,.015],bands[i],[0,0,Math.PI/2],'',8);for(const dx of [-.010,.010])cyl(g,.002,.001,[x+dx,y,-.004],solder,[Math.PI/2,0,0],'',8);}
  const logic=part('logic'),tray=new T.Group();tray.name='board_tray';logic.add(tray);tray.position.set(-.57,1.90,-.17);tray.rotation.set(0,Math.PI/2,Math.PI/2);
  const placements={cpu:[.64,0,Math.PI/2],rom:[-.055,-.20,0],interface:[-.075,.37,0],sound:[-.80,-.26,0]};
  for(const [id,layout]of Object.entries(boardLayouts)){
@@ -25,7 +32,9 @@ export function addHardware({root,part,box,cyl,tube,ring,screw,m,mesh,mat}){
   for(const c of layout.chips)dip(g,c,label);
   for(const e of layout.headers)header(g,e,w,h,label);
   // Decoupling footprints follow the assembly drawing: one above each CPU IC.
-  // Traces are deliberately omitted until copper artwork can establish their routes.
+  // Short pad fan-outs are illustrative, not a reproduction of unverified copper artwork.
+  for(const c of layout.chips.filter(c=>!c.empty)){const px=(c.u-.5)*w,py=(.5-c.v)*h;for(const sign of [-1,1]){const yy=py+sign*.010;box(g,[.019,.0013,.0005],[px+sign*.023,yy,.0035],copperTrack,0);box(g,[.0013,.014,.0005],[px+sign*.032,yy+sign*.006,.0035],copperTrack,0);ring(g,.0023,.0006,[px+sign*.032,yy+sign*.013,.004],m.brass,[0,0,0],8);}}
+  g.userData.copperRouting='Illustrative pad fan-outs; not original copper artwork.';
   if(id==='cpu'){
    for(const c of layout.chips){const px=(c.u-.5)*w,py=(.5-c.v)*h+(c.pins/2-1)*.0065/2+.014;axial(g,px,py);}
    for(let i=0;i<3;i++){const bx=.30+i*.055;box(g,[.045,.171,.012],[bx,-.28,.009],m.trim,.002);cyl(g,.020,.136,[bx,-.28,.034],m.ivory,[0,0,0],'',12);for(const by of [-.353,-.207])box(g,[.035,.009,.028],[bx,by,.023],m.zinc,.001);label('AA 1.5V',.10,.018,bx,-.28,.055,Math.PI/2);}
@@ -37,7 +46,7 @@ export function addHardware({root,part,box,cyl,tube,ring,screw,m,mesh,mat}){
    for(let i=0;i<4;i++){cyl(g,.004,.007,[.135+i*.016,.205,.012],m.red,[Math.PI/2,0,0],'',10);axial(g,.135+i*.016,.238);}
    capacitor(g,-.21,.055,.011,.020);
   }else{
-   for(const [px,py,rr,hh]of [[.155,-.114,.025,.052],[.205,-.114,.032,.065],[.115,.124,.012,.035],[.145,.124,.012,.035]])capacitor(g,px,py,rr,hh);
+   for(const [px,py,rr,hh]of [[.155,-.114,.025,.052],[.205,-.114,.032,.065],[.115,.124,.012,.035],[.145,.124,.012,.035]])capacitor(g,px,py,rr,hh,label);
    for(const fx of [.185,.224]){cyl(g,.005,.083,[fx,.105,.016],m.glass,[0,0,0],'',12);for(const fy of [.061,.149])box(g,[.014,.008,.015],[fx,fy,.014],m.zinc,.001);box(g,[.001,.080,.001],[fx,.105,.016],m.copper,0);}
    label('F1 / F2  4A SB',.10,.009,.195,.17,.006);
    box(g,[.043,.027,.020],[.18,-.00,.015],m.chip,.002);label('7805',.041,.012,.18,0,.026);
@@ -54,7 +63,7 @@ export function addHardware({root,part,box,cyl,tube,ring,screw,m,mesh,mat}){
  const supply=new T.Group();supply.name='supply_board';power.add(supply);supply.position.set(-.15,.88,-.40);const pl=labels(supply,'power');
  box(supply,[.66,.49,.006],[0,0,0],m.pcb,.001);for(const [x,y,w,h]of [[-.16,.036,.266,.330],[.19,-.13,.204,.18]]){box(supply,[w,h,.011],[x,y,.018],m.zinc,.001);for(let k=0;k<8;k++)box(supply,[w,.003,.035],[x,y-h*.44+k*h*.88/7,.034],m.zinc,0);const caseBody=mesh(supply,new T.SphereGeometry(.024,16,8),m.zinc,[x,y,.046]);caseBody.scale.set(1,.75,.5);for(const dx of [-.037,.037])screw(supply,[x+dx,y,.033],'z',.004);}
  for(let i=0;i<5;i++){const y=.203-i*.032;cyl(supply,.004,.075,[.202,y,.015],m.glass,[0,0,Math.PI/2],'',12);box(supply,[.075,.001,.001],[.202,y,.015],m.copper,0);for(const x of [.160,.244])box(supply,[.009,.014,.019],[x,y,.014],m.zinc,.001);pl('F'+[1,2,3,5,4][i],.016,.008,.27,y,.004);}
- capacitor(supply,.040,.024,.034,.060);pl('C12',.035,.010,.04,-.024,.005);
+ capacitor(supply,.040,.024,.034,.060,pl);pl('C12',.035,.010,.04,-.024,.005);
  for(const [x,text]of [[-.27,'+5V'],[-.14,'+12V'],[-.04,'-5V']]){cyl(supply,.004,.005,[x,-.174,.009],m.red,[Math.PI/2,0,0],'',10);pl(text,.036,.010,x,-.188,.006);}
  for(const [x,y,n,ref]of [[.31,.095,12,'4J1'],[-.13,-.223,15,'4J2'],[.31,-.175,6,'4J3']])header(supply,{u:x/.66+.5,v:.5-y/.49,n,ref,rotation:ref==='4J2'?0:Math.PI/2},.66,.49,pl);
  pl('D8359 LINEAR SUPPLY',.31,.013,0,.233,.004);for(const x of [-.31,.31])for(const y of [-.225,.225])screw(supply,[x,y,.005],'z',.005);

@@ -2,6 +2,7 @@ import * as T from 'three';
 import {addHardware} from './model-hardware.mjs';
 import {cabinetProfile} from './cabinet-profile.mjs';
 import {addMonitor} from './model-monitor.mjs';
+import {addFinish} from './model-finish.mjs';
 import {RoundedBoxGeometry} from 'three/addons/geometries/RoundedBoxGeometry.js';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
@@ -49,7 +50,7 @@ export function buildDetailedCabinet(){
  const bezelShape=new T.Shape();bezelShape.moveTo(-.75,-.615);bezelShape.lineTo(.75,-.615);bezelShape.lineTo(.75,.615);bezelShape.lineTo(-.75,.615);bezelShape.closePath();const aperture=new T.Path();aperture.moveTo(-.498,-.374);aperture.lineTo(-.498,.374);aperture.lineTo(.498,.374);aperture.lineTo(.498,-.374);aperture.closePath();bezelShape.holes.push(aperture);mesh(crt,new T.ExtrudeGeometry(bezelShape,{depth:.006,bevelEnabled:false}),mat('bezel_face','#050605',0,.97),[0,2.26,.474],'monitor_bezel');
  const cp=part('controls');box(cp,[1.35,.1,.565],[0,1.655,.594],m.raw);box(cp,[1.36,.026,.574],[0,1.72,.599],m.black);const cpFace=mesh(cp,new T.PlaneGeometry(1.29,.505),mat('control_print','#fff',.12,.68),[0,1.739,.611],'control_print');cpFace.rotation.x=-Math.PI/2;box(cp,[1.35,.11,.034],[0,1.658,.889],m.black);box(cp,[1.32,.008,.017],[0,1.716,.911],m.zinc);
  const joystick=new T.Group();joystick.name='joystick';joystick.position.set(-.48,1.746,.57);cp.add(joystick);box(cp,[.052,.012,.155],[-.48,1.749,.57],m.trim,.006);box(cp,[.025,.008,.12],[-.48,1.758,.57],m.ink,.003);cyl(joystick,.009,.14,[0,.07,0],m.steel);mesh(joystick,new T.SphereGeometry(.044,24,16),m.red,[0,.15,0]);
- for(const [i,x,z,color]of [[0,-.36,.73,m.ivory],[1,.32,.49,m.ivory],[2,.46,.49,m.ivory],[3,.24,.65,m.green],[4,0,.80,m.ivory],[5,-.12,.46,m.red],[6,.12,.46,m.red]]){cyl(cp,.043,.012,[x,1.746,z],color);ring(cp,.035,.002,[x,1.756,z],m.trim,[Math.PI/2,0,0]);mesh(cp,new T.LatheGeometry([[0,.002],[.019,.002],[.026,.005],[.030,.009],[.032,.007],[.032,-.012],[0,-.012]].map(([r,y])=>new T.Vector2(r,y)),32),color,[x,1.769,z],'button_'+i);cyl(cp,.034,.12,[x,1.61,z],m.ivory);box(cp,[.1,.014,.055],[x,1.54,z],m.ink);box(cp,[.11,.004,.025],[x,1.515,z],m.brass,0,'leaf_'+i);box(cp,[.11,.004,.025],[x,1.507,z],m.brass,0);cyl(cp,.008,.016,[x+.033,1.511,z],m.steel);tube(cp,[[x,1.53,z-.022],[x+.03,1.44,z-.04],[x-.02,1.39,.3]],.004,m.yellowwire,10);}
+ for(const [i,x,z,color]of [[0,-.36,.73,m.ivory],[1,.32,.49,m.ivory],[2,.46,.49,m.ivory],[3,.24,.65,m.green],[4,0,.80,m.ivory],[5,-.12,.46,m.red],[6,.12,.46,m.red]]){cyl(cp,.043,.012,[x,1.746,z],color);ring(cp,.035,.002,[x,1.756,z],m.trim,[Math.PI/2,0,0]);mesh(cp,new T.LatheGeometry([[0,-.001],[.008,-.0005],[.018,.001],[.025,.004],[.029,.009],[.031,.010],[.032,.007],[.032,-.012],[0,-.012]].map(([r,y])=>new T.Vector2(r,y)),32),color,[x,1.769,z],'button_'+i);cyl(cp,.034,.12,[x,1.61,z],m.ivory);box(cp,[.1,.014,.055],[x,1.54,z],m.ink);box(cp,[.11,.004,.025],[x,1.515,z],m.brass,0,'leaf_'+i);box(cp,[.11,.004,.025],[x,1.507,z],m.brass,0);cyl(cp,.008,.016,[x+.033,1.511,z],m.steel);tube(cp,[[x,1.53,z-.022],[x+.03,1.44,z-.04],[x-.02,1.39,.3]],.004,m.yellowwire,10);}
  for(const x of [-.61,.61])for(const z of [.39,.83])screw(cp,[x,1.752,z],'y');box(cp,[.12,.08,.2],[-.48,1.57,.57],m.black);for(const z of [.485,.655])box(cp,[.1,.008,.026],[-.48,1.532,z],m.brass);
  box(cp,[1.34,.14,.025],[0,1.6,.884],m.black);
  const coin=part('coin');box(coin,[1.29,1.1,.062],[0,.995,.533],m.wood);box(coin,[.72,.87,.025],[0,1,.58],m.zinc,.018);box(coin,[.674,.826,.034],[0,1,.601],m.trim,.024);box(coin,[.622,.777,.022],[0,1,.625],m.black,.02);
@@ -81,6 +82,7 @@ export function buildDetailedCabinet(){
  for(const x of [-.29,.29])tube(coin,[[x,.68,.64],[x,1,.642],[x,1.325,.64]],.004,m.black,12);
  for(let i=0;i<3;i++)tube(coin,[[-.23,1.33,.56],[-.24+i*.004,1.37,.44],[-.3+i*.004,1.31,.33]],.002,m.copper,10);
  for(const x of [-.23,-.3])ring(coin,.014,.003,[x,1.32,.56],m.brass);
+ addFinish({root,cp,coin,crt,marquee,frame,back,box,cyl,ring,tube,mesh,screw,m,mat});
  // Clear the bezel overhang while retaining assembly-local animation pivots.
  for(const o of cp.children)o.position.z+=.18;
  // Batch static geometry by material inside each independently movable assembly.

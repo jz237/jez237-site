@@ -24,7 +24,7 @@ export function crtMaterial(map:T.Texture,history:T.Texture){
    float column=mod(floor(uv.x*1440.0),3.0);
    vec3 stripe=column<1.0?vec3(1.0,.73,.73):column<2.0?vec3(.73,1.0,.73):vec3(.73,.73,1.0);
    rgb*=mix(vec3(1.0),stripe,maskResolved*.55);
-   vec3 halo=(texture2D(map,uv+vec2(0,1.0/240.0)).rgb+texture2D(map,uv-vec2(0,1.0/240.0)).rgb)*.027;
+   vec3 halo=(texture2D(map,uv+vec2(0,1.0/240.0)).rgb+texture2D(map,uv-vec2(0,1.0/240.0)).rgb+texture2D(map,uv+vec2(1.0/294.0,0)).rgb+texture2D(map,uv-vec2(1.0/294.0,0)).rgb)*.019;
    vec3 viewDir=normalize(cameraPosition-crtPosition);
    vec3 n=normalize(crtNormal);if(dot(n,viewDir)<0.0)n=-n;
    vec3 lamp=normalize(vec3(.5,4.08,.2)-crtPosition);
@@ -40,7 +40,7 @@ export function crtMaterial(map:T.Texture,history:T.Texture){
    diffuseColor*=vec4(rgb+halo+glass,1.0);
   `);
  };
- material.customProgramCacheKey=()=> 'defender-crt-glass-v2';
+ material.customProgramCacheKey=()=> 'defender-crt-glass-v3';
  return material;
 }
 
