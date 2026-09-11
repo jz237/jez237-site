@@ -15,11 +15,14 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet','grass'] as Species[])for(let variant=0;variant<variants;variant++){
   const form=variant/(variants-1),handedness=variant%2?1:-1;
   const p:number[]=[],uv:number[]=[],idx:number[]=[];
-  const rows=species==='grass'?16:species==='sword'?28:species==='carpet'?8:species==='bacopa'||species==='anubias'?32:24,cols=species==='grass'?2:species==='carpet'?4:species==='sword'?16:12;
+  const rows=species==='grass'?16:species==='sword'?40:species==='carpet'?8:species==='bacopa'||species==='anubias'?64:24,cols=species==='grass'?2:species==='carpet'?4:species==='sword'?16:12;
   for(let i=0;i<=rows;i++){
-   const t=i/rows,blade=Math.max(0,(t-.08)/.92);
+   // Concentrate rings at the shoulders and tip: those high-curvature areas
+   // exposed straight polygon edges in the old uniformly spaced broad blades.
+   const row=i/rows,t=species==='grass'||species==='carpet'?row:.5-.5*Math.cos(row*Math.PI),blade=Math.max(0,(t-.08)/.92);
    const profile=species==='bacopa'?Math.pow(blade,1.2+form*.2):species==='ludwigia'?Math.pow(blade,.72+form*.18):species==='sword'?Math.pow(blade,.82+form*.24):Math.pow(blade,.78+form*.32);
-   const outline=species==='anubias'||species==='bacopa'?Math.pow(Math.sin(profile*Math.PI),.46):species==='sword'?Math.pow(Math.sin(profile*Math.PI),.72):Math.pow(Math.sin(profile*Math.PI),species==='ludwigia'?.56:.82);
+   // Thick anubias has a more pointed apex than the rounded bacopa blade.
+   const outline=Math.pow(Math.max(0,Math.sin(profile*Math.PI)),species==='anubias'?.64:species==='bacopa'?.46+form*.07:species==='sword'?.72:species==='ludwigia'?.56:.82);
    // A continuous petiole-to-blade transition avoids the old abrupt shoulder.
    const width=species==='grass'?Math.pow(1-t,.65)*.5:t<.08?.008:T.MathUtils.lerp(.008,outline*.5,T.MathUtils.smoothstep(t,.08,.18));
    for(let j=0;j<=cols;j++){
@@ -32,7 +35,10 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
     const bladeWeight=T.MathUtils.smoothstep(t,.08,.18)*Math.sin(t*Math.PI);
     const midrib=Math.exp(-s*s*90)*.010*bladeWeight;
     const ribbing=species==='sword'?Math.cos(s*Math.PI*6)*.0045*bladeWeight*(1-edge):0;
-    p.push(s*width*(1+s*asymmetry*.14)+asymmetry*.035,t,arch-curl+midrib+ribbing+edge*edge*(.016+form*.027)*Math.sin(t*Math.PI)+wave+s*width*handedness*t*(.06+form*.18));
+    // Subtle unequal margins and a wandering midrib avoid a stamped silhouette.
+    const margin=1+(Math.sin(t*29+s*1.7+variant)*.016+Math.sin(t*53+variant*2.1+s)*.007)*bladeWeight*edge;
+    const midribDrift=Math.sin(blade*Math.PI)*Math.sin(blade*4.2+variant)*.012;
+    p.push(s*width*(1+s*asymmetry*.14)*margin+asymmetry*.035+midribDrift,t,arch-curl+midrib+ribbing+edge*edge*(.016+form*.027)*Math.sin(t*Math.PI)+wave+s*width*handedness*t*(.06+form*.18));
     uv.push(u,t);
     if(i<rows&&j<cols){const n=i*(cols+1)+j;idx.push(n,n+1,n+cols+1,n+1,n+cols+2,n+cols+1);}
    }
