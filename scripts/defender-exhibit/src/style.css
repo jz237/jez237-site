@@ -25,3 +25,6 @@
 @media(max-width:760px){.workshop{left:16px;bottom:149px;width:min(272px,calc(100% - 32px));max-height:38svh}.workshop-toggle{min-height:40px}.workshop-body{padding:0 10px 10px}.workshop-body p{font-size:10px}.workshop.expanded{max-height:45svh}.workshop .workshop-panels button{min-height:40px}.workshop~.part-card{bottom:205px!important}.workshop.expanded~.part-card{display:none}}
 
 .mechanisms-open .intro{visibility:hidden}.workshop-toggle{position:sticky;top:0;z-index:2;background:#171b13}.return-view{position:sticky;top:42px;z-index:2;background:#23291b}.workshop-toggle:focus-visible,.return-view:focus-visible{outline:2px solid #d4b278;outline-offset:-3px}
+
+.machine-picker{position:absolute;z-index:12;left:32px;bottom:112px;display:flex;gap:8px}.machine-picker button{padding:11px 16px;background:#0b100ed9;border:1px solid #5b665e;color:#c7c7b7;font:11px monospace;letter-spacing:.08em;cursor:pointer;min-height:48px;backdrop-filter:blur(10px)}.machine-picker button[aria-pressed=true]{border-color:#c7a565;color:#f1cd88}.machine-picker small{display:block;font:8px monospace;letter-spacing:.09em;margin-top:7px;color:#999e91}.machine-picker button:focus-visible{outline:2px solid #f6d795;outline-offset:3px}
+@media(min-width:761px){.machine-picker{left:auto;right:32px;bottom:125px}.signal-select{bottom:198px}}

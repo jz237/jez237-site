@@ -8,7 +8,7 @@ export const chipRoles:Record<string,string>={
  '6808 / 02':'The dedicated sound processor executes a separate sound program. The drawing permits the 6808/6802 configuration; this exhibit does not claim a particular supplier or production date.',
  '6810':'128 × 8-bit static RAM provides working storage for the sound program.',
  '1408 DAC':'The eight-bit digital-to-analog converter turns the PIA’s numeric output into an analog signal for the audio amplifier. It does not itself compose the sounds.',
- 'SOUND ROM':'The original sound program occupies IC12. The publicly deployed exhibit contains newly synthesized sound, not the original 2,048-byte sound ROM.',
+ 'SOUND ROM':'The original sound program occupies IC12. The deployed exhibit plays PCM samples rendered from the original sound program; the 2,048-byte ROM is not bundled.',
  'TDA2002':'The analog power amplifier drives the 8-ohm speaker from the DAC-derived audio signal. The sound processor and DAC create the waveform; this stage supplies the power to move the cone.',
  '7805':'A linear regulator supplies the sound board’s regulated +5 V rail. It is separate from the main cabinet’s D8359 supply.',
  'UNUSED':'IC5 is deliberately unpopulated in the documented red-label ROM configuration.',
