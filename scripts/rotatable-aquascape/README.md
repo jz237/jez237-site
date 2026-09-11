@@ -362,3 +362,9 @@ Red colonies use deeper copper pigment with warmer growing tips and individual v
 Veins, transverse ribs, edge ripples and twist now use a species-level width/length estimate instead of scaling all relief with leaf length. This reduces exaggerated folds on long narrow blades while retaining their longitudinal bend. Margins have shallow unequal curvature. A close-up comparison with the previous geometry exposed excessive cupping on the first round-leaf trial; their original cup depth was retained with the new asymmetry.
 
 The 29,724 leaf instances retain the same layout and animation. A static export audit found all blade vertices finite and inside the glass. Bounced lighting was rebuilt against the unchanged 8,973,091-triangle count in 22.09 seconds. This remains an artistic species-level approximation rather than measured leaf anatomy. No paid assets or services were used; photographic parity remains unproven.
+
+### Clearer front-pane reflection
+
+A close-up isolation test traced the broad gray veil on the front pane to the shared studio environment map. The flat glass faces now use .02 environment intensity instead of .10. Their physical Fresnel response, transmitted scene, polished edges, silicone and internal side-wall reflections remain. The edge material retains its separate .7 response, so the tank still has a visible rimless-glass boundary. Water reflections and scene illumination are unchanged.
+
+This is a studio-reflection adjustment, not a change to water clarity or attenuation. Transparent glass is excluded from the static diffuse bake, which remains valid. No paid assets or services were used; full reference parity is still unfinished.
