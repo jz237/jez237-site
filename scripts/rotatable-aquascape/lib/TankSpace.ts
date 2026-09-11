@@ -12,14 +12,14 @@ export function clearHardscape(p:T.Vector3,obstacles:Obstacle[],bodyRadius=.23){
  return p;
 }
 /** Fit a curved leaf inside the glass, including a small allowance for its sway. */
-export function fitLeaf(dummy:T.Object3D,positions:T.BufferAttribute){
+export function fitLeaf(dummy:T.Object3D,positions:T.BufferAttribute,motionAllowance=.14){
  let scale=1;const root=dummy.position,point=new T.Vector3();
  for(let i=0;i<positions.count;i++){
   point.fromBufferAttribute(positions,i).applyMatrix4(dummy.matrix).sub(root);
   for(const [axis,bound] of [['x',4.96],['z',2.20],['y',5.25]] as const){
    const d=point[axis],origin=root[axis];
-   if(d>0)scale=Math.min(scale,(bound-origin)/(d+.14));
-   if(d<0&&axis!=='y')scale=Math.min(scale,(-bound-origin)/(d-.14));
+   if(d>0)scale=Math.min(scale,(bound-origin)/(d+motionAllowance));
+   if(d<0&&axis!=='y')scale=Math.min(scale,(-bound-origin)/(d-motionAllowance));
   }
  }
  if(scale<1){dummy.scale.multiplyScalar(Math.max(.02,scale));dummy.updateMatrix();}
