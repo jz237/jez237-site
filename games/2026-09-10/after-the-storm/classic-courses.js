@@ -88,8 +88,16 @@ const lake={
 const fortMap=points=>fromMap(points,210,300,.8);
 const fortLand=fortMap([[110,135],[111,84],[117,74],[123,83],[127,121],[139,153],[159,176],[203,189],[293,200],[360,215],[370,225],[319,228],[267,228],[267,264],[259,292],[268,430],[249,467],[216,491],[132,507],[104,500],[108,360],[125,351],[136,290],[151,274],[159,277],[180,277],[194,261],[207,263],[207,244],[181,250],[153,264],[130,286],[119,330],[110,339],[106,325],[107,166],[43,155],[41,143],[57,135]]);
 const fortCrates=fortMap([[261,172],[295,195],[334,200],[247,179],[274,181],[307,194],[322,207],[351,205],[177,298],[94,328]]);
+const fortBuoys=rows=>rows.map(([x,z,side])=>({x:(x-210)*.8,z:(z-300)*.8,side}));
+const fortNormalBuoys=fortBuoys([[69,203,1],[160,64,1],[170,94,1],[155,138,-1],[201,156,1],[350,174,1],[360,269,1],[306,267,1]]);
+const fortHardBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],[350,174,1],[295,260,1]]);
+const fortExpertBuoys=fortBuoys([[69,203,1],[158,90,1],[155,138,-1],[192,157,1],[350,168,1],[295,260,1]]);
+const fortReverseBuoys=fortBuoys([[176,320,1],[118,382,1],[274,394,1],[311,425,-1],[309,463,1],[399,362,1]].map(([x,z,side])=>[466-x,564-z,side]));
+fortReverseBuoys[3].approach={x:(169-210)*.8,z:(160-300)*.8,throttle:.4,radius:3};
+fortReverseBuoys[5].approach={x:(58-210)*.8,z:(183-300)*.8,throttle:.4,radius:3};
 const fort={
- name:'Marine Fortress',theme:'fortress',tag:'04 / MARINE FORTRESS',layoutRevision:2,
+ name:'Marine Fortress',theme:'fortress',tag:'04 / MARINE FORTRESS',layoutRevision:3,
+ buoysByClass:[fortNormalBuoys,fortHardBuoys,fortExpertBuoys,fortReverseBuoys],retainRouteControls:true,
  description:'Rough grey water around a stone fort. Floating crates crowd the eastern arm; Hard and above open a curved inner route after the first lap.',
  anchors:fortMap([[81,273],[81,192],[53,178],[37,156],[38,128],[54,89],[79,68],[104,60],[125,63],[148,94],[176,144],[201,160],[264,179],[337,185],[374,204],[384,227],[373,247],[307,251],[290,270],[283,345],[279,423],[260,466],[225,493],[168,510],[105,516],[81,499],[76,461],[80,360]]),
  ground(x,z){return clamp(-polygonDistance(fortLand,x,z)*.7,-11,6.5);},

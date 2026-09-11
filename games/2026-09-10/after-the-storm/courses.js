@@ -41,7 +41,11 @@ export function terrainHeight(course,x,z){if(CLASSIC_COURSES[course.id])return C
 export const COURSES=definitions.map(original=>{const d={...original,...CLASSIC_COURSES[original.id]};return {...d,gates:buildGates(sampleRoute(d.anchors)),rocks:[],laps:3};});
 export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c=>c.id===id)||COURSES[0],reverse=difficulty===3,level=Math.min(2,difficulty),anchors=base.anchorsByClass?.[difficulty]||(level===2&&base.expertAnchors?base.expertAnchors:base.anchors);let points=sampleRoute(anchors,24+level*4);if(reverse)points=[points[0],...points.slice(1).reverse()];
  let route=sampleRoute(anchors,384);if(reverse)route=[route[0],...route.slice(1).reverse()];const course={...base,anchors,resistance:base.resistanceByClass?.[difficulty]||base.resistance||[],closedAreas:level===2?base.expertClosedAreas||[]:[],requiredPassage:level===2&&!!base.expertAnchors,difficulty,reverse,route,gates:buildGates(points,level),rocks:(base.obstaclesByClass?.[difficulty]||[...(base.obstacles||[]),...(level?(base.extraObstacles||[]).slice(0,level===1?4:99):[])]).map(o=>({...o})),ramps:(base.raceRampsByClass?.[difficulty]||base.raceRamps||[]).map(r=>({...r,solidBack:true}))};
- if(base.buoysByClass?.[difficulty])course.gates=mappedGates(route,base.buoysByClass[difficulty]);
+ if(base.buoysByClass?.[difficulty]){
+  const mapped=mappedGates(route,base.buoysByClass[difficulty]);
+  if(base.retainRouteControls){const controls=mappedGates(route,(reverse?[...sampleRoute(anchors,24)].slice(1).reverse():sampleRoute(anchors,24).slice(1)).map(p=>({...p,side:0,offset:0,width:23}))).slice(1);course.gates=[mapped[0],...[...mapped.slice(1),...controls.filter(g=>mapped.slice(1).every(b=>Math.hypot(b.x-g.x,b.z-g.z)>20))].sort((a,b)=>a.routeIndex-b.routeIndex)];}
+  else course.gates=mapped;
+ }
  const finishLine=base.finishLinesByClass?.[difficulty]||base.finishLine;
  if(finishLine){const g=course.gates[0],[a,b]=finishLine,dx=b[0]-a[0],dz=b[1]-a[1],length=Math.hypot(dx,dz),direction=reverse?-1:1;g.tx=dz/length*direction;g.tz=-dx/length*direction;g.z=a[1];const sides=[a,b].map(p=>-(p[0]-g.x)*g.tz+(p[1]-g.z)*g.tx);g.spanMin=Math.min(...sides);g.spanMax=Math.max(...sides);course.finishBypass=reverse?0:base.finishBypass;}
  // Navigation obstacles grow with difficulty, but keep a safe central racing line.
