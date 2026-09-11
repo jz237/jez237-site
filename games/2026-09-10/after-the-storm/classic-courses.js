@@ -92,5 +92,19 @@ const city={
  quayOutlines:[cityCenter,cityEast],obstaclesByClass:[cityBalls,cityBalls,cityExpertBalls,cityBalls],
  raceRampsByClass:[[cityRamp(120,270,260,0,-1,10),...cityLateRamps],[cityRamp(120,270,260,0,-1,10),...cityLateRamps],[cityRamp(120,270,285,0,-1,10),...cityLateRamps],[cityRamp(120,270,285,0,-1,10),...cityLateRamps]],resistance:[]
 };
-export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort,port,neon:city};
+const glacierMap=points=>fromMap(points,205,280,.8);
+const glacierLand=glacierMap([[76,118],[92,99],[143,97],[191,98],[251,98],[276,103],[283,113],[275,132],[251,159],[221,190],[196,219],[181,241],[175,275],[176,309],[192,336],[207,358],[207,373],[187,387],[148,409],[111,431],[97,434],[82,421],[76,400],[82,373],[83,348],[79,320],[77,290],[80,267],[74,238],[74,202],[69,168]]);
+const glacierNorth=glacierMap([[-350,-250],[700,-250],[700,20],[417,47],[354,57],[292,54],[231,62],[192,86],[171,91],[125,87],[65,75],[0,63],[-350,63]]);
+const glacierIceBalls=glacierMap([[27,190],[27,212],[26,231],[237,187],[256,190],[240,206],[217,205],[219,227],[200,225],[196,249]]).map(([x,z])=>({x,z,r:1.7,type:'ice'}));
+const glacierRamp=(id,x,z,tx,tz,width,length)=>({id,name:'ICE COAST JUMP',x:(x-205)*.8,z:(z-280)*.8,tx,tz,width,length,height:1.9,floating:false});
+const glacier={
+ name:'Glacier Coast',theme:'ice',tag:'07 / GLACIER COAST',layoutRevision:2,
+ description:'Race around a long ice peninsula, through the narrow western straight and past floating ice on the eastern return. Fixed ramps face the original race direction.',
+ anchors:glacierMap([[34,351],[33,306],[32,269],[31,235],[31,201],[31,166],[40,133],[64,113],[97,96],[147,95],[187,94],[214,85],[243,91],[281,96],[301,107],[306,122],[290,142],[267,163],[254,183],[232,203],[215,223],[211,250],[211,278],[211,307],[219,334],[223,359],[218,383],[204,409],[180,411],[161,424],[144,441],[125,456],[102,459],[78,447],[53,419],[37,390]]),
+ ground(x,z){return clamp(Math.max(-polygonDistance(glacierLand,x,z),-polygonDistance(glacierNorth,x,z))*.85,-10,38);},
+ obstacles:glacierIceBalls,
+ raceRamps:[glacierRamp(130,59,256,0,-1,17,34),glacierRamp(131,49,207,0,-1,18,34),glacierRamp(132,57,161,0,-1,17,34),glacierRamp(133,185,312,0,1,16,17)],
+ resistance:[]
+};
+export const CLASSIC_COURSES={greyhaven:sunny,amber:sunset,reed:lake,citadel:fort,port,neon:city,glacier};
 export function courseResistance(course,x,z,wet=1){let drag=0;for(const p of course.resistance||[]){const q=((x-p.x)/p.rx)**2+((z-p.z)/p.rz)**2;drag=Math.max(drag,p.drag*clamp((1-q)*3,0,1));}return drag*clamp(wet,0,1);}

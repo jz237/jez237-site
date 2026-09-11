@@ -118,7 +118,7 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   for(let i=0;i<course.gates.length;i+=2){const p=course.gates[i],x=p.x+p.tz*42,z=p.z-p.tx*42,y=course.ground(x,z);cylinder(x,y+5,z,.12,10,steel);box(x,y+10,z,1.4,.2,1.4,cityLight);if(i%6===0){const l=new T.PointLight(0x99d8ff,45,35,2);l.position.set(x,y+8,z);root.add(l);lights.push(l);}}
   const p=course.gates[5],bridge=new T.Group();bridge.position.set(p.x,8,p.z);bridge.rotation.y=Math.atan2(p.tx,p.tz);root.add(bridge);box(0,0,0,100,1,9,steel,bridge);for(const x of[-40,40])box(x,-4,0,3,8,10,stone,bridge);for(let x=-45;x<46;x+=5)box(x,1.2,-4,.18,2,.18,cityLight,bridge);label(course.quayOutlines?'TWILIGHT CITY':'NEON REACH',0,2,4.6,33,bridge,'#9ceaff');
  }
- if(cold){for(let i=0;i<50;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(52+random()*35),z=g.z-g.tx*side*(52+random()*35);rock(x,z,9+random()*16,true);}building(-170,125,25,16,8,white);label('ARCTIC RESEARCH / 64',-170,14,134,28);}
+ if(cold){for(let i=0;i<50;i++){const g=course.gates[i%course.gates.length],side=i%2?1:-1,x=g.x+g.tz*side*(52+random()*35),z=g.z-g.tx*side*(52+random()*35);const radius=9+random()*16;if(Array.from({length:12},(_,j)=>course.ground(x+Math.cos(j*Math.PI/6)*radius,z+Math.sin(j*Math.PI/6)*radius)).every(y=>y>1))rock(x,z,radius,true);}building(-170,125,25,16,8,white);label('ARCTIC RESEARCH / 64',-170,14,134,28);}
  // Navigable masonry/harbour passage; dimensions are shared with collision.
  const passage=course.passage;let gateMesh=null,gateSignal=null;
  if(passage?.continuous){
