@@ -1,3 +1,6 @@
 demos/living-aquascape/assets/*.js linguist-generated=true -whitespace
 scripts/living-aquascape/static/index.html text eol=lf
 demos/living-aquascape/index.html text eol=lf
+# Preserve original asset bytes for provenance checksums.
+demos/rotatable-aquascape/models/moss_01/*.gltf -text
+scripts/rotatable-aquascape/public/models/moss_01/*.gltf -text

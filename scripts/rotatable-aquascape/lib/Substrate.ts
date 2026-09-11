@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {substrateVolume} from './SubstrateVolume';
 
 /** A shared, irregular boundary keeps the sand and encroaching carpet in agreement. */
 export function sandChannel(z:number){
@@ -20,7 +21,8 @@ export function buildAquariumSubstrate(scene:T.Scene,height:(x:number,z:number)=
   }
   const map=new T.CanvasTexture(canvas),bumpMap=new T.CanvasTexture(bump);map.colorSpace=T.SRGBColorSpace;
   for(const texture of [map,bumpMap]){texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=8;}
-  const mat=new T.MeshStandardMaterial({map,bumpMap,bumpScale:sand?.016:.03,roughness:.96});
+  // Fine submerged quartz keeps diffuse grain contrast without a broad white sheen.
+  const mat=new T.MeshPhysicalMaterial({map,bumpMap,bumpScale:sand?.006:.03,roughness:.96,color:sand?0xc5c0b3:0xffffff,ior:sand?1.16:1.5,specularIntensity:sand?.7:1});
   mat.onBeforeCompile=shader=>{
    shader.uniforms.waterTime=time;shader.vertexShader='varying vec3 substrateWorld;\n'+shader.vertexShader;
    shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nsubstrateWorld=(modelMatrix*vec4(transformed,1.)).xyz;');
@@ -32,25 +34,30 @@ export function buildAquariumSubstrate(scene:T.Scene,height:(x:number,z:number)=
   return mat;
  };
  const soil=material(false),sand=material(true);
- const terrain=new T.PlaneGeometry(10.12,4.64,110,55);terrain.rotateX(-Math.PI/2);
+ const terrain=new T.PlaneGeometry(10.12,4.6,110,55);terrain.rotateX(-Math.PI/2);
  const positions=terrain.getAttribute('position') as T.BufferAttribute,uv=terrain.getAttribute('uv') as T.BufferAttribute;
  for(let i=0;i<positions.count;i++){const x=positions.getX(i),z=positions.getZ(i);positions.setY(i,height(x,z)+(random()-.5)*.003);uv.setXY(i,x/2.2,z/2.2);}
  terrain.computeVertexNormals();const ground=new T.Mesh(terrain,soil);ground.receiveShadow=true;scene.add(ground);
- const layer=new T.Mesh(new T.BoxGeometry(10.13,.32,4.64),soil);layer.position.y=.17;layer.receiveShadow=true;scene.add(layer);
- const p:number[]=[],tex:number[]=[],indices:number[]=[];
+ const layer=new T.Mesh(substrateVolume(terrain,110,55),soil);layer.receiveShadow=true;scene.add(layer);
+ const p:number[]=[],tex:number[]=[],indices:number[]=[],pigment:number[]=[];
  for(let j=0;j<=96;j++){
   const z=2.29-j/96*4.5,{left,right}=sandChannel(z);
   for(let k=0;k<=20;k++){
    const x=T.MathUtils.lerp(left,right,k/20);p.push(x,height(x,z)+.027+.005*Math.sin(x*21+z*17),z);tex.push(x/2.2,z/2.2);
+   // Irregular mineral deposits and a little mixed aquasoil near the margins.
+   const edge=T.MathUtils.smoothstep(Math.min(x-left,right-x),.015,.18);
+   const mineral=.94+.06*Math.sin(x*4.7+z*2.8)*Math.sin(z*5.3-x*.7);
+   const tone=mineral*(.82+.18*edge);pigment.push(tone,tone*.99,tone*.96);
    if(j<96&&k<20){const n=j*21+k;indices.push(n,n+1,n+21,n+1,n+22,n+21);}
   }
  }
- const path=new T.BufferGeometry();path.setAttribute('position',new T.Float32BufferAttribute(p,3));path.setAttribute('uv',new T.Float32BufferAttribute(tex,2));path.setIndex(indices);path.computeVertexNormals();
+ const path=new T.BufferGeometry();path.setAttribute('position',new T.Float32BufferAttribute(p,3));path.setAttribute('uv',new T.Float32BufferAttribute(tex,2));path.setAttribute('color',new T.Float32BufferAttribute(pigment,3));sand.vertexColors=true;path.setIndex(indices);path.computeVertexNormals();
  const pathMesh=new T.Mesh(path,sand);pathMesh.receiveShadow=true;scene.add(pathMesh);
 
  const dummy=new T.Object3D(),grainGeometry=new T.IcosahedronGeometry(1,0),grainMaterial=new T.MeshStandardMaterial({roughness:.93});
- const quartz=new T.InstancedMesh(grainGeometry,grainMaterial,12000),soilGrains=new T.InstancedMesh(grainGeometry,grainMaterial,2700);
- const quartzColors=['#bdb298','#d0c4a9','#9c947d','#afa48c','#817c68'].map(c=>new T.Color(c));
+ const quartzMaterial=new T.MeshPhysicalMaterial({roughness:.93,ior:1.16,specularIntensity:.7});
+ const quartz=new T.InstancedMesh(grainGeometry,quartzMaterial,12000),soilGrains=new T.InstancedMesh(grainGeometry,grainMaterial,2700);
+ const quartzColors=['#bdb298','#d0c4a9','#9c947d','#afa48c','#817c68'].map(c=>new T.Color(c).multiply(new T.Color(0xc5c0b3)));
  const soilColors=['#292c22','#39392c','#4a4434','#5e5541'].map(c=>new T.Color(c));
  for(let i=0;i<quartz.count;i++){
   const z=-2.18+random()*4.45,{left,right}=sandChannel(z),x=T.MathUtils.lerp(left-.09,right+.09,random()),s=.003+random()**2*.008;
@@ -63,5 +70,14 @@ export function buildAquariumSubstrate(scene:T.Scene,height:(x:number,z:number)=
   const inSand=x>left&&x<right;
   dummy.position.set(x,height(x,z)+(inSand?.023:0)+s*.5,z);dummy.rotation.set(random()*3,random()*6.28,random()*3);dummy.scale.set(s,s*.8,s*(.7+random()*.5));dummy.updateMatrix();soilGrains.setMatrixAt(i,dummy.matrix);soilGrains.setColorAt(i,soilColors[i%soilColors.length]);
  }
- for(const grains of [quartz,soilGrains]){grains.castShadow=true;grains.receiveShadow=true;grains.computeBoundingSphere();scene.add(grains);}
+ // Exposed pellet caps meet the front glass without a flat, stretched soil band.
+ const frontGrains=new T.InstancedMesh(grainGeometry,grainMaterial,3000);let frontCount=0;
+ for(let i=0;i<3000;i++){
+  const x=-5.01+random()*10.02,y=.036+random()*(height(x,2.3)-.06),r=.012+random()*.007;
+  if(y+r>height(x,2.3)-.007)continue;
+  dummy.position.set(x,y,2.292);dummy.rotation.set(random()*3,random()*6.28,random()*3);dummy.scale.set(r,r*(.8+random()*.2),r);dummy.updateMatrix();
+  frontGrains.setMatrixAt(frontCount,dummy.matrix);frontGrains.setColorAt(frontCount,soilColors[frontCount%soilColors.length]);frontCount++;
+ }
+ frontGrains.count=frontCount;
+ for(const grains of [quartz,soilGrains,frontGrains]){grains.castShadow=true;grains.receiveShadow=true;grains.computeBoundingSphere();scene.add(grains);}
 }

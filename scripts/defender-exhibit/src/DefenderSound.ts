@@ -2,16 +2,18 @@ export type SoundEvent='fire'|'explosion'|'bomber'|'mutant'|'pod'|'swarmer'|'abd
 // Priorities come from the original game's SNDLD tables (defa7.src).
 const priorities:Record<SoundEvent,number>={bomb:0xe8,death:0xf0,extra:0xff,planet:0xe8,fire:0xc0,explosion:0xd0,pod:0xd0,bomber:0xd0,mutant:0xd0,swarmer:0xc0,abduct:0xd0,fall:0xd8,catch:0xe0,delivery:0xe0,hyperspace:0xd0,credit:0xff,thrust:0,start:0xf0};
 export class DefenderSound {
+ private spatialGain:GainNode;private pan:StereoPannerNode;private lowpass:BiquadFilterNode;
  private master:GainNode;private thrustGain:GainNode;private analyser:AnalyserNode;private buffers=new Map<SoundEvent,AudioBuffer>();
  private voice?:{source:AudioBufferSourceNode;until:number;priority:number};private playing=false;private output=0;private engine=false;private last='';private count=0;private loadError='';
  private context:AudioContext;readonly ready:Promise<void>;
- constructor(context:AudioContext){this.context=context;this.master=context.createGain();this.master.gain.value=0;this.analyser=context.createAnalyser();this.analyser.fftSize=256;this.master.connect(this.analyser).connect(context.destination);this.thrustGain=context.createGain();this.thrustGain.gain.value=0;this.thrustGain.connect(this.master);
+ constructor(context:AudioContext){this.context=context;this.master=context.createGain();this.master.gain.value=0;this.analyser=context.createAnalyser();this.analyser.fftSize=256;this.spatialGain=context.createGain();this.pan=context.createStereoPanner();this.lowpass=context.createBiquadFilter();this.lowpass.type='lowpass';this.lowpass.frequency.value=15000;this.master.connect(this.lowpass).connect(this.spatialGain).connect(this.pan).connect(this.analyser).connect(context.destination);this.thrustGain=context.createGain();this.thrustGain.gain.value=0;this.thrustGain.connect(this.master);
   this.ready=this.load().catch(error=>{this.loadError=String(error);console.error('Defender original audio could not load',error);});
  }
  private async load(){
   await Promise.all((Object.keys(priorities) as SoundEvent[]).map(async event=>{const response=await fetch(`./audio/${event}.wav`);if(!response.ok)throw new Error(`${event}: HTTP ${response.status}`);this.buffers.set(event,await this.context.decodeAudioData(await response.arrayBuffer()));}));
   const source=this.context.createBufferSource();source.buffer=this.buffers.get('thrust')!;source.loop=true;source.connect(this.thrustGain);source.start();this.effect('start');
  }
+ spatial(mix:{pan:number;gain:number;cutoff:number}){const now=this.context.currentTime;this.pan.pan.setTargetAtTime(mix.pan,now,.08);this.spatialGain.gain.setTargetAtTime(mix.gain,now,.1);this.lowpass.frequency.setTargetAtTime(mix.cutoff,now,.1);}
  state(active:boolean,muted:boolean,volume:number,thrust:boolean){
   const enabled=active&&!muted,v=enabled?Math.max(0,Math.min(1,volume))*.45:0;
   if(v!==this.output){this.master.gain.setTargetAtTime(v,this.context.currentTime,.012);this.output=v;}
@@ -29,5 +31,5 @@ export class DefenderSound {
   const source=this.context.createBufferSource();source.buffer=buffer;source.connect(this.master);source.start();source.onended=()=>source.disconnect();
   this.voice={source,until:now+buffer.duration,priority};this.last=event;this.count++;
  }
- inspect(){const samples=new Float32Array(256);this.analyser.getFloatTimeDomainData(samples);return {context:this.context.state,level:Math.sqrt(samples.reduce((a,b)=>a+b*b,0)/samples.length),output:this.output,engine:this.engine,event:this.last,count:this.count,loaded:this.buffers.size,source:'VSNDRM1 rendered samples',error:this.loadError};}
+ inspect(){const samples=new Float32Array(256);this.analyser.getFloatTimeDomainData(samples);return {context:this.context.state,level:Math.sqrt(samples.reduce((a,b)=>a+b*b,0)/samples.length),output:this.output,pan:this.pan.pan.value,distanceGain:this.spatialGain.gain.value,cutoff:this.lowpass.frequency.value,engine:this.engine,event:this.last,count:this.count,loaded:this.buffers.size,source:'VSNDRM1 rendered samples',error:this.loadError};}
 }

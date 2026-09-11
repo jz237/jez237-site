@@ -1,18 +1,46 @@
 import * as T from 'three';
 import {Reflector} from 'three/addons/objects/Reflector.js';
 import {ReflectionPool} from './ReflectionPool';
+import {waterOpticsShader,WATER_LEVEL} from './WaterDepth';
 const ripple=`
 float rippleHeight(vec2 p){
  float inlet=length(p-vec2(4.25,-1.6));
- float agitation=.38+.62*exp(-inlet*.32);
- float broad=sin(p.x*3.1+p.y*4.2-time*1.07)*.010;
- float cross=sin(p.x*7.3-p.y*5.6-time*1.63+sin(p.y*1.7)*.30)*.004;
- float fine=sin(p.x*17.2+p.y*13.8-time*2.21)*.00085;
- float rings=sin(inlet*18.-time*3.1)*exp(-inlet*.58)*.005;
+ float agitation=.65+.35*exp(-inlet*.32);
+ // Several crossing ripple scales break up the long, regular mirror stripes.
+ // Shorter waves change reflection direction without making large water swells.
+ vec2 q=p+vec2(sin(p.y*1.9+p.x*.7-time*.29),sin(p.x*1.3-p.y*.8+time*.23))*.09;
+ float broad=sin(q.x*2.7+q.y*3.6-time*1.8)*.011;
+ float cross=sin(q.x*8.3-q.y*6.8-time*3.2+sin(q.y*1.7)*.65)*.012;
+ float secondary=sin(q.x*12.1+q.y*9.7-time*4.8+sin(q.x*.8-time*.23)*.7)*.007;
+ // Small, differently directed ripples break the large repeating reflection lobes.
+ float fine=sin(q.x*23.2-q.y*17.8-time*7.1)*.002;
+ fine+=sin(q.x*31.7+q.y*11.9-time*8.6+sin(q.y*2.3)*.25)*.0014;
+ fine+=sin(-q.x*15.3+q.y*37.4-time*10.3)*.0011;
+ #ifdef WATER_FRAGMENT
+ // Suppress unresolved capillary detail on distant/mobile pixels, rather than sparkle.
+ float footprint=max(length(dFdx(p)),length(dFdy(p)));
+ fine*=1.-smoothstep(.03,.07,footprint);
+ #endif
+ float rings=sin(inlet*18.-time*5.4)*exp(-inlet*.8)*.006;
  float edge=min(5.04-abs(p.x),2.30-abs(p.y));
- return ((broad+cross+fine)*agitation+rings)*smoothstep(0.,.18,edge);
+ // A narrow raised meniscus meets the glass; the contact line retains a
+ // small part of the passing wave instead of becoming a rigid straight bar.
+ float wetEdge=.015*exp(-max(0.,edge)/.025);
+ float wallMotion=.12+.88*smoothstep(0.,.18,edge);
+ return ((broad+cross+secondary+fine)*agitation+rings)*wallMotion+wetEdge;
 }
 `;
+/** Concentrate real surface vertices around the curved glass contact zone. */
+function waterSurfaceGeometry(){
+ const geometry=new T.PlaneGeometry(10.08,4.6,320,128),positions=geometry.getAttribute('position');
+ for(let i=0;i<positions.count;i++){
+  positions.setXY(i,Math.sin(positions.getX(i)/5.04*Math.PI*.5)*5.04,Math.sin(positions.getY(i)/2.3*Math.PI*.5)*2.3);
+ }
+ positions.needsUpdate=true;geometry.computeBoundingBox();geometry.computeBoundingSphere();
+ // Shader displacement includes the raised contact edge and passing waves.
+ geometry.boundingSphere!.radius+=.075;
+ return geometry;
+}
 /** Two-sided scene captures with depth-guided reflection rays across the moving surface. */
 export class AquariumWater extends T.Group {
  private surfaces:Reflector[]=[];
@@ -20,11 +48,12 @@ export class AquariumWater extends T.Group {
  constructor(reflections:ReflectionPool){
   super();
   for(const underside of [true,false]){
-   const surface=new Reflector(new T.PlaneGeometry(10.08,4.6,160,72),{textureWidth:1024,textureHeight:1024,clipBias:.002,multisample:2,shader:{
+   const surface=new Reflector(waterSurfaceGeometry(),{textureWidth:1024,textureHeight:1024,clipBias:.002,multisample:2,shader:{
     name:'AquariumWaterReflection',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},illumination:{value:1},underside:{value:underside?1:0}},
     vertexShader:`uniform mat4 textureMatrix;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
     void main(){vec3 displaced=position;world=(modelMatrix*vec4(position,1.)).xyz;float wave=rippleHeight(world.xz);displaced.z+=wave*(underside>.5?-1.:1.);world.y+=wave;reflectionUv=textureMatrix*vec4(displaced,1.);gl_Position=projectionMatrix*modelViewMatrix*vec4(displaced,1.);}`,
-    fragmentShader:`uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
+    fragmentShader:`#define WATER_FRAGMENT
+    uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}${waterOpticsShader}
     // Unpolarized dielectric Fresnel, including the water-to-air critical angle.
     // See PBRT, Specular Reflection and Transmission (FrDielectric).
     float waterFresnel(float cosine){
@@ -82,12 +111,19 @@ export class AquariumWater extends T.Group {
      vec2 planarUv=reflectionUv.xy/reflectionUv.w;
      vec2 reflectedUv=traceReflection(world,wavyRay,planarUv+distortion*.25);
      vec3 reflection=texture2D(tDiffuse,reflectedUv).rgb;
+     // The captured plants already include their path toward the surface.
+     // Account separately for the real camera-to-surface segment inside water.
+     if(underside>.5){
+      vec3 incident=world-cameraPosition;
+      float opticalDistance=waterPath(cameraPosition,normalize(incident),length(incident));
+      reflection=attenuateWater(reflection,opticalDistance,illumination);
+     }
      // Intersect the reflected ray with the actual three LED strips. Sampling
      // their narrow shapes only from a capture made the highlight break into
      // isolated white pixels. Pixel-footprint coverage keeps the emitter intact.
      if(underside<.5){
       vec3 lampHit=world+wavyRay*((6.326-world.y)/max(wavyRay.y,.0001));
-      vec2 aa=max(fwidth(lampHit.xz),vec2(.003));
+      vec2 aa=clamp(fwidth(lampHit.xz),vec2(.003),vec2(.10));
       float along=1.-smoothstep(4.375-aa.x,4.375+aa.x,abs(lampHit.x));
       float across=0.;
       for(int strip=0;strip<3;strip++){
@@ -102,7 +138,7 @@ export class AquariumWater extends T.Group {
      float strength=.5*(waterFresnel(clamp(cosine-footprint,0.,1.))+waterFresnel(clamp(cosine+footprint,0.,1.)));
      // A very narrow wet edge catches light where the surface meets the glass.
      float edge=min(5.04-abs(world.x),2.30-abs(world.z));
-     float meniscus=exp(-max(0.,edge)*180.)*.028;
+     float meniscus=exp(-max(0.,edge)*180.)*.028*illumination;
      gl_FragColor=vec4(reflection*vec3(.96,1.,.97)+meniscus*vec3(.65,.84,.72),strength);
      #include <tonemapping_fragment>
      #include <colorspace_fragment>
@@ -121,8 +157,8 @@ export class AquariumWater extends T.Group {
     uniforms.reflectionInverseProjection.value.copy(camera.projectionMatrix).invert();
    };
    reflections.add(surface);
-   surface.position.y=5.36;surface.rotation.x=underside?Math.PI/2:-Math.PI/2;surface.renderOrder=6;(surface.material as T.ShaderMaterial).transparent=true;(surface.material as T.ShaderMaterial).depthWrite=false;this.add(surface);this.surfaces.push(surface);
+   surface.position.y=WATER_LEVEL;surface.rotation.x=underside?Math.PI/2:-Math.PI/2;surface.renderOrder=6;(surface.material as T.ShaderMaterial).transparent=true;(surface.material as T.ShaderMaterial).depthWrite=false;this.add(surface);this.surfaces.push(surface);
   }
  }
- update(time:number,cameraY:number,illumination=1){this.surfaces.forEach((s,i)=>{s.visible=(cameraY<5.36)===(i===0);const uniforms=(s.material as T.ShaderMaterial).uniforms;uniforms.time.value=time;uniforms.illumination.value=illumination;});}
+ update(time:number,cameraY:number,illumination=1){this.surfaces.forEach((s,i)=>{s.visible=(cameraY<WATER_LEVEL)===(i===0);const uniforms=(s.material as T.ShaderMaterial).uniforms;uniforms.time.value=time;uniforms.illumination.value=illumination;});}
 }
