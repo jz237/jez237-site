@@ -1,0 +1,12 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import {surfHeight,surfEnvelope,surfStrength,surfSeed} from '../surf-waves.js';
+import {demoFlipInput} from '../race-flips.js';
+import {clearWakeTrail,recordWake,wakeHeight} from '../wake-field.js';
+import {createDemoScene,demoInput,demoSceneDone} from '../demo-driver.js';
+import {stepRace} from '../race-core.js';
+test('wave sets include quiet patches, large sets and continuous transitions',()=>{surfSeed.value=17;surfStrength.value=1;let low=Infinity,high=0,quiet=0;for(let t=0;t<300;t+=.1){const e=surfEnvelope(t*15,t*9,t);low=Math.min(low,e);high=Math.max(high,e);if(e<.15)quiet++;const a=surfHeight(t*15,t*9,t),b=surfHeight(t*15,t*9,t+.001);assert.ok(Math.abs(a-b)<.02);}assert.ok(low<.1&&high>1.15&&quiet>200);});
+test('new seeds change the sea without changing its deterministic sampling',()=>{surfStrength.value=1;surfSeed.value=23;const a=surfHeight(20,30,5);assert.equal(surfHeight(20,30,5),a);surfSeed.value=619;assert.ok(Math.abs(surfHeight(20,30,5)-a)>.1);});
+test('demo leaves at least 30 seconds between flip attempts',()=>{const r={id:0,raceTime:20,hydro:{airborne:true,vy:6,y:2,waterHeight:0,airTime:.1},stunt:{}};assert.equal(demoFlipInput(r,{}).trick,'flip');r.raceTime=49;assert.equal(demoFlipInput(r,{}).trick,undefined);r.raceTime=51;assert.equal(demoFlipInput(r,{}).trick,'flip');});
+test('stronger emitted wake makes a physically taller trailing ridge',()=>{clearWakeTrail();recordWake(0,0,0,0,1.4);const a=wakeHeight(1.2,0,1);clearWakeTrail();recordWake(0,0,0,0,2.1);assert.ok(wakeHeight(1.2,0,1)>a*1.4);clearWakeTrail();});
+for(const seed of [23,619])test('random opening race completes at speed with seed '+seed,()=>{const s=createDemoScene(0,seed);let peak=0;while(!demoSceneDone(s)){stepRace(s,demoInput(s),1/60);peak=Math.max(peak,...s.racers.map(r=>r.speed));}assert.equal(s.racers[0].dq,'');assert.ok(s.racers[0].lap>1);assert.ok(peak>24);});
