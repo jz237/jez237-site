@@ -26,7 +26,7 @@ still require their own source comparison before they can be signed off.
 | Course | Distinctive requirements | State |
 | --- | --- | --- |
 | Sunny Beach | Long sandbar, parallel straights, tight ends, open sea and mainland, difficulty-specific slalom | Rebuilt sandbar; original class buoy maps and metal-ball rows transcribed and race-tested; final shoreline/visual sign-off pending |
-| Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/ramp, original class buoy sequences and Expert slalom; physical piers, final-lap bypass and visual sign-off pending |
+| Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/ramp, original class buoy sequences, Expert slalom, steel balls and physical piers; all-class under-pier traversal verified; final-lap bypass and visual sign-off pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
 | Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; original buoy patterns and final visual/scale matching pending |
@@ -371,3 +371,19 @@ Added ten physical steel balls to Hard, Expert and Reverse; Normal stays clear. 
 All four Sunset tests pass in 6.07 s, including ordinary-input three-lap races on every class without missed buoys, original buoy transcription, exact cluster counts/rows and collision/separation against the actual steel obstacles. Rendering uses the existing floating steel-ball model shared with collision positions. Physical piers, final-lap shortcut and final visual sign-off remain unfinished.
 
 Browser visual check: Reverse held at 6.683 s with zero misses. Steel spheres are visible along the left edge of the racing line, separate from colored navigation buoys. The debug-only Inspect metal cluster button holds near existing metal obstacles for repeatable visual review; the full ten-object count is covered by source transcription and tests, not claimed from the cropped camera view. No browser errors were observed.
+
+### Sunset Bay physical piers — 2026-09-11
+
+The previous `piers` definitions were not consumed by the world renderer or collision solver. Replaced them with two wooden crossbars using the shared deck/support geometry, at the map-derived west-straight locations (133,144) and (132,299). Deck bottoms at 2.8 m and 14 m support spacing are reconstruction estimates, not measured original elevations or exact pile placement.
+
+Five focused tests pass in 6.32 s. Ordinary-input four-rider races now require exactly one under-deck crossing of each pier on each of three laps, in all four classes, with zero nearby collision frames and zero missed buoys. Normal/Hard/Expert/Reverse finish in 264.12 / 309.52 / 277.95 / 290.20 s. Separate checks prove solid decks and piles, finite above-deck clearance, and unobstructed under-deck camera paths.
+
+Browser inspection in Normal/course sea/high graphics held the actual grid-start run at 31.983 s: hull y -0.451 m, deck underside 2.8 m, zero collisions or misses. The rider and ski are visible beneath the wooden deck between solid support piles, with rivals ahead and the mapped ramp beyond. Browser error log is empty. The existing Inspect pier approach control now also inspects this Sunset passage. Final-lap out-of-bounds bypass, moored boats and final source/visual comparison remain pending; no parity or publication claim.
+
+Next shortcut requirement clarified from the retrieved Normal guide: the last-lap hairpin exit skips three buoys and should incur three misses. It is viable only with zero or one prior miss; two or more prior misses must cause the existing five-miss disqualification before finishing. The guide estimates about two seconds saved. This is not yet implemented/verified as a continuous route; do not grant checkpoint credit or suppress penalties to make it pass.
+
+Full-suite follow-up initially found 163/165 passing in 69.96 s. One stale fixture still expected zero Expert metal balls; corrected to ten. The other failure was real: the engine-tuned championship rider became pinned on a Sunset support pile. Rival local obstacle avoidance now includes physical pier piles whenever the deck has surface clearance, using the same pile coordinates/radii as collision and penalizing detours into adjoining supports. No checkpoint or hull state is injected. All five Sunset checks still pass (6.67 s), and the complete Hard/Expert/Reverse tuned championship test passes in 40.84 s. A fresh full regression run follows this actual navigation fix.
+
+Post-fix Hard browser inspection: 31.483 s, hull y 0.087 m, underside 2.8 m, zero collisions/misses and no browser errors. The craft remains visible between the piles beneath the deck, with the ramp visible beyond.
+
+Final full regression: 165/165 passed in 107.18 s (work/sunset-piers-full-tests-fixed.log). This proves the current automated coverage, not complete original-course parity. Changes remain local.

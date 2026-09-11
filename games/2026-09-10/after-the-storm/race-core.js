@@ -1,5 +1,5 @@
 import {iceContact,supportOnIce,stepIceBalance} from './ice-surfaces.js';
-import {barrierCollision} from './course-barriers.js';
+import {barrierCollision,barrierPiles} from './course-barriers.js';
 import {courseResistance,polygonDistance} from './classic-courses.js';
 import {quickTurn,rocketStart,beginWipeout,stepWipeout,collideRiders} from './rider-actions.js';
 import {clearWakeTrail,recordWake} from './wake-field.js';
@@ -57,8 +57,9 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
  // Plan a local detour around a solid obstacle that intersects the intended
  // line. Keep the original checkpoint; avoiding a post never grants progress.
  if(s.course.layoutRevision){const dx=tx-r.x,dz=tz-r.z,length=Math.max(1,Math.hypot(dx,dz)),ux=dx/length,uz=dz/length;
-  const threats=(s.course.rocks||[]).map(q=>({...obstaclePosition(q,s.time),r:q.r})).filter(q=>{const ahead=(q.x-r.x)*ux+(q.z-r.z)*uz,side=(q.x-r.x)*uz-(q.z-r.z)*ux;return ahead>-.5&&ahead<Math.min(18,length)&&Math.abs(side)<q.r+1.8;}).sort((a,b)=>Math.hypot(a.x-r.x,a.z-r.z)-Math.hypot(b.x-r.x,b.z-r.z));
-  if(threats.length){const q=threats[0],space=q.r+3.1,choices=[-1,1].map(side=>{const x=q.x+g.tz*side*space+ux*(q.r+3),z=q.z-g.tx*side*space+uz*(q.r+3),coords=gateCoordinates(g,x,z);let cost=Math.hypot(x-r.x,z-r.z)+Math.hypot(tx-x,tz-z);if(s.course.ground(x,z)>-.8)cost+=1000;for(const o of s.course.rocks)if(Math.hypot(x-o.x,z-o.z)<o.r+1.5)cost+=1000;if(Math.abs(coords.forward)<18&&g.side&&(coords.lateral+g.side*g.offset)*g.side<1)cost+=100;return {x,z,cost};}).sort((a,b)=>a.cost-b.cost);tx=choices[0].x;tz=choices[0].z;}
+  const obstacles=[...(s.course.rocks||[]).map(q=>({...obstaclePosition(q,s.time),r:q.r})),...(s.course.crossbars||[]).filter(b=>b.bottom>r.hydro.waterHeight+1.1).flatMap(b=>barrierPiles(b).map(p=>({...p,r:p.radius})))];
+  const threats=obstacles.filter(q=>{const ahead=(q.x-r.x)*ux+(q.z-r.z)*uz,side=(q.x-r.x)*uz-(q.z-r.z)*ux;return ahead>-.5&&ahead<Math.min(18,length)&&Math.abs(side)<q.r+1.8;}).sort((a,b)=>Math.hypot(a.x-r.x,a.z-r.z)-Math.hypot(b.x-r.x,b.z-r.z));
+  if(threats.length){const q=threats[0],space=q.r+3.1,choices=[-1,1].map(side=>{const x=q.x+g.tz*side*space+ux*(q.r+3),z=q.z-g.tx*side*space+uz*(q.r+3),coords=gateCoordinates(g,x,z);let cost=Math.hypot(x-r.x,z-r.z)+Math.hypot(tx-x,tz-z);if(s.course.ground(x,z)>-.8)cost+=1000;for(const o of obstacles)if(Math.hypot(x-o.x,z-o.z)<o.r+1.5)cost+=1000;if(Math.abs(coords.forward)<18&&g.side&&(coords.lateral+g.side*g.offset)*g.side<1)cost+=100;return {x,z,cost};}).sort((a,b)=>a.cost-b.cost);tx=choices[0].x;tz=choices[0].z;}
  }
  // Fixed ramps are obstacles from behind. Approach a rear corner before
  // following its side; aiming straight at the next buoy can pin a reversed ski.
