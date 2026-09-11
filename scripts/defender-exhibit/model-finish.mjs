@@ -41,8 +41,9 @@ export function addFinish({robotron=false,joust=false,root,cp,coin,crt,marquee,f
  // Coin acceptor throats have lips, a dark recessed slot and a separate return lens.
  const red=mat('coin_return_lens','#ae2017',0,.24);
  for(const x of [-.158,.158]){
-  for(const dx of [-.039,.039])box(coin,[.008,.027,.019],[x+dx,1.263,.712],m.zinc,.002);
-  for(const dy of [-.012,.012])box(coin,[.080,.006,.017],[x,1.263+dy,.713],m.zinc,.001);
+  // Original Coinco entry: vertical opening beside, never across, the price lens.
+  for(const dx of [-.011,.011])box(coin,[.006,.122,.019],[x-.049+dx,1.232,.712],m.zinc,.002);
+  for(const dy of [-.058,.058])box(coin,[.028,.006,.017],[x-.049,1.232+dy,.713],m.zinc,.001);
   box(coin,[.091,.049,.009],[x,1.132,.711],m.trim,.003);
   box(coin,[.079,.037,.010],[x,1.132,.718],red,.006,'coin_return_'+(x<0?'left':'right'));
   for(let i=0;i<6;i++)box(coin,[.055,.001,.001],[x,1.119+i*.005,.724],scuff,0);
