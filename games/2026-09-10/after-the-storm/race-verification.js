@@ -25,6 +25,16 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
+ if(state.verifyDrakeInner&&state.course.id==='reed'){
+  if(r.next===(state.course.reverse?14:4)&&r.drakeInner?.lap!==r.lap)r.drakeInner={lap:r.lap,stage:0};
+  const guide=r.drakeInner,path=[[277,77],[269,84],[251,96],[239,state.course.reverse?101:103],[200,107],[168,103],[139,93],[112,78]];
+  if(state.course.reverse)path.reverse();
+  if(guide?.lap===r.lap&&guide.stage<path.length){const p=path[guide.stage],x=(p[0]-200)*.75,z=(p[1]-240)*.75,anticipation=state.course.reverse?.25:.15,error=angleDelta(Math.atan2(x-r.x-r.vx*anticipation,z-r.z-r.vz*anticipation)-r.heading);
+   if(Math.hypot(x-r.x,z-r.z)<2)guide.stage++;
+   return {throttle:.32,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
+  }
+ }
+
  if(state.verifySunsetShortcut&&state.course.id==='amber'&&!state.course.reverse&&r.lap===state.laps){
   if(r.next===state.course.gates.length-4&&r.z<(455-275)*.75&&r.x>(445-245)*.75)r.sunsetShortcut=true;
   if(r.sunsetShortcut){const x=(410-245)*.75,z=(290-275)*.75,error=angleDelta(Math.atan2(x-r.x-r.vx*.18,z-r.z-r.vz*.18)-r.heading);return {throttle:1,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};}
