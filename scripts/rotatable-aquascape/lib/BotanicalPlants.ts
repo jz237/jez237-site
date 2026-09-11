@@ -4,7 +4,7 @@ import {fitLeaf} from './TankSpace';
 import {plantCurrent,setPlantRoots} from './PlantCurrent';
 import {sandChannel} from './Substrate';
 
-type Species='stem'|'bacopa'|'rotala'|'ludwigia'|'sword'|'anubias'|'carpet';
+type Species='stem'|'bacopa'|'rotala'|'ludwigia'|'sword'|'anubias'|'carpet'|'grass';
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z),up=V(0,1,0);
 /** Modeled leaf blades, petioles and branching stems. Nothing faces the camera. */
 export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>number,time:{value:number}){
@@ -12,21 +12,21 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  const batches=new Map<string,{species:Species;geometry:T.BufferGeometry;matrices:T.Matrix4[];colors:T.Color[];roots:number[];flex:number[];motion:number[]}>();
  const dummy=new T.Object3D();
  const variants=6;
- for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet'] as Species[])for(let variant=0;variant<variants;variant++){
+ for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet','grass'] as Species[])for(let variant=0;variant<variants;variant++){
   const form=variant/(variants-1),handedness=variant%2?1:-1;
   const p:number[]=[],uv:number[]=[],idx:number[]=[];
-  const rows=species==='sword'?28:species==='carpet'?8:species==='bacopa'||species==='anubias'?32:24,cols=species==='carpet'?4:species==='sword'?16:12;
+  const rows=species==='grass'?16:species==='sword'?28:species==='carpet'?8:species==='bacopa'||species==='anubias'?32:24,cols=species==='grass'?2:species==='carpet'?4:species==='sword'?16:12;
   for(let i=0;i<=rows;i++){
    const t=i/rows,blade=Math.max(0,(t-.08)/.92);
    const profile=species==='bacopa'?Math.pow(blade,1.2+form*.2):species==='ludwigia'?Math.pow(blade,.72+form*.18):species==='sword'?Math.pow(blade,.82+form*.24):Math.pow(blade,.78+form*.32);
    const outline=species==='anubias'||species==='bacopa'?Math.pow(Math.sin(profile*Math.PI),.46):species==='sword'?Math.pow(Math.sin(profile*Math.PI),.72):Math.pow(Math.sin(profile*Math.PI),species==='ludwigia'?.56:.82);
    // A continuous petiole-to-blade transition avoids the old abrupt shoulder.
-   const width=t<.08?.008:T.MathUtils.lerp(.008,outline*.5,T.MathUtils.smoothstep(t,.08,.18));
+   const width=species==='grass'?Math.pow(1-t,.65)*.5:t<.08?.008:T.MathUtils.lerp(.008,outline*.5,T.MathUtils.smoothstep(t,.08,.18));
    for(let j=0;j<=cols;j++){
     const u=j/cols,s=u*2-1;
     // Arched midrib, modest edge waviness and a rolled tip make a thin living blade.
     const edge=Math.abs(s),wave=Math.sin(t*22+s*3+variant*.9)*edge*edge*(species==='sword'?.018:.006)*Math.sin(t*Math.PI);
-    const curl=(species==='sword'?.28:species==='bacopa'?.07:.18)*t*t*(.55+form*.95);
+    const curl=(species==='grass'?.40:species==='sword'?.28:species==='bacopa'?.07:.18)*t*t*(.55+form*.95);
     const asymmetry=handedness*(.25+form*.75)*Math.sin(t*Math.PI);
     const arch=Math.sin(t*Math.PI)*(.018+form*.055);
     const bladeWeight=T.MathUtils.smoothstep(t,.08,.18)*Math.sin(t*Math.PI);
@@ -67,11 +67,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   plantRoot=V(x,base,z);plantFlex=.24+random()*.17;
   const leanX=Math.cos(angle)*(.12+random()*.33),leanZ=(random()-.5)*.40;
   const point=(t:number)=>V(T.MathUtils.clamp(x+leanX*t*t+Math.sin(t*4+phase)*.13*t,-4.65,4.65),base+h*t,T.MathUtils.clamp(z+leanZ*t*t,-1.95,1.9));
-  const hue=red?-.018+random()*.026:.205+random()*.035,light=.26+random()*.065;
+  const hue=red?.007+random()*.026:.205+random()*.035,light=.26+random()*.065;
   const roundLeaf=!red&&(maxH<2.5||(cx< -3.8||cx>3.7)&&i%5===0);
   const broadRed=red&&i%5===0;
   const grow=(start:number,end:number,offset:T.Vector3,vigor=1)=>{
-   const span=(end-start)*h,nodes=Math.max(4,Math.floor(span*(red?5.2:5.0))),nodeAngle=random()*6.28,spiral=Math.PI*.5+(random()-.5)*.22;
+   const span=(end-start)*h,nodes=Math.max(4,Math.floor(span*(red?6.4:5.8)*(.88+.24*(Math.sin(phase*2.7)*.5+.5)))),nodeAngle=random()*6.28,spiral=Math.PI*.5+(random()-.5)*.22;
    let previous=point(start);
    for(let j=1;j<=nodes;j++){
     const node=j===nodes?1:(j+Math.sin(j*2.4+phase)*.16)/nodes;
@@ -85,16 +85,17 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
      // every stem look like the same triangular miniature conifer.
      const a=nodeAngle+j*spiral+side*Math.PI+(random()-.5)*.35;
      const tip=T.MathUtils.smoothstep(growth,.77,1),length=(broadRed?.34:red?.38:roundLeaf?.29:.40)*(1-tip*.48)*(.78+random()*.40)*vigor;
-     const direction=V(Math.cos(a),.42+tip*.50+random()*.60,Math.sin(a));
+     // Mature blades spread below the compact, upward-facing growing tip.
+     const direction=V(Math.cos(a),-.12+tip*.95+random()*.64,Math.sin(a));
      const redGrowth=T.MathUtils.smoothstep(t,.25,.91);
      const leafHue=red?T.MathUtils.lerp(.18,hue,redGrowth):hue,leafLight=red?.29+redGrowth*.065+random()*.035:light+(random()-.5)*.045;
-     add(broadRed?'ludwigia':red?'rotala':roundLeaf?'bacopa':'stem',at,direction,length,length*(broadRed?.60:red?.25:roundLeaf?.56:.27),leafHue,red?.49:.63,leafLight,(random()-.5)*.75+.35);
+     add(broadRed?'ludwigia':red?'rotala':roundLeaf?'bacopa':'stem',at,direction,length,length*(broadRed?.60:red?.25:roundLeaf?.56:.27),leafHue,red?.37:.59,leafLight,(random()-.5)*.75+.35);
     }
    }
   };
   grow(0,1,V(0,0,0));
   // Pruned shoots fork; each offshoot has its own growing tip and node rhythm.
-  if(i%3===1){
+  if(i%3!==0){
    const start=.28+random()*.26,a=angle+(random()-.5)*2.0,reach=.25+random()*.42;
    grow(start,.72+random()*.22,V(Math.cos(a)*reach,0,Math.sin(a)*reach*.65),.74+random()*.15);
   }
@@ -133,6 +134,19 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
    add('anubias',tip,V(Math.cos(a)*.65,.2+random()*.5,Math.sin(a)*.65),l,l*.7,.22+random()*.025,.65,.18+random()*.07,random());
   }
  }
+ // Fine rooted grass tufts interrupt the broad-leaf carpet, as in the reference.
+ // Fixed blades have real curvature and retain volume when the camera rotates.
+ for(const [cx,cz,spreadX,spreadZ,count] of [[3.65,1.25,.98,.65,95],[3.10,.35,.55,.55,48],[-3.8,1.45,.54,.45,35]])for(let i=0;i<count;i++){
+  const angle=random()*Math.PI*2,radius=Math.sqrt(random());
+  const x=T.MathUtils.clamp(cx+Math.cos(angle)*radius*spreadX,-4.8,4.8),z=T.MathUtils.clamp(cz+Math.sin(angle)*radius*spreadZ,-2.05,2.05);
+  const {left,right}=sandChannel(z);if(x>left-.12&&x<right+.12)continue;
+  const b=height(x,z)+.012;plantRoot=V(x,b,z);plantFlex=.8;
+  const vigor=.65+random()*.6;
+  for(let j=0;j<7;j++){
+   const a=j*2.399+angle,length=(.14+random()*.27)*vigor;
+   add('grass',V(x+(random()-.5)*.045,b,z+(random()-.5)*.045),V(Math.cos(a)*(.12+random()*.4),1,Math.sin(a)*(.12+random()*.4)),length,.009+random()*.009,.20+random()*.035,.50,.23+random()*.08,random()*.4);
+  }
+ }
  // Dense, irregular carpeting with rounded small blades and an open sand channel.
  for(let i=0;i<4800;i++){
   const x=(random()-.5)*9.85,z=(random()-.5)*4.4,{left,right}=sandChannel(z);
@@ -145,7 +159,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  const tissues={fine:leafSurfaceMaps('fine'),round:leafSurfaceMaps('round',2732),sword:leafSurfaceMaps('sword',2733)};
  for(const batch of batches.values()){
   const {species}=batch;
-  const tissue=tissues[species==='sword'?'sword':species==='anubias'||species==='bacopa'||species==='ludwigia'?'round':'fine'];
+  const tissue=tissues[species==='sword'||species==='grass'?'sword':species==='anubias'||species==='bacopa'||species==='ludwigia'?'round':'fine'];
   const material=new T.MeshPhysicalMaterial({color:0xffffff,map:tissue.color,bumpMap:tissue.bump,roughnessMap:tissue.roughness,bumpScale:species==='sword'?.011:.004,roughness:species==='anubias'||species==='bacopa'?.66:.79,ior:1.18,specularIntensity:.7,side:T.DoubleSide});
   plantCurrent(material,time,true);setPlantRoots(batch.geometry,batch.roots,batch.flex);
   batch.geometry.setAttribute('leafMotion',new T.InstancedBufferAttribute(new Float32Array(batch.motion),3));
