@@ -36,10 +36,10 @@ export class Aquarium{
  private last=0;
  private seed=237;
  private daylight=1;
- private key=new T.SpotLight(0xe8f8ed,200,26,.94,.65,1.1);
- private stripLight=new T.RectAreaLight(0xf3ffe9,32,8.7,.28);
+ private canopyLights:T.SpotLight[]=[];
+ private stripLight=new T.RectAreaLight(0xf3ffe9,20,8.7,.50);
  private ledMaterial=new T.MeshStandardMaterial({color:0xe0f9ee,emissive:0xe0f9ee,emissiveIntensity:3});
- private fill=new T.HemisphereLight(0xc2e2e6,0x5b6a49,.9);
+ private fill=new T.HemisphereLight(0xc2e2e6,0x74846a,.9);
  private swimShader={value:0};
  private waterIllumination={value:1};
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
@@ -62,6 +62,8 @@ export class Aquarium{
   this.renderer.toneMapping=T.ACESFilmicToneMapping;
   this.renderer.toneMappingExposure=1.12;
   this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;
+  // Refresh once before the main view; reflection captures share the same maps.
+  this.renderer.shadowMap.autoUpdate=false;
   this.lighting=new AquariumLighting(this.scene,this.camera);
   host.appendChild(this.renderer.domElement);
   this.renderer.domElement.tabIndex=0;
@@ -82,9 +84,16 @@ export class Aquarium{
   this.camera.position.set(0,3.3,21.5);
   RectAreaLightUniformsLib.init();
   this.stripLight.position.set(0,6.29,-.15);this.stripLight.lookAt(0,0,-.15);
-  this.scene.add(this.fill,this.key,this.stripLight);
-  this.key.position.set(-1.5,8,1.7);this.key.target.position.set(0,1,-.5);this.scene.add(this.key.target);
-  this.key.castShadow=true;this.key.shadow.mapSize.set(2048,2048);this.key.shadow.bias=-.0003;this.key.shadow.normalBias=.035;this.key.shadow.radius=3;
+  this.scene.add(this.fill,this.stripLight);
+  // Three shadowed samples along the actual luminaire approximate a long emitter.
+  // The area light supplies the continuous highlight between those samples.
+  for(const x of [-2.8,0,2.8]){
+   const light=new T.SpotLight(0xf3ffe9,36,20,.94,.72,1.1);
+   light.position.set(x,6.29,-.15);light.target.position.set(x*.8,.6,-.15);
+   light.castShadow=true;light.shadow.mapSize.set(1536,1536);light.shadow.camera.near=.1;light.shadow.camera.far=20;
+   light.shadow.bias=-.00015;light.shadow.normalBias=.018;light.shadow.radius=3;
+   this.canopyLights.push(light);this.scene.add(light,light.target);
+  }
   const rim=new T.DirectionalLight(0xd2dfbf,.65);rim.position.set(-5,6,-3);this.scene.add(rim);
   const warm=new T.PointLight(0xffd9ad,7,18,2);warm.position.set(6,5,5);this.scene.add(warm);
   this.buildTank();buildAquariumSubstrate(this.scene,(x,z)=>this.height(x,z),this.swimShader);buildBotanicalPlants(this.scene,(x,z)=>this.height(x,z),this.swimShader);
@@ -196,7 +205,8 @@ export class Aquarium{
   this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
   this.waterIllumination.value=this.daylight;
   this.ledMaterial.emissiveIntensity=3*this.daylight;
-  this.key.intensity=130*this.daylight;this.stripLight.intensity=32*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=.8+.32*this.daylight;
+  for(const light of this.canopyLights)light.intensity=36*this.daylight;
+  this.stripLight.intensity=20*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=.8+.32*this.daylight;
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
@@ -213,6 +223,7 @@ export class Aquarium{
   const p=this.dust.geometry.getAttribute('position') as T.BufferAttribute;if(dt){for(let i=0;i<p.count;i++){let x=p.getX(i)+Math.sin(i+this.time*.2)*dt*.018,y=p.getY(i)+dt*.006;if(y>5.3)y=.7;p.setXY(i,x,y);}p.needsUpdate=true;}
   this.water.update(this.time,this.camera.position.y);
   const renderStart=performance.now();
+  this.renderer.shadowMap.needsUpdate=true;
   const sceneTriangles=this.lighting.render(this.renderer,this.lightingInspection);
   if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
   if(import.meta.env.DEV){this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}

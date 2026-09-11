@@ -49,11 +49,11 @@ transformedNormal = normalMatrix * transformedNormal;
    // Use each light's attenuated, shadowed irradiance for thin-leaf transmission.
    const direct='RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, reflectedLight );';
    shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_begin>',T.ShaderChunk.lights_fragment_begin.replaceAll(direct,direct+`
-reflectedLight.directDiffuse += directLight.color * material.diffuseColor * .24 * RECIPROCAL_PI * pow(saturate(dot(-geometryNormal,directLight.direction)),.8);
+reflectedLight.directDiffuse += directLight.color * material.diffuseColor * .38 * RECIPROCAL_PI * pow(saturate(dot(-geometryNormal,directLight.direction)),.8);
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-normals-v2-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v3-${flutter}-${material.type}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){
