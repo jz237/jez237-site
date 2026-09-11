@@ -24,6 +24,17 @@ export function parkMasteryInput(state,r){
 // Verification issues the same inputs available to a rider. It does not move
 // craft, award scores, or mark objectives complete.
 export function verificationInput(state,r){
+ if(state.verifyPierSurface&&!state.course.reverse&&r.lap>1){
+  if(r.next===state.course.gates.findIndex(g=>g.width===110)&&r.pierSurface?.lap!==r.lap)r.pierSurface={lap:r.lap,stage:0};
+  const guide=r.pierSurface;
+  if(guide&&guide.lap===r.lap&&guide.stage<7){
+   const path=[[160,450],[168,484],[236,495],[236,542],[260,580],[310,602],[355,580]],point=path[guide.stage],x=(point[0]-210)*.8,z=(point[1]-325)*.8;
+   if(Math.hypot(x-r.x,z-r.z)<(guide.stage===2?2:5))guide.stage++;
+   const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);
+   return {throttle:.65,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
+  }
+ }
+
  if(state.verifyPierDive&&r.pierDiveStage!==5){
   const a=state.course.ramps.find(a=>a.id===151);
   if(a&&(r.next===state.course.gates.findIndex(g=>g.width===110)&&!state.course.reverse&&r.lap===1||r.pierDiveStage!==undefined)){

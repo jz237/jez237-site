@@ -132,3 +132,17 @@ test('Normal Hard and Expert grid-start races take the first-lap pier dive and r
  assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.dq,'');assert.equal(r.lap,4);
  }
 });
+
+test('all forward classes take the low-tide pier route on laps two and three without jumping or diving',()=>{
+ for(const difficulty of [0,1,2]){
+  const s=createRace({course:getCourse('tempest',difficulty),difficulty}),r=s.racers[0];s.verifyPierSurface=true;const under={2:0,3:0};
+  for(let i=0;i<36000&&s.phase!=='results';i++){
+   stepRace(s,verificationInput(s,r),1/60);
+   if(r.pierSurface?.stage<4){
+    assert.ok(r.lap>1);assert.equal(r.collision,0);assert.equal(r.hydro.onRamp,false);assert.equal(r.hydro.diveRemaining,0);
+    if(r.z>map(0,521)[1]&&r.z<map(0,531)[1]&&r.hydro.y+1.1<.65)under[r.lap]++;
+   }
+  }
+  assert.ok(under[2]>10&&under[3]>10);assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.dq,'');assert.equal(r.lap,4);
+ }
+});

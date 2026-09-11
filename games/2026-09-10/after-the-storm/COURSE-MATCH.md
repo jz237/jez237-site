@@ -317,3 +317,12 @@ Expert now targets map x232 instead of x235 at the same south-side exit, accommo
 The full grid-start shortcut regression now covers Normal, Hard and Expert and passes in 6.68 s. It still requires ramp contact, no collision throughout the shortcut, more than ten frames beneath the deck with an active dive, exit before 90 s on lap one, and clean three-lap completion. Expert remains submerged briefly as buoyancy raises it after the dive timer expires; the test now counts active-dive frames rather than incorrectly requiring the timer to stay active on every subsequent submerged frame. Reverse and later-lap surface shortcut routes remain outstanding.
 
 Expert browser inspection at 79.05 s: lap one, zero misses, 63.77 km/h, hull y -3.013 m, dive remaining 0.333 s. The rider is visibly submerged beneath the deck between its supports; no logged browser errors.
+
+
+### Later-lap surface passage, forward classes — 2026-09-11
+
+Added an ordinary-input inspection route for the low-tide southern pier passage on laps two and three. It leaves the original outer first lap intact, takes the western side of the southern jump, aligns at map (236,495), and runs straight between supports before rejoining the eastern sequence. A nearer alignment point at y507 clipped a pile in Normal/Hard and was rejected. The retained route never commands a jump or dive.
+
+The new grid-start regression covers Normal, Hard and Expert for all three laps. On both later laps it requires over ten frames physically under the deck, zero shortcut collisions, no ramp contact, zero dive timer, and clean race completion. It passes in 6.92 s. Recorded total races: Normal 302.90 s, Hard 412.50 s, Expert 314.58 s; all zero misses. Hard's slower approach is not claimed as an optimized original racing line. A browser Inspect low-tide pier button holds the same route under the deck on lap two. Reverse still needs its own later-lap approach.
+
+Browser inspection confirms the Normal surface passage at 181.35 s on lap two: speed 48.43 km/h, hull y -2.185 m, dive remaining zero, no missed buoys and no browser errors. The ski is visibly riding the water beneath the exposed deck between supports. All 19 Southern geography/buoy tests passed in 25.72 s.
