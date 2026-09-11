@@ -72,7 +72,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  for(const [cx,cz,spreadX,spreadZ,maxH,count,red] of colonies)for(let i=0;i<Math.ceil(count*(maxH>2.5?1.4:1.1));i++){
   const radius=Math.sqrt(random()),angle=random()*Math.PI*2;
   const x=cx+Math.cos(angle)*radius*spreadX,z=cz+Math.sin(angle)*radius*spreadZ,base=height(x,z);
-  const h=Math.min(5.15-base,maxH*(.78-.19*radius*radius+random()*.23)),phase=random()*Math.PI*2;
+  // Mature rear shoots reach toward the light; keep the colony edge lower
+  // and individual tips uneven rather than cutting one horizontal canopy.
+  const rear=maxH>2.5&&cz<-.9;
+  const tipCeiling=rear?4.85+.36*(.5+.5*Math.sin(angle*2.3+i*1.71)):5.15;
+  const h=Math.min(tipCeiling-base,maxH*((rear?.89:.78)-(rear?.14:.19)*radius*radius+random()*.23)),phase=random()*Math.PI*2;
   plantRoot=V(x,base,z);plantFlex=.24+random()*.17;
   const leanX=Math.cos(angle)*(.12+random()*.33),leanZ=(random()-.5)*.40;
   const point=(t:number)=>V(T.MathUtils.clamp(x+leanX*t*t+Math.sin(t*4+phase)*.13*t,-4.65,4.65),base+h*t,T.MathUtils.clamp(z+leanZ*t*t,-1.95,1.9));
