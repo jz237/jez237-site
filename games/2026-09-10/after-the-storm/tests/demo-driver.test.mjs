@@ -16,7 +16,7 @@ for(let index=0;index<DEMO_SCENES.length;index++)test('live demo drives '+DEMO_S
  assert.ok(maxSpeed>8,'ski must actually drive');
  assert.equal(r.dq,'');
  if(s.mode==='stunt'){assert.equal(r.stunt.nextCheckpoint,4);assert.ok(r.stunt.rings>=14);}
- else assert.ok(r.lap>1,'complete a physical lap before timeout');
+ else {assert.ok(r.lap>1,'complete a physical lap before timeout');assert.ok(maxSpeed>20,'demo race must exceed 72 km/h');}
  assert.ok(Number.isFinite(r.x+r.z+r.hydro.y));
 });
 test('stalled demo requests normal rescue input without injecting position or progress',()=>{

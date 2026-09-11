@@ -11,6 +11,8 @@ export function createDemoScene(index=0){
  const [course,mode]=DEMO_SCENES[((index%DEMO_SCENES.length)+DEMO_SCENES.length)%DEMO_SCENES.length];
  const s=createRace({course:getCourse(course,0),mode,rider:0,difficulty:0,laps:3});
  s.demoRun=true;
+ // Exhibition starts at full engine power for the entire pack.
+ for(const r of s.racers)r.power=5;
  return s;
 }
 export function demoSceneDone(s){return s.phase==='results'||s.time>=115||(s.mode!=='stunt'&&s.racers[0].lap>1);}

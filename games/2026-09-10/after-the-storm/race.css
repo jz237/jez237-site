@@ -64,3 +64,5 @@ header:before{content:"";position:fixed;inset:0 0 auto;height:250px;background:l
  .mobile-riding:not(.demo-active) #freeStunts{background:transparent!important;padding:0!important;top:65px!important;left:14px!important}.mobile-riding:not(.demo-active) #freeStunts small,.mobile-riding:not(.demo-active) #stuntScore{display:none!important}.mobile-riding:not(.demo-active) #stuntGuide{font-size:10px}
 }
 @media(max-height:500px) and (max-width:900px){.mobile-riding:not(.demo-active) .telemetry{bottom:132px}.demo-active.demo-controls-open #demoPanel{left:12px;transform:none;width:min(450px,calc(100% - 170px));bottom:max(10px,env(safe-area-inset-bottom))}}
+
+#demoStart{display:block;background:#edc58c;color:#153744;font-weight:700;font-size:16px;padding:15px 24px;margin:16px 0 20px;border:0;border-radius:5px}@media(max-width:900px),(pointer:coarse){.intro{padding-top:82px}.intro h1{font-size:48px;margin:12px 0}#demoStart{font-size:15px;padding:14px 20px;margin:12px 0}}
