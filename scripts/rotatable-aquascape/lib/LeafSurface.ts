@@ -6,18 +6,25 @@ export function leafSurfaceMaps(kind:LeafSurfaceKind,seed=2731){
  const color=make(),relief=make(),cuticle=make(),contexts=[color,relief,cuticle].map(c=>c.getContext('2d')!);
  const pixels=contexts.map(c=>c.createImageData(512,1024));
  let state=seed;const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
+ // Smooth, non-repeating pigment/cuticle fields, rather than periodic sine bands.
+ const lattice=Float32Array.from({length:65*129},()=>random()*2-1);
+ const noise=(x:number,y:number)=>{
+  const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy;
+  const sx=fx*fx*(3-2*fx),sy=fy*fy*(3-2*fy),i=iy*65+ix;
+  return T.MathUtils.lerp(T.MathUtils.lerp(lattice[i],lattice[i+1],sx),T.MathUtils.lerp(lattice[i+65],lattice[i+66],sx),sy);
+ };
  for(let y=0;y<1024;y++)for(let x=0;x<512;x++){
   const u=x/512,v=y/1024,index=(y*512+x)*4,edge=Math.abs(u*2-1);
   const tissue=Math.sin(x*.087+Math.sin(y*.031)*2.2)*Math.sin(y*.063+Math.sin(x*.053));
-  const broad=Math.sin(u*17+Math.sin(v*14))*Math.sin(v*22);
-  const cells=Math.sin(u*39+Math.sin(v*24)*1.8)*Math.sin(v*67+Math.sin(u*21));
-  const grain=(random()-.5),tone=210+14*Math.sin(v*Math.PI)-edge*edge*8+tissue*2+broad*3+cells*2+grain*5;
-  const values=[tone,128+tissue*3+cells*4+grain*3,215+broad*15+cells*8+tissue*5+grain*4];
+  const broad=noise(u*5.5+3,v*9+7),patch=noise(u*17+13,v*29+19);
+  const cells=noise(u*47+2,v*97+3);
+  const grain=(random()-.5),tone=208+12*Math.sin(v*Math.PI)-edge*edge*10+tissue*2+broad*12+patch*5+cells*3+grain*4;
+  const values=[tone,128+tissue*2+patch*3+cells*5+grain*2,223+broad*12+patch*14+cells*8+tissue*3+grain*3];
   for(let channel=0;channel<3;channel++){
    const data=pixels[channel].data;data[index]=data[index+1]=data[index+2]=values[channel];
-   if(channel===0){data[index]+=broad*2;data[index+1]+=2;data[index+2]-=3+edge*3;}
+   if(channel===0){data[index]+=broad*5+patch*2;data[index+1]+=2;data[index+2]-=5+edge*3+broad*4;}
    // Pack optical tissue density in red; Three uses green for roughness.
-   if(channel===2)data[index]=68-edge*edge*15+broad*10+cells*5+tissue*2;
+   if(channel===2)data[index]=68-edge*edge*15+broad*14+patch*7+cells*5+tissue*2;
    data[index+3]=255;
   }
  }
@@ -38,7 +45,7 @@ export function leafSurfaceMaps(kind:LeafSurfaceKind,seed=2731){
  }else{
   const count=kind==='round'?8:13;
   for(let row=0;row<count;row++)for(const sign of [-1,1]){
-   const base=80+row*(870/count)+(random()-.5)*18,reach=kind==='round'?145:105;
+   const base=80+row*(870/count)+(random()-.5)*25,reach=(kind==='round'?145:105)*(.85+random()*.3);
    vein(c=>{c.moveTo(256,base);c.bezierCurveTo(256+sign*65,base-12,256+sign*177,base-reach,256+sign*250,base-reach-10);},kind==='round'?3.2:2.4,true);
    for(let j=1;j<6;j++){
     const x=256+sign*j*36,y=base-j*reach/6;

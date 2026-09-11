@@ -244,3 +244,10 @@ Leaf response is 55% faster with a slowly changing shared phase, stronger broad 
 The studio backdrop and fog now share a scene-linear blue-gray radiance. A small warm point light that produced a distracting pipe highlight is removed, and the floor is cooler. Production retains ACES tone mapping; the temporary developer AgX comparison is removed.
 
 Eight targeted tank-space, reflection and baked-field checks and the production build pass. Front and angled frames show changing leaf silhouettes; the angled preview reported 60 fps and 7.9 ms synchronous render submission without browser warnings/errors. No fish behavior, assets, dependencies or paid services changed. Full photographic fidelity remains unfinished.
+
+
+## Irregular pigment and cuticle detail
+
+Leaf maps now use deterministic smooth noise at three scales for nonperiodic pigment, relief, optical density and roughness variation. A slightly rougher cuticle breaks the uniform broad-leaf sheen, and secondary veins vary their reach and attachment spacing. An initially stronger pigment treatment was reduced after the leaf study showed excessive mottling. Texture resolution and geometry are unchanged; current animation is retained.
+
+Front-lit and backlit blade studies and the full aquarium were reviewed. The static diffuse field was rebuilt for the changed surface colors against 6,403,819 triangles in 19.34 seconds. Four targeted reflection and baked-field checks and the production build pass. This remains an artistic leaf material, not measured botanical reflectance. No paid assets, services or dependencies were introduced. The photographic realism goal remains unfinished.
