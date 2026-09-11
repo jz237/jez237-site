@@ -12558,5 +12558,24 @@
       "imageSha256": "2fa7b1058be35395cb74e49b5d0c24e002d023d663cef193dd7c00ad4bf1cb6d",
       "imageDHash": "d2d696d6de525715"
     }
+  },
+  {
+    "id": "2026-09-11-intense-phobia-situation-intense-phobia-situation-inside-th-2",
+    "title": "Intense phobia situation: Inside the Carp Feeding School",
+    "tests": "Friday catch-up lane 2/4. Phobia: Ichthyophobia. Fictional photorealistic shallow-pond maintenance dive; close normal koi bodies, overhead feeding platform, curved pond wall and obscured horizon create immediate proximity and enclosure. Credible carp anatomy, shallow-water optics and intact dive equipment are prompt constraints. Fresh fish-feeding subject/action/setting distinct from archived phobias. Exact CLI PNG decoded; concept and pixel gates unique. No visual review under explicit Friday override. Requested 1536x1024; provider returned 1448x1086.",
+    "prompt": "Create a fully photorealistic underwater documentary photograph of ichthyophobia, the fear of fish. The first-person camera is mounted on a trained pond-maintenance diver at kneeling height on a shallow ornamental carp pond floor during routine feeding. Dense ordinary adult koi carp fill almost the whole frame, close enough that their wet scales, round eyes, fleshy mouths and fine barbels are sharply readable. One large but normal 60-centimeter koi passes only twenty centimeters from the lens, its head dominating the left foreground; another crosses from the right, and many varied fish overlap naturally in the middle distance without intersecting. The viewer is immersed among them, not watching an aquarium through a window.\nBuild immediate bodily discomfort from four clear pressure devices: fish intrude from both foreground edges; overlapping bodies obscure the surface and horizon; a low submerged feeding platform looms just overhead; the pond's curved stone wall occupies the right edge and confines lateral sight. A short section of the diver's gloved left hand and intact regulator hose at the lower edge give human scale. The fishes' mouths are ordinary feeding mouths, not teeth or attacks. Fish occupy at least eighty percent of the composition, extending beyond the crop in a naturally circulating school. No inviting clear water corridor.\nUse a rectilinear 24 mm underwater housing, ordinary shallow-water green-gold sunlight, realistic suspended food particles, gentle silt, caustics on mottled cream, orange, black and silver scales, credible fin attachment and translucent fin rays. Preserve real carp anatomy: coherent eyes and gill covers, paired pectoral and pelvic fins, single dorsal and caudal fins, credible overlap, contact-free swimming and individual variation. The maintained pond is shallow and the equipped diver is safe; nothing is trapped, injured or attacking. No sharks, piranhas, giant fish, monster teeth, panic, blood, supernatural effects, text, labels, watermark, fisheye distortion, cinematic horror grading or decorative scenic panorama.",
+    "image": "images/2026-09-11-intense-phobia-situation-intense-phobia-situation-inside-th-2.jpg",
+    "thumb": "thumbs/2026-09-11-intense-phobia-situation-intense-phobia-situation-inside-th-2.webp",
+    "color": "#706148",
+    "date": "2026-09-11",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2",
+    "size": "1448x1086",
+    "dedup": {
+      "conceptKey": "carp-feeding-school-pond-diver",
+      "imageSha256": "2215a4e077210b87d0057fe84920b55cad7c8467c45942df0f43baa73a5e38f1",
+      "imageDHash": "39bbac31923a3bb8"
+    }
   }
 ]
