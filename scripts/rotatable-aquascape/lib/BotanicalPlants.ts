@@ -15,7 +15,7 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  for(const species of ['stem','bacopa','rotala','ludwigia','sword','anubias','carpet'] as Species[])for(let variant=0;variant<variants;variant++){
   const form=variant/(variants-1),handedness=variant%2?1:-1;
   const p:number[]=[],uv:number[]=[],idx:number[]=[];
-  const rows=species==='sword'?24:species==='carpet'?8:16,cols=species==='carpet'?4:8;
+  const rows=species==='sword'?28:species==='carpet'?8:species==='bacopa'||species==='anubias'?32:24,cols=species==='carpet'?4:species==='sword'?16:12;
   for(let i=0;i<=rows;i++){
    const t=i/rows,blade=Math.max(0,(t-.08)/.92);
    const profile=species==='bacopa'?Math.pow(blade,1.2+form*.2):species==='ludwigia'?Math.pow(blade,.72+form*.18):species==='sword'?Math.pow(blade,.82+form*.24):Math.pow(blade,.78+form*.32);
@@ -29,7 +29,10 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
     const curl=(species==='sword'?.28:species==='bacopa'?.07:.18)*t*t*(.55+form*.95);
     const asymmetry=handedness*(.25+form*.75)*Math.sin(t*Math.PI);
     const arch=Math.sin(t*Math.PI)*(.018+form*.055);
-    p.push(s*width*(1+s*asymmetry*.14)+asymmetry*.035,t,arch-curl+edge*edge*(.016+form*.027)*Math.sin(t*Math.PI)+wave+s*width*handedness*t*(.06+form*.18));
+    const bladeWeight=T.MathUtils.smoothstep(t,.08,.18)*Math.sin(t*Math.PI);
+    const midrib=Math.exp(-s*s*90)*.010*bladeWeight;
+    const ribbing=species==='sword'?Math.cos(s*Math.PI*6)*.0045*bladeWeight*(1-edge):0;
+    p.push(s*width*(1+s*asymmetry*.14)+asymmetry*.035,t,arch-curl+midrib+ribbing+edge*edge*(.016+form*.027)*Math.sin(t*Math.PI)+wave+s*width*handedness*t*(.06+form*.18));
     uv.push(u,t);
     if(i<rows&&j<cols){const n=i*(cols+1)+j;idx.push(n,n+1,n+cols+1,n+1,n+cols+2,n+cols+1);}
    }
@@ -143,10 +146,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
  for(const batch of batches.values()){
   const {species}=batch;
   const tissue=tissues[species==='sword'?'sword':species==='anubias'||species==='bacopa'||species==='ludwigia'?'round':'fine'];
-  const material=new T.MeshPhysicalMaterial({color:0xffffff,map:tissue.color,bumpMap:tissue.bump,roughnessMap:tissue.roughness,bumpScale:species==='sword'?.007:.002,roughness:species==='anubias'||species==='bacopa'?.58:.74,ior:1.18,specularIntensity:.8,side:T.DoubleSide});
+  const material=new T.MeshPhysicalMaterial({color:0xffffff,map:tissue.color,bumpMap:tissue.bump,roughnessMap:tissue.roughness,bumpScale:species==='sword'?.011:.004,roughness:species==='anubias'||species==='bacopa'?.66:.79,ior:1.18,specularIntensity:.7,side:T.DoubleSide});
   plantCurrent(material,time,true);setPlantRoots(batch.geometry,batch.roots,batch.flex);
   batch.geometry.setAttribute('leafMotion',new T.InstancedBufferAttribute(new Float32Array(batch.motion),3));
   const leaves=new T.InstancedMesh(batch.geometry,material,batch.matrices.length);batch.matrices.forEach((m,i)=>{leaves.setMatrixAt(i,m);leaves.setColorAt(i,batch.colors[i]);});leaves.castShadow=true;leaves.receiveShadow=true;leaves.computeBoundingSphere();
+  leaves.userData.plantSpecies=species;
   leaves.customDepthMaterial=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking,side:T.DoubleSide});plantCurrent(leaves.customDepthMaterial,time,true);scene.add(leaves);
  }
  const stemsMesh=new T.InstancedMesh(new T.CylinderGeometry(1,1,1,5),new T.MeshStandardMaterial({roughness:.85}),stems.length);

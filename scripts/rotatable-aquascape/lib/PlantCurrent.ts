@@ -61,14 +61,26 @@ transformedNormal = normalMatrix * transformedNormal;
   shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',T.ShaderChunk.project_vertex.replace('mvPosition = modelViewMatrix * mvPosition;','mvPosition.xyz = bendPlant(mvPosition.xyz);\nmvPosition = modelViewMatrix * mvPosition;'));
   shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>',T.ShaderChunk.worldpos_vertex.replace('worldPosition = modelMatrix * worldPosition;','worldPosition.xyz = bendPlant(worldPosition.xyz);\nworldPosition = modelMatrix * worldPosition;'));
   if(flutter&&material instanceof T.MeshStandardMaterial){
+   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
+// A paler abaxial face and thicker veins break the uniform plastic-sheet response.
+if(!gl_FrontFacing){
+ float tissueLuma=dot(diffuseColor.rgb,vec3(.2126,.7152,.0722));
+ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(tissueLuma),.12)*vec3(1.08,1.12,.99);
+}
+float leafTranslucency=.38;
+#ifdef USE_BUMPMAP
+ float veinRelief=texture2D(bumpMap,vBumpMapUv).r;
+ leafTranslucency*=1.-clamp((veinRelief-.52)*2.2,0.,.62);
+#endif
+`);
    // Use each light's attenuated, shadowed irradiance for thin-leaf transmission.
    const direct='RE_Direct( directLight, geometryPosition, geometryNormal, geometryViewDir, geometryClearcoatNormal, material, reflectedLight );';
    shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_begin>',T.ShaderChunk.lights_fragment_begin.replaceAll(direct,direct+`
-reflectedLight.directDiffuse += directLight.color * material.diffuseColor * .38 * RECIPROCAL_PI * pow(saturate(dot(-geometryNormal,directLight.direction)),.8);
+reflectedLight.directDiffuse += directLight.color * material.diffuseColor * leafTranslucency * RECIPROCAL_PI * pow(saturate(dot(-geometryNormal,directLight.direction)),.8);
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v4-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v5-${flutter}-${material.type}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){
