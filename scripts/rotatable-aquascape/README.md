@@ -200,3 +200,12 @@ The old rectangular soil layer stretched a square texture over a front face more
 Two geometry tests verify that the combined terrain volume closes without gaps or inconsistent seam winding, and that side/bottom texture scale matches world distance. The static light field was rebuilt against 6,392,823 triangles, including the corrected soil volume and grains. All 37 tests and the production build pass.
 
 Front and enlarged three-quarter views were inspected; the close preview reported 60 fps and 7.9 ms synchronous render submission, with no browser warnings/errors. Fish behavior and the photographic original are unchanged. No assets, dependencies or paid services were introduced. This improves the foreground material scale and depth; the whole scene still does not match the reference photograph.
+
+
+## Visible blade movement in the current
+
+Individual leaves now flex farther at normal aquarium viewing distance. A slowly varying current envelope drives a broad bend, while smaller traveling ripples and torsion disturb the tip and edges. Sword blades move more slowly, short grass responds faster, and thick anubias remains restrained. Per-leaf phase and rate variation avoids identical synchronized loops. The petiole position stays attached to the stem, and analytical shading normals and shadow geometry use the same deformation.
+
+Blade motion is capped in world distance. Glass-fitting clearance now accounts for the largest blade excursion rather than assuming one fixed allowance. A geometry check covers this additional clearance; the static diffuse field is rebuilt for the slightly revised leaf placement. This is procedural water-responsive animation, not a hydrodynamic solver. Fish behavior and materials are unchanged; no assets, services, or dependencies were purchased.
+
+Verified individual blade changes over time, full front and close angled views, and pause/resume. The angled preview reported 60 fps / 5.6 ms synchronous render submission. All 38 tests and the production build pass. The static field was rebuilt against 6,392,823 triangles in 19.21 seconds. Full photographic fidelity remains unfinished.

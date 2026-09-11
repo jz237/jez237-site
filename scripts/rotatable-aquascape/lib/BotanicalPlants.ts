@@ -45,10 +45,11 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
   const batch=batches.get(`${species}-${variant}`)!;dummy.position.copy(pos);dir.normalize();
   // Orient the upper lamina toward the light, instead of leaving leaf faces vertical.
   const across=dir.clone().cross(up);if(across.lengthSq()<.0001)across.set(1,0,0);across.normalize();
+  const leafAmplitude=Math.min(species==='anubias'?.10:species==='grass'?.42:.34,(species==='sword'?.18:.11)/Math.max(length,.01));
   const normal=across.clone().cross(dir).normalize();dummy.quaternion.setFromRotationMatrix(new T.Matrix4().makeBasis(across,dir,normal));
-  dummy.rotateY(twist-.35);dummy.scale.set(width,length,length);dummy.updateMatrix();fitLeaf(dummy,batch.geometry.getAttribute('position') as T.BufferAttribute);batch.matrices.push(dummy.matrix.clone());batch.colors.push(new T.Color().setHSL(h,s,l).convertSRGBToLinear());batch.roots.push(plantRoot.x,plantRoot.y,plantRoot.z);batch.flex.push(plantFlex);
+  dummy.rotateY(twist-.35);dummy.scale.set(width,length,length);dummy.updateMatrix();fitLeaf(dummy,batch.geometry.getAttribute('position') as T.BufferAttribute,Math.max(.14,leafAmplitude*length*1.6));batch.matrices.push(dummy.matrix.clone());batch.colors.push(new T.Color().setHSL(h,s,l).convertSRGBToLinear());batch.roots.push(plantRoot.x,plantRoot.y,plantRoot.z);batch.flex.push(plantFlex);
   const phase=pos.x*13.7+pos.y*9.3+pos.z*17.1+dir.x*4.2;
-  batch.motion.push(phase,Math.min(species==='anubias'?.075:.18,(species==='sword'?.10:.065)/Math.max(length,.01)),.8+(Math.sin(phase*1.7)*.5+.5)*.75);
+  batch.motion.push(phase,leafAmplitude,(species==='sword'?.55:species==='anubias'?.48:.75)+(Math.sin(phase*1.7)*.5+.5)*(species==='grass'?1.15:.70));
  };
  const stems:{a:T.Vector3;b:T.Vector3;r:number;color:T.Color;root:T.Vector3;flex:number}[]=[];
  const stem=(a:T.Vector3,b:T.Vector3,r:number,color:number)=>stems.push({a,b,r,color:new T.Color(color),root:plantRoot.clone(),flex:plantFlex});
