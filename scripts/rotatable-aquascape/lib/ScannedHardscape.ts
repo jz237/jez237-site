@@ -17,7 +17,17 @@ export async function buildScannedHardscape(scene:T.Scene,obstacles:Obstacle[],h
  const wood=woodFile.scene.children[0] as T.Mesh<T.BufferGeometry,T.MeshStandardMaterial>;
  // The scan already contains brown weathering. A restrained neutral tint keeps
  // its pale exposed grain visible; the packed ARM red channel restores crevices.
- const woodMaterial=new T.MeshPhysicalMaterial({map:wood.material.map,normalMap:wood.material.normalMap,roughnessMap:wood.material.roughnessMap,aoMap:wood.material.roughnessMap,aoMapIntensity:.7,color:0xb7aea0,roughness:.9,normalScale:new T.Vector2(.95,.95),side:T.FrontSide,vertexColors:true,metalness:0,ior:1.22,specularIntensity:.65});
+ const woodMaterial=new T.MeshPhysicalMaterial({map:wood.material.map,normalMap:wood.material.normalMap,roughnessMap:wood.material.roughnessMap,aoMap:wood.material.roughnessMap,aoMapIntensity:.9,color:0xb7aea0,roughness:.82,normalScale:new T.Vector2(1.15,1.15),side:T.FrontSide,vertexColors:true,metalness:0,ior:1.22,specularIntensity:.65});
+ // Darker soaked bark retains the scan's pale exposed fibers. Apply the same
+ // scene-linear reflectance curve in the offline diffuse-light export.
+ const weathering={saturation:1,tint:[1,1,1],exponent:1.18,gain:1.12};
+ woodMaterial.userData.bakeDiffuse=weathering;
+ woodMaterial.onBeforeCompile=shader=>{
+  shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
+   diffuseColor.rgb=pow(max(diffuseColor.rgb,vec3(0.)),vec3(${weathering.exponent}))*${weathering.gain};
+  `);
+ };
+ woodMaterial.customProgramCacheKey=()=>`submerged-bark-${weathering.exponent}-${weathering.gain}`;
  for(const texture of [woodMaterial.map,woodMaterial.normalMap,woodMaterial.roughnessMap])if(texture)texture.anisotropy=8;
  for(const branch of aquascapeBranches){
   const {geometry,obstacles:contacts}=bendScannedBranch(wood.geometry,branch);

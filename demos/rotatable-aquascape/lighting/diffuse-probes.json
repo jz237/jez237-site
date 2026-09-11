@@ -19,26 +19,26 @@
   "triangles": 8973091,
   "bytes": 60480,
   "coefficientRange": [
-    -1.2288329601287842,
-    1.2001363039016724
+    -1.228931188583374,
+    1.1999775171279907
   ],
   "hits": 681124,
-  "seconds": 21.42,
+  "seconds": 21.24,
   "model": "single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds/moss excluded",
   "sourceHashes": {
     "bake-lighting.py": "250c098fd06cbc785c7ddef67327e8e71db92f51770c197211ac6b75dbe798ab",
     "lib/CanopyLighting.json": "6489e217691f32bdc35b3b555879ed382770f46eb1ee15ac004aededcbc4e2af",
-    "lib/BakeExport.ts": "2e98e04551eda48df2ce235e6e7f4186080a893b858fbc3a7382ecf939102840",
+    "lib/BakeExport.ts": "45f139627f01556cf97b82ef09f53f58da26e6af31289651f7ac9c945ef4f42a",
     "lib/WaterDepth.ts": "ec5a7100b6f51eee084044c935ebc0cba549d3db6661c67024655c832e4f1179",
-    "lib/BotanicalPlants.ts": "c049bad314ffd62b3e705251ba6f20fd6cfa870d33f8af3ab1c3ad3e377c5c9f",
+    "lib/BotanicalPlants.ts": "dad073a729d510b58797b087f02d2e4d2be0434e382b341070ae4d6f00938b8e",
     "lib/ScannedBranch.ts": "721f3bc6138bc0c9c3191c3827c6770deb4498b7ce662726402ad8a38af0f045",
     "lib/ScannedRock.ts": "c82fcd9cfac2ba8b5f23f8f6d9a56579cbb3362107cb13482e03a1a2d29976f9",
-    "lib/ScannedHardscape.ts": "1becfee7464d423fc705d27cf399b1c825231c22dcb169e14d98169ec9160b2c",
+    "lib/ScannedHardscape.ts": "97e7caf7c5aa6e257de5f9cfc4b62552d55650278e18e93f289d4af4a7fdfa64",
     "lib/EpiphyteMoss.ts": "3eede7a5e5c6f14e72914759734af560ddd87424f72420914c43f94800605d51",
     "lib/TankSpace.ts": "7778538c968f10f4634c2527aa61e0292c272c695d464d0371b8a328ecee271f",
     "lib/Substrate.ts": "2f32006d9075f596ca77cc8aaf46d9e0872e6176d36f728c448830f3adc328d7",
     "lib/SubstrateVolume.ts": "56fd05a3a76161cf15866ca66f2888fb50664f25fb3b8aab8d0e60e141ea1a6b",
     "lib/LeafSurface.ts": "b36a27bbb868c26fd62e00245ae6f30ccf1d45cc1545350e699539f69688d0d8"
   },
-  "binarySHA256": "6abbfc5bcbfd03c48224072a65040572a58ca9c228804ebe4d8809aefe1b2add"
+  "binarySHA256": "b01df7efce55758cb74bedb8a01c4c344883d054319a635ce291076de5b3fbe1"
 }

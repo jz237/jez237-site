@@ -103,12 +103,12 @@ export function buildBotanicalPlants(scene:T.Scene,height:(x:number,z:number)=>n
      const inclination=.12+tip*.65+(Math.sin(phase*1.37+j*.93)*.5+.5)*.28+random()*.66;
      const direction=V(Math.cos(a),inclination,Math.sin(a));
      const redGrowth=T.MathUtils.smoothstep(t,.25,.91);
-     // Copper mature leaves and salmon tips avoid the old green-to-yellow hue
+     // Copper-red mature leaves and warmer growing tips avoid a uniform brown
      // ramp. Some broad-leaf shoots retain green lower growth among the reds.
      const palette=Math.sin(phase*2.7)*.5+.5,greenBase=red&&broadRed&&t<.20+palette*.24;
-     const leafHue=red?(greenBase?.205:T.MathUtils.lerp(.022+palette*.035,hue,redGrowth)):hue;
-     const leafLight=red?.26+redGrowth*.08+random()*.035:light+(random()-.5)*.045;
-     add(broadRed?'ludwigia':red?'rotala':roundLeaf?'bacopa':'stem',at,direction,length,length*(broadRed?.60:red?.25:roundLeaf?.56:.27),leafHue,red?(greenBase?.53:.36+palette*.075):.59,leafLight,(random()-.5)*.75+.35);
+     const leafHue=red?(greenBase?.205:T.MathUtils.lerp(.01+palette*.019,hue,redGrowth)):hue;
+     const leafLight=red?.245+redGrowth*.07+random()*.03:light+(random()-.5)*.045;
+     add(broadRed?'ludwigia':red?'rotala':roundLeaf?'bacopa':'stem',at,direction,length,length*(broadRed?.60:red?.25:roundLeaf?.56:.27),leafHue,red?(greenBase?.53:.46+palette*.10):.59,leafLight,(random()-.5)*.75+.35);
     }
    }
   };
