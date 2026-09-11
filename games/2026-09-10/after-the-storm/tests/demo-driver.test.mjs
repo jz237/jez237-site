@@ -9,14 +9,15 @@ test('demo tours all nine venues and wraps to the first scene',()=>{
  assert.equal(createDemoScene().demoRun,true);
 });
 for(let index=0;index<DEMO_SCENES.length;index++)test('live demo drives '+DEMO_SCENES[index].join(' / '),()=>{
- const s=createDemoScene(index);let steps=0,maxSpeed=0;
- while(!demoSceneDone(s)&&steps++<7200){stepRace(s,demoInput(s),1/60);maxSpeed=Math.max(maxSpeed,s.racers[0].speed);}
+ const s=createDemoScene(index);let steps=0,maxSpeed=0,near=0,samples=0,distanceSum=0;
+ while(!demoSceneDone(s)&&steps++<7200){stepRace(s,demoInput(s),1/60);maxSpeed=Math.max(maxSpeed,...s.racers.map(r=>r.speed));
+  if(s.mode==='race'&&s.time>8)for(const r of s.racers){const distance=Math.min(...s.racers.filter(q=>q!==r).map(q=>Math.hypot(q.x-r.x,q.z-r.z)));samples++;distanceSum+=distance;if(distance<5)near++;}}
  const r=s.racers[0];
  assert.ok(demoSceneDone(s),'scene must end without hanging');
  assert.ok(maxSpeed>8,'ski must actually drive');
  assert.equal(r.dq,'');
  if(s.mode==='stunt'){assert.equal(r.stunt.nextCheckpoint,4);assert.ok(r.stunt.rings>=14);}
- else {assert.ok(r.lap>1,'complete a physical lap before timeout');assert.ok(maxSpeed>20,'demo race must exceed 72 km/h');}
+ else {assert.ok(r.lap>1,'complete a physical lap before timeout');assert.ok(maxSpeed>20,'racing pack must exceed 72 km/h while followers may yield');assert.ok(distanceSum/samples>12,'pack should spread out');assert.ok(near/samples<.08,'riders should rarely crowd within five metres');}
  assert.ok(Number.isFinite(r.x+r.z+r.hydro.y));
 });
 test('stalled demo requests normal rescue input without injecting position or progress',()=>{

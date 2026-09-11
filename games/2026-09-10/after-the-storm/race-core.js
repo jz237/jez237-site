@@ -1,3 +1,4 @@
+import {demoTrafficInput} from './demo-traffic.js';
 import {mooredBoatCollision} from './moored-boats.js';
 import {setCourseWaveTrain} from './course-wave-train.js';
 import {iceContact,supportOnIce,stepIceBalance} from './ice-surfaces.js';
@@ -59,7 +60,8 @@ export function adjudicateGate(s,r,ox,oz){
 }
 export function courseDistance(course,x,z){let best=Infinity;for(let i=0;i<course.gates.length;i++){const a=course.gates[i],b=course.gates[(i+1)%course.gates.length],dx=b.x-a.x,dz=b.z-a.z,t=clamp(((x-a.x)*dx+(z-a.z)*dz)/(dx*dx+dz*dz),0,1);best=Math.min(best,Math.hypot(x-a.x-dx*t,z-a.z-dz*t));}return best;}
 export function outsideCourse(course,x,z){return course.boundary?polygonDistance(course.boundary,x,z)>0:courseDistance(course,x,z)>30;}
-export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z-r.z),next=s.course.gates[(r.next+1)%s.course.gates.length];
+export function aiInput(s,r){const input=courseInput(s,r);return s.demoRun&&s.mode==='race'?demoTrafficInput(s,r,input):input;}
+function courseInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z-r.z),next=s.course.gates[(r.next+1)%s.course.gates.length];
  // Freestanding obstacle detours need a braking phase with the faster engine.
  // Roof/pier supports retain their existing passage approach and tide timing.
  let avoidingObstacle=false;
@@ -76,6 +78,13 @@ export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z
   const q0=route[(best+count)%count],q1=route[(best+1+count)%count],spacing=Math.max(1,Math.hypot(q1.x-q0.x,q1.z-q0.z)),ahead=Math.min(Math.ceil(end),best+Math.ceil((5+r.speed*.35)/spacing)),q=route[(ahead+count)%count];tx=q.x;tz=q.z;
  }
  if(g.pathFraction!==undefined&&s.course.passage?.continuous&&d>6){const q=passageAim(s.course.passage,g,r.x,r.z,4+r.speed*.15);tx=q.x;tz=q.z;}
+ // Give each exhibition rider a distinct line on open stretches. Converge
+ // before checkpoints and leave constrained authored passages untouched.
+ if(s.demoRun&&s.mode==='race'&&d>24&&!g.channel&&!g.approach&&!s.course.passage?.continuous&&!r.onIce){
+  const dx=tx-r.x,dz=tz-r.z,length=Math.max(1,Math.hypot(dx,dz)),offset=(r.id-1.5)*1.7*Math.min(1,(d-24)/18),nx=dz/length,nz=-dx/length;
+  const x=tx+nx*offset,z=tz+nz*offset;
+  if([.25,.5,.75,1].every(t=>s.course.ground(r.x+(x-r.x)*t,r.z+(z-r.z)*t)<-1.2&&!outsideCourse(s.course,r.x+(x-r.x)*t,r.z+(z-r.z)*t))){tx=x;tz=z;}
+ }
  // Plan a local detour around a solid obstacle that intersects the intended
  // line. Keep the original checkpoint; avoiding a post never grants progress.
  if(s.course.layoutRevision){const dx=tx-r.x,dz=tz-r.z,length=Math.max(1,Math.hypot(dx,dz)),ux=dx/length,uz=dz/length;
