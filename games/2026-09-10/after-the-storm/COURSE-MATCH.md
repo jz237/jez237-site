@@ -26,7 +26,7 @@ still require their own source comparison before they can be signed off.
 | Course | Distinctive requirements | State |
 | --- | --- | --- |
 | Sunny Beach | Long sandbar, parallel straights, tight ends, open sea and mainland, difficulty-specific slalom | Rebuilt sandbar; original class buoy maps and metal-ball rows transcribed and race-tested; final shoreline/visual sign-off pending |
-| Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/route and race ramp; piers, bypasses and buoy placement pending |
+| Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/ramp, original class buoy sequences and Expert slalom; physical piers, metal barriers, final-lap bypass and visual sign-off pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
 | Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel, required Expert/Reverse inner route and class-specific bow jumps; original buoy patterns and final visual/scale matching pending |
@@ -351,3 +351,14 @@ Focused tests verify original counts, complete color sequences, ordered progress
 Regression evidence: the full suite initially passed 157/160 tests in 102.63 s. The three failures were stale assumptions in `race.test`: generated gate colors at fixed indices, a sub-180-second generic course limit, and (0,0) being out-of-course. Updated these to select gates by actual side, retain a bounded 600-second session limit, and test a verified outside-boundary point (-200,0). All six race tests then passed in 4.41 s, including every rider finishing with zero misses, wrong-side power reset/disqualification, backwards-crossing rejection and the unchanged five-second outside rule. The full suite was not rerun after these test-only fixture corrections; the changed Sunny steel-ball mapping also passed its three focused tests separately.
 
 Browser Reverse completion: 4:06.033, second place, zero misses, 36 passed gates, high graphics/course sea state, no console errors. Rendered slalom and shoreline were inspected; original visual matching is still pending. No publication yet.
+
+
+### Sunset Bay original buoy sequences — 2026-09-11
+
+Inspected all four original Sunset Bay maps and replaced generated alternating buoys with Normal 14, Hard 15, Expert 16 and Reverse 12 buoy sequences, each plus a finish. Normal uses the existing map origin (245,275) at 0.75 m/pixel; Hard is translated seven pixels left, Expert sixty pixels right, and Reverse rotated about (256,276) to align the source geography. Scale/alignment are reconstruction estimates, and the original artwork is not shipped. Added the mapped outer boundary.
+
+Expert's tighter western and southern slalom requires its own approach route. A new optional anchorsByClass field supports that route independently of Port Blue's required-tunnel logic. The original buoy centers, colors, side rules and penalties remain unchanged. Initial Expert trials missed its western yellow and southern yellow; the corrected approach line now clears both on every lap.
+
+Three focused tests pass in 5.86 s: original counts/full color sequences/selected coordinates and ordered gates; isolated Expert route selection without tunnel-rule leakage; and ordinary-input three-lap completion in all four classes with zero misses/DQ. Total races Normal/Hard/Expert/Reverse: 264.12 / 300.95 / 277.95 / 290.20 s. Another 25 classic-course, passage and Sunny Beach tests pass in 9.25 s. These checks do not prove Sunset Bay's original metal-ball cluster, physical piers or final-lap out-of-bounds shortcut, all still pending, nor full visual parity. Layout revision is now 3; record-key separation remains pending before release.
+
+Browser Expert race completed in 4:37.950, second place, zero misses, 51 passed checkpoints, high graphics and course sea state. The rendered slalom was inspected and no browser errors were logged. This does not sign off the still-pending source-specific scenery or shortcuts.

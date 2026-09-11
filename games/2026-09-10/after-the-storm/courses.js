@@ -39,7 +39,7 @@ export function terrainHeight(course,x,z){if(CLASSIC_COURSES[course.id])return C
  return Math.min(theme==='ice'?65:theme==='lake'?45:22,h)+erosion*clamp((d-45)/24,0,1);
 }
 export const COURSES=definitions.map(original=>{const d={...original,...CLASSIC_COURSES[original.id]};return {...d,gates:buildGates(sampleRoute(d.anchors)),rocks:[],laps:3};});
-export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c=>c.id===id)||COURSES[0],reverse=difficulty===3,level=Math.min(2,difficulty),anchors=level===2&&base.expertAnchors?base.expertAnchors:base.anchors;let points=sampleRoute(anchors,24+level*4);if(reverse)points=[points[0],...points.slice(1).reverse()];
+export function getCourse(id='greyhaven',difficulty=0){const base=COURSES.find(c=>c.id===id)||COURSES[0],reverse=difficulty===3,level=Math.min(2,difficulty),anchors=base.anchorsByClass?.[difficulty]||(level===2&&base.expertAnchors?base.expertAnchors:base.anchors);let points=sampleRoute(anchors,24+level*4);if(reverse)points=[points[0],...points.slice(1).reverse()];
  let route=sampleRoute(anchors,384);if(reverse)route=[route[0],...route.slice(1).reverse()];const course={...base,anchors,closedAreas:level===2?base.expertClosedAreas||[]:[],requiredPassage:level===2&&!!base.expertAnchors,difficulty,reverse,route,gates:buildGates(points,level),rocks:(base.obstaclesByClass?.[difficulty]||[...(base.obstacles||[]),...(level?(base.extraObstacles||[]).slice(0,level===1?4:99):[])]).map(o=>({...o})),ramps:(base.raceRampsByClass?.[difficulty]||base.raceRamps||[]).map(r=>({...r,solidBack:true}))};
  if(base.buoysByClass?.[difficulty])course.gates=mappedGates(route,base.buoysByClass[difficulty]);
  // Navigation obstacles grow with difficulty, but keep a safe central racing line.
