@@ -913,3 +913,9 @@ Added a user-started smart demo with eleven scenes: one real lap on all nine ven
 Take control (or driving keys) hands over the current ski without resetting its physical state. Demo-origin sessions, including takeovers, cannot award records or unlocks. Touch controls remain hidden while the pilot drives and return on handoff if enabled.
 
 All 14 demo tests pass: nine physical race laps without disqualification, both four-checkpoint stunt runs with at least 14 rings, loop wrap, stalled rescue and paused/finished inputs. Three touch-input regressions also pass. Browser inspection confirmed autonomous movement, Next coast, pause/resume and takeover without runtime errors. These tests cover the curated Normal-class demo, not full original-course parity or physical-phone performance. Existing specialized course/stunt issues remain.
+
+### Clear mobile viewing — 2026-09-11
+
+Mobile/coarse-pointer demo viewing now starts with the racing HUD, branding and demo panel hidden; only a 44px control chip remains. Tap the chip or tap the water to reveal compact takeover, next coast, exit and pause actions. Hide controls restores the clean view. Each new demo scene starts collapsed. Camera drags remain separate from tap gestures. Mobile driving retains controls, speed and next-buoy guidance while removing the large position, timing, engine and map overlays.
+
+Visually checked portrait 390x844 and landscape 844x390, chip open/close, tapping the water, pause/resume and touch takeover. No browser errors. This is presentation-only; existing physics and original-course fidelity limitations remain.
