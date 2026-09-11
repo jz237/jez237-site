@@ -8,7 +8,7 @@ import {passageTarget} from '../course-passages.js';
 test('Sunny Beach has a long dry sandbar, two wet straights and open water beyond its western boundary',()=>{
  const c=getCourse('greyhaven');assert.equal(c.name,'Sunny Beach');
  for(const z of [-120,-60,0,60,120]){assert.ok(c.ground(0,z)>2);assert.ok(c.ground(-36,z)<-3);assert.ok(c.ground(39,z)<-3);assert.ok(c.ground(110,z)>2);assert.ok(c.ground(-180,z)<-5);}
- for(let d=0;d<4;d++){const v=getCourse('greyhaven',d);assert.equal(v.rocks.length,0);assert.equal(v.ramps.length,0);}
+ for(let d=0;d<4;d++){const v=getCourse('greyhaven',d);assert.equal(v.rocks.length,[0,3,5,5][d]);assert.equal(v.ramps.length,0);}
 });
 test('Sunset Bay has distinct L-shaped geography and a race-mode ramp with a wet bypass',()=>{
  const c=getCourse('amber');assert.equal(c.name,'Sunset Bay');assert.ok(c.ground(-34,40)>0);assert.ok(c.ground(90,127)>0);assert.ok(c.ground(65,30)<-4);

@@ -25,7 +25,7 @@ still require their own source comparison before they can be signed off.
 
 | Course | Distinctive requirements | State |
 | --- | --- | --- |
-| Sunny Beach | Long sandbar, parallel straights, tight ends, open sea and mainland, difficulty-specific slalom | Rebuilt geography; exact buoy placements and visual sign-off pending |
+| Sunny Beach | Long sandbar, parallel straights, tight ends, open sea and mainland, difficulty-specific slalom | Rebuilt sandbar; original class buoy maps and metal-ball rows transcribed and race-tested; final shoreline/visual sign-off pending |
 | Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/route and race ramp; piers, bypasses and buoy placement pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
@@ -337,3 +337,17 @@ The retained driver samples the shared wave model for the approaching entry wind
 The new regression checks the outer first lap, actual braking, physical clearance on both later laps, no ramp contact or diving, and clean three-lap completion. It and the three-forward-class surface regression pass in 9.19 s. The browser low-tide inspection now selects the corresponding Reverse crossing stage. This establishes one viable Reverse surface route; it does not establish parity for the remaining courses or original rival behavior.
 
 Reverse browser inspection: 139.93 s, lap two, zero misses, speed 47.36 km/h, hull y -3.037 m and dive remaining zero. The ski is visible riding beneath the pier between supports; no browser errors.
+
+
+### Sunny Beach original class slaloms — 2026-09-11
+
+Replaced generated alternating gates with the illustrated Normal/Hard/Expert 13-buoy sequences and the distinct Reverse 11-buoy sequence, plus each finish. Added the mapped three-ball Hard row and five-ball Expert/Reverse rows. Balls use the existing steel sphere rendering and actual obstacle collision; they are not yellow navigation buoys. All class diagrams were inspected this pass. The map transform uses (168,250) as origin at 0.75 m/pixel; Expert's left margin differs by 35 pixels and Reverse rotates about map (179,261). These transforms/scale are reconstruction estimates against shared landmarks.
+
+The north-east route bend now approaches at x24 instead of x35, matching the tighter reversed shoreline line. Reverse's near-shore red buoy retains its mapped center and right-pass rule, with a 2 m approach offset instead of the generic 7 m. The navigation margin is capped relative to that offset; all existing 7 m mapped gates retain their previous 4 m margin. Neither gate width nor missed-buoy rules were relaxed. The land remains the earlier approximate sandbar model, so exact shoreline, mainland and visual fidelity still need comparison.
+
+Focused tests verify original counts, complete color sequences, ordered progression, selected class coordinates, metal barrier counts and complete zero-miss races in all four classes. All three tests pass in 4.92 s after the steel-ball visual correction. Normal/Hard/Expert/Reverse total race times: 214.73 / 226.42 / 241.75 / 246.03 seconds. The original course requirement is not signed off solely from these navigation tests. Layout revision is now 3; saved-record separation remains a later release requirement.
+
+
+Regression evidence: the full suite initially passed 157/160 tests in 102.63 s. The three failures were stale assumptions in `race.test`: generated gate colors at fixed indices, a sub-180-second generic course limit, and (0,0) being out-of-course. Updated these to select gates by actual side, retain a bounded 600-second session limit, and test a verified outside-boundary point (-200,0). All six race tests then passed in 4.41 s, including every rider finishing with zero misses, wrong-side power reset/disqualification, backwards-crossing rejection and the unchanged five-second outside rule. The full suite was not rerun after these test-only fixture corrections; the changed Sunny steel-ball mapping also passed its three focused tests separately.
+
+Browser Reverse completion: 4:06.033, second place, zero misses, 36 passed gates, high graphics/course sea state, no console errors. Rendered slalom and shoreline were inspected; original visual matching is still pending. No publication yet.

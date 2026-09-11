@@ -8,10 +8,22 @@ export function polygonDistance(points,x,z){let inside=false,d=Infinity;for(let 
  d=Math.min(d,Math.hypot(x-a[0]-dx*t,z-a[1]-dz*t));if((a[1]>z)!==(b[1]>z)&&x<(b[0]-a[0])*(z-a[1])/(b[1]-a[1])+a[0])inside=!inside;
  }return inside?-d:d;
 }
+const sunnyMap=points=>fromMap(points,168,250,.75);
+const sunnyBuoys=rows=>rows.map(([x,z,side])=>({x:(x-168)*.75,z:(z-250)*.75,side}));
+const sunnyNormalBuoys=sunnyBuoys([[218,165,-1],[198,87,1],[133,30,-1],[124,77,-1],[142,126,1],[118,185,-1],[138,246,1],[119,277,-1],[142,379,1],[127,439,-1],[215,481,-1],[225,434,-1],[207,358,1]]);
+const sunnyHardBuoys=sunnyBuoys([[214,165,-1],[203,87,1],[133,30,-1],[126,77,-1],[132,126,1],[118,185,-1],[129,246,1],[119,277,-1],[129,379,1],[133,439,-1],[215,481,-1],[225,434,-1],[213,358,1]]);
+// Expert's course map has a 35 pixel smaller left margin.
+const sunnyExpertBuoys=sunnyBuoys([[179,165,-1],[167,87,1],[99,30,-1],[91,78,-1],[97,126,1],[86,185,-1],[94,246,1],[89,277,-1],[94,379,1],[98,439,-1],[181,481,-1],[180,435,-1],[183,358,1]].map(([x,z,side])=>[x+35,z,side]));
+// Reverse geography is rotated into the common world frame around map (179,261).
+const sunnyReverseBuoys=sunnyBuoys([[147,165,1],[158,69,-1],[231,75,-1],[243,131,1],[243,243,-1],[240,276,1],[247,338,-1],[235,395,1],[243,443,-1],[163,438,1],[153,358,-1]].map(([x,z,side])=>[358-x,522-z,side])).map((b,i)=>i===9?{...b,offset:2}:b);
+const sunnyBalls=points=>sunnyMap(points).map(([x,z])=>({x,z,r:.55,type:'ball'}));
 const sunny={
- name:'Sunny Beach',theme:'beach',tag:'01 / SUNNY BEACH',layoutRevision:2,
+ name:'Sunny Beach',theme:'beach',tag:'01 / SUNNY BEACH',layoutRevision:3,
+ buoysByClass:[sunnyNormalBuoys,sunnyHardBuoys,sunnyExpertBuoys,sunnyReverseBuoys],
+ boundary:sunnyMap([[94,0],[96,459],[104,497],[120,511],[202,515],[238,500],[273,470],[273,0]]),
+ obstaclesByClass:[[],sunnyBalls([[107,327],[130,327],[153,327]]),sunnyBalls([[106,327],[119,327],[132,327],[145,327],[159,327]]),sunnyBalls([[208,195],[221,195],[234,195],[247,195],[260,195]].map(([x,z])=>[358-x,522-z]))],
  description:'A long sandbar separates two fast straights. Round the tight ends, keep clear of the beach, and thread the buoys.',
- anchors:[[38,32],[39,-55],[35,-133],[19,-166],[-8,-168],[-31,-145],[-36,-60],[-37,44],[-32,137],[-12,166],[12,168],[31,146],[39,88]],
+ anchors:[[38,39.75],[39,-55],[24,-133],[19,-166],[-8,-168],[-31,-145],[-36,-60],[-37,44],[-32,137],[-12,166],[12,168],[31,146],[39,88]],
  ground(x,z){const axisZ=clamp(z,-143,143),width=10.5+1.8*Math.cos(z*.015),bar=3.3-Math.hypot(x,z-axisZ)*3.3/width;
  const beach=clamp((x-(76+4*Math.cos(z*.014)))*.18,-10,9);return Math.max(-9,bar,beach);},
  obstacles:[],resistance:[],raceRamps:[]
