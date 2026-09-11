@@ -35,7 +35,7 @@ test('fortress race actually takes the outer first lap and traverses the open sl
  }
 });
 test('the outer route remains an honest optional route after the shortcut opens',()=>{
- for(const id of ['citadel','port']){const s=createRace({course:getCourse(id,2),difficulty:2}),r=s.racers[0],outer={...s.course,passage:null};
+ for(const id of ['citadel','port']){const difficulty=id==='port'?1:2,s=createRace({course:getCourse(id,difficulty),difficulty}),r=s.racers[0],outer={...s.course,passage:null};
   for(let i=0;i<22000&&s.phase!=='results';i++)stepRace(s,aiInput({...s,course:outer},r),1/60);
   assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.passed,s.course.gates.length*3);
  }

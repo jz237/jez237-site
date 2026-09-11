@@ -29,7 +29,7 @@ Remaining diagrams still require inspection before their buoy layouts are author
 | Sunset Bay | L-shaped landmass, orange water, race jump, piers and bypass choices | Rebuilt island/route and race ramp; piers, bypasses and buoy placement pending |
 | Drake Lake | Irregular square loop, small island, fog clearing, posts, slowing weeds | Rebuilt banks/island, posts and wet-hull weed resistance; route/visual checks pending |
 | Marine Fortress | Storm, fortress-shaped shoreline, crates, lap-dependent gate | Rebuilt eastern arm, northwestern breakwater, fort walls, difficulty-specific crates and curved lap-two gate; original buoys, southern projections and final visual comparison pending |
-| Port Blue | Tanker, working dock, winding narrow tunnel, outer route and class-specific jump | Rebuilt tanker/dock geography and continuous winding tunnel; race jump, original buoy patterns, dock detail and final visual matching pending |
+| Port Blue | Tanker, working dock, winding narrow tunnel, Hard route choice, Expert/Reverse outer closures, class-specific jump | Rebuilt geography/tunnel and corrected required Expert/Reverse inner route; race jump, original buoy patterns and final visual matching pending |
 | Twilight City | Angular urban channel, walls, race ramps and alternate routes | Existing generic course; full reconstruction pending |
 | Glacier Coast | Constricted coast, ice ramps/sliding, breakable ice hazards | Existing generic course; full reconstruction pending |
 | Southern Island | Connected islands/piers, dropping water, exposed ship and changing routes | Existing generic course; full reconstruction pending |
@@ -78,3 +78,18 @@ This remains a local reconstruction milestone, not a publication or a course-par
 - Original class-dependent bow jump is not implemented yet. Original buoy placement, port fittings and final material/detail comparison remain outstanding. These are required before course parity can be signed off.
 
 Local-only milestone; production remains on the previous gameplay release.
+
+## Port Blue difficulty correction — September 10, 2026
+
+The Expert walkthrough explicitly says the easier outer dock route is blocked and the inner route is mandatory. This supersedes the previous milestone's assertion that the outer route remains available in every class. Hard retains the choice; Expert and Reverse now use authored inner-route anchors and physical northern/southern quay closures. Closed areas share their footprint with terrain collision and explicit concrete meshes. Required-course checkpoints follow the inner route directly rather than projecting the former outer checkpoints onto it.
+
+Focused tests cover all four class states, dry closure footprints, actual hull contact, continuous route clearance, Hard's optional outer race, Expert/Reverse navigation and stunt progression. All 18 focused geography/passage tests pass. Full regression suite: 117/117 passed in 75.03 seconds. Browser Expert / venue conditions finished in 197.300 seconds with 96 checkpoints, zero misses, one wave landing and third place; High graphics, final 60 FPS, no runtime errors. The rendered minimap follows the required winding route.
+
+Additional source findings for the remaining jump work:
+- Normal's bow jump can be bypassed on the inside.
+- Hard widens it but leaves a narrow gap on the right.
+- Expert closes that gap and requires a jump before the final turn.
+- The Reverse diagram shows separate small jump blocks; do not assume the Expert ramp simply rotates to face the rider.
+- The Reverse Sunset walkthrough explicitly calls its backward-facing ramp an obstacle. Existing global reversal of race-ramp direction must be replaced with source-appropriate fixed ramp geometry and backward-contact behavior when this work is implemented.
+
+The bow jump is still pending. This correction is not a full course-parity sign-off or a publication.

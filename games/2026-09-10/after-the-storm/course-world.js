@@ -94,8 +94,8 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
   const cargoMats=[mat(0xa6533d),mat(0x496e83),mat(0xe0b557),mat(0x557567)];for(let i=0;i<45;i++){const x=(i%9-4)*15,z=Math.floor(i/9)*10-20,y=course.ground(x,z);if(y<1||routeDistance(course,x,z)<42)continue;box(x,y+1.7,z,12,3.4,5,cargoMats[i%4]);for(let k=-5;k<6;k++)box(x+k,y+1.7,z-2.55,.08,3.1,.08,steel);if(i%3===0)box(x,y+5.1,z,12,3.4,5,cargoMats[(i+1)%4]);}for(let i=0;i<5;i++)crane(-155,80-i*40,Math.PI/2);for(let i=0;i<4;i++)building(165,-85+i*55,35,38,14,white);if(!course.shipOutline)label('PORT MERIDIAN / 07',165,18,75,40);for(let i=0;i<4;i++)pier(-150,110-i*45,Math.PI/2,18);
  }
  if(course.dockOutline){
-  const shape=new T.Shape();course.dockOutline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();
-  const quay=new T.ExtrudeGeometry(shape,{depth:8,bevelEnabled:false});quay.rotateX(-Math.PI/2);add(quay,stone,0,-2,0);
+  for(const outline of [course.dockOutline,...course.closedAreas||[]]){const shape=new T.Shape();outline.forEach(([x,z],i)=>i?shape.lineTo(x,-z):shape.moveTo(x,-z));shape.closePath();
+  const quay=new T.ExtrudeGeometry(shape,{depth:8,bevelEnabled:false});quay.rotateX(-Math.PI/2);add(quay,stone,0,-2,0);}
   for(const [mx,mz] of [[309,153],[315,223]])crane((mx-220)*.8,(mz-285)*.8,-Math.PI/2);
   for(let i=0;i<6;i++){const x=(292+i%2*17-220)*.8,z=(141+Math.floor(i/2)*22-285)*.8;box(x,8,z,11,4,6,i%2?steel:yellow);}
  }
