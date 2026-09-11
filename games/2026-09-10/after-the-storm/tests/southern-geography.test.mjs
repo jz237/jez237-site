@@ -76,3 +76,14 @@ test('grid-start ship jump clears the hull, lands cleanly and rejoins all three 
  assert.ok(contact);assert.ok(over>10);assert.ok(landed);assert.equal(r.shipJumpStage,2);
  assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.dq,'');assert.equal(r.lap,4);
 });
+
+test('southern pier jump follows the map location and retains its direction in Reverse',()=>{
+ const c=getCourse('tempest'),a=c.ramps.find(a=>a.id===151),[x,z]=map(189,477);
+ assert.equal(a.x,x);assert.equal(a.z,z);assert.ok(a.tx>0&&a.tz>0);
+ assert.deepEqual(getCourse('tempest',3).ramps.find(a=>a.id===151),a);
+ const s=createRace({mode:'time',course:c,seaState:'calm'}),r=s.racers[0];s.phase='running';
+ r.x=a.x-a.tx*15;r.z=a.z-a.tz*15;r.heading=Math.atan2(a.tx,a.tz);r.vx=a.tx*20;r.vz=a.tz*20;r.speed=20;r.power=5;
+ let contact=false,airborne=false;
+ for(let i=0;i<120;i++){stepRace(s,{throttle:1,dampen:true},1/60);contact ||=r.hydro.onRamp;airborne ||=contact&&r.hydro.airborne&&r.hydro.y-r.hydro.waterHeight>1;}
+ assert.ok(contact);assert.ok(airborne);
+});
