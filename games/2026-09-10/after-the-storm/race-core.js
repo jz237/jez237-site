@@ -47,7 +47,7 @@ export function courseDistance(course,x,z){let best=Infinity;for(let i=0;i<cours
 export function outsideCourse(course,x,z){return course.boundary?polygonDistance(course.boundary,x,z)>0:courseDistance(course,x,z)>30;}
 export function aiInput(s,r){const g=passageTarget(s,r),d=Math.hypot(g.x-r.x,g.z-r.z),next=s.course.gates[(r.next+1)%s.course.gates.length];
  // Aim beyond the crossing plane. Steering toward the buoy itself causes last-moment stalls.
- const lane=-g.side*(g.routeIndex!==undefined?4:1.1)+(r.id-1.5)*.5;let tx=g.x+g.tx*3+g.tz*lane,tz=g.z+g.tz*3-g.tx*lane;
+ const lane=-g.side*(g.routeIndex!==undefined?Math.min(4,g.offset*.5+.5):1.1)+(r.id-1.5)*.5;let tx=g.x+g.tx*3+g.tz*lane,tz=g.z+g.tz*3-g.tx*lane;
  // Follow the authored bend between checkpoint planes rather than cutting a
  // chord across a projecting seawall. The final approach still targets the gate.
  if(s.course.layoutRevision&&s.course.route&&g===s.course.gates[r.next]&&d>(g.routeIndex!==undefined?26:14)){const route=s.course.route,count=route.length,n=s.course.gates.length,end=g.routeIndex!==undefined?(r.next===0?count:g.routeIndex):(r.next||n)*count/n,start=g.routeIndex!==undefined?s.course.gates[(r.next+n-1)%n].routeIndex:end-count/n;let best=Math.floor(start),distance=Infinity;
