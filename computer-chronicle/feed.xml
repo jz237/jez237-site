@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 11 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 18-24, 1984 — MIT&apos;s Project Athena Opens a New Window</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-06-18</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-18</guid>
+      <pubDate>Fri, 11 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Robert Scheifler announces the X Window System, separating graphical programs from the screens that display them. Robert Scheifler at MIT&apos;s Project Athena announced the X Window System on June 19, giving the laboratory&apos;s networked workstations a new way to draw and manage graphical displays. The first implementation was written for a VAX VS100, but its central idea reaches beyond a single machine. Also this week: VisiCorp Tries to Re-enter the Business-Software Race · Apple IIc Packs the Apple II into 7.5 Pounds · Stolen Password Exposes the Fragility of Online Credit Files.</description>
+    </item>
     <item>
       <title>Week of June 11-17, 1984 — Police Seize a Bulletin Board: Is the Sysop Liable for What Users Post?</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-06-11</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-06</guid>
       <pubDate>Fri, 21 Aug 2026 12:00:00 GMT</pubDate>
       <description>An open hardware architecture, protected firmware and a vast software library turn “compatible” into the most valuable—and confusing—word in personal computing. The flood of machines claiming kinship with the IBM Personal Computer has made compatibility one of the microcomputer trade’s most important and confusing questions. IBM published enough of the PC’s hardware design to invite expansion cards and outside development, but the machine’s basic input-output system remains copyrighted software. A look-alike case and an 8088-family processor alone do not make a true substitute. Also this week: Coleco Restarts Adam Lines After a Gentleman’s C · “Best Of” Game Albums Promised for Adam · One Printer Attempts Double Duty.</description>
-    </item>
-    <item>
-      <title>Week of January 30-February 5, 1984 — Macintosh Meets the Public in Boston</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-01-30</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-30</guid>
-      <pubDate>Thu, 20 Aug 2026 12:00:00 GMT</pubDate>
-      <description>Steve Jobs brings Apple’s new graphical computer before the Boston Computer Society for its first public demonstration. BOSTON, Jan. 30 — Six days after Apple formally introduced Macintosh, Steve Jobs carried the compact computer onto the Boston Computer Society stage for what the society’s founder remembers as its first public showing. Before a room of experienced personal-computer users, the machine’s windows, icons and mouse moved from advertising promise to a working demonstration. Also this week: IBM Takes the Clone War to Court · Lisa 2 Becomes Macintosh’s Elder Sibling · MacWrite and MacPaint Make the Desktop Tangible · Computer Games Ask What Comes After the Crash.</description>
     </item>
   </channel>
 </rss>
