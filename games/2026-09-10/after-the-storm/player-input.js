@@ -1,7 +1,8 @@
+import {steeringAxis} from './riding-controls.js';
 export function playerInput(keys,pad,player=0,split=false){
  const second=player===1,up=second?'ArrowUp':'KeyW',left=second?'ArrowLeft':'KeyA',right=second?'ArrowRight':'KeyD',down=second?'ArrowDown':'KeyS';
  const arrows=!split&&!second,modifier=!!pad?.buttons[4]?.pressed;const padTrick=!modifier?'':pad?.buttons[3]?.pressed?'flip':pad?.buttons[2]?.pressed?'left':pad?.buttons[1]?.pressed?'right':pad?.buttons[12]?.pressed?'stand':pad?.buttons[15]?.pressed?'handstand':pad?.buttons[13]?.pressed?'backwards':pad?.buttons[0]?.pressed?'somersault':'';
- const axis=pad&&Math.abs(pad.axes[0])>.12?-pad.axes[0]:0;
+ const axis=pad?steeringAxis(-(pad.axes[0]||0),.12):0;
  return {throttle:Math.max(keys[up]||arrows&&keys.ArrowUp?1:0,pad?.buttons[7]?.value||0),
  steer:axis||.8*((keys[left]||arrows&&keys.ArrowLeft?1:0)-(keys[right]||arrows&&keys.ArrowRight?1:0)),
  brake:!!(keys[down]||keys[second?'ControlRight':'Space']||arrows&&keys.ArrowDown||pad?.buttons[6]?.pressed),

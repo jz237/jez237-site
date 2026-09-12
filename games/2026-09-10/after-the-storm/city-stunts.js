@@ -12,15 +12,20 @@ export function cityStuntLayout(){
  // across the following bend aimed its approach through the quay corner.
  rings[13].tx=0;rings[13].tz=1;
  const ramps=[[270,285,0,-1],[185,113,0,1],[84,488,1,0],[189,489,.948683298,.316227766]].map(([x,z,tx,tz],i)=>({...map([x,z]),tx,tz,id:260+i,name:'CITY STUNT JUMP '+(i+1),width:i?14:12,length:i?14:22,height:i?2.1:2.7,floating:false,solidBack:true,diveJump:i===0}));
- const checkpoints=[[173,75],[141,278],[38,472],[269,420]].map((row,section)=>{const p=map(row);return {...p,...tangent(p),width:20,limit:section===0?20:15,section};});
+ // Calibrated against full physical runs: the longer outer opening takes
+ // about 45 s; later sections take 16–25 s. Leave a modest recovery margin.
+ const checkpoints=[[173,75],[141,278],[38,472],[269,420]].map((row,section)=>{const p=map(row);return {...p,...tangent(p),width:20,limit:[48,27,27,35][section],section};});
  const target=i=>({...rings[i],kind:rings[i].type==='dive'?'dive':'ring',speed:i===12?9:13}),cp=i=>({...checkpoints[i],kind:'checkpoint'}),ramp=i=>({...ramps[i],kind:'ramp'}),way=row=>{const p=map(row);return {...p,...tangent(p),kind:'waypoint',speed:11};};
- const tail=[way([269,45]),way([229,29]),way([182,27]),way([173,55]),cp(0),ramp(1),target(9),way([190,169]),way([207,200]),way([204,218]),way([174,244]),cp(1),target(10),target(11),target(12),{...way([48,383]),speed:7},target(13),target(14),way([23,458]),cp(2),way([65,488]),ramp(2),target(15),way([150,489]),way([175,484]),ramp(3),target(16),way([244,483]),way([266,456]),cp(3)];
+ const tail=[way([269,45]),way([229,29]),way([182,27]),way([173,55]),cp(0),ramp(1),target(9),way([190,169]),way([207,200]),way([204,218]),way([174,244]),cp(1),target(10),target(11),target(12),{...way([48,380]),tx:0,tz:1,speed:7},{...way([48,388]),tx:0,tz:1,speed:7},{...target(13),speed:9},{...target(14),speed:9},way([23,458]),cp(2),way([65,488]),ramp(2),target(15),way([150,489]),{...way([163,480]),tx:.948683298,tz:.316227766,speed:8},{...way([175,484]),tx:.948683298,tz:.316227766,speed:8},ramp(3),target(16),way([244,483]),way([266,456]),cp(3)];
  const verificationTargets=[way([269,360]),way([269,315]),ramp(0),...inner.map((_,i)=>target(i)),...tail];
- const outerVerificationTargets=[way([288,341]),way([322,281]),way([342,239]),way([336,212]),way([352,181]),way([368,160]),way([358,139]),target(6),target(7),way([357,55]),target(8),...tail.slice(1)].map(p=>({...p}));
- const outerPoints=[map([269,420]),...outerVerificationTargets];outerVerificationTargets.forEach((p,i)=>{const a=outerPoints[i],b=outerPoints[Math.min(i+2,outerPoints.length-1)],n=Math.hypot(b.x-a.x,b.z-a.z)||1;if(p.kind==='waypoint'){p.tx=(b.x-a.x)/n;p.tz=(b.z-a.z)/n;}if(i<12)p.speed=18;});
+ const outerVerificationTargets=[way([288,341]),way([322,281]),way([342,239]),way([336,212]),way([352,181]),way([368,160]),way([358,150]),{...way([354,135]),tx:rings[6].tx,tz:rings[6].tz,speed:10},{...target(6),speed:12},target(7),{...way([358,41]),tx:rings[8].tx,tz:rings[8].tz,speed:10},{...target(8),speed:12},...tail.slice(1)].map(p=>({...p}));
+ const outerPoints=[map([269,420]),...outerVerificationTargets];outerVerificationTargets.forEach((p,i)=>{const a=outerPoints[i],b=outerPoints[Math.min(i+2,outerPoints.length-1)],n=Math.hypot(b.x-a.x,b.z-a.z)||1;if(p.kind==='waypoint'){p.tx=(b.x-a.x)/n;p.tz=(b.z-a.z)/n;}if(i<12&&p.speed===11)p.speed=18;});
  // Four spiked floats span the channel between the finish jumps in the
  // original footage at65s. Locations retain the mapped race-row spacing;
  // precise stunt-mode distances remain to be calibrated.
  const rocks=[[108,485],[108,496],[108,507],[108,518]].map(row=>({...map(row),r:.7,type:'ball',spiked:true}));
- return {rocks,anchors:outerPoints.slice(0,-1).map(p=>[p.x,p.z]),rings,ramps,checkpoints,verificationTargets,outerVerificationTargets,forwardPassage:true};
+ // Keep the general racing line smooth and outside the quay. Precision stunt
+ // approach points are helm targets, not replacement spline control points.
+ const navigation=[[269,420],[288,341],[322,281],[342,239],[336,212],[352,181],[368,160],[358,139],outer[0],outer[1],[357,55],outer[2],...path.slice(path.findIndex(([x,z])=>x===229&&z===29))].map(map);
+ return {rocks,anchors:navigation.map(p=>[p.x,p.z]),rings,ramps,checkpoints,verificationTargets,outerVerificationTargets,forwardPassage:true};
 }

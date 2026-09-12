@@ -1,0 +1,122 @@
+{
+  "version": "2.0.0",
+  "date": "2026-09-12",
+  "environment": "Graphical Chrome / Radeon 8060S / Mesa / 1280x720 / Adaptive; shared workstation load",
+  "clock": "ordinary1x; no skips or progress overrides",
+  "tourSeconds": 1002.51,
+  "scenesCompleted": 11,
+  "errors": [],
+  "missingGameRequests": [],
+  "scenes": [
+    {
+      "course": "greyhaven",
+      "mode": "race",
+      "simulationSeconds": 72.97,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 55.5
+    },
+    {
+      "course": "amber",
+      "mode": "race",
+      "simulationSeconds": 89.53,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 49.0
+    },
+    {
+      "course": "reed",
+      "mode": "race",
+      "simulationSeconds": 84.52,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 59.9
+    },
+    {
+      "course": "citadel",
+      "mode": "race",
+      "simulationSeconds": 90.35,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 60.0
+    },
+    {
+      "course": "citadel",
+      "mode": "stunt",
+      "simulationSeconds": 92.17,
+      "leadLap": 2,
+      "rings": 15,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 60.0
+    },
+    {
+      "course": "port",
+      "mode": "race",
+      "simulationSeconds": 74.98,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 60.0
+    },
+    {
+      "course": "port",
+      "mode": "stunt",
+      "simulationSeconds": 82.63,
+      "leadLap": 2,
+      "rings": 16,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 60.0
+    },
+    {
+      "course": "neon",
+      "mode": "race",
+      "simulationSeconds": 113.38,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 60.0
+    },
+    {
+      "course": "glacier",
+      "mode": "race",
+      "simulationSeconds": 109.8,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 60.0
+    },
+    {
+      "course": "tempest",
+      "mode": "race",
+      "simulationSeconds": 91.27,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 60.0
+    },
+    {
+      "course": "practice",
+      "mode": "race",
+      "simulationSeconds": 54.35,
+      "leadLap": 2,
+      "rings": 0,
+      "leadDisqualified": false,
+      "rescues": 0,
+      "medianSampledFPS": 60.0
+    }
+  ]
+}

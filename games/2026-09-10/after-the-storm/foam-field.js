@@ -29,12 +29,25 @@ export function makeFoamField(renderer,common,uniforms){
  float decay=exp(-foamDt*.55),bubbleDecay=exp(-foamDt*.2);
  float density=clamp(old.r*decay+source*(1.-decay)/.55,0.,1.);
  float bubbles=clamp(old.g*bubbleDecay+source*(1.-bubbleDecay)*1.5,0.,1.);
+ // Advected Kelvin arms and aerated prop-wash, evaluated per atlas texel.
+ // Each packet is born behind a real, water-loaded hull; no screen-space trail.
+ float wakeFoam=0.;
+ for(int i=0;i<64;i++){vec4 w=wake[i];float age=time-w.z;
+  if(w.w<=.02||age<0.||age>18.)continue;
+  vec2 d=p-w.xy-vec2(.16,-.11)*storm*age;float spread=.55+age*.65;
+  if(dot(d,d)>(spread+4.)*(spread+4.))continue;
+  vec2 f=vec2(sin(wakeHeading[i]),cos(wakeHeading[i]));
+  float a=dot(d,f),b=dot(d,vec2(f.y,-f.x)),edge=abs(b)-spread;
+  wakeFoam+=(exp(-edge*edge*3./(1.+age*.4))*.28+exp(-b*b/(.35+age*.3))*.52)
+    *exp(-a*a/(1.8+age*.15)-age*.25)*w.w;
+ }
+ density=max(density,min(.95,wakeFoam));bubbles=max(bubbles,min(.7,wakeFoam*.55));
  float inundated=customTerrain*smoothstep(-.06,.15,depth);
  float wet=max(oldWet*exp(-foamDt*.045),inundated);
  gl_FragColor=vec4(density,bubbles,wet,1.);}`});
  const scene=new T.Scene(),quad=new T.Mesh(new T.PlaneGeometry(2,2),material),camera=new T.Camera();scene.add(quad);let index=0,elapsed=0,frames=0,resolution=128;
  return {texture:targets[0].texture,center:u.foamCenter,span:u.foamSpan,update(dt,x,z,quality,span=240){
-  if(dt<=0)return;elapsed+=dt;if(frames++%2)return;const nextSize=quality==='high'?128:quality==='medium'?96:64;
+  if(dt<=0)return;elapsed+=dt;if(frames++%2)return;const nextSize=quality==='high'?256:quality==='medium'?160:96;
   if(nextSize!==resolution){resolution=nextSize;targets.forEach(t=>t.setSize(resolution,resolution));u.foamReady.value=0;}
   u.previousSpan.value=u.foamSpan.value;u.foamSpan.value=span;u.previousCenter.value.copy(u.foamCenter.value);u.foamCenter.value.set(Math.floor(x/4)*4,Math.floor(z/4)*4);u.foamDt.value=Math.min(elapsed,1);elapsed=0;
   u.previousFoam.value=targets[index].texture;index=1-index;const previous=renderer.getRenderTarget();renderer.setRenderTarget(targets[index]);renderer.render(scene,camera);renderer.setRenderTarget(previous);u.foamReady.value=1;this.texture=targets[index].texture;

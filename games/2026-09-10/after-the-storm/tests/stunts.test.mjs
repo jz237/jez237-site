@@ -29,6 +29,6 @@ test('authored stunt allowances apply at creation and reset to the next section 
  assert.equal(s.remaining,11);assert.equal(s.nextCheckpoint,2);
  assert.equal(createStunt().remaining,38);
  const city=createRace({mode:'stunt',course:getCourse('neon')});
- assert.equal(city.racers[0].stunt.remaining,20);
- assert.deepEqual(city.course.checkpoints.map(c=>c.limit),[20,15,15,15]);
+ assert.equal(city.racers[0].stunt.remaining,48);
+ assert.deepEqual(city.course.checkpoints.map(c=>c.limit),[48,27,27,35]);
 });

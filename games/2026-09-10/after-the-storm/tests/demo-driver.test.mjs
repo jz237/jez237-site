@@ -29,3 +29,16 @@ test('stalled demo requests normal rescue input without injecting position or pr
 test('paused and finished demos issue no throttle',()=>{
  const s=createDemoScene();s.phase='paused';assert.ok(!demoInput(s).throttle);s.phase='results';assert.ok(demoSceneDone(s));assert.ok(!demoInput(s).throttle);
 });
+
+
+test('city exhibition keeps its chosen outer branch and completes the adverse seed',()=>{
+ const index=DEMO_SCENES.findIndex(([course,mode])=>course==='neon'&&mode==='race');
+ const s=createDemoScene(index,1),r=s.racers[0];let entered=false;
+ for(let i=0;i<9600&&!demoSceneDone(s);i++){
+  stepRace(s,demoInput(s),1/60);
+  if(r.passed===1){entered=true;assert.equal(r.passageRoute,'outer');}
+ }
+ assert.ok(entered);assert.equal(r.dq,'');assert.equal(r.misses,0);
+ assert.ok(r.lap>1,'rough water cannot redirect the exhibition into an unscored branch');
+ assert.equal(s.demoPilot.rescues,0);
+});
