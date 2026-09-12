@@ -1,5 +1,5 @@
 import * as T from 'three';
-import {grazerBody} from './GrazerCollision.ts';
+import {grazerBody,type BodySphere} from './GrazerCollision.ts';
 
 export type PlantLeaf={mesh:T.InstancedMesh;index:number;matrix:T.Matrix4;root:T.Vector3;motion:T.Vector3;flex:number;rows:number;cols:number;box:T.Box3;length:number;width:number};
 type FernTriangle={triangle:T.Triangle;margin:number};
@@ -32,6 +32,7 @@ export function leafContact(leaf:PlantLeaf,u:number,v:number,time:number,p:T.Vec
 export class GrazerPlants{
  readonly leaves:PlantLeaf[]=[];private cells=new Map<string,PlantLeaf[]>();private stems=new Map<string,PlantStem[]>();private ferns=new Map<string,FernTriangle[]>();private shrimpTrails=new Map<PlantLeaf,LeafTrail|null>();private snailTrails=new Map<PlantLeaf,LeafTrail|null>();
  private collisionTime=NaN;private leafCollisionCache=new Map<PlantLeaf,{rows:number;cols:number;vertices:T.Vector3[]}>();
+ private envelopeCollisionCache=new Map<PlantLeaf,{rows:number;cols:number;vertices:T.Vector3[]}>();
  private normal=new T.Vector3();private triangle=new T.Triangle();private closest=new T.Vector3();
  private solidCheck?:(p:T.Vector3,n:T.Vector3,f:T.Vector3,snail:boolean)=>boolean;
  constructor(scene:T.Scene,solidCheck?:(p:T.Vector3,n:T.Vector3,f:T.Vector3,snail:boolean)=>boolean){
@@ -64,20 +65,25 @@ export class GrazerPlants{
  nearby(p:T.Vector3,r:number){const found=new Set<PlantLeaf>();for(let x=Math.floor((p.x-r)/.5);x<=Math.floor((p.x+r)/.5);x++)for(let y=Math.floor((p.y-r)/.5);y<=Math.floor((p.y+r)/.5);y++)for(let z=Math.floor((p.z-r)/.5);z<=Math.floor((p.z+r)/.5);z++)for(const leaf of this.cells.get(`${x},${y},${z}`)||[])found.add(leaf);return found;}
  /** Body clearance, not just a point at the animal's feet. */
  clear(p:T.Vector3,n:T.Vector3,tangent:T.Vector3,snail:boolean,time:number,own?:PlantLeaf){
-  if(time!==this.collisionTime){this.collisionTime=time;this.leafCollisionCache.clear();}
   if(this.solidCheck&&!this.solidCheck(p,n,tangent,snail))return false;
-  const centers=grazerBody(p,n,tangent,snail,snail?.84:.88).map(s=>({p:s.center,r:s.radius}));
+  return this.clearBody(p,grazerBody(p,n,tangent,snail,snail?.84:.88),time,own);
+ }
+ clearBody(p:T.Vector3,body:BodySphere[],time:number,own?:PlantLeaf,envelope=false){
+  const cache=envelope?this.envelopeCollisionCache:this.leafCollisionCache;if(envelope)time=0;
+  if(!envelope&&time!==this.collisionTime){this.collisionTime=time;this.leafCollisionCache.clear();}
+  const centers=body.map(s=>({p:s.center,r:s.radius}));
   const ferns=new Set<FernTriangle>();for(let x=Math.floor((p.x-.48)/.5);x<=Math.floor((p.x+.48)/.5);x++)for(let y=Math.floor((p.y-.48)/.5);y<=Math.floor((p.y+.48)/.5);y++)for(let z=Math.floor((p.z-.48)/.5);z<=Math.floor((p.z+.48)/.5);z++)for(const fern of this.ferns.get(`${x},${y},${z}`)||[])ferns.add(fern);
   for(const fern of ferns)for(const c of centers){fern.triangle.closestPointToPoint(c.p,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+fern.margin)**2)return false;}
   const stems=new Set<PlantStem>();for(let x=Math.floor((p.x-.48)/.5);x<=Math.floor((p.x+.48)/.5);x++)for(let y=Math.floor((p.y-.48)/.5);y<=Math.floor((p.y+.48)/.5);y++)for(let z=Math.floor((p.z-.48)/.5);z<=Math.floor((p.z+.48)/.5);z++)for(const stem of this.stems.get(`${x},${y},${z}`)||[])stems.add(stem);
-  for(const stem of stems){const bend=(q:T.Vector3)=>{const h=Math.max(0,q.y-stem.root.y),phase=stem.root.x*.47+stem.root.z*.71;q.x+=(Math.sin(time*.82+phase)*.035+Math.sin(time*1.19+phase*1.7)*.013)*h*h*stem.flex*clamp((4.96-Math.abs(q.x))*2,0,1);q.z+=Math.sin(time*.67+phase+.8)*.029*h*h*stem.flex*clamp((2.20-Math.abs(q.z))*2,0,1);return q;};const line=new T.Line3(bend(stem.a.clone()),bend(stem.b.clone()));for(const c of centers){line.closestPointToPoint(c.p,true,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+stem.radius)**2)return false;}}
+  for(const stem of stems){const bend=(q:T.Vector3)=>{const h=Math.max(0,q.y-stem.root.y),phase=stem.root.x*.47+stem.root.z*.71;q.x+=(Math.sin(time*.82+phase)*.035+Math.sin(time*1.19+phase*1.7)*.013)*h*h*stem.flex*clamp((4.96-Math.abs(q.x))*2,0,1);q.z+=Math.sin(time*.67+phase+.8)*.029*h*h*stem.flex*clamp((2.20-Math.abs(q.z))*2,0,1);return q;};const line=new T.Line3(bend(stem.a.clone()),bend(stem.b.clone()));for(const c of centers){line.closestPointToPoint(c.p,true,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+stem.radius+(envelope?.13*Math.max(stem.a.y-stem.root.y,stem.b.y-stem.root.y)**2*stem.flex:0))**2)return false;}}
   for(const leaf of this.nearby(p,.48)){
    if(leaf===own)continue;
    if(!centers.some(c=>leaf.box.distanceToPoint(c.p)<c.r))continue;
    // Thin small leaves need only two triangles; large blades retain their cup
    // and arch in the contact mesh. This is collision data, never rendered LOD.
-   let cached=this.leafCollisionCache.get(leaf);if(!cached){const rows=leaf.length>.4?10:2,cols=leaf.width>.15?4:1,vertices:T.Vector3[]=[];for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++){const q=new T.Vector3();leafContact(leaf,x/cols,y/rows,time,q,this.normal);vertices.push(q);}cached={rows,cols,vertices};this.leafCollisionCache.set(leaf,cached);}const {rows,cols,vertices}=cached;
-   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const k=y*(cols+1)+x;for(const ids of [[k,k+1,k+cols+1],[k+1,k+cols+2,k+cols+1]]){this.triangle.set(vertices[ids[0]],vertices[ids[1]],vertices[ids[2]]);for(const c of centers){this.triangle.closestPointToPoint(c.p,this.closest);if(this.closest.distanceToSquared(c.p)<c.r*c.r)return false;}}}
+   const extra=envelope?leaf.motion.y*new T.Vector3().setFromMatrixScale(leaf.matrix).y*3.4+.13*Math.max(0,leaf.box.max.y-leaf.root.y)**2*leaf.flex:0;
+   let cached=cache.get(leaf);if(!cached){const rows=leaf.length>.4?10:2,cols=leaf.width>.15?4:1,vertices:T.Vector3[]=[];for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++){const q=new T.Vector3();leafContact(leaf,x/cols,y/rows,time,q,this.normal);vertices.push(q);}cached={rows,cols,vertices};cache.set(leaf,cached);}const {rows,cols,vertices}=cached;
+   for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const k=y*(cols+1)+x;for(const ids of [[k,k+1,k+cols+1],[k+1,k+cols+2,k+cols+1]]){this.triangle.set(vertices[ids[0]],vertices[ids[1]],vertices[ids[2]]);for(const c of centers){this.triangle.closestPointToPoint(c.p,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+extra)**2)return false;}}}
   }
   return true;
  }
