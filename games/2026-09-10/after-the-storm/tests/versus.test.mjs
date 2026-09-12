@@ -30,7 +30,7 @@ test('split viewports cover both halves once, including odd-height windows',()=>
 });
 test('separate gamepad inputs keep analogue throttle and dead zones',()=>{
  const pad={axes:[.6],buttons:Array.from({length:10},()=>({value:0,pressed:false}))};pad.buttons[7].value=.4;
- const input=playerInput({},pad,1,true);assert.equal(input.steer,-.6);assert.equal(input.throttle,.4);assert.equal(playerInput({},null,0,true).throttle,0);
+ const input=playerInput({},pad,1,true);assert.ok(input.steer<-.4&&input.steer>-.6,'mid-stick gives precise proportional steering');assert.equal(input.throttle,.4);assert.equal(playerInput({},null,0,true).throttle,0);
  pad.axes[0]=.05;assert.equal(playerInput({},pad,1,true).steer,0);
 });
 test('gamepad stunt modifier supports rotations, poses, dive and stick trim',()=>{const pad={axes:[0,-.5],buttons:Array.from({length:16},()=>({value:0,pressed:false}))};pad.buttons[4].pressed=true;for(const [button,trick] of [[3,'flip'],[2,'left'],[1,'right'],[12,'stand'],[15,'handstand'],[13,'backwards'],[0,'somersault']]){pad.buttons[button].pressed=true;const i=playerInput({},pad);assert.equal(i.trick,trick);assert.equal(i.lean,.5);if(button===0)assert.equal(i.dampen,false);pad.buttons[button].pressed=false;}pad.buttons[6].pressed=true;assert.equal(playerInput({},pad).dive,true);assert.equal(playerInput({},pad,1,true).trick,'');});

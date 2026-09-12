@@ -37,7 +37,10 @@ test('keyboard turns are softened for both players while analogue steering stays
  assert.equal(playerInput({ArrowRight:true}).steer,-.8);
  assert.equal(playerInput({ArrowLeft:true},null,1,true).steer,.8);
  assert.equal(playerInput({KeyA:true,KeyD:true}).steer,0);
- assert.equal(playerInput({}, {axes:[.5],buttons:[]}).steer,-.5);
+ const half=playerInput({}, {axes:[.5],buttons:[]}).steer;
+ assert.ok(half<-.3&&half>-.5,'half stick gives a proportional, softened turn');
+ assert.ok(playerInput({}, {axes:[.75],buttons:[]}).steer<half,'more stick gives more steering');
+ assert.equal(playerInput({}, {axes:[1],buttons:[]}).steer,-1,'full stick retains full lock');
  assert.equal(playerInput({KeyR:true}).rescue,true);
  assert.equal(playerInput({Backspace:true},null,1,true).rescue,true);
 });

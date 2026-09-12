@@ -1,3 +1,5 @@
+> Historical evidence below records earlier builds. Current TIDELINE v2.0.0 verification is in [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) and the independent [TIDELINE-REVIEW.md](TIDELINE-REVIEW.md).
+
 # Current feature-parity and ElevenLabs update — September 10, 2026
 
 This section supersedes older sound/gameplay descriptions below.
