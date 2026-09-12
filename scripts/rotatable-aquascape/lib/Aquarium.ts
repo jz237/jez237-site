@@ -1,5 +1,7 @@
 /// <reference types="vite/client" />
 import {Corydoras,coryBody,coryForward} from './Corydoras';
+import floorRoutes from './CoryFloorRoutes.json';
+import type {FloorRouteMap} from './CoryFloorRoutes';
 import {Invertebrates} from './Invertebrates';
 import {PlantPicker,trackFish,type Identification} from './Exploration';
 import type {FishPoint} from './FishBrain';
@@ -152,6 +154,7 @@ export class Aquarium{
    this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
    this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3],this.obstacles);
    this.cories=new Corydoras(this.scene,(x,z)=>this.height(x,z),this.obstacles,this.invertebrates.plants);
+   await this.cories.prepareNavigation(floorRoutes as unknown as FloorRouteMap);
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
@@ -373,7 +376,7 @@ export class Aquarium{
   this.fishes.forEach(({model,swim:s})=>{model.group.position.copy(fishPosition(s.x,s.y,s.z));model.group.rotation.set(0,s.yaw+s.depthHeading,s.pitch,'YXZ');model.update(this.time,s.effort,this.texture,.65,s.z,1,dt,s.pectoralEffort);});
   if(this.following!==null){if(this.followApproach){const offset=this.camera.position.clone().sub(this.controls.target),ease=1-Math.exp(-wallDt*2.2);offset.setLength(T.MathUtils.lerp(offset.length(),7.5,ease));this.camera.position.copy(this.controls.target).add(offset);this.camera.fov=T.MathUtils.lerp(this.camera.fov,37,ease);this.camera.updateProjectionMatrix();if(Math.abs(offset.length()-7.5)<.01)this.followApproach=false;}trackFish(this.camera,this.controls.target,this.fishes[this.following].model.group.position,wallDt);this.controls.update();}
   if(dt&&this.invertebrates){const contacts=this.fishes.map((f,id)=>({id,position:f.model.group.position.clone(),previous:this.grazerFishPrevious.get(id),forward:V(1,0,0).applyQuaternion(f.model.group.quaternion),size:f.size}));this.cories?.update(dt,this.currentTime,contacts,this.invertebrates.animals);
-   if(this.cories){for(const [id,point] of this.cories.fishCorrections){const f=this.fishes[id];Object.assign(f.swim,fishCoordinates(point));f.model.group.position.copy(point);contacts[id].position.copy(point);}this.invertebrates.externalBodies=this.cories.animals.map(a=>coryBody(a.position,coryForward(a),a.size));}
+   if(this.cories){for(const [id,point] of this.cories.fishCorrections){const f=this.fishes[id];Object.assign(f.swim,fishCoordinates(point));f.model.group.position.copy(point);contacts[id].position.copy(point);}this.invertebrates.externalBodies=this.cories.animals.map(a=>coryBody(a.position,coryForward(a),a.size,a.pitch));}
    this.invertebrates.update(dt,this.currentTime,contacts);
    for(const [id,point] of this.invertebrates.fishCorrections){const f=this.fishes[id];Object.assign(f.swim,fishCoordinates(point));startleTetra(f.swim);this.avoidSolid(f.swim);f.model.group.position.copy(fishPosition(f.swim.x,f.swim.y,f.swim.z));}
    this.fishes.forEach((f,id)=>this.grazerFishPrevious.set(id,f.model.group.position.clone()));

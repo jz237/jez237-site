@@ -1,0 +1,15 @@
+import fs from 'node:fs';
+import * as T from 'three';
+export const height=(x,z)=>.3+.55*Math.exp(-((x+2.5)**2/6+(z+.8)**2/2))+.22*(1-(z+2.3)/4.6)+.035*Math.sin(x*2+z)*Math.cos(z*3);
+export function addFernFixture(scene){
+ const base=new URL('../public/models/fern_02/',import.meta.url),gltf=JSON.parse(fs.readFileSync(new URL('fern_02_2k.gltf',base),'utf8')),buffers=gltf.buffers.map(b=>fs.readFileSync(new URL(b.uri,base)));
+ const attribute=id=>{const a=gltf.accessors[id],v=gltf.bufferViews[a.bufferView],b=buffers[v.buffer],start=b.byteOffset+(v.byteOffset??0)+(a.byteOffset??0),Type=a.componentType===5126?Float32Array:a.componentType===5125?Uint32Array:Uint16Array,size=a.type==='VEC3'?3:1;return new T.BufferAttribute(new Type(b.buffer.slice(start,start+a.count*size*Type.BYTES_PER_ELEMENT)),size);};
+ const geometries=gltf.meshes.map(m=>{const p=m.primitives[0],g=new T.BufferGeometry();g.setAttribute('position',attribute(p.attributes.POSITION));g.setIndex(attribute(p.indices));return g;});
+ for(const [id,x,z,width,yaw] of [[0,-3.5,.92,1.6,1],[1,-2.65,1.55,1.1,0],[2,-2.05,.73,1.35,2.2],[3,-1.1,.1,1.5,1.5],[0,-4.45,-.4,1.2,.8],[3,-3.48,-.95,1.4,2.1],[2,-.05,-1.2,1.05,.7],[1,3,-.5,1.3,2.5],[0,4.26,.45,1,1.5],[2,3.73,1.56,.8,1.6]]){const g=geometries[id].clone();g.computeBoundingBox();const size=g.boundingBox.getSize(new T.Vector3()),center=g.boundingBox.getCenter(new T.Vector3());g.translate(-center.x,-g.boundingBox.min.y,-center.z);const mat=new T.MeshBasicMaterial();mat.customProgramCacheKey=()=> 'scanned-fern-current-fixture';const mesh=new T.Mesh(g,mat);mesh.scale.setScalar(width/Math.max(size.x,size.z));mesh.position.set(x,height(x,z)+.035,z);mesh.rotation.y=yaw;scene.add(mesh);}
+}
+
+export async function hardscapeObstacles(){
+ const {aquascapeBranches,bendScannedBranch}=await import('../lib/ScannedBranch.ts'),{rockPlacements,shapeScannedRock}=await import('../lib/ScannedRock.ts');
+ function load(name){const root=new URL(`../public/models/${name}/`,import.meta.url),gltf=JSON.parse(fs.readFileSync(new URL(`${name}_2k.gltf`,root),'utf8')),buffers=gltf.buffers.map(b=>fs.readFileSync(new URL(b.uri,root)));return gltf.meshes.map(m=>{const acc=gltf.accessors[m.primitives[0].attributes.POSITION],v=gltf.bufferViews[acc.bufferView],b=buffers[v.buffer],data=new DataView(b.buffer,b.byteOffset,b.byteLength),positions=[];for(let i=0;i<acc.count;i++)for(let j=0;j<3;j++)positions.push(data.getFloat32((v.byteOffset??0)+(acc.byteOffset??0)+i*(v.byteStride??12)+j*4,true));return new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(positions,3));});}
+ const wood=load('dead_tree_trunk_02')[0],rocks=load('rock_moss_set_01'),obstacles=[];for(const branch of aquascapeBranches){const r=bendScannedBranch(wood,branch);obstacles.push(...r.obstacles);r.geometry.dispose();}for(const [id,x,z,size,yaw,tilt] of rockPlacements){const g=shapeScannedRock(rocks[id],size,yaw,tilt);obstacles.push({center:g.boundingSphere.center.clone().add(new T.Vector3(x,height(x,z)-size*.12,z)),radius:g.boundingSphere.radius});g.dispose();}return obstacles;
+}

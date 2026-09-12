@@ -1,0 +1,29 @@
+import * as T from 'three';
+export type FloorRouteMap={nodes:{id:number;point:number[];neighbors:number[];region:number}[];turns:[string,boolean][];sources?:Record<string,string>};
+export type FloorNode={id:number;point:T.Vector3;neighbors:number[];region:number};
+/** A shared, prevalidated map of the lower tank. No per-frame scene-wide path search. */
+export class CoryFloorRoutes{
+ readonly nodes:FloorNode[]=[];private cells=new Map<string,number>();private turns=new Map<string,boolean>();
+ private floor:(x:number,z:number)=>number;private clear:(p:T.Vector3,f:T.Vector3)=>boolean;
+ constructor(floor:(x:number,z:number)=>number,clear:(p:T.Vector3,f:T.Vector3)=>boolean){this.floor=floor;this.clear=clear;}
+ load(data:FloorRouteMap){this.nodes.push(...data.nodes.map(n=>({...n,point:new T.Vector3().fromArray(n.point),neighbors:[...n.neighbors]})));this.turns=new Map(data.turns);}
+ snapshot():FloorRouteMap{return {nodes:this.nodes.map(n=>({...n,point:n.point.toArray()})),turns:[...this.turns]};}
+ async build(){
+  const dirs=[new T.Vector3(1,0,0),new T.Vector3(-1,0,0),new T.Vector3(0,0,1),new T.Vector3(0,0,-1)],levels=[0,.22,.44,.70,.98,1.25];
+  for(let ix=0;ix<=20;ix++){const x=-4.5+ix*.45;for(let iz=0;iz<=10;iz++){const z=-2.1+iz*.42;for(let iy=0;iy<levels.length;iy++){const point=new T.Vector3(x,this.floor(x,z)+levels[iy],z);if(!dirs.some(f=>this.clear(point,f)))continue;const id=this.nodes.length;this.cells.set(`${ix},${iz},${iy}`,id);this.nodes.push({id,point,neighbors:[],region:-1});}}if(ix%3===0)await new Promise<void>(resolve=>setTimeout(resolve,0));}
+  for(const [key,id] of this.cells){const [ix,iz,iy]=key.split(',').map(Number),a=this.nodes[id];for(const [dx,dz,dy] of [[1,0,0],[0,1,0],[1,1,0],[1,-1,0],[0,0,1],[1,0,1],[-1,0,1],[0,1,1],[0,-1,1],[2,1,0],[2,-1,0],[3,1,0],[3,-1,0],[4,1,0],[4,-1,0]]){const other=this.cells.get(`${ix+dx},${iz+dz},${iy+dy}`);if(other===undefined)continue;const b=this.nodes[other];if(this.segment(a.point,b.point))a.neighbors.push(other);if(this.segment(b.point,a.point))b.neighbors.push(id);}if(id%24===0)await new Promise<void>(resolve=>setTimeout(resolve,0));}
+  let region=0;for(const n of this.nodes){if(n.region>=0)continue;const queue=[n.id];n.region=region;for(let i=0;i<queue.length;i++)for(const id of this.nodes[queue[i]].neighbors)if(this.nodes[id].region<0){this.nodes[id].region=region;queue.push(id);}region++;}
+ }
+ segment(a:T.Vector3,b:T.Vector3){const f=b.clone().sub(a).setY(0).normalize();if(f.lengthSq()<.01)f.set(1,0,0);const steps=Math.max(1,Math.ceil(a.distanceTo(b)/.07));for(let i=0;i<=steps;i++)if(!this.clear(a.clone().lerp(b,i/steps),f))return false;return true;}
+ /** Start at a visible waypoint; route to a distant, least-recently visited bottom patch. */
+ private turn(node:FloorNode,from:number,to:number){const key=`${node.id}:${from.toFixed(3)}:${to.toFixed(3)}`;if(this.turns.has(key))return this.turns.get(key)!;const d=Math.atan2(Math.sin(to-from),Math.cos(to-from)),steps=Math.max(1,Math.ceil(Math.abs(d)/.14));let okay=true;for(let i=0;i<=steps;i++){const angle=from+d*i/steps;if(!this.clear(node.point,new T.Vector3(Math.cos(angle),0,-Math.sin(angle)))){okay=false;break;}}this.turns.set(key,okay);return okay;}
+ route(position:T.Vector3,visits:Map<string,number>,time:number,seed:number,yaw=0,occupied:T.Vector3[]=[]){
+  const candidates=this.nodes.map(n=>({n,d:n.point.distanceToSquared(position)})).sort((a,b)=>a.d-b.d);const start=candidates.slice(0,24).find(({n,d})=>{const v=n.point.clone().sub(position),angle=v.x*v.x+v.z*v.z>.000001?Math.atan2(-v.z,v.x):yaw,delta=Math.atan2(Math.sin(angle-yaw),Math.cos(angle-yaw)),steps=Math.max(1,Math.ceil(Math.abs(delta)/.10));for(let i=0;i<=steps;i++){const a=yaw+delta*i/steps;if(!this.clear(position,new T.Vector3(Math.cos(a),0,-Math.sin(a))))return false;}return d<.000001||this.segment(position,n.point);})?.n;if(!start)return [];
+  const v=start.point.clone().sub(position),first=v.x*v.x+v.z*v.z>.0001?Math.atan2(-v.z,v.x):yaw;
+  type State={node:number;heading:number;distance:number;previous?:number};const states:State[]=[{node:start.id,heading:first,distance:0}],seen=new Map<string,number>([[`${start.id}:${first.toFixed(3)}`,0]]);
+  for(let i=0;i<states.length;i++){const state=states[i],a=this.nodes[state.node];for(const id of a.neighbors){const b=this.nodes[id];if(occupied.some(p=>new T.Line3(a.point,b.point).closestPointToPoint(p,true,new T.Vector3()).distanceTo(p)<.76))continue;const d=b.point.clone().sub(a.point),heading=d.x*d.x+d.z*d.z<.001?state.heading:Math.atan2(-d.z,d.x),key=`${id}:${heading.toFixed(3)}`;if(!this.turn(a,state.heading,heading))continue;let next=seen.get(key);if(next===undefined){next=states.length;seen.set(key,next);states.push({node:id,heading,distance:state.distance+d.length(),previous:i});}}}
+  let best=0,score=-Infinity;for(let i=0;i<states.length;i++){const state=states[i],n=this.nodes[state.node],p=n.point,d=state.distance;if(d<1||!n.neighbors.some(id=>{const v=this.nodes[id].point.clone().sub(p),heading=v.x*v.x+v.z*v.z<.001?state.heading:Math.atan2(-v.z,v.x);return this.turn(n,state.heading,heading);}))continue;const cell=`${Math.floor(p.x/.65)},${Math.floor(p.z/.65)}`,age=Math.min(150,time-(visits.get(cell)??-150)),low=p.y-this.floor(p.x,p.z),variation=Math.sin(n.id*17.13+seed*3.1)*1.5;
+   const value=age*.035+Math.min(position.distanceTo(p),7)*.5-low*1.8+variation;if(value>score){score=value;best=i;}}
+  const path:T.Vector3[]=[];let state:State|undefined=states[best];while(state){path.unshift(this.nodes[state.node].point.clone());state=state.previous===undefined?undefined:states[state.previous];}return path;
+ }
+}
