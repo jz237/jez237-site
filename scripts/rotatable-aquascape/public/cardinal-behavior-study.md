@@ -67,3 +67,8 @@ Six representative Neocaridina-like dwarf shrimp have articulated walking legs, 
 [Lee et al., Crawling beneath the free surface: Water snail locomotion](https://www.damtp.cam.ac.uk/user/lauga/papers/22.pdf) distinguishes ciliary gliding from conspicuous pedal waves. The ramshorn animation therefore keeps a continuous surface-contacting foot without attributing a measured land-snail wave pattern to this aquatic model. Exact taxonomic anatomy, shell growth and radular microstructure are not simulated.
 
 All animals are original procedural geometry. No footage or third-party animal asset is redistributed. Detailed appendages share seven instanced render batches; the aquarium's existing plants, fish geometry, textures, resolution and lighting passes are retained.
+
+
+### Macro-reference model revision
+
+The shrimp and snails have since been rebuilt using an explicitly generated GPT Image visual reference and material atlas. See the [model study and reference](./grazer-model-study.md). The new meshes replace the rounded prototypes, adding shaped carapaces and abdomen plates, thin ray-bearing tail fans, joined shell whorls, an aperture lip, a broad sculpted foot and finer surface texture. This visual revision does not change or add measurements to the cardinal evidence above.

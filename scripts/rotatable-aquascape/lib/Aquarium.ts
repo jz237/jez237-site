@@ -144,11 +144,11 @@ export class Aquarium{
   this.bubbles=new T.InstancedMesh(new T.SphereGeometry(.018,7,5),new T.MeshPhysicalMaterial({color:0xd2eee0,roughness:.05,metalness:.1,transparent:true,opacity:.36,depthWrite:false}),48);
   this.scene.add(this.bubbles);
   this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(host);this.resize();
-  this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader)]).then(async()=>{
+  this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader),new T.TextureLoader().loadAsync('./grazer-material-atlas.png').catch(error=>{console.warn('Grazer atlas unavailable; using procedural materials.',error);return undefined;})]).then(async results=>{
    if(!(import.meta.env.DEV&&new URLSearchParams(location.search).has('originalIndices')))optimizeLeafIndexOrder(this.scene);
    calmSwordLeaves(this.scene);
    this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
-   this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces);
+   this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3]);
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
@@ -204,7 +204,7 @@ export class Aquarium{
  private fishInfo(id:number):Identification{const fish=this.fishes[id];return {kind:'fish',fishId:id,name:'Cardinal tetra '+(id+1),subtitle:'Paracheirodon axelrodi',needs:'Companions, sheltered planting, clean oxygenated water and suitably small food.',role:'A small predator that forages for tiny animal prey among leaves, roots and litter.',behavior:tetraBehaviorLabel(fish.swim),point:fish.model.group.position.clone()};}
  identifyFish(id:number){if(!this.fishes.length)return;id=Math.max(0,Math.min(this.fishes.length-1,id));this.selection=this.fishInfo(id);this.onIdentify(this.selection);}
  identifyAnimal(id:number){const info=this.invertebrates?.info(id);if(info){this.selection=info;this.onIdentify(info);}}
- inspectAnimal(){if(this.selection?.animalId===undefined)return;const a=this.invertebrates?.animals[this.selection.animalId];if(!a)return;this.follow(null);const p=a.position,side=new T.Vector3().setFromMatrixColumn(a.matrix,2),forward=new T.Vector3().setFromMatrixColumn(a.matrix,0),offset=side.multiplyScalar(1.1).addScaledVector(forward,.5).addScaledVector(a.normal,.8);this.controls.target.copy(p).addScaledVector(a.normal,.09);this.camera.position.copy(this.controls.target).add(offset);this.camera.fov=37;this.camera.updateProjectionMatrix();this.inspectingAnimal=a.id;this.controls.minDistance=.7;this.controls.minPolarAngle=0;this.controls.maxPolarAngle=Math.PI;this.controls.minAzimuthAngle=-Infinity;this.controls.maxAzimuthAngle=Infinity;this.targetCamera=null;this.targetFov=null;this.controls.update();}
+ inspectAnimal(){if(this.selection?.animalId===undefined)return;const a=this.invertebrates?.animals[this.selection.animalId];if(!a)return;this.follow(null);const p=a.position,side=new T.Vector3().setFromMatrixColumn(a.matrix,2),forward=new T.Vector3().setFromMatrixColumn(a.matrix,0),offset=side.multiplyScalar(a.kind==='shrimp'?(side.z<0?-1.15:1.15):1.1).addScaledVector(forward,.35).addScaledVector(a.normal,.8);this.controls.target.copy(p).addScaledVector(a.normal,.09);this.camera.position.copy(this.controls.target).add(offset);this.camera.fov=37;this.camera.updateProjectionMatrix();this.inspectingAnimal=a.id;this.controls.minDistance=.7;this.controls.minPolarAngle=0;this.controls.maxPolarAngle=Math.PI;this.controls.minAzimuthAngle=-Infinity;this.controls.maxAzimuthAngle=Infinity;this.targetCamera=null;this.targetFov=null;this.controls.update();}
 
  identifyPlant(species:string){const info=this.picker?.example(species);if(info){this.selection=info;this.onIdentify(info);}}
  get selectedFishStatus(){if(this.selection?.animalId!==undefined)return this.invertebrates?.info(this.selection.animalId)?.behavior??'';return this.selection?.fishId!==undefined?tetraBehaviorLabel(this.fishes[this.selection.fishId].swim):'';}
@@ -351,7 +351,7 @@ export class Aquarium{
   this.waterIllumination.value=this.daylight;
   this.ledMaterial.emissiveIntensity=3*this.daylight;
   for(const light of this.canopyLights)light.intensity=canopy.sampleIntensity*this.daylight;
-  this.stripLight.intensity=canopy.stripIntensity*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=.8+.32*this.daylight;
+  this.stripLight.intensity=canopy.stripIntensity*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=(.8+.32*this.daylight)*(this.inspectingAnimal!==null?.80:1);
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
