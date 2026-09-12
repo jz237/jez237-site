@@ -35,15 +35,15 @@ export default function LivingAquascape(){
  const notify=(text:string)=>setNotice(text);
  useEffect(()=>{if(!notice)return;const id=setTimeout(()=>setNotice(''),4500);return()=>clearTimeout(id);},[notice]);
  useEffect(()=>{
- const preference=matchMedia('(prefers-reduced-motion: reduce)').matches;reducedRef.current=preference;setReduced(preference);
+ // Every visit starts animated; pause and reduced motion remain explicit controls.
+ pauseRef.current=false;setPaused(false);reducedRef.current=false;setReduced(false);
  const tier=navigator.hardwareConcurrency<=4||innerWidth<700?'Performance':'High';setRecommended(tier);
  let saved=tier;try{saved=localStorage.getItem('living-aquascape-quality')||tier;}catch{}
- if(!['Performance','High','Ultra','Photography'].includes(saved))saved=tier;setQuality(saved);
+ if(!['Performance','High','Ultra'].includes(saved))saved=tier;setQuality(saved);
  let active=true,e:PhotographicScene|null=null;
  try{if(host.current){e=new PhotographicScene(host.current);engine.current=e;e.setQuality(saved);e.onSelectedFish=setSelected;e.onInspect=name=>{if(name==='equipment')openFilter();else changeMode(name==='roots'?'Roots':'Biology');};
  e.ready.then(()=>{if(active)setLoading(false);}).catch(()=>{if(active){setLoading(false);setError('Some visual assets could not load. Reload to try again; the educational controls remain available.');}});
  }}catch{setLoading(false);setError('This browser cannot start WebGL. The static gallery and ecosystem controls remain available.');}
- if(saved==='Photography'){pauseRef.current=true;setPaused(true);}
  let request=0,last=performance.now(),report=0,frames=0,elapsed=0,gamepadPress=false;
  const loop=(now:number)=>{const raw=Math.max(0,(now-last)/1000),dt=frameDelta(now,last);last=now;if(filterRef.current){request=requestAnimationFrame(loop);return;}
  if(!pauseRef.current)advance(eco.current,env.current,dt*speedRef.current/3600);
