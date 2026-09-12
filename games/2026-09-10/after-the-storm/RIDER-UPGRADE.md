@@ -45,3 +45,7 @@ Meshoptimizer 0.24.0 is an optional offline tool, not a runtime dependency. Buil
 - Short 1440×900 High-quality samples measured approximately **39–59 FPS** on this workstation. These are scene-dependent measurements, not a universal 60 FPS promise; adaptive graphics remains the default.
 - Close model budgets: **82,208 ski / 115,780 rider triangles**; distant models: **28,069 / 40,024**. Full/LOD geometry and microtextures are shared across riders; skin/wetness materials remain independent.
 - Touch: **390×844 and 844×390** browser-emulated viewports passed independent pointer ownership, Auto/brake precedence and pause/reset in calm Pelican Park. An initial rough-water attempt hit shore and correctly entered wipeout; the control test was isolated from collision physics. Physical phone/gamepad hardware was not tested. The local receipt is `source/rider-browser-verification.json`; public deployment verification is recorded separately after publication.
+
+### 2.1.1 live framing correction
+
+Live screenshot review exposed a desktop-only overlap between the closer craft and the old bottom demo panel. Wide-screen mouse layouts now use a compact top control bar, leaving the rider, stern and wake unobstructed. Phone/tablet tap-to-show controls are unchanged. No handling or animation logic changed in this layout patch.

@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.1.0 · TIDELINE** — September 12, 2026. See [RIDER-UPGRADE.md](RIDER-UPGRADE.md) for the rider/jet-ski release and [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for the preceding water upgrade.
+**v2.1.1 · TIDELINE** — September 12, 2026. See [RIDER-UPGRADE.md](RIDER-UPGRADE.md) for the rider/jet-ski release and [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for the preceding water upgrade.
 
 A browser jet-ski game built around shared waves, hull response and modern water rendering. Free ride is the initial mode. Racing offers an original nine-venue interpretation of Wave Race 64's core mechanics; the earlier coastal salvage voyage remains available.
 
