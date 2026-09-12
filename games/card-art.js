@@ -1,6 +1,7 @@
 /* Hand-built animated cover illustrations. No game code or remote assets loaded. */
 (() => {
   const entries = {
+    'After the Storm: Coastal Racing':['coastal','#ffa467','#76dce7',0],
     'Philadelphia Relief':['relief','#69d7e9','#e8c58c',0],
     'Final Blow: Philly After Dark':['fighter','#fe685e','#85a9e9',0],
     'Pinball Illusions':['pinball','#e861be','#91e6ef',0],
@@ -61,6 +62,18 @@
   const group=(body,transform='',motion='',extra='')=>`<g${transform?` transform="${transform}"`:''} ${extra}>${motion?`<g class="ca-motion ${motion}">${body}</g>`:body}</g>`;
   const repeat=(n,fn)=>Array.from({length:n},(_,i)=>fn(i)).join('');
   const blink=(body,delay=0)=>group(body,'','ca-glimmer',`style="--lag:${delay}s"`);
+  // Stable phases keep a game's choreography intact when filtering the catalog.
+  const phaseFor=title=>-([...title].reduce((h,c)=>(Math.imul(h,31)+c.codePointAt(0))>>>0,7)%720)/100;
+
+  function atmosphere(type,a,b,id){
+    const water=['aquarium','submarine','eddy','primordia'].includes(type);
+    const space=['space','trek','lander','gravity','vector'].includes(type);
+    const embers=['volcano','commando','tank','robot','fighter'].includes(type);
+    const specks=repeat(7,i=>group(circle(7+(i*29)%87,10+(i*17)%49,.25+(i%3)*.13,i%2?a:b,'',1,'opacity=".65"'),' ',water?'ca-water-mote':embers?'ca-ember':'ca-dust',`style="--lag:${-i*.83}s"`));
+    const rays=water?group(path('M18 0 7 68H19L28 0ZM53 0 41 68H47L59 0Z',`url(#${id}-rays)`),'','ca-light-water'):'';
+    const streaks=space?repeat(3,i=>group(path(`M${12+i*37} ${7+i*5}l-3 7`,'none',b,.45,'opacity=".5"'),'','ca-star-streak',`style="--lag:${-i*1.7}s"`)):'';
+    return rays+specks+streaks;
+  }
 
   function makeScene(type,a,b,v,id){
     const metal=`url(#${id}-metal)`,lit=`url(#${id}-lit)`,haze=`url(#${id}-haze)`;
@@ -77,17 +90,42 @@
     const leaves=(x,y,h,color)=>path(`M${x} ${y}Q${x-5} ${y-h/2} ${x+2} ${y-h}M${x} ${y-4}q-10-3-7-10M${x} ${y-10}q9-1 8-8M${x} ${y-17}q-7-1-5-7`,'none',color,1.7,'stroke-linecap="round"');
 
     switch(type){
+      case 'coastal': {
+        const sea=rect(0,24,100,44,'#285463')+repeat(12,i=>group(path(`M${-10+(i*19)%100} ${28+i*2.8}h${9+(i%3)*6}`,'none',i%3?b:'#ffe2b0',.55,'opacity=".45"'),'','ca-sea',`style="--lag:${-i*.6}s"`));
+        const cliff=path('M0 28 15 19 29 21 39 26 51 28 54 36 33 40 20 52 0 53Z','#385454')+path('M0 25 15 17 30 19 40 24 47 26 30 28 15 40 0 39Z','#77907d')+path('M0 46 22 36 34 35 24 47 9 60 0 60Z','#8e8a73');
+        const road=path('M26 68C27 52 70 47 55 36S30 35 31 27','none','#bcc5b6',22)+path('M26 68C27 52 70 47 55 36S30 35 31 27','none','#3a454b',19)+path('M26 68C27 52 70 47 55 36S30 35 31 27','none','#748e94',14,'opacity=".35"')+path('M26 68C27 52 70 47 55 36S30 35 31 27','none','#e6d6a0',.8,'class="ca-motion ca-road-flow" stroke-dasharray="4 6"')+path('M16 68C16 53 53 48 53 44','none','#deece8',.8)+repeat(6,i=>path(`M${59-i*4.3} ${45+i*2.5}v3.5`,'none','#d5e3db',.6));
+        const car=ellipse(0,11,15,3,'#081820')+path('M-13 0-9-10H8L13 0 12 10H-12Z',`url(#${id}-paint)`,'#fed9be',.5)+path('M-7-8H6L9-1H-9Z','#123342','#bad8d8',.5)+path('M-8 0H9L10 4H-10Z','#8e5544')+path('M-14-1H14M-9 6H-4M4 6H9','none','#ffc09a',1.5)+path('M-13 0V7M13 0V7','none','#142431',2)+path('M-11 7H-5M5 7H11','none','#ff544c',1.6)+rect(-2,7,4,1,'#d7e7dd')+path('M-10 11 0 13 11 11','none','#dcebef',.6);
+        return rect(0,0,100,30,'#668b9b')+ellipse(75,22,28,19,`url(#${id}-lamp)`)+circle(75,21,7,'#ffe2a8')+group(path('M-6 13Q10 1 25 8T54 8Q69 1 92 10L109 17H-6Z','#304b5f')+path('M-5 16Q15 10 37 15T85 14L106 19H-5Z','#456477'),'','ca-cloud')+sea+cliff+road+group(ellipse(39,64,17,3,b,'','opacity=".14"'),'','ca-glimmer')+group(car,'translate(42 48) rotate(14)','ca-coastal-car')+repeat(4,i=>group(path(`M${29+i*8} 59l-3 4`,'none','#e2f8f2',.65),'','ca-spray',`style="--lag:${-i*.3}s"`))+path('M4 18V9l4-3 4 3v9M3 18h10M5 12h6','none','#f1dfbb',.6);
+      }
       case 'relief': return stars+path('M8 47 44 24 94 40 59 63Z','#122932',a,.8)+path('M8 47v5l51 16v-5Z','#102029')+path('M59 63 94 40v6L59 68Z','#1e4149')+repeat(7,i=>path(`M${13+i*4} ${45+i}q15-15 33-7t32-1`,'none',a,.45,'opacity=".25"'))+path('M56 28Q43 34 62 39T63 60','none','#53bfcf',4)+repeat(20,i=>{const x=23+(i*17)%49,y=41+(i*7)%10,h=3+(i*11)%17;return path(`M${x} ${y}v-${h}l3-2 3 1v${h}l-3 2Z`,metal)+path(`M${x+3} ${y-2}v-${h}`,'none',b,.65)})+path('M63 43 78 49M66 40v8M75 44v8','none',b,.8)+blink(circle(52,32,1.1,a)+circle(74,47,1,b));
-      case 'fighter': return skyline()+floor+rect(8,16,24,7,'#192437',1,a)+path('M11 19h17M14 21h11','none',a,.65)+path('M0 55 100 48','none',b,.5)+group(person(35,42,1.55,'#a6c8d8',1),'','ca-stance')+group(person(65,42,1.55,'#cb705f',1),'translate(130 0) scale(-1 1)','ca-stance', 'style="--lag:-1.4s"')+blink(path('M48 30 54 34 51 28 58 32M51 36 56 39','none','#fff0c2',1.2)) +ellipse(48,63,26,3,haze);
-      case 'pinball': return floor+path('M27 6H72L86 59 80 65H15L12 58Z','#112333','#8793a1',1)+path('M30 9H69L80 57H20Z',v===1?'#462237':v===2?'#192f42':'#362349',a,.7)+path('M32 13Q12 24 29 47M66 13Q86 27 69 46','none',metal,2)+repeat(3,i=>group(circle(38+i*12,24+(i%2)*11,5,'#1b2030',b,1.2)+circle(38+i*12,24+(i%2)*11,2.5,a),'','ca-glimmer',`style="--lag:${-i*.7}s"`))+repeat(7,i=>circle(28+i*7,45-(i%2)*4,1.1,i%2?a:b))+group(path('M29 53 44 57','none',metal,3,'stroke-linecap="round"'),'','ca-flipper')+group(path('M69 53 54 57','none',metal,3,'stroke-linecap="round"'),'','ca-flipper','style="--lag:-.6s"')+group(circle(54,39,2,metal),'','ca-pinball')+rect(39,12,20,5,'#0a1320',.5)+path(`M42 14h${v===0?12:v===1?8:15}`,'none',a,1)+path('M18 61h64','none',a,1.3);
+      case 'fighter': {
+        const fighter=(color,opponent=false)=>ellipse(0,19,14,2.5,'#020a12')+path('M-4 4-10 17-14 18M3 4 11 15 15 16','none','#263847',4,'stroke-linecap="round"')+path('M-5-7Q0-10 5-6L6 4-4 6-7 1Z',color,'#e3c3aa',.5)+path('M-3-4 3-4M-3 2 4 1','none','#fff0de',.5,'opacity=".5"')+circle(0,-13,3.5,'#cca58e')+path('M-4-14Q-2-19 3-16L4-13 1-14Z','#202131')+path('M-5-6-10-1-6 2','none',color,3.4,'stroke-linecap="round"')+group(path('M4-6 10-9 17-8','none',color,3.5,'stroke-linecap="round"')+circle(17,-8,2.2,'#e0b79a'),' ',opponent?'ca-guard':'ca-punch');
+        return skyline()+floor+rect(7,10,27,10,'#1d2030',1,a)+path('M10 13h21M13 17h15','none',a,.7)+blink(ellipse(20,15,21,12,haze),-.6)+path('M0 59 100 52M0 66 100 57','none','#6a7387',.6)+repeat(7,i=>path(`M${8+i*14} 52l-8 16`,'none','#394956',.45))+group(fighter('#aacfe1'),'translate(34 39)','ca-fighter-step')+group(fighter('#e5846d',true),'translate(68 39) scale(-1 1)','ca-rival-step')+group(path('M53 28 57 25 56 30 62 29 58 33 61 36 55 34 51 37 52 32 48 30Z','#fff1bb')+circle(55,31,7,'none',a,.6),'','ca-hit')+ellipse(47,62,28,3,haze)+path('M75 10V36M88 17v19','none','#3a5667',1)+blink(rect(76,13,11,7,a,.5,'','opacity=".4"'),-2.1);
+      }
+      case 'pinball': {
+        const bumper=(x,y,n)=>circle(x,y,7,`url(#${id}-lamp)`,'',1,`class="ca-motion ca-bumper-glow ca-bumper-${n}"`)+circle(x,y,4.6,metal,b,.6)+circle(x,y,3,a,'#edfaff',.4)+circle(x-1,y-1,1,'#fff7cd');
+        const lights=repeat(9,i=>group(path('M-1 1 0-1 1 1Z',i%2?a:b),`translate(${29+i*5.5} ${44-(i%3)*3})`,'ca-insert',`style="--lag:${-i*.18}s"`));
+        return floor+ellipse(50,57,39,10,haze)+path('M25 5H74L86 60 79 66H18L12 60Z','#0c1829','#d4e5ed',.85)+path('M28 8H71L79 57H20Z',v===1?'#341e30':v===2?'#172e43':'#292141',a,.65)+path('M31 13Q15 28 29 46M67 13Q84 30 69 46','none','#10212f',4)+path('M31 13Q15 28 29 46M67 13Q84 30 69 46','none',metal,1.2)+path('M25 48C45 37 20 13 49 17S48 42 68 47','none','#6c879b',3,'opacity=".45"')+path('M25 47C45 36 20 12 49 16S48 41 68 46','none',b,.55)+path('M74 57 68 12','none',metal,1)+rect(38,9,25,5,'#050e1e',.8,a)+repeat(12,i=>rect(40+i*1.7,10.5,.7,1.6,i<v+5?a:'#364153',.1))+repeat(3,i=>rect(24+i*3.5,31-i*.8,2,4,b,.4))+bumper(37,25,0)+bumper(61,24,1)+bumper(50,36,2)+lights+path('M25 42 37 49 24 50ZM72 42 61 49 74 50Z',`url(#${id}-lit)`,metal,.5)+group(path('M28 54 44 58','none',metal,3.4,'stroke-linecap="round"')+circle(28,54,1.2,a),'','ca-flipper-left')+group(path('M71 54 56 58','none',metal,3.4,'stroke-linecap="round"')+circle(71,54,1.2,a),'','ca-flipper-right')+group(circle(50,52,2.1,`url(#${id}-ball)`,'#e6f8ff',.25),'','ca-ball-run')+path('M16 61H83','none',a,1)+repeat(5,i=>circle(25+i*12,63,.6,i%2?a:b));
+      }
       case 'commando': return horizon+path('M25 68 39 25 57 25 81 68Z','#454937')+repeat(9,i=>group(leaves(4+(i*23)%93,45+(i%3)*12,18,'#324c3e'),'','ca-sway'))+rect(65,37,17,12,'#575a40',1,'#adb17d')+repeat(3,i=>rect(13+i*7,44,5,8,i%2?'#727050':'#604735',1))+person(47,45,1.3,'#b5c17e',1)+path('M55 38 68 31','none',metal,2)+blink(path('M69 31 76 29M70 32 74 34','none','#fff1bd',1.5))+path('M37 59 62 61','none',a,.8);
       case 'volcano': return stars+ellipse(54,42,39,20,haze)+group(repeat(8,i=>circle(48+Math.sin(i*2)*10,30-i*4,5+i*.55,i%2?'#584256':'#372d42','','',`opacity="${.75-i*.06}"`)),'','ca-plume')+path('M0 65 20 49 39 26 47 30 55 25 76 47 100 64Z','#302a35','#80686c',.5)+path('M0 65 37 31 30 50 49 62 59 36 75 47 100 65Z','#171d2a')+path('M43 30 47 40 42 45 50 55 45 66M53 29 57 40 65 49 70 65','none',a,2.3)+path('M43 30 47 40 42 45 50 55','none','#ffdfa5',.7)+flame(48,25,.43)+repeat(10,i=>blink(circle(25+(i*13)%53,9+(i*7)%30,.65,i%2?a:'#ffe8af'),-i*.31));
       case 'smoke': return floor+rect(20,8,60,46,'#0e1d2d',3,'#506070')+repeat(8,i=>path(`M22 ${13+i*5}h56`,'none',b,.25,'opacity=".22"'))+rect(37,41,27,11,metal,2)+group(path('M48 46C20 37 64 36 38 25S63 11 47 4','none',a,8,'opacity=".22" stroke-linecap="round"')+path('M51 45C72 29 25 34 58 18S40 6 62 3','none',b,6,'opacity=".34" stroke-linecap="round"')+path('M50 44C29 32 62 28 47 18S49 8 54 5','none','#efe0ff',1.2,'opacity=".8"'),'','ca-smoke')+blink(circle(49,44,2,a))+rect(29,57,42,3,'#374655',1)+repeat(5,i=>circle(34+i*8,58.5,.7,i%2?a:b));
       case 'aquarium': return rect(7,8,86,51,'#092c39',4,'#60858e')+path('M8 13Q30 9 51 13T93 13','none','#b5eef1',1.3)+path('M8 55Q35 48 58 55T92 53V61H8Z','#263c3d')+repeat(8,i=>group(leaves(13+i*11,56,14+(i*7)%20,i%2?'#46745d':'#6b9170'),'','ca-sway',`style="--lag:${-i*.4}s"`))+path('M35 56 41 42 52 47 57 57Z','#465d61','#7b9390',.5)+fish(38,28,1.2,b)+fish(69,38,.85,a,-1.3)+fish(23,43,.6,'#c6b5d9',-2.2)+repeat(6,i=>group(circle(77+(i%2)*3,51-i*6,.8,'none','#a3e3e8',.5),'','ca-bubble',`style="--lag:${-i*.5}s"`))+path('M10 10v44M89 11v44','none','#ccf8ff',.6,'opacity=".4"');
       case 'skyhook': return stars+ellipse(48,22,50,30,haze)+path('M0 40Q18 30 40 39T100 36V68H0Z','#213b49')+repeat(3,i=>group(path('M-14 0 10-4 17 1 0 21Z','#2c4145')+path('M-14 0 10-4 17 1-7 6Z','#98a79a')+rect(-7,-14,5,17,'#b7b89b')+rect(5,-19,5,18,'#c7c8aa')+path('M-7-14 10-19','none',b,2),`translate(${15+i*37} ${42-(i%2)*20})`))+circle(48,13,3,a)+path('M48 13Q50 33 65 38','none',b,.7)+group(person(65,45,.9,'#e7bd80'),'','ca-swing')+blink(circle(48,13,5,'none',a,.5));
       case 'robot': return (v? horizon:skyline())+floor+ellipse(51,56,29,9,haze)+group(path('M40 25 58 23 65 39 58 51H40L33 38Z',metal,'#9aaebd',.7)+path('M42 27 56 26 59 38 40 40Z','#263c47',a,.7)+circle(49,33,3,a)+rect(41,14,17,13,metal,3)+path('M43 20h12','none',a,2)+path('M37 30 25 33 21 45M61 29 74 31 83 23M42 48 38 61M55 48 61 61','none',metal,6,'stroke-linecap="round"')+path('M73 28 86 23','none','#263741',5)+blink(path('M87 22 94 20M87 24 94 26','none',b,1.5)),'','ca-stance')+repeat(4,i=>circle(13+i*24,58,.7,a));
-      case 'racer': return skyline(39)+path(v?'M0 60 35 28 60 27 100 55 100 68 0 68Z':'M0 65 33 26 62 26 100 64V68H0Z','#283344','#849398',.6)+path('M4 65 36 28M96 65 59 28','none',a,2)+path('M50 29v7m0 4v8m0 6v14','none','#c3c6b6',1.3)+group(ellipse(0,12,23,4,'#050a12')+rect(-21,1,7,11,'#09121a',2,'#727c83')+rect(14,1,7,11,'#09121a',2,'#727c83')+path('M-20 5-13-8 10-10 20 3 18 13-18 13Z',a,'#e2d2c4',.65)+path('M-11-6 8-7 13 1-15 2Z','#18374b','#accbdc',.6)+path('M-17 6 16 5','none','#f0e5d0',.7)+rect(-16,7,7,2,'#fff1c5',.8)+rect(9,6,7,2,'#fff1c5',.8)+path('M-6 11h13','none','#152231',2),`translate(${v?55:48} 46)`,'ca-drive')+repeat(4,i=>path(`M${6+i*28} 65l4-6`,'none',b,.5));
-      case 'space': return stars+ellipse(76,18,25,19,haze)+circle(76,18,12,'#263448',b,.5)+path('M66 12Q82 9 87 19M67 24Q80 17 86 25','none',b,1,'opacity=".24"')+(v===1?repeat(5,i=>group(path('M-5-8 4-7 9-1 5 6-4 9-9 2Z','#394353','#96a7b3',.5)+path('M-5-3 1-4 4 0-2 4Z','#1e2d3d'),`translate(${14+(i*21)%78} ${13+(i*17)%42}) scale(${.7+(i%2)*.3})`,'ca-drift')):repeat(3,i=>group(path('M0-6 9 5 0 1-9 5Z',b),`translate(${21+i*28} ${12+(i%2)*10})`,'ca-hover')))+ship(48,43,1.1)+group(path('M46 19V7M51 17V3','none',a,1.2),'','ca-bolt');
+      case 'racer': {
+        const roadway=path(v?'M0 60 35 28 60 27 100 55 100 68 0 68Z':'M0 65 33 26 62 26 100 64V68H0Z','#263447','#849398',.6)+path('M4 65 36 28M96 65 59 28','none',a,1.6)+path('M50 29v39','none','#e7dfc5',1.2,'stroke-dasharray="4 6" class="ca-motion ca-road-flow"')+repeat(6,i=>path(`M${5+i*17} 67 48 28`,'none',b,.35,'opacity=".15"'));
+        const wheel=x=>group(circle(x,7,5,'#07111d','#94a7b7',.8)+repeat(5,i=>path(`M${x} 3v8`,'none','#8596a5',.4,`transform="rotate(${i*36} ${x} 7)"`))+circle(x,7,1.2,'#dfeef1'),'','ca-wheel');
+        const car=ellipse(0,14,25,4,haze)+wheel(-18)+wheel(18)+path('M-22 4-13-9 9-11 21 1 20 13-19 13Z',`url(#${id}-paint)`,'#e2d2c4',.65)+path('M-11-7 8-8 14 0-15 1Z','#102e46','#bddee8',.65)+path('M-9-5 7-6 11-2-12-1Z',b,'',1,'opacity=".25"')+path('M-18 5 18 3M-18 12H19','none','#fff0d8',.55)+rect(-17,6,8,2,'#fff6cf',.8)+rect(10,5,7,2,'#fff6cf',.8)+path('M-6 10h13','none','#132536',2.5)+path('M-23-5H21','none','#263a47',2)+path('M-17-4v5M16-4v4','none',metal,.6);
+        return stars+circle(76,17,9,`url(#${id}-lamp)`)+skyline(39)+roadway+repeat(5,i=>group(path(`M${4+i*23} 40l-8 19`,'none',b,.6,'opacity=".5"'),'','ca-speed',`style="--lag:${-i*.3}s"`))+group(path('M-15 7-28 22H-7L-10 7M14 6 27 22H6L10 6Z','#fff1c7','','', 'opacity=".12"')+car,`translate(${v?54:48} 45)`,'ca-race-car');
+      }
+      case 'space': {
+        const planet=circle(78,18,16,'#24354d',b,.4)+path('M65 9Q86 5 92 23M63 23Q83 15 92 26','none',b,1.5,'opacity=".24"')+ellipse(78,19,24,4,'none',b,'transform="rotate(-22 78 19)" opacity=".4"');
+        const rocks=repeat(5,i=>group(path('M-5-8 4-7 9-1 5 6-4 9-9 2Z','#394b60','#b4c2cc',.55)+path('M-5-3 1-4 4 0-2 4Z','#1b2c40')+path('M-5-8 1-4 4-7M4 0 9-1M-2 4-4 9','none','#8295a9',.5),`translate(${12+(i*23)%78} ${11+(i*17)%41}) scale(${.5+(i%3)*.16})`,'ca-asteroid',`style="--lag:${-i*1.3}s"`));
+        const engine=group(path('M-5 9Q-8 17 0 27 8 17 5 9Z',b,'',1,'opacity=".7"')+path('M-2 11 0 22 2 11Z','#e6faff'),'','ca-thrust');
+        const craft=engine+path('M0-20 5-4 19 11 18 16 6 10 0 16-6 10-18 16-19 11-5-4Z',metal,'#e1f2fc',.65)+path('M0-20 0 15-5 8-5-4Z','#5c7c96')+path('M0-12 4 3 0 9-4 3Z',a,'#e6f7ff',.45)+path('M-16 10-9 8M9 8 16 10','none',b,1.3)+path('M0-10 1 1-1 3Z','#fff4dc')+rect(-13,10,2,4,'#91effb',.4)+rect(11,10,2,4,'#91effb',.4);
+        return stars+ellipse(70,15,37,26,haze)+planet+(v===1?rocks:repeat(3,i=>group(path('M0-7 9 6 0 2-9 6Z',b,'#ffe4c6',.5)+path('M0-3 2 2-2 2Z','#182b41'),`translate(${17+i*32} ${12+(i%2)*8})`,'ca-enemy',`style="--lag:${-i*.6}s"`)))+group(path('M36 27V9M60 24V4','none',a,1,'opacity=".8"'),'','ca-laser')+group(craft,'translate(48 43)','ca-bank')+blink(circle(90,42,2,`url(#${id}-lamp)`),-1.5);
+      }
       case 'grove': return stars+path('M0 0 16 11 9 45 22 68H0Z','#10262c')+path('M100 0 82 12 92 41 80 68H100Z','#15212d')+ellipse(50,52,40,12,haze)+path('M0 59Q36 47 49 57T100 55V68H0Z','#132d32')+repeat(7,i=>group(leaves(13+i*13,64,14+(i*11)%24,i%2?'#3d6464':'#31584d'),'','ca-sway',`style="--lag:${-i*.6}s"`))+(v?crystal(52,39,1.4,a)+fish(29,43,.45,b):group(path('M51 57Q48 40 52 26','none','#99b29a',2)+repeat(6,i=>group(ellipse(0,-7,3.5,9,a,'#ddf5be','opacity=".8"'),`translate(52 29) rotate(${i*60})`))+circle(52,29,4,'#edf4c7'),'','ca-breathe'))+repeat(9,i=>blink(circle(17+(i*31)%71,18+(i*7)%39,.7,i%2?a:b),-i*.5));
       case 'marble': return stars+path('M12 33 44 16 90 32 58 50Z','#8dacc0')+path('M12 33v12l46 18V50Z','#30445f')+path('M58 50 90 32v13L58 63Z','#526785')+path('M21 33 43 23 58 29 43 37 61 44 80 35','none','#e1d4eb',5)+path('M21 33 43 23 58 29 43 37 61 44 80 35','none','#38465f',3)+repeat(4,i=>path(`M${18+i*12} ${35+i*4}v10`,'none','#9eacc2',.5))+group(ellipse(0,6,6,2,'#102030')+circle(0,0,6,metal,a,.5)+circle(-2,-2,1.5,'#f0fbff'),`translate(47 26)`,'ca-marble')+circle(79,33,3,'#1a2541',b,1);
       case 'bricks': return stars+floor+repeat(24,i=>rect(10+(i%6)*14,10+Math.floor(i/6)*7,12,5,i%3===0?a:i%3===1?b:'#718faa',1,'#d2dfdf'))+group(rect(33,57,34,4,metal,2,a),'','ca-paddle')+group(path('M58 40 49 48 45 52','none',b,1,'opacity=".6"')+circle(59,39,2.7,'#fff1d5'), '','ca-pinball')+blink(path('M57 33 61 28M65 36l5-2M55 36l-5-2','none',a,.9));
@@ -125,6 +163,7 @@
     entries,
     mount(){
       observer?.disconnect();
+      document.body.classList.toggle('gallery-motion-paused',document.hidden);
       const covers=document.querySelectorAll('.cover-art');
       if(!('IntersectionObserver' in window)){covers.forEach(el=>el.classList.add('cover-visible'));return}
       observer=new IntersectionObserver(items=>items.forEach(({target,isIntersecting})=>target.classList.toggle('cover-visible',isIntersecting)),{rootMargin:'120px'});
@@ -133,16 +172,20 @@
     render(g){
       const entry=entries[g.title];if(!entry)return null;
       const [type,a,b,v]=entry,id=`cover-${++serial}`;
-      const svg=`<svg viewBox="0 0 100 68" class="arcade-svg cover-art" aria-hidden="true" focusable="false" data-cover="${type}" data-cover-title="${g.title.replaceAll('&','&amp;').replaceAll('"','&quot;')}">
+      const svg=`<svg viewBox="0 0 100 68" class="arcade-svg cover-art" aria-hidden="true" focusable="false" style="--scene-phase:${phaseFor(g.title)}s" data-cover="${type}" data-cover-title="${g.title.replaceAll('&','&amp;').replaceAll('"','&quot;')}">
         <defs>
           <linearGradient id="${id}-sky" x2=".2" y2="1"><stop stop-color="#101b2e"/><stop offset="1" stop-color="#030912"/></linearGradient>
           <linearGradient id="${id}-metal" x1="0" y1="0" x2=".7" y2="1"><stop stop-color="#e3edf0"/><stop offset=".3" stop-color="#90a4b5"/><stop offset=".49" stop-color="#dce7eb"/><stop offset=".53" stop-color="#415567"/><stop offset="1" stop-color="#a3b5c0"/></linearGradient>
           <linearGradient id="${id}-lit"><stop stop-color="${a}"/><stop offset="1" stop-color="${b}"/></linearGradient>
           <radialGradient id="${id}-haze"><stop stop-color="${a}" stop-opacity=".34"/><stop offset="1" stop-color="${a}" stop-opacity="0"/></radialGradient>
+          <radialGradient id="${id}-lamp"><stop stop-color="#fffce5"/><stop offset=".2" stop-color="${a}" stop-opacity=".8"/><stop offset="1" stop-color="${a}" stop-opacity="0"/></radialGradient>
+          <radialGradient id="${id}-ball" cx=".3" cy=".25" r=".8"><stop stop-color="#fff"/><stop offset=".2" stop-color="#d7f4ff"/><stop offset=".45" stop-color="#60788c"/><stop offset=".7" stop-color="#172c40"/><stop offset="1" stop-color="#adccdc"/></radialGradient>
+          <linearGradient id="${id}-rays" x2="0" y2="1"><stop stop-color="#b1faff" stop-opacity=".2"/><stop offset="1" stop-color="#b1faff" stop-opacity="0"/></linearGradient>
+          <linearGradient id="${id}-paint" x2=".25" y2="1"><stop stop-color="#fff4de"/><stop offset=".12" stop-color="${a}"/><stop offset=".57" stop-color="${a}"/><stop offset="1" stop-color="#172c40"/></linearGradient>
           <linearGradient id="${id}-shade" x2="0" y2="1"><stop stop-color="#020710" stop-opacity=".15"/><stop offset=".55" stop-color="#020710" stop-opacity="0"/><stop offset="1" stop-color="#020710" stop-opacity=".32"/></linearGradient>
           <clipPath id="${id}-clip"><rect width="100" height="68" rx="4"/></clipPath>
         </defs>
-        <g clip-path="url(#${id}-clip)">${rect(0,0,100,68,`url(#${id}-sky)`)}${makeScene(type,a,b,v,id)}${rect(0,0,100,68,`url(#${id}-shade)`)}</g>
+        <g clip-path="url(#${id}-clip)">${rect(0,0,100,68,`url(#${id}-sky)`)}${makeScene(type,a,b,v,id)}${atmosphere(type,a,b,id)}${rect(0,0,100,68,`url(#${id}-shade)`)}</g>
         ${path('M3 16V5Q3 3 5 3H19M81 3H95Q97 3 97 5V16M3 52V63Q3 65 5 65H19M81 65H95Q97 65 97 63V52','none',a,.45,'opacity=".45"')}
       </svg>`;
       return `<span class="icon-wrap particle-icon-wrap gallery-cover" style="--icon-a:${a};--icon-b:${b};--icon-c:${b};--icon-hot:#e0edf1;--icon-cool:${a}" aria-hidden="true"><span class="arcade-icon icon-cover">${svg}</span></span>`;
