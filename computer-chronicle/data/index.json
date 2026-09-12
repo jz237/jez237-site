@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-12",
+      "historicDate": "1984-06-25",
+      "displayDate": "Week of June 25-July 1, 1984",
+      "edition": "Issue 100 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "AT&T puts its name on an IBM-compatible, while computer owners weigh printers and meet after hours on CompuServe.",
+      "leadHeadline": "AT&T Enters the Personal-Computer Market with the PC 6300",
+      "storyHeadlines": [
+        "Printer Buyers Face a Maze from Dot Matrix to Laser",
+        "VisiCorp Tries to Regain Its Business-Software Footing",
+        "Timex/Sinclair Owners Build a Lifeline on CompuServe"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-06-25.jpg",
+      "thumb": "media/thumbs/1984-06-25.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-11",
       "historicDate": "1984-06-18",
       "displayDate": "Week of June 18-24, 1984",
