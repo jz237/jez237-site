@@ -7,6 +7,7 @@ const T=await import('three');const {buildBotanicalPlants}=await import('../lib/
 const height=(x,z)=>.3+.55*Math.exp(-((x+2.5)**2/6+(z+.8)**2/2))+.22*(1-(z+2.3)/4.6)+.035*Math.sin(x*2+z)*Math.cos(z*3);
 
 const {Invertebrates}=await import('../lib/Invertebrates.ts');
+const {grazerBody,bodiesOverlap}=await import('../lib/GrazerCollision.ts');
 function addFernFixture(scene){
  const base=new URL('../public/models/fern_02/',import.meta.url),gltf=JSON.parse(fs.readFileSync(new URL('fern_02_2k.gltf',base),'utf8')),buffers=gltf.buffers.map(b=>fs.readFileSync(new URL(b.uri,base)));
  const attribute=id=>{const a=gltf.accessors[id],v=gltf.bufferViews[a.bufferView],b=buffers[v.buffer],start=b.byteOffset+(v.byteOffset??0)+(a.byteOffset??0),Type=a.componentType===5126?Float32Array:a.componentType===5125?Uint32Array:Uint16Array,size=a.type==='VEC3'?3:1;return new T.BufferAttribute(new Type(b.buffer.slice(start,start+a.count*size*Type.BYTES_PER_ELEMENT)),size);};
@@ -20,7 +21,8 @@ test('full planting supports climbing, swimming departures, landings and pause w
  const initial=life.animals.map(a=>a.trail?.leaf),swimmers=new Set(),landed=new Set();let maxStep=0;
  for(let i=0;i<1800;i++){
   const before=life.animals.map(a=>a.position.clone());life.update(.1);
-  for(const a of life.animals){maxStep=Math.max(maxStep,a.position.distanceTo(before[a.id]));if(a.flight)swimmers.add(a.id);else if(a.trail?.leaf!==initial[a.id])landed.add(a.id);
+  const bodies=life.animals.map(a=>grazerBody(a.position,a.normal,new T.Vector3().setFromMatrixColumn(a.matrix,0).normalize(),a.kind==='snail',a.kind==='shrimp'?.80+a.id%3*.04:.84));for(let a=0;a<9;a++)for(let b=a+1;b<9;b++)assert.equal(bodiesOverlap(bodies[a],bodies[b],0),false,`grazer bodies overlap at ${i}: ${a}/${b}`);
+  for(const a of life.animals){maxStep=Math.max(maxStep,a.position.distanceTo(before[a.id]));assert.ok(a.position.distanceTo(before[a.id])<.065,JSON.stringify({frame:i,id:a.id,before:before[a.id].toArray(),after:a.position.toArray(),flight:a.flight?.progress,distance:a.distance,length:a.length}));if(a.flight)swimmers.add(a.id);else if(a.trail?.leaf!==initial[a.id])landed.add(a.id);
    assert.ok(Number.isFinite(a.matrix.determinant())&&a.matrix.determinant()>0,'upright finite contact basis');
    if(a.trail&&!a.flight){const p=new T.Vector3(),n=new T.Vector3(),tr=a.trail,u=a.distance/a.length*tr.points.length,j=Math.floor(u)%tr.points.length,uv=tr.points[j].clone().lerp(tr.points[(j+1)%tr.points.length],u-j);leafContact(tr.leaf,uv.x,uv.y,(i+1)*.1,p,n);p.addScaledVector(n,.004);assert.ok(a.position.distanceTo(p)<1e-6,'feet follow the animated rendered surface');}
   }
