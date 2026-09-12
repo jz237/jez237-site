@@ -2,18 +2,18 @@ import {createFishBrain,thinkFish,rememberPlant,type FishBrain,type FishSenses} 
 export const MAX_TETRA_PITCH=.24;
 export const MAX_TETRA_VERTICAL_SPEED=14;
 export type TetraBehavior='cruising'|'burst'|'gliding'|'approaching'|'inspecting'|'foraging';
-export type TetraSwim={x:number;y:number;vx:number;vy:number;yaw:number;pitch:number;speed:number;direction:1|-1;sinceTurn:number;elapsed:number;behavior:TetraBehavior;remaining:number;targetX:number;targetY:number;cruiseSpeed:number;effort:number;pectoralEffort:number;seed:number;wasFeeding:boolean;turnRate:number;depthTarget:number;depthRemaining:number;depthBand:number;brain:FishBrain;z:number;vz:number;targetZ:number;depthHeading:number;depthTimer:number;startleRemaining:number;startleCooldown:number;avoidanceRemaining:number;avoidanceZ:number;strokeRemaining:number;powerStroke:boolean;browsing:boolean;};
+export type TetraSwim={x:number;y:number;vx:number;vy:number;yaw:number;pitch:number;speed:number;direction:1|-1;sinceTurn:number;elapsed:number;behavior:TetraBehavior;remaining:number;targetX:number;targetY:number;cruiseSpeed:number;effort:number;pectoralEffort:number;seed:number;wasFeeding:boolean;turnRate:number;depthTarget:number;depthRemaining:number;depthBand:number;brain:FishBrain;z:number;vz:number;targetZ:number;depthHeading:number;depthTimer:number;startleRemaining:number;startleCooldown:number;avoidanceRemaining:number;avoidanceZ:number;strokeRemaining:number;powerStroke:boolean;browsing:boolean;pickRemaining:number;pickIn:number;};
 const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,n));
 const ease=(a:number,b:number,rate:number,dt:number)=>a+(b-a)*(1-Math.exp(-dt*rate));
 function random(s:TetraSwim){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
-export function createTetraSwim(seed=237):TetraSwim{return {x:1110,y:330,vx:16,vy:0,yaw:0,pitch:0,speed:16,direction:1,sinceTurn:10,elapsed:0,behavior:'cruising',remaining:2.6,targetX:1190,targetY:345,cruiseSpeed:16,effort:.7,pectoralEffort:.35,seed,wasFeeding:false,turnRate:.8,depthTarget:445,depthRemaining:20,depthBand:2,z:.62,vz:0,targetZ:.18,depthHeading:0,depthTimer:0,startleRemaining:0,startleCooldown:0,avoidanceRemaining:0,avoidanceZ:.5,strokeRemaining:.15+(seed%17)*.019,powerStroke:true,browsing:false,brain:createFishBrain()};}
+export function createTetraSwim(seed=237):TetraSwim{return {x:1110,y:330,vx:16,vy:0,yaw:0,pitch:0,speed:16,direction:1,sinceTurn:10,elapsed:0,behavior:'cruising',remaining:2.6,targetX:1190,targetY:345,cruiseSpeed:16,effort:.7,pectoralEffort:.35,seed,wasFeeding:false,turnRate:.8,depthTarget:445,depthRemaining:20,depthBand:2,z:.62,vz:0,targetZ:.18,depthHeading:0,depthTimer:0,startleRemaining:0,startleCooldown:0,avoidanceRemaining:0,avoidanceZ:.5,strokeRemaining:.15+(seed%17)*.019,powerStroke:true,browsing:false,pickRemaining:0,pickIn:.3,brain:createFishBrain()};}
 function enter(s:TetraSwim,behavior:TetraBehavior){
  s.behavior=behavior;
  const r=random(s);
  if(behavior==='cruising'){s.remaining=2+r*4;s.cruiseSpeed=16+random(s)*15;s.targetY=s.depthTarget;}
  if(behavior==='burst'){s.remaining=.28+r*.6;s.cruiseSpeed=38+random(s)*18;}
  if(behavior==='gliding')s.remaining=.65+r*1.1;
- if(behavior==='inspecting'){s.remaining=.7+r*1.4;rememberPlant(s.brain,s.targetX,s.targetY);}
+ if(behavior==='inspecting'){s.remaining=.7+r*1.4;s.pickIn=.16+random(s)*.3;s.pickRemaining=0;rememberPlant(s.brain,s.targetX,s.targetY);}
  if(behavior==='approaching'){
   // Leaf and branch margins in the photographic planting, kept near the current depth.
   const sites=[[1170,380],[1090,397],[975,382],[890,327],[760,355],[690,340],[1180,480],[1060,465],[950,490],[810,465],[820,287],[990,275],[1150,290]];
@@ -43,7 +43,7 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
  if(s.remaining<=0){s.browsing=false;
   if(feeding)enter(s,'foraging');
   else if(s.behavior==='burst')enter(s,'gliding');
-  else if(s.behavior==='approaching')enter(s,'inspecting');
+  else if(s.behavior==='approaching'){s.browsing=false;enter(s,'cruising');}
   else if(s.behavior==='inspecting')enter(s,random(s)<.6?'burst':'cruising');
   else {const roll=random(s);enter(s,roll<.36&&Math.abs(s.depthTarget-s.y)<30?'approaching':roll<.70?'burst':'cruising');}
  }
@@ -66,7 +66,7 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
   if(Math.abs(s.targetY-s.y)>20)pace=Math.max(pace,feeding?44:9);
   if(feeding)pace=Math.max(pace,Math.min(48,Math.hypot(s.targetX-s.x,s.targetY-s.y,((intent?.target?.z??s.z)-s.z)*180)*1.1));
   drive=pace/24;fan=pace<3?.8:.4;
-  if(s.behavior==='approaching'&&Math.abs(s.targetX-s.x)<19&&Math.abs(s.targetY-s.y)<17){enter(s,'inspecting');pace=0;drive=.02;fan=.9;}
+  if(s.behavior==='approaching'&&Math.hypot(s.targetX-s.x,s.targetY-s.y,((intent?.target?.z??s.targetZ)-s.z)*180)<23){enter(s,'inspecting');pace=0;drive=.02;fan=.9;}
  }
  if(intent?.kind==='school'&&s.behavior==='cruising'){pace=clamp(s.cruiseSpeed*.65+Math.abs(intent.target?.vx??17)*.35+Math.abs(s.targetX-s.x)*.014,16,37);drive=pace/28;}
  // Unequal short propulsion bouts and coasts within travel. Frequencies are illustrative,
@@ -75,7 +75,10 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
   if(s.powerStroke){pace*=1.06;drive*=1.08;}
   else {pace*=.86;drive*=.16;fan=Math.max(fan,.32);}
  }
- if(s.browsing&&inspecting){const peck=(s.elapsed+(s.seed%29)*.1)%1.25;if(peck<.11){pace=5;drive=.15;fan=.9;}}
+ // A brief prey-picking movement follows settling at an actually reached 3D patch.
+ // No repeated global sine phase and no inspection at a failed approach timeout.
+ if(s.browsing&&inspecting){s.pickIn-=dt;s.pickRemaining=Math.max(0,s.pickRemaining-dt);if(s.pickIn<=0&&s.speed<3){s.pickRemaining=.08+random(s)*.07;s.pickIn=.5+random(s)*.8;}if(s.pickRemaining>0){pace=7;drive=.28;fan=.9;}}
+ else s.pickRemaining=0;
  if(s.startleRemaining>0){pace=72;drive=1.7;fan=1;}
  if(intent?.kind==='rest'){pace=0;drive=.015;fan=.85;s.behavior='gliding';s.remaining=2;}
  if(turning){pace=Math.min(pace,8);drive=.3;fan=.7;}
