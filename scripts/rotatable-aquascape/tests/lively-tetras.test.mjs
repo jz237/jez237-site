@@ -42,15 +42,16 @@ test('runtime depth can reach water behind and in front of the hardscape',()=>{
  for(let i=0;i<600*30;i++){advanceTetraSwim(s,1/30,false,false,{...empty,depthBounds:[-.26,1.26]});rear=Math.min(rear,s.z);front=Math.max(front,s.z);}
  assert.ok(rear<-.12&&front>1.12,`${rear} to ${front}`);
 });
-test('only sword blade motion is calmed, without changing any geometry or instance transform',()=>{
- const scene=new T.Scene();const meshes=['sword','stem'].map(species=>{
+test('sword and ground-cover motion is calmed without altering authored geometry',()=>{
+ const scene=new T.Scene();const meshes=['sword','stem','carpet','grass'].map(species=>{
   const g=new T.PlaneGeometry();g.setAttribute('leafMotion',new T.InstancedBufferAttribute(new Float32Array([1,.4,1]),3));
-  const m=new T.InstancedMesh(g,new T.MeshBasicMaterial(),1);m.userData.plantSpecies=species;scene.add(m);return m;
+  g.setAttribute('plantRoot',new T.InstancedBufferAttribute(new Float32Array([0,0,0]),3));g.setAttribute('plantFlex',new T.InstancedBufferAttribute(new Float32Array([.4]),1));const m=new T.InstancedMesh(g,new T.MeshBasicMaterial(),1);m.setMatrixAt(0,new T.Matrix4().makeTranslation(0,1,0));m.userData.plantSpecies=species;scene.add(m);return m;
  });
  const vertices=meshes[0].geometry.attributes.position.array.slice(),matrix=meshes[0].instanceMatrix.array.slice();
  calmSwordLeaves(scene);calmSwordLeaves(scene);
  assert.ok(Math.abs(meshes[0].geometry.attributes.leafMotion.getY(0)-.112)<1e-6);
  assert.ok(Math.abs(meshes[0].geometry.attributes.leafMotion.getZ(0)-.6)<1e-6);
  assert.ok(Math.abs(meshes[1].geometry.attributes.leafMotion.getY(0)-.4)<1e-6);
+ for(const mesh of meshes.slice(2)){assert.ok(mesh.geometry.attributes.leafMotion.getY(0)<.041);assert.ok(mesh.geometry.attributes.plantFlex.getX(0)<.05);}
  assert.deepEqual(meshes[0].geometry.attributes.position.array,vertices);assert.deepEqual(meshes[0].instanceMatrix.array,matrix);
 });

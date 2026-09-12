@@ -21,3 +21,12 @@ The material atlas was separately generated from the macro reference. Its three 
 The organisms remain representative realtime models. Microscopic setal anatomy, shell growth, tissue optics and behavior timing are approximations. Their grazing paths and independent clocks are inherited from the existing simulation. The image does not replace the cardinal field evidence documented in [the behavior study](./cardinal-behavior-study.md).
 
 No assets were purchased and no separate paid API was used. The implementation shares geometries, material tiles and render batches across six shrimp and three snails. The full reference loads only when its link is opened.
+
+
+## Plant contact and swimming update
+
+Low carpet and grass blades now retain only a small fraction of their former movement; the scanned ground ferns also have a restrained current. Taller planting keeps its existing detail and rooted motion.
+
+Seven grazers begin on plant surfaces; two ramshorns remain on the front glass. Leaf paths use barycentric contact on the actual blade triangles and the same deformation and current clock as the renderer. Body-volume checks include neighboring blades, stems and conservative fern-frond envelopes. Crawlers reverse or pause at blocked paths. Shrimp occasionally depart, swim through a checked water path using faster swimmeret strokes, and settle on another leaf. A newly obstructed swimming trip retreats. Independent grazing intervals and gradual turns remain active.
+
+The route search and spatial index are cached; all visible animal and plant geometry is retained. This is an illustrative behavioral model, not measured species locomotion or a physics simulation of individual feet and suction. Fine antennae and individual toe contacts are animated rather than solved separately.
