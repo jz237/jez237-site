@@ -1,4 +1,7 @@
 /// <reference types="vite/client" />
+import {TeachingScene} from './TeachingScene';
+import {LearningModel} from './LearningModel';
+import type {Lesson} from './LearningContent';
 import {buildScannedHardscape,buildScannedFerns} from './ScannedHardscape';
 import {AquariumWater} from './AquariumWater';
 import {buildAquariumGlass} from './AquariumGlass';
@@ -30,6 +33,10 @@ const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
 const clamp=T.MathUtils.clamp;
 export class Aquarium{
  readonly ready:Promise<void>;
+ readonly learning=new LearningModel();
+ teaching:TeachingScene|null=null;
+ private learningSubstrate:T.Object3D[]=[];
+ private learningHousing:T.Object3D[]=[];
  paused=false;
  evening=false;
  status='Exploring';
@@ -42,6 +49,7 @@ export class Aquarium{
  private targetCamera:T.Vector3|null=null;
  private targetFov:number|null=null;
  private time=0;
+ private currentTime=0;
  private last=0;
  private seed=237;
  private daylight=1;
@@ -111,7 +119,7 @@ export class Aquarium{
    this.canopyLights.push(light);this.scene.add(light,light.target);
   }
   const rim=new T.DirectionalLight(0xd2dfbf,.65);rim.position.set(-5,6,-3);this.scene.add(rim);
-  this.buildTank();buildAquariumSubstrate(this.scene,(x,z)=>this.height(x,z),this.swimShader);buildBotanicalPlants(this.scene,(x,z)=>this.height(x,z),this.swimShader);
+  const housingStart=this.scene.children.length;this.buildTank();this.learningHousing=this.scene.children.slice(housingStart).filter(o=>!(o instanceof T.Light));const substrateStart=this.scene.children.length;buildAquariumSubstrate(this.scene,(x,z)=>this.height(x,z),this.swimShader);this.learningSubstrate=this.scene.children.slice(substrateStart);buildBotanicalPlants(this.scene,(x,z)=>this.height(x,z),this.swimShader);
   this.water=this.buildWater();
   if(import.meta.env.DEV&&new URLSearchParams(location.search).get('inspect')==='reflection'){
    const scene=new T.Scene(),camera=new T.OrthographicCamera(-1,1,1,-1,0,1),material=new T.MeshBasicMaterial({map:this.water.reflectionTexture});
@@ -130,9 +138,11 @@ export class Aquarium{
    // Prepare the final material variants before revealing the aquarium. The warm
    // frame also initializes shadow, reflection and postprocessing programs.
    this.controls.update();this.scene.updateMatrixWorld();this.schoolEyes?.update();
-   this.water.update(this.time,this.camera.position.y,this.daylight);
+   this.water.update(this.currentTime,this.camera.position.y,this.daylight);
    await this.lighting.prepare(this.renderer);
    this.renderer.shadowMap.needsUpdate=true;this.lighting.render(this.renderer,this.lightingInspection);
+   const plants=this.scene.children.filter(o=>o instanceof T.Mesh&&!!o.geometry.getAttribute('plantRoot'));
+   this.teaching=new TeachingScene(this.scene,this.host,plants,this.learningSubstrate,this.texture,[...this.learningHousing,this.water]);this.learning.reset();
    this.frame=requestAnimationFrame(this.animate);
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
@@ -149,6 +159,13 @@ export class Aquarium{
    const rect=canvas.getBoundingClientRect(),ray=new T.Raycaster();
    ray.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),this.camera);
    const hit=ray.ray.intersectBox(new T.Box3(V(-5.05,.1,-2.35),V(5.05,5.4,2.35)),new T.Vector3());
+   if(hit&&this.teaching?.mode){
+    if(!this.studyView){
+     const fish=this.fishes.find(f=>ray.ray.distanceSqToPoint(f.model.group.position)<.14);
+     if(fish)this.teaching.onInspect(0);
+    }
+    return;
+   }
    if(hit){this.fishes.forEach(({swim})=>startleTetra(swim));if(import.meta.env.DEV)this.host.dataset.glassTaps=String(Number(this.host.dataset.glassTaps??0)+1);}
   });
  }
@@ -219,18 +236,23 @@ export class Aquarium{
   }
   this.schoolEyes=new SchoolEyes(this.scene,this.fishes.map(f=>f.model));
  }
+ learn(mode:Lesson|null,step=0){
+  this.teaching?.set(mode,step);this.learning.running=false;this.view('front');
+ }
  feed(){
+  if(this.teaching?.mode==='experiments')this.learning.state.waste+=.5;
   if(this.food.length>12)return;
   for(let i=0;i<12;i++){const m=this.mesh(new T.IcosahedronGeometry(.028,0),new T.MeshStandardMaterial({color:0xbba471,roughness:1}),V(.65+(this.random()-.5)*1.6,5.12+this.random()*.13,.62+(this.random()-.5)*.3),false);m.scale.set(1,.35,.8);this.food.push({mesh:m,age:0});}
  }
  zoom(scale:number){this.targetCamera=null;this.targetFov=null;const offset=this.camera.position.clone().sub(this.controls.target);offset.setLength(clamp(offset.length()*scale,this.controls.minDistance,this.controls.maxDistance));this.camera.position.copy(this.controls.target).add(offset);this.controls.update();}
- view(name:string){const dist=21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?2.45:7.5,Math.cos(angle)*dist);this.targetFov=aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera);}
+ private get studyView(){return this.teaching?.mode==='organisms'||this.teaching?.mode==='water'&&this.teaching.step>0&&this.teaching.step<4;}
+ view(name:string){const dist=this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?37:aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera);}
  private resize(){
   const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;
   // Fit continuously across viewport shapes while retaining the user's zoom distance.
   const framingPosition=this.camera.position.clone().sub(this.controls.target).setLength(21.5).add(this.controls.target);
-  this.camera.fov=aquariumFieldOfView(w,h,framingPosition);
-  if(this.targetCamera)this.targetFov=aquariumFieldOfView(w,h,this.targetCamera);
+  this.camera.fov=this.studyView?37:aquariumFieldOfView(w,h,framingPosition);
+  if(this.targetCamera)this.targetFov=this.studyView?37:aquariumFieldOfView(w,h,this.targetCamera);
   this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);
   const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);
  }
@@ -252,18 +274,21 @@ export class Aquarium{
   if(document.hidden){this.last=0;return;}
   const updateStart=performance.now();
   const elapsed=this.last?(now-this.last)/1000:0,wallDt=Math.min(elapsed,.05);this.last=now;
-  const dt=this.paused||document.hidden?0:wallDt;this.time+=dt;this.swimShader.value=this.time;
+  const dt=this.paused||document.hidden?0:wallDt;this.time+=dt;this.currentTime+=dt*(this.teaching?.mode==='experiments'?.2+.8*this.learning.environment.flow/65:1);this.swimShader.value=this.currentTime;
   if(this.targetCamera){
    const ease=1-Math.exp(-wallDt*4);this.camera.position.copy(orbitToward(this.camera.position,this.targetCamera,ease));
    // Keep the intermediate diagonal silhouette in view too. Preserve a deliberate
    // close-up while its camera distance eases back toward the selected preset.
    const fittingPosition=this.camera.position.clone().sub(this.controls.target).setLength(this.targetCamera.distanceTo(this.controls.target)).add(this.controls.target);
-   const required=aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,fittingPosition);
+   const required=this.studyView?37:aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,fittingPosition);
    this.camera.fov=Math.max(required,T.MathUtils.lerp(this.camera.fov,this.targetFov??required,ease));this.camera.updateProjectionMatrix();
    if(this.camera.position.distanceTo(this.targetCamera)<.02){this.camera.position.copy(this.targetCamera);this.camera.fov=this.targetFov??this.camera.fov;this.camera.updateProjectionMatrix();this.targetCamera=null;this.targetFov=null;}
   }
   this.controls.update();
-  this.daylight=T.MathUtils.lerp(this.daylight,this.evening?.27:1,1-Math.exp(-wallDt*1.4));
+  this.learning.tick(this.teaching?.mode==='experiments'&&!this.paused?wallDt:0);
+  const teachingMode=this.teaching?.mode;
+  const lightTarget=teachingMode==='experiments'?.27+.73*Math.min(1,this.learning.light):teachingMode==='day'?(this.teaching!.night?.27:1):this.evening?.27:1;
+  this.daylight=T.MathUtils.lerp(this.daylight,lightTarget,1-Math.exp(-wallDt*1.4));
   this.waterIllumination.value=this.daylight;
   this.ledMaterial.emissiveIntensity=3*this.daylight;
   for(const light of this.canopyLights)light.intensity=canopy.sampleIntensity*this.daylight;
@@ -273,7 +298,7 @@ export class Aquarium{
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
   this.fishes.forEach(({swim:s},i)=>{
    const activity=schoolActivity(this.school,goal,i);
-   advanceTetraSwim(s,dt,false,false,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,depthBounds:[-.26,1.26]});
+   advanceTetraSwim(s,dt,false,teachingMode==='experiments'&&this.learning.state.oxygen<3,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,depthBounds:[-.26,1.26]});
    if(dt)this.avoidSolid(s);
    if(s.brain.consumedFood!==null){const idx=this.food.findIndex(f=>f.mesh.id===s.brain.consumedFood);if(idx>=0){const f=this.food.splice(idx,1)[0];this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();}s.brain.consumedFood=null;}
   });
@@ -281,9 +306,11 @@ export class Aquarium{
   this.fishes.forEach(({model,swim:s})=>{model.group.position.copy(fishPosition(s.x,s.y,s.z));model.group.rotation.set(0,s.yaw+s.depthHeading,s.pitch,'YXZ');model.update(this.time,s.effort,this.texture,.65,s.z,1,dt,s.pectoralEffort);});
   this.status=this.food.length?'Foraging':this.fishes.length?tetraBehaviorLabel(this.fishes[0].swim):'Exploring';
   for(let i=this.food.length-1;i>=0;i--){const f=this.food[i];f.age+=dt;f.mesh.position.y-=dt*.07;f.mesh.rotation.y+=dt*.5;if(f.age>48){this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();this.food.splice(i,1);}}
+  this.bubbles.visible=!this.studyView&&(teachingMode!=='experiments'||this.learning.environment.co2>0);
   const d=new T.Object3D();for(let i=0;i<48;i++){const t=(this.time*(.11+(i%4)*.015)+i*.137)%1;d.position.set(4.36+Math.sin(t*8+i)*.045+t*.16,.85+t*4.46,-1.7+Math.cos(t*6+i)*.06);d.scale.setScalar(.4+(1-t)*.6);d.updateMatrix();this.bubbles.setMatrixAt(i,d.matrix);}this.bubbles.instanceMatrix.needsUpdate=true;
   const p=this.dust.geometry.getAttribute('position') as T.BufferAttribute;if(dt){for(let i=0;i<p.count;i++){let x=p.getX(i)+Math.sin(i+this.time*.2)*dt*.018,y=p.getY(i)+dt*.006;if(y>5.3)y=.7;p.setXY(i,x,y);}p.needsUpdate=true;}
-  this.water.update(this.time,this.camera.position.y,this.daylight);
+  this.water.update(this.currentTime,this.camera.position.y,this.daylight);
+  this.teaching?.update(dt,this.camera,teachingMode==='experiments'?this.learning.environment.flow:65);
   // All passes share the same world transforms for this simulation frame.
   this.scene.updateMatrixWorld();this.scene.matrixWorldAutoUpdate=false;
   this.schoolEyes?.update();
