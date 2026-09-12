@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.0.0 · TIDELINE** — September 12, 2026. See [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for this release and verification evidence.
+**v2.1.0 · TIDELINE** — September 12, 2026. See [RIDER-UPGRADE.md](RIDER-UPGRADE.md) for the rider/jet-ski release and [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for the preceding water upgrade.
 
 A browser jet-ski game built around shared waves, hull response and modern water rendering. Free ride is the initial mode. Racing offers an original nine-venue interpretation of Wave Race 64's core mechanics; the earlier coastal salvage voyage remains available.
 
@@ -69,23 +69,23 @@ Export portable JSON by downloading or copying the displayed text. Import throug
 
 ## Blender watercraft model
 
-The Tideline R-01 replaces the original primitive craft with a Blender-authored hull, contoured pearl deck and livery hood, stepped stitched saddle, ribbed footwells, intake louvers, mirrors, detailed steering hardware, boarding platform and jet pump. Rider liveries and the moving handlebar/nozzle groups remain connected to the game; the live dashboard is retained. Salvage keeps its cargo rack and winch.
+The Tideline R-01 replaces the original primitive craft with a Blender-authored hull, contoured graphite deck and carbon-fibre inserts and livery hood, stepped stitched saddle, ribbed footwells, intake louvers, mirrors, detailed steering hardware, boarding platform and jet pump. Rider liveries and the moving handlebar/nozzle groups remain connected to the game; the live dashboard is retained. Salvage keeps its cargo rack and winch.
 
-Editable source: **source/blender/Tideline R-01.blend**. Standard interchange asset: **dist/assets/Tideline R-01.glb**. Front/rear studio PNGs and the reproducible **build_jetski.py** are beside the Blender file. The meshes are original geometry built in Blender 5.2; the watercraft works with the detailed Blender rider and articulated pose rig.
+Editable source: **source/blender/Tideline R-01.blend**. Standard interchange asset: **assets/Tideline R-01.glb**. Front/rear studio PNGs and the reproducible **build_jetski.py** are beside the Blender file. The meshes are original geometry rebuilt in Blender 4.5 LTS; the watercraft works with the detailed Blender rider and articulated pose rig.
 
-The browser loads the Blender-evaluated meshes from tideline-r01.json/bin. Geometry is shared across rider colours and merged into 19 material/articulation batches per craft. The original built-in craft is a fallback if these assets cannot load. Run Blender in background with `--python source/blender/build_jetski.py` to rebuild the model, exports and studio renders. Blender is only needed for editing/rebuilding; playing requires no Blender installation.
+The browser loads the Blender-evaluated meshes from tideline-r01.json/bin. Geometry is shared across rider colours and merged into 20 material/articulation batches per craft. The original built-in craft is a fallback if these assets cannot load. Run Blender in background with `--python source/blender/build_jetski.py` to rebuild the model, exports and studio renders. Blender is only needed for editing/rebuilding; playing requires no Blender installation.
 
 ## Detailed Blender riders
 
-Adult riders now have shaped faces, eyes and lips, open-face helmets, clear goggles, chin straps, fitted flotation vests with webbing and reflective strips, contoured wetsuit limbs, individual gripping fingers and molded water boots. Four complexion variants accompany the rider liveries. The same detailed geometry is used for seated riding and stunts.
+Adult riders have full-face composite helmets, curved smoked visors, exposed anatomical arms, fitted segmented flotation vests with webbing and reflective strips, contoured neoprene legs, padded individual gripping fingers and molded water boots. Four complexion variants accompany the rider liveries. The same detailed geometry is used for seated riding and stunts.
 
-The 15-part pose rig keeps hands on the steering grips and feet planted during riding, with subtle breathing, a forward lean at speed, head turns and impact compression. These are articulated real-time characters, with simplified faces and procedural motion; they are not scanned people or cloth simulations.
+The 15-part pose rig keeps hands on the steering grips and feet planted during riding, with spring-driven turn lean, acceleration/braking weight transfer, forward/rearward trim, wave-load bracing, head turns and landing compression/rebound. These are articulated real-time characters, with simplified faces and procedural motion; they are not scanned people or cloth simulations.
 
-Editable source with pose bones and jet-ski context: **source/blender/Coastal Rider.blend**. Standard geometry export: **dist/assets/Coastal Rider.glb**. Use **source/blender/build_rider.py** in Blender to regenerate the model, runtime buffers and front/rear renders. The game shares the asset geometry across riders and retains the earlier rider as an asset-loading fallback.
+Editable source with pose bones and jet-ski context: **source/blender/Coastal Rider.blend**. Standard geometry export: **assets/Coastal Rider.glb**. Use **source/blender/build_rider.py** in Blender to regenerate the model, runtime buffers and front/rear renders. The game shares the asset geometry across riders and retains the earlier rider as an asset-loading fallback.
 
 ## On-screen pace
 
-Racing and free riding now run in **real seconds**, using fixed 1/60-second physics steps. Gravity, waves, weather, animation and race clocks share that clock. Speed feel comes from actual acceleration plus a progressively lower chase camera and a smoothly widening 58–76 degree field of view. Both split-screen cameras respond independently. Camera clearance includes wave crests, ramps and enclosed passages.
+Racing and free riding now run in **real seconds**, using fixed 1/60-second physics steps. Gravity, waves, weather, animation and race clocks share that clock. Speed feel comes from actual acceleration plus a progressively lower chase camera and a smoothly widening 58–65 degree field of view. Both split-screen cameras respond independently. Camera clearance includes wave crests, ramps and enclosed passages.
 
 ## Engine and hull response
 

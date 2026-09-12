@@ -15,3 +15,5 @@ Exact download URLs and SHA-256 hashes are recorded in `assets/terrain/manifest.
 Tree, grass, shrub, pebble and driftwood geometry in `coastal-scenery.js` is original procedural work. Jet-ski and rider geometry is original Blender work, with editable sources under `source/blender/`. Three.js is bundled under the MIT license; see `vendor/THREE-LICENSE.txt`.
 
 The `*-lod.json/bin` meshes are lower-detail derivatives of those original Blender models, generated offline with meshoptimizer 0.24.0 (MIT, Arseny Kapoulkine). The authoring script is `source/build-lod.mjs`; meshoptimizer is not shipped or required at runtime. Full-detail models remain available for close views. Bone attachment groups, material assignments and normals are retained in the derivatives.
+
+The 2.1 rider/helmet, graphite deck additions and deterministic skin/fabric/carbon normal and roughness patterns in `craft-materials.js` are original authored work. Nintendo references informed movement and silhouette only; no Nintendo meshes, textures, logos, ROMs or video are bundled. The user-provided reference image is not redistributed.

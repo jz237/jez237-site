@@ -1,5 +1,6 @@
 import {loadCraftLOD,craftGeometryLOD} from './mesh-lod.js';
 import * as T from './vendor/three.module.js';
+import {craftSurface,craftUV} from './craft-materials.js';
 
 // These shared geometries are evaluated from the editable Blender model.
 // Material/group batching keeps all eight rider liveries inexpensive to instantiate.
@@ -12,12 +13,13 @@ try {
  if(!metadataResponse.ok||!geometryResponse.ok)throw new Error('Jet ski asset request failed');
  const metadata=await metadataResponse.json(),buffer=await geometryResponse.arrayBuffer();
  const materials=Object.fromEntries(Object.entries(metadata.materials).map(([name,spec])=>{
-  const material=new T.MeshPhysicalMaterial({...spec,side:T.DoubleSide});material.name=name;return [name,material];
+  const material=new T.MeshPhysicalMaterial({...spec,side:T.DoubleSide});material.name=name;craftSurface(material,name);return [name,material];
  }));
  const meshes=metadata.meshes.map(batch=>{
   const geometry=new T.BufferGeometry(),data=new T.InterleavedBuffer(new Float32Array(buffer,batch.offset,batch.vertices*6),6);
   geometry.setAttribute('position',new T.InterleavedBufferAttribute(data,3,0));
   geometry.setAttribute('normal',new T.InterleavedBufferAttribute(data,3,3));
+  craftUV(geometry);
   geometry.computeBoundingSphere();
   return {group:batch.group,geometry,material:materials[batch.material]};
  });

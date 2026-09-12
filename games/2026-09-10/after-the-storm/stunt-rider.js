@@ -3,7 +3,7 @@ import * as T from './vendor/three.module.js';
 // A small articulated rig for poses; every limb is rebuilt between anatomical
 // joint positions, keeping hands and feet attached during transitions.
 export function makeStuntRider(parent,color,riderIndex=0){
- const detailed=makeBlenderRider(parent,{color,riderIndex});if(detailed){detailed.root.visible=false;return {root:detailed.root,update:(pose,t=0,lean=0)=>{detailed.root.visible=!!pose;if(pose)detailed.update(pose,t,lean);}};}
+ const detailed=makeBlenderRider(parent,{color,riderIndex});if(detailed){detailed.root.visible=false;return {root:detailed.root,update:(pose,t=0,lean=0,motion={})=>{detailed.root.visible=!!pose;if(pose)detailed.update(pose,t,lean,motion);}};}
 const root=new T.Group();parent.add(root);root.visible=false;
  const suit=new T.MeshStandardMaterial({color:0x213b46,roughness:.85}),vest=new T.MeshStandardMaterial({color,roughness:.7}),helmet=new T.MeshPhysicalMaterial({color:0xe8eddf,roughness:.3,clearcoat:1}),rubber=new T.MeshStandardMaterial({color:0x12252b,roughness:.65});
  const sphere=new T.SphereGeometry(1,16,12),cylinder=new T.CylinderGeometry(1,1,1,10);
