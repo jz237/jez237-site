@@ -40,7 +40,7 @@ try{
  // All 308 geometry bounds must fit simultaneously without overlap, including after resize.
  await page.locator('#all-parts').click();assert.equal((await read()).board,true);
  const checkBoard=async count=>{
-  await page.waitForTimeout(150);const rects=await page.evaluate(()=>modelSStudio.getBoardRectangles());assert.equal(rects.length,count);
+  await page.waitForTimeout(150);const frame=await page.locator('#viewport').boundingBox(),height=await page.evaluate(()=>innerHeight);assert.ok(frame.y>=0&&frame.y+frame.height<=height+1,'Entire parts canvas must fit the browser window');const rects=await page.evaluate(()=>modelSStudio.getBoardRectangles());assert.equal(rects.length,count);
   for(const r of rects){assert.ok(r.min.every(v=>v>=-1)&&r.max.every(v=>v<=1),`Part ${r.id} outside frame`);assert.ok(r.max[0]>r.min[0]&&r.max[1]>r.min[1]);}
   for(let i=0;i<rects.length;i++)for(let j=i+1;j<rects.length;j++){const a=rects[i],b=rects[j];assert.ok(a.max[0]<=b.min[0]||b.max[0]<=a.min[0]||a.max[1]<=b.min[1]||b.max[1]<=a.min[1],`Parts ${a.id}, ${b.id} overlap`);}
  };

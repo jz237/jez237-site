@@ -161,7 +161,7 @@ function toggleBoard(on){
  if(!state.ready)return;stopSequence();viewTween=null;state.board=on;document.body.classList.toggle('board-mode',on);$('all-parts').setAttribute('aria-pressed',on);$('board-header').hidden=!on;model.visible=!on;board.group.visible=on;studioObjects.forEach(o=>o.visible=!on);scene.fog=on?null:studioFog;controls.enabled=false;
  if(on){
   camera=board.camera;if(!boardControls){boardControls=new OrbitControls(camera,renderer.domElement);boardControls.enableRotate=false;boardControls.screenSpacePanning=true;boardControls.mouseButtons.LEFT=THREE.MOUSE.PAN;boardControls.minZoom=.65;boardControls.maxZoom=20;boardControls.enableDamping=false;}controls=boardControls;controls.enabled=true;
-  controls.autoRotate=false;board.select(state.selected);reflowBoard(true);
+  controls.autoRotate=false;board.select(state.selected);reflowBoard(true);window.scrollTo(0,0);
  }else{camera=carCamera;controls=carControls;controls.enabled=true;setView(state.view,true);}
  updateUI();
 }
