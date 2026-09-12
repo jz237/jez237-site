@@ -15,6 +15,6 @@ test('pause freezes experiments; resets isolate state and bound chart memory',()
  m.running=true;m.tick(.1);assert.ok(m.state.hours>0);for(let i=0;i<80;i++)m.step(24);assert.ok(m.history.length<=193);assert.ok(Object.values(m.state).every(Number.isFinite));
  m.reset('balanced');assert.deepEqual(m.state,m.baseline);m.state.waste=4;assert.notEqual(m.state.waste,m.baseline.waste);assert.equal(m.running,false);
 });
-test('all six lessons have reachable steps with finite scene anchors and explanations',()=>{
- assert.equal(Object.keys(lessonNames).length,6);for(const id of Object.keys(lessonNames)){assert.ok(lessons[id].length);for(const step of lessons[id]){assert.ok(step.title&&step.text&&step.detail);assert.equal(step.point.length,3);assert.ok(step.point.every(Number.isFinite));}}
+test('all eight lessons have reachable steps with finite scene anchors and explanations',()=>{
+ assert.equal(Object.keys(lessonNames).length,8);for(const id of Object.keys(lessonNames)){assert.ok(lessons[id].length);for(const step of lessons[id]){assert.ok(step.title&&step.text&&step.detail);assert.equal(step.point.length,3);assert.ok(step.point.every(Number.isFinite));}}
 });

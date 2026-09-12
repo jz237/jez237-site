@@ -24,6 +24,7 @@ test('fused output retains full-resolution AO, beauty multisampling and renderer
  lighting.contact.render=()=>{assert.equal(lighting.contact.output,GTAOPass.OUTPUT.Off);contactRenders++;};
  lighting.output.render=(_renderer,_write,read)=>{assert.equal(read,lighting.beauty);assert.equal(lighting.output.uniforms.aquariumAO.value,lighting.contact.gtaoMap);outputRenders++;};
  assert.equal(lighting.render(renderer,null),123);assert.equal(target,original);assert.deepEqual([sceneRenders,contactRenders,outputRenders],[1,1,1]);
+ lighting.lens.enabled=true;lighting.render(renderer,null);assert.equal(lighting.output.uniforms.lensZoom.value,2.4);assert.deepEqual([sceneRenders,contactRenders,outputRenders],[2,2,2]);lighting.lens.enabled=false;
  lighting.render(renderer,'contact');assert.equal(lighting.output.uniforms.inspectionMode.value,1);
  lighting.render(renderer,'unshaded');assert.equal(lighting.output.uniforms.inspectionMode.value,2);
  lighting.output.render=()=>{throw Error('test failure');};assert.throws(()=>lighting.render(renderer,null),/test failure/);assert.equal(target,original);
