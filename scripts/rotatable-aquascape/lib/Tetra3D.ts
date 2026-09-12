@@ -54,10 +54,15 @@ diffuseColor.a*=mix(1.,3.15,finPigment);
   for(const side of [-1,1]){const eye=new T.Mesh(new T.SphereGeometry(.027,16,12),iris);eye.scale.set(1,1,.45);eye.position.set(.426,-.022,side*.034);this.group.add(eye);this.eyes.push(eye);const center=new T.Mesh(new T.SphereGeometry(.018,16,12),pupil);center.scale.set(1,1,.3);center.position.set(.426,-.022,side*.047);this.group.add(center);this.eyes.push(center);}
 
  }
- private add(geometry:T.BufferGeometry,material:T.MeshPhysicalMaterial,kind:FinKind='body',side=1){const mesh=new T.Mesh(geometry,material);this.meshes.push(mesh);this.fins.set(mesh,{kind,side});const rest=new Float32Array(geometry.getAttribute('position').array);this.deformers.set(geometry,createTetraDeformation(rest,kind,side));(geometry.getAttribute('position') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);(geometry.getAttribute('normal') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);this.group.add(mesh);}
+ private add(geometry:T.BufferGeometry,material:T.MeshPhysicalMaterial,kind:FinKind='body',side=1){
+  // A fin is one thin membrane, not a transparent volume needing a back/front pair.
+  if(kind!=='body')material.forceSinglePass=true;
+  const mesh=new T.Mesh(geometry,material);this.meshes.push(mesh);this.fins.set(mesh,{kind,side});const rest=new Float32Array(geometry.getAttribute('position').array);this.deformers.set(geometry,createTetraDeformation(rest,kind,side));(geometry.getAttribute('position') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);(geometry.getAttribute('normal') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);this.group.add(mesh);}
  update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number,pectoralEffort=.35){
   this.phase=swimPhase(this.phase,dt,activity);
   this.pectoralPhase+=dt*(5+pectoralEffort*13);
+  // Keep the biological clock running in isolated lessons, without uploading invisible bodies.
+  if(!this.group.visible)return;
   for(const mesh of this.meshes){const p=mesh.geometry.getAttribute('position') as T.BufferAttribute;this.deformers.get(mesh.geometry)!(p.array as Float32Array,this.phase,activity,this.pectoralPhase,pectoralEffort);p.needsUpdate=true;mesh.geometry.computeVertexNormals();}
   for(const shader of this.shaders){shader.uniforms.photograph.value=photo;shader.uniforms.sceneTime.value=time;shader.uniforms.flow.value=flow;shader.uniforms.depth.value=depth;shader.uniforms.daylight.value=daylight;}
  }

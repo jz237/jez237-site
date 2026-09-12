@@ -6,6 +6,7 @@ const labels:Record<Experiment,string>={balanced:'Balanced aquarium',flow:'Restr
 export function installLearning(aquarium:Aquarium){
  const main=document.querySelector('main')!,open=document.querySelector<HTMLButtonElement>('#learn')!;
  const panel=document.createElement('aside');panel.id='learning';panel.hidden=true;panel.setAttribute('aria-label','Aquarium learning guide');main.append(panel);
+ let readingsKey='';
  let mode:Lesson='water',step=0,tour=false,nextAt=0,chart:'oxygen'|'ammonia'='oxygen';
  const select=(m:Lesson,n=0)=>{mode=m;step=n;if(m==='layers')aquarium.teaching!.separation=1;if(m==='day')aquarium.teaching!.night=n===1;aquarium.learn(m,n);document.querySelector<HTMLButtonElement>('#light')!.disabled=m==='day'||m==='experiments';render();};
  const close=()=>{tour=false;panel.hidden=true;main.classList.remove('learning-open');open.setAttribute('aria-expanded','false');aquarium.learn(null);document.querySelector<HTMLButtonElement>('#light')!.disabled=false;open.focus();};
@@ -13,6 +14,7 @@ export function installLearning(aquarium:Aquarium){
  open.onclick=()=>panel.hidden?reveal():close();open.disabled=false;
  aquarium.teaching!.onSelect=i=>select(mode,i);aquarium.teaching!.onInspect=i=>select('organisms',i);
  const render=()=>{
+  readingsKey='';
   const entry=lessons[mode][step],model=aquarium.learning;
   panel.innerHTML=`<div class="learning-top"><span class="eyebrow">HOW THIS WORLD WORKS</span><button id="learn-close" aria-label="Close learning mode">×</button></div>
    <nav class="lesson-tabs" aria-label="Choose a lesson">${Object.entries(lessonNames).map(([id,title])=>`<button data-lesson="${id}" aria-pressed="${id===mode}">${title}</button>`).join('')}</nav>
@@ -56,6 +58,8 @@ export function installLearning(aquarium:Aquarium){
  function updateReadings(){
   const readings=panel.querySelector('#lab-readings');if(!readings)return;
   const m=aquarium.learning,s=m.state,b=m.baseline;
+  const key=JSON.stringify([chart,aquarium.paused,m.light,s,b,m.history.length,m.history.at(-1)]);
+  if(key===readingsKey)return;readingsKey=key;
   readings.innerHTML=`<div class="lab-clock">${s.hours.toFixed(1)} simulated hours · ${m.light>.1?'Lights on':'Night'}${aquarium.paused?' · Aquarium paused':''}</div><table><thead><tr><th>Reading</th><th>Changed</th><th>Control</th></tr></thead><tbody>${[['O₂ · mg/L',s.oxygen,b.oxygen],['CO₂ · mg/L',s.co2,b.co2],['Ammonia · mg N/L',s.ammonia,b.ammonia],['Nitrite · mg N/L',s.nitrite,b.nitrite],['Nitrate · mg N/L',s.nitrate,b.nitrate]].map(([label,a,c])=>`<tr><th>${label}</th><td>${Number(a).toFixed(Number(a)<1?3:2)}</td><td>${Number(c).toFixed(Number(c)<1?3:2)}</td></tr>`).join('')}</tbody></table>`;
   const samples=m.history,values=samples.flatMap(v=>chart==='oxygen'?[v.oxygen,v.baselineOxygen]:[v.ammonia,v.baselineAmmonia]),max=Math.max(chart==='oxygen'?10:.1,...values)*1.08;
   const first=samples[0]?.hour??0,last=Math.max(first+1,samples.at(-1)?.hour??1);

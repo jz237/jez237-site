@@ -231,6 +231,8 @@ export class Aquarium{
    const model=new Tetra3D(this.texture,i*.83,false),swim=createTetraSwim(237+i*7919),size=.48+this.random()*.09;
    Object.assign(swim,{x:870+i%4*65,y:310+Math.floor(i/4)*33,z:.28+i%3*.19,elapsed:i*.7,remaining:2+i*.23});
    swim.brain.seed=723+i*3571;swim.brain.energy=.72+this.random()*.22;swim.brain.hunger=.45+this.random()*.22;
+   // Development-only A/B check of the former two-pass membrane rendering.
+   if(import.meta.env.DEV&&new URLSearchParams(location.search).has('doubleFinPass'))model.group.traverse(o=>{if(o instanceof T.Mesh)(o.material as T.Material).forceSinglePass=false;});
    model.group.scale.setScalar(size);model.group.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=!(o.material as T.Material).transparent;o.receiveShadow=true;o.renderOrder=0;}});
    this.fishes.push({model,swim,size});this.scene.add(model.group);
   }
