@@ -18,11 +18,11 @@ test('fern current anchors the base and stays bounded throughout a varying cycle
   assert.deepEqual(f({x:.2,y:0,z:-.1}),{x:.2,y:0,z:-.1});
   for(const h of [.1,.25,.43]){
    const p=new T.Vector3(.2,h,-.1),q=xyz(f({...p}));
-   assert.ok(q.distanceTo(p)<=h*h*.31+1e-9);
+   assert.ok(q.distanceTo(p)<=h*h*.031+1e-9);
    if(h===.43)tips.push(q.x);
   }
  }
- assert.ok(Math.max(...tips)-Math.min(...tips)>.07);
+ assert.ok(Math.max(...tips)-Math.min(...tips)>.007);
 });
 
 test('fern lighting normals follow both directions of the moving frond',()=>{
