@@ -4,23 +4,24 @@ GLB and material-batched bone-local geometry for the browser pose rig.
 """
 from pathlib import Path
 exec((Path(__file__).parent/'build_jetski.py').read_text(encoding='utf-8').split('# Hull:')[0])
-material('Skin','bf8967',0,.63)
+material('Skin','bf8967',0,.56,.02)
 material('Skin shadow','965e48',0,.67)
 material('Lips','99665a',0,.58)
 material('Eye white','cbc6bb',0,.34)
 material('Iris','35443e',0,.31)
 material('Pupil','101619',0,.23)
-material('Neoprene','1e303a',0,.86)
-material('Stretch panels','34444d',0,.91)
+material('Neoprene','172029',0,.74)
+material('Stretch panels','303840',0,.82)
 material('Vest livery','b9542d',0,.75)
-material('Vest seam','844123',0,.83)
+material('Vest seam','56616b',0,.83)
+material('Impact foam','26313b',0,.67)
 material('Webbing','151d23',0,.94)
 material('Reflective tape','bfcac2',.12,.51)
-material('Helmet shell','e2e6df',.14,.26,.7)
+material('Helmet shell','162027',.22,.23,.9)
+material('Helmet graphic','b9542d',.12,.3,.6)
 material('Helmet lining','253239',0,.85)
 material('Goggle lens','526772',.15,.15,.7)
-specs['Goggle lens'].update(transparent=True,opacity=.36,depthWrite=False)
-bs=materials['Goggle lens'].node_tree.nodes.get('Principled BSDF');bs.inputs['Alpha'].default_value=.36
+specs['Goggle lens'].update(metalness=.42,roughness=.12,clearcoat=1)
 
 # Rest pose: adult dimensions fitted to the actual saddle, footwells and grips.
 hip=Vector((0,.865,-.34));shoulder=Vector((0,1.405,.02))
@@ -67,13 +68,26 @@ def ribbon(name,points,r,mat,bone):
 vertical('01 / Anatomical wetsuit torso',[(.86,.145,.09,-.34),(.92,.16,.105,-.30),(1.04,.17,.105,-.215),
  (1.20,.206,.119,-.12),(1.34,.218,.111,-.025),(1.40,.202,.088,.012),(1.45,.105,.07,.06)],'Neoprene','torso')
 vertical('02 / Fitted flotation vest',[(.975,.174,.118,-.26),(1.01,.187,.139,-.237),(1.16,.227,.145,-.142),
- (1.30,.245,.134,-.06),(1.365,.225,.12,-.02),(1.414,.148,.087,.025)],'Vest livery','torso')
+ (1.30,.245,.134,-.06),(1.365,.225,.12,-.02),(1.414,.148,.087,.025)],'Webbing','torso')
 vertical('03 / Hip and seat fabric',[(.78,.14,.135,-.37),(.83,.20,.152,-.35),(.9,.194,.12,-.32),(.955,.158,.09,-.28)],'Neoprene','pelvis')
 rod('Exposed neck',(0,1.419,.061),(0,1.545,.10),.059,'Skin','head',r2=.057)
 rod('Wetsuit neck sleeve',(0,1.402,.035),(0,1.445,.078),.067,'Neoprene','torso',r2=.064)
 for side in [-1,1]:
+ # Independent shaped flotation blocks sit on a close-fitting textile carrier.
+ # Their gaps and bound edges read as actual equipment at chase distance.
+ for k,(y,z,w) in enumerate([(1.045,-.351,.143),(1.157,-.285,.178),(1.276,-.203,.172)]):
+  o=part(box('Segmented rear flotation pad',(side*(w*.5+.007),y,z-.012),(w,.103,.045),'Impact foam',.018),'torso');o.rotation_euler.x=.59
+ for y,z,w in [(1.12,-.014,.142),(1.27,.068,.15)]:
+  o=part(box('Contoured chest flotation',(side*.091,y,z-.021),(w,.132,.035),'Impact foam',.02),'torso');o.rotation_euler.x=.62
+ ribbon('Colour-coded side panel',[(side*.182,1.035,-.246),(side*.221,1.18,-.144),(side*.23,1.305,-.052)],.026,'Vest livery','torso')
+ ribbon('Racing shoulder tab',[(side*.165,1.34,-.118),(side*.174,1.398,-.045),(side*.147,1.405,.037)],.025,'Vest livery','torso')
+ ribbon('Rear harness shoulder webbing',[(side*.127,1.04,-.394),(side*.14,1.20,-.3),(side*.124,1.345,-.18)],.011,'Webbing','torso')
+ for y,z in [(1.07,-.377),(1.245,-.252)]:
+  part(box('Harness adjustment loop',(side*.135,y,z),(.039,.036,.015),'Dark anodized metal',.004),'torso')
+ # Flat-lock seams and fabric folds replace unbroken mannequin-like surfaces.
+ for j in range(4):
+  tube('Waist compression fold',[(side*.075,.92+j*.016,-.42+j*.018),(side*.14,.925+j*.016,-.4+j*.018),(side*.179,.939+j*.015,-.362+j*.018)],.0035,'Stretch panels','pelvis')
  # Sewn channels contour the back of the vest; shallow panels read as cloth.
- tube('Flotation channel',[(side*.095,1.035,-.36),(side*.12,1.16,-.28),(side*.115,1.29,-.184),(side*.086,1.362,-.11)],.004,'Vest seam','torso')
  tube('Shoulder binding',[(side*.174,1.37,-.086),(side*.18,1.409,-.01),(side*.157,1.37,.08)],.012,'Webbing','torso')
  ribbon('Reflective back shoulder',[(side*.162,1.20,-.262),(side*.163,1.27,-.205),(side*.148,1.333,-.143)],.012,'Reflective tape','torso')
  ribbon('Reflective chest shoulder',[(side*.145,1.26,.066),(side*.15,1.327,.091),(side*.133,1.37,.09)],.010,'Reflective tape','torso')
@@ -84,16 +98,17 @@ for y,z in [(1.06,-.092),(1.16,.002)]:
  ribbon('Front strap',[(-.18,y+.009,z-.02),(0,y,z),(.18,y+.009,z-.02)],.009,'Webbing','torso')
 tube('Vest front zipper',[(0,1.02,-.12),(0,1.16,.012),(0,1.30,.078),(0,1.365,.082)],.0035,'Brushed titanium','torso')
 part(box('Zipper pull',(0,1.29,.084),(.012,.028,.008),'Brushed titanium',.003),'torso')
-label=part(text('Rear vest label','TIDELINE',(0,1.22,-.26),.025,'Reflective tape'),'torso');label.rotation_euler.rotate_axis('Y',math.pi)
+label=part(text('Rear vest label','R / 01',(0,1.29,-.237),.028,'Reflective tape'),'torso');label.rotation_euler.rotate_axis('Y',math.pi)
 
 # Tapered limbs carry muscle volume and neoprene reinforcement. Joint overlaps
 # sit inside the clothing, avoiding the old visible ball-and-stick silhouette.
 for side,label in [(-1,'L'),(1,'R')]:
- anatomy('Upper arm sleeve',f'upperArm{label}',[(-.1,.058,.059),(0,.078,.078),(.2,.085,.079),(.5,.073,.068),(.8,.06,.059),(1.07,.055,.05)],'Neoprene')
- anatomy('Forearm sleeve',f'forearm{label}',[(-.08,.052,.05),(0,.059,.052),(.23,.069,.06),(.58,.055,.047),(.9,.041,.037),(1.02,.037,.035)],'Neoprene')
+ anatomy('Sculpted deltoid biceps and triceps',f'upperArm{label}',[(-.14,.032,.035),(-.04,.077,.073),(.10,.091,.084),(.27,.097,.084),(.48,.082,.078),(.67,.077,.064),(.88,.057,.051),(1.08,.051,.048)],'Skin')
+ anatomy('Anatomical forearm and wrist',f'forearm{label}',[(-.11,.047,.045),(0,.056,.051),(.17,.076,.065),(.34,.069,.057),(.58,.054,.047),(.82,.042,.037),(1.07,.035,.032)],'Skin')
+ anatomy('Short glove cuff',f'forearm{label}',[(.88,.041,.037),(.91,.043,.038),(1.04,.039,.036)],'Webbing')
  anatomy('Contoured thigh',f'thigh{label}',[(-.15,.105,.098),(0,.116,.108),(.25,.116,.102),(.6,.092,.086),(.88,.076,.07),(1.04,.068,.062)],'Neoprene')
  anatomy('Shin and calf',f'shin{label}',[(-.08,.064,.06),(.1,.071,.066),(.32,.08,.07),(.62,.059,.053),(.95,.044,.043),(1.05,.044,.04)],'Neoprene')
- for bone in [f'upperArm{label}',f'forearm{label}',f'thigh{label}',f'shin{label}']:
+ for bone in [f'thigh{label}',f'shin{label}']:
   a,b=bones[bone];r=.052 if 'Arm' in bone or 'fore' in bone else .061
   direction=(b-a).normalized();points=[]
   for t in [.15,.38,.66,.87]:
@@ -101,7 +116,11 @@ for side,label in [(-1,'L'),(1,'R')]:
   tube('Flatlock sleeve seam',points,.0022,'Stretch panels',bone)
  knee=bones[f'thigh{label}'][1]
  part(ellipsoid('Knee abrasion pad',tuple(knee+Vector((0,.022,.025))),(.078,.066,.047),'Stretch panels'),f'thigh{label}')
- a,b=bones[f'forearm{label}'];part(ellipsoid('Elbow reinforcement',tuple(a),(.057,.05,.055),'Stretch panels'),f'forearm{label}')
+ a,b=bones[f'forearm{label}'];part(ellipsoid('Elbow olecranon',tuple(a+Vector((0,-.012,-.014))),(.049,.036,.041),'Skin'),f'forearm{label}')
+ a,b=bones[f'thigh{label}']
+ for j in range(4):
+  p=a.lerp(b,.57+j*.065)
+  tube('Flexed neoprene thigh folds',[tuple(p+Vector((-side*.045,.045,-.052))),tuple(p+Vector((0,.065,-.059))),tuple(p+Vector((side*.065,.047,-.041)))],.003,'Stretch panels',f'thigh{label}')
  wrist=bones[f'hand{label}'][0]
  part(ellipsoid('Gloved palm',tuple(wrist+Vector((0,-.005,.026))),(.048,.036,.056),'Webbing'),f'hand{label}')
  part(ellipsoid('Glove knuckle padding',tuple(wrist+Vector((0,.022,.018))),(.044,.012,.028),'Stretch panels'),f'hand{label}')
@@ -137,15 +156,16 @@ for side in [-1,1]:
 tube('Upper lip',[(-.027,1.62,.197),(-.01,1.623,.207),(0,1.62,.21),(.01,1.623,.207),(.027,1.62,.197)],.0038,'Lips','head')
 tube('Lower lip',[(-.024,1.615,.198),(0,1.613,.209),(.024,1.615,.198)],.0035,'Lips','head')
 
-# Open-face helmet has a real shell opening, lower trim, vents and a chin strap.
+# Full-face race helmet: shell, projecting chin guard, visor opening, padded
+# neck roll, intake vents and original graphic panels (no licensed logos).
 vs=[];faces=[];rows=14;cols=48
 for i in range(rows+1):
  for j in range(cols):
-  phi=2*math.pi*j/cols;front=max(0,math.cos(phi));theta=(.02+i/rows)*(1.92-front*.91)
+  phi=2*math.pi*j/cols;front=max(0,math.cos(phi));theta=(.02+i/rows)*(1.92-front*.45)
   vs.append((.119*math.sin(theta)*math.sin(phi),1.718+.13*math.cos(theta),.085+.118*math.sin(theta)*math.cos(phi)))
 for i in range(rows):
  for j in range(cols):faces.append((i*cols+j,(i+1)*cols+j,(i+1)*cols+(j+1)%cols,i*cols+(j+1)%cols))
-helmet=mesh('05 / Open face helmet shell',vs,faces,'Helmet shell','head',sub=1)
+helmet=mesh('05 / Composite race helmet shell',vs,faces,'Helmet shell','head',sub=1)
 mod=helmet.modifiers.new('Helmet shell thickness','SOLIDIFY');mod.thickness=.008
 tube('Helmet lower edge',[vs[rows*cols+j] for j in range(0,cols,3)]+[vs[rows*cols]],.006,'Helmet lining','head')
 for side in [-1,1]:
@@ -153,11 +173,32 @@ for side in [-1,1]:
  tube('Temple chin strap',[(side*.099,1.691,.034),(side*.091,1.606,.094),(side*.035,1.551,.15)],.007,'Webbing','head')
  part(ellipsoid('Strap rivet',(side*.115,1.7,.035),(.005,.009,.009),'Brushed titanium'),'head')
 tube('Chin strap',[(-.035,1.551,.15),(0,1.548,.162),(.035,1.551,.15)],.007,'Webbing','head')
-# Clear sport goggles retain a readable face rather than a featureless black ball.
+vs=[];faces=[];n=48
+for y,rx,back,front in [(1.556,.064,.027,.207),(1.574,.106,-.014,.257),(1.606,.124,-.022,.269),(1.637,.123,-.021,.258),(1.654,.115,-.019,.238)]:
+ for j in range(n):
+  a=j*2*math.pi/n;c=math.cos(a);vs.append((rx*math.sin(a),y+max(0,-c)*.025,.086+c*((front-.086) if c>0 else (.086-back))))
+for i in range(4):
+ for j in range(n):faces.append((i*n+j,i*n+(j+1)%n,(i+1)*n+(j+1)%n,(i+1)*n+j))
+guard=mesh('06 / Protective sculpted chin bar',vs,faces,'Helmet shell','head',sub=1)
+mod=guard.modifiers.new('Chin bar thickness','SOLIDIFY');mod.thickness=.012
+tube('Padded lower neck roll',[(-.093,1.569,.147),(-.075,1.558,.024),(0,1.555,.009),(.075,1.558,.024),(.093,1.569,.147)],.012,'Helmet lining','head')
 for side in [-1,1]:
- part(ellipsoid('Clear goggle lens',(side*.04,1.703,.205),(.035,.022,.012),'Goggle lens'),'head')
- tube('Goggle eyebrow frame',[(side*.009,1.717,.21),(side*.044,1.727,.209),(side*.074,1.716,.188)],.0035,'Graphite composite','head')
-tube('Goggle bridge',[(-.008,1.709,.214),(0,1.713,.218),(.008,1.709,.214)],.004,'Graphite composite','head')
+ tube('Reinforced visor pillar',[(side*.112,1.623,.135),(side*.118,1.687,.127),(side*.103,1.735,.14)],.015,'Helmet shell','head')
+ ribbon('Rear helmet graphic',[(side*.049,1.665,-.021),(side*.055,1.717,-.02),(side*.042,1.78,-.008)],.012,'Helmet graphic','head')
+ ribbon('Crown racing stripe',[(side*.034,1.838,.057),(side*.04,1.841,.10),(side*.038,1.818,.167)],.01,'Reflective tape','head')
+ for j in range(3):
+  tube('Chin vent inlet',[(side*.027+j*side*.015,1.605,.266-j*.007),(side*.029+j*side*.015,1.634,.257-j*.007)],.004,'Helmet lining','head')
+ part(ellipsoid('Visor pivot screw',(side*.119,1.697,.127),(.005,.013,.013),'Brushed titanium'),'head')
+vs=[];faces=[];n=24
+for i in range(5):
+ for j in range(n+1):
+  a=(j/n-.5)*2.18;y=1.666+i*.013
+  vs.append((.12*math.sin(a),y,.106+.131*math.cos(a)))
+for i in range(4):
+ for j in range(n):a=i*(n+1)+j;faces.append((a,a+1,a+n+2,a+n+1))
+mesh('07 / Curved smoked optical visor',vs,faces,'Goggle lens','head',sub=1)
+for row in [0,4]:tube('Visor rubber seal',vs[row*(n+1):(row+1)*(n+1)],.004,'Helmet lining','head')
+tube('Aerodynamic brow edge',[(-.102,1.733,.16),(-.055,1.75,.227),(0,1.752,.245),(.055,1.75,.227),(.102,1.733,.16)],.009,'Helmet shell','head')
 
 # Settle the pelvis onto the saddle, shorten exposed neck and lean into the grips.
 # Bone-space affine transforms preserve editable primitives and curve details.
