@@ -1,4 +1,6 @@
 import * as T from 'three';
+import {shrimpCarapace,shrimpPlate,shrimpFan,fanRays,shrimpRostrum,snailBody,ramshornShell} from './GrazerGeometry.ts';
+import {grazerMaterials} from './GrazerMaterials.ts';
 import type {Identification} from './Exploration.ts';
 
 type Animal={id:number;kind:'shrimp'|'snail';position:T.Vector3;normal:T.Vector3;heading:number;distance:number;speed:number;remaining:number;grazing:boolean;phase:number;seed:number;route:T.Vector3[];normals:T.Vector3[];length:number;matrix:T.Matrix4;};
@@ -13,33 +15,22 @@ export function advanceGrazer(a:Animal,dt:number){
  a.speed+=(target-a.speed)*(1-Math.exp(-dt*4));a.distance=(a.distance+a.speed*dt)%a.length;a.phase+=dt;
 }
 
-/** Shared instanced parts: full articulation adds seven draws, not one draw per leg. */
+/** Shared instanced parts: full articulation uses shared batches, not one draw per leg. */
 export class Invertebrates{
  readonly root=new T.Group();readonly animals:Animal[]=[];
- private pools:T.InstancedMesh[]=[];private counts:number[]=[];private owners:number[][]=[];
+ private pools:T.InstancedMesh[]=[];private textures:T.Texture[]=[];private size=new T.Vector3();private counts:number[]=[];private owners:number[][]=[];
  private dummy=new T.Object3D();private local=new T.Matrix4();private tangent=new T.Vector3();private binormal=new T.Vector3();private rotation=new T.Matrix4();private link=new T.Vector3();private end=new T.Vector3();
- constructor(scene:T.Scene,height:(x:number,z:number)=>number,surfaces:T.Object3D[]=[]){
+ constructor(scene:T.Scene,height:(x:number,z:number)=>number,surfaces:T.Object3D[]=[],atlas?:T.Texture){
   this.root.name='Shrimp and ramshorn snails';scene.add(this.root);
-  const skin=new T.MeshPhysicalMaterial({color:0x702a22,roughness:.47,ior:1.15,specularIntensity:.45});
-  skin.onBeforeCompile=shader=>{
-   shader.vertexShader='varying vec3 grazerPoint;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ngrazerPoint=position;');
-   shader.fragmentShader='varying vec3 grazerPoint;\n'+shader.fragmentShader;shader.fragmentShader=shader.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
-float pigment=fract(sin(dot(floor(grazerPoint*85.),vec3(12.9898,78.233,42.734)))*43758.5453);
-diffuseColor.rgb*=mix(.72,1.18,smoothstep(.12,.85,pigment));
-diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.25,.14,.08),smoothstep(.965,.99,pigment)*.6);
-`);
-  };skin.customProgramCacheKey=()=> 'dwarf-shrimp-pigment-v1';
-  const pale=new T.MeshPhysicalMaterial({color:0x94745c,roughness:.55,ior:1.12,specularIntensity:.35});
-  const dark=new T.MeshStandardMaterial({color:0x141813,roughness:.3});
-  const flesh=new T.MeshPhysicalMaterial({color:0x8d7564,roughness:.5,ior:1.15,specularIntensity:.4});
-  const shell=new T.MeshStandardMaterial({vertexColors:true,roughness:.43});
-  const sphere=new T.SphereGeometry(1,24,16),rod=new T.CylinderGeometry(.75,1,1,6,1);
-  for(const [g,m,n] of [[sphere,skin,130],[sphere,pale,180],[sphere,dark,60],[rod,pale,650],[sphere,flesh,45],[this.shell(),shell,3],[rod,skin,100]] as [T.BufferGeometry,T.Material,number][]){
+  const {skin,plateSkin,membrane,joint,flesh,shell,dark,textures}=grazerMaterials(atlas);this.textures=textures;
+  const plate=shrimpPlate(),patches=Float32Array.from({length:36},(_,i)=>.323-(i%6)*.0616667);plate.setAttribute('plateOffset',new T.InstancedBufferAttribute(patches,1));
+  const sphere=new T.SphereGeometry(1,20,14),rod=new T.CylinderGeometry(.95,1,1,7,1);
+  for(const [g,m,n] of [[sphere,skin,90],[sphere,membrane,110],[sphere,dark,45],[rod,joint,1100],[sphere,flesh,30],[ramshornShell(),shell,3],[rod,skin,320],[shrimpCarapace(),skin,6],[plate,plateSkin,36],[shrimpFan(),membrane,90],[fanRays(),joint,90],[shrimpRostrum(),skin,6],[snailBody(),flesh,3],[rod,flesh,120]] as [T.BufferGeometry,T.Material,number][]){
    const mesh=new T.InstancedMesh(g,m,n);mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mesh.frustumCulled=false;mesh.boundingSphere=new T.Sphere(new T.Vector3(0,2.7,0),6.4);mesh.castShadow=true;mesh.receiveShadow=true;this.pools.push(mesh);this.root.add(mesh);this.owners.push([]);
   }
   // Cache contact paths once. Hardscape is raycast at construction, never each frame.
   scene.updateMatrixWorld();const ray=new T.Raycaster(new T.Vector3(),new T.Vector3(0,-1,0));
-  const centers=[[-3.8,1.8],[-2.2,1.72],[.1,1.7],[1.8,.9],[3.55,1.45],[-1.3,-.55],[3.6,0]];
+  const centers=[[-3.8,1.8],[-2.2,1.72],[1.1,1.96],[1.8,.9],[3.55,1.45],[-1.3,-.55],[3.6,0]];
   for(let id=0;id<9;id++){
    const kind=id<6?'shrimp':'snail',glass=id>=7,route:T.Vector3[]=[],normals:T.Vector3[]=[];
    for(let j=0;j<192;j++){
@@ -62,19 +53,8 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.25,.14,.08),smoothstep(.965,.99,pigm
   }
   this.update(0);
  }
- private shell(){
-  // Planispiral ramshorn shell: expanding whorls, recessed center, growth striae.
-  const p:number[]=[],colors:number[]=[],indices:number[]=[],c=new T.Color();const turns=Math.PI*5.7;
-  for(let i=0;i<=180;i++){const t=i/180*turns,r=.13*Math.exp(.19*(t-turns)),tube=r*.49;
-   for(let j=0;j<=20;j++){const v=j/20*Math.PI*2,ridge=1+.012*Math.sin(t*22);p.push((r+Math.cos(v)*tube*ridge)*Math.cos(t),(r+Math.cos(v)*tube*ridge)*Math.sin(t)+.145,Math.sin(v)*tube*.92);
-    c.setRGB(.19,.105,.048).multiplyScalar(.8+.14*Math.sin(t*22)+.14*Math.sin(t*2.1));colors.push(c.r,c.g,c.b);
-    if(i<180&&j<20){const n=i*21+j;indices.push(n,n+21,n+1,n+1,n+21,n+22);}
-   }
-  }
-  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('color',new T.Float32BufferAttribute(colors,3));g.setIndex(indices);g.computeVertexNormals();return g;
- }
- private part(a:Animal,pool:number,x:number,y:number,z:number,sx:number,sy:number,sz:number,rz=0){
-  this.dummy.position.set(x,y,z);this.dummy.rotation.set(0,0,rz);this.dummy.scale.set(sx,sy,sz);this.dummy.updateMatrix();this.local.multiplyMatrices(a.matrix,this.dummy.matrix);const n=this.counts[pool]++;this.pools[pool].setMatrixAt(n,this.local);this.owners[pool][n]=a.id;
+ private part(a:Animal,pool:number,x:number,y:number,z:number,sx:number,sy:number,sz:number,rz=0,ry=0,rx=0){
+  this.dummy.position.set(x,y,z);this.dummy.rotation.set(rx,ry,rz);this.dummy.scale.set(sx,sy,sz);this.dummy.updateMatrix();this.local.multiplyMatrices(a.matrix,this.dummy.matrix);const n=this.counts[pool]++;this.pools[pool].setMatrixAt(n,this.local);this.owners[pool][n]=a.id;
  }
  private rod(a:Animal,pool:number,x:number,y:number,z:number,ex:number,ey:number,ez:number,r:number){
   this.link.set(ex-x,ey-y,ez-z);this.dummy.position.set((x+ex)/2,(y+ey)/2,(z+ez)/2);this.dummy.quaternion.setFromUnitVectors(UP,this.end.copy(this.link).normalize());this.dummy.scale.set(r,this.link.length(),r);this.dummy.updateMatrix();this.local.multiplyMatrices(a.matrix,this.dummy.matrix);const n=this.counts[pool]++;this.pools[pool].setMatrixAt(n,this.local);this.owners[pool][n]=a.id;
@@ -83,39 +63,62 @@ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.25,.14,.08),smoothstep(.965,.99,pigm
   if(!this.root.visible)return;
   this.counts=this.pools.map(()=>0);
   for(const a of this.animals){advanceGrazer(a,Math.min(.1,Math.max(0,dt)));const u=a.distance/a.length*a.route.length,i=Math.floor(u)%a.route.length,j=(i+1)%a.route.length;
-   a.position.copy(a.route[i]).lerp(a.route[j],u-i);a.normal.copy(a.normals[i]).lerp(a.normals[j],u-i).normalize();this.tangent.copy(a.route[j]).sub(a.route[i]).normalize();this.binormal.crossVectors(this.tangent,a.normal).normalize();this.tangent.crossVectors(a.normal,this.binormal).normalize();this.rotation.makeBasis(this.tangent,a.normal,this.binormal);a.matrix.copy(this.rotation).setPosition(a.position);
+   a.position.copy(a.route[i]).lerp(a.route[j],u-i);a.normal.copy(a.normals[i]).lerp(a.normals[j],u-i).normalize();this.tangent.copy(a.route[j]).sub(a.route[i]).normalize();this.binormal.crossVectors(this.tangent,a.normal).normalize();this.tangent.crossVectors(a.normal,this.binormal).normalize();this.rotation.makeBasis(this.tangent,a.normal,this.binormal);a.matrix.copy(this.rotation).setPosition(a.position);a.matrix.scale(this.size.setScalar(a.kind==='shrimp'?.80+a.id%3*.04:.84));
    if(a.kind==='shrimp')this.shrimp(a);else this.snail(a);
   }
   this.pools.forEach((p,i)=>{p.count=this.counts[i];p.instanceMatrix.needsUpdate=true;});
  }
  private shrimp(a:Animal){
   const t=a.phase,walk=a.speed/.06;
-  this.part(a,0,.07,.105,0,.107,.054,.043);this.part(a,1,.10,.135,0,.08,.024,.036); // carapace and dorsal saddle
-  this.part(a,2,-.04,.108,0,.15,.008,.009); // digestive tract visible between shell segments
-  for(let k=0;k<6;k++){const x=-.035-k*.034,y=.105-.025*(k/5)**2;this.part(a,0,x,y,0,.031,.046-k*.004,.041-k*.0035,.03*Math.sin(t*.8-k*.5));
-   for(const side of [-1,1])this.part(a,1,x-.01,y-.045,side*.021,.025,.005,.017,.15*Math.sin(t*3-k*.85));
-  }
-  for(let k=-2;k<=2;k++)this.part(a,1,-.265,.064,k*.017,.047,.008,.020,k*.17);
-  this.rod(a,6,.14,.14,0,.225,.145,0,.008);for(let k=0;k<6;k++)this.rod(a,6,.155+k*.01,.145,0,.15+k*.01,.155,0,.0025);
-  for(const side of [-1,1]){
-   this.rod(a,3,.137,.13,side*.035,.163,.152,side*.047,.004);this.part(a,2,.167,.153,side*.048,.011,.012,.011);
-   for(let k=0;k<5;k++){const x=.11-k*.038,phase=t*(a.grazing?5.5:8)+k*1.1+side*1.5,pick=k<2&&a.grazing,swing=Math.sin(phase)*(pick?.027:.019*walk),lift=Math.max(0,Math.cos(phase))*(pick?.022:.013*walk);
-    const kneeX=x-.025+swing,kneeY=.037+lift,kneeZ=side*.061,toeX=pick?.15+swing:x-.055+swing,toeY=.004+lift,toeZ=side*(pick?.028:.082);
-    this.rod(a,3,x,.075,side*.032,kneeX,kneeY,kneeZ,.0038);this.rod(a,3,kneeX,kneeY,kneeZ,toeX,toeY,toeZ,.0027);
-    if(pick){this.rod(a,3,toeX,toeY,toeZ,toeX+.01,toeY+.003,toeZ+side*.008,.0017);this.rod(a,3,toeX,toeY,toeZ,toeX+.012,toeY+.002,toeZ-side*.007,.0017);}
+  this.part(a,7,0,0,0,1,1,1);this.part(a,11,0,0,0,1,1,1);
+  for(let k=0;k<6;k++){
+   const x=-.102-k*.037,y=.116+Math.sin(k/5*Math.PI)*.014-k*.003,flex=Math.sin(t*1.3-k*.46)*.017*(.35+walk);
+   this.part(a,8,x,y,0,.04,[.046,.045,.042,.036,.028,.017][k],[.039,.038,.035,.030,.024,.015][k],flex);
+   if(k<5)for(const side of [-1,1]){
+    const flap=.24*Math.sin(t*3.4-k*.84+side*.7),args=[x,y-.03,side*.022,.30,.6,.48,flap,side*.3] as const;
+    this.part(a,9,...args);this.part(a,10,...args);
    }
-   for(let antenna=0;antenna<2;antenna++){let x=.18,y=.126,z=side*.018;for(let k=1;k<=7;k++){const f=k/7,len=antenna?.16:.31,ex=.18+f*len,ey=.126+Math.sin(f*2.1)*.065+Math.sin(t*1.2+side+f*2)*.018*f,ez=side*(.018+f*(antenna?.07:.15)+Math.sin(t*.75+antenna+f)*.028*f);this.rod(a,3,x,y,z,ex,ey,ez,.0022*(1-f*.75));x=ex;y=ey;z=ez;}}
-   this.part(a,1,.153,.078,side*.012,.014,.017,.009,.22*Math.sin(t*12+side));
+  }
+  for(let k=-2;k<=2;k++){const ry=k*.32+.035*Math.sin(t*1.1),scale=k===0?.72:Math.abs(k)===2?1:.88;this.part(a,9,-.309,.100,k*.006,scale,1,k===0?.50:1,.025*Math.sin(t*.9+k),ry);this.part(a,10,-.309,.100,k*.006,scale,1,k===0?.50:1,.025*Math.sin(t*.9+k),ry);}
+  for(const side of [-1,1]){
+   this.rod(a,6,.123,.139,side*.022,.141,.148,side*.030,.0038);this.part(a,0,.141,.148,side*.030,.008,.008,.007);
+   this.part(a,2,.142,.149,side*.035,.0065,.0065,.0052);
+   for(let k=0;k<5;k++){
+    const x=.105-k*.034,phase=t*(a.grazing?4.1:8)+k*1.65+side*1.5,pick=k<2&&a.grazing,swing=Math.sin(phase)*.025*walk,lift=Math.max(0,Math.cos(phase))*.020*walk;
+    const transfer=pick?Math.max(0,Math.sin(phase)):0,kneeX=x-.016,kneeY=.044+transfer*.018,kneeZ=side*.060,
+     toeX=pick?.16-transfer*.023:x-.040+swing,toeY=pick?.006+transfer*.080:.003+lift,toeZ=side*(pick?.037-transfer*.020:.10);
+    this.rod(a,6,x,.079,side*.033,kneeX,kneeY,kneeZ,.0032);
+    this.part(a,1,kneeX,kneeY,kneeZ,.0039,.0039,.0039);
+    const ankleX=T.MathUtils.lerp(kneeX,toeX,.72),ankleY=T.MathUtils.lerp(kneeY,toeY,.72),ankleZ=T.MathUtils.lerp(kneeZ,toeZ,.72);
+    this.rod(a,3,kneeX,kneeY,kneeZ,ankleX,ankleY,ankleZ,.0024);this.rod(a,6,ankleX,ankleY,ankleZ,toeX,toeY,toeZ,.0019);
+    if(k<2){
+     const gape=.003+.002*Math.max(0,Math.sin(phase));this.rod(a,6,toeX,toeY,toeZ,toeX+.010,toeY+.002,toeZ+side*gape,.0013);this.rod(a,6,toeX,toeY,toeZ,toeX+.011,toeY+.001,toeZ-side*gape,.0013);
+     for(let h=0;h<3;h++)this.rod(a,3,toeX+.006+h*.002,toeY+.001,toeZ+side*gape,toeX+.010+h*.002,toeY+.003,toeZ+side*(gape+.003),.00020);
+    }
+   }
+   for(let antenna=0;antenna<2;antenna++){
+    let x=.184,y=.133,z=side*.016;for(let k=1;k<=16;k++){const f=k/16,len=antenna?.19:.37,
+     ex=.184+f*len,ey=.133+Math.sin(f*2.3)*(antenna?.035:.09)+Math.sin(t*.9+side+f*1.4)*.012*f,
+     ez=side*(.016+f*(antenna?.053:.13)+Math.sin(t*.62+antenna+f)*.016*f);
+     this.rod(a,k<4?6:3,x,y,z,ex,ey,ez,.0015*(1-f*.86));x=ex;y=ey;z=ez;
+    }
+   }
+   for(let k=0;k<3;k++){const f=Math.sin(t*(8+k)+side+k)*.008;this.rod(a,6,.15-k*.009,.101,side*.011,.178+f,.082,side*(.016+k*.005),.0018);this.part(a,1,.178+f,.082,side*(.016+k*.005),.005,.008,.003);}
   }
  }
  private snail(a:Animal){
-  const t=a.phase;this.part(a,4,-.025,.062,0,.074,.068,.052);this.part(a,4,.025,.019,0,.19,.019,.072);this.part(a,4,.166,.042,0,.065,.038,.047);
-  this.part(a,5,-.015,0,0,1,1,1); // foot remains at the sampled contact plane
-  for(const side of [-1,1]){let x=.19,y=.05,z=side*.03;for(let k=1;k<=6;k++){const f=k/6,ex=.19+f*.10,ey=.05+f*.10+Math.sin(t*.8+side)*f*.014,ez=side*(.03+f*.046)+Math.sin(t*.6+f)*.01*f;this.rod(a,3,x,y,z,ex,ey,ez,.004*(1-f*.7));x=ex;y=ey;z=ez;}this.part(a,2,.191,.05,side*.034,.004,.004,.004);}
-  // Small mouth movement is visible through the glass, independent of forward glide.
-  this.part(a,4,.206,.008,0,.014+Math.sin(t*2.5)*.002,.005,.014);
+  const t=a.phase;this.part(a,12,0,0,0,1,1,1);this.part(a,5,0,0,0,1,1,1);
+  for(const side of [-1,1]){
+   let x=.177,y=.054,z=side*.048;
+   for(let k=1;k<=18;k++){const f=k/18,ex=.177+f*.15,ey=.054+f*.105+Math.sin(t*.65+side+f)*f*.012,ez=side*(.048+f*.065)+Math.sin(t*.54+f)*.008*f;
+    this.rod(a,13,x,y,z,ex,ey,ez,.0053*(1-f*.88));x=ex;y=ey;z=ez;
+   }
+   this.part(a,4,.174,.052,side*.052,.008,.008,.006);this.part(a,2,.176,.054,side*.057,.0037,.0037,.0027);
+   this.rod(a,3,.22,.022,side*.038,.25,.009,side*.052,.0032);
+  }
+  this.part(a,2,.224,.003,0,.009,.0017,.006);this.part(a,4,.225,.006,0,.013+Math.sin(t*2.5)*.0015,.004,.011);
  }
- info(id:number):Identification|null{const a=this.animals[id];if(!a)return null;return {kind:'invertebrate',animalId:id,name:a.kind==='shrimp'?`Dwarf shrimp ${id+1}`:`Ramshorn snail ${id-5}`,subtitle:a.kind==='shrimp'?'Neocaridina-like dwarf shrimp · representative model':'Planorbid ramshorn · representative model',needs:'Stable clean water, suitable mineral availability, food and safe grazing surfaces.',role:a.kind==='shrimp'?'Picks biofilm and small food particles with its front appendages. Its legs walk while its antennae explore.':'Grazes surface films using a radula. A muscular foot maintains contact with the glass or substrate.',behavior:a.kind==='shrimp'?(a.grazing?'Picking at a feeding patch.':'Walking to another feeding patch.'):'Slow surface crawling and grazing. These animals recycle material; they also produce waste.',point:a.position.clone()};}
+ info(id:number):Identification|null{const a=this.animals[id];if(!a)return null;return {kind:'invertebrate',animalId:id,name:a.kind==='shrimp'?`Cherry shrimp ${id+1}`:`Ramshorn snail ${id-5}`,subtitle:a.kind==='shrimp'?'Neocaridina davidi · cherry shrimp model':'Planorbid ramshorn · representative model',needs:'Stable clean water, suitable mineral availability, food and safe grazing surfaces.',role:a.kind==='shrimp'?'Picks biofilm and small food particles with its front appendages. Its legs walk while its antennae explore.':'Grazes surface films using a radula. A muscular foot maintains contact with the glass or substrate.',behavior:a.kind==='shrimp'?(a.grazing?'Picking at a feeding patch.':'Walking to another feeding patch.'):'Slow surface crawling and grazing. These animals recycle material; they also produce waste.',point:a.position.clone()};}
  pick(ray:T.Raycaster){const hit=ray.intersectObjects(this.pools,false)[0];if(!hit||hit.instanceId===undefined)return null;const pool=this.pools.indexOf(hit.object as T.InstancedMesh);return {distance:hit.distance,info:this.info(this.owners[pool][hit.instanceId])!};}
- dispose(){const geometries=new Set(this.pools.map(p=>p.geometry)),materials=new Set(this.pools.map(p=>p.material as T.Material));geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());this.root.removeFromParent();}
+ dispose(){const geometries=new Set(this.pools.map(p=>p.geometry)),materials=new Set(this.pools.map(p=>p.material as T.Material));geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());this.textures.forEach(t=>t.dispose());this.root.removeFromParent();}
 }
