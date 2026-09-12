@@ -228,4 +228,3 @@ function tick(now){
  for(const {el,part} of landmarks){el.hidden=!state.labels||!part.mesh.visible;if(el.hidden)continue;const p=part.center.clone().add(part.mesh.position).sub(part.base).project(camera);el.hidden=Math.abs(p.x)>.92||Math.abs(p.y)>.92||p.z>1;el.style.left=`${(p.x*.5+.5)*renderer.domElement.clientWidth}px`;el.style.top=`${(-p.y*.5+.5)*renderer.domElement.clientHeight}px`;}
  renderer.render(scene,camera);
 }
-
