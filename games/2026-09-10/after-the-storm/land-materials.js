@@ -12,7 +12,11 @@ export const landMaps={};
 await Promise.all(Object.entries(names).map(async([kind,name])=>{
  const maps={};landMaps[kind]=maps;
  await Promise.all(['diff','nor_gl','rough'].map(async channel=>{
-  const texture=await loader.loadAsync(new URL(`./assets/terrain/${name}_${channel}.jpg`,import.meta.url).href);
+  let texture;try{texture=await loader.loadAsync(new URL(`./assets/terrain/${name}_${channel}.jpg`,import.meta.url).href);}catch{
+   const pixel=channel==='nor_gl'?[128,128,255,255]:channel==='rough'?[220,220,220,255]:[176,166,143,255];
+   texture=new T.DataTexture(new Uint8Array(pixel),1,1);texture.needsUpdate=true;
+   console.warn('Terrain texture unavailable; using built-in fallback:',kind,channel);
+  }
   texture.wrapS=texture.wrapT=T.RepeatWrapping;texture.anisotropy=8;
   if(channel==='diff')texture.colorSpace=T.SRGBColorSpace;
   maps[channel]=texture;

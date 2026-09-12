@@ -33,7 +33,7 @@ export function verificationInput(state,r){
   if(guide&&!guide.done){
    if(z<126)guide.done=true;
    else{if(z<175&&guide.waitAt===null)guide.waitAt=state.time;
-    const waiting=guide.waitAt!==null&&state.time<guide.waitAt+(state.ridgeWait??4.5);
+    const waiting=guide.waitAt!==null&&state.time<guide.waitAt+(state.ridgeWait??6);
     const error=angleDelta(Math.atan2((81-210)*.8-r.x-r.vx*.12,(100-300)*.8-r.z-r.vz*.12)-r.heading);
     return {throttle:waiting?0:1,brake:waiting,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),lean:1,dampen:true};
    }
@@ -116,7 +116,8 @@ export function verificationInput(state,r){
  if(state.mode==='stunt'&&state.course.stuntLayout?.verificationTargets)return authoredStuntInput(state,r);
  const input=aiInput(state,r);if(state.mode!=='stunt')return input;
  const s=r.stunt,h=r.hydro,kind=['flip','left','right','flip'][s.nextCheckpoint%4];
- if(h.airborne&&(h.y-h.waterHeight>1.5||s.trick)&&Math.abs(s.angle)<6.20)input.trick=s.trick||kind;
+ const flightRemaining=(h.vy+Math.sqrt(h.vy*h.vy+19.62*Math.max(0,h.y-h.waterHeight)))/9.81;
+ if(h.airborne&&(s.trick||flightRemaining>1.15)&&(h.y-h.waterHeight>1.5||s.trick)&&Math.abs(s.angle)<6.20)input.trick=s.trick||kind;
  else if(!h.airborne&&h.wet>.5&&r.next%6>=4){input.trick=['stand','handstand','backwards','stand'][s.nextCheckpoint%4];if(s.pose==='stand'&&s.poseTime>1.2)input.trick='somersault';}
  return input;
 }
@@ -148,16 +149,21 @@ function authoredStuntInput(state,r){
  let q=targets[Math.min(v.index,targets.length-1)],along=(r.x-q.x)*q.tx+(r.z-q.z)*q.tz;
  // Crossing an infinite waypoint plane far to one side does not complete a
  // corner approach. Physical rings still use their own scoring collision.
- const lateral=-(r.x-q.x)*q.tz+(r.z-q.z)*q.tx;
- if(along>(q.kind==='ramp'?q.length/2:1)&&(q.kind!=='waypoint'||Math.abs(lateral)<2)&&v.index<targets.length-1)q=targets[++v.index];
- const aim=q.kind==='ramp'?q.length/2+4:1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
+ const lateral=-(r.x-q.x)*q.tz+(r.z-q.z)*q.tx,city=state.course.id==='neon';
+ if(city&&q.kind==='waypoint'&&Math.hypot(q.x-r.x,q.z-r.z)<3.5&&v.index<targets.length-1)q=targets[++v.index];
+ else if(along>(q.kind==='ramp'?q.length/2:1)&&(q.kind!=='waypoint'||Math.abs(lateral)<2)&&v.index<targets.length-1)q=targets[++v.index];
+ // Keep the aim beyond velocity anticipation until the target plane is crossed.
+ // A fixed 1.3 m lookahead fell behind a moving ski and induced a last-metre
+ // brake/steer oscillation, particularly across closely spaced dive rings.
+ const aim=q.kind==='ramp'?q.length/2+4:city?Math.max(3.4,r.speed*.18):1.3,error=angleDelta(Math.atan2(q.x+q.tx*aim-r.x-r.vx*.12,q.z+q.tz*aim-r.z-r.vz*.12)-r.heading);
  // Settle heading and yaw while still on water: a steering correction after
  // leaving a ramp cannot redirect the airborne hull onto the next ring.
- const rampMisaligned=q.kind==='ramp'&&!h.onRamp&&!h.airborne&&(Math.abs(angleDelta(Math.atan2(q.tx,q.tz)-r.heading))>.2||Math.abs(r.yawVelocity||0)>.4);
+ const rampMisaligned=q.kind==='ramp'&&!h.onRamp&&!h.airborne&&(Math.abs(angleDelta(Math.atan2(q.tx,q.tz)-r.heading))>(city?.07:.2)||Math.abs(r.yawVelocity||0)>(city?.16:.4));
  const desired=rampMisaligned?Math.min(q.speed??13,7):q.speed??13;
- const input={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*2.5-(r.yawVelocity||0)*.15,-1,1),brake:Math.abs(error)>1.1||r.speed>desired+2,dampen:true,lean:q.kind==='ramp'?-1:0};
+ const input={throttle:clamp(.53+(desired-r.speed)*.16,0,1),steer:clamp(error*(city?2.2:2.5)-(r.yawVelocity||0)*(city?.55:.15),-1,1),brake:Math.abs(error)>(city?.85:1.1)||r.speed>desired+2,dampen:true,lean:q.kind==='ramp'?-1:0};
  if(v.diveJump&&h.airborne&&h.vy<0&&h.y-h.waterHeight<.45)input.dive=true;
- if(v.rampJump&&!v.diveJump&&h.airborne&&(h.y-h.waterHeight>1.2||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||'flip';
+ const flightRemaining=(h.vy+Math.sqrt(h.vy*h.vy+19.62*Math.max(0,h.y-h.waterHeight)))/9.81;
+ if(v.rampJump&&!v.diveJump&&h.airborne&&(!city||s.trick||flightRemaining>1.15)&&(h.y-h.waterHeight>1.2||s.trick)&&Math.abs(s.angle)<6.2)input.trick=s.trick||'flip';
  else if(!h.airborne&&h.wet>.5&&q.kind!=='ramp')input.trick=s.pose==='handstand'&&s.poseTime>2?'':'handstand';
  return input;
 }

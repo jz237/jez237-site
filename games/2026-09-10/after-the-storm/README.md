@@ -1,5 +1,7 @@
 # After the Storm
 
+**v2.0.0 · TIDELINE** — September 12, 2026. See [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for this release and verification evidence.
+
 A browser jet-ski game built around shared waves, hull response and modern water rendering. Free ride is the initial mode. Racing offers an original nine-venue interpretation of Wave Race 64's core mechanics; the earlier coastal salvage voyage remains available.
 
 ## Play
@@ -27,7 +29,7 @@ No build, npm install, API key, account or paid service is required. This folder
 
 A fresh throttle press as GO appears gives maximum power. Hold rearward trim while steering for a quick turn. Hard collisions and bad stunt landings can eject the rider; tap throttle to remount faster.
 
-Keyboard steering is 20% gentler; analogue steering is unchanged. After a brief period stuck on shore, the ski returns to its last safe water position, facing away from the beach. R (P2: Backspace) recovers immediately when stranded. If the tide has exposed that spot, recovery searches nearby water. Lap and buoy progress are preserved.
+Keyboard steering is 20% gentler; analogue steering has a continuous dead zone and progressive precision curve, retaining full lock at full stick. After a brief period stuck on shore, the ski returns to its last safe water position, facing away from the beach. R (P2: Backspace) recovers immediately when stranded. If the tide has exposed that spot, recovery searches nearby water. Lap and buoy progress are preserved.
 
 In solo modes, arrow keys also drive. Drag to orbit and scroll to zoom; each split-screen half controls its own camera. Forward ramp trim gives a lower, shorter jump; rearward trim gives a higher, longer jump.
 
@@ -36,6 +38,8 @@ Free ride includes four floating ramps and twelve air, surface and dive rings in
 Stunts: hold 1 for a flip, 2/3 for barrel rolls, then release before landing. 4/5/6 select standing, handstand and backward poses; 7 somersaults from standing; F dives during descent.
 
 Standard gamepads: left stick steering/trim, right trigger throttle, left trigger brake, right shoulder slide, bottom face button absorb, top face button camera, Start pause. For stunts, hold left shoulder with the top face button for flip, left/right face buttons for rolls, D-pad up/right/down for poses, bottom face button for somersault, and left trigger for dive. Physical gamepad hardware has not been tested.
+
+Phone controls provide a proportional steering pad, independent GO / Brake / Absorb controls, and optional remembered Auto throttle (off initially). Brake always overrides Auto throttle. Both portrait and landscape layouts are supported; landscape offers the widest view.
 
 ## Modes and decisions
 
@@ -95,11 +99,11 @@ The GPU and CPU share fourteen dispersive wave bands with horizontal trochoidal 
 
 A reprojected foam atlas retains foam and bubbles after breaking crests and shallow shoreline breakers. Water includes depth-dependent absorption/refraction, roughness-filtered planar reflections with a sky fallback, forward light scattering through backlit crests, sun glints, fine ripples, caustics and rain rings. Environment lighting refreshes with weather; wet rocks change color and roughness, and ground-conforming contact shadows anchor vegetation. Adaptive graphics reduces reflection, foam and screen resolution when needed.
 
-This remains an interactive approximation rather than CFD. Waves do not overturn into fully simulated water volumes; foam and spray use a surface atlas, sheets and particles. Reflections remain planar. The ebb is compressed into a race, and stunt poses/dives are arcade maneuvers. Ramps heave as rigid platforms. The jet ski and riders are modeled in Blender; scenery remains procedural. The original salvage mode retains its earlier driving rules but shares the upgraded water rendering. Sound uses local ElevenLabs clips with synthesized fallback; physical gamepad hardware and mobile touch input are not verified.
+This remains an interactive approximation rather than CFD. Waves do not overturn into fully simulated water volumes; foam and spray use a surface atlas, sheets and particles. Reflections remain planar. The ebb is compressed into a race, and stunt poses/dives are arcade maneuvers. Ramps heave as rigid platforms. The jet ski and riders are modeled in Blender; scenery remains procedural. The original salvage mode retains its earlier driving rules but shares the upgraded water rendering. Sound uses local ElevenLabs clips with synthesized fallback; physical gamepad hardware and performance on physical phones remain unverified; multi-touch input has been checked in a real GPU browser with phone-sized viewports.
 
 ## Source and verification
 
-`npm test` runs the automated suite. All 106 tests pass, covering all 36 course/class routes, championship scoring/unlocks/restart, salvage outcomes, full park mastery, rider actions, two-player controls, water response, moving hazards/passages, saves and audio assets/mixing.
+`npm test` runs the automated suite. The suite covers all 36 course/class routes, championship scoring/unlocks/restart, salvage outcomes, full park mastery, rider actions, two-player controls, water response, moving hazards/passages, saves and audio assets/mixing.
 
 Use `race.html?verify=1` for visible development controls. The verification driver supplies ordinary helm input at either real time or a 4x verification clock; it does not teleport or grant progress. The salvage harness at `/?verify=1` includes a full voyage and bounded seeded failure scenarios. These panels are absent from normal play.
 
@@ -119,6 +123,6 @@ The ground textures are photographs; trees and terrain remain procedural real-ti
 - [Play salvage](https://jez237.com/games/2026-09-10/after-the-storm/)
 - [Games catalog](https://jez237.com/games/)
 
-Source is maintained in `jz237/jez237-site`, on the separate worktree branch `codex/after-the-storm-coast-20260910`. The route contains source, assets, tests and Blender files and can be served as a static directory.
+Source is maintained on `main` in `jz237/jez237-site`. The route contains source, assets, tests and Blender files and can be served as a static directory.
 
 After changing browser modules or styles, run `node source/version-assets.mjs` to regenerate both HTML import maps and content-versioned asset URLs. It supports the published flat layout and the downloadable package with a `dist/` folder.

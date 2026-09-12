@@ -1,3 +1,4 @@
+import {loadCraftLOD,craftGeometryLOD} from './mesh-lod.js';
 import * as T from './vendor/three.module.js';
 import {riderPose} from './rider-pose.js';
 let asset=null;
@@ -12,6 +13,7 @@ try{
   geometry.setAttribute('uv',new T.BufferAttribute(uv,2));geometry.computeBoundingSphere();return {...part,geometry};
  });asset={meta,meshes};
 }catch(error){console.warn('Blender rider unavailable; using the built-in rider.',error);}
+const lodGeometry=await loadCraftLOD('coastal-rider');
 const up=new T.Vector3(0,1,0),skinTones=[0xbf8967,0xd9a88a,0x815237,0xad7959];
 let fabric=null;
 function fabricTexture(){
@@ -32,7 +34,7 @@ export function makeBlenderRider(parent,{color=null,riderIndex=0}={}){
   if(['Neoprene','Vest livery','Stretch panels'].includes(name)){m.normalMap=fabricTexture();m.normalScale=new T.Vector2(.24,.24);}
   return [name,m];
  }));
- for(const part of asset.meshes){const m=new T.Mesh(part.geometry,materials[part.material]);m.castShadow=true;m.receiveShadow=true;groups[part.bone].add(m);}
+ for(const [partIndex,part] of asset.meshes.entries()){const m=new T.Mesh(part.geometry,materials[part.material]);craftGeometryLOD(m,lodGeometry?.[partIndex]);m.castShadow=true;m.receiveShadow=true;groups[part.bone].add(m);}
  const start=new T.Vector3(),end=new T.Vector3(),direction=new T.Vector3();
  function update(pose='',time=0,turn=0,motion={}){
   const p=riderPose(pose,time,turn,motion);root.rotation.y=p.yaw;

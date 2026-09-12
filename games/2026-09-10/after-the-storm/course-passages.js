@@ -46,7 +46,7 @@ export function passageAim(p,g,x,z,lookahead=5){
 export function passageOpening(p,time,openedAt=Infinity){if(!p?.enabled)return 0;if(p.kind==='tunnel'||p.kind==='jump-dive')return 1;return clamp((time-openedAt)/3,0,1);}
 export function passageTarget(s,r){
  const g=s.course.gates[r.next],p=s.course.passage;
- if(p?.kind==='jump-dive'&&(s.course.reverse||(r.next!==p.first&&passageDistance(p,r.x,r.z)>p.width+6)))return g;
+ if(p?.kind==='jump-dive'&&(s.course.reverse||(r.passageRoute!=='open'&&r.next!==p.first&&passageDistance(p,r.x,r.z)>p.width+6)))return g;
  if(s.course.requiredPassage||s.mode==='stunt'||r.passageRoute==='outer'||!p||!(p.indices.includes(r.next)||r.next===p.first)||passageOpening(p,s.time,s.passageOpenedAt)<.98)return g;
  if(p.branchGates)return p.branchGates[r.next]||g;
  // Intersection with the original checkpoint plane: no progress is granted here.

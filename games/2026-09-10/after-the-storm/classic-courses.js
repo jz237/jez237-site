@@ -43,6 +43,9 @@ const sunsetNormalBuoys=sunsetBuoys([[258,134,-1],[203,66,1],[140,52,-1],[125,95
 const sunsetHardBuoys=sunsetBuoys([[264,134,-1],[209,66,1],[146,52,-1],[132,95,-1],[154,166,1],[140,283,-1],[144,342,1],[204,504,-1],[279,495,1],[357,506,-1],[419,490,1],[488,405,-1],[433,389,-1],[388,405,1],[324,370,-1]].map(([x,z,side])=>[x-7,z,side]));
 const sunsetExpertBuoys=sunsetBuoys([[197,134,-1],[142,66,1],[79,52,-1],[65,95,-1],[76,166,1],[79,266,-1],[78,342,1],[126,497,-1],[149,492,-1],[212,495,1],[292,495,-1],[352,490,1],[421,405,-1],[366,398,-1],[322,402,1],[257,370,-1]].map(([x,z,side])=>[x+60,z,side]));
 const sunsetReverseBuoys=sunsetBuoys([[192,175,-1],[128,147,1],[81,148,-1],[90,48,1],[154,60,-1],[239,48,1],[288,64,-1],[382,214,1],[365,288,-1],[381,464,-1],[295,492,1],[251,407,-1]].map(([x,z,side])=>[512-x,552-z,side]));
+// The Hard buoy exits close to a pier support. Settle in the real gap before
+// continuing to the following buoy; the piles retain their full collision.
+sunsetHardBuoys[6].approach={x:-84.75,z:10,throttle:.32,radius:2,range:38};
 // Ten metal balls, excluding the adjoining dotted course boundary.
 const sunsetBalls=points=>sunsetMap(points).map(([x,z])=>({x,z,r:.85,type:'ball'}));
 const sunsetForwardBalls=sunsetBalls([[364,350],[375,350],[388,350],[359,358],[369,358],[380,358],[390,358],[364,366],[374,366],[385,366]]);
@@ -202,6 +205,8 @@ const glacierRamp=(id,x,z,tx,tz,width,length)=>({id,name:'ICE COAST JUMP',x:(x-2
 const glacierBuoys=rows=>rows.map(([x,z,side])=>({x:(x-205)*.8,z:(z-280)*.8,side}));
 const glacierExpertBuoys=glacierBuoys([[27,286,1],[67,222,-1],[34,138,1],[331,131,1],[280,159,1],[247,175,-1],[228,216,1],[195,240,-1],[204,290,1],[220,330,1],[233,389,1],[194,392,-1],[170,427,1],[130,435,-1],[108,459,1],[38,423,1]]);
 const glacierReverseBuoys=glacierBuoys([[360,112,1],[308,76,-1],[284,103,1],[233,103,-1],[219,142,1],[171,154,-1],[201,207,1],[219,245,1],[214,299,-1],[191,339,1],[149,357,-1],[134,384,1],[114,412,1],[380,403,1],[389,250,-1]].map(([x,z,side])=>[417-x,537-z,side]));
+// Settle the reverse line in open water before the buoy beside the southern ice.
+glacierReverseBuoys[3].approach={x:-35,z:110,throttle:.36,radius:3,range:32};
 const glacier={
  boundary:glacierMap([[14,65],[235,55],[417,43],[348,124],[336,151],[310,181],[285,214],[257,248],[228,284],[225,306],[245,331],[276,348],[285,373],[280,396],[257,420],[202,458],[128,505],[68,534],[27,529],[15,503]]),
  buoysByClass:[glacierExpertBuoys,glacierExpertBuoys,glacierExpertBuoys,glacierReverseBuoys],

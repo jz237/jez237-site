@@ -12,8 +12,8 @@ test('Twilight stunt navigation stays in the water around both quay corners',()=
 });
 
 test('Twilight opening branches collect their separate rings through ordinary controls',()=>{
- // This checks the opening only. Outer checkpoint timing and the shared final
- // rings remain unresolved; this is deliberately not a course-completion claim.
+ // Isolate the mutually exclusive opening rings; complete inner and outer
+ // routes, including checkpoint timing, are checked separately below.
  for(const outer of [false,true]){
   const s=createRace({mode:'stunt',course:getCourse('neon')}),r=s.racers[0];
   s.verifyStuntOuter=outer;
@@ -65,5 +65,18 @@ test('Twilight branch drivers target the real object crossing directions',()=>{
    const object=objects.find(o=>o.x===target.x&&o.z===target.z);
    assert.ok(object);assert.equal(target.tx,object.tx);assert.equal(target.tz,object.tz);
   }
+ }
+});
+
+
+test('Twilight outer route finishes all eleven selected rings and four checkpoints',()=>{
+ for(let difficulty=0;difficulty<4;difficulty++){
+  const s=createRace({mode:'stunt',course:getCourse('neon',difficulty)}),r=s.racers[0];
+  s.verifyStuntOuter=true;
+  for(let i=0;i<10000&&s.phase!=='results';i++)stepRace(s,verificationInput(s,r),1/60);
+  assert.equal(s.phase,'results');assert.equal(r.dq,'');
+  assert.equal(r.stunt.rings,11);assert.equal(r.stunt.nextCheckpoint,4);
+  assert.equal(r.stunt.crashes,0);
+  for(const [i,ring] of s.course.rings.entries())assert.equal(r.stunt.ringStatus[i],ring.branch==='inner'?undefined:'hit');
  }
 });
