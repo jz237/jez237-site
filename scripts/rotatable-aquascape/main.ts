@@ -1,4 +1,5 @@
 import './style.css';
+import {installExploration} from './lib/ExplorationUI';
 import {installLearning} from './lib/LearningUI';
 import {Aquarium} from './lib/Aquarium';
 
@@ -21,7 +22,7 @@ async function start(){
  const aquarium=new Aquarium(host);
  await aquarium.ready;
  document.querySelector('#loading')!.remove();
- installLearning(aquarium);
+ installLearning(aquarium);installExploration(aquarium);
  document.querySelector('#status')!.textContent='Exploring';
  document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(b=>b.onclick=()=>{aquarium.view(b.dataset.view!);document.querySelectorAll('[data-view]').forEach(v=>v.classList.toggle('active',v===b));});
  const pause=document.querySelector<HTMLButtonElement>('#pause')!;

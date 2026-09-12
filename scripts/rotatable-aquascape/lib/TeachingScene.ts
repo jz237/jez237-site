@@ -46,6 +46,21 @@ export class TeachingScene{
    for(let j=1;j<4;j++){const y=-j*.16;this.tube([V(x*j/4,y,z*j/4),V(x*j/4+.12*Math.cos(a+j),y-.12,z*j/4+.12*Math.sin(a+j)),V(x*j/4+.19*Math.cos(a+j),y-.21,z*j/4+.19*Math.sin(a+j))],.004,0xd2bd91,group);}
   }return group;
  }
+ private underground(){
+  const soil=new T.MeshStandardMaterial({color:0x29291f,roughness:.96});
+  this.add(new T.BoxGeometry(4.4,1.6,2.25),soil,V(0,2.65,0));
+  const grains=new T.InstancedMesh(new T.IcosahedronGeometry(1,1),new T.MeshStandardMaterial({roughness:.94}),1200),d=new T.Object3D();
+  let seed=841;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+  for(let i=0;i<grains.count;i++){const front=i<850,r=.025+random()*.055;d.position.set((random()-.5)*4.4,front?1.87+random()*1.58:3.46+r*.3,front?1.13+random()*.07:(random()-.5)*2.25);d.scale.set(r,r*(.7+random()*.5),r);d.rotation.set(random()*3,random()*3,random()*3);d.updateMatrix();grains.setMatrixAt(i,d.matrix);grains.setColorAt(i,new T.Color().setHSL(.10,.14,.10+random()*.13));}this.content.add(grains);
+  this.roots(V(-.35,3.85,1.32),2.2);this.roots(V(1.2,3.7,.55),1.5);
+  const debris=new T.InstancedMesh(new T.IcosahedronGeometry(.09,0),new T.MeshStandardMaterial({color:0x9a7141,roughness:1}),28);
+  for(let i=0;i<28;i++){d.position.set((random()-.5)*3.8,2.75+random()*.75,1.26);d.scale.set(1,.18,.65);d.rotation.set(random()*2,random()*4,random()*3);d.updateMatrix();debris.setMatrixAt(i,d.matrix);}this.content.add(debris);
+  const microbes=new T.InstancedMesh(new T.SphereGeometry(.022,6,4),basic(0x8fd2a9),150);
+  for(let i=0;i<150;i++){d.position.set((random()-.5)*3.7,1.98+random()*1.32,1.25);d.scale.set(1,1.5,1);d.updateMatrix();microbes.setMatrixAt(i,d.matrix);}this.content.add(microbes);
+  this.path([V(-1.8,3.7,1.3),V(-1.45,3.05,1.4),V(-1,2.7,1.4),V(-.5,2.1,1.4)],0x7dd4e9,.07);
+  this.path([V(1.2,3.5,1.35),V(.8,3,1.42),V(.4,2.8,1.4)],0xe3b770,.08);
+  lessons.underground.forEach((s,i)=>this.label(s.tag,V(...s.point),i));
+ }
  private filter(){
   // Open front shell exposes real modeled baskets, foam pores, ceramic rings and rotor.
   const metal=new T.MeshStandardMaterial({color:0x859596,metalness:.8,roughness:.24});
@@ -66,8 +81,9 @@ export class TeachingScene{
   this.clear();this.mode=mode;this.step=step;this.root.visible=!!mode;this.labelHost.hidden=!mode;
   if(mode!=='layers')for(const [o,original] of this.originals)o.position.copy(original.position);
   if(!mode)return;
-  const isolated=(mode==='water'&&step>0&&step<4)||mode==='organisms';
+  const isolated=(mode==='water'&&step>0&&step<4)||mode==='organisms'||mode==='underground';
   if(isolated){for(const o of this.world.children){if(o===this.root||o instanceof T.Light)continue;this.savedVisibility.set(o,o.visible);o.visible=false;}}
+  if(mode==='underground')this.underground();
   if(mode==='water'){
    if(isolated)this.filter();
    else{this.path([V(4.77,1.27,-2.02),V(4.77,5.75,-2.02),V(5.7,5.5,-1),V(5.7,.8,0),V(5.9,.4,1),V(6.1,3.4,0),V(4.4,5.75,-2.02),V(3.93,4.99,-1.57)]);this.path([V(3.93,4.99,-1.57),V(1,4.7,-.4),V(-3,4.4,.6),V(-3.5,1.9,1),V(1,1.4,.9),V(4.77,1.27,-2.02)]);this.label('Open filter cutaway',V(5.7,2.6,0),1);this.label('Intake',V(4.77,1.27,-2.02),0);this.label('Return',V(3.93,4.99,-1.57),4);}

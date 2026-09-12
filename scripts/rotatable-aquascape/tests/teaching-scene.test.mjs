@@ -29,3 +29,10 @@ test('stationary lesson labels avoid repeated DOM writes but track camera and vi
  writes=0;host.clientWidth=390;teach.update(1/60,camera);assert.ok(writes>0);
  teach.set(null);writes=0;teach.update(1/60,camera);assert.equal(writes,0);
 });
+
+test('substrate study contains grains, debris, microbes and roots and restores the tank',()=>{
+ const scene=new T.Scene(),tank=new T.Mesh(new T.BoxGeometry(),new T.MeshStandardMaterial());scene.add(tank);
+ const teach=new TeachingScene(scene,{...element(),clientWidth:390,clientHeight:844},[],[],new T.Texture());teach.set('underground');assert.equal(tank.visible,false);
+ const counts=[];let roots=0;teach.root.traverse(o=>{if(o instanceof T.InstancedMesh)counts.push(o.count);if(o.userData.rootTemplate)roots++;});assert.ok(counts.includes(1200)&&counts.includes(150)&&counts.includes(28));assert.equal(roots,2);
+ teach.set(null);assert.equal(tank.visible,true);assert.equal(teach.root.children[0].children.length,0);
+});
