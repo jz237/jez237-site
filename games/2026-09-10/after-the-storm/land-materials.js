@@ -64,15 +64,20 @@ vec2 cuv=landP.xz*.19+vec2(time*.012,-time*.007);
 float c1=texture2D(detailMap,cuv).b,c2=texture2D(detailMap,mat2(.8,-.6,.6,.8)*landP.xz*.237-vec2(time*.009,0)).b;
 float caustic=max(0.,min(c1,c2)*3.-.65),submerged=seaLevel-landP.y;
 earth+=vec3(.16,.23,.13)*caustic*smoothstep(0.,.7,submerged)*exp(-max(0.,submerged-1.)*.19)*(1.-storm*.8);
+// Static bed ripples are sculpted by flow; moving caustics slide over them.
+float bedMask=smoothstep(.1,1.,submerged)*(1.-stoneWeight)*(1.-plantWeight);
+float bedPhase=landP.x*.9+landP.z*3.6+sin(landP.x*.28)*.8;
+earth*=1.+cos(bedPhase)*.065*bedMask;
 diffuseColor.rgb*=earth;`);
   s.fragmentShader=s.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
 float sr=triColor(sandRough,sandUV,tw).r,rr=triColor(rockRough,rockUV,tw).r,gr=triColor(soilRough,soilUV,tw).r;
 roughnessFactor=clamp(mix(mix(sr,rr,stoneWeight),gr,plantWeight)*.5+.42-wet*.25,.22,1.);`);
   s.fragmentShader=s.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
 vec3 surfaceN=normalize(mix(mix(triNormal(sandNormal,sandUV,tw,ln),triNormal(rockNormal,rockUV,tw,ln),stoneWeight),triNormal(soilNormal,soilUV,tw,ln),plantWeight));
+surfaceN=normalize(surfaceN+vec3(.9,0.,3.6)*sin(bedPhase)*.024*bedMask);
 normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7))),0.)).xyz);`);
  };
- mat.customProgramCacheKey=()=>`photographic-coast-wash-v2-${palette.grass??0}`;
+ mat.customProgramCacheKey=()=>`photographic-coast-bed-v3-${palette.grass??0}`;
 }
 
 export function rockMaterial(){
