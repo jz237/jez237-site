@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 11 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 12 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of June 25-July 1, 1984 — AT&amp;T Enters the Personal-Computer Market with the PC 6300</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-06-25</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-25</guid>
+      <pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate>
+      <description>The post-divestiture telephone giant puts an 8 MHz 8086 machine into the crowded IBM-compatible business market. AT&amp;T Information Systems entered the personal-computer market in New York on Tuesday, June 26, placing one of America&apos;s largest technology names directly in the path of IBM and the multiplying compatible makers. Its PC 6300 is an AT&amp;T-branded version of Olivetti&apos;s M24, built to run software written for the IBM PC. Also this week: Printer Buyers Face a Maze from Dot Matrix to Laser · VisiCorp Tries to Regain Its Business-Software Footing · Timex/Sinclair Owners Build a Lifeline on CompuServe.</description>
+    </item>
     <item>
       <title>Week of June 18-24, 1984 — MIT&apos;s Project Athena Opens a New Window</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-06-18</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-13</guid>
       <pubDate>Sat, 22 Aug 2026 12:00:00 GMT</pubDate>
       <description>The $4,225 Portable Personal Computer answers Compaq with PC/XT compatibility, twin floppy drives and a built-in amber screen. IBM entered the suitcase-computer contest on February 16 with the Portable Personal Computer model 5155, putting the familiar IBM PC architecture into a transportable case. Contemporary coverage made the competitive target plain: Compaq had proved that business buyers wanted a machine they could carry between offices without leaving their software behind. Also this week: Sinclair Sets a $499 American Course for the QL · CBS, IBM and Sears Bet on a Videotex Home · Coleco Courts Publishers for Adam “Best Of” Albums.</description>
-    </item>
-    <item>
-      <title>Week of February 6-12, 1984 — IBM Compatibility Becomes the Industry’s New Battleground</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-02-06</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-06</guid>
-      <pubDate>Fri, 21 Aug 2026 12:00:00 GMT</pubDate>
-      <description>An open hardware architecture, protected firmware and a vast software library turn “compatible” into the most valuable—and confusing—word in personal computing. The flood of machines claiming kinship with the IBM Personal Computer has made compatibility one of the microcomputer trade’s most important and confusing questions. IBM published enough of the PC’s hardware design to invite expansion cards and outside development, but the machine’s basic input-output system remains copyrighted software. A look-alike case and an 8088-family processor alone do not make a true substitute. Also this week: Coleco Restarts Adam Lines After a Gentleman’s C · “Best Of” Game Albums Promised for Adam · One Printer Attempts Double Duty.</description>
     </item>
   </channel>
 </rss>
