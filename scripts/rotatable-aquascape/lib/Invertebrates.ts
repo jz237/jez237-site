@@ -21,8 +21,9 @@ export function advanceGrazer(a:Animal,dt:number){
 
 /** Shared instanced parts: full articulation uses shared batches, not one draw per leg. */
 export class Invertebrates{
+ externalBodies:ReturnType<typeof grazerBody>[]=[];
  readonly root=new T.Group();readonly animals:Animal[]=[];readonly fishCorrections=new Map<number,T.Vector3>();
- private obstacles:Obstacle[];private floorHeight:(x:number,z:number)=>number;private initialized=false;private plants:GrazerPlants;private waterTime=0;private usedLeaves=new Set<PlantLeaf>();
+ private obstacles:Obstacle[];private floorHeight:(x:number,z:number)=>number;private initialized=false;readonly plants:GrazerPlants;private waterTime=0;private usedLeaves=new Set<PlantLeaf>();
  private pools:T.InstancedMesh[]=[];private textures:T.Texture[]=[];private size=new T.Vector3();private counts:number[]=[];private owners:number[][]=[];
  private bodyFrame:T.Matrix4|null=null;private bodyFrames=Array.from({length:6},()=>new T.Matrix4());private posed=new T.Matrix4();
  private dummy=new T.Object3D();private local=new T.Matrix4();private tangent=new T.Vector3();private binormal=new T.Vector3();private rotation=new T.Matrix4();private link=new T.Vector3();private end=new T.Vector3();
@@ -81,6 +82,7 @@ export class Invertebrates{
   }return true;
  }
  private clear(a:Animal,p:T.Vector3,n:T.Vector3,f:T.Vector3,own=a.trail?.leaf){
+  if(this.externalBodies.some(b=>bodiesOverlap(grazerBody(p,n,f,a.kind==='snail',a.kind==='snail'?.84:.88),b)))return false;
   if(!this.plants.clear(p,n,f,a.kind==='snail',this.waterTime,own))return false;
   const body=grazerBody(p,n,f,a.kind==='snail',a.kind==='shrimp'?.80+a.id%3*.04:.84);
   return !this.animals.some(other=>other!==a&&other.heading&&p.distanceToSquared(other.position)<.8**2&&bodiesOverlap(body,grazerBody(other.position,other.normal,new T.Vector3().setFromMatrixColumn(other.matrix,0).normalize(),other.kind==='snail',other.kind==='shrimp'?.80+other.id%3*.04:.84)));

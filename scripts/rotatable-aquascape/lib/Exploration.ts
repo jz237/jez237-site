@@ -1,5 +1,5 @@
 import * as T from 'three';
-export type Identification={kind:'fish'|'plant'|'invertebrate';name:string;subtitle:string;needs:string;role:string;behavior:string;point:T.Vector3;fishId?:number;animalId?:number;species?:string};
+export type Identification={kind:'fish'|'plant'|'invertebrate';name:string;subtitle:string;needs:string;role:string;behavior:string;point:T.Vector3;fishId?:number;coryId?:number;animalId?:number;species?:string};
 export const plantFacts:Record<string,[string,string,string,string]>={
  fern:['Fern-like epiphyte','Fern-frond model · representative form','Attachment space, light and dissolved nutrients.','Fronds provide cover and surfaces for biofilms.'],
  moss:['Moss planting','Fine moss shoots · representative form','Light and dissolved nutrients reaching the shoots.','Fine branching traps small particles and provides habitat for tiny animals.'],
