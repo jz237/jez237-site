@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Model S Studio · Jez237</title>
+<meta name="description" content="Take a Tesla Model S Plaid apart in an interactive 3D studio. Explore 297 visual pieces, inspect the cabin, change the paint and smoothly reassemble the car.">
+<meta name="theme-color" content="#090e14"><link rel="icon" href="../../assets/brand.svg" type="image/svg+xml">
+<link rel="canonical" href="https://jez237.com/demos/model-s-studio/">
+<link rel="stylesheet" href="studio.css">
+<script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
+</head>
+<body>
+<header class="topbar"><a class="brand" href="../">JEZ237 <span>/ DEMOS</span></a><span class="top-title">MODEL S <b>STUDIO</b></span><a class="source" href="https://github.com/jz237/jez237-site/tree/main/demos/model-s-studio" target="_blank" rel="noopener">View source ↗</a></header>
+<main class="workspace">
+ <section class="stage" aria-label="Interactive Model S viewer">
+  <div id="viewport" tabindex="0" aria-label="3D Tesla Model S. Drag to orbit, scroll or pinch to zoom. Select a component to inspect it."></div>
+  <div class="hero"><p class="eyebrow"><span class="dot"></span> ANATOMY OF AN ELECTRIC ICON</p><h1>Model <em>S.</em></h1><p class="subtitle">Every curve. Every layer.<br>A different perspective.</p></div>
+  <div class="scene-badge"><span class="dot"></span><span id="scene-status">PREPARING STUDIO</span></div>
+  <div id="loading" class="loading" role="status"><span class="spinner"></span><strong>Bringing the Model S into focus</strong><span id="load-progress">Loading the 3D model…</span></div>
+  <div id="error" class="error" hidden role="alert"><h2>The studio couldn’t start</h2><p id="error-message">This demo needs a browser with WebGL 2 enabled.</p><button onclick="location.reload()">Try again</button></div>
+  <div id="labels" class="labels" aria-hidden="true"></div><div id="tooltip" class="tooltip" hidden></div>
+  <div class="view-toolbar" aria-label="Camera views"><button data-view="hero" class="active" title="Three-quarter view">Perspective</button><button data-view="side">Side</button><button data-view="front">Front</button><button data-view="top">Top</button></div>
+  <p class="gesture-hint">DRAG TO ORBIT <span>·</span> SCROLL TO ZOOM <span>·</span> CLICK TO INSPECT</p>
+  <div class="transport">
+   <div class="transport-head"><div><span class="eyebrow">EXPLODED VIEW</span><h2 id="assembly-state">Beautifully assembled.</h2></div><output id="amount" for="explode">000<span>%</span></output></div>
+   <label class="sr-only" for="explode">Explode model from assembled to fully separated</label><input type="range" id="explode" min="0" max="100" step="1" value="0">
+   <div class="range-labels"><span>01 / ASSEMBLED</span><span>02 / EXPLORE THE LAYERS</span><span>03 / FULLY EXPLODED</span></div>
+   <div class="playback"><button id="explode-button" class="primary" disabled><span aria-hidden="true">↗</span> Explode model</button><button id="animate" disabled>▷ Play sequence</button><button id="reset" disabled>↺ Reset</button><span class="key-hint">E explode <span>·</span> R reset</span></div>
+  </div>
+ </section>
+ <aside class="inspector" aria-label="Studio controls">
+  <div class="panel-heading"><span class="eyebrow">THE EXPLORER</span><span class="small-pill">2021 PLAID</span></div>
+  <h2>Look a little closer.</h2><p class="intro-copy">Pull the car apart, then select a piece to discover where it belongs.</p>
+  <div class="stat-grid"><div><strong id="part-count">297</strong><span>VISUAL PIECES</span></div><div><strong>360°</strong><span>YOUR PERSPECTIVE</span></div></div>
+  <section class="control-section"><h3>01 <span>Paint finish</span></h3><div class="swatches" role="group" aria-label="Paint finish"><button data-color="#b50922" class="swatch active" style="--swatch:#b50922" aria-label="Crimson red" aria-pressed="true"></button><button data-color="#e8ecf1" class="swatch" style="--swatch:#e8ecf1" aria-label="Pearl white" aria-pressed="false"></button><button data-color="#204b85" class="swatch" style="--swatch:#204b85" aria-label="Deep blue" aria-pressed="false"></button><button data-color="#3b4149" class="swatch" style="--swatch:#3b4149" aria-label="Graphite" aria-pressed="false"></button><button data-color="#111215" class="swatch" style="--swatch:#111215" aria-label="Obsidian black" aria-pressed="false"></button><span id="paint-name">Crimson red</span></div></section>
+  <section class="control-section"><h3>02 <span>Explore the model</span></h3><label for="system">Visible system</label><select id="system"><option value="all">Complete vehicle</option><option value="Body">Body &amp; paint</option><option value="Glass">Glass &amp; glazing</option><option value="Wheels">Wheels &amp; brakes</option><option value="Cabin">Cabin &amp; controls</option><option value="Lighting">Lighting</option><option value="Trim">Trim &amp; details</option></select><div class="toggle-row"><button id="cabin" aria-pressed="false">Cabin view</button><button id="rotate" aria-pressed="false">Auto orbit</button><button id="label-toggle" aria-pressed="false">Labels</button></div></section>
+  <section class="selection control-section"><h3>03 <span>Component inspector</span></h3><label class="sr-only" for="search">Find a component</label><input id="search" type="search" placeholder="Find a part or system…" autocomplete="off"><label class="sr-only" for="part-list">Select component</label><select id="part-list"><option value="">Select a component…</option></select><div class="part-detail" aria-live="polite"><span id="part-category" class="eyebrow">NO PIECE SELECTED</span><h4 id="part-title">Curiosity starts with a click.</h4><p id="part-description">Select directly on the car or choose from the list. Each piece can be viewed on its own.</p><span id="part-meta"></span></div><div class="selection-actions"><button id="isolate" disabled aria-pressed="false">Isolate piece</button><button id="clear" disabled>Clear</button></div></section>
+  <div class="panel-footer"><button id="fullscreen">⛶ Fullscreen</button><a href="../">← All demos</a></div>
+  <details class="credits"><summary>About this model &amp; credits</summary><p>An independent visual study of the Tesla Model S Plaid. Pieces are artist-authored surfaces, not a verified service-parts catalog. Hidden powertrain and battery internals are not modeled.</p><p>Model: <a href="https://sketchfab.com/3d-models/tesla-model-s-plaid-2021-481866a0b23143b18e8e4e7f642cee53" target="_blank" rel="noopener">Tesla Model S Plaid 2021</a> by <a href="https://sketchfab.com/lachie.mullard" target="_blank" rel="noopener">3D Hawk</a>, <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. Adapted for component separation, optimized geometry and interactive paint.</p><p>Inspired by <a href="https://github.com/ashemag/model-x-studio" target="_blank" rel="noopener">ashemag’s Model X Studio</a>. Independently built; no affiliation with Tesla.</p></details>
+ </aside>
+</main>
+<noscript><p class="error">Enable JavaScript to explore the 3D Model S.</p></noscript>
+<script type="module" src="studio.js"></script>
+</body></html>

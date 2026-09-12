@@ -132,5 +132,27 @@
     "note": "WebGL 2 · Desktop & touch · Switch views inside the aquarium",
     "alternateUrl": "living-aquascape/",
     "alternateLabel": "Photographic aquarium"
+  },
+  {
+    "id": "007",
+    "title": "Model S Studio",
+    "category": "3D · Electric vehicle",
+    "description": "Take a Tesla Model S Plaid apart, one layer at a time. Pull 297 visual pieces into an exploded view, explore the cabin and inspect the details from every angle.",
+    "url": "model-s-studio/",
+    "image": "assets/model-s-studio.jpg",
+    "imageAlt": "Actual Model S Studio showing a crimson Tesla Model S Plaid separated into body panels, glass, wheels and interior surfaces",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/model-s-studio",
+    "features": [
+      "Smooth explode & reassemble",
+      "297 selectable visual pieces",
+      "Paint finishes & cabin view",
+      "Isolate, orbit & zoom"
+    ],
+    "facts": [
+      "Tesla Model S Plaid",
+      "297 visual pieces",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Artist model by 3D Hawk, CC BY 4.0 · Preview captured from the running demo"
   }
 ]
