@@ -8,14 +8,14 @@ const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z),UP=V(0,1,0),clamp=T.MathUtils.clamp;
 export type Cory={id:number;position:T.Vector3;previous:T.Vector3;target:T.Vector3;yaw:number;pitch:number;size:number;speed:number;phase:number;effort:number;remaining:number;seed:number;mode:'foraging'|'browsing'|'feeding'|'exploring';blocked:number;time:number;lift:number};
 export function coryForward(a:Cory){return V(Math.cos(a.yaw),0,-Math.sin(a.yaw));}
 /** Includes the swept width of the tail, barbels and paired fins. */
-export function coryBody(p:T.Vector3,f:T.Vector3,size=.7):BodySphere[]{return [[-.46,.085,.13],[-.045,.265,.09],[-.28,.085,.065],[-.13,.095,.095],[.045,.115,.125],[.17,.085,.15],[.30,.06,.065]].map(([x,y,r])=>({center:p.clone().addScaledVector(f,x*size).addScaledVector(UP,y*size),radius:r*size}));}
+export function coryBody(p:T.Vector3,f:T.Vector3,size=.7):BodySphere[]{return [[-.46,.085,.175],[-.045,.265,.09],[-.28,.085,.095],[-.13,.095,.12],[.045,.115,.125],[.17,.085,.15],[.30,.06,.065]].map(([x,y,r])=>({center:p.clone().addScaledVector(f,x*size).addScaledVector(UP,y*size),radius:r*size}));}
 const random=(a:Cory)=>{a.seed=(Math.imul(a.seed,1664525)+1013904223)>>>0;return a.seed/4294967296;};
 export class Corydoras{
  readonly models:CoryModels;readonly animals:Cory[]=[];readonly fishCorrections=new Map<number,T.Vector3>();readonly pellets:{position:T.Vector3;age:number;mesh:T.Mesh}[]=[];
  private scene:T.Scene;private height:(x:number,z:number)=>number;private obstacles:Obstacle[];private plants?:GrazerPlants;private pelletGeometry=new T.IcosahedronGeometry(.022,1);private pelletMaterial=new T.MeshStandardMaterial({color:0xa78b58,roughness:1});private time=0;
  constructor(scene:T.Scene,height:(x:number,z:number)=>number,obstacles:Obstacle[]=[],plants?:GrazerPlants,count=6){this.scene=scene;this.height=height;this.obstacles=obstacles;this.plants=plants;this.models=new CoryModels(count);scene.add(this.models.root);
   for(let id=0;id<count;id++){const a:Cory={id,position:V(),previous:V(),target:V(),yaw:id*1.73,pitch:0,size:.66+id%3*.025,speed:0,phase:id*2.37,effort:0,remaining:1+id*.7,seed:237+id*7351,mode:id%2?'browsing':'foraging',blocked:0,time:0,lift:0};let found=false;
-   for(let k=0;k<1600;k++){const x=k<150? .4+random(a)*3: -4.55+random(a)*9.1,z=k<150? .5+random(a)*1.6:-2+random(a)*4.1;a.position.set(x,this.floor(x,z),z);if(this.clear(a,a.position,coryForward(a),[])){found=true;break;}}
+   for(let k=0;k<1600;k++){const x=k<150? .4+random(a)*3: -4.55+random(a)*9.1,z=k<150? .5+random(a)*1.6:-2+random(a)*4.1;a.position.set(x,this.floor(x,z),z);if(this.clear(a,a.position,coryForward(a),[])&&[-.18,.18].every(d=>{const q=a.position.clone().addScaledVector(coryForward(a),d);q.y=this.floor(q.x,q.z);return this.clear(a,q,coryForward(a),[]);})){found=true;break;}}
    if(!found)throw new Error('No unobstructed Corydoras starting position');a.previous.copy(a.position);a.target.copy(a.position);this.animals.push(a);this.choose(a);this.pose(a);
   }this.models.flush();
  }
