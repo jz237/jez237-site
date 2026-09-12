@@ -15,6 +15,8 @@ export class TeachingScene{
  private paths:Path[]=[];private labels:{button:HTMLButtonElement;point:T.Vector3}[]=[];
  private host:HTMLElement;private labelHost:HTMLDivElement;private content=new T.Group();
  private specimen:Tetra3D|null=null;private texture:T.Texture;private leaf:T.InstancedMesh|undefined;
+ private labelMatrix=new T.Matrix4();private labelsDirty=true;private labelWidth=0;private labelHeight=0;
+ private projected=new T.Vector3();private dummy=new T.Object3D();
  private phase=0;private impeller:T.Group|null=null;private rootStudy:T.Group|null=null;
  private savedVisibility=new Map<T.Object3D,boolean>();
  constructor(world:T.Scene,host:HTMLElement,plants:T.Object3D[],substrate:T.Object3D[],texture:T.Texture,housing:T.Object3D[]=[]){
@@ -26,7 +28,7 @@ export class TeachingScene{
  }
  private restore(){for(const [o,v] of this.savedVisibility)o.visible=v;this.savedVisibility.clear();}
  private clear(){
-  this.restore();this.labelHost.replaceChildren();this.labels=[];this.paths=[];this.impeller=null;this.rootStudy=null;
+  this.labelsDirty=true;this.restore();this.labelHost.replaceChildren();this.labels=[];this.paths=[];this.impeller=null;this.rootStudy=null;
   this.content.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
   this.content.clear();this.specimen=null;
  }
@@ -101,15 +103,20 @@ export class TeachingScene{
   }
  }
  update(dt:number,camera:T.Camera,flow=65){
-  const target=this.mode==='layers'?this.separation:0;
-  for(const [o,original] of this.originals){const offset=this.plants.includes(o)?target*1.3:-target*.48;o.position.y=T.MathUtils.damp(o.position.y,original.position.y+offset,5,dt);}
   if(!this.mode)return;
+  const target=this.mode==='layers'?this.separation:0;
+  if(this.mode==='layers')for(const [o,original] of this.originals){const offset=this.plants.includes(o)?target*1.3:-target*.48;o.position.y=T.MathUtils.damp(o.position.y,original.position.y+offset,5,dt);}
   if(this.mode==='layers'){for(const o of this.housing)o.visible=target<.02&&(this.savedVisibility.get(o)??true);for(const o of this.content.children)if(o.userData.rootTemplate)o.visible=target>.02;}
   this.phase+=dt;
   if(this.impeller)this.impeller.rotation.y+=dt*flow*.14;
   this.specimen?.update(this.phase,.4,this.texture,.65,.5,1,dt,.6);
-  const dummy=new T.Object3D();for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.beads.count;i++){dummy.position.copy(path.curve.getPoint((path.phase+i/path.beads.count)%1));dummy.updateMatrix();path.beads.setMatrixAt(i,dummy.matrix);}path.beads.instanceMatrix.needsUpdate=true;}
+  const dummy=this.dummy;for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.beads.count;i++){path.curve.getPoint((path.phase+i/path.beads.count)%1,dummy.position);dummy.updateMatrix();path.beads.setMatrixAt(i,dummy.matrix);}path.beads.instanceMatrix.needsUpdate=true;}
   const w=this.host.clientWidth,h=this.host.clientHeight;
-  for(const {button,point} of this.labels){const p=point.clone().project(camera);button.hidden=p.z>1||Math.abs(p.x)>1||Math.abs(p.y)>1;button.style.left=Math.max(75,Math.min(w-75,(p.x*.5+.5)*w))+'px';button.style.top=Math.max(40,Math.min(h-40,(-p.y*.5+.5)*h))+'px';}
+  // Label anchors are static; only a changed view or layout needs DOM writes.
+  camera.updateMatrixWorld();
+  const matrix=this.dummy.matrix.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);
+  if(!this.labelsDirty&&w===this.labelWidth&&h===this.labelHeight&&this.labelMatrix.equals(matrix))return;
+  this.labelsDirty=false;this.labelWidth=w;this.labelHeight=h;this.labelMatrix.copy(matrix);
+  for(const {button,point} of this.labels){const p=this.projected.copy(point).applyMatrix4(matrix);button.hidden=p.z>1||Math.abs(p.x)>1||Math.abs(p.y)>1;button.style.left=Math.max(75,Math.min(w-75,(p.x*.5+.5)*w))+'px';button.style.top=Math.max(40,Math.min(h-40,(-p.y*.5+.5)*h))+'px';}
  }
 }
