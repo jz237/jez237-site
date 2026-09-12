@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import * as T from 'three';
 import {Corydoras,coryBody,coryForward} from '../lib/Corydoras.ts';
-import {coryWave} from '../lib/CoryModels.ts';
+import {coryWave,coryBend} from '../lib/CoryModels.ts';
 import {bodiesOverlap} from '../lib/GrazerCollision.ts';
 test('six cories vary their movement, remain separate, explore depth and stop on pause',()=>{
  const scene=new T.Scene(),life=new Corydoras(scene,()=>.4),start=life.animals.map(a=>a.position.clone()),distance=Array(6).fill(0),states=new Set();
@@ -12,3 +12,5 @@ test('six cories vary their movement, remain separate, explore depth and stop on
 test('head stays steady while a traveling wave grows toward the tail',()=>{for(const phase of [0,1,2,3])assert.ok(Math.abs(coryWave(.2,phase,1))===0);assert.ok(Math.abs(coryWave(-.4,1,1))>Math.abs(coryWave(-.1,1,1)));assert.notEqual(coryWave(-.4,1,1),coryWave(-.4,2,1));});
 test('sinking pellets reach the bottom and cories eat them without teleporting',()=>{const life=new Corydoras(new T.Scene(),()=>.4);life.feed();assert.equal(life.pellets.length,6);life.feed();assert.equal(life.pellets.length,6);let feeding=false;for(let i=0;i<900;i++){life.update(.05,i*.05);feeding ||=life.animals.some(a=>a.mode==='feeding');}assert.ok(feeding);assert.ok(life.pellets.length<6);});
 test('rocks and a swept fast tetra cannot cross a cory body',()=>{const o={center:new T.Vector3(2,.65,1),radius:.38},life=new Corydoras(new T.Scene(),()=>.4,[o]);for(let i=0;i<400;i++){life.update(.05,i*.05);for(const a of life.animals)for(const s of coryBody(a.position,coryForward(a),a.size))assert.ok(s.center.distanceTo(o.center)>s.radius+o.radius);}const a=life.animals[0],p=a.position.clone().add(new T.Vector3(0,.07,0));life.update(.01,21,[{id:3,previous:p.clone().add(new T.Vector3(-1,0,0)),position:p.clone().add(new T.Vector3(1,0,0)),forward:new T.Vector3(1,0,0),size:.52}]);assert.ok(life.fishCorrections.has(3));});
+
+test('larger body flex preserves cross-section width and leaves the head stable',()=>{for(let phase=0;phase<6.3;phase+=.2){for(const x of [-.35,-.18,-.04,.22]){const a=coryBend(new T.Vector3(x,.1,-.05),phase,1),b=coryBend(new T.Vector3(x,.1,.05),phase,1);assert.ok(Math.abs(a.distanceTo(b)-.1)<1e-9);}assert.ok(coryBend(new T.Vector3(.22,.1,.05),phase,1).distanceTo(new T.Vector3(.22,.1,.05))<1e-9);}let mid=0,tail=0;for(let phase=0;phase<6.3;phase+=.1){mid=Math.max(mid,Math.abs(coryWave(-.1,phase,1)));tail=Math.max(tail,Math.abs(coryWave(-.4,phase,1)));}assert.ok(mid>.03&&tail>.09);});
