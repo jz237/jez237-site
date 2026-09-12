@@ -2,9 +2,10 @@ import * as T from 'three';
 import {shrimpCarapace,shrimpPlate,shrimpFan,fanRays,shrimpRostrum,snailBody,ramshornShell} from './GrazerGeometry.ts';
 import {grazerMaterials} from './GrazerMaterials.ts';
 import {GrazerPlants,leafContact,type LeafTrail,type PlantLeaf} from './GrazerPlants.ts';
+import {createShrimpMotion,advanceShrimpMotion,shrimpAbdomen,shrimpCenters,swimmeretStroke,type ShrimpMotion} from './ShrimpMotion.ts';
 import type {Identification} from './Exploration.ts';
 
-type Animal={trail?:LeafTrail;direction:number;blocked:number;tripIn:number;flight?:{from:T.Vector3;to:T.Vector3;target:LeafTrail;progress:number;duration:number;retreat:boolean;originDistance:number};id:number;kind:'shrimp'|'snail';position:T.Vector3;normal:T.Vector3;heading:number;distance:number;speed:number;remaining:number;grazing:boolean;phase:number;seed:number;route:T.Vector3[];normals:T.Vector3[];length:number;matrix:T.Matrix4;};
+type Animal={motion:ShrimpMotion;trail?:LeafTrail;direction:number;blocked:number;tripIn:number;flight?:{from:T.Vector3;to:T.Vector3;target:LeafTrail;progress:number;duration:number;retreat:boolean;originDistance:number};id:number;kind:'shrimp'|'snail';position:T.Vector3;normal:T.Vector3;heading:number;distance:number;speed:number;remaining:number;grazing:boolean;phase:number;seed:number;route:T.Vector3[];normals:T.Vector3[];length:number;matrix:T.Matrix4;};
 const UP=new T.Vector3(0,1,0);
 const rand=(a:Animal)=>{a.seed=(Math.imul(a.seed,1664525)+1013904223)>>>0;return a.seed/4294967296;};
 /** Speeds here are illustrative world units, not measured species kinematics. */
@@ -21,6 +22,7 @@ export class Invertebrates{
  readonly root=new T.Group();readonly animals:Animal[]=[];
  private initialized=false;private plants:GrazerPlants;private waterTime=0;private usedLeaves=new Set<PlantLeaf>();
  private pools:T.InstancedMesh[]=[];private textures:T.Texture[]=[];private size=new T.Vector3();private counts:number[]=[];private owners:number[][]=[];
+ private bodyFrame:T.Matrix4|null=null;private bodyFrames=Array.from({length:6},()=>new T.Matrix4());private posed=new T.Matrix4();
  private dummy=new T.Object3D();private local=new T.Matrix4();private tangent=new T.Vector3();private binormal=new T.Vector3();private rotation=new T.Matrix4();private link=new T.Vector3();private end=new T.Vector3();
  constructor(scene:T.Scene,height:(x:number,z:number)=>number,surfaces:T.Object3D[]=[],atlas?:T.Texture){
   this.root.name='Shrimp and ramshorn snails';scene.add(this.root);
@@ -52,15 +54,15 @@ export class Invertebrates{
    const lengths=[0];for(let j=1;j<=route.length;j++)lengths.push(lengths[j-1]+route[j%route.length].distanceTo(route[j-1]));const length=lengths.at(-1)!;
    const points:T.Vector3[]=[],ns:T.Vector3[]=[];let k=0;for(let j=0;j<256;j++){const d=j/256*length;while(k<route.length-1&&lengths[k+1]<d)k++;const f=(d-lengths[k])/(lengths[k+1]-lengths[k]);points.push(route[k].clone().lerp(route[(k+1)%route.length],f));ns.push(normals[k].clone().lerp(normals[(k+1)%route.length],f).normalize());}
    const trail=!glass?this.plants.trail(new T.Vector3(centers[id][0],height(...centers[id] as [number,number])+.7,centers[id][1]),kind==='snail',this.usedLeaves):undefined;
-   this.animals.push({trail,direction:1,blocked:id*.027,tripIn:18+id*9,id,kind,position:new T.Vector3(),normal:new T.Vector3(),heading:0,distance:(trail?.length??length)*(id*.173%1),speed:0,remaining:2+id*.73,grazing:id%2===0,phase:id*2.7,seed:237+id*3571,route:points,normals:ns,length:trail?.length??length,matrix:new T.Matrix4()});
+   this.animals.push({motion:createShrimpMotion(id),trail,direction:1,blocked:id*.027,tripIn:18+id*9,id,kind,position:new T.Vector3(),normal:new T.Vector3(),heading:0,distance:(trail?.length??length)*(id*.173%1),speed:0,remaining:2+id*.73,grazing:id%2===0,phase:id*2.7,seed:237+id*3571,route:points,normals:ns,length:trail?.length??length,matrix:new T.Matrix4()});
   }
   this.update(0);
  }
  private part(a:Animal,pool:number,x:number,y:number,z:number,sx:number,sy:number,sz:number,rz=0,ry=0,rx=0){
-  this.dummy.position.set(x,y,z);this.dummy.rotation.set(rx,ry,rz);this.dummy.scale.set(sx,sy,sz);this.dummy.updateMatrix();this.local.multiplyMatrices(a.matrix,this.dummy.matrix);const n=this.counts[pool]++;this.pools[pool].setMatrixAt(n,this.local);this.owners[pool][n]=a.id;
+  this.dummy.position.set(x,y,z);this.dummy.rotation.set(rx,ry,rz);this.dummy.scale.set(sx,sy,sz);this.dummy.updateMatrix();this.local.multiplyMatrices(a.matrix,this.bodyFrame?this.posed.multiplyMatrices(this.bodyFrame,this.dummy.matrix):this.dummy.matrix);const n=this.counts[pool]++;this.pools[pool].setMatrixAt(n,this.local);this.owners[pool][n]=a.id;
  }
  private rod(a:Animal,pool:number,x:number,y:number,z:number,ex:number,ey:number,ez:number,r:number){
-  this.link.set(ex-x,ey-y,ez-z);this.dummy.position.set((x+ex)/2,(y+ey)/2,(z+ez)/2);this.dummy.quaternion.setFromUnitVectors(UP,this.end.copy(this.link).normalize());this.dummy.scale.set(r,this.link.length(),r);this.dummy.updateMatrix();this.local.multiplyMatrices(a.matrix,this.dummy.matrix);const n=this.counts[pool]++;this.pools[pool].setMatrixAt(n,this.local);this.owners[pool][n]=a.id;
+  this.link.set(ex-x,ey-y,ez-z);this.dummy.position.set((x+ex)/2,(y+ey)/2,(z+ez)/2);this.dummy.quaternion.setFromUnitVectors(UP,this.end.copy(this.link).normalize());this.dummy.scale.set(r,this.link.length(),r);this.dummy.updateMatrix();this.local.multiplyMatrices(a.matrix,this.bodyFrame?this.posed.multiplyMatrices(this.bodyFrame,this.dummy.matrix):this.dummy.matrix);const n=this.counts[pool]++;this.pools[pool].setMatrixAt(n,this.local);this.owners[pool][n]=a.id;
  }
  private contact(a:Animal,distance:number,time:number,p:T.Vector3,n:T.Vector3,tangent:T.Vector3){
   if(a.trail){const tr=a.trail,u=distance/a.length*tr.points.length,i=Math.floor(u)%tr.points.length,f=u-i,uv=tr.points[i].clone().lerp(tr.points[(i+1)%tr.points.length],f),next=tr.points[(i+1)%tr.points.length];
@@ -97,32 +99,36 @@ export class Invertebrates{
     // Cached paths are prevalidated. Staggered checks catch moving neighbors.
     a.blocked-=dt;if(dt&&a.id<7&&a.blocked<=0){a.blocked=.18+a.id*.007;if(!this.plants.clear(a.position,a.normal,this.tangent,a.kind==='snail',this.waterTime,a.trail?.leaf)){a.distance=old;a.direction*=-1;a.speed=0;a.grazing=true;a.remaining=1.5;this.contact(a,a.distance,this.waterTime,a.position,a.normal,this.tangent);}}
    }
+   let turnDemand=0;
    // Turn along the contact plane instead of flipping the body at a reversal.
-   if(dt&&a.heading){const forward=new T.Vector3().setFromMatrixColumn(a.matrix,0).projectOnPlane(a.normal).normalize(),desired=this.tangent.clone().projectOnPlane(a.normal).normalize();const angle=Math.atan2(a.normal.dot(new T.Vector3().crossVectors(forward,desired)),forward.dot(desired));this.tangent.copy(forward).applyAxisAngle(a.normal,T.MathUtils.clamp(angle,-dt*2.8,dt*2.8));}a.heading=1;
+   if(dt&&a.heading){const forward=new T.Vector3().setFromMatrixColumn(a.matrix,0).projectOnPlane(a.normal).normalize(),desired=this.tangent.clone().projectOnPlane(a.normal).normalize();const angle=Math.atan2(a.normal.dot(new T.Vector3().crossVectors(forward,desired)),forward.dot(desired));turnDemand=angle;this.tangent.copy(forward).applyAxisAngle(a.normal,T.MathUtils.clamp(angle,-dt*2.8,dt*2.8));}a.heading=1;
    this.binormal.crossVectors(this.tangent,a.normal).normalize();this.tangent.crossVectors(a.normal,this.binormal).normalize();this.rotation.makeBasis(this.tangent,a.normal,this.binormal);a.matrix.copy(this.rotation).setPosition(a.position);a.matrix.scale(this.size.setScalar(a.kind==='shrimp'?.80+a.id%3*.04:.84));
-   if(a.kind==='shrimp')this.shrimp(a);else this.snail(a);
+   if(a.kind==='shrimp'){advanceShrimpMotion(a.motion,dt,a.flight?.progress??null,a.speed,turnDemand);this.shrimp(a);}else this.snail(a);
   }
   this.pools.forEach((p,i)=>{p.count=this.counts[i];p.instanceMatrix.needsUpdate=true;});this.initialized=true;
  }
  private shrimp(a:Animal){
   const t=a.phase,walk=a.flight?.35:Math.min(1,a.speed/.06);
   this.part(a,7,0,0,0,1,1,1);this.part(a,11,0,0,0,1,1,1);
+  shrimpAbdomen(a.motion,this.bodyFrames);
   for(let k=0;k<6;k++){
-   const x=-.102-k*.037,y=.116+Math.sin(k/5*Math.PI)*.014-k*.003,flex=Math.sin(t*1.3-k*.46)*.017*(.35+walk);
-   this.part(a,8,x,y,0,.04,[.046,.045,.042,.036,.028,.017][k],[.039,.038,.035,.030,.024,.015][k],flex);
+   this.bodyFrame=this.bodyFrames[k];const {x,y}=shrimpCenters[k];
+   this.part(a,8,x,y,0,.04,[.046,.045,.042,.036,.028,.017][k],[.039,.038,.035,.030,.024,.015][k]);
    if(k<5)for(const side of [-1,1]){
-    const flap=(a.flight?.52:.24)*Math.sin(t*(a.flight?15:3.4)-k*.84+side*.7),args=[x,y-.03,side*.022,.30,.6,.48,flap,side*.3] as const;
+    const stroke=swimmeretStroke(a.motion,k),args=[x,y-.03,side*.022,.30,.6,.48*stroke.spread,stroke.angle,side*(.3+stroke.fold)] as const;
     this.part(a,9,...args);this.part(a,10,...args);
    }
   }
-  for(let k=-2;k<=2;k++){const ry=k*.32+.035*Math.sin(t*1.1),scale=k===0?.72:Math.abs(k)===2?1:.88;this.part(a,9,-.309,.100,k*.006,scale,1,k===0?.50:1,.025*Math.sin(t*.9+k),ry);this.part(a,10,-.309,.100,k*.006,scale,1,k===0?.50:1,.025*Math.sin(t*.9+k),ry);}
+  // Telson and uropods inherit the final segment's flex instead of floating behind it.
+  for(let k=-2;k<=2;k++){const spread=.27+.11*a.motion.swimming+.10*a.motion.adjustment,ry=k*spread,scale=k===0?.72:Math.abs(k)===2?1:.88,pitch=.045*Math.sin(a.motion.time*1.1)+a.motion.curl*.20;this.part(a,9,-.309,.100,k*.006,scale,1,k===0?.50:1,pitch,ry);this.part(a,10,-.309,.100,k*.006,scale,1,k===0?.50:1,pitch,ry);}
+  this.bodyFrame=null;
   for(const side of [-1,1]){
    this.rod(a,6,.123,.139,side*.022,.141,.148,side*.030,.0038);this.part(a,0,.141,.148,side*.030,.008,.008,.007);
    this.part(a,2,.142,.149,side*.035,.0065,.0065,.0052);
    for(let k=0;k<5;k++){
     const x=.105-k*.034,phase=t*(a.grazing?4.1:8)+k*1.65+side*1.5,pick=k<2&&a.grazing,swing=Math.sin(phase)*.025*walk,lift=Math.max(0,Math.cos(phase))*.020*walk;
     const transfer=pick?Math.max(0,Math.sin(phase)):0,kneeX=x-.016,kneeY=.044+transfer*.018,kneeZ=side*.060,
-     toeX=pick?.16-transfer*.023:x-.040+swing,toeY=pick?.006+transfer*.080:.003+lift,toeZ=side*(pick?.037-transfer*.020:.10);
+     toeX=pick?.16-transfer*.023:x-.040+swing,toeY=(pick?.006+transfer*.080:.003+lift)+a.motion.swimming*.048,toeZ=side*(pick?.037-transfer*.020:.10-a.motion.swimming*.045);
     this.rod(a,6,x,.079,side*.033,kneeX,kneeY,kneeZ,.0032);
     this.part(a,1,kneeX,kneeY,kneeZ,.0039,.0039,.0039);
     const ankleX=T.MathUtils.lerp(kneeX,toeX,.72),ankleY=T.MathUtils.lerp(kneeY,toeY,.72),ankleZ=T.MathUtils.lerp(kneeZ,toeZ,.72);
