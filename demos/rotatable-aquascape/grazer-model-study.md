@@ -30,3 +30,8 @@ Low carpet and grass blades now retain only a small fraction of their former mov
 Seven grazers begin on plant surfaces; two ramshorns remain on the front glass. Leaf paths use barycentric contact on the actual blade triangles and the same deformation and current clock as the renderer. Body-volume checks include neighboring blades, stems and conservative fern-frond envelopes. Crawlers reverse or pause at blocked paths. Shrimp occasionally depart, swim through a checked water path using faster swimmeret strokes, and settle on another leaf. A newly obstructed swimming trip retreats. Independent grazing intervals and gradual turns remain active.
 
 The route search and spatial index are cached; all visible animal and plant geometry is retained. This is an illustrative behavioral model, not measured species locomotion or a physics simulation of individual feet and suction. Fine antennae and individual toe contacts are animated rather than solved separately.
+
+
+## Connected shrimp body motion
+
+The abdomen, swimmerets and tail now share a connected six-segment rig with activity-dependent flex and continuous stroke timing. See the [shrimp motion research and tuning notes](./shrimp-motion-study.md) for primary sources and the limits of the comparative evidence.
