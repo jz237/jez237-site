@@ -5,7 +5,7 @@ const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
 /** Hollow glass intake and flared return, tucked into the rear-right corner. */
 export function buildAquariumPlumbing(scene:T.Scene){
  const glass=new T.MeshPhysicalMaterial({color:0xe5f0e9,transparent:true,opacity:1,transmission:.96,thickness:.022,ior:1.5,roughness:.025,metalness:0,depthWrite:false,envMap:scene.environment,envMapIntensity:.4});
- const add=(g:T.BufferGeometry,p=V(0,0,0))=>{const mesh=new T.Mesh(g,glass);mesh.position.copy(p);scene.add(mesh);return mesh;};
+ const add=(g:T.BufferGeometry,p=V(0,0,0))=>{const mesh=new T.Mesh(g,glass);mesh.position.copy(p);mesh.userData.grazerEquipment=true;scene.add(mesh);return mesh;};
  const intake=new T.CatmullRomCurve3([V(4.77,3.5,-2.64),V(4.77,5.6,-2.64),V(4.77,5.87,-2.48),V(4.77,5.82,-2.08),V(4.77,5.3,-2.02),V(4.77,1.48,-2.02)]);
  const outlet=new T.CatmullRomCurve3([V(4.4,3.5,-2.64),V(4.4,5.6,-2.64),V(4.4,5.87,-2.48),V(4.4,5.82,-2.08),V(4.4,5.25,-1.98),V(4.23,4.97,-1.80),V(3.93,4.99,-1.57)]);
  add(hollowTube(intake,()=>.075));
