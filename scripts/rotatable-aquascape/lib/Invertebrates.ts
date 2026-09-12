@@ -1,9 +1,10 @@
 import * as T from 'three';
 import {shrimpCarapace,shrimpPlate,shrimpFan,fanRays,shrimpRostrum,snailBody,ramshornShell} from './GrazerGeometry.ts';
 import {grazerMaterials} from './GrazerMaterials.ts';
+import {GrazerPlants,leafContact,type LeafTrail,type PlantLeaf} from './GrazerPlants.ts';
 import type {Identification} from './Exploration.ts';
 
-type Animal={id:number;kind:'shrimp'|'snail';position:T.Vector3;normal:T.Vector3;heading:number;distance:number;speed:number;remaining:number;grazing:boolean;phase:number;seed:number;route:T.Vector3[];normals:T.Vector3[];length:number;matrix:T.Matrix4;};
+type Animal={trail?:LeafTrail;direction:number;blocked:number;tripIn:number;flight?:{from:T.Vector3;to:T.Vector3;target:LeafTrail;progress:number;duration:number;retreat:boolean;originDistance:number};id:number;kind:'shrimp'|'snail';position:T.Vector3;normal:T.Vector3;heading:number;distance:number;speed:number;remaining:number;grazing:boolean;phase:number;seed:number;route:T.Vector3[];normals:T.Vector3[];length:number;matrix:T.Matrix4;};
 const UP=new T.Vector3(0,1,0);
 const rand=(a:Animal)=>{a.seed=(Math.imul(a.seed,1664525)+1013904223)>>>0;return a.seed/4294967296;};
 /** Speeds here are illustrative world units, not measured species kinematics. */
@@ -18,6 +19,7 @@ export function advanceGrazer(a:Animal,dt:number){
 /** Shared instanced parts: full articulation uses shared batches, not one draw per leg. */
 export class Invertebrates{
  readonly root=new T.Group();readonly animals:Animal[]=[];
+ private initialized=false;private plants:GrazerPlants;private waterTime=0;private usedLeaves=new Set<PlantLeaf>();
  private pools:T.InstancedMesh[]=[];private textures:T.Texture[]=[];private size=new T.Vector3();private counts:number[]=[];private owners:number[][]=[];
  private dummy=new T.Object3D();private local=new T.Matrix4();private tangent=new T.Vector3();private binormal=new T.Vector3();private rotation=new T.Matrix4();private link=new T.Vector3();private end=new T.Vector3();
  constructor(scene:T.Scene,height:(x:number,z:number)=>number,surfaces:T.Object3D[]=[],atlas?:T.Texture){
@@ -29,7 +31,7 @@ export class Invertebrates{
    const mesh=new T.InstancedMesh(g,m,n);mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mesh.frustumCulled=false;mesh.boundingSphere=new T.Sphere(new T.Vector3(0,2.7,0),6.4);mesh.castShadow=true;mesh.receiveShadow=true;this.pools.push(mesh);this.root.add(mesh);this.owners.push([]);
   }
   // Cache contact paths once. Hardscape is raycast at construction, never each frame.
-  scene.updateMatrixWorld();const ray=new T.Raycaster(new T.Vector3(),new T.Vector3(0,-1,0));
+  scene.updateMatrixWorld();this.plants=new GrazerPlants(scene);const ray=new T.Raycaster(new T.Vector3(),new T.Vector3(0,-1,0));
   const centers=[[-3.8,1.8],[-2.2,1.72],[1.1,1.96],[1.8,.9],[3.55,1.45],[-1.3,-.55],[3.6,0]];
   for(let id=0;id<9;id++){
    const kind=id<6?'shrimp':'snail',glass=id>=7,route:T.Vector3[]=[],normals:T.Vector3[]=[];
@@ -49,7 +51,8 @@ export class Invertebrates{
    // Uniform arc-length sampling prevents speed changes caused by ellipse curvature.
    const lengths=[0];for(let j=1;j<=route.length;j++)lengths.push(lengths[j-1]+route[j%route.length].distanceTo(route[j-1]));const length=lengths.at(-1)!;
    const points:T.Vector3[]=[],ns:T.Vector3[]=[];let k=0;for(let j=0;j<256;j++){const d=j/256*length;while(k<route.length-1&&lengths[k+1]<d)k++;const f=(d-lengths[k])/(lengths[k+1]-lengths[k]);points.push(route[k].clone().lerp(route[(k+1)%route.length],f));ns.push(normals[k].clone().lerp(normals[(k+1)%route.length],f).normalize());}
-   this.animals.push({id,kind,position:new T.Vector3(),normal:new T.Vector3(),heading:0,distance:length*(id*.173%1),speed:0,remaining:2+id*.73,grazing:id%2===0,phase:id*2.7,seed:237+id*3571,route:points,normals:ns,length,matrix:new T.Matrix4()});
+   const trail=!glass?this.plants.trail(new T.Vector3(centers[id][0],height(...centers[id] as [number,number])+.7,centers[id][1]),kind==='snail',this.usedLeaves):undefined;
+   this.animals.push({trail,direction:1,blocked:id*.027,tripIn:18+id*9,id,kind,position:new T.Vector3(),normal:new T.Vector3(),heading:0,distance:(trail?.length??length)*(id*.173%1),speed:0,remaining:2+id*.73,grazing:id%2===0,phase:id*2.7,seed:237+id*3571,route:points,normals:ns,length:trail?.length??length,matrix:new T.Matrix4()});
   }
   this.update(0);
  }
@@ -59,23 +62,56 @@ export class Invertebrates{
  private rod(a:Animal,pool:number,x:number,y:number,z:number,ex:number,ey:number,ez:number,r:number){
   this.link.set(ex-x,ey-y,ez-z);this.dummy.position.set((x+ex)/2,(y+ey)/2,(z+ez)/2);this.dummy.quaternion.setFromUnitVectors(UP,this.end.copy(this.link).normalize());this.dummy.scale.set(r,this.link.length(),r);this.dummy.updateMatrix();this.local.multiplyMatrices(a.matrix,this.dummy.matrix);const n=this.counts[pool]++;this.pools[pool].setMatrixAt(n,this.local);this.owners[pool][n]=a.id;
  }
- update(dt:number){
-  if(!this.root.visible)return;
+ private contact(a:Animal,distance:number,time:number,p:T.Vector3,n:T.Vector3,tangent:T.Vector3){
+  if(a.trail){const tr=a.trail,u=distance/a.length*tr.points.length,i=Math.floor(u)%tr.points.length,f=u-i,uv=tr.points[i].clone().lerp(tr.points[(i+1)%tr.points.length],f),next=tr.points[(i+1)%tr.points.length];
+   leafContact(tr.leaf,uv.x,uv.y,time,p,n);const q=new T.Vector3();leafContact(tr.leaf,next.x,next.y,time,q,tangent);tangent.copy(q).sub(p).normalize();p.addScaledVector(n,.004);
+  }else{const u=distance/a.length*a.route.length,i=Math.floor(u)%a.route.length,j=(i+1)%a.route.length;p.copy(a.route[i]).lerp(a.route[j],u-i);n.copy(a.normals[i]).lerp(a.normals[j],u-i).normalize();tangent.copy(a.route[j]).sub(a.route[i]).normalize();}
+  tangent.multiplyScalar(a.direction);
+ }
+ private startTrip(a:Animal){
+  const target=this.plants.trail(a.position.clone().add(new T.Vector3(Math.sin(a.phase)*.8,.5,Math.cos(a.phase)*.5)),false,this.usedLeaves);if(!target)return;
+  const to=new T.Vector3(),normal=new T.Vector3();leafContact(target.leaf,target.points[0].x,target.points[0].y,this.waterTime,to,normal);to.addScaledVector(normal,.004);
+  const delta=to.clone().sub(a.position),direction=delta.clone().normalize(),up=new T.Vector3(0,1,0);
+  // Sweep the full body through the water before accepting a departure.
+  for(let j=1;j<20;j++){const f=j/20,p=a.position.clone().lerp(to,f).addScaledVector(up,Math.sin(f*Math.PI)*.20);if(!this.plants.clear(p,up,direction,false,this.waterTime,f<.15?a.trail?.leaf:f>.85?target.leaf:undefined)){this.usedLeaves.delete(target.leaf);return;}}
+  a.flight={from:a.position.clone(),to,target,progress:0,duration:Math.max(2.5,delta.length()/.22),retreat:false,originDistance:a.distance};a.grazing=false;
+ }
+ update(dt:number,currentTime?:number){
+  if(!this.root.visible||(this.initialized&&dt<=0))return;
+  dt=Math.min(.1,Math.max(0,dt));this.waterTime=currentTime??this.waterTime+dt;
   this.counts=this.pools.map(()=>0);
-  for(const a of this.animals){advanceGrazer(a,Math.min(.1,Math.max(0,dt)));const u=a.distance/a.length*a.route.length,i=Math.floor(u)%a.route.length,j=(i+1)%a.route.length;
-   a.position.copy(a.route[i]).lerp(a.route[j],u-i);a.normal.copy(a.normals[i]).lerp(a.normals[j],u-i).normalize();this.tangent.copy(a.route[j]).sub(a.route[i]).normalize();this.binormal.crossVectors(this.tangent,a.normal).normalize();this.tangent.crossVectors(a.normal,this.binormal).normalize();this.rotation.makeBasis(this.tangent,a.normal,this.binormal);a.matrix.copy(this.rotation).setPosition(a.position);a.matrix.scale(this.size.setScalar(a.kind==='shrimp'?.80+a.id%3*.04:.84));
+  for(const a of this.animals){
+   const old=a.distance;advanceGrazer(a,dt);a.distance=(old+(a.distance-old+a.length)%a.length*a.direction+a.length)%a.length;
+   if(a.kind==='shrimp'&&this.plants.leaves.length&&!a.flight&&dt){a.tripIn-=dt;if(a.tripIn<=0){this.startTrip(a);a.tripIn=20+rand(a)*30;}}
+   if(a.flight){
+    const flight=a.flight,previous=flight.progress;flight.progress=T.MathUtils.clamp(flight.progress+dt/flight.duration*(flight.retreat?-1:1),0,1);let f=flight.progress,s=f*f*(3-2*f);const uv=flight.target.points[0];
+    const sourceNormal=new T.Vector3(),sourceTangent=new T.Vector3();this.contact(a,flight.originDistance,this.waterTime,flight.from,sourceNormal,sourceTangent);leafContact(flight.target.leaf,uv.x,uv.y,this.waterTime,flight.to,a.normal);flight.to.addScaledVector(a.normal,.004);
+    a.position.copy(flight.from).lerp(flight.to,s);a.position.y+=Math.sin(s*Math.PI)*.20;this.tangent.copy(flight.to).sub(flight.from).normalize().multiplyScalar(flight.retreat?-1:1);a.normal.lerp(sourceNormal,1-s).lerp(new T.Vector3(0,1,0),Math.sin(f*Math.PI)).normalize();a.speed=.15;
+    if(dt&&!flight.retreat&&!this.plants.clear(a.position,a.normal,this.tangent,false,this.waterTime,f<.15?a.trail?.leaf:f>.85?flight.target.leaf:undefined)){
+     flight.progress=previous;flight.retreat=true;f=previous;s=f*f*(3-2*f);a.position.copy(flight.from).lerp(flight.to,s);a.position.y+=Math.sin(s*Math.PI)*.20;
+    }
+    if(flight.retreat&&f===0){this.usedLeaves.delete(flight.target.leaf);a.distance=flight.originDistance;a.flight=undefined;a.grazing=true;a.remaining=3;a.speed=0;this.contact(a,a.distance,this.waterTime,a.position,a.normal,this.tangent);}
+    if(f===1){if(a.trail)this.usedLeaves.delete(a.trail.leaf);a.trail=flight.target;a.length=a.trail.length;a.distance=0;a.direction=1;a.flight=undefined;a.grazing=true;a.remaining=5+rand(a)*8;a.speed=0;}
+   }else{
+    this.contact(a,a.distance,this.waterTime,a.position,a.normal,this.tangent);
+    // Cached paths are prevalidated. Staggered checks catch moving neighbors.
+    a.blocked-=dt;if(dt&&a.id<7&&a.blocked<=0){a.blocked=.18+a.id*.007;if(!this.plants.clear(a.position,a.normal,this.tangent,a.kind==='snail',this.waterTime,a.trail?.leaf)){a.distance=old;a.direction*=-1;a.speed=0;a.grazing=true;a.remaining=1.5;this.contact(a,a.distance,this.waterTime,a.position,a.normal,this.tangent);}}
+   }
+   // Turn along the contact plane instead of flipping the body at a reversal.
+   if(dt&&a.heading){const forward=new T.Vector3().setFromMatrixColumn(a.matrix,0).projectOnPlane(a.normal).normalize(),desired=this.tangent.clone().projectOnPlane(a.normal).normalize();const angle=Math.atan2(a.normal.dot(new T.Vector3().crossVectors(forward,desired)),forward.dot(desired));this.tangent.copy(forward).applyAxisAngle(a.normal,T.MathUtils.clamp(angle,-dt*2.8,dt*2.8));}a.heading=1;
+   this.binormal.crossVectors(this.tangent,a.normal).normalize();this.tangent.crossVectors(a.normal,this.binormal).normalize();this.rotation.makeBasis(this.tangent,a.normal,this.binormal);a.matrix.copy(this.rotation).setPosition(a.position);a.matrix.scale(this.size.setScalar(a.kind==='shrimp'?.80+a.id%3*.04:.84));
    if(a.kind==='shrimp')this.shrimp(a);else this.snail(a);
   }
-  this.pools.forEach((p,i)=>{p.count=this.counts[i];p.instanceMatrix.needsUpdate=true;});
+  this.pools.forEach((p,i)=>{p.count=this.counts[i];p.instanceMatrix.needsUpdate=true;});this.initialized=true;
  }
  private shrimp(a:Animal){
-  const t=a.phase,walk=a.speed/.06;
+  const t=a.phase,walk=a.flight?.35:Math.min(1,a.speed/.06);
   this.part(a,7,0,0,0,1,1,1);this.part(a,11,0,0,0,1,1,1);
   for(let k=0;k<6;k++){
    const x=-.102-k*.037,y=.116+Math.sin(k/5*Math.PI)*.014-k*.003,flex=Math.sin(t*1.3-k*.46)*.017*(.35+walk);
    this.part(a,8,x,y,0,.04,[.046,.045,.042,.036,.028,.017][k],[.039,.038,.035,.030,.024,.015][k],flex);
    if(k<5)for(const side of [-1,1]){
-    const flap=.24*Math.sin(t*3.4-k*.84+side*.7),args=[x,y-.03,side*.022,.30,.6,.48,flap,side*.3] as const;
+    const flap=(a.flight?.52:.24)*Math.sin(t*(a.flight?15:3.4)-k*.84+side*.7),args=[x,y-.03,side*.022,.30,.6,.48,flap,side*.3] as const;
     this.part(a,9,...args);this.part(a,10,...args);
    }
   }
@@ -118,7 +154,7 @@ export class Invertebrates{
   }
   this.part(a,2,.224,.003,0,.009,.0017,.006);this.part(a,4,.225,.006,0,.013+Math.sin(t*2.5)*.0015,.004,.011);
  }
- info(id:number):Identification|null{const a=this.animals[id];if(!a)return null;return {kind:'invertebrate',animalId:id,name:a.kind==='shrimp'?`Cherry shrimp ${id+1}`:`Ramshorn snail ${id-5}`,subtitle:a.kind==='shrimp'?'Neocaridina davidi · cherry shrimp model':'Planorbid ramshorn · representative model',needs:'Stable clean water, suitable mineral availability, food and safe grazing surfaces.',role:a.kind==='shrimp'?'Picks biofilm and small food particles with its front appendages. Its legs walk while its antennae explore.':'Grazes surface films using a radula. A muscular foot maintains contact with the glass or substrate.',behavior:a.kind==='shrimp'?(a.grazing?'Picking at a feeding patch.':'Walking to another feeding patch.'):'Slow surface crawling and grazing. These animals recycle material; they also produce waste.',point:a.position.clone()};}
+ info(id:number):Identification|null{const a=this.animals[id];if(!a)return null;return {kind:'invertebrate',animalId:id,name:a.kind==='shrimp'?`Cherry shrimp ${id+1}`:`Ramshorn snail ${id-5}`,subtitle:a.kind==='shrimp'?'Neocaridina davidi · cherry shrimp model':'Planorbid ramshorn · representative model',needs:'Stable clean water, suitable mineral availability, food and safe grazing surfaces.',role:a.kind==='shrimp'?'Picks biofilm and small food particles with its front appendages. Its legs walk while its antennae explore.':'Grazes surface films using a radula. A muscular foot maintains contact with the glass or substrate.',behavior:a.kind==='shrimp'?(a.flight?'Swimming to another leaf using the swimmerets.':a.trail?(a.grazing?'Attached to a leaf, picking at biofilm.':'Climbing around a living leaf.'):a.grazing?'Picking at a feeding patch.':'Walking to another feeding patch.'):'Slow surface crawling and grazing. These animals recycle material; they also produce waste.',point:a.position.clone()};}
  pick(ray:T.Raycaster){const hit=ray.intersectObjects(this.pools,false)[0];if(!hit||hit.instanceId===undefined)return null;const pool=this.pools.indexOf(hit.object as T.InstancedMesh);return {distance:hit.distance,info:this.info(this.owners[pool][hit.instanceId])!};}
  dispose(){const geometries=new Set(this.pools.map(p=>p.geometry)),materials=new Set(this.pools.map(p=>p.material as T.Material));geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());this.textures.forEach(t=>t.dispose());this.root.removeFromParent();}
 }
