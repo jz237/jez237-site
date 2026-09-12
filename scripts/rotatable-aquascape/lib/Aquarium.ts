@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import {Invertebrates} from './Invertebrates';
 import {PlantPicker,trackFish,type Identification} from './Exploration';
 import type {FishPoint} from './FishBrain';
 import {TeachingScene} from './TeachingScene';
@@ -71,6 +72,7 @@ export class Aquarium{
  private fill=new T.HemisphereLight(0xc2e2e6,0x74846a,.9);
  private swimShader={value:0};
  private waterIllumination={value:1};
+ private invertebrates:Invertebrates|null=null;private inspectingAnimal:number|null=null;
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
  private school=createSchoolRoute();
  private schoolEyes:SchoolEyes|null=null;
@@ -145,6 +147,8 @@ export class Aquarium{
   this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader)]).then(async()=>{
    if(!(import.meta.env.DEV&&new URLSearchParams(location.search).has('originalIndices')))optimizeLeafIndexOrder(this.scene);
    calmSwordLeaves(this.scene);
+   this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
+   this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces);
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
@@ -193,17 +197,21 @@ export class Aquarium{
   let closest=Infinity,info:Identification|null=null;
   const plant=this.picker?.pick(ray);if(plant){closest=plant.distance;info=plant.info;}
   this.fishes.forEach(({model},id)=>{if(!model.group.visible)return;const hit=ray.intersectObjects(model.group.children,false).find(h=>!(h.object as T.Mesh).material||(h.object as T.Mesh).material&&!((h.object as T.Mesh).material as T.Material).transparent);if(hit&&hit.distance<closest){closest=hit.distance;info=this.fishInfo(id);}});
+  const grazer=this.invertebrates?.pick(ray);if(grazer&&grazer.distance<closest){closest=grazer.distance;info=grazer.info;}
   const blocked=ray.intersectObjects(this.pickBlockers,false)[0];if(blocked&&blocked.distance<closest-.025)info=null;
   this.selection=info;this.onIdentify(info);
  }
  private fishInfo(id:number):Identification{const fish=this.fishes[id];return {kind:'fish',fishId:id,name:'Cardinal tetra '+(id+1),subtitle:'Paracheirodon axelrodi',needs:'Companions, sheltered planting, clean oxygenated water and suitably small food.',role:'A small predator that forages for tiny animal prey among leaves, roots and litter.',behavior:tetraBehaviorLabel(fish.swim),point:fish.model.group.position.clone()};}
  identifyFish(id:number){if(!this.fishes.length)return;id=Math.max(0,Math.min(this.fishes.length-1,id));this.selection=this.fishInfo(id);this.onIdentify(this.selection);}
+ identifyAnimal(id:number){const info=this.invertebrates?.info(id);if(info){this.selection=info;this.onIdentify(info);}}
+ inspectAnimal(){if(this.selection?.animalId===undefined)return;const a=this.invertebrates?.animals[this.selection.animalId];if(!a)return;this.follow(null);const p=a.position,side=new T.Vector3().setFromMatrixColumn(a.matrix,2),forward=new T.Vector3().setFromMatrixColumn(a.matrix,0),offset=side.multiplyScalar(1.1).addScaledVector(forward,.5).addScaledVector(a.normal,.8);this.controls.target.copy(p).addScaledVector(a.normal,.09);this.camera.position.copy(this.controls.target).add(offset);this.camera.fov=37;this.camera.updateProjectionMatrix();this.inspectingAnimal=a.id;this.controls.minDistance=.7;this.controls.minPolarAngle=0;this.controls.maxPolarAngle=Math.PI;this.controls.minAzimuthAngle=-Infinity;this.controls.maxAzimuthAngle=Infinity;this.targetCamera=null;this.targetFov=null;this.controls.update();}
+
  identifyPlant(species:string){const info=this.picker?.example(species);if(info){this.selection=info;this.onIdentify(info);}}
- get selectedFishStatus(){return this.selection?.fishId!==undefined?tetraBehaviorLabel(this.fishes[this.selection.fishId].swim):'';}
+ get selectedFishStatus(){if(this.selection?.animalId!==undefined)return this.invertebrates?.info(this.selection.animalId)?.behavior??'';return this.selection?.fishId!==undefined?tetraBehaviorLabel(this.fishes[this.selection.fishId].swim):'';}
  follow(id:number|null){
   if(id!==null&&!this.fishes[id])return;
-  this.following=id;this.followApproach=id!==null;this.targetCamera=null;this.targetFov=null;this.controls.minDistance=id===null?10.8:4.5;
-  if(id===null){const offset=this.camera.position.clone().sub(this.controls.target);this.controls.target.set(0,2.75,0);this.camera.position.copy(this.controls.target).add(offset.setLength(Math.max(10.8,offset.length())));}
+  this.inspectingAnimal=null;this.following=id;this.followApproach=id!==null;this.targetCamera=null;this.targetFov=null;this.controls.minDistance=id===null?10.8:4.5;
+  if(id===null){this.controls.minPolarAngle=Math.PI*.31;this.controls.maxPolarAngle=Math.PI*.515;this.controls.minAzimuthAngle=-Math.PI*.42;this.controls.maxAzimuthAngle=Math.PI*.46;const offset=this.camera.position.clone().sub(this.controls.target);this.controls.target.set(0,2.75,0);this.camera.position.copy(this.controls.target).add(offset.setLength(Math.max(10.8,offset.length())));}
   this.controls.update();
  }
  setMagnifier(enabled:boolean){this.lighting.lens.enabled=enabled;this.controls.enableRotate=!enabled;this.controls.enableZoom=!enabled;this.host.classList.toggle('magnifier-on',enabled);this.moveLens(.5,.48);}
@@ -212,6 +220,7 @@ export class Aquarium{
  private updateSelection(){
   const selected=this.selection;if(!selected||this.teaching?.mode){this.selectionRing.hidden=true;return;}
   if(selected.fishId!==undefined)selected.point.copy(this.fishes[selected.fishId].model.group.position);
+  if(selected.animalId!==undefined){const animal=this.invertebrates?.animals[selected.animalId];if(animal)selected.point.copy(animal.position);}
   this.camera.updateMatrixWorld();const p=selected.point.clone().project(this.camera);this.selectionRing.hidden=p.z>1||p.z< -1||Math.abs(p.x)>1||Math.abs(p.y)>1;
   this.selectionRing.style.transform=`translate(${(p.x*.5+.5)*this.host.clientWidth}px,${(-p.y*.5+.5)*this.host.clientHeight}px) translate(-50%,-50%)`;
  }
@@ -296,7 +305,7 @@ export class Aquarium{
  private studyFov(){return this.teaching?.mode==='underground'?Math.max(37,2*Math.atan(2.7/(10*this.host.clientWidth/this.host.clientHeight))*180/Math.PI):37;}
  get magnifierEnabled(){return this.lighting.lens.enabled;}
  private get studyView(){return this.teaching?.mode==='organisms'||this.teaching?.mode==='underground'||this.teaching?.mode==='water'&&this.teaching.step>0&&this.teaching.step<4;}
- view(name:string){if(this.following!==null)this.follow(null);const dist=this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera);}
+ view(name:string){this.follow(null);const dist=this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera);}
  private resize(){
   const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;
   // Fit continuously across viewport shapes while retaining the user's zoom distance.
@@ -355,6 +364,8 @@ export class Aquarium{
   if(dt){const bodies=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,radius:25}));separateFish(bodies,[-.40,1.40]);bodies.forEach((b,i)=>{Object.assign(this.fishes[i].swim,{x:b.x,y:b.y,z:b.z});this.avoidSolid(this.fishes[i].swim);});}
   this.fishes.forEach(({model,swim:s})=>{model.group.position.copy(fishPosition(s.x,s.y,s.z));model.group.rotation.set(0,s.yaw+s.depthHeading,s.pitch,'YXZ');model.update(this.time,s.effort,this.texture,.65,s.z,1,dt,s.pectoralEffort);});
   if(this.following!==null){if(this.followApproach){const offset=this.camera.position.clone().sub(this.controls.target),ease=1-Math.exp(-wallDt*2.2);offset.setLength(T.MathUtils.lerp(offset.length(),7.5,ease));this.camera.position.copy(this.controls.target).add(offset);this.camera.fov=T.MathUtils.lerp(this.camera.fov,37,ease);this.camera.updateProjectionMatrix();if(Math.abs(offset.length()-7.5)<.01)this.followApproach=false;}trackFish(this.camera,this.controls.target,this.fishes[this.following].model.group.position,wallDt);this.controls.update();}
+  if(dt)this.invertebrates?.update(dt);
+  if(this.inspectingAnimal!==null&&this.invertebrates){const a=this.invertebrates.animals[this.inspectingAnimal];trackFish(this.camera,this.controls.target,a.position.clone().addScaledVector(a.normal,.09),wallDt);this.controls.update();}
   this.updateSelection();
   this.status=this.food.length?'Foraging':this.fishes.length?tetraBehaviorLabel(this.fishes[0].swim):'Exploring';
   for(let i=this.food.length-1;i>=0;i--){const f=this.food[i];f.age+=dt;f.mesh.position.y-=dt*.07;f.mesh.rotation.y+=dt*.5;if(f.age>48){this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();this.food.splice(i,1);}}
