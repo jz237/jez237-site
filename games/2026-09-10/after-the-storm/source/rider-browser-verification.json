@@ -1,0 +1,50 @@
+{
+  "version": "2.1.0",
+  "date": "2026-09-12",
+  "renderer": "Graphical Chrome, Radeon 8060S/Mesa",
+  "fullSuite": {
+    "passed": 296,
+    "failed": 0,
+    "seconds": 217.24
+  },
+  "finalFocused": {
+    "passed": 37,
+    "failed": 0,
+    "countsOverlapFullSuite": true
+  },
+  "independentReview": {
+    "passed": 24,
+    "report": "RIDER-REVIEW.md"
+  },
+  "sceneDriveChecks": {
+    "scenes": 11,
+    "venues": 9,
+    "gameErrors": 0,
+    "missingGameRequests": 0,
+    "pauseAndTakeover": true,
+    "completeBrowserTourRepeated": false
+  },
+  "modes": {
+    "splitScreen": true,
+    "salvage": true,
+    "optionalAssetFallback": true
+  },
+  "touch": {
+    "viewports": [
+      [
+        390,
+        844
+      ],
+      [
+        844,
+        390
+      ]
+    ],
+    "multiPointerOwnership": true,
+    "autoBrakePrecedence": true,
+    "pauseReset": true,
+    "course": "Pelican Park, calm sea",
+    "note": "Control isolation uses calm open water; initial rough-water attempt correctly entered wipeout after hitting shore."
+  },
+  "physicalMobileOrGamepadHardwareTested": false
+}

@@ -22,9 +22,10 @@ def material(name,color,metal=0,rough=.4,coat=0):
  bs.inputs['Coat Weight'].default_value=coat;bs.inputs['Coat Roughness'].default_value=.16
  materials[name]=m;specs[name]={'color':int(color,16),'metalness':metal,'roughness':rough,'clearcoat':coat,'clearcoatRoughness':.16}
  return m
-material('Pearl ceramic','e8ece8',.22,.24,1)
+material('Pearl ceramic','39474d',.32,.27,1)
 material('Rider livery','d95b24',.28,.27,1)
-material('Graphite composite','17272e',.35,.3,.7)
+material('Graphite composite','152027',.35,.25,.9)
+material('Carbon fibre','202a30',.32,.34,.85)
 material('Soft saddle','202a30',0,.76)
 material('Traction rubber','10181d',0,.87)
 material('Brushed titanium','83949b',.84,.3)
@@ -97,7 +98,7 @@ loft('02 / Pearl upper deck',[
 loft('03 / Sculpted livery hood',[
  (.05,.21,.55,.4),(.16,.34,.64,.41),(.48,.37,.79,.45),(.88,.35,.8,.46),(1.25,.29,.67,.44),(1.66,.13,.52,.43),(1.88,.008,.45,.43)],'Rider livery')
 loft('04 / Recessed center bonnet',[
- (.6,.12,.809,.773),(.69,.17,.821,.78),(.97,.16,.79,.75),(1.35,.095,.654,.62),(1.58,.004,.552,.53)],'Graphite composite',sub=2)
+ (.6,.12,.809,.773),(.69,.17,.821,.78),(.97,.16,.79,.75),(1.35,.095,.654,.62),(1.58,.004,.552,.53)],'Carbon fibre',sub=2)
 for side in [-1,1]:
  tube('Continuous rub rail',[(side*.52,.23,-1.87),(side*.72,.27,-1.1),(side*.745,.32,-.1),(side*.66,.37,.7),(side*.46,.42,1.3),(side*.2,.45,1.79),(0,.4,2.04)],.025,'Traction rubber')
  tube('Lower spray chine',[(side*.5,-.13,-1.81),(side*.64,-.12,-1.15),(side*.66,-.06,-.2),(side*.53,.06,.65),(side*.3,.2,1.4)],.016,'Warm accent')
@@ -116,6 +117,13 @@ for side in [-1,1]:
  for k in range(6):tube('Intake louver',[(side*(.37-k*.005),.56+k*.016,.45+k*.071),(side*(.421-k*.009),.51+k*.021,.62+k*.065)],.009,'Dark anodized metal')
  text('Hull nameplate','T I D E L I N E',(side*.751,.281,-.48),.071,'Lettering',side)
  text('Rear series','R—01',(side*.689,.265,-1.5),.095,'Lettering',side)
+ # Split composite fairings, inset access fasteners and rescue tow hardpoints.
+ panel('Composite rear shoulder',[(side*.47,.346,-1.63),(side*.624,.365,-1.18),(side*.642,.397,-.46),(side*.66,.37,-.34),(side*.684,.33,-1.27)],'Carbon fibre')
+ tube('Deck moulding seam',[(side*.57,.36,-1.43),(side*.66,.4,-.52),(side*.61,.465,.3),(side*.48,.56,.92)],.004,'Traction rubber')
+ for z in [-1.54,-.86,-.2]:
+  rod('Recessed deck screw',(side*.621,.356,z),(side*.621,.366,z),.013,'Dark anodized metal')
+  box('Screwdriver slot',(side*.621,.368,z),(.013,.002,.002),'Traction rubber',.001)
+ tube('Rear race accent',[(side*.52,.325,-1.75),(side*.595,.348,-1.32),(side*.63,.365,-.9)],.012,'Rider livery')
 
 # Ergonomic stepped saddle with piping and visible upholstered ribs.
 loft('05 / Saddle support',[
@@ -132,6 +140,10 @@ box('Rear boarding platform',(0,.255,-1.82),(1.10,.085,.34),'Graphite composite'
 box('Boarding traction pad',(0,.304,-1.83),(.92,.024,.25),'Traction rubber',.025)
 for k in range(12):box('Platform traction',(k*.071-.39,.32,-1.83),(.024,.008,.20),'Soft saddle',.003)
 tube('Passenger grab handle',[(-.36,.48,-1.34),(-.43,.56,-1.52),(-.31,.61,-1.66),(.31,.61,-1.66),(.43,.56,-1.52),(.36,.48,-1.34)],.028,'Graphite composite')
+for side in [-1,1]:
+ box('Transom service hatch',(side*.34,.231,-1.971),(.23,.105,.016),'Carbon fibre',.012)
+ rod('Tow eye mounting',(side*.48,.197,-1.951),(side*.48,.197,-1.978),.033,'Brushed titanium')
+ tube('Stainless tow eye',[(side*.458,.197,-1.975),(side*.458,.198,-2.025),(side*.505,.198,-2.025),(side*.505,.197,-1.975)],.007,'Brushed titanium')
 for side in [-1,1]:rod('Boarding step hinge',(side*.44,.13,-1.88),(side*.44,.03,-2.0),.025,'Brushed titanium')
 tube('Fold down boarding step',[(-.44,.04,-2.0),(-.34,-.005,-2.04),(.34,-.005,-2.04),(.44,.04,-2.0)],.026,'Traction rubber')
 rod('Fuel filler neck',(0,.79,.93),(0,.816,.93),.065,'Dark anodized metal')

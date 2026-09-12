@@ -1,8 +1,15 @@
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const angle = v => Math.atan2(Math.sin(v), Math.cos(v));
+// Translate with the subject before damping the relative camera framing.
+// Otherwise a 4/s position lerp adds speed/4 metres to the selected zoom,
+// hiding the rider just when body animation matters most.
+export function translateFollow(memory,rider,position,target){
+  if(memory.x!==undefined){const dx=rider.x-memory.x,dz=rider.z-memory.z;position.x+=dx;position.z+=dz;target.x+=dx;target.z+=dz;}
+  memory.x=rider.x;memory.z=rider.z;
+}
 // The lens follows the travel line and a suspended water datum. Hull pitch,
 // rider tricks and momentary handlebar reversals never roll the horizon.
-export function chaseFrame(memory, rider, dt, { orbit = 0, zoom = 11, pitch = .22 } = {}) {
+export function chaseFrame(memory, rider, dt, { orbit = 0, zoom = 8, pitch = .22 } = {}) {
   dt = clamp(dt, 0, .1);
   const h = rider.hydro, speed = Math.hypot(rider.vx, rider.vz);
   const water = Number.isFinite(h.waterHeight) ? h.waterHeight : 0;
@@ -21,6 +28,6 @@ export function chaseFrame(memory, rider, dt, { orbit = 0, zoom = 11, pitch = .2
   return {
     position: { x: rider.x - fx * distance, y: memory.water + 1.35 + Math.sin(pitch) * distance - pace * .4 + memory.lift, z: rider.z - fz * distance },
     target: { x: rider.x + Math.sin(memory.heading + turnLook) * look, y: memory.water + .85 + memory.lift * 1.5, z: rider.z + Math.cos(memory.heading + turnLook) * look },
-    fov: 62 + pace * 11
+    fov: 58 + pace * 7
   };
 }

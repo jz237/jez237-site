@@ -1,4 +1,5 @@
 import * as T from './vendor/three.module.js';
+import {craftUV} from './craft-materials.js';
 const cache=new Map();
 export function loadCraftLOD(name){
  if(!cache.has(name))cache.set(name,(async()=>{
@@ -9,8 +10,7 @@ export function loadCraftLOD(name){
    return meta.meshes.map(part=>{
     const g=new T.BufferGeometry(),values=new Float32Array(buffer,part.offset,part.vertices*6),data=new T.InterleavedBuffer(values,6);
     g.setAttribute('position',new T.InterleavedBufferAttribute(data,3,0));g.setAttribute('normal',new T.InterleavedBufferAttribute(data,3,3));
-    const uv=new Float32Array(part.vertices*2);for(let i=0;i<part.vertices;i++){uv[i*2]=values[i*6]*9;uv[i*2+1]=values[i*6+1]*9;}
-    g.setAttribute('uv',new T.BufferAttribute(uv,2));g.computeBoundingSphere();return g;
+    craftUV(g);g.computeBoundingSphere();return g;
    });
   }catch{return null;}
  })());
