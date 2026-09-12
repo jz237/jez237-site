@@ -1,0 +1,6 @@
+export type ChallengeId='filter'|'carbon'|'feeding';
+export const challenges={
+ filter:{question:'If filter flow stops, how will dissolved oxygen compare with the balanced tank after six simulated hours?',choices:['Lower','About the same','Higher'],answer:0,experiment:'flow',metric:'oxygen',explanation:'In this model, reduced circulation weakens gas exchange while respiration continues. The comparison includes the same light cycle in both tanks.'},
+ carbon:{question:'With CO₂ supply off, which tank will have less dissolved CO₂ after six simulated hours?',choices:['The changed tank','Both stay identical','The balanced tank'],answer:0,experiment:'carbon',metric:'co2',explanation:'The changed tank loses its supplied carbon input. Plants, respiration and surface exchange continue; switching supply off does not instantly remove all CO₂.'},
+ feeding:{question:'What will an extra food load do to the modeled ammonia pool over the next six hours?',choices:['Raise it above the control','Make it vanish','Keep both identical'],answer:0,experiment:'food',metric:'ammonia',explanation:'Decomposition adds reduced nitrogen. Microbial processing takes time, so extra food can raise the ammonia pool compared with the same tank without that extra load.'}
+} as const;
