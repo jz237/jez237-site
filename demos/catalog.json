@@ -89,22 +89,22 @@
   },
   {
     "id": "005",
-    "title": "Defender — Inside the Arcade",
+    "title": "Defender, Robotron & Joust — Inside the Arcade",
     "category": "3D · Arcade preservation",
-    "description": "Explore a weathered arcade cabinet after closing. Separate 13 assemblies, trace its circuitry, and watch an autonomous Defender-inspired battle on the glowing CRT.",
+    "description": "Explore three arcade cabinets after closing. Click Defender, Robotron or Joust to bring it forward, separate its assemblies, trace the circuits and watch autonomous battles with original sprites and sounds.",
     "url": "defender-exhibit/",
     "image": "assets/defender-exhibit.webp",
     "imageAlt": "Live exploded Defender exhibit with a detailed cabinet and autonomous space battle on its CRT",
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/defender-exhibit",
     "features": [
       "Hero, exploded & X-ray views",
-      "Autonomous Defender display",
-      "Seven-chapter guided tour",
+      "Defender, Robotron & Joust displays",
+      "Machine-specific guided tours",
       "CRT close-up watch mode"
     ],
     "facts": [
       "13 assemblies",
-      "Original cabinet art",
+      "Original game sprites & sound",
       "Automatic combat & rescues"
     ],
     "note": "WebGL · Desktop & mobile · Interpretive model · Preview captured from the live exhibit"

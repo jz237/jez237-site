@@ -43,5 +43,3 @@ for(const [material,b] of buckets){
 }
 for(const s of root.listScenes())if(s!==scene)s.dispose();for(const node of oldNodes)node.dispose();root.setDefaultScene(scene);
 await io.write(process.argv[3] ?? 'prepared.glb',doc); console.log({total,stats});
-
-
