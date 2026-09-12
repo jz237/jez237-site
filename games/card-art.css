@@ -5,7 +5,7 @@
 .gallery-cover .icon-cover{background:#08121d;overflow:hidden;border-color:#7892a755;box-shadow:inset 0 0 0 1px #cedde512,0 8px 20px #0005}
 .gallery-cover .cover-art{padding:0;filter:none;overflow:hidden}
 .game-card:hover .gallery-cover .cover-art{filter:brightness(1.1);transform:scale(1.025)}
-.cover-art .ca-motion{transform-box:fill-box;transform-origin:center;animation-play-state:paused!important;animation-delay:var(--lag,0s)}
+.cover-art .ca-motion{transform-box:fill-box;transform-origin:center;animation-play-state:paused!important;animation-delay:calc(var(--scene-phase,0s) + var(--lag,0s))}
 .cover-art.cover-visible .ca-motion{animation-play-state:running!important}
 .gallery-motion-paused .cover-art .ca-motion{animation-play-state:paused!important}
 .ca-glimmer{animation:coverGlimmer 3.4s ease-in-out infinite}
@@ -61,4 +61,74 @@
 @keyframes coverRotor{from{transform:scaleX(.5);opacity:.5}to{transform:scaleX(1);opacity:1}}
 @keyframes coverSlash{0%,50%{transform:translate(-8px,6px);opacity:0}65%{opacity:1}85%,100%{transform:translate(5px,-4px);opacity:0}}
 @keyframes coverSwing{0%,100%{transform:rotate(-6deg)}50%{transform:rotate(6deg)}}
-@media(prefers-reduced-motion:reduce){.cover-art .ca-motion{animation:none!important}.game-card:hover .gallery-cover .cover-art{transform:none}}
+/* Fine light, separated depth planes, and actions with a shared scene clock. */
+.game-card .gallery-cover{isolation:isolate;transition:transform .35s ease,border-color .35s ease,box-shadow .35s ease}
+.game-card .gallery-cover::before,.game-card .gallery-cover::after{animation:none!important}
+.gallery-cover .icon-cover{border:1px solid color-mix(in srgb,var(--icon-a) 48%,#36516a);background:#091622}
+.gallery-cover .cover-art{transition:filter .35s ease,transform .5s ease}
+.game-card:focus-within .gallery-cover{border-color:var(--icon-a);box-shadow:0 0 0 2px color-mix(in srgb,var(--icon-a) 38%,transparent),0 12px 25px #0006}
+.game-card:focus-within .gallery-cover .cover-art{filter:brightness(1.12)}
+.ca-dust{animation:coverDust 9s ease-in-out infinite}
+.ca-ember{animation:coverEmber 6s ease-out infinite}
+.ca-water-mote{animation:coverWaterMote 8s ease-in-out infinite}
+.ca-light-water{animation:coverLightWater 11s ease-in-out infinite}
+.ca-star-streak{animation:coverStarStreak 7s linear infinite}
+.ca-cloud{animation:coverCloud 17s ease-in-out infinite}
+.ca-sea{animation:coverSea 5.6s ease-in-out infinite}
+.ca-road-flow{animation:coverRoadFlow .85s linear infinite}
+.ca-coastal-car{animation:coverCoastalCar 6s ease-in-out infinite}
+.ca-spray{animation:coverSpray 1.6s ease-out infinite}
+.ca-flipper-left{animation:coverFlipperLeft 4.8s ease-in-out infinite;transform-box:view-box!important;transform-origin:28px 54px!important}
+.ca-flipper-right{animation:coverFlipperRight 4.8s ease-in-out infinite;transform-box:view-box!important;transform-origin:71px 54px!important}
+.ca-ball-run{animation:coverBallRun 4.8s linear infinite}
+.ca-bumper-0{animation:coverBumper0 4.8s ease-out infinite}
+.ca-bumper-1{animation:coverBumper1 4.8s ease-out infinite}
+.ca-bumper-2{animation:coverBumper2 4.8s ease-out infinite}
+.ca-insert{animation:coverInsert 2.4s ease-in-out infinite}
+.ca-punch{animation:coverPunch 5.2s ease-in-out infinite;transform-origin:0 80%!important}
+.ca-guard{animation:coverGuard 5.2s ease-in-out infinite}
+.ca-fighter-step{animation:coverFighterStep 5.2s ease-in-out infinite}
+.ca-rival-step{animation:coverRivalStep 5.2s ease-in-out infinite}
+.ca-hit{animation:coverHit 5.2s ease-out infinite}
+.ca-wheel{animation:coverWheel .7s linear infinite}
+.ca-speed{animation:coverSpeed 1.4s linear infinite}
+.ca-race-car{animation:coverRaceCar 5s ease-in-out infinite}
+.ca-asteroid{animation:coverAsteroid 14s ease-in-out infinite}
+.ca-enemy{animation:coverEnemy 8s ease-in-out infinite}
+.ca-bank{animation:coverBank 7s ease-in-out infinite}
+.ca-laser{animation:coverLaser 2.8s linear infinite}
+@keyframes coverDust{0%,100%{transform:translate(0,0);opacity:.25}50%{transform:translate(2px,-3px);opacity:.8}}
+@keyframes coverEmber{0%{transform:translate(0,5px);opacity:0}25%{opacity:.75}100%{transform:translate(4px,-10px);opacity:0}}
+@keyframes coverWaterMote{0%,100%{transform:translate(-2px,1px);opacity:.3}50%{transform:translate(3px,-3px);opacity:.8}}
+@keyframes coverLightWater{0%,100%{transform:translateX(-2px) skewX(-4deg);opacity:.6}50%{transform:translateX(3px) skewX(3deg);opacity:1}}
+@keyframes coverStarStreak{0%,68%{transform:translate(0,-7px);opacity:0}74%{opacity:.6}100%{transform:translate(-5px,20px);opacity:0}}
+@keyframes coverCloud{0%,100%{transform:translateX(-2px)}50%{transform:translateX(4px)}}
+@keyframes coverSea{0%,100%{transform:translateX(-2px);opacity:.5}50%{transform:translateX(3px);opacity:.9}}
+@keyframes coverRoadFlow{to{stroke-dashoffset:-10}}
+@keyframes coverCoastalCar{0%,100%{transform:translate(-1px,0) rotate(-2deg)}45%{transform:translate(2px,-1px) rotate(3deg)}70%{transform:translate(1px,.4px) rotate(1deg)}}
+@keyframes coverSpray{0%{transform:translate(0,-1px) scale(.6);opacity:0}20%{opacity:.7}100%{transform:translate(-3px,6px) scale(1.4);opacity:0}}
+@keyframes coverFlipperLeft{0%,7%{transform:rotate(-24deg)}12%,92%{transform:rotate(0)}97%,100%{transform:rotate(-24deg)}}
+@keyframes coverFlipperRight{0%,75%,95%,100%{transform:rotate(0)}83%,89%{transform:rotate(24deg)}}
+@keyframes coverBallRun{0%,100%{transform:translate(-6px,4px)}20%{transform:translate(-13px,-22px)}40%{transform:translate(11px,-23px)}60%{transform:translate(0,-11px)}78%{transform:translate(19px,0)}85%{transform:translate(10px,4px)}}
+@keyframes coverBumper0{0%,18%,35%,100%{opacity:.18;transform:scale(.8)}21%{opacity:1;transform:scale(1.25)}}
+@keyframes coverBumper1{0%,38%,55%,100%{opacity:.18;transform:scale(.8)}41%{opacity:1;transform:scale(1.25)}}
+@keyframes coverBumper2{0%,58%,75%,100%{opacity:.18;transform:scale(.8)}61%{opacity:1;transform:scale(1.25)}}
+@keyframes coverInsert{0%,100%{opacity:.25}40%,65%{opacity:1}}
+@keyframes coverPunch{0%,32%,64%,100%{transform:rotate(12deg) translateX(-2px)}44%,50%{transform:rotate(0) translateX(6px)}}
+@keyframes coverGuard{0%,35%,75%,100%{transform:rotate(-14deg)}45%,60%{transform:rotate(-35deg)}}
+@keyframes coverFighterStep{0%,25%,80%,100%{transform:translate(0,0)}40%,53%{transform:translate(3px,-.4px)}65%{transform:translate(1px,.6px)}}
+@keyframes coverRivalStep{0%,40%,80%,100%{transform:translate(0,.5px)}49%{transform:translate(-3px,-.6px) rotate(-5deg)}62%{transform:translate(-2px,0)}}
+@keyframes coverHit{0%,44%,60%,100%{opacity:0;transform:scale(.5)}48%{opacity:.95;transform:scale(1)}55%{opacity:0;transform:scale(1.4)}}
+@keyframes coverWheel{to{transform:rotate(360deg)}}
+@keyframes coverSpeed{0%{transform:translate(0,-3px);opacity:0}20%{opacity:.6}100%{transform:translate(-4px,14px);opacity:0}}
+@keyframes coverRaceCar{0%,100%{transform:translate(-1px,0) rotate(-1deg)}35%{transform:translate(2px,-.5px) rotate(1deg)}70%{transform:translate(.5px,.4px)}}
+@keyframes coverAsteroid{0%,100%{transform:translate(-2px,-2px) rotate(-15deg)}50%{transform:translate(4px,3px) rotate(30deg)}}
+@keyframes coverEnemy{0%,100%{transform:translate(-3px,0)}50%{transform:translate(4px,2px)}}
+@keyframes coverBank{0%,100%{transform:translate(-2px,1px) rotate(-5deg)}35%{transform:translate(3px,-1px) rotate(7deg)}70%{transform:translate(1px,0) rotate(0)}}
+@keyframes coverLaser{0%,58%{transform:translateY(10px);opacity:0}62%{opacity:.9}82%,100%{transform:translateY(-22px);opacity:0}}
+@media(prefers-reduced-motion:reduce){
+  .cover-art .ca-motion{animation:none!important}
+  .cover-art .ca-hit{opacity:0}
+  .game-card .gallery-cover,.gallery-cover .cover-art{transition:none}
+  .game-card:hover .gallery-cover .cover-art{transform:none}
+}
