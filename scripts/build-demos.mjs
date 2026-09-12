@@ -15,8 +15,8 @@ const cards = demos.map((demo, i) => {
   readFileSync(new URL(`${demo.url}index.html`, root));
   readFileSync(new URL(demo.image, root));
   if (demo.alternateUrl !== undefined) {
-    if (!/^[a-z0-9][a-z0-9/-]*\/$/i.test(demo.alternateUrl) || typeof demo.alternateLabel !== 'string' || !demo.alternateLabel.trim()) throw new Error(`Invalid alternate view for ${demo.title}`);
-    readFileSync(new URL(`${demo.alternateUrl}index.html`, root));
+    if (!/^[a-z0-9][a-z0-9/-]*(?:\/|\.html)$/i.test(demo.alternateUrl) || typeof demo.alternateLabel !== 'string' || !demo.alternateLabel.trim()) throw new Error(`Invalid alternate view for ${demo.title}`);
+    readFileSync(new URL(demo.alternateUrl.endsWith('/') ? `${demo.alternateUrl}index.html` : demo.alternateUrl, root));
   }
   const d = Object.fromEntries(Object.entries(demo).filter(([,v]) => typeof v === 'string').map(([k,v]) => [k,escape(v)]));
   return `<article class="demo-card${i === 0 ? ' featured' : ''}">

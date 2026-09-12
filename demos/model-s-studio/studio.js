@@ -156,7 +156,7 @@ async function loadModel() {
 }
 
 function pick(e){const rect=renderer.domElement.getBoundingClientRect();pointer.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);raycaster.setFromCamera(pointer,camera);const meshes=state.board?board.visible.flatMap(e=>[e.mesh,e.plane]):parts.filter(p=>p.mesh.visible).map(p=>p.mesh);return raycaster.intersectObjects(meshes,false)[0]?.object;}
-function reflowBoard(force=false){if(!board)return;const key=parts.filter(p=>p.mesh.visible).map(p=>p.id).join(',');if(force||key!==boardKey){boardKey=key;board.layout($('viewport').clientWidth,$('viewport').clientHeight,p=>p.mesh.visible);boardControls?.target.set(0,0,0);}$('board-count').textContent=`${board.visible.length} / ${parts.length} PIECES`;}
+function reflowBoard(force=false){if(!board)return;const key=parts.filter(p=>p.mesh.visible).map(p=>p.id).join(',');if(force||key!==boardKey){boardKey=key;board.layout($('viewport').clientWidth,$('viewport').clientHeight,p=>p.mesh.visible);boardControls?.target.set(0,0,0);if(state.board)window.scrollTo(0,0);}$('board-count').textContent=`${board.visible.length} / ${parts.length} PIECES`;}
 function toggleBoard(on){
  if(!state.ready)return;stopSequence();viewTween=null;state.board=on;document.body.classList.toggle('board-mode',on);$('all-parts').setAttribute('aria-pressed',on);$('board-header').hidden=!on;model.visible=!on;board.group.visible=on;studioObjects.forEach(o=>o.visible=!on);scene.fog=on?null:studioFog;controls.enabled=false;
  if(on){
@@ -219,7 +219,7 @@ function bindControls(){
  $('explode-button').onclick=()=>setAmount(state.target>.5?0:1);
  $('animate').onclick=()=>{if(state.board)toggleBoard(false);if(state.sequence){stopSequence();return;}state.sequence=true;state.sequenceTime=0;state.isolated=false;selectPart(null);$('animate').textContent='Ⅱ Pause sequence';};
  $('all-parts').onclick=()=>{if(!state.board){state.system='all';state.cabin=false;state.isolated=false;$('system').value='all';$('cabin').setAttribute('aria-pressed','false');selectPart(null);updateList();}toggleBoard(!state.board);};
- $('fit-parts').onclick=()=>{board.fit();controls.target.set(0,0,0);};
+ $('fit-parts').onclick=()=>{board.fit();controls.target.set(0,0,0);window.scrollTo(0,0);};
  $('return-car').onclick=()=>toggleBoard(false);
  $('battery-view').onclick=()=>{if(state.board)toggleBoard(false);state.system='Battery';state.cabin=false;state.isolated=false;$('system').value='Battery';$('cabin').setAttribute('aria-pressed','false');setAmount(1);selectPart(parts.find(p=>p.name==='Battery · sealed upper cover'));updateList();setTimeout(()=>{if(state.system==='Battery'&&!state.board){model.updateMatrixWorld(true);const b=new THREE.Box3();parts.filter(p=>p.group==='Battery').forEach(p=>b.expandByObject(p.mesh));const center=b.getCenter(new THREE.Vector3()),radius=b.getSize(new THREE.Vector3()).length()/2,distance=radius/Math.sin(THREE.MathUtils.degToRad(camera.fov/2))*Math.max(1,1/camera.aspect)*1.1;viewTween={start:performance.now(),from:camera.position.clone(),to:center.clone().addScaledVector(new THREE.Vector3(3.5,3.3,4.5).normalize(),distance),fromTarget:controls.target.clone(),toTarget:center};}},900);};
  $('reset').onclick=reset;

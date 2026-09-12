@@ -137,15 +137,15 @@
     "id": "007",
     "title": "Model S Studio",
     "category": "3D · Electric vehicle",
-    "description": "Explore a metallic silver Model S Plaid in 308 selectable pieces. See every part on a dedicated board, examine the added schematic battery and open the operating manual and technical reference.",
+    "description": "Explore a silver Model S Plaid in 308 selectable pieces, then take the driver’s seat. Inspect the cockpit, try the interactive software study and discover the schematic battery anatomy.",
     "url": "model-s-studio/",
     "image": "assets/model-s-studio.jpg",
     "imageAlt": "Actual Model S Studio showing a silver Tesla Model S Plaid with separated body panels, glass, wheels, cabin surfaces and an added schematic battery",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/model-s-studio",
     "features": [
       "All 308 pieces on one board",
+      "Driver’s seat & interactive display",
       "Layered schematic battery anatomy",
-      "Silver finish & detailed materials",
       "Operating manual & technical reference"
     ],
     "facts": [
@@ -153,6 +153,8 @@
       "308 visual pieces",
       "Mouse & touch"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Artist model by 3D Hawk, CC BY 4.0 · Preview captured from the running demo"
+    "note": "WebGL 2 · Desktop & mobile · Artist model by 3D Hawk, CC BY 4.0 · Preview captured from the running demo",
+    "alternateUrl": "model-s-studio/cockpit.html",
+    "alternateLabel": "Enter the driver’s seat"
   }
 ]

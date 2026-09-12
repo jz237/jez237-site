@@ -2,7 +2,10 @@
   "name": "jez237-model-s-studio-tools",
   "private": true,
   "type": "module",
-  "scripts": { "verify": "node verify.mjs" },
+  "scripts": {
+    "verify": "node verify.mjs",
+    "verify:cockpit": "node verify-cockpit.mjs"
+  },
   "devDependencies": {
     "@gltf-transform/cli": "4.5.0",
     "@gltf-transform/core": "4.5.0",

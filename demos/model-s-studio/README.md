@@ -16,6 +16,12 @@ The [operating manual and technical reference](https://jez237.com/demos/model-s-
 
 Desktop and touch layouts are supported. WebGL 2 is required. Reduced-motion settings remove automatic transition easing; the assembly sequence and auto-orbit start only when requested.
 
+## Driver’s seat and software study
+
+Open [the cockpit](https://jez237.com/demos/model-s-studio/cockpit.html) from the studio’s **Enter the driver’s seat** link. Four interior cameras, first-person look controls, illuminated instruments and an interactive center display use the same vehicle asset. Navigation, climate, charging and vehicle-control pages are original software simulations with fictional map data and readings. Controls work on the 3D touchscreen and in an enlarged, keyboard-accessible interface. Battery level, appearance and vent airflow share one state. There are no vehicle connections, proprietary firmware or paid services. The manual describes scope and links official Tesla references.
+
+Validate with `node scripts/model-s-studio/verify-cockpit.mjs` after installing the tooling dependencies.
+
 ## Run locally
 
 From the repository root, run `python -m http.server 8768`, then open `http://localhost:8768/demos/model-s-studio/`. No build step or service keys are required. Three.js 0.180.0, its loader, orbit controls, procedural softbox environment, and Meshopt decoder are vendored with the Three.js license. Fonts use Google Fonts with system fallbacks.
