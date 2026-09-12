@@ -1,0 +1,13 @@
+{
+  "name": "jez237-model-s-studio-tools",
+  "private": true,
+  "type": "module",
+  "scripts": { "verify": "node verify.mjs" },
+  "devDependencies": {
+    "@gltf-transform/cli": "4.5.0",
+    "@gltf-transform/core": "4.5.0",
+    "@gltf-transform/functions": "4.5.0",
+    "playwright": "1.63.0",
+    "three": "0.180.0"
+  }
+}

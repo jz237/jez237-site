@@ -56,6 +56,10 @@ use these instructions before writing code or snippets.
   Commodore 64 SID music, Commodore Amiga music, and AI-generated music.
 - `/ai-sounds/player-lab.html` - player UI lab for AI sounds.
 - `/games/` - GameMaster Arcade and playable prototypes.
+- `/demos/model-s-studio/` - interactive Tesla Model S Plaid exploded-view
+  studio with 297 visual pieces, paint finishes, cabin view and part isolation.
+  Listed in the Website Demos catalog; source and validation tools are in
+  `demos/model-s-studio/` and `scripts/model-s-studio/`.
 - `/weather/` - local weather console.
 - `/stock-market/` - Stock Command Center.
 - `/ops/` - operations, stats, runtime notes, and dashboard material.
