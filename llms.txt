@@ -57,7 +57,8 @@ use these instructions before writing code or snippets.
 - `/ai-sounds/player-lab.html` - player UI lab for AI sounds.
 - `/games/` - GameMaster Arcade and playable prototypes.
 - `/demos/model-s-studio/` - interactive Tesla Model S Plaid exploded-view
-  studio with 297 visual pieces, paint finishes, cabin view and part isolation.
+  studio with 308 visual pieces, an all-parts board, silver finishes, an added
+  schematic battery, operations manual, technical references and part isolation.
   Listed in the Website Demos catalog; source and validation tools are in
   `demos/model-s-studio/` and `scripts/model-s-studio/`.
 - `/weather/` - local weather console.
