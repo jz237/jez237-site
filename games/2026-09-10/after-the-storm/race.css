@@ -79,3 +79,16 @@ header:before{content:"";position:fixed;inset:0 0 auto;height:250px;background:l
 .launch-actions #start,.launch-actions #demoStart{margin:0;font-size:14px;padding:15px 18px;flex:1;min-width:160px}
 .launch-actions #demoStart{color:#e9eadb;background:#153944bb;border:1px solid #d6c7a780}
 @media(max-height:500px){.intro{padding-top:72px}.intro h1{font-size:40px;margin:8px 0}.intro>.eyebrow{display:none}.intro>p{margin:8px 0}.launch-actions{margin:12px 0}.launch-actions #start,.launch-actions #demoStart{padding:12px 14px}.touch-choice small{font-size:10px}}
+/* Keep the closer demo craft unobstructed; touch retains its tap-to-show tray. */
+@media (min-width:1000px) and (min-height:501px) and (pointer:fine){
+ #demoPanel{top:16px;bottom:auto;width:min(640px,calc(100% - 420px));padding:9px 12px;gap:14px;align-items:center;text-align:left}
+ #demoPanel:not([hidden]){display:flex}
+ #demoPanel>div:first-child{flex:1;min-width:0}
+ #demoPanel small{display:none}
+ #demoPanel strong{font-size:12px;margin:0 0 3px}
+ #demoPanel span{font-size:10px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+ #demoPanel .demo-buttons{margin:0;flex-wrap:nowrap;gap:4px}
+ #demoPanel .demo-buttons button{min-height:38px;padding:7px 9px;font-size:11px}
+ .demo-active .telemetry{bottom:36px}
+ .demo-active #chart{bottom:36px}
+}
