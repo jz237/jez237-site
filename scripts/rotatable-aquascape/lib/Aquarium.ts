@@ -78,7 +78,7 @@ export class Aquarium{
  private schoolEyes:SchoolEyes|null=null;
  private gpuTimer:GpuFrameTimer|null=null;
  private texture=new T.Texture();
- private obstacles:Obstacle[]=[];
+ private obstacles:Obstacle[]=[];private grazerFishPrevious=new Map<number,T.Vector3>();
  private food:{mesh:T.Mesh;age:number}[]=[];
  private dust:T.Points;
  private bubbles:T.InstancedMesh;
@@ -148,7 +148,7 @@ export class Aquarium{
    if(!(import.meta.env.DEV&&new URLSearchParams(location.search).has('originalIndices')))optimizeLeafIndexOrder(this.scene);
    calmSwordLeaves(this.scene);
    this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
-   this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3]);
+   this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3],this.obstacles);
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
@@ -364,7 +364,10 @@ export class Aquarium{
   if(dt){const bodies=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,radius:25}));separateFish(bodies,[-.40,1.40]);bodies.forEach((b,i)=>{Object.assign(this.fishes[i].swim,{x:b.x,y:b.y,z:b.z});this.avoidSolid(this.fishes[i].swim);});}
   this.fishes.forEach(({model,swim:s})=>{model.group.position.copy(fishPosition(s.x,s.y,s.z));model.group.rotation.set(0,s.yaw+s.depthHeading,s.pitch,'YXZ');model.update(this.time,s.effort,this.texture,.65,s.z,1,dt,s.pectoralEffort);});
   if(this.following!==null){if(this.followApproach){const offset=this.camera.position.clone().sub(this.controls.target),ease=1-Math.exp(-wallDt*2.2);offset.setLength(T.MathUtils.lerp(offset.length(),7.5,ease));this.camera.position.copy(this.controls.target).add(offset);this.camera.fov=T.MathUtils.lerp(this.camera.fov,37,ease);this.camera.updateProjectionMatrix();if(Math.abs(offset.length()-7.5)<.01)this.followApproach=false;}trackFish(this.camera,this.controls.target,this.fishes[this.following].model.group.position,wallDt);this.controls.update();}
-  if(dt)this.invertebrates?.update(dt,this.currentTime);
+  if(dt&&this.invertebrates){const contacts=this.fishes.map((f,id)=>({id,position:f.model.group.position.clone(),previous:this.grazerFishPrevious.get(id),forward:V(1,0,0).applyQuaternion(f.model.group.quaternion),size:f.size}));this.invertebrates.update(dt,this.currentTime,contacts);
+   for(const [id,point] of this.invertebrates.fishCorrections){const f=this.fishes[id];Object.assign(f.swim,fishCoordinates(point));startleTetra(f.swim);this.avoidSolid(f.swim);f.model.group.position.copy(fishPosition(f.swim.x,f.swim.y,f.swim.z));}
+   this.fishes.forEach((f,id)=>this.grazerFishPrevious.set(id,f.model.group.position.clone()));
+  }
   if(this.inspectingAnimal!==null&&this.invertebrates){const a=this.invertebrates.animals[this.inspectingAnimal];trackFish(this.camera,this.controls.target,a.position.clone().addScaledVector(a.normal,.09),wallDt);this.controls.update();}
   this.updateSelection();
   this.status=this.food.length?'Foraging':this.fishes.length?tetraBehaviorLabel(this.fishes[0].swim):'Exploring';

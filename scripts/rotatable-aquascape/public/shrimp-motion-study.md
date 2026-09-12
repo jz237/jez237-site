@@ -17,3 +17,14 @@ The animation varies abdominal posture during grazing, walking, takeoff, travel 
 Five swimmeret pairs use staggered strokes with continuous phase across speed changes. Their blades spread more during the power stroke and fold during recovery. Stroke rate eases with activity. Walking legs draw inward during swimming and return toward the leaf at landing. Tail-fan spread varies with activity and posture.
 
 All six shrimp share the original detailed geometry and render batches. Leaf-contact paths, swimming route clearance, individual behavior and pause remain active. This is an evidence-informed animation, not a measured species-specific biomechanics reconstruction or a fluid dynamics solver.
+
+
+## Contact and escape response update
+
+Walking legs now begin at embedded thoracic hip sockets, with a continuous socket-to-upper-leg-to-knee chain. Tests cast through the modeled shell to verify that each of the ten roots lies inside it.
+
+Grazers use articulated-body-sized collision volumes with checks along both translation and turning, rather than testing only the destination. These cover neighboring grazers, botanical leaves and stems, scanned fern fronds, hardscape envelopes, tank boundaries, substrate and the glass plumbing. Swimmers yield when blocked; moving landing points cannot cause a jump when a route clears. The slower snail is allocated a suitable clear leaf first. If no plant path fits an animal, a glass path is used rather than placing it inside ground cover.
+
+Fish contact is tested along the fish's motion in three dimensions, so a fast crossing cannot skip over a shrimp and projected overlap at a different depth does not count. On contact, the fish is held outside the shrimp's body. The shrimp selects a short backward/upward escape path, briefly flexes its abdomen and then settles back. A cooldown prevents repeated continuous contact from restarting the animation. If all escape exits are blocked, it makes a small defensive posture adjustment rather than crossing an obstacle. These timings and the return behavior are illustrative animation choices.
+
+Collision shapes conservatively approximate bodies and hardscape. Individual antenna hairs, each toe and the fluid displaced by a tail stroke are not separately simulated. Original detailed rendered geometry is retained; nearby animated collision surfaces are cached per frame.
