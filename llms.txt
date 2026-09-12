@@ -59,6 +59,8 @@ use these instructions before writing code or snippets.
 - `/demos/model-s-studio/` - interactive Tesla Model S Plaid exploded-view
   studio with 308 visual pieces, an all-parts board, silver finishes, an added
   schematic battery, operations manual, technical references and part isolation.
+  `/demos/model-s-studio/cockpit.html` adds interior cameras and a simulated
+  interactive touchscreen with navigation, climate, charging and vehicle controls.
   Listed in the Website Demos catalog; source and validation tools are in
   `demos/model-s-studio/` and `scripts/model-s-studio/`.
 - `/weather/` - local weather console.
