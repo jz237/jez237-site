@@ -1,4 +1,5 @@
 import './style.css';
+import {installFullscreen} from './lib/Fullscreen';
 import {installExploration} from './lib/ExplorationUI';
 import {installLearning} from './lib/LearningUI';
 import {Aquarium} from './lib/Aquarium';
@@ -14,8 +15,10 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
  <aside class="help"><span>EXPLORE THE TANK</span><p>Drag to rotate<br>Scroll or pinch to zoom</p></aside>
  <footer><div class="views" role="group" aria-label="Camera view"><button data-view="front" class="active">Front</button><button data-view="angle">Three-quarter</button><button data-view="side">Side</button></div>
  <div class="actions"><button id="zoomIn" aria-label="Zoom in">＋</button><button id="zoomOut" aria-label="Zoom out">−</button><span class="divider"></span><button id="feed">Feed fish</button><button id="pause" aria-pressed="false">Pause</button><button id="light" aria-pressed="false">Evening</button><button id="reset" aria-label="Reset camera">Reset view</button></div></footer>
+ <button id="fullscreen" aria-pressed="false">Full screen</button>
  <div class="bottom-note">A separate 3D study <span>·</span> All scenery has volume</div>
 </main>`;
+installFullscreen(document.querySelector('main')!,document.querySelector<HTMLButtonElement>('#fullscreen')!);
 const host=document.querySelector<HTMLDivElement>('#scene')!;
 async function start(){
  try{
