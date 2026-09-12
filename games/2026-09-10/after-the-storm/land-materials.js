@@ -2,7 +2,7 @@ import {waterLevel} from './simulation.js';
 export const coastalLighting={time:{value:0},storm:{value:0},seaLevel:waterLevel};
 import * as T from './vendor/three.module.js';
 
-const dryAtlas=new T.DataTexture(new Uint8Array([0,0,0,255]),1,1);dryAtlas.needsUpdate=true;
+const dryAtlas=new T.DataTexture(new Uint8Array([0,0,0,0]),1,1);dryAtlas.needsUpdate=true;
 export const shoreline={shoreMap:{value:dryAtlas},shoreCenter:{value:new T.Vector2()},shoreSpan:{value:240}};
 
 // Local CC0 photographic surfaces; all instances share the same GPU textures.
@@ -57,9 +57,15 @@ vec3 earth=mix(mix(sandy,rocky,stoneWeight),grassy,plantWeight)*(.80+macro*.33);
 earth=mix(earth,vec3(.76,.86,.89)*(0.85+macro*.2),snowCover*smoothstep(.15,.8,ln.y));
 vec2 shoreUV=(landP.xz-shoreCenter)/shoreSpan+.5;
 float shoreInside=step(0.,shoreUV.x)*step(shoreUV.x,1.)*step(0.,shoreUV.y)*step(shoreUV.y,1.);
-float recentWash=texture2D(shoreMap,shoreUV).b*shoreInside;
-float wet=max(1.-smoothstep(-.15,.4,altitude),recentWash)*(1.-plantWeight*.85)*(1.-snowCover);
-earth*=1.-wet*.40;
+vec2 beachHistory=texture2D(shoreMap,shoreUV).ba*shoreInside;
+float sandExposure=(1.-plantWeight*.9)*(1.-snowCover);
+// No permanent wet strip above sea level: the footprint belongs to real wash.
+float wet=max(1.-smoothstep(-.25,-.03,altitude),beachHistory.x)*sandExposure;
+float film=beachHistory.y*sandExposure;
+float damp=smoothstep(.015,.95,wet);
+earth*=1.-damp*.46;
+// Fresh water fills pore spaces; the film drains before the sand lightens.
+earth=mix(earth,earth*vec3(.87,.94,.97),film*.3);
 vec2 cuv=landP.xz*.19+vec2(time*.012,-time*.007);
 float c1=texture2D(detailMap,cuv).b,c2=texture2D(detailMap,mat2(.8,-.6,.6,.8)*landP.xz*.237-vec2(time*.009,0)).b;
 float caustic=max(0.,min(c1,c2)*3.-.65),submerged=seaLevel-landP.y;
@@ -71,13 +77,15 @@ earth*=1.+cos(bedPhase)*.065*bedMask;
 diffuseColor.rgb*=earth;`);
   s.fragmentShader=s.fragmentShader.replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
 float sr=triColor(sandRough,sandUV,tw).r,rr=triColor(rockRough,rockUV,tw).r,gr=triColor(soilRough,soilUV,tw).r;
-roughnessFactor=clamp(mix(mix(sr,rr,stoneWeight),gr,plantWeight)*.5+.42-wet*.25,.22,1.);`);
+float dryRoughness=clamp(mix(mix(sr,rr,stoneWeight),gr,plantWeight)*.5+.42,.65,1.);
+roughnessFactor=mix(dryRoughness,dryRoughness*.72,damp);
+roughnessFactor=mix(roughnessFactor,.18,smoothstep(.05,.95,film)*.9);`);
   s.fragmentShader=s.fragmentShader.replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
 vec3 surfaceN=normalize(mix(mix(triNormal(sandNormal,sandUV,tw,ln),triNormal(rockNormal,rockUV,tw,ln),stoneWeight),triNormal(soilNormal,soilUV,tw,ln),plantWeight));
 surfaceN=normalize(surfaceN+vec3(.9,0.,3.6)*sin(bedPhase)*.024*bedMask);
-normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7))),0.)).xyz);`);
+normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7)*(1.-film*.35))),0.)).xyz);`);
  };
- mat.customProgramCacheKey=()=>`photographic-coast-bed-v3-${palette.grass??0}`;
+ mat.customProgramCacheKey=()=>`photographic-coast-drying-v4-${palette.grass??0}`;
 }
 
 export function rockMaterial(){
