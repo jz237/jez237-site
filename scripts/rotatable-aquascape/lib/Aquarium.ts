@@ -13,6 +13,7 @@ import {buildScannedHardscape,buildScannedFerns} from './ScannedHardscape';
 import {AquariumWater} from './AquariumWater';
 import {buildAquariumGlass} from './AquariumGlass';
 import {ReflectionPool} from './ReflectionPool';
+import {CaptureScheduler} from './CaptureScheduler';
 import {SceneRefraction} from './SceneRefraction';
 import {applyWaterDepth} from './WaterDepth';
 import {applyBakedIrradiance} from './BakedIrradiance';
@@ -100,6 +101,8 @@ export class Aquarium{
  private bubbles:T.InstancedMesh;
  private water:AquariumWater;
  private reflections=new ReflectionPool();
+ private captureScheduler=new CaptureScheduler();
+ private staggerCaptures=new URLSearchParams(location.search).get('captures')==='staggered'||(matchMedia('(pointer: coarse)').matches&&new URLSearchParams(location.search).get('captures')!=='full'&&new URLSearchParams(location.search).get('renderer')!=='previous');
  private refraction:SceneRefraction|null=null;
  private frame=0;
  private diagnosticTime=0;private diagnosticFrames=0;
@@ -118,6 +121,7 @@ export class Aquarium{
   this.renderer.shadowMap.autoUpdate=false;
   this.lighting=new AquariumLighting(this.scene,this.camera);
   host.appendChild(this.renderer.domElement);
+  host.dataset.captureMode=this.staggerCaptures?'staggered, full resolution':'every frame, full resolution';
   if(new URLSearchParams(location.search).get('stats')==='1')this.perfReadout=new PerformanceReadout(host,this.renderer.domElement);
   this.renderer.domElement.tabIndex=0;
   this.renderer.domElement.setAttribute('aria-label','Aquarium. Drag to rotate, use the view and zoom buttons below.');
@@ -149,6 +153,7 @@ export class Aquarium{
    light.position.set(x,canopy.height,canopy.depth);light.target.position.set(x*canopy.targetXScale,canopy.targetHeight,canopy.depth);
    light.castShadow=true;light.shadow.mapSize.set(1536,1536);light.shadow.camera.near=.1;light.shadow.camera.far=20;
    light.shadow.bias=-.00015;light.shadow.normalBias=.018;light.shadow.radius=3;
+   light.shadow.autoUpdate=false;light.shadow.needsUpdate=true;
    this.canopyLights.push(light);this.scene.add(light,light.target);
   }
   const rim=new T.DirectionalLight(0xd2dfbf,.65);rim.position.set(-5,6,-3);this.scene.add(rim);
@@ -190,7 +195,7 @@ export class Aquarium{
    this.frame=requestAnimationFrame(this.animate);
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
-  document.addEventListener('visibilitychange',()=>{this.last=0;if(document.hidden)this.frameBenchmark?.cancel();});
+  document.addEventListener('visibilitychange',()=>{this.last=0;this.captureScheduler.invalidate();if(document.hidden)this.frameBenchmark?.cancel();});
  }
  private installFrameBenchmark(){
   const readout=this.perfReadout!;
@@ -200,6 +205,7 @@ export class Aquarium{
    resolution(mode==='pixels'?pixelRatio*.5:pixelRatio);
   },()=>{
    resolution(pixelRatio);this.controls.enabled=controlsEnabled;this.last=0;
+   this.captureScheduler.invalidate();
    this.renderer.shadowMap.needsUpdate=true;
   },(message,done)=>readout.benchmark(message,done));
   readout.onTest=()=>{
@@ -213,9 +219,22 @@ export class Aquarium{
   readout.enableTest();
  }
  private drawAquarium(probe:FrameProbe='normal'){
-  this.renderer.shadowMap.needsUpdate=probe!=='shadows'&&probe!=='captures';
-  if(this.refraction&&probe!=='reflections'&&probe!=='captures')this.reflections.prepare(this.renderer,this.scene,this.camera);
-  return this.lighting.render(this.renderer,this.lightingInspection,probe!=='contact');
+  const mirrors=this.refraction?this.reflections.visible(this.camera):[];
+  const shadows=probe!=='shadows'&&probe!=='captures';
+  const reflections=probe!=='reflections'&&probe!=='captures';
+  const ids=[...(shadows?this.canopyLights.map(l=>l.uuid):[]),...(reflections?mirrors.map(m=>m.uuid):[])];
+  const selected=this.captureScheduler.select(ids,this.camera,`${this.teaching?.mode}:${this.teaching?.step}`,this.staggerCaptures);
+  for(const light of this.canopyLights)light.shadow.needsUpdate=selected.has(light.uuid);
+  this.renderer.shadowMap.needsUpdate=this.canopyLights.some(l=>l.shadow.needsUpdate);
+  // Even an empty selection manages the mirror hooks: the main render must not
+  // silently recapture them. Projection/depth matrices stay paired with their
+  // captured image, so a reused image remains anchored to the tank.
+  try{
+   if(this.refraction)this.reflections.prepare(this.renderer,this.scene,this.camera,selected);
+   const triangles=this.lighting.render(this.renderer,this.lightingInspection,probe!=='contact');
+   this.captureScheduler.complete(selected);
+   return triangles;
+  }catch(error){this.captureScheduler.invalidate();throw error;}
  }
  private installGlassTap(){
   const canvas=this.renderer.domElement;
