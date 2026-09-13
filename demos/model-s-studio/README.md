@@ -45,3 +45,7 @@ See `../../scripts/model-s-studio/README.md` for the reproducible geometry prepa
 ## Guided tour and interior details
 
 `tour.html` presents nine stops with manual navigation, optional 10-second playback, a stop menu, scene interaction that pauses playback, and a live touchscreen at the last stop. `?stop=battery` or another stop key opens a specific chapter. Only one embedded renderer is loaded at a time. `cockpit.html?view=seats`, `door`, `pedals`, and `console` expose the four new close-ups of the existing artist geometry. Reduced-motion visitors get immediate camera changes.
+
+## Interior finish pass
+
+The cockpit refines 103 source surfaces with physically based upholstery, carpet, fabric, brushed metal and trim materials. Small procedural textures need no external image downloads. Seat normals are smoothed across compatible shared positions while preserving creases; 584 surface-following thread dashes and 15 pedal grip strips add close-up detail. These are illustrative finish details on the artist model. A cached 1024px cabin shadow map supplies depth, and the screen adds subtle light at night. The exterior studio and its 308-piece breakdown retain their existing geometry and finish.
