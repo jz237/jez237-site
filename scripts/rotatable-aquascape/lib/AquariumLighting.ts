@@ -45,14 +45,14 @@ export class AquariumLighting {
   try{renderer.setRenderTarget(this.beauty);await renderer.compileAsync(this.scene,this.camera);}
   finally{renderer.setRenderTarget(target);}
  }
- render(renderer:T.WebGLRenderer,inspect:string|null){
+ render(renderer:T.WebGLRenderer,inspect:string|null,contact=true){
   const target=renderer.getRenderTarget();
   try{
    renderer.setRenderTarget(this.beauty);renderer.render(this.scene,this.camera);
    const triangles=renderer.info.render.triangles;
    this.contact.output=GTAOPass.OUTPUT.Off;
-   this.contact.render(renderer,this.beauty,this.beauty,0,false);
-   this.output.uniforms.inspectionMode.value=inspect==='contact'?1:inspect==='unshaded'?2:0;
+   if(contact)this.contact.render(renderer,this.beauty,this.beauty,0,false);
+   this.output.uniforms.inspectionMode.value=!contact?2:inspect==='contact'?1:inspect==='unshaded'?2:0;
    this.output.uniforms.lensZoom.value=this.lens.enabled?this.lens.zoom:1;
    this.output.render(renderer,this.beauty,this.beauty,0,false);
    return triangles;
