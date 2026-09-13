@@ -1,6 +1,7 @@
 /* Hand-built animated cover illustrations. No game code or remote assets loaded. */
 (() => {
   const entries = {
+    'Mini Moto — Pine Ridge Park':['moto','#ff963d','#87c785',0],
     'After the Storm: Coastal Racing':['coastal','#ffa467','#76dce7',0],
     'Philadelphia Relief':['relief','#69d7e9','#e8c58c',0],
     'Final Blow: Philly After Dark':['fighter','#fe685e','#85a9e9',0],
@@ -77,6 +78,11 @@
 
   function makeScene(type,a,b,v,id){
     const metal=`url(#${id}-metal)`,lit=`url(#${id}-lit)`,haze=`url(#${id}-haze)`;
+    if(type==='moto'){
+      const wheel=(x)=>circle(x,0,7,'#080f17','#b4bdba',1.1)+circle(x,0,4,'#273541',b,.5)+path(`M${x-4} 0h8M${x} -4v8`,'none','#a6babf',.65);
+      const bike=wheel(-15)+wheel(16)+path('M-15 0 -5-12 7-10 16 0M-15 0 4 0 -5-12M4 0 7-10 12-14 16-14','none','#becbd1',1.7)+path('M-11-13 5-14 8-9-5-9Z',a)+path('M-18-8q7-5 12-1M11-8q7-3 12 2','none',a,2)+path('M-2-22 4-20 1-14-5-10 2-3M3-19 9-14 14-14','none','#e8e1d0',3,'stroke-linecap="round"')+circle(1,-25,4.1,a)+path('M1-27h5v3H1Z','#11242e');
+      return path('M0 31 15 20 33 31 49 15 67 28 86 18 100 29V68H0Z','#19312d')+repeat(8,i=>group(path('M0-15-6-3H-4L-8 5H8L4-3H6Z',i%2?'#365343':'#467052')+rect(-1,4,2,5,'#756346'),`translate(${7+i*13} ${28+i%3*5}) scale(.65)`))+path('M0 56Q20 53 42 40T100 34V68H0Z','#846344')+path('M0 60Q20 57 44 44T100 38','none','#c69b69',8)+path('M5 65 22 59M67 43 96 41','none','#503c30',.8)+ellipse(51,57,29,4,'#0006')+group(repeat(4,i=>circle(-23-i*4,2+i%2,2-i*.25,'#c39b68','','',`opacity="${.5-i*.1}"`)),'translate(48 50)','ca-dust')+group(bike,'translate(50 50) rotate(-9)','ca-drive')+path('M88 14V37','none','#c2cec4',1)+rect(88,14,10,7,'#efeadd')+rect(88,14,3,3,'#17232d')+rect(94,14,3,3,'#17232d')+rect(91,17,3,4,'#17232d');
+    }
     const stars=repeat(24,i=>circle(5+(i*37)%91,3+(i*19)%43,i%4===0?.55:.28,i%3?a:b,'',1,`opacity="${.22+(i%4)*.15}"`));
     const horizon=path('M0 40 12 32 22 38 36 22 48 35 66 20 85 34 100 28V68H0Z','#182538')+path('M0 51 19 39 37 50 54 34 74 43 89 36 100 47V68H0Z','#0d1825');
     const floor=path('M0 48H100V68H0Z','#091420')+repeat(6,i=>path(`M${-30+i*32} 68 50 39`,'none',a,.35,'opacity=".13"'))+repeat(4,i=>path(`M0 ${49+i*i*1.7}H100`,'none',a,.35,'opacity=".14"'));
