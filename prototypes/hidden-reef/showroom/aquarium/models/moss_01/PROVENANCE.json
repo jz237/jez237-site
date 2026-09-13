@@ -1,0 +1,45 @@
+{
+  "asset": "Moss 01",
+  "author": "Rob Tuytel",
+  "source": "https://polyhaven.com/a/moss_01",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "files": [
+    {
+      "path": "moss_01_2k.gltf",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/2k/moss_01/moss_01_2k.gltf",
+      "bytes": 18481,
+      "md5": "2a4fd6d96cbe0bbc3f65a657df64ad94"
+    },
+    {
+      "path": "textures/moss_01_nor_gl_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/moss_01/moss_01_nor_gl_2k.jpg",
+      "bytes": 1632699,
+      "md5": "96db55f825bbaefa2ded5c8d1cc6abbe"
+    },
+    {
+      "path": "textures/moss_01_diff_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/moss_01/moss_01_diff_2k.jpg",
+      "bytes": 511727,
+      "md5": "268c4ea561fa189fead481250ab5835c"
+    },
+    {
+      "path": "textures/moss_01_arm_2k.jpg",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/jpg/2k/moss_01/moss_01_arm_2k.jpg",
+      "bytes": 1095803,
+      "md5": "427fabe137e96a5e9f9087fc2220407c"
+    },
+    {
+      "path": "moss_01.bin",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/gltf/4k/moss_01/moss_01.bin",
+      "bytes": 7260,
+      "md5": "cdb092878a81b3208a162d79546892fe"
+    },
+    {
+      "path": "textures/moss_01_alpha_2k.png",
+      "url": "https://dl.polyhaven.org/file/ph-assets/Models/png/2k/moss_01/moss_01_alpha_2k.png",
+      "bytes": 167941,
+      "md5": "838476c334c1c70807d9c3b999b81186"
+    }
+  ]
+}

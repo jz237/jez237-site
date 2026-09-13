@@ -883,6 +883,7 @@
 
   window.THR = window.THR || {};
   window.THR.openProductModal = openProductModal;
+  window.THR.addToPreviewList = addToCart;
 
   function boot() {
     initDemoCart();
