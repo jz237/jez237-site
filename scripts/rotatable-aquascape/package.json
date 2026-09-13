@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc --noEmit && vite build",
+    "build:sites": "npm run build && node ../sync_hidden_reef_showroom.mjs",
     "test": "node --test tests/*.test.mjs"
   },
   "dependencies": {

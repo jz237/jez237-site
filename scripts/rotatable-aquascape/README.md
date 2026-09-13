@@ -13,7 +13,7 @@ npm run build
 npm test
 ```
 
-The production build is in `dist/`. Copy its contents into `demos/rotatable-aquascape/` before site publication. Vite uses relative asset URLs; the demo can also be served independently from any static web server. No API keys, external CDNs, paid services, or external API calls are needed.
+Run `npm run build:sites` to build once and synchronize jez237's demo, Hidden Reef's showroom and the Hidden Reef preview. The user wants every 3D aquarium improvement kept current across these sites. Both deployment preflights check active bundle identity and model/texture bytes with `scripts/check_aquarium_sync.mjs`. Publish both Pages projects and verify their live bundles before reporting completion. Preserve each site's wrapper, theme and navigation. Vite uses relative asset URLs; no API keys, external CDNs, paid services, or external API calls are needed.
 
 ## Scene and controls
 

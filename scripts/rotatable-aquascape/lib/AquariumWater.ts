@@ -2,34 +2,7 @@ import * as T from 'three';
 import {Reflector} from 'three/addons/objects/Reflector.js';
 import {ReflectionPool} from './ReflectionPool';
 import {waterOpticsShader,WATER_LEVEL} from './WaterDepth';
-const ripple=`
-float rippleHeight(vec2 p){
- float inlet=length(p-vec2(4.25,-1.6));
- float agitation=.65+.35*exp(-inlet*.32);
- // Several crossing ripple scales break up the long, regular mirror stripes.
- // Shorter waves change reflection direction without making large water swells.
- vec2 q=p+vec2(sin(p.y*1.9+p.x*.7-time*.29),sin(p.x*1.3-p.y*.8+time*.23))*.09;
- float broad=sin(q.x*2.7+q.y*3.6-time*1.8)*.011;
- float cross=sin(q.x*8.3-q.y*6.8-time*3.2+sin(q.y*1.7)*.65)*.012;
- float secondary=sin(q.x*12.1+q.y*9.7-time*4.8+sin(q.x*.8-time*.23)*.7)*.007;
- // Small, differently directed ripples break the large repeating reflection lobes.
- float fine=sin(q.x*23.2-q.y*17.8-time*7.1)*.002;
- fine+=sin(q.x*31.7+q.y*11.9-time*8.6+sin(q.y*2.3)*.25)*.0014;
- fine+=sin(-q.x*15.3+q.y*37.4-time*10.3)*.0011;
- #ifdef WATER_FRAGMENT
- // Suppress unresolved capillary detail on distant/mobile pixels, rather than sparkle.
- float footprint=max(length(dFdx(p)),length(dFdy(p)));
- fine*=1.-smoothstep(.03,.07,footprint);
- #endif
- float rings=sin(inlet*18.-time*5.4)*exp(-inlet*.8)*.006;
- float edge=min(5.04-abs(p.x),2.30-abs(p.y));
- // A narrow raised meniscus meets the glass; the contact line retains a
- // small part of the passing wave instead of becoming a rigid straight bar.
- float wetEdge=.015*exp(-max(0.,edge)/.025);
- float wallMotion=.12+.88*smoothstep(0.,.18,edge);
- return ((broad+cross+secondary+fine)*agitation+rings)*wallMotion+wetEdge;
-}
-`;
+import {rippleHeightShader,rippleSlopeShader} from './WaterRipples';
 /** Concentrate real surface vertices around the curved glass contact zone. */
 function waterSurfaceGeometry(){
  const geometry=new T.PlaneGeometry(10.08,4.6,320,128),positions=geometry.getAttribute('position');
@@ -50,10 +23,10 @@ export class AquariumWater extends T.Group {
   for(const underside of [true,false]){
    const surface=new Reflector(waterSurfaceGeometry(),{textureWidth:1024,textureHeight:1024,clipBias:.002,multisample:2,shader:{
     name:'AquariumWaterReflection',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},illumination:{value:1},underside:{value:underside?1:0}},
-    vertexShader:`uniform mat4 textureMatrix;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}
+    vertexShader:`uniform mat4 textureMatrix;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${rippleHeightShader}
     void main(){vec3 displaced=position;world=(modelMatrix*vec4(position,1.)).xyz;float wave=rippleHeight(world.xz);displaced.z+=wave*(underside>.5?-1.:1.);world.y+=wave;reflectionUv=textureMatrix*vec4(displaced,1.);gl_Position=projectionMatrix*modelViewMatrix*vec4(displaced,1.);}`,
     fragmentShader:`#define WATER_FRAGMENT
-    uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${ripple}${waterOpticsShader}
+    uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${rippleSlopeShader}${waterOpticsShader}
     // Unpolarized dielectric Fresnel, including the water-to-air critical angle.
     // See PBRT, Specular Reflection and Transmission (FrDielectric).
     float waterFresnel(float cosine){
@@ -69,19 +42,25 @@ export class AquariumWater extends T.Group {
     float reflectedDepth(vec2 uv){
      float depth=texture2D(reflectionDepth,uv).x;
      if(depth>.999999)return -10000.;
-     vec4 p=reflectionInverseProjection*vec4(uv*2.-1.,depth*2.-1.,1.);
-     return p.z/p.w;
+     vec4 clip=vec4(uv*2.-1.,depth*2.-1.,1.);
+     // Only view-space Z is needed, not a complete reconstructed position.
+     float z=dot(vec4(reflectionInverseProjection[0][2],reflectionInverseProjection[1][2],reflectionInverseProjection[2][2],reflectionInverseProjection[3][2]),clip);
+     float w=dot(vec4(reflectionInverseProjection[0][3],reflectionInverseProjection[1][3],reflectionInverseProjection[2][3],reflectionInverseProjection[3][3]),clip);
+     return z/w;
     }
     // Search the captured scene along the bent world-space ray. Geometry outside
     // the capture remains a planar approximation rather than inventing detail.
     vec2 traceReflection(vec3 origin,vec3 direction,vec2 fallback){
      vec3 start=(reflectionView*vec4(origin,1.)).xyz;
      vec3 ray=(reflectionView*vec4(direction,0.)).xyz;
+     // Project the ray once. Matrix multiplication is linear along it.
+     vec4 clipStart=reflectionProjection*vec4(start,1.);
+     vec4 clipRay=reflectionProjection*vec4(ray,0.);
      float previous=.02;
      for(int i=0;i<28;i++){
       float distance=.045+float(i)*.24;
       vec3 p=start+ray*distance;
-      vec4 projected=reflectionProjection*vec4(p,1.);
+      vec4 projected=clipStart+clipRay*distance;
       vec2 uv=projected.xy/projected.w*.5+.5;
       if(projected.w<=0.||any(lessThan(uv,vec2(.002)))||any(greaterThan(uv,vec2(.998))))break;
       float delta=reflectedDepth(uv)-p.z;
@@ -89,7 +68,7 @@ export class AquariumWater extends T.Group {
        float low=previous,high=distance;
        for(int j=0;j<4;j++){
         float mid=(low+high)*.5;vec3 q=start+ray*mid;
-        vec4 clip=reflectionProjection*vec4(q,1.);vec2 sampleUv=clip.xy/clip.w*.5+.5;
+        vec4 clip=clipStart+clipRay*mid;vec2 sampleUv=clip.xy/clip.w*.5+.5;
         if(reflectedDepth(sampleUv)>q.z){high=mid;uv=sampleUv;}else low=mid;
        }
        return uv;
@@ -100,9 +79,8 @@ export class AquariumWater extends T.Group {
     }
     void main(){
      vec3 viewDirection=normalize(cameraPosition-world);
-     float dx=(rippleHeight(world.xz+vec2(.012,0.))-rippleHeight(world.xz-vec2(.012,0.)))/.024;
-     float dz=(rippleHeight(world.xz+vec2(0.,.012))-rippleHeight(world.xz-vec2(0.,.012)))/.024;
-     vec3 rippleNormal=normalize(vec3(-dx,1.,-dz));
+     float waterFootprint=max(length(dFdx(world.xz)),length(dFdy(world.xz)));
+     vec3 rippleNormal=normalize(rippleSlope(world.x,world.z,1.-smoothstep(.03,.07,waterFootprint)));
      float cosine=abs(dot(viewDirection,rippleNormal));
      vec3 flatRay=reflect(-viewDirection,vec3(0.,1.,0.));
      vec3 wavyRay=reflect(-viewDirection,rippleNormal);

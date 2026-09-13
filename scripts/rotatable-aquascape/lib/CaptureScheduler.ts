@@ -1,5 +1,16 @@
 import {Matrix4,Quaternion,Vector3,type Camera} from 'three';
 
+/** Reflection captures shade the whole scene; shadow captures only write depth.
+ * Interleave these classes instead of clustering three expensive views together. */
+export function interleaveCaptures(shadows:readonly string[],mirrors:readonly string[]){
+ const jobs:string[]=[];
+ for(let i=0;i<Math.max(shadows.length,mirrors.length);i++){
+  if(i<shadows.length)jobs.push(shadows[i]);
+  if(i<mirrors.length)jobs.push(mirrors[i]);
+ }
+ return jobs;
+}
+
 /** Full-resolution captures share a frame budget; the main view never waits for
  * a complete cycle. Oldest-first service bounds every active map's age, including
  * during continuous orbiting. A new view/lesson gets a complete fresh set. */

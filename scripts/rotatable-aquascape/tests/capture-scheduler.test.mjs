@@ -1,9 +1,17 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {PerspectiveCamera} from 'three';
-import {CaptureScheduler} from '../lib/CaptureScheduler.ts';
+import {CaptureScheduler,interleaveCaptures} from '../lib/CaptureScheduler.ts';
 
 const ids=['shadow-left','shadow-center','shadow-right','water','glass-left','glass-right'];
+test('full-scene reflection jobs alternate with depth-only shadow jobs without dropping views',()=>{
+ const ordered=interleaveCaptures(ids.slice(0,3),ids.slice(3));
+ const f=fixture();f.tick(ordered);
+ const cycle=Array.from({length:6},()=>f.tick(ordered)[0]);
+ assert.deepEqual(cycle,['shadow-left','water','shadow-center','glass-left','shadow-right','glass-right']);
+ assert.deepEqual(interleaveCaptures([],ids.slice(3)),ids.slice(3));
+ assert.deepEqual(interleaveCaptures(ids.slice(0,3),['water']),['shadow-left','water','shadow-center','shadow-right']);
+});
 function fixture(){
  const schedule=new CaptureScheduler(),camera=new PerspectiveCamera(37,1,.1,100);
  camera.position.z=21;

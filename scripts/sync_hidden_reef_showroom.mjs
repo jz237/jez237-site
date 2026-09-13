@@ -1,11 +1,13 @@
 // Run after npm --prefix scripts/rotatable-aquascape run build.
-// Keeps both existing Hidden Reef variants on the same tested showroom bundle.
+// Keeps jez237 and both Hidden Reef variants on the same tested aquarium bundle.
 import {cpSync,readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {resolve} from 'node:path';
+import {checkAquariumSync} from './check_aquarium_sync.mjs';
 const root=resolve(import.meta.dirname,'..');
 const site=resolve(root,'prototypes/hidden-reef');
 const preview=resolve(root,'prototypes/hidden-reef-header-preview');
 const dist=resolve(root,'scripts/rotatable-aquascape/dist');
+cpSync(dist,resolve(root,'demos/rotatable-aquascape'),{recursive:true});
 // Reuse the store's actual navigation enhancement without running its animated
 // full-page background alongside the aquarium. Regenerate rather than fork it.
 const backgroundSource=readFileSync(resolve(site,'assets/reef-background.js'),'utf8');
@@ -19,4 +21,5 @@ for(const file of ['assets/showroom.js','assets/showroom.css','assets/showroom-n
 mkdirSync(resolve(preview,'showroom'),{recursive:true});
 cpSync(resolve(site,'showroom'),resolve(preview,'showroom'),{recursive:true});
 writeFileSync(resolve(preview,'index.html'),readFileSync(resolve(site,'index.html'),'utf8').replace('site-masthead.css?v=20260906-animated"','site-masthead.css?v=20260906-animated-preview"').replace('reef-background.js?v=20260906-performance','reef-background.js?v=20260712-unified-nav'));
-console.log('Synchronized the Living Showroom and aquarium build in both storefront variants.');
+checkAquariumSync(root);
+console.log('Synchronized the aquarium build across jez237 and both Hidden Reef storefront variants.');
