@@ -8,7 +8,7 @@ export function installExploration(aquarium:Aquarium){
  aquarium.onExploreClose=close;
  const open=()=>{const learn=document.querySelector<HTMLButtonElement>('#learn')!;if(learn.getAttribute('aria-expanded')==='true')learn.click();panel.hidden=false;main.classList.add('exploration-open');button.setAttribute('aria-expanded','true');aquarium.identifyMode=true;render();};
  button.onclick=()=>panel.hidden?open():close();
- aquarium.onIdentify=info=>{if(aquarium.following!==null&&info?.fishId!==aquarium.following)aquarium.follow(null);selected=info;render();};
+ aquarium.onIdentify=info=>{if(aquarium.following!==null&&info?.fishId!==aquarium.following)aquarium.follow(null);selected=info;if(info)document.dispatchEvent(new CustomEvent('aquascape-context',{detail:{kind:info.kind,name:info.name}}));render();};
  function render(){
   panel.innerHTML=`<div class="explore-heading"><span class="eyebrow">A CLOSER LOOK</span><button id="explore-close" aria-label="Close exploration">×</button></div>
    <div class="explore-scene-tools"><button id="explore-front">Front</button><button id="explore-angle">Three-quarter</button><button id="explore-feed">Feed fish</button><button id="explore-pause">${aquarium.paused?'Resume':'Pause'}</button></div>

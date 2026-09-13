@@ -3117,6 +3117,7 @@
     }
   </style>
   <link rel="stylesheet" href="assets/site-masthead.css?v=20260906-animated-preview" />
+  <link rel="stylesheet" href="assets/showroom.css?v=1">
 </head>
 <body>
   <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
@@ -3146,6 +3147,11 @@
       <a href="https://www.thehiddenreef.com/" target="_blank" rel="noopener">Current official site</a>
     </div>
 
+    <section class="living-showroom-feature" aria-labelledby="showroom-feature-title">
+      <a href="showroom/" aria-label="Enter the Hidden Reef Living Showroom"><img src="assets/site/showroom-preview.jpg" alt="Our interactive planted aquarium, filled with plants and schooling fish" width="1265" height="712" loading="lazy"><span class="showroom-feature-label">↗ Rotate. Explore. Discover.</span></a>
+      <div><span class="showroom-kicker">INTRODUCING THE LIVING SHOWROOM</span><h2 id="showroom-feature-title">Don't just imagine your next aquarium.<br>Step inside one.</h2><p>Explore our living 3D aquascape. Meet the fish, follow water through the filter, and discover the essentials for a tank of your own.</p><a class="showroom-primary" href="showroom/">Enter the 3D aquarium ↗</a><small>Interactive close-ups · Aquarium lessons · Build your store list</small></div>
+    </section>
+
     <section class="hero" aria-labelledby="page-title">
       <div class="hero-slides" aria-hidden="true">
         <img class="hero-slide is-active" src="assets/site/hero-hd/vivid-reef.webp" srcset="assets/site/hero-hd/vivid-reef-960.webp 960w, assets/site/hero-hd/vivid-reef.webp 1672w" sizes="(max-width: 760px) calc(100vw - 16px), 1180px" width="1672" height="941" alt="" decoding="async" fetchpriority="high" />
@@ -3160,7 +3166,8 @@
         <h1 id="page-title">Build Your Perfect Aquatic World</h1>
         <p>Everything aquarium: freshwater, saltwater, ponds, plants, coral, equipment, food, and expert help from a real local store.</p>
         <div class="button-row">
-          <a class="btn" href="category/?filter=sale-items">Shop Sale Items</a>
+          <a class="btn showroom-hero-link" href="showroom/">Explore the 3D Aquarium ↗</a>
+          <a class="btn secondary" href="category/?filter=sale-items">Shop Sale Items</a>
           <a class="btn secondary cta-bubbles" href="category/?filter=new-arrivals">New Arrivals</a>
           <a class="btn secondary cta-location" href="#visit">Visit the Store</a>
         </div>
@@ -3307,7 +3314,7 @@
 
     <section class="section-band alt" aria-labelledby="learn-title">
       <div class="section-head">
-        <h2 id="learn-title">Learn the System</h2>
+        <h2 id="learn-title">Learn the System</h2><a href="showroom/">Explore the Living Showroom ↗</a>
         <a href="learn/">View all care guides</a>
       </div>
       <div class="learn-panel">
@@ -3533,7 +3540,7 @@
 	      document.getElementById('products')?.scrollIntoView({behavior:'smooth'});
 	    });
 	  </script>
-	  <script src="assets/reef-background.js?v=20260712-unified-nav"></script>
+	  <script src="assets/reef-background.js?v=20260913-showroom"></script>
 		  <script src="assets/category.js?v=20260604-sale-prices"></script>
 </body>
 	</html>

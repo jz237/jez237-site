@@ -57,6 +57,8 @@ export class Aquarium{
  private learningSubstrate:T.Object3D[]=[];
  private learningHousing:T.Object3D[]=[];
  paused=false;
+ /** Storefront host can suspend drawing while the embedded tank is offscreen. */
+ suspended=false;
  evening=false;
  status='Exploring';
  private renderer:T.WebGLRenderer;
@@ -351,7 +353,7 @@ export class Aquarium{
  }
  private animate=(now:number)=>{
   this.frame=requestAnimationFrame(this.animate);
-  if(document.hidden){this.last=0;return;}
+  if(document.hidden||this.suspended){this.last=0;return;}
   const updateStart=performance.now();
   const elapsed=this.last?(now-this.last)/1000:0,wallDt=Math.min(elapsed,.05);this.last=now;
   const dt=this.paused||document.hidden?0:wallDt;this.time+=dt;this.currentTime+=dt*((this.teaching?.mode==='experiments'||this.teaching?.mode==='challenges')?.2+.8*this.learning.environment.flow/65:1);this.swimShader.value=this.currentTime;

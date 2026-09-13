@@ -2,6 +2,7 @@ import './style.css';
 import {installFullscreen} from './lib/Fullscreen';
 import {installExploration} from './lib/ExplorationUI';
 import {installLearning} from './lib/LearningUI';
+import {installShowroom} from './lib/Showroom';
 import {Aquarium} from './lib/Aquarium';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
@@ -18,6 +19,8 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
  <button id="fullscreen" aria-pressed="false">Full screen</button>
  <div class="bottom-note">A separate 3D study <span>·</span> All scenery has volume</div>
 </main>`;
+const storeShowroom=new URLSearchParams(location.search).get('showroom')==='hidden-reef';
+if(storeShowroom){document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';document.querySelector('h1')!.textContent='Living Showroom';document.querySelector('header nav')!.innerHTML='<a href="../" target="_top">← Showroom & tank planner</a>';}
 installFullscreen(document.querySelector('main')!,document.querySelector<HTMLButtonElement>('#fullscreen')!);
 const host=document.querySelector<HTMLDivElement>('#scene')!;
 async function start(){
@@ -25,7 +28,7 @@ async function start(){
  const aquarium=new Aquarium(host);
  await aquarium.ready;
  document.querySelector('#loading')!.remove();
- installLearning(aquarium);installExploration(aquarium);
+ installLearning(aquarium);installExploration(aquarium);installShowroom(aquarium);
  document.querySelector('#status')!.textContent='Exploring';
  document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(b=>b.onclick=()=>{aquarium.view(b.dataset.view!);document.querySelectorAll('[data-view]').forEach(v=>v.classList.toggle('active',v===b));});
  const pause=document.querySelector<HTMLButtonElement>('#pause')!;
@@ -39,6 +42,6 @@ async function start(){
  document.querySelector<HTMLButtonElement>('#reset')!.onclick=()=>{aquarium.view('angle');document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(v=>v.classList.toggle('active',v.dataset.view==='angle'));};
  host.addEventListener('pointerdown',()=>document.querySelectorAll('[data-view]').forEach(v=>v.classList.remove('active')));
  setInterval(()=>document.querySelector('#status')!.textContent=aquarium.paused?'Paused':aquarium.status,1200);
- }catch(error){console.error(error);document.querySelector('#loading')!.innerHTML='The 3D aquarium could not start.<br><small>Try a browser with WebGL enabled, or visit the photographic version above.</small>';}
+ }catch(error){console.error(error);document.querySelector('#loading')!.innerHTML=storeShowroom?'The 3D aquarium could not start.<br><small>Try a browser with WebGL enabled, or <a href="../" target="_top">return to the showroom guides and planner</a>.</small>':'The 3D aquarium could not start.<br><small>Try a browser with WebGL enabled, or visit the photographic version above.</small>';}
 }
 start();

@@ -9,7 +9,7 @@ export function installLearning(aquarium:Aquarium){
  const panel=document.createElement('aside');panel.id='learning';panel.hidden=true;panel.setAttribute('aria-label','Aquarium learning guide');main.append(panel);
  let readingsKey='',challenge:ChallengeId='filter',prediction:number|null=null,revealed=false;
  let mode:Lesson='water',step=0,tour=false,nextAt=0,chart:'oxygen'|'ammonia'|'co2'='oxygen';
- const select=(m:Lesson,n=0)=>{mode=m;step=n;if(m==='layers')aquarium.teaching!.separation=1;if(m==='day')aquarium.teaching!.night=n===1;aquarium.learn(m,n);document.querySelector<HTMLButtonElement>('#light')!.disabled=m==='day'||m==='experiments'||m==='challenges';render();};
+ const select=(m:Lesson,n=0)=>{document.dispatchEvent(new CustomEvent('aquascape-context',{detail:{lesson:m}}));mode=m;step=n;if(m==='layers')aquarium.teaching!.separation=1;if(m==='day')aquarium.teaching!.night=n===1;aquarium.learn(m,n);document.querySelector<HTMLButtonElement>('#light')!.disabled=m==='day'||m==='experiments'||m==='challenges';render();};
  const close=()=>{tour=false;panel.hidden=true;main.classList.remove('learning-open');open.setAttribute('aria-expanded','false');aquarium.learn(null);document.querySelector<HTMLButtonElement>('#light')!.disabled=false;open.focus();};
  const reveal=()=>{panel.hidden=false;main.classList.add('learning-open');open.setAttribute('aria-expanded','true');select(mode,step);};
  open.onclick=()=>panel.hidden?reveal():close();open.disabled=false;
