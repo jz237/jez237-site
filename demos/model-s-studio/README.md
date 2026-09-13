@@ -49,3 +49,5 @@ See `../../scripts/model-s-studio/README.md` for the reproducible geometry prepa
 ## Interior finish pass
 
 The cockpit refines 103 source surfaces with physically based upholstery, carpet, fabric, brushed metal and trim materials. Small procedural textures need no external image downloads. Seat normals are smoothed across compatible shared positions while preserving creases; 584 surface-following thread dashes and 15 pedal grip strips add close-up detail. These are illustrative finish details on the artist model. A cached 1024px cabin shadow map supplies depth, and the screen adds subtle light at night. The exterior studio and its 308-piece breakdown retain their existing geometry and finish.
+
+The cockpit yoke is independently rebuilt with a smooth swept grip, beveled center pad and spokes, metallic edging, and ribbed scroll wheels. Its silhouette and control placement reference [Tesla’s Model S steering-yoke illustration](https://www.tesla.com/ownersmanual/models/en_us/GUID-DEB259CC-ABAC-4BFC-8D10-B7B1BBCFCB1F.html). The replacement is confined to the cockpit; it remains a visual approximation rather than manufacturer CAD.

@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {MeshoptDecoder} from './vendor/meshopt_decoder.module.js';
 import {finishMaterial,studioEnvironment} from './materials.js?v=2';
+import {installSteeringYoke} from './steering-yoke.js?v=1';
 import {refineInterior,interiorDetails} from './interior-realism.js?v=1';
 import {CockpitDisplay} from './cockpit-display.js';
 const $=id=>document.getElementById(id),host=$('cockpit-viewport'),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -42,16 +43,10 @@ async function load(){
   if(mesh.name==='Surface_003'){centerScreen=mesh;screenUV(mesh);mesh.material=new THREE.MeshBasicMaterial({map:screenTexture,toneMapped:false});}
   if(mesh.name==='Surface_006'){instrumentScreen=mesh;screenUV(mesh);mesh.material=new THREE.MeshBasicMaterial({map:instrumentTexture,toneMapped:false});}
  });
- detailStats.materials=refineInterior(model);scene.add(model);const details=interiorDetails(model);detailStats.stitches=details.stitches;detailStats.pedalGrips=details.grips;steeringDetails();renderer.shadowMap.needsUpdate=true;ready=true;document.body.dataset.ready='true';$('cockpit-loading').hidden=true;$('open-screen').disabled=false;setCamera('driver',true);applySoftware(software.state);
+ detailStats.materials=refineInterior(model);scene.add(model);const details=interiorDetails(model);detailStats.stitches=details.stitches;detailStats.pedalGrips=details.grips;detailStats.yoke=installSteeringYoke(model);renderer.shadowMap.needsUpdate=true;ready=true;document.body.dataset.ready='true';$('cockpit-loading').hidden=true;$('open-screen').disabled=false;setCamera('driver',true);applySoftware(software.state);
  window.modelSCockpit={getState:()=>({ready,view,software:software.getState(),screenOpen:$('screen-dialog').open,camera:camera.position.toArray(),look:camera.quaternion.toArray(),triangles:renderer.info.render.triangles,drawCalls:renderer.info.render.calls,interior:detailStats}),getScreenTargets:()=>screenTargets(),showView:name=>{if(!Object.hasOwn(presets,name))return false;setCamera(name);return true;},openScreen:()=>openScreen('navigation'),closeScreen:()=>$('screen-dialog').close()};
  const initialCamera=new URLSearchParams(location.search).get('view');if(Object.hasOwn(presets,initialCamera))setCamera(initialCamera,true);
  const initial=new URLSearchParams(location.search).get('app');if(['navigation','climate','charging','controls'].includes(initial))openScreen(initial);
-}
-function steeringDetails(){
- const decal=(label,position,normal,width,height)=>{const canvas=document.createElement('canvas');canvas.width=512;canvas.height=128;const c=canvas.getContext('2d');c.font='500 66px Arial';c.textAlign='center';c.fillStyle='#bdcbd3';c.fillText(label,256,91);const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;const mesh=new THREE.Mesh(new THREE.PlaneGeometry(width,height),new THREE.MeshBasicMaterial({map:texture,transparent:true,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-2}));const n=new THREE.Vector3(...normal);mesh.position.set(...position).addScaledVector(n,.001);mesh.lookAt(mesh.position.clone().add(n));scene.add(mesh);};
- decal('T E S L A',[.37652,.94089,.38980],[.0039,.2715,-.9624],.054,.0135);
- decal('◀   ▶',[.47092,.94207,.40758],[-.1235,.2616,-.9572],.025,.0063);
- decal('≋   ◉',[.27009,.94163,.40729],[.1257,.2606,-.9572],.025,.0063);
 }
 function screenUV(mesh){
  const bounds=new THREE.Box3().setFromObject(mesh),size=bounds.getSize(new THREE.Vector3()),positions=mesh.geometry.attributes.position,uv=new Float32Array(positions.count*2),v=new THREE.Vector3();
