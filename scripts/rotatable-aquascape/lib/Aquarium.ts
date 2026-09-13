@@ -102,7 +102,6 @@ export class Aquarium{
  private diagnosticTime=0;private diagnosticFrames=0;
  private frameSamples:number[][]=[];
  private resizeObserver:ResizeObserver;
- private showroomBackdrop:T.Texture|null=null;
  private inspection:{scene:T.Scene;camera:T.Camera;material:T.MeshBasicMaterial}|null=null;
  constructor(private host:HTMLElement){
   this.renderer=new T.WebGLRenderer({antialias:false,depth:false,stencil:false,alpha:false,powerPreference:'high-performance'});
@@ -121,13 +120,8 @@ export class Aquarium{
   this.renderer.domElement.setAttribute('aria-label','Aquarium. Drag to rotate, use the view and zoom buttons below.');
   // Scene-linear backdrop radiance: ACES otherwise crushes the dark reference
   // blue-gray almost to black when a display-space swatch is used directly.
-  this.scene.background=new T.Color(.0087,.0147,.0173);
+  this.scene.background=new URLSearchParams(location.search).get('showroom')==='hidden-reef'?new T.Color(.008,.029,.095):new T.Color(.0087,.0147,.0173);
   this.scene.fog=new T.FogExp2(this.scene.background,.008);
-  const storeBackdrop=new URLSearchParams(location.search).get('showroom')==='hidden-reef'
-   ?new T.TextureLoader().loadAsync(new URL('../../assets/water-lab/clear-reef-water-gpt-image-2.webp',location.href).href).then(texture=>{
-    texture.colorSpace=T.SRGBColorSpace;this.showroomBackdrop=texture;this.fitShowroomBackdrop();this.scene.background=texture;
-   }).catch(error=>console.warn('Store water backdrop unavailable; retaining aquarium background.',error))
-   :Promise.resolve();
   const pmrem=new T.PMREMGenerator(this.renderer),environment=new RoomEnvironment();
   this.scene.environment=pmrem.fromScene(environment,.035).texture;this.scene.environmentIntensity=.10;
   environment.dispose();pmrem.dispose();
@@ -165,7 +159,7 @@ export class Aquarium{
   this.bubbles=new T.InstancedMesh(new T.SphereGeometry(.018,7,5),new T.MeshPhysicalMaterial({color:0xd2eee0,roughness:.05,metalness:.1,transparent:true,opacity:.36,depthWrite:false}),48);
   this.scene.add(this.bubbles);
   this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(host);this.resize();
-  this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader),new T.TextureLoader().loadAsync('./grazer-material-atlas.png').catch(error=>{console.warn('Grazer atlas unavailable; using procedural materials.',error);return undefined;}),storeBackdrop]).then(async results=>{
+  this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader),new T.TextureLoader().loadAsync('./grazer-material-atlas.png').catch(error=>{console.warn('Grazer atlas unavailable; using procedural materials.',error);return undefined;})]).then(async results=>{
    if(!(import.meta.env.DEV&&new URLSearchParams(location.search).has('originalIndices')))optimizeLeafIndexOrder(this.scene);
    calmSwordLeaves(this.scene);
    this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
@@ -286,16 +280,9 @@ export class Aquarium{
  private buildTank(){
   const dark=new T.MeshStandardMaterial({color:0x111c1e,roughness:.35,metalness:.65});
   const floor=new T.MeshStandardMaterial({color:0x0a1219,roughness:.82,metalness:0});
-  if(new URLSearchParams(location.search).get('showroom')==='hidden-reef')floor.fog=false;
   floor.onBeforeCompile=shader=>{
-   shader.uniforms.roomBackground={value:this.scene.fog!.color};
+   shader.uniforms.roomBackground={value:this.scene.background};
    shader.fragmentShader='uniform vec3 roomBackground;\n'+shader.fragmentShader;
-   if(this.showroomBackdrop){
-    shader.uniforms.roomBackdrop={value:this.showroomBackdrop};shader.uniforms.roomBackdropTransform={value:this.showroomBackdrop.matrix};
-    shader.vertexShader='varying vec4 roomClip;\n'+shader.vertexShader;
-    shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>','#include <project_vertex>\nroomClip=gl_Position;');
-    shader.fragmentShader='uniform sampler2D roomBackdrop;uniform mat3 roomBackdropTransform;varying vec4 roomClip;\n'+shader.fragmentShader;
-   }
    shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`
     // Soft footprint of the stationary cabinet, independent of camera angle.
     vec3 floorWorld=cameraPosition-inverseTransformDirection(normalize(vViewPosition),viewMatrix)*length(vViewPosition);
@@ -303,8 +290,7 @@ export class Aquarium{
     float cabinetEdge=length(max(cabinetDistance,0.))+min(max(cabinetDistance.x,cabinetDistance.y),0.);
     outgoingLight*=mix(.16,1.,smoothstep(-.05,.72,cabinetEdge));
     float studioFade=1.-exp(-pow(max(0.,length(vViewPosition)-23.)*.075,2.));
-    ${this.showroomBackdrop?`vec2 roomUV=(roomBackdropTransform*vec3(roomClip.xy/roomClip.w*.5+.5,1.)).xy;
-    outgoingLight=mix(outgoingLight,texture2D(roomBackdrop,roomUV).rgb,smoothstep(.15,3.,cabinetEdge));`:'outgoingLight=mix(outgoingLight,roomBackground,studioFade);'}
+    outgoingLight=mix(outgoingLight,roomBackground,studioFade);
     #include <opaque_fragment>`);
   };
   const ground=this.mesh(new T.PlaneGeometry(180,180),floor,V(0,-1.0,0),false);
@@ -371,14 +357,7 @@ export class Aquarium{
  get magnifierEnabled(){return this.lighting.lens.enabled;}
  private get studyView(){return this.teaching?.mode==='organisms'||this.teaching?.mode==='underground'||this.teaching?.mode==='water'&&this.teaching.step>0&&this.teaching.step<4;}
  view(name:string){this.follow(null);const dist=this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera);}
- private fitShowroomBackdrop(){
-  const texture=this.showroomBackdrop;if(!texture)return;
-  const image=texture.image as HTMLImageElement,aspect=this.host.clientWidth/Math.max(1,this.host.clientHeight),imageAspect=image.width/image.height;
-  texture.repeat.set(Math.min(1,aspect/imageAspect),Math.min(1,imageAspect/aspect));
-  texture.offset.set((1-texture.repeat.x)/2,1-texture.repeat.y);texture.updateMatrix();
- }
  private resize(){
-  this.fitShowroomBackdrop();
   const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;
   // Fit continuously across viewport shapes while retaining the user's zoom distance.
   const framingPosition=this.camera.position.clone().sub(this.controls.target).setLength(21.5).add(this.controls.target);
