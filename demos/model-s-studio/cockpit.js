@@ -1,7 +1,7 @@
 import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {MeshoptDecoder} from './vendor/meshopt_decoder.module.js';
-import {finishMaterial,studioEnvironment} from './materials.js';
+import {finishMaterial,studioEnvironment} from './materials.js?v=2';
 import {CockpitDisplay} from './cockpit-display.js';
 const $=id=>document.getElementById(id),host=$('cockpit-viewport'),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
 let scene,renderer,camera,model,screenTexture,instrumentTexture,centerScreen,instrumentScreen,sky,fill,beam,airflow,software,view='driver',yaw=0,pitch=-.18,fov=65,transition=null,last=performance.now(),ready=false;

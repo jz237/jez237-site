@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
 import { PartsBoard } from './parts-board.js';
-import { finishMaterial, studioEnvironment } from './materials.js';
+import { finishMaterial, studioEnvironment } from './materials.js?v=2';
 import { createBatteryParts } from './battery.js';
 import { MeshoptDecoder } from './vendor/meshopt_decoder.module.js';
 
@@ -11,7 +11,7 @@ if(new URLSearchParams(location.search).has('tour'))document.documentElement.cla
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', cabin:false, labels:false, paint:'#aeb7c2', view:'hero', board:false };
 const parts = [], landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
-let renderer, controls, camera, scene, model, last=performance.now(), pointerStart=null, viewTween=null, lastAppliedAmount=-1;
+let renderer, controls, camera, scene, model, last=performance.now(), pointerStart=null, viewTween=null, lastAppliedAmount=-1,explodeTween=null;
 let board, carCamera, carControls, boardControls, studioObjects=[], studioFog,boardKey='';
 const baseTarget = new THREE.Vector3(0,.7,0);
 const views = {hero:[6,3.15,6.8],side:[9,1.8,0],front:[0,1.8,10],top:[.01,11,.01]};
@@ -174,10 +174,19 @@ function setView(name,immediate=false){
  if(immediate||reducedMotion){camera.position.copy(destination);controls.target.copy(target);viewTween=null;}else viewTween={start:performance.now(),from:camera.position.clone(),to:destination,fromTarget:controls.target.clone(),toTarget:target};
  document.querySelectorAll('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));
 }
-function setAmount(value,{fit=true,manual=true}={}){if(!state.ready)return;if(state.board)toggleBoard(false);if(manual)stopSequence();state.target=THREE.MathUtils.clamp(value,0,1);if(reducedMotion)state.amount=state.target;updateUI();if(fit)setView(state.view);}
+function setAmount(value,{fit=true,manual=true,animate=false}={}){
+ if(!state.ready)return;if(state.board)toggleBoard(false);if(manual)stopSequence();
+ state.target=THREE.MathUtils.clamp(value,0,1);
+ // A deliberate button press plays a visible separation, including a gentler reduced-motion version.
+ const duration=reducedMotion?1600:3200;
+ explodeTween=animate?{start:performance.now(),from:state.amount,to:state.target,duration}:null;
+ if(reducedMotion&&!animate)state.amount=state.target;
+ updateUI();if(fit){setView(state.view);if(animate&&viewTween)viewTween.duration=duration;}
+}
 function updateUI(){
- $('explode').value=Math.round(state.target*100);$('amount').innerHTML=`${String(Math.round(state.target*100)).padStart(3,'0')}<span>%</span>`;
- $('assembly-state').textContent=state.target<.01?'Beautifully assembled.':state.target<.4?'Beneath the surface.':state.target<.8?'A study in separation.':'Every piece, revealed.';
+ const shown=explodeTween?state.amount:state.target;
+ $('explode').value=Math.round(shown*100);$('amount').innerHTML=`${String(Math.round(shown*100)).padStart(3,'0')}<span>%</span>`;
+ $('assembly-state').textContent=explodeTween?(state.target>state.amount?'Separating the layers…':'Bringing it together…'):state.target<.01?'Beautifully assembled.':state.target<.4?'Beneath the surface.':state.target<.8?'A study in separation.':'Every piece, revealed.';
  $('explode-button').innerHTML=state.target>.5?'↙ Reassemble':'<span aria-hidden="true">↗</span> Explode model';
  $('scene-status').textContent=state.board?'ALL-PARTS BOARD':state.isolated?'ISOLATED COMPONENT':state.cabin?'CABIN STUDY':state.system!=='all'?`${state.system.toUpperCase()} STUDY`:state.target>.01?'EXPLODED STUDY':'LIVE 3D / MODEL S PLAID';
 }
@@ -213,12 +222,12 @@ function focusSelected(){
  const direction=camera.position.clone().sub(controls.target).normalize();controls.minDistance=.15;
  viewTween={start:performance.now(),from:camera.position.clone(),to:center.clone().addScaledVector(direction,distance),fromTarget:controls.target.clone(),toTarget:center};
 }
-function stopSequence(){state.sequence=false;$('animate').textContent='▷ Play sequence';}
+function stopSequence(){explodeTween=null;state.sequence=false;$('animate').textContent='▷ Play sequence';}
 function reset(){if(state.board)toggleBoard(false);stopSequence();controls.minDistance=2.5;state.target=0;state.system='all';state.cabin=false;state.isolated=false;state.labels=false;state.view='hero';controls.autoRotate=false;$('system').value='all';$('search').value='';for(const id of ['cabin','rotate','label-toggle'])$(id).setAttribute('aria-pressed','false');selectPart(null);updateList();updateUI();setView('hero');}
 function bindControls(){
  $('explode').addEventListener('input',e=>setAmount(Number(e.target.value)/100));
- $('explode-button').onclick=()=>setAmount(state.target>.5?0:1);
- $('animate').onclick=()=>{if(state.board)toggleBoard(false);if(state.sequence){stopSequence();return;}state.sequence=true;state.sequenceTime=0;state.isolated=false;selectPart(null);$('animate').textContent='Ⅱ Pause sequence';};
+ $('explode-button').onclick=()=>setAmount(state.target>.5?0:1,{animate:true});
+ $('animate').onclick=()=>{if(state.board)toggleBoard(false);if(state.sequence){stopSequence();return;}explodeTween=null;state.sequence=true;state.sequenceTime=0;state.isolated=false;selectPart(null);$('animate').textContent='Ⅱ Pause sequence';};
  $('all-parts').onclick=()=>{if(!state.board){state.system='all';state.cabin=false;state.isolated=false;$('system').value='all';$('cabin').setAttribute('aria-pressed','false');selectPart(null);updateList();}toggleBoard(!state.board);};
  $('fit-parts').onclick=()=>{board.fit();controls.target.set(0,0,0);window.scrollTo(0,0);};
  $('return-car').onclick=()=>toggleBoard(false);
@@ -235,19 +244,20 @@ function bindControls(){
  $('label-toggle').onclick=()=>{state.labels=!state.labels;$('label-toggle').setAttribute('aria-pressed',state.labels);};
  $('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen();}catch{ $('fullscreen').textContent='Fullscreen unavailable'; }};
  document.addEventListener('fullscreenchange',()=>{$('fullscreen').textContent=document.fullscreenElement?'⛶ Exit fullscreen':'⛶ Fullscreen';});
- document.addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey||!state.ready)return;if(e.key.toLowerCase()==='e')setAmount(state.target>.5?0:1);if(e.key.toLowerCase()==='r')reset();if(e.key==='Escape')selectPart(null);});
+ document.addEventListener('keydown',e=>{if(/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName)||e.ctrlKey||e.metaKey||e.altKey||!state.ready)return;if(e.key.toLowerCase()==='e')setAmount(state.target>.5?0:1,{animate:true});if(e.key.toLowerCase()==='r')reset();if(e.key==='Escape')selectPart(null);});
 }
 function tick(now){
  const dt=Math.min((now-last)/1000,.05);last=now;
  if(state.sequence){state.sequenceTime+=dt;const t=state.sequenceTime;const v=t<1?0:t<6?(t-1)/5:t<9?1:t<14?1-(t-9)/5:0;state.target=v;updateUI();if(t>=15)stopSequence();
   const target=baseTarget.clone().add(new THREE.Vector3(v*.85,v*.6,0));const direction=camera.position.clone().sub(controls.target).normalize();const distance=new THREE.Vector3().fromArray(views[state.view]).sub(baseTarget).length()*(1+v*.9)*Math.max(1,Math.sqrt(1.4/camera.aspect));controls.target.lerp(target,.05);camera.position.lerp(target.addScaledVector(direction,distance),.05);
  }
- state.amount=THREE.MathUtils.damp(state.amount,state.target,reducedMotion?1000:5,dt);if(Math.abs(state.amount-state.target)<.0001)state.amount=state.target;
+ if(explodeTween){const t=Math.min(1,(now-explodeTween.start)/explodeTween.duration),ease=t*t*(3-2*t);state.amount=THREE.MathUtils.lerp(explodeTween.from,explodeTween.to,ease);if(t===1){state.amount=explodeTween.to;explodeTween=null;}updateUI();}
+ else{state.amount=THREE.MathUtils.damp(state.amount,state.target,reducedMotion?1000:5,dt);if(Math.abs(state.amount-state.target)<.0001)state.amount=state.target;}
  if(state.ready&&lastAppliedAmount!==state.amount){for(const p of parts){
   const t=state.amount;const spread=THREE.MathUtils.smoothstep(t,.55,1);
   p.mesh.position.copy(p.base).addScaledVector(p.offset,t).addScaledVector(p.spread,spread);
  }lastAppliedAmount=state.amount;}
- if(viewTween){const t=Math.min(1,(now-viewTween.start)/900),s=t*t*(3-2*t);camera.position.lerpVectors(viewTween.from,viewTween.to,s);controls.target.lerpVectors(viewTween.fromTarget,viewTween.toTarget,s);if(t===1)viewTween=null;}
+ if(viewTween){const t=Math.min(1,(now-viewTween.start)/(viewTween.duration||900)),s=t*t*(3-2*t);camera.position.lerpVectors(viewTween.from,viewTween.to,s);controls.target.lerpVectors(viewTween.fromTarget,viewTween.toTarget,s);if(t===1)viewTween=null;}
  controls.update(dt);
  for(const {el,part} of landmarks){el.hidden=state.board||(!state.labels&&!(part.group==='Battery'&&state.amount>.35))||!part.mesh.visible;if(el.hidden)continue;const p=part.center.clone().add(part.mesh.position).sub(part.base).project(camera);el.hidden=Math.abs(p.x)>.92||Math.abs(p.y)>.92||p.z>1;el.style.left=`${(p.x*.5+.5)*renderer.domElement.clientWidth}px`;el.style.top=`${(-p.y*.5+.5)*renderer.domElement.clientHeight}px`;}
  renderer.render(scene,camera);
