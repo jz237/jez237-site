@@ -37,3 +37,16 @@ Rejected experiments: spatial plant grouping increased draw calls from about 1,4
 Validation: production build passed; full 103-test suite passed, followed by the five affected transform/teaching tests after finalizing explicit static transforms. The layer test now verifies world matrices during separation and restoration. Browser preview renders the tank and readout without console errors. A desktop viewport check cannot substitute for the real S25 GPU.
 
 The immediate rollback point for this follow-up is ca69772f0763e3228c8cbed19adc71e4431d2cf6. Keep its public index-CdKo1KIA.js asset. Revert only the follow-up commit and redeploy current main if needed.
+
+
+## Follow-up: plant-contact CPU optimization
+
+Phone report for b9df72312: 12.8 FPS, median frame 83.2 ms, simulation 33.3 ms, rendering CPU/driver 7.7 ms, GPU timing unavailable, buffer 633 x 1145. These measurements do not isolate GPU time; simulation nevertheless consumes a substantial part of the frame.
+
+A Node CPU profile of the existing full-plant animal test found approximately 15.2 s in Box3.distanceToPoint and 14.9 s in Triangle.closestPointToPoint. CollisionBounds now performs conservative squared sphere/AABB rejection before the unchanged exact contact tests. Candidate lists are cached by the full spatial-cell range, with a bounded 384-entry cache for each index. The moving-leaf contact cache reuses vectors, triangles and bounds, refreshing them at the exact requested water time; it is bounded to 512 leaves. Static conservative Corydoras contact envelopes retain their existing geometry and margins. No collision sampling interval, triangle, body sphere, rendering detail or behavioral update has been removed.
+
+Two new tests compare bounding rejection against 16,000 exact triangle contacts and cached spatial membership against the original cell traversal, including cell boundaries and eviction. The full 105-test suite passed in 17.4 s (previous full suite approximately 48.1 s). The long Corydoras/full-plant trajectory test fell from approximately 40.8 s to 12.5 s; the independent grazer trajectory test fell from approximately 6.9 s to 4.6 s. These are desktop automated-test timings, not a forecast of phone FPS.
+
+Navigation was rebuilt from the changed collision sources, including the new helper in its source manifest. All 231 nodes and 14,918 cached turn results exactly match the previous navigation data. Only source hashes changed.
+
+The opt-in phone panel now splits simulation into tetras, bottom feeders, and shrimp/snails so the next phone measurement can identify remaining CPU work. GPU remains explicitly unavailable on devices without the timing extension. The preceding b9df72312 commit and index-DtUhCXRL.js remain the rollback point.

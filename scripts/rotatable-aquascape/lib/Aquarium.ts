@@ -373,6 +373,8 @@ export class Aquarium{
   this.ledMaterial.emissiveIntensity=3*this.daylight;
   for(const light of this.canopyLights)light.intensity=canopy.sampleIntensity*this.daylight;
   this.stripLight.intensity=canopy.stripIntensity*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=(.8+.32*this.daylight)*(this.inspectingAnimal!==null?.80:1);
+  const tetraStart=this.diagnostics?performance.now():0;
+  let coryMs=0,grazerMs=0;
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
@@ -384,10 +386,11 @@ export class Aquarium{
   });
   if(dt){const bodies=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,radius:25}));separateFish(bodies,[-.40,1.40]);bodies.forEach((b,i)=>{Object.assign(this.fishes[i].swim,{x:b.x,y:b.y,z:b.z});this.avoidSolid(this.fishes[i].swim);});}
   this.fishes.forEach(({model,swim:s})=>{model.group.position.copy(fishPosition(s.x,s.y,s.z));model.group.rotation.set(0,s.yaw+s.depthHeading,s.pitch,'YXZ');model.update(this.time,s.effort,this.texture,.65,s.z,1,dt,s.pectoralEffort);});
+  const tetraMs=this.diagnostics?performance.now()-tetraStart:0;
   if(this.following!==null){if(this.followApproach){const offset=this.camera.position.clone().sub(this.controls.target),ease=1-Math.exp(-wallDt*2.2);offset.setLength(T.MathUtils.lerp(offset.length(),7.5,ease));this.camera.position.copy(this.controls.target).add(offset);this.camera.fov=T.MathUtils.lerp(this.camera.fov,37,ease);this.camera.updateProjectionMatrix();if(Math.abs(offset.length()-7.5)<.01)this.followApproach=false;}trackFish(this.camera,this.controls.target,this.fishes[this.following].model.group.position,wallDt);this.controls.update();}
-  if(dt&&this.invertebrates){const contacts=this.fishes.map((f,id)=>({id,position:f.model.group.position.clone(),previous:this.grazerFishPrevious.get(id),forward:V(1,0,0).applyQuaternion(f.model.group.quaternion),size:f.size}));this.cories?.update(dt,this.currentTime,contacts,this.invertebrates.animals);
+  if(dt&&this.invertebrates){const contacts=this.fishes.map((f,id)=>({id,position:f.model.group.position.clone(),previous:this.grazerFishPrevious.get(id),forward:V(1,0,0).applyQuaternion(f.model.group.quaternion),size:f.size}));const coryStart=this.diagnostics?performance.now():0;this.cories?.update(dt,this.currentTime,contacts,this.invertebrates.animals);if(this.diagnostics)coryMs=performance.now()-coryStart;
    if(this.cories){for(const [id,point] of this.cories.fishCorrections){const f=this.fishes[id];Object.assign(f.swim,fishCoordinates(point));f.model.group.position.copy(point);contacts[id].position.copy(point);}this.invertebrates.externalBodies=this.cories.animals.map(a=>coryBody(a.position,coryForward(a),a.size,a.pitch));}
-   this.invertebrates.update(dt,this.currentTime,contacts);
+   const grazerStart=this.diagnostics?performance.now():0;this.invertebrates.update(dt,this.currentTime,contacts);if(this.diagnostics)grazerMs=performance.now()-grazerStart;
    for(const [id,point] of this.invertebrates.fishCorrections){const f=this.fishes[id];Object.assign(f.swim,fishCoordinates(point));startleTetra(f.swim);this.avoidSolid(f.swim);f.model.group.position.copy(fishPosition(f.swim.x,f.swim.y,f.swim.z));}
    this.fishes.forEach((f,id)=>this.grazerFishPrevious.set(id,f.model.group.position.clone()));
   }
@@ -412,7 +415,7 @@ export class Aquarium{
   const sceneTriangles=this.lighting.render(this.renderer,this.lightingInspection);
   if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
   this.gpuTimer?.end();
-  this.perfReadout?.update(elapsed,renderStart-updateStart,performance.now()-renderStart);
+  this.perfReadout?.update(elapsed,renderStart-updateStart,performance.now()-renderStart,[tetraMs,coryMs,grazerMs]);
   if(import.meta.env.DEV){
    this.frameSamples.push([elapsed*1000,renderStart-updateStart,performance.now()-renderStart,this.renderer.info.render.calls,this.renderer.info.render.triangles]);
    if(this.frameSamples.length>=240){const samples=this.frameSamples;const q=(column:number,p:number)=>{const sorted=samples.map(s=>s[column]).sort((a,b)=>a-b);return +sorted[Math.floor((sorted.length-1)*p)].toFixed(2);};this.host.dataset.frameProfile=JSON.stringify({frames:samples.length,frameMsP50:q(0,.5),frameMsP95:q(0,.95),updateMsP50:q(1,.5),updateMsP95:q(1,.95),renderCpuMsP50:q(2,.5),renderCpuMsP95:q(2,.95),drawCalls:q(3,.5),triangles:q(4,.5)});this.frameSamples=[];}
