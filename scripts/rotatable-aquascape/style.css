@@ -12,3 +12,22 @@
 #fullscreen{position:absolute;z-index:12;right:max(18px,env(safe-area-inset-right));bottom:max(14px,env(safe-area-inset-bottom));background:#0b191fed;border:1px solid #abcdbc55;font-size:12px;padding:10px 12px;min-height:40px}main:fullscreen,main:-webkit-full-screen,main.aquarium-fullscreen{position:fixed;inset:0;width:100vw;height:100dvh;background:#080f12}main.aquarium-fullscreen header,main.aquarium-fullscreen .help,main.aquarium-fullscreen .scene-note,main.aquarium-fullscreen .bottom-note{display:none}main.aquarium-fullscreen .learn-toggle,main.aquarium-fullscreen .explore-toggle{top:max(14px,env(safe-area-inset-top))}main.aquarium-fullscreen footer{bottom:max(18px,env(safe-area-inset-bottom))}main.aquarium-fullscreen #fullscreen{bottom:auto;top:max(14px,env(safe-area-inset-top))}@media(max-width:850px){#fullscreen{bottom:8px;padding:8px 10px;font-size:11px}.bottom-note{display:none}main.aquarium-fullscreen .learn-toggle{top:64px;left:14px}main.aquarium-fullscreen .explore-toggle{left:14px;top:14px}main.aquarium-fullscreen #exploration{max-height:calc(100% - 160px)}main.aquarium-fullscreen.exploration-open #exploration{max-height:none}}
 
 @media(max-width:850px){footer{bottom:56px}}
+
+/* Hidden Reef's cyan/violet accents and deep-blue glass panels. */
+.store-showroom{background:#03182c;color:#e9f8fc}
+.store-showroom #loading{background:#03182c var(--reef-water-background,none) center top/cover;color:#f0fbff;text-shadow:0 2px 12px #00101f}
+.store-showroom #loading span{background:#40d9ff}
+.store-showroom header,.store-showroom .scene-note{text-shadow:0 2px 8px #00101f}
+.store-showroom h1{color:#f0fbff}.store-showroom .identity .eyebrow{color:#b7edff}
+.store-showroom nav,.store-showroom .views,.store-showroom .actions,.store-showroom .learn-toggle,.store-showroom .explore-toggle,.store-showroom #fullscreen{background:#071a27ed;border-color:#74cdeb55;backdrop-filter:none}
+.store-showroom button,.store-showroom nav a{color:#c8e5f4}
+.store-showroom button.active,.store-showroom button[aria-pressed=true],.store-showroom .lesson-steps button[aria-current]{background:#40d9ff22;border-color:#40d9ff88;color:#e9faff}
+.store-showroom button:hover,.store-showroom a:hover{background:#796ce12e;color:white}
+.store-showroom :focus-visible{outline-color:#40d9ff}
+.store-showroom .scene-note,.store-showroom .help p,.store-showroom .bottom-note{color:#b8d3e3}
+.store-showroom .help>span{color:#a0c1d7}.store-showroom .live-dot{background:#40d9ff}
+.store-showroom #learning,.store-showroom #exploration{background:#071a27f5;border-color:#74cdeb55;color:#dff4ff}
+.store-showroom .lesson-body p,.store-showroom #exploration p{color:#b8d3e3}
+.store-showroom .learning-tag{background:#08273deb;border-color:#74cdeb88;color:#e9faff}
+.store-showroom .selection-ring{border-color:#40d9ff;box-shadow:0 0 0 4px #40d9ff15}
+.store-showroom main:fullscreen,.store-showroom main.aquarium-fullscreen{background:#03182c}

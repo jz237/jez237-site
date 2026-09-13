@@ -4,6 +4,7 @@ import {lessonNames,type Lesson} from './LearningContent';
 /** Small, same-origin bridge for the Hidden Reef showroom. No simulation changes. */
 export function installShowroom(aquarium:Aquarium){
  if(new URLSearchParams(location.search).get('showroom')!=='hidden-reef')return;
+ aquarium.paused=false;
  document.body.classList.add('store-showroom');
  document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';
  document.querySelector('h1')!.textContent='Living Showroom';

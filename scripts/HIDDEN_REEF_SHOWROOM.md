@@ -2,7 +2,7 @@
 
 The flagship aquarium feature precedes the shopping hero on the homepage. Desktop navigation includes 3D Aquarium; the phone navigation has a permanently visible aquarium entry outside its collapsed menu. Freshwater and help-center pages also invite visitors into the showroom.
 
-The showroom at `prototypes/hidden-reef/showroom/` loads a screenshot initially and creates the same-origin 3D iframe only after a deliberate launch or lesson selection. Closing removes the iframe. Intersection, page visibility and shopping overlays suspend aquarium rendering without changing the visitor's pause setting. The standalone jez237 aquarium behavior is unchanged unless the Hidden Reef query parameter is set.
+The showroom at `prototypes/hidden-reef/showroom/` automatically creates the same-origin 3D iframe on arrival from the store aquarium link. Motion starts when models are ready, with no second play button. The screenshot appears after visitors deliberately close the aquarium and offers a reopen button. Closing removes the iframe. Intersection, page visibility and shopping overlays suspend aquarium rendering without changing the visitor's pause setting. The standalone jez237 aquarium behavior is unchanged unless the Hidden Reef query parameter is set.
 
 The aquarium bridge accepts messages only from its parent window at the same origin. Close-ups and lessons update related care and catalog links. The filter shortcut opens the mechanical-media cutaway directly. The planner reads real catalog options and uses the existing preview-list API/storage, including quantity, copy and print. Aquarium sizing and livestock planning remain conversations with the store; the catalog does not have a matching freshwater tank to recommend as an exact replica. No invented stock or prices.
 
@@ -12,6 +12,8 @@ The aquarium bridge accepts messages only from its parent window at the same ori
 2. `node scripts/sync_hidden_reef_showroom.mjs`
 3. `python scripts/check_hidden_reef_links.py prototypes/hidden-reef`
 4. `python scripts/check_hidden_reef_links.py prototypes/hidden-reef-header-preview`
+
+The showroom and its aquarium controls use the store’s blue/cyan/violet palette and the existing `clear-reef-water-gpt-image-2.webp` photograph. The 3D renderer draws that backdrop and softly blends the cabinet floor into it; no additional WebGL background canvas is introduced. Standalone aquarium styling stays independent.
 
 The sync script preserves the existing two storefront variants and copies the current aquarium build, models, textures, lighting and study references. Old published content-hashed assets may be retained for rollback. The poster is an actual renderer screenshot; `?showroom=hidden-reef&poster=1` hides the aquarium controls for a fresh capture.
 
