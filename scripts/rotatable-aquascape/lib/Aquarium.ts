@@ -12,6 +12,7 @@ import {buildScannedHardscape,buildScannedFerns} from './ScannedHardscape';
 import {AquariumWater} from './AquariumWater';
 import {buildAquariumGlass} from './AquariumGlass';
 import {ReflectionPool} from './ReflectionPool';
+import {SceneRefraction} from './SceneRefraction';
 import {applyWaterDepth} from './WaterDepth';
 import {applyBakedIrradiance} from './BakedIrradiance';
 import {buildAquariumSubstrate} from './Substrate';
@@ -88,6 +89,7 @@ export class Aquarium{
  private bubbles:T.InstancedMesh;
  private water:AquariumWater;
  private reflections=new ReflectionPool();
+ private refraction:SceneRefraction|null=null;
  private frame=0;
  private diagnosticTime=0;private diagnosticFrames=0;
  private frameSamples:number[][]=[];
@@ -158,12 +160,14 @@ export class Aquarium{
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
+   // The previous path stays available for device comparisons and immediate fallback.
+   if(new URLSearchParams(location.search).get('renderer')!=='previous')this.refraction=new SceneRefraction(this.renderer,this.scene);
    // Prepare the final material variants before revealing the aquarium. The warm
    // frame also initializes shadow, reflection and postprocessing programs.
    this.controls.update();this.scene.updateMatrixWorld();this.schoolEyes?.update();
    this.water.update(this.currentTime,this.camera.position.y,this.daylight);
    await this.lighting.prepare(this.renderer);
-   this.renderer.shadowMap.needsUpdate=true;this.lighting.render(this.renderer,this.lightingInspection);
+   this.renderer.shadowMap.needsUpdate=true;if(this.refraction)this.reflections.prepare(this.renderer,this.scene,this.camera);this.lighting.render(this.renderer,this.lightingInspection);
    const plants=this.scene.children.filter(o=>o instanceof T.Mesh&&!!o.geometry.getAttribute('plantRoot'));
    this.teaching=new TeachingScene(this.scene,this.host,plants,this.learningSubstrate,this.texture,[...this.learningHousing,this.water]);this.learning.reset();
    this.picker=new PlantPicker(this.scene);
@@ -398,6 +402,7 @@ export class Aquarium{
   if(import.meta.env.DEV){this.renderer.info.autoReset=false;this.renderer.info.reset();}
   this.gpuTimer?.begin();
   this.renderer.shadowMap.needsUpdate=true;
+  if(this.refraction)this.reflections.prepare(this.renderer,this.scene,this.camera);
   const sceneTriangles=this.lighting.render(this.renderer,this.lightingInspection);
   if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
   this.gpuTimer?.end();
