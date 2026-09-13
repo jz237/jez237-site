@@ -18,6 +18,9 @@ export class LearningModel{
   while(remaining>1e-8){const h=Math.min(.25,remaining);advance(this.state,this.environment,h);advance(this.baseline,this.baselineEnvironment,h);remaining-=h;this.record();}
  }
  tick(dt:number){if(this.running)this.step(Math.min(.1,Math.max(0,dt))*this.hoursPerSecond);}
+ /** Food changes only the experimental tank. Challenge results stay isolated. */
+ addFood(){this.state.waste+=.5;}
+ get injectingCO2(){return this.environment.co2>0&&this.light>1e-6;}
  get light(){return illumination(this.state,this.environment);}
  private record(){const previous=this.history.at(-1);if(previous&&this.state.hours-previous.hour<.24)return;this.history.push({hour:this.state.hours,oxygen:this.state.oxygen,baselineOxygen:this.baseline.oxygen,ammonia:this.state.ammonia,baselineAmmonia:this.baseline.ammonia,co2:this.state.co2,baselineCo2:this.baseline.co2});if(this.history.length>193)this.history.shift();}
 }

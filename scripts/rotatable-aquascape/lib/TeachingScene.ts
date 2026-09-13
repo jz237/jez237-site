@@ -1,4 +1,6 @@
 import * as T from 'three';
+import {CoryModels} from './CoryModels.ts';
+import {Invertebrates} from './Invertebrates.ts';
 import {Tetra3D} from './Tetra3D.ts';
 import {lessons,type Lesson} from './LearningContent.ts';
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
@@ -14,13 +16,15 @@ export class TeachingScene{
  private originals=new Map<T.Object3D,{position:T.Vector3;visible:boolean}>();
  private paths:Path[]=[];private labels:{button:HTMLButtonElement;point:T.Vector3}[]=[];
  private host:HTMLElement;private labelHost:HTMLDivElement;private content=new T.Group();
+ private shrimpStudy:Invertebrates|null=null;private coryStudy:CoryModels|null=null;private coryPhase=0;
  private specimen:Tetra3D|null=null;private texture:T.Texture;private leaf:T.InstancedMesh|undefined;
  private labelMatrix=new T.Matrix4();private labelsDirty=true;private labelWidth=0;private labelHeight=0;
  private projected=new T.Vector3();private dummy=new T.Object3D();
  private phase=0;private impeller:T.Group|null=null;private rootStudy:T.Group|null=null;
+ private grazerAtlas?:T.Texture;
  private savedVisibility=new Map<T.Object3D,boolean>();
- constructor(world:T.Scene,host:HTMLElement,plants:T.Object3D[],substrate:T.Object3D[],texture:T.Texture,housing:T.Object3D[]=[]){
-  this.housing=housing;this.world=world;this.host=host;this.plants=plants;this.substrate=substrate;this.texture=texture;
+ constructor(world:T.Scene,host:HTMLElement,plants:T.Object3D[],substrate:T.Object3D[],texture:T.Texture,housing:T.Object3D[]=[],grazerAtlas?:T.Texture){
+  this.grazerAtlas=grazerAtlas;this.housing=housing;this.world=world;this.host=host;this.plants=plants;this.substrate=substrate;this.texture=texture;
   for(const o of [...plants,...substrate])this.originals.set(o,{position:o.position.clone(),visible:o.visible});
   world.traverse(o=>{if(o instanceof T.InstancedMesh&&o.userData.plantSpecies==='sword')this.leaf=o;});
   this.labelHost=document.createElement('div');this.labelHost.className='learning-labels';host.append(this.labelHost);
@@ -28,6 +32,7 @@ export class TeachingScene{
  }
  private restore(){for(const [o,v] of this.savedVisibility)o.visible=v;this.savedVisibility.clear();}
  private clear(){
+  this.shrimpStudy?.dispose();this.shrimpStudy=null;this.coryStudy=null;this.coryPhase=0;
   this.labelsDirty=true;this.restore();this.labelHost.replaceChildren();this.labels=[];this.paths=[];this.impeller=null;this.rootStudy=null;
   this.content.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
   this.content.clear();this.specimen=null;
@@ -114,16 +119,25 @@ export class TeachingScene{
     const g=this.leaf.geometry.clone();g.computeBoundingBox();g.translate(0,-.45,0);
     const leaf=this.add(g,mat,V(0,2.75,0));leaf.scale.set(4*size.x/size.y,4,4);leaf.rotation.y=-.3;
     this.path([V(-1,5.5,0),V(0,3.6,.5),V(.3,2.5,.5)],0xf5d894,.17);this.path([V(.3,2.5,.6),V(1.5,3,.6),V(2,4,.6)],0x8cdbef,.15);
+   }else if(step===3){
+    this.shrimpStudy=new Invertebrates(new T.Scene(),()=>0,[],this.grazerAtlas,[],()=>0,true);
+    this.shrimpStudy.root.position.set(-.3,2.1,0);this.shrimpStudy.root.scale.setScalar(5.5);this.content.add(this.shrimpStudy.root);
+   }else if(step===4){
+    this.coryStudy=new CoryModels(1);this.content.add(this.coryStudy.root);this.poseCory(0);
    }else{this.roots(V(0,4.5,0),4);this.path([V(2,1.4,.5),V(1,2,.6),V(0,3,.5),V(0,4.4,0)],0xb5e59b,.15);}
    this.label(lessons.organisms[step].tag,V(1.7,3.6,.5),step);
   }
  }
- update(dt:number,camera:T.Camera,flow=65){
+ private poseCory(dt:number){
+  const effort=.16+.09*(1+Math.sin(this.phase*.7))/2;this.coryPhase+=dt*(2.1+effort*5);
+  this.coryStudy?.pose(0,V(.45,2.4,0),0,-.10*(.5+.5*Math.sin(this.phase*.6)),5,this.coryPhase,effort,this.phase,true);this.coryStudy?.flush();
+ }
+ update(dt:number,camera:T.Camera,flow=65,viewDt=dt){
   if(!this.mode)return;
   const target=this.mode==='layers'?this.separation:0;
-  if(this.mode==='layers')for(const [o,original] of this.originals){const offset=this.plants.includes(o)?target*1.3:-target*.48;o.position.y=T.MathUtils.damp(o.position.y,original.position.y+offset,5,dt);o.updateMatrix();}
+  if(this.mode==='layers')for(const [o,original] of this.originals){const offset=this.plants.includes(o)?target*1.3:-target*.48;o.position.y=T.MathUtils.damp(o.position.y,original.position.y+offset,5,viewDt);o.updateMatrix();}
   if(this.mode==='layers'){for(const o of this.housing)o.visible=target<.02&&(this.savedVisibility.get(o)??true);for(const o of this.content.children)if(o.userData.rootTemplate)o.visible=target>.02;}
-  this.phase+=dt;
+  this.phase+=dt;this.shrimpStudy?.poseSpecimen(dt);if(this.coryStudy)this.poseCory(dt);
   if(this.impeller)this.impeller.rotation.y+=dt*flow*.14;
   this.specimen?.update(this.phase,.4,this.texture,.65,.5,1,dt,.6);
   const dummy=this.dummy;for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.beads.count;i++){path.curve.getPoint((path.phase+i/path.beads.count)%1,dummy.position);dummy.updateMatrix();path.beads.setMatrixAt(i,dummy.matrix);}path.beads.instanceMatrix.needsUpdate=true;}
@@ -133,6 +147,6 @@ export class TeachingScene{
   const matrix=this.dummy.matrix.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse);
   if(!this.labelsDirty&&w===this.labelWidth&&h===this.labelHeight&&this.labelMatrix.equals(matrix))return;
   this.labelsDirty=false;this.labelWidth=w;this.labelHeight=h;this.labelMatrix.copy(matrix);
-  for(const {button,point} of this.labels){const p=this.projected.copy(point).applyMatrix4(matrix);button.hidden=p.z>1||Math.abs(p.x)>1||Math.abs(p.y)>1;button.style.left=Math.max(75,Math.min(w-75,(p.x*.5+.5)*w))+'px';button.style.top=Math.max(40,Math.min(h-40,(-p.y*.5+.5)*h))+'px';}
+  for(const {button,point} of this.labels){const p=this.projected.copy(point).applyMatrix4(matrix);button.hidden=p.z< -1||p.z>1||Math.abs(p.x)>1||Math.abs(p.y)>1;button.style.left=Math.max(75,Math.min(w-75,(p.x*.5+.5)*w))+'px';button.style.top=Math.max(40,Math.min(h-40,(-p.y*.5+.5)*h))+'px';}
  }
 }

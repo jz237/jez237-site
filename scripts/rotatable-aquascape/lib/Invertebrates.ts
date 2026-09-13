@@ -27,7 +27,7 @@ export class Invertebrates{
  private pools:T.InstancedMesh[]=[];private textures:T.Texture[]=[];private size=new T.Vector3();private counts:number[]=[];private owners:number[][]=[];
  private bodyFrame:T.Matrix4|null=null;private bodyFrames=Array.from({length:6},()=>new T.Matrix4());private posed=new T.Matrix4();
  private dummy=new T.Object3D();private local=new T.Matrix4();private tangent=new T.Vector3();private binormal=new T.Vector3();private rotation=new T.Matrix4();private link=new T.Vector3();private end=new T.Vector3();
- constructor(scene:T.Scene,height:(x:number,z:number)=>number,surfaces:T.Object3D[]=[],atlas?:T.Texture,obstacles:Obstacle[]=[],floorHeight:(x:number,z:number)=>number=height){
+ constructor(scene:T.Scene,height:(x:number,z:number)=>number,surfaces:T.Object3D[]=[],atlas?:T.Texture,obstacles:Obstacle[]=[],floorHeight:(x:number,z:number)=>number=height,specimen=false){
   this.obstacles=obstacles;this.floorHeight=floorHeight;
   this.root.name='Shrimp and ramshorn snails';scene.add(this.root);
   const {skin,plateSkin,membrane,joint,flesh,shell,dark,textures}=grazerMaterials(atlas);this.textures=textures;
@@ -37,7 +37,11 @@ export class Invertebrates{
    const mesh=new T.InstancedMesh(g,m,n);mesh.instanceMatrix.setUsage(T.DynamicDrawUsage);mesh.frustumCulled=false;mesh.boundingSphere=new T.Sphere(new T.Vector3(0,2.7,0),6.4);mesh.castShadow=true;mesh.receiveShadow=true;this.pools.push(mesh);this.root.add(mesh);this.owners.push([]);
   }
   // Cache contact paths once. Hardscape is raycast at construction, never each frame.
-  scene.updateMatrixWorld();this.plants=new GrazerPlants(scene,(p,n,f,snail)=>this.solidClear(p,n,f,snail));const ray=new T.Raycaster(new T.Vector3(),new T.Vector3(0,-1,0));
+  scene.updateMatrixWorld();this.plants=new GrazerPlants(specimen?new T.Scene():scene,(p,n,f,snail)=>this.solidClear(p,n,f,snail));const ray=new T.Raycaster(new T.Vector3(),new T.Vector3(0,-1,0));
+  if(specimen){
+   this.animals.push({cooldown:0,motion:createShrimpMotion(0),direction:1,blocked:0,tripIn:Infinity,id:0,kind:'shrimp',position:new T.Vector3(),normal:UP.clone(),heading:0,distance:0,speed:0,remaining:Infinity,grazing:true,phase:0,seed:237,route:[],normals:[],length:1,matrix:new T.Matrix4()});
+   this.poseSpecimen(0);return;
+  }
   const centers=[[-3.8,1.8],[-2.2,1.72],[1.1,1.96],[1.8,.9],[3.55,1.45],[-1.3,-.55],[3.6,0]];
   const snailTrail=this.plants.trail(new T.Vector3(3.6,1.4,0),true,this.usedLeaves);
   for(let id=0;id<9;id++){
@@ -154,6 +158,13 @@ export class Invertebrates{
    if(a.kind==='shrimp'){advanceShrimpMotion(a.motion,dt,(a.escape?Math.min(1,a.escape.age/2.6):a.flight?.progress)??null,a.speed,turnDemand,a.escape?.age);this.shrimp(a);}else this.snail(a);
   }
   this.pools.forEach((p,i)=>{p.count=this.counts[i];p.instanceMatrix.needsUpdate=true;});this.initialized=true;
+ }
+ /** Reuse the living shrimp's exact anatomy and articulation for an enlarged study. */
+ poseSpecimen(dt:number){
+  const a=this.animals[0];a.phase+=dt;
+  // Held in place for inspection: demonstrate gentle grazing, not an escape loop.
+  advanceShrimpMotion(a.motion,dt,null,0,0);this.counts=this.pools.map(()=>0);this.shrimp(a);
+  this.pools.forEach((p,i)=>{p.count=this.counts[i];p.instanceMatrix.needsUpdate=true;});
  }
  private shrimp(a:Animal){
   const t=a.phase,walk=a.flight?.35:Math.min(1,a.speed/.06);

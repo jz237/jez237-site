@@ -18,3 +18,16 @@ test('pause freezes experiments; resets isolate state and bound chart memory',()
 test('all eight lessons have reachable steps with finite scene anchors and explanations',()=>{
  assert.equal(Object.keys(lessonNames).length,8);for(const id of Object.keys(lessonNames)){assert.ok(lessons[id].length);for(const step of lessons[id]){assert.ok(step.title&&step.text&&step.detail);assert.equal(step.point.length,3);assert.ok(step.point.every(Number.isFinite));}}
 });
+
+
+test('CO2 injection follows the simulated light timer and supply control',()=>{
+ const m=new LearningModel();m.reset();assert.equal(m.injectingCO2,true);m.environment.co2=0;assert.equal(m.injectingCO2,false);
+ m.environment.co2=24;m.step(6);assert.equal(m.injectingCO2,false);const co2=m.state.co2;m.step(6);assert.ok(m.state.co2<co2);m.step(12);assert.equal(m.injectingCO2,true);
+});
+
+test('six-hour challenge answers agree with the model and food is isolated from control',()=>{
+ const m=new LearningModel();m.reset('flow');m.environment.flow=0;m.step(6);assert.ok(m.state.oxygen<m.baseline.oxygen);
+ m.reset('carbon');m.step(6);assert.ok(m.state.co2<m.baseline.co2);
+ m.reset('food');m.step(6);assert.ok(m.state.ammonia>m.baseline.ammonia);
+ const baseline=structuredClone(m.baseline),waste=m.state.waste;m.addFood();assert.equal(m.state.waste,waste+.5);assert.deepEqual(m.baseline,baseline);
+});
