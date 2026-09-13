@@ -20,7 +20,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
  <div class="bottom-note">A separate 3D study <span>·</span> All scenery has volume</div>
 </main>`;
 const storeShowroom=new URLSearchParams(location.search).get('showroom')==='hidden-reef';
-if(storeShowroom){document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';document.querySelector('h1')!.textContent='Living Showroom';document.querySelector('header nav')!.innerHTML='<a href="../" target="_top">← Showroom & tank planner</a>';}
+if(storeShowroom){document.body.classList.add('store-showroom');document.body.style.setProperty('--reef-water-background',`url("${new URL('../../assets/water-lab/clear-reef-water-gpt-image-2.webp',location.href).href}")`);document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';document.querySelector('h1')!.textContent='Living Showroom';document.querySelector('header nav')!.innerHTML='<a href="../" target="_top">← Showroom & tank planner</a>';}
 installFullscreen(document.querySelector('main')!,document.querySelector<HTMLButtonElement>('#fullscreen')!);
 const host=document.querySelector<HTMLDivElement>('#scene')!;
 async function start(){
