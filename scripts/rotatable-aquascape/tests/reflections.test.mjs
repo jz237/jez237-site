@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import {PlaneGeometry} from 'three';
+import {PlaneGeometry,Scene,PerspectiveCamera,Group} from 'three';
 import {Reflector} from 'three/addons/objects/Reflector.js';
 import {ReflectionPool} from '../lib/ReflectionPool.ts';
 
@@ -26,3 +26,13 @@ test('a failed reflection capture does not leave the other mirrors permanently f
  b.onBeforeRender();assert.equal(captures,1);
  dispose(a);dispose(b);
 });
+
+ test('prepared reflections capture once before the main view and refresh every frame',()=>{
+ const pool=new ReflectionPool(),a=mirror(),b=mirror(),scene=new Scene(),camera=new PerspectiveCamera(60,1,.1,100),captures=[];
+ camera.position.z=4;scene.add(a,b);scene.updateMatrixWorld();
+ a.onBeforeRender=()=>{captures.push('a');b.onBeforeRender();};b.onBeforeRender=()=>captures.push('b');pool.add(a);pool.add(b);
+ pool.prepare({},scene,camera);a.onBeforeRender();b.onBeforeRender();assert.deepEqual(captures,['a','b']);
+ pool.prepare({},scene,camera);assert.deepEqual(captures,['a','b','a','b']);
+ const hidden=new Group();hidden.visible=false;hidden.add(a);scene.add(hidden);b.position.x=100;scene.updateMatrixWorld();
+ pool.prepare({},scene,camera);assert.equal(captures.length,4);dispose(a);dispose(b);
+ });
