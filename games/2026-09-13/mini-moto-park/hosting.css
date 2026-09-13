@@ -1,0 +1,4 @@
+/* Fit the original game controls inside short phone/tablet viewports. */
+@media (max-height: 519px) {
+  .game-shell { min-height: 0; }
+}
