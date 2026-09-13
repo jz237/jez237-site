@@ -1,3 +1,7 @@
+/* Creator attribution remains visible beneath the original control bar. */
+.creator-credit { position:fixed; z-index:20; bottom:1px; left:50%; transform:translateX(-50%); margin:0; padding:0 5px; max-width:100%; white-space:nowrap; color:#bdcbc9; background:#07151ce8; font:10px/12px Arial,sans-serif; }
+.creator-credit a { color:#ffb66e; text-decoration:underline; text-underline-offset:2px; }
+.creator-credit a:focus-visible { outline:2px solid #ffb66e; outline-offset:2px; }
 /* Fit the original game controls inside short phone/tablet viewports. */
 @media (max-height: 519px) {
   .game-shell { min-height: 0; }
