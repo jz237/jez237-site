@@ -22,6 +22,10 @@ Open [the cockpit](https://jez237.com/demos/model-s-studio/cockpit.html) from th
 
 Validate with `node scripts/model-s-studio/verify-cockpit.mjs` after installing the tooling dependencies.
 
+## Infographic
+
+The [Model S infographic](https://jez237.com/demos/model-s-studio/infographic.html) combines exploded anatomy, schematic battery layers, the driver’s seat and the simulated display. Its page provides a full-size view, PNG download, print layout and accessible text description, and is linked from the studio, cockpit and manual. The public asset is `assets/model-s-infographic-v1.png` (1024 × 1536). It was generated with the built-in image tool from studio captures; the prompt is preserved in `../../scripts/model-s-studio/infographic-prompt.txt`. This is an illustrated overview, not manufacturer CAD.
+
 ## Run locally
 
 From the repository root, run `python -m http.server 8768`, then open `http://localhost:8768/demos/model-s-studio/`. No build step or service keys are required. Three.js 0.180.0, its loader, orbit controls, procedural softbox environment, and Meshopt decoder are vendored with the Three.js license. Fonts use Google Fonts with system fallbacks.

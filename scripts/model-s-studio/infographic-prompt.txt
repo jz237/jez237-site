@@ -1,0 +1,29 @@
+Use case: infographic-diagram / compositing.
+Transform the four supplied Model S Studio captures into ONE polished, high-resolution portrait infographic, about 2:3 aspect ratio. Recompose and redraw the vehicle and interior cleanly; do not reproduce the surrounding webpage controls or browser UI. This is a visual breakdown of this specific silver Model S Studio project.
+Input 1: reference for the metallic silver Model S Plaid exterior and sedan proportions.
+Input 2: reference for the exploded anatomy and the separate layered battery schematic.
+Input 3: reference for the actual driver's-seat cabin arrangement, black yoke, driver instrument binnacle, landscape center monitor, upholstery and console.
+Input 4: reference for the enlarged landscape touchscreen: vehicle status on the left, pale map on the right, and bottom tabs.
+Preserve Model S identity, silver paint, the left-hand-drive interior and landscape center display. Never substitute a Model X, SUV, gullwing doors, conventional round steering wheel or portrait tablet.
+
+Design: premium technical editorial poster with carefully aligned typography, generous negative space and clear numbered callouts. Deep charcoal/navy background matching the reference studio, brushed silver components, restrained mint/cyan leader lines and small warm amber battery accents. Detailed, realistic product illustrations with crisp edges, soft studio reflections, believable leather, rubber, metal and glass. Improve the clarity and finish of the reference renderings. No flames or destructive explosion: exploded means clean engineering-style part separation. Large readable labels, very little prose, disciplined hierarchy, no illegible microtext.
+
+Layout: headline across top. Upper half is the dominant three-quarter exploded Model S diagram, retaining an unmistakable coherent sedan silhouette while spacing the hood, roof glazing, doors, wheels and cabin assemblies sufficiently to see each group. Include a small intact silver Model S silhouette as an assembled orientation reference. Show the battery enclosure, cooling layer, illustrative cell banks and lid clearly separated below/beside the floor; label it explicitly schematic. Use thin tidy leader lines that terminate at the appropriate actual part without crossing text. Do not attempt 308 individual labels.
+Lower half has two generous coordinated detail panels: left, a realistic driver's-seat cutaway close-up showing the instrument cluster behind the yoke, the center touchscreen to its right and the console below; right, a large clean close-up of the landscape touchscreen, with a small miniature row of four interface tiles for navigation, climate, charging and vehicle controls. Connect the physical center screen to its enlarged detail with one discreet leader. These are static depictions of the interactive software study, not functioning buttons. Make the interior and display large enough to reward close viewing, not tiny inserts.
+Bottom has a simple numerical breakdown strip and a short clear disclosure/credit. Every diagram remains inside the page margins.
+
+Use these exact headings and labels, with no additional factual specifications:
+Title: "MODEL S"
+Subtitle: "ANATOMY • INTERIOR • DISPLAY"
+Section 01: "01 / EXPLODED ANATOMY"
+Exterior callouts: "Silver body panels", "Panoramic glazing", "Wheels & brakes", "Cabin assembly", "Battery schematic"
+Battery layer labels: "Cover", "Cell banks", "Cooling layer", "Protective tray"
+Section 02: "02 / DRIVER’S SEAT"
+Interior callouts: "Steering yoke", "Instrument cluster", "Center touchscreen", "Center console"
+Section 03: "03 / DISPLAY & SOFTWARE"
+Display feature labels: "Navigation", "Climate", "Charging", "Vehicle controls"
+On the display itself, match the sample UI visually: "P", "0 mph", "78%", "72°", a simplified map and a bottom app dock. Include the readable small tag "SIMULATED UI".
+Breakdown strip: "308 visual groups" and beneath it "297 artist surfaces + 11 schematic battery pieces"
+Footer: "Educational visualization • Battery layout is schematic • Software is simulated"
+Small credit: "Vehicle model: 3D Hawk / CC BY 4.0 • JEZ237"
+Accuracy constraints: no invented engineering measurements, horsepower, range, cell counts, or claims of manufacturer CAD accuracy; no promise of true service-part inventory. Exactly one coherent silver Model S main exploded assembly, a consistent left-hand-drive cabin, and a matching display enlargement. Finish as a beautiful, legible infographic rather than a screenshot collage.
