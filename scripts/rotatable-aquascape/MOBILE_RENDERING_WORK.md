@@ -22,3 +22,18 @@ Previous public CSS: `demos/rotatable-aquascape/assets/index-Ha15YhvB.css`.
 Both assets remain in the repository and deployment. Current pre-publication site HEAD is `45253f8c0` and includes unrelated updates that must be preserved.
 
 To restore the actual live aquarium, revert only this mobile-rendering publication commit and deploy current main through the guarded snapshot process. Do not reset the entire website to an older commit. For an immediate user-side comparison use `?renderer=previous`.
+
+
+## Follow-up: actual phone report and opt-in measurements
+
+The user reports that ca69772f0 improved the Galaxy S25 Ultra from roughly 1 FPS to roughly 10 FPS; it remains choppy. This is the user's device observation, not our own phone measurement.
+
+This follow-up stops recomposing the existing meshes' fixed local matrices each frame. Moving fish parent groups, per-vertex body/fin deformation, per-instance shrimp/cory poses, plant shaders, all geometry and textures, full-resolution shadows/reflections, and their refresh rates remain unchanged. Layer lessons explicitly refresh transforms as they separate or restore the planting and substrate. Food and new lesson objects keep their usual automatic transforms. `originalTransforms=1` bypasses this change for comparison.
+
+`stats=1` adds a local-only panel showing three-second FPS and CPU windows, nonblocking GPU query timing when supported, drawing-buffer dimensions and the build label. Measurements are copied only when the viewer clicks the Copy measurements button. The ordinary production URL does not enable timing queries or the panel. Leave the tank running for 30 seconds before copying its measurements. No telemetry is sent.
+
+Rejected experiments: spatial plant grouping increased draw calls from about 1,451 to 4,383 and render CPU median from 4.3 to 9.9 ms while saving only about 2% of triangles. A shared GPU wave table increased desktop GPU time from about 8.2 to 9.7 ms. Neither experiment is included. We have not established an additional Galaxy speedup; the phone readout is needed to distinguish simulation cost, graphics-driver stalls and GPU time.
+
+Validation: production build passed; full 103-test suite passed, followed by the five affected transform/teaching tests after finalizing explicit static transforms. The layer test now verifies world matrices during separation and restoration. Browser preview renders the tank and readout without console errors. A desktop viewport check cannot substitute for the real S25 GPU.
+
+The immediate rollback point for this follow-up is ca69772f0763e3228c8cbed19adc71e4431d2cf6. Keep its public index-CdKo1KIA.js asset. Revert only the follow-up commit and redeploy current main if needed.

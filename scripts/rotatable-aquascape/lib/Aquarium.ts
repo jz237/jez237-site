@@ -30,6 +30,8 @@ import {calmSwordLeaves} from './SwordCurrent';
 import {SchoolEyes} from './SchoolEyes';
 import {optimizeLeafIndexOrder} from './LeafIndexOrder';
 import {GpuFrameTimer} from './GpuFrameTimer';
+import {reuseUnchangedTransforms} from './TransformReuse';
+import {PerformanceReadout} from './PerformanceReadout';
 import {createTetraSwim,advanceTetraSwim,startleTetra,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
 import {createSchoolRoute,advanceSchoolRoute,schoolActivity} from './SchoolRoute';
 import {separateFish} from './FishCollisions';
@@ -81,6 +83,8 @@ export class Aquarium{
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
  private school=createSchoolRoute();
  private schoolEyes:SchoolEyes|null=null;
+ private diagnostics=import.meta.env.DEV||new URLSearchParams(location.search).get('stats')==='1';
+ private perfReadout:PerformanceReadout|null=null;
  private gpuTimer:GpuFrameTimer|null=null;
  private texture=new T.Texture();
  private obstacles:Obstacle[]=[];private grazerFishPrevious=new Map<number,T.Vector3>();
@@ -98,7 +102,7 @@ export class Aquarium{
  constructor(private host:HTMLElement){
   this.renderer=new T.WebGLRenderer({antialias:false,depth:false,stencil:false,alpha:false,powerPreference:'high-performance'});
   this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));
-  if(import.meta.env.DEV)this.gpuTimer=new GpuFrameTimer(this.renderer.getContext() as WebGL2RenderingContext,host);
+  if(this.diagnostics)this.gpuTimer=new GpuFrameTimer(this.renderer.getContext() as WebGL2RenderingContext,host);
   this.renderer.outputColorSpace=T.SRGBColorSpace;
   this.renderer.toneMapping=T.ACESFilmicToneMapping;
   this.renderer.toneMappingExposure=1.12;
@@ -107,6 +111,7 @@ export class Aquarium{
   this.renderer.shadowMap.autoUpdate=false;
   this.lighting=new AquariumLighting(this.scene,this.camera);
   host.appendChild(this.renderer.domElement);
+  if(new URLSearchParams(location.search).get('stats')==='1')this.perfReadout=new PerformanceReadout(host,this.renderer.domElement);
   this.renderer.domElement.tabIndex=0;
   this.renderer.domElement.setAttribute('aria-label','Aquarium. Drag to rotate, use the view and zoom buttons below.');
   // Scene-linear backdrop radiance: ACES otherwise crushes the dark reference
@@ -173,6 +178,7 @@ export class Aquarium{
    this.picker=new PlantPicker(this.scene);
    this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))this.pickBlockers.push(o);});
    const seen=new Set<string>();this.scene.traverse(o=>{if(!(o instanceof T.InstancedMesh)||!o.userData.plantSpecies)return;const root=o.geometry.getAttribute('plantRoot');if(!root)return;for(let i=0;i<o.count;i++){const point=new T.Vector3().fromBufferAttribute(root,i),key=[point.x.toFixed(1),point.z.toFixed(1)].join(',');if(seen.has(key))continue;seen.add(key);point.y+=.35+(this.browseSites.length%4)*.3;clearHardscape(point,this.obstacles,.35);const p=fishCoordinates(point);if(p.x>670&&p.x<1200&&p.y>250&&p.y<500)this.browseSites.push({id:-100-this.browseSites.length,...p});}});
+   if(!new URLSearchParams(location.search).has('originalTransforms'))reuseUnchangedTransforms(this.scene);
    this.frame=requestAnimationFrame(this.animate);
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
@@ -399,13 +405,14 @@ export class Aquarium{
   this.scene.updateMatrixWorld();this.scene.matrixWorldAutoUpdate=false;
   this.schoolEyes?.update();
   const renderStart=performance.now();
-  if(import.meta.env.DEV){this.renderer.info.autoReset=false;this.renderer.info.reset();}
+  if(this.diagnostics){this.renderer.info.autoReset=false;this.renderer.info.reset();}
   this.gpuTimer?.begin();
   this.renderer.shadowMap.needsUpdate=true;
   if(this.refraction)this.reflections.prepare(this.renderer,this.scene,this.camera);
   const sceneTriangles=this.lighting.render(this.renderer,this.lightingInspection);
   if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
   this.gpuTimer?.end();
+  this.perfReadout?.update(elapsed,renderStart-updateStart,performance.now()-renderStart);
   if(import.meta.env.DEV){
    this.frameSamples.push([elapsed*1000,renderStart-updateStart,performance.now()-renderStart,this.renderer.info.render.calls,this.renderer.info.render.triangles]);
    if(this.frameSamples.length>=240){const samples=this.frameSamples;const q=(column:number,p:number)=>{const sorted=samples.map(s=>s[column]).sort((a,b)=>a-b);return +sorted[Math.floor((sorted.length-1)*p)].toFixed(2);};this.host.dataset.frameProfile=JSON.stringify({frames:samples.length,frameMsP50:q(0,.5),frameMsP95:q(0,.95),updateMsP50:q(1,.5),updateMsP95:q(1,.95),renderCpuMsP50:q(2,.5),renderCpuMsP95:q(2,.95),drawCalls:q(3,.5),triangles:q(4,.5)});this.frameSamples=[];}
