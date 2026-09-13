@@ -38,3 +38,26 @@ test('substrate study contains grains, debris, microbes and roots and restores t
  const counts=[];let roots=0;teach.root.traverse(o=>{if(o instanceof T.InstancedMesh)counts.push(o.count);if(o.userData.rootTemplate)roots++;});assert.ok(counts.includes(1200)&&counts.includes(150)&&counts.includes(28));assert.equal(roots,2);
  teach.set(null);assert.equal(tank.visible,true);assert.equal(teach.root.children[0].children.length,0);
 });
+
+
+test('layer slider responds while biological motion remains paused',()=>{
+ const scene=new T.Scene(),plant=new T.Mesh(new T.BoxGeometry(),new T.MeshStandardMaterial());scene.add(plant);
+ const teach=new TeachingScene(scene,{...element(),clientWidth:900,clientHeight:700},[plant],[],new T.Texture());const camera=new T.PerspectiveCamera();
+ teach.set('layers');teach.separation=1;for(let i=0;i<120;i++)teach.update(0,camera,65,1/60);
+ assert.ok(plant.position.y>1.29);assert.equal(teach.phase,0);
+ teach.separation=0;for(let i=0;i<120;i++)teach.update(0,camera,65,1/60);assert.ok(plant.position.y<.001);
+});
+
+test('shrimp and cory close-ups animate actual articulated geometry and release it on exit',()=>{
+ const scene=new T.Scene(),tank=new T.Mesh(new T.BoxGeometry(),new T.MeshStandardMaterial());scene.add(tank);
+ const teach=new TeachingScene(scene,{...element(),clientWidth:900,clientHeight:700},[],[],new T.Texture(),[],new T.Texture());const camera=new T.PerspectiveCamera();
+ teach.set('organisms',3);assert.equal(tank.visible,false);
+ const shrimp=teach.shrimpStudy;assert.equal(shrimp.animals.length,1);assert.ok(shrimp.root.children.some(m=>m.count===6&&m.geometry.getAttribute('plateOffset')));
+ for(const m of shrimp.root.children){assert.ok(Number.isFinite(m.count));assert.ok(Array.from(m.instanceMatrix.array.slice(0,m.count*16)).every(Number.isFinite));}
+ const phase=shrimp.animals[0].phase;teach.update(.05,camera);assert.ok(shrimp.animals[0].phase>phase);
+ const paused=shrimp.animals[0].phase;teach.update(0,camera);assert.equal(shrimp.animals[0].phase,paused);
+ let disposed=false;shrimp.root.children[0].geometry.addEventListener('dispose',()=>disposed=true);
+ teach.set('organisms',4);assert.equal(disposed,true);assert.equal(teach.shrimpStudy,null);assert.equal(teach.coryStudy.meshes.length,2);
+ const cory=teach.coryStudy;const wave=cory.motion.getX(0);teach.update(.05,camera);assert.ok(cory.motion.getX(0)>wave);const held=cory.motion.getX(0);teach.update(0,camera);assert.equal(cory.motion.getX(0),held);
+ teach.set(null);assert.equal(tank.visible,true);assert.equal(teach.coryStudy,null);assert.equal(teach.root.children[0].children.length,0);
+});

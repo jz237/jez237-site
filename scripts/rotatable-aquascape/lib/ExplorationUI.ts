@@ -8,7 +8,7 @@ export function installExploration(aquarium:Aquarium){
  aquarium.onExploreClose=close;
  const open=()=>{const learn=document.querySelector<HTMLButtonElement>('#learn')!;if(learn.getAttribute('aria-expanded')==='true')learn.click();panel.hidden=false;main.classList.add('exploration-open');button.setAttribute('aria-expanded','true');aquarium.identifyMode=true;render();};
  button.onclick=()=>panel.hidden?open():close();
- aquarium.onIdentify=info=>{if(aquarium.following!==null&&info?.fishId!==aquarium.following)aquarium.follow(null);selected=info;if(info)document.dispatchEvent(new CustomEvent('aquascape-context',{detail:{kind:info.kind,name:info.name}}));render();};
+ aquarium.onIdentify=info=>{if(selected?.fishId!==info?.fishId||selected?.coryId!==info?.coryId||selected?.animalId!==info?.animalId)aquarium.follow(null);selected=info;if(info)document.dispatchEvent(new CustomEvent('aquascape-context',{detail:{kind:info.kind,name:info.name}}));render();};
  function render(){
   panel.innerHTML=`<div class="explore-heading"><span class="eyebrow">A CLOSER LOOK</span><button id="explore-close" aria-label="Close exploration">×</button></div>
    <div class="explore-scene-tools"><button id="explore-front">Front</button><button id="explore-angle">Three-quarter</button><button id="explore-feed">Feed fish</button><button id="explore-pause">${aquarium.paused?'Resume':'Pause'}</button></div>
@@ -24,7 +24,7 @@ export function installExploration(aquarium:Aquarium){
   panel.querySelector<HTMLButtonElement>('#explore-feed')!.onclick=()=>document.querySelector<HTMLButtonElement>('#feed')!.click();
   panel.querySelector<HTMLButtonElement>('#explore-pause')!.onclick=()=>{document.querySelector<HTMLButtonElement>('#pause')!.click();render();};
   panel.querySelector<HTMLButtonElement>('#explore-close')!.onclick=()=>{close();button.focus();};
-  panel.querySelector<HTMLSelectElement>('#choose-organism')!.onchange=e=>{const [kind,id]=(e.target as HTMLSelectElement).value.split(':');if(kind==='cory')aquarium.identifyCory(+id);if(kind==='fish')aquarium.identifyFish(+id);if(kind==='plant')aquarium.identifyPlant(id);if(kind==='animal')aquarium.identifyAnimal(+id);};
+  panel.querySelector<HTMLSelectElement>('#choose-organism')!.onchange=e=>{const [kind,id]=(e.target as HTMLSelectElement).value.split(':');if(!kind){aquarium.follow(null);aquarium.clearSelection();selected=null;render();return;}if(kind==='cory')aquarium.identifyCory(+id);if(kind==='fish')aquarium.identifyFish(+id);if(kind==='plant')aquarium.identifyPlant(id);if(kind==='animal')aquarium.identifyAnimal(+id);};
   const inspectCory=panel.querySelector<HTMLButtonElement>('#inspect-cory');if(inspectCory)inspectCory.onclick=()=>aquarium.inspectCory();
   const inspect=panel.querySelector<HTMLButtonElement>('#inspect-animal');if(inspect)inspect.onclick=()=>aquarium.inspectAnimal();
   const follow=panel.querySelector<HTMLButtonElement>('#follow-fish');if(follow)follow.onclick=()=>{aquarium.follow(aquarium.following===selected!.fishId?null:selected!.fishId!);render();};
@@ -32,6 +32,6 @@ export function installExploration(aquarium:Aquarium){
   panel.querySelector<HTMLButtonElement>('#underground')!.onclick=()=>aquarium.onLessonRequest('underground');
   panel.querySelector<HTMLButtonElement>('#try-challenge')!.onclick=()=>aquarium.onLessonRequest('challenges');
  }
- setInterval(()=>{if(panel.hidden||(!selected||selected.kind==='plant'))return;const text=aquarium.selectedFishStatus,el=panel.querySelector('#observed-behavior');if(el&&el.textContent!==text)el.textContent=text;},400);
+ setInterval(()=>{if(panel.hidden)return;const pause=panel.querySelector('#explore-pause');if(pause)pause.textContent=aquarium.paused?'Resume':'Pause';const feed=panel.querySelector<HTMLButtonElement>('#explore-feed');if(feed)feed.disabled=document.querySelector<HTMLButtonElement>('#feed')!.disabled;if(!selected||selected.kind==='plant')return;const text=aquarium.selectedFishStatus,el=panel.querySelector('#observed-behavior');if(el&&el.textContent!==text)el.textContent=text;},400);
  document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!panel.hidden){close();button.focus();}});
 }
