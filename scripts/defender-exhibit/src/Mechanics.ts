@@ -17,3 +17,10 @@ export function speakerMix(distance:number,side:number,facing:number){
  const front=Math.max(0,Math.min(1,(facing+1)/2));
  return {pan:Math.max(-.85,Math.min(.85,side)),gain:Math.max(.12,1/(1+Math.max(0,distance-1.2)*.34))*(.62+.38*front),cutoff:2400+12600*front};
 }
+
+/** Keep both background games audible, below the selected cabinet even when nearer. */
+export function cabinetMix(distance:number,side:number,facing:number,focused:boolean,focusDistance:number){
+ const mix=speakerMix(distance,side,facing);
+ if(!focused)mix.gain=Math.min(mix.gain*.32,speakerMix(focusDistance,0,-1).gain*.4);
+ return mix;
+}

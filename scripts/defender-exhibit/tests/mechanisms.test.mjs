@@ -2,7 +2,7 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {Vector3} from 'three';
 import {buildDetailedCabinet} from '../model-detail.mjs';
-import {harnessCurve,mechanismPose,speakerMix} from '../src/Mechanics.ts';
+import {harnessCurve,mechanismPose,speakerMix,cabinetMix} from '../src/Mechanics.ts';
 import {DefenderSound} from '../src/DefenderSound.ts';
 
 test('service hinges preserve attachment points, leave the coin fascia and cashbox fixed, and move plug endpoints',()=>{
@@ -33,4 +33,13 @@ test('positional processing remains downstream of master mute and schedules smoo
  const nodes=[];const node=()=>{const n={gain:param(),frequency:param(),pan:param(),connect(next){this.next=next;return next;},start(){},stop(){},disconnect(){},getFloatTimeDomainData(v){v.fill(0)}};nodes.push(n);return n;};
  const context={currentTime:1,state:'running',destination:{},createGain:node,createAnalyser:node,createStereoPanner:node,createBiquadFilter:node,createBufferSource:node,decodeAudioData:async()=>({duration:.1})};
  try{const sound=new DefenderSound(context);await sound.ready;sound.state(true,false,.25,false);const master=nodes[0];assert(master.gain.value>0);sound.spatial(speakerMix(4,.5,-1));sound.state(true,true,.25,false);assert.equal(master.gain.value,0);sound.spatial(speakerMix(1,-.5,1));assert.equal(master.gain.value,0,'moving the camera must not unmute audio');assert(nodes.some(n=>n.pan.calls.some(c=>c.smoothing>0)));assert(nodes.some(n=>n.frequency.calls.some(c=>c.value===15000)));}finally{globalThis.fetch=originalFetch;}
+});
+
+
+test('all cabinets remain audible at wide distances and selected cabinet dominates nearer neighbors',()=>{
+ for(const distance of [1,4,8,12,30])for(const facing of [-1,0,1]){
+  const focus=cabinetMix(distance,0,facing,true,distance);
+  for(const nearby of [1,4,12]){const left=cabinetMix(nearby,-.7,1,false,distance),right=cabinetMix(nearby,.7,1,false,distance);assert(left.gain>0&&right.gain>0);assert(focus.gain>left.gain*2);assert(left.pan<0&&right.pan>0);}
+ }
+ assert(cabinetMix(5,0,1,true,5).gain>cabinetMix(5,0,1,false,5).gain);
 });
