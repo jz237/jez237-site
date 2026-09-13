@@ -41,7 +41,7 @@ async function start(){
  document.querySelector<HTMLButtonElement>('#zoomOut')!.onclick=()=>aquarium.zoom(1.18);
  document.querySelector<HTMLButtonElement>('#reset')!.onclick=()=>{aquarium.view('angle');document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(v=>v.classList.toggle('active',v.dataset.view==='angle'));};
  host.addEventListener('pointerdown',()=>document.querySelectorAll('[data-view]').forEach(v=>v.classList.remove('active')));
- setInterval(()=>document.querySelector('#status')!.textContent=aquarium.paused?'Paused':aquarium.status,1200);
+ setInterval(()=>{document.querySelector('#status')!.textContent=aquarium.paused?'Paused':aquarium.status;light.textContent=aquarium.evening?'Daylight':'Evening';light.setAttribute('aria-pressed',String(aquarium.evening));},1200);
  }catch(error){console.error(error);document.querySelector('#loading')!.innerHTML=storeShowroom?'The 3D aquarium could not start.<br><small>Try a browser with WebGL enabled, or <a href="../" target="_top">return to the showroom guides and planner</a>.</small>':'The 3D aquarium could not start.<br><small>Try a browser with WebGL enabled, or visit the photographic version above.</small>';}
 }
 start();

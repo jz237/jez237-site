@@ -31,3 +31,7 @@
 .store-showroom .learning-tag{background:#08273deb;border-color:#74cdeb88;color:#e9faff}
 .store-showroom .selection-ring{border-color:#40d9ff;box-shadow:0 0 0 4px #40d9ff15}
 .store-showroom main:fullscreen,.store-showroom main.aquarium-fullscreen{background:#062750}
+
+.chemistry-summary{position:absolute;left:38px;top:202px;z-index:4;font-size:11px;color:#c1d7dd;background:#081c2ee6;border:1px solid #accbd12e;max-width:calc(100% - 44px)}
+.learning-open .chemistry-summary,.exploration-open .chemistry-summary{display:none}
+@media(max-width:850px){.chemistry-summary{top:172px;left:22px;font-size:10px;padding:8px}}
