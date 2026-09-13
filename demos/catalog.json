@@ -89,22 +89,22 @@
   },
   {
     "id": "005",
-    "title": "Defender — Inside the Arcade",
+    "title": "Defender, Robotron & Joust — Inside the Arcade",
     "category": "3D · Arcade preservation",
-    "description": "Explore a weathered arcade cabinet after closing. Separate 13 assemblies, trace its circuitry, and watch an autonomous Defender-inspired battle on the glowing CRT.",
+    "description": "Explore three arcade cabinets after closing. Click Defender, Robotron or Joust to bring it forward, separate its assemblies, trace the circuits and watch autonomous battles with original sprites and sounds.",
     "url": "defender-exhibit/",
     "image": "assets/defender-exhibit.webp",
     "imageAlt": "Live exploded Defender exhibit with a detailed cabinet and autonomous space battle on its CRT",
     "source": "https://github.com/jz237/jez237-site/tree/main/scripts/defender-exhibit",
     "features": [
       "Hero, exploded & X-ray views",
-      "Autonomous Defender display",
-      "Seven-chapter guided tour",
+      "Defender, Robotron & Joust displays",
+      "Machine-specific guided tours",
       "CRT close-up watch mode"
     ],
     "facts": [
       "13 assemblies",
-      "Original cabinet art",
+      "Original game sprites & sound",
       "Automatic combat & rescues"
     ],
     "note": "WebGL · Desktop & mobile · Interpretive model · Preview captured from the live exhibit"
@@ -112,23 +112,49 @@
   {
     "id": "006",
     "title": "The Living Aquascape",
-    "category": "Photographic · Living systems",
-    "description": "A small world, in balance. Watch a densely planted aquarium come to life, follow its circulation, inspect a leaf at macro scale and explore how light, carbon and biology interact.",
-    "url": "living-aquascape/",
-    "image": "assets/living-aquascape.png",
-    "imageAlt": "Original photographic artwork of a lush rimless aquarium with branching wood, layered plants and polished filtration equipment",
-    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/living-aquascape",
+    "category": "3D & photographic · Living systems",
+    "description": "Explore a planted aquarium in 3D: orbit the glass tank, follow a school of cardinal tetras and watch flowing plants and rippling water. Switch to the photographic aquarium to explore its ecosystem, circulation and leaf details.",
+    "url": "rotatable-aquascape/",
+    "image": "assets/rotatable-aquascape.jpg",
+    "imageAlt": "Actual 3D aquarium with a tetra school, branching driftwood, red and green plants, and a winding sand path",
+    "source": "https://github.com/jz237/jez237-site/tree/main/scripts/rotatable-aquascape",
     "features": [
-      "Animated photographic scene",
-      "Six exploration modes",
-      "Ten ecosystem scenarios",
-      "Time-lapse & live chemistry"
+      "Drag to orbit & zoom",
+      "Feed fish & change lighting",
+      "Photographic aquarium option",
+      "Ecosystem & macro exploration"
     ],
     "facts": [
-      "Original photographic art",
-      "Macro inspection",
-      "Mouse, touch & keyboard"
+      "3D by default",
+      "Two aquarium views",
+      "Mouse & touch"
     ],
-    "note": "WebGL · Desktop & touch · Image-based cinematic exhibit · Illustrative ecosystem model"
+    "note": "WebGL 2 · Desktop & touch · Switch views inside the aquarium",
+    "alternateUrl": "living-aquascape/",
+    "alternateLabel": "Photographic aquarium"
+  },
+  {
+    "id": "007",
+    "title": "Model S Studio",
+    "category": "3D · Electric vehicle",
+    "description": "Explore a silver Model S Plaid in 308 selectable pieces, then take the driver’s seat. Take a guided tour, inspect four interior close-ups, try the interactive display and discover the schematic battery anatomy.",
+    "url": "model-s-studio/",
+    "image": "assets/model-s-studio.jpg",
+    "imageAlt": "Actual Model S Studio showing a silver Tesla Model S Plaid with separated body panels, glass, wheels, cabin surfaces and an added schematic battery",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/model-s-studio",
+    "features": [
+      "All 308 pieces on one board",
+      "Driver’s seat & interactive display",
+      "Layered schematic battery anatomy",
+      "Infographic, manual & technical reference"
+    ],
+    "facts": [
+      "Tesla Model S Plaid",
+      "308 visual pieces",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Artist model by 3D Hawk, CC BY 4.0 · Preview captured from the running demo",
+    "alternateUrl": "model-s-studio/tour.html",
+    "alternateLabel": "Take the guided tour"
   }
 ]

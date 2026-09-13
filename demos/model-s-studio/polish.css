@@ -1,0 +1,32 @@
+/* Shared navigation and accessible entry points for the four studio views. */
+.studio-nav{display:flex;align-items:center;gap:6px;letter-spacing:0}
+.studio-nav a{display:flex;align-items:center;justify-content:center;min-height:44px;padding:10px 15px;border:1px solid transparent;border-radius:6px;color:var(--muted);font-size:12px}
+.studio-nav a:hover{color:var(--text);background:#19252f}
+.studio-nav a[aria-current=page]{background:#17372f;border-color:#426f60;color:var(--mint)}
+.skip-link{position:fixed;left:16px;top:12px;clip-path:inset(100%);z-index:100;padding:13px 18px;border-radius:6px;background:var(--mint);color:#102c24;font-weight:600}
+.skip-link:focus{clip-path:none}
+.fallback-link{display:block;margin-top:16px;color:var(--mint);text-decoration:underline;line-height:1.6}
+.static-fallback{position:relative;margin:24px;padding:20px;border:1px solid var(--line);border-radius:8px;background:var(--panel);line-height:1.7}
+#cockpit-error{padding:24px;text-align:center;line-height:1.7}
+@media(max-width:760px){
+ .topbar{height:112px;flex-direction:column;align-items:stretch;justify-content:center;gap:9px;padding:10px 16px}
+ .topbar .brand{align-self:flex-start;font-size:15px}
+ .studio-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}
+ .studio-nav a{padding:10px 4px;font-size:10px}
+ .board-mode .stage,.cockpit-stage{height:calc(100dvh - 112px)}
+ .poster-notes a{display:inline-flex;align-items:center;min-height:44px}
+ .cockpit-manual,.cockpit-back{display:flex;align-items:center;min-height:44px}
+ .poster-credit a{display:inline;min-height:0}
+ .manual-nav a,.manual-nav button,.view-toolbar button,.cockpit-viewbar button,.toggle-row button,.selection-actions button,.board-header button{min-height:44px}
+ .manual-section{scroll-margin-top:150px}
+ .board-mode #viewport{top:181px}
+ .board-header>div:last-child{gap:5px}
+ .board-header strong{margin-bottom:0}
+ .swatch{width:32px;height:32px;min-width:32px}
+ .swatches{gap:12px}
+}
+@media print{.skip-link,.studio-nav{display:none}}
+
+.interior-details{margin:24px 0;padding:20px 0;border-block:1px solid var(--line)}.detail-buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px}.detail-buttons button{min-height:44px;font-size:11px;padding:10px 7px}.interior-details p{font-size:11px;line-height:1.7;color:var(--muted)}
+
+.cockpit-heading{background:#08131bd9;border:1px solid #60778755;border-radius:8px;padding:12px 15px;max-width:calc(100% - 40px)}
