@@ -1,0 +1,10 @@
+{
+  "asset": "Pine Ridge evergreen tree",
+  "creator": "chipchaunceytheonlyone",
+  "sourceSite": "https://mini-moto-park.chipchaunceytheonlyone.chatgpt.site/",
+  "siteCopy": "https://jez237.com/games/2026-09-13/mini-moto-park/",
+  "sourceFile": "games/2026-09-13/mini-moto-park/assets/pine-v3.glb",
+  "sourceSha256": "0d4e31c3d3efd5e25f68720a2382df7ecdf4690329df98b160a2eb8174d4404c",
+  "adaptation": "Repacked existing site model into shared instanced geometry; resized textures to 1024px and encoded JPEG/WebP. Original attribution retained. No new license claimed.",
+  "script": "source/repack-moto-pine.py"
+}

@@ -39,14 +39,17 @@ export function makeUnderwaterScenery(parent,course){
   }
  }
  // Tapered blades anchored at the floor; the tip bends independently in the surge.
- const bladeGeo=new T.PlaneGeometry(.16,1,1,5);bladeGeo.translate(0,.5,0);const bp=bladeGeo.attributes.position;for(let i=0;i<bp.count;i++)bp.setX(i,bp.getX(i)*(1-bp.getY(i)*.94));bladeGeo.computeVertexNormals();geometries.add(bladeGeo);bladeGeo.setAttribute('habitatIndex',new T.InstancedBufferAttribute(new Float32Array(Array.from({length:sites.length*240},(_,i)=>i%sites.length)),1));
- const grass=material(cold?0x465952:lake?0x486b36:0x3d7656);grass.side=T.DoubleSide;
- grass.onBeforeCompile=s=>{Object.assign(s.uniforms,{reefTime:time,reefFlow:flow,reefSurge:surges});s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nuniform float reefTime,reefFlow;uniform vec2 reefSurge[12];attribute float habitatIndex;').replace('#include <begin_vertex>',`#include <begin_vertex>
+ const bladeGeo=new T.PlaneGeometry(.16,1,1,5);bladeGeo.translate(0,.5,0);const bp=bladeGeo.attributes.position;for(let i=0;i<bp.count;i++){const y=bp.getY(i);bp.setX(i,bp.getX(i)*(.24+Math.sin(Math.PI*y)*.76)*(1-y*.45));bp.setZ(i,Math.sin(y*Math.PI)*.06)};bladeGeo.computeVertexNormals();geometries.add(bladeGeo);bladeGeo.setAttribute('habitatIndex',new T.InstancedBufferAttribute(new Float32Array(Array.from({length:sites.length*240},(_,i)=>i%sites.length)),1));
+ const grass=material(cold?0x465952:lake?0x486b36:0x3d7656);grass.side=T.DoubleSide;grass.alphaTest=.2;grass.alphaToCoverage=true;
+ grass.onBeforeCompile=s=>{Object.assign(s.uniforms,{reefTime:time,reefFlow:flow,reefSurge:surges});s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nuniform float reefTime,reefFlow;uniform vec2 reefSurge[12];attribute float habitatIndex;varying vec2 bladeUV;').replace('#include <begin_vertex>',`#include <begin_vertex>
+ bladeUV=uv;
  vec3 base=(instanceMatrix*vec4(0.,0.,0.,1.)).xyz;
  float bend=sin(reefTime*1.1+base.x*.24+base.z*.17)*(.16+reefFlow*.12);
  vec2 surge=reefSurge[int(habitatIndex)];
  transformed.x+=position.y*position.y*(bend+surge.x*.8);
- transformed.z+=position.y*position.y*(sin(reefTime*.8+base.z*.3)*.14+surge.y*.8);`);};
+ transformed.z+=position.y*position.y*(sin(reefTime*.8+base.z*.3)*.14+surge.y*.8);`);
+ s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying vec2 bladeUV;').replace('#include <color_fragment>',`#include <color_fragment>
+ diffuseColor.rgb*=mix(.68,1.15,smoothstep(0.,.8,bladeUV.y));diffuseColor.a*=smoothstep(0.,.14,bladeUV.x)*smoothstep(0.,.14,1.-bladeUV.x);`);};
  const blades=new T.InstancedMesh(bladeGeo,grass,sites.length*240);blades.instanceMatrix.setUsage(T.StaticDrawUsage);root.add(blades);
  for(let i=0;i<blades.count;i++){const p=sites[i%sites.length],a=random()*6.28,r=Math.sqrt(random())*4.5,x=p.x+Math.cos(a)*r,z=p.z+Math.sin(a)*r,y=ground(x,z);dummy.position.set(x,y,z);dummy.rotation.set(0,random()*6.28,0);const h=cold?.22:.35+random()*.65;dummy.scale.set(.8+random(),y< -1.8?h:0,1);dummy.updateMatrix();blades.setMatrixAt(i,dummy.matrix);blades.setColorAt(i,new T.Color().setHSL(.28+random()*.10,.3,.3+random()*.2));}blades.instanceMatrix.needsUpdate=true;
  // A connected spindle body plus separate dorsal, tail and pectoral fin surfaces.
@@ -61,7 +64,7 @@ export function makeUnderwaterScenery(parent,course){
  const fishGeo=new T.BufferGeometry();fishGeo.setAttribute('position',new T.Float32BufferAttribute(positions,3));fishGeo.setAttribute('finPart',new T.Float32BufferAttribute(parts,1));fishGeo.setIndex(indices);fishGeo.computeVertexNormals();geometries.add(fishGeo);
  const schools=sites.filter((_,i)=>i%2===0).map((p,i)=>createSchool(p,i*137+17,cold?10:18)),fish=schools.flat(),phases=new Float32Array(fish.map(f=>f.phase)),rates=new Float32Array(fish.length);
  fishGeo.setAttribute('fishPhase',new T.InstancedBufferAttribute(phases,1));fishGeo.setAttribute('fishRate',new T.InstancedBufferAttribute(rates,1));
- const silver=material(0xb0c7bf,.3,.55);silver.side=T.DoubleSide;
+ const silver=material(0xb0c7bf,.23,.72);silver.side=T.DoubleSide;
  silver.onBeforeCompile=s=>{Object.assign(s.uniforms,{reefTime:time});s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nuniform float reefTime;attribute float fishPhase,fishRate,finPart;varying float fishBack;varying float eyeMask;').replace('#include <begin_vertex>',`#include <begin_vertex>
  float tail=clamp((.22-position.z)/.92,0.,1.);
  float pulse=fishPhase;
@@ -69,7 +72,9 @@ export function makeUnderwaterScenery(parent,course){
  if(finPart>1.5&&finPart<4.5){transformed.y+=sin(pulse*1.37+finPart*2.)*.045;transformed.x+=sin(pulse*.83+finPart)*.025;}
  fishBack=position.y;eyeMask=step(4.5,finPart);`);
  s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying float fishBack;varying float eyeMask;').replace('#include <color_fragment>',`#include <color_fragment>
- diffuseColor.rgb*=mix(vec3(.85,.98,1.),vec3(.20,.36,.34),smoothstep(-.01,.14,fishBack));diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.008),eyeMask);`);};
+ diffuseColor.rgb*=mix(vec3(.85,.98,1.),vec3(.20,.36,.34),smoothstep(-.01,.14,fishBack));diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.008),eyeMask);`).replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+ // Silver flanks catch the actual scene lights as individual fish bank/turn.
+ roughnessFactor=mix(.17,.48,smoothstep(.035,.13,fishBack));roughnessFactor=mix(roughnessFactor,.38,eyeMask);`);};
  const fishMesh=new T.InstancedMesh(fishGeo,silver,fish.length);fishMesh.instanceMatrix.setUsage(T.DynamicDrawUsage);root.add(fishMesh);fishMesh.frustumCulled=false;
  // Soft sediment puffs originate at the bed and remain below the surface.
  const count=160,clouds=Array.from({length:count},()=>({life:0})),cloudPositions=new Float32Array(count*3),cloudAlpha=new Float32Array(count),cloudSize=new Float32Array(count);
