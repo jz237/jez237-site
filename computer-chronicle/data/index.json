@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-13",
+      "historicDate": "1984-07-02",
+      "displayDate": "Week of July 2-8, 1984",
+      "edition": "Issue 101 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Tramiel takes Atari, the IIc travels light, and The Hulk tops the Atari software counter.",
+      "leadHeadline": "Jack Tramiel Takes Atari as Warner Retreats",
+      "storyHeadlines": [
+        "Apple IIc Packs a Full Apple II into 7.5 Pounds",
+        "The Hulk Leads Atari's Living Software Shelf",
+        "Byte Watches Computers and Video Converge"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-02.jpg",
+      "thumb": "media/thumbs/1984-07-02.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-09-12",
       "historicDate": "1984-06-25",
       "displayDate": "Week of June 25-July 1, 1984",
