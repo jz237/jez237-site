@@ -1,8 +1,436 @@
 {
-  "generatedAt": "2026-09-12",
+  "generatedAt": "2026-09-13T12:00:00Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-13",
+      "historicDate": "1984-07-02",
+      "displayDate": "Week of July 2-8, 1984",
+      "edition": "Issue 101 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Atari changing hands amid arcade color, home-computer price pressure and warm newsprint",
+        "motifs": [
+          "Atari 8-bit computer",
+          "Jack Tramiel silhouette",
+          "game cartridges",
+          "Apple IIc"
+        ],
+        "layout": "Urgent extra-edition front with Atari takeover lead, game shelf and compact culture rails"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "Week of July 2-8, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Tramiel's Atari takeover dominates above the fold with game imagery",
+        "secondaryRail": "Apple IIc, Atari games, video computing, charts and modem culture",
+        "archiveNavigation": "Previous and next weekly issues with calendar archive"
+      },
+      "sectionChrome": {
+        "primary": "#a52a2a",
+        "secondary": "#214f78",
+        "texture": "Warm aged newsprint with halftone ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-07-02.jpg",
+        "alt": "GPT Image 2 vintage newspaper front page for the week of July 2-8, 1984, led by Jack Tramiel's Atari takeover",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Extra Edition: Atari's consumer business has a new owner, and the founder of Commodore is back in the home-computer contest.",
+      "morningLine": "Tramiel takes Atari, the IIc travels light, and The Hulk tops the Atari software counter.",
+      "lead": {
+        "headline": "Jack Tramiel Takes Atari as Warner Retreats",
+        "dek": "The Commodore founder acquires Atari's home-computer and console operations, setting up a fierce new round in the personal-computer price war.",
+        "body": [
+          "Warner Communications sold Atari's loss-plagued home-computer and home-video-game operations on Monday, July 2, to a new company headed by Jack Tramiel. Warner kept the coin-operated arcade operation, while the consumer business became the foundation of a new Atari Corporation.",
+          "The transaction was valued in contemporary follow-up accounts at roughly $240 million, paid chiefly through notes and warrants rather than a simple cash purchase. It closes Warner's bruising attempt to hold together entertainment, consoles and personal computers after the 1983 video-game collapse produced catastrophic losses.",
+          "Tramiel left Commodore only about six months ago. His return at Atari turns two of the home-computer trade's best-known names into direct rivals and puts an operator famous for aggressive pricing in control of Atari's technology, catalog and dealer presence.",
+          "The change arrived with immediate pain. By Friday, July 6, UPI reported another 300 Sunnyvale dismissals, and the New York Times also described layoffs ordered by the new owner. Atari's next machines remain unwritten, but its contest with Commodore has already entered a new chapter."
+        ],
+        "sourceRefs": [
+          0,
+          1,
+          2,
+          3,
+          4
+        ],
+        "confidence": "exact-date"
+      },
+      "stories": [
+        {
+          "headline": "Apple IIc Packs a Full Apple II into 7.5 Pounds",
+          "body": [
+            "Apple's compact IIc brings a 65C02 processor, 128K of RAM, Applesoft BASIC and a built-in 5.25-inch drive into a 7.5-pound case. Rear connections cover display, printer, modem, mouse, joystick and a second disk drive.",
+            "The base machine lists for $1,295, before a $199 green-phosphor monitor or $329 external drive. Apple says 90 percent of a library of roughly 10,000 Apple II programs will run, making compatibility the machine's strongest argument against the IBM PCjr.",
+            "Portability still has limits. Apple's planned 80-column LCD is scheduled for fall at $600; until then, the little IIc still needs a television or monitor at its destination."
+          ],
+          "sourceRefs": [
+            5
+          ],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "The Hulk Leads Atari's Living Software Shelf",
+          "body": [
+            "A Calisto Atari chart published July 5 puts Adventure International's The Hulk at No. 1, followed by Cosmi's Slinky and Adventure International's The Count.",
+            "Airstrike 2, Aztec Challenge, Zaxxon, Encounter, Rally Speedway, Enchanter and Flak fill out the top ten. The mix of arcade action and text adventure shows a market still buying Atari software even as the company above it changes hands."
+          ],
+          "sourceRefs": [
+            7
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "headline": "Byte Watches Computers and Video Converge",
+          "body": [
+            "Byte's July theme issue, 'Computers and Video,' surveys a field in which home machines are increasingly pitched as graphics, animation and video-production tools rather than calculators with keyboards.",
+            "Video digitizing, display hardware and graphics software give context to Atari's enduring value: its television orientation, graphics chips and game experience remain useful assets despite Warner's retreat."
+          ],
+          "sourceRefs": [
+            6
+          ],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Atari Corporation",
+          "summary": "Tramiel's new company takes over Atari's consumer computer and console operations while Warner retains arcade games.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            0,
+            1
+          ]
+        },
+        {
+          "title": "Atari layoffs",
+          "summary": "Another 300 Sunnyvale workers were dismissed July 6 as the new owner moved quickly to cut costs.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2,
+            3
+          ]
+        },
+        {
+          "title": "Apple IIc",
+          "summary": "A 7.5-pound Apple II with 128K RAM, built-in floppy and a $1,295 base price.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "title": "Atari game chart",
+          "summary": "The Hulk, Slinky and The Count lead the chart published July 5.",
+          "confidence": "same-week",
+          "sourceRefs": [
+            7
+          ]
+        },
+        {
+          "title": "Computers and Video",
+          "summary": "Byte's July issue tracks the convergence of home computers, graphics and television.",
+          "confidence": "same-month",
+          "sourceRefs": [
+            6
+          ]
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "The Hulk",
+          "detail": "Adventure International illustrated/text adventure; No. 1 on the July 5 Atari chart."
+        },
+        {
+          "name": "Slinky",
+          "detail": "Cosmi action game; No. 2 on the same Atari chart."
+        },
+        {
+          "name": "The Count",
+          "detail": "Adventure International text adventure; No. 3 on the chart."
+        },
+        {
+          "name": "Enchanter",
+          "detail": "Infocom fantasy text adventure; No. 9 on the Atari chart."
+        },
+        {
+          "name": "MousePaint",
+          "detail": "Apple IIc paint program bundled with Apple's $99 mouse."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "The Hulk",
+            "Slinky",
+            "The Count",
+            "Airstrike 2",
+            "Aztec Challenge"
+          ]
+        },
+        {
+          "label": "Top 5 Movies",
+          "items": [
+            "Ghostbusters",
+            "Gremlins",
+            "The Karate Kid",
+            "Indiana Jones and the Temple of Doom",
+            "Cannonball Run II"
+          ]
+        },
+        {
+          "label": "Hardware Counter",
+          "items": [
+            "Apple IIc",
+            "Apple Scribe printer",
+            "Apple IIc external drive",
+            "Apple mouse",
+            "Apple flat-panel display (announced)"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Apple IIc computer",
+          "price": "$1,295",
+          "note": "128K RAM and built-in floppy; monitor not included.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "item": "Apple Scribe thermal-transfer printer",
+          "price": "$299",
+          "note": "Black-and-white or color text and graphics with the appropriate ribbon.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "item": "Apple IIc external floppy drive",
+          "price": "$329",
+          "note": "Second 5.25-inch drive accessory.",
+          "sourceRefs": [
+            5
+          ]
+        },
+        {
+          "item": "CompuServe connect time",
+          "price": "$6/hour at 300/450 baud",
+          "note": "Standard-time period rate; 1200/2400 baud cost $12.50 per hour.",
+          "sourceRefs": [
+            8
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "Atari cuts reach the factory floor",
+          "summary": "UPI counted another 300 Sunnyvale dismissals on July 6, days after the takeover.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "headline": "Prince reaches No. 1",
+          "summary": "When Doves Cry tops the Billboard Hot 100 dated July 7, Prince's first No. 1 on that chart.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            9,
+            10
+          ]
+        },
+        {
+          "headline": "Ghostbusters holds the summer screen",
+          "summary": "Ghostbusters leads the July 6-8 domestic weekend while Gremlins remains another dominant release.",
+          "confidence": "exact-date",
+          "sourceRefs": [
+            11,
+            12
+          ]
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "When Doves Cry",
+          "artist": "Prince"
+        },
+        {
+          "rank": 2,
+          "title": "Dancing in the Dark",
+          "artist": "Bruce Springsteen"
+        },
+        {
+          "rank": 3,
+          "title": "Jump (For My Love)",
+          "artist": "The Pointer Sisters"
+        },
+        {
+          "rank": 4,
+          "title": "Self Control",
+          "artist": "Laura Branigan"
+        },
+        {
+          "rank": 5,
+          "title": "The Reflex",
+          "artist": "Duran Duran"
+        }
+      ],
+      "periodAd": {
+        "headline": "Apple IIc: Carry the Apple II Library",
+        "summary": "128K, a built-in disk drive and familiar Apple II software in a 7.5-pound case.",
+        "tagline": "Compact computing for $1,295"
+      },
+      "market": {
+        "headline": "Tramiel Reopens the Price-War Playbook",
+        "summary": "The founder who drove Commodore's mass-market strategy now controls Atari's consumer technology and software catalog while Warner exits the field.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          0,
+          1,
+          4
+        ]
+      },
+      "worldAnchor": {
+        "headline": "Olympic Boycott Shadows Los Angeles Run-Up",
+        "summary": "With the Los Angeles Games only weeks away, the Soviet-led boycott remains the central international backdrop as the list of participating boycotters expands.",
+        "confidence": "same-week",
+        "sourceRefs": [
+          13
+        ]
+      },
+      "bbsNote": {
+        "headline": "Going Online Still Means Watching the Clock",
+        "summary": "CompuServe's metered rates reward composing offline and transferring quickly.",
+        "posts": [
+          {
+            "topic": "Connect-time economics",
+            "platform": "CompuServe Information Service",
+            "text": "Standard-time access costs $6 per hour at 300/450 baud and $12.50 at 1200/2400 baud, billed by the minute."
+          },
+          {
+            "topic": "The IIc arrives modem-ready",
+            "platform": "Apple II / dial-up services",
+            "text": "A dedicated modem socket sits beside the IIc's printer, mouse, joystick, display and disk-drive connections."
+          }
+        ]
+      },
+      "gadgetWatch": {
+        "headline": "Sony Takes Compact Disc Audio onto the Road",
+        "summary": "Audio magazine's July coverage examines Sony's early automotive compact-disc player as optical audio moves beyond the living room.",
+        "confidence": "same-month",
+        "sourceRefs": [
+          15
+        ]
+      },
+      "curiosity": {
+        "headline": "Apple's 'Portable' Needed a $600 Screen That Did Not Yet Exist",
+        "summary": "The 7.5-pound Apple IIc was easy to carry, but its promised untethered display was still a future accessory.",
+        "detail": "Creative Computing reported that Apple planned an 80-by-24-character low-power LCD for fall at $600. Until then, owners still needed power gear and a television or monitor."
+      },
+      "milestone": {
+        "title": "Jack Tramiel Acquires Atari's Consumer Business",
+        "note": "The deal redirected a foundational video-game company, created the platform that would launch the Atari ST, and reshaped the Commodore-Atari rivalry."
+      },
+      "accuracyLedger": {
+        "items": [
+          "The Atari sale and layoffs are exact-week reporting supported by contemporary UPI and New York Times coverage.",
+          "Apple IIc and computers-and-video material comes from July 1984 period publications.",
+          "The Atari game chart was published July 5 and covers the immediately preceding sales week.",
+          "Music ranks use the Billboard Hot 100 dated July 7; movie titles reflect the July 6-8 domestic weekend.",
+          "Website text and sources are canonical; generated newspaper art is illustrative."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Warner sells Atari operations",
+          "url": "https://www.upi.com/Archives/1984/07/02/Warner-sells-Atari-operations/5941457588800/",
+          "date": "1984-07-02"
+        },
+        {
+          "title": "Warner Sells Atari to Tramiel",
+          "url": "https://www.nytimes.com/1984/07/03/business/warner-sells-atari-to-tramiel.html",
+          "date": "1984-07-03"
+        },
+        {
+          "title": "Atari Corporation has started a major layoff program",
+          "url": "https://www.upi.com/Archives/1984/07/06/Atari-Corporation-has-started-a-major-layoff-program-at/1321457934400/",
+          "date": "1984-07-06"
+        },
+        {
+          "title": "Atari's New Owner Orders Layoffs",
+          "url": "https://www.nytimes.com/1984/07/07/business/atari-s-new-owner-orders-layoffs.html",
+          "date": "1984-07-07"
+        },
+        {
+          "title": "A New Pac-Man",
+          "url": "https://time.com/archive/6884324/a-new-pac-man/",
+          "date": "1984-07"
+        },
+        {
+          "title": "Apple announces the IIc",
+          "url": "https://www.atarimagazines.com/creative/v10n7/116_Apple_announces_the_IIc.php",
+          "date": "1984-07"
+        },
+        {
+          "title": "Byte Vol. 9 No. 7: Computers and Video",
+          "url": "https://vintageapple.org/byte/pdf/198407_Byte_Magazine_Vol_09-07_Computers_and_Video.pdf",
+          "date": "1984-07"
+        },
+        {
+          "title": "Popular Computing Weekly Calisto Atari chart",
+          "url": "https://computerhits.org/archive/popular%20computing%20weekly_1984-07-05_atari/",
+          "date": "1984-07-05"
+        },
+        {
+          "title": "CompuServe Information Service Rates",
+          "url": "https://www.atarimania.com/8bit/files/CompuServe_Information_Service_Rates.pdf",
+          "date": "period"
+        },
+        {
+          "title": "Billboard Hot 100 chart for July 7, 1984",
+          "url": "https://musicchartsarchive.com/singles-chart/1984-07-07",
+          "date": "1984-07-07"
+        },
+        {
+          "title": "Prince's first Hot 100 No. 1",
+          "url": "https://www.billboard.com/pro/this-week-in-billboard-chart-history-in-1984-prince-reigned-with/",
+          "date": "1984-07-07"
+        },
+        {
+          "title": "Domestic 1984 Weekend 27",
+          "url": "https://www.boxofficemojo.com/weekend/1984W27/",
+          "date": "1984-07-06"
+        },
+        {
+          "title": "Ghostbusters, Gremlins trounce newer releases",
+          "url": "https://www.upi.com/Archives/1984/07/02/Ghostbusters-Gremlins-trounce-Arnold-Schwarzenegger-Burt-Reynolds/3490457588800/",
+          "date": "1984-07-02"
+        },
+        {
+          "title": "Countries boycotting the 1984 Olympics",
+          "url": "https://www.upi.com/Archives/1984/06/27/Countries-boycotting-the-1984-Olympics-in-Los-Angeles-date/8992457156800/",
+          "date": "1984-06-27"
+        },
+        {
+          "title": "2600 Volume 1 Number 7",
+          "url": "http://www.gbppr.net/2600/pdf/2600_1-7.pdf",
+          "date": "1984-07"
+        },
+        {
+          "title": "Sony Car CD Player: On the Road",
+          "url": "https://www.gammaelectronics.xyz/audio_07-1984_sony.html",
+          "date": "1984-07"
+        }
+      ]
+    },
     {
       "currentDate": "2026-09-12",
       "historicDate": "1984-06-25",

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Sat, 12 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 13 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 2-8, 1984 — Jack Tramiel Takes Atari as Warner Retreats</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-07-02</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-02</guid>
+      <pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate>
+      <description>The Commodore founder acquires Atari&apos;s home-computer and console operations, setting up a fierce new round in the personal-computer price war. Warner Communications sold Atari&apos;s loss-plagued home-computer and home-video-game operations on Monday, July 2, to a new company headed by Jack Tramiel. Warner kept the coin-operated arcade operation, while the consumer business became the foundation of a new Atari Corporation. Also this week: Apple IIc Packs a Full Apple II into 7.5 Pounds · The Hulk Leads Atari&apos;s Living Software Shelf · Byte Watches Computers and Video Converge.</description>
+    </item>
     <item>
       <title>Week of June 25-July 1, 1984 — AT&amp;T Enters the Personal-Computer Market with the PC 6300</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-06-25</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-20</guid>
       <pubDate>Sun, 23 Aug 2026 12:00:00 GMT</pubDate>
       <description>The electronics veteran enters the hottest race in personal computing with a 16-bit family built to speak IBM’s language. Zenith Data Systems unveiled its Z-150 family on February 22, placing another substantial manufacturer in the fast-growing market for machines compatible with the IBM Personal Computer. The new 16-bit line is aimed at buyers who want access to the expanding IBM software world without buying an IBM-badged machine. Also this week: IBM and Eagle Settle Firmware Copyright Fight · Software Industry Comes Into Its Own · PC Magazine Pits Apple Experience Against IBM Momentum.</description>
-    </item>
-    <item>
-      <title>Week of February 13-19, 1984 — IBM Packs the PC into a 30-Pound Suitcase</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-02-13</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-13</guid>
-      <pubDate>Sat, 22 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The $4,225 Portable Personal Computer answers Compaq with PC/XT compatibility, twin floppy drives and a built-in amber screen. IBM entered the suitcase-computer contest on February 16 with the Portable Personal Computer model 5155, putting the familiar IBM PC architecture into a transportable case. Contemporary coverage made the competitive target plain: Compaq had proved that business buyers wanted a machine they could carry between offices without leaving their software behind. Also this week: Sinclair Sets a $499 American Course for the QL · CBS, IBM and Sears Bet on a Videotex Home · Coleco Courts Publishers for Adam “Best Of” Albums.</description>
     </item>
   </channel>
 </rss>
