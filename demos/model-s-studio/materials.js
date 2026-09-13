@@ -21,7 +21,9 @@ export function finishMaterial(mesh,part,paint){
  if(group==='Body'){
   projectedUV(mesh,name);mat=new THREE.MeshPhysicalMaterial({color:paint,metalness:.88,roughness:.27,clearcoat:1,clearcoatRoughness:.14,envMapIntensity:.8,bumpMap:grain,bumpScale:.00005});
  }else if(group==='Glass'){
-  mat=new THREE.MeshPhysicalMaterial({color:'#7d9ca8',metalness:0,roughness:.09,clearcoat:1,clearcoatRoughness:.04,transparent:true,opacity:.43,side:THREE.DoubleSide,depthWrite:false,envMapIntensity:1.2});
+  // The panoramic pane is a separate surface in the source model.
+  const roof=mesh.name==='Surface_128';
+  mat=new THREE.MeshPhysicalMaterial({color:roof?'#526b76':'#7d9ca8',metalness:0,roughness:.09,clearcoat:1,clearcoatRoughness:.04,transparent:true,opacity:roof?.55:.43,side:THREE.DoubleSide,depthWrite:false,envMapIntensity:1.2});
  }else if(/tires/.test(name)){
   projectedUV(mesh,name);mat=new THREE.MeshStandardMaterial({color:'#121519',roughness:.94,metalness:.01,bumpMap:rubber,bumpScale:.0012,envMapIntensity:.22});
  }else if(/Rims|ceramic_brake|gris__/.test(name)){

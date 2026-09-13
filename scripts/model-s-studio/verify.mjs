@@ -17,7 +17,7 @@ try{
  assert.equal((await read()).pieces,308);assert.equal((await read()).visible,308);assert.equal((await read()).paint,'#aeb7c2');
  const battery=await page.evaluate(()=>modelSStudio.getParts().filter(p=>p.group==='Battery'));assert.equal(battery.length,11);assert.ok(battery.every(p=>p.schematic));
  await page.screenshot({path:path.join(shots,'assembled.png')});
- await page.locator('#explode-button').click();await settled(1);
+ await page.locator('#explode-button').click();await page.waitForTimeout(450);assert.ok((await read()).amount>0&&(await read()).amount<.8,'Explosion must visibly pass through intermediate positions');await settled(1);
  const exploded=await page.evaluate(()=>window.modelSStudio.getParts());
  assert.ok(exploded.every(p=>Math.hypot(...p.position.map((v,i)=>v-p.base[i]))>.01),'Every visual piece must move');
  await page.screenshot({path:path.join(shots,'exploded.png')});
@@ -62,9 +62,9 @@ try{
  await page.goto(new URL('manual.html',url).href);assert.equal(await page.locator('h1').count(),1);assert.ok(await page.locator('a[href*="tesla.com/ownersmanual"]').count()>5);assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  await page.screenshot({path:path.join(shots,'manual-mobile.png'),fullPage:true});
  await page.goto(new URL('?view=parts',url).href);await page.waitForFunction(()=>document.body.dataset.ready==='true',null,{timeout:60000});assert.equal((await read()).board,true);await checkBoard(308);
- // Reduced-motion changes must still transform the geometry, without easing.
+ // A requested explosion remains visible with reduced motion, using a shorter transition.
  const reduced=await browser.newPage({viewport:{width:1024,height:900},reducedMotion:'reduce'});reduced.on('pageerror',e=>errors.push(e.message));await reduced.goto(url);await reduced.waitForFunction(()=>document.body.dataset.ready==='true',null,{timeout:60000});
- await reduced.locator('#explode-button').click();await reduced.waitForFunction(()=>window.modelSStudio.getState().amount===1);
+ await reduced.locator('#explode-button').click();await reduced.waitForTimeout(350);assert.ok(await reduced.evaluate(()=>modelSStudio.getState().amount>0&&modelSStudio.getState().amount<1),'Explicit explosion must animate under reduced motion');await reduced.waitForFunction(()=>window.modelSStudio.getState().amount===1);
  await reduced.waitForTimeout(100);assert.ok(await reduced.evaluate(()=>window.modelSStudio.getParts().every(p=>Math.hypot(...p.position.map((v,i)=>v-p.base[i]))>.01)));
  assert.deepEqual(errors,[]);console.log(`PASS: ${url} — 308 pieces, 11 schematic battery components, non-overlapping all-parts board at four viewport sizes, tile picking, board isolation, fit, manual and deep links, explosion, exact reassembly, isolated close-up, filters, search, paint, labels, playback, keyboard, mobile and reduced motion. Screenshots: ${shots}`);
 }finally{await browser.close();}
