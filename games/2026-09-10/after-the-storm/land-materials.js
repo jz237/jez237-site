@@ -66,6 +66,12 @@ float damp=smoothstep(.015,.95,wet);
 earth*=1.-damp*.46;
 // Fresh water fills pore spaces; the film drains before the sand lightens.
 earth=mix(earth,earth*vec3(.87,.94,.97),film*.3);
+vec2 downhill=normalize(ln.xz+vec2(.001));
+float runnel=landNoise(vec2(dot(landP.xz,vec2(-downhill.y,downhill.x))*4.,dot(landP.xz,downhill)*.32-time*.16));
+float backwash=smoothstep(.58,.79,runnel)*film*(1.-smoothstep(.72,.98,film));
+float foamDeposit=texture2D(shoreMap,shoreUV).r*shoreInside*smoothstep(.12,.5,wet)*(1.-smoothstep(.5,.95,film));
+float lace=smoothstep(.56,.78,landNoise(landP.xz*3.7))*clamp(backwash*.4+foamDeposit*.38,0.,.45)*sandExposure;
+earth=mix(earth,vec3(.66,.72,.67),lace);
 vec2 cuv=landP.xz*.19+vec2(time*.012,-time*.007);
 float c1=texture2D(detailMap,cuv).b,c2=texture2D(detailMap,mat2(.8,-.6,.6,.8)*landP.xz*.237-vec2(time*.009,0)).b;
 float caustic=max(0.,min(c1,c2)*3.-.65),submerged=seaLevel-landP.y;
@@ -85,7 +91,7 @@ vec3 surfaceN=normalize(mix(mix(triNormal(sandNormal,sandUV,tw,ln),triNormal(roc
 surfaceN=normalize(surfaceN+vec3(.9,0.,3.6)*sin(bedPhase)*.024*bedMask);
 normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7)*(1.-film*.35))),0.)).xyz);`);
  };
- mat.customProgramCacheKey=()=>`photographic-coast-drying-v4-${palette.grass??0}`;
+ mat.customProgramCacheKey=()=>`photographic-coast-backwash-v5-${palette.grass??0}`;
 }
 
 export function rockMaterial(){

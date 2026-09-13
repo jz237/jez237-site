@@ -1,4 +1,5 @@
 import * as T from './vendor/three.module.js';
+import {motoPine} from './moto-pine.js';
 import {barkMaterial,rockMaterial} from './land-materials.js';
 import {routeDistance} from './courses.js';
 
@@ -95,18 +96,21 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
  const palmMat=foliage(0x66813d,.22),pineMat=foliage(0x415c38,.13),broadMat=foliage(0x657c39,.22),grassMat=foliage(0x8b9152,1.1);
  function instances(g,m,points){
   geometries.push(g);if(!points.length)return;
+  // Spatial batches let small devices discard distant groves before touching water.
+  if(points.length>0&&!points[0].batched){const bins=new Map();for(const p of points){const key=Math.floor(p.x/64)+','+Math.floor(p.z/64);if(!bins.has(key))bins.set(key,[]);bins.get(key).push({...p,batched:true});}const group=new T.Group();root.add(group);for(const bin of bins.values()){const child=instances(g,m,bin);group.add(child);}return group;}
   const mesh=new T.InstancedMesh(g,m,points.length),dummy=new T.Object3D();mesh.userData.dynamic=true;
   points.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(p.rx??0,p.angle,p.rz??0);dummy.scale.set(p.scale,p.scale*(p.stretch??1),p.scale);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);if(m.vertexColors)mesh.setColorAt(i,new T.Color().setScalar(.78+p.tint*.3));});
-  mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);meshes.push(mesh);return mesh;
+  mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);meshes.push(mesh);mesh.userData.foliageCenter=mesh.boundingSphere.center.clone();mesh.userData.foliageRadius=mesh.boundingSphere.radius;return mesh;
  }
+ const pineWood=motoPine?new T.MeshStandardMaterial({map:motoPine.bark,roughness:.94}):wood;if(motoPine){materials.push(pineWood);wind(pineWood,0);pineMat.map=motoPine.bough;pineMat.color.setHex(0xd3dfc7);pineMat.alphaTest=.42;pineMat.alphaToCoverage=true;}
  const cold=course.theme==='ice',urban=['port','city','fortress'].includes(course.theme),tropical=['beach','island','resort','park'].includes(course.theme),points={palm:[],pine:[],broad:[]},grassPoints=[],rockPoints=[],logPoints=[];
  for(let i=0;i<3000;i++){
   const x=(random()-.5)*670,z=(random()-.5)*670,y=course.ground(x,z),d=routeDistance(course,x,z);
   if(y<1.5||d<(course.layoutRevision?24:46)||course.renderGround&&y>course.renderGround(x,z)+.5)continue;
   const slope=Math.hypot(course.ground(x+1,z)-course.ground(x-1,z),course.ground(x,z+1)-course.ground(x,z-1))/2;
-  const common={x,y:y-.12,z,angle:random()*Math.PI*2,scale:.72+random()*.65,tint:random()};
+  const common={x,y:y-.12,z,angle:random()*Math.PI*2,scale:.55+random()*.9,tint:random()};
   const cluster=Math.sin(x*.047+Math.sin(z*.032)*2)*Math.cos(z*.039);
-  if(i<1150&&slope<.48&&y>2.2&&(!urban||i<75)&&(!cold||i<100)&&cluster>-.40){
+  if(i<1600&&slope<.48&&y>2.2&&(!urban||i<75)&&(!cold||i<100)&&cluster>-.40){
    const kind=tropical?(random()<.60?'palm':'broad'):(course.theme==='coast'&&random()>.7?'broad':'pine');
    points[kind].push({...common,stretch:.85+random()*.3});
   }
@@ -114,21 +118,33 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
   if(y<4.5&&slope<.7&&i<1500)rockPoints.push({...common,scale:.35+random()**2*3.0,stretch:.45+random()*.6});
   if(y>1.5&&y<3.5&&slope<.3&&logPoints.length<16)logPoints.push({...common,scale:.6+random()*.7});
  }
+ // Companion saplings and mature trees create depth around the established
+ // anchors, as in Pine Ridge's groves, using our own lightweight botanical meshes.
+ for(const kind of ['palm','pine','broad'])for(const anchor of [...points[kind]]){
+  if(random()>.58||urban||cold)continue;
+  for(let j=0;j<2;j++){const a=random()*6.283,r=4+random()*8,x=anchor.x+Math.cos(a)*r,z=anchor.z+Math.sin(a)*r,y=course.ground(x,z);
+   if(y<2.3||routeDistance(course,x,z)<(course.layoutRevision?24:46)||Math.abs(y-anchor.y)>3||course.renderGround&&y>course.renderGround(x,z)+.5)continue;
+   points[kind].push({...anchor,x,y:y-.1,z,angle:random()*6.283,scale:.4+random()*.7,stretch:.8+random()*.4,tint:random()});
+  }
+ }
+ // Keep a finite scenery budget; prioritize groves visible from the course.
+ const nearest=Object.entries(points).flatMap(([kind,rows])=>rows.map(p=>({kind,p,d:routeDistance(course,p.x,p.z)}))).sort((a,b)=>a.d-b.d).slice(0,600);
+ for(const kind of Object.keys(points))points[kind]=nearest.filter(row=>row.kind===kind).map(row=>row.p);
  for(const kind of ['palm','pine','broad']){
-  if(!points[kind].length)continue;const model=tree(kind,473+kind.length);
-  instances(model.wood,wood,points[kind]);instances(model.leaf,kind==='palm'?palmMat:kind==='pine'?pineMat:broadMat,points[kind]);
+  if(!points[kind].length)continue;const model=kind==='pine'&&motoPine?{wood:motoPine.wood.clone(),leaf:motoPine.leaf.clone()}:tree(kind,473+kind.length);
+  instances(model.wood,kind==='pine'?pineWood:wood,points[kind]);instances(model.leaf,kind==='palm'?palmMat:kind==='pine'?pineMat:broadMat,points[kind]);
  }
  const tuft=new Shape();for(let i=0;i<24;i++){
   const a=random()*Math.PI*2,r=random()*.42,h=.35+random()*.65,x=Math.cos(a)*r,z=Math.sin(a)*r;
   tuft.leaf([x,0,z],[x+Math.cos(a)*h*.38,h,z+Math.sin(a)*h*.38],.025+random()*.025,a+Math.PI/2,.6+random()*.5);
  }
  const grassClusters=[];for(const point of grassPoints)for(let i=0;i<4;i++){const x=point.x+(random()-.5)*4,z=point.z+(random()-.5)*4,y=course.ground(x,z);if(y>1.5)grassClusters.push({...point,x,y,z,angle:random()*6.28});}
- const grassMesh=instances(tuft.geometry(),grassMat,grassClusters);if(grassMesh)grassMesh.castShadow=false;
+ const grassMesh=instances(tuft.geometry(),grassMat,grassClusters);if(grassMesh)grassMesh.traverse(m=>{m.castShadow=false;});
  const rock=rockMaterial();materials.push(rock);const geo=new T.IcosahedronGeometry(1,2),p=geo.attributes.position;
  for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),f=.85+.14*Math.sin(x*7+z*5)*Math.cos(y*6);p.setXYZ(i,x*f,y*f*.68,z*f);}geo.computeVertexNormals();instances(geo,rock,rockPoints);
  const drift=new Shape();drift.tube([-1.9,.19,0],[1.9,.28,.12],.24,.12,9);drift.tube([.4,.25,0],[1.1,.6,.6],.11,.03,6);drift.tube([-1.6,.2,0],[-2.1,.6,-.4],.08,.015,5);instances(drift.geometry(),wood,logPoints);
  // Low shrubs fill the tree line without a repeated grid of identical plants.
- const shrubs=points.broad.slice(0,34).map(p=>({...p,x:p.x+3,z:p.z+2,scale:.18,y:course.ground(p.x+3,p.z+2)})).filter(p=>p.y>1.7);
+ const shrubs=[...points.broad,...points.pine].slice(0,90).map(p=>({...p,x:p.x+3,z:p.z+2,scale:.16+random()*.16,y:course.ground(p.x+3,p.z+2)})).filter(p=>p.y>1.7);
  if(shrubs.length){const shrub=tree('broad',725);instances(shrub.wood,wood,shrubs);instances(shrub.leaf,broadMat,shrubs);}
  // Soft ambient contact under trunks and canopies supplements directional
  // shadows. Each quad conforms to the shared terrain instead of hovering.
@@ -137,5 +153,7 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
  const cp=[],cu=[];for(const point of Object.values(points).flat()){const radius=3.2*point.scale;for(const [x,z] of [[-1,-1],[-1,1],[1,-1],[1,-1],[-1,1],[1,1]]){const px=point.x+x*radius,pz=point.z+z*radius;cp.push(px,course.ground(px,pz)+.035,pz);cu.push((x+1)/2,(z+1)/2);}}
  const contactGeometry=new T.BufferGeometry();contactGeometry.setAttribute('position',new T.Float32BufferAttribute(cp,3));contactGeometry.setAttribute('uv',new T.Float32BufferAttribute(cu,2));geometries.push(contactGeometry);const contacts=new T.Mesh(contactGeometry,contactMaterial);contacts.userData.dynamic=true;contacts.renderOrder=1;root.add(contacts);
  root.userData.sceneryCounts={trees:Object.values(points).reduce((n,p)=>n+p.length,0),grass:grassPoints.length,pebbles:rockPoints.length,driftwood:logPoints.length};
- return{update(t,storm,quality){time.value=t;strength.value=storm;distance.value=quality==='low'?200:quality==='medium'?280:380;if(grassMesh)grassMesh.visible=quality!=='low';},dispose(){contacts.removeFromParent();contactTexture.dispose();for(const m of meshes){m.removeFromParent();m.dispose();}for(const g of new Set(geometries))g.dispose();for(const m of materials)m.dispose();}};
+ return{update(t,storm,quality,budget=1,camera=null,second=null){time.value=t;strength.value=storm;distance.value=(quality==='low'?200:quality==='medium'?280:380)*budget;
+ if(camera)for(const m of meshes){const c=m.userData.foliageCenter,r=m.userData.foliageRadius;const d=Math.min(Math.hypot(camera.x-c.x,camera.z-c.z),second?Math.hypot(second.x-c.x,second.z-c.z):Infinity);m.visible=d<distance.value+r+45;}
+ if(grassMesh)grassMesh.visible=quality!=='low';},dispose(){contacts.removeFromParent();contactTexture.dispose();for(const m of meshes){m.removeFromParent();m.dispose();}for(const g of new Set(geometries))g.dispose();for(const m of materials)m.dispose();}};
 }

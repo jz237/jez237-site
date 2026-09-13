@@ -19,3 +19,11 @@ export function adaptiveQuality(memory, quality, fps, seconds = 2) {
   }
   return quality;
 }
+
+export function sceneryFirstQuality(memory,quality,fps,seconds=2){
+ memory.scenery??=1;memory.sceneryRecovery=(fps>=58?(memory.sceneryRecovery||0)+seconds:0);
+ if((memory.elapsed||0)>=2&&fps>0&&fps<46&&memory.scenery>.56){memory.scenery=Math.max(.55,memory.scenery-.225);memory.elapsed=(memory.elapsed||0)+seconds;memory.slow=0;return quality;}
+ const next=adaptiveQuality(memory,quality,fps,seconds);
+ if(next==='high'&&quality==='high'&&memory.sceneryRecovery>40){memory.scenery=Math.min(1,memory.scenery+.15);memory.sceneryRecovery=0;}
+ return next;
+}
