@@ -2,9 +2,10 @@ import * as THREE from 'three';
 import {GLTFLoader} from './vendor/GLTFLoader.js';
 import {MeshoptDecoder} from './vendor/meshopt_decoder.module.js';
 import {finishMaterial,studioEnvironment} from './materials.js?v=2';
+import {refineInterior,interiorDetails} from './interior-realism.js?v=1';
 import {CockpitDisplay} from './cockpit-display.js';
 const $=id=>document.getElementById(id),host=$('cockpit-viewport'),reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-let scene,renderer,camera,model,screenTexture,instrumentTexture,centerScreen,instrumentScreen,sky,fill,beam,airflow,software,view='driver',yaw=0,pitch=-.18,fov=65,transition=null,last=performance.now(),ready=false;
+let scene,renderer,camera,model,screenTexture,instrumentTexture,centerScreen,instrumentScreen,sky,fill,beam,airflow,software,view='driver',yaw=0,pitch=-.18,fov=65,transition=null,last=performance.now(),ready=false,cabinLight,sun,displayGlow,detailStats={};
 const presets={driver:{position:[.38,1.14,-.15],target:[.05,.91,1.2],fov:65,caption:'The view from behind the yoke.'},display:{position:[.02,1.02,.02],target:[0,.929,.59],fov:41,caption:'The center touchscreen. Click a control, or open the full display.'},yoke:{position:[.41,1.07,-.12],target:[.38,.87,.61],fov:43,caption:'The sculpted yoke and illuminated instruments.'},passenger:{position:[-.34,1.16,-.25],target:[.1,.86,.76],fov:72,caption:'Across the dashboard, console and front cabin.'}};
 Object.assign(presets,{seats:{position:[.02,1.2,.48],target:[.38,.82,-.18],fov:57,caption:'Seat bolsters, headrest and upholstery seams.'},door:{position:[.32,1.02,-.03],target:[.76,.78,.35],fov:52,caption:'Driver’s door: armrest, trim and stitched surfaces.'},pedals:{position:[.32,.70,.10],target:[.42,.37,.77],fov:49,caption:'A closer look into the driver’s footwell.'},console:{position:[.33,1.02,-.1],target:[0,.67,.30],fov:49,caption:'The center console, storage surfaces and armrest.'}});
 if(new URLSearchParams(location.search).has('tour'))document.documentElement.classList.add('tour-embed');
@@ -13,10 +14,11 @@ const clusterCanvas=document.createElement('canvas');clusterCanvas.width=4096;cl
 try{init();await load();}catch(error){console.error(error);$('cockpit-loading').hidden=true;$('cockpit-error').hidden=false;}
 function init(){
  scene=new THREE.Scene();scene.background=new THREE.Color('#b6c9d4');scene.fog=new THREE.Fog('#b6c9d4',18,65);
- renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1;host.append(renderer.domElement);
+ renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'});renderer.setPixelRatio(Math.min(devicePixelRatio,1.8));renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1;renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;host.append(renderer.domElement);
  camera=new THREE.PerspectiveCamera(65,1,.012,100);scene.environment=studioEnvironment(renderer);scene.environmentIntensity=.6;
  sky=new THREE.HemisphereLight('#edf6ff','#54616c',1.8);scene.add(sky);fill=new THREE.PointLight('#f1f5ff',2.1,3.2,0);fill.position.set(.1,1.23,-.05);scene.add(fill);
- const sun=new THREE.DirectionalLight('#ffeed4',2.1);sun.position.set(-8,12,10);scene.add(sun);beam=new THREE.SpotLight('#c5defb',0,25,.6,.7,1);beam.position.set(0,.75,2.5);beam.target.position.set(0,0,12);scene.add(beam,beam.target);
+ sun=new THREE.DirectionalLight('#ffeed4',2.1);sun.position.set(-8,12,10);scene.add(sun);beam=new THREE.SpotLight('#c5defb',0,25,.6,.7,1);beam.position.set(0,.75,2.5);beam.target.position.set(0,0,12);scene.add(beam,beam.target);
+ cabinLight=new THREE.SpotLight('#fff6ea',1.6,3.5,1.35,.85,1.5);cabinLight.position.set(.12,1.34,.12);cabinLight.target.position.set(0,.5,-.2);cabinLight.castShadow=true;cabinLight.shadow.mapSize.set(1024,1024);cabinLight.shadow.camera.near=.025;cabinLight.shadow.camera.far=4;cabinLight.shadow.bias=-.00015;cabinLight.shadow.normalBias=.0012;cabinLight.shadow.radius=3;scene.add(cabinLight,cabinLight.target);displayGlow=new THREE.PointLight('#b9dfff',.04,1.1,2);displayGlow.position.set(0,.94,.47);scene.add(displayGlow);
  environment();software=new CockpitDisplay($('touchscreen-host'),applySoftware);
  screenTexture=new THREE.CanvasTexture(software.canvas);screenTexture.colorSpace=THREE.SRGBColorSpace;screenTexture.anisotropy=renderer.capabilities.getMaxAnisotropy();instrumentTexture=new THREE.CanvasTexture(clusterCanvas);instrumentTexture.colorSpace=THREE.SRGBColorSpace;instrumentTexture.anisotropy=8;
  new ResizeObserver(resize).observe(host);resize();bind();renderer.setAnimationLoop(tick);
@@ -35,13 +37,13 @@ function environment(){
 }
 async function load(){
  const gltf=await new GLTFLoader().setMeshoptDecoder(MeshoptDecoder).loadAsync('./model-s.glb?v=2');model=gltf.scene;model.updateMatrixWorld(true);
- model.traverse(mesh=>{if(!mesh.isMesh)return;const name=mesh.material.name,group=/Windows/.test(name)?'Glass':/Pearl_White/.test(name)?'Body':'Cabin';finishMaterial(mesh,{material:name,group},'#aeb7c2');
+ model.traverse(mesh=>{if(!mesh.isMesh)return;const name=mesh.material.name,group=/Windows/.test(name)?'Glass':/Pearl_White/.test(name)?'Body':'Cabin';mesh.userData.sourceMaterial=name;mesh.castShadow=group!=='Glass';mesh.receiveShadow=group==='Cabin';finishMaterial(mesh,{material:name,group},'#aeb7c2');
   if(group==='Cabin'&&!/scrn|speedomet|lights|RedMain|Reflectors|Pearl_White/.test(name)&&Math.min(mesh.material.color.r,mesh.material.color.g,mesh.material.color.b)>.5){mesh.material.color.set(/chrome|metal|silver|brake|pedal/i.test(name)?'#8b949b':'#626a70');mesh.material.roughness=Math.max(.35,mesh.material.roughness);}
   if(mesh.name==='Surface_003'){centerScreen=mesh;screenUV(mesh);mesh.material=new THREE.MeshBasicMaterial({map:screenTexture,toneMapped:false});}
   if(mesh.name==='Surface_006'){instrumentScreen=mesh;screenUV(mesh);mesh.material=new THREE.MeshBasicMaterial({map:instrumentTexture,toneMapped:false});}
  });
- scene.add(model);steeringDetails();ready=true;document.body.dataset.ready='true';$('cockpit-loading').hidden=true;$('open-screen').disabled=false;setCamera('driver',true);applySoftware(software.state);
- window.modelSCockpit={getState:()=>({ready,view,software:software.getState(),screenOpen:$('screen-dialog').open,camera:camera.position.toArray(),look:camera.quaternion.toArray(),triangles:renderer.info.render.triangles}),getScreenTargets:()=>screenTargets(),showView:name=>{if(!Object.hasOwn(presets,name))return false;setCamera(name);return true;},openScreen:()=>openScreen('navigation'),closeScreen:()=>$('screen-dialog').close()};
+ detailStats.materials=refineInterior(model);scene.add(model);const details=interiorDetails(model);detailStats.stitches=details.stitches;detailStats.pedalGrips=details.grips;steeringDetails();renderer.shadowMap.needsUpdate=true;ready=true;document.body.dataset.ready='true';$('cockpit-loading').hidden=true;$('open-screen').disabled=false;setCamera('driver',true);applySoftware(software.state);
+ window.modelSCockpit={getState:()=>({ready,view,software:software.getState(),screenOpen:$('screen-dialog').open,camera:camera.position.toArray(),look:camera.quaternion.toArray(),triangles:renderer.info.render.triangles,drawCalls:renderer.info.render.calls,interior:detailStats}),getScreenTargets:()=>screenTargets(),showView:name=>{if(!Object.hasOwn(presets,name))return false;setCamera(name);return true;},openScreen:()=>openScreen('navigation'),closeScreen:()=>$('screen-dialog').close()};
  const initialCamera=new URLSearchParams(location.search).get('view');if(Object.hasOwn(presets,initialCamera))setCamera(initialCamera,true);
  const initial=new URLSearchParams(location.search).get('app');if(['navigation','climate','charging','controls'].includes(initial))openScreen(initial);
 }
@@ -65,7 +67,7 @@ function drawCluster(s){
 }
 function applySoftware(s){
  if(screenTexture)screenTexture.needsUpdate=true;drawCluster(s);$('battery-stat').innerHTML=`${Math.floor(s.battery)}<small>%</small>`;
- if(!scene)return;scene.background.set(s.night?'#111f31':'#b6c9d4');scene.fog.color.copy(scene.background);sky.intensity=s.night?.3:1.8;fill.intensity=s.night?.42:2.1;scene.environmentIntensity=s.night?.18:.6;beam.intensity=s.lights==='On'||(s.lights==='Auto'&&s.night)?18:0;
+ if(!scene)return;scene.background.set(s.night?'#111f31':'#b6c9d4');scene.fog.color.copy(scene.background);sky.intensity=s.night?.16:.95;fill.intensity=s.night?.12:.45;scene.environmentIntensity=s.night?.14:.5;cabinLight.intensity=s.night?.16:1.6;sun.intensity=s.night?.035:2.1;displayGlow.intensity=(s.night?.18:.035)*s.brightness/100;beam.intensity=s.lights==='On'||(s.lights==='Auto'&&s.night)?18:0;
  if(centerScreen)centerScreen.material.color.setScalar(.35+s.brightness*.0065);if(instrumentScreen)instrumentScreen.material.color.setScalar(s.night?.6:1);
  $('day-night').textContent=s.night?'☾ Night cabin':'☼ Daylight cabin';$('day-night').setAttribute('aria-pressed',s.night);
 }
