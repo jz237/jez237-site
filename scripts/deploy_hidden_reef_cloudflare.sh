@@ -24,6 +24,7 @@ if [ "$local_head" != "$remote_head" ]; then
 fi
 
 echo "Preflight: JavaScript syntax checks"
+node "$SCRIPT_DIR/check_aquarium_sync.mjs"
 for js_file in "$SOURCE_DIR"/assets/*.js; do
   node --check "$js_file"
 done
