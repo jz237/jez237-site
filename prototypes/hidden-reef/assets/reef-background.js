@@ -3,7 +3,7 @@
 
   const reefAssetBase = new URL('.', document.currentScript.src);
   const showroomUrl=new URL('../showroom/',reefAssetBase);
-  const showroomStyle=document.createElement('link');showroomStyle.rel='stylesheet';showroomStyle.href=new URL('showroom.css?v=deep-blue-3',reefAssetBase);document.head.append(showroomStyle);
+  const showroomStyle=document.createElement('link');showroomStyle.rel='stylesheet';showroomStyle.href=new URL('showroom.css?v=shared-header-4',reefAssetBase);document.head.append(showroomStyle);
   const waterAsset = function(name) { return new URL('water-lab/' + name, reefAssetBase).href; };
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
