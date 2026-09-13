@@ -41,3 +41,7 @@ The interaction concept was inspired by [ashemag/model-x-studio](https://github.
 ## Rebuild the asset
 
 See `../../scripts/model-s-studio/README.md` for the reproducible geometry preparation and browser validation tools. The original source asset is not duplicated in this repository.
+
+## Guided tour and interior details
+
+`tour.html` presents nine stops with manual navigation, optional 10-second playback, a stop menu, scene interaction that pauses playback, and a live touchscreen at the last stop. `?stop=battery` or another stop key opens a specific chapter. Only one embedded renderer is loaded at a time. `cockpit.html?view=seats`, `door`, `pedals`, and `console` expose the four new close-ups of the existing artist geometry. Reduced-motion visitors get immediate camera changes.

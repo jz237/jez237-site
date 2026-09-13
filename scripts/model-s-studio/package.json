@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "verify": "node verify.mjs",
-    "verify:cockpit": "node verify-cockpit.mjs"
+    "verify:cockpit": "node verify-cockpit.mjs",
+    "verify:tour": "node verify-tour.mjs"
   },
   "devDependencies": {
     "@gltf-transform/cli": "4.5.0",

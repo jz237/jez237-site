@@ -7,6 +7,7 @@ import { createBatteryParts } from './battery.js';
 import { MeshoptDecoder } from './vendor/meshopt_decoder.module.js';
 
 const $ = id => document.getElementById(id);
+if(new URLSearchParams(location.search).has('tour'))document.documentElement.classList.add('tour-embed');
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', cabin:false, labels:false, paint:'#aeb7c2', view:'hero', board:false };
 const parts = [], landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
@@ -150,8 +151,8 @@ async function loadModel() {
   if(part){const el=document.createElement('span');el.className='landmark';el.textContent=group==='Glass'?'PANORAMIC GLAZING':group==='Wheels'?'WHEEL ASSEMBLIES':group==='Body'?'SCULPTED BODY':group==='Battery'?'BATTERY · SCHEMATIC':'PASSENGER CABIN';$('labels').append(el);landmarks.push({el,part});}
  }
  updateList();updateUI();setView('hero',true);
- // Read-only diagnostics for geometry and interaction validation.
- window.modelSStudio={getState:()=>({ready:state.ready,pieces:parts.length,visible:parts.filter(p=>p.mesh.visible).length,amount:state.amount,target:state.target,selected:state.selected?.label??null,isolated:state.isolated,system:state.system,cabin:state.cabin,board:state.board,paint:state.paint,triangles:renderer.info.render.triangles,drawCalls:renderer.info.render.calls}),getParts:()=>parts.map(p=>({id:p.id,name:p.name,group:p.group,position:p.mesh.position.toArray(),base:p.base.toArray(),schematic:p.schematic})),getBoardRectangles:()=>board.rectangles()};
+ // Tour controls and diagnostics for geometry and interaction validation.
+ window.modelSStudio={getState:()=>({ready:state.ready,pieces:parts.length,visible:parts.filter(p=>p.mesh.visible).length,amount:state.amount,target:state.target,selected:state.selected?.label??null,isolated:state.isolated,system:state.system,cabin:state.cabin,board:state.board,paint:state.paint,triangles:renderer.info.render.triangles,drawCalls:renderer.info.render.calls}),getParts:()=>parts.map(p=>({id:p.id,name:p.name,group:p.group,position:p.mesh.position.toArray(),base:p.base.toArray(),schematic:p.schematic})),getBoardRectangles:()=>board.rectangles(),showTourView:name=>{if(!['exterior','exploded','battery'].includes(name))return false;reset();document.querySelector('[data-color="#aeb7c2"]').click();if(name==='exploded')setAmount(1);if(name==='battery')$('battery-view').click();return true;}};
  const initialView=new URLSearchParams(location.search).get('view');if(initialView==='parts')toggleBoard(true);if(initialView==='battery')$('battery-view').click();
 }
 
