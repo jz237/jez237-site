@@ -14,8 +14,8 @@
 @media(max-width:850px){footer{bottom:56px}}
 
 /* Hidden Reef's cyan/violet accents and deep-blue glass panels. */
-.store-showroom{background:#03182c;color:#e9f8fc}
-.store-showroom #loading{background:#03182c var(--reef-water-background,none) center top/cover;color:#f0fbff;text-shadow:0 2px 12px #00101f}
+.store-showroom{background:#062750;color:#e9f8fc}
+.store-showroom #loading{background:#062750;color:#f0fbff;text-shadow:0 2px 12px #00101f}
 .store-showroom #loading span{background:#40d9ff}
 .store-showroom header,.store-showroom .scene-note{text-shadow:0 2px 8px #00101f}
 .store-showroom h1{color:#f0fbff}.store-showroom .identity .eyebrow{color:#b7edff}
@@ -30,4 +30,4 @@
 .store-showroom .lesson-body p,.store-showroom #exploration p{color:#b8d3e3}
 .store-showroom .learning-tag{background:#08273deb;border-color:#74cdeb88;color:#e9faff}
 .store-showroom .selection-ring{border-color:#40d9ff;box-shadow:0 0 0 4px #40d9ff15}
-.store-showroom main:fullscreen,.store-showroom main.aquarium-fullscreen{background:#03182c}
+.store-showroom main:fullscreen,.store-showroom main.aquarium-fullscreen{background:#062750}

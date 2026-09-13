@@ -73,7 +73,7 @@
   document.addEventListener('visibilitychange',visibility);
   new MutationObserver(visibility).observe(document.body,{attributes:true,attributeFilter:['class']});
   // The store aquarium link is the launch gesture; no second play gate.
-  launch();mount.scrollIntoView({block:'start',behavior:'instant'});
+  launch();
   const plans=[
     ['01','Aquarium & stand','Start with room, footprint and a stand designed for the filled aquarium.','showroom-consult','aquariums',/./],
     ['02','Filtration','Explore external canisters, then match capacity and media to your setup.','canister-filters','filtration&sub=canister-filters',/canister|cansiter|filtosmart|ultramax|hypermax/i],

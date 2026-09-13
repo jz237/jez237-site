@@ -13,7 +13,7 @@ The aquarium bridge accepts messages only from its parent window at the same ori
 3. `python scripts/check_hidden_reef_links.py prototypes/hidden-reef`
 4. `python scripts/check_hidden_reef_links.py prototypes/hidden-reef-header-preview`
 
-The showroom and its aquarium controls use the store’s blue/cyan/violet palette and the existing `clear-reef-water-gpt-image-2.webp` photograph. The 3D renderer draws that backdrop and softly blends the cabinet floor into it; no additional WebGL background canvas is introduced. Standalone aquarium styling stays independent.
+The showroom uses the store’s blue/cyan/violet palette with solid deep blue introduction and aquarium panels. The outer page retains its water photograph. A still copy of the existing header artwork (`assets/animated-header/reference.png`) sits above the navigation, without a header animation or additional WebGL canvas. Entry keeps the top header visible while the aquarium loads automatically; manual reopening scrolls directly to the tank. Standalone aquarium styling stays independent.
 
 The sync script preserves the existing two storefront variants and copies the current aquarium build, models, textures, lighting and study references. Old published content-hashed assets may be retained for rollback. The poster is an actual renderer screenshot; `?showroom=hidden-reef&poster=1` hides the aquarium controls for a fresh capture.
 
