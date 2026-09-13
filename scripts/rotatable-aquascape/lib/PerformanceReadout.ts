@@ -34,6 +34,7 @@ export class PerformanceReadout {
   const median=(column:number)=>{const a=this.frames.map(f=>f[column]).sort((a,b)=>a-b);return a[Math.floor(a.length/2)].toFixed(1);};
   const gpu=this.host.dataset.gpuProfile?JSON.parse(this.host.dataset.gpuProfile):null;
   this.report=`Aquarium performance\nFPS: ${(this.frames.length/this.elapsed).toFixed(1)}\nFrame: ${median(0)} ms\nSimulation: ${median(1)} ms\n  Tetras: ${median(3)} ms\n  Bottom feeders: ${median(4)} ms\n  Shrimp/snails: ${median(5)} ms\nRendering CPU + driver: ${median(2)} ms\nGPU: ${gpu?gpu.medianMs+' ms':this.host.dataset.gpuTiming==='unavailable'?'unavailable':'warming up…'}\nImage: ${this.canvas.width} × ${this.canvas.height}\nBuild: ${new URLSearchParams(location.search).get('v')??'local'}`;
+  this.report+='\nCaptures: '+(this.host.dataset.captureMode??'every frame');
   if(this.benchmarkReport)this.report+='\n\n'+this.benchmarkReport;
   this.output.textContent=this.report;this.frames=[];this.elapsed=0;
  }
