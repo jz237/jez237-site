@@ -79,7 +79,7 @@ export class TeachingScene{
  }
  set(mode:Lesson|null,step=0){
   this.clear();this.mode=mode;this.step=step;this.root.visible=!!mode;this.labelHost.hidden=!mode;
-  if(mode!=='layers')for(const [o,original] of this.originals)o.position.copy(original.position);
+  if(mode!=='layers')for(const [o,original] of this.originals){o.position.copy(original.position);o.updateMatrix();}
   if(!mode)return;
   const isolated=(mode==='water'&&step>0&&step<4)||mode==='organisms'||mode==='underground';
   if(isolated){for(const o of this.world.children){if(o===this.root||o instanceof T.Light)continue;this.savedVisibility.set(o,o.visible);o.visible=false;}}
@@ -121,7 +121,7 @@ export class TeachingScene{
  update(dt:number,camera:T.Camera,flow=65){
   if(!this.mode)return;
   const target=this.mode==='layers'?this.separation:0;
-  if(this.mode==='layers')for(const [o,original] of this.originals){const offset=this.plants.includes(o)?target*1.3:-target*.48;o.position.y=T.MathUtils.damp(o.position.y,original.position.y+offset,5,dt);}
+  if(this.mode==='layers')for(const [o,original] of this.originals){const offset=this.plants.includes(o)?target*1.3:-target*.48;o.position.y=T.MathUtils.damp(o.position.y,original.position.y+offset,5,dt);o.updateMatrix();}
   if(this.mode==='layers'){for(const o of this.housing)o.visible=target<.02&&(this.savedVisibility.get(o)??true);for(const o of this.content.children)if(o.userData.rootTemplate)o.visible=target>.02;}
   this.phase+=dt;
   if(this.impeller)this.impeller.rotation.y+=dt*flow*.14;
