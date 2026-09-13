@@ -2,6 +2,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { checkGamesCatalogSyntax } from "./check_games_catalog_syntax.mjs";
+import { checkAquariumSync } from "./check_aquarium_sync.mjs";
 
 const BASELINE_COMMIT = "4810212c063f49501d5d5dbb5bb7ba4bf8c66fd1";
 const BASELINE_LABEL = "2026-08-24 Final Blow 1.9E live-safe baseline";
@@ -132,6 +133,7 @@ if (missingPaths.length > 0) {
 try {
   const checked = checkGamesCatalogSyntax();
   console.log(`Games catalog syntax passed (${checked} inline scripts).`);
+  console.log(`Aquarium synchronization passed (${checkAquariumSync()} shared assets).`);
 } catch (error) {
   fail(error.message);
 }

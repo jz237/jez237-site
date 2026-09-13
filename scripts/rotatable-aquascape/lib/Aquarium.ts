@@ -13,7 +13,7 @@ import {buildScannedHardscape,buildScannedFerns} from './ScannedHardscape';
 import {AquariumWater} from './AquariumWater';
 import {buildAquariumGlass} from './AquariumGlass';
 import {ReflectionPool} from './ReflectionPool';
-import {CaptureScheduler} from './CaptureScheduler';
+import {CaptureScheduler,interleaveCaptures} from './CaptureScheduler';
 import {SceneRefraction} from './SceneRefraction';
 import {applyWaterDepth} from './WaterDepth';
 import {applyBakedIrradiance} from './BakedIrradiance';
@@ -222,7 +222,7 @@ export class Aquarium{
   const mirrors=this.refraction?this.reflections.visible(this.camera):[];
   const shadows=probe!=='shadows'&&probe!=='captures';
   const reflections=probe!=='reflections'&&probe!=='captures';
-  const ids=[...(shadows?this.canopyLights.map(l=>l.uuid):[]),...(reflections?mirrors.map(m=>m.uuid):[])];
+  const ids=interleaveCaptures(shadows?this.canopyLights.map(l=>l.uuid):[],reflections?mirrors.map(m=>m.uuid):[]);
   const selected=this.captureScheduler.select(ids,this.camera,`${this.teaching?.mode}:${this.teaching?.step}`,this.staggerCaptures);
   for(const light of this.canopyLights)light.shadow.needsUpdate=selected.has(light.uuid);
   this.renderer.shadowMap.needsUpdate=this.canopyLights.some(l=>l.shadow.needsUpdate);
