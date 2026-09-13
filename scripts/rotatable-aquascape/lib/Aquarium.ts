@@ -32,6 +32,7 @@ import {optimizeLeafIndexOrder} from './LeafIndexOrder';
 import {GpuFrameTimer} from './GpuFrameTimer';
 import {reuseUnchangedTransforms} from './TransformReuse';
 import {PerformanceReadout} from './PerformanceReadout';
+import {FrameBenchmark,type FrameProbe} from './FrameBenchmark';
 import {createTetraSwim,advanceTetraSwim,startleTetra,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
 import {createSchoolRoute,advanceSchoolRoute,schoolActivity} from './SchoolRoute';
 import {separateFish} from './FishCollisions';
@@ -87,6 +88,7 @@ export class Aquarium{
  private schoolEyes:SchoolEyes|null=null;
  private diagnostics=import.meta.env.DEV||new URLSearchParams(location.search).get('stats')==='1';
  private perfReadout:PerformanceReadout|null=null;
+ private frameBenchmark:FrameBenchmark|null=null;
  private gpuTimer:GpuFrameTimer|null=null;
  private texture=new T.Texture();
  private obstacles:Obstacle[]=[];private grazerFishPrevious=new Map<number,T.Vector3>();
@@ -181,10 +183,36 @@ export class Aquarium{
    this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))this.pickBlockers.push(o);});
    const seen=new Set<string>();this.scene.traverse(o=>{if(!(o instanceof T.InstancedMesh)||!o.userData.plantSpecies)return;const root=o.geometry.getAttribute('plantRoot');if(!root)return;for(let i=0;i<o.count;i++){const point=new T.Vector3().fromBufferAttribute(root,i),key=[point.x.toFixed(1),point.z.toFixed(1)].join(',');if(seen.has(key))continue;seen.add(key);point.y+=.35+(this.browseSites.length%4)*.3;clearHardscape(point,this.obstacles,.35);const p=fishCoordinates(point);if(p.x>670&&p.x<1200&&p.y>250&&p.y<500)this.browseSites.push({id:-100-this.browseSites.length,...p});}});
    if(!new URLSearchParams(location.search).has('originalTransforms'))reuseUnchangedTransforms(this.scene);
+   if(this.perfReadout)this.installFrameBenchmark();
    this.frame=requestAnimationFrame(this.animate);
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
-  document.addEventListener('visibilitychange',()=>{this.last=0;});
+  document.addEventListener('visibilitychange',()=>{this.last=0;if(document.hidden)this.frameBenchmark?.cancel();});
+ }
+ private installFrameBenchmark(){
+  const readout=this.perfReadout!;
+  let pixelRatio=this.renderer.getPixelRatio(),controlsEnabled=this.controls.enabled;
+  const resolution=(ratio:number)=>{if(this.renderer.getPixelRatio()!==ratio){this.renderer.setPixelRatio(ratio);const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);}};
+  this.frameBenchmark=new FrameBenchmark(mode=>{
+   resolution(mode==='pixels'?pixelRatio*.5:pixelRatio);
+  },()=>{
+   resolution(pixelRatio);this.controls.enabled=controlsEnabled;this.last=0;
+   this.renderer.shadowMap.needsUpdate=true;
+  },(message,done)=>readout.benchmark(message,done));
+  readout.onTest=()=>{
+   if(this.frameBenchmark!.active){this.frameBenchmark!.cancel();return;}
+   pixelRatio=this.renderer.getPixelRatio();controlsEnabled=this.controls.enabled;this.controls.enabled=false;
+   this.frameBenchmark!.start(performance.now());
+  };
+  // A new view, a learning control or a resize invalidates a pass comparison.
+  document.addEventListener('pointerdown',event=>{if(this.frameBenchmark?.active&&!(event.target as Element).closest('aside[aria-label="Aquarium performance"]'))this.frameBenchmark.cancel();},true);
+  window.addEventListener('resize',()=>this.frameBenchmark?.cancel());
+  readout.enableTest();
+ }
+ private drawAquarium(probe:FrameProbe='normal'){
+  this.renderer.shadowMap.needsUpdate=probe!=='shadows'&&probe!=='captures';
+  if(this.refraction&&probe!=='reflections'&&probe!=='captures')this.reflections.prepare(this.renderer,this.scene,this.camera);
+  return this.lighting.render(this.renderer,this.lightingInspection,probe!=='contact');
  }
  private installGlassTap(){
   const canvas=this.renderer.domElement;
@@ -353,7 +381,16 @@ export class Aquarium{
  }
  private animate=(now:number)=>{
   this.frame=requestAnimationFrame(this.animate);
-  if(document.hidden||this.suspended){this.last=0;return;}
+  if(document.hidden||this.suspended){this.frameBenchmark?.cancel();this.last=0;return;}
+  this.frameBenchmark?.tick(now);
+  const probe=this.frameBenchmark?.mode??'normal';
+  if(probe!=='normal'){
+   // Render exactly the held scene: dt=0 still runs some animal work, so bypass
+   // simulation entirely for these independent graphics comparisons.
+   this.last=now;
+   try{this.drawAquarium(probe);}catch(error){this.frameBenchmark?.cancel();throw error;}
+   return;
+  }
   const updateStart=performance.now();
   const elapsed=this.last?(now-this.last)/1000:0,wallDt=Math.min(elapsed,.05);this.last=now;
   const dt=this.paused||document.hidden?0:wallDt;this.time+=dt;this.currentTime+=dt*((this.teaching?.mode==='experiments'||this.teaching?.mode==='challenges')?.2+.8*this.learning.environment.flow/65:1);this.swimShader.value=this.currentTime;
@@ -412,9 +449,8 @@ export class Aquarium{
   const renderStart=performance.now();
   if(this.diagnostics){this.renderer.info.autoReset=false;this.renderer.info.reset();}
   this.gpuTimer?.begin();
-  this.renderer.shadowMap.needsUpdate=true;
-  if(this.refraction)this.reflections.prepare(this.renderer,this.scene,this.camera);
-  const sceneTriangles=this.lighting.render(this.renderer,this.lightingInspection);
+  let sceneTriangles:number;
+  try{sceneTriangles=this.drawAquarium();}catch(error){this.frameBenchmark?.cancel();throw error;}
   if(this.inspection){this.inspection.material.map=this.water.reflectionTexture;this.renderer.render(this.inspection.scene,this.inspection.camera);}
   this.gpuTimer?.end();
   this.perfReadout?.update(elapsed,renderStart-updateStart,performance.now()-renderStart,[tetraMs,coryMs,grazerMs]);

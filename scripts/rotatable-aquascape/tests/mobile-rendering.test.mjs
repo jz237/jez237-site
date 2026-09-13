@@ -27,6 +27,8 @@ test('fused output retains full-resolution AO, beauty multisampling and renderer
  lighting.lens.enabled=true;lighting.render(renderer,null);assert.equal(lighting.output.uniforms.lensZoom.value,2.4);assert.deepEqual([sceneRenders,contactRenders,outputRenders],[2,2,2]);lighting.lens.enabled=false;
  lighting.render(renderer,'contact');assert.equal(lighting.output.uniforms.inspectionMode.value,1);
  lighting.render(renderer,'unshaded');assert.equal(lighting.output.uniforms.inspectionMode.value,2);
+ const before=contactRenders;lighting.render(renderer,null,false);assert.equal(contactRenders,before);assert.equal(lighting.output.uniforms.inspectionMode.value,2);
+ lighting.render(renderer,null);assert.equal(contactRenders,before+1);assert.equal(lighting.output.uniforms.inspectionMode.value,0);
  lighting.output.render=()=>{throw Error('test failure');};assert.throws(()=>lighting.render(renderer,null),/test failure/);assert.equal(target,original);
  lighting.dispose();
 });
