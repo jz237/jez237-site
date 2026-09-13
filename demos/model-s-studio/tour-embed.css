@@ -1,0 +1,5 @@
+.tour-embed .topbar,.tour-embed .skip-link,.tour-embed .inspector,.tour-embed .cockpit-sidebar,.tour-embed .hero,.tour-embed .scene-badge,.tour-embed .view-toolbar,.tour-embed .transport,.tour-embed .gesture-hint,.tour-embed .cockpit-heading,.tour-embed .cockpit-viewbar,.tour-embed .cockpit-hint,.tour-embed .open-screen{display:none}
+.tour-embed .workspace,.tour-embed .cockpit-workspace{display:block;min-height:0}
+.tour-embed .stage,.tour-embed .cockpit-stage{height:100dvh;min-height:0}
+.tour-embed #viewport,.tour-embed .labels,.tour-embed .loading{inset:0}
+.tour-embed body{overflow:hidden}

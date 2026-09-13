@@ -11,8 +11,8 @@
 @media(max-width:760px){
  .topbar{height:112px;flex-direction:column;align-items:stretch;justify-content:center;gap:9px;padding:10px 16px}
  .topbar .brand{align-self:flex-start;font-size:15px}
- .studio-nav{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:3px}
- .studio-nav a{padding:10px 4px;font-size:11px}
+ .studio-nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:3px}
+ .studio-nav a{padding:10px 4px;font-size:10px}
  .board-mode .stage,.cockpit-stage{height:calc(100dvh - 112px)}
  .poster-notes a{display:inline-flex;align-items:center;min-height:44px}
  .cockpit-manual,.cockpit-back{display:flex;align-items:center;min-height:44px}
@@ -26,3 +26,7 @@
  .swatches{gap:12px}
 }
 @media print{.skip-link,.studio-nav{display:none}}
+
+.interior-details{margin:24px 0;padding:20px 0;border-block:1px solid var(--line)}.detail-buttons{display:grid;grid-template-columns:1fr 1fr;gap:7px}.detail-buttons button{min-height:44px;font-size:11px;padding:10px 7px}.interior-details p{font-size:11px;line-height:1.7;color:var(--muted)}
+
+.cockpit-heading{background:#08131bd9;border:1px solid #60778755;border-radius:8px;padding:12px 15px;max-width:calc(100% - 40px)}

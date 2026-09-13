@@ -61,6 +61,8 @@ use these instructions before writing code or snippets.
   schematic battery, operations manual, technical references and part isolation.
   `/demos/model-s-studio/cockpit.html` adds interior cameras and a simulated
   interactive touchscreen with navigation, climate, charging and vehicle controls.
+  `/demos/model-s-studio/tour.html` adds a nine-stop guided tour, and the cockpit
+  includes seat, door, pedal and console close-ups.
   `/demos/model-s-studio/infographic.html` hosts the anatomy poster with PNG
   download, print layout, and links back to the interactive views.
   Listed in the Website Demos catalog; source and validation tools are in
