@@ -16,3 +16,11 @@ test('rocks and a swept fast tetra cannot cross a cory body',()=>{const o={cente
 test('larger body flex preserves cross-section width and leaves the head stable',()=>{for(let phase=0;phase<6.3;phase+=.2){for(const x of [-.35,-.18,-.04,.22]){const a=coryBend(new T.Vector3(x,.1,-.05),phase,1),b=coryBend(new T.Vector3(x,.1,.05),phase,1);assert.ok(Math.abs(a.distanceTo(b)-.1)<1e-9);}assert.ok(coryBend(new T.Vector3(.22,.1,.05),phase,1).distanceTo(new T.Vector3(.22,.1,.05))<1e-9);}let mid=0,tail=0;for(let phase=0;phase<6.3;phase+=.1){mid=Math.max(mid,Math.abs(coryWave(-.1,phase,1)));tail=Math.max(tail,Math.abs(coryWave(-.4,phase,1)));}assert.ok(mid>.03&&tail>.09);});
 
 test('nibbling gently lowers the mouth while the tail rises, without penetrating gravel',()=>{const life=new Corydoras(new T.Scene(),()=>.4);let dips=0;for(let i=0;i<1200;i++){life.update(.05,i*.05);for(const a of life.animals){const mouth=coryMouth(a.position,coryForward(a),a.size,a.pitch);assert.ok(mouth.y>=.406-1e-8);if(a.pitch<-.18){dips++;assert.ok(a.mode==='foraging'||a.speed<.1);}}}assert.ok(dips>20,'occasional visible nibbling posture');});
+
+
+test('pellet chemistry callback fires for a real bite, not visual expiration',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4);let bites=0;assert.equal(life.feed(()=>bites++),6);assert.equal(life.feed(()=>bites++),0);
+ const expired=life.pellets[0];expired.age=66;life.update(.01,0);assert.equal(bites,0);
+ const eater=life.animals[0],pellet=life.pellets[0];pellet.position.copy(eater.position).addScaledVector(coryForward(eater),.18);pellet.position.y=.425;
+ life.update(.025,.025);assert.ok(bites>0);
+});

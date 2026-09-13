@@ -29,5 +29,5 @@ test('six-hour challenge answers agree with the model and food is isolated from 
  const m=new LearningModel();m.reset('flow');m.environment.flow=0;m.step(6);assert.ok(m.state.oxygen<m.baseline.oxygen);
  m.reset('carbon');m.step(6);assert.ok(m.state.co2<m.baseline.co2);
  m.reset('food');m.step(6);assert.ok(m.state.ammonia>m.baseline.ammonia);
- const baseline=structuredClone(m.baseline),waste=m.state.waste;m.addFood();assert.equal(m.state.waste,waste+.5);assert.deepEqual(m.baseline,baseline);
+ const baseline=structuredClone(m.baseline),waste=m.state.waste;m.addFood();assert.equal(m.state.waste,waste+120*.07/180);assert.deepEqual(m.baseline,baseline);
 });

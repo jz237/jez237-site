@@ -16,7 +16,7 @@ export function nibblePitch(time:number,id:number){return -.26-.065*(.5+.5*Math.
 
 const random=(a:Cory)=>{a.seed=(Math.imul(a.seed,1664525)+1013904223)>>>0;return a.seed/4294967296;};
 export class Corydoras{
- readonly models:CoryModels;readonly animals:Cory[]=[];readonly fishCorrections=new Map<number,T.Vector3>();readonly pellets:{position:T.Vector3;age:number;mesh:T.Mesh}[]=[];
+ readonly models:CoryModels;readonly animals:Cory[]=[];readonly fishCorrections=new Map<number,T.Vector3>();readonly pellets:{position:T.Vector3;age:number;mesh:T.Mesh;onEaten?:()=>void}[]=[];
  readonly routes:CoryFloorRoutes;
  private scene:T.Scene;private height:(x:number,z:number)=>number;private obstacles:Obstacle[];private plants?:GrazerPlants;private pelletGeometry=new T.IcosahedronGeometry(.022,1);private pelletMaterial=new T.MeshStandardMaterial({color:0xa78b58,roughness:1});private time=0;
  constructor(scene:T.Scene,height:(x:number,z:number)=>number,obstacles:Obstacle[]=[],plants?:GrazerPlants,count=6){this.scene=scene;this.height=height;this.obstacles=obstacles;this.plants=plants;this.routes=new CoryFloorRoutes((x,z)=>this.floor(x,z),(p,f)=>this.solid(p,coryBody(p,f)));this.models=new CoryModels(count);scene.add(this.models.root);
@@ -51,7 +51,8 @@ export class Corydoras{
   a.target.copy(goal??a.position.clone().addScaledVector(coryForward(a),-.6));
  }
 
- feed(){if(this.pellets.length)return;for(let i=0;i<6;i++){const a=this.animals[i%this.animals.length],p=a.position.clone();p.y=5.1;const mesh=new T.Mesh(this.pelletGeometry,this.pelletMaterial);mesh.position.copy(p);this.models.root.add(mesh);this.pellets.push({position:mesh.position,age:0,mesh});}}
+ clearFood(){for(const pellet of [...this.pellets])this.removePellet(pellet);}
+ feed(onEaten?:()=>void){if(this.pellets.length)return 0;for(let i=0;i<6;i++){const a=this.animals[i%this.animals.length],p=a.position.clone();p.y=5.1;const mesh=new T.Mesh(this.pelletGeometry,this.pelletMaterial);mesh.position.copy(p);this.models.root.add(mesh);this.pellets.push({position:mesh.position,age:0,mesh,onEaten});}return 6;}
  update(dt:number,waterTime:number,fish:FishContactBody[]=[],grazers:{id?:number;position:T.Vector3;normal:T.Vector3;matrix:T.Matrix4;kind:string}[]=[]){if(dt<=0)return;this.time=waterTime;this.fishCorrections.clear();const others=grazers.map(a=>grazerBody(a.position,a.normal,V().setFromMatrixColumn(a.matrix,0).normalize(),a.kind==='snail',a.kind==='snail'?.84:.80+(a.id??0)%3*.04));const visitors=[...others,...fish.map(f=>fishBody(f))];
   for(const pellet of [...this.pellets]){pellet.age+=dt;pellet.position.y=Math.max(this.height(pellet.position.x,pellet.position.z)+.025,pellet.position.y-dt*.65);if(pellet.age>65)this.removePellet(pellet);}
   const steps=Math.max(1,Math.ceil(dt/.025)),h=dt/steps;
@@ -61,7 +62,7 @@ export class Corydoras{
     const last=a.trail[a.trail.length-1];if(!last||last.point.distanceTo(a.position)>.00001||Math.abs(Math.atan2(Math.sin(last.yaw-a.yaw),Math.cos(last.yaw-a.yaw)))>.00001){a.trail.push({point:a.position.clone(),yaw:a.yaw});if(a.trail.length>480)a.trail.shift();}}
 a.replanIn-=h;if(this.routes.nodes.length&&a.replanIn<=0&&!a.picking&&a.mode!=='feeding'&&(!a.route.length||a.position.distanceTo(a.route[0])<.01)){this.choose(a);a.replanIn=5+random(a)*4;}if(Math.floor(a.time*2)!==Math.floor((a.time-h)*2))a.visits.set(`${Math.floor(a.position.x/.65)},${Math.floor(a.position.z/.65)}`,a.time);if(a.route.length&&a.mode!=='feeding'){while(a.route.length&&a.position.distanceTo(a.route[0])<.002)a.route.shift();if(a.route.length)a.target.copy(a.route[0]);else this.choose(a);a.restIn-=h;if(a.mode==='foraging'){if(a.remaining<=0){a.picking=undefined;a.mode='browsing';a.remaining=60;}}else if(a.restIn<=0){if(!this.startPicking(a))a.restIn=1.5;}}else if(a.remaining<=0||a.mode!=='foraging'&&a.position.distanceTo(a.target)<.13)this.choose(a);
    const food=this.pellets.filter(p=>p.position.y<this.floor(p.position.x,p.position.z)+.12).sort((p,q)=>p.position.distanceToSquared(a.position)-q.position.distanceToSquared(a.position))[0];
-   if(food&&a.position.distanceTo(food.position)<2.4){a.picking=undefined;a.mode='feeding';a.target.copy(food.position);a.target.y=this.floor(a.target.x,a.target.z);a.remaining=1;a.lift=0;if(a.position.clone().addScaledVector(coryForward(a),.18).distanceTo(food.position)<.20){this.removePellet(food);a.mode='foraging';a.remaining=2+random(a)*2;this.startPicking(a);}}
+   if(food&&a.position.distanceTo(food.position)<2.4){a.picking=undefined;a.mode='feeding';a.target.copy(food.position);a.target.y=this.floor(a.target.x,a.target.z);a.remaining=1;a.lift=0;if(a.position.clone().addScaledVector(coryForward(a),.18).distanceTo(food.position)<.20){this.removePellet(food,true);a.mode='foraging';a.remaining=2+random(a)*2;this.startPicking(a);}}
    const steering=a.target.clone().sub(a.position).normalize();for(const b of this.animals){if(b===a||a.route.length)continue;const away=a.position.clone().sub(b.position);away.y=0;const d=away.length();if(d<.85&&d>.001)steering.addScaledVector(away,(.85-d)*3/d);}
    const verticalLeg=a.route.length>0&&Math.hypot(a.target.x-a.position.x,a.target.z-a.position.z)<.055&&Math.abs(a.target.y-a.position.y)>.000001;
    const desired=a.picking||verticalLeg||steering.lengthSq()<.000001?a.yaw:Math.atan2(-steering.z,steering.x),delta=Math.atan2(Math.sin(desired-a.yaw),Math.cos(desired-a.yaw)),oldYaw=a.yaw,oldForward=coryForward(a);a.yaw+=clamp(delta,-h*1.35,h*1.35);const f=coryForward(a);
@@ -82,7 +83,7 @@ a.replanIn-=h;if(this.routes.nodes.length&&a.replanIn<=0&&!a.picking&&a.mode!=='
   for(const f of fish)for(const a of this.animals){const corrected=fishTouch({...f,position:this.fishCorrections.get(f.id)??f.position},coryBody(a.position,coryForward(a),a.size,a.pitch));if(corrected)this.fishCorrections.set(f.id,corrected);}
   this.models.flush();
  }
- private removePellet(p:typeof this.pellets[number]){p.mesh.removeFromParent();this.pellets.splice(this.pellets.indexOf(p),1);}
+ private removePellet(p:typeof this.pellets[number],eaten=false){if(eaten)p.onEaten?.();p.mesh.removeFromParent();this.pellets.splice(this.pellets.indexOf(p),1);}
  private pose(a:Cory){this.models.pose(a.id,a.position,a.yaw,a.pitch,a.size,a.phase,a.effort,a.time,!!a.picking);}
  info(id:number):Identification|undefined{const a=this.animals[id];if(!a)return;return {kind:'fish',coryId:id,name:`Dwarf Corydoras ${id+1}`,subtitle:'Salt-and-pepper cory · Corydoras habrosus',role:'A small bottom-foraging catfish. Barbels help it locate edible morsels in sand; it does not eat fish waste.',needs:'Fine, smooth substrate, companions, clean oxygenated water and food that reaches the bottom.',behavior:a.mode==='feeding'?'Following sinking food and searching for morsels.':a.picking?.kind==='leaf'?'Picking small food particles from a low leaf with its mouth and barbels.':a.mode==='foraging'?'Inspecting the substrate with its mouth and barbels.':a.mode==='exploring'?'Making a short excursion above the bottom.':'Exploring fresh floor patches, with brief stops to search the substrate.',point:a.position.clone()};}
  pick(ray:T.Raycaster){if(!this.models.root.visible)return;const h=ray.intersectObject(this.models.meshes[0])[0];if(h&&h.instanceId!==undefined)return {distance:h.distance,info:this.info(h.instanceId)!};}

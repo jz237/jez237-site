@@ -1,5 +1,7 @@
 # Aquarium control and science audit — 13 September 2026
 
+Chemistry has since been upgraded; see [CHEMISTRY.md](CHEMISTRY.md) for the current ongoing model, action bindings, mass accounting and limitations.
+
 Scope: the eight right-hand learning lessons, exploration/identification panel, experiment model, and shared camera, pause, lighting, feeding and magnifier interactions.
 
 ## Corrections
