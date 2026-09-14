@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.13.0, the bait)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.14.0, seasons and live weather)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Seasons and live weather (v0.14.0)
+
+The calendar now reaches the fish. Water temperature follows the day of the year (36 °F in late January, 80 °F at the start of August) and each species has a comfort band: inside it activity is full, outside it falls off, so bass in January are sluggish and walleye come alive in cold water. The barometric trend counts too: falling pressure feeds them ahead of a front, a sharp rise behind one gives lockjaw. The weather presets carry a trend (overcast falling, rain falling fast), and in **real-time mode** with **Live weather** on (menu setting) the game fetches the lake's current wind, cloud, rain and pressure from Open-Meteo every fifteen minutes and shows it in the conditions strip as "live". Pennsylvania's closed seasons are marked as understood from the Fish and Boat Commission's inland-water rules (bass catch-and-immediate-release only from April 15 through the Friday before the first Saturday after June 11, walleye closed from March 15 through the Friday before the first Saturday in May; check them each spring): the water line reads "spring · bass C&R only" and a catch card in those windows says "closed season, released". Ray reads the pressure in his opening line and his planner scores species by season. QA: `__FIRST_LIGHT.conditions()`, `setWeatherLive(openMeteoJson)`.
 
 ## The bait (v0.13.0)
 
