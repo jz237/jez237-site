@@ -1,0 +1,20 @@
+import test from 'node:test';import assert from 'node:assert/strict';
+import {STEPS,createTutorial,stepTutorial,skipTutorial,progress} from '../tutorial.js';
+test('the first morning advances only when the player has done each thing, and retries a lost fish',()=>{
+ const t=createTutorial();const snap=(o)=>({phase:'idle',casts:0,technique:'idle',polarized:false,dt:1,events:[],...o});
+ assert.equal(stepTutorial(t,snap()).id,'cast');
+ assert.equal(stepTutorial(t,snap({casts:1,phase:'flight'})).id,'work','a cast in the air moves on');
+ for(let i=0;i<2;i++)assert.equal(stepTutorial(t,snap({casts:1,phase:'retrieve',technique:'dead stick'})).id,'work','dead sticking is not working it');
+ for(let i=0;i<2;i++)stepTutorial(t,snap({casts:1,phase:'retrieve',technique:'stop & go'}));
+ assert.equal(stepTutorial(t,snap({casts:1,phase:'retrieve',technique:'stop & go'})).id,'bring','three seconds of a named technique');
+ assert.equal(stepTutorial(t,snap({casts:1,phase:'idle'})).id,'lenses');
+ assert.equal(stepTutorial(t,snap({casts:1,polarized:true})).id,'bite');
+ const r=stepTutorial(t,snap({casts:2,phase:'retrieve',technique:'lift & drop',polarized:true}));assert.equal(r.id,'bite');assert.equal(r.needsFish,true);
+ assert.equal(stepTutorial(t,snap({casts:2,phase:'fight',polarized:true,events:['hooked']})).id,'fight');
+ assert.equal(stepTutorial(t,snap({casts:2,phase:'idle',polarized:true,events:['lost']})).id,'bite','a lost fish sends you back to the hookset');
+ assert.equal(stepTutorial(t,snap({casts:3,phase:'fight',polarized:true,events:['hooked']})).id,'fight');
+ assert.equal(stepTutorial(t,snap({casts:3,phase:'landed',polarized:true,events:['landed']})).id,'release');
+ const end=stepTutorial(t,snap({casts:3,phase:'idle',polarized:true,events:['released']}));assert.equal(end.finished,true);assert.equal(progress(t).done,true);assert.ok(t.log.filter(l=>l.did).length>=STEPS.length,'every step was done at least once');
+ const s=createTutorial();skipTutorial(s);assert.equal(stepTutorial(s,snap()).finished,true);assert.equal(progress(s).skipped,true);
+ for(const st of STEPS)assert.ok(st.text.length>20&&typeof st.done==='function');
+});
