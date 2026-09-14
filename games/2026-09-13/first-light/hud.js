@@ -15,6 +15,7 @@ export function mountHud(handlers){
  $('menu').onclick=()=>handlers.onMenu();
  $('rigBtn').onclick=()=>handlers.onRig();
  $('ccRelease').onclick=()=>handlers.onRelease();
+ $('watch').onclick=()=>handlers.onWatch();
  $('timeSlider').oninput=e=>handlers.onHour(Number(e.target.value));
  return {
   els,
@@ -25,6 +26,7 @@ export function mountHud(handlers){
   setTackle(snap,rigName,desc){els.rigName.textContent=rigName;els.rigDesc.textContent=desc;els.technique.textContent=snap.phase==='retrieve'?snap.technique:snap.phase==='flight'?'cast away':snap.phase==='charging'?'loading the rod':snap.phase==='bite'?'SET THE HOOK':snap.phase==='fight'?'fish on · '+(snap.fight||'').toLowerCase():snap.phase==='landed'?'landed':'rod ready';
    els.lineInfo.textContent=snap.phase==='retrieve'?`${snap.lineOut.toFixed(0)} m out · lure ${snap.lureDepth<.05?(snap.onBottom?'on the bottom':'on top'):snap.lureDepth.toFixed(1)+' m down'}${snap.tension>.6?' · tight':''}`:snap.casts?`${snap.casts} cast${snap.casts===1?'':'s'}`:'';},
   setCast(phase,power){if(phase!==lastPhase){lastPhase=phase;els.reticle.classList.toggle('show',phase==='idle'||phase==='charging');els.power.classList.toggle('show',phase==='charging');}if(phase==='charging'&&Math.abs(power-lastPower)>.01){lastPower=power;els.powerFill.style.width=(power*100).toFixed(0)+'%';}},
+  setCaption(text){const el=$('caption');if(el.textContent!==text){el.textContent=text;el.classList.toggle('show',!!text);}},setDemo(on){$('demoBadge').classList.toggle('show',!!on);document.body.classList.toggle('demo',!!on);},
   setTension(show,value,label){els.tension.classList.toggle('show',!!show);if(show){els.tensionFill.style.width=(Math.min(1,value)*100).toFixed(0)+'%';els.tensionLabel.textContent=label||'';}},
   showCard(c){$('ccSpecies').textContent=c.species;$('ccSize').textContent=c.size;$('ccDetail').textContent=c.detail;$('ccMeta').textContent=c.meta;els.card.classList.remove('hidden');},hideCard(){els.card.classList.add('hidden');},
   setLenses(v){$('lenses').classList.toggle('on',!!v);},

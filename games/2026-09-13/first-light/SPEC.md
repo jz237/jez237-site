@@ -17,6 +17,9 @@ Underwater render branch (hysteresis −4 cm enter / −0.5 cm exit), per-pass f
 ## v0.4.0 first fish
 Implemented as described in the README (population, brain, bite window 0.12–1.25 s, fight with slack and overload losses, landing at rod-tip distance < 2.9 m when tired, hero view, catch card, journal). QA: `spawnFish(x,z,len,bold)`, `fish()`, `forceStrike()`, `setHook()`, `fightState()`, `fightInput({reeling,sidePressure,rodUp})`, `releaseFish()`, `journal()`.
 
+## v0.6.0 Watch Demo
+States open → plan → travel → cast → work → (plan | card); planner in `demo.js` (`planNext`), executor patterns, `fightControl` with a 0.25 s delayed state read, director shots surface/lurecam/slowmo/hero with coverage accounting, dead-air metric (retrieve time beyond 45 s without an event), take-the-rod on any key or pointer. QA: `demo(seed)`, `demoStep(secs)`, `demoReport()`, `takeRod()`.
+
 ## M2 remaining
 Largemouth hero model, material and rig; brain core states; tackle chain with weakest-link readout; cast (ballistic with drag, preview arc), 24-node Verlet line with buoyancy by line type, technique recognizer (3 s window over reel rate and rod-tip velocity), bite signatures (tick 80 ms, thump 200 ms, weed ramp, snag), hookset window from strike + species delay to +1.2 s (musky 2.5 s), fight with both failure modes (slack drains hookHold during HEADSHAKE/JUMP; overload past the weakest link breaks after a ~1 s reaction window), side pressure, landing at stamina < 0.15 within 3 m, in-hand hero view with the measuring board, catch card, release; lure cam and strike replay via the underwater branch; three lures; optional pro meters; **Watch Demo v1** (angler brain, technique executor, fight controller, first director shot set) doubling as the end-to-end QA bot.
 
