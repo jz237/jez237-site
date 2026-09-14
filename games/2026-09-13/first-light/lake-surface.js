@@ -57,7 +57,7 @@ export function makeLake(renderer,scene,camera,bathy,quality='high'){
    wakeTrail.forEach((w,i)=>{mat.uniforms.wake.value[i].set(w.x,w.z,w.time,w.power);mat.uniforms.wakeHeading.value[i]=w.heading;});
    impactWaves.forEach((w,i)=>mat.uniforms.impactWaves.value[i].set(w.x,w.z,w.time,w.amplitude));},
   resize(){renderer.getDrawingBufferSize(size);refract.setSize(size.x,size.y);},
-  render(viewCamera=camera){
+  render(viewCamera=camera,outTarget=null){
    lakeLighting.time.value=shared.time.value;lakeLighting.wind.value=shared.wind.value;
    mat.uniforms.eye.value=viewCamera.position;mat.uniforms.near.value=viewCamera.near;mat.uniforms.far.value=viewCamera.far;
    // hysteresis around the waterline so a bobbing eye does not flicker between the two surface shaders
@@ -69,7 +69,7 @@ export function makeLake(renderer,scene,camera,bathy,quality='high'){
     this.hooks.setFog?.('air');water.visible=false;renderer.setRenderTarget(refract);renderer.render(scene,viewCamera);
     if(this.quality==='high'){this.hooks.setFog?.('water');mirror.copy(viewCamera);mirror.position.y=2*waterLevel.value-viewCamera.position.y;clipUnder.constant=waterLevel.value+.05;viewCamera.getWorldDirection(target);target.add(viewCamera.position);target.y=2*waterLevel.value-target.y;mirror.up.set(0,-1,0);mirror.lookAt(target);mirror.updateMatrixWorld();mat.uniforms.mirrorMatrix.value.multiplyMatrices(mirror.projectionMatrix,mirror.matrixWorldInverse);renderer.clippingPlanes=[clipUnder];renderer.setRenderTarget(reflect);renderer.render(scene,mirror);renderer.clippingPlanes=[];uniforms.underMirror.value=1;}else uniforms.underMirror.value=0;
     this.hooks.setFog?.('water');water.visible=true;for(const o of hidden)o.visible=true;
-    renderer.setRenderTarget(null);renderer.getSize(size);renderer.setViewport(0,0,size.x,size.y);mat.uniforms.viewportOrigin.value.set(0,0);renderer.getDrawingBufferSize(mat.uniforms.viewportSize.value);renderer.render(scene,viewCamera);return;
+    renderer.setRenderTarget(outTarget);renderer.getSize(size);renderer.setViewport(0,0,size.x,size.y);mat.uniforms.viewportOrigin.value.set(0,0);renderer.getDrawingBufferSize(mat.uniforms.viewportSize.value);renderer.render(scene,viewCamera);return;
    }
    this.hooks.setFog?.('air');
    water.visible=false;renderer.setRenderTarget(refract);renderer.render(scene,viewCamera);
@@ -80,7 +80,7 @@ export function makeLake(renderer,scene,camera,bathy,quality='high'){
     for(const o of farOff)o.visible=true;
    }
    water.visible=true;for(const o of hidden)o.visible=true;
-   renderer.setRenderTarget(null);renderer.getSize(size);renderer.setViewport(0,0,size.x,size.y);mat.uniforms.viewportOrigin.value.set(0,0);renderer.getDrawingBufferSize(mat.uniforms.viewportSize.value);
+   renderer.setRenderTarget(outTarget);renderer.getSize(size);renderer.setViewport(0,0,size.x,size.y);mat.uniforms.viewportOrigin.value.set(0,0);renderer.getDrawingBufferSize(mat.uniforms.viewportSize.value);
    renderer.render(scene,viewCamera);
   },
   dispose(){foam.dispose();ripple.dispose();refract.dispose();reflect.dispose();}};
