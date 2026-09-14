@@ -8,6 +8,7 @@ export function mountHud(handlers){
  $('quality').onchange=e=>handlers.onQuality(e.target.value);
  $('steady').onchange=e=>handlers.onSteady(e.target.checked);
  $('dof').onchange=e=>handlers.onDof(e.target.checked);
+ $('coach').onchange=e=>handlers.onCoach(e.target.checked);
  $('liveWeather').onchange=e=>handlers.onLiveWeather(e.target.checked);
  $('voiceVol').oninput=e=>handlers.onVoice(Number(e.target.value));
  $('ambVol').oninput=e=>handlers.onAmbience(Number(e.target.value));
@@ -33,8 +34,9 @@ export function mountHud(handlers){
   els,
   showMenu({eyebrow,title,description,button}){els.overlay.classList.remove('hidden');if(eyebrow)els.eyebrow.textContent=eyebrow;if(title)els.title.innerHTML=title;if(description)els.description.textContent=description;if(button)els.start.textContent=button;els.start.disabled=false;},
   hideMenu(){els.overlay.classList.add('hidden');els.hud.classList.remove('hidden');},
-  setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('dof').checked=s.dof!==false;$('liveWeather').checked=s.liveWeather!==false;$('voiceVol').value=s.voice===undefined?.8:s.voice;$('ambVol').value=s.ambience===undefined?.7:s.ambience;$('realism').value=s.realism||'standard';$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
+  setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('dof').checked=s.dof!==false;$('coach').checked=s.coach!==false;$('liveWeather').checked=s.liveWeather!==false;$('voiceVol').value=s.voice===undefined?.8:s.voice;$('ambVol').value=s.ambience===undefined?.7:s.ambience;$('realism').value=s.realism||'standard';$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
   setConditions(c){els.clock.textContent=c.time;els.date.textContent=c.date;els.wind.textContent=c.wind;{const parts=(c.water||'').split(' · ');els.water.textContent=parts.slice(0,2).join(' · ');els.water.closest('.chip').title=c.water;els.sun.textContent=c.sun+(parts.length>2?' · '+parts.slice(2).join(' · '):'');}if(c.sky!==undefined)els.sky.textContent=c.sky;if(c.phase!==undefined)els.phase.textContent=c.phase;if(c.night!==undefined){els.sunIcon.style.display=c.night?'none':'inline';els.moonIcon.style.display=c.night?'inline':'none';}if(c.hour!==undefined&&document.activeElement!==$('timeSlider'))$('timeSlider').value=c.hour.toFixed(2);},
+  setCoachLine(text){const el=$('coachLine');if(el.textContent!==text)el.textContent=text;el.classList.toggle('show',!!text);},
   setHolder(text,alert){if(els.holderLine.textContent!==text)els.holderLine.textContent=text;els.holderLine.classList.toggle('alert',!!alert);els.holderLine.classList.toggle('show',!!text);},
   setTackle(snap,rigName,desc){els.rigName.textContent=rigName;els.rigDesc.textContent=desc;els.technique.textContent=snap.phase==='snagged'?'SNAGGED · slack, then snap (F)':snap.phase==='retrieve'?snap.technique:snap.phase==='flight'?'cast away':snap.phase==='charging'?'loading the rod':snap.phase==='bite'?'SET THE HOOK':snap.phase==='fight'?'fish on · '+(snap.fight||'').toLowerCase():snap.phase==='landed'?'landed':'rod ready';
    els.lineInfo.textContent=snap.phase==='retrieve'?`${snap.lineOut.toFixed(0)} m out · lure ${snap.lureDepth<.05?(snap.onBottom?'on the bottom':'on top'):snap.lureDepth.toFixed(1)+' m down'}${snap.tension>.6?' · tight':''}`+(snap.abrasion>=.12?' · line '+snap.lineWord:''):snap.retie>0?`retying… ${Math.ceil(snap.retie)} s`:snap.casts?`${snap.casts} cast${snap.casts===1?'':'s'}`+(snap.abrasion>=.3?' · line '+snap.lineWord+' · R to retie':''):'';},

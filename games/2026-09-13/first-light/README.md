@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.38.0, catch replay)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.39.0, guided sessions)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Guided sessions (v0.39.0)
+
+The concept's Guided Sessions card: helpful tips, hotspots and beginner-friendly coaching. Ray now ranks the cove's cover with the same numbers he fishes by in his own episode, refreshed with the light and the weather, and names the best one under the rig card ("Hotspot now: Riprap point · walleye on squarebill"); the top three wear gold rings with their rank on the lake map. Once a second while you fish he checks what you are doing and, when it warrants it, says one thing as a caption: how to cast if you have not yet, to cast at cover if the lure has sat in the boat, that thin water in bright sun is a waste, that five casts in one place with nothing means move or change, that a worm wants lift and drop, that topwater belongs to the low light, to wait a beat on the take after two early sets, to ease off after two break-offs, that cats want cut bait after dark, and where the hotspot is when you have been elsewhere a while. Each tip waits five minutes before it can repeat, nothing is said during the tutorial or the demo, and a "Ray's coaching" checkbox in the menu silences it all, rings included. The ranking and the rules are pure and tested.
 
 ## The catch replay (v0.38.0)
 
