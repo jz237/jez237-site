@@ -46,3 +46,11 @@ Settled packing and transparent housing pass:
 - Reduced excessive shadow normal bias and tightened its depth interval to preserve small-media contact detail.
 - Full 147-test suite passes, both builds pass, all three aquarium copies match, both link checks pass; browser close-up shows supported media and no rendering errors.
 - Keep full goal active: indirect/contact shading in the ceramic recesses remains visually flatter than the reference. Existing site synchronization, removed planner navigation, and all nine emphasized discovery buttons remain part of the completion audit.
+
+Final ceramic-shading pass and audit:
+- Added per-vertex cavity visibility and per-instance directional neighbor visibility, applied only to indirect lighting. Neighbor visibility is computed once; the full 126-ring geometry and five draw batches remain.
+- Preserved shader callbacks when selected materials are cloned, including the initial ceramic selection and subsequent component changes. The magnified specimen uses the same cavity shading.
+- Local visual review covers the reference composition, shaped reflective steel, clear arched hoses/window edges, foam cells, white fibers, settled porous rings with darker bores, exposed motor windings, outlet stream and ceramic macro view. This remains a real-time 3D interpretation of the supplied photographic reference.
+- The named interface requirements are implemented: the nine discovery controls use the emphasized teal grid; both showroom initialization paths remove the planner navigation; shared source supplies the filter to photographic and rotatable aquariums, including Hidden Reef.
+- Current verification: 149 tests pass; both production builds pass; the three-copy checker matches 38 assets; both Hidden Reef link checks pass; component changes and isolated close-up have no browser errors. Prior phone review verifies assembled/exploded framing and toolbar clearance.
+- Publication gate for this final pass: push guarded main, deploy Hidden Reef and jez237, verify the actual active JS/CSS bytes (including photographic filter chunks), and inspect live button styling and absence of planner navigation. Completion is not established by local tests alone.
