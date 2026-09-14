@@ -150,7 +150,7 @@ export function stepDemo(d,dt,game){
     const quiet=d.elapsed-d.lastEventAt>30;const want=quiet?12:4;if(d.rate!==want){d.rate=want;game.setRate(want);}break;}
    if(a.phase==='bite'){if(d.hookAt!==null&&d.elapsed>=d.hookAt){game.setHook();d.hookAt=null;}break;}
    if(a.phase==='fight'){const ft=game.fight();d.delayClock+=dt;if(d.delayClock>d.fightDelay){d.delayClock=0;d.delayedState=ft?ft.state:null;}game.fightInput(fightControl(ft,1,d.delayedState));break;}
-   if(a.phase==='landed'){if(d.stateTime>7){game.release();d.state='cast';d.stateTime=0;}break;}
+   if(a.phase==='landed'){if(!d.replayed&&d.stateTime>1.2&&game.replay){d.replayed=true;caption(d,'Look at that take again.',3);game.replay(8);break;}if(d.stateTime>7){game.release();d.replayed=false;d.state='cast';d.stateTime=0;}break;}
    // back to idle: decide whether to keep casting here
    game.input({reeling:false,twitch:false});game.fightInput(null);
    if(a.abrasion>=.3&&game.retie&&game.retie()){caption(d,"Line's frayed from that wood. Retying.",3);break;}

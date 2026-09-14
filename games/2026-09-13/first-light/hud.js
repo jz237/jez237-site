@@ -22,7 +22,7 @@ export function mountHud(handlers){
  $('rigCard').onclick=()=>handlers.onRig();$('journalBtn').onclick=()=>handlers.onGallery();$('cameraBtn').onclick=()=>handlers.onPhotoMode();$('helpBtn').onclick=()=>document.body.classList.toggle('showKeys');
  $('rigBtn').onclick=()=>handlers.onRig();
  $('ccRelease').onclick=()=>handlers.onRelease();
- $('ccPhoto').onclick=()=>handlers.onPhoto();$('photoBtn').onclick=()=>handlers.onPhotoMode();$('pbSave').onclick=()=>handlers.onPhotoSave();$('pbBack').onclick=()=>handlers.onPhotoBack();
+ $('ccPhoto').onclick=()=>handlers.onPhoto();$('ccReplay').onclick=()=>handlers.onReplay();$('rpBack').onclick=()=>handlers.onReplayBack();$('photoBtn').onclick=()=>handlers.onPhotoMode();$('pbSave').onclick=()=>handlers.onPhotoSave();$('pbBack').onclick=()=>handlers.onPhotoBack();
  $('watch').onclick=()=>handlers.onWatch();
  $('lureCamBtn').onclick=()=>handlers.onLureCam();
  $('galleryBtn').onclick=()=>handlers.onGallery();
