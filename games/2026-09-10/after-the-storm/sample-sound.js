@@ -3,7 +3,7 @@ import {stereoWidth} from './coastal-music.js';
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 export const SOUND_FILES={idle:'engine-idle',fast:'engine-fast',water:'water-rush',wind:'wind',splash:'splash',hit:'hull-impact',cue:'race-cue',music:'coastal-theme'};
 // No service credentials or runtime generation: these are local ElevenLabs exports.
-export function engineMix(speed,wet=1,throttle=0){const motion=clamp(Math.abs(speed)/14),load=clamp(throttle),rpm=clamp(motion*.72+load*.28+(1-wet)*load*.22);
+export function engineMix(speed,wet=1,throttle=0){const motion=clamp(Math.abs(speed)/14),load=clamp(throttle),rpm=clamp(motion*.64+load*.36+(1-wet)*load*.22);
  return {idle:Math.cos(rpm*Math.PI/2)*.42,fast:Math.sin(rpm*Math.PI/2)*(.35+load*.23),idleRate:.82+rpm*.75,fastRate:.65+rpm*.53+(1-clamp(wet))*load*.38,water:motion*wet*.52,cutoff:9000+(1-clamp(wet))*load*4500};}
 export class SampleSound{
  constructor(ctx,effects,music){this.ctx=ctx;this.effects=effects;this.musicBus=music;this.buffers={};this.loops=[];this.shots=new Set();this.ready=false;this.failures=[];this.mode='stereo';}
@@ -20,7 +20,7 @@ export class SampleSound{
    if(l.id==='wind'){gain=.08+storm*.38;cutoff=900+storm*6500;pan=.12;}
    else if(l.id==='music'){gain=music?.45:0;}
    else if(!second||companion){gain=m[l.id]*(companion?.72:1);rate=l.id==='idle'?m.idleRate:l.id==='fast'?m.fastRate:.85+clamp((p?.speed||0)/14)*.3;cutoff=l.id==='water'?12000:m.cutoff;pan=companion?(second?.45:-.45):0;}
-   if(paused&&l.id!=='music')gain=0;if(engineMuted&&l.player===0&&['idle','fast'].includes(l.id))gain=0;l.gain.gain.setTargetAtTime(gain,c,.12);l.source.playbackRate.setTargetAtTime(rate,c,.09);l.filter.frequency.setTargetAtTime(cutoff,c,.15);l.pan.pan.setTargetAtTime(pan*stereoWidth(mode),c,.08);
+   if(paused&&l.id!=='music')gain=0;if(engineMuted&&l.player===0&&['idle','fast'].includes(l.id))gain=0;l.gain.gain.setTargetAtTime(gain,c,.12);l.source.playbackRate.setTargetAtTime(rate,c,.06);l.filter.frequency.setTargetAtTime(cutoff,c,.15);l.pan.pan.setTargetAtTime(pan*stereoWidth(mode),c,.08);
   }
  }
  updateRivals(listener,racers,paused=false,camera=null){if(!this.ready)return;const t=this.ctx.currentTime,near=racers.filter(r=>r!==listener&&r.mount!=='dolphin').sort((a,b)=>Math.hypot(a.x-listener.x,a.z-listener.z)-Math.hypot(b.x-listener.x,b.z-listener.z)).slice(0,3);

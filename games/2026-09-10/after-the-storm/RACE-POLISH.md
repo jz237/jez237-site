@@ -1,0 +1,14 @@
+# Racing and scenery polish — v2.7.0
+
+1. Sky: a small, filtered 3D noise volume supports 20/24/32 ray samples at Low/Medium/High. Three depths of sunlight occlusion shade cloud interiors; finer billows, horizon haze and light through cloud gaps replace the previous visibly spaced samples.
+2. Carve exit: Big Surf stores a short throttle load during a sustained turn, releasing a bounded thrust increase as steering unwinds. It requires immersed intake, shuts off under braking, in air, on ice and during recovery, and fades to zero at rated speed. Engine sound responds more directly to throttle. Big Surf retains 96 wake packets instead of 64; venue conditions retain their established physical wake budget.
+3. Water readability: broad faces receive more directional lighting and trough shading, capillary clutter is reduced, and elevated sloping crests admit more backlight. Foam advection follows the broad wave slope; whitewater streaks follow the downhill face and leave persistent aeration.
+4. Spray: fresh mist-designated spray begins as heavy ballistic droplets for a short time before atomizing into expanding, wind-driven aerosol. Sheets, droplets and mist share hull launch momentum and actual contact. Fresh droplets are denser than the dispersed mist.
+5. Shore: irregular, gradual soil/sand interpenetration, darker organic fringe and terrain-conforming root flares connect vegetation with the ground. Existing tidal wetness and other agents' scenery remain intact.
+6. Encounters: on safe Big Surf straights, faster racers plan a passing side, avoid occupied adjacent lanes and hold their choice before returning to the course line. They brace and reduce steering after an unsettled landing. Existing wave sampling and shared wake forces govern wake reactions; no position or progress is injected.
+
+Controls are unchanged. The title screen's Watch smart demo shows the racing improvements. WASD/arrows drive, Space brakes, B braces, Q/E trim, R rescues, and Esc pauses. Phone controls remain available.
+
+Validation: a browser three-lap Big Surf race finished in 3:27.917 with 42 buoy passes, zero misses and 33 water landings. Low graphics measured about 56 FPS during accelerated verification on this desktop. The full regression run passed 372 of 373 checks; its occupied-passing-lane failure was corrected, then all 25 affected traffic/demo checks and all seven polish regressions passed. Every course and championship passed. Replay returned with unchanged race state and restart returned to lap one. Landscape and portrait demo layouts were checked; the High demo held roughly 60 FPS on the desktop, with no game rendering errors.
+
+The effects are procedural approximations. Actual mobile GPU performance is not measured by desktop phone-sized layout checks. Overtaking and the new carve response are bounded to Big Surf; authored venue race behavior remains protected.

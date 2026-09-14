@@ -6,6 +6,7 @@ export function sprayLaunch(r,kind,side,random=Math.random){
  const speed=Math.hypot(r.vx,r.vz),power=Math.min(1,speed/18),slip=r.vx*rx+r.vz*rz;
  const jet=kind==='jet',impact=kind==='impact'||kind==='landingMist',mist=kind==='mist'||kind==='landingMist';
  const plume=landingPlume(h);
+ const atomize=mist?.15+random()*.35:0;
  const contact=side>0?(h.starboardWet??h.wet):(h.portWet??h.wet);
  const catchSpray=Math.min(1,r.gripCatch||0)*Math.max(0,Math.sign(slip)*side);
  const out=impact?(plume.lateral*(.4+random()*.6)):(.5+power*3.8+Math.max(0,slip*side)*.55+catchSpray*3)*contact;
@@ -16,5 +17,5 @@ export function sprayLaunch(r,kind,side,random=Math.random){
   vx:r.vx*carry-fx*back+rx*side*(jet?random()*.45:out),
   vy:(jet?1.3+power*1.9:impact?.7+random()*h.impact*.55*plume.rise:.45+power*1.3+Math.max(0,h.waterVelocity)*.12)+Math.max(0,h.vy-(h.pitchVelocity||0)*aft+(h.rollVelocity||0)*(jet?0:side*.61))*.25,
   vz:r.vz*carry-fz*back+rz*side*(jet?random()*.45:out),
-  size:mist?.08+random()*.13:jet?.025+random()*.045:impact?.035+random()*.09:.02+random()*.07,life:mist?1.5+random()*1.4:impact?plume.life*(.7+random()*.6):.45+random()*.6,mist};
+  size:mist?.08+random()*.13:jet?.025+random()*.045:impact?.035+random()*.09:.02+random()*.07,atomize,life:mist?2.0+random()*1.2:impact?plume.life*(.7+random()*.6):.45+random()*.6,mist};
 }

@@ -5,11 +5,12 @@ export const atmosphereFragment=`
 uniform float storm,skyNight,skySteps;uniform vec3 skyHorizon,skyZenith,skySun;varying vec3 dir;
 ${cloudGLSL}
 float volumeHash(vec3 p){p=fract(p*.1031);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}
-float volumeNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(mix(volumeHash(i),volumeHash(i+vec3(1,0,0)),f.x),mix(volumeHash(i+vec3(0,1,0)),volumeHash(i+vec3(1,1,0)),f.x),f.y),mix(mix(volumeHash(i+vec3(0,0,1)),volumeHash(i+vec3(1,0,1)),f.x),mix(volumeHash(i+vec3(0,1,1)),volumeHash(i+vec3(1,1,1)),f.x),f.y),f.z);}
+uniform highp sampler3D cloudVolume;
+float volumeNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return texture(cloudVolume,(i+f+.5)/32.).r;}
 float cloudDensity(vec3 p){
  float coverage=cloudCoverAt(p.xz);
  vec3 q=(p+vec3(weatherTime*1.2,0.,-weatherTime*.43))*.018;
- float billow=volumeNoise(q)*.65+volumeNoise(q*2.03+13.7)*.35;
+ float billow=volumeNoise(q)*.58+volumeNoise(q*2.03+13.7)*.30+volumeNoise(q*4.11+29.3)*.12;
  float top=205.+coverage*70.;
  float envelope=smoothstep(173.,189.,p.y)*(1.-smoothstep(top-24.,top,p.y));
  return smoothstep(.43,.70,coverage*.68+billow*.42)*envelope;
@@ -21,18 +22,20 @@ void main(){
  col+=vec3(.28,.17,.075)*pow(mu,7.)*(1.-storm*.6);
  col+=vec3(1.,.84,.59)*smoothstep(.99972,.99994,mu)*3.*(1.-skyNight);
  col+=vec3(.20,.15,.09)*pow(mu,110.);
+ float sunGap=1.-cloudCoverAt(cameraPosition.xz+sun.xz*190./max(.12,sun.y));
+ col+=vec3(.13,.10,.055)*pow(mu,18.)*sunGap*(1.-storm)*(1.-skyNight);
  float localFront=frontAt(cameraPosition.xz,weatherTime);
  col=mix(col,vec3(.23,.31,.36)+y*vec3(.015,.035,.055),storm*.24+localFront*.18);
  if(d.y>.005){
   float start=max(0.,(175.-cameraPosition.y)/d.y),end=(260.-cameraPosition.y)/d.y;
   float stepLength=(end-start)/skySteps,transmission=1.;vec3 scattered=vec3(0.);
-  for(int i=0;i<16;i++){
+  for(int i=0;i<32;i++){
    if(float(i)>=skySteps)break;
    float jitter=volumeHash(vec3(gl_FragCoord.xy,2.));
-   vec3 p=cameraPosition+d*(start+(float(i)+.46+jitter*.08)*stepLength);
+   vec3 p=cameraPosition+d*(start+(float(i)+.38+jitter*.24)*stepLength);
    float density=cloudDensity(p),optical=density*min(stepLength,90.)*.040;
    float alpha=1.-exp(-optical);
-   float shadow=exp(-cloudDensity(p+sun*32.)*2.4);
+   float shadow=exp(-(cloudDensity(p+sun*18.)*.85+cloudDensity(p+sun*45.)*1.2+cloudDensity(p+sun*85.)*.8));
    float heightLight=smoothstep(177.,245.,p.y);
    float front=frontAt(p.xz,weatherTime),grey=clamp(storm*.6+front*.35,0.,1.);
    vec3 fill=mix(vec3(.37,.45,.50),vec3(.15,.22,.27),grey);
@@ -41,7 +44,7 @@ void main(){
    scattered+=transmission*alpha*light;transmission*=1.-alpha;
   }
   vec3 clouds=col*transmission+scattered;
-  col=mix(col,clouds,smoothstep(.015,.085,d.y)*(1.-smoothstep(1800.,7000.,start)));
+  col=mix(col,clouds,smoothstep(.035,.16,d.y)*(1.-smoothstep(1300.,4200.,start)));
  }
  // The distant rain curtain is the actual moving boundary, never a billboard.
  float denominator=dot(d.xz,vec2(.86,-.51));

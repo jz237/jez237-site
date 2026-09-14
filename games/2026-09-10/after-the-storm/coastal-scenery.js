@@ -155,6 +155,17 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
  const rock=rockMaterial();materials.push(rock);const geo=new T.IcosahedronGeometry(1,2),p=geo.attributes.position;
  for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i),z=p.getZ(i),f=.85+.14*Math.sin(x*7+z*5)*Math.cos(y*6);p.setXYZ(i,x*f,y*f*.68,z*f);}geo.computeVertexNormals();instances(geo,rock,rockPoints);
  const drift=new Shape();drift.tube([-1.9,.19,0],[1.9,.28,.12],.24,.12,9);drift.tube([.4,.25,0],[1.1,.6,.6],.11,.03,6);drift.tube([-1.6,.2,0],[-2.1,.6,-.4],.08,.015,5);instances(drift.geometry(),wood,logPoints);
+ // Root flares and fine litter join every nearby trunk to its terrain.
+ const rootShape=new Shape(),floor=course.renderGround||course.ground;
+ for(const point of Object.values(points).flat().slice(0,240))for(let j=0;j<5;j++){
+  const a=point.angle+j*1.256,r=(.8+random()*.9)*point.scale,x=point.x+Math.cos(a)*r,z=point.z+Math.sin(a)*r;
+  if(floor(x,z)<1.2)continue;
+  const mid=[point.x+Math.cos(a)*r*.4,floor(point.x+Math.cos(a)*r*.4,point.z+Math.sin(a)*r*.4)+.08,point.z+Math.sin(a)*r*.4];
+  rootShape.tube([point.x,point.y+.28*point.scale,point.z],mid,.13*point.scale,.065*point.scale,5);
+  rootShape.tube(mid,[x,floor(x,z)+.018,z],.065*point.scale,.01,4);
+ }
+ const rootWood=barkMaterial();materials.push(rootWood);
+ instances(rootShape.geometry(),rootWood,[{x:0,y:0,z:0,angle:0,scale:1}]);
  // Low shrubs fill the tree line without a repeated grid of identical plants.
  const shrubs=[...points.broad,...points.pine].slice(0,90).map(p=>({...p,x:p.x+3,z:p.z+2,scale:.16+random()*.16,y:course.ground(p.x+3,p.z+2)})).filter(p=>p.y>1.7);
  if(shrubs.length){const shrub=tree('broad',725);instances(shrub.wood,wood,shrubs);instances(shrub.leaf,broadMat,shrubs);}

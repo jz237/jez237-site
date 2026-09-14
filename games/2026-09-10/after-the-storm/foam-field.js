@@ -13,7 +13,7 @@ export function makeFoamField(renderer,common,uniforms){
  void main(){vec2 p=(uvP-.5)*foamSpan+foamCenter;vec3 movingSurface=waveSurface(p);float bed=floorDepth(p);
  vec2 terrainSlope=vec2(floorDepth(p+vec2(1.,0.))-floorDepth(p-vec2(1.,0.)),floorDepth(p+vec2(0.,1.))-floorDepth(p-vec2(0.,1.)))*.5;
  float shallow=1.-smoothstep(.25,2.,seaLevel+movingSurface.x-bed);
- vec2 drift=gustAt(p,time,storm).xy*.05-movingSurface.yz*.55-terrainSlope*shallow*.9;
+ vec2 drift=gustAt(p,time,storm).xy*.05-movingSurface.yz*(.55+.35*smoothstep(.1,1.4,movingSurface.x))-terrainSlope*shallow*.9;
  drift=clamp(drift,vec2(-1.5),vec2(1.5));vec2 oldUV=(p-drift*foamDt-previousCenter)/previousSpan+.5;
  float inside=step(0.,oldUV.x)*step(oldUV.x,1.)*step(0.,oldUV.y)*step(oldUV.y,1.);vec2 old=texture2D(previousFoam,oldUV).rg*inside*foamReady;
  // Wet sand stays fixed to the beach, rather than drifting with surface foam.
@@ -37,7 +37,7 @@ export function makeFoamField(renderer,common,uniforms){
  // Advected Kelvin arms and aerated prop-wash, evaluated per atlas texel.
  // Each packet is born behind a real, water-loaded hull; no screen-space trail.
  float wakeFoam=0.;
- for(int i=0;i<64;i++){vec4 w=wake[i];float age=time-w.z;
+ for(int i=0;i<96;i++){vec4 w=wake[i];float age=time-w.z;
   if(w.w<=.02||age<0.||age>18.)continue;
   vec2 d=p-w.xy-vec2(.16,-.11)*storm*age;float spread=.55+age*.65;
   if(dot(d,d)>(spread+4.)*(spread+4.))continue;

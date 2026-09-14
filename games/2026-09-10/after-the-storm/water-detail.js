@@ -31,7 +31,7 @@ void main(){
  vec2 flow=vec2(time*.013,-time*.009);vec2 r1=texture2D(detailMap,p*.145+flow).rg*2.-1.;
  vec2 rotated=mat2(.8,-.6,.6,.8)*p;vec2 r2=texture2D(detailMap,rotated*.37-flow*1.7).rg*2.-1.;
  vec3 localGust=gustAt(p,time,storm);
- float detailStrength=(.025+storm*.045+localGust.z*.08)*(1.-smoothstep(75.,300.,dist)*.6);
+ float detailStrength=(.021+storm*.038+localGust.z*.06)*(1.-smoothstep(75.,300.,dist)*.6);
  // Capillary ripples travel with the longer waves instead of sliding as a single sheet.
  vec2 drift=surface.yz*.24;
  vec2 r3=texture2D(detailMap,p*.82+drift-flow*2.3).rg*2.-1.;
@@ -68,12 +68,13 @@ void main(){
  // reveal the existing displaced troughs and crests at racing distance.
  float cloudLight=cloudVisibility(worldP);
  float faceLight=smoothstep(-.16,.22,-dot(surface.yz,sun.xz));
- col*=(.76+.40*faceLight)*mix(.70,1.,cloudLight);
+ float trough=smoothstep(.12,1.4,seaLevel-worldP.y)*(1.-smoothstep(1.,4.,verticalDepth)*.35);
+ col*=(.70+.47*faceLight)*(1.-trough*.13)*mix(.70,1.,cloudLight);
  col+=vec3(.004,.026,.024)*smoothstep(.1,1.2,worldP.y-seaLevel)*faceLight*(1.-night);
  // Forward scattering through thinner, backlit crests gives water depth without
  // a uniform neon rim. It vanishes under thick storm cloud or at night.
- float backlight=pow(max(0.,dot(V,-sun)),4.),crest=clamp((worldP.y-seaLevel+.15)*.65,0.,1.);
- col+=vec3(.035,.23,.19)*backlight*crest*(1.-nv)*(.25+.75*max(0.,dot(N,sun)))*(1.-storm*.8)*(1.-night)*cloudLight;
+ float backlight=pow(max(0.,dot(V,-sun)),3.),crest=smoothstep(.12,1.4,worldP.y-seaLevel)*smoothstep(.05,.5,length(surface.yz));
+ col+=vec3(.045,.29,.22)*backlight*crest*(1.-nv)*(.25+.75*max(0.,dot(N,sun)))*(1.-storm*.8)*(1.-night)*cloudLight;
  // Finite sun highlight with slope variance to soften distant glints and prevent aliasing.
  vec3 H=normalize(V+sun);float nh=max(0.,dot(N,H)),nl=max(0.,dot(N,sun));float variance=dot(dFdx(N),dFdx(N))+dot(dFdy(N),dFdy(N));
  float alpha2=roughness*roughness+min(.04,variance*.32);float denom=nh*nh*(alpha2-1.)+1.;float distribution=alpha2/(3.14159265*denom*denom);
@@ -81,7 +82,7 @@ void main(){
  float spec=distribution*smithV*smithL*.0204/max(.02,4.*nv*nl);
  col+=vec3(1.,.80,.53)*min(12.,spec)*nl*2.4*cloudLight*(1.-storm*.88)*(1.-night*.97);
  float turbulence=noise(p*2.7+vec2(time*.07,-time*.04))*.6+noise(p*8.1-time*.025)*.4;
- vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float age=history.g/max(.001,history.r+history.g);float structure=foamStructure(p,vec2(.86,-.51)*time*.08+surface.yz*.3,age,dist);float foam=history.r*(.24+structure*.76)+history.g*structure*.24,bubbles=history.g*.38;
+ vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float age=history.g/max(.001,history.r+history.g);float structure=foamStructure(p,vec2(.86,-.51)*time*.08+surface.yz*(.3+.22*sin(time*.8)),age,dist);float foam=history.r*(.24+structure*.76)+history.g*structure*.24,bubbles=history.g*.38;
  // Landing wash expands from the contact point and breaks apart, remaining in
  // world space after the rider has left. Its ring follows the shared pressure wave.
  for(int i=0;i<12;i++){vec4 w=impactWaves[i];float age=time-w.z;if(w.w<=0.||age<0.||age>7.)continue;
@@ -105,12 +106,13 @@ void main(){
  float capPatch=noise(p*.15+surface.yz*.8-vec2(time*.10,time*.06));
  float cap=breakingCrest*smoothstep(.40,.67,capPatch);
  float capLace=mix(smoothstep(.24,.65,turbulence),.72,smoothstep(55.,180.,dist));
- foam+=cap*capLace*.85;
+ foam+=cap*capLace*.66;
  // Aerated streaks spill from the crest down the lee face; large-scale height
  // still comes entirely from the shared displacement and buoyancy model.
- vec2 fallUV=p+surface.yz*(.7+history.r*1.2);
+ vec2 downFace=normalize(surface.yz+vec2(.001));
+ vec2 fallUV=vec2(dot(p,vec2(-downFace.y,downFace.x)),dot(p,downFace))+vec2(0.,time*.7);
  float spill=noise(fallUV*vec2(.7,3.8)-vec2(time*.22,time*.48));
- float faceWash=history.r*smoothstep(.14,.65,steepness)*smoothstep(.47,.73,spill);
+ float faceWash=max(history.r,breakingCrest*.45)*smoothstep(.14,.65,steepness)*smoothstep(.47,.73,spill);
  foam+=faceWash*.46;
  col+=vec3(.018,.095,.068)*breakingCrest*backlight*(1.-fresnel)*cloudLight*(1.-night);
  // Subsurface aeration persists after the white surface foam disperses.
