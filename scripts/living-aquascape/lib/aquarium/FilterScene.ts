@@ -18,7 +18,7 @@ export const filterParts=[
 ];
 export const waterStages=[
  {name:'Intake',text:'Water enters the strainer and travels up the inlet hose.',part:9,points:[[-2.8,3.5,0],[-2.5,5.6,0],[-.7,5.8,0],[-.55,5.25,0]]},
- {name:'Down-channel',text:'The inlet passage carries untreated water to the space beneath the baskets.',part:0,points:[[-.55,5.25,0],[-1.17,3.5,-.35],[-1.17,.42,-.35],[0,.4,0]]},
+ {name:'Down-channel',text:'The inlet passage carries untreated water to the space beneath the baskets.',part:0,points:[[-.55,5.25,0],[-1.20,3.5,.55],[-1.20,.42,.55],[0,.4,0]]},
  {name:'Coarse foam',text:'Water spreads upward through the first sponge. Large suspended debris is caught here.',part:1,points:[[0,.4,0],[.2,.55,.1],[.1,.8,.2],[0,1.1,.1]]},
  {name:'Fine foam',text:'Smaller particles are intercepted as water passes through the finer sponge.',part:2,points:[[0,1.1,.1],[-.2,1.3,.15],[.1,1.5,.1],[0,1.75,0]]},
  {name:'Ceramic media',text:'Oxygenated water passes around the porous rings and their living biofilms.',part:3,points:[[0,1.75,0],[.3,2,.2],[-.25,2.3,.2],[0,2.7,0]]},
@@ -27,11 +27,11 @@ export const waterStages=[
  {name:'Return',text:'Filtered water travels through the return hose and back into the aquarium.',part:9,points:[[.55,5.25,0],[.7,5.9,0],[2.4,5.7,0],[2.85,4,0]]}
 ];
 export class FilterScene{
- readonly renderer:T.WebGLRenderer;private scene=new T.Scene();private camera=new T.PerspectiveCamera(38,1,.1,100);private controls:OrbitControls;private groups:T.Group[]=[];private rotor=new T.Group();private shell:T.Mesh;private topShell:T.Mesh;private window:T.Mesh;private materials:T.MeshStandardMaterial[]=[];private flow=new T.Group();private returnWater=new FilterReturnWater();private dots:T.Mesh[]=[];private path:T.CatmullRomCurve3;private explosion=0;private target=0;private tick=0;private request=0;private observer:ResizeObserver;private environment:T.WebGLRenderTarget;private pointerStart={x:0,y:0};private dead=false;private isolated=false;private selected=3;private rotation=false;private running=true;private tracing=false;private tracePlaying=false;private traceTime=0;private traceStage=-1;private traceLayer=new T.Group();private traceCurves:T.CatmullRomCurve3[]=[];private traceRails:T.Mesh[]=[];private tracePulse:T.Mesh;private traceTail:T.Mesh[]=[];
+ readonly renderer:T.WebGLRenderer;private scene=new T.Scene();private camera=new T.PerspectiveCamera(38,1,.1,100);private controls:OrbitControls;private groups:T.Group[]=[];private rotor=new T.Group();private shell:T.Mesh;private topShell:T.Mesh;private window:T.Mesh;private materials:T.MeshStandardMaterial[]=[];private flow=new T.Group();private returnWater=new FilterReturnWater();private dots:T.Mesh[]=[];private path:T.CurvePath<T.Vector3>;private explosion=0;private target=0;private tick=0;private request=0;private observer:ResizeObserver;private environment:T.WebGLRenderTarget;private pointerStart={x:0,y:0};private dead=false;private isolated=false;private selected=3;private rotation=false;private running=true;private tracing=false;private tracePlaying=false;private traceTime=0;private traceStage=-1;private traceLayer=new T.Group();private traceCurves:T.CatmullRomCurve3[]=[];private traceRails:T.Mesh[]=[];private tracePulse:T.Mesh;private traceTail:T.Mesh[]=[];
  constructor(private host:HTMLElement,private onPick:(id:number)=>void,private reduced=false,private onTrace:(stage:number)=>void=()=>{}){
  this.renderer=new T.WebGLRenderer({antialias:true,alpha:false});this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.6));this.renderer.setClearColor(0x06100f);this.renderer.outputColorSpace=T.SRGBColorSpace;this.renderer.toneMapping=T.ACESFilmicToneMapping;this.renderer.toneMappingExposure=.95;this.renderer.shadowMap.enabled=true;this.renderer.shadowMap.type=T.PCFShadowMap;host.appendChild(this.renderer.domElement);this.renderer.domElement.setAttribute('aria-label','3D canister filter. Drag to orbit, scroll or pinch to zoom. Select components with the parts list.');this.renderer.domElement.setAttribute('role','img');
  const pmrem=new T.PMREMGenerator(this.renderer),room=canisterStudio();this.environment=pmrem.fromScene(room.scene,.025);this.scene.environment=this.environment.texture;this.scene.fog=new T.Fog(0x06100f,18,35);room.dispose();pmrem.dispose();
- this.camera.position.set(.65,3.5,12.6);this.controls=new OrbitControls(this.camera,this.renderer.domElement);this.controls.target.set(0,2.85,0);this.controls.enableDamping=!reduced;this.controls.minDistance=1.6;this.controls.maxDistance=22;this.controls.maxPolarAngle=Math.PI*.85;
+ this.camera.position.set(.45,3.3,11.5);this.controls=new OrbitControls(this.camera,this.renderer.domElement);this.controls.target.set(0,2.65,0);this.controls.enableDamping=!reduced;this.controls.minDistance=1.6;this.controls.maxDistance=22;this.controls.maxPolarAngle=Math.PI*.85;
  this.scene.add(new T.HemisphereLight(0xe5edee,0x090c0d,.35));const key=new T.DirectionalLight(0xffffff,2.1);key.position.set(4,8,5);key.castShadow=true;key.shadow.mapSize.set(2048,2048);key.shadow.camera.left=-6;key.shadow.camera.right=6;key.shadow.camera.top=12;key.shadow.camera.bottom=-3;key.shadow.normalBias=.025;this.scene.add(key);const rim=new T.PointLight(0xffc06c,35);rim.position.set(-4,4,-2);this.scene.add(rim);const fill=new T.DirectionalLight(0xb8e9f6,.7);fill.position.set(-4,5,6);this.scene.add(fill);
  const metal=this.mat(0xb9c1c4,.18,1),dark=this.mat(0x101618,.4,.25),rubber=this.mat(0x101211,.93,0),gold=this.mat(0xa9713c,.26,.95),cyan=this.mat(0x3b4547,.3,.65),ceramic=this.mat(0xf0e4c9,.85,0);
  const surface=(kind:'steel'|'foam'|'ceramic'|'fiber')=>{const c=document.createElement('canvas');c.width=c.height=512;const ctx=c.getContext('2d')!;let seed=591;const rand=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};ctx.fillStyle=kind==='steel'?'#909090':kind==='foam'?'#454545':'#aaaaaa';ctx.fillRect(0,0,512,512);for(let i=0;i<(kind==='steel'?6500:18000);i++){const x=rand()*512,y=rand()*512,v=Math.floor(30+rand()*170);ctx.strokeStyle=ctx.fillStyle=`rgba(${v},${v},${v},${.1+rand()*.6})`;if(kind==='steel'||kind==='fiber'){ctx.lineWidth=kind==='steel'?.4:.8;ctx.beginPath();ctx.moveTo(x,y);ctx.lineTo(x+(kind==='steel'?80:12)*rand(),y+(kind==='steel'?0:8));ctx.stroke();}else{ctx.beginPath();ctx.arc(x,y,kind==='foam'?1+rand()*5:.3+rand()*1.8,0,Math.PI*2);ctx.fill();}}const map=new T.CanvasTexture(c);map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(kind==='steel'?3:2,2);map.anisotropy=8;return map;};
@@ -53,7 +53,9 @@ export class FilterScene{
  for(const i of [1,2,3,4]){const g=this.groups[i],y=heights[i];ring(1.13,.045,metal,g,y-.25);ring(1.13,.045,dark,g,y+.25);cylinder(1.1,.06,dark,g,y-.28);
  for(let j=0;j<8;j++){const a=j/8*Math.PI*2,m=new T.Mesh(new T.BoxGeometry(.026,.5,.04),dark);m.position.set(Math.cos(a)*1.13,y,Math.sin(a)*1.13);g.add(m);}
  if(i!==3){const m=this.mat(i===1?0x252b2a:i===2?0x354748:0xf0f0e7,.97,0);m.bumpMap=surface(i===4?'fiber':'foam');m.bumpScale=i===1?.10:i===2?.055:.006;m.roughnessMap=m.bumpMap;m.map=texture(i===1?'#252b2a':i===2?'#354748':'#eeeee8',i);if(i===4)cylinder(1.06,.44,m,g,y);else{m.map=null;m.bumpMap=null;m.roughnessMap=null;m.color.set(0x202623);m.roughness=.65;const foam=foamCells(1.06,.44,i===1?.115:.082,m);foam.position.y=y;g.add(foam);}}
- else{for(let layer=0;layer<3;layer++)for(let j=0;j<26;j++){const a=j*2.399,r=.90*Math.sqrt((j+.5)/26),m=new T.Mesh(ceramicShapes[j%5],ceramic);m.position.set(Math.cos(a)*r,y-.17+layer*.17,Math.sin(a)*r);m.rotation.set(j*.6,layer*.8,j*.4);g.add(m);}}
+ else{const instances=Array.from({length:5},(_,j)=>new T.InstancedMesh(ceramicShapes[j],ceramic,Math.ceil(126/5))),counts=Array(5).fill(0),dummy=new T.Object3D();
+ for(let layer=0;layer<3;layer++)for(let j=0;j<42;j++){const a=j*2.399+layer*.74,r=.91*Math.sqrt((j+.5)/42),index=(j+layer*42)%5;dummy.position.set(Math.cos(a)*r,y-.105+layer*.165,Math.sin(a)*r);dummy.rotation.set(j*.6+layer*.3,layer*.8,j*.4);dummy.updateMatrix();instances[index].setMatrixAt(counts[index]++,dummy.matrix);}
+ instances.forEach((mesh,j)=>{mesh.count=counts[j];mesh.instanceMatrix.needsUpdate=true;mesh.userData.mediaShadow=true;g.add(mesh);});}
  }
  ring(1.30,.065,rubber,this.groups[5],3.75);ring(1.36,.022,this.mat(0x983a24,.52,0),this.groups[5],3.69);
  for(let i=0;i<4;i++){const a=i*Math.PI/2+.25;const clamp=new T.Mesh(new T.BoxGeometry(.17,.55,.18),metal);clamp.position.set(Math.cos(a)*1.44,3.75,Math.sin(a)*1.44);clamp.rotation.y=-a;this.groups[5].add(clamp);}
@@ -63,14 +65,25 @@ export class FilterScene{
  // Individually wound copper stator coils around laminated iron poles.
  for(let i=0;i<10;i++){const a=i/10*Math.PI*2;const pole=new T.Group();pole.position.set(Math.cos(a)*.72,4.22,Math.sin(a)*.72);pole.rotation.y=-a;const core=new T.Mesh(new T.BoxGeometry(.23,.32,.24),dark);pole.add(core);for(let j=0;j<13;j++){const coil=new T.Mesh(new T.TorusGeometry(.16,.013,6,28),gold);coil.position.z=(j-6)*.020;pole.add(coil);}this.groups[7].add(pole);}
 
- const cap=cylinder(1.34,.10,metal,this.groups[7],4.6);cap.material=metal;
+ const cap=new T.Mesh(new T.LatheGeometry([[0,4.58],[1.34,4.58],[1.36,4.65],[1.29,4.73],[1.15,4.82],[.95,4.84],[0,4.84]].map(([r,y])=>new T.Vector2(r,y)),96),metal);this.groups[7].add(cap);
+ for(let i=0;i<12;i++){const a=i*Math.PI/6,r=1.18,tab=new T.Mesh(new T.BoxGeometry(.08,.09,.13),metal);tab.position.set(Math.cos(a)*r,4.80,Math.sin(a)*r);tab.rotation.y=-a;this.groups[7].add(tab);}
  for(const [x,mat] of [[-.55,gold],[.55,cyan]] as const){const valve=cylinder(.18,.55,mat,this.groups[8],4.98);valve.position.x=x;const lever=new T.Mesh(new T.BoxGeometry(.55,.09,.17),dark);lever.position.set(x,5.2,0);this.groups[8].add(lever);}
  tube([[-.55,5.25,0],[-.7,5.8,0],[-2.5,5.6,0],[-2.8,3.8,0]],.105,hose,this.groups[9]);tube([[.55,5.25,0],[.7,5.9,0],[2.4,5.7,0],[2.8,4.1,0]],.105,hose,this.groups[9]);
  const strainer=cylinder(.2,.65,dark,this.groups[9],3.65);strainer.position.x=-2.8;for(let i=0;i<6;i++){const rr=ring(.21,.02,gold,this.groups[9],3.4+i*.1);rr.position.x=-2.8;}
  const mouth=new T.Mesh(new T.CylinderGeometry(.105,.28,.40,48,1,true),hose);mouth.position.set(2.8,3.9,0);this.groups[9].add(mouth);this.groups[9].add(this.returnWater);
  // An exposed inlet down-channel feeds the plenum beneath the media stack.
- tube([[-.55,4.8,-.35],[-1.17,3.5,-.35],[-1.17,.42,-.35],[0,.4,0]],.055,gold,this.groups[0]);
- this.path=tube([[-2.8,3.5,.2],[-2.6,5.55,.2],[-.55,5.6,.2],[-1.17,3.6,.2],[-1.17,.40,.2],[0,.4,.2],[0,1.4,.2],[0,3.2,.2],[0,4.1,.2],[.55,5.5,.2],[2.4,5.6,.2],[2.85,4,.2]],.017,new T.MeshBasicMaterial({color:0x65cbe0,transparent:true,opacity:.30}),this.flow);this.scene.add(this.flow);
+ tube([[-.55,4.8,-.35],[-1.20,3.65,.55],[-1.20,3.3,.55],[-1.20,.7,.55],[-1.05,.42,.55],[0,.4,0]],.055,gold,this.groups[0]);
+ this.path=new T.CurvePath<T.Vector3>();
+ // Separate curves preserve the exact hose arches instead of a long spline shortcut.
+ const flowRoutes=[
+ [[-2.8,3.5,0],[-2.8,3.8,0]],
+ [[-2.8,3.8,0],[-2.5,5.6,0],[-.7,5.8,0],[-.55,5.25,0]],
+ [[-.55,5.25,0],[-.55,4.8,-.35]],
+ [[-.55,4.8,-.35],[-1.20,3.65,.55],[-1.20,3.3,.55],[-1.20,.7,.55],[-1.05,.42,.55],[0,.4,0]],
+ [[0,.4,0],[0,1.4,0],[0,3.2,0],[0,4.15,0]],
+ [[0,4.15,0],[.55,4.6,0],[.55,5.25,0]],
+ [[.55,5.25,0],[.7,5.9,0],[2.4,5.7,0],[2.8,4.1,0]]];
+ for(const points of flowRoutes)this.path.add(tube(points,.012,new T.MeshBasicMaterial({color:0x65cbe0,transparent:true,opacity:.16}),this.flow));this.scene.add(this.flow);
  const dotGeo=new T.SphereGeometry(.047,8,6);for(let i=0;i<45;i++){const dot=new T.Mesh(dotGeo,new T.MeshBasicMaterial({color:i<20?0xe5b66e:0x76deef}));this.dots.push(dot);this.flow.add(dot);}
  
  // A deliberately visible schematic overlay keeps the route readable through opaque media.
@@ -90,7 +103,7 @@ export class FilterScene{
  plaque(this.groups[0],'AQUASCAPE / CANISTER','CLOSED LOOP FILTRATION',.94,1.76,1.04,.62);
  plaque(this.groups[7],'PUMP HEAD','WET ROTOR ASSEMBLY',.85,4.2,1.07,.48);
  addFilterMicroDetail(this.groups,this.rotor,metal,rubber);
- this.groups.forEach(g=>g.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=!(o instanceof T.InstancedMesh);o.receiveShadow=true;}}));
+ this.groups.forEach(g=>g.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=!(o instanceof T.InstancedMesh)||o.userData.mediaShadow===true;o.receiveShadow=true;}}));
  this.renderer.domElement.addEventListener('pointerdown',this.down);this.renderer.domElement.addEventListener('pointerup',this.up);this.observer=new ResizeObserver(this.resize);this.observer.observe(host);this.resize();this.select(3);
  let previous=performance.now();const loop=(now:number)=>{if(this.dead)return;if(document.hidden){previous=now;this.request=requestAnimationFrame(loop);return;}const dt=Math.max(0,Math.min(.05,(now-previous)/1000));previous=now;if(this.running&&!this.reduced)this.tick+=dt;this.explosion+=(this.target-this.explosion)*(this.reduced?1:1-Math.exp(-dt*5));this.groups.forEach((g,i)=>{g.position.y=this.explosion*i*.43;});this.rotor.rotation.y=this.tick*4;this.flow.visible=this.running&&!this.tracing&&!this.isolated&&this.explosion<.08;this.returnWater.visible=this.running&&!this.tracing&&!this.isolated&&this.explosion<.08;if(this.returnWater.visible)this.returnWater.update(this.tick);this.updateTrace(dt);this.dots.forEach((d,i)=>{const progress=(this.tick*.09+i/45)%1;d.position.copy(this.path.getPointAt(progress));(d.material as T.MeshBasicMaterial).color.set(progress<.48?0xe5b66e:0x76deef);});this.controls.autoRotate=this.rotation&&!this.reduced;this.controls.autoRotateSpeed=.6;this.controls.update();this.renderer.render(this.scene,this.camera);this.request=requestAnimationFrame(loop);};this.request=requestAnimationFrame(loop);
  }
@@ -101,14 +114,14 @@ export class FilterScene{
  private mat(color:number,roughness:number,metalness:number){const m=new T.MeshStandardMaterial({color,roughness,metalness});this.materials.push(m);return m;}
  setIsolate(on:boolean){this.isolated=on;this.groups.forEach((g,i)=>g.visible=!on||i===this.selected);}
  focusSelected(){const box=new T.Box3().setFromObject(this.groups[this.selected]),center=box.getCenter(new T.Vector3()),size=box.getSize(new T.Vector3());const distance=Math.max(2.4,Math.max(size.x,size.y,size.z)*2.2);this.controls.target.copy(center);this.camera.position.copy(center).add(new T.Vector3(.48,.28,1).normalize().multiplyScalar(distance));this.controls.update();}
- setExplode(value:number){this.target=value;this.controls.target.y=2.85+value*2.1;this.camera.position.set(.65+value*4,3.5+value*3,12.6+value*5);}
+ setExplode(value:number){this.target=value;this.controls.target.y=2.65+value*2.1;this.camera.position.set(.45+value*4,3.3+value*3,11.5+value*6);}
  setCutaway(cut:boolean){this.shell.visible=cut;this.window.visible=cut;this.topShell.visible=cut; // Cutaway exposes the front; ghost view removes the housing entirely.
  }
  setFlow(on:boolean){this.running=on;}
  setRotate(on:boolean){this.rotation=on;}
- reset(){this.camera.position.set(.65+this.target*4,3.5+this.target*3,12.6+this.target*5);this.controls.target.set(0,2.85+this.target*2.1,0);this.controls.update();}
+ reset(){this.camera.position.set(.45+this.target*4,3.3+this.target*3,11.5+this.target*6);this.controls.target.set(0,2.65+this.target*2.1,0);this.controls.update();}
  select(id:number){this.selected=id;this.setIsolate(this.isolated);if(this.isolated)this.focusSelected();this.groups.forEach((g,i)=>g.traverse(o=>{if(o instanceof T.Mesh){if(!o.userData.originalMaterial)o.userData.originalMaterial=o.material;if(o.userData.highlight){o.material.dispose();o.userData.highlight=false;}o.material=o.userData.originalMaterial;if(i===id&&o.material instanceof T.MeshStandardMaterial){o.material=o.material.clone();o.material.emissive.set(0x438978);o.material.emissiveIntensity=.07;o.userData.highlight=true;}}}));}
- private resize=()=>{const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;this.camera.zoom=w/h<.9?.70:1;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);};
+ private resize=()=>{const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;this.camera.zoom=w/h<.9?.88:1;this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);};
  private down=(e:PointerEvent)=>{this.pointerStart={x:e.clientX,y:e.clientY};};
  private up=(e:PointerEvent)=>{if(Math.hypot(e.clientX-this.pointerStart.x,e.clientY-this.pointerStart.y)>5)return;const rect=this.renderer.domElement.getBoundingClientRect(),ray=new T.Raycaster();ray.setFromCamera(new T.Vector2((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1),this.camera);const hit=ray.intersectObjects(this.groups,true).find(h=>{let o:T.Object3D|null=h.object;while(o){if(!o.visible)return false;o=o.parent;}return true;});if(!hit)return;let object:T.Object3D|null=hit.object;while(object&&object.userData.part===undefined)object=object.parent;if(object)this.onPick(object.userData.part);};
  dispose(){this.dead=true;cancelAnimationFrame(this.request);this.observer.disconnect();this.controls.dispose();this.renderer.domElement.removeEventListener('pointerdown',this.down);this.renderer.domElement.removeEventListener('pointerup',this.up);const geometries=new Set<T.BufferGeometry>(),materials=new Set<T.Material>(),textures=new Set<T.Texture>();this.scene.traverse(o=>{if(o instanceof T.Mesh){geometries.add(o.geometry);for(const m of [o.material,o.userData.originalMaterial].flat()){if(m){materials.add(m);for(const key of ['map','bumpMap','roughnessMap'])if(m[key])textures.add(m[key]);}}}});this.materials.forEach(m=>materials.add(m));geometries.forEach(g=>g.dispose());materials.forEach(m=>m.dispose());textures.forEach(t=>t.dispose());this.environment.dispose();this.renderer.dispose();this.renderer.domElement.remove();}

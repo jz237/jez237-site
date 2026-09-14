@@ -29,3 +29,12 @@ Outlet and ceramic-rim pass:
 - Added subtle stone floor grain and restrained illumination beneath the canister.
 - Verified desktop and 412x915 phone framing, outlet toggle, no browser errors, 146 passing tests, both production builds, all three copied assets and both link checks.
 - Visual comparison still shows a slimmer, more schematic canister than the reference; the head/valve proportions, side-channel routing and dense ceramic packing are the next concrete fidelity work. No claim of photographic equivalence or completed goal.
+
+Proportions and media pass:
+- Larger frontal framing and a wider desktop component directory align the composition more closely with the reference.
+- A shaped, stepped motor-head cover replaces the flat disk.
+- Ceramic media increases from 78 to 126 full-detail rings in five instanced batches. Raised the lower layer to clear its support plate.
+- Flow follows separate hose and down-channel curves, removing the diagonal spline shortcut. Less correlated outlet-droplet phases avoid a spiraling spray pattern.
+- Mobile canvas reserves space above and below for labels and the toolbar; the exploded base was previously partly covered.
+- Close-up/isolation, desktop and mobile assembly views verified; 146 tests, both builds, synchronization, both link checks pass.
+- Goal remains active: material realism, ceramic packing contacts and the glass/water interface still fall short of the supplied photographic reference. Next pass should address those visual gaps, not rework already-completed button emphasis or navigation removal.
