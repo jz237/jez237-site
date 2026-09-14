@@ -36,7 +36,7 @@ export function makePopulation(scene,bathy,coverFeatures,{seed=2026,assets={},ro
     // body: swim by speed, jaw on strike, wet only when lifted
     const speed=Math.hypot(b.vx,b.vy,b.vz);const beat=(.5+1.6*speed/b.length)*Math.PI*2;f.swimPhase+=dt*beat;const amp=clamp(.012+.05*speed/(b.length*3),.012,.07);
     let turn=0;const targetYaw=b.heading;let d=targetYaw-f.body.root.rotation.y;d=Math.atan2(Math.sin(d),Math.cos(d));f.body.root.rotation.y+=d*Math.min(1,dt*6);turn=clamp(-d*2,-.8,.8);
-    f.body.setSwim(f.swimPhase,amp,turn);f.jaw+=((b.state==='STRIKE'||b.state==='BITE')?1:0-f.jaw)*Math.min(1,dt*10);f.body.setJaw(f.jaw);
+    f.body.setSwim(f.swimPhase,amp,turn);f.jaw+=(((b.state==='STRIKE'||b.state==='BITE')?1:b.state==='LANDED'?.35:0)-f.jaw)*Math.min(1,dt*10);f.body.setJaw(f.jaw);
     f.body.root.position.set(b.x,b.y,b.z);f.body.root.rotation.x=clamp(-b.vy*.8,-.5,.5);f.body.root.rotation.z*=0;f.body.root.visible=b.state!=='LANDED';}
   },
   info:f=>({id:f.brain.id,species:f.brain.species.id,name:f.brain.name,state:f.brain.state,length:+f.brain.length.toFixed(3),...describeFish(f.brain.species,f.brain.length),x:+f.brain.x.toFixed(1),y:+f.brain.y.toFixed(2),z:+f.brain.z.toFixed(1),boldness:+f.brain.boldness.toFixed(2),aversion:f.brain.aversion,caught:f.brain.caught}),
