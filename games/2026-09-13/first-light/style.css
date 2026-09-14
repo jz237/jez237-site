@@ -41,3 +41,6 @@ body.touch-active footer{display:none}body.touch-active .timebar{display:none}bo
 
 /* the second rod: holder status under the tackle line, blinking on a take */
 #holderLine{display:none;margin-top:.25rem;font-size:.78rem;color:#d7e3c9}#holderLine.show{display:block}#holderLine.alert{color:#ffe36b;font-weight:600;animation:holderBlink .6s steps(2,start) infinite}@keyframes holderBlink{to{visibility:hidden}}
+
+/* the Lure Cam drift: no tackle, no reticle, no key hints under the water */
+body.aquarium #tackle,body.aquarium #reticle,body.aquarium #power,body.aquarium #tension,body.aquarium .controls,body.aquarium #holderLine,body.aquarium #sonar{display:none!important}
