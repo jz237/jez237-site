@@ -26,7 +26,7 @@ export function journalOverview(journal){
  for(const c of catches)if(!best||(c.weightLb||0)>(best.weightLb||0))best=c;
  return {count:catches.length,species:species.size,best};
 }
-export function weightText(lb){return lb?`${Math.floor(lb)} lb ${Math.round((lb%1)*16)} oz`:'';}
+export function weightText(lb){if(!lb)return '';const oz=Math.round(lb*16);return `${Math.floor(oz/16)} lb ${oz%16} oz`;}
 export function bestText(c){if(!c)return null;const sp=SPECIES[c.species];return `${c.lengthIn} in ${sp?sp.name.toLowerCase():c.species}${c.weightLb?' · '+weightText(c.weightLb):''}`;}
 export function hourLabel(h){const x=((h%24)+24)%24;const ap=x<12?'AM':'PM';const hh=x%12===0?12:x%12;return `${hh} ${ap}`;}
 // one line for the menu

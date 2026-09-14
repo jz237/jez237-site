@@ -21,7 +21,7 @@ test('the plan names a species and reaches for the musky rig once the bass are i
  const bitten=planNext({hour:7.5,activity:.9,spots:[{type:'weedbed',x:15,z:10,r:40},{type:'laydown',x:-10,z:20,r:8}],rigs:RIGS,kayak:{x:0,z:0},memory:{visits:{},refusals:0,caught:{},refusalsByRig:{},bittenOff:2},random:rng(9)});assert.equal(bitten.rigIndex,3);assert.ok(/teeth/.test(bitten.reason),bitten.reason);
 });
 test('the executor produces input the recognizer names as intended',()=>{
- for(const [tech,lure,onBottom] of [['walking the dog',LURES.walker,false],['stop & go',LURES.squarebill,false],['lift & drop',LURES.worm,true],['straight retrieve',LURES.squarebill,false]]){
+ for(const [tech,lure,onBottom] of [['walking the dog',LURES.walker,false],['stop & go',LURES.squarebill,false],['lift & drop',LURES.worm,true],['straight retrieve',LURES.squarebill,false],['dead stick',LURES.nightcrawler,false]]){
   const ex=createExecutor(tech,rng(7)),r=createRecognizer();let t=0;let label='';
   for(let i=0;i<600;i++){t+=1/60;const inp=stepExecutor(ex,1/60,rng(i));if(i%3===0)recordSample(r,t,inp.reeling);if(inp.twitch)recordTwitch(r,t);if(i%15===0)label=classify(r,t,lure,{inWater:true,onBottom});}
   assert.equal(label,tech,'technique '+tech+' read as '+label);}

@@ -9,6 +9,11 @@ test('a hanging line keeps its segments at the paid-out length',()=>{
  const seg=6/23;for(let i=0;i<23;i++){const d=Math.hypot(line.x[i+1]-line.x[i],line.y[i+1]-line.y[i],line.z[i+1]-line.z[i]);assert.ok(d<=seg*1.02,'segment '+i+' '+d);}
  assert.equal(line.x[0],0);assert.equal(line.y[0],1.5);
 });
+test('a bait under a float hangs at the float depth instead of sinking to the bed',()=>{
+ const line=createLine(24);resetLine(line,0,1.5,0);line.lineOut=12;setLure(line,8,-.2,3);
+ run(line,{...flat,tip:{x:0,y:1.5,z:0},lineBuoy:.4,lure:LURES.nightcrawler},12);
+ const lp=lurePosition(line);assert.ok(lp.y<-.6&&lp.y>-.95,'bait hangs about 0.9 m down: '+lp.y);assert.equal(line.lureOnBottom,false);
+});
 test('a sinking lure never falls faster than its sink rate and comes to rest on the bed',()=>{
  const line=createLine(24);resetLine(line,0,1.5,0);layLine(line,{x:0,y:1.5,z:0},{x:6,y:-.05,z:0});line.lineOut=12;
  const env={...flat,tip:{x:0,y:1.5,z:0},lineBuoy:-.6,lure:LURES.worm};let fastest=0,prev=lurePosition(line).y;

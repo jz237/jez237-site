@@ -16,17 +16,18 @@ const SPOT_BASE={laydown:1,dock:.95,weedbed:.9,pads:.8,stump:.7,riprap:.75};
 // family suit them, how big they run (a musky is worth a slow hour), whether Ray has caught one
 // already this episode (novelty), and how the lure suits the cover itself (cranks deflect off rock,
 // topwater over grass, worms in wood). Refusals on a rig count against it.
-const TECH_FOR={walker:'walking the dog',worm:'lift & drop',squarebill:'stop & go',bucktail:'straight retrieve'};
-export const TUNE={sizePow:1.5,topwaterLow:1.6,topwaterHigh:.7,bladeLow:1.3,bladeHigh:.9,crankRock:1.3,noise:.16};
-const COVER_FIT={riprap:{crank:1.3,blade:1.1,soft:1,topwater:.7},dock:{crank:1.2,soft:1.1,topwater:.9,blade:.9},laydown:{soft:1.15,topwater:1.05,crank:1,blade:1},weedbed:{topwater:1.25,blade:1.15,soft:.9,crank:.6},pads:{topwater:1.3,soft:1,crank:.4,blade:.6},stump:{crank:1.1,soft:1.1,topwater:.9,blade:.9}};
+const TECH_FOR={walker:'walking the dog',worm:'lift & drop',squarebill:'stop & go',bucktail:'straight retrieve',nightcrawler:'dead stick',cutbait:'dead stick'};
+export const TUNE={sizePow:1.5,topwaterLow:1.6,topwaterHigh:.7,bladeLow:1.3,bladeHigh:.9,crankRock:1.3,noise:.16,baitPatience:.8};
+const COVER_FIT={riprap:{crank:1.3,blade:1.1,soft:1,topwater:.7,bait:1},dock:{crank:1.2,soft:1.1,topwater:.9,blade:.9,bait:1.2},laydown:{soft:1.15,topwater:1.05,crank:1,blade:1,bait:1},weedbed:{topwater:1.25,blade:1.15,soft:.9,crank:.6,bait:.9},pads:{topwater:1.3,soft:1,crank:.4,blade:.6,bait:1.1},stump:{crank:1.1,soft:1.1,topwater:.9,blade:.9,bait:1.2}};
 const WHERE={laydown:'the laydown',dock:'the dock',weedbed:'the weed bed',pads:'the pads',stump:'the stumps',riprap:'the riprap point'};
 const PLURAL={largemouth:'Largemouth',smallmouth:'Smallmouth',walleye:'Walleye',bluegill:'Bluegill',musky:'A musky',pickerel:'Pickerel',striper:'Hybrids',catfish:'Cats',carp:'Carp',crappie:'Crappie',perch:'Perch',pumpkinseed:'Pumpkinseeds'};
-const RIG_LINE={walker:w=>`Walking the walker over ${w}.`,worm:w=>`Worm on the bottom of ${w}, lift and drop.`,squarebill:w=>`Squarebill off ${w}, stop and go so it deflects.`,bucktail:w=>`Big bucktail on the wire along ${w}, steady and slow. If one follows, figure-eight at the boat.`};
+const RIG_LINE={nightcrawler:w=>`A nightcrawler under a float beside ${w}. Now we wait.`,cutbait:w=>`Cut bait on the bottom off ${w}, rod in the holder, and we wait.`,walker:w=>`Walking the walker over ${w}.`,worm:w=>`Worm on the bottom of ${w}, lift and drop.`,squarebill:w=>`Squarebill off ${w}, stop and go so it deflects.`,bucktail:w=>`Big bucktail on the wire along ${w}, steady and slow. If one follows, figure-eight at the boat.`};
 // how much a species is worth chasing: a common-class fish's weight, compressed
 function sizeValue(sp){const mid=(sp.classes.common[0]+sp.classes.common[1])/2;return Math.pow(Math.log2(1+sp.weightKg(mid)*2.2),TUNE.sizePow);}
 const boldness=sp=>(sp.boldness[0]+sp.boldness[1])/2;
 // topwater is a low-light bait, a bucktail is best at dusk, and a crank earns its keep on rock
-function lightFit(family,lowLight){return family==='topwater'?(lowLight?TUNE.topwaterLow:TUNE.topwaterHigh):family==='blade'?(lowLight?TUNE.bladeLow:TUNE.bladeHigh):1;}
+// Ray would rather fish a moving bait than watch a float, unless the bait clearly wins (night cats, panfish stacked on a dock)
+function lightFit(family,lowLight){return family==='topwater'?(lowLight?TUNE.topwaterLow:TUNE.topwaterHigh):family==='blade'?(lowLight?TUNE.bladeLow:TUNE.bladeHigh):family==='bait'?TUNE.baitPatience:1;}
 export function scoreRig(spotType,rig,lure,{hour,sunrise=6.5,sunset=19.5,species,caught={},lowLight=false,cond=null}){
  const tech=TECH_FOR[lure.id]||'straight retrieve';let total=0,best=null,bestV=0;
  for(const id in species){const sp=species[id];if(!sp.structure.includes(spotType))continue;
@@ -67,6 +68,7 @@ export function stepExecutor(ex,dt,random){
   case 'stop & go':ex.reeling=((ex.t+ex.phase)%2.0)<1.2;break;
   case 'twitching':ex.reeling=true;if(ex.t>ex.phase){ex.twitch=true;ex.phase=ex.t+.9+j()*2;}break;
   case 'slow roll':ex.reeling=((ex.t*10)|0)%10<6;break;
+  case 'dead stick':ex.reeling=false;break;
   default:ex.reeling=true;
  }
  return {reeling:ex.reeling,twitch:ex.twitch};
@@ -122,7 +124,7 @@ export function stepDemo(d,dt,game){
   case 'work':{
    if(a.phase==='flight'){game.input({reeling:false,twitch:false});break;}
    if(a.phase==='retrieve'){const inp=stepExecutor(d.executor,dt,d.random);game.input(inp);
-    if(d.stateTime>45){game.input({reeling:true,twitch:false});}
+    if(d.stateTime>(d.plan&&d.plan.technique==='dead stick'?150:45)){game.input({reeling:true,twitch:false});}
     // the governor: a quiet stretch runs the clock forward so the light keeps changing
     const quiet=d.elapsed-d.lastEventAt>30;const want=quiet?12:4;if(d.rate!==want){d.rate=want;game.setRate(want);}break;}
    if(a.phase==='bite'){if(d.hookAt!==null&&d.elapsed>=d.hookAt){game.setHook();d.hookAt=null;}break;}
