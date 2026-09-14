@@ -27,10 +27,10 @@ export function makePopulation(scene,bathy,coverFeatures,{seed=2026,assets={},ro
  function disturb(x,z,t,radius=8,seconds=40){let n=0;for(const f of fish){const b=f.brain;if(b.state==='HOOKED'||b.state==='LANDED')continue;if(Math.hypot(b.x-x,b.z-z)<radius){b.state='REFUSE';b.stateTime=0;b.refuseUntil=Math.max(b.refuseUntil||0,t+seconds*(.6+random()*.8));n++;}}return n;}
  return {fish,species,spawn,nearest,disturb,
   splash(x,z,t){lastSplash={x,z,t};},
-  update(dt,t,hour,sunrise,sunset,lure,kayak,clarity){
+  update(dt,t,hour,sunrise,sunset,lure,kayak,clarity,bait=null){
    const acts={};for(const id in SPECIES)acts[id]=activityByHour(hour,SPECIES[id].diel,sunrise,sunset);
    const base={lure,clarity,kayak,splash:lastSplash?{x:lastSplash.x,z:lastSplash.z,age:t-lastSplash.t}:null};
-   for(const f of fish){const b=f.brain;const p={...base,activity:acts[b.species.id]};
+   for(const f of fish){const b=f.brain;const p={...base,activity:acts[b.species.id]*(bait?1+.35*bait(b.x,b.z):1)};
     if(b.state!=='HOOKED'&&b.state!=='LANDED'){stepFishBrain(b,dt,t,p);const bed=bathy.height(b.x,b.z);b.y=clamp(b.y,bed+.18,-.12);if(bathy.height(b.x,b.z)>-.3){b.x=b.home.x;b.z=b.home.z;}}
     // body: swim by speed, jaw on strike, wet only when lifted
     const speed=Math.hypot(b.vx,b.vy,b.vz);const beat=(.5+1.6*speed/b.length)*Math.PI*2;f.swimPhase+=dt*beat;const amp=clamp(.012+.05*speed/(b.length*3),.012,.07);
