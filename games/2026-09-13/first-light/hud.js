@@ -20,7 +20,7 @@ export function mountHud(handlers){
  $('ccPhoto').onclick=()=>handlers.onPhoto();$('photoBtn').onclick=()=>handlers.onPhotoMode();$('pbSave').onclick=()=>handlers.onPhotoSave();$('pbBack').onclick=()=>handlers.onPhotoBack();
  $('watch').onclick=()=>handlers.onWatch();
  $('galleryBtn').onclick=()=>handlers.onGallery();
- $('sessionBtn').onclick=()=>handlers.onSession($('sessionVariant').value);$('bigBassBtn').onclick=()=>handlers.onBigBass();
+ $('sessionBtn').onclick=()=>handlers.onSession($('sessionVariant').value);$('tutorialBtn').onclick=()=>handlers.onTutorial();$('tutSkip').onclick=()=>handlers.onTutorialSkip();$('bigBassBtn').onclick=()=>handlers.onBigBass();
  $('scSubmit').onclick=()=>handlers.onSessionSubmit($('scInitials').value);$('scBack').onclick=()=>handlers.onSessionBack();$('scInitials').onkeydown=e=>{if(e.key==='Enter')handlers.onSessionSubmit($('scInitials').value);e.stopPropagation();};
  $('timeSlider').oninput=e=>handlers.onHour(Number(e.target.value));
  return {
