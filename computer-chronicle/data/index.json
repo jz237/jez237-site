@@ -2,6 +2,70 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-14",
+      "historicDate": "1984-07-09",
+      "displayDate": "Week of July 9-15, 1984",
+      "edition": "Issue 102 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Atari and Commodore lawyer up while summer buyers compare games, graphics and machines that travel.",
+      "leadHeadline": "Atari-Commodore Rivalry Turns into a Fight over Trade Secrets",
+      "storyHeadlines": [
+        "BYTE Puts Computers and Video in the Spotlight",
+        "Sinclair Warns QL Buyers of Delivery Delays",
+        "PC Magazine Surveys a Fast-Growing IBM Ecosystem"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-09.jpg",
+      "thumb": "media/thumbs/1984-07-09.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-13",
+      "historicDate": "1984-07-02",
+      "displayDate": "Week of July 2-8, 1984",
+      "edition": "Issue 101 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Tramiel takes Atari, the IIc travels light, and The Hulk tops the Atari software counter.",
+      "leadHeadline": "Jack Tramiel Takes Atari as Warner Retreats",
+      "storyHeadlines": [
+        "Apple IIc Packs a Full Apple II into 7.5 Pounds",
+        "The Hulk Leads Atari's Living Software Shelf",
+        "Byte Watches Computers and Video Converge"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-02.jpg",
+      "thumb": "media/thumbs/1984-07-02.webp",
+      "milestone": true
+    },
+    {
+      "currentDate": "2026-09-12",
+      "historicDate": "1984-06-25",
+      "displayDate": "Week of June 25-July 1, 1984",
+      "edition": "Issue 100 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "AT&T puts its name on an IBM-compatible, while computer owners weigh printers and meet after hours on CompuServe.",
+      "leadHeadline": "AT&T Enters the Personal-Computer Market with the PC 6300",
+      "storyHeadlines": [
+        "Printer Buyers Face a Maze from Dot Matrix to Laser",
+        "VisiCorp Tries to Regain Its Business-Software Footing",
+        "Timex/Sinclair Owners Build a Lifeline on CompuServe"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-06-25.jpg",
+      "thumb": "media/thumbs/1984-06-25.webp",
+      "milestone": false
+    },
+    {
+      "currentDate": "2026-09-11",
+      "historicDate": "1984-06-18",
+      "displayDate": "Week of June 18-24, 1984",
+      "edition": "Issue 099 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The workstation screen is becoming a shared piece of the network.",
+      "leadHeadline": "MIT's Project Athena Opens a New Window",
+      "storyHeadlines": [
+        "VisiCorp Tries to Re-enter the Business-Software Race",
+        "Apple IIc Packs the Apple II into 7.5 Pounds",
+        "Stolen Password Exposes the Fragility of Online Credit Files"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-06-18.jpg",
+      "thumb": "media/thumbs/1984-06-18.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-10",
       "historicDate": "1984-06-11",
       "displayDate": "Week of June 11-17, 1984",

@@ -1,0 +1,388 @@
+{
+  "currentDate": "2026-09-14",
+  "historicDate": "1984-07-09",
+  "displayDate": "Week of July 9-15, 1984",
+  "edition": "Issue 102 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Urgent trade-paper reporting with bright summer retail color",
+    "motifs": [
+      "Atari joystick silhouette",
+      "Commodore circuit traces",
+      "CRT video scan lines",
+      "newsprint legal-file stamps"
+    ],
+    "layout": "Gaming-led broadsheet with a rivalry splash, video feature rail, and dense shelf modules"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "July 9-15, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Five-column rivalry splash with Atari hardware and legal-paper imagery",
+    "secondaryRail": "BYTE video, Sinclair QL, PC ecosystem, modem and gadget desks",
+    "archiveNavigation": "Chronological weekly archive with previous and next issue controls"
+  },
+  "sectionChrome": {
+    "primary": "#a82020",
+    "secondary": "#174a78",
+    "texture": "Warm cream newsprint, halftone dots, narrow rules, and slightly uneven ink"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-07-09.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the week of July 9-15, 1984",
+    "caption": "A GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Atari begins its next life under Jack Tramiel with the old Commodore rivalry no longer confined to the showroom. Around it, video, portable hardware, modems and a swelling IBM-compatible market show how quickly the personal-computer business is widening.",
+  "morningLine": "Atari and Commodore lawyer up while summer buyers compare games, graphics and machines that travel.",
+  "lead": {
+    "headline": "Atari-Commodore Rivalry Turns into a Fight over Trade Secrets",
+    "dek": "Days after Jack Tramiel takes control of Atari’s consumer operation, his old rivalry with Commodore shifts from price cuts and product launches to engineers, designs and the courts.",
+    "body": [
+      "The struggle for the home-computer market acquired a legal edge this week. On July 14, The New York Times reported a dispute over Commodore trade secrets, arriving only days after Warner Communications transferred Atari’s home-computer and video-game businesses to a company led by former Commodore chief Jack Tramiel.",
+      "The sale instantly made Atari and Commodore a rivalry with unusually personal stakes. Tramiel had built Commodore into a mass-market computer power before leaving the company in January; now he was assembling a team to revive Atari’s consumer business and develop a successor to its aging 8-bit machines.",
+      "Engineering talent and proprietary designs therefore mattered as much as shelf price. Any movement of former Commodore people into the new Atari could affect how quickly Tramiel’s company produced competitive hardware, while Commodore had every reason to protect work already under way.",
+      "The contest unfolded against a harsh financial backdrop. Contemporary UPI reports described Atari’s consumer operation as loss-plagued, and another 300 Sunnyvale employees were dismissed on July 6. The cuts underscored the urgency behind the acquisition: Atari needed fewer costs, fresh products and a credible route back to buyers.",
+      "For players and home-computer owners, the courtroom language pointed toward the next hardware race. The familiar Atari and Commodore names would remain on store shelves, but the people, designs and strategies behind them were being rearranged at extraordinary speed."
+    ],
+    "sourceRefs": [
+      0,
+      9,
+      10
+    ],
+    "confidence": "Exact-week reporting supported by contemporaneous New York Times and UPI coverage."
+  },
+  "stories": [
+    {
+      "headline": "BYTE Puts Computers and Video in the Spotlight",
+      "body": [
+        "BYTE’s July issue made “Computers and Video” its central theme, picturing a multichannel workstation and treating moving images as serious personal-computer territory. The $3.50 issue joined video hardware with programming, graphics and communications coverage.",
+        "The package catches an important shift: home and small-business machines were no longer discussed only as calculators, word processors or game boxes. Video production and computer-controlled imagery were becoming plausible creative applications, even if the required equipment remained specialized.",
+        "For readers following graphics chips, frame grabbers and display standards, BYTE’s feature package offered a map of a field moving toward the desktop."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "Same-month primary period magazine."
+    },
+    {
+      "headline": "Sinclair Warns QL Buyers of Delivery Delays",
+      "body": [
+        "Sinclair Research warned that it might struggle to meet the 28-day delivery period printed on QL order forms, according to the July issue of Sinclair User. The company blamed unexpectedly heavy demand.",
+        "The delay was especially awkward because the £399 QL was pitched as an ambitious low-cost step beyond 8-bit home machines. Its Motorola 68008 processor, 128 KB of memory and twin Microdrives promised a compact route into more advanced computing.",
+        "A bold specification sheet only matters when machines reach customers. Production pressure now threatened the QL’s chance to establish itself against Apple, IBM-compatible and Commodore systems already commanding attention."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "Same-month period reporting."
+    },
+    {
+      "headline": "PC Magazine Surveys a Fast-Growing IBM Ecosystem",
+      "body": [
+        "The July 10 issue of PC Magazine arrived with another thick snapshot of the IBM PC world. Software, peripherals and compatible systems were multiplying beyond IBM’s own catalog, giving offices more choices and vendors a rapidly expanding audience.",
+        "The growth of that ecosystem was becoming the platform’s central advantage. A buyer could increasingly select among competing applications, add-on boards and printers while expecting the PC architecture to remain the common reference point.",
+        "For smaller computer makers, the magazine’s advertising and editorial density carried a warning: compatibility was turning into a market of its own, not merely a feature on a specification sheet."
+      ],
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "Exact-date issue reference; broad ecosystem claims are period-contextual."
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Sinclair QL",
+      "summary": "Motorola 68008 processor, 128 KB RAM and twin Microdrives at a £399 launch price, with delivery delays clouding demand.",
+      "confidence": "Same-month period reporting.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "title": "Apple IIc",
+      "summary": "Apple compresses a 128 KB Apple II, built-in 5.25-inch disk drive and familiar expansion connections into a 7.5-pound computer.",
+      "confidence": "Same-month period review.",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "title": "Computers and Video",
+      "summary": "BYTE’s July cover package explores the convergence of micros, graphics and video production.",
+      "confidence": "Same-month primary source.",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Visi On Applications Manager",
+      "detail": "VisiCorp’s graphical environment for IBM-compatible PCs remains a prominent, hardware-hungry alternative."
+    },
+    {
+      "name": "Mterm/ZCOMM",
+      "detail": "Telecommunications packages connect Timex/Sinclair owners to bulletin boards and CompuServe user areas."
+    },
+    {
+      "name": "Questron",
+      "detail": "SSI fantasy role-playing on Apple II and Commodore 64."
+    },
+    {
+      "name": "The Hulk",
+      "detail": "Adventure International’s illustrated adventure leads a contemporary Atari sales chart."
+    },
+    {
+      "name": "Enchanter",
+      "detail": "Infocom interactive fiction remains a current favorite across major home-computer platforms."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Computer Games",
+      "items": [
+        "The Hulk — Atari 8-bit",
+        "Enchanter — Atari 8-bit / Apple II / Commodore 64 / IBM PC",
+        "Questron — Apple II / Commodore 64"
+      ]
+    },
+    {
+      "label": "At the Movies",
+      "items": [
+        "Ghostbusters — No. 1 summer hit",
+        "Gremlins — holding second place"
+      ]
+    },
+    {
+      "label": "Software Desk",
+      "items": [
+        "Visi On Applications Manager",
+        "Mterm/ZCOMM telecommunications software"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Apple IIc",
+      "price": "$1,295",
+      "note": "Base computer with 128 KB and built-in disk drive.",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "item": "Apple IIc accessories",
+      "price": "$99-$329",
+      "note": "$99 mouse, $199 green monitor, $299 Scribe printer, $329 external disk drive.",
+      "sourceRefs": [
+        11
+      ]
+    },
+    {
+      "item": "BYTE magazine",
+      "price": "$3.50",
+      "note": "United States cover price for the July “Computers and Video” issue.",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Atari Layoffs Shadow the Comeback",
+      "summary": "UPI reported July 6 that another 300 Sunnyvale workers were dismissed as the new Atari Corporation cut costs.",
+      "confidence": "Same-week reporting.",
+      "sourceRefs": [
+        10
+      ]
+    },
+    {
+      "headline": "Computers Meet Television",
+      "summary": "BYTE’s July feature package treats computer-controlled video as a serious technical and creative field.",
+      "confidence": "Same-month primary source.",
+      "sourceRefs": [
+        1
+      ]
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "When Doves Cry",
+      "artist": "Prince and the Revolution"
+    },
+    {
+      "rank": 2,
+      "title": "Dancing in the Dark",
+      "artist": "Bruce Springsteen"
+    },
+    {
+      "rank": 3,
+      "title": "Jump (For My Love)",
+      "artist": "The Pointer Sisters"
+    }
+  ],
+  "periodAd": {
+    "headline": "Carry an Apple IIc",
+    "summary": "A 7.5-pound Apple II with 128 KB, built-in disk drive and a full set of peripheral connections.",
+    "tagline": "The Apple II road machine — display and wall outlet still required."
+  },
+  "market": {
+    "headline": "Atari’s New Owners Race the Balance Sheet",
+    "summary": "Fresh layoffs and a loss-plagued consumer operation leave Jack Tramiel’s Atari under pressure to cut costs while preparing competitive new hardware.",
+    "confidence": "Exact-week and immediate prior-week UPI reporting.",
+    "sourceRefs": [
+      9,
+      10
+    ]
+  },
+  "worldAnchor": {
+    "headline": "United States and West Germany Sign Space-Cooperation Agreement",
+    "summary": "On July 12, the two governments signed what officials called a milestone agreement for cooperation in space research and activity.",
+    "confidence": "Exact-date wire report.",
+    "sourceRefs": [
+      7
+    ]
+  },
+  "bbsNote": {
+    "headline": "Timex/Sinclair Owners Compile a Bay Area Modem Directory",
+    "summary": "A July Timelinez item shows modem users building a local human network around inexpensive home computers.",
+    "posts": [
+      {
+        "topic": "Modem-owner directory",
+        "platform": "Timex/Sinclair user community",
+        "text": "Thirteen members shared contact information so scattered modem owners could reach one another."
+      },
+      {
+        "topic": "Online support",
+        "platform": "CompuServe CEM 450 SIG",
+        "text": "A weekly Wednesday conference and downloadable XA-library programs gave users an online meeting place."
+      }
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Sony Takes the Compact Disc onto the Road",
+    "summary": "Audio’s July coverage examines an early Sony car CD player, roughly eighteen months after consumer compact-disc hardware reached the United States.",
+    "confidence": "Same-month period coverage.",
+    "sourceRefs": [
+      8
+    ]
+  },
+  "undergroundDesk": {
+    "headline": "2600 Reads a Culture of Computer Fear",
+    "dek": "A young hacker and phone-phreak newsletter records the anxiety gathering around anyone with a keyboard and a modem.",
+    "body": [
+      "The July issue of 2600 carried the cover line “Look Out, He’s Got a Computer!” and treated public suspicion of computer users as news within the emerging underground scene.",
+      "The item is cultural evidence, not a report of a specific intrusion. Its tone shows how curiosity, technical play and fears about unauthorized access were becoming tangled in the public imagination.",
+      "For the growing modem community, the argument was also about identity: whether independent experimenters would be viewed as enthusiasts, nuisances or criminals."
+    ],
+    "groups": [
+      {
+        "name": "2600",
+        "note": "The young hacker and phone-phreak newsletter documenting the scene in its July 1984 issue."
+      }
+    ],
+    "sourceRefs": [
+      6
+    ],
+    "confidence": "Same-month primary period newsletter; no exact-week incident is claimed."
+  },
+  "curiosity": {
+    "headline": "A Full Apple II That Weighs 7.5 Pounds",
+    "summary": "Apple’s IIc compresses a 128 KB Apple II and built-in disk drive into a surprisingly portable package.",
+    "detail": "A period review notes that the machine retained monitor, printer, modem, mouse, joystick and second-drive connections. The carrying case cost $39, though travel still required a display and power outlet."
+  },
+  "accuracyLedger": {
+    "items": [
+      "The trade-secret dispute is anchored to a July 14 New York Times report.",
+      "QL delivery coverage and BYTE’s video package are labeled same-month rather than exact-week.",
+      "Games are presented as current-period or contemporary-chart titles, not claimed as releases during this week.",
+      "The 2600 item is framed as cultural reportage, not as evidence of a specific intrusion."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Commodore Trade Secrets",
+      "url": "https://www.nytimes.com/1984/07/14/business/commodore-trade-secrets.html",
+      "date": "1984-07-14"
+    },
+    {
+      "title": "BYTE, July 1984: Computers and Video Issue",
+      "url": "https://vintageapple.org/byte/pdf/198407_Byte_Magazine_Vol_09-07_Computers_and_Video.pdf",
+      "date": "1984-07"
+    },
+    {
+      "title": "Sinclair User 25 News",
+      "url": "https://sinclairuser.com/025/news.htm",
+      "date": "1984-07"
+    },
+    {
+      "title": "PC Magazine, July 10, 1984",
+      "url": "https://www.megalextoria.com/wordpress/index.php/2024/05/14/pc-magazine-july-10th-1984/",
+      "date": "1984-07-10"
+    },
+    {
+      "title": "Billboard, July 14, 1984",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-07-14.pdf",
+      "date": "1984-07-14"
+    },
+    {
+      "title": "Modem Owners Directory",
+      "url": "https://www.timexsinclair.com/article/modem-owners-directory/index.html",
+      "date": "1984-07"
+    },
+    {
+      "title": "2600, Volume 1 Number 7",
+      "url": "http://www.gbppr.net/2600/pdf/2600_1-7.pdf",
+      "date": "1984-07"
+    },
+    {
+      "title": "West Germany and United States Sign Cooperative Agreement",
+      "url": "https://www.upi.com/Archives/1984/07/12/West-Germany-and-the-United-States-signed-a-milestone/9613458452800/",
+      "date": "1984-07-12"
+    },
+    {
+      "title": "Sony Car CD Player: On the Road",
+      "url": "https://www.gammaelectronics.xyz/audio_07-1984_sony.html",
+      "date": "1984-07"
+    },
+    {
+      "title": "Warner Sells Atari Operations",
+      "url": "https://www.upi.com/Archives/1984/07/02/Warner-sells-Atari-operations/5941457588800/",
+      "date": "1984-07-02"
+    },
+    {
+      "title": "Atari Begins Major Layoff Program",
+      "url": "https://www.upi.com/Archives/1984/07/06/Atari-Corporation-has-started-a-major-layoff-program-at/1321457934400/",
+      "date": "1984-07-06"
+    },
+    {
+      "title": "Apple Announces the IIc",
+      "url": "https://www.atarimagazines.com/creative/v10n7/116_Apple_announces_the_IIc.php",
+      "date": "1984-07"
+    },
+    {
+      "title": "Popular Computing Weekly Atari Chart",
+      "url": "https://computerhits.org/archive/popular%20computing%20weekly_1984-07-05_atari/",
+      "date": "1984-07-05"
+    },
+    {
+      "title": "Questron",
+      "url": "https://www.mobygames.com/game/13865/questron/",
+      "date": "1984"
+    },
+    {
+      "title": "T/S Users Meet on CompuServe",
+      "url": "https://www.timexsinclair.com/article/t-s-users-meet-on-compuserve/index.html",
+      "date": "1984"
+    },
+    {
+      "title": "Visi On Review",
+      "url": "https://jvlone.com/computerpub/InfoWorld/IW_1984-07-xx_x-x_VisiOn_IWinReview.pdf",
+      "date": "1984-07"
+    }
+  ]
+}

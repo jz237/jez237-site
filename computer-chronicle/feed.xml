@@ -6,7 +6,35 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 10 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 14 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 9-15, 1984 — Atari-Commodore Rivalry Turns into a Fight over Trade Secrets</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-07-09</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-09</guid>
+      <pubDate>Mon, 14 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Days after Jack Tramiel takes control of Atari’s consumer operation, his old rivalry with Commodore shifts from price cuts and product launches to engineers, designs and the courts. The struggle for the home-computer market acquired a legal edge this week. On July 14, The New York Times reported a dispute over Commodore trade secrets, arriving only days after Warner Communications transferred Atari’s home-computer and video-game businesses to a company led by former Commodore chief Jack Tramiel. Also this week: BYTE Puts Computers and Video in the Spotlight · Sinclair Warns QL Buyers of Delivery Delays · PC Magazine Surveys a Fast-Growing IBM Ecosystem.</description>
+    </item>
+    <item>
+      <title>Week of July 2-8, 1984 — Jack Tramiel Takes Atari as Warner Retreats</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-07-02</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-02</guid>
+      <pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate>
+      <description>The Commodore founder acquires Atari&apos;s home-computer and console operations, setting up a fierce new round in the personal-computer price war. Warner Communications sold Atari&apos;s loss-plagued home-computer and home-video-game operations on Monday, July 2, to a new company headed by Jack Tramiel. Warner kept the coin-operated arcade operation, while the consumer business became the foundation of a new Atari Corporation. Also this week: Apple IIc Packs a Full Apple II into 7.5 Pounds · The Hulk Leads Atari&apos;s Living Software Shelf · Byte Watches Computers and Video Converge.</description>
+    </item>
+    <item>
+      <title>Week of June 25-July 1, 1984 — AT&amp;T Enters the Personal-Computer Market with the PC 6300</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-06-25</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-25</guid>
+      <pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate>
+      <description>The post-divestiture telephone giant puts an 8 MHz 8086 machine into the crowded IBM-compatible business market. AT&amp;T Information Systems entered the personal-computer market in New York on Tuesday, June 26, placing one of America&apos;s largest technology names directly in the path of IBM and the multiplying compatible makers. Its PC 6300 is an AT&amp;T-branded version of Olivetti&apos;s M24, built to run software written for the IBM PC. Also this week: Printer Buyers Face a Maze from Dot Matrix to Laser · VisiCorp Tries to Regain Its Business-Software Footing · Timex/Sinclair Owners Build a Lifeline on CompuServe.</description>
+    </item>
+    <item>
+      <title>Week of June 18-24, 1984 — MIT&apos;s Project Athena Opens a New Window</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-06-18</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-06-18</guid>
+      <pubDate>Fri, 11 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Robert Scheifler announces the X Window System, separating graphical programs from the screens that display them. Robert Scheifler at MIT&apos;s Project Athena announced the X Window System on June 19, giving the laboratory&apos;s networked workstations a new way to draw and manage graphical displays. The first implementation was written for a VAX VS100, but its central idea reaches beyond a single machine. Also this week: VisiCorp Tries to Re-enter the Business-Software Race · Apple IIc Packs the Apple II into 7.5 Pounds · Stolen Password Exposes the Fragility of Online Credit Files.</description>
+    </item>
     <item>
       <title>Week of June 11-17, 1984 — Police Seize a Bulletin Board: Is the Sysop Liable for What Users Post?</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-06-11</link>
@@ -118,34 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-27</guid>
       <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
       <description>Big Blue answers the transportable-computer boom with a suitcase-sized machine that runs familiar PC software. IBM announced the Portable Personal Computer 5155 Model 68 on February 29, bringing its own badge to a transportable category pioneered by Osborne and sharpened by Compaq. The new machine preserves IBM PC disk and software compatibility in a luggable case intended to move between desks. Also this week: West Coast Computer Faire Throws Open Its Doors · Software Becomes the Industry’s Main Event · PCjr Brings Better Games—and Awkward Compromises.</description>
-    </item>
-    <item>
-      <title>Week of February 20-26, 1984 — Zenith Joins the IBM-Compatible Rush With New 16-Bit PCs</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-02-20</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-20</guid>
-      <pubDate>Sun, 23 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The electronics veteran enters the hottest race in personal computing with a 16-bit family built to speak IBM’s language. Zenith Data Systems unveiled its Z-150 family on February 22, placing another substantial manufacturer in the fast-growing market for machines compatible with the IBM Personal Computer. The new 16-bit line is aimed at buyers who want access to the expanding IBM software world without buying an IBM-badged machine. Also this week: IBM and Eagle Settle Firmware Copyright Fight · Software Industry Comes Into Its Own · PC Magazine Pits Apple Experience Against IBM Momentum.</description>
-    </item>
-    <item>
-      <title>Week of February 13-19, 1984 — IBM Packs the PC into a 30-Pound Suitcase</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-02-13</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-13</guid>
-      <pubDate>Sat, 22 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The $4,225 Portable Personal Computer answers Compaq with PC/XT compatibility, twin floppy drives and a built-in amber screen. IBM entered the suitcase-computer contest on February 16 with the Portable Personal Computer model 5155, putting the familiar IBM PC architecture into a transportable case. Contemporary coverage made the competitive target plain: Compaq had proved that business buyers wanted a machine they could carry between offices without leaving their software behind. Also this week: Sinclair Sets a $499 American Course for the QL · CBS, IBM and Sears Bet on a Videotex Home · Coleco Courts Publishers for Adam “Best Of” Albums.</description>
-    </item>
-    <item>
-      <title>Week of February 6-12, 1984 — IBM Compatibility Becomes the Industry’s New Battleground</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-02-06</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-06</guid>
-      <pubDate>Fri, 21 Aug 2026 12:00:00 GMT</pubDate>
-      <description>An open hardware architecture, protected firmware and a vast software library turn “compatible” into the most valuable—and confusing—word in personal computing. The flood of machines claiming kinship with the IBM Personal Computer has made compatibility one of the microcomputer trade’s most important and confusing questions. IBM published enough of the PC’s hardware design to invite expansion cards and outside development, but the machine’s basic input-output system remains copyrighted software. A look-alike case and an 8088-family processor alone do not make a true substitute. Also this week: Coleco Restarts Adam Lines After a Gentleman’s C · “Best Of” Game Albums Promised for Adam · One Printer Attempts Double Duty.</description>
-    </item>
-    <item>
-      <title>Week of January 30-February 5, 1984 — Macintosh Meets the Public in Boston</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-01-30</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-01-30</guid>
-      <pubDate>Thu, 20 Aug 2026 12:00:00 GMT</pubDate>
-      <description>Steve Jobs brings Apple’s new graphical computer before the Boston Computer Society for its first public demonstration. BOSTON, Jan. 30 — Six days after Apple formally introduced Macintosh, Steve Jobs carried the compact computer onto the Boston Computer Society stage for what the society’s founder remembers as its first public showing. Before a room of experienced personal-computer users, the machine’s windows, icons and mouse moved from advertising promise to a working demonstration. Also this week: IBM Takes the Clone War to Court · Lisa 2 Becomes Macintosh’s Elder Sibling · MacWrite and MacPaint Make the Desktop Tangible · Computer Games Ask What Comes After the Crash.</description>
     </item>
   </channel>
 </rss>
