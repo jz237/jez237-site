@@ -1,7 +1,8 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {STEPS,createTutorial,stepTutorial,skipTutorial,progress} from '../tutorial.js';
+import {STEPS,LESSONS,lessonById,createTutorial,stepTutorial,skipTutorial,skipStep,progress,lessonSummary,allStepLines,stepClip} from '../tutorial.js';
+const base=(o)=>({phase:'idle',casts:0,technique:'idle',polarized:false,rigId:'finesse',onBottom:false,holder:false,anchored:true,lureCam:false,dt:1,events:[],...o});
 test('the first morning advances only when the player has done each thing, and retries a lost fish',()=>{
- const t=createTutorial();const snap=(o)=>({phase:'idle',casts:0,technique:'idle',polarized:false,dt:1,events:[],...o});
+ const t=createTutorial();const snap=base;
  assert.equal(stepTutorial(t,snap()).id,'cast');
  assert.equal(stepTutorial(t,snap({casts:1,phase:'flight'})).id,'work','a cast in the air moves on');
  for(let i=0;i<2;i++)assert.equal(stepTutorial(t,snap({casts:1,phase:'retrieve',technique:'dead stick'})).id,'work','dead sticking is not working it');
@@ -17,4 +18,64 @@ test('the first morning advances only when the player has done each thing, and r
  const end=stepTutorial(t,snap({casts:3,phase:'idle',polarized:true,events:['released']}));assert.equal(end.finished,true);assert.equal(progress(t).done,true);assert.ok(t.log.filter(l=>l.did).length>=STEPS.length,'every step was done at least once');
  const s=createTutorial();skipTutorial(s);assert.equal(stepTutorial(s,snap()).finished,true);assert.equal(progress(s).skipped,true);
  for(const st of STEPS)assert.ok(st.text.length>20&&typeof st.done==='function');
+});
+test('every lesson has a spoken line, a keyboard caption and a touch caption per step, and a unique clip',()=>{
+ assert.equal(LESSONS.length,5);const files=new Set();
+ for(const l of LESSONS){assert.ok(l.title&&l.blurb&&l.minutes>0&&l.setup.rig&&l.setup.hour>0);assert.ok(l.steps.length>=5);
+  for(const s of l.steps){assert.ok(s.say.length>12&&s.text.length>12&&s.touch.length>12,l.id+'/'+s.id);assert.equal(typeof s.done,'function');if(s.retryOn)assert.equal(typeof s.retryOn,'function');if(s.retryTo)assert.ok(l.steps.some(x=>x.id===s.retryTo),'retryTo exists');files.add(stepClip(l.id,s.id));}}
+ assert.equal(files.size,allStepLines().length,'one clip per step');assert.equal(allStepLines().length,LESSONS.reduce((a,l)=>a+l.steps.length,0));
+ assert.equal(lessonById('nope'),null);assert.equal(createTutorial('nope').lesson,'morning');
+});
+test('rigs lesson: tab through to topwater, walk the dog, float it, land and release',()=>{
+ const t=createTutorial('rigs');const s=base;
+ assert.equal(stepTutorial(t,s()).id,'tab');
+ assert.equal(stepTutorial(t,s({events:['rig'],rigId:'topwater'})).id,'topwater');
+ assert.equal(stepTutorial(t,s({rigId:'topwater'})).id,'walk','topwater already in hand moves straight on');
+ for(let i=0;i<2;i++)stepTutorial(t,s({rigId:'topwater',casts:1,phase:'retrieve',technique:'walking the dog'}));
+ assert.equal(stepTutorial(t,s({rigId:'topwater',casts:1,phase:'retrieve',technique:'walking the dog'})).id,'float');
+ assert.equal(stepTutorial(t,s({rigId:'float',casts:1})).id,'floatcast');
+ for(let i=0;i<4;i++)stepTutorial(t,s({rigId:'float',casts:2,phase:'retrieve',technique:'dead stick'}));
+ const r=stepTutorial(t,s({rigId:'float',casts:2,phase:'retrieve',technique:'dead stick'}));assert.equal(r.id,'floatbite','four seconds of leaving it alone');assert.equal(r.needsFish,true);
+ assert.equal(stepTutorial(t,s({rigId:'float',casts:2,phase:'idle',events:['lost']})).id,'floatcast','a lost fish goes back to the cast, not the rig change');
+ for(let i=0;i<5;i++)stepTutorial(t,s({rigId:'float',casts:3,phase:'retrieve',technique:'dead stick'}));
+ assert.equal(stepTutorial(t,s({rigId:'float',casts:3,phase:'landed',events:['landed']})).id,'floatrelease');
+ assert.equal(stepTutorial(t,s({rigId:'float',casts:3,events:['released']})).finished,true);
+});
+test('holder lesson: bottom on the bed, park, fish a second rod, answer the bell, land, release',()=>{
+ const t=createTutorial('holder');const s=base;
+ assert.equal(stepTutorial(t,s({rigId:'bottom'})).id,'bottomcast');
+ assert.equal(stepTutorial(t,s({rigId:'bottom',casts:1,phase:'retrieve',onBottom:true})).id,'park');
+ assert.equal(stepTutorial(t,s({rigId:'bottom',casts:1,holder:true,events:['parked']})).id,'second');
+ assert.equal(stepTutorial(t,s({rigId:'finesse',casts:1,holder:true,events:['rig']})).id,'second','a rig change without a cast is not fishing');
+ const r=stepTutorial(t,s({rigId:'finesse',casts:2,phase:'retrieve',technique:'straight retrieve',holder:true}));assert.equal(r.id,'bell');assert.equal(r.needsHolderBite,true);
+ assert.equal(stepTutorial(t,s({rigId:'bottom',casts:2,phase:'retrieve',events:['took_holder']})).id,'catfight');
+ assert.equal(stepTutorial(t,s({rigId:'bottom',casts:2,phase:'idle',events:['lost']})).id,'bottomcast','losing the cat starts the soak over');
+ assert.equal(stepTutorial(t,s({rigId:'bottom',casts:3,phase:'retrieve',onBottom:true})).id,'park');
+ stepTutorial(t,s({rigId:'bottom',casts:3,holder:true}));stepTutorial(t,s({rigId:'finesse',casts:4,phase:'retrieve',holder:true}));
+ assert.equal(stepTutorial(t,s({rigId:'bottom',casts:4,phase:'fight',events:['took_holder','hooked']})).id,'catfight');
+ assert.equal(stepTutorial(t,s({rigId:'bottom',casts:4,phase:'landed',events:['landed']})).id,'catrelease');
+ assert.equal(stepTutorial(t,s({rigId:'bottom',casts:4,events:['released']})).finished,true);
+});
+test('reading and moments lessons watch the map, anchor, lure cam, replay and photo mode events',()=>{
+ const t=createTutorial('reading');const s=(o)=>base({anchored:false,...o});
+ assert.equal(stepTutorial(t,s()).id,'lenses');assert.equal(stepTutorial(t,s({polarized:true})).id,'map');
+ assert.equal(stepTutorial(t,s({polarized:true,events:['map_open']})).id,'map','open is not enough');
+ assert.equal(stepTutorial(t,s({polarized:true,events:['map_close']})).id,'anchor');
+ assert.equal(stepTutorial(t,s({polarized:true,anchored:true})).id,'lurecam');
+ assert.equal(stepTutorial(t,s({polarized:true,anchored:true,casts:1,phase:'retrieve',lureCam:true,events:['lurecam']})).id,'lurecamback');
+ assert.equal(stepTutorial(t,s({polarized:true,anchored:true,casts:1,phase:'retrieve',lureCam:false})).finished,true);
+ const m=createTutorial('moments');
+ assert.equal(stepTutorial(m,base({rigId:'crank'})).id,'catch');
+ assert.equal(stepTutorial(m,base({rigId:'crank',casts:1,phase:'idle',events:['hooked','lost']})).id,'catch','a lost fish stays on the catch step');
+ assert.equal(stepTutorial(m,base({rigId:'crank',casts:2,phase:'landed',events:['hooked','landed']})).id,'replay');
+ assert.equal(stepTutorial(m,base({rigId:'crank',casts:2,phase:'landed',events:['replay_open']})).id,'replayback');
+ assert.equal(stepTutorial(m,base({rigId:'crank',casts:2,phase:'landed',events:['replay_close']})).id,'release');
+ assert.equal(stepTutorial(m,base({rigId:'crank',casts:2,events:['released']})).id,'photo');
+ assert.equal(stepTutorial(m,base({rigId:'crank',casts:2,events:['photo_open','photo_close']})).finished,true);
+});
+test('skipping a step moves on without marking the lesson skipped; the hub knows what is next',()=>{
+ const t=createTutorial('reading');skipStep(t);assert.equal(progress(t).id,'map');assert.equal(t.log[0].skipped,'lenses');
+ for(let i=0;i<10&&!t.done;i++)skipStep(t);assert.equal(t.done,true);assert.equal(t.skipped,false,'skipping through still counts as done');
+ const sum=lessonSummary({morning:true});assert.equal(sum.completed,1);assert.equal(sum.total,5);assert.equal(sum.next,'rigs');assert.equal(sum.rows[0].done,true);
+ assert.equal(lessonSummary({}).next,'morning');assert.equal(lessonSummary({morning:1,rigs:1,holder:1,reading:1,moments:1}).next,null);
 });

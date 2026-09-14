@@ -29,5 +29,14 @@ export function createVoice({base='./',volume=.8,enabled=true,now=()=>performanc
   a.onerror=()=>{failed++;synth(d.text);};
   return d;
  }
- return {say,state,setVolume(v){vol=Math.max(0,Math.min(1,v));},setEnabled(v){on=!!v;},stats:()=>({count:state.count,failed,synthUsed,log:state.log.slice(-12)}),preload(events){for(const ev of events)for(let i=0;i<(RAY[ev]||[]).length;i++)clip(lineFile(ev,i));}};
+ let pendingId=null;
+ function speak({id,text,file,seconds=null,priority=6,queued=false}){
+  if(!on||vol<=0)return null;if(queued&&pendingId!==id)return null;const t=now();const secs=seconds||Math.max(2,Math.min(12,.42*text.split(/\s+/).length));
+  if(t<state.busyUntil&&!queued){pendingId=id;setTimeout(()=>speak({id,text,file,seconds,priority,queued:true}),Math.max(0,(state.busyUntil-t)*1000+120));return null;}
+  pendingId=null;state.busyUntil=t+secs;state.busyPriority=priority;state.count++;state.log.push({t:+t.toFixed(2),event:id,n:0});if(state.log.length>60)state.log.shift();
+  if(current){try{current.pause();current.currentTime=0;}catch{}}
+  const a=clip(file);a.volume=vol;current=a;const p=a.play();if(p&&p.catch)p.catch(()=>{failed++;synth(text);});a.onerror=()=>{failed++;synth(text);};
+  return {event:id,text,file,seconds:secs};
+ }
+ return {say,speak,state,setVolume(v){vol=Math.max(0,Math.min(1,v));},setEnabled(v){on=!!v;},stats:()=>({count:state.count,failed,synthUsed,log:state.log.slice(-12)}),preload(events){for(const ev of events)for(let i=0;i<(RAY[ev]||[]).length;i++)clip(lineFile(ev,i));}};
 }
