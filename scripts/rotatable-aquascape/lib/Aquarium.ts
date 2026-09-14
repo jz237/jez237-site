@@ -382,13 +382,13 @@ export class Aquarium{
  private studyFov(){return this.studyView?Math.max(37,2*Math.atan(2.9/(10*this.host.clientWidth/this.host.clientHeight))*180/Math.PI):37;}
  get magnifierEnabled(){return this.lighting.lens.enabled;}
  private get studyView(){return this.teaching?.mode==='organisms'||this.teaching?.mode==='underground'||this.teaching?.mode==='water'&&this.teaching.step>0&&this.teaching.step<4;}
- view(name:string){this.follow(null);const dist=this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera);}
+ view(name:string){this.follow(null);const dist=this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera,this.host.offsetTop);}
  private resize(){
   const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;
   // Fit continuously across viewport shapes while retaining the user's zoom distance.
   const framingPosition=this.camera.position.clone().sub(this.controls.target).setLength(21.5).add(this.controls.target);
-  this.camera.fov=this.studyView?this.studyFov():aquariumFieldOfView(w,h,framingPosition);
-  if(this.targetCamera)this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(w,h,this.targetCamera);
+  this.camera.fov=this.studyView?this.studyFov():aquariumFieldOfView(w,h,framingPosition,this.host.offsetTop);
+  if(this.targetCamera)this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(w,h,this.targetCamera,this.host.offsetTop);
   this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);this.moveLens(this.lighting.lens.center.x,1-this.lighting.lens.center.y);
   const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);
  }
@@ -425,7 +425,7 @@ export class Aquarium{
    // Keep the intermediate diagonal silhouette in view too. Preserve a deliberate
    // close-up while its camera distance eases back toward the selected preset.
    const fittingPosition=this.camera.position.clone().sub(this.controls.target).setLength(this.targetCamera.distanceTo(this.controls.target)).add(this.controls.target);
-   const required=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,fittingPosition);
+   const required=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,fittingPosition,this.host.offsetTop);
    this.camera.fov=Math.max(required,T.MathUtils.lerp(this.camera.fov,this.targetFov??required,ease));this.camera.updateProjectionMatrix();
    if(this.camera.position.distanceTo(this.targetCamera)<.02){this.camera.position.copy(this.targetCamera);this.camera.fov=this.targetFov??this.camera.fov;this.camera.updateProjectionMatrix();this.targetCamera=null;this.targetFov=null;}
   }

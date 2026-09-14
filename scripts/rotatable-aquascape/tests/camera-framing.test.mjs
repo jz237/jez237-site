@@ -4,12 +4,13 @@ import * as T from 'three';
 import {aquariumFrames,aquariumTarget,aquariumFieldOfView,framingSpace,orbitToward} from '../lib/CameraFraming.ts';
 
 test('tank, stand and lamp fit front, angled and side presets across screen sizes',()=>{
- for(const [width,height] of [[360,640],[390,844],[320,740],[720,1280],[1116,1238],[1920,1080],[844,390]])for(const angle of [0,.47,1.28]){
+ for(const [width,height] of [[360,640],[390,844],[320,740],[720,1280],[1116,1238],[1920,1080],[844,390]])for(const angle of [0,.47,1.28])for(const reservedHeader of [0,125]){
   const position=new T.Vector3(Math.sin(angle)*21.5,angle===0?2.45:7.5,Math.cos(angle)*21.5);
-  const fov=aquariumFieldOfView(width,height,position),camera=new T.PerspectiveCamera(fov,width/height,.1,100);
+  const viewportHeight=height-reservedHeader;
+  const fov=aquariumFieldOfView(width,viewportHeight,position,reservedHeader),camera=new T.PerspectiveCamera(fov,width/viewportHeight,.1,100);
   assert.ok(Number.isFinite(fov)&&fov>10&&fov<110);
   camera.position.copy(position);camera.lookAt(aquariumTarget);camera.updateMatrixWorld();
-  const space=framingSpace(height);
+  const space=framingSpace(viewportHeight,reservedHeader);
   for(const frame of aquariumFrames)for(const x of [frame.min.x,frame.max.x])for(const y of [frame.min.y,frame.max.y])for(const z of [frame.min.z,frame.max.z]){
    const p=new T.Vector3(x,y,z).project(camera);
    assert.ok(Math.abs(p.x)<=space.horizontal+1e-6,`horizontal clipping at ${width}x${height}`);
