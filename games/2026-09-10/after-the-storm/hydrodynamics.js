@@ -1,3 +1,4 @@
+import {landingResponse,airTrim} from './landing-response.js';
 // Distributed pressure model, SI units, integrated at fixed simulation steps.
 // Twelve contact patches create lift and moments independently. No force pulls
 // the hull toward the water when separated from it.
@@ -32,12 +33,13 @@ export function stepHydro(h,craft,time,dt,surface,{dampen=false,lean=0,dive=fals
  const forwardWater=(heights[9]+heights[10]+heights[11])/3,aftWater=(heights[0]+heights[1]+heights[2])/3;
  const portWater=(heights[0]+heights[3]+heights[6]+heights[9])/4,starWater=(heights[2]+heights[5]+heights[8]+heights[11])/4;
  // Rotational inertia and distributed pressure; rider lean supplies a bounded moment.
- const turn=craft.turn||0;pitchMoment+=lean*.6*wet;rollMoment-=turn*planing*1.5*wet;
+ const turn=craft.turn||0;pitchMoment+=lean*.6*wet;if(wet<.05&&h.launched)pitchMoment+=airTrim(lean,h.pitch,h.pitchVelocity);rollMoment-=turn*planing*1.5*wet;
  h.pitchVelocity+=(pitchMoment/1.6-h.pitchVelocity*(wet*(dampen?5.4:3.8)+.15))*dt;
  h.rollVelocity+=(rollMoment/.46-h.rollVelocity*(wet*(dampen?7:5.6)+.18))*dt;
  h.pitch=clamp(h.pitch+h.pitchVelocity*dt,-1.15,1.15);h.roll=clamp(h.roll+h.rollVelocity*dt,-1.25,1.25);
  h.airborne=wet<.05&&h.y>water+.28;if(h.airborne)h.launched=true;h.airTime=h.airborne?h.airTime+dt:0;
  if(h.y<water-.6&&h.diveRemaining===0){h.y=water-.6;h.vy=Math.max(h.vy,h.waterVelocity*.25);}
+ if(landing){h.entry=landingResponse(h,craft,{bowSlope:-(forwardWater-aftWater)/2.4,sideSlope:(starWater-portWater)/.84,dampen});h.pitchVelocity+=h.entry.kick;h.landingStyle=h.entry.style;}
  h.drag=slamming*.007+wet*planing*.035;h.previousSpeed=speed;
  const compressTarget=clamp((h.load-1)*.14+h.impact*.045,0,.38);
  h.compressionVelocity+=((compressTarget-h.compression)*95-h.compressionVelocity*15)*dt;h.compression=clamp(h.compression+h.compressionVelocity*dt,0,.38);
