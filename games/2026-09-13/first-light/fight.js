@@ -3,10 +3,11 @@
 // slack during a head-shake or jump lets the hook fall out, and overload past the weakest link
 // (a reaction window of about a second in the red) breaks it. Side pressure turns a running fish.
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+import {abradeRate,strengthFactor} from './snag.js';
 export function createFight({fish,rig,random}){
  // fish: {length, species, x,y,z}; rig: {dragKg, weakestKg, rodPower, lineStretch}
  const kg=fish.species.weightKg(fish.length);
- return {fish,rig,random,kg,state:'RUN',stateTime:0,stamina:1,hookHold:1,overload:0,tension:0,pull:0,runHeading:random()*6.283,jumpT:0,jumpY:0,lost:null,landed:false,elapsed:0,runsDone:0,maxTension:0,peakPullKg:0};
+ return {fish,rig,random,kg,state:'RUN',stateTime:0,stamina:1,hookHold:1,overload:0,abrasion:rig.abrasion||0,tension:0,pull:0,runHeading:random()*6.283,jumpT:0,jumpY:0,lost:null,landed:false,elapsed:0,runsDone:0,maxTension:0,peakPullKg:0};
 }
 // input: {reeling:0..1, sidePressure:-1..1 (rod swept toward the fish's run side), rodUp:0..1}
 // geom: {distToAngler, lineOut, depth}
@@ -41,7 +42,9 @@ export function stepFight(ft,dt,input,geom){
  // paper mouth: a crappie horsed at more than 1.5x its own weight tears the hook out
  if(ft.fish.species&&ft.fish.species.paperMouth&&tension>ft.kg*1.5)ft.hookHold=clamp(ft.hookHold-dt*.7,0,1);
  if(ft.hookHold<=0){ft.lost='threw the hook';ft.state='LOST';}
- const overloaded=tension>ft.rig.weakestKg*.92;
+ // wood frays the line while the fish runs through it; a frayed line breaks below its rating
+ if(geom&&geom.nearWood)ft.abrasion=clamp(ft.abrasion+abradeRate(geom.nearWood,true)*dt,0,1);
+ const overloaded=tension>ft.rig.weakestKg*.92*strengthFactor(ft.abrasion);
  ft.overload=clamp(ft.overload+(overloaded?dt:-dt*1.5),0,2);
  if(ft.overload>=1){ft.lost='broke off';ft.state='LOST';}
  // teeth: an esocid on anything but a wire leader saws through the line at species.teeth per second

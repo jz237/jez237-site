@@ -4,6 +4,13 @@ import {SPECIES} from '../species.js';
 function rng(seed){return()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};}
 const rig=(over={})=>({dragKg:2.2,weakestKg:3.6,rodPower:.35,lineStretch:.12,retrieveMs:1.05,...over});
 function run(ft,controller,seconds=90){const geom={distToAngler:18,lineOut:20,depth:1};let t=0;while(t<seconds&&!ft.lost&&!ft.landed){const out=stepFight(ft,1/60,controller(ft,geom),geom);geom.distToAngler=Math.max(1,Math.min(geom.lineOut,geom.distToAngler+(out.state==='RUN'?out.speed*(Math.cos(out.heading)>.55?-1:1):-out.speed*.4)*(1/60)));t+=1/60;}return {t,geom};}
+test('wood frays the line during a fight and a frayed line breaks below its rating',()=>{
+ const ft=createFight({fish:{length:.45,species:SPECIES.largemouth},rig:rig(),random:rng(3)});const geom={distToAngler:12,lineOut:14,depth:1,nearWood:'laydown'};
+ for(let i=0;i<60*20;i++)stepFight(ft,1/60,{reeling:.3,sidePressure:0,rodUp:.6},geom);assert.ok(ft.abrasion>.9,'abrasion '+ft.abrasion);
+ let bf=0,bb=0;for(let s=1;s<=12;s++){const a=createFight({fish:{length:.5,species:SPECIES.largemouth},rig:rig(),random:rng(s)});run(a,()=>({reeling:.7,sidePressure:0,rodUp:.8}),60);if(a.lost==='broke off')bf++;
+  const b=createFight({fish:{length:.5,species:SPECIES.largemouth},rig:rig({abrasion:.9}),random:rng(s)});run(b,()=>({reeling:.7,sidePressure:0,rodUp:.8}),60);if(b.lost==='broke off')bb++;}
+ assert.ok(bb>bf,'frayed breaks more: '+bb+' vs '+bf);
+});
 test('a competent angler lands a 2 lb bass on the finesse rig without breaking off',()=>{
  let landed=0,lost=[];for(let seed=1;seed<=10;seed++){const ft=createFight({fish:{length:.40,species:SPECIES.largemouth},rig:rig(),random:rng(seed)});
   run(ft,(ft,g)=>({reeling:ft.state==='RUN'?.15:ft.state==='JUMP'?.9:.9,sidePressure:ft.state==='RUN'?1:0,rodUp:ft.state==='JUMP'?0:.8}),140);
