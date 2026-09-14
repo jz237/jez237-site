@@ -18,6 +18,7 @@ export function mountHud(handlers){
  for(const b of document.querySelectorAll('[data-skip]'))b.onclick=()=>handlers.onSkip(Number(b.dataset.skip));
  $('lenses').onclick=()=>handlers.onLenses();
  $('menu').onclick=()=>handlers.onMenu();
+ $('mapBtn').onclick=()=>handlers.onMap();$('mapBack').onclick=()=>handlers.onMapBack();
  $('rigCard').onclick=()=>handlers.onRig();$('journalBtn').onclick=()=>handlers.onGallery();$('cameraBtn').onclick=()=>handlers.onPhotoMode();$('helpBtn').onclick=()=>document.body.classList.toggle('showKeys');
  $('rigBtn').onclick=()=>handlers.onRig();
  $('ccRelease').onclick=()=>handlers.onRelease();
