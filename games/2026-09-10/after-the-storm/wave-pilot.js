@@ -1,3 +1,4 @@
+import {encounterInput} from './race-encounters.js';
 const clamp=(x,a,b)=>Math.max(a,Math.min(b,x));
 // Compare small, legal changes to a straight racing line. No position, buoy
 // progress or launch force is ever injected by this controller.
@@ -20,12 +21,12 @@ export function wavePilotInput(s,r,base,surface){
  const g=s.course.gates[r.next];
  if(s.seaState!=='surf'||!['race','championship'].includes(s.mode)||r.rampPlan||r.onIce||r.wipeout||r.out||r.hydro.airborne||r.speed<12||Math.abs(base.steer||0)>.25||g.channel||g.approach||s.course.requiredPassage||s.course.iceSheets?.length||Math.hypot(g.x-r.x,g.z-r.z)<42)return base;
  if((s.course.ramps||[]).some(p=>Math.hypot(p.x-r.x,p.z-r.z)<80)||(s.course.crossbars||[]).some(p=>Math.hypot(p.x-r.x,p.z-r.z)<70))return base;
+ const clear=(x,z)=>s.course.ground(x,z)<-2&&(x-g.x)*g.tx+(z-g.z)*g.tz< -8&&!(s.course.rocks||[]).some(p=>Math.hypot(p.x-x,p.z-z)<p.r+5);
  if(!r.waveReading||s.time-r.waveReading.time>.25){
-  const clear=(x,z)=>s.course.ground(x,z)<-2&&(x-g.x)*g.tx+(z-g.z)*g.tz< -8&&!(s.course.rocks||[]).some(p=>Math.hypot(p.x-x,p.z-z)<p.r+5);
   const reading=readWaveLanes(r,s.time,surface,clear);
   r.waveReading={...reading,time:s.time,decisions:(r.waveReading?.decisions||0)+1};
  }
  const q=r.waveReading;if(!Number.isFinite(q.cost))return base;
  const steer=clamp((base.steer||0)+q.offset*.025,-1,1);
- return {...base,steer,throttle:q.launch?base.throttle:(base.throttle||0)*(q.crest>.20?.88:1),lean:q.launch?-.12:q.crest>.14?.20:base.lean,dampen:true};
+ return encounterInput(s,r,{...base,steer,throttle:q.launch?base.throttle:(base.throttle||0)*(q.crest>.20?.88:1),lean:q.launch?-.12:q.crest>.14?.20:base.lean,dampen:true},clear);
 }

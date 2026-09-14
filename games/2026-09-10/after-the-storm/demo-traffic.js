@@ -16,6 +16,7 @@ export function demoTrafficInput(s,r,input){
   const projectedSide=side+closingSide*Math.min(.7,ahead/Math.max(4,r.speed));
   // A clear adjacent line permits a pass; a crossing or lead ski gets room.
   if(Math.min(Math.abs(side),Math.abs(projectedSide))>6.5)continue;
+  if(c.passIntent&&ahead>12&&Math.abs(projectedSide)>Math.abs(side)-.5)continue;
   const leaderSpeed=Math.max(0,q.vx*fx+q.vz*fz),gap=9+r.speed*.8;
   limit=Math.min(limit,Math.max(3,leaderSpeed+(ahead-gap)*.85));
  }

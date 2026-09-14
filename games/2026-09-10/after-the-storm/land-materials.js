@@ -47,14 +47,17 @@ ${sampling}`);
 vec3 ln=normalize(landN),tw=pow(abs(ln),vec3(5.));tw/=max(dot(tw,vec3(1.)),.001);
 float macro=landNoise(landP.xz*.041)*.65+landNoise(landP.xz*.113)*.35;
 float slope=1.-abs(ln.y),altitude=landP.y-seaLevel;
+float boundary=landNoise(landP.xz*.31)*.7+landNoise(landP.xz*1.7)*.3;
 float stoneWeight=clamp(smoothstep(.065,.36,slope)+smoothstep(1.,7.,altitude+macro*5.)*.58,0.,1.);
-float plantWeight=smoothstep(2.,8.,altitude+macro*4.)*(1.-smoothstep(.10,.32,slope));
+float plantWeight=smoothstep(1.7,7.,altitude+macro*3.+(boundary-.5)*2.4)*(1.-smoothstep(.10,.32,slope));
 vec3 sandUV=landP/9.,rockUV=landP/13.,soilUV=landP/7.;
 vec3 sandy=triColor(sandColor,sandUV,tw)*mix(vec3(1.),landSand,.28);
 vec3 rocky=triColor(rockColor,rockUV,tw)*mix(vec3(1.),landRock,.15);
 vec3 grassy=triColor(soilColor,soilUV,tw)*mix(vec3(1.),landGrass,.68);
 vec3 earth=mix(mix(sandy,rocky,stoneWeight),grassy,plantWeight)*(.80+macro*.33);
-earth=mix(earth,vec3(.76,.86,.89)*(0.85+macro*.2),snowCover*smoothstep(.15,.8,ln.y));
+float fringe=4.*plantWeight*(1.-plantWeight)*(1.-snowCover);
+ earth*=1.-fringe*smoothstep(.55,.8,boundary)*.18;
+ earth=mix(earth,vec3(.76,.86,.89)*(0.85+macro*.2),snowCover*smoothstep(.15,.8,ln.y));
 vec2 shoreUV=(landP.xz-shoreCenter)/shoreSpan+.5;
 float shoreInside=step(0.,shoreUV.x)*step(shoreUV.x,1.)*step(0.,shoreUV.y)*step(shoreUV.y,1.);
 vec2 beachHistory=texture2D(shoreMap,shoreUV).ba*shoreInside;
@@ -91,7 +94,7 @@ vec3 surfaceN=normalize(mix(mix(triNormal(sandNormal,sandUV,tw,ln),triNormal(roc
 surfaceN=normalize(surfaceN+vec3(.9,0.,3.6)*sin(bedPhase)*.024*bedMask);
 normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7)*(1.-film*.35))),0.)).xyz);`);
  };
- mat.customProgramCacheKey=()=>`photographic-coast-backwash-v5-${palette.grass??0}`;
+ mat.customProgramCacheKey=()=>`photographic-coast-fringe-v6-${palette.grass??0}`;
 }
 
 export function rockMaterial(){
