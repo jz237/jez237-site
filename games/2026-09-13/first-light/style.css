@@ -38,3 +38,6 @@ body.touch-active footer{display:none}body.touch-active .timebar{display:none}bo
 
 #sonar{position:fixed;left:34px;bottom:196px;width:240px;height:96px;border:1px solid #e3c18e55;border-radius:4px;background:#08201d;display:none;z-index:4;image-rendering:pixelated}#sonar.show{display:block}
 @media(max-width:800px){#sonar{left:18px;bottom:auto;top:300px;width:160px;height:64px}}
+
+/* the second rod: holder status under the tackle line, blinking on a take */
+#holderLine{display:none;margin-top:.25rem;font-size:.78rem;color:#d7e3c9}#holderLine.show{display:block}#holderLine.alert{color:#ffe36b;font-weight:600;animation:holderBlink .6s steps(2,start) infinite}@keyframes holderBlink{to{visibility:hidden}}

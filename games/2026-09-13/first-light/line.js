@@ -25,7 +25,7 @@ export function stepLine(line,dt,env){
     damp=Math.exp(-dt*(4+L.drag*3));
     const depth=sy-line.y[i];
     if(L.buoyancy==='float'){ay=depth>.015?18+depth*30:0;}
-    else if(L.buoyancy==='sink'){ay=-g*.35;}
+    else if(L.buoyancy==='sink'){ay=-g*(L.circle?.95:.35);} // a sinker rig falls near its rated speed; a worm drifts down
     else if(L.buoyancy==='crank'){const target=env.diveTarget||0;ay=Math.max(-25,Math.min(25,-10*(target-depth)));}
     else ay=0;
    }else{damp=Math.exp(-dt*.4);ay=-g;if(env.wind){ax+=env.wind.x*.6;az+=env.wind.z*.6;}}
@@ -51,7 +51,7 @@ export function stepLine(line,dt,env){
    const sx=dx*diff,sy=dy*diff,sz=dz*diff;
    line.x[i]+=sx*wi;line.y[i]+=sy*wi;line.z[i]+=sz*wi;line.x[j]-=sx*wj;line.y[j]-=sy*wj;line.z[j]-=sz*wj;
   }
-  for(let i=1;i<n;i++){const bed=env.bed(line.x[i],line.z[i])+.04;if(line.y[i]<bed){line.y[i]=bed;if(i===last)line.lureOnBottom=true;}else if(i===last)line.lureOnBottom=false;}
+  for(let i=1;i<n;i++){const bed=env.bed(line.x[i],line.z[i])+.04;if(line.y[i]<bed){line.y[i]=bed;if(i===last)line.lureOnBottom=true;}else if(i===last&&line.y[i]>bed+.03)line.lureOnBottom=false;} // sticky: resting exactly on the bed still counts
  }
  const dx=line.x[last]-line.x[0],dy=line.y[last]-line.y[0],dz=line.z[last]-line.z[0];const straight=Math.hypot(dx,dy,dz);
  line.tension=clamp((straight/Math.max(.1,line.lineOut)-.9)/.1,0,1);
