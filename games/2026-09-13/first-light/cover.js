@@ -17,7 +17,7 @@ export function makeCover(scene,bathy){
   box(0,0,len/2,2.2,.12,len,wood,g);for(let i=.3;i<len;i+=.32)box(0,.07,i,2.2,.02,.05,darkWood,g);
   for(const side of [-1,1])for(let i=1;i<=len;i+=4){const px=side*.95,pz=i;const wx=bank.x+Math.sin(yaw)*pz+Math.cos(yaw)*px,wz=bank.z+Math.cos(yaw)*pz-Math.sin(yaw)*px;const bed=bathy.height(wx,wz);const h=.9-bed;cylinder(px,-.45+bed+h/2,pz,.13,h,darkWood,g);cylinder(px,.55,pz,.07,.9,darkWood,g);}
   box(0,.36,len-.15,2.4,.06,.3,darkWood,g);
-  features.push({type:'dock',x:(bank.x+out.x)/2,z:(bank.z+out.z)/2,r:9});}
+  features.push({type:'dock',x:(bank.x+out.x)/2,z:(bank.z+out.z)/2,r:9,yaw,len,bank:{x:bank.x,z:bank.z},deckY:.51});}
  // --- laydowns: fallen trees from the bank into the water
  for(const l of COVE_FEATURES.laydowns){const base=shorePoint(l.u,l.side,-3),tip=shorePoint(l.u,l.side,13);const s=new Shape();
   const y0=coveHeight(base.x,base.z)+.3,y1=Math.max(-2.2,coveHeight(tip.x,tip.z)+.15);
