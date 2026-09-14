@@ -36,8 +36,8 @@ export function makeBlenderRider(parent,{color=null,riderIndex=0}={}){
   // Stunt callers do not supply a separate steering angle.
   const movement=riderMotion(motionMemory,time,turn,{...motion,steering:motion.steering??turn*.3});
   const p=riderPose(pose,time,movement.turn,movement);root.rotation.y=p.yaw;
-  root.userData.riderMotion={lean:movement.turn,compression:movement.compression,forward:movement.forwardShift,wetness:movement.wetness};
-  for(const name of ['Skin','Neoprene','Stretch panels','Impact foam'])if(materials[name])materials[name].roughness=materials[name].userData.dryRoughness-movement.wetness*.13;
+  root.userData.riderMotion={lean:movement.turn,compression:movement.compression,forward:movement.forwardShift,wetness:movement.wetness,steering:movement.steering};
+  for(const name of ['Skin','Neoprene','Stretch panels','Impact foam'])if(materials[name])materials[name].roughness=materials[name].userData.dryRoughness-movement.wetness*.21;
   for(const [name,[a,b]] of Object.entries(p.targets)){
    const g=groups[name];start.fromArray(a);end.fromArray(b);direction.subVectors(end,start);const length=direction.length();
    g.position.copy(start);g.quaternion.setFromUnitVectors(up,direction.normalize());g.scale.set(1,length/asset.meta.bones[name].length,1);

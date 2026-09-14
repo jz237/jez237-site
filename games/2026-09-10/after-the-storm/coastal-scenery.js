@@ -12,8 +12,8 @@ class Shape {
   const av=new T.Vector3(...a),bv=new T.Vector3(...b),axis=bv.clone().sub(av),side=new T.Vector3(Math.cos(angle),.12,Math.sin(angle)).multiplyScalar(width);
   const mid=av.clone().addScaledVector(axis,.48),ridge=mid.clone().add(new T.Vector3(0,width*.22,0));
   const l=mid.clone().add(side),r=mid.clone().sub(side);
-  this.tri(a,l.toArray(),ridge.toArray(),shade);this.tri(a,ridge.toArray(),r.toArray(),shade*.87);
-  this.tri(l.toArray(),b,ridge.toArray(),shade*.94);this.tri(ridge.toArray(),b,r.toArray(),shade*.79);
+  this.tri(a,l.toArray(),ridge.toArray(),shade,[[.5,0],[0,.48],[.5,.48]]);this.tri(a,ridge.toArray(),r.toArray(),shade*.87,[[.5,0],[.5,.48],[1,.48]]);
+  this.tri(l.toArray(),b,ridge.toArray(),shade*.94,[[0,.48],[.5,1],[.5,.48]]);this.tri(ridge.toArray(),b,r.toArray(),shade*.79,[[.5,.48],[.5,1],[1,.48]]);
  }
  tube(a,b,r1,r2,segments=7){
   const av=new T.Vector3(...a),bv=new T.Vector3(...b),axis=bv.clone().sub(av).normalize(),side=new T.Vector3(1,0,0);
@@ -34,8 +34,8 @@ function tree(kind,seed){
  if(kind==='palm'){
   const top=new T.Vector3(.8,11.2,.3);
   for(let i=0;i<14;i++){const t=i/14,u=(i+1)/14;wood.tube([.8*t*t,11.2*t,.3*t],[.8*u*u,11.2*u,.3*u],.26-t*.11,.26-u*.11,9);}
-  for(let j=0;j<16;j++){
-   const a=j*2.399+(random()-.5)*.25,len=4.2+random()*1.8,down=j<4?-.4:.6;
+  for(let j=0;j<20;j++){
+   const a=j*2.399+(random()-.5)*.25,len=(j<4?2.4:4.2)+random()*1.8,down=j<4?-1.6:.4+random()*.8;
    const path=t=>top.clone().add(new T.Vector3(Math.cos(a)*len*t,Math.sin(t*Math.PI)*1.3-t*t*(1.9+down),Math.sin(a)*len*t));
    for(let k=0;k<24;k++){
     const t=k/24,u=(k+1)/24,p=path(t),q=path(u);wood.tube(p.toArray(),q.toArray(),.045*(1-t)+.006,.045*(1-u)+.006,4);
@@ -64,9 +64,9 @@ function tree(kind,seed){
   wood.tube([0,0,0],[.3,6.1,.1],.38,.06,9);
   for(let j=0;j<18;j++){
    const a=j*2.399,y=2.7+random()*3.5,r=1.3+random()*1.3,end=[Math.cos(a)*r,y+1.3,Math.sin(a)*r];wood.tube([.2,y-1.3,0],end,.10,.014,6);
-   for(let k=0;k<40;k++){
+   for(let k=0;k<60;k++){
     const az=random()*Math.PI*2,rad=Math.sqrt(random())*1.5,c=[end[0]+Math.cos(az)*rad,end[1]+(random()-.5)*1.8,end[2]+Math.sin(az)*rad];
-    leaf.leaf(c,[c[0]+Math.cos(az)*.76,c[1]+.15,c[2]+Math.sin(az)*.76],.25,az+Math.PI/2,.65+random()*.4);
+    leaf.leaf(c,[c[0]+Math.cos(az)*.54,c[1]+(random()-.3)*.75,c[2]+Math.sin(az)*.54],.18,az+Math.PI/2,.65+random()*.4);
    }
   }
  }
@@ -94,6 +94,16 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
  // Leaf flutter is modest: movement follows the same strengthening weather as the water.
  function foliage(color,flex){const m=new T.MeshStandardMaterial({color,roughness:.86,side:T.DoubleSide,vertexColors:true});wind(m,flex);materials.push(m);return m;}
  const palmMat=foliage(0x66813d,.22),pineMat=foliage(0x415c38,.13),broadMat=foliage(0x657c39,.22),grassMat=foliage(0x8b9152,1.1);
+ // Continuous leaf coordinates carry a midrib, angled veins, waxy highlights
+ // and subtle colour variation instead of flat green polygons.
+ for(const m of [palmMat,broadMat]){const before=m.onBeforeCompile;m.onBeforeCompile=s=>{before(s);s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec2 leafUV;').replace('#include <begin_vertex>','#include <begin_vertex>\nleafUV=uv;');s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nvarying vec2 leafUV;').replace('#include <color_fragment>',`#include <color_fragment>
+ float midrib=exp(-pow((leafUV.x-.5)*55.,2.));
+ float veins=pow(.5+.5*cos((leafUV.y-abs(leafUV.x-.5)*.65)*100.),12.);
+ float mottling=.5+.5*sin(leafUV.y*23.+sin(leafUV.x*31.));
+ diffuseColor.rgb*=mix(vec3(.64,.78,.42),vec3(1.16,1.08,.76),mottling*.45+leafUV.y*.25);
+ diffuseColor.rgb+=vec3(.07,.085,.025)*(midrib+veins*.45);`).replace('#include <roughnessmap_fragment>',`#include <roughnessmap_fragment>
+ roughnessFactor=.53+veins*.12;`);};m.customProgramCacheKey=()=> 'veined-coastal-foliage-'+m.color.getHex();}
+
  function instances(g,m,points){
   geometries.push(g);if(!points.length)return;
   // Spatial batches let small devices discard distant groves before touching water.

@@ -1,3 +1,4 @@
+import {cloudGLSL} from './weather-light.js';
 import * as T from './vendor/three.module.js';
 
 // Periodic spectral slope texture. Mipmapping removes subpixel shimmer at distance.
@@ -11,6 +12,7 @@ const data=new Uint8Array(N*N*4);for(let i=0;i<N*N;i++){data[i*4]=Math.round(T.M
 export const waterDetail=new T.DataTexture(data,N,N,T.RGBAFormat);waterDetail.wrapS=waterDetail.wrapT=T.RepeatWrapping;waterDetail.minFilter=T.LinearMipmapLinearFilter;waterDetail.magFilter=T.LinearFilter;waterDetail.generateMipmaps=true;waterDetail.needsUpdate=true;
 
 export const waterFragment=`
+${cloudGLSL}
 uniform sampler2D refraction,reflection,depthMap,detailMap,foamMap;uniform vec2 foamCenter;uniform float foamSpan;
 uniform float night;uniform vec2 viewportOrigin,viewportSize;
 uniform sampler2D terrainMap;uniform float terrainSpan,customTerrain;
@@ -60,19 +62,20 @@ void main(){
  }
  // Broad wave-face lighting is intentionally stronger than capillary detail:
  // reveal the existing displaced troughs and crests at racing distance.
+ float cloudLight=cloudVisibility(worldP);
  float faceLight=smoothstep(-.16,.22,-dot(surface.yz,sun.xz));
- col*=.76+.40*faceLight;
+ col*=(.76+.40*faceLight)*mix(.70,1.,cloudLight);
  col+=vec3(.004,.026,.024)*smoothstep(.1,1.2,worldP.y-seaLevel)*faceLight*(1.-night);
  // Forward scattering through thinner, backlit crests gives water depth without
  // a uniform neon rim. It vanishes under thick storm cloud or at night.
  float backlight=pow(max(0.,dot(V,-sun)),4.),crest=clamp((worldP.y-seaLevel+.15)*.65,0.,1.);
- col+=vec3(.035,.23,.19)*backlight*crest*(1.-nv)*(.25+.75*max(0.,dot(N,sun)))*(1.-storm*.8)*(1.-night);
+ col+=vec3(.035,.23,.19)*backlight*crest*(1.-nv)*(.25+.75*max(0.,dot(N,sun)))*(1.-storm*.8)*(1.-night)*cloudLight;
  // Finite sun highlight with slope variance to soften distant glints and prevent aliasing.
  vec3 H=normalize(V+sun);float nh=max(0.,dot(N,H)),nl=max(0.,dot(N,sun));float variance=dot(dFdx(N),dFdx(N))+dot(dFdy(N),dFdy(N));
  float alpha2=roughness*roughness+min(.04,variance*.32);float denom=nh*nh*(alpha2-1.)+1.;float distribution=alpha2/(3.14159265*denom*denom);
  float smithV=2.*nv/(nv+sqrt(alpha2+(1.-alpha2)*nv*nv));float smithL=2.*nl/(nl+sqrt(alpha2+(1.-alpha2)*nl*nl));
  float spec=distribution*smithV*smithL*.0204/max(.02,4.*nv*nl);
- col+=vec3(1.,.80,.53)*min(12.,spec)*nl*2.4*(1.-storm*.88)*(1.-night*.97);
+ col+=vec3(1.,.80,.53)*min(12.,spec)*nl*2.4*cloudLight*(1.-storm*.88)*(1.-night*.97);
  float turbulence=noise(p*2.7+vec2(time*.07,-time*.04))*.6+noise(p*8.1-time*.025)*.4;
  vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float foam=history.r*smoothstep(.27,.76,turbulence)*.72,bubbles=history.g*.4;
  // Landing wash expands from the contact point and breaks apart, remaining in
@@ -99,13 +102,20 @@ void main(){
  float cap=breakingCrest*smoothstep(.40,.67,capPatch);
  float capLace=mix(smoothstep(.24,.65,turbulence),.72,smoothstep(55.,180.,dist));
  foam+=cap*capLace*.85;
+ // Aerated streaks spill from the crest down the lee face; large-scale height
+ // still comes entirely from the shared displacement and buoyancy model.
+ vec2 fallUV=p+surface.yz*(.7+history.r*1.2);
+ float spill=noise(fallUV*vec2(.7,3.8)-vec2(time*.22,time*.48));
+ float faceWash=history.r*smoothstep(.14,.65,steepness)*smoothstep(.47,.73,spill);
+ foam+=faceWash*.46;
+ col+=vec3(.018,.095,.068)*breakingCrest*backlight*(1.-fresnel)*cloudLight*(1.-night);
  // Subsurface aeration persists after the white surface foam disperses.
  col=mix(col,mix(vec3(.10,.32,.30),vec3(.055,.15,.17),storm),clamp(bubbles,0.,.65)*(1.-fresnel));
  float cells=texture2D(detailMap,p*1.9+drift-flow*.6).b;
  float cover=clamp(1.-exp(-foam*1.45),0.,.88);
- vec3 foamColor=mix(vec3(.78,.86,.85),vec3(.34,.43,.46),storm)*(.78+.22*cells+.12*max(0.,dot(N,sun)))*(1.-night*.72);
+ vec3 foamColor=mix(vec3(.78,.86,.85),vec3(.34,.43,.46),storm)*mix(.65,1.,cloudLight)*(.78+.22*cells+.12*max(0.,dot(N,sun)))*(1.-night*.72);
  col=mix(col,foamColor,cover);
- float fog=1.-exp(-dist*dist*.0000016*(1.+storm*3.));col=mix(col,mix(vec3(.50,.61,.63),vec3(.20,.28,.32),storm)*(1.-night*.8),fog);
+ float fog=1.-exp(-dist*dist*.0000016*(1.+storm*3.)-dist*.0006);col=mix(col,mix(vec3(.50,.61,.63),vec3(.20,.28,.32),storm)*(1.-night*.8),fog);
  gl_FragColor=vec4(col,1.);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
