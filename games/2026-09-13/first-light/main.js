@@ -4,7 +4,7 @@ import {makeSky,skyPalette} from './sky.js';
 import {makeLake,makeLakeBed,shared,skyColors} from './lake-surface.js';
 import {makeCover} from './cover.js';
 import {makeShoreScenery} from './shore-scenery.js';
-import {makeKayak} from './kayak.js';
+import {cedarTexture,makeKayak} from './kayak.js';
 import {createLook,lookDrag,lookStick,updateAnglerCamera} from './angler-camera.js';
 import {playerInput} from './player-input.js';
 import {mountTouchControls} from './touch-controls.js';
@@ -64,7 +64,7 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.40.1';
+export const VERSION='0.40.2';
 const coolShadow=new T.Color(.5,.48,.72);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
@@ -395,7 +395,23 @@ hud.setSettings(settings);applyAccess();setWeather(settings.weather);Object.assi
 hud.showMenu({});
 try{applyQuality(quality);warmShadows();step(.016);renderer.compile(scene,camera);render();$('start').disabled=false;$('start').textContent='Paddle out';requestAnimationFrame(frame);}catch(e){hud.error('The lake could not load: '+e.message);console.error(e);}
 
-// ?diag=1: a small readout for screenshots from devices we cannot attach to
+// ?diag=1: a readout plus a self-test for screenshots from devices we cannot attach to. Every two
+// seconds it renders one sphere per material family into a tiny target and reads the colour back,
+// renders the real kayak into a small target, and samples the live frame at the sky, the water and
+// the deck, so a black lake can be blamed on a material, a light or a pass from one screenshot.
 if(new URLSearchParams(location.search).get('diag')){const box=document.createElement('pre');box.id='diag';box.style.cssText='position:fixed;left:8px;bottom:8px;z-index:99;max-width:92vw;font:11px/1.35 monospace;color:#fff;background:rgba(0,0,0,.72);padding:8px 10px;border-radius:8px;white-space:pre-wrap;pointer-events:none';document.body.appendChild(box);const errs=[];const push=m=>{errs.push(String(m).slice(0,140));if(errs.length>4)errs.shift();};const ce=console.error.bind(console);console.error=(...a)=>{push(a.join(' '));ce(...a);};window.addEventListener('error',e=>push(e.message));window.addEventListener('unhandledrejection',e=>push('promise: '+(e.reason&&e.reason.message||e.reason)));
  const gl=renderer.getContext();const dbg=gl.getExtension('WEBGL_debug_renderer_info');const gpu=dbg?gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL):'(masked)';let glErrs=0;
- setInterval(()=>{let e;while((e=gl.getError()))glErrs++;const sm=sun.shadow.map;box.textContent=`First Light ${VERSION} · ${gpu}\ntier ${quality} · dpr ${renderer.getPixelRatio().toFixed(2)} · ${innerWidth}×${innerHeight} · float RT ${renderer.extensions.has('EXT_color_buffer_float')} · maxTex ${gl.getParameter(gl.MAX_TEXTURE_SIZE)}\nshadows ${renderer.shadowMap.enabled?['Basic','PCF','PCFSoft','VSM'][renderer.shadowMap.type]||renderer.shadowMap.type:'off'} map ${sm?sm.width+'² depthTex '+!!sm.depthTexture:'none'} · gl errors ${glErrs} · lum ${(()=>{try{return window.__FIRST_LIGHT.pixelStats().avgLum.toFixed(2);}catch{return '?';}})()}\n`+(errs.length?errs.join('\n'):'no console errors');},1000);}
+ // the probe: isolated lights, one sphere per material family
+ const pScene=new T.Scene();pScene.add(new T.HemisphereLight(0xffffff,0x334433,1.2));const pSun=new T.DirectionalLight(0xffffff,2.2);pSun.position.set(1,2,1.5);pScene.add(pSun);
+ const pCam=new T.PerspectiveCamera(40,1,.1,20);pCam.position.set(0,0,3.2);pCam.lookAt(0,0,0);
+ const hullMat=(()=>{let m=null;kayak.group.traverse(o=>{if(!m&&o.isMesh&&o.material&&o.material.isMeshPhysicalMaterial)m=o.material;});return m;})();
+ const probes={std:new T.MeshStandardMaterial({color:0x88aa66,roughness:.9}),phys:new T.MeshPhysicalMaterial({color:0xc9a26a,roughness:.35,clearcoat:.6}),canvasTex:new T.MeshStandardMaterial({map:cedarTexture(),roughness:.5}),hull:hullMat||new T.MeshBasicMaterial({color:0xff00ff}),env:new T.MeshStandardMaterial({color:0xffffff,roughness:.2,metalness:.8,envMap:scene.environment||null})};
+ const balls={};for(const k in probes){const b=new T.Mesh(new T.SphereGeometry(1,24,16),probes[k]);b.visible=false;pScene.add(b);balls[k]=b;}
+ const rt=new T.WebGLRenderTarget(24,24);const px=new Uint8Array(4);
+ const readRT=(sc,cam)=>{const prev=renderer.getRenderTarget();renderer.setRenderTarget(rt);renderer.clear();renderer.render(sc,cam);renderer.readRenderTargetPixels(rt,12,12,1,1,px);renderer.setRenderTarget(prev);return px[0]+','+px[1]+','+px[2];};
+ const kCam=new T.PerspectiveCamera(50,1,.1,50);
+ setInterval(()=>{let e;while((e=gl.getError()))glErrs++;const sm=sun.shadow.map;let out=`First Light ${VERSION} · ${gpu}\ntier ${quality} · dpr ${renderer.getPixelRatio().toFixed(2)} · ${innerWidth}×${innerHeight} · float RT ${renderer.extensions.has('EXT_color_buffer_float')} · precision ${renderer.capabilities.precision} · gl errors ${glErrs}\nshadows ${renderer.shadowMap.enabled?['Basic','PCF','PCFSoft','VSM'][renderer.shadowMap.type]||renderer.shadowMap.type:'off'} map ${sm?sm.width+'²':'none'} · grade ${settings.grade!==false} · env ${!!scene.environment} · sun ${sun.intensity.toFixed(2)} amb ${ambient.intensity.toFixed(2)} fog ${(scene.fog&&scene.fog.density||0).toFixed(4)}\n`;
+  try{const cols=[];for(const k in balls){for(const j in balls)balls[j].visible=j===k;if(k==='env')probes.env.envMap=scene.environment||null;cols.push(k+' '+readRT(pScene,pCam));}for(const j in balls)balls[j].visible=false;out+='probe '+cols.join(' | ')+'\n';
+   const ks=kayak.state;kCam.position.set(ks.x+Math.sin(ks.heading+2.4)*3.2,1.4,ks.z+Math.cos(ks.heading+2.4)*3.2);kCam.lookAt(ks.x,.25,ks.z);out+='real kayak in scene '+readRT(scene,kCam)+'\n';
+   app.render();const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;const at=(fx,fy)=>{gl.readPixels(Math.floor(w*fx),Math.floor(h*(1-fy)),1,1,gl.RGBA,gl.UNSIGNED_BYTE,px);return px[0]+','+px[1]+','+px[2];};out+=`frame sky ${at(.5,.12)} · far water ${at(.5,.55)} · near water ${at(.3,.8)} · bow ${at(.5,.7)} · seat ${at(.5,.93)}\n`;}catch(err){out+='self-test failed: '+String(err).slice(0,100)+'\n';}
+  box.textContent=out+(errs.length?errs.join('\n'):'no console errors');},2000);}
