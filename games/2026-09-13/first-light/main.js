@@ -64,7 +64,7 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.40.0';
+export const VERSION='0.40.1';
 const coolShadow=new T.Color(.5,.48,.72);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
@@ -77,7 +77,7 @@ const hud=mountHud({
  onLenses:()=>setPolarized(!polarizedTarget),onMenu:()=>toggleMenu(),onHour:h=>setHour(clock,h),onRig:()=>nextRig(),onRelease:()=>releaseFish(),onWatch:()=>startDemo(),onLureCam:()=>startAquarium(),onMap:()=>toggleMap(),onMapBack:()=>closeMap(),onReplay:()=>openReplay(),onReplayBack:()=>closeReplay(),onGallery:()=>openGallery()
 });
 let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});}catch(e){hud.error('WebGL 2 is needed for this lake. Try a current browser with hardware acceleration enabled.');throw e;}
-renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;renderer.shadowMap.autoUpdate=false;
+renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.shadowMap.enabled=true;renderer.shadowMap.type=(matchMedia('(pointer: coarse)').matches||navigator.maxTouchPoints>0)?T.BasicShadowMap:T.PCFShadowMap;renderer.shadowMap.autoUpdate=false;
 const scene=new T.Scene();scene.fog=new T.FogExp2(0xb4c2c6,.0016);
 const camera=new T.PerspectiveCamera(settings.fov,innerWidth/innerHeight,.08,1800);
 const sun=new T.DirectionalLight(0xffe1aa,3);sun.castShadow=true;sun.shadow.mapSize.set(2048,2048);Object.assign(sun.shadow.camera,{left:-70,right:70,top:70,bottom:-70,near:1,far:700});sun.shadow.bias=-.0003;sun.shadow.normalBias=.15;scene.add(sun);scene.add(sun.target);
@@ -261,7 +261,9 @@ function stepAquarium(dt){if(!aquarium)return;let sub=driftSubject(aquarium.shot
 function startDemo(seed=Math.floor(Math.random()*1e6)){ambience.unlock();demo=createDemo(seed);mode='demo';hud.hideMenu();touch?.setActive(false);hud.hideCard();demoInput={reeling:false,twitch:false};demoPaddle={p:0,turn:0};qaFight=null;demoEvents=[];hud.setDemo(true);const ev=sunEvents(clock.ms);if(clock.mode!=='real'&&(hourOf(clock.ms)<5.5||hourOf(clock.ms)>19.5)){setHour(clock,seed%2===0?21.3:6.3);} // even seeds fish the night, odd seeds the dawn
  return seed;}
 function takeRod(){if(mode!=='demo')return;demo=null;mode='playing';demoTimeScale=1;qaFight=null;demoInput={reeling:false,twitch:false};demoPaddle={p:0,turn:0};hud.setDemo(false);hud.setCaption('');hud.hideCard();if(cameraMode==='lurecam'||cameraMode==='shore')cameraMode='surface';touch?.setActive(true);setRate(settings.timeRate==='real'?'real':String(settings.timeRate||4));hud.toast('You have the rod');}
-function applyQuality(q){quality=q;lake.setQuality(q);const ratio=q==='high'?Math.min(devicePixelRatio,1.5):q==='medium'?1:.75;renderer.setPixelRatio(ratio);renderer.setSize(innerWidth,innerHeight);lake.resize();dof.resize();renderer.shadowMap.enabled=q==='high'||q==='medium';sun.shadow.mapSize.set(q==='high'?2048:1024,q==='high'?2048:1024);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}
+function applyQuality(q){quality=q;lake.setQuality(q);const ratio=q==='high'?Math.min(devicePixelRatio,1.5):q==='medium'?1:.75;renderer.setPixelRatio(ratio);renderer.setSize(innerWidth,innerHeight);lake.resize();dof.resize();renderer.shadowMap.enabled=q==='high'||q==='medium';sun.shadow.mapSize.set(q==='high'?2048:1024,q==='high'?2048:1024);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}warmShadows();}
+// The shadow map must exist before the first lit draw samples it: Three sets up the lights before it renders shadows, so on the first pass after the map is (re)created the hardware-compare sampler sees an empty texture and every shadow-receiving draw is rejected (a two-frame flash on desktop, a black lake on some phone drivers).
+function warmShadows(){if(!renderer.shadowMap.enabled)return;try{renderer.shadowMap.needsUpdate=true;renderer.shadowMap.render([sun],scene,camera);renderer.shadowMap.needsUpdate=false;}catch(e){console.warn('shadow warm-up',e);}}
 function setPolarized(v){polarizedTarget=v?1:0;settings.polarized=!!v;saveSettings(settings);hud.setLenses(!!v);hud.toast(v?'Polarized lenses on':'Lenses off');}
 function setCamera(name){cameraMode=name;}
 // the panel's word for the light: from the sun's elevation and the hour
@@ -391,4 +393,9 @@ const app={step,render,renderer,version:VERSION,start,demo:seed=>startDemo(seed)
 installQA(app);
 hud.setSettings(settings);applyAccess();setWeather(settings.weather);Object.assign(weather,WEATHER[settings.weather]);setRate(settings.timeRate==='real'?'real':String(settings.timeRate||4));
 hud.showMenu({});
-try{applyQuality(quality);step(.016);renderer.compile(scene,camera);render();$('start').disabled=false;$('start').textContent='Paddle out';requestAnimationFrame(frame);}catch(e){hud.error('The lake could not load: '+e.message);console.error(e);}
+try{applyQuality(quality);warmShadows();step(.016);renderer.compile(scene,camera);render();$('start').disabled=false;$('start').textContent='Paddle out';requestAnimationFrame(frame);}catch(e){hud.error('The lake could not load: '+e.message);console.error(e);}
+
+// ?diag=1: a small readout for screenshots from devices we cannot attach to
+if(new URLSearchParams(location.search).get('diag')){const box=document.createElement('pre');box.id='diag';box.style.cssText='position:fixed;left:8px;bottom:8px;z-index:99;max-width:92vw;font:11px/1.35 monospace;color:#fff;background:rgba(0,0,0,.72);padding:8px 10px;border-radius:8px;white-space:pre-wrap;pointer-events:none';document.body.appendChild(box);const errs=[];const push=m=>{errs.push(String(m).slice(0,140));if(errs.length>4)errs.shift();};const ce=console.error.bind(console);console.error=(...a)=>{push(a.join(' '));ce(...a);};window.addEventListener('error',e=>push(e.message));window.addEventListener('unhandledrejection',e=>push('promise: '+(e.reason&&e.reason.message||e.reason)));
+ const gl=renderer.getContext();const dbg=gl.getExtension('WEBGL_debug_renderer_info');const gpu=dbg?gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL):'(masked)';let glErrs=0;
+ setInterval(()=>{let e;while((e=gl.getError()))glErrs++;const sm=sun.shadow.map;box.textContent=`First Light ${VERSION} · ${gpu}\ntier ${quality} · dpr ${renderer.getPixelRatio().toFixed(2)} · ${innerWidth}×${innerHeight} · float RT ${renderer.extensions.has('EXT_color_buffer_float')} · maxTex ${gl.getParameter(gl.MAX_TEXTURE_SIZE)}\nshadows ${renderer.shadowMap.enabled?['Basic','PCF','PCFSoft','VSM'][renderer.shadowMap.type]||renderer.shadowMap.type:'off'} map ${sm?sm.width+'² depthTex '+!!sm.depthTexture:'none'} · gl errors ${glErrs} · lum ${(()=>{try{return window.__FIRST_LIGHT.pixelStats().avgLum.toFixed(2);}catch{return '?';}})()}\n`+(errs.length?errs.join('\n'):'no console errors');},1000);}
