@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.5.0, photo bass)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the first fish: eleven largemouth living on the cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.6.0, watch demo)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the first fish: eleven largemouth living on the cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Watch Demo (v0.6.0)
+
+**Watch Ray fish** on the menu (or leave the menu idle for 75 s) starts a self-playing episode with the real simulation and the player's own input path (`demo.js`). The angler brain scores the cove's cover against the light, distance and what it has already tried, picks a rig and a named technique, and says why in a caption ("Low light and calm water. Walking the walker over the weed bed."). It paddles to the spot, anchors, aims and casts, works the lure with a technique executor (reel and twitch patterns with human jitter, which the recognizer reads back as the intended technique), sets the hook a beat after the take, fights with a reaction delay (bows to jumps, leans on runs), releases, and moves on after refusals or a quiet spell. The director cuts to the lure cam when a fish follows, slows time for a jump and holds the hero shot on a landing; a governor runs the clock forward through quiet stretches. Press any key or tap to take the rod with the fish, tackle and spot as they are. The episode report (`__FIRST_LIGHT.demoReport()`) lists casts, encounters, strikes, landed and lost fish, every decision with its reason, and which shot covered each event. First headless episode: a fish inspected on the lure cam, a slow-motion jump, a landing on the hero shot, 5 casts in 270 s.
 
 ## The first fish (v0.4.0)
 
