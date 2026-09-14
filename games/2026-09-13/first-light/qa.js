@@ -9,7 +9,8 @@ export function installQA(app){
    return {width:W,height:H,samples:n,avgLum:sum/n,nonBlackFrac:nonBlack/n,maxLum,avgRGB:[r/n,g/n,b/n],skyLum:top/Math.max(1,topN),waterLum:bottom/Math.max(1,bottomN)};},
   stats:()=>app.stats(),quality:q=>app.setQuality(q),setTime:h=>app.setHour(h),setClockRate:r=>app.setRate(r),setWind:(ms,dirDeg)=>app.setWind(ms,dirDeg),setWeather:w=>app.setWeather(w),
   setCamera:name=>app.setCamera(name),addRipple:(x,z,kind='splash')=>app.addRipple(x,z,kind),polarized:v=>app.setPolarized(v),forceSize:(w,h)=>app.forceSize(w,h),
-  state:()=>app.state(),start:()=>app.start(),debug:()=>app.debug(),version:app.version
+  state:()=>app.state(),start:()=>app.start(),debug:()=>app.debug(),version:app.version,
+  cast:(power=.8)=>app.cast(power),setReeling:v=>app.setReeling(v),twitch:()=>app.twitch(),rig:i=>app.rig(i),angling:()=>app.angling()
  };
  window.__FIRST_LIGHT=api;return api;
 }

@@ -1,16 +1,24 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build is the water slice (v0.1.0):** Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak, with the lake renderer, sky, clock, weather, shoreline and the interactive surface in place. Fish, tackle and the angling loop arrive in the next milestones (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.2.0, cast and retrieve)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics and lures that behave as their kinds do. Fish arrive in the next milestone (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
 ## Play
 
-Press **Paddle out**. Drag the scene to look around. **W / S** paddle, **A / D** turn, **Space** drops or lifts the anchor, **P** puts the polarized lenses on, **T** cycles the time rate (real, 1×, 4×, 12×), **1 / 2 / 3** skip to dawn, dusk or night, **Esc** opens the menu. Tap or click the water to toss a pebble and watch the rings spread. Phones get hold buttons for paddle and turn, tap buttons for anchor, lenses and menu, and drag-to-look; gamepads use the left stick to paddle and turn, the right stick to look, A for anchor, X for lenses, Start for the menu.
+Press **Paddle out**. Drag the scene to look around. **Hold the mouse button** (still, for a moment) to load the rod and **release** to cast where you are looking; **Space** reels, **F** twitches the rod, **Tab** changes rig (finesse worm, topwater walker, squarebill). **W / S** paddle, **A / D** turn, **X** drops or lifts the anchor, **P** puts the polarized lenses on, **T** cycles the time rate (real, 1×, 4×, 12×), **1 / 2 / 3** skip to dawn, dusk or night, **Esc** opens the menu; right-click tosses a pebble. Phones get hold buttons for paddle, turn, reel and cast (hold to load, release to throw), tap buttons for twitch, anchor, lenses, rig and menu, and drag-to-look; gamepads use the left stick to paddle and turn, the right stick to look, LT to load and release a cast, RT to reel, RB to twitch, A for anchor, X for lenses, Start for the menu.
 
 The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for phones), the time rate, a weather preset (calm dawn, light breeze, overcast, rain), a Steady camera option that damps the kayak's pitch and roll (also on automatically under `prefers-reduced-motion`), and a field-of-view slider. The hour slider and skip buttons live on the HUD.
 
-## What the slice contains
+## Casting and retrieving (v0.2.0)
+
+- **Tackle chain** (`tackle.js`): rods, reels, lines and lures with real ratings; the weakest link (line test, drag setting, leader, rod class) is shown on the HUD and a lure outside the rod's weight range casts short.
+- **Cast** (`angling.js`): power loads over 1.3 s; release throws the lure on a ballistic arc with quadratic drag and wind toward the reticle; splashdown stamps the surface impulses and the ripple field. About 28 m at full power on the finesse rig.
+- **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
+- **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
+- **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## What the water slice contains
 
 - **Real sun and clock.** Sunrise and sunset are computed for the lake (40.46°N, 75.24°W) with the NOAA solar algorithm; the game clock starts 25 minutes before today's sunrise and runs at 4× by default so a session covers a dawn window. Real-time mode follows the wall clock.
 - **The lake.** After the Storm's water renderer retuned for a reservoir: fetch-limited wind waves (twelve Gerstner bands, 0.4–6 m, amplitude scaled by wind and by local openness so sheltered water stays glassy), a full-resolution refraction target with depth-guided offsets and Beer–Lambert freshwater absorption, a mirrored-camera planar reflection with a mip-blurred sky fallback, capillary detail, rain rings, wind lanes, a world-space foam and shoreline-wetness atlas, and moving caustics on the bed.

@@ -1,8 +1,9 @@
-// Compact overlay: the title menu over the live lake, in-game conditions, toasts and the version badge.
+// Compact overlay: the title menu over the live lake, in-game conditions, tackle and technique
+// readouts, the cast reticle and power meter, toasts and the version badge.
 const $=id=>document.getElementById(id);
 export function mountHud(handlers){
- const els={overlay:$('overlay'),hud:$('hud'),toast:$('toast'),clock:$('clock'),date:$('date'),wind:$('wind'),water:$('water'),sun:$('sun'),error:$('error'),start:$('start'),eyebrow:$('eyebrow'),title:$('title'),description:$('description'),hint:$('hint')};
- let toastUntil=0;
+ const els={overlay:$('overlay'),hud:$('hud'),toast:$('toast'),clock:$('clock'),date:$('date'),wind:$('wind'),water:$('water'),sun:$('sun'),error:$('error'),start:$('start'),eyebrow:$('eyebrow'),title:$('title'),description:$('description'),hint:$('hint'),rigName:$('rigName'),rigDesc:$('rigDesc'),technique:$('technique'),lineInfo:$('lineInfo'),reticle:$('reticle'),power:$('power'),powerFill:$('power').firstElementChild};
+ let toastUntil=0,lastPhase='',lastPower=-1;
  $('start').onclick=()=>handlers.onStart();
  $('quality').onchange=e=>handlers.onQuality(e.target.value);
  $('steady').onchange=e=>handlers.onSteady(e.target.checked);
@@ -12,6 +13,7 @@ export function mountHud(handlers){
  for(const b of document.querySelectorAll('[data-skip]'))b.onclick=()=>handlers.onSkip(Number(b.dataset.skip));
  $('lenses').onclick=()=>handlers.onLenses();
  $('menu').onclick=()=>handlers.onMenu();
+ $('rigBtn').onclick=()=>handlers.onRig();
  $('timeSlider').oninput=e=>handlers.onHour(Number(e.target.value));
  return {
   els,
@@ -19,6 +21,9 @@ export function mountHud(handlers){
   hideMenu(){els.overlay.classList.add('hidden');els.hud.classList.remove('hidden');},
   setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
   setConditions(c){els.clock.textContent=c.time;els.date.textContent=c.date;els.wind.textContent=c.wind;els.water.textContent=c.water;els.sun.textContent=c.sun;if(c.hour!==undefined&&document.activeElement!==$('timeSlider'))$('timeSlider').value=c.hour.toFixed(2);},
+  setTackle(snap,rigName,desc){els.rigName.textContent=rigName;els.rigDesc.textContent=desc;els.technique.textContent=snap.phase==='retrieve'?snap.technique:snap.phase==='flight'?'cast away':snap.phase==='charging'?'loading the rod':'rod ready';
+   els.lineInfo.textContent=snap.phase==='retrieve'?`${snap.lineOut.toFixed(0)} m out · lure ${snap.lureDepth<.05?(snap.onBottom?'on the bottom':'on top'):snap.lureDepth.toFixed(1)+' m down'}${snap.tension>.6?' · tight':''}`:snap.casts?`${snap.casts} cast${snap.casts===1?'':'s'}`:'';},
+  setCast(phase,power){if(phase!==lastPhase){lastPhase=phase;els.reticle.classList.toggle('show',phase==='idle'||phase==='charging');els.power.classList.toggle('show',phase==='charging');}if(phase==='charging'&&Math.abs(power-lastPower)>.01){lastPower=power;els.powerFill.style.width=(power*100).toFixed(0)+'%';}},
   setLenses(v){$('lenses').classList.toggle('on',!!v);},
   toast(text,ms=3200){els.toast.textContent=text;els.toast.style.opacity=1;toastUntil=performance.now()+ms;},
   tick(){if(toastUntil&&performance.now()>toastUntil){els.toast.style.opacity=0;toastUntil=0;}},
