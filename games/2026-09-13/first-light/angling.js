@@ -32,11 +32,13 @@ export function makeAngling(scene,kayak,env){
  const line=createLine(24),rec=createRecognizer();let sampleClock=0,classifyClock=0;let realism={reaction:1,slack:1};
  function setRealism(r){realism={reaction:(r&&r.reaction)||1,slack:(r&&r.slack)||1};}
  // --- rod: nine tapered segments on nested pivots so tension can bend it
- const rodMat=new T.MeshStandardMaterial({color:0x26262b,roughness:.35,metalness:.25}),gripMat=new T.MeshStandardMaterial({color:0x4a3a2c,roughness:.9});
+ // a cork grip painted once: tan with darker flecks
+ function corkTexture(){const W=128,H=128,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.fillStyle='#c9a877';g.fillRect(0,0,W,H);let seed=5;const r=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};for(let i=0;i<900;i++){const x=r()*W,y=r()*H,s=1+r()*3;g.fillStyle=`rgba(${70+r()*60},${45+r()*40},${20+r()*25},${.25+r()*.5})`;g.fillRect(x,y,s,s*.7);}const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(2,4);return t;}
+ const rodMat=new T.MeshStandardMaterial({color:0x26262b,roughness:.35,metalness:.25}),gripMat=new T.MeshStandardMaterial({map:corkTexture(),roughness:.85});
  const NSEG=9,rodLen=2.0,segLen=rodLen/NSEG;
  function buildRod(x,y,z){const root=new T.Group();kayak.group.add(root);root.position.set(x,y,z);
   const grip=new T.Mesh(new T.CylinderGeometry(.012,.014,.30,10),gripMat);grip.rotation.x=Math.PI/2;grip.position.z=.13;root.add(grip);
-  const reelMesh=new T.Mesh(new T.BoxGeometry(.045,.05,.065),rodMat);reelMesh.position.set(0,-.04,.34);root.add(reelMesh);
+  const reelMesh=new T.Mesh(new T.BoxGeometry(.03,.045,.05),rodMat);reelMesh.position.set(0,-.045,.34);root.add(reelMesh);const spool=new T.Mesh(new T.CylinderGeometry(.024,.024,.03,14),new T.MeshStandardMaterial({color:0x8d949c,roughness:.35,metalness:.6}));spool.rotation.z=Math.PI/2;spool.position.set(.02,-.07,.34);root.add(spool);const bail=new T.Mesh(new T.TorusGeometry(.026,.002,6,20),rodMat);bail.rotation.y=Math.PI/2;bail.position.set(.036,-.07,.34);root.add(bail);
   const segs=[];let parent=root;
   for(let i=0;i<NSEG;i++){const pivot=new T.Group();pivot.position.z=i===0?.28:segLen;parent.add(pivot);const r0=.0055*(1-i/NSEG)+.0014,r1=.0055*(1-(i+1)/NSEG)+.0014;const m=new T.Mesh(new T.CylinderGeometry(r1,r0,segLen,8),rodMat);m.rotation.x=Math.PI/2;m.position.z=segLen/2;pivot.add(m);if(i%2===1){const guide=new T.Mesh(new T.TorusGeometry(.006-i*.0004,.0008,5,10),rodMat);guide.position.set(0,-.007,segLen/2);pivot.add(guide);}segs.push(pivot);parent=pivot;}
   const tipObj=new T.Object3D();tipObj.position.z=segLen;parent.add(tipObj);return {root,segs,tipObj};}
