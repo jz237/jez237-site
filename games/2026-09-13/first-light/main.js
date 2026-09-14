@@ -45,7 +45,7 @@ import {createForage,stepForage,baitAt,forageInfo,rng as forageRng} from './fora
 import {makeForageMesh} from './forage-mesh.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.20.0';
+export const VERSION='0.21.0';
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -107,6 +107,8 @@ function nearestCoverType(x,z){let best=null,bd=1e9;for(const f of cover.feature
 function refreshJournalLine(){const el=document.getElementById('journalLine');if(el)el.textContent=journalLine(journal)+(nextUnlock(journal)?' · '+nextUnlock(journal):'');}
 function saveJournal(){try{localStorage.setItem('first_light_journal_v1',JSON.stringify(journal));}catch{}refreshJournalLine();}
 refreshJournalLine();
+// the service worker: shell network-first, media cache-first, so the lake works on the dock with no signal
+if('serviceWorker' in navigator&&(location.protocol==='https:'||location.hostname==='localhost')){navigator.serviceWorker.register('./sw.js').catch(()=>{});}
 // --- Photo mode and the share card: a free orbit around the kayak, and the rendered frame with the catch written on it
 let lastCatchCard=null,photoFrom='menu';const photo={yaw:2.6,pitch:.16,dist:6,drag:null};
 function snapshotFrame(){render();const img=new Image();img.src=renderer.domElement.toDataURL('image/jpeg',.92);return new Promise(res=>{img.onload=()=>res(img);img.onerror=()=>res(null);});}
