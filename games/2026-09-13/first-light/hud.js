@@ -16,6 +16,7 @@ export function mountHud(handlers){
  $('rigBtn').onclick=()=>handlers.onRig();
  $('ccRelease').onclick=()=>handlers.onRelease();
  $('watch').onclick=()=>handlers.onWatch();
+ $('galleryBtn').onclick=()=>handlers.onGallery();
  $('timeSlider').oninput=e=>handlers.onHour(Number(e.target.value));
  return {
   els,
