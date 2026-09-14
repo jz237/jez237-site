@@ -31,6 +31,11 @@ jobs:
             /games/2026-08-20/final-blow/manifest.webmanifest
             /games/2026-08-20/final-blow/icon.svg
             /games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
+            /scripts/check_aquarium_sync.mjs
+            /scripts/rotatable-aquascape/public/
+            /demos/rotatable-aquascape/
+            /prototypes/hidden-reef/showroom/aquarium/
+            /prototypes/hidden-reef-header-preview/showroom/aquarium/
             /scripts/check_games_catalog_syntax.mjs
             /scripts/guard_cloudflare_deploy.mjs
             /scripts/live-deploy-baseline.json
