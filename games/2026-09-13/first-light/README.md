@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.40.1, comfort + phone hotfix)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.40.3, comfort + phone fixes)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Phones, resolved (v0.40.3)
+
+The phone kept a black lake after v0.40.1, and a self-test in the diagnostic overlay found the rest: on an Adreno 830 (Snapdragon, OpenGL ES 3.2) every material lit by plain lights matched the desktop, but the sky's environment map, built by Three's PMREM generator straight from the sky scene, came out black, and before sunrise the kayak and the water are lit almost entirely by that map. The same sky rendered through a cube camera and fed to the generator as a cubemap works there. The game now probes its fragile paths at boot, a lit sphere through byte and half-float targets with and without mipmaps and through the environment built both ways, and switches anything that reads back black to a fallback: byte lake and post targets, the cube-camera environment, or a brighter hemisphere light when the generator is dead entirely. The probe also caught a regression on the desktop: the colour grade's contrast curve was crushing pre-dawn darks to exactly zero. It now fades out below a quarter luminance, the vignette is gentler, and the pre-dawn ambient floor is higher. `?diag=1` prints the probe results and the fallback in use.
 
 ## Hotfix: a black lake on phones (v0.40.1)
 
