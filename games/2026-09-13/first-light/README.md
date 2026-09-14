@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.6.0, watch demo)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the first fish: eleven largemouth living on the cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.7.0, roster part one)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the first four species, thirty fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,19 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## The roster, part one (v0.7.0)
+
+Four species now live in the cove, each with its own tables in `species.js` (size classes, length-weight curve, diel curve, temperature band, the cover it holds on, technique and lure-family preferences, spook radius, fight profile) and its own photo-derived body. The population (`fish.js`) spawns each species on the cover it prefers at its own depth band, and the catch card, journal and QA hooks all name the species.
+
+| Species | Fish | Holds | Depth | Takes | Fight |
+|---|---|---|---|---|---|
+| Largemouth bass (+ the Ridge Fish) | 8 + 1 | laydowns, dock, weed bed, stumps, pads | 0.4–2.2 m | walking the dog, stop & go, topwater | jumps, head-shakes |
+| Smallmouth bass | 5 | riprap, stumps, dock, laydowns | 0.6–3 m | stop & go, twitching, crankbaits | runs and repeated jumps, most stamina |
+| Walleye | 4 | riprap, stumps | 2.2–6 m | lift & drop, slow roll, soft plastics; nocturnal | dogged, no jumps |
+| Bluegill | 12 | dock, pads, weed bed | 0.3–1.6 m | dead stick, lift & drop, small soft baits; rarely crank or topwater | quick circles, tires fast |
+
+Every body follows Jez's reference-photo rule: a side-on and a top-down photo generated with GPT Image through fal, cut out, then measured by `source/fish-from-photo.py` into a profile, flank texture and fin card, and compared in the studio pose against the photo (`compare-fish.py`). Results this build: smallmouth aspect 0.404 vs 0.412, silhouette IoU 0.847; walleye aspect 0.359 vs 0.378, IoU 0.784 (the spiny first dorsal still reads partly as body); bluegill aspect 0.593 vs 0.618, IoU 0.821; largemouth unchanged at IoU 0.86. Colour differences sit at 40–42/255 under scene lighting. Honest gaps: jaws do not open, pectorals are painted rather than modelled, and there is no top texture yet. QA: `spawnFish(x,z,len,bold,species)`, `studio(len,species)`, `fish()` entries carry `species`.
 
 ## Watch Demo (v0.6.0)
 

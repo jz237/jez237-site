@@ -27,13 +27,13 @@ def bbox(alpha,thr=100):
 def opening1d(v,window):
     return maximum_filter1d(minimum_filter1d(v,window,mode='nearest'),window,mode='nearest')
 
-def analyse(lateral,top,out_dir,species='largemouth',stations=64):
+def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,belly_window=.16,width_ratio=None,peduncle=(.70,.90)):
     os.makedirs(out_dir,exist_ok=True)
     im,a=load(lateral);alpha=a[:,:,3];x0,y0,x1,y1=bbox(alpha)
     crop=im.crop((x0,y0,x1,y1));ca=np.array(crop).astype(np.float32);H,W=ca.shape[:2]
     mask=ca[:,:,3]>100
     rgb=ca[:,:,:3]/255.0;lum=rgb@np.array([.299,.587,.114]);sat=(rgb.max(2)-rgb.min(2))/np.maximum(rgb.max(2),1e-3)
-    dark=(lum<.47)&mask                      # olive back and lateral blotches, not fin membranes
+    dark=(lum<dark_thr)&mask                 # olive back and lateral blotches, not fin membranes
     body_top=np.full(W,np.nan);body_bot=np.full(W,np.nan);sil_top=np.full(W,np.nan);sil_bot=np.full(W,np.nan)
     for x in range(W):
         col=np.where(mask[:,x])[0]
@@ -46,7 +46,7 @@ def analyse(lateral,top,out_dir,species='largemouth',stations=64):
         body_top[x]=found if found is not None else np.nan
     # belly: opening of the lower silhouette removes the pelvic and anal fin bumps
     valid=~np.isnan(sil_bot);bot=np.where(valid,sil_bot,np.nanmean(sil_bot))
-    win=max(5,int(W*.16)|1)
+    win=max(5,int(W*belly_window)|1)
     body_bot=minimum_filter1d(maximum_filter1d(-bot,win,mode='nearest'),win,mode='nearest')*-1  # opening on depth
     body_bot=uniform_filter1d(body_bot,max(3,int(W*.03)|1),mode='nearest')
     # back: fill gaps (the tail region has no dark run) and smooth; the body ends where the dark run vanishes
@@ -59,7 +59,7 @@ def analyse(lateral,top,out_dir,species='largemouth',stations=64):
     bt_s=uniform_filter1d(np.maximum(bt_open,np.nan_to_num(sil_top,nan=0)),max(3,int(W*.03)|1),mode='nearest')
     # the peduncle: the narrowest column in the last third is where the body ends and the caudal fin
     # begins; beyond it the loft closes over a short taper and the fin card carries the tail
-    h=body_bot-bt_s;lo=int(W*.68);hi=int(W*.95);x_ped=lo+int(np.argmin(h[lo:hi]))
+    h=body_bot-bt_s;lo=int(W*peduncle[0]);hi=int(W*peduncle[1]);x_ped=lo+int(np.argmin(h[lo:hi]))
     body_end=min(W-1,x_ped+int(W*.03))
     for x in range(x_ped,W):
         f=(x-x_ped)/max(1,int(W*.06));mid=(bt_s[x]+body_bot[x])/2;hh=h[x_ped]*max(0.,1-f)
@@ -73,7 +73,8 @@ def analyse(lateral,top,out_dir,species='largemouth',stations=64):
     for i in range(stations):
         s=i/(stations-1);x=int(round((1-s)*(W-1)));xt=int(round((1-s)*(TW-1)))
         topf=(mid_row-bt_s[x])/L;botf=(mid_row-body_bot[x])/L
-        prof.append({'s':round(s,4),'top':round(float(topf),4),'bottom':round(float(botf),4),'halfWidth':round(float(ext[xt]/2/TW),4),
+        hw=(float(ext[xt]/2/TW) if width_ratio is None else float((topf-botf)*width_ratio/2))
+        prof.append({'s':round(s,4),'top':round(float(topf),4),'bottom':round(float(botf),4),'halfWidth':round(hw,4),
                      'texTop':round(float(bt_s[x]/H),4),'texBottom':round(float(body_bot[x]/H),4)})
     meta={'species':species,'lengthPx':W,'heightPx':H,'midRow':round(mid_row/H,4),'bodyEndS':round(1-body_end/(W-1),4),'texAspect':round(H/W,4),'stations':prof}
     json.dump(meta,open(os.path.join(out_dir,'profile.json'),'w'))
@@ -92,4 +93,11 @@ def analyse(lateral,top,out_dir,species='largemouth',stations=64):
     return meta
 
 if __name__=='__main__':
-    analyse(sys.argv[1],sys.argv[2],sys.argv[3])
+    a=sys.argv;kw={}
+    for i,v in enumerate(a):
+        if v=='--dark': kw['dark_thr']=float(a[i+1])
+        if v=='--belly-window': kw['belly_window']=float(a[i+1])
+        if v=='--species': kw['species']=a[i+1]
+        if v=='--width-ratio': kw['width_ratio']=float(a[i+1])
+        if v=='--peduncle': kw['peduncle']=(float(a[i+1]),float(a[i+2]))
+    analyse(a[1],a[2],a[3],**kw)
