@@ -2,6 +2,7 @@
 // dense band along the waterline and taller ones on the crests, instanced in 64 m bins, tinted per
 // tree, swaying with the wind, in the planar reflection. Backlit at dawn they read as the black
 // serrated tree line of the concept art; by day the tiers and the tint keep them from reading flat.
+import {backlight,setBacklight} from './backlight.js';
 import * as T from './vendor/three.module.js';
 import {planTreeline} from './treeline-plan.js';
 import {windSway,rng} from './botany.js';
@@ -31,6 +32,7 @@ export function makeTreeline(scene,bathy){
  const plan=planTreeline({height:(x,z)=>bathy.height(x,z),shoreDistance:(x,z)=>bathy.shoreDistance(x,z),span:bathy.span,random,noise});
  const tex=spruceTexture(),geo=cardGeometry();
  const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:true,roughness:.92,metalness:0,color:0xffffff});windSway(mat,.05);
+ // backlit silhouettes come with windSway (botany.js); setSun feeds the shared uniforms for every swaying material at once
  const meshes=[];
  function bins(points,shadow){const map=new Map();for(const p of points){const k=Math.floor(p.x/64)+','+Math.floor(p.z/64);if(!map.has(k))map.set(k,[]);map.get(k).push(p);}
   for(const pts of map.values()){const mesh=new T.InstancedMesh(geo,mat,pts.length),d=new T.Object3D();
@@ -38,5 +40,5 @@ export function makeTreeline(scene,bathy){
    mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=shadow;mesh.receiveShadow=false;mesh.userData.skipReflection=!shadow;root.add(mesh);meshes.push(mesh);}}
  bins(plan.shore,true);bins(plan.crest,false);
  const counts={shore:plan.shore.length,crest:plan.crest.length,bins:meshes.length};
- return {root,counts,update(quality,camera){const reach=quality==='high'?520:quality==='medium'?400:300;for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<reach+r;}}};
+ return {root,counts,setSun(dir,backlit){setBacklight(dir,backlit);},backlit:()=>backlight.amount.value,update(quality,camera){const reach=quality==='high'?520:quality==='medium'?400:300;for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<reach+r;}}};
 }

@@ -5,7 +5,7 @@
 // sun's glow through the window, and absorption along the path to the eye.
 export const lakeUnderFragment=`
 uniform sampler2D refraction,reflection,depthMap,detailMap;
-uniform float night,polarized,clarity,underMirror;uniform vec2 viewportOrigin,viewportSize;
+uniform float night,daylight,polarized,clarity,underMirror;uniform vec2 viewportOrigin,viewportSize;
 uniform vec3 eye,sun,sunColor,skyHorizon,skyZenith,fogColor;uniform float near,far,fogDensity;
 varying vec3 worldP;varying vec4 mirrorP;varying vec3 broadSurface;varying vec2 disturbanceSlope;varying float fetchV;uniform vec3 waterScatter,waterAbsorption;
 void main(){

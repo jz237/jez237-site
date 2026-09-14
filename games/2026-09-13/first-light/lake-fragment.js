@@ -4,7 +4,7 @@
 // wind-scaled capillary ripples, the ripple field's slopes, rain rings, wind lanes and foam.
 export const lakeFragment=`
 uniform sampler2D refraction,reflection,depthMap,detailMap,foamMap;uniform vec2 foamCenter;uniform float foamSpan;
-uniform float night,polarized,clarity;uniform vec2 viewportOrigin,viewportSize;
+uniform float night,daylight,polarized,clarity;uniform vec2 viewportOrigin,viewportSize;
 uniform vec3 eye,sun,sunColor,skyHorizon,skyZenith,fogColor;uniform float near,far,fogDensity;
 varying vec3 worldP;varying vec4 mirrorP;varying vec3 broadSurface;varying vec2 disturbanceSlope;varying float fetchV;uniform vec3 waterScatter,waterAbsorption;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
@@ -37,10 +37,10 @@ void main(){
  if(bgDepth<ownDepth+.035){ruv=uv;bgDepth=linearDepth(texture2D(depthMap,uv).r);}
  float thickness=max(0.,bgDepth-ownDepth)*dist/max(.1,ownDepth);float verticalDepth=max(0.,worldP.y-floorH(p));
  vec3 transmission=exp(-waterAbsorption*thickness/clarity);
- vec3 scatter=waterScatter*(1.-night*.8);
+ vec3 scatter=waterScatter*(1.-night*.8)*(.28+.72*daylight);
  vec3 below=texture2D(refraction,ruv).rgb;vec3 refracted=below*transmission+scatter*(1.-transmission);
  vec2 muv=mirrorP.xy/mirrorP.w*.5+.5;vec2 reflectUV=clamp(muv+screenSlope*.032,vec2(.002),vec2(.998));
- float roughness=.03+breeze*.06;float blur=clamp(roughness*16.+dist*.003,0.,3.4);
+ float roughness=.045+breeze*.06;float blur=clamp(roughness*16.+dist*.003,0.,3.4);
  vec3 reflected=texture2D(reflection,reflectUV,blur).rgb;
  vec3 reflectedRay=reflect(-V,N);vec3 skyFallback=mix(skyHorizon,skyZenith,pow(max(0.,reflectedRay.y),.4));
  float mirrorEdge=max(abs(reflectUV.x-.5),abs(reflectUV.y-.5));reflected=mix(reflected,skyFallback,smoothstep(.46,.5,mirrorEdge));

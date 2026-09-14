@@ -1,5 +1,6 @@
 // Branched, leafy botanical meshes shared by hundreds of instances (After the Storm's Shape builder),
 // plus lake-side plants: cattails and grass tufts. Deterministic from a seed.
+import {backlight,BACKLIT_GLSL,BACKLIT_UNIFORMS} from './backlight.js';
 import * as T from './vendor/three.module.js';
 export class Shape{
  constructor(){this.p=[];this.uv=[];this.c=[];}
@@ -42,11 +43,13 @@ export function tree(kind,seed,detail=1){
   }
  }else{
   // broadleaf: an oak-like crown on a forked trunk, about 14 m tall
-  wood.tube([0,0,0],[.35,9.5,.1],.5,.1,9);const branches=Math.max(6,Math.round(18*detail)),leaves=Math.max(10,Math.round(40*detail));
+  // the crown is a dense rounded mass: enough cards that no sky shows between the clusters, so a
+  // backlit oak on the skyline reads as one silhouette rather than a scatter of leaves
+  wood.tube([0,0,0],[.35,9.5,.1],.5,.1,9);const branches=Math.max(6,Math.round(18*detail)),leaves=Math.max(26,Math.round(64*detail));
   for(let j=0;j<branches;j++){
    const a=j*2.399,y=4.2+random()*5,r=2.1+random()*2.4,end=[Math.cos(a)*r,y+2.2,Math.sin(a)*r];wood.tube([.25,y-2,0],end,.13,.02,6);
    for(let k=0;k<leaves;k++){
-    const az=random()*Math.PI*2,rad=Math.sqrt(random())*2.4*(1+(1-detail)*.5),c=[end[0]+Math.cos(az)*rad,end[1]+(random()-.5)*2.8,end[2]+Math.sin(az)*rad],ls=1+(1-detail)*1.7;
+    const az=random()*Math.PI*2,rad=Math.sqrt(random())*2.1*(1+(1-detail)*.5),c=[end[0]+Math.cos(az)*rad,end[1]+(random()-.5)*2.4,end[2]+Math.sin(az)*rad],ls=1+(1-detail)*2.0;
     leaf.leaf(c,[c[0]+Math.cos(az)*1.05*ls,c[1]+.2,c[2]+Math.sin(az)*1.05*ls],.36*ls,az+Math.PI/2,.62+random()*.42);
    }
   }
@@ -69,7 +72,9 @@ export function grassTuft(seed){
 // Vertex sway shared by every plant material: bend grows with height, strength with the wind.
 export function windSway(material,flex=.03){
  material.onBeforeCompile=s=>{
-  Object.assign(s.uniforms,{foliageTime:windSway.time,foliageWind:windSway.strength,foliageDistance:windSway.distance});
+  Object.assign(s.uniforms,{foliageTime:windSway.time,foliageWind:windSway.strength,foliageDistance:windSway.distance,backlitSunDir:backlight.sunDir,backlitAmount:backlight.amount});
+  // backlit: looking toward a low sun, foliage is a dark cut-out with the sky burning behind it; the albedo drops to a tenth for cards that sit between the eye and the sun, so the skyline reads as the serrated silhouette of the concept art and the reflection pass, which faces the same sun, agrees
+  s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\n'+BACKLIT_UNIFORMS).replace('#include <color_fragment>','#include <color_fragment>\n'+BACKLIT_GLSL);
   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nuniform float foliageTime,foliageWind,foliageDistance;')
    .replace('#include <begin_vertex>',`#include <begin_vertex>
 vec3 anchor=(modelMatrix*instanceMatrix*vec4(0.,0.,0.,1.)).xyz;
