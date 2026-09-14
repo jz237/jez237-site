@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.33.0, tree line)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.34.0, first light sky)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## First light sky, and a grade (v0.34.0)
+
+Toward the concept's sky. The horizon is now warm only toward the sun and goes purple-blue away from it, the way a real dawn does; the low sun carries a wide warm aureole, a tighter halo and a softer, larger disc; a pink haze sits on the horizon while the sun is below fourteen degrees; clouds take pink-orange undersides toward the sun, purple-blue shade and a silver lining beside the disc; dusk leans magenta and the fog goes faintly pink at low sun. The lighting follows: warm light and cool shadows, with the ambient tinted toward violet as the sun drops. And the frame is graded: the post pass that carries depth of field now runs on every frame except on Saver, with saturation, an S-curve of contrast, a warm-highlight and cool-shadow split that grows as the sun drops, and a vignette (`gradeFor`, pure and tested). Measured on sun-facing stills from the same orbit, before to after: sky saturation .150 to .188 at sunrise, .104 to .179 at dusk and .194 to .260 at noon; frame contrast (standard deviation of luminance) .228 to .289 at sunrise and .237 to .297 at dusk; the sky a touch darker each time.
 
 ## The tree line, and mist on the water (v0.33.0)
 
