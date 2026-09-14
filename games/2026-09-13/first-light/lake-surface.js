@@ -4,6 +4,7 @@
 import * as T from './vendor/three.module.js';
 import {lakeVertex} from './lake-vertex.js';
 import {lakeFragment} from './lake-fragment.js';
+import {lakeUnderFragment} from './lake-under-fragment.js';
 import {waterDetail} from './water-detail.js';
 import {waterProfile} from './water-profile.js';
 import {makeFoamField} from './foam-field.js';
@@ -39,14 +40,15 @@ export function makeLake(renderer,scene,camera,bathy,quality='high'){
  shared.terrainMap.value=makeTerrainTexture(bathy);
  const ripple=makeRippleField(renderer,quality);
  const profile=waterProfile('lake');
- const uniforms={...shared,...ripple.uniforms,waterScatter:{value:new T.Vector3(...profile.scatter)},waterAbsorption:{value:new T.Vector3(...profile.absorption)},clarity:lakeLighting.clarity,polarized:{value:0},viewportOrigin:{value:new T.Vector2()},viewportSize:{value:size.clone()},night:skyColors.night,skyHorizon:skyColors.skyHorizon,skyZenith:skyColors.skyZenith,sun:skyColors.sun,sunColor:skyColors.sunColor,fogColor:skyColors.fogColor,fogDensity:skyColors.fogDensity,impactWaves:{value:impactWaves.map(w=>new T.Vector4(w.x,w.z,w.time,w.amplitude))},detailMap:{value:waterDetail},wakeHeading:{value:new Float32Array(64)},refraction:{value:refract.texture},reflection:{value:reflect.texture},depthMap:{value:refract.depthTexture},mirrorMatrix:{value:new T.Matrix4()},eye:{value:camera.position},near:{value:camera.near},far:{value:camera.far},wake:{value:Array.from({length:64},()=>new T.Vector4(10000,10000,0,0))}};
+ const uniforms={...shared,...ripple.uniforms,underMirror:{value:0},waterScatter:{value:new T.Vector3(...profile.scatter)},waterAbsorption:{value:new T.Vector3(...profile.absorption)},clarity:lakeLighting.clarity,polarized:{value:0},viewportOrigin:{value:new T.Vector2()},viewportSize:{value:size.clone()},night:skyColors.night,skyHorizon:skyColors.skyHorizon,skyZenith:skyColors.skyZenith,sun:skyColors.sun,sunColor:skyColors.sunColor,fogColor:skyColors.fogColor,fogDensity:skyColors.fogDensity,impactWaves:{value:impactWaves.map(w=>new T.Vector4(w.x,w.z,w.time,w.amplitude))},detailMap:{value:waterDetail},wakeHeading:{value:new Float32Array(64)},refraction:{value:refract.texture},reflection:{value:reflect.texture},depthMap:{value:refract.depthTexture},mirrorMatrix:{value:new T.Matrix4()},eye:{value:camera.position},near:{value:camera.near},far:{value:camera.far},wake:{value:Array.from({length:64},()=>new T.Vector4(10000,10000,0,0))}};
  const mat=new T.ShaderMaterial({uniforms,vertexShader:lakeCommon+lakeVertex,fragmentShader:lakeCommon+lakeFragment});
+ const matUnder=new T.ShaderMaterial({uniforms,vertexShader:lakeCommon+lakeVertex,fragmentShader:lakeCommon+lakeUnderFragment,side:T.BackSide});
  const water=new T.Mesh(waterGeometry(SEGMENTS[quality]),mat);water.frustumCulled=false;water.userData.isWater=true;scene.add(water);
- let frame=0;const clip=new T.Plane(new T.Vector3(0,1,0),.05);
+ let frame=0;const clip=new T.Plane(new T.Vector3(0,1,0),.05),clipUnder=new T.Plane(new T.Vector3(0,-1,0),.05);
  const foam=makeFoamField(renderer,lakeCommon,uniforms);mat.uniforms.foamMap={value:foam.texture};mat.uniforms.foamCenter=foam.center;mat.uniforms.foamSpan=foam.span;
  shoreline.shoreCenter.value=foam.center.value;shoreline.shoreSpan.value=foam.span.value;
  const target=new T.Vector3();
- return {mesh:water,mat,refract,reflect,ripple,quality,
+ return {mesh:water,mat,matUnder,refract,reflect,ripple,quality,underwater:false,hooks:{setFog:null},
   setProfile(p){mat.uniforms.waterScatter.value.fromArray(p.scatter);mat.uniforms.waterAbsorption.value.fromArray(p.absorption);if(p.clarity)lakeLighting.clarity.value=p.clarity;},
   setQuality(q){if(q!==this.quality){water.geometry.dispose();water.geometry=waterGeometry(SEGMENTS[q]);reflect.setSize(REFLECT[q],REFLECT[q]);ripple.setQuality(q);}this.quality=q;},
   setPolarized(v){mat.uniforms.polarized.value=v;},
@@ -58,7 +60,18 @@ export function makeLake(renderer,scene,camera,bathy,quality='high'){
   render(viewCamera=camera){
    lakeLighting.time.value=shared.time.value;lakeLighting.wind.value=shared.wind.value;
    mat.uniforms.eye.value=viewCamera.position;mat.uniforms.near.value=viewCamera.near;mat.uniforms.far.value=viewCamera.far;
+   // hysteresis around the waterline so a bobbing eye does not flicker between the two surface shaders
+   const eyeY=viewCamera.position.y;if(this.underwater){if(eyeY>waterLevel.value-.005)this.underwater=false;}else if(eyeY<waterLevel.value-.04)this.underwater=true;
+   water.material=this.underwater?matUnder:mat;
    const hidden=scene.children.filter(o=>o.userData.skipRefraction&&o.visible);for(const o of hidden)o.visible=false;
+   if(this.underwater){
+    // from below: the above world through the window (air fog), the underwater world mirrored (water fog) on High
+    this.hooks.setFog?.('air');water.visible=false;renderer.setRenderTarget(refract);renderer.render(scene,viewCamera);
+    if(this.quality==='high'){this.hooks.setFog?.('water');mirror.copy(viewCamera);mirror.position.y=2*waterLevel.value-viewCamera.position.y;clipUnder.constant=waterLevel.value+.05;viewCamera.getWorldDirection(target);target.add(viewCamera.position);target.y=2*waterLevel.value-target.y;mirror.up.set(0,-1,0);mirror.lookAt(target);mirror.updateMatrixWorld();mat.uniforms.mirrorMatrix.value.multiplyMatrices(mirror.projectionMatrix,mirror.matrixWorldInverse);renderer.clippingPlanes=[clipUnder];renderer.setRenderTarget(reflect);renderer.render(scene,mirror);renderer.clippingPlanes=[];uniforms.underMirror.value=1;}else uniforms.underMirror.value=0;
+    this.hooks.setFog?.('water');water.visible=true;for(const o of hidden)o.visible=true;
+    renderer.setRenderTarget(null);renderer.getSize(size);renderer.setViewport(0,0,size.x,size.y);mat.uniforms.viewportOrigin.value.set(0,0);renderer.getDrawingBufferSize(mat.uniforms.viewportSize.value);renderer.render(scene,viewCamera);return;
+   }
+   this.hooks.setFog?.('air');
    water.visible=false;renderer.setRenderTarget(refract);renderer.render(scene,viewCamera);
    if(frame++%SKIP[this.quality]===0){
     const farOff=[];if(this.quality!=='high')scene.traverse(o=>{if(o.userData.skipReflection&&o.visible)farOff.push(o);});for(const o of farOff)o.visible=false;

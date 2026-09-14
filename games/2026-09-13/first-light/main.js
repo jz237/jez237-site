@@ -23,7 +23,9 @@ import {worldFromFrame,halfWidth} from './lake-shape.js';
 import {waterTempF,seasonOptics} from './season.js';
 import {makeMist} from './mist.js';
 import {makeAngling} from './angling.js';
-export const VERSION='0.2.0';
+import {makeUnderwaterFx} from './underwater-fx.js';
+import {underwaterFogDensity,underwaterFogColor} from './optics.js';
+export const VERSION='0.3.0';
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -66,6 +68,10 @@ const env={windMs:0,windDir:0,time:0,surface,depth:(x,z)=>bathy.depth(x,z),rippl
 {const p=worldFromFrame(150,halfWidth(150,1)*.42),aim=worldFromFrame(120,-halfWidth(120,-1)+12);kayak.place(p.x,p.z,Math.atan2(aim.x-p.x,aim.z-p.z));kayak.state.anchored=true;}
 const angling=makeAngling(scene,kayak,{surface,bed:(x,z)=>bathy.height(x,z),ripple:(x,z,kind)=>addRipple(x,z,kind),windVec:()=>({x:Math.cos(env.windDir)*env.windMs,z:Math.sin(env.windDir)*env.windMs})});
 let qaReel=false,touchCastHeld=false;
+// Two fog objects, swapped per pass: Three refreshes fog uniforms when the scene fog changes identity.
+const fx=makeUnderwaterFx(scene);const fogAir=scene.fog,fogWater=new T.FogExp2(0x1a4a34,.09);
+lake.hooks.setFog=m=>{scene.fog=m==='water'?fogWater:fogAir;};
+function toggleLureCam(){if(cameraMode==='lurecam'){cameraMode='surface';hud.toast('Back in the kayak');}else if(angling.state.phase==='retrieve'){cameraMode='lurecam';hud.toast('Lure cam · C to return');}else hud.toast('Cast first, then C follows the lure');}
 function nextRig(){angling.nextRig();hud.toast(angling.rig().name+' — '+angling.describe(),5000);}
 function applyQuality(q){quality=q;lake.setQuality(q);const ratio=q==='high'?Math.min(devicePixelRatio,1.5):q==='medium'?1:.75;renderer.setPixelRatio(ratio);renderer.setSize(innerWidth,innerHeight);lake.resize();renderer.shadowMap.enabled=q==='high'||q==='medium';sun.shadow.mapSize.set(q==='high'?2048:1024,q==='high'?2048:1024);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}
 function setPolarized(v){polarizedTarget=v?1:0;settings.polarized=!!v;saveSettings(settings);hud.setLenses(!!v);hud.toast(v?'Polarized lenses on':'Lenses off');}
@@ -82,10 +88,10 @@ canvas.addEventListener('pointermove',e=>{if(!drag||e.pointerId!==drag.id)return
 function endDrag(e){if(!drag||e.pointerId!==drag.id)return;drag=null;}
 canvas.addEventListener('pointerup',endDrag);canvas.addEventListener('pointercancel',()=>{drag=null;});
 window.addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);lake.resize();});
-const ray=new T.Raycaster(),plane=new T.Plane(new T.Vector3(0,1,0),0),hit=new T.Vector3();
+const ray=new T.Raycaster(),plane=new T.Plane(new T.Vector3(0,1,0),0),hit=new T.Vector3(),lureCamPos=new T.Vector3(),lureCamLook=new T.Vector3(),lureCamCur=new T.Vector3();let lureCamLive=false;
 function tossPebble(cx,cy){ray.setFromCamera(new T.Vector2(cx/innerWidth*2-1,-(cy/innerHeight)*2+1),camera);if(!ray.ray.intersectPlane(plane,hit))return;const d=Math.hypot(hit.x-kayak.state.x,hit.z-kayak.state.z);if(d>45||bathy.depth(hit.x,hit.z)<=0)return;addRipple(hit.x,hit.z,'pebble');}
 function addRipple(x,z,kind='pebble'){const k={pebble:[.13,.012,2.4],splash:[.3,.03,3.4],dimple:[.08,-.004,0],boil:[.5,.02,2.2]}[kind]||[.15,.012,2.4];lake.addRipple(x,z,k[0],k[1]);if(k[2])addImpact(x,z,simTime,k[2]);}
-touch=mountTouchControls({onTap:what=>{if(what==='anchor')pressed.KeyX=true;else if(what==='lenses')setPolarized(!polarizedTarget);else if(what==='menu')toggleMenu();else if(what==='twitch')pressed.KeyF=true;else if(what==='rig')nextRig();}});touch.setLeftHanded(settings.touchLeft);
+touch=mountTouchControls({onTap:what=>{if(what==='anchor')pressed.KeyX=true;else if(what==='lenses')setPolarized(!polarizedTarget);else if(what==='menu')toggleMenu();else if(what==='twitch')pressed.KeyF=true;else if(what==='rig')nextRig();else if(what==='cam')toggleLureCam();}});touch.setLeftHanded(settings.touchLeft);
 // --- per-frame simulation
 let conditionsClock=0,lastElevation=0;
 function step(dt){
@@ -96,15 +102,15 @@ function step(dt){
  const sd=sunDirection(clock.ms);lastElevation=sd.elevation;const palette=skyPalette(sd.elevation,weather.cloud);sky.apply(palette,sd,sd.elevation,weather.cloud);
  sun.position.set(kayak.state.x+sd.x*320,Math.max(12,sd.y*320),kayak.state.z+sd.z*320);sun.target.position.set(kayak.state.x,0,kayak.state.z);sun.intensity=palette.sunIntensity;sun.color.setRGB(...palette.sunColor);sun.visible=palette.sunIntensity>.01;
  ambient.intensity=palette.ambientIntensity;ambient.color.setRGB(...palette.horizon).multiplyScalar(1.15);ambient.groundColor.setRGB(.26,.23,.17);
- scene.fog.color.setRGB(...palette.fogColor);scene.fog.density=palette.fogDensity;scene.environmentIntensity=.35+.45*(1-palette.night);
+ fogAir.color.setRGB(...palette.fogColor);fogAir.density=palette.fogDensity;const sc=lake.mat.uniforms.waterScatter.value;fogWater.density=underwaterFogDensity(lake.mat.uniforms.clarity.value,sc.y);fogWater.color.setRGB(...underwaterFogColor([sc.x,sc.y,sc.z],Math.max(0,Math.min(1,sd.elevation/18)),palette.night));scene.environmentIntensity=(.35+.45*(1-palette.night))*(lake.underwater?.35:1);if(lake.underwater){ambient.intensity*=.5;ambient.color.multiply(new T.Color(.55,.85,.7));}
  sky.mesh.position.copy(camera.position);refreshEnvironment(sd.elevation,weather.cloud);mist.update(simTime,camera.position,sd.elevation,weather.wind,palette);
  const pad=navigator.getGamepads?.()?.[0]||null,input=playerInput(keys,pad,touch.keys());
- if(pad){lookStick(look,input.lookX,input.lookY,dt);if(input.padLenses&&!pressed._padLenses){setPolarized(!polarizedTarget);}pressed._padLenses=input.padLenses;if(input.padAnchor&&!pressed._padAnchor)pressed.KeyX=true;pressed._padAnchor=input.padAnchor;if(input.padMenu&&!pressed._padMenu)toggleMenu();pressed._padMenu=input.padMenu;if(input.padTwitch&&!pressed._padTwitch)pressed.KeyF=true;pressed._padTwitch=input.padTwitch;}
+ if(pad){lookStick(look,input.lookX,input.lookY,dt);if(input.padLenses&&!pressed._padLenses){setPolarized(!polarizedTarget);}pressed._padLenses=input.padLenses;if(input.padAnchor&&!pressed._padAnchor)pressed.KeyX=true;pressed._padAnchor=input.padAnchor;if(input.padMenu&&!pressed._padMenu)toggleMenu();pressed._padMenu=input.padMenu;if(input.padTwitch&&!pressed._padTwitch)pressed.KeyF=true;pressed._padTwitch=input.padTwitch;if(input.padCam&&!pressed._padCam)toggleLureCam();pressed._padCam=input.padCam;}
  if(pressed.KeyP){setPolarized(!polarizedTarget);}if(pressed.Escape)toggleMenu();if(pressed.Digit1)hud.toast('Skipping to '+formatClock(skipToHour(clock,5.4)));if(pressed.Digit2)hud.toast('Skipping to '+formatClock(skipToHour(clock,18.9)));if(pressed.Digit3)hud.toast('Skipping to '+formatClock(skipToHour(clock,22)));
  if(pressed.KeyT){const order=['real','1','4','12'],next=order[(order.indexOf(String(settings.timeRate))+1)%order.length];setRate(next);settings.timeRate=next==='real'?'real':Number(next);saveSettings(settings);hud.toast(next==='real'?'Real time':'Time runs at '+next+'×');}
  const control=mode==='playing'?{paddle:input.paddle,turn:input.turn,anchorToggle:!!pressed.KeyX}:{paddle:0,turn:0,anchorToggle:false};
  if(mode==='playing'&&pressed.KeyX)hud.toast(kayak.state.anchored?'Anchor up':'Anchor down');
- if(pressed.Tab&&mode==='playing')nextRig();
+ if(pressed.Tab&&mode==='playing')nextRig();if(pressed.KeyC&&mode==='playing')toggleLureCam();
  kayak.step(dt,control,env);
  // the cast: a held button loads the rod (after a still 180 ms so a quick drag only looks), release throws
  const mouseHold=!!drag&&(performance.now()-drag.t)>180&&(drag.charging||dragMoved<8);if(drag&&mouseHold)drag.charging=true;
@@ -117,13 +123,17 @@ function step(dt){
  lake.update(dt,kayak.state.x,kayak.state.z);cover.update(simTime,surface);shore.update(simTime,weather.wind,quality,camera.position);
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;updateAnglerCamera(camera,kayak.state,look,dt,{steady:settings.steadyCamera||reduced?1:0});
  angling.update(dt,simTime,{charging,reeling:mode==='playing'&&(input.reeling||qaReel)},camera);hud.setCast(angling.state.phase,angling.state.power);
- if(cameraMode==='shore'){const p=worldFromFrame(150,halfWidth(150,1)+3);camera.position.set(p.x,2.2,p.z);camera.lookAt(kayak.state.x,0,kayak.state.z);}else if(cameraMode==='under'){camera.position.y=-1.2;}
+ if(cameraMode==='shore'){const p=worldFromFrame(150,halfWidth(150,1)+3);camera.position.set(p.x,2.2,p.z);camera.lookAt(kayak.state.x,0,kayak.state.z);}
+ else if(cameraMode==='under'){const fx0=Math.sin(kayak.state.heading),fz0=Math.cos(kayak.state.heading);camera.position.set(kayak.state.x+fx0*2.5,-1.3,kayak.state.z+fz0*2.5);camera.lookAt(kayak.state.x+fx0*9,-3.6,kayak.state.z+fz0*9);}
+ else if(cameraMode==='lurecam'){if(angling.state.phase!=='retrieve'){cameraMode='surface';hud.toast('Lure is in: back in the kayak');}else{const lp=angling.lure();const dx=lp.x-kayak.state.x,dz=lp.z-kayak.state.z,d=Math.hypot(dx,dz)||1;const ux=dx/d,uz=dz/d;const bed=bathy.height(lp.x-ux*1.5,lp.z-uz*1.5);const goalY=Math.max(bed+.3,Math.min(waterLevel.value-.14,lp.y+(lp.y<-.9?.35:-.28)));lureCamPos.set(lp.x-ux*1.5,goalY,lp.z-uz*1.5);if(!lureCamLive){lureCamCur.copy(lureCamPos);lureCamLive=true;}lureCamCur.lerp(lureCamPos,1-Math.exp(-dt*5));camera.position.copy(lureCamCur);lureCamLook.set(lp.x,lp.y+.03,lp.z);camera.lookAt(lureCamLook);}}
+ if(cameraMode!=='lurecam')lureCamLive=false;
+ const camDepth=Math.max(0,waterLevel.value-camera.position.y);fx.update(simTime,camera,lake.underwater,camDepth,sd,Math.max(0,Math.min(1,sd.elevation/15)),renderer.getPixelRatio(),quality);
  conditionsClock+=dt;if(conditionsClock>.25){conditionsClock=0;const ev=sunEvents(clock.ms);const doy=dayOfYear(clock.ms);const optics=seasonOptics(doy,weather.rain);lake.setProfile(optics);
   hud.setTackle(angling.snapshot(),angling.rig().name,angling.describe());
   hud.setConditions({time:formatClock(clock.ms),date:formatDate(clock.ms)+(clock.mode==='real'?' · live':' · '+clock.rate+'×'),wind:Math.round(env.windMs*2.237)+' mph '+compass(weather.from)+' · '+WEATHER[weatherName].label,water:Math.round(waterTempF(doy))+'°F · '+(optics.profile==='lakeClear'?'clear':optics.profile==='lakeStained'?'stained':optics.profile==='lakeBloom'?'algae bloom':'green'),sun:ev.sunrise?'Sunrise '+formatClock(ev.sunrise)+' · Sunset '+formatClock(ev.sunset):'',hour:hourOfDay(clock.ms)});}
  hud.tick();
 }
-let shadowFrame=0;function render(){renderer.shadowMap.needsUpdate=renderer.shadowMap.enabled&&(shadowFrame++%4===0);lake.render(camera);}
+let shadowFrame=0;function render(){renderer.shadowMap.needsUpdate=renderer.shadowMap.enabled&&(shadowFrame++%4===0);lake.render(camera);fx.render(renderer);}
 function frame(now){requestAnimationFrame(frame);const raw=frameElapsed((now-last)/1000);last=now;
  if(quality==='saver'&&(saverToggle^=1)){pendingDt+=raw;return;}const dt=Math.min(raw+pendingDt,.05);pendingDt=0;
  step(dt);render();
@@ -133,7 +143,7 @@ let pendingDt=0,lastFps=0;
 const app={step,render,renderer,version:VERSION,start,cast:(power=.8)=>{if(mode!=='playing')start();angling.beginCharge();angling.state.power=power;angling.release(camera);return angling.snapshot();},setReeling:v=>{qaReel=!!v;},twitch:()=>angling.twitch(simTime),rig:i=>{typeof i==='number'?angling.setRig(i):nextRig();return angling.rig().id;},angling:()=>angling.snapshot(),setQuality:q=>{applyQuality(q);settings.quality=q;},setHour:h=>setHour(clock,h),setRate,setWind,setWeather,setCamera,addRipple,setPolarized,
  forceSize:(w,h)=>{renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();lake.resize();},
  debug:()=>({scene,bed,cover,shore,kayak,lake,sky,camera,sun,mist,ambient}),stats:()=>({fps:lastFps,quality,tris:renderer.info.render.triangles,calls:renderer.info.render.calls,programs:renderer.info.programs?.length,scenery:shore.counts,cover:cover.features.length}),
- state:()=>({mode,angling:angling.snapshot(),clock:{ms:clock.ms,rate:clock.rate,mode:clock.mode,local:formatClock(clock.ms)},sunElevation:lastElevation,weather:{...weather,name:weatherName},kayak:{...kayak.state},polarized,camera:camera.position.toArray(),depthUnderKayak:bathy.depth(kayak.state.x,kayak.state.z)})};
+ state:()=>({mode,angling:angling.snapshot(),cameraMode,underwater:lake.underwater,clock:{ms:clock.ms,rate:clock.rate,mode:clock.mode,local:formatClock(clock.ms)},sunElevation:lastElevation,weather:{...weather,name:weatherName},kayak:{...kayak.state},polarized,camera:camera.position.toArray(),depthUnderKayak:bathy.depth(kayak.state.x,kayak.state.z)})};
 installQA(app);
 hud.setSettings(settings);setWeather(settings.weather);Object.assign(weather,WEATHER[settings.weather]);setRate(settings.timeRate==='real'?'real':String(settings.timeRate||4));
 hud.showMenu({});

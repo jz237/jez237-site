@@ -10,8 +10,11 @@
 - **Sky** (`sky.js`): palette by sun elevation (night, dusk, gold, day) blended with cloud cover, sun disc and glow, two drifting fbm cloud layers lit from the sun's side, stars after dark, horizon haze. The same palette drives the directional light, hemisphere ambient, fog and the environment map (refreshed when the elevation changes by 1.5°).
 - **Mist** (`mist.js`): three noise-alpha sheets below eye level, strongest from −7° to +5° of sun elevation and gone above wind 0.5.
 
+## Underwater (v0.3.0)
+`lake-under-fragment.js` renders the surface from below (water-to-air Fresnel, TIR beyond 48.6°, refracted above-world, mirrored underwater world on High); `optics.js` sets the water-column fog (swapped as a separate fog object per pass so Three refreshes the uniforms); `underwater-fx.js` adds particulate and screen-space light shafts. The mirror pass uses a clip plane keeping y ≤ waterline + 5 cm.
+
 ## Not yet
-The underwater camera branch (Snell's window, absorption fog, light shafts) is designed but not built; the surface shader assumes the eye above the water. Breaking crests, spray and a wave spectrum are out of scope for a lake.
+Breaking crests, spray and a wave spectrum are out of scope for a lake.
 
 ## Approximations, stated
 Analytic bands are not a sea state; deep-water dispersion is used everywhere (valid for these wavelengths); the reflection is planar; refraction is screen-space; the ripple field is linear; the bed is invented from the lake's character.

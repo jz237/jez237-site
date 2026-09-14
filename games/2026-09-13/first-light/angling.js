@@ -93,7 +93,7 @@ export function makeAngling(scene,kayak,env){
   const camPos=camera.position;const linePts=state.phase==='idle'?[[t.x,t.y,t.z],[t.x,t.y-.28,t.z]]:null;
   for(let i=0;i<N;i++){let x,y,z;if(linePts){const s=i/(N-1);x=linePts[0][0]+(linePts[1][0]-linePts[0][0])*s;y=linePts[0][1]+(linePts[1][1]-linePts[0][1])*s;z=linePts[0][2];}else{x=line.x[i];y=line.y[i];z=line.z[i];}
    const j=Math.min(N-1,i+1),i0=Math.max(0,i-1);const sx=(linePts?0:line.x[j]-line.x[i0]),sy=(linePts?-1:line.y[j]-line.y[i0]),sz=(linePts?0:line.z[j]-line.z[i0]);
-   tmp.set(sx,sy,sz).normalize();tmp2.set(camPos.x-x,camPos.y-y,camPos.z-z);const dist=tmp2.length();tmp2.normalize();const right=tmp.cross(tmp2).normalize();const w=.0022+dist*.0016;
+   tmp.set(sx,sy,sz).normalize();tmp2.set(camPos.x-x,camPos.y-y,camPos.z-z);const dist=tmp2.length();tmp2.normalize();const right=tmp.cross(tmp2).normalize();const w=.0005+dist*.0013;
    rpos[i*6]=x+right.x*w;rpos[i*6+1]=y+right.y*w;rpos[i*6+2]=z+right.z*w;rpos[i*6+3]=x-right.x*w;rpos[i*6+4]=y-right.y*w;rpos[i*6+5]=z-right.z*w;}
   ribbonGeo.attributes.position.needsUpdate=true;ribbon.material.opacity=state.phase==='idle'?.6:.85;
  }

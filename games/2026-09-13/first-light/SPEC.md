@@ -11,6 +11,9 @@
 - **Persistence:** `first_light_settings_v1`.
 - **QA hook:** `window.__FIRST_LIGHT` (see README).
 
+## v0.3.0 lure cam
+Underwater render branch (hysteresis −4 cm enter / −0.5 cm exit), per-pass fog objects, lure cam follow (1.5 m behind the lure along the kayak-to-lure line, below it when shallow and slightly above when deeper than 0.9 m, clamped 14 cm under the surface and 30 cm off the bed), QA `setCamera('lurecam'|'under')`.
+
 ## M2 first fish (next)
 Largemouth hero model, material and rig; brain core states; tackle chain with weakest-link readout; cast (ballistic with drag, preview arc), 24-node Verlet line with buoyancy by line type, technique recognizer (3 s window over reel rate and rod-tip velocity), bite signatures (tick 80 ms, thump 200 ms, weed ramp, snag), hookset window from strike + species delay to +1.2 s (musky 2.5 s), fight with both failure modes (slack drains hookHold during HEADSHAKE/JUMP; overload past the weakest link breaks after a ~1 s reaction window), side pressure, landing at stamina < 0.15 within 3 m, in-hand hero view with the measuring board, catch card, release; lure cam and strike replay via the underwater branch; three lures; optional pro meters; **Watch Demo v1** (angler brain, technique executor, fight controller, first director shot set) doubling as the end-to-end QA bot.
 
