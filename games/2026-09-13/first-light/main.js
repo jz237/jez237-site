@@ -26,8 +26,10 @@ import {makeAngling} from './angling.js';
 import {makeUnderwaterFx} from './underwater-fx.js';
 import {underwaterFogDensity,underwaterFogColor} from './optics.js';
 import {makePopulation} from './fish.js';
+import {loadFishAssets,makePhotoFishMesh} from './fish-photo.js';
+import {makeFishMesh} from './fish-body.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.4.0';
+export const VERSION='0.5.0';
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -75,7 +77,8 @@ const fx=makeUnderwaterFx(scene);const fogAir=scene.fog,fogWater=new T.FogExp2(0
 lake.hooks.setFog=m=>{scene.fog=m==='water'?fogWater:fogAir;};
 function toggleLureCam(){if(cameraMode==='lurecam'){cameraMode='surface';hud.toast('Back in the kayak');}else if(angling.state.phase==='retrieve'){cameraMode='lurecam';hud.toast('Lure cam · C to return');}else hud.toast('Cast first, then C follows the lure');}
 function nextRig(){if(angling.state.phase==='fight'||angling.state.phase==='landed')return;angling.nextRig();hud.toast(angling.rig().name+' — '+angling.describe(),5000);}
-const pop=makePopulation(scene,bathy,cover.features,{count:10});const journal=(()=>{try{return JSON.parse(localStorage.getItem('first_light_journal_v1')||'{"catches":[]}');}catch{return {catches:[]};}})();
+const fishAssets=await loadFishAssets('largemouth');const pop=makePopulation(scene,bathy,cover.features,{count:10,assets:fishAssets});let studio=null;
+function setStudio(len){if(studio){scene.remove(studio.root);studio=null;}if(len){studio=fishAssets?makePhotoFishMesh(len,fishAssets):makeFishMesh(len);scene.add(studio.root);cameraMode='studio';}else cameraMode='surface';}const journal=(()=>{try{return JSON.parse(localStorage.getItem('first_light_journal_v1')||'{"catches":[]}');}catch{return {catches:[]};}})();
 function releaseFish(){if(angling.state.phase!=='landed')return;angling.releaseFish(simTime);hud.hideCard();cameraMode='surface';hud.toast('Released');}
 function handleAnglingEvents(){for(const e of angling.drainEvents()){
  if(e.type==='bite'){hud.toast('Fish on the line — set the hook!',1500);navigator.vibrate?.(60);}
@@ -84,7 +87,7 @@ function handleAnglingEvents(){for(const e of angling.drainEvents()){
  else if(e.type==='lost'){hud.toast(e.reason==='broke off'?'Broke off — the '+angling.chain().weakest.part+' gave way. Re-tie and try again.':'It threw the hook. Keep the line tight through the shakes.',5000);pop.markEscape(e.fish,angling.parts().lure.family);}
  else if(e.type==='landed'){const d=pop.describe(e.fish);cameraMode='hero';heroFish=e.fish;const cls={young:'Young',common:'Common',trophy:'Trophy',legend:'Legend'}[d.sizeClass];const name=e.fish.brain.name?e.fish.brain.name+' · ':'';hud.showCard({species:name+pop.species.name,size:cls+' · '+d.lengthIn+' in · '+d.weightText,detail:angling.rig().name+' · '+angling.parts().lure.name+' · '+(lastTechnique||'straight retrieve')+' · fought '+e.seconds.toFixed(0)+' s',meta:formatClock(clock.ms)+' · '+formatDate(clock.ms)+' · '+WEATHER[weatherName].label+' · '+Math.round(env.windMs*2.237)+' mph '+compass(weather.from)});journal.catches.push({species:pop.species.id,lengthIn:d.lengthIn,weightLb:d.weightLb,sizeClass:d.sizeClass,lure:angling.parts().lure.id,technique:lastTechnique,at:clock.ms,name:e.fish.brain.name});try{localStorage.setItem('first_light_journal_v1',JSON.stringify(journal));}catch{}pop.markEscape(e.fish,angling.parts().lure.family);}
  else if(e.type==='released'){heroFish=null;}}}
-let heroFish=null,lastTechnique='',fightInput={reeling:0,sidePressure:0,rodUp:.6},qaFight=null;
+let studioVisible=true,heroFish=null,lastTechnique='',fightInput={reeling:0,sidePressure:0,rodUp:.6},qaFight=null;
 function applyQuality(q){quality=q;lake.setQuality(q);const ratio=q==='high'?Math.min(devicePixelRatio,1.5):q==='medium'?1:.75;renderer.setPixelRatio(ratio);renderer.setSize(innerWidth,innerHeight);lake.resize();renderer.shadowMap.enabled=q==='high'||q==='medium';sun.shadow.mapSize.set(q==='high'?2048:1024,q==='high'?2048:1024);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}
 function setPolarized(v){polarizedTarget=v?1:0;settings.polarized=!!v;saveSettings(settings);hud.setLenses(!!v);hud.toast(v?'Polarized lenses on':'Lenses off');}
 function setCamera(name){cameraMode=name;}
@@ -145,6 +148,7 @@ function step(dt){
  {const a=angling.state,lp=angling.lure(),ev=sunEvents(clock.ms);const lure=a.phase==='retrieve'?{x:lp.x,y:lp.y,z:lp.z,speed:angling.line.lureSpeed,family:angling.parts().lure.family,technique:a.label,inWater:true,onSurface:angling.line.lureDepth<.05}:null;
   pop.update(dt,simTime,hourOf(clock.ms),ev.sunrise?hourOf(ev.sunrise):6.5,ev.sunset?hourOf(ev.sunset):19.5,lure,{x:kayak.state.x,z:kayak.state.z},lakeLightingClarity());
   if(a.phase==='retrieve')for(const f of pop.fish)if(f.brain.state==='BITE'){angling.bite(f,simTime);break;}}
+ if(cameraMode==='studio'&&studio){const fwd=new T.Vector3();camera.getWorldDirection(fwd);fwd.y=0;fwd.normalize();const L=studio.root.scale.x;const pos=camera.position.clone().addScaledVector(fwd,.22+L*.6);pos.y=camera.position.y+.06;studio.root.position.copy(pos);studio.root.rotation.set(0,Math.atan2(fwd.x,fwd.z)+Math.PI/2,0);studio.root.visible=studioVisible;studio.setSwim(0,0,0);studio.setWet(0);camera.lookAt(pos);}
  if(cameraMode==='hero'&&heroFish){const b=heroFish.brain,fwd=new T.Vector3();camera.getWorldDirection(fwd);const right=new T.Vector3().crossVectors(fwd,new T.Vector3(0,1,0)).normalize();const L=heroFish.brain.length;const pos=camera.position.clone().addScaledVector(fwd,.5+L*.8).addScaledVector(right,.22).addScaledVector(new T.Vector3(0,1,0),-.16);heroFish.body.root.position.copy(pos);heroFish.body.root.rotation.set(-.1+Math.sin(simTime*.9)*.05,Math.atan2(fwd.x,fwd.z)+Math.PI/2+Math.sin(simTime*.7)*.2,-.12);heroFish.body.setWet(1);heroFish.body.setJaw(.35);heroFish.body.setSwim(simTime*4,.006,0);heroFish.body.root.visible=true;b.x=pos.x;b.y=pos.y;b.z=pos.z;}
  if(cameraMode==='shore'){const p=worldFromFrame(150,halfWidth(150,1)+3);camera.position.set(p.x,2.2,p.z);camera.lookAt(kayak.state.x,0,kayak.state.z);}
  else if(cameraMode==='under'){const fx0=Math.sin(kayak.state.heading),fz0=Math.cos(kayak.state.heading);camera.position.set(kayak.state.x+fx0*2.5,-1.3,kayak.state.z+fz0*2.5);camera.lookAt(kayak.state.x+fx0*9,-3.6,kayak.state.z+fz0*9);}
@@ -165,7 +169,7 @@ function frame(now){requestAnimationFrame(frame);const raw=frameElapsed((now-las
 }
 let pendingDt=0,lastFps=0;
 function lakeLightingClarity(){return lake.mat.uniforms.clarity.value;}
-const app={step,render,renderer,version:VERSION,start,spawnFish:(x,z,len=.42,bold=.7)=>{const f=pop.spawn(x,z,len,bold);return f?pop.info(f):null;},fish:()=>pop.fish.map(pop.info),forceStrike:()=>{const lp=angling.lure();const f=pop.nearest(lp.x,lp.z);if(!f)return null;f.brain.state='STRIKE';f.brain.stateTime=0;f.brain.strikeReady=simTime;f.brain.refuseUntil=-1;return pop.info(f);},setHook:()=>angling.setHook(simTime),fightState:()=>angling.fight(),fightInput:i=>{qaFight=i;},releaseFish,journal:()=>journal,cast:(power=.8)=>{if(mode!=='playing')start();angling.beginCharge();angling.state.power=power;angling.release(camera);return angling.snapshot();},setReeling:v=>{qaReel=!!v;},twitch:()=>angling.twitch(simTime),rig:i=>{typeof i==='number'?angling.setRig(i):nextRig();return angling.rig().id;},angling:()=>angling.snapshot(),setQuality:q=>{applyQuality(q);settings.quality=q;},setHour:h=>setHour(clock,h),setRate,setWind,setWeather,setCamera,addRipple,setPolarized,
+const app={step,render,renderer,version:VERSION,start,studio:(len)=>{setStudio(len);return !!studio;},studioVisible:v=>{studioVisible=v;},photoFish:!!fishAssets,spawnFish:(x,z,len=.42,bold=.7)=>{const f=pop.spawn(x,z,len,bold);return f?pop.info(f):null;},fish:()=>pop.fish.map(pop.info),forceStrike:()=>{const lp=angling.lure();const f=pop.nearest(lp.x,lp.z);if(!f)return null;f.brain.state='STRIKE';f.brain.stateTime=0;f.brain.strikeReady=simTime;f.brain.refuseUntil=-1;return pop.info(f);},setHook:()=>angling.setHook(simTime),fightState:()=>angling.fight(),fightInput:i=>{qaFight=i;},releaseFish,journal:()=>journal,cast:(power=.8)=>{if(mode!=='playing')start();angling.beginCharge();angling.state.power=power;angling.release(camera);return angling.snapshot();},setReeling:v=>{qaReel=!!v;},twitch:()=>angling.twitch(simTime),rig:i=>{typeof i==='number'?angling.setRig(i):nextRig();return angling.rig().id;},angling:()=>angling.snapshot(),setQuality:q=>{applyQuality(q);settings.quality=q;},setHour:h=>setHour(clock,h),setRate,setWind,setWeather,setCamera,addRipple,setPolarized,
  forceSize:(w,h)=>{renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();lake.resize();},
  debug:()=>({scene,bed,cover,shore,kayak,lake,sky,camera,sun,mist,ambient}),stats:()=>({fps:lastFps,quality,tris:renderer.info.render.triangles,calls:renderer.info.render.calls,programs:renderer.info.programs?.length,scenery:shore.counts,cover:cover.features.length}),
  state:()=>({mode,angling:angling.snapshot(),fight:angling.fight(),fishStates:pop.fish.map(f=>f.brain.state),cameraMode,underwater:lake.underwater,clock:{ms:clock.ms,rate:clock.rate,mode:clock.mode,local:formatClock(clock.ms)},sunElevation:lastElevation,weather:{...weather,name:weatherName},kayak:{...kayak.state},polarized,camera:camera.position.toArray(),depthUnderKayak:bathy.depth(kayak.state.x,kayak.state.z)})};
