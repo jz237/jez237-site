@@ -1,0 +1,11 @@
+# Art pipeline (fish, M2 onward)
+
+**Route:** one multi-view reference generation per species (lateral, dorsal, ventral, three-quarter on a flat key colour, fal gpt-image-2; art that must animate together must come from one generation) → Blender 4.5 LTS authoring via `source/blender/build_fish.py` (After the Storm's scripted pattern): sculpt, retopo to 20–40k tris, armature from a spine spline (~28 bones: spine_00..11, jaw, maxilla, gills, pectorals, pelvics, dorsals, anal, caudal), auto-weights, tangents exported, WebP textures → `source/pack-fish.mjs` (gltfpack quantization, meshoptimizer LOD) → `assets/fish/<species>.glb` with LOD0 and LOD1 nodes. Image-to-3D (Meshy/Tripo/Hunyuan3D) is a sculpt starting point only, never shipped.
+
+**Fallback:** procedural bodies (aquascape Tetra3D approach) as far LOD, all forage, and whenever a species file fails.
+
+**Budget:** hero species ≈ 4.3 MB (2K albedo and normal, 1K ORM, 1K fin RGBA, quantized LOD0+LOD1), small species ≈ 2.6 MB, ≈ 41 MB total, every file under 5 MB, lazy per lake. `tests/asset-budget.test.mjs` (M3) enforces ≤ 45 MB and the 25 MiB Cloudflare Pages per-file cap, which the deploy script otherwise skips silently. Spill path: R2 bucket `jez237-site-media` with an `assetBase` override.
+
+**Tools on this box (installed 2026-09-13):** Blender 4.5.13 at `~/.local/bin/blender` (headless: `blender -b file.blend --python script.py`), `~/.openclaw/workspace/tools/first-light-tools` (meshoptimizer 0.24.0, gltfpack), `~/.openclaw/workspace/tools/first-light-venv` (numpy 2.5, Pillow 12, scipy 1.18). The AMD Radeon 8060S renders Cycles on CPU headlessly if EEVEE cannot get a context.
+
+**Acceptance per species:** side-by-side with a reference photo, gallery turntable at every size class, swim and fight poses on a filmstrip, dE against its own reference sheet.
