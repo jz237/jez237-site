@@ -8,7 +8,7 @@ export function installShowroom(aquarium:Aquarium){
  document.body.classList.add('store-showroom');
  document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';
  document.querySelector('h1')!.textContent='Living Showroom';
- document.querySelector('header nav')!.innerHTML='<a href="../" target="_top">← Showroom & tank planner</a>';
+ document.querySelector('header nav')!.innerHTML='';
  document.querySelector('.bottom-note')!.textContent='Explore • Learn • Build a tank like this';
  const send=(data:object)=>{if(parent!==window)parent.postMessage({channel:'hidden-reef-aquarium',...data},location.origin);};
  document.addEventListener('aquascape-context',event=>send({type:'context',...(event as CustomEvent).detail}));
@@ -16,7 +16,7 @@ export function installShowroom(aquarium:Aquarium){
   if(event.origin!==location.origin||event.source!==parent||event.data?.channel!=='hidden-reef-showroom')return;
   const {type,value}=event.data;
   if(type==='visibility'&&typeof value==='boolean'){aquarium.suspended=!value;return;}
-  if(type==='cutaway'){aquarium.onLessonRequest('water');document.querySelector<HTMLButtonElement>('[data-step="1"]')?.click();return;}
+  if(type==='cutaway'){aquarium.onFilterRequest();return;}
   if(type==='lesson'&&Object.hasOwn(lessonNames,value)){aquarium.onLessonRequest(value as Lesson);return;}
   if(type==='explore'){
    const learn=document.querySelector<HTMLButtonElement>('#learn')!;

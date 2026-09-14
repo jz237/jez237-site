@@ -10,7 +10,7 @@ function fixture(search='?showroom=hidden-reef'){
  const listeners={},nodes=new Map(),sent=[],calls=[];
  const node=key=>{if(!nodes.has(key))nodes.set(key,{textContent:'',innerHTML:'',expanded:'false',getAttribute(){return this.expanded;},click(){this.expanded='true';calls.push(key);}});return nodes.get(key);};
  const parent={postMessage:message=>sent.push(message)},document={body:{classList:{add(){}}},querySelector:node,addEventListener:(name,fn)=>listeners[name]=fn};
- const aquarium={paused:false,suspended:false,identifyMode:false,onLessonRequest:m=>calls.push(m),onIdentify:info=>calls.push(info),identifyFish:i=>calls.push(['fish',i])};
+ const aquarium={paused:false,suspended:false,identifyMode:false,onFilterRequest:()=>calls.push('detailed-filter'),onLessonRequest:m=>calls.push(m),onIdentify:info=>calls.push(info),identifyFish:i=>calls.push(['fish',i])};
  const context={document,parent,window:{},location:{origin:'https://reef.test',search},URLSearchParams,lessonNames,addEventListener:(name,fn)=>listeners[name]=fn};
  vm.runInNewContext(source,context);context.install(aquarium);
  const message=(data,origin='https://reef.test',sender=parent)=>listeners.message?.({origin,source:sender,data:{channel:'hidden-reef-showroom',...data}});
@@ -26,7 +26,7 @@ test('offscreen suspension preserves the visitor pause state and rejects malform
  f.message({type:'visibility',value:true});assert.equal(f.aquarium.suspended,false);assert.equal(f.aquarium.paused,true);
 });
 test('cutaway opens its detailed filter step and identification reports context',()=>{
- const f=fixture();f.message({type:'cutaway'});assert.deepEqual(f.calls,['water','[data-step="1"]']);
+ const f=fixture();f.message({type:'cutaway'});assert.deepEqual(f.calls,['detailed-filter']);
  f.listeners['aquascape-context']({detail:{kind:'fish',name:'Cardinal tetra'}});assert.equal(f.sent.at(-1).type,'context');assert.equal(f.sent.at(-1).name,'Cardinal tetra');
 });
 test('standalone aquarium does not install store controls',()=>{

@@ -51,6 +51,7 @@ export class Aquarium{
  identifyMode=false;following:number|null=null;private followApproach=false;
  onIdentify:(info:Identification|null)=>void=()=>{};
  onLessonRequest:(mode:Lesson)=>void=()=>{};
+ onFilterRequest:(part?:number)=>void=()=>{};filterOpen=false;
  onExploreClose:()=>void=()=>{};
  private picker:PlantPicker|null=null;
  private browseSites:FishPoint[]=[];
@@ -408,7 +409,7 @@ export class Aquarium{
  }
  private animate=(now:number)=>{
   this.frame=requestAnimationFrame(this.animate);
-  if(document.hidden||this.suspended){this.frameBenchmark?.cancel();this.last=0;return;}
+  if(document.hidden||this.suspended||this.filterOpen){this.frameBenchmark?.cancel();this.last=0;return;}
   this.frameBenchmark?.tick(now);
   const probe=this.frameBenchmark?.mode??'normal';
   if(probe!=='normal'){
