@@ -3944,5 +3944,111 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-13-factual-infographic-factual-infographic-agoraphobia-when-es",
+    "title": "Factual infographic: Agoraphobia — When Escape Feels Out of Reach",
+    "tests": "Sunday phobia-infographic lane 2/2 and daily quota 6/6; scheduled spacing slot 22:20 ET; selected enriched entry: Factual infographic: Agoraphobia — When Escape Feels Out of Reach; factual_subtype: phobia-infographic; recognized phobia: Agoraphobia; real-world/non-fiction educational topic; dominant transit-concourse hero plus 8 substantive panels and 4 major explanatory close-ups/diagrams; verified definition, five situation families, escape/help appraisal, immediate anxiety and body-alarm symptoms, avoidance and companion reliance, avoidance feedback, perceived-versus-actual danger, CBT and gradual supported exposure; no invented statistics, diagnosis, cure promise or unsafe exposure advice; direct-canvas portrait layout; source claims verified against NHS and NIMH; generated exactly once using openai/gpt-image-2.5-sunburst; exact same-run non-empty 1024x1536 PNG provenance verified; mandatory archive-wide concept, title, prompt and pixel duplicate gates returned unique; subjective visual review correctly skipped under the 2026-09-11 selective-review directive for non-Monday categories.",
+    "prompt": "Create a very detailed museum-quality direct-canvas portrait infographic titled “AGORAPHOBIA — WHEN ESCAPE FEELS OUT OF REACH.” The canvas itself is the finished orthographic information design, straight-on and edge-to-edge, 1024×1536 portrait, with no paper edge, frame, wall, desk, screen, room around the layout, or cast shadow around the whole composition. Use authoritative editorial typography, large readable labels, precise leader lines, generous spacing, and a restrained transit palette of deep navy, warm amber, concrete gray, and safety teal. Prioritize medical accuracy and legibility over decoration. Do not print URLs, citations, prevalence figures, medication names or doses.\n\nMake the dominant hero visualization occupy roughly the upper 40 percent: a photorealistic human-eye view inside a large railway concourse at a calm ordinary hour, showing ticket gates ahead, a queue at one side, a broad open floor, an enclosed train carriage through a side cutaway, and an exit/help point that is physically present but feels hard to reach through the layered space. One ordinary adult traveler stands still near the foreground with a trusted companion beside them; show no panic spectacle, collapse, emergency, danger, or hostile crowd. Integrate five concise callouts around the hero: “PUBLIC TRANSPORT,” “OPEN SPACE,” “ENCLOSED SPACE,” “LINE OR CROWD,” and “OUTSIDE HOME ALONE.” The visual should communicate that agoraphobia is more complex than simply fear of open spaces.\n\nBelow and around the hero, build eight substantial illustrated panels, each with a distinct purpose and readable short text:\n1. DEFINITION — “Fear of situations where escape may feel difficult or help may seem unavailable.” Use a five-part ring of small environment vignettes matching the five situation families above.\n2. THE APPRAISAL — a large cutaway decision-path diagram from “WHERE IS THE EXIT?” and “COULD HELP REACH ME?” to “THREAT FEELS HIGH,” explicitly labeling this as perceived difficulty, not proof of actual danger.\n3. BODY ALARM — a detailed anatomical human silhouette with four enlarged callouts: heart “RAPID HEARTBEAT,” lungs “RAPID BREATHING,” skin “HOT OR SWEATY,” and stomach “NAUSEA.”\n4. SENSORY UNCERTAINTY — three close-up windows of blocked sightlines at gates, bodies obscuring an exit, and the closed geometry of a carriage; explain with the short label “UNCERTAINTY CAN AMPLIFY THE ALARM.”\n5. AVOIDANCE — a split scene contrasting entering the concourse with ordering from home or turning away; label “AVOIDING TRIGGERS CAN SHRINK DAILY ROUTES.”\n6. COMPANION RELIANCE — a close-up of two hands holding a transit card together and two figures traveling side by side; label “SOME PEOPLE LEAVE HOME ONLY WITH SOMEONE THEY TRUST.”\n7. FEEDBACK LOOP — a clear four-node circular diagram: “FEARED SITUATION → BODY ALARM → ESCAPE OR AVOIDANCE → SHORT-TERM RELIEF,” with an outer arrow back to heightened future fear. Do not imply personal blame.\n8. EVIDENCE-BASED HELP — a stepped illustrated path with clinician and traveler planning together: “ASSESSMENT → CBT SKILLS → GRADUAL, SUPPORTED EXPOSURE → RECLAIMED ACTIVITIES.” Add the safety note “Professional guidance can tailor the pace. Do not force sudden exposure.”\n\nAdd a concise bottom band: “NOT EVERYONE WITH AGORAPHOBIA HAS A HISTORY OF PANIC ATTACKS” and “GENERAL EDUCATION — NOT A PERSONAL DIAGNOSIS.” Include three or more major explanatory close-ups/diagrams beyond the hero: body-alarm anatomy, escape-appraisal path, avoidance loop, and supported-help staircase. Keep every illustrated causal relationship exactly within the supplied labels. No invented statistics, diagnostic checklist, cure promise, monsters, gore, coercion, sensational panic, unsafe exposure instruction, pseudo-text, illegible paragraphs, logos, watermark, decorative bibliography, photographed poster, or sparse school-poster appearance.",
+    "image": "images/2026-09-13-factual-infographic-factual-infographic-agoraphobia-when-es.jpg",
+    "thumb": "thumbs/2026-09-13-factual-infographic-factual-infographic-agoraphobia-when-es.webp",
+    "color": "#7a868e",
+    "date": "2026-09-13",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "agoraphobia-escape-appraisal-transit-concourse",
+      "imageSha256": "9cdf0e8dffe78df991878d80766e6dd0dc425b3ad6523f70b05658dc24992215",
+      "imageDHash": "4ec3cb2da6b6a4a4"
+    },
+    "factualInfographic": {
+      "topic": "Agoraphobia: fear of situations where escape may be difficult or help unavailable",
+      "description": "A detailed real-world educational infographic explaining how agoraphobia can connect escape or help concerns across public transport, open and enclosed spaces, lines or crowds, and being outside home alone; it maps body alarm, avoidance, and evidence-based professional help without diagnosing the viewer.",
+      "sourceNote": "Verified scope: definition, triggering situation families, panic-like symptoms, avoidance and companion reliance, panic association, disproportionate fear, CBT, supported exposure, and seeking qualified help. National Health Service — Overview: https://www.nhs.uk/mental-health/conditions/agoraphobia/overview/ ; National Institute of Mental Health — Phobias and Phobia-Related Disorders: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-14T02:22:53Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Health Service",
+            "title": "Overview - Agoraphobia",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/agoraphobia/overview/"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Agoraphobia involves fear of situations where escape might be difficult or help might not be available if something goes wrong.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Triggering situations can include public transport, open spaces, enclosed spaces, standing in line or crowds, and being outside the home alone.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A stressful triggering situation can produce immediate intense anxiety and panic-like symptoms such as rapid heartbeat, rapid breathing, sweating, feeling hot, or nausea.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "People may actively avoid triggering situations or leave home only with a trusted companion.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoidance may follow an association between panic attacks and the places where they occurred, although not everyone with agoraphobia has a history of panic attacks.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobic fear may be out of proportion to the actual danger presented by the situation.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Cognitive behavioral therapy teaches different ways of thinking, behaving, and reacting to help reduce anxiety and fear.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Exposure therapy is a CBT method that gradually addresses feared situations and activities that have been avoided; it should be presented as a supported treatment pathway, not an abrupt self-directed challenge.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A primary care provider or qualified mental health professional can assess symptoms and help identify appropriate treatment options.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
