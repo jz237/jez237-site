@@ -18,7 +18,7 @@ export class FilterReturnWater extends T.Group{
  update(time:number){
   const d=this.dummy;
   for(let i=0;i<360;i++){
-   const a=i*2.399963,r=.245*Math.sqrt(((i*73)%359+.5)/360),age=(time*(.8+(i%7)*.035)+i*.618034)%1;
+   const a=i*2.399963,r=.245*Math.sqrt(((i*73)%359+.5)/360),age=(time*(.8+(i%7)*.035)+((Math.imul(i^0x45d9f3b,1597334677)>>>0)/4294967296))%1;
    const spread=1+age*.9;
    d.position.set(2.8+Math.cos(a)*r*spread+age*.33,3.695-age*.72-age*age*.38,Math.sin(a)*r*spread);
    const width=.0035+(i%5)*.0006,fade=Math.min(1,(1-age)*5);
