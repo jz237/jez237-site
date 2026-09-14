@@ -29,6 +29,7 @@ function makeFloat(){const g=new T.Group();const top=new T.Mesh(new T.ConeGeomet
 export function makeAngling(scene,kayak,env){
  const state={rigIndex:0,phase:'idle',biteFish:null,biteAt:0,fight:null,fightFish:null,events:[],fightSeconds:0,power:0,charging:false,reeling:0,twitchClock:0,twitchSide:1,castCount:0,label:'idle',abrasion:0,snag:null,retie:0,flight:null,retrieveSpeed:0,rodYaw:0,rodPitch:0,castAnim:0,twitchAnim:0,inWater:false};
  let hiddenAll=false;function setVisible(v){hiddenAll=!v;}
+ let simple=false;function setSimple(v){simple=!!v;} // simplified controls: a tap casts at least a fair cast
  const line=createLine(24),rec=createRecognizer();let sampleClock=0,classifyClock=0;let realism={reaction:1,slack:1};
  function setRealism(r){realism={reaction:(r&&r.reaction)||1,slack:(r&&r.slack)||1};}
  // --- rod: nine tapered segments on nested pivots so tension can bend it
@@ -55,7 +56,7 @@ export function makeAngling(scene,kayak,env){
  function setRig(i){state.rigIndex=(i+RIGS.length)%RIGS.length;rig=RIGS[state.rigIndex];parts=rigParts(rig);chain=weakestLink(rig);scene.remove(lureObj);lureObj=lureMesh(parts.lure);scene.add(lureObj);state.phase='idle';state.flight=null;line.lineOut=1.2;}
  function worldTip(){kayak.group.updateMatrixWorld(true);tipObj.getWorldPosition(tip);return tip;}
  function beginCharge(){if(state.phase!=='idle'||state.retie>0)return false;state.phase='charging';state.power=0;return true;}
- function release(camera){if(state.phase!=='charging')return;const power=clamp(state.power,.08,1);camera.getWorldDirection(camDir);const yaw=Math.atan2(camDir.x,camDir.z);
+ function release(camera){if(state.phase!=='charging')return;if(simple)state.power=Math.max(state.power,.7);const power=clamp(state.power,.08,1);camera.getWorldDirection(camDir);const yaw=Math.atan2(camDir.x,camDir.z);
   const massFactor=clamp(Math.sqrt(parts.lure.massG/14),.7,1.15);const speed=(CAST.minSpeed+(CAST.maxSpeed-CAST.minSpeed)*power)*chain.castEfficiency*massFactor;
   const t=worldTip();state.flight={x:t.x,y:t.y+.1,z:t.z,vx:Math.sin(yaw)*Math.cos(CAST.elevation)*speed,vy:Math.sin(CAST.elevation)*speed,vz:Math.cos(yaw)*Math.cos(CAST.elevation)*speed,age:0};
   state.phase='flight';state.castAnim=1;state.castCount++;line.lineOut=1.2;resetLine(line,t.x,t.y,t.z);state.inWater=false;}
@@ -167,7 +168,7 @@ export function makeAngling(scene,kayak,env){
   if(hiddenAll){ribbon.visible=false;lureObj.visible=false;floatObj.visible=false;holderLine.visible=false;}
  }
  setRig(0);
- return {state,line,rig:()=>rig,parts:()=>parts,chain:()=>chain,describe:()=>describeRig(rig),setRig,setVisible,park,takeHolder,holderBite,canPark,holderTarget:()=>holderTargetModel(holder),holderState:t=>holderSnapshot(holder,t),nextRig:()=>setRig(state.rigIndex+1),beginCharge,release,twitch,reelIn,retie,setRealism,realism:()=>realism,update,tipPosition:()=>worldTip().clone(),bite,setHook,releaseFish,drainEvents,fight:()=>state.fight?{state:state.fight.state,stamina:+state.fight.stamina.toFixed(2),tension:+state.fight.tension.toFixed(2),hookHold:+state.fight.hookHold.toFixed(2),overload:+state.fight.overload.toFixed(2),pullKg:+state.fight.pull.toFixed(2),seconds:+state.fightSeconds.toFixed(1),lost:state.fight.lost,landed:state.fight.landed,weakestKg:chain.weakest.kg}:null,
+ return {state,line,rig:()=>rig,parts:()=>parts,chain:()=>chain,describe:()=>describeRig(rig),setRig,setVisible,setSimple,park,takeHolder,holderBite,canPark,holderTarget:()=>holderTargetModel(holder),holderState:t=>holderSnapshot(holder,t),nextRig:()=>setRig(state.rigIndex+1),beginCharge,release,twitch,reelIn,retie,setRealism,realism:()=>realism,update,tipPosition:()=>worldTip().clone(),bite,setHook,releaseFish,drainEvents,fight:()=>state.fight?{state:state.fight.state,stamina:+state.fight.stamina.toFixed(2),tension:+state.fight.tension.toFixed(2),hookHold:+state.fight.hookHold.toFixed(2),overload:+state.fight.overload.toFixed(2),pullKg:+state.fight.pull.toFixed(2),seconds:+state.fightSeconds.toFixed(1),lost:state.fight.lost,landed:state.fight.landed,weakestKg:chain.weakest.kg}:null,
   lure:()=>state.phase==='flight'?{...state.flight}:lurePosition(line),
   snapshot:()=>({phase:state.phase,fight:state.fight?state.fight.state:null,rig:rig.id,holder:!!holder.rod,lure:parts.lure.id,power:+state.power.toFixed(2),lineOut:+line.lineOut.toFixed(2),tension:+line.tension.toFixed(2),lureDepth:+line.lureDepth.toFixed(2),onBottom:line.lureOnBottom,technique:state.label,casts:state.castCount,reeling:state.reeling,abrasion:+state.abrasion.toFixed(2),lineWord:lineWord(state.abrasion),retie:+state.retie.toFixed(1),snagTries:state.snag?state.snag.tries:0,lure_pos:(()=>{const p=state.phase==='flight'?state.flight:lurePosition(line);return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2)];})()})};
 }
