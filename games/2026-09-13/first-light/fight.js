@@ -38,14 +38,14 @@ export function stepFight(ft,dt,input,geom){
  ft.stamina=clamp(ft.stamina-dt*(.028*tension/size+.004*reel)+ (tension<.2?dt*.004:0),0,1);
  // failure modes
  const slack=tension<.24*size&&(ft.state==='HEADSHAKE'||(ft.state==='JUMP'&&ft.jumpT>.3));
- ft.hookHold=clamp(ft.hookHold+(slack?-dt*1.4:dt*.08),0,1);
+ ft.hookHold=clamp(ft.hookHold+(slack?-dt*1.4/(ft.rig.slack||1):dt*.08),0,1);
  // paper mouth: a crappie horsed at more than 1.5x its own weight tears the hook out
  if(ft.fish.species&&ft.fish.species.paperMouth&&tension>ft.kg*1.5)ft.hookHold=clamp(ft.hookHold-dt*.7,0,1);
  if(ft.hookHold<=0){ft.lost='threw the hook';ft.state='LOST';}
  // wood frays the line while the fish runs through it; a frayed line breaks below its rating
  if(geom&&geom.nearWood)ft.abrasion=clamp(ft.abrasion+abradeRate(geom.nearWood,true)*dt,0,1);
  const overloaded=tension>ft.rig.weakestKg*.92*strengthFactor(ft.abrasion);
- ft.overload=clamp(ft.overload+(overloaded?dt:-dt*1.5),0,2);
+ ft.overload=clamp(ft.overload+(overloaded?dt/(ft.rig.reaction||1):-dt*1.5),0,2);
  if(ft.overload>=1){ft.lost='broke off';ft.state='LOST';}
  // teeth: an esocid on anything but a wire leader saws through the line at species.teeth per second
  const teeth=ft.fish.species&&ft.fish.species.teeth;if(teeth&&!ft.rig.wire&&ft.state!=='LOST'&&ft.random()<teeth*dt){ft.lost='bitten off';ft.state='LOST';}

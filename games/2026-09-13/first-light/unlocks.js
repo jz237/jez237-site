@@ -1,6 +1,8 @@
 // The tackle box grows through catches, never through money: three rigs to start, the rest earned
 // from the journal. Pure, node-testable.
 import {RIGS} from './tackle.js';
+export const SONAR_UNLOCK={count:12,label:'twelve fish'};
+export function isSonarUnlocked(journal){return (((journal&&journal.catches)||[]).length)>=SONAR_UNLOCK.count;}
 export const RIG_UNLOCKS={
  finesse:null,topwater:null,float:null,
  crank:{count:3,label:'three fish in the journal'},
@@ -12,7 +14,7 @@ export function isUnlocked(rigId,journal){const u=RIG_UNLOCKS[rigId];if(u===null
 export function unlockedRigs(journal){return RIGS.filter(r=>isUnlocked(r.id,journal)).map(r=>r.id);}
 // the next thing the player can earn, for the menu line
 export function nextUnlock(journal){
- const s=stats(journal);const locked=RIGS.filter(r=>!isUnlocked(r.id,journal));if(!locked.length)return null;
+ const s=stats(journal);const locked=RIGS.filter(r=>!isUnlocked(r.id,journal));if(!locked.length){if(!isSonarUnlocked(journal))return `Fish finder unlocks after ${SONAR_UNLOCK.label} (${Math.max(0,SONAR_UNLOCK.count-s.count)} more)`;return null;}
  const r=locked[0],u=RIG_UNLOCKS[r.id];
  if(u.count!==undefined)return `${r.name} unlocks after ${u.label} (${Math.max(0,u.count-s.count)} more)`;
  return `${r.name} unlocks after ${u.label}`;
