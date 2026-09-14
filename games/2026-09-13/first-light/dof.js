@@ -22,9 +22,11 @@ void main(){
  gl_FragColor=vec4(c,1.);
  #include <tonemapping_fragment>
  // the grade, on the tonemapped frame: saturation, contrast about mid grey, split tone, vignette
- {vec3 g=gl_FragColor.rgb;float l=dot(g,vec3(.2126,.7152,.0722));g=mix(vec3(l),g,sat);g=(g-.5)*contrast+.5;
+ {vec3 g=gl_FragColor.rgb;float l=dot(g,vec3(.2126,.7152,.0722));g=mix(vec3(l),g,sat);
+  // contrast about mid grey, but the darks keep their footing: below a quarter luminance the curve fades out, so a pre-dawn lake is dim, never crushed to black
+  g=mix(g,(g-.5)*contrast+.5,smoothstep(0.,.25,l));
   float hl=smoothstep(.35,.85,l),sh=1.-smoothstep(.1,.55,l);g=mix(g,g*warm,split*hl*.6);g=mix(g,g*cool,split*sh*.5);
-  vec2 v=vUv-.5;g*=1.-vignette*dot(v,v)*1.6;gl_FragColor.rgb=clamp(g,0.,1.);}
+  vec2 v=vUv-.5;g*=1.-vignette*dot(v,v)*1.2;gl_FragColor.rgb=clamp(g,0.,1.);}
  #include <colorspace_fragment>
 }`});
  const quad=new T.Scene();quad.add(new T.Mesh(new T.PlaneGeometry(2,2),mat));const cam=new T.Camera();
