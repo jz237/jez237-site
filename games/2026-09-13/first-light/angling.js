@@ -9,6 +9,7 @@ import {createLine,resetLine,setLure,stepLine,layLine,lurePosition,lureVelocity}
 import {createRecognizer,recordSample,recordTwitch,classify} from './technique.js';
 import {addImpact} from './surface-impulses.js';
 import {createFight,stepFight} from './fight.js';
+import {snagChance,abradeRate,attemptFree,snagBreakSeconds,lineWord,RETIE_SECONDS} from './snag.js';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const CAST={elevation:.62,minSpeed:7,maxSpeed:22,chargeSeconds:1.3};
 function lureMesh(lure){
@@ -25,7 +26,7 @@ function lureMesh(lure){
 // a slip float: red over white, sits on the surface above the bait and goes under on a take
 function makeFloat(){const g=new T.Group();const top=new T.Mesh(new T.ConeGeometry(.018,.032,10),new T.MeshStandardMaterial({color:0xe02a1a,roughness:.5}));top.position.y=.016;const bot=new T.Mesh(new T.ConeGeometry(.018,.032,10),new T.MeshStandardMaterial({color:0xf2efe6,roughness:.5}));bot.rotation.x=Math.PI;bot.position.y=-.016;g.add(top,bot);return g;}
 export function makeAngling(scene,kayak,env){
- const state={rigIndex:0,phase:'idle',biteFish:null,biteAt:0,fight:null,fightFish:null,events:[],fightSeconds:0,power:0,charging:false,reeling:0,twitchClock:0,twitchSide:1,castCount:0,label:'idle',flight:null,retrieveSpeed:0,rodYaw:0,rodPitch:0,castAnim:0,twitchAnim:0,inWater:false};
+ const state={rigIndex:0,phase:'idle',biteFish:null,biteAt:0,fight:null,fightFish:null,events:[],fightSeconds:0,power:0,charging:false,reeling:0,twitchClock:0,twitchSide:1,castCount:0,label:'idle',abrasion:0,snag:null,retie:0,flight:null,retrieveSpeed:0,rodYaw:0,rodPitch:0,castAnim:0,twitchAnim:0,inWater:false};
  const line=createLine(24),rec=createRecognizer();let sampleClock=0,classifyClock=0;
  // --- rod: nine tapered segments on nested pivots so tension can bend it
  const rodRoot=new T.Group();kayak.group.add(rodRoot);rodRoot.position.set(-.36,.34,.30);
@@ -42,27 +43,29 @@ export function makeAngling(scene,kayak,env){
  const tip=new T.Vector3(),tmp=new T.Vector3(),tmp2=new T.Vector3(),camDir=new T.Vector3();
  function setRig(i){state.rigIndex=(i+RIGS.length)%RIGS.length;rig=RIGS[state.rigIndex];parts=rigParts(rig);chain=weakestLink(rig);scene.remove(lureObj);lureObj=lureMesh(parts.lure);scene.add(lureObj);state.phase='idle';state.flight=null;line.lineOut=1.2;}
  function worldTip(){kayak.group.updateMatrixWorld(true);tipObj.getWorldPosition(tip);return tip;}
- function beginCharge(){if(state.phase!=='idle')return false;state.phase='charging';state.power=0;return true;}
+ function beginCharge(){if(state.phase!=='idle'||state.retie>0)return false;state.phase='charging';state.power=0;return true;}
  function release(camera){if(state.phase!=='charging')return;const power=clamp(state.power,.08,1);camera.getWorldDirection(camDir);const yaw=Math.atan2(camDir.x,camDir.z);
   const massFactor=clamp(Math.sqrt(parts.lure.massG/14),.7,1.15);const speed=(CAST.minSpeed+(CAST.maxSpeed-CAST.minSpeed)*power)*chain.castEfficiency*massFactor;
   const t=worldTip();state.flight={x:t.x,y:t.y+.1,z:t.z,vx:Math.sin(yaw)*Math.cos(CAST.elevation)*speed,vy:Math.sin(CAST.elevation)*speed,vz:Math.cos(yaw)*Math.cos(CAST.elevation)*speed,age:0};
   state.phase='flight';state.castAnim=1;state.castCount++;line.lineOut=1.2;resetLine(line,t.x,t.y,t.z);state.inWater=false;}
  function splashdown(time,x,y,z,v){const speed=Math.hypot(v.x,v.y,v.z);addImpact(x,z,time,Math.min(4.5,speed*.6));env.ripple(x,z,speed>6?'splash':'pebble');const t=worldTip();layLine(line,{x:t.x,y:t.y,z:t.z},{x,y,z});const last=N-1;line.px[last]=x-v.x*.01;line.py[last]=y-v.y*.004;line.pz[last]=z-v.z*.01;state.phase='retrieve';state.flight=null;state.inWater=true;}
- function twitch(time){if(state.phase!=='retrieve'||state.twitchClock>0)return false;state.twitchClock=.28;state.twitchAnim=1;recordTwitch(rec,time);const last=N-1,dt=1/60;const t=worldTip();const dx=t.x-line.x[last],dz=t.z-line.z[last],d=Math.hypot(dx,dz)||1;const L=parts.lure;
+ function twitch(time){if(state.phase==='snagged'&&state.twitchClock<=0){const s=state.snag;s.tries++;state.twitchClock=.4;state.twitchAnim=1;if(attemptFree(s.slack,Math.random)){state.phase='retrieve';state.snag=null;state.events.push({type:'snag',reason:'freed'});}else s.slack=0;return true;}if(state.phase!=='retrieve'||state.twitchClock>0)return false;state.twitchClock=.28;state.twitchAnim=1;recordTwitch(rec,time);const last=N-1,dt=1/60;const t=worldTip();const dx=t.x-line.x[last],dz=t.z-line.z[last],d=Math.hypot(dx,dz)||1;const L=parts.lure;
   let vx=dx/d*1.3,vy=0,vz=dz/d*1.3;
   if(L.action==='walk'){state.twitchSide*=-1;vx+=-dz/d*state.twitchSide*1.1;vz+=dx/d*state.twitchSide*1.1;}
   else if(L.action==='hop'){vy=.9;vx*=.6;vz*=.6;}
   else{vy=-.4;}
   line.px[last]-=vx*dt;line.py[last]-=vy*dt;line.pz[last]-=vz*dt;return true;}
- function reelIn(){state.phase='idle';state.inWater=false;line.lineOut=1.2;state.fight=null;state.fightFish=null;state.biteFish=null;}
+ function reelIn(){state.phase='idle';state.inWater=false;line.lineOut=1.2;state.fight=null;state.fightFish=null;state.biteFish=null;state.snag=null;}
+ // a free retie: three seconds with the rod down, and the line is fresh
+ function retie(){if(state.phase!=='idle'||state.retie>0)return false;state.retie=RETIE_SECONDS;return true;}
  // --- the bite, the set, the fight
  function bite(fish,time){if(state.phase!=='retrieve')return false;state.phase='bite';state.biteFish=fish;state.biteAt=time;const lp=lurePosition(line);if(parts.lure.family==='topwater'){addImpact(lp.x,lp.z,time,4.5);env.ripple(lp.x,lp.z,'boil');}else env.ripple(lp.x,lp.z,'dimple');state.events.push({type:'bite',fish});return true;}
  function setHook(time){if(state.phase!=='bite')return false;const dtb=time-state.biteAt;if(dtb<.12&&parts.lure.family!=='bait'){state.events.push({type:'missed',fish:state.biteFish,reason:'too early'});missed();return false;}return beginFight(time);}
  function missed(){const f=state.biteFish;state.biteFish=null;state.phase='retrieve';return f;}
- function beginFight(time){const fish=state.biteFish;const rig={dragKg:parts.reel.dragKg,weakestKg:chain.weakest.kg,rodPower:parts.rod.power,lineStretch:parts.line.stretch,retrieveMs:parts.reel.retrieveMs,wire:!!parts.line.wire};state.fight=createFight({fish:{length:fish.brain.length,species:fish.brain.species},rig,random:fish.brain.random});state.fightFish=fish;fish.brain.state='HOOKED';state.phase='fight';state.fightSeconds=0;state.biteFish=null;state.events.push({type:'hooked',fish});return true;}
+ function beginFight(time){const fish=state.biteFish;const rig={dragKg:parts.reel.dragKg,weakestKg:chain.weakest.kg,rodPower:parts.rod.power,lineStretch:parts.line.stretch,retrieveMs:parts.reel.retrieveMs,wire:!!parts.line.wire,abrasion:state.abrasion};state.fight=createFight({fish:{length:fish.brain.length,species:fish.brain.species},rig,random:fish.brain.random});state.fightFish=fish;fish.brain.state='HOOKED';state.phase='fight';state.fightSeconds=0;state.biteFish=null;state.events.push({type:'hooked',fish});return true;}
  function mouthOf(fish){const b=fish.brain;return {x:b.x+Math.sin(b.heading)*b.length*.48,y:b.y,z:b.z+Math.cos(b.heading)*b.length*.48};}
- function fightStep(dt,time,input){const ft=state.fight,fish=state.fightFish,b=fish.brain;const t=worldTip();const m0=mouthOf(fish);const dist=Math.hypot(m0.x-t.x,m0.y-t.y,m0.z-t.z);const geom={distToAngler:dist,lineOut:line.lineOut,depth:-b.y};
-  const out=stepFight(ft,dt,input,geom);line.lineOut=geom.lineOut;state.fightSeconds+=dt;
+ function fightStep(dt,time,input){const ft=state.fight,fish=state.fightFish,b=fish.brain;const t=worldTip();const m0=mouthOf(fish);const dist=Math.hypot(m0.x-t.x,m0.y-t.y,m0.z-t.z);const geom={distToAngler:dist,lineOut:line.lineOut,depth:-b.y,nearWood:env.coverAt?env.coverAt(b.x,b.z):null};
+  const out=stepFight(ft,dt,input,geom);state.abrasion=ft.abrasion;line.lineOut=geom.lineOut;state.fightSeconds+=dt;
   // move the fish: runs are away from the kayak, sometimes straight at it; jumps break the surface
   const ax=b.x-kayak.state.x,az=b.z-kayak.state.z,ad=Math.hypot(ax,az)||1;let dirA=Math.atan2(ax/ad,az/ad);if(Math.cos(out.heading)>.55)dirA+=Math.PI;else dirA+=Math.sin(out.heading)*1.1;
   const sp=out.speed;b.vx+=(Math.sin(dirA)*sp-b.vx)*Math.min(1,dt*3);b.vz+=(Math.cos(dirA)*sp-b.vz)*Math.min(1,dt*3);
@@ -77,6 +80,7 @@ export function makeAngling(scene,kayak,env){
  function releaseFish(time){const fish=state.fightFish;if(fish){const b=fish.brain;b.state='RESTING';b.stateTime=0;b.home={x:kayak.state.x+Math.sin(kayak.state.heading)*4,y:Math.max(env.bed(b.x,b.z)+.5,-1.5),z:kayak.state.z+Math.cos(kayak.state.heading)*4};b.x=b.home.x;b.z=b.home.z;b.y=-.4;b.caught++;env.ripple(b.x,b.z,'boil');state.events.push({type:'released',fish});}reelIn();}
  function drainEvents(){const e=state.events;state.events=[];return e;}
  function update(dt,time,input,camera){
+  if(state.retie>0){state.retie-=dt;if(state.retie<=0){state.retie=0;state.abrasion=0;state.events.push({type:'retied'});}}
   // input: {charging:boolean, reeling:boolean}
   state.twitchClock=Math.max(0,state.twitchClock-dt);state.castAnim=Math.max(0,state.castAnim-dt*3.2);state.twitchAnim=Math.max(0,state.twitchAnim-dt*6);
   if(state.phase==='charging'){if(!input.charging){release(camera);}else state.power=clamp(state.power+dt/CAST.chargeSeconds,0,1);}
@@ -91,7 +95,7 @@ export function makeAngling(scene,kayak,env){
   if(state.phase==='bite'){if(time-state.biteAt>(parts.lure.family==='bait'?3.2:1.25)){state.events.push({type:'missed',fish:state.biteFish,reason:'spat it'});const f=missed();f.brain.state='REFUSE';f.brain.refuseUntil=time+10;}else{const lp=lurePosition(line);const m=mouthOf(state.biteFish);setLure(line,m.x,Math.min(m.y,-.03),m.z);const t2=worldTip();layLine(line,{x:t2.x,y:t2.y,z:t2.z},{x:m.x,y:Math.min(m.y,-.03),z:m.z});line.tension=.35+Math.sin(time*30)*.15;}}
   if(state.phase==='fight')fightStep(dt,time,input);
   if(state.phase==='landed'){const t2=worldTip();for(let i=0;i<N;i++){line.x[i]=line.px[i]=t2.x;line.y[i]=line.py[i]=t2.y-.05*i/N;line.z[i]=line.pz[i]=t2.z;}}
-  if(state.phase==='retrieve'){
+  if(state.phase==='retrieve'||state.phase==='snagged'){
    state.reeling=input.reeling?1:0;const reelMs=parts.reel.retrieveMs;
    if(input.reeling)line.lineOut=Math.max(1.3,line.lineOut-reelMs*dt);
    const lp=lurePosition(line),lv=lureVelocity(line,Math.max(dt,.004));
@@ -100,6 +104,10 @@ export function makeAngling(scene,kayak,env){
    const force={x:0,y:0,z:0};
    if(parts.lure.action==='wobble'&&input.reeling&&under){const wob=Math.sin(time*38)*.9;const dx=t.x-lp.x,dz=t.z-lp.z,d=Math.hypot(dx,dz)||1;force.x=-dz/d*wob;force.z=dx/d*wob;}
    stepLine(line,dt,{tip:{x:t.x,y:t.y,z:t.z},surface:(x,z)=>env.surface(x,z,time),bed:env.bed,lineBuoy:parts.line.buoyancy,lure:parts.lure,diveTarget,lureForce:force,wind:env.windVec()});
+   // line care and snags: a lure on the bottom in wood frays the line and now and then hangs up
+   {const cov=env.coverAt?env.coverAt(lp.x,lp.z):null;
+    if(state.phase==='retrieve'&&cov){state.abrasion=clamp(state.abrasion+abradeRate(cov,false)*dt*(line.lureOnBottom?1:.3),0,1);const spd=Math.hypot(lv.x,lv.z);if(Math.random()<snagChance(cov,line.lureOnBottom,spd,parts.lure)*dt){state.phase='snagged';state.snag={x:lp.x,y:lp.y,z:lp.z,slack:0,pull:0,tries:0};state.events.push({type:'snagged'});}}
+    if(state.phase==='snagged'){const s=state.snag;setLure(line,s.x,s.y,s.z);if(input.reeling){s.pull+=dt;s.slack=0;if(s.pull>snagBreakSeconds(state.abrasion)){state.events.push({type:'snag',reason:'broke off'});state.abrasion=0;reelIn();}}else{s.slack+=dt;s.pull=Math.max(0,s.pull-dt*2);}}}
    state.retrieveSpeed=input.reeling?reelMs:0;
    sampleClock+=dt;if(sampleClock>=.05){sampleClock=0;recordSample(rec,time,input.reeling);}
    classifyClock+=dt;if(classifyClock>=.25){classifyClock=0;state.label=classify(rec,time,parts.lure,{inWater:true,onBottom:line.lureOnBottom,moving:Math.abs(kayak.state.speed)>.4&&line.lineOut>12});}
@@ -109,18 +117,18 @@ export function makeAngling(scene,kayak,env){
   let targetPitch=-.24,targetYaw=-.34;
   if(state.phase==='charging')targetPitch=-1.9+state.power*.25,targetYaw=-.7;
   else if(state.castAnim>0)targetPitch=-.12-state.castAnim*.45;
-  else if(state.phase==='retrieve'||state.phase==='flight'||state.phase==='bite'||state.phase==='fight'){const lp=state.flight||lurePosition(line);tmp.set(lp.x-kayak.state.x,0,lp.z-kayak.state.z);const yawWorld=Math.atan2(tmp.x,tmp.z);let rel=yawWorld-kayak.state.heading;rel=Math.atan2(Math.sin(rel),Math.cos(rel));targetYaw=clamp(rel-.15,-1.2,.8);targetPitch=-.2-line.tension*.25;}
+  else if(state.phase==='retrieve'||state.phase==='snagged'||state.phase==='flight'||state.phase==='bite'||state.phase==='fight'){const lp=state.flight||lurePosition(line);tmp.set(lp.x-kayak.state.x,0,lp.z-kayak.state.z);const yawWorld=Math.atan2(tmp.x,tmp.z);let rel=yawWorld-kayak.state.heading;rel=Math.atan2(Math.sin(rel),Math.cos(rel));targetYaw=clamp(rel-.15,-1.2,.8);targetPitch=-.2-line.tension*.25;}
   // a bottom rig goes in the holder while it soaks: rod up, until you pick it up to reel
   if(parts.lure.circle&&(state.phase==='retrieve'||state.phase==='bite')&&!state.reeling)targetPitch=-.95;
   const k=1-Math.exp(-dt*(state.phase==='charging'?4:9));state.rodPitch+=(targetPitch-state.rodPitch)*k;state.rodYaw+=(targetYaw-state.rodYaw)*k;
   rodRoot.rotation.set(state.rodPitch,state.rodYaw,0,'YXZ');
-  const bend=((state.phase==='retrieve'||state.phase==='fight'||state.phase==='bite')?line.tension*.11:0)+(input.rodUp!==undefined&&state.phase==='fight'?(input.rodUp-.6)*.03:0)+state.twitchAnim*.05+(state.phase==='charging'?.02:0)+state.castAnim*.06;
+  const bend=((state.phase==='retrieve'||state.phase==='snagged'||state.phase==='fight'||state.phase==='bite')?line.tension*.11:0)+(input.rodUp!==undefined&&state.phase==='fight'?(input.rodUp-.6)*.03:0)+state.twitchAnim*.05+(state.phase==='charging'?.02:0)+state.castAnim*.06;
   for(let i=0;i<NSEG;i++){const s=(i+1)/NSEG;segs[i].rotation.x=bend*s*s*1.6;}
   // --- lure and ribbon
   floatObj.visible=false;if(parts.lure.floatDepth&&(state.phase==='retrieve'||state.phase==='bite')){const fp=lurePosition(line);floatObj.visible=true;floatObj.position.set(fp.x,env.surface(fp.x,fp.z,time)-(state.phase==='bite'?.16:0)+.01,fp.z);}
   if(state.phase==='flight'){const f=state.flight;lureObj.position.set(f.x,f.y,f.z);tmp.set(f.vx,f.vy,f.vz);if(tmp.lengthSq()>1e-4){lureObj.lookAt(tmp2.copy(lureObj.position).add(tmp));}}
   else if(state.phase==='fight'||state.phase==='bite'){lureObj.visible=false;}
-  else if(state.phase==='retrieve'){const lp=lurePosition(line),lv=lureVelocity(line,Math.max(dt,.004));lureObj.position.set(lp.x,lp.y,lp.z);tmp.set(lv.x,lv.y*.3,lv.z);if(tmp.lengthSq()>.02)lureObj.lookAt(tmp2.copy(lureObj.position).add(tmp));else{tmp.set(t.x-lp.x,0,t.z-lp.z);if(tmp.lengthSq()>.01)lureObj.lookAt(tmp2.copy(lureObj.position).add(tmp));}
+  else if(state.phase==='retrieve'||state.phase==='snagged'){const lp=lurePosition(line),lv=lureVelocity(line,Math.max(dt,.004));lureObj.position.set(lp.x,lp.y,lp.z);tmp.set(lv.x,lv.y*.3,lv.z);if(tmp.lengthSq()>.02)lureObj.lookAt(tmp2.copy(lureObj.position).add(tmp));else{tmp.set(t.x-lp.x,0,t.z-lp.z);if(tmp.lengthSq()>.01)lureObj.lookAt(tmp2.copy(lureObj.position).add(tmp));}
    if(parts.lure.action==='wobble'&&input.reeling)lureObj.rotation.z=Math.sin(time*38)*.5;if(parts.lure.action==='walk'&&!line.lureOnBottom)lureObj.rotation.z=0;}
   else{lureObj.position.set(t.x,t.y-.28,t.z);lureObj.rotation.set(-1.2,kayak.state.heading,0);}
   if(state.phase!=='fight'&&state.phase!=='bite')lureObj.visible=state.phase!=='landed';
@@ -132,7 +140,7 @@ export function makeAngling(scene,kayak,env){
   ribbonGeo.attributes.position.needsUpdate=true;ribbon.material.opacity=state.phase==='idle'?.6:.85;ribbon.visible=state.phase!=='landed';
  }
  setRig(0);
- return {state,line,rig:()=>rig,parts:()=>parts,chain:()=>chain,describe:()=>describeRig(rig),setRig,nextRig:()=>setRig(state.rigIndex+1),beginCharge,release,twitch,reelIn,update,tipPosition:()=>worldTip().clone(),bite,setHook,releaseFish,drainEvents,fight:()=>state.fight?{state:state.fight.state,stamina:+state.fight.stamina.toFixed(2),tension:+state.fight.tension.toFixed(2),hookHold:+state.fight.hookHold.toFixed(2),overload:+state.fight.overload.toFixed(2),pullKg:+state.fight.pull.toFixed(2),seconds:+state.fightSeconds.toFixed(1),lost:state.fight.lost,landed:state.fight.landed,weakestKg:chain.weakest.kg}:null,
+ return {state,line,rig:()=>rig,parts:()=>parts,chain:()=>chain,describe:()=>describeRig(rig),setRig,nextRig:()=>setRig(state.rigIndex+1),beginCharge,release,twitch,reelIn,retie,update,tipPosition:()=>worldTip().clone(),bite,setHook,releaseFish,drainEvents,fight:()=>state.fight?{state:state.fight.state,stamina:+state.fight.stamina.toFixed(2),tension:+state.fight.tension.toFixed(2),hookHold:+state.fight.hookHold.toFixed(2),overload:+state.fight.overload.toFixed(2),pullKg:+state.fight.pull.toFixed(2),seconds:+state.fightSeconds.toFixed(1),lost:state.fight.lost,landed:state.fight.landed,weakestKg:chain.weakest.kg}:null,
   lure:()=>state.phase==='flight'?{...state.flight}:lurePosition(line),
-  snapshot:()=>({phase:state.phase,fight:state.fight?state.fight.state:null,rig:rig.id,lure:parts.lure.id,power:+state.power.toFixed(2),lineOut:+line.lineOut.toFixed(2),tension:+line.tension.toFixed(2),lureDepth:+line.lureDepth.toFixed(2),onBottom:line.lureOnBottom,technique:state.label,casts:state.castCount,reeling:state.reeling,lure_pos:(()=>{const p=state.phase==='flight'?state.flight:lurePosition(line);return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2)];})()})};
+  snapshot:()=>({phase:state.phase,fight:state.fight?state.fight.state:null,rig:rig.id,lure:parts.lure.id,power:+state.power.toFixed(2),lineOut:+line.lineOut.toFixed(2),tension:+line.tension.toFixed(2),lureDepth:+line.lureDepth.toFixed(2),onBottom:line.lureOnBottom,technique:state.label,casts:state.castCount,reeling:state.reeling,abrasion:+state.abrasion.toFixed(2),lineWord:lineWord(state.abrasion),retie:+state.retie.toFixed(1),snagTries:state.snag?state.snag.tries:0,lure_pos:(()=>{const p=state.phase==='flight'?state.flight:lurePosition(line);return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2)];})()})};
 }

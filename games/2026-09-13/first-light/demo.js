@@ -106,7 +106,10 @@ export function stepDemo(d,dt,game){
   if(e.type==='missed'){d.memory.refusals++;if(d.plan)d.memory.refusalsByRig[d.plan.rigIndex]=(d.memory.refusalsByRig[d.plan.rigIndex]||0)+1;caption(d,e.reason==='too early'?'Pulled it out of his mouth. Patience.':'Spat it. Let them take it next time.');}
   if(e.type==='lost'){d.lost++;if(e.reason==='bitten off'){d.memory.bittenOff++;caption(d,'Bit off clean. Something with teeth. That means the wire.',4);}else{d.memory.refusals++;caption(d,e.reason==='broke off'?'Broke off. That drag was set too tight for this line.':'Threw the hook on the shake. Keep it tight next time.');}}
   if(e.type==='landed'){d.landed++;d.coverage.push({t:d.elapsed,event:'landed',shot:'hero'});const sp=e.species||(e.fish&&e.fish.brain&&e.fish.brain.species&&e.fish.brain.species.id);if(sp)d.memory.caught[sp]=(d.memory.caught[sp]||0)+1;const nm=e.speciesName||(e.fish&&e.fish.brain&&e.fish.brain.species&&e.fish.brain.species.name)||'fish';caption(d,`A ${nm.toLowerCase()}. ${sp==='musky'?'That is the fish of the year.':sp==='bluegill'||sp==='pumpkinseed'||sp==='perch'?'Small, but they all count.':'Look at the shoulders on him.'}`,5);}
-  if(e.type==='released')caption(d,'Back you go.',2);}
+  if(e.type==='released')caption(d,'Back you go.',2);
+  if(e.type==='snagged'){d.snag={slackUntil:d.elapsed+1.0,tries:0};caption(d,'Snagged. Slack, then snap it.',3);}
+  if(e.type==='snag'){d.snag=null;caption(d,e.reason==='freed'?'Came free.':'Buried. Lost it. Fresh line.',2.5);}
+  if(e.type==='retied')caption(d,'Fresh line.',2);}
  switch(d.state){
   case 'open':{if(!d.opened){d.opened=true;game.setRate(4);game.anchor(true);caption(d,game.openingLine(),6);}
    if(d.stateTime>6){d.state='plan';d.stateTime=0;}break;}
@@ -116,12 +119,13 @@ export function stepDemo(d,dt,game){
   case 'travel':{const k=game.kayak(),s=d.plan.spot,dist=Math.hypot(s.x-k.x,s.z-k.z);
    if(dist<24||d.stateTime>60){game.paddle(0,0);game.anchor(true);game.setRate(4);d.rate=4;d.state='cast';d.stateTime=0;break;}
    const yaw=Math.atan2(s.x-k.x,s.z-k.z);let rel=yaw-k.heading;rel=Math.atan2(Math.sin(rel),Math.cos(rel));game.paddle(Math.abs(rel)<.6?1:.4,clamp(rel*1.5,-1,1));break;}
-  case 'cast':{if(a.phase!=='idle'){d.state='work';d.stateTime=0;break;}
+  case 'cast':{if(a.phase!=='idle'){d.state='work';d.stateTime=0;break;}if(a.retie>0)break;
    const k=game.kayak(),s=d.plan.spot;const ang=d.random()*6.283,r=d.random()*Math.max(2,s.r*.55);const tx=s.x+Math.cos(ang)*r,tz=s.z+Math.sin(ang)*r;
    const dist=Math.hypot(tx-k.x,tz-k.z);game.aimAt(tx,tz);const power=clamp((dist-6)/26+(d.random()-.5)*.1,.25,1);
    if(d.stateTime<.6){break;} // let the look settle on the target
    game.cast(power);d.casts++;d.castsAtSpot++;d.executor=createExecutor(d.plan.technique,d.random);d.state='work';d.stateTime=0;break;}
   case 'work':{
+   if(a.phase==='snagged'){const s=d.snag||(d.snag={slackUntil:d.elapsed+1,tries:0});if(s.tries>=3)game.input({reeling:true,twitch:false});else if(d.elapsed>=s.slackUntil){game.input({reeling:false,twitch:true});s.tries++;s.slackUntil=d.elapsed+1.2;}else game.input({reeling:false,twitch:false});break;}
    if(a.phase==='flight'){game.input({reeling:false,twitch:false});break;}
    if(a.phase==='retrieve'){const inp=stepExecutor(d.executor,dt,d.random);game.input(inp);
     if(d.stateTime>(d.plan&&d.plan.technique==='dead stick'?150:45)){game.input({reeling:true,twitch:false});}
@@ -132,6 +136,7 @@ export function stepDemo(d,dt,game){
    if(a.phase==='landed'){if(d.stateTime>7){game.release();d.state='cast';d.stateTime=0;}break;}
    // back to idle: decide whether to keep casting here
    game.input({reeling:false,twitch:false});game.fightInput(null);
+   if(a.abrasion>=.3&&game.retie&&game.retie()){caption(d,"Line's frayed from that wood. Retying.",3);break;}
    const sinceEvent=d.elapsed-d.lastEventAt;
    if(d.castsAtSpot>=6&&sinceEvent>60||d.memory.refusals>=2||sinceEvent>150||d.memory.bittenOff>0){if(d.segment>=5){d.state='card';d.stateTime=0;}else{d.state='plan';d.stateTime=0;}}
    else{d.state='cast';d.stateTime=0;}
