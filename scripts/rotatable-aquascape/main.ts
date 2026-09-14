@@ -54,7 +54,16 @@ async function start(){
  const light=document.querySelector<HTMLButtonElement>('#light')!;
  light.onclick=()=>{aquarium.evening=!aquarium.evening;light.textContent=aquarium.evening?'Daylight':'Evening';light.setAttribute('aria-pressed',String(aquarium.evening));};
  const feed=document.querySelector<HTMLButtonElement>('#feed')!;
- feed.onclick=()=>{aquarium.feed();feed.disabled=true;feed.textContent='Food released';setTimeout(()=>{feed.disabled=false;feed.textContent='Feed fish';},6000);};
+ feed.onclick=()=>{
+ // A cutaway hides the real animals and their sinking food. Return to the
+ // living tank before feeding; chemistry and whole-tank lessons stay open.
+ if(aquarium.studyView)document.querySelector<HTMLButtonElement>('#learn-close')!.click();
+ const portion=aquarium.feed();
+ feed.disabled=true;
+ feed.textContent=portion.pellets?(portion.flakes?'Flakes + pellets':'Pellets released'):portion.flakes?'Flakes · pellets remain':'Food still in tank';
+ feed.title=`${portion.flakes} flakes and ${portion.pellets} sinking pellets released. Existing food stays in the tank until eaten or broken down.`;
+ setTimeout(()=>{feed.disabled=false;feed.textContent='Feed fish';},6000);
+ };
  document.querySelector<HTMLButtonElement>('#zoomIn')!.onclick=()=>aquarium.zoom(.85);
  document.querySelector<HTMLButtonElement>('#zoomOut')!.onclick=()=>aquarium.zoom(1.18);
  document.querySelector<HTMLButtonElement>('#reset')!.onclick=()=>{aquarium.view('angle');document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(v=>v.classList.toggle('active',v.dataset.view==='angle'));};

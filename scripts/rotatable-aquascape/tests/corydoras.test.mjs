@@ -10,7 +10,7 @@ test('six cories vary their movement, remain separate, explore depth and stop on
  assert.ok(distance.every(d=>d>1.5),JSON.stringify(distance));assert.ok(life.animals.some((a,i)=>Math.abs(a.position.z-start[i].z)>.3));assert.ok(states.has('foraging')&&states.has('browsing')&&states.has('exploring'));const positions=life.animals.map(a=>a.position.toArray()),phase=life.animals.map(a=>a.phase);life.update(0,1000);assert.deepEqual(life.animals.map(a=>a.position.toArray()),positions);assert.deepEqual(life.animals.map(a=>a.phase),phase);
 });
 test('head stays steady while a traveling wave grows toward the tail',()=>{for(const phase of [0,1,2,3])assert.ok(Math.abs(coryWave(.2,phase,1))===0);assert.ok(Math.abs(coryWave(-.4,1,1))>Math.abs(coryWave(-.1,1,1)));assert.notEqual(coryWave(-.4,1,1),coryWave(-.4,2,1));});
-test('sinking pellets reach the bottom and cories eat them without teleporting',()=>{const life=new Corydoras(new T.Scene(),()=>.4);life.feed();assert.equal(life.pellets.length,6);life.feed();assert.equal(life.pellets.length,6);let feeding=false;for(let i=0;i<900;i++){life.update(.05,i*.05);feeding ||=life.animals.some(a=>a.mode==='feeding');}assert.ok(feeding);assert.ok(life.pellets.length<6);});
+test('sinking pellets reach the bottom and cories eat them without teleporting',()=>{const life=new Corydoras(new T.Scene(),()=>.4);life.feed();assert.equal(life.pellets.length,6);life.feed();assert.equal(life.pellets.length,12);let feeding=false;for(let i=0;i<900;i++){life.update(.05,i*.05);feeding ||=life.animals.some(a=>a.mode==='feeding');}assert.ok(feeding);assert.ok(life.pellets.length<12);});
 test('rocks and a swept fast tetra cannot cross a cory body',()=>{const o={center:new T.Vector3(2,.65,1),radius:.38},life=new Corydoras(new T.Scene(),()=>.4,[o]);for(let i=0;i<400;i++){life.update(.05,i*.05);for(const a of life.animals)for(const s of coryBody(a.position,coryForward(a),a.size,a.pitch))assert.ok(s.center.distanceTo(o.center)>s.radius+o.radius);}const a=life.animals[0],p=a.position.clone().add(new T.Vector3(0,.07,0));life.update(.01,21,[{id:3,previous:p.clone().add(new T.Vector3(-1,0,0)),position:p.clone().add(new T.Vector3(1,0,0)),forward:new T.Vector3(1,0,0),size:.52}]);assert.ok(life.fishCorrections.has(3));});
 
 test('larger body flex preserves cross-section width and leaves the head stable',()=>{for(let phase=0;phase<6.3;phase+=.2){for(const x of [-.35,-.18,-.04,.22]){const a=coryBend(new T.Vector3(x,.1,-.05),phase,1),b=coryBend(new T.Vector3(x,.1,.05),phase,1);assert.ok(Math.abs(a.distanceTo(b)-.1)<1e-9);}assert.ok(coryBend(new T.Vector3(.22,.1,.05),phase,1).distanceTo(new T.Vector3(.22,.1,.05))<1e-9);}let mid=0,tail=0;for(let phase=0;phase<6.3;phase+=.1){mid=Math.max(mid,Math.abs(coryWave(-.1,phase,1)));tail=Math.max(tail,Math.abs(coryWave(-.4,phase,1)));}assert.ok(mid>.03&&tail>.09);});
@@ -19,8 +19,29 @@ test('nibbling gently lowers the mouth while the tail rises, without penetrating
 
 
 test('pellet chemistry callback fires for a real bite, not visual expiration',()=>{
- const life=new Corydoras(new T.Scene(),()=>.4);let bites=0;assert.equal(life.feed(()=>bites++),6);assert.equal(life.feed(()=>bites++),0);
+ const life=new Corydoras(new T.Scene(),()=>.4);let bites=0;assert.equal(life.feed(()=>bites++),6);assert.equal(life.feed(()=>bites++),6);assert.equal(life.feed(()=>bites++),0);
  const expired=life.pellets[0];expired.age=66;life.update(.01,0);assert.equal(bites,0);
  const eater=life.animals[0],pellet=life.pellets[0];pellet.position.copy(eater.position).addScaledVector(coryForward(eater),.18);pellet.position.y=.425;
  life.update(.025,.025);assert.ok(bites>0);
+});
+
+
+test('a leftover pellet does not block a fresh sinking portion; top-ups are bounded and report actual pieces',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4);life.feed();
+ // Five pellets have been eaten, leaving one old piece behind a plant.
+ for(const p of life.pellets.splice(1))p.mesh.removeFromParent();
+ life.pellets[0].position.y=.425;life.pellets[0].age=20;
+ const old=life.pellets[0];assert.equal(life.feed(),6);assert.equal(life.pellets.length,7);
+ assert.equal(life.pellets[0],old);assert.equal(old.age,20);
+ assert.equal(life.feed(),5);assert.equal(life.pellets.length,12);assert.equal(life.feed(),0);
+ for(const p of life.pellets.slice(1))assert.equal(p.position.y,5.1);
+});
+
+test('new sinking food still moves in world space after static transforms are reused',async()=>{
+ const {reuseUnchangedTransforms}=await import('../lib/TransformReuse.ts');
+ const scene=new T.Scene(),life=new Corydoras(scene,()=>.4);
+ reuseUnchangedTransforms(scene);scene.matrixWorldAutoUpdate=false;life.feed();
+ const pellet=life.pellets[0];scene.updateMatrixWorld();const start=pellet.mesh.matrixWorld.elements[13];
+ for(let i=0;i<80;i++){life.update(.05,i*.05);scene.updateMatrixWorld();}
+ assert.ok(pellet.position.y<start-2);assert.equal(pellet.mesh.matrixWorld.elements[13],pellet.position.y);
 });

@@ -373,15 +373,16 @@ export class Aquarium{
   const generation=this.learning.generation;
   const count=this.cories?.feed(()=>this.learning.eat(representedFood*.35/6*FOOD_N_FRACTION/VOLUME_L,generation))??0;
   const flakes=this.food.length<=12;
-  if(modelFood)this.learning.addFood((count?FEED_MG*.35:0)+(flakes?FEED_MG*.65:0));
-  if(!flakes)return;
+  if(modelFood)this.learning.addFood((count/6*FEED_MG*.35)+(flakes?FEED_MG*.65:0));
+  if(!flakes)return {flakes:0,pellets:count};
   const nitrogen=representedFood*.65*FOOD_N_FRACTION/VOLUME_L/12;
   for(let i=0;i<12;i++){const m=this.mesh(new T.IcosahedronGeometry(.028,0),new T.MeshStandardMaterial({color:0xbba471,roughness:1}),V(.65+(this.random()-.5)*1.6,5.12+this.random()*.13,.62+(this.random()-.5)*.3),false);m.userData.foodNitrogen=nitrogen;m.userData.chemistryGeneration=generation;m.scale.set(1,.35,.8);this.food.push({mesh:m,age:0});}
+  return {flakes:12,pellets:count};
  }
  zoom(scale:number){this.followApproach=false;this.targetCamera=null;this.targetFov=null;const offset=this.camera.position.clone().sub(this.controls.target);offset.setLength(clamp(offset.length()*scale,this.controls.minDistance,this.controls.maxDistance));this.camera.position.copy(this.controls.target).add(offset);this.controls.update();}
  private studyFov(){return this.studyView?Math.max(37,2*Math.atan(2.9/(10*this.host.clientWidth/this.host.clientHeight))*180/Math.PI):37;}
  get magnifierEnabled(){return this.lighting.lens.enabled;}
- private get studyView(){return this.teaching?.mode==='organisms'||this.teaching?.mode==='underground'||this.teaching?.mode==='water'&&this.teaching.step>0&&this.teaching.step<4;}
+ get studyView(){return this.teaching?.mode==='organisms'||this.teaching?.mode==='underground'||this.teaching?.mode==='water'&&this.teaching.step>0&&this.teaching.step<4;}
  view(name:string){this.follow(null);const dist=this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera,this.host.offsetTop);}
  private resize(){
   const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;
@@ -483,7 +484,7 @@ export class Aquarium{
   if(import.meta.env.DEV){
    this.frameSamples.push([elapsed*1000,renderStart-updateStart,performance.now()-renderStart,this.renderer.info.render.calls,this.renderer.info.render.triangles]);
    if(this.frameSamples.length>=240){const samples=this.frameSamples;const q=(column:number,p:number)=>{const sorted=samples.map(s=>s[column]).sort((a,b)=>a-b);return +sorted[Math.floor((sorted.length-1)*p)].toFixed(2);};this.host.dataset.frameProfile=JSON.stringify({frames:samples.length,frameMsP50:q(0,.5),frameMsP95:q(0,.95),updateMsP50:q(1,.5),updateMsP95:q(1,.95),renderCpuMsP50:q(2,.5),renderCpuMsP95:q(2,.95),drawCalls:q(3,.5),triangles:q(4,.5)});this.frameSamples=[];}
-   this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishBehavior=JSON.stringify(this.fishes.map(({swim:s})=>({speed:+s.speed.toFixed(1),behavior:s.behavior,intent:s.brain.intent.kind,energy:+s.brain.energy.toFixed(2)})));this.host.dataset.grazers=JSON.stringify(this.invertebrates?.animals.map(a=>({id:a.id,leaf:a.trail?`${a.trail.leaf.mesh.userData.plantSpecies}:${a.trail.leaf.index}`:null,swimming:!!a.flight,tripIn:a.tripIn,position:a.position.toArray(),distance:a.distance})));this.host.dataset.cories=JSON.stringify(this.cories?.animals.map(a=>({id:a.id,position:a.position.toArray(),speed:a.speed,mode:a.mode})));this.host.dataset.foodCount=String(this.food.length);this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
+   this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishBehavior=JSON.stringify(this.fishes.map(({swim:s})=>({speed:+s.speed.toFixed(1),behavior:s.behavior,intent:s.brain.intent.kind,energy:+s.brain.energy.toFixed(2)})));this.host.dataset.grazers=JSON.stringify(this.invertebrates?.animals.map(a=>({id:a.id,leaf:a.trail?`${a.trail.leaf.mesh.userData.plantSpecies}:${a.trail.leaf.index}`:null,swimming:!!a.flight,tripIn:a.tripIn,position:a.position.toArray(),distance:a.distance})));this.host.dataset.cories=JSON.stringify(this.cories?.animals.map(a=>({id:a.id,position:a.position.toArray(),speed:a.speed,mode:a.mode})));this.host.dataset.foodCount=String(this.food.length);this.host.dataset.sinkingFood=JSON.stringify(this.cories?.pellets.map(p=>({position:p.position.toArray(),age:p.age,visible:this.cories!.models.root.visible,worldY:p.mesh.matrixWorld.elements[13]})));this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
 
  };
 }
