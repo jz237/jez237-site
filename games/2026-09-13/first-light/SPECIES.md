@@ -20,7 +20,7 @@ Launch roster: twelve species present in Lake Nockamixon or Green Lane Reservoir
 ## Size classes
 Every species carries Young / Common / Trophy / Legend with its own thresholds and a length-weight curve (W = a·L^b, checked in tests against known specimens). Largemouth: Young < 12 in, Common 12–18 in, Trophy 18 in and 5 lb+, Legend the named residents at 7 lb+ against Pennsylvania's 11 lb 3 oz record. Class changes the fight, the card and journal progress.
 
-## Implemented (v0.7.0, v0.8.0)
+## Implemented (v0.7.0 to v0.9.0, all twelve)
 | Species | Young | Common | Trophy | Legend | Weight (lb) | Diel | Temp °C | Fish in the cove |
 |---|---|---|---|---|---|---|---|---|
 | Largemouth bass | < 12 in | 12–18 | 18–22 | 22+ | in³ / 1600 | crepuscular | 18–27 | 8 + the Ridge Fish |
@@ -30,8 +30,13 @@ Every species carries Young / Common / Trophy / Legend with its own thresholds a
 | Muskellunge | < 30 in | 30–40 | 40–48 | 48+ | in³ / 3500 | crepuscular | 15–24 | 2 |
 | Chain pickerel | < 15 in | 15–20 | 20–24 | 24+ | in³ / 3800 | diurnal | 15–26 | 5 |
 | Hybrid striped bass | < 16 in | 16–22 | 22–27 | 27+ | in³ / 2100 | crepuscular | 14–24 | 4 |
+| Channel catfish | < 16 in | 16–24 | 24–30 | 30+ | in³ / 2200 | nocturnal | 20–30 | 4 |
+| Common carp | < 18 in | 18–26 | 26–32 | 32+ | in³ / 1400 | diurnal | 18–30 | 4 |
+| Black crappie | < 9 in | 9–12 | 12–15 | 15+ | in³ / 1700 | crepuscular | 16–26 | 8 |
+| Yellow perch | < 8 in | 8–11 | 11–14 | 14+ | in³ / 2400 | diurnal | 12–24 | 8 |
+| Pumpkinseed | < 5 in | 5–7 | 7–9 | 9+ | in³ / 1000 | diurnal | 18–28 | 8 |
 
-Technique and lure-family multipliers per species are in `species.js` (`technique`, `lureFamily`); walleye treat topwater at 0.25 and walking the dog at 0.3, bluegill take almost nothing but small soft baits worked slowly; the `blade` family (bucktail) is the musky's favourite and nearly invisible to bluegill. Esocids carry `teeth` (per-second bite-off chance without a wire leader) and the musky `follow` (long inspect window, boatside strike boost). `tests/species.test.mjs` checks the roster, weights against known specimens and the diel peaks.
+Technique and lure-family multipliers per species are in `species.js` (`technique`, `lureFamily`); walleye treat topwater at 0.25 and walking the dog at 0.3, bluegill take almost nothing but small soft baits worked slowly; the `blade` family (bucktail) is the musky's favourite and nearly invisible to bluegill. Esocids carry `teeth` (per-second bite-off chance without a wire leader) and the musky `follow` (long inspect window, boatside strike boost); the crappie carries `paperMouth` (hook hold drains when tension exceeds 1.5× its weight). Scent-driven species (catfish, carp) are approximated with a strong dead-stick preference and low sight range until baits and bottom rigs arrive. `tests/species.test.mjs` checks the roster, weights against known specimens and the diel peaks.
 
 ## Simulation (M2–M3)
 States: HOLD, CRUISE, FORAGE, INSPECT (follows the lure 1–4 s), STRIKE, REFUSE (turns away; visible with the lenses), HOOKED (RUN / SULK / HEADSHAKE / JUMP / ROLL / TIRED), FLEE, SPAWN, SUSPEND, REST. Drivers: species diel curve, water temperature by season and hour, barometric trend, light (sun elevation × cloud), wind (bait stacks on windblown banks), clarity, moon. Perception: lure profile vs prey window, lateral-line vibration with inverse-square falloff, colour contrast at depth given clarity and light, flash, rattle, and technique match. `strikeChance = boldness · activity · presentation · techniqueMatch · (1 − aversion[lureFamily]) · depthMatch · speedMatch`. About ten persistent residents per lake learn aversion per escape and forget slowly; casual fish come from a population table.

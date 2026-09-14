@@ -32,7 +32,7 @@ import {createDemo,stepDemo,demoReport} from './demo.js';
 import {activityByHour,ROSTER,SPECIES} from './species.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.8.0';
+export const VERSION='0.9.0';
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({

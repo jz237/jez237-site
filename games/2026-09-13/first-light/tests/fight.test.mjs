@@ -25,6 +25,12 @@ test('a musky saws through anything but a wire leader',()=>{
   const b=createFight({fish:{length:.95,species:SPECIES.musky},rig:rig({...heavy,wire:true}),random:rng(seed)});run(b,ctl,240);if(b.lost==='bitten off')bittenWire++;}
  assert.ok(bitten>=7,'bitten off without wire '+bitten+'/10');assert.equal(bittenWire,0);
 });
+test('a crappie is lost to its paper mouth when horsed and landed when played gently',()=>{
+ let torn=0,gentleLanded=0;for(let seed=1;seed<=10;seed++){
+  const a=createFight({fish:{length:.3,species:SPECIES.crappie},rig:rig(),random:rng(seed)});run(a,()=>({reeling:1,sidePressure:0,rodUp:.9}),120);if(a.lost==='threw the hook')torn++;
+  const b=createFight({fish:{length:.3,species:SPECIES.crappie},rig:rig(),random:rng(seed)});run(b,()=>({reeling:.35,sidePressure:0,rodUp:.5}),120);if(b.landed)gentleLanded++;}
+ assert.ok(torn>=3,'torn '+torn+'/10');assert.ok(gentleLanded>=6,'gentle landed '+gentleLanded+'/10');
+});
 test('stamina only falls while the line is loaded and the fight is bounded',()=>{
  const ft=createFight({fish:{length:.42,species:SPECIES.largemouth},rig:rig(),random:rng(9)});let prev=1;const geom={distToAngler:15,lineOut:16,depth:1};
  for(let i=0;i<600;i++){stepFight(ft,1/60,{reeling:.6,sidePressure:.5,rodUp:.7},geom);assert.ok(ft.stamina<=prev+.01);prev=ft.stamina;assert.ok(Number.isFinite(ft.tension));}
