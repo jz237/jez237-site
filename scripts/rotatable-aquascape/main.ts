@@ -8,7 +8,8 @@ import {Aquarium} from './lib/Aquarium';
 document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
 <main>
  <div id="scene" aria-label="Interactive three-dimensional planted aquarium"></div>
- <header><div class="identity"><span class="eyebrow">THE LIVING AQUASCAPE</span><h1>In three dimensions</h1></div>
+ <header class="aquarium-header"><div class="identity"><span class="eyebrow">THE LIVING AQUASCAPE</span><h1>In three dimensions</h1></div>
+ <div class="primary-tools" role="group" aria-label="Explore and learn about the aquarium"></div>
  <nav aria-label="Compare aquariums"><a href="../living-aquascape/?v=trace-f06dc4f">Photographic</a><a href="./" aria-current="page">Rotatable 3D <span class="dot"></span></a></nav></header>
  <div class="scene-note"><span class="live-dot"></span><span>Cardinal tetra school</span><span class="note-divider">/</span><span id="status">Preparing the aquarium</span></div>
  <div id="loading" role="status">Growing a small world<span></span></div>
@@ -21,6 +22,17 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
 </main>`;
 const storeShowroom=new URLSearchParams(location.search).get('showroom')==='hidden-reef';
 if(storeShowroom){document.body.classList.add('store-showroom');document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';document.querySelector('h1')!.textContent='Living Showroom';document.querySelector('header nav')!.innerHTML='<a href="../" target="_top">← Showroom & tank planner</a>';}
+const aquariumHeader=document.querySelector<HTMLElement>('.aquarium-header')!;
+const primaryTools=document.querySelector<HTMLElement>('.primary-tools')!;
+primaryTools.append(document.querySelector('#learn')!);
+aquariumHeader.append(document.querySelector('.scene-note')!);
+// Reserve real layout space, including wrapped phone controls and fullscreen.
+// The canvas ResizeObserver will reframe the tank for the remaining space.
+new ResizeObserver(()=>{
+ const main=document.querySelector<HTMLElement>('main')!;
+ const space=aquariumHeader.getBoundingClientRect().height?Math.ceil(aquariumHeader.getBoundingClientRect().bottom-main.getBoundingClientRect().top+12):0;
+ main.style.setProperty('--toolbar-space',space+'px');
+}).observe(aquariumHeader);
 installFullscreen(document.querySelector('main')!,document.querySelector<HTMLButtonElement>('#fullscreen')!);
 const host=document.querySelector<HTMLDivElement>('#scene')!;
 async function start(){
@@ -28,7 +40,9 @@ async function start(){
  const aquarium=new Aquarium(host);
  await aquarium.ready;
  document.querySelector('#loading')!.remove();
- installLearning(aquarium);installExploration(aquarium);installShowroom(aquarium);
+ installLearning(aquarium);installExploration(aquarium);
+ primaryTools.append(document.querySelector('#explore')!,document.querySelector('.chemistry-summary')!);
+ installShowroom(aquarium);
  document.querySelector('#status')!.textContent='Exploring';
  document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(b=>b.onclick=()=>{aquarium.view(b.dataset.view!);document.querySelectorAll('[data-view]').forEach(v=>v.classList.toggle('active',v===b));});
  const pause=document.querySelector<HTMLButtonElement>('#pause')!;

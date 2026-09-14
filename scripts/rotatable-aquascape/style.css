@@ -35,3 +35,22 @@
 .chemistry-summary{position:absolute;left:38px;top:202px;z-index:4;font-size:11px;color:#c1d7dd;background:#081c2ee6;border:1px solid #accbd12e;max-width:calc(100% - 44px)}
 .learning-open .chemistry-summary,.exploration-open .chemistry-summary{display:none}
 @media(max-width:850px){.chemistry-summary{top:172px;left:22px;font-size:10px;padding:8px}}
+
+/* Main destinations belong beside the title, outside the aquarium viewport. */
+main #scene{top:var(--toolbar-space,130px)}
+main .aquarium-header{top:24px;left:28px;right:28px;z-index:8;display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px 22px;align-items:center}
+.aquarium-header .primary-tools{display:flex;gap:8px;align-items:stretch;pointer-events:auto}
+.aquarium-header .primary-tools>button{position:static;display:block;min-height:50px;min-width:0;max-width:200px;flex:1;padding:11px 14px;font-size:13px;font-weight:700;line-height:1.25;text-align:center;color:#042835;background:linear-gradient(140deg,#79edee,#42cadd);border:1px solid #a5f8ff;border-radius:9px;box-shadow:0 3px 14px #08baca30;text-shadow:none}
+.aquarium-header .primary-tools>button:hover{background:#b4faff;color:#03212e;box-shadow:0 4px 18px #40d9ff55}
+.aquarium-header .primary-tools>button[aria-expanded=true]{background:#d4ffff;border-color:#fff;color:#003347;box-shadow:0 0 0 2px #40d9ff55}
+.aquarium-header .primary-tools>button:focus-visible{outline:3px solid #fff;outline-offset:3px}
+.primary-tools .chemistry-preview{display:block;min-height:12px;font-size:10px;font-weight:400;margin-top:4px;white-space:nowrap;font-variant-numeric:tabular-nums}
+.aquarium-header .scene-note{position:static;grid-column:1/-1;font-size:11px;line-height:1.4;min-width:0;flex-wrap:wrap}
+.aquarium-header nav{justify-self:end}.aquarium-header nav a{font-size:11px;padding:10px}
+main.learning-open .aquarium-header{right:410px;grid-template-columns:1fr;gap:8px}
+main.learning-open .primary-tools>button,main.exploration-open .primary-tools>button{display:block}
+main.aquarium-fullscreen .aquarium-header{display:grid;grid-template-columns:1fr;top:max(12px,env(safe-area-inset-top));right:150px}
+main.aquarium-fullscreen .aquarium-header .identity,main.aquarium-fullscreen .aquarium-header nav,main.aquarium-fullscreen .aquarium-header .scene-note{display:none}
+@media(max-width:1100px){main .aquarium-header{grid-template-columns:auto 1fr;gap:10px 16px}.aquarium-header .primary-tools{grid-column:1/-1;grid-row:2}.aquarium-header nav{grid-column:2;grid-row:1}.aquarium-header .scene-note{grid-row:3}.aquarium-header .primary-tools>button{max-width:none}}
+@media(max-width:850px){main .aquarium-header,main.learning-open .aquarium-header,main.exploration-open .aquarium-header{top:14px;left:14px;right:14px;grid-template-columns:auto 1fr;gap:9px 10px}.aquarium-header .primary-tools{gap:6px}.aquarium-header .primary-tools>button{font-size:11px;padding:9px 7px;min-height:46px}.primary-tools .chemistry-preview{font-size:8px}.aquarium-header .scene-note{font-size:10px;gap:6px}.learning-open .aquarium-header .primary-tools,.exploration-open .aquarium-header .primary-tools{grid-row:2}.learning-open .aquarium-header .scene-note,.exploration-open .aquarium-header .scene-note{display:none}main.aquarium-fullscreen .aquarium-header{grid-template-columns:1fr;right:14px;top:56px}.aquarium-fullscreen .primary-tools{grid-row:1}.aquarium-header .identity .eyebrow{font-size:9px}.aquarium-header h1{font-size:19px}}
+@media(max-height:500px) and (max-width:850px){main .aquarium-header{top:8px}.aquarium-header .identity,.aquarium-header nav,.aquarium-header .scene-note{display:none}.aquarium-header .primary-tools{grid-row:1}main.aquarium-fullscreen .aquarium-header{right:130px;top:8px}}
