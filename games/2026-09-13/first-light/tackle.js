@@ -4,25 +4,30 @@
 export const LURES={
  walker:{id:'walker',name:'Bone walker',family:'topwater',massG:14,buoyancy:'float',sinkRate:0,diveDepth:0,drag:.9,action:'walk',color:0xe9e3cf,length:.11,radius:.014},
  worm:{id:'worm',name:'Texas-rigged worm, 3/8 oz',family:'soft',massG:14,buoyancy:'sink',sinkRate:.45,diveDepth:0,drag:1.1,action:'hop',color:0x4d5a2a,length:.18,radius:.007},
- squarebill:{id:'squarebill',name:'Squarebill crankbait',family:'crank',massG:11,buoyancy:'crank',sinkRate:0,diveDepth:1.6,drag:1.4,action:'wobble',color:0xd8b04a,length:.065,radius:.016}
+ squarebill:{id:'squarebill',name:'Squarebill crankbait',family:'crank',massG:11,buoyancy:'crank',sinkRate:0,diveDepth:1.6,drag:1.4,action:'wobble',color:0xd8b04a,length:.065,radius:.016},
+ bucktail:{id:'bucktail',name:'Double-blade bucktail',family:'blade',massG:60,buoyancy:'sink',sinkRate:.35,diveDepth:0,drag:1.6,action:'thump',color:0x2a2a2e,length:.20,radius:.02}
 };
 export const RODS={
  ml:{id:'ml',name:'6\'6" medium-light, fast',lureG:[3.5,14],lineKg:[2.7,5.4],power:.35,length:1.98},
- mh:{id:'mh',name:'7\' medium-heavy, fast',lureG:[10,28],lineKg:[5.4,9],power:.6,length:2.13}
+ mh:{id:'mh',name:'7\' medium-heavy, fast',lureG:[10,28],lineKg:[5.4,9],power:.6,length:2.13},
+ xh:{id:'xh',name:'8\'6" heavy musky rod',lureG:[30,120],lineKg:[18,45],power:.9,length:2.6}
 };
 export const REELS={
  spin2500:{id:'spin2500',name:'2500 spinning reel',maxDragKg:5,dragKg:2.2,retrieveMs:1.05},
- bc71:{id:'bc71',name:'7.1:1 baitcaster',maxDragKg:8,dragKg:4,retrieveMs:1.25}
+ bc71:{id:'bc71',name:'7.1:1 baitcaster',maxDragKg:8,dragKg:4,retrieveMs:1.25},
+ bc400:{id:'bc400',name:'400-size low-profile reel',maxDragKg:12,dragKg:7,retrieveMs:1.5}
 };
 export const LINES={
  fluoro8:{id:'fluoro8',name:'8 lb fluorocarbon',testKg:3.6,buoyancy:-.6,stretch:.12,visibility:.3},
  mono10:{id:'mono10',name:'10 lb monofilament',testKg:4.5,buoyancy:.4,stretch:.2,visibility:.5},
- braid15:{id:'braid15',name:'15 lb braid, 12 lb fluoro leader',testKg:6.8,leaderKg:5.4,buoyancy:.1,stretch:.04,visibility:.7}
+ braid15:{id:'braid15',name:'15 lb braid, 12 lb fluoro leader',testKg:6.8,leaderKg:5.4,buoyancy:.1,stretch:.04,visibility:.7},
+ braid80:{id:'braid80',name:'80 lb braid, wire leader',testKg:36,leaderKg:40,wire:true,buoyancy:.1,stretch:.03,visibility:.9}
 };
 export const RIGS=[
  {id:'finesse',name:'Finesse spinning',rod:'ml',reel:'spin2500',line:'fluoro8',lure:'worm',hook:'2/0 EWG'},
  {id:'topwater',name:'Topwater casting',rod:'mh',reel:'bc71',line:'mono10',lure:'walker',hook:'#4 trebles'},
- {id:'crank',name:'Squarebill casting',rod:'mh',reel:'bc71',line:'braid15',lure:'squarebill',hook:'#6 trebles'}
+ {id:'crank',name:'Squarebill casting',rod:'mh',reel:'bc71',line:'braid15',lure:'squarebill',hook:'#6 trebles'},
+ {id:'musky',name:'Musky casting',rod:'xh',reel:'bc400',line:'braid80',lure:'bucktail',hook:'5/0 trebles'}
 ];
 export function rigParts(rig){return {rod:RODS[rig.rod],reel:REELS[rig.reel],line:LINES[rig.line],lure:LURES[rig.lure]};}
 // The chain: every component's breaking or slipping load in kg, sorted weakest first. The rod
