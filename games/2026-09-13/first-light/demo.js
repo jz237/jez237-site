@@ -5,6 +5,7 @@
 // when a fish follows, slows time for a jump, and holds the hero shot when one is landed. A dead-
 // air governor keeps the episode moving. Everything Ray does is logged for the report.
 import {activityByHour,SPECIES} from './species.js';
+import {tempFactor,pressureFactor} from './season.js';
 import {LURES} from './tackle.js';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export function rng(seed){return()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};}
@@ -26,26 +27,26 @@ function sizeValue(sp){const mid=(sp.classes.common[0]+sp.classes.common[1])/2;r
 const boldness=sp=>(sp.boldness[0]+sp.boldness[1])/2;
 // topwater is a low-light bait, a bucktail is best at dusk, and a crank earns its keep on rock
 function lightFit(family,lowLight){return family==='topwater'?(lowLight?TUNE.topwaterLow:TUNE.topwaterHigh):family==='blade'?(lowLight?TUNE.bladeLow:TUNE.bladeHigh):1;}
-export function scoreRig(spotType,rig,lure,{hour,sunrise=6.5,sunset=19.5,species,caught={},lowLight=false}){
+export function scoreRig(spotType,rig,lure,{hour,sunrise=6.5,sunset=19.5,species,caught={},lowLight=false,cond=null}){
  const tech=TECH_FOR[lure.id]||'straight retrieve';let total=0,best=null,bestV=0;
  for(const id in species){const sp=species[id];if(!sp.structure.includes(spotType))continue;
-  const act=activityByHour(hour,sp.diel,sunrise,sunset);const fit=(sp.technique[tech]??.8)*(sp.lureFamily[lure.family]??1);
+  const act=activityByHour(hour,sp.diel,sunrise,sunset)*(cond?tempFactor(sp,cond.tempC)*pressureFactor(cond.pressureTrend):1);const fit=(sp.technique[tech]??.8)*(sp.lureFamily[lure.family]??1);
   const v=(sp.count||6)*boldness(sp)*act*fit*sizeValue(sp)/(1+(caught[id]||0));total+=v;if(v>bestV){bestV=v;best=id;}}
  let cover=(COVER_FIT[spotType]||{})[lure.family]??1;if(spotType==='riprap'&&lure.family==='crank')cover=TUNE.crankRock;
  return {value:total*cover*lightFit(lure.family,lowLight),target:best};
 }
-export function planNext({hour,activity,spots,rigs,kayak,memory,random,sunrise=6.5,sunset=19.5,species=SPECIES,lures=LURES}){
+export function planNext({hour,activity,spots,rigs,kayak,memory,random,sunrise=6.5,sunset=19.5,species=SPECIES,lures=LURES,cond=null}){
  const lowLight=activity>.62;const caught=memory.caught||{};const byRig=memory.refusalsByRig||{};const teeth=memory.bittenOff||0;
  let bestPick=null,bestV=-1;
  for(const s of spots){const visits=memory.visits[s.type+':'+Math.round(s.x)]||0;const d=Math.hypot(s.x-kayak.x,s.z-kayak.z);
   const spotF=(1-clamp(visits*.3,0,.75))*(1-clamp(d/320,0,.45))*(1+.5*(s.bait||0));
-  for(let i=0;i<rigs.length;i++){const lure=lures[rigs[i].lure];const sc=scoreRig(s.type,rigs[i],lure,{hour,sunrise,sunset,species,caught,lowLight});
+  for(let i=0;i<rigs.length;i++){const lure=lures[rigs[i].lure];const sc=scoreRig(s.type,rigs[i],lure,{hour,sunrise,sunset,species,caught,lowLight,cond});
    const wire=!!lures[rigs[i].lure]&&rigs[i].line&&/wire|braid80/.test(rigs[i].line);
    const v=sc.value*spotF*(1-clamp((byRig[i]||0)*.35,0,.7))*(wire?1+.8*teeth:1)*(1+(random()-.5)*TUNE.noise);
    if(v>bestV){bestV=v;bestPick={spot:s,rigIndex:i,target:sc.target};}}}
  let {spot:pick,rigIndex,target}=bestPick;
  // two refusals in a row on anything but the worm: slow down and go small, whatever the numbers say
- if(memory.refusals>=2&&rigIndex!==0){rigIndex=0;target=scoreRig(pick.type,rigs[0],lures[rigs[0].lure],{hour,sunrise,sunset,species,caught,lowLight}).target;}
+ if(memory.refusals>=2&&rigIndex!==0){rigIndex=0;target=scoreRig(pick.type,rigs[0],lures[rigs[0].lure],{hour,sunrise,sunset,species,caught,lowLight,cond}).target;}
  const lure=rigs[rigIndex].lure,technique=TECH_FOR[lure]||'straight retrieve';
  const where=WHERE[pick.type]||'that cover';const light=lowLight?(hour<12?'Low light and calm water':'Light is going'):hour<10?'Sun is up':hour<16?'Bright and slow':'Afternoon';
  const who=target?`${PLURAL[target]||species[target].name} should be on ${where}. `:'';
@@ -107,7 +108,7 @@ export function stepDemo(d,dt,game){
  switch(d.state){
   case 'open':{if(!d.opened){d.opened=true;game.setRate(4);game.anchor(true);caption(d,game.openingLine(),6);}
    if(d.stateTime>6){d.state='plan';d.stateTime=0;}break;}
-  case 'plan':{const sun=game.sun?game.sun():{sunrise:6.5,sunset:19.5};const p=planNext({hour:game.hour(),activity:game.activity(),spots:game.spots(),rigs:game.rigs(),kayak:game.kayak(),memory:d.memory,random:d.random,sunrise:sun.sunrise,sunset:sun.sunset});
+  case 'plan':{const sun=game.sun?game.sun():{sunrise:6.5,sunset:19.5};const p=planNext({hour:game.hour(),activity:game.activity(),spots:game.spots(),rigs:game.rigs(),kayak:game.kayak(),memory:d.memory,random:d.random,sunrise:sun.sunrise,sunset:sun.sunset,cond:game.cond?game.cond():null});
    d.plan=p;d.decisions.push({t:d.elapsed,spot:p.spot.type,rig:p.rigIndex,technique:p.technique,target:p.target,reason:p.reason});caption(d,p.reason,6);game.setRig(p.rigIndex);d.castsAtSpot=0;d.segment++;
    d.state='travel';d.stateTime=0;game.anchor(false);game.setRate(12);d.rate=12;break;}
   case 'travel':{const k=game.kayak(),s=d.plan.spot,dist=Math.hypot(s.x-k.x,s.z-k.z);

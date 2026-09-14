@@ -3,6 +3,7 @@
 import * as T from './vendor/three.module.js';
 import {SPECIES,activityByHour,describeFish,sizeClass} from './species.js';
 import {createFishBrain,stepFishBrain,markEscape} from './fish-brain.js';
+import {tempFactor,pressureFactor} from './season.js';
 import {createFight,stepFight} from './fight.js';
 import {makeFishMesh} from './fish-body.js';
 import {makePhotoFishMesh} from './fish-photo.js';
@@ -27,8 +28,8 @@ export function makePopulation(scene,bathy,coverFeatures,{seed=2026,assets={},ro
  function disturb(x,z,t,radius=8,seconds=40){let n=0;for(const f of fish){const b=f.brain;if(b.state==='HOOKED'||b.state==='LANDED')continue;if(Math.hypot(b.x-x,b.z-z)<radius){b.state='REFUSE';b.stateTime=0;b.refuseUntil=Math.max(b.refuseUntil||0,t+seconds*(.6+random()*.8));n++;}}return n;}
  return {fish,species,spawn,nearest,disturb,
   splash(x,z,t){lastSplash={x,z,t};},
-  update(dt,t,hour,sunrise,sunset,lure,kayak,clarity,bait=null){
-   const acts={};for(const id in SPECIES)acts[id]=activityByHour(hour,SPECIES[id].diel,sunrise,sunset);
+  update(dt,t,hour,sunrise,sunset,lure,kayak,clarity,bait=null,cond=null){
+   const acts={};for(const id in SPECIES)acts[id]=activityByHour(hour,SPECIES[id].diel,sunrise,sunset)*(cond?tempFactor(SPECIES[id],cond.tempC)*pressureFactor(cond.pressureTrend):1);
    const base={lure,clarity,kayak,splash:lastSplash?{x:lastSplash.x,z:lastSplash.z,age:t-lastSplash.t}:null};
    for(const f of fish){const b=f.brain;const p={...base,activity:acts[b.species.id]*(bait?1+.35*bait(b.x,b.z):1)};
     if(b.state!=='HOOKED'&&b.state!=='LANDED'){stepFishBrain(b,dt,t,p);const bed=bathy.height(b.x,b.z);b.y=clamp(b.y,bed+.18,-.12);if(bathy.height(b.x,b.z)>-.3){b.x=b.home.x;b.z=b.home.z;}}

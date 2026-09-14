@@ -7,6 +7,7 @@ export function mountHud(handlers){
  $('start').onclick=()=>handlers.onStart();
  $('quality').onchange=e=>handlers.onQuality(e.target.value);
  $('steady').onchange=e=>handlers.onSteady(e.target.checked);
+ $('liveWeather').onchange=e=>handlers.onLiveWeather(e.target.checked);
  $('fov').oninput=e=>handlers.onFov(Number(e.target.value));
  $('rate').onchange=e=>handlers.onRate(e.target.value);
  $('weather').onchange=e=>handlers.onWeather(e.target.value);
@@ -22,7 +23,7 @@ export function mountHud(handlers){
   els,
   showMenu({eyebrow,title,description,button}){els.overlay.classList.remove('hidden');if(eyebrow)els.eyebrow.textContent=eyebrow;if(title)els.title.innerHTML=title;if(description)els.description.textContent=description;if(button)els.start.textContent=button;els.start.disabled=false;},
   hideMenu(){els.overlay.classList.add('hidden');els.hud.classList.remove('hidden');},
-  setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
+  setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('liveWeather').checked=s.liveWeather!==false;$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
   setConditions(c){els.clock.textContent=c.time;els.date.textContent=c.date;els.wind.textContent=c.wind;els.water.textContent=c.water;els.sun.textContent=c.sun;if(c.hour!==undefined&&document.activeElement!==$('timeSlider'))$('timeSlider').value=c.hour.toFixed(2);},
   setTackle(snap,rigName,desc){els.rigName.textContent=rigName;els.rigDesc.textContent=desc;els.technique.textContent=snap.phase==='retrieve'?snap.technique:snap.phase==='flight'?'cast away':snap.phase==='charging'?'loading the rod':snap.phase==='bite'?'SET THE HOOK':snap.phase==='fight'?'fish on · '+(snap.fight||'').toLowerCase():snap.phase==='landed'?'landed':'rod ready';
    els.lineInfo.textContent=snap.phase==='retrieve'?`${snap.lineOut.toFixed(0)} m out · lure ${snap.lureDepth<.05?(snap.onBottom?'on the bottom':'on top'):snap.lureDepth.toFixed(1)+' m down'}${snap.tension>.6?' · tight':''}`:snap.casts?`${snap.casts} cast${snap.casts===1?'':'s'}`:'';},
