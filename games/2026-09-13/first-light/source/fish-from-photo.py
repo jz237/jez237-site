@@ -8,7 +8,11 @@ top-down photo (head left). Outputs into assets/fish/<id>/:
   flank.webp    - the lateral cutout cropped to its bounding box (the body samples it by station/height)
   fins.webp     - the same crop with the body region cleared: dorsal, anal, pelvic and caudal fins as a
                   sagittal card
-  diag.png      - the detected body edges drawn over the photo, for the eye
+  top.webp      - the dorsal photo cropped to its bounding box (the back of the loft blends it in by ring
+                  angle); the stations carry the centreline row and the body half extent per station,
+                  and profile.json carries a linear colour tint that matches its ridge to the flank's back
+                  (--no-top when the dorsal generation came back as a side view; --top-flip if head-right)
+  diag.png      - the detected body edges drawn over the photo, for the eye (diag-top.png for the top view)
 Fins are separated from the body by colour and shape: the back is found by scanning down each column
 to the first run of dark pixels (fin membranes are pale, their rays too thin to form a run); the
 belly line is the morphological opening of the lower silhouette, which drops the narrow fin bumps.
@@ -27,7 +31,7 @@ def bbox(alpha,thr=100):
 def opening1d(v,window):
     return maximum_filter1d(minimum_filter1d(v,window,mode='nearest'),window,mode='nearest')
 
-def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,belly_window=.16,width_ratio=None,peduncle=(.70,.90),fin_alpha=1.0):
+def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,belly_window=.16,width_ratio=None,peduncle=(.70,.90),fin_alpha=1.0,no_top=False,top_flip=False):
     os.makedirs(out_dir,exist_ok=True)
     im,a=load(lateral);alpha=a[:,:,3];x0,y0,x1,y1=bbox(alpha)
     crop=im.crop((x0,y0,x1,y1));ca=np.array(crop).astype(np.float32);H,W=ca.shape[:2]
@@ -64,10 +68,21 @@ def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,be
     for x in range(x_ped,W):
         f=(x-x_ped)/max(1,int(W*.06));mid=(bt_s[x]+body_bot[x])/2;hh=h[x_ped]*max(0.,1-f)
         bt_s[x]=mid-hh/2;body_bot[x]=mid+hh/2
-    # top view: width per station, opening removes the pectoral fins
-    tim,ta=load(top);talpha=ta[:,:,3];tx0,ty0,tx1,ty1=bbox(talpha);tm=talpha[ty0:ty1,tx0:tx1]>100;TW=tm.shape[1]
-    ext=np.array([ (np.where(tm[:,x])[0].max()-np.where(tm[:,x])[0].min()) if tm[:,x].any() else 0 for x in range(TW)],dtype=np.float32)
+    # top view: width per station, opening removes the pectoral fins; the crop is also the dorsal
+    # texture, with the body centreline per column taken as the centroid of its dark pixels (fins
+    # are pale) and the half extent clamped inside the silhouette
+    tim,ta=load(top);talpha=ta[:,:,3];tx0,ty0,tx1,ty1=bbox(talpha);tcrop=tim.crop((tx0,ty0,tx1,ty1))
+    if top_flip: tcrop=tcrop.transpose(Image.FLIP_LEFT_RIGHT)
+    tca=np.array(tcrop).astype(np.float32);tm=tca[:,:,3]>100;TH,TW=tm.shape;trgb=tca[:,:,:3]/255.0;tlum=trgb@np.array([.299,.587,.114])
+    t_top=np.array([np.where(tm[:,x])[0].min() if tm[:,x].any() else np.nan for x in range(TW)],dtype=np.float32)
+    t_bot=np.array([np.where(tm[:,x])[0].max() if tm[:,x].any() else np.nan for x in range(TW)],dtype=np.float32)
+    ext=np.nan_to_num(t_bot-t_top)
     ext=opening1d(ext,max(5,int(TW*.12)|1));ext=uniform_filter1d(ext,max(3,int(TW*.03)|1),mode='nearest')
+    tdark=(tlum<dark_thr)&tm;rows=np.arange(TH,dtype=np.float32)[:,None]
+    t_mid=np.where(np.isnan(t_top),TH/2,(np.nan_to_num(t_top,nan=0)+np.nan_to_num(t_bot,nan=TH))/2)
+    dcount=tdark.sum(0);dcent=(tdark*rows).sum(0)/np.maximum(dcount,1);t_mid=np.where(dcount>=8,dcent,t_mid)
+    t_mid=uniform_filter1d(t_mid,max(5,int(TW*.08)|1),mode='nearest')
+    t_half=np.minimum(ext/2,np.minimum(t_mid-np.nan_to_num(t_top,nan=0),np.nan_to_num(t_bot,nan=TH)-t_mid));t_half=np.maximum(t_half,0)
     L=float(W);mid_row=float(np.nanmean((bt_s+body_bot)/2))
     prof=[]
     for i in range(stations):
@@ -75,10 +90,32 @@ def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,be
         topf=(mid_row-bt_s[x])/L;botf=(mid_row-body_bot[x])/L
         hw=(float(ext[xt]/2/TW) if width_ratio is None else float((topf-botf)*width_ratio/2))
         prof.append({'s':round(s,4),'top':round(float(topf),4),'bottom':round(float(botf),4),'halfWidth':round(hw,4),
-                     'texTop':round(float(bt_s[x]/H),4),'texBottom':round(float(body_bot[x]/H),4)})
-    meta={'species':species,'lengthPx':W,'heightPx':H,'midRow':round(mid_row/H,4),'bodyEndS':round(1-body_end/(W-1),4),'texAspect':round(H/W,4),'stations':prof}
+                     'texTop':round(float(bt_s[x]/H),4),'texBottom':round(float(body_bot[x]/H),4),
+                     'topMid':round(float(t_mid[xt]/TH),4) if not no_top else .5,'topHalf':round(float(t_half[xt]/TH),4) if not no_top else 0.})
+    # colour match at the seam: the two photos were lit separately, so the tint makes the top view's
+    # outer flank (45-85 % of the half extent, where the blend runs) agree with the lateral photo's
+    # upper flank (10-35 % of the body height below the back line), both in linear light
+    lin=lambda c: np.power(np.clip(c,0,1),2.2)
+    def band(img,msk,x,r0,r1):
+        r0,r1=int(min(r0,r1)),int(max(r0,r1));seg=img[r0:r1,x];return seg[msk[r0:r1,x]]
+    back=[band(rgb,mask,x,bt_s[x]+.10*(body_bot[x]-bt_s[x]),bt_s[x]+.35*(body_bot[x]-bt_s[x])) for x in range(int(W*.3),int(W*.8))]
+    back=np.concatenate([b for b in back if len(b)]);flank_seam=lin(back.mean(0))
+    ridge=[band(trgb,tm,x,t_mid[x]+sg*.45*t_half[x],t_mid[x]+sg*.85*t_half[x]) for x in range(int(TW*.3),int(TW*.8)) for sg in (-1,1)]
+    ridge=np.concatenate([r for r in ridge if len(r)]);top_seam=lin(ridge.mean(0))
+    tint=np.clip(flank_seam/np.maximum(top_seam,1e-3),.35,3.0) if not no_top else np.ones(3)
+    meta={'species':species,'lengthPx':W,'heightPx':H,'midRow':round(mid_row/H,4),'bodyEndS':round(1-body_end/(W-1),4),'texAspect':round(H/W,4),
+          'hasTop':not no_top,'topAspect':round(TH/TW,4),'topTint':[round(float(v),3) for v in tint],'stations':prof}
     json.dump(meta,open(os.path.join(out_dir,'profile.json'),'w'))
     crop.save(os.path.join(out_dir,'flank.webp'),quality=92,method=6)
+    top_path=os.path.join(out_dir,'top.webp')
+    if no_top:
+        if os.path.exists(top_path): os.remove(top_path)
+    else:
+        tcrop.save(top_path,quality=90,method=6)
+        td=tcrop.copy();tdr=ImageDraw.Draw(td)
+        for x in range(0,TW,2):
+            tdr.point((x,t_mid[x]),fill=(255,0,255,255));tdr.point((x,t_mid[x]-t_half[x]),fill=(255,0,0,255));tdr.point((x,t_mid[x]+t_half[x]),fill=(0,120,255,255))
+        td.save(os.path.join(out_dir,'diag-top.png'))
     # fin card: clear the body, keep everything outside it (fins), feather the edge slightly
     fin=np.array(crop).copy()
     if fin_alpha!=1.0: fin[:,:,3]=np.clip(fin[:,:,3].astype(np.float32)*fin_alpha,0,255).astype(np.uint8)  # pale membranes cut translucent
@@ -90,7 +127,7 @@ def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,be
     for x in range(0,W,2):
         dr.point((x,bt_s[x]),fill=(255,0,0,255));dr.point((x,body_bot[x]),fill=(0,120,255,255))
     dr.line([(body_end,0),(body_end,H)],fill=(255,0,255,255));d.save(os.path.join(out_dir,'diag.png'))
-    print('profile: length',W,'px height',H,'px, body ends at s=',meta['bodyEndS'],'max depth',round(max(p['top']-p['bottom'] for p in prof),3),'L max halfwidth',round(max(p['halfWidth'] for p in prof),3),'L')
+    print('profile: length',W,'px height',H,'px, body ends at s=',meta['bodyEndS'],'max depth',round(max(p['top']-p['bottom'] for p in prof),3),'L max halfwidth',round(max(p['halfWidth'] for p in prof),3),'L','| top:','none' if no_top else f'{TW}x{TH} tint {meta["topTint"]}')
     return meta
 
 if __name__=='__main__':
@@ -102,4 +139,6 @@ if __name__=='__main__':
         if v=='--width-ratio': kw['width_ratio']=float(a[i+1])
         if v=='--peduncle': kw['peduncle']=(float(a[i+1]),float(a[i+2]))
         if v=='--fin-alpha': kw['fin_alpha']=float(a[i+1])
+        if v=='--no-top': kw['no_top']=True
+        if v=='--top-flip': kw['top_flip']=True
     analyse(a[1],a[2],a[3],**kw)
