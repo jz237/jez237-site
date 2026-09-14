@@ -28,10 +28,14 @@ primaryTools.append(document.querySelector('#learn')!);
 aquariumHeader.append(document.querySelector('.scene-note')!);
 // Reserve real layout space, including wrapped phone controls and fullscreen.
 // The canvas ResizeObserver will reframe the tank for the remaining space.
+let toolbarResizeFrame=0;
 new ResizeObserver(()=>{
+ cancelAnimationFrame(toolbarResizeFrame);
+ toolbarResizeFrame=requestAnimationFrame(()=>{
  const main=document.querySelector<HTMLElement>('main')!;
  const space=aquariumHeader.getBoundingClientRect().height?Math.ceil(aquariumHeader.getBoundingClientRect().bottom-main.getBoundingClientRect().top+12):0;
- main.style.setProperty('--toolbar-space',space+'px');
+ if(main.style.getPropertyValue('--toolbar-space')!==space+'px')main.style.setProperty('--toolbar-space',space+'px');
+ });
 }).observe(aquariumHeader);
 installFullscreen(document.querySelector('main')!,document.querySelector<HTMLButtonElement>('#fullscreen')!);
 const host=document.querySelector<HTMLDivElement>('#scene')!;
