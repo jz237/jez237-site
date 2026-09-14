@@ -38,3 +38,11 @@ Proportions and media pass:
 - Mobile canvas reserves space above and below for labels and the toolbar; the exploded base was previously partly covered.
 - Close-up/isolation, desktop and mobile assembly views verified; 146 tests, both builds, synchronization, both link checks pass.
 - Goal remains active: material realism, ceramic packing contacts and the glass/water interface still fall short of the supplied photographic reference. Next pass should address those visual gaps, not rework already-completed button emphasis or navigation removal.
+
+Settled packing and transparent housing pass:
+- Replaced hand-arranged overlapping media with 126 offline settled poses, using exact outer-cylinder support along separating axes. Conservative closed-cylinder envelopes keep hollow ceramic rings apart without a runtime physics cost.
+- Deeper ceramic basket and relocated polishing pad contain the settled stack. Saved-pose tests verify neighboring separation, support, floor clearance, wall clearance and polishing-pad clearance.
+- Added rounded clear-window edges, less tinted hoses, a transparent inlet down-channel, silver strainer rims and softer steel highlights.
+- Reduced excessive shadow normal bias and tightened its depth interval to preserve small-media contact detail.
+- Full 147-test suite passes, both builds pass, all three aquarium copies match, both link checks pass; browser close-up shows supported media and no rendering errors.
+- Keep full goal active: indirect/contact shading in the ceramic recesses remains visually flatter than the reference. Existing site synchronization, removed planner navigation, and all nine emphasized discovery buttons remain part of the completion audit.

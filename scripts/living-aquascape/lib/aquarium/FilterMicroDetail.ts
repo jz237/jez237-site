@@ -15,9 +15,9 @@ export function addFilterMicroDetail(groups:T.Group[],rotor:T.Group,metal:T.Mesh
   batch(new T.CylinderGeometry(.0035,.004,1,5),struts,600,groups[id],(_,o)=>{const a=rnd()*Math.PI*2;o.position.set(Math.sin(a)*1.065,y+(rnd()-.5)*.42,Math.cos(a)*1.065);o.rotation.set(rnd()*.8,0,rnd()*Math.PI);o.scale.y=.012+rnd()*.023;});
  }
  const fiber=new T.MeshStandardMaterial({color:0xf4f4ee,roughness:1});
- batch(new T.CylinderGeometry(.0018,.0025,1,4),fiber,2200,groups[4],(_,o)=>{const a=rnd()*Math.PI*2,d=Math.sqrt(rnd())*1.06;o.position.set(Math.cos(a)*d,3.274+rnd()*.012,Math.sin(a)*d);o.rotation.set(Math.PI/2+(rnd()-.5)*.4,rnd()*Math.PI,0);o.scale.y=.018+rnd()*.065;});
+ batch(new T.CylinderGeometry(.0018,.0025,1,4),fiber,2200,groups[4],(_,o)=>{const a=rnd()*Math.PI*2,d=Math.sqrt(rnd())*1.06;o.position.set(Math.cos(a)*d,3.414+rnd()*.012,Math.sin(a)*d);o.rotation.set(Math.PI/2+(rnd()-.5)*.4,rnd()*Math.PI,0);o.scale.y=.018+rnd()*.065;});
  // Tangled fibers cover the exposed sidewall as well as the top of the pad.
- batch(new T.CylinderGeometry(.0015,.002,1,4),fiber,7000,groups[4],(_,o)=>{const a=rnd()*Math.PI*2,r=1.058+rnd()*.008;o.position.set(Math.cos(a)*r,2.84+rnd()*.42,Math.sin(a)*r);const tangent=new T.Vector3(-Math.sin(a),0,Math.cos(a)),direction=tangent.multiplyScalar((rnd()-.5)*2).add(new T.Vector3(0,(rnd()-.5)*2,0)).normalize();o.quaternion.setFromUnitVectors(axis,direction);o.scale.y=.020+rnd()*.060;});
+ batch(new T.CylinderGeometry(.0015,.002,1,4),fiber,7000,groups[4],(_,o)=>{const a=rnd()*Math.PI*2,r=1.058+rnd()*.008;o.position.set(Math.cos(a)*r,2.98+rnd()*.42,Math.sin(a)*r);const tangent=new T.Vector3(-Math.sin(a),0,Math.cos(a)),direction=tangent.multiplyScalar((rnd()-.5)*2).add(new T.Vector3(0,(rnd()-.5)*2,0)).normalize();o.quaternion.setFromUnitVectors(axis,direction);o.scale.y=.020+rnd()*.060;});
  // Layers of laminated steel around the stator, ceramic shaft bushings and retaining washers.
  for(let j=0;j<19;j++){const m=new T.Mesh(new T.TorusGeometry(.94,.014,6,64,Math.PI),j%3?metal:rubber);m.rotation.set(Math.PI/2,0,Math.PI);m.position.y=4.02+j*.020;groups[7].add(m);}
  for(const y of [3.73,4.58]){const b=new T.Mesh(new T.CylinderGeometry(.13,.13,.095,24),rubber);b.position.y=y;groups[6].add(b);const washer=new T.Mesh(new T.TorusGeometry(.085,.02,8,32),metal);washer.rotation.x=Math.PI/2;washer.position.y=y+.06;groups[6].add(washer);}
@@ -36,5 +36,5 @@ export function addFilterMicroDetail(groups:T.Group[],rotor:T.Group,metal:T.Mesh
  batch(new T.SphereGeometry(.013,6,4),metal,280,groups[0],(j,o)=>{const a=.65+j/279*Math.PI*1.35;o.position.set(Math.sin(a)*1.396,3.45,Math.cos(a)*1.396);o.scale.set(1,.4,1);});
  // Strainer cage ribs, with open slots and reinforced rims.
  batch(new T.BoxGeometry(.015,.62,.013),rubber,22,groups[9],(j,o)=>{const a=j/22*Math.PI*2;o.position.set(-2.8+Math.cos(a)*.213,3.66,Math.sin(a)*.213);o.rotation.y=-a;});
- for(const [id,y] of [[1,.78],[2,1.45],[3,2.19],[4,3.05]]){for(const x of [-.8,.8]){const handle=new T.Mesh(new T.TorusGeometry(.12,.016,8,28,Math.PI),rubber);handle.position.set(x,y+.30,0);groups[id].add(handle);}}
+ for(const [id,y] of [[1,.78],[2,1.45],[3,2.38],[4,3.19]]){for(const x of [-.8,.8]){const handle=new T.Mesh(new T.TorusGeometry(.12,.016,8,28,Math.PI),rubber);handle.position.set(x,y+.30,0);groups[id].add(handle);}}
 }
