@@ -14,10 +14,12 @@ export function addFilterMicroDetail(groups:T.Group[],rotor:T.Group,metal:T.Mesh
   const struts=new T.MeshStandardMaterial({color:id===1?0x38413c:0x4c6460,roughness:.95});
   batch(new T.CylinderGeometry(.0035,.004,1,5),struts,600,groups[id],(_,o)=>{const a=rnd()*Math.PI*2;o.position.set(Math.sin(a)*1.065,y+(rnd()-.5)*.42,Math.cos(a)*1.065);o.rotation.set(rnd()*.8,0,rnd()*Math.PI);o.scale.y=.012+rnd()*.023;});
  }
- const fiber=new T.MeshStandardMaterial({color:0xbcb9a8,roughness:1});
+ const fiber=new T.MeshStandardMaterial({color:0xf4f4ee,roughness:1});
  batch(new T.CylinderGeometry(.0018,.0025,1,4),fiber,2200,groups[4],(_,o)=>{const a=rnd()*Math.PI*2,d=Math.sqrt(rnd())*1.06;o.position.set(Math.cos(a)*d,3.274+rnd()*.012,Math.sin(a)*d);o.rotation.set(Math.PI/2+(rnd()-.5)*.4,rnd()*Math.PI,0);o.scale.y=.018+rnd()*.065;});
+ // Tangled fibers cover the exposed sidewall as well as the top of the pad.
+ batch(new T.CylinderGeometry(.0015,.002,1,4),fiber,7000,groups[4],(_,o)=>{const a=rnd()*Math.PI*2,r=1.058+rnd()*.008;o.position.set(Math.cos(a)*r,2.84+rnd()*.42,Math.sin(a)*r);const tangent=new T.Vector3(-Math.sin(a),0,Math.cos(a)),direction=tangent.multiplyScalar((rnd()-.5)*2).add(new T.Vector3(0,(rnd()-.5)*2,0)).normalize();o.quaternion.setFromUnitVectors(axis,direction);o.scale.y=.020+rnd()*.060;});
  // Layers of laminated steel around the stator, ceramic shaft bushings and retaining washers.
- for(let j=0;j<19;j++){const m=new T.Mesh(new T.TorusGeometry(.94,.014,6,64),j%3?metal:rubber);m.rotation.x=Math.PI/2;m.position.y=4.02+j*.020;groups[7].add(m);}
+ for(let j=0;j<19;j++){const m=new T.Mesh(new T.TorusGeometry(.94,.014,6,64,Math.PI),j%3?metal:rubber);m.rotation.set(Math.PI/2,0,Math.PI);m.position.y=4.02+j*.020;groups[7].add(m);}
  for(const y of [3.73,4.58]){const b=new T.Mesh(new T.CylinderGeometry(.13,.13,.095,24),rubber);b.position.y=y;groups[6].add(b);const washer=new T.Mesh(new T.TorusGeometry(.085,.02,8,32),metal);washer.rotation.x=Math.PI/2;washer.position.y=y+.06;groups[6].add(washer);}
  // Swept impeller vanes replace the seven rectangular paddle blocks.
  for(const child of [...rotor.children])if(child instanceof T.Mesh&&child.geometry instanceof T.BoxGeometry){rotor.remove(child);child.geometry.dispose();}
