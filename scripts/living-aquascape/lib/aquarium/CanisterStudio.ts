@@ -21,3 +21,12 @@ export function ceramicSurface(){
  for(let i=0;i<2200;i++){const x=random()*size,y=random()*size,r=1+random()*4.8;for(const [ctx,shade] of [[c,'rgba(138,122,95,.38)'],[h,'#262626']] as const){const gradient=ctx.createRadialGradient(x,y,0,x,y,r);gradient.addColorStop(0,shade);gradient.addColorStop(.4,shade);gradient.addColorStop(1,'transparent');ctx.fillStyle=gradient;ctx.fillRect(x-r,y-r,r*2,r*2);}}
  const map=new T.CanvasTexture(color),bumpMap=new T.CanvasTexture(height);map.colorSpace=T.SRGBColorSpace;for(const t of [map,bumpMap]){t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;}return {map,bumpMap};
 }
+
+/** Fine mottled stone anchors the cutaway without another reflection capture. */
+export function canisterFloor(){
+ const canvas=document.createElement('canvas');canvas.width=canvas.height=512;
+ const ctx=canvas.getContext('2d')!,pixels=ctx.createImageData(512,512);let seed=928;
+ for(let y=0;y<512;y++)for(let x=0;x<512;x++){seed=(Math.imul(seed,1664525)+1013904223)>>>0;const noise=seed/4294967296,v=78+noise*35+2*Math.sin(x*.045+Math.sin(y*.028)*3),i=(y*512+x)*4;pixels.data[i]=v*.78;pixels.data[i+1]=v;pixels.data[i+2]=v*.89;pixels.data[i+3]=255;}
+ ctx.putImageData(pixels,0,0);const map=new T.CanvasTexture(canvas);map.colorSpace=T.SRGBColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;map.repeat.set(50,50);map.anisotropy=8;
+ return new T.MeshStandardMaterial({color:0x26392f,map,roughness:.90,metalness:0,envMapIntensity:.10,bumpMap:map,bumpScale:.0015});
+}

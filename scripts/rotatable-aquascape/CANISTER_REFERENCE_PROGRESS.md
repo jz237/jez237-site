@@ -22,3 +22,10 @@ Material-finish pass:
 - Opened the front of the stator laminations so individual copper windings are visible.
 - Desktop visual review confirms clearer media and copper windings; all 144 tests, both builds, 38-asset synchronization and both 38-page link checks pass.
 - Still incomplete against the reference: return-water jet detail, more organic ceramic rim pores, and stronger grounded studio-floor composition. Keep the goal active; this pass improves real model fidelity but does not establish photographic equivalence.
+
+Outlet and ceramic-rim pass:
+- Added a bounded instanced outlet stream: 64 short water threads and 360 falling droplets. It follows flow enable/disable and hides during exploded, isolated, or trace presentations.
+- Added recessed pores on both ceramic end rims, preserving the open bore and finite normals.
+- Added subtle stone floor grain and restrained illumination beneath the canister.
+- Verified desktop and 412x915 phone framing, outlet toggle, no browser errors, 146 passing tests, both production builds, all three copied assets and both link checks.
+- Visual comparison still shows a slimmer, more schematic canister than the reference; the head/valve proportions, side-channel routing and dense ceramic packing are the next concrete fidelity work. No claim of photographic equivalence or completed goal.

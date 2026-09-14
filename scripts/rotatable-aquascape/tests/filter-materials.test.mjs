@@ -15,3 +15,10 @@ test('foam cells expose gaps between connected struts within the basket',()=>{
  for(let i=0;i<mesh.count;i++){mesh.getMatrixAt(i,matrix);matrix.decompose(p,q,scale);assert.ok(Math.hypot(p.x,p.z)<1.061);assert.ok(Math.abs(p.y)<=.221);assert.ok(scale.y>0&&scale.y<.3);}
  mesh.geometry.dispose();mesh.material.dispose();
 });
+
+
+test('ceramic end rims have recessed pores while preserving the open bore',()=>{
+ const g=porousCeramic(),p=g.getAttribute('position');let recessed=0,intact=0;
+ for(let i=0;i<p.count;i++){const r=Math.hypot(p.getX(i),p.getZ(i)),y=Math.abs(p.getY(i));if(r>.072&&r<.093&&y>.087){if(y<.094)recessed++;else intact++;}}
+ assert.ok(recessed>100);assert.ok(intact>100);g.dispose();
+});
