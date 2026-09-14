@@ -1,3 +1,4 @@
+import {cloudMaterial} from './weather-light.js';
 import * as T from './vendor/three.module.js';
 const textures=new Map();
 // Original deterministic material microstructure, shared by all rider liveries.
@@ -32,6 +33,6 @@ export function craftUV(geometry){
 export function craftSurface(material,name){
  const kind=name==='Skin'?'skin':name==='Carbon fibre'?'carbon':['Neoprene','Stretch panels','Impact foam','Vest livery','Webbing','Soft saddle','Traction rubber'].includes(name)?'fabric':null;
  if(kind){const t=surfaceTexture(kind);material.normalMap=t.normal;material.roughnessMap=t.roughness;material.normalScale=new T.Vector2(kind==='skin'?.18:.30,kind==='skin'?.18:.30);}
- material.userData.dryRoughness=material.roughness;
+ material.userData.dryRoughness=material.roughness;cloudMaterial(material);
  return material;
 }

@@ -9,7 +9,11 @@ export function makeFoamField(renderer,common,uniforms){
  const material=new T.ShaderMaterial({uniforms:u,depthTest:false,depthWrite:false,vertexShader:'varying vec2 uvP;void main(){uvP=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:common+wetSandGLSL+`
  uniform sampler2D previousFoam,terrainMap;uniform vec2 foamCenter,previousCenter;uniform float historyByte,historyFrame,foamSpan,previousSpan,foamDt,foamReady,customTerrain,terrainSpan;varying vec2 uvP;
  float floorDepth(vec2 p){vec2 rg=texture2D(terrainMap,clamp(p/terrainSpan+.5,vec2(0.),vec2(1.))).rg;return -16.+dot(rg,vec2(256.,1.))/257.*100.;}
- void main(){vec2 p=(uvP-.5)*foamSpan+foamCenter;vec2 drift=vec2(.35,-.24)*storm;vec2 oldUV=(p-drift*foamDt-previousCenter)/previousSpan+.5;
+ void main(){vec2 p=(uvP-.5)*foamSpan+foamCenter;vec3 movingSurface=waveSurface(p);float bed=floorDepth(p);
+ vec2 terrainSlope=vec2(floorDepth(p+vec2(1.,0.))-floorDepth(p-vec2(1.,0.)),floorDepth(p+vec2(0.,1.))-floorDepth(p-vec2(0.,1.)))*.5;
+ float shallow=1.-smoothstep(.25,2.,seaLevel+movingSurface.x-bed);
+ vec2 drift=vec2(.35,-.24)*storm-movingSurface.yz*.55-terrainSlope*shallow*.9;
+ drift=clamp(drift,vec2(-1.5),vec2(1.5));vec2 oldUV=(p-drift*foamDt-previousCenter)/previousSpan+.5;
  float inside=step(0.,oldUV.x)*step(oldUV.x,1.)*step(0.,oldUV.y)*step(oldUV.y,1.);vec2 old=texture2D(previousFoam,oldUV).rg*inside*foamReady;
  // Wet sand stays fixed to the beach, rather than drifting with surface foam.
  vec2 beachUV=(p-previousCenter)/previousSpan+.5;

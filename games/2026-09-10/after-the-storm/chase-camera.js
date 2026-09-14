@@ -26,8 +26,8 @@ export function chaseFrame(memory, rider, dt, { orbit = 0, zoom = 8, pitch = .22
   const distance = clamp(zoom, 6, 25), pace = clamp(speed / 30, 0, 1);
   const look = 3.4 + pace * 2.8, turnLook = clamp(rider.yawVelocity || 0, -.7, .7) * pace * 1.3;
   return {
-    position: { x: rider.x - fx * distance, y: memory.water + 1.35 + Math.sin(pitch) * distance - pace * .4 + memory.lift, z: rider.z - fz * distance },
-    target: { x: rider.x + Math.sin(memory.heading + turnLook) * look, y: memory.water + .85 + memory.lift * 1.5, z: rider.z + Math.cos(memory.heading + turnLook) * look },
+    position: { x: rider.x - fx * distance, y: memory.water + 1.35 - clamp(h.compression||0,0,.38)*.16 + Math.sin(pitch) * distance - pace * .4 + memory.lift, z: rider.z - fz * distance },
+    target: { x: rider.x + Math.sin(memory.heading + turnLook) * look, y: memory.water + .85 - clamp(h.compression||0,0,.38)*.16 + memory.lift * 1.5, z: rider.z + Math.cos(memory.heading + turnLook) * look },
     fov: 58 + pace * 7
   };
 }
