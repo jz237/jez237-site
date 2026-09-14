@@ -1,12 +1,12 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.2.0, cast and retrieve)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics and lures that behave as their kinds do. Fish arrive in the next milestone (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.3.0, lure cam)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, and a camera that follows the lure under the surface. Fish arrive in the next milestone (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
 ## Play
 
-Press **Paddle out**. Drag the scene to look around. **Hold the mouse button** (still, for a moment) to load the rod and **release** to cast where you are looking; **Space** reels, **F** twitches the rod, **Tab** changes rig (finesse worm, topwater walker, squarebill). **W / S** paddle, **A / D** turn, **X** drops or lifts the anchor, **P** puts the polarized lenses on, **T** cycles the time rate (real, 1×, 4×, 12×), **1 / 2 / 3** skip to dawn, dusk or night, **Esc** opens the menu; right-click tosses a pebble. Phones get hold buttons for paddle, turn, reel and cast (hold to load, release to throw), tap buttons for twitch, anchor, lenses, rig and menu, and drag-to-look; gamepads use the left stick to paddle and turn, the right stick to look, LT to load and release a cast, RT to reel, RB to twitch, A for anchor, X for lenses, Start for the menu.
+Press **Paddle out**. Drag the scene to look around. **Hold the mouse button** (still, for a moment) to load the rod and **release** to cast where you are looking; **Space** reels, **F** twitches the rod, **Tab** changes rig (finesse worm, topwater walker, squarebill), **C** follows the lure underwater while you work it and returns you to the seat. **W / S** paddle, **A / D** turn, **X** drops or lifts the anchor, **P** puts the polarized lenses on, **T** cycles the time rate (real, 1×, 4×, 12×), **1 / 2 / 3** skip to dawn, dusk or night, **Esc** opens the menu; right-click tosses a pebble. Phones get hold buttons for paddle, turn, reel and cast (hold to load, release to throw), tap buttons for twitch, anchor, lenses, rig and menu, and drag-to-look; gamepads use the left stick to paddle and turn, the right stick to look, LT to load and release a cast, RT to reel, RB to twitch, A for anchor, X for lenses, Start for the menu.
 
 The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for phones), the time rate, a weather preset (calm dawn, light breeze, overcast, rain), a Steady camera option that damps the kayak's pitch and roll (also on automatically under `prefers-reduced-motion`), and a field-of-view slider. The hour slider and skip buttons live on the HUD.
 
@@ -17,6 +17,13 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Under the surface (v0.3.0)
+
+- **The surface from below** (`lake-under-fragment.js`): water-to-air Fresnel with total internal reflection outside Snell's window (48.6°), the above-water world refracted through the window from the same refraction target, the underwater world mirrored across the surface where reflection is total (a flipped mirror pass on High, the deep colour on lower tiers), the sun's glow through the window, absorption along the path to the eye. Hysteresis around the waterline keeps a bobbing eye from flickering between the two surface shaders.
+- **Water column** (`optics.js`): exponential-squared fog from the optical preset and clarity (about 8 m visibility in green water at clarity 1), swapped per render pass so the above-water world seen through the window keeps its air haze; dimmer, greener ambient light underwater.
+- **Effects** (`underwater-fx.js`): suspended particulate drifting in a box around the camera; light shafts as a screen-space overlay from the sun's projected position, fading with depth and gone at night.
+- **Lure cam**: C (or the Cam button, or Y on a gamepad) follows the lure from behind and slightly below while it is in the water; reel, twitch and technique readouts keep working; it returns to the seat when the lure comes in.
 
 ## What the water slice contains
 

@@ -10,6 +10,6 @@ export function playerInput(keys,pad,touchKeys={}){
   turn:(k('KeyA')||k('ArrowLeft')?1:0)-(k('KeyD')||k('ArrowRight')?1:0)||padTurn,
   lookX:pad?axis(pad.axes[2]||0,.18):0,lookY:pad?axis(pad.axes[3]||0,.18):0,
   reeling:k('Space')||(pad?.buttons[7]?.value||0)>.3,charging:k('Cast')||(pad?.buttons[6]?.value||0)>.3,
-  padTwitch:!!pad?.buttons[5]?.pressed,padAnchor:!!pad?.buttons[0]?.pressed,padLenses:!!pad?.buttons[2]?.pressed,padMenu:!!pad?.buttons[9]?.pressed
+  padTwitch:!!pad?.buttons[5]?.pressed,padCam:!!pad?.buttons[3]?.pressed,padAnchor:!!pad?.buttons[0]?.pressed,padLenses:!!pad?.buttons[2]?.pressed,padMenu:!!pad?.buttons[9]?.pressed
  };
 }
