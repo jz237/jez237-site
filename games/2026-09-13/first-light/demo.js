@@ -38,7 +38,7 @@ export function planNext({hour,activity,spots,rigs,kayak,memory,random,sunrise=6
  const lowLight=activity>.62;const caught=memory.caught||{};const byRig=memory.refusalsByRig||{};const teeth=memory.bittenOff||0;
  let bestPick=null,bestV=-1;
  for(const s of spots){const visits=memory.visits[s.type+':'+Math.round(s.x)]||0;const d=Math.hypot(s.x-kayak.x,s.z-kayak.z);
-  const spotF=(1-clamp(visits*.3,0,.75))*(1-clamp(d/320,0,.45));
+  const spotF=(1-clamp(visits*.3,0,.75))*(1-clamp(d/320,0,.45))*(1+.5*(s.bait||0));
   for(let i=0;i<rigs.length;i++){const lure=lures[rigs[i].lure];const sc=scoreRig(s.type,rigs[i],lure,{hour,sunrise,sunset,species,caught,lowLight});
    const wire=!!lures[rigs[i].lure]&&rigs[i].line&&/wire|braid80/.test(rigs[i].line);
    const v=sc.value*spotF*(1-clamp((byRig[i]||0)*.35,0,.7))*(wire?1+.8*teeth:1)*(1+(random()-.5)*TUNE.noise);
@@ -52,7 +52,7 @@ export function planNext({hour,activity,spots,rigs,kayak,memory,random,sunrise=6
  let reason;const wirePick=rigs[rigIndex].line&&/wire|braid80/.test(rigs[rigIndex].line);if(wirePick)memory.bittenOff=0;
  if(teeth&&wirePick)reason=`Something with teeth keeps cutting me off. Wire and the bucktail along ${where}${target?', and there is a good chance it is '+(PLURAL[target]||species[target].name).toLowerCase():''}.`;
  else if(memory.refusals>=2)reason=`They keep turning away. Slowing down: a worm on ${where}, lift and drop.`;
- else reason=`${light}. ${who}${(RIG_LINE[lure]||(w=>`Working ${w}.`))(where)}`;
+ else reason=`${(pick.bait||0)>.5?"Bait's stacked on "+where+'. ':''}${light}. ${who}${(RIG_LINE[lure]||(w=>`Working ${w}.`))(where)}`;
  memory.visits[pick.type+':'+Math.round(pick.x)]=(memory.visits[pick.type+':'+Math.round(pick.x)]||0)+1;memory.refusals=0;
  return {spot:pick,rigIndex,technique,reason,target,targetName:target?species[target].name:null};
 }
