@@ -4,7 +4,7 @@ const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 export const SOUND_FILES={idle:'engine-idle',fast:'engine-fast',water:'water-rush',wind:'wind',splash:'splash',hit:'hull-impact',cue:'race-cue',music:'coastal-theme'};
 // No service credentials or runtime generation: these are local ElevenLabs exports.
 export function engineMix(speed,wet=1,throttle=0){const motion=clamp(Math.abs(speed)/14),load=clamp(throttle),rpm=clamp(motion*.72+load*.28+(1-wet)*load*.22);
- return {idle:Math.cos(rpm*Math.PI/2)*.42,fast:Math.sin(rpm*Math.PI/2)*(.35+load*.23),idleRate:.82+rpm*.75,fastRate:.65+rpm*.53+(1-clamp(wet))*load*.12,water:motion*wet*.52,cutoff:500+wet*8500};}
+ return {idle:Math.cos(rpm*Math.PI/2)*.42,fast:Math.sin(rpm*Math.PI/2)*(.35+load*.23),idleRate:.82+rpm*.75,fastRate:.65+rpm*.53+(1-clamp(wet))*load*.38,water:motion*wet*.52,cutoff:9000+(1-clamp(wet))*load*4500};}
 export class SampleSound{
  constructor(ctx,effects,music){this.ctx=ctx;this.effects=effects;this.musicBus=music;this.buffers={};this.loops=[];this.shots=new Set();this.ready=false;this.failures=[];this.mode='stereo';}
  async load(loader=url=>fetch(url).then(r=>{if(!r.ok)throw Error('Sound asset '+r.status);return r.arrayBuffer();})){

@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.4.1 · TIDELINE** — September 13, 2026. See [WATER-INTERACTION.md](WATER-INTERACTION.md) for evolving foam, hull contact, local wave interactions, moving gusts, surface beads and optional recorded replays. See [RIDING-IMMERSION.md](RIDING-IMMERSION.md) for airborne trim, directional landings, curling breakers, spray contact, waterline detail, physical sound and rendering improvements. See [IMMERSION-PASS.md](IMMERSION-PASS.md) for wave, shore, scenery, rider, audio and lighting improvements. See [FINISHING-PASS.md](FINISHING-PASS.md) for scenery, landing, rider, shoreline and mobile rendering polish. See [RIDER-UPGRADE.md](RIDER-UPGRADE.md) for the rider/jet-ski release and [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for the preceding water upgrade.
+**v2.5.0 · TIDELINE** — September 13, 2026. See [WATER-INTERACTION.md](WATER-INTERACTION.md) for evolving foam, hull contact, local wave interactions, moving gusts, surface beads and optional recorded replays. See [RIDING-IMMERSION.md](RIDING-IMMERSION.md) for airborne trim, directional landings, curling breakers, spray contact, waterline detail, physical sound and rendering improvements. See [IMMERSION-PASS.md](IMMERSION-PASS.md) for wave, shore, scenery, rider, audio and lighting improvements. See [FINISHING-PASS.md](FINISHING-PASS.md) for scenery, landing, rider, shoreline and mobile rendering polish. See [RIDER-UPGRADE.md](RIDER-UPGRADE.md) for the rider/jet-ski release and [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for the preceding water upgrade.
 
 A browser jet-ski game built around shared waves, hull response and modern water rendering. Free ride is the initial mode. Racing offers an original nine-venue interpretation of Wave Race 64's core mechanics; the earlier coastal salvage voyage remains available.
 
@@ -127,3 +127,5 @@ The ground textures are photographs; trees and terrain remain procedural real-ti
 Source is maintained on `main` in `jz237/jez237-site`. The route contains source, assets, tests and Blender files and can be served as a static directory.
 
 After changing browser modules or styles, run `node source/version-assets.mjs` to regenerate both HTML import maps and content-versioned asset URLs. It supports the published flat layout and the downloadable package with a `dist/` folder.
+
+See [Surf and rider immersion](IMMERSION-NEXT.md) for the v2.5.0 changes, ramp preference, verification and simulation limits.

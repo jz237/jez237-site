@@ -28,7 +28,9 @@ export function stepHydro(h,craft,time,dt,surface,{dampen=false,lean=0,dive=fals
  let landing=false;h.impact*=Math.exp(-dt*6);
  if(h.launched&&wet>.18&&relativeSum>1.5){h.launched=false;h.impact=relativeSum/Math.max(.18,wet);h.landingId++;landing=true;}
  h.wet=wet;h.bowWet=bow;h.sternWet=stern;h.portWet=port;h.starboardWet=starboard;
- const intakeTarget=Math.min(stern,wet*1.3);h.intake+=(intakeTarget-h.intake)*(1-Math.exp(-dt*(intakeTarget<h.intake?30:11)));
+ const intakeTarget=Math.min(stern,wet*1.3),oldIntake=h.intake;h.intake+=(intakeTarget-h.intake)*(1-Math.exp(-dt*(intakeTarget<h.intake?30:11)));
+ // Re-priming is driven by actual intake immersion, including wave skims.
+ h.reengagement=Math.max((h.reengagement||0)*Math.exp(-dt*8),clamp((h.intake-oldIntake)/Math.max(.001,dt)*.10,0,1)*(craft.throttle||0));
  h.load=support/9.81;h.vy+=(support-9.81)*dt;h.y+=h.vy*dt;
  const forwardWater=(heights[9]+heights[10]+heights[11])/3,aftWater=(heights[0]+heights[1]+heights[2])/3;
  const portWater=(heights[0]+heights[3]+heights[6]+heights[9])/4,starWater=(heights[2]+heights[5]+heights[8]+heights[11])/4;
@@ -38,6 +40,12 @@ export function stepHydro(h,craft,time,dt,surface,{dampen=false,lean=0,dive=fals
  h.rollVelocity+=(rollMoment/.46-h.rollVelocity*(wet*(dampen?7:5.6)+.18))*dt;
  h.pitch=clamp(h.pitch+h.pitchVelocity*dt,-1.15,1.15);h.roll=clamp(h.roll+h.rollVelocity*dt,-1.25,1.25);
  h.airborne=wet<.05&&h.y>water+.28;if(h.airborne)h.launched=true;h.airTime=h.airborne?h.airTime+dt:0;
+ // Look ahead along actual momentum. The rider reacts before the hull hits,
+ // without changing support forces or the ballistic flight trajectory.
+ const look=.28,ahead=surface(craft.x+(craft.vx||0)*look,craft.z+(craft.vz||0)*look,time+look);
+ const clearance=h.y+h.vy*look-4.905*look*look-ahead;
+ const incoming=clamp((ahead-water)*.7,0,1)*planing;
+ h.anticipation=Math.max(incoming,h.airborne?clamp((.65-clearance)/.8,0,1)*clamp(-h.vy/4,0,1):h.onRamp?.55:0);
  if(h.y<water-.6&&h.diveRemaining===0){h.y=water-.6;h.vy=Math.max(h.vy,h.waterVelocity*.25);}
  if(landing){h.entry=landingResponse(h,craft,{bowSlope:-(forwardWater-aftWater)/2.4,sideSlope:(starWater-portWater)/.84,dampen});h.pitchVelocity+=h.entry.kick;h.landingStyle=h.entry.style;}
  h.drag=slamming*.007+wet*planing*.035;h.previousSpeed=speed;
