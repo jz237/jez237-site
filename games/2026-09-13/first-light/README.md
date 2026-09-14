@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.19.0, photo mode)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.20.0, Big Bass)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Big Bass (v0.20.0)
+
+**Big Bass tournament** on the menu is the kayak format as the real series fish it: catch, photo, measure, release; best five bass by length, total inches. Twenty real minutes at twelve times speed, so the day runs from six to ten in the morning, on the day's seed, against three rival kayaks (Kim, Dale and Marisol) you can see across the cove. The rivals fish with the planner's own numbers: each re-plans a spot and a rig every few minutes by the same score Ray uses, casts at their own pace, and lands a bass with a chance that follows that score and their skill, with lengths drawn from the species' own size distribution. They are rates, not fully simulated boats, and the docs say so. Their catches come through as one-line reports ("Kim: 17.2 in largemouth off the dock"), the bar shows your limit, total and place, and the results card ranks everyone and posts your total inches (in tenths) to the day's board. Only largemouth and smallmouth count; everything else still goes in the journal.
 
 ## Photo mode and the share card (v0.19.0)
 
