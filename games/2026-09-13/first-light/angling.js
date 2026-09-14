@@ -8,6 +8,7 @@ import {RIGS,rigParts,weakestLink,describeRig} from './tackle.js';
 import {createLine,resetLine,setLure,stepLine,layLine,lurePosition,lureVelocity} from './line.js';
 import {createRecognizer,recordSample,recordTwitch,classify} from './technique.js';
 import {addImpact} from './surface-impulses.js';
+import {createFight,stepFight} from './fight.js';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
 export const CAST={elevation:.62,minSpeed:7,maxSpeed:22,chargeSeconds:1.3};
 function lureMesh(lure){
@@ -19,7 +20,7 @@ function lureMesh(lure){
  g.traverse(m=>{if(m.isMesh){m.castShadow=false;}});return g;
 }
 export function makeAngling(scene,kayak,env){
- const state={rigIndex:0,phase:'idle',power:0,charging:false,reeling:0,twitchClock:0,twitchSide:1,castCount:0,label:'idle',flight:null,retrieveSpeed:0,rodYaw:0,rodPitch:0,castAnim:0,twitchAnim:0,inWater:false};
+ const state={rigIndex:0,phase:'idle',biteFish:null,biteAt:0,fight:null,fightFish:null,events:[],fightSeconds:0,power:0,charging:false,reeling:0,twitchClock:0,twitchSide:1,castCount:0,label:'idle',flight:null,retrieveSpeed:0,rodYaw:0,rodPitch:0,castAnim:0,twitchAnim:0,inWater:false};
  const line=createLine(24),rec=createRecognizer();let sampleClock=0,classifyClock=0;
  // --- rod: nine tapered segments on nested pivots so tension can bend it
  const rodRoot=new T.Group();kayak.group.add(rodRoot);rodRoot.position.set(-.36,.34,.30);
@@ -48,7 +49,28 @@ export function makeAngling(scene,kayak,env){
   else if(L.action==='hop'){vy=.9;vx*=.6;vz*=.6;}
   else{vy=-.4;}
   line.px[last]-=vx*dt;line.py[last]-=vy*dt;line.pz[last]-=vz*dt;return true;}
- function reelIn(){state.phase='idle';state.inWater=false;line.lineOut=1.2;}
+ function reelIn(){state.phase='idle';state.inWater=false;line.lineOut=1.2;state.fight=null;state.fightFish=null;state.biteFish=null;}
+ // --- the bite, the set, the fight
+ function bite(fish,time){if(state.phase!=='retrieve')return false;state.phase='bite';state.biteFish=fish;state.biteAt=time;const lp=lurePosition(line);if(parts.lure.family==='topwater'){addImpact(lp.x,lp.z,time,4.5);env.ripple(lp.x,lp.z,'boil');}else env.ripple(lp.x,lp.z,'dimple');state.events.push({type:'bite',fish});return true;}
+ function setHook(time){if(state.phase!=='bite')return false;const dtb=time-state.biteAt;if(dtb<.12){state.events.push({type:'missed',fish:state.biteFish,reason:'too early'});missed();return false;}return beginFight(time);}
+ function missed(){const f=state.biteFish;state.biteFish=null;state.phase='retrieve';return f;}
+ function beginFight(time){const fish=state.biteFish;const rig={dragKg:parts.reel.dragKg,weakestKg:chain.weakest.kg,rodPower:parts.rod.power,lineStretch:parts.line.stretch,retrieveMs:parts.reel.retrieveMs};state.fight=createFight({fish:{length:fish.brain.length,species:fish.brain.species},rig,random:fish.brain.random});state.fightFish=fish;fish.brain.state='HOOKED';state.phase='fight';state.fightSeconds=0;state.biteFish=null;state.events.push({type:'hooked',fish});return true;}
+ function mouthOf(fish){const b=fish.brain;return {x:b.x+Math.sin(b.heading)*b.length*.48,y:b.y,z:b.z+Math.cos(b.heading)*b.length*.48};}
+ function fightStep(dt,time,input){const ft=state.fight,fish=state.fightFish,b=fish.brain;const t=worldTip();const m0=mouthOf(fish);const dist=Math.hypot(m0.x-t.x,m0.y-t.y,m0.z-t.z);const geom={distToAngler:dist,lineOut:line.lineOut,depth:-b.y};
+  const out=stepFight(ft,dt,input,geom);line.lineOut=geom.lineOut;state.fightSeconds+=dt;
+  // move the fish: runs are away from the kayak, sometimes straight at it; jumps break the surface
+  const ax=b.x-kayak.state.x,az=b.z-kayak.state.z,ad=Math.hypot(ax,az)||1;let dirA=Math.atan2(ax/ad,az/ad);if(Math.cos(out.heading)>.55)dirA+=Math.PI;else dirA+=Math.sin(out.heading)*1.1;
+  const sp=out.speed;b.vx+=(Math.sin(dirA)*sp-b.vx)*Math.min(1,dt*3);b.vz+=(Math.cos(dirA)*sp-b.vz)*Math.min(1,dt*3);
+  const bed=env.bed(b.x,b.z);const targetY=out.jump>0?out.jump-.05:(ft.state==='RUN'||ft.state==='SULK'?Math.max(bed+.35,-2.2):Math.max(bed+.3,-.6));b.vy+=(clamp((targetY-b.y)*3,-1.5,1.5)-b.vy)*Math.min(1,dt*4);
+  b.x+=b.vx*dt;b.y+=b.vy*dt;b.z+=b.vz*dt;if(out.jump<=0)b.y=Math.min(b.y,-.08);b.y=Math.max(b.y,bed+.2);if(b.vx*b.vx+b.vz*b.vz>1e-4)b.heading=Math.atan2(b.vx,b.vz);
+  // the line limits the fish to what has been paid out
+  const m=mouthOf(fish);const dx=m.x-t.x,dy=m.y-t.y,dz=m.z-t.z,d=Math.hypot(dx,dy,dz);if(d>line.lineOut){const k=line.lineOut/d;b.x=t.x+dx*k-(m.x-b.x);b.z=t.z+dz*k-(m.z-b.z);}
+  const m2=mouthOf(fish);const keepOut=line.lineOut;layLine(line,{x:t.x,y:t.y,z:t.z},m2);line.lineOut=keepOut;const d2=Math.hypot(m2.x-t.x,m2.y-t.y,m2.z-t.z);const sag=clamp((line.lineOut-d2)*.45,0,2.2);for(let i=1;i<N-1;i++){const s=i/(N-1);line.y[i]-=Math.sin(s*Math.PI)*sag;}
+  line.tension=clamp(ft.tension/chain.weakest.kg,0,1);line.lureDepth=Math.max(0,-b.y);
+  if(ft.lost){state.events.push({type:'lost',fish,reason:ft.lost});b.state='FLEE';b.fleeUntil=time+6;reelIn();}
+  else if(ft.landed){state.phase='landed';b.state='LANDED';b.vx=b.vy=b.vz=0;state.events.push({type:'landed',fish,seconds:state.fightSeconds});}}
+ function releaseFish(time){const fish=state.fightFish;if(fish){const b=fish.brain;b.state='RESTING';b.stateTime=0;b.home={x:kayak.state.x+Math.sin(kayak.state.heading)*4,y:Math.max(env.bed(b.x,b.z)+.5,-1.5),z:kayak.state.z+Math.cos(kayak.state.heading)*4};b.x=b.home.x;b.z=b.home.z;b.y=-.4;b.caught++;env.ripple(b.x,b.z,'boil');state.events.push({type:'released',fish});}reelIn();}
+ function drainEvents(){const e=state.events;state.events=[];return e;}
  function update(dt,time,input,camera){
   // input: {charging:boolean, reeling:boolean}
   state.twitchClock=Math.max(0,state.twitchClock-dt);state.castAnim=Math.max(0,state.castAnim-dt*3.2);state.twitchAnim=Math.max(0,state.twitchAnim-dt*6);
@@ -61,6 +83,9 @@ export function makeAngling(scene,kayak,env){
    if(f.y<=sy&&bed<0){splashdown(time,f.x,sy-.01,f.z,f);}else if(f.y<=bed+.03){f.y=bed+.03;splashdown(time,f.x,f.y,f.z,{x:0,y:0,z:0});}
    else{for(let i=0;i<N;i++){const s=i/(N-1);line.x[i]=line.px[i]=t.x+(f.x-t.x)*s;line.y[i]=line.py[i]=t.y+(f.y-t.y)*s-Math.sin(s*Math.PI)*.35*s;line.z[i]=line.pz[i]=t.z+(f.z-t.z)*s;}}
   }
+  if(state.phase==='bite'){if(time-state.biteAt>1.25){state.events.push({type:'missed',fish:state.biteFish,reason:'spat it'});const f=missed();f.brain.state='REFUSE';f.brain.refuseUntil=time+10;}else{const lp=lurePosition(line);const m=mouthOf(state.biteFish);setLure(line,m.x,Math.min(m.y,-.03),m.z);const t2=worldTip();layLine(line,{x:t2.x,y:t2.y,z:t2.z},{x:m.x,y:Math.min(m.y,-.03),z:m.z});line.tension=.35+Math.sin(time*30)*.15;}}
+  if(state.phase==='fight')fightStep(dt,time,input);
+  if(state.phase==='landed'){const t2=worldTip();for(let i=0;i<N;i++){line.x[i]=line.px[i]=t2.x;line.y[i]=line.py[i]=t2.y-.05*i/N;line.z[i]=line.pz[i]=t2.z;}}
   if(state.phase==='retrieve'){
    state.reeling=input.reeling?1:0;const reelMs=parts.reel.retrieveMs;
    if(input.reeling)line.lineOut=Math.max(1.3,line.lineOut-reelMs*dt);
@@ -79,26 +104,27 @@ export function makeAngling(scene,kayak,env){
   let targetPitch=-.24,targetYaw=-.34;
   if(state.phase==='charging')targetPitch=-1.9+state.power*.25,targetYaw=-.7;
   else if(state.castAnim>0)targetPitch=-.12-state.castAnim*.45;
-  else if(state.phase==='retrieve'||state.phase==='flight'){const lp=state.flight||lurePosition(line);tmp.set(lp.x-kayak.state.x,0,lp.z-kayak.state.z);const yawWorld=Math.atan2(tmp.x,tmp.z);let rel=yawWorld-kayak.state.heading;rel=Math.atan2(Math.sin(rel),Math.cos(rel));targetYaw=clamp(rel-.15,-1.2,.8);targetPitch=-.2-line.tension*.25;}
+  else if(state.phase==='retrieve'||state.phase==='flight'||state.phase==='bite'||state.phase==='fight'){const lp=state.flight||lurePosition(line);tmp.set(lp.x-kayak.state.x,0,lp.z-kayak.state.z);const yawWorld=Math.atan2(tmp.x,tmp.z);let rel=yawWorld-kayak.state.heading;rel=Math.atan2(Math.sin(rel),Math.cos(rel));targetYaw=clamp(rel-.15,-1.2,.8);targetPitch=-.2-line.tension*.25;}
   const k=1-Math.exp(-dt*(state.phase==='charging'?4:9));state.rodPitch+=(targetPitch-state.rodPitch)*k;state.rodYaw+=(targetYaw-state.rodYaw)*k;
   rodRoot.rotation.set(state.rodPitch,state.rodYaw,0,'YXZ');
-  const bend=(state.phase==='retrieve'?line.tension*.09:0)+state.twitchAnim*.05+(state.phase==='charging'?.02:0)+state.castAnim*.06;
+  const bend=((state.phase==='retrieve'||state.phase==='fight'||state.phase==='bite')?line.tension*.11:0)+(input.rodUp!==undefined&&state.phase==='fight'?(input.rodUp-.6)*.03:0)+state.twitchAnim*.05+(state.phase==='charging'?.02:0)+state.castAnim*.06;
   for(let i=0;i<NSEG;i++){const s=(i+1)/NSEG;segs[i].rotation.x=bend*s*s*1.6;}
   // --- lure and ribbon
   if(state.phase==='flight'){const f=state.flight;lureObj.position.set(f.x,f.y,f.z);tmp.set(f.vx,f.vy,f.vz);if(tmp.lengthSq()>1e-4){lureObj.lookAt(tmp2.copy(lureObj.position).add(tmp));}}
+  else if(state.phase==='fight'||state.phase==='bite'){lureObj.visible=false;}
   else if(state.phase==='retrieve'){const lp=lurePosition(line),lv=lureVelocity(line,Math.max(dt,.004));lureObj.position.set(lp.x,lp.y,lp.z);tmp.set(lv.x,lv.y*.3,lv.z);if(tmp.lengthSq()>.02)lureObj.lookAt(tmp2.copy(lureObj.position).add(tmp));else{tmp.set(t.x-lp.x,0,t.z-lp.z);if(tmp.lengthSq()>.01)lureObj.lookAt(tmp2.copy(lureObj.position).add(tmp));}
    if(parts.lure.action==='wobble'&&input.reeling)lureObj.rotation.z=Math.sin(time*38)*.5;if(parts.lure.action==='walk'&&!line.lureOnBottom)lureObj.rotation.z=0;}
   else{lureObj.position.set(t.x,t.y-.28,t.z);lureObj.rotation.set(-1.2,kayak.state.heading,0);}
-  lureObj.visible=true;
+  if(state.phase!=='fight'&&state.phase!=='bite')lureObj.visible=state.phase!=='landed';
   const camPos=camera.position;const linePts=state.phase==='idle'?[[t.x,t.y,t.z],[t.x,t.y-.28,t.z]]:null;
   for(let i=0;i<N;i++){let x,y,z;if(linePts){const s=i/(N-1);x=linePts[0][0]+(linePts[1][0]-linePts[0][0])*s;y=linePts[0][1]+(linePts[1][1]-linePts[0][1])*s;z=linePts[0][2];}else{x=line.x[i];y=line.y[i];z=line.z[i];}
    const j=Math.min(N-1,i+1),i0=Math.max(0,i-1);const sx=(linePts?0:line.x[j]-line.x[i0]),sy=(linePts?-1:line.y[j]-line.y[i0]),sz=(linePts?0:line.z[j]-line.z[i0]);
    tmp.set(sx,sy,sz).normalize();tmp2.set(camPos.x-x,camPos.y-y,camPos.z-z);const dist=tmp2.length();tmp2.normalize();const right=tmp.cross(tmp2).normalize();const w=.0005+dist*.0013;
    rpos[i*6]=x+right.x*w;rpos[i*6+1]=y+right.y*w;rpos[i*6+2]=z+right.z*w;rpos[i*6+3]=x-right.x*w;rpos[i*6+4]=y-right.y*w;rpos[i*6+5]=z-right.z*w;}
-  ribbonGeo.attributes.position.needsUpdate=true;ribbon.material.opacity=state.phase==='idle'?.6:.85;
+  ribbonGeo.attributes.position.needsUpdate=true;ribbon.material.opacity=state.phase==='idle'?.6:.85;ribbon.visible=state.phase!=='landed';
  }
  setRig(0);
- return {state,line,rig:()=>rig,parts:()=>parts,chain:()=>chain,describe:()=>describeRig(rig),setRig,nextRig:()=>setRig(state.rigIndex+1),beginCharge,release,twitch,reelIn,update,tipPosition:()=>worldTip().clone(),
+ return {state,line,rig:()=>rig,parts:()=>parts,chain:()=>chain,describe:()=>describeRig(rig),setRig,nextRig:()=>setRig(state.rigIndex+1),beginCharge,release,twitch,reelIn,update,tipPosition:()=>worldTip().clone(),bite,setHook,releaseFish,drainEvents,fight:()=>state.fight?{state:state.fight.state,stamina:+state.fight.stamina.toFixed(2),tension:+state.fight.tension.toFixed(2),hookHold:+state.fight.hookHold.toFixed(2),overload:+state.fight.overload.toFixed(2),pullKg:+state.fight.pull.toFixed(2),seconds:+state.fightSeconds.toFixed(1),lost:state.fight.lost,landed:state.fight.landed,weakestKg:chain.weakest.kg}:null,
   lure:()=>state.phase==='flight'?{...state.flight}:lurePosition(line),
-  snapshot:()=>({phase:state.phase,rig:rig.id,lure:parts.lure.id,power:+state.power.toFixed(2),lineOut:+line.lineOut.toFixed(2),tension:+line.tension.toFixed(2),lureDepth:+line.lureDepth.toFixed(2),onBottom:line.lureOnBottom,technique:state.label,casts:state.castCount,reeling:state.reeling,lure_pos:(()=>{const p=state.phase==='flight'?state.flight:lurePosition(line);return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2)];})()})};
+  snapshot:()=>({phase:state.phase,fight:state.fight?state.fight.state:null,rig:rig.id,lure:parts.lure.id,power:+state.power.toFixed(2),lineOut:+line.lineOut.toFixed(2),tension:+line.tension.toFixed(2),lureDepth:+line.lureDepth.toFixed(2),onBottom:line.lureOnBottom,technique:state.label,casts:state.castCount,reeling:state.reeling,lure_pos:(()=>{const p=state.phase==='flight'?state.flight:lurePosition(line);return [+p.x.toFixed(2),+p.y.toFixed(2),+p.z.toFixed(2)];})()})};
 }

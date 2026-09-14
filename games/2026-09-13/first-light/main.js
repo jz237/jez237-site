@@ -25,7 +25,9 @@ import {makeMist} from './mist.js';
 import {makeAngling} from './angling.js';
 import {makeUnderwaterFx} from './underwater-fx.js';
 import {underwaterFogDensity,underwaterFogColor} from './optics.js';
-export const VERSION='0.3.0';
+import {makePopulation} from './fish.js';
+import {hourOfDay as hourOf} from './game-clock.js';
+export const VERSION='0.4.0';
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -34,7 +36,7 @@ const hud=mountHud({
  onRate:r=>{setRate(r);settings.timeRate=r==='real'?'real':Number(r);saveSettings(settings);},
  onWeather:w=>{setWeather(w);settings.weather=w;saveSettings(settings);},
  onSkip:h=>{const target=skipToHour(clock,h);hud.toast('Skipping to '+formatClock(target));},
- onLenses:()=>setPolarized(!polarizedTarget),onMenu:()=>toggleMenu(),onHour:h=>setHour(clock,h),onRig:()=>nextRig()
+ onLenses:()=>setPolarized(!polarizedTarget),onMenu:()=>toggleMenu(),onHour:h=>setHour(clock,h),onRig:()=>nextRig(),onRelease:()=>releaseFish()
 });
 let renderer;try{renderer=new T.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});}catch(e){hud.error('WebGL 2 is needed for this lake. Try a current browser with hardware acceleration enabled.');throw e;}
 renderer.setPixelRatio(Math.min(devicePixelRatio,1.5));renderer.setSize(innerWidth,innerHeight);renderer.outputColorSpace=T.SRGBColorSpace;renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.05;renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFShadowMap;renderer.shadowMap.autoUpdate=false;
@@ -72,7 +74,17 @@ let qaReel=false,touchCastHeld=false;
 const fx=makeUnderwaterFx(scene);const fogAir=scene.fog,fogWater=new T.FogExp2(0x1a4a34,.09);
 lake.hooks.setFog=m=>{scene.fog=m==='water'?fogWater:fogAir;};
 function toggleLureCam(){if(cameraMode==='lurecam'){cameraMode='surface';hud.toast('Back in the kayak');}else if(angling.state.phase==='retrieve'){cameraMode='lurecam';hud.toast('Lure cam · C to return');}else hud.toast('Cast first, then C follows the lure');}
-function nextRig(){angling.nextRig();hud.toast(angling.rig().name+' — '+angling.describe(),5000);}
+function nextRig(){if(angling.state.phase==='fight'||angling.state.phase==='landed')return;angling.nextRig();hud.toast(angling.rig().name+' — '+angling.describe(),5000);}
+const pop=makePopulation(scene,bathy,cover.features,{count:10});const journal=(()=>{try{return JSON.parse(localStorage.getItem('first_light_journal_v1')||'{"catches":[]}');}catch{return {catches:[]};}})();
+function releaseFish(){if(angling.state.phase!=='landed')return;angling.releaseFish(simTime);hud.hideCard();cameraMode='surface';hud.toast('Released');}
+function handleAnglingEvents(){for(const e of angling.drainEvents()){
+ if(e.type==='bite'){hud.toast('Fish on the line — set the hook!',1500);navigator.vibrate?.(60);}
+ else if(e.type==='missed'){hud.toast(e.reason==='too early'?'Pulled it away too soon':'It spat the lure');pop.markEscape(e.fish,angling.parts().lure.family);}
+ else if(e.type==='hooked'){hud.toast('Fish on!');navigator.vibrate?.([80,40,80]);}
+ else if(e.type==='lost'){hud.toast(e.reason==='broke off'?'Broke off — the '+angling.chain().weakest.part+' gave way. Re-tie and try again.':'It threw the hook. Keep the line tight through the shakes.',5000);pop.markEscape(e.fish,angling.parts().lure.family);}
+ else if(e.type==='landed'){const d=pop.describe(e.fish);cameraMode='hero';heroFish=e.fish;const cls={young:'Young',common:'Common',trophy:'Trophy',legend:'Legend'}[d.sizeClass];const name=e.fish.brain.name?e.fish.brain.name+' · ':'';hud.showCard({species:name+pop.species.name,size:cls+' · '+d.lengthIn+' in · '+d.weightText,detail:angling.rig().name+' · '+angling.parts().lure.name+' · '+(lastTechnique||'straight retrieve')+' · fought '+e.seconds.toFixed(0)+' s',meta:formatClock(clock.ms)+' · '+formatDate(clock.ms)+' · '+WEATHER[weatherName].label+' · '+Math.round(env.windMs*2.237)+' mph '+compass(weather.from)});journal.catches.push({species:pop.species.id,lengthIn:d.lengthIn,weightLb:d.weightLb,sizeClass:d.sizeClass,lure:angling.parts().lure.id,technique:lastTechnique,at:clock.ms,name:e.fish.brain.name});try{localStorage.setItem('first_light_journal_v1',JSON.stringify(journal));}catch{}pop.markEscape(e.fish,angling.parts().lure.family);}
+ else if(e.type==='released'){heroFish=null;}}}
+let heroFish=null,lastTechnique='',fightInput={reeling:0,sidePressure:0,rodUp:.6},qaFight=null;
 function applyQuality(q){quality=q;lake.setQuality(q);const ratio=q==='high'?Math.min(devicePixelRatio,1.5):q==='medium'?1:.75;renderer.setPixelRatio(ratio);renderer.setSize(innerWidth,innerHeight);lake.resize();renderer.shadowMap.enabled=q==='high'||q==='medium';sun.shadow.mapSize.set(q==='high'?2048:1024,q==='high'?2048:1024);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}
 function setPolarized(v){polarizedTarget=v?1:0;settings.polarized=!!v;saveSettings(settings);hud.setLenses(!!v);hud.toast(v?'Polarized lenses on':'Lenses off');}
 function setCamera(name){cameraMode=name;}
@@ -108,7 +120,8 @@ function step(dt){
  if(pad){lookStick(look,input.lookX,input.lookY,dt);if(input.padLenses&&!pressed._padLenses){setPolarized(!polarizedTarget);}pressed._padLenses=input.padLenses;if(input.padAnchor&&!pressed._padAnchor)pressed.KeyX=true;pressed._padAnchor=input.padAnchor;if(input.padMenu&&!pressed._padMenu)toggleMenu();pressed._padMenu=input.padMenu;if(input.padTwitch&&!pressed._padTwitch)pressed.KeyF=true;pressed._padTwitch=input.padTwitch;if(input.padCam&&!pressed._padCam)toggleLureCam();pressed._padCam=input.padCam;}
  if(pressed.KeyP){setPolarized(!polarizedTarget);}if(pressed.Escape)toggleMenu();if(pressed.Digit1)hud.toast('Skipping to '+formatClock(skipToHour(clock,5.4)));if(pressed.Digit2)hud.toast('Skipping to '+formatClock(skipToHour(clock,18.9)));if(pressed.Digit3)hud.toast('Skipping to '+formatClock(skipToHour(clock,22)));
  if(pressed.KeyT){const order=['real','1','4','12'],next=order[(order.indexOf(String(settings.timeRate))+1)%order.length];setRate(next);settings.timeRate=next==='real'?'real':Number(next);saveSettings(settings);hud.toast(next==='real'?'Real time':'Time runs at '+next+'×');}
- const control=mode==='playing'?{paddle:input.paddle,turn:input.turn,anchorToggle:!!pressed.KeyX}:{paddle:0,turn:0,anchorToggle:false};
+ const busy=angling.state.phase==='fight'||angling.state.phase==='landed'||angling.state.phase==='bite';
+ const control=mode==='playing'&&!busy?{paddle:input.paddle,turn:input.turn,anchorToggle:!!pressed.KeyX}:{paddle:0,turn:0,anchorToggle:false};
  if(mode==='playing'&&pressed.KeyX)hud.toast(kayak.state.anchored?'Anchor up':'Anchor down');
  if(pressed.Tab&&mode==='playing')nextRig();if(pressed.KeyC&&mode==='playing')toggleLureCam();
  kayak.step(dt,control,env);
@@ -117,14 +130,25 @@ function step(dt){
  const charging=mode==='playing'&&(mouseHold||input.charging);
  if(charging&&angling.state.phase==='idle')angling.beginCharge();
  if(pressed.KeyF&&mode==='playing')angling.twitch(simTime);
+ if(angling.state.phase==='bite'&&mode==='playing'&&(pressed.KeyF||input.reeling||qaReel))angling.setHook(simTime);
+ const fighting=angling.state.phase==='fight';
+ fightInput=qaFight||{reeling:(input.reeling||qaReel)?1:0,sidePressure:(input.turn!==0)?1:0,rodUp:input.paddle>0?1:input.paddle<0?0:.6};
+ if(angling.state.phase==='retrieve')lastTechnique=angling.state.label;
  pressed={};
  if(mode==='menu'){look.targetYaw=Math.sin(simTime*.05)*.35;look.targetPitch=-.06;}
  polarized+=(polarizedTarget-polarized)*(1-Math.exp(-dt*3.5));lake.setPolarized(polarized);
  lake.update(dt,kayak.state.x,kayak.state.z);cover.update(simTime,surface);shore.update(simTime,weather.wind,quality,camera.position);
  const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;updateAnglerCamera(camera,kayak.state,look,dt,{steady:settings.steadyCamera||reduced?1:0});
- angling.update(dt,simTime,{charging,reeling:mode==='playing'&&(input.reeling||qaReel)},camera);hud.setCast(angling.state.phase,angling.state.power);
+ angling.update(dt,simTime,{charging,reeling:mode==='playing'&&(input.reeling||qaReel),...(fighting?fightInput:{})},camera);hud.setCast(angling.state.phase,angling.state.power);handleAnglingEvents();
+ const ft=angling.fight();hud.setTension(!!ft&&angling.state.phase==='fight',ft?ft.tension/ft.weakestKg:0,ft?(ft.tension/ft.weakestKg>.85?'TOO MUCH':ft.state==='JUMP'?'BOW TO IT':ft.state==='HEADSHAKE'?'KEEP IT TIGHT':ft.state.toLowerCase()):'');
+ // the population perceives the lure, the kayak and the last splash
+ {const a=angling.state,lp=angling.lure(),ev=sunEvents(clock.ms);const lure=a.phase==='retrieve'?{x:lp.x,y:lp.y,z:lp.z,speed:angling.line.lureSpeed,family:angling.parts().lure.family,technique:a.label,inWater:true,onSurface:angling.line.lureDepth<.05}:null;
+  pop.update(dt,simTime,hourOf(clock.ms),ev.sunrise?hourOf(ev.sunrise):6.5,ev.sunset?hourOf(ev.sunset):19.5,lure,{x:kayak.state.x,z:kayak.state.z},lakeLightingClarity());
+  if(a.phase==='retrieve')for(const f of pop.fish)if(f.brain.state==='BITE'){angling.bite(f,simTime);break;}}
+ if(cameraMode==='hero'&&heroFish){const b=heroFish.brain,fwd=new T.Vector3();camera.getWorldDirection(fwd);const right=new T.Vector3().crossVectors(fwd,new T.Vector3(0,1,0)).normalize();const L=heroFish.brain.length;const pos=camera.position.clone().addScaledVector(fwd,.5+L*.8).addScaledVector(right,.22).addScaledVector(new T.Vector3(0,1,0),-.16);heroFish.body.root.position.copy(pos);heroFish.body.root.rotation.set(-.1+Math.sin(simTime*.9)*.05,Math.atan2(fwd.x,fwd.z)+Math.PI/2+Math.sin(simTime*.7)*.2,-.12);heroFish.body.setWet(1);heroFish.body.setJaw(.35);heroFish.body.setSwim(simTime*4,.006,0);heroFish.body.root.visible=true;b.x=pos.x;b.y=pos.y;b.z=pos.z;}
  if(cameraMode==='shore'){const p=worldFromFrame(150,halfWidth(150,1)+3);camera.position.set(p.x,2.2,p.z);camera.lookAt(kayak.state.x,0,kayak.state.z);}
  else if(cameraMode==='under'){const fx0=Math.sin(kayak.state.heading),fz0=Math.cos(kayak.state.heading);camera.position.set(kayak.state.x+fx0*2.5,-1.3,kayak.state.z+fz0*2.5);camera.lookAt(kayak.state.x+fx0*9,-3.6,kayak.state.z+fz0*9);}
+ else if(cameraMode==='fish'){const f=pop.nearest(kayak.state.x,kayak.state.z);if(f){const b=f.brain;const rx=Math.cos(b.heading),rz=-Math.sin(b.heading);camera.position.set(b.x+rx*1.35,Math.max(bathy.height(b.x+rx*1.35,b.z+rz*1.35)+.25,Math.min(-.15,b.y+.15)),b.z+rz*1.35);camera.lookAt(b.x,b.y,b.z);}}
  else if(cameraMode==='lurecam'){if(angling.state.phase!=='retrieve'){cameraMode='surface';hud.toast('Lure is in: back in the kayak');}else{const lp=angling.lure();const dx=lp.x-kayak.state.x,dz=lp.z-kayak.state.z,d=Math.hypot(dx,dz)||1;const ux=dx/d,uz=dz/d;const bed=bathy.height(lp.x-ux*1.5,lp.z-uz*1.5);const goalY=Math.max(bed+.3,Math.min(waterLevel.value-.14,lp.y+(lp.y<-.9?.35:-.28)));lureCamPos.set(lp.x-ux*1.5,goalY,lp.z-uz*1.5);if(!lureCamLive){lureCamCur.copy(lureCamPos);lureCamLive=true;}lureCamCur.lerp(lureCamPos,1-Math.exp(-dt*5));camera.position.copy(lureCamCur);lureCamLook.set(lp.x,lp.y+.03,lp.z);camera.lookAt(lureCamLook);}}
  if(cameraMode!=='lurecam')lureCamLive=false;
  const camDepth=Math.max(0,waterLevel.value-camera.position.y);fx.update(simTime,camera,lake.underwater,camDepth,sd,Math.max(0,Math.min(1,sd.elevation/15)),renderer.getPixelRatio(),quality);
@@ -140,10 +164,11 @@ function frame(now){requestAnimationFrame(frame);const raw=frameElapsed((now-las
  if(raw<.25&&!document.hidden){frameSum+=raw;frameCount++;adaptClock+=raw;}if(adaptClock>8){const fps=frameCount/frameSum;if(settings.quality==='auto'){const next=adaptiveQuality(adapt.memory,quality,fps,8);if(next!==quality){applyQuality(next);hud.toast('Graphics: '+next);}}frameSum=frameCount=adaptClock=0;lastFps=fps;}
 }
 let pendingDt=0,lastFps=0;
-const app={step,render,renderer,version:VERSION,start,cast:(power=.8)=>{if(mode!=='playing')start();angling.beginCharge();angling.state.power=power;angling.release(camera);return angling.snapshot();},setReeling:v=>{qaReel=!!v;},twitch:()=>angling.twitch(simTime),rig:i=>{typeof i==='number'?angling.setRig(i):nextRig();return angling.rig().id;},angling:()=>angling.snapshot(),setQuality:q=>{applyQuality(q);settings.quality=q;},setHour:h=>setHour(clock,h),setRate,setWind,setWeather,setCamera,addRipple,setPolarized,
+function lakeLightingClarity(){return lake.mat.uniforms.clarity.value;}
+const app={step,render,renderer,version:VERSION,start,spawnFish:(x,z,len=.42,bold=.7)=>{const f=pop.spawn(x,z,len,bold);return f?pop.info(f):null;},fish:()=>pop.fish.map(pop.info),forceStrike:()=>{const lp=angling.lure();const f=pop.nearest(lp.x,lp.z);if(!f)return null;f.brain.state='STRIKE';f.brain.stateTime=0;f.brain.strikeReady=simTime;f.brain.refuseUntil=-1;return pop.info(f);},setHook:()=>angling.setHook(simTime),fightState:()=>angling.fight(),fightInput:i=>{qaFight=i;},releaseFish,journal:()=>journal,cast:(power=.8)=>{if(mode!=='playing')start();angling.beginCharge();angling.state.power=power;angling.release(camera);return angling.snapshot();},setReeling:v=>{qaReel=!!v;},twitch:()=>angling.twitch(simTime),rig:i=>{typeof i==='number'?angling.setRig(i):nextRig();return angling.rig().id;},angling:()=>angling.snapshot(),setQuality:q=>{applyQuality(q);settings.quality=q;},setHour:h=>setHour(clock,h),setRate,setWind,setWeather,setCamera,addRipple,setPolarized,
  forceSize:(w,h)=>{renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();lake.resize();},
  debug:()=>({scene,bed,cover,shore,kayak,lake,sky,camera,sun,mist,ambient}),stats:()=>({fps:lastFps,quality,tris:renderer.info.render.triangles,calls:renderer.info.render.calls,programs:renderer.info.programs?.length,scenery:shore.counts,cover:cover.features.length}),
- state:()=>({mode,angling:angling.snapshot(),cameraMode,underwater:lake.underwater,clock:{ms:clock.ms,rate:clock.rate,mode:clock.mode,local:formatClock(clock.ms)},sunElevation:lastElevation,weather:{...weather,name:weatherName},kayak:{...kayak.state},polarized,camera:camera.position.toArray(),depthUnderKayak:bathy.depth(kayak.state.x,kayak.state.z)})};
+ state:()=>({mode,angling:angling.snapshot(),fight:angling.fight(),fishStates:pop.fish.map(f=>f.brain.state),cameraMode,underwater:lake.underwater,clock:{ms:clock.ms,rate:clock.rate,mode:clock.mode,local:formatClock(clock.ms)},sunElevation:lastElevation,weather:{...weather,name:weatherName},kayak:{...kayak.state},polarized,camera:camera.position.toArray(),depthUnderKayak:bathy.depth(kayak.state.x,kayak.state.z)})};
 installQA(app);
 hud.setSettings(settings);setWeather(settings.weather);Object.assign(weather,WEATHER[settings.weather]);setRate(settings.timeRate==='real'?'real':String(settings.timeRate||4));
 hud.showMenu({});
