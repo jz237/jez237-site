@@ -10,7 +10,7 @@ export function createLakeMap({bathy,features,span,res=240}){
  for(let j=0;j<res;j++)for(let i=0;i<res;i++){const x=(i/(res-1)-.5)*span,z=(j/(res-1)-.5)*span;const h=bathy.height(x,z);let b=depthBand(h);if(b==='land'&&h<.9)b='fringe';const c=cols[b];const k=(j*res+i)*4;d[k]=c[0];d[k+1]=c[1];d[k+2]=c[2];d[k+3]=255;}
  rg.putImageData(img,0,0);
  return {
-  draw(ctx,w,h,{kayak,catches=[],hour}={}){
+  draw(ctx,w,h,{kayak,catches=[],hour,hotspots=[]}={}){
    const f=mapFrame(span,w,h);ctx.save();ctx.fillStyle='#0b1d22';ctx.fillRect(0,0,w,h);
    const side=span*f.s;ctx.imageSmoothingEnabled=true;ctx.drawImage(raster,f.ox-side/2,f.oy-side/2,side,side);
    // cover
@@ -26,6 +26,8 @@ export function createLakeMap({bathy,features,span,res=240}){
    // the journal's catches
    for(const s of catchSpots(catches,features)){const p=worldToMap(f,s.x,s.z);const r=4+Math.min(8,s.count*1.5);ctx.fillStyle=SPECIES_TINT[s.top]||'#e8c77a';ctx.globalAlpha=.9;ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.283);ctx.fill();ctx.globalAlpha=1;ctx.strokeStyle='rgba(255,255,255,.7)';ctx.lineWidth=1;ctx.stroke();
     if(s.count>1){ctx.fillStyle='#0b1d22';ctx.font='bold 9px "DM Sans",Arial,sans-serif';ctx.textAlign='center';ctx.fillText(String(s.count),p.x,p.y+.5);ctx.font='11px "DM Sans",Arial,sans-serif';}}
+   // Ray's hotspots: gold rings with their rank
+   for(const hs of hotspots){const p=worldToMap(f,hs.x,hs.z);ctx.strokeStyle='rgba(232,199,122,.95)';ctx.lineWidth=2;ctx.beginPath();ctx.arc(p.x,p.y,13,0,6.283);ctx.stroke();ctx.fillStyle='rgba(232,199,122,.95)';ctx.beginPath();ctx.arc(p.x+10,p.y-10,7,0,6.283);ctx.fill();ctx.fillStyle='#0b1d22';ctx.font='bold 9px "DM Sans",Arial,sans-serif';ctx.textAlign='center';ctx.fillText(String(hs.rank),p.x+10,p.y-9.5);ctx.font='11px "DM Sans",Arial,sans-serif';}
    // the kayak
    if(kayak){const p=worldToMap(f,kayak.x,kayak.z);ctx.save();ctx.translate(p.x,p.y);ctx.rotate(-(kayak.heading||0));ctx.fillStyle='#f3f1e8';ctx.beginPath();ctx.moveTo(0,-9);ctx.lineTo(5,6);ctx.lineTo(0,3);ctx.lineTo(-5,6);ctx.closePath();ctx.fill();ctx.restore();}
    // north arrow, scale bar
