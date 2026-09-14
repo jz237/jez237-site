@@ -1,4 +1,4 @@
-# Water interaction · v2.4.0
+# Water interaction · v2.4.1
 
 This update extends the existing shared wave renderer and racing physics. It retains the larger seeded surf, occasional smooth water, wake jumps, shoreline wetness, scenery, underwater life and existing game modes.
 
