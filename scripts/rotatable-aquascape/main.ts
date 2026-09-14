@@ -1,3 +1,4 @@
+import {installFilterExperience} from './lib/FilterExperience';
 import './style.css';
 import {installFullscreen} from './lib/Fullscreen';
 import {installExploration} from './lib/ExplorationUI';
@@ -21,7 +22,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
  <div class="bottom-note">A separate 3D study <span>·</span> All scenery has volume</div>
 </main>`;
 const storeShowroom=new URLSearchParams(location.search).get('showroom')==='hidden-reef';
-if(storeShowroom){document.body.classList.add('store-showroom');document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';document.querySelector('h1')!.textContent='Living Showroom';document.querySelector('header nav')!.innerHTML='<a href="../" target="_top">← Showroom & tank planner</a>';}
+if(storeShowroom){document.body.classList.add('store-showroom');document.querySelector('.identity .eyebrow')!.textContent='THE HIDDEN REEF';document.querySelector('h1')!.textContent='Living Showroom';document.querySelector('header nav')!.innerHTML='';}
 const aquariumHeader=document.querySelector<HTMLElement>('.aquarium-header')!;
 const primaryTools=document.querySelector<HTMLElement>('.primary-tools')!;
 primaryTools.append(document.querySelector('#learn')!);
@@ -44,7 +45,7 @@ async function start(){
  const aquarium=new Aquarium(host);
  await aquarium.ready;
  document.querySelector('#loading')!.remove();
- installLearning(aquarium);installExploration(aquarium);
+ installFilterExperience(aquarium);installLearning(aquarium);installExploration(aquarium);
  primaryTools.append(document.querySelector('#explore')!,document.querySelector('.chemistry-summary')!);
  installShowroom(aquarium);
  document.querySelector('#status')!.textContent='Exploring';

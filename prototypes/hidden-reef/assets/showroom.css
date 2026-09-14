@@ -16,3 +16,11 @@
 .showroom-page .main-nav{font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}@media(min-width:761px){.showroom-page .header.masthead+.main-nav{grid-template-columns:minmax(138px,auto) repeat(9,max-content) minmax(0,1fr)!important}.showroom-page .header.masthead+.main-nav>a{padding-left:6px!important;padding-right:6px!important}}
 
 .living-showroom-feature>div p,.living-showroom-feature>div small{color:#d9f3fa}.living-showroom-feature>div .showroom-kicker{color:#9eecff}
+
+/* Discovery controls are primary destinations, with generous touch targets. */
+.showroom-chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.showroom-chips button{display:flex;align-items:center;justify-content:space-between;min-height:62px;padding:16px 20px;border:1px solid #62e4f0;border-radius:9px;background:linear-gradient(135deg,#086b89,#06455f);color:#f0fdff;font-size:15px;font-weight:700;text-align:left;box-shadow:0 5px 18px #001b3855,inset 0 1px #b8ffff22;transition:background .18s,border-color .18s}
+.showroom-chips button:after{content:'↗';color:#9ceefa;margin-left:12px;font-size:19px}
+.showroom-chips button:hover,.showroom-chips button[aria-pressed=true]{background:#5fe2ed;color:#032136;border-color:#c3ffff}
+.showroom-chips button:hover:after,.showroom-chips button[aria-pressed=true]:after{color:inherit}
+@media(max-width:600px){.showroom-chips{grid-template-columns:repeat(2,minmax(0,1fr))}.showroom-chips button{font-size:13px;padding:13px;min-height:60px}}
