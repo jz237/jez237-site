@@ -5,14 +5,16 @@ import {SPECIES,activityByHour,describeFish,sizeClass} from './species.js';
 import {createFishBrain,stepFishBrain,markEscape} from './fish-brain.js';
 import {createFight,stepFight} from './fight.js';
 import {makeFishMesh} from './fish-body.js';
+import {makePhotoFishMesh} from './fish-photo.js';
 import {rng} from './botany.js';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-export function makePopulation(scene,bathy,coverFeatures,{count=10,seed=2026}={}){
+export function makePopulation(scene,bathy,coverFeatures,{count=10,seed=2026,assets=null}={}){
+ const mesh=len=>assets?makePhotoFishMesh(len,assets):makeFishMesh(len);
  const random=rng(seed),fish=[],species=SPECIES.largemouth;
  const spots=coverFeatures.filter(f=>species.structure.includes(f.type));
  function spawn(x,z,length,boldness,name=null){const bed=bathy.height(x,z);if(bed>-.6)return null;const y=clamp(bed+.4+random()*Math.max(.2,-bed-.9),bed+.35,-.35);
   const brain=createFishBrain({id:'lm'+fish.length,species,length,home:{x,y,z},boldness,random:rng(Math.floor(random()*1e9))});brain.name=name;
-  const body=makeFishMesh(length);scene.add(body.root);const f={brain,body,swimPhase:random()*6.28,fight:null,jaw:0,wet:0};fish.push(f);return f;}
+  const body=mesh(length);scene.add(body.root);const f={brain,body,swimPhase:random()*6.28,fight:null,jaw:0,wet:0};fish.push(f);return f;}
  for(let i=0;i<count;i++){const s=spots[Math.floor(random()*spots.length)];const a=random()*6.28,r=random()*Math.max(3,s.r*.6);const x=s.x+Math.cos(a)*r,z=s.z+Math.sin(a)*r;
   const length=.28+Math.pow(random(),1.6)*.26;spawn(x,z,length,.4+random()*.45);}
  // the legend: a big fish that lives under the north laydown
