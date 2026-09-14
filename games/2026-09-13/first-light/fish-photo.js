@@ -40,20 +40,24 @@ export function finCardFromProfile(profile,segs=48,rows=10){
 }
 export function photoMaterial(u,map,{fins=false}={}){
  const m=new T.MeshPhysicalMaterial({map,color:0xffffff,roughness:fins?.55:.42,metalness:.0,sheen:fins?.1:.3,sheenColor:new T.Color(.6,.6,.45),clearcoat:fins?.1:.35,clearcoatRoughness:.3,side:T.DoubleSide,transparent:fins,alphaTest:fins?.18:0,depthWrite:true});
- m.onBeforeCompile=s=>{Object.assign(s.uniforms,{swimPhase:u.swimPhase,swimAmp:u.swimAmp,turnBend:u.turnBend,wet:u.wet});
-  s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float station;uniform float swimPhase,swimAmp,turnBend;')
+ m.onBeforeCompile=s=>{Object.assign(s.uniforms,{swimPhase:u.swimPhase,swimAmp:u.swimAmp,turnBend:u.turnBend,wet:u.wet,jawOpen:u.jawOpen,jawHingeY:u.jawHingeY});
+  s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nattribute float station;uniform float swimPhase,swimAmp,turnBend,jawOpen,jawHingeY;')
    .replace('#include <begin_vertex>',`#include <begin_vertex>
 float env=pow(clamp(1.-station,0.,1.),1.25);
-transformed.x+=sin(swimPhase-(1.-station)*3.3)*swimAmp*env+turnBend*env*env*.35;`);
+transformed.x+=sin(swimPhase-(1.-station)*3.3)*swimAmp*env+turnBend*env*env*.35;
+// the lower jaw: the front of the loft below the mouth line swings down about a hinge at station .86
+float jw=smoothstep(.86,.92,station)*step(transformed.y,jawHingeY)*jawOpen;
+if(jw>0.){float ang=jw*.55;float cy=transformed.y-jawHingeY,cz=transformed.z-.36;float c=cos(ang),sn=sin(ang);transformed.y=jawHingeY+cy*c-cz*sn;transformed.z=.36+cy*sn+cz*c;}`);
   s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nuniform float wet;').replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=mix(roughnessFactor,.1,wet);');
- };m.customProgramCacheKey=()=>'first-light-photo-fish-v1'+(fins?'-fins':'');return m;
+ };m.customProgramCacheKey=()=>'first-light-photo-fish-v2'+(fins?'-fins':'');return m;
 }
 const geoCache=new Map();
 export function makePhotoFishMesh(length,assets){
  if(!geoCache.has(assets.profile))geoCache.set(assets.profile,{profile:assets.profile,body:bodyFromProfile(assets.profile),card:finCardFromProfile(assets.profile)});const geo=geoCache.get(assets.profile);
- const u={swimPhase:{value:0},swimAmp:{value:.02},turnBend:{value:0},wet:{value:0}};
+ const hp=sampleProfile(assets.profile.stations,.86);
+ const u={swimPhase:{value:0},swimAmp:{value:.02},turnBend:{value:0},wet:{value:0},jawOpen:{value:0},jawHingeY:{value:(hp.top+hp.bottom)/2}};
  const root=new T.Group();root.scale.setScalar(length);
  const body=new T.Mesh(geo.body,photoMaterial(u,assets.flank));body.castShadow=true;root.add(body);
  const card=new T.Mesh(geo.card,photoMaterial(u,assets.fins,{fins:true}));card.castShadow=false;root.add(card);
- return {root,u,setJaw(){},setSwim(phase,amp,turn){u.swimPhase.value=phase;u.swimAmp.value=amp;u.turnBend.value=turn;},setWet(w){u.wet.value=w;},photo:true};
+ return {root,u,setJaw(open){u.jawOpen.value=Math.max(0,Math.min(1,open||0));},setSwim(phase,amp,turn){u.swimPhase.value=phase;u.swimAmp.value=amp;u.turnBend.value=turn;},setWet(w){u.wet.value=w;},photo:true};
 }
