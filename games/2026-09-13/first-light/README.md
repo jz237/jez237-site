@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.31.0, Ray's night)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.32.0, cinematic UI)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Clean cinematic UI (v0.32.0)
+
+The first card of the reimagined concept: the HUD is rebuilt as glass. A location chip sits top-left (Keystone Waters · Lake Nockamixon · Three Mile Run). A glass panel top-right carries the clock with the day phase and a sun or moon icon, the date and time rate, three chips (Wind, Water, Conditions) and a rig card that names the rig in hand and what the rod is doing; clicking the card changes rigs, and the line readout and the holder line sit beneath it. A vertical icon rail on the right holds Tackle, Journal, Camera, Lenses, Settings and Keys; the key hints are hidden until you ask for them. Toasts and captions are glass too. On phones the panel collapses to the clock and the rig card, the rail moves to the left edge as icons only, the tap row shrinks to Anchor, Cam and Holder, and the cast control is a round gold-ringed CAST button bottom-right, hold to load and release to throw. Verified headless on desktop, phone landscape and portrait: no horizontal overflow, the panel and rail never overlap, every rail button reaches its screen.
 
 ## Ray's night (v0.31.0)
 
