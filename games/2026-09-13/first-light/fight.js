@@ -38,6 +38,8 @@ export function stepFight(ft,dt,input,geom){
  // failure modes
  const slack=tension<.24*size&&(ft.state==='HEADSHAKE'||(ft.state==='JUMP'&&ft.jumpT>.3));
  ft.hookHold=clamp(ft.hookHold+(slack?-dt*1.4:dt*.08),0,1);
+ // paper mouth: a crappie horsed at more than 1.5x its own weight tears the hook out
+ if(ft.fish.species&&ft.fish.species.paperMouth&&tension>ft.kg*1.5)ft.hookHold=clamp(ft.hookHold-dt*.7,0,1);
  if(ft.hookHold<=0){ft.lost='threw the hook';ft.state='LOST';}
  const overloaded=tension>ft.rig.weakestKg*.92;
  ft.overload=clamp(ft.overload+(overloaded?dt:-dt*1.5),0,2);

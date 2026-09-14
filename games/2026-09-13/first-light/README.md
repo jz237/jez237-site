@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.8.0, the follow)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and seven species, forty-one fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.9.0, full roster)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -18,9 +18,9 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
 
-## The roster (v0.7.0 and v0.8.0)
+## The roster (v0.7.0 to v0.9.0)
 
-Seven species now live in the cove, each with its own tables in `species.js` (size classes, length-weight curve, diel curve, temperature band, the cover it holds on, technique and lure-family preferences, spook radius, fight profile) and its own photo-derived body. The population (`fish.js`) spawns each species on the cover it prefers at its own depth band, and the catch card, journal and QA hooks all name the species.
+All twelve launch species now live in the cove, each with its own tables in `species.js` (size classes, length-weight curve, diel curve, temperature band, the cover it holds on, technique and lure-family preferences, spook radius, fight profile) and its own photo-derived body. The population (`fish.js`) spawns each species on the cover it prefers at its own depth band, and the catch card, journal and QA hooks all name the species.
 
 | Species | Fish | Holds | Depth | Takes | Fight |
 |---|---|---|---|---|---|
@@ -31,10 +31,34 @@ Seven species now live in the cove, each with its own tables in `species.js` (si
 | Muskellunge | 2 | weed bed, laydowns, riprap | 1–4 m | bucktails and crankbaits on a steady or slow-rolled retrieve; a long follow before it commits | violent head-shakes, rolls, the most stamina; teeth |
 | Chain pickerel | 5 | weed bed, pads, laydowns | 0.4–2 m | twitching and straight retrieves, crankbaits; bold | quick, thrashing; teeth |
 | Hybrid striped bass | 4 | riprap, stumps | 1.5–5 m | straight retrieve, stop & go, crankbaits and topwater at dawn | long powerful runs, rarely jumps |
+| Channel catfish | 4 | stumps, laydowns, riprap | 2–6 m | dead-sticked or slowly lifted soft baits; nocturnal | long bulldogging, rolls, never jumps |
+| Common carp | 4 | pads, weed bed, dock | 0.5–2.5 m | a dead-sticked soft bait, and only when it wants to; wary | the longest runs in the lake, most stamina |
+| Black crappie | 8 | laydowns, dock, stumps | 1–3.5 m | lift & drop, slow roll, small soft baits | light; the paper mouth tears if you horse it |
+| Yellow perch | 8 | riprap, weed bed, stumps | 1.5–4 m | lift & drop, small soft baits | light, quick |
+| Pumpkinseed | 8 | weed bed, pads, dock | 0.3–1.5 m | dead stick, lift & drop; tiny baits | quick circles |
 
-Every body follows Jez's reference-photo rule: a side-on and a top-down photo generated with GPT Image through fal, cut out, then measured by `source/fish-from-photo.py` into a profile, flank texture and fin card, and compared in the studio pose against the photo (`compare-fish.py`). Results: largemouth IoU 0.86; smallmouth aspect 0.404 vs 0.412, IoU 0.847; walleye aspect 0.359 vs 0.378, IoU 0.784 (the spiny first dorsal still reads partly as body); bluegill aspect 0.593 vs 0.618, IoU 0.821; muskellunge aspect 0.264 vs 0.267, IoU 0.813; chain pickerel aspect 0.277 vs 0.279, IoU 0.858; hybrid striper aspect 0.492 vs 0.501, IoU 0.760 (its dark dorsal fins defeat the pale-membrane back detection, so the back line under the spiny dorsal is the weak spot). Colour differences sit at 40–47/255 under scene lighting. Honest gaps: jaws do not open, pectorals are painted rather than modelled, and there is no top texture yet. QA: `spawnFish(x,z,len,bold,species)`, `studio(len,species)`, `fish()` entries carry `species`.
+Every body follows Jez's reference-photo rule: a side-on and a top-down photo generated with GPT Image through fal, cut out, then measured by `source/fish-from-photo.py` into a profile, flank texture and fin card, and compared in the studio pose against the photo (`compare-fish.py`). Since v0.9.0 the comparison fills holes in the rendered silhouette before scoring (pale bodies against a pale sky left holes in the difference mask that were measurement noise, not shape error), so every species below is measured the same way:
+
+| Species | Aspect (render / photo) | Silhouette IoU | Colour diff |
+|---|---|---|---|
+| Largemouth bass | 0.414 / 0.419 | 0.941 | 41 |
+| Smallmouth bass | 0.404 / 0.412 | 0.943 | 40 |
+| Walleye | 0.359 / 0.378 | 0.878 | 43 |
+| Bluegill | 0.593 / 0.618 | 0.893 | 41 |
+| Muskellunge | 0.264 / 0.267 | 0.956 | 40 |
+| Chain pickerel | 0.277 / 0.279 | 0.942 | 46 |
+| Hybrid striped bass | 0.492 / 0.501 | 0.902 | 48 |
+| Channel catfish | 0.362 / 0.373 | 0.920 | 32 |
+| Common carp | 0.470 / 0.473 | 0.942 | 44 |
+| Black crappie | 0.549 / 0.555 | 0.942 | 51 |
+| Yellow perch | 0.464 / 0.474 | 0.925 | 39 |
+| Pumpkinseed | 0.596 / 0.618 | 0.896 | 42 |
+
+The walleye and the striper remain the weakest outlines (their spiny first dorsals read partly as body); colour differences are measured under scene lighting against a studio photo, so 40 is the floor rather than a gap. Honest gaps: jaws do not open, pectorals are painted rather than modelled, and there is no top texture yet. QA: `spawnFish(x,z,len,bold,species)`, `studio(len,species)`, `fish()` entries carry `species`.
 
 **The toothy ones (v0.8.0).** A fourth rig, Musky casting (8'6" heavy rod, 400-size reel, 80 lb braid with a wire leader, a double-blade bucktail), joins the Tab cycle. Muskellunge and pickerel carry teeth: hooked on any rig without the wire leader they saw through the line at a per-second rate (musky about one chance in ten each second, pickerel one in thirty), and the loss reads "Bitten off". The musky's signature is the follow: it tracks the lure for four to ten seconds from a metre behind, a caption tells you it is there, and it is far more likely to commit while the lure is still moving inside three metres of the kayak, which is the figure-eight in practice. The demo angler does not yet fish the musky rig.
+
+**Paper mouths (v0.9.0).** A crappie hooked and reeled at more than one and a half times its own weight in tension tears free (its hook hold drains) and the loss reads as a thrown hook; played gently on the finesse rig it comes to hand.
 
 ## Watch Demo (v0.6.0)
 
