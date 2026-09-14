@@ -28,7 +28,9 @@ export function stepFishBrain(f,dt,t,p){
    f.lastDecision+=dt;
    if(f.lastDecision>=.5){f.lastDecision=0;const tech=sp.technique[p.lure.technique]??.8,fam=sp.lureFamily[p.lure.family]??1,av=1-(f.aversion[p.lure.family]||0);
     const moving=p.lure.speed>.08||p.lure.technique==='dead stick'&&p.lure.onSurface;const presentation=tech*fam*(moving?1:.35);
-    const chance=f.boldness*p.activity*presentation*av*.28;
+    // the follow: a musky that has tracked the lure to the boat commits when it is still moving there (the figure-eight)
+    const boatside=sp.follow&&p.kayak&&Math.hypot(p.lure.x-p.kayak.x,p.lure.z-p.kayak.z)<3&&p.lure.speed>.35?2.6:1;
+    const chance=f.boldness*p.activity*presentation*av*.28*boatside;
     if(f.random()<chance){enter(f,'STRIKE',t);f.strikeReady=t+sp.strikeDelay;}
     else if(t>f.inspectUntil){enter(f,'REFUSE',t);f.refuseUntil=t+8+f.random()*12;}}
    break;}

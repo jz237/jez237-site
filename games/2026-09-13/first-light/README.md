@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.7.0, roster part one)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the first four species, thirty fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.8.0, the follow)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and seven species, forty-one fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -18,9 +18,9 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
 
-## The roster, part one (v0.7.0)
+## The roster (v0.7.0 and v0.8.0)
 
-Four species now live in the cove, each with its own tables in `species.js` (size classes, length-weight curve, diel curve, temperature band, the cover it holds on, technique and lure-family preferences, spook radius, fight profile) and its own photo-derived body. The population (`fish.js`) spawns each species on the cover it prefers at its own depth band, and the catch card, journal and QA hooks all name the species.
+Seven species now live in the cove, each with its own tables in `species.js` (size classes, length-weight curve, diel curve, temperature band, the cover it holds on, technique and lure-family preferences, spook radius, fight profile) and its own photo-derived body. The population (`fish.js`) spawns each species on the cover it prefers at its own depth band, and the catch card, journal and QA hooks all name the species.
 
 | Species | Fish | Holds | Depth | Takes | Fight |
 |---|---|---|---|---|---|
@@ -28,8 +28,13 @@ Four species now live in the cove, each with its own tables in `species.js` (siz
 | Smallmouth bass | 5 | riprap, stumps, dock, laydowns | 0.6–3 m | stop & go, twitching, crankbaits | runs and repeated jumps, most stamina |
 | Walleye | 4 | riprap, stumps | 2.2–6 m | lift & drop, slow roll, soft plastics; nocturnal | dogged, no jumps |
 | Bluegill | 12 | dock, pads, weed bed | 0.3–1.6 m | dead stick, lift & drop, small soft baits; rarely crank or topwater | quick circles, tires fast |
+| Muskellunge | 2 | weed bed, laydowns, riprap | 1–4 m | bucktails and crankbaits on a steady or slow-rolled retrieve; a long follow before it commits | violent head-shakes, rolls, the most stamina; teeth |
+| Chain pickerel | 5 | weed bed, pads, laydowns | 0.4–2 m | twitching and straight retrieves, crankbaits; bold | quick, thrashing; teeth |
+| Hybrid striped bass | 4 | riprap, stumps | 1.5–5 m | straight retrieve, stop & go, crankbaits and topwater at dawn | long powerful runs, rarely jumps |
 
-Every body follows Jez's reference-photo rule: a side-on and a top-down photo generated with GPT Image through fal, cut out, then measured by `source/fish-from-photo.py` into a profile, flank texture and fin card, and compared in the studio pose against the photo (`compare-fish.py`). Results this build: smallmouth aspect 0.404 vs 0.412, silhouette IoU 0.847; walleye aspect 0.359 vs 0.378, IoU 0.784 (the spiny first dorsal still reads partly as body); bluegill aspect 0.593 vs 0.618, IoU 0.821; largemouth unchanged at IoU 0.86. Colour differences sit at 40–42/255 under scene lighting. Honest gaps: jaws do not open, pectorals are painted rather than modelled, and there is no top texture yet. QA: `spawnFish(x,z,len,bold,species)`, `studio(len,species)`, `fish()` entries carry `species`.
+Every body follows Jez's reference-photo rule: a side-on and a top-down photo generated with GPT Image through fal, cut out, then measured by `source/fish-from-photo.py` into a profile, flank texture and fin card, and compared in the studio pose against the photo (`compare-fish.py`). Results: largemouth IoU 0.86; smallmouth aspect 0.404 vs 0.412, IoU 0.847; walleye aspect 0.359 vs 0.378, IoU 0.784 (the spiny first dorsal still reads partly as body); bluegill aspect 0.593 vs 0.618, IoU 0.821; muskellunge aspect 0.264 vs 0.267, IoU 0.813; chain pickerel aspect 0.277 vs 0.279, IoU 0.858; hybrid striper aspect 0.492 vs 0.501, IoU 0.760 (its dark dorsal fins defeat the pale-membrane back detection, so the back line under the spiny dorsal is the weak spot). Colour differences sit at 40–47/255 under scene lighting. Honest gaps: jaws do not open, pectorals are painted rather than modelled, and there is no top texture yet. QA: `spawnFish(x,z,len,bold,species)`, `studio(len,species)`, `fish()` entries carry `species`.
+
+**The toothy ones (v0.8.0).** A fourth rig, Musky casting (8'6" heavy rod, 400-size reel, 80 lb braid with a wire leader, a double-blade bucktail), joins the Tab cycle. Muskellunge and pickerel carry teeth: hooked on any rig without the wire leader they saw through the line at a per-second rate (musky about one chance in ten each second, pickerel one in thirty), and the loss reads "Bitten off". The musky's signature is the follow: it tracks the lure for four to ten seconds from a metre behind, a caption tells you it is there, and it is far more likely to commit while the lure is still moving inside three metres of the kayak, which is the figure-eight in practice. The demo angler does not yet fish the musky rig.
 
 ## Watch Demo (v0.6.0)
 

@@ -42,6 +42,8 @@ export function stepFight(ft,dt,input,geom){
  const overloaded=tension>ft.rig.weakestKg*.92;
  ft.overload=clamp(ft.overload+(overloaded?dt:-dt*1.5),0,2);
  if(ft.overload>=1){ft.lost='broke off';ft.state='LOST';}
+ // teeth: an esocid on anything but a wire leader saws through the line at species.teeth per second
+ const teeth=ft.fish.species&&ft.fish.species.teeth;if(teeth&&!ft.rig.wire&&ft.state!=='LOST'&&ft.random()<teeth*dt){ft.lost='bitten off';ft.state='LOST';}
  // fish motion request: direction and speed for the population layer
  const speed=ft.state==='RUN'?size*1.6*(1+fresh):ft.state==='TIRED'?.15:ft.state==='SULK'?.1:.5;
  geom.lineOut=Math.max(2,geom.lineOut-reel*ft.rig.retrieveMs*dt*(1-tension/(ft.rig.dragKg+.01))*.9);

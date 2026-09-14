@@ -18,6 +18,13 @@ test('giving slack through head-shakes and jumps throws the hook',()=>{
  let thrown=0;for(let seed=1;seed<=8;seed++){const ft=createFight({fish:{length:.45,species:SPECIES.largemouth},rig:rig(),random:rng(seed)});run(ft,ft=>({reeling:0,sidePressure:0,rodUp:1}),120);if(ft.lost==='threw the hook')thrown++;}
  assert.ok(thrown>=5,'thrown '+thrown);
 });
+test('a musky saws through anything but a wire leader',()=>{
+ const heavy={dragKg:7,weakestKg:7,rodPower:.9,lineStretch:.03,retrieveMs:1.5};const ctl=(ft,g)=>({reeling:ft.state==='RUN'?.2:.9,sidePressure:ft.state==='RUN'?1:0,rodUp:ft.state==='JUMP'?0:.8});
+ let bitten=0,bittenWire=0;for(let seed=1;seed<=10;seed++){
+  const a=createFight({fish:{length:.95,species:SPECIES.musky},rig:rig(heavy),random:rng(seed)});run(a,ctl,240);if(a.lost==='bitten off')bitten++;
+  const b=createFight({fish:{length:.95,species:SPECIES.musky},rig:rig({...heavy,wire:true}),random:rng(seed)});run(b,ctl,240);if(b.lost==='bitten off')bittenWire++;}
+ assert.ok(bitten>=7,'bitten off without wire '+bitten+'/10');assert.equal(bittenWire,0);
+});
 test('stamina only falls while the line is loaded and the fight is bounded',()=>{
  const ft=createFight({fish:{length:.42,species:SPECIES.largemouth},rig:rig(),random:rng(9)});let prev=1;const geom={distToAngler:15,lineOut:16,depth:1};
  for(let i=0;i<600;i++){stepFight(ft,1/60,{reeling:.6,sidePressure:.5,rodUp:.7},geom);assert.ok(ft.stamina<=prev+.01);prev=ft.stamina;assert.ok(Number.isFinite(ft.tension));}

@@ -27,7 +27,7 @@ def bbox(alpha,thr=100):
 def opening1d(v,window):
     return maximum_filter1d(minimum_filter1d(v,window,mode='nearest'),window,mode='nearest')
 
-def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,belly_window=.16,width_ratio=None,peduncle=(.70,.90)):
+def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,belly_window=.16,width_ratio=None,peduncle=(.70,.90),fin_alpha=1.0):
     os.makedirs(out_dir,exist_ok=True)
     im,a=load(lateral);alpha=a[:,:,3];x0,y0,x1,y1=bbox(alpha)
     crop=im.crop((x0,y0,x1,y1));ca=np.array(crop).astype(np.float32);H,W=ca.shape[:2]
@@ -81,6 +81,7 @@ def analyse(lateral,top,out_dir,species='largemouth',stations=64,dark_thr=.47,be
     crop.save(os.path.join(out_dir,'flank.webp'),quality=92,method=6)
     # fin card: clear the body, keep everything outside it (fins), feather the edge slightly
     fin=np.array(crop).copy()
+    if fin_alpha!=1.0: fin[:,:,3]=np.clip(fin[:,:,3].astype(np.float32)*fin_alpha,0,255).astype(np.uint8)  # pale membranes cut translucent
     for x in range(W):
         t=int(max(0,bt_s[x]+2));b=int(min(H,body_bot[x]-2))
         if b>t: fin[t:b,x,3]=0
@@ -100,4 +101,5 @@ if __name__=='__main__':
         if v=='--species': kw['species']=a[i+1]
         if v=='--width-ratio': kw['width_ratio']=float(a[i+1])
         if v=='--peduncle': kw['peduncle']=(float(a[i+1]),float(a[i+2]))
+        if v=='--fin-alpha': kw['fin_alpha']=float(a[i+1])
     analyse(a[1],a[2],a[3],**kw)

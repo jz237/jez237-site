@@ -32,7 +32,7 @@ import {createDemo,stepDemo,demoReport} from './demo.js';
 import {activityByHour,ROSTER,SPECIES} from './species.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.7.0';
+export const VERSION='0.8.0';
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -87,7 +87,7 @@ function handleAnglingEvents(){for(const e of angling.drainEvents()){if(mode==='
  if(e.type==='bite'){hud.toast('Fish on the line — set the hook!',1500);navigator.vibrate?.(60);}
  else if(e.type==='missed'){hud.toast(e.reason==='too early'?'Pulled it away too soon':'It spat the lure');pop.markEscape(e.fish,angling.parts().lure.family);}
  else if(e.type==='hooked'){hud.toast('Fish on!');navigator.vibrate?.([80,40,80]);}
- else if(e.type==='lost'){hud.toast(e.reason==='broke off'?'Broke off — the '+angling.chain().weakest.part+' gave way. Re-tie and try again.':'It threw the hook. Keep the line tight through the shakes.',5000);pop.markEscape(e.fish,angling.parts().lure.family);}
+ else if(e.type==='lost'){hud.toast(e.reason==='bitten off'?'Bitten off — teeth went through the line. Tie on the wire leader for the toothy ones.':e.reason==='broke off'?'Broke off — the '+angling.chain().weakest.part+' gave way. Re-tie and try again.':'It threw the hook. Keep the line tight through the shakes.',5000);pop.markEscape(e.fish,angling.parts().lure.family);}
  else if(e.type==='landed'){const d=pop.describe(e.fish);cameraMode='hero';heroFish=e.fish;const cls={young:'Young',common:'Common',trophy:'Trophy',legend:'Legend'}[d.sizeClass];const name=e.fish.brain.name?e.fish.brain.name+' · ':'';const spName=pop.speciesOf(e.fish).name;hud.showCard({species:name+spName,size:cls+' · '+d.lengthIn+' in · '+d.weightText,detail:angling.rig().name+' · '+angling.parts().lure.name+' · '+(lastTechnique||'straight retrieve')+' · fought '+e.seconds.toFixed(0)+' s',meta:formatClock(clock.ms)+' · '+formatDate(clock.ms)+' · '+WEATHER[weatherName].label+' · '+Math.round(env.windMs*2.237)+' mph '+compass(weather.from)});journal.catches.push({species:pop.speciesOf(e.fish).id,lengthIn:d.lengthIn,weightLb:d.weightLb,sizeClass:d.sizeClass,lure:angling.parts().lure.id,technique:lastTechnique,at:clock.ms,name:e.fish.brain.name});try{localStorage.setItem('first_light_journal_v1',JSON.stringify(journal));}catch{}pop.markEscape(e.fish,angling.parts().lure.family);}
  else if(e.type==='released'){heroFish=null;}}}
 let studioVisible=true,heroFish=null,lastTechnique='',fightInput={reeling:0,sidePressure:0,rodUp:.6},qaFight=null;
@@ -170,7 +170,8 @@ function step(dt){
  // the population perceives the lure, the kayak and the last splash
  {const a=angling.state,lp=angling.lure(),ev=sunEvents(clock.ms);const lure=a.phase==='retrieve'?{x:lp.x,y:lp.y,z:lp.z,speed:angling.line.lureSpeed,family:angling.parts().lure.family,technique:a.label,inWater:true,onSurface:angling.line.lureDepth<.05}:null;
   pop.update(dt,simTime,hourOf(clock.ms),ev.sunrise?hourOf(ev.sunrise):6.5,ev.sunset?hourOf(ev.sunset):19.5,lure,{x:kayak.state.x,z:kayak.state.z},lakeLightingClarity());
-  if(a.phase==='retrieve')for(const f of pop.fish)if(f.brain.state==='BITE'){angling.bite(f,simTime);break;}}
+  if(a.phase==='retrieve')for(const f of pop.fish)if(f.brain.state==='BITE'){angling.bite(f,simTime);break;}
+  for(const f of pop.fish){const b=f.brain;if(b.species.follow){if(b.state==='INSPECT'&&!b.followShown){b.followShown=true;hud.toast('A follow — keep the lure moving and figure-eight it at the boat.',5000);}else if(b.state!=='INSPECT')b.followShown=false;}}}
  if(cameraMode==='studio'&&studio){const fwd=new T.Vector3();camera.getWorldDirection(fwd);fwd.y=0;fwd.normalize();const L=studio.root.scale.x;const pos=camera.position.clone().addScaledVector(fwd,.22+L*.6);pos.y=camera.position.y+.06;studio.root.position.copy(pos);studio.root.rotation.set(0,Math.atan2(fwd.x,fwd.z)+Math.PI/2,0);studio.root.visible=studioVisible;studio.setSwim(0,0,0);studio.setWet(0);camera.lookAt(pos);}
  if(cameraMode==='hero'&&heroFish){const b=heroFish.brain,fwd=new T.Vector3();camera.getWorldDirection(fwd);const right=new T.Vector3().crossVectors(fwd,new T.Vector3(0,1,0)).normalize();const L=heroFish.brain.length;const pos=camera.position.clone().addScaledVector(fwd,.5+L*.8).addScaledVector(right,.22).addScaledVector(new T.Vector3(0,1,0),-.16);heroFish.body.root.position.copy(pos);heroFish.body.root.rotation.set(-.1+Math.sin(simTime*.9)*.05,Math.atan2(fwd.x,fwd.z)+Math.PI/2+Math.sin(simTime*.7)*.2,-.12);heroFish.body.setWet(1);heroFish.body.setJaw(.35);heroFish.body.setSwim(simTime*4,.006,0);heroFish.body.root.visible=true;b.x=pos.x;b.y=pos.y;b.z=pos.z;}
  if(cameraMode==='shore'){const p=worldFromFrame(150,halfWidth(150,1)+3);camera.position.set(p.x,2.2,p.z);camera.lookAt(kayak.state.x,0,kayak.state.z);}
