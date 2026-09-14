@@ -41,16 +41,20 @@ ${sampling}`);
   s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
 vec3 ln=normalize(landN),tw=pow(abs(ln),vec3(5.));tw/=max(dot(tw,vec3(1.)),.001);
 float macro=landNoise(landP.xz*.041)*.65+landNoise(landP.xz*.113)*.35;
-float slope=1.-abs(ln.y),altitude=landP.y-seaLevel,submerged=-altitude;
-float stoneWeight=clamp(smoothstep(.10,.40,slope)+smoothstep(2.,9.,altitude+macro*5.)*.35,0.,1.);
-float plantWeight=smoothstep(.35,2.6,altitude+macro*1.6)*(1.-smoothstep(.14,.38,slope));
+float slope=1.-abs(ln.y),grade=length(ln.xz)/max(abs(ln.y),.05),altitude=landP.y-seaLevel,submerged=-altitude;
+// outcrops where the bank is steep, more of them higher up the wooded side
+float stoneWeight=clamp(smoothstep(.30,.62,grade+macro*.18)*(.6+.4*smoothstep(2.,9.,altitude)),0.,1.);
+float plantWeight=smoothstep(.35,2.6,altitude+macro*1.6)*(1.-smoothstep(.45,.8,grade));
 vec3 sandUV=landP/6.,rockUV=landP/11.,soilUV=landP/5.5;
 // gravel and silt: the sand scan tinted toward wet grey-brown, darkening with depth into silt
 vec3 gravel=triColor(sandColor,sandUV,tw)*vec3(.72,.70,.64);
 vec3 rocky=triColor(rockColor,rockUV,tw)*vec3(.82,.80,.76);
 vec3 litter=triColor(soilColor,soilUV,tw)*vec3(.95,.92,.80);
-vec3 grassy=litter*vec3(.62,.78,.42)*1.15;
-vec3 earth=mix(mix(gravel,rocky,stoneWeight),mix(litter,grassy,smoothstep(1.2,4.,altitude+macro*2.)),plantWeight)*(.82+macro*.3);
+vec3 grassy=litter*vec3(.58,.74,.40)*1.1;
+vec3 forestFloor=litter*vec3(.55,.52,.40)*.8;
+float patches=landNoise(landP.xz*.017+4.)*.6+landNoise(landP.xz*.06)*.4;
+vec3 ground=mix(mix(litter,grassy,smoothstep(1.2,4.,altitude+macro*2.)),forestFloor,smoothstep(.42,.7,patches)*smoothstep(1.5,6.,altitude));
+vec3 earth=mix(mix(gravel,rocky,stoneWeight),ground,plantWeight)*(.82+macro*.3);
 // silt and an algae film take over below about two metres; clarity pushes the transition deeper
 float silt=smoothstep(.8*clarity,3.2*clarity,submerged);
 earth=mix(earth,vec3(.19,.20,.15)*(.8+macro*.4),silt*.75);
@@ -84,7 +88,7 @@ vec3 surfaceN=normalize(mix(mix(triNormal(sandNormal,sandUV,tw,ln),triNormal(roc
 surfaceN=normalize(surfaceN+vec3(.9,0.,3.6)*sin(bedPhase)*.02*bedMask);
 normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.62*(1.-film*.35))),0.)).xyz);`);
  };
- mat.customProgramCacheKey=()=>'first-light-bed-v1';
+ mat.customProgramCacheKey=()=>'first-light-bed-v2';
 }
 export function rockMaterial(){
  const mat=new T.MeshStandardMaterial({color:0xcfc9bb,roughness:.9});

@@ -15,12 +15,12 @@ function hullGeometry(){
 }
 export function makeKayak(scene){
  const group=new T.Group();scene.add(group);
- const shell=new T.MeshPhysicalMaterial({color:0x2f6e4a,roughness:.5,clearcoat:.35,clearcoatRoughness:.3});
+ const shell=new T.MeshPhysicalMaterial({color:0x3f7a52,roughness:.42,clearcoat:.45,clearcoatRoughness:.25});
  const hull=new T.Mesh(hullGeometry(),shell);hull.castShadow=hull.receiveShadow=true;group.add(hull);
  const dark=new T.MeshStandardMaterial({color:0x1b1b1b,roughness:.8}),grey=new T.MeshStandardMaterial({color:0x5a5f66,roughness:.7});
  const seat=new T.Mesh(new T.BoxGeometry(.42,.06,.42),dark);seat.position.set(0,.13,-.15);group.add(seat);
  const back=new T.Mesh(new T.BoxGeometry(.42,.34,.05),dark);back.position.set(0,.31,-.38);back.rotation.x=-.18;group.add(back);
- const hatch=new T.Mesh(new T.CylinderGeometry(.16,.16,.03,20),dark);hatch.position.set(0,.19,1.05);group.add(hatch);
+ const hatchMat=new T.MeshStandardMaterial({color:0x2c3a33,roughness:.7});const hatch=new T.Mesh(new T.CylinderGeometry(.17,.19,.025,24),hatchMat);hatch.position.set(0,.145,1.05);group.add(hatch);const hatchRim=new T.Mesh(new T.TorusGeometry(.19,.012,8,28),dark);hatchRim.rotation.x=Math.PI/2;hatchRim.position.set(0,.152,1.05);group.add(hatchRim);
  const hatch2=new T.Mesh(new T.CylinderGeometry(.13,.13,.03,20),dark);hatch2.position.set(0,.16,-1.15);group.add(hatch2);
  for(const [x1,z1,x2,z2] of [[-.24,.55,.24,1.35],[.24,.55,-.24,1.35]]){const a=new T.Vector3(x1,.15,z1),b=new T.Vector3(x2,.19,z2);const len=a.distanceTo(b);const m=new T.Mesh(new T.CylinderGeometry(.006,.006,len,5),dark);m.position.copy(a).lerp(b,.5);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),b.clone().sub(a).normalize());group.add(m);}
  for(const side of [-1,1]){const holder=new T.Mesh(new T.CylinderGeometry(.025,.025,.22,10),grey);holder.position.set(side*.27,.22,-.55);holder.rotation.z=side*.35;group.add(holder);}
