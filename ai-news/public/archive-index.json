@@ -1,6 +1,30 @@
 {
-  "updatedAt": "2026-09-05T12:41:06.387085+00:00",
+  "updatedAt": "2026-09-14T15:52:31.663883+00:00",
   "archives": [
+    {
+      "date": "2026-09-14",
+      "path": "public/ai-news-daily-2026-09-14.json",
+      "count": 18,
+      "updatedAt": "2026-09-14T15:52:31.663883+00:00"
+    },
+    {
+      "date": "2026-09-13",
+      "path": "public/ai-news-daily-2026-09-13.json",
+      "count": 18,
+      "updatedAt": "2026-09-13T13:47:07.236021+00:00"
+    },
+    {
+      "date": "2026-09-12",
+      "path": "public/ai-news-daily-2026-09-12.json",
+      "count": 8,
+      "updatedAt": "2026-09-12T12:49:46.756864+00:00"
+    },
+    {
+      "date": "2026-09-11",
+      "path": "public/ai-news-daily-2026-09-11.json",
+      "count": 18,
+      "updatedAt": "2026-09-11T15:55:52.649734+00:00"
+    },
     {
       "date": "2026-09-05",
       "path": "public/ai-news-daily-2026-09-05.json",
@@ -246,30 +270,6 @@
       "path": "public/ai-news-daily-2026-07-27.json",
       "count": 14,
       "updatedAt": "2026-07-27T12:35:29.001800+00:00"
-    },
-    {
-      "date": "2026-07-26",
-      "path": "public/ai-news-daily-2026-07-26.json",
-      "count": 15,
-      "updatedAt": "2026-07-26T22:00:01.904163+00:00"
-    },
-    {
-      "date": "2026-07-25",
-      "path": "public/ai-news-daily-2026-07-25.json",
-      "count": 3,
-      "updatedAt": "2026-07-25T10:42:22.168482+00:00"
-    },
-    {
-      "date": "2026-07-24",
-      "path": "public/ai-news-daily-2026-07-24.json",
-      "count": 10,
-      "updatedAt": "2026-07-24T11:10:07.745434+00:00"
-    },
-    {
-      "date": "2026-07-23",
-      "path": "public/ai-news-daily-2026-07-23.json",
-      "count": 15,
-      "updatedAt": "2026-07-23T11:18:47.097581+00:00"
     }
   ]
 }
