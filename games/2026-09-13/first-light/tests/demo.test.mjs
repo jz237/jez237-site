@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {planNext,scoreRig,createExecutor,stepExecutor,fightControl,rng} from '../demo.js';
+import {planNext,scoreRig,createExecutor,stepExecutor,fightControl,rng,createDemo,stepDemo} from '../demo.js';
 import {SPECIES} from '../species.js';
 import {createRecognizer,recordSample,recordTwitch,classify} from '../technique.js';
 import {LURES,RIGS} from '../tackle.js';
@@ -29,4 +29,25 @@ test('the executor produces input the recognizer names as intended',()=>{
 test('the fight controller bows to jumps and leans on runs',()=>{
  assert.equal(fightControl({state:'JUMP'},1,null).rodUp,0);assert.equal(fightControl({state:'RUN'},1,null).sidePressure,1);assert.ok(fightControl({state:'HEADSHAKE'},1,null).reeling>.9);
  assert.equal(fightControl({state:'RUN'},1,'JUMP').rodUp,0,'a delayed read is what the angler reacts to');
+});
+test('at night Ray parks the bottom rig once the bait is down, fishes a second rod close, and grabs the holder rod when it goes',()=>{
+ const rigs=RIGS,bottom=rigs.findIndex(r=>r.id==='bottom');
+ // the planner can be told to leave a rig alone
+ const spot={type:'channel',x:0,z:0,r:8};const mem={visits:{},refusals:0,caught:{},refusalsByRig:{},bittenOff:0};
+ for(let i=0;i<20;i++){const p=planNext({hour:22,activity:.3,spots:[spot],rigs,kayak:{x:0,z:0},memory:mem,random:rng(i),exclude:[bottom]});assert.notEqual(p.rigIndex,bottom,'excluded rig never picked');}
+ // a stub game: the angling snapshot and events are scripted, calls are recorded
+ const calls=[];let snap={phase:'retrieve',onBottom:true,retie:0,abrasion:0};let holder=null;let queue=[];
+ const game={angling:()=>snap,fight:()=>null,drainEvents:()=>{const q=queue;queue=[];return q;},nearestFishState:()=>'HOLD',setShot:()=>{},setRate:()=>{},anchor:()=>{},paddle:()=>{},hour:()=>22,cond:()=>null,sun:()=>({sunrise:6.5,sunset:19.5}),activity:()=>.3,spots:()=>[spot],rigs:()=>rigs,kayak:()=>({x:0,z:0,heading:0}),setRig:i=>calls.push('rig:'+rigs[i].id),aimAt:()=>{},cast:p=>calls.push('cast:'+p.toFixed(2)),input:i=>calls.push(i.reeling?'reel':'hold'),setHook:()=>calls.push('hook'),fightInput:()=>{},release:()=>{},retie:()=>false,openingLine:()=>'',
+  canPark:()=>snap.phase==='retrieve'&&snap.onBottom&&!holder,park:()=>{holder={rig:'bottom'};calls.push('park');snap={...snap,phase:'idle'};return true;},holder:()=>holder,takeHolder:()=>{calls.push('take');holder=null;snap={...snap,phase:'bite'};return true;}};
+ const d=createDemo(2);d.state='work';d.plan={spot,rigIndex:bottom,technique:'dead stick',reason:''};d.executor=createExecutor('dead stick',d.random);
+ stepDemo(d,1/30,game);assert.ok(calls.includes('park'),'parked once the bait was down');assert.equal(d.state,'cast');assert.notEqual(d.plan.rigIndex,bottom,'a different rod for the second line');assert.match(d.captions.at(-1).text,/Second rod/);
+ for(let i=0;i<30;i++)stepDemo(d,1/30,game);const castCall=calls.find(c=>c.startsWith('cast:'));assert.ok(castCall&&Number(castCall.slice(5))<=.45,'the second rod is a short cast: '+castCall);
+ // the holder bell: reel this rod in, then take the holder rod
+ snap={...snap,phase:'retrieve'};queue.push({type:'holder_bite'});stepDemo(d,1/30,game);assert.ok(d.grab,'grab pending');assert.equal(calls.at(-1),'reel','reels in whatever state it was in');
+ snap={...snap,phase:'idle'};stepDemo(d,1/30,game);assert.ok(calls.includes('take'),'took the holder rod');assert.equal(d.grab,null);
+ queue.push({type:'took_holder'});stepDemo(d,1/30,game);assert.equal(d.plan.rigIndex,bottom,'the plan follows the rod in hand');assert.equal(d.plan.technique,'dead stick');
+ // a dropped take clears the grab
+ d.grab={since:0};queue.push({type:'holder_dropped'});stepDemo(d,1/30,game);assert.equal(d.grab,null);
+ // moving on with a rod still parked: bring it in first
+ holder={rig:'bottom'};snap={...snap,phase:'idle'};d.state='plan';stepDemo(d,1/30,game);assert.equal(d.reelIn,true);assert.equal(holder,null);assert.equal(d.state,'work');
 });
