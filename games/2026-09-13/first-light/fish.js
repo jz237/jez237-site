@@ -29,7 +29,7 @@ export function makePopulation(scene,bathy,coverFeatures,{seed=2026,assets={},ro
  return {fish,species,spawn,nearest,disturb,
   splash(x,z,t){lastSplash={x,z,t};},
   update(dt,t,hour,sunrise,sunset,lure,kayak,clarity,bait=null,cond=null){
-   const acts={};for(const id in SPECIES)acts[id]=activityByHour(hour,SPECIES[id].diel,sunrise,sunset)*(cond?tempFactor(SPECIES[id],cond.tempC)*pressureFactor(cond.pressureTrend):1);
+   const acts={};for(const id in SPECIES)acts[id]=activityByHour(hour,SPECIES[id].diel,sunrise,sunset)*(cond?tempFactor(SPECIES[id],cond.tempC)*pressureFactor(cond.pressureTrend)*(cond.activityScale||1):1);
    const base={lure,clarity,kayak,splash:lastSplash?{x:lastSplash.x,z:lastSplash.z,age:t-lastSplash.t}:null};
    for(const f of fish){const b=f.brain;const p={...base,activity:acts[b.species.id]*(bait?1+.35*bait(b.x,b.z):1)};
     if(b.state!=='HOOKED'&&b.state!=='LANDED'){stepFishBrain(b,dt,t,p);const bed=bathy.height(b.x,b.z);b.y=clamp(b.y,bed+.18,-.12);if(bathy.height(b.x,b.z)>-.3){b.x=b.home.x;b.z=b.home.z;}}

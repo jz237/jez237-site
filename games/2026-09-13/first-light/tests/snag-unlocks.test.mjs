@@ -21,5 +21,5 @@ test('three rigs to start, the rest earned from the journal',()=>{
  assert.deepEqual(newlyUnlocked(unlockedRigs(empty),three),['Squarebill casting']);
  const trophy={catches:[{sizeClass:'trophy'}]};assert.ok(isUnlocked('musky',trophy));assert.ok(!isUnlocked('crank',trophy));
  const many={catches:Array.from({length:6},()=>({sizeClass:'common'}))};assert.ok(isUnlocked('bottom',many));assert.match(nextUnlock(many),/Musky casting unlocks after a trophy-class fish/);
- const all={catches:[...many.catches,{sizeClass:'legend'}]};assert.equal(nextUnlock(all),null);assert.equal(unlockedRigs(all).length,RIGS.length);
+ const all={catches:[...many.catches,{sizeClass:'legend'}]};assert.match(nextUnlock(all),/Fish finder unlocks/);assert.equal(unlockedRigs(all).length,RIGS.length);assert.equal(nextUnlock({catches:Array.from({length:12},()=>({sizeClass:'trophy'}))}),null);
 });
