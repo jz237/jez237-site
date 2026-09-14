@@ -1,6 +1,7 @@
 // Photographic CC0 surfaces for the lake bed and banks (After the Storm's triplanar material, retuned
 // for a reservoir): gravel and silt below the waterline with moving caustics, leaf litter and grass
 // above it, a wet band that follows the foam atlas, and darker silt with an algae film in the depths.
+import {backlight,BACKLIT_GLSL} from './backlight.js';
 import * as T from './vendor/three.module.js';
 export const waterLevel={value:0};
 export const lakeLighting={time:{value:0},wind:{value:0},seaLevel:waterLevel,clarity:{value:1}};
@@ -30,14 +31,15 @@ vec3 triNormal(sampler2D tex,vec3 p,vec3 weights,vec3 n){
 }`;
 export function configureTerrainMaterial(mat,{waterDetail}){
  mat.onBeforeCompile=s=>{
-  Object.assign(s.uniforms,{...shoreline,seaLevel:waterLevel,time:lakeLighting.time,wind:lakeLighting.wind,clarity:lakeLighting.clarity,detailMap:{value:waterDetail}});
+  Object.assign(s.uniforms,{...shoreline,seaLevel:waterLevel,time:lakeLighting.time,wind:lakeLighting.wind,clarity:lakeLighting.clarity,detailMap:{value:waterDetail},backlitSunDir:backlight.sunDir,backlitAmount:backlight.amount});
   for(const k of ['sand','rock','soil'])for(const [key,channel]of [['Color','diff'],['Normal','nor_gl'],['Rough','rough']])s.uniforms[k+key]={value:landMaps[k][channel]};
   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 landP;varying vec3 landN;').replace('#include <begin_vertex>','#include <begin_vertex>\nlandP=position;landN=normal;');
   s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
-varying vec3 landP;varying vec3 landN;uniform float seaLevel,time,wind,clarity;
+varying vec3 landP;varying vec3 landN;uniform float seaLevel,time,wind,clarity;uniform vec3 backlitSunDir;uniform float backlitAmount;
 uniform sampler2D shoreMap;uniform vec2 shoreCenter;uniform float shoreSpan;
 uniform sampler2D sandColor,sandNormal,sandRough,rockColor,rockNormal,rockRough,soilColor,soilNormal,soilRough,detailMap;
 ${sampling}`);
+  s.fragmentShader=s.fragmentShader.replace('#include <emissivemap_fragment>','{float above=smoothstep(seaLevel-.2,seaLevel+.4,landP.y);'+BACKLIT_GLSL.replace('*backlitAmount;','*backlitAmount*above;')+'}\n#include <emissivemap_fragment>');
   s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
 vec3 ln=normalize(landN),tw=pow(abs(ln),vec3(5.));tw/=max(dot(tw,vec3(1.)),.001);
 float macro=landNoise(landP.xz*.041)*.65+landNoise(landP.xz*.113)*.35;

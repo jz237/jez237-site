@@ -1,5 +1,5 @@
 import test from 'node:test';import assert from 'node:assert/strict';
-import {cocPixels,dofFor,DOF_VIEWS,DOF_TAPS,gradeFor} from '../dof-model.js';
+import {cocPixels,dofFor,DOF_VIEWS,DOF_TAPS,gradeFor,glowFor} from '../dof-model.js';
 test('the circle of confusion is zero on the focus plane, grows toward the aperture in the distance, and is capped',()=>{
  assert.equal(cocPixels(1,1,16,18),0);assert.equal(cocPixels(1.15,1,16,18,.2),0,'inside the focal band');assert.ok(cocPixels(1.15,1,16,18)>0&&cocPixels(1.5,1,16,18,.2)>0,'outside it blurs');
  assert.ok(cocPixels(2,1,16,18)>cocPixels(1.5,1,16,18)&&cocPixels(1.5,1,16,18)>0,'farther is softer');
@@ -20,4 +20,15 @@ test('the grade is off on Saver, grows its split tone as the sun drops, and desa
  const day=gradeFor({elevation:40}),dawn=gradeFor({elevation:2}),night=gradeFor({elevation:-20,night:1});
  assert.equal(day.split,0);assert.ok(dawn.split>.25&&dawn.contrast>day.contrast,'more split and contrast at dawn');assert.ok(night.sat<day.sat&&night.split===0,'quieter at night');
  for(const g of [day,dawn,night]){assert.ok(g.sat>0&&g.contrast>0&&g.vignette>=0&&g.warm.length===3&&g.cool.length===3);}
+});
+test('the glow: a wide bloom at the low sun, a whisper by day, rays only with the sun low, ahead and on screen',()=>{
+ const dawn=glowFor({elevation:4,sunUV:[.5,.6],sunAhead:true}),day=glowFor({elevation:40,sunUV:[.5,.6],sunAhead:true});
+ assert.ok(dawn.bloom>day.bloom*2,'dawn bleeds far more than noon');assert.ok(dawn.shaft>.4,'rays at dawn');assert.equal(day.shaft,0,'no rays at noon');
+ assert.equal(glowFor({elevation:4,sunUV:[.5,.6],sunAhead:false}).shaft,0,'sun behind the eye: no rays');
+ assert.equal(glowFor({elevation:4,sunUV:[1.8,.6],sunAhead:true}).shaft,0,'sun far off the screen: no rays');
+ const edge=glowFor({elevation:4,sunUV:[1.15,.6],sunAhead:true});assert.ok(edge.shaft>0&&edge.shaft<dawn.shaft,'rays fade as the sun leaves the frame');
+ assert.equal(glowFor({elevation:-3,sunUV:[.5,.5],sunAhead:true}).shaft,0,'below the horizon');
+ const night=glowFor({elevation:-20,night:1,sunUV:[.5,.5],sunAhead:true});assert.ok(night.threshold<dawn.threshold&&night.bloom>0,'the moon and stars bloom at a lower threshold');
+ assert.ok(glowFor({elevation:4,cloud:1,sunUV:[.5,.6],sunAhead:true}).shaft<dawn.shaft*.5,'overcast hides the rays');
+ assert.equal(glowFor({elevation:4,quality:'saver'}),null);assert.equal(glowFor({elevation:4,quality:'low',sunUV:[.5,.5],sunAhead:true}).samples,24);assert.equal(dawn.wide,true);
 });
