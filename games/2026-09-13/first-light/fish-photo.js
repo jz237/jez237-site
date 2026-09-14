@@ -48,12 +48,12 @@ transformed.x+=sin(swimPhase-(1.-station)*3.3)*swimAmp*env+turnBend*env*env*.35;
   s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\nuniform float wet;').replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=mix(roughnessFactor,.1,wet);');
  };m.customProgramCacheKey=()=>'first-light-photo-fish-v1'+(fins?'-fins':'');return m;
 }
-let geoCache=null;
+const geoCache=new Map();
 export function makePhotoFishMesh(length,assets){
- if(!geoCache||geoCache.profile!==assets.profile)geoCache={profile:assets.profile,body:bodyFromProfile(assets.profile),card:finCardFromProfile(assets.profile)};
+ if(!geoCache.has(assets.profile))geoCache.set(assets.profile,{profile:assets.profile,body:bodyFromProfile(assets.profile),card:finCardFromProfile(assets.profile)});const geo=geoCache.get(assets.profile);
  const u={swimPhase:{value:0},swimAmp:{value:.02},turnBend:{value:0},wet:{value:0}};
  const root=new T.Group();root.scale.setScalar(length);
- const body=new T.Mesh(geoCache.body,photoMaterial(u,assets.flank));body.castShadow=true;root.add(body);
- const card=new T.Mesh(geoCache.card,photoMaterial(u,assets.fins,{fins:true}));card.castShadow=false;root.add(card);
+ const body=new T.Mesh(geo.body,photoMaterial(u,assets.flank));body.castShadow=true;root.add(body);
+ const card=new T.Mesh(geo.card,photoMaterial(u,assets.fins,{fins:true}));card.castShadow=false;root.add(card);
  return {root,u,setJaw(){},setSwim(phase,amp,turn){u.swimPhase.value=phase;u.swimAmp.value=amp;u.turnBend.value=turn;},setWet(w){u.wet.value=w;},photo:true};
 }

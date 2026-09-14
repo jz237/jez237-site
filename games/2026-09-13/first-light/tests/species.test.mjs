@@ -8,3 +8,9 @@ test('crepuscular activity peaks at dawn and dusk, stays in range',()=>{
  let peak=0,peakHour=0;for(let h=0;h<24;h+=.25){const a=activityByHour(h,'crepuscular',6.6,19.2);assert.ok(a>=0&&a<=1);if(a>peak){peak=a;peakHour=h;}}
  assert.ok(Math.abs(peakHour-6.9)<1||Math.abs(peakHour-18.8)<1,'peak hour '+peakHour);assert.ok(activityByHour(13,'crepuscular')<activityByHour(6.8,'crepuscular'));
 });
+import {ROSTER} from '../species.js';
+test('the roster weights are plausible and size classes nest',()=>{
+ const expect={smallmouth:[.42,1.2,1.7],walleye:[.56,1.3,1.9],bluegill:[.2,.2,.32]};
+ for(const id of ROSTER.slice(1)){const s=SPECIES[id];const [L,lo,hi]=expect[id];const kg=s.weightKg(L);assert.ok(kg>lo&&kg<hi,id+' '+L+' m -> '+kg.toFixed(2)+' kg');
+  const c=s.classes;assert.ok(c.young[1]===c.common[0]&&c.common[1]===c.trophy[0]&&c.trophy[1]===c.legend[0]);assert.ok(s.count>0&&s.depth[0]<s.depth[1]);}
+});
