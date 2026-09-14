@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.16.0, line care and the tackle box)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.17.0, Ray speaks)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Ray speaks (v0.17.0)
+
+The guide has a voice. Twenty-six events (a bite, a set that came too early or too late, the hookup, a jump, slack through a head-shake, too much tension, the three ways to lose a fish, a landing by size class, the first of a species for the book, a personal best, a musky follow, a snag and its two endings, a frayed line and the retie, an unlock, falling pressure, a skunked evening, bait showing) each have three or four short lines (`voice-lines.js`), spoken by ElevenLabs' "Bill" and shipped as 64 kbps clips in `assets/voice/`. The rules (`voice.js`, tested): no line repeats back to back, one line at a time with higher-priority events interrupting lower ones, chatter events rate-limited (slack every six seconds at most, bait once every three minutes), and the browser's speech synthesis as the fallback if a clip cannot play. A volume slider on the menu; the same voice speaks in the Watch Demo. Dynamic captions (the plan, the reasons) stay text.
 
 ## Line care, snags and the tackle box (v0.16.0)
 
