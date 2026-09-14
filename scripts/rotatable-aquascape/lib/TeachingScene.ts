@@ -1,3 +1,4 @@
+import {flowArrowGeometry,placeFlowArrow} from '../../living-aquascape/lib/aquarium/FlowArrow.ts';
 import * as T from 'three';
 import {CoryModels} from './CoryModels.ts';
 import {Invertebrates} from './Invertebrates.ts';
@@ -5,7 +6,7 @@ import {Tetra3D} from './Tetra3D.ts';
 import {lessons,type Lesson} from './LearningContent.ts';
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
 const basic=(color:number,opacity=1)=>new T.MeshBasicMaterial({color,transparent:opacity<1,opacity,depthWrite:opacity===1});
-type Path={curve:T.CatmullRomCurve3;beads:T.InstancedMesh;speed:number;phase:number};
+type Path={curve:T.CatmullRomCurve3;arrows:T.InstancedMesh;speed:number;phase:number};
 /** Optional teaching geometry. No extra draws or simulation when the mode is closed. */
 export class TeachingScene{
  root=new T.Group();mode:Lesson|null=null;step=0;separation=0;night=false;
@@ -41,7 +42,7 @@ export class TeachingScene{
  private tube(points:T.Vector3[],radius:number,color:number,parent:T.Object3D=this.content){return this.add(new T.TubeGeometry(new T.CatmullRomCurve3(points),32,radius,7,false),basic(color),V(0,0,0),parent);}
  private path(points:T.Vector3[],color=0x78d8ee,speed=.12){
   const curve=new T.CatmullRomCurve3(points),line=new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(100)),new T.LineBasicMaterial({color,transparent:true,opacity:.55}));this.content.add(line);
-  const beads=new T.InstancedMesh(new T.SphereGeometry(.052,8,6),basic(color),12);beads.frustumCulled=false;this.content.add(beads);this.paths.push({curve,beads,speed,phase:0});
+  const arrows=new T.InstancedMesh(flowArrowGeometry(.24,.065),basic(color),12);arrows.frustumCulled=false;this.content.add(arrows);this.paths.push({curve,arrows,speed,phase:0});
  }
  private label(text:string,point:T.Vector3,index:number){const button=document.createElement('button');button.textContent=text;button.className='learning-tag';button.setAttribute('aria-label','Inspect '+text);button.onclick=()=>this.onSelect(index);this.labelHost.append(button);this.labels.push({button,point});}
  private roots(origin:T.Vector3,scale=1){
@@ -140,7 +141,7 @@ export class TeachingScene{
   this.phase+=dt;this.shrimpStudy?.poseSpecimen(dt);if(this.coryStudy)this.poseCory(dt);
   if(this.impeller)this.impeller.rotation.y+=dt*flow*.14;
   this.specimen?.update(this.phase,.4,this.texture,.65,.5,1,dt,.6);
-  const dummy=this.dummy;for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.beads.count;i++){path.curve.getPoint((path.phase+i/path.beads.count)%1,dummy.position);dummy.updateMatrix();path.beads.setMatrixAt(i,dummy.matrix);}path.beads.instanceMatrix.needsUpdate=true;}
+  const dummy=this.dummy;for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.arrows.count;i++){placeFlowArrow(dummy,path.curve,(path.phase+i/path.arrows.count)%1);dummy.updateMatrix();path.arrows.setMatrixAt(i,dummy.matrix);}path.arrows.instanceMatrix.needsUpdate=true;}
   const w=this.host.clientWidth,h=this.host.clientHeight;
   // Label anchors are static; only a changed view or layout needs DOM writes.
   camera.updateMatrixWorld();
