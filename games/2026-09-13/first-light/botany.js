@@ -35,19 +35,19 @@ export function tree(kind,seed,detail=1){
    for(let k=1;k<leaves;k++){
     const f=k/leaves,c=new T.Vector3().fromArray(start).lerp(new T.Vector3(...end),f);
     for(const side of [-1,1]){
-     const reach=(1-f)*.95+.12,tip=c.clone().add(new T.Vector3(-Math.sin(a)*side*reach,.18+random()*.22,Math.cos(a)*side*reach));
-     leaf.leaf(c.toArray(),tip.toArray(),reach*.36,a,.61+random()*.48);
+     const reach=((1-f)*.95+.12)*(1+(1-detail)*.9),tip=c.clone().add(new T.Vector3(-Math.sin(a)*side*reach,.18+random()*.22,Math.cos(a)*side*reach));
+     leaf.leaf(c.toArray(),tip.toArray(),reach*.36*(1+(1-detail)*.8),a,.61+random()*.48);
     }
    }
   }
  }else{
-  // broadleaf: oak-like crown on a forked trunk
-  wood.tube([0,0,0],[.3,6.1,.1],.42,.08,9);const branches=Math.max(6,Math.round(18*detail)),leaves=Math.max(10,Math.round(40*detail));
+  // broadleaf: an oak-like crown on a forked trunk, about 14 m tall
+  wood.tube([0,0,0],[.35,9.5,.1],.5,.1,9);const branches=Math.max(6,Math.round(18*detail)),leaves=Math.max(10,Math.round(40*detail));
   for(let j=0;j<branches;j++){
-   const a=j*2.399,y=2.7+random()*3.5,r=1.3+random()*1.6,end=[Math.cos(a)*r,y+1.5,Math.sin(a)*r];wood.tube([.2,y-1.3,0],end,.11,.016,6);
+   const a=j*2.399,y=4.2+random()*5,r=2.1+random()*2.4,end=[Math.cos(a)*r,y+2.2,Math.sin(a)*r];wood.tube([.25,y-2,0],end,.13,.02,6);
    for(let k=0;k<leaves;k++){
-    const az=random()*Math.PI*2,rad=Math.sqrt(random())*1.7*(1+(1-detail)*.4),c=[end[0]+Math.cos(az)*rad,end[1]+(random()-.5)*2.0,end[2]+Math.sin(az)*rad];
-    leaf.leaf(c,[c[0]+Math.cos(az)*.78,c[1]+.15,c[2]+Math.sin(az)*.78],.27,az+Math.PI/2,.62+random()*.42);
+    const az=random()*Math.PI*2,rad=Math.sqrt(random())*2.4*(1+(1-detail)*.5),c=[end[0]+Math.cos(az)*rad,end[1]+(random()-.5)*2.8,end[2]+Math.sin(az)*rad],ls=1+(1-detail)*1.7;
+    leaf.leaf(c,[c[0]+Math.cos(az)*1.05*ls,c[1]+.2,c[2]+Math.sin(az)*1.05*ls],.36*ls,az+Math.PI/2,.62+random()*.42);
    }
   }
  }

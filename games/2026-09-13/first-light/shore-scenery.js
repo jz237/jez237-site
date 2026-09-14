@@ -17,17 +17,17 @@ export function makeShoreScenery(scene,bathy){
   points.forEach((p,i)=>{d.position.set(p.x,p.y,p.z);d.rotation.set(p.rx??0,p.angle,p.rz??0);d.scale.set(p.scale,p.scale*(p.stretch??1),p.scale);d.updateMatrix();mesh.setMatrixAt(i,d.matrix);if(m.vertexColors)mesh.setColorAt(i,new T.Color().setScalar(.78+(p.tint??.5)*.3));});
   mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=shadow;mesh.receiveShadow=true;mesh.userData.skipReflection=!shadow;meshes.push(mesh);return mesh;}
  const span=bathy.span,near={pine:[],broad:[]},far={pine:[],broad:[]},grass=[],reeds=[];
- const budget={near:520,far:1100,grass:1600,reeds:900};
- for(let i=0;i<26000;i++){
+ const budget={near:820,far:1500,grass:1600,reeds:900};
+ for(let i=0;i<60000;i++){
   const x=(random()-.5)*span*.98,z=(random()-.5)*span*.98,y=bathy.height(x,z);
-  if(y<-.8)continue;const shore=bathy.shoreDistance(x,z);if(shore>170&&y>0)continue;
+  if(y<-.8)continue;const shore=bathy.shoreDistance(x,z);if(shore>190&&y>0)continue;
   const slope=Math.hypot(bathy.height(x+1,z)-bathy.height(x-1,z),bathy.height(x,z+1)-bathy.height(x,z-1))/2;
   const north=z<-(x*.75)-15;const cluster=noise(x*.02+7,z*.02)*.7+noise(x*.07,z*.07+3)*.3;
   const common={x,y:y-.12,z,angle:random()*6.283,scale:.55+random()*.9,tint:random()};
   if(y>.9&&y<38&&slope<.6){
    const pineChance=north?.62:.35;
-   if(shore<70&&cluster>(north?.30:.40)&&near.pine.length+near.broad.length<budget.near)(random()<pineChance?near.pine:near.broad).push({...common,stretch:.85+random()*.35});
-   else if(shore>=45&&cluster>.26&&far.pine.length+far.broad.length<budget.far)(random()<pineChance?far.pine:far.broad).push({...common,scale:.7+random()*.9,stretch:.9+random()*.4});
+   if(shore<80&&cluster>(north?.22:.34)&&near.pine.length+near.broad.length<budget.near)(random()<pineChance?near.pine:near.broad).push({...common,stretch:.85+random()*.35});
+   else if(shore>=50&&cluster>.2&&far.pine.length+far.broad.length<budget.far)(random()<pineChance?far.pine:far.broad).push({...common,scale:.7+random()*.9,stretch:.9+random()*.4});
   }
   if(y>.15&&y<9&&shore<45&&slope<.75&&cluster>.22&&grass.length<budget.grass)grass.push({...common,y,scale:.6+random()*1.1});
   if(y<.12&&y>-.7&&reeds.length<budget.reeds&&noise(x*.05+2,z*.05)>.5)reeds.push({...common,y:y-.02,scale:.75+random()*.6});
