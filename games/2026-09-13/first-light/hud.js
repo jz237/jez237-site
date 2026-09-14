@@ -10,6 +10,7 @@ export function mountHud(handlers){
  $('dof').onchange=e=>handlers.onDof(e.target.checked);
  $('liveWeather').onchange=e=>handlers.onLiveWeather(e.target.checked);
  $('voiceVol').oninput=e=>handlers.onVoice(Number(e.target.value));
+ $('ambVol').oninput=e=>handlers.onAmbience(Number(e.target.value));
  $('realism').onchange=e=>handlers.onRealism(e.target.value);
  $('fov').oninput=e=>handlers.onFov(Number(e.target.value));
  $('rate').onchange=e=>handlers.onRate(e.target.value);
@@ -31,7 +32,7 @@ export function mountHud(handlers){
   els,
   showMenu({eyebrow,title,description,button}){els.overlay.classList.remove('hidden');if(eyebrow)els.eyebrow.textContent=eyebrow;if(title)els.title.innerHTML=title;if(description)els.description.textContent=description;if(button)els.start.textContent=button;els.start.disabled=false;},
   hideMenu(){els.overlay.classList.add('hidden');els.hud.classList.remove('hidden');},
-  setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('dof').checked=s.dof!==false;$('liveWeather').checked=s.liveWeather!==false;$('voiceVol').value=s.voice===undefined?.8:s.voice;$('realism').value=s.realism||'standard';$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
+  setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('dof').checked=s.dof!==false;$('liveWeather').checked=s.liveWeather!==false;$('voiceVol').value=s.voice===undefined?.8:s.voice;$('ambVol').value=s.ambience===undefined?.7:s.ambience;$('realism').value=s.realism||'standard';$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
   setConditions(c){els.clock.textContent=c.time;els.date.textContent=c.date;els.wind.textContent=c.wind;{const parts=(c.water||'').split(' · ');els.water.textContent=parts.slice(0,2).join(' · ');els.water.closest('.chip').title=c.water;els.sun.textContent=c.sun+(parts.length>2?' · '+parts.slice(2).join(' · '):'');}if(c.sky!==undefined)els.sky.textContent=c.sky;if(c.phase!==undefined)els.phase.textContent=c.phase;if(c.night!==undefined){els.sunIcon.style.display=c.night?'none':'inline';els.moonIcon.style.display=c.night?'inline':'none';}if(c.hour!==undefined&&document.activeElement!==$('timeSlider'))$('timeSlider').value=c.hour.toFixed(2);},
   setHolder(text,alert){if(els.holderLine.textContent!==text)els.holderLine.textContent=text;els.holderLine.classList.toggle('alert',!!alert);els.holderLine.classList.toggle('show',!!text);},
   setTackle(snap,rigName,desc){els.rigName.textContent=rigName;els.rigDesc.textContent=desc;els.technique.textContent=snap.phase==='snagged'?'SNAGGED · slack, then snap (F)':snap.phase==='retrieve'?snap.technique:snap.phase==='flight'?'cast away':snap.phase==='charging'?'loading the rod':snap.phase==='bite'?'SET THE HOOK':snap.phase==='fight'?'fish on · '+(snap.fight||'').toLowerCase():snap.phase==='landed'?'landed':'rod ready';

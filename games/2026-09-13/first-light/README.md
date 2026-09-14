@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.35.0, cedar deck)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.36.0, living lake)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## The living lake (v0.36.0)
+
+The concept's Living Lake World card: birds, insects, shoreline movement and ambient life. A great blue heron stands on the bank by the north laydown, turning its head now and then; bring the kayak within about twenty metres and it croaks, lifts off with heavy wingbeats and flies down the shore, coming back a few minutes after you leave. Skeins of Canada geese cross the cove high up in the low light, calling as they pass. Swallows skim the water around the boat at dawn and dusk, a haze of insects hangs over the water while the sun is low and the air is still, and fish rise at dusk, rings spreading near the boat. And the lake has a voice at last: four sound beds generated with ElevenLabs and crossfaded over their own seams, a dawn chorus that peaks around sunrise with a quieter evening one, spring peepers and crickets after dark, wind in the pines that follows the weather, and water lapping the hull that rises with the wind and the paddle; one-shots for the geese, the heron, the lure's splashdown, the hookup, jumps and the landing; a "Lake sounds" slider in the menu. The mixing rules and every creature's state machine are pure and tested. Verified headless: the bed's gains by light, the heron's takeoff on approach, a forced skein, swallows, insects and rises at dusk, with stills.
 
 ## The cedar deck (v0.35.0)
 
