@@ -34,6 +34,7 @@ import {makeTreeline} from './treeline.js';
 import {makeAngling} from './angling.js';
 import {makeUnderwaterFx} from './underwater-fx.js';
 import {makeDoF} from './dof.js';
+import {gradeFor} from './dof-model.js';
 import {ringBell} from './bell.js';
 import {holderLine} from './holder.js';
 import {createDrift,planShot,stepDrift,driftCaption} from './drift.js';
@@ -55,7 +56,8 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.33.0';
+export const VERSION='0.34.0';
+const coolShadow=new T.Color(.5,.48,.72);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -247,9 +249,9 @@ function step(dt){
  for(const b of rivalBoats)if(b.group.visible)b.step(dt,{paddle:0,turn:0,anchor:true},env);
  stepTutorialFrame(dt);stepSonar(dt);if(mode==='aquarium')stepAquarium(dt);if(pressed.KeyN&&(mode==='playing'))toggleSonar();
  if(session&&!session.closed&&mode==='playing'){if(!session.over)sessionTick(session,dt);else session.elapsed+=dt;hud.setSession({label:(VARIANTS[session.variant]||VARIANTS.dawn).label,target:targetName(session),remaining:formatRemaining(remaining(session)),score:session.score});const busy=angling.state.phase==='fight'||angling.state.phase==='bite'||angling.state.phase==='landed';if(session.over&&(!busy||session.elapsed>20*60+75))closeCurrentSession();}
- const sd=sunDirection(clock.ms);lastElevation=sd.elevation;env.light=Math.max(0,Math.min(1,(sd.elevation+2)/12));const palette=skyPalette(sd.elevation,weather.cloud);sky.apply(palette,sd,sd.elevation,weather.cloud);
+ const sd=sunDirection(clock.ms);lastElevation=sd.elevation;env.light=Math.max(0,Math.min(1,(sd.elevation+2)/12));const palette=skyPalette(sd.elevation,weather.cloud);lastPalette=palette;sky.apply(palette,sd,sd.elevation,weather.cloud);
  sun.position.set(kayak.state.x+sd.x*320,Math.max(12,sd.y*320),kayak.state.z+sd.z*320);sun.target.position.set(kayak.state.x,0,kayak.state.z);sun.intensity=palette.sunIntensity;sun.color.setRGB(...palette.sunColor);sun.visible=palette.sunIntensity>.01;
- ambient.intensity=palette.ambientIntensity;ambient.color.setRGB(...palette.horizon).multiplyScalar(1.15);ambient.groundColor.setRGB(.26,.23,.17);
+ ambient.intensity=palette.ambientIntensity;ambient.color.setRGB(...palette.horizon).multiplyScalar(1.15);ambient.groundColor.setRGB(.26,.23,.17);{const cool=1-Math.min(1,Math.max(0,sd.elevation/14));ambient.color.lerp(coolShadow,.3*cool*(1-palette.night));} // low sun: warm light, cool shadows
  fogAir.color.setRGB(...palette.fogColor);fogAir.density=palette.fogDensity;const sc=lake.mat.uniforms.waterScatter.value;fogWater.density=underwaterFogDensity(lake.mat.uniforms.clarity.value,sc.y);fogWater.color.setRGB(...underwaterFogColor([sc.x,sc.y,sc.z],Math.max(0,Math.min(1,sd.elevation/18)),palette.night));scene.environmentIntensity=(.35+.45*(1-palette.night))*(lake.underwater?.35:1);if(lake.underwater){ambient.intensity*=.5;ambient.color.multiply(new T.Color(.55,.85,.7));}
  sky.mesh.position.copy(camera.position);refreshEnvironment(sd.elevation,weather.cloud);mist.update(simTime,camera.position,sd.elevation,weather.wind,palette,sd);
  if(mode==='demo'&&demo)stepDemo(demo,dt,demoAdapter);
@@ -316,8 +318,8 @@ function dofPlan(){if(settings.dof===false)return null;let view=null,focus=0;
  else if(cameraMode==='studio'&&studio&&mode==='gallery'){view='gallery';focus=camera.position.distanceTo(studio.root.position);}
  else if(cameraMode==='photo'){view='photo';focus=photo.dist;}
  else if(cameraMode==='drift'&&aquarium&&aquarium.look){view='drift';focus=camera.position.distanceTo(new T.Vector3(aquarium.look.x,aquarium.look.y,aquarium.look.z));}
- return view?dof.plan(view,{focus,quality,enabled:true,pixelRatio:renderer.getPixelRatio()}):null;}
-let shadowFrame=0;function render(){renderer.shadowMap.needsUpdate=renderer.shadowMap.enabled&&(shadowFrame++%4===0);const p=dofPlan();lastDof=p;if(p){lake.render(camera,dof.rt);fx.render(renderer);dof.finish(camera,p);}else{lake.render(camera);fx.render(renderer);}}
+ const grade=gradeFor({elevation:lastElevation,night:lastPalette?lastPalette.night:0,quality});const p=view?dof.plan(view,{focus,quality,enabled:true,pixelRatio:renderer.getPixelRatio()}):null;if(p){p.grade=grade;return p;}return settings.grade===false?null:dof.gradeOnly({elevation:lastElevation,night:lastPalette?lastPalette.night:0,quality});}
+let lastPalette=null;let shadowFrame=0;function render(){renderer.shadowMap.needsUpdate=renderer.shadowMap.enabled&&(shadowFrame++%4===0);const p=dofPlan();lastDof=p;if(p){lake.render(camera,dof.rt);fx.render(renderer);dof.finish(camera,p);}else{lake.render(camera);fx.render(renderer);}}
 function frame(now){requestAnimationFrame(frame);const raw=frameElapsed((now-last)/1000);last=now;
  if(quality==='saver'&&(saverToggle^=1)){pendingDt+=raw;return;}const dt=Math.min(raw+pendingDt,.05)*demoTimeScale;pendingDt=0;
  step(dt);render();
