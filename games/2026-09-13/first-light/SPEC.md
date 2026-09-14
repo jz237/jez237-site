@@ -77,6 +77,9 @@ Mode `gallery` (from menu or play; Esc or Back returns to where it came from). `
 ## v0.25.0 Jaws
 `fish-photo.js`: uniforms `jawOpen`, `jawHingeY` (profile mid-height at station .86); in `<begin_vertex>` vertices with station > .86 and y below the hinge rotate about the hinge (z .36) by −jawOpen × .55 × smoothstep(.86,.92,station); `setJaw(open)` now live; program cache key bumped. `fish.js`: jaw target 1 on STRIKE/BITE, .35 on LANDED, 0 otherwise. QA `studioJaw(open)`. Tests: 86.
 
+## v0.26.0 Pectoral fins
+`fish-photo.js`: `pectoralGeometry` (an 8-segment fan, radius .12 L, sweep −10° to 75°, UVs radial), `pectoralTexture` (128² canvas: rays from the base, alpha fading to the edge, cached), tint sampled from the flank image at the fin base (station .76, mid-depth), two cards mirrored at ±halfWidth, yaw ±.45, pitch −.25, sculling ±.12 rad with the swim phase in `setSwim`. Tests: 86.
+
 ## M2 remaining
 Largemouth hero model, material and rig; brain core states; tackle chain with weakest-link readout; cast (ballistic with drag, preview arc), 24-node Verlet line with buoyancy by line type, technique recognizer (3 s window over reel rate and rod-tip velocity), bite signatures (tick 80 ms, thump 200 ms, weed ramp, snag), hookset window from strike + species delay to +1.2 s (musky 2.5 s), fight with both failure modes (slack drains hookHold during HEADSHAKE/JUMP; overload past the weakest link breaks after a ~1 s reaction window), side pressure, landing at stamina < 0.15 within 3 m, in-hand hero view with the measuring board, catch card, release; lure cam and strike replay via the underwater branch; three lures; optional pro meters; **Watch Demo v1** (angler brain, technique executor, fight controller, first director shot set) doubling as the end-to-end QA bot.
 

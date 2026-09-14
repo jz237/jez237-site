@@ -52,6 +52,16 @@ if(jw>0.){float ang=jw*.55;float cy=transformed.y-jawHingeY,cz=transformed.z-.36
  };m.customProgramCacheKey=()=>'first-light-photo-fish-v2'+(fins?'-fins':'');return m;
 }
 const geoCache=new Map();
+// pectoral fins: a translucent fan hinged behind the gill, rays drawn once onto a small canvas, tinted from the flank
+let pectTex=null;
+function pectoralTexture(){if(pectTex)return pectTex;const c=document.createElement('canvas');c.width=c.height=128;const g=c.getContext('2d');
+ const grad=g.createRadialGradient(0,128,4,0,128,128);grad.addColorStop(0,'rgba(255,255,255,.95)');grad.addColorStop(.75,'rgba(255,255,255,.72)');grad.addColorStop(1,'rgba(255,255,255,0)');g.fillStyle=grad;g.fillRect(0,0,128,128);
+ g.strokeStyle='rgba(70,55,30,.38)';g.lineWidth=1.3;for(let i=0;i<=10;i++){const a=(i/10)*Math.PI*.5;g.beginPath();g.moveTo(0,128);g.lineTo(Math.cos(a)*132,128-Math.sin(a)*132);g.stroke();}
+ pectTex=new T.CanvasTexture(c);pectTex.colorSpace=T.SRGBColorSpace;return pectTex;}
+function pectoralGeometry(R=.12,segs=8){const pos=[0,0,0],uv=[0,1],idx=[];const a0=-35*Math.PI/180,a1=25*Math.PI/180;
+ for(let i=0;i<=segs;i++){const t=i/segs,th=a0+(a1-a0)*t,phi=t*Math.PI*.44;pos.push(0,Math.sin(th)*R,-Math.cos(th)*R);uv.push(Math.cos(phi),1-Math.sin(phi));if(i<segs)idx.push(0,i+1,i+2);}
+ const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;}
+function tintFromFlank(tex,u,v){try{const img=tex&&tex.image;if(!img||!(img.width||img.naturalWidth))return new T.Color(0xb9a27a);const c=document.createElement('canvas');c.width=c.height=64;const g=c.getContext('2d');g.drawImage(img,0,0,64,64);const x=Math.max(2,Math.min(61,Math.round(u*64))),y=Math.max(2,Math.min(61,Math.round((1-v)*64)));const d=g.getImageData(x-2,y-2,5,5).data;let r=0,gg=0,b=0,n=0;for(let i=0;i<d.length;i+=4){if(d[i+3]<40)continue;r+=d[i];gg+=d[i+1];b+=d[i+2];n++;}if(!n)return new T.Color(0xb9a27a);return new T.Color(r/n/255,gg/n/255,b/n/255).multiplyScalar(1.1);}catch{return new T.Color(0xb9a27a);}}
 export function makePhotoFishMesh(length,assets){
  if(!geoCache.has(assets.profile))geoCache.set(assets.profile,{profile:assets.profile,body:bodyFromProfile(assets.profile),card:finCardFromProfile(assets.profile)});const geo=geoCache.get(assets.profile);
  const hp=sampleProfile(assets.profile.stations,.86);
@@ -59,5 +69,9 @@ export function makePhotoFishMesh(length,assets){
  const root=new T.Group();root.scale.setScalar(length);
  const body=new T.Mesh(geo.body,photoMaterial(u,assets.flank));body.castShadow=true;root.add(body);
  const card=new T.Mesh(geo.card,photoMaterial(u,assets.fins,{fins:true}));card.castShadow=false;root.add(card);
- return {root,u,setJaw(open){u.jawOpen.value=Math.max(0,Math.min(1,open||0));},setSwim(phase,amp,turn){u.swimPhase.value=phase;u.swimAmp.value=amp;u.turnBend.value=turn;},setWet(w){u.wet.value=w;},photo:true};
+ // the pectorals, mirrored, hinged at station .76 a little below the midline
+ const pp=sampleProfile(assets.profile.stations,.76);const pmid=(pp.top+pp.bottom)/2,py=pmid-.3*(pmid-pp.bottom),pz=.26,px=Math.max(.01,pp.halfWidth*.85);
+ const tint=tintFromFlank(assets.flank,1-.76,1-(pp.texTop+pp.texBottom)/2);const pmat=new T.MeshPhysicalMaterial({map:pectoralTexture(),color:tint,transparent:true,opacity:.9,side:T.DoubleSide,roughness:.5,metalness:0,depthWrite:false});
+ const pgeo=pectoralGeometry();const pect=[1,-1].map(side=>{const g=new T.Group();g.position.set(side*px,py,pz);g.rotation.set(-.25,-side*.45,0);const m=new T.Mesh(pgeo,pmat);m.castShadow=false;g.add(m);root.add(g);return {g,side};});
+ return {root,u,setJaw(open){u.jawOpen.value=Math.max(0,Math.min(1,open||0));},setSwim(phase,amp,turn){u.swimPhase.value=phase;u.swimAmp.value=amp;u.turnBend.value=turn;pect.forEach((p,i)=>{p.g.rotation.y=-p.side*.45+Math.sin(phase*.8+i*1.5)*.12*Math.min(1,amp*25+.4);});},setWet(w){u.wet.value=w;},photo:true};
 }
