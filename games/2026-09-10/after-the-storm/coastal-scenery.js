@@ -1,3 +1,4 @@
+import {gustGLSL} from './wind-gusts.js';
 import * as T from './vendor/three.module.js';
 import {motoPine} from './moto-pine.js';
 import {barkMaterial,rockMaterial} from './land-materials.js';
@@ -80,13 +81,14 @@ export function makeCoastalScenery(root,course){
  function wind(material,flex=.03){
   material.onBeforeCompile=s=>{
    Object.assign(s.uniforms,{foliageTime:time,foliageWind:strength,foliageDistance:distance});
-   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nuniform float foliageTime,foliageWind,foliageDistance;')
+   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nuniform float foliageTime,foliageWind,foliageDistance;'+gustGLSL)
     .replace('#include <begin_vertex>',`#include <begin_vertex>
 vec3 anchor=(modelMatrix*instanceMatrix*vec4(0.,0.,0.,1.)).xyz;
+vec3 gust=gustAt(anchor.xz,foliageTime,foliageWind);
 float phase=anchor.x*.061+anchor.z*.087;
 float bend=pow(max(position.y,0.)*.09,2.)*${flex.toFixed(4)};
-transformed.x+=sin(foliageTime*1.4+phase+position.y*.17)*bend*(.35+foliageWind*1.8);
-transformed.z+=sin(foliageTime*1.03+phase*.7)*bend*.55*(.35+foliageWind*1.8);
+transformed.x+=sin(foliageTime*1.4+phase+position.y*.17)*bend*(.35+foliageWind*1.8+gust.z*3.);
+transformed.z+=sin(foliageTime*1.03+phase*.7)*bend*.55*(.35+foliageWind*1.8+gust.z*3.);
 float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPosition.xz-anchor.xz));transformed*=farFade;`);
   };material.customProgramCacheKey=()=>`coastal-wind-${flex}`;
  }

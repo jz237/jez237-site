@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.3.0 · TIDELINE** — September 13, 2026. See [RIDING-IMMERSION.md](RIDING-IMMERSION.md) for airborne trim, directional landings, curling breakers, spray contact, waterline detail, physical sound and rendering improvements. See [IMMERSION-PASS.md](IMMERSION-PASS.md) for wave, shore, scenery, rider, audio and lighting improvements. See [FINISHING-PASS.md](FINISHING-PASS.md) for scenery, landing, rider, shoreline and mobile rendering polish. See [RIDER-UPGRADE.md](RIDER-UPGRADE.md) for the rider/jet-ski release and [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for the preceding water upgrade.
+**v2.4.0 · TIDELINE** — September 13, 2026. See [WATER-INTERACTION.md](WATER-INTERACTION.md) for evolving foam, hull contact, local wave interactions, moving gusts, surface beads and optional recorded replays. See [RIDING-IMMERSION.md](RIDING-IMMERSION.md) for airborne trim, directional landings, curling breakers, spray contact, waterline detail, physical sound and rendering improvements. See [IMMERSION-PASS.md](IMMERSION-PASS.md) for wave, shore, scenery, rider, audio and lighting improvements. See [FINISHING-PASS.md](FINISHING-PASS.md) for scenery, landing, rider, shoreline and mobile rendering polish. See [RIDER-UPGRADE.md](RIDER-UPGRADE.md) for the rider/jet-ski release and [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for the preceding water upgrade.
 
 A browser jet-ski game built around shared waves, hull response and modern water rendering. Free ride is the initial mode. Racing offers an original nine-venue interpretation of Wave Race 64's core mechanics; the earlier coastal salvage voyage remains available.
 
@@ -25,6 +25,7 @@ No build, npm install, API key, account or paid service is required. This folder
 | Trim forward / back | Q / E | [ / ] |
 | Recover when stranded | R | Backspace |
 | Camera | C | / |
+| Instant replay | Replay button; Space pauses playback, Escape returns | Shared replay view |
 | Pause | Escape or Enter in two-player mode | Escape or Enter |
 
 A fresh throttle press as GO appears gives maximum power. Hold rearward trim while steering for a quick turn. Hard collisions and bad stunt landings can eject the rider; tap throttle to remount faster.

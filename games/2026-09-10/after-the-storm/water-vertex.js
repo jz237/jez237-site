@@ -11,14 +11,14 @@ void main(){
  vec2 p=q+shift;
  float det=max(.12,J[0][0]*J[1][1]-J[1][0]*J[0][1]);
  vec2 slope=vec2(J[1][1]*grad.x-J[0][1]*grad.y,-J[1][0]*grad.x+J[0][0]*grad.y)/det;
- broadSurface=vec3(h,slope)+waveTrainSurface(p)+surfSurface(p)+boundarySurface(p);
+ broadSurface=vec3(h,slope)+waveTrainSurface(p)+surfSurface(p)+boundarySurface(p)+gustSurface(p,time,storm)+localWaterSurface(p);
  breakingCrest=smoothstep(.7,1.7,broadSurface.x)*smoothstep(.04,.17,crestCurvature(q,p))*(1.-smoothstep(.38,.80,length(broadSurface.yz)));
  vec3 wakeResponse=wakeSurface(p);
  float e=.14;
  disturbanceSlope=vec2(
-   jetWake(p+vec2(e,0))+impactHeight(p+vec2(e,0))-jetWake(p-vec2(e,0))-impactHeight(p-vec2(e,0)),
-   jetWake(p+vec2(0,e))+impactHeight(p+vec2(0,e))-jetWake(p-vec2(0,e))-impactHeight(p-vec2(0,e)))/(2.*e)+wakeResponse.yz;
- worldP=vec3(p.x,seaLevel+broadSurface.x+jetWake(p)+impactHeight(p)+wakeResponse.x,p.y);
+   hullContactHeight(p+vec2(e,0))-hullContactHeight(p-vec2(e,0))+jetWake(p+vec2(e,0))+impactHeight(p+vec2(e,0))-jetWake(p-vec2(e,0))-impactHeight(p-vec2(e,0)),
+   hullContactHeight(p+vec2(0,e))-hullContactHeight(p-vec2(0,e))+jetWake(p+vec2(0,e))+impactHeight(p+vec2(0,e))-jetWake(p-vec2(0,e))-impactHeight(p-vec2(0,e)))/(2.*e)+wakeResponse.yz;
+ worldP=vec3(p.x,seaLevel+broadSurface.x+hullContactHeight(p)+jetWake(p)+impactHeight(p)+wakeResponse.x,p.y);
  mirrorP=mirrorMatrix*vec4(worldP,1.);
  gl_Position=projectionMatrix*viewMatrix*vec4(worldP,1.);
 }`;

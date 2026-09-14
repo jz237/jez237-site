@@ -15,7 +15,7 @@ export function createDemoScene(index=0,waveSeed=17){
  for(const r of s.racers){r.power=5;if(s.course.passage?.kind==='jump-dive')r.passageRoute='outer';}
  return s;
 }
-export function demoSceneDone(s){return s.phase==='results'||s.time>=150||(s.mode!=='stunt'&&s.racers[0].lap>1);}
+export function demoSceneDone(s){return s.phase==='results'||s.time>=150||(s.mode!=='stunt'&&s.racers[0].lap>1&&!s.racers.some(r=>r.stunt.trick));}
 export function demoInput(s){
  const r=s.racers[0];
  if(s.phase!=='running'||demoSceneDone(s))return {brake:true,dampen:true};

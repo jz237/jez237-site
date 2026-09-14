@@ -92,3 +92,9 @@ header:before{content:"";position:fixed;inset:0 0 auto;height:250px;background:l
  .demo-active .telemetry{bottom:36px}
  .demo-active #chart{bottom:36px}
 }
+
+#watchReplay{position:fixed;right:22px;top:74px;z-index:24;font-size:12px;padding:8px 14px;background:#102d39bb;border:1px solid #a4c6cc66;border-radius:20px;color:#e5f3f4}
+#replayBar{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:80;display:flex;align-items:center;gap:10px;padding:7px 12px;background:#102d39dd;border:1px solid #a4c6cc55;border-radius:9px;color:#e5f3f4;white-space:nowrap;font-size:12px}
+#replayBar button{padding:7px 10px;font-size:12px}.replaying header,.replaying #demoPanel,.replaying #demoToggle,.replaying #racehud,.replaying #splitHud{display:none!important}
+#replayBar[hidden],#watchReplay[hidden]{display:none}#verifyReplay{position:fixed;left:8px;bottom:2px;font:10px monospace;color:white;z-index:91;pointer-events:none}
+@media(max-width:900px){#watchReplay{top:max(12px,env(safe-area-inset-top));right:max(15px,env(safe-area-inset-right));padding:6px 10px}.mobile-riding:not(.demo-active) #watchReplay{top:64px}#replayBar{gap:6px;max-width:94vw;font-size:11px}#replayBar button{padding:6px;font-size:11px}}
