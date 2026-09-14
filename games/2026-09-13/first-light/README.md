@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.11.0, Ray knows the roster)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.12.0, the journal)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## The journal (v0.12.0)
+
+Every fish you land writes a line in the journal (`first_light_journal_v1`: species, length, weight, size class, lure, technique, hour, the cover it came from, the weather). The Species Gallery card is the journal's species card: a **bite clock** shows the guide's hearsay (the species' own activity curve) as faint hourly bars and your catches as solid ones on top, so knowledge firms up from what you actually caught; **It took** lists the lures and techniques that worked for you; **Bests** keeps a personal best per size class; the menu carries a one-line summary of the whole book. Ray's catches in the Watch Demo do not go in your journal. QA: `__FIRST_LIGHT.journalAdd({species,lengthIn,weightLb,sizeClass,lure,technique})`.
 
 ## Ray knows the roster (v0.11.0)
 

@@ -1,6 +1,7 @@
 // Species Gallery data: the size-class slider mapping, the field marks shown as callouts, and the
 // card text. Pure module (node-testable); the DOM lives in gallery-ui.js.
 import {SPECIES,ROSTER,describeFish,sizeClass} from './species.js';
+import {summarizeSpecies,hearsayClock} from './journal.js';
 export const CLASS_ORDER=['young','common','trophy','legend'];
 export const CLASS_LABEL={young:'Young',common:'Common',trophy:'Trophy',legend:'Legend'};
 // Real identification marks, three per species, the kind a guide points at in the net.
@@ -35,16 +36,16 @@ export function sliderForLength(sp,L){
 function topTechniques(sp,n=3){return Object.entries(sp.technique).filter(([k])=>k!=='idle').sort((x,y)=>y[1]-x[1]).slice(0,n).map(([k])=>k);}
 function topFamilies(sp){return Object.entries(sp.lureFamily).filter(([,v])=>v>=.9).sort((x,y)=>y[1]-x[1]).map(([k])=>({topwater:'topwater',soft:'soft plastics',crank:'crankbaits',blade:'bucktails'})[k]||k);}
 // Everything the panel prints for one species at one length.
-export function galleryCard(id,L,journal){
+export function galleryCard(id,L,journal,{sunrise=6.5,sunset=19.5}={}){
  const sp=SPECIES[id];const d=describeFish(sp,L);const catches=(journal&&journal.catches||[]).filter(c=>c.species===id);
- const best=catches.reduce((m,c)=>Math.max(m,c.lengthIn||0),0);
+ const best=catches.reduce((m,c)=>Math.max(m,c.lengthIn||0),0);const book=summarizeSpecies(journal,id),hearsay=hearsayClock(sp,sunrise,sunset);
  const fam=topFamilies(sp);
  return {id,name:sp.name,latin:sp.latin,sizeClass:d.sizeClass,classLabel:CLASS_LABEL[d.sizeClass],lengthIn:d.lengthIn,weightText:d.weightText,
   sizeText:`${CLASS_LABEL[d.sizeClass]} · ${d.lengthIn} in · ${d.weightText}`,
   holds:sp.structure.map(s=>STRUCT[s]||s).join(', '),takes:topTechniques(sp).join(', ')+(fam.length?' · '+fam.join(', '):''),
   hours:DIEL[sp.diel]||sp.diel,temp:`${sp.tempPref[0]}–${sp.tempPref[1]} °C`,
   notes:[sp.follow?'Follows the lure to the boat before it commits':null,sp.teeth?'Teeth: use the wire leader':null,sp.paperMouth?'Paper mouth: play it gently':null].filter(Boolean),
-  marks:FIELD_MARKS[id]||[],count:sp.count,caught:catches.length,best:best?best.toFixed(1)+' in':null};
+  marks:FIELD_MARKS[id]||[],count:sp.count,caught:catches.length,best:best?best.toFixed(1)+' in':null,book,hearsay};
 }
 export function galleryList(){return ROSTER.map(id=>({id,name:SPECIES[id].name}));}
 export {sizeClass};
