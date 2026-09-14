@@ -11,7 +11,7 @@ export function installQA(app){
   setCamera:name=>app.setCamera(name),addRipple:(x,z,kind='splash')=>app.addRipple(x,z,kind),polarized:v=>app.setPolarized(v),forceSize:(w,h)=>app.forceSize(w,h),
   state:()=>app.state(),start:()=>app.start(),debug:()=>app.debug(),version:app.version,
   cast:(power=.8)=>app.cast(power),setReeling:v=>app.setReeling(v),twitch:()=>app.twitch(),rig:i=>app.rig(i),angling:()=>app.angling(),
-  demo:seed=>app.demo(seed),demoStep:(secs,dt)=>app.demoStep(secs,dt),demoReport:()=>app.demoReport(),takeRod:()=>app.takeRod(),studio:(len,species)=>app.studio(len,species),studioVisible:v=>app.studioVisible(v),photoFish:app.photoFish,spawnFish:(x,z,len,bold,species)=>app.spawnFish(x,z,len,bold,species),fish:()=>app.fish(),forceStrike:()=>app.forceStrike(),setHook:()=>app.setHook(),fightState:()=>app.fightState(),fightInput:i=>app.fightInput(i),releaseFish:()=>app.releaseFish(),journal:()=>app.journal()
+  demo:seed=>app.demo(seed),demoStep:(secs,dt)=>app.demoStep(secs,dt),demoReport:()=>app.demoReport(),takeRod:()=>app.takeRod(),gallery:(id,t)=>app.gallery(id,t),galleryState:()=>app.galleryState(),galleryLake:()=>app.galleryLake(),closeGallery:()=>app.closeGallery(),studio:(len,species)=>app.studio(len,species),studioVisible:v=>app.studioVisible(v),photoFish:app.photoFish,spawnFish:(x,z,len,bold,species)=>app.spawnFish(x,z,len,bold,species),fish:()=>app.fish(),forceStrike:()=>app.forceStrike(),setHook:()=>app.setHook(),fightState:()=>app.fightState(),fightInput:i=>app.fightInput(i),releaseFish:()=>app.releaseFish(),journal:()=>app.journal()
  };
  window.__FIRST_LIGHT=api;return api;
 }
