@@ -8,7 +8,8 @@ export const DOF_TAPS={high:24,medium:16,low:0,saver:0};
 export const DOF_VIEWS={
  hero:{aperture:16,maxCoc:18,range:.2,blurb:'the catch in hand, the cove soft behind it'},
  gallery:{aperture:12,maxCoc:14,range:.15,blurb:'the turntable'},
- photo:{aperture:6,maxCoc:8,range:.12,blurb:'a gentle fall-off around the kayak'}
+ photo:{aperture:6,maxCoc:8,range:.12,blurb:'a gentle fall-off around the kayak'},
+ drift:{aperture:7,maxCoc:9,range:.2,blurb:'the lure cam drift, the fish in focus'}
 };
 export function cocPixels(dist,focus,aperture,maxCoc,range=0){if(!(dist>0)||!(focus>0))return 0;return Math.min(maxCoc,aperture*Math.max(0,Math.abs(dist-focus)-range*focus)/dist);}
 // what the pass should do this frame, or null for no pass

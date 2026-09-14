@@ -21,6 +21,7 @@ export function mountHud(handlers){
  $('ccRelease').onclick=()=>handlers.onRelease();
  $('ccPhoto').onclick=()=>handlers.onPhoto();$('photoBtn').onclick=()=>handlers.onPhotoMode();$('pbSave').onclick=()=>handlers.onPhotoSave();$('pbBack').onclick=()=>handlers.onPhotoBack();
  $('watch').onclick=()=>handlers.onWatch();
+ $('lureCamBtn').onclick=()=>handlers.onLureCam();
  $('galleryBtn').onclick=()=>handlers.onGallery();
  $('sessionBtn').onclick=()=>handlers.onSession($('sessionVariant').value);$('tutorialBtn').onclick=()=>handlers.onTutorial();$('tutSkip').onclick=()=>handlers.onTutorialSkip();$('bigBassBtn').onclick=()=>handlers.onBigBass();
  $('scSubmit').onclick=()=>handlers.onSessionSubmit($('scInitials').value);$('scBack').onclick=()=>handlers.onSessionBack();$('scInitials').onkeydown=e=>{if(e.key==='Enter')handlers.onSessionSubmit($('scInitials').value);e.stopPropagation();};
@@ -35,6 +36,7 @@ export function mountHud(handlers){
   setTackle(snap,rigName,desc){els.rigName.textContent=rigName;els.rigDesc.textContent=desc;els.technique.textContent=snap.phase==='snagged'?'SNAGGED · slack, then snap (F)':snap.phase==='retrieve'?snap.technique:snap.phase==='flight'?'cast away':snap.phase==='charging'?'loading the rod':snap.phase==='bite'?'SET THE HOOK':snap.phase==='fight'?'fish on · '+(snap.fight||'').toLowerCase():snap.phase==='landed'?'landed':'rod ready';
    els.lineInfo.textContent=snap.phase==='retrieve'?`${snap.lineOut.toFixed(0)} m out · lure ${snap.lureDepth<.05?(snap.onBottom?'on the bottom':'on top'):snap.lureDepth.toFixed(1)+' m down'}${snap.tension>.6?' · tight':''}`+(snap.abrasion>=.12?' · line '+snap.lineWord:''):snap.retie>0?`retying… ${Math.ceil(snap.retie)} s`:snap.casts?`${snap.casts} cast${snap.casts===1?'':'s'}`+(snap.abrasion>=.3?' · line '+snap.lineWord+' · R to retie':''):'';},
   setCast(phase,power){if(phase!==lastPhase){lastPhase=phase;els.reticle.classList.toggle('show',phase==='idle'||phase==='charging');els.power.classList.toggle('show',phase==='charging');}if(phase==='charging'&&Math.abs(power-lastPower)>.01){lastPower=power;els.powerFill.style.width=(power*100).toFixed(0)+'%';}},
+  setBadge(text){$('demoBadge').textContent=text||'WATCH DEMO · Ray is fishing · press any key or tap to take the rod';},
   setCaption(text){const el=$('caption');if(el.textContent!==text){el.textContent=text;el.classList.toggle('show',!!text);}},setDemo(on){$('demoBadge').classList.toggle('show',!!on);document.body.classList.toggle('demo',!!on);},
   setTension(show,value,label){els.tension.classList.toggle('show',!!show);if(show){els.tensionFill.style.width=(Math.min(1,value)*100).toFixed(0)+'%';els.tensionLabel.textContent=label||'';}},
   showCard(c){$('ccSpecies').textContent=c.species;$('ccSize').textContent=c.size;$('ccDetail').textContent=c.detail;$('ccMeta').textContent=c.meta;els.card.classList.remove('hidden');},hideCard(){els.card.classList.add('hidden');},
