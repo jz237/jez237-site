@@ -8,3 +8,10 @@ export function landingResponse(h,craft,{bowSlope=0,sideSlope=0,dampen=false}={}
  return {style,pitch,roll,slip,loss:directional*energy*(bow*.16+stern*.035+side*.20)*brace,yaw:directional*clamp(-slip*.015-Math.sin(roll)*.26,-.35,.35)*energy*brace,kick:directional*(stern*.35-bow*.22)*energy*brace,harshness:energy*(.65+bow*.6+side*.75)*brace};
 }
 export function airTrim(lean,pitch,pitchRate){return -Math.max(-1,Math.min(1,lean))*1.15-pitchRate*.12;}
+
+// Match spray direction to the entry used by the physical pressure solver.
+export function landingPlume(h){const style=h.entry?.style||h.landingStyle||'level',energy=clamp((h.impact||0)/10);
+ return {style,forward:style==='bow-first'?2+energy*5:style==='stern-first'?-2-energy*3:0,
+  lateral:style==='sideways'?3+energy*6:1.4+energy*2.5,
+  rise:style==='bow-first'?1.2:style==='sideways'?.65:style==='stern-first'?.9:.45,
+  carry:style==='level'?.60:.28,life:style==='sideways'?1.25:.85};}

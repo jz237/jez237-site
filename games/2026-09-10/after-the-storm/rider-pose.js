@@ -18,21 +18,21 @@ export function jointBetween(a,b,l1,l2,pole){
 }
 // Anatomical joint targets shared by the detailed seated and stunt riders.
 // Hands remain on the rotating grips while the torso absorbs hull motion.
-export function riderPose(pose='',time=0,turn=0,{speed=0,impact=0,compression=clamp(impact*.035,0,.38),load=1,airborne=false,airTime=0,verticalSpeed=0,pitch=0,roll=0,steering=turn*.3,mountDolphin=false,wipeoutAmount=0,forwardShift=0,flightBlend,loadShift=0,recovery=0,counter=0,brace:preparedBrace=0}={}){
+export function riderPose(pose='',time=0,turn=0,{speed=0,impact=0,compression=clamp(impact*.035,0,.38),load=1,airborne=false,airTime=0,verticalSpeed=0,pitch=0,roll=0,steering=turn*.3,mountDolphin=false,wipeoutAmount=0,forwardShift=0,flightBlend,loadShift=0,recovery=0,counter=0,brace:preparedBrace=0,headPitch=0,headLook=0,shoulderLag=0,cornerLean=0}={}){
  const flight=flightBlend??(airborne?clamp(airTime*4,0,1):0),brace=flight*clamp(-verticalSpeed/7,0,1);
  const crouch=clamp(compression+Math.max(brace,preparedBrace)*.16+recovery*.32,0,.38),breath=Math.sin(time*1.7)*.003;
  let hip=[0,.765,-.34],shoulder=[0,1.405,.075],neck=[0,1.430,.14],crown=[0,1.745,.17];
  let shoulders=[[-.225,1.392,.075],[.225,1.392,.075]],elbows=[[-.335,1.155,.355],[.335,1.155,.355]],hands=[[-.445,1.132,.704],[.445,1.132,.704]],knees=[[-.395,.635,.12],[.395,.635,.12]],feet=[[-.5,.44,-.34],[.5,.44,-.34]];
  if(wipeoutAmount){hands=hands.map((p,i)=>mix(p,[(i?1:-1)*.6,1.25,.12],clamp(wipeoutAmount,0,1)));}if(mountDolphin){hands=[[-.3,.7,.56],[.3,.7,.56]];}if(!pose){
   const pace=clamp(speed/30,0,1),stance=pace*.08;
-  const shift=[turn*.28-roll*.14+counter,-pace*.045-crouch*.85+flight*.08+breath-clamp(loadShift,0,2)*.015,-flight*.10+pace*.09+forwardShift-recovery*.25];
+  const shift=[turn*.28-roll*.14+counter+cornerLean+shoulderLag,-pace*.045-crouch*.85+flight*.08+breath-clamp(loadShift,0,2)*.015,-flight*.10+pace*.09+forwardShift-recovery*.25];
   hip=add(hip,[turn*.12,stance-crouch*.43+flight*.07,-flight*.035+forwardShift*.4]);shoulder=add(shoulder,shift);neck=add(neck,shift);crown=add(crown,shift);shoulders=shoulders.map(p=>add(p,shift));
   // Inside shoulder drops into the turn; the outer arm extends while the
   // inner elbow folds. Pelvis counterbalance keeps the knees astride the seat.
   shoulders=shoulders.map((p,i)=>add(p,[0,(i?1:-1)*-turn*.055,(i?1:-1)*-turn*.04]));
   elbows=elbows.map(p=>add(p,shift));
   // The neck counters a fraction of hull attitude without moving the hands.
-  crown=add(crown,[roll*.10,0,pitch*.11]);
+  crown=add(crown,[roll*.10,-Math.abs(headPitch)*.12,pitch*.11+headPitch]);
  }else if(pose==='handstand'){
   hip=[0,2.12,.63];shoulder=[0,1.68,.68];neck=[0,1.55,.71];crown=[0,1.25,.73];
   shoulders=[[-.225,1.68,.68],[.225,1.68,.68]];elbows=[[-.34,1.42,.7],[.34,1.42,.7]];knees=[[-.14,2.64,.48],[.14,2.64,.48]];feet=[[-.16,3.09,.27],[.16,3.09,.27]];
@@ -65,7 +65,7 @@ export function riderPose(pose='',time=0,turn=0,{speed=0,impact=0,compression=cl
   const rotate=p=>{const y=p[1]-1.7,z=p[2]+.25;return [p[0],1.7+y*c-z*s,-.25+y*s+z*c];};
   for(const k in targets)targets[k]=targets[k].map(rotate);
  }
- return {targets,yaw:pose==='backwards'?Math.PI:0,headYaw:pose?0:turn*.40};
+ return {targets,yaw:pose==='backwards'?Math.PI:0,headYaw:pose?0:turn*.40+headLook};
 }
 
 // Additional body bank makes the rider's weight transfer legible at chase

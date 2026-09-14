@@ -1,3 +1,5 @@
+import {atmosphereFragment} from './atmosphere.js';
+import {frontEnabled} from './weather-front.js';
 import {characterUniforms,syncWaterCharacter} from './water-character-render.js';
 import {hullContactGLSL} from './hull-contact.js';
 import {gustGLSL} from './wind-gusts.js';
@@ -18,7 +20,7 @@ import {impactWaves,impactGLSL} from './surface-impulses.js';
 import * as T from './vendor/three.module.js';
 import {waterDetail,waterFragment} from './water-detail.js';
 import {WAVES,ground,wave,ROCKS,craftFields,waterLevel} from './simulation.js';
-export const shared={...characterUniforms,...localWaterUniforms,boundaryWalls,boundaryCount,surfSeed,surfStrength,courseWaveTrain,seaLevel:waterLevel,time:{value:0},storm:{value:0}};
+export const shared={frontEnabled,...characterUniforms,...localWaterUniforms,boundaryWalls,boundaryCount,surfSeed,surfStrength,courseWaveTrain,seaLevel:waterLevel,time:{value:0},storm:{value:0}};
 export const skyColors={skyNight:{value:0},skyHorizon:{value:new T.Color(.53,.64,.66)},skyZenith:{value:new T.Color(.10,.27,.43)},skySun:{value:new T.Vector3(-.35,.25,-.90).normalize()}};
 const common=`uniform float seaLevel;uniform float time;uniform float storm;uniform vec4 craft;uniform float craftTurn;uniform vec4 craftSources[4];
 ${impactGLSL}
@@ -30,10 +32,7 @@ ${hullContactGLSL}
 ${gustGLSL}
 ${localWaterGLSL}
 float height(vec2 p){return seaLevel+localWaterHeight(p)+gustHeightAt(p,time,storm)+hullContactHeight(p)+boundaryHeight(p)+waveSurface(p).x+jetWake(p)+impactHeight(p)+wakeHeight(p);}`;
-export function makeSky(scene){const mat=new T.ShaderMaterial({side:T.BackSide,depthWrite:false,uniforms:{...shared,...skyColors,...weatherUniforms},vertexShader:`varying vec3 dir;void main(){dir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`uniform float time;uniform float storm;uniform vec3 skyHorizon,skyZenith,skySun;uniform float skyNight;varying vec3 dir;
-${cloudGLSL}
-float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}float fbm(vec2 p){return noise(p)*.5+noise(p*2.03)*.25+noise(p*4.07)*.125+noise(p*8.1)*.0625;}
-void main(){vec3 d=normalize(dir);float y=max(d.y,0.);vec3 sun=skySun;float s=max(0.,dot(d,sun));vec3 col=mix(skyHorizon,skyZenith,pow(y,.38));col+=vec3(.48,.29,.105)*pow(s,8.)+vec3(1.,.78,.43)*pow(s,850.)*2.;vec2 p=d.xz/(y+.19)*2.3+vec2(time*.003,0);float cloud=cloudCoverAt(cameraPosition.xz+d.xz*(190.-cameraPosition.y)/max(.04,y))*smoothstep(.0,.16,y);vec3 cloudColor=mix(vec3(.94,.96,.94),vec3(.18,.25,.29),storm);col=mix(col,cloudColor,cloud*.90);col=mix(col,vec3(.17,.25,.30)+vec3(y*.07),storm*.72);col*=1.-skyNight*.75;gl_FragColor=vec4(col,1.);#include <tonemapping_fragment>\n#include <colorspace_fragment>}`.replace('1.);#include','1.);\n#include')});const sky=new T.Mesh(new T.SphereGeometry(1200,32,20),mat);scene.add(sky);return sky;}
+export function makeSky(scene){const mat=new T.ShaderMaterial({side:T.BackSide,depthWrite:false,uniforms:{...shared,...skyColors,...weatherUniforms,skySteps:{value:12}},vertexShader:`varying vec3 dir;void main(){dir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:atmosphereFragment});const sky=new T.Mesh(new T.SphereGeometry(1200,32,20),mat);scene.add(sky);return sky;}
 export function makeTerrain(scene,heightFn=ground,palette={}){
  const geo=new T.PlaneGeometry(920,920,360,360);geo.rotateX(-Math.PI/2);
  const p=geo.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,heightFn(p.getX(i),p.getZ(i)));geo.computeVertexNormals();
