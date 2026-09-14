@@ -52,7 +52,11 @@ export class Corydoras{
  }
 
  clearFood(){for(const pellet of [...this.pellets])this.removePellet(pellet);}
- feed(onEaten?:()=>void){if(this.pellets.length)return 0;for(let i=0;i<6;i++){const a=this.animals[i%this.animals.length],p=a.position.clone();p.y=5.1;const mesh=new T.Mesh(this.pelletGeometry,this.pelletMaterial);mesh.position.copy(p);this.models.root.add(mesh);this.pellets.push({position:mesh.position,age:0,mesh,onEaten});}return 6;}
+ feed(onEaten?:()=>void){
+  // One old pellet must not suppress the next community meal. Keep at most
+  // two portions in flight/on the floor, and report only newly added pieces.
+  const count=Math.min(6,Math.max(0,12-this.pellets.length));
+  for(let i=0;i<count;i++){const a=this.animals[i%this.animals.length],p=a.position.clone();p.y=5.1;const mesh=new T.Mesh(this.pelletGeometry,this.pelletMaterial);mesh.position.copy(p);this.models.root.add(mesh);this.pellets.push({position:mesh.position,age:0,mesh,onEaten});}return count;}
  update(dt:number,waterTime:number,fish:FishContactBody[]=[],grazers:{id?:number;position:T.Vector3;normal:T.Vector3;matrix:T.Matrix4;kind:string}[]=[]){if(dt<=0)return;this.time=waterTime;this.fishCorrections.clear();const others=grazers.map(a=>grazerBody(a.position,a.normal,V().setFromMatrixColumn(a.matrix,0).normalize(),a.kind==='snail',a.kind==='snail'?.84:.80+(a.id??0)%3*.04));const visitors=[...others,...fish.map(f=>fishBody(f))];
   for(const pellet of [...this.pellets]){pellet.age+=dt;pellet.position.y=Math.max(this.height(pellet.position.x,pellet.position.z)+.025,pellet.position.y-dt*.65);if(pellet.age>65)this.removePellet(pellet);}
   const steps=Math.max(1,Math.ceil(dt/.025)),h=dt/steps;
