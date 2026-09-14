@@ -5,7 +5,7 @@ export function mountTouchControls({onTap}){
  const held=new Map(),root=document.createElement('nav');root.id='touchControls';root.hidden=true;root.setAttribute('aria-label','Touch controls');
  root.innerHTML=`<div class="touch-left"><div class="row"><button data-key="KeyA" class="hold">◀</button><button data-key="KeyD" class="hold">▶</button></div><button data-tap="twitch" class="tapbtn">TWITCH</button></div>
  <div class="touch-right"><button data-key="KeyW" class="hold wide">PADDLE</button><div class="row"><button data-key="Space" class="hold">REEL</button><button data-key="Cast" class="hold cast">CAST</button></div></div>
- <div class="touch-taps"><button data-tap="anchor">⚓ Anchor</button><button data-tap="lenses">🕶 Lenses</button><button data-tap="rig">🎣 Rig</button><button data-tap="cam">🎥 Cam</button><button data-tap="menu">☰</button></div>`;
+ <div class="touch-taps"><button data-tap="anchor">⚓ Anchor</button><button data-tap="lenses">🕶 Lenses</button><button data-tap="rig">🎣 Rig</button><button data-tap="cam">🎥 Cam</button><button data-tap="holder">🪝 Holder</button><button data-tap="menu">☰</button></div>`;
  document.body.append(root);
  const wanted=navigator.maxTouchPoints>0||matchMedia('(pointer: coarse)').matches;let active=false;
  const keys=()=>Object.fromEntries([...held.values()].map(k=>[k,true]));
