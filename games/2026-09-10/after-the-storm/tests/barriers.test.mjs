@@ -15,7 +15,9 @@ test('Hard jumps above the city wall and Expert dives below it on every actual r
  }
 });
 test('the city outer route remains available without a jump or dive shortcut',()=>{
- const s=createRace({course:getCourse('neon',2),difficulty:2}),r=s.racers[0],outer={...s.course,passage:null};for(let i=0;i<20000&&s.phase!=='results';i++)stepRace(s,aiInput({...s,course:outer},r),1/60);assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.passed,s.course.gates.length*3);
+ // Allow the optional race-ramp approaches on three laps; the outer route
+ // must still finish every checkpoint with no misses within 400 seconds.
+ const s=createRace({course:getCourse('neon',2),difficulty:2}),r=s.racers[0],outer={...s.course,passage:null};for(let i=0;i<24000&&s.phase!=='results';i++)stepRace(s,aiInput({...s,course:outer},r),1/60);assert.equal(s.phase,'results');assert.equal(r.misses,0);assert.equal(r.passed,s.course.gates.length*3);
 });
 test('chase camera stops at the wall, while sight lines above and beneath remain clear',()=>{
  const bars=getCourse('neon',1).crossbars,b=bars[0];for(const y of [-1,3]){const target={x:b.x,y,z:b.z-3},desired={x:b.x,y,z:b.z+7};assert.deepEqual(barrierCamera(bars,target,desired),desired);}

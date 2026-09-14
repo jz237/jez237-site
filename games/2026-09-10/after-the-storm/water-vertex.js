@@ -11,7 +11,7 @@ void main(){
  vec2 p=q+shift;
  float det=max(.12,J[0][0]*J[1][1]-J[1][0]*J[0][1]);
  vec2 slope=vec2(J[1][1]*grad.x-J[0][1]*grad.y,-J[1][0]*grad.x+J[0][0]*grad.y)/det;
- broadSurface=vec3(h,slope)+waveTrainSurface(p)+surfSurface(p)+boundarySurface(p)+gustSurface(p,time,storm)+localWaterSurface(p);
+ broadSurface=coastalSurface(p,vec3(h,slope)+waveTrainSurface(p)+surfSurface(p))+boundarySurface(p)+gustSurface(p,time,storm)+localWaterSurface(p);
  breakingCrest=smoothstep(.7,1.7,broadSurface.x)*smoothstep(.04,.17,crestCurvature(q,p))*(1.-smoothstep(.38,.80,length(broadSurface.yz)));
  vec3 wakeResponse=wakeSurface(p);
  float e=.14;

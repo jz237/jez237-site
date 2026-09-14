@@ -29,6 +29,7 @@ export function demoInput(s){
  if(r.wipeout){input.throttle=Math.floor(s.time*8)%2;pilot.label='Remounting after a wipeout';}
  else if(s.time-pilot.rescueAt<2)pilot.label='Recovering to open water';
  else if(r.hydro.airborne)pilot.label='Balancing for the landing';
+ else if(input.rampChoice)pilot.label=input.rampChoice==='jump'?'Committing to the stunt ramp':'Taking the water line past the ramp';
  else if(input.dive)pilot.label='Diving beneath the surface';
  else if(input.brake)pilot.label='Slowing for the next turn';
  else if(s.mode==='stunt')pilot.label='Lining up the next ramp or ring';
