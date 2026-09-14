@@ -23,7 +23,9 @@ export function makePopulation(scene,bathy,coverFeatures,{seed=2026,assets={},ro
  {const lay=coverFeatures.find(f=>f.type==='laydown');if(lay)spawn(lay.x+2,lay.z+2,.585,.42,'the Ridge Fish',SPECIES.largemouth);}
  let lastSplash=null;
  function nearest(x,z){let best=null,bd=1e9;for(const f of fish){const d=Math.hypot(f.brain.x-x,f.brain.z-z);if(d<bd){bd=d;best=f;}}return best;}
- return {fish,species,spawn,nearest,
+ // a fight, a lost fish or a botched set puts the neighbours off for a while: the spot goes quiet
+ function disturb(x,z,t,radius=8,seconds=40){let n=0;for(const f of fish){const b=f.brain;if(b.state==='HOOKED'||b.state==='LANDED')continue;if(Math.hypot(b.x-x,b.z-z)<radius){b.state='REFUSE';b.stateTime=0;b.refuseUntil=Math.max(b.refuseUntil||0,t+seconds*(.6+random()*.8));n++;}}return n;}
+ return {fish,species,spawn,nearest,disturb,
   splash(x,z,t){lastSplash={x,z,t};},
   update(dt,t,hour,sunrise,sunset,lure,kayak,clarity){
    const acts={};for(const id in SPECIES)acts[id]=activityByHour(hour,SPECIES[id].diel,sunrise,sunset);

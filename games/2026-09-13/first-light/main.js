@@ -34,7 +34,7 @@ import {lengthForSlider,galleryCard,galleryList} from './gallery.js';
 import {mountGallery} from './gallery-ui.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.10.0';
+export const VERSION='0.11.0';
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -95,10 +95,10 @@ function galleryReturn(){if(mode!=='gallery'||!gal.lake)return;gal.lake=null;gal
 function releaseFish(){if(angling.state.phase!=='landed')return;angling.releaseFish(simTime);hud.hideCard();cameraMode='surface';hud.toast('Released');}
 function handleAnglingEvents(){for(const e of angling.drainEvents()){if(mode==='demo')demoEvents.push(e);
  if(e.type==='bite'){hud.toast('Fish on the line — set the hook!',1500);navigator.vibrate?.(60);}
- else if(e.type==='missed'){hud.toast(e.reason==='too early'?'Pulled it away too soon':'It spat the lure');pop.markEscape(e.fish,angling.parts().lure.family);}
+ else if(e.type==='missed'){{const lp=angling.lure();pop.disturb(lp.x,lp.z,simTime,3,15);}hud.toast(e.reason==='too early'?'Pulled it away too soon':'It spat the lure');pop.markEscape(e.fish,angling.parts().lure.family);}
  else if(e.type==='hooked'){hud.toast('Fish on!');navigator.vibrate?.([80,40,80]);}
- else if(e.type==='lost'){hud.toast(e.reason==='bitten off'?'Bitten off — teeth went through the line. Tie on the wire leader for the toothy ones.':e.reason==='broke off'?'Broke off — the '+angling.chain().weakest.part+' gave way. Re-tie and try again.':'It threw the hook. Keep the line tight through the shakes.',5000);pop.markEscape(e.fish,angling.parts().lure.family);}
- else if(e.type==='landed'){const d=pop.describe(e.fish);cameraMode='hero';heroFish=e.fish;const cls={young:'Young',common:'Common',trophy:'Trophy',legend:'Legend'}[d.sizeClass];const name=e.fish.brain.name?e.fish.brain.name+' · ':'';const spName=pop.speciesOf(e.fish).name;hud.showCard({species:name+spName,size:cls+' · '+d.lengthIn+' in · '+d.weightText,detail:angling.rig().name+' · '+angling.parts().lure.name+' · '+(lastTechnique||'straight retrieve')+' · fought '+e.seconds.toFixed(0)+' s',meta:formatClock(clock.ms)+' · '+formatDate(clock.ms)+' · '+WEATHER[weatherName].label+' · '+Math.round(env.windMs*2.237)+' mph '+compass(weather.from)});journal.catches.push({species:pop.speciesOf(e.fish).id,lengthIn:d.lengthIn,weightLb:d.weightLb,sizeClass:d.sizeClass,lure:angling.parts().lure.id,technique:lastTechnique,at:clock.ms,name:e.fish.brain.name});try{localStorage.setItem('first_light_journal_v1',JSON.stringify(journal));}catch{}pop.markEscape(e.fish,angling.parts().lure.family);}
+ else if(e.type==='lost'){{const h=e.fish&&e.fish.brain?e.fish.brain.home:angling.lure();pop.disturb(h.x,h.z,simTime,10,60);}hud.toast(e.reason==='bitten off'?'Bitten off — teeth went through the line. Tie on the wire leader for the toothy ones.':e.reason==='broke off'?'Broke off — the '+angling.chain().weakest.part+' gave way. Re-tie and try again.':'It threw the hook. Keep the line tight through the shakes.',5000);pop.markEscape(e.fish,angling.parts().lure.family);}
+ else if(e.type==='landed'){const d=pop.describe(e.fish);pop.disturb(e.fish.brain.home.x,e.fish.brain.home.z,simTime,12,90);cameraMode='hero';heroFish=e.fish;const cls={young:'Young',common:'Common',trophy:'Trophy',legend:'Legend'}[d.sizeClass];const name=e.fish.brain.name?e.fish.brain.name+' · ':'';const spName=pop.speciesOf(e.fish).name;hud.showCard({species:name+spName,size:cls+' · '+d.lengthIn+' in · '+d.weightText,detail:angling.rig().name+' · '+angling.parts().lure.name+' · '+(lastTechnique||'straight retrieve')+' · fought '+e.seconds.toFixed(0)+' s',meta:formatClock(clock.ms)+' · '+formatDate(clock.ms)+' · '+WEATHER[weatherName].label+' · '+Math.round(env.windMs*2.237)+' mph '+compass(weather.from)});journal.catches.push({species:pop.speciesOf(e.fish).id,lengthIn:d.lengthIn,weightLb:d.weightLb,sizeClass:d.sizeClass,lure:angling.parts().lure.id,technique:lastTechnique,at:clock.ms,name:e.fish.brain.name});try{localStorage.setItem('first_light_journal_v1',JSON.stringify(journal));}catch{}pop.markEscape(e.fish,angling.parts().lure.family);}
  else if(e.type==='released'){heroFish=null;}}}
 let studioVisible=true,heroFish=null,lastTechnique='',fightInput={reeling:0,sidePressure:0,rodUp:.6},qaFight=null;
 // --- Watch Demo
@@ -109,7 +109,7 @@ const demoAdapter={angling:()=>angling.snapshot(),fight:()=>angling.fight(),drai
  nearestFishState:()=>{const lp=angling.lure();const f=pop.nearest(lp.x,lp.z);return f&&Math.hypot(f.brain.x-lp.x,f.brain.z-lp.z)<6?f.brain.state:'HOLD';},
  setShot:(shot,scale)=>{demoTimeScale=scale;if(cameraMode==='hero')return;cameraMode=shot==='lurecam'&&angling.state.phase==='retrieve'?'lurecam':'surface';},
  setRate:r=>setRate(String(r)),anchor:down=>{kayak.state.anchored=!!down;},paddle:(p,turn)=>{demoPaddle={p,turn};},
- hour:()=>hourOf(clock.ms),activity:()=>{const ev=sunEvents(clock.ms);return activityByHour(hourOf(clock.ms),'crepuscular',ev.sunrise?hourOf(ev.sunrise):6.5,ev.sunset?hourOf(ev.sunset):19.5);},
+ hour:()=>hourOf(clock.ms),sun:()=>{const ev=sunEvents(clock.ms);return {sunrise:ev.sunrise?hourOf(ev.sunrise):6.5,sunset:ev.sunset?hourOf(ev.sunset):19.5};},activity:()=>{const ev=sunEvents(clock.ms);return activityByHour(hourOf(clock.ms),'crepuscular',ev.sunrise?hourOf(ev.sunrise):6.5,ev.sunset?hourOf(ev.sunset):19.5);},
  spots:()=>cover.features.filter(f=>FISHABLE.has(f.type)),rigs:()=>RIGS,kayak:()=>({x:kayak.state.x,z:kayak.state.z,heading:kayak.state.heading}),setRig:i=>angling.setRig(i),
  aimAt:(x,z)=>{const yaw=wrapAngle(Math.atan2(x-kayak.state.x,z-kayak.state.z)-kayak.state.heading);look.targetYaw=Math.max(-2.7,Math.min(2.7,yaw));look.targetPitch=-.12;},
  cast:p=>{angling.beginCharge();angling.state.power=p;angling.release(camera);},input:i=>{demoInput=i;if(i.twitch)angling.twitch(simTime);},setHook:()=>angling.setHook(simTime),fightInput:i=>{qaFight=i;},release:()=>releaseFish(),
