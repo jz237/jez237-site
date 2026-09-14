@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-14",
+      "historicDate": "1984-07-09",
+      "displayDate": "Week of July 9-15, 1984",
+      "edition": "Issue 102 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Atari and Commodore lawyer up while summer buyers compare games, graphics and machines that travel.",
+      "leadHeadline": "Atari-Commodore Rivalry Turns into a Fight over Trade Secrets",
+      "storyHeadlines": [
+        "BYTE Puts Computers and Video in the Spotlight",
+        "Sinclair Warns QL Buyers of Delivery Delays",
+        "PC Magazine Surveys a Fast-Growing IBM Ecosystem"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-09.jpg",
+      "thumb": "media/thumbs/1984-07-09.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-13",
       "historicDate": "1984-07-02",
       "displayDate": "Week of July 2-8, 1984",
