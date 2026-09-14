@@ -77,6 +77,9 @@ Mode `gallery` (from menu or play; Esc or Back returns to where it came from). `
 ## v0.25.0 Jaws
 `fish-photo.js`: uniforms `jawOpen`, `jawHingeY` (profile mid-height at station .86); in `<begin_vertex>` vertices with station > .86 and y below the hinge rotate about the hinge (z .36) by −jawOpen × .55 × smoothstep(.86,.92,station); `setJaw(open)` now live; program cache key bumped. `fish.js`: jaw target 1 on STRIKE/BITE, .35 on LANDED, 0 otherwise. QA `studioJaw(open)`. Tests: 86.
 
+## v0.27.0 Top texture
+`source/fish-from-photo.py`: `top.webp` (the dorsal crop; `--top-flip` if head-right, `--no-top` when the generation is a side view), per-station `topMid`/`topHalf` (centroid of dark pixels per column, half extent clamped inside the silhouette), `hasTop`, `topAspect`, `topTint` (linear-light ratio of the lateral photo's upper flank, 10–35 % below the back line, to the dorsal photo's outer flank, 45–85 % of the half extent; clamped .35–3). `fish-photo.js`: `topUv` attribute (u = 1−s, v = topMid + cos(ring) × topHalf × .92), `belly` and `topUv` as varyings, fragment blends `topMap × topTint` over `diffuseColor` with smoothstep(.45,.9, belly) × topOn after `<map_fragment>`, compiled only when the species has a top (cache key v3); `setTop(on)`, `hasTop`. QA `studioRoll(rad)` (rolls the studio fish about its length axis; −π/2 shows the back), `studioTop(on)`. `tests/fish-assets.test.mjs`: every profile, dorsal rows inside the image, tints in range, `top.webp` exists exactly when `hasTop`, the 25 MiB per-file and 45 MB total caps. Tests: 87.
+
 ## v0.26.0 Pectoral fins
 `fish-photo.js`: `pectoralGeometry` (an 8-segment fan, radius .12 L, sweep −10° to 75°, UVs radial), `pectoralTexture` (128² canvas: rays from the base, alpha fading to the edge, cached), tint sampled from the flank image at the fin base (station .76, mid-depth), two cards mirrored at ±halfWidth, yaw ±.45, pitch −.25, sculling ±.12 rad with the swim phase in `setSwim`. Tests: 86.
 
