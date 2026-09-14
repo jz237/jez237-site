@@ -54,7 +54,7 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.31.0';
+export const VERSION='0.32.0';
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -208,6 +208,8 @@ function takeRod(){if(mode!=='demo')return;demo=null;mode='playing';demoTimeScal
 function applyQuality(q){quality=q;lake.setQuality(q);const ratio=q==='high'?Math.min(devicePixelRatio,1.5):q==='medium'?1:.75;renderer.setPixelRatio(ratio);renderer.setSize(innerWidth,innerHeight);lake.resize();dof.resize();renderer.shadowMap.enabled=q==='high'||q==='medium';sun.shadow.mapSize.set(q==='high'?2048:1024,q==='high'?2048:1024);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}}
 function setPolarized(v){polarizedTarget=v?1:0;settings.polarized=!!v;saveSettings(settings);hud.setLenses(!!v);hud.toast(v?'Polarized lenses on':'Lenses off');}
 function setCamera(name){cameraMode=name;}
+// the panel's word for the light: from the sun's elevation and the hour
+function dayPhase(h,el){if(el<-6)return 'Night';if(el<6)return h<12?'Dawn':'Dusk';if(h<11)return 'Morning';if(h<14)return 'Midday';if(h<17)return 'Afternoon';return 'Evening';}
 function toggleMenu(){if(mode==='playing'){mode='menu';keys={};touch?.setActive(false);hud.showMenu({eyebrow:'AT ANCHOR',title:'Take a<br>breath',description:'The lake keeps moving while the menu is open.',button:'Back to the water'});}else start();}
 function start(){mode='playing';hud.hideMenu();keys={};touch?.setActive(true);canvas.focus();if(!tutorial&&!settings.tutorialDone&&!settings.tutorialHinted){settings.tutorialHinted=true;saveSettings(settings);setTimeout(()=>hud.toast('New to the lake? First Morning with Ray on the menu walks you through the first ten minutes.',8000),7500);}if(settings.hint){hud.toast('Hold the mouse button to load the cast, release to throw · Space reels · F twitches · Tab changes rig · X anchor · P lenses',7000);}}
 // --- input
@@ -302,7 +304,7 @@ function step(dt){
  const camDepth=Math.max(0,waterLevel.value-camera.position.y);fx.update(simTime,camera,lake.underwater,camDepth,sd,Math.max(0,Math.min(1,sd.elevation/15)),renderer.getPixelRatio(),quality);
  conditionsClock+=dt;if(conditionsClock>.25){conditionsClock=0;const ev=sunEvents(clock.ms);const doy=dayOfYear(clock.ms);const optics=seasonOptics(doy,weather.rain);lake.setProfile(optics);
   hud.setTackle(angling.snapshot(),angling.rig().name,angling.describe());
-  hud.setConditions({time:formatClock(clock.ms),date:formatDate(clock.ms)+(clock.mode==='real'?' · live':' · '+clock.rate+'×'),wind:Math.round(env.windMs*2.237)+' mph '+compass(weather.from)+' · '+WEATHER[weatherName].label+(weatherName!=='live'&&pressureWord(cond.pressureTrend)!=='steady'?' · pressure '+pressureWord(cond.pressureTrend):''),water:Math.round(waterTempF(doy))+'°F · '+(optics.profile==='lakeClear'?'clear':optics.profile==='lakeStained'?'stained':optics.profile==='lakeBloom'?'algae bloom':'green')+' · '+seasonLine(doy,cond.closed),sun:ev.sunrise?'Sunrise '+formatClock(ev.sunrise)+' · Sunset '+formatClock(ev.sunset):'',hour:hourOfDay(clock.ms)});}
+  hud.setConditions({time:formatClock(clock.ms),date:formatDate(clock.ms)+(clock.mode==='real'?' · live':' · '+clock.rate+'×'),phase:dayPhase(hourOf(clock.ms),lastElevation),night:lastElevation<-6,sky:({calm:'Calm · mist',breeze:'Light breeze',overcast:'Overcast',rain:'Rain'}[weatherName]||WEATHER[weatherName].label)+(weatherName!=='live'&&pressureWord(cond.pressureTrend)!=='steady'?' · '+pressureWord(cond.pressureTrend):''),wind:Math.round(env.windMs*2.237)+' mph '+compass(weather.from),water:Math.round(waterTempF(doy))+'°F · '+(optics.profile==='lakeClear'?'clear':optics.profile==='lakeStained'?'stained':optics.profile==='lakeBloom'?'algae bloom':'green')+' · '+seasonLine(doy,cond.closed),sun:ev.sunrise?'Sunrise '+formatClock(ev.sunrise)+' · Sunset '+formatClock(ev.sunset):'',hour:hourOfDay(clock.ms)});}
  hud.tick();
 }
 // depth of field only where it earns its cost: the fish in hand, the gallery turntable, photo mode
