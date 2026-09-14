@@ -18,7 +18,7 @@ export function skyPalette(e,cloud=0){
  const warm=1-smooth(0,22,e);
  const sunColor=mix3([1,.93,.84],[1,.52,.26],warm);
  const sunIntensity=3.1*Math.pow(clamp((e+1.5)/14,0,1),.75)*(1-cloud*.75);
- const ambientIntensity=lerp(.14,1.15,smooth(-9,18,e))*(1-cloud*.25);
+ const ambientIntensity=lerp(.24,1.15,smooth(-9,18,e))*(1-cloud*.25); // a floor that keeps the deck and the near water readable before sunrise
  let fog=mix3(h,[.82,.84,.80],warm*.25*(1-night));fog=mix3(fog,[.90,.70,.74],warm*.2*(1-night));
  // the pink haze that sits on the horizon while the sun is low, fading to a pale grey-blue by mid-morning
  const haze=mix3([.95,.62,.66],[.86,.88,.94],smooth(2,18,e));

@@ -64,7 +64,7 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.40.2';
+export const VERSION='0.40.3';
 const coolShadow=new T.Color(.5,.48,.72);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
@@ -84,7 +84,40 @@ const sun=new T.DirectionalLight(0xffe1aa,3);sun.castShadow=true;sun.shadow.mapS
 const ambient=new T.HemisphereLight(0xbad6e0,0x4c4636,1);scene.add(ambient);
 const bathy=makeBathymetry(512);
 const sky=makeSky(scene);const envScene=new T.Scene();envScene.add(sky.mesh.clone());const pmrem=new T.PMREMGenerator(renderer);let environment=null,envElevation=-999,envCloud=-1;
-function refreshEnvironment(elevation,cloud){if(Math.abs(elevation-envElevation)<1.5&&Math.abs(cloud-envCloud)<.15)return;envElevation=elevation;envCloud=cloud;if(environment)environment.dispose();environment=pmrem.fromScene(envScene,.04,.1,2000);scene.environment=environment.texture;}
+// The GPU probe: some phone drivers render our half-float targets or the sky's PMREM as black without
+// a single error. At boot a lit sphere goes through each path and is read back; anything black
+// switches that path to a fallback (byte render targets; the environment from a cube camera, or from
+// a plain hemisphere when PMREM itself is dead). The diag overlay prints the results.
+const gpu={probed:false,byte:null,half:null,halfMips:null,envSimple:null,envSky:null,noHalfRT:false,envMode:'pmrem'};
+function probeGPU(){if(gpu.probed)return gpu;gpu.probed=true;try{
+ const pScene=new T.Scene();pScene.add(new T.HemisphereLight(0xffffff,0x334433,1.2));const pSun=new T.DirectionalLight(0xffffff,2.2);pSun.position.set(1,2,1.5);pScene.add(pSun);const pCam=new T.PerspectiveCamera(40,1,.1,20);pCam.position.set(0,0,3.2);pCam.lookAt(0,0,0);
+ const ball=new T.Mesh(new T.SphereGeometry(1,24,16),new T.MeshStandardMaterial({color:0x88aa66,roughness:.9}));pScene.add(ball);
+ const px=new Uint8Array(4);const byteRT=new T.WebGLRenderTarget(24,24);const prev=renderer.getRenderTarget();
+ const read=()=>{renderer.readRenderTargetPixels(byteRT,12,12,1,1,px);return [px[0],px[1],px[2]];};
+ const renderTo=(rt)=>{renderer.setRenderTarget(rt);renderer.clear();renderer.render(pScene,pCam);};
+ renderTo(byteRT);gpu.byte=read();
+ // half-float: render into 16F, then draw that texture onto a quad into the byte target to read it
+ const quadScene=new T.Scene(),quadCam=new T.Camera();const quadMat=new T.MeshBasicMaterial();const quad=new T.Mesh(new T.PlaneGeometry(2,2),quadMat);quadScene.add(quad);
+ const via=(rt)=>{renderTo(rt);quadMat.map=rt.texture;quadMat.needsUpdate=true;renderer.setRenderTarget(byteRT);renderer.clear();renderer.render(quadScene,quadCam);const c=read();rt.dispose();return c;};
+ const floating=renderer.extensions.has('EXT_color_buffer_float');
+ if(floating){gpu.half=via(new T.WebGLRenderTarget(24,24,{type:T.HalfFloatType}));gpu.halfMips=via(new T.WebGLRenderTarget(32,32,{type:T.HalfFloatType,generateMipmaps:true,minFilter:T.LinearMipmapLinearFilter}));}
+ const dark=c=>!c||(c[0]+c[1]+c[2])<6;
+ gpu.noHalfRT=floating&&(dark(gpu.half)||dark(gpu.halfMips));
+ // the environment: PMREM from a plain bright scene, and PMREM from our sky
+ const shiny=new T.Mesh(new T.SphereGeometry(1,24,16),new T.MeshStandardMaterial({color:0xffffff,roughness:.2,metalness:.8}));ball.visible=false;pScene.add(shiny);
+ const simpleScene=new T.Scene();simpleScene.background=new T.Color(.6,.5,.4);const litBox=new T.Mesh(new T.BoxGeometry(3,3,3),new T.MeshBasicMaterial({color:0xffe0a0,side:T.BackSide}));simpleScene.add(litBox);
+ const envA=pmrem.fromScene(simpleScene,0,.1,50);shiny.material.envMap=envA.texture;renderTo(byteRT);gpu.envSimple=read();envA.dispose();
+ const envB=pmrem.fromScene(envScene,.04,.1,2000);shiny.material.envMap=envB.texture;renderTo(byteRT);gpu.envSky=read();envB.dispose();
+ gpu.envMode=dark(gpu.envSky)?(dark(gpu.envSimple)?'none':'cubemap'):'pmrem';
+ renderer.setRenderTarget(prev);byteRT.dispose();
+ if(gpu.noHalfRT){for(const rt of [lake.refract,lake.reflect,dof.rt]){rt.texture.type=T.UnsignedByteType;rt.dispose();}}
+ envElevation=-999;refreshEnvironment(lastElevation,weather.cloud);
+}catch(e){console.warn('gpu probe',e);}return gpu;}
+const envCubeRT=new T.WebGLCubeRenderTarget(128,{generateMipmaps:true,minFilter:T.LinearMipmapLinearFilter});const envCubeCam=new T.CubeCamera(.1,2000,envCubeRT);
+function refreshEnvironment(elevation,cloud){if(Math.abs(elevation-envElevation)<1.5&&Math.abs(cloud-envCloud)<.15)return;envElevation=elevation;envCloud=cloud;if(environment){environment.dispose();environment=null;}
+ if(gpu.envMode==='none'){scene.environment=null;scene.environmentIntensity=0;ambient.intensity*=1;return;}
+ if(gpu.envMode==='cubemap'){envCubeCam.update(renderer,envScene);environment=pmrem.fromCubemap(envCubeRT.texture);scene.environment=environment.texture;return;}
+ environment=pmrem.fromScene(envScene,.04,.1,2000);scene.environment=environment.texture;}
 // mist banks along the far shore and across the cove, where the concept's dawn keeps them
 const mistBanks=[];for(const u of [90,150,215,280,345,400]){for(const side of [1,-1]){const p=shorePoint(u,side,14+(u%3)*4);mistBanks.push({x:p.x,z:p.z,w:44+(u%5)*6,h:2.6+(u%4)*.4});}}for(const [u,v] of [[180,-.25],[260,.3],[330,0]]){const p=worldFromFrame(u,v*halfWidth(u,v<0?-1:1));mistBanks.push({x:p.x,z:p.z,w:70,h:3.2});}
 const mist=makeMist(scene,{banks:mistBanks});const bed=makeLakeBed(scene,bathy,300),cover=makeCover(scene,bathy),shore=makeShoreScenery(scene,bathy),treeline=makeTreeline(scene,bathy),kayak=makeKayak(scene);
@@ -263,7 +296,8 @@ function startDemo(seed=Math.floor(Math.random()*1e6)){ambience.unlock();demo=cr
 function takeRod(){if(mode!=='demo')return;demo=null;mode='playing';demoTimeScale=1;qaFight=null;demoInput={reeling:false,twitch:false};demoPaddle={p:0,turn:0};hud.setDemo(false);hud.setCaption('');hud.hideCard();if(cameraMode==='lurecam'||cameraMode==='shore')cameraMode='surface';touch?.setActive(true);setRate(settings.timeRate==='real'?'real':String(settings.timeRate||4));hud.toast('You have the rod');}
 function applyQuality(q){quality=q;lake.setQuality(q);const ratio=q==='high'?Math.min(devicePixelRatio,1.5):q==='medium'?1:.75;renderer.setPixelRatio(ratio);renderer.setSize(innerWidth,innerHeight);lake.resize();dof.resize();renderer.shadowMap.enabled=q==='high'||q==='medium';sun.shadow.mapSize.set(q==='high'?2048:1024,q==='high'?2048:1024);if(sun.shadow.map){sun.shadow.map.dispose();sun.shadow.map=null;}warmShadows();}
 // The shadow map must exist before the first lit draw samples it: Three sets up the lights before it renders shadows, so on the first pass after the map is (re)created the hardware-compare sampler sees an empty texture and every shadow-receiving draw is rejected (a two-frame flash on desktop, a black lake on some phone drivers).
-function warmShadows(){if(!renderer.shadowMap.enabled)return;try{renderer.shadowMap.needsUpdate=true;renderer.shadowMap.render([sun],scene,camera);renderer.shadowMap.needsUpdate=false;}catch(e){console.warn('shadow warm-up',e);}}
+const warmRT=new T.WebGLRenderTarget(8,8);
+function warmShadows(){if(!renderer.shadowMap.enabled)return;try{const prev=renderer.getRenderTarget();renderer.shadowMap.needsUpdate=true;renderer.setRenderTarget(warmRT);renderer.render(scene,camera);renderer.setRenderTarget(prev);renderer.shadowMap.needsUpdate=false;}catch(e){console.warn('shadow warm-up',e);}} // a throwaway render: the shadow map is created inside it, so the frames that follow sample a real map
 function setPolarized(v){polarizedTarget=v?1:0;settings.polarized=!!v;saveSettings(settings);hud.setLenses(!!v);hud.toast(v?'Polarized lenses on':'Lenses off');}
 function setCamera(name){cameraMode=name;}
 // the panel's word for the light: from the sun's elevation and the hour
@@ -304,7 +338,7 @@ function step(dt){
  if(session&&!session.closed&&mode==='playing'){if(!session.over)sessionTick(session,dt);else session.elapsed+=dt;hud.setSession({label:(VARIANTS[session.variant]||VARIANTS.dawn).label,target:targetName(session),remaining:formatRemaining(remaining(session)),score:session.score});const busy=angling.state.phase==='fight'||angling.state.phase==='bite'||angling.state.phase==='landed';if(session.over&&(!busy||session.elapsed>20*60+75))closeCurrentSession();}
  const sd=sunDirection(clock.ms);lastElevation=sd.elevation;env.light=Math.max(0,Math.min(1,(sd.elevation+2)/12));const palette=skyPalette(sd.elevation,weather.cloud);lastPalette=palette;sky.apply(palette,sd,sd.elevation,weather.cloud);
  sun.position.set(kayak.state.x+sd.x*320,Math.max(12,sd.y*320),kayak.state.z+sd.z*320);sun.target.position.set(kayak.state.x,0,kayak.state.z);sun.intensity=palette.sunIntensity;sun.color.setRGB(...palette.sunColor);sun.visible=palette.sunIntensity>.01;
- ambient.intensity=palette.ambientIntensity;ambient.color.setRGB(...palette.horizon).multiplyScalar(1.15);ambient.groundColor.setRGB(.26,.23,.17);{const cool=1-Math.min(1,Math.max(0,sd.elevation/14));ambient.color.lerp(coolShadow,.3*cool*(1-palette.night));} // low sun: warm light, cool shadows
+ ambient.intensity=palette.ambientIntensity*(gpu.envMode==='none'?2.4:1);ambient.color.setRGB(...palette.horizon).multiplyScalar(1.15);ambient.groundColor.setRGB(.26,.23,.17);{const cool=1-Math.min(1,Math.max(0,sd.elevation/14));ambient.color.lerp(coolShadow,.3*cool*(1-palette.night));} // low sun: warm light, cool shadows
  fogAir.color.setRGB(...palette.fogColor);fogAir.density=palette.fogDensity;const sc=lake.mat.uniforms.waterScatter.value;fogWater.density=underwaterFogDensity(lake.mat.uniforms.clarity.value,sc.y);fogWater.color.setRGB(...underwaterFogColor([sc.x,sc.y,sc.z],Math.max(0,Math.min(1,sd.elevation/18)),palette.night));scene.environmentIntensity=(.35+.45*(1-palette.night))*(lake.underwater?.35:1);if(lake.underwater){ambient.intensity*=.5;ambient.color.multiply(new T.Color(.55,.85,.7));}
  sky.mesh.position.copy(camera.position);refreshEnvironment(sd.elevation,weather.cloud);mist.update(simTime,camera.position,sd.elevation,weather.wind,palette,sd);
  {const kp={x:kayak.state.x,z:kayak.state.z};for(const e of wildlife.update(dt,{t:simTime,elevation:sd.elevation,wind:weather.wind,kayak:kp,camera:camera.position,ripple:(x,z,k)=>addRipple(x,z,k)})){if(e==='geese')ambience.shot('geese',.55);else if(e==='takeoff'){const wd=wildlife.state(kp).heron.dist||30;ambience.shot('heron',.9*Math.max(.2,1-wd/60));}}
@@ -393,14 +427,14 @@ const app={step,render,renderer,version:VERSION,start,demo:seed=>startDemo(seed)
 installQA(app);
 hud.setSettings(settings);applyAccess();setWeather(settings.weather);Object.assign(weather,WEATHER[settings.weather]);setRate(settings.timeRate==='real'?'real':String(settings.timeRate||4));
 hud.showMenu({});
-try{applyQuality(quality);warmShadows();step(.016);renderer.compile(scene,camera);render();$('start').disabled=false;$('start').textContent='Paddle out';requestAnimationFrame(frame);}catch(e){hud.error('The lake could not load: '+e.message);console.error(e);}
+try{applyQuality(quality);warmShadows();step(.016);renderer.compile(scene,camera);render();probeGPU();render();$('start').disabled=false;$('start').textContent='Paddle out';requestAnimationFrame(frame);}catch(e){hud.error('The lake could not load: '+e.message);console.error(e);}
 
 // ?diag=1: a readout plus a self-test for screenshots from devices we cannot attach to. Every two
 // seconds it renders one sphere per material family into a tiny target and reads the colour back,
 // renders the real kayak into a small target, and samples the live frame at the sky, the water and
 // the deck, so a black lake can be blamed on a material, a light or a pass from one screenshot.
 if(new URLSearchParams(location.search).get('diag')){const box=document.createElement('pre');box.id='diag';box.style.cssText='position:fixed;left:8px;bottom:8px;z-index:99;max-width:92vw;font:11px/1.35 monospace;color:#fff;background:rgba(0,0,0,.72);padding:8px 10px;border-radius:8px;white-space:pre-wrap;pointer-events:none';document.body.appendChild(box);const errs=[];const push=m=>{errs.push(String(m).slice(0,140));if(errs.length>4)errs.shift();};const ce=console.error.bind(console);console.error=(...a)=>{push(a.join(' '));ce(...a);};window.addEventListener('error',e=>push(e.message));window.addEventListener('unhandledrejection',e=>push('promise: '+(e.reason&&e.reason.message||e.reason)));
- const gl=renderer.getContext();const dbg=gl.getExtension('WEBGL_debug_renderer_info');const gpu=dbg?gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL):'(masked)';let glErrs=0;
+ const gl=renderer.getContext();const dbg=gl.getExtension('WEBGL_debug_renderer_info');const gpuName=dbg?gl.getParameter(dbg.UNMASKED_RENDERER_WEBGL):'(masked)';let glErrs=0;
  // the probe: isolated lights, one sphere per material family
  const pScene=new T.Scene();pScene.add(new T.HemisphereLight(0xffffff,0x334433,1.2));const pSun=new T.DirectionalLight(0xffffff,2.2);pSun.position.set(1,2,1.5);pScene.add(pSun);
  const pCam=new T.PerspectiveCamera(40,1,.1,20);pCam.position.set(0,0,3.2);pCam.lookAt(0,0,0);
@@ -410,7 +444,7 @@ if(new URLSearchParams(location.search).get('diag')){const box=document.createEl
  const rt=new T.WebGLRenderTarget(24,24);const px=new Uint8Array(4);
  const readRT=(sc,cam)=>{const prev=renderer.getRenderTarget();renderer.setRenderTarget(rt);renderer.clear();renderer.render(sc,cam);renderer.readRenderTargetPixels(rt,12,12,1,1,px);renderer.setRenderTarget(prev);return px[0]+','+px[1]+','+px[2];};
  const kCam=new T.PerspectiveCamera(50,1,.1,50);
- setInterval(()=>{let e;while((e=gl.getError()))glErrs++;const sm=sun.shadow.map;let out=`First Light ${VERSION} · ${gpu}\ntier ${quality} · dpr ${renderer.getPixelRatio().toFixed(2)} · ${innerWidth}×${innerHeight} · float RT ${renderer.extensions.has('EXT_color_buffer_float')} · precision ${renderer.capabilities.precision} · gl errors ${glErrs}\nshadows ${renderer.shadowMap.enabled?['Basic','PCF','PCFSoft','VSM'][renderer.shadowMap.type]||renderer.shadowMap.type:'off'} map ${sm?sm.width+'²':'none'} · grade ${settings.grade!==false} · env ${!!scene.environment} · sun ${sun.intensity.toFixed(2)} amb ${ambient.intensity.toFixed(2)} fog ${(scene.fog&&scene.fog.density||0).toFixed(4)}\n`;
+ setInterval(()=>{let e;while((e=gl.getError()))glErrs++;const sm=sun.shadow.map;let out=`First Light ${VERSION} · ${gpuName}\ntier ${quality} · dpr ${renderer.getPixelRatio().toFixed(2)} · ${innerWidth}×${innerHeight} · float RT ${renderer.extensions.has('EXT_color_buffer_float')} · precision ${renderer.capabilities.precision} · gl errors ${glErrs}\nshadows ${renderer.shadowMap.enabled?['Basic','PCF','PCFSoft','VSM'][renderer.shadowMap.type]||renderer.shadowMap.type:'off'} map ${sm?sm.width+'²':'none'} · grade ${settings.grade!==false} · env ${gpu.envMode}${scene.environment?'':' (null)'} · sun ${sun.intensity.toFixed(2)} amb ${ambient.intensity.toFixed(2)} fog ${(scene.fog&&scene.fog.density||0).toFixed(4)}\ngpu probe byte ${gpu.byte} · half ${gpu.half} · halfMips ${gpu.halfMips} · envSimple ${gpu.envSimple} · envSky ${gpu.envSky} · noHalfRT ${gpu.noHalfRT} · lakeRT ${lake.refract.texture.type===T.HalfFloatType?'16F':'byte'}\n`;
   try{const cols=[];for(const k in balls){for(const j in balls)balls[j].visible=j===k;if(k==='env')probes.env.envMap=scene.environment||null;cols.push(k+' '+readRT(pScene,pCam));}for(const j in balls)balls[j].visible=false;out+='probe '+cols.join(' | ')+'\n';
    const ks=kayak.state;kCam.position.set(ks.x+Math.sin(ks.heading+2.4)*3.2,1.4,ks.z+Math.cos(ks.heading+2.4)*3.2);kCam.lookAt(ks.x,.25,ks.z);out+='real kayak in scene '+readRT(scene,kCam)+'\n';
    app.render();const w=gl.drawingBufferWidth,h=gl.drawingBufferHeight;const at=(fx,fy)=>{gl.readPixels(Math.floor(w*fx),Math.floor(h*(1-fy)),1,1,gl.RGBA,gl.UNSIGNED_BYTE,px);return px[0]+','+px[1]+','+px[2];};out+=`frame sky ${at(.5,.12)} · far water ${at(.5,.55)} · near water ${at(.3,.8)} · bow ${at(.5,.7)} · seat ${at(.5,.93)}\n`;}catch(err){out+='self-test failed: '+String(err).slice(0,100)+'\n';}
