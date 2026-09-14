@@ -122,3 +122,27 @@ body.touch-active #caption{bottom:auto;top:66px;font-size:13px;max-width:60vw}
 
 /* Ray's hotspot line under the rig card */
 #coachLine{display:none;margin-top:6px;font-size:11px;color:#e8c77a;letter-spacing:.01em}#coachLine.show{display:block}body.touch-active #coachLine{display:none!important}
+
+/* ---- accessibility and comfort: interface zoom, high-contrast and colour-safe HUD palettes ---- */
+:root{--ui-zoom:1}
+#infoPanel,#locChip,#rail,#toast,#caption,#catchCard,#sessionCard,#sessionBar,#mapPanel .mpanel,#replayBar,#photoBar,#tutorialBar,.timebar,footer,.panel,#gallery .gpanel,#demoBadge{zoom:var(--ui-zoom)}
+body.touch-active #infoPanel,body.touch-active #rail,body.touch-active #locChip{zoom:min(var(--ui-zoom),1.2)}
+body.hud-contrast .glass,body.hud-contrast #toast,body.hud-contrast #caption,body.hud-contrast #catchCard,body.hud-contrast #sessionCard,body.hud-contrast .panel{background:rgba(3,12,16,.92)!important;border:2px solid rgba(255,255,255,.55)!important;backdrop-filter:none!important;box-shadow:none!important}
+body.hud-contrast,body.hud-contrast #infoPanel,body.hud-contrast #locChip,body.hud-contrast #rail button{color:#ffffff}
+body.hud-contrast .chip{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.35)}
+body.hud-contrast #rigCard{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.5)}
+body.hud-contrast .ipTime span,body.hud-contrast .chip small,body.hud-contrast #locChip span,body.hud-contrast .sunLine,body.hud-contrast #lineInfo{opacity:1;color:#f4f4f0}
+body.hud-contrast #rigCard em,body.hud-contrast #coachLine,body.hud-contrast .ipSun svg{color:#ffe36b}
+body.hud-contrast #reticle{border-color:#fff;border-width:2px;box-shadow:0 0 0 2px #000}
+/* colour-safe: the Okabe-Ito pairs; tension runs blue to orange to vermilion, alerts go yellow on black */
+body.hud-colorsafe #tension i{background:linear-gradient(90deg,#56B4E9 0%,#E69F00 60%,#D55E00 92%)}
+body.hud-colorsafe #tension{background:#ffffff44}
+body.hud-colorsafe #rigCard em,body.hud-colorsafe #coachLine,body.hud-colorsafe #rigCard svg,body.hud-colorsafe .ipSun svg,body.hud-colorsafe #locChip svg{color:#F0E442}
+body.hud-colorsafe #holderLine.alert{color:#000;background:#F0E442;padding:2px 6px;border-radius:6px}
+body.hud-colorsafe #rail #lenses.on{background:#F0E442;color:#000}
+body.hud-colorsafe #touchControls .cast{border-color:#F0E442;box-shadow:0 0 0 6px rgba(240,228,66,.2)}
+body.hud-colorsafe #touchControls .held{background:#F0E442cc;color:#000}
+body.reduce-motion #holderLine.alert{animation:none}
+
+/* the time bar keeps clear of the rail when the interface is zoomed */
+.timebar{zoom:min(var(--ui-zoom),1.15);right:calc(30px + 62px * var(--ui-zoom))}

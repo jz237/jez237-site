@@ -9,6 +9,7 @@ export function mountHud(handlers){
  $('steady').onchange=e=>handlers.onSteady(e.target.checked);
  $('dof').onchange=e=>handlers.onDof(e.target.checked);
  $('coach').onchange=e=>handlers.onCoach(e.target.checked);
+ $('textSize').onchange=e=>handlers.onAccess({textSize:e.target.value});$('hudMode').onchange=e=>handlers.onAccess({hudMode:e.target.value});$('simple').onchange=e=>handlers.onAccess({simple:e.target.checked});$('gradeOn').onchange=e=>handlers.onAccess({grade:e.target.checked});
  $('liveWeather').onchange=e=>handlers.onLiveWeather(e.target.checked);
  $('voiceVol').oninput=e=>handlers.onVoice(Number(e.target.value));
  $('ambVol').oninput=e=>handlers.onAmbience(Number(e.target.value));
@@ -34,7 +35,7 @@ export function mountHud(handlers){
   els,
   showMenu({eyebrow,title,description,button}){els.overlay.classList.remove('hidden');if(eyebrow)els.eyebrow.textContent=eyebrow;if(title)els.title.innerHTML=title;if(description)els.description.textContent=description;if(button)els.start.textContent=button;els.start.disabled=false;},
   hideMenu(){els.overlay.classList.add('hidden');els.hud.classList.remove('hidden');},
-  setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('dof').checked=s.dof!==false;$('coach').checked=s.coach!==false;$('liveWeather').checked=s.liveWeather!==false;$('voiceVol').value=s.voice===undefined?.8:s.voice;$('ambVol').value=s.ambience===undefined?.7:s.ambience;$('realism').value=s.realism||'standard';$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
+  setSettings(s){$('quality').value=s.quality;$('steady').checked=!!s.steadyCamera;$('dof').checked=s.dof!==false;$('coach').checked=s.coach!==false;$('textSize').value=s.textSize||'normal';$('hudMode').value=s.hudMode||'standard';$('simple').checked=!!s.simple;$('gradeOn').checked=s.grade!==false;$('liveWeather').checked=s.liveWeather!==false;$('voiceVol').value=s.voice===undefined?.8:s.voice;$('ambVol').value=s.ambience===undefined?.7:s.ambience;$('realism').value=s.realism||'standard';$('fov').value=s.fov;$('rate').value=String(s.timeRate);$('weather').value=s.weather;$('lenses').classList.toggle('on',!!s.polarized);},
   setConditions(c){els.clock.textContent=c.time;els.date.textContent=c.date;els.wind.textContent=c.wind;{const parts=(c.water||'').split(' · ');els.water.textContent=parts.slice(0,2).join(' · ');els.water.closest('.chip').title=c.water;els.sun.textContent=c.sun+(parts.length>2?' · '+parts.slice(2).join(' · '):'');}if(c.sky!==undefined)els.sky.textContent=c.sky;if(c.phase!==undefined)els.phase.textContent=c.phase;if(c.night!==undefined){els.sunIcon.style.display=c.night?'none':'inline';els.moonIcon.style.display=c.night?'inline':'none';}if(c.hour!==undefined&&document.activeElement!==$('timeSlider'))$('timeSlider').value=c.hour.toFixed(2);},
   setCoachLine(text){const el=$('coachLine');if(el.textContent!==text)el.textContent=text;el.classList.toggle('show',!!text);},
   setHolder(text,alert){if(els.holderLine.textContent!==text)els.holderLine.textContent=text;els.holderLine.classList.toggle('alert',!!alert);els.holderLine.classList.toggle('show',!!text);},
