@@ -17,6 +17,7 @@ export function mountHud(handlers){
  $('menu').onclick=()=>handlers.onMenu();
  $('rigBtn').onclick=()=>handlers.onRig();
  $('ccRelease').onclick=()=>handlers.onRelease();
+ $('ccPhoto').onclick=()=>handlers.onPhoto();$('photoBtn').onclick=()=>handlers.onPhotoMode();$('pbSave').onclick=()=>handlers.onPhotoSave();$('pbBack').onclick=()=>handlers.onPhotoBack();
  $('watch').onclick=()=>handlers.onWatch();
  $('galleryBtn').onclick=()=>handlers.onGallery();
  $('sessionBtn').onclick=()=>handlers.onSession($('sessionVariant').value);
