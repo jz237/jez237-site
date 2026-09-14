@@ -2,7 +2,14 @@
 // camera, thickest in the calm half hour around sunrise and gone once the sun climbs or the wind rises.
 import * as T from './vendor/three.module.js';
 const smooth=(a,b,v)=>{const x=Math.max(0,Math.min(1,(v-a)/(b-a)));return x*x*(3-2*x);};
-export function makeMist(scene){
+// a mist bank: a soft sprite over the water, brighter when the sun is behind it
+function bankTexture(){const W=256,H=128,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');const img=g.createImageData(W,H);const d=img.data;
+ const hash=(x,y)=>{const s=Math.sin(x*127.1+y*311.7)*43758.5453;return s-Math.floor(s);};const smooth=(v)=>v*v*(3-2*v);
+ const n2=(x,y)=>{const ix=Math.floor(x),iy=Math.floor(y),fx=smooth(x-ix),fy=smooth(y-iy);const a=hash(ix,iy),b=hash(ix+1,iy),cc=hash(ix,iy+1),dd=hash(ix+1,iy+1);return (a+(b-a)*fx)+((cc+(dd-cc)*fx)-(a+(b-a)*fx))*fy;};
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){const u=x/W*2-1,v=y/H*2-1;const ell=Math.max(0,1-(u*u+v*v*2.2));const n=n2(x/38,y/22)*.6+n2(x/13,y/9)*.4;const a=Math.pow(ell,1.4)*(.55+.45*n)*(1-Math.max(0,v)*.35);const i=(y*W+x)*4;d[i]=d[i+1]=d[i+2]=255;d[i+3]=Math.round(255*Math.min(1,a));}
+ g.putImageData(img,0,0);const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;return t;}
+export function makeMist(scene,{banks:bankSpots=[]}={}){
+ const bankTex=bankSpots.length?bankTexture():null;const banks=bankSpots.map((b,i)=>{const m=new T.SpriteMaterial({map:bankTex,transparent:true,depthWrite:false,opacity:0,color:0xffffff});const s=new T.Sprite(m);s.position.set(b.x,b.y||1.1,b.z);s.scale.set(b.w||50,b.h||3,1);s.renderOrder=4;s.userData.skipRefraction=true;s.userData.skipReflection=true;s.userData.phase=i*1.7;scene.add(s);return s;});
  const u={time:{value:0},strength:{value:0},tint:{value:new T.Color(.85,.86,.84)},eye:{value:new T.Vector3()}};
  const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,uniforms:u,vertexShader:`varying vec3 wp;void main(){wp=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(wp,1.);}`,
   fragmentShader:`uniform float time,strength;uniform vec3 tint,eye;varying vec3 wp;
@@ -15,5 +22,9 @@ void main(){vec2 p=wp.xz*.045+vec2(time*.012,-time*.007);float n=noise(p)*.55+no
  #include <colorspace_fragment>}`});
  // Every sheet stays below the seated eye (0.62 m) so the mist is something you look down onto, never a veil over the sky.
  const layers=[];for(let i=0;i<3;i++){const m=new T.Mesh(new T.PlaneGeometry(520,520),mat);m.rotation.x=-Math.PI/2;m.position.y=.12+i*.16;m.renderOrder=3;m.userData.skipRefraction=true;m.userData.skipReflection=true;m.frustumCulled=false;scene.add(m);layers.push(m);}
- return {layers,update(t,eye,elevation,wind,palette){u.time.value=t;u.eye.value.copy(eye);const dawn=smooth(-7,-1,elevation)*(1-smooth(5,14,elevation));u.strength.value=dawn*(1-smooth(.15,.5,wind));u.tint.value.setRGB(palette.fogColor[0]*1.05,palette.fogColor[1]*1.05,palette.fogColor[2]*1.02);for(const m of layers){m.position.x=eye.x;m.position.z=eye.z;m.visible=u.strength.value>.01;}}};
+ return {layers,banks,update(t,eye,elevation,wind,palette,sunDir=null){u.time.value=t;u.eye.value.copy(eye);const dawn=smooth(-7,-1,elevation)*(1-smooth(5,14,elevation));u.strength.value=dawn*(1-smooth(.15,.5,wind));u.tint.value.setRGB(palette.fogColor[0]*1.05,palette.fogColor[1]*1.05,palette.fogColor[2]*1.02);for(const m of layers){m.position.x=eye.x;m.position.z=eye.z;m.visible=u.strength.value>.01;}
+   // the banks: strongest in the calm dawn, glowing where the low sun is behind them
+   const bankStrength=smooth(-8,-2,elevation)*(1-smooth(6,18,elevation))*(1-smooth(.2,.55,wind));
+   for(const s of banks){const dx=s.position.x-eye.x,dz=s.position.z-eye.z,dl=Math.hypot(dx,dz)||1;const toward=sunDir?Math.max(0,(dx/dl)*sunDir.x+(dz/dl)*sunDir.z):0;const glow=.35+.65*toward*toward;
+    s.material.opacity=bankStrength*(.55+.25*Math.sin(t*.05+s.userData.phase))*.85;s.material.color.setRGB(palette.fogColor[0]*(.9+.5*glow),palette.fogColor[1]*(.9+.42*glow),palette.fogColor[2]*(.9+.3*glow));s.visible=s.material.opacity>.01;s.position.y=(s.userData.baseY??(s.userData.baseY=s.position.y))+.15*Math.sin(t*.07+s.userData.phase);}}};
 }

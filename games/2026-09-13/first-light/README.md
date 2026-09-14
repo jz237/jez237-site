@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.32.0, cinematic UI)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.33.0, tree line)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## The tree line, and mist on the water (v0.33.0)
+
+Toward the concept's hero image. The banks were a scattering of branch-and-leaf trees that never made a skyline; now a conifer tree line stands over them: crossed cards painted once on a canvas as a spruce in layered jagged tiers, a dense band along the waterline (nine to twenty metres) and taller ones on the hill crests (twelve to twenty-five), placed by a pure planner that keeps them on land and puts the tallest on the ridges so the skyline serrates against the dawn. They are instanced in 64 m bins, tinted per tree, sway with the wind, cast shadows near the water and stand in the planar reflection. Backlit at first light they are the black serrated line of the picture. Mist banks join the sheets: soft sprites along the far shore and across the cove, strongest in the calm half hour around sunrise, brighter where the low sun is behind them, gone by mid-morning or in a breeze. Verified headless: the horizon band of the dawn frame from the kayak went from 24 % to 31 % dark pixels, the banks show at dawn and vanish at noon in a breeze, and the triangle count stays modest.
 
 ## Clean cinematic UI (v0.32.0)
 
