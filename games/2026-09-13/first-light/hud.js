@@ -20,7 +20,7 @@ export function mountHud(handlers){
  $('ccPhoto').onclick=()=>handlers.onPhoto();$('photoBtn').onclick=()=>handlers.onPhotoMode();$('pbSave').onclick=()=>handlers.onPhotoSave();$('pbBack').onclick=()=>handlers.onPhotoBack();
  $('watch').onclick=()=>handlers.onWatch();
  $('galleryBtn').onclick=()=>handlers.onGallery();
- $('sessionBtn').onclick=()=>handlers.onSession($('sessionVariant').value);
+ $('sessionBtn').onclick=()=>handlers.onSession($('sessionVariant').value);$('bigBassBtn').onclick=()=>handlers.onBigBass();
  $('scSubmit').onclick=()=>handlers.onSessionSubmit($('scInitials').value);$('scBack').onclick=()=>handlers.onSessionBack();$('scInitials').onkeydown=e=>{if(e.key==='Enter')handlers.onSessionSubmit($('scInitials').value);e.stopPropagation();};
  $('timeSlider').oninput=e=>handlers.onHour(Number(e.target.value));
  return {
@@ -36,7 +36,7 @@ export function mountHud(handlers){
   setTension(show,value,label){els.tension.classList.toggle('show',!!show);if(show){els.tensionFill.style.width=(Math.min(1,value)*100).toFixed(0)+'%';els.tensionLabel.textContent=label||'';}},
   showCard(c){$('ccSpecies').textContent=c.species;$('ccSize').textContent=c.size;$('ccDetail').textContent=c.detail;$('ccMeta').textContent=c.meta;els.card.classList.remove('hidden');},hideCard(){els.card.classList.add('hidden');},
   setLenses(v){$('lenses').classList.toggle('on',!!v);},
-  setSession(s){const el=$('sessionBar');if(!s){el.classList.remove('show');return;}el.classList.add('show');el.innerHTML=`${s.label} · target <b>${s.target}</b> · <b>${s.remaining}</b> left · <b>${s.score}</b> pts`;},
+  setSession(s){const el=$('sessionBar');if(!s){el.classList.remove('show');return;}el.classList.add('show');el.innerHTML=s.html||`${s.label} · target <b>${s.target}</b> · <b>${s.remaining}</b> left · <b>${s.score}</b> pts`;},
   showSessionCard(c){$('scTitle').textContent=c.title;$('scSummary').textContent=c.summary;$('scTarget').textContent=c.target;$('scInitials').value=c.initials||'';$('scBoard').innerHTML=c.rows||'';$('sessionCard').classList.remove('hidden');$('scInitials').focus();},
   setSessionBoard(rows){$('scBoard').innerHTML=rows;},hideSessionCard(){$('sessionCard').classList.add('hidden');},
   toast(text,ms=3200){els.toast.textContent=text;els.toast.style.opacity=1;toastUntil=performance.now()+ms;},
