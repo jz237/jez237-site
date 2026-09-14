@@ -29,6 +29,7 @@ export function riderMotion(memory,time,turn,motion={}){
  const recovery=spring(memory,'recovery',clamp((motion.impact||0)*.022,0,.19),5,dt);
  const counter=spring(memory,'counter',clamp(-(motion.rollVelocity||0)*.045,-.09,.09),11,dt);
  const brace=spring(memory,'brace',motion.airborne?clamp(-(motion.verticalSpeed||0)/9,0,1):0,14,dt);
+ const duck=spring(memory,'duck',Math.max(0,Math.min(1,motion.sprayExposure||0)),13,dt);
  const wetness=spring(memory,'wetness',clamp(.25+(motion.speed||0)/35+(motion.impact||0)*.08,0,1),2,dt);
- return {...motion,turn:lean,forwardShift:forward,compression,flightBlend:flight,loadShift:load,wetness,recovery,counter,brace,steering:(motion.steering??turn*.3)+helm};
+ return {...motion,turn:lean,forwardShift:forward-duck*.08,compression:Math.min(.38,compression+duck*.13),flightBlend:flight,loadShift:load,wetness:Math.max(wetness,duck),recovery,counter,brace:Math.max(brace,duck*.7),duck,steering:(motion.steering??turn*.3)+helm};
 }

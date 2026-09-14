@@ -1,0 +1,27 @@
+import {waterDetail} from './water-detail.js';
+import * as T from './vendor/three.module.js';
+import {wave,waterLevel} from './simulation.js';
+import {cloudMaterial} from './weather-light.js';
+const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
+export function breakerProfile(v,age,height){const collapse=clamp((age-.62)/.38),curl=clamp(age/.66),angle=-Math.PI/2+v*(Math.PI/2+curl*1.95),radius=height*(1-collapse*.82);return {forward:radius*(1+Math.sin(angle))+collapse*height*.9,y:radius*Math.cos(angle)-collapse*.20,foam:clamp((v-.62)*2+collapse)};}
+export function makeCurlingBreakers(scene){const patches=[],segments=28,rows=14;let ground=null,previous=null,scan=0,phase=0,emitted=0;
+ for(let k=0;k<6;k++){const g=new T.PlaneGeometry(1,1,segments,rows),color=new Float32Array(g.attributes.position.count*3);g.setAttribute('color',new T.BufferAttribute(color,3));const m=new T.MeshStandardMaterial({color:0x337d72,roughness:.09,metalness:.08,transparent:true,opacity:.45,side:T.DoubleSide,depthWrite:false});m.onBeforeCompile=shader=>{shader.uniforms.breakerDetail={value:waterDetail};shader.uniforms.breakerPhase=m.userData.phase={value:0};shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying vec2 breakerUV;varying vec3 breakerP;').replace('#include <begin_vertex>','#include <begin_vertex>\nbreakerUV=uv;breakerP=position;');shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform sampler2D breakerDetail;uniform float breakerPhase;varying vec2 breakerUV;varying vec3 breakerP;').replace('#include <color_fragment>',`#include <color_fragment>
+ float grain=dot(texture2D(breakerDetail,breakerP.xz*1.7+vec2(breakerPhase*.08,0.)).rg,vec2(.6,.4));
+ float lip=smoothstep(.64,.95,1.-breakerUV.y),collapse=smoothstep(.62,.95,breakerPhase);float foam=max(lip,collapse)*smoothstep(.43,.61,grain);
+ diffuseColor.rgb=mix(diffuseColor.rgb,vec3(.75,.86,.83),foam*.92);
+ diffuseColor.a*=smoothstep(0.,.14,sin(breakerUV.x*3.14159))*smoothstep(0.,.22,1.-breakerUV.y)*mix(.45,1.5,foam);
+ `).replace('#include <normal_fragment_maps>',`#include <normal_fragment_maps>
+ vec2 ripple=texture2D(breakerDetail,breakerP.xz*1.2+breakerPhase*.04).rg-.5;normal=normalize(normal+vec3(ripple*.17,0.));`);};cloudMaterial(m);const mesh=new T.Mesh(g,m);mesh.visible=false;mesh.frustumCulled=false;mesh.userData.skipRefraction=true;scene.add(mesh);patches.push({mesh,heights:new Float32Array(segments+1),age:10,life:1.65});}
+ return {stats:{active:0,emitted:0},inspect(camera){const p=patches.find(p=>p.mesh.visible&&p.age/p.life>.4&&p.age/p.life<.7);if(!p)return false;const y=wave(p.x,p.z,previous,0.2);camera.position.set(p.x+p.nx*7-p.nz*3,y+1.8,p.z+p.nz*7+p.nx*3);camera.lookAt(p.x,y+.25,p.z);return true;},reset(course){ground=course.renderGround||course.ground;previous=null;scan=0;phase=0;emitted=0;for(const p of patches)p.mesh.visible=false;},
+ update(t,storm,camera,quality){if(!ground)return;const dt=previous===null?0:clamp(t-previous,0,.15);previous=t;scan+=dt;
+ if(scan>.16){scan=0;const samples=quality==='low'?18:32;for(let i=0;i<samples;i++){const a=(i+phase)*2.399963,r=10+Math.sqrt((i+.5)/samples)*65,x=camera.x+Math.cos(a)*r,z=camera.z+Math.sin(a)*r,bed=ground(x,z),depth=waterLevel.value-bed;if(depth<.25||depth>4.5)continue;
+ const h=wave(x,z,t,storm),xp=wave(x+1,z,t,storm),xm=wave(x-1,z,t,storm),zp=wave(x,z+1,t,storm),zm=wave(x,z-1,t,storm),curvature=Math.max(2*h-xp-xm,2*h-zp-zm),slope=Math.hypot(xp-xm,zp-zm)*.5;
+ if(h-waterLevel.value<.28||curvature<.055||slope<.16||wave(x,z,t-.12,storm)>h)continue;if(patches.some(p=>p.mesh.visible&&Math.hypot(p.x-x,p.z-z)<14))continue;const p=patches.find(p=>!p.mesh.visible);if(!p)break;
+ const terrainX=ground(x+1,z)-ground(x-1,z),terrainZ=ground(x,z+1)-ground(x,z-1),gx=Math.hypot(terrainX,terrainZ)>.02?terrainX:-(xp-xm),gz=Math.hypot(terrainX,terrainZ)>.02?terrainZ:-(zp-zm),len=Math.hypot(gx,gz)||1;Object.assign(p,{x,z,nx:gx/len,nz:gz/len,age:0,height:clamp((h-waterLevel.value)*.65,.38,1.5),width:5+clamp(curvature*4)*5});p.mesh.visible=true;emitted++;}phase+=.51;}
+ for(const p of patches){if(!p.mesh.visible)continue;p.age+=dt;if(p.age>=p.life){p.mesh.visible=false;continue;}const age=p.age/p.life,base=wave(p.x,p.z,t,storm)-p.height*.32,pos=p.mesh.geometry.attributes.position,col=p.mesh.geometry.attributes.color;
+ for(let j=0;j<=segments;j++){const across=(j/segments-.5)*p.width;p.heights[j]=wave(p.x-p.nz*across+p.nx*p.height*.5,p.z+p.nx*across+p.nz*p.height*.5,t,storm);}
+ for(let row=0;row<=rows;row++)for(let j=0;j<=segments;j++){const index=row*(segments+1)+j,u=j/segments,v=row/rows,edge=Math.sin(u*Math.PI)**.7,q=breakerProfile(v,age,p.height*edge),across=(u-.5)*p.width,ripple=Math.sin(j*.9+t*6)*.025*edge;
+ pos.setXYZ(index,p.x-p.nz*across+p.nx*q.forward,p.heights[j]+q.y-p.height*.30+ripple,p.z+p.nx*across+p.nz*q.forward);const foam=q.foam;col.setXYZ(index,.12+foam*.65,.47+foam*.40,.38+foam*.48);}
+ pos.needsUpdate=true;col.needsUpdate=true;p.mesh.geometry.computeVertexNormals();p.mesh.material.opacity=Math.sin(Math.PI*age)**.35*.5;if(p.mesh.material.userData.phase)p.mesh.material.userData.phase.value=age;
+ }this.stats={active:patches.filter(p=>p.mesh.visible).length,emitted};},dispose(){for(const p of patches){p.mesh.removeFromParent();p.mesh.geometry.dispose();p.mesh.material.dispose();}}};
+}
