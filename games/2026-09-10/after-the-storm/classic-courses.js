@@ -205,7 +205,7 @@ const glacierRamp=(id,x,z,tx,tz,width,length)=>({id,name:'ICE COAST JUMP',x:(x-2
 const glacierBuoys=rows=>rows.map(([x,z,side])=>({x:(x-205)*.8,z:(z-280)*.8,side}));
 const glacierExpertBuoys=glacierBuoys([[27,286,1],[67,222,-1],[34,138,1],[331,131,1],[280,159,1],[247,175,-1],[228,216,1],[195,240,-1],[204,290,1],[220,330,1],[233,389,1],[194,392,-1],[170,427,1],[130,435,-1],[108,459,1],[38,423,1]]);
 // Settle the hull in open water before crossing the southern shore buoy.
-glacierExpertBuoys[14].approach={back:20,throttle:.3,radius:5,range:50};
+glacierExpertBuoys[14].approach={back:10,throttle:.3,speed:7,radius:4,range:35};
 const glacierReverseBuoys=glacierBuoys([[360,112,1],[308,76,-1],[284,103,1],[233,103,-1],[219,142,1],[171,154,-1],[201,207,1],[219,245,1],[214,299,-1],[191,339,1],[149,357,-1],[134,384,1],[114,412,1],[380,403,1],[389,250,-1]].map(([x,z,side])=>[417-x,537-z,side]));
 // Settle the reverse line in open water before the buoy beside the southern ice.
 glacierReverseBuoys[3].approach={x:-35,z:110,throttle:.36,radius:3,range:32};

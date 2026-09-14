@@ -1,3 +1,4 @@
+import {gustAt} from '../wind-gusts.js';
 import test from 'node:test';import assert from 'node:assert/strict';
 import {displacedSurface,sampleSwell} from '../wave-model.js';
 import {createHydro,stepHydro,HULL_PATCHES} from '../hydrodynamics.js';
@@ -37,7 +38,7 @@ test('rider IK holds grips and boots while preserving arm and leg lengths under 
 });
 test('fine mist follows wind more strongly than ballistic impact droplets',()=>{
  const mist={vx:15,vy:2,vz:0,size:.1,mist:true},drop={...mist,mist:false},a=new Float32Array([0,5,0]),b=new Float32Array([0,5,0]);for(let i=0;i<60;i++){advanceSpray(mist,a,0,1/60,1,()=>-100);advanceSpray(drop,b,0,1/60,1,()=>-100);}
- assert.ok(mist.vx<drop.vx*.5);assert.ok(mist.vz<drop.vz);assert.ok(mist.size>drop.size);assert.ok(a[1]>b[1]);
+ const wind=gustAt(a[0],a[2],0,1);assert.ok(Math.abs(mist.vx-wind.x)<Math.abs(drop.vx-wind.x));assert.ok(mist.vz<drop.vz);assert.ok(mist.size>drop.size);assert.ok(a[1]>b[1]);
 });
 
 test('spray attachment follows hull pitch, roll and local vertical motion',()=>{

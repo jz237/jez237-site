@@ -1,3 +1,4 @@
+import {foamLifeGLSL} from './foam-life.js';
 import {wetSandGLSL} from './wet-sand.js';
 import * as T from './vendor/three.module.js';
 // A moving world-space foam atlas. Previous foam is reprojected and advected,
@@ -6,13 +7,13 @@ export function makeFoamField(renderer,common,uniforms){
  const floatingHistory=renderer.extensions.has('EXT_color_buffer_float');
  const targets=[0,1].map(()=>new T.WebGLRenderTarget(128,128,{type:floatingHistory?T.HalfFloatType:T.UnsignedByteType,depthBuffer:false,minFilter:T.LinearFilter,magFilter:T.LinearFilter}));
  const u={...uniforms,historyByte:{value:floatingHistory?0:1},historyFrame:{value:0},previousFoam:{value:targets[0].texture},foamCenter:{value:new T.Vector2()},previousCenter:{value:new T.Vector2()},foamSpan:{value:240},previousSpan:{value:240},foamDt:{value:0},foamReady:{value:0}};
- const material=new T.ShaderMaterial({uniforms:u,depthTest:false,depthWrite:false,vertexShader:'varying vec2 uvP;void main(){uvP=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:common+wetSandGLSL+`
+ const material=new T.ShaderMaterial({uniforms:u,depthTest:false,depthWrite:false,vertexShader:'varying vec2 uvP;void main(){uvP=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:common+wetSandGLSL+foamLifeGLSL+`
  uniform sampler2D previousFoam,terrainMap;uniform vec2 foamCenter,previousCenter;uniform float historyByte,historyFrame,foamSpan,previousSpan,foamDt,foamReady,customTerrain,terrainSpan;varying vec2 uvP;
  float floorDepth(vec2 p){vec2 rg=texture2D(terrainMap,clamp(p/terrainSpan+.5,vec2(0.),vec2(1.))).rg;return -16.+dot(rg,vec2(256.,1.))/257.*100.;}
  void main(){vec2 p=(uvP-.5)*foamSpan+foamCenter;vec3 movingSurface=waveSurface(p);float bed=floorDepth(p);
  vec2 terrainSlope=vec2(floorDepth(p+vec2(1.,0.))-floorDepth(p-vec2(1.,0.)),floorDepth(p+vec2(0.,1.))-floorDepth(p-vec2(0.,1.)))*.5;
  float shallow=1.-smoothstep(.25,2.,seaLevel+movingSurface.x-bed);
- vec2 drift=vec2(.35,-.24)*storm-movingSurface.yz*.55-terrainSlope*shallow*.9;
+ vec2 drift=gustAt(p,time,storm).xy*.05-movingSurface.yz*.55-terrainSlope*shallow*.9;
  drift=clamp(drift,vec2(-1.5),vec2(1.5));vec2 oldUV=(p-drift*foamDt-previousCenter)/previousSpan+.5;
  float inside=step(0.,oldUV.x)*step(oldUV.x,1.)*step(0.,oldUV.y)*step(oldUV.y,1.);vec2 old=texture2D(previousFoam,oldUV).rg*inside*foamReady;
  // Wet sand stays fixed to the beach, rather than drifting with surface foam.
@@ -32,9 +33,7 @@ export function makeFoamField(renderer,common,uniforms){
   *(.28+.72*smoothstep(-.1,.7,h));
  float source=max(crest*.30,breaker*1.3);
  // Analytic accumulation remains stable when rendering is throttled.
- float decay=exp(-foamDt*.55),bubbleDecay=exp(-foamDt*.2);
- float density=clamp(old.r*decay+source*(1.-decay)/.55,0.,1.);
- float bubbles=clamp(old.g*bubbleDecay+source*(1.-bubbleDecay)*1.5,0.,1.);
+ vec2 life=foamLifeStep(old,source,foamDt);float density=life.r,bubbles=life.g;
  // Advected Kelvin arms and aerated prop-wash, evaluated per atlas texel.
  // Each packet is born behind a real, water-loaded hull; no screen-space trail.
  float wakeFoam=0.;
@@ -47,7 +46,7 @@ export function makeFoamField(renderer,common,uniforms){
   wakeFoam+=(exp(-edge*edge*3./(1.+age*.4))*.28+exp(-b*b/(.35+age*.3))*.52)
     *exp(-a*a/(1.8+age*.15)-age*.25)*w.w;
  }
- density=max(density,min(.95,wakeFoam));bubbles=max(bubbles,min(.7,wakeFoam*.55));
+ density=max(density,min(.95,wakeFoam));bubbles=max(bubbles,min(.3,wakeFoam*.18));
  // Drainage varies slowly along the shore; weakly wetted fringes dry first.
  float drainage=.9+.2*sin(p.x*.18+p.y*.11)*sin(p.y*.23-p.x*.07);
  vec2 beach=wetSandStep(oldBeach,depth,foamDt,drainage)*customTerrain;

@@ -2,7 +2,9 @@ const TAU=Math.PI*2;
 export function demoFlipInput(r,input){
  const h=r.hydro,s=r.stunt;
  const ready=r.raceTime>(s.nextDemoFlip??(12+r.id*4));
- const safe=ready&&h.airborne&&h.vy>4.5&&h.y-h.waterHeight>.5&&h.airTime<.2;
+ const clearance=Math.max(0,h.y-h.waterHeight),flight=(h.vy+Math.sqrt(h.vy*h.vy+19.62*clearance))/9.81;
+ // A dropping trough can leave enough airtime even after upward speed fades.
+ const safe=ready&&h.airborne&&h.vy>0&&clearance>.5&&flight>.98&&h.airTime<.35;
  if(safe&&!s.trick)s.nextDemoFlip=r.raceTime+30+r.id*4;
  return safe||s.trick?{...input,trick:'flip'}:input;
 }

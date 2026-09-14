@@ -1,3 +1,4 @@
+import {foamDetailGLSL} from './foam-life.js';
 import {cloudGLSL} from './weather-light.js';
 import * as T from './vendor/three.module.js';
 
@@ -20,6 +21,7 @@ uniform vec3 eye,sun,skyHorizon,skyZenith;uniform float near,far;uniform vec3 re
 varying vec3 worldP;varying vec4 mirrorP;varying vec3 broadSurface;varying vec2 disturbanceSlope;varying float breakingCrest;uniform vec3 waterScatter,waterAbsorption;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
 float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}
+${foamDetailGLSL}
 float linearDepth(float d){return near*far/(far-d*(far-near));}
 float floorH(vec2 p){float result=0.;if(customTerrain>.5){vec2 encodedHeight=texture2D(terrainMap,clamp(p/terrainSpan+.5,vec2(0.),vec2(1.))).rg;result=-16.+dot(encodedHeight,vec2(256.,1.))/257.*100.;}else{float x=p.x,z=p.y;float outer=length(vec2(x/1.04,(z+15.)/1.25));float g=-7.+max(0.,outer-125.)*.22;g+=sin(x*.04)*.5+sin(z*.053+x*.025)*.65;g+=5.8*exp(-((x+77.)*(x+77.)+(z-25.)*(z-25.))/1500.);g+=5.4*exp(-((x-87.)*(x-87.)+(z+52.)*(z+52.))/1350.);g+=2.4*exp(-((x+32.)*(x+32.)+(z+166.)*(z+166.))/1600.);if(z< -170.)g-=min(16.,(-z-170.)*.16)*exp(-x*x/12500.);result=g;}return result;}
 
@@ -28,7 +30,8 @@ void main(){
  vec3 surface=broadSurface;vec2 wakeSlope=disturbanceSlope;
  vec2 flow=vec2(time*.013,-time*.009);vec2 r1=texture2D(detailMap,p*.145+flow).rg*2.-1.;
  vec2 rotated=mat2(.8,-.6,.6,.8)*p;vec2 r2=texture2D(detailMap,rotated*.37-flow*1.7).rg*2.-1.;
- float detailStrength=(.035+storm*.060)*(1.-smoothstep(75.,300.,dist)*.6);
+ vec3 localGust=gustAt(p,time,storm);
+ float detailStrength=(.025+storm*.045+localGust.z*.08)*(1.-smoothstep(75.,300.,dist)*.6);
  // Capillary ripples travel with the longer waves instead of sliding as a single sheet.
  vec2 drift=surface.yz*.24;
  vec2 r3=texture2D(detailMap,p*.82+drift-flow*2.3).rg*2.-1.;
@@ -50,7 +53,7 @@ void main(){
  vec3 scatter=mix(waterScatter,waterScatter*.48,storm)*(1.-night*.75);
  vec3 below=texture2D(refraction,ruv).rgb;vec3 refracted=below*transmission+scatter*(1.-transmission);
  vec2 muv=mirrorP.xy/mirrorP.w*.5+.5;vec2 reflectUV=clamp(muv+screenSlope*.032,vec2(.002),vec2(.998));
- float roughness=.055+storm*.045;float blur=clamp(roughness*16.+dist*.003,0.,3.4);
+ float roughness=.045+storm*.035+localGust.z*.035;float blur=clamp(roughness*16.+dist*.003,0.,3.4);
  vec3 reflected=texture2D(reflection,reflectUV,blur).rgb;
  vec3 reflectedRay=reflect(-V,N);vec3 skyFallback=mix(skyHorizon,skyZenith,pow(max(0.,reflectedRay.y),.4))*(1.-storm*.65)*(1.-night*.75);
  float mirrorEdge=max(abs(reflectUV.x-.5),abs(reflectUV.y-.5));reflected=mix(reflected,skyFallback,smoothstep(.46,.5,mirrorEdge));
@@ -59,6 +62,7 @@ void main(){
  for(int i=0;i<4;i++){vec4 c=craftSources[i];vec2 d=p-c.xy;
   float a=dot(d,vec2(sin(c.z),cos(c.z))),b=dot(d,vec2(cos(c.z),-sin(c.z)));
   col*=1.-exp(-a*a*.38-b*b*2.8)*min(1.,c.w*2.)*.24*(1.-fresnel);
+  float cavity=exp(-(a+2.3)*(a+2.3)*1.4-b*b*3.5)*c.w;col=mix(col,waterScatter*.55,cavity*.3*(1.-fresnel));
  }
  // Broad wave-face lighting is intentionally stronger than capillary detail:
  // reveal the existing displaced troughs and crests at racing distance.
@@ -77,7 +81,7 @@ void main(){
  float spec=distribution*smithV*smithL*.0204/max(.02,4.*nv*nl);
  col+=vec3(1.,.80,.53)*min(12.,spec)*nl*2.4*cloudLight*(1.-storm*.88)*(1.-night*.97);
  float turbulence=noise(p*2.7+vec2(time*.07,-time*.04))*.6+noise(p*8.1-time*.025)*.4;
- vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float foam=history.r*smoothstep(.27,.76,turbulence)*.72,bubbles=history.g*.4;
+ vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float age=history.g/max(.001,history.r+history.g);float structure=foamStructure(p,vec2(.86,-.51)*time*.08+surface.yz*.3,age,dist);float foam=history.r*(.24+structure*.76)+history.g*structure*.24,bubbles=history.g*.38;
  // Landing wash expands from the contact point and breaks apart, remaining in
  // world space after the rider has left. Its ring follows the shared pressure wave.
  for(int i=0;i<12;i++){vec4 w=impactWaves[i];float age=time-w.z;if(w.w<=0.||age<0.||age>7.)continue;

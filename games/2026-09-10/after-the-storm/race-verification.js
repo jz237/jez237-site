@@ -67,8 +67,8 @@ export function verificationInput(state,r){
    }
    if(Math.hypot(x-r.x,z-r.z)<(guide.stage===(state.course.reverse?4:2)?2:5))guide.stage++;
    const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);
-   const desiredSpeed=guide.stage===2?7:guide.stage===3?10:14;
-   return {throttle:state.course.reverse?.65:clamp(.53+(desiredSpeed-r.speed)*.16,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1||!state.course.reverse&&r.speed>desiredSpeed+2,dampen:true};
+   const desiredSpeed=state.course.reverse&&guide.stage>=4&&guide.stage<=5?12:guide.stage===2?7:guide.stage===3?10:14;
+   return {throttle:state.course.reverse&&guide.stage<4?.65:clamp(.53+(desiredSpeed-r.speed)*.16,0,1),steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1||(!state.course.reverse||guide.stage>=4)&&r.speed>desiredSpeed+2,dampen:true};
   }
  }
 

@@ -1,3 +1,4 @@
+import {gustAt} from './wind-gusts.js';
 import * as T from './vendor/three.module.js';
 import {wave,waterLevel} from './simulation.js';
 import {crestEmission} from './immersion-model.js';
@@ -13,6 +14,6 @@ export function makeCrestSpray(scene){
     if(energy<.003)continue;for(let k=0;k<Math.min(24,6+Math.ceil(energy*220));k++){const p=particles[cursor++%n],life=.7+Math.random()*.65;emitted++;Object.assign(p,{x:x+(Math.random()-.5)*1.5,y:h+.06,z:z+(Math.random()-.5)*1.5,vx:1+storm*3+(b-f)*.6,vy:.5+energy*8+Math.random()*.7,vz:-.4-storm*1.2+(l-rr)*.6,life,max:life});}
    }phase+=.37;
   }
-  particles.forEach((p,i)=>{if(p.life>0){p.life=Math.max(0,p.life-dt);p.vy-=dt*2.3;p.vx+=dt*(.5+storm);p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;xyz.set([p.x,p.y,p.z],i*3);}alpha[i]=p.life>0?Math.sin(Math.PI*p.life/p.max)*.55:0;size[i]=p.life>0?.11+(1-p.life/p.max)*.30:0;});for(const a of Object.values(geo.attributes))a.needsUpdate=true;this.stats={alive:particles.filter(p=>p.life>0).length,emitted};
+  particles.forEach((p,i)=>{if(p.life>0){p.life=Math.max(0,p.life-dt);p.vy-=dt*2.3;const wind=gustAt(p.x,p.z,t,storm);p.vx+=(wind.x-p.vx)*(1-Math.exp(-dt*.8));p.vz+=(wind.z-p.vz)*(1-Math.exp(-dt*.8));p.x+=p.vx*dt;p.y+=p.vy*dt;p.z+=p.vz*dt;xyz.set([p.x,p.y,p.z],i*3);}alpha[i]=p.life>0?Math.sin(Math.PI*p.life/p.max)*.55:0;size[i]=p.life>0?.11+(1-p.life/p.max)*.30:0;});for(const a of Object.values(geo.attributes))a.needsUpdate=true;this.stats={alive:particles.filter(p=>p.life>0).length,emitted};
  },dispose(){mesh.removeFromParent();geo.dispose();mat.dispose();}};
 }
