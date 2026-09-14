@@ -5,7 +5,9 @@ export const LURES={
  walker:{id:'walker',name:'Bone walker',family:'topwater',massG:14,buoyancy:'float',sinkRate:0,diveDepth:0,drag:.9,action:'walk',color:0xe9e3cf,length:.11,radius:.014},
  worm:{id:'worm',name:'Texas-rigged worm, 3/8 oz',family:'soft',massG:14,buoyancy:'sink',sinkRate:.45,diveDepth:0,drag:1.1,action:'hop',color:0x4d5a2a,length:.18,radius:.007},
  squarebill:{id:'squarebill',name:'Squarebill crankbait',family:'crank',massG:11,buoyancy:'crank',sinkRate:0,diveDepth:1.6,drag:1.4,action:'wobble',color:0xd8b04a,length:.065,radius:.016},
- bucktail:{id:'bucktail',name:'Double-blade bucktail',family:'blade',massG:60,buoyancy:'sink',sinkRate:.35,diveDepth:0,drag:1.6,action:'thump',color:0x2a2a2e,length:.20,radius:.02}
+ bucktail:{id:'bucktail',name:'Double-blade bucktail',family:'blade',massG:60,buoyancy:'sink',sinkRate:.35,diveDepth:0,drag:1.6,action:'thump',color:0x2a2a2e,length:.20,radius:.02},
+ nightcrawler:{id:'nightcrawler',name:'Nightcrawler under a float',family:'bait',massG:8,buoyancy:'sink',sinkRate:.25,floatDepth:.9,diveDepth:0,drag:1.2,action:'hang',color:0x8a5a4a,length:.06,radius:.006},
+ cutbait:{id:'cutbait',name:'Cut bait on a sinker',family:'bait',massG:26,buoyancy:'sink',sinkRate:1.3,diveDepth:0,drag:1.5,action:'rest',color:0x9a7a6a,length:.05,radius:.012,circle:true}
 };
 export const RODS={
  ml:{id:'ml',name:'6\'6" medium-light, fast',lureG:[3.5,14],lineKg:[2.7,5.4],power:.35,length:1.98},
@@ -21,13 +23,17 @@ export const LINES={
  fluoro8:{id:'fluoro8',name:'8 lb fluorocarbon',testKg:3.6,buoyancy:-.6,stretch:.12,visibility:.3},
  mono10:{id:'mono10',name:'10 lb monofilament',testKg:4.5,buoyancy:.4,stretch:.2,visibility:.5},
  braid15:{id:'braid15',name:'15 lb braid, 12 lb fluoro leader',testKg:6.8,leaderKg:5.4,buoyancy:.1,stretch:.04,visibility:.7},
- braid80:{id:'braid80',name:'80 lb braid, wire leader',testKg:36,leaderKg:40,wire:true,buoyancy:.1,stretch:.03,visibility:.9}
+ braid80:{id:'braid80',name:'80 lb braid, wire leader',testKg:36,leaderKg:40,wire:true,buoyancy:.1,stretch:.03,visibility:.9},
+ mono6:{id:'mono6',name:'6 lb monofilament',testKg:2.7,buoyancy:.4,stretch:.2,visibility:.4},
+ mono15:{id:'mono15',name:'15 lb monofilament',testKg:6.8,buoyancy:.4,stretch:.2,visibility:.6}
 };
 export const RIGS=[
  {id:'finesse',name:'Finesse spinning',rod:'ml',reel:'spin2500',line:'fluoro8',lure:'worm',hook:'2/0 EWG'},
  {id:'topwater',name:'Topwater casting',rod:'mh',reel:'bc71',line:'mono10',lure:'walker',hook:'#4 trebles'},
  {id:'crank',name:'Squarebill casting',rod:'mh',reel:'bc71',line:'braid15',lure:'squarebill',hook:'#6 trebles'},
- {id:'musky',name:'Musky casting',rod:'xh',reel:'bc400',line:'braid80',lure:'bucktail',hook:'5/0 trebles'}
+ {id:'musky',name:'Musky casting',rod:'xh',reel:'bc400',line:'braid80',lure:'bucktail',hook:'5/0 trebles'},
+ {id:'float',name:'Float rig',rod:'ml',reel:'spin2500',line:'mono6',lure:'nightcrawler',hook:'#6 baitholder'},
+ {id:'bottom',name:'Bottom rig',rod:'mh',reel:'bc71',line:'mono15',lure:'cutbait',hook:'3/0 circle'}
 ];
 export function rigParts(rig){return {rod:RODS[rig.rod],reel:REELS[rig.reel],line:LINES[rig.line],lure:LURES[rig.lure]};}
 // The chain: every component's breaking or slipping load in kg, sorted weakest first. The rod

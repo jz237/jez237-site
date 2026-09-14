@@ -11,6 +11,10 @@ test('rod twitches on a topwater walk the dog, on a sinking lure lift and drop',
  assert.equal(feed([{n:60,reel:0,twitchEvery:20}],LURES.worm,{onBottom:true}),'lift & drop');
  assert.equal(feed([{n:60,reel:1,twitchEvery:20}],LURES.squarebill),'twitching');
 });
+test('a lure trailed behind a moving kayak is trolling',()=>{
+ const r=createRecognizer();let t=0;for(let i=0;i<60;i++){t+=.1;recordSample(r,t,false);}
+ assert.equal(classify(r,t,{family:'crank',buoyancy:'crank'},{inWater:true,moving:true}),'trolling');assert.equal(classify(r,t,{family:'crank',buoyancy:'crank'},{inWater:true,moving:false}),'dead stick');
+});
 test('nothing happening is a dead stick, and out of the water is idle',()=>{
  assert.equal(feed([{n:60,reel:0}],LURES.worm),'dead stick');assert.equal(feed([{n:60,reel:1}],LURES.worm,{inWater:false}),'idle');
 });

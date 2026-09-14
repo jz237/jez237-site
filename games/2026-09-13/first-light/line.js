@@ -37,6 +37,8 @@ export function stepLine(line,dt,env){
   line.x[i]+=vx*damp+ax*dt*dt;line.y[i]+=vy*damp+ay*dt*dt;line.z[i]+=vz*damp+az*dt*dt;
   // a sinking lure falls no faster than its sink rate through the water
   if(i===last&&under&&env.lure.buoyancy==='sink'){const vyNow=(line.y[i]-line.py[i])/dt;if(vyNow<-env.lure.sinkRate)line.y[i]=line.py[i]-env.lure.sinkRate*dt;}
+  // a float holds the bait at its set depth: the bait node cannot hang deeper than the float allows
+  if(i===last&&env.lure.floatDepth){const top=env.surface(line.x[i],line.z[i])-env.lure.floatDepth;if(line.y[i]<top)line.y[i]=top;}
  }
  // pin the first node to the rod tip
  line.x[0]=env.tip.x;line.y[0]=env.tip.y;line.z[0]=env.tip.z;
