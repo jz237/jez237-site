@@ -67,7 +67,7 @@ void main(){vec2 d=(vUv-sunUV)*density/float(N);vec2 uv=vUv;float illum=1.,wsum=
    const t=Math.max(4,Math.min(24,p.taps|0));if(mat.defines.TAPS!==t){mat.defines.TAPS=t;mat.needsUpdate=true;}
    const gl=p.glow;
    if(gl&&gl.bloom>0){bu.threshold.value=gl.threshold;pass(bright,bA);ku.dir.value.set(1/q.x,0);ku.tex.value=bA.texture;pass(blur,bB);ku.dir.value.set(0,1/q.y);ku.tex.value=bB.texture;pass(blur,bA);
-    if(gl.wide){ku.dir.value.set(2.6/q.x,0);ku.tex.value=bA.texture;pass(blur,bB);ku.dir.value.set(0,2.6/q.y);ku.tex.value=bB.texture;pass(blur,bA);ku.dir.value.set(6./q.x,0);ku.tex.value=bA.texture;pass(blur,bB);ku.dir.value.set(0,6./q.y);ku.tex.value=bB.texture;pass(blur,bA);}
+    if(gl.wide){ku.dir.value.set(2.6/q.x,0);ku.tex.value=bA.texture;pass(blur,bB);ku.dir.value.set(0,2.6/q.y);ku.tex.value=bB.texture;pass(blur,bA);}
     u.tBloom.value=bA.texture;u.bloom.value=gl.bloom;}else{u.tBloom.value=black;u.bloom.value=0;}
    if(gl&&gl.shaft>0&&gl.sunUV){su.sunUV.value.set(gl.sunUV[0],gl.sunUV[1]);su.decay.value=gl.decay;su.density.value=gl.density;su.threshold.value=gl.shaftThreshold;if(shaft.defines.N!==gl.samples){shaft.defines.N=gl.samples;shaft.needsUpdate=true;}pass(shaft,sA);u.tShaft.value=sA.texture;u.shaft.value=gl.shaft;u.shaftTint.value.set(...gl.tint);}else{u.tShaft.value=black;u.shaft.value=0;}
    qm.material=mat;renderer.setRenderTarget(null);renderer.render(quad,cam);},

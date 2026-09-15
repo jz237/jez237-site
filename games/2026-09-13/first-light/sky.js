@@ -7,7 +7,7 @@ import {shared,skyColors} from './lake-surface.js';
 const lerp=(a,b,t)=>a+(b-a)*t,clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),smooth=(a,b,v)=>{const x=clamp((v-a)/(b-a),0,1);return x*x*(3-2*x);};
 const mix3=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];
 // dawn and dusk sit low and purple, as the hero art does: the warmth lives in the sun's aureole and on the sun side of the horizon, not across the whole sky
-const DAY={z:[.15,.34,.74],h:[.52,.68,.86]},GOLD={z:[.12,.10,.23],h:[.78,.42,.24]},DUSK={z:[.075,.06,.17],h:[.58,.26,.28]},NIGHT={z:[.008,.012,.032],h:[.030,.040,.070]};
+const DAY={z:[.15,.34,.74],h:[.52,.68,.86]},GOLD={z:[.15,.13,.27],h:[.78,.42,.24]},DUSK={z:[.09,.075,.19],h:[.58,.26,.28]},NIGHT={z:[.008,.012,.032],h:[.030,.040,.070]};
 // Palette for a sun elevation in degrees. Values are linear light.
 export function skyPalette(e,cloud=0){
  let z,h;
@@ -20,8 +20,8 @@ export function skyPalette(e,cloud=0){
  const sunColor=mix3([1,.93,.84],[1,.52,.26],warm);
  const sunIntensity=3.1*Math.pow(clamp((e+1.5)/14,0,1),.75)*(1-cloud*.75);
  const ambientIntensity=lerp(.36,1.15,smooth(-9,12,e))*(1-cloud*.25); // the sky lights the shade well before the sun clears the trees: by four degrees the hemisphere is most of the way up // a floor that keeps the deck and the near water readable before sunrise
- let fog=mix3(mix3(h,[.82,.84,.80],.35),[.26,.38,.52],warm*.85*(1-night));
- const mist=mix3(mix3(h,[.86,.86,.84],.4),[.80,.62,.74],warm*.65*(1-night));
+ let fog=mix3(mix3(h,[.82,.84,.80],.35*(1-night)),[.26,.38,.52],warm*.85*(1-night));
+ const mist=mix3(mix3(h,[.86,.86,.84],.4*(1-night)),[.80,.62,.74],warm*.65*(1-night));
  // the pink haze that sits on the horizon while the sun is low, fading to a pale grey-blue by mid-morning
  const haze=mix3([.72,.42,.50],[.86,.88,.94],smooth(2,18,e));
  return {zenith:z,horizon:h,night,sunColor,sunIntensity,ambientIntensity,fogColor:fog,mistColor:mist,fogDensity:lerp(.0012,.0030,cloud)*(1+night*.4)*(1+1.0*(1-smooth(2,20,e))*(1-night)),haze};
@@ -43,7 +43,7 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  float sunTerms=1.-envPass*.85;
  col+=sunColor*(pow(s,30.)*(.10+.30*low)+pow(s,70.)*.30*low)*(1.-night)*up*sunTerms;
  // the low sun's glow: a wide warm aureole and a tighter halo, then a softer, larger disc
- col+=sunColor*(pow(s,24.)*.24+pow(s,50.)*.40+pow(s,120.)*.8)*lowSun*(1.-night)*up*(1.-cloud*.6)*sunTerms;
+ col+=sunColor*(pow(s,24.)*.18+pow(s,50.)*.32+pow(s,120.)*.8)*lowSun*(1.-night)*up*(1.-cloud*.6)*sunTerms;
  col+=sunColor*pow(s,mix(1400.,500.,lowSun))*mix(4.,6.,lowSun)*up*(1.-cloud*.8)*sunTerms;
  vec3 c1=col;col=mix(col,hazeColor,lowSun*pow(1.-y,4.)*.22*(1.-night)*pow(az,2.)*(1.-envPass*.7));vec3 c2=col;
  vec2 flow=vec2(cos(windDir),sin(windDir))*time*(.003+wind*.018);
