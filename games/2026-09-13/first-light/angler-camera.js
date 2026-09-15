@@ -18,3 +18,12 @@ export function updateAnglerCamera(camera,state,look,dt,{steady=0}={}){
  e.set(look.pitch,look.yaw+Math.PI,0,'YXZ');const ql=new T.Quaternion().setFromEuler(e);
  camera.quaternion.copy(q).multiply(ql);
 }
+
+// Zoom: the seat view narrows from the settings field of view down to a third of it, which is about
+// what a pair of binoculars does. A pinch multiplies the zoom by the ratio of the finger spread; a
+// wheel notch steps it. The camera's field of view is the base divided by the zoom.
+export const ZOOM_MIN=1,ZOOM_MAX=3.2;
+export function clampZoom(z){return Math.max(ZOOM_MIN,Math.min(ZOOM_MAX,z));}
+export function pinchZoom(zoom,fromSpread,toSpread){if(!(fromSpread>1)||!(toSpread>1))return clampZoom(zoom);return clampZoom(zoom*(toSpread/fromSpread));}
+export function wheelZoom(zoom,deltaY){return clampZoom(zoom*Math.exp(-deltaY*.0012));}
+export function fovFor(baseFov,zoom){return baseFov/clampZoom(zoom);}

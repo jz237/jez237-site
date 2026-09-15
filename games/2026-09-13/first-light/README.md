@@ -18,6 +18,12 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
 
+## Ultra and zoom (v0.62.0)
+
+The desktop push begins. There is a fifth quality tier above High, **Ultra**, which only a desktop can reach: the adaptive setting now takes a ceiling, and a touch device stops at High however fast it runs, so nothing here changes what a phone renders. Ultra doubles the pixel ratio cap and takes the shadow map to 4096; the tiers that follow it (real trees on the near bank, a textured ridge, volumetric mist) hang off this switch.
+
+**Pinch to zoom**, which is for every device: two fingers on the water narrow the view from the settings field of view down to about a third of it, and the mouse wheel does the same on a desktop. The first finger's look-drag and any cast charge are cancelled the moment the second lands, so a pinch never throws a lure, and a finger whose release goes missing is dropped rather than left to freeze the gesture. QA: `zoom(z)`, `glowState().zoom` and `.tier`.
+
 ## Photographic sky (v0.61.0)
 
 Third tick of the bounded push. The dawn sky is a photograph now: a generated equirectangular panorama with the sun kept out of the painting (a glow on the horizon, lit cloud undersides near it, a blue-grey to violet sky elsewhere, mist on the horizon), made seamless, and mixed into the sky dome through the dawn and dusk windows (in from three degrees below the horizon, out by fifteen above), turned so its glow sits on the real sun's bearing, weighted toward the low sky so the zenith stays the game's own, and left out of the environment capture. The game's disc, aureole, rays and bloom stay in charge of where the sun actually is, the procedural cloud decks and streaks fade out as the photograph comes in, and the water reflects it. A first, fiery panorama painted the whole dome orange and moved both measurements the wrong way; the muted second one is neutral on the portrait target (about 41) and a little off the landscape hero frame (about 19 against 14), while the frame reads far more like a photograph, which is the point of this push. QA: `glowState().pano`, `lightOverride({pano})`.
