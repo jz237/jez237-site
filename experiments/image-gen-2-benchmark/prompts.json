@@ -13006,5 +13006,102 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-15-factual-infographic-factual-infographic-nepenthes-the-water",
+    "title": "Factual infographic: Nepenthes — The Water-Lubricated Trap Rim",
+    "tests": "Direct-canvas portrait infographic; one dominant hero, eight substantive panels, three explanatory close-ups, concise source-backed labels only.; archive_slot=2026-09-15T00:20; concept=nepenthes-peristome-water-film-insect-aquaplaning; factual_subtype: factual-infographic",
+    "prompt": "Create one finished 1024x1536 portrait factual infographic titled NEPENTHES: THE WATER-LUBRICATED TRAP RIM. Render the infographic itself directly on the canvas, front-facing, orthographic, edge-to-edge, with no paper edge, poster, frame, wall, desk, screen, hands, specimen tray, room, or outer cast shadow. Use a sophisticated museum-quality botanical-mechanics plate with a dominant, highly detailed hero cutaway of a living Nepenthes pitcher: lid, nectar-bearing inner rim, broad ribbed peristome, slippery inward slope, pitcher fluid, and a source-accurate ant losing purchase at the wet rim. Make realistic waxy green and burgundy plant tissue, translucent water sheen, fine radial ribs, humid rainforest light, and clear scale cues integral to the information design. Surround the hero with eight substantive, clearly separated panels: (1) SPECIALIZED LEAF, a compact leaf-to-pitcher anatomy transformation silhouette identifying the pitcher as a modified leaf and pitfall trap; (2) WATER ARRIVES, three source-backed droplets labeled RAIN and NECTAR converging on the rim, with no unsupported claims; (3) DRY RIM / WET RIM, a side-by-side footing comparison showing secure contact on dry tissue and a continuous lubricating film on wet tissue; (4) RADIAL WATER TRACKS, a top-view rim diagram showing macroscopic ribs guiding water radially into continuous tracks; (5) THREE-SCALE RIDGE CUTAWAY, a magnified stepped cross-section with macro ridge, micro ridge, and inward-facing direction arrows; (6) ADHESIVE PAD CLOSE-UP, a large ant tarsus cross-section showing water separating the soft pad from the wet surface and label PAD CONTACT DISRUPTED; (7) CLAW CLOSE-UP, an equally large profile showing claws meeting overlapping step edges and label REDUCED INWARD PURCHASE; (8) CAPTURE SEQUENCE, four readable stages labeled VISIT RIM, FILM FORMS, FOOTING FAILS, FALL INTO PITCHER, ending with a small ecological context inset labeled PREY-DERIVED NUTRIENTS SUPPORT THE PLANT IN NUTRIENT-POOR HABITATS. Add a concise mechanism band connecting WATER FILM + HIERARCHICAL RIDGES to AQUAPLANING, plus a conservative takeaway: THE TRAP IS MOST SLIPPERY WHEN WET. Use precise leader lines, large legible typography, uncluttered panel boundaries, and at least three prominent explanatory close-ups: peristome ridge hierarchy, adhesive-pad water film, and claw-versus-step geometry. Palette: deep rainforest green, burgundy, wet ruby, amber nectar, cyan water highlights, charcoal diagrams, and warm ivory labels. Keep every factual implication within the verified claim sheet. Do not add exact measurements, capture percentages, unsupported species-general universals, bibliography, URLs, logos, QR codes, invented statistics, fantasy anatomy, gore, tiny paragraphs, decorative pseudo-text, classroom worksheet styling, or a photographed poster mockup.",
+    "image": "images/2026-09-15-factual-infographic-factual-infographic-nepenthes-the-water.jpg",
+    "thumb": "thumbs/2026-09-15-factual-infographic-factual-infographic-nepenthes-the-water.webp",
+    "color": "#635a4d",
+    "date": "2026-09-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "nepenthes-peristome-water-film-insect-aquaplaning",
+      "imageSha256": "007f9a3d78c80663f7a2343b06754a2dcdc8ec05d1648b46decb329337b74ef2",
+      "imageDHash": "c94947c7d794795b"
+    },
+    "factualInfographic": {
+      "topic": "How Nepenthes pitcher-plant rims use hierarchical ridges and water films to make insects aquaplane into the trap",
+      "description": "A source-verified botanical biomechanics infographic explaining how wetting and hierarchical peristome ridges combine to disrupt insect adhesive pads and claw purchase.",
+      "sourceNote": "Verified against Proceedings of the National Academy of Sciences https://pmc.ncbi.nlm.nih.gov/articles/PMC521129/ and the University of Cambridge Apollo Repository https://www.repository.cam.ac.uk/items/1032896a-eaef-40b1-8e94-57412164c8e9; scope covers pitcher anatomy, wet peristome aquaplaning, hierarchical radial ridges, adhesive-pad water films, claw interaction, capture sequence, and conservative ecological context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-15T04:21:05Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Proceedings of the National Academy of Sciences",
+            "title": "Insect aquaplaning: Nepenthes pitcher plants capture prey with the peristome, a fully wettable water-lubricated anisotropic surface",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC521129/"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Cambridge Apollo Repository",
+            "title": "Disentangling the role of surface topography and intrinsic wettability in the prey capture mechanism of Nepenthes pitcher plants",
+            "sourceType": "university",
+            "url": "https://www.repository.cam.ac.uk/items/1032896a-eaef-40b1-8e94-57412164c8e9"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Nepenthes pitchers are specialized leaves that function as pitfall traps for arthropod prey.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The pitcher rim, or peristome, carries hierarchical radial ridges at macroscopic and microscopic scales.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Rainwater and nectar can wet the peristome and create a continuous lubricating liquid film.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A wet peristome is slippery to visiting insects, while a dry peristome provides substantially better footing.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The water film disrupts contact by soft adhesive pads, while the stepped anisotropic surface topography reduces effective claw purchase toward the pitcher interior.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Macroscopic radial ridges promote radial water spreading and help form continuous slippery tracks even when little water is available.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Microscopic ridges help stabilize the water film between an insect adhesive pad and the peristome, enabling aquaplaning.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Once footing fails at the rim, prey can slide inward and fall into the pitcher fluid, where captured prey contributes nutrients used by the plant in nutrient-poor habitats.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
