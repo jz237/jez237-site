@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.44.0, behind the trees)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.45.0, shade and haze)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Shade and haze (v0.45.0)
+
+Fourth measured pass against the hero image, aimed at the two outliers: the tree line's teal and the over-bright sky beside the sun. What was found: at first light nearly everything in shade was lit by the sky's own environment map, and that map was one aureole and a warm horizon band painted across a hemisphere, so every shaded face came out peach. Now the environment is captured with the sun's terms mostly dropped (`envPass`), its weight halves at the low sun, the cool hemisphere carries the shade, and the horizon's warmth is confined to the sun (the azimuth power rises to twelve at first light, in the sky and in the water's fallback alike). The dawn haze doubled and went bluer (the hero's far shore is barely there), the silhouette floor rose again, the zenith lifted a little toward the picture's grey-purple, the aureole came down a third, and the deck is matte, so it no longer mirrors the glow. Region distance to the hero frame: v0.44 about 33, this build about 23, with the far water now within five units. The tree line and the sky beside the sun remain the largest gaps, both under thirty. QA: `lightOverride({env,sun,ambient,mist})` scales each light persistently for A/B probes (the live loop rewrites raw property pokes every conditions update).
 
 ## Behind the trees (v0.44.0)
 

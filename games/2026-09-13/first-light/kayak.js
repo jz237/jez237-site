@@ -19,7 +19,7 @@ function hullGeometry(part='all'){
 // weathered strips: dark taupe tones with dark seams and a grain along the length, under a varnish that carries the sky (the hero bow is a dark deck between light wooden gunwales)
 let woodTex=null;
 export function cedarTexture(){if(woodTex)return woodTex;const W=512,H=256,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
- const tones=['#45403d','#3b3634','#4c4642','#353130','#433d3a','#3a3533'];const strips=12,sh=H/strips;let seed=11;const r=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+ const tones=['#5e5b62','#524f56','#68656c','#4a474e','#5b585f','#4f4c53'];const strips=12,sh=H/strips;let seed=11;const r=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  for(let i=0;i<strips;i++){g.fillStyle=tones[Math.floor(r()*tones.length)];g.fillRect(0,i*sh,W,sh);
   // grain: long faint streaks
   for(let k=0;k<14;k++){const y=i*sh+r()*sh;g.strokeStyle=`rgba(${r()<.5?60:200},${r()<.5?40:150},${r()<.5?20:90},${.08+.12*r()})`;g.lineWidth=.6+r()*1.2;g.beginPath();g.moveTo(0,y);for(let x=0;x<=W;x+=32)g.lineTo(x,y+(r()-.5)*2.2);g.stroke();}
@@ -30,7 +30,7 @@ function railCurve(side){const pts=[];for(let i=0;i<=28;i++){const t=i/28;pts.pu
 export function makeKayak(scene){
  const group=new T.Group();scene.add(group);
  const shell=new T.MeshPhysicalMaterial({color:0x2f5a3e,roughness:.42,clearcoat:.45,clearcoatRoughness:.25});
- const deckMat=new T.MeshPhysicalMaterial({map:cedarTexture(),color:0xffffff,roughness:.34,clearcoat:.65,clearcoatRoughness:.18});deckMat.map.repeat.set(1,1);
+ const deckMat=new T.MeshPhysicalMaterial({map:cedarTexture(),color:0xffffff,roughness:.85,clearcoat:0,clearcoatRoughness:.5});deckMat.map.repeat.set(1,1);
  const hull=new T.Mesh(hullGeometry('hull'),shell);hull.castShadow=hull.receiveShadow=true;group.add(hull);
  const deck=new T.Mesh(hullGeometry('deck'),deckMat);deck.castShadow=deck.receiveShadow=true;group.add(deck);
  const railMat=new T.MeshStandardMaterial({color:0xb08a5a,roughness:.5,metalness:.02});for(const side of [-1,1]){const rail=new T.Mesh(new T.TubeGeometry(railCurve(side),56,.013,6,false),railMat);rail.castShadow=true;group.add(rail);}

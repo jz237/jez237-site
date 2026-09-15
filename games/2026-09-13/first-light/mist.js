@@ -22,7 +22,7 @@ void main(){vec2 p=wp.xz*.045+vec2(time*.012,-time*.007);float n=noise(p)*.55+no
  #include <colorspace_fragment>}`});
  // Every sheet stays below the seated eye (0.62 m) so the mist is something you look down onto, never a veil over the sky.
  const layers=[];for(let i=0;i<3;i++){const m=new T.Mesh(new T.PlaneGeometry(520,520),mat);m.rotation.x=-Math.PI/2;m.position.y=.12+i*.16;m.renderOrder=3;m.userData.skipRefraction=true;m.userData.skipReflection=true;m.frustumCulled=false;scene.add(m);layers.push(m);}
- return {layers,banks,update(t,eye,elevation,wind,palette,sunDir=null){u.time.value=t;u.eye.value.copy(eye);const dawn=smooth(-7,-1,elevation)*(1-smooth(5,14,elevation));u.strength.value=dawn*1.3*(1-smooth(.15,.5,wind));const mc=palette.mistColor||palette.fogColor;u.tint.value.setRGB(mc[0]*1.05,mc[1]*1.05,mc[2]*1.02);for(const m of layers){m.position.x=eye.x;m.position.z=eye.z;m.visible=u.strength.value>.01;}
+ return {layers,banks,update(t,eye,elevation,wind,palette,sunDir=null){u.time.value=t;u.eye.value.copy(eye);const dawn=smooth(-7,-1,elevation)*(1-smooth(5,14,elevation));u.strength.value=dawn*1.3*(1-smooth(.15,.5,wind));const mc=palette.mistColor||palette.fogColor;u.tint.value.setRGB(mc[0]*1.05,mc[1]*1.05,mc[2]*1.02);for(const m of layers){m.position.x=eye.x;m.position.z=eye.z;m.visible=u.strength.value>.01&&!m.userData.forceHidden;}
    // the banks: strongest in the calm dawn, glowing where the low sun is behind them
    const bankStrength=1.8*smooth(-8,-2,elevation)*(1-smooth(7,20,elevation))*(1-smooth(.2,.55,wind));
    for(const s of banks){const dx=s.position.x-eye.x,dz=s.position.z-eye.z,dl=Math.hypot(dx,dz)||1;const toward=sunDir?Math.max(0,(dx/dl)*sunDir.x+(dz/dl)*sunDir.z):0;const glow=.35+.65*toward*toward;

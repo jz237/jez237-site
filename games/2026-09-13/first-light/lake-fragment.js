@@ -46,7 +46,7 @@ void main(){
  vec3 reflectedRay=reflect(-V,N);
  // the fallback beyond the mirror's edge follows the sky shader: the horizon is warm only toward the sun, purple away from it while the sun is low
  float fbAz=.5+.5*dot(normalize(vec3(reflectedRay.x,0.,reflectedRay.z)+vec3(1e-4)),normalize(vec3(sun.x,0.,sun.z)+vec3(1e-4)));float fbLow=1.-smoothstep(.03,.34,sun.y);
- vec3 fbCool=mix(skyHorizon,mix(skyZenith,vec3(.30,.19,.40),.5),.72*fbLow*(1.-night));vec3 fbHorizon=mix(fbCool,skyHorizon,pow(fbAz,mix(1.6,5.,fbLow)));
+ vec3 fbCool=mix(skyHorizon,mix(skyZenith,vec3(.30,.19,.40),.5),.72*fbLow*(1.-night));vec3 fbHorizon=mix(fbCool,skyHorizon,pow(fbAz,mix(1.6,12.,fbLow)));
  vec3 skyFallback=mix(fbHorizon,skyZenith,pow(max(0.,reflectedRay.y),.4));
  float mirrorEdge=max(abs(reflectUV.x-.5),abs(reflectUV.y-.5));reflected=mix(reflected,skyFallback,smoothstep(.46,.5,mirrorEdge));
  vec3 col=mix(refracted,reflected,fresnel);
