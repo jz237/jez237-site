@@ -38,6 +38,7 @@ export const RIDERS=[
 ];
 const TAU=Math.PI*2;
 export const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+const smoothThrottle=v=>{v=clamp(v,0,1);return v*v*(3-2*v);};
 export const angleDelta=a=>Math.atan2(Math.sin(a),Math.cos(a));
 export function makeCoveCourse(){return getCourse('greyhaven');}
 export const COVE=makeCoveCourse();
@@ -176,12 +177,15 @@ export function stepRace(s,input,dt){if(s.phase==='paused'||s.phase==='results')
  craftFields.forEach((c,i)=>{const r=s.racers[i];Object.assign(c,r?{x:r.x,z:r.z,heading:r.heading,turn:r.turn,bowWet:r.hydro.bowWet,sternWet:r.hydro.sternWet,power:Math.min(1,r.speed/18)*r.hydro.wet}:{power:0});});
  for(const r of s.racers){if(r.finishTime!==null||r.dq)continue;let c=r.human?(Array.isArray(input)?input[r.player]||{}:r.player===0?input:{}):aiInput(s,r),stats=r.stats;const ox=r.x,oz=r.z,oldY=r.hydro.y;r.raceTime=s.time;if(r.human&&rocketStart(r,c.throttle||0,s.time))announce(r,s,'ROCKET START · MAX POWER');if(stepWipeout(r,c,dt,s.time))announce(r,s,'BACK ABOARD');if(r.wipeout)c={throttle:0};r.collision=Math.max(0,r.collision-dt);r.recover=Math.max(0,r.recover-dt);
  const ice=iceContact(s.course,r);r.onIce=ice?.id||'';if(ice)supportOnIce(r,ice,0);r.turn+=((c.steer||0)-r.turn)*(1-Math.exp(-dt*7));r.throttle=clamp(c.throttle||0,0,1);r.riderLean=clamp(c.lean||0,-1,1);
- r.handicapBoost=handicapBoost(s,r);const maximum=stats.speed*(s.seaState==='surf'?1.27:1.10)*(.64+r.power*.072)*(1+r.handicapBoost),velocity=Math.hypot(r.vx,r.vz),steering=stats.handling*r.turn*clamp((velocity+(r.collision>0&&velocity<1?2*Math.sqrt(r.throttle):0))/4,0,1);
+ r.handicapBoost=handicapBoost(s,r);const rated=2*stats.speed*(s.seaState==='surf'?1.27:1.10)*(.64+r.power*.072)*(1+r.handicapBoost),velocity=Math.hypot(r.vx,r.vz),steering=stats.handling*r.turn*clamp((velocity+(r.collision>0&&velocity<1?2*Math.sqrt(r.throttle):0))/4,0,1);
  const gust=gustAt(r.x,r.z,s.time,s.weather.storm);r.gust=gust.strength;const windForce=.003*(1-r.hydro.wet*.8);r.vx+=gust.x*windForce*dt;r.vz+=gust.z*windForce*dt;
    const contact=contactHandling(r,c,dt);r.quickTurn=quickTurn(c,velocity,r.hydro.wet);r.yawVelocity??=0;const targetYaw=steering*contact.yaw*(1+r.quickTurn*.65)*(c.slide?1.35:1)*(.78+.22*r.throttle);r.yawVelocity+=(targetYaw-r.yawVelocity)*(1-Math.exp(-dt*7*r.hydro.wet));r.yawVelocity*=Math.exp(-dt*.18*(1-r.hydro.wet));if(ice)r.yawVelocity*=Math.exp(-dt*9);r.heading+=r.yawVelocity*dt;const fx=Math.sin(r.heading),fz=Math.cos(r.heading),forward=r.vx*fx+r.vz*fz;
  // Source HUD launch samples: 16/68/95 km/h at .3/1.3/2.3 seconds.
  // Planing craft retain thrust through mid speed, then approach their existing
- // rated maximum. Intake contact still gates propulsion on waves and in air.
+ // rated maximum, now doubled. Intake contact still gates propulsion on waves and in air.
+ // The final throttle travel progressively opens the doubled top end. Part
+ // throttle preserves the existing precision response for turns and obstacles.
+ const topEnd=smoothThrottle((r.throttle-.95)/.05)*smoothThrottle((forward/(rated*.5)-.95)/.10),maximum=rated*.5*(1+topEnd);
  const ratio=clamp(forward/maximum,-1.5,1.5),response=1+r.throttle*(.85+2.4*ratio**2);
  const exitDrive=s.seaState==='surf'?cornerDrive(r,c,dt,ratio):0;
  const acceleration=ice?0:response*(stats.accel*(s.seaState==='surf'?1.27:1.1)*(1+r.handicapBoost)*r.throttle*r.hydro.intake*(1+exitDrive)-ratio**2*stats.accel*(.08+.92*r.hydro.wet))-(c.brake?velocity*2*r.hydro.wet:0);r.vx+=fx*acceleration*dt;r.vz+=fz*acceleration*dt;
