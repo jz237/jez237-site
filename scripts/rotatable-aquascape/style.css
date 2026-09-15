@@ -57,3 +57,5 @@ main.aquarium-fullscreen .aquarium-header .identity,main.aquarium-fullscreen .aq
 .effects-control{display:inline-flex;align-items:center;gap:5px;margin-left:8px;pointer-events:auto;font-size:10px;color:#b4d3ce}
 .effects-control select{max-width:150px;padding:3px 6px;border:1px solid #41626a;border-radius:5px;background:#092933;color:#ddf6f4;font:inherit;cursor:pointer}
 .effects-control select:focus-visible{outline:2px solid #8cedee;outline-offset:2px}
+
+.filter-loading{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;gap:20px;background:#07151df5;color:#e4f2eb}.filter-loading button{padding:12px 22px;border:1px solid #73b0b7;border-radius:8px;background:#173c49;color:inherit;font:inherit}

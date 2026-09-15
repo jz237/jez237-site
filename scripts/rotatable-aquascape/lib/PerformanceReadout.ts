@@ -37,6 +37,7 @@ export class PerformanceReadout {
   this.report+='\nFrame p95: '+median(0,.95)+' ms\nCaptures: '+(this.host.dataset.captureMode??'every frame');
   this.report+='\nGraphics device: '+(this.host.dataset.graphicsDevice??'not exposed by browser');
   this.report+='\nEffects: '+(this.host.dataset.effectsMode??'Full');
+  if(this.host.dataset.loadSeconds)this.report+='\nAquarium ready: '+this.host.dataset.loadSeconds+' s after navigation';
   if(this.benchmarkReport)this.report+='\n\n'+this.benchmarkReport;
   this.output.textContent=this.report;this.frames=[];this.elapsed=0;
  }

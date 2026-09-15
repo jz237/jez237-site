@@ -104,3 +104,10 @@
 
 /games/2026-08-01/commando/data/*
   Cache-Control: no-cache, must-revalidate
+
+# Aquarium filenames contain a content hash; new builds request new URLs.
+/demos/rotatable-aquascape/load/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/demos/rotatable-aquascape/assets/*
+  Cache-Control: public, max-age=31536000, immutable

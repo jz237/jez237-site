@@ -1,4 +1,6 @@
 /// <reference types="vite/client" />
+import {assetURL,installAssetPaths} from './AssetPaths';
+import {LoadTiming} from './LoadTiming';
 import {Corydoras,coryBody,coryForward} from './Corydoras';
 import floorRoutes from './CoryFloorRoutes.json';
 import type {FloorRouteMap} from './CoryFloorRoutes';
@@ -120,6 +122,7 @@ export class Aquarium{
  private resizeObserver:ResizeObserver;
  private inspection:{scene:T.Scene;camera:T.Camera;material:T.MeshBasicMaterial}|null=null;
  constructor(private host:HTMLElement){
+  const loadTiming=new LoadTiming(host);installAssetPaths();
   this.renderer=new T.WebGLRenderer({antialias:false,depth:false,stencil:false,alpha:false,powerPreference:'high-performance'});
   this.renderer.setPixelRatio(Math.min(devicePixelRatio,1.65));
   if(this.diagnostics)this.gpuTimer=new GpuFrameTimer(this.renderer.getContext() as WebGL2RenderingContext,host);
@@ -177,7 +180,8 @@ export class Aquarium{
   this.bubbles=new T.InstancedMesh(new T.SphereGeometry(.018,7,5),new T.MeshPhysicalMaterial({color:0xd2eee0,roughness:.05,metalness:.1,transparent:true,opacity:.36,depthWrite:false}),48);
   this.scene.add(this.bubbles);
   this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(host);this.resize();
-  this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader),new T.TextureLoader().loadAsync('./grazer-material-atlas.png').catch(error=>{console.warn('Grazer atlas unavailable; using procedural materials.',error);return undefined;})]).then(async results=>{
+  this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader),new T.TextureLoader().loadAsync(assetURL('./grazer-material-atlas.png')).catch(error=>{console.warn('Grazer atlas unavailable; using procedural materials.',error);return undefined;})]).then(async results=>{
+   loadTiming.mark('assets');
    if(!(import.meta.env.DEV&&new URLSearchParams(location.search).has('originalIndices')))optimizeLeafIndexOrder(this.scene);
    if(!new URLSearchParams(location.search).has('originalHardscapeIndices')){try{await optimizeHardscapeIndices(this.scene);}catch(error){console.warn('Keeping original hardscape draw order.',error);}}
    calmSwordLeaves(this.scene);
@@ -198,6 +202,7 @@ export class Aquarium{
    // frame also initializes shadow, reflection and postprocessing programs.
    this.controls.update();this.scene.updateMatrixWorld();this.schoolEyes?.update();
    this.water.update(this.currentTime,this.camera.position.y,this.daylight);
+   loadTiming.mark('scene');
    await this.lighting.prepare(this.renderer);
    this.renderer.shadowMap.needsUpdate=true;if(this.refraction)this.reflections.prepare(this.renderer,this.scene,this.camera);this.lighting.render(this.renderer,this.lightingInspection);
    const plants=this.scene.children.filter(o=>o instanceof T.Mesh&&!!o.geometry.getAttribute('plantRoot'));
@@ -207,6 +212,7 @@ export class Aquarium{
    const seen=new Set<string>();this.scene.traverse(o=>{if(!(o instanceof T.InstancedMesh)||!o.userData.plantSpecies)return;const root=o.geometry.getAttribute('plantRoot');if(!root)return;for(let i=0;i<o.count;i++){const point=new T.Vector3().fromBufferAttribute(root,i),key=[point.x.toFixed(1),point.z.toFixed(1)].join(',');if(seen.has(key))continue;seen.add(key);point.y+=.35+(this.browseSites.length%4)*.3;clearHardscape(point,this.obstacles,.35);const p=fishCoordinates(point);if(p.x>670&&p.x<1200&&p.y>250&&p.y<500)this.browseSites.push({id:-100-this.browseSites.length,...p});}});
    if(!new URLSearchParams(location.search).has('originalTransforms'))reuseUnchangedTransforms(this.scene);
    if(this.perfReadout)this.installFrameBenchmark();
+   loadTiming.finish();
    this.frame=requestAnimationFrame(this.animate);
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
@@ -394,7 +400,7 @@ export class Aquarium{
   const obj=new T.Points(g,m);this.scene.add(obj);return obj;
  }
  private async loadFish(){
-  const img=new Image();img.src='./living-species.png';await img.decode();
+  const img=new Image();img.crossOrigin='anonymous';img.src=assetURL('./living-species.png');await img.decode();
   const c=document.createElement('canvas');c.width=img.width/2;c.height=img.height/2;const ctx=c.getContext('2d')!;ctx.drawImage(img,0,0,c.width,c.height,0,0,c.width,c.height);
   const data=ctx.getImageData(0,0,c.width,c.height).data;let left=c.width,top=c.height,right=0,bottom=0;
   for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(data[(y*c.width+x)*4+3]>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
