@@ -10,6 +10,7 @@ export class AquariumLighting {
  private beauty=new T.WebGLRenderTarget(1,1,{type:T.HalfFloatType,samples:2,depthTexture:new T.DepthTexture(1,1,T.UnsignedIntType)});
  private contact:GTAOPass;
  private output=new OutputPass();
+ private aoScale=1;private contactEnabled=true;private width=1;private height=1;
  readonly lens={enabled:false,center:new T.Vector2(.5,.5),radius:new T.Vector2(.12,.12),zoom:2.4};
  private scene:T.Scene;private camera:T.PerspectiveCamera;
  constructor(scene:T.Scene,camera:T.PerspectiveCamera){
@@ -37,8 +38,14 @@ export class AquariumLighting {
   this.output.renderToScreen=true;
  }
  resize(width:number,height:number){
+  this.width=width;this.height=height;
   this.beauty.setSize(width,height);
-  this.contact.setSize(width,height);
+  this.contact.setSize(Math.max(1,Math.round(width*this.aoScale)),Math.max(1,Math.round(height*this.aoScale)));
+ }
+ setEffects(aoScale:number,contact:boolean,samples:number){
+  this.contactEnabled=contact;
+  if(this.aoScale!==aoScale){this.aoScale=aoScale;this.resize(this.width,this.height);this.contact.updatePdMaterial({radius:4*aoScale});}
+  if(this.beauty.samples!==samples){this.beauty.samples=samples;this.beauty.dispose();}
  }
  async prepare(renderer:T.WebGLRenderer){
   const target=renderer.getRenderTarget();
@@ -46,6 +53,7 @@ export class AquariumLighting {
   finally{renderer.setRenderTarget(target);}
  }
  render(renderer:T.WebGLRenderer,inspect:string|null,contact=true){
+  contact=contact&&this.contactEnabled;
   const target=renderer.getRenderTarget();
   try{
    renderer.setRenderTarget(this.beauty);renderer.render(this.scene,this.camera);

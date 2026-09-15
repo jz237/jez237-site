@@ -18,3 +18,5 @@ is a separate implementation; this preference refers to the 3D aquarium.
 Preserve full model/texture detail and the established independent animal motion,
 body/fin flexibility, schooling, exploration and collision behavior. Do not spend
 money without explicit authorization.
+
+When effects need to be reduced for performance, adapt only on computers that show sustained slow frames. Powerful computers must retain full effects. Keep model/texture detail and animal behavior intact; provide an Always full override and restore effects when sustained headroom permits. Do not use GPU model names or desktop/mobile labels alone to reduce quality.

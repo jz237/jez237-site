@@ -14,6 +14,8 @@ import {AquariumWater} from './AquariumWater';
 import {buildAquariumGlass} from './AquariumGlass';
 import {ReflectionPool} from './ReflectionPool';
 import {CaptureScheduler,CaptureCadence,interleaveCaptures} from './CaptureScheduler';
+import {AdaptiveEffects,effectProfiles} from './AdaptiveEffects';
+import {installAdaptiveShadowFilter} from './AdaptiveShadowFilter';
 import {SceneRefraction} from './SceneRefraction';
 import {applyWaterDepth} from './WaterDepth';
 import {applyBakedIrradiance} from './BakedIrradiance';
@@ -104,6 +106,8 @@ export class Aquarium{
  private water:AquariumWater;
  private reflections=new ReflectionPool();
  private captureScheduler=new CaptureScheduler();
+ private effects=new AdaptiveEffects();private effectLevel=0;private autoEffects=true;
+ private simpleShadows={value:0};
  private captureCadence=new CaptureCadence(new URLSearchParams(location.search).get('captures')==='alternate'?2:1);
  private adaptiveCaptures=!['staggered','alternate'].includes(new URLSearchParams(location.search).get('captures')??'');
  // Desktop integrated GPUs also need a bounded capture budget. Keep full
@@ -186,6 +190,10 @@ export class Aquarium{
    catch(error){console.warn('Bounced lighting unavailable; using live illumination.',error);}
    // The previous path stays available for device comparisons and immediate fallback.
    if(new URLSearchParams(location.search).get('renderer')!=='previous')this.refraction=new SceneRefraction(this.renderer,this.scene);
+   installAdaptiveShadowFilter(this.scene,this.simpleShadows);
+   const requestedEffects=new URLSearchParams(location.search).get('effects');
+   if(requestedEffects==='full'||requestedEffects!==null&&/^[0-3]$/.test(requestedEffects)){this.autoEffects=false;this.effects.level=requestedEffects==='full'?0:Number(requestedEffects);}
+   this.applyEffects(this.effects.level);
    // Prepare the final material variants before revealing the aquarium. The warm
    // frame also initializes shadow, reflection and postprocessing programs.
    this.controls.update();this.scene.updateMatrixWorld();this.schoolEyes?.update();
@@ -202,22 +210,50 @@ export class Aquarium{
    this.frame=requestAnimationFrame(this.animate);
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
-  document.addEventListener('visibilitychange',()=>{this.last=0;this.captureScheduler.invalidate();this.captureCadence.reset();if(document.hidden)this.frameBenchmark?.cancel();});
+  document.addEventListener('visibilitychange',()=>{this.last=0;this.captureScheduler.invalidate();this.captureCadence.reset();this.effects.reset();if(document.hidden)this.frameBenchmark?.cancel();});
+ }
+ setEffectsMode(mode:string){
+  this.frameBenchmark?.cancel();this.autoEffects=mode!=='full';this.effects.level=0;this.effects.reset();
+  this.captureCadence.value=1;this.captureCadence.reset();this.applyEffects(0);
+ }
+ private applyEffects(level:number){
+  const profile=effectProfiles[level];this.effectLevel=level;
+  this.lighting.setEffects(profile.aoScale,profile.contact,profile.samples);
+  this.simpleShadows.value=profile.simpleShadows?1:0;this.water.advancedReflections.value=profile.waterTrace?1:0;
+  if(this.reflections.setEffects(profile.reflectionScale,profile.samples))this.captureScheduler.invalidate();
+  const details=level===0?'full effects':level===1?'half-resolution contact shading':level===2?'contact shading off; simpler shadows and water reflections':'contact shading off; simpler shadows and water reflections; lighter reflection images; MSAA off';
+  this.host.dataset.effectsMode=`${this.autoEffects?'Auto':'Fixed'}: ${profile.name} — ${details}`;
+  const select=document.querySelector<HTMLSelectElement>('#effects');
+  if(select){
+   select.options[0].text=`Auto · ${profile.name.toLowerCase()}`;
+   const preview=select.querySelector('option[value="preview"]');
+   if(!this.autoEffects&&level>0){if(!preview)select.add(new Option(`Test · ${profile.name.toLowerCase()}`,'preview'));else preview.textContent=`Test · ${profile.name.toLowerCase()}`;}
+   else preview?.remove();
+   select.value=this.autoEffects?'auto':level===0?'full':'preview';select.title=this.host.dataset.effectsMode;
+  }
+  this.updateCaptureLabel();
+ }
+ private captureInterval(){return Math.max(this.captureCadence.value,this.effectLevel===3?4:this.effectLevel>0?2:1);}
+ private updateCaptureLabel(){
+  const interval=this.captureInterval(),resolution=effectProfiles[this.effectLevel].reflectionScale===1?'full resolution':'65% reflection dimensions';
+  this.host.dataset.captureMode=this.staggerCaptures?`${interval===1?'staggered':'adaptive'}, ${resolution}${interval>1?`; secondary captures every ${interval} frames`:''}`:'every frame, '+resolution;
  }
  private installFrameBenchmark(){
   const readout=this.perfReadout!;
-  let pixelRatio=this.renderer.getPixelRatio(),controlsEnabled=this.controls.enabled;
+  let pixelRatio=this.renderer.getPixelRatio(),controlsEnabled=this.controls.enabled,savedEffects=this.effectLevel;
   const resolution=(ratio:number)=>{if(this.renderer.getPixelRatio()!==ratio){this.renderer.setPixelRatio(ratio);const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);}};
   this.frameBenchmark=new FrameBenchmark(mode=>{
    resolution(mode==='pixels'||mode==='captures-pixels'?pixelRatio*.5:pixelRatio);
   },()=>{
    resolution(pixelRatio);this.controls.enabled=controlsEnabled;this.last=0;
+   this.applyEffects(savedEffects);this.effects.reset();this.captureCadence.reset();
    this.captureScheduler.invalidate();
    this.renderer.shadowMap.needsUpdate=true;
   },(message,done)=>readout.benchmark(message,done));
   readout.onTest=()=>{
    if(this.frameBenchmark!.active){this.frameBenchmark!.cancel();return;}
    pixelRatio=this.renderer.getPixelRatio();controlsEnabled=this.controls.enabled;this.controls.enabled=false;
+   savedEffects=this.effectLevel;this.applyEffects(0);
    this.frameBenchmark!.start(performance.now());
   };
   // A new view, a learning control or a resize invalidates a pass comparison.
@@ -231,7 +267,7 @@ export class Aquarium{
   const shadows=probe!=='shadows'&&!heldCaptures;
   const reflections=probe!=='reflections'&&!heldCaptures;
   const ids=interleaveCaptures(shadows?this.canopyLights.map(l=>l.uuid):[],reflections?mirrors.map(m=>m.uuid):[]);
-  const selected=this.captureScheduler.select(ids,this.camera,`${this.teaching?.mode}:${this.teaching?.step}`,this.staggerCaptures,this.captureCadence.value);
+  const selected=this.captureScheduler.select(ids,this.camera,`${this.teaching?.mode}:${this.teaching?.step}`,this.staggerCaptures,this.captureInterval());
   for(const light of this.canopyLights)light.shadow.needsUpdate=selected.has(light.uuid);
   this.renderer.shadowMap.needsUpdate=this.canopyLights.some(l=>l.shadow.needsUpdate);
   // Even an empty selection manages the mirror hooks: the main render must not
@@ -419,7 +455,7 @@ export class Aquarium{
  }
  private animate=(now:number)=>{
   this.frame=requestAnimationFrame(this.animate);
-  if(document.hidden||this.suspended||this.filterOpen){this.frameBenchmark?.cancel();this.last=0;return;}
+  if(document.hidden||this.suspended||this.filterOpen){this.frameBenchmark?.cancel();this.effects.reset();this.last=0;return;}
   this.frameBenchmark?.tick(now);
   const probe=this.frameBenchmark?.mode??'normal';
   if(probe!=='normal'){
@@ -431,9 +467,13 @@ export class Aquarium{
   }
   const updateStart=performance.now();
   const elapsed=this.last?(now-this.last)/1000:0,wallDt=Math.min(elapsed,.05);this.last=now;
-  if(this.staggerCaptures&&this.adaptiveCaptures&&!this.frameBenchmark?.active){
+  if(this.autoEffects&&!this.frameBenchmark?.active){
+   if(this.paused||this.studyView)this.effects.reset();
+   else if(this.effects.observe(elapsed*1000))this.applyEffects(this.effects.level);
+  }
+  if(this.autoEffects&&this.staggerCaptures&&this.adaptiveCaptures&&!this.frameBenchmark?.active){
    const previous=this.captureCadence.value;this.captureCadence.observe(elapsed*1000);
-   if(previous!==this.captureCadence.value)this.host.dataset.captureMode=this.captureCadence.value===1?'staggered, full resolution':'adaptive, full resolution; secondary captures every 2 frames';
+   if(previous!==this.captureCadence.value)this.updateCaptureLabel();
   }
   const dt=this.paused||document.hidden?0:wallDt;this.time+=dt;this.currentTime+=dt*(.2+.8*this.chemistry.environment.flow/65);this.swimShader.value=this.currentTime;
   if(this.targetCamera){

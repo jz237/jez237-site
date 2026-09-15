@@ -12,7 +12,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
  <header class="aquarium-header"><div class="identity"><span class="eyebrow">THE LIVING AQUASCAPE</span><h1>In three dimensions</h1></div>
  <div class="primary-tools" role="group" aria-label="Explore and learn about the aquarium"></div>
  <nav aria-label="Compare aquariums"><a href="../living-aquascape/?v=trace-f06dc4f">Photographic</a><a href="./" aria-current="page">Rotatable 3D <span class="dot"></span></a></nav></header>
- <div class="scene-note"><span class="live-dot"></span><span>Cardinal tetra school</span><span class="note-divider">/</span><span id="status">Preparing the aquarium</span></div>
+ <div class="scene-note"><span class="live-dot"></span><span>Cardinal tetra school</span><span class="note-divider">/</span><span id="status">Preparing the aquarium</span><label class="effects-control">Effects <select id="effects" aria-label="Visual effects" disabled><option value="auto">Auto · full</option><option value="full">Always full</option></select></label></div>
  <div id="loading" role="status">Growing a small world<span></span></div>
  <button id="learn" class="learn-toggle" aria-expanded="false" aria-controls="learning" disabled>How the aquarium works ↗</button>
  <aside class="help"><span>EXPLORE THE TANK</span><p>Drag to rotate<br>Scroll or pinch to zoom</p></aside>
@@ -44,6 +44,7 @@ async function start(){
  try{
  const aquarium=new Aquarium(host);
  await aquarium.ready;
+ const effects=document.querySelector<HTMLSelectElement>('#effects')!;effects.disabled=false;effects.onchange=()=>aquarium.setEffectsMode(effects.value);
  document.querySelector('#loading')!.remove();
  installFilterExperience(aquarium);installLearning(aquarium);installExploration(aquarium);
  primaryTools.append(document.querySelector('#explore')!,document.querySelector('.chemistry-summary')!);

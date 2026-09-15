@@ -28,7 +28,7 @@ export class FrameBenchmark{
  }
  private enter(now:number){
   this.started=this.last=now;this.samples=[];this.apply(this.mode);
-  this.notify(`Aquarium graphics test ${this.index+1}/${frameProbes.length}\n${frameProbes[this.index].label}\nKeep this view still. About ${frameProbes.length*5} seconds total.\nMotion and some effects change temporarily.\nFull settings return automatically.`,false);
+  this.notify(`Aquarium graphics test ${this.index+1}/${frameProbes.length}\n${frameProbes[this.index].label}\nKeep this view still. About ${frameProbes.length*5} seconds total.\nMotion and some effects change temporarily.\nOriginal effects and settings return automatically.`,false);
  }
  tick(now:number){
   if(!this.active)return;
@@ -43,8 +43,8 @@ export class FrameBenchmark{
   this.index++;
   if(this.index===frameProbes.length){
    this.active=false;this.restore();
-   this.notify(`Aquarium graphics test\n${this.results.join('\n')}\nFrame-time comparisons, not individual GPU timings.\nFull detail and original controls restored.`,true);
+   this.notify(`Aquarium graphics test\n${this.results.join('\n')}\nFrame-time comparisons, not individual GPU timings.\nOriginal effects, resolution and controls restored.`,true);
   }else{try{this.enter(now);}catch(error){this.cancel();throw error;}}
  }
- cancel(){if(!this.active)return;this.active=false;this.restore();this.notify('Graphics test cancelled. Full detail and original controls restored.',true);}
+ cancel(){if(!this.active)return;this.active=false;this.restore();this.notify('Graphics test cancelled. Original effects, resolution and controls restored.',true);}
 }
