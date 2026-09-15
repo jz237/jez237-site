@@ -3,7 +3,7 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { getHeight } from './terrain.js?v=5';
+import { getHeight } from './terrain.js?v=woodland1';
 import { makeRng } from './noise.js?v=5';
 import { CG, SCORING, PILLBOX, PICKUP } from './config.js?v=5';
 

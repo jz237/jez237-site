@@ -51,30 +51,43 @@ check line-of-sight, and lead their shots.
   mobile, and the browser heartbeat keeps lobbies fresh while players
   wait.
 
-## Honest notes on the art
+## Art and rendering
 
-Every visual is **procedural, authored in code** — there are no model
-files, textures, or sourced assets. Terrain is simplex-noise heightmap
-geometry with canvas-painted grass/dirt/rock detail textures blended by
-slope and height in the shader, plus baked concavity AO; four tree
-species, bushes, deadfall, grass, and flowers are instanced primitive
-meshes scattered by noise. Tanks have sloped trapezoid hulls, cast
-lathe turrets with cupolas and pintle MGs, canvas-painted camo and
-decal markings, road wheels that ride the (real) suspension, and
-individually instanced track links that circulate around the running
-gear at per-side track speed; the sky is a gradient shader with a sun disc and
-canvas-blob clouds; effects are pooled point sprites with scorch decals.
-The look aims for clean stylized low-poly, not photorealism.
+The woodland uses the detailed tree atlas already used by the site's Stunt
+Car Racer (`images/tex-trees.png`), copied locally as `assets/textures/woodland.png`.
+No new paid assets or external CDN dependencies were added. Three fixed
+crossed planes per tree, plus an interior broadleaf crown, give layered
+silhouettes from different driving angles. These are inexpensive foliage
+impostors, not individually modeled leaves. Fir, broadleaf, slender broadleaf,
+and modeled dead-tree variants retain the original positions and collisions.
+Trees and shrubs remain instanced, with alpha-tested cutout shadows and
+two-sided canopy lighting. Falling trees retain their texture, tint and
+original orientation, and release their individual materials after removal.
+
+Terrain uses the existing grass image with smaller texture scale, baked
+soil/gravel detail, forest-litter and clearing masks, and texture-driven
+blend edges. These reuse the existing three terrain texture samples and
+mesh resolution. Colour grading is more restrained. Grass uses half as
+many triangles; dead branches and welded rock silhouettes are more natural.
+Tank models, lighting, sky and effects remain authored procedurally in code.
 
 ## Performance
 
-An automatic quality scaler watches smoothed frame time and steps pixel
-ratio, shadow resolution, bloom, foliage density, fog distance, and
-particle counts down *before* the game can dip below 30 fps (and back up
-when there's headroom). On a desktop GPU the full scene renders in ~1–2 ms.
-Mobile gets a lower starting tier. Touch controls are implemented and laid
-out for phones, but were tested in an emulated environment rather than on
-physical devices.
+The existing automatic quality scaler still controls resolution, shadows,
+bloom, foliage density, fog distance and particles. This art update does
+not increase foliage counts, shadow resolution or postprocessing passes.
+
+September 15, 2026 validation, Edge/ANGLE on RTX 5090, 1440 x 900, locked
+High quality: three fixed views rendered about **81–82% fewer triangles**
+including shadow/post passes (spawn: 1,688,414 → 314,306). An eight-second
+driving/firing comparison measured **59.5 fps before and 59.8 fps after**,
+with the same 16.8 ms 95th-percentile frame interval. Hardware GPU queries
+were also sampled at High and Low. These desktop measurements are not a
+guarantee for every GPU; portrait touch layout was checked in mobile
+emulation, not on physical mobile hardware.
+
+Gameplay checks covered driving, firing, toppling, fallen-tree cleanup,
+and reducing/restoring foliage through the existing quality controls.
 
 ## Tech
 

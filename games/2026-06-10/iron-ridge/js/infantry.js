@@ -4,7 +4,7 @@
 // head, helmet, rifle) share one matrix per soldier: 4 draw calls total.
 
 import * as THREE from 'three';
-import { getHeight } from './terrain.js?v=5';
+import { getHeight } from './terrain.js?v=woodland1';
 import { INFANTRY } from './config.js?v=5';
 
 const _m = new THREE.Matrix4();

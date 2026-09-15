@@ -89,7 +89,7 @@ export function forestDensity(x, z) {
 // ---------------------------------------------------------------------
 // canvas-painted detail textures (procedural, tile seamlessly enough)
 function makeDetailTexture(base, speckles, opts = {}) {
-  const s = 256;
+  const s = 512;
   const cv = document.createElement('canvas');
   cv.width = cv.height = s;
   const ctx = cv.getContext('2d');
@@ -98,7 +98,7 @@ function makeDetailTexture(base, speckles, opts = {}) {
   const rng = makeRng(opts.seed ?? 1);
   for (const sp of speckles) {
     ctx.fillStyle = sp.color;
-    for (let i = 0; i < sp.n; i++) {
+    for (let i = 0; i < sp.n * 4; i++) {
       const x = rng() * s, y = rng() * s;
       const w = sp.w[0] + rng() * (sp.w[1] - sp.w[0]);
       const h = sp.h[0] + rng() * (sp.h[1] - sp.h[0]);
@@ -112,12 +112,26 @@ function makeDetailTexture(base, speckles, opts = {}) {
         ctx.beginPath();
         ctx.ellipse(x, y, w, h, rng() * Math.PI, 0, Math.PI * 2);
         ctx.fill();
+        // Baked pebble relief: lit lip and earth contact shadow, no extra
+        // geometry, texture samples, normal maps or per-frame work.
+        if (opts.gravel && w > 2.0) {
+          ctx.strokeStyle = 'rgba(35,30,22,0.30)';
+          ctx.lineWidth = 0.9;
+          ctx.beginPath();
+          ctx.ellipse(x, y + 0.5, w, h, 0, 0.1, Math.PI * 0.9);
+          ctx.stroke();
+          ctx.strokeStyle = 'rgba(208,195,162,0.27)';
+          ctx.beginPath();
+          ctx.ellipse(x, y - 0.5, w * 0.8, h * 0.8, 0, Math.PI * 1.05, Math.PI * 1.8);
+          ctx.stroke();
+        }
       }
     }
   }
   const tex = new THREE.CanvasTexture(cv);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
   tex.colorSpace = THREE.SRGBColorSpace;
+  tex.anisotropy = 4;
   return tex;
 }
 
@@ -131,12 +145,12 @@ function grassTexture() {
 }
 
 function dirtTexture() {
-  return makeDetailTexture('#8a6f4d', [
+  return makeDetailTexture('#807561', [
     { color: 'rgba(116,90,60,0.5)', n: 420, w: [2, 7], h: [1.5, 5] },
     { color: 'rgba(158,130,94,0.45)', n: 320, w: [1.5, 5], h: [1, 4] },
     { color: 'rgba(84,64,42,0.5)', n: 220, w: [1, 3.5], h: [1, 3] },
     { color: 'rgba(60,46,32,0.55)', n: 90, w: [1, 2.2], h: [1, 2.2] },
-  ], { seed: 22 });
+  ], { seed: 22, gravel: true });
 }
 
 function rockTexture() {
@@ -144,7 +158,7 @@ function rockTexture() {
     { color: 'rgba(110,106,98,0.55)', n: 260, w: [3, 12], h: [1, 4] },
     { color: 'rgba(158,154,146,0.5)', n: 240, w: [2, 9], h: [1, 3.5] },
     { color: 'rgba(70,68,64,0.5)', n: 150, w: [1, 6], h: [0.8, 2.2] },
-  ], { seed: 33 });
+  ], { seed: 33, gravel: true });
 }
 
 // tints multiply the (already colored) photo grass texture, so they sit
@@ -152,7 +166,7 @@ function rockTexture() {
 const COL_TINT_A = new THREE.Color(0xdcead0);   // grass tint variation (multiplies texture)
 const COL_TINT_B = new THREE.Color(0xf2f7d8);
 const COL_DRY = new THREE.Color(0xf0e6ae);
-const COL_LUSH = new THREE.Color(0xa8cc8a);     // deeper meadow-green patches
+const COL_LUSH = new THREE.Color(0xb1c29b);     // deeper meadow-green patches
 
 export function buildTerrain(scene, world) {
   // ---- visual mesh ----
@@ -180,6 +194,12 @@ export function buildTerrain(scene, world) {
     dirt = Math.max(dirt, THREE.MathUtils.clamp((slope - 0.10) * 6, 0, 0.55));
     rock = THREE.MathUtils.clamp((slope - 0.17) * 7.5, 0, 1);
     if (h > 15) rock = Math.max(rock, Math.min(1, (h - 15) / 9));
+    // Forest litter and worn soil around the spawn clearing. These
+    // masks are baked once into the existing vertex attributes.
+    const forest = forestDensity(x, z);
+    dirt = Math.max(dirt, forest * 0.42);
+    const clearing = 1 - THREE.MathUtils.smoothstep(Math.hypot(x, z), 8, 29);
+    dirt = Math.max(dirt, clearing * (0.48 + tint * 0.24));
     splat[i * 2] = dirt;
     splat[i * 2 + 1] = rock;
 
@@ -205,7 +225,7 @@ export function buildTerrain(scene, world) {
   geo.computeVertexNormals();
 
   const gTex = grassTexture(), dTex = dirtTexture(), rTex = rockTexture();
-  const REPEAT = WORLD_SIZE / 7; // one tile every ~7m
+  const REPEAT = WORLD_SIZE / 4.2; // smaller natural leaf/gravel scale
 
   const mat = new THREE.MeshStandardMaterial({
     vertexColors: true,
@@ -243,7 +263,13 @@ export function buildTerrain(scene, world) {
         vec4 gCol = texture2D(map, dUv);
         vec4 dCol = texture2D(dirtMap, dUv * 1.31);
         vec4 rCol = texture2D(rockMap, dUv * 0.71);
-        vec4 texelColor = mix(mix(gCol, dCol, clamp(vSplat.x, 0.0, 1.0)), rCol, clamp(vSplat.y, 0.0, 1.0));
+        // Reuse the already sampled colour detail to break up splat edges.
+        // This avoids broad, airbrushed transitions with no extra fetches.
+        float grain = dot(gCol.rgb, vec3(0.299, 0.587, 0.114));
+        float soil = smoothstep(0.14, 0.86, vSplat.x + (grain - 0.32) * 0.42);
+        float stone = smoothstep(0.08, 0.92, vSplat.y + (rCol.r - 0.30) * 0.25);
+        gCol.rgb = mix(vec3(grain), gCol.rgb, 0.76) * vec3(0.96, 0.97, 0.91);
+        vec4 texelColor = mix(mix(gCol, dCol, soil), rCol, stone);
         diffuseColor *= texelColor;
       `);
   };
