@@ -97,7 +97,8 @@ export function verificationInput(state,r){
    const heading=Math.atan2(a.tx,a.tz)-(r.shipJumpStage===1?.4:0),along=r.shipJumpStage===0?-30:60,x=a.x+Math.sin(heading)*along,z=a.z+Math.cos(heading)*along;
    if(r.shipJumpStage===0&&Math.hypot(r.x-x,r.z-z)<3)r.shipJumpStage=1;
    const error=angleDelta(Math.atan2(x-r.x-r.vx*.15,z-r.z-r.vz*.15)-r.heading);
-   return {throttle:1,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
+   // Keep the inspection approach below the new full-throttle top end.
+   return {throttle:.95,steer:clamp(error*2.4-(r.yawVelocity||0)*.12,-1,1),brake:Math.abs(error)>1.1,dampen:true};
   }
  }
 

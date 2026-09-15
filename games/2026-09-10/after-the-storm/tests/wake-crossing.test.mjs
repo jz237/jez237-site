@@ -16,15 +16,17 @@ test('wake pressure lifts a fast crossing hull while a slow hull stays in contac
 });
 
 // Two ordinary throttle streams on an isolated open-water crossing. The first
-// craft accelerates for 60 metres before the crossing and must emit the wake through stepRace; the second uses identical controls.
-function twoCrafts(leader,x=-65,z=60){
+// craft accelerates for 60 metres before the crossing and must emit the wake
+// through stepRace; both use the same 90% throttle to retain a roughly 100 km/h
+// contact fixture after the top-end increase. Full throttle is tested separately.
+function twoCrafts(leader,x=-65,z=60,throttle=.9){
  const s=createRace({mode:'versus',seaState:'calm',course:{...COVE,ground:()=>-20,rocks:[],ramps:[],crossbars:[],passage:null}});s.phase='running';
  const [a,b]=s.racers;Object.assign(a,{x:leader?0:1000,z:0,heading:0,power:5});Object.assign(b,{x,z,heading:Math.PI/2,power:5});let peak=0,air=0;
- for(let i=0;i<360;i++){stepRace(s,[{throttle:1,dampen:true},{throttle:1,dampen:true}],1/60);if(b.x> -10&&b.x<10){peak=Math.max(peak,b.hydro.y-b.hydro.waterHeight);air+=b.hydro.airborne/60;}}
+ for(let i=0;i<360;i++){stepRace(s,[{throttle,dampen:true},{throttle,dampen:true}],1/60);if(b.x> -10&&b.x<10){peak=Math.max(peak,b.hydro.y-b.hydro.waterHeight);air+=b.hydro.airborne/60;}}
  return {peak,air};
 }
 test('a moving jet ski wake can launch another rider through the shared hull physics',()=>{
  const alone=twoCrafts(false),crossing=twoCrafts(true);assert.equal(alone.air,0);assert.ok(crossing.air>.15);assert.ok(crossing.peak>alone.peak+.4);clearWakeTrail();
 });
 
-test('crossing the earlier low-energy launch wake does not force a jump',()=>{const early=twoCrafts(true,-35,30);assert.equal(early.air,0);clearWakeTrail();});
+test('crossing the earlier low-energy launch wake does not force a jump',()=>{const early=twoCrafts(true,-35,30,1);assert.equal(early.air,0);clearWakeTrail();});
