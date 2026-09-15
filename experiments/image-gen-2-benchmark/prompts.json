@@ -13103,5 +13103,123 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-15-factual-infographic-factual-infographic-bocydium-globulare-",
+    "title": "Factual infographic: Bocydium globulare — The Globe-Bearing Helmet",
+    "tests": "Archive-wide duplicate scan found no Bocydium, treehopper, or pronotum topic. Direct-canvas portrait infographic; one dominant whole-insect hero, eight substantive panels, four explanatory close-ups, conservative uncertainty labels.; archive_slot=2026-09-15T04:20; concept=bocydium-globulare-globe-bearing-pronotum-leaf; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished direct-canvas, museum-quality portrait entomology infographic titled ‘BOCYDIUM GLOBULARE — THE GLOBE-BEARING HELMET’. This is a richly illustrated educational plate, not a photographed poster, specimen drawer, book spread, desktop, or room mockup. Use a dark charcoal-to-deep-forest background with warm ivory type, restrained amber section markers, precise fine leader lines, and naturalistic high-magnification macro lighting. The insects and biological close-ups must occupy most of the canvas; keep all labels large and readable.\n\nDOMINANT HERO: Fill the upper-middle canvas with an enormous, highly detailed lateral three-quarter macro rendering of a real adult Bocydium globulare standing beneath a green Miconia leaf. Keep it recognizably tiny despite the magnification with a nearby 5 mm scale bar and a small life-size silhouette. Render exactly six jointed legs, a small dark head with unstalked compound eyes, folded true wings, segmented thorax and abdomen, and above them the extraordinary enlarged pronotum: a central elevated stalk, slender paired suprahumeral branches bearing rounded inflated globes, and one simple spine-like posterior process. Do not turn the globes into eyes, antennae, ants, fungus, weapons, or balloons. Preserve a delicate dark-brown-to-black body, believable chitin, translucent wing venation, leaf hairs, moisture, and shallow macro depth of field.\n\nBuild EIGHT substantive supporting panels around the hero with clean hierarchy and no tiny paragraphs:\n1. ‘BODY OR HELMET?’ — a color-coded side anatomy diagram separating head, first thoracic segment/pronotum, true wings, abdomen, and all six legs; emphasize that the globe structure is enlarged pronotum, not a second animal or a set of wings.\n2. ‘GLOBE GEOMETRY’ — enlarged dorsal and oblique close-ups of the widely separated lateral globes on slender suprahumeral horns, plus the central stalk and posterior spine, linked to the hero by precise leader lines.\n3. ‘SURFACE UNDER MAGNIFICATION’ — an extreme macro window showing the pronotum's punctate pits, one long narrow seta associated with each pit, and fine tuberculate texture between pits; depict texture, not invented cellular anatomy.\n4. ‘A TINY ADULT’ — a clean scale comparison showing the verified adult range 4.6–7.5 mm against a millimeter rule and fingernail-width silhouette without making the insect monstrous.\n5. ‘FEEDING POSITION’ — a habitat vignette of the insect on the underside of a Miconia leaf a few feet above tropical forest ground, with its small piercing-sucking beak placed against plant tissue; label only ‘recorded on Miconia’ and ‘underside of leaf’. Do not show chewing.\n6. ‘NYMPH TO ADULT — NO PUPA’ — a conservative three-step diagram: earlier nymph, final nymphal instar with wing pads and smaller pronotum, adult after the final molt with expanded wings and pronotum. Clearly label that treehoppers develop through nymphal instars and do not have a pupal stage; do not assert a species-specific number of days or depict undocumented B. globulare nymph ornament.\n7. ‘TROPICAL AMERICAS’ — a compact locator map highlighting the documented genus range from Costa Rica and Trinidad through northern and central South America to Brazil, Bolivia, and Paraguay; caption ‘Bocydium genus records’ so it is not misread as a precise species distribution map.\n8. ‘FUNCTION: STILL UNKNOWN’ — a comparison panel placing the real pronotal silhouette beside a small Neotropical seed and spiny fruit silhouette. Use a large question mark and text ‘resemblance proposed; function untested’. Explicitly avoid presenting ant mimicry, predator defense, mate choice, sensory organs, or seed mimicry as established fact.\n\nInclude FOUR prominent explanatory close-ups: globe-bearing horn geometry; pronotal punctures/setae/tubercles; the true head and unstalked eyes beneath the helmet; and the final-molt expansion diagram. Add a concise taxonomic footer: ‘Insecta • Hemiptera • Membracidae • Bocydium globulare (Fabricius, 1803)’. Naturalistic scientific illustration and macro-photography realism, anatomically credible body segmentation and six legs, sophisticated editorial balance, dense but uncluttered, crisp typography. No bibliography, URLs, logos, watermarks, invented statistics, sensational claims, gore, or decorative filler.",
+    "image": "images/2026-09-15-factual-infographic-factual-infographic-bocydium-globulare-.jpg",
+    "thumb": "thumbs/2026-09-15-factual-infographic-factual-infographic-bocydium-globulare-.webp",
+    "color": "#44483a",
+    "date": "2026-09-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "bocydium-globulare-globe-bearing-pronotum-leaf",
+      "imageSha256": "52338ebf3b947075020bc0685a41907449f8ec364269fa1e2d4a69707c21c4c1",
+      "imageDHash": "9ce733592d2f694e"
+    },
+    "factualInfographic": {
+      "topic": "How Bocydium globulare carries inflated globe-bearing horns on an enlarged pronotum",
+      "description": "Adult anatomy, developmental context, leaf-feeding habitat, and unresolved function of the globe-bearing treehopper's elaborate pronotum.",
+      "sourceNote": "Proceedings of the Entomological Society of Washington https://zenodo.org/api/records/16234616/files/bhlpart55256.pdf/content and Proceedings of the Royal Society B https://pmc.ncbi.nlm.nih.gov/articles/PMC9174728/ — verified taxonomy, adult dimensions, pronotal anatomy and texture, Miconia/underside-leaf observations, genus range, developmental context, and uncertainty about function.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-15T08:20:00Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Proceedings of the Entomological Society of Washington",
+            "title": "Review of the New World Treehopper Tribe Stegaspidini: I: Bocydium, Lirania, and Smerdalea",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://zenodo.org/api/records/16234616/files/bhlpart55256.pdf/content"
+          },
+          {
+            "id": "S2",
+            "publisher": "Proceedings of the Royal Society B",
+            "title": "The roles of growth regulation and appendage patterning genes in the morphogenesis of treehopper pronota",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9174728/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Bocydium globulare is a taxonomically recognized species of the treehopper genus Bocydium in the insect family Membracidae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Adult Bocydium are 4.6-7.5 mm long and have a small dark, delicate body beneath the enlarged pronotum.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The Bocydium pronotum bears slender suprahumeral horns with inflated bulbs and a simple spine-like posterior process arising from a central pronotal stalk.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Bocydium globulare is distinguished in the adult key by a wide separation between its lateral pronotal globes relative to the humeral angles.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The pronotal surface is punctate, each pit bears a long narrow seta, and the surface between pits is finely tuberculate.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The head has unstalked compound eyes and ocelli, while the legs are ordinary walking legs and the hind tibia carries rows of cucullate setae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Bocydium globulare has been recorded on Miconia and feeding from the undersides of leaves a few feet above the ground.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The genus Bocydium is recorded across tropical parts of Central and South America, including Costa Rica, Trinidad, Venezuela, the Guianas, Colombia, Ecuador, Peru, Bolivia, Brazil, and Paraguay.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The biological function of the globe-bearing pronotal structure remains unknown; proposed resemblance to seeds or spiny fruit is a hypothesis, not an established mechanism.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In treehoppers, the pronotum is the dorsal plate of the first thoracic segment and can become enlarged into elaborate species-specific forms.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treehopper pronotal shape begins differentiating during nymphal development, and the final molt is associated with a major expansion of the pronotum and wings.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Treehoppers develop through nymphal instars before the adult stage rather than through a pupal stage.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
