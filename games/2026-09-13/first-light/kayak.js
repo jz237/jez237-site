@@ -19,7 +19,7 @@ function hullGeometry(part='all'){
 // weathered strips: dark taupe tones with dark seams and a grain along the length, under a varnish that carries the sky (the hero bow is a dark deck between light wooden gunwales)
 let woodTex=null;
 export function cedarTexture(){if(woodTex)return woodTex;const W=512,H=256,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');
- const tones=['#5e5b62','#524f56','#68656c','#4a474e','#5b585f','#4f4c53'];const strips=12,sh=H/strips;let seed=11;const r=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+ const tones=['#7a767e','#6b6870','#86828b','#615d66','#767279','#68646d'];const strips=12,sh=H/strips;let seed=11;const r=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  for(let i=0;i<strips;i++){g.fillStyle=tones[Math.floor(r()*tones.length)];g.fillRect(0,i*sh,W,sh);
   // grain: long faint streaks
   for(let k=0;k<14;k++){const y=i*sh+r()*sh;g.strokeStyle=`rgba(${r()<.5?50:170},${r()<.5?48:170},${r()<.5?52:180},${.08+.12*r()})`;g.lineWidth=.6+r()*1.2;g.beginPath();g.moveTo(0,y);for(let x=0;x<=W;x+=32)g.lineTo(x,y+(r()-.5)*2.2);g.stroke();}
