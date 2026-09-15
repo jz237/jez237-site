@@ -7,7 +7,7 @@ import {shared,skyColors} from './lake-surface.js';
 const lerp=(a,b,t)=>a+(b-a)*t,clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),smooth=(a,b,v)=>{const x=clamp((v-a)/(b-a),0,1);return x*x*(3-2*x);};
 const mix3=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];
 // dawn and dusk sit low and purple, as the hero art does: the warmth lives in the sun's aureole and on the sun side of the horizon, not across the whole sky
-const DAY={z:[.15,.34,.74],h:[.52,.68,.86]},GOLD={z:[.15,.13,.27],h:[.64,.34,.20]},DUSK={z:[.09,.075,.19],h:[.50,.23,.22]},NIGHT={z:[.008,.012,.032],h:[.030,.040,.070]};
+const DAY={z:[.15,.34,.74],h:[.52,.68,.86]},GOLD={z:[.15,.13,.27],h:[.58,.31,.19]},DUSK={z:[.09,.075,.19],h:[.46,.21,.21]},NIGHT={z:[.008,.012,.032],h:[.030,.040,.070]};
 // Palette for a sun elevation in degrees. Values are linear light.
 export function skyPalette(e,cloud=0){
  let z,h;
