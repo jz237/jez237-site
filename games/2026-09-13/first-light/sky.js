@@ -60,10 +60,14 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  vec3 cloudEdge=mix(mix(vec3(.80,.82,.88),mix(skyZenith,vec3(.40,.28,.38),.55),lowSun),cloudLit,clamp(lit*(1.-cloud*.45)+rim*pow(s,3.)*.9,0.,1.));
  vec3 cloudColor=mix(cloudEdge,cloudShade,thick*(1.-.55*lit))*(1.-night*.92);
  cloudColor+=sunColor*pow(s,10.)*.5*lowSun*(1.-night);
- col=mix(col,cloudColor,cover*.93);vec3 c3=col;
+ col=mix(col,cloudColor,cover*.93);
+ // high thin streaks near the horizon at first light: bands of constant elevation (rings in the projection), lit peach beside the sun and mauve away from it, the altostratus the picture's sun sits behind
+ float streakV=0.;{float st=fbm(vec2(atan(p.y,p.x)*1.6+flow.x*.2,length(p)*3.6+17.));float streak=smoothstep(.44,.60,st)*smoothstep(.02,.07,y)*(1.-smoothstep(.22,.42,y))*lowSun*(1.-night)*(1.-envPass);streakV=streak;
+  vec3 streakColor=mix(mix(skyZenith,vec3(.42,.28,.40),.5),cloudLit*.5,pow(s,4.)*.85);col=mix(col,streakColor,streak*.6);}
+ vec3 c3=col;
  vec3 sd=floor(d*260.);float star=step(.9972,hash(sd.xy*1.7+sd.z*3.1))*night*(1.-cover);col+=vec3(.9,.92,1.)*star*smoothstep(.02,.25,y);
  col=mix(col,horizonHere,(1.-smoothstep(0.,.10,y))*(.55-.30*lowSun));
- if(skyDebug>.5)col=skyDebug<1.5?c0:skyDebug<2.5?c1:skyDebug<3.5?c2:skyDebug<4.5?c3:vec3(cover);
+ if(skyDebug>.5)col=skyDebug<1.5?c0:skyDebug<2.5?c1:skyDebug<3.5?c2:skyDebug<4.5?c3:skyDebug<5.5?vec3(cover):vec3(streakV);
  gl_FragColor=vec4(col,1.);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
