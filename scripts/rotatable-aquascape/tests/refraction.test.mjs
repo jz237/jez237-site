@@ -40,3 +40,38 @@ test('a failed copy restores materials, clear state, background and framebuffer'
  assert.throws(()=>f.renderer.render(f.scene,f.camera),/copy failed/);
  assert.deepEqual(f.materials.map(m=>m.visible),[true,true,true,false]);assert.equal(f.renderer.autoClear,true);assert.equal(f.scene.background,background);assert.equal(f.renderer.getRenderTarget(),f.target);f.pass.dispose();
 });
+
+
+test('one frame collects materials once across every mirror and main camera, refreshing dynamic contents next frame',()=>{
+ const f=fixture();let traversals=0;
+ const original=f.scene.traverseVisible.bind(f.scene);
+ f.scene.traverseVisible=fn=>{traversals++;original(fn);};
+ f.pass.beginFrame();
+ for(let view=0;view<4;view++)f.renderer.render(f.scene,new T.PerspectiveCamera());
+ assert.equal(traversals,1);
+ assert.equal(f.copies.length,4);
+ assert.deepEqual(f.materials.map(m=>m.visible),[true,true,true,false]);
+ f.pass.endFrame();
+ const food=new T.MeshBasicMaterial();f.scene.add(new T.Mesh(f.geometry,food));
+ f.materials[0].visible=false;
+ f.pass.beginFrame();f.renderer.render(f.scene,f.camera);f.pass.endFrame();
+ assert.equal(traversals,2);
+ assert.equal(food.visible,true);assert.equal(f.materials[0].visible,false);
+ // Original render fixture records only original materials; cached map must also
+ // include newly created food, and remove it when its object is removed.
+ f.pass.beginFrame();assert.equal(f.pass.frameMaterials.get(food),true);f.pass.endFrame();
+ f.scene.remove(f.scene.children.at(-1));
+ f.pass.beginFrame();assert.equal(f.pass.frameMaterials.has(food),false);f.pass.endFrame();
+ f.pass.dispose();
+});
+
+test('frame material reuse restores visibility after a failed mirror copy and can render the following frame',()=>{
+ const f=fixture(),copy=f.renderer.copyTextureToTexture;
+ f.pass.beginFrame();f.renderer.copyTextureToTexture=()=>{throw Error('mirror failed');};
+ assert.throws(()=>f.renderer.render(f.scene,f.camera),/mirror failed/);
+ f.pass.endFrame();
+ assert.deepEqual(f.materials.map(m=>m.visible),[true,true,true,false]);
+ f.renderer.copyTextureToTexture=copy;
+ f.pass.beginFrame();f.renderer.render(f.scene,f.camera);f.pass.endFrame();
+ assert.equal(f.copies.length,1);f.pass.dispose();
+});

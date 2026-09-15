@@ -11,6 +11,7 @@ export class SceneRefraction {
  private originalRender:T.WebGLRenderer['render'];
  private originalShadows:T.WebGLRenderer['shadowMap']['render'];
  private opaqueMaterials:Map<T.Material,boolean>|null=null;
+ private frameMaterials:Map<T.Material,boolean>|null=null;
  private renderer:T.WebGLRenderer;private scene:T.Scene;
  constructor(renderer:T.WebGLRenderer,scene:T.Scene){
   this.renderer=renderer;this.scene=scene;
@@ -51,13 +52,22 @@ export class SceneRefraction {
    this.renderView(camera);
   };
  }
- private renderView(camera:T.Camera){
-  const r=this.renderer,target=r.getRenderTarget()!;
+ /** Collect after simulation/lesson visibility changes, once for all camera passes.
+  * Reflectors may hide their own Object3D while capturing; that does not change
+  * material visibility, and Three still respects each object's visibility. */
+ beginFrame(){this.frameMaterials=this.collectMaterials();}
+ endFrame(){this.frameMaterials=null;}
+ private collectMaterials(){
   const materials=new Map<T.Material,boolean>();
   this.scene.traverseVisible(object=>{
    if(object instanceof T.Mesh||object instanceof T.Line||object instanceof T.Points)
     for(const material of Array.isArray(object.material)?object.material:[object.material])materials.set(material,material.visible);
   });
+  return materials;
+ }
+ private renderView(camera:T.Camera){
+  const r=this.renderer,target=r.getRenderTarget()!;
+  const materials=this.frameMaterials??this.collectMaterials();
   // Shadow casters must keep their original visibility (including animal fins).
   // Reflection views reuse this same frame's maps.
   const clear=r.autoClear,background=this.scene.background,mipmaps=target.texture.generateMipmaps;

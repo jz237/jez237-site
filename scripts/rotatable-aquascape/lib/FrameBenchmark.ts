@@ -26,7 +26,7 @@ export class FrameBenchmark{
  }
  private enter(now:number){
   this.started=this.last=now;this.samples=[];this.apply(this.mode);
-  this.notify(`Phone graphics test ${this.index+1}/${frameProbes.length}\n${frameProbes[this.index].label}\nKeep this view still. About 40 seconds total.\nMotion and some effects change temporarily.\nFull settings return automatically.`,false);
+  this.notify(`Aquarium graphics test ${this.index+1}/${frameProbes.length}\n${frameProbes[this.index].label}\nKeep this view still. About 40 seconds total.\nMotion and some effects change temporarily.\nFull settings return automatically.`,false);
  }
  tick(now:number){
   if(!this.active)return;

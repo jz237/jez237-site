@@ -103,7 +103,9 @@ export class Aquarium{
  private water:AquariumWater;
  private reflections=new ReflectionPool();
  private captureScheduler=new CaptureScheduler();
- private staggerCaptures=new URLSearchParams(location.search).get('captures')==='staggered'||(matchMedia('(pointer: coarse)').matches&&new URLSearchParams(location.search).get('captures')!=='full'&&new URLSearchParams(location.search).get('renderer')!=='previous');
+ // Desktop integrated GPUs also need a bounded capture budget. Keep full
+ // captures available explicitly for comparisons; never infer GPU speed from input type.
+ private staggerCaptures=new URLSearchParams(location.search).get('captures')!=='full'&&new URLSearchParams(location.search).get('renderer')!=='previous';
  private refraction:SceneRefraction|null=null;
  private frame=0;
  private diagnosticTime=0;private diagnosticFrames=0;
@@ -231,11 +233,13 @@ export class Aquarium{
   // silently recapture them. Projection/depth matrices stay paired with their
   // captured image, so a reused image remains anchored to the tank.
   try{
+   this.refraction?.beginFrame();
    if(this.refraction)this.reflections.prepare(this.renderer,this.scene,this.camera,selected);
    const triangles=this.lighting.render(this.renderer,this.lightingInspection,probe!=='contact');
    this.captureScheduler.complete(selected);
    return triangles;
   }catch(error){this.captureScheduler.invalidate();throw error;}
+  finally{this.refraction?.endFrame();}
  }
  private installGlassTap(){
   const canvas=this.renderer.domElement;
