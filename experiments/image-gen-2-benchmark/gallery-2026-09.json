@@ -1,5 +1,108 @@
 [
   {
+    "id": "2026-09-15-factual-infographic-factual-infographic-peacock-spider-cour",
+    "title": "Factual infographic: Peacock Spider Courtship — Signal in Motion",
+    "tests": "Archive-wide factual dataset scan found no peacock-spider or Maratus volans topic. Direct-canvas portrait infographic; one dominant hero, eight substantive panels, four explanatory close-ups, short labels, conservative lab-evidence caveats.; archive_slot=2026-09-15T08:20; concept=maratus-volans-courtship-visual-vibration-display; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, museum-quality portrait scientific infographic directly on the 2048x3072 canvas, titled 'PEACOCK SPIDER COURTSHIP — SIGNAL IN MOTION'. Do not depict a poster, paper sheet, screen, wall, desk, specimen tray, or mockup. Use a deep charcoal-to-forest scientific field-guide ground with restrained sunburst accents, crisp ivory typography, readable labels, precise leader lines, and luminous but biologically credible macro illustration. The dominant hero is a highly detailed adult male Maratus volans facing an adult female on a textured horizontal substrate: the male's brightly colored abdominal flaps are expanded, the ornamented third legs are raised and moving, and subtle concentric surface-wave graphics travel through the substrate toward the female. Render fine setae, segmented legs, reflective eyes, colored abdominal scales, contact shadows, and shallow macro lighting while keeping anatomy legible. Surround the hero with eight substantive numbered panels, each visually distinct and connected to the central scene: 1 ANATOMY OF THE DISPLAY — dorsal and frontal callouts identifying expanded abdominal flaps, abdomen, ornamented third legs, pedipalps, and feet contacting the substrate; 2 TWO CHANNELS — a split diagram showing visible color-and-motion cues above the surface and substrate-borne vibration below it, converging at the observing female; 3 DISPLAY SEQUENCE — a cautious storyboard of approach/attention, abdominal movement, flap expansion, third-leg display, and continued multi-part signaling, labeled 'elements can combine and vary' rather than implying a rigid universal order; 4 MOTION CLOSE-UP — three ghosted silhouettes tracing abdominal bobbing, flap display, and third-leg movement; 5 VIBRATION CLOSE-UP — a side cutaway of feet, substrate, propagating wave fronts, and a small waveform inset, explicitly labeled 'substrate-borne vibration, not airborne song'; 6 HOW SCIENTISTS MEASURE IT — compact laboratory schematic pairing high-speed/regular video with a laser vibrometer aimed at the substrate, showing movement track and vibration trace without invented numbers; 7 RECEIVER PERSPECTIVE — a female-eye-view vignette with the male centered, plus a substrate cross-section showing that visual and vibratory information arrive through different sensory routes; 8 WHAT THE EVIDENCE SUPPORTS — a clean cause-and-evidence diagram stating that mating-trial success was associated with a combination of visual and vibratory displays, while no single gesture guarantees mating. Include at least four explanatory close-ups: expanded flap anatomy, ornamented third-leg movement, foot-to-substrate vibration transfer, and laser-vibrometry measurement. Add a small 'CAUTION IN INTERPRETATION' box: pedipalp flickering occurs during courtship but was also observed in other contexts; controlled studies describe patterns, not identical behavior in every individual. Use short source-backed labels only, no statistics, no URLs, no bibliography, no invented sensory organs, no generalized claims about every Maratus species, and no claim that color or vibration alone determines female choice. Richly illustrated, scientifically sober, exceptionally detailed, cohesive typographic hierarchy, generous label spacing, no tiny paragraphs, no watermark or logo.",
+    "image": "images/2026-09-15-factual-infographic-factual-infographic-peacock-spider-cour.jpg",
+    "thumb": "thumbs/2026-09-15-factual-infographic-factual-infographic-peacock-spider-cour.webp",
+    "color": "#3d3f33",
+    "date": "2026-09-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "maratus-volans-courtship-visual-vibration-display",
+      "imageSha256": "3ebd3421dcb6d732161743ef7b92cbf3a67979f991ec8ee4d56ecc1396ab6561",
+      "imageDHash": "394d191bcf4b6ff9"
+    },
+    "factualInfographic": {
+      "topic": "How male Maratus volans combine visual ornaments, movement, and substrate-borne vibrations during courtship",
+      "description": "A direct-canvas educational plate explaining the anatomy, visual and vibratory channels, observed behavioral elements, measurement methods, receiver perspective, and cautious interpretation of Maratus volans courtship.",
+      "sourceNote": "Verified against PLOS ONE, https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0025390, and UNSW Sydney, https://unsworks.unsw.edu.au/entities/publication/d17dd1fc-f683-4a7e-ba72-c41888d2cf81. Scope: male M. volans courtship anatomy and movement, substrate-borne vibration, video/laser-vibrometry methods, and evidence that mating success relates to combined visual and vibratory displays.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-15T12:20:50Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "PLOS ONE",
+            "title": "Multi-Modal Courtship in the Peacock Spider, Maratus volans (O.P.-Cambridge, 1874)",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0025390"
+          },
+          {
+            "id": "S2",
+            "publisher": "UNSW Sydney",
+            "title": "Female preference for multi-modal courtship: Multiple signals are important for male mating success in peacock spiders",
+            "sourceType": "university",
+            "url": "https://unsworks.unsw.edu.au/entities/publication/d17dd1fc-f683-4a7e-ba72-c41888d2cf81"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Maratus volans males use a multi-modal courtship display combining visual signals with substrate-borne vibratory signals.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "During courtship, a male can unfurl brightly colored flaps around the abdomen and display them toward a female.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The expanded abdominal display is coordinated with movements of the ornamented third pair of legs.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Researchers characterized courtship movement with video and measured substrate vibration with laser vibrometry.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The documented courtship repertoire contains distinct, stereotyped behavioral elements rather than one continuous undifferentiated dance.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Pedipalp flickering can appear during courtship but was also observed in other contexts, so it is not necessarily courtship-specific.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Male abdominal bobbing is associated with vibratory signaling, making visible motion and substrate vibration linked parts of the display.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Experimental mating trials found male mating success depended on a combination of visual and vibratory displays.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The evidence concerns controlled observations and mating trials, so the infographic should not imply that every female responds identically or that one display element guarantees mating.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-15-factual-infographic-factual-infographic-nepenthes-the-water",
     "title": "Factual infographic: Nepenthes — The Water-Lubricated Trap Rim",
     "tests": "Direct-canvas portrait infographic; one dominant hero, eight substantive panels, three explanatory close-ups, concise source-backed labels only.; archive_slot=2026-09-15T00:20; concept=nepenthes-peristome-water-film-insect-aquaplaning; factual_subtype: factual-infographic",
