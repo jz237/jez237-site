@@ -13,10 +13,13 @@ export const foamDetailGLSL=`
 uniform sampler2D foamDetailMap;
 float foamStructure(vec2 p,vec2 flow,float age,float dist){
  vec2 q=p-flow;
- vec2 warp=texture2D(foamDetailMap,q*.067).gb-.5;
- vec3 cellular=texture2D(foamDetailMap,q*.64+warp*.16).rgb;
- vec3 fine=texture2D(foamDetailMap,mat2(.8,-.6,.6,.8)*q*1.87-warp*.1).rgb;
- float lace=clamp(cellular.r*.8+fine.r*.55,0.,1.);
- float fresh=mix(.30,1.,smoothstep(.15,.8,cellular.b+fine.b*.35));
- return mix(mix(fresh,lace,age*.82),mix(.55,.22,age),smoothstep(60.,200.,dist));
+ // Irregular froth islands with opaque interiors and eroded edges. Tiny
+ // bubbles belong inside these patches, never an all-over cellular lattice.
+ vec2 warp=texture2D(foamDetailMap,q*.023).rg-.5;
+ vec3 coarse=texture2D(foamDetailMap,q*.085+warp*.27).rgb;
+ vec3 fine=texture2D(foamDetailMap,mat2(.8,-.6,.6,.8)*q*.43-warp*.11).rgb;
+ float foamPatch=coarse.r*.67+fine.r*.33;
+ float fresh=smoothstep(.40+age*.19,.57+age*.19,foamPatch);
+ float grain=.60+.40*texture2D(foamDetailMap,q*.27).g;
+ return mix(fresh*grain,mix(.39,.08,age),smoothstep(75.,240.,dist));
 }`;

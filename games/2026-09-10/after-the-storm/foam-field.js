@@ -31,7 +31,7 @@ export function makeFoamField(renderer,common,uniforms){
  float bottom=floorDepth(p),depth=height(p)-bottom;
  float breaker=customTerrain*(1.-smoothstep(.3,2.1,depth))*smoothstep(.01,.18,depth)
   *(.28+.72*smoothstep(-.1,.7,h));
- float source=max(crest*(.30+.35*smoothstep(.8,1.8,h)),breaker*1.3);
+ float source=max(crest*(.19+.26*smoothstep(.8,1.8,h)),breaker*1.3);
  // Analytic accumulation remains stable when rendering is throttled.
  vec2 life=foamLifeStep(old,source,foamDt);float density=life.r,bubbles=life.g;
  // Advected Kelvin arms and aerated prop-wash, evaluated per atlas texel.

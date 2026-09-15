@@ -12,8 +12,8 @@ export function islandElevation(u,v,seed,height=120){
  if(rim<=0)return -12;
  const x=u+(n(u*2+31,v*2)-.5)*.30,z=v+(n(u*2,v*2+47)-.5)*.30;
  const crest=Math.exp(-((x+.14)**2*1.8+(z-.05)**2*3.5));
- let ridges=0,weight=.55,scale=3.2;
- for(let i=0;i<4;i++){const ridge=1-Math.abs(n(x*scale+i*17,z*scale+i*9)*2-1);ridges+=ridge*ridge*weight;weight*=.48;scale*=2.17;}
+ let ridges=0,weight=.55,scale=2.8;
+ for(let i=0;i<4;i++){const ridge=1-Math.abs(n(x*scale+i*17,z*scale+i*9)*2-1);ridges+=ridge*ridge*weight;weight*=.28;scale*=2.03;}
  const flank=Math.max(0,1-radius*radius)**.62;
- return -12+height*flank*(.16+crest*.40+ridges*.65);
+ return -12+height*flank*(.24+crest*.43+ridges*.44);
 }

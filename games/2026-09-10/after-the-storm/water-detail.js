@@ -33,11 +33,11 @@ void main(){
  vec2 flow=vec2(time*.013,-time*.009);vec2 r1=texture2D(detailMap,p*.145+flow).rg*2.-1.;
  vec2 rotated=mat2(.8,-.6,.6,.8)*p;vec2 r2=texture2D(detailMap,rotated*.37-flow*1.7).rg*2.-1.;
  vec3 localGust=gustAt(p,time,storm);
- float detailStrength=(.21+storm*.065+localGust.z*.09)*(1.-smoothstep(75.,300.,dist)*.6);
+ float detailStrength=(.36+storm*.065+localGust.z*.09)*(1.-smoothstep(75.,300.,dist)*.6);
  // Capillary ripples travel with the longer waves instead of sliding as a single sheet.
  vec2 drift=surface.yz*.24;
  vec2 r3=texture2D(detailMap,p*.82+drift-flow*2.3).rg*2.-1.;
- vec2 ripple=(r1+r2*.52+r3*.22)*detailStrength;
+ vec2 ripple=(r1+r2*.60+r3*.28)*detailStrength;
  // Rain impacts are independent short-lived expanding rings, rather than a global ripple loop.
  if(storm>.32){vec2 grid=p*1.6;vec2 cell=floor(grid);for(int j=-1;j<=1;j++)for(int i=-1;i<=1;i++){
   vec2 c=cell+vec2(float(i),float(j));float cycle=time*1.4+hash(c);float epoch=floor(cycle);vec2 point=c+vec2(hash(c+epoch),hash(c+epoch+23.));vec2 delta=(grid-point)/1.6;float age=fract(cycle);float d=length(delta);float ring=d-age*.43;
@@ -72,7 +72,7 @@ void main(){
  float cloudLight=cloudVisibility(worldP);
  float faceLight=smoothstep(-.16,.22,-dot(surface.yz,sun.xz));
  float trough=smoothstep(.12,1.4,seaLevel-worldP.y)*(1.-smoothstep(1.,4.,verticalDepth)*.35);
- col*=(.63+.51*faceLight)*(1.-trough*.20)*mix(.70,1.,cloudLight);
+ col*=(.57+.66*faceLight)*(1.-trough*.25)*mix(.70,1.,cloudLight);
  col+=vec3(.004,.026,.024)*smoothstep(.1,1.2,worldP.y-seaLevel)*faceLight*(1.-night);
  // Forward scattering through thinner, backlit crests gives water depth without
  // a uniform neon rim. It vanishes under thick storm cloud or at night.
@@ -83,9 +83,9 @@ void main(){
  float alpha2=roughness*roughness+min(.04,variance*.32);float denom=nh*nh*(alpha2-1.)+1.;float distribution=alpha2/(3.14159265*denom*denom);
  float smithV=2.*nv/(nv+sqrt(alpha2+(1.-alpha2)*nv*nv));float smithL=2.*nl/(nl+sqrt(alpha2+(1.-alpha2)*nl*nl));
  float spec=distribution*smithV*smithL*.0204/max(.02,4.*nv*nl);
- col+=mix(vec3(1.,.94,.82),vec3(1.,.70,.32),skyWarmth)*min(18.,spec)*nl*3.8*cloudLight*(1.-storm*.88)*(1.-night*.97);
+ col+=mix(vec3(1.,.94,.82),vec3(1.,.70,.32),skyWarmth)*min(22.,spec)*nl*4.8*cloudLight*(1.-storm*.88)*(1.-night*.97);
  float turbulence=noise(p*2.7+vec2(time*.07,-time*.04))*.6+noise(p*8.1-time*.025)*.4;
- vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float age=history.g/max(.001,history.r+history.g);float structure=foamStructure(p,vec2(.86,-.51)*time*.08+surface.yz*(.3+.22*sin(time*.8)),age,dist);float foam=smoothstep(.12,.78,history.r)*structure*1.8+history.g*structure*.035,bubbles=history.g*.38;
+ vec2 foamUV=(p-foamCenter)/foamSpan+.5;float foamInside=step(0.,foamUV.x)*step(foamUV.x,1.)*step(0.,foamUV.y)*step(foamUV.y,1.);vec2 history=texture2D(foamMap,foamUV).rg*foamInside;float age=history.g/max(.001,history.r+history.g);float structure=foamStructure(p,vec2(.86,-.51)*time*.08+surface.yz*(.3+.22*sin(time*.8)),age,dist);float foam=smoothstep(.19,.82,history.r)*structure*2.1,bubbles=history.g*.23;
  // Landing wash expands from the contact point and breaks apart, remaining in
  // world space after the rider has left. Its ring follows the shared pressure wave.
  for(int i=0;i<12;i++){vec4 w=impactWaves[i];float age=time-w.z;if(w.w<=0.||age<0.||age>7.)continue;
@@ -99,7 +99,7 @@ void main(){
  float lip=exp(-pow((verticalDepth-.13)/.16,2.));
  float lace=noise(p*1.25+surface.yz*.4-vec2(time*.13,time*.09));
  float wash=smoothstep(.28,.70,lace*.65+turbulence*.35);
- foam+=lip*(.24+.52*wash)+shore*wash*(.14+history.r*.40);
+ foam+=lip*(.18+.62*wash)*structure+shore*wash*history.r*.35*structure;
  bubbles+=shore*.2;
  for(int r=0;r<7;r++){float gap=length(p-reefs[r].xy)-reefs[r].z;foam+=exp(-gap*gap*3.)*smoothstep(.42,.8,turbulence+.12*sin(time*1.7+float(r)))*(.20+storm*.12);}
  // Persistent wake foam is accumulated in the world-space foam atlas.
@@ -121,7 +121,10 @@ void main(){
  // Subsurface aeration persists after the white surface foam disperses.
  col=mix(col,mix(vec3(.10,.32,.30),vec3(.055,.15,.17),storm),clamp(bubbles,0.,.65)*(1.-fresnel));
  float cells=texture2D(detailMap,p*1.9+drift-flow*.6).b;
- float cover=clamp(1.-exp(-foam*2.05),0.,.94);
+ float cover=clamp(1.-exp(-foam*2.4),0.,.97);
+ // Resolvable fine gaps in the froth, filtered naturally by texture mipmaps.
+ float foamGrain=texture2D(foamDetailMap,(p-flow)*.19+drift*.03).g;
+ cover*=mix(.45,1.,smoothstep(.22,.68,foamGrain+foam*.16));
  vec3 foamColor=mix(vec3(.89,.94,.93),vec3(.37,.45,.48),storm)*mix(.65,1.,cloudLight)*(.88+.12*cells+.18*max(0.,dot(N,sun)))*(1.-night*.72);
  col=mix(col,foamColor,cover);
  float fog=1.-exp(-dist*dist*.0000010*(1.+storm*3.)-dist*.00038);col=mix(col,mix(skyHorizon,vec3(.20,.28,.32),storm)*(1.-night*.8),fog);

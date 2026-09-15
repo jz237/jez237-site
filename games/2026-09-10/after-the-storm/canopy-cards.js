@@ -16,4 +16,8 @@ export function canopyGeometry(aspect){
  }
  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(p,3));g.setAttribute('normal',new T.Float32BufferAttribute(normals,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(indices);return g;
 }
-export function canopyMaterial(kind){return new T.MeshStandardMaterial({map:kind.map,color:0xc0c9aa,roughness:.95,side:T.DoubleSide,alphaTest:.52,alphaToCoverage:true});}
+export function canopyMaterial(kind){
+ const m=new T.MeshStandardMaterial({map:kind.map,color:0x92a57b,roughness:.95,side:T.DoubleSide,alphaTest:.48,alphaToCoverage:true});
+ m.onBeforeCompile=s=>{s.fragmentShader=s.fragmentShader.replace('#include <normal_fragment_begin>','#include <normal_fragment_begin>\nnormal=normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz);');};
+ m.customProgramCacheKey=()=> 'soft-canopy-normals-v2';return m;
+}
