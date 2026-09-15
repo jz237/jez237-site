@@ -65,7 +65,7 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.53.0';
+export const VERSION='0.54.0';
 const coolShadow=new T.Color(.36,.48,.64);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
@@ -156,7 +156,7 @@ const windDirRad=fromDeg=>{const t=(fromDeg+180)*Math.PI/180;return Math.atan2(-
 const compass=d=>['N','NE','E','SE','S','SW','W','NW'][Math.round(((d%360)+360)%360/45)%8];
 // --- clock: first light today by default
 const events=sunEvents(Date.now());
-const clock=createClock({start:(events.sunrise||Date.now())-25*60000,rate:settings.timeRate==='real'?1:Number(settings.timeRate)||4,mode:settings.timeRate==='real'?'real':'sim'});
+const clock=createClock({start:(events.sunrise||Date.now())-10*60000,rate:settings.timeRate==='real'?1:Number(settings.timeRate)||4,mode:settings.timeRate==='real'?'real':'sim'});
 function setRate(r){if(r==='real'){clock.mode='real';}else{clock.mode='sim';clock.rate=Number(r)||4;}$('rate').value=String(r);liveWeatherTick(true);}
 // --- state
 let mode='menu',keys={},pressed={},simTime=0,last=performance.now(),touch=null,polarized=0,polarizedTarget=settings.polarized?1:0,cameraMode='surface';
@@ -452,7 +452,9 @@ const app={step,render,renderer,version:VERSION,start,demo:seed=>startDemo(seed)
 installQA(app);
 hud.setSettings(settings);applyAccess();setWeather(settings.weather);Object.assign(weather,WEATHER[settings.weather]);setRate(settings.timeRate==='real'?'real':String(settings.timeRate||4));
 hud.showMenu({});
-try{applyQuality(quality);warmShadows();step(.016);renderer.compile(scene,camera);render();probeGPU();render();$('start').disabled=false;$('start').textContent='Paddle out';requestAnimationFrame(frame);}catch(e){hud.error('The lake could not load: '+e.message);console.error(e);}
+// the bow faces the sunrise at boot: the first frame is the concept's framing, the sun behind the tree line ahead
+function faceSunrise(){const sd=sunDirection(clock.ms);let best=kayak.state.heading,bd=-2;const t=new T.Vector3();for(let i=0;i<72;i++){const h=-Math.PI+i*Math.PI/36;kayak.state.heading=h;step(0);camera.getWorldDirection(t);const d=t.x*sd.x+t.z*sd.z;if(d>bd){bd=d;best=h;}}kayak.state.heading=best;step(0);return best;}
+try{applyQuality(quality);warmShadows();step(.016);faceSunrise();renderer.compile(scene,camera);render();probeGPU();render();$('start').disabled=false;$('start').textContent='Paddle out';requestAnimationFrame(frame);}catch(e){hud.error('The lake could not load: '+e.message);console.error(e);}
 
 // ?diag=1: a readout plus a self-test for screenshots from devices we cannot attach to. Every two
 // seconds it renders one sphere per material family into a tiny target and reads the colour back,

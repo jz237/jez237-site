@@ -63,7 +63,7 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  cloudColor+=sunColor*pow(s,10.)*.5*lowSun*(1.-night);
  col=mix(col,cloudColor,cover*.93);
  // high thin streaks near the horizon at first light: bands of constant elevation (rings in the projection), lit peach beside the sun and mauve away from it, the altostratus the picture's sun sits behind
- float streakV=0.;{float st=fbm(vec2(atan(p.y,p.x)*1.6+flow.x*.2,length(p)*3.6+17.));float streak=smoothstep(.44,.60,st)*smoothstep(.02,.07,y)*(1.-smoothstep(.22,.42,y))*lowSun*(1.-night)*(1.-envPass);streakV=streak;
+ float streakV=0.;{vec2 pd=normalize(p+vec2(1e-4));float st=fbm(vec2(pd.x*2.2+flow.x*.2+17.,pd.y*2.2+length(p)*3.6)); /* seamless around the ring: the angle enters as a direction, never as an arctangent that wraps */float streak=smoothstep(.44,.60,st)*smoothstep(.02,.07,y)*(1.-smoothstep(.22,.42,y))*lowSun*(1.-night)*(1.-envPass);streakV=streak;
   vec3 streakColor=mix(mix(skyZenith,vec3(.42,.28,.40),.5),cloudLit*.5,pow(s,4.)*.85);col=mix(col,streakColor,streak*.6);}
  vec3 c3=col;
  vec3 sd=floor(d*260.);float star=step(.9972,hash(sd.xy*1.7+sd.z*3.1))*night*(1.-cover);col+=vec3(.9,.92,1.)*star*smoothstep(.02,.25,y);
