@@ -75,7 +75,10 @@ export function windSway(material,flex=.03){
   Object.assign(s.uniforms,{foliageTime:windSway.time,foliageWind:windSway.strength,foliageDistance:windSway.distance,backlitSunDir:backlight.sunDir,backlitAmount:backlight.amount});
   // backlit: looking toward a low sun, foliage is a dark cut-out with the sky burning behind it; the albedo drops to a tenth for cards that sit between the eye and the sun, so the skyline reads as the serrated silhouette of the concept art and the reflection pass, which faces the same sun, agrees
   s.fragmentShader=s.fragmentShader.replace('#include <common>','#include <common>\n'+BACKLIT_UNIFORMS).replace('#include <color_fragment>','#include <color_fragment>\n'+BACKLIT_GLSL);
+  // foliage is lit like a canopy, not like a wall: every leaf card's normal leans toward the sky, so a stand of pines takes the noon sun instead of reading as a black cut-out
   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nuniform float foliageTime,foliageWind,foliageDistance;')
+  // after the double-sided flip, so both faces of a card lean the same way
+  s.fragmentShader=s.fragmentShader.replace('#include <normal_fragment_begin>','#include <normal_fragment_begin>\nnormal=normalize(mix(normal,normalize((viewMatrix*vec4(0.,1.,0.,0.)).xyz),.7));')
    .replace('#include <begin_vertex>',`#include <begin_vertex>
 vec3 anchor=(modelMatrix*instanceMatrix*vec4(0.,0.,0.,1.)).xyz;
 float phase=anchor.x*.061+anchor.z*.087;
