@@ -1304,7 +1304,7 @@
     const SITE_BASE = './';
     const gameHref = g => g.href || `${SITE_BASE}${g.path}`;
     const games = [
-      { title: 'First Light: Keystone Waters', path: '2026-09-13/first-light/', emoji: '🎣', date: 'Sep 13', cat: 'adventure', tag: 'featured', desc: 'First-person fishing sim on Lake Nockamixon: hyper-real water you read for wind lanes and nervous water, twelve photo-derived species living on the cover with their own minds, six rigs that behave like tackle, snags and frayed line, a guide with a voice, a journal with a bite clock, daily sessions and a Big Bass tournament against rival kayaks, photo mode, and a Watch Demo where Ray fishes the lake himself. Installable on a phone.' },
+      { title: 'First Light: Keystone Waters', path: '2026-09-13/first-light/', emoji: '🎣', date: 'Sep 13', cat: 'adventure', tag: 'experimental', desc: 'First-person fishing sim on Lake Nockamixon: hyper-real water you read for wind lanes and nervous water, twelve photo-derived species living on the cover with their own minds, six rigs that behave like tackle, snags and frayed line, a guide with a voice, a journal with a bite clock, daily sessions and a Big Bass tournament against rival kayaks, photo mode, and a Watch Demo where Ray fishes the lake himself. Installable on a phone.' },
       { title: 'Mini Moto — Pine Ridge Park', path: '2026-09-13/mini-moto-park/', emoji: '🏍️', date: 'Sep 13', cat: 'arcade', tag: 'featured', desc: 'Vibe coded by <a href="https://mini-moto-park.chipchaunceytheonlyone.chatgpt.site/" target="_blank" rel="noopener noreferrer">chipchaunceytheonlyone</a>. A living miniature motocross park with eight AI riders, suspension physics, overtaking, pit stops and editable terrain. Follow the pack, sculpt jumps, manage riders, or enable Road Rash combat. Original game engine and 3D assets hosted locally.' },
       { title: 'After the Storm: Coastal Racing', path: '2026-09-10/after-the-storm/race.html', emoji: '🌊', date: 'Sep 12', cat: 'arcade', tag: 'featured', desc: 'TIDELINE v2.0: carve rolling waves across nine coastal venues, with lingering wakes, a steadier chase camera and proportional phone steering. Free ride, racing, championships, stunts, split screen, salvage and a live-physics demo tour. Keyboard, gamepad or touch; adaptive WebGL graphics.' },
       { title: 'Final Blow: Philly After Dark', path: '2026-08-20/final-blow/', emoji: '🥊', date: 'Aug 20', cat: 'arcade', tag: 'featured', desc: 'A full 1990s-inspired Philadelphia weapon fighter with eight distinct combat styles, fixed-step frame-based combat, combos, throws, supers, Grit Gauge strategy, rollback private rooms, arcade and training modes, and a self-playing CPU-vs-CPU attract mode. Each fighter has bespoke movement and attack animation, two graphic Final Blow fatalities, and a unique ElevenLabs sound palette across movement, strikes, reactions, specials, supers and finishers. Four selectable soundtracks, keyboard, touch, XInput, remapping, accessibility controls, landscape fullscreen mobile play, and offline install support.' },
@@ -1368,7 +1368,8 @@
     let currentFilter = 'all';
 
     const UNFINISHED = new Set([
-      // 'first light keystone waters' promoted to Playable 2026-09-14 (v0.22.0).
+      // 'first light keystone waters' back to Unfinished 2026-09-15 (owner's call: glitches on a real GPU).
+      'first light keystone waters',
       // 'pinball fantasies hd' promoted to Playable 2026-07-31 (owner's call).
       'crystal cavern', 'crystal tavern', 'plasma pong',
       'super star trek', 'depth charge',
