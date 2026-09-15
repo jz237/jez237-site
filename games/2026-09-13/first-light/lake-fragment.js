@@ -17,7 +17,7 @@ void main(){
  vec2 flow=vec2(time*.013,-time*.009);vec2 r1=texture2D(detailMap,p*.145+flow).rg*2.-1.;
  vec2 rotated=mat2(.8,-.6,.6,.8)*p;vec2 r2=texture2D(detailMap,rotated*.37-flow*1.7).rg*2.-1.;
  float breeze=clamp(wind*fetchV*1.4+.06,0.,1.);
- float detailStrength=(.036+breeze*.06)*(1.-smoothstep(75.,300.,dist)*.6);
+ float detailStrength=(.05+breeze*.06)*(1.-smoothstep(75.,300.,dist)*.6);
  vec2 drift=surface.yz*.24;
  vec2 r3=texture2D(detailMap,p*.82+drift-flow*2.3).rg*2.-1.;
  vec2 ripple=(r1+r2*.52+r3*.22)*detailStrength;
