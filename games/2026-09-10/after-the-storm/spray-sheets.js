@@ -11,10 +11,10 @@ export function makeSpraySheets(scene){
  uniform float sheetTime;varying vec2 vUv;varying vec3 sheetP;varying float wet;
  void main(){float edge=pow(max(0.,sin(vUv.x*3.14159)),.45),age=vUv.y;
  float tears=cloudNoise(vec2(vUv.x*17.+sheetTime*1.7,age*27.-sheetTime*6.));
- float intact=1.-smoothstep(.38,.96,age),holes=mix(1.,smoothstep(.25,.62,tears),smoothstep(.22,.88,age));
+ float intact=1.-smoothstep(.25,.80,age),holes=mix(1.,smoothstep(.35,.66,tears),smoothstep(.22,.88,age));
  float foam=smoothstep(.5,.9,age)*.45+pow(abs(vUv.x-.5)*2.,6.)*.32;
- vec3 color=mix(vec3(.23,.49,.55),litSpray(sheetP),.42+foam);
- float alpha=wet*edge*pow(1.-age,1.15)*holes*(.40+foam+intact*.18);
+ vec3 color=mix(vec3(.19,.40,.43),litSpray(sheetP),.72+foam*.28);
+ float alpha=wet*edge*pow(1.-age,1.15)*holes*(.58+foam+intact*.20);
  if(alpha<.006)discard;gl_FragColor=vec4(color,alpha);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>

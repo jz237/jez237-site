@@ -31,7 +31,7 @@ class Shape {
 }
 function rng(seed){return()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};}
 
-function tree(kind,seed){
+function tree(kind,seed,lite=false){
  const wood=new Shape(),leaf=new Shape(),random=rng(seed);
  if(kind==='palm'){
   const top=new T.Vector3(1.35,11.2,.6);
@@ -39,8 +39,11 @@ function tree(kind,seed){
   for(let j=0;j<24;j++){
    const a=j*2.399+(random()-.5)*.25,len=(j<4?2.4:4.4)+random()*2.3,down=j<4?-1.6:.4+random()*.8;
    const path=t=>top.clone().add(new T.Vector3(Math.cos(a)*len*t,Math.sin(t*Math.PI)*1.3-t*t*(1.9+down),Math.sin(a)*len*t));
-   for(let k=0;k<24;k++){
-    const t=k/24,u=(k+1)/24,p=path(t),q=path(u);wood.tube(p.toArray(),q.toArray(),.045*(1-t)+.006,.045*(1-u)+.006,4);
+   const segments=lite?7:20;
+   for(let k=0;k<segments;k++){
+    const t=k/segments,u=(k+1)/segments,p=path(t),q=path(u);
+    if(lite){leaf.leaf(p.toArray(),q.toArray(),(.15+Math.sin(t*Math.PI)*.75),a+Math.PI/2,.73+random()*.22);continue;}
+    wood.tube(p.toArray(),q.toArray(),.045*(1-t)+.006,.045*(1-u)+.006,4);
     if(k<2)continue;
     for(const side of [-1,1]){
      const reach=Math.sin(t*Math.PI)*1.58+.12;
@@ -144,6 +147,27 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
    if(py<.35)continue;rockPoints.push({x:px,y:py,z:pz,angle:random()*6.28,scale:.08+random()*.29,stretch:.5+random()*.45,tint:random()});
   }
  }
+ // A jittered shoreline survey fills the sparse banks visible from the water.
+ // Only dry ground is populated; routes, ramps and existing collision shapes stay clear.
+ if(!cold&&!urban){
+  const floor=course.renderGround||course.ground;let coastalTrees=0,coastalRocks=0;
+  for(let gz=-330;gz<330;gz+=8)for(let gx=-330;gx<330;gx+=8){
+   const x=gx+(random()-.5)*7,z=gz+(random()-.5)*7,y=floor(x,z),d=routeDistance(course,x,z);
+   if(y<.6||y>14||d<18||d>95)continue;
+   const slope=Math.hypot(floor(x+1,z)-floor(x-1,z),floor(x,z+1)-floor(x,z-1))*.5;
+   const cluster=Math.sin(x*.053+Math.sin(z*.035)*2)*Math.cos(z*.049);
+   const base={x,y:y-.15,z,angle:random()*6.283,scale:.7+random()*.55,tint:random(),stretch:.85+random()*.22};
+   if(y>1.6&&slope<.65&&cluster>-.15&&coastalTrees<190){
+    const kind=tropical?(random()<.55?'palm':'broad'):'broad';points[kind].push(base);coastalTrees++;
+    grassPoints.push({...base,scale:1.1});
+   }
+   if(y<6&&slope<1.2&&cluster>-.4&&coastalRocks<300){
+    for(let j=0;j<3;j++){const px=x+(random()-.5)*5,pz=z+(random()-.5)*5,py=floor(px,pz);if(py<.4||routeDistance(course,px,pz)<17)continue;
+     rockPoints.push({...base,x:px,y:py-.25,z:pz,scale:.6+random()**2*2.7,stretch:.65+random()*.7});coastalRocks++;
+    }
+   }
+  }
+ }
  // Companion saplings and mature trees create depth around the established
  // anchors, as in Pine Ridge's groves, using our own lightweight botanical meshes.
  for(const kind of ['palm','pine','broad'])for(const anchor of [...points[kind]]){
@@ -169,6 +193,12 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
      if(y>1.8&&routeDistance(course,x,z)>24)rows.push({...anchor,x,y:y-.05,z,scale:1.8+random()*2.3,stretch:.75+random()*.3});
     }
     instances(canopyGeometry(photo.aspect),m,rows);
+   }continue;
+  }
+  if(kind==='palm'){
+   // Full leaflets near the rider; curved frond ribbons retain distant silhouettes.
+   for(const lite of [false,true]){const model=tree('palm',477,lite);
+    for(const [g,m] of [[model.wood,wood],[model.leaf,palmMat]]){const batch=instances(g,m,points.palm);batch?.traverse(o=>{if(o.isInstancedMesh)o.userData.foliageLOD=lite?'far':'near';});}
    }continue;
   }
   const model=kind==='pine'&&motoPine?{wood:motoPine.wood.clone(),leaf:motoPine.leaf.clone()}:tree(kind,473+kind.length);
@@ -205,6 +235,6 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
  const contactGeometry=new T.BufferGeometry();contactGeometry.setAttribute('position',new T.Float32BufferAttribute(cp,3));contactGeometry.setAttribute('uv',new T.Float32BufferAttribute(cu,2));geometries.push(contactGeometry);const contacts=new T.Mesh(contactGeometry,contactMaterial);contacts.userData.dynamic=true;contacts.renderOrder=1;root.add(contacts);
  root.userData.sceneryCounts={photographicCanopies:canopyKinds.length?points.broad.length:0,trees:Object.values(points).reduce((n,p)=>n+p.length,0),grass:grassPoints.length,pebbles:rockPoints.length,driftwood:logPoints.length};
  return{update(t,storm,quality,budget=1,camera=null,second=null){time.value=t;strength.value=storm;distance.value=(quality==='low'?200:quality==='medium'?280:380)*budget;
- if(camera)for(const m of meshes){const c=m.userData.foliageCenter,r=m.userData.foliageRadius;const d=Math.min(Math.hypot(camera.x-c.x,camera.z-c.z),second?Math.hypot(second.x-c.x,second.z-c.z):Infinity);m.visible=d<distance.value+r+45;}
- if(grassMesh)grassMesh.visible=quality!=='low';},dispose(){contacts.removeFromParent();contactTexture.dispose();for(const m of meshes){m.removeFromParent();m.dispose();}for(const g of new Set(geometries))g.dispose();for(const m of materials)m.dispose();}};
+ if(camera)for(const m of meshes){const c=m.userData.foliageCenter,r=m.userData.foliageRadius;const d=Math.min(Math.hypot(camera.x-c.x,camera.z-c.z),second?Math.hypot(second.x-c.x,second.z-c.z):Infinity);m.visible=d<distance.value+r+45;if(m.userData.foliageLOD){const near=d<(quality==='high'?115:quality==='medium'?85:65);m.visible&&=m.userData.foliageLOD==='near'?near:!near;}}
+ if(grassMesh)grassMesh.visible=true;},dispose(){contacts.removeFromParent();contactTexture.dispose();for(const m of meshes){m.removeFromParent();m.dispose();}for(const g of new Set(geometries))g.dispose();for(const m of materials)m.dispose();}};
 }
