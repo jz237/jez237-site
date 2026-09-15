@@ -6,13 +6,13 @@ import {createHash} from 'node:crypto';
 import {assetURL,resolveAssetURL} from '../lib/AssetPaths.ts';
 const root=new URL('../',import.meta.url),read=p=>fs.readFileSync(new URL(p,root)),hash=b=>createHash('sha256').update(b).digest('hex');
 const manifest=JSON.parse(read('lib/LoadAssetManifest.json')),preloads=JSON.parse(read('LoadPreloads.json'));
-test('versioned assets preserve every model, texture and lighting byte except verified lossless PNG replacements',()=>{
+test('versioned assets preserve geometry, textures and lighting with verified lossless PNG replacements',()=>{
  const proof=JSON.parse(read('loading-source/pixel-provenance.json'));
  for(const [original,target] of Object.entries(manifest)){
   const bytes=read('public/'+target.slice(2));assert.ok(target.includes(hash(bytes).slice(0,16)),'filename follows content');
   const name=path.basename(original,'.png'),record=proof[name];
   if(record){assert.equal(hash(read('public/'+original.slice(2))),record.sourceSHA256);assert.equal(hash(bytes),record.webpSHA256);}
-  else assert.deepEqual(bytes,read('public/'+original.slice(2)),original);
+  else{let source=read('public/'+original.slice(2));if(/\.(gltf|json)$/.test(original))source=Buffer.from(source.toString('utf8').replace(/\r\n/g,'\n'));assert.deepEqual(bytes,source,original);}
  }
  assert.equal(preloads.length,27);assert.equal(new Set(preloads.map(p=>p.href)).size,27);
  assert.ok(preloads.every(p=>Object.values(manifest).includes(p.href)));

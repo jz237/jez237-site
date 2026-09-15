@@ -9,6 +9,7 @@ const models=['dead_tree_trunk_02','rock_moss_set_01','fern_02','moss_01'];
 const extras=['living-species.png','grazer-material-atlas.png','models/fern_02/textures/fern_02_alpha_2k.png','models/moss_01/textures/moss_01_alpha_2k.png','models/rock_moss_set_01/textures/rock_moss_set_01_ao_2k.jpg','lighting/diffuse-probes.json','lighting/diffuse-probes.bin'];
 const manifest={},preloads=[],provenance=JSON.parse(fs.readFileSync(path.join(root,'loading-source/pixel-provenance.json')));
 function emit(original,bytes,extension=path.extname(original),as='fetch'){
+ if(/\.(gltf|json)$/.test(extension))bytes=Buffer.from(bytes.toString('utf8').replace(/\r\n/g,'\n'));
  const filename=path.basename(original,path.extname(original))+'-'+hash(bytes).slice(0,16)+extension,url='./load/'+filename;
  fs.writeFileSync(path.join(out,filename),bytes);manifest['./'+original]=url;
  if(!preloads.some(p=>p.href===url))preloads.push({href:url,as});

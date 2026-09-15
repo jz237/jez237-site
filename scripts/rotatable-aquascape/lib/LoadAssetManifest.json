@@ -24,6 +24,6 @@
   "./models/fern_02/textures/fern_02_alpha_2k.png": "./load/fern_02_alpha_2k-f51eb9b8f9f4b25a.png",
   "./models/moss_01/textures/moss_01_alpha_2k.png": "./load/moss_01_alpha_2k-43b8d86ec306f39b.png",
   "./models/rock_moss_set_01/textures/rock_moss_set_01_ao_2k.jpg": "./load/rock_moss_set_01_ao_2k-7c4c128c5ec1e012.jpg",
-  "./lighting/diffuse-probes.json": "./load/diffuse-probes-b5bffbca6ff32e3a.json",
+  "./lighting/diffuse-probes.json": "./load/diffuse-probes-33366bf61bea7510.json",
   "./lighting/diffuse-probes.bin": "./load/diffuse-probes-bcb3044724b9c788.bin"
 }
