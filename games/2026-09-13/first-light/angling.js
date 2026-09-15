@@ -43,7 +43,7 @@ export function makeAngling(scene,kayak,env){
   const segs=[];let parent=root;
   for(let i=0;i<NSEG;i++){const pivot=new T.Group();pivot.position.z=i===0?.28:segLen;parent.add(pivot);const r0=.0055*(1-i/NSEG)+.0014,r1=.0055*(1-(i+1)/NSEG)+.0014;const m=new T.Mesh(new T.CylinderGeometry(r1,r0,segLen,8),rodMat);m.rotation.x=Math.PI/2;m.position.z=segLen/2;pivot.add(m);if(i%2===1){const guide=new T.Mesh(new T.TorusGeometry(.006-i*.0004,.0008,5,10),rodMat);guide.position.set(0,-.007,segLen/2);pivot.add(guide);}segs.push(pivot);parent=pivot;}
   const tipObj=new T.Object3D();tipObj.position.z=segLen;parent.add(tipObj);return {root,segs,tipObj};}
- const mainRod=buildRod(-.36,.34,.30),rodRoot=mainRod.root,segs=mainRod.segs,tipObj=mainRod.tipObj;
+ const mainRod=buildRod(-.31,.2,.72),rodRoot=mainRod.root,segs=mainRod.segs,tipObj=mainRod.tipObj;
  // --- the second rod: a bottom rig parked in a holder on the other side, glow stick on the tip, its line to the bait
  const holder=createHolder();const holderRod=buildRod(.38,.30,.08);holderRod.root.visible=false;holderRod.root.rotation.set(-.95,.35,0,'YXZ');
  const glowMat=new T.MeshBasicMaterial({color:0xc8ff3a,toneMapped:false});const glow=new T.Mesh(new T.SphereGeometry(.014,8,6),glowMat);holderRod.tipObj.add(glow);
@@ -136,7 +136,7 @@ export function makeAngling(scene,kayak,env){
    if(line.lineOut<=1.35&&Math.hypot(lp.x-t.x,lp.z-t.z)<1.6)reelIn();
   }else{state.label='idle';state.reeling=0;}
   // --- rod pose: idle low, cocked back while charging, whipped forward on release, tracking the lure while fishing, bending with tension
-  let targetPitch=-.24,targetYaw=-.34;
+  let targetPitch=-.42,targetYaw=.3; // at rest the rod rises from the right hand across the frame toward the upper left, as it does in the concept
   if(state.phase==='charging')targetPitch=-1.9+state.power*.25,targetYaw=-.7;
   else if(state.castAnim>0)targetPitch=-.12-state.castAnim*.45;
   else if(state.phase==='retrieve'||state.phase==='snagged'||state.phase==='flight'||state.phase==='bite'||state.phase==='fight'){const lp=state.flight||lurePosition(line);tmp.set(lp.x-kayak.state.x,0,lp.z-kayak.state.z);const yawWorld=Math.atan2(tmp.x,tmp.z);let rel=yawWorld-kayak.state.heading;rel=Math.atan2(Math.sin(rel),Math.cos(rel));targetYaw=clamp(rel-.15,-1.2,.8);targetPitch=-.2-line.tension*.25;}

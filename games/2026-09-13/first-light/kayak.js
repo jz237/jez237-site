@@ -5,10 +5,10 @@ import * as T from './vendor/three.module.js';
 import {floatingPose} from './course-environment.js';
 import {recordWake} from './wake-field.js';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-export const KAYAK={length:3.6,beam:.76,eyeHeight:.62,eyeForward:.35,maxSpeed:2.3,thrust:1.9,turnRate:1.05};
+export const KAYAK={length:3.6,beam:1.0,eyeHeight:.58,eyeForward:.42,maxSpeed:2.3,thrust:1.9,turnRate:1.05};
 // the loft: the hull below the sheer, a cedar-strip deck above it with an upswept bow and stern, as
 // in the concept art; u runs bow to stern, v around the ring, so strips run the length of the boat
-const hullW=t=>KAYAK.beam/2*Math.pow(Math.sin(Math.PI*t),.62),hullDepth=t=>.17*Math.pow(Math.sin(Math.PI*t),.5),deckH=t=>.11+.17*Math.pow(Math.abs(t-.5)*2,2.6);
+const hullW=t=>KAYAK.beam/2*Math.pow(Math.sin(Math.PI*t),.62),hullDepth=t=>.17*Math.pow(Math.sin(Math.PI*t),.5),deckH=t=>.12+.12*Math.pow(Math.abs(t-.5)*2,2.6); // a flat fishing deck with a modest upsweep at the ends
 function hullGeometry(part='all'){
  const L=KAYAK.length,stations=28,ring=18,pos=[],uv=[],idx=[];
  for(let i=0;i<=stations;i++){const t=i/stations,z=(t-.5)*L;for(let j=0;j<ring;j++){const a=j/ring*Math.PI*2,c=Math.cos(a),s=Math.sin(a);const y=s<0?-hullDepth(t)*Math.pow(-s,.9):deckH(t)*Math.pow(s,.6);pos.push(hullW(t)*c*(s<0?1:.96),y,z);uv.push(t,j/ring);}}
@@ -25,12 +25,24 @@ export function cedarTexture(){if(woodTex)return woodTex;const W=512,H=256,c=doc
   for(let k=0;k<14;k++){const y=i*sh+r()*sh;g.strokeStyle=`rgba(${r()<.5?50:170},${r()<.5?48:170},${r()<.5?52:180},${.08+.12*r()})`;g.lineWidth=.6+r()*1.2;g.beginPath();g.moveTo(0,y);for(let x=0;x<=W;x+=32)g.lineTo(x,y+(r()-.5)*2.2);g.stroke();}
   g.fillStyle='rgba(30,28,32,.55)';g.fillRect(0,i*sh,W,1.4);}
  woodTex=new T.CanvasTexture(c);woodTex.colorSpace=T.SRGBColorSpace;woodTex.wrapS=woodTex.wrapT=T.RepeatWrapping;woodTex.anisotropy=8;return woodTex;}
+// the hatch lid: black rubber with a moulded ridge ring and a small mountain mark; the cup: a matte black mug with the lake's line on it
+function hatchTexture(){const S=256,c=document.createElement('canvas');c.width=c.height=S;const g=c.getContext('2d');g.fillStyle='#1c1f1e';g.fillRect(0,0,S,S);g.strokeStyle='#2a2e2c';g.lineWidth=6;for(const r of [40,70,100]){g.beginPath();g.arc(S/2,S/2,r,0,Math.PI*2);g.stroke();}
+ g.fillStyle='#3a3f3c';g.beginPath();g.moveTo(S/2,S/2-22);g.lineTo(S/2+26,S/2+14);g.lineTo(S/2+8,S/2+14);g.lineTo(S/2,S/2+2);g.lineTo(S/2-8,S/2+14);g.lineTo(S/2-26,S/2+14);g.closePath();g.fill();
+ const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;return t;}
+function cupTexture(){const W=512,H=256,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');g.fillStyle='#17191b';g.fillRect(0,0,W,H);g.fillStyle='#e6e1d3';g.textAlign='center';g.font='bold 30px Helvetica, Arial, sans-serif';g.fillText('GOOD',W*.5,H*.42);g.fillText('WATERS',W*.5,H*.57);g.font='bold 22px Helvetica, Arial, sans-serif';g.fillText('BETTER DAYS',W*.5,H*.72);
+ g.strokeStyle='#e6e1d3';g.lineWidth=3;g.beginPath();g.moveTo(W*.42,H*.3);g.lineTo(W*.5,H*.18);g.lineTo(W*.58,H*.3);g.stroke();
+ const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.wrapS=T.RepeatWrapping;t.repeat.set(1,1);return t;}
 // the gunwale: a dark rail along the sheer on each side, and a stem cap at each end
 function railCurve(side){const pts=[];for(let i=0;i<=28;i++){const t=i/28;pts.push(new T.Vector3(side*hullW(t)*.96+side*.006,.004,(t-.5)*KAYAK.length));}return new T.CatmullRomCurve3(pts);}
 export function makeKayak(scene){
  const group=new T.Group();scene.add(group);
- const shell=new T.MeshPhysicalMaterial({color:0x2f5a3e,roughness:.42,clearcoat:.45,clearcoatRoughness:.25});
- const deckMat=new T.MeshPhysicalMaterial({map:cedarTexture(),color:0xffffff,roughness:.85,clearcoat:0,clearcoatRoughness:.5});deckMat.map.repeat.set(1,1);
+ const shell=new T.MeshPhysicalMaterial({color:0x5a6a3c,roughness:.5,clearcoat:.45,clearcoatRoughness:.25});
+ // the deck: wet olive rotomolded plastic, a photographic tile with a roughness map (the droplets are the smooth points) and a gentle normal map; the strips stand in until the tile arrives
+ const deckMat=new T.MeshPhysicalMaterial({map:cedarTexture(),color:0xffffff,roughness:.55,clearcoat:.55,clearcoatRoughness:.22,normalScale:new T.Vector2(.35,.35)});deckMat.map.repeat.set(1,1);
+ {const loader=new T.TextureLoader();const base='./assets/kayak/';const ready=(t,srgb)=>{t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(5.5,2.4);t.anisotropy=8;if(srgb)t.colorSpace=T.SRGBColorSpace;return t;};
+  loader.load(base+'deck.webp',t=>{deckMat.map=ready(t,true);deckMat.color.setRGB(.62,.68,.42);deckMat.needsUpdate=true;},undefined,()=>{});
+  loader.load(base+'deck-rough.webp',t=>{deckMat.roughnessMap=ready(t,false);deckMat.needsUpdate=true;},undefined,()=>{});
+  loader.load(base+'deck-normal.webp',t=>{deckMat.normalMap=ready(t,false);deckMat.needsUpdate=true;},undefined,()=>{});}
  const hull=new T.Mesh(hullGeometry('hull'),shell);hull.castShadow=hull.receiveShadow=true;group.add(hull);
  const deck=new T.Mesh(hullGeometry('deck'),deckMat);deck.castShadow=deck.receiveShadow=true;group.add(deck);
  const railMat=new T.MeshStandardMaterial({color:0xb08a5a,roughness:.5,metalness:.02});for(const side of [-1,1]){const rail=new T.Mesh(new T.TubeGeometry(railCurve(side),56,.013,6,false),railMat);rail.castShadow=true;group.add(rail);}
@@ -38,14 +50,18 @@ export function makeKayak(scene){
  const dark=new T.MeshStandardMaterial({color:0x1b1b1b,roughness:.8}),grey=new T.MeshStandardMaterial({color:0x5a5f66,roughness:.7});
  const seat=new T.Mesh(new T.BoxGeometry(.42,.06,.42),dark);seat.position.set(0,.13,-.15);group.add(seat);
  const back=new T.Mesh(new T.BoxGeometry(.42,.34,.05),dark);back.position.set(0,.31,-.38);back.rotation.x=-.18;group.add(back);
- const hatchMat=new T.MeshStandardMaterial({color:0x2c3a33,roughness:.7});const hatch=new T.Mesh(new T.CylinderGeometry(.17,.19,.025,24),hatchMat);hatch.position.set(0,.145,1.05);group.add(hatch);const hatchRim=new T.Mesh(new T.TorusGeometry(.19,.012,8,28),dark);hatchRim.rotation.x=Math.PI/2;hatchRim.position.set(0,.152,1.05);group.add(hatchRim);
+ const hatchMat=new T.MeshStandardMaterial({map:hatchTexture(),color:0xffffff,roughness:.78});const hatch=new T.Mesh(new T.CylinderGeometry(.15,.165,.03,32),hatchMat);hatch.position.set(.25,.165,1.42);group.add(hatch);const hatchRim=new T.Mesh(new T.TorusGeometry(.165,.013,10,36),dark);hatchRim.rotation.x=Math.PI/2;hatchRim.position.set(.25,.173,1.42);group.add(hatchRim);
+ // pad-eyes and the bungee cross on the foredeck, ahead of the hatch
+ const eyeMat=new T.MeshStandardMaterial({color:0x111111,roughness:.6});for(const [x,z] of [[-.22,1.54],[.22,1.54],[-.14,1.74],[.14,1.74],[0,1.64]]){const e=new T.Mesh(new T.TorusGeometry(.016,.005,6,12),eyeMat);e.rotation.x=Math.PI/2;e.position.set(x,deckH((z+KAYAK.length/2)/KAYAK.length)+.01,z);group.add(e);}
+ // the cup: a black insulated mug in the holder by the left thigh
+ const cupMat=new T.MeshStandardMaterial({map:cupTexture(),color:0xffffff,roughness:.45,metalness:.25});const cup=new T.Mesh(new T.CylinderGeometry(.042,.038,.17,20),cupMat);cup.position.set(.36,.245,.95);group.add(cup);const lid=new T.Mesh(new T.CylinderGeometry(.045,.045,.02,20),dark);lid.position.set(.36,.34,.95);group.add(lid);const cupRing=new T.Mesh(new T.TorusGeometry(.05,.006,6,20),dark);cupRing.rotation.x=Math.PI/2;cupRing.position.set(.36,.17,.95);group.add(cupRing);
  const hatch2=new T.Mesh(new T.CylinderGeometry(.13,.13,.03,20),dark);hatch2.position.set(0,.16,-1.15);group.add(hatch2);
- for(const [x1,z1,x2,z2] of [[-.24,.55,.24,1.35],[.24,.55,-.24,1.35]]){const a=new T.Vector3(x1,.15,z1),b=new T.Vector3(x2,.19,z2);const len=a.distanceTo(b);const m=new T.Mesh(new T.CylinderGeometry(.006,.006,len,5),dark);m.position.copy(a).lerp(b,.5);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),b.clone().sub(a).normalize());group.add(m);}
+ for(const [x1,z1,x2,z2] of [[-.22,1.54,.14,1.74],[.22,1.54,-.14,1.74],[-.22,1.54,.22,1.54]]){const a=new T.Vector3(x1,.15,z1),b=new T.Vector3(x2,.19,z2);const len=a.distanceTo(b);const m=new T.Mesh(new T.CylinderGeometry(.006,.006,len,5),dark);m.position.copy(a).lerp(b,.5);m.quaternion.setFromUnitVectors(new T.Vector3(0,1,0),b.clone().sub(a).normalize());group.add(m);}
  for(const side of [-1,1]){const holder=new T.Mesh(new T.CylinderGeometry(.025,.025,.22,10),grey);holder.position.set(side*.27,.22,-.55);holder.rotation.z=side*.35;group.add(holder);}
  const paddle=new T.Group();group.add(paddle);const shaftMat=new T.MeshPhysicalMaterial({map:cedarTexture(),color:0xd9c39a,roughness:.4,clearcoat:.5});const shaft=new T.Mesh(new T.CylinderGeometry(.015,.015,2.25,8),shaftMat);shaft.rotation.z=Math.PI/2;paddle.add(shaft);
  const bladeMat=new T.MeshPhysicalMaterial({map:cedarTexture(),color:0xe6cf9e,roughness:.45,clearcoat:.5});
  for(const side of [-1,1]){const blade=new T.Mesh(new T.BoxGeometry(.42,.18,.012),bladeMat);blade.position.set(side*1.15,0,0);blade.rotation.y=side*.5;paddle.add(blade);const edge=new T.Mesh(new T.BoxGeometry(.44,.02,.016),railMat);edge.position.set(side*1.15,-.09,0);edge.rotation.y=side*.5;paddle.add(edge);}
- paddle.position.set(0,.27,.95); // rests across the foredeck beyond the hatch, a metre ahead of the seat, so a sideways look does not cross the shaft at arm's length
+ paddle.position.set(0,.27,1.05); // rests across the foredeck beyond the hatch, a metre ahead of the seat, so a sideways look does not cross the shaft at arm's length
  const state={x:0,z:0,heading:0,speed:0,turn:0,anchored:false,pitch:0,roll:0,y:0,strokeClock:0,strokeSide:1,wakeClock:0};
  return {group,state,paddle,
   place(x,z,heading){state.x=x;state.z=z;state.heading=heading;state.speed=0;},
