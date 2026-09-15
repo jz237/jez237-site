@@ -15,3 +15,13 @@ export function landingPlume(h){const style=h.entry?.style||h.landingStyle||'lev
   lateral:style==='sideways'?3+energy*6:1.4+energy*2.5,
   rise:style==='bow-first'?1.2:style==='sideways'?.65:style==='stern-first'?.9:.45,
   carry:style==='level'?.60:.28,life:style==='sideways'?1.25:.85};}
+
+// Gradual reattachment preserves lateral momentum after a skewed entry.
+// This changes grip, never adds kinetic energy or snaps velocity to heading.
+export function landingGrip(r,dt){
+ const h=r.hydro;
+ if(r.landingGripId!==h.landingId){r.landingGripId=h.landingId;r.landingSettle=h.entry?.style==='sideways'?clamp(h.entry.harshness,0,.85)*clamp((Math.abs(h.entry.slip||0)-3)/5):0;}
+ const amount=r.landingSettle||0;
+ if(!h.airborne)r.landingSettle=Math.max(0,amount-dt*(1.5+clamp(h.wet)*1.5));
+ return 1-amount*.15;
+}

@@ -11,11 +11,12 @@ export function demoCameraFrame(memory,r,racers,dt,{orbit=0,zoom=9,pitch=.25}={}
  memory.rate+=clamp(wanted-memory.rate,-.65*dt,.65*dt);
  memory.heading=angle(memory.heading+memory.rate*dt);
  const heading=memory.heading+clamp(orbit,-.35,.35),fx=Math.sin(heading),fz=Math.cos(heading);
- let x=r.x,z=r.z,weight=1;
- for(const q of racers){if(q===r||q.dq)continue;const dx=q.x-r.x,dz=q.z-r.z,d=Math.hypot(dx,dz);if(d<38&&dx*fx+dz*fz>0){const w=.25*(1-d/38);x+=q.x*w;z+=q.z*w;weight+=w;}}
+ let x=r.x,z=r.z,weight=1,spread=0;
+ for(const q of racers){if(q===r||q.dq)continue;const dx=q.x-r.x,dz=q.z-r.z,d=Math.hypot(dx,dz);if(d<38&&dx*fx+dz*fz>0){spread=Math.max(spread,Math.abs(dx*fz-dz*fx));const w=.38*(1-d/38);x+=q.x*w;z+=q.z*w;weight+=w;}}
  x=x/weight+fx*3;z=z/weight+fz*3;
- const distance=clamp(zoom,8,24),datum=Number.isFinite(r.hydro.waterHeight)?r.hydro.waterHeight:0;memory.water+=(datum-memory.water)*(1-Math.exp(-dt*2));const water=memory.water;
- const jump=r.hydro.airborne?clamp((r.hydro.y||0)-datum-.3,0,6)*.5:0;
+ const anticipation=clamp(r.hydro.anticipation||0,0,1);memory.framing??=0;memory.framing+=(Math.min(4,spread*.22+anticipation*1.8)-memory.framing)*(1-Math.exp(-dt*2));
+ const distance=clamp(zoom+memory.framing,8,24),datum=Number.isFinite(r.hydro.waterHeight)?r.hydro.waterHeight:0;memory.water+=(datum-memory.water)*(1-Math.exp(-dt*2));const water=memory.water;
+ const jump=r.hydro.airborne?clamp((r.hydro.y||0)-datum-.3+Math.max(0,r.hydro.vy||0)*.22,0,7)*.5:anticipation*.30;
  memory.lift+=(jump-memory.lift)*(1-Math.exp(-dt*3.8));
  return {position:{x:r.x-fx*distance,y:water+1.35+Math.sin(clamp(pitch,.18,.35))*distance*.6+memory.lift*.65,z:r.z-fz*distance},target:{x,y:water+.8+memory.lift,z}};
 }
