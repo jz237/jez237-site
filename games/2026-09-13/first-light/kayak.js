@@ -45,7 +45,7 @@ export function makeKayak(scene){
  const paddle=new T.Group();group.add(paddle);const shaftMat=new T.MeshPhysicalMaterial({map:cedarTexture(),color:0xd9c39a,roughness:.4,clearcoat:.5});const shaft=new T.Mesh(new T.CylinderGeometry(.015,.015,2.25,8),shaftMat);shaft.rotation.z=Math.PI/2;paddle.add(shaft);
  const bladeMat=new T.MeshPhysicalMaterial({map:cedarTexture(),color:0xe6cf9e,roughness:.45,clearcoat:.5});
  for(const side of [-1,1]){const blade=new T.Mesh(new T.BoxGeometry(.42,.18,.012),bladeMat);blade.position.set(side*1.15,0,0);blade.rotation.y=side*.5;paddle.add(blade);const edge=new T.Mesh(new T.BoxGeometry(.44,.02,.016),railMat);edge.position.set(side*1.15,-.09,0);edge.rotation.y=side*.5;paddle.add(edge);}
- paddle.position.set(0,.36,.15);
+ paddle.position.set(0,.27,.95); // rests across the foredeck beyond the hatch, a metre ahead of the seat, so a sideways look does not cross the shaft at arm's length
  const state={x:0,z:0,heading:0,speed:0,turn:0,anchored:false,pitch:0,roll:0,y:0,strokeClock:0,strokeSide:1,wakeClock:0};
  return {group,state,paddle,
   place(x,z,heading){state.x=x;state.z=z;state.heading=heading;state.speed=0;},
