@@ -2,6 +2,7 @@ import * as T from 'three';
 
 /** Shared rooted deformation keeps leaf attachments, stems and shadows together. */
 export function plantCurrent(material:T.Material,time:{value:number},flutter=false){
+ const reuse=typeof location==='undefined'||!new URLSearchParams(location.search).has('originalPlantShader');
  material.onBeforeCompile=shader=>{
   shader.uniforms.waterTime=time;
   shader.vertexShader=`uniform float waterTime;
@@ -62,15 +63,16 @@ vec3 bendPlantNormal(vec3 p,vec3 n){
  return vec3(nx,n.y-2.*h*(c*fx*nx+d*fz*nz),nz);
 }
 `+shader.vertexShader;
+  if(flutter&&reuse)shader.vertexShader=shader.vertexShader.replace('void main() {','void main() {\nvec3 plantLeafPosition=animatedLeaf(position);');
   if(flutter)shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
-transformed=animatedLeaf(transformed);
+transformed=${reuse?'plantLeafPosition':'animatedLeaf(transformed)'};
 `);
   if(flutter)shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
 objectNormal=animatedLeafNormal(position,objectNormal);
 `);
   shader.vertexShader=shader.vertexShader.replace('#include <defaultnormal_vertex>',T.ShaderChunk.defaultnormal_vertex.replace('transformedNormal = normalMatrix * transformedNormal;',`
 vec3 plantNormalPosition=position;
-${flutter?'plantNormalPosition=animatedLeaf(plantNormalPosition);':''}
+${flutter?`plantNormalPosition=${reuse?'plantLeafPosition':'animatedLeaf(plantNormalPosition)'};`:''}
 #ifdef USE_INSTANCING
  plantNormalPosition=(instanceMatrix*vec4(plantNormalPosition,1.)).xyz;
 #endif
@@ -78,8 +80,8 @@ transformedNormal=bendPlantNormal(plantNormalPosition,transformedNormal);
 transformedNormal = normalMatrix * transformedNormal;
 `));
   // Instanced coordinates are in scene space, so every part of one plant bends identically.
-  shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',T.ShaderChunk.project_vertex.replace('mvPosition = modelViewMatrix * mvPosition;','mvPosition.xyz = bendPlant(mvPosition.xyz);\nmvPosition = modelViewMatrix * mvPosition;'));
-  shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>',T.ShaderChunk.worldpos_vertex.replace('worldPosition = modelMatrix * worldPosition;','worldPosition.xyz = bendPlant(worldPosition.xyz);\nworldPosition = modelMatrix * worldPosition;'));
+  shader.vertexShader=shader.vertexShader.replace('#include <project_vertex>',T.ShaderChunk.project_vertex.replace('mvPosition = modelViewMatrix * mvPosition;',`mvPosition.xyz = bendPlant(mvPosition.xyz);\n${reuse?'vec3 plantBentPosition=mvPosition.xyz;':''}\nmvPosition = modelViewMatrix * mvPosition;`));
+  shader.vertexShader=shader.vertexShader.replace('#include <worldpos_vertex>',T.ShaderChunk.worldpos_vertex.replace('worldPosition = modelMatrix * worldPosition;',`worldPosition.xyz = ${reuse?'plantBentPosition':'bendPlant(worldPosition.xyz)'};\nworldPosition = modelMatrix * worldPosition;`));
   if(flutter&&material instanceof T.MeshStandardMaterial){
    shader.uniforms.leafOpticalDensity={value:material.userData.leafOpticalDensity??1};
    shader.fragmentShader='uniform float leafOpticalDensity;\n'+shader.fragmentShader;
@@ -113,7 +115,7 @@ reflectedLight.directDiffuse += directLight.color * leafTransmissionTint * leafT
 `));
   }
  };
- material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v11-${flutter}-${material.type}`;
+ material.customProgramCacheKey=()=>`rooted-plant-current-translucency-v12-${flutter}-${material.type}-${reuse}`;
 }
 
 export function setPlantRoots(geometry:T.BufferGeometry,roots:number[],flex:number[]){

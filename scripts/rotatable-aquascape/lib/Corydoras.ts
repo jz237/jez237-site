@@ -84,7 +84,8 @@ a.replanIn-=h;if(this.routes.nodes.length&&a.replanIn<=0&&!a.picking&&a.mode!=='
    a.effort+=(clamp(a.speed/.25,0,1)-a.effort)*(1-Math.exp(-h*5));a.phase+=h*(2.5+a.effort*17)*(1+.10*Math.sin(a.time*.9+a.id));this.pose(a);
   }
   // Existing fish yield at the first contact along their segment, including fast darts.
-  for(const f of fish)for(const a of this.animals){const corrected=fishTouch({...f,position:this.fishCorrections.get(f.id)??f.position},coryBody(a.position,coryForward(a),a.size,a.pitch));if(corrected)this.fishCorrections.set(f.id,corrected);}
+  const contactBodies=this.animals.map(a=>coryBody(a.position,coryForward(a),a.size,a.pitch));
+  for(const f of fish)for(const body of contactBodies){const corrected=fishTouch({...f,position:this.fishCorrections.get(f.id)??f.position},body);if(corrected)this.fishCorrections.set(f.id,corrected);}
   this.models.flush();
  }
  private removePellet(p:typeof this.pellets[number],eaten=false){if(eaten)p.onEaten?.();p.mesh.removeFromParent();this.pellets.splice(this.pellets.indexOf(p),1);}

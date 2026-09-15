@@ -35,7 +35,7 @@ vec3 indirectProbe(vec3 point,vec3 normal){
 `+shader.fragmentShader;
     shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_maps>',`#include <lights_fragment_maps>
 #if defined(RE_IndirectDiffuse)
- vec3 probeWorld=cameraPosition-inverseTransformDirection(normalize(vViewPosition),viewMatrix)*length(vViewPosition);
+ vec3 probeWorld=cameraPosition-(vec4(vViewPosition,0.)*viewMatrix).xyz;
  if(abs(probeWorld.x)<5.1&&abs(probeWorld.z)<2.35&&probeWorld.y>.1&&probeWorld.y<5.36){
   vec3 probeNormal=inverseTransformDirection(geometryNormal,viewMatrix);
   irradiance+=indirectProbe(probeWorld,probeNormal)*bakedStrength*bakedDaylight;
