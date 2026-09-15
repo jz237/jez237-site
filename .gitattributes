@@ -4,3 +4,9 @@ demos/living-aquascape/index.html text eol=lf
 # Preserve original asset bytes for provenance checksums.
 demos/rotatable-aquascape/models/moss_01/*.gltf -text
 scripts/rotatable-aquascape/public/models/moss_01/*.gltf -text
+
+# Hashed aquarium delivery files must keep their bytes on Windows and Linux.
+scripts/rotatable-aquascape/public/load/** -text
+demos/rotatable-aquascape/load/** -text
+prototypes/hidden-reef/showroom/aquarium/load/** -text
+prototypes/hidden-reef-header-preview/showroom/aquarium/load/** -text
