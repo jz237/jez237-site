@@ -22,3 +22,14 @@ test('the cards hand over to the real trees: they are gone before the reach ends
  assert.ok(CARD_FADE[0]>CARD_FADE_DEFAULT[1],'the ultra band starts beyond where the plain one has finished');
  assert.deepEqual(CARD_FADE_DEFAULT,[28,62]);
 });
+
+import {shorePoint} from '../shore-rocks.js';
+test('a boulder goes where the bed crosses the waterline on a slope, not out in the lake or up the hill',()=>{
+ const beach=(x,z)=>x*.25-1; // a bank rising to the east through y=0 at x=4
+ assert.equal(shorePoint(beach,-40,0),null,'deep water takes no rock');
+ assert.equal(shorePoint(beach,40,0),null,'the hilltop takes no rock');
+ const p=shorePoint(beach,4,0);
+ assert.ok(p&&Math.abs(p.y)<.01,'the waterline does');
+ assert.ok(p.slope>0,'and it knows which way the bed falls');
+ assert.equal(shorePoint((x,z)=>0,0,0),null,'a dead-flat bed has no shore to sit on');
+});

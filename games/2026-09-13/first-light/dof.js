@@ -98,6 +98,10 @@ void main(){vec2 d=(vUv-sunUV)*density/float(N);vec2 uv=vUv;float illum=1.,wsum=
     u.tBloom.value=bA.texture;u.bloom.value=gl.bloom;}else{u.tBloom.value=black;u.bloom.value=0;}
    if(gl&&gl.shaft>0&&gl.sunUV){su.sunUV.value.set(gl.sunUV[0],gl.sunUV[1]);su.decay.value=gl.decay;su.density.value=gl.density;su.threshold.value=gl.shaftThreshold;if(shaft.defines.N!==gl.samples){shaft.defines.N=gl.samples;shaft.needsUpdate=true;}pass(shaft,sA);u.tShaft.value=sA.texture;u.shaft.value=gl.shaft;u.shaftTint.value.set(...gl.tint);}else{u.tShaft.value=black;u.shaft.value=0;}
    qm.material=mat;renderer.setRenderTarget(null);renderer.render(quad,cam);},
+  // multisampling into the colour target: the canvas's own antialiasing only ever touched the
+  // full-screen quad, so until now the scene itself was unaliased. Ultra resolves 4 samples.
+  setSamples(n){const want=Math.max(0,n|0);if(rt.samples===want)return rt.samples;rt.samples=want;rt.dispose();return rt.samples;},
+  samples(){return rt.samples;},
   resize(){renderer.getDrawingBufferSize(size);rt.setSize(size.x,size.y);u.texel.value.set(1/size.x,1/size.y);qsize();bA.setSize(q.x,q.y);bB.setSize(q.x,q.y);sA.setSize(q.x,q.y);},
   size(){return [size.x,size.y];},
   glowSize(){return [q.x,q.y];},
