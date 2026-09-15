@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 14 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 15 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 16-22, 1984 — FBI Seizes Home Computers in Huntsville Hacker Probe</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-07-16</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-16</guid>
+      <pubDate>Tue, 15 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Four Alabama homes yield computers and related equipment as federal investigators examine unauthorized entry into two systems. HUNTSVILLE, Ala. — Federal agents seized computers and related equipment Monday at four homes in the Huntsville area, an unusually vivid sign that the expanding world of home terminals and dial-up experimentation has begun to draw the close attention of law enforcement. Also this week: Tramiel Takes Atari Into a New, Hard-Cost Era · Imagine Software&apos;s Million-Pound Dream Bursts · Apple IIc Brings 128K and Plug-In Simplicity Home · £1.99 Games Ignite a British Software Price War.</description>
+    </item>
     <item>
       <title>Week of July 9-15, 1984 — Atari-Commodore Rivalry Turns into a Fight over Trade Secrets</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-07-09</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-05</guid>
       <pubDate>Tue, 25 Aug 2026 12:00:00 GMT</pubDate>
       <description>A multibillion-dollar American trade looks overseas—and a software show makes clear that programs now constitute an industry of their own. The personal-computer business has spent years measuring progress in processors, memory and disk drives. This week the programs themselves claim the marquee. A March 4 report in The Washington Post describes American personal-computer software as a multibillion-dollar business whose firms are looking beyond the domestic boom toward customers overseas. Also this week: IBM’s PCjr Arrives to a Skeptical Reception · Micro Games Crowd the Chart · Industry Seeks Laws Against “Electronic Trespassers”.</description>
-    </item>
-    <item>
-      <title>Week of February 27-March 4, 1984 — IBM Packs the PC Into a 30-Pound Portable</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-02-27</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-02-27</guid>
-      <pubDate>Mon, 24 Aug 2026 12:00:00 GMT</pubDate>
-      <description>Big Blue answers the transportable-computer boom with a suitcase-sized machine that runs familiar PC software. IBM announced the Portable Personal Computer 5155 Model 68 on February 29, bringing its own badge to a transportable category pioneered by Osborne and sharpened by Compaq. The new machine preserves IBM PC disk and software compatibility in a luggable case intended to move between desks. Also this week: West Coast Computer Faire Throws Open Its Doors · Software Becomes the Industry’s Main Event · PCjr Brings Better Games—and Awkward Compromises.</description>
     </item>
   </channel>
 </rss>
