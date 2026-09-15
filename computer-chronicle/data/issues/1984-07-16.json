@@ -1,0 +1,416 @@
+{
+  "currentDate": "2026-09-15",
+  "historicDate": "1984-07-16",
+  "displayDate": "Week of July 16-22, 1984",
+  "edition": "Issue 103 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Urgent trade-paper reporting with bright summer retail color",
+    "motifs": [
+      "Atari joystick silhouette",
+      "Commodore circuit traces",
+      "CRT video scan lines",
+      "newsprint legal-file stamps"
+    ],
+    "layout": "Gaming-led broadsheet with a rivalry splash, video feature rail, and dense shelf modules"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Computer & Culture Newspaper",
+    "dateline": "Week of July 16-22, 1984",
+    "price": "75¢"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Five-column rivalry splash with Atari hardware and legal-paper imagery",
+    "secondaryRail": "BYTE video, Sinclair QL, PC ecosystem, modem and gadget desks",
+    "archiveNavigation": "Chronological weekly archive with previous and next issue controls"
+  },
+  "sectionChrome": {
+    "primary": "#a82020",
+    "secondary": "#174a78",
+    "texture": "Warm cream newsprint, halftone dots, narrow rules, and slightly uneven ink"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-07-16.jpg",
+    "alt": "GPT Image 2 newspaper front page for the week of July 16-22, 1984",
+    "caption": "A GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Federal agents seize home computers in an Alabama intrusion probe as the dial-up underground collides with law enforcement. Elsewhere, Tramiel remakes Atari, Imagine collapses, Apple simplifies the II, and budget games redraw the software shelf.",
+  "morningLine": "The modem line meets the law while Atari changes hands and software prices tumble.",
+  "lead": {
+    "headline": "FBI Seizes Home Computers in Huntsville Hacker Probe",
+    "dek": "Four Alabama homes yield computers and related equipment as federal investigators examine unauthorized entry into two systems.",
+    "body": [
+      "HUNTSVILLE, Ala. — Federal agents seized computers and related equipment Monday at four homes in the Huntsville area, an unusually vivid sign that the expanding world of home terminals and dial-up experimentation has begun to draw the close attention of law enforcement.",
+      "The FBI said the people under investigation were believed to have penetrated two computer systems. The contemporary wire report used the still-novel word “hackers,” a label now crossing from hobbyist conversation into the language of investigators and the general press.",
+      "No named crew, handle or bulletin board appeared in the report, and the seizures were part of an investigation rather than a finding of guilt. Even so, the case places the home computer at the center of a new legal boundary: a machine bought for learning, games and communications can also become a doorway into distant systems.",
+      "For modem owners, the lesson is immediate. As inexpensive adapters and faster modems make remote access easier, the customs of the electronic clubhouse are colliding with rules written for property, privacy and fraud. The Huntsville inquiry may not settle those questions, but it makes them impossible to ignore."
+    ],
+    "sourceRefs": [
+      0
+    ],
+    "confidence": "exact-date"
+  },
+  "stories": [
+    {
+      "headline": "Tramiel Takes Atari Into a New, Hard-Cost Era",
+      "body": [
+        "Jack Tramiel’s takeover of Atari’s consumer operations is moving from boardroom announcement to factory-floor reality. Warner transferred the home-computer and home-video-game businesses to a new company led by the former Commodore chief, while retaining the coin-operated arcade operation.",
+        "The consideration was described chiefly as long-term notes and warrants, not a simple cash purchase. Within days, UPI reported another 300 layoffs in Sunnyvale, underscoring the speed and severity of the cost-cutting program.",
+        "A Newsweek profile dated July 16 casts Tramiel as the hard-driving executive expected to rebuild Atari through tight costs and mass-market pricing. His old Commodore rivalry now has a new arena, with Atari’s machines, dealers and software library awaiting a strategy."
+      ],
+      "sourceRefs": [
+        1,
+        2,
+        3
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "headline": "Imagine Software's Million-Pound Dream Bursts",
+      "body": [
+        "Liverpool software celebrity Imagine has collapsed after little more than a year, according to CRASH, leaving roughly £500,000 owed to its bank and creditors. The failure punctures one of the British games boom’s most extravagant success stories.",
+        "Imagine had projected glamour through lavish magazine advertising and talk of a valuation near £30 million. CRASH reported that more than £50,000 in advertising remained unpaid when agency Studio Sting went into liquidation.",
+        "Rights to existing titles had been marketed to Beau Jolly, while the fate of the heavily promoted “mega-games” Bandersnatch and Psyclapse remained unclear. Operations controller Bruce Everiss was left seeking work for about 60 people."
+      ],
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Apple IIc Brings 128K and Plug-In Simplicity Home",
+      "body": [
+        "Apple’s compact IIc turns the familiar Apple II into an appliance-like machine: a 65C02 processor, 128K of memory and a built-in 140K disk drive are sealed into a low-profile case designed to be connected and used without opening the computer.",
+        "Rear ports accommodate display, printer, modem, mouse or joystick and a second disk drive. The machine retains Apple II graphics modes and, Apple says, compatibility with more than 90 percent of currently available Apple II software.",
+        "The missing expansion slots mark the wager. Apple is trading the IIe’s internal flexibility for a cleaner desk and simpler setup, supported by a $199 monitor, $299 printer, $99 mouse and $329 external drive."
+      ],
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "£1.99 Games Ignite a British Software Price War",
+      "body": [
+        "The British cassette rack has a new low-price frontier. Mastertronic titles at £1.99 and Warwick Leisure’s Pulsonic range at £2.99 are challenging the established price of a home-computer game.",
+        "Lothlorien was considering its own low-price line, while CCS introduced Charlie Charlie Sugar with £2.99 Spectrum games Dix Mille and Whodunnit. CCS pitched them as pocket-money impulse buys rather than purchases requiring weeks of saving.",
+        "The strategy could widen the market and reward rapid turnover, but it also squeezes publishers whose larger productions command premium prices. On the same shelves, New Generation’s Complete Machine Code Tutor stood at £14.95 — a reminder of how wide the software price ladder has become."
+      ],
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Apple IIc",
+      "summary": "July's most visible new home-computer design, emphasizing compactness and compatibility. 65C02, 128K RAM, 16K ROM, built-in 140K 5.25-inch drive, serial ports, 560x192 monochrome mode",
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "MPP-1150 printer interface",
+      "summary": "An Atari SIO-to-Centronics interface advertised as compatible with all Atari computer models and able to daisy-chain other peripherals.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "McPen light pen",
+      "summary": "A high-resolution Atari light pen with adjustable sensitivity.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "AppleWorks",
+      "detail": "Apple's integrated word processor, spreadsheet, and database package was a flagship IIc offering in July coverage."
+    },
+    {
+      "name": "Complete Machine Code Tutor",
+      "detail": "New Generation's £14.95 package served Spectrum, Commodore 64, BBC, and Atari users; the Spectrum edition promised 33 lessons and more than 100K across two cassettes."
+    },
+    {
+      "name": "Flipsketch",
+      "detail": "Atari drawing and animation utility: $19.95 cassette or $23.95 disk; up to 56 low-resolution frames with 40K."
+    },
+    {
+      "name": "T.L.L.",
+      "detail": "Vortex Software / Ocean — No. 1 on Personal Computer News's all-formats chart published July 21 (sales week ending July 12)."
+    },
+    {
+      "name": "Sabre Wulf",
+      "detail": "Ultimate Play the Game — No. 2 on the July 21 Personal Computer News all-formats chart."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "T.L.L.",
+        "Sabre Wulf",
+        "Mugsy",
+        "Spare Change",
+        "Agent USA"
+      ]
+    },
+    {
+      "label": "Period Software",
+      "items": [
+        "AppleWorks",
+        "Complete Machine Code Tutor",
+        "Flipsketch"
+      ]
+    },
+    {
+      "label": "Hardware Counter",
+      "items": [
+        "Apple IIc",
+        "MPP-1150 printer interface",
+        "McPen light pen"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Apple Monitor IIc",
+      "price": "$199",
+      "note": "Advertised or reported period price.",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "Apple 300-baud modem",
+      "price": "$225",
+      "note": "Advertised or reported period price.",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "Apple 1200-baud modem",
+      "price": "$495",
+      "note": "Advertised or reported period price.",
+      "sourceRefs": [
+        5
+      ]
+    },
+    {
+      "item": "R-Verter modem adapter for Atari",
+      "price": "$49.95",
+      "note": "Advertised or reported period price.",
+      "sourceRefs": [
+        6
+      ]
+    },
+    {
+      "item": "Mastertronic budget games",
+      "price": "£1.99",
+      "note": "Advertised or reported period price.",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Eddie Kidd becomes a computer-game hero",
+      "summary": "Martech announced Jump Challenge for 48K Spectrum and Commodore 64, promising an attempt to reproduce the stunt rider's timing and control.",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Voice digitizing reaches the joystick port",
+      "summary": "Gemini Software's $39.95 Digi-Voice package captured, edited, graphed, and replayed sound through an audio card plugged into an Atari joystick port.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "When Doves Cry",
+      "artist": "Prince"
+    },
+    {
+      "rank": 2,
+      "title": "Dancing in the Dark",
+      "artist": "Bruce Springsteen"
+    },
+    {
+      "rank": 3,
+      "title": "Ghostbusters",
+      "artist": "Ray Parker Jr."
+    },
+    {
+      "rank": 4,
+      "title": "Eyes Without a Face",
+      "artist": "Billy Idol"
+    },
+    {
+      "rank": 5,
+      "title": "Jump (For My Love)",
+      "artist": "Pointer Sisters"
+    }
+  ],
+  "periodAd": {
+    "headline": "Plug In and Dial Out",
+    "summary": "Atari’s $49.95 R-Verter links standard RS-232C modems without occupying a joystick port.",
+    "tagline": "Your serial door to the online world."
+  },
+  "market": {
+    "headline": "Atari Enters the Tramiel Ledger",
+    "summary": "Warner separates Atari’s consumer computer and console operations from its retained arcade business as layoffs expose the urgency of the restructuring.",
+    "sourceRefs": [
+      1,
+      2,
+      3
+    ],
+    "confidence": "same-week"
+  },
+  "worldAnchor": {
+    "headline": "Ferraro accepts historic vice-presidential nomination",
+    "summary": "At the Democratic National Convention on July 19, Geraldine Ferraro became the first woman nominated for vice president by a major U.S. political party.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      11
+    ]
+  },
+  "bbsNote": {
+    "headline": "A $49.95 Adapter Opens Atari's Serial Door",
+    "summary": "July's ANTIC listed the R-Verter, a low-cost way to connect common RS-232C modems directly to Atari computers, while Apple positioned 300- and 1200-baud modems as standard IIc accessories. Together they show dial-up access moving from specialist interfaces toward consumer plug-in use.",
+    "posts": [
+      {
+        "topic": "R-Verter",
+        "platform": "Atari 8-bit",
+        "text": "Advanced Interface Devices' $49.95 adapter included a smart-terminal emulator and RS-232C handler, used no joystick port, and required no separate interface module."
+      },
+      {
+        "topic": "Apple modem ladder",
+        "platform": "Apple IIc",
+        "text": "Apple listed a 300-baud modem at $225 and a 1200-baud model at $495; the IIc's two serial ports could support a modem without an expansion card."
+      },
+      {
+        "topic": "CompuServe user community",
+        "platform": "CompuServe CEM 450 SIG",
+        "text": "A June 1984 Timex/Sinclair user-group guide described accessing the CEM 450 Special Interest Group to read and exchange messages, a close period example of vendor communities migrating online."
+      }
+    ],
+    "sourceUrls": [
+      "https://www.atarimagazines.com/v3n3/newproducts.php",
+      "https://www.atarimagazines.com/compute/issue50/227_1_Evolutionary_To_The_Core_The_Apple_IIc_Heads_For_Home.php",
+      "https://www.timexsinclair.com/article/t-s-users-meet-on-compuserve/index.html"
+    ]
+  },
+  "undergroundDesk": {
+    "headline": "The Dial-Up Frontier Meets the FBI",
+    "dek": "A Huntsville seizure turns the computer underground into front-page legal news.",
+    "body": [
+      "The July 16 UPI dispatch reported FBI seizures of computers and equipment at four Huntsville-area homes in an investigation of unauthorized entry into two computer systems. No crew, handle, or board name appears in the accessible contemporary report, so the identity list is intentionally empty.",
+      "The wire account names no crew, handle or board, so this desk records none. Its importance lies instead in the moment: network exploration conducted from homes is now being treated as a matter for federal search and seizure.",
+      "The same month, British software houses were organizing against copier advertisements in computer magazines, showing a second front in the struggle over who may enter, duplicate or control digital property."
+    ],
+    "groups": [],
+    "sourceRefs": [
+      0,
+      4
+    ],
+    "confidence": "exact-date / same-month"
+  },
+  "curiosity": {
+    "headline": "Apple's New Computer Had a 'Drool Cover'",
+    "summary": "The polished Apple IIc hid an unexpectedly practical feature beneath its keyboard.",
+    "detail": "COMPUTE! reported that plastic under the keys kept spilled liquid out of the computer and directed it toward front air vents when the machine sat at typing angle. An Apple spokesperson cheerfully called the membrane the 'drool cover.'",
+    "sourceUrls": [
+      "https://www.atarimagazines.com/compute/issue50/227_1_Evolutionary_To_The_Core_The_Apple_IIc_Heads_For_Home.php"
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Huntsville seizures: exact-date UPI report, July 16, 1984.",
+      "Atari restructuring: same-week reporting and period profile.",
+      "Charts: Billboard week of July 21 and weekend box office beginning July 20.",
+      "Product and software details: July 1984 period magazines."
+    ]
+  },
+  "sources": [
+    {
+      "title": "UPI: FBI seized computers at four homes",
+      "url": "https://www.upi.com/Archives/1984/07/16/The-FBI-seized-computers-and-equipment-Monday-at-four/3861458798400/",
+      "date": "1984-07-16"
+    },
+    {
+      "title": "Newsweek: Jack Tramiel — A Tough Man for a Tough Job (reprint)",
+      "url": "https://www.commodore.ca/commodore-history/jack-tramiel-tough-man-tough-job/",
+      "date": "1984-07-16"
+    },
+    {
+      "title": "UPI: Warner sells Atari operations",
+      "url": "https://www.upi.com/Archives/1984/07/02/Warner-sells-Atari-operations/5941457588800/",
+      "date": "1984-07-02"
+    },
+    {
+      "title": "UPI: Atari starts major layoff program",
+      "url": "https://www.upi.com/Archives/1984/07/06/Atari-Corporation-has-started-a-major-layoff-program-at/1321457934400/",
+      "date": "1984-07-06"
+    },
+    {
+      "title": "CRASH 7: News Input",
+      "url": "https://www.crashonline.org.uk/07/news.htm",
+      "date": "1984-08"
+    },
+    {
+      "title": "COMPUTE! 50: The Apple IIc Heads for Home",
+      "url": "https://www.atarimagazines.com/compute/issue50/227_1_Evolutionary_To_The_Core_The_Apple_IIc_Heads_For_Home.php",
+      "date": "1984-07"
+    },
+    {
+      "title": "ANTIC Vol. 3 No. 3: New Products",
+      "url": "https://www.atarimagazines.com/v3n3/newproducts.php",
+      "date": "1984-07"
+    },
+    {
+      "title": "Personal Computer News all-formats chart",
+      "url": "https://computerhits.org/archive/personal%20computer%20news_1984-07-21_all%20formats/",
+      "date": "1984-07-21"
+    },
+    {
+      "title": "Billboard Hot 100 archive",
+      "url": "https://www.musicchartsarchive.com/singles-chart/1984-07-21",
+      "date": "1984-07-21"
+    },
+    {
+      "title": "Weekend domestic box office",
+      "url": "https://www.the-numbers.com/box-office-chart/weekend/1984/07/20",
+      "date": "1984-07-20"
+    },
+    {
+      "title": "AFI Catalog: Electric Dreams",
+      "url": "https://catalog.afi.com/Catalog/moviedetails/70494",
+      "date": "1984-07-20"
+    },
+    {
+      "title": "UPI: Geraldine Ferraro accepts nomination",
+      "url": "https://www.upi.com/Archives/1984/07/19/Geraldine-Ferraro-Thursday-night-became-the-first-woman-nominated/6300459057600/",
+      "date": "1984-07-19"
+    },
+    {
+      "title": "UPI: San Ysidro mass shooting",
+      "url": "https://www.upi.com/Archives/1984/07/18/A-gunman-dressed-in-combat-fatigues-opened-fire-at/1656458971200/",
+      "date": "1984-07-18"
+    }
+  ]
+}
