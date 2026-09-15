@@ -1,4 +1,4 @@
-import {readFileSync,readdirSync} from 'node:fs';
+import {readFileSync,readdirSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';
 import {resolve,relative,sep} from 'node:path';
 import {pathToFileURL} from 'node:url';
@@ -19,7 +19,12 @@ export function checkAquariumSync(root=resolve(import.meta.dirname,'..')){
  });
  for(let i=1;i<entries.length;i++)if(JSON.stringify(entries[i])!==JSON.stringify(entries[0]))throw Error(`Aquarium bundle mismatch: ${aquariumCopies[i]}. Run npm run build:sites in scripts/rotatable-aquascape.`);
  const publicRoot=resolve(root,'scripts/rotatable-aquascape/public');
- const assets=[...entries[0].map(f=>['assets/'+f,resolve(root,aquariumCopies[0],'assets',f)]),...files(publicRoot).map(f=>[f,resolve(publicRoot,f)])];
+ const chunkManifest=resolve(root,aquariumCopies[0],'build-manifest.json');
+ const chunks=existsSync(chunkManifest)?JSON.parse(readFileSync(chunkManifest,'utf8')):entries[0].map(f=>'assets/'+f);
+ if(!Array.isArray(chunks)||chunks.some(f=>typeof f!=='string'||!/^assets\/[A-Za-z0-9_.-]+\.(js|css)$/.test(f))||entries[0].some(f=>!chunks.includes('assets/'+f)))throw Error('Invalid aquarium chunk manifest.');
+ const sharedChunks=chunks.map(f=>[f,resolve(root,aquariumCopies[0],f)]);
+ if(existsSync(chunkManifest))sharedChunks.push(['build-manifest.json',chunkManifest]);
+ const assets=[...sharedChunks,...files(publicRoot).map(f=>[f,resolve(publicRoot,f)])];
  for(const [file,source] of assets){
   const expected=hash(source);
   for(const copy of aquariumCopies){
