@@ -24,13 +24,23 @@ function ringGeometry(r){
 }
 export function makeRidge(scene){
  const root=new T.Group();scene.add(root);
- const u={colorAway:{value:new T.Color(.2,.15,.35)},colorSun:{value:new T.Color(.5,.3,.3)},sunDir:{value:new T.Vector3(0,1,0)},haze:{value:.5},skyLow:{value:new T.Color(.5,.3,.4)}};
- const mats=RINGS.map(r=>new T.ShaderMaterial({uniforms:{...u,far:{value:r.far}},side:T.DoubleSide,depthWrite:true,vertexShader:`varying vec3 wp;varying float vh;void main(){wp=(modelMatrix*vec4(position,1.)).xyz;vh=uv.y;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
-  fragmentShader:`uniform vec3 colorAway,colorSun,sunDir,skyLow;uniform float haze,far;varying vec3 wp;varying float vh;
+ const u={colorAway:{value:new T.Color(.2,.15,.35)},colorSun:{value:new T.Color(.5,.3,.3)},sunDir:{value:new T.Vector3(0,1,0)},haze:{value:.5},skyLow:{value:new T.Color(.5,.3,.4)},tex:{value:null},texMix:{value:0}};
+ const mats=RINGS.map(r=>new T.ShaderMaterial({uniforms:{...u,far:{value:r.far}},side:T.DoubleSide,depthWrite:true,vertexShader:`varying vec3 wp;varying float vh;varying float vu;void main(){wp=(modelMatrix*vec4(position,1.)).xyz;vh=uv.y;vu=uv.x;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,
+  fragmentShader:`uniform vec3 colorAway,colorSun,sunDir,skyLow;uniform float haze,far,texMix;uniform sampler2D tex;varying vec3 wp;varying float vh;varying float vu;
 void main(){vec3 d=normalize(vec3(wp.x-cameraPosition.x,0.,wp.z-cameraPosition.z));float az=.5+.5*dot(d,normalize(vec3(sunDir.x,0.,sunDir.z)+vec3(1e-4)));
  vec3 c=mix(colorAway,colorSun,pow(az,3.));
  // aerial perspective: the far ring melts into the low sky, the crest a touch lighter than the foot
  c=mix(c,skyLow,haze*far);c*=mix(.85,1.05,vh);
+ // Ultra: a photograph of layered forested ridges over the painted colour. The mesh crest maps just
+ // under the strip's own skyline so no transparent pixel can reach the edge, and the last tenth of
+ // the mesh fades into the low sky, which hides the seam where the two silhouettes disagree.
+ if(texMix>0.){vec4 t=texture2D(tex,vec2(fract(vu),clamp(vh*.70,.01,.70)));
+  // the photograph is used as detail, not as colour: its own light and shade modulate the painted
+  // ridge, so the hills keep the hour's palette and gain the forest's texture and layered ridge lines
+  float tl=dot(t.rgb,vec3(.30,.55,.15))/255.*255.;
+  float detail=mix(1.,.55+tl*1.25,texMix*t.a);
+  c*=detail;
+  c=mix(c,skyLow,smoothstep(.88,1.,vh)*texMix*.85);}
  gl_FragColor=vec4(c,1.);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
@@ -38,6 +48,9 @@ void main(){vec3 d=normalize(vec3(wp.x-cameraPosition.x,0.,wp.z-cameraPosition.z
  const meshes=RINGS.map((r,i)=>{const m=new T.Mesh(ringGeometry(r),mats[i]);m.frustumCulled=false;m.userData.skipReflection=false;m.renderOrder=-5;root.add(m);return m;});
  return {root,meshes,
   // palette: the sky palette of the hour; sunDir: unit vector to the sun
+  loadTexture(url){new T.TextureLoader().load(url,t=>{t.colorSpace=T.SRGBColorSpace;t.wrapS=T.RepeatWrapping;t.wrapT=T.ClampToEdgeWrapping;t.anisotropy=8;u.tex.value=t;},undefined,()=>{});},
+  setTextured(on){u.texMix.value=u.tex.value&&on?1:0;},
+  textured(){return u.texMix.value;},
   update(eye,palette,sunDir,elevation){root.position.set(eye.x,0,eye.z);
    const lowSun=Math.max(0,Math.min(1,1-(elevation-2)/18)),night=palette.night||0;
    const z=palette.zenith,h=palette.horizon;
