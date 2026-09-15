@@ -18,7 +18,18 @@ vec3 panoramaRadiance(vec3 ray,vec3 sun,vec3 horizon,vec3 zenith,float night,flo
  vec2 uv=vec2(fract(.5+azimuth/6.2831853),clamp(.50+(elevation-asin(clamp(sun.y,-1.,1.)))/3.14159265,.01,.99));
  // Extremely slow coherent drift: one continuous sky, including its reflection.
  uv.x+=sin(weatherTime*.002)*.002;
- vec3 photographic=texture2D(skyPanorama,uv).rgb;
+ // Explicit angular gradients avoid the giant implicit derivative at atan/fract's
+ // longitude seam. The same sampler is used by the water and environment map.
+ uv.x=fract(uv.x);
+ float denom=max(.0001,dot(d.xz,d.xz));
+ vec3 dx=dFdx(d),dy=dFdy(d);
+ vec2 gx=vec2((d.z*dx.x-d.x*dx.z)/(6.2831853*denom),dx.y/(3.14159265*sqrt(max(.0001,1.-d.y*d.y))));
+ vec2 gy=vec2((d.z*dy.x-d.x*dy.z)/(6.2831853*denom),dy.y/(3.14159265*sqrt(max(.0001,1.-d.y*d.y))));
+ vec3 photographic=textureGrad(skyPanorama,uv,gx,gy).rgb;
+ // Feather mismatched image boundaries to a common value at the wrap itself.
+ float join=1.-smoothstep(0.,.045,min(uv.x,1.-uv.x));
+ vec3 opposite=textureGrad(skyPanorama,vec2(1.-uv.x,uv.y),vec2(-gx.x,gx.y),vec2(-gy.x,gy.y)).rgb;
+ photographic=mix(photographic,opposite,join*.5);
  float pole=smoothstep(.92,1.,abs(d.y));
  photographic=mix(photographic,zenith,pole);
  // Golden light belongs to Sunset Bay; daylight and night retain venue identity.
