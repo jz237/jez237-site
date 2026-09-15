@@ -9,7 +9,7 @@ function fixture(){
 }
 test('phone test compares independent passes and restores exactly once after completion',()=>{
  const f=fixture();f.benchmark.start(0);f.benchmark.start(10);
- for(let now=100;now<=40000;now+=100)f.benchmark.tick(now);
+ for(let now=100;now<=frameProbes.length*5000;now+=100)f.benchmark.tick(now);
  assert.deepEqual(f.applied,frameProbes.map(p=>p.mode));
  assert.equal(f.restored,1);assert.equal(f.benchmark.active,false);assert.equal(f.benchmark.mode,'normal');
  const result=f.messages.at(-1);assert.equal(result.done,true);

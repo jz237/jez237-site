@@ -4,7 +4,12 @@ export class GpuFrameTimer{
  private pending:WebGLQuery[]=[];
  private active:WebGLQuery|null=null;
  private samples:number[]=[];
- constructor(private gl:WebGL2RenderingContext,private host:HTMLElement){this.extension=gl.getExtension('EXT_disjoint_timer_query_webgl2');host.dataset.gpuTiming=this.extension?'available':'unavailable';}
+ constructor(private gl:WebGL2RenderingContext,private host:HTMLElement){
+  this.extension=gl.getExtension('EXT_disjoint_timer_query_webgl2');host.dataset.gpuTiming=this.extension?'available':'unavailable';
+  // Only collected for the opt-in local readout; never sent to a server.
+  try{const info=gl.getExtension('WEBGL_debug_renderer_info');host.dataset.graphicsDevice=String(gl.getParameter(info?info.UNMASKED_RENDERER_WEBGL:gl.RENDERER));}
+  catch{host.dataset.graphicsDevice='not exposed by browser';}
+ }
  begin(){
   const gl=this.gl,ext=this.extension;if(!ext)return;
   const disjoint=gl.getParameter(ext.GPU_DISJOINT_EXT);
