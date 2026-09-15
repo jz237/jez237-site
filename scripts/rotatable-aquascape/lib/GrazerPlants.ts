@@ -85,20 +85,25 @@ export class GrazerPlants{
  }
  clearBody(p:T.Vector3,body:BodySphere[],time:number,own?:PlantLeaf,envelope=false){
   const cache=envelope?this.envelopeCollisionCache:this.leafCollisionCache;if(envelope)time=0;
-  const centers=body.map(s=>({p:s.center,r:s.radius}));
-  for(const fern of this.fernCandidates.nearby(p,.48))for(const c of centers){if(!sphereMayReachBox(c.p,c.r+fern.margin,fern.box))continue;fern.triangle.closestPointToPoint(c.p,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+fern.margin)**2)return false;}
+  const centers=body;
+  // Reject an entire surface against the complete body before testing its
+  // individual spheres. This only skips surfaces no body sphere can reach.
+  let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity;
+  for(const {center:c,radius:r} of body){minX=Math.min(minX,c.x-r);minY=Math.min(minY,c.y-r);minZ=Math.min(minZ,c.z-r);maxX=Math.max(maxX,c.x+r);maxY=Math.max(maxY,c.y+r);maxZ=Math.max(maxZ,c.z+r);}
+  const mayReach=(box:T.Box3,extra=0)=>{extra+=1e-12;return maxX+extra>=box.min.x&&minX-extra<=box.max.x&&maxY+extra>=box.min.y&&minY-extra<=box.max.y&&maxZ+extra>=box.min.z&&minZ-extra<=box.max.z;};
+  for(const fern of this.fernCandidates.nearby(p,.48)){if(!mayReach(fern.box,fern.margin))continue;for(const c of centers){if(!sphereMayReachBox(c.center,c.radius+fern.margin,fern.box))continue;fern.triangle.closestPointToPoint(c.center,this.closest);if(this.closest.distanceToSquared(c.center)<(c.radius+fern.margin)**2)return false;}}
   const stems=this.stemCandidates.nearby(p,.48);
   for(const stem of stems){
    const extra=envelope?.13*Math.max(stem.a.y-stem.root.y,stem.b.y-stem.root.y)**2*stem.flex:0;
    // The stored box already encloses the full current sweep and stem radius.
    // Distant stems need neither a deformed segment nor an exact distance test.
-   if(!centers.some(c=>sphereMayReachBox(c.p,c.r+extra,stem.box)))continue;
+   if(!mayReach(stem.box,extra)||!centers.some(c=>sphereMayReachBox(c.center,c.radius+extra,stem.box)))continue;
    if(stem.time!==time||!stem.line){const bend=(q:T.Vector3)=>{const h=Math.max(0,q.y-stem.root.y),phase=stem.root.x*.47+stem.root.z*.71;q.x+=(Math.sin(time*.82+phase)*.035+Math.sin(time*1.19+phase*1.7)*.013)*h*h*stem.flex*clamp((4.96-Math.abs(q.x))*2,0,1);q.z+=Math.sin(time*.67+phase+.8)*.029*h*h*stem.flex*clamp((2.20-Math.abs(q.z))*2,0,1);return q;};stem.line??=new T.Line3();bend(stem.line.start.copy(stem.a));bend(stem.line.end.copy(stem.b));stem.time=time;}
-   for(const c of centers){stem.line.closestPointToPoint(c.p,true,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+stem.radius+extra)**2)return false;}
+   for(const c of centers){stem.line.closestPointToPoint(c.center,true,this.closest);if(this.closest.distanceToSquared(c.center)<(c.radius+stem.radius+extra)**2)return false;}
   }
   for(const leaf of this.nearby(p,.48)){
    if(leaf===own)continue;
-   if(!centers.some(c=>sphereMayReachBox(c.p,c.r,leaf.box)))continue;
+   if(!mayReach(leaf.box)||!centers.some(c=>sphereMayReachBox(c.center,c.radius,leaf.box)))continue;
    // Thin small leaves need only two triangles; large blades retain their cup
    // and arch in the contact mesh. This is collision data, never rendered LOD.
    const extra=envelope?leaf.motion.y*new T.Vector3().setFromMatrixScale(leaf.matrix).y*3.4+.13*Math.max(0,leaf.box.max.y-leaf.root.y)**2*leaf.flex:0;
@@ -116,7 +121,7 @@ export class GrazerPlants{
     for(const {triangle,box} of cached.triangles)box.makeEmpty().expandByPoint(triangle.a).expandByPoint(triangle.b).expandByPoint(triangle.c);
     cached.time=time;
    }
-   for(const {triangle,box} of cached.triangles)for(const c of centers){if(!sphereMayReachBox(c.p,c.r+extra,box))continue;triangle.closestPointToPoint(c.p,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+extra)**2)return false;}
+   for(const {triangle,box} of cached.triangles){if(!mayReach(box,extra))continue;for(const c of centers){if(!sphereMayReachBox(c.center,c.radius+extra,box))continue;triangle.closestPointToPoint(c.center,this.closest);if(this.closest.distanceToSquared(c.center)<(c.radius+extra)**2)return false;}}
 
   }
   return true;

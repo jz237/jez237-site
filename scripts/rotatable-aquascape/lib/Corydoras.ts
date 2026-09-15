@@ -10,7 +10,8 @@ const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z),UP=V(0,1,0),clamp=T.MathUtils.clamp;
 export type Cory={id:number;position:T.Vector3;previous:T.Vector3;target:T.Vector3;yaw:number;pitch:number;size:number;speed:number;phase:number;effort:number;remaining:number;seed:number;mode:'foraging'|'browsing'|'feeding'|'exploring';blocked:number;time:number;lift:number;visits:Map<string,number>;route:T.Vector3[];restIn:number;replanIn:number;trail:{point:T.Vector3;yaw:number}[];retreat:number;yieldLeft:number;stalled:number;anchor:T.Vector3;picking?:CoryForageSite};
 export function coryForward(a:Cory){return V(Math.cos(a.yaw),0,-Math.sin(a.yaw));}
 /** Includes the swept width of the tail, barbels and paired fins. */
-export function coryBody(p:T.Vector3,f:T.Vector3,size=.568,pitch=0):BodySphere[]{return [[-.46,.085,.175],[-.045,.265,.09],[-.28,.085,.095],[-.13,.095,.12],[.045,.115,.125],[.17,.085,.15],[.30,.06,.065]].map(([x,y,r])=>({center:p.clone().addScaledVector(f,(x*Math.cos(pitch)-y*Math.sin(pitch))*size).addScaledVector(UP,(x*Math.sin(pitch)+y*Math.cos(pitch))*size),radius:r*size}));}
+const bodyProfile=[[-.46,.085,.175],[-.045,.265,.09],[-.28,.085,.095],[-.13,.095,.12],[.045,.115,.125],[.17,.085,.15],[.30,.06,.065]];
+export function coryBody(p:T.Vector3,f:T.Vector3,size=.568,pitch=0):BodySphere[]{const c=Math.cos(pitch),s=Math.sin(pitch);return bodyProfile.map(([x,y,r])=>({center:p.clone().addScaledVector(f,(x*c-y*s)*size).addScaledVector(UP,(x*s+y*c)*size),radius:r*size}));}
 export function coryMouth(p:T.Vector3,f:T.Vector3,size:number,pitch:number){return p.clone().addScaledVector(f,(.26*Math.cos(pitch)-.038*Math.sin(pitch))*size).addScaledVector(UP,(.26*Math.sin(pitch)+.038*Math.cos(pitch))*size);}
 export function nibblePitch(time:number,id:number){return -.26-.065*(.5+.5*Math.sin(time*4.1+id*2.3));}
 
@@ -18,6 +19,8 @@ const random=(a:Cory)=>{a.seed=(Math.imul(a.seed,1664525)+1013904223)>>>0;return
 export class Corydoras{
  readonly models:CoryModels;readonly animals:Cory[]=[];readonly fishCorrections=new Map<number,T.Vector3>();readonly pellets:{position:T.Vector3;age:number;mesh:T.Mesh;onEaten?:()=>void}[]=[];
  readonly routes:CoryFloorRoutes;
+ private visitorBounds=new WeakMap<BodySphere[],T.Box3>();
+ private bodyCache=new WeakMap<Cory,{x:number;y:number;z:number;yaw:number;pitch:number;size:number;body:BodySphere[]}>();
  private scene:T.Scene;private height:(x:number,z:number)=>number;private obstacles:Obstacle[];private plants?:GrazerPlants;private pelletGeometry=new T.IcosahedronGeometry(.022,1);private pelletMaterial=new T.MeshStandardMaterial({color:0xa78b58,roughness:1});private time=0;
  constructor(scene:T.Scene,height:(x:number,z:number)=>number,obstacles:Obstacle[]=[],plants?:GrazerPlants,count=6){this.scene=scene;this.height=height;this.obstacles=obstacles;this.plants=plants;this.routes=new CoryFloorRoutes((x,z)=>this.floor(x,z),(p,f)=>this.solid(p,coryBody(p,f)));this.models=new CoryModels(count);scene.add(this.models.root);
   for(let id=0;id<count;id++){const a:Cory={id,position:V(),previous:V(),target:V(),yaw:id*1.73,pitch:0,size:(.66+id%3*.025)*.8,speed:0,phase:id*2.37,effort:0,remaining:1+id*.7,seed:237+id*7351,mode:id%2?'browsing':'foraging',blocked:0,time:0,lift:0,visits:new Map(),route:[],restIn:5+id*1.1,replanIn:6+id,trail:[],retreat:0,yieldLeft:0,stalled:0,anchor:V()};let found=false;
@@ -28,7 +31,12 @@ export class Corydoras{
  async prepareNavigation(cached?:FloorRouteMap){if(cached)this.routes.load(cached);else await this.routes.build();for(const a of this.animals){const origin=V(-4+a.id*1.55,this.floor(-4+a.id*1.55,1.6),1.6),candidates=this.routes.nodes.filter(n=>n.neighbors.length>2).sort((n,m)=>n.point.distanceToSquared(origin)-m.point.distanceToSquared(origin));for(const n of candidates){let found=false;for(const id of n.neighbors){const d=this.routes.nodes[id].point.clone().sub(n.point);if(d.x*d.x+d.z*d.z<.01)continue;const yaw=Math.atan2(-d.z,d.x),f=V(Math.cos(yaw),0,-Math.sin(yaw));if(!this.clear(a,n.point,f,[])||this.animals.some(b=>b.id<a.id&&b.position.distanceTo(n.point)<.85))continue;const route=this.routes.route(n.point,a.visits,0,a.seed,yaw);if(route.length<4)continue;a.position.copy(n.point);a.previous.copy(n.point);a.anchor.copy(n.point);a.trail=[];a.yaw=yaw;found=true;break;}if(found)break;}this.choose(a);this.pose(a);}this.models.flush();}
  private floor(x:number,z:number){let y=this.height(x,z);for(const [dx,dz] of [[.25,0],[-.3,0],[0,.13],[0,-.13]])y=Math.max(y,this.height(x+dx,z+dz));return y+.032;}
  private solid(p:T.Vector3,body:BodySphere[]){return p.y>=this.floor(p.x,p.z)-.006&&body.every(s=>Math.abs(s.center.x)+s.radius<4.98&&Math.abs(s.center.z)+s.radius<2.32&&s.center.y+s.radius<5.3&&this.obstacles.every(o=>o.center.distanceToSquared(s.center)>(o.radius+s.radius+.01)**2))&&(!this.plants||this.plants.clearBody(p,body,this.time,undefined,true));}
- private clear(a:Cory,p:T.Vector3,f:T.Vector3,visitors:BodySphere[][]){if(a.retreat<=0&&this.animals.some(b=>b!==a&&p.distanceToSquared(b.position)<.72**2&&p.distanceToSquared(b.position)<a.position.distanceToSquared(b.position)-1e-8))return false;const body=coryBody(p,f,a.size,a.pitch),mouth=coryMouth(p,f,a.size,a.pitch);return mouth.y>=this.height(mouth.x,mouth.z)+.006&&this.solid(p,body)&&!this.animals.some(b=>b!==a&&bodiesOverlap(body,coryBody(b.position,coryForward(b),b.size,b.pitch),.014))&&!visitors.some(b=>bodiesOverlap(body,b,.004));}
+ /** Cache an exact pose, never a frame: earlier fish may move during a substep. */
+ private currentBody(a:Cory){let cached=this.bodyCache.get(a);const p=a.position;if(!cached||cached.x!==p.x||cached.y!==p.y||cached.z!==p.z||cached.yaw!==a.yaw||cached.pitch!==a.pitch||cached.size!==a.size){cached={x:p.x,y:p.y,z:p.z,yaw:a.yaw,pitch:a.pitch,size:a.size,body:coryBody(p,coryForward(a),a.size,a.pitch)};this.bodyCache.set(a,cached);}return cached.body;}
+ /** A conservative whole-body bound rejects distant visitors before sphere pairs. */
+ private visitorMayReach(p:T.Vector3,size:number,body:BodySphere[]){let box=this.visitorBounds.get(body);if(!box){box=new T.Box3();for(const {center:c,radius:r} of body){box.min.x=Math.min(box.min.x,c.x-r);box.min.y=Math.min(box.min.y,c.y-r);box.min.z=Math.min(box.min.z,c.z-r);box.max.x=Math.max(box.max.x,c.x+r);box.max.y=Math.max(box.max.y,c.y+r);box.max.z=Math.max(box.max.z,c.z+r);}this.visitorBounds.set(body,box);}const r=.75*Math.abs(size)+.004+1e-10;return p.x+r>=box.min.x&&p.x-r<=box.max.x&&p.y+r>=box.min.y&&p.y-r<=box.max.y&&p.z+r>=box.min.z&&p.z-r<=box.max.z;}
+ private clear(a:Cory,p:T.Vector3,f:T.Vector3,visitors:BodySphere[][]){if(a.retreat<=0&&this.animals.some(b=>b!==a&&p.distanceToSquared(b.position)<.72**2&&p.distanceToSquared(b.position)<a.position.distanceToSquared(b.position)-1e-8))return false;const body=coryBody(p,f,a.size,a.pitch),mouth=coryMouth(p,f,a.size,a.pitch);return mouth.y>=this.height(mouth.x,mouth.z)+.006&&this.solid(p,body)&&!this.animals.some(b=>b!==a&&p.distanceToSquared(b.position)<(.75*(Math.abs(a.size)+Math.abs(b.size))+.014+1e-10)**2&&bodiesOverlap(body,this.currentBody(b),.014))&&!visitors.some(b=>this.visitorMayReach(p,a.size,b)&&bodiesOverlap(body,b,.004));}
+
  private startPicking(a:Cory){const site=findCoryForageSite(a.position,coryForward(a),a.size,this.height,this.plants,this.time,random(a)<.65);if(!site)return false;a.picking=site;a.mode='foraging';a.remaining=1.2+random(a)*1.7;a.restIn=6+random(a)*9;return true;}
  private choose(a:Cory){
   a.picking=undefined;
@@ -57,7 +65,7 @@ export class Corydoras{
   // two portions in flight/on the floor, and report only newly added pieces.
   const count=Math.min(6,Math.max(0,12-this.pellets.length));
   for(let i=0;i<count;i++){const a=this.animals[i%this.animals.length],p=a.position.clone();p.y=5.1;const mesh=new T.Mesh(this.pelletGeometry,this.pelletMaterial);mesh.position.copy(p);this.models.root.add(mesh);this.pellets.push({position:mesh.position,age:0,mesh,onEaten});}return count;}
- update(dt:number,waterTime:number,fish:FishContactBody[]=[],grazers:{id?:number;position:T.Vector3;normal:T.Vector3;matrix:T.Matrix4;kind:string}[]=[]){if(dt<=0)return;this.time=waterTime;this.fishCorrections.clear();const others=grazers.map(a=>grazerBody(a.position,a.normal,V().setFromMatrixColumn(a.matrix,0).normalize(),a.kind==='snail',a.kind==='snail'?.84:.80+(a.id??0)%3*.04));const visitors=[...others,...fish.map(f=>fishBody(f))];
+ update(dt:number,waterTime:number,fish:FishContactBody[]=[],grazers:{id?:number;position:T.Vector3;normal:T.Vector3;matrix:T.Matrix4;kind:string}[]=[]){if(dt<=0)return;this.time=waterTime;this.visitorBounds=new WeakMap();this.fishCorrections.clear();const others=grazers.map(a=>grazerBody(a.position,a.normal,V().setFromMatrixColumn(a.matrix,0).normalize(),a.kind==='snail',a.kind==='snail'?.84:.80+(a.id??0)%3*.04));const visitors=[...others,...fish.map(f=>fishBody(f))];
   for(const pellet of [...this.pellets]){pellet.age+=dt;pellet.position.y=Math.max(this.height(pellet.position.x,pellet.position.z)+.025,pellet.position.y-dt*.65);if(pellet.age>65)this.removePellet(pellet);}
   const steps=Math.max(1,Math.ceil(dt/.025)),h=dt/steps;
   for(let step=0;step<steps;step++)for(const a of this.animals){a.previous.copy(a.position);a.time+=h;a.remaining-=h;
@@ -84,7 +92,7 @@ a.replanIn-=h;if(this.routes.nodes.length&&a.replanIn<=0&&!a.picking&&a.mode!=='
    a.effort+=(clamp(a.speed/.25,0,1)-a.effort)*(1-Math.exp(-h*5));a.phase+=h*(2.5+a.effort*17)*(1+.10*Math.sin(a.time*.9+a.id));this.pose(a);
   }
   // Existing fish yield at the first contact along their segment, including fast darts.
-  const contactBodies=this.animals.map(a=>coryBody(a.position,coryForward(a),a.size,a.pitch));
+  const contactBodies=this.animals.map(a=>this.currentBody(a));
   for(const f of fish)for(const body of contactBodies){const corrected=fishTouch({...f,position:this.fishCorrections.get(f.id)??f.position},body);if(corrected)this.fishCorrections.set(f.id,corrected);}
   this.models.flush();
  }
