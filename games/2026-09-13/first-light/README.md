@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.55.0, first frames)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.56.0, photographic trees)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Photographic trees (v0.56.0)
+
+Fifteenth pass, the asset-level one. The skyline's conifers are photographs now: a white pine, a red spruce and a hemlock generated as isolated reference images (the same image model and reference loop the fish went through), keyed off their white ground at full resolution and trimmed to 1024-pixel cards under 200 KB each, in `assets/trees/`. Each species has its own card width (the tree's real aspect); a bin of the skyline is one instanced mesh per species so the mix is even; the painted spruce stands in until the photographs arrive and remains the fallback. Along the way a lighting flaw that predates every dawn pass was found: a card or a leaf cluster is a vertical surface, so at noon it took almost no sun and a stand of pines read as a black cut-out. Every foliage material now leans its normal toward the sky in the fragment stage, after the double-sided flip, so both faces of a card are lit like a canopy; the dark conifer pixels at noon halved and brightened by a third. Region distance to the hero frame: about 14, with the tree line at its best yet, eighteen.
 
 ## First frames (v0.55.0)
 

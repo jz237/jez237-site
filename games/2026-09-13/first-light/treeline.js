@@ -27,23 +27,32 @@ function spruceTexture(){
  g.fillStyle='#233a2b';g.beginPath();g.moveTo(W/2,H*.015);g.lineTo(W/2+9,H*.12);g.lineTo(W/2-9,H*.12);g.closePath();g.fill();
  const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=8;tex.wrapS=tex.wrapT=T.ClampToEdgeWrapping;return tex;
 }
-// two crossed unit planes, base at the origin, 1 tall and .38 wide before the instance scale
-function cardGeometry(){const w=.38;const pos=[],uv=[],idx=[];const quad=(ax,az)=>{const b=pos.length/3;pos.push(-ax*w/2,0,-az*w/2, ax*w/2,0,az*w/2, ax*w/2,1,az*w/2, -ax*w/2,1,-az*w/2);uv.push(0,0,1,0,1,1,0,1);idx.push(b,b+1,b+2,b,b+2,b+3);};quad(1,0);quad(0,1);
+// two crossed unit planes, base at the origin, 1 tall and `w` wide before the instance scale
+function cardGeometry(w=.38){const pos=[],uv=[],idx=[];const quad=(ax,az)=>{const b=pos.length/3;pos.push(-ax*w/2,0,-az*w/2, ax*w/2,0,az*w/2, ax*w/2,1,az*w/2, -ax*w/2,1,-az*w/2);uv.push(0,0,1,0,1,1,0,1);idx.push(b,b+1,b+2,b,b+2,b+3);};quad(1,0);quad(0,1);
  const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(pos,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(idx);g.computeVertexNormals();return g;}
-export function makeTreeline(scene,bathy){
+// The skyline's three species are photographs: a white pine, a red spruce and a hemlock generated as
+// isolated reference images and keyed off their white ground, 1024 px tall. Each has its own card
+// width (the tree's real aspect); the painted spruce stands in until the photographs arrive.
+export const PHOTO_TREES=[{id:'pine',aspect:.45},{id:'spruce',aspect:.39},{id:'hemlock',aspect:.47}];
+export function makeTreeline(scene,bathy,{base='./assets/trees/'}={}){
  const root=new T.Group();scene.add(root);const random=rng(9137);
  const plan=planTreeline({height:(x,z)=>bathy.height(x,z),shoreDistance:(x,z)=>bathy.shoreDistance(x,z),span:bathy.span,random,noise});
- const tex=spruceTexture(),geo=cardGeometry();
- const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:true,roughness:.92,metalness:0,color:0xffffff});windSway(mat,.05);
+ const tex=spruceTexture();
+ const kinds=PHOTO_TREES.map(p=>{const geo=cardGeometry(p.aspect);const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:true,roughness:.92,metalness:0,color:0xffffff});windSway(mat,.05);return {...p,geo,mat};});
+ const loader=new T.TextureLoader();let photos=0;for(const k of kinds){loader.load(base+k.id+'.webp',t=>{t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.wrapS=t.wrapT=T.ClampToEdgeWrapping;k.mat.map=t;k.mat.needsUpdate=true;photos++;},undefined,()=>{});}
+ const mat=kinds[0].mat,geo=kinds[0].geo;
  // a card is a skyline trick: within sixty metres it is a flat cut-out, so the near band shrinks away and the modelled shore pines carry the foreground
- {const sway=mat.onBeforeCompile;mat.onBeforeCompile=sh=>{sway(sh);sh.vertexShader=sh.vertexShader.replace('transformed*=farFade;','transformed*=farFade*smoothstep(28.,62.,length(cameraPosition.xz-anchor.xz));');};}
+ // a card stands for a whole tree, so it is lit like a canopy, not like a wall: its normal leans three-quarters toward the sky
+ for(const k of kinds){const sway=k.mat.onBeforeCompile;k.mat.onBeforeCompile=sh=>{sway(sh);sh.vertexShader=sh.vertexShader.replace('transformed*=farFade;','transformed*=farFade*smoothstep(28.,62.,length(cameraPosition.xz-anchor.xz));');};}
  // backlit silhouettes come with windSway (botany.js); setSun feeds the shared uniforms for every swaying material at once
  const meshes=[];
  function bins(points,shadow){const map=new Map();for(const p of points){const k=Math.floor(p.x/64)+','+Math.floor(p.z/64);if(!map.has(k))map.set(k,[]);map.get(k).push(p);}
-  for(const pts of map.values()){const mesh=new T.InstancedMesh(geo,mat,pts.length),d=new T.Object3D();
-   pts.forEach((p,i)=>{d.position.set(p.x,p.y,p.z);d.rotation.set(0,p.angle,0);d.scale.set(p.h,p.h,p.h);d.updateMatrix();mesh.setMatrixAt(i,d.matrix);mesh.setColorAt(i,new T.Color().setScalar(.62+p.tint*.45));});
-   mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=shadow;mesh.receiveShadow=false;mesh.userData.skipReflection=!shadow;root.add(mesh);meshes.push(mesh);}}
+  for(const pts of map.values()){
+   // each bin is one instanced mesh per species; a tree's species follows its index so the mix is even
+   for(let s=0;s<kinds.length;s++){const sub=pts.filter((_,i)=>i%kinds.length===s);if(!sub.length)continue;const mesh=new T.InstancedMesh(kinds[s].geo,kinds[s].mat,sub.length),d=new T.Object3D();
+    sub.forEach((p,i)=>{d.position.set(p.x,p.y,p.z);d.rotation.set(0,p.angle,0);d.scale.set(p.h,p.h,p.h);d.updateMatrix();mesh.setMatrixAt(i,d.matrix);mesh.setColorAt(i,new T.Color().setScalar(.62+p.tint*.45));});
+    mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=shadow;mesh.receiveShadow=false;mesh.userData.skipReflection=!shadow;root.add(mesh);meshes.push(mesh);}}}
  bins(plan.shore,true);bins(plan.crest,false);
  const counts={shore:plan.shore.length,crest:plan.crest.length,bins:meshes.length};
- return {root,counts,setSun(dir,backlit){setBacklight(dir,backlit);},backlit:()=>backlight.amount.value,update(quality,camera){const reach=quality==='high'?520:quality==='medium'?400:300;for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<reach+r;}}};
+ return {root,counts,photos:()=>photos,setSun(dir,backlit){setBacklight(dir,backlit);},backlit:()=>backlight.amount.value,update(quality,camera){const reach=quality==='high'?520:quality==='medium'?400:300;for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<reach+r;}}};
 }
