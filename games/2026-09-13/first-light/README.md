@@ -18,6 +18,16 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
 
+## Edges and stones (v0.65.0)
+
+The last of the desktop passes. **Anti-aliasing**: the canvas was created with it, but the scene is
+drawn into a colour target and only the full-screen quad ever reached the canvas, so the scene itself
+had been unaliased since the post pass arrived. Ultra now resolves four samples into that target, and
+a rod blank or a branch against the sky is a line rather than a staircase. **The waterline** gains
+boulders and driftwood: two hundred and eighty-odd rocks and logs, seeded, placed by keeping only the
+points where the bed crosses the waterline on a slope, so each sits with its foot in the water rather
+than floating or buried. Both Ultra only.
+
 ## Ridge and mist (v0.64.0)
 
 Two more Ultra-only passes. The **ridge** behind the tree line was flat colour from a noise skyline;
