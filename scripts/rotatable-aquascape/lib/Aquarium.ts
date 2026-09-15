@@ -381,10 +381,10 @@ export class Aquarium{
   return {flakes:12,pellets:count};
  }
  zoom(scale:number){this.followApproach=false;this.targetCamera=null;this.targetFov=null;const offset=this.camera.position.clone().sub(this.controls.target);offset.setLength(clamp(offset.length()*scale,this.controls.minDistance,this.controls.maxDistance));this.camera.position.copy(this.controls.target).add(offset);this.controls.update();}
- private studyFov(){return this.studyView?Math.max(37,2*Math.atan(2.9/(10*this.host.clientWidth/this.host.clientHeight))*180/Math.PI):37;}
+ private studyFov(){return this.studyView?Math.max(37,2*Math.atan(2.9/((this.teaching?.mode==='underground'?6.7:10)*this.host.clientWidth/this.host.clientHeight))*180/Math.PI):37;}
  get magnifierEnabled(){return this.lighting.lens.enabled;}
  get studyView(){return this.teaching?.mode==='organisms'||this.teaching?.mode==='underground'||this.teaching?.mode==='water'&&this.teaching.step>0&&this.teaching.step<4;}
- view(name:string){this.follow(null);const dist=this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera,this.host.offsetTop);}
+ view(name:string){this.follow(null);const dist=this.teaching?.mode==='underground'?8:this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera,this.host.offsetTop);}
  private resize(){
   const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;
   // Fit continuously across viewport shapes while retaining the user's zoom distance.
