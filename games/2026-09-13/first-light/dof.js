@@ -18,10 +18,10 @@ export function makeDoF(renderer){
  const mk=()=>new T.WebGLRenderTarget(q.x,q.y,{depthBuffer:false,type:rt.texture.type,minFilter:T.LinearFilter,magFilter:T.LinearFilter});
  const bA=mk(),bB=mk(),sA=mk();
  const black=new T.DataTexture(new Uint8Array([0,0,0,255]),1,1);black.needsUpdate=true;
- const u={tColor:{value:rt.texture},tDepth:{value:rt.depthTexture},tBloom:{value:black},tShaft:{value:black},texel:{value:new T.Vector2(1/size.x,1/size.y)},near:{value:.1},far:{value:100},focus:{value:1},aperture:{value:0},maxCoc:{value:0},range:{value:0},sat:{value:1},contrast:{value:1},split:{value:0},vignette:{value:0},warm:{value:new T.Vector3(1,.86,.62)},cool:{value:new T.Vector3(.55,.6,.9)},bloom:{value:0},shaft:{value:0},shaftTint:{value:new T.Vector3(1,.7,.45)}};
+ const u={tColor:{value:rt.texture},tDepth:{value:rt.depthTexture},tBloom:{value:black},tShaft:{value:black},texel:{value:new T.Vector2(1/size.x,1/size.y)},near:{value:.1},far:{value:100},focus:{value:1},aperture:{value:0},maxCoc:{value:0},range:{value:0},sat:{value:1},contrast:{value:1},split:{value:0},vignette:{value:0},warm:{value:new T.Vector3(1,.86,.62)},cool:{value:new T.Vector3(.55,.6,.9)},bloom:{value:0},shaft:{value:0},shaftTint:{value:new T.Vector3(1,.7,.45)},glowDebug:{value:0}};
  const taps=POISSON.map(p=>`vec2(${p[0]},${p[1]})`).join(',');
  const mat=new T.ShaderMaterial({uniforms:u,depthTest:false,depthWrite:false,defines:{TAPS:24},vertexShader:VS,fragmentShader:`#include <packing>
-uniform sampler2D tColor,tDepth,tBloom,tShaft;uniform vec2 texel;uniform float near,far,focus,aperture,maxCoc,range,sat,contrast,split,vignette,bloom,shaft;uniform vec3 warm,cool,shaftTint;varying vec2 vUv;
+uniform sampler2D tColor,tDepth,tBloom,tShaft;uniform vec2 texel;uniform float near,far,focus,aperture,maxCoc,range,sat,contrast,split,vignette,bloom,shaft,glowDebug;uniform vec3 warm,cool,shaftTint;varying vec2 vUv;
 const vec2 P[24]=vec2[24](${taps});
 float viewDist(vec2 uv){return -perspectiveDepthToViewZ(texture2D(tDepth,uv).r,near,far);}
 float coc(float d){return clamp(aperture*max(0.,abs(d-focus)-range*focus)/max(d,1e-3),0.,maxCoc);}
@@ -30,6 +30,7 @@ void main(){
  if(cc>.6){float w=1.;for(int i=0;i<TAPS;i++){vec2 uv=vUv+P[i]*cc*texel;float wt=clamp(coc(viewDist(uv))/cc,0.,1.);c+=texture2D(tColor,uv).rgb*wt;w+=wt;}c/=w;}
  // the glow, added in linear light before tone mapping so it rolls off like an over-exposed film edge
  c+=texture2D(tBloom,vUv).rgb*bloom+texture2D(tShaft,vUv).rgb*shaftTint*shaft;
+ if(glowDebug>.5)c=glowDebug<1.5?texture2D(tBloom,vUv).rgb*bloom:texture2D(tShaft,vUv).rgb*shaftTint*shaft*4.;
  gl_FragColor=vec4(c,1.);
  #include <tonemapping_fragment>
  // the grade, on the tonemapped frame: saturation, contrast about mid grey, split tone, vignette
@@ -66,11 +67,13 @@ void main(){vec2 d=(vUv-sunUV)*density/float(N);vec2 uv=vUv;float illum=1.,wsum=
    const t=Math.max(4,Math.min(24,p.taps|0));if(mat.defines.TAPS!==t){mat.defines.TAPS=t;mat.needsUpdate=true;}
    const gl=p.glow;
    if(gl&&gl.bloom>0){bu.threshold.value=gl.threshold;pass(bright,bA);ku.dir.value.set(1/q.x,0);ku.tex.value=bA.texture;pass(blur,bB);ku.dir.value.set(0,1/q.y);ku.tex.value=bB.texture;pass(blur,bA);
-    if(gl.wide){ku.dir.value.set(2.6/q.x,0);ku.tex.value=bA.texture;pass(blur,bB);ku.dir.value.set(0,2.6/q.y);ku.tex.value=bB.texture;pass(blur,bA);}
+    if(gl.wide){ku.dir.value.set(2.6/q.x,0);ku.tex.value=bA.texture;pass(blur,bB);ku.dir.value.set(0,2.6/q.y);ku.tex.value=bB.texture;pass(blur,bA);ku.dir.value.set(6./q.x,0);ku.tex.value=bA.texture;pass(blur,bB);ku.dir.value.set(0,6./q.y);ku.tex.value=bB.texture;pass(blur,bA);}
     u.tBloom.value=bA.texture;u.bloom.value=gl.bloom;}else{u.tBloom.value=black;u.bloom.value=0;}
    if(gl&&gl.shaft>0&&gl.sunUV){su.sunUV.value.set(gl.sunUV[0],gl.sunUV[1]);su.decay.value=gl.decay;su.density.value=gl.density;su.threshold.value=gl.shaftThreshold;if(shaft.defines.N!==gl.samples){shaft.defines.N=gl.samples;shaft.needsUpdate=true;}pass(shaft,sA);u.tShaft.value=sA.texture;u.shaft.value=gl.shaft;u.shaftTint.value.set(...gl.tint);}else{u.tShaft.value=black;u.shaft.value=0;}
    qm.material=mat;renderer.setRenderTarget(null);renderer.render(quad,cam);},
   resize(){renderer.getDrawingBufferSize(size);rt.setSize(size.x,size.y);u.texel.value.set(1/size.x,1/size.y);qsize();bA.setSize(q.x,q.y);bB.setSize(q.x,q.y);sA.setSize(q.x,q.y);},
   size(){return [size.x,size.y];},
-  glowSize(){return [q.x,q.y];}};
+  glowSize(){return [q.x,q.y];},
+  // 0 the frame, 1 the bloom buffer alone, 2 the rays alone (×4): for probes
+  setDebug(v){u.glowDebug.value=v|0;}};
 }

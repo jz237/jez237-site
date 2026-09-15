@@ -17,7 +17,7 @@ void main(){
  vec2 flow=vec2(time*.013,-time*.009);vec2 r1=texture2D(detailMap,p*.145+flow).rg*2.-1.;
  vec2 rotated=mat2(.8,-.6,.6,.8)*p;vec2 r2=texture2D(detailMap,rotated*.37-flow*1.7).rg*2.-1.;
  float breeze=clamp(wind*fetchV*1.4+.06,0.,1.);
- float detailStrength=(.006+breeze*.06)*(1.-smoothstep(75.,300.,dist)*.6);
+ float detailStrength=(.028+breeze*.06)*(1.-smoothstep(75.,300.,dist)*.6);
  vec2 drift=surface.yz*.24;
  vec2 r3=texture2D(detailMap,p*.82+drift-flow*2.3).rg*2.-1.;
  vec2 ripple=(r1+r2*.52+r3*.22)*detailStrength;
@@ -39,10 +39,15 @@ void main(){
  vec3 transmission=exp(-waterAbsorption*thickness/clarity);
  vec3 scatter=waterScatter*(1.-night*.8)*(.28+.72*daylight);
  vec3 below=texture2D(refraction,ruv).rgb;vec3 refracted=below*transmission+scatter*(1.-transmission);
- vec2 muv=mirrorP.xy/mirrorP.w*.5+.5;vec2 reflectUV=clamp(muv+screenSlope*.032,vec2(.002),vec2(.998));
- float roughness=.045+breeze*.06;float blur=clamp(roughness*16.+dist*.003,0.,3.4);
+ // the mirror lookup is pushed further by each ripple while the sun is low: a facet tilted by a degree swings a grazing reflection by two, so the disc's reflection breaks into the long shimmering column of a dawn photograph
+ float lowSunW=1.-smoothstep(.03,.34,sun.y);vec2 muv=mirrorP.xy/mirrorP.w*.5+.5;vec2 reflectUV=clamp(muv+screenSlope*mix(.032,.085,lowSunW*(1.-night)),vec2(.002),vec2(.998));
+ float roughness=.13+breeze*.08;float blur=clamp(roughness*16.+dist*.003,0.,3.4);
  vec3 reflected=texture2D(reflection,reflectUV,blur).rgb;
- vec3 reflectedRay=reflect(-V,N);vec3 skyFallback=mix(skyHorizon,skyZenith,pow(max(0.,reflectedRay.y),.4));
+ vec3 reflectedRay=reflect(-V,N);
+ // the fallback beyond the mirror's edge follows the sky shader: the horizon is warm only toward the sun, purple away from it while the sun is low
+ float fbAz=.5+.5*dot(normalize(vec3(reflectedRay.x,0.,reflectedRay.z)+vec3(1e-4)),normalize(vec3(sun.x,0.,sun.z)+vec3(1e-4)));float fbLow=1.-smoothstep(.03,.34,sun.y);
+ vec3 fbCool=mix(skyHorizon,mix(skyZenith,vec3(.30,.19,.40),.5),.72*fbLow*(1.-night));vec3 fbHorizon=mix(fbCool,skyHorizon,pow(fbAz,mix(1.6,5.,fbLow)));
+ vec3 skyFallback=mix(fbHorizon,skyZenith,pow(max(0.,reflectedRay.y),.4));
  float mirrorEdge=max(abs(reflectUV.x-.5),abs(reflectUV.y-.5));reflected=mix(reflected,skyFallback,smoothstep(.46,.5,mirrorEdge));
  vec3 col=mix(refracted,reflected,fresnel);
  float faceLight=smoothstep(-.16,.22,-dot(surface.yz,sun.xz));

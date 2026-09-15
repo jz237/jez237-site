@@ -35,12 +35,12 @@ export function glowFor({elevation=30,night=0,quality='high',cloud=0,sunUV=null,
  if(quality==='saver')return null;
  const lowSun=clamp01(1-(elevation-1)/16);
  const bloom=(.16+.5*lowSun)*(1-.5*cloud)+.12*night;
- const threshold=.85-.25*lowSun-.3*night;
+ const threshold=.85-.35*lowSun-.3*night;
  let shaft=0;
  if(sunAhead&&sunUV&&elevation>-1&&elevation<22&&night<.5){
   const out=Math.max(-sunUV[0],sunUV[0]-1,-sunUV[1],sunUV[1]-1);
   const edge=clamp01(1-out/.35);
-  shaft=.6*lowSun*edge*(1-.7*cloud);
+  shaft=.9*lowSun*edge*(1-.7*cloud);
  }
  return {bloom:+bloom.toFixed(3),threshold:+threshold.toFixed(3),wide:quality==='high',shaft:+shaft.toFixed(3),sunUV,decay:.965,density:.85,samples:quality==='high'?40:24,shaftThreshold:.35,tint:[1,.72,.45]};
 }
