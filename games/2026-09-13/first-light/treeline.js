@@ -34,16 +34,22 @@ function cardGeometry(w=.38){const pos=[],uv=[],idx=[];const quad=(ax,az)=>{cons
 // isolated reference images and keyed off their white ground, 1024 px tall. Each has its own card
 // width (the tree's real aspect); the painted spruce stands in until the photographs arrive.
 export const PHOTO_TREES=[{id:'pine',aspect:.45},{id:'spruce',aspect:.39},{id:'hemlock',aspect:.47}];
+let photoKinds=null,photosLoaded=0;
+// the three photographic kinds, built once and shared by the skyline and the near shore: geometry per aspect, a material per species that carries the painted spruce until its photograph arrives
+export function photoTreeKinds(base='./assets/trees/'){
+ if(photoKinds)return photoKinds;const tex=spruceTexture();
+ photoKinds=PHOTO_TREES.map(p=>{const geo=cardGeometry(p.aspect);const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:true,roughness:.92,metalness:0,color:0xffffff});windSway(mat,.05);
+  const sway=mat.onBeforeCompile;mat.onBeforeCompile=sh=>{sway(sh);sh.vertexShader=sh.vertexShader.replace('transformed*=farFade;','transformed*=farFade*smoothstep(28.,62.,length(cameraPosition.xz-anchor.xz));');};
+  return {...p,geo,mat};});
+ const loader=new T.TextureLoader();for(const k of photoKinds){loader.load(base+k.id+'.webp',t=>{t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.wrapS=t.wrapT=T.ClampToEdgeWrapping;k.mat.map=t;k.mat.needsUpdate=true;photosLoaded++;},undefined,()=>{});}
+ return photoKinds;}
+export function photoTreesLoaded(){return photosLoaded;}
 export function makeTreeline(scene,bathy,{base='./assets/trees/'}={}){
  const root=new T.Group();scene.add(root);const random=rng(9137);
  const plan=planTreeline({height:(x,z)=>bathy.height(x,z),shoreDistance:(x,z)=>bathy.shoreDistance(x,z),span:bathy.span,random,noise});
- const tex=spruceTexture();
- const kinds=PHOTO_TREES.map(p=>{const geo=cardGeometry(p.aspect);const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:true,roughness:.92,metalness:0,color:0xffffff});windSway(mat,.05);return {...p,geo,mat};});
- const loader=new T.TextureLoader();let photos=0;for(const k of kinds){loader.load(base+k.id+'.webp',t=>{t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.wrapS=t.wrapT=T.ClampToEdgeWrapping;k.mat.map=t;k.mat.needsUpdate=true;photos++;},undefined,()=>{});}
+ const kinds=photoTreeKinds(base);const photos=()=>photosLoaded;
  const mat=kinds[0].mat,geo=kinds[0].geo;
- // a card is a skyline trick: within sixty metres it is a flat cut-out, so the near band shrinks away and the modelled shore pines carry the foreground
- // a card stands for a whole tree, so it is lit like a canopy, not like a wall: its normal leans three-quarters toward the sky
- for(const k of kinds){const sway=k.mat.onBeforeCompile;k.mat.onBeforeCompile=sh=>{sway(sh);sh.vertexShader=sh.vertexShader.replace('transformed*=farFade;','transformed*=farFade*smoothstep(28.,62.,length(cameraPosition.xz-anchor.xz));');};}
+
  // backlit silhouettes come with windSway (botany.js); setSun feeds the shared uniforms for every swaying material at once
  const meshes=[];
  function bins(points,shadow){const map=new Map();for(const p of points){const k=Math.floor(p.x/64)+','+Math.floor(p.z/64);if(!map.has(k))map.set(k,[]);map.get(k).push(p);}
@@ -54,5 +60,5 @@ export function makeTreeline(scene,bathy,{base='./assets/trees/'}={}){
     mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=shadow;mesh.receiveShadow=false;mesh.userData.skipReflection=!shadow;root.add(mesh);meshes.push(mesh);}}}
  bins(plan.shore,true);bins(plan.crest,false);
  const counts={shore:plan.shore.length,crest:plan.crest.length,bins:meshes.length};
- return {root,counts,photos:()=>photos,setSun(dir,backlit){setBacklight(dir,backlit);},backlit:()=>backlight.amount.value,update(quality,camera){const reach=quality==='high'?520:quality==='medium'?400:300;for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<reach+r;}}};
+ return {root,counts,photos,setSun(dir,backlit){setBacklight(dir,backlit);},backlit:()=>backlight.amount.value,update(quality,camera){const reach=quality==='high'?520:quality==='medium'?400:300;for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<reach+r;}}};
 }
