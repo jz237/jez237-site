@@ -19,7 +19,7 @@ export function skyPalette(e,cloud=0){
  const warm=1-smooth(0,22,e);
  const sunColor=mix3([1,.93,.84],[1,.52,.26],warm);
  const sunIntensity=3.1*Math.pow(clamp((e+1.5)/14,0,1),.75)*(1-cloud*.75);
- const ambientIntensity=lerp(.24,1.15,smooth(-9,18,e))*(1-cloud*.25); // a floor that keeps the deck and the near water readable before sunrise
+ const ambientIntensity=lerp(.36,1.15,smooth(-9,12,e))*(1-cloud*.25); // the sky lights the shade well before the sun clears the trees: by four degrees the hemisphere is most of the way up // a floor that keeps the deck and the near water readable before sunrise
  let fog=mix3(mix3(h,[.82,.84,.80],.35),[.26,.38,.52],warm*.85*(1-night));
  const mist=mix3(mix3(h,[.86,.86,.84],.4),[.80,.62,.74],warm*.65*(1-night));
  // the pink haze that sits on the horizon while the sun is low, fading to a pale grey-blue by mid-morning
@@ -35,7 +35,7 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  // the horizon is warm only toward the sun; away from it the low sky goes purple, as it does
  float az=.5+.5*dot(normalize(vec3(d.x,0.,d.z)+vec3(1e-4)),normalize(vec3(sun.x,0.,sun.z)+vec3(1e-4)));
  vec3 coolHorizon=mix(skyHorizon,mix(skyZenith,vec3(.30,.19,.40),.5),.72*lowSun*(1.-night));
- vec3 horizonHere=mix(coolHorizon,skyHorizon,pow(az,mix(1.6,12.,lowSun)));
+ vec3 horizonHere=mix(coolHorizon,skyHorizon,pow(az,mix(1.6,12.,lowSun))*(1.-envPass*.7));
  // the horizon band is thin at first light: by fifteen degrees up the sky is already the zenith's purple
  float band=mix(pow(y,.55),smoothstep(0.,.26,y)*.85+.15*pow(y,.55),lowSun*(1.-night));
  vec3 col=mix(horizonHere,skyZenith,band);vec3 c0=col;
@@ -45,7 +45,7 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  // the low sun's glow: a wide warm aureole and a tighter halo, then a softer, larger disc
  col+=sunColor*(pow(s,24.)*.24+pow(s,50.)*.40+pow(s,120.)*.8)*lowSun*(1.-night)*up*(1.-cloud*.6)*sunTerms;
  col+=sunColor*pow(s,mix(1400.,500.,lowSun))*mix(4.,6.,lowSun)*up*(1.-cloud*.8)*sunTerms;
- vec3 c1=col;col=mix(col,hazeColor,lowSun*pow(1.-y,4.)*.22*(1.-night)*pow(az,2.));vec3 c2=col;
+ vec3 c1=col;col=mix(col,hazeColor,lowSun*pow(1.-y,4.)*.22*(1.-night)*pow(az,2.)*(1.-envPass*.7));vec3 c2=col;
  vec2 flow=vec2(cos(windDir),sin(windDir))*time*(.003+wind*.018);
  // two decks: broad stratocumulus clumps that keep their size down to the horizon, and a finer layer above
  vec2 p=d.xz/(y+.22)*1.1+flow;float n=fbm(p*.55)*.62+fbm(p*1.35+7.)*.38,n2=fbm(p*.47+flow*.5+11.);
@@ -54,7 +54,7 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  float thick=smoothstep(cA+.02,cA+.13,dens);
  // the rim: density falls off toward the sun where the cloud thins, and that edge catches the light
  vec2 toSun=normalize(vec2(sun.x,sun.z)+vec2(1e-4))*.09;float nS=fbm((p+toSun)*.55)*.62+fbm((p+toSun)*1.35+7.)*.38;float rim=clamp((dens-(nS*.75+n2*.25))*7.,0.,1.)*lowSun*up;
- float litDot=dot(normalize(vec3(d.x,.35,d.z)),normalize(vec3(sun.x,max(sun.y,.05),sun.z)));float lit=mix(clamp(.45+.55*litDot,0.,1.),pow(s,6.)*up,lowSun)*(1.-night);
+ float litDot=dot(normalize(vec3(d.x,.35,d.z)),normalize(vec3(sun.x,max(sun.y,.05),sun.z)));float lit=mix(clamp(.45+.55*litDot,0.,1.),pow(s,6.)*up,lowSun)*(1.-night)*(1.-envPass*.8);
  // clouds: pink-orange undersides toward the low sun, dark purple bodies in shade, a silver lining beside the disc
  vec3 cloudLit=mix(vec3(.96,.96,.95),mix(sunColor,vec3(1.,.55,.42),.4),min(1.,low*1.4)),cloudShade=mix(mix(vec3(.58,.62,.70),vec3(.075,.065,.085),lowSun),vec3(.24,.27,.33),cloud*(1.-.6*lowSun));
  vec3 cloudEdge=mix(mix(vec3(.80,.82,.88),mix(skyZenith,vec3(.40,.28,.38),.55),lowSun),cloudLit,clamp(lit*(1.-cloud*.45)+rim*pow(s,3.)*.9,0.,1.));

@@ -4,7 +4,7 @@
 import {backlight,BACKLIT_GLSL} from './backlight.js';
 import * as T from './vendor/three.module.js';
 export const waterLevel={value:0};
-export const lakeLighting={time:{value:0},wind:{value:0},seaLevel:waterLevel,clarity:{value:1}};
+export const lakeLighting={sunHigh:{value:1},time:{value:0},wind:{value:0},seaLevel:waterLevel,clarity:{value:1}};
 const dryAtlas=new T.DataTexture(new Uint8Array([0,0,0,0]),1,1);dryAtlas.needsUpdate=true;
 export const shoreline={shoreMap:{value:dryAtlas},shoreCenter:{value:new T.Vector2()},shoreSpan:{value:240}};
 const loader=new T.TextureLoader();
@@ -31,14 +31,15 @@ vec3 triNormal(sampler2D tex,vec3 p,vec3 weights,vec3 n){
 }`;
 export function configureTerrainMaterial(mat,{waterDetail}){
  mat.onBeforeCompile=s=>{
-  Object.assign(s.uniforms,{...shoreline,seaLevel:waterLevel,time:lakeLighting.time,wind:lakeLighting.wind,clarity:lakeLighting.clarity,detailMap:{value:waterDetail},backlitSunDir:backlight.sunDir,backlitAmount:backlight.amount});
+  Object.assign(s.uniforms,{...shoreline,seaLevel:waterLevel,time:lakeLighting.time,wind:lakeLighting.wind,clarity:lakeLighting.clarity,sunHigh:lakeLighting.sunHigh,detailMap:{value:waterDetail},backlitSunDir:backlight.sunDir,backlitAmount:backlight.amount});
   for(const k of ['sand','rock','soil'])for(const [key,channel]of [['Color','diff'],['Normal','nor_gl'],['Rough','rough']])s.uniforms[k+key]={value:landMaps[k][channel]};
   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 landP;varying vec3 landN;').replace('#include <begin_vertex>','#include <begin_vertex>\nlandP=position;landN=normal;');
   s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
-varying vec3 landP;varying vec3 landN;uniform float seaLevel,time,wind,clarity;uniform vec3 backlitSunDir;uniform float backlitAmount;
+varying vec3 landP;varying vec3 landN;uniform float seaLevel,time,wind,clarity,sunHigh;uniform vec3 backlitSunDir;uniform float backlitAmount;
 uniform sampler2D shoreMap;uniform vec2 shoreCenter;uniform float shoreSpan;
 uniform sampler2D sandColor,sandNormal,sandRough,rockColor,rockNormal,rockRough,soilColor,soilNormal,soilRough,detailMap;
 ${sampling}`);
+  s.fragmentShader=s.fragmentShader.replace('#include <roughnessmap_fragment>','#include <roughnessmap_fragment>\nroughnessFactor=mix(roughnessFactor,1.,smoothstep(0.,.3,seaLevel-landP.y));');
   s.fragmentShader=s.fragmentShader.replace('#include <emissivemap_fragment>','{float above=smoothstep(seaLevel-.2,seaLevel+.4,landP.y);'+BACKLIT_GLSL.replace('*backlitAmount;','*backlitAmount*above;')+'}\n#include <emissivemap_fragment>');
   s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
 vec3 ln=normalize(landN),tw=pow(abs(ln),vec3(5.));tw/=max(dot(tw,vec3(1.)),.001);
@@ -75,7 +76,9 @@ earth=mix(earth,vec3(.70,.74,.68),smoothstep(.56,.78,landNoise(landP.xz*3.7))*cl
 vec2 cuv=landP.xz*.19+vec2(time*.012,-time*.007);
 float c1=texture2D(detailMap,cuv).b,c2=texture2D(detailMap,mat2(.8,-.6,.6,.8)*landP.xz*.237-vec2(time*.009,0)).b;
 float caustic=max(0.,min(c1,c2)*3.-.65);
-earth+=vec3(.20,.24,.14)*caustic*smoothstep(0.,.5,submerged)*exp(-max(0.,submerged-.8)*.55/clarity);
+earth+=vec3(.20,.24,.14)*caustic*sunHigh*smoothstep(0.,.5,submerged)*exp(-max(0.,submerged-.8)*.55/clarity); // caustics need a sun that is up and clear of the trees: a grazing sun mostly bounces off the surface
+// a grazing sun barely enters the water: the bed under it goes dim until the sun is well up
+earth*=mix(1.,mix(.12,1.,sunHigh*sunHigh),smoothstep(0.,.4,submerged));
 float bedMask=smoothstep(.1,1.,submerged)*(1.-stoneWeight)*(1.-plantWeight);
 float bedPhase=landP.x*.9+landP.z*3.6+sin(landP.x*.28)*.8;
 earth*=1.+cos(bedPhase)*.05*bedMask;

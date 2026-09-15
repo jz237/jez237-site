@@ -22,8 +22,8 @@ export function cedarTexture(){if(woodTex)return woodTex;const W=512,H=256,c=doc
  const tones=['#5e5b62','#524f56','#68656c','#4a474e','#5b585f','#4f4c53'];const strips=12,sh=H/strips;let seed=11;const r=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  for(let i=0;i<strips;i++){g.fillStyle=tones[Math.floor(r()*tones.length)];g.fillRect(0,i*sh,W,sh);
   // grain: long faint streaks
-  for(let k=0;k<14;k++){const y=i*sh+r()*sh;g.strokeStyle=`rgba(${r()<.5?60:200},${r()<.5?40:150},${r()<.5?20:90},${.08+.12*r()})`;g.lineWidth=.6+r()*1.2;g.beginPath();g.moveTo(0,y);for(let x=0;x<=W;x+=32)g.lineTo(x,y+(r()-.5)*2.2);g.stroke();}
-  g.fillStyle='rgba(40,24,12,.55)';g.fillRect(0,i*sh,W,1.4);}
+  for(let k=0;k<14;k++){const y=i*sh+r()*sh;g.strokeStyle=`rgba(${r()<.5?50:170},${r()<.5?48:170},${r()<.5?52:180},${.08+.12*r()})`;g.lineWidth=.6+r()*1.2;g.beginPath();g.moveTo(0,y);for(let x=0;x<=W;x+=32)g.lineTo(x,y+(r()-.5)*2.2);g.stroke();}
+  g.fillStyle='rgba(30,28,32,.55)';g.fillRect(0,i*sh,W,1.4);}
  woodTex=new T.CanvasTexture(c);woodTex.colorSpace=T.SRGBColorSpace;woodTex.wrapS=woodTex.wrapT=T.RepeatWrapping;woodTex.anisotropy=8;return woodTex;}
 // the gunwale: a dark rail along the sheer on each side, and a stem cap at each end
 function railCurve(side){const pts=[];for(let i=0;i<=28;i++){const t=i/28;pts.push(new T.Vector3(side*hullW(t)*.96+side*.006,.004,(t-.5)*KAYAK.length));}return new T.CatmullRomCurve3(pts);}
