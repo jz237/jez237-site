@@ -14,7 +14,7 @@ export class PerformanceReadout {
   this.output.style.cssText='margin:0 0 7px;white-space:pre-wrap;font:inherit';this.output.textContent=this.report;
   copy.textContent='Copy measurements';copy.type='button';copy.style.cssText='font:inherit;padding:4px 8px;color:inherit;background:#253c34;border:1px solid #72988a;border-radius:4px';
   copy.onclick=async()=>{try{await navigator.clipboard.writeText(this.report);copy.textContent='Copied';}catch{copy.textContent='Select the numbers above to copy';}};
-  this.testButton.textContent='Run phone graphics test';this.testButton.type='button';this.testButton.disabled=true;this.testButton.style.cssText=copy.style.cssText+';margin-left:6px';
+  this.testButton.textContent='Run graphics test';this.testButton.type='button';this.testButton.disabled=true;this.testButton.style.cssText=copy.style.cssText+';margin-left:6px';
   this.testButton.onclick=()=>this.onTest();
   panel.style.maxHeight='75vh';panel.style.overflowY='auto';
   panel.append(this.output,copy,this.testButton);document.body.append(panel);
@@ -24,7 +24,7 @@ export class PerformanceReadout {
   this.testing=!done;this.frames=[];this.elapsed=0;
   this.benchmarkReport=done?message:'';
   this.report=message+`\nBuild: ${new URLSearchParams(location.search).get('v')??'local'}`;
-  this.output.textContent=this.report;this.testButton.textContent=done?'Run phone graphics test':'Cancel test';
+  this.output.textContent=this.report;this.testButton.textContent=done?'Run graphics test':'Cancel test';
  }
  update(elapsed:number,simulationMs:number,renderMs:number,animals:readonly number[]=[0,0,0]){
   if(this.testing)return;
