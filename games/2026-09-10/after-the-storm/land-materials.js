@@ -38,11 +38,11 @@ vec3 triNormal(sampler2D tex,vec3 p,vec3 weights,vec3 n){
 
 export function configureTerrainMaterial(mat,{palette={},waterDetail,waterLevel,time,storm}){
  mat.onBeforeCompile=s=>{
-  Object.assign(s.uniforms,{...shoreline,landSand:{value:new T.Color(palette.sand??0xdcc9a5)},landRock:{value:new T.Color(palette.rock??0xbabaae)},landGrass:{value:new T.Color(palette.grass??0x7b9349)},seaLevel:waterLevel,time,storm,detailMap:{value:waterDetail},snowCover:{value:palette.grass===0xe5f0f0?1:0}});
+  Object.assign(s.uniforms,{...shoreline,landSand:{value:new T.Color(palette.sand??0xdcc9a5)},landRock:{value:new T.Color(palette.rock??0xbabaae)},landGrass:{value:new T.Color(palette.grass??0x7b9349)},seaLevel:waterLevel,time,storm,detailMap:{value:waterDetail},snowCover:{value:palette.grass===0xe5f0f0?1:0},pavedGround:{value:palette.paved?1:0}});
   for(const k of ['sand','rock','soil'])for(const [key,channel]of [['Color','diff'],['Normal','nor_gl'],['Rough','rough']])s.uniforms[k+key]={value:k==='rock'&&channel==='diff'?cliffAlbedo:landMaps[k][channel]};
   s.vertexShader=s.vertexShader.replace('#include <common>','#include <common>\nvarying vec3 landP;varying vec3 landN;').replace('#include <begin_vertex>','#include <begin_vertex>\nlandP=position;landN=normal;');
   s.fragmentShader=s.fragmentShader.replace('#include <common>',`#include <common>
-varying vec3 landP;varying vec3 landN;uniform vec3 landSand,landRock,landGrass;uniform float seaLevel,time,storm,snowCover;
+varying vec3 landP;varying vec3 landN;uniform vec3 landSand,landRock,landGrass;uniform float seaLevel,time,storm,snowCover,pavedGround;
 uniform sampler2D shoreMap;uniform vec2 shoreCenter;uniform float shoreSpan;
 uniform sampler2D sandColor,sandNormal,sandRough,rockColor,rockNormal,rockRough,soilColor,soilNormal,soilRough,detailMap;
 ${sampling}`);
@@ -58,6 +58,11 @@ vec3 sandy=triColor(sandColor,sandUV,tw)*mix(vec3(1.),landSand,.28);
 vec3 rocky=triColor(rockColor,rockUV,tw)*mix(vec3(1.),landRock,.15);
 vec3 grassy=triColor(soilColor,soilUV,tw)*mix(vec3(1.),landGrass,.68);
 vec3 earth=mix(mix(sandy,rocky,stoneWeight),grassy,plantWeight)*(.80+macro*.33);
+// Quays have weathered paving above the bank, rather than forest soil.
+float paving=pavedGround*smoothstep(1.,2.5,altitude)*(1.-smoothstep(.025,.14,slope));
+vec2 slab=abs(fract(landP.xz/5.)-.5);float pavingJoint=smoothstep(.49,.498,max(slab.x,slab.y));
+vec3 pavingColor=mix(vec3(.17,.19,.19),vec3(.32,.33,.30),macro)*(.83+triColor(sandColor,landP*1.4,tw).r*.3)*(1.-pavingJoint*.22);
+earth=mix(earth,pavingColor,paving);
 float fringe=4.*plantWeight*(1.-plantWeight)*(1.-snowCover);
  earth*=1.-fringe*smoothstep(.55,.8,boundary)*.18;
  earth=mix(earth,vec3(.76,.86,.89)*(0.85+macro*.2),snowCover*smoothstep(.15,.8,ln.y));
@@ -97,7 +102,7 @@ vec3 surfaceN=normalize(mix(mix(triNormal(sandNormal,sandUV,tw,ln),triNormal(roc
 surfaceN=normalize(surfaceN+vec3(.9,0.,3.6)*sin(bedPhase)*.024*bedMask);
 normal=normalize((viewMatrix*vec4(normalize(mix(ln,surfaceN,.65*(1.-snowCover*.7)*(1.-film*.35))),0.)).xyz);`);
  };
- mat.customProgramCacheKey=()=>`photographic-coast-fringe-v6-${palette.grass??0}`;
+ mat.customProgramCacheKey=()=>`photographic-coast-fringe-v7-${palette.grass??0}-${palette.paved?1:0}`;
 }
 
 export function rockMaterial({scale=.18,vegetation=0}={}){
