@@ -1,3 +1,4 @@
+import {dressMaterial} from './venue-materials.js';
 import {rockMaterial} from './land-materials.js';
 import {islandElevation,geologyNoise} from './coast-geology.js';
 import {canopyKinds,canopyGeometry,canopyMaterial} from './canopy-cards.js';
@@ -11,7 +12,7 @@ export function makeDistantCoast(root,course){
  for(let layer=0;layer<3;layer++){
   const positions=[],colours=[],indices=[],radius=640+layer*235,offset=random()*6.28;
   for(let island=0;island<3;island++){
-   const a=offset+island*2.09,cx=Math.sin(a)*radius,cz=Math.cos(a)*radius,width=150+random()*110,depth=95+random()*65,height=island===1?62+random()*28:85+random()*42,rockSeed=random()*1000;
+   const a=offset+island*2.09,cx=Math.sin(a)*radius,cz=Math.cos(a)*radius,width=150+random()*110,depth=95+random()*65,height=(island===1?62+random()*28:85+random()*42)*(cold?1.65:course.theme==='lake'?1.18:1),rockSeed=random()*1000;
    const elevation=(u,v)=>islandElevation(u,v,rockSeed,height);
    const point=(u,v)=>[cx+u*width*Math.cos(a)-v*depth*Math.sin(a),elevation(u,v),cz+u*width*Math.sin(a)+v*depth*Math.cos(a)];
    const slope=(u,v)=>Math.hypot((elevation(u+.012,v)-elevation(u-.012,v))/(width*.024),(elevation(u,v+.012)-elevation(u,v-.012))/(depth*.024));
@@ -35,17 +36,17 @@ export function makeDistantCoast(root,course){
    }
   }
   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('color',new T.Float32BufferAttribute(colours,3));g.setIndex(indices);g.computeVertexNormals();
-  const m=rockMaterial({scale:.033,vegetation:cold?0:.8});m.vertexColors=true;m.color.setHex(cold?0xdde8ea:0xffffff);
+  const m=cold?dressMaterial(new T.MeshStandardMaterial({roughness:.82}),'ice'):rockMaterial({scale:.033,vegetation:urban?0:course.theme==='fortress'?.4:.8});m.vertexColors=true;m.color.setHex(cold?0xdde8ea:0xffffff);
   const before=m.onBeforeCompile;m.onBeforeCompile=shader=>{before.call(m,shader);shader.fragmentShader=shader.fragmentShader.replace('cliffWorld.y*17.', 'cliffWorld.y*.38').replace('#include <fog_fragment>',`#ifdef USE_FOG
    float aerial=1.-exp(-vFogDepth*vFogDepth*.0000008);gl_FragColor.rgb=mix(gl_FragColor.rgb,fogColor,aerial);
-   #endif`);};m.customProgramCacheKey=()=> 'eroded-distant-granite-v2';
+   #endif`);};m.customProgramCacheKey=()=> 'eroded-distant-granite-v3-'+(cold?'ice':'rock');
   group.add(new T.Mesh(g,m));geometries.push(g);materials.push(m);
  }
  const dummy=new T.Object3D();
  for(let k=0;k<canopyKinds.length;k++){
   const rows=foliage.filter(p=>p.kind===k),kind=canopyKinds[k];if(!rows.length)continue;
   const g=canopyGeometry(kind.aspect),m=canopyMaterial(kind),mesh=new T.InstancedMesh(g,m,rows.length);
-  const previousCompile=m.onBeforeCompile;m.onBeforeCompile=s=>{previousCompile(s);s.fragmentShader=s.fragmentShader.replace('#include <fog_fragment>',`#ifdef USE_FOG
+  m.color.setHex(0x617849);const previousCompile=m.onBeforeCompile;m.onBeforeCompile=s=>{previousCompile(s);s.fragmentShader=s.fragmentShader.replace('#include <fog_fragment>',`#ifdef USE_FOG
    float aerial=1.-exp(-vFogDepth*vFogDepth*.0000008);gl_FragColor.rgb=mix(gl_FragColor.rgb,fogColor,aerial);
    #endif`);};m.customProgramCacheKey=()=> 'distant-canopy-light-v2';
   rows.forEach((p,i)=>{dummy.position.fromArray(p.p);dummy.rotation.set(0,p.angle,0);dummy.scale.setScalar(p.height);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);mesh.setColorAt(i,new T.Color().setScalar(.75+random()*.35));});
