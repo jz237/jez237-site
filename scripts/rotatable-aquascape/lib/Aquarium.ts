@@ -209,7 +209,7 @@ export class Aquarium{
   let pixelRatio=this.renderer.getPixelRatio(),controlsEnabled=this.controls.enabled;
   const resolution=(ratio:number)=>{if(this.renderer.getPixelRatio()!==ratio){this.renderer.setPixelRatio(ratio);const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);}};
   this.frameBenchmark=new FrameBenchmark(mode=>{
-   resolution(mode==='pixels'?pixelRatio*.5:pixelRatio);
+   resolution(mode==='pixels'||mode==='captures-pixels'?pixelRatio*.5:pixelRatio);
   },()=>{
    resolution(pixelRatio);this.controls.enabled=controlsEnabled;this.last=0;
    this.captureScheduler.invalidate();
@@ -227,8 +227,9 @@ export class Aquarium{
  }
  private drawAquarium(probe:FrameProbe='normal'){
   const mirrors=this.refraction?this.reflections.visible(this.camera):[];
-  const shadows=probe!=='shadows'&&probe!=='captures';
-  const reflections=probe!=='reflections'&&probe!=='captures';
+  const heldCaptures=probe==='captures'||probe==='captures-contact'||probe==='captures-pixels';
+  const shadows=probe!=='shadows'&&!heldCaptures;
+  const reflections=probe!=='reflections'&&!heldCaptures;
   const ids=interleaveCaptures(shadows?this.canopyLights.map(l=>l.uuid):[],reflections?mirrors.map(m=>m.uuid):[]);
   const selected=this.captureScheduler.select(ids,this.camera,`${this.teaching?.mode}:${this.teaching?.step}`,this.staggerCaptures,this.captureCadence.value);
   for(const light of this.canopyLights)light.shadow.needsUpdate=selected.has(light.uuid);
@@ -239,7 +240,7 @@ export class Aquarium{
   try{
    this.refraction?.beginFrame();
    if(this.refraction)this.reflections.prepare(this.renderer,this.scene,this.camera,selected);
-   const triangles=this.lighting.render(this.renderer,this.lightingInspection,probe!=='contact');
+   const triangles=this.lighting.render(this.renderer,this.lightingInspection,probe!=='contact'&&probe!=='captures-contact');
    this.captureScheduler.complete(selected);
    return triangles;
   }catch(error){this.captureScheduler.invalidate();throw error;}

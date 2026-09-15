@@ -1,4 +1,4 @@
-export type FrameProbe='normal'|'still'|'reflections'|'shadows'|'captures'|'contact'|'pixels';
+export type FrameProbe='normal'|'still'|'reflections'|'shadows'|'captures'|'contact'|'pixels'|'captures-contact'|'captures-pixels';
 export const frameProbes:readonly {mode:FrameProbe;label:string}[]=[
  {mode:'normal',label:'Full aquarium'},
  {mode:'still',label:'Simulation held'},
@@ -7,6 +7,8 @@ export const frameProbes:readonly {mode:FrameProbe;label:string}[]=[
  {mode:'captures',label:'Still + both captures held'},
  {mode:'contact',label:'Still + contact shading bypassed'},
  {mode:'pixels',label:'Still + half image width/height'},
+ {mode:'captures-contact',label:'Still + both captures held + contact shading bypassed'},
+ {mode:'captures-pixels',label:'Still + both captures held + half image width/height'},
  {mode:'normal',label:'Full aquarium recheck'},
 ];
 
@@ -26,7 +28,7 @@ export class FrameBenchmark{
  }
  private enter(now:number){
   this.started=this.last=now;this.samples=[];this.apply(this.mode);
-  this.notify(`Aquarium graphics test ${this.index+1}/${frameProbes.length}\n${frameProbes[this.index].label}\nKeep this view still. About 40 seconds total.\nMotion and some effects change temporarily.\nFull settings return automatically.`,false);
+  this.notify(`Aquarium graphics test ${this.index+1}/${frameProbes.length}\n${frameProbes[this.index].label}\nKeep this view still. About ${frameProbes.length*5} seconds total.\nMotion and some effects change temporarily.\nFull settings return automatically.`,false);
  }
  tick(now:number){
   if(!this.active)return;

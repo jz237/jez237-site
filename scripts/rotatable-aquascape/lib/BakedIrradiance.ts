@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {packIrradiance} from './BakedFieldPacking';
 
 /** Static, single-bounce L1 irradiance field. Objects sample it at their current
  * position/normal, so animation and camera rotation remain genuinely three-dimensional.
@@ -9,7 +10,7 @@ export async function applyBakedIrradiance(scene:T.Scene,illumination:{value:num
  const metadata=await metadataResponse.json(),data=new Float32Array(await dataResponse.arrayBuffer());
  const [nx,ny,nz]=metadata.dimensions;
  if(metadata.version!==1||![nx,ny,nz].every(n=>Number.isInteger(n)&&n>1&&n<128)||data.length!==nx*ny*nz*16||!data.every(Number.isFinite))throw Error('Invalid indirect-light field');
- const texture=new T.Data3DTexture(Uint16Array.from(data,T.DataUtils.toHalfFloat),nx*4,ny,nz);
+ const texture=new T.Data3DTexture(packIrradiance(data,nx,ny,nz),nx*3,ny,nz);
  texture.type=T.HalfFloatType;texture.format=T.RGBAFormat;texture.minFilter=texture.magFilter=T.LinearFilter;texture.unpackAlignment=1;texture.needsUpdate=true;
  const strength={value:study?0:1},minimum=new T.Vector3().fromArray(metadata.minimum),span=new T.Vector3().fromArray(metadata.maximum).sub(minimum),dimensions=new T.Vector3(nx,ny,nz);
  const seen=new Set<T.Material>();
@@ -26,10 +27,11 @@ uniform vec3 bakedMin,bakedSpan,bakedDimensions;
 uniform float bakedStrength,bakedDaylight;
 vec3 indirectProbe(vec3 point,vec3 normal){
  vec3 uv=(clamp((point-bakedMin)/bakedSpan,0.,1.)*(bakedDimensions-1.)+.5)/bakedDimensions;
- vec3 c0=texture(bakedField,vec3(uv.x*.25,uv.yz)).rgb;
- vec3 cx=texture(bakedField,vec3((uv.x+1.)*.25,uv.yz)).rgb;
- vec3 cy=texture(bakedField,vec3((uv.x+2.)*.25,uv.yz)).rgb;
- vec3 cz=texture(bakedField,vec3((uv.x+3.)*.25,uv.yz)).rgb;
+ vec4 red=texture(bakedField,vec3(uv.x/3.,uv.yz));
+ vec4 green=texture(bakedField,vec3((uv.x+1.)/3.,uv.yz));
+ vec4 blue=texture(bakedField,vec3((uv.x+2.)/3.,uv.yz));
+ vec3 c0=vec3(red.x,green.x,blue.x),cx=vec3(red.y,green.y,blue.y);
+ vec3 cy=vec3(red.z,green.z,blue.z),cz=vec3(red.w,green.w,blue.w);
  return max(vec3(0.),c0+cx*normal.x+cy*normal.y+cz*normal.z);
 }
 `+shader.fragmentShader;
@@ -43,7 +45,7 @@ vec3 indirectProbe(vec3 point,vec3 normal){
 #endif
 `);
    };
-   material.customProgramCacheKey=()=>key+'-diffuse-probe-l1-v1';material.needsUpdate=true;
+   material.customProgramCacheKey=()=>key+'-diffuse-probe-l1-rgb-v2';material.needsUpdate=true;
   }
  });
  if(study){const label=document.createElement('label'),toggle=document.createElement('input');toggle.type='checkbox';toggle.onchange=()=>strength.value=toggle.checked?1:0;label.append(toggle,' Bounced light comparison');Object.assign(label.style,{position:'fixed',top:'150px',left:'24px',zIndex:'100',padding:'12px',background:'#172224',color:'white'});document.body.appendChild(label);}
