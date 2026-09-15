@@ -34,8 +34,8 @@ const clamp01=v=>Math.max(0,Math.min(1,v));
 export function glowFor({elevation=30,night=0,quality='high',cloud=0,sunUV=null,sunAhead=false}={}){
  if(quality==='saver')return null;
  const lowSun=clamp01(1-(elevation-1)/16);
- const bloom=(.16+.30*lowSun)*(1-.5*cloud)+.12*night;
- const threshold=.85-.35*lowSun-.3*night;
+ const bloom=(.16+.24*lowSun)*(1-.5*cloud)+.12*night;
+ const threshold=.85-.28*lowSun-.3*night;
  let shaft=0;
  if(sunAhead&&sunUV&&elevation>-1&&elevation<22&&night<.5){
   const out=Math.max(-sunUV[0],sunUV[0]-1,-sunUV[1],sunUV[1]-1);

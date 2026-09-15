@@ -7,7 +7,7 @@ import {shared,skyColors} from './lake-surface.js';
 const lerp=(a,b,t)=>a+(b-a)*t,clamp=(v,a,b)=>Math.max(a,Math.min(b,v)),smooth=(a,b,v)=>{const x=clamp((v-a)/(b-a),0,1);return x*x*(3-2*x);};
 const mix3=(a,b,t)=>[lerp(a[0],b[0],t),lerp(a[1],b[1],t),lerp(a[2],b[2],t)];
 // dawn and dusk sit low and purple, as the hero art does: the warmth lives in the sun's aureole and on the sun side of the horizon, not across the whole sky
-const DAY={z:[.15,.34,.74],h:[.52,.68,.86]},GOLD={z:[.15,.13,.27],h:[.78,.42,.24]},DUSK={z:[.09,.075,.19],h:[.58,.26,.28]},NIGHT={z:[.008,.012,.032],h:[.030,.040,.070]};
+const DAY={z:[.15,.34,.74],h:[.52,.68,.86]},GOLD={z:[.15,.13,.27],h:[.64,.34,.20]},DUSK={z:[.09,.075,.19],h:[.50,.23,.22]},NIGHT={z:[.008,.012,.032],h:[.030,.040,.070]};
 // Palette for a sun elevation in degrees. Values are linear light.
 export function skyPalette(e,cloud=0){
  let z,h;
@@ -35,17 +35,17 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  // the horizon is warm only toward the sun; away from it the low sky goes purple, as it does
  float az=.5+.5*dot(normalize(vec3(d.x,0.,d.z)+vec3(1e-4)),normalize(vec3(sun.x,0.,sun.z)+vec3(1e-4)));
  vec3 coolHorizon=mix(skyHorizon,mix(skyZenith,vec3(.30,.19,.40),.5),.72*lowSun*(1.-night));
- vec3 horizonHere=mix(coolHorizon,skyHorizon,pow(az,mix(1.6,12.,lowSun))*(1.-envPass*.7));
+ vec3 horizonHere=mix(coolHorizon,skyHorizon,pow(az,mix(1.6,mix(7.,12.,envPass),lowSun))*(1.-envPass*.7));
  // the horizon band is thin at first light: by fifteen degrees up the sky is already the zenith's purple
- float band=mix(pow(y,.55),smoothstep(0.,.26,y)*.85+.15*pow(y,.55),lowSun*(1.-night));
+ float band=mix(pow(y,.55),smoothstep(0.,.26,y)*.85+.15*pow(y,.55),lowSun*(1.-night));band=mix(band,pow(y,.7),pow(az,10.)*.45*lowSun*(1.-night)*(1.-envPass));
  vec3 col=mix(horizonHere,skyZenith,band);vec3 c0=col;
  // during the environment capture the sun's own terms are mostly dropped: the map lights shaded faces, and a whole hemisphere painted by one aureole makes every shadow peach
  float sunTerms=1.-envPass*.85;
  col+=sunColor*(pow(s,30.)*(.10+.30*low)+pow(s,70.)*.30*low)*(1.-night)*up*sunTerms;
  // the low sun's glow: a wide warm aureole and a tighter halo, then a softer, larger disc
- col+=sunColor*(pow(s,24.)*.18+pow(s,50.)*.32+pow(s,120.)*.8)*lowSun*(1.-night)*up*(1.-cloud*.6)*sunTerms;
+ col+=sunColor*(pow(s,24.)*.10+pow(s,50.)*.18+pow(s,120.)*.8)*lowSun*(1.-night)*up*(1.-cloud*.6)*sunTerms;
  col+=sunColor*pow(s,mix(1400.,500.,lowSun))*mix(4.,6.,lowSun)*up*(1.-cloud*.8)*sunTerms;
- vec3 c1=col;col=mix(col,hazeColor,lowSun*pow(1.-y,4.)*.22*(1.-night)*pow(az,2.)*(1.-envPass*.7));vec3 c2=col;
+ vec3 c1=col;col=mix(col,mix(hazeColor,sunColor*.85,pow(s,8.)*.7),lowSun*pow(1.-y,4.)*.22*(1.-night)*pow(az,2.)*(1.-envPass*.7));vec3 c2=col;
  vec2 flow=vec2(cos(windDir),sin(windDir))*time*(.003+wind*.018);
  // two decks: broad stratocumulus clumps that keep their size down to the horizon, and a finer layer above
  vec2 p=d.xz/(y+.22)*1.1+flow;float n=fbm(p*.55)*.62+fbm(p*1.35+7.)*.38,n2=fbm(p*.47+flow*.5+11.);

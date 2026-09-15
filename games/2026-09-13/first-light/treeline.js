@@ -8,20 +8,23 @@ import {planTreeline} from './treeline-plan.js';
 import {windSway,rng} from './botany.js';
 import {noise} from './lake-shape.js';
 function spruceTexture(){
- const W=128,H=256,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');const r=rng(31);
+ const W=256,H=512,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');const r=rng(31);
  g.clearRect(0,0,W,H);
  // trunk
- g.fillStyle='#2a1d14';g.fillRect(W/2-2.5,H*.55,5,H*.45);
- // tiers from the bottom up, each a jagged triangle narrower than the last
- const tiers=11;
- for(let i=0;i<tiers;i++){const t=i/(tiers-1);const yBase=H*(.98-.86*t),yTop=yBase-H*.16,half=W*.47*(1-t*.82)+3;
-  const shade=.55+.45*r();g.fillStyle=`rgb(${Math.round(24+18*shade)},${Math.round(44+26*shade)},${Math.round(30+16*shade)})`;
-  g.beginPath();g.moveTo(W/2,yTop);
-  for(let k=0;k<=8;k++){const f=k/8;const x=W/2+half*f,y=yTop+(yBase-yTop)*f+(k%2?-3:3)*r();g.lineTo(x,y);}
-  g.lineTo(W/2,yBase+4);for(let k=8;k>=0;k--){const f=k/8;const x=W/2-half*f,y=yTop+(yBase-yTop)*f+(k%2?-3:3)*r();g.lineTo(x,y);}
-  g.closePath();g.fill();}
+ g.fillStyle='#2a1d14';g.fillRect(W/2-4,H*.5,8,H*.5);
+ // tiers from the bottom up: each a fan of drooping needle strokes, narrower and shorter toward the top, so the
+ // silhouette is feathery rather than a stack of triangles
+ const tiers=15;g.lineCap='round';
+ for(let i=0;i<tiers;i++){const t=i/(tiers-1);const yBase=H*(.97-.86*t),half=W*.48*(1-t*.84)+4,droop=H*.05*(1-t*.5)+6;
+  const shade=.5+.5*r();const col=`rgb(${Math.round(22+20*shade)},${Math.round(42+28*shade)},${Math.round(28+18*shade)})`;
+  const strokes=Math.round(26*(1-t*.6)+8);
+  for(let k=0;k<strokes;k++){const f=(k+.5)/strokes;const side=f<.5?-1:1;const u=Math.abs(f-.5)*2;const x0=W/2+side*u*half*.15,y0=yBase-droop*.9-H*.03*(1-u);const x1=W/2+side*(u*half+half*.06*r()),y1=yBase-droop*.9+droop*(.5+.6*u)+(r()-.5)*6;
+   g.strokeStyle=col;g.lineWidth=2.2+r()*2.2;g.beginPath();g.moveTo(x0,y0);g.quadraticCurveTo((x0+x1)/2,y0+(y1-y0)*.25,x1,y1);g.stroke();
+   // needle tufts along the branch
+   for(let n=0;n<4;n++){const q=.3+n*.18;const bx=x0+(x1-x0)*q,by=y0+(y1-y0)*q;g.lineWidth=1.2+r();g.beginPath();g.moveTo(bx,by);g.lineTo(bx+side*(3+r()*5),by+5+r()*7);g.stroke();}}
+ }
  // a pointed top
- g.fillStyle='#233a2b';g.beginPath();g.moveTo(W/2,H*.02);g.lineTo(W/2+6,H*.14);g.lineTo(W/2-6,H*.14);g.closePath();g.fill();
+ g.fillStyle='#233a2b';g.beginPath();g.moveTo(W/2,H*.015);g.lineTo(W/2+9,H*.12);g.lineTo(W/2-9,H*.12);g.closePath();g.fill();
  const tex=new T.CanvasTexture(c);tex.colorSpace=T.SRGBColorSpace;tex.anisotropy=8;tex.wrapS=tex.wrapT=T.ClampToEdgeWrapping;return tex;
 }
 // two crossed unit planes, base at the origin, 1 tall and .38 wide before the instance scale
