@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.47.0, grey-purple zenith)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.48.0, peach and feather)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Peach and feather (v0.48.0)
+
+Seventh measured pass, on the glow beside the sun and the tree line's texture. Put beside the picture's sun region, ours was lavender where the picture is peach: the warmth had been confined to a narrow band for the environment map's sake. The visible sky now carries a wider swath of warmth around the sun that climbs higher there (the environment capture keeps its own narrow, cool version), the haze beside the sun is the sun's peach rather than the mauve of the haze elsewhere, the warm horizon is a darker, more saturated peach, and the aureole, bloom and the warm band's climb all came down so the region is warm without being bright. The spruce card was redrawn at twice the texels as fans of drooping needle strokes with tufts, so the skyline reads feathery rather than a stack of triangles. The glow's blur step is now a fraction of the frame rather than of the quarter-size target, so a phone's narrow portrait frame no longer gets a glow twice as wide as the desktop's. Region distance to the hero frame: v0.47 about 21, this build about 18, with the sky top within seven and the far water within eleven; the glow beside the sun has the picture's hue now and is only brighter.
 
 ## Grey-purple zenith (v0.47.0)
 
