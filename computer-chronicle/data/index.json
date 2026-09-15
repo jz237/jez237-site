@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-15",
+      "historicDate": "1984-07-16",
+      "displayDate": "Week of July 16-22, 1984",
+      "edition": "Issue 103 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The modem line meets the law while Atari changes hands and software prices tumble.",
+      "leadHeadline": "FBI Seizes Home Computers in Huntsville Hacker Probe",
+      "storyHeadlines": [
+        "Tramiel Takes Atari Into a New, Hard-Cost Era",
+        "Imagine Software's Million-Pound Dream Bursts",
+        "Apple IIc Brings 128K and Plug-In Simplicity Home",
+        "£1.99 Games Ignite a British Software Price War"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-16.jpg",
+      "thumb": "media/thumbs/1984-07-16.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-14",
       "historicDate": "1984-07-09",
       "displayDate": "Week of July 9-15, 1984",
