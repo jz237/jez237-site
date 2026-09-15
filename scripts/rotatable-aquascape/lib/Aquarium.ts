@@ -13,7 +13,7 @@ import {buildScannedHardscape,buildScannedFerns} from './ScannedHardscape';
 import {AquariumWater} from './AquariumWater';
 import {buildAquariumGlass} from './AquariumGlass';
 import {ReflectionPool} from './ReflectionPool';
-import {CaptureScheduler,interleaveCaptures} from './CaptureScheduler';
+import {CaptureScheduler,CaptureCadence,interleaveCaptures} from './CaptureScheduler';
 import {SceneRefraction} from './SceneRefraction';
 import {applyWaterDepth} from './WaterDepth';
 import {applyBakedIrradiance} from './BakedIrradiance';
@@ -31,6 +31,7 @@ import {Tetra3D} from './Tetra3D';
 import {calmSwordLeaves} from './SwordCurrent';
 import {SchoolEyes} from './SchoolEyes';
 import {optimizeLeafIndexOrder} from './LeafIndexOrder';
+import {optimizeHardscapeIndices} from './HardscapeIndexOrder';
 import {GpuFrameTimer} from './GpuFrameTimer';
 import {reuseUnchangedTransforms} from './TransformReuse';
 import {PerformanceReadout} from './PerformanceReadout';
@@ -103,6 +104,8 @@ export class Aquarium{
  private water:AquariumWater;
  private reflections=new ReflectionPool();
  private captureScheduler=new CaptureScheduler();
+ private captureCadence=new CaptureCadence(new URLSearchParams(location.search).get('captures')==='alternate'?2:1);
+ private adaptiveCaptures=!['staggered','alternate'].includes(new URLSearchParams(location.search).get('captures')??'');
  // Desktop integrated GPUs also need a bounded capture budget. Keep full
  // captures available explicitly for comparisons; never infer GPU speed from input type.
  private staggerCaptures=new URLSearchParams(location.search).get('captures')!=='full'&&new URLSearchParams(location.search).get('renderer')!=='previous';
@@ -124,7 +127,7 @@ export class Aquarium{
   this.renderer.shadowMap.autoUpdate=false;
   this.lighting=new AquariumLighting(this.scene,this.camera);
   host.appendChild(this.renderer.domElement);
-  host.dataset.captureMode=this.staggerCaptures?'staggered, full resolution':'every frame, full resolution';
+  host.dataset.captureMode=this.staggerCaptures?(this.captureCadence.value===2?'adaptive, full resolution; secondary captures every 2 frames':'staggered, full resolution'):'every frame, full resolution';
   if(new URLSearchParams(location.search).get('stats')==='1')this.perfReadout=new PerformanceReadout(host,this.renderer.domElement);
   this.renderer.domElement.tabIndex=0;
   this.renderer.domElement.setAttribute('aria-label','Aquarium. Drag to rotate, use the view and zoom buttons below.');
@@ -172,6 +175,7 @@ export class Aquarium{
   this.resizeObserver=new ResizeObserver(()=>this.resize());this.resizeObserver.observe(host);this.resize();
   this.ready=Promise.all([buildScannedFerns(this.scene,(x,z)=>this.height(x,z),this.swimShader),this.loadFish(),buildScannedHardscape(this.scene,this.obstacles,(x,z)=>this.height(x,z),this.swimShader),new T.TextureLoader().loadAsync('./grazer-material-atlas.png').catch(error=>{console.warn('Grazer atlas unavailable; using procedural materials.',error);return undefined;})]).then(async results=>{
    if(!(import.meta.env.DEV&&new URLSearchParams(location.search).has('originalIndices')))optimizeLeafIndexOrder(this.scene);
+   if(!new URLSearchParams(location.search).has('originalHardscapeIndices')){try{await optimizeHardscapeIndices(this.scene);}catch(error){console.warn('Keeping original hardscape draw order.',error);}}
    calmSwordLeaves(this.scene);
    this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
    this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3],this.obstacles);
@@ -198,7 +202,7 @@ export class Aquarium{
    this.frame=requestAnimationFrame(this.animate);
   });
   if(import.meta.env.DEV&&this.lightingInspection==='bake')this.ready.then(async()=>{const {installBakeExport}=await import('./BakeExport');installBakeExport(this.scene);});
-  document.addEventListener('visibilitychange',()=>{this.last=0;this.captureScheduler.invalidate();if(document.hidden)this.frameBenchmark?.cancel();});
+  document.addEventListener('visibilitychange',()=>{this.last=0;this.captureScheduler.invalidate();this.captureCadence.reset();if(document.hidden)this.frameBenchmark?.cancel();});
  }
  private installFrameBenchmark(){
   const readout=this.perfReadout!;
@@ -226,7 +230,7 @@ export class Aquarium{
   const shadows=probe!=='shadows'&&probe!=='captures';
   const reflections=probe!=='reflections'&&probe!=='captures';
   const ids=interleaveCaptures(shadows?this.canopyLights.map(l=>l.uuid):[],reflections?mirrors.map(m=>m.uuid):[]);
-  const selected=this.captureScheduler.select(ids,this.camera,`${this.teaching?.mode}:${this.teaching?.step}`,this.staggerCaptures);
+  const selected=this.captureScheduler.select(ids,this.camera,`${this.teaching?.mode}:${this.teaching?.step}`,this.staggerCaptures,this.captureCadence.value);
   for(const light of this.canopyLights)light.shadow.needsUpdate=selected.has(light.uuid);
   this.renderer.shadowMap.needsUpdate=this.canopyLights.some(l=>l.shadow.needsUpdate);
   // Even an empty selection manages the mirror hooks: the main render must not
@@ -426,6 +430,10 @@ export class Aquarium{
   }
   const updateStart=performance.now();
   const elapsed=this.last?(now-this.last)/1000:0,wallDt=Math.min(elapsed,.05);this.last=now;
+  if(this.staggerCaptures&&this.adaptiveCaptures&&!this.frameBenchmark?.active){
+   const previous=this.captureCadence.value;this.captureCadence.observe(elapsed*1000);
+   if(previous!==this.captureCadence.value)this.host.dataset.captureMode=this.captureCadence.value===1?'staggered, full resolution':'adaptive, full resolution; secondary captures every 2 frames';
+  }
   const dt=this.paused||document.hidden?0:wallDt;this.time+=dt;this.currentTime+=dt*(.2+.8*this.chemistry.environment.flow/65);this.swimShader.value=this.currentTime;
   if(this.targetCamera){
    const ease=1-Math.exp(-wallDt*4);this.camera.position.copy(orbitToward(this.camera.position,this.targetCamera,ease));

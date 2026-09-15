@@ -1,6 +1,7 @@
 import * as T from 'three';
 import {swimPhase,type FinKind} from './TetraKinematics.ts';
 import {createTetraDeformation} from './TetraDeformation.ts';
+import {createNormalUpdater} from './DeformedNormals.ts';
 
 
 /** One authored, rounded tetra prototype; dimensions are relative to body length. */
@@ -9,7 +10,9 @@ export class Tetra3D {
  private meshes:T.Mesh[]=[];
  private phase=0;
  private pectoralPhase=0;
+ private lastPose=[NaN,NaN,NaN,NaN];
  private fins=new Map<T.Mesh,{kind:FinKind;side:number}>();
+ private normalUpdates=new Map<T.BufferGeometry,()=>void>();
  private deformers=new Map<T.BufferGeometry,ReturnType<typeof createTetraDeformation>>();
  private shaders:{uniforms:Record<string,T.IUniform>}[]=[];
  private eyes:T.Mesh[]=[];
@@ -57,13 +60,16 @@ diffuseColor.a*=mix(1.,3.15,finPigment);
  private add(geometry:T.BufferGeometry,material:T.MeshPhysicalMaterial,kind:FinKind='body',side=1){
   // A fin is one thin membrane, not a transparent volume needing a back/front pair.
   if(kind!=='body')material.forceSinglePass=true;
-  const mesh=new T.Mesh(geometry,material);this.meshes.push(mesh);this.fins.set(mesh,{kind,side});const rest=new Float32Array(geometry.getAttribute('position').array);this.deformers.set(geometry,createTetraDeformation(rest,kind,side));(geometry.getAttribute('position') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);(geometry.getAttribute('normal') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);this.group.add(mesh);}
+  const mesh=new T.Mesh(geometry,material);this.meshes.push(mesh);this.fins.set(mesh,{kind,side});const rest=new Float32Array(geometry.getAttribute('position').array);this.deformers.set(geometry,createTetraDeformation(rest,kind,side));this.normalUpdates.set(geometry,createNormalUpdater(geometry));(geometry.getAttribute('position') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);(geometry.getAttribute('normal') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);this.group.add(mesh);}
  update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number,pectoralEffort=.35){
   this.phase=swimPhase(this.phase,dt,activity);
   this.pectoralPhase+=dt*(5+pectoralEffort*13);
   // Keep the biological clock running in isolated lessons, without uploading invisible bodies.
   if(!this.group.visible)return;
-  for(const mesh of this.meshes){const p=mesh.geometry.getAttribute('position') as T.BufferAttribute;this.deformers.get(mesh.geometry)!(p.array as Float32Array,this.phase,activity,this.pectoralPhase,pectoralEffort);p.needsUpdate=true;mesh.geometry.computeVertexNormals();}
+  if(this.lastPose[0]!==this.phase||this.lastPose[1]!==activity||this.lastPose[2]!==this.pectoralPhase||this.lastPose[3]!==pectoralEffort){
+   for(const mesh of this.meshes){const p=mesh.geometry.getAttribute('position') as T.BufferAttribute;this.deformers.get(mesh.geometry)!(p.array as Float32Array,this.phase,activity,this.pectoralPhase,pectoralEffort);p.needsUpdate=true;this.normalUpdates.get(mesh.geometry)!();}
+   this.lastPose[0]=this.phase;this.lastPose[1]=activity;this.lastPose[2]=this.pectoralPhase;this.lastPose[3]=pectoralEffort;
+  }
   for(const shader of this.shaders){shader.uniforms.photograph.value=photo;shader.uniforms.sceneTime.value=time;shader.uniforms.flow.value=flow;shader.uniforms.depth.value=depth;shader.uniforms.daylight.value=daylight;}
  }
  dispose(){const materials=new Set<T.Material>();this.group.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();materials.add(o.material as T.Material);}});materials.forEach(m=>m.dispose());}

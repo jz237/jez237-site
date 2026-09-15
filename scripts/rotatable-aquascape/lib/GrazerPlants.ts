@@ -5,20 +5,32 @@ import {grazerBody,type BodySphere} from './GrazerCollision.ts';
 export type PlantLeaf={mesh:T.InstancedMesh;index:number;matrix:T.Matrix4;root:T.Vector3;motion:T.Vector3;flex:number;rows:number;cols:number;box:T.Box3;length:number;width:number};
 type FernTriangle={triangle:T.Triangle;margin:number;box:T.Box3};
 type CollisionLeaf={rows:number;cols:number;vertices:T.Vector3[];triangles:{triangle:T.Triangle;box:T.Box3}[];time:number};
-type PlantStem={a:T.Vector3;b:T.Vector3;radius:number;root:T.Vector3;flex:number;box:T.Box3};
+type PlantStem={a:T.Vector3;b:T.Vector3;radius:number;root:T.Vector3;flex:number;box:T.Box3;line?:T.Line3;time?:number};
 export type LeafTrail={leaf:PlantLeaf;points:T.Vector2[];length:number};
 const clamp=T.MathUtils.clamp;
+type CurrentPhase={time:number;mx:number;mz:number;rx:number;rz:number;flow:number;phase:number;surge:number;side:number;currentX:number;currentZ:number};
+const currentPhases=new WeakMap<PlantLeaf,CurrentPhase>();
+/** A contacted blade's vertices share the same temporal phase and rooted current.
+ * Cache only those common scalars; all vertex-dependent bends remain exact. */
+function currentPhase(leaf:PlantLeaf,time:number){
+ const m=leaf.motion,r=leaf.root;let c=currentPhases.get(leaf);
+ if(!c||c.time!==time||c.mx!==m.x||c.mz!==m.z||c.rx!==r.x||c.rz!==r.z){
+  const flow=r.x*.47+r.z*.71;
+  c={time,mx:m.x,mz:m.z,rx:r.x,rz:r.z,flow,phase:time*m.z*2.25+m.x+.32*Math.sin(time*.43+flow),surge:.85+.15*Math.sin(time*.37+flow),side:time*m.z*1.13+m.x*.73,currentX:Math.sin(time*.82+flow)*.035+Math.sin(time*1.19+flow*1.7)*.013,currentZ:Math.sin(time*.67+flow+.8)*.029};
+  currentPhases.set(leaf,c);
+ }
+ return c;
+}
 /** CPU counterpart of PlantCurrent, evaluated only for nearby contact triangles. */
 export function deformPlantPoint(p:T.Vector3,leaf:PlantLeaf,time:number){
- const m=leaf.motion,r=leaf.root,flow=r.x*.47+r.z*.71;
- const phase=time*m.z*2.25+m.x+.32*Math.sin(time*.43+flow),surge=.85+.15*Math.sin(time*.37+flow);
+ const m=leaf.motion,r=leaf.root,c=currentPhase(leaf,time),{flow,phase,surge}=c;
  const ripple=(1.12*Math.sin(phase-p.y*1.8)+.16*Math.sin(time*.63+flow-p.y*1.4)+.10*Math.sin(phase*2.7-p.y*5.5))*surge;
  const twist=.25*Math.sin(phase*.81-p.y*.6+1.2)+.08*Math.sin(phase*2.1-p.y*3),f=p.y*p.y*(2-p.y);
- p.z+=m.y*(ripple*f+p.x*p.y*twist);p.x+=m.y*.22*f*Math.sin(time*m.z*1.13+m.x*.73-p.y*2.2);
+ p.z+=m.y*(ripple*f+p.x*p.y*twist);p.x+=m.y*.22*f*Math.sin(c.side-p.y*2.2);
  p.applyMatrix4(leaf.matrix);
  const h=Math.max(0,p.y-r.y),x=p.x,z=p.z;
- p.x+=(Math.sin(time*.82+flow)*.035+Math.sin(time*1.19+flow*1.7)*.013)*h*h*leaf.flex*clamp((4.96-Math.abs(x))*2,0,1);
- p.z+=Math.sin(time*.67+flow+.8)*.029*h*h*leaf.flex*clamp((2.20-Math.abs(z))*2,0,1);
+ p.x+=c.currentX*h*h*leaf.flex*clamp((4.96-Math.abs(x))*2,0,1);
+ p.z+=c.currentZ*h*h*leaf.flex*clamp((2.20-Math.abs(z))*2,0,1);
  return p.applyMatrix4(leaf.mesh.matrixWorld);
 }
 const va=new T.Vector3(),vb=new T.Vector3(),vc=new T.Vector3(),edge=new T.Vector3();
@@ -76,7 +88,14 @@ export class GrazerPlants{
   const centers=body.map(s=>({p:s.center,r:s.radius}));
   for(const fern of this.fernCandidates.nearby(p,.48))for(const c of centers){if(!sphereMayReachBox(c.p,c.r+fern.margin,fern.box))continue;fern.triangle.closestPointToPoint(c.p,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+fern.margin)**2)return false;}
   const stems=this.stemCandidates.nearby(p,.48);
-  for(const stem of stems){const bend=(q:T.Vector3)=>{const h=Math.max(0,q.y-stem.root.y),phase=stem.root.x*.47+stem.root.z*.71;q.x+=(Math.sin(time*.82+phase)*.035+Math.sin(time*1.19+phase*1.7)*.013)*h*h*stem.flex*clamp((4.96-Math.abs(q.x))*2,0,1);q.z+=Math.sin(time*.67+phase+.8)*.029*h*h*stem.flex*clamp((2.20-Math.abs(q.z))*2,0,1);return q;};const line=new T.Line3(bend(stem.a.clone()),bend(stem.b.clone()));for(const c of centers){line.closestPointToPoint(c.p,true,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+stem.radius+(envelope?.13*Math.max(stem.a.y-stem.root.y,stem.b.y-stem.root.y)**2*stem.flex:0))**2)return false;}}
+  for(const stem of stems){
+   const extra=envelope?.13*Math.max(stem.a.y-stem.root.y,stem.b.y-stem.root.y)**2*stem.flex:0;
+   // The stored box already encloses the full current sweep and stem radius.
+   // Distant stems need neither a deformed segment nor an exact distance test.
+   if(!centers.some(c=>sphereMayReachBox(c.p,c.r+extra,stem.box)))continue;
+   if(stem.time!==time||!stem.line){const bend=(q:T.Vector3)=>{const h=Math.max(0,q.y-stem.root.y),phase=stem.root.x*.47+stem.root.z*.71;q.x+=(Math.sin(time*.82+phase)*.035+Math.sin(time*1.19+phase*1.7)*.013)*h*h*stem.flex*clamp((4.96-Math.abs(q.x))*2,0,1);q.z+=Math.sin(time*.67+phase+.8)*.029*h*h*stem.flex*clamp((2.20-Math.abs(q.z))*2,0,1);return q;};stem.line??=new T.Line3();bend(stem.line.start.copy(stem.a));bend(stem.line.end.copy(stem.b));stem.time=time;}
+   for(const c of centers){stem.line.closestPointToPoint(c.p,true,this.closest);if(this.closest.distanceToSquared(c.p)<(c.r+stem.radius+extra)**2)return false;}
+  }
   for(const leaf of this.nearby(p,.48)){
    if(leaf===own)continue;
    if(!centers.some(c=>sphereMayReachBox(c.p,c.r,leaf.box)))continue;

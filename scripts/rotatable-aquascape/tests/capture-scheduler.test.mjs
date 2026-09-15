@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {PerspectiveCamera} from 'three';
-import {CaptureScheduler,interleaveCaptures} from '../lib/CaptureScheduler.ts';
+import {CaptureScheduler,CaptureCadence,interleaveCaptures} from '../lib/CaptureScheduler.ts';
 
 const ids=['shadow-left','shadow-center','shadow-right','water','glass-left','glass-right'];
 test('full-scene reflection jobs alternate with depth-only shadow jobs without dropping views',()=>{
@@ -54,4 +54,32 @@ test('failed captures are retried instead of acknowledged as fresh',()=>{
  assert.deepEqual(f.schedule.select(ids,f.camera,'tank',true),first);
  f.schedule.complete(first);
  assert.notDeepEqual(f.schedule.select(ids,f.camera,'tank',true),first);
+});
+
+
+test('adaptive cadence ignores isolated spikes, responds to sustained slow frames and recovers without rapid toggling',()=>{
+ const cadence=new CaptureCadence();
+ for(let i=0;i<240;i++)cadence.observe(i%60===0?120:16.7);
+ assert.equal(cadence.value,1);
+ for(let i=0;i<120;i++)cadence.observe(33.3);
+ assert.equal(cadence.value,2);
+ for(let i=0;i<240;i++)cadence.observe(16.7);
+ assert.equal(cadence.value,2,'requires sustained recovery');
+ for(let i=0;i<120;i++)cadence.observe(16.7);
+ assert.equal(cadence.value,1);
+ cadence.observe(5000);
+ for(let i=0;i<30;i++)cadence.observe(100);
+ assert.equal(cadence.value,1,'resume/loading warmup cannot trigger a downgrade');
+});
+
+test('adaptive capture frames preserve all maps and refresh camera changes immediately',()=>{
+ const f=fixture();f.tick();const counts=new Map(ids.map(id=>[id,0]));let total=0;
+ for(let frame=0;frame<120;frame++){
+  const selected=f.schedule.select(ids,f.camera,'tank',true,2);f.schedule.complete(selected);
+  total+=selected.size;for(const id of selected)counts.set(id,counts.get(id)+1);
+ }
+ assert.equal(total,60);assert.deepEqual([...counts.values()],[10,10,10,10,10,10]);
+ f.camera.position.x+=4;
+ assert.equal(f.schedule.select(ids,f.camera,'tank',true,2).size,6);
+ assert.equal(f.schedule.select(ids,f.camera,'tank',false,2).size,6,'explicit full mode stays full');
 });
