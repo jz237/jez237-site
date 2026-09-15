@@ -315,6 +315,96 @@
     }
   },
   {
+    "id": "2026-09-15-factual-infographic-factual-infographic-glass-frog-transpar",
+    "title": "Factual infographic: Glass Frog Transparency — Hiding Blood in the Liver",
+    "tests": "Archive-wide factual topic packet contains no prior glassfrog-transparency or liver blood-storage subject. Direct-canvas portrait infographic; one dominant hero, eight substantive panels, four explanatory close-ups, concise source-backed labels only.; archive_slot=2026-09-15T16:20; concept=resting-glassfrog-red-blood-cells-liver-transparency; factual_subtype: factual-infographic",
+    "prompt": "Create a finished museum-quality direct-canvas scientific infographic in a tall 1024x1536 portrait format, titled exactly ‘GLASS FROG TRANSPARENCY’ with subtitle ‘Hiding blood in the liver while resting’. Sunburst visual language: luminous emerald, leaf green, translucent jade, warm crimson, and pale ivory on a deep forest-teal field; crisp editorial typography, short readable labels, clean leader lines, no URLs, no bibliography, no mockup, no poster hanging in a room. Anchor the plate with one dominant, highly detailed glassfrog resting belly-down on a broad leaf viewed partly from below: translucent tissues, softly visible pale internal anatomy, believable moist skin and leaf veins, and a compact dark-red liver region; do not invent exposed organs or fantasy anatomy. Surround the hero with eight substantive integrated panels. PANEL 1 ‘THE OPTICAL PROBLEM’: a simple light-path cutaway showing that red blood cells strongly attenuate light while transparent camouflage depends on reducing scattering and absorption. PANEL 2 ‘ACTIVE / CIRCULATING’: a compact awake-state silhouette with red cells distributed through vessels and a visibly less transparent body. PANEL 3 ‘RESTING / STORED’: matching resting-state silhouette showing most circulating red cells redirected into the liver and a clearer body. PANEL 4 ‘THE MEASURED SHIFT’: a bold proportional dot diagram labeled ‘about 89% moved out of circulation’ and ‘transparency rises roughly 2–3×’; make the comparison instantly legible without embellishing it. PANEL 5 ‘BLOOD ROUTE’: a three-step causal sequence—circulation → liver packing → reduced red coloration through the body—with precise arrows and no claim of a known cellular mechanism. PANEL 6 ‘HOW SCIENTISTS SAW IT’: a simplified photoacoustic-imaging diagram—pulsed light enters living tissue, absorbed energy produces an acoustic signal, detector maps red-blood-cell location—label this as the method used to track cells in vivo, without adding unsupported technical specifications. PANEL 7 ‘TWO PARTS OF TRANSPARENCY’: paired close-up diagrams labeled ‘see-through tissues’ and ‘active clearing of respiratory pigments’, emphasizing that both contribute. PANEL 8 ‘OPEN BIOLOGY QUESTION’: show tightly packed red cells in a liver close-up beside a normal flowing-vessel close-up, with restrained label ‘redistribution occurs without clotting; this ability informs blood-flow and clotting research’ and do not imply the anti-clotting mechanism is solved. Include at least four explanatory close-ups: individual biconcave red cells within a vessel, compact liver storage, a body-wall light path, and the photoacoustic signal path. Add a small bottom key distinguishing observed blood distribution from explanatory arrows. Maintain anatomical restraint, realistic scale, tactile translucent skin and leaf textures, precise callouts, strong hierarchy, dense but uncluttered spacing, and large legible text. Every factual label must stay within the supplied claims; no habitat range, species name, predator, evolutionary timeline, health advice, or extra statistics.",
+    "image": "images/2026-09-15-factual-infographic-factual-infographic-glass-frog-transpar.jpg",
+    "thumb": "thumbs/2026-09-15-factual-infographic-factual-infographic-glass-frog-transpar.webp",
+    "color": "#58654c",
+    "date": "2026-09-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "resting-glassfrog-red-blood-cells-liver-transparency",
+      "imageSha256": "c474067388513634ee57082486db7423e036476fcf5940855878dd16aa7309ba",
+      "imageDHash": "1749498c0e9b5dd7"
+    },
+    "factualInfographic": {
+      "topic": "How resting glassfrogs increase transparency by packing red blood cells in the liver",
+      "description": "A detailed scientific plate showing the optical obstacle posed by circulating red blood cells, their resting-state redistribution to the liver, the resulting transparency increase, and the photoacoustic method used to observe the shift.",
+      "sourceNote": "Verified scope: resting-state red-blood-cell redistribution, transparency increase, optical rationale, photoacoustic observation, and unresolved clotting relevance. Duke University: https://scholars.duke.edu/publication/1560515 ; U.S. National Science Foundation: https://par.nsf.gov/biblio/10400211-glassfrogs-conceal-blood-liver-maintain-transparency",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-15T20:20:46Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Duke University",
+            "title": "Glassfrogs conceal blood in their liver to maintain transparency",
+            "sourceType": "university",
+            "url": "https://scholars.duke.edu/publication/1560515"
+          },
+          {
+            "id": "S2",
+            "publisher": "U.S. National Science Foundation",
+            "title": "Glassfrogs conceal blood in their liver to maintain transparency",
+            "sourceType": "government-agency",
+            "url": "https://par.nsf.gov/biblio/10400211-glassfrogs-conceal-blood-liver-maintain-transparency"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Transparency can function as camouflage by reducing light scattering and absorption through an animal's body.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Red blood cells strongly attenuate light, making a blood-filled circulatory system a major obstacle to vertebrate transparency.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "While resting, glassfrogs remove about 89 percent of their red blood cells from circulation and pack them within the liver.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "This red-blood-cell redistribution increases a resting glassfrog's transparency by roughly two- to threefold.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Photoacoustic imaging was used to track red blood cells in living glassfrogs.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Glassfrog transparency combines see-through tissues with an active mechanism that clears respiratory pigments from those tissues.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Glassfrogs can regulate the location, density, and packing of red blood cells without clotting, a capability relevant to hemodynamic and blood-clot research.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-15-factual-infographic-factual-infographic-bocydium-globulare-",
     "title": "Factual infographic: Bocydium globulare — The Globe-Bearing Helmet",
     "tests": "Archive-wide duplicate scan found no Bocydium, treehopper, or pronotum topic. Direct-canvas portrait infographic; one dominant whole-insect hero, eight substantive panels, four explanatory close-ups, conservative uncertainty labels.; archive_slot=2026-09-15T04:20; concept=bocydium-globulare-globe-bearing-pronotum-leaf; factual_subtype: bizarre-insect-life",
