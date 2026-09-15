@@ -1,5 +1,11 @@
 # After the Storm
 
+**v2.12.0 · TIDELINE** — September 15, 2026. Repairs the sky longitude seam and improves scenery throughout the nine venues: dry-bank undergrowth, reeds, driftwood, stonework, harbor paving, city facades, and layered snowy ice. See [SCENERY-2.12.md](SCENERY-2.12.md) for verification and limits.
+
+The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
+
+Jet-ski rated top speed is doubled for every rider and sea state. Full throttle progressively opens the extra top end; cruising, braking and water contact still control actual speed, and AI keeps its situational pacing. See [IMMERSION-2.8.md](IMMERSION-2.8.md) for rider weight shifts, obstacle surge, landing recovery, distant coast, demo framing and performance. See [RACE-POLISH.md](RACE-POLISH.md) for the sky, wave-face, spray, acceleration, shoreline and overtaking pass. See [ATMOSPHERE-RACING.md](ATMOSPHERE-RACING.md) for continuous volume clouds, a travelling rain front, wave-aware racing, turning sheets, directional spray and rider reactions. See [WATER-INTERACTION.md](WATER-INTERACTION.md) for evolving foam, hull contact, local wave interactions, moving gusts, surface beads and optional recorded replays. See [RIDING-IMMERSION.md](RIDING-IMMERSION.md) for airborne trim, directional landings, curling breakers, spray contact, waterline detail, physical sound and rendering improvements. See [IMMERSION-PASS.md](IMMERSION-PASS.md) for wave, shore, scenery, rider, audio and lighting improvements. See [FINISHING-PASS.md](FINISHING-PASS.md) for scenery, landing, rider, shoreline and mobile rendering polish. See [RIDER-UPGRADE.md](RIDER-UPGRADE.md) for the rider/jet-ski release and [TIDELINE-UPGRADE.md](TIDELINE-UPGRADE.md) for the preceding water upgrade.
+
 A browser jet-ski game built around shared waves, hull response and modern water rendering. Free ride is the initial mode. Racing offers an original nine-venue interpretation of Wave Race 64's core mechanics; the earlier coastal salvage voyage remains available.
 
 ## Play
@@ -23,11 +29,12 @@ No build, npm install, API key, account or paid service is required. This folder
 | Trim forward / back | Q / E | [ / ] |
 | Recover when stranded | R | Backspace |
 | Camera | C | / |
+| Instant replay | Replay button; Space pauses playback, Escape returns | Shared replay view |
 | Pause | Escape or Enter in two-player mode | Escape or Enter |
 
 A fresh throttle press as GO appears gives maximum power. Hold rearward trim while steering for a quick turn. Hard collisions and bad stunt landings can eject the rider; tap throttle to remount faster.
 
-Keyboard steering is 20% gentler; analogue steering is unchanged. After a brief period stuck on shore, the ski returns to its last safe water position, facing away from the beach. R (P2: Backspace) recovers immediately when stranded. If the tide has exposed that spot, recovery searches nearby water. Lap and buoy progress are preserved.
+Keyboard steering is 20% gentler; analogue steering has a continuous dead zone and progressive precision curve, retaining full lock at full stick. After a brief period stuck on shore, the ski returns to its last safe water position, facing away from the beach. R (P2: Backspace) recovers immediately when stranded. If the tide has exposed that spot, recovery searches nearby water. Lap and buoy progress are preserved.
 
 In solo modes, arrow keys also drive. Drag to orbit and scroll to zoom; each split-screen half controls its own camera. Forward ramp trim gives a lower, shorter jump; rearward trim gives a higher, longer jump.
 
@@ -36,6 +43,8 @@ Free ride includes four floating ramps and twelve air, surface and dive rings in
 Stunts: hold 1 for a flip, 2/3 for barrel rolls, then release before landing. 4/5/6 select standing, handstand and backward poses; 7 somersaults from standing; F dives during descent.
 
 Standard gamepads: left stick steering/trim, right trigger throttle, left trigger brake, right shoulder slide, bottom face button absorb, top face button camera, Start pause. For stunts, hold left shoulder with the top face button for flip, left/right face buttons for rolls, D-pad up/right/down for poses, bottom face button for somersault, and left trigger for dive. Physical gamepad hardware has not been tested.
+
+Phone controls provide a proportional steering pad, independent GO / Brake / Absorb controls, and optional remembered Auto throttle (off initially). Brake always overrides Auto throttle. Both portrait and landscape layouts are supported; landscape offers the widest view.
 
 ## Modes and decisions
 
@@ -65,23 +74,23 @@ Export portable JSON by downloading or copying the displayed text. Import throug
 
 ## Blender watercraft model
 
-The Tideline R-01 replaces the original primitive craft with a Blender-authored hull, contoured pearl deck and livery hood, stepped stitched saddle, ribbed footwells, intake louvers, mirrors, detailed steering hardware, boarding platform and jet pump. Rider liveries and the moving handlebar/nozzle groups remain connected to the game; the live dashboard is retained. Salvage keeps its cargo rack and winch.
+The Tideline R-01 replaces the original primitive craft with a Blender-authored hull, contoured graphite deck and carbon-fibre inserts and livery hood, stepped stitched saddle, ribbed footwells, intake louvers, mirrors, detailed steering hardware, boarding platform and jet pump. Rider liveries and the moving handlebar/nozzle groups remain connected to the game; the live dashboard is retained. Salvage keeps its cargo rack and winch.
 
-Editable source: **source/blender/Tideline R-01.blend**. Standard interchange asset: **dist/assets/Tideline R-01.glb**. Front/rear studio PNGs and the reproducible **build_jetski.py** are beside the Blender file. The meshes are original geometry built in Blender 5.2; the watercraft works with the detailed Blender rider and articulated pose rig.
+Editable source: **source/blender/Tideline R-01.blend**. Standard interchange asset: **assets/Tideline R-01.glb**. Front/rear studio PNGs and the reproducible **build_jetski.py** are beside the Blender file. The meshes are original geometry rebuilt in Blender 4.5 LTS; the watercraft works with the detailed Blender rider and articulated pose rig.
 
-The browser loads the Blender-evaluated meshes from tideline-r01.json/bin. Geometry is shared across rider colours and merged into 19 material/articulation batches per craft. The original built-in craft is a fallback if these assets cannot load. Run Blender in background with `--python source/blender/build_jetski.py` to rebuild the model, exports and studio renders. Blender is only needed for editing/rebuilding; playing requires no Blender installation.
+The browser loads the Blender-evaluated meshes from tideline-r01.json/bin. Geometry is shared across rider colours and merged into 20 material/articulation batches per craft. The original built-in craft is a fallback if these assets cannot load. Run Blender in background with `--python source/blender/build_jetski.py` to rebuild the model, exports and studio renders. Blender is only needed for editing/rebuilding; playing requires no Blender installation.
 
 ## Detailed Blender riders
 
-Adult riders now have shaped faces, eyes and lips, open-face helmets, clear goggles, chin straps, fitted flotation vests with webbing and reflective strips, contoured wetsuit limbs, individual gripping fingers and molded water boots. Four complexion variants accompany the rider liveries. The same detailed geometry is used for seated riding and stunts.
+Adult riders have full-face composite helmets, curved smoked visors, exposed anatomical arms, fitted segmented flotation vests with webbing and reflective strips, contoured neoprene legs, padded individual gripping fingers and molded water boots. Four complexion variants accompany the rider liveries. The same detailed geometry is used for seated riding and stunts.
 
-The 15-part pose rig keeps hands on the steering grips and feet planted during riding, with subtle breathing, a forward lean at speed, head turns and impact compression. These are articulated real-time characters, with simplified faces and procedural motion; they are not scanned people or cloth simulations.
+The 15-part pose rig keeps hands on the steering grips and feet planted during riding, with spring-driven turn lean, acceleration/braking weight transfer, forward/rearward trim, wave-load bracing, head turns and landing compression/rebound. These are articulated real-time characters, with simplified faces and procedural motion; they are not scanned people or cloth simulations.
 
-Editable source with pose bones and jet-ski context: **source/blender/Coastal Rider.blend**. Standard geometry export: **dist/assets/Coastal Rider.glb**. Use **source/blender/build_rider.py** in Blender to regenerate the model, runtime buffers and front/rear renders. The game shares the asset geometry across riders and retains the earlier rider as an asset-loading fallback.
+Editable source with pose bones and jet-ski context: **source/blender/Coastal Rider.blend**. Standard geometry export: **assets/Coastal Rider.glb**. Use **source/blender/build_rider.py** in Blender to regenerate the model, runtime buffers and front/rear renders. The game shares the asset geometry across riders and retains the earlier rider as an asset-loading fallback.
 
 ## On-screen pace
 
-Racing and free riding now run in **real seconds**, using fixed 1/60-second physics steps. Gravity, waves, weather, animation and race clocks share that clock. Speed feel comes from actual acceleration plus a progressively lower chase camera and a smoothly widening 58–76 degree field of view. Both split-screen cameras respond independently. Camera clearance includes wave crests, ramps and enclosed passages.
+Racing and free riding now run in **real seconds**, using fixed 1/60-second physics steps. Gravity, waves, weather, animation and race clocks share that clock. Speed feel comes from actual acceleration plus a progressively lower chase camera and a smoothly widening 58–65 degree field of view. Both split-screen cameras respond independently. Camera clearance includes wave crests, ramps and enclosed passages.
 
 ## Engine and hull response
 
@@ -95,11 +104,11 @@ The GPU and CPU share fourteen dispersive wave bands with horizontal trochoidal 
 
 A reprojected foam atlas retains foam and bubbles after breaking crests and shallow shoreline breakers. Water includes depth-dependent absorption/refraction, roughness-filtered planar reflections with a sky fallback, forward light scattering through backlit crests, sun glints, fine ripples, caustics and rain rings. Environment lighting refreshes with weather; wet rocks change color and roughness, and ground-conforming contact shadows anchor vegetation. Adaptive graphics reduces reflection, foam and screen resolution when needed.
 
-This remains an interactive approximation rather than CFD. Waves do not overturn into fully simulated water volumes; foam and spray use a surface atlas, sheets and particles. Reflections remain planar. The ebb is compressed into a race, and stunt poses/dives are arcade maneuvers. Ramps heave as rigid platforms. The jet ski and riders are modeled in Blender; scenery remains procedural. The original salvage mode retains its earlier driving rules but shares the upgraded water rendering. Sound uses local ElevenLabs clips with synthesized fallback; physical gamepad hardware and mobile touch input are not verified.
+This remains an interactive approximation rather than CFD. Waves do not overturn into fully simulated water volumes; foam and spray use a surface atlas, sheets and particles. Reflections remain planar. The ebb is compressed into a race, and stunt poses/dives are arcade maneuvers. Ramps heave as rigid platforms. The jet ski and riders are modeled in Blender; scenery remains procedural. The original salvage mode retains its earlier driving rules but shares the upgraded water rendering. Sound uses local ElevenLabs clips with synthesized fallback; physical gamepad hardware and performance on physical phones remain unverified; multi-touch input has been checked in a real GPU browser with phone-sized viewports.
 
 ## Source and verification
 
-`npm test` runs the automated suite. All 106 tests pass, covering all 36 course/class routes, championship scoring/unlocks/restart, salvage outcomes, full park mastery, rider actions, two-player controls, water response, moving hazards/passages, saves and audio assets/mixing.
+`npm test` runs the automated suite. The suite covers all 36 course/class routes, championship scoring/unlocks/restart, salvage outcomes, full park mastery, rider actions, two-player controls, water response, moving hazards/passages, saves and audio assets/mixing.
 
 Use `race.html?verify=1` for visible development controls. The verification driver supplies ordinary helm input at either real time or a 4x verification clock; it does not teleport or grant progress. The salvage harness at `/?verify=1` includes a full voyage and bounded seeded failure scenarios. These panels are absent from normal play.
 
@@ -119,6 +128,8 @@ The ground textures are photographs; trees and terrain remain procedural real-ti
 - [Play salvage](https://jez237.com/games/2026-09-10/after-the-storm/)
 - [Games catalog](https://jez237.com/games/)
 
-Source is maintained in `jz237/jez237-site`, on the separate worktree branch `codex/after-the-storm-coast-20260910`. The route contains source, assets, tests and Blender files and can be served as a static directory.
+Source is maintained on `main` in `jz237/jez237-site`. The route contains source, assets, tests and Blender files and can be served as a static directory.
 
 After changing browser modules or styles, run `node source/version-assets.mjs` to regenerate both HTML import maps and content-versioned asset URLs. It supports the published flat layout and the downloadable package with a `dist/` folder.
+
+See [Surf and rider immersion](IMMERSION-NEXT.md) for the earlier surf/rider changes, ramp preference, verification and simulation limits.

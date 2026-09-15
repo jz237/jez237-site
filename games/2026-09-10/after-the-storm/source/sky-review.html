@@ -1,0 +1,10 @@
+<!doctype html><html lang="en"><meta charset="utf-8"><title>Sky seam review</title><style>body{margin:0;background:#123;color:white;font:16px system-ui}aside{position:absolute;top:12px;left:12px;background:#123d;padding:12px}button{padding:12px}canvas{display:block}</style><aside>Sky longitude wrap — no rain or scene objects<br><button id="left">Left of wrap</button><button id="center">Across wrap</button><button id="right">Right of wrap</button><button id="night">Toggle night</button><output id="status">Loading</output></aside><script type="module">
+import * as T from '../vendor/three.module.js';
+import {makeSky,skyColors} from '../ocean.js';
+const scene=new T.Scene(),renderer=new T.WebGLRenderer({antialias:true}),camera=new T.PerspectiveCamera(65,innerWidth/innerHeight,.1,1600);
+renderer.setSize(innerWidth,innerHeight);renderer.setPixelRatio(1);renderer.toneMapping=T.ACESFilmicToneMapping;document.body.append(renderer.domElement);makeSky(scene);
+const sun=skyColors.skySun.value,wrap=Math.atan2(sun.x,sun.z)+Math.PI;
+function view(offset){const a=wrap+offset;camera.lookAt(Math.sin(a)*100,38,Math.cos(a)*100);renderer.render(scene,camera);document.querySelector('#status').textContent=' View '+Math.round(offset*180/Math.PI)+'°';}
+for(const [id,offset] of [['left',-.36],['center',0],['right',.36]])document.getElementById(id).onclick=()=>view(offset);
+document.getElementById('night').onclick=()=>{skyColors.skyNight.value=1-skyColors.skyNight.value;view(0);};view(0);
+</script></html>
