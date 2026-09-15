@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.43.0, sun and shimmer)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.44.0, behind the trees)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Behind the trees (v0.44.0)
+
+Third measured pass against the hero image. **The tree line blocks the sun.** The game marches from the kayak along the sun's bearing to the first land, takes the angle of the tree tops there, and while the sun sits below it the direct light is gone: only the sky lights the boat, which is why the picture's deck is in shadow with the sun on the horizon, and why the moment the sun clears the trees now reads as a moment (the trees go green, the deck catches light, the disc burns at the tree tops). **Clouds have bodies.** A third, finer noise lumps the edges, the cover ramp is sharp, the thick cores sit below the sky in value at first light as the hero's do, and the thin edges take the light, pink toward the sun and mauve away from it. **The bow** is a dark weathered deck between light wooden gunwales, as in the picture, instead of bright cedar. The extra passes cost nothing a phone will notice: bright pass, three blur pairs and the rays all run at a quarter of the frame. QA: `glowState().treeline` reports the tree-top angle on the sun's bearing and the occlusion.
 
 ## Sun and shimmer (v0.43.0)
 

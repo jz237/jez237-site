@@ -47,13 +47,16 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  vec2 flow=vec2(cos(windDir),sin(windDir))*time*(.003+wind*.018);
  // two decks: broad stratocumulus clumps that keep their size down to the horizon, and a finer layer above
  vec2 p=d.xz/(y+.22)*1.1+flow;float n=fbm(p*.55)*.62+fbm(p*1.35+7.)*.38,n2=fbm(p*.47+flow*.5+11.);
- float dens=n*.75+n2*.25;float cover=smoothstep(.52-cloud*.30,.64-cloud*.24,dens)*smoothstep(.0,.08,y);
+ float dens=n*.75+n2*.25+(fbm(p*2.6+3.)-.5)*.12;float cA=.53-cloud*.30;float cover=smoothstep(cA,cA+.09,dens)*smoothstep(.0,.08,y);
+ // thickness: the cores of a cloud are darker than the sky around it at first light (the hero's bodies sit below the sky in value); the thin edges take the light
+ float thick=smoothstep(cA+.02,cA+.13,dens);
  // the rim: density falls off toward the sun where the cloud thins, and that edge catches the light
  vec2 toSun=normalize(vec2(sun.x,sun.z)+vec2(1e-4))*.09;float nS=fbm((p+toSun)*.55)*.62+fbm((p+toSun)*1.35+7.)*.38;float rim=clamp((dens-(nS*.75+n2*.25))*7.,0.,1.)*lowSun*up;
  float litDot=dot(normalize(vec3(d.x,.35,d.z)),normalize(vec3(sun.x,max(sun.y,.05),sun.z)));float lit=mix(clamp(.45+.55*litDot,0.,1.),pow(s,6.)*up,lowSun)*(1.-night);
  // clouds: pink-orange undersides toward the low sun, dark purple bodies in shade, a silver lining beside the disc
- vec3 cloudLit=mix(vec3(.96,.96,.95),mix(sunColor,vec3(1.,.55,.42),.4),min(1.,low*1.4)),cloudShade=mix(mix(vec3(.58,.62,.70),vec3(.07,.04,.12),lowSun),vec3(.24,.27,.33),cloud*(1.-.6*lowSun));
- vec3 cloudColor=mix(cloudShade,cloudLit,clamp(lit*(1.-cloud*.45)+rim*pow(s,3.)*.9,0.,1.))*(1.-night*.92);
+ vec3 cloudLit=mix(vec3(.96,.96,.95),mix(sunColor,vec3(1.,.55,.42),.4),min(1.,low*1.4)),cloudShade=mix(mix(vec3(.58,.62,.70),vec3(.075,.065,.085),lowSun),vec3(.24,.27,.33),cloud*(1.-.6*lowSun));
+ vec3 cloudEdge=mix(mix(vec3(.80,.82,.88),mix(skyZenith,vec3(.40,.28,.38),.55),lowSun),cloudLit,clamp(lit*(1.-cloud*.45)+rim*pow(s,3.)*.9,0.,1.));
+ vec3 cloudColor=mix(cloudEdge,cloudShade,thick*(1.-.55*lit))*(1.-night*.92);
  cloudColor+=sunColor*pow(s,10.)*.5*lowSun*(1.-night);
  col=mix(col,cloudColor,cover*.93);vec3 c3=col;
  vec3 sd=floor(d*260.);float star=step(.9972,hash(sd.xy*1.7+sd.z*3.1))*night*(1.-cover);col+=vec3(.9,.92,1.)*star*smoothstep(.02,.25,y);
