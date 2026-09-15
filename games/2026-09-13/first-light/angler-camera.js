@@ -4,7 +4,7 @@
 import * as T from './vendor/three.module.js';
 import {KAYAK} from './kayak.js';
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
-export function createLook(){return {yaw:0,pitch:-.08,targetYaw:0,targetPitch:-.08};}
+export function createLook(){return {yaw:0,pitch:-.2,targetYaw:0,targetPitch:-.2};}
 export function lookDrag(look,dx,dy){look.targetYaw=clamp(look.targetYaw-dx*.0042,-2.7,2.7);look.targetPitch=clamp(look.targetPitch-dy*.0034,-.62,.58);}
 export function lookStick(look,x,y,dt){look.targetYaw=clamp(look.targetYaw-x*2.3*dt,-2.7,2.7);look.targetPitch=clamp(look.targetPitch-y*1.7*dt,-.62,.58);}
 const q=new T.Quaternion(),e=new T.Euler(),offset=new T.Vector3();
