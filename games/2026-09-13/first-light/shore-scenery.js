@@ -45,7 +45,7 @@ export function makeShoreScenery(scene,bathy){
  const grassGroup=instances(grassTuft(19),grassMat,grass,false);
  const reed=cattail(77);instances(reed.plant,reedMat,reeds,false);instances(reed.head,headMat,reeds,false);
  root.userData.counts={nearPine:near.pine.length,nearBroad:near.broad.length,farPine:far.pine.length,farBroad:far.broad.length,grass:grass.length,reeds:reeds.length};
- return {root,counts:root.userData.counts,update(t,wind,quality,camera){windSway.time.value=t;windSway.strength.value=wind;windSway.distance.value=quality==='high'?460:quality==='medium'?330:230;
+ return {root,counts:root.userData.counts,nearPoints:{pine:near.pine,broad:near.broad},update(t,wind,quality,camera){windSway.time.value=t;windSway.strength.value=wind;windSway.distance.value=quality==='ultra'?560:quality==='high'?460:quality==='medium'?330:230;
   for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<windSway.distance.value+r+45;}
   if(grassGroup)grassGroup.visible=quality!=='low'&&quality!=='saver';}};
 }
