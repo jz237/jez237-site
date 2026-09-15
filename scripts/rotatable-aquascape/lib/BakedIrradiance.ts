@@ -1,3 +1,4 @@
+import {assetURL} from './AssetPaths';
 import * as T from 'three';
 import {packIrradiance} from './BakedFieldPacking';
 
@@ -5,7 +6,7 @@ import {packIrradiance} from './BakedFieldPacking';
  * position/normal, so animation and camera rotation remain genuinely three-dimensional.
  */
 export async function applyBakedIrradiance(scene:T.Scene,illumination:{value:number},study=false){
- const [metadataResponse,dataResponse]=await Promise.all([fetch('./lighting/diffuse-probes.json',{cache:'no-cache'}),fetch('./lighting/diffuse-probes.bin',{cache:'no-cache'})]);
+ const [metadataResponse,dataResponse]=await Promise.all([fetch(assetURL('./lighting/diffuse-probes.json')),fetch(assetURL('./lighting/diffuse-probes.bin'))]);
  if(!metadataResponse.ok||!dataResponse.ok)throw Error('Indirect-light field could not be loaded');
  const metadata=await metadataResponse.json(),data=new Float32Array(await dataResponse.arrayBuffer());
  const [nx,ny,nz]=metadata.dimensions;

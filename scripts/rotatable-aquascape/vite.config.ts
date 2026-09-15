@@ -1,7 +1,8 @@
 import {defineConfig} from 'vite';
+import preloads from './LoadPreloads.json' with {type:'json'};
 import {mkdir,writeFile} from 'node:fs/promises';
 import {resolve} from 'node:path';
-export default defineConfig({base:'./',resolve:{dedupe:['three','react','react-dom']},build:{outDir:'dist'},server:{host:'127.0.0.1',port:5187,strictPort:true},plugins:[{
+export default defineConfig({base:'./',resolve:{dedupe:['three','react','react-dom']},build:{outDir:'dist'},server:{host:'127.0.0.1',port:5187,strictPort:true},plugins:[{name:'aquarium-chunk-manifest',generateBundle(_options,bundle){this.emitFile({type:'asset',fileName:'build-manifest.json',source:JSON.stringify(Object.keys(bundle).filter(p=>/\.(js|css)$/.test(p)).sort())});}},{name:'aquarium-critical-assets',transformIndexHtml(){return preloads.map(p=>({tag:'link',attrs:{rel:'preload',href:p.href,as:p.as,crossorigin:'anonymous',fetchpriority:'low'},injectTo:'head' as const}));}},{
  name:'local-lighting-export',configureServer(server){server.middlewares.use('/__bake_scene',async(req,res)=>{
   if(req.method!=='POST'||req.headers.origin!=='http://127.0.0.1:5187'){res.statusCode=403;res.end();return;}
   try{const chunks:Buffer[]=[];let size=0;for await(const chunk of req){size+=chunk.length;if(size>120*1024*1024)throw Error('Geometry export exceeds 120 MB');chunks.push(chunk);}

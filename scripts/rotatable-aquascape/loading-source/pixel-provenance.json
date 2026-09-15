@@ -1,0 +1,22 @@
+{
+  "living-species": {
+    "sourceSHA256": "707efaaf102b44fe134f17e3dc9283267e8ec88a985c697c7fd96050c34260a6",
+    "webpSHA256": "99e34ed1198207653a1b398d33a7600684efae373241f63e03c7387a8121de88",
+    "decodedSHA256": "cbdd0323f4079fba5377bd716a6509b1a9cbf12ddfc8cc78434df6590661c73f",
+    "size": [
+      1254,
+      1254
+    ],
+    "mode": "RGBA"
+  },
+  "grazer-material-atlas": {
+    "sourceSHA256": "244e609691583cb7d15e3027fc18c778158716dd210bfe19984a9052df4d6709",
+    "webpSHA256": "5cae097e04b44cc84a96c690f17ce4f37c8124f4d15b39db747fa54c8cb7cfcd",
+    "decodedSHA256": "2f1f655186baea9be6ef56e2d30828568ca9006f2c41fe7ccf325199e4f7d95c",
+    "size": [
+      2172,
+      724
+    ],
+    "mode": "RGB"
+  }
+}

@@ -15,3 +15,10 @@
 
 /assets/department/*
   Cache-Control: public, max-age=86400
+
+# Aquarium filenames contain a content hash; new builds request new URLs.
+/showroom/aquarium/load/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/showroom/aquarium/assets/*
+  Cache-Control: public, max-age=31536000, immutable
