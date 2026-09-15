@@ -116,6 +116,10 @@ Mode `gallery` (from menu or play; Esc or Back returns to where it came from). `
 ## v0.28.0 Depth of field
 `dof-model.js` (pure): `DOF_VIEWS` hero/gallery/photo (aperture = far-background blur radius in device px 16/12/6, `maxCoc` 18/14/8, focal band `range` .2/.15/.12 of the focus distance), `DOF_TAPS` high 24 / medium 16 / low 0 / saver 0, `cocPixels(dist,focus,aperture,maxCoc,range)`, `dofFor(view,{focus,quality,enabled,pixelRatio})` → plan or null. `dof.js`: `makeDoF(renderer)` owns a drawing-buffer-sized `WebGLRenderTarget` (HalfFloat when `EXT_color_buffer_float`) with a `DepthTexture`; `lake.render(camera,outTarget)` now takes the final destination (the parameter is named `outTarget` because the method already had a `target` vector for the mirror camera); `fx.render` draws onto whatever target is current; `finish(camera,plan)` sets near/far/focus/aperture/maxCoc/range, rebuilds the program when the tap count changes (`TAPS` define), and blits with `<tonemapping_fragment>` + `<colorspace_fragment>` since Three applies neither into a target. `main.js` `dofPlan()`: hero → focus = distance to the fish in hand; gallery studio → distance to the turntable fish; photo → orbit distance; setting `dof` (default on), `onDof`, `#dof` checkbox. QA `dof(on)`, `dofState()`. Headless check (`dof-check.py`, variance of the Laplacian on the same frame with the pass on vs off): hero fish 1.08× / shore behind .09×; photo far bank .06× (the kayak box .50×, it spans water at other depths); gallery fish 1.13× (its sky band is uninformative, the stills show the shore softened). Tests: 89.
 
+## v0.52.0 Wisps
+
+`bankTexture(seed)` 512×192: lens `1−(.9u²+2.6v²)`, body `fbm(x/70,y/16)·.55 + fbm(x/22,y/7)·.45`, tendril `pow(max(0,body−.22),.8)·1.35`, ragged top `edge = −.15+.5·n2(x/48+seed,.5)+.2·n2(x/9,3.1·seed)`, `top = 1−pow((−v−edge)/(1.05−edge),.55)` for v<0; four seeds round-robin. Banks: shore `w 52+8·(u%5), h 5.2+.8·(u%4), y 1.9`; cove `w 84, h 6, y 2.1`.
+
 ## v0.51.0 The last brightness
 
 GOLD horizon `[.58,.31,.19]`, DUSK horizon `[.46,.21,.21]`; bloom `.16+.20·lowSun`; deck strips `#7a767e #6b6870 #86828b #615d66 #767279 #68646d`.

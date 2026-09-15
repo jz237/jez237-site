@@ -3,13 +3,26 @@
 import * as T from './vendor/three.module.js';
 const smooth=(a,b,v)=>{const x=Math.max(0,Math.min(1,(v-a)/(b-a)));return x*x*(3-2*x);};
 // a mist bank: a soft sprite over the water, brighter when the sun is behind it
-function bankTexture(){const W=256,H=128,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');const img=g.createImageData(W,H);const d=img.data;
- const hash=(x,y)=>{const s=Math.sin(x*127.1+y*311.7)*43758.5453;return s-Math.floor(s);};const smooth=(v)=>v*v*(3-2*v);
+// A bank of mist: a low lens of vapour whose top edge is ragged and whose body is drawn out into long
+// horizontal tendrils, so it reads as the wisps that lie on a lake at first light rather than a soft
+// ellipse. Four seeds give neighbouring banks different shapes.
+function bankTexture(seed=0){const W=512,H=192,c=document.createElement('canvas');c.width=W;c.height=H;const g=c.getContext('2d');const img=g.createImageData(W,H);const d=img.data;
+ const hash=(x,y)=>{const s=Math.sin(x*127.1+y*311.7+seed*17.3)*43758.5453;return s-Math.floor(s);};const smooth=(v)=>v*v*(3-2*v);
  const n2=(x,y)=>{const ix=Math.floor(x),iy=Math.floor(y),fx=smooth(x-ix),fy=smooth(y-iy);const a=hash(ix,iy),b=hash(ix+1,iy),cc=hash(ix,iy+1),dd=hash(ix+1,iy+1);return (a+(b-a)*fx)+((cc+(dd-cc)*fx)-(a+(b-a)*fx))*fy;};
- for(let y=0;y<H;y++)for(let x=0;x<W;x++){const u=x/W*2-1,v=y/H*2-1;const ell=Math.max(0,1-(u*u+v*v*2.2));const n=n2(x/38,y/22)*.6+n2(x/13,y/9)*.4;const a=Math.pow(ell,1.4)*(.55+.45*n)*(1-Math.max(0,v)*.35);const i=(y*W+x)*4;d[i]=d[i+1]=d[i+2]=255;d[i+3]=Math.round(255*Math.min(1,a));}
+ const fbm=(x,y)=>n2(x,y)*.5+n2(x*2.1+3,y*2.1)*.3+n2(x*4.3+7,y*4.3)*.2;
+ for(let y=0;y<H;y++)for(let x=0;x<W;x++){const u=x/W*2-1,v=y/H*2-1;
+  // the lens, drawn out sideways; tendrils are long in x and short in y
+  const ell=Math.max(0,1-(u*u*.9+v*v*2.6));
+  const body=fbm(x/70,y/16)*.55+fbm(x/22,y/7)*.45;
+  // a ragged top: the upper boundary wanders with a low-frequency noise and frays with a high one
+  const edge=-.15+.5*n2(x/48+seed,.5)+.2*n2(x/9,seed*3.1);
+  const top=v<0?1-Math.pow(Math.max(0,(-v-edge)/(1.05-edge)),.55):1;
+  const tendril=Math.pow(Math.max(0,body-.22),.8)*1.35;
+  const a=Math.pow(ell,1.1)*Math.min(1,tendril)*Math.max(0,top)*(1-Math.max(0,v)*.3);
+  const i=(y*W+x)*4;d[i]=d[i+1]=d[i+2]=255;d[i+3]=Math.round(255*Math.min(1,a));}
  g.putImageData(img,0,0);const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;return t;}
 export function makeMist(scene,{banks:bankSpots=[]}={}){
- const bankTex=bankSpots.length?bankTexture():null;const banks=bankSpots.map((b,i)=>{const m=new T.SpriteMaterial({map:bankTex,transparent:true,depthWrite:false,opacity:0,color:0xffffff});const s=new T.Sprite(m);s.position.set(b.x,b.y||1.1,b.z);s.scale.set(b.w||50,b.h||3,1);s.renderOrder=4;s.userData.skipRefraction=true;s.userData.skipReflection=true;s.userData.phase=i*1.7;scene.add(s);return s;});
+ const bankTexs=bankSpots.length?[0,1,2,3].map(k=>bankTexture(k)):[];const banks=bankSpots.map((b,i)=>{const m=new T.SpriteMaterial({map:bankTexs[i%4],transparent:true,depthWrite:false,opacity:0,color:0xffffff});const s=new T.Sprite(m);s.position.set(b.x,b.y||1.1,b.z);s.scale.set(b.w||50,b.h||3,1);s.renderOrder=4;s.userData.skipRefraction=true;s.userData.skipReflection=true;s.userData.phase=i*1.7;scene.add(s);return s;});
  const u={time:{value:0},strength:{value:0},tint:{value:new T.Color(.85,.86,.84)},eye:{value:new T.Vector3()}};
  const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,side:T.DoubleSide,uniforms:u,vertexShader:`varying vec3 wp;void main(){wp=(modelMatrix*vec4(position,1.)).xyz;gl_Position=projectionMatrix*viewMatrix*vec4(wp,1.);}`,
   fragmentShader:`uniform float time,strength;uniform vec3 tint,eye;varying vec3 wp;

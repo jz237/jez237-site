@@ -65,7 +65,7 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.51.0';
+export const VERSION='0.52.0';
 const coolShadow=new T.Color(.36,.48,.64);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
@@ -121,7 +121,7 @@ function refreshEnvironmentCapture(){
  if(gpu.envMode==='cubemap'){envCubeCam.update(renderer,envScene);environment=pmrem.fromCubemap(envCubeRT.texture);scene.environment=environment.texture;return;}
  environment=pmrem.fromScene(envScene,.04,.1,2000);scene.environment=environment.texture;}
 // mist banks along the far shore and across the cove, where the concept's dawn keeps them
-const mistBanks=[];for(const u of [90,150,215,280,345,400]){for(const side of [1,-1]){const p=shorePoint(u,side,14+(u%3)*4);mistBanks.push({x:p.x,z:p.z,w:44+(u%5)*6,h:2.6+(u%4)*.4});}}for(const [u,v] of [[180,-.25],[260,.3],[330,0]]){const p=worldFromFrame(u,v*halfWidth(u,v<0?-1:1));mistBanks.push({x:p.x,z:p.z,w:70,h:3.2});}
+const mistBanks=[];for(const u of [90,150,215,280,345,400]){for(const side of [1,-1]){const p=shorePoint(u,side,14+(u%3)*4);mistBanks.push({x:p.x,z:p.z,w:52+(u%5)*8,h:5.2+(u%4)*.8,y:1.9});}}for(const [u,v] of [[180,-.25],[260,.3],[330,0]]){const p=worldFromFrame(u,v*halfWidth(u,v<0?-1:1));mistBanks.push({x:p.x,z:p.z,w:84,h:6.0,y:2.1});}
 const mist=makeMist(scene,{banks:mistBanks});const bed=makeLakeBed(scene,bathy,300),cover=makeCover(scene,bathy),shore=makeShoreScenery(scene,bathy),treeline=makeTreeline(scene,bathy),kayak=makeKayak(scene);
 // the living lake: a heron on the bank by the laydown, geese, swallows, insects, rises; and the sound bed
 const heronPerch=(()=>{const lay=cover.features.find(f=>f.type==='laydown')||{x:0,z:0};for(let r=3;r<18;r+=1.5)for(let a=0;a<6.283;a+=.35){const x=lay.x+Math.cos(a)*r,z=lay.z+Math.sin(a)*r,y=bathy.height(x,z);if(y>.05&&y<.5)return {x,y,z,heading:Math.atan2(lay.x-x,lay.z-z)};}return {x:lay.x,y:.2,z:lay.z,heading:0};})();
