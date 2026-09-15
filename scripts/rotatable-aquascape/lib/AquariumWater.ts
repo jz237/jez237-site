@@ -1,8 +1,8 @@
 import * as T from 'three';
 import {Reflector} from 'three/addons/objects/Reflector.js';
-import {ReflectionPool} from './ReflectionPool';
-import {waterOpticsShader,WATER_LEVEL} from './WaterDepth';
-import {rippleHeightShader,rippleSlopeShader} from './WaterRipples';
+import type {ReflectionPool} from './ReflectionPool';
+import {waterOpticsShader,WATER_LEVEL} from './WaterDepth.ts';
+import {rippleHeightShader,rippleSlopeShader} from './WaterRipples.ts';
 /** Concentrate real surface vertices around the curved glass contact zone. */
 function waterSurfaceGeometry(){
  const geometry=new T.PlaneGeometry(10.08,4.6,320,128),positions=geometry.getAttribute('position');
@@ -17,16 +17,18 @@ function waterSurfaceGeometry(){
 /** Two-sided scene captures with depth-guided reflection rays across the moving surface. */
 export class AquariumWater extends T.Group {
  private surfaces:Reflector[]=[];
+ readonly advancedReflections={value:1};
  get reflectionTexture(){return this.surfaces.find(s=>s.visible)?.getRenderTarget().texture??this.surfaces[0].getRenderTarget().texture;}
  constructor(reflections:ReflectionPool){
   super();
   for(const underside of [true,false]){
    const surface=new Reflector(waterSurfaceGeometry(),{textureWidth:1024,textureHeight:1024,clipBias:.002,multisample:2,shader:{
-    name:'AquariumWaterReflection',uniforms:{color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},illumination:{value:1},underside:{value:underside?1:0}},
+    name:'AquariumWaterReflection',uniforms:{advancedReflections:this.advancedReflections,color:{value:new T.Color(0xffffff)},tDiffuse:{value:null},reflectionDepth:{value:null},reflectionView:{value:new T.Matrix4()},reflectionProjection:{value:new T.Matrix4()},reflectionInverseProjection:{value:new T.Matrix4()},textureMatrix:{value:new T.Matrix4()},time:{value:0},illumination:{value:1},underside:{value:underside?1:0}},
     vertexShader:`uniform mat4 textureMatrix;uniform float time;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${rippleHeightShader}
     void main(){vec3 displaced=position;world=(modelMatrix*vec4(position,1.)).xyz;float wave=rippleHeight(world.xz);displaced.z+=wave*(underside>.5?-1.:1.);world.y+=wave;reflectionUv=textureMatrix*vec4(displaced,1.);gl_Position=projectionMatrix*modelViewMatrix*vec4(displaced,1.);}`,
     fragmentShader:`#define WATER_FRAGMENT
     uniform sampler2D tDiffuse;uniform sampler2D reflectionDepth;uniform mat4 reflectionView;uniform mat4 reflectionProjection;uniform mat4 reflectionInverseProjection;uniform float time;uniform float illumination;uniform float underside;varying vec4 reflectionUv;varying vec3 world;${rippleSlopeShader}${waterOpticsShader}
+    uniform float advancedReflections;
     // Unpolarized dielectric Fresnel, including the water-to-air critical angle.
     // See PBRT, Specular Reflection and Transmission (FrDielectric).
     float waterFresnel(float cosine){
@@ -51,6 +53,7 @@ export class AquariumWater extends T.Group {
     // Search the captured scene along the bent world-space ray. Geometry outside
     // the capture remains a planar approximation rather than inventing detail.
     vec2 traceReflection(vec3 origin,vec3 direction,vec2 fallback){
+     if(advancedReflections<.5)return fallback;
      vec3 start=(reflectionView*vec4(origin,1.)).xyz;
      vec3 ray=(reflectionView*vec4(direction,0.)).xyz;
      // Project the ray once. Matrix multiplication is linear along it.
@@ -123,7 +126,7 @@ export class AquariumWater extends T.Group {
     }`
    }});
    const target=surface.getRenderTarget();target.depthTexture=new T.DepthTexture(1024,1024,T.UnsignedIntType);
-   const uniforms=(surface.material as T.ShaderMaterial).uniforms;uniforms.reflectionDepth.value=target.depthTexture;
+   const uniforms=(surface.material as T.ShaderMaterial).uniforms;uniforms.reflectionDepth.value=target.depthTexture;uniforms.advancedReflections=this.advancedReflections;
    const capture=surface.onBeforeRender;
    surface.onBeforeRender=(...args)=>{
     capture.apply(surface,args);
