@@ -1,25 +1,71 @@
+import {foamLifeGLSL} from './foam-life.js';
+import {wetSandGLSL} from './wet-sand.js';
 import * as T from './vendor/three.module.js';
 // A moving world-space foam atlas. Previous foam is reprojected and advected,
 // so breaking crests leave patches which persist through subsequent troughs.
 export function makeFoamField(renderer,common,uniforms){
- const targets=[0,1].map(()=>new T.WebGLRenderTarget(128,128,{depthBuffer:false,minFilter:T.LinearFilter,magFilter:T.LinearFilter}));
- const u={...uniforms,previousFoam:{value:targets[0].texture},foamCenter:{value:new T.Vector2()},previousCenter:{value:new T.Vector2()},foamSpan:{value:240},previousSpan:{value:240},foamDt:{value:0},foamReady:{value:0}};
- const material=new T.ShaderMaterial({uniforms:u,depthTest:false,depthWrite:false,vertexShader:'varying vec2 uvP;void main(){uvP=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:common+`
- uniform sampler2D previousFoam,terrainMap;uniform vec2 foamCenter,previousCenter;uniform float foamSpan,previousSpan,foamDt,foamReady,customTerrain,terrainSpan;varying vec2 uvP;
+ const floatingHistory=renderer.extensions.has('EXT_color_buffer_float');
+ const targets=[0,1].map(()=>new T.WebGLRenderTarget(128,128,{type:floatingHistory?T.HalfFloatType:T.UnsignedByteType,depthBuffer:false,minFilter:T.LinearFilter,magFilter:T.LinearFilter}));
+ const u={...uniforms,historyByte:{value:floatingHistory?0:1},historyFrame:{value:0},previousFoam:{value:targets[0].texture},foamCenter:{value:new T.Vector2()},previousCenter:{value:new T.Vector2()},foamSpan:{value:240},previousSpan:{value:240},foamDt:{value:0},foamReady:{value:0}};
+ const material=new T.ShaderMaterial({uniforms:u,depthTest:false,depthWrite:false,vertexShader:'varying vec2 uvP;void main(){uvP=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:common+wetSandGLSL+foamLifeGLSL+`
+ uniform sampler2D previousFoam,terrainMap;uniform vec2 foamCenter,previousCenter;uniform float historyByte,historyFrame,foamSpan,previousSpan,foamDt,foamReady,customTerrain,terrainSpan;varying vec2 uvP;
  float floorDepth(vec2 p){vec2 rg=texture2D(terrainMap,clamp(p/terrainSpan+.5,vec2(0.),vec2(1.))).rg;return -16.+dot(rg,vec2(256.,1.))/257.*100.;}
- void main(){vec2 p=(uvP-.5)*foamSpan+foamCenter;vec2 drift=vec2(.35,-.24)*storm;vec2 oldUV=(p-drift*foamDt-previousCenter)/previousSpan+.5;
+ void main(){vec2 p=(uvP-.5)*foamSpan+foamCenter;vec3 movingSurface=waveSurface(p);float bed=floorDepth(p);
+ vec2 terrainSlope=vec2(floorDepth(p+vec2(1.,0.))-floorDepth(p-vec2(1.,0.)),floorDepth(p+vec2(0.,1.))-floorDepth(p-vec2(0.,1.)))*.5;
+ float shallow=1.-smoothstep(.25,2.,seaLevel+movingSurface.x-bed);
+ vec2 drift=gustAt(p,time,storm).xy*.05-movingSurface.yz*(.55+.35*smoothstep(.1,1.4,movingSurface.x))-terrainSlope*shallow*.9;
+ drift=clamp(drift,vec2(-1.5),vec2(1.5));vec2 oldUV=(p-drift*foamDt-previousCenter)/previousSpan+.5;
  float inside=step(0.,oldUV.x)*step(oldUV.x,1.)*step(0.,oldUV.y)*step(oldUV.y,1.);vec2 old=texture2D(previousFoam,oldUV).rg*inside*foamReady;
+ // Wet sand stays fixed to the beach, rather than drifting with surface foam.
+ vec2 beachUV=(p-previousCenter)/previousSpan+.5;
+ float beachInside=step(0.,beachUV.x)*step(beachUV.x,1.)*step(0.,beachUV.y)*step(beachUV.y,1.);
+ vec2 oldBeach=texture2D(previousFoam,beachUV).ba*beachInside*foamReady;
  vec2 q=p-swellShift(p);float h;vec2 shift,grad;mat2 J;swellAt(q,h,shift,grad,J);float compression=1.-(J[0][0]*J[1][1]-J[0][1]*J[1][0]);
- float crest=smoothstep(.16,.34,compression)*smoothstep(.12,.7,storm);
- float bottom=floorDepth(p),depth=seaLevel+h-bottom;
- float breaker=customTerrain*(1.-smoothstep(.4,2.3,depth))*smoothstep(.02,.35,depth)*smoothstep(.03,.6,h)*(0.25+storm*.75);
- float source=max(crest*.25,breaker*1.25);float density=clamp(old.r*exp(-foamDt*.4)+source*foamDt,0.,1.);
- float bubbles=clamp(old.g*exp(-foamDt*.16)+source*foamDt*.3,0.,1.);gl_FragColor=vec4(density,bubbles,0.,1.);}`});
+ // Include the same variable surf sets that lift the hulls and rendered water.
+ vec3 surface=waveSurface(p);h=surface.x;
+ vec2 direction=normalize(surface.yz+vec2(.001));
+ float curvature=h*2.-waveSurface(p+direction*1.5).x-waveSurface(p-direction*1.5).x;
+ float crest=smoothstep(.018,.13,curvature)*smoothstep(.25,1.15,h)
+  *smoothstep(.10,.32,length(surface.yz));
+ crest=max(crest,smoothstep(.16,.34,compression)*storm*.35);
+ float bottom=floorDepth(p),depth=height(p)-bottom;
+ float breaker=customTerrain*(1.-smoothstep(.3,2.1,depth))*smoothstep(.01,.18,depth)
+  *(.28+.72*smoothstep(-.1,.7,h));
+ float source=max(crest*(.19+.26*smoothstep(.8,1.8,h)),breaker*1.3);
+ // Analytic accumulation remains stable when rendering is throttled.
+ vec2 life=foamLifeStep(old,source,foamDt);float density=life.r,bubbles=life.g;
+ // Advected Kelvin arms and aerated prop-wash, evaluated per atlas texel.
+ // Each packet is born behind a real, water-loaded hull; no screen-space trail.
+ float wakeFoam=0.;
+ for(int i=0;i<96;i++){vec4 w=wake[i];float age=time-w.z;
+  if(w.w<=.02||age<0.||age>18.)continue;
+  vec2 d=p-w.xy-vec2(.16,-.11)*storm*age;float spread=.55+age*.65;
+  if(dot(d,d)>(spread+4.)*(spread+4.))continue;
+  vec2 f=vec2(sin(wakeHeading[i]),cos(wakeHeading[i]));
+  float a=dot(d,f),b=dot(d,vec2(f.y,-f.x)),edge=abs(b)-spread;
+  wakeFoam+=(exp(-edge*edge*3./(1.+age*.4))*.28+exp(-b*b/(.35+age*.3))*.52)
+    *exp(-a*a/(1.8+age*.15)-age*.25)*w.w;
+ }
+ density=max(density,min(.95,wakeFoam));bubbles=max(bubbles,min(.3,wakeFoam*.18));
+ // Drainage varies slowly along the shore; weakly wetted fringes dry first.
+ float drainage=.9+.2*sin(p.x*.18+p.y*.11)*sin(p.y*.23-p.x*.07);
+ vec2 beach=wetSandStep(oldBeach,depth,foamDt,drainage)*customTerrain;
+ // Unbiased rounding avoids frozen wetness on 8-bit mobile render targets.
+ if(historyByte>.5){float jitter=fract(sin(dot(floor(p),vec2(12.9898,78.233))+historyFrame*1.618)*43758.5453);beach=floor(beach*255.+jitter)/255.;}
+ gl_FragColor=vec4(density,bubbles,beach);}`});
  const scene=new T.Scene(),quad=new T.Mesh(new T.PlaneGeometry(2,2),material),camera=new T.Camera();scene.add(quad);let index=0,elapsed=0,frames=0,resolution=128;
  return {texture:targets[0].texture,center:u.foamCenter,span:u.foamSpan,update(dt,x,z,quality,span=240){
-  if(dt<=0)return;elapsed+=dt;if(frames++%2)return;const nextSize=quality==='high'?128:quality==='medium'?96:64;
-  if(nextSize!==resolution){resolution=nextSize;targets.forEach(t=>t.setSize(resolution,resolution));u.foamReady.value=0;}
-  u.previousSpan.value=u.foamSpan.value;u.foamSpan.value=span;u.previousCenter.value.copy(u.foamCenter.value);u.foamCenter.value.set(Math.floor(x/4)*4,Math.floor(z/4)*4);u.foamDt.value=Math.min(elapsed,.15);elapsed=0;
-  u.previousFoam.value=targets[index].texture;index=1-index;const previous=renderer.getRenderTarget();renderer.setRenderTarget(targets[index]);renderer.render(scene,camera);renderer.setRenderTarget(previous);u.foamReady.value=1;this.texture=targets[index].texture;
+  if(dt<=0)return;elapsed+=dt;if(frames++%2)return;const nextSize=quality==='high'?256:quality==='medium'?160:96;
+  if(nextSize!==resolution){
+   // Preserve the soaked shoreline when adaptive graphics changes atlas size.
+   const old=targets.slice(),previous=renderer.getRenderTarget();resolution=nextSize;
+   for(let i=0;i<2;i++)targets[i]=new T.WebGLRenderTarget(resolution,resolution,{type:floatingHistory?T.HalfFloatType:T.UnsignedByteType,depthBuffer:false,minFilter:T.LinearFilter,magFilter:T.LinearFilter});
+   if(u.foamReady.value){const copy=new T.ShaderMaterial({uniforms:{source:{value:old[index].texture}},depthTest:false,depthWrite:false,vertexShader:'varying vec2 uvP;void main(){uvP=uv;gl_Position=vec4(position.xy,0.,1.);}',fragmentShader:'uniform sampler2D source;varying vec2 uvP;void main(){gl_FragColor=texture2D(source,uvP);}'});
+    quad.material=copy;renderer.setRenderTarget(targets[index]);renderer.render(scene,camera);quad.material=material;copy.dispose();
+   }
+   renderer.setRenderTarget(previous);old.forEach(t=>t.dispose());
+  }
+  u.previousSpan.value=u.foamSpan.value;u.foamSpan.value=span;u.previousCenter.value.copy(u.foamCenter.value);u.foamCenter.value.set(Math.floor(x/4)*4,Math.floor(z/4)*4);u.foamDt.value=Math.min(elapsed,2);elapsed=0;
+  u.historyFrame.value++;u.previousFoam.value=targets[index].texture;index=1-index;const previous=renderer.getRenderTarget();renderer.setRenderTarget(targets[index]);renderer.render(scene,camera);renderer.setRenderTarget(previous);u.foamReady.value=1;this.texture=targets[index].texture;
  },reset(){u.foamReady.value=0;elapsed=0;},dispose(){targets.forEach(t=>t.dispose());material.dispose();quad.geometry.dispose();}};
 }
