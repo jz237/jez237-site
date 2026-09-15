@@ -3,7 +3,7 @@
 // terrain textures, the fish, Ray's voice) is cache-first once seen, in its own capped cache, so a
 // second morning on the lake starts fast and works on the dock with no signal. Bump CACHE with
 // the game version (tests/pwa.test.mjs checks they match).
-const VERSION='0.59.0';
+const VERSION='0.60.0';
 const CACHE='first-light-shell-'+VERSION;
 const MEDIA='first-light-media-v1';
 const MEDIA_MAX_ENTRIES=600;

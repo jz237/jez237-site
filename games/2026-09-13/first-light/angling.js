@@ -39,11 +39,29 @@ export function makeAngling(scene,kayak,env){
  const NSEG=9,rodLen=2.0,segLen=rodLen/NSEG;
  function buildRod(x,y,z){const root=new T.Group();kayak.group.add(root);root.position.set(x,y,z);
   const grip=new T.Mesh(new T.CylinderGeometry(.012,.014,.30,10),gripMat);grip.rotation.x=Math.PI/2;grip.position.z=.13;root.add(grip);
-  const reelMesh=new T.Mesh(new T.BoxGeometry(.03,.045,.05),rodMat);reelMesh.position.set(0,-.045,.34);root.add(reelMesh);const spool=new T.Mesh(new T.CylinderGeometry(.024,.024,.03,14),new T.MeshStandardMaterial({color:0x8d949c,roughness:.35,metalness:.6}));spool.rotation.z=Math.PI/2;spool.position.set(.02,-.07,.34);root.add(spool);const bail=new T.Mesh(new T.TorusGeometry(.026,.002,6,20),rodMat);bail.rotation.y=Math.PI/2;bail.position.set(.036,-.07,.34);root.add(bail);
+  // the spinning reel: foot and stem under the seat, a black rotor housing, a gold-anodised spool with a wound line, the bail wire around it, a line roller and a crank with a knob
+  {const body=new T.MeshStandardMaterial({color:0x1c1d20,roughness:.55,metalness:.4}),gold=new T.MeshStandardMaterial({color:0xb08a3a,roughness:.3,metalness:.85}),lineWound=new T.MeshStandardMaterial({color:0x6d7f3a,roughness:.9});
+   // everything hangs off the reel foot under the seat; the whole reel is a third larger than life so it reads on a phone
+   const reel=new T.Group();reel.position.set(0,-.012,.34);reel.scale.setScalar(1.35);root.add(reel);const P=(m,x,y,z)=>{m.position.set(x,y-(-.012),z-.34);reel.add(m);return m;};
+   P(new T.Mesh(new T.BoxGeometry(.018,.012,.06),rodMat),0,-.012,.34);
+   P(new T.Mesh(new T.CylinderGeometry(.006,.009,.05,10),body),0,-.04,.34);
+   const housing=P(new T.Mesh(new T.CylinderGeometry(.02,.024,.05,18),body),0,-.075,.33);housing.rotation.x=Math.PI/2;
+   const rotor=P(new T.Mesh(new T.CylinderGeometry(.026,.022,.022,18),body),0,-.075,.365);rotor.rotation.x=Math.PI/2;
+   const spool=P(new T.Mesh(new T.CylinderGeometry(.027,.027,.03,20),gold),0,-.075,.39);spool.rotation.x=Math.PI/2;
+   const wound=P(new T.Mesh(new T.CylinderGeometry(.0275,.0275,.02,20),lineWound),0,-.075,.388);wound.rotation.x=Math.PI/2;
+   P(new T.Mesh(new T.TorusGeometry(.028,.003,8,24),gold),0,-.075,.405);
+   const bail=P(new T.Mesh(new T.TorusGeometry(.036,.0016,6,28,Math.PI*1.15),new T.MeshStandardMaterial({color:0xb8bcc2,roughness:.3,metalness:.9})),0,-.075,.385);bail.rotation.z=-.3;
+   P(new T.Mesh(new T.CylinderGeometry(.004,.004,.008,8),body),.03,-.06,.385);
+   const crank=P(new T.Mesh(new T.BoxGeometry(.006,.045,.005),body),-.032,-.09,.33);crank.rotation.z=.4;
+   const knob=P(new T.Mesh(new T.CylinderGeometry(.007,.007,.02,10),new T.MeshStandardMaterial({color:0x3a2a1a,roughness:.6})),-.05,-.11,.33);knob.rotation.z=Math.PI/2;
+   const cap=P(new T.Mesh(new T.CylinderGeometry(.006,.006,.012,10),gold),.026,-.075,.33);cap.rotation.z=Math.PI/2;}
+  // the reel seat hood and the fore grip
+  const hood=new T.Mesh(new T.CylinderGeometry(.013,.011,.06,12),rodMat);hood.rotation.x=Math.PI/2;hood.position.z=.30;root.add(hood);
+  const fore=new T.Mesh(new T.CylinderGeometry(.011,.0095,.06,10),gripMat);fore.rotation.x=Math.PI/2;fore.position.z=.36;root.add(fore);
   const segs=[];let parent=root;
-  for(let i=0;i<NSEG;i++){const pivot=new T.Group();pivot.position.z=i===0?.28:segLen;parent.add(pivot);const r0=.0055*(1-i/NSEG)+.0014,r1=.0055*(1-(i+1)/NSEG)+.0014;const m=new T.Mesh(new T.CylinderGeometry(r1,r0,segLen,8),rodMat);m.rotation.x=Math.PI/2;m.position.z=segLen/2;pivot.add(m);if(i%2===1){const guide=new T.Mesh(new T.TorusGeometry(.006-i*.0004,.0008,5,10),rodMat);guide.position.set(0,-.007,segLen/2);pivot.add(guide);}segs.push(pivot);parent=pivot;}
+  for(let i=0;i<NSEG;i++){const pivot=new T.Group();pivot.position.z=i===0?.28:segLen;parent.add(pivot);const r0=.0055*(1-i/NSEG)+.0014,r1=.0055*(1-(i+1)/NSEG)+.0014;const m=new T.Mesh(new T.CylinderGeometry(r1,r0,segLen,8),rodMat);m.rotation.x=Math.PI/2;m.position.z=segLen/2;pivot.add(m);{const gr=.0075-i*.0007;const guide=new T.Mesh(new T.TorusGeometry(gr,.0007,5,12),new T.MeshStandardMaterial({color:0x9a9ea6,roughness:.35,metalness:.85}));guide.position.set(0,-(gr+.006),segLen*.55);pivot.add(guide);const foot=new T.Mesh(new T.CylinderGeometry(.0009,.0009,.006+gr,5),rodMat);foot.position.set(0,-(.003+gr/2),segLen*.55);pivot.add(foot);}segs.push(pivot);parent=pivot;}
   const tipObj=new T.Object3D();tipObj.position.z=segLen;parent.add(tipObj);return {root,segs,tipObj};}
- const mainRod=buildRod(-.31,.2,.72),rodRoot=mainRod.root,segs=mainRod.segs,tipObj=mainRod.tipObj;
+ const mainRod=buildRod(-.2,.14,.66),rodRoot=mainRod.root,segs=mainRod.segs,tipObj=mainRod.tipObj;
  // --- the second rod: a bottom rig parked in a holder on the other side, glow stick on the tip, its line to the bait
  const holder=createHolder();const holderRod=buildRod(.38,.30,.08);holderRod.root.visible=false;holderRod.root.rotation.set(-.95,.35,0,'YXZ');
  const glowMat=new T.MeshBasicMaterial({color:0xc8ff3a,toneMapped:false});const glow=new T.Mesh(new T.SphereGeometry(.014,8,6),glowMat);holderRod.tipObj.add(glow);
@@ -136,7 +154,7 @@ export function makeAngling(scene,kayak,env){
    if(line.lineOut<=1.35&&Math.hypot(lp.x-t.x,lp.z-t.z)<1.6)reelIn();
   }else{state.label='idle';state.reeling=0;}
   // --- rod pose: idle low, cocked back while charging, whipped forward on release, tracking the lure while fishing, bending with tension
-  let targetPitch=-.42,targetYaw=.3; // at rest the rod rises from the right hand across the frame toward the upper left, as it does in the concept
+  let targetPitch=-.42,targetYaw=.36; // at rest the rod rises from the right hand across the frame toward the upper left, as it does in the concept
   if(state.phase==='charging')targetPitch=-1.9+state.power*.25,targetYaw=-.7;
   else if(state.castAnim>0)targetPitch=-.12-state.castAnim*.45;
   else if(state.phase==='retrieve'||state.phase==='snagged'||state.phase==='flight'||state.phase==='bite'||state.phase==='fight'){const lp=state.flight||lurePosition(line);tmp.set(lp.x-kayak.state.x,0,lp.z-kayak.state.z);const yawWorld=Math.atan2(tmp.x,tmp.z);let rel=yawWorld-kayak.state.heading;rel=Math.atan2(Math.sin(rel),Math.cos(rel));targetYaw=clamp(rel-.15,-1.2,.8);targetPitch=-.2-line.tension*.25;}
