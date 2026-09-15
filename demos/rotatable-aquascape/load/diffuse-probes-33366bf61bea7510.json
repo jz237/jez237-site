@@ -1,0 +1,44 @@
+{
+  "version": 1,
+  "dimensions": [
+    15,
+    9,
+    7
+  ],
+  "minimum": [
+    -4.85,
+    0.35,
+    -2.15
+  ],
+  "maximum": [
+    4.85,
+    5.2,
+    2.15
+  ],
+  "samples": 1536,
+  "triangles": 8639431,
+  "bytes": 60480,
+  "coefficientRange": [
+    -1.2297577857971191,
+    1.1982442140579224
+  ],
+  "hits": 674074,
+  "seconds": 20.67,
+  "model": "single-bounce L1 diffuse irradiance; static geometry; three canopy samples; glass and alpha-cut fronds/moss excluded",
+  "sourceHashes": {
+    "bake-lighting.py": "250c098fd06cbc785c7ddef67327e8e71db92f51770c197211ac6b75dbe798ab",
+    "lib/CanopyLighting.json": "6489e217691f32bdc35b3b555879ed382770f46eb1ee15ac004aededcbc4e2af",
+    "lib/BakeExport.ts": "45f139627f01556cf97b82ef09f53f58da26e6af31289651f7ac9c945ef4f42a",
+    "lib/WaterDepth.ts": "ec5a7100b6f51eee084044c935ebc0cba549d3db6661c67024655c832e4f1179",
+    "lib/BotanicalPlants.ts": "c437122c47ac50459c7084d1473254fd0535a6ee429266db1185e0b4002f8099",
+    "lib/ScannedBranch.ts": "721f3bc6138bc0c9c3191c3827c6770deb4498b7ce662726402ad8a38af0f045",
+    "lib/ScannedRock.ts": "c82fcd9cfac2ba8b5f23f8f6d9a56579cbb3362107cb13482e03a1a2d29976f9",
+    "lib/ScannedHardscape.ts": "97e7caf7c5aa6e257de5f9cfc4b62552d55650278e18e93f289d4af4a7fdfa64",
+    "lib/EpiphyteMoss.ts": "3eede7a5e5c6f14e72914759734af560ddd87424f72420914c43f94800605d51",
+    "lib/TankSpace.ts": "7778538c968f10f4634c2527aa61e0292c272c695d464d0371b8a328ecee271f",
+    "lib/Substrate.ts": "2f32006d9075f596ca77cc8aaf46d9e0872e6176d36f728c448830f3adc328d7",
+    "lib/SubstrateVolume.ts": "56fd05a3a76161cf15866ca66f2888fb50664f25fb3b8aab8d0e60e141ea1a6b",
+    "lib/LeafSurface.ts": "b36a27bbb868c26fd62e00245ae6f30ccf1d45cc1545350e699539f69688d0d8"
+  },
+  "binarySHA256": "bcb3044724b9c7881466d0687e6ee822256424d0469b50fbc385d5dff8163807"
+}
