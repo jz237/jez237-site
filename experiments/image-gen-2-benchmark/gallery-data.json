@@ -13324,5 +13324,120 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-15-factual-infographic-factual-infographic-stenus-comma-the-sp",
+    "title": "Factual infographic: Stenus comma — The Spring-Loaded Sticky Lip",
+    "tests": "Archive-wide factual topic packet contains no prior Stenus comma or adhesive-labium subject. Direct-canvas portrait infographic at the supported 1024x1536 minimum; one dominant hero, eight substantive panels, four explanatory close-ups, exact six-legged anatomy, source-boundary footer, no unsupported speed claim. Generation requested the larger 2048x3072 portrait, but the exact routed model returned a valid high-quality 1024x1536 source; retained source adopted without regeneration.; archive_slot=2026-09-15T12:20; concept=stenus-comma-adhesive-labium-springtail-capture; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a museum-quality DIRECT-CANVAS portrait scientific infographic, 2048 x 3072 pixels, titled exactly ‘STENUS COMMA — THE SPRING-LOADED STICKY LIP’. This is the real rove beetle Stenus comma, not a fantasy insect and not a poster photographed in a room. Use polished natural-history illustration blended with credible macro-photography realism: tactile black punctured cuticle, two conspicuous orange spots on the short elytra, black legs, correct beetle segmentation, exactly six legs, large globular protruding compound eyes, fine setae, natural damp shoreline vegetation, restrained dark charcoal, amber-orange, reed-green and cool water-blue palette, excellent contrast and crisp legible typography. The insect and its biology occupy most of the canvas.\n\nINFORMATION ARCHITECTURE: one enormous dominant three-quarter macro hero of the 5.5–6 mm adult poised on a damp mossy water-edge substrate, with the extensible labium partly projected toward a tiny springtail; keep anatomy plausible and scale explicit. Surround and integrate EIGHT substantive illustrated panels, each with a short heading and no tiny paragraphs: (1) ‘A ROVE BEETLE’ — compact taxonomic ladder: Coleoptera → Staphylinidae → Stenus → S. comma, explicitly say ‘no standard English common name’; (2) ‘FIELD MARKS’ — dorsal diagnostic inset showing orange elytral spots, black legs, large eyes, and a 5.5–6 mm ruler silhouette; (3) ‘HEAD READY’ — large frontal close-up of compound eyes and the folded labium beneath the head; (4) ‘PRESSURE PROJECTS IT’ — clean sagittal head cutaway with a blue haemolymph-pressure arrow extending the elongated labium, no invented spring or muscle; (5) ‘STICKY TIP’ — scanning-electron-microscope-inspired macro close-up of the paired modified paraglossae as secretion-bearing adhesive pads, with a small droplet-film callout; (6) ‘FOUR-STEP CAPTURE’ — sequential silhouettes labeled DETECT → PROJECT → ADHERE → RETRIEVE, showing a springtail contacted by the pad and brought toward the mandibles, with no exact speed number; (7) ‘WHY SPRINGTAILS?’ — prey-context close-up showing a small springtail and its forked jumping organ, caption only ‘small, jump-capable prey’; (8) ‘WATERSIDE HUNTER’ — habitat vignette of damp margins beside a pond or reservoir, plus a cautious distribution note ‘recorded widely in England and Wales’.\n\nAdd FOUR especially clear explanatory close-ups: folded versus projected labium side-by-side at identical head scale; magnified paired adhesive pads; large compound-eye surface; and the contact interface between pad secretion and springtail cuticle. Use precise leader lines that terminate on the correct structures. Add a narrow evidence-boundary footer: ‘Species field marks and habitat: S. comma. Capture mechanism: shared across genus Stenus. Exact strike speed not shown.’ Include a small life-history note only: ‘Predaceous Stenus have studied waterside life histories; species-specific generation timing is omitted here.’ Keep labels concise, spelled correctly, and readable. No bibliography, URLs, citations, invented statistics, monster tongue, mammal-like saliva, extra limbs, humanoid pose, fake specimen pins, museum case, page curl, frame, desk, mockup, logos, or watermark. The final output is the finished flat infographic itself.",
+    "image": "images/2026-09-15-factual-infographic-factual-infographic-stenus-comma-the-sp.jpg",
+    "thumb": "thumbs/2026-09-15-factual-infographic-factual-infographic-stenus-comma-the-sp.webp",
+    "color": "#4d5146",
+    "date": "2026-09-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "stenus-comma-adhesive-labium-springtail-capture",
+      "imageSha256": "ea05889526b5c66eaec71456f9bdbbe5a7a6c5b94cb4bc15f233bcac539df96f",
+      "imageDHash": "10c2b11ddc4d7c72"
+    },
+    "factualInfographic": {
+      "topic": "How Stenus comma uses an extensible adhesive labium to capture springtails",
+      "description": "Species identity, waterside habitat, diagnostic adult form, scale, predatory role, and the genus-defining haemolymph-driven labial prey-capture apparatus with adhesive paraglossal pads.",
+      "sourceNote": "Scientific Reports https://pmc.ncbi.nlm.nih.gov/articles/PMC5387741/; Harvard Museum of Comparative Zoology https://mczbase.mcz.harvard.edu/name/Stenus%20comma; NatureSpot https://www.naturespot.org/species/stenus-comma; Netherlands Journal of Zoology https://brill.com/view/journals/njz/51/4/article-p371_1.xml. Verified scope: taxonomy, diagnostic form and scale, waterside habitat, predatory ecology, adhesive labial mechanism, and conservative life-history context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-15T12:20:00-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Scientific Reports",
+            "title": "Cretaceous origin of the unique prey-capture apparatus in mega-diverse genus: stem lineage of Steninae rove beetles discovered in Burmese amber",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC5387741/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Harvard Museum of Comparative Zoology",
+            "title": "Taxon Details: Stenus comma",
+            "sourceType": "museum",
+            "url": "https://mczbase.mcz.harvard.edu/name/Stenus%20comma"
+          },
+          {
+            "id": "S3",
+            "publisher": "NatureSpot",
+            "title": "Stenus comma",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.naturespot.org/species/stenus-comma"
+          },
+          {
+            "id": "S4",
+            "publisher": "Netherlands Journal of Zoology",
+            "title": "Life History Traits in Different Life Forms of Predaceous Stenus Beetles, Living in Waterside Environments",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://brill.com/view/journals/njz/51/4/article-p371_1.xml"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Stenus comma is an accepted species of rove beetle in the family Staphylinidae; no English common name is asserted.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "The adult is approximately 5.5-6 mm long, primarily dark, with black legs and conspicuous orange spots on the elytra.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Stenus comma is associated with the edges of water bodies and is fairly widespread in England and Wales.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Stenus species are obligate predators in ground-based microhabitats and vegetation and prey particularly on springtails.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "All Stenus share large, globular, protruding compound eyes associated with active predation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The Stenus prey-capture apparatus is an elongated labium projected toward prey by haemolymph pressure.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "At the tip of the labium, the paraglossae are modified into sticky pads that produce adhesive secretion.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A scientifically conservative mechanism sequence may show prey detection, labial projection, adhesive-pad contact, and prey retrieval toward the mouth, without an exact speed label.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Predaceous Stenus beetles have published life-history variation associated with waterside environments; species-specific generation duration is not established here and is omitted.",
+            "sourceIds": [
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
