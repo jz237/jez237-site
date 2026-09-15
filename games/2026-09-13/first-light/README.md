@@ -18,6 +18,26 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
 
+## Real trees (v0.63.0)
+
+On Ultra the near bank is no longer flat cards. Four trees are built in Blender from a seeded script
+(`source/blender/build_trees.py`): a white pine and a spruce as whorled branches drooping outward, an
+oak and a maple as forked trunks that branch four times into narrow forest-grown crowns, with needle
+and leaf sprays on crossed cards at the twig ends. They are instanced and re-pointed at the nearest
+shore trees a few times a second, so the cost is fixed however large the wood, and each tree carries
+its own tint so a stand is not one flat green. The flat cards already shrank away within sixty metres
+of the eye, and on Ultra that fade moves out to between ninety-two and a hundred and twenty-eight
+metres, which is exactly where the real trees stop, so the handover leaves no gap and no doubling.
+
+Two fixes came out of the work. Every per-tier lookup table (water segments, reflection size, ripple
+resolution, depth-of-field taps) had four keys and no `ultra`, so the new tier sized its water
+geometry and reflection target `undefined` and painted a dark slab across the lake; all four now
+answer for every tier and a test holds them to it. And the sky-lean that makes a flat card light like
+a canopy is now per material: a card that stands for a whole tree still leans right over to the sky,
+while a leaf cluster on a real branch keeps most of its own normal, so an Ultra crown shades itself
+instead of glowing a flat pale green. Phones are untouched throughout: the tier ceiling stops them at
+High, and every default is what it was.
+
 ## Ultra and zoom (v0.62.0)
 
 The desktop push begins. There is a fifth quality tier above High, **Ultra**, which only a desktop can reach: the adaptive setting now takes a ceiling, and a touch device stops at High however fast it runs, so nothing here changes what a phone renders. Ultra doubles the pixel ratio cap and takes the shadow map to 4096; the tiers that follow it (real trees on the near bank, a textured ridge, volumetric mist) hang off this switch.
