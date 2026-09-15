@@ -1,0 +1,19 @@
+{
+  "granite": {
+    "path": "../terrain/coastal-granite-v1.png",
+    "generator": "Built-in image_gen",
+    "prompt": "Production PBR game texture, a perfectly seamless tileable photorealistic coastal granite cliff wall albedo texture. Front-on orthographic view filling the entire square. Cool grey and pale warm grey fractured granite, large angular rock facets, deep thin dark fissures, weathered diagonal mineral seams, subtle ochre lichen and tiny sparse green moss only in crevices. Highly varied natural rock masses rather than repeating horizontal sediment stripes. Fine grain and cracks, realistic neutral colors. Flat diffuse overcast lighting, no directional shadows, no perspective, no horizon, no objects, no ground plane, no borders, no text. This will wrap onto actual 3D coastal cliffs in a jet ski game; broad rock fracture pattern must remain visible at a distance. Generate a sharp 1536 x 1536 texture."
+  },
+  "canopies": {
+    "paths": [
+      "first-light-oak.webp",
+      "first-light-maple.webp"
+    ],
+    "origin": "Existing generated First Light images copied byte-for-byte from Git commit 8bf0a3fd777974e8d7eaf0714c9369539962de3c",
+    "sourcePaths": [
+      "games/2026-09-13/first-light/assets/trees/oak.webp",
+      "games/2026-09-13/first-light/assets/trees/maple.webp"
+    ],
+    "changes": "No image edits; alpha-tested crossed cards provide canopy depth. Source game files are unchanged."
+  }
+}

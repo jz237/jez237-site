@@ -1,3 +1,4 @@
+import {canopyKinds,canopyGeometry,canopyMaterial} from './canopy-cards.js';
 import {gustGLSL} from './wind-gusts.js';
 import * as T from './vendor/three.module.js';
 import {motoPine} from './moto-pine.js';
@@ -33,16 +34,16 @@ function rng(seed){return()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;retu
 function tree(kind,seed){
  const wood=new Shape(),leaf=new Shape(),random=rng(seed);
  if(kind==='palm'){
-  const top=new T.Vector3(.8,11.2,.3);
-  for(let i=0;i<14;i++){const t=i/14,u=(i+1)/14;wood.tube([.8*t*t,11.2*t,.3*t],[.8*u*u,11.2*u,.3*u],.26-t*.11,.26-u*.11,9);}
-  for(let j=0;j<20;j++){
-   const a=j*2.399+(random()-.5)*.25,len=(j<4?2.4:4.2)+random()*1.8,down=j<4?-1.6:.4+random()*.8;
+  const top=new T.Vector3(1.35,11.2,.6);
+  for(let i=0;i<14;i++){const t=i/14,u=(i+1)/14;wood.tube([1.35*t*t,11.2*t,.6*t],[1.35*u*u,11.2*u,.6*u],.26-t*.11,.26-u*.11,9);}
+  for(let j=0;j<24;j++){
+   const a=j*2.399+(random()-.5)*.25,len=(j<4?2.4:4.4)+random()*2.3,down=j<4?-1.6:.4+random()*.8;
    const path=t=>top.clone().add(new T.Vector3(Math.cos(a)*len*t,Math.sin(t*Math.PI)*1.3-t*t*(1.9+down),Math.sin(a)*len*t));
    for(let k=0;k<24;k++){
     const t=k/24,u=(k+1)/24,p=path(t),q=path(u);wood.tube(p.toArray(),q.toArray(),.045*(1-t)+.006,.045*(1-u)+.006,4);
     if(k<2)continue;
     for(const side of [-1,1]){
-     const reach=Math.sin(t*Math.PI)*1.28+.10;
+     const reach=Math.sin(t*Math.PI)*1.58+.12;
      const tip=p.clone().add(new T.Vector3(Math.cos(a+.5)*.28-Math.sin(a)*side*reach,-.13-reach*.26,Math.sin(a+.5)*.28+Math.cos(a)*side*reach));
      leaf.leaf(p.toArray(),tip.toArray(),.13+Math.sin(t*Math.PI)*.11,a, .72+random()*.36);
     }
@@ -111,7 +112,7 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
   // Spatial batches let small devices discard distant groves before touching water.
   if(points.length>0&&!points[0].batched){const bins=new Map();for(const p of points){const key=Math.floor(p.x/64)+','+Math.floor(p.z/64);if(!bins.has(key))bins.set(key,[]);bins.get(key).push({...p,batched:true});}const group=new T.Group();root.add(group);for(const bin of bins.values()){const child=instances(g,m,bin);group.add(child);}return group;}
   const mesh=new T.InstancedMesh(g,m,points.length),dummy=new T.Object3D();mesh.userData.dynamic=true;
-  points.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(p.rx??0,p.angle,p.rz??0);dummy.scale.set(p.scale,p.scale*(p.stretch??1),p.scale);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);if(m.vertexColors)mesh.setColorAt(i,new T.Color().setScalar(.78+p.tint*.3));});
+  points.forEach((p,i)=>{dummy.position.set(p.x,p.y,p.z);dummy.rotation.set(p.rx??0,p.angle,p.rz??0);dummy.scale.set(p.scale,p.scale*(p.stretch??1),p.scale);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);if(m.vertexColors||m.userData.photoCanopy)mesh.setColorAt(i,new T.Color().setScalar(.78+p.tint*.3));});
   mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=true;mesh.receiveShadow=true;root.add(mesh);meshes.push(mesh);mesh.userData.foliageCenter=mesh.boundingSphere.center.clone();mesh.userData.foliageRadius=mesh.boundingSphere.radius;return mesh;
  }
  const pineWood=motoPine?new T.MeshStandardMaterial({map:motoPine.bark,roughness:.94}):wood;if(motoPine){materials.push(pineWood);wind(pineWood,0);pineMat.map=motoPine.bough;pineMat.color.setHex(0xd3dfc7);pineMat.alphaTest=.42;pineMat.alphaToCoverage=true;}
@@ -133,6 +134,16 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
   }
   if(y>1.5&&y<3.5&&slope<.3&&logPoints.length<16)logPoints.push({...common,scale:.6+random()*.7});
  }
+ // Pebbles occupy dry beach above the navigable water, in loose natural clusters.
+ // Their small scale leaves the terrain's existing hull/collision behavior intact.
+ if(!cold&&!urban)for(let i=0;i<2000;i++){
+  const x=(random()-.5)*610,z=(random()-.5)*610,y=(course.renderGround||course.ground)(x,z);
+  if(y<.45||y>2.5||routeDistance(course,x,z)<18||Math.sin(x*.11+z*.07)<-.15)continue;
+  for(let j=0;j<3;j++){
+   const px=x+(random()-.5)*2,pz=z+(random()-.5)*2,py=(course.renderGround||course.ground)(px,pz);
+   if(py<.35)continue;rockPoints.push({x:px,y:py,z:pz,angle:random()*6.28,scale:.08+random()*.29,stretch:.5+random()*.45,tint:random()});
+  }
+ }
  // Companion saplings and mature trees create depth around the established
  // anchors, as in Pine Ridge's groves, using our own lightweight botanical meshes.
  for(const kind of ['palm','pine','broad'])for(const anchor of [...points[kind]]){
@@ -146,7 +157,21 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
  const nearest=Object.entries(points).flatMap(([kind,rows])=>rows.map(p=>({kind,p,d:routeDistance(course,p.x,p.z)}))).sort((a,b)=>a.d-b.d).slice(0,600);
  for(const kind of Object.keys(points))points[kind]=nearest.filter(row=>row.kind===kind).map(row=>row.p);
  for(const kind of ['palm','pine','broad']){
-  if(!points[kind].length)continue;const model=kind==='pine'&&motoPine?{wood:motoPine.wood.clone(),leaf:motoPine.leaf.clone()}:tree(kind,473+kind.length);
+  if(!points[kind].length)continue;
+  if(kind==='broad'&&canopyKinds.length){
+   for(let k=0;k<canopyKinds.length;k++){
+    const photo=canopyKinds[k],m=canopyMaterial(photo);m.userData.photoCanopy=true;wind(m,.025);
+    const before=m.onBeforeCompile;m.onBeforeCompile=shader=>{before(shader);shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_begin>','#include <normal_fragment_begin>\nnormal=normalize(mix(normal,(viewMatrix*vec4(0.,1.,0.,0.)).xyz,.75));');};m.customProgramCacheKey=()=> 'coastal-photo-canopy-'+k;materials.push(m);
+    const rows=points.broad.filter((_,i)=>i%canopyKinds.length===k).map(p=>({...p,scale:p.scale*8.5,stretch:.85+random()*.25}));
+    // Small canopy clusters provide layered understory without a new leaf mesh.
+    for(const anchor of points.broad.filter((_,i)=>i%canopyKinds.length===k))for(let j=0;j<2;j++){
+     const a=random()*6.28,r=2+random()*3.5,x=anchor.x+Math.cos(a)*r,z=anchor.z+Math.sin(a)*r,y=course.ground(x,z);
+     if(y>1.8&&routeDistance(course,x,z)>24)rows.push({...anchor,x,y:y-.05,z,scale:1.8+random()*2.3,stretch:.75+random()*.3});
+    }
+    instances(canopyGeometry(photo.aspect),m,rows);
+   }continue;
+  }
+  const model=kind==='pine'&&motoPine?{wood:motoPine.wood.clone(),leaf:motoPine.leaf.clone()}:tree(kind,473+kind.length);
   instances(model.wood,kind==='pine'?pineWood:wood,points[kind]);instances(model.leaf,kind==='palm'?palmMat:kind==='pine'?pineMat:broadMat,points[kind]);
  }
  const tuft=new Shape();for(let i=0;i<24;i++){
@@ -178,7 +203,7 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
  const contactTexture=new T.CanvasTexture(contactCanvas),contactMaterial=new T.MeshBasicMaterial({map:contactTexture,transparent:true,opacity:.5,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-1});materials.push(contactMaterial);
  const cp=[],cu=[];for(const point of Object.values(points).flat()){const radius=3.2*point.scale;for(const [x,z] of [[-1,-1],[-1,1],[1,-1],[1,-1],[-1,1],[1,1]]){const px=point.x+x*radius,pz=point.z+z*radius;cp.push(px,course.ground(px,pz)+.035,pz);cu.push((x+1)/2,(z+1)/2);}}
  const contactGeometry=new T.BufferGeometry();contactGeometry.setAttribute('position',new T.Float32BufferAttribute(cp,3));contactGeometry.setAttribute('uv',new T.Float32BufferAttribute(cu,2));geometries.push(contactGeometry);const contacts=new T.Mesh(contactGeometry,contactMaterial);contacts.userData.dynamic=true;contacts.renderOrder=1;root.add(contacts);
- root.userData.sceneryCounts={trees:Object.values(points).reduce((n,p)=>n+p.length,0),grass:grassPoints.length,pebbles:rockPoints.length,driftwood:logPoints.length};
+ root.userData.sceneryCounts={photographicCanopies:canopyKinds.length?points.broad.length:0,trees:Object.values(points).reduce((n,p)=>n+p.length,0),grass:grassPoints.length,pebbles:rockPoints.length,driftwood:logPoints.length};
  return{update(t,storm,quality,budget=1,camera=null,second=null){time.value=t;strength.value=storm;distance.value=(quality==='low'?200:quality==='medium'?280:380)*budget;
  if(camera)for(const m of meshes){const c=m.userData.foliageCenter,r=m.userData.foliageRadius;const d=Math.min(Math.hypot(camera.x-c.x,camera.z-c.z),second?Math.hypot(second.x-c.x,second.z-c.z):Infinity);m.visible=d<distance.value+r+45;}
  if(grassMesh)grassMesh.visible=quality!=='low';},dispose(){contacts.removeFromParent();contactTexture.dispose();for(const m of meshes){m.removeFromParent();m.dispose();}for(const g of new Set(geometries))g.dispose();for(const m of materials)m.dispose();}};
