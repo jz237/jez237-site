@@ -1,11 +1,12 @@
+import {rootLeafCurrent,setRootLeafMotion} from './RootLeafCurrent.ts';
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 import {buildRootSystem} from './RootAnatomy.ts';
 import {leafSurfaceMaps} from './LeafSurface.ts';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 
-/** Optional, static teaching specimen. All surface particles are instanced. */
-export function buildRootCutaway(){
+/** Optional teaching specimen. Only the exposed blades flex; grains and buried roots stay fixed. */
+export function buildRootCutaway(time={value:0},flow={value:1}){
  const group=new T.Group();let seed=817;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
  const top=(x:number,z:number)=>3.28+.035*Math.sin(x*2.3+z*1.8)+.022*Math.sin(z*7+x*4);
  const rockMaterial=new T.MeshStandardMaterial({roughness:.92});
@@ -41,6 +42,7 @@ export function buildRootCutaway(){
  placements.forEach((g,i)=>{dummy.position.copy(g.position);dummy.scale.copy(g.scale);dummy.rotation.copy(g.rotation);dummy.updateMatrix();grains.setMatrixAt(i,dummy.matrix);grains.setColorAt(i,g.color);});grains.instanceMatrix.needsUpdate=true;group.add(grains);
  const maps=leafSurfaceMaps('sword');group.userData.ownedTextures=Object.values(maps);
  const leafMat=new T.MeshStandardMaterial({color:0x709b29,map:maps.color,bumpMap:maps.bump,bumpScale:.012,roughnessMap:maps.roughness,roughness:.83,side:T.DoubleSide});
+ rootLeafCurrent(leafMat,time,flow);
  const leafPieces:T.BufferGeometry[]=[],veinPieces:T.BufferGeometry[]=[];
  for(const [x,z,size,grassy] of [[-.95,1.035,1,0],[1.16,1.02,.76,1]]){
   const crown=V(x,top(x,z),z),roots=buildRootSystem(grassy?381:733);roots.position.copy(crown);roots.scale.set(size*.98,size*1.04,.75);group.add(roots);
@@ -52,12 +54,14 @@ export function buildRootCutaway(){
     const t=j/28,center=crown.clone().add(V(Math.sin(a)*reach*t*t,high*(t-.12*t*t),Math.cos(a)*reach*t*t)),w=width*Math.pow(Math.sin(Math.PI*t),.85)*(t<.18?.15+.85*t/.18:1);mid.push(center);
     for(let k=0;k<=8;k++){const u=k/8*2-1,point=center.clone().addScaledVector(side,u*w);point.y+=Math.abs(u)*w*.22+Math.sin(t*17+i)*u*u*.022;positions.push(point.x,point.y,point.z);uv.push(k/8,t);if(j<28&&k<8){const n=j*9+k;indices.push(n,n+9,n+1,n+1,n+9,n+10);}}
    }
-   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();leafPieces.push(g);
-   veinPieces.push(new T.TubeGeometry(new T.CatmullRomCurve3(mid),24,grassy?.002:.004,5,false));
+   const g=new T.BufferGeometry();g.setAttribute('position',new T.Float32BufferAttribute(positions,3));g.setAttribute('uv',new T.Float32BufferAttribute(uv,2));g.setIndex(indices);g.computeVertexNormals();
+   const phase=i*1.73+x*.63,speed=.72+(i%5)*.09,amplitude=grassy?.050:.032;
+   setRootLeafMotion(g,crown.y,phase,speed,amplitude);leafPieces.push(g);
+   const vein=new T.TubeGeometry(new T.CatmullRomCurve3(mid),24,grassy?.002:.004,5,false);setRootLeafMotion(vein,crown.y,phase,speed,amplitude);veinPieces.push(vein);
    const stalk=new T.Mesh(new T.ConeGeometry(.025*size,.25*size,7),new T.MeshStandardMaterial({color:0x95995b,roughness:.78}));stalk.position.copy(crown).add(V(Math.sin(a)*.028,.09,Math.cos(a)*.028));group.add(stalk);
   }
  }
- const leaves=mergeGeometries(leafPieces)!,veins=mergeGeometries(veinPieces)!;leafPieces.forEach(g=>g.dispose());veinPieces.forEach(g=>g.dispose());group.add(new T.Mesh(leaves,leafMat),new T.Mesh(veins,new T.MeshStandardMaterial({color:0x899d43,roughness:.8})));
+ const leaves=mergeGeometries(leafPieces)!,veins=mergeGeometries(veinPieces)!;leafPieces.forEach(g=>g.dispose());veinPieces.forEach(g=>g.dispose());const veinMat=new T.MeshStandardMaterial({color:0x899d43,roughness:.8});rootLeafCurrent(veinMat,time,flow);group.add(new T.Mesh(leaves,leafMat),new T.Mesh(veins,veinMat));
  // Curled detritus fragments lie on the gravel, with visible central ribs.
  const debris=new T.Group(),debrisMat=new T.MeshStandardMaterial({color:0x72502a,roughness:.97,side:T.DoubleSide});
  for(let i=0;i<11;i++){

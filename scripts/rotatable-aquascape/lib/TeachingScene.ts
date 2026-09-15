@@ -23,7 +23,7 @@ export class TeachingScene{
  private specimen:Tetra3D|null=null;private texture:T.Texture;private leaf:T.InstancedMesh|undefined;
  private labelMatrix=new T.Matrix4();private labelsDirty=true;private labelWidth=0;private labelHeight=0;
  private projected=new T.Vector3();private dummy=new T.Object3D();
- private phase=0;private impeller:T.Group|null=null;private rootStudy:T.Group|null=null;
+ private rootTime={value:0};private rootFlow={value:1};private phase=0;private impeller:T.Group|null=null;private rootStudy:T.Group|null=null;
  private grazerAtlas?:T.Texture;
  private savedVisibility=new Map<T.Object3D,boolean>();
  constructor(world:T.Scene,host:HTMLElement,plants:T.Object3D[],substrate:T.Object3D[],texture:T.Texture,housing:T.Object3D[]=[],grazerAtlas?:T.Texture){
@@ -51,7 +51,7 @@ export class TeachingScene{
   const group=buildRootSystem();group.position.copy(origin);group.scale.setScalar(scale*.5);this.content.add(group);return group;
  }
  private underground(){
-  this.content.add(buildRootCutaway());
+  this.content.add(buildRootCutaway(this.rootTime,this.rootFlow));
   if(this.step===2){
    // Transport annotations are separate from the material specimen and have no physical scale.
    this.path([V(-1.9,3.35,1.3),V(-1.6,2.95,1.3),V(-1.4,2.65,1.3)],0x7dd4e9,.025);
@@ -130,7 +130,7 @@ export class TeachingScene{
   const target=this.mode==='layers'?this.separation:0;
   if(this.mode==='layers')for(const [o,original] of this.originals){const offset=this.plants.includes(o)?target*1.3:-target*.48;o.position.y=T.MathUtils.damp(o.position.y,original.position.y+offset,5,viewDt);o.updateMatrix();}
   if(this.mode==='layers'){for(const o of this.housing)o.visible=target<.02&&(this.savedVisibility.get(o)??true);for(const o of this.content.children)if(o.userData.rootTemplate)o.visible=target>.02;}
-  this.phase+=dt;this.shrimpStudy?.poseSpecimen(dt);if(this.coryStudy)this.poseCory(dt);
+  this.phase+=dt;this.rootTime.value=this.phase;if(this.mode==='underground')this.rootFlow.value=T.MathUtils.damp(this.rootFlow.value,T.MathUtils.clamp(flow/65,0,1.35),3,dt);this.shrimpStudy?.poseSpecimen(dt);if(this.coryStudy)this.poseCory(dt);
   if(this.impeller)this.impeller.rotation.y+=dt*flow*.14;
   this.specimen?.update(this.phase,.4,this.texture,.65,.5,1,dt,.6);
   const dummy=this.dummy;for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.arrows.count;i++){placeFlowArrow(dummy,path.curve,(path.phase+i/path.arrows.count)%1);dummy.updateMatrix();path.arrows.setMatrixAt(i,dummy.matrix);}path.arrows.instanceMatrix.needsUpdate=true;}
