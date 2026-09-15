@@ -44,7 +44,8 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  col+=sunColor*(pow(s,30.)*(.10+.30*low)+pow(s,70.)*.30*low)*(1.-night)*up*sunTerms;
  // the low sun's glow: a wide warm aureole and a tighter halo, then a softer, larger disc
  col+=sunColor*(pow(s,24.)*.10+pow(s,50.)*.18+pow(s,120.)*.8)*lowSun*(1.-night)*up*(1.-cloud*.6)*sunTerms;
- col+=sunColor*pow(s,mix(1400.,500.,lowSun))*mix(4.,6.,lowSun)*up*(1.-cloud*.8)*sunTerms;
+ // the disc itself: small and intense (about a degree across), the halo is the bloom's job
+ col+=sunColor*pow(s,mix(9000.,4000.,lowSun))*mix(9.,14.,lowSun)*up*(1.-cloud*.8)*sunTerms;
  vec3 c1=col;col=mix(col,mix(hazeColor,sunColor*.85,pow(s,8.)*.7),lowSun*pow(1.-y,4.)*.22*(1.-night)*pow(az,2.)*(1.-envPass*.7));vec3 c2=col;
  vec2 flow=vec2(cos(windDir),sin(windDir))*time*(.003+wind*.018);
  // two decks: broad stratocumulus clumps that keep their size down to the horizon, and a finer layer above

@@ -32,7 +32,7 @@ export function makeShoreScenery(scene,bathy){
   if(y>.15&&y<9&&shore<45&&slope<.75&&cluster>.22&&grass.length<budget.grass)grass.push({...common,y,scale:.6+random()*1.1});
   if(y<.12&&y>-.7&&reeds.length<budget.reeds&&noise(x*.05+2,z*.05)>.5)reeds.push({...common,y:y-.02,scale:.75+random()*.6});
  }
- const pineNear=tree('pine',473,.75),broadNear=tree('broad',811,.75),pineFar=tree('pine',921,.32),broadFar=tree('broad',553,.32);
+ const pineNear=tree('pine',473,1.0),broadNear=tree('broad',811,.75),pineFar=tree('pine',921,.32),broadFar=tree('broad',553,.32);
  instances(pineNear.wood,wood,near.pine);instances(pineNear.leaf,pineMat,near.pine);
  instances(broadNear.wood,wood,near.broad);instances(broadNear.leaf,broadMat,near.broad);
  instances(pineFar.wood,wood,far.pine,false);instances(pineFar.leaf,farPine,far.pine,false);
