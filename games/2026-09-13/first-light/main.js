@@ -18,7 +18,7 @@ import {sunDirection,sunEvents} from './sun-position.js';
 import {sampleSwell,windAmplitude} from './lake-waves.js';
 import {impactHeight,addImpact} from './surface-impulses.js';
 import {wakeHeight} from './wake-field.js';
-import {waterLevel} from './land-materials.js';
+import {waterLevel,lakeLighting} from './land-materials.js';
 import {worldFromFrame,halfWidth,shorePoint} from './lake-shape.js';
 import {waterTempF,waterTempC,seasonOptics,seasonOf,tempFactor,pressureFactor,pressureWord,closedSeasons,closedNote,seasonLine} from './season.js';
 import {fetchLive,mapOpenMeteo,toWeatherTarget} from './weather-link.js';
@@ -65,8 +65,8 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.45.0';
-const coolShadow=new T.Color(.38,.42,.66);
+export const VERSION='0.46.0';
+const coolShadow=new T.Color(.36,.48,.64);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
 const hud=mountHud({
@@ -346,7 +346,7 @@ function tossPebble(cx,cy){ray.setFromCamera(new T.Vector2(cx/innerWidth*2-1,-(c
 function addRipple(x,z,kind='pebble'){const k={pebble:[.13,.012,2.4],splash:[.3,.03,3.4],dimple:[.08,-.004,0],boil:[.5,.02,2.2]}[kind]||[.15,.012,2.4];lake.addRipple(x,z,k[0],k[1]);if(k[2])addImpact(x,z,simTime,k[2]);}
 touch=mountTouchControls({onTap:what=>{if(what==='anchor')pressed.KeyX=true;else if(what==='lenses')setPolarized(!polarizedTarget);else if(what==='menu')toggleMenu();else if(what==='twitch')pressed.KeyF=true;else if(what==='rig')nextRig();else if(what==='cam')toggleLureCam();else if(what==='holder')pressed.KeyH=true;}});touch.setLeftHanded(settings.touchLeft);
 // --- per-frame simulation
-let conditionsClock=0,lastElevation=0,lastSun=null,sunOcclusion=1;const lightOverride={env:1,sun:1,ambient:1,mist:1}; // QA: persistent light scales applied after every conditions update
+let conditionsClock=0,lastElevation=0,lastSun=null,sunOcclusion=1;const lightOverride={env:1,sun:1,ambient:1,mist:1,glint:1}; // QA: persistent light scales applied after every conditions update
 // The tree line blocks a low sun: march from the kayak along the sun's bearing to the first land and take the angle of the tree tops there; while the sun sits below it the direct light is gone and only the sky lights the boat, which is why the hero's deck is in shadow with the sun on the horizon
 function sunBlockedBy(sd){let d=0,top=0;for(let i=1;i<=40;i++){d=i*12;const x=kayak.state.x+sd.x*d,z=kayak.state.z+sd.z*d;const h=bathy.height(x,z);if(h>.2){top=h+15;break;}if(i===40)return {angle:0,occlusion:1};}
  const angle=Math.atan2(top,d)*180/Math.PI;const occ=Math.max(0,Math.min(1,(sd.elevation-(angle-1.2))/2.4));return {angle:+angle.toFixed(2),dist:d,occlusion:+(occ*occ*(3-2*occ)).toFixed(3)};}const sunScreenV=new T.Vector3(),camDirV=new T.Vector3();
@@ -361,9 +361,9 @@ function step(dt){
  stepTutorialFrame(dt);stepSonar(dt);if(mode==='aquarium')stepAquarium(dt);if(mode==='replay')stepReplay(dt);stepCoach(dt);if(mode==='map'){mapClock+=dt;if(mapClock>.1){mapClock=0;drawMap();}}if(pressed.KeyN&&(mode==='playing'))toggleSonar();
  if(session&&!session.closed&&mode==='playing'){if(!session.over)sessionTick(session,dt);else session.elapsed+=dt;hud.setSession({label:(VARIANTS[session.variant]||VARIANTS.dawn).label,target:targetName(session),remaining:formatRemaining(remaining(session)),score:session.score});const busy=angling.state.phase==='fight'||angling.state.phase==='bite'||angling.state.phase==='landed';if(session.over&&(!busy||session.elapsed>20*60+75))closeCurrentSession();}
  const sd=sunDirection(clock.ms);lastElevation=sd.elevation;lastSun=sd;treeline.setSun(sd,Math.max(0,Math.min(1,1-(sd.elevation-6)/14))*(1-(lastPalette?lastPalette.night:0)));env.light=Math.max(0,Math.min(1,(sd.elevation+2)/12));const palette=skyPalette(sd.elevation,weather.cloud);lastPalette=palette;sky.apply(palette,sd,sd.elevation,weather.cloud);
- sun.position.set(kayak.state.x+sd.x*320,Math.max(12,sd.y*320),kayak.state.z+sd.z*320);sun.target.position.set(kayak.state.x,0,kayak.state.z);{const sb=sunBlockedBy(sd);sunOcclusion=sb.occlusion;}sun.intensity=palette.sunIntensity*sunOcclusion;sun.color.setRGB(...palette.sunColor);sun.visible=palette.sunIntensity*sunOcclusion>.01;
+ sun.position.set(kayak.state.x+sd.x*320,Math.max(12,sd.y*320),kayak.state.z+sd.z*320);sun.target.position.set(kayak.state.x,0,kayak.state.z);{const sb=sunBlockedBy(sd);sunOcclusion=sb.occlusion;}sun.intensity=palette.sunIntensity*sunOcclusion;skyColors.sunGlint.value=sunOcclusion*lightOverride.glint;lakeLighting.sunHigh.value=sunOcclusion*Math.max(0,Math.min(1,(sd.elevation-2)/16));sun.color.setRGB(...palette.sunColor);sun.visible=palette.sunIntensity*sunOcclusion>.01;
  ambient.intensity=palette.ambientIntensity*(gpu.envMode==='none'?2.4:1);ambient.color.setRGB(...palette.horizon).multiplyScalar(1.15);ambient.groundColor.setRGB(.26,.23,.17);{const cool=1-Math.min(1,Math.max(0,(sd.elevation-2)/16));ambient.color.lerp(coolShadow,.85*cool*(1-palette.night));} // low sun: warm light, cool shadows
- fogAir.color.setRGB(...palette.fogColor);fogAir.density=palette.fogDensity;const sc=lake.mat.uniforms.waterScatter.value;fogWater.density=underwaterFogDensity(lake.mat.uniforms.clarity.value,sc.y);fogWater.color.setRGB(...underwaterFogColor([sc.x,sc.y,sc.z],Math.max(0,Math.min(1,sd.elevation/18)),palette.night));{const lowSun=Math.max(0,Math.min(1,1-(sd.elevation-2)/18));scene.environmentIntensity=(.35+.45*(1-palette.night))*(lake.underwater?.35:1)*(1-.5*lowSun*(1-palette.night))*lightOverride.env;sun.intensity*=lightOverride.sun;ambient.intensity*=lightOverride.ambient;} // the sky's own map is all sun-side horizon at first light; leaning on it paints every shaded face peach, so the cool hemisphere carries the shade insteadif(lake.underwater){ambient.intensity*=.5;ambient.color.multiply(new T.Color(.55,.85,.7));}
+ fogAir.color.setRGB(...palette.fogColor);fogAir.density=palette.fogDensity;const sc=lake.mat.uniforms.waterScatter.value;fogWater.density=underwaterFogDensity(lake.mat.uniforms.clarity.value,sc.y);fogWater.color.setRGB(...underwaterFogColor([sc.x,sc.y,sc.z],Math.max(0,Math.min(1,sd.elevation/18)),palette.night));{const lowSun=Math.max(0,Math.min(1,1-(sd.elevation-2)/18));scene.environmentIntensity=(.35+.45*(1-palette.night))*(lake.underwater?.35:1)*(1-.15*lowSun*(1-palette.night))*lightOverride.env;sun.intensity*=lightOverride.sun;ambient.intensity*=lightOverride.ambient;} // the sky's own map is all sun-side horizon at first light; leaning on it paints every shaded face peach, so the cool hemisphere carries the shade insteadif(lake.underwater){ambient.intensity*=.5;ambient.color.multiply(new T.Color(.55,.85,.7));}
  sky.mesh.position.copy(camera.position);ridge.update(camera.position,palette,sd,sd.elevation);refreshEnvironment(sd.elevation,weather.cloud);mist.update(simTime,camera.position,sd.elevation,weather.wind,palette,sd);
  {const kp={x:kayak.state.x,z:kayak.state.z};for(const e of wildlife.update(dt,{t:simTime,elevation:sd.elevation,wind:weather.wind,kayak:kp,camera:camera.position,ripple:(x,z,k)=>addRipple(x,z,k)})){if(e==='geese')ambience.shot('geese',.55);else if(e==='takeoff'){const wd=wildlife.state(kp).heron.dist||30;ambience.shot('heron',.9*Math.max(.2,1-wd/60));}}
   ambience.tick(dt,{elevation:sd.elevation,wind:weather.wind,speed:kayak.state.speed,hour:hourOf(clock.ms)});

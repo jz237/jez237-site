@@ -15,7 +15,7 @@ import {rippleGLSL,makeRippleField} from './ripple-field.js';
 import {configureTerrainMaterial,shoreline,waterLevel,lakeLighting} from './land-materials.js';
 import {TERRAIN_SPAN} from './bathymetry.js';
 export const shared={seaLevel:waterLevel,time:{value:0},wind:{value:0},windAmp:{value:0},windDir:{value:0},rain:{value:0},focus:{value:new T.Vector4(0,0,0,0)},terrainMap:{value:waterDetail},terrainSpan:{value:TERRAIN_SPAN}};
-export const skyColors={night:{value:0},daylight:{value:1},skyHorizon:{value:new T.Color(.66,.77,.86)},skyZenith:{value:new T.Color(.16,.36,.72)},sun:{value:new T.Vector3(0,1,0)},sunColor:{value:new T.Color(1,.9,.7)},fogColor:{value:new T.Color(.7,.78,.84)},fogDensity:{value:.0016}};
+export const skyColors={night:{value:0},daylight:{value:1},sunGlint:{value:1},skyHorizon:{value:new T.Color(.66,.77,.86)},skyZenith:{value:new T.Color(.16,.36,.72)},sun:{value:new T.Vector3(0,1,0)},sunColor:{value:new T.Color(1,.9,.7)},fogColor:{value:new T.Color(.7,.78,.84)},fogDensity:{value:.0016}};
 export const lakeCommon=`uniform float seaLevel,time,wind,windAmp,rain;uniform vec4 focus;uniform sampler2D terrainMap;uniform float terrainSpan;
 ${impactGLSL}
 ${wakeGLSL}
