@@ -1,3 +1,5 @@
+import {buildRootSystem} from './RootAnatomy.ts';
+import {buildRootCutaway} from './RootCutaway.ts';
 import {flowArrowGeometry,placeFlowArrow} from '../../living-aquascape/lib/aquarium/FlowArrow.ts';
 import * as T from 'three';
 import {CoryModels} from './CoryModels.ts';
@@ -35,7 +37,7 @@ export class TeachingScene{
  private clear(){
   this.shrimpStudy?.dispose();this.shrimpStudy=null;this.coryStudy=null;this.coryPhase=0;
   this.labelsDirty=true;this.restore();this.labelHost.replaceChildren();this.labels=[];this.paths=[];this.impeller=null;this.rootStudy=null;
-  this.content.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
+  this.content.traverse(o=>{for(const texture of o.userData.ownedTextures??[])texture.dispose();if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
   this.content.clear();this.specimen=null;
  }
  private add(g:T.BufferGeometry,m:T.Material,p:T.Vector3,parent:T.Object3D=this.content){const mesh=new T.Mesh(g,m);mesh.position.copy(p);parent.add(mesh);return mesh;}
@@ -46,25 +48,15 @@ export class TeachingScene{
  }
  private label(text:string,point:T.Vector3,index:number){const button=document.createElement('button');button.textContent=text;button.className='learning-tag';button.setAttribute('aria-label','Inspect '+text);button.onclick=()=>this.onSelect(index);this.labelHost.append(button);this.labels.push({button,point});}
  private roots(origin:T.Vector3,scale=1){
-  const group=new T.Group();group.position.copy(origin);group.scale.setScalar(scale);group.userData.rootTemplate=true;this.content.add(group);
-  for(let i=0;i<13;i++){const a=i*2.399,x=Math.cos(a)*(.3+i*.025),z=Math.sin(a)*(.18+i*.014),end=V(x*1.3,-.58-(i%4)*.08,z*1.2);
-   this.tube([V(0,0,0),V(x*.35,-.18,z*.35),V(x,-.38,z),end],.011,0xb9a47b,group);
-   for(let j=1;j<4;j++){const y=-j*.16;this.tube([V(x*j/4,y,z*j/4),V(x*j/4+.12*Math.cos(a+j),y-.12,z*j/4+.12*Math.sin(a+j)),V(x*j/4+.19*Math.cos(a+j),y-.21,z*j/4+.19*Math.sin(a+j))],.004,0xd2bd91,group);}
-  }return group;
+  const group=buildRootSystem();group.position.copy(origin);group.scale.setScalar(scale*.5);this.content.add(group);return group;
  }
  private underground(){
-  const soil=new T.MeshStandardMaterial({color:0x29291f,roughness:.96});
-  this.add(new T.BoxGeometry(4.4,1.6,2.25),soil,V(0,2.65,0));
-  const grains=new T.InstancedMesh(new T.IcosahedronGeometry(1,1),new T.MeshStandardMaterial({roughness:.94}),1200),d=new T.Object3D();
-  let seed=841;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
-  for(let i=0;i<grains.count;i++){const front=i<850,r=.025+random()*.055;d.position.set((random()-.5)*4.4,front?1.87+random()*1.58:3.46+r*.3,front?1.13+random()*.07:(random()-.5)*2.25);d.scale.set(r,r*(.7+random()*.5),r);d.rotation.set(random()*3,random()*3,random()*3);d.updateMatrix();grains.setMatrixAt(i,d.matrix);grains.setColorAt(i,new T.Color().setHSL(.10,.14,.10+random()*.13));}this.content.add(grains);
-  this.roots(V(-.35,3.85,1.32),2.2);this.roots(V(1.2,3.7,.55),1.5);
-  const debris=new T.InstancedMesh(new T.IcosahedronGeometry(.09,0),new T.MeshStandardMaterial({color:0x9a7141,roughness:1}),28);
-  for(let i=0;i<28;i++){d.position.set((random()-.5)*3.8,2.75+random()*.75,1.26);d.scale.set(1,.18,.65);d.rotation.set(random()*2,random()*4,random()*3);d.updateMatrix();debris.setMatrixAt(i,d.matrix);}this.content.add(debris);
-  const microbes=new T.InstancedMesh(new T.SphereGeometry(.022,6,4),basic(0x8fd2a9),150);
-  for(let i=0;i<150;i++){d.position.set((random()-.5)*3.7,1.98+random()*1.32,1.25);d.scale.set(1,1.5,1);d.updateMatrix();microbes.setMatrixAt(i,d.matrix);}this.content.add(microbes);
-  this.path([V(-1.8,3.7,1.3),V(-1.45,3.05,1.4),V(-1,2.7,1.4),V(-.5,2.1,1.4)],0x7dd4e9,.07);
-  this.path([V(1.2,3.5,1.35),V(.8,3,1.42),V(.4,2.8,1.4)],0xe3b770,.08);
+  this.content.add(buildRootCutaway());
+  if(this.step===2){
+   // Transport annotations are separate from the material specimen and have no physical scale.
+   this.path([V(-1.9,3.35,1.3),V(-1.6,2.95,1.3),V(-1.4,2.65,1.3)],0x7dd4e9,.025);
+   this.path([V(.6,1.85,1.3),V(.8,2.35,1.3),V(1.16,3.22,1.3)],0xe3b770,.035);
+  }
   lessons.underground.forEach((s,i)=>this.label(s.tag,V(...s.point),i));
  }
  private filter(){
@@ -88,7 +80,7 @@ export class TeachingScene{
   if(mode!=='layers')for(const [o,original] of this.originals){o.position.copy(original.position);o.updateMatrix();}
   if(!mode)return;
   const isolated=(mode==='water'&&step>0&&step<4)||mode==='organisms'||mode==='underground';
-  if(isolated){for(const o of this.world.children){if(o===this.root||o instanceof T.Light)continue;this.savedVisibility.set(o,o.visible);o.visible=false;}}
+  if(isolated){for(const o of this.world.children){if(o===this.root||(o instanceof T.Light&&mode!=='underground'))continue;this.savedVisibility.set(o,o.visible);o.visible=false;}}
   if(mode==='underground')this.underground();
   if(mode==='water'){
    if(isolated)this.filter();
