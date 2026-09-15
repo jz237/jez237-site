@@ -39,7 +39,7 @@ void main(){
  vec3 transmission=exp(-waterAbsorption*thickness/clarity);
  // before the light comes the water body takes the sky's colour, not the daylight green of a lit lake
  float lowSunW=1.-smoothstep(.03,.34,sun.y);
- vec3 scatter=mix(waterScatter,skyZenith*1.8,lowSunW*.55)*(1.-night*.8)*(.28+.72*daylight);
+ vec3 scatter=mix(waterScatter,vec3(.075,.135,.21),lowSunW*.6)*(1.-night*.8)*(.28+.72*daylight);
  vec3 below=texture2D(refraction,ruv).rgb;vec3 refracted=below*transmission+scatter*(1.-transmission);
  // the mirror lookup is pushed further by each ripple while the sun is low: a facet tilted by a degree swings a grazing reflection by two, so the disc's reflection breaks into the long shimmering column of a dawn photograph
  vec2 muv=mirrorP.xy/mirrorP.w*.5+.5;vec2 reflectUV=clamp(muv+screenSlope*vec2(.7,1.7)*mix(.032,.085,lowSunW*(1.-night)),vec2(.002),vec2(.998));
