@@ -2,7 +2,7 @@
 // mode. This half is pure and node-tested: the circle of confusion in device pixels for a view
 // distance, and the per-view presets (aperture is the blur radius the far background reaches).
 // The shader pass lives in dof.js.
-export const DOF_TAPS={high:24,medium:16,low:0,saver:0};
+export const DOF_TAPS={ultra:24,high:24,medium:16,low:0,saver:0};
 // range is the focal band as a fraction of the focus distance: everything inside it stays untouched,
 // so a fish angled toward the camera never picks up a one-pixel blur at its nose and tail
 export const DOF_VIEWS={

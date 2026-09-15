@@ -37,11 +37,14 @@ function cardGeometry(w=.38){const pos=[],uv=[],idx=[];const quad=(ax,az)=>{cons
 export const PHOTO_TREES=[{id:'pine',aspect:.45,tone:.6},{id:'spruce',aspect:.39,tone:.5},{id:'hemlock',aspect:.47,tone:.6}];
 export const PHOTO_BROAD=[{id:'oak',aspect:.95,tone:.85},{id:'maple',aspect:.70,tone:.8}];
 const kindCache=new Map();let photosLoaded=0;
+// where a flat card shrinks away: close on the plain tiers, far out on Ultra where real trees stand in its place
+export const cardFade={value:new T.Vector2(28,62)};
+export function setCardFade(near,far){cardFade.value.set(near,far);}
 // photographic kinds, built once per list and shared by the skyline and the shore: geometry per aspect, a material per species that carries the painted spruce until its photograph arrives
 export function photoTreeKinds(base='./assets/trees/',list=PHOTO_TREES){
  const key=list.map(p=>p.id).join(',');if(kindCache.has(key))return kindCache.get(key);const tex=spruceTexture();
  const kinds=list.map(p=>{const geo=cardGeometry(p.aspect);const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:false,roughness:.92,metalness:0,color:0xffffff});mat.color.setScalar(p.tone??.85);windSway(mat,.05); /* vertexColors stays off: the card geometry has no colour attribute, and with it on WebGL fed the default (black) and zeroed the diffuse; instance colours still apply through USE_INSTANCING_COLOR. The photographs decode dark (overcast shade), so the colour multiplier lifts them a third */
-  const sway=mat.onBeforeCompile;mat.onBeforeCompile=sh=>{sway(sh);sh.vertexShader=sh.vertexShader.replace('transformed*=farFade;','transformed*=farFade*smoothstep(28.,62.,length(cameraPosition.xz-anchor.xz));');};
+  const sway=mat.onBeforeCompile;mat.onBeforeCompile=sh=>{sway(sh);Object.assign(sh.uniforms,{cardFade});sh.vertexShader=sh.vertexShader.replace('#include <common>','#include <common>\nuniform vec2 cardFade;').replace('transformed*=farFade;','transformed*=farFade*smoothstep(cardFade.x,cardFade.y,length(cameraPosition.xz-anchor.xz));');};
   return {...p,geo,mat};});
  const loader=new T.TextureLoader();for(const k of kinds){loader.load(base+k.id+'.webp',t=>{t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.wrapS=t.wrapT=T.ClampToEdgeWrapping;k.mat.map=t;k.mat.needsUpdate=true;photosLoaded++;},undefined,()=>{});}
  kindCache.set(key,kinds);return kinds;}
@@ -62,5 +65,5 @@ export function makeTreeline(scene,bathy,{base='./assets/trees/'}={}){
     mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=shadow;mesh.receiveShadow=false;mesh.userData.skipReflection=!shadow;root.add(mesh);meshes.push(mesh);}}}
  bins(plan.shore,true);bins(plan.crest,false);
  const counts={shore:plan.shore.length,crest:plan.crest.length,bins:meshes.length};
- return {root,counts,photos,setSun(dir,backlit){setBacklight(dir,backlit);},backlit:()=>backlight.amount.value,update(quality,camera){const reach=quality==='high'?520:quality==='medium'?400:300;for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<reach+r;}}};
+ return {root,counts,photos,setSun(dir,backlit){setBacklight(dir,backlit);},backlit:()=>backlight.amount.value,update(quality,camera){const reach=quality==='ultra'?640:quality==='high'?520:quality==='medium'?400:300;for(const m of meshes){const c=m.boundingSphere.center,r=m.boundingSphere.radius;m.visible=Math.hypot(camera.x-c.x,camera.z-c.z)<reach+r;}}};
 }

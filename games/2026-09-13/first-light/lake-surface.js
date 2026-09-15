@@ -31,7 +31,7 @@ export function makeLakeBed(scene,bathy,segments=400){
  const mesh=new T.Mesh(geo,mat);mesh.receiveShadow=true;mesh.castShadow=false;scene.add(mesh);return mesh;
 }
 function waterGeometry(segments){const geo=new T.PlaneGeometry(1500,1500,segments,segments);geo.rotateX(-Math.PI/2);const gp=geo.attributes.position;for(let i=0;i<gp.count;i++){const x=gp.getX(i)/750,z=gp.getZ(i)/750;gp.setX(i,Math.sign(x)*(Math.abs(x)*60+Math.pow(Math.abs(x),4)*690));gp.setZ(i,Math.sign(z)*(Math.abs(z)*60+Math.pow(Math.abs(z),4)*690));}return geo;}
-const SEGMENTS={high:288,medium:208,low:144,saver:144},REFLECT={high:1024,medium:640,low:384,saver:384},SKIP={high:1,medium:2,low:3,saver:3};
+const SEGMENTS={ultra:384,high:288,medium:208,low:144,saver:144},REFLECT={ultra:2048,high:1024,medium:640,low:384,saver:384},SKIP={ultra:1,high:1,medium:2,low:3,saver:3};
 export function makeLake(renderer,scene,camera,bathy,quality='high'){
  const size=new T.Vector2();renderer.getDrawingBufferSize(size);const floating=renderer.extensions.has('EXT_color_buffer_float');
  const refract=new T.WebGLRenderTarget(size.x,size.y,{depthBuffer:true,type:floating?T.HalfFloatType:T.UnsignedByteType});refract.depthTexture=new T.DepthTexture(size.x,size.y);

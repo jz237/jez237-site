@@ -1,7 +1,7 @@
 // The interactive ripple field is a 2D wave equation on a GPU heightfield (ripple-field.js).
 // The scheme constants live here so node tests can check stability and decay without WebGL.
 export const RIPPLE={span:48,c:.55,dt:1/60,damping:.992};
-export const RIPPLE_TIERS={high:{res:512},medium:{res:256},low:{res:128},saver:{res:128}};
+export const RIPPLE_TIERS={ultra:{res:512},high:{res:512},medium:{res:256},low:{res:128},saver:{res:128}};
 export function rippleTier(quality){return RIPPLE_TIERS[quality]||RIPPLE_TIERS.medium;}
 export function cellSize(res){return RIPPLE.span/res;}
 export function cflNumber(res){return RIPPLE.c*RIPPLE.dt/cellSize(res);}
