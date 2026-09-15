@@ -127,7 +127,10 @@ float farFade=1.-smoothstep(foliageDistance,foliageDistance+45.,length(cameraPos
    points[kind].push({...common,stretch:.85+random()*.3});
   }
   if(!cold&&slope<.58&&y<20&&i<2100&&cluster>-.3)grassPoints.push({...common,scale:.65+random()*1.1});
-  if(y<4.5&&slope<.7&&i<1500)rockPoints.push({...common,scale:.35+random()**2*3.0,stretch:.45+random()*.6});
+  if(y<12&&slope<.95&&i<1700){
+   const exposed=y>4.5&&slope>.22;
+   rockPoints.push({...common,scale:exposed?1.4+random()*3.8:.35+random()**2*3.0,stretch:exposed?.8+random()*.8:.45+random()*.6});
+  }
   if(y>1.5&&y<3.5&&slope<.3&&logPoints.length<16)logPoints.push({...common,scale:.6+random()*.7});
  }
  // Companion saplings and mature trees create depth around the established

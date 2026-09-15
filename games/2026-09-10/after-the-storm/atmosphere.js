@@ -1,9 +1,11 @@
+import {panoramaGLSL} from './sky-panorama.js';
 import {cloudGLSL} from './weather-light.js';
 // A continuous world-space cloud slab. The same coverage field shades the
 // water and shore; integration gives the clouds depth instead of flat patches.
 export const atmosphereFragment=`
 uniform float storm,skyNight,skySteps;uniform vec3 skyHorizon,skyZenith,skySun;varying vec3 dir;
 ${cloudGLSL}
+${panoramaGLSL}
 float volumeHash(vec3 p){p=fract(p*.1031);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}
 uniform highp sampler3D cloudVolume;
 float volumeNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return texture(cloudVolume,(i+f+.5)/32.).r;}
@@ -19,6 +21,7 @@ void main(){
  vec3 d=normalize(dir),sun=normalize(skySun);float y=max(0.,d.y),mu=max(0.,dot(d,sun));
  float haze=exp(-y*5.5);vec3 horizon=mix(skyHorizon,vec3(.66,.73,.76),.22);
  vec3 col=mix(skyZenith,horizon,haze);
+ if(panoramaReady>.5)col=panoramaRadiance(d,sun,skyHorizon,skyZenith,skyNight,storm);
  col+=vec3(.28,.17,.075)*pow(mu,7.)*(1.-storm*.6);
  col+=vec3(1.,.84,.59)*smoothstep(.99972,.99994,mu)*3.*(1.-skyNight);
  col+=vec3(.20,.15,.09)*pow(mu,110.);
@@ -26,7 +29,7 @@ void main(){
  col+=vec3(.13,.10,.055)*pow(mu,18.)*sunGap*(1.-storm)*(1.-skyNight);
  float localFront=frontAt(cameraPosition.xz,weatherTime);
  col=mix(col,vec3(.23,.31,.36)+y*vec3(.015,.035,.055),storm*.24+localFront*.18);
- if(d.y>.005){
+ if(d.y>.005 && panoramaReady<.5){
   float start=max(0.,(175.-cameraPosition.y)/d.y),end=(260.-cameraPosition.y)/d.y;
   float stepLength=(end-start)/skySteps,transmission=1.;vec3 scattered=vec3(0.);
   for(int i=0;i<32;i++){
@@ -55,7 +58,7 @@ void main(){
   float curtain=frontEnabled*smoothstep(20.,120.,distance)*(1.-smoothstep(900.,1600.,distance))*smoothstep(-8.,25.,hit.y)*(1.-smoothstep(120.,190.,hit.y))*streak*.42;
   col=mix(col,vec3(.25,.33,.38),curtain);
  }
- col*=1.-skyNight*.75;gl_FragColor=vec4(col,1.);
+ if(panoramaReady<.5)col*=1.-skyNight*.75;gl_FragColor=vec4(col,1.);
  #include <tonemapping_fragment>
  #include <colorspace_fragment>
 }`;
