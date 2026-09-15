@@ -33,13 +33,14 @@ function cardGeometry(w=.38){const pos=[],uv=[],idx=[];const quad=(ax,az)=>{cons
 // The skyline's three species are photographs: a white pine, a red spruce and a hemlock generated as
 // isolated reference images and keyed off their white ground, 1024 px tall. Each has its own card
 // width (the tree's real aspect); the painted spruce stands in until the photographs arrive.
-export const PHOTO_TREES=[{id:'pine',aspect:.45},{id:'spruce',aspect:.39},{id:'hemlock',aspect:.47}];
-export const PHOTO_BROAD=[{id:'oak',aspect:.95},{id:'maple',aspect:.70}];
+// tone: the card's colour multiplier; the conifer photographs are pale blue-green in full sun and read frosty at one, the broadleaves are right near it
+export const PHOTO_TREES=[{id:'pine',aspect:.45,tone:.6},{id:'spruce',aspect:.39,tone:.5},{id:'hemlock',aspect:.47,tone:.6}];
+export const PHOTO_BROAD=[{id:'oak',aspect:.95,tone:.85},{id:'maple',aspect:.70,tone:.8}];
 const kindCache=new Map();let photosLoaded=0;
 // photographic kinds, built once per list and shared by the skyline and the shore: geometry per aspect, a material per species that carries the painted spruce until its photograph arrives
 export function photoTreeKinds(base='./assets/trees/',list=PHOTO_TREES){
  const key=list.map(p=>p.id).join(',');if(kindCache.has(key))return kindCache.get(key);const tex=spruceTexture();
- const kinds=list.map(p=>{const geo=cardGeometry(p.aspect);const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:false,roughness:.92,metalness:0,color:0xffffff});mat.color.setScalar(.85);windSway(mat,.05); /* vertexColors stays off: the card geometry has no colour attribute, and with it on WebGL fed the default (black) and zeroed the diffuse; instance colours still apply through USE_INSTANCING_COLOR. The photographs decode dark (overcast shade), so the colour multiplier lifts them a third */
+ const kinds=list.map(p=>{const geo=cardGeometry(p.aspect);const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:false,roughness:.92,metalness:0,color:0xffffff});mat.color.setScalar(p.tone??.85);windSway(mat,.05); /* vertexColors stays off: the card geometry has no colour attribute, and with it on WebGL fed the default (black) and zeroed the diffuse; instance colours still apply through USE_INSTANCING_COLOR. The photographs decode dark (overcast shade), so the colour multiplier lifts them a third */
   const sway=mat.onBeforeCompile;mat.onBeforeCompile=sh=>{sway(sh);sh.vertexShader=sh.vertexShader.replace('transformed*=farFade;','transformed*=farFade*smoothstep(28.,62.,length(cameraPosition.xz-anchor.xz));');};
   return {...p,geo,mat};});
  const loader=new T.TextureLoader();for(const k of kinds){loader.load(base+k.id+'.webp',t=>{t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.wrapS=t.wrapT=T.ClampToEdgeWrapping;k.mat.map=t;k.mat.needsUpdate=true;photosLoaded++;},undefined,()=>{});}

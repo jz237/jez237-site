@@ -118,7 +118,7 @@ Mode `gallery` (from menu or play; Esc or Back returns to where it came from). `
 
 ## v0.58.0 Broadleaves
 
-`assets/trees/{oak,maple}.webp` (aspects .95/.70). `PHOTO_BROAD`; `photoTreeKinds(base, list)` caches per list. Card materials: `vertexColors: false` (no colour attribute on the card geometry; instance colours apply through `USE_INSTANCING_COLOR`), `color.setScalar(.85)` (1.35 in v0.58.0 washed the noon trees). Shore: `near.broad` and `far.broad` → per-species card instances, `scale = 14·p.scale·(p.stretch ?? 1)`; the modelled broadleaf geometry is no longer instanced. QA: `debug().photoKinds`, `lightOverride({fog})` scales `fogAir.density`. Probe pattern for card lighting: `scratchpad/locate-diag.py` (an emissive flag finds a material's pixels, then colours are read under each light).
+`assets/trees/{oak,maple}.webp` (aspects .95/.70). `PHOTO_BROAD`; `photoTreeKinds(base, list)` caches per list. Card materials: `vertexColors: false` (no colour attribute on the card geometry; instance colours apply through `USE_INSTANCING_COLOR`), `color.setScalar(tone)` with tone pine .6, spruce .5, hemlock .6, oak .85, maple .8 (1.35 in v0.58.0 washed the noon trees). Cards edge-bled: opaque colour pushed ten box-blur steps into the transparent fringe before the WebP is written (`tools/first-light-art/trees`, numpy in the venv). Shore: `near.broad` and `far.broad` → per-species card instances, `scale = 14·p.scale·(p.stretch ?? 1)`; the modelled broadleaf geometry is no longer instanced. QA: `debug().photoKinds`, `lightOverride({fog})` scales `fogAir.density`. Probe pattern for card lighting: `scratchpad/locate-diag.py` (an emissive flag finds a material's pixels, then colours are read under each light).
 
 ## v0.57.0 The near shore
 
