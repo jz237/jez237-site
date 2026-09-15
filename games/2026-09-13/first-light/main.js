@@ -65,7 +65,7 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.58.0';
+export const VERSION='0.58.1';
 const coolShadow=new T.Color(.36,.48,.64);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
