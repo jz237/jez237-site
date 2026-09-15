@@ -1,0 +1,13 @@
+{
+  "asset": "coastal-clouds-v2.png",
+  "type": "AI-generated sky texture",
+  "tool": "Built-in image_gen",
+  "dimensions": [
+    1774,
+    887
+  ],
+  "source": "Original generated cloud panorama; no third-party photograph",
+  "prompt": "Photorealistic seamless 360-degree equirectangular maritime sky. Sculpted cumulus and stratocumulus, blue-grey undersides, warm ivory-gold cloud edges, scattered clear openings. No land, water, people, text, or visible sun disk. Refined for crisp photographic billows and natural left-right continuity.",
+  "rendering": "Shared by sky, reflection fallback and environment lighting; venue tint, sun, weather dimming and subtle drift remain live.",
+  "limitation": "Cloud topology is a panoramic texture rather than fully simulated volumetric clouds. Requested high-resolution refinement returned 1774 x 887 pixels."
+}
