@@ -1,6 +1,6 @@
 import * as T from './vendor/three.module.js';
 import {craftUV} from './craft-materials.js';
-const cache=new Map();
+const cache=new Map();let lodRevision=0;
 export function loadCraftLOD(name){
  if(!cache.has(name))cache.set(name,(async()=>{
   try{
@@ -16,7 +16,7 @@ export function loadCraftLOD(name){
  })());
  return cache.get(name);
 }
-export function craftGeometryLOD(mesh,geometry){if(geometry){mesh.userData.detailGeometry=mesh.geometry;mesh.userData.lodGeometry=geometry;}}
+export function craftGeometryLOD(mesh,geometry){if(geometry){lodRevision++;mesh.userData.detailGeometry=mesh.geometry;mesh.userData.lodGeometry=geometry;}}
 export function updateCraftLOD(boat,distance,quality){
  const threshold=quality==='high'?30:quality==='medium'?20:0;
  const previous=boat.userData.lowDetail;
@@ -25,5 +25,6 @@ export function updateCraftLOD(boat,distance,quality){
  boat.userData.lowDetail=low;
  // Check children even when the requested level is unchanged: replacement
  // models or late-attached LOD geometry must inherit the current level.
- boat.traverse(mesh=>{if(mesh.userData.lodGeometry){const geometry=low?mesh.userData.lodGeometry:mesh.userData.detailGeometry;if(mesh.geometry!==geometry)mesh.geometry=geometry;}});
+ const detailMeshes=boat.userData.detailMeshes??=[];if(boat.userData.lodRevision!==lodRevision){detailMeshes.length=0;boat.traverse(m=>{if(m.userData.lodGeometry)detailMeshes.push(m);});boat.userData.lodRevision=lodRevision;}
+ for(const mesh of detailMeshes){if(mesh.userData.lodGeometry){const geometry=low?mesh.userData.lodGeometry:mesh.userData.detailGeometry;if(mesh.geometry!==geometry)mesh.geometry=geometry;}}
 }
