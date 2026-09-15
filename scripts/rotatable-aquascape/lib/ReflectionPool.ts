@@ -6,6 +6,18 @@ export class ReflectionPool{
  private capturing=false;
  private managed=false;
  private captures=new Map<Reflector,Reflector['onBeforeRender']>();
+ private originalSizes=new Map<Reflector,{width:number;height:number;samples:number}>();
+ setEffects(scale:number,samples:number){
+  let changed=false;
+  for(const [surface,size] of this.originalSizes){
+   const target=surface.getRenderTarget(),width=Math.max(1,Math.round(size.width*scale)),height=Math.max(1,Math.round(size.height*scale));
+   const count=Math.min(size.samples,samples);
+   if(target.width===width&&target.height===height&&target.samples===count)continue;
+   if(target.samples!==count){target.samples=count;target.dispose();}
+   target.setSize(width,height);surface.forceUpdate=true;changed=true;
+  }
+  return changed;
+ }
  visible(camera:Camera){
   camera.updateMatrixWorld();
   const frustum=new Frustum().setFromProjectionMatrix(new Matrix4().multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse));
@@ -31,6 +43,7 @@ export class ReflectionPool{
   }finally{this.capturing=false;}
  }
  add(surface:Reflector){
+  const target=surface.getRenderTarget();this.originalSizes.set(surface,{width:target.width,height:target.height,samples:target.samples});
   const texture=surface.getRenderTarget().texture;
   texture.generateMipmaps=true;texture.minFilter=LinearMipmapLinearFilter;texture.anisotropy=8;
   const capture=surface.onBeforeRender;this.captures.set(surface,capture);
