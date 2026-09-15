@@ -34,15 +34,16 @@ function cardGeometry(w=.38){const pos=[],uv=[],idx=[];const quad=(ax,az)=>{cons
 // isolated reference images and keyed off their white ground, 1024 px tall. Each has its own card
 // width (the tree's real aspect); the painted spruce stands in until the photographs arrive.
 export const PHOTO_TREES=[{id:'pine',aspect:.45},{id:'spruce',aspect:.39},{id:'hemlock',aspect:.47}];
-let photoKinds=null,photosLoaded=0;
-// the three photographic kinds, built once and shared by the skyline and the near shore: geometry per aspect, a material per species that carries the painted spruce until its photograph arrives
-export function photoTreeKinds(base='./assets/trees/'){
- if(photoKinds)return photoKinds;const tex=spruceTexture();
- photoKinds=PHOTO_TREES.map(p=>{const geo=cardGeometry(p.aspect);const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:true,roughness:.92,metalness:0,color:0xffffff});windSway(mat,.05);
+export const PHOTO_BROAD=[{id:'oak',aspect:.95},{id:'maple',aspect:.70}];
+const kindCache=new Map();let photosLoaded=0;
+// photographic kinds, built once per list and shared by the skyline and the shore: geometry per aspect, a material per species that carries the painted spruce until its photograph arrives
+export function photoTreeKinds(base='./assets/trees/',list=PHOTO_TREES){
+ const key=list.map(p=>p.id).join(',');if(kindCache.has(key))return kindCache.get(key);const tex=spruceTexture();
+ const kinds=list.map(p=>{const geo=cardGeometry(p.aspect);const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:false,roughness:.92,metalness:0,color:0xffffff});mat.color.setScalar(1.35);windSway(mat,.05); /* vertexColors stays off: the card geometry has no colour attribute, and with it on WebGL fed the default (black) and zeroed the diffuse; instance colours still apply through USE_INSTANCING_COLOR. The photographs decode dark (overcast shade), so the colour multiplier lifts them a third */
   const sway=mat.onBeforeCompile;mat.onBeforeCompile=sh=>{sway(sh);sh.vertexShader=sh.vertexShader.replace('transformed*=farFade;','transformed*=farFade*smoothstep(28.,62.,length(cameraPosition.xz-anchor.xz));');};
   return {...p,geo,mat};});
- const loader=new T.TextureLoader();for(const k of photoKinds){loader.load(base+k.id+'.webp',t=>{t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.wrapS=t.wrapT=T.ClampToEdgeWrapping;k.mat.map=t;k.mat.needsUpdate=true;photosLoaded++;},undefined,()=>{});}
- return photoKinds;}
+ const loader=new T.TextureLoader();for(const k of kinds){loader.load(base+k.id+'.webp',t=>{t.colorSpace=T.SRGBColorSpace;t.anisotropy=8;t.wrapS=t.wrapT=T.ClampToEdgeWrapping;k.mat.map=t;k.mat.needsUpdate=true;photosLoaded++;},undefined,()=>{});}
+ kindCache.set(key,kinds);return kinds;}
 export function photoTreesLoaded(){return photosLoaded;}
 export function makeTreeline(scene,bathy,{base='./assets/trees/'}={}){
  const root=new T.Group();scene.add(root);const random=rng(9137);
