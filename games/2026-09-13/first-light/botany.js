@@ -29,7 +29,7 @@ export function rng(seed){return()=>{seed=(Math.imul(seed,1664525)+1013904223)>>
 export function tree(kind,seed,detail=1){
  const wood=new Shape(),leaf=new Shape(),random=rng(seed);
  if(kind==='pine'){
-  wood.tube([0,0,0],[.16,13,0],.34,.035,10);const branches=Math.max(14,Math.round(60*detail)),leaves=Math.max(4,Math.round(9*detail));
+  wood.tube([0,0,0],[.16,13,0],.34,.035,10);const branches=Math.max(14,Math.round(60*detail)),leaves=Math.max(4,Math.round(13*detail));
   for(let j=0;j<branches;j++){
    const t=j/branches,y=2.3+t*10.4,a=j*2.3999,len=(1-t)*3.4+.22,start=[.16*t,y,0],end=[Math.cos(a)*len,y+.25-Math.sin(t*Math.PI)*.3,Math.sin(a)*len];
    wood.tube(start,end,.075*(1-t)+.015,.008,5);
@@ -37,7 +37,7 @@ export function tree(kind,seed,detail=1){
     const f=k/leaves,c=new T.Vector3().fromArray(start).lerp(new T.Vector3(...end),f);
     for(const side of [-1,1]){
      const reach=((1-f)*.95+.12)*(1+(1-detail)*.9),tip=c.clone().add(new T.Vector3(-Math.sin(a)*side*reach,.18+random()*.22,Math.cos(a)*side*reach));
-     leaf.leaf(c.toArray(),tip.toArray(),reach*.36*(1+(1-detail)*.8),a,.61+random()*.48);
+     leaf.leaf(c.toArray(),tip.toArray(),reach*.28*(1+(1-detail)*1.1),a,.61+random()*.48);
     }
    }
   }

@@ -65,7 +65,7 @@ import {createSonar,tickSonar,drawSonar,sonarSummary} from './sonar.js';
 import {isSonarUnlocked} from './unlocks.js';
 import {RIGS} from './tackle.js';
 import {hourOfDay as hourOf} from './game-clock.js';
-export const VERSION='0.52.0';
+export const VERSION='0.53.0';
 const coolShadow=new T.Color(.36,.48,.64);
 const $=id=>document.getElementById(id),canvas=$('lake');
 const settings=loadSettings();
@@ -348,7 +348,7 @@ touch=mountTouchControls({onTap:what=>{if(what==='anchor')pressed.KeyX=true;else
 // --- per-frame simulation
 let conditionsClock=0,lastElevation=0,lastSun=null,sunOcclusion=1;const lightOverride={env:1,sun:1,ambient:1,mist:1,glint:1}; // QA: persistent light scales applied after every conditions update
 // The tree line blocks a low sun: march from the kayak along the sun's bearing to the first land and take the angle of the tree tops there; while the sun sits below it the direct light is gone and only the sky lights the boat, which is why the hero's deck is in shadow with the sun on the horizon
-function sunBlockedBy(sd){let d=0,top=0;for(let i=1;i<=40;i++){d=i*12;const x=kayak.state.x+sd.x*d,z=kayak.state.z+sd.z*d;const h=bathy.height(x,z);if(h>.2){top=h+15;break;}if(i===40)return {angle:0,occlusion:1};}
+function sunBlockedBy(sd){let d=0,top=0;for(let i=1;i<=40;i++){d=i*12;const x=kayak.state.x+sd.x*d,z=kayak.state.z+sd.z*d;const h=bathy.height(x,z);if(h>.2){top=h+21;break;}if(i===40)return {angle:0,occlusion:1};}
  const angle=Math.atan2(top,d)*180/Math.PI;const occ=Math.max(0,Math.min(1,(sd.elevation-(angle-1.2))/2.4));return {angle:+angle.toFixed(2),dist:d,occlusion:+(occ*occ*(3-2*occ)).toFixed(3)};}const sunScreenV=new T.Vector3(),camDirV=new T.Vector3();
 function sunScreen(){if(!lastSun)return {uv:null,ahead:false};camera.getWorldDirection(camDirV);const ahead=camDirV.x*lastSun.x+camDirV.y*lastSun.y+camDirV.z*lastSun.z>.05;sunScreenV.set(lastSun.x,lastSun.y,lastSun.z).multiplyScalar(2000).add(camera.position).project(camera);return {uv:[+(sunScreenV.x*.5+.5).toFixed(4),+(sunScreenV.y*.5+.5).toFixed(4)],ahead};}
 function step(dt){

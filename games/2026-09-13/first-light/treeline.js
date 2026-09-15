@@ -35,6 +35,8 @@ export function makeTreeline(scene,bathy){
  const plan=planTreeline({height:(x,z)=>bathy.height(x,z),shoreDistance:(x,z)=>bathy.shoreDistance(x,z),span:bathy.span,random,noise});
  const tex=spruceTexture(),geo=cardGeometry();
  const mat=new T.MeshStandardMaterial({map:tex,alphaTest:.5,side:T.DoubleSide,vertexColors:true,roughness:.92,metalness:0,color:0xffffff});windSway(mat,.05);
+ // a card is a skyline trick: within sixty metres it is a flat cut-out, so the near band shrinks away and the modelled shore pines carry the foreground
+ {const sway=mat.onBeforeCompile;mat.onBeforeCompile=sh=>{sway(sh);sh.vertexShader=sh.vertexShader.replace('transformed*=farFade;','transformed*=farFade*smoothstep(28.,62.,length(cameraPosition.xz-anchor.xz));');};}
  // backlit silhouettes come with windSway (botany.js); setSun feeds the shared uniforms for every swaying material at once
  const meshes=[];
  function bins(points,shadow){const map=new Map();for(const p of points){const k=Math.floor(p.x/64)+','+Math.floor(p.z/64);if(!map.has(k))map.set(k,[]);map.get(k).push(p);}
