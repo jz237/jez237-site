@@ -4,7 +4,7 @@
 import * as T from './vendor/three.module.js';
 import {tree,cattail,grassTuft,rng,windSway} from './botany.js';
 import {barkMaterial} from './land-materials.js';
-import {photoTreeKinds} from './treeline.js';
+import {photoTreeKinds,PHOTO_BROAD} from './treeline.js';
 import {noise} from './lake-shape.js';
 export function makeShoreScenery(scene,bathy){
  const random=rng(4471),root=new T.Group();scene.add(root);const meshes=[];
@@ -37,9 +37,11 @@ export function makeShoreScenery(scene,bathy){
  {const kinds=photoTreeKinds();for(let s=0;s<kinds.length;s++){const pts=near.pine.filter((_,i)=>i%kinds.length===s);if(!pts.length)continue;const mesh=new T.InstancedMesh(kinds[s].geo,kinds[s].mat,pts.length),d=new T.Object3D();
    pts.forEach((p,i)=>{const h=13*p.scale*(p.stretch??1);d.position.set(p.x,p.y,p.z);d.rotation.set(0,p.angle,0);d.scale.set(h,h,h);d.updateMatrix();mesh.setMatrixAt(i,d.matrix);mesh.setColorAt(i,new T.Color().setScalar(.78+(p.tint??.5)*.3));});
    mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=true;mesh.receiveShadow=false;root.add(mesh);meshes.push(mesh);}}
- instances(broadNear.wood,wood,near.broad);instances(broadNear.leaf,broadMat,near.broad);
+ {const kinds=photoTreeKinds(undefined,PHOTO_BROAD);const cards=(points,shadow)=>{for(let s=0;s<kinds.length;s++){const pts=points.filter((_,i)=>i%kinds.length===s);if(!pts.length)continue;const mesh=new T.InstancedMesh(kinds[s].geo,kinds[s].mat,pts.length),d=new T.Object3D();
+   pts.forEach((p,i)=>{const h=14*p.scale*(p.stretch??1);d.position.set(p.x,p.y,p.z);d.rotation.set(0,p.angle,0);d.scale.set(h,h,h);d.updateMatrix();mesh.setMatrixAt(i,d.matrix);mesh.setColorAt(i,new T.Color().setScalar(.78+(p.tint??.5)*.3));});
+   mesh.instanceMatrix.needsUpdate=true;mesh.computeBoundingSphere();mesh.castShadow=shadow;mesh.receiveShadow=false;mesh.userData.skipReflection=!shadow;root.add(mesh);meshes.push(mesh);}};cards(near.broad,true);cards(far.broad,false);}
  instances(pineFar.wood,wood,far.pine,false);instances(pineFar.leaf,farPine,far.pine,false);
- instances(broadFar.wood,wood,far.broad,false);instances(broadFar.leaf,farBroad,far.broad,false);
+
  const grassGroup=instances(grassTuft(19),grassMat,grass,false);
  const reed=cattail(77);instances(reed.plant,reedMat,reeds,false);instances(reed.head,headMat,reeds,false);
  root.userData.counts={nearPine:near.pine.length,nearBroad:near.broad.length,farPine:far.pine.length,farBroad:far.broad.length,grass:grass.length,reeds:reeds.length};

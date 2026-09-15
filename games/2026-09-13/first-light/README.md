@@ -1,6 +1,6 @@
 # First Light: Keystone Waters
 
-An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.57.0, the near shore)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
+An immersive freshwater angling sim for the browser, set on real Pennsylvania water. **This build (v0.58.0, broadleaves)** is Lake Nockamixon's Three Mile Run cove at first light from a fishing kayak: the lake renderer, sky, clock, weather, shoreline and interactive surface from the v0.1.0 water slice, plus a rod in your hands, three rigs, a charge-and-release cast, line physics, lures that behave as their kinds do, a camera that follows the lure under the surface, and the full twelve-species roster, seventy-three fish built from reference photographs living on the cove's cover with their own minds, a bite you have to set, a fight you can lose two ways, and a catch card at the end (see `CONCEPT.md` and `SPEC.md`).
 
 Live: `https://jez237.com/games/2026-09-13/first-light/`
 
@@ -17,6 +17,10 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Line** (`line.js`): a 24-node Verlet chain from the bending rod tip; air nodes sag, submerged nodes drag and rise or sink with the line type, and the lure node floats, sinks at its rate, or dives to a target depth on the retrieve. Tension is how taut the chain is. The line is drawn as a camera-facing ribbon, so the underwater part refracts through the surface.
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
+
+## Broadleaves (v0.58.0)
+
+Seventeenth pass. The shore's oaks and maples are photographs now, through the same reference pipeline as the conifers: a red oak and a sugar maple generated as isolated images, white-keyed at full resolution, cards fourteen metres tall at scale one like the modelled crowns they replace, near and far, one instanced mesh per species. Fitting them exposed a flaw older than the photographs: the card geometry has no vertex-colour attribute, but the card materials asked for vertex colours, so WebGL supplied the default attribute (black) and the diffuse term was multiplied to zero. Every skyline card had been rendering with no diffuse at all, only the environment's specular and the fog, which is why nothing done to their colour or texture had ever shown, and why they were black at noon. Vertex colours are off on the card materials now (instance colours still apply), the photographs' shade-dark decode is lifted a third, and the cards are lit and textured at every hour. Region distance to the hero frame: about 13, with the tree line down from 20 to 7, within the picture's own dark teal. QA: `debug().photoKinds`, `lightOverride({fog})`.
 
 ## The near shore (v0.57.0)
 
