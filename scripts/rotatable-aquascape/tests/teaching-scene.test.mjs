@@ -61,3 +61,18 @@ test('shrimp and cory close-ups animate actual articulated geometry and release 
  const cory=teach.coryStudy;const wave=cory.motion.getX(0);teach.update(.05,camera);assert.ok(cory.motion.getX(0)>wave);const held=cory.motion.getX(0);teach.update(0,camera);assert.equal(cory.motion.getX(0),held);
  teach.set(null);assert.equal(tank.visible,true);assert.equal(teach.coryStudy,null);assert.equal(teach.root.children[0].children.length,0);
 });
+
+
+test('root leaf animation shares time and bend parameters with veins, pauses, and leaves the bed fixed',()=>{
+ const teach=new TeachingScene(new T.Scene(),{...element(),clientWidth:900,clientHeight:700},[],[],new T.Texture());teach.set('underground');
+ const moving=[],fixed=[];teach.root.traverse(o=>{if(o.geometry){if(o.geometry.getAttribute('rootMotion'))moving.push(o);else fixed.push([o,o.geometry.getAttribute('position').array.slice()]);}});
+ assert.equal(moving.length,2);
+ const specs=mesh=>{const a=mesh.geometry.getAttribute('rootMotion'),set=new Set();for(let i=0;i<a.count;i++)set.add([a.getX(i),a.getY(i),a.getZ(i),a.getW(i)].join(','));return [...set].sort();};
+ assert.deepEqual(specs(moving[0]),specs(moving[1]));assert.equal(specs(moving[0]).length,28);
+ const shaders=moving.map(o=>{const s={uniforms:{},vertexShader:'#include <beginnormal_vertex>\n#include <begin_vertex>'};o.material.onBeforeCompile(s);return s;});
+ assert.equal(shaders[0].uniforms.rootStudyTime,shaders[1].uniforms.rootStudyTime);
+ const camera=new T.PerspectiveCamera();teach.update(.5,camera);const time=shaders[0].uniforms.rootStudyTime.value;assert.ok(time>0);teach.update(0,camera,65,.5);assert.equal(shaders[0].uniforms.rootStudyTime.value,time);
+ for(let i=0;i<120;i++)teach.update(1/60,camera,0);assert.ok(shaders[0].uniforms.rootStudyFlow.value<.003);
+ for(const [mesh,before] of fixed)assert.deepEqual(mesh.geometry.getAttribute('position').array,before);
+ teach.set(null);
+});

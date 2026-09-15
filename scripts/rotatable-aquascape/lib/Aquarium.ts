@@ -367,7 +367,8 @@ export class Aquarium{
   this.schoolEyes=new SchoolEyes(this.scene,this.fishes.map(f=>f.model));
  }
  learn(mode:Lesson|null,step=0){
-  this.onExploreClose();this.follow(null);this.setMagnifier(false);this.selection=null;this.teaching?.set(mode,step);this.view('front');
+  const keepRootView=mode==='underground'&&this.teaching?.mode==='underground';
+  if(!keepRootView){this.onExploreClose();this.follow(null);}this.setMagnifier(false);this.selection=null;this.teaching?.set(mode,step);if(!keepRootView)this.view(mode==='underground'?'root':'front');
  }
  clearFood(){for(const f of this.food){this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();}this.food=[];this.cories?.clearFood();}
  feed(modelFood=true,representedFood=FEED_MG){
@@ -384,7 +385,7 @@ export class Aquarium{
  private studyFov(){return this.studyView?Math.max(37,2*Math.atan(2.9/((this.teaching?.mode==='underground'?6.7:10)*this.host.clientWidth/this.host.clientHeight))*180/Math.PI):37;}
  get magnifierEnabled(){return this.lighting.lens.enabled;}
  get studyView(){return this.teaching?.mode==='organisms'||this.teaching?.mode==='underground'||this.teaching?.mode==='water'&&this.teaching.step>0&&this.teaching.step<4;}
- view(name:string){this.follow(null);const dist=this.teaching?.mode==='underground'?8:this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera,this.host.offsetTop);}
+ view(name:string){this.follow(null);if(this.teaching?.mode==='underground'){this.controls.minDistance=3;this.controls.minPolarAngle=Math.PI*.12;}document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(b=>b.classList.toggle('active',b.dataset.view===name));const dist=this.teaching?.mode==='underground'?8:this.studyView?11.5:21.5,angle=name==='front'?0:name==='side'?1.28:name==='root'?.18:.47;this.targetCamera=V(Math.sin(angle)*dist, name==='front'?(this.studyView?2.75:2.45):name==='root'?6.1:this.studyView?5:7.5,Math.cos(angle)*dist);this.targetFov=this.studyView?this.studyFov():aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,this.targetCamera,this.host.offsetTop);}
  private resize(){
   const w=this.host.clientWidth,h=this.host.clientHeight;if(!w||!h)return;this.camera.aspect=w/h;
   // Fit continuously across viewport shapes while retaining the user's zoom distance.
