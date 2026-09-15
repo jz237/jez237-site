@@ -18,10 +18,16 @@ export function makeDoF(renderer){
  const mk=()=>new T.WebGLRenderTarget(q.x,q.y,{depthBuffer:false,type:rt.texture.type,minFilter:T.LinearFilter,magFilter:T.LinearFilter});
  const bA=mk(),bB=mk(),sA=mk();
  const black=new T.DataTexture(new Uint8Array([0,0,0,255]),1,1);black.needsUpdate=true;
- const u={tColor:{value:rt.texture},tDepth:{value:rt.depthTexture},tBloom:{value:black},tShaft:{value:black},texel:{value:new T.Vector2(1/size.x,1/size.y)},near:{value:.1},far:{value:100},focus:{value:1},aperture:{value:0},maxCoc:{value:0},range:{value:0},sat:{value:1},contrast:{value:1},split:{value:0},vignette:{value:0},warm:{value:new T.Vector3(1,.86,.62)},cool:{value:new T.Vector3(.55,.6,.9)},bloom:{value:0},shaft:{value:0},shaftTint:{value:new T.Vector3(1,.7,.45)},glowDebug:{value:0}};
+ const u={tColor:{value:rt.texture},tDepth:{value:rt.depthTexture},tBloom:{value:black},tShaft:{value:black},texel:{value:new T.Vector2(1/size.x,1/size.y)},near:{value:.1},far:{value:100},focus:{value:1},aperture:{value:0},maxCoc:{value:0},range:{value:0},sat:{value:1},contrast:{value:1},split:{value:0},vignette:{value:0},warm:{value:new T.Vector3(1,.86,.62)},cool:{value:new T.Vector3(.55,.6,.9)},bloom:{value:0},shaft:{value:0},shaftTint:{value:new T.Vector3(1,.7,.45)},glowDebug:{value:0},mist:{value:0},mistHeight:{value:2.2},mistColor:{value:new T.Vector3(.8,.78,.82)},mistTime:{value:0},camPos:{value:new T.Vector3()},invViewProj:{value:new T.Matrix4()}};
  const taps=POISSON.map(p=>`vec2(${p[0]},${p[1]})`).join(',');
  const mat=new T.ShaderMaterial({uniforms:u,depthTest:false,depthWrite:false,defines:{TAPS:24},vertexShader:VS,fragmentShader:`#include <packing>
-uniform sampler2D tColor,tDepth,tBloom,tShaft;uniform vec2 texel;uniform float near,far,focus,aperture,maxCoc,range,sat,contrast,split,vignette,bloom,shaft,glowDebug;uniform vec3 warm,cool,shaftTint;varying vec2 vUv;
+uniform sampler2D tColor,tDepth,tBloom,tShaft;uniform vec2 texel;uniform float near,far,focus,aperture,maxCoc,range,sat,contrast,split,vignette,bloom,shaft,glowDebug,mist,mistHeight,mistTime;uniform vec3 warm,cool,shaftTint,mistColor,camPos;uniform mat4 invViewProj;varying vec2 vUv;
+// the world point behind a pixel, from the depth buffer
+vec3 worldAt(vec2 uv,float depth){vec4 h=invViewProj*vec4(uv*2.-1.,depth*2.-1.,1.);return h.xyz/h.w;}
+float hash13(vec3 p){p=fract(p*.1031);p+=dot(p,p.yzx+33.33);return fract((p.x+p.y)*p.z);}
+float vnoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);
+ float a=mix(mix(mix(hash13(i),hash13(i+vec3(1,0,0)),f.x),mix(hash13(i+vec3(0,1,0)),hash13(i+vec3(1,1,0)),f.x),f.y),
+             mix(mix(hash13(i+vec3(0,0,1)),hash13(i+vec3(1,0,1)),f.x),mix(hash13(i+vec3(0,1,1)),hash13(i+vec3(1,1,1)),f.x),f.y),f.z);return a;}
 const vec2 P[24]=vec2[24](${taps});
 float viewDist(vec2 uv){return -perspectiveDepthToViewZ(texture2D(tDepth,uv).r,near,far);}
 float coc(float d){return clamp(aperture*max(0.,abs(d-focus)-range*focus)/max(d,1e-3),0.,maxCoc);}
@@ -29,6 +35,22 @@ void main(){
  float cc=coc(viewDist(vUv));vec3 c=texture2D(tColor,vUv).rgb;
  if(cc>.6){float w=1.;for(int i=0;i<TAPS;i++){vec2 uv=vUv+P[i]*cc*texel;float wt=clamp(coc(viewDist(uv))/cc,0.,1.);c+=texture2D(tColor,uv).rgb*wt;w+=wt;}c/=w;}
  // the glow, added in linear light before tone mapping so it rolls off like an over-exposed film edge
+ // the mist as a volume: the height fog between the eye and whatever the pixel shows, integrated
+ // analytically and broken into wisps by a drifting noise, so it fills the gaps between the trees and
+ // thickens along a long sight line instead of hanging as a flat sheet
+ if(mist>0.){float dep=texture2D(tDepth,vUv).r;
+  vec3 w=worldAt(vUv,min(dep,.99995));vec3 ray=w-camPos;float len=min(length(ray),420.);
+  vec3 dir=ray/max(length(ray),1e-4);
+  float y0=camPos.y,y1=camPos.y+dir.y*len;
+  // integral of exp(-y/H) along the ray, in closed form
+  float H=max(.4,mistHeight);
+  float dy=(y1-y0);
+  float integral=abs(dy)<1e-3?len*exp(-max(y0,0.)/H)
+                             :len*H/dy*(exp(-max(y0,0.)/H)-exp(-max(y1,0.)/H));
+  vec3 mid=camPos+dir*(len*.5);
+  float wisp=vnoise(vec3(mid.x*.045+mistTime*.02,mid.y*.22,mid.z*.045))*.8+vnoise(vec3(mid.x*.12,mid.y*.5,mid.z*.12+mistTime*.05))*.4;
+  float amount=clamp(integral*mist*(.45+wisp),0.,.92);
+  c=mix(c,mistColor,amount);}
  c+=texture2D(tBloom,vUv).rgb*bloom+texture2D(tShaft,vUv).rgb*shaftTint*shaft;
  if(glowDebug>.5)c=glowDebug<1.5?texture2D(tBloom,vUv).rgb*bloom:texture2D(tShaft,vUv).rgb*shaftTint*shaft*4.;
  gl_FragColor=vec4(c,1.);
@@ -63,7 +85,10 @@ void main(){vec2 d=(vUv-sunUV)*density/float(N);vec2 uv=vUv;float illum=1.,wsum=
   gradeOnly(opts){const g=gradeFor(opts);return g?{view:'grade',focus:1,aperture:0,maxCoc:0,range:0,taps:4,grade:g}:null;},
   glow(opts){return glowFor(opts);},
   // after the scene has been drawn into rt (and any overlays on top of it): the glow passes, then the gather to the screen
-  finish(camera,p){u.near.value=camera.near;u.far.value=camera.far;u.focus.value=p.focus;u.aperture.value=p.aperture;u.maxCoc.value=p.maxCoc;u.range.value=p.range||0;const g=p.grade;u.sat.value=g?g.sat:1;u.contrast.value=g?g.contrast:1;u.split.value=g?g.split:0;u.vignette.value=g?g.vignette:0;if(g){u.warm.value.set(...g.warm);u.cool.value.set(...g.cool);}
+  // the volumetric mist needs the eye and the inverse of its view projection to unproject depth
+  mistAmount(){return u.mist.value;},
+  setMist({amount=0,height=2.2,colour=[.8,.78,.82],time=0}={}){u.mist.value=amount;u.mistHeight.value=height;u.mistColor.value.set(...colour);u.mistTime.value=time;},
+  finish(camera,p){if(u.mist.value>0){camera.updateMatrixWorld();u.camPos.value.setFromMatrixPosition(camera.matrixWorld);u.invViewProj.value.multiplyMatrices(camera.projectionMatrix,camera.matrixWorldInverse).invert();}u.near.value=camera.near;u.far.value=camera.far;u.focus.value=p.focus;u.aperture.value=p.aperture;u.maxCoc.value=p.maxCoc;u.range.value=p.range||0;const g=p.grade;u.sat.value=g?g.sat:1;u.contrast.value=g?g.contrast:1;u.split.value=g?g.split:0;u.vignette.value=g?g.vignette:0;if(g){u.warm.value.set(...g.warm);u.cool.value.set(...g.cool);}
    const t=Math.max(4,Math.min(24,p.taps|0));if(mat.defines.TAPS!==t){mat.defines.TAPS=t;mat.needsUpdate=true;}
    const gl=p.glow;
    // the blur step is a fraction of the frame, not of the quarter target, so the glow keeps its size on a phone's narrow frame

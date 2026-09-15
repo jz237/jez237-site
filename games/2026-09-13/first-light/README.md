@@ -18,6 +18,21 @@ The menu has graphics tiers (Adaptive, High, Medium, Low, Saver at 30 fps for ph
 - **Lures**: the walker zigzags on top with each twitch, the Texas-rigged worm sinks and hops off the bottom, the squarebill dives while reeling and floats up at rest.
 - **Technique recognizer** (`technique.js`): a three-second window over reeling and twitches names what you are doing (straight retrieve, slow roll, stop & go, twitching, lift & drop, walking the dog, dead stick).
 
+## Ridge and mist (v0.64.0)
+
+Two more Ultra-only passes. The **ridge** behind the tree line was flat colour from a noise skyline;
+it now carries a photograph of layered forested ridges, used as light and shade over the painted
+colour rather than as colour itself, so the hills keep the hour's palette and gain forest texture and
+the layered ridge lines a real horizon has. (Mixing the photograph in as colour put a cyan band on
+the dawn horizon, which is why it modulates instead.)
+
+The **mist is a volume**. The sprite banks and sheets stay, and over them the post pass integrates a
+height fog between the eye and whatever each pixel shows, unprojecting the depth buffer to find the
+world point, solving the fog integral in closed form and breaking it into wisps with a drifting
+noise. The result thickens along a long sight line and fills the gaps between the trunks instead of
+hanging as a flat sheet, and it fades out as the sun climbs, as the wind gets up and at night. Phones
+and the High tier are untouched: both effects are off below Ultra.
+
 ## Real trees (v0.63.0)
 
 On Ultra the near bank is no longer flat cards. Four trees are built in Blender from a seeded script
