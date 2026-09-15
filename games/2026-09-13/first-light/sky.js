@@ -27,8 +27,8 @@ export function skyPalette(e,cloud=0){
  return {zenith:z,horizon:h,night,sunColor,sunIntensity,ambientIntensity,fogColor:fog,mistColor:mist,fogDensity:lerp(.0012,.0030,cloud)*(1+night*.4)*(1+1.0*(1-smooth(2,20,e))*(1-night)),haze};
 }
 export function makeSky(scene){
- const u={...shared,...skyColors,cloud:{value:.2},sunElevation:{value:20},hazeColor:{value:new T.Color(.95,.62,.66)},skyDebug:{value:0},envPass:{value:0}};
- const mat=new T.ShaderMaterial({side:T.BackSide,depthWrite:false,uniforms:u,vertexShader:`varying vec3 dir;void main(){dir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`uniform float time,wind,windDir,night,cloud,sunElevation,skyDebug,envPass;uniform vec3 hazeColor,skyHorizon,skyZenith,sun,sunColor;varying vec3 dir;
+ const u={...shared,...skyColors,cloud:{value:.2},sunElevation:{value:20},hazeColor:{value:new T.Color(.95,.62,.66)},skyDebug:{value:0},envPass:{value:0},panoTex:{value:null},panoMix:{value:0},panoYaw:{value:0},panoExposure:{value:1.1},panoSunU:{value:0.518}};
+ const mat=new T.ShaderMaterial({side:T.BackSide,depthWrite:false,uniforms:u,vertexShader:`varying vec3 dir;void main(){dir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}`,fragmentShader:`uniform float time,wind,windDir,night,cloud,sunElevation,skyDebug,envPass,panoMix,panoYaw,panoExposure,panoSunU;uniform sampler2D panoTex;uniform vec3 hazeColor,skyHorizon,skyZenith,sun,sunColor;varying vec3 dir;
 float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+1.),f.x),f.y);}float fbm(vec2 p){return noise(p)*.5+noise(p*2.03)*.25+noise(p*4.07)*.125+noise(p*8.1)*.0625;}
 void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun));
  float low=1.-clamp(sunElevation/25.,0.,1.);float up=step(-.02,sun.y);float lowSun=1.-smoothstep(2.,20.,sunElevation);
@@ -38,7 +38,9 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  vec3 horizonHere=mix(coolHorizon,skyHorizon,pow(az,mix(1.6,mix(7.,12.,envPass),lowSun))*(1.-envPass*.7));
  // the horizon band is thin at first light: by fifteen degrees up the sky is already the zenith's purple
  float band=mix(pow(y,.55),smoothstep(0.,.26,y)*.85+.15*pow(y,.55),lowSun*(1.-night));band=mix(band,pow(y,.7),pow(az,10.)*.45*lowSun*(1.-night)*(1.-envPass));
- vec3 col=mix(horizonHere,skyZenith,band);vec3 c0=col;
+ vec3 col=mix(horizonHere,skyZenith,band);
+ if(panoMix>0.){float pu=fract(atan(d.x,d.z)/6.2831853+panoYaw+panoSunU);float pv=clamp(.5+asin(clamp(d.y,-1.,1.))/3.14159265,.002,.998);vec3 pc=texture2D(panoTex,vec2(pu,pv)).rgb*panoExposure;col=mix(col,pc,panoMix*smoothstep(-.02,.06,d.y)*(1.-smoothstep(.22,.75,d.y)*.6));} /* the photograph owns the low sky; the zenith stays the game's own purple-blue */
+ vec3 c0=col;
  // during the environment capture the sun's own terms are mostly dropped: the map lights shaded faces, and a whole hemisphere painted by one aureole makes every shadow peach
  float sunTerms=1.-envPass*.85;
  col+=sunColor*(pow(s,30.)*(.10+.30*low)+pow(s,70.)*.30*low)*(1.-night)*up*sunTerms;
@@ -61,10 +63,10 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
  vec3 cloudEdge=mix(mix(vec3(.80,.82,.88),mix(skyZenith,vec3(.40,.28,.38),.55),lowSun),cloudLit,clamp(lit*(1.-cloud*.45)+rim*pow(s,3.)*.9,0.,1.));
  vec3 cloudColor=mix(cloudEdge,cloudShade,thick*(1.-.55*lit))*(1.-night*.92);
  cloudColor+=sunColor*pow(s,10.)*.5*lowSun*(1.-night);
- col=mix(col,cloudColor,cover*.93);
+ col=mix(col,cloudColor,cover*.93*(1.-panoMix*.85));
  // high thin streaks near the horizon at first light: bands of constant elevation (rings in the projection), lit peach beside the sun and mauve away from it, the altostratus the picture's sun sits behind
  float streakV=0.;{vec2 pd=normalize(p+vec2(1e-4));float st=fbm(vec2(pd.x*2.2+flow.x*.2+17.,pd.y*2.2+length(p)*3.6)); /* seamless around the ring: the angle enters as a direction, never as an arctangent that wraps */float streak=smoothstep(.44,.60,st)*smoothstep(.02,.07,y)*(1.-smoothstep(.22,.42,y))*lowSun*(1.-night)*(1.-envPass);streakV=streak;
-  vec3 streakColor=mix(mix(skyZenith,vec3(.42,.28,.40),.5),cloudLit*.5,pow(s,4.)*.85);col=mix(col,streakColor,streak*.6);}
+  vec3 streakColor=mix(mix(skyZenith,vec3(.42,.28,.40),.5),cloudLit*.5,pow(s,4.)*.85);col=mix(col,streakColor,streak*.6*(1.-panoMix));}
  vec3 c3=col;
  vec3 sd=floor(d*260.);float star=step(.9972,hash(sd.xy*1.7+sd.z*3.1))*night*(1.-cover);col+=vec3(.9,.92,1.)*star*smoothstep(.02,.25,y);
  col=mix(col,horizonHere,(1.-smoothstep(0.,.10,y))*(.55-.30*lowSun));
@@ -75,6 +77,10 @@ void main(){vec3 d=normalize(dir);float y=max(d.y,0.);float s=max(0.,dot(d,sun))
 }`});
  const sky=new T.Mesh(new T.SphereGeometry(1200,40,24),mat);sky.userData.skipReflection=false;scene.add(sky);
  return {mesh:sky,uniforms:u,
+  // the photograph: loaded once; mixed in through the dawn and dusk windows, turned so its glow sits on the real sun's bearing, never during the environment capture
+  loadPanorama(url){const t=new T.TextureLoader().load(url,tex=>{tex.colorSpace=T.SRGBColorSpace;tex.wrapS=T.RepeatWrapping;tex.wrapT=T.ClampToEdgeWrapping;tex.anisotropy=4;u.panoTex.value=tex;u.panoReady=true;});return t;},
+  setPanorama({mix=0,sunAzimuthRad=0,exposure=1.1}={}){u.panoMix.value=u.panoTex.value?mix:0;u.panoYaw.value=-sunAzimuthRad/(2*Math.PI);u.panoExposure.value=exposure;},
+  panoState(){return {mix:u.panoMix.value,ready:!!u.panoTex.value};},
   apply(palette,sunDir,elevation,cloud){u.cloud.value=cloud;u.sunElevation.value=elevation;skyColors.night.value=palette.night;skyColors.daylight.value=smooth(-3,16,elevation);skyColors.skyHorizon.value.setRGB(...palette.horizon);skyColors.skyZenith.value.setRGB(...palette.zenith);skyColors.sun.value.set(sunDir.x,sunDir.y,sunDir.z).normalize();skyColors.sunColor.value.setRGB(...palette.sunColor);skyColors.fogColor.value.setRGB(...palette.fogColor);skyColors.fogDensity.value=palette.fogDensity;if(palette.haze)u.hazeColor.value.setRGB(...palette.haze);}
  };
 }
