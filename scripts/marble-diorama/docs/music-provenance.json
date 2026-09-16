@@ -1,0 +1,60 @@
+{
+  "schema": 1,
+  "status": "candidate-rendered-not-release-verified",
+  "archiveSha256": "47bce92aec2167d15c44d3c8f51a2a9743c487360ccd22d4bc42ea85da039c32",
+  "renderer": "WebUADE+",
+  "rendererCommit": "c1f894dad9329495aea9f5dbe141e208fb5c017f",
+  "sampleRate": 44100,
+  "channels": 2,
+  "filter": "A500",
+  "modules": [
+    {
+      "name": "cust.Aerial",
+      "bytes": 40364,
+      "sha256": "3574cc0327f13621a4de5066d81ac92cdc2db3489a2ef1a47813711db578894d",
+      "palTimerWordOffset": 466,
+      "originalTimerMultiplier": 5,
+      "palRenderTimerMultiplier": 6
+    },
+    {
+      "name": "cust.Beginner",
+      "bytes": 33088,
+      "sha256": "59de9e8fbdd88d6094d9023afe89a29fa49f79a813475ba3fdf9827fa813732b",
+      "palTimerWordOffset": 468,
+      "originalTimerMultiplier": 5,
+      "palRenderTimerMultiplier": 6
+    },
+    {
+      "name": "cust.Intermedia",
+      "bytes": 34248,
+      "sha256": "1842498ca18d2160cf0258bab635dcd840749e9bdc8943a322f4abb3b3680183",
+      "palTimerWordOffset": 472,
+      "originalTimerMultiplier": 5,
+      "palRenderTimerMultiplier": 6
+    },
+    {
+      "name": "cust.Practice",
+      "bytes": 27808,
+      "sha256": "41019e5ec2e9f2c2a81c6af2d16c3e9353a98ac7aef2e473385fd7db9946a114",
+      "palTimerWordOffset": 468,
+      "originalTimerMultiplier": 5,
+      "palRenderTimerMultiplier": 6
+    },
+    {
+      "name": "cust.Silly",
+      "bytes": 40420,
+      "sha256": "11a5b6dd0136e66918362240c1b4656262875ebffad5641ae3201bd758ce697b",
+      "palTimerWordOffset": 466,
+      "originalTimerMultiplier": 5,
+      "palRenderTimerMultiplier": 6
+    },
+    {
+      "name": "cust.Ultimate",
+      "bytes": 40540,
+      "sha256": "682010ab48539b3234d8ca5d881ef4053edb1c76afe0a4c6077691de3f8baf51",
+      "palTimerWordOffset": 468,
+      "originalTimerMultiplier": 5,
+      "palRenderTimerMultiplier": 6
+    }
+  ]
+}
