@@ -9,6 +9,7 @@ export const shoreline={shoreMap:{value:dryAtlas},shoreCenter:{value:new T.Vecto
 const loader=new T.TextureLoader();
 const names={sand:'coast_sand_02',rock:'coast_sand_rocks_02',soil:'forrest_ground_01',bark:'bark_brown_02'};
 export const landMaps={};
+const cliffPromise=loader.loadAsync(new URL('./assets/terrain/coastal-granite-v1.webp',import.meta.url).href).catch(()=>null);
 await Promise.all(Object.entries(names).map(async([kind,name])=>{
  const maps={};landMaps[kind]=maps;
  await Promise.all(['diff','nor_gl','rough'].map(async channel=>{
@@ -24,7 +25,7 @@ await Promise.all(Object.entries(names).map(async([kind,name])=>{
 }));
 
 export let cliffAlbedo=landMaps.rock.diff;
-try {cliffAlbedo=await loader.loadAsync(new URL('./assets/terrain/coastal-granite-v1.png',import.meta.url).href);cliffAlbedo.colorSpace=T.SRGBColorSpace;cliffAlbedo.wrapS=cliffAlbedo.wrapT=T.RepeatWrapping;cliffAlbedo.anisotropy=8;}catch{console.warn('Granite texture unavailable; using coastal rock fallback.');}
+try {const loaded=await cliffPromise;if(!loaded)throw Error('Granite unavailable');cliffAlbedo=loaded;cliffAlbedo.colorSpace=T.SRGBColorSpace;cliffAlbedo.wrapS=cliffAlbedo.wrapT=T.RepeatWrapping;cliffAlbedo.anisotropy=8;}catch{console.warn('Granite texture unavailable; using coastal rock fallback.');}
 
 const sampling=`
 float landHash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}

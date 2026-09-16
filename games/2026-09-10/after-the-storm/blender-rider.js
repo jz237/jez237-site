@@ -1,20 +1,22 @@
+import {loadBinary} from './asset-binary.js';
 import {loadCraftLOD,craftGeometryLOD} from './mesh-lod.js';
 import * as T from './vendor/three.module.js';
 import {riderPose} from './rider-pose.js';
 import {riderMotion} from './rider-motion.js';
 import {craftSurface,craftUV} from './craft-materials.js';
 let asset=null;
+const lodPromise=loadCraftLOD('coastal-rider');
 try{
- const [a,b]=await Promise.all([fetch(new URL('./assets/coastal-rider.json',import.meta.url)),fetch(new URL('./assets/coastal-rider.bin',import.meta.url))]);
- if(!a.ok||!b.ok)throw new Error('Rider asset request failed');
- const meta=await a.json(),buffer=await b.arrayBuffer();
+ const [a,buffer]=await Promise.all([fetch(new URL('./assets/coastal-rider.json',import.meta.url)),loadBinary('assets/coastal-rider.bin')]);
+ if(!a.ok)throw new Error('Rider asset request failed');
+ const meta=await a.json();
  const meshes=meta.meshes.map(part=>{
   const geometry=new T.BufferGeometry(),values=new Float32Array(buffer,part.offset,part.vertices*6),data=new T.InterleavedBuffer(values,6);
   geometry.setAttribute('position',new T.InterleavedBufferAttribute(data,3,0));geometry.setAttribute('normal',new T.InterleavedBufferAttribute(data,3,3));
   craftUV(geometry);geometry.computeBoundingSphere();return {...part,geometry};
  });asset={meta,meshes};
 }catch(error){console.warn('Blender rider unavailable; using the built-in rider.',error);}
-const lodGeometry=await loadCraftLOD('coastal-rider');
+const lodGeometry=await lodPromise;
 const up=new T.Vector3(0,1,0),skinTones=[0xbf8967,0xd9a88a,0x815237,0xad7959];
 export function makeBlenderRider(parent,{color=null,riderIndex=0}={}){
  if(!asset)return null;
