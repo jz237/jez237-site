@@ -105,3 +105,24 @@ test('folded median fins and stronger tail strokes remain inside the collision e
   }
  }
 });
+
+test('mouth and gill covers breathe while hovering with delayed, independent pulses and a working pause',()=>{
+ const a=new AngelfishModel(new T.Group(),0),b=new AngelfishModel(new T.Group(),3.71);
+ const uniforms=model=>{const shader={uniforms:{},vertexShader:'#include <common>\n#include <begin_vertex>'};model.group.children[0].material.onBeforeCompile(shader);return shader.uniforms;};
+ const x=uniforms(a),y=uniforms(b),mouths=[],gills=[];
+ const geometry=a.group.children[0].geometry,positions=geometry.attributes.position.array.slice();
+ assert.equal(geometry,b.group.children[0].geometry,'aperture geometry is shared');
+ for(let i=0;i<300;i++){a.update(1/60,.1,true);b.update(1/60,.1,true);mouths.push(x.angelMouth.value);gills.push(x.angelGill.value);}
+ assert.ok(Math.max(...mouths)>.98&&Math.min(...mouths)<.01);
+ assert.ok(Math.max(...gills)>.98&&Math.min(...gills)<.01);
+ const mouthPeak=mouths.findIndex(v=>v>.98),gillPeak=gills.findIndex(v=>v>.98);
+ assert.ok(gillPeak>mouthPeak+10&&gillPeak<mouthPeak+25,'opercular pulse follows oral expansion');
+ assert.ok(Math.abs(x.angelGill.value-y.angelGill.value)>.05,'fish are not synchronized');
+ assert.equal(x.angelFold.value,0,'breathing does not require swimming');
+ const held=[x.angelGill.value,x.angelMouth.value];a.update(0,1,false,1,1);assert.deepEqual([x.angelGill.value,x.angelMouth.value],held);
+ assert.deepEqual(geometry.attributes.position.array,positions,'breathing adds no per-frame vertex upload');
+ const bounds=angelBody(new T.Vector3(),0,0,1);
+ for(const px of [.779,.791])for(const py of [-.0608,-.029])for(const pz of [-.017,.017]){
+  const point=new T.Vector3(px,py,pz);assert.ok(bounds.some(s=>point.distanceToSquared(s.center)<s.radius*s.radius),'open mouth stays within contact bounds');
+ }
+});

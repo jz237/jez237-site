@@ -44,3 +44,9 @@ Keep angelfish pelvic fins visibly active: independent forward/back hinge sweeps
 a deliberate forward extension near leaves or hardscape, relaxation afterward,
 and collision volumes that follow that pose. Preserve actual open-water depth
 exploration in front of and behind scenery; never fake depth by crossing solids.
+
+Keep visible mouth/gill breathing on angelfish, cardinal tetras and Corydoras,
+including while hovering. Use individual continuous timing with the oral pulse
+leading the opercular pulse. Keep eyes and the front of the head steady, retain
+Corydoras feeding-mouth motion, and freeze respiration on pause. These are
+illustrative respiratory rhythms, not measured species-specific physiology.

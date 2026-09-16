@@ -5,10 +5,32 @@ import {assetURL} from './AssetPaths.ts';
 /** Blender-authored mesh and maps are loaded once and shared by both animals. */
 let source:Promise<T.Group>|undefined;
 export function loadAngelfish(){return source??=new GLTFLoader().loadAsync(assetURL('./models/angelfish/silver-angelfish.glb')).then(g=>g.scene);}
+let mouthGeometry:T.SphereGeometry|undefined;
+function oralOpening(){
+ if(!mouthGeometry){mouthGeometry=new T.SphereGeometry(1,12,8);mouthGeometry.scale(.006,.006,.017);mouthGeometry.translate(.785,-.035,0);}
+ const mesh=new T.Mesh(mouthGeometry,new T.MeshStandardMaterial({color:0x24110f,roughness:.85}));
+ mesh.name='OralOpening';return mesh;
+}
 
 const deformation=`
-uniform float angelPhase, angelEffort, angelPectoral, angelRegion, angelDrift, angelReach, angelStroke, angelFold;
+uniform float angelPhase, angelEffort, angelPectoral, angelRegion, angelDrift, angelReach, angelStroke, angelFold, angelGill, angelMouth;
 vec3 angelDeform(vec3 p){
+ if(angelRegion>4.5){
+  // The dark aperture stays within the lip rim; its upper edge is anchored.
+  p.y=-.029+(p.y+.029)*(1.+1.65*angelMouth);
+  return p;
+ }
+ if(angelRegion<.5){
+  // Local opercular abduction: fixed anterior hinge and eyes, moving rear
+  // cover/rim on both sides. The whole head does not nod with ventilation.
+  float cover=smoothstep(.14,.26,p.x)*(1.-smoothstep(.35,.46,p.x));
+  cover*=1.-smoothstep(.22,.36,abs(p.y+.045));
+  cover*=smoothstep(.015,.07,abs(p.z));
+  p.z+=sign(p.z)*cover*angelGill*.032;
+  p.x-=cover*angelGill*.007;
+  float jaw=smoothstep(.62,.77,p.x)*(1.-smoothstep(-.055,-.024,p.y));
+  p.y-=jaw*angelMouth*.018;
+ }
  float tail=1.-smoothstep(-1.3,.28,p.x);
  float w=tail*tail;
  // A traveling wave builds behind the steady head. Power strokes soften the
@@ -34,7 +56,7 @@ vec3 angelDeform(vec3 p){
   p.z+=side*tip*sin(angelPectoral+side*.71)*(.065+.085*angelEffort);
   p.y+=tip*cos(angelPectoral+side*.71)*.020;
   p.x+=tip*sin(angelPectoral+side*.71)*.012;
- }else if(angelRegion>3.5){
+ }else if(angelRegion>3.5&&angelRegion<4.5){
   float tip=pow(clamp((-p.y-.43)/1.11,0.,1.),1.6);
   p.z+=tip*sin(angelDrift*.55+p.y*2.3)*.034;
   float side=p.z>0.?1.:-1.;
@@ -48,15 +70,16 @@ vec3 angelDeform(vec3 p){
 `;
 export class AngelfishModel{
  readonly group:T.Group;
- private phase:number;private pectoral:number;private drift=0;
- private uniforms:{angelPhase:T.IUniform<number>;angelEffort:T.IUniform<number>;angelPectoral:T.IUniform<number>;angelDrift:T.IUniform<number>;angelReach:T.IUniform<number>;angelStroke:T.IUniform<number>;angelFold:T.IUniform<number>} ;
+ private phase:number;private pectoral:number;private drift=0;private breath:number;
+ private uniforms:{angelPhase:T.IUniform<number>;angelEffort:T.IUniform<number>;angelPectoral:T.IUniform<number>;angelDrift:T.IUniform<number>;angelReach:T.IUniform<number>;angelStroke:T.IUniform<number>;angelFold:T.IUniform<number>;angelGill:T.IUniform<number>;angelMouth:T.IUniform<number>} ;
  constructor(prototype:T.Group,seed=0){
-  this.group=prototype.clone(true);this.phase=seed;this.pectoral=seed*1.7;
-  this.drift=seed;this.uniforms={angelPhase:{value:seed},angelEffort:{value:.2},angelPectoral:{value:seed*1.7},angelDrift:{value:seed},angelReach:{value:0},angelStroke:{value:0},angelFold:{value:0}};
+  this.group=prototype.clone(true);this.phase=seed;this.pectoral=seed*1.7;this.breath=seed*2.13;
+  const mouth=oralOpening();this.group.add(mouth);
+  this.drift=seed;this.uniforms={angelPhase:{value:seed},angelEffort:{value:.2},angelPectoral:{value:seed*1.7},angelDrift:{value:seed},angelReach:{value:0},angelStroke:{value:0},angelFold:{value:0},angelGill:{value:0},angelMouth:{value:0}};
   this.group.traverse(o=>{
    if(!(o instanceof T.Mesh))return;
-   const region=o.name.startsWith('Median')?1:o.name.startsWith('PectoralLeft')?2:o.name.startsWith('PectoralRight')?3:o.name.startsWith('Streamers')?4:0;
-   const original=o.material as T.MeshStandardMaterial,m=original.clone();o.material=m;
+   const region=o.name==='OralOpening'?5:o.name.startsWith('Median')?1:o.name.startsWith('PectoralLeft')?2:o.name.startsWith('PectoralRight')?3:o.name.startsWith('Streamers')?4:0;
+   const original=o.material as T.MeshStandardMaterial,m=original.clone();o.material=m;if(region===5)original.dispose();
    if(m.transparent){m.depthWrite=false;m.side=T.DoubleSide;m.forceSinglePass=true;}
    // No expensive transmission pass: transparent, textured single-sheet tissue.
    m.roughness=Math.max(.38,m.roughness);m.metalness=Math.min(.3,m.metalness);
@@ -75,7 +98,7 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
 `);
      s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','vec3 transformed=angelDeform(position);');
     };
-    material.customProgramCacheKey=()=>`angelfish-fin-strokes-v6-${region}-${normal}`;
+    material.customProgramCacheKey=()=>`angelfish-breathing-v7-${region}-${normal}`;
    };
    install(m,true);
    // Subpixel fin rays cannot produce stable individual shadow texels. Their
@@ -91,6 +114,11 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
   this.drift+=dt;
   const blend=1-Math.exp(-dt*4),u=this.uniforms;
   u.angelEffort.value=T.MathUtils.lerp(u.angelEffort.value,effort,blend);
+  // A separate, continuous ventilatory rhythm persists during hovering.
+  // Slight effort/individual variation; qualitative timing, not measured rates.
+  this.breath+=dt*2*Math.PI*(.95+.55*u.angelEffort.value+.035*Math.sin(this.drift*.43));
+  u.angelMouth.value=Math.pow(.5+.5*Math.sin(this.breath),1.6);
+  u.angelGill.value=Math.pow(.5+.5*Math.sin(this.breath-Math.PI*.60),1.25);
   // Speed drives fin folding; effort controls stronger propulsion. Individual
   // stroke/coast envelopes modulate amplitude without resetting phase.
   const swim=T.MathUtils.smoothstep(Math.max(0,speed),.025,.34);

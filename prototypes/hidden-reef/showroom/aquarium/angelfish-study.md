@@ -78,3 +78,18 @@ This is an illustrative inspection behavior requested for the display, not a cla
 that its trigger distance or timing has been measured in angelfish. The articulated
 collision envelope follows the pelvic pose and prevents an extension through a
 surface. The living close-up demonstrates the extension at a larger scale.
+
+## Visible ventilation
+
+Angelfish now pulse their gill covers and make small mouth openings in the tank
+and living close-up. The oral expansion precedes the opercular pulse. Each fish
+has a separate continuous breathing phase, which continues while hovering and
+quickens modestly with sustained effort. The eyes and anterior head stay steady.
+The tetras and Corydoras also have coordinated oral/opercular motion; Corydoras
+retain their separate substrate-picking movement. Pausing freezes ventilation.
+
+This illustrates the coupled buccal and opercular pumps described in
+[Hughes (1960), A Comparative Study of Gill Ventilation in Marine Teleosts](https://journals.biologists.com/jeb/article/37/1/28/13294/A-Comparative-Study-of-Gill-Ventilation-in-Marine).
+That comparison is not a measurement of these three aquarium species. The phase
+offset, amplitudes and frequencies here are visual choices, not measured
+species-specific rates or a simulation of gill pressures and oxygen uptake.
