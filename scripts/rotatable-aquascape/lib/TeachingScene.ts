@@ -1,7 +1,10 @@
+import {buildRootSystem} from './RootAnatomy.ts';
+import {buildRootCutaway} from './RootCutaway.ts';
 import {flowArrowGeometry,placeFlowArrow} from '../../living-aquascape/lib/aquarium/FlowArrow.ts';
 import * as T from 'three';
 import {CoryModels} from './CoryModels.ts';
 import {Invertebrates} from './Invertebrates.ts';
+import {AngelfishModel} from './AngelfishModel.ts';
 import {Tetra3D} from './Tetra3D.ts';
 import {lessons,type Lesson} from './LearningContent.ts';
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
@@ -18,10 +21,12 @@ export class TeachingScene{
  private paths:Path[]=[];private labels:{button:HTMLButtonElement;point:T.Vector3}[]=[];
  private host:HTMLElement;private labelHost:HTMLDivElement;private content=new T.Group();
  private shrimpStudy:Invertebrates|null=null;private coryStudy:CoryModels|null=null;private coryPhase=0;
+ angelPrototype:T.Group|undefined;private angelStudy:AngelfishModel|null=null;
  private specimen:Tetra3D|null=null;private texture:T.Texture;private leaf:T.InstancedMesh|undefined;
  private labelMatrix=new T.Matrix4();private labelsDirty=true;private labelWidth=0;private labelHeight=0;
  private projected=new T.Vector3();private dummy=new T.Object3D();
- private phase=0;private impeller:T.Group|null=null;private rootStudy:T.Group|null=null;
+ private rootTime={value:0};private rootFlow={value:1};private phase=0;private impeller:T.Group|null=null;private rootStudy:T.Group|null=null;
+ private rootAnnotations=new T.Group();
  private grazerAtlas?:T.Texture;
  private savedVisibility=new Map<T.Object3D,boolean>();
  constructor(world:T.Scene,host:HTMLElement,plants:T.Object3D[],substrate:T.Object3D[],texture:T.Texture,housing:T.Object3D[]=[],grazerAtlas?:T.Texture){
@@ -33,39 +38,38 @@ export class TeachingScene{
  }
  private restore(){for(const [o,v] of this.savedVisibility)o.visible=v;this.savedVisibility.clear();}
  private clear(){
+  if(this.angelStudy){this.content.remove(this.angelStudy.group);this.angelStudy.dispose();this.angelStudy=null;}
   this.shrimpStudy?.dispose();this.shrimpStudy=null;this.coryStudy=null;this.coryPhase=0;
   this.labelsDirty=true;this.restore();this.labelHost.replaceChildren();this.labels=[];this.paths=[];this.impeller=null;this.rootStudy=null;
-  this.content.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
-  this.content.clear();this.specimen=null;
+  this.content.traverse(o=>{for(const texture of o.userData.ownedTextures??[])texture.dispose();if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
+  this.content.clear();this.rootAnnotations.clear();this.specimen=null;
  }
  private add(g:T.BufferGeometry,m:T.Material,p:T.Vector3,parent:T.Object3D=this.content){const mesh=new T.Mesh(g,m);mesh.position.copy(p);parent.add(mesh);return mesh;}
  private tube(points:T.Vector3[],radius:number,color:number,parent:T.Object3D=this.content){return this.add(new T.TubeGeometry(new T.CatmullRomCurve3(points),32,radius,7,false),basic(color),V(0,0,0),parent);}
- private path(points:T.Vector3[],color=0x78d8ee,speed=.12){
-  const curve=new T.CatmullRomCurve3(points),line=new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(100)),new T.LineBasicMaterial({color,transparent:true,opacity:.55}));this.content.add(line);
-  const arrows=new T.InstancedMesh(flowArrowGeometry(.24,.065),basic(color),12);arrows.frustumCulled=false;this.content.add(arrows);this.paths.push({curve,arrows,speed,phase:0});
+ private path(points:T.Vector3[],color=0x78d8ee,speed=.12,parent:T.Object3D=this.content){
+  const curve=new T.CatmullRomCurve3(points),line=new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(100)),new T.LineBasicMaterial({color,transparent:true,opacity:.55}));parent.add(line);
+  const closeup=this.mode==='organisms';
+  const arrows=new T.InstancedMesh(flowArrowGeometry(closeup?.075:.24,closeup?.020:.065),basic(color),closeup?8:12);arrows.frustumCulled=false;parent.add(arrows);this.paths.push({curve,arrows,speed,phase:0});
  }
  private label(text:string,point:T.Vector3,index:number){const button=document.createElement('button');button.textContent=text;button.className='learning-tag';button.setAttribute('aria-label','Inspect '+text);button.onclick=()=>this.onSelect(index);this.labelHost.append(button);this.labels.push({button,point});}
  private roots(origin:T.Vector3,scale=1){
-  const group=new T.Group();group.position.copy(origin);group.scale.setScalar(scale);group.userData.rootTemplate=true;this.content.add(group);
-  for(let i=0;i<13;i++){const a=i*2.399,x=Math.cos(a)*(.3+i*.025),z=Math.sin(a)*(.18+i*.014),end=V(x*1.3,-.58-(i%4)*.08,z*1.2);
-   this.tube([V(0,0,0),V(x*.35,-.18,z*.35),V(x,-.38,z),end],.011,0xb9a47b,group);
-   for(let j=1;j<4;j++){const y=-j*.16;this.tube([V(x*j/4,y,z*j/4),V(x*j/4+.12*Math.cos(a+j),y-.12,z*j/4+.12*Math.sin(a+j)),V(x*j/4+.19*Math.cos(a+j),y-.21,z*j/4+.19*Math.sin(a+j))],.004,0xd2bd91,group);}
-  }return group;
+  const group=buildRootSystem();group.position.copy(origin);group.scale.setScalar(scale*.5);this.content.add(group);return group;
  }
  private underground(){
-  const soil=new T.MeshStandardMaterial({color:0x29291f,roughness:.96});
-  this.add(new T.BoxGeometry(4.4,1.6,2.25),soil,V(0,2.65,0));
-  const grains=new T.InstancedMesh(new T.IcosahedronGeometry(1,1),new T.MeshStandardMaterial({roughness:.94}),1200),d=new T.Object3D();
-  let seed=841;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
-  for(let i=0;i<grains.count;i++){const front=i<850,r=.025+random()*.055;d.position.set((random()-.5)*4.4,front?1.87+random()*1.58:3.46+r*.3,front?1.13+random()*.07:(random()-.5)*2.25);d.scale.set(r,r*(.7+random()*.5),r);d.rotation.set(random()*3,random()*3,random()*3);d.updateMatrix();grains.setMatrixAt(i,d.matrix);grains.setColorAt(i,new T.Color().setHSL(.10,.14,.10+random()*.13));}this.content.add(grains);
-  this.roots(V(-.35,3.85,1.32),2.2);this.roots(V(1.2,3.7,.55),1.5);
-  const debris=new T.InstancedMesh(new T.IcosahedronGeometry(.09,0),new T.MeshStandardMaterial({color:0x9a7141,roughness:1}),28);
-  for(let i=0;i<28;i++){d.position.set((random()-.5)*3.8,2.75+random()*.75,1.26);d.scale.set(1,.18,.65);d.rotation.set(random()*2,random()*4,random()*3);d.updateMatrix();debris.setMatrixAt(i,d.matrix);}this.content.add(debris);
-  const microbes=new T.InstancedMesh(new T.SphereGeometry(.022,6,4),basic(0x8fd2a9),150);
-  for(let i=0;i<150;i++){d.position.set((random()-.5)*3.7,1.98+random()*1.32,1.25);d.scale.set(1,1.5,1);d.updateMatrix();microbes.setMatrixAt(i,d.matrix);}this.content.add(microbes);
-  this.path([V(-1.8,3.7,1.3),V(-1.45,3.05,1.4),V(-1,2.7,1.4),V(-.5,2.1,1.4)],0x7dd4e9,.07);
-  this.path([V(1.2,3.5,1.35),V(.8,3,1.42),V(.4,2.8,1.4)],0xe3b770,.08);
+  this.content.add(buildRootCutaway(this.rootTime,this.rootFlow));
+  this.undergroundAnnotations();
   lessons.underground.forEach((s,i)=>this.label(s.tag,V(...s.point),i));
+ }
+ private undergroundAnnotations(){
+  // A step changes the explanation, not the detailed specimen. Keep its GPU
+  // buffers, textures, light programs and animation alive throughout the lesson.
+  this.rootAnnotations.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
+  this.rootAnnotations.clear();this.paths=[];this.content.add(this.rootAnnotations);
+  if(this.step===2){
+   // Transport annotations are separate from the material specimen and have no physical scale.
+   this.path([V(-1.9,3.35,1.3),V(-1.6,2.95,1.3),V(-1.4,2.65,1.3)],0x7dd4e9,.025,this.rootAnnotations);
+   this.path([V(.6,1.85,1.3),V(.8,2.35,1.3),V(1.16,3.22,1.3)],0xe3b770,.035,this.rootAnnotations);
+  }
  }
  private filter(){
   // Open front shell exposes real modeled baskets, foam pores, ceramic rings and rotor.
@@ -84,11 +88,15 @@ export class TeachingScene{
   [['Foam',1.8,1],['Ceramic media',2.85,2],['Impeller',3.8,3]].forEach(([text,y,index])=>this.label(String(text),V(.65,Number(y),.6),Number(index)));
  }
  set(mode:Lesson|null,step=0){
+  if(mode==='underground'&&this.mode===mode){
+   if(this.step!==step){this.step=step;this.undergroundAnnotations();}
+   return;
+  }
   this.clear();this.mode=mode;this.step=step;this.root.visible=!!mode;this.labelHost.hidden=!mode;
   if(mode!=='layers')for(const [o,original] of this.originals){o.position.copy(original.position);o.updateMatrix();}
   if(!mode)return;
   const isolated=(mode==='water'&&step>0&&step<4)||mode==='organisms'||mode==='underground';
-  if(isolated){for(const o of this.world.children){if(o===this.root||o instanceof T.Light)continue;this.savedVisibility.set(o,o.visible);o.visible=false;}}
+  if(isolated){for(const o of this.world.children){if(o===this.root||(o instanceof T.Light&&mode!=='underground'))continue;this.savedVisibility.set(o,o.visible);o.visible=false;}}
   if(mode==='underground')this.underground();
   if(mode==='water'){
    if(isolated)this.filter();
@@ -111,7 +119,6 @@ export class TeachingScene{
   }
   if(mode==='organisms'){
    if(step===0){this.specimen=new Tetra3D(this.texture);this.specimen.group.position.set(0,2.9,0);this.specimen.group.scale.setScalar(2.8);this.content.add(this.specimen.group);
-    const gill=this.add(new T.TorusGeometry(.31,.025,8,32,Math.PI*1.2),basic(0xe9a6a2),V(1,2.95,.2));gill.rotation.y=.5;
     this.path([V(2.5,3.05,.3),V(1.3,3.05,.35),V(.7,2.8,.4),V(0,2.7,.5)],0x82d7ee,.2);
    }else if(step===1&&this.leaf){
     const mat=(this.leaf.material as T.MeshStandardMaterial).clone();mat.onBeforeCompile=()=>{};
@@ -123,6 +130,8 @@ export class TeachingScene{
    }else if(step===3){
     this.shrimpStudy=new Invertebrates(new T.Scene(),()=>0,[],this.grazerAtlas,[],()=>0,true);
     this.shrimpStudy.root.position.set(-.3,2.1,0);this.shrimpStudy.root.scale.setScalar(5.5);this.content.add(this.shrimpStudy.root);
+   }else if(step===5&&this.angelPrototype){
+    this.angelStudy=new AngelfishModel(this.angelPrototype);this.angelStudy.group.position.set(0,2.8,0);this.angelStudy.group.scale.setScalar(1.85);this.content.add(this.angelStudy.group);
    }else if(step===4){
     this.coryStudy=new CoryModels(1);this.content.add(this.coryStudy.root);this.poseCory(0);
    }else{this.roots(V(0,4.5,0),4);this.path([V(2,1.4,.5),V(1,2,.6),V(0,3,.5),V(0,4.4,0)],0xb5e59b,.15);}
@@ -138,8 +147,9 @@ export class TeachingScene{
   const target=this.mode==='layers'?this.separation:0;
   if(this.mode==='layers')for(const [o,original] of this.originals){const offset=this.plants.includes(o)?target*1.3:-target*.48;o.position.y=T.MathUtils.damp(o.position.y,original.position.y+offset,5,viewDt);o.updateMatrix();}
   if(this.mode==='layers'){for(const o of this.housing)o.visible=target<.02&&(this.savedVisibility.get(o)??true);for(const o of this.content.children)if(o.userData.rootTemplate)o.visible=target>.02;}
-  this.phase+=dt;this.shrimpStudy?.poseSpecimen(dt);if(this.coryStudy)this.poseCory(dt);
+  this.phase+=dt;this.rootTime.value=this.phase;if(this.mode==='underground')this.rootFlow.value=T.MathUtils.damp(this.rootFlow.value,T.MathUtils.clamp(flow/65,0,1.35),3,dt);this.shrimpStudy?.poseSpecimen(dt);if(this.coryStudy)this.poseCory(dt);
   if(this.impeller)this.impeller.rotation.y+=dt*flow*.14;
+  this.angelStudy?.update(dt,.22+.12*Math.sin(this.phase*.7),false,.5+.5*Math.sin(this.phase*.65),.20+.16*Math.sin(this.phase*.45));
   this.specimen?.update(this.phase,.4,this.texture,.65,.5,1,dt,.6);
   const dummy=this.dummy;for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.arrows.count;i++){placeFlowArrow(dummy,path.curve,(path.phase+i/path.arrows.count)%1);dummy.updateMatrix();path.arrows.setMatrixAt(i,dummy.matrix);}path.arrows.instanceMatrix.needsUpdate=true;}
   const w=this.host.clientWidth,h=this.host.clientHeight;
