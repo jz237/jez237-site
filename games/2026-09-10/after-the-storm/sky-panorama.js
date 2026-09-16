@@ -4,7 +4,7 @@ import * as T from './vendor/three.module.js';
 // The procedural atmosphere remains available if the optional image cannot load.
 export const panoramaUniforms={skyPanorama:{value:null},panoramaReady:{value:0},skyWarmth:{value:.25}};
 try {
- const texture=await new T.TextureLoader().loadAsync(new URL('./assets/sky/coastal-clouds-v3.png',import.meta.url).href);
+ const texture=await new T.TextureLoader().loadAsync(new URL('./assets/sky/coastal-clouds-v3.webp',import.meta.url).href);
  texture.colorSpace=T.SRGBColorSpace;texture.wrapS=T.RepeatWrapping;
  texture.minFilter=T.LinearMipmapLinearFilter;texture.anisotropy=4;
  panoramaUniforms.skyPanorama.value=texture;panoramaUniforms.panoramaReady.value=1;

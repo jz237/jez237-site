@@ -1,12 +1,11 @@
 import * as T from './vendor/three.module.js';
 // Existing generated tree assets from First Light, copied from its committed
 // version. Shared textures, alpha-tested crossed cards and soft upright normals.
-export const canopyKinds=[];
-for(const [name,aspect] of [['oak',.95],['maple',.70]]){
+export const canopyKinds=(await Promise.all([['oak',.95],['maple',.70]].map(async([name,aspect])=>{
  try {const map=await new T.TextureLoader().loadAsync(new URL(`./assets/scenery/first-light-${name}.webp`,import.meta.url).href);
-  map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;canopyKinds.push({name,aspect,map});
- }catch{console.warn('Canopy photograph unavailable:',name);}
-}
+  map.colorSpace=T.SRGBColorSpace;map.anisotropy=4;return {name,aspect,map};
+ }catch{console.warn('Canopy photograph unavailable:',name);return null;}
+}))).filter(Boolean);
 export function canopyGeometry(aspect){
  const p=[],uv=[],normals=[],indices=[];
  for(let k=0;k<3;k++){const a=k*Math.PI/3,x=Math.cos(a)*aspect*.5,z=Math.sin(a)*aspect*.5,b=p.length/3;

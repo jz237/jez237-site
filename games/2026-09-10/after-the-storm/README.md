@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.12.0 · TIDELINE** — September 15, 2026. Repairs the sky longitude seam and improves scenery throughout the nine venues: dry-bank undergrowth, reeds, driftwood, stonework, harbor paving, city facades, and layered snowy ice. See [SCENERY-2.12.md](SCENERY-2.12.md) for verification and limits.
+**v2.13.0 · TIDELINE** — September 16, 2026. Lossless model compression, parallel asset loading, faster starts/restarts, and fewer replay/HUD allocations. Water, physics, scenery detail and texture resolution are preserved. See [PERFORMANCE-2.13.md](PERFORMANCE-2.13.md) for measurements and verification.
 
 The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
 
