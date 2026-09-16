@@ -1,0 +1,377 @@
+{
+  "date": "2026-09-15",
+  "baselineCommit": "524b0251385e6b8aa33fcad9d28f4fc526d4a422",
+  "release": "ridge4",
+  "method": "RTX 5090, fixed 1920x1080, locked High, fresh browser per run; 120 warmup/600 measured frames/300 disjoint-checked GPU queries. Same benchmark as graphics-performance.json.",
+  "interpretation": "CPU median unchanged in both scenes. Draw calls, triangles, particle raster-area proxy and texture/memory counts identical. GPU differences are within scheduling variability; no gain claimed. No weaker GPU tested. Only fog and mountain shading constants changed.",
+  "runs": [
+    {
+      "version": "ridge-clear-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          },
+          {
+            "name": "forest-drive",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "dense-forest",
+          "quality": 2,
+          "spriteRasterPixels": 0,
+          "activeParticles": 0,
+          "assetTextureMiB": 14.066406250000007,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.5,
+          "cpuP95": 0.6999999284744263,
+          "gpuMedian": 0.439968,
+          "gpuP95": 0.83552,
+          "samples": 300,
+          "counts": {
+            "frame": 11734,
+            "calls": 104,
+            "triangles": 404400,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 28,
+          "memory": {
+            "geometries": 97,
+            "textures": 38
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "ridge-clear-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          },
+          {
+            "name": "forest-drive",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "combat",
+          "quality": 2,
+          "spriteRasterPixels": 4020090,
+          "activeParticles": 759,
+          "assetTextureMiB": 16.899739583333332,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 2.100000023841858,
+          "cpuP95": 2.3000000715255737,
+          "gpuMedian": 0.64464,
+          "gpuP95": 1.193696,
+          "samples": 300,
+          "counts": {
+            "frame": 11734,
+            "calls": 596,
+            "triangles": 411634,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 298,
+            "textures": 48
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "ridge-clear-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          },
+          {
+            "name": "forest-drive",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "dense-forest",
+          "quality": 2,
+          "spriteRasterPixels": 0,
+          "activeParticles": 0,
+          "assetTextureMiB": 14.066406250000007,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.5,
+          "cpuP95": 0.6999999284744263,
+          "gpuMedian": 0.374016,
+          "gpuP95": 0.810176,
+          "samples": 300,
+          "counts": {
+            "frame": 11734,
+            "calls": 104,
+            "triangles": 404400,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 28,
+          "memory": {
+            "geometries": 97,
+            "textures": 38
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "ridge-clear-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          },
+          {
+            "name": "forest-drive",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "combat",
+          "quality": 2,
+          "spriteRasterPixels": 4020090,
+          "activeParticles": 759,
+          "assetTextureMiB": 16.899739583333332,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 2.100000023841858,
+          "cpuP95": 2.200000047683716,
+          "gpuMedian": 0.545568,
+          "gpuP95": 1.110976,
+          "samples": 300,
+          "counts": {
+            "frame": 11734,
+            "calls": 596,
+            "triangles": 411634,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 298,
+            "textures": 48
+          }
+        }
+      ],
+      "errors": []
+    }
+  ]
+}

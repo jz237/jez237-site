@@ -98,21 +98,22 @@ function ridgeLayer(radius, base, amp, topColor, baseColor, seed, freq, map) {
   const normals=geo.attributes.normal;
   for(let i=0;i<normals.count;i++){
     const light=Math.max(0,normals.getX(i)*SUN_DIR.x+normals.getY(i)*SUN_DIR.y+normals.getZ(i)*SUN_DIR.z);
-    const heightMix=(i%rows)/(rows-1),shade=1-heightMix*(.21-light*.21);
+    const heightMix=(i%rows)/(rows-1),shade=1-heightMix*(.34-light*.34);
     cols[i*3]*=shade;cols[i*3+1]*=shade;cols[i*3+2]*=shade;
   }
   geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));
   const material=new THREE.MeshBasicMaterial({map,vertexColors:true,fog:true,side:THREE.DoubleSide});
+  // Keep haze at the hidden foot of the ridge so slopes retain their detail.
   material.onBeforeCompile=shader=>{
     shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying float vRidgeHeight;').replace('#include <begin_vertex>','#include <begin_vertex>\nvRidgeHeight=position.y;');
-    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRidgeHeight;').replace('#include <fog_fragment>',`\n#ifdef USE_FOG\ngl_FragColor.rgb=mix(gl_FragColor.rgb,fogColor,1.0-smoothstep(-5.0,55.0,vRidgeHeight));\n#endif`);
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRidgeHeight;').replace('#include <fog_fragment>',`\n#ifdef USE_FOG\ngl_FragColor.rgb=mix(gl_FragColor.rgb,fogColor,1.0-smoothstep(-12.0,32.0,vRidgeHeight));\n#endif`);
     shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
       // Reuse forest/ravine detail from First Light without importing its sky.
       vec3 mountainPhoto=texture2D(map,vMapUv).rgb;
-      float detail=clamp(dot(mountainPhoto,vec3(.299,.587,.114))*2.6+.66,.68,1.22);
+      float detail=clamp(dot(mountainPhoto,vec3(.299,.587,.114))*3.4+.45,.50,1.32);
       diffuseColor.rgb*=detail;`);
   };
-  material.customProgramCacheKey=()=> 'textured-ridge3';
+  material.customProgramCacheKey=()=> 'textured-ridge4';
   const mesh=new THREE.Mesh(geo,material);mesh.name='distant-ridge';mesh.frustumCulled=false;return mesh;
 }
 
@@ -173,9 +174,9 @@ export function buildSky(scene) {
   });
   ridgeMap.colorSpace=THREE.SRGBColorSpace;ridgeMap.wrapS=THREE.MirroredRepeatWrapping;ridgeMap.anisotropy=4;
   const distant = new THREE.Group();
-  distant.add(ridgeLayer(645, 36, 125, 0x9aaebd, 0xc4d3dc, 1201, 2.6, ridgeMap));
-  distant.add(ridgeLayer(565, 22, 96, 0x7d969e, 0xbdcdd1, 5807, 3.4, ridgeMap));
-  distant.add(ridgeLayer(488, 12, 68, 0x60796f, 0xb0c4c6, 9103, 4.3, ridgeMap));
+  distant.add(ridgeLayer(645, 36, 125, 0x7690a1, 0x899fa5, 1201, 2.6, ridgeMap));
+  distant.add(ridgeLayer(565, 22, 96, 0x58777a, 0x768e88, 5807, 3.4, ridgeMap));
+  distant.add(ridgeLayer(488, 12, 68, 0x496554, 0x607d68, 9103, 4.3, ridgeMap));
   scene.add(distant);
 
   // clouds
