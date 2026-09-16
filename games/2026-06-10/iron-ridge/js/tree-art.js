@@ -2,7 +2,7 @@
 // give parallax from every driving angle without per-tree camera updates.
 // Fine leaves, bark and branch shading live in one shared mipmapped texture.
 import * as THREE from 'three';
-import { makeRng } from './noise.js?v=detail2';
+import { makeRng } from './noise.js?v=detail3';
 
 export function woodlandMaterial(path = './assets/textures/woodland.png') {
   // Transparent first paint while the local atlas loads (never white cards).
@@ -15,6 +15,7 @@ export function woodlandMaterial(path = './assets/textures/woodland.png') {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = 4;
     mat.map = texture;
+    if(mat.lodDepth){mat.lodDepth.map=texture;mat.lodDepth.needsUpdate=true;}
     mat.needsUpdate = true;
     map.dispose();
   });

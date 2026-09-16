@@ -8,25 +8,27 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=detail2';
-import { Infantry } from './infantry.js?v=detail2';
-import { makeRng } from './noise.js?v=detail2';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=detail2';
-import { buildSky } from './sky.js?v=detail2';
-import { Foliage } from './foliage.js?v=detail2';
-import { Props } from './props.js?v=detail2';
-import { Tank } from './tank.js?v=detail2';
-import { WaveManager } from './enemy.js?v=detail2';
-import { Projectiles } from './projectiles.js?v=detail2';
-import { Effects } from './effects.js?v=detail2';
-import { GameAudio } from './audio.js?v=detail2';
-import { Input, isTouch } from './input.js?v=detail2';
-import { settings, setSetting } from './settings.js?v=detail2';
-import { Hud } from './hud.js?v=detail2';
-import { QualityScaler, LEVELS } from './quality.js?v=detail2';
-import { Minimap } from './minimap.js?v=detail2';
-import * as LB from './leaderboard.js?v=detail2';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=detail2';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=detail3';
+import { Infantry } from './infantry.js?v=detail3';
+import { makeRng } from './noise.js?v=detail3';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=detail3';
+import { buildSky } from './sky.js?v=detail3';
+import { Foliage } from './foliage.js?v=detail3';
+import { Props } from './props.js?v=detail3';
+import { Tank } from './tank.js?v=detail3';
+import { WaveManager } from './enemy.js?v=detail3';
+import { Projectiles } from './projectiles.js?v=detail3';
+import { surfaceDetail } from './surface-art.js?v=detail3';
+import { ContactShadows } from './contact-shadows.js?v=detail3';
+import { Effects } from './effects.js?v=detail3';
+import { GameAudio } from './audio.js?v=detail3';
+import { Input, isTouch } from './input.js?v=detail3';
+import { settings, setSetting } from './settings.js?v=detail3';
+import { Hud } from './hud.js?v=detail3';
+import { QualityScaler, LEVELS } from './quality.js?v=detail3';
+import { Minimap } from './minimap.js?v=detail3';
+import * as LB from './leaderboard.js?v=detail3';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=detail3';
 
 const $ = (id) => document.getElementById(id);
 
@@ -116,6 +118,7 @@ const foliage = new Foliage(scene, world);
 const props = new Props(scene, world);
 const infantry = new Infantry(scene);
 const effects = new Effects(scene, camera);
+const contacts = new ContactShadows(scene);
 const projectiles = new Projectiles(scene, world);
 const audio = new GameAudio();
 const input = new Input(canvas);
@@ -604,6 +607,8 @@ const quality = new QualityScaler(isTouch ? 1 : 2, (L) => {
   terrain.mesh.material.userData.detailStrength.value = L.groundDetail;
   foliage.setGrassFraction(L.grassFrac);
   effects.setParticleScale(L.particleScale);
+  contacts.setCapacity(L.contactCap);
+  surfaceDetail.value=L.groundDetail;
   if (sky.sun.shadow.mapSize.x !== L.shadowSize) {
     sky.sun.shadow.mapSize.set(L.shadowSize, L.shadowSize);
     if (sky.sun.shadow.map) {
@@ -2197,7 +2202,12 @@ function gameFrame(dt) {
       if (G.dustAcc > 1.4) {
         G.dustAcc = 0;
         const bp = G.player.body.position;
-        effects.dustPuff(bp.x, getHeight(bp.x, bp.z), bp.z, Math.min(2, sp / 6));
+        const yaw=G.player.visualYaw(),sin=Math.sin(yaw),cos=Math.cos(yaw);
+        const travel=Math.sign(G.player.speedAlongForward());
+        for(const side of [-1,1]) {
+          const x=bp.x-sin*1.8*travel+cos*side,z=bp.z-cos*1.8*travel-sin*side;
+          effects.dustPuff(x,getHeight(x,z),z,Math.min(1.2,sp/12),-sin*travel*sp*.12,-cos*travel*sp*.12);
+        }
       }
       G.trailAcc += sp * dt;
       if (G.trailAcc > 0.85) {
@@ -2297,6 +2307,7 @@ function gameFrame(dt) {
     }
   }
   foliage.update(dt, camera.position.x, camera.position.z);
+  contacts.update(dt, camera, foliage, G.player, waves.enemies);
   effects.update(dt);
   // shadow frustum follows the camera so downed-spectate stays lit
   sky.update(dt, camera.position);
@@ -2326,6 +2337,7 @@ function menuFrame(dt) {
   camera.position.set(Math.cos(t) * r, 26 + Math.sin(t * 0.7) * 6, Math.sin(t) * r);
   camera.lookAt(0, 6, 0);
   foliage.update(dt, camera.position.x, camera.position.z);
+  contacts.update(dt, camera, foliage, G.player, waves.enemies);
   effects.update(dt);
   sky.update(dt, camera.position);
 }
@@ -2373,7 +2385,7 @@ requestAnimationFrame(loop);
 
 // debug/testing handle (harmless in production)
 window.__IR = {
-  G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry,
+  contacts, G, quality, world, startGame, waves, props, projectiles, effects, input, camera, multiplayer, infantry,
   onShellHit, audio, damagePlayer,
   player: () => G.player, frames: 0,
   // drive frames manually when rAF is suspended (headless testing)

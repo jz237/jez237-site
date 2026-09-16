@@ -3,7 +3,7 @@
 // ridge" backdrop), circling birds, hemisphere + directional sun lighting.
 
 import * as THREE from 'three';
-import { Simplex2, makeRng } from './noise.js?v=detail2';
+import { Simplex2, makeRng } from './noise.js?v=detail3';
 
 export const SUN_DIR = new THREE.Vector3(0.55, 0.62, 0.38).normalize();
 
@@ -70,35 +70,50 @@ function cloudTexture(seed) {
 // camera far plane (700m). They follow the player, so they read as an
 // infinitely distant backdrop; fog is baked into the vertex colors instead
 // of applied (uniform fog at that range would erase them).
-function ridgeLayer(radius, base, amp, topColor, baseColor, seed, freq) {
-  // Four gently curved slope bands, with baked gully shading. More natural
-  // relief than a single vertical silhouette; still one draw per ridge.
-  const N=512, rows=5, noise=new Simplex2(seed),verts=[],cols=[],idx=[];
+function ridgeLayer(radius, base, amp, topColor, baseColor, seed, freq, map) {
+  const N=384,rows=9,noise=new Simplex2(seed),verts=[],cols=[],uvs=[],indices=[];
   const top=new THREE.Color(topColor),haze=new THREE.Color(baseColor),c=new THREE.Color();
   const heights=[];
   for(let i=0;i<N;i++) {
-    const a=i/N*Math.PI*2,cx=Math.cos(a),sz=Math.sin(a);
-    const n=noise.fbm(cx*freq+3.7,sz*freq-1.9,3,2.0,.42);
-    heights.push(base+Math.pow(THREE.MathUtils.clamp(n*.43+.55,0,1),1.15)*amp);
+    const a=i/N*Math.PI*2,x=Math.cos(a),z=Math.sin(a);
+    const broad=noise.fbm(x*freq+3.7,z*freq-1.9,4,2,.43);
+    const crag=1-Math.abs(noise.noise(x*freq*2.7-10,z*freq*2.7+13));
+    heights.push(base+amp*(.35+broad*.55+crag*.19));
   }
   for(let i=0;i<=N;i++) {
-    const a=(i%N)/N*Math.PI*2,cx=Math.cos(a),sz=Math.sin(a);
-    const h=heights[i%N],slope=(heights[(i+1)%N]-heights[(i+N-1)%N])*.032;
+    const a=(i%N)/N*Math.PI*2,x=Math.cos(a),z=Math.sin(a),h=heights[i%N];
     for(let j=0;j<rows;j++) {
-      const t=j/(rows-1),r=radius-(1-t)*45;
-      verts.push(cx*r,-22+(h+22)*Math.pow(t,.85),sz*r);
-      const gully=noise.noise(cx*freq*4.1+t*.65,sz*freq*4.1)*.5+.5;
-      const shade=1+THREE.MathUtils.clamp(slope*Math.cos(a-.7),-.09,.09)*t-gully*.075*t;
-      c.copy(haze).lerp(top,Math.pow(t,1.5)*.9).multiplyScalar(shade);
-      cols.push(c.r,c.g,c.b);
-      if(i<N&&j<rows-1){const k=i*rows+j;idx.push(k,k+rows,k+1,k+1,k+rows,k+rows+1);}
+      const t=j/(rows-1),gully=noise.noise(x*freq*5+t*.6,z*freq*5+t*.35);
+      // Broad foothills rise into a narrow crest; gullies fan down the slope.
+      const r=radius-95*Math.pow(1-t,1.3)+gully*8*Math.sin(t*Math.PI);
+      const y=-28+(h+28)*Math.pow(t,.9)+gully*amp*.09*Math.sin(t*Math.PI);
+      verts.push(x*r,y,z*r);uvs.push(i/N*8+seed*.001,.015+t*.48);
+      c.copy(haze).lerp(top,Math.pow(t,.65));cols.push(c.r,c.g,c.b);
+      if(i<N&&j<rows-1){const k=i*rows+j;indices.push(k,k+rows,k+1,k+1,k+rows,k+rows+1);}
     }
   }
   const geo=new THREE.BufferGeometry();
   geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
-  geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));geo.setIndex(idx);
-  const mesh=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide}));
-  mesh.frustumCulled=false;return mesh;
+  geo.setAttribute('uv',new THREE.Float32BufferAttribute(uvs,2));geo.setIndex(indices);geo.computeVertexNormals();
+  const normals=geo.attributes.normal;
+  for(let i=0;i<normals.count;i++){
+    const light=Math.max(0,normals.getX(i)*SUN_DIR.x+normals.getY(i)*SUN_DIR.y+normals.getZ(i)*SUN_DIR.z);
+    const heightMix=(i%rows)/(rows-1),shade=1-heightMix*(.21-light*.21);
+    cols[i*3]*=shade;cols[i*3+1]*=shade;cols[i*3+2]*=shade;
+  }
+  geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));
+  const material=new THREE.MeshBasicMaterial({map,vertexColors:true,fog:true,side:THREE.DoubleSide});
+  material.onBeforeCompile=shader=>{
+    shader.vertexShader=shader.vertexShader.replace('#include <common>','#include <common>\nvarying float vRidgeHeight;').replace('#include <begin_vertex>','#include <begin_vertex>\nvRidgeHeight=position.y;');
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nvarying float vRidgeHeight;').replace('#include <fog_fragment>',`\n#ifdef USE_FOG\ngl_FragColor.rgb=mix(gl_FragColor.rgb,fogColor,1.0-smoothstep(-5.0,55.0,vRidgeHeight));\n#endif`);
+    shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`
+      // Reuse forest/ravine detail from First Light without importing its sky.
+      vec3 mountainPhoto=texture2D(map,vMapUv).rgb;
+      float detail=clamp(dot(mountainPhoto,vec3(.299,.587,.114))*2.6+.66,.68,1.22);
+      diffuseColor.rgb*=detail;`);
+  };
+  material.customProgramCacheKey=()=> 'textured-ridge3';
+  const mesh=new THREE.Mesh(geo,material);mesh.name='distant-ridge';mesh.frustumCulled=false;return mesh;
 }
 
 // --- birds ----------------------------------------------------------------
@@ -148,10 +163,19 @@ export function buildSky(scene) {
   scene.add(sky);
 
   // the eponymous ridge line: three haze-graded silhouette layers
+  const ridgeMap=new THREE.TextureLoader().load('./assets/textures/distant-ridge.webp',texture=>{
+    // The horizon occupies a narrow screen band. A 1024px copy saves about
+    // 5.5 MiB of resident texture memory while retaining its visible detail.
+    const source=texture.image,canvas=document.createElement('canvas');canvas.width=1024;
+    canvas.height=Math.round(source.height*1024/source.width);
+    canvas.getContext('2d').drawImage(source,0,0,canvas.width,canvas.height);
+    texture.image=canvas;texture.needsUpdate=true;
+  });
+  ridgeMap.colorSpace=THREE.SRGBColorSpace;ridgeMap.wrapS=THREE.MirroredRepeatWrapping;ridgeMap.anisotropy=4;
   const distant = new THREE.Group();
-  distant.add(ridgeLayer(645, 30, 96, 0xabbac7, 0xcbdce5, 1201, 2.6));
-  distant.add(ridgeLayer(565, 18, 74, 0x859da7, 0xc2d4db, 5807, 3.4));
-  distant.add(ridgeLayer(488, 8, 50, 0x657f80, 0xb6cbd0, 9103, 4.3));
+  distant.add(ridgeLayer(645, 36, 125, 0x9aaebd, 0xc4d3dc, 1201, 2.6, ridgeMap));
+  distant.add(ridgeLayer(565, 22, 96, 0x7d969e, 0xbdcdd1, 5807, 3.4, ridgeMap));
+  distant.add(ridgeLayer(488, 12, 68, 0x60796f, 0xb0c4c6, 9103, 4.3, ridgeMap));
   scene.add(distant);
 
   // clouds
@@ -226,5 +250,5 @@ export function buildSky(scene) {
     }
   }
 
-  return { sky, sun, hemi, update };
+  return { sky, sun, hemi, distant, update };
 }

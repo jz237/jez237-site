@@ -1,6 +1,6 @@
 // Small shared procedural maps. Generated once, never painted per frame.
 import * as THREE from 'three';
-import { makeRng } from './noise.js?v=detail2';
+import { Simplex2, makeRng } from './noise.js?v=detail3';
 
 export function groundRelief() {
   const n = 256, height = new Float32Array(n * n), data = new Uint8Array(n * n * 4);
@@ -59,4 +59,64 @@ export function barkTexture() {
   }
   const map=new THREE.CanvasTexture(c);map.colorSpace=THREE.SRGBColorSpace;
   map.wrapS=map.wrapT=THREE.RepeatWrapping;return map;
+}
+
+// Whole-map masks: meandering worn paths, soil patches, exposed rock and
+// meadow tint. All generation runs once; the shader uses one packed lookup.
+export function landscapeMask(worldSize) {
+  const n=512,data=new Uint8Array(n*n*4),noise=new Simplex2(31875);
+  for(let y=0;y<n;y++)for(let x=0;x<n;x++) {
+    const wx=(x/(n-1)-.5)*worldSize,wz=(.5-y/(n-1))*worldSize;
+    const broad=noise.noise(wx*.021+9,wz*.021-6)*.5+.5;
+    const patch=noise.noise(wx*.068-40,wz*.068+60)*.5+.5;
+    const pathA=Math.abs(wz-wx*.38-13*Math.sin(wx*.019));
+    const pathB=Math.abs(wx+63-19*Math.sin(wz*.014));
+    const distance=Math.min(pathA,pathB);
+    const road=1-THREE.MathUtils.smoothstep(distance,1.5,4.4+patch*1.8);
+    const soil=Math.max(road*.94,THREE.MathUtils.smoothstep(broad,.46,.79)*.82);
+    const stone=noise.noise(wx*.034+22,wz*.034-70)*.5+.5;
+    const i=(y*n+x)*4;
+    data[i]=soil*255;data[i+1]=stone*255;data[i+2]=(broad*.7+patch*.3)*255;data[i+3]=road*255;
+  }
+  const map=new THREE.DataTexture(data,n,n);map.magFilter=THREE.LinearFilter;
+  map.minFilter=THREE.LinearMipmapLinearFilter;map.generateMipmaps=true;map.needsUpdate=true;
+  return map;
+}
+
+export const surfaceDetail={value:1};
+const surfaceMaps=new Map();
+export function tankSurface(material, kind='paint') {
+  if(!surfaceMaps.has(kind)) {
+    const n=128,rng=makeRng(kind==='rubber'?701:kind==='steel'?702:703),height=new Float32Array(n*n),data=new Uint8Array(n*n*4);
+    for(let y=0;y<n;y++)for(let x=0;x<n;x++) {
+      const grain=rng();
+      height[y*n+x]=kind==='rubber' ? .15*grain+.1*Math.sin(x*.8) : kind==='steel' ? .18*grain+.07*Math.sin(y*1.7) : grain*.38;
+    }
+    for(let y=0;y<n;y++)for(let x=0;x<n;x++) {
+      const i=y*n+x,dx=height[y*n+(x+1)%n]-height[y*n+(x+n-1)%n],dy=height[((y+1)%n)*n+x]-height[((y+n-1)%n)*n+x];
+      const v=new THREE.Vector3(-dx,-dy,1).normalize();
+      data[i*4]=(v.x*.5+.5)*255;data[i*4+1]=(v.y*.5+.5)*255;data[i*4+2]=(v.z*.5+.5)*255;
+      data[i*4+3]=130+Math.min(125,height[i]*240);
+    }
+    const map=new THREE.DataTexture(data,n,n);map.wrapS=map.wrapT=THREE.RepeatWrapping;
+    map.minFilter=THREE.LinearMipmapLinearFilter;map.magFilter=THREE.LinearFilter;map.generateMipmaps=true;map.needsUpdate=true;
+    surfaceMaps.set(kind,map);
+  }
+  material.normalMap=surfaceMaps.get(kind);material.normalScale.setScalar(kind==='paint'?.22:.12);
+  // Reuse the normal-map fetch's alpha for roughness. No second roughness lookup.
+  material.onBeforeCompile=shader=>{
+    shader.uniforms.surfaceDetail=surfaceDetail;
+    shader.fragmentShader=shader.fragmentShader.replace('#include <common>','#include <common>\nuniform float surfaceDetail;');
+    shader.fragmentShader=shader.fragmentShader.replace('#include <normal_fragment_maps>',`
+      #ifdef USE_NORMALMAP_TANGENTSPACE
+        if(surfaceDetail>0.5){
+        vec4 surfaceSample=texture2D(normalMap,vNormalMapUv);
+        vec3 mapN=surfaceSample.xyz*2.0-1.0;
+        mapN.xy*=normalScale;normal=normalize(tbn*mapN);
+        roughnessFactor=clamp(roughnessFactor*(.65+surfaceSample.a*.58),.22,1.0);
+        }
+      #endif`);
+  };
+  material.customProgramCacheKey=()=> 'packed-tank-surface3';
+  return material;
 }

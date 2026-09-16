@@ -3,9 +3,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { getHeight } from './terrain.js?v=detail2';
-import { makeRng } from './noise.js?v=detail2';
-import { CG, SCORING, PILLBOX, PICKUP } from './config.js?v=detail2';
+import { getHeight } from './terrain.js?v=detail3';
+import { makeRng } from './noise.js?v=detail3';
+import { CG, SCORING, PILLBOX, PICKUP } from './config.js?v=detail3';
 
 function barrelTexture() {
   const cv = document.createElement('canvas');

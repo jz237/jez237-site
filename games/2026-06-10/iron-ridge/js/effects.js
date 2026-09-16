@@ -3,9 +3,10 @@
 // tread marks, and screen-shake trauma.
 
 import * as THREE from 'three';
-import { treadTexture } from './surface-art.js?v=detail2';
-import { getHeight, getNormal } from './terrain.js?v=detail2';
-import { SCATTER } from './config.js?v=detail2';
+import { Simplex2 } from './noise.js?v=detail3';
+import { treadTexture } from './surface-art.js?v=detail3';
+import { getHeight, getNormal } from './terrain.js?v=detail3';
+import { SCATTER } from './config.js?v=detail3';
 
 function softCircleTexture(hard = false) {
   const s = 64;
@@ -19,6 +20,23 @@ function softCircleTexture(hard = false) {
   ctx.fillStyle = g;
   ctx.fillRect(0, 0, s, s);
   return new THREE.CanvasTexture(cv);
+}
+
+// Four lumpy, softly lit cloud silhouettes in a single shared map.
+function smokeAtlas() {
+  const tile=128,n=tile*2,data=new Uint8Array(n*n*4);
+  for(let k=0;k<4;k++) {
+    const noise=new Simplex2(908+k*371),ox=k%2*tile,oy=Math.floor(k/2)*tile;
+    for(let y=0;y<tile;y++)for(let x=0;x<tile;x++) {
+      const nx=x/(tile-1)*2-1,ny=y/(tile-1)*2-1;
+      const broad=noise.noise(nx*2+5,ny*2-8),fine=noise.fbm(nx*5-30,ny*5+40,3,2,.5);
+      const d=Math.hypot(nx,ny),edge=1-THREE.MathUtils.smoothstep(d+Math.max(0,broad)*.18,.32,.96);
+      const density=edge*(.72+fine*.34),light=THREE.MathUtils.clamp(.84-ny*.11+fine*.14,.58,1);
+      const i=((oy+y)*n+ox+x)*4;data[i]=data[i+1]=data[i+2]=light*255;data[i+3]=density*255;
+    }
+  }
+  const map=new THREE.DataTexture(data,n,n);map.magFilter=THREE.LinearFilter;
+  map.minFilter=THREE.LinearMipmapLinearFilter;map.generateMipmaps=true;map.needsUpdate=true;return map;
 }
 
 // irregular dark-red splatter with outlying droplets
@@ -66,6 +84,7 @@ class ParticlePool {
     this.grav = new Float32Array(count);
     this.baseSize = new Float32Array(count);
     this.startAlpha = new Float32Array(count);
+    this.alpha = new Float32Array(count);this.phase = new Float32Array(count*2);this.additive=additive;this.spawnSerial=0;
     this.head = 0;
     this.activeCap = count;
 
@@ -73,24 +92,31 @@ class ParticlePool {
     geo.setAttribute('position', new THREE.BufferAttribute(this.pos, 3));
     geo.setAttribute('color', new THREE.BufferAttribute(this.col, 3));
     geo.setAttribute('size', new THREE.BufferAttribute(this.sizeAttr, 1));
+    geo.setAttribute('aAlpha',new THREE.BufferAttribute(this.alpha,1));
+    geo.setAttribute('aPhase',new THREE.BufferAttribute(this.phase,2));
 
     const mat = new THREE.ShaderMaterial({
-      uniforms: { map: { value: softCircleTexture(additive) } },
+      uniforms: { map: { value: additive?softCircleTexture(true):smokeAtlas() }, tiles:{value:additive?1:2}, pointLimit:{value:192} },
       vertexShader: /* glsl */`
-        attribute float size;
-        varying vec3 vCol;
+        attribute float size;attribute float aAlpha;attribute vec2 aPhase;
+        uniform float pointLimit;uniform float tiles;
+        varying vec3 vCol;varying float vAlpha;varying vec4 vPhase;
         void main() {
-          vCol = color;
+          vCol = color;vAlpha=aAlpha;vPhase=vec4(cos(aPhase.x),sin(aPhase.x),mod(aPhase.y,tiles),floor(aPhase.y/tiles));
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
-          gl_PointSize = size * (220.0 / -mv.z);
+          gl_PointSize = min(pointLimit,size * (220.0 / max(0.1,-mv.z)));
           gl_Position = projectionMatrix * mv;
         }`,
       fragmentShader: /* glsl */`
-        uniform sampler2D map;
-        varying vec3 vCol;
+        uniform sampler2D map;uniform float tiles;
+        varying vec3 vCol;varying float vAlpha;varying vec4 vPhase;
         void main() {
-          vec4 t = texture2D(map, gl_PointCoord);
-          gl_FragColor = vec4(vCol, 1.0) * t;
+          if(vAlpha<0.003)discard;
+          vec2 p=gl_PointCoord-.5;
+          vec2 uv=vec2(p.x*vPhase.x-p.y*vPhase.y,p.x*vPhase.y+p.y*vPhase.x)+.5;
+          if(any(lessThan(uv,vec2(0.0)))||any(greaterThan(uv,vec2(1.0))))discard;
+          vec4 t=texture2D(map,(clamp(uv,vec2(.004),vec2(.996))+vPhase.zw)/tiles);
+          gl_FragColor=vec4(vCol,t.a*vAlpha)*vec4(t.rgb,1.0);
         }`,
       vertexColors: true,
       transparent: true,
@@ -103,7 +129,7 @@ class ParticlePool {
     this.life.fill(-1);
   }
 
-  emit(x, y, z, vx, vy, vz, life, size, r, g, b, { grow = 0, drag = 0, grav = 0 } = {}) {
+  emit(x, y, z, vx, vy, vz, life, size, r, g, b, { grow = 0, drag = 0, grav = 0, alpha = 0.62 } = {}) {
     const i = this.head;
     this.head = (this.head + 1) % this.activeCap;
     this.pos[i * 3] = x; this.pos[i * 3 + 1] = y; this.pos[i * 3 + 2] = z;
@@ -111,16 +137,18 @@ class ParticlePool {
     this.life[i] = life; this.maxLife[i] = life;
     this.baseSize[i] = size;
     this.col[i * 3] = r; this.col[i * 3 + 1] = g; this.col[i * 3 + 2] = b;
-    this.startAlpha[i] = 1;
+    this.startAlpha[i] = this.additive?1:alpha;
+    this.phase[i*2]=(this.spawnSerial++*2.399963)%6.283185;this.phase[i*2+1]=this.additive?0:this.spawnSerial%4;
+    this.phaseDirty=true;
     this.grow[i] = grow; this.drag[i] = drag; this.grav[i] = grav;
   }
 
   update(dt) {
     const { pos, vel, life, maxLife, sizeAttr, baseSize, grow, drag, grav } = this;
     for (let i = 0; i < this.count; i++) {
-      if (life[i] < 0) { sizeAttr[i] = 0; continue; }
+      if (life[i] < 0) { sizeAttr[i] = 0; this.alpha[i]=0;continue; }
       life[i] -= dt;
-      if (life[i] < 0) { sizeAttr[i] = 0; continue; }
+      if (life[i] < 0) { sizeAttr[i] = 0; this.alpha[i]=0;continue; }
       const dragF = 1 - drag[i] * dt;
       vel[i * 3] *= dragF;
       vel[i * 3 + 1] = vel[i * 3 + 1] * dragF + grav[i] * dt;
@@ -129,11 +157,13 @@ class ParticlePool {
       pos[i * 3 + 1] += vel[i * 3 + 1] * dt;
       pos[i * 3 + 2] += vel[i * 3 + 2] * dt;
       const t = life[i] / maxLife[i];
-      sizeAttr[i] = baseSize[i] * (1 + grow[i] * (1 - t)) * Math.min(1, t * 4);
+      sizeAttr[i] = baseSize[i] * (1 + grow[i] * (1 - t));
+      this.alpha[i]=this.startAlpha[i]*THREE.MathUtils.smoothstep(t,0,.45)*(this.additive?1:THREE.MathUtils.smoothstep(1-t,0,.08));
     }
+    this.points.geometry.attributes.aAlpha.needsUpdate=true;
+    if(this.phaseDirty){this.points.geometry.attributes.aPhase.needsUpdate=true;this.points.geometry.attributes.color.needsUpdate=true;this.phaseDirty=false;}
     this.points.geometry.attributes.position.needsUpdate = true;
     this.points.geometry.attributes.size.needsUpdate = true;
-    this.points.geometry.attributes.color.needsUpdate = true;
   }
 }
 
@@ -253,7 +283,7 @@ export class Effects {
     this.splats.instanceMatrix.needsUpdate = true;
   }
 
-  setParticleScale(s) { this.particleScale = s; }
+  setParticleScale(s) { this.particleScale = s;this.smoke.points.material.uniforms.pointLimit.value=128+64*s;this.fire.points.material.uniforms.pointLimit.value=128+64*s; }
 
   setShakeScale(s) { this.shakeScale = s; }
 
@@ -379,14 +409,14 @@ export class Effects {
         1, 0.85, 0.5, { grav: -22, drag: 0.4 });
     }
     // smoke column
-    const ns = Math.floor(20 * ps * power);
+    const ns = Math.floor(16 * ps * power);
     for (let i = 0; i < ns; i++) {
       const g = 0.18 + Math.random() * 0.2;
       this.smoke.emit(
         pos.x + (Math.random() - 0.5) * 1.6 * power, pos.y + Math.random() * 1.2, pos.z + (Math.random() - 0.5) * 1.6 * power,
         (Math.random() - 0.5) * 2.5, 2.5 + Math.random() * 4.5, (Math.random() - 0.5) * 2.5,
         1.1 + Math.random() * 1.3, (2.6 + Math.random() * 3.4) * power,
-        g, g * 0.95, g * 0.88, { drag: 1.4, grow: 3.2 });
+        g, g * 0.95, g * 0.88, { drag: 1.4, grow: 2.4, alpha: 0.72 });
     }
     // shrapnel streaks
     const nh = Math.floor(8 * ps * power);
@@ -449,15 +479,15 @@ export class Effects {
     }
   }
 
-  dustPuff(x, y, z, amount = 1) {
-    const n = Math.floor(2 * amount * this.particleScale);
+  dustPuff(x, y, z, amount = 1, driftX = 0, driftZ = 0) {
+    const n = Math.max(1,Math.floor(2 * amount * this.particleScale));
     for (let i = 0; i < n; i++) {
       const g = 0.52 + Math.random() * 0.1;
       this.smoke.emit(
         x + (Math.random() - 0.5) * 1.4, y + 0.2, z + (Math.random() - 0.5) * 1.4,
-        (Math.random() - 0.5) * 1.8, 0.8 + Math.random() * 1.4, (Math.random() - 0.5) * 1.8,
+        driftX+(Math.random() - 0.5) * 1.2, 0.4 + Math.random() * 0.7, driftZ+(Math.random() - 0.5) * 1.2,
         0.7 + Math.random() * 0.7, 1.1 + Math.random() * 1.4,
-        g, g * 0.94, g * 0.8, { drag: 1.8, grow: 2.4 });
+        g, g * 0.94, g * 0.8, { drag: 1.3, grow: 2.1, alpha: 0.35 });
     }
   }
 
