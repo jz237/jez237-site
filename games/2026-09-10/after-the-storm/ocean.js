@@ -36,9 +36,9 @@ ${gustGLSL}
 ${localWaterGLSL}
 float height(vec2 p){return seaLevel+localWaterHeight(p)+gustHeightAt(p,time,storm)+hullContactHeight(p)+boundaryHeight(p)+waveSurface(p).x+jetWake(p)+impactHeight(p)+wakeHeight(p);}`;
 export function makeSky(scene){const mat=new T.ShaderMaterial({side:T.BackSide,depthWrite:false,uniforms:{...panoramaUniforms,...shared,...skyColors,...weatherUniforms,cloudVolume:{value:cloudVolume},skySteps:{value:20}},vertexShader:`varying vec3 dir;void main(){dir=position;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}`,fragmentShader:atmosphereFragment});const sky=new T.Mesh(new T.SphereGeometry(1200,32,20),mat);scene.add(sky);return sky;}
-export function makeTerrain(scene,heightFn=ground,palette={}){
+export function makeTerrain(scene,heightFn=ground,palette={},heights=null){
  const geo=new T.PlaneGeometry(920,920,360,360);geo.rotateX(-Math.PI/2);
- const p=geo.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,heightFn(p.getX(i),p.getZ(i)));geo.computeVertexNormals();
+ const p=geo.attributes.position;for(let i=0;i<p.count;i++)p.setY(i,heights?.length===p.count?heights[i]:heightFn(p.getX(i),p.getZ(i)));geo.computeVertexNormals();
  const mat=new T.MeshStandardMaterial({color:0xffffff,roughness:.93});
  configureTerrainMaterial(mat,{palette,waterDetail,waterLevel,time:shared.time,storm:shared.storm});
  cloudMaterial(mat);const mesh=new T.Mesh(geo,mat);mesh.receiveShadow=true;scene.add(mesh);return mesh;

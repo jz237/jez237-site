@@ -1,3 +1,4 @@
+import {terrainPreparation} from './terrain-preparation.js';
 import {makeVenueScenery} from './venue-scenery.js';
 import {dressMaterial} from './venue-materials.js';
 import {panoramaUniforms} from './sky-panorama.js';
@@ -32,8 +33,8 @@ export function makeCourseWorld(scene,course,ocean,{freeRide=false}={}){
  const palette=cold?{sand:0x94bdc9,rock:0xadc8d5,grass:0xe5f0f0}:theme==='port'||night?{sand:0x737e81,rock:0x899091,grass:0x828b83,paved:true}:theme==='beach'||theme==='resort'||theme==='island'?{sand:0xd8c99c,rock:0xa7a58a,grass:0x759358}:{};
  const venueScenery=makeVenueScenery(root,course),scenery=makeCoastalScenery(root,course),distant=makeDistantCoast(root,course),obstacleFoam=makeObstacleFoam(root,course);
  const underwater=makeUnderwaterScenery(root,course);
- const renderGround=course.renderGround||course.ground;const terrain=makeTerrain(root,renderGround,palette);materials.push(terrain.material);geometries.push(terrain.geometry);
- const n=512,data=new Uint8Array(n*n*4);for(let z=0;z<n;z++)for(let x=0;x<n;x++){const h=renderGround((x/(n-1)-.5)*920,(z/(n-1)-.5)*920),v=Math.round(T.MathUtils.clamp((h+16)/100,0,1)*65535),i=(z*n+x)*4;data[i]=v>>8;data[i+1]=v&255;data[i+3]=255;}
+ const renderGround=course.renderGround||course.ground,prepared=terrainPreparation.get(course);const terrain=makeTerrain(root,renderGround,palette,prepared?.heights);materials.push(terrain.material);geometries.push(terrain.geometry);
+ const n=512,data=prepared?.depth||new Uint8Array(n*n*4);if(!prepared)for(let z=0;z<n;z++)for(let x=0;x<n;x++){const h=renderGround((x/(n-1)-.5)*920,(z/(n-1)-.5)*920),v=Math.round(T.MathUtils.clamp((h+16)/100,0,1)*65535),i=(z*n+x)*4;data[i]=v>>8;data[i+1]=v&255;data[i+3]=255;}
  const heightMap=new T.DataTexture(data,n,n,T.RGBAFormat);heightMap.minFilter=heightMap.magFilter=T.LinearFilter;heightMap.needsUpdate=true;textures.push(heightMap);ocean.mat.uniforms.terrainMap.value=heightMap;ocean.mat.uniforms.customTerrain.value=1;
  ocean.mat.uniforms.reefs.value.forEach((r,i)=>{const p=course.rocks[i];r.set(p?.x??10000,p?.z??10000,p?.r??0);});
  panoramaUniforms.skyWarmth.value=theme==='resort'?1:.18;skyColors.skyNight.value=night?1:0;skyColors.skyHorizon.value.setHex(course.sky[0]);skyColors.skyZenith.value.setHex(course.sky[1]);if(['coast','park','island'].includes(theme)){skyColors.skyHorizon.value.lerp(new T.Color(0xb2dce9),.32);skyColors.skyZenith.value.lerp(new T.Color(0x187fc0),.35);}skyColors.skySun.value.set(theme==='resort'?-.7:-.35,theme==='resort'?.13:night?.45:.32,-.9).normalize();ocean.mat.uniforms.sun.value.copy(skyColors.skySun.value);shared.storm.value=course.storm;

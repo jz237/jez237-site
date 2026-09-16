@@ -1,3 +1,4 @@
+import {assetURL,fetchAsset} from './asset-store.js';
 import {loadBinary} from './asset-binary.js';
 import {loadCraftLOD,craftGeometryLOD} from './mesh-lod.js';
 import * as T from './vendor/three.module.js';
@@ -7,7 +8,7 @@ import {craftSurface,craftUV} from './craft-materials.js';
 let asset=null;
 const lodPromise=loadCraftLOD('coastal-rider');
 try{
- const [a,buffer]=await Promise.all([fetch(new URL('./assets/coastal-rider.json',import.meta.url)),loadBinary('assets/coastal-rider.bin')]);
+ const [a,buffer]=await Promise.all([fetchAsset(assetURL('assets/coastal-rider.json')),loadBinary('assets/coastal-rider.bin')]);
  if(!a.ok)throw new Error('Rider asset request failed');
  const meta=await a.json();
  const meshes=meta.meshes.map(part=>{
