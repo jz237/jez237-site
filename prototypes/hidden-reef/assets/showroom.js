@@ -74,6 +74,29 @@
   new MutationObserver(visibility).observe(document.body,{attributes:true,attributeFilter:['class']});
   // The store aquarium link is the launch gesture; no second play gate.
   launch();
+  // The aquarium starts independently of the optional store planner. Use the
+  // same catalog URL as shopping pages so moving between them reuses cache.
+  const planner=document.querySelector('#planner-grid');
+  let catalogPending=null,plannerBuilt=false;
+  function preparePlanner(){
+    if(plannerBuilt)return Promise.resolve();
+    if(catalogPending)return catalogPending;
+    planner.setAttribute('aria-busy','true');
+    catalogPending=new Promise((resolve,reject)=>{
+      if(window.THR_PRODUCTS){resolve();return;}
+      const script=document.createElement('script');script.src='../assets/product-data.js?v=20260530-sitemap-complete';
+      script.onload=()=>resolve();script.onerror=()=>{script.remove();reject(new Error('Catalog unavailable'));};document.head.append(script);
+    }).then(()=>{planner.replaceChildren();buildPlanner();plannerBuilt=true;planner.setAttribute('aria-busy','false');
+      const product=new URLSearchParams(location.search).get('product');if(product)window.THR?.openProductModal?.(product);
+    }).catch(()=>{catalogPending=null;planner.setAttribute('aria-busy','false');planner.replaceChildren();
+      const retry=document.createElement('button');retry.type='button';retry.textContent='Catalog could not load. Try again';retry.onclick=preparePlanner;planner.append(retry);
+    });
+    return catalogPending;
+  }
+  const plannerObserver=new IntersectionObserver(entries=>{if(entries.some(e=>e.isIntersecting)){plannerObserver.disconnect();preparePlanner();}},{rootMargin:'600px'});
+  plannerObserver.observe(planner);
+  if(new URLSearchParams(location.search).has('product'))preparePlanner();
+  function buildPlanner(){
   const plans=[
     ['01','Aquarium & stand','Start with room, footprint and a stand designed for the filled aquarium.','showroom-consult','aquariums',/./],
     ['02','Filtration','Explore external canisters, then match capacity and media to your setup.','canister-filters','filtration&sub=canister-filters',/canister|cansiter|filtosmart|ultramax|hypermax/i],
@@ -113,5 +136,6 @@
       const note=document.createElement('p');note.textContent='Plan the tank and stand with our team. The online catalog does not currently provide a matching freshwater setup for this aquascape.';
       const visit=document.createElement('a');visit.href='../contact/';visit.textContent='Choose your setup with the team →';article.append(numberEl,heading,description,note,visit,browse);
     }grid.append(article);
+  }
   }
 })();

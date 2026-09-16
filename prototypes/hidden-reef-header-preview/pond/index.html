@@ -8,7 +8,7 @@
   <link rel="canonical" href="../category/?cat=pond" />
   <meta http-equiv="refresh" content="0; url=../category/?cat=pond" />
   <script>window.location.replace('../category/?cat=pond');</script>
-  <link rel="icon" href="../assets/site/header-fish.png" />
+  <link rel="icon" href="../assets/site/favicon.png" />
   <link rel="stylesheet" href="../assets/category.css?v=20260601-touch-pan" />
   <link rel="stylesheet" href="../assets/thr-cards.css?v=20260712-premium-art" />
   <style>
@@ -204,7 +204,7 @@
       .visit-band { grid-template-columns:1fr; }
     }
   </style>
-  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260906-animated-preview" />
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260906-animated" />
 </head>
 <body>
   <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
@@ -330,15 +330,15 @@
     <footer class="footer"><div class="footer-top"><div><h3>The Hidden Reef</h3><div class="footer-contact"><a href="../contact/">4501 New Falls Rd<br>Levittown, PA 19056</a></div></div><div><h4>Shop</h4><div class="footer-link-grid"><a href="../category/?cat=freshwater">Freshwater</a><a href="../category/?cat=saltwater">Saltwater</a><a href="../category/?cat=pond">Pond</a><a href="../category/?cat=equipment">Equipment</a><a href="../category/?cat=food">Food &amp; Care</a><a href="../category/?cat=decor">Decorations</a><a href="../category/?cat=maintenance">Maintenance</a></div></div><div><h4>Customer Service</h4><div class="footer-link-grid"><a href="../contact/">Visit the store</a><a href="../contact/">Contact &amp; Hours</a><a href="../contact/">Shipping info</a><a href="../contact/">Returns</a><a href="../about/">About Us</a><a href="../lightspeed-integration/">Checkout info</a></div></div><div><h4>Helpful Info</h4><a href="../learn/">Help Center</a><a href="../contact/">Visit Us</a></div></div></footer>
   </main>
   <aside class="drawer"><div class="drawer-head"><h2>Preview list</h2><button class="close-cart">Close</button></div><div id="cart-items" class="cart-items"></div><p id="empty-cart" class="empty-cart">Your preview list is empty.</p><a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef site →</a></aside>
-  <script src="../assets/products.js"></script>
-  <script src="../assets/product-data.js"></script>
-  <script src="../assets/catalog-utils.js"></script>
-  <script src="../assets/thr-cards.js?v=20260712-premium-art"></script>
-  <script src="../assets/link-modal.js?v=20260712-premium-art"></script>
-  <script>
+  <script defer src="../assets/products.js"></script>
+  <script defer src="../assets/product-data.js?v=20260530-sitemap-complete"></script>
+  <script defer src="../assets/catalog-utils.js"></script>
+  <script defer src="../assets/thr-cards.js?v=20260712-premium-art"></script>
+  <script defer src="../assets/link-modal.js?v=20260712-premium-art"></script>
+  <script>document.addEventListener("DOMContentLoaded",()=>{
     // Render pond department products from live data
     THR.renderProducts('products', ['pond-supplies', 'pond-pumps', 'pond-additives', 'pond-bacteria', 'pond-food']);
-  </script>
-  <script src="../assets/reef-background.js?v=20260913-showroom"></script>
+  });</script>
+  <script defer src="../assets/reef-background.js?v=20260916-loading"></script>
 </body>
 </html>

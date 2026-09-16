@@ -8,7 +8,7 @@
   <link rel="canonical" href="../category/?cat=decor" />
   <meta http-equiv="refresh" content="0; url=../category/?cat=decor" />
   <script>window.location.replace('../category/?cat=decor');</script>
-  <link rel="icon" href="../assets/site/header-fish.png" />
+  <link rel="icon" href="../assets/site/favicon.png" />
   <link rel="stylesheet" href="../assets/category.css?v=20260601-touch-pan" />
   <link rel="stylesheet" href="../assets/thr-cards.css?v=20260712-premium-art" />
   <style>
@@ -165,15 +165,15 @@
     <a class="btn" href="https://www.thehiddenreef.com/" target="_blank" rel="noopener" style="display:block;text-align:center">Shop on Hidden Reef site →</a>
   </aside>
 
-  <script src="../assets/products.js"></script>
-  <script src="../assets/product-data.js"></script>
-  <script src="../assets/catalog-utils.js"></script>
-  <script src="../assets/thr-cards.js?v=20260712-premium-art"></script>
-  <script src="../assets/link-modal.js?v=20260712-premium-art"></script>
-  <script>
+  <script defer src="../assets/products.js"></script>
+  <script defer src="../assets/product-data.js?v=20260530-sitemap-complete"></script>
+  <script defer src="../assets/catalog-utils.js"></script>
+  <script defer src="../assets/thr-cards.js?v=20260712-premium-art"></script>
+  <script defer src="../assets/link-modal.js?v=20260712-premium-art"></script>
+  <script>document.addEventListener("DOMContentLoaded",()=>{
     // Render decor department products from live data
     THR.renderProducts('products', ['ornaments', 'all-decorations']);
-  </script>
-  <script src="../assets/reef-background.js?v=20260913-showroom"></script>
+  });</script>
+  <script defer src="../assets/reef-background.js?v=20260916-loading"></script>
 </body>
 </html>

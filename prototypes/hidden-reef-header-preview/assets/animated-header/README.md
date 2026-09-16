@@ -1,4 +1,4 @@
-# Animated Hidden Reef header — review copy
+# Animated Hidden Reef header
 
 Imported from Jez's `D:\projects\hidden reef header` on VENGEANCE, 2026-09-06.
 The original machine/project was not modified. Original artwork and live SVG
@@ -12,8 +12,9 @@ The surrounding header retains the original site width. Its height follows the
 source's 72%-cropped responsive scene. Navigation remains directly below it.
 The preview also shows the header on mobile (the previous site hid it there).
 
-This entire `hidden-reef-header-preview` tree is for GitHub Pages review only.
-The production `hidden-reef` tree and Cloudflare deployment are unchanged.
+Jez approved the optimized, button-free header for Cloudflare deployment on
+2026-09-06. This is the production copy; the separate
+`hidden-reef-header-preview` tree remains available for GitHub review.
 
 To rebuild after changes, use esbuild to bundle `header.ts` as browser ESM into
 `header.js`. `reef-engine.ts` and `underwater-light.ts` retain the renderer source.
@@ -36,3 +37,13 @@ navigation alignment, offscreen pause/resume and dynamic reduced-motion checks.
 Headless Chrome software-rendering measurements are comparative, not a claim
 about a visitor's actual hardware FPS. Before optimization the header issued
 about 3,096 image draws per frame; the optimized mesh/caching path uses far fewer.
+
+## Lossless loading assets (2026-09-16)
+
+Run `python scripts/optimize_hidden_reef_images.py` from the repository root,
+then rebuild `header.ts` with esbuild. The generator preserves original pixels,
+crops only the lettering areas exposed by the existing SVG masks, and writes
+content-hashed lossless WebP files to `assets/optimized`. Keep the original PNGs
+as editable sources. Header image transfer falls from 9,414,603 to 3,415,906 bytes.
+The poster reuses the reef texture instead of downloading another full backdrop.
+Keep `?still=1` support when rebuilding: the showroom uses a stationary header.

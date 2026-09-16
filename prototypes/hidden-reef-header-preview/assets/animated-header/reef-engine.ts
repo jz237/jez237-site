@@ -63,6 +63,7 @@ export class ReefEngine {
   private gl: WebGLRenderingContext | null;
   private ctx: CanvasRenderingContext2D | null;
   private program: WebGLProgram | null = null;
+  private uniforms:Record<string,WebGLUniformLocation|null>={};
   private texture: WebGLTexture | null = null;
   private buffer: WebGLBuffer | null = null;
   private backdrop = new Image();
@@ -135,7 +136,7 @@ export class ReefEngine {
           gl.UNSIGNED_BYTE,
           this.backdrop,
         );
-      } else water.style.background = 'url(./reef.png) center / cover';
+      } else water.style.background = 'url(../optimized/header-reef-91944d53351c.webp) center / cover';
       onReady();
     };
     this.backdrop.addEventListener('load', () => {
@@ -158,8 +159,8 @@ export class ReefEngine {
       });
       this.invalidate();
     };
-    this.backdrop.src = './reef.png';
-    this.sprites.src = './fish.png';
+    this.backdrop.src = '../optimized/header-reef-91944d53351c.webp';
+    this.sprites.src = '../optimized/header-fish-069316b29257.webp';
     this.resize = new ResizeObserver(() => this.measure());
     this.resize.observe(water);
     root.addEventListener('pointermove', this.move);
@@ -211,6 +212,7 @@ export class ReefEngine {
       return;
     }
     this.program = p;
+    for(const name of ['time','aspect','imageAspect','pointer'])this.uniforms[name]=gl.getUniformLocation(p,name);
     gl.useProgram(p);
     this.buffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.buffer);
@@ -365,14 +367,14 @@ export class ReefEngine {
       p = this.program;
     if (!gl || !p || !this.loaded) return;
     gl.useProgram(p);
-    gl.uniform1f(gl.getUniformLocation(p, 'time'), this.clock);
-    gl.uniform1f(gl.getUniformLocation(p, 'aspect'), this.width / this.height);
+    gl.uniform1f(this.uniforms.time, this.clock);
+    gl.uniform1f(this.uniforms.aspect, this.width / this.height);
     gl.uniform1f(
-      gl.getUniformLocation(p, 'imageAspect'),
+      this.uniforms.imageAspect,
       this.backdrop.width / this.backdrop.height,
     );
     gl.uniform2f(
-      gl.getUniformLocation(p, 'pointer'),
+      this.uniforms.pointer,
       this.pointer.x,
       this.pointer.y,
     );
