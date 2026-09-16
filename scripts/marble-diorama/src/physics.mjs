@@ -1,6 +1,11 @@
 import RAPIER from "@dimforge/rapier3d-compat";
 import { compileCourse, motionAt, presenceAt, SURFACES } from "./course.mjs";
-import { createEnemies, steerEnemies, updateEnemies } from "./enemies.mjs";
+import {
+  createEnemies,
+  steerEnemies,
+  updateEnemies,
+  birdMotionAt,
+} from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
 export const PHYSICS_VERSION = "rapier-0.20.0-mm-5";
 export const STEP = 1 / 120,
@@ -499,7 +504,41 @@ export class DemoController {
       this.recovering = false;
     }
     this.index = Math.min(Math.max(this.index, 0), route.length - 1);
+    const collectible = (t) =>
+      t.collect
+        ? sim.enemies.find(
+            (e) => e.def.id === t.collect && e.def.kind === "mini",
+          )
+        : null;
+    // Collection waypoints follow a miniature's measured position, but only
+    // within the authored safe area. A missed or fallen miniature must not
+    // trap the demonstration in a chase or send it over the edge.
+    while (route[this.index]?.collect && this.index < route.length - 1) {
+      const waypoint = route[this.index],
+        enemy = collectible(waypoint);
+      if (this.collectionIndex !== this.index) {
+        this.collectionIndex = this.index;
+        this.collectionTick = sim.tick;
+      }
+      const ep = enemy?.current.position;
+      if (
+        !enemy ||
+        enemy.collected ||
+        sim.tick - this.collectionTick > 8 / STEP ||
+        Math.hypot(ep.x - waypoint.x, ep.z - waypoint.z) > 4 ||
+        Math.abs(ep.y - enemy.def.radius - waypoint.y) > 1
+      )
+        this.index++;
+      else break;
+    }
     const resolve = (t) => {
+      const enemy = collectible(t);
+      if (enemy && !enemy.collected)
+        return {
+          ...t,
+          ...enemy.current.position,
+          y: enemy.current.position.y - enemy.def.radius,
+        };
       const mover = t.part
         ? sim.movers.find((m) => m.part.id === t.part)
         : null;
@@ -540,6 +579,7 @@ export class DemoController {
           sim.world.getRigidBody(movingGate.handle).linvel()[waiting.axis] >
             0));
     if (
+      !target.collect &&
       (Math.hypot(pos.x - target.x, pos.z - target.z) <
         (target.radius ?? 0.75) ||
         passedCorner) &&
@@ -606,7 +646,43 @@ export class DemoController {
           RADIUS * 2 + 0.5
       );
     });
-    const speed = traffic ? 0 : cruisingSpeed;
+    const birdCrossing = sim.enemies.some((enemy) => {
+      if (enemy.def.kind !== "bird" || enemy.collected) return false;
+      const home = enemy.def,
+        direction = home.direction;
+      if (Math.abs(home.y - pos.y) > RADIUS + home.radius) return false;
+      const rx = home.x - pos.x,
+        rz = home.z - pos.z;
+      // Only wait outside the flight corridor. Once in it, keep rolling out;
+      // stopping under an approaching bird would turn a near miss into a hit.
+      const clearance = RADIUS + home.radius + 0.4;
+      if (
+        Math.abs(rx * direction.z - rz * direction.x) /
+          Math.hypot(direction.x, direction.z) <
+        clearance
+      )
+        return false;
+      // Include the next launch while a bird is resting off the board. Its
+      // physical flight and this forecast use the same clock and motion rule.
+      for (let ahead = 0.15; ahead <= 2.4; ahead += 0.15) {
+        const future = birdMotionAt(
+          home,
+          sim.tick * STEP + ahead,
+          sim.preset.enemySpeed,
+        );
+        const travel = Math.min(dist, cruisingSpeed * ahead);
+        if (
+          future.active &&
+          Math.hypot(
+            future.position.x - pos.x - (dx / Math.max(dist, 0.01)) * travel,
+            future.position.z - pos.z - (dz / Math.max(dist, 0.01)) * travel,
+          ) < clearance
+        )
+          return true;
+      }
+      return false;
+    });
+    const speed = traffic || birdCrossing ? 0 : cruisingSpeed;
     // Counter gravity on descents as well as climbs. Slip feedback limits
     // excessive spin before a low-friction surface grips again.
     const compensation = p.groundNormal

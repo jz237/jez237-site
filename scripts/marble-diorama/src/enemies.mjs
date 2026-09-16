@@ -3,6 +3,19 @@ import RAPIER from "@dimforge/rapier3d-compat";
 // The visible ball/capsule dimensions come directly from these definitions.
 export const MUNCHER_HALF_HEIGHT = 0.25;
 const copy = (v) => ({ ...v });
+export function birdMotionAt(home, time, speedMultiplier = 1) {
+  const duration = home.distance / (home.speed * speedMultiplier),
+    period = duration + (home.rest ?? 1),
+    phase = (time + (home.phase ?? 0)) % period;
+  return {
+    active: phase < duration,
+    position: {
+      x: home.x + home.direction.x * home.speed * speedMultiplier * phase,
+      y: home.y,
+      z: home.z + home.direction.z * home.speed * speedMultiplier * phase,
+    },
+  };
+}
 // A convex, low-poly bird: the rendered triangles and collision hull share
 // these exact points, including the wings and beak.
 export function birdGeometry(radius) {
@@ -80,20 +93,12 @@ export function steerEnemies(sim, dt) {
       home = e.def;
     e.previous = e.current;
     if (home.kind === "bird") {
-      const duration = home.distance / (home.speed * sim.preset.enemySpeed),
-        period = duration + (home.rest ?? 1),
-        phase = (sim.tick * dt + (home.phase ?? 0)) % period,
-        active = phase < duration;
+      const { active, position: pos } = birdMotionAt(
+        home,
+        sim.tick * dt,
+        sim.preset.enemySpeed,
+      );
       if (active) {
-        const pos = {
-          x:
-            home.x +
-            home.direction.x * home.speed * sim.preset.enemySpeed * phase,
-          y: home.y,
-          z:
-            home.z +
-            home.direction.z * home.speed * sim.preset.enemySpeed * phase,
-        };
         const angle = Math.atan2(home.direction.x, home.direction.z);
         const rotation = {
           x: 0,

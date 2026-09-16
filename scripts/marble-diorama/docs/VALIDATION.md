@@ -2,7 +2,7 @@
 
 ## Current outcome
 
-**65 automated tests pass. All six campaign races and all three bonus courses
+**68 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Unfinished Games, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
@@ -11,6 +11,32 @@ Current simulation/replay version: `rapier-0.20.0-mm-5`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
+
+### September 16 — miniature collection and bird crossings (local development)
+
+Silly revision 3 gives the two demos separate routes through the miniature room.
+Each marble collects three enemies through physical contact, earning 1,500 points
+and nine clock units. The controller follows each target within a bounded area;
+it abandons a chase after eight seconds or when the target falls out of reach.
+No position, velocity, score, clock or collision-mask override is used by the demo.
+Bird forecasts include flights beginning after the off-board rest interval and
+share the exact motion function used by the physical bird bodies.
+
+The solo Silly demo finishes in **77.508 seconds with zero falls**; two-player
+finishes are **77.508 / 81.992 seconds, both with zero falls**. The authored right
+alternate also finishes without falls. All six untimed campaign courses and
+all existing bonus/alternate checks still complete. Three added tests cover
+solo/paired collections, bounded steering with unchanged body positions before
+the physics step, and abandoning an unreachable miniature. **68 tests pass**.
+The local browser's paired Silly demo also finishes with zero falls for both
+marbles (Player 1: 77.51 seconds, 2,384 points; Player 2: 2,383 points), with
+no captured console errors.
+
+Full timed campaign acceptance remains open. With the additional pickup awards,
+solo times out in Silly at **58.883 seconds** and both players time out by
+**57.600 seconds** in the paired run. The clock and human steering calibration
+have not been changed to make the demonstration pass. Earlier checkpoint
+measurements below are historical; JSON reports contain the current results.
 
 ## Measured physics results
 

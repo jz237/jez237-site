@@ -10,6 +10,7 @@ import {
   practiceCourse,
   beginnerCourse,
   intermediateCourse,
+  sillyCourse,
   campaignCourses,
   worldPoint,
 } from "../src/campaign.mjs";
@@ -23,6 +24,55 @@ import {
   partGeometry,
 } from "../src/course.mjs";
 await initPhysics();
+
+for (const players of [1, 2]) {
+  test(`Silly ${players}-player demos collect miniatures through contact and cross bird flights without falls`, () => {
+    const sim = new Simulation(sillyCourse(), { players, untimed: true }),
+      drivers = sim.players.map(() => new DemoController()),
+      collections = sim.players.map(() => 0);
+    while (
+      sim.tick < 14400 &&
+      sim.players.some((p) => p.status !== "finished")
+    ) {
+      const before = sim.players.map((p) => ({ ...sim.body(p).translation() }));
+      const inputs = drivers.map((driver, i) => driver.input(sim, i));
+      inputs.forEach((input, i) => {
+        assert.ok(Number.isFinite(input.x) && Number.isFinite(input.z));
+        assert.ok(Math.hypot(input.x, input.z) <= 1.000001);
+        assert.deepEqual({ ...sim.body(sim.players[i]).translation() }, before[i]);
+      });
+      sim.step(inputs);
+      for (const event of sim.events)
+        if (event.type === "collect") collections[event.player]++;
+    }
+    assert.deepEqual(collections, Array(players).fill(3));
+    assert.equal(sim.enemies.filter((e) => e.collected).length, 3 * players);
+    for (const p of sim.players) {
+      assert.equal(p.status, "finished");
+      assert.equal(p.deaths, 0);
+      assert.equal(p.time, 34);
+      assert.ok(p.score >= 1500);
+    }
+    sim.dispose();
+  });
+}
+
+test("demo leaves a collection waypoint when its miniature has fallen out of reach", () => {
+  const c = sillyCourse(),
+    waypoint = c.route.findIndex((p) => p.collect === "mini-5"),
+    sim = new Simulation(c, { untimed: true }),
+    driver = new DemoController(),
+    enemy = sim.enemies.find((e) => e.def.id === "mini-5");
+  driver.index = waypoint;
+  enemy.current.position.y = -10;
+  const before = { ...sim.body(sim.players[0]).translation() };
+  driver.input(sim);
+  assert.equal(driver.index, waypoint + 1);
+  assert.equal(enemy.collected, undefined);
+  assert.equal(sim.players[0].score, 0);
+  assert.deepEqual({ ...sim.body(sim.players[0]).translation() }, before);
+  sim.dispose();
+});
 
 test("every authored alternate route completes through normal steering and fall recovery", () => {
   for (const course of campaignCourses())
