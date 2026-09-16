@@ -21,3 +21,10 @@ test('shared leaf sampling preserves every contact point across species, motion 
  }
  assert.equal(species.size,8);assert.ok(points>3000);
 });
+
+test('leaf sampling refreshes geometry versions and retains live instance/world transforms',()=>{
+ const scene=new T.Scene();buildBotanicalPlants(scene,()=>.4,{value:0});scene.updateMatrixWorld();const plants=new GrazerPlants(scene),leaf=plants.leaves.find(l=>l.mesh.userData.plantSpecies==='sword'),rows=10,cols=4,vertices=Array.from({length:55},()=>new T.Vector3()),sample=leafCollisionSampler(leaf,rows,cols,vertices),reference=new T.Vector3(),normal=new T.Vector3();
+ const verify=time=>{sample(time);for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++){leafContact(leaf,x/cols,y/rows,time,reference,normal);assert.deepEqual(vertices[y*(cols+1)+x].toArray(),reference.toArray());}};
+ verify(0);const p=leaf.mesh.geometry.attributes.position;for(let i=0;i<p.count;i++){p.setY(i,p.getY(i)*.93);p.setZ(i,p.getZ(i)+.01);}p.needsUpdate=true;verify(1.2);
+ leaf.mesh.geometry.setAttribute('position',p.clone());leaf.matrix.premultiply(new T.Matrix4().makeTranslation(.1,.2,.1));leaf.mesh.position.set(.1,.1,.1);leaf.mesh.updateMatrixWorld();verify(2.3);
+});

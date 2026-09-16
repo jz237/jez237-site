@@ -2,6 +2,7 @@ import * as T from 'three';
 import {swimPhase,type FinKind} from './TetraKinematics.ts';
 import {createTetraDeformation} from './TetraDeformation.ts';
 import {createNormalUpdater} from './DeformedNormals.ts';
+import {createTetraMaterials,type TetraMaterials} from './TetraMaterials.ts';
 import {FishRespiration} from './FishRespiration.ts';
 
 
@@ -13,42 +14,18 @@ export class Tetra3D {
  private pectoralPhase=0;
  private lastPose=[NaN,NaN,NaN,NaN,NaN,NaN];
  private breathing:FishRespiration;
- private gillUniform={value:0};
+ private materials:TetraMaterials;private breathAttribute!:T.BufferAttribute;private disposed=false;
  private fins=new Map<T.Mesh,{kind:FinKind;side:number}>();
  private normalUpdates=new Map<T.BufferGeometry,()=>void>();
  private deformers=new Map<T.BufferGeometry,ReturnType<typeof createTetraDeformation>>();
  private shaders:{uniforms:Record<string,T.IUniform>}[]=[];
  private eyes:T.Mesh[]=[];
  get eyeMeshes():readonly T.Mesh[]{return this.eyes;}
- constructor(texture:T.Texture,phaseOffset=0,detailed=true){
+ constructor(texture:T.Texture,phaseOffset=0,detailed=true,sharedMaterials?:TetraMaterials){
   this.phase=phaseOffset;this.pectoralPhase=phaseOffset*1.7;
   this.breathing=new FishRespiration(phaseOffset,1.25);
-  // A submerged wet surface has far less interface contrast than a metallic,
-  // clear-coated object in air. Keep the painted scale detail and colored band.
-  const skin=new T.MeshPhysicalMaterial({map:texture,color:0xd4dfd9,roughness:.49,metalness:0,ior:1.16,specularIntensity:.65,clearcoat:.06,clearcoatRoughness:.42,bumpMap:texture,bumpScale:.00065});
-  skin.onBeforeCompile=s=>{
-   s.uniforms.tetraGill=this.gillUniform;
-   s.vertexShader='attribute vec3 tetraRest; varying vec3 tetraAnatomy;\n'+s.vertexShader;
-   s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','#include <begin_vertex>\ntetraAnatomy=tetraRest;');
-   s.fragmentShader='varying vec3 tetraAnatomy; uniform float tetraGill;\n'+s.fragmentShader;
-   s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
-float coverLine=.335+.035*pow(clamp(abs(tetraAnatomy.y+.035)/.075,0.,1.),2.);
-float seam=(1.-smoothstep(.002,.005,abs(tetraAnatomy.x-coverLine)))*smoothstep(.012,.024,abs(tetraAnatomy.z));
-diffuseColor.rgb*=1.-seam*(.18+.28*tetraGill);
-if(tetraAnatomy.x>.489)diffuseColor.rgb=vec3(.018,.009,.008);
-`);
-  };
-  skin.customProgramCacheKey=()=> 'tetra-ventilation-v1';
-  const fin=new T.MeshPhysicalMaterial({map:texture,color:0xa5beb3,transparent:true,opacity:.27,alphaTest:.015,side:T.DoubleSide,depthWrite:false,roughness:.62,metalness:0,ior:1.12,specularIntensity:.5});
-  const pectoral=fin.clone();pectoral.map=null;pectoral.color.set(0x819e91);pectoral.opacity=.18;pectoral.alphaTest=0;
-  // Preserve the pigmented tissue where the red tail root meets its clear rays.
-  fin.onBeforeCompile=shader=>{
-   shader.fragmentShader=shader.fragmentShader.replace('#include <map_fragment>',`#include <map_fragment>
-float finPigment=smoothstep(1.2,2.,diffuseColor.r/(max(diffuseColor.g,diffuseColor.b)+.003))*smoothstep(.015,.06,diffuseColor.r);
-diffuseColor.a*=mix(1.,3.15,finPigment);
-`);
-  };
-  fin.customProgramCacheKey=()=> 'tetra-pigmented-fin-root-v1';
+  this.materials=sharedMaterials??createTetraMaterials(texture);this.materials.references++;
+  const {skin,fin,pectoral}=this.materials;
   // Elliptical cross-sections are joined into a continuous, closed body.
   const profile=[[-.32,.025],[-.26,.041],[-.14,.073],[0,.106],[.14,.115],[.27,.101],[.37,.075],[.445,.038],[.49,.003]];
   const pos:number[]=[],uv:number[]=[],idx:number[]=[];
@@ -57,7 +34,7 @@ diffuseColor.a*=mix(1.,3.15,finPigment);
    for(let j=0;j<=sides;j++){const theta=j/sides*Math.PI*2,y=-.035+Math.cos(theta)*radius,z=Math.sin(theta)*radius*.52;pos.push(x,y,z);uv.push(x+.5,.5+y/.45);if(i<rings-1&&j<sides){const n=i*(sides+1)+j;idx.push(n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1);}}
   }
   for(const [ring,x] of [[0,-.32],[rings-1,.49]]){const center=pos.length/3;pos.push(x,-.035,0);uv.push(x+.5,.5-.035/.45);for(let j=0;j<sides;j++){const a=ring*(sides+1)+j,b=a+1;if(ring===0)idx.push(center,b,a);else idx.push(center,a,b);}}
-  const body=new T.BufferGeometry();body.setAttribute('position',new T.Float32BufferAttribute(pos,3));body.setAttribute('tetraRest',new T.Float32BufferAttribute(pos,3));body.setAttribute('uv',new T.Float32BufferAttribute(uv,2));body.setIndex(idx);body.computeVertexNormals();this.add(body,skin);
+  const body=new T.BufferGeometry();body.setAttribute('position',new T.Float32BufferAttribute(pos,3));body.setAttribute('tetraRest',new T.Float32BufferAttribute(pos,3));this.breathAttribute=new T.Float32BufferAttribute(new Float32Array(pos.length/3),1);this.breathAttribute.setUsage(T.DynamicDrawUsage);body.setAttribute('tetraBreath',this.breathAttribute);body.setAttribute('uv',new T.Float32BufferAttribute(uv,2));body.setIndex(idx);body.computeVertexNormals();this.add(body,skin);
   const membrane=(points:number[][],kind:FinKind,side=1)=>{const positions:number[]=[],coords:number[]=[];
    // Subdivide each membrane so fin rays can flex instead of moving as a rigid triangle.
    for(let t=1;t<points.length-1;t++){const a=points[0],b=points[t],c=points[t+1],n=7;
@@ -81,16 +58,17 @@ diffuseColor.a*=mix(1.,3.15,finPigment);
  update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number,pectoralEffort=.35){
   this.phase=swimPhase(this.phase,dt,activity);
   this.pectoralPhase+=dt*(5+pectoralEffort*13);
-  this.breathing.update(dt,activity);const {gill,mouth}=this.breathing;this.gillUniform.value=gill;
+  this.breathing.update(dt,activity);const {gill,mouth}=this.breathing;
   // Keep the biological clock running in isolated lessons, without uploading invisible bodies.
   if(!this.group.visible)return;
   if(this.lastPose[0]!==this.phase||this.lastPose[1]!==activity||this.lastPose[2]!==this.pectoralPhase||this.lastPose[3]!==pectoralEffort||this.lastPose[4]!==gill||this.lastPose[5]!==mouth){
+   if(this.lastPose[4]!==gill){(this.breathAttribute.array as Float32Array).fill(gill);this.breathAttribute.needsUpdate=true;}
    for(const mesh of this.meshes){const p=mesh.geometry.getAttribute('position') as T.BufferAttribute;this.deformers.get(mesh.geometry)!(p.array as Float32Array,this.phase,activity,this.pectoralPhase,pectoralEffort,gill,mouth);p.needsUpdate=true;this.normalUpdates.get(mesh.geometry)!();}
    this.lastPose[0]=this.phase;this.lastPose[1]=activity;this.lastPose[2]=this.pectoralPhase;this.lastPose[3]=pectoralEffort;
    this.lastPose[4]=gill;this.lastPose[5]=mouth;
   }
   for(const shader of this.shaders){shader.uniforms.photograph.value=photo;shader.uniforms.sceneTime.value=time;shader.uniforms.flow.value=flow;shader.uniforms.depth.value=depth;shader.uniforms.daylight.value=daylight;}
  }
- dispose(){const materials=new Set<T.Material>();this.group.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();materials.add(o.material as T.Material);}});materials.forEach(m=>m.dispose());}
+ dispose(){if(this.disposed)return;this.disposed=true;const shared=new Set([this.materials.skin,this.materials.fin,this.materials.pectoral]);const materials=new Set<T.Material>();this.group.traverse(o=>{if(o instanceof T.Mesh){o.geometry.dispose();materials.add(o.material as T.Material);}});materials.forEach(m=>{if(!shared.has(m as T.MeshPhysicalMaterial))m.dispose();});if(--this.materials.references===0)shared.forEach(m=>m.dispose());}
 }
 

@@ -1,5 +1,6 @@
 import {CoryFloorRoutes,type FloorRouteMap} from './CoryFloorRoutes.ts';
 import * as T from 'three';
+import {bodyObstacleCandidates} from './BodyObstacles.ts';
 import {CoryModels} from './CoryModels.ts';
 import {bodiesOverlap,grazerBody,fishBody,fishTouch,sweptPose,type BodySphere,type FishContactBody} from './GrazerCollision.ts';
 import {leafContact,type GrazerPlants} from './GrazerPlants.ts';
@@ -30,7 +31,7 @@ export class Corydoras{
  }
  async prepareNavigation(cached?:FloorRouteMap){if(cached)this.routes.load(cached);else await this.routes.build();for(const a of this.animals){const origin=V(-4+a.id*1.55,this.floor(-4+a.id*1.55,1.6),1.6),candidates=this.routes.nodes.filter(n=>n.neighbors.length>2).sort((n,m)=>n.point.distanceToSquared(origin)-m.point.distanceToSquared(origin));for(const n of candidates){let found=false;for(const id of n.neighbors){const d=this.routes.nodes[id].point.clone().sub(n.point);if(d.x*d.x+d.z*d.z<.01)continue;const yaw=Math.atan2(-d.z,d.x),f=V(Math.cos(yaw),0,-Math.sin(yaw));if(!this.clear(a,n.point,f,[])||this.animals.some(b=>b.id<a.id&&b.position.distanceTo(n.point)<.85))continue;const route=this.routes.route(n.point,a.visits,0,a.seed,yaw);if(route.length<4)continue;a.position.copy(n.point);a.previous.copy(n.point);a.anchor.copy(n.point);a.trail=[];a.yaw=yaw;found=true;break;}if(found)break;}this.choose(a);this.pose(a);}this.models.flush();}
  private floor(x:number,z:number){let y=this.height(x,z);for(const [dx,dz] of [[.25,0],[-.3,0],[0,.13],[0,-.13]])y=Math.max(y,this.height(x+dx,z+dz));return y+.032;}
- private solid(p:T.Vector3,body:BodySphere[]){return p.y>=this.floor(p.x,p.z)-.006&&body.every(s=>Math.abs(s.center.x)+s.radius<4.98&&Math.abs(s.center.z)+s.radius<2.32&&s.center.y+s.radius<5.3&&this.obstacles.every(o=>o.center.distanceToSquared(s.center)>(o.radius+s.radius+.01)**2))&&(!this.plants||this.plants.clearBody(p,body,this.time,undefined,true));}
+ private solid(p:T.Vector3,body:BodySphere[]){if(!(p.y>=this.floor(p.x,p.z)-.006))return false;const obstacles=bodyObstacleCandidates(body,this.obstacles,.01);return body.every(s=>Math.abs(s.center.x)+s.radius<4.98&&Math.abs(s.center.z)+s.radius<2.32&&s.center.y+s.radius<5.3&&obstacles.every(o=>o.center.distanceToSquared(s.center)>(o.radius+s.radius+.01)**2))&&(!this.plants||this.plants.clearBody(p,body,this.time,undefined,true));}
  /** Cache an exact pose, never a frame: earlier fish may move during a substep. */
  private currentBody(a:Cory){let cached=this.bodyCache.get(a);const p=a.position;if(!cached||cached.x!==p.x||cached.y!==p.y||cached.z!==p.z||cached.yaw!==a.yaw||cached.pitch!==a.pitch||cached.size!==a.size){cached={x:p.x,y:p.y,z:p.z,yaw:a.yaw,pitch:a.pitch,size:a.size,body:coryBody(p,coryForward(a),a.size,a.pitch)};this.bodyCache.set(a,cached);}return cached.body;}
  /** A conservative whole-body bound rejects distant visitors before sphere pairs. */

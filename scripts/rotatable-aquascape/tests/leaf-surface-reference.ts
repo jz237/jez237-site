@@ -8,24 +8,17 @@ export function leafSurfaceMaps(kind:LeafSurfaceKind,seed=2731){
  let state=seed;const random=()=>{state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
  // Smooth, non-repeating pigment/cuticle fields, rather than periodic sine bands.
  const lattice=Float32Array.from({length:65*129},()=>random()*2-1);
- // Noise coordinates and separable trigonometry are fixed along each row or
- // column. Compute them once, preserving double precision and pixel rounding.
- const axis=(count:number,scale:number,offset:number)=>Array.from({length:count},(_,n)=>{const p=n/count*scale+offset,i=Math.floor(p),f=p-i;return {i,s:f*f*(3-2*f)};});
- const bx=axis(512,5.5,3),by=axis(1024,9,7),px=axis(512,17,13),py=axis(1024,29,19),cx=axis(512,47,2),cy=axis(1024,97,3);
- const noise=(x:{i:number;s:number},y:{i:number;s:number})=>{
-  const sx=x.s,sy=y.s,i=y.i*65+x.i;
+ const noise=(x:number,y:number)=>{
+  const ix=Math.floor(x),iy=Math.floor(y),fx=x-ix,fy=y-iy;
+  const sx=fx*fx*(3-2*fx),sy=fy*fy*(3-2*fy),i=iy*65+ix;
   return T.MathUtils.lerp(T.MathUtils.lerp(lattice[i],lattice[i+1],sx),T.MathUtils.lerp(lattice[i+65],lattice[i+66],sx),sy);
  };
- const sinX=Float64Array.from({length:512},(_,x)=>Math.sin(x*.053));
- const edges=Float64Array.from({length:512},(_,x)=>Math.abs(x/512*2-1));
- for(let y=0;y<1024;y++){
- const rowSin=Math.sin(y*.031)*2.2,rowTone=208+12*Math.sin(y/1024*Math.PI);
- for(let x=0;x<512;x++){
-  const index=(y*512+x)*4,edge=edges[x];
-  const tissue=Math.sin(x*.087+rowSin)*Math.sin(y*.063+sinX[x]);
-  const broad=noise(bx[x],by[y]),patch=noise(px[x],py[y]);
-  const cells=noise(cx[x],cy[y]);
-  const grain=(random()-.5),tone=rowTone-edge*edge*10+tissue*2+broad*12+patch*5+cells*3+grain*4;
+ for(let y=0;y<1024;y++)for(let x=0;x<512;x++){
+  const u=x/512,v=y/1024,index=(y*512+x)*4,edge=Math.abs(u*2-1);
+  const tissue=Math.sin(x*.087+Math.sin(y*.031)*2.2)*Math.sin(y*.063+Math.sin(x*.053));
+  const broad=noise(u*5.5+3,v*9+7),patch=noise(u*17+13,v*29+19);
+  const cells=noise(u*47+2,v*97+3);
+  const grain=(random()-.5),tone=208+12*Math.sin(v*Math.PI)-edge*edge*10+tissue*2+broad*12+patch*5+cells*3+grain*4;
   const values=[tone,128+tissue*2+patch*3+cells*5+grain*2,223+broad*12+patch*14+cells*8+tissue*3+grain*3];
   for(let channel=0;channel<3;channel++){
    const data=pixels[channel].data;data[index]=data[index+1]=data[index+2]=values[channel];
@@ -34,7 +27,7 @@ export function leafSurfaceMaps(kind:LeafSurfaceKind,seed=2731){
    if(channel===2)data[index]=68-edge*edge*15+broad*14+patch*7+cells*5+tissue*2;
    data[index+3]=255;
   }
- }}
+ }
  contexts.forEach((context,i)=>context.putImageData(pixels[i],0,0));
  const vein=(path:(context:CanvasRenderingContext2D)=>void,width:number,major=false)=>{
   contexts.forEach((context,i)=>{
