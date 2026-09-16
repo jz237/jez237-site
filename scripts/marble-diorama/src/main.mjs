@@ -23,6 +23,12 @@ import { DioramaView } from "./view.mjs";
 import { Inputs } from "./input.mjs";
 import { AudioEngine } from "./audio.mjs";
 import {
+  medalTargets,
+  recordContext,
+  recordSummary,
+  saveFinishedRun,
+} from "./records.mjs";
+import {
   loadStore,
   saveStore,
   recordKey,
@@ -94,6 +100,11 @@ function settings() {
 }
 function refreshCourses() {
   const list = $("courseList");
+  const recordOptions = {
+    ...options(),
+    campaign: $("recordScope").value === "campaign",
+  };
+  $("recordContext").textContent = recordContext(recordOptions);
   list.replaceChildren();
   for (const c of [
     ...campaignCourses(),
@@ -117,6 +128,16 @@ function refreshCourses() {
     title.textContent = c.name;
     desc.textContent = c.subtitle ?? "Your own miniature world";
     btn.append(label, title, desc);
+    const targets = document.createElement("small");
+    targets.className = "medal-targets";
+    targets.textContent = medalTargets(c);
+    btn.append(targets);
+    for (let i = 0; i < recordOptions.players; i++) {
+      const best = document.createElement("small");
+      best.className = "record-summary";
+      best.textContent = recordSummary(store, c, recordOptions, i);
+      btn.append(best);
+    }
     btn.onclick = () => {
       selected = structuredClone(c);
       menu();
@@ -124,6 +145,70 @@ function refreshCourses() {
     };
     list.append(btn);
   }
+}
+function refreshSelectedRecords() {
+  const opts = options();
+  $("selectedTargets").textContent = medalTargets(selected);
+  $("selectedRecordContext").textContent = recordContext(opts);
+  $("selectedRecords").replaceChildren();
+  for (let i = 0; i < opts.players; i++) {
+    const row = document.createElement("p");
+    row.textContent = recordSummary(store, selected, opts, i);
+    $("selectedRecords").append(row);
+  }
+}
+function finishAwards() {
+  const root = $("resultAwards");
+  root.replaceChildren();
+  show("resultAwards", runMode === "play");
+  if (runMode !== "play") return;
+  const outcome = saveFinishedRun(store, {
+    course: selected,
+    options: sim.options,
+    players: sim.players,
+    recording,
+    mode: runMode,
+  });
+  const context = document.createElement("p");
+  context.className = "record-context";
+  context.textContent = recordContext(sim.options);
+  root.append(context);
+  for (const result of outcome.results) {
+    const row = document.createElement("div"),
+      badge = document.createElement("span"),
+      detail = document.createElement("div"),
+      title = document.createElement("strong"),
+      note = document.createElement("small");
+    row.className = "award-row";
+    badge.className = "medal-badge " + (result.medal ?? "unfinished");
+    badge.textContent = result.medal ? result.medal[0].toUpperCase() : "—";
+    badge.setAttribute("aria-hidden", "true");
+    title.textContent =
+      `Player ${result.index + 1} · ` +
+      (result.finished
+        ? `${result.medal[0].toUpperCase() + result.medal.slice(1)} · ${result.time.toFixed(2)}s`
+        : "Out of time");
+    note.textContent = !result.finished
+      ? "Finish the course to earn a medal."
+      : outcome.saved
+        ? `${result.personalBest ? "New personal best!" : `Best ${result.bestTime.toFixed(2)}s`} · High score ${result.bestScore}`
+        : "Run complete, but this result could not be saved.";
+    detail.append(title, note);
+    row.append(badge, detail);
+    root.append(row);
+  }
+  const note = document.createElement("p");
+  note.className = "record-context";
+  note.textContent =
+    outcome.saved === false
+      ? "Local storage is full or unavailable. Your previous records are unchanged."
+      : outcome.saved
+        ? "Saved on this device." +
+          (outcome.pruned
+            ? " Older replay or ghost data was cleared to make room."
+            : "")
+        : medalTargets(selected);
+  root.append(note);
 }
 function setSim(next) {
   sim?.dispose();
@@ -174,6 +259,7 @@ function menu() {
   $("courseDescription").textContent =
     selected.subtitle ??
     "Slopes, ceramic channels and a moving bridge. Explore the new physical world.";
+  refreshSelectedRecords();
   setSim(new Simulation(selected, { untimed: true }));
   view.setOrbit(false);
   view.frameOverview();
@@ -325,32 +411,7 @@ function finish() {
       ? "Follow the channels and brake before the edges."
       : `${sim.players.length === 2 ? `Player ${winner + 1} · ` : ""}${(sim.players[winner].finishTick * STEP).toFixed(2)} seconds · ${sim.players[winner].score} points${sim.options.assisted ? " · assisted" : ""}`;
   $("again").textContent = "Roll again ↻";
-  if (runMode === "play" && winner >= 0 && sim.players.length === 1) {
-    const key = recordKey(selected, sim.options),
-      time = sim.players[0].finishTick * STEP,
-      old = store.records[key];
-    let improved = false;
-    if (!old || time < old.time) {
-      store.records[key] = {
-        time,
-        score: sim.players[0].score,
-        medal:
-          time < (selected.medals?.gold ?? 30)
-            ? "gold"
-            : time < (selected.medals?.silver ?? 60)
-              ? "silver"
-              : "bronze",
-        ghost: { physics: PHYSICS_VERSION, poses: recording.poses },
-      };
-      improved = true;
-    }
-    store.recordings = [recording];
-    persist(
-      improved
-        ? "Personal best saved · ghost ready for the next run"
-        : undefined,
-    );
-  }
+  finishAwards();
   if (campaign) {
     campaignOutcome = campaign.complete(sim);
     const totals = campaign.players
@@ -619,6 +680,9 @@ async function init() {
     }
     settings();
     $("trackball").onchange = settings;
+    for (const id of ["players", "mode", "difficulty", "assisted"])
+      $(id).onchange = refreshSelectedRecords;
+    $("recordScope").onchange = refreshCourses;
     $("play").onclick = () => start();
     $("demo").onclick = () => start(true);
     $("campaignPlay").onclick = () => beginCampaign(false);

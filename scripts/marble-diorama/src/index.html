@@ -53,6 +53,12 @@
               </select></label
             >
           </div>
+          <details id="courseRecords">
+            <summary>Medals &amp; personal best</summary>
+            <p id="selectedTargets" class="medal-targets"></p>
+            <p id="selectedRecordContext" class="record-context"></p>
+            <div id="selectedRecords" class="record-summary"></div>
+          </details>
           <button id="play" class="primary">
             Roll into it <span>↗</span>
           </button>
@@ -114,6 +120,7 @@
         <span class="micro" id="resultLabel">RACE COMPLETE</span>
         <h2 id="resultTitle">Beautifully rolled.</h2>
         <p id="resultText"></p>
+        <div id="resultAwards"></div>
         <button id="again" class="primary">Roll again <span>↻</span></button
         ><button id="replay">Watch replay</button
         ><button id="resultHome">Back to workshop</button>
@@ -447,6 +454,13 @@
         </button>
       </div>
       <h2>Small worlds.</h2>
+      <label
+        >Show records for<select id="recordScope">
+          <option value="single">Single courses</option>
+          <option value="campaign">Campaign races</option>
+        </select></label
+      >
+      <p id="recordContext" class="record-context"></p>
       <div id="courseList"></div>
       <h3>Original Amiga campaign</h3>
       <p class="audio-note">

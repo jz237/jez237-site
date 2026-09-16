@@ -58,7 +58,11 @@ original dimensions, timing, or complete route coverage.
 - [x] Contact-force impacts/dust, measured rolling/slipping noise, fall fragments.
 - [x] Lossless compact replay storage, quota eviction preserving scores/courses,
   failed-save rollback and a simulated 5 MiB long-recording test.
-- [ ] Final medal thresholds.
+- [x] Visible per-player medals, course targets, personal bests and independent
+  high scores; assistance/difficulty/practice/campaign records remain separate.
+  Failed saves roll back and custom-layout changes cannot inherit old records.
+  Target rationale and browser checks are in RECORDS.md.
+- [ ] Reassess medal targets after final campaign/physics calibration.
 - [x] Current portrait/landscape viewport inspection, including two-player
   split controls and portrait title readability.
 - [ ] Sustained campaign performance and final whole-campaign browser pass.
