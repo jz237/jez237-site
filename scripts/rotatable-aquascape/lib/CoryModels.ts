@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {indexExactVertices} from './ExactVertexIndex.ts';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 /** Continuous armored trunk with a broad head and narrowing caudal peduncle. */
@@ -27,7 +28,7 @@ function geometries(){
  fan(V(.045,.20,0),Array.from({length:13},(_,i)=>{const a=i/12;return V(.025-a*.20,.20+Math.sin((a*.83+.15)*Math.PI)*.145,0);}),2);
  fan(V(-.23,.12,0),[V(-.25,.16,0),V(-.29,.155,0),V(-.31,.115,0)],3);
  for(const side of [-1,1]){fan(V(.12,.057,side*.045),Array.from({length:12},(_,i)=>{const a=i/11;return V(.15-a*.19,.023+Math.sin(a*Math.PI)*.017,side*(.065+.12*Math.sin((a*.8+.15)*Math.PI)));}),side<0?4:5);fan(V(-.12,.039,side*.025),Array.from({length:9},(_,i)=>{const a=i/8;return V(-.12-a*.11,.025,side*(.035+.075*Math.sin(a*Math.PI)));}),side<0?6:7);}
- return [mergeGeometries(solid),mergeGeometries(fins)];
+ return [indexExactVertices(mergeGeometries(solid)),indexExactVertices(mergeGeometries(fins))];
 }
 export class CoryModels{
  readonly root=new T.Group();readonly meshes:T.InstancedMesh[]=[];readonly motion:T.InstancedBufferAttribute;
@@ -35,13 +36,13 @@ export class CoryModels{
  const shader=(s:T.WebGLProgramParametersWithUniforms)=>{s.vertexShader=`varying vec3 coryLocal;varying float corySkin;attribute float coryPart;attribute vec3 coryPivot;attribute vec4 coryMotion;
  float corySpine(float x,float phase,float effort){float w=clamp((.16-x)/.62,0.,1.);return sin(phase+x*10.)*pow(w,1.45)*(.032+.086*effort);}
  vec3 coryPose(vec3 p){float phase=coryMotion.x,effort=coryMotion.y;vec3 q=p-coryPivot;float a=0.;if(coryPart>9.5){q.xz*=1.+coryMotion.w*(.10+.16*sin(coryMotion.z*18.));}else if(coryPart>3.5&&coryPart<7.5){a=sin(phase*.61+coryPart*1.8)*(.10+.32*effort);q.yz=mat2(cos(a),sin(a),-sin(a),cos(a))*q.yz;}else if(coryPart>7.5&&coryPart<8.5){float tipLift=max(0.,-instanceMatrix[0].y/length(instanceMatrix[0].xyz));q.y+=max(0.,q.x)*tipLift*1.4;a=sin(coryMotion.z*9.+coryPivot.z*27.)*.10;q.xz=mat2(cos(a),sin(a),-sin(a),cos(a))*q.xz;}else if(coryPart>1.5&&coryPart<3.5){q.z+=sin(phase*.47+coryPart)*q.y*.12;}p=coryPivot+q;float spine=corySpine(p.x,phase,effort),bend=atan((corySpine(p.x+.001,phase,effort)-corySpine(p.x-.001,phase,effort))/.002);float lateral=p.z;p.x-=sin(bend)*lateral;p.z=spine+cos(bend)*lateral;return p;}
-`+s.vertexShader;s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','coryLocal=position;corySkin=coryPart;vec3 transformed=coryPose(position);');s.fragmentShader=`varying vec3 coryLocal;varying float corySkin;
+`+s.vertexShader;s.vertexShader=s.vertexShader.replace('void main() {','void main() {\nvec3 coryCenter=coryPose(position);');s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','coryLocal=position;corySkin=coryPart;vec3 transformed=coryCenter;');s.fragmentShader=`varying vec3 coryLocal;varying float corySkin;
  float coryHash(vec3 p){return fract(sin(dot(p,vec3(127.1,311.7,74.7)))*43758.5453);}
  float coryNoise(vec3 p){vec3 i=floor(p),f=fract(p);f=f*f*(3.-2.*f);return mix(mix(mix(coryHash(i),coryHash(i+vec3(1,0,0)),f.x),mix(coryHash(i+vec3(0,1,0)),coryHash(i+vec3(1,1,0)),f.x),f.y),mix(mix(coryHash(i+vec3(0,0,1)),coryHash(i+vec3(1,0,1)),f.x),mix(coryHash(i+vec3(0,1,1)),coryHash(i+vec3(1,1,1)),f.x),f.y),f.z);}
  `+s.fragmentShader;s.fragmentShader=s.fragmentShader.replace('#include <color_fragment>',`#include <color_fragment>
  if(corySkin<.5){vec3 p=coryLocal;float n=coryNoise(p*vec3(40.,56.,61.)),small=coryNoise(p*260.),grain=coryNoise(p*1300.);float flank=1.-smoothstep(.025,.085,abs(p.y-.12));float pigment=smoothstep(.51,.65,n+small*.16)*smoothstep(.043,.086,p.y);float speck=smoothstep(.66,.76,small)*smoothstep(.07,.14,p.y);diffuseColor.rgb*=mix(vec3(1.,.86,.69),vec3(.16,.105,.065),clamp(pigment*(.62+.30*flank)+speck*.5,0.,.97));diffuseColor.rgb*=.88+grain*.21;}
  if(corySkin>0.5&&corySkin<7.5){float spot=coryNoise(coryLocal*vec3(95.,100.,110.));diffuseColor.rgb*=mix(1.,.22,smoothstep(.58,.70,spot));}
- `);s.vertexShader=s.vertexShader.replace('#include <beginnormal_vertex>',`vec3 t=normalize(cross(normal,abs(normal.y)<.9?vec3(0,1,0):vec3(1,0,0)));vec3 b=cross(normal,t);vec3 objectNormal=normalize(cross(coryPose(position+t*.001)-coryPose(position),coryPose(position+b*.001)-coryPose(position)));`);};m.onBeforeCompile=shader;m.customProgramCacheKey=()=>`cory-articulated-v4-${i}`;const depth=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking});depth.onBeforeCompile=shader;depth.customProgramCacheKey=()=> 'cory-depth-v4';mesh.customDepthMaterial=depth;}
+ `);s.vertexShader=s.vertexShader.replace('#include <beginnormal_vertex>',`vec3 t=normalize(cross(normal,abs(normal.y)<.9?vec3(0,1,0):vec3(1,0,0)));vec3 b=cross(normal,t);vec3 objectNormal=normalize(cross(coryPose(position+t*.001)-coryCenter,coryPose(position+b*.001)-coryCenter));`);};m.onBeforeCompile=shader;m.customProgramCacheKey=()=>`cory-articulated-v5-${i}`;const depth=new T.MeshDepthMaterial({depthPacking:T.RGBADepthPacking});depth.onBeforeCompile=shader;depth.customProgramCacheKey=()=> 'cory-depth-v5';mesh.customDepthMaterial=depth;}
  }
  pose(id:number,p:T.Vector3,yaw:number,pitch:number,scale:number,phase:number,effort:number,time:number,picking=false){const m=new T.Matrix4().compose(p,new T.Quaternion().setFromEuler(new T.Euler(0,yaw,pitch,'YXZ')),new T.Vector3().setScalar(scale));this.meshes.forEach(mesh=>mesh.setMatrixAt(id,m));this.motion.setXYZW(id,phase,effort,time,picking?1:0);}
  flush(){this.motion.needsUpdate=true;this.meshes.forEach(m=>m.instanceMatrix.needsUpdate=true);}
