@@ -2,9 +2,9 @@
 
 ## Current outcome
 
-**52 automated tests pass. All six campaign races and all three bonus courses
-are playable. This remains an unpublished reconstruction, with release gates
-open in PARITY.md.** The full campaign passes untimed one- and two-player
+**65 automated tests pass. All six campaign races and all three bonus courses
+are playable. This reconstruction is published under Unfinished Games, with
+completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original music is not enabled.
 Current simulation/replay version: `rapier-0.20.0-mm-5`.
