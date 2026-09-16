@@ -1,16 +1,17 @@
 import * as T from 'three';
 export type BodySphere={center:T.Vector3;radius:number};
-export type FishContactBody={id:number;position:T.Vector3;previous?:T.Vector3;forward:T.Vector3;size:number};
+export type FishContactBody={id:number;position:T.Vector3;previous?:T.Vector3;forward:T.Vector3;size:number;envelope?:BodySphere[]};
 export function grazerBody(position:T.Vector3,normal:T.Vector3,forward:T.Vector3,snail=false,scale=.84):BodySphere[]{
  const profile=snail?[[-.04,.20,.185],[.14,.06,.075]]:[[-.29,.10,.045],[-.20,.12,.055],[-.10,.12,.065],[0,.12,.068],[.105,.13,.054],[.18,.133,.026]];
  return profile.map(([x,y,r])=>({center:position.clone().addScaledVector(forward,x*scale).addScaledVector(normal,y*scale),radius:r*scale}));
 }
-export function bodiesOverlap(a:BodySphere[],b:BodySphere[],margin=.004){return a.some(x=>b.some(y=>x.center.distanceToSquared(y.center)<(x.radius+y.radius+margin)**2));}
-export function fishBody(fish:FishContactBody,position=fish.position):BodySphere[]{return [-.24,-.10,.05,.20,.34,.445].map((x,i)=>({center:position.clone().addScaledVector(fish.forward,x*fish.size).add(new T.Vector3(0,-.035*fish.size,0)),radius:[.047,.085,.115,.115,.095,.040][i]*fish.size}));}
+export function bodiesOverlap(a:BodySphere[],b:BodySphere[],margin=.004){for(const x of a)for(const y of b){const r=x.radius+y.radius+margin,dx=x.center.x-y.center.x;if(Math.abs(dx)>=r)continue;const dy=x.center.y-y.center.y;if(Math.abs(dy)>=r)continue;const dz=x.center.z-y.center.z;if(dx*dx+dy*dy+dz*dz<r*r)return true;}return false;}
+export function fishBody(fish:FishContactBody,position=fish.position):BodySphere[]{if(fish.envelope)return fish.envelope.map(b=>({center:b.center.clone().add(position),radius:b.radius}));return [-.24,-.10,.05,.20,.34,.445].map((x,i)=>({center:position.clone().addScaledVector(fish.forward,x*fish.size).add(new T.Vector3(0,-.035*fish.size,0)),radius:[.047,.085,.115,.115,.095,.040][i]*fish.size}));}
 /** Broad rejection encloses the entire translated six-sphere fish, including
  * a fast sweep and the body offset. A possible hit always uses the original
  * narrow phase; this never substitutes a point test for the animal's body. */
 export function fishSweepMayReach(fish:FishContactBody,body:BodySphere[],margin=.006){
+ if(fish.envelope){const from=fish.previous??fish.position,to=fish.position;for(const b of fish.envelope){const r=b.radius+margin,c=b.center;for(const a of body)if(a.center.x+a.radius>=Math.min(from.x,to.x)+c.x-r&&a.center.x-a.radius<=Math.max(from.x,to.x)+c.x+r&&a.center.y+a.radius>=Math.min(from.y,to.y)+c.y-r&&a.center.y-a.radius<=Math.max(from.y,to.y)+c.y+r&&a.center.z+a.radius>=Math.min(from.z,to.z)+c.z-r&&a.center.z-a.radius<=Math.max(from.z,to.z)+c.z+r)return true;}return false;}
  const from=fish.previous??fish.position,to=fish.position,f=fish.forward,size=Math.abs(fish.size);
  const ex=(Math.abs(f.x)*.445+.115)*size+margin+1e-10;
  const ey=(Math.abs(f.y)*.445+.115)*size+margin+1e-10;

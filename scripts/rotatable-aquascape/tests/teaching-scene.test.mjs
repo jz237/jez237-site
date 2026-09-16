@@ -48,6 +48,15 @@ test('layer slider responds while biological motion remains paused',()=>{
  teach.separation=0;for(let i=0;i<120;i++)teach.update(0,camera,65,1/60);assert.ok(plant.position.y<.001);
 });
 
+test('angelfish living close-up restores the tank without disposing its shared model',()=>{
+ const scene=new T.Scene(),tank=new T.Mesh(new T.BoxGeometry(),new T.MeshStandardMaterial());scene.add(tank);
+ const prototype=new T.Group(),mesh=new T.Mesh(new T.SphereGeometry(.2),new T.MeshStandardMaterial());mesh.name='Body';prototype.add(mesh);
+ const teach=new TeachingScene(scene,{...element(),clientWidth:900,clientHeight:700},[],[],new T.Texture());teach.angelPrototype=prototype;
+ let disposed=false;mesh.geometry.addEventListener('dispose',()=>disposed=true);
+ teach.set('organisms',5);assert.equal(tank.visible,false);assert.equal(teach.angelStudy.group.children[0].geometry,mesh.geometry);
+ teach.update(.1,new T.PerspectiveCamera());teach.set(null);assert.equal(tank.visible,true);assert.equal(teach.angelStudy,null);assert.equal(disposed,false);
+});
+
 test('shrimp and cory close-ups animate actual articulated geometry and release it on exit',()=>{
  const scene=new T.Scene(),tank=new T.Mesh(new T.BoxGeometry(),new T.MeshStandardMaterial());scene.add(tank);
  const teach=new TeachingScene(scene,{...element(),clientWidth:900,clientHeight:700},[],[],new T.Texture(),[],new T.Texture());const camera=new T.PerspectiveCamera();

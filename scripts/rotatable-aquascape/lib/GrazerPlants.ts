@@ -83,7 +83,7 @@ export class GrazerPlants{
   if(this.solidCheck&&!this.solidCheck(p,n,tangent,snail))return false;
   return this.clearBody(p,grazerBody(p,n,tangent,snail,snail?.84:.88),time,own);
  }
- clearBody(p:T.Vector3,body:BodySphere[],time:number,own?:PlantLeaf,envelope=false){
+ clearBody(p:T.Vector3,body:BodySphere[],time:number,own?:PlantLeaf,envelope=false,queryRadius=.48){
   const cache=envelope?this.envelopeCollisionCache:this.leafCollisionCache;if(envelope)time=0;
   const centers=body;
   // Reject an entire surface against the complete body before testing its
@@ -91,8 +91,8 @@ export class GrazerPlants{
   let minX=Infinity,minY=Infinity,minZ=Infinity,maxX=-Infinity,maxY=-Infinity,maxZ=-Infinity;
   for(const {center:c,radius:r} of body){minX=Math.min(minX,c.x-r);minY=Math.min(minY,c.y-r);minZ=Math.min(minZ,c.z-r);maxX=Math.max(maxX,c.x+r);maxY=Math.max(maxY,c.y+r);maxZ=Math.max(maxZ,c.z+r);}
   const mayReach=(box:T.Box3,extra=0)=>{extra+=1e-12;return maxX+extra>=box.min.x&&minX-extra<=box.max.x&&maxY+extra>=box.min.y&&minY-extra<=box.max.y&&maxZ+extra>=box.min.z&&minZ-extra<=box.max.z;};
-  for(const fern of this.fernCandidates.nearby(p,.48)){if(!mayReach(fern.box,fern.margin))continue;for(const c of centers){if(!sphereMayReachBox(c.center,c.radius+fern.margin,fern.box))continue;fern.triangle.closestPointToPoint(c.center,this.closest);if(this.closest.distanceToSquared(c.center)<(c.radius+fern.margin)**2)return false;}}
-  const stems=this.stemCandidates.nearby(p,.48);
+  for(const fern of this.fernCandidates.nearby(p,queryRadius)){if(!mayReach(fern.box,fern.margin))continue;for(const c of centers){if(!sphereMayReachBox(c.center,c.radius+fern.margin,fern.box))continue;fern.triangle.closestPointToPoint(c.center,this.closest);if(this.closest.distanceToSquared(c.center)<(c.radius+fern.margin)**2)return false;}}
+  const stems=this.stemCandidates.nearby(p,queryRadius);
   for(const stem of stems){
    const extra=envelope?.13*Math.max(stem.a.y-stem.root.y,stem.b.y-stem.root.y)**2*stem.flex:0;
    // The stored box already encloses the full current sweep and stem radius.
@@ -101,7 +101,7 @@ export class GrazerPlants{
    if(stem.time!==time||!stem.line){const bend=(q:T.Vector3)=>{const h=Math.max(0,q.y-stem.root.y),phase=stem.root.x*.47+stem.root.z*.71;q.x+=(Math.sin(time*.82+phase)*.035+Math.sin(time*1.19+phase*1.7)*.013)*h*h*stem.flex*clamp((4.96-Math.abs(q.x))*2,0,1);q.z+=Math.sin(time*.67+phase+.8)*.029*h*h*stem.flex*clamp((2.20-Math.abs(q.z))*2,0,1);return q;};stem.line??=new T.Line3();bend(stem.line.start.copy(stem.a));bend(stem.line.end.copy(stem.b));stem.time=time;}
    for(const c of centers){stem.line.closestPointToPoint(c.center,true,this.closest);if(this.closest.distanceToSquared(c.center)<(c.radius+stem.radius+extra)**2)return false;}
   }
-  for(const leaf of this.nearby(p,.48)){
+  for(const leaf of this.nearby(p,queryRadius)){
    if(leaf===own)continue;
    if(!mayReach(leaf.box)||!centers.some(c=>sphereMayReachBox(c.center,c.radius,leaf.box)))continue;
    // Thin small leaves need only two triangles; large blades retain their cup

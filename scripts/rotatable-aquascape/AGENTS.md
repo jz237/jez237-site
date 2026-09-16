@@ -27,3 +27,12 @@ bursts, controlled upright 3D turns, braking, mouth-range capture, short bite pa
 and movement clear of the feeding spot. Preserve individual timing, competition,
 retargeting of lost or stalled food, collision constraints and the unchanged food
 nitrogen accounting. Motion constants are illustrative, not measured species data.
+
+
+For silver angelfish, match the reference's shallow eyes and dark band entering
+around the iris. Preserve graceful fin-led gliding with a quiet head and trunk,
+subtle median-fin and pelvic-streamer motion, and stronger tail flex only during
+brief high effort. Filter social steering and angular velocity; commit to clear
+obstacle recovery instead of alternating yaw at a contact boundary. The two fish
+have a loose companion preference and give other fish room, without rigidly
+synchronized motion. These motion constants are qualitative, not measured data.

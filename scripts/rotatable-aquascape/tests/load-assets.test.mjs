@@ -14,7 +14,7 @@ test('versioned assets preserve geometry, textures and lighting with verified lo
   if(record){assert.equal(hash(read('public/'+original.slice(2))),record.sourceSHA256);assert.equal(hash(bytes),record.webpSHA256);}
   else{let source=read('public/'+original.slice(2));if(/\.(gltf|json)$/.test(original))source=Buffer.from(source.toString('utf8').replace(/\r\n/g,'\n'));assert.deepEqual(bytes,source,original);}
  }
- assert.equal(preloads.length,27);assert.equal(new Set(preloads.map(p=>p.href)).size,27);
+ assert.equal(preloads.length,28);assert.equal(new Set(preloads.map(p=>p.href)).size,28);
  assert.ok(preloads.every(p=>Object.values(manifest).includes(p.href)));
 });
 test('model dependencies use identical versioned URLs for all site and relative loader paths',()=>{

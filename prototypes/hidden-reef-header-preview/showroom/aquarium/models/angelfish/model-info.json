@@ -1,0 +1,9 @@
+{
+  "species": "Pterophyllum scalare",
+  "authoring": "Blender 5.2.1 LTS",
+  "triangles": 39486,
+  "drawMeshes": 12,
+  "reference": "User supplied silver angelfish photograph",
+  "license": "Original project asset; no third-party model or paid assets",
+  "motion": "Runtime GPU deformation; source geometry remains shared"
+}
