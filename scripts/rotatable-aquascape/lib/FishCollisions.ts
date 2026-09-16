@@ -13,7 +13,10 @@ export function separateFish(bodies:CollisionBody[],depthBounds:[number,number]=
    a.x-=dx*push;a.y-=dy*push;a.z-=dz*push/180;
    b.x+=dx*push;b.y+=dy*push;b.z+=dz*push/180;
   }
-  for(const b of bodies){b.x=Math.max(620+b.radius,Math.min(1260-b.radius,b.x));b.y=Math.max(220+b.radius,Math.min(550-b.radius,b.y));b.z=Math.max(depthBounds[0]+b.radius/180,Math.min(depthBounds[1]-b.radius/180,b.z));}
+  for(const b of bodies){const x=b.x,y=b.y,z=b.z;b.x=Math.max(620+b.radius,Math.min(1260-b.radius,b.x));b.y=Math.max(220+b.radius,Math.min(550-b.radius,b.y));b.z=Math.max(depthBounds[0]+b.radius/180,Math.min(depthBounds[1]-b.radius/180,b.z));
+   // A wall correction can create a new overlap after the pair pass. Continue
+   // resolving it instead of treating the pre-clamp separation as settled.
+   penetration=Math.max(penetration,Math.abs(b.x-x),Math.abs(b.y-y),Math.abs(b.z-z)*180);}
   if(penetration<.002)break;
  }
 }
