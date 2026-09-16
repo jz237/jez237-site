@@ -1,14 +1,14 @@
 import {frontAt,frontWave,frontGLSL} from './weather-front.js';
 const clamp=x=>Math.max(0,Math.min(1,x));
 // Travelling fronts share position and time across water, foliage, spray and riding.
-export function gustAt(x,z,t,storm=0){
+export function gustAt(x,z,t,storm=0,out={}){
  const phase=(x*.86-z*.51-t*(4+storm*4))*.022;
  const band=(Math.sin(phase)*.5+.5)**6;
  const variation=.42+.58*(Math.sin(z*.009+x*.004+t*.013)*.5+.5);
  const strength=clamp(band*variation),speed=2+storm*10+strength*(5+storm*6)+frontAt(x,z,t)*7;
- return {x:speed*.86,z:-speed*.51,strength,speed};
+ out.x=speed*.86;out.z=-speed*.51;out.strength=strength;out.speed=speed;return out;
 }
-export function gustHeight(x,z,t,storm=0){const g=gustAt(x,z,t,storm);return frontWave(x,z,t)+g.strength*(.028+storm*.055)*Math.sin(x*.8+z*.45-t*4.5)*Math.cos(x*.23-z*.51-t*1.8);}
+export function gustHeight(x,z,t,storm=0,g=null){g??=gustAt(x,z,t,storm);return frontWave(x,z,t)+g.strength*(.028+storm*.055)*Math.sin(x*.8+z*.45-t*4.5)*Math.cos(x*.23-z*.51-t*1.8);}
 export const gustGLSL=`${frontGLSL}
 vec3 gustAt(vec2 p,float t,float s){
  float phase=(p.x*.86-p.y*.51-t*(4.+s*4.))*.022;
