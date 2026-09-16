@@ -9,8 +9,8 @@ export function rootBranches(seed=733):RootBranch[]{
  for(let i=0;i<19;i++){
   const side=i%2?1:-1,reach=(.18+random()*.95)*side,depth=.75+random()*.9;
   const start=V((random()-.5)*.12,0,(random()-.5)*.10);
-  const bend=(random()-.5)*.35,phase=random()*6;
-  const curve=new T.CatmullRomCurve3(Array.from({length:7},(_,j)=>{const t=j/6;return V(start.x*(1-t)+reach*Math.pow(t,1.2)+bend*Math.sin(t*Math.PI)+.045*Math.sin(t*11+phase)*Math.sin(t*Math.PI),-depth*t,.03+start.z*(1-t)+.065*t+.035*Math.sin(t*9+phase)*Math.sin(t*Math.PI));}));
+  const bend=(random()-.5)*.48,phase=random()*6,spreadPower=.65+random()*1.25,dropPower=.75+random()*.9;
+  const curve=new T.CatmullRomCurve3(Array.from({length:9},(_,j)=>{const t=j/8;return V(start.x*(1-t)+reach*Math.pow(t,spreadPower)+bend*Math.sin(t*Math.PI)+.065*Math.sin(t*11+phase)*Math.sin(t*Math.PI),-depth*Math.pow(t,dropPower),.03+start.z*(1-t)+.065*t+.045*Math.sin(t*9+phase)*Math.sin(t*Math.PI));}));
   const parent=branches.length;branches.push({curve,radius:.016+random()*.012,parent:-1,attachment:0,order:0});
   for(let j=0;j<8;j++){
    const t=.14+j*.10+random()*.065,point=curve.getPoint(t),spread=(.16+random()*.40)*(j%2?1:-1),drop=.07+random()*.28;
@@ -48,4 +48,21 @@ export function buildRootSystem(seed=733){
  }});
  const hairMesh=new T.LineSegments(new T.BufferGeometry().setAttribute('position',new T.Float32BufferAttribute(hairs,3)),new T.LineBasicMaterial({color:0xc6b68f,transparent:true,opacity:.48}));group.add(hairMesh);
  group.userData.rootTemplate=true;return group;
+}
+
+/** Unfolded exposure wraps continuously around both corners of the soil slice.
+ * Apply the same mapping to branches and hairs so no roots become detached. */
+export function wrapCutawayRoots(group:T.Group,crown:T.Vector3,width:number,height:number){
+ group.traverse(object=>{
+  if(!(object instanceof T.Mesh||object instanceof T.Line))return;
+  const g=object.geometry,p=g.getAttribute('position');
+  for(let i=0;i<p.count;i++){
+   const x=crown.x+p.getX(i)*width,overflow=Math.max(0,Math.abs(x)-2.48);
+   p.setXYZ(i,T.MathUtils.clamp(x,-2.48,2.48)+Math.sign(x)*overflow*.025,
+    crown.y+p.getY(i)*height,1.07+p.getZ(i)*.40-overflow);
+  }
+  if(object instanceof T.Mesh)g.computeVertexNormals();
+  g.computeBoundingBox();g.computeBoundingSphere();
+ });
+ return group;
 }

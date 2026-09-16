@@ -97,8 +97,10 @@ test('folded median fins and stronger tail strokes remain inside the collision e
   for(let i=0;i<a.count;i+=3){
    const at=start+(v.byteOffset??0)+(a.byteOffset??0)+i*(v.byteStride??12);
    const x=b.readFloatLE(at),y=b.readFloatLE(at+4),z=b.readFloatLE(at+8),edge=T.MathUtils.smoothstep(Math.abs(y),.56,1.4);
-   const sweep=Math.abs(y)<.56&&x<-.8?.19:.13;
-   for(const fold of [0,.13,.26])for(const lateral of [-sweep,sweep])for(const recoil of [0,x<-.8&&Math.abs(y)<.56?-.036:0]){
+   const fan=T.MathUtils.clamp((-.8-x)/.51,0,1)*(1-T.MathUtils.smoothstep(Math.abs(y),.45,.62));
+   const rear=1-T.MathUtils.smoothstep(x,-1.3,.28),margin=T.MathUtils.smoothstep(Math.abs(y),.06,.40);
+   const sweep=rear*rear*.05+edge*.10+fan*fan*.17+fan*fan*fan*margin*.024;
+   for(const fold of [0,.13,.26])for(const lateral of [-sweep,sweep])for(const recoil of [0,-.048*fan*fan]){
     const p=new T.Vector3(x+edge*fold*.3+recoil,y-Math.sign(y)*edge*fold,z+lateral);
     assert.ok(spheres.some(s=>p.distanceToSquared(s.center)<=s.radius*s.radius),'moving fin exceeds contact envelope at '+p.toArray());
    }

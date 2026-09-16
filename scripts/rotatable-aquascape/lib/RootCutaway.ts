@@ -1,7 +1,7 @@
 import {rootLeafCurrent,setRootLeafMotion} from './RootLeafCurrent.ts';
 import * as T from 'three';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
-import {buildRootSystem} from './RootAnatomy.ts';
+import {buildRootSystem,wrapCutawayRoots} from './RootAnatomy.ts';
 import {leafSurfaceMaps} from './LeafSurface.ts';
 const V=(x=0,y=0,z=0)=>new T.Vector3(x,y,z);
 
@@ -45,7 +45,8 @@ export function buildRootCutaway(time={value:0},flow={value:1}){
  rootLeafCurrent(leafMat,time,flow);
  const leafPieces:T.BufferGeometry[]=[],veinPieces:T.BufferGeometry[]=[];
  for(const [x,z,size,grassy] of [[-.95,1.035,1,0],[1.16,1.02,.76,1]]){
-  const crown=V(x,top(x,z),z),roots=buildRootSystem(grassy?381:733);roots.position.copy(crown);roots.scale.set(size*.98,size*1.04,.75);group.add(roots);
+  const crown=V(x,top(x,z),z),roots=buildRootSystem(grassy?381:733);
+  wrapCutawayRoots(roots,crown,grassy?1.7:1.85,size*1.04);group.add(roots);
   for(let i=0;i<(grassy?17:11);i++){
    const a=i*2.399,reach=(.35+random()*.55)*size,high=(.8+random()*.68)*size,width=(grassy?.045:.16+random()*.085)*size;
    const positions:number[]=[],uv:number[]=[],indices:number[]=[],mid:T.Vector3[]=[];
