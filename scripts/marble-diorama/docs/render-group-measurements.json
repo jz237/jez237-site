@@ -1,0 +1,60 @@
+{
+  "physics": "rapier-0.20.0-mm-5",
+  "method": "Count course mesh material groups before and after draw-index batching. These exclude decorations, marbles and extra shadow passes; they are not FPS measurements.",
+  "courses": [
+    {
+      "course": "practice",
+      "before": 702,
+      "after": 4,
+      "triangles": 10876
+    },
+    {
+      "course": "beginner",
+      "before": 681,
+      "after": 5,
+      "triangles": 57360
+    },
+    {
+      "course": "intermediate",
+      "before": 409,
+      "after": 33,
+      "triangles": 38572
+    },
+    {
+      "course": "aerial",
+      "before": 82,
+      "after": 12,
+      "triangles": 33658
+    },
+    {
+      "course": "silly",
+      "before": 869,
+      "after": 5,
+      "triangles": 52812
+    },
+    {
+      "course": "ultimate",
+      "before": 458,
+      "after": 16,
+      "triangles": 35110
+    },
+    {
+      "course": "clockwork-foundry",
+      "before": 14,
+      "after": 8,
+      "triangles": 4966
+    },
+    {
+      "course": "magnetic-observatory",
+      "before": 10,
+      "after": 6,
+      "triangles": 5930
+    },
+    {
+      "course": "crystal-cascade",
+      "before": 16,
+      "after": 6,
+      "triangles": 5920
+    }
+  ]
+}
