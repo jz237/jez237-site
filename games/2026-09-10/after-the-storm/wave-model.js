@@ -5,13 +5,14 @@ import {waveTrainHeight,waveTrainGLSL} from './course-wave-train.js';
 // GPU vertices use the forward map. Both operate in metres and real seconds.
 export const WAVES=Array.from({length:14},(_,i)=>{const angle=.78+Math.sin(i*2.399)*1.05,k=.085*Math.pow(1.34,i)/(i<4?2.1:1);return [Math.cos(angle),Math.sin(angle),k,.18*Math.pow(.73,i)*(i<4?2.1:1),Math.sqrt(9.81*k),(i*2.39996323+.71)%(Math.PI*2)];});
 export const CHOP=1.65;
+const sampledCharacter=[];
 export function displacedSurface(x,z,t,storm=0){let px=x,pz=z,y=0;const scale=1+storm*2.3;
  for(let i=0;i<WAVES.length;i++){const [dx,dz,k,a,w,ph]=WAVES[i],f=(x*dx+z*dz)*k-t*w+ph,A=a*scale;y+=(Math.sin(f)+.12*Math.sin(2*f))*A;if(i<6){const d=CHOP*A*Math.cos(f);px+=dx*d;pz+=dz*d;}}
- return {x:px,z:pz,y:(y+surfHeight(px,pz,t))*(1+(characterAt(px,pz)[0]-1)*surfStrength.value)+waveTrainHeight(px,pz,t)+characterHeight(px,pz,t)*storm*surfStrength.value};
+ const c=characterAt(px,pz,sampledCharacter);return {x:px,z:pz,y:(y+surfHeight(px,pz,t))*(1+(c[0]-1)*surfStrength.value)+waveTrainHeight(px,pz,t)+characterHeight(px,pz,t,c)*storm*surfStrength.value};
 }
 export function sampleSwell(x,z,t,storm=0){let qx=x,qz=z;const scale=1+storm*2.3;
  for(let j=0;j<4;j++){let dx=0,dz=0;for(let i=0;i<6;i++){const [wx,wz,k,a,w,ph]=WAVES[i],f=(qx*wx+qz*wz)*k-t*w+ph,d=CHOP*a*scale*Math.cos(f);dx+=wx*d;dz+=wz*d;}qx=x-dx;qz=z-dz;}
- let y=0;for(const [dx,dz,k,a,w,ph] of WAVES){const f=(qx*dx+qz*dz)*k-t*w+ph;y+=(Math.sin(f)+.12*Math.sin(2*f))*a*scale;}return (y+surfHeight(x,z,t))*(1+(characterAt(x,z)[0]-1)*surfStrength.value)+waveTrainHeight(x,z,t)+characterHeight(x,z,t)*storm*surfStrength.value;
+ const c=characterAt(x,z,sampledCharacter);let y=0;for(const [dx,dz,k,a,w,ph] of WAVES){const f=(qx*dx+qz*dz)*k-t*w+ph;y+=(Math.sin(f)+.12*Math.sin(2*f))*a*scale;}return (y+surfHeight(x,z,t))*(1+(c[0]-1)*surfStrength.value)+waveTrainHeight(x,z,t)+characterHeight(x,z,t,c)*storm*surfStrength.value;
 }
 const n=v=>v.toFixed(10);
 const blocks=WAVES.map(([x,z,k,a,w,ph],i)=>`{vec2 d=vec2(${n(x)},${n(z)});float f=dot(q,d)*${n(k)}-time*${n(w)}+${n(ph)},A=${n(a)}*(1.+storm*2.3);h+=(sin(f)+.12*sin(2.*f))*A;${i<6?`shift+=d*${n(CHOP)}*A*cos(f);float j=-${n(CHOP*k)}*A*sin(f);J+=mat2(d.x*d.x,d.y*d.x,d.x*d.y,d.y*d.y)*j;`:''}grad+=d*(cos(f)+.24*cos(2.*f))*A*${n(k)};}`).join('\n');

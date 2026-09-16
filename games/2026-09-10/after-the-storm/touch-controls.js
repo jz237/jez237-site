@@ -1,18 +1,21 @@
 import {steeringAxis,touchHelm} from './riding-controls.js';
 // Separate pointer ownership prevents one thumb release from cancelling another.
 export function touchState(){
- const pointers=new Map();
+ const pointers=new Map(),pressed={};
+ const rebuild=()=>{for(const key in pressed)delete pressed[key];for(const key of pointers.values())pressed[key]=true;};
  return {
-  press(id,key){pointers.set(id,key);},
-  release(id){pointers.delete(id);},
-  clear(){pointers.clear();},
-  keys(){return Object.fromEntries([...pointers.values()].map(key=>[key,true]));}
+  press(id,key){pointers.set(id,key);rebuild();},
+  release(id){if(pointers.delete(id))rebuild();},
+  clear(){pointers.clear();rebuild();},
+  keys(){return {...pressed};},
+  read(){return pressed;}
  };
+
 }
 
 export function mountTouchControls({onCamera}){
  const held=touchState(),root=document.createElement('nav');
- let steer=0,steerPointer=null,autoThrottle=false;try{autoThrottle=localStorage.getItem('after-the-storm-auto-throttle')==='true';}catch{}
+ let steer=0,steerPointer=null,stickBounds=null,autoThrottle=false;try{autoThrottle=localStorage.getItem('after-the-storm-auto-throttle')==='true';}catch{}
  const saveAuto=()=>{try{localStorage.setItem('after-the-storm-auto-throttle',String(autoThrottle));}catch{}};
  root.id='touchControls';root.hidden=true;root.setAttribute('aria-label','Touch driving controls');
  root.innerHTML=`<div class="touch-tools"><button type="button" data-key="KeyR">Rescue</button><button type="button" id="touchCamera">Camera</button><button type="button" id="touchAuto" aria-pressed="false">Auto: OFF</button><button type="button" id="touchTricks" aria-expanded="false">Stunts</button></div>
@@ -25,7 +28,7 @@ export function mountTouchControls({onCamera}){
  const toggle=choice.querySelector('input');toggle.checked=navigator.maxTouchPoints>0||matchMedia('(pointer: coarse)').matches;
  let active=false;
  const stick=root.querySelector('#touchStick'),knob=root.querySelector('#touchKnob'),autoButton=root.querySelector('#touchAuto');
- function centre(){steer=0;steerPointer=null;knob.style.transform='translate(-50%,-50%)';stick.setAttribute('aria-valuenow','0');}
+ function centre(){steer=0;steerPointer=null;stickBounds=null;knob.style.transform='translate(-50%,-50%)';stick.setAttribute('aria-valuenow','0');}
  function reset(){centre();held.clear();root.querySelectorAll('[data-key]').forEach(b=>{b.classList.remove('held');b.setAttribute('aria-pressed','false');});}
  function update(){const show=toggle.checked&&active;root.hidden=!show;document.body.classList.toggle('touch-driving-active',show);document.body.classList.toggle('touch-stunts-open',show&&!root.querySelector('.touch-tricks').hidden);if(!show)reset();}
  toggle.addEventListener('change',update);
@@ -39,8 +42,8 @@ export function mountTouchControls({onCamera}){
   for(const type of ['pointerup','pointercancel','lostpointercapture'])button.addEventListener(type,release);
   button.addEventListener('contextmenu',e=>e.preventDefault());
  }
- function moveStick(e){if(e.pointerId!==steerPointer)return;const bounds=stick.getBoundingClientRect(),x=Math.max(-1,Math.min(1,(e.clientX-bounds.left-bounds.width/2)/(bounds.width*.36)));steer=-steeringAxis(x);knob.style.transform=`translate(calc(-50% + ${x*38}px),-50%)`;stick.setAttribute('aria-valuenow',String(Math.round(x*100)));}
- stick.addEventListener('pointerdown',e=>{if(!active||root.hidden||steerPointer!==null||e.button>0)return;e.preventDefault();steerPointer=e.pointerId;stick.setPointerCapture(e.pointerId);moveStick(e);});
+ function moveStick(e){if(e.pointerId!==steerPointer)return;const bounds=stickBounds,x=Math.max(-1,Math.min(1,(e.clientX-bounds.left-bounds.width/2)/(bounds.width*.36)));steer=-steeringAxis(x);knob.style.transform=`translate(calc(-50% + ${x*38}px),-50%)`;stick.setAttribute('aria-valuenow',String(Math.round(x*100)));}
+ stick.addEventListener('pointerdown',e=>{if(!active||root.hidden||steerPointer!==null||e.button>0)return;e.preventDefault();stickBounds=stick.getBoundingClientRect();steerPointer=e.pointerId;stick.setPointerCapture(e.pointerId);moveStick(e);});
  stick.addEventListener('pointermove',moveStick);
  for(const type of ['pointerup','pointercancel','lostpointercapture'])stick.addEventListener(type,e=>{if(e.pointerId===steerPointer)centre();});
  stick.addEventListener('contextmenu',e=>e.preventDefault());
@@ -51,5 +54,6 @@ export function mountTouchControls({onCamera}){
  window.addEventListener('blur',reset);window.addEventListener('pagehide',reset);
  document.addEventListener('visibilitychange',()=>{if(document.hidden)reset();});
  window.addEventListener('resize',reset);
- return {keys:()=>held.keys(),apply:input=>touchHelm(input,{enabled:toggle.checked,active,steer,steering:steerPointer!==null,autoThrottle}),reset,setActive(value){if(active!==value){active=value;update();}}};
+ const helm={};
+ return {keys:()=>held.read(),apply(input){helm.enabled=toggle.checked;helm.active=active;helm.steer=steer;helm.steering=steerPointer!==null;helm.autoThrottle=autoThrottle;return touchHelm(input,helm,input);},reset,setActive(value){if(active!==value){active=value;update();}}};
 }
