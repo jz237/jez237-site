@@ -15,7 +15,7 @@ export function recordMoment(rec,state,water,beads=[]){
   }
  });
  const f=state.localWater,local=f&&Number.isFinite(f.x)?{h:f.h.slice(),mask:f.mask.slice(),x:f.x,z:f.z,cell:f.cell,size:f.size,version:f.version}:null;
- const frame={time:state.time,racers:clone(racers),weather:clone(state.weather),passageOpenedAt:state.passageOpenedAt,water:clone(water),localWater:local,beads:clone(beads)};
+ const frame={time:state.time,racers:clone(racers),weather:clone(state.weather),passageOpenedAt:state.passageOpenedAt,water:clone(typeof water==='function'?water():water),localWater:local,beads:clone(typeof beads==='function'?beads():beads)};
  rec.frames.push(frame);rec.last=state.time;rec.previous=frame;
  while(rec.frames.length>201||rec.frames[0].time<state.time-10)rec.frames.shift();
 }
