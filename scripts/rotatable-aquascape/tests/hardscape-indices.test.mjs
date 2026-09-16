@@ -26,3 +26,16 @@ test('only opaque ungrouped hardscape indices change; attributes and other meshe
  for(const [name,attribute] of Object.entries(attributes))assert.equal(geometry.getAttribute(name),attribute);
  assert.equal(glass.geometry.index,glassIndex);assert.equal(fish.geometry.index,fishIndex);
 });
+
+test('face ordering preserves disconnected, degenerate and 32-bit indexed meshes without WebAssembly',async()=>{
+ const cases=[new Uint16Array(),new Uint16Array([2,2,2,1,2,1,9,8,7,2,1,0]),new Uint32Array([65538,65537,65536,65536,65537,0])];
+ const wasm=globalThis.WebAssembly;globalThis.WebAssembly=undefined;
+ try{for(const source of cases){const result=await reorderedFaces(source);assert.deepEqual(faces(result),faces(source));assert.equal(result.constructor,source.constructor);}}
+ finally{globalThis.WebAssembly=wasm;}
+});
+test('repeated topologies get equal independent index buffers without modifying source attributes',async()=>{
+ const scene=new T.Scene(),material=new T.MeshStandardMaterial();material.userData.bakeDiffuse={};
+ const meshes=Array.from({length:12},()=>new T.Mesh(new T.TorusGeometry(1,.3,12,30),material));scene.add(...meshes);
+ const before=meshes.map(m=>m.geometry.index.array.slice());assert.equal(await optimizeHardscapeIndices(scene),12);
+ for(let i=0;i<meshes.length;i++){assert.deepEqual(faces(meshes[i].geometry.index.array),faces(before[i]));assert.deepEqual(meshes[i].geometry.index.array,meshes[0].geometry.index.array);if(i)assert.notEqual(meshes[i].geometry.index.array,meshes[0].geometry.index.array);}
+});
