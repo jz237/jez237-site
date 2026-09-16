@@ -229,6 +229,33 @@ export function sillyCourse() {
       [0, 12, 5],
     ].map(([l, h, d]) => routePoint(l, h, d, { speed: 3, radius: 0.6 })),
   );
+  // Follow the room's open lanes while collecting its small enemies. The
+  // waypoints follow live miniature positions; collection still needs contact.
+  // Separate approaches let both marbles earn time without chasing one target.
+  const miniaturePoint = (l, d, collect) =>
+    routePoint(l, 4.03, d, {
+      speed: 3.5,
+      radius: 0.65,
+      ...(collect ? { collect } : {}),
+    });
+  const leftDemoRoute = [
+    ...route.slice(0, 8),
+    miniaturePoint(-6, 99, "mini-5"),
+    miniaturePoint(-1, 97, "mini-3"),
+    miniaturePoint(-12, 98),
+    miniaturePoint(-12, 87),
+    miniaturePoint(-9, 87, "mini-0"),
+    ...route.slice(9),
+  ];
+  const rightDemoRoute = [
+    ...rightRoute.slice(0, 8),
+    miniaturePoint(9, 96, "mini-2"),
+    miniaturePoint(12, 95),
+    miniaturePoint(12, 86),
+    miniaturePoint(8, 86, "mini-4"),
+    miniaturePoint(0, 87, "mini-1"),
+    ...rightRoute.slice(9),
+  ];
   const enemies = [
     [-9, 87],
     [0, 87],
@@ -273,7 +300,7 @@ export function sillyCourse() {
   return {
     schema: 1,
     id: "silly",
-    revision: 2,
+    revision: 3,
     name: "Silly Race",
     courseNumber: 5,
     subtitle:
@@ -303,12 +330,13 @@ export function sillyCourse() {
     starts: [worldPoint(-0.7, 0.56, 130), worldPoint(0.7, 0.56, 130)],
     goal: { ...worldPoint(0, 12, 5), angle: ISO, width: 9, depth: 1.3 },
     parts,
-    route,
+    route: leftDemoRoute,
+    playerRoutes: [leftDemoRoute, rightDemoRoute],
     alternateRoutes: [
       {
         id: "right-climbs",
         name: "Right climbs and bird-field exit",
-        route: rightRoute,
+        route: rightDemoRoute,
       },
     ],
     enemies,

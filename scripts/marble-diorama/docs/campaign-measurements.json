@@ -1,6 +1,6 @@
 {
   "physics": "rapier-0.20.0-mm-5",
-  "generatedAt": "2026-09-16T16:09:17.980Z",
+  "generatedAt": "2026-09-16T16:34:57.593Z",
   "method": "Headless 120 Hz simulation. Normal DemoController steering and turbo only. Campaign untimed; bonuses timed; difficulty 0. No positional overrides.",
   "runs": [
     {
@@ -71,14 +71,14 @@
       "course": "silly",
       "players": 1,
       "untimed": true,
-      "ticks": 8544,
+      "ticks": 9301,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 71.2,
-          "falls": 1,
-          "clock": 175,
-          "score": 3936
+          "seconds": 77.50833333333334,
+          "falls": 0,
+          "clock": 184,
+          "score": 5436
         }
       ],
       "campaignOutcome": "next"
@@ -93,8 +93,8 @@
           "status": "finished",
           "seconds": 63.916666666666664,
           "falls": 0,
-          "clock": 200,
-          "score": 4996
+          "clock": 209,
+          "score": 6496
         }
       ],
       "campaignOutcome": "complete"
@@ -240,21 +240,21 @@
       "course": "silly",
       "players": 2,
       "untimed": true,
-      "ticks": 9584,
+      "ticks": 9839,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 79.86666666666666,
-          "falls": 1,
-          "clock": 175,
-          "score": 3930
+          "seconds": 77.50833333333334,
+          "falls": 0,
+          "clock": 184,
+          "score": 5430
         },
         {
           "status": "finished",
-          "seconds": 76.175,
+          "seconds": 81.99166666666666,
           "falls": 0,
-          "clock": 175,
-          "score": 3931
+          "clock": 184,
+          "score": 5430
         }
       ],
       "campaignOutcome": "next"
@@ -269,15 +269,15 @@
           "status": "finished",
           "seconds": 63.916666666666664,
           "falls": 0,
-          "clock": 200,
-          "score": 4990
+          "clock": 209,
+          "score": 6490
         },
         {
           "status": "finished",
           "seconds": 68.725,
           "falls": 0,
-          "clock": 200,
-          "score": 4991
+          "clock": 209,
+          "score": 6490
         }
       ],
       "campaignOutcome": "complete"
@@ -393,10 +393,10 @@
     {
       "course": "silly",
       "route": "right-climbs",
-      "revision": 2,
+      "revision": 3,
       "status": "finished",
-      "seconds": 83.175,
-      "falls": 2
+      "seconds": 81.99166666666666,
+      "falls": 0
     },
     {
       "course": "ultimate",

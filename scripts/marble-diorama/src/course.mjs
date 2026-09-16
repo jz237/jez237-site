@@ -205,9 +205,15 @@ export function validateCourse(c) {
     ...(c.route ?? []),
     ...(c.playerRoutes ?? []).flat(),
     ...(c.alternateRoutes ?? []).flatMap((r) => r.route ?? []),
-  ])
+  ]) {
     if (!a || ![a.x, a.y, a.z].every(finite))
       throw Error("Invalid start, route, checkpoint or goal.");
+    if (
+      a.collect !== undefined &&
+      !c.enemies?.some((e) => e.id === a.collect && e.kind === "mini")
+    )
+      throw Error("Collection waypoint must reference a miniature enemy.");
+  }
   if (
     !c.starts?.length ||
     c.starts.length > 2 ||
