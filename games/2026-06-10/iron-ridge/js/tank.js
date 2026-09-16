@@ -3,9 +3,10 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { batchRigidParts } from './render-batch.js?v=detail2';
-import { TANK, SHELL, CG } from './config.js?v=detail2';
-import { getHeight } from './terrain.js?v=detail2';
+import { tankSurface } from './surface-art.js?v=detail3';
+import { batchRigidParts } from './render-batch.js?v=detail3';
+import { TANK, SHELL, CG } from './config.js?v=detail3';
+import { getHeight } from './terrain.js?v=detail3';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();
@@ -175,6 +176,8 @@ export function buildTankMesh(scheme = 'olive') {
   const rubberMat = new THREE.MeshStandardMaterial({ color: 0x2c2c2e, roughness: 0.95 });
   const steelMat = new THREE.MeshStandardMaterial({ color: 0x6a6a70, roughness: 0.45, metalness: 0.45 });
 
+  tankSurface(hullMat);tankSurface(accentMat);
+  tankSurface(barrelMat,'steel');tankSurface(steelMat,'steel');tankSurface(rubberMat,'rubber');
   const root = new THREE.Group();
 
   // ---- hull: trapezoid cross-section with sloped armor ----
@@ -296,6 +299,7 @@ export function buildTankMesh(scheme = 'olive') {
 
   // ---- running gear: road wheels, sprocket, idler, return rollers ----
   const roadWheels = [];
+  const wheelParts=[],hubParts=[];
   const spinning = [];
   const wheelGeo = new THREE.CylinderGeometry(0.34, 0.34, 0.3, 14);
   const hubGeo = new THREE.CylinderGeometry(0.15, 0.15, 0.33, 9);
@@ -306,10 +310,10 @@ export function buildTankMesh(scheme = 'olive') {
       grp.position.set(sx, 0.36, 1.6 - i * 0.8);
       const w = new THREE.Mesh(wheelGeo, rubberMat);
       w.rotation.z = Math.PI / 2;
-      grp.add(w);
+      grp.add(w);wheelParts.push({pivot:grp,source:w});w.visible=false;
       const hub = new THREE.Mesh(hubGeo, accentMat);
       hub.rotation.z = Math.PI / 2;
-      grp.add(hub);
+      grp.add(hub);hubParts.push({pivot:grp,source:hub});hub.visible=false;
       hull.add(grp);
       roadWheels.push({ grp, side, z: grp.position.z, baseY: 0.36 });
       spinning.push(grp);
@@ -344,6 +348,33 @@ export function buildTankMesh(scheme = 'olive') {
       spinning.push(roller);
     }
   }
+
+  // Ten identical wheel/hub pairs retain their suspension pivots, but render
+  // as two instanced draws. Source nodes remain as animation/transform references.
+  // Dedicated material objects keep Three from repeatedly switching one
+  // material between instanced and ordinary shader programs every frame.
+  const wheelMaterials=[rubberMat,accentMat].map(source=>{
+    const material=source.clone();material.onBeforeCompile=source.onBeforeCompile;
+    material.customProgramCacheKey=source.customProgramCacheKey;return material;
+  });
+  const wheelInstances=[new THREE.InstancedMesh(wheelGeo,wheelMaterials[0],10),new THREE.InstancedMesh(hubGeo,wheelMaterials[1],10)];
+  for(const m of wheelInstances){m.castShadow=true;m.frustumCulled=false;hull.add(m);}
+  const wheelMatrix=new THREE.Matrix4();
+  for(const {pivot,source} of [...wheelParts,...hubParts]) {
+    source.updateMatrix();source.matrixAutoUpdate=false;pivot.matrixAutoUpdate=false;
+  }
+  // Both concentric cylinders use the same local rotation. Compose the shared
+  // transform once per wheel, not once per material or again in scene traversal.
+  const wheelLocal=wheelParts[0].source.matrix;
+  function updateWheelInstances() {
+    for(let i=0;i<roadWheels.length;i++) {
+      const pivot=roadWheels[i].grp;pivot.updateMatrix();
+      wheelMatrix.multiplyMatrices(pivot.matrix,wheelLocal);
+      wheelInstances[0].setMatrixAt(i,wheelMatrix);wheelInstances[1].setMatrixAt(i,wheelMatrix);
+    }
+    wheelInstances[0].instanceMatrix.needsUpdate=true;wheelInstances[1].instanceMatrix.needsUpdate=true;
+  }
+  updateWheelInstances();
 
   // ---- circulating track links (instanced, both sides in one mesh) ----
   const links = new THREE.InstancedMesh(linkGeo, linkMat, LINKS_PER_SIDE * 2);
@@ -526,7 +557,7 @@ export function buildTankMesh(scheme = 'olive') {
   batchRigidParts(root,[hull,turret,pivot,recoilGrp,...spinning.filter(o=>o.isGroup)],moving);
   root.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
 
-  return { root, hull, turret, pivot, recoilGrp, muzzle, coaxMuzzle, roadWheels, spinning, tracks, exhausts };
+  return { root, hull, turret, pivot, recoilGrp, muzzle, coaxMuzzle, roadWheels, spinning, tracks, exhausts, wheelInstances, wheelParts, hubParts, updateWheelInstances };
 }
 
 export class Tank {
@@ -866,6 +897,7 @@ export class Tank {
       }
     }
 
+    if(animDetail)this.visual.updateWheelInstances();
     this.updateTurret(dt);
   }
 

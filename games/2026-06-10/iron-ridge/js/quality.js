@@ -4,7 +4,7 @@
 
 export const LEVELS = [
   { // 0 — potato
-    name: 'Low',
+    name: 'Low', contactCap: 16,
     nearTrees: 8, nearRadius: 16, groundDetail: 0.35,
     pixelRatio: 1.0,
     shadowSize: 1024,
@@ -16,7 +16,7 @@ export const LEVELS = [
     particleScale: 0.45,
   },
   { // 1
-    name: 'Medium',
+    name: 'Medium', contactCap: 32,
     nearTrees: 16, nearRadius: 22, groundDetail: 0.7,
     pixelRatio: 1.25,
     shadowSize: 1024,
@@ -28,7 +28,7 @@ export const LEVELS = [
     particleScale: 0.7,
   },
   { // 2
-    name: 'High',
+    name: 'High', contactCap: 64,
     nearTrees: 28, nearRadius: 28, groundDetail: 1,
     pixelRatio: 1.5,
     shadowSize: 2048,
@@ -40,7 +40,7 @@ export const LEVELS = [
     particleScale: 1,
   },
   { // 3 — full
-    name: 'Ultra',
+    name: 'Ultra', contactCap: 80,
     nearTrees: 40, nearRadius: 34, groundDetail: 1,
     pixelRatio: 2.0,
     shadowSize: 2048,

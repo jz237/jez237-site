@@ -53,73 +53,101 @@ check line-of-sight, and lead their shots.
 
 ## Art and rendering
 
-Nearby trees have tapered bark trunks, connected branches, and individual
-leaf/needle sprays using the existing assets from First Light
-(`games/2026-09-13/first-light/assets/trees/{leaf,needle}.webp`). Distant
-woodland retains the Stunt Car Racer atlas and six/eight-triangle impostors.
-The detail pool is capped at 8 / 16 / 28 / 40 trees on Low / Medium / High /
-Ultra, using the existing spatial hash. Tree positions and collisions are
-unchanged. Destroyed trees retain their selected model, tint and lighting;
-their individual materials are released after the fall.
+Nearby trees have bark trunks, branches and individual leaf/needle sprays
+from First Light. Distant trees use the Stunt Car Racer atlas. Each quality
+level selects at most 8 / 16 / 28 / 40 detailed trees. A 0.45-second opaque
+dither transition trades pixels between the two representations; it also
+applies to their shadows. Three metres of selection hysteresis prevents
+boundary flicker. The bounded incoming/outgoing pool never exceeds twice the
+selected tier's limit. Once a transition finishes, the unused model stops
+rendering. Destroyed trees retain their appearance and release cloned materials.
 
-Ground has soil/gravel and forest-litter blends, smaller-scale grass, and
-nearby packed normal/height relief. Medium and above blend a rotated grass
-sample to reduce repetition. Low keeps the original three terrain samples.
-No extra terrain subdivisions or postprocessing passes are needed.
+Ground has broad soil and stone patches, forest litter, and winding worn paths
+from a packed landscape mask. The mask replaces the second grass sample:
+High/Medium use five terrain samples, Low uses four and skips micro relief.
+Existing terrain geometry and physics heights are unchanged.
 
-Tank paint includes baked weld beads, chips, cast-metal grain, dust and
-runoff. Rigid parts sharing a material are merged within their animation
-pivot; wheels, suspension, turret, recoil and effects anchors stay independent.
+Armor, rubber and bare metal use different surface grain and roughness. Normal
+and roughness data share one small texture lookup; Low skips that lookup.
+Paint retains baked chips, welds, dust and runoff. Static parts are batched,
+and the ten road wheels and hubs render as two instanced draws while keeping
+individual suspension and rotation. Dedicated wheel material objects prevent
+repeated switching between instanced and ordinary shader configurations.
 
-Chevron tread marks follow the ground, persist, and fade between 45 and 65
-seconds. They reuse the original 360-instance ring buffer (oldest marks are
-recycled sooner during continuous driving). Warm sunlight, softer sky fill,
-and three haze-graded ridge meshes provide depth without extra lighting passes.
-The new maps are generated once or reused from existing site assets; no paid
-assets or new CDN dependencies were added.
+Smoke has four irregular, shaded silhouettes, rotation and a real opacity
+fade while expanding. Trail dust emits from both tracks and drifts behind
+forward/reverse travel. Particle pools stay at their original capacity; screen
+size is capped by quality to limit close-range overdraw. Tread marks retain
+the bounded 360-instance pool and fade between 45 and 65 seconds.
+
+Soft contact shadows sit under nearby tanks, tree trunks and rocks in one
+instanced draw, capped at 16 / 32 / 64 / 80 marks by quality. Static transforms
+are cached. This adds no full-screen ambient-occlusion or depth-capture pass.
+
+Distant mountains have shaped foothills, crests and gullies with baked sunlight,
+forested slope detail reused from First Light's `assets/sky/ridge.webp`, and
+bases that blend into the scene's haze. All three layers share one texture,
+resampled to 1024 x 350 at load time to save about 5.5 MiB of GPU memory.
+No paid assets, additional CDN dependencies, shadow-map resolution increases
+or postprocessing passes were added.
 
 ## Performance
 
-The existing automatic quality scaler continues to control resolution,
-shadows, bloom, foliage, fog and particles. No shadow-map, render-resolution,
-or postprocessing-pass increases. Detailed foliage adds geometry near the
-camera; rigid tank batching offsets rendering overhead, especially in combat.
+The automatic quality scaler still controls resolution, shadows, bloom,
+foliage, fog and particles. This release adds no postprocessing passes or
+shadow-map/resolution increases. Wheel instancing offsets the new visual work.
 
-September 15, 2026 comparison against the preceding woodland release, Edge /
-ANGLE D3D11 on RTX 5090, locked 1920 x 1080 drawing buffer. Each scenario starts
-in a fresh browser with fixed camera, controlled opponents, and disabled
-vsync/frame caps. GPU timing uses disjoint-checked hardware timer queries;
-CPU timing covers a simulation/render frame. These are frame-work timings,
-not an FPS claim for slower devices.
+September 15, 2026 comparison against detail2 (`bed4c3320a5ab516ea7085c86e8db559dccb3578`),
+Edge / ANGLE D3D11 on RTX 5090, locked 1920 x 1080 drawing buffer. Each case
+starts in a fresh browser with seeded scenery, controlled opponents and
+disabled vsync/frame caps: 120 warmup frames, 600 measured frames and 300
+disjoint-checked GPU timer queries. CPU timing covers simulation and rendering.
+These measure frame work, not FPS on typical PCs.
 
 | High quality scenario | CPU median before → after | GPU median before → after | Draw calls before → after |
 |---|---|---|---|
-| Ground / tank | 0.90 → 0.80 ms | 0.53 → 0.32 ms | 346 → 217 |
-| Dense forest, 28 nearby models | 0.70 → 0.60 ms | 0.31 → 0.33 ms | 112 → 105 |
-| Eight additional tanks + repeated explosions | 4.00 → 2.40 ms | 2.47 → 1.27 ms | 2,254 → 926 |
+| Ground / tank | 0.70 → 0.70 ms | 0.325 → 0.344 ms | 207 → 172 |
+| Dense forest, 28 selected trees | 0.50 → 0.50 ms | 0.319 → 0.334 ms | 99 → 104 |
+| Eight additional tanks + repeated explosions | 2.30 → 2.10 ms | 1.139 → 0.542 ms | 919 → 596 |
+| Moving through forest | 0.60 → 0.60 ms | 0.334 → 0.370 ms | 132 → 121 |
 
-Combat CPU 95th percentile: 4.5 → 2.9 ms; GPU: 4.94 → 2.60 ms.
-Dense forest geometry increases from 303,906 to 396,402 triangles including
-shadow and post passes, with essentially flat CPU timing. A longer Low ground
-run (600 frames / 300 GPU queries) measured CPU median 0.80 → 0.70 ms and GPU
-median 0.26 → 0.29 ms; GPU 95th percentile 2.32 → 2.35 ms. GPU outliers vary
-with driver scheduling, so small deltas should not be treated as precise gains.
-A separate 600-frame combat run with 4x CPU throttling reduced CPU median
-23.8 → 14.5 ms and 95th percentile 26.4 → 15.8 ms. This exercises CPU
-headroom; it does not represent a particular device.
-Actual slower GPUs/phones still need device testing; CPU throttling and mobile
-viewport emulation do not emulate a slower GPU.
+High combat CPU 95th percentile improves from 2.5 to 2.3 ms; GPU from 3.27
+to 2.71 ms. Moving-forest CPU 95th percentile stays at 0.8 ms, with GPU
+2.49 → 2.56 ms. Low combat CPU median improves from 2.3 to 2.1 ms and GPU
+0.851 → 0.784 ms. The other Low cases add 0.010–0.022 ms median GPU work;
+forest CPU medians increase from 0.5 to 0.6 ms. GPU scheduling creates
+outliers, so small differences and the large High combat GPU gain should
+not be assumed to reproduce on every device.
 
-Validation covers all quality caps, replacement/restoration without doubled
-or resurrected trees, fallen-material cleanup, ground-conforming tread pool
-wrap/fading, and wheel/turret/recoil/exhaust attachments. Batching preserves all
-10,968 non-instanced tank triangle vertices within 0.00000012 world units.
+A separate High combat run with 4x CPU throttling reduces CPU median from
+14.5 to 13.4 ms and 95th percentile from 16.7 to 14.9 ms. This tests CPU
+headroom; it does not emulate a weaker GPU. Actual slower PCs and phones
+still need device testing. Portrait/touch emulation checks layout and play.
+
+The final combat frame's summed particle screen-square area falls by 10.2%
+on High and 11.7% on Low. This is a transparent-overdraw proxy before alpha
+discard, not an exact shaded-pixel counter. Estimated incremental texture
+storage is about 3.72 MiB including mipmaps and the injected landscape mask;
+no render targets are added. Raw renderer counts, material-visible texture
+estimates, timings and caveats are stored in `tests/graphics-performance.json`.
+
+Validation covers all quality caps, complementary GPU dither coverage,
+bounded/released transition residents, fallen-material cleanup, contact-shadow
+alignment, smoke opacity/expansion, ground-conforming tread wrap/fading,
+and wheel/turret/recoil/exhaust attachments. Rigid batching preserves 10,968
+vertices within 0.00000012 world units; all 20 wheel/hub instance transforms
+match their animation references within 0.00000006. Desktop driving/firing
+and portrait touch startup pass without JavaScript errors.
 
 Development smoke test: serve this folder, install/use Playwright with Edge,
 then run `node tests/graphics-smoke.cjs` with `IRON_RIDGE_URL` set to the served
 game URL (default `http://127.0.0.1:8080/`). `PLAYWRIGHT_MODULE` can point to an
 existing Playwright installation. Screenshots and the JSON report are written
-to the current directory.
+to the current directory. For comparisons, serve baseline and current copies
+under one base URL, set `IRON_RIDGE_BASE_URL`, and run
+`node tests/graphics-benchmark.cjs <directory> <quality-index> <view>`.
+Set `BENCH_FRAMES=600`, `BENCH_WARMUP=120`, and optionally `CPU_RATE=4`.
+Views are `ground-tank`, `dense-forest`, `combat`, and `forest-drive`.
 
 ## Tech
 
