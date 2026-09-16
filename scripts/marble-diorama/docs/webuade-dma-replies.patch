@@ -1,0 +1,121 @@
+--- a/src/audiodevice.c
++++ b/src/audiodevice.c
+@@ -153,10 +153,24 @@
+ 	}
+ }
+ 
++struct AudioReply { struct AudioReply* next; uint32_t address; };
++static struct AudioReply *reply_head=0, *reply_tail=0;
+ void reply_message_DMA(uint32_t al_msg_addr, int audioChannel) {
+-	// note: score only checks this 1x per playloop and the extra latency might be a problem
+-
+-	reply_message(al_msg_addr, swap32(SCORE_HAVE_REPLYMSG));
++    struct AudioReply* node=calloc(1,sizeof(struct AudioReply));
++    if (!node) abort();
++    node->address=al_msg_addr;
++    if(reply_tail) reply_tail->next=node;
++    else reply_head=node;
++    reply_tail=node;
++}
++uint32_t audiodevice_take_reply(void) {
++    if(!reply_head) return 0;
++    struct AudioReply* node=reply_head;
++    uint32_t address=swap32(node->address);
++    reply_head=node->next;
++    if(!reply_head)reply_tail=0;
++    free(node);
++    return address;
+ }
+ 
+ 
+@@ -208,6 +222,7 @@
+ uint8_t _allocated_channels = 0;
+ 
+ void audiodevice_reset() {
++	while(reply_head) audiodevice_take_reply();
+ 	_use_audio_device= _allocated_channels= 0;
+ 	alloc_write_lists();
+ }
+--- a/src/audiodevice.h
++++ b/src/audiodevice.h
+@@ -21,6 +21,7 @@
+ uint16_t swap16(uint16_t in);
+ uint32_t swap32(uint32_t in);
+ 
++uint32_t audiodevice_take_reply(void);
+ void audiodevice_reset();
+ void audiodevice_open(uint32_t al_msg_addr);
+ void audiodevice_beginIO(uint32_t al_msg_addr, uint32_t al_dst_addr);
+--- a/src/include/amigamsg.h
++++ b/src/include/amigamsg.h
+@@ -26,6 +26,7 @@
+   AMIGAMSG_AUDIO_DEV_OPEN = 50,
+   AMIGAMSG_AUDIO_DEV_BEGINIO = 51,
+   AMIGAMSG_AUDIO_DEV_ABORTIO = 52,
++  AMIGAMSG_AUDIO_DEV_REPLY = 53,
+     
+ };
+ 
+--- a/src/uade.c
++++ b/src/uade.c
+@@ -755,6 +755,10 @@
+     uade_send_debug("Starting audio output at %d", uade_audio_skip);
+     break;
+ 
++  case AMIGAMSG_AUDIO_DEV_REPLY:
++    uade_put_long(0x1fc, audiodevice_take_reply());
++    break;
++
+   case AMIGAMSG_AUDIO_DEV_BEGINIO:
+ 	src = uade_get_u32(0x204);
+ 	if (!uade_valid_string(src)) {
+--- a/amigasrc/score/score.s
++++ b/amigasrc/score/score.s
+@@ -154,6 +154,7 @@
+ AMIGAMSG_AUDIO_DEV_OPEN	equ	50
+ AMIGAMSG_AUDIO_DEV_BEGINIO	equ	51
+ AMIGAMSG_AUDIO_DEV_ABORTIO	equ	52
++AMIGAMSG_AUDIO_DEV_REPLY equ 53
+ 
+ 
+ EXECBASE	equ	$0D00
+--- a/amigasrc/score/devices/audio/audio_dev.s
++++ b/amigasrc/score/devices/audio/audio_dev.s
+@@ -80,21 +80,23 @@
+ 	pull	all
+ 	rts
+ 
++ad_pollreply dc.l AMIGAMSG_AUDIO_DEV_REPLY
+ handleDMAreplymsgs
+-	push a6
+-	move.l 4.w,a6
+-
+-;	move.w		#$4000,$dff09a     		; disable int
+-;	addq.b		#1,IDNestCnt(a6)
+-
+-	tst.l	$1fc
+-	beq.b	hend
+-	move.l $1fc,a1
+-	move.l #0,$1fc
+-	
+-	bra handlereplymsgs0
+-
+-	
++    push all
++    move.l 4.w,a6
++ad_nextreply
++    lea ad_pollreply(pc),a0
++    moveq #4,d0
++    bsr put_message
++    move.l $1fc,d0
++    beq.b ad_replydone
++    move.l d0,a1
++    bsr exec_replymsg
++    bra.b ad_nextreply
++ad_replydone
++    pull all
++    rts
++
+ ; A1: ptr to chained Messages
+ handlereplymsgs
+ 	push a6
