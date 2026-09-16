@@ -218,6 +218,118 @@
     }
   },
   {
+    "id": "2026-09-15-factual-infographic-factual-infographic-palingenia-longicau",
+    "title": "Factual infographic: Palingenia longicauda — The River's Brief Swarm",
+    "tests": "Archive-wide factual topic packet contains no prior Palingenia longicauda subject. Direct-canvas portrait infographic; one dominant hero, eight substantive panels, four explanatory macro close-ups, exact six-legged anatomy, no pupal stage, and concise source-backed labels only.; archive_slot=2026-09-15T20:20; concept=palingenia-longicauda-clay-bank-three-year-development-synchronized-river-emergence; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a museum-quality, direct-canvas scientific infographic in a tall 2048x3072 portrait format titled 'PALINGENIA LONGICAUDA — THE RIVER'S BRIEF SWARM'. This is a factual entomology plate, not a photographed poster, not a specimen tray, and not a room or workbench scene. Make the insect imagery occupy most of the canvas. Use precise natural-history illustration fused with naturalistic macro-photography detail, a deep river-blue and warm twilight-gold palette, crisp readable cream typography, fine leader lines, restrained translucent diagram overlays, believable wing membranes, clay textures, water reflections, and coherent directional flow from riverbank below to aerial swarm above.\n\nDOMINANT HERO: one enormous, anatomically credible adult long-tailed mayfly Palingenia longicauda in three-quarter side view, spanning the central upper half above a lowland river at twilight. Show exactly six articulated legs, distinct head/thorax/segmented abdomen, two pairs of clear membranous wings with the smaller hind wings behind the broad forewings, compound eyes, and extremely long delicate terminal filaments. Render species-appropriate pale cream to warm amber body tones and translucent wings; no fantasy colors, monster scale, or extra limbs. Behind it, thousands of much smaller mayflies form a luminous but natural synchronized cloud close over the river, with several males around one female as a small behavior vignette; keep the hero unmistakably dominant. Add a simple scale bracket reading 'TOTAL SIZE: UP TO ABOUT 10 CM'.\n\nBuild EIGHT substantive, clearly separated but integrated information modules around the hero, each with a short heading and no paragraph longer than two concise lines:\n1. 'THREE YEARS BELOW' — a large cutaway through a steep, continuously eroding outer riverbank of layered wet clay. Show an aquatic Palingenia-type burrowing nymph within the clay habitat, river current outside, roots and sediment grains for scale. Label: 'Larvae develop for three years in steep, eroding clay riverbanks.'\n2. 'NO PUPA' — a left-to-right four-stage strip: egg, aquatic nymph, winged subimago, adult imago. Put a bold crossed-out pupa silhouette between nymph and subimago and label 'Mayflies skip the pupal stage.'\n3. 'A FEW HOURS ABOVE' — a clean time-compression sequence of nymph rising from the river, winged emergence at the surface, subimago, and mature flying imago, ending in the twilight swarm. Label: 'Mass emergence is synchronized and lasts only a few hours.' Do not invent a clock time, month, temperature trigger, or swarm count.\n4. 'LOWLAND RIVER SPECIALIST' — an oblique habitat slice of a medium-to-large lowland river with a meander, steep outer clay bank, and calm inner margin; small locator callouts read 'Documented populations: Tisza and Raba river systems, Hungary' and 'Historically found across European rivers.' Avoid a dominant decorative map.\n5. 'WINGED ARCHITECTURE' — macro close-up of the adult thorax and overlapping forewing/hind-wing bases with delicate venation; leader lines label 'broad forewing', 'smaller hind wing', 'thorax', and 'six legs'.\n6. 'BUILT TO BURROW' — two explanatory nymph close-ups: frontal head showing tusk-like digging mouthparts and robust digging legs; lateral abdomen showing articulated gills and three terminal filaments. Label carefully as 'Burrowing-mayfly adaptations' and 'Gills help move water through the burrow.' Do not imply these structures breathe air.\n7. 'BETWEEN TWO WORLDS' — a compact cause-and-effect diagram: aquatic nymph → winged emergence → fish and river predators below / birds and other terrestrial consumers above, with the exact caption 'Mayflies move nutrients between aquatic and terrestrial food webs.' No invented predator species or quantities.\n8. 'BANKS ARE NURSERIES' — a split comparison: living eroding clay bank with nymph habitat versus armored riprap/concrete bank with the clay habitat removed. Label 'Hard bank reinforcement can destroy larval habitat.' Keep this a factual habitat comparison, not an advocacy slogan.\n\nInclude FOUR large explanatory macro windows distributed around the plate: (A) nymph head, tusks, and digging legs embedded in clay grains; (B) articulated abdominal gills moving water through a burrow; (C) adult wing venation and smaller hind-wing overlap; (D) extremely long terminal filaments against a dark water background. Also include a small silhouette scale comparison against a human hand, clearly marked 'about 10 cm total size' without suggesting the body alone is 10 cm. Use arrows only for documented transitions: nymph to subimago to imago, water movement past gills, and nutrient transfer across the water-land boundary.\n\nTYPOGRAPHY AND ACCURACY: all labels large, short, and legible at normal viewing size; italicize Palingenia longicauda. Preserve exact six-legged insect anatomy and correct body segmentation throughout. Make every secondary mayfly visibly insect-like with paired wings and long filaments, but do not over-detail the distant swarm. Explicitly avoid a pupal stage, dragonfly anatomy, four-legged insects, extra wings, antenna-like tails on the head, human-like motives, sensational universal claims, URLs, footnotes, bibliography, logos, watermarks, and tiny unreadable body text. The finished result must feel like a sophisticated science-museum exhibit graphic with one detailed hero, eight genuinely informative panels, four anatomical close-ups, habitat scale, mechanism sequence, and strong visual hierarchy.",
+    "image": "images/2026-09-15-factual-infographic-factual-infographic-palingenia-longicau.jpg",
+    "thumb": "thumbs/2026-09-15-factual-infographic-factual-infographic-palingenia-longicau.webp",
+    "color": "#515457",
+    "date": "2026-09-15",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "palingenia-longicauda-clay-bank-three-year-development-synchronized-river-emergence",
+      "imageSha256": "6d078faf23bdcad7760a99d9b7530d7e4b43bffedac1056d8b140eb7a673d093",
+      "imageDHash": "274f4ecd1135c8c9"
+    },
+    "factualInfographic": {
+      "topic": "How the long-tailed mayfly Palingenia longicauda spends three years developing in eroding clay riverbanks before a synchronized emergence lasting only a few hours",
+      "description": "A richly illustrated entomology plate centered on Palingenia longicauda, contrasting its three-year clay-bank larval development with its synchronized winged emergence lasting only a few hours.",
+      "sourceNote": "Verified against PLOS ONE (species identity, lowland-river habitat, three-year larval development in eroding clay banks, size, synchronized emergence, range and habitat loss): https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0031872 ; and Insects (MDPI) (mayfly subimago life cycle, wing and nymph anatomy, burrowing adaptations, and aquatic-terrestrial nutrient transfer): https://pmc.ncbi.nlm.nih.gov/articles/PMC6628430/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-15T20:21:03-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "PLOS ONE",
+            "title": "Species History Masks the Effects of Human-Induced Range Loss — Unexpected Genetic Diversity in the Endangered Giant Mayfly Palingenia longicauda",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://journals.plos.org/plosone/article?id=10.1371%2Fjournal.pone.0031872"
+          },
+          {
+            "id": "S2",
+            "publisher": "Insects (MDPI)",
+            "title": "Mayflies (Ephemeroptera) and Their Contributions to Ecosystem Services",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6628430/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Palingenia longicauda is the long-tailed mayfly, an insect in the order Ephemeroptera and family Palingeniidae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Palingenia longicauda is a lowland river species historically associated with medium-to-large European rivers; documented surviving populations include the Tisza and Raba river systems in Hungary.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Its larvae develop for three years almost exclusively in continuously eroding, steep outer riverbanks composed mostly of clay.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "After the long larval development, mass emergence as subimagos and imagos is highly synchronized and lasts only a few hours.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The species can reach about 10 centimetres in total size and is known for spectacular synchronized reproductive swarms.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Mayfly development has no pupal stage: an aquatic nymph gives rise to a winged subimago, and the subimago may molt into the adult imago.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adult mayflies have two pairs of wings, with hind wings smaller than forewings, and two or three terminal filaments depending on the taxon.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Mayfly nymphs are aquatic, usually have three terminal filaments, prominent forewing pads, ten abdominal segments, and paired articulated gills on at most abdominal segments one through seven.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Burrowing mayfly nymphs use digging-adapted legs and tusks in substrates that include clay, while their gills help move water through the burrow.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Mayflies as a group transfer nutrients between aquatic and terrestrial ecosystems and provide food for many other animals.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Reinforcing eroding riverbanks with riprap or concrete destroys the clay-bank larval habitat used by Palingenia longicauda.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-15-factual-infographic-factual-infographic-nepenthes-the-water",
     "title": "Factual infographic: Nepenthes — The Water-Lubricated Trap Rim",
     "tests": "Direct-canvas portrait infographic; one dominant hero, eight substantive panels, three explanatory close-ups, concise source-backed labels only.; archive_slot=2026-09-15T00:20; concept=nepenthes-peristome-water-film-insect-aquaplaning; factual_subtype: factual-infographic",
