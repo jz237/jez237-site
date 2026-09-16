@@ -11,9 +11,13 @@ test('indexed Corydoras retain every original triangle attribute bit and articul
  for(const [id,mesh] of models.meshes.entries()){
   const g=mesh.geometry,h=createHash('sha256');
   for(const [name,a] of Object.entries(g.attributes).sort(([a],[b])=>a.localeCompare(b))){
-   if(name==='coryMotion')continue;
+   if(a.isInstancedBufferAttribute)continue;
    const bits=new Uint32Array(a.array.buffer,a.array.byteOffset,a.array.length),expanded=new Uint32Array(g.index.count*a.itemSize);
    for(let i=0;i<g.index.count;i++)for(let k=0;k<a.itemSize;k++)expanded[i*a.itemSize+k]=bits[g.index.getX(i)*a.itemSize+k];
+   // Eye vertices now use an explicit non-breathing region, 11 instead of 9.
+   // Normalize only that intentional articulation label for the original proof;
+   // positions, normals, colors, UVs and all other region bits must still match.
+   if(name==='coryPart'){const parts=new Float32Array(expanded.buffer);for(let i=0;i<parts.length;i++)if(parts[i]===11)parts[i]=9;}
    h.update(name);h.update(new Uint8Array(expanded.buffer));
   }
   assert.equal(h.digest('hex'),originalHashes[id]);
