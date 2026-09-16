@@ -11,10 +11,13 @@ The mesh has a deep, compressed flank, vertical pigment bands, shallow integrate
 individual fin rays, dark reinforced leading edges with warm pale rims, short
 anterior fin spines, paired pectoral fins and two tapering pelvic streamers.
 The fine dark bars in the median fins come from the same reference photograph.
-Routine cruising keeps the deep body quiet; stronger tail flex is reserved for
-brief high-effort movement. Median fins,
-pectoral fins and streamers have separate GPU motion. Visible alternating pectoral
-strokes, gentle median-fin waves and small tail-fan strokes support gliding; shadow geometry follows the
+Routine cruising keeps the head steady while a traveling wave builds toward the
+rear trunk. Forward speed controls a visible inward fold of the free dorsal and
+anal tips; they reopen during coasting and hovering. Tail strokes quicken with
+propulsive effort, with independent stroke/coast timing for each animal. The
+tail fan bends behind the peduncle rather than wagging the whole fish. Median fins,
+pectoral fins and streamers have separate GPU motion. Alternating pectoral
+strokes and median-fin waves continue during gliding; shadow geometry follows the
 same deformation. No additional per-frame CPU vertex upload is needed.
 
 ## Behavioral interpretation
@@ -36,6 +39,11 @@ body/caudal-fin swimming, burst-and-coast and maneuvering in angelfish and two
 other species. Their comparison supports distinguishing fin-led routine movement
 from high-effort body/tail propulsion. It does not provide the exact animation
 frequencies used here.
+
+The visible fin folding and its degree follow the owner's observation. The
+study supports multiple swimming gaits; it does not establish the exact fold
+angles or tail-beat frequencies used by this animation. The fin-contact margin
+also covers the stronger strokes so extra flexibility does not permit clipping.
 
 - [Original study: performance and maneuverability](https://doi.org/10.1139/z01-146)
 

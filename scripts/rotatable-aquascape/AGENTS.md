@@ -30,9 +30,12 @@ nitrogen accounting. Motion constants are illustrative, not measured species dat
 
 
 For silver angelfish, match the reference's shallow eyes and dark band entering
-around the iris. Preserve graceful fin-led gliding with a quiet head and trunk,
-subtle median-fin and pelvic-streamer motion, and stronger tail flex only during
-brief high effort. Filter social steering and angular velocity; commit to clear
+around the iris. Preserve graceful fin-led gliding with a steady head and modest
+traveling flex in the rear trunk. Fold the free dorsal and anal fin tips visibly
+toward the body during forward strokes, reopen them on the coast, and quicken the
+flexible caudal stroke with speed/effort. Keep independent stroke/coast timing,
+active pelvic streamers and collision bounds covering the moving fins.
+Filter social steering and angular velocity; commit to clear
 obstacle recovery instead of alternating yaw at a contact boundary. The two fish
 have a loose companion preference and give other fish room, without rigidly
 synchronized motion. These motion constants are qualitative, not measured data.
