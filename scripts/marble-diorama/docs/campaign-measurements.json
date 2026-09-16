@@ -1,0 +1,418 @@
+{
+  "physics": "rapier-0.20.0-mm-5",
+  "generatedAt": "2026-09-16T18:09:41.604Z",
+  "method": "Headless 120 Hz simulation. Normal DemoController steering and turbo only. Campaign untimed; bonuses timed; difficulty 0. No positional overrides.",
+  "runs": [
+    {
+      "course": "practice",
+      "players": 1,
+      "untimed": true,
+      "ticks": 3569,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 29.741666666666667,
+          "falls": 0,
+          "clock": 60,
+          "score": 410
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "beginner",
+      "players": 1,
+      "untimed": true,
+      "ticks": 7401,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 61.675,
+          "falls": 0,
+          "clock": 75,
+          "score": 1299
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "intermediate",
+      "players": 1,
+      "untimed": true,
+      "ticks": 5623,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 46.858333333333334,
+          "falls": 0,
+          "clock": 120,
+          "score": 2100
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "aerial",
+      "players": 1,
+      "untimed": true,
+      "ticks": 6749,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 56.24166666666667,
+          "falls": 0,
+          "clock": 150,
+          "score": 3044
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "silly",
+      "players": 1,
+      "untimed": true,
+      "ticks": 8867,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 73.89166666666667,
+          "falls": 0,
+          "clock": 193,
+          "score": 6929
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "ultimate",
+      "players": 1,
+      "untimed": true,
+      "ticks": 6864,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 57.2,
+          "falls": 0,
+          "clock": 218,
+          "score": 7986
+        }
+      ],
+      "campaignOutcome": "complete"
+    },
+    {
+      "course": "clockwork-foundry",
+      "players": 1,
+      "untimed": false,
+      "ticks": 2489,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 20.741666666666667,
+          "falls": 0,
+          "clock": 129.2583333333522,
+          "score": 1768
+        }
+      ]
+    },
+    {
+      "course": "magnetic-observatory",
+      "players": 1,
+      "untimed": false,
+      "ticks": 2251,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 18.758333333333333,
+          "falls": 0,
+          "clock": 131.24166666668373,
+          "score": 1788
+        }
+      ]
+    },
+    {
+      "course": "crystal-cascade",
+      "players": 1,
+      "untimed": false,
+      "ticks": 1524,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 12.7,
+          "falls": 0,
+          "clock": 137.30000000001155,
+          "score": 1948
+        }
+      ]
+    },
+    {
+      "course": "practice",
+      "players": 2,
+      "untimed": true,
+      "ticks": 3712,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 30.933333333333334,
+          "falls": 0,
+          "clock": 60,
+          "score": 409
+        },
+        {
+          "status": "finished",
+          "seconds": 30.175,
+          "falls": 0,
+          "clock": 60,
+          "score": 409
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "beginner",
+      "players": 2,
+      "untimed": true,
+      "ticks": 7939,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 66.15833333333333,
+          "falls": 0,
+          "clock": 75,
+          "score": 1284
+        },
+        {
+          "status": "finished",
+          "seconds": 64.51666666666667,
+          "falls": 0,
+          "clock": 75,
+          "score": 1305
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "intermediate",
+      "players": 2,
+      "untimed": true,
+      "ticks": 5809,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 46.858333333333334,
+          "falls": 0,
+          "clock": 120,
+          "score": 2085
+        },
+        {
+          "status": "finished",
+          "seconds": 48.40833333333333,
+          "falls": 0,
+          "clock": 120,
+          "score": 2106
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "aerial",
+      "players": 2,
+      "untimed": true,
+      "ticks": 7402,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 56.24166666666667,
+          "falls": 0,
+          "clock": 150,
+          "score": 3029
+        },
+        {
+          "status": "finished",
+          "seconds": 61.68333333333333,
+          "falls": 0,
+          "clock": 150,
+          "score": 3049
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "silly",
+      "players": 2,
+      "untimed": true,
+      "ticks": 8057,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 67.14166666666667,
+          "falls": 0,
+          "clock": 184,
+          "score": 5414
+        },
+        {
+          "status": "finished",
+          "seconds": 65.14166666666667,
+          "falls": 0,
+          "clock": 184,
+          "score": 5432
+        }
+      ],
+      "campaignOutcome": "next"
+    },
+    {
+      "course": "ultimate",
+      "players": 2,
+      "untimed": true,
+      "ticks": 7442,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 62.016666666666666,
+          "falls": 0,
+          "clock": 209,
+          "score": 6471
+        },
+        {
+          "status": "finished",
+          "seconds": 57.21666666666667,
+          "falls": 0,
+          "clock": 209,
+          "score": 6489
+        }
+      ],
+      "campaignOutcome": "complete"
+    },
+    {
+      "course": "clockwork-foundry",
+      "players": 2,
+      "untimed": false,
+      "ticks": 2598,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 17.308333333333334,
+          "falls": 0,
+          "clock": 132.6916666666824,
+          "score": 1798
+        },
+        {
+          "status": "finished",
+          "seconds": 21.65,
+          "falls": 0,
+          "clock": 128.3500000000197,
+          "score": 1758
+        }
+      ]
+    },
+    {
+      "course": "magnetic-observatory",
+      "players": 2,
+      "untimed": false,
+      "ticks": 2062,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 17.183333333333334,
+          "falls": 0,
+          "clock": 132.8166666666823,
+          "score": 1798
+        },
+        {
+          "status": "finished",
+          "seconds": 15.941666666666666,
+          "falls": 0,
+          "clock": 134.05833333334783,
+          "score": 1818
+        }
+      ]
+    },
+    {
+      "course": "crystal-cascade",
+      "players": 2,
+      "untimed": false,
+      "ticks": 2619,
+      "marbles": [
+        {
+          "status": "finished",
+          "seconds": 21.333333333333332,
+          "falls": 1,
+          "clock": 128.66666666668607,
+          "score": 1858
+        },
+        {
+          "status": "finished",
+          "seconds": 21.825,
+          "falls": 1,
+          "clock": 128.17500000001985,
+          "score": 1858
+        }
+      ]
+    }
+  ],
+  "alternateRoutes": [
+    {
+      "course": "practice",
+      "route": "right-training-exit",
+      "revision": 1,
+      "status": "finished",
+      "seconds": 31.291666666666668,
+      "falls": 0
+    },
+    {
+      "course": "beginner",
+      "route": "left-ledge",
+      "revision": 2,
+      "status": "finished",
+      "seconds": 65.61666666666666,
+      "falls": 0
+    },
+    {
+      "course": "beginner",
+      "route": "upper-right-fork",
+      "revision": 2,
+      "status": "finished",
+      "seconds": 64.85833333333333,
+      "falls": 0
+    },
+    {
+      "course": "intermediate",
+      "route": "right-upper-maze",
+      "revision": 2,
+      "status": "finished",
+      "seconds": 52.56666666666667,
+      "falls": 0
+    },
+    {
+      "course": "intermediate",
+      "route": "pipe-wave-route",
+      "revision": 2,
+      "status": "finished",
+      "seconds": 56.275,
+      "falls": 0
+    },
+    {
+      "course": "aerial",
+      "route": "right-hammer-route",
+      "revision": 1,
+      "status": "finished",
+      "seconds": 63.59166666666667,
+      "falls": 0
+    },
+    {
+      "course": "silly",
+      "route": "right-climbs",
+      "revision": 3,
+      "status": "finished",
+      "seconds": 64.65,
+      "falls": 0
+    },
+    {
+      "course": "ultimate",
+      "route": "right-hazard-rooms",
+      "revision": 1,
+      "status": "finished",
+      "seconds": 117.55833333333334,
+      "falls": 3
+    }
+  ]
+}
