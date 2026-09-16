@@ -137,7 +137,7 @@ export class TeachingScene{
   if(this.mode==='layers'){for(const o of this.housing)o.visible=target<.02&&(this.savedVisibility.get(o)??true);for(const o of this.content.children)if(o.userData.rootTemplate)o.visible=target>.02;}
   this.phase+=dt;this.rootTime.value=this.phase;if(this.mode==='underground')this.rootFlow.value=T.MathUtils.damp(this.rootFlow.value,T.MathUtils.clamp(flow/65,0,1.35),3,dt);this.shrimpStudy?.poseSpecimen(dt);if(this.coryStudy)this.poseCory(dt);
   if(this.impeller)this.impeller.rotation.y+=dt*flow*.14;
-  this.angelStudy?.update(dt,.22+.12*Math.sin(this.phase*.7),true,.5+.5*Math.sin(this.phase*.65));
+  this.angelStudy?.update(dt,.22+.12*Math.sin(this.phase*.7),false,.5+.5*Math.sin(this.phase*.65),.20+.16*Math.sin(this.phase*.45));
   this.specimen?.update(this.phase,.4,this.texture,.65,.5,1,dt,.6);
   const dummy=this.dummy;for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.arrows.count;i++){placeFlowArrow(dummy,path.curve,(path.phase+i/path.arrows.count)%1);dummy.updateMatrix();path.arrows.setMatrixAt(i,dummy.matrix);}path.arrows.instanceMatrix.needsUpdate=true;}
   const w=this.host.clientWidth,h=this.host.clientHeight;

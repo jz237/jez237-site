@@ -66,3 +66,41 @@ test('pelvic collision volumes follow forward reach while the body stays steady'
  assert.ok(Math.max(...moved)>.5,'free pelvic tips extend visibly forward');
  assert.ok(moved.filter(d=>Math.abs(d)<1e-8).length>original.length*.7,'torso and other fins keep their pose');
 });
+
+test('forward swimming folds tall fins and quickens tail strokes, then relaxes smoothly at rest',()=>{
+ const source=new T.Group(),mesh=new T.Mesh(new T.PlaneGeometry(),new T.MeshStandardMaterial());mesh.name='Median';source.add(mesh);
+ const moving=new AngelfishModel(source,0),resting=new AngelfishModel(source,0);
+ const uniforms=model=>{const shader={uniforms:{},vertexShader:'#include <common>\n#include <begin_vertex>'};model.group.children[0].material.onBeforeCompile(shader);return shader.uniforms;};
+ const m=uniforms(moving),r=uniforms(resting);let min=1,max=0,last=0;
+ for(let i=0;i<600;i++){
+  moving.update(1/60,.2,false,0,.32);resting.update(1/60,.2,true,0,0);
+  assert.ok(Math.abs(m.angelFold.value-last)<.014,'fin pose eases without a snap');last=m.angelFold.value;
+  if(i>120){min=Math.min(min,last);max=Math.max(max,last);}
+ }
+ assert.ok(max>.16&&min<.12,'visible fold/reopen cycle while traveling');
+ assert.equal(r.angelFold.value,0,'hovering does not retract tall fins');
+ assert.ok(m.angelPhase.value>r.angelPhase.value*2,'traveling tail beats clearly faster');
+ const held=Object.fromEntries(Object.entries(m).map(([k,v])=>[k,v.value]));moving.update(0,1,false,1,1);
+ assert.deepEqual(Object.fromEntries(Object.entries(m).map(([k,v])=>[k,v.value])),held,'pause freezes all fin channels');
+ for(let i=0;i<120;i++)moving.update(1/60,.1,true,0,0);
+ assert.ok(m.angelFold.value<.001&&m.angelStroke.value<.001,'fins fan open and tail settles after stopping');
+});
+
+test('folded median fins and stronger tail strokes remain inside the collision envelope',()=>{
+ const b=fs.readFileSync(new URL('../public/models/angelfish/silver-angelfish.glb',import.meta.url));
+ const gltf=JSON.parse(b.subarray(20,20+b.readUInt32LE(12)).toString()),start=28+b.readUInt32LE(12);
+ const spheres=angelBody(new T.Vector3(),0,0,1);
+ // Check the boundary of the entire allowed fin-motion range, independently
+ // of stroke timing: inward fold, slight forward rake, and lateral flex.
+ for(const node of gltf.nodes.filter(n=>n.name.startsWith('Median'))){
+  const a=gltf.accessors[gltf.meshes[node.mesh].primitives[0].attributes.POSITION],v=gltf.bufferViews[a.bufferView];
+  for(let i=0;i<a.count;i+=3){
+   const at=start+(v.byteOffset??0)+(a.byteOffset??0)+i*(v.byteStride??12);
+   const x=b.readFloatLE(at),y=b.readFloatLE(at+4),z=b.readFloatLE(at+8),edge=T.MathUtils.smoothstep(Math.abs(y),.56,1.4);
+   for(const fold of [0,.10,.20])for(const lateral of [-.12,.12]){
+    const p=new T.Vector3(x+edge*fold*.3,y-Math.sign(y)*edge*fold,z+lateral);
+    assert.ok(spheres.some(s=>p.distanceToSquared(s.center)<=s.radius*s.radius),'moving fin exceeds contact envelope at '+p.toArray());
+   }
+  }
+ }
+});

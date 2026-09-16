@@ -61,7 +61,7 @@ export class Angelfish{
   }
   this.pose(dt);
  }
- pose(dt:number){for(const s of this.states){const m=this.models[s.id];m.group.position.copy(s.position);m.group.rotation.set(0,s.yaw,s.pitch,'YXZ');m.update(dt,s.effort,s.hover>0,s.reach);}this.collision=this.states.map(s=>angelBody(s.position,s.yaw,s.pitch,s.size,s.reach,s.phase));}
+ pose(dt:number){for(const s of this.states){const m=this.models[s.id];m.group.position.copy(s.position);m.group.rotation.set(0,s.yaw,s.pitch,'YXZ');m.update(dt,s.effort,s.hover>0,s.reach,s.speed);}this.collision=this.states.map(s=>angelBody(s.position,s.yaw,s.pitch,s.size,s.reach,s.phase));}
  contacts():FishContactBody[]{return this.states.map(s=>({id:100+s.id,position:s.position.clone(),previous:s.previous.clone(),forward:angelForward(s.yaw,s.pitch),size:s.size,envelope:angelBody(new T.Vector3(),s.yaw,s.pitch,s.size,s.reach,s.phase)}));}
  correct(id:number,p:T.Vector3){const s=this.states[id];if(!s)return;s.position.copy(p);s.speed=0;s.timer=0;this.pose(0);}
  startle(){for(const s of this.states){s.startle=.2+s.id*.07;s.hover=0;}}
