@@ -5,8 +5,8 @@ export function steeringAxis(value, deadzone = .08) {
   const magnitude = clamp((Math.abs(value) - deadzone) / (1 - deadzone), 0, 1);
   return Math.sign(value) * magnitude ** 1.2;
 }
-export function touchHelm(input, { enabled = false, active = false, steer = 0, steering = false, autoThrottle = false } = {}) {
+export function touchHelm(input, { enabled = false, active = false, steer = 0, steering = false, autoThrottle = false } = {}, out) {
   if (!enabled || !active) return input;
-  return { ...input, steer: steering ? steer : input.steer,
-    throttle: input.brake ? 0 : Math.max(input.throttle || 0, autoThrottle ? 1 : 0) };
+  const result=out||{...input};if(out&&out!==input)Object.assign(out,input);
+  result.steer=steering?steer:input.steer;result.throttle=input.brake?0:Math.max(input.throttle||0,autoThrottle?1:0);return result;
 }

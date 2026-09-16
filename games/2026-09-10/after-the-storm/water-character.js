@@ -19,12 +19,13 @@ export function setWaterCharacter(course){
   characterField.data.set([exposure*(1+shallow*.22),exposure,shallow,bed],(j*n+i)*4);
  }
 }
-export function characterAt(x,z){
- if(!characterField.active)return [1,1,0,-20];
+export function characterAt(x,z,out=[]){
+ if(!characterField.active){out[0]=1;out[1]=1;out[2]=0;out[3]=-20;return out;}
  const n=CHARACTER_SIZE,u=clamp(x/CHARACTER_SPAN+.5)*(n-1),v=clamp(z/CHARACTER_SPAN+.5)*(n-1),i=Math.min(n-2,Math.floor(u)),j=Math.min(n-2,Math.floor(v)),a=u-i,b=v-j,d=characterField.data;
- return [0,1,2,3].map(k=>(d[(j*n+i)*4+k]*(1-a)+d[(j*n+i+1)*4+k]*a)*(1-b)+(d[((j+1)*n+i)*4+k]*(1-a)+d[((j+1)*n+i+1)*4+k]*a)*b);
+ for(let k=0;k<4;k++)out[k]=(d[(j*n+i)*4+k]*(1-a)+d[(j*n+i+1)*4+k]*a)*(1-b)+(d[((j+1)*n+i)*4+k]*(1-a)+d[((j+1)*n+i+1)*4+k]*a)*b;return out;
 }
-export function characterHeight(x,z,t){if(!characterField.active)return 0;const c=characterAt(x,z);return c[2]*c[1]*.085*Math.sin(x*.83+z*.47-t*3.6)+Math.max(0,c[1]-.65)*.075*Math.sin(x*1.2-z*.72-t*4.2);}
+const heightCharacter=[];
+export function characterHeight(x,z,t,c=null){if(!characterField.active)return 0;c??=characterAt(x,z,heightCharacter);return c[2]*c[1]*.085*Math.sin(x*.83+z*.47-t*3.6)+Math.max(0,c[1]-.65)*.075*Math.sin(x*1.2-z*.72-t*4.2);}
 export const characterGLSL=`uniform sampler2D characterMap;uniform float characterActive;
 vec4 characterAt(vec2 p){if(characterActive<.5)return vec4(1.,1.,0.,-20.);vec2 q=clamp(p/640.+.5,0.,1.)*64.,i=min(floor(q),vec2(63.)),f=q-i;vec2 uv=(i+.5)/65.;return mix(mix(texture2D(characterMap,uv),texture2D(characterMap,uv+vec2(1./65.,0.)),f.x),mix(texture2D(characterMap,uv+vec2(0.,1./65.)),texture2D(characterMap,uv+vec2(1./65.,1./65.)),f.x),f.y);}
 float characterHeight(vec2 p){if(characterActive<.5)return 0.;vec4 c=characterAt(p);return surfStrength*storm*(c.z*c.y*.085*sin(p.x*.83+p.y*.47-time*3.6)+max(0.,c.y-.65)*.075*sin(p.x*1.2-p.y*.72-time*4.2));}
