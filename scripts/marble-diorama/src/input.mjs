@@ -1,6 +1,6 @@
 const bound = (n) => Math.max(-1, Math.min(1, n));
 export class Inputs {
-  constructor(canvas, shortcut) {
+  constructor(canvas, shortcut, canCapturePointer = () => true) {
     this.keys = new Set();
     this.touch = [
       { x: 0, y: 0, turbo: false },
@@ -28,7 +28,7 @@ export class Inputs {
     window.addEventListener("keyup", (e) => this.keys.delete(e.code));
     window.addEventListener("blur", () => this.reset());
     canvas.addEventListener("pointerdown", (e) => {
-      if (e.pointerType !== "touch" && this.trackball) {
+      if (e.pointerType !== "touch" && this.trackball && canCapturePointer()) {
         canvas.requestPointerLock?.();
         this.mouse.turbo = e.button === 0;
       }

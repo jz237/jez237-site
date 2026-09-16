@@ -8,7 +8,7 @@
     />
     <meta name="theme-color" content="#181e22" />
     <title>Marble Madness · The Diorama Workshop</title>
-    <link rel="stylesheet" href="style.css?v=5d378321db6ee4e8" />
+    <link rel="stylesheet" href="style.css?v=da3e01d1cba2df19" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23d65b46'/%3E%3Cpath d='M14 3Q30 20 14 37' stroke='%23eed695' stroke-width='8' fill='none'/%3E%3C/svg%3E"
@@ -107,7 +107,15 @@
       <div class="camera-tools">
         <button id="zoomOut" aria-label="Zoom out">−</button><span>VIEW</span
         ><button id="zoomIn" aria-label="Zoom in">+</button>
+        <button
+          id="resetView"
+          aria-label="Reset diorama view"
+          title="Reset view"
+        >
+          ↺
+        </button>
       </div>
+      <p class="view-hint">Drag to rotate · Scroll or pinch to zoom</p>
       <div id="toast" role="status" aria-live="polite"></div>
       <section id="pauseCard" class="floating" hidden>
         <span class="micro">TAKE A BREATHER</span>
@@ -473,6 +481,6 @@
       </div>
       <button id="newCourse">Create a custom course ↗</button>
     </dialog>
-    <script type="module" src="game.js?v=c2d4be66b7b97143"></script>
+    <script type="module" src="game.js?v=a3f3c1076e51d529"></script>
   </body>
 </html>

@@ -261,7 +261,7 @@ function menu() {
     "Slopes, ceramic channels and a moving bridge. Explore the new physical world.";
   refreshSelectedRecords();
   setSim(new Simulation(selected, { untimed: true }));
-  view.setOrbit(false);
+  view.setOrbit(true);
   view.frameOverview();
   $("status").textContent = "Workshop preview · locally bundled physics";
   inputs.reset();
@@ -649,15 +649,19 @@ async function init() {
     await initPhysics();
     view = new DioramaView($("world"));
     clock = new FixedClock(step);
-    inputs = new Inputs($("world"), (code) => {
-      if (
-        code === "KeyP" ||
-        (code === "Escape" && !document.pointerLockElement)
-      )
-        pause();
-      if (code === "KeyR" && ["play", "demo", "result"].includes(runMode))
-        restart();
-    });
+    inputs = new Inputs(
+      $("world"),
+      (code) => {
+        if (
+          code === "KeyP" ||
+          (code === "Escape" && !document.pointerLockElement)
+        )
+          pause();
+        if (code === "KeyR" && ["play", "demo", "result"].includes(runMode))
+          restart();
+      },
+      () => runMode === "play" && !paused && !view.orbit,
+    );
     for (let i = 0; i < 8; i++) {
       const o = document.createElement("option");
       o.value = i;
@@ -719,12 +723,15 @@ async function init() {
     };
     $("exitReplay").onclick = menu;
     $("zoomIn").onclick = () => {
-      view.zoom = Math.min(3, view.zoom * 1.2);
+      view.zoom = Math.min(view.controls.maxZoom, view.zoom * 1.2);
       view.updateFrustum();
     };
     $("zoomOut").onclick = () => {
-      view.zoom = Math.max(0.25, view.zoom / 1.2);
+      view.zoom = Math.max(view.controls.minZoom, view.zoom / 1.2);
       view.updateFrustum();
+    };
+    $("resetView").onclick = () => {
+      if (runMode === "menu") view.frameOverview();
     };
     $("settingsButton").onclick = () => {
       if (["play", "demo"].includes(runMode)) pause(true);

@@ -84,8 +84,8 @@ export class DioramaView {
     this.controls.enablePan = false;
     this.controls.enableZoom = false;
     this.controls.maxPolarAngle = Math.PI / 2.2;
-    this.controls.minDistance = 8;
-    this.controls.maxDistance = 90;
+    this.controls.minZoom = 0.1;
+    this.controls.maxZoom = 3;
     this.pmrem = new THREE.PMREMGenerator(this.renderer);
     const room = new RoomEnvironment();
     this.env = this.pmrem.fromScene(room, 0.05);
@@ -147,8 +147,16 @@ export class DioramaView {
     this.renderer.setSize(width, height, false);
     this.updateFrustum();
   }
+  // Buttons and OrbitControls share the orthographic camera's zoom, so wheel
+  // and pinch gestures cannot leave a second zoom multiplier behind on restart.
+  get zoom() {
+    return this.camera.zoom;
+  }
+  set zoom(value) {
+    this.camera.zoom = value;
+  }
   updateFrustum() {
-    const h = 19 / this.zoom,
+    const h = 19,
       w = (h * this.width) / this.height;
     Object.assign(this.camera, { left: -w, right: w, top: h, bottom: -h });
     this.camera.updateProjectionMatrix();
@@ -589,6 +597,12 @@ export class DioramaView {
     return mesh;
   }
   frameOverview() {
+    // Finish any damped gesture before setting the overview, including a reset
+    // pressed immediately after a drag.
+    const damping = this.controls.enableDamping;
+    this.controls.enableDamping = false;
+    this.controls.update();
+    this.controls.enableDamping = damping;
     const b = new THREE.Box3()
         .setFromObject(this.root)
         .expandByObject(this.display),
@@ -625,6 +639,9 @@ export class DioramaView {
     this.controls.enableRotate = enabled;
     this.controls.enableZoom = enabled;
     this.orbit = enabled;
+    this.canvas.classList.toggle("orbit-enabled", enabled);
+    if (enabled && document.pointerLockElement === this.canvas)
+      document.exitPointerLock();
   }
   setQuality(q) {
     this.quality = q;
