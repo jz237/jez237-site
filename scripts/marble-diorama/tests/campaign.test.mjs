@@ -381,29 +381,34 @@ test("pyramid default thickness and all Practice mesh vertices are finite", () =
     assert.ok(Array.from(g.vertices).every(Number.isFinite));
 });
 
-test("timed solo campaign carries the original clock through Aerial with bounded steering and no falls", () => {
-  const run = new CampaignRun({ players: 1, untimed: false, campaign: true });
-  for (const course of campaignCourses().slice(0, 4)) {
-    const sim = new Simulation(course, run.options),
-      driver = new DemoController();
-    run.prepare(sim);
-    while (
-      sim.tick < 24000 &&
-      ["racing", "falling"].includes(sim.players[0].status)
-    ) {
-      const input = driver.input(sim);
-      assert.ok(Number.isFinite(input.x) && Number.isFinite(input.z));
-      assert.ok(Math.hypot(input.x, input.z) <= 1 + 1e-12);
-      sim.step([input]);
+for (const players of [1, 2])
+  test(`timed ${players}-player campaign carries the original clock through Aerial without falls`, () => {
+    const run = new CampaignRun({ players, untimed: false, campaign: true });
+    for (const course of campaignCourses().slice(0, 4)) {
+      const sim = new Simulation(course, run.options);
+      const drivers = sim.players.map(() => new DemoController());
+      run.prepare(sim);
+      while (
+        sim.tick < 24000 &&
+        sim.players.some((p) => ["racing", "falling"].includes(p.status))
+      ) {
+        const inputs = drivers.map((d, i) => d.input(sim, i));
+        for (const input of inputs) {
+          assert.ok(Number.isFinite(input.x) && Number.isFinite(input.z));
+          assert.ok(Math.hypot(input.x, input.z) <= 1 + 1e-12);
+        }
+        sim.step(inputs);
+      }
+      for (const p of sim.players) {
+        assert.equal(p.status, "finished", course.id);
+        assert.equal(p.deaths, 0, course.id);
+        assert.ok(p.time > 0, course.id);
+      }
+      run.complete(sim);
+      sim.dispose();
     }
-    assert.equal(sim.players[0].status, "finished", course.id);
-    assert.equal(sim.players[0].deaths, 0, course.id);
-    assert.ok(sim.players[0].time > 0, course.id);
-    run.complete(sim);
-    sim.dispose();
-  }
-  assert.equal(run.courseId, "silly");
-});
+    assert.equal(run.courseId, "silly");
+  });
 
 test("Ultimate demo takes the open ice lane and crosses the timed bridge without falls for both marbles", () => {
   const course = campaignCourses().find((c) => c.id === "ultimate");
@@ -417,6 +422,33 @@ test("Ultimate demo takes the open ice lane and crosses the timed bridge without
   for (const p of sim.players) {
     assert.equal(p.status, "finished");
     assert.equal(p.deaths, 0);
+  }
+  sim.dispose();
+});
+
+test("two-player Aerial demos yield at the crossing and both finish without falls", () => {
+  const course = campaignCourses().find((c) => c.id === "aerial");
+  const sim = new Simulation(course, { players: 2, untimed: true });
+  const drivers = sim.players.map(() => new DemoController());
+  while (
+    sim.tick < 120 * 75 &&
+    sim.players.some((p) => p.status !== "finished")
+  ) {
+    const before = sim.players.map((p) => ({ ...sim.body(p).translation() }));
+    const inputs = drivers.map((d, i) => d.input(sim, i));
+    inputs.forEach((input, i) => {
+      assert.ok(Math.hypot(input.x, input.z) <= 1 + 1e-12);
+      assert.deepEqual(
+        { ...sim.body(sim.players[i]).translation() },
+        before[i],
+      );
+    });
+    sim.step(inputs);
+  }
+  for (const p of sim.players) {
+    assert.equal(p.status, "finished");
+    assert.equal(p.deaths, 0);
+    assert.ok(p.finishTick < 120 * 75);
   }
   sim.dispose();
 });

@@ -305,3 +305,29 @@ The owner explicitly requested publishing the current build in Unfinished Games.
 
 The audio engine now uses native sample-clock loops, cue-generation cancellation, a bounded decoded-buffer cache, independent volume buses and serialized pause/resume. Eleven audio unit checks and five native OfflineAudioContext fixture checks pass. The browser checks cover loops, one-shots, restarts, stops and stereo, with zero output error against decoded samples. These checks do not verify the original soundtrack; no music is enabled or packaged.
 Publication checks: all 63 automated tests pass and the production bundle builds successfully.
+
+## Crossing-aware two-player demos — September 16, 2026
+
+The controller predicts nearby marbles' closest approach over 2.5 seconds. At
+crossing approaches, the second demo driver brakes to yield to the first. It
+ignores parallel following and marbles on different elevations. Inputs remain
+bounded steering and turbo; no body positions, collisions, clocks or player
+physics are changed. Physics remains mm-5.
+
+Aerial previously had four/five falls at its initial crossing in two-player
+mode. It now completes with zero falls in 59.550 / 62.992 seconds. The right
+route's shallow bend before the descent accepts a 0.9-unit approach radius,
+inside the three-unit-wide track, removing an unnecessary return to its marker.
+
+All 65 tests pass and the production bundle builds. New acceptance covers
+one- and two-player timed campaigns through Aerial, with zero falls and time
+remaining for every player. The dedicated crossing test also checks that
+computing demo inputs does not move bodies. Fresh full campaign measurements
+cover every untimed race, authored alternate route and timed bonus again.
+
+Full timed acceptance remains open: solo times out in Silly at 47.367 seconds;
+two-player reaches Silly with both players, then both time out by 46.083 seconds.
+No clock extension was used. Original soundtrack and quantitative Amiga parity
+also remain open. The unfinished public preview is commit 2e3703951; this
+checkpoint is local development pending its next publication.
+Browser verification: the rebuilt two-player Aerial demo finishes both marbles with zero falls; the result shows Player 1 at 59.55 seconds. No browser errors were logged during this run.

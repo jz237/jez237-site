@@ -573,12 +573,40 @@ export class DemoController {
     const dx = target.x - pos.x,
       dz = target.z - pos.z,
       dist = Math.hypot(dx, dz),
-      speed = Math.min(
+      cruisingSpeed = Math.min(
         maximum,
         target.stop
           ? Math.sqrt(2 * 1.5 * Math.max(0, dist - 0.2))
           : Math.sqrt(2 * 1.5 * Math.max(0, dist - 0.75)) + cornerSpeed,
       );
+    // Give the earlier player priority at intersecting approaches. Predict
+    // closest approach from measured velocities and brake before entering the
+    // crossing; neither marble is moved or made non-colliding by the demo.
+    const traffic = sim.players.slice(0, player).some((other) => {
+      if (other.status !== "racing") return false;
+      const ob = sim.body(other),
+        op = ob.translation(),
+        ov = ob.linvel();
+      if (Math.abs(op.y - pos.y) > RADIUS * 2) return false;
+      // Ordinary following/overtaking is not a crossing conflict.
+      const speeds = Math.hypot(v.x, v.z) * Math.hypot(ov.x, ov.z);
+      if (speeds > 0.1 && (v.x * ov.x + v.z * ov.z) / speeds > 0.75)
+        return false;
+      const rx = op.x - pos.x,
+        rz = op.z - pos.z;
+      const vx = ov.x - v.x,
+        vz = ov.z - v.z;
+      const relativeSpeed2 = vx * vx + vz * vz;
+      if (relativeSpeed2 < 0.01) return false;
+      const closestTime = -(rx * vx + rz * vz) / relativeSpeed2;
+      return (
+        closestTime > 0 &&
+        closestTime < 2.5 &&
+        Math.hypot(rx + vx * closestTime, rz + vz * closestTime) <
+          RADIUS * 2 + 0.5
+      );
+    });
+    const speed = traffic ? 0 : cruisingSpeed;
     // Counter gravity on descents as well as climbs. Slip feedback limits
     // excessive spin before a low-friction surface grips again.
     const compensation = p.groundNormal

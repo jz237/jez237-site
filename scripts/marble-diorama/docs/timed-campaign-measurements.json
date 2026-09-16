@@ -1,6 +1,6 @@
 {
   "physics": "rapier-0.20.0-mm-5",
-  "generatedAt": "2026-09-16T02:50:54.530Z",
+  "generatedAt": "2026-09-16T16:08:30.062Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -75,17 +75,17 @@
       "results": [
         {
           "course": "practice",
-          "ticks": 3653,
+          "ticks": 3712,
           "players": [
             {
-              "time": 36.21744791667532,
-              "score": 4009,
+              "time": 35.833333333342125,
+              "score": 3909,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 36.907552083341734,
-              "score": 4010,
+              "time": 36.425781250008576,
+              "score": 4009,
               "deaths": 0,
               "status": "finished"
             }
@@ -93,17 +93,17 @@
         },
         {
           "course": "beginner",
-          "ticks": 8065,
+          "ticks": 8256,
           "players": [
             {
-              "time": 22.493489583335244,
-              "score": 7105,
+              "time": 23.255208333335382,
+              "score": 7102,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 23.639322916668785,
-              "score": 7207,
+              "time": 21.250000000001684,
+              "score": 7003,
               "deaths": 0,
               "status": "finished"
             }
@@ -114,14 +114,14 @@
           "ticks": 6308,
           "players": [
             {
-              "time": 27.143229166675248,
-              "score": 10606,
+              "time": 28.143229166674697,
+              "score": 10703,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 26.932291666674477,
-              "score": 10608,
+              "time": 24.932291666675567,
+              "score": 10204,
               "deaths": 0,
               "status": "finished"
             }
@@ -129,18 +129,36 @@
         },
         {
           "course": "aerial",
-          "ticks": 8756,
+          "ticks": 7559,
+          "players": [
+            {
+              "time": 11.476562500006958,
+              "score": 12746,
+              "deaths": 0,
+              "status": "finished"
+            },
+            {
+              "time": 4.7877604166723415,
+              "score": 11547,
+              "deaths": 0,
+              "status": "finished"
+            }
+          ]
+        },
+        {
+          "course": "silly",
+          "ticks": 5530,
           "players": [
             {
               "time": 0,
-              "score": 11384,
-              "deaths": 4,
+              "score": 13245,
+              "deaths": 0,
               "status": "timeout"
             },
             {
               "time": 0,
-              "score": 11197,
-              "deaths": 5,
+              "score": 11915,
+              "deaths": 0,
               "status": "timeout"
             }
           ]
