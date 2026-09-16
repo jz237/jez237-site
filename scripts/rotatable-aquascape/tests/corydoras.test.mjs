@@ -45,3 +45,16 @@ test('new sinking food still moves in world space after static transforms are re
  for(let i=0;i<80;i++){life.update(.05,i*.05);scene.updateMatrixWorld();}
  assert.ok(pellet.position.y<start-2);assert.equal(pellet.mesh.matrixWorld.elements[13],pellet.position.y);
 });
+
+test('a cory interrupts a saved route, approaches a descending pellet briskly and bites once near the floor',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4,[],undefined,1),a=life.animals[0];a.position.set(-1,.432,0);a.yaw=.3;a.pitch=0;a.picking=undefined;a.mode='browsing';a.remaining=60;a.restIn=60;a.replanIn=60;a.route=[new T.Vector3(3,.432,0)];a.target.copy(a.route[0]);a.anchor.copy(a.position);
+ life.routes.nodes.push({id:0,point:new T.Vector3(3,.432,0),neighbors:[],region:0});let bites=0;life.feed(()=>bites++);for(const p of life.pellets.splice(1))p.mesh.removeFromParent();life.pellets[0].position.set(.8,.8,.1);
+ let peak=0,movedWhileTurning=false;
+ for(let i=0;i<240&&bites===0;i++){const p=a.position.clone(),yaw=a.yaw;life.update(1/60,i/60);peak=Math.max(peak,a.speed);if(i===0)assert.equal(a.mode,'feeding','reacts before the pellet reaches the gravel');if(a.position.distanceTo(p)>.0001&&Math.abs(a.yaw-yaw)>.0001)movedWhileTurning=true;assert.ok(a.position.y<.55,'stays near the floor');}
+ assert.ok(peak>.42,'faster feeding approach');assert.ok(movedWhileTurning,'old route alignment cannot stop food pursuit');assert.equal(bites,1);assert.equal(life.pellets.length,0);
+});
+
+test('brisk pellet pursuit retains swept rock collision protection',()=>{
+ const rock={center:new T.Vector3(0,.58,0),radius:.30},life=new Corydoras(new T.Scene(),()=>.4,[rock],undefined,1),a=life.animals[0];a.position.set(-1.2,.432,0);a.yaw=0;a.pitch=0;a.picking=undefined;a.route=[];life.feed();life.pellets[0].position.set(1,.425,0);
+ for(let i=0;i<240;i++){life.update(.05,i*.05);for(const b of coryBody(a.position,coryForward(a),a.size,a.pitch))assert.ok(b.center.distanceTo(rock.center)>b.radius+rock.radius);}
+});

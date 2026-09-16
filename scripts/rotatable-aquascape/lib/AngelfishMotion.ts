@@ -53,7 +53,7 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
   let best=Infinity;
   for(const f of senses.food){if(f.position.y>4.35||f.position.y<1.7)continue;const d=f.position.distanceTo(s.position);let score=d;
    for(const n of senses.other)if(n.radius>.45&&n.position.distanceTo(f.position)<d)score+=.9;
-   if(score<best&&d<4.8){best=score;food=f;}
+   if(score<best&&d<5.8){best=score;food=f;}
   }
   if(food){s.target=food.id;s.hover=0;}
  }
@@ -64,12 +64,13 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
  if(food){
   const d=s.position.distanceTo(food.position);s.stalled=d<s.lastDistance-.02?0:s.stalled+dt;if(d<s.lastDistance-.02)s.lastDistance=d;
   if(s.stalled>2.4){s.target=null;s.bite=.8;s.stalled=0;newGoal(s,senses);}
-  pace=d>.65?(Math.sin(s.phase*8+s.id)>.2?1.25:.64):clamp((d-.43)*3,.045,.55);
+  // Stronger feeding strokes blend into glides, with the same precise braking.
+  pace=d>.8?1.18+.38*Math.sin(s.phase*2.6+s.id*1.7):clamp((d-.43)*3,.045,.70);
   s.behavior=d>.7?'Approaching a falling flake':'Braking for a precise bite';
   const mouth=s.position.clone().addScaledVector(angelForward(s.yaw,s.pitch),.78*s.size);
-  if(mouth.distanceTo(food.position)<.11&&s.speed<.7){s.consumed=food.id;s.target=null;s.hunger=Math.max(0,s.hunger-.14);s.bite=.75+random(s)*.75;s.hover=.3;newGoal(s,senses);s.behavior='Taking a bite';}
+  if(mouth.distanceTo(food.position)<.11&&s.speed<.7){s.consumed=food.id;s.target=null;s.hunger=Math.max(0,s.hunger-.14);s.bite=.4+random(s)*.35;s.hover=.3;newGoal(s,senses);s.behavior='Taking a bite';}
  }
- if(s.hover>0||s.bite>.8)pace=.035;
+ if(s.hover>0||s.bite>0)pace=.035;
  if(s.startle>0){pace=1.5;s.behavior='A short startle dart';}
  const verticalError=desired.y-s.position.y,delta=desired.sub(s.position).normalize();
  s.detour=Math.max(0,s.detour-dt);if(s.detour>0){delta.copy(angelForward(s.detourYaw,0));pace=Math.min(pace,.22);}
@@ -90,7 +91,7 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
  const to=s.position.clone().addScaledVector(angelForward(yaw,pitch),s.speed*dt);
  // Fin sculling lets a deep-bodied angelfish gain/lose height without pointing
  // its whole body steeply upward or downward.
- if(s.hover===0)to.y+=clamp(verticalError*.3,-.16,.16)*dt;
+ if(s.hover===0)to.y+=clamp(verticalError*(food?.42:.3),food?-.22:-.16,food?.22:.16)*dt;
  // Test intermediate translation AND orientation so bursts cannot tunnel.
  const steps=Math.max(1,Math.ceil(s.position.distanceTo(to)/.035),Math.ceil(Math.abs(yaw-s.yaw)/.08));let valid=true;
  for(let i=1;i<=steps;i++){const t=i/steps;if(!senses.clear(s.position.clone().lerp(to,t),s.yaw+(yaw-s.yaw)*t,s.pitch+(pitch-s.pitch)*t,s.size)){valid=false;break;}}

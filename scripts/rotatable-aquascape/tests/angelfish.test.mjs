@@ -128,3 +128,11 @@ test('mouth and gill covers breathe while hovering with delayed, independent pul
   const point=new T.Vector3(px,py,pz);assert.ok(bounds.some(s=>point.distanceToSquared(s.center)<s.radius*s.radius),'open mouth stays within contact bounds');
  }
 });
+
+test('feeding angels leave inspection promptly, glide faster, then pause briefly at a real bite',()=>{
+ const s=createAngel(0);s.position.set(-1.5,3.2,1.4);s.yaw=0;s.hover=2;
+ const food={id:91,position:new T.Vector3(.5,3.2,1.4)};let peak=0,ate=false;
+ for(let i=0;i<300;i++){const yaw=s.yaw;advanceAngel(s,1/60,{...open,food:[food]});peak=Math.max(peak,s.speed);assert.ok(Math.abs(s.yaw-yaw)<1.6/60+.00001);if(i===0){assert.equal(s.target,91);assert.equal(s.hover,0);}if(s.consumed===91){ate=true;assert.ok(s.bite>=.4&&s.bite<=.75);break;}}
+ assert.ok(peak>1.1,'visible stronger feeding approach');assert.ok(ate,'does not circle the morsel indefinitely');
+ const resting=createAngel(1);advanceAngel(resting,.05,{...open,daylight:.2,food:[food]});assert.equal(resting.target,null,'dim-light resting remains unchanged');
+});
