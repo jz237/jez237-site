@@ -55,9 +55,28 @@ export function leafCollisionSampler(leaf:PlantLeaf,rows:number,cols:number,vert
   const weights=a+b<=1?[1-a-b,a,b]:[a+b-1,1-a,1-b];
   bindings.push({a:source(ids[0],weights[0]),b:source(ids[1],weights[1]),c:source(ids[2],weights[2]),wa:weights[0],wb:weights[1],wc:weights[2],p:vertices[y*(cols+1)+x]});
  }
+ let sourceAttribute=leaf.mesh.geometry.getAttribute('position'),sourceVersion=-1;
+ const sections=new Map<number,{id:number;p:T.Vector3}[]>();
  return (time:number)=>{
   const attr=leaf.mesh.geometry.getAttribute('position');
-  for(const [id,p] of sources)deformPlantPoint(p.fromBufferAttribute(attr,id),leaf,time);
+  const version=attr instanceof T.InterleavedBufferAttribute?attr.data.version:attr.version;
+  if(attr!==sourceAttribute||version!==sourceVersion){
+   sections.clear();for(const [id,p] of sources){const y=attr.getY(id);let section=sections.get(y);if(!section){section=[];sections.set(y,section);}section.push({id,p});}
+   sourceAttribute=attr;sourceVersion=version;
+  }
+  const m=leaf.motion,r=leaf.root,c=currentPhase(leaf,time),{flow,phase,surge}=c;
+  // Vertices on one blade cross-section have exactly the same bend factors.
+  // Reuse those factors, not approximate positions or a reduced collision mesh.
+  for(const [y,section] of sections){
+   const ripple=(1.12*Math.sin(phase-y*1.8)+.16*Math.sin(time*.63+flow-y*1.4)+.10*Math.sin(phase*2.7-y*5.5))*surge;
+   const twist=.25*Math.sin(phase*.81-y*.6+1.2)+.08*Math.sin(phase*2.1-y*3),f=y*y*(2-y),side=Math.sin(c.side-y*2.2);
+   for(const {id,p} of section){
+    p.fromBufferAttribute(attr,id);p.z+=m.y*(ripple*f+p.x*p.y*twist);p.x+=m.y*.22*f*side;p.applyMatrix4(leaf.matrix);
+    const h=Math.max(0,p.y-r.y),x=p.x,z=p.z;
+    p.x+=c.currentX*h*h*leaf.flex*clamp((4.96-Math.abs(x))*2,0,1);p.z+=c.currentZ*h*h*leaf.flex*clamp((2.20-Math.abs(z))*2,0,1);
+    p.applyMatrix4(leaf.mesh.matrixWorld);
+   }
+  }
   for(const b of bindings)b.p.copy(b.a).multiplyScalar(b.wa).addScaledVector(b.b,b.wb).addScaledVector(b.c,b.wc);
  };
 }

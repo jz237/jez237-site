@@ -34,6 +34,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {RectAreaLightUniformsLib} from 'three/addons/lights/RectAreaLightUniformsLib.js';
 import {Tetra3D} from './Tetra3D';
+import {createTetraMaterials} from './TetraMaterials';
 import {calmSwordLeaves} from './SwordCurrent';
 import {SchoolEyes} from './SchoolEyes';
 import {optimizeLeafIndexOrder} from './LeafIndexOrder';
@@ -415,8 +416,9 @@ export class Aquarium{
   for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(data[(y*c.width+x)*4+3]>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
   const trimmed=document.createElement('canvas');trimmed.width=right-left+1;trimmed.height=bottom-top+1;trimmed.getContext('2d')!.drawImage(c,left,top,trimmed.width,trimmed.height,0,0,trimmed.width,trimmed.height);
   this.texture=new T.CanvasTexture(trimmed);this.texture.colorSpace=T.SRGBColorSpace;this.texture.anisotropy=8;
+  const tetraMaterials=createTetraMaterials(this.texture);
   for(let i=0;i<16;i++){
-   const model=new Tetra3D(this.texture,i*.83,false),swim=createTetraSwim(237+i*7919),size=.48+this.random()*.09;
+   const model=new Tetra3D(this.texture,i*.83,false,import.meta.env.DEV&&new URLSearchParams(location.search).has('individualTetraMaterials')?undefined:tetraMaterials),swim=createTetraSwim(237+i*7919),size=.48+this.random()*.09;
    Object.assign(swim,{x:870+i%4*65,y:310+Math.floor(i/4)*33,z:.28+i%3*.19,elapsed:i*.7,remaining:2+i*.23});
    swim.brain.seed=723+i*3571;swim.brain.energy=.72+this.random()*.22;swim.brain.hunger=.45+this.random()*.22;
    // Development-only A/B check of the former two-pass membrane rendering.

@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {bodyObstacleCandidates} from './BodyObstacles.ts';
 import {AngelfishModel,loadAngelfish} from './AngelfishModel.ts';
 import {advanceAngel,createAngel,angelBody,angelForward,type AngelFood} from './AngelfishMotion.ts';
 import {bodiesOverlap,fishTouch,type FishContactBody,type BodySphere} from './GrazerCollision.ts';
@@ -29,9 +30,10 @@ export class Angelfish{
  static load=loadAngelfish;
  private clear(p:T.Vector3,yaw:number,pitch:number,size:number,id:number,reach=this.states[id]?.reach??0){
   const body=angelBody(p,yaw,pitch,size,reach,this.states[id]?.phase),near=this.neighbors.filter(n=>p.distanceToSquared(n.position)<(1.4+n.radius)**2);
+  const obstacles=bodyObstacleCandidates(body,this.obstacles);
   for(const {center:c,radius:r} of body){
    if(c.x-r< -4.85||c.x+r>4.85||c.z-r< -2.10||c.z+r>2.10||c.y+r>5.12||c.y-r<this.height(c.x,c.z)+.035)return false;
-   for(const o of this.obstacles)if(c.distanceToSquared(o.center)<(r+o.radius)**2)return false;
+   for(const o of obstacles)if(c.distanceToSquared(o.center)<(r+o.radius)**2)return false;
    for(const n of near)if(c.distanceToSquared(n.position)<(r+n.radius)**2)return false;
   }
   const other=this.states[1-id];if(other&&p.distanceToSquared(other.position)<5.8&&bodiesOverlap(body,this.stateBody(1-id),.045))return false;
