@@ -2,7 +2,7 @@
 
 ## Current outcome
 
-**79 automated tests pass. All six campaign races and all three bonus courses
+**81 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Unfinished Games, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
@@ -11,6 +11,63 @@ Current simulation/replay version: `rapier-0.20.0-mm-5`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
+
+### September 16 — course draw batching
+
+Course meshes previously created a draw group for every alternating run of top
+and side faces. Rounded ribbons consequently issued hundreds of small draws.
+`render-surface.mjs` preserves the original expanded vertex and normal buffers,
+then groups their draw indices by material. Each mesh now needs at most two
+groups. Wall texture, relief/grid shaders, triangle winding, creased normals,
+shadow eligibility, course definitions and all simulation inputs are unchanged.
+
+| Course | Previous material groups | Batched groups |
+|---|---:|---:|
+| Practice | 702 | 4 |
+| Beginner | 681 | 5 |
+| Intermediate | 409 | 33 |
+| Aerial | 82 | 12 |
+| Silly | 869 | 5 |
+| Ultimate | 458 | 16 |
+| Clockwork Foundry | 14 | 8 |
+| Magnetic Observatory | 10 | 6 |
+| Crystal Cascade | 16 | 6 |
+
+These are course-material groups, excluding decorations and additional shadow
+passes. `node measure-render-groups.mjs` reproduces the table and writes
+`render-group-measurements.json`. They are not FPS estimates.
+
+All 81 tests pass. The added checks compare every rendered triangle corner with
+its collider corner across all nine courses, preserve material assignment and
+winding, require unchanged compiler buffers and bit-identical creased normals,
+and exercise moving-wave draw indices through a complete wave cycle. Physics
+and replay version remains mm-5. The production bundle builds successfully.
+
+The published pre-batching build (0c263d075, game.js `28c655d241e2fbd9`) also
+completed a fresh full two-player untimed browser campaign on September 16:
+Player 1 **26,471 points / zero falls**, Player 2 **26,489 points / zero falls**.
+The browser showed the six-course ending. This supersedes the older mm-3-only
+browser evidence for paired untimed completion. Timed completion is still open.
+
+Hardware inventory for this browser session: Windows, AMD Ryzen 9 9950X3D2,
+approximately 93.4 GiB usable RAM, NVIDIA GeForce RTX 5090 and AMD integrated
+graphics. The Codex browser reports the masked renderer `WebKit WebGL`; the
+inventory alone does not identify which GPU the browser selected. Browser
+sampling uses Auto quality and the visible QA overlay, not a physical phone.
+
+The optimized browser build (`game.js?v=c2d4be66b7b97143`) completed the same
+full two-player untimed campaign with exactly the same ending totals and zero
+falls. Ultimate ended at tick **7,442**, matching the published baseline, and
+both final positions and quaternions matched. No console errors were captured.
+The desktop viewport was **1089 × 1241 CSS pixels**, with Auto quality.
+Sampled QA readings during Beginner, Intermediate, Aerial, Silly and Ultimate
+were **59–60 fps**. These are rolling observations, not a frame-time percentile
+benchmark or physical-phone test. Auto quality and camera framing affect the
+total draw count; the material-group table above is the controlled comparison.
+
+Reference inspection also identified an opening-route contradiction in Ultimate.
+See ULTIMATE-REFERENCE.md. The unsuccessful steering experiments are discarded;
+neither clocks nor human controls were altered to make campaign checks pass.
 
 ### September 16 — Beginner upper-right fork (local development)
 
