@@ -57,6 +57,44 @@ values as final loop boundaries.
 - Package the approved audio locally, then test startup, gain, pause, restart,
   tab switching, overlapping-track prevention and mobile audio activation.
 
+## September 16 — instrumented renderer diagnosis
+
+The upstream renderer now builds with the existing Emscripten 3.1.46 SDK.
+Its bundled `prowiz.bc` and `unice68.bc` were incompatible legacy objects;
+both libraries were rebuilt for wasm32. The module wrapper and string callbacks
+were adapted to the current compiler, without changing audio playback behavior.
+The 45-second Aerial baseline is **bit-exact across 1,984,512 stereo frames**
+against the previously rendered candidate. Read-only instrumentation likewise
+preserves every compared sample in 60-second Aerial and 75-second Intermediate
+renders. This validates the diagnostic toolchain, not soundtrack fidelity.
+
+The counters in `music-renderer-diagnostics.json` narrow the outstanding issues:
+
+- Aerial issues 330 writes in 60 seconds. Of those, 165 wait behind another
+  write, with a maximum queue depth of two. No queued sample data or relevant
+  request field changed before its write began. Copying queued samples is
+  therefore not justified by this trace. Changes during playback were not
+  measured by this check.
+- Intermediate reaches 848 writes by 38 seconds, then issues no more through
+  75 seconds. DMA counters continue advancing on all four channels. The cause
+  of this stopped note sequence is still unknown; a sustained output is not
+  proof of an intended ending or an acceptable loop.
+- Neither run invokes the unsupported multi-channel volume-command or
+  synchronous-cycle-write cases. Those cases do not explain these candidates.
+
+Next audio investigation: inspect the Amiga sequencer/task state at Intermediate's
+37–38-second transition and establish Aerial's two sequence assignments against
+game playback. No driver behavior patch or audio asset was added to the game.
+Scratch compiler, renderer, traces and candidate WAVs stay outside the site.
+
+The SOAMC Aerial T001 archive recording was also rejected: spectral comparisons
+match the module's default sub-tune 0 (roughly 0.90–0.93 similarity), while the
+course-reference matches remain weak. Its course name alone does not establish
+the correct music selection. The [WHDLoad maintainer's notes](https://www.whdload.de/games/MarbleMadness.html)
+also report that some original sound-effect samples contain background music;
+this is another reason to check instrument identity and transitions rather than
+approve an entire cue from isolated spectral matches.
+
 ## Gameplay reference observations
 
 The same recording shows Practice's 60-unit clock and Beginner's independent
