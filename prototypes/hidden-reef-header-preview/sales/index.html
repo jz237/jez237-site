@@ -5,7 +5,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Current Sales - The Hidden Reef</title>
-  <link rel="icon" href="../assets/site/header-fish.png" />
+  <link rel="icon" href="../assets/site/favicon.png" />
   <link rel="stylesheet" href="../assets/category.css?v=20260601-touch-pan" />
   <link rel="stylesheet" href="../assets/thr-cards.css?v=20260712-premium-art" />
   <style>
@@ -199,7 +199,7 @@
       .sale-products { grid-template-columns:repeat(auto-fill, minmax(132px, 1fr)); gap:7px; }
     }
   </style>
-  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260906-animated-preview" />
+  <link rel="stylesheet" href="../assets/site-masthead.css?v=20260906-animated" />
 </head>
 <body>
   <canvas class="reef-background" data-reef-background aria-hidden="true"></canvas>
@@ -273,9 +273,9 @@
       </div>
     </section>
   </main>
-  <script src="../assets/reef-background.js?v=20260913-showroom"></script>
-  <script src="../assets/sale-data.js"></script>
-  <script>
+  <script defer src="../assets/reef-background.js?v=20260916-loading"></script>
+  <script defer src="../assets/sale-data.js"></script>
+  <script>document.addEventListener("DOMContentLoaded",()=>{
     (function() {
       'use strict';
       const data = window.THR_SALE_DATA || { departments: [] };
@@ -389,6 +389,6 @@
       render();
       if (requested || window.location.hash === '#sale-view') window.setTimeout(scrollToSaleView, 120);
     })();
-  </script>
+  });</script>
 </body>
 </html>

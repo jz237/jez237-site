@@ -1,0 +1,76 @@
+{
+  "reef": {
+    "url": "../optimized/header-reef-91944d53351c.webp",
+    "bytes": 2000360,
+    "size": [
+      2172,
+      724
+    ],
+    "box": null
+  },
+  "fish": {
+    "url": "../optimized/header-fish-069316b29257.webp",
+    "bytes": 993190,
+    "size": [
+      1254,
+      1254
+    ],
+    "box": null
+  },
+  "crest": {
+    "url": "../optimized/header-crest-e8fe5bfb077e.webp",
+    "bytes": 23646,
+    "size": [
+      148,
+      121
+    ],
+    "box": [
+      1011,
+      41,
+      1159,
+      162
+    ]
+  },
+  "the": {
+    "url": "../optimized/header-the-1aee8921729c.webp",
+    "bytes": 60894,
+    "size": [
+      838,
+      88
+    ],
+    "box": [
+      666,
+      147,
+      1504,
+      235
+    ]
+  },
+  "title": {
+    "url": "../optimized/header-title-0af9273426ef.webp",
+    "bytes": 265092,
+    "size": [
+      1268,
+      219
+    ],
+    "box": [
+      456,
+      220,
+      1724,
+      439
+    ]
+  },
+  "tagline": {
+    "url": "../optimized/header-tagline-355e18fbec4c.webp",
+    "bytes": 72724,
+    "size": [
+      1248,
+      58
+    ],
+    "box": [
+      466,
+      439,
+      1714,
+      497
+    ]
+  }
+}
