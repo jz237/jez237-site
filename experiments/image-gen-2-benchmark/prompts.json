@@ -13666,5 +13666,30 @@
       "description": "A nocturnal overhead conservation-triage tableau formed from dense copperplate tooth, burnished ivory light, scraper-softened gray, plate-edge embossing, ink burr, and restrained carmine à la poupée accents.",
       "template": ""
     }
+  },
+  {
+    "id": "2026-09-16-random-image-style-fluorescent-risograph-storm-drain-rehear",
+    "title": "Fluorescent Risograph: Storm-Drain Rehearsal Map",
+    "tests": "Wednesday image 2/3. Distinct from today's mezzotint conservation reconstruction: civic systems rehearsal, broad axonometric zigzag, fluorescent two-ink overprint, moving crew and water-flow choreography. Reusable operation: one public system is tested through sequential ghost actions and overprinted contingency routes inside one continuous place.; archive_slot=2026-09-16T09:20; concept=storm-drain-flood-rehearsal-streetscape",
+    "prompt": "Create a finished, high-detail landscape illustration as an unmistakable handmade two-drum fluorescent risograph print on warm, slightly toothy off-white uncoated paper. Depict one continuous axonometric neighborhood streetscape during a flash-flood response rehearsal, not a poster and not a set of panels. The street descends in a broad zigzag from the upper left toward a circular underground cistern revealed at the lower right. Across this single coherent place, a diverse neighborhood crew appears in sequential ghosted repetitions: volunteers pass sandbags hand to hand, another pair opens a curb gate, two people guide a widening sheet of runoff toward a planted rain garden, and a final crew discovers one culvert blocked by leaves and a tipped bicycle basket. Show three successive contingency water paths as overlapping translucent flows that diverge, back up at the blocked culvert, then arc toward the rain garden and cistern. The repeated bodies and overprinted routes must read as rehearsal timing and system behavior through spatial choreography alone, without labels. Include convincing civic details: curb cuts, drain grates, cellar steps, row-house stoops, street trees bending in wind, rain barrels, a maintenance hatch, wet paving texture, sandbag stacks, hand tools, and a visible cutaway of the drain chamber and cistern. Use only fluorescent safety orange and very deep teal ink plus the dark near-black intersections created where the inks overprint; let untouched paper form highlights and pale rain. Make the physical print process richly visible: coarse variable halftone dots, soy-ink pooling at dense edges, loose stencil gaps, paper fibers, roller streaks, slightly uneven solids, deliberate registration slips, orange and teal misregistration halos around moving figures, and dense dark overprints where flood routes collide. Composition should feel urgent but lucid, with strong diagonal flow, tiny repeated actions, and enough breathing room that the eye can trace cause and response. No readable words, letters, numbers, instructions, arrows, legend, infographic panels, standard evacuation-poster layout, comic-strip frames, generic duotone filter, glossy vector perfection, photorealism, logo, signature, border, or watermark.",
+    "image": "images/2026-09-16-random-image-style-fluorescent-risograph-storm-drain-rehear.jpg",
+    "thumb": "thumbs/2026-09-16-random-image-style-fluorescent-risograph-storm-drain-rehear.webp",
+    "color": "#918575",
+    "date": "2026-09-16",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "storm-drain-flood-rehearsal-streetscape",
+      "imageSha256": "6e33593b716eaa35d80aa98903eeace5ed864c88e491d5e4be10eba18255c033",
+      "imageDHash": "c83236a68e5b998c",
+      "styleFamily": "risograph"
+    },
+    "randomRenderingStyle": {
+      "medium": "two-drum fluorescent risograph print",
+      "description": "A flash-flood response rehearsal visualized as a single misregistered risograph streetscape, with ghosted crews and overlapping water routes exposing a blocked culvert.",
+      "template": ""
+    }
   }
 ]
