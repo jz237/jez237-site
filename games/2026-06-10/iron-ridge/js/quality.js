@@ -5,6 +5,7 @@
 export const LEVELS = [
   { // 0 — potato
     name: 'Low',
+    nearTrees: 8, nearRadius: 16, groundDetail: 0.35,
     pixelRatio: 1.0,
     shadowSize: 1024,
     bloom: false,
@@ -16,6 +17,7 @@ export const LEVELS = [
   },
   { // 1
     name: 'Medium',
+    nearTrees: 16, nearRadius: 22, groundDetail: 0.7,
     pixelRatio: 1.25,
     shadowSize: 1024,
     bloom: false,
@@ -27,6 +29,7 @@ export const LEVELS = [
   },
   { // 2
     name: 'High',
+    nearTrees: 28, nearRadius: 28, groundDetail: 1,
     pixelRatio: 1.5,
     shadowSize: 2048,
     bloom: true,
@@ -38,6 +41,7 @@ export const LEVELS = [
   },
   { // 3 — full
     name: 'Ultra',
+    nearTrees: 40, nearRadius: 34, groundDetail: 1,
     pixelRatio: 2.0,
     shadowSize: 2048,
     bloom: true,

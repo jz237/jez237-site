@@ -4,10 +4,11 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { woodlandMaterial, woodlandParts, undergrowthParts } from './tree-art.js?v=woodland1';
-import { getHeight, getNormal, forestDensity } from './terrain.js?v=woodland1';
-import { makeRng } from './noise.js?v=5';
-import { WORLD_HALF, SCATTER, CG } from './config.js?v=5';
+import { barkTexture } from './surface-art.js?v=detail2';
+import { woodlandMaterial, woodlandParts, undergrowthParts, nearTreeParts, nearLeafMaterial } from './tree-art.js?v=detail2';
+import { getHeight, getNormal, forestDensity } from './terrain.js?v=detail2';
+import { makeRng } from './noise.js?v=detail2';
+import { WORLD_HALF, SCATTER, CG } from './config.js?v=detail2';
 
 // --- tiny non-indexed geometry merger (avoids vendoring utils) ----------
 function mergeGeoms(geoms) {
@@ -224,6 +225,7 @@ export class Foliage {
           radius: spec.radius * s + 0.25,
           alive: true, culled: false,
           rotation: dummy.quaternion.clone(),
+          baseMatrix: dummy.matrix.clone(), nearSlot: -1,
         };
         this.trees.push(rec);
         const k = keyOf(x, z);
@@ -238,6 +240,26 @@ export class Foliage {
       scene.add(mesh);
       this.treeMeshes.push(mesh);
     }
+
+    // Bounded close-detail pool. Far trees retain their six/eight-triangle
+    // impostors; selection uses the existing spatial hash at 6 Hz.
+    this.nearCap = 28; this.nearRadius = 28; this.nearTimer = 0;
+    this.nearSelected = []; this.nearDirty = true;
+    this.nearWoodMaterial = new THREE.MeshLambertMaterial({ map: barkTexture(), vertexColors: true });
+    this.nearGeos = [0,1,2].map(v => {
+      const parts=nearTreeParts(v);
+      return {wood:mergeGeoms(parts.wood),leaves:mergeGeoms(parts.leaves)};
+    });
+    const nearLeaf = nearLeafMaterial(false), nearNeedle = nearLeafMaterial(true);
+    this.nearLeafMaterials = [nearNeedle,nearLeaf,nearLeaf];
+    this.nearMeshes = this.nearGeos.map((geos,v) => {
+      const leaves=new THREE.InstancedMesh(geos.leaves,this.nearLeafMaterials[v],40);
+      const wood=new THREE.InstancedMesh(geos.wood,this.nearWoodMaterial,40);
+      for(const m of [leaves,wood]) {m.count=0;m.frustumCulled=false;m.castShadow=true;scene.add(m);}
+      return {leaves,wood};
+    });
+    this.nearZero = new THREE.Matrix4().makeScale(0,0,0);
+    this.nearTint = new THREE.Color();
 
     // ---- rocks ----
     this.rockMeshes = [];
@@ -412,6 +434,38 @@ export class Foliage {
     this.grassAnchor.set(cx, cz);
   }
 
+  setNearDetail(cap, radius) {
+    this.nearCap=Math.min(40,Math.max(0,cap));this.nearRadius=radius;this.nearDirty=true;
+  }
+
+  updateNearTrees(x,z) {
+    const previous=new Set(this.nearSelected);
+    // Restore only living instances. Destroyed trees must never reappear.
+    for(const t of this.nearSelected) {
+      if(t.alive)t.mesh.setMatrixAt(t.instanceId,t.baseMatrix);
+      t.mesh.instanceMatrix.needsUpdate=true;t.nearSlot=-1;
+    }
+    const candidates=this.treesNear(x,z,this.nearRadius).filter(t=>t.variant<3);
+    const rank=t=>Math.hypot(t.x-x,t.z-z)-(previous.has(t)?3:0);
+    candidates.sort((a,b)=>rank(a)-rank(b));
+    this.nearSelected=candidates.slice(0,this.nearCap);
+    const counts=[0,0,0];
+    for(const t of this.nearSelected) {
+      const slot=counts[t.variant]++, pair=this.nearMeshes[t.variant];
+      t.nearSlot=slot;
+      t.mesh.getColorAt(t.instanceId,this.nearTint);
+      for(const m of [pair.leaves,pair.wood]) {m.setMatrixAt(slot,t.baseMatrix);m.setColorAt(slot,this.nearTint);}
+      t.mesh.setMatrixAt(t.instanceId,this.nearZero);t.mesh.instanceMatrix.needsUpdate=true;
+    }
+    this.nearMeshes.forEach((pair,v)=>{
+      for(const m of [pair.leaves,pair.wood]) {
+        m.count=counts[v];m.instanceMatrix.needsUpdate=true;
+        if(m.instanceColor)m.instanceColor.needsUpdate=true;
+      }
+    });
+    this.nearDirty=false;
+  }
+
   treesNear(x, z, r) {
     const out = [];
     const c0x = Math.floor((x - r) / CELL), c1x = Math.floor((x + r) / CELL);
@@ -448,7 +502,20 @@ export class Foliage {
     material.onBeforeCompile = sourceMaterial.onBeforeCompile;
     material.customProgramCacheKey = sourceMaterial.customProgramCacheKey;
     rec.mesh.getColorAt(rec.instanceId, material.color);
-    const mesh = new THREE.Mesh(this.treeGeos[rec.variant], material);
+    let mesh;
+    if(rec.nearSlot>=0 && rec.variant<3) {
+      mesh=new THREE.Group();
+      material.dispose();
+      const leafMat=this.nearLeafMaterials[rec.variant].clone();
+      rec.mesh.getColorAt(rec.instanceId,leafMat.color);
+      const crown=new THREE.Mesh(this.nearGeos[rec.variant].leaves,leafMat);
+      const woodMat=this.nearWoodMaterial.clone();woodMat.color.copy(leafMat.color);
+      const wood=new THREE.Mesh(this.nearGeos[rec.variant].wood,woodMat);
+      crown.castShadow=wood.castShadow=true;mesh.add(crown,wood);
+      const pair=this.nearMeshes[rec.variant];
+      for(const m of [pair.leaves,pair.wood]){m.setMatrixAt(rec.nearSlot,this.nearZero);m.instanceMatrix.needsUpdate=true;}
+      rec.nearSlot=-1;this.nearDirty=true;
+    } else mesh = new THREE.Mesh(this.treeGeos[rec.variant], material);
     mesh.scale.setScalar(rec.scale);
     mesh.castShadow = true;
     this.scene.add(mesh);
@@ -479,11 +546,12 @@ export class Foliage {
 
   removeFalling(f) {
     this.scene.remove(f.mesh);
-    f.mesh.material.dispose();
+    f.mesh.traverse(o=>{if(o.isMesh)o.material.dispose();});
     this.world.removeBody(f.body);
   }
 
   setTreeFraction(frac) {
+    this.nearDirty = true;
     for (const mesh of this.treeMeshes) {
       mesh.count = Math.floor(mesh.userData.fullCount * frac);
     }
@@ -500,6 +568,10 @@ export class Foliage {
 
   update(dt, camX, camZ) {
     this.windU.value += dt;
+    this.nearTimer += dt;
+    if(this.nearDirty || this.nearTimer >= 0.16) {
+      this.nearTimer=0;this.updateNearTrees(camX,camZ);
+    }
     if (Math.hypot(this.grassAnchor.x - camX, this.grassAnchor.y - camZ) > 22) {
       this.scatterGrass(camX, camZ);
     }

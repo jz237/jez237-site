@@ -5,8 +5,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { Simplex2, makeRng } from './noise.js?v=5';
-import { WORLD_SIZE, WORLD_HALF, TERRAIN_SEGS, CG, WORLD_SEED } from './config.js?v=5';
+import { groundRelief } from './surface-art.js?v=detail2';
+import { Simplex2, makeRng } from './noise.js?v=detail2';
+import { WORLD_SIZE, WORLD_HALF, TERRAIN_SEGS, CG, WORLD_SEED } from './config.js?v=detail2';
 
 const simplex = new Simplex2(90210 + WORLD_SEED);
 const detail = new Simplex2(417 + WORLD_SEED * 3);
@@ -225,6 +226,8 @@ export function buildTerrain(scene, world) {
   geo.computeVertexNormals();
 
   const gTex = grassTexture(), dTex = dirtTexture(), rTex = rockTexture();
+  const reliefMap = groundRelief();
+  const detailStrength = { value: 1 };
   const REPEAT = WORLD_SIZE / 4.2; // smaller natural leaf/gravel scale
 
   const mat = new THREE.MeshStandardMaterial({
@@ -243,6 +246,8 @@ export function buildTerrain(scene, world) {
     mat.map = tex;
   });
   mat.onBeforeCompile = (shader) => {
+    shader.uniforms.reliefMap = { value: reliefMap };
+    shader.uniforms.detailStrength = detailStrength;
     shader.uniforms.dirtMap = { value: dTex };
     shader.uniforms.rockMap = { value: rTex };
     shader.uniforms.detailRepeat = { value: REPEAT };
@@ -254,6 +259,8 @@ export function buildTerrain(scene, world) {
         vSplat = aSplat;`);
     shader.fragmentShader = shader.fragmentShader
       .replace('#include <common>', `#include <common>
+        uniform sampler2D reliefMap;
+        uniform float detailStrength;
         uniform sampler2D dirtMap;
         uniform sampler2D rockMap;
         uniform float detailRepeat;
@@ -261,6 +268,13 @@ export function buildTerrain(scene, world) {
       .replace('#include <map_fragment>', `
         vec2 dUv = vMapUv * detailRepeat;
         vec4 gCol = texture2D(map, dUv);
+        // A rotated, differently scaled sample removes the obvious repeated
+        // flowers and grass clusters without extra terrain geometry.
+        vec2 broadUv = mat2(0.8, -0.6, 0.6, 0.8) * dUv * 0.43 + vec2(0.37, 0.71);
+        vec4 broadGrass = texture2D(map, broadUv);
+        gCol = mix(gCol, broadGrass, 0.34);
+        vec3 groundMicro = texture2D(reliefMap, dUv * 2.1).rgb;
+        float reliefFade = (1.0 - smoothstep(18.0, 65.0, length(vViewPosition))) * detailStrength;
         vec4 dCol = texture2D(dirtMap, dUv * 1.31);
         vec4 rCol = texture2D(rockMap, dUv * 0.71);
         // Reuse the already sampled colour detail to break up splat edges.
@@ -271,8 +285,18 @@ export function buildTerrain(scene, world) {
         gCol.rgb = mix(vec3(grain), gCol.rgb, 0.76) * vec3(0.96, 0.97, 0.91);
         vec4 texelColor = mix(mix(gCol, dCol, soil), rCol, stone);
         diffuseColor *= texelColor;
+        diffuseColor.rgb *= 1.0 + (groundMicro.b - 0.3) * reliefFade * 0.16;
+      `)
+      .replace('#include <normal_fragment_maps>', `#include <normal_fragment_maps>
+        // Existing normal in view space plus a subtle world-horizontal grain
+        // normal. This is one packed lookup, not screen-space postprocessing.
+        vec3 microNormal = (viewMatrix * vec4((groundMicro.r - 0.5) * 0.65, 0.0,
+          (groundMicro.g - 0.5) * 0.65, 0.0)).xyz;
+        normal = normalize(normal + microNormal * reliefFade);
       `);
   };
+  mat.userData.detailStrength = detailStrength;
+  mat.customProgramCacheKey = () => 'ground-relief-detail2';
 
   const mesh = new THREE.Mesh(geo, mat);
   mesh.receiveShadow = true;

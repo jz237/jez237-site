@@ -3,9 +3,9 @@
 // ridge" backdrop), circling birds, hemisphere + directional sun lighting.
 
 import * as THREE from 'three';
-import { Simplex2, makeRng } from './noise.js?v=5';
+import { Simplex2, makeRng } from './noise.js?v=detail2';
 
-export const SUN_DIR = new THREE.Vector3(0.45, 0.72, 0.3).normalize();
+export const SUN_DIR = new THREE.Vector3(0.55, 0.62, 0.38).normalize();
 
 const SKY_VERT = /* glsl */`
 varying vec3 vDir;
@@ -71,39 +71,34 @@ function cloudTexture(seed) {
 // infinitely distant backdrop; fog is baked into the vertex colors instead
 // of applied (uniform fog at that range would erase them).
 function ridgeLayer(radius, base, amp, topColor, baseColor, seed, freq) {
-  const N = 200;
-  const noise = new Simplex2(seed);
-  const verts = new Float32Array((N + 1) * 2 * 3);
-  const cols = new Float32Array((N + 1) * 2 * 3);
-  const idx = [];
-  const cTop = new THREE.Color(topColor);
-  const cBase = new THREE.Color(baseColor);
-  const c = new THREE.Color();
-  for (let i = 0; i <= N; i++) {
-    const a = (i % N) / N * Math.PI * 2;
-    const cx = Math.cos(a), sz = Math.sin(a);
-    const n = noise.fbm(cx * freq + 3.7, sz * freq - 1.9, 4, 2.05, 0.5);
-    const crest = Math.pow(THREE.MathUtils.clamp(n * 0.85 + 0.55, 0, 1), 1.25);
-    const jag = Math.abs(noise.noise(cx * freq * 3.3, sz * freq * 3.3)) * 0.12;
-    const h = base + (crest + jag) * amp;
-    const bi = i * 2, ti = i * 2 + 1;
-    verts[bi * 3] = cx * radius; verts[bi * 3 + 1] = -26; verts[bi * 3 + 2] = sz * radius;
-    verts[ti * 3] = cx * radius; verts[ti * 3 + 1] = h; verts[ti * 3 + 2] = sz * radius;
-    // base fades into the horizon haze; crests keep the layer color
-    cols[bi * 3] = cBase.r; cols[bi * 3 + 1] = cBase.g; cols[bi * 3 + 2] = cBase.b;
-    c.copy(cBase).lerp(cTop, THREE.MathUtils.clamp((h - base) / amp * 0.85 + 0.35, 0, 1));
-    cols[ti * 3] = c.r; cols[ti * 3 + 1] = c.g; cols[ti * 3 + 2] = c.b;
-    if (i < N) idx.push(bi, bi + 2, ti, ti, bi + 2, bi + 3);
+  // Four gently curved slope bands, with baked gully shading. More natural
+  // relief than a single vertical silhouette; still one draw per ridge.
+  const N=512, rows=5, noise=new Simplex2(seed),verts=[],cols=[],idx=[];
+  const top=new THREE.Color(topColor),haze=new THREE.Color(baseColor),c=new THREE.Color();
+  const heights=[];
+  for(let i=0;i<N;i++) {
+    const a=i/N*Math.PI*2,cx=Math.cos(a),sz=Math.sin(a);
+    const n=noise.fbm(cx*freq+3.7,sz*freq-1.9,3,2.0,.42);
+    heights.push(base+Math.pow(THREE.MathUtils.clamp(n*.43+.55,0,1),1.15)*amp);
   }
-  const geo = new THREE.BufferGeometry();
-  geo.setAttribute('position', new THREE.BufferAttribute(verts, 3));
-  geo.setAttribute('color', new THREE.BufferAttribute(cols, 3));
-  geo.setIndex(idx);
-  const mesh = new THREE.Mesh(geo, new THREE.MeshBasicMaterial({
-    vertexColors: true, fog: false, side: THREE.DoubleSide,
-  }));
-  mesh.frustumCulled = false;
-  return mesh;
+  for(let i=0;i<=N;i++) {
+    const a=(i%N)/N*Math.PI*2,cx=Math.cos(a),sz=Math.sin(a);
+    const h=heights[i%N],slope=(heights[(i+1)%N]-heights[(i+N-1)%N])*.032;
+    for(let j=0;j<rows;j++) {
+      const t=j/(rows-1),r=radius-(1-t)*45;
+      verts.push(cx*r,-22+(h+22)*Math.pow(t,.85),sz*r);
+      const gully=noise.noise(cx*freq*4.1+t*.65,sz*freq*4.1)*.5+.5;
+      const shade=1+THREE.MathUtils.clamp(slope*Math.cos(a-.7),-.09,.09)*t-gully*.075*t;
+      c.copy(haze).lerp(top,Math.pow(t,1.5)*.9).multiplyScalar(shade);
+      cols.push(c.r,c.g,c.b);
+      if(i<N&&j<rows-1){const k=i*rows+j;idx.push(k,k+rows,k+1,k+1,k+rows,k+rows+1);}
+    }
+  }
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.Float32BufferAttribute(verts,3));
+  geo.setAttribute('color',new THREE.Float32BufferAttribute(cols,3));geo.setIndex(idx);
+  const mesh=new THREE.Mesh(geo,new THREE.MeshBasicMaterial({vertexColors:true,fog:false,side:THREE.DoubleSide}));
+  mesh.frustumCulled=false;return mesh;
 }
 
 // --- birds ----------------------------------------------------------------
@@ -154,9 +149,9 @@ export function buildSky(scene) {
 
   // the eponymous ridge line: three haze-graded silhouette layers
   const distant = new THREE.Group();
-  distant.add(ridgeLayer(645, 30, 96, 0x9fb8d2, 0xc6ddec, 1201, 2.6));
-  distant.add(ridgeLayer(565, 18, 74, 0x84a2c0, 0xc0d8e9, 5807, 3.4));
-  distant.add(ridgeLayer(488, 8, 50, 0x6d8dab, 0xb7d1e4, 9103, 4.3));
+  distant.add(ridgeLayer(645, 30, 96, 0xabbac7, 0xcbdce5, 1201, 2.6));
+  distant.add(ridgeLayer(565, 18, 74, 0x859da7, 0xc2d4db, 5807, 3.4));
+  distant.add(ridgeLayer(488, 8, 50, 0x657f80, 0xb6cbd0, 9103, 4.3));
   scene.add(distant);
 
   // clouds
@@ -187,10 +182,10 @@ export function buildSky(scene) {
   let birdT = 0;
 
   // lighting
-  const hemi = new THREE.HemisphereLight(0xaccdf0, 0x6d7a4a, 0.78);
+  const hemi = new THREE.HemisphereLight(0xc1d5e5, 0x777052, 0.96);
   scene.add(hemi);
 
-  const sun = new THREE.DirectionalLight(0xfff0d2, 3.0);
+  const sun = new THREE.DirectionalLight(0xffe8c4, 2.65);
   sun.position.copy(SUN_DIR).multiplyScalar(180);
   sun.castShadow = true;
   sun.shadow.mapSize.set(2048, 2048);

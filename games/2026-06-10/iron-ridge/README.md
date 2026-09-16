@@ -53,41 +53,73 @@ check line-of-sight, and lead their shots.
 
 ## Art and rendering
 
-The woodland uses the detailed tree atlas already used by the site's Stunt
-Car Racer (`images/tex-trees.png`), copied locally as `assets/textures/woodland.png`.
-No new paid assets or external CDN dependencies were added. Three fixed
-crossed planes per tree, plus an interior broadleaf crown, give layered
-silhouettes from different driving angles. These are inexpensive foliage
-impostors, not individually modeled leaves. Fir, broadleaf, slender broadleaf,
-and modeled dead-tree variants retain the original positions and collisions.
-Trees and shrubs remain instanced, with alpha-tested cutout shadows and
-two-sided canopy lighting. Falling trees retain their texture, tint and
-original orientation, and release their individual materials after removal.
+Nearby trees have tapered bark trunks, connected branches, and individual
+leaf/needle sprays using the existing assets from First Light
+(`games/2026-09-13/first-light/assets/trees/{leaf,needle}.webp`). Distant
+woodland retains the Stunt Car Racer atlas and six/eight-triangle impostors.
+The detail pool is capped at 8 / 16 / 28 / 40 trees on Low / Medium / High /
+Ultra, using the existing spatial hash. Tree positions and collisions are
+unchanged. Destroyed trees retain their selected model, tint and lighting;
+their individual materials are released after the fall.
 
-Terrain uses the existing grass image with smaller texture scale, baked
-soil/gravel detail, forest-litter and clearing masks, and texture-driven
-blend edges. These reuse the existing three terrain texture samples and
-mesh resolution. Colour grading is more restrained. Grass uses half as
-many triangles; dead branches and welded rock silhouettes are more natural.
-Tank models, lighting, sky and effects remain authored procedurally in code.
+Ground has soil/gravel and forest-litter blends, smaller-scale grass, and
+nearby packed normal/height relief. Medium and above blend a rotated grass
+sample to reduce repetition. Low keeps the original three terrain samples.
+No extra terrain subdivisions or postprocessing passes are needed.
+
+Tank paint includes baked weld beads, chips, cast-metal grain, dust and
+runoff. Rigid parts sharing a material are merged within their animation
+pivot; wheels, suspension, turret, recoil and effects anchors stay independent.
+
+Chevron tread marks follow the ground, persist, and fade between 45 and 65
+seconds. They reuse the original 360-instance ring buffer (oldest marks are
+recycled sooner during continuous driving). Warm sunlight, softer sky fill,
+and three haze-graded ridge meshes provide depth without extra lighting passes.
+The new maps are generated once or reused from existing site assets; no paid
+assets or new CDN dependencies were added.
 
 ## Performance
 
-The existing automatic quality scaler still controls resolution, shadows,
-bloom, foliage density, fog distance and particles. This art update does
-not increase foliage counts, shadow resolution or postprocessing passes.
+The existing automatic quality scaler continues to control resolution,
+shadows, bloom, foliage, fog and particles. No shadow-map, render-resolution,
+or postprocessing-pass increases. Detailed foliage adds geometry near the
+camera; rigid tank batching offsets rendering overhead, especially in combat.
 
-September 15, 2026 validation, Edge/ANGLE on RTX 5090, 1440 x 900, locked
-High quality: three fixed views rendered about **81–82% fewer triangles**
-including shadow/post passes (spawn: 1,688,414 → 314,306). An eight-second
-driving/firing comparison measured **59.5 fps before and 59.8 fps after**,
-with the same 16.8 ms 95th-percentile frame interval. Hardware GPU queries
-were also sampled at High and Low. These desktop measurements are not a
-guarantee for every GPU; portrait touch layout was checked in mobile
-emulation, not on physical mobile hardware.
+September 15, 2026 comparison against the preceding woodland release, Edge /
+ANGLE D3D11 on RTX 5090, locked 1920 x 1080 drawing buffer. Each scenario starts
+in a fresh browser with fixed camera, controlled opponents, and disabled
+vsync/frame caps. GPU timing uses disjoint-checked hardware timer queries;
+CPU timing covers a simulation/render frame. These are frame-work timings,
+not an FPS claim for slower devices.
 
-Gameplay checks covered driving, firing, toppling, fallen-tree cleanup,
-and reducing/restoring foliage through the existing quality controls.
+| High quality scenario | CPU median before → after | GPU median before → after | Draw calls before → after |
+|---|---|---|---|
+| Ground / tank | 0.90 → 0.80 ms | 0.53 → 0.32 ms | 346 → 217 |
+| Dense forest, 28 nearby models | 0.70 → 0.60 ms | 0.31 → 0.33 ms | 112 → 105 |
+| Eight additional tanks + repeated explosions | 4.00 → 2.40 ms | 2.47 → 1.27 ms | 2,254 → 926 |
+
+Combat CPU 95th percentile: 4.5 → 2.9 ms; GPU: 4.94 → 2.60 ms.
+Dense forest geometry increases from 303,906 to 396,402 triangles including
+shadow and post passes, with essentially flat CPU timing. A longer Low ground
+run (600 frames / 300 GPU queries) measured CPU median 0.80 → 0.70 ms and GPU
+median 0.26 → 0.29 ms; GPU 95th percentile 2.32 → 2.35 ms. GPU outliers vary
+with driver scheduling, so small deltas should not be treated as precise gains.
+A separate 600-frame combat run with 4x CPU throttling reduced CPU median
+23.8 → 14.5 ms and 95th percentile 26.4 → 15.8 ms. This exercises CPU
+headroom; it does not represent a particular device.
+Actual slower GPUs/phones still need device testing; CPU throttling and mobile
+viewport emulation do not emulate a slower GPU.
+
+Validation covers all quality caps, replacement/restoration without doubled
+or resurrected trees, fallen-material cleanup, ground-conforming tread pool
+wrap/fading, and wheel/turret/recoil/exhaust attachments. Batching preserves all
+10,968 non-instanced tank triangle vertices within 0.00000012 world units.
+
+Development smoke test: serve this folder, install/use Playwright with Edge,
+then run `node tests/graphics-smoke.cjs` with `IRON_RIDGE_URL` set to the served
+game URL (default `http://127.0.0.1:8080/`). `PLAYWRIGHT_MODULE` can point to an
+existing Playwright installation. Screenshots and the JSON report are written
+to the current directory.
 
 ## Tech
 

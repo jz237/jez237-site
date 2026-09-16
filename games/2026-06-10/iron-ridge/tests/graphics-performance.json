@@ -1,0 +1,1235 @@
+{
+  "hardware": "RTX 5090; Edge ANGLE D3D11; fixed 1920x1080; fresh browser per scenario; vsync disabled",
+  "baselineCommit": "167392deaa602d45097fa6c2558dead233ca8329",
+  "notes": [
+    "GPU timer samples may include driver scheduling/starvation; small differences are inconclusive.",
+    "CPU throttling is not GPU or physical-device emulation.",
+    "Eight extra tanks receive syncVisual; wave spawning is suppressed to keep view and geometry deterministic."
+  ],
+  "runs": [
+    {
+      "version": "round2-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "ground-tank",
+          "quality": 2,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.8999999761581421,
+          "cpuP95": 1,
+          "gpuMedian": 0.527424,
+          "gpuP95": 2.408544,
+          "samples": 75,
+          "counts": {
+            "frame": 3634,
+            "calls": 346,
+            "triangles": 311056,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 164,
+            "textures": 28
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "ground-tank",
+          "quality": 2,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.8000000715255737,
+          "cpuP95": 1,
+          "gpuMedian": 0.31728,
+          "gpuP95": 2.449664,
+          "samples": 75,
+          "counts": {
+            "frame": 3634,
+            "calls": 217,
+            "triangles": 323410,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 98,
+            "textures": 33
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "dense-forest",
+          "quality": 2,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.6999999284744263,
+          "cpuP95": 0.8999999761581421,
+          "gpuMedian": 0.312288,
+          "gpuP95": 2.289216,
+          "samples": 75,
+          "counts": {
+            "frame": 3634,
+            "calls": 112,
+            "triangles": 303906,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 165,
+            "textures": 28
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "dense-forest",
+          "quality": 2,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.6000000238418579,
+          "cpuP95": 0.7000000476837158,
+          "gpuMedian": 0.32656,
+          "gpuP95": 1.987936,
+          "samples": 75,
+          "counts": {
+            "frame": 3634,
+            "calls": 105,
+            "triangles": 396402,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 28,
+          "memory": {
+            "geometries": 99,
+            "textures": 33
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "combat",
+          "quality": 2,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 4,
+          "cpuP95": 4.5,
+          "gpuMedian": 2.466496,
+          "gpuP95": 4.941952,
+          "samples": 75,
+          "counts": {
+            "frame": 3634,
+            "calls": 2254,
+            "triangles": 394340,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 957,
+            "textures": 38
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "combat",
+          "quality": 2,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 2.399999976158142,
+          "cpuP95": 2.899999976158142,
+          "gpuMedian": 1.266176,
+          "gpuP95": 2.599712,
+          "samples": 75,
+          "counts": {
+            "frame": 3634,
+            "calls": 926,
+            "triangles": 405568,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 299,
+            "textures": 43
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "ground-tank",
+          "quality": 0,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.8000000715255737,
+          "cpuP95": 1,
+          "gpuMedian": 0.224736,
+          "gpuP95": 1.948704,
+          "samples": 75,
+          "counts": {
+            "frame": 1114,
+            "calls": 330,
+            "triangles": 261158,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 164,
+            "textures": 28
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "ground-tank",
+          "quality": 0,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.7999999523162842,
+          "cpuP95": 1,
+          "gpuMedian": 0.234112,
+          "gpuP95": 4.03056,
+          "samples": 75,
+          "counts": {
+            "frame": 1114,
+            "calls": 201,
+            "triangles": 273512,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 98,
+            "textures": 33
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "dense-forest",
+          "quality": 0,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.6000000238418579,
+          "cpuP95": 0.8000000715255737,
+          "gpuMedian": 0.257888,
+          "gpuP95": 1.857696,
+          "samples": 75,
+          "counts": {
+            "frame": 1114,
+            "calls": 96,
+            "triangles": 254008,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 165,
+            "textures": 28
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "dense-forest",
+          "quality": 0,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.6000000238418579,
+          "cpuP95": 0.7999999523162842,
+          "gpuMedian": 0.213152,
+          "gpuP95": 2.34784,
+          "samples": 75,
+          "counts": {
+            "frame": 1114,
+            "calls": 85,
+            "triangles": 287064,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 8,
+          "memory": {
+            "geometries": 99,
+            "textures": 33
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "combat",
+          "quality": 0,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 3.799999952316284,
+          "cpuP95": 4.399999976158142,
+          "gpuMedian": 2.2792,
+          "gpuP95": 4.842688,
+          "samples": 75,
+          "counts": {
+            "frame": 1114,
+            "calls": 2238,
+            "triangles": 344442,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 957,
+            "textures": 38
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "combat",
+          "quality": 0,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 2.3000000715255737,
+          "cpuP95": 2.899999976158142,
+          "gpuMedian": 0.729504,
+          "gpuP95": 2.618336,
+          "samples": 75,
+          "counts": {
+            "frame": 1114,
+            "calls": 910,
+            "triangles": 355670,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 299,
+            "textures": 43
+          }
+        }
+      ],
+      "errors": []
+    },
+    {
+      "version": "round2-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "ground-tank",
+          "quality": 0,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.7999999523162842,
+          "cpuP95": 0.9000000953674316,
+          "gpuMedian": 0.25648,
+          "gpuP95": 2.316736,
+          "samples": 300,
+          "counts": {
+            "frame": 1654,
+            "calls": 330,
+            "triangles": 261158,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 164,
+            "textures": 28
+          }
+        }
+      ],
+      "errors": [],
+      "cpuThrottleRate": 1,
+      "measuredFrames": 600
+    },
+    {
+      "version": "round2-before",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "combat",
+          "quality": 2,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 23.799999952316284,
+          "cpuP95": 26.399999976158142,
+          "gpuMedian": 17.756736,
+          "gpuP95": 21.164512,
+          "samples": 300,
+          "counts": {
+            "frame": 11734,
+            "calls": 2255,
+            "triangles": 394396,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 957,
+            "textures": 38
+          }
+        }
+      ],
+      "errors": [],
+      "cpuThrottleRate": 4,
+      "measuredFrames": 600
+    },
+    {
+      "version": "round2-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "ground-tank",
+          "quality": 0,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 0.7000000476837158,
+          "cpuP95": 0.8999999761581421,
+          "gpuMedian": 0.288704,
+          "gpuP95": 2.346656,
+          "samples": 300,
+          "counts": {
+            "frame": 1654,
+            "calls": 201,
+            "triangles": 273512,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 98,
+            "textures": 33
+          }
+        }
+      ],
+      "errors": [],
+      "cpuThrottleRate": 1,
+      "measuredFrames": 600
+    },
+    {
+      "version": "round2-current",
+      "hardware": "RTX 5090 / Edge ANGLE D3D11",
+      "views": {
+        "denseTreeCount": 70,
+        "views": [
+          {
+            "name": "ground-tank",
+            "pos": [
+              4,
+              3.2,
+              -6
+            ],
+            "look": [
+              0,
+              1,
+              2
+            ]
+          },
+          {
+            "name": "dense-forest",
+            "pos": [
+              53.84953569807112,
+              4.03037476244543,
+              -103.17240643315017
+            ],
+            "look": [
+              62.84953569807112,
+              4.830374762445429,
+              -91.17240643315017
+            ]
+          },
+          {
+            "name": "combat",
+            "pos": [
+              0,
+              7,
+              -13
+            ],
+            "look": [
+              0,
+              3,
+              30
+            ]
+          }
+        ]
+      },
+      "results": [
+        {
+          "view": "combat",
+          "quality": 2,
+          "resolution": [
+            1920,
+            1080
+          ],
+          "cpuMedian": 14.5,
+          "cpuP95": 15.800000071525574,
+          "gpuMedian": 9.140192,
+          "gpuP95": 12.094336,
+          "samples": 300,
+          "counts": {
+            "frame": 11734,
+            "calls": 927,
+            "triangles": 405624,
+            "points": 1600,
+            "lines": 0
+          },
+          "nearTrees": 0,
+          "memory": {
+            "geometries": 299,
+            "textures": 43
+          }
+        }
+      ],
+      "errors": [],
+      "cpuThrottleRate": 4,
+      "measuredFrames": 600
+    }
+  ]
+}

@@ -3,8 +3,9 @@
 // tread marks, and screen-shake trauma.
 
 import * as THREE from 'three';
-import { getHeight, getNormal } from './terrain.js?v=woodland1';
-import { SCATTER } from './config.js?v=5';
+import { treadTexture } from './surface-art.js?v=detail2';
+import { getHeight, getNormal } from './terrain.js?v=detail2';
+import { SCATTER } from './config.js?v=detail2';
 
 function softCircleTexture(hard = false) {
   const s = 64;
@@ -199,10 +200,10 @@ export class Effects {
     }
 
     // tread marks
-    const tmGeo = new THREE.PlaneGeometry(0.46, 0.85);
+    const tmGeo = new THREE.PlaneGeometry(0.48, 0.88);
     tmGeo.rotateX(-Math.PI / 2);
     const tmMat = new THREE.MeshBasicMaterial({
-      color: 0x2e2a20, transparent: true, opacity: 0.32, depthWrite: false,
+      map: treadTexture(), color: 0xffffff, transparent: true, opacity: 0.60, depthWrite: false,
       polygonOffset: true, polygonOffsetFactor: -2,
     });
     this.marks = new THREE.InstancedMesh(tmGeo, tmMat, SCATTER.treadMarks);
@@ -210,7 +211,18 @@ export class Effects {
     scene.add(this.marks);
     this.markData = new Array(SCATTER.treadMarks).fill(null).map(() => ({ born: -1e9 }));
     this.markHead = 0;
-    this.markLife = 22;
+    this.markLife = 65;
+    this.markTime = { value: 0 };
+    this.markBirths = new THREE.InstancedBufferAttribute(new Float32Array(SCATTER.treadMarks).fill(-1e6), 1);
+    tmGeo.setAttribute('aBorn', this.markBirths);
+    tmMat.onBeforeCompile = sh => {
+      sh.uniforms.markTime = this.markTime;
+      sh.vertexShader = sh.vertexShader.replace('#include <common>', '#include <common>\nattribute float aBorn; varying float vBorn;')
+        .replace('#include <begin_vertex>', '#include <begin_vertex>\nvBorn = aBorn;');
+      sh.fragmentShader = sh.fragmentShader.replace('#include <common>', '#include <common>\nuniform float markTime; varying float vBorn;')
+        .replace('#include <alphamap_fragment>', '#include <alphamap_fragment>\ndiffuseColor.a *= 1.0 - smoothstep(45.0, 65.0, markTime - vBorn);');
+    };
+    tmMat.customProgramCacheKey = () => 'tread-fade-detail2';
     const zeroM = new THREE.Matrix4().makeScale(0, 0, 0);
     for (let i = 0; i < SCATTER.treadMarks; i++) this.marks.setMatrixAt(i, zeroM);
 
@@ -461,6 +473,8 @@ export class Effects {
     const i = this.markHead;
     this.markHead = (this.markHead + 1) % this.marks.count;
     this.markData[i].born = this.time;
+    this.markBirths.setX(i, this.time);
+    this.markBirths.needsUpdate = true;
     const n = getNormal(x, z);
     this.dummy.position.set(x, getHeight(x, z) + 0.04, z);
     this.dummy.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), n);
@@ -487,6 +501,7 @@ export class Effects {
 
   update(dt) {
     this.time += dt;
+    this.markTime.value = this.time;
     this.fire.update(dt);
     this.smoke.update(dt);
 

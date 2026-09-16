@@ -2,15 +2,16 @@
 // give parallax from every driving angle without per-tree camera updates.
 // Fine leaves, bark and branch shading live in one shared mipmapped texture.
 import * as THREE from 'three';
+import { makeRng } from './noise.js?v=detail2';
 
-export function woodlandMaterial() {
+export function woodlandMaterial(path = './assets/textures/woodland.png') {
   // Transparent first paint while the local atlas loads (never white cards).
   const map = new THREE.DataTexture(new Uint8Array([0, 0, 0, 0]), 1, 1);
   map.needsUpdate = true;
   const mat = new THREE.MeshLambertMaterial({
     map, vertexColors: true, side: THREE.DoubleSide, alphaTest: 0.42,
   });
-  new THREE.TextureLoader().load('./assets/textures/woodland.png', texture => {
+  new THREE.TextureLoader().load(path, texture => {
     texture.colorSpace = THREE.SRGBColorSpace;
     texture.anisotropy = 4;
     mat.map = texture;
@@ -76,4 +77,79 @@ export function woodlandParts(species) {
 
 export function undergrowthParts() {
   return [0, Math.PI / 3, Math.PI * 2 / 3].map(a => card(1.8, 1.05, -0.12, a, CROWN, 0xb8c58b));
+}
+
+// Close-range tree models: real tapered trunks, connected limbs and spatial
+// crown clusters. Only a small nearby pool renders these geometries.
+export function nearTreeParts(species) {
+  const wood=[], leaves=[], fir=species===0, slender=species===2;
+  function branch(a,b,r0,r1) {
+    const from=new THREE.Vector3(...a),to=new THREE.Vector3(...b),d=to.clone().sub(from),length=d.length();
+    const g=new THREE.CylinderGeometry(r1,r0,length,6,1,true);
+    const uv=g.attributes.uv;
+    for(let i=0;i<uv.count;i++) uv.setY(i,uv.getY(i)*length*.8);
+    g.applyQuaternion(new THREE.Quaternion().setFromUnitVectors(new THREE.Vector3(0,1,0),d.normalize()));
+    g.translate(...from.add(to).multiplyScalar(.5).toArray());
+    const c=new THREE.Color(slender?0xc4c1ab:0xb19c7c), colors=new Float32Array(g.attributes.position.count*3);
+    for(let i=0;i<colors.length;i+=3)colors.set([c.r,c.g,c.b],i);
+    g.setAttribute('color',new THREE.BufferAttribute(colors,3));wood.push(g);
+  }
+  // Individual leaf/needle sprays from First Light, oriented around each twig.
+  // Full alpha cutouts preserve fine silhouettes; there are no clipped canopy discs.
+  function spray(center, direction, w, h, tint) {
+    const along=new THREE.Vector3(...direction).normalize();
+    const axis=Math.abs(along.y)>.9?new THREE.Vector3(1,0,0):new THREE.Vector3(0,1,0);
+    const across=new THREE.Vector3().crossVectors(along,axis).normalize();
+    const cross=new THREE.Vector3().crossVectors(along,across).normalize();
+    for(const side of [across,cross]) {
+      const g=new THREE.PlaneGeometry(1,1),p=g.attributes.position,n=g.attributes.normal;
+      const c=new THREE.Color(tint),colors=new Float32Array(p.count*3);
+      const face=new THREE.Vector3().crossVectors(along,side).normalize();
+      // Partial sky bend, retaining local canopy shading and depth.
+      if(face.y<0)face.negate();face.lerp(new THREE.Vector3(0,1,0),.38).normalize();
+      for(let i=0;i<p.count;i++) {
+        const u=p.getX(i)*w,v=p.getY(i)*h;
+        p.setXYZ(i,center[0]+along.x*u+side.x*v,center[1]+along.y*u+side.y*v,center[2]+along.z*u+side.z*v);
+        n.setXYZ(i,face.x,face.y,face.z);colors.set([c.r,c.g,c.b],i*3);
+      }
+      g.setAttribute('color',new THREE.BufferAttribute(colors,3));leaves.push(g);
+    }
+  }
+  const rng=makeRng(612+species),h=fir?8:slender?6:6.8;
+  branch([0,-.05,0],[.08,h*.48,0],slender?.11:.18,.09);
+  branch([.08,h*.48,0],[-.12,h,0.06],.09,.008);
+  if(fir){
+    for(let layer=0;layer<10;layer++){
+      const y=.85+layer*.72,radius=2.04-layer*.19;
+      for(let side=0;side<5;side++){
+        const a=side*Math.PI*2/5+layer*2.399,dx=Math.cos(a),dz=Math.sin(a);
+        branch([0,y+.25,0],[dx*radius,y-.15,dz*radius],.027,.004);
+        for(let j=0;j<6;j++) {
+          const f=.18+j*.16,sideAngle=a+(j%2?-.6:.6);
+          const w=(.8-layer*.048)*(1.08-f*.15);
+          spray([dx*radius*f,y+.1-f*.28,dz*radius*f],
+            [Math.cos(sideAngle),.12+rng()*.18,Math.sin(sideAngle)],w,w*.85,0xc1ccad);
+        }
+      }
+    }
+    spray([-.1,7.75,.05],[.05,1,.1],.7,.55,0xd4dbb6);
+  } else {
+    for(let i=0;i<9;i++){
+      const a=i*2.399,rad=(slender?.84:1.35)*(i%2?.85:1.1);
+      const x=Math.cos(a)*rad,z=Math.sin(a)*rad,y=3.5+(i%3)*.72;
+      branch([.03,2.1+i*.17,0],[x,y,z],.065,.012);
+      for(let j=0;j<26;j++) {
+        const az=rng()*Math.PI*2,vertical=rng()*2-1,r=Math.sqrt(1-vertical*vertical);
+        const spread=slender?.9:1.15,dx=Math.cos(az)*r,dz=Math.sin(az)*r;
+        const c=[x+dx*spread,y+.55+vertical*1.05,z+dz*spread];
+        const w=.62+rng()*.24;
+        spray(c,[dx,.25+vertical*.6,dz],w,w*.88,slender?0xd4dfb9:0xe0ddbd);
+      }
+    }
+  }
+  return {wood,leaves};
+}
+
+export function nearLeafMaterial(fir) {
+  return woodlandMaterial('./assets/textures/near-'+(fir?'needle':'leaf')+'.webp');
 }
