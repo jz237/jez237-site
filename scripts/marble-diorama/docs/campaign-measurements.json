@@ -1,6 +1,6 @@
 {
   "physics": "rapier-0.20.0-mm-5",
-  "generatedAt": "2026-09-16T17:36:01.505Z",
+  "generatedAt": "2026-09-16T18:09:41.604Z",
   "method": "Headless 120 Hz simulation. Normal DemoController steering and turbo only. Campaign untimed; bonuses timed; difficulty 0. No positional overrides.",
   "runs": [
     {
@@ -364,6 +364,14 @@
       "revision": 2,
       "status": "finished",
       "seconds": 65.61666666666666,
+      "falls": 0
+    },
+    {
+      "course": "beginner",
+      "route": "upper-right-fork",
+      "revision": 2,
+      "status": "finished",
+      "seconds": 64.85833333333333,
       "falls": 0
     },
     {

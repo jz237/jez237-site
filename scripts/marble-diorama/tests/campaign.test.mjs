@@ -127,6 +127,43 @@ test("demo leaves a collection waypoint when its miniature has fallen out of rea
   sim.dispose();
 });
 
+test("Beginner upper-right fork reaches both pipes and finishes within the original clock without falls", () => {
+  const course = beginnerCourse();
+  course.route = course.alternateRoutes.find(
+    (route) => route.id === "upper-right-fork",
+  ).route;
+  delete course.playerRoutes;
+  const sim = new Simulation(course, { untimed: false });
+  const driver = new DemoController();
+  const landmarks = [
+    worldPoint(10, 17, 43),
+    worldPoint(10, 13.2, 72),
+    worldPoint(3, 8.2, 97),
+  ];
+  const visited = landmarks.map(() => false);
+  while (sim.tick < 12000 && sim.players[0].status === "racing") {
+    const before = { ...sim.body(sim.players[0]).translation() };
+    const input = driver.input(sim);
+    assert.ok(Number.isFinite(input.x) && Number.isFinite(input.z));
+    assert.ok(Math.hypot(input.x, input.z) <= 1.000001);
+    assert.deepEqual({ ...sim.body(sim.players[0]).translation() }, before);
+    sim.step([input]);
+    const position = sim.body(sim.players[0]).translation();
+    landmarks.forEach((point, i) => {
+      if (
+        Math.hypot(position.x - point.x, position.z - point.z) < 2.5 &&
+        Math.abs(position.y - RADIUS - point.y) < 2
+      )
+        visited[i] = true;
+    });
+  }
+  assert.deepEqual(visited, [true, true, true]);
+  assert.equal(sim.players[0].status, "finished");
+  assert.equal(sim.players[0].deaths, 0);
+  assert.ok(sim.players[0].time > 20);
+  sim.dispose();
+});
+
 test("every authored alternate route completes through normal steering and fall recovery", () => {
   for (const course of campaignCourses())
     for (const alternative of course.alternateRoutes ?? []) {

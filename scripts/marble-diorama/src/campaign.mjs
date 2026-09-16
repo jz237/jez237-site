@@ -495,6 +495,16 @@ export function beginnerCourse() {
     Object.assign(pipeRoute[i], { radius: 0.25, speed: 1.3 });
   for (const i of [21, 22])
     Object.assign(pipeRoute[i], { radius: 0.6, speed: 1.8 });
+  const upperRightRoute = roundDemoCorners([
+    ...pipeRoute.slice(0, 9),
+    ...[
+      [10, 43],
+      [11.8, 45],
+      [11.8, 53],
+      [0, 53],
+    ].map(([l, d]) => routePoint(l, 17, d, { speed: 2.8 })),
+    ...pipeRoute.slice(12),
+  ]);
   return {
     schema: 1,
     id: "beginner",
@@ -539,7 +549,14 @@ export function beginnerCourse() {
     parts,
     route: roundDemoCorners(pipeRoute),
     playerRoutes: [roundDemoCorners(pipeRoute), roundDemoCorners(route)],
-    alternateRoutes: [{ id: "left-ledge", name: "Left ledge maze", route }],
+    alternateRoutes: [
+      { id: "left-ledge", name: "Left ledge maze", route },
+      {
+        id: "upper-right-fork",
+        name: "Upper-right fork and twin pipes",
+        route: upperRightRoute,
+      },
+    ],
     zones: [],
     enemies: [
       {
