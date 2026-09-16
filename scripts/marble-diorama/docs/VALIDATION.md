@@ -2,7 +2,7 @@
 
 ## Current outcome
 
-**78 automated tests pass. All six campaign races and all three bonus courses
+**79 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Unfinished Games, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
@@ -12,7 +12,24 @@ Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
 
-### September 16 — timed solo campaign reaches Ultimate (local development)
+### September 16 — Beginner upper-right fork (local development)
+
+Added the selectable **Upper-right fork and twin pipes** demonstration. It takes
+the existing right descent, passes around the pyramid room, and joins both pipe
+transfers. It finishes in **64.858 seconds with zero falls**. The timed regression
+also requires positive clock carryover, physical visits to the right fork and
+both pipes, bounded inputs, and no direct body changes by the controller.
+Browser selection and playback also pass: **64.86 seconds, 876 points, zero
+falls**, with no captured console errors.
+
+All 79 tests and the build pass. Refreshed measurements still complete every
+untimed campaign race, timed bonus, and authored alternate. This adds route
+coverage; it does not certify original dimensions or resolve full timed-campaign
+balance. Human physics, course meshes and clocks are unchanged. Increasing
+Ultimate's broad-route speeds to 3–4.5 made its runs slower or caused falls, so
+that experiment was discarded.
+
+### September 16 — timed solo campaign reaches Ultimate
 
 The normal-input solo demo now completes the first five races under the original
 clock rules, with zero falls. It collects all six Silly miniatures through physical
