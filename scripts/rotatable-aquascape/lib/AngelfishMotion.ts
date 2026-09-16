@@ -17,7 +17,7 @@ export function angelBody(position:T.Vector3,yaw:number,pitch:number,size:number
  return envelope.map(([x,y,z,r,region])=>{
   // Cover the stronger median/caudal sweeps, including both sides of a stroke.
   // Only the outer fin volumes grow; the head and torso keep their fitted size.
-  if(region!==4&&(Math.abs(y)>.55||x<-.75))r+=.045;
+  if(region!==4&&(Math.abs(y)>.55||x<-.75))r+=.085;
   if(region===4){const angle=.85*reach+(phase===undefined?0:.16*Math.sin(phase*.9+(z>0?1:-1)*.85)),dx=x-.27,dy=y+.43,c=Math.cos(angle),sn=Math.sin(angle);x=.27+c*dx-sn*dy;y=-.43+sn*dx+c*dy;}
   return {center:position.clone().addScaledVector(forward,x*size).addScaledVector(up,y*size).addScaledVector(lateral,z*size),radius:r*size};
  });

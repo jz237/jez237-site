@@ -77,7 +77,7 @@ test('forward swimming folds tall fins and quickens tail strokes, then relaxes s
   assert.ok(Math.abs(m.angelFold.value-last)<.014,'fin pose eases without a snap');last=m.angelFold.value;
   if(i>120){min=Math.min(min,last);max=Math.max(max,last);}
  }
- assert.ok(max>.16&&min<.12,'visible fold/reopen cycle while traveling');
+ assert.ok(max>.22&&min<.15,'visible fold/reopen cycle while traveling');
  assert.equal(r.angelFold.value,0,'hovering does not retract tall fins');
  assert.ok(m.angelPhase.value>r.angelPhase.value*2,'traveling tail beats clearly faster');
  const held=Object.fromEntries(Object.entries(m).map(([k,v])=>[k,v.value]));moving.update(0,1,false,1,1);
@@ -97,8 +97,9 @@ test('folded median fins and stronger tail strokes remain inside the collision e
   for(let i=0;i<a.count;i+=3){
    const at=start+(v.byteOffset??0)+(a.byteOffset??0)+i*(v.byteStride??12);
    const x=b.readFloatLE(at),y=b.readFloatLE(at+4),z=b.readFloatLE(at+8),edge=T.MathUtils.smoothstep(Math.abs(y),.56,1.4);
-   for(const fold of [0,.10,.20])for(const lateral of [-.12,.12]){
-    const p=new T.Vector3(x+edge*fold*.3,y-Math.sign(y)*edge*fold,z+lateral);
+   const sweep=Math.abs(y)<.56&&x<-.8?.19:.13;
+   for(const fold of [0,.13,.26])for(const lateral of [-sweep,sweep])for(const recoil of [0,x<-.8&&Math.abs(y)<.56?-.036:0]){
+    const p=new T.Vector3(x+edge*fold*.3+recoil,y-Math.sign(y)*edge*fold,z+lateral);
     assert.ok(spheres.some(s=>p.distanceToSquared(s.center)<=s.radius*s.radius),'moving fin exceeds contact envelope at '+p.toArray());
    }
   }

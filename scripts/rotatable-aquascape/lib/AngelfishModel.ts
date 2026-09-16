@@ -20,14 +20,14 @@ vec3 angelDeform(vec3 p){
   // inward during propulsion and fan open on the coast, without root gaps.
   float edge=smoothstep(.56,1.4,abs(p.y));
   float wave=angelDrift*2.7-p.x*3.2+abs(p.y)*1.8;
-  p.z+=edge*sin(wave)*(.035+.035*angelEffort);
+  p.z+=edge*sin(wave)*(.052+.048*angelEffort);
   p.y+=sign(p.y)*edge*(sin(wave+.5)*.010-angelFold);
   p.x+=edge*angelFold*.30;
   // Faster, flexible caudal strokes lag behind the peduncle. The tail fan
   // is separate from the tall median-fin tips despite their shared material.
   float fan=clamp((-.80-p.x)/.51,0.,1.)*(1.-smoothstep(.45,.62,abs(p.y)));
-  p.z+=fan*fan*sin(angelPhase-p.x*3.8-.65)*(.020+.045*angelStroke);
-  p.x+=fan*fan*(cos(angelPhase-p.x*3.8-.65)-1.)*.010*angelStroke;
+  p.z+=fan*fan*sin(angelPhase-p.x*3.8-.65)*(.035+.085*angelStroke);
+  p.x+=fan*fan*(cos(angelPhase-p.x*3.8-.65)-1.)*.018*angelStroke;
  }else if(angelRegion>1.5&&angelRegion<3.5){
   float side=angelRegion<2.5?1.:-1.;
   float tip=clamp((.36-p.x)/.43,0.,1.);
@@ -75,7 +75,7 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
 `);
      s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','vec3 transformed=angelDeform(position);');
     };
-    material.customProgramCacheKey=()=>`angelfish-fin-strokes-v5-${region}-${normal}`;
+    material.customProgramCacheKey=()=>`angelfish-fin-strokes-v6-${region}-${normal}`;
    };
    install(m,true);
    // Subpixel fin rays cannot produce stable individual shadow texels. Their
@@ -96,7 +96,7 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
   const swim=T.MathUtils.smoothstep(Math.max(0,speed),.025,.34);
   const power=T.MathUtils.smoothstep(.5+.5*Math.sin(this.drift*1.7),.16,.80);
   u.angelStroke.value=T.MathUtils.lerp(u.angelStroke.value,swim*(.22+.78*power),blend);
-  u.angelFold.value=T.MathUtils.lerp(u.angelFold.value,swim*(.09+.11*power),blend);
+  u.angelFold.value=T.MathUtils.lerp(u.angelFold.value,swim*(.12+.14*power),blend);
   this.phase+=dt*2*Math.PI*(.45+u.angelStroke.value*(1.25+1.9*u.angelEffort.value));
   this.pectoral+=dt*(hover?7:5+u.angelEffort.value*5);
   this.uniforms.angelReach.value=reach;this.uniforms.angelPhase.value=this.phase;this.uniforms.angelPectoral.value=this.pectoral;this.uniforms.angelDrift.value=this.drift;
