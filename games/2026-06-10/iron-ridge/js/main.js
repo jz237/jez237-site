@@ -12,7 +12,7 @@ import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TA
 import { Infantry } from './infantry.js?v=detail3';
 import { makeRng } from './noise.js?v=detail3';
 import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=detail3';
-import { buildSky } from './sky.js?v=detail3';
+import { buildSky } from './sky.js?v=ridge4';
 import { Foliage } from './foliage.js?v=detail3';
 import { Props } from './props.js?v=detail3';
 import { Tank } from './tank.js?v=detail3';
@@ -44,7 +44,7 @@ renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure = 1.14;
 
 const scene = new THREE.Scene();
-const FOG_COLOR = 0xc8dfee;
+const FOG_COLOR = 0x81938a;
 scene.fog = new THREE.Fog(FOG_COLOR, 140, 400);
 
 const camera = new THREE.PerspectiveCamera(58, 1, 0.3, 700);
@@ -598,8 +598,8 @@ function deployAfterOnlineConnect() {
 const quality = new QualityScaler(isTouch ? 1 : 2, (L) => {
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, L.pixelRatio));
   composer.setPixelRatio(Math.min(window.devicePixelRatio || 1, L.pixelRatio));
-  scene.fog.far = L.fogFar;
-  scene.fog.near = L.fogFar * 0.35;
+  scene.fog.far = L.fogFar * 1.6;
+  scene.fog.near = L.fogFar * 0.55;
   bloomPass.enabled = L.bloom;
   gradePass.enabled = L.grade;
   foliage.setTreeFraction(L.treeFrac);

@@ -86,7 +86,10 @@ are cached. This adds no full-screen ambient-occlusion or depth-capture pass.
 
 Distant mountains have shaped foothills, crests and gullies with baked sunlight,
 forested slope detail reused from First Light's `assets/sky/ridge.webp`, and
-bases that blend into the scene's haze. All three layers share one texture,
+bases that blend into the scene's haze. The ridge4 visibility adjustment
+uses deeper forest/blue-grey ridge colors, stronger slope contrast and a lower
+mountain haze band. Neutral green-grey valley fog starts later and fades over
+a longer distance, preserving distant forest and ground detail. All three layers share one texture,
 resampled to 1024 x 350 at load time to save about 5.5 MiB of GPU memory.
 No paid assets, additional CDN dependencies, shadow-map resolution increases
 or postprocessing passes were added.
@@ -148,6 +151,12 @@ under one base URL, set `IRON_RIDGE_BASE_URL`, and run
 `node tests/graphics-benchmark.cjs <directory> <quality-index> <view>`.
 Set `BENCH_FRAMES=600`, `BENCH_WARMUP=120`, and optionally `CPU_RATE=4`.
 Views are `ground-tank`, `dense-forest`, `combat`, and `forest-drive`.
+
+The ridge4 follow-up changes fog/shading constants only. High 1080p forest
+and combat CPU medians remain 0.5 and 2.1 ms respectively, with identical
+draw calls, geometry, particle-area proxy and texture storage. GPU times show
+no regression in these runs; no performance gain is claimed from timing noise.
+Raw follow-up measurements: `tests/ridge-visibility-performance.json`.
 
 ## Tech
 
