@@ -407,6 +407,25 @@ input[type="checkbox"] {
   letter-spacing: 1px;
   color: var(--dim);
 }
+.orbit-enabled {
+  cursor: grab;
+}
+.orbit-enabled:active {
+  cursor: grabbing;
+}
+.view-hint {
+  position: absolute;
+  right: 30px;
+  top: 70px;
+  margin: 0;
+  font-size: 10px;
+  color: var(--dim);
+  pointer-events: none;
+}
+.playing .view-hint,
+.playing #resetView {
+  display: none;
+}
 footer {
   height: 48px;
   display: flex;
@@ -863,8 +882,14 @@ dialog p {
     font-size: 28px;
   }
   .camera-tools {
-    top: 25px;
+    top: 225px;
     right: 20px;
+  }
+  .view-hint {
+    top: 450px;
+    right: 0;
+    left: 0;
+    text-align: center;
   }
   .scene-label small {
     font-size: 7px;

@@ -3,7 +3,7 @@
 ## Current outcome
 
 **81 automated tests pass. All six campaign races and all three bonus courses
-are playable. This reconstruction is published under Unfinished Games, with
+are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original music is not enabled.
@@ -11,6 +11,20 @@ Current simulation/replay version: `rapier-0.20.0-mm-5`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
+
+### September 16 — title-screen camera
+
+The title screen enables drag orbit and wheel/two-finger pinch zoom. The zoom
+buttons and gestures now share the orthographic camera's zoom value; beginning
+a race restores the regular gameplay framing. A reset button restores the whole
+diorama view. Mouse-trackball capture is restricted to active human gameplay.
+
+Browser checks: desktop drag rotation, wheel zoom in/out, zoom buttons, reset,
+menu interaction with trackball enabled (no pointer capture), and race startup
+after zooming passed. A 390 × 844 CSS-pixel viewport passed drag/button checks
+with camera controls and hint separated from the title. No captured console
+errors. Physical touch/pinch testing remains open. All 81 existing tests pass;
+the production build and diff check pass. Course/physics versions are unchanged.
 
 ### September 16 — course draw batching
 
