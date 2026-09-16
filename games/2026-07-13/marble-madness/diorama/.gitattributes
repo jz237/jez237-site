@@ -1,0 +1,2 @@
+# Vendor GLSL strings inside the generated bundle retain upstream whitespace.
+game.js -whitespace linguist-generated=true
