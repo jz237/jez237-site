@@ -2,7 +2,7 @@
 
 ## Current outcome
 
-**77 automated tests pass. All six campaign races and all three bonus courses
+**78 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Unfinished Games, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
@@ -11,6 +11,56 @@ Current simulation/replay version: `rapier-0.20.0-mm-5`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
+
+### September 16 — timed solo campaign reaches Ultimate (local development)
+
+The normal-input solo demo now completes the first five races under the original
+clock rules, with zero falls. It collects all six Silly miniatures through physical
+contact, earning 3,000 points and 18 clock units. It finishes Silly with 5.272 units
+remaining. No time-limit, carryover, geometry, human steering or physics parameter
+was changed; simulation/replay version remains mm-5.
+
+| Solo timed campaign | Elapsed seconds | Remaining clock | Falls |
+|---|---:|---:|---:|
+| Practice | 29.742 | 36.764 | 0 |
+| Beginner | 61.675 | 26.816 | 0 |
+| Intermediate | 46.858 | 34.392 | 0 |
+| Aerial | 56.242 | 20.061 | 0 |
+| Silly | 73.892 | 5.272 | 0 |
+| Ultimate | 38.400 (timeout) | 0 | 0 |
+
+The controller can anticipate the next leg inside explicitly authored broad
+waypoint corridors. Precision approaches, stop markers and timed gates keep
+their direct steering. Beginner's paired demonstration takes separate routes
+after the fork. Aerial's initial crossing and right-hand descent keep their
+previous approach; broad zigzags alone use anticipation. The same shared physics
+still applies every torque and collision.
+
+Paired Silly demos each collect three miniatures and finish in **67.142 / 65.142
+seconds, zero falls**, down from 77.508 / 81.992. Ultimate's untimed demonstrations
+finish in **57.200 seconds solo**, and **62.017 / 57.217 seconds paired**, all with
+zero falls. All six untimed campaign courses, all timed bonuses and all authored
+alternates still complete. The 78-test suite passes; its timed solo test now
+requires five courses and normal bounded inputs, and its Silly test verifies six
+solo pickups or three per paired player without any body-position change from
+the controller. A new fallback check also preserves per-player routes when a
+custom course omits its shared route.
+
+Browser verification: the solo Silly demo finishes in 73.89 seconds with 3,885
+points and zero falls. Both paired marbles finish with zero falls, scoring
+2,385 / 2,383 points; the result correctly identifies Player 2 as the winner at
+65.14 seconds. No console errors were captured for the tested bundle.
+
+**Full timed acceptance remains open.** Solo times out in Ultimate at 38.400
+seconds, before the measured 57.200-second untimed finish. Both marbles still
+time out in the paired Silly campaign, by 65.283 seconds. The current reports are
+`campaign-measurements.json` and `timed-campaign-measurements.json`. Experimental
+blanket increases to corner speed caused falls and were rejected; anticipation
+is enabled only for the authored approaches that passed the course checks.
+
+The public preview remains fb190f0cf; these improvements and the medal UI are
+local development checkpoints. Original music, quantitative Amiga calibration
+and physical-device acceptance are still open.
 
 ### September 16 — visible medals and reliable records (local development)
 

@@ -1,3 +1,4 @@
+import { roundDemoCorners } from "./demo-route.mjs";
 import { AMIGA_RULES } from "./rules.mjs";
 import { waveStrip } from "./wave.mjs";
 import { aerialCourse } from "./aerial.mjs";
@@ -536,7 +537,8 @@ export function beginnerCourse() {
       worldPoint(6, 4.76, 108),
     ],
     parts,
-    route: pipeRoute,
+    route: roundDemoCorners(pipeRoute),
+    playerRoutes: [roundDemoCorners(pipeRoute), roundDemoCorners(route)],
     alternateRoutes: [{ id: "left-ledge", name: "Left ledge maze", route }],
     zones: [],
     enemies: [
@@ -909,7 +911,11 @@ export function intermediateCourse() {
   ])
     p.y *= 0.5;
   for (const e of course.enemies) e.y = (e.y - 0.9) * 0.5 + 0.9;
-  course.playerRoutes = [route, course.alternateRoutes[0].route];
+  course.playerRoutes = [
+    roundDemoCorners(route),
+    roundDemoCorners(course.alternateRoutes[0].route),
+  ];
+  course.route = course.playerRoutes[0];
   course.parts = course.parts.filter((p) => p.id !== "first-wave");
   course.parts.push(
     ribbon(

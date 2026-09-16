@@ -1,3 +1,4 @@
+import { roundDemoCorners } from "./demo-route.mjs";
 import {
   ISO,
   worldPoint,
@@ -227,7 +228,7 @@ export function sillyCourse() {
       [6, 12, 13],
       [0, 12, 8],
       [0, 12, 5],
-    ].map(([l, h, d]) => routePoint(l, h, d, { speed: 3, radius: 0.6 })),
+    ].map(([l, h, d]) => routePoint(l, h, d, { speed: 3, radius: 1.5 })),
   );
   // Follow the room's open lanes while collecting its small enemies. The
   // waypoints follow live miniature positions; collection still needs contact.
@@ -255,6 +256,20 @@ export function sillyCourse() {
     miniaturePoint(8, 86, "mini-4"),
     miniaturePoint(0, 87, "mini-1"),
     ...rightRoute.slice(9),
+  ];
+  // A lone marble can collect all six time pickups. In a paired race, retain
+  // separate three-pickup approaches so the marbles do not chase the same enemy.
+  const soloDemoRoute = [
+    ...leftDemoRoute.slice(0, 8),
+    miniaturePoint(-6, 99, "mini-5"),
+    miniaturePoint(-1, 97, "mini-3"),
+    miniaturePoint(9, 96, "mini-2"),
+    miniaturePoint(12, 95),
+    miniaturePoint(12, 86),
+    miniaturePoint(8, 86, "mini-4"),
+    miniaturePoint(0, 87, "mini-1"),
+    miniaturePoint(-9, 87, "mini-0"),
+    ...leftDemoRoute.slice(13),
   ];
   const enemies = [
     [-9, 87],
@@ -331,13 +346,16 @@ export function sillyCourse() {
     starts: [worldPoint(-0.7, 0.56, 130), worldPoint(0.7, 0.56, 130)],
     goal: { ...worldPoint(0, 12, 5), angle: ISO, width: 9, depth: 1.3 },
     parts,
-    route: leftDemoRoute,
-    playerRoutes: [leftDemoRoute, rightDemoRoute],
+    route: roundDemoCorners(soloDemoRoute, { radius: 1.5 }),
+    playerRoutes: [
+      roundDemoCorners(leftDemoRoute, { radius: 1.5 }),
+      roundDemoCorners(rightDemoRoute, { radius: 1.5 }),
+    ],
     alternateRoutes: [
       {
         id: "right-climbs",
         name: "Right climbs and bird-field exit",
-        route: rightDemoRoute,
+        route: roundDemoCorners(rightDemoRoute, { radius: 1.5 }),
       },
     ],
     enemies,

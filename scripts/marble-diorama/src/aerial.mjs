@@ -1,3 +1,4 @@
+import { roundDemoCorners } from "./demo-route.mjs";
 import {
   ISO,
   worldPoint,
@@ -385,9 +386,12 @@ export function aerialCourse() {
     starts: [worldPoint(10, 18.56, 2), worldPoint(-10, 18.56, 2)],
     goal: { ...worldPoint(-8, 4, 118), angle: ISO, width: 5.5, depth: 1.3 },
     parts,
-    route,
+    route: roundDemoCorners(route, { from: 7 }),
     zones,
-    playerRoutes: [route, rightRoute],
+    playerRoutes: [
+      roundDemoCorners(route, { from: 7 }),
+      roundDemoCorners(rightRoute, { from: 7, to: 14 }),
+    ],
     alternateRoutes: [
       {
         id: "right-hammer-route",

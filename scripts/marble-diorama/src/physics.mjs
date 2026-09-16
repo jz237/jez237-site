@@ -481,7 +481,10 @@ export class DemoController {
       b = sim.body(p),
       pos = b.translation(),
       v = b.linvel(),
-      playerRoute = sim.course.playerRoutes?.[player],
+      playerRoute =
+        sim.players.length === 1 && sim.course.route?.length
+          ? sim.course.route
+          : sim.course.playerRoutes?.[player],
       route = playerRoute?.length
         ? playerRoute
         : sim.course.route?.length
@@ -613,9 +616,27 @@ export class DemoController {
       cornerSpeed =
         this.index === route.length - 1
           ? 0.5
-          : 0.5 + 3 * Math.max(0, cosine) ** 4;
-    const dx = target.x - pos.x,
-      dz = target.z - pos.z,
+          : (precise || !target.flow ? 0.5 : 1) + 3 * Math.max(0, cosine) ** 4;
+    // Begin turning toward the next leg inside an explicitly authored broad
+    // corner. Tight entries, stops, moving gates and pickups retain direct aim.
+    // This is a steering target only; the rigid body still follows normal input.
+    const lookahead =
+      target.flow &&
+      !precise &&
+      !target.collect &&
+      this.index < route.length - 1
+        ? Math.max(
+            0,
+            (target.radius ?? 0.75) * 2 -
+              Math.hypot(target.x - pos.x, target.z - pos.z),
+          ) * 0.5
+        : 0;
+    const segment = Math.max(
+      0.01,
+      Math.hypot(next.x - target.x, next.z - target.z),
+    );
+    const dx = target.x - pos.x + ((next.x - target.x) / segment) * lookahead,
+      dz = target.z - pos.z + ((next.z - target.z) / segment) * lookahead,
       dist = Math.hypot(dx, dz),
       cruisingSpeed = Math.min(
         maximum,

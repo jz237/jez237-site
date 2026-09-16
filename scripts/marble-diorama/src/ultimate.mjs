@@ -1,3 +1,4 @@
+import { roundDemoCorners } from "./demo-route.mjs";
 import {
   ISO,
   worldPoint,
@@ -287,7 +288,7 @@ export function ultimateCourse() {
     starts: [worldPoint(-0.7, 16.56, 0), worldPoint(0.7, 16.56, 0)],
     goal: { ...worldPoint(0, 2, 128), angle: ISO, width: 9, depth: 1.3 },
     parts,
-    route,
+    route: roundDemoCorners(route, { radius: 1.5 }),
     alternateRoutes: [
       {
         id: "right-hazard-rooms",
