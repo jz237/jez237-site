@@ -48,8 +48,13 @@ vec3 angelDeform(vec3 p){
   // Faster, flexible caudal strokes lag behind the peduncle. The tail fan
   // is separate from the tall median-fin tips despite their shared material.
   float fan=clamp((-.80-p.x)/.51,0.,1.)*(1.-smoothstep(.45,.62,abs(p.y)));
-  p.z+=fan*fan*sin(angelPhase-p.x*3.8-.65)*(.035+.085*angelStroke);
-  p.x+=fan*fan*(cos(angelPhase-p.x*3.8-.65)-1.)*.018*angelStroke;
+  float caudalWave=angelPhase-p.x*4.8-.85;
+  // A soft fan bends progressively behind the fixed attachment. Its upper
+  // and lower margins trail the center, visibly cupping on each power stroke.
+  float margin=smoothstep(.06,.40,abs(p.y));
+  p.z+=fan*fan*sin(caudalWave-margin*.7)*(.055+.115*angelStroke);
+  p.z+=fan*fan*fan*margin*sin(caudalWave*1.25-.9)*(.007+.017*angelStroke);
+  p.x+=fan*fan*(cos(caudalWave)-1.)*.024*angelStroke;
  }else if(angelRegion>1.5&&angelRegion<3.5){
   float side=angelRegion<2.5?1.:-1.;
   float tip=clamp((.36-p.x)/.43,0.,1.);
@@ -98,7 +103,7 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
 `);
      s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','vec3 transformed=angelDeform(position);');
     };
-    material.customProgramCacheKey=()=>`angelfish-breathing-v7-${region}-${normal}`;
+    material.customProgramCacheKey=()=>`angelfish-flexible-tail-v8-${region}-${normal}`;
    };
    install(m,true);
    // Subpixel fin rays cannot produce stable individual shadow texels. Their

@@ -20,11 +20,12 @@ test('fused output retains full-resolution AO, beauty multisampling and renderer
  assert.equal(lighting.contact.gtaoRenderTarget.width,390);assert.equal(lighting.contact.pdRenderTarget.height,844);
  assert.equal(lighting.contact.gtaoRenderTarget.depthBuffer,false);assert.equal(lighting.contact.pdRenderTarget.depthBuffer,false);
  let target={name:'previous'},sceneRenders=0,contactRenders=0,outputRenders=0;const original=target;
- const renderer={getRenderTarget:()=>target,setRenderTarget:t=>target=t,render:()=>sceneRenders++,info:{render:{triangles:123}}};
+ const renderer={domElement:{getBoundingClientRect:()=>({width:390,height:844})},shadowMap:{autoUpdate:true,needsUpdate:false},getRenderTarget:()=>target,setRenderTarget:t=>target=t,render:()=>sceneRenders++,info:{render:{triangles:123}}};
  lighting.contact.render=()=>{assert.equal(lighting.contact.output,GTAOPass.OUTPUT.Off);contactRenders++;};
  lighting.output.render=(_renderer,_write,read)=>{assert.equal(read,lighting.beauty);assert.equal(lighting.output.uniforms.aquariumAO.value,lighting.contact.gtaoMap);outputRenders++;};
  assert.equal(lighting.render(renderer,null),123);assert.equal(target,original);assert.deepEqual([sceneRenders,contactRenders,outputRenders],[1,1,1]);
- lighting.lens.enabled=true;lighting.render(renderer,null);assert.equal(lighting.output.uniforms.lensZoom.value,2.4);assert.deepEqual([sceneRenders,contactRenders,outputRenders],[2,2,2]);lighting.lens.enabled=false;
+ lighting.lens.enabled=true;lighting.render(renderer,null);assert.equal(lighting.output.uniforms.lensZoom.value,2.4);assert.deepEqual([sceneRenders,contactRenders,outputRenders],[3,2,2]);
+ assert.equal(lighting.lensTarget.width,188);assert.equal(lighting.lensTarget.height,406);assert.equal(renderer.shadowMap.autoUpdate,true);assert.equal(target,original);lighting.lens.enabled=false;
  lighting.render(renderer,'contact');assert.equal(lighting.output.uniforms.inspectionMode.value,1);
  lighting.render(renderer,'unshaded');assert.equal(lighting.output.uniforms.inspectionMode.value,2);
  const before=contactRenders;lighting.render(renderer,null,false);assert.equal(contactRenders,before);assert.equal(lighting.output.uniforms.inspectionMode.value,2);

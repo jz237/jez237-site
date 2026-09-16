@@ -47,7 +47,8 @@ export class TeachingScene{
  private tube(points:T.Vector3[],radius:number,color:number,parent:T.Object3D=this.content){return this.add(new T.TubeGeometry(new T.CatmullRomCurve3(points),32,radius,7,false),basic(color),V(0,0,0),parent);}
  private path(points:T.Vector3[],color=0x78d8ee,speed=.12){
   const curve=new T.CatmullRomCurve3(points),line=new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(100)),new T.LineBasicMaterial({color,transparent:true,opacity:.55}));this.content.add(line);
-  const arrows=new T.InstancedMesh(flowArrowGeometry(.24,.065),basic(color),12);arrows.frustumCulled=false;this.content.add(arrows);this.paths.push({curve,arrows,speed,phase:0});
+  const closeup=this.mode==='organisms';
+  const arrows=new T.InstancedMesh(flowArrowGeometry(closeup?.075:.24,closeup?.020:.065),basic(color),closeup?8:12);arrows.frustumCulled=false;this.content.add(arrows);this.paths.push({curve,arrows,speed,phase:0});
  }
  private label(text:string,point:T.Vector3,index:number){const button=document.createElement('button');button.textContent=text;button.className='learning-tag';button.setAttribute('aria-label','Inspect '+text);button.onclick=()=>this.onSelect(index);this.labelHost.append(button);this.labels.push({button,point});}
  private roots(origin:T.Vector3,scale=1){
@@ -106,7 +107,6 @@ export class TeachingScene{
   }
   if(mode==='organisms'){
    if(step===0){this.specimen=new Tetra3D(this.texture);this.specimen.group.position.set(0,2.9,0);this.specimen.group.scale.setScalar(2.8);this.content.add(this.specimen.group);
-    const gill=this.add(new T.TorusGeometry(.31,.025,8,32,Math.PI*1.2),basic(0xe9a6a2),V(1,2.95,.2));gill.rotation.y=.5;
     this.path([V(2.5,3.05,.3),V(1.3,3.05,.35),V(.7,2.8,.4),V(0,2.7,.5)],0x82d7ee,.2);
    }else if(step===1&&this.leaf){
     const mat=(this.leaf.material as T.MeshStandardMaterial).clone();mat.onBeforeCompile=()=>{};
