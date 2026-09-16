@@ -1,6 +1,6 @@
 {
   "physics": "rapier-0.20.0-mm-5",
-  "generatedAt": "2026-09-16T16:34:57.593Z",
+  "generatedAt": "2026-09-16T17:36:01.505Z",
   "method": "Headless 120 Hz simulation. Normal DemoController steering and turbo only. Campaign untimed; bonuses timed; difficulty 0. No positional overrides.",
   "runs": [
     {
@@ -23,14 +23,14 @@
       "course": "beginner",
       "players": 1,
       "untimed": true,
-      "ticks": 7691,
+      "ticks": 7401,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 64.09166666666667,
+          "seconds": 61.675,
           "falls": 0,
           "clock": 75,
-          "score": 1308
+          "score": 1299
         }
       ],
       "campaignOutcome": "next"
@@ -39,14 +39,14 @@
       "course": "intermediate",
       "players": 1,
       "untimed": true,
-      "ticks": 6122,
+      "ticks": 5623,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 51.016666666666666,
+          "seconds": 46.858333333333334,
           "falls": 0,
           "clock": 120,
-          "score": 2109
+          "score": 2100
         }
       ],
       "campaignOutcome": "next"
@@ -55,14 +55,14 @@
       "course": "aerial",
       "players": 1,
       "untimed": true,
-      "ticks": 7146,
+      "ticks": 6749,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 59.55,
+          "seconds": 56.24166666666667,
           "falls": 0,
           "clock": 150,
-          "score": 3052
+          "score": 3044
         }
       ],
       "campaignOutcome": "next"
@@ -71,14 +71,14 @@
       "course": "silly",
       "players": 1,
       "untimed": true,
-      "ticks": 9301,
+      "ticks": 8867,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 77.50833333333334,
+          "seconds": 73.89166666666667,
           "falls": 0,
-          "clock": 184,
-          "score": 5436
+          "clock": 193,
+          "score": 6929
         }
       ],
       "campaignOutcome": "next"
@@ -87,14 +87,14 @@
       "course": "ultimate",
       "players": 1,
       "untimed": true,
-      "ticks": 7670,
+      "ticks": 6864,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 63.916666666666664,
+          "seconds": 57.2,
           "falls": 0,
-          "clock": 209,
-          "score": 6496
+          "clock": 218,
+          "score": 7986
         }
       ],
       "campaignOutcome": "complete"
@@ -171,21 +171,21 @@
       "course": "beginner",
       "players": 2,
       "untimed": true,
-      "ticks": 8256,
+      "ticks": 7939,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 66.23333333333333,
+          "seconds": 66.15833333333333,
           "falls": 0,
           "clock": 75,
-          "score": 1302
+          "score": 1284
         },
         {
           "status": "finished",
-          "seconds": 68.8,
+          "seconds": 64.51666666666667,
           "falls": 0,
           "clock": 75,
-          "score": 1303
+          "score": 1305
         }
       ],
       "campaignOutcome": "next"
@@ -194,21 +194,21 @@
       "course": "intermediate",
       "players": 2,
       "untimed": true,
-      "ticks": 6308,
+      "ticks": 5809,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 51.016666666666666,
+          "seconds": 46.858333333333334,
           "falls": 0,
           "clock": 120,
-          "score": 2103
+          "score": 2085
         },
         {
           "status": "finished",
-          "seconds": 52.56666666666667,
+          "seconds": 48.40833333333333,
           "falls": 0,
           "clock": 120,
-          "score": 2104
+          "score": 2106
         }
       ],
       "campaignOutcome": "next"
@@ -217,21 +217,21 @@
       "course": "aerial",
       "players": 2,
       "untimed": true,
-      "ticks": 7559,
+      "ticks": 7402,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 59.55,
+          "seconds": 56.24166666666667,
           "falls": 0,
           "clock": 150,
-          "score": 3046
+          "score": 3029
         },
         {
           "status": "finished",
-          "seconds": 62.99166666666667,
+          "seconds": 61.68333333333333,
           "falls": 0,
           "clock": 150,
-          "score": 3047
+          "score": 3049
         }
       ],
       "campaignOutcome": "next"
@@ -240,21 +240,21 @@
       "course": "silly",
       "players": 2,
       "untimed": true,
-      "ticks": 9839,
+      "ticks": 8057,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 77.50833333333334,
+          "seconds": 67.14166666666667,
           "falls": 0,
           "clock": 184,
-          "score": 5430
+          "score": 5414
         },
         {
           "status": "finished",
-          "seconds": 81.99166666666666,
+          "seconds": 65.14166666666667,
           "falls": 0,
           "clock": 184,
-          "score": 5430
+          "score": 5432
         }
       ],
       "campaignOutcome": "next"
@@ -263,21 +263,21 @@
       "course": "ultimate",
       "players": 2,
       "untimed": true,
-      "ticks": 8247,
+      "ticks": 7442,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 63.916666666666664,
+          "seconds": 62.016666666666666,
           "falls": 0,
           "clock": 209,
-          "score": 6490
+          "score": 6471
         },
         {
           "status": "finished",
-          "seconds": 68.725,
+          "seconds": 57.21666666666667,
           "falls": 0,
           "clock": 209,
-          "score": 6490
+          "score": 6489
         }
       ],
       "campaignOutcome": "complete"
@@ -379,7 +379,7 @@
       "route": "pipe-wave-route",
       "revision": 2,
       "status": "finished",
-      "seconds": 58.975,
+      "seconds": 56.275,
       "falls": 0
     },
     {
@@ -395,7 +395,7 @@
       "route": "right-climbs",
       "revision": 3,
       "status": "finished",
-      "seconds": 81.99166666666666,
+      "seconds": 64.65,
       "falls": 0
     },
     {

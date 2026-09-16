@@ -54,6 +54,22 @@ test("custom demos without authored waypoints steer normally to the finish for b
   }
 });
 
+test("solo demos use their shared route and retain per-player fallback when it is absent", () => {
+  for (const route of [undefined, [], [{ x: 3, y: 0, z: -3 }]]) {
+    const course = {
+      ...blankCourse(),
+      route,
+      playerRoutes: [[{ x: -3, y: 0, z: -3 }]],
+    };
+    const sim = new Simulation(course, { untimed: true });
+    const before = { ...sim.body(sim.players[0]).translation() };
+    const input = new DemoController().input(sim);
+    assert.ok(route?.length ? input.x > 0 : input.x < 0);
+    assert.deepEqual({ ...sim.body(sim.players[0]).translation() }, before);
+    sim.dispose();
+  }
+});
+
 for (const players of [1, 2]) {
   test(`Silly ${players}-player demos collect miniatures through contact and cross bird flights without falls`, () => {
     const sim = new Simulation(sillyCourse(), { players, untimed: true }),
@@ -77,13 +93,18 @@ for (const players of [1, 2]) {
       for (const event of sim.events)
         if (event.type === "collect") collections[event.player]++;
     }
-    assert.deepEqual(collections, Array(players).fill(3));
-    assert.equal(sim.enemies.filter((e) => e.collected).length, 3 * players);
+    const perPlayer = players === 1 ? 6 : 3;
+    assert.deepEqual(collections, Array(players).fill(perPlayer));
+    assert.equal(
+      sim.enemies.filter((e) => e.collected).length,
+      perPlayer * players,
+    );
     for (const p of sim.players) {
       assert.equal(p.status, "finished");
       assert.equal(p.deaths, 0);
-      assert.equal(p.time, 34);
-      assert.ok(p.score >= 1500);
+      assert.equal(p.time, 25 + perPlayer * 3);
+      assert.ok(p.score >= perPlayer * 500);
+      assert.ok(p.finishTick / 120 < (players === 1 ? 80 : 72));
     }
     sim.dispose();
   });
@@ -464,9 +485,9 @@ test("pyramid default thickness and all Practice mesh vertices are finite", () =
 });
 
 for (const players of [1, 2])
-  test(`timed ${players}-player campaign carries the original clock through Aerial without falls`, () => {
+  test(`timed ${players}-player campaign carries the original clock through ${players === 1 ? "Silly" : "Aerial"} without falls`, () => {
     const run = new CampaignRun({ players, untimed: false, campaign: true });
-    for (const course of campaignCourses().slice(0, 4)) {
+    for (const course of campaignCourses().slice(0, players === 1 ? 5 : 4)) {
       const sim = new Simulation(course, run.options);
       const drivers = sim.players.map(() => new DemoController());
       run.prepare(sim);
@@ -489,7 +510,7 @@ for (const players of [1, 2])
       run.complete(sim);
       sim.dispose();
     }
-    assert.equal(run.courseId, "silly");
+    assert.equal(run.courseId, players === 1 ? "ultimate" : "silly");
   });
 
 test("Ultimate demo takes the open ice lane and crosses the timed bridge without falls for both marbles", () => {
