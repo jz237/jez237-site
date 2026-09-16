@@ -4,7 +4,7 @@ import {grazerBody,type BodySphere} from './GrazerCollision.ts';
 
 export type PlantLeaf={mesh:T.InstancedMesh;index:number;matrix:T.Matrix4;root:T.Vector3;motion:T.Vector3;flex:number;rows:number;cols:number;box:T.Box3;length:number;width:number};
 type FernTriangle={triangle:T.Triangle;margin:number;box:T.Box3};
-type CollisionLeaf={rows:number;cols:number;vertices:T.Vector3[];triangles:{triangle:T.Triangle;box:T.Box3}[];time:number};
+type CollisionLeaf={vertices:T.Vector3[];sample:(time:number)=>void;triangles:{triangle:T.Triangle;box:T.Box3}[];time:number};
 type PlantStem={a:T.Vector3;b:T.Vector3;radius:number;root:T.Vector3;flex:number;box:T.Box3;line?:T.Line3;time?:number};
 export type LeafTrail={leaf:PlantLeaf;points:T.Vector2[];length:number};
 const clamp=T.MathUtils.clamp;
@@ -42,13 +42,33 @@ export function leafContact(leaf:PlantLeaf,u:number,v:number,time:number,p:T.Vec
  n.copy(vb).sub(va).cross(edge.copy(vc).sub(va)).normalize();
 }
 
+/** Compile the same barycentric contacts once. Adjacent samples share source
+ * vertices, so bend each source vertex only once per update; collision geometry
+ * and its interpolation order are unchanged. No normals are needed here. */
+export function leafCollisionSampler(leaf:PlantLeaf,rows:number,cols:number,vertices:T.Vector3[]){
+ const sources=new Map<number,T.Vector3>(),bindings:{a:T.Vector3;b:T.Vector3;c:T.Vector3;wa:number;wb:number;wc:number;p:T.Vector3}[]=[];
+ const zero=new T.Vector3();
+ const source=(id:number,weight:number)=>{if(weight===0)return zero;let p=sources.get(id);if(!p){p=new T.Vector3();sources.set(id,p);}return p;};
+ for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++){
+  const u=clamp(x/cols,0,.999999)*leaf.cols,v=clamp(y/rows,0,.999999)*leaf.rows,col=Math.floor(u),row=Math.floor(v),a=u-col,b=v-row,k=row*(leaf.cols+1)+col;
+  const ids=a+b<=1?[k,k+1,k+leaf.cols+1]:[k+leaf.cols+2,k+leaf.cols+1,k+1];
+  const weights=a+b<=1?[1-a-b,a,b]:[a+b-1,1-a,1-b];
+  bindings.push({a:source(ids[0],weights[0]),b:source(ids[1],weights[1]),c:source(ids[2],weights[2]),wa:weights[0],wb:weights[1],wc:weights[2],p:vertices[y*(cols+1)+x]});
+ }
+ return (time:number)=>{
+  const attr=leaf.mesh.geometry.getAttribute('position');
+  for(const [id,p] of sources)deformPlantPoint(p.fromBufferAttribute(attr,id),leaf,time);
+  for(const b of bindings)b.p.copy(b.a).multiplyScalar(b.wa).addScaledVector(b.b,b.wb).addScaledVector(b.c,b.wc);
+ };
+}
+
 /** A spatial broad phase avoids raycasting all 30,000 blades during animation. */
 export class GrazerPlants{
  readonly leaves:PlantLeaf[]=[];private cells=new Map<string,PlantLeaf[]>();private stems=new Map<string,PlantStem[]>();private ferns=new Map<string,FernTriangle[]>();private shrimpTrails=new Map<PlantLeaf,LeafTrail|null>();private snailTrails=new Map<PlantLeaf,LeafTrail|null>();
  private leafCandidates=new CollisionCandidates(this.cells);private stemCandidates=new CollisionCandidates(this.stems);private fernCandidates=new CollisionCandidates(this.ferns);
  private leafCollisionCache=new Map<PlantLeaf,CollisionLeaf>();
  private envelopeCollisionCache=new Map<PlantLeaf,CollisionLeaf>();
- private normal=new T.Vector3();private closest=new T.Vector3();
+ private closest=new T.Vector3();
  private solidCheck?:(p:T.Vector3,n:T.Vector3,f:T.Vector3,snail:boolean)=>boolean;
  constructor(scene:T.Scene,solidCheck?:(p:T.Vector3,n:T.Vector3,f:T.Vector3,snail:boolean)=>boolean){
   this.solidCheck=solidCheck;
@@ -111,13 +131,13 @@ export class GrazerPlants{
     const rows=leaf.length>.4?10:2,cols=leaf.width>.15?4:1,vertices:T.Vector3[]=[],triangles:CollisionLeaf['triangles']=[];
     for(let i=0;i<(rows+1)*(cols+1);i++)vertices.push(new T.Vector3());
     for(let y=0;y<rows;y++)for(let x=0;x<cols;x++){const k=y*(cols+1)+x;for(const ids of [[k,k+1,k+cols+1],[k+1,k+cols+2,k+cols+1]]){const triangle=new T.Triangle(vertices[ids[0]],vertices[ids[1]],vertices[ids[2]]);triangles.push({triangle,box:new T.Box3()});}}
-    cached={rows,cols,vertices,triangles,time:NaN};
+    cached={vertices,sample:leafCollisionSampler(leaf,rows,cols,vertices),triangles,time:NaN};
     // Moving contacts reuse vectors and bounds instead of allocating them every frame.
     if(!envelope&&cache.size>=512)cache.delete(cache.keys().next().value!);
     cache.set(leaf,cached);
    }
    if(cached.time!==time){
-    const {rows,cols,vertices}=cached;for(let y=0;y<=rows;y++)for(let x=0;x<=cols;x++)leafContact(leaf,x/cols,y/rows,time,vertices[y*(cols+1)+x],this.normal);
+    cached.sample(time);
     for(const {triangle,box} of cached.triangles)box.makeEmpty().expandByPoint(triangle.a).expandByPoint(triangle.b).expandByPoint(triangle.c);
     cached.time=time;
    }
