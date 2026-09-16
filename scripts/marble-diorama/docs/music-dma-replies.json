@@ -1,0 +1,557 @@
+{
+  "status": "Renderer stall fixed in diagnostic trials; audio release approval remains open.",
+  "upstreamCommit": "c1f894dad9329495aea9f5dbe141e208fb5c017f",
+  "compiler": "Emscripten 3.1.46",
+  "assembler": "vasm 2.0f, m68k/mot, -no-opt -Fbin",
+  "assemblerSource": "http://sun.hasenbraten.de/vasm/release/vasm.tar.gz",
+  "assemblerArchiveSha256": "c84b2de1cbb87831795fe64a85c5d9a7002a766e3a7c30b0a2d7d5e99d878f49",
+  "functionalPatch": "webuade-dma-replies.patch",
+  "patchSha256": "c947a04c2e89eeaff5845125ea0a0d2ee2d4bec53fc6b63cfb7a7804b0d87a11",
+  "patchCheck": "git apply --cached --check passed against untouched upstream index",
+  "baselineScoreSha256": "6b262d01d304ceb711e535825e610690d8a33138679c29e0ed505e5359d002c8",
+  "patchedScoreSha256": "97dfa2455e234904241c6b983a81e7a74f25f37fbe200a4e878d2d371b59c459",
+  "originalModuleHashesUnchanged": true,
+  "baselineFailure": {
+    "cue": "Intermedia/1/PAL",
+    "persistentQueueMismatchObservedSeconds": 37.871746031746035,
+    "writesAt38Seconds": 848,
+    "writesAt75Seconds": 848,
+    "musicTaskWaitMask": "0x40000000",
+    "musicTaskReceivedMask": "0x80000000"
+  },
+  "correctedSoak": {
+    "seconds": 300.00181405895694,
+    "writes": {
+      "35": 760,
+      "38": 848,
+      "40": 898,
+      "60": 1578,
+      "120": 3210,
+      "180": 5014,
+      "240": 6854,
+      "300": 8736
+    },
+    "unresolvedQueueMismatches": 0,
+    "transientMismatches": 4,
+    "maximumTransientMismatchSeconds": 0.023219954648538987,
+    "logSha256": "b17c1fc9b2ad5cfbdf5580daacf0f469f5108581ac2d6eb32697e15c3af87ad3"
+  },
+  "instrumentationCheck": {
+    "frames": 5292032,
+    "sampleRate": 44100,
+    "bitExact": true,
+    "instrumentedWavSha256": "f922df5be860f0810987f76f0e4b4dec61465be36fdaa6463a9671bf6f063034",
+    "uninstrumentedWavSha256": "f922df5be860f0810987f76f0e4b4dec61465be36fdaa6463a9671bf6f063034"
+  },
+  "referenceComparisonMethod": "96 normalized log spectral bands; 8-second windows; unrestricted match in Nfa2etJ84_8. Repetitions and sound effects can produce ambiguous assignments.",
+  "candidateComparisons": [
+    {
+      "file": "Aerial-1-pal-host-replies.wav",
+      "matches": [
+        {
+          "cueStart": 1,
+          "referenceStart": 138.813,
+          "similarity": 0.4791
+        },
+        {
+          "cueStart": 8,
+          "referenceStart": 212.613,
+          "similarity": 0.5077
+        },
+        {
+          "cueStart": 16,
+          "referenceStart": 179.493,
+          "similarity": 0.5102
+        },
+        {
+          "cueStart": 30,
+          "referenceStart": 181.373,
+          "similarity": 0.5685
+        },
+        {
+          "cueStart": 38,
+          "referenceStart": 180.373,
+          "similarity": 0.5731
+        },
+        {
+          "cueStart": 45,
+          "referenceStart": 182.933,
+          "similarity": 0.5595
+        },
+        {
+          "cueStart": 60,
+          "referenceStart": 180.333,
+          "similarity": 0.547
+        },
+        {
+          "cueStart": 90,
+          "referenceStart": 182.933,
+          "similarity": 0.56
+        },
+        {
+          "cueStart": 120,
+          "referenceStart": 181.373,
+          "similarity": 0.5678
+        },
+        {
+          "cueStart": 150,
+          "referenceStart": 180.333,
+          "similarity": 0.5469
+        }
+      ]
+    },
+    {
+      "file": "Aerial-2-pal-host-replies.wav",
+      "matches": [
+        {
+          "cueStart": 1,
+          "referenceStart": 178.533,
+          "similarity": 0.8725
+        },
+        {
+          "cueStart": 8,
+          "referenceStart": 178.533,
+          "similarity": 0.8729
+        },
+        {
+          "cueStart": 16,
+          "referenceStart": 179.533,
+          "similarity": 0.9506
+        },
+        {
+          "cueStart": 30,
+          "referenceStart": 178.533,
+          "similarity": 0.8731
+        },
+        {
+          "cueStart": 38,
+          "referenceStart": 179.533,
+          "similarity": 0.8915
+        },
+        {
+          "cueStart": 45,
+          "referenceStart": 182.533,
+          "similarity": 0.9499
+        },
+        {
+          "cueStart": 60,
+          "referenceStart": 178.533,
+          "similarity": 0.8725
+        },
+        {
+          "cueStart": 90,
+          "referenceStart": 179.533,
+          "similarity": 0.891
+        },
+        {
+          "cueStart": 120,
+          "referenceStart": 179.533,
+          "similarity": 0.9507
+        },
+        {
+          "cueStart": 150,
+          "referenceStart": 183.533,
+          "similarity": 0.9493
+        }
+      ]
+    },
+    {
+      "file": "Beginner-1-pal-host-replies.wav",
+      "matches": [
+        {
+          "cueStart": 1,
+          "referenceStart": 65.853,
+          "similarity": 0.8887
+        },
+        {
+          "cueStart": 8,
+          "referenceStart": 65.173,
+          "similarity": 0.8866
+        },
+        {
+          "cueStart": 16,
+          "referenceStart": 50.133,
+          "similarity": 0.9148
+        },
+        {
+          "cueStart": 30,
+          "referenceStart": 64.133,
+          "similarity": 0.9278
+        },
+        {
+          "cueStart": 38,
+          "referenceStart": 64.453,
+          "similarity": 0.9006
+        },
+        {
+          "cueStart": 45,
+          "referenceStart": 48.413,
+          "similarity": 0.9189
+        },
+        {
+          "cueStart": 60,
+          "referenceStart": 55.773,
+          "similarity": 0.6553
+        },
+        {
+          "cueStart": 90,
+          "referenceStart": 55.013,
+          "similarity": 0.7671
+        },
+        {
+          "cueStart": 120,
+          "referenceStart": 54.293,
+          "similarity": 0.7653
+        },
+        {
+          "cueStart": 150,
+          "referenceStart": 45.893,
+          "similarity": 0.8669
+        }
+      ]
+    },
+    {
+      "file": "Intermedia-1-pal-host-replies.wav",
+      "matches": [
+        {
+          "cueStart": 1,
+          "referenceStart": 88.773,
+          "similarity": 0.7902
+        },
+        {
+          "cueStart": 8,
+          "referenceStart": 95.773,
+          "similarity": 0.7584
+        },
+        {
+          "cueStart": 16,
+          "referenceStart": 103.813,
+          "similarity": 0.9205
+        },
+        {
+          "cueStart": 30,
+          "referenceStart": 117.813,
+          "similarity": 0.9442
+        },
+        {
+          "cueStart": 38,
+          "referenceStart": 125.813,
+          "similarity": 0.8794
+        },
+        {
+          "cueStart": 45,
+          "referenceStart": 126.093,
+          "similarity": 0.5883
+        },
+        {
+          "cueStart": 60,
+          "referenceStart": 116.933,
+          "similarity": 0.6396
+        },
+        {
+          "cueStart": 90,
+          "referenceStart": 102.173,
+          "similarity": 0.9003
+        }
+      ]
+    },
+    {
+      "file": "Practice-1-pal-host-replies.wav",
+      "matches": [
+        {
+          "cueStart": 1,
+          "referenceStart": 13.373,
+          "similarity": 0.8728
+        },
+        {
+          "cueStart": 8,
+          "referenceStart": 20.373,
+          "similarity": 0.7903
+        },
+        {
+          "cueStart": 16,
+          "referenceStart": 14.253,
+          "similarity": 0.791
+        },
+        {
+          "cueStart": 30,
+          "referenceStart": 21.173,
+          "similarity": 0.7168
+        },
+        {
+          "cueStart": 38,
+          "referenceStart": 15.053,
+          "similarity": 0.837
+        },
+        {
+          "cueStart": 45,
+          "referenceStart": 20.653,
+          "similarity": 0.7459
+        },
+        {
+          "cueStart": 60,
+          "referenceStart": 20.133,
+          "similarity": 0.75
+        },
+        {
+          "cueStart": 90,
+          "referenceStart": 14.813,
+          "similarity": 0.802
+        },
+        {
+          "cueStart": 120,
+          "referenceStart": 13.773,
+          "similarity": 0.8193
+        },
+        {
+          "cueStart": 150,
+          "referenceStart": 14.133,
+          "similarity": 0.7655
+        }
+      ]
+    },
+    {
+      "file": "Silly-1-pal-host-replies.wav",
+      "matches": [
+        {
+          "cueStart": 1,
+          "referenceStart": 201.773,
+          "similarity": 0.9361
+        },
+        {
+          "cueStart": 8,
+          "referenceStart": 208.773,
+          "similarity": 0.8301
+        },
+        {
+          "cueStart": 16,
+          "referenceStart": 216.773,
+          "similarity": 0.7839
+        },
+        {
+          "cueStart": 30,
+          "referenceStart": 183.773,
+          "similarity": 0.6044
+        },
+        {
+          "cueStart": 38,
+          "referenceStart": 214.173,
+          "similarity": 0.546
+        },
+        {
+          "cueStart": 45,
+          "referenceStart": 179.053,
+          "similarity": 0.516
+        },
+        {
+          "cueStart": 60,
+          "referenceStart": 201.573,
+          "similarity": 0.6354
+        },
+        {
+          "cueStart": 90,
+          "referenceStart": 212.053,
+          "similarity": 0.5084
+        },
+        {
+          "cueStart": 120,
+          "referenceStart": 183.093,
+          "similarity": 0.5403
+        },
+        {
+          "cueStart": 150,
+          "referenceStart": 108.133,
+          "similarity": 0.5035
+        }
+      ]
+    },
+    {
+      "file": "Ultimate-1-pal-host-replies.wav",
+      "matches": [
+        {
+          "cueStart": 1,
+          "referenceStart": 269.933,
+          "similarity": 0.9093
+        },
+        {
+          "cueStart": 8,
+          "referenceStart": 279.493,
+          "similarity": 0.7378
+        },
+        {
+          "cueStart": 16,
+          "referenceStart": 284.933,
+          "similarity": 0.8418
+        },
+        {
+          "cueStart": 30,
+          "referenceStart": 298.933,
+          "similarity": 0.9276
+        },
+        {
+          "cueStart": 38,
+          "referenceStart": 349.533,
+          "similarity": 0.8353
+        },
+        {
+          "cueStart": 45,
+          "referenceStart": 313.933,
+          "similarity": 0.7168
+        },
+        {
+          "cueStart": 60,
+          "referenceStart": 328.933,
+          "similarity": 0.903
+        },
+        {
+          "cueStart": 90,
+          "referenceStart": 278.853,
+          "similarity": 0.7634
+        },
+        {
+          "cueStart": 120,
+          "referenceStart": 346.333,
+          "similarity": 0.8868
+        },
+        {
+          "cueStart": 150,
+          "referenceStart": 333.733,
+          "similarity": 0.9003
+        }
+      ]
+    },
+    {
+      "file": "Ultimate-2-pal-host-replies.wav",
+      "matches": [
+        {
+          "cueStart": 1,
+          "referenceStart": 354.693,
+          "similarity": 0.9564
+        },
+        {
+          "cueStart": 8,
+          "referenceStart": 354.893,
+          "similarity": 0.8239
+        },
+        {
+          "cueStart": 16,
+          "referenceStart": 352.693,
+          "similarity": 0.7634
+        },
+        {
+          "cueStart": 30,
+          "referenceStart": 353.053,
+          "similarity": 0.8143
+        },
+        {
+          "cueStart": 38,
+          "referenceStart": 354.213,
+          "similarity": 0.8046
+        },
+        {
+          "cueStart": 45,
+          "referenceStart": 354.413,
+          "similarity": 0.827
+        },
+        {
+          "cueStart": 60,
+          "referenceStart": 355.773,
+          "similarity": 0.8468
+        },
+        {
+          "cueStart": 90,
+          "referenceStart": 355.093,
+          "similarity": 0.8285
+        },
+        {
+          "cueStart": 120,
+          "referenceStart": 354.413,
+          "similarity": 0.7943
+        },
+        {
+          "cueStart": 150,
+          "referenceStart": 353.733,
+          "similarity": 0.7993
+        }
+      ]
+    }
+  ],
+  "remaining": [
+    "Aerial first cue assignment/voices",
+    "Silly later phrases",
+    "All-cue listening",
+    "Sample-accurate loops and transitions",
+    "In-game audio acceptance"
+  ],
+  "rejectedExperiments": [
+    "Reordering duplicate detection did not remove the 37.87-second stall.",
+    "Forbid/Permit around reply delivery only moved the stall to about 55 seconds.",
+    "Forbid/Permit around BeginIO caused an invalid-PC failure around 45 seconds."
+  ],
+  "candidateRenders": [
+    {
+      "cue": "Practice",
+      "subsong": 1,
+      "seconds": 180.00108843537416,
+      "writesAt60": 714,
+      "writesAtEnd": 2160,
+      "wavSha256": "9f6c7ddbbf9adca47d284013a383f023442fdb28912b7464378ebdac7496a880"
+    },
+    {
+      "cue": "Beginner",
+      "subsong": 1,
+      "seconds": 180.00108843537416,
+      "writesAt60": 1084,
+      "writesAtEnd": 3186,
+      "wavSha256": "b5e4e28b928087494a675a24f4146e177f3d1518b4525aa608c8f6b129b46735"
+    },
+    {
+      "cue": "Intermedia",
+      "subsong": 1,
+      "seconds": 120.00072562358277,
+      "writesAt60": 1578,
+      "writesAtEnd": 3210,
+      "wavSha256": "f922df5be860f0810987f76f0e4b4dec61465be36fdaa6463a9671bf6f063034"
+    },
+    {
+      "cue": "Aerial",
+      "subsong": 1,
+      "seconds": 180.00108843537416,
+      "writesAt60": 330,
+      "writesAtEnd": 918,
+      "wavSha256": "0929ee94df12d1a423e99ea4eb756421fb05a307d5d470036872926b9ed42f05"
+    },
+    {
+      "cue": "Aerial",
+      "subsong": 2,
+      "seconds": 180.00108843537416,
+      "writesAt60": 1448,
+      "writesAtEnd": 4349,
+      "wavSha256": "aadc18f6dd770b4e59202cfbfff24169c1618361c60c5db52e0f0fa33882985b"
+    },
+    {
+      "cue": "Silly",
+      "subsong": 1,
+      "seconds": 180.00108843537416,
+      "writesAt60": 1054,
+      "writesAtEnd": 3201,
+      "wavSha256": "a3c92ecc083967a6797eed825fe6952cf8bbaf483de00ef68290e707fa645577"
+    },
+    {
+      "cue": "Ultimate",
+      "subsong": 1,
+      "seconds": 180.00108843537416,
+      "writesAt60": 1128,
+      "writesAtEnd": 3914,
+      "wavSha256": "d2d63193ce93da9f9fa9ebfdc0ded0c26a63167424629c03ce932dfc7c6af4b6"
+    },
+    {
+      "cue": "Ultimate",
+      "subsong": 2,
+      "seconds": 180.00108843537416,
+      "writesAt60": 1977,
+      "writesAtEnd": 6013,
+      "wavSha256": "10fa60e1a748f4fb45c879e55325653af789f2199668847c0e4fc084e8118295"
+    }
+  ]
+}

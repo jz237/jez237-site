@@ -82,10 +82,8 @@ The counters in `music-renderer-diagnostics.json` narrow the outstanding issues:
 - Neither run invokes the unsupported multi-channel volume-command or
   synchronous-cycle-write cases. Those cases do not explain these candidates.
 
-Next audio investigation: inspect the Amiga sequencer/task state at Intermediate's
-37–38-second transition and establish Aerial's two sequence assignments against
-game playback. No driver behavior patch or audio asset was added to the game.
-Scratch compiler, renderer, traces and candidate WAVs stay outside the site.
+The subsequent investigation below addresses Intermediate's stalled sequencer.
+Scratch compilers, renderer binaries, traces and candidate WAVs stay outside the site.
 
 The SOAMC Aerial T001 archive recording was also rejected: spectral comparisons
 match the module's default sub-tune 0 (roughly 0.90–0.93 similarity), while the
@@ -94,6 +92,62 @@ the correct music selection. The [WHDLoad maintainer's notes](https://www.whdloa
 also report that some original sound-effect samples contain background music;
 this is another reason to check instrument identity and transitions rather than
 approve an entire cue from isolated spectral matches.
+
+## September 16 — DMA reply queue correction
+
+The Intermediate cutoff was a renderer failure. At 37.872 seconds, the sound
+task's message list acquired an invalid tail pointer. The music task later waited
+for signal `0x40000000` while receiving only its `0x80000000` tick signal. Its note
+writes stayed at 848 through 75 seconds. The emulator continued producing PCM,
+so successful WAV export alone had concealed the failure.
+
+The host DMA callback used the Amiga IO request's own linked-list fields for a
+deferred reply chain. These fields also belong to the emulated task's message
+port. `webuade-dma-replies.patch` separates the host completion queue from those
+fields. The score program polls and delivers one completed request at a time;
+reset frees pending host entries. Instrument samples, sequence data, periods and
+the existing PAL timer correction are unchanged. All six original module hashes
+still match `music-provenance.json`.
+
+Evidence is recorded in `music-dma-replies.json`:
+
+- Intermediate reaches 898 writes at 40 seconds, 3,210 at 120 seconds and 8,736
+  at 300 seconds. No persistent message-list inconsistency remains in that run.
+  Four snapshots caught a list operation mid-update; each recovered in the next
+  1,024-frame observation (about 23 ms).
+- The previously missing candidate passage at 38 seconds matches reference
+  125.813 seconds with spectral similarity 0.8794. Earlier matches remain at
+  the same offsets: 16 → 103.813 and 30 → 117.813 seconds.
+- All eight course/ending candidates render for two or three minutes with note
+  writes continuing. This is a stall check, not all-cue approval.
+- The clean patch and instrumented renderer produce **bit-identical output for
+  all 5,292,032 stereo frames** of the two-minute Intermediate render.
+- A duplicate-link check did not solve the fault. Forbidding task switches only
+  moved the stall; extending that approach around BeginIO caused a crash. Those
+  changes are absent from the saved patch.
+
+### Rebuilding the corrected renderer
+
+Apply the patch to WebUADE+ commit
+`c1f894dad9329495aea9f5dbe141e208fb5c017f`, then rebuild **both** its Amiga score and
+host renderer. The new score and host share message command 53 and must be used
+together. `git apply --cached --check` passes against the untouched upstream index.
+From `amigasrc/score`, the tested assembler command is:
+
+```text
+vasmm68k_mot -no-opt -o score -Fbin score.s
+```
+
+Copy that score into `emscripten/htdocs/uade/system/score`. The existing modernized
+Emscripten build described above uses compiler 3.1.46; score assembly uses
+[vasm 2.0f](http://sun.hasenbraten.de/vasm/). Source archive, baseline/patched score,
+patch and candidate WAV hashes are recorded in the report. The patch contains
+changes to the publicly available emulator, not game program or music data.
+
+**Audio remains disabled in the game.** Aerial 1 still has weak reference matches,
+and later Silly phrases also need investigation. Assignment/voice verification,
+all-cue listening, sample-accurate loops and transitions, and in-game acceptance
+remain required. Continuous note generation is not proof of faithful sound.
 
 ## Gameplay reference observations
 
