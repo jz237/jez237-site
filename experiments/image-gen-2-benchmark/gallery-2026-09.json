@@ -25,6 +25,31 @@
     }
   },
   {
+    "id": "2026-09-16-random-image-style-hand-built-stained-glass-greenhouse-heat",
+    "title": "Hand-Built Stained Glass: Greenhouse Heat-Leak Survey",
+    "tests": "Wednesday image 3/3. Distinct from today's mezzotint museum conservation scene and fluorescent risograph civic rehearsal: tall greenhouse section, transmitted jewel light, architectural glass craft, and an invisible heat-flow diagnosis. Reusable operation: invisible building behavior becomes legible through glass density, lead topology, color transmission, and integrated magnified observations inside one occupied place.; archive_slot=2026-09-16T17:20; concept=stained-glass-greenhouse-roof-vent-heat-leak",
+    "prompt": "Create a finished, high-detail portrait illustration that is physically and materially unmistakable as a monumental hand-built stained-glass artwork, while depicting a coherent occupied greenhouse rather than a decorative church window, poster, or technical chart. Show an old hilltop greenhouse before dawn during a winter heat-leak survey, seen in a tall sectional perspective through three connected glasshouse bays. One bundled older glazier moves among dwarf citrus trees, patched panes, cast-iron steam coils, a turning frost fan, condensation, and a loosened roof vent. The architecture remains believable: stone sill, iron ribs, narrow service walkway, potting bench, pipe valves, gutters, roof braces, and snow pressing against the exterior base. Make invisible heat movement legible only through the physical grammar of stained glass: dense ruby, vermilion, and amber ribbons of textured glass rise from the steam coils, curl through leaves, thin as they pass the middle bay, and surge toward the faulty roof vent; jagged cobalt and indigo fields press inward around cold frame edges; beads of pale glass condensation descend toward a clogged channel. Integrate three circular leaded-glass medallions naturally into the lower stone sill, not as labeled infographic panels: the left medallion magnifies a hairline crack crossing a seeded pane, the center shows a compressed gasket pulling away from the iron frame, and the right shows condensate overflowing a corroded channel. Connect each medallion to its real location through elegant branching lead cames that behave like structural veins, without arrows or text. The glazier should be actively comparing the roof seam with a small smoked-glass inspection disk while a leather tool roll, glazing knife, replacement pane, putty cord, and hand lamp rest nearby. Use believable transmitted light: the cold predawn sky illuminates cobalt exterior glass, practical amber coil light glows through warm panes, and jewel-colored projections fall across the dark stone sill and the glazier's coat. Render rich traditional fabrication: mouth-blown ripples, seeded bubbles, flashed color, hand-painted trace lines, silver stain, enamel stippling, solder beads, oxidized lead cames, slightly bowed panes, hairline cracks, putty residue, replacement panes with subtly different texture, tiny abrasion marks, and uneven hand-cut edges. Preserve open areas of pale glass so the convection path remains lucid across a densely crafted composition. Palette: ruby, amber, smoky citron, cobalt, indigo, moss green, oxidized lead gray, and pale frosted glass. No readable temperature figures, words, numbers, arrows, legend, poster layout, thermal-camera screenshot, church iconography, saints, rose-window symmetry, smooth vector gradients, photoreal greenhouse photography, glossy CGI, logo, signature, border, or watermark.",
+    "image": "images/2026-09-16-random-image-style-hand-built-stained-glass-greenhouse-heat.jpg",
+    "thumb": "thumbs/2026-09-16-random-image-style-hand-built-stained-glass-greenhouse-heat.webp",
+    "color": "#5f5149",
+    "date": "2026-09-16",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "stained-glass-greenhouse-roof-vent-heat-leak",
+      "imageSha256": "a3809221ba28d1dd021d9188d35dd4d082bd6d37b78dd335b982b6d602b06cc5",
+      "imageDHash": "130b495879496de8",
+      "styleFamily": "stained-glass"
+    },
+    "randomRenderingStyle": {
+      "medium": "hand-built stained glass with lead cames and silver stain",
+      "description": "A winter greenhouse survey expressed through a coherent stained-glass interior, where jewel-colored convection, structural leadwork, and magnified craft details reveal one faulty roof vent.",
+      "template": ""
+    }
+  },
+  {
     "id": "2026-09-16-random-image-style-fluorescent-risograph-storm-drain-rehear",
     "title": "Fluorescent Risograph: Storm-Drain Rehearsal Map",
     "tests": "Wednesday image 2/3. Distinct from today's mezzotint conservation reconstruction: civic systems rehearsal, broad axonometric zigzag, fluorescent two-ink overprint, moving crew and water-flow choreography. Reusable operation: one public system is tested through sequential ghost actions and overprinted contingency routes inside one continuous place.; archive_slot=2026-09-16T09:20; concept=storm-drain-flood-rehearsal-streetscape",
