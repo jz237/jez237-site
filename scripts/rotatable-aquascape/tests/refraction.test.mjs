@@ -75,3 +75,16 @@ test('frame material reuse restores visibility after a failed mirror copy and ca
  f.pass.beginFrame();f.renderer.render(f.scene,f.camera);f.pass.endFrame();
  assert.equal(f.copies.length,1);f.pass.dispose();
 });
+
+test('a glass-free close-up skips refraction copies and the second scene pass, then restores tank refraction',()=>{
+ const f=fixture(),glassObject=f.scene.children[1],background=f.scene.background;
+ const housing=new T.Group();f.scene.add(housing);housing.add(glassObject);housing.visible=false;
+ f.pass.beginFrame();f.renderer.render(f.scene,f.camera);f.renderer.render(f.scene,new T.PerspectiveCamera());f.pass.endFrame();
+ assert.equal(f.draws.length,2);assert.equal(f.copies.length,0);assert.equal(f.pass.copies.size,0);
+ assert.ok(f.draws.every(d=>d.clear&&d.background===background));assert.deepEqual(f.materials.map(m=>m.visible),[true,true,true,false]);
+ housing.visible=true;f.pass.beginFrame();f.renderer.render(f.scene,f.camera);f.pass.endFrame();
+ assert.equal(f.draws.length,4);assert.equal(f.copies.length,1);
+ f.materials[1].visible=false;f.pass.beginFrame();f.renderer.render(f.scene,f.camera);f.pass.endFrame();
+ assert.equal(f.draws.length,5);assert.equal(f.copies.length,1);assert.equal(f.materials[1].visible,false);
+ f.materials[1].visible=true;f.renderer.render(f.scene,f.camera);assert.equal(f.draws.length,7);assert.equal(f.copies.length,2);f.pass.dispose();
+});

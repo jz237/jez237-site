@@ -85,3 +85,22 @@ test('root leaf animation shares time and bend parameters with veins, pauses, an
  for(const [mesh,before] of fixed)assert.deepEqual(mesh.geometry.getAttribute('position').array,before);
  teach.set(null);
 });
+
+test('root lesson steps retain detailed GPU resources and only replace their transport annotations',()=>{
+ const scene=new T.Scene(),tank=new T.Mesh(new T.BoxGeometry(),new T.MeshStandardMaterial()),light=new T.DirectionalLight();scene.add(tank,light);
+ const host={...element(),clientWidth:900,clientHeight:700},teach=new TeachingScene(scene,host,[],[],new T.Texture()),camera=new T.PerspectiveCamera();
+ teach.set('underground');
+ const specimen=teach.content.children.find(o=>o.userData.reference),labels=[...host.children[0].children];
+ assert.ok(specimen);const resources=new Set();specimen.traverse(o=>{if(o.geometry)resources.add(o.geometry);for(const t of o.userData.ownedTextures??[])resources.add(t);});
+ let releases=0;for(const r of resources)r.addEventListener('dispose',()=>releases++);
+ for(const step of [1,2,2,0,2,1]){
+  teach.update(.05,camera);const time=teach.rootTime.value;teach.set('underground',step);
+  assert.equal(teach.content.children.find(o=>o.userData.reference),specimen);assert.equal(teach.rootTime.value,time);assert.equal(releases,0);
+  assert.deepEqual(host.children[0].children,labels);assert.equal(tank.visible,false);assert.equal(light.visible,false);
+  assert.equal(teach.paths.length,step===2?2:0);assert.equal(teach.rootAnnotations.children.length,step===2?4:0);
+ }
+ teach.set('underground',2);const arrows=teach.paths[0].arrows;let arrowReleases=0;arrows.geometry.addEventListener('dispose',()=>arrowReleases++);
+ teach.update(.1,camera);const phase=teach.paths[0].phase;teach.set('underground',2);assert.equal(teach.paths[0].phase,phase);
+ teach.set(null);assert.equal(arrowReleases,1);assert.equal(releases,resources.size);assert.equal(tank.visible,true);assert.equal(light.visible,true);assert.equal(teach.rootAnnotations.children.length,0);
+ teach.set('underground');assert.notEqual(teach.content.children.find(o=>o.userData.reference),specimen);assert.equal(releases,resources.size);assert.equal(arrowReleases,1);teach.set(null);
+});
