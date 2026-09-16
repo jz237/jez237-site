@@ -1,3 +1,4 @@
+import {loadTexture} from './asset-texture.js';
 import {waterLevel} from './simulation.js';
 export const coastalLighting={time:{value:0},storm:{value:0},seaLevel:waterLevel};
 import * as T from './vendor/three.module.js';
@@ -6,14 +7,13 @@ const dryAtlas=new T.DataTexture(new Uint8Array([0,0,0,0]),1,1);dryAtlas.needsUp
 export const shoreline={shoreMap:{value:dryAtlas},shoreCenter:{value:new T.Vector2()},shoreSpan:{value:240}};
 
 // Local CC0 photographic surfaces; all instances share the same GPU textures.
-const loader=new T.TextureLoader();
 const names={sand:'coast_sand_02',rock:'coast_sand_rocks_02',soil:'forrest_ground_01',bark:'bark_brown_02'};
 export const landMaps={};
-const cliffPromise=loader.loadAsync(new URL('./assets/terrain/coastal-granite-v1.webp',import.meta.url).href).catch(()=>null);
+const cliffPromise=loadTexture('assets/terrain/coastal-granite-v1.webp').catch(()=>null);
 await Promise.all(Object.entries(names).map(async([kind,name])=>{
  const maps={};landMaps[kind]=maps;
  await Promise.all(['diff','nor_gl','rough'].map(async channel=>{
-  let texture;try{texture=await loader.loadAsync(new URL(`./assets/terrain/${name}_${channel}.jpg`,import.meta.url).href);}catch{
+  let texture;try{texture=await loadTexture(`assets/terrain/${name}_${channel}.jpg`);}catch{
    const pixel=channel==='nor_gl'?[128,128,255,255]:channel==='rough'?[220,220,220,255]:[176,166,143,255];
    texture=new T.DataTexture(new Uint8Array(pixel),1,1);texture.needsUpdate=true;
    console.warn('Terrain texture unavailable; using built-in fallback:',kind,channel);

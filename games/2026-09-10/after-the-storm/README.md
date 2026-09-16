@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.13.0 · TIDELINE** — September 16, 2026. Lossless model compression, parallel asset loading, faster starts/restarts, and fewer replay/HUD allocations. Water, physics, scenery detail and texture resolution are preserved. See [PERFORMANCE-2.13.md](PERFORMANCE-2.13.md) for measurements and verification.
+**v2.14.0 · TIDELINE** — September 16, 2026. Exact-asset browser caching and background terrain preparation for desktop and phones. All graphics settings, water effects, mesh and texture detail, and physics are preserved. See [PERFORMANCE-2.14.md](PERFORMANCE-2.14.md) for measurements and verification; previous lossless loading changes are in [PERFORMANCE-2.13.md](PERFORMANCE-2.13.md).
 
 The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
 

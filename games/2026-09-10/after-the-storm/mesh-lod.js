@@ -1,3 +1,4 @@
+import {assetURL,fetchAsset} from './asset-store.js';
 import {loadBinary} from './asset-binary.js';
 import * as T from './vendor/three.module.js';
 import {craftUV} from './craft-materials.js';
@@ -5,7 +6,7 @@ const cache=new Map();let lodRevision=0;
 export function loadCraftLOD(name){
  if(!cache.has(name))cache.set(name,(async()=>{
   try{
-   const [a,buffer]=await Promise.all([fetch(new URL(`./assets/${name}-lod.json`,import.meta.url)),loadBinary(`assets/${name}-lod.bin`)]);
+   const [a,buffer]=await Promise.all([fetchAsset(assetURL(`assets/${name}-lod.json`)),loadBinary(`assets/${name}-lod.bin`)]);
    if(!a.ok)return null;
    const meta=await a.json();
    return meta.meshes.map(part=>{

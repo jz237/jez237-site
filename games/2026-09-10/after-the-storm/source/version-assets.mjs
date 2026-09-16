@@ -1,6 +1,8 @@
+import {prepareLoading} from './prepare-loading.mjs';
 import {readFileSync,writeFileSync,readdirSync,existsSync} from 'node:fs';
 import {createHash} from 'node:crypto';import {fileURLToPath} from 'node:url';import {join,posix} from 'node:path';
 const packageRoot=fileURLToPath(new URL('../',import.meta.url)),root=existsSync(join(packageRoot,'dist'))?join(packageRoot,'dist'):packageRoot,hash=name=>createHash('sha256').update(readFileSync(join(root,name),'utf8').replaceAll('\r\n','\n')).digest('hex').slice(0,12);
+prepareLoading(root);
 const modules=readdirSync(root).filter(n=>n.endsWith('.js')).sort(),imports=Object.fromEntries(modules.map(n=>['./'+n,'./'+n+'?v='+hash(n)]));
 // Start the entry's entire static module graph from the HTML parser. This
 // removes the request-per-import-depth waterfall without fetching salvage-only

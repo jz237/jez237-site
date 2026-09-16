@@ -1,3 +1,4 @@
+import {assetURL,fetchAsset} from './asset-store.js';
 import {loadBinary} from './asset-binary.js';
 import {loadCraftLOD,craftGeometryLOD} from './mesh-lod.js';
 import * as T from './vendor/three.module.js';
@@ -9,7 +10,7 @@ let asset=null;
 const lodPromise=loadCraftLOD('tideline-r01');
 try {
  const [metadataResponse,buffer]=await Promise.all([
-  fetch(new URL('./assets/tideline-r01.json',import.meta.url)),
+  fetchAsset(assetURL('assets/tideline-r01.json')),
   loadBinary('assets/tideline-r01.bin')
  ]);
  if(!metadataResponse.ok)throw new Error('Jet ski asset request failed');
