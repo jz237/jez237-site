@@ -1,12 +1,13 @@
+import {swimForFood,type FeedingPhase} from './TetraFeeding.ts';
 import {createFishBrain,thinkFish,rememberPlant,type FishBrain,type FishSenses} from './FishBrain.ts';
 export const MAX_TETRA_PITCH=.24;
 export const MAX_TETRA_VERTICAL_SPEED=14;
 export type TetraBehavior='cruising'|'burst'|'gliding'|'approaching'|'inspecting'|'foraging';
-export type TetraSwim={x:number;y:number;vx:number;vy:number;yaw:number;pitch:number;speed:number;direction:1|-1;sinceTurn:number;elapsed:number;behavior:TetraBehavior;remaining:number;targetX:number;targetY:number;cruiseSpeed:number;effort:number;pectoralEffort:number;seed:number;wasFeeding:boolean;turnRate:number;depthTarget:number;depthRemaining:number;depthBand:number;brain:FishBrain;z:number;vz:number;targetZ:number;depthHeading:number;depthTimer:number;startleRemaining:number;startleCooldown:number;avoidanceRemaining:number;avoidanceZ:number;strokeRemaining:number;powerStroke:boolean;browsing:boolean;pickRemaining:number;pickIn:number;};
+export type TetraSwim={x:number;y:number;vx:number;vy:number;yaw:number;pitch:number;speed:number;direction:1|-1;sinceTurn:number;elapsed:number;behavior:TetraBehavior;remaining:number;targetX:number;targetY:number;cruiseSpeed:number;effort:number;pectoralEffort:number;seed:number;wasFeeding:boolean;turnRate:number;depthTarget:number;depthRemaining:number;depthBand:number;brain:FishBrain;z:number;vz:number;targetZ:number;depthHeading:number;depthTimer:number;startleRemaining:number;startleCooldown:number;avoidanceRemaining:number;avoidanceZ:number;strokeRemaining:number;powerStroke:boolean;browsing:boolean;pickRemaining:number;pickIn:number;feedingPhase:FeedingPhase;feedingTimer:number;feedingTarget:number|null;feedingBurst:number;};
 const clamp=(n:number,a:number,b:number)=>Math.max(a,Math.min(b,n));
 const ease=(a:number,b:number,rate:number,dt:number)=>a+(b-a)*(1-Math.exp(-dt*rate));
 function random(s:TetraSwim){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
-export function createTetraSwim(seed=237):TetraSwim{return {x:1110,y:330,vx:16,vy:0,yaw:0,pitch:0,speed:16,direction:1,sinceTurn:10,elapsed:0,behavior:'cruising',remaining:2.6,targetX:1190,targetY:345,cruiseSpeed:16,effort:.7,pectoralEffort:.35,seed,wasFeeding:false,turnRate:.8,depthTarget:445,depthRemaining:20,depthBand:2,z:.62,vz:0,targetZ:.18,depthHeading:0,depthTimer:0,startleRemaining:0,startleCooldown:0,avoidanceRemaining:0,avoidanceZ:.5,strokeRemaining:.15+(seed%17)*.019,powerStroke:true,browsing:false,pickRemaining:0,pickIn:.3,brain:createFishBrain()};}
+export function createTetraSwim(seed=237):TetraSwim{return {x:1110,y:330,vx:16,vy:0,yaw:0,pitch:0,speed:16,direction:1,sinceTurn:10,elapsed:0,behavior:'cruising',remaining:2.6,targetX:1190,targetY:345,cruiseSpeed:16,effort:.7,pectoralEffort:.35,seed,wasFeeding:false,turnRate:.8,depthTarget:445,depthRemaining:20,depthBand:2,z:.62,vz:0,targetZ:.18,depthHeading:0,depthTimer:0,startleRemaining:0,startleCooldown:0,avoidanceRemaining:0,avoidanceZ:.5,strokeRemaining:.15+(seed%17)*.019,powerStroke:true,browsing:false,pickRemaining:0,pickIn:.3,feedingPhase:'search',feedingTimer:0,feedingTarget:null,feedingBurst:180,brain:createFishBrain()};}
 function enter(s:TetraSwim,behavior:TetraBehavior){
  s.behavior=behavior;
  const r=random(s);
@@ -28,7 +29,10 @@ function enter(s:TetraSwim,behavior:TetraBehavior){
 /** Stable upright locomotion, with time-based decisions rather than per-frame randomness. */
 export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxygen=false,senses?:FishSenses){
  const dt=clamp(Number.isFinite(seconds)?seconds:0,0,.1);if(!dt)return;
- const intent=senses?thinkFish(s.brain,dt,s.x,s.y,s.speed,senses,s.z):null;
+ const mouthHeading=s.yaw+s.depthHeading,reach=18;
+ const perceived=senses?{...senses,heading:mouthHeading,mouth:{x:s.x+Math.cos(mouthHeading)*Math.cos(s.pitch)*reach,y:s.y-Math.sin(s.pitch)*reach,z:s.z-Math.sin(mouthHeading)*Math.cos(s.pitch)*reach/180}}:undefined;
+ const intent=perceived?thinkFish(s.brain,dt,s.x,s.y,s.speed,perceived,s.z):null;
+ if(perceived&&swimForFood(s,dt,intent?.kind==='feed'?intent.target:undefined,perceived,lowOxygen))return;
  if(intent)feeding=intent.kind==='feed';
  if(intent?.kind==='browse'&&intent.target&&!s.browsing){s.behavior='approaching';s.remaining=18;s.browsing=true;}
  if(intent?.kind!=='browse'&&s.behavior!=='inspecting')s.browsing=false;
@@ -106,7 +110,7 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
  s.depthHeading+=clamp(depthAngle-s.depthHeading,-.25*dt,.25*dt);
  s.pitch+=clamp((wantedPitch-s.pitch)*(1-Math.exp(-dt*2)),-.25*dt,.25*dt);
 }
-export function tetraBehaviorLabel(s:TetraSwim){if(s.brain.intent.kind==='rest')return 'Resting';if(s.brain.intent.kind==='school')return 'Following the school';if(s.brain.intent.kind==='space')return 'Making space';if(s.browsing)return s.behavior==='inspecting'?'Picking near the planting':'Browsing a feeding patch';return {cruising:'Exploring',burst:'Short swimming burst',gliding:'Gliding',approaching:'Approaching a leaf',inspecting:'Inspecting the planting',foraging:'Looking for food'}[s.behavior];}
+export function tetraBehaviorLabel(s:TetraSwim){if(s.feedingPhase!=='search')return {notice:'Noticing a food particle',pursuit:'Darting toward food',coast:'Coasting toward a morsel',braking:'Aiming for a bite',bite:'Taking a bite',pause:'Pausing after a bite',depart:'Moving clear after a bite',yield:'Giving feeding companions room',recover:'Returning to the school'}[s.feedingPhase];if(s.brain.intent.kind==='rest')return 'Resting';if(s.brain.intent.kind==='school')return 'Following the school';if(s.brain.intent.kind==='space')return 'Making space';if(s.browsing)return s.behavior==='inspecting'?'Picking near the planting':'Browsing a feeding patch';return {cruising:'Exploring',burst:'Short swimming burst',gliding:'Gliding',approaching:'Approaching a leaf',inspecting:'Inspecting the planting',foraging:'Looking for food'}[s.behavior];}
 
 
 
