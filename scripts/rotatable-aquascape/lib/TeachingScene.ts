@@ -26,6 +26,7 @@ export class TeachingScene{
  private labelMatrix=new T.Matrix4();private labelsDirty=true;private labelWidth=0;private labelHeight=0;
  private projected=new T.Vector3();private dummy=new T.Object3D();
  private rootTime={value:0};private rootFlow={value:1};private phase=0;private impeller:T.Group|null=null;private rootStudy:T.Group|null=null;
+ private rootAnnotations=new T.Group();
  private grazerAtlas?:T.Texture;
  private savedVisibility=new Map<T.Object3D,boolean>();
  constructor(world:T.Scene,host:HTMLElement,plants:T.Object3D[],substrate:T.Object3D[],texture:T.Texture,housing:T.Object3D[]=[],grazerAtlas?:T.Texture){
@@ -41,14 +42,14 @@ export class TeachingScene{
   this.shrimpStudy?.dispose();this.shrimpStudy=null;this.coryStudy=null;this.coryPhase=0;
   this.labelsDirty=true;this.restore();this.labelHost.replaceChildren();this.labels=[];this.paths=[];this.impeller=null;this.rootStudy=null;
   this.content.traverse(o=>{for(const texture of o.userData.ownedTextures??[])texture.dispose();if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
-  this.content.clear();this.specimen=null;
+  this.content.clear();this.rootAnnotations.clear();this.specimen=null;
  }
  private add(g:T.BufferGeometry,m:T.Material,p:T.Vector3,parent:T.Object3D=this.content){const mesh=new T.Mesh(g,m);mesh.position.copy(p);parent.add(mesh);return mesh;}
  private tube(points:T.Vector3[],radius:number,color:number,parent:T.Object3D=this.content){return this.add(new T.TubeGeometry(new T.CatmullRomCurve3(points),32,radius,7,false),basic(color),V(0,0,0),parent);}
- private path(points:T.Vector3[],color=0x78d8ee,speed=.12){
-  const curve=new T.CatmullRomCurve3(points),line=new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(100)),new T.LineBasicMaterial({color,transparent:true,opacity:.55}));this.content.add(line);
+ private path(points:T.Vector3[],color=0x78d8ee,speed=.12,parent:T.Object3D=this.content){
+  const curve=new T.CatmullRomCurve3(points),line=new T.Line(new T.BufferGeometry().setFromPoints(curve.getPoints(100)),new T.LineBasicMaterial({color,transparent:true,opacity:.55}));parent.add(line);
   const closeup=this.mode==='organisms';
-  const arrows=new T.InstancedMesh(flowArrowGeometry(closeup?.075:.24,closeup?.020:.065),basic(color),closeup?8:12);arrows.frustumCulled=false;this.content.add(arrows);this.paths.push({curve,arrows,speed,phase:0});
+  const arrows=new T.InstancedMesh(flowArrowGeometry(closeup?.075:.24,closeup?.020:.065),basic(color),closeup?8:12);arrows.frustumCulled=false;parent.add(arrows);this.paths.push({curve,arrows,speed,phase:0});
  }
  private label(text:string,point:T.Vector3,index:number){const button=document.createElement('button');button.textContent=text;button.className='learning-tag';button.setAttribute('aria-label','Inspect '+text);button.onclick=()=>this.onSelect(index);this.labelHost.append(button);this.labels.push({button,point});}
  private roots(origin:T.Vector3,scale=1){
@@ -56,12 +57,19 @@ export class TeachingScene{
  }
  private underground(){
   this.content.add(buildRootCutaway(this.rootTime,this.rootFlow));
+  this.undergroundAnnotations();
+  lessons.underground.forEach((s,i)=>this.label(s.tag,V(...s.point),i));
+ }
+ private undergroundAnnotations(){
+  // A step changes the explanation, not the detailed specimen. Keep its GPU
+  // buffers, textures, light programs and animation alive throughout the lesson.
+  this.rootAnnotations.traverse(o=>{if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
+  this.rootAnnotations.clear();this.paths=[];this.content.add(this.rootAnnotations);
   if(this.step===2){
    // Transport annotations are separate from the material specimen and have no physical scale.
-   this.path([V(-1.9,3.35,1.3),V(-1.6,2.95,1.3),V(-1.4,2.65,1.3)],0x7dd4e9,.025);
-   this.path([V(.6,1.85,1.3),V(.8,2.35,1.3),V(1.16,3.22,1.3)],0xe3b770,.035);
+   this.path([V(-1.9,3.35,1.3),V(-1.6,2.95,1.3),V(-1.4,2.65,1.3)],0x7dd4e9,.025,this.rootAnnotations);
+   this.path([V(.6,1.85,1.3),V(.8,2.35,1.3),V(1.16,3.22,1.3)],0xe3b770,.035,this.rootAnnotations);
   }
-  lessons.underground.forEach((s,i)=>this.label(s.tag,V(...s.point),i));
  }
  private filter(){
   // Open front shell exposes real modeled baskets, foam pores, ceramic rings and rotor.
@@ -80,6 +88,10 @@ export class TeachingScene{
   [['Foam',1.8,1],['Ceramic media',2.85,2],['Impeller',3.8,3]].forEach(([text,y,index])=>this.label(String(text),V(.65,Number(y),.6),Number(index)));
  }
  set(mode:Lesson|null,step=0){
+  if(mode==='underground'&&this.mode===mode){
+   if(this.step!==step){this.step=step;this.undergroundAnnotations();}
+   return;
+  }
   this.clear();this.mode=mode;this.step=step;this.root.visible=!!mode;this.labelHost.hidden=!mode;
   if(mode!=='layers')for(const [o,original] of this.originals){o.position.copy(original.position);o.updateMatrix();}
   if(!mode)return;

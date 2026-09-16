@@ -68,6 +68,11 @@ export class SceneRefraction {
  private renderView(camera:T.Camera){
   const r=this.renderer,target=r.getRenderTarget()!;
   const materials=this.frameMaterials??this.collectMaterials();
+  // Isolated specimens hide the tank's glass. Without a visible consumer of
+  // transmission, draw normally: no HDR copy, mipmap generation or second pass.
+  let needsRefraction=false;
+  for(const [material,visible] of materials)if(visible&&this.glass.has(material as T.MeshPhysicalMaterial)){needsRefraction=true;break;}
+  if(!needsRefraction)return this.originalRender(this.scene,camera);
   // Shadow casters must keep their original visibility (including animal fins).
   // Reflection views reuse this same frame's maps.
   const clear=r.autoClear,background=this.scene.background,mipmaps=target.texture.generateMipmaps;
