@@ -4,7 +4,7 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 
 // Exercise the actual storefront launch/visibility bridge, excluding catalog UI.
-const source=readFileSync(new URL('../../../prototypes/hidden-reef/assets/showroom.js',import.meta.url),'utf8').split('  const plans=')[0]+'})();';
+const source=readFileSync(new URL('../../../prototypes/hidden-reef/assets/showroom.js',import.meta.url),'utf8').split('  const planner=')[0]+'})();';
 function fixture(search=''){
  const listeners={},nodes=new Map(),frames=[],messages=[];
  const node=key=>{

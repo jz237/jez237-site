@@ -23,6 +23,10 @@
   let showNewArrivalsFilter = false;
   let showSaleItemsFilter = false;
   let categoryHeroRotator = 0;
+  // The catalog is immutable during a page visit. Reuse its decorated rows
+  // while searching/paging instead of recreating thousands of objects per key.
+  const productCache = new Map(), brandCache = new Map();
+  let catalogSource = null, allCatalogCache = null;
 
   function getParams() {
     const p = new URLSearchParams(window.location.search);
@@ -117,14 +121,17 @@
   }
 
   function getProducts(subSlug) {
+    if(catalogSource!==window.THR_PRODUCTS){catalogSource=window.THR_PRODUCTS;productCache.clear();allCatalogCache=null;}
     if (!window.THR_PRODUCTS || !THR_PRODUCTS[subSlug]) return [];
+    if(productCache.has(subSlug))return productCache.get(subSlug);
     const meta = getCategoryMeta(subSlug);
-    return THR_PRODUCTS[subSlug].map(product => Object.assign({}, product, {
+    const rows=THR_PRODUCTS[subSlug].map(product => Object.assign({}, product, {
       categorySlug: subSlug,
       categoryName: meta.childName || '',
       groupSlug: meta.groupSlug || '',
       groupName: meta.groupName || ''
     }));
+    productCache.set(subSlug,rows);return rows;
   }
 
   function getCategoryProducts(cat) {
@@ -137,12 +144,14 @@
   }
 
   function getAllCatalogProducts() {
+    if(catalogSource!==window.THR_PRODUCTS){catalogSource=window.THR_PRODUCTS;productCache.clear();allCatalogCache=null;}
+    if(allCatalogCache)return allCatalogCache;
     let products = [];
     if (!window.THR_PRODUCTS) return products;
     for (const key of Object.keys(THR_PRODUCTS)) {
       products = products.concat(getProducts(key));
     }
-    return products;
+    allCatalogCache=products;return products;
   }
 
   function getCategoryMeta(subSlug) {
@@ -210,7 +219,8 @@
   }
 
   function extractBrand(name) {
-    return window.THR?.extractBrand ? THR.extractBrand(name) : '';
+    if(!brandCache.has(name))brandCache.set(name,window.THR?.extractBrand ? THR.extractBrand(name) : '');
+    return brandCache.get(name);
   }
 
   function getProductKey(product) {
@@ -464,13 +474,15 @@
   function startCategoryHeroRotator(header, images) {
     const slides = Array.from(header.querySelectorAll('.cat-hero-slide'));
     if (slides.length < 2) return;
-    images.slice(1).forEach(src => {
-      const image = new Image();
-      image.src = src;
-    });
+    let visible=false,busy=false;
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)');
+    new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;},{rootMargin:'160px'}).observe(header);
     let activeImage = 0;
     let activeLayer = 0;
     categoryHeroRotator = window.setInterval(async () => {
+      if(document.hidden||!visible||busy||reduced.matches)return;
+      busy=true;
+      try{
       activeImage = (activeImage + 1) % images.length;
       const nextLayer = activeLayer === 0 ? 1 : 0;
       const incomingSlide = slides[nextLayer];
@@ -487,7 +499,10 @@
         incomingSlide.classList.add('is-active');
         outgoingSlide.classList.remove('is-active');
         activeLayer = nextLayer;
+        // Prepare just the following image, retaining original resolution.
+        const next=new Image();next.decoding='async';next.src=images[(activeImage+1)%images.length];
       });
+      }finally{busy=false;}
     }, 4000);
   }
 
@@ -1019,7 +1034,8 @@
     const searchInput = document.getElementById('search');
     if (searchInput) {
       if (params.search) searchInput.value = params.search;
-      searchInput.addEventListener('input', () => updateProductView(1));
+      let searchFrame=0;
+      searchInput.addEventListener('input', () => {cancelAnimationFrame(searchFrame);searchFrame=requestAnimationFrame(()=>updateProductView(1));});
     }
 
     updateProductView(currentPage);

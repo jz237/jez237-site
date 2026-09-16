@@ -63,13 +63,17 @@
       menu.textContent = 'Menu';
     });
 
+    const header = nav.previousElementSibling;
+    let threshold=0,compact=null;
     const updateCompactHeader = function() {
-      const header = nav.previousElementSibling;
-      const threshold = header.getBoundingClientRect().bottom + window.scrollY;
-      document.documentElement.classList.toggle('has-compact-masthead', window.scrollY > threshold);
+      const next=window.scrollY>threshold;
+      if(next!==compact){compact=next;document.documentElement.classList.toggle('has-compact-masthead',next);}
     };
+    const measureHeader=()=>{threshold=header.getBoundingClientRect().bottom+window.scrollY;updateCompactHeader();};
+    new ResizeObserver(measureHeader).observe(header);
+    window.addEventListener('resize',measureHeader,{passive:true});
     window.addEventListener('scroll', updateCompactHeader, { passive: true });
-    updateCompactHeader();
+    measureHeader();
     const animation = document.querySelector('.animated-reef-header');
     if (animation) {
       let visible = true;

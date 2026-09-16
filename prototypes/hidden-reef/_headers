@@ -18,6 +18,18 @@
 /assets/department/*
   Cache-Control: public, max-age=86400
 
+# These lossless artwork filenames include their content hash.
+/assets/optimized/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Share catalog/controller responses across pages; mutable data revalidates
+# after five minutes, so daily inventory refreshes do not get stuck in cache.
+/assets/*.js
+  Cache-Control: public, max-age=300, must-revalidate
+
+/assets/*.css
+  Cache-Control: public, max-age=300, must-revalidate
+
 # Aquarium filenames contain a content hash; new builds request new URLs.
 /showroom/aquarium/load/*
   Cache-Control: public, max-age=31536000, immutable

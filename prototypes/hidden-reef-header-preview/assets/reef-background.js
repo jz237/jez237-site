@@ -186,13 +186,17 @@
       menu.textContent = 'Menu';
     });
 
+    const header = nav.previousElementSibling;
+    let threshold=0,compact=null;
     const updateCompactHeader = function() {
-      const header = nav.previousElementSibling;
-      const threshold = header.getBoundingClientRect().bottom + window.scrollY;
-      document.documentElement.classList.toggle('has-compact-masthead', window.scrollY > threshold);
+      const next=window.scrollY>threshold;
+      if(next!==compact){compact=next;document.documentElement.classList.toggle('has-compact-masthead',next);}
     };
+    const measureHeader=()=>{threshold=header.getBoundingClientRect().bottom+window.scrollY;updateCompactHeader();};
+    new ResizeObserver(measureHeader).observe(header);
+    window.addEventListener('resize',measureHeader,{passive:true});
     window.addEventListener('scroll', updateCompactHeader, { passive: true });
-    updateCompactHeader();
+    measureHeader();
     const animation = document.querySelector('.animated-reef-header');
     if (animation) {
       let visible = true;
@@ -489,6 +493,11 @@
   let raf = 0;
   let last = performance.now();
   let depthMix = 0;
+  let scrollRange=0,publishedDepth='';
+  const measureScrollRange=()=>{scrollRange=Math.max(0,document.documentElement.scrollHeight-window.innerHeight);};
+  new ResizeObserver(measureScrollRange).observe(document.body);
+  window.addEventListener('resize',measureScrollRange,{passive:true});
+  measureScrollRange();
 
   function random(min, max) {
     return min + Math.random() * (max - min);
@@ -634,7 +643,7 @@
   }
 
   function getScrollDepth() {
-    const maxScroll = Math.max(0, document.documentElement.scrollHeight - window.innerHeight);
+    const maxScroll = scrollRange;
     if (maxScroll <= 1) return 0;
     const raw = Math.max(0, Math.min(1, window.scrollY / maxScroll));
     return raw * raw * (3 - 2 * raw);
@@ -655,8 +664,8 @@
     depthMix = prefersReducedMotion
       ? targetDepth
       : depthMix + (targetDepth - depthMix) * Math.min(1, dt * 0.0065);
-    canvas.dataset.reefDepth = depthMix.toFixed(3);
-    document.documentElement.style.setProperty('--reef-depth', depthMix.toFixed(3));
+    const depthText=depthMix.toFixed(3);
+    if(depthText!==publishedDepth){publishedDepth=depthText;canvas.dataset.reefDepth=depthText;document.documentElement.style.setProperty('--reef-depth',depthText);}
     if (waterRenderer) waterRenderer.render(time * motionScale, depthMix);
 
     const topLight = ctx.createRadialGradient(width * 0.5, -height * 0.12, 0, width * 0.5, -height * 0.12, Math.max(width, height) * 0.75);

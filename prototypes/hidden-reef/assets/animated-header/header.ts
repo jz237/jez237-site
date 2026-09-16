@@ -10,7 +10,7 @@ const engine = new ReefEngine(
   () => stage.classList.add('is-ready'),
 );
 function sync() {
-  engine.paused = reduced.matches || !visible;
+  engine.paused = reduced.matches || !visible || new URLSearchParams(location.search).has('still');
   stage.classList.toggle('is-paused', engine.paused);
 }
 reduced.addEventListener('change', sync);

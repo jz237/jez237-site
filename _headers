@@ -111,3 +111,22 @@
 
 /demos/rotatable-aquascape/assets/*
   Cache-Control: public, max-age=31536000, immutable
+
+# Keep the Hidden Reef copies on the same artwork/catalog cache policy.
+/prototypes/hidden-reef/assets/optimized/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/prototypes/hidden-reef-header-preview/assets/optimized/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/prototypes/hidden-reef/assets/*.js
+  Cache-Control: public, max-age=300, must-revalidate
+
+/prototypes/hidden-reef/assets/*.css
+  Cache-Control: public, max-age=300, must-revalidate
+
+/prototypes/hidden-reef-header-preview/assets/*.js
+  Cache-Control: public, max-age=300, must-revalidate
+
+/prototypes/hidden-reef-header-preview/assets/*.css
+  Cache-Control: public, max-age=300, must-revalidate
