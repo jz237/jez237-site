@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-16",
+      "historicDate": "1984-07-23",
+      "displayDate": "Week of July 23-29, 1984",
+      "edition": "Issue 104 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Game makers test the boundaries of copying as Atari reorganizes and Apple turns up the Macintosh line.",
+      "leadHeadline": "Activision Forces 'Cuthbert in the Jungle' Off the Market",
+      "storyHeadlines": [
+        "Tramiel's Atari Shake-Up Reaches Britain",
+        "Apple Plans to Double Macintosh Production",
+        "A Computer Fantasy Game Becomes an Alan Dean Foster Novel"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-23.jpg",
+      "thumb": "media/thumbs/1984-07-23.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-15",
       "historicDate": "1984-07-16",
       "displayDate": "Week of July 16-22, 1984",

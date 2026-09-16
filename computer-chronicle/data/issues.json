@@ -1,8 +1,374 @@
 {
-  "generatedAt": "2026-09-15T12:00:00Z",
+  "generatedAt": "2026-09-16T12:00:00Z",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-16",
+      "historicDate": "1984-07-23",
+      "displayDate": "Week of July 23-29, 1984",
+      "edition": "Issue 104 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Combative games-trade reporting with bright midsummer arcade color",
+        "motifs": [
+          "jungle-platform silhouette",
+          "Atari joystick",
+          "Macintosh production line",
+          "1200-baud modem lights"
+        ],
+        "layout": "Gaming-led broadsheet with a copyright splash, industry rail, and dense shelf modules"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Computer & Culture Newspaper",
+        "dateline": "Week of July 23-29, 1984",
+        "price": "75¢"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Five-column games-copyright splash with jungle-platform and legal-paper imagery",
+        "secondaryRail": "Atari shake-up, Macintosh production, fantasy software, modem desk, and shelf charts",
+        "archiveNavigation": "Chronological weekly archive with previous and next issue controls"
+      },
+      "sectionChrome": {
+        "primary": "#a82020",
+        "secondary": "#174a78",
+        "texture": "Warm cream newsprint, halftone dots, narrow rules, and slightly uneven ink"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-07-23.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of July 23-29, 1984, led by the Activision and Microdeal copyright dispute.",
+        "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "A British courtroom challenge puts game cloning on the front page while Atari's new ownership moves quickly, Apple prepares more Macintoshes, and 1200-baud modems edge toward mass-market prices.",
+      "morningLine": "Game makers test the boundaries of copying as Atari reorganizes and Apple turns up the Macintosh line.",
+      "lead": {
+        "headline": "Activision Forces 'Cuthbert in the Jungle' Off the Market",
+        "dek": "A High Court undertaking pulls Microdeal's Commodore 64 game from sale and makes the young software trade confront the difference between inspiration and imitation.",
+        "body": [
+          "LONDON — Activision has forced Microdeal to withdraw Cuthbert in the Jungle after bringing High Court proceedings that alleged the Commodore 64 title copied Pitfall!, Popular Computing Weekly reported on July 26. Microdeal gave the court an undertaking that it would no longer produce the game in any form and notified suppliers that the title could no longer be sold.",
+          "Activision UK managing director Geoff Heath said his company had first asked Microdeal to remove the game before turning to legal action. The dispute puts unusual public pressure on a trade in which successful arcade and home-computer designs are often followed quickly by close variations, sometimes with only their names and scenery changed.",
+          "Microdeal had already encountered a similar challenge. Nintendo objected the previous year to the firm's Donkey King, after which the game was renamed The King. This week's result suggests that a change of title may not settle complaints when a publisher believes the play itself follows a protected hit too closely.",
+          "The magazine's editorial widened the argument beyond one program, criticizing an industry that condemns cassette piracy while tolerating catalogs crowded with near-copies. For buyers, programmers, and small publishers, the Cuthbert undertaking is an early warning that software law may now shape what reaches the shelves as strongly as memory limits and machine compatibility."
+        ],
+        "sourceRefs": [
+          0
+        ],
+        "confidence": "exact-date"
+      },
+      "stories": [
+        {
+          "headline": "Tramiel's Atari Shake-Up Reaches Britain",
+          "body": [
+            "Atari's change of control is already remaking its British operation. Popular Computing Weekly reported that UK managing director Graham Clark resigned and that many sales and management employees were dismissed, with financial controller Simon Westbrook serving as acting managing director.",
+            "Several former Commodore executives joined Jack Tramiel's organization as the new owners moved to streamline the loss-making company. The reported plan was to replace much of Atari's own sales force with appointed distributors.",
+            "Across the Atlantic, Electronic Games Hotline said previously announced products had been put on hold for several weeks while management reviewed fall plans. The pause leaves dealers and players waiting to learn which machines and games will survive the transition."
+          ],
+          "sourceRefs": [
+            0,
+            1
+          ],
+          "confidence": "exact-date"
+        },
+        {
+          "headline": "Apple Plans to Double Macintosh Production",
+          "body": [
+            "Apple plans to double Macintosh production by the end of 1984, according to Electronic Games Hotline. The Fremont, California, factory was reported to be turning out about 40,000 machines each month.",
+            "Chief executive John Sculley also said that a Macintosh with expanded memory would appear during the year, though he offered no specifications. Six months after the machine's launch, the announcement signals that Apple expects demand to carry the compact graphical computer beyond its first wave of enthusiasts."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "headline": "A Computer Fantasy Game Becomes an Alan Dean Foster Novel",
+          "body": [
+            "The usual book-to-game path is running backward: Ultrasoft's Shadowkeep, published on Spinnaker's Trillium label, has inspired a forthcoming novel by science-fiction author Alan Dean Foster.",
+            "The illustrated fantasy game supports as many as nine players, with five character classes and four races. Creatures drawn from Welsh and Scottish mythology, high-resolution graphics, animation, and a parser accepting full sentences give the project enough of a world to travel from disk to printed page."
+          ],
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-week"
+        }
+      ],
+      "computerItems": [
+        {
+          "title": "Apple Macintosh",
+          "summary": "Fremont production was reported near 40,000 units monthly, with Apple planning to double output by year-end and introduce an expanded-memory model.",
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "title": "Atari 7800 ProSystem",
+          "summary": "Pole Position II was packaged with Atari's new console, although the change of ownership left broader fall plans under review.",
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "exact-date"
+        },
+        {
+          "title": "Qubie PC212A/1200 modem card",
+          "summary": "An IBM PC internal, Hayes-command-compatible 1200-baud modem bundled with PC-TALK III, cable, guide, and manual for $299.",
+          "sourceRefs": [
+            2
+          ],
+          "confidence": "exact-date"
+        }
+      ],
+      "softwareList": [
+        {
+          "name": "Shadowkeep",
+          "detail": "Spinnaker/Trillium multiplayer illustrated fantasy role-playing game, announced as the basis for an Alan Dean Foster novel."
+        },
+        {
+          "name": "Database of Databases subscription",
+          "detail": "A $185 annual package covering more than 1,800 databases from over 800 producers, with directory, newsletter, hotline, and $75 of online use."
+        },
+        {
+          "name": "Pole Position II",
+          "detail": "Atari 7800 pack-in with four courses, rated 9/10 by Electronic Games Hotline."
+        },
+        {
+          "name": "Montezuma's Revenge",
+          "detail": "Robert Jaeger's Atari 8-bit action-adventure from Parker Brothers, rated 8/10."
+        },
+        {
+          "name": "Arcade Boot Camp",
+          "detail": "Penguin Software's five-part Apple II game-playing trainer, rated 8/10."
+        }
+      ],
+      "storeShelves": [
+        {
+          "label": "Top 5 Computer Games",
+          "items": [
+            "Pole Position II",
+            "Montezuma's Revenge",
+            "Arcade Boot Camp",
+            "The Three Stooges",
+            "Shadowkeep"
+          ]
+        },
+        {
+          "label": "Period Software",
+          "items": [
+            "Shadowkeep",
+            "Database of Databases subscription",
+            "PC-TALK III"
+          ]
+        },
+        {
+          "label": "Hardware Counter",
+          "items": [
+            "Apple Macintosh",
+            "Atari 7800 ProSystem",
+            "Qubie PC212A/1200 modem card"
+          ]
+        }
+      ],
+      "priceWatch": [
+        {
+          "item": "Hayes Smartmodem 300",
+          "price": "$209",
+          "note": "Advertised street price in the July 24 PC Magazine issue.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Hayes Smartmodem 1200",
+          "price": "$489",
+          "note": "External 1200-baud modem advertised alongside a $419 internal 1200B package with Smartcom II.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "10 MB Maynard hard disk",
+          "price": "$995",
+          "note": "Advertised as an XT-lookalike hard disk.",
+          "sourceRefs": [
+            2
+          ]
+        },
+        {
+          "item": "Lotus 1-2-3 and WordStar Propack",
+          "price": "$699",
+          "note": "Bundled software street price in a dealer advertisement.",
+          "sourceRefs": [
+            2
+          ]
+        }
+      ],
+      "briefs": [
+        {
+          "headline": "McGraw-Hill buys Future Computing",
+          "summary": "McGraw-Hill acquired the PC research and consulting firm for an undisclosed cash price; the buyer cited a market growing from $10 billion in 1983 toward a forecast $40 billion in 1988.",
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "headline": "Interphase converts games to MSX",
+          "summary": "Sewer Sam and Aquattack were scheduled for MSX conversion and summer shipment to Japan.",
+          "sourceRefs": [
+            1
+          ],
+          "confidence": "same-week"
+        },
+        {
+          "headline": "Konami establishes UK subsidiary",
+          "summary": "UK Konami Ltd. was formed to promote game sales directly while continuing distributor relationships.",
+          "sourceRefs": [
+            0
+          ],
+          "confidence": "exact-date"
+        }
+      ],
+      "musicChart": [
+        {
+          "rank": 1,
+          "title": "When Doves Cry",
+          "artist": "Prince"
+        },
+        {
+          "rank": 2,
+          "title": "Ghostbusters",
+          "artist": "Ray Parker, Jr."
+        },
+        {
+          "rank": 3,
+          "title": "Dancing in the Dark",
+          "artist": "Bruce Springsteen"
+        },
+        {
+          "rank": 4,
+          "title": "State of Shock",
+          "artist": "The Jacksons"
+        },
+        {
+          "rank": 5,
+          "title": "Eyes Without a Face",
+          "artist": "Billy Idol"
+        }
+      ],
+      "periodAd": {
+        "headline": "Make the Jump to 1200 Baud",
+        "summary": "Qubie's $299 PC212A/1200 card brings auto-dial, auto-answer, Hayes-compatible commands, and PC-TALK III inside the IBM PC.",
+        "tagline": "Twice the line speed, one card inside."
+      },
+      "market": {
+        "headline": "Atari's New Owners Cut and Reconsider",
+        "summary": "The British sales organization is being stripped back as Tramiel's team reviews announced products and prepares a distributor-led operation.",
+        "sourceRefs": [
+          0,
+          1
+        ],
+        "confidence": "exact-date"
+      },
+      "worldAnchor": {
+        "headline": "Los Angeles Olympics open amid Soviet-led boycott",
+        "summary": "President Reagan opened the Games on July 28; the first day of competition brought six U.S. gold medals while the Soviet-led boycott and Libya's last-minute withdrawal remained part of the story.",
+        "confidence": "exact-date",
+        "sourceRefs": [
+          7,
+          8
+        ]
+      },
+      "bbsNote": {
+        "headline": "1200-Baud Modems Fall Below the Old $500 Barrier",
+        "summary": "PC Magazine's July 24 ads make the economics of going online unusually concrete: Hayes's external Smartmodem 1200 remained near $500, while Qubie pitched a $299 internal PC package built around four signal-processing chips and Hayes-compatible commands.",
+        "posts": [
+          {
+            "topic": "Budget 1200-baud hardware",
+            "platform": "IBM PC",
+            "text": "Qubie's PC212A/1200 card bundled PC-TALK III, modular cable, quick-reference card and manual for $299; an optional external serial-port connector cost $20."
+          },
+          {
+            "topic": "Established modem prices",
+            "platform": "Hayes-compatible ecosystem",
+            "text": "A dealer offered the Hayes Smartmodem 300 at $209, Smartmodem 1200 at $489, and internal 1200B with Smartcom II at $419."
+          },
+          {
+            "topic": "Database access costs",
+            "platform": "Commercial online database directory",
+            "text": "Knowledge Industry Publications charged $185 annually for its directory and online service, including $75 usage; additional access ran $60 per hour with a $7 minimum."
+          }
+        ],
+        "sourceUrls": [
+          "https://archive.org/stream/PC-Mag-1984-07-24/PC-Mag-1984-07-24_djvu.txt",
+          "https://vgpavilion.com/mags/1984/07/29egh/pages/19840729-egh.pdf"
+        ]
+      },
+      "curiosity": {
+        "headline": "An Arcade Cabinet with Three Joysticks and a Seat That Shakes",
+        "summary": "Mylstar supplied two gloriously excessive arcade ideas in one week's newsletter: a Three Stooges cabinet with a joystick for each Stooge and a laser-game conversion with vibrating-seat effects.",
+        "detail": "The Three Stooges let one to three players slap villains and throw pies through 28 rounds. Mylstar's Us vs. Them conversion for M.A.C.H. 3 mixed live-action footage, superimposed graphics, an orchestral score and a vibrating seat to simulate flight.",
+        "sourceUrls": [
+          "https://vgpavilion.com/mags/1984/07/29egh/pages/19840729-egh.pdf"
+        ]
+      },
+      "accuracyLedger": {
+        "items": [
+          "Activision-Microdeal dispute and Atari UK changes: exact-date Popular Computing Weekly, July 26, 1984.",
+          "Games, Macintosh plans, and Shadowkeep: Electronic Games Hotline, July 29, 1984.",
+          "Prices and modem details: PC Magazine, July 24, 1984.",
+          "Charts: Billboard week ending July 28 and domestic box office weekend of July 27-29.",
+          "World bulletin: UPI reports from July 28-29, 1984."
+        ]
+      },
+      "sources": [
+        {
+          "title": "Popular Computing Weekly, Vol. 3 No. 30",
+          "url": "https://ia600601.us.archive.org/16/items/popular-computing-weekly-1984-07-26/PopularComputing_Weekly_Issue_1984-07-26.pdf",
+          "date": "1984-07-26"
+        },
+        {
+          "title": "Electronic Games Hotline, Vol. 2 No. 26",
+          "url": "https://vgpavilion.com/mags/1984/07/29egh/pages/19840729-egh.pdf",
+          "date": "1984-07-29"
+        },
+        {
+          "title": "PC Magazine",
+          "url": "https://archive.org/stream/PC-Mag-1984-07-24/PC-Mag-1984-07-24_djvu.txt",
+          "date": "1984-07-24"
+        },
+        {
+          "title": "Billboard singles chart for July 28, 1984 (reproduced)",
+          "url": "https://www.musicchartsarchive.com/singles-chart/1984-07-28",
+          "date": "1984-07-28"
+        },
+        {
+          "title": "Domestic weekend box office, July 27-29, 1984",
+          "url": "https://www.boxofficemojo.com/weekend/1984W30/",
+          "date": "1984-07-29"
+        },
+        {
+          "title": "AFI Catalog: Purple Rain",
+          "url": "https://catalog.afi.com/Catalog/MovieDetailsPrintView/57174",
+          "date": "1984-07-27"
+        },
+        {
+          "title": "UPI: 13 dead in refinery explosion",
+          "url": "https://www.upi.com/Archives/1984/07/24/13-dead-in-refinery-explosion/9881459489600/",
+          "date": "1984-07-24"
+        },
+        {
+          "title": "UPI: Los Angeles Olympic opening ceremony",
+          "url": "https://www.upi.com/Archives/1984/07/28/With-bugles-blaring-American-flags-flying-and-thousands-upon/3742459835200/",
+          "date": "1984-07-28"
+        },
+        {
+          "title": "UPI: First day of Olympic competition",
+          "url": "https://www.upi.com/Archives/1984/07/29/The-23rd-summer-Olympics-their-luster-slightly-tarnished-by/1460459921600/",
+          "date": "1984-07-29"
+        }
+      ]
+    },
     {
       "currentDate": "2026-09-15",
       "historicDate": "1984-07-16",

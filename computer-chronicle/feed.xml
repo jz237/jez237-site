@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 15 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 16 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 23-29, 1984 — Activision Forces &apos;Cuthbert in the Jungle&apos; Off the Market</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-07-23</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-23</guid>
+      <pubDate>Wed, 16 Sep 2026 12:00:00 GMT</pubDate>
+      <description>A High Court undertaking pulls Microdeal&apos;s Commodore 64 game from sale and makes the young software trade confront the difference between inspiration and imitation. LONDON — Activision has forced Microdeal to withdraw Cuthbert in the Jungle after bringing High Court proceedings that alleged the Commodore 64 title copied Pitfall!, Popular Computing Weekly reported on July 26. Microdeal gave the court an undertaking that it would no longer produce the game in any form and notified suppliers that the title could no longer be sold. Also this week: Tramiel&apos;s Atari Shake-Up Reaches Britain · Apple Plans to Double Macintosh Production · A Computer Fantasy Game Becomes an Alan Dean Foster Novel.</description>
+    </item>
     <item>
       <title>Week of July 16-22, 1984 — FBI Seizes Home Computers in Huntsville Hacker Probe</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-07-16</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-12</guid>
       <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>
       <description>The watchmaker joins Texas Instruments and Mattel in retreat, turning the post-boom home-computer shakeout into the week’s unmistakable story. Timex will cease production and sales of its Timex/Sinclair 1500 and 2068 home computers, ending one of the most visible attempts to put a microcomputer into American homes at a mass-market price. The company says manufacturing will stop after remaining components are used, probably within four months. Also this week: Mindset Bets Its PC Future on Spectacular Graphics · VisiCalc Partners Carry Their Feud to Softcon · Model 100 Gains a Desktop-Sized Disk Drive.</description>
-    </item>
-    <item>
-      <title>Week of March 5-11, 1984 — Software Steps Out of Hardware’s Shadow</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-03-05</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-05</guid>
-      <pubDate>Tue, 25 Aug 2026 12:00:00 GMT</pubDate>
-      <description>A multibillion-dollar American trade looks overseas—and a software show makes clear that programs now constitute an industry of their own. The personal-computer business has spent years measuring progress in processors, memory and disk drives. This week the programs themselves claim the marquee. A March 4 report in The Washington Post describes American personal-computer software as a multibillion-dollar business whose firms are looking beyond the domestic boom toward customers overseas. Also this week: IBM’s PCjr Arrives to a Skeptical Reception · Micro Games Crowd the Chart · Industry Seeks Laws Against “Electronic Trespassers”.</description>
     </item>
   </channel>
 </rss>
