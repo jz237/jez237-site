@@ -1,5 +1,5 @@
 import { build } from "esbuild";
-import { mkdir, copyFile, writeFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 const out = new URL(
@@ -16,9 +16,9 @@ await build({
   outfile: fileURLToPath(new URL("game.js", out)),
   legalComments: "linked",
 });
-await copyFile(
-  new URL("src/style.css", import.meta.url),
+await writeFile(
   new URL("style.css", out),
+  (await readFile(new URL("src/style.css", import.meta.url), "utf8")).replace(/\r\n/g, "\n"),
 );
 let html = await readFile(new URL("src/index.html", import.meta.url), "utf8");
 for (const asset of ["game.js", "style.css"]) {
