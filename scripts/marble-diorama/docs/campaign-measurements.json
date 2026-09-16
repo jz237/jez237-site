@@ -1,6 +1,6 @@
 {
   "physics": "rapier-0.20.0-mm-5",
-  "generatedAt": "2026-09-16T02:49:54.009Z",
+  "generatedAt": "2026-09-16T16:09:17.980Z",
   "method": "Headless 120 Hz simulation. Normal DemoController steering and turbo only. Campaign untimed; bonuses timed; difficulty 0. No positional overrides.",
   "runs": [
     {
@@ -148,21 +148,21 @@
       "course": "practice",
       "players": 2,
       "untimed": true,
-      "ticks": 3653,
+      "ticks": 3712,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 30.441666666666666,
+          "seconds": 30.933333333333334,
           "falls": 0,
           "clock": 60,
           "score": 409
         },
         {
           "status": "finished",
-          "seconds": 29.558333333333334,
+          "seconds": 30.175,
           "falls": 0,
           "clock": 60,
-          "score": 410
+          "score": 409
         }
       ],
       "campaignOutcome": "next"
@@ -171,21 +171,21 @@
       "course": "beginner",
       "players": 2,
       "untimed": true,
-      "ticks": 8065,
+      "ticks": 8256,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 67.20833333333333,
+          "seconds": 66.23333333333333,
           "falls": 0,
           "clock": 75,
-          "score": 1305
+          "score": 1302
         },
         {
           "status": "finished",
-          "seconds": 65.74166666666666,
+          "seconds": 68.8,
           "falls": 0,
           "clock": 75,
-          "score": 1307
+          "score": 1303
         }
       ],
       "campaignOutcome": "next"
@@ -201,14 +201,14 @@
           "seconds": 51.016666666666666,
           "falls": 0,
           "clock": 120,
-          "score": 2106
+          "score": 2103
         },
         {
           "status": "finished",
           "seconds": 52.56666666666667,
           "falls": 0,
           "clock": 120,
-          "score": 2108
+          "score": 2104
         }
       ],
       "campaignOutcome": "next"
@@ -217,21 +217,21 @@
       "course": "aerial",
       "players": 2,
       "untimed": true,
-      "ticks": 11624,
+      "ticks": 7559,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 82.55,
-          "falls": 4,
+          "seconds": 59.55,
+          "falls": 0,
           "clock": 150,
-          "score": 3049
+          "score": 3046
         },
         {
           "status": "finished",
-          "seconds": 96.86666666666666,
-          "falls": 5,
+          "seconds": 62.99166666666667,
+          "falls": 0,
           "clock": 150,
-          "score": 3051
+          "score": 3047
         }
       ],
       "campaignOutcome": "next"
@@ -240,21 +240,21 @@
       "course": "silly",
       "players": 2,
       "untimed": true,
-      "ticks": 8393,
+      "ticks": 9584,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 69.94166666666666,
-          "falls": 0,
+          "seconds": 79.86666666666666,
+          "falls": 1,
           "clock": 175,
-          "score": 3933
+          "score": 3930
         },
         {
           "status": "finished",
-          "seconds": 67.31666666666666,
+          "seconds": 76.175,
           "falls": 0,
           "clock": 175,
-          "score": 3935
+          "score": 3931
         }
       ],
       "campaignOutcome": "next"
@@ -267,17 +267,17 @@
       "marbles": [
         {
           "status": "finished",
-          "seconds": 68.725,
-          "falls": 0,
-          "clock": 200,
-          "score": 4993
-        },
-        {
-          "status": "finished",
           "seconds": 63.916666666666664,
           "falls": 0,
           "clock": 200,
-          "score": 4995
+          "score": 4990
+        },
+        {
+          "status": "finished",
+          "seconds": 68.725,
+          "falls": 0,
+          "clock": 200,
+          "score": 4991
         }
       ],
       "campaignOutcome": "complete"
@@ -308,21 +308,21 @@
       "course": "magnetic-observatory",
       "players": 2,
       "untimed": false,
-      "ticks": 2452,
+      "ticks": 2062,
       "marbles": [
         {
           "status": "finished",
-          "seconds": 20.433333333333334,
+          "seconds": 17.183333333333334,
           "falls": 0,
-          "clock": 129.56666666668525,
-          "score": 1768
+          "clock": 132.8166666666823,
+          "score": 1798
         },
         {
           "status": "finished",
-          "seconds": 16.35,
+          "seconds": 15.941666666666666,
           "falls": 0,
-          "clock": 133.65000000001487,
-          "score": 1808
+          "clock": 134.05833333334783,
+          "score": 1818
         }
       ]
     },
@@ -387,7 +387,7 @@
       "route": "right-hammer-route",
       "revision": 1,
       "status": "finished",
-      "seconds": 63.608333333333334,
+      "seconds": 63.59166666666667,
       "falls": 0
     },
     {

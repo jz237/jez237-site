@@ -351,6 +351,9 @@ export function aerialCourse() {
       radius: d === 18 ? 1 : 0.65,
     }),
   );
+  // Keep rolling through the shallow bend into the right-hand descent.
+  // The acceptance radius stays inside the three-unit-wide track.
+  rightRoute[17].radius = 0.9;
   return {
     schema: 1,
     id: "aerial",

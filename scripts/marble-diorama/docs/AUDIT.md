@@ -1,3 +1,5 @@
+> Publication update (September 16, 2026): the owner subsequently requested an unfinished preview. Commit `2e3703951` is live under Unfinished Games, with successful Cloudflare and GitHub Pages deployment checks and a live zero-fall Practice demo. Statements below that publication is withheld describe earlier checkpoints. Full remake acceptance remains open. Current development branch: `codex/marble-preview-publish-20260915`.
+
 # Amiga diorama remake — source audit
 
 Date: 2026-09-15. Status: **six-course reconstruction plus bonuses; release work continues**.

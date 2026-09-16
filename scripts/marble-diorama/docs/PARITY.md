@@ -10,7 +10,7 @@ original dimensions, timing, or complete route coverage.
 | Practice | PARTIAL: training field, twin peaks, four banked reversals; left and right exits pass | PARTIAL: physical gates/bollards; exact gate and numbered-pad effects open | 60-unit start, rotated finish, 100 points per unused timed unit and last-safe recovery implemented; original score triggers/boundaries open |
 | Beginner | PARTIAL: cyan towers, fork, pyramids, ledges, three hollow pipes, ice; left ledge and two-pipe routes pass; upper-right fork open | Physical steelie pursuit/collision; exact enemy awards and placement open | 75-unit reset after Practice implemented; timed left and two-pipe runs pass; original finish/respawn details open |
 | Intermediate | PARTIAL: split towers, islands, acid room, orange pipe, lower green lanes; both upper starts and left bypass pass; orange pipe, two traveling-wave strips and right lane now pass | Physical munchers and moving acid; two physical traveling-wave strips implemented; full lower-lane deformation and original wave pattern open | 45 units added to carryover; paired starts and independent completion pass; scoring/boundary parity open |
-| Aerial | PARTIAL: crossed narrow rails, zigzags, vacuum turns, lower red/yellow towers; two-player routes both complete with recoveries | Directional vacuums, steelie, moving hammer/pistons implemented; measured hazard cycles open | 30 units added; normal-input untimed runs pass; timed full-campaign balance open |
+| Aerial | PARTIAL: crossed narrow rails, zigzags, vacuum turns, lower red/yellow towers; two-player demos yield at the crossing and both complete without falls | Directional vacuums, steelie, moving hammer/pistons implemented; measured hazard cycles open | 30 units added; normal-input untimed runs pass; timed full-campaign balance open |
 | Silly | PARTIAL: reverse uphill course, mini room, red uplift pipe, two mazes, bird field and split goal climbs; left route and authored right climbs pass; exact original route coverage open | Collectible miniature enemies (+500/+3), wall-to-wall purple birds, pyramids; exact flight pattern and uplift behavior open | 25 units added; upright physical rolling climbs and finish pass; full score/time parity open |
 | Ultimate | PARTIAL: three launch islands, split acid/muncher rooms, ice pyramids, branching finish; left route and authored right hazard-room path pass with recoveries; exact original route coverage open | Aimed physical launch impulses, munchers, moving acid, ice, three sequential disappearing bridge tiles; moving launcher mechanism and exact bridge pattern open | 25 units added; six-course ending and 20,000 + 1,000/time − 1,000/fall award implemented; complete timed campaign acceptance open |
 
@@ -24,9 +24,9 @@ original dimensions, timing, or complete route coverage.
 - [ ] Difficulty effects measured against Amiga. Current 0–7 presets increase
   clock, enemy, machine and force speeds; UI explicitly calls them provisional.
 - [ ] Calibrate steering, brakes, friction, restitution and turbo against Amiga.
-- [x] Timed solo campaign through Aerial, normal bounded input and zero falls.
+- [x] Timed solo and two-player campaigns through Aerial, normal bounded input and zero falls.
 - [ ] Full timed campaign completion and every alternate route. Current timed
-  measurement fails in Silly solo and Aerial two-player; see VALIDATION.md.
+  measurement fails in Silly for both player counts; see VALIDATION.md.
 - [ ] Original two-player winner/catch-up/time-bonus rules and simultaneous ties.
 - [ ] Exact progress, steelie, training gate and numbered-pad awards.
 - [ ] Original soundtrack all-cue listening, assignments, loops and transitions.
