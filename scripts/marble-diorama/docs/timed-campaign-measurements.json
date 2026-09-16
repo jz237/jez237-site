@@ -1,0 +1,152 @@
+{
+  "physics": "rapier-0.20.0-mm-5",
+  "generatedAt": "2026-09-16T02:50:54.530Z",
+  "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
+  "runs": [
+    {
+      "players": 1,
+      "outcome": "game-over",
+      "results": [
+        {
+          "course": "practice",
+          "ticks": 3569,
+          "players": [
+            {
+              "time": 36.76432291667512,
+              "score": 4010,
+              "deaths": 0,
+              "status": "finished"
+            }
+          ]
+        },
+        {
+          "course": "beginner",
+          "ticks": 7691,
+          "players": [
+            {
+              "time": 24.92838541666902,
+              "score": 7308,
+              "deaths": 0,
+              "status": "finished"
+            }
+          ]
+        },
+        {
+          "course": "intermediate",
+          "ticks": 6122,
+          "players": [
+            {
+              "time": 29.143229166674157,
+              "score": 11009,
+              "deaths": 0,
+              "status": "finished"
+            }
+          ]
+        },
+        {
+          "course": "aerial",
+          "ticks": 7146,
+          "players": [
+            {
+              "time": 12.476562500007233,
+              "score": 13152,
+              "deaths": 0,
+              "status": "finished"
+            }
+          ]
+        },
+        {
+          "course": "silly",
+          "ticks": 5684,
+          "players": [
+            {
+              "time": 0,
+              "score": 13684,
+              "deaths": 0,
+              "status": "timeout"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "players": 2,
+      "outcome": "game-over",
+      "results": [
+        {
+          "course": "practice",
+          "ticks": 3653,
+          "players": [
+            {
+              "time": 36.21744791667532,
+              "score": 4009,
+              "deaths": 0,
+              "status": "finished"
+            },
+            {
+              "time": 36.907552083341734,
+              "score": 4010,
+              "deaths": 0,
+              "status": "finished"
+            }
+          ]
+        },
+        {
+          "course": "beginner",
+          "ticks": 8065,
+          "players": [
+            {
+              "time": 22.493489583335244,
+              "score": 7105,
+              "deaths": 0,
+              "status": "finished"
+            },
+            {
+              "time": 23.639322916668785,
+              "score": 7207,
+              "deaths": 0,
+              "status": "finished"
+            }
+          ]
+        },
+        {
+          "course": "intermediate",
+          "ticks": 6308,
+          "players": [
+            {
+              "time": 27.143229166675248,
+              "score": 10606,
+              "deaths": 0,
+              "status": "finished"
+            },
+            {
+              "time": 26.932291666674477,
+              "score": 10608,
+              "deaths": 0,
+              "status": "finished"
+            }
+          ]
+        },
+        {
+          "course": "aerial",
+          "ticks": 8756,
+          "players": [
+            {
+              "time": 0,
+              "score": 11384,
+              "deaths": 4,
+              "status": "timeout"
+            },
+            {
+              "time": 0,
+              "score": 11197,
+              "deaths": 5,
+              "status": "timeout"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "complete": false
+}

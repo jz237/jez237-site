@@ -1,0 +1,544 @@
+import {
+  ribbonGeometry,
+  polygonGeometry,
+  pyramidGeometry,
+  tubeGeometry,
+} from "./surface-geometry.mjs";
+import { wavePose, WAVE_INDICES, WAVE_ROLES } from "./wave.mjs";
+// CourseDefinition v1 is the only source of visible and physical track surfaces.
+export const COURSE_SCHEMA = 1;
+export const SURFACES = {
+  stone: { friction: 0.9, color: "#e4ddd0", roughness: 0.52 },
+  ceramic: { friction: 0.85, color: "#dbe1de", roughness: 0.3 },
+  ice: { friction: 0.035, color: "#8fd8de", roughness: 0.12 },
+  glass: { friction: 0.4, color: "#b1ece6", roughness: 0.12 },
+  brass: { friction: 0.8, color: "#c8a568", roughness: 0.35 },
+  red: { friction: 0.9, color: "#bd4235", roughness: 0.3 },
+  blue: { friction: 0.75, color: "#315fba", roughness: 0.24 },
+  orange: { friction: 0.75, color: "#c4712f", roughness: 0.28 },
+  green: { friction: 0.9, color: "#49a58e", roughness: 0.42 },
+  sand: { friction: 0.9, color: "#d8af70", roughness: 0.55 },
+  yellow: { friction: 0.9, color: "#e1bc24", roughness: 0.35 },
+  metal: { friction: 0.7, color: "#879193", roughness: 0.4 },
+  miniature: { friction: 0.9, color: "#839580", roughness: 0.48 },
+};
+const finite = (x) =>
+  typeof x === "number" && Number.isFinite(x) && Math.abs(x) <= 2000;
+export function validateCourse(c) {
+  if (
+    !c ||
+    c.schema !== COURSE_SCHEMA ||
+    typeof c.id !== "string" ||
+    typeof c.name !== "string" ||
+    !Number.isInteger(c.revision)
+  )
+    throw Error(
+      "Unsupported course header. Expected schema 1, id, name and integer revision.",
+    );
+  if (!Array.isArray(c.parts) || c.parts.length > 500 || !c.parts.length)
+    throw Error("A course needs 1–500 parts.");
+  const ids = new Set();
+  let estimatedVertices = 0;
+  for (const p of c.parts) {
+    if (ids.has(p.id) || typeof p.id !== "string")
+      throw Error("Part IDs must be unique.");
+    ids.add(p.id);
+    if (
+      ![
+        "floor",
+        "ramp",
+        "channel",
+        "wall",
+        "moving",
+        "tilt",
+        "piston",
+        "spring",
+        "ribbon",
+        "polygon",
+        "pyramid",
+        "tube",
+      ].includes(p.kind)
+    )
+      throw Error("Unknown part type.");
+    if (
+      ![
+        p.x,
+        p.y,
+        p.z,
+        p.w,
+        p.d,
+        p.h ?? 0.5,
+        p.rise ?? 0,
+        p.bank ?? 0,
+        p.angle ?? 0,
+        p.bevel ?? 0,
+      ].every(finite) ||
+      p.w < 0.1 ||
+      p.d < 0.1 ||
+      p.w > 100 ||
+      p.d > 100 ||
+      (p.h ?? 0.5) < 0.05 ||
+      (p.bevel ?? 0) < 0 ||
+      (p.bevel ?? 0) > Math.min(p.w, p.d) / 4
+    )
+      throw Error("Invalid part dimensions.");
+    if (!SURFACES[p.material ?? "stone"])
+      throw Error("Unknown surface material.");
+    if (
+      p.launch &&
+      (p.kind !== "spring" ||
+        ![p.launch.forward, p.launch.lateral, p.launch.up].every(
+          (v) => finite(v) && Math.abs(v) <= 20,
+        ) ||
+        p.launch.up < 0)
+    )
+      throw Error("Invalid launcher impulse.");
+    if (p.kind === "ribbon" || p.kind === "tube") {
+      if (
+        p.motion ||
+        !Array.isArray(p.path) ||
+        p.path.length < 2 ||
+        p.path.length > 500
+      )
+        throw Error("A static ribbon needs 2–500 path points.");
+      for (const v of p.path)
+        if (
+          ![
+            v.x,
+            v.y,
+            v.z,
+            v.width ?? p.width ?? 4,
+            v.bank ?? p.bank ?? 0,
+          ].every(finite) ||
+          (v.width ?? p.width ?? 4) < 1 ||
+          (v.width ?? p.width ?? 4) > 30
+        )
+          throw Error("Invalid ribbon cross-section.");
+      estimatedVertices += p.path
+        .slice(1)
+        .reduce(
+          (sum, v, i) =>
+            sum +
+            Math.ceil(
+              Math.hypot(
+                v.x - p.path[i].x,
+                p.kind === "tube" ? v.y - p.path[i].y : 0,
+                v.z - p.path[i].z,
+              ) * (p.kind === "tube" ? 10 : 2),
+            ) *
+              (p.kind === "tube" ? 52 : 20),
+          0,
+        );
+    }
+    if (
+      p.kind === "tube" &&
+      (![p.radius ?? 1.4, p.thickness ?? 0.15].every(finite) ||
+        (p.radius ?? 1.4) < 0.6 ||
+        (p.radius ?? 1.4) > 8 ||
+        (p.thickness ?? 0.15) < 0.05 ||
+        (p.thickness ?? 0.15) > 2)
+    )
+      throw Error("Invalid tube dimensions.");
+    if (p.kind === "polygon") {
+      if (
+        p.motion ||
+        !Array.isArray(p.outline) ||
+        p.outline.length < 3 ||
+        p.outline.length > 500 ||
+        !p.outline.every((v) => [v.x, v.z].every(finite))
+      )
+        throw Error("Invalid polygon outline.");
+    }
+    if (p.kind === "polygon") estimatedVertices += p.outline.length * 3;
+    else if (p.kind === "pyramid") estimatedVertices += 9;
+    else if (!["ribbon", "tube"].includes(p.kind))
+      estimatedVertices += (Math.ceil(p.w * 2) + 1) * (Math.ceil(p.d * 2) + 1);
+    if (estimatedVertices > 150000)
+      throw Error(
+        "Course geometry exceeds the 150,000-vertex authoring limit.",
+      );
+    if (
+      p.motion &&
+      (!["x", "y", "z", "tilt", "wave"].includes(p.motion.axis) ||
+        ![p.motion.amplitude, p.motion.period, p.motion.phase ?? 0].every(
+          finite,
+        ) ||
+        p.motion.period < 0.5)
+    )
+      throw Error("Invalid motion.");
+    if (
+      p.motion?.axis === "wave" &&
+      (![
+        p.motion.heading,
+        p.motion.wavelength,
+        p.motion.total,
+        p.motion.from,
+        p.motion.to,
+        p.motion.rise ?? 0,
+      ].every(finite) ||
+        p.motion.wavelength < 1 ||
+        p.motion.total < 0.1 ||
+        p.motion.from < 0 ||
+        p.motion.to <= p.motion.from ||
+        p.motion.to > p.motion.total + 0.001 ||
+        p.angle ||
+        p.bank ||
+        p.bevel)
+    )
+      throw Error("Invalid wave panel.");
+    if (
+      p.presence &&
+      (!p.motion ||
+        ![p.presence.period, p.presence.on, p.presence.phase ?? 0].every(
+          finite,
+        ) ||
+        p.presence.period < 0.5 ||
+        p.presence.on <= 0 ||
+        p.presence.on > p.presence.period)
+    )
+      throw Error("Invalid disappearing-platform cycle.");
+  }
+  for (const a of [
+    ...(c.starts ?? []),
+    c.goal,
+    ...(c.checkpoints ?? []),
+    ...(c.route ?? []),
+    ...(c.playerRoutes ?? []).flat(),
+    ...(c.alternateRoutes ?? []).flatMap((r) => r.route ?? []),
+  ])
+    if (!a || ![a.x, a.y, a.z].every(finite))
+      throw Error("Invalid start, route, checkpoint or goal.");
+  if (
+    !c.starts?.length ||
+    c.starts.length > 2 ||
+    !c.goal ||
+    !finite(c.time) ||
+    c.time < 1
+  )
+    throw Error("One or two starts, a goal and positive time are required.");
+  if ((c.zones?.length ?? 0) > 100 || (c.route?.length ?? 0) > 1000)
+    throw Error("Course exceeds limits.");
+  if (
+    c.rules &&
+    (![c.rules.timerRate ?? 1, c.rules.finishPointRate ?? 10].every(finite) ||
+      (c.rules.timerRate ?? 1) <= 0 ||
+      (c.rules.timerRate ?? 1) > 4 ||
+      (c.rules.finishPointRate ?? 10) < 0 ||
+      (c.rules.finishPointRate ?? 10) > 1000 ||
+      ![undefined, "last-safe", "start"].includes(c.rules.respawn))
+  )
+    throw Error("Invalid course rules.");
+  for (const z of c.zones ?? [])
+    if (
+      !["magnet", "hazard", "acid", "vacuum"].includes(z.kind) ||
+      ![z.x, z.y, z.z, z.radius, z.strength ?? 0].every(finite) ||
+      z.radius <= 0
+    )
+      throw Error("Invalid zone.");
+  for (const z of c.zones ?? [])
+    if (
+      z.motion &&
+      (!["x", "z"].includes(z.motion.axis) ||
+        ![z.motion.amplitude, z.motion.period, z.motion.phase ?? 0].every(
+          finite,
+        ) ||
+        z.motion.period < 0.5 ||
+        Math.abs(z.motion.amplitude) > 10)
+    )
+      throw Error("Invalid moving hazard.");
+  for (const z of c.zones ?? [])
+    if (
+      z.kind === "vacuum" &&
+      (!z.direction ||
+        ![z.direction.x, z.direction.y, z.direction.z].every(finite))
+    )
+      throw Error("Invalid vacuum direction.");
+  if ((c.enemies?.length ?? 0) > 40) throw Error("Too many enemies.");
+  const enemyIds = new Set();
+  for (const e of c.enemies ?? []) {
+    if (
+      typeof e.id !== "string" ||
+      enemyIds.has(e.id) ||
+      !["steelie", "muncher", "mini", "bird"].includes(e.kind) ||
+      ![e.x, e.y, e.z, e.radius, e.roam, e.speed].every(finite) ||
+      e.radius < 0.2 ||
+      e.radius > 2 ||
+      e.roam < 0.5 ||
+      e.roam > 30 ||
+      e.speed <= 0 ||
+      e.speed > 8
+    )
+      throw Error("Invalid enemy.");
+    enemyIds.add(e.id);
+    if (
+      e.kind === "bird" &&
+      (!e.direction ||
+        ![
+          e.direction.x,
+          e.direction.z,
+          e.distance,
+          e.rest ?? 1,
+          e.phase ?? 0,
+        ].every(finite) ||
+        e.distance <= 0 ||
+        (e.rest ?? 1) < 0 ||
+        Math.abs(Math.hypot(e.direction.x, e.direction.z) - 1) > 0.01)
+    )
+      throw Error("Invalid bird flight.");
+  }
+  return c;
+}
+export const part = (id, x, z, w, d, y = 0, extra = {}) => ({
+  id,
+  kind: "floor",
+  x,
+  y,
+  z,
+  w,
+  d,
+  h: 0.8,
+  material: "stone",
+  ...extra,
+});
+export const point = (x, y, z) => ({ x, y, z });
+
+// Generate top, side, underside and optional bevel triangles once. Rendering uses
+// these exact arrays; Rapier uses the same arrays with internal-edge correction.
+export function partGeometry(p) {
+  if (p.motion?.axis === "wave")
+    return {
+      vertices: wavePose(p, 0).vertices,
+      indices: WAVE_INDICES,
+      roles: WAVE_ROLES,
+    };
+  if (p.kind === "tube") return tubeGeometry(p);
+  if (p.kind === "ribbon") return ribbonGeometry(p);
+  if (p.kind === "polygon") return polygonGeometry(p);
+  if (p.kind === "pyramid") return pyramidGeometry(p);
+  const vertices = [],
+    indices = [],
+    roles = [],
+    keys = new Map();
+  const ang = p.angle ?? 0,
+    cs = Math.cos(ang),
+    sn = Math.sin(ang);
+  const put = ([x, y, z]) => {
+    if (!p.motion && ["floor", "ramp", "channel"].includes(p.kind)) {
+      const radius = Math.min(0.55, p.w * 0.18, p.d * 0.18),
+        cx = p.w / 2 - radius,
+        cz = p.d / 2 - radius,
+        dx = Math.max(0, Math.abs(x) - cx),
+        dz = Math.max(0, Math.abs(z) - cz),
+        distance = Math.hypot(dx, dz);
+      if (dx > 0 && dz > 0 && distance > radius) {
+        x = Math.sign(x) * (cx + (dx * radius) / distance);
+        z = Math.sign(z) * (cz + (dz * radius) / distance);
+      }
+    }
+    const v = [x * cs - z * sn, y, x * sn + z * cs];
+    const key = v.map((n) => n.toFixed(7)).join(",");
+    if (keys.has(key)) return keys.get(key);
+    const i = vertices.length / 3;
+    vertices.push(...v);
+    keys.set(key, i);
+    return i;
+  };
+  const tri = (a, b, c, role) => {
+    indices.push(put(a), put(b), put(c));
+    roles.push(role);
+  };
+  const quad = (a, b, c, d, role) => {
+    tri(a, b, c, role);
+    tri(a, c, d, role);
+  };
+  const w = p.w / 2,
+    d = p.d / 2,
+    b = p.bevel ?? 0,
+    bottom = Math.min(0, p.rise ?? 0, p.bank ?? 0) - (p.h ?? 0.8);
+  const nx = Math.max(1, Math.ceil(p.w * 2)),
+    nz = Math.max(1, Math.ceil(p.d * 2));
+  const height = (x, z) =>
+    (p.rise ?? 0) * (z / p.d + 0.5) + (p.bank ?? 0) * Math.pow(x / w, 2);
+  const grid = (x, z) => [
+    -w + b + ((p.w - 2 * b) * x) / nx,
+    height(
+      -w + b + ((p.w - 2 * b) * x) / nx,
+      -d + b + ((p.d - 2 * b) * z) / nz,
+    ),
+    -d + b + ((p.d - 2 * b) * z) / nz,
+  ];
+  for (let z = 0; z < nz; z++)
+    for (let x = 0; x < nx; x++)
+      quad(
+        grid(x, z),
+        grid(x, z + 1),
+        grid(x + 1, z + 1),
+        grid(x + 1, z),
+        "top",
+      );
+  const boundary = [];
+  for (let i = 0; i <= nx; i++) boundary.push(grid(i, 0));
+  for (let i = 1; i <= nz; i++) boundary.push(grid(nx, i));
+  for (let i = nx - 1; i >= 0; i--) boundary.push(grid(i, nz));
+  for (let i = nz - 1; i > 0; i--) boundary.push(grid(0, i));
+  const outside = boundary.map(([x, y, z]) => [
+    Math.abs(x - (w - b)) < 1e-6 ? w : Math.abs(x + w - b) < 1e-6 ? -w : x,
+    y - b,
+    Math.abs(z - (d - b)) < 1e-6 ? d : Math.abs(z + d - b) < 1e-6 ? -d : z,
+  ]);
+  for (let i = 0; i < boundary.length; i++) {
+    const j = (i + 1) % boundary.length,
+      a = boundary[i],
+      bb = boundary[j],
+      aa = outside[i],
+      ab = outside[j];
+    if (b) quad(a, bb, ab, aa, "top");
+    quad(aa, ab, [ab[0], bottom, ab[2]], [aa[0], bottom, aa[2]], "side");
+  }
+  quad(
+    [-w, bottom, -d],
+    [w, bottom, -d],
+    [w, bottom, d],
+    [-w, bottom, d],
+    "side",
+  );
+  return {
+    vertices: new Float32Array(vertices),
+    indices: new Uint32Array(indices),
+    roles,
+  };
+}
+export function compileCourse(c) {
+  validateCourse(c);
+  const staticGroups = new Map(),
+    moving = [];
+  for (const p of c.parts) {
+    const geom = partGeometry(p);
+    if (p.motion) {
+      if (p.bank || p.bevel)
+        throw Error("Moving parts must be convex flat or ramp solids.");
+      moving.push({ part: p, ...geom });
+      continue;
+    }
+    const material = p.material ?? "stone";
+    if (!staticGroups.has(material))
+      staticGroups.set(material, {
+        material,
+        vertices: [],
+        indices: [],
+        roles: [],
+        keys: new Map(),
+        faces: new Map(),
+      });
+    const group = staticGroups.get(material),
+      remap = [];
+    for (let i = 0; i < geom.vertices.length; i += 3) {
+      const v = [
+          geom.vertices[i] + p.x,
+          geom.vertices[i + 1] + p.y,
+          geom.vertices[i + 2] + p.z,
+        ],
+        key = v.map((n) => n.toFixed(6)).join(",");
+      if (!group.keys.has(key)) {
+        group.keys.set(key, group.vertices.length / 3);
+        group.vertices.push(...v);
+      }
+      remap.push(group.keys.get(key));
+    }
+    for (let i = 0; i < geom.indices.length; i += 3) {
+      const t = [
+          remap[geom.indices[i]],
+          remap[geom.indices[i + 1]],
+          remap[geom.indices[i + 2]],
+        ],
+        key = [...t].sort((a, b) => a - b).join(",");
+      if (group.faces.has(key)) {
+        const previous = group.faces.get(key).t;
+        const sameFacing = previous.some(
+          (_, j) =>
+            previous[j] === t[0] &&
+            previous[(j + 1) % 3] === t[1] &&
+            previous[(j + 2) % 3] === t[2],
+        );
+        if (!sameFacing) group.faces.delete(key);
+      } else group.faces.set(key, { t, role: geom.roles[i / 3] });
+    }
+  }
+  const statics = [...staticGroups.values()].map((g) => {
+    for (const f of g.faces.values()) {
+      g.indices.push(...f.t);
+      g.roles.push(f.role);
+    }
+    return {
+      material: g.material,
+      vertices: new Float32Array(g.vertices),
+      indices: new Uint32Array(g.indices),
+      roles: g.roles,
+    };
+  });
+  return { definition: c, statics, moving };
+}
+export function motionAt(p, time) {
+  if (p.motion?.axis === "wave") return wavePose(p, time);
+  const m = p.motion,
+    phase = (time * 2 * Math.PI) / m.period + (m.phase ?? 0),
+    s = Math.sin(phase) * m.amplitude;
+  const position = { x: p.x, y: p.y, z: p.z },
+    rotation = { x: 0, y: 0, z: 0, w: 1 };
+  if (m.axis === "tilt") {
+    rotation.z = Math.sin(s / 2);
+    rotation.w = Math.cos(s / 2);
+  } else position[m.axis] += s;
+  return { position, rotation };
+}
+export function presenceAt(p, time) {
+  if (!p.presence) return { visible: true, remaining: Infinity };
+  const { period, on, phase = 0 } = p.presence,
+    t = (((time + phase) % period) + period) % period;
+  return { visible: t < on, remaining: Math.max(0, on - t) };
+}
+
+export function proofCourse() {
+  return {
+    schema: 1,
+    id: "physics-proof",
+    revision: 1,
+    name: "The Rolling Laboratory",
+    subtitle: "A small world. Real momentum.",
+    category: "proof",
+    color: "#d35b45",
+    time: 180,
+    starts: [point(-1, 4.56, 0), point(1, 4.56, 0)],
+    goal: point(0, 0, 52),
+    checkpoints: [point(0, 4.56, 7), point(0, 2.56, 20), point(0, 0.56, 40)],
+    route: [
+      point(0, 4, 7),
+      point(0, 4, 10),
+      point(0, 2, 18),
+      point(0, 2, 26),
+      point(0, 2, 32),
+      point(0, 0, 38),
+      point(0, 0, 44),
+      point(0, 0, 52),
+    ],
+    parts: [
+      part("start", 0, 2, 10, 12, 4, { bevel: 0 }),
+      part("seam", 0, 9, 6, 2, 4),
+      part("slope", 0, 14, 6, 8, 4, { kind: "ramp", rise: -2 }),
+      part("channel", 0, 23, 6, 10, 2, { kind: "channel", bank: 1.4 }),
+      part("lip", 0, 30, 6, 4, 2),
+      part("landing", 0, 37, 10, 10, 0),
+      part("bridge", 0, 44, 4, 4, 0, {
+        kind: "moving",
+        material: "brass",
+        h: 0.65,
+        motion: { axis: "y", amplitude: 0.55, period: 6 },
+      }),
+      part("finish", 0, 51, 10, 10, 0, { bevel: 0.06 }),
+      part("left-wall", -5.25, 1, 0.5, 12, 6, { kind: "wall", h: 2.8 }),
+      part("right-wall", 5.25, 1, 0.5, 12, 6, { kind: "wall", h: 2.8 }),
+      part("back-wall", 0, -4.25, 10, 0.5, 6, { kind: "wall", h: 2.8 }),
+    ],
+    zones: [],
+  };
+}

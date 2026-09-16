@@ -1,0 +1,464 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#181e22" />
+    <title>Marble Madness · The Diorama Workshop</title>
+    <link rel="stylesheet" href="style.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23d65b46'/%3E%3Cpath d='M14 3Q30 20 14 37' stroke='%23eed695' stroke-width='8' fill='none'/%3E%3C/svg%3E"
+    />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="../../../../"
+        ><span class="brand-icon">◒</span
+        ><span>JEZ237 <small>PLAY / EXPERIMENTS</small></span></a
+      >
+      <div class="edition">MARBLE MADNESS <span>DIORAMA WORKSHOP</span></div>
+      <button id="settingsButton" class="quiet">
+        Settings <span>↗</span>
+      </button>
+    </header>
+    <main id="app">
+      <canvas id="world" aria-label="Three dimensional marble course"></canvas>
+      <section id="intro">
+        <div class="eyebrow"><i></i> THE AMIGA, REIMAGINED IN MINIATURE</div>
+        <h1>Marble<br /><em>Madness.</em></h1>
+        <p class="lede">
+          A little weight. A little nerve.<br />A whole world on the edge.
+        </p>
+        <div class="start-card">
+          <span class="micro">ON THE WORKBENCH</span>
+          <h2 id="courseName">The Rolling Laboratory</h2>
+          <p id="courseDescription">
+            Slopes, ceramic channels and a moving bridge. Explore the new
+            physical world.
+          </p>
+          <div class="fields">
+            <label
+              >Players<select id="players">
+                <option value="1">Solo marble</option>
+                <option value="2">Local two-player</option>
+              </select></label
+            ><label
+              >Mode<select id="mode">
+                <option value="timed">Timed race</option>
+                <option value="untimed">Untimed practice</option>
+              </select></label
+            >
+          </div>
+          <button id="play" class="primary">
+            Roll into it <span>↗</span>
+          </button>
+          <details id="demoRoutes">
+            <summary>Demo route</summary>
+            <label
+              >Route for Watch demo<select id="demoRoute">
+                <option value="">Main route</option>
+              </select></label
+            >
+          </details>
+          <div class="secondary-row">
+            <button id="demo">Watch demo</button
+            ><button id="coursesButton">Change course</button>
+          </div>
+          <div class="secondary-row">
+            <button id="campaignPlay">Play campaign</button
+            ><button id="campaignDemo">Watch campaign</button>
+          </div>
+        </div>
+        <p class="build-note">
+          Six-course campaign preview. Untimed practice is available for every
+          course. Timing, full Amiga parity, and music verification remain in
+          progress.
+        </p>
+      </section>
+      <div id="hud" hidden>
+        <div class="course-tag">
+          <span class="micro" id="raceCategory">PHYSICS WORKSHOP</span
+          ><strong id="raceName"></strong>
+          <small class="slope-key"
+            >Blue hollows · gold ridges &amp; edges</small
+          >
+        </div>
+        <div id="scores"></div>
+        <div class="hud-actions">
+          <button id="pause">Pause <kbd>P</kbd></button
+          ><button id="restart" title="Restart race">↻</button
+          ><button id="home" title="Return to workshop">⌂</button>
+        </div>
+      </div>
+      <div class="scene-label" id="sceneLabel">
+        <span>01 / PHYSICS STUDY</span><strong>Built to roll.</strong
+        ><small>STONE · CERAMIC · MOMENTUM</small>
+      </div>
+      <div class="camera-tools">
+        <button id="zoomOut" aria-label="Zoom out">−</button><span>VIEW</span
+        ><button id="zoomIn" aria-label="Zoom in">+</button>
+      </div>
+      <div id="toast" role="status" aria-live="polite"></div>
+      <section id="pauseCard" class="floating" hidden>
+        <span class="micro">TAKE A BREATHER</span>
+        <h2>Perfectly still.</h2>
+        <p>Drag the course to look around.</p>
+        <button id="resume" class="primary">Keep rolling <span>→</span></button
+        ><button id="editButton">Open course editor</button>
+      </section>
+      <section id="result" class="floating" hidden>
+        <span class="micro" id="resultLabel">RACE COMPLETE</span>
+        <h2 id="resultTitle">Beautifully rolled.</h2>
+        <p id="resultText"></p>
+        <button id="again" class="primary">Roll again <span>↻</span></button
+        ><button id="replay">Watch replay</button
+        ><button id="resultHome">Back to workshop</button>
+      </section>
+      <section id="replayBar" hidden>
+        <button id="replayPause">Pause replay</button
+        ><input
+          id="seek"
+          aria-label="Replay position"
+          type="range"
+          min="0"
+          max="1"
+          value="0"
+        /><select id="replaySpeed" aria-label="Playback speed">
+          <option value="0.25">¼ speed</option>
+          <option value="0.5">½ speed</option>
+          <option value="1" selected>1× speed</option>
+          <option value="2">2× speed</option></select
+        ><button id="exitReplay">Exit</button>
+      </section>
+      <section id="editor" hidden>
+        <div class="micro">COURSE WORKSHOP</div>
+        <h2>Make your own way.</h2>
+        <label
+          >Course name<input id="customName" type="text" maxlength="80"
+        /></label>
+        <label
+          >Clock units<input
+            id="customTime"
+            type="number"
+            min="1"
+            max="2000"
+            value="120"
+        /></label>
+        <p>
+          Click the world to place a piece on the selected elevation. Drag to
+          orbit while paused.
+        </p>
+        <label
+          >Piece<select id="piece">
+            <option>floor</option>
+            <option>ramp</option>
+            <option>channel</option>
+            <option>curve</option>
+            <option>curved-channel</option>
+            <option>tube</option>
+            <option>pyramid</option>
+            <option>wall</option>
+            <option>moving</option>
+            <option>tilt</option>
+            <option>piston</option>
+            <option>spring</option>
+            <option>start</option>
+            <option>checkpoint</option>
+            <option>goal</option>
+            <option>hazard</option>
+            <option>magnet</option>
+            <option>acid</option>
+            <option>vacuum</option>
+            <option>steelie</option>
+            <option>muncher</option>
+            <option>mini</option>
+            <option>bird</option>
+            <option>vanishing</option>
+            <option>demo waypoint</option>
+            <option>move selected</option>
+            <option>erase</option>
+          </select></label
+        >
+        <div class="fields">
+          <label
+            >Width<input
+              id="pieceWidth"
+              type="number"
+              min="1"
+              max="30"
+              value="6" /></label
+          ><label
+            >Depth<input
+              id="pieceDepth"
+              type="number"
+              min="1"
+              max="30"
+              value="6"
+          /></label>
+        </div>
+        <div class="fields">
+          <label
+            >Elevation<input
+              id="pieceY"
+              type="number"
+              min="-5"
+              max="30"
+              value="0"
+              step="0.5" /></label
+          ><label
+            >Rise<input
+              id="pieceRise"
+              type="number"
+              min="-8"
+              max="8"
+              value="0"
+              step="0.5"
+          /></label>
+        </div>
+        <label
+          >Surface<select id="pieceMaterial">
+            <option>stone</option>
+            <option>ceramic</option>
+            <option>ice</option>
+            <option>glass</option>
+            <option>brass</option>
+            <option>red</option>
+            <option>blue</option>
+            <option>orange</option>
+            <option>green</option>
+            <option>sand</option>
+            <option>yellow</option>
+            <option>metal</option>
+          </select></label
+        >
+        <div class="fields">
+          <label
+            >Angle °<input
+              id="pieceAngle"
+              type="number"
+              min="-360"
+              max="360"
+              step="15"
+              value="0"
+          /></label>
+          <label
+            >Grid<select id="pieceSnap">
+              <option value=".25">¼ unit</option>
+              <option value=".5">½ unit</option>
+              <option value="1" selected>1 unit</option>
+              <option value="2">2 units</option>
+            </select></label
+          >
+        </div>
+        <details>
+          <summary>Curves, motion &amp; launchers</summary>
+          <div class="fields">
+            <label
+              >Curve / zone radius<input
+                id="pieceRadius"
+                type="number"
+                min="1"
+                max="30"
+                value="6"
+            /></label>
+            <label
+              >Channel bank<input
+                id="pieceBank"
+                type="number"
+                min="0"
+                max="5"
+                step=".25"
+                value="1"
+            /></label>
+          </div>
+          <div class="fields">
+            <label
+              >Motion axis<select id="pieceAxis">
+                <option>x</option>
+                <option selected>y</option>
+                <option>z</option>
+              </select></label
+            >
+            <label
+              >Amplitude (tilt °)<input
+                id="pieceAmplitude"
+                type="number"
+                min="0"
+                max="30"
+                step=".25"
+                value="1"
+            /></label>
+          </div>
+          <label
+            >Motion period, seconds<input
+              id="piecePeriod"
+              type="number"
+              min=".5"
+              max="60"
+              step=".5"
+              value="4"
+          /></label>
+          <div class="fields">
+            <label
+              >Launch forward<input
+                id="pieceForward"
+                type="number"
+                min="0"
+                max="20"
+                value="7"
+            /></label>
+            <label
+              >Launch upward<input
+                id="pieceUp"
+                type="number"
+                min="0"
+                max="20"
+                value="5"
+            /></label>
+          </div>
+          <p>
+            Curves turn 90°. Width sets a pipe’s diameter. Leave space between
+            pieces for gaps. Add demo waypoints in travel order.
+          </p>
+        </details>
+        <details>
+          <summary>Move, rotate &amp; remove</summary>
+          <label>Object<select id="selectedPiece"></select></label>
+          <div class="secondary-row">
+            <button id="movePiece">Move on next click</button
+            ><button id="rotatePiece">Rotate 45°</button>
+          </div>
+          <button id="removePiece">Remove selected object</button>
+        </details>
+        <div class="secondary-row">
+          <button id="undo">↶ Undo</button><button id="redo">Redo ↷</button>
+        </div>
+        <button id="playtest" class="primary">
+          Playtest course <span>→</span>
+        </button>
+        <div class="secondary-row">
+          <button id="saveCourse">Save locally</button
+          ><button id="exportCourse">Export JSON</button>
+        </div>
+        <label class="file-button"
+          >Import JSON<input
+            id="importCourse"
+            type="file"
+            accept=".json,application/json" /></label
+        ><button id="closeEditor">Close editor</button>
+        <p id="editorStatus" role="status">Snapping to a 1-unit grid.</p>
+      </section>
+      <div id="touchControls" hidden>
+        <div class="touch-player">
+          <div class="steer" aria-label="Player one steering">
+            <b></b><span>P1</span>
+          </div>
+          <button class="turbo">TURBO</button>
+        </div>
+        <div class="touch-player" id="touchP2">
+          <div class="steer" aria-label="Player two steering">
+            <b></b><span>P2</span>
+          </div>
+          <button class="turbo">TURBO</button>
+        </div>
+      </div>
+    </main>
+    <footer>
+      <div>
+        <span class="status-dot"></span
+        ><span id="status">Loading the physical world…</span>
+      </div>
+      <div class="instructions">
+        <kbd>W A S D</kbd> roll <kbd>SHIFT</kbd> turbo <kbd>P</kbd> pause
+      </div>
+      <a href="../legacy/">Legacy game ↗</a>
+    </footer>
+    <dialog id="settings">
+      <div class="dialog-head">
+        <span class="micro">MAKE YOURSELF AT HOME</span
+        ><button data-close="settings" aria-label="Close settings">×</button>
+      </div>
+      <h2>How you roll.</h2>
+      <label
+        >Graphics<select id="quality">
+          <option value="auto">Adaptive quality</option>
+          <option value="high">High quality</option>
+          <option value="low">Lightweight</option>
+        </select></label
+      ><label
+        >Sensitivity<input
+          id="sensitivity"
+          type="range"
+          min="0.3"
+          max="2"
+          step="0.1"
+          value="1" /></label
+      ><label class="check"
+        ><input id="trackball" type="checkbox" /> Mouse trackball (click course
+        to capture)</label
+      ><label class="check"
+        ><input id="assisted" type="checkbox" /> Checkpoint assistance ·
+        separate records</label
+      ><label
+        >Difficulty
+        <select id="difficulty"></select
+      ></label>
+      <p class="build-note">
+        Higher levels speed up the clock, enemies, and machinery. These remake
+        presets still need level-by-level calibration against the Amiga.
+      </p>
+      <label
+        >Music<input
+          id="musicVolume"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="0.5"
+      /></label>
+      <p class="audio-note">
+        Original modules located. Playback and loops remain unverified; music is
+        unavailable in this build.
+      </p>
+      <label
+        >Effects<input
+          id="effectsVolume"
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          value="0.55"
+      /></label>
+      <p>
+        P1: WASD + Shift / Space. P2: arrows + Enter. Gamepads: stick + A.
+        Touch: pad + Turbo. Esc releases mouse.
+      </p>
+      <button id="settingsDone" class="primary">All set <span>✓</span></button>
+    </dialog>
+    <dialog id="courseDialog">
+      <div class="dialog-head">
+        <span class="micro">CHOOSE YOUR NEXT ROLL</span
+        ><button data-close="courseDialog" aria-label="Close course picker">
+          ×
+        </button>
+      </div>
+      <h2>Small worlds.</h2>
+      <div id="courseList"></div>
+      <h3>Original Amiga campaign</h3>
+      <p class="audio-note">
+        All six courses are available as reconstructions. Full rule, hazard,
+        alternate-route, and music parity are in progress.
+      </p>
+      <div class="pending-courses">
+        01 Practice · 02 Beginner · 03 Intermediate<br />04 Aerial · 05 Silly ·
+        06 Ultimate
+      </div>
+      <button id="newCourse">Create a custom course ↗</button>
+    </dialog>
+    <script type="module" src="game.js"></script>
+  </body>
+</html>
