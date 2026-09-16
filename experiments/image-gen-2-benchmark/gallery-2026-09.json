@@ -1,5 +1,30 @@
 [
   {
+    "id": "2026-09-16-random-image-style-mezzotint-museum-moth-damage-triage",
+    "title": "Mezzotint Museum Moth-Damage Triage",
+    "tests": "Wednesday slot 1/3. Formula: conservation incident reconstructed through a pin-marked evidence trail and integrated magnified observations emerging from burnished pools of light. Distinct medium, subject, composition, palette, and narrative premise from the archive and later Wednesday candidates.; archive_slot=2026-09-16T01:20; concept=mezzotint-museum-moth-damage-triage",
+    "prompt": "Create a finished, richly detailed museum conservation scene as an authentic hand-rocked copperplate mezzotint with one restrained carmine spot color—never a prompt card, flat diagram, photographic grayscale filter, or smooth digital illustration. Overhead spiral composition on a near-black conservation worktable: a large pale wool tapestry curls around a convex magnifying lens at the center. The tapestry depicts a graceful crane among reeds, but branching clothes-moth damage has eaten through parts of the bird and wetland, leaving irregular channels, exposed linen warp and weft, loosened wool, cocoons, clipped fibers, and tiny shadows. A conservator's gloved hands enter naturally from opposite edges, one holding a sable brush and the other lifting a silk collection tent; nearby are small glass sample vials, curved tweezers, a pin cushion, thread cards without writing, and a low inspection lamp. A spiral trail of tiny carmine-headed pins leads through the scene and connects three distinct circular close-observation zones formed by magnifying lenses and pools of burnished light: an enlarged larval grazing channel with clipped wool ends, a cluster of eggs nestled between warp threads, and a repaired boundary where new support fabric meets the fragile original. Integrate these observations into the single tabletop rather than separating them into panels. Make mezzotint printmaking unmistakably physical: velvety blacks built from dense hand-rocked copperplate tooth, luminous ivory shapes burnished out of darkness, scraper-softened gray transitions, granular burr, irregular wiped-ink veils, subtle plate-edge embossing, warm cotton-rag paper, and tiny carmine à la poupée accents limited to pin heads and one repair thread. Light should feel excavated from the black ground: the lens glows, glass rims flash, loose fibers become silver filaments, and the crane fades into darkness where damaged. The evidence trail, damage sequence, and treatment logic must be understandable through object placement and tonal hierarchy alone. Believable conservation tools and textile structure, tactile macro clarity, deep coherent detail, no readable text, no letters, no logos, no watermark, no poster border, no photorealism, no smooth vector shapes, no glossy 3D rendering.",
+    "image": "images/2026-09-16-random-image-style-mezzotint-museum-moth-damage-triage.jpg",
+    "thumb": "thumbs/2026-09-16-random-image-style-mezzotint-museum-moth-damage-triage.webp",
+    "color": "#524b42",
+    "date": "2026-09-16",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "mezzotint-museum-moth-damage-triage",
+      "imageSha256": "d56375ab1c95fc6859f6c901b68f928a28877e5558950934d13e8e289b359b01",
+      "imageDHash": "da1d9eb2234a6aa6",
+      "styleFamily": "hand-rocked-copperplate-mezzotint"
+    },
+    "randomRenderingStyle": {
+      "medium": "hand-rocked copperplate mezzotint",
+      "description": "A nocturnal overhead conservation-triage tableau formed from dense copperplate tooth, burnished ivory light, scraper-softened gray, plate-edge embossing, ink burr, and restrained carmine à la poupée accents.",
+      "template": ""
+    }
+  },
+  {
     "id": "2026-09-15-factual-infographic-factual-infographic-stenus-comma-the-sp",
     "title": "Factual infographic: Stenus comma — The Spring-Loaded Sticky Lip",
     "tests": "Archive-wide factual topic packet contains no prior Stenus comma or adhesive-labium subject. Direct-canvas portrait infographic at the supported 1024x1536 minimum; one dominant hero, eight substantive panels, four explanatory close-ups, exact six-legged anatomy, source-boundary footer, no unsupported speed claim. Generation requested the larger 2048x3072 portrait, but the exact routed model returned a valid high-quality 1024x1536 source; retained source adopted without regeneration.; archive_slot=2026-09-15T12:20; concept=stenus-comma-adhesive-labium-springtail-capture; factual_subtype: bizarre-insect-life",
