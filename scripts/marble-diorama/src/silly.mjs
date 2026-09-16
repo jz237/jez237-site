@@ -300,6 +300,7 @@ export function sillyCourse() {
   return {
     schema: 1,
     id: "silly",
+    medals: { gold: 95, silver: 140 },
     revision: 3,
     name: "Silly Race",
     courseNumber: 5,

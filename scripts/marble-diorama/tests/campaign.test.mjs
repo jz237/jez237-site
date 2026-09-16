@@ -17,6 +17,7 @@ import {
 import { CampaignRun, nextCourseTime, endingBonus } from "../src/rules.mjs";
 import { Recording, seekRecording } from "../src/storage.mjs";
 import { tubeGeometry } from "../src/surface-geometry.mjs";
+import { blankCourse } from "../src/workshop.mjs";
 import {
   part,
   proofCourse,
@@ -24,6 +25,34 @@ import {
   partGeometry,
 } from "../src/course.mjs";
 await initPhysics();
+
+test("custom demos without authored waypoints steer normally to the finish for both players", () => {
+  for (const routes of [
+    { route: [] },
+    { route: undefined },
+    { playerRoutes: [[], []] },
+  ]) {
+    const course = { ...blankCourse(), ...routes };
+    const sim = new Simulation(course, { players: 2, untimed: true });
+    const drivers = sim.players.map(() => new DemoController());
+    while (
+      sim.tick < 2400 &&
+      sim.players.some((p) => p.status !== "finished")
+    ) {
+      const controls = drivers.map((driver, i) => driver.input(sim, i));
+      for (const control of controls) {
+        assert.ok(Number.isFinite(control.x) && Number.isFinite(control.z));
+        assert.ok(Math.hypot(control.x, control.z) <= 1.000001);
+      }
+      sim.step(controls);
+    }
+    for (const p of sim.players) {
+      assert.equal(p.status, "finished");
+      assert.equal(p.deaths, 0);
+    }
+    sim.dispose();
+  }
+});
 
 for (const players of [1, 2]) {
   test(`Silly ${players}-player demos collect miniatures through contact and cross bird flights without falls`, () => {
@@ -39,7 +68,10 @@ for (const players of [1, 2]) {
       inputs.forEach((input, i) => {
         assert.ok(Number.isFinite(input.x) && Number.isFinite(input.z));
         assert.ok(Math.hypot(input.x, input.z) <= 1.000001);
-        assert.deepEqual({ ...sim.body(sim.players[i]).translation() }, before[i]);
+        assert.deepEqual(
+          { ...sim.body(sim.players[i]).translation() },
+          before[i],
+        );
       });
       sim.step(inputs);
       for (const event of sim.events)

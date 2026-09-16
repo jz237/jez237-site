@@ -481,8 +481,12 @@ export class DemoController {
       b = sim.body(p),
       pos = b.translation(),
       v = b.linvel(),
-      route = sim.course.playerRoutes?.[player] ??
-        sim.course.route ?? [sim.course.goal];
+      playerRoute = sim.course.playerRoutes?.[player],
+      route = playerRoute?.length
+        ? playerRoute
+        : sim.course.route?.length
+          ? sim.course.route
+          : [sim.course.goal];
     if (p.deaths !== this.lastDeath) {
       this.recovering = true;
       this.lastDeath = p.deaths;

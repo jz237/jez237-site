@@ -357,6 +357,7 @@ export function aerialCourse() {
   return {
     schema: 1,
     id: "aerial",
+    medals: { gold: 75, silver: 110 },
     revision: 1,
     name: "Aerial Race",
     courseNumber: 4,

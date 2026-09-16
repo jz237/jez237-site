@@ -159,6 +159,7 @@ export function practiceCourse() {
   return {
     schema: 1,
     id: "practice",
+    medals: { gold: 35, silver: 55 },
     rules: AMIGA_RULES,
     revision: 1,
     name: "Practice Race",
@@ -496,6 +497,7 @@ export function beginnerCourse() {
   return {
     schema: 1,
     id: "beginner",
+    medals: { gold: 75, silver: 110 },
     rules: AMIGA_RULES,
     revision: 2,
     name: "Beginner Race",
@@ -804,6 +806,7 @@ export function intermediateCourse() {
   const course = {
     schema: 1,
     id: "intermediate",
+    medals: { gold: 65, silver: 95 },
     revision: 2,
     name: "Intermediate Race",
     courseNumber: 3,

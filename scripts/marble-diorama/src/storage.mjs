@@ -115,8 +115,37 @@ export function saveStore(s, { onPrune } = {}) {
     }
   }
 }
+function customDefinitionTag(course) {
+  // Imports and successive playtests may reuse a revision. Include the actual
+  // definition so a changed layout cannot inherit its predecessor's records.
+  const {
+    name,
+    subtitle,
+    color,
+    sidePalette,
+    reference,
+    medals,
+    ...definition
+  } = course;
+  const text = JSON.stringify(definition, (_, value) =>
+    value && typeof value === "object" && !Array.isArray(value)
+      ? Object.fromEntries(
+          Object.keys(value)
+            .sort()
+            .map((key) => [key, value[key]]),
+        )
+      : value,
+  );
+  let a = 2166136261,
+    b = 3339675911;
+  for (let i = 0; i < text.length; i++) {
+    a = Math.imul(a ^ text.charCodeAt(i), 16777619);
+    b = Math.imul(b ^ text.charCodeAt(i), 2246822519);
+  }
+  return `${(a >>> 0).toString(16).padStart(8, "0")}${(b >>> 0).toString(16).padStart(8, "0")}`;
+}
 export function recordKey(c, options) {
-  return [
+  const fields = [
     PHYSICS_VERSION,
     c.id,
     c.revision,
@@ -125,7 +154,9 @@ export function recordKey(c, options) {
     options.assisted ? "assisted" : "standard",
     options.untimed ? "untimed" : "timed",
     options.campaign ? "campaign" : "single",
-  ].join(":");
+  ];
+  if (c.category === "custom") fields.push(customDefinitionTag(c));
+  return fields.join(":");
 }
 export class Recording {
   constructor(sim) {

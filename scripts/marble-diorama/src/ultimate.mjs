@@ -258,6 +258,7 @@ export function ultimateCourse() {
   return {
     schema: 1,
     id: "ultimate",
+    medals: { gold: 85, silver: 125 },
     revision: 1,
     name: "Ultimate Race",
     courseNumber: 6,

@@ -37,6 +37,16 @@ export function validateCourse(c) {
     );
   if (!Array.isArray(c.parts) || c.parts.length > 500 || !c.parts.length)
     throw Error("A course needs 1–500 parts.");
+  if (
+    c.medals &&
+    (!Number.isFinite(c.medals.gold) ||
+      !Number.isFinite(c.medals.silver) ||
+      c.medals.gold <= 0 ||
+      c.medals.silver < c.medals.gold)
+  )
+    throw Error(
+      "Medal targets need positive gold and silver times, with gold no slower than silver.",
+    );
   const ids = new Set();
   let estimatedVertices = 0;
   for (const p of c.parts) {

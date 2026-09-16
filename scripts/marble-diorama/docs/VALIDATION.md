@@ -2,7 +2,7 @@
 
 ## Current outcome
 
-**68 automated tests pass. All six campaign races and all three bonus courses
+**77 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Unfinished Games, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
@@ -11,6 +11,25 @@ Current simulation/replay version: `rapier-0.20.0-mm-5`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
+
+### September 16 — visible medals and reliable records (local development)
+
+The result screen awards each finishing player a medal and reports personal bests,
+high scores and save status. Course targets and records appear in the start card
+and course picker, with a separate campaign-record view. Failed persistence
+preserves previous data; custom-definition fingerprints isolate changed layouts.
+Eight added tests cover awards and persistence behavior. Browser checks confirm
+solo/two-player results, reload persistence, assisted separation, desktop and
+portrait/landscape layouts. See RECORDS.md for scope and evidence. JavaScript and
+CSS URLs now carry content-derived versions to avoid stale assets after updates.
+The browser demo check also exposed an empty-waypoint crash on new custom
+courses. The controller now falls back to the course finish when no nonempty
+route exists. A regression test completes the default custom floor with both
+players and zero falls for missing/empty shared and per-player routes. The
+browser fixture demo then completed, with no medal awards or console errors.
+
+This checkpoint is local; the currently published preview is fb190f0cf. Full
+campaign balance, Amiga parity, music and physical-device acceptance remain open.
 
 ### September 16 — miniature collection and bird crossings (local development)
 

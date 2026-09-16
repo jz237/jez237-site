@@ -125,6 +125,103 @@ canvas {
 #intro input {
   pointer-events: auto;
 }
+#courseRecords {
+  pointer-events: auto;
+  margin: 5px 0 14px;
+  font-size: 11px;
+}
+#courseRecords summary {
+  cursor: pointer;
+  color: var(--accent);
+}
+#courseRecords p {
+  margin: 8px 0;
+  line-height: 1.5;
+}
+#courseRecords[open] {
+  max-height: 160px;
+  overflow: auto;
+}
+@media (min-width: 801px) {
+  #intro {
+    max-height: calc(100% - 55px);
+    overflow-y: auto;
+    scrollbar-width: thin;
+    pointer-events: auto;
+    padding-right: 8px;
+  }
+}
+.record-context {
+  color: var(--dim);
+  font-size: 10px;
+  line-height: 1.5;
+}
+.course-choice .medal-targets,
+.medal-targets {
+  color: #e1c99d;
+}
+.course-choice .record-summary,
+.record-summary {
+  color: #c6ddd1;
+}
+#result {
+  max-height: calc(100% - 24px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+#resultAwards {
+  margin: 14px 0 20px;
+  text-align: left;
+}
+.award-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-top: 1px solid #ffffff16;
+  padding: 12px 0;
+}
+.award-row strong,
+.award-row small {
+  display: block;
+  line-height: 1.5;
+}
+.award-row strong {
+  font-size: 12px;
+  font-weight: 500;
+}
+.award-row small {
+  font-size: 10px;
+  color: var(--dim);
+}
+.medal-badge {
+  flex: 0 0 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  border: 3px double #ffffff70;
+  box-shadow:
+    inset 0 2px 5px #fff4,
+    0 2px 4px #0004;
+  font:
+    bold 17px Georgia,
+    serif;
+  color: #302416;
+}
+.medal-badge.gold {
+  background: linear-gradient(135deg, #ffedb9, #b88433);
+}
+.medal-badge.silver {
+  background: linear-gradient(135deg, #e6f0f3, #7d949e);
+}
+.medal-badge.bronze {
+  background: linear-gradient(135deg, #e9b88e, #975c36);
+}
+.medal-badge.unfinished {
+  color: var(--dim);
+  border-color: #ffffff25;
+  box-shadow: none;
+}
 .eyebrow,
 .micro {
   font-size: 9px;

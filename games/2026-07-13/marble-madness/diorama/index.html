@@ -8,7 +8,7 @@
     />
     <meta name="theme-color" content="#181e22" />
     <title>Marble Madness · The Diorama Workshop</title>
-    <link rel="stylesheet" href="style.css" />
+    <link rel="stylesheet" href="style.css?v=5d378321db6ee4e8" />
     <link
       rel="icon"
       href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Ccircle cx='20' cy='20' r='18' fill='%23d65b46'/%3E%3Cpath d='M14 3Q30 20 14 37' stroke='%23eed695' stroke-width='8' fill='none'/%3E%3C/svg%3E"
@@ -53,6 +53,12 @@
               </select></label
             >
           </div>
+          <details id="courseRecords">
+            <summary>Medals &amp; personal best</summary>
+            <p id="selectedTargets" class="medal-targets"></p>
+            <p id="selectedRecordContext" class="record-context"></p>
+            <div id="selectedRecords" class="record-summary"></div>
+          </details>
           <button id="play" class="primary">
             Roll into it <span>↗</span>
           </button>
@@ -114,6 +120,7 @@
         <span class="micro" id="resultLabel">RACE COMPLETE</span>
         <h2 id="resultTitle">Beautifully rolled.</h2>
         <p id="resultText"></p>
+        <div id="resultAwards"></div>
         <button id="again" class="primary">Roll again <span>↻</span></button
         ><button id="replay">Watch replay</button
         ><button id="resultHome">Back to workshop</button>
@@ -447,6 +454,13 @@
         </button>
       </div>
       <h2>Small worlds.</h2>
+      <label
+        >Show records for<select id="recordScope">
+          <option value="single">Single courses</option>
+          <option value="campaign">Campaign races</option>
+        </select></label
+      >
+      <p id="recordContext" class="record-context"></p>
       <div id="courseList"></div>
       <h3>Original Amiga campaign</h3>
       <p class="audio-note">
@@ -459,6 +473,6 @@
       </div>
       <button id="newCourse">Create a custom course ↗</button>
     </dialog>
-    <script type="module" src="game.js"></script>
+    <script type="module" src="game.js?v=6dde4b4f9534a2b7"></script>
   </body>
 </html>
