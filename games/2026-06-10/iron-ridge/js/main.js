@@ -8,25 +8,25 @@ import { RenderPass } from '../vendor/postprocessing/RenderPass.js';
 import { UnrealBloomPass } from '../vendor/postprocessing/UnrealBloomPass.js';
 import { ShaderPass } from '../vendor/postprocessing/ShaderPass.js';
 
-import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=5';
-import { Infantry } from './infantry.js?v=5';
-import { makeRng } from './noise.js?v=5';
-import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=woodland1';
-import { buildSky } from './sky.js?v=5';
-import { Foliage } from './foliage.js?v=woodland1';
-import { Props } from './props.js?v=5';
-import { Tank } from './tank.js?v=5';
-import { WaveManager } from './enemy.js?v=5';
-import { Projectiles } from './projectiles.js?v=5';
-import { Effects } from './effects.js?v=5';
-import { GameAudio } from './audio.js?v=5';
-import { Input, isTouch } from './input.js?v=5';
-import { settings, setSetting } from './settings.js?v=5';
-import { Hud } from './hud.js?v=5';
-import { QualityScaler, LEVELS } from './quality.js?v=5';
-import { Minimap } from './minimap.js?v=5';
-import * as LB from './leaderboard.js?v=5';
-import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=5';
+import { FIXED_DT, MAX_FRAME_DT, GRAVITY, SHELL, ENEMY, ENEMY_TYPES, SCORING, TANK, PLAY_RADIUS, ARTILLERY, PICKUP, PILLBOX, WEAPONS, MG, REPAIR, PERKS, DAILY, DAILY_STAMP, CG, CACHE, BOOST, INFANTRY } from './config.js?v=detail2';
+import { Infantry } from './infantry.js?v=detail2';
+import { makeRng } from './noise.js?v=detail2';
+import { buildTerrain, getHeight, raycastTerrain } from './terrain.js?v=detail2';
+import { buildSky } from './sky.js?v=detail2';
+import { Foliage } from './foliage.js?v=detail2';
+import { Props } from './props.js?v=detail2';
+import { Tank } from './tank.js?v=detail2';
+import { WaveManager } from './enemy.js?v=detail2';
+import { Projectiles } from './projectiles.js?v=detail2';
+import { Effects } from './effects.js?v=detail2';
+import { GameAudio } from './audio.js?v=detail2';
+import { Input, isTouch } from './input.js?v=detail2';
+import { settings, setSetting } from './settings.js?v=detail2';
+import { Hud } from './hud.js?v=detail2';
+import { QualityScaler, LEVELS } from './quality.js?v=detail2';
+import { Minimap } from './minimap.js?v=detail2';
+import * as LB from './leaderboard.js?v=detail2';
+import { Multiplayer, cleanName, cleanRoom, randomRoom } from './multiplayer.js?v=detail2';
 
 const $ = (id) => document.getElementById(id);
 
@@ -600,6 +600,8 @@ const quality = new QualityScaler(isTouch ? 1 : 2, (L) => {
   bloomPass.enabled = L.bloom;
   gradePass.enabled = L.grade;
   foliage.setTreeFraction(L.treeFrac);
+  foliage.setNearDetail(L.nearTrees, L.nearRadius);
+  terrain.mesh.material.userData.detailStrength.value = L.groundDetail;
   foliage.setGrassFraction(L.grassFrac);
   effects.setParticleScale(L.particleScale);
   if (sky.sun.shadow.mapSize.x !== L.shadowSize) {

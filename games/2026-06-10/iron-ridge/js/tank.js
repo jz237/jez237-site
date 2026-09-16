@@ -3,8 +3,9 @@
 
 import * as THREE from 'three';
 import * as CANNON from 'cannon-es';
-import { TANK, SHELL, CG } from './config.js?v=5';
-import { getHeight } from './terrain.js?v=woodland1';
+import { batchRigidParts } from './render-batch.js?v=detail2';
+import { TANK, SHELL, CG } from './config.js?v=detail2';
+import { getHeight } from './terrain.js?v=detail2';
 
 const _conn = new CANNON.Vec3();
 const _connW = new CANNON.Vec3();
@@ -28,7 +29,7 @@ const camoCache = new Map();
 function camoTexture(schemeName) {
   if (camoCache.has(schemeName)) return camoCache.get(schemeName);
   const colors = SCHEMES[schemeName] ?? SCHEMES.olive;
-  const s = 128;
+  const s = 512;
   const cv = document.createElement('canvas');
   cv.width = cv.height = s;
   const ctx = cv.getContext('2d');
@@ -37,7 +38,7 @@ function camoTexture(schemeName) {
   let seed = 0;
   for (let i = 0; i < schemeName.length; i++) seed = (seed * 31 + schemeName.charCodeAt(i)) | 0;
   const rng = () => { seed = (seed * 1103515245 + 12345) & 0x7fffffff; return seed / 0x7fffffff; };
-  for (const [color, n, rMin, rMax] of [[colors.camo, 9, 10, 26], [colors.camo2, 7, 6, 16]]) {
+  for (const [color, n, rMin, rMax] of [[colors.camo, 12, 40, 104], [colors.camo2, 10, 24, 64]]) {
     ctx.fillStyle = color;
     for (let i = 0; i < n; i++) {
       const x = rng() * s, y = rng() * s;
@@ -58,6 +59,31 @@ function camoTexture(schemeName) {
     const v = rng();
     ctx.fillStyle = v > 0.5 ? 'rgba(0,0,0,0.07)' : 'rgba(255,255,255,0.05)';
     ctx.fillRect(rng() * s, rng() * s, 1 + rng() * 2, 1 + rng() * 2);
+  }
+  // Cast-metal grain, panel welds and chipped painted edges are baked
+  // into the existing colour map (no new mesh or draw call).
+  for(let i=0;i<7000;i++) {
+    ctx.fillStyle=i%3?'rgba(30,27,22,0.07)':'rgba(228,224,198,0.12)';
+    ctx.fillRect(rng()*s,rng()*s,1+rng()*2,1+rng()*2);
+  }
+  for(const x of [12,244,500]) {
+    ctx.fillStyle='rgba(25,29,21,0.34)';ctx.fillRect(x-3,0,5,s);
+    for(let y=0;y<s;y+=5){
+      ctx.fillStyle='rgba(173,176,146,0.55)';ctx.fillRect(x-1,y,3,3);
+      ctx.fillStyle='rgba(40,43,31,0.35)';ctx.fillRect(x+2,y+2,2,3);
+    }
+  }
+  for(let i=0;i<240;i++) {
+    const x=rng()*s,y=i%2?rng()*14:s-rng()*16;
+    ctx.fillStyle='rgba(37,40,32,0.7)';ctx.fillRect(x,y,2+rng()*9,1+rng()*3);
+    ctx.fillStyle='rgba(182,181,155,0.45)';ctx.fillRect(x,y-1,2+rng()*5,1);
+  }
+  // Dust/grime along lower panel edges, with gravity-directed runoff.
+  const mud=ctx.createLinearGradient(0,s*.62,0,s);
+  mud.addColorStop(0,'rgba(109,86,51,0)');mud.addColorStop(1,'rgba(109,86,51,0.50)');
+  ctx.fillStyle=mud;ctx.fillRect(0,0,s,s);
+  for(let i=0;i<100;i++){
+    ctx.fillStyle='rgba(58,48,30,0.22)';ctx.fillRect(rng()*s,s*.7+rng()*s*.3,1+rng()*3,8+rng()*35);
   }
   const tex = new THREE.CanvasTexture(cv);
   tex.wrapS = tex.wrapT = THREE.RepeatWrapping;
@@ -142,9 +168,9 @@ export function buildTankMesh(scheme = 'olive') {
   const colors = SCHEMES[scheme] ?? SCHEMES.olive;
   const camo = camoTexture(scheme);
 
-  const hullMat = new THREE.MeshStandardMaterial({ map: camo, roughness: 0.74, metalness: 0.05 });
-  const accentMat = new THREE.MeshStandardMaterial({ map: camo, color: 0xc6c6bc, roughness: 0.8, metalness: 0.05 });
-  const darkMat = new THREE.MeshStandardMaterial({ color: colors.dark, roughness: 0.8, metalness: 0.05 });
+  const hullMat = new THREE.MeshStandardMaterial({ map: camo, roughness: 0.67, metalness: 0.16 });
+  const accentMat = new THREE.MeshStandardMaterial({ map: camo, color: 0xc6c6bc, roughness: 0.77, metalness: 0.12 });
+  const darkMat = new THREE.MeshStandardMaterial({ color: colors.dark, roughness: 0.77, metalness: 0.12 });
   const barrelMat = new THREE.MeshStandardMaterial({ color: colors.barrel, roughness: 0.45, metalness: 0.3 });
   const rubberMat = new THREE.MeshStandardMaterial({ color: 0x2c2c2e, roughness: 0.95 });
   const steelMat = new THREE.MeshStandardMaterial({ color: 0x6a6a70, roughness: 0.45, metalness: 0.45 });
@@ -496,6 +522,8 @@ export function buildTankMesh(scheme = 'olive') {
   coaxMuzzle.position.set(0.34, 0.02, 0.95);
   pivot.add(coaxMuzzle);
 
+  const moving = new Set([turret,pivot,recoilGrp,links,...spinning,...exhausts,muzzle,coaxMuzzle]);
+  batchRigidParts(root,[hull,turret,pivot,recoilGrp,...spinning.filter(o=>o.isGroup)],moving);
   root.traverse(o => { if (o.isMesh) { o.castShadow = true; } });
 
   return { root, hull, turret, pivot, recoilGrp, muzzle, coaxMuzzle, roadWheels, spinning, tracks, exhausts };
