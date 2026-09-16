@@ -62,3 +62,11 @@ individuals and husbandry; consult the store about a real community.
 
 Blender source: scripts/rotatable-aquascape/model-source/silver-angelfish.blend.
 Rebuild script: model-source/build_angelfish.py. No paid assets or services used.
+
+Nearby leaves and hardscape trigger a brief, deliberate forward extension of the
+pelvic fins, followed by relaxation and a cooldown. The hinge movement remains
+independent on each side, including visible forward/back sweeps between inspections.
+This is an illustrative inspection behavior requested for the display, not a claim
+that its trigger distance or timing has been measured in angelfish. The articulated
+collision envelope follows the pelvic pose and prevents an extension through a
+surface. The living close-up demonstrates the extension at a larger scale.

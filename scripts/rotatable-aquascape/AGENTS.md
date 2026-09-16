@@ -36,3 +36,8 @@ brief high effort. Filter social steering and angular velocity; commit to clear
 obstacle recovery instead of alternating yaw at a contact boundary. The two fish
 have a loose companion preference and give other fish room, without rigidly
 synchronized motion. These motion constants are qualitative, not measured data.
+
+Keep angelfish pelvic fins visibly active: independent forward/back hinge sweeps,
+a deliberate forward extension near leaves or hardscape, relaxation afterward,
+and collision volumes that follow that pose. Preserve actual open-water depth
+exploration in front of and behind scenery; never fake depth by crossing solids.

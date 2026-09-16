@@ -19,7 +19,7 @@
   "./models/moss_01/textures/moss_01_diff_2k.jpg": "./load/moss_01_diff_2k-75acf965b37418e1.jpg",
   "./models/moss_01/textures/moss_01_arm_2k.jpg": "./load/moss_01_arm_2k-91d01f1f37d3bc1c.jpg",
   "./models/moss_01/moss_01_2k.gltf": "./load/moss_01_2k-16c490f2d8c932d8.gltf",
-  "./models/angelfish/silver-angelfish.glb": "./load/silver-angelfish-ca91f55ad481d99d.glb",
+  "./models/angelfish/silver-angelfish.glb": "./load/silver-angelfish-ad03401373499ca0.glb",
   "./living-species.png": "./load/living-species-99e34ed119820765.webp",
   "./grazer-material-atlas.png": "./load/grazer-material-atlas-5cae097e04b44cc8.webp",
   "./models/fern_02/textures/fern_02_alpha_2k.png": "./load/fern_02_alpha_2k-f51eb9b8f9f4b25a.png",
