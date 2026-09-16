@@ -245,11 +245,11 @@ for key,points in sorted(cells.items()):
     radius=max(math.dist(p,center) for p in points)
     # Include independent fin/streamer excursions, without thickening the trunk.
     pad=.035 if key[0]=='Body' else .085 if key[0]=='Median' else .12 if key[0]=='Streamers' else .16
-    envelope.append([*[round(a,5) for a in center],round(radius+pad,5)])
+    envelope.append([*[round(a,5) for a in center],round(radius+pad,5),4 if key[0]=='Streamers' else 0])
 # Drop spheres fully contained in another sphere without losing any coverage.
 kept=[]
 for sphere in sorted(envelope,key=lambda s:-s[3]):
-    if not any(math.dist(sphere[:3],other[:3])+sphere[3]<=other[3] for other in kept):kept.append(sphere)
+    if not any(sphere[4]==other[4] and math.dist(sphere[:3],other[:3])+sphere[3]<=other[3] for other in kept):kept.append(sphere)
 envelope=kept
 (ROOT/'lib'/'AngelfishEnvelope.json').write_text(json.dumps(envelope,separators=(',',':'))+'\n',encoding='utf-8')
 

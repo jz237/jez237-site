@@ -15,3 +15,15 @@ assert.ok(report[0].min[2]<-.5,'uses open water behind the planting');
 assert.ok(report[1].min[2]<.2,'companion also explores tank depth');
 assert.ok(life.states[0].position.distanceTo(life.states[1].position)<3,'companions regroup');
 });
+
+
+test('nearby surfaces trigger a deliberate pelvic-fin reach which relaxes on leaving',()=>{
+ let near=true;
+ const plants={clearBody:(_p,body)=>body.length>1||!near};
+ const life=new Angelfish([],()=>0,plants,new T.Group());
+ for(let i=0;i<45;i++)life.update(1/30,i/30,1,[],[],()=>{});
+ assert.ok(life.states.some(s=>s.reach>.7),'reaches toward a sensed surface');
+ near=false;
+ for(let i=45;i<120;i++)life.update(1/30,i/30,1,[],[],()=>{});
+ assert.ok(life.states.every(s=>s.reach<.05),'relaxes after leaving');
+});

@@ -3,18 +3,21 @@ import type {BodySphere} from './GrazerCollision.ts';
 import envelope from './AngelfishEnvelope.json' with {type:'json'};
 
 export type AngelFood={id:number;position:T.Vector3};
-export type AngelState={id:number;position:T.Vector3;previous:T.Vector3;goal:T.Vector3;yaw:number;pitch:number;speed:number;effort:number;seed:number;timer:number;hover:number;bite:number;startle:number;hunger:number;target:number|null;stalled:number;lastDistance:number;phase:number;size:number;behavior:string;consumed:number|null;detour:number;detourYaw:number;yawRate:number;pitchRate:number;blocked:number;social:T.Vector3;recovery:T.Vector3;retreat:number};
+export type AngelState={id:number;position:T.Vector3;previous:T.Vector3;goal:T.Vector3;yaw:number;pitch:number;speed:number;effort:number;seed:number;timer:number;hover:number;bite:number;startle:number;hunger:number;target:number|null;stalled:number;lastDistance:number;phase:number;size:number;behavior:string;consumed:number|null;detour:number;detourYaw:number;yawRate:number;pitchRate:number;blocked:number;social:T.Vector3;recovery:T.Vector3;retreat:number;reach:number};
 export type AngelSenses={food:AngelFood[];other:{position:T.Vector3;radius:number}[];daylight:number;companion?:T.Vector3;clear:(position:T.Vector3,yaw:number,pitch:number,size:number)=>boolean};
 const clamp=T.MathUtils.clamp;
 function random(s:AngelState){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
-export function createAngel(id:number):AngelState{return {id,position:new T.Vector3(id?2.5:-2.2,3.1+id*.6,1.55),previous:new T.Vector3(),goal:new T.Vector3(id?-2:2,3.4,1.5),yaw:id?Math.PI:0,pitch:0,speed:0,effort:.2,seed:237+id*7349,timer:8,hover:0,bite:0,startle:0,hunger:.65-id*.12,target:null,stalled:0,lastDistance:Infinity,phase:id*3.71,size:id?.58:.64,behavior:'Exploring the planting',consumed:null,detour:0,detourYaw:0,yawRate:0,pitchRate:0,blocked:0,social:new T.Vector3(),recovery:new T.Vector3(),retreat:0};}
+export function createAngel(id:number):AngelState{return {id,position:new T.Vector3(id?2.5:-2.2,3.1+id*.6,1.55),previous:new T.Vector3(),goal:new T.Vector3(id?-2:2,3.4,1.5),yaw:id?Math.PI:0,pitch:0,speed:0,effort:.2,seed:237+id*7349,timer:8,hover:0,bite:0,startle:0,hunger:.65-id*.12,target:null,stalled:0,lastDistance:Infinity,phase:id*3.71,size:id?.58:.64,behavior:'Exploring the planting',consumed:null,detour:0,detourYaw:0,yawRate:0,pitchRate:0,blocked:0,social:new T.Vector3(),recovery:new T.Vector3(),retreat:0,reach:0};}
 export function angelForward(yaw:number,pitch:number){return new T.Vector3(Math.cos(yaw)*Math.cos(pitch),Math.sin(pitch),-Math.sin(yaw)*Math.cos(pitch));}
 /** Overlapping volumes enclose torso, median fins, tail and pelvic streamers,
  * including the GPU wave's displacement. They rotate with the upright animal. */
-export function angelBody(position:T.Vector3,yaw:number,pitch:number,size:number):BodySphere[]{
+export function angelBody(position:T.Vector3,yaw:number,pitch:number,size:number,reach=0,phase?:number):BodySphere[]{
  const forward=angelForward(yaw,pitch),up=new T.Vector3(-Math.cos(yaw)*Math.sin(pitch),Math.cos(pitch),Math.sin(yaw)*Math.sin(pitch));
  const lateral=new T.Vector3(Math.sin(yaw),0,Math.cos(yaw));
- return envelope.map(([x,y,z,r])=>({center:position.clone().addScaledVector(forward,x*size).addScaledVector(up,y*size).addScaledVector(lateral,z*size),radius:r*size}));
+ return envelope.map(([x,y,z,r,region])=>{
+  if(region===4){const angle=.85*reach+(phase===undefined?0:.16*Math.sin(phase*.9+(z>0?1:-1)*.85)),dx=x-.27,dy=y+.43,c=Math.cos(angle),sn=Math.sin(angle);x=.27+c*dx-sn*dy;y=-.43+sn*dx+c*dy;}
+  return {center:position.clone().addScaledVector(forward,x*size).addScaledVector(up,y*size).addScaledVector(lateral,z*size),radius:r*size};
+ });
 }
 function newGoal(s:AngelState,senses:AngelSenses){
  for(let i=0;i<9;i++){

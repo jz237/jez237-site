@@ -58,3 +58,11 @@ test('two angelfish share geometry and textures but animate and pause independen
  a.update(.5,.6);b.update(.5,.2);assert.notEqual(visible.uniforms.angelPhase.value,other.uniforms.angelPhase.value);const held=visible.uniforms.angelPhase.value;a.update(0,.9);assert.equal(visible.uniforms.angelPhase.value,held);assert.deepEqual(geometry.attributes.position.array,vertices);assert.equal(geometry.attributes.position.version,version);
  let geometryDisposed=false,textureDisposed=false;geometry.addEventListener('dispose',()=>geometryDisposed=true);map.addEventListener('dispose',()=>textureDisposed=true);a.dispose();assert.equal(geometryDisposed,false);assert.equal(textureDisposed,false);
 });
+
+
+test('pelvic collision volumes follow forward reach while the body stays steady',()=>{
+ const original=angelBody(new T.Vector3(),0,0,1,0,0),reached=angelBody(new T.Vector3(),0,0,1,1,0);
+ const moved=original.map((s,i)=>reached[i].center.x-s.center.x);
+ assert.ok(Math.max(...moved)>.5,'free pelvic tips extend visibly forward');
+ assert.ok(moved.filter(d=>Math.abs(d)<1e-8).length>original.length*.7,'torso and other fins keep their pose');
+});

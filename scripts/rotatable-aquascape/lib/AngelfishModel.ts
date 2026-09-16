@@ -7,7 +7,7 @@ let source:Promise<T.Group>|undefined;
 export function loadAngelfish(){return source??=new GLTFLoader().loadAsync(assetURL('./models/angelfish/silver-angelfish.glb')).then(g=>g.scene);}
 
 const deformation=`
-uniform float angelPhase, angelEffort, angelPectoral, angelRegion, angelDrift;
+uniform float angelPhase, angelEffort, angelPectoral, angelRegion, angelDrift, angelReach;
 vec3 angelDeform(vec3 p){
  float tail=1.-smoothstep(-1.3,.28,p.x);
  float w=tail*tail;
@@ -31,8 +31,10 @@ vec3 angelDeform(vec3 p){
   float tip=pow(clamp((-p.y-.43)/1.11,0.,1.),1.6);
   p.z+=tip*sin(angelDrift*.55+p.y*2.3)*.034;
   float side=p.z>0.?1.:-1.;
-  p.x+=tip*sin(angelDrift*.9+p.y*1.1+side*.8)*.095;
-  p.y+=tip*cos(angelDrift*.8+p.y*1.2+side*.8)*.024;
+  float angle=.16*sin(angelDrift*.9+side*.85)+.85*angelReach;
+  vec2 pelvic=p.xy-vec2(.27,-.43);
+  p.xy=vec2(.27,-.43)+vec2(cos(angle)*pelvic.x-sin(angle)*pelvic.y,sin(angle)*pelvic.x+cos(angle)*pelvic.y);
+  p.y+=tip*cos(angelDrift*.8+side*.8)*.016;
  }
  return p;
 }
@@ -40,10 +42,10 @@ vec3 angelDeform(vec3 p){
 export class AngelfishModel{
  readonly group:T.Group;
  private phase:number;private pectoral:number;private drift=0;
- private uniforms:{angelPhase:T.IUniform<number>;angelEffort:T.IUniform<number>;angelPectoral:T.IUniform<number>;angelDrift:T.IUniform<number>} ;
+ private uniforms:{angelPhase:T.IUniform<number>;angelEffort:T.IUniform<number>;angelPectoral:T.IUniform<number>;angelDrift:T.IUniform<number>;angelReach:T.IUniform<number>} ;
  constructor(prototype:T.Group,seed=0){
   this.group=prototype.clone(true);this.phase=seed;this.pectoral=seed*1.7;
-  this.drift=seed;this.uniforms={angelPhase:{value:seed},angelEffort:{value:.2},angelPectoral:{value:seed*1.7},angelDrift:{value:seed}};
+  this.drift=seed;this.uniforms={angelPhase:{value:seed},angelEffort:{value:.2},angelPectoral:{value:seed*1.7},angelDrift:{value:seed},angelReach:{value:0}};
   this.group.traverse(o=>{
    if(!(o instanceof T.Mesh))return;
    const region=o.name.startsWith('Median')?1:o.name.startsWith('PectoralLeft')?2:o.name.startsWith('PectoralRight')?3:o.name.startsWith('Streamers')?4:0;
@@ -66,7 +68,7 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
 `);
      s.vertexShader=s.vertexShader.replace('#include <begin_vertex>','vec3 transformed=angelDeform(position);');
     };
-    material.customProgramCacheKey=()=>`angelfish-photo-fins-v3-${region}-${normal}`;
+    material.customProgramCacheKey=()=>`angelfish-inspection-v4-${region}-${normal}`;
    };
    install(m,true);
    // Subpixel fin rays cannot produce stable individual shadow texels. Their
@@ -77,9 +79,9 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
    o.geometry.computeBoundingSphere();o.frustumCulled=false;
   });
  }
- update(dt:number,effort:number,hover=false){
+ update(dt:number,effort:number,hover=false,reach=0){
   this.phase+=dt*(1.6+effort*5);this.pectoral+=dt*(hover?7:5+effort*5);this.drift+=dt;
-  this.uniforms.angelPhase.value=this.phase;this.uniforms.angelPectoral.value=this.pectoral;this.uniforms.angelDrift.value=this.drift;
+  this.uniforms.angelReach.value=reach;this.uniforms.angelPhase.value=this.phase;this.uniforms.angelPectoral.value=this.pectoral;this.uniforms.angelDrift.value=this.drift;
   this.uniforms.angelEffort.value=T.MathUtils.lerp(this.uniforms.angelEffort.value,effort,1-Math.exp(-dt*3));
  }
  dispose(){this.group.traverse(o=>{if(o instanceof T.Mesh){(o.material as T.Material).dispose();o.customDepthMaterial?.dispose();}});}
