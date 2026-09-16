@@ -1,0 +1,551 @@
+{
+  "status": "Diagnostic evidence only; soundtrack acceptance remains open.",
+  "upstreamCommit": "c1f894dad9329495aea9f5dbe141e208fb5c017f",
+  "compiler": "Emscripten 3.1.46, existing local SDK",
+  "buildChanges": [
+    "Recompiled prowiz and unice68 for wasm32; legacy bitcode was incompatible.",
+    "Modern module wrapper and UTF8ToString callback compatibility.",
+    "Read-only audio.device counters; no playback behavior patch."
+  ],
+  "baseline": {
+    "original": "Aerial-1-pal.wav",
+    "candidate": "Aerial-1-pal-baseline.wav",
+    "rate": 44100,
+    "framesCompared": 1984512,
+    "bitExact": true,
+    "comparedPcmSha256": "9db6c58cd86216aa0f354763588b4547f69a6fdf67e2b69e400c97aba8490cf2",
+    "candidateWavSha256": "c1ac6879c3ff99e5929270d9714f4be9a30474d17a624a9ee1c9039a367a4036"
+  },
+  "instrumentedComparisons": [
+    {
+      "original": "Aerial-1-pal.wav",
+      "candidate": "Aerial-1-pal-traced.wav",
+      "rate": 44100,
+      "framesCompared": 2646016,
+      "bitExact": true,
+      "comparedPcmSha256": "a03f14e310d3d94e1a7446aac490667f38773f894a3c859eeb2ada7529185730",
+      "candidateWavSha256": "eea2d8a9e0a5681fb764ea57badcf822ae482a5bfeacf57f3c5e87a64c30824d"
+    },
+    {
+      "original": "Intermedia-1-pal.wav",
+      "candidate": "Intermedia-1-pal-traced.wav",
+      "rate": 44100,
+      "framesCompared": 3307520,
+      "bitExact": true,
+      "comparedPcmSha256": "e2c75a908893bf53ac89afede94d2b7df4b8b7eb99567fcb86797b2965e6987b",
+      "candidateWavSha256": "5809a845348cf9949c7a194d5ea97b678ffe5b25430bae0548ba270103f70c46"
+    }
+  ],
+  "counterOrder": [
+    "enqueued",
+    "started",
+    "queuedPcmChangedBeforeStart",
+    "queuedRequestChangedBeforeStart",
+    "dma0",
+    "dma1",
+    "dma2",
+    "dma3",
+    "pervolCommands",
+    "multiChannelPervolCommands",
+    "flushCommands",
+    "synchronousCycleWrites",
+    "writesQueuedBehindAnother",
+    "maximumQueueDepth"
+  ],
+  "traces": [
+    {
+      "log": "uade-traced-render.log",
+      "logSha256": "d5b23547d38cc3d26af34dc64518f0bbb55c05cac4bc682ed0c9756024a89051",
+      "samples": [
+        {
+          "second": 1,
+          "counters": [
+            34,
+            34,
+            0,
+            0,
+            107,
+            120,
+            138,
+            84,
+            0,
+            0,
+            15,
+            0,
+            17,
+            2
+          ]
+        },
+        {
+          "second": 10,
+          "counters": [
+            84,
+            84,
+            0,
+            0,
+            650,
+            926,
+            3797,
+            3301,
+            0,
+            0,
+            39,
+            0,
+            42,
+            2
+          ]
+        },
+        {
+          "second": 20,
+          "counters": [
+            130,
+            130,
+            0,
+            0,
+            1158,
+            2328,
+            7084,
+            7437,
+            0,
+            0,
+            61,
+            0,
+            65,
+            2
+          ]
+        },
+        {
+          "second": 30,
+          "counters": [
+            182,
+            182,
+            0,
+            0,
+            1625,
+            3655,
+            10291,
+            9991,
+            0,
+            0,
+            87,
+            0,
+            91,
+            2
+          ]
+        },
+        {
+          "second": 35,
+          "counters": [
+            206,
+            206,
+            0,
+            0,
+            1904,
+            3969,
+            11836,
+            11111,
+            0,
+            0,
+            99,
+            0,
+            103,
+            2
+          ]
+        },
+        {
+          "second": 36,
+          "counters": [
+            214,
+            214,
+            0,
+            0,
+            1943,
+            4035,
+            12101,
+            11316,
+            0,
+            0,
+            103,
+            0,
+            107,
+            2
+          ]
+        },
+        {
+          "second": 37,
+          "counters": [
+            216,
+            216,
+            0,
+            0,
+            1982,
+            4309,
+            12489,
+            11662,
+            0,
+            0,
+            105,
+            0,
+            108,
+            2
+          ]
+        },
+        {
+          "second": 38,
+          "counters": [
+            218,
+            218,
+            0,
+            0,
+            2046,
+            4583,
+            12877,
+            12008,
+            0,
+            0,
+            105,
+            0,
+            109,
+            2
+          ]
+        },
+        {
+          "second": 39,
+          "counters": [
+            226,
+            226,
+            0,
+            0,
+            2070,
+            4784,
+            13192,
+            12281,
+            0,
+            0,
+            109,
+            0,
+            113,
+            2
+          ]
+        },
+        {
+          "second": 40,
+          "counters": [
+            230,
+            230,
+            0,
+            0,
+            2107,
+            4821,
+            13519,
+            12511,
+            0,
+            0,
+            113,
+            0,
+            115,
+            2
+          ]
+        },
+        {
+          "second": 45,
+          "counters": [
+            258,
+            258,
+            0,
+            0,
+            2386,
+            5158,
+            14990,
+            13596,
+            0,
+            0,
+            125,
+            0,
+            129,
+            2
+          ]
+        },
+        {
+          "second": 60,
+          "counters": [
+            330,
+            330,
+            0,
+            0,
+            3078,
+            7166,
+            19906,
+            17502,
+            0,
+            0,
+            161,
+            0,
+            165,
+            2
+          ]
+        }
+      ]
+    },
+    {
+      "log": "uade-intermedia-trace.log",
+      "logSha256": "3af7e53832fe8afc804b37e3bcc48f042f9eca4966f8f1a6c8b0ce154073ba84",
+      "samples": [
+        {
+          "second": 1,
+          "counters": [
+            18,
+            18,
+            0,
+            0,
+            130,
+            64,
+            0,
+            0,
+            0,
+            0,
+            7,
+            0,
+            9,
+            2
+          ]
+        },
+        {
+          "second": 10,
+          "counters": [
+            218,
+            218,
+            0,
+            0,
+            5198,
+            709,
+            341,
+            1153,
+            0,
+            0,
+            106,
+            0,
+            79,
+            2
+          ]
+        },
+        {
+          "second": 20,
+          "counters": [
+            400,
+            400,
+            0,
+            0,
+            7509,
+            3032,
+            1232,
+            1933,
+            0,
+            0,
+            196,
+            0,
+            170,
+            2
+          ]
+        },
+        {
+          "second": 30,
+          "counters": [
+            624,
+            624,
+            0,
+            0,
+            10672,
+            5266,
+            2245,
+            2825,
+            0,
+            0,
+            309,
+            0,
+            282,
+            2
+          ]
+        },
+        {
+          "second": 35,
+          "counters": [
+            760,
+            760,
+            0,
+            0,
+            12265,
+            6303,
+            3051,
+            3608,
+            0,
+            0,
+            377,
+            0,
+            350,
+            2
+          ]
+        },
+        {
+          "second": 36,
+          "counters": [
+            782,
+            782,
+            0,
+            0,
+            12669,
+            6538,
+            3264,
+            3909,
+            0,
+            0,
+            387,
+            0,
+            361,
+            2
+          ]
+        },
+        {
+          "second": 37,
+          "counters": [
+            814,
+            814,
+            0,
+            0,
+            13063,
+            6726,
+            3535,
+            4200,
+            0,
+            0,
+            403,
+            0,
+            377,
+            2
+          ]
+        },
+        {
+          "second": 38,
+          "counters": [
+            848,
+            848,
+            0,
+            0,
+            13457,
+            6863,
+            3807,
+            4490,
+            0,
+            0,
+            420,
+            0,
+            394,
+            2
+          ]
+        },
+        {
+          "second": 39,
+          "counters": [
+            848,
+            848,
+            0,
+            0,
+            13894,
+            7017,
+            4115,
+            4817,
+            0,
+            0,
+            420,
+            0,
+            394,
+            2
+          ]
+        },
+        {
+          "second": 40,
+          "counters": [
+            848,
+            848,
+            0,
+            0,
+            14330,
+            7170,
+            4422,
+            5144,
+            0,
+            0,
+            420,
+            0,
+            394,
+            2
+          ]
+        },
+        {
+          "second": 45,
+          "counters": [
+            848,
+            848,
+            0,
+            0,
+            16503,
+            7937,
+            5956,
+            6773,
+            0,
+            0,
+            420,
+            0,
+            394,
+            2
+          ]
+        },
+        {
+          "second": 60,
+          "counters": [
+            848,
+            848,
+            0,
+            0,
+            23049,
+            10247,
+            10575,
+            11677,
+            0,
+            0,
+            420,
+            0,
+            394,
+            2
+          ]
+        },
+        {
+          "second": 75,
+          "counters": [
+            848,
+            848,
+            0,
+            0,
+            29595,
+            12556,
+            15193,
+            16582,
+            0,
+            0,
+            420,
+            0,
+            394,
+            2
+          ]
+        }
+      ]
+    }
+  ],
+  "findings": [
+    "Aerial: 330 enqueues/starts by 60 seconds; 165 queued behind another write, maximum depth 2; no queued PCM or request mutation detected before start.",
+    "Intermediate: 848 enqueues/starts by 38 seconds, unchanged through 75 seconds while all four DMA counters continue increasing.",
+    "Neither run uses ADCMD_PERVOL or ADIOF_SYNCCYCLE writes. These unimplemented cases do not explain these renders.",
+    "No finding proves what causes the Intermediate note stream to stop or approves the resulting sustained sound.",
+    "Aerial music sequence assignment/transition still unresolved; no cue enabled or published."
+  ]
+}
