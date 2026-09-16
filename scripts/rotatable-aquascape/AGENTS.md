@@ -20,3 +20,10 @@ body/fin flexibility, schooling, exploration and collision behavior. Do not spen
 money without explicit authorization.
 
 When effects need to be reduced for performance, adapt only on computers that show sustained slow frames. Powerful computers must retain full effects. Keep model/texture detail and animal behavior intact; provide an Always full override and restore effects when sustained headroom permits. Do not use GPU model names or desktop/mobile labels alone to reduce quality.
+
+
+Feeding cardinals should pursue individual actual food particles with brief fast
+bursts, controlled upright 3D turns, braking, mouth-range capture, short bite pauses
+and movement clear of the feeding spot. Preserve individual timing, competition,
+retargeting of lost or stalled food, collision constraints and the unchanged food
+nitrogen accounting. Motion constants are illustrative, not measured species data.

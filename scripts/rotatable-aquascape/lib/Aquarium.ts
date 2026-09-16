@@ -45,6 +45,7 @@ import {createSchoolRoute,advanceSchoolRoute,schoolActivity} from './SchoolRoute
 import {separateFish} from './FishCollisions';
 
 import {fishPosition,fishCoordinates,clearHardscape,type Obstacle} from './TankSpace';
+import {sweepHardscape} from './SweptFishContacts';
 
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
 const clamp=T.MathUtils.clamp;
@@ -429,7 +430,7 @@ export class Aquarium{
   if(modelFood)this.learning.addFood((count/6*FEED_MG*.35)+(flakes?FEED_MG*.65:0));
   if(!flakes)return {flakes:0,pellets:count};
   const nitrogen=representedFood*.65*FOOD_N_FRACTION/VOLUME_L/12;
-  for(let i=0;i<12;i++){const m=this.mesh(new T.IcosahedronGeometry(.028,0),new T.MeshStandardMaterial({color:0xbba471,roughness:1}),V(.65+(this.random()-.5)*1.6,5.12+this.random()*.13,.62+(this.random()-.5)*.3),false);m.userData.foodNitrogen=nitrogen;m.userData.chemistryGeneration=generation;m.scale.set(1,.35,.8);this.food.push({mesh:m,age:0});}
+  for(let i=0;i<12;i++){const m=this.mesh(new T.IcosahedronGeometry(.028,0),new T.MeshStandardMaterial({color:0xbba471,roughness:1}),V(.65+(this.random()-.5)*2.6,5.12+this.random()*.13,.62+(this.random()-.5)*1.2),false);m.userData.foodNitrogen=nitrogen;m.userData.chemistryGeneration=generation;m.scale.set(1,.35,.8);this.food.push({mesh:m,age:0});}
   return {flakes:12,pellets:count};
  }
  zoom(scale:number){this.followApproach=false;this.targetCamera=null;this.targetFov=null;const offset=this.camera.position.clone().sub(this.controls.target);offset.setLength(clamp(offset.length()*scale,this.controls.minDistance,this.controls.maxDistance));this.camera.position.copy(this.controls.target).add(offset);this.controls.update();}
@@ -446,7 +447,8 @@ export class Aquarium{
   this.camera.updateProjectionMatrix();this.renderer.setSize(w,h);this.moveLens(this.lighting.lens.center.x,1-this.lighting.lens.center.y);
   const size=this.renderer.getDrawingBufferSize(new T.Vector2());this.lighting.resize(size.x,size.y);
  }
- private avoidSolid(s:TetraSwim){
+ private avoidSolid(s:TetraSwim,previous?:{x:number;y:number;z:number}){
+  if(previous&&s.feedingPhase!=='search'){const p=fishPosition(s.x,s.y,s.z),before=p.clone();sweepHardscape(fishPosition(previous.x,previous.y,previous.z),p,this.obstacles);if(p.distanceToSquared(before)>.000001){s.speed=Math.min(s.speed,12);s.avoidanceRemaining=0;}Object.assign(s,fishCoordinates(p));}
   // Look ahead before contact and select the nearer open side of a branch.
   const ahead=fishPosition(s.x+s.vx*.8,s.y+s.vy*.8,s.z+s.vz*.8);
   if(s.avoidanceRemaining<=0)for(const obstacle of this.obstacles){
@@ -502,13 +504,13 @@ export class Aquarium{
   this.stripLight.intensity=canopy.stripIntensity*this.daylight;this.fill.intensity=.18+this.daylight*.72;this.renderer.toneMappingExposure=(.8+.32*this.daylight)*(this.inspectingAnimal!==null?.80:1);
   const tetraStart=this.diagnostics?performance.now():0;
   let coryMs=0,grazerMs=0;
-  const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,radius:25}));
+  const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,vz:s.vz,foodTarget:s.feedingTarget,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
   this.fishes.forEach(({swim:s},i)=>{
    const activity=schoolActivity(this.school,goal,i);
    advanceTetraSwim(s,dt,false,this.chemistry.state.oxygen<3,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,browseSites:this.browseSites,depthBounds:[-.26,1.26]});
-   if(dt)this.avoidSolid(s);
+   if(dt)this.avoidSolid(s,snapshot[i]);
    if(s.brain.consumedFood!==null){const idx=this.food.findIndex(f=>f.mesh.id===s.brain.consumedFood);if(idx>=0){const f=this.food.splice(idx,1)[0];this.learning.eat(f.mesh.userData.foodNitrogen??0,f.mesh.userData.chemistryGeneration);this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();}s.brain.consumedFood=null;}
   });
   if(dt){const bodies=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,radius:25}));separateFish(bodies,[-.40,1.40]);bodies.forEach((b,i)=>{Object.assign(this.fishes[i].swim,{x:b.x,y:b.y,z:b.z});this.avoidSolid(this.fishes[i].swim);});}
@@ -545,7 +547,7 @@ export class Aquarium{
   if(import.meta.env.DEV){
    this.frameSamples.push([elapsed*1000,renderStart-updateStart,performance.now()-renderStart,this.renderer.info.render.calls,this.renderer.info.render.triangles]);
    if(this.frameSamples.length>=240){const samples=this.frameSamples;const q=(column:number,p:number)=>{const sorted=samples.map(s=>s[column]).sort((a,b)=>a-b);return +sorted[Math.floor((sorted.length-1)*p)].toFixed(2);};this.host.dataset.frameProfile=JSON.stringify({frames:samples.length,frameMsP50:q(0,.5),frameMsP95:q(0,.95),updateMsP50:q(1,.5),updateMsP95:q(1,.95),renderCpuMsP50:q(2,.5),renderCpuMsP95:q(2,.95),drawCalls:q(3,.5),triangles:q(4,.5)});this.frameSamples=[];}
-   this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishBehavior=JSON.stringify(this.fishes.map(({swim:s})=>({speed:+s.speed.toFixed(1),behavior:s.behavior,intent:s.brain.intent.kind,energy:+s.brain.energy.toFixed(2)})));this.host.dataset.grazers=JSON.stringify(this.invertebrates?.animals.map(a=>({id:a.id,leaf:a.trail?`${a.trail.leaf.mesh.userData.plantSpecies}:${a.trail.leaf.index}`:null,swimming:!!a.flight,tripIn:a.tripIn,position:a.position.toArray(),distance:a.distance})));this.host.dataset.cories=JSON.stringify(this.cories?.animals.map(a=>({id:a.id,position:a.position.toArray(),speed:a.speed,mode:a.mode})));this.host.dataset.foodCount=String(this.food.length);this.host.dataset.sinkingFood=JSON.stringify(this.cories?.pellets.map(p=>({position:p.position.toArray(),age:p.age,visible:this.cories!.models.root.visible,worldY:p.mesh.matrixWorld.elements[13]})));this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
+   this.diagnosticFrames++;this.diagnosticTime+=elapsed;if(this.diagnosticTime>=1){this.host.dataset.renderMs=(performance.now()-renderStart).toFixed(1);this.host.dataset.fps=String(Math.round(this.diagnosticFrames/this.diagnosticTime));this.host.dataset.triangles=String(sceneTriangles);this.host.dataset.fishBehavior=JSON.stringify(this.fishes.map(({swim:s})=>({speed:+s.speed.toFixed(1),behavior:s.behavior,feeding:s.feedingPhase,foodTarget:s.feedingTarget,intent:s.brain.intent.kind,energy:+s.brain.energy.toFixed(2)})));this.host.dataset.grazers=JSON.stringify(this.invertebrates?.animals.map(a=>({id:a.id,leaf:a.trail?`${a.trail.leaf.mesh.userData.plantSpecies}:${a.trail.leaf.index}`:null,swimming:!!a.flight,tripIn:a.tripIn,position:a.position.toArray(),distance:a.distance})));this.host.dataset.cories=JSON.stringify(this.cories?.animals.map(a=>({id:a.id,position:a.position.toArray(),speed:a.speed,mode:a.mode})));this.host.dataset.foodCount=String(this.food.length);this.host.dataset.sinkingFood=JSON.stringify(this.cories?.pellets.map(p=>({position:p.position.toArray(),age:p.age,visible:this.cories!.models.root.visible,worldY:p.mesh.matrixWorld.elements[13]})));this.host.dataset.fishPositions=JSON.stringify(this.fishes.map(f=>({x:+f.model.group.position.x.toFixed(2),y:+f.model.group.position.y.toFixed(2),z:+f.model.group.position.z.toFixed(2)})));this.diagnosticFrames=0;this.diagnosticTime=0;}}
 
  };
 }

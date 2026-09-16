@@ -1,9 +1,9 @@
-export type FishPoint={radius?:number;id:number;x:number;y:number;z?:number;vx?:number;vy?:number};
-export type FishSenses={food:FishPoint[];neighbors:FishPoint[];schoolGoal?:FishPoint;browseSites?:FishPoint[];daylight?:number;schoolAffinity?:number;depthBounds?:[number,number]};
+export type FishPoint={radius?:number;foodTarget?:number|null;id:number;x:number;y:number;z?:number;vx?:number;vy?:number;vz?:number};
+export type FishSenses={food:FishPoint[];neighbors:FishPoint[];mouth?:{x:number;y:number;z:number};heading?:number;schoolGoal?:FishPoint;browseSites?:FishPoint[];daylight?:number;schoolAffinity?:number;depthBounds?:[number,number]};
 export type FishIntent={kind:'explore'|'feed'|'school'|'rest'|'space'|'browse';reason:string;target?:FishPoint};
-export type FishBrain={hunger:number;energy:number;curiosity:number;decisionIn:number;biteIn:number;seed:number;intent:FishIntent;consumedFood:number|null;browseIn:number;visited:{x:number;y:number;age:number}[]};
+export type FishBrain={hunger:number;energy:number;curiosity:number;decisionIn:number;biteIn:number;seed:number;intent:FishIntent;consumedFood:number|null;foodDistance:number;foodStall:number;browseIn:number;visited:{x:number;y:number;age:number}[]};
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
-export function createFishBrain():FishBrain{return {hunger:.6,energy:.85,curiosity:.65,decisionIn:0,biteIn:0,seed:723,intent:{kind:'explore',reason:'Exploring the planting.'},consumedFood:null,browseIn:0,visited:[]};}
+export function createFishBrain():FishBrain{return {hunger:.6,energy:.85,curiosity:.65,decisionIn:0,biteIn:0,seed:723,intent:{kind:'explore',reason:'Exploring the planting.'},consumedFood:null,foodDistance:Infinity,foodStall:0,browseIn:0,visited:[]};}
 const random=(b:FishBrain)=>{b.seed=(Math.imul(b.seed,1664525)+1013904223)>>>0;return b.seed/4294967296;};
 export function rememberPlant(b:FishBrain,x:number,y:number){b.visited.push({x,y,age:0});if(b.visited.length>6)b.visited.shift();b.curiosity*=.35;b.browseIn=8+random(b)*10;b.decisionIn=0;b.intent={kind:'explore',reason:'Leaving a feeding patch to rejoin companions.'};}
 export function thinkFish(b:FishBrain,dt:number,x:number,y:number,speed:number,senses:FishSenses,z=.65){
@@ -11,8 +11,26 @@ export function thinkFish(b:FishBrain,dt:number,x:number,y:number,speed:number,s
  if(dt<=0)return b.intent;
  b.hunger=clamp(b.hunger+dt*.0015);b.energy=clamp(b.energy+dt*(speed<2?.018:speed<24?.009:-.0003*(speed-24)));b.curiosity=clamp(b.curiosity+dt*.006);
  b.visited.forEach(v=>v.age+=dt);b.visited=b.visited.filter(v=>v.age<100);b.browseIn=Math.max(0,b.browseIn-dt);b.biteIn=Math.max(0,b.biteIn-dt);b.decisionIn-=dt;
- const food=senses.food.filter(f=>distance(f)<650).sort((a,c)=>distance(a)-distance(c))[0];
- if(food&&b.hunger>.18&&distance(food)<22&&b.biteIn===0){b.consumedFood=food.id;b.hunger=clamp(b.hunger-.23);b.energy=clamp(b.energy+.08);b.biteIn=.25;b.decisionIn=0;}
+ // Keep a live target through the approach. Allocate no sorted food list each
+ // frame; choose individual nearby morsels and discount those others reach first.
+ let food:FishPoint|undefined,best=Infinity;
+ const previous=b.intent.kind==='feed'?b.intent.target?.id:null;
+ const liveTarget=senses.food.find(f=>f.id===previous);
+ if(liveTarget){const d=distance(liveTarget);b.foodStall+=dt;if(d<b.foodDistance-3){b.foodDistance=d;b.foodStall=0;}}
+ else {b.foodDistance=Infinity;b.foodStall=0;}
+ for(const candidate of senses.food){
+  const d=distance(candidate);if(d>=650||candidate.id===b.consumedFood)continue;
+  if(candidate.id===previous){if(b.foodStall<2.5||senses.food.length<2){food=candidate;break;}continue;}
+  let score=d;
+  if(senses.heading!==undefined){const dx=candidate.x-x,dz=((candidate.z??z)-z)*180;score+=(1-(dx*Math.cos(senses.heading)-dz*Math.sin(senses.heading))/Math.max(1,Math.hypot(dx,dz)))*32;}
+  for(const other of senses.neighbors)if(other.foodTarget===candidate.id&&Math.hypot(other.x-candidate.x,other.y-candidate.y,((other.z??z)-(candidate.z??z))*180)<d+25)score+=90;
+  if(score<best){best=score;food=candidate;}
+ }
+ if(food&&food.z===undefined)food={...food,z:food.id===previous?(b.intent.target?.z??z):z};
+ if(food&&food.id!==previous){b.foodDistance=distance(food);b.foodStall=0;}
+ const mouth=senses.mouth;
+ const withinReach=food&&(mouth?Math.hypot(food.x-mouth.x,food.y-mouth.y,((food.z??z)-mouth.z)*180)<8&&speed<65:distance(food)<22);
+ if(food&&b.hunger>.18&&withinReach&&b.biteIn===0){b.consumedFood=food.id;b.hunger=clamp(b.hunger-.23);b.energy=clamp(b.energy+.08);b.biteIn=.20+random(b)*.35;b.decisionIn=0;}
  const close=senses.neighbors.filter(f=>distance(f)<26).sort((a,c)=>distance(a)-distance(c))[0];
  // Keep a chosen action long enough to be readable; food loss and crowding interrupt it.
  if(b.decisionIn>0&&!(b.intent.kind==='rest'&&(senses.daylight??0)>=.4)&&!close&&!(food&&b.hunger>.35&&b.intent.kind!=='feed')&&!(b.intent.kind==='feed'&&!food)){
@@ -21,7 +39,7 @@ export function thinkFish(b:FishBrain,dt:number,x:number,y:number,speed:number,s
  }
  b.decisionIn=.7+random(b)*.8;
  if(close)b.intent={kind:'space',reason:'Giving a nearby fish more room.',target:{id:-1,x:x+(x>=close.x?65:-65),y:y+(y>=close.y?22:-22),z:clamp(z+(z>=(close.z??z)?.09:-.09))}};
- else if(food&&b.hunger>.18)b.intent={kind:'feed',reason:'Food detected — approaching a flake.',target:food};
+ else if(food&&b.hunger>.18)b.intent={kind:'feed',reason:'Pursuing an individual food particle.',target:food};
  else if((senses.daylight??0)<.4&&(b.energy<.28||((senses.daylight??1)<.4)||(b.intent.kind==='rest'&&b.energy<.62)))b.intent={kind:'rest',reason:'Resting and fanning its fins to hold position.'};
  else {
   // Cardinal field diet: small animal prey around roots, litter and submerged plants.

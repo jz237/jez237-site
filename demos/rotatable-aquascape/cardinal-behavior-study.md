@@ -72,3 +72,26 @@ All animals are original procedural geometry. No footage or third-party animal a
 ### Macro-reference model revision
 
 The shrimp and snails have since been rebuilt using an explicitly generated GPT Image visual reference and material atlas. See the [model study and reference](./grazer-model-study.md). The new meshes replace the rounded prototypes, adding shaped carapaces and abdomen plates, thin ray-bearing tail fans, joined shell whorls, an aperture lip, a broad sculpted foot and finer surface texture. This visual revision does not change or add measurements to the cardinal evidence above.
+
+
+## September 15: individual feeding pursuits
+
+Cardinals now commit to individual visible food particles, use short, unequal fast
+pursuits and coasts, then brake and use paired-fin positioning at mouth range.
+Food is consumed only within mouth reach; a flake behind the body is not a bite.
+A brief bite/pause is followed by movement clear of the feeding spot. Neighbor
+claims influence new targets, unsuccessful approaches can change targets, and
+upright turns follow three-dimensional targets. A wider sprinkle separates food
+particles without changing the number of flakes, bottom pellets or nutrient dose.
+
+General fish feeding biomechanics supports coordinated approach, stabilization
+and braking ([Higham, 2007](https://pubmed.ncbi.nlm.nih.gov/21672822/)). It does not
+provide cardinal-specific timing constants. The chosen burst speeds, turn limits,
+reaction delays and bite pauses remain illustrative animation tuning. Existing
+cardinal field-diet evidence above supports browsing around submerged structure.
+
+Tests check fast approach followed by mouth capture and pauses at several frame
+rates, independent targets, lost/stalled food, a sixteen-fish feeding group,
+non-duplicate consumption and collision separation. Swept hardscape contact
+prevents fast movement through branch envelopes. Wall corrections now trigger
+another separation pass if needed, instead of leaving a new overlap unresolved.
