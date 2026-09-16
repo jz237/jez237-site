@@ -1,7 +1,7 @@
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
-import { toCreasedNormals } from "three/addons/utils/BufferGeometryUtils.js";
+import { surfaceGeometry } from "./render-surface.mjs";
 import { SURFACES } from "./course.mjs";
 import { reliefField } from "./relief-field.mjs";
 import { stoneTexture, finishStone, displayBase } from "./diorama-finish.mjs";
@@ -212,29 +212,7 @@ export class DioramaView {
     return finishStone(m, this.wallGrain);
   }
   meshFor(g, material, color) {
-    const geometry = new THREE.BufferGeometry();
-    geometry.setAttribute("position", new THREE.BufferAttribute(g.vertices, 3));
-    geometry.setIndex(new THREE.BufferAttribute(g.indices, 1));
-    let start = 0,
-      current = g.roles[0];
-    for (let i = 1; i <= g.roles.length; i++) {
-      if (g.roles[i] !== current) {
-        geometry.addGroup(
-          start * 3,
-          (i - start) * 3,
-          current === "top" ? 0 : 1,
-        );
-        start = i;
-        current = g.roles[i];
-      }
-    }
-    const shaded =
-      g.part?.motion?.axis === "wave"
-        ? geometry.toNonIndexed()
-        : toCreasedNormals(geometry, Math.PI / 5);
-    if (g.part?.motion?.axis === "wave") shaded.computeVertexNormals();
-    geometry.dispose();
-    const mesh = new THREE.Mesh(shaded, [
+    const mesh = new THREE.Mesh(surfaceGeometry(g), [
       this.material(material, false, color, !!g.part?.motion),
       this.material(material, true, color),
     ]);

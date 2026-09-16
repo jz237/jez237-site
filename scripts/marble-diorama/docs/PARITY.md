@@ -19,7 +19,9 @@ original dimensions, timing, or complete route coverage.
 - [x] Six-course campaign UI, individual clocks/scores, carryover/reset,
   elimination, restart, continuation and ending.
 - [x] Six-course one- and two-player normal-input untimed completion.
-- [x] Complete solo browser campaign through ending (prior mm-3 checkpoint).
+- [x] Complete solo browser campaign through ending (prior mm-3 checkpoint),
+  and current mm-5 two-player untimed browser campaign through ending with zero
+  falls for both players (published 0c263d075 build, September 16).
 - [x] Original manual's 0–7 selector and held-button turbo are represented.
 - [ ] Difficulty effects measured against Amiga. Current 0–7 presets increase
   clock, enemy, machine and force speeds; UI explicitly calls them provisional.
@@ -73,3 +75,8 @@ The earlier checklist mistakenly assigned vanishing paths to Beginner/Aerial.
 The Amiga longplay's final-room frames and Michael Webb's Amiga retrospective
 place the disappearing bridges at Ultimate's ending. Exact geometry and cycles
 remain PARTIAL; names in an old ledger are not proof of a hazard's location.
+
+The Ultimate opening also needs a topology correction: the observed Amiga route
+uses the first square mechanism and then the left lower platform/bridge without
+visiting the right lower platform. The current serial three-launch route is not
+supported by that sequence. See ULTIMATE-REFERENCE.md before further timing work.
