@@ -4,6 +4,7 @@ import {flowArrowGeometry,placeFlowArrow} from '../../living-aquascape/lib/aquar
 import * as T from 'three';
 import {CoryModels} from './CoryModels.ts';
 import {Invertebrates} from './Invertebrates.ts';
+import {AngelfishModel} from './AngelfishModel.ts';
 import {Tetra3D} from './Tetra3D.ts';
 import {lessons,type Lesson} from './LearningContent.ts';
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
@@ -20,6 +21,7 @@ export class TeachingScene{
  private paths:Path[]=[];private labels:{button:HTMLButtonElement;point:T.Vector3}[]=[];
  private host:HTMLElement;private labelHost:HTMLDivElement;private content=new T.Group();
  private shrimpStudy:Invertebrates|null=null;private coryStudy:CoryModels|null=null;private coryPhase=0;
+ angelPrototype:T.Group|undefined;private angelStudy:AngelfishModel|null=null;
  private specimen:Tetra3D|null=null;private texture:T.Texture;private leaf:T.InstancedMesh|undefined;
  private labelMatrix=new T.Matrix4();private labelsDirty=true;private labelWidth=0;private labelHeight=0;
  private projected=new T.Vector3();private dummy=new T.Object3D();
@@ -35,6 +37,7 @@ export class TeachingScene{
  }
  private restore(){for(const [o,v] of this.savedVisibility)o.visible=v;this.savedVisibility.clear();}
  private clear(){
+  if(this.angelStudy){this.content.remove(this.angelStudy.group);this.angelStudy.dispose();this.angelStudy=null;}
   this.shrimpStudy?.dispose();this.shrimpStudy=null;this.coryStudy=null;this.coryPhase=0;
   this.labelsDirty=true;this.restore();this.labelHost.replaceChildren();this.labels=[];this.paths=[];this.impeller=null;this.rootStudy=null;
   this.content.traverse(o=>{for(const texture of o.userData.ownedTextures??[])texture.dispose();if(o instanceof T.Mesh||o instanceof T.Line){o.geometry.dispose();for(const m of Array.isArray(o.material)?o.material:[o.material])m.dispose();}});
@@ -115,6 +118,8 @@ export class TeachingScene{
    }else if(step===3){
     this.shrimpStudy=new Invertebrates(new T.Scene(),()=>0,[],this.grazerAtlas,[],()=>0,true);
     this.shrimpStudy.root.position.set(-.3,2.1,0);this.shrimpStudy.root.scale.setScalar(5.5);this.content.add(this.shrimpStudy.root);
+   }else if(step===5&&this.angelPrototype){
+    this.angelStudy=new AngelfishModel(this.angelPrototype);this.angelStudy.group.position.set(0,2.8,0);this.angelStudy.group.scale.setScalar(1.85);this.content.add(this.angelStudy.group);
    }else if(step===4){
     this.coryStudy=new CoryModels(1);this.content.add(this.coryStudy.root);this.poseCory(0);
    }else{this.roots(V(0,4.5,0),4);this.path([V(2,1.4,.5),V(1,2,.6),V(0,3,.5),V(0,4.4,0)],0xb5e59b,.15);}
@@ -132,6 +137,7 @@ export class TeachingScene{
   if(this.mode==='layers'){for(const o of this.housing)o.visible=target<.02&&(this.savedVisibility.get(o)??true);for(const o of this.content.children)if(o.userData.rootTemplate)o.visible=target>.02;}
   this.phase+=dt;this.rootTime.value=this.phase;if(this.mode==='underground')this.rootFlow.value=T.MathUtils.damp(this.rootFlow.value,T.MathUtils.clamp(flow/65,0,1.35),3,dt);this.shrimpStudy?.poseSpecimen(dt);if(this.coryStudy)this.poseCory(dt);
   if(this.impeller)this.impeller.rotation.y+=dt*flow*.14;
+  this.angelStudy?.update(dt,.22+.12*Math.sin(this.phase*.7),true);
   this.specimen?.update(this.phase,.4,this.texture,.65,.5,1,dt,.6);
   const dummy=this.dummy;for(const path of this.paths){path.phase+=dt*path.speed*(this.mode==='water'?flow/65:1);for(let i=0;i<path.arrows.count;i++){placeFlowArrow(dummy,path.curve,(path.phase+i/path.arrows.count)%1);dummy.updateMatrix();path.arrows.setMatrixAt(i,dummy.matrix);}path.arrows.instanceMatrix.needsUpdate=true;}
   const w=this.host.clientWidth,h=this.host.clientHeight;

@@ -80,6 +80,10 @@
     "as": "fetch"
   },
   {
+    "href": "./load/silver-angelfish-ca91f55ad481d99d.glb",
+    "as": "fetch"
+  },
+  {
     "href": "./load/living-species-99e34ed119820765.webp",
     "as": "image"
   },

@@ -23,6 +23,7 @@ export function installShowroom(aquarium:Aquarium){
    if(learn.getAttribute('aria-expanded')==='true')learn.click();
    const explore=document.querySelector<HTMLButtonElement>('#explore')!;
    if(explore.getAttribute('aria-expanded')!=='true')explore.click();
+   if(value==='angel')aquarium.identifyAngel(0);
    if(value==='tetra')aquarium.identifyFish(0);
    if(value==='cory')aquarium.identifyCory(0);
    if(value==='shrimp')aquarium.identifyAnimal(0);

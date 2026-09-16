@@ -13,7 +13,9 @@ export function oxygenSaturation(celsius:number){
 }
 export function ammoniaFraction(ph:number,temperature:number){return 1/(1+10**(.09018+2729.92/(temperature+273.15)-ph));}
 export function chemistryInitial(){
- const s={hours:0,co2:24,oxygen:8.1,temperature:24,ammonia:.015,nitrite:.01,nitrate:4.5,waste:.08,digesting:0,plantN:6,fishN:2,
+ // Assumed tissue N: original community 2 + two small angelfish at .4 each.
+ // This is an illustrative biomass budget, not a measured weight/stocking limit.
+ const s={hours:0,co2:24,oxygen:8.1,temperature:24,ammonia:.015,nitrite:.01,nitrate:4.5,waste:.08,digesting:0,plantN:6,fishN:2.8,
   biomass:1,bacteria:.95,ph:6.7,alkalinity:4*DKH,carbon:24/44.01+4*DKH/50,nh3:0,kh:4,
   nitrogenStart:0,nitrogenAdded:0,nitrogenExported:0};
  s.nitrogenStart=nitrogenInventory(s);speciate(s);return s;

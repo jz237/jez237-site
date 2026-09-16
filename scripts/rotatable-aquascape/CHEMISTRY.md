@@ -8,7 +8,7 @@ One ongoing 180 L model runs while the tank is visible, including during identif
 
 Flow, CO2 supply and lighting affect both the chemistry and the displayed circulation, diffuser and illumination. The day/night lesson and Evening/Daylight control change the ongoing light setting. The daily timer can be restored in Water chemistry. Temperature approaches the heater target gradually. The unchanged control shares the lighting but not extra food, temperature/flow/CO2 interventions or water changes. Predict & test uses an entirely separate model and never resets the displayed tank.
 
-A normal accepted Feed fish action represents up to 120 mg dry food at an assumed 7% nitrogen: 65% flakes, 35% sinking pellets. If existing pellets prevent a new pellet release, only newly released food is added. Individual real tetra bites and Corydoras pellet consumption transfer the represented nitrogen out of the organic pool: 25% retained tissue and 75% digestion, released over hours. Visual expiration does not imply ingestion or remove chemical nitrogen. Remaining organic matter decays; plant turnover returns N to that pool. Pools are well mixed, so a bite is bounded by available organic nitrogen rather than an independent chemical calculation for each visible crumb. These ration sizes, composition, retention fractions and rates are assumptions, not measured feed or species data.
+A normal accepted Feed fish action represents up to 120 mg dry food at an assumed 7% nitrogen: 65% flakes, 35% sinking pellets. If existing pellets prevent a new pellet release, only newly released food is added. Individual tetra and angelfish bites and Corydoras pellet consumption transfer the represented nitrogen out of the organic pool: 25% retained tissue and 75% digestion, released over hours. Visual expiration does not imply ingestion or remove chemical nitrogen. Remaining organic matter decays; plant turnover returns N to that pool. Pools are well mixed, so a bite is bounded by available organic nitrogen rather than an independent chemical calculation for each visible crumb. These ration sizes, composition, retention fractions and rates are assumptions, not measured feed or species data.
 
 Reset also clears visible food. Generation IDs prevent any stale bite callback from spending a new comparison's food. Existing detailed geometry, swimming and collision handling remain unchanged.
 
@@ -42,3 +42,11 @@ Oxygen solubility uses the EPA-listed freshwater polynomial at sea-level pressur
 Automated tests cover stoichiometric consumption, no negative oxygen/N pools, a week of feeding/uptake/nitrification/water changes with N error below 1e-9 mg N/L, pH/CO2 direction, temperature-sensitive NH3 fraction and oxygen saturation, gradual heating, dilution with retained solids/biofilm, frame-rate tolerance, pause, challenge isolation, stale bite callbacks, and Corydoras ingestion versus visual expiration. Existing animal, rendering and collision tests remain applicable.
 
 Browser checks verify actual feeding changes the comparison; advancing hours produces distinct readings; 30% water changes reduce dissolved nitrogen by the corresponding fraction; lesson close/reopen retains the clock and lighting; chart choices and reset are functional. No phone performance measurement or real-aquarium validation is claimed.
+
+## Angelfish addition · 15 September 2026
+
+The two small angelfish add an assumed 0.4 mg N/L tissue budget each to both the
+ongoing tank and its unchanged control. Initial animal tissue N is now 2.8 mg N/L.
+Respiration therefore includes their modeled biomass. These are illustrative
+weights, not measured fish masses. Their bites consume existing flake nitrogen;
+no extra ration or nitrogen is silently created.
