@@ -1,3 +1,5 @@
+import {assetURL,fetchAsset} from './asset-store.js';
+import {loadBinary} from './asset-binary.js';
 import {loadCraftLOD,craftGeometryLOD} from './mesh-lod.js';
 import * as T from './vendor/three.module.js';
 import {craftSurface,craftUV} from './craft-materials.js';
@@ -5,13 +7,14 @@ import {craftSurface,craftUV} from './craft-materials.js';
 // These shared geometries are evaluated from the editable Blender model.
 // Material/group batching keeps all eight rider liveries inexpensive to instantiate.
 let asset=null;
+const lodPromise=loadCraftLOD('tideline-r01');
 try {
- const [metadataResponse,geometryResponse]=await Promise.all([
-  fetch(new URL('./assets/tideline-r01.json',import.meta.url)),
-  fetch(new URL('./assets/tideline-r01.bin',import.meta.url))
+ const [metadataResponse,buffer]=await Promise.all([
+  fetchAsset(assetURL('assets/tideline-r01.json')),
+  loadBinary('assets/tideline-r01.bin')
  ]);
- if(!metadataResponse.ok||!geometryResponse.ok)throw new Error('Jet ski asset request failed');
- const metadata=await metadataResponse.json(),buffer=await geometryResponse.arrayBuffer();
+ if(!metadataResponse.ok)throw new Error('Jet ski asset request failed');
+ const metadata=await metadataResponse.json();
  const materials=Object.fromEntries(Object.entries(metadata.materials).map(([name,spec])=>{
   const material=new T.MeshPhysicalMaterial({...spec,side:T.DoubleSide});material.name=name;craftSurface(material,name);return [name,material];
  }));
@@ -26,7 +29,7 @@ try {
  asset={meshes};
 } catch(error){console.warn('Blender jet ski unavailable; using the built-in model.',error);}
 
-const lodGeometry=await loadCraftLOD('tideline-r01');
+const lodGeometry=await lodPromise;
 export function installBlenderJetSki(v,{screen,rack,winchArm,salvage=true}={}){
  if(!asset)return false;
  const keep=new Set([v.rider,v.cargo,v.winch,v.handlebars,v.prop,...(salvage?[rack,winchArm]:[])]);
