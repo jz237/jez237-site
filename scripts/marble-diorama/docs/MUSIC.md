@@ -191,3 +191,12 @@ startup, bounded buffering, pause/resume, cue changes, ending and stop. These
 checks establish playback/data continuity, not human listening verification of
 every voice or exact original transition. The earlier disabled-build entries
 above remain as historical diagnostic records.
+
+### Production security compatibility
+
+Live acceptance exposed the upstream Adapter's `emscripten_run_script` folder
+initialization, which is blocked by the site's CSP. Replaced it with static
+`EM_ASM` filesystem calls and rebuilt the emulator. The production CSP is not
+weakened. The local preview now applies the production CSP as well (except HTTPS
+upgrade on localhost), so the native worker test covers this release condition.
+Updated corresponding Adapter source is included in renderer-source.zip.
