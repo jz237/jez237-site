@@ -1,0 +1,126 @@
+<!doctype html><meta charset="utf-8" />
+<title>Original music verification</title
+><button id="run">Verify original music</button>
+<pre id="result">Ready</pre>
+<script type="module">
+  import { musicCues } from "../src/music-cues.mjs";
+  const expected = {
+    practice:
+      "06e02cdc06a32039bc3cda66b786ce0505db0417ccc2597808c6b5781c6b5fce",
+    beginner:
+      "312c2efa7548415de27cdfcb3f83d3946954ca8f868fbc8135778314e3fe9abc",
+    intermediate:
+      "78a86bb8d1a5a58959c5cab8e94285126d2046d1696bba8f62aa6b92b36632f9",
+    aerial: "e22738c64c40d4286a355cb109cedd5f42a20a20f98d02ccaf487701369d915a",
+    silly: "bfc52fa404794fdddf14d76d4342096f585e14c0d04f1d4bc77e16a94f41d32b",
+    ultimate:
+      "52ae280584293f4bdaa020909ed9eae9cfee321e5ae23287558ab3058d959197",
+    ending: "4bc46c6b1cc91a71bdac19da56d61d443ecd1eb9800b383390284f31db002cec",
+  };
+  const result = document.querySelector("#result");
+  document.querySelector("#run").onclick = async () => {
+    result.textContent = "Running�";
+    try {
+      for (const [id, cue] of Object.entries(musicCues)) {
+        const start = performance.now();
+        const data = await new Promise((resolve, reject) => {
+          const worker = new Worker(
+            "/games/2026-07-13/marble-madness/diorama/assets/music/music-worker.js",
+          );
+          const chunks = [];
+          const timer = setTimeout(() => {
+            worker.terminate();
+            reject(Error(id + ": timeout"));
+          }, 60000);
+          worker.onerror = (e) => {
+            clearTimeout(timer);
+            worker.terminate();
+            reject(Error(e.message));
+          };
+          worker.onmessage = ({ data }) => {
+            if (data.error) {
+              clearTimeout(timer);
+              worker.terminate();
+              reject(Error(data.error));
+              return;
+            }
+            chunks.push(new Uint8Array(data.pcm));
+            if (chunks.length < 100) worker.postMessage({});
+            else {
+              clearTimeout(timer);
+              worker.terminate();
+              const all = new Uint8Array(
+                chunks.reduce((n, c) => n + c.length, 0),
+              );
+              let o = 0;
+              for (const c of chunks) {
+                all.set(c, o);
+                o += c.length;
+              }
+              resolve(all);
+            }
+          };
+          worker.postMessage({ cue });
+        });
+        const hash = Array.from(
+          new Uint8Array(await crypto.subtle.digest("SHA-256", data)),
+          (b) => b.toString(16).padStart(2, "0"),
+        ).join("");
+        if (hash !== expected[id]) throw Error(id + ": PCM differs " + hash);
+        result.textContent +=
+          "\nPASS " +
+          id +
+          ": 4,505,600 original stereo frames match; " +
+          Math.round(performance.now() - start) +
+          " ms";
+      }
+      result.textContent += "\nALL PASS";
+    } catch (e) {
+      result.textContent += "\nFAIL " + e.message;
+    }
+  };
+</script>
+<button id="engine">Verify playback controls</button>
+<pre id="controls">Ready</pre>
+<script type="module">
+  import { AudioEngine } from "../src/audio.mjs";
+  import { musicCues } from "../src/music-cues.mjs";
+  document.querySelector("#engine").onclick = async () => {
+    const out = document.querySelector("#controls");
+    out.textContent = "Running�";
+    const audio = new AudioEngine({
+      createWorker: () =>
+        new Worker(
+          "/games/2026-07-13/marble-madness/diorama/assets/music/music-worker.js",
+        ),
+    });
+    audio.verifiedCues = musicCues;
+    try {
+      await audio.unlock();
+      audio.volumes(0, 0);
+      if (!(await audio.playCue("practice"))) throw Error(audio.lastMusicError);
+      await new Promise((r) => setTimeout(r, 400));
+      if (audio.streamSources.size !== 3)
+        throw Error("Expected bounded three-chunk queue");
+      await audio.pause();
+      const time = audio.context.currentTime;
+      await new Promise((r) => setTimeout(r, 150));
+      if (audio.context.currentTime !== time)
+        throw Error("Pause advanced the audio clock");
+      await audio.resume();
+      if (!(await audio.playCue("beginner")))
+        throw Error("Course transition failed");
+      if (!(await audio.playCue("ending"))) throw Error("Ending failed");
+      audio.stop();
+      if (audio.streamSources.size || audio.musicWorker)
+        throw Error("Music remained after stop");
+      out.textContent =
+        "PASS: native audio startup, bounded buffering, exact pause/resume, course change, ending and stop. Output muted for automated check.";
+    } catch (e) {
+      out.textContent = "FAIL " + e.message;
+    } finally {
+      audio.stop();
+      await audio.context?.close();
+    }
+  };
+</script>

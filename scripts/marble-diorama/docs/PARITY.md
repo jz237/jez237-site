@@ -33,7 +33,7 @@ original dimensions, timing, or complete route coverage.
 - [ ] Original two-player winner/catch-up/time-bonus rules and simultaneous ties.
 - [ ] Exact progress, steelie, training gate and numbered-pad awards.
 - [ ] Original soundtrack all-cue listening, assignments, loops and transitions.
-  Six original rips were obtained; no substitute music is enabled.
+  Six original modules now play through the bundled WebUADE worker, including the ending cue. No substitute music is used. Exact original transition/listening parity remains open.
 
 ## Extras and physics
 

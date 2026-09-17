@@ -1,5 +1,5 @@
 import { build } from "esbuild";
-import { mkdir, writeFile, readFile } from "node:fs/promises";
+import { mkdir, writeFile, readFile, cp } from "node:fs/promises";
 import { fileURLToPath } from "node:url";
 import { createHash } from "node:crypto";
 const out = new URL(
@@ -7,6 +7,15 @@ const out = new URL(
   import.meta.url,
 );
 await mkdir(out, { recursive: true });
+await cp(
+  new URL("assets/music/", import.meta.url),
+  new URL("assets/music/", out),
+  { recursive: true },
+);
+await cp(
+  new URL("src/music-worker.js", import.meta.url),
+  new URL("assets/music/music-worker.js", out),
+);
 await build({
   entryPoints: ["src/main.mjs"],
   bundle: true,
@@ -18,7 +27,10 @@ await build({
 });
 await writeFile(
   new URL("style.css", out),
-  (await readFile(new URL("src/style.css", import.meta.url), "utf8")).replace(/\r\n/g, "\n"),
+  (await readFile(new URL("src/style.css", import.meta.url), "utf8")).replace(
+    /\r\n/g,
+    "\n",
+  ),
 );
 let html = await readFile(new URL("src/index.html", import.meta.url), "utf8");
 for (const asset of ["game.js", "style.css"]) {

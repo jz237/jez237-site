@@ -1,3 +1,4 @@
+import { musicCues } from "./music-cues.mjs";
 import {
   initPhysics,
   Simulation,
@@ -40,6 +41,7 @@ const $ = (id) => document.getElementById(id),
   show = (id, v = true) => ($(id).hidden = !v);
 const store = loadStore(),
   audio = new AudioEngine();
+audio.verifiedCues = musicCues;
 let view,
   sim,
   clock,
@@ -82,6 +84,8 @@ function persist(successMessage) {
   else if (successMessage) toast(successMessage);
   return saved;
 }
+audio.onMusicError = () =>
+  toast("Music could not load. Restart the race to retry.");
 function options() {
   return {
     players: Number($("players").value),
@@ -307,7 +311,8 @@ async function start(demo = false, course = selected, run = null) {
   demoControllers = sim.players.map(() => new DemoController());
   const saved = store.records[recordKey(selected, sim.options)];
   ghost = saved?.ghost ?? null;
-  audio.playCue(selected.musicCue ?? selected.id);
+  const cue = selected.musicCue ?? selected.id;
+  audio.playCue(musicCues[cue] ? cue : "practice");
   for (const id of ["intro", "result", "pauseCard", "replayBar", "editor"])
     show(id, false);
   show("hud");
@@ -456,6 +461,10 @@ function finish() {
         persist();
       }
     }
+  }
+  if (campaignOutcome === "complete") {
+    audio.resume();
+    audio.playCue("ending");
   }
   runMode = "result";
   renderHud();

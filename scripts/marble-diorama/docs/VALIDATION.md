@@ -2,11 +2,11 @@
 
 ## Current outcome
 
-**84 automated tests pass. All six campaign races and all three bonus courses
+**86 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
-timed original campaign has not yet passed. Original music is not enabled.
+timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
 Current simulation/replay version: `rapier-0.20.0-mm-5`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.

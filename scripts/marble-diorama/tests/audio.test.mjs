@@ -253,3 +253,73 @@ test("network and cue validation failures report an error without starting audio
   assert.match(f.audio.lastMusicError, /loop frames/);
   assert.equal(f.audio.track, null);
 });
+
+test("original module streaming schedules contiguous audio and terminates on stop", async () => {
+  const { audio, context } = fixture();
+  const workers = [];
+  audio.createWorker = () => {
+    const w = {
+      messages: [],
+      postMessage(m) {
+        this.messages.push(m);
+      },
+      terminate() {
+        this.terminated = true;
+      },
+    };
+    workers.push(w);
+    return w;
+  };
+  audio.verifiedCues.original = {
+    verified: true,
+    stream: true,
+    module: "Practice",
+    subsong: 1,
+  };
+  await audio.unlock();
+  const ready = audio.playCue("original"),
+    w = workers[0];
+  assert.equal(w.messages.length, 3);
+  const chunk = {
+    pcm: new Int16Array([4096, -4096, 8192, -8192]).buffer,
+    frames: 2,
+    rate: 2,
+  };
+  w.onmessage({ data: chunk });
+  assert.equal(await ready, true);
+  w.onmessage({ data: chunk });
+  const sources = [...audio.streamSources];
+  assert.equal(sources.length, 2);
+  assert.equal(sources[1].started[0], sources[0].started[0] + 1);
+  await audio.pause();
+  assert.equal(context.state, "suspended");
+  await audio.resume();
+  assert.equal(context.state, "running");
+  audio.stop();
+  assert.equal(w.terminated, true);
+  assert.ok(sources.every((s) => s.stopped && s.disconnected));
+  w.onmessage({ data: chunk });
+  assert.equal(audio.streamSources.size, 0);
+});
+
+test("module startup cancellation and worker errors settle without overlapping music", async () => {
+  const { audio } = fixture();
+  let worker;
+  audio.createWorker = () =>
+    (worker = {
+      postMessage() {},
+      terminate() {
+        this.terminated = true;
+      },
+    });
+  audio.verifiedCues.original = { verified: true, stream: true };
+  await audio.unlock();
+  const first = audio.playCue("original");
+  audio.stop();
+  assert.equal(await first, false);
+  const next = audio.playCue("original");
+  worker.onmessage({ data: { error: "missing module" } });
+  assert.equal(await next, false);
+  assert.equal(audio.lastMusicError, "missing module");
+  assert.equal(worker.terminated, true);
+});
