@@ -1,5 +1,5 @@
 export type FishPoint={radius?:number;foodTarget?:number|null;id:number;x:number;y:number;z?:number;vx?:number;vy?:number;vz?:number};
-export type FishSenses={food:FishPoint[];neighbors:FishPoint[];mouth?:{x:number;y:number;z:number};heading?:number;schoolGoal?:FishPoint;browseSites?:FishPoint[];daylight?:number;schoolAffinity?:number;depthBounds?:[number,number]};
+export type FishSenses={reachable?:(food:FishPoint)=>boolean;food:FishPoint[];neighbors:FishPoint[];mouth?:{x:number;y:number;z:number};heading?:number;schoolGoal?:FishPoint;browseSites?:FishPoint[];daylight?:number;schoolAffinity?:number;depthBounds?:[number,number]};
 export type FishIntent={kind:'explore'|'feed'|'school'|'rest'|'space'|'browse';reason:string;target?:FishPoint};
 export type FishBrain={hunger:number;energy:number;curiosity:number;decisionIn:number;biteIn:number;seed:number;intent:FishIntent;consumedFood:number|null;foodDistance:number;foodStall:number;browseIn:number;visited:{x:number;y:number;age:number}[]};
 const clamp=(n:number)=>Math.max(0,Math.min(1,n));
@@ -19,7 +19,7 @@ export function thinkFish(b:FishBrain,dt:number,x:number,y:number,speed:number,s
  if(liveTarget){const d=distance(liveTarget);b.foodStall+=dt;if(d<b.foodDistance-3){b.foodDistance=d;b.foodStall=0;}}
  else {b.foodDistance=Infinity;b.foodStall=0;}
  for(const candidate of senses.food){
-  const d=distance(candidate);if(d>=650||candidate.id===b.consumedFood)continue;
+  const d=distance(candidate);if(d>=650||candidate.id===b.consumedFood||senses.reachable&&!senses.reachable(candidate))continue;
   if(candidate.id===previous){if(b.foodStall<2.5||senses.food.length<2){food=candidate;break;}continue;}
   let score=d;
   if(senses.heading!==undefined){const dx=candidate.x-x,dz=((candidate.z??z)-z)*180;score+=(1-(dx*Math.cos(senses.heading)-dz*Math.sin(senses.heading))/Math.max(1,Math.hypot(dx,dz)))*32;}

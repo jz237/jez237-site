@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {FeedingBite} from './FeedingBite.ts';
 import {swimPhase,type FinKind} from './TetraKinematics.ts';
 import {createTetraDeformation} from './TetraDeformation.ts';
 import {createNormalUpdater} from './DeformedNormals.ts';
@@ -13,6 +14,8 @@ export class Tetra3D {
  private phase=0;
  private pectoralPhase=0;
  private lastPose=[NaN,NaN,NaN,NaN,NaN,NaN];
+ private feedingBite=new FeedingBite();
+ bite(){this.feedingBite.trigger();}
  private breathing:FishRespiration;
  private materials:TetraMaterials;private breathAttribute!:T.BufferAttribute;private disposed=false;
  private fins=new Map<T.Mesh,{kind:FinKind;side:number}>();
@@ -58,7 +61,7 @@ export class Tetra3D {
  update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number,pectoralEffort=.35){
   this.phase=swimPhase(this.phase,dt,activity);
   this.pectoralPhase+=dt*(5+pectoralEffort*13);
-  this.breathing.update(dt,activity);const {gill,mouth}=this.breathing;
+  this.breathing.update(dt,activity);this.feedingBite.update(dt);const {gill}=this.breathing,mouth=Math.max(this.breathing.mouth,this.feedingBite.value*2.4);
   // Keep the biological clock running in isolated lessons, without uploading invisible bodies.
   if(!this.group.visible)return;
   if(this.lastPose[0]!==this.phase||this.lastPose[1]!==activity||this.lastPose[2]!==this.pectoralPhase||this.lastPose[3]!==pectoralEffort||this.lastPose[4]!==gill||this.lastPose[5]!==mouth){

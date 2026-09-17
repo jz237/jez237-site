@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import {FoodReachability,foodApproach} from './FoodReachability.ts';
 import {assetURL,installAssetPaths} from './AssetPaths';
 import {LoadTiming} from './LoadTiming';
 import {Corydoras,coryBody,coryForward} from './Corydoras';
@@ -106,6 +107,7 @@ export class Aquarium{
  private frameBenchmark:FrameBenchmark|null=null;
  private gpuTimer:GpuFrameTimer|null=null;
  private texture=new T.Texture();
+ private foodPaths=Array.from({length:16},()=>new FoodReachability());
  private obstacles:Obstacle[]=[];private grazerFishPrevious=new Map<number,T.Vector3>();
  private food:{mesh:T.Mesh;age:number}[]=[];
  private dust:T.Points;
@@ -519,9 +521,9 @@ export class Aquarium{
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
   this.fishes.forEach(({swim:s},i)=>{
    const activity=schoolActivity(this.school,goal,i);
-   advanceTetraSwim(s,dt,false,this.chemistry.state.oxygen<3,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,browseSites:this.browseSites,depthBounds:[-.26,1.26]});
+   advanceTetraSwim(s,dt,false,this.chemistry.state.oxygen<3,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),reachable:f=>this.foodPaths[i].test(f.id,this.currentTime,fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),()=>foodApproach(fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),s.yaw+s.depthHeading,s.pitch,.252,(p)=>this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+.23)**2)&&(!this.invertebrates||this.invertebrates.plants.clearBody(p,[{center:p,radius:.23}],this.currentTime,undefined,false,.4)))),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,browseSites:this.browseSites,depthBounds:[-.26,1.26]});
    if(dt)this.avoidSolid(s,snapshot[i]);
-   if(s.brain.consumedFood!==null){const idx=this.food.findIndex(f=>f.mesh.id===s.brain.consumedFood);if(idx>=0){const f=this.food.splice(idx,1)[0];this.learning.eat(f.mesh.userData.foodNitrogen??0,f.mesh.userData.chemistryGeneration);this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();}s.brain.consumedFood=null;}
+   if(s.brain.consumedFood!==null){const idx=this.food.findIndex(f=>f.mesh.id===s.brain.consumedFood);if(idx>=0){this.fishes[i].model.bite();const f=this.food.splice(idx,1)[0];this.learning.eat(f.mesh.userData.foodNitrogen??0,f.mesh.userData.chemistryGeneration);this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();}s.brain.consumedFood=null;}
   });
   if(dt){const bodies=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,radius:25}));separateFish(bodies,[-.40,1.40]);bodies.forEach((b,i)=>{Object.assign(this.fishes[i].swim,{x:b.x,y:b.y,z:b.z});this.avoidSolid(this.fishes[i].swim);});}
   if(dt&&this.angels)this.fishes.forEach(({swim:s,size},i)=>{const p=fishPosition(s.x,s.y,s.z),safe=this.angels!.constrainTetra({id:i,position:p,previous:fishPosition(snapshot[i].x,snapshot[i].y,snapshot[i].z),forward:V(Math.cos(s.yaw+s.depthHeading)*Math.cos(s.pitch),Math.sin(s.pitch),-Math.sin(s.yaw+s.depthHeading)*Math.cos(s.pitch)),size});if(p.distanceToSquared(safe)>1e-8){Object.assign(s,fishCoordinates(safe));this.avoidSolid(s);const corrected=fishPosition(s.x,s.y,s.z);if(this.angels!.exclude(corrected).distanceToSquared(corrected)>1e-7)Object.assign(s,{x:snapshot[i].x,y:snapshot[i].y,z:snapshot[i].z});s.avoidanceRemaining=1;s.avoidanceZ=s.z+(s.z<.5?-.23:.23);}});
