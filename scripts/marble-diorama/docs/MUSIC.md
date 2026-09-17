@@ -1,7 +1,8 @@
 # Original Amiga music: rendering and verification ledger
 
-Status: original module data obtained and rendered. **Not release-verified or
-enabled in the game.** No synthesized replacement music is used.
+Status: original Amiga modules are now enabled through a locally bundled WebUADE
+worker. Module hashes are verified; the original sequencers supply repeats.
+Detailed reference-listening parity remains open, as recorded below.
 
 ## Sources
 
@@ -161,3 +162,32 @@ left, and a deduction of 1,000 per accumulated death: 58,470 + 20,000 + 4,000 âˆ
 Early Beginner clock changes are mostly 1.28 seconds apart; the new nominal
 clock uses 50/64 units per real second. Later reference intervals vary, so exact
 hardware/load and difficulty-dependent timing remains a parity item.
+
+
+## September 17 — original module playback enabled
+
+The published player uses the original six `cust.*` files and the corrected clean
+WebUADE build directly. A worker renders continuous 44,100 Hz stereo chunks, with
+three chunks scheduled on the native audio clock. The original sequencer supplies
+note timing and repeats: no approximate WAV splice or fabricated loop is used.
+The PAL timer conversion is corrected in memory; original files/sample periods
+remain unchanged. Playback gain is 3× (the examined renders peak below 0.17),
+followed by the user's independent music volume control.
+
+Cue assignment: Practice 1, Beginner 1, Intermedia 1, Aerial 2, Silly 1,
+Ultimate 1; campaign ending Ultimate 2. Aerial 2 is the strongly matching
+course passage; exact original in-course sub-tune transitions remain a fidelity
+item. Bonuses reuse their authored original-course cue selection.
+
+Playback begins after the race/demo start gesture. Pause suspends the audio clock;
+restart/course change terminates the previous worker and all queued sources.
+Worker failures are surfaced as a retry message. All assets are served locally.
+The bundled `assets/music/renderer-source.zip` contains corresponding renderer
+sources, license notices, build script and DMA patch. Asset README credits the
+music composer and custom-module adaptation.
+
+Native browser checks compare original renderer PCM for all seven cues and test
+startup, bounded buffering, pause/resume, cue changes, ending and stop. These
+checks establish playback/data continuity, not human listening verification of
+every voice or exact original transition. The earlier disabled-build entries
+above remain as historical diagnostic records.

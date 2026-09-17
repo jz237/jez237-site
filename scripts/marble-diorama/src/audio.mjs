@@ -3,9 +3,13 @@ export class AudioEngine {
   constructor({
     createContext = () => new AudioContext(),
     fetchAudio = (...args) => fetch(...args),
+    createWorker = () =>
+      new Worker(new URL("assets/music/music-worker.js", document.baseURI)),
   } = {}) {
     this.createContext = createContext;
     this.fetchAudio = fetchAudio;
+    this.createWorker = createWorker;
+    this.streamSources = new Set();
     this.context = null;
     this.musicVolume = 0.5;
     this.effectsVolume = 0.5;
@@ -83,6 +87,7 @@ export class AudioEngine {
     const cue = this.verifiedCues[id];
     this.lastMusicError = null;
     if (!cue?.verified || !this.context) return false;
+    if (cue.stream) return this.playStream(cue);
     const generation = this.cueGeneration;
     const loading = new AbortController();
     this.musicLoad = loading;
@@ -135,6 +140,62 @@ export class AudioEngine {
     } finally {
       if (this.musicLoad === loading) this.musicLoad = null;
     }
+  }
+  playStream(cue) {
+    const generation = this.cueGeneration;
+    return new Promise((resolve) => {
+      this.streamReady = resolve;
+      let scheduled = 0;
+      const fail = (message) => {
+        if (generation !== this.cueGeneration) return;
+        this.stop();
+        this.lastMusicError = message;
+        this.onMusicError?.(message);
+        resolve(false);
+      };
+      let worker;
+      try {
+        worker = this.createWorker();
+      } catch (error) {
+        fail(error.message);
+        return;
+      }
+      this.musicWorker = worker;
+      worker.onerror = () => fail("The Amiga music player could not start.");
+      worker.onmessage = ({ data }) => {
+        if (generation !== this.cueGeneration) return;
+        if (data.error) {
+          fail(data.error);
+          return;
+        }
+        const pcm = new Int16Array(data.pcm);
+        const buffer = this.context.createBuffer(2, data.frames, data.rate);
+        for (let channel = 0; channel < 2; channel++) {
+          const samples = buffer.getChannelData(channel);
+          for (let i = 0; i < data.frames; i++)
+            samples[i] = (pcm[i * 2 + channel] / 32768) * (cue.gain ?? 1);
+        }
+        const source = this.context.createBufferSource();
+        source.buffer = buffer;
+        source.connect(this.musicBus);
+        this.streamSources.add(source);
+        source.onended = () => {
+          source.disconnect();
+          this.streamSources.delete(source);
+          if (generation === this.cueGeneration) worker.postMessage({});
+        };
+        const when = Math.max(scheduled, this.context.currentTime + 0.05);
+        source.start(when);
+        scheduled = when + buffer.duration;
+        this.streamReady = null;
+        resolve(true);
+      };
+      // Three seconds of queued audio absorb worker jitter; pausing freezes the
+      // audio clock and bounds the queue instead of advancing the song silently.
+      worker.postMessage({ cue });
+      worker.postMessage({});
+      worker.postMessage({});
+    });
   }
   impact(force) {
     if (
@@ -198,6 +259,16 @@ export class AudioEngine {
   }
   stop() {
     this.cueGeneration++;
+    this.streamReady?.(false);
+    this.streamReady = null;
+    this.musicWorker?.terminate();
+    this.musicWorker = null;
+    for (const source of this.streamSources) {
+      source.onended = null;
+      source.stop();
+      source.disconnect();
+    }
+    this.streamSources.clear();
     this.musicLoad?.abort();
     this.musicLoad = null;
     if (this.rollingGain) this.rollingGain.gain.value = 0;
