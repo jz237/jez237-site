@@ -79,3 +79,34 @@ test("clockwise and counterclockwise boards expose all four walls and the bottom
     material.dispose();
   }
 });
+
+test("display foundations reach the plinth on every course without changing track geometry", async () => {
+  const { foundationGeometry } = await import("../src/foundations.mjs");
+  for (const course of [...campaignCourses(), ...bonusCourses()]) {
+    let count = 0;
+    const base =
+      Math.min(
+        ...course.parts.map((p) => {
+          const g = partGeometry(p);
+          let low = Infinity;
+          for (let i = 1; i < g.vertices.length; i += 3)
+            low = Math.min(low, g.vertices[i] + p.y);
+          return low;
+        }),
+      ) - 0.04;
+    for (const part of course.parts) {
+      const before = partGeometry(part);
+      const g = foundationGeometry(part, base);
+      assert.deepEqual(partGeometry(part), before);
+      if (!g) continue;
+      count++;
+      for (let i = 0; i < g.vertices.length; i += 12) {
+        assert.ok(Math.abs(g.vertices[i + 7] - base) < 1e-4);
+        assert.ok(Math.abs(g.vertices[i + 10] - base) < 1e-4);
+        assert.equal(g.vertices[i], g.vertices[i + 9]);
+        assert.equal(g.vertices[i + 3], g.vertices[i + 6]);
+      }
+    }
+    assert.ok(count > 0, course.id);
+  }
+});

@@ -105,7 +105,6 @@ export function displayBase(course, grain) {
     minZ = Infinity,
     maxZ = -Infinity,
     bottom = Infinity;
-  const parts = [];
   for (const p of course.parts) {
     const g = partGeometry(p);
     let loX = Infinity,
@@ -130,7 +129,6 @@ export function displayBase(course, grain) {
     minZ = Math.min(minZ, loZ);
     maxZ = Math.max(maxZ, hiZ);
     bottom = Math.min(bottom, loY);
-    parts.push({ p, loX, hiX, loZ, hiZ, loY });
   }
   const w = maxX - minX + 7,
     d = maxZ - minZ + 7,
@@ -170,10 +168,6 @@ export function displayBase(course, grain) {
     dark = new THREE.MeshStandardMaterial({
       color: "#20272a",
       roughness: 0.82,
-    }),
-    support = new THREE.MeshStandardMaterial({
-      color: "#635b4c",
-      roughness: 0.92,
     });
   const box = (width, height, depth, x, y, z, material, radius = 0.15) => {
     const mesh = new THREE.Mesh(
@@ -198,29 +192,6 @@ export function displayBase(course, grain) {
   for (const x of [minX + 0.3, maxX - 0.3])
     for (const z of [minZ + 0.3, maxZ - 0.3])
       box(2.4, 0.5, 2.4, x, top - 1.6, z, dark, 0.14);
-  // Discrete display supports beneath higher static slabs, below racing space.
-  for (const { p, loX, hiX, loZ, hiZ, loY } of parts) {
-    if (
-      p.motion ||
-      loY - top < 0.35 ||
-      hiX - loX < 2 ||
-      hiZ - loZ < 2 ||
-      ["wall", "pyramid", "tube"].includes(p.kind)
-    )
-      continue;
-    const height = loY - top;
-    for (const t of [0.3, 0.7])
-      box(
-        0.8,
-        height,
-        0.8,
-        loX + (hiX - loX) * t,
-        top + height / 2,
-        loZ + (hiZ - loZ) * 0.5,
-        support,
-        0.09,
-      );
-  }
   const canvas = document.createElement("canvas");
   canvas.width = 768;
   canvas.height = 128;
