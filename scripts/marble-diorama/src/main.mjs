@@ -84,8 +84,11 @@ function persist(successMessage) {
   else if (successMessage) toast(successMessage);
   return saved;
 }
-audio.onMusicError = () =>
+audio.onMusicError = (reason) => {
+  console.error("Amiga music:", reason);
+  $("musicStatus").textContent = `Music could not load: ${reason}`;
   toast("Music could not load. Restart the race to retry.");
+};
 function options() {
   return {
     players: Number($("players").value),
@@ -312,7 +315,11 @@ async function start(demo = false, course = selected, run = null) {
   const saved = store.records[recordKey(selected, sim.options)];
   ghost = saved?.ghost ?? null;
   const cue = selected.musicCue ?? selected.id;
-  audio.playCue(musicCues[cue] ? cue : "practice");
+  $("musicStatus").textContent = "Loading original Amiga music�";
+  audio.playCue(musicCues[cue] ? cue : "practice").then((playing) => {
+    if (playing)
+      $("musicStatus").textContent = "Original Amiga music is playing.";
+  });
   for (const id of ["intro", "result", "pauseCard", "replayBar", "editor"])
     show(id, false);
   show("hud");
