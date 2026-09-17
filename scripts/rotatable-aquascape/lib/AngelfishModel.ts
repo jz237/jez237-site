@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {FeedingBite} from './FeedingBite.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {assetURL} from './AssetPaths.ts';
 
@@ -75,6 +76,8 @@ vec3 angelDeform(vec3 p){
 `;
 export class AngelfishModel{
  readonly group:T.Group;
+ private feedingBite=new FeedingBite();
+ bite(){this.feedingBite.trigger();}
  private phase:number;private pectoral:number;private drift=0;private breath:number;
  private uniforms:{angelPhase:T.IUniform<number>;angelEffort:T.IUniform<number>;angelPectoral:T.IUniform<number>;angelDrift:T.IUniform<number>;angelReach:T.IUniform<number>;angelStroke:T.IUniform<number>;angelFold:T.IUniform<number>;angelGill:T.IUniform<number>;angelMouth:T.IUniform<number>} ;
  constructor(prototype:T.Group,seed=0){
@@ -116,13 +119,13 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
  }
  update(dt:number,effort:number,hover=false,reach=0,speed=hover?0:effort){
   if(dt<=0)return;
-  this.drift+=dt;
+  this.drift+=dt;this.feedingBite.update(dt);
   const blend=1-Math.exp(-dt*4),u=this.uniforms;
   u.angelEffort.value=T.MathUtils.lerp(u.angelEffort.value,effort,blend);
   // A separate, continuous ventilatory rhythm persists during hovering.
   // Slight effort/individual variation; qualitative timing, not measured rates.
   this.breath+=dt*2*Math.PI*(.95+.55*u.angelEffort.value+.035*Math.sin(this.drift*.43));
-  u.angelMouth.value=Math.pow(.5+.5*Math.sin(this.breath),1.6);
+  u.angelMouth.value=Math.max(Math.pow(.5+.5*Math.sin(this.breath),1.6),this.feedingBite.value*2.4);
   u.angelGill.value=Math.pow(.5+.5*Math.sin(this.breath-Math.PI*.60),1.25);
   // Speed drives fin folding; effort controls stronger propulsion. Individual
   // stroke/coast envelopes modulate amplitude without resetting phase.

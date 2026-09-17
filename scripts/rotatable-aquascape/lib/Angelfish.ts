@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {FoodReachability,foodApproach} from './FoodReachability.ts';
 import {bodyObstacleCandidates} from './BodyObstacles.ts';
 import {AngelfishModel,loadAngelfish} from './AngelfishModel.ts';
 import {advanceAngel,createAngel,angelBody,angelForward,type AngelFood} from './AngelfishMotion.ts';
@@ -9,6 +10,7 @@ import type {Identification} from './Exploration';
 
 export class Angelfish{
  readonly root=new T.Group();readonly states=[createAngel(0),createAngel(1)];readonly models:AngelfishModel[]=[];
+ private foodPaths=[new FoodReachability(),new FoodReachability()];
  private time=0;private neighbors:{position:T.Vector3;radius:number}[]=[];
  private collision:BodySphere[][]=[];
  private inspection=[{clock:0,hold:0,cooldown:0,near:false},{clock:0,hold:0,cooldown:0,near:false}];
@@ -28,15 +30,15 @@ export class Angelfish{
   this.pose(0);
  }
  static load=loadAngelfish;
- private clear(p:T.Vector3,yaw:number,pitch:number,size:number,id:number,reach=this.states[id]?.reach??0){
+ private clear(p:T.Vector3,yaw:number,pitch:number,size:number,id:number,reach=this.states[id]?.reach??0,traffic=true){
   const body=angelBody(p,yaw,pitch,size,reach,this.states[id]?.phase),near=this.neighbors.filter(n=>p.distanceToSquared(n.position)<(1.4+n.radius)**2);
   const obstacles=bodyObstacleCandidates(body,this.obstacles);
   for(const {center:c,radius:r} of body){
    if(c.x-r< -4.85||c.x+r>4.85||c.z-r< -2.10||c.z+r>2.10||c.y+r>5.12||c.y-r<this.height(c.x,c.z)+.035)return false;
    for(const o of obstacles)if(c.distanceToSquared(o.center)<(r+o.radius)**2)return false;
-   for(const n of near)if(c.distanceToSquared(n.position)<(r+n.radius)**2)return false;
+   for(const n of near)if(traffic&&c.distanceToSquared(n.position)<(r+n.radius)**2)return false;
   }
-  const other=this.states[1-id];if(other&&p.distanceToSquared(other.position)<5.8&&bodiesOverlap(body,this.stateBody(1-id),.045))return false;
+  const other=this.states[1-id];if(traffic&&other&&p.distanceToSquared(other.position)<5.8&&bodiesOverlap(body,this.stateBody(1-id),.045))return false;
   return this.plants.clearBody(p,body,this.time,undefined,false,1.3);
  }
  update(dt:number,time:number,daylight:number,food:AngelFood[],visitors:{position:T.Vector3;radius:number}[],eat:(id:number)=>void){
@@ -51,7 +53,7 @@ export class Angelfish{
    }
    const reach=T.MathUtils.lerp(s.reach,inspect.near&&inspect.hold>0?1:0,1-Math.exp(-dt*2.3));
    if(Math.abs(reach-s.reach)<.0001||this.clear(s.position,s.yaw,s.pitch,s.size,s.id,reach))s.reach=reach;
-   advanceAngel(s,dt,{daylight,companion:this.states[1-s.id].position,food:available,other:[...visitors,{position:this.states[1-s.id].position,radius:.75}],clear:(p,y,pitch,size)=>this.clear(p,y,pitch,size,s.id)});
+   advanceAngel(s,dt,{daylight,companion:this.states[1-s.id].position,food:available,reachable:f=>this.foodPaths[s.id].test(f.id,time,s.position,f.position,()=>foodApproach(s.position,f.position,s.yaw,s.pitch,.78*s.size,(p,y,pitch)=>this.clear(p,y,pitch,s.size,s.id,s.reach,false))),other:[...visitors,{position:this.states[1-s.id].position,radius:.75}],clear:(p,y,pitch,size)=>this.clear(p,y,pitch,size,s.id)});
    // A swaying leaf can enter yesterday's clear pose. Resolve that contact by
    // the smallest available translation, without snapping the fish's heading.
    if(dt>0&&!this.clear(s.position,s.yaw,s.pitch,s.size,s.id)){
@@ -59,7 +61,7 @@ export class Angelfish{
     let resolved=false;
     for(const amount of [.006,.012,.025,.05,.10]){for(const direction of directions){if(direction.lengthSq()<.5)continue;const p=s.position.clone().addScaledVector(direction,amount);if(this.clear(p,s.yaw,s.pitch,s.size,s.id)){s.position.copy(p);s.speed*=.5;resolved=true;break;}}if(resolved)break;}
    }
-   if(s.consumed!==null){const i=available.findIndex(f=>f.id===s.consumed);if(i>=0){available.splice(i,1);eat(s.consumed);}}
+   if(s.consumed!==null){const i=available.findIndex(f=>f.id===s.consumed);if(i>=0){available.splice(i,1);this.models[s.id].bite();eat(s.consumed);}}
   }
   this.pose(dt);
  }

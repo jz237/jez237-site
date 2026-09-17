@@ -4,7 +4,7 @@ import envelope from './AngelfishEnvelope.json' with {type:'json'};
 
 export type AngelFood={id:number;position:T.Vector3};
 export type AngelState={id:number;position:T.Vector3;previous:T.Vector3;goal:T.Vector3;yaw:number;pitch:number;speed:number;effort:number;seed:number;timer:number;hover:number;bite:number;startle:number;hunger:number;target:number|null;stalled:number;lastDistance:number;phase:number;size:number;behavior:string;consumed:number|null;detour:number;detourYaw:number;yawRate:number;pitchRate:number;blocked:number;social:T.Vector3;recovery:T.Vector3;retreat:number;reach:number};
-export type AngelSenses={food:AngelFood[];other:{position:T.Vector3;radius:number}[];daylight:number;companion?:T.Vector3;clear:(position:T.Vector3,yaw:number,pitch:number,size:number)=>boolean};
+export type AngelSenses={reachable?:(food:AngelFood)=>boolean;food:AngelFood[];other:{position:T.Vector3;radius:number}[];daylight:number;companion?:T.Vector3;clear:(position:T.Vector3,yaw:number,pitch:number,size:number)=>boolean};
 const clamp=T.MathUtils.clamp;
 function random(s:AngelState){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
 export function createAngel(id:number):AngelState{return {id,position:new T.Vector3(id?2.5:-2.2,3.1+id*.6,1.55),previous:new T.Vector3(),goal:new T.Vector3(id?-2:2,3.4,1.5),yaw:id?Math.PI:0,pitch:0,speed:0,effort:.2,seed:237+id*7349,timer:8,hover:0,bite:0,startle:0,hunger:.65-id*.12,target:null,stalled:0,lastDistance:Infinity,phase:id*3.71,size:id?.58:.64,behavior:'Exploring the planting',consumed:null,detour:0,detourYaw:0,yawRate:0,pitchRate:0,blocked:0,social:new T.Vector3(),recovery:new T.Vector3(),retreat:0,reach:0};}
@@ -48,12 +48,13 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
   return;
  }
  let food=senses.food.find(f=>f.id===s.target);
+ if(food&&senses.reachable&&!senses.reachable(food))food=undefined;
  if(!food){s.target=null;s.stalled=0;s.lastDistance=Infinity;}
  if(!food&&s.hunger>.16&&s.bite===0&&senses.daylight>.4){
   let best=Infinity;
   for(const f of senses.food){if(f.position.y>4.35||f.position.y<1.7)continue;const d=f.position.distanceTo(s.position);let score=d;
    for(const n of senses.other)if(n.radius>.45&&n.position.distanceTo(f.position)<d)score+=.9;
-   if(score<best&&d<5.8){best=score;food=f;}
+   if(score<best&&d<5.8&&(!senses.reachable||senses.reachable(f))){best=score;food=f;}
   }
   if(food){s.target=food.id;s.hover=0;}
  }
@@ -68,7 +69,7 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
   pace=d>.8?1.18+.38*Math.sin(s.phase*2.6+s.id*1.7):clamp((d-.43)*3,.045,.70);
   s.behavior=d>.7?'Approaching a falling flake':'Braking for a precise bite';
   const mouth=s.position.clone().addScaledVector(angelForward(s.yaw,s.pitch),.78*s.size);
-  if(mouth.distanceTo(food.position)<.11&&s.speed<.7){s.consumed=food.id;s.target=null;s.hunger=Math.max(0,s.hunger-.14);s.bite=.4+random(s)*.35;s.hover=.3;newGoal(s,senses);s.behavior='Taking a bite';}
+  if(mouth.distanceTo(food.position)<.085&&s.speed<.7){s.consumed=food.id;s.target=null;s.hunger=Math.max(0,s.hunger-.14);s.bite=.4+random(s)*.35;s.hover=.3;newGoal(s,senses);s.behavior='Taking a bite';}
  }
  if(s.hover>0||s.bite>0)pace=.035;
  if(s.startle>0){pace=1.5;s.behavior='A short startle dart';}
