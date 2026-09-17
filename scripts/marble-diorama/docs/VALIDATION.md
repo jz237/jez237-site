@@ -2,7 +2,7 @@
 
 ## Current outcome
 
-**81 automated tests pass. All six campaign races and all three bonus courses
+**83 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
