@@ -4,7 +4,7 @@ export class AudioEngine {
     createContext = () => new AudioContext(),
     fetchAudio = (...args) => fetch(...args),
     createWorker = () =>
-      new Worker(new URL("assets/music/music-worker.js?v=3", document.baseURI)),
+      new Worker(new URL("assets/music/music-worker-csp2.js", document.baseURI)),
   } = {}) {
     this.createContext = createContext;
     this.fetchAudio = fetchAudio;

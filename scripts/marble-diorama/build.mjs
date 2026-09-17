@@ -14,7 +14,7 @@ await cp(
 );
 await cp(
   new URL("src/music-worker.js", import.meta.url),
-  new URL("assets/music/music-worker.js", out),
+  new URL("assets/music/music-worker-csp2.js", out),
 );
 await build({
   entryPoints: ["src/main.mjs"],
