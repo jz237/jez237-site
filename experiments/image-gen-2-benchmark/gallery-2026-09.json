@@ -1,5 +1,161 @@
 [
   {
+    "id": "2026-09-17-factual-infographic-factual-infographic-obstructive-sleep-a",
+    "title": "Factual infographic: Obstructive Sleep Apnea — The Airway Under Pressure",
+    "tests": "Direct-canvas portrait medical infographic; one dominant anatomical hero, eight substantive panels, four explanatory close-ups, readable source-backed labels only; factual_subtype: medical-health-infographic; archive_slot=2026-09-17T05:20; concept=obstructive-sleep-apnea-airway-collapse-effort-cpap; factual_subtype: medical-health-infographic",
+    "prompt": "Create one finished 1024x1536 portrait medical infographic titled OBSTRUCTIVE SLEEP APNEA: THE AIRWAY UNDER PRESSURE. Render the infographic itself directly on the canvas, front-facing and edge-to-edge, with no paper edge, poster, frame, wall, desk, screen, hands, room, outer cast shadow, bibliography, URLs, logos, or QR codes. Use a sophisticated museum-quality medical-anatomy plate with a dominant highly detailed sagittal head-and-neck cutaway of an adult asleep in side profile. Show nasal cavity, oral cavity, hard and soft palate, tongue, mandible, tonsillar region, pharynx, epiglottis, larynx, trachea, cervical spine, and realistic soft-tissue layers. Divide the hero into a clean paired comparison: OPEN AIRWAY with an unobstructed cyan airflow ribbon, then OSA EVENT with relaxed tongue and soft palate narrowing the upper airway, diminished airflow, visible continuing chest/diaphragm effort, and a short awakening/arousal transition that reopens the airway. Use clinically calm anatomical colors—warm coral and rose tissue, ivory bone, deep navy nerves and shadows, cyan airflow, amber caution accents—with realistic translucency, credible scale, fine membranes, precise leader lines, and large readable typography. Surround the hero with eight substantive panels: (1) THE NIGHTLY CYCLE, a four-stage sequence labeled SLEEP / AIRWAY NARROWS / AIRFLOW FALLS WHILE BREATHING EFFORT CONTINUES / BRIEF AROUSAL REOPENS AIRWAY, without invented timing or oxygen values; (2) OBSTRUCTIVE VS CENTRAL, two compact respiratory traces and diagrams showing BLOCKED AIRWAY + BREATHING EFFORT versus MISSING BRAIN SIGNAL TO BREATHE, clearly stating this plate focuses on obstructive apnea; (3) AIRWAY CLOSE-UP, a magnified tongue-soft-palate-pharynx cross-section comparing awake muscle tone, open sleeping airway, and obstructed sleeping airway; (4) CLUES DURING SLEEP, concise icons and labels for breathing that starts and stops, frequent loud snoring, and gasping, plus a bed-partner observation vignette; (5) DAYTIME EFFECTS, an alertness-to-sleepiness comparison labeled TIREDNESS CAN AFFECT FOCUS, LEARNING, AND REACTION; (6) RISK CONTEXT, a nonjudgmental constellation labeled AGE, BODY AND AIRWAY ANATOMY, FAMILY HISTORY, SOME HEALTH CONDITIONS, SMOKING, AND ALCOHOL—RISK FACTORS ARE NOT A DIAGNOSIS; (7) HOW IT IS EVALUATED, a sleep-clinic vignette plus polysomnography close-up showing airflow sensor, chest-effort belt, oxygen sensor, and sleep-stage leads, labeled SLEEP TESTING HELPS IDENTIFY TYPE AND SEVERITY; (8) MANAGEMENT PATHWAYS, a clinician-guided branching diagram for INDIVIDUALIZED HEALTH CHANGES, PAP, CUSTOM ORAL APPLIANCE, and SELECTED PROCEDURES, emphasizing that choice depends on clinical assessment and follow-up. Add a prominent CPAP mechanism close-up showing a mask, hose, pressure source, and a cyan pressure column splinting the pharyngeal airway open; label CONTINUOUS POSITIVE AIRWAY PRESSURE HELPS KEEP THE AIRWAY OPEN. Add a final SAFETY AND NEXT STEPS strip: LOUD SNORING, GASPING, OR DAYTIME SLEEPINESS — TALK WITH A HEALTHCARE PROVIDER; SLEEP TESTING MAY BE NEEDED. DAYTIME SLEEPINESS CAN SLOW REACTION. Include a restrained long-term context box: UNTREATED SLEEP APNEA CAN AFFECT THINKING AND IS LINKED WITH SERIOUS CARDIOVASCULAR RISKS. Footer: GENERAL EDUCATION — NOT A DIAGNOSIS; TREATMENT SHOULD FOLLOW OBJECTIVE TESTING AND INDIVIDUAL CLINICAL GUIDANCE. Include at least four prominent explanatory close-ups: open-versus-narrowed pharynx, tongue/soft-palate relationship, airflow-versus-effort traces, and CPAP pressure splinting. Keep every factual implication within the verified claim sheet. Do not add prevalence figures, apnea counts, oxygen percentages, medication advice, prescription doses, treatment guarantees, stigmatizing body imagery, self-diagnosis, tiny paragraphs, decorative pseudo-text, classroom worksheet styling, fantasy anatomy, gore, or photographed-poster staging.",
+    "image": "images/2026-09-17-factual-infographic-factual-infographic-obstructive-sleep-a.jpg",
+    "thumb": "thumbs/2026-09-17-factual-infographic-factual-infographic-obstructive-sleep-a.webp",
+    "color": "#878891",
+    "date": "2026-09-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "obstructive-sleep-apnea-airway-collapse-effort-cpap",
+      "imageSha256": "e0fa85c20188abecd786a293904f8adb3b0a4ef7f12e0106df8218e835c4f06d",
+      "imageDHash": "2b6a4bd6cebeb45c"
+    },
+    "factualInfographic": {
+      "topic": "How obstructive sleep apnea repeatedly narrows or blocks the upper airway during sleep and how it is evaluated and managed",
+      "description": "A source-verified medical anatomy infographic explaining upper-airway obstruction, continued respiratory effort, sleep and daytime clues, risk context, objective sleep testing, CPAP mechanics, individualized treatment categories, and safety context.",
+      "sourceNote": "Verified against NHLBI https://www.nhlbi.nih.gov/health/sleep-apnea, https://www.nhlbi.nih.gov/health/sleep-apnea/causes, https://www.nhlbi.nih.gov/health/sleep-apnea/symptoms, https://www.nhlbi.nih.gov/health/sleep-apnea/diagnosis, and https://www.nhlbi.nih.gov/health/sleep-apnea/treatment, plus the American Academy of Sleep Medicine clinical practice guideline in Journal of Clinical Sleep Medicine https://pmc.ncbi.nlm.nih.gov/articles/PMC6374094/; scope covers OSA mechanism, distinction from central apnea, symptoms, risk context, testing, PAP mechanics, individualized management, follow-up, and long-term safety context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-17T05:20:47-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Sleep Apnea — What Is Sleep Apnea?",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/sleep-apnea"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Sleep Apnea — Causes and Risk Factors",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/sleep-apnea/causes"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Sleep Apnea — Symptoms",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/sleep-apnea/symptoms"
+          },
+          {
+            "id": "S4",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Sleep Apnea — Diagnosis",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/sleep-apnea/diagnosis"
+          },
+          {
+            "id": "S5",
+            "publisher": "National Heart, Lung, and Blood Institute",
+            "title": "Sleep Apnea — Treatment",
+            "sourceType": "government-agency",
+            "url": "https://www.nhlbi.nih.gov/health/sleep-apnea/treatment"
+          },
+          {
+            "id": "S6",
+            "publisher": "Journal of Clinical Sleep Medicine / American Academy of Sleep Medicine",
+            "title": "Treatment of Adult Obstructive Sleep Apnea with Positive Airway Pressure: An American Academy of Sleep Medicine Clinical Practice Guideline",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6374094/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Obstructive sleep apnea occurs when the upper airway becomes repeatedly narrowed or blocked during sleep, reducing or stopping airflow.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The tongue and soft palate can move backward during sleep and contribute to upper-airway obstruction.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Obstructive apnea involves an airway blockage, whereas central sleep apnea results from missing brain signals needed to breathe.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Common sleep-time clues include breathing that starts and stops, frequent loud snoring, and gasping for air.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Daytime sleepiness and tiredness can impair learning, focus, and reaction.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Risk factors and associations include older age, obesity, a large tongue or tonsils, family history, some endocrine disorders, smoking, and alcohol use; these factors do not by themselves diagnose OSA.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "A clinical evaluation considers symptoms, risk factors, and family history, and a sleep study can identify the apnea type and severity.",
+            "sourceIds": [
+              "S4"
+            ]
+          },
+          {
+            "claim": "Positive-airway-pressure treatment should follow an OSA diagnosis established with objective sleep apnea testing.",
+            "sourceIds": [
+              "S6"
+            ]
+          },
+          {
+            "claim": "CPAP provides continuous air pressure through the nose and/or mouth to help keep the airway open during sleep.",
+            "sourceIds": [
+              "S5"
+            ]
+          },
+          {
+            "claim": "Treatment options can include individualized lifestyle changes, PAP, custom oral appliances, and selected surgical procedures; the appropriate choice depends on the person and clinical assessment.",
+            "sourceIds": [
+              "S5",
+              "S6"
+            ]
+          },
+          {
+            "claim": "PAP therapy requires education, troubleshooting, monitoring, and follow-up rather than a one-size-fits-all setup.",
+            "sourceIds": [
+              "S6"
+            ]
+          },
+          {
+            "claim": "Untreated sleep apnea can impair concentration, decision-making, memory, and behavior and is associated with increased risk of stroke, heart attack, and other serious problems.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "People with possible symptoms should discuss them with a healthcare provider; a sleep study may be needed, especially when daytime sleepiness affects attention or reaction.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-17-factual-infographic-factual-infographic-bppv-when-ear-cryst",
     "title": "Factual infographic: BPPV — When Ear Crystals Enter a Balance Canal",
     "tests": "Direct-canvas portrait medical infographic; one dominant anatomical hero, eight substantive panels, four explanatory close-ups, readable source-backed labels only; factual_subtype: medical-health-infographic; archive_slot=2026-09-17T02:20; concept=bppv-displaced-otoconia-posterior-canal-repositioning; factual_subtype: medical-health-infographic",
