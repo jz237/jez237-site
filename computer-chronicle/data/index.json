@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-17",
+      "historicDate": "1984-07-30",
+      "displayDate": "Week of July 30-August 5, 1984",
+      "edition": "Issue 105 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Public-domain programs dial into homes, Tramiel starts remaking Atari, and Shadowkeep crosses from disk to novel.",
+      "leadHeadline": "Free Software Travels the Phone Lines",
+      "storyHeadlines": [
+        "Tramiel Takes Atari and the Ax Falls",
+        "A Fantasy Computer Game Becomes a Novel",
+        "BYTE Surveys the Small-System Frontier"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-07-30.jpg",
+      "thumb": "media/thumbs/1984-07-30.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-16",
       "historicDate": "1984-07-23",
       "displayDate": "Week of July 23-29, 1984",
