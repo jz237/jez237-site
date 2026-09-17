@@ -323,3 +323,76 @@ test("module startup cancellation and worker errors settle without overlapping m
   assert.equal(audio.lastMusicError, "missing module");
   assert.equal(worker.terminated, true);
 });
+
+test("game events play on the effects bus; results stop music without truncating goal", async () => {
+  const { audio, context, sources } = fixture();
+  await audio.unlock();
+  for (const type of [
+    "fall",
+    "respawn",
+    "collect",
+    "spring",
+    "finish",
+    "timeout",
+  ])
+    assert.equal(audio.event({ type, player: 0 }), true, type);
+  assert.equal(audio.effectSources.size, 6);
+  const effects = sources.slice(1);
+  audio.finishRace();
+  assert.equal(context.state, "running");
+  assert.ok(effects.every((s) => !s.stopped));
+  audio.volumes(0.5, 0);
+  assert.equal(audio.bus.gain.value, 0);
+  assert.equal(audio.musicBus.gain.value, 0.5);
+  await audio.pause();
+  assert.equal(audio.event({ type: "fall", player: 1 }), false);
+  await audio.resume();
+  assert.equal(audio.event({ type: "fall", player: 1 }), true);
+  audio.stop();
+  assert.equal(audio.effectSources.size, 0);
+  assert.ok(effects.every((s) => s.stopped));
+});
+test("effects throttle repeated events, permit both players, and bound polyphony", async () => {
+  const { audio, context } = fixture();
+  await audio.unlock();
+  assert.equal(audio.event({ type: "fall", player: 0 }), true);
+  assert.equal(audio.event({ type: "fall", player: 0 }), false);
+  assert.equal(audio.event({ type: "fall", player: 1 }), true);
+  assert.equal(
+    audio.event({ type: "checkpoint", player: 0 }, false),
+    undefined,
+  );
+  assert.equal(audio.event({ type: "checkpoint", player: 0 }, true), true);
+  for (let i = 0; i < 30; i++) {
+    context.currentTime += 0.2;
+    audio.event({ type: "collect", player: 0 });
+  }
+  assert.equal(audio.effectSources.size, 16);
+});
+test("obstacles are audible only near a racing player and while moving or active", async () => {
+  const { audio, context } = fixture();
+  await audio.unlock();
+  const pose = (x) => ({
+    position: { x, y: 0, z: 0 },
+    rotation: { x: 0, y: 0, z: 0, w: 1 },
+  });
+  const sim = {
+    tick: 1,
+    players: [{ status: "racing", current: pose(100) }],
+    world: { getRigidBody: () => ({ isEnabled: () => true }) },
+    movers: [{ handle: 1, previous: pose(0), current: pose(0.02) }],
+    enemies: [],
+    course: { zones: [] },
+  };
+  audio.obstacles(sim);
+  assert.equal(audio.effectSources.size, 0);
+  sim.tick++;
+  sim.players[0].current = pose(1);
+  audio.obstacles(sim);
+  assert.equal(audio.effectSources.size, 1);
+  sim.tick++;
+  context.currentTime = 1;
+  sim.movers[0].previous = pose(0.02);
+  audio.obstacles(sim);
+  assert.equal(audio.effectSources.size, 1);
+});

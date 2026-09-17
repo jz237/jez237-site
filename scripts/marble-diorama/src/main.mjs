@@ -401,7 +401,7 @@ function finish() {
   renderHud();
   lastRecording = recording;
   clock.pause(true);
-  audio.pause();
+  audio.finishRace();
   show("result");
   show("touchControls", false);
   view.setOrbit(true);
@@ -493,12 +493,14 @@ function step() {
   recording.capture(sim, controls);
   for (const e of events) {
     if (e.type === "impact" || e.type === "fall") view.effect(e);
-    if (e.type === "impact") audio.impact(e.force);
+    audio.event(e, sim.options.assisted);
     if (e.type === "checkpoint" && sim.options.assisted)
       toast("Checkpoint reached");
     if (e.type === "fall") toast(`Player ${e.player + 1} · back in a moment`);
     if (e.type === "collect")
-      toast(`Player ${e.player + 1} · +${e.time} seconds · +${e.score} points`);
+      toast(
+        `Player ${e.player + 1} · +${e.time} seconds · +${e.score} points`,
+      );
   }
   if (
     sim.players.every((p) => p.status === "finished" || p.status === "timeout")

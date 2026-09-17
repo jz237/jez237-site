@@ -1,0 +1,33 @@
+<!doctype html><meta charset="utf-8"><title>Game effects verification</title>
+<button id="run">Verify game effects</button><pre id="result">Ready</pre>
+<script type="module">
+import {AudioEngine} from '../src/audio.mjs';
+import {effectDurations} from '../src/effects.mjs';
+const result=document.querySelector('#result');
+document.querySelector('#run').onclick=async()=>{
+const audio=new AudioEngine();
+try {
+ await audio.unlock();
+ const analyser=audio.context.createAnalyser();analyser.fftSize=2048;
+ audio.bus.connect(analyser);const samples=new Float32Array(analyser.fftSize);
+ const delay=ms=>new Promise(r=>setTimeout(r,ms));
+ const peak=()=>{analyser.getFloatTimeDomainData(samples);return Math.max(...samples.map(Math.abs));};
+ result.textContent='Running';
+ for(const kind of Object.keys(effectDurations)) {
+  audio.effect(kind);await delay(65);
+  if(peak()<0.0001) throw Error(kind+' produced no output');
+  result.textContent+='\nPASS '+kind+' audible output';
+  audio.stop();await delay(60);
+ }
+ audio.volumes(0.5,0);audio.effect('finish');await delay(80);
+ if(peak()>0.0001) throw Error('Effects mute failed');
+ audio.stop();audio.volumes(0.5,0.5);audio.effect('finish');audio.finishRace();await delay(80);
+ if(peak()<0.0001 || audio.context.state!=='running') throw Error('Goal truncated at results');
+ await audio.pause();const frozen=audio.context.currentTime;await delay(80);
+ if(audio.context.currentTime!==frozen)throw Error('Pause clock advanced');
+ await audio.resume();await delay(80);if(peak()<0.0001)throw Error('Goal did not resume');
+ audio.stop();if(audio.effectSources.size)throw Error('Leaked effect sources');
+ result.textContent+='\nPASS effects mute, results tail, pause/resume and cleanup\nALL PASS';
+} catch(e){result.textContent+='\nFAIL '+e.stack;} finally {audio.stop();await audio.pause();}
+};
+</script>
