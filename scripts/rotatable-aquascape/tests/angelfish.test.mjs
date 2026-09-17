@@ -2,10 +2,32 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import * as T from 'three';
-import {createAngel,advanceAngel,angelBody,angelForward} from '../lib/AngelfishMotion.ts';
+import {createAngel,advanceAngel,angelBody,angelForward,angelMouth} from '../lib/AngelfishMotion.ts';
 import {fishTouch,fishBody,bodiesOverlap} from '../lib/GrazerCollision.ts';
 import {AngelfishModel} from '../lib/AngelfishModel.ts';
 const open={food:[],other:[],daylight:1,clear:p=>Math.abs(p.x)<4&&p.y>1.3&&p.y<4.4&&Math.abs(p.z)<1.8};
+
+test('both sizes line up with sinking food above, below and across depth beside a companion',()=>{
+ for(const id of [0,1])for(const dt of [1/60,.05])for(const dy of [-.5,0,.5])for(const dz of [-.5,0,.5]){
+  const s=createAngel(id);s.position.set(-1,3,0);s.yaw=0;
+  const food={id:41,position:new T.Vector3(0,3+dy,dz)},mate=new T.Vector3(-1,3.2,.85);let eaten=false;
+  for(let t=0;t<8;t+=dt){
+   food.position.y-=.07*dt;const yaw=s.yaw;
+   advanceAngel(s,dt,{...open,food:[food],other:[{position:mate,radius:.75}],companion:mate});
+   assert.ok(Math.abs(s.yaw-yaw)<=1.6*dt+.00001,'upright eased turn');
+   if(s.consumed!==null){assert.equal(s.consumed,41);assert.ok(angelMouth(s).distanceTo(food.position)<.055,'visible aperture meets the actual flake');eaten=true;break;}
+  }
+  assert.ok(eaten,`size ${s.size}, dt ${dt}, offset ${dy}/${dz}: no endless circling`);
+ }
+});
+
+test('feeding mouth matches the rendered model transform and cannot capture through a blocker',()=>{
+ const s=createAngel(1);s.position.set(-.5,3,0);s.yaw=.4;s.pitch=-.2;
+ const pose=new T.Object3D();pose.position.copy(s.position);pose.rotation.set(0,s.yaw,s.pitch,'YXZ');pose.scale.setScalar(s.size);pose.updateMatrixWorld();
+ assert.ok(pose.localToWorld(new T.Vector3(.785,-.035,0)).distanceTo(angelMouth(s))<1e-10);
+ const food={id:9,position:angelMouth(s).add(new T.Vector3(.09,0,0))},start=s.position.clone();
+ for(let i=0;i<30;i++){advanceAngel(s,1/60,{...open,food:[food],clear:p=>p.distanceTo(start)<1e-8});assert.equal(s.consumed,null);}
+});
 
 test('angelfish explore depth and height with independent speeds and upright turns',()=>{
  const fish=[createAngel(0),createAngel(1)],range=fish.map(()=>({min:[Infinity,Infinity,Infinity],max:[-Infinity,-Infinity,-Infinity],minSpeed:9,maxSpeed:0,hover:0}));

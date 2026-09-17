@@ -16,9 +16,10 @@ export class FoodReachability {
 
 /** Check room to turn and a body-sized approach, ending with food at the mouth.
  * Blocked approaches are declined; existing swept motion remains authoritative. */
-export function foodApproach(from:T.Vector3,food:T.Vector3,yaw:number,pitch:number,mouth:number,clear:(p:T.Vector3,yaw:number,pitch:number)=>boolean,floor?:(x:number,z:number)=>number){
+export function foodApproach(from:T.Vector3,food:T.Vector3,yaw:number,pitch:number,mouth:number,clear:(p:T.Vector3,yaw:number,pitch:number)=>boolean,floor?:(x:number,z:number)=>number,mouthY=0){
  const delta=food.clone().sub(from),heading=Math.atan2(-delta.z,delta.x),tilt=floor?0:T.MathUtils.clamp(Math.atan2(delta.y,Math.hypot(delta.x,delta.z)),-.26,.26);
  const forward=new T.Vector3(Math.cos(heading)*Math.cos(tilt),Math.sin(tilt),-Math.sin(heading)*Math.cos(tilt)),end=food.clone().addScaledVector(forward,-mouth);
+ end.addScaledVector(new T.Vector3(-Math.cos(heading)*Math.sin(tilt),Math.cos(tilt),Math.sin(heading)*Math.sin(tilt)),-mouthY);
  if(floor)end.y=floor(end.x,end.z);
  const angle=Math.atan2(Math.sin(heading-yaw),Math.cos(heading-yaw)),turns=Math.max(1,Math.ceil(Math.abs(angle)/.16));
  for(let i=1;i<=turns;i++)if(!clear(from,yaw+angle*i/turns,pitch+(tilt-pitch)*i/turns))return false;
