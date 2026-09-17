@@ -165,6 +165,9 @@ export class DioramaView {
     const s = SURFACES[name],
       m = new THREE.MeshStandardMaterial({
         color: side ? color : s.color,
+        // Some authored shells have inward wall winding. Render both faces
+        // so their closed walls and undersides stay opaque during inspection.
+        side: side ? THREE.DoubleSide : THREE.FrontSide,
         roughness: s.roughness,
         metalness: name === "brass" ? 0.58 : name === "metal" ? 0.72 : 0.05,
       });
