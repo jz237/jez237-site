@@ -117,7 +117,7 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
    o.geometry.computeBoundingSphere();o.frustumCulled=false;
   });
  }
- update(dt:number,effort:number,hover=false,reach=0,speed=hover?0:effort){
+ update(dt:number,effort:number,hover=false,reach=0,speed=hover?0:effort,biteApproach=0){
   if(dt<=0)return;
   this.drift+=dt;this.feedingBite.update(dt);
   const blend=1-Math.exp(-dt*4),u=this.uniforms;
@@ -125,7 +125,8 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
   // A separate, continuous ventilatory rhythm persists during hovering.
   // Slight effort/individual variation; qualitative timing, not measured rates.
   this.breath+=dt*2*Math.PI*(.95+.55*u.angelEffort.value+.035*Math.sin(this.drift*.43));
-  u.angelMouth.value=Math.max(Math.pow(.5+.5*Math.sin(this.breath),1.6),this.feedingBite.value*2.4);
+  // Open as the flake reaches the lips, then let the confirmed bite close it.
+  u.angelMouth.value=Math.max(Math.pow(.5+.5*Math.sin(this.breath),1.6),this.feedingBite.value*2.4,T.MathUtils.clamp(biteApproach,0,1)*2.4);
   u.angelGill.value=Math.pow(.5+.5*Math.sin(this.breath-Math.PI*.60),1.25);
   // Speed drives fin folding; effort controls stronger propulsion. Individual
   // stroke/coast envelopes modulate amplitude without resetting phase.

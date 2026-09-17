@@ -2,7 +2,7 @@ import * as T from 'three';
 import {FoodReachability,foodApproach} from './FoodReachability.ts';
 import {bodyObstacleCandidates} from './BodyObstacles.ts';
 import {AngelfishModel,loadAngelfish} from './AngelfishModel.ts';
-import {advanceAngel,createAngel,angelBody,angelForward,type AngelFood} from './AngelfishMotion.ts';
+import {advanceAngel,createAngel,angelBody,angelForward,angelMouth,type AngelFood} from './AngelfishMotion.ts';
 import {bodiesOverlap,fishTouch,type FishContactBody,type BodySphere} from './GrazerCollision.ts';
 import type {GrazerPlants} from './GrazerPlants';
 import type {Obstacle} from './TankSpace';
@@ -49,11 +49,11 @@ export class Angelfish{
    if(dt>0&&inspect.clock<=0){
     inspect.clock=.22;const probe=s.position.clone().addScaledVector(angelForward(s.yaw,s.pitch),.65*s.size);probe.y-=.72*s.size;
     inspect.near=this.obstacles.some(o=>probe.distanceTo(o.center)<o.radius+.6*s.size)||!this.plants.clearBody(probe,[{center:probe,radius:.6*s.size}],time,undefined,false,.65);
-    if(inspect.near&&inspect.cooldown===0){inspect.hold=2.6+s.id*.5;inspect.cooldown=7+s.id*2;s.hover=Math.max(s.hover,.9);}
+    if(inspect.near&&inspect.cooldown===0){inspect.hold=2.6+s.id*.5;inspect.cooldown=7+s.id*2;if(s.target===null)s.hover=Math.max(s.hover,.9);}
    }
    const reach=T.MathUtils.lerp(s.reach,inspect.near&&inspect.hold>0?1:0,1-Math.exp(-dt*2.3));
    if(Math.abs(reach-s.reach)<.0001||this.clear(s.position,s.yaw,s.pitch,s.size,s.id,reach))s.reach=reach;
-   advanceAngel(s,dt,{daylight,companion:this.states[1-s.id].position,food:available,reachable:f=>this.foodPaths[s.id].test(f.id,time,s.position,f.position,()=>foodApproach(s.position,f.position,s.yaw,s.pitch,.78*s.size,(p,y,pitch)=>this.clear(p,y,pitch,s.size,s.id,s.reach,false))),other:[...visitors,{position:this.states[1-s.id].position,radius:.75}],clear:(p,y,pitch,size)=>this.clear(p,y,pitch,size,s.id)});
+   advanceAngel(s,dt,{daylight,companion:this.states[1-s.id].position,food:available,reachable:f=>f.id!==this.states[1-s.id].target&&this.foodPaths[s.id].test(f.id,time,s.position,f.position,()=>foodApproach(s.position,f.position,s.yaw,s.pitch,.785*s.size,(p,y,pitch)=>this.clear(p,y,pitch,s.size,s.id,s.reach,false),undefined,-.035*s.size)),other:[...visitors,{position:this.states[1-s.id].position,radius:.75}],clear:(p,y,pitch,size)=>this.clear(p,y,pitch,size,s.id)});
    // A swaying leaf can enter yesterday's clear pose. Resolve that contact by
    // the smallest available translation, without snapping the fish's heading.
    if(dt>0&&!this.clear(s.position,s.yaw,s.pitch,s.size,s.id)){
@@ -63,9 +63,13 @@ export class Angelfish{
    }
    if(s.consumed!==null){const i=available.findIndex(f=>f.id===s.consumed);if(i>=0){available.splice(i,1);this.models[s.id].bite();eat(s.consumed);}}
   }
-  this.pose(dt);
+  this.pose(dt,available);
  }
- pose(dt:number){for(const s of this.states){const m=this.models[s.id];m.group.position.copy(s.position);m.group.rotation.set(0,s.yaw,s.pitch,'YXZ');m.update(dt,s.effort,s.hover>0,s.reach,s.speed);}this.collision=this.states.map(s=>angelBody(s.position,s.yaw,s.pitch,s.size,s.reach,s.phase));}
+ pose(dt:number,food:AngelFood[]=[]){for(const s of this.states){
+  const m=this.models[s.id],flake=food.find(f=>f.id===s.target);
+  const opening=flake&&s.retreat===0&&s.bite===0&&s.speed<.7?1-T.MathUtils.smoothstep(angelMouth(s).distanceTo(flake.position),.055,.17):0;
+  m.group.position.copy(s.position);m.group.rotation.set(0,s.yaw,s.pitch,'YXZ');m.update(dt,s.effort,s.hover>0,s.reach,s.speed,opening);
+ }this.collision=this.states.map(s=>angelBody(s.position,s.yaw,s.pitch,s.size,s.reach,s.phase));}
  contacts():FishContactBody[]{return this.states.map(s=>({id:100+s.id,position:s.position.clone(),previous:s.previous.clone(),forward:angelForward(s.yaw,s.pitch),size:s.size,envelope:angelBody(new T.Vector3(),s.yaw,s.pitch,s.size,s.reach,s.phase)}));}
  correct(id:number,p:T.Vector3){const s=this.states[id];if(!s)return;s.position.copy(p);s.speed=0;s.timer=0;this.pose(0);}
  startle(){for(const s of this.states){s.startle=.2+s.id*.07;s.hover=0;}}

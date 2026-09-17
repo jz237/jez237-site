@@ -9,6 +9,11 @@ const clamp=T.MathUtils.clamp;
 function random(s:AngelState){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
 export function createAngel(id:number):AngelState{return {id,position:new T.Vector3(id?2.5:-2.2,3.1+id*.6,1.55),previous:new T.Vector3(),goal:new T.Vector3(id?-2:2,3.4,1.5),yaw:id?Math.PI:0,pitch:0,speed:0,effort:.2,seed:237+id*7349,timer:8,hover:0,bite:0,startle:0,hunger:.65-id*.12,target:null,stalled:0,lastDistance:Infinity,phase:id*3.71,size:id?.58:.64,behavior:'Exploring the planting',consumed:null,detour:0,detourYaw:0,yawRate:0,pitchRate:0,blocked:0,social:new T.Vector3(),recovery:new T.Vector3(),retreat:0,reach:0};}
 export function angelForward(yaw:number,pitch:number){return new T.Vector3(Math.cos(yaw)*Math.cos(pitch),Math.sin(pitch),-Math.sin(yaw)*Math.cos(pitch));}
+/** Same local aperture center and YXZ orientation as the rendered model. */
+export function angelMouth(s:Pick<AngelState,'position'|'yaw'|'pitch'|'size'>){
+ const up=new T.Vector3(-Math.cos(s.yaw)*Math.sin(s.pitch),Math.cos(s.pitch),Math.sin(s.yaw)*Math.sin(s.pitch));
+ return s.position.clone().addScaledVector(angelForward(s.yaw,s.pitch),.785*s.size).addScaledVector(up,-.035*s.size);
+}
 /** Overlapping volumes enclose torso, median fins, tail and pelvic streamers,
  * including the GPU wave's displacement. They rotate with the upright animal. */
 export function angelBody(position:T.Vector3,yaw:number,pitch:number,size:number,reach=0,phase?:number):BodySphere[]{
@@ -63,13 +68,13 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
  let pace=senses.daylight<.4?.10:.30+.075*Math.sin(s.phase*.19+s.id)+.055*Math.sin(s.phase*.31+s.id*3)**2;
  s.behavior=senses.daylight<.4?'Resting in dim light':s.hover>0?'Hovering and inspecting':'Cruising between plants';
  if(food){
-  const d=s.position.distanceTo(food.position);s.stalled=d<s.lastDistance-.02?0:s.stalled+dt;if(d<s.lastDistance-.02)s.lastDistance=d;
+  s.hover=0;
+  const d=s.position.distanceTo(food.position),mouthDistance=angelMouth(s).distanceTo(food.position);
+  s.stalled=mouthDistance<s.lastDistance-.01?0:s.stalled+dt;if(mouthDistance<s.lastDistance-.01)s.lastDistance=mouthDistance;
   if(s.stalled>2.4){s.target=null;s.bite=.8;s.stalled=0;newGoal(s,senses);}
   // Stronger feeding strokes blend into glides, with the same precise braking.
-  pace=d>.8?1.18+.38*Math.sin(s.phase*2.6+s.id*1.7):clamp((d-.43)*3,.045,.70);
+  pace=d>.95?1.18+.38*Math.sin(s.phase*2.6+s.id*1.7):clamp((d-.785*s.size)*3,0,.70);
   s.behavior=d>.7?'Approaching a falling flake':'Braking for a precise bite';
-  const mouth=s.position.clone().addScaledVector(angelForward(s.yaw,s.pitch),.78*s.size);
-  if(mouth.distanceTo(food.position)<.085&&s.speed<.7){s.consumed=food.id;s.target=null;s.hunger=Math.max(0,s.hunger-.14);s.bite=.4+random(s)*.35;s.hover=.3;newGoal(s,senses);s.behavior='Taking a bite';}
  }
  if(s.hover>0||s.bite>0)pace=.035;
  if(s.startle>0){pace=1.5;s.behavior='A short startle dart';}
@@ -81,7 +86,11 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
  for(const n of senses.other){const away=s.position.clone().sub(n.position),d=away.length(),mate=n.position===senses.companion,range=mate?1.35:1.12+n.radius;if(d<range&&d>.0001){social.addScaledVector(away,(mate?2.0:2.8)*(range-d)/d);if(d<.45+n.radius)pace=Math.min(pace,.16);}}
  if(senses.companion&&!food){const toward=senses.companion.clone().sub(s.position),d=toward.length();if(d>1.65){social.addScaledVector(toward,Math.min(1.1,(d-1.65)*.6)/d);if(d>2.3)s.hover=0;}}
  if(senses.companion&&s.position.distanceTo(senses.companion)<1.8)social.add(new T.Vector3(0,s.id?-.06:.06,s.id?.38:-.7));
- social.clampLength(0,1.8);s.social.lerp(social,1-Math.exp(-dt*2));delta.add(s.social);
+ social.clampLength(0,1.8);s.social.lerp(social,1-Math.exp(-dt*2));
+ // Give mouth alignment priority over a companion's preferred formation.
+ // Whole-body swept contacts below still forbid entering any animal or solid.
+ const foodDistance=food?s.position.distanceTo(food.position):Infinity;
+ delta.addScaledVector(s.social,food?T.MathUtils.smoothstep(foodDistance,.65,1.8)*.35:1);
  let yaw=Math.atan2(-delta.z,delta.x),pitch=clamp(Math.atan2(delta.y,Math.hypot(delta.x,delta.z)),-.26,.26);
  const error=Math.atan2(Math.sin(yaw-s.yaw),Math.cos(yaw-s.yaw));
  const turnLimit=food||s.startle>0?1.6:.65;
@@ -92,7 +101,14 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
  const to=s.position.clone().addScaledVector(angelForward(yaw,pitch),s.speed*dt);
  // Fin sculling lets a deep-bodied angelfish gain/lose height without pointing
  // its whole body steeply upward or downward.
- if(s.hover===0)to.y+=clamp(verticalError*(food?.42:.3),food?-.22:-.16,food?.22:.16)*dt;
+ if(food&&foodDistance<.95&&Math.cos(error)>.5&&s.detour===0&&s.startle===0&&s.bite===0){
+  // Station with the paired fins: correct all three mouth coordinates, including
+  // the moving flake's height. A body-center chase otherwise orbits beneath it.
+  const error=food.position.clone().sub(angelMouth({...s,yaw,pitch}));
+  const correction=error.multiplyScalar(3).clampLength(0,.65);
+  to.copy(s.position).addScaledVector(correction,dt);
+  s.speed=correction.length();
+ }else if(s.hover===0)to.y+=clamp(verticalError*(food?.42:.3),food?-.22:-.16,food?.22:.16)*dt;
  // Test intermediate translation AND orientation so bursts cannot tunnel.
  const steps=Math.max(1,Math.ceil(s.position.distanceTo(to)/.035),Math.ceil(Math.abs(yaw-s.yaw)/.08));let valid=true;
  for(let i=1;i<=steps;i++){const t=i/steps;if(!senses.clear(s.position.clone().lerp(to,t),s.yaw+(yaw-s.yaw)*t,s.pitch+(pitch-s.pitch)*t,s.size)){valid=false;break;}}
@@ -119,6 +135,12 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
    s.timer=0;
   }
 
+ }
+ // Consume only after a valid movement puts the visible mouth on the flake.
+ // A small mouth/flake tolerance, not a body-sized collection radius.
+ if(food&&valid&&s.bite===0&&s.target===food.id&&angelMouth(s).distanceTo(food.position)<.055&&s.speed<.7){
+  s.consumed=food.id;s.target=null;s.hunger=Math.max(0,s.hunger-.14);s.bite=.4+random(s)*.35;s.hover=.3;s.speed=0;
+  newGoal(s,senses);s.behavior='Taking a bite';
  }
  s.effort=clamp(.055+s.speed*.28+(food&&s.speed>.55?.35:0)+(s.startle>0?.35:0),.045,1);
 }
