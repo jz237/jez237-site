@@ -322,6 +322,147 @@
     }
   },
   {
+    "id": "2026-09-17-factual-infographic-factual-infographic-carpal-tunnel-syndr",
+    "title": "Factual infographic: Carpal Tunnel Syndrome — Pressure on the Median Nerve",
+    "tests": "Direct-canvas portrait medical infographic; one dominant anatomical hero, eight substantive panels, four explanatory close-ups, readable source-backed labels only; factual_subtype: medical-health-infographic; archive_slot=2026-09-17T17:20; concept=carpal-tunnel-median-nerve-compression-wrist-cutaway; factual_subtype: medical-health-infographic",
+    "prompt": "Create one finished 1024x1536 portrait medical infographic titled CARPAL TUNNEL SYNDROME: PRESSURE ON THE MEDIAN NERVE. Render the infographic itself directly on the canvas, front-facing and edge-to-edge, with no paper edge, poster, frame, wall, desk, screen, hands holding a chart, room, outer cast shadow, bibliography, URLs, logos, or QR codes. Use a sophisticated museum-quality anatomical plate with one dominant, highly detailed palmar wrist cutaway viewed in slight three-quarter perspective. Clearly show the rigid arch of carpal bones, the transverse carpal ligament forming the roof, nine flexor tendons with synovial coverings, and the median nerve compressed beneath the ligament. Pair the main cutaway with a precise exploded anatomy view in which the ligament lifts away, tendon bundles separate, and the median nerve changes from rounded above the tunnel to flattened at the pressure point. Use realistic ivory bone, pearly tendon, translucent blue-gray synovium, warm coral muscle, and a luminous golden median nerve, with restrained red pressure accents and cool teal clinical diagrams. Make tissues credible, non-gory, richly textured, dimensionally lit, and precisely labeled with large readable type, short labels, leader lines, and explicit arrows. Surround the hero with eight substantive panels: (1) THE CONFINED PASSAGE, a layered cross-section labeled CARPAL BONES / TRANSVERSE CARPAL LIGAMENT / MEDIAN NERVE / FLEXOR TENDONS, explaining that rigid boundaries leave little room when tissue volume or pressure increases; (2) PRESSURE ON THE NERVE, a three-frame macro sequence NORMAL SPACE / CROWDING OR SWELLING / COMPRESSED MEDIAN NERVE, linking compression to altered sensation and weakness without claiming one universal cause; (3) WHERE SENSATION CHANGES, paired palm and fingertip maps highlighting the thumb, index, middle, and thumb-side half of the ring finger, while leaving the little finger unhighlighted; (4) THE SYMPTOM PATTERN, concise icons for NUMBNESS OR TINGLING, BURNING OR PAIN, NIGHT WAKING, SHAKING THE HAND FOR TEMPORARY RELIEF, CLUMSINESS, and DROPPING OBJECTS; (5) FACTORS, NOT A SINGLE CAUSE, a balanced ring of labeled vignettes for WRIST ANATOMY OR INJURY, PREGNANCY-RELATED SWELLING, DIABETES, RHEUMATOID ARTHRITIS, THYROID DISEASE, REPEATED MOTION, and PROLONGED EXTREME WRIST BENDING, plus the explicit note TYPING ALONE IS NOT A PROVEN UNIVERSAL CAUSE; (6) HOW CLINICIANS EVALUATE, a history-and-exam sequence checking sensory territory and thumb-base strength, with small wrist-position and tapping maneuvers labeled CLUES WITHIN A FULL EVALUATION; (7) TESTS WHEN NEEDED, three compact diagrams for NERVE CONDUCTION, EMG, and ULTRASOUND, plus a small X-RAY icon labeled MAY HELP CHECK OTHER WRIST CAUSES; (8) MANAGEMENT PATHWAYS, a branching clinical diagram: NEUTRAL NIGHT SPLINT AND ACTIVITY MODIFICATION; CLINICIAN-GUIDED NERVE GLIDING FOR SELECTED PATIENTS; CORTICOSTEROID INJECTION MAY GIVE TEMPORARY RELIEF; and CARPAL TUNNEL RELEASE DIVIDES THE LIGAMENT TO CREATE MORE SPACE WHEN CLINICALLY INDICATED. Add at least four prominent explanatory close-ups: the tunnel boundaries and contents; a magnified compressed nerve with reduced room but no invented cellular pathology; a sensory-territory hand map; and before-versus-after carpal tunnel release showing the divided ligament and enlarged space. Add a high-contrast TIMELY ASSESSMENT strip: PERSISTENT NUMBNESS, WORSENING WEAKNESS, THUMB-BASE MUSCLE WASTING, OR INCREASING TROUBLE GRASPING OBJECTS — SEEK CLINICAL EVALUATION. Footer: GENERAL EDUCATION — NOT A DIAGNOSIS. EVALUATION AND TREATMENT DEPEND ON SYMPTOMS, EXAM FINDINGS, SEVERITY, AND INDIVIDUAL HEALTH. Keep every factual implication within the verified claim sheet. Do not add prevalence figures, exact pressure thresholds, prescription doses, treatment guarantees, blanket ergonomic cures, self-diagnosis, claims that every hand symptom is carpal tunnel syndrome, tiny paragraphs, decorative pseudo-text, classroom worksheet styling, fantasy anatomy, gore, or photographed-poster staging.",
+    "image": "images/2026-09-17-factual-infographic-factual-infographic-carpal-tunnel-syndr.jpg",
+    "thumb": "thumbs/2026-09-17-factual-infographic-factual-infographic-carpal-tunnel-syndr.webp",
+    "color": "#a79f97",
+    "date": "2026-09-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "carpal-tunnel-median-nerve-compression-wrist-cutaway",
+      "imageSha256": "abb63950b6b37601a8a3cf77105f37788933b22bcc0f08f5511d888f2f27f713",
+      "imageDHash": "333aeabab362868d"
+    },
+    "factualInfographic": {
+      "topic": "How carpal tunnel syndrome compresses the median nerve at the wrist and how it is evaluated and managed",
+      "description": "A source-verified medical anatomy infographic explaining the confined carpal tunnel, median-nerve compression, sensory territory, symptoms, associated factors, evaluation, management pathways, and timely assessment for progressive nerve dysfunction.",
+      "sourceNote": "Verified against National Library of Medicine MedlinePlus https://medlineplus.gov/carpaltunnelsyndrome.html and American Academy of Orthopaedic Surgeons OrthoInfo https://www.orthoinfo.org/diseases--conditions/carpal-tunnel-syndrome/; scope covers tunnel anatomy, median-nerve sensory and motor function, symptom patterns, associated factors, clinical evaluation and testing, nonsurgical management, carpal tunnel release, and progressive nerve-dysfunction warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-17T21:20:47Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Library of Medicine — MedlinePlus",
+            "title": "Carpal Tunnel Syndrome",
+            "sourceType": "government-agency",
+            "url": "https://medlineplus.gov/carpaltunnelsyndrome.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Academy of Orthopaedic Surgeons — OrthoInfo",
+            "title": "Carpal Tunnel Syndrome",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.orthoinfo.org/diseases--conditions/carpal-tunnel-syndrome/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The carpal tunnel is a narrow, rigid wrist passage bounded by carpal bones and the transverse carpal ligament.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The median nerve and finger-flexor tendons pass through the carpal tunnel.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Carpal tunnel syndrome occurs when pressure within this confined passage squeezes the median nerve, producing numbness, tingling, pain, or weakness.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Median-nerve sensation in the hand includes the thumb, index finger, middle finger, and thumb-side half of the ring finger; the nerve also controls muscles around the base of the thumb.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Symptoms commonly begin gradually and may be worse at night or during prolonged activities with the wrist bent; shaking or moving the hand may temporarily ease symptoms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Hand clumsiness, dropping objects, persistent numbness, and weakness or wasting at the thumb base can occur as nerve dysfunction becomes more severe or prolonged.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Carpal tunnel syndrome usually reflects a combination of factors; associated factors include wrist anatomy or injury, pregnancy-related swelling, diabetes, rheumatoid arthritis, thyroid disease, repeated hand motions, and prolonged extreme wrist flexion or extension.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Long-term typing or computer use alone has not been established as a definite cause of carpal tunnel syndrome.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Clinical evaluation begins with symptom and medical history plus examination of sensation and thumb-base strength; provocative wrist maneuvers may reproduce tingling but do not replace the full evaluation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "When needed, nerve-conduction studies and electromyography can assess nerve and muscle function, while ultrasound can show the median nerve and X-rays can help assess other wrist causes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A neutral-position night wrist splint and modification of aggravating activities are common nonsurgical management options; clinician-guided nerve-gliding exercises or corticosteroid injection may be considered for selected patients.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Corticosteroid injection may provide temporary symptom relief but is not guaranteed to provide long-term benefit.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Carpal tunnel release surgery divides the transverse carpal ligament to enlarge the tunnel and reduce pressure on the median nerve; it may be considered when symptoms are severe, testing shows significant nerve changes, or nonsurgical care is insufficient.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Persistent numbness, worsening weakness, or visible thumb-base muscle wasting warrants timely clinical assessment because prolonged compression can cause lasting nerve dysfunction.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-17-factual-infographic-factual-infographic-bppv-when-ear-cryst",
     "title": "Factual infographic: BPPV — When Ear Crystals Enter a Balance Canal",
     "tests": "Direct-canvas portrait medical infographic; one dominant anatomical hero, eight substantive panels, four explanatory close-ups, readable source-backed labels only; factual_subtype: medical-health-infographic; archive_slot=2026-09-17T02:20; concept=bppv-displaced-otoconia-posterior-canal-repositioning; factual_subtype: medical-health-infographic",
