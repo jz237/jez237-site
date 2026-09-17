@@ -13716,5 +13716,122 @@
       "description": "A winter greenhouse survey expressed through a coherent stained-glass interior, where jewel-colored convection, structural leadwork, and magnified craft details reveal one faulty roof vent.",
       "template": ""
     }
+  },
+  {
+    "id": "2026-09-17-factual-infographic-factual-infographic-bppv-when-ear-cryst",
+    "title": "Factual infographic: BPPV — When Ear Crystals Enter a Balance Canal",
+    "tests": "Direct-canvas portrait medical infographic; one dominant anatomical hero, eight substantive panels, four explanatory close-ups, readable source-backed labels only; factual_subtype: medical-health-infographic; archive_slot=2026-09-17T02:20; concept=bppv-displaced-otoconia-posterior-canal-repositioning; factual_subtype: medical-health-infographic",
+    "prompt": "Create one finished 1024x1536 portrait medical infographic titled BPPV: WHEN EAR CRYSTALS ENTER A BALANCE CANAL. Render the infographic itself directly on the canvas, front-facing, orthographic, edge-to-edge, with no paper edge, poster, frame, wall, desk, screen, hands, room, outer cast shadow, bibliography, URLs, logos, or QR codes. Use a sophisticated museum-quality medical-anatomy plate with a dominant, highly detailed hero cutaway of the temporal bone and inner ear: translucent bony labyrinth, three correctly oriented semicircular canals, utricle, saccule, cochlea, vestibular nerve, endolymph, cupula, sensory hair cells, and tiny calcium-carbonate otoconia. Make the central mechanism unmistakable: several otoconia have detached from the utricle and settled into the posterior semicircular canal; a curved gravity arrow and a short head-turn sequence show how moving particles displace fluid, deflect the cupula, and create a false rotation signal. Use clinically calm, precise anatomical rendering—pearl-white otoconia, coral and rose tissue, cyan endolymph, deep navy nerves, amber warning accents—with realistic translucency, delicate membranes, credible scale, and large readable typography. Surround the hero with eight substantial panels: (1) NORMAL BALANCE SIGNAL, showing eyes, vestibular labyrinth, and leg proprioception converging on the brain; (2) OTOLITH ORGAN CLOSE-UP, a magnified utricle cross-section with gel layer, hair cells, stereocilia, and otoconia responding to gravity; (3) SEMICIRCULAR CANAL CLOSE-UP, a large ampulla/cupula/hair-cell cutaway showing normal fluid lag during head rotation; (4) WHAT CHANGES IN BPPV, a four-stage sequence labeled OToconia loosen, ENTER CANAL, MOVE WITH GRAVITY, FALSE SPIN SIGNAL; (5) TYPICAL TRIGGERS, four clear human silhouettes rolling in bed, bending down, looking up, and turning over a shoulder, labeled BRIEF POSITION-TRIGGERED SPINNING; (6) CLINICAL CHECK, a restrained clinician-guided positional-test diagram showing head position, eye movement observation, and the label POSITIONAL NYSTAGMUS HELPS IDENTIFY THE AFFECTED CANAL—do not present this as a self-test; (7) CANALITH REPOSITIONING, a four-position clinician-guided Epley pathway with a continuous particle trail returning toward the utricle, captioned MOVES PARTICLES OUT OF THE CANAL; (8) SAFETY AND NEXT STEPS, separating MAKE WALKING SAFER / SEEK ASSESSMENT IF PERSISTENT OR RECURRENT from a high-contrast emergency box: SUDDEN DIZZINESS WITH TROUBLE WALKING, VISION CHANGE, ONE-SIDED WEAKNESS OR NUMBNESS, SPEECH DIFFICULTY, CONFUSION, OR SUDDEN SEVERE HEADACHE — CALL EMERGENCY SERVICES. Include a small comparison strip distinguishing BPPV's brief position-triggered pattern from ongoing or neurologically accompanied dizziness without diagnosing either, and a footer: GENERAL EDUCATION — NOT A DIAGNOSIS; MANEUVERS SHOULD MATCH THE AFFECTED CANAL AND INDIVIDUAL CLINICAL GUIDANCE. Use precise leader lines, generous panel spacing, large concise labels, and at least four prominent explanatory close-ups: utricle otoconia, cupula/hair cells, free canaliths in the posterior canal, and the particle path during repositioning. Keep every factual implication within the verified claim sheet. Do not add prevalence figures, exact episode durations, treatment guarantees, drug advice, prescription doses, unsupported causes, home-maneuver instructions, gore, tiny paragraphs, decorative pseudo-text, classroom worksheet styling, fantasy anatomy, or photographed-poster staging.",
+    "image": "images/2026-09-17-factual-infographic-factual-infographic-bppv-when-ear-cryst.jpg",
+    "thumb": "thumbs/2026-09-17-factual-infographic-factual-infographic-bppv-when-ear-cryst.webp",
+    "color": "#bbbfc6",
+    "date": "2026-09-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "bppv-displaced-otoconia-posterior-canal-repositioning",
+      "imageSha256": "ec89a6a2629484742111ab9ac36e8a2eb2a58ff870c055e0a00c6a2000b77e22",
+      "imageDHash": "d676b0b0a3b3b4ac"
+    },
+    "factualInfographic": {
+      "topic": "How benign paroxysmal positional vertigo (BPPV) arises from displaced otoconia and how canalith repositioning restores them to the utricle",
+      "description": "A source-verified medical anatomy infographic explaining vestibular anatomy, displaced otoconia, position-triggered vertigo, clinical positional testing, canalith repositioning, fall safety, and urgent neurological warning signs.",
+      "sourceNote": "Verified against NIDCD https://www.nidcd.nih.gov/health/balance-disorders, Clinical Medicine & Research https://pmc.ncbi.nlm.nih.gov/articles/PMC9544192/, and CDC https://www.cdc.gov/stroke/signs-symptoms/index.html; scope covers vestibular anatomy, BPPV mechanism and triggers, positional assessment, canalith repositioning, recurrence caveats, fall safety, and emergency stroke warning signs.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-17T06:21:15Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute on Deafness and Other Communication Disorders",
+            "title": "Balance Disorders — Causes, Types & Treatment",
+            "sourceType": "government-agency",
+            "url": "https://www.nidcd.nih.gov/health/balance-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "Clinical Medicine & Research",
+            "title": "A Review of the Efficacy of Therapeutic Maneuvers in Posterior Canal Benign Paroxysmal Positional Vertigo",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9544192/"
+          },
+          {
+            "id": "S3",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Signs and Symptoms of Stroke",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/stroke/signs-symptoms/index.html"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "The semicircular canals are three fluid-filled ducts arranged roughly at right angles; fluid motion bends the cupula and sensory stereocilia to signal head rotation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The utricle and saccule contain calcium-carbonate otoconia that help signal head position and linear movement relative to gravity.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In BPPV, loose otoconia can enter a semicircular canal and produce incorrect positional signals that cause brief, intense vertigo with particular head movements.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Common provoking movements include rolling over in bed, bending down, and looking up or over a shoulder.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Posterior-canal BPPV is the most common canal form, and diagnosis typically uses a head-hanging positional test that looks for characteristic positional nystagmus.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Canalith-repositioning maneuvers such as the Epley maneuver use a sequence of head and body positions to move displaced particles out of the canal and back toward the utricle.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Therapeutic repositioning maneuvers have better outcomes than no treatment or sham maneuvers, although symptoms may persist or recur and some people need repeat treatment.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Because dizziness has many causes, evaluation should distinguish BPPV from other inner-ear, medication-related, cardiovascular, and brain causes; this infographic is general education, not diagnosis.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Sudden dizziness or loss of balance accompanied by trouble walking, vision change, one-sided weakness or numbness, confusion, speech difficulty, or sudden severe headache can be a stroke warning and requires immediate emergency help.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Fall-risk precautions and individualized clinical guidance are appropriate when dizziness makes walking, stairs, bathing, driving, or exercise unsafe.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
