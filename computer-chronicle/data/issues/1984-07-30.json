@@ -1,0 +1,375 @@
+{
+  "currentDate": "2026-09-17",
+  "historicDate": "1984-07-30",
+  "displayDate": "Week of July 30-August 5, 1984",
+  "edition": "Issue 105 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "telephone-line discovery, arcade color, and newsroom urgency on warm summer newsprint",
+    "motifs": [
+      "acoustic modem and telephone handset",
+      "Apple II adventure screen",
+      "Atari 7800 joystick",
+      "floppy-disk software library"
+    ],
+    "layout": "dense five-column front page with the software-sharing lead, game boxes, shelf cards, charts, and a compact world bulletin"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+    "dateline": "July 30-August 5, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "banner lead above the fold with modem-and-telephone halftone",
+    "secondaryRail": "Atari upheaval, game desk, charts, price watch, and modem notes",
+    "archiveNavigation": "Issue 105 in the chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "ink blue",
+    "texture": "warm newsprint, halftone screens, fine column rules, and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-07-30.jpg",
+    "alt": "GPT Image 2 newspaper front page for Computer Chronicle, week of July 30-August 5, 1984",
+    "caption": "A GPT Image 2 newspaper-style front page generated from the Chronicle structured issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "The telephone line is becoming a software shelf: this week freely shared programs reach a mass audience while Atari changes hands and inventive games crowd the summer market.",
+  "morningLine": "Public-domain programs dial into homes, Tramiel starts remaking Atari, and Shadowkeep crosses from disk to novel.",
+  "lead": {
+    "headline": "Free Software Travels the Phone Lines",
+    "dek": "Thousands of public-domain programs are moving through online services and local bulletin boards, challenging the idea that every useful disk must arrive in a shrink-wrapped box.",
+    "body": [
+      "A Macintosh communications program has become the calling card for a much wider movement. MIT-trained consultant Dennis Brothers wrote MacTEP after probing the new machine closely enough to make it talk over telephone lines, then gave the program away. CompuServe placed it before a reported 135,000 subscribers, and calls soon reached Brothers from Britain and the Dominican Republic.",
+      "TIME counted roughly 35,000 public-domain programs in circulation. CompuServe, The Source, computer clubs, and hundreds of dial-up bulletin boards are turning modems into delivery trucks, carrying utilities and diversions without the $40-to-$500 price tags common on commercial shelves.",
+      "Finding the programs is becoming a business of its own. Mike Cane's $9.95 Computer Phone Book lists more than 400 boards and networks, while the $8.95 Free Software for the IBM PC describes more than 600 programs. The directories promise to make a scattered underground of disks and phone numbers legible to ordinary owners.",
+      "The economics remain experimental. Some authors ask only for a contribution from satisfied users: PC World editor Andrew Fluegelman reportedly earned more than $100,000 through that approach. Others, including early modem-program author Ward Christensen, decline unsolicited money. Either way, the phone line now looks like a genuine alternative software channel."
+    ],
+    "sourceRefs": [
+      1
+    ],
+    "confidence": "exact-date"
+  },
+  "stories": [
+    {
+      "headline": "Tramiel Takes Atari and the Ax Falls",
+      "body": [
+        "Jack Tramiel's acquisition of Atari's home-computer and videogame divisions is already reshaping Sunnyvale. Electronic Games Hotline put the sale at $240 million, with Warner retaining the coin-operated division and Ataritel.",
+        "Within the first week, the newsletter reported broad layoffs and immediate cost-cutting. Three Tramiel sons and several former Commodore executives were expected to help lead the company, while announced products were temporarily put on hold.",
+        "The industry's first reading is that computers will receive greater emphasis. What that means for Atari's game machines and software partners remains uncertain, but the old organization has ended with startling speed."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "headline": "A Fantasy Computer Game Becomes a Novel",
+      "body": [
+        "Spinnaker's Shadowkeep is reversing the usual adaptation route: instead of turning a book into a game, the Trillium adventure is inspiring a novel by science-fiction author Alan Dean Foster.",
+        "Created by Ultrasoft, the game supports parties of as many as nine characters, with five professions and four races. High-resolution graphics, animation, and full-sentence or abbreviated commands frame its fantasy expedition.",
+        "The tie-in suggests that a computer adventure can supply a world substantial enough to travel into print, an early sign that the young medium's characters and settings may outlive the disk that introduced them."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "headline": "BYTE Surveys the Small-System Frontier",
+      "body": [
+        "BYTE's August number finds personal computing splitting into many technical directions at once. Its feature list ranges from the 65816 processor and FORTH-83 to Modula-2, UNIX benchmarking, and an early look at Framework.",
+        "The review bench is just as broad: Macintosh, IBM PCjr, Sanyo MBC-550, a Juki printer, and four Logo implementations for the IBM PC all share the issue. At a $3.50 cover price, the magazine reads like a field guide to a market whose standards remain unsettled."
+      ],
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Mabel's Mansion - Apple II",
+      "summary": "Datamost's side-view, single-keystroke action adventure earns a 7/10 notice from Electronic Games Hotline.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "title": "Pole Position II - Atari 7800",
+      "summary": "The four-course pack-in shows off the ProSystem with strong arcade fidelity and a 9/10 newsletter rating.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "title": "The Three Stooges - Coin-op",
+      "summary": "Mylstar marks the comedy team's 50th anniversary with joystick slaps, thrown pies, and Moe, Larry, and Curly.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-week"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "MacTEP",
+      "detail": "Freely distributed Macintosh communications software carried by CompuServe."
+    },
+    {
+      "name": "Framework",
+      "detail": "Ashton-Tate integrated productivity system previewed in BYTE."
+    },
+    {
+      "name": "Sidekick",
+      "detail": "Borland desktop utility offered at a $49.95 introductory price."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Mabel's Mansion - Apple II",
+        "Pole Position II - Atari 7800",
+        "The Three Stooges - coin-op",
+        "Shadowkeep - personal computers",
+        "Us vs. Them - laser-disc arcade"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Ghostbusters",
+        "Purple Rain",
+        "Gremlins",
+        "The Jungle Book (1984 re-release)",
+        "The Karate Kid"
+      ]
+    },
+    {
+      "label": "Hardware Desk",
+      "items": [
+        "WDC 65816 processor",
+        "Atari 7800 ProSystem",
+        "Yamaha CD-X1 compact-disc player"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Public-domain software guides",
+      "price": "$9.95 / $8.95",
+      "note": "The Computer Phone Book / Free Software for the IBM PC",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Hayes modems",
+      "price": "$209-$499",
+      "note": "Street prices: Smartmodem 300 $209; 1200 $499; 1200B $449",
+      "sourceRefs": [
+        3
+      ]
+    },
+    {
+      "item": "HesWare Multiplan for Commodore 64",
+      "price": "$99.95",
+      "note": "Creative Computing corrected an erroneous earlier $10 listing.",
+      "sourceRefs": [
+        3
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Interphase ports games to MSX",
+      "summary": "Sewer Sam and Aquattack are being converted for summer shipment to Japan, where MSX promises software and peripheral compatibility.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-week"
+    },
+    {
+      "headline": "McGraw-Hill buys Future Computing",
+      "summary": "The research firm changes hands as personal-computer hardware and software sales are forecast to rise from $10 billion in 1983 to more than $40 billion in 1988.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-week"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "When Doves Cry",
+      "artist": "Prince",
+      "chartDate": "1984-08-04",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.cheneyweb.com/singles-chart/1984-08-04"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Ghostbusters",
+      "artist": "Ray Parker Jr.",
+      "chartDate": "1984-08-04",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.cheneyweb.com/singles-chart/1984-08-04"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "State of Shock",
+      "artist": "The Jacksons",
+      "chartDate": "1984-08-04",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.cheneyweb.com/singles-chart/1984-08-04"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Dancing in the Dark",
+      "artist": "Bruce Springsteen",
+      "chartDate": "1984-08-04",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.cheneyweb.com/singles-chart/1984-08-04"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "What's Love Got to Do with It",
+      "artist": "Tina Turner",
+      "chartDate": "1984-08-04",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.cheneyweb.com/singles-chart/1984-08-04"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Technics Brings the Laser Home",
+    "summary": "The SL-P8 advertisement describes compact-disc sound as a marriage of lasers and computers, promising live-performance clarity.",
+    "tagline": "Digital sound for the listening room."
+  },
+  "market": {
+    "headline": "Future Computing Changes Hands",
+    "summary": "McGraw-Hill buys the market-research firm as Joseph Dionne forecasts personal-computer hardware and software sales above $40 billion by 1988.",
+    "sourceRefs": [
+      2
+    ],
+    "confidence": "same-week"
+  },
+  "worldAnchor": {
+    "headline": "Los Angeles Olympics Reach Midpoint",
+    "summary": "The 1984 Summer Games dominate the week's news, with the August 4 program reaching its midpoint and competition continuing across the city.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Compact-Disc Prices Hit New Lows",
+    "summary": "Billboard's August 4 home-entertainment coverage reports falling CD prices as the young format broadens its retail reach.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "bbsNote": {
+    "headline": "The Modem Opens a New World of Computer",
+    "summary": "COMPUTE!'s August modem primer described falling prices, the shift from acoustic couplers to direct-connect units, 300 versus 1200 bps economics, and BBS culture, while TIME showed CompuServe, The Source, and hundreds of boards distributing programs by telephone.",
+    "posts": [
+      {
+        "topic": "BBS speed",
+        "platform": "local bulletin boards",
+        "text": "Anchor Automation's Jerry Hussong argued that 300 baud remained the intelligent, economical choice for chatting with friends or reading local boards because so much material was available at that speed."
+      },
+      {
+        "topic": "Public-domain libraries",
+        "platform": "CompuServe and The Source",
+        "text": "TIME reported both networks maintained large collections of downloadable public-domain software; CompuServe exposed MacTEP to 135,000 subscribers."
+      },
+      {
+        "topic": "Falling hardware costs",
+        "platform": "home telecomputing",
+        "text": "COMPUTE! put the modem range at about $49 to $1,000+, down from an $80 low a year earlier and roughly $200 several years before; it predicted $300-$500 1200-bps units by year's end."
+      }
+    ],
+    "sourceUrls": [
+      "https://www.atarimagazines.com/compute/issue54/106_1_Understanding_Modems.php",
+      "https://content.time.com/time/subscriber/printout/0,8816,926733,00.html",
+      "https://archive.org/stream/creativecomputing-1984-08/Creative_Computing_v10_n08_1984_August_djvu.txt"
+    ]
+  },
+  "curiosity": {
+    "headline": "Add Another Coin to Keep the Laser Movie Flying",
+    "summary": "Mylstar's Us vs. Them conversion kit turned a M.A.C.H. 3 laser-disc cabinet into a science-fiction flight film with live actors and overlaid computer graphics.",
+    "detail": "The attraction promised multiple camera angles, San Francisco, Chicago, Hollywood and wilderness backdrops, an orchestral score, a vibrating seat, and a special continue feature inviting extra coins during play.",
+    "sourceUrls": [
+      "https://vgpavilion.com/mags/1984/07/29egh/pages/19840729-egh.pdf"
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Lead reporting is tied to TIME dated July 30, 1984.",
+      "Atari, game, and market items come from the July 29 Electronic Games Hotline.",
+      "Charts and box office match the week ending August 4-5, 1984.",
+      "Same-month magazine items are labeled as such."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Computers: Software Is for Sharing",
+      "url": "https://content.time.com/time/subscriber/printout/0,8816,926733,00.html",
+      "date": "1984-07-30"
+    },
+    {
+      "title": "Electronic Games Hotline, Vol. 2 No. 26",
+      "url": "https://vgpavilion.com/mags/1984/07/29egh/pages/19840729-egh.pdf",
+      "date": "1984-07-29"
+    },
+    {
+      "title": "Creative Computing, Vol. 10 No. 8",
+      "url": "https://archive.org/stream/creativecomputing-1984-08/Creative_Computing_v10_n08_1984_August_djvu.txt",
+      "date": "1984-08"
+    },
+    {
+      "title": "BYTE, Vol. 9 No. 8",
+      "url": "https://www.worldradiohistory.com/Archive-Byte/80s/Byte-1984-08.pdf",
+      "date": "1984-08"
+    },
+    {
+      "title": "Understanding Modems",
+      "url": "https://www.atarimagazines.com/compute/issue54/106_1_Understanding_Modems.php",
+      "date": "1984-11"
+    },
+    {
+      "title": "Billboard",
+      "url": "https://www.worldradiohistory.com/Archive-All-Music/Billboard/80s/1984/BB-1984-08-04.pdf",
+      "date": "1984-08-04"
+    },
+    {
+      "title": "Billboard Hot 100 archive",
+      "url": "https://www.musicchartsarchive.cheneyweb.com/singles-chart/1984-08-04",
+      "date": "1984-08-04"
+    },
+    {
+      "title": "Domestic Weekend 31",
+      "url": "https://www.boxofficemojo.com/weekend/1984W31/",
+      "date": "1984-08-03"
+    },
+    {
+      "title": "UPI Olympics midpoint dispatch",
+      "url": "https://www.upi.com/Archives/1984/08/04/As-the-1984-Summer-Olympics-reached-its-midway-point/3929460440000/",
+      "date": "1984-08-04"
+    },
+    {
+      "title": "Three hijackers in Iran",
+      "url": "https://www.nytimes.com/1984/08/03/world/3-hijackers-in-iran-take-hostages-off-jet-blow-it-up-and-surrender.html",
+      "date": "1984-08-03"
+    }
+  ]
+}

@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Wed, 16 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 17 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of July 30-August 5, 1984 — Free Software Travels the Phone Lines</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-07-30</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-07-30</guid>
+      <pubDate>Thu, 17 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Thousands of public-domain programs are moving through online services and local bulletin boards, challenging the idea that every useful disk must arrive in a shrink-wrapped box. A Macintosh communications program has become the calling card for a much wider movement. MIT-trained consultant Dennis Brothers wrote MacTEP after probing the new machine closely enough to make it talk over telephone lines, then gave the program away. CompuServe placed it before a reported 135,000 subscribers, and calls soon reached Brothers from Britain and the Dominican Republic. Also this week: Tramiel Takes Atari and the Ax Falls · A Fantasy Computer Game Becomes a Novel · BYTE Surveys the Small-System Frontier.</description>
+    </item>
     <item>
       <title>Week of July 23-29, 1984 — Activision Forces &apos;Cuthbert in the Jungle&apos; Off the Market</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-07-23</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-19</guid>
       <pubDate>Fri, 28 Aug 2026 12:00:00 GMT</pubDate>
       <description>An 80186, MS-DOS and purpose-built video hardware aim the new machine at artists, animators and game makers. The newest challenge to the IBM-shaped personal-computer market arrives with a very different sales pitch: do more with the picture. InfoWorld placed the Mindset computer on its March 19 cover under the teasing line “Gambling on Great Graphics,” giving the ambitious machine one of the week’s most conspicuous introductions. Also this week: Microcomputers Become Tools of Independence · Laserdiscs Point Toward an Arcade-Style Future at Home · Chequered Flag Takes the British Micro Pole.</description>
-    </item>
-    <item>
-      <title>Week of March 12-18, 1984 — Timex Pulls the Plug on Its Sinclair Home Computers</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-03-12</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-12</guid>
-      <pubDate>Wed, 26 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The watchmaker joins Texas Instruments and Mattel in retreat, turning the post-boom home-computer shakeout into the week’s unmistakable story. Timex will cease production and sales of its Timex/Sinclair 1500 and 2068 home computers, ending one of the most visible attempts to put a microcomputer into American homes at a mass-market price. The company says manufacturing will stop after remaining components are used, probably within four months. Also this week: Mindset Bets Its PC Future on Spectacular Graphics · VisiCalc Partners Carry Their Feud to Softcon · Model 100 Gains a Desktop-Sized Disk Drive.</description>
     </item>
   </channel>
 </rss>
