@@ -20,7 +20,7 @@ self.window = {
 const root = "./";
 const version = "20260917-csp2";
 const asset = (path) => root + path + "?v=" + version;
-importScripts(asset("renderer.js"));
+importScripts(asset("renderer-csp2.js"));
 const call = (n, t = [], a = []) => emu.ccall(n, "number", t, a);
 async function bytes(path) {
   const response = await fetch(asset(path));
@@ -36,7 +36,7 @@ function put(path, data) {
 }
 async function init(cue) {
   emu = await createUADE({
-    wasmBinary: await bytes("clean.wasm"),
+    wasmBinary: await bytes("renderer-csp2.wasm"),
     print() {},
     printErr() {},
   });
