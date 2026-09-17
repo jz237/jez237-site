@@ -3,6 +3,10 @@ import { readFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 const root = fileURLToPath(new URL("../../", import.meta.url));
+const productionHeaders = await readFile(path.join(root, "_headers"), "utf8");
+const policy = productionHeaders.match(
+  /^\s*Content-Security-Policy:\s*(.+)$/m,
+)?.[1];
 http
   .createServer(async (req, res) => {
     try {
@@ -19,6 +23,11 @@ http
         return;
       }
       const bytes = await readFile(p);
+      if (policy)
+        res.setHeader(
+          "Content-Security-Policy",
+          policy.replace("upgrade-insecure-requests", ""),
+        );
       res.setHeader(
         "Content-Type",
         {
