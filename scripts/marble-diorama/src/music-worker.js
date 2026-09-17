@@ -18,10 +18,12 @@ self.window = {
   },
 };
 const root = "./";
-importScripts(root + "renderer.js");
+const version = "20260917-csp2";
+const asset = (path) => root + path + "?v=" + version;
+importScripts(asset("renderer.js"));
 const call = (n, t = [], a = []) => emu.ccall(n, "number", t, a);
 async function bytes(path) {
-  const response = await fetch(root + path);
+  const response = await fetch(asset(path));
   if (!response.ok) throw Error(`Music asset unavailable: ${path}`);
   return new Uint8Array(await response.arrayBuffer());
 }
@@ -38,7 +40,7 @@ async function init(cue) {
     print() {},
     printErr() {},
   });
-  const response = await fetch(root + "files.json");
+  const response = await fetch(asset("files.json"));
   const listing = await response.json();
   await Promise.all(
     Object.entries(listing).map(async ([name, path]) =>

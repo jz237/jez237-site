@@ -44,3 +44,29 @@ await writeFile(
   `Three.js 0.186.0\n${await readFile("node_modules/three/LICENSE", "utf8")}\nRapier 0.20.0\n${await readFile("node_modules/@dimforge/rapier3d-compat/LICENSE", "utf8")}`,
 );
 console.log("Built locally bundled Three.js + Rapier:", fileURLToPath(out));
+
+// A static, user-gesture-only diagnostic verifies the published worker/decoder.
+const check = await readFile("tests/music-stream.html", "utf8");
+const blocks = [
+  ...check.matchAll(/<script type="module">([\s\S]*?)<\/script>/g),
+];
+await build({
+  stdin: {
+    contents: blocks
+      .map((b, i) =>
+        i ? b[1].replace(/import \{ musicCues \} from [^;]+;/, "") : b[1],
+      )
+      .join("\n"),
+    resolveDir: fileURLToPath(new URL("tests/", import.meta.url)),
+    loader: "js",
+  },
+  bundle: true,
+  format: "esm",
+  minify: true,
+  outfile: fileURLToPath(new URL("assets/music/verification.js", out)),
+});
+await writeFile(
+  new URL("music-check.html", out),
+  check.replace(/<script type="module">[\s\S]*?<\/script>/g, "") +
+    '<script type="module" src="assets/music/verification.js"></script>',
+);

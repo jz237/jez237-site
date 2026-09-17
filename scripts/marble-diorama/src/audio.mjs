@@ -4,7 +4,7 @@ export class AudioEngine {
     createContext = () => new AudioContext(),
     fetchAudio = (...args) => fetch(...args),
     createWorker = () =>
-      new Worker(new URL("assets/music/music-worker.js?v=2", document.baseURI)),
+      new Worker(new URL("assets/music/music-worker.js?v=3", document.baseURI)),
   } = {}) {
     this.createContext = createContext;
     this.fetchAudio = fetchAudio;
@@ -161,7 +161,8 @@ export class AudioEngine {
         return;
       }
       this.musicWorker = worker;
-      worker.onerror = () => fail("The Amiga music player could not start.");
+      worker.onerror = (event) =>
+        fail(event.message || "The Amiga music player could not start.");
       worker.onmessage = ({ data }) => {
         if (generation !== this.cueGeneration) return;
         if (data.error) {
