@@ -1,10 +1,13 @@
+import { effectSamples } from "./effects.mjs";
 // No synthesized replacement music. Only explicitly verified local cues may play.
 export class AudioEngine {
   constructor({
     createContext = () => new AudioContext(),
     fetchAudio = (...args) => fetch(...args),
     createWorker = () =>
-      new Worker(new URL("assets/music/music-worker-csp2.js", document.baseURI)),
+      new Worker(
+        new URL("assets/music/music-worker-csp2.js", document.baseURI),
+      ),
   } = {}) {
     this.createContext = createContext;
     this.fetchAudio = fetchAudio;
@@ -21,6 +24,10 @@ export class AudioEngine {
     this.contextChange = Promise.resolve();
     this.wantRunning = false;
     this.lastMusicError = null;
+    this.effectSources = new Set();
+    this.effectBuffers = new Map();
+    this.effectTimes = new Map();
+    this.obstacleStates = new Map();
   }
   ensureContext() {
     if (!this.context) {
@@ -198,6 +205,123 @@ export class AudioEngine {
       worker.postMessage({});
     });
   }
+  effect(kind, { gain = 1, key = kind, cooldown = 0.08 } = {}) {
+    if (!this.context || this.context.state !== "running" || gain <= 0)
+      return false;
+    const now = this.context.currentTime;
+    if (now - (this.effectTimes.get(key) ?? -Infinity) < cooldown) return false;
+    let buffer = this.effectBuffers.get(kind);
+    if (!buffer) {
+      const samples = effectSamples(kind, this.context.sampleRate);
+      if (!samples) return false;
+      buffer = this.context.createBuffer(
+        1,
+        samples.length,
+        this.context.sampleRate,
+      );
+      buffer.getChannelData(0).set(samples);
+      this.effectBuffers.set(kind, buffer);
+    }
+    this.effectTimes.set(key, now);
+    if (this.effectSources.size >= 16)
+      this.effectSources.values().next().value.cancel();
+    const source = this.context.createBufferSource(),
+      volume = this.context.createGain();
+    source.buffer = buffer;
+    volume.gain.value = Math.min(1, gain);
+    source.connect(volume).connect(this.bus);
+    const voice = {
+      cancel: () => {
+        source.onended = null;
+        source.stop();
+        cleanup();
+      },
+    };
+    const cleanup = () => {
+      source.disconnect();
+      volume.disconnect();
+      this.effectSources.delete(voice);
+    };
+    source.onended = cleanup;
+    this.effectSources.add(voice);
+    source.start();
+    return true;
+  }
+  event(event, assisted = false) {
+    if (event.type === "impact") return this.impact(event.force);
+    if (event.type === "checkpoint" && !assisted) return;
+    return this.effect(event.type, { key: `${event.type}:${event.player}` });
+  }
+  obstacles(sim) {
+    // Sample actual simulated motion, once per simulation tick. Distance to
+    // either racing player controls audibility in local two-player mode.
+    if (this.obstacleTick === sim.tick) return;
+    this.obstacleTick = sim.tick;
+    const players = sim.players
+      .filter((p) => p.status === "racing")
+      .map((p) => p.current.position);
+    const proximity = (pos) =>
+      Math.max(
+        0,
+        ...players.map(
+          (p) => 1 - Math.hypot(p.x - pos.x, p.y - pos.y, p.z - pos.z) / 14,
+        ),
+      );
+    for (const m of sim.movers ?? []) {
+      const body = sim.world.getRigidBody(m.handle);
+      if (!body.isEnabled()) continue;
+      const a = m.previous,
+        b = m.current;
+      const movement = Math.hypot(
+        b.position.x - a.position.x,
+        b.position.y - a.position.y,
+        b.position.z - a.position.z,
+        b.rotation.x - a.rotation.x,
+        b.rotation.y - a.rotation.y,
+        b.rotation.z - a.rotation.z,
+      );
+      if (movement > 0.0001)
+        this.effect("machine", {
+          gain: proximity(b.position) * 0.55,
+          key: "machinery",
+          cooldown: 0.42,
+        });
+    }
+    for (const e of sim.enemies ?? []) {
+      const active = !e.hidden && !e.collected && e.fallenAt === null;
+      const previous = this.obstacleStates.get(e.handle);
+      this.obstacleStates.set(e.handle, active);
+      if (!active) continue;
+      const gain = proximity(e.current.position);
+      if (e.def.kind === "bird" && !previous)
+        this.effect("bird", { gain, key: `bird:${e.handle}`, cooldown: 0.5 });
+      if (
+        e.def.kind === "muncher" &&
+        Math.hypot(
+          e.current.position.x - e.previous.position.x,
+          e.current.position.z - e.previous.position.z,
+        ) > 0.0001
+      )
+        this.effect("muncher", {
+          gain: gain * 0.7,
+          key: "munchers",
+          cooldown: 0.65,
+        });
+    }
+    for (const z of sim.course.zones ?? []) {
+      if (!["vacuum", "magnet", "acid"].includes(z.kind)) continue;
+      this.effect(z.kind, {
+        gain: proximity(z) * 0.65,
+        key: z.kind,
+        cooldown: z.kind === "acid" ? 0.75 : 0.3,
+      });
+    }
+  }
+  finishRace() {
+    // Keep the audio clock alive for goal/timeout effects on the results screen.
+    this.stopMusic();
+    if (this.rollingGain) this.rollingGain.gain.value = 0;
+  }
   impact(force) {
     if (
       !this.context ||
@@ -238,6 +362,7 @@ export class AudioEngine {
           speed = Math.max(speed, s);
           slip = Math.max(slip, Math.abs(s - Math.hypot(w.x, w.z) * 0.55));
         }
+    if (enabled) this.obstacles(sim);
     const now = this.context.currentTime;
     this.rollingGain.gain.setTargetAtTime(
       Math.min(0.07, speed * 0.004 + slip * 0.006),
@@ -259,6 +384,13 @@ export class AudioEngine {
     await this.unlock();
   }
   stop() {
+    this.stopMusic();
+    for (const voice of this.effectSources) voice.cancel();
+    this.effectTimes.clear();
+    this.obstacleStates.clear();
+    this.obstacleTick = null;
+  }
+  stopMusic() {
     this.cueGeneration++;
     this.streamReady?.(false);
     this.streamReady = null;

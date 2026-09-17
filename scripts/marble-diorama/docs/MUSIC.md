@@ -200,3 +200,9 @@ initialization, which is blocked by the site's CSP. Replaced it with static
 weakened. The local preview now applies the production CSP as well (except HTTPS
 upgrade on localhost), so the native worker test covers this release condition.
 Updated corresponding Adapter source is included in renderer-source.zip.
+
+## September 17 - gameplay effects
+
+Added newly designed PCM effects for falls, respawns, goals, timeouts, pickups, springs and assisted checkpoints. Nearby moving mechanisms, birds, munchers, vacuum mouths, magnets and acid have proximity-scaled effects driven by simulation state. These effects are not recovered Amiga samples; exact original effects parity remains open. The recovered music data is unchanged.
+
+Effects use the separate Effects volume bus, share pause/resume timing, have bounded polyphony and are cleared on restart/menu. Results stop the course music without cutting off goal/timeout effects. Native browser checks passed audible output for all 13 effects, independent effects mute, results tails, pause/resume and cleanup. The full suite passed 89 checks initially with one signed-zero assertion corrected; all 17 focused audio/PCM checks subsequently passed (90 total test cases).
