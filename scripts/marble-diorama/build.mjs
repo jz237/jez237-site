@@ -63,10 +63,10 @@ await build({
   bundle: true,
   format: "esm",
   minify: true,
-  outfile: fileURLToPath(new URL("assets/music/verification.js", out)),
+  outfile: fileURLToPath(new URL("assets/music/verification-csp2.js", out)),
 });
 await writeFile(
   new URL("music-check.html", out),
   check.replace(/<script type="module">[\s\S]*?<\/script>/g, "") +
-    '<script type="module" src="assets/music/verification.js"></script>',
+    '<script type="module" src="assets/music/verification-csp2.js"></script>',
 );
