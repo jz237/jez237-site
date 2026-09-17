@@ -1,3 +1,4 @@
+import { foundationGeometry } from "./foundations.mjs";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -555,6 +556,17 @@ export class DioramaView {
     }
     const base = displayBase(sim.course, this.wallGrain);
     this.display.add(base.group);
+    for (const part of sim.course.parts) {
+      const foundation = foundationGeometry(part, base.top);
+      if (foundation)
+        this.display.add(
+          this.meshFor(
+            foundation,
+            part.material ?? "stone",
+            sim.course.color,
+          ),
+        );
+    }
     this.ground.position.y = base.ground;
     this.target.copy(vec(sim.course.starts[0]));
     this.overview = true;
