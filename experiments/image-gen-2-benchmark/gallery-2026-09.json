@@ -175,6 +175,153 @@
     }
   },
   {
+    "id": "2026-09-17-factual-infographic-factual-infographic-kidney-stones-a-cry",
+    "title": "Factual infographic: Kidney Stones — A Crystal's Journey",
+    "tests": "Direct-canvas portrait medical infographic; one dominant anatomical hero, eight substantive panels, four explanatory close-ups, readable source-backed labels only; factual_subtype: medical-health-infographic; archive_slot=2026-09-17T14:20; concept=kidney-stone-crystal-formation-ureter-obstruction-journey; factual_subtype: medical-health-infographic",
+    "prompt": "Create one finished 1024x1536 portrait medical infographic titled KIDNEY STONES: A CRYSTAL'S JOURNEY. Render the infographic itself directly on the canvas, front-facing and edge-to-edge, with no paper edge, poster, frame, wall, desk, screen, hands, room, outer cast shadow, bibliography, URLs, logos, or QR codes. Use a sophisticated museum-quality medical-anatomy plate with one dominant, highly detailed cutaway of the urinary system: both kidneys, renal calyces and pelvis, two ureters descending to the bladder, ureterovesical junctions, and urethra. Magnify one kidney and its ureter as the main narrative path. Show mineral material concentrating in urine, microscopic crystals nucleating and aggregating into a stone in a calyx, the stone entering the renal pelvis, traveling into the ureter, and a lodged stone narrowing the lumen and slowing urine drainage. Use a warm ivory and rose anatomical palette, deep burgundy vessels, translucent amber urine, distinct pale mineral crystals, cool cyan diagnostic accents, and restrained red-orange caution signals. Make tissues anatomically credible, non-gory, richly textured, dimensionally lit, and precisely labeled with large readable type, leader lines, and arrows whose meaning is explicit. Surround the hero with eight substantive panels: (1) FROM DISSOLVED MINERALS TO CRYSTAL, a three-step macro sequence labeled CONCENTRATION / CRYSTAL NUCLEATION / AGGREGATION, explaining that elevated levels of stone-forming substances in urine can permit crystals to build into a solid stone; (2) THE URINARY ROUTE, a simplified kidney-to-ureter-to-bladder map with a moving stone and clear scale cue, emphasizing that a stone may obstruct urine flow when lodged; (3) WHERE PAIN TRAVELS, a calm torso silhouette mapping back and side pain that may extend toward the lower abdomen or groin, labeled PAIN MAY COME IN WAVES; (4) SYMPTOM CLUES, clear icons and concise labels for BLOOD IN URINE, PAINFUL OR URGENT URINATION, NAUSEA OR VOMITING, and CLOUDY OR BAD-SMELLING URINE, without implying that symptoms prove a diagnosis; (5) TESTING THE CLUES, an urinalysis close-up showing blood, minerals, white cells, and bacteria as possible findings, a blood-test vial for mineral levels, and a small recovered-stone analysis vignette; (6) FINDING THE STONE, paired CT and ultrasound diagrams showing location, size, and possible blockage, with the distinction that the clinician selects appropriate imaging; (7) MANAGEMENT PATHWAYS, a branching clinical diagram: SOME SMALL STONES MAY PASS WITH CLINICIAN-GUIDED SUPPORT; SHOCK-WAVE LITHOTRIPSY BREAKS A STONE INTO SMALLER PIECES; URETEROSCOPY LOCATES AND REMOVES OR BREAKS A STONE; PERCUTANEOUS NEPHROLITHOTOMY ACCESSES THE KIDNEY THROUGH A SMALL BACK INCISION FOR SELECTED LARGER STONES; and STENT OR NEPHROSTOMY CAN RESTORE DRAINAGE WHEN FLOW IS BLOCKED; (8) PREVENTION IS PERSONAL, a large water glass and diluted-versus-concentrated urine comparison labeled ADEQUATE FLUID HELPS PREVENT MANY STONES, alongside a stone-analysis card stating DIET AND PREVENTION DEPEND ON STONE TYPE, HEALTH CONDITIONS, AND CLINICAL GUIDANCE. Add at least four prominent explanatory close-ups: crystal nucleation and aggregation in urine, a stone lodged within a layered ureter wall with backed-up urine above it, CT versus ultrasound imaging principles, and the three procedure paths with simple tool silhouettes. Add a high-contrast URGENT ASSESSMENT strip: FEVER OR CHILLS; INABILITY TO URINATE OR ONLY A SMALL AMOUNT; SEVERE PAIN WITH VOMITING OR DEHYDRATION; OR CONCERN FOR BLOCKED FLOW — SEEK PROMPT MEDICAL CARE. Footer: GENERAL EDUCATION — NOT A DIAGNOSIS. CARE DEPENDS ON STONE SIZE, LOCATION, TYPE, SYMPTOMS, AND URINARY OBSTRUCTION. Keep every factual implication within the verified claim sheet. Do not add prevalence figures, universal diet rules, exact fluid targets, prescription drugs or doses, procedure guarantees, self-diagnosis, invented crystal chemistry, tiny paragraphs, decorative pseudo-text, classroom worksheet styling, fantasy anatomy, gore, or photographed-poster staging.",
+    "image": "images/2026-09-17-factual-infographic-factual-infographic-kidney-stones-a-cry.jpg",
+    "thumb": "thumbs/2026-09-17-factual-infographic-factual-infographic-kidney-stones-a-cry.webp",
+    "color": "#d3beb3",
+    "date": "2026-09-17",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "kidney-stone-crystal-formation-ureter-obstruction-journey",
+      "imageSha256": "cce0c6374dbdde59f5fa2bd0362dfc6cdaeac0b92595682d2a1a4dcc673ed1a0",
+      "imageDHash": "b83152963692690d"
+    },
+    "factualInfographic": {
+      "topic": "How kidney stones form, move through the urinary tract, cause symptoms, and are evaluated, managed, and prevented",
+      "description": "A source-verified medical anatomy infographic tracing crystal formation and stone passage through the urinary tract, with symptom patterns, obstruction, laboratory and imaging evaluation, treatment pathways, individualized prevention, and urgent warning signs.",
+      "sourceNote": "Verified against NIDDK https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/symptoms-causes, https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/diagnosis, https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/treatment, and https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/eating-diet-nutrition, plus RadiologyInfo (RSNA/ACR) https://www.radiologyinfo.org/en/info/stones-renal; scope covers formation, urinary anatomy and obstruction, symptoms, laboratory and imaging evaluation, procedure and drainage categories, individualized prevention, and urgent-care context.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-17T18:20:30Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Symptoms & Causes of Kidney Stones",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/symptoms-causes"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Diagnosis of Kidney Stones",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/diagnosis"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Treatment for Kidney Stones",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/treatment"
+          },
+          {
+            "id": "S4",
+            "publisher": "National Institute of Diabetes and Digestive and Kidney Diseases",
+            "title": "Eating, Diet, & Nutrition for Kidney Stones",
+            "sourceType": "government-agency",
+            "url": "https://www.niddk.nih.gov/health-information/urologic-diseases/kidney-stones/eating-diet-nutrition"
+          },
+          {
+            "id": "S5",
+            "publisher": "Radiological Society of North America and American College of Radiology",
+            "title": "Kidney and Bladder Stones — Diagnosis, Evaluation and Treatment",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.radiologyinfo.org/en/info/stones-renal"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Kidney stones are solid crystal build-ups formed from substances present in urine.",
+            "sourceIds": [
+              "S1",
+              "S5"
+            ]
+          },
+          {
+            "claim": "High urinary levels of calcium, oxalate, and phosphorus can contribute to kidney-stone formation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A stone can move from a kidney into a ureter and obstruct urine flow.",
+            "sourceIds": [
+              "S2",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Kidney-stone pain may be felt in the back, side, lower abdomen, or groin and may come and go in waves.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Blood in urine, painful or urgent urination, nausea, vomiting, fever, chills, and inability to urinate can occur with kidney stones and require healthcare assessment.",
+            "sourceIds": [
+              "S1",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Urinalysis can detect blood, stone-forming minerals, white blood cells, or bacteria, while blood tests can identify elevated mineral levels.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "CT can show a stone's size and location and whether it blocks the urinary tract; ultrasound can help identify stones and blocked urinary flow.",
+            "sourceIds": [
+              "S2",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Treatment is selected according to stone size, location, composition, symptoms, and whether urine flow is blocked.",
+            "sourceIds": [
+              "S3",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Some small stones pass without a procedure, while larger, painful, or obstructing stones may require urgent treatment.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Procedure categories include shock-wave lithotripsy, ureteroscopy, and percutaneous nephrolithotomy; a ureteral stent or nephrostomy may restore drainage when flow is blocked.",
+            "sourceIds": [
+              "S3",
+              "S5"
+            ]
+          },
+          {
+            "claim": "Analyzing a recovered stone and, when indicated, urine testing can help guide prevention according to stone type and individual risk.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          },
+          {
+            "claim": "Adequate fluid intake helps prevent many kidney stones, but the appropriate amount and dietary changes should be individualized for health conditions and stone type.",
+            "sourceIds": [
+              "S3",
+              "S4"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-17-factual-infographic-factual-infographic-bppv-when-ear-cryst",
     "title": "Factual infographic: BPPV — When Ear Crystals Enter a Balance Canal",
     "tests": "Direct-canvas portrait medical infographic; one dominant anatomical hero, eight substantive panels, four explanatory close-ups, readable source-backed labels only; factual_subtype: medical-health-infographic; archive_slot=2026-09-17T02:20; concept=bppv-displaced-otoconia-posterior-canal-repositioning; factual_subtype: medical-health-infographic",
