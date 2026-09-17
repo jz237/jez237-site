@@ -36,7 +36,7 @@ const pmrem=new T.PMREMGenerator(renderer);scene.environment=pmrem.fromScene(env
 scene.add(new T.HemisphereLight(0xbce4ff,0x030103,.32));
 function light(color,power,x,y,z){const l=new T.DirectionalLight(color,power);l.position.set(x,y,z);scene.add(l);return l}
 light(0xc9e6ff,5,-6,10,6);light(0xffffff,3.5,4,3,10);light(0xff1328,1.2,0,-5,5);light(0x3a83bb,2,4,7,-7);
-const coreLight=new T.PointLight(0xff1933,35,14,2);coreLight.position.set(0,.9,3);scene.add(coreLight);
+const coreLight=new T.PointLight(0xff1933,35,14,2);coreLight.position.set(0,1.57,3);scene.add(coreLight);
 function brushed(){const c=document.createElement('canvas');c.width=1024;c.height=128;const g=c.getContext('2d');g.fillStyle='#888';g.fillRect(0,0,1024,128);for(let i=0;i<3400;i++){const q=100+rnd()*60;g.strokeStyle=`rgba(${q},${q},${q},.26)`;let y=rnd()*128;g.beginPath();g.moveTo(rnd()*1024,y);g.lineTo(rnd()*1024,y+.2);g.stroke()}const t=new T.CanvasTexture(c);t.wrapS=t.wrapT=T.RepeatWrapping;t.repeat.set(.45,.65);return t}
 const brush=brushed();
 const chrome=new T.MeshPhysicalMaterial({color:0xbac8d6,metalness:1,roughness:.16,clearcoat:.7,clearcoatRoughness:.11,envMap:scene.environment,envMapIntensity:1.1,bumpMap:brush,bumpScale:.012});
@@ -48,7 +48,18 @@ const red=new T.MeshBasicMaterial({color:new T.Color(2.8,.001,.008)});
 const dimRed=new T.MeshBasicMaterial({color:new T.Color(.52,.003,.009)}),ice=new T.MeshBasicMaterial({color:new T.Color(.14,.35,.65)}),hot=new T.MeshBasicMaterial({color:new T.Color(12,2.4,2.8)});
 for(const mat of [red,dimRed,hot])mat.userData.glow=true;
 const darkBloom=new T.MeshBasicMaterial({color:0}),darkLine=new T.LineBasicMaterial({color:0});const originals=new Map();
-function renderScene(){renderer.info.reset();const bg=scene.background;scene.background=new T.Color(0);const hidden=[];scene.traverse(o=>{if(!o.visible)return;if((o.isPoints||o.isSprite||(o.isMesh&&o.material?.transparent))&&!o.material?.userData?.glow){hidden.push(o);o.visible=false}else if((o.isMesh||o.isLine)&&!o.material?.userData?.glow){originals.set(o,o.material);o.material=o.isLine?darkLine:darkBloom}});bloomComposer.render();originals.forEach((m,o)=>{o.material=m});originals.clear();hidden.forEach(o=>o.visible=true);scene.background=bg;composer.render()}
+function renderScene(){
+ renderer.info.reset();
+ // Zero glow needs neither a second scene render nor its blur/composite passes.
+ // Keep the main composer and OutputPass for identical antialiasing and color.
+ blend.enabled=bloom.strength>0;
+ if(blend.enabled){
+  const bg=scene.background;scene.background=new T.Color(0);const hidden=[];
+  scene.traverse(o=>{if(!o.visible)return;if((o.isPoints||o.isSprite||(o.isMesh&&o.material?.transparent))&&!o.material?.userData?.glow){hidden.push(o);o.visible=false}else if((o.isMesh||o.isLine)&&!o.material?.userData?.glow){originals.set(o,o.material);o.material=o.isLine?darkLine:darkBloom}});
+  bloomComposer.render();originals.forEach((m,o)=>{o.material=m});originals.clear();hidden.forEach(o=>o.visible=true);scene.background=bg;
+ }
+ composer.render();
+}
 const root=new T.Group();root.name='Skynet sculpture';scene.add(root);const turners=[],pulses=[];
 // One draw call per light bank; phases are deterministic and pause with the scene.
 const beacons=[];let beaconCount=0;
@@ -90,7 +101,8 @@ for(let j=0;j<9;j++){const r=Math.sqrt(4.12**2-((j-4)*.79)**2);const ring=torus(
 const nodeGeo=new T.SphereGeometry(.038,6,6);const stars=[];
 for(let i=0;i<190;i++){const a=rnd()*TAU,b=Math.acos(2*rnd()-1);const p=new T.Vector3(4.14*Math.sin(b)*Math.cos(a),4.14*Math.cos(b),4.14*Math.sin(b)*Math.sin(a));stars.push(p)}
 beaconBank(stars.map(p=>p.toArray()),neural,1.8);
-for(let i=0;i<stars.length;i++)for(let j=i+1;j<stars.length;j++){const dist=stars[i].distanceTo(stars[j]);if(dist<1.5&&dist>.6)stroke([stars[i].toArray(),stars[j].toArray()],i%5?faintBlue:thinRed,neural)}
+// createCinematic builds these links in one batch; do not construct and discard
+// hundreds of temporary line geometries before that batched version exists.
 const denseBrain=createDenseBrain(neural);beacons.push(...denseBrain.materials);beaconCount+=denseBrain.nodeCount;
 // Armored plates reproduce the three-part silhouette of the reference.
 const crest=new T.Group();crest.position.z=.15;root.add(crest);
@@ -124,8 +136,8 @@ function coreAssembly(x,y,z,r){const g=new T.Group();g.position.set(x,y,z);root.
   for(let j=0;j<9;j++){const leaf=new T.Group();leaf.rotation.z=j*TAU/9;leaf.position.z=(j%3)*.013;iris.add(leaf);mesh(extrude(blade,.045,.009),irisMetal,leaf);stroke([[.28,-.08,.057],[.57,-.26,.057],[.84,-.12,.057]],irisEtch,leaf);for(let k=0;k<3;k++)stroke([[.47+k*.045,-.05,.058],[.64+k*.04,-.1,.058]],irisEtch,leaf)}
   const lensMat=new T.MeshPhysicalMaterial({color:0x9c0310,metalness:.25,roughness:.075,clearcoat:1,transparent:true,opacity:.55,depthWrite:false,emissive:0x340008,emissiveIntensity:.2});
   const lens=mesh(new T.SphereGeometry(.24,40,24),lensMat,g,0,0,.37);lens.scale.z=.5;lens.name='Recessed red lens';
-  mesh(new T.SphereGeometry(.095,24,16),hot,g,0,0,.43);torus(.145,.009,red,g,0,0,.46);torus(.225,.012,red,g,0,0,.47);
-  const glow=glowSprite(0xff122c,.92,g,0,0,.51,.64);pulses.push({obj:glow,base:.92});const flare=glowSprite(0xff2035,1,g,0,0,.52,.40);flare.scale.set(3.4,.045,1);
+  const center=mesh(new T.SphereGeometry(.095,24,16),hot.clone(),g,0,0,.43);center.name='Pulsing reactor center';torus(.145,.009,red,g,0,0,.46);torus(.225,.012,red,g,0,0,.47);
+  const glow=glowSprite(0xff122c,.92,g,0,0,.51,.64);glow.name='Pulsing reactor center halo';pulses.push({obj:glow,base:.92});const flare=glowSprite(0xff2035,1,g,0,0,.52,.40);flare.scale.set(3.4,.045,1);
   beaconBank(Array.from({length:32},(_,i)=>{const a=i*TAU/32;return[Math.cos(a)*r*.84,Math.sin(a)*r*.84,.80]}),g,.65);
   return g;
  }
@@ -143,7 +155,9 @@ function coreAssembly(x,y,z,r){const g=new T.Group();g.position.set(x,y,z);root.
  mesh(new T.SphereGeometry(r*.115,24,16),hot,g,0,0,.47);const glow=glowSprite(0xff0b24,r*1.1,g,0,0,.65,.7);const flare=glowSprite(0xff2438,1,g,0,0,.67,.46);flare.scale.set(r*4.8,r*.075,1);pulses.push({obj:glow,base:r*1.1});
  beaconBank(Array.from({length:32},(_,i)=>{const a=i*TAU/32;return[Math.cos(a)*r*.76,Math.sin(a)*r*.76,.57]}),g,.65);return g;
 }
-const primaryCore=coreAssembly(0,.83,1.08,1.18),upperCore=coreAssembly(0,3.08,.86,.43);
+// Clear the subtitle panel and center the smaller core within the upper diamond.
+const upperPlateCenterY=(plates[0][0][1]+plates[0][2][1])/2-.12;
+const primaryCore=coreAssembly(0,1.50,1.08,1.18),upperCore=coreAssembly(0,upperPlateCenterY,.86,.43);
 // Custom angular glyphs with solid extruded bodies and red inlaid seams.
 const glyph={
 S:[[1,.98],[.2,.98],[0,.78],[0,.54],[.17,.40],[.70,.40],[.75,.34],[.75,.24],[.69,.18],[0,.18],[0,0],[.79,0],[1,.19],[1,.45],[.81,.59],[.29,.59],[.24,.65],[.24,.75],[.30,.81],[1,.81]],
@@ -240,14 +254,37 @@ const fogMap=fogTexture(),wisps=[];for(let i=0;i<18;i++){const mat=new T.SpriteM
 cinema=createCinematic({scene,root,neural,stars,crest,plates,word,dais,renderer,camera,controls,chrome,steel,black,letterMetal,rnd});
 const powerUp=createPowerUp({chassis,dais,crest,neural,word,subtitle,primaryCore,upperCore,coreLight});
 const polish=createFinalPolish({scene,root,crest,plates,wordBacking,primaryCore,renderer,steel,black}),showcase=setupShowcase();
-const updateCinematic=cinema.update;cinema.update=(...args)=>{updateCinematic(...args);const reveal=cinema.stats();powerUp.update(reveal);polish.update(args[0],reveal,powerUp.stats().powerStages)};
+const reactorCenter=primaryCore.getObjectByName('Pulsing reactor center'),reactorHalo=primaryCore.getObjectByName('Pulsing reactor center halo');
+const updateCinematic=cinema.update;cinema.update=(...args)=>{
+ updateCinematic(...args);const reveal=cinema.stats();powerUp.update(reveal);polish.update(args[0],reveal,powerUp.stats().powerStages);
+ // Slow breathing pulse, confined to the central light. Power-up restores the
+ // material baseline each frame, so brightness never accumulates. Shared scene
+ // time keeps this frozen on pause and for reduced-motion visitors.
+ const breath=.5+.5*Math.sin(args[0]*TAU/2.8);
+ reactorCenter.scale.setScalar(.88+.24*breath);
+ reactorCenter.material.color.multiplyScalar(.48+.72*breath);
+ reactorHalo.material.opacity=.38+.36*breath;
+ reactorHalo.scale.setScalar(.78+.25*breath);
+};
 let animated=!matchMedia('(prefers-reduced-motion: reduce)').matches,elapsed=0,frames=0,previous=performance.now();$('motion').setAttribute('aria-pressed',String(animated));
 function update(dt){if(animated)elapsed+=dt;for(const m of beacons){m.uniforms.time.value=elapsed;m.uniforms.resolution.value=innerHeight*renderer.getPixelRatio()}for(const {g,s,axis='z'} of turners)g.rotation[axis]=elapsed*s;for(const p of pulses){const s=p.base*(1+Math.sin(elapsed*2.4)*.065);p.obj.scale.set(s,s,1)}coreLight.intensity=18+Math.sin(elapsed*2.4)*3;for(let i=0;i<count;i++){positions[i*3]=bases[i*3]+Math.sin(elapsed*.12+i)*.13;positions[i*3+1]=((bases[i*3+1]+5+elapsed*(.06+(i%5)*.013))%19)-5;positions[i*3+2]=bases[i*3+2]}pgeo.attributes.position.needsUpdate=true;for(const w of wisps)w.s.position.x=w.x+Math.sin(elapsed*.1+w.x)*.4;cinema.update(elapsed,animated?dt:0,animated);updateFrontOrbit(controls,dt,animated);if(animated||needsRender){renderScene();needsRender=false;frames++}}
-function frame(now){const dt=Math.max(0,Math.min((now-previous)/1000,.06));previous=now;update(dt);requestAnimationFrame(frame)}requestAnimationFrame(frame);
+function frame(now){
+ const dt=Math.max(0,Math.min((now-previous)/1000,.06));previous=now;
+ if(!document.hidden){
+  // Let manual-camera damping settle while paused, without updating thousands
+  // of particles, neural uniforms and cinematic effects on every idle frame.
+  if(!animated&&!needsRender)updateFrontOrbit(controls,dt,false);
+  if(animated||needsRender)update(dt);
+ }
+ requestAnimationFrame(frame);
+}
+document.addEventListener('visibilitychange',()=>{previous=performance.now();needsRender=true});
+requestAnimationFrame(frame);
 $('home').onclick=reset;renderer.domElement.ondblclick=reset;$('orbit').onclick=()=>{controls.autoRotate=!controls.autoRotate;$('orbit').setAttribute('aria-pressed',String(controls.autoRotate))};$('motion').onclick=()=>{animated=!animated;$('motion').setAttribute('aria-pressed',String(animated))};$('glow').oninput=e=>{bloom.strength=Number(e.target.value)};$('compare').onclick=()=>{const on=$('reference').classList.toggle('show');$('compare').setAttribute('aria-pressed',String(on))};$('fullscreen').onclick=async()=>{try{if(document.fullscreenElement)await document.exitFullscreen();else await document.documentElement.requestFullscreen()}catch{$('message').textContent='Fullscreen is unavailable in this viewer. Open the file in Chrome.'}};
 $('stage').addEventListener('keydown',e=>{const spherical=new T.Spherical().setFromVector3(camera.position.clone().sub(controls.target));if(e.key==='ArrowLeft')spherical.theta-=.1;else if(e.key==='ArrowRight')spherical.theta+=.1;else if(e.key==='ArrowUp')spherical.phi=Math.max(.2,spherical.phi-.1);else if(e.key==='ArrowDown')spherical.phi=Math.min(controls.maxPolarAngle,spherical.phi+.1);else if(e.key==='Home'){reset();return}else return;e.preventDefault();camera.position.copy(controls.target).add(new T.Vector3().setFromSpherical(spherical));controls.update()});
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);composer.setSize(innerWidth,innerHeight);bloomComposer.setSize(innerWidth,innerHeight)});renderer.domElement.addEventListener('webglcontextlost',e=>{e.preventDefault();$('message').textContent='The graphics context was interrupted. Reload to restore the scene.'});
 $('replay').onclick=()=>{animated=true;$('motion').setAttribute('aria-pressed','true');cinema.replay()};
 const toggleMotion=$('motion').onclick;$('motion').onclick=()=>{toggleMotion();if(!animated){const auto=controls.autoRotate,damping=controls.enableDamping;controls.autoRotate=false;controls.enableDamping=false;controls.update(0);controls.enableDamping=damping;controls.autoRotate=auto}needsRender=true};
+$('compare').addEventListener('click',()=>{const img=$('reference').querySelector('img');if($('reference').classList.contains('show')&&!img.hasAttribute('src'))img.src=img.dataset.src});
 $('glow').addEventListener('input',()=>{needsRender=true});addEventListener('resize',()=>{needsRender=true});
 window.skynet={scene,camera,controls,renderer,composer,reset,setTime(t){elapsed=t;needsRender=true;update(0)},stats(){let meshes=0,extrusions=0;root.traverse(o=>{if(o.isMesh)meshes++;if(o.geometry?.type==='ExtrudeGeometry')extrusions++});return{version:'2026.09.05.10',brainNodes:denseBrain.nodeCount,brainLinks:denseBrain.linkCount,...frontOrbitStats(controls),...cinema.stats(),...powerUp.stats(),...polish.stats(),...showcase.stats(),beaconCount,beaconTime:beacons[0].uniforms.time.value,meshes,extrusions,frames,elapsed,camera:camera.position.toArray(),distance:camera.position.distanceTo(controls.target),glow:bloom.strength,orbitAngle:controls.getAzimuthalAngle(),orbitPath:'left-up-right-down',orbitElevation:Math.PI/2-controls.getPolarAngle(),upperCoreAnimation:true,autoOrbit:controls.autoRotate,animated,drawCalls:renderer.info.render.calls}},ready:true};$('loading').remove();
