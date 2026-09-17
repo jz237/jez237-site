@@ -48,3 +48,9 @@ body { margin: 0; background: #0f1110; color: #eee9df; }
   .collection-main { width: min(100% - 24px, 1460px); padding-top: 24px; }
   .collection-lightbox-hint { display: none; }
 }
+
+/* Keep shared site links reachable between the mobile and desktop layouts. */
+@media (min-width: 721px) and (max-width: 1200px) {
+  #site-nav .links { overflow-x: auto; justify-content: flex-start; }
+  #site-nav .links a { flex-shrink: 0; }
+}
