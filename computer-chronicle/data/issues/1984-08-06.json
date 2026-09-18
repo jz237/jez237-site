@@ -1,0 +1,386 @@
+{
+  "currentDate": "2026-09-18",
+  "historicDate": "1984-08-06",
+  "displayDate": "Week of August 6-12, 1984",
+  "edition": "Issue 106 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "prototype wonder, software rivalry, and colorful home-computer ambition on warm summer newsprint",
+    "motifs": [
+      "Amiga Lorraine prototype",
+      "color sprite graphics",
+      "Questprobe comic-book adventure",
+      "integrated-software windows"
+    ],
+    "layout": "dense five-column front page with a dramatic prototype lead, game boxes, shelf cards, charts, and compact world bulletin"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+    "dateline": "August 6-12, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "banner lead above the fold with a halftone of the Lorraine prototype and vivid sprite imagery",
+    "secondaryRail": "Questprobe games, integrated software, Deskpro, price watch, charts, and modem notes",
+    "archiveNavigation": "Issue 106 in the chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "ink blue",
+    "texture": "warm newsprint, halftone screens, fine column rules, and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-08-06.jpg",
+    "alt": "GPT Image 2 newspaper front page for Computer Chronicle, week of August 6-12, 1984",
+    "caption": "A GPT Image 2 newspaper-style front page generated from the Chronicle structured issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Behind closed doors, a multimedia machine called Lorraine hints at a startling future while software giants battle to put every office task under one roof.",
+  "morningLine": "Amiga shows its colors, Symphony meets Framework, and Marvel's Hulk crashes into the adventure-game aisle.",
+  "lead": {
+    "headline": "Behind Closed Doors, Amiga's Lorraine Points to a New Generation",
+    "dek": "A rough but dazzling 68000 prototype promises color, sound, animation, speech, and communications in one home machine.",
+    "body": [
+      "Visitors invited behind closed doors at the Summer Consumer Electronics Show saw something very different from another beige box. Amiga's Lorraine prototype, now detailed in COMPUTE!'s August issue, paired a Motorola 68000 processor with custom graphics and sound hardware intended to make animation, music, and multitasking central parts of personal computing.",
+      "The proposed machine carried 128K of memory expandable to 512K internally, 64K of ROM, a built-in 320K double-sided floppy drive, and a 300-bps modem that could be replaced by a 1200-bps unit. Its video design promised 320-by-200 and 640-by-200 modes, a palette of 4,096 colors, eight independent sprites, split screens, and frame-buffer animation, while four audio channels and text-to-speech voices rounded out the demonstration.",
+      "Those specifications put Lorraine in territory normally reserved for expensive workstations and specialized video gear. COMPUTE! writer Selby Bateman judged the potential machine powerful enough to make an IBM PC look like a four-function calculator, a startling comparison at a show otherwise dominated by software and cautious refinements to familiar hardware.",
+      "Yet the demonstration remained a promise, not a product. The rough prototype was operated from a remote terminal, Amiga still needed substantial capital and production engineering, and its claimed $1,500 price and Christmas delivery faced a severe test. Even with those cautions, Lorraine offered the clearest glimpse this summer of a home computer designed from the start for sight, sound, and motion."
+    ],
+    "sourceRefs": [
+      2,
+      3
+    ],
+    "confidence": "same-month"
+  },
+  "stories": [
+    {
+      "headline": "Symphony and Framework Fight to Define Integrated Software",
+      "body": [
+        "The business-software aisle has become a contest over the shape of the electronic office. Lotus Symphony combines spreadsheet, word processing, database, communications, and graphics functions in a $695 package, extending the formula that made Lotus 1-2-3 the defining program of the IBM PC.",
+        "Ashton-Tate's Framework approaches the same goal through outlining and nested frames able to contain text, spreadsheets, graphs, and other documents. Developed by Robert Carr's Forefront and marketed with Ashton-Tate's muscle, it asks users to organize work as connected pieces rather than separate application files.",
+        "PC Magazine, dated August 7, calls the two products pace-setters and recalls Lotus and Ashton-Tate occupying adjacent Spring COMDEX booths like technological knights preparing for battle. Their rivalry makes one point clear: the next office-software prize may belong to the package that keeps users from leaving it."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "Compaq Deskpro Turns Compatibility into a Speed Contest",
+      "body": [
+        "Compaq is arguing that IBM compatibility need not mean IBM performance. Its Deskpro runs an 8086 at 7.14 MHz, delivering a reported two to three times the speed of the PC while retaining a slowdown mode for programs whose timing depends on IBM's pace.",
+        "Four models stretch from a 128K single-floppy system at $2,495 to a 640K flagship with a 10MB hard disk and 10MB cartridge-tape backup at $7,195. Eight expansion slots, an 8087 socket, and extensive card and software testing make the machine a direct bid for serious PC buyers.",
+        "The mini-data-cartridge tape unit shares the floppy controller to trim parts and cost. Peter Norton called the new machine what the PC-XT should have been; whether buyers agree, the Deskpro has turned compatibility into a race to improve on the standard rather than merely copy it."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "Questprobe Sends the Hulk into the Adventure Machine",
+      "body": [
+        "Adventure International and Marvel are joining comics and computer adventures in Questprobe featuring The Hulk, announced for August on the Commodore 64 and Plus/4. The green giant leads a planned line that treats familiar comic heroes as interactive characters rather than static licensed decoration.",
+        "The announcement lands amid a strong software summer. Spinnaker's Trillium label is adapting science-fiction novels including Rendezvous with Rama, Fahrenheit 451, and Starman Jones, with Michael Crichton scripting Amazon and Arthur C. Clarke devising an ending for Rama.",
+        "COMPUTE! also supplies games readers can type themselves: Devastator and Jackpot appear across VIC-20, Commodore 64, Atari, IBM PC/PCjr, and Apple editions. From superhero licenses to literary adaptations and printed listings, the game shelf is widening in every direction."
+      ],
+      "sourceRefs": [
+        2,
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "IBM's Price Cuts Put PC-Compatible Makers in a Squeeze",
+      "body": [
+        "IBM's June price reductions are still rippling across the August market. A 256K PC with one 360K drive now lists at $1,995, the two-drive version at $2,420, and the 128K XT system unit has fallen from $4,995 to $4,275.",
+        "The enhanced 128K PCjr with a disk drive dropped from $1,269 to $999. Those reductions, roughly 18 to 23 percent across key computer prices, force compatible makers to answer an opponent with far greater scale and an instantly recognized badge.",
+        "Eagle Computer matched the cuts while negotiating with creditors over $10.8 million in unsecured loans after a disastrous quarter. As analyst Esther Dyson warned, firms that play with price invite IBM to come at them with price."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "exact-date"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Questprobe featuring The Hulk",
+      "summary": "Adventure International and Marvel's first Questprobe adventure arrives for Commodore 64 and Plus/4.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Trillium science-fiction adventures",
+      "summary": "Rendezvous with Rama, Amazon, Dragonworld, Starman Jones, Fahrenheit 451, and Shadowkeep turn novels into illustrated adventures.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Devastator and Jackpot",
+      "summary": "COMPUTE!'s August issue prints two type-in games across major home-computer editions.",
+      "sourceRefs": [
+        3
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Lotus Symphony",
+      "detail": "Five-function integrated PC package; list price $695."
+    },
+    {
+      "name": "Ashton-Tate Framework",
+      "detail": "Integrated environment built around outlines and nested frames."
+    },
+    {
+      "name": "NewWord 1.29",
+      "detail": "WordStar-compatible word processor reviewed at $249."
+    },
+    {
+      "name": "Videotex 64",
+      "detail": "Commodore tool for sending color graphics and text over telephone lines."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Questprobe featuring The Hulk",
+        "Rendezvous with Rama",
+        "Amazon",
+        "Devastator",
+        "Jackpot"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "Ghostbusters - Ray Parker Jr.",
+        "When Doves Cry - Prince",
+        "State of Shock - The Jacksons",
+        "What's Love Got to Do with It - Tina Turner",
+        "Sad Songs (Say So Much) - Elton John"
+      ]
+    },
+    {
+      "label": "Top 5 Movies",
+      "items": [
+        "Red Dawn",
+        "Ghostbusters",
+        "Purple Rain",
+        "Revenge of the Nerds",
+        "The Karate Kid"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "IBM PC, 256K and one 360K drive",
+      "price": "$1,995",
+      "note": "New system-unit price reported August 7.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "IBM PCjr, 128K and 360K drive",
+      "price": "$999",
+      "note": "Reduced from $1,269.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Compaq Deskpro Model 1 / Model 4",
+      "price": "$2,495 / $7,195",
+      "note": "Entry floppy model versus 640K hard-disk and tape flagship.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Muppet Learning Keys",
+      "price": "$79.95",
+      "note": "Preschool keyboard for Apple IIe/IIc and Commodore 64.",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Eagle Computer fights for survival",
+      "summary": "The clone maker matches IBM's cuts while confronting $10.8 million in unsecured loans and dealer concern.",
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "Coleco says the 1984 Adam is ready",
+      "summary": "Coleco says reliability issues are corrected and shows a disk drive, 300-baud AdamLink modem, 64K expander, and new software.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Ghostbusters",
+      "artist": "Ray Parker Jr.",
+      "chartDate": "1984-08-11",
+      "sourceUrls": [
+        "https://www.elpee.jp/hot100/week/1984-08-11"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "When Doves Cry",
+      "artist": "Prince",
+      "chartDate": "1984-08-11",
+      "sourceUrls": [
+        "https://www.elpee.jp/hot100/week/1984-08-11"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "State of Shock",
+      "artist": "The Jacksons",
+      "chartDate": "1984-08-11",
+      "sourceUrls": [
+        "https://www.elpee.jp/hot100/week/1984-08-11"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "What's Love Got to Do with It",
+      "artist": "Tina Turner",
+      "chartDate": "1984-08-11",
+      "sourceUrls": [
+        "https://www.elpee.jp/hot100/week/1984-08-11"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Sad Songs (Say So Much)",
+      "artist": "Elton John",
+      "chartDate": "1984-08-11",
+      "sourceUrls": [
+        "https://www.elpee.jp/hot100/week/1984-08-11"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Five Office Tools, One Symphony",
+    "summary": "Lotus promises spreadsheet, writing, database, communications, and graphics work without leaving one $695 package.",
+    "tagline": "The integrated office takes the podium."
+  },
+  "market": {
+    "headline": "IBM Turns Up the Price Pressure",
+    "summary": "Cuts of roughly 18 to 23 percent and a 256K baseline squeeze compatible makers just as Compaq races ahead on speed.",
+    "sourceRefs": [
+      1
+    ],
+    "confidence": "exact-date"
+  },
+  "worldAnchor": {
+    "headline": "Los Angeles Olympics Dominate the Week",
+    "summary": "The 1984 Summer Olympics supply daily results and Cold War context throughout the issue week, including basketball quarterfinals on August 6.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      8
+    ]
+  },
+  "bbsNote": {
+    "headline": "Modems Move from Add-On to Built-In Feature",
+    "summary": "Lorraine, AdamLink, and Videotex 64 all treat telecommunications as an increasingly central part of the home-computer experience.",
+    "posts": [
+      {
+        "topic": "Built-in telecom",
+        "platform": "Amiga Lorraine",
+        "text": "A replaceable 300-bps modem design suggests that going online could become a standard system feature."
+      },
+      {
+        "topic": "Turnkey home communications",
+        "platform": "Coleco AdamLink",
+        "text": "Coleco pairs a direct-connect 300-baud full-duplex modem with AdamLink software."
+      },
+      {
+        "topic": "Picture exchange",
+        "platform": "Commodore 64 / VICMODEM",
+        "text": "Videotex 64 promises to mix color pictures with text and transmit them over normal phone lines."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "A Preschool Keyboard Built Like a Tiny School Desk",
+    "summary": "Koala's $79.95 Muppet Learning Keys replaces conventional keys with a child's desk full of learning objects.",
+    "detail": "The three-pound Apple II/Commodore 64 accessory includes a ruler, watercolor set, penmanship slate, compass, eraser, and arithmetic book, with Kermit, Miss Piggy, and Gonzo guiding alphabet, number, color, and shape exercises.",
+    "sourceUrls": [
+      "https://www.atarimagazines.com/compute/issue51/176_1_Software_Power.php"
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Lorraine and Summer CES reporting comes from COMPUTE!'s August 1984 issue.",
+      "PC software, Deskpro, and IBM pricing come from PC Magazine dated August 7, 1984.",
+      "Charts and box office match the week ending August 11-12, 1984.",
+      "Same-month magazine announcements are labeled as such."
+    ]
+  },
+  "sources": [
+    {
+      "title": "PC Magazine, August 7, 1984 (full text)",
+      "url": "https://archive.org/stream/PC-Mag-1984-08-07/PC-Mag-1984-08-07_djvu.txt",
+      "date": "1984-08-07"
+    },
+    {
+      "title": "Software Power! The Summer Consumer Electronics Show",
+      "url": "https://www.atarimagazines.com/compute/issue51/176_1_Software_Power.php",
+      "date": "1984-08"
+    },
+    {
+      "title": "COMPUTE! Issue 51 index",
+      "url": "https://www.atarimagazines.com/compute/index/index.php?issue=issue51",
+      "date": "1984-08"
+    },
+    {
+      "title": "Billboard Hot 100 week of August 11, 1984",
+      "url": "https://www.elpee.jp/hot100/week/1984-08-11",
+      "date": "1984-08-11"
+    },
+    {
+      "title": "Singles chart for August 11, 1984",
+      "url": "https://www.musicchartsarchive.com/singles-chart/1984-08-11",
+      "date": "1984-08-11"
+    },
+    {
+      "title": "Domestic box office weekend 32",
+      "url": "https://www.boxofficemojo.com/weekend/1984W32/",
+      "date": "1984-08-12"
+    },
+    {
+      "title": "UPI: Red Dawn debuts at No. 1",
+      "url": "https://www.upi.com/Archives/1984/08/13/Red-Dawn-an-adventure-movie-about-Russian-troops-invading/2578461217600/",
+      "date": "1984-08-13"
+    },
+    {
+      "title": "UPI: Olympic results",
+      "url": "https://www.upi.com/Archives/1984/08/06/Final-Compiled-Olympic-ResultsNEWLNat-Los-Angeles-Monday-Aug-6/7583460612800/",
+      "date": "1984-08-06"
+    },
+    {
+      "title": "UPI: Hiroshima anniversary observance",
+      "url": "https://www.upi.com/Archives/1984/08/06/Solemn-crowd-remembers-Hirishima-bombing/1393460612800/",
+      "date": "1984-08-06"
+    }
+  ]
+}
