@@ -14,7 +14,7 @@ function enter(s:TetraSwim,behavior:TetraBehavior){
  if(behavior==='cruising'){s.remaining=2+r*4;s.cruiseSpeed=16+random(s)*15;s.targetY=s.depthTarget;}
  if(behavior==='burst'){s.remaining=.28+r*.6;s.cruiseSpeed=38+random(s)*18;}
  if(behavior==='gliding')s.remaining=.65+r*1.1;
- if(behavior==='inspecting'){s.remaining=.7+r*1.4;s.pickIn=.16+random(s)*.3;s.pickRemaining=0;rememberPlant(s.brain,s.targetX,s.targetY);}
+ if(behavior==='inspecting'){s.remaining=.7+r*1.4;s.pickIn=.16+random(s)*.3;s.pickRemaining=0;rememberPlant(s.brain,s.targetX,s.targetY,s.z);}
  if(behavior==='approaching'){
   // Leaf and branch margins in the photographic planting, kept near the current depth.
   const sites=[[1170,380],[1090,397],[975,382],[890,327],[760,355],[690,340],[1180,480],[1060,465],[950,490],[810,465],[820,287],[990,275],[1150,290]];

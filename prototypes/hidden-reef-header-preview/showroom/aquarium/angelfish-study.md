@@ -93,3 +93,11 @@ This illustrates the coupled buccal and opercular pumps described in
 That comparison is not a measurement of these three aquarium species. The phase
 offset, amplitudes and frequencies here are visual choices, not measured
 species-specific rates or a simulation of gill pressures and oxygen uptake.
+
+## September 2026 behavior refinement
+Ordinary cruising now alternates independently timed fin-powered bouts and
+lower-effort glides, instead of a continuously repeating speed waveform. Speed
+and upright angular acceleration remain smoothed; feeding, startles and obstacle
+recovery retain priority. Timing and effort values are qualitative animation
+choices, not measured angelfish kinematics. No claim of a bonded breeding pair is
+made for the two demonstration animals.

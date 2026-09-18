@@ -95,3 +95,13 @@ rates, independent targets, lost/stalled food, a sixteen-fish feeding group,
 non-duplicate consumption and collision separation. Swept hardscape contact
 prevents fast movement through branch envelopes. Wall corrections now trigger
 another separation pass if needed, instead of leaving a new overlap unresolved.
+
+## September 2026 behavior refinement
+Cardinals now remember inspected patches in three dimensions: a foreground leaf
+and a different leaf behind it are separate search locations. Local school
+alignment also anticipates companions' vertical and depth movement, with bounded
+steering, while retaining individual departures and spacing. Walker's field/diet
+study supports browsing submerged roots, plants and litter for small animal prey:
+https://acta.inpa.gov.br/fasciculos/34-1/BODY/v34n1a09.html
+Memory duration, anticipation and movement constants are qualitative simulation
+choices, not measurements reported by that study.

@@ -158,3 +158,13 @@ test('feeding angels leave inspection promptly, glide faster, then pause briefly
  assert.ok(peak>1.1,'visible stronger feeding approach');assert.ok(ate,'does not circle the morsel indefinitely');
  const resting=createAngel(1);advanceAngel(resting,.05,{...open,daylight:.2,food:[food]});assert.equal(resting.target,null,'dim-light resting remains unchanged');
 });
+
+test('angelfish alternate independent irregular propulsion and gliding bouts without head shake',()=>{
+ const fish=[createAngel(0),createAngel(1)],switches=[[],[]];let different=0;
+ for(let i=0;i<1800;i++)for(const s of fish){const powered=s.powerStroke,yaw=s.yaw;
+  advanceAngel(s,1/60,open);if(powered!==s.powerStroke)switches[s.id].push(i);
+  assert.ok(Math.abs(s.yaw-yaw)<=.65/60+1e-8);
+  if(s.id===1&&s.powerStroke!==fish[0].powerStroke)different++;}
+ assert.ok(different>200);for(const times of switches){assert.ok(times.length>8);assert.ok(new Set(times.slice(1).map((t,i)=>t-times[i])).size>5);}
+ const frozen=structuredClone(fish[0]);advanceAngel(fish[0],0,open);assert.equal(fish[0].strokeIn,frozen.strokeIn);
+});
