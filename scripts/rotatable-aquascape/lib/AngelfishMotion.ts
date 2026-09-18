@@ -3,7 +3,7 @@ import type {BodySphere} from './GrazerCollision.ts';
 import envelope from './AngelfishEnvelope.json' with {type:'json'};
 
 export type AngelFood={id:number;position:T.Vector3};
-export type AngelState={id:number;position:T.Vector3;previous:T.Vector3;goal:T.Vector3;yaw:number;pitch:number;speed:number;effort:number;seed:number;timer:number;hover:number;bite:number;startle:number;hunger:number;target:number|null;stalled:number;lastDistance:number;phase:number;size:number;behavior:string;consumed:number|null;detour:number;detourYaw:number;yawRate:number;pitchRate:number;blocked:number;social:T.Vector3;recovery:T.Vector3;retreat:number;reach:number;strokeIn:number;powerStroke:boolean;cruise:number;locomotorSeed:number;foodMemory:T.Vector3|null;memoryIn:number;memoryVisits:number};
+export type AngelState={lightAwake?:boolean;lightResponse?:number;id:number;position:T.Vector3;previous:T.Vector3;goal:T.Vector3;yaw:number;pitch:number;speed:number;effort:number;seed:number;timer:number;hover:number;bite:number;startle:number;hunger:number;target:number|null;stalled:number;lastDistance:number;phase:number;size:number;behavior:string;consumed:number|null;detour:number;detourYaw:number;yawRate:number;pitchRate:number;blocked:number;social:T.Vector3;recovery:T.Vector3;retreat:number;reach:number;strokeIn:number;powerStroke:boolean;cruise:number;locomotorSeed:number;foodMemory:T.Vector3|null;memoryIn:number;memoryVisits:number};
 export type AngelSenses={reachable?:(food:AngelFood)=>boolean;food:AngelFood[];other:{position:T.Vector3;radius:number}[];daylight:number;companion?:T.Vector3;clear:(position:T.Vector3,yaw:number,pitch:number,size:number)=>boolean};
 const clamp=T.MathUtils.clamp;
 function random(s:AngelState){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
@@ -49,6 +49,9 @@ function newGoal(s:AngelState,senses:AngelSenses){
  * Individual exploration and hovering replace tetra school alignment. */
 export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
  s.consumed=null;if(dt<=0)return;s.previous.copy(s.position);s.phase+=dt;s.memoryIn=Math.max(0,s.memoryIn-dt);if(s.memoryIn===0)s.foodMemory=null;
+ const awake=senses.daylight>=.4;
+ if(s.lightAwake!==undefined&&s.lightAwake!==awake){s.lightResponse=.6;if(awake&&s.bite===0){s.hover=0;s.powerStroke=true;s.strokeIn=.6;}}
+ s.lightAwake=awake;s.lightResponse=Math.max(0,(s.lightResponse??0)-dt);
  s.hunger=clamp(s.hunger+dt*.001,0,1);s.timer-=dt;s.bite=Math.max(0,s.bite-dt);s.hover=Math.max(0,s.hover-dt);s.startle=Math.max(0,s.startle-dt);
  // A blocked fish first sculls out along one committed clear direction. It
  // does not alternate between a rejected turn and a fresh turn every frame.
@@ -114,7 +117,7 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
  const desiredTurn=clamp(error*1.7,-turnLimit,turnLimit),desiredPitch=clamp((pitch-s.pitch)*1.8,-.30,.30);
  s.yawRate=T.MathUtils.lerp(s.yawRate,desiredTurn,1-Math.exp(-dt*3));s.pitchRate=T.MathUtils.lerp(s.pitchRate,desiredPitch,1-Math.exp(-dt*3));
  yaw=s.yaw+s.yawRate*dt;pitch=clamp(s.pitch+s.pitchRate*dt,-.26,.26);
- pace*=Math.max(.12,Math.cos(error));s.speed+=clamp(pace-s.speed,-dt*(food?3.5:.65),dt*(food||s.startle?4.5:.38));
+ pace*=Math.max(.12,Math.cos(error));s.speed+=clamp(pace-s.speed,-dt*(food?3.5:s.lightResponse>0?1.4:.65),dt*(food||s.startle?4.5:s.lightResponse>0?1.2:.38));
  const to=s.position.clone().addScaledVector(angelForward(yaw,pitch),s.speed*dt);
  // Fin sculling lets a deep-bodied angelfish gain/lose height without pointing
  // its whole body steeply upward or downward.

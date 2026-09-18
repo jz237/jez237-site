@@ -32,9 +32,11 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
  const dt=clamp(Number.isFinite(seconds)?seconds:0,0,.1);if(!dt)return;
  const mouthHeading=s.yaw+s.depthHeading,reach=s.mouthReach;
  const perceived=senses?{...senses,heading:mouthHeading,mouth:{x:s.x+Math.cos(mouthHeading)*Math.cos(s.pitch)*reach,y:s.y-Math.sin(s.pitch)*reach,z:s.z-Math.sin(mouthHeading)*Math.cos(s.pitch)*reach/180}}:undefined;
+ const wasResting=s.brain.intent.kind==='rest';
  const intent=perceived?thinkFish(s.brain,dt,s.x,s.y,s.speed,perceived,s.z):null;
  if(perceived&&swimForFood(s,dt,intent?.kind==='feed'?intent.target:undefined,perceived,lowOxygen))return;
  if(s.courtship>0&&advanceCourtshipSwim(s,dt))return;
+ if(wasResting&&intent?.kind!=='rest'&&(senses?.daylight??1)>=.4){enter(s,'cruising');s.powerStroke=true;s.strokeRemaining=.35;}
  if(intent)feeding=intent.kind==='feed';
  if(intent?.kind==='browse'&&intent.target&&!s.browsing){s.behavior='approaching';s.remaining=18;s.browsing=true;}
  if(intent?.kind!=='browse'&&s.behavior!=='inspecting')s.browsing=false;
@@ -91,7 +93,7 @@ export function advanceTetraSwim(s:TetraSwim,seconds:number,feeding=false,lowOxy
  if(lowOxygen){pace=Math.min(pace,11);drive=Math.min(drive,.55);}
  // Anticipate a close approach before the hard contact constraint is needed.
  if(senses){for(const other of senses.neighbors){const dx=other.x-s.x,dy=other.y-s.y,dz=((other.z??s.z)-s.z)*180;const distance=Math.hypot(dx,dy,dz);const ahead=dx*s.direction>0;const closing=(s.vx-(other.vx??0))*dx+(s.vy-(other.vy??0))*dy;if(ahead&&closing>0&&distance<65&&Math.abs(dy)<22&&Math.abs(dz)<25){pace=Math.min(pace,Math.max(12,(distance-45)*.8));fan=Math.max(fan,.85);drive=Math.min(drive,.18);}}}
- s.speed=ease(s.speed,pace,s.startleRemaining>0?18:feeding||inspecting?5:s.behavior==='gliding'?.65:s.behavior==='burst'?7:1.65,dt);
+ s.speed=ease(s.speed,pace,s.startleRemaining>0?18:intent?.kind==='rest'?10:wasResting?8:feeding||inspecting?5:s.behavior==='gliding'?.65:s.behavior==='burst'?7:1.65,dt);
  s.effort=ease(s.effort,drive,8,dt);s.pectoralEffort=ease(s.pectoralEffort,fan,3,dt);
  const holding=s.startleRemaining<=0&&(s.behavior==='inspecting'||intent?.kind==='rest');
  const goalY=intent?.target||s.behavior==='approaching'||s.behavior==='foraging'?s.targetY:s.depthTarget;

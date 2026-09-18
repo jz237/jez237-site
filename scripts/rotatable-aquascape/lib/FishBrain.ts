@@ -33,7 +33,7 @@ export function thinkFish(b:FishBrain,dt:number,x:number,y:number,speed:number,s
  if(food&&b.hunger>.18&&withinReach&&b.biteIn===0){b.consumedFood=food.id;b.hunger=clamp(b.hunger-.23);b.energy=clamp(b.energy+.08);b.biteIn=.20+random(b)*.35;b.decisionIn=0;}
  const close=senses.neighbors.filter(f=>distance(f)<26).sort((a,c)=>distance(a)-distance(c))[0];
  // Keep a chosen action long enough to be readable; food loss and crowding interrupt it.
- if(b.decisionIn>0&&!(b.intent.kind==='rest'&&(senses.daylight??0)>=.4)&&!close&&!(food&&b.hunger>.35&&b.intent.kind!=='feed')&&!(b.intent.kind==='feed'&&!food)){
+ if(b.decisionIn>0&&!((senses.daylight??1)<.4&&b.intent.kind!=='rest')&&!(b.intent.kind==='rest'&&(senses.daylight??0)>=.4)&&!close&&!(food&&b.hunger>.35&&b.intent.kind!=='feed')&&!(b.intent.kind==='feed'&&!food)){
   if(b.intent.kind==='feed'&&food)b.intent.target=food;
   return b.intent;
  }
