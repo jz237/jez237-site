@@ -12,7 +12,7 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, labels:false, stage:'none', loading:false, rotate:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, stage:'none', loading:false, rotate:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
 let board = null, bodyCamera, bodyControls, boardControls, studioObjects = [], studioFog, boardKey = '', boardDirty = true, keyLight;
@@ -83,14 +83,14 @@ async function loadStudio(){
  document.querySelectorAll('[data-assembly]').forEach(b => b.disabled = false);
  updateList(); updateUI(); setView('hero', true);
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, assembly:state.assembly, stage:state.stage, loading:state.loading, triangles:renderer.info.render.triangles, drawCalls:renderer.info.render.calls, files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
-  getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && p.assembly === state.assembly) })),
-  getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = parts.filter(p => p.assemblies.includes(id)); return { members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:renderer.info.render.triangles, drawCalls:renderer.info.render.calls, files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
+  getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
   loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, getManifest:() => manifest
  };
  const initialView = params.get('view'), initialAssembly = params.get('assembly');
- if (initialAssembly && assemblies[initialAssembly]) await enterAssembly(initialAssembly);
+ if (initialAssembly && assemblies[initialAssembly]) await enterAssembly(initialAssembly, (params.get('side') || '').toUpperCase());
  else if (initialView === 'parts') toggleBoard(true);
  if (target !== 'core') loadStage(target);
 }
@@ -104,7 +104,7 @@ async function loadFiles(ids){
    for (const mesh of meshes) {
     const piece = manifest.pieces.find(p => p.id === mesh.userData.id) || manifest.pieces.find(p => p.id === mesh.parent?.userData.id); if (!piece) continue;
     model.attach(mesh); const index = parts.length;
-    const part = { id:piece.id, piece, mesh, file:piece.file, group:piece.file, short:fileLabels[piece.file], name:piece.name, side:piece.side, region:piece.region, path:piece.path, parent:piece.parent, merged:piece.merged, triangles:piece.triangles, index, label:`${piece.name}${piece.side === 'M' ? '' : ` (${piece.side === 'L' ? 'left' : 'right'})`} · ${String(index + 1).padStart(4, '0')}`, base:mesh.position.clone(), center:new THREE.Vector3().fromArray(piece.center), size:new THREE.Vector3().fromArray(piece.size), assemblies:Object.keys(manifest.assemblies).filter(a => manifest.assemblies[a].includes(piece.id)) };
+    const part = { id:piece.id, piece, mesh, file:piece.file, group:piece.file, short:fileLabels[piece.file], name:piece.name, side:piece.side, region:piece.region, path:piece.path, parent:piece.parent, merged:piece.merged, triangles:piece.triangles, index, label:`${piece.name}${piece.side === 'M' ? '' : ` (${piece.side === 'L' ? 'left' : 'right'})`} · ${String(index + 1).padStart(4, '0')}`, base:mesh.position.clone(), center:new THREE.Vector3().fromArray(piece.center), size:new THREE.Vector3().fromArray(piece.size), assemblies:Object.keys(assemblies).filter(k => assemblies[k].paired ? (assemblies[k].match(piece, 'L') || assemblies[k].match(piece, 'R')) : (manifest.assemblies[k] || []).includes(piece.id)) };
     part.assembly = part.assemblies[0] || null;
     finishMaterial(mesh, piece, state.mode); captureMaterial(part);
     mesh.castShadow = !mesh.material.transparent; mesh.receiveShadow = true; mesh.userData.part = part; mesh.frustumCulled = true;
@@ -151,7 +151,7 @@ function setView(name, immediate = false){
  if (state.board) toggleBoard(false);
  state.view = name; const aspectFactor = Math.max(1, Math.sqrt(1.4 / camera.aspect)), factor = (1 + state.target * (state.assembly ? 0 : 1.05)) * aspectFactor;
  const target = state.assembly ? assemblyTarget() : baseTarget.clone().add(new THREE.Vector3(0, state.target * .12, state.target * .25));
- const dir = state.assembly ? new THREE.Vector3().fromArray(assemblies[state.assembly].view).normalize() : new THREE.Vector3().fromArray(views[name]).sub(baseTarget).normalize();
+ const dir = state.assembly ? new THREE.Vector3().fromArray(assemblies[state.assembly].view).multiply(new THREE.Vector3(assemblies[state.assembly].paired && state.assemblySide === 'R' ? -1 : 1, 1, 1)).normalize() : new THREE.Vector3().fromArray(views[name]).sub(baseTarget).normalize();
  const distance = state.assembly ? assemblyDistance() : new THREE.Vector3().fromArray(views[name]).sub(baseTarget).length() * factor;
  const destination = target.clone().addScaledVector(dir, distance);
  if (immediate || reducedMotion) { camera.position.copy(destination); controls.target.copy(target); viewTween = null; } else viewTween = { start:performance.now(), from:camera.position.clone(), to:destination, fromTarget:controls.target.clone(), toTarget:target };
@@ -173,12 +173,12 @@ function updateUI(){
  $('scene-status').textContent = state.board ? 'ALL-PARTS BOARD' : state.assembly ? `${assemblies[state.assembly].title.toUpperCase()} · NESTED STUDY` : state.isolated ? 'ISOLATED PIECE' : state.system !== 'all' ? `${fileLabels[state.system].toUpperCase()} STUDY` : state.target > .01 ? 'EXPLODED STUDY' : 'LIVE 3D / HUMAN ANATOMY';
 }
 function updateList(){
- const search = $('search').value.toLowerCase(); const options = parts.filter(p => (state.system === 'all' || p.file === state.system) && (!state.assembly || p.assemblies.includes(state.assembly)) && `${p.label} ${p.short} ${p.region} ${p.path}`.toLowerCase().includes(search));
+ const search = $('search').value.toLowerCase(); const options = parts.filter(p => (state.system === 'all' || p.file === state.system) && isMember(p) && `${p.label} ${p.short} ${p.region} ${p.path}`.toLowerCase().includes(search));
  $('part-list').replaceChildren(new Option(options.length ? `Select a piece… (${options.length})` : 'No matching pieces', ''), ...options.map(p => new Option(`${p.short} / ${p.label}`, p.id)));
  $('part-list').value = state.selected?.id ?? '';
 }
 function updateVisibility(){
- for (const p of parts) { const selected = p === state.selected, mat = p.mesh.material, member = !state.assembly || p.assemblies.includes(state.assembly);
+ for (const p of parts) { const selected = p === state.selected, mat = p.mesh.material, member = isMember(p);
   p.mesh.visible = member && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected);
   const o = state.assembly && p.assemblyLayer?.opacity != null && state.amount > .05 ? p.assemblyLayer.opacity : null;
   mat.opacity = o ?? p.opacity; mat.transparent = o != null || p.transparent; mat.depthWrite = o != null ? false : p.depthWrite;
@@ -212,30 +212,35 @@ function focusSelected(){
 }
 
 // ---------------------------------------------------------------- nested assemblies
-function assemblyMembers(id){ return parts.filter(p => p.assemblies.includes(id)); }
+function isMember(p){ if (!state.assembly) return true; const a = assemblies[state.assembly]; return p.assemblies.includes(state.assembly) && (!a.paired || p.side === state.assemblySide); }
+function assemblyMembers(id, side = state.assemblySide){ const a = assemblies[id]; return parts.filter(p => p.assemblies.includes(id) && (!a.paired || p.side === side)); }
 function assemblyBox(){ const b = new THREE.Box3(); const a = assemblies[state.assembly]; for (const p of assemblyMembers(state.assembly)) { if (a.frame && !a.frame(p.piece)) continue; const c = p.center.clone().addScaledVector(p.assemblyOffset, state.target); b.expandByPoint(c.clone().sub(p.size.clone().multiplyScalar(.5))); b.expandByPoint(c.clone().add(p.size.clone().multiplyScalar(.5))); } return b; }
 function assemblyTarget(){ return assemblyBox().getCenter(new THREE.Vector3()); }
 function assemblyDistance(){ const a = assemblies[state.assembly]; const radius = assemblyBox().getSize(new THREE.Vector3()).length() / 2; return radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.max(1, 1 / camera.aspect) * (a.padding || 1.1); }
-async function enterAssembly(id){
+async function enterAssembly(id, side){
  const a = assemblies[id]; if (!a || !state.ready) return; if (state.board) toggleBoard(false); stopSequence();
+ state.assemblySide = a.paired ? (side === 'R' ? 'R' : side === 'L' ? 'L' : state.assemblySide) : 'L';
  await loadFiles(a.files);
  state.assembly = id; state.system = 'all'; state.isolated = false; $('system').value = 'all';
  // X-ray ghosts soft tissue, so a nested study renders in the realistic finish and restores X-ray on exit.
  if (state.mode === 'xray') { state.restoreMode = 'xray'; setMode('realistic'); }
  const members = assemblyMembers(id), ctx = assemblyContext(a, members.map(p => p.piece));
- for (const p of members) { const r = assemblyOffset(a, p.piece, ctx); p.assemblyOffset = new THREE.Vector3().fromArray(r.offset); p.assemblyLayer = r; }
+ for (const p of parts) { p.assemblyOffset = null; p.assemblyLayer = null; }
+ for (const p of members) { const r = assemblyOffset(a, p.piece, ctx, state.assemblySide); p.assemblyOffset = new THREE.Vector3().fromArray(r.offset); p.assemblyLayer = r; }
  for (const l of landmarks.filter(l => l.kind === 'assembly')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'assembly') landmarks.splice(i, 1);
  for (const l of a.landmarks || []) {
   let part = null, anchor = null;
-  if (l.piece) part = members.find(p => p.name === l.piece && (!l.side || p.side === l.side)) || members.find(p => p.name === l.piece);
+  const wantSide = a.paired ? state.assemblySide : l.side;
+  if (l.piece) part = members.find(p => p.name === l.piece && (!wantSide || p.side === wantSide)) || members.find(p => p.name === l.piece);
   if (l.anchor) { anchor = manifest.landmarks.find(x => x.name === l.anchor); if (anchor) { const pos = new THREE.Vector3().fromArray(anchor.position); part = members.reduce((best, p) => (!best || p.center.distanceTo(pos) < best.center.distanceTo(pos)) ? p : best, null); } }
   if (!part) continue; const el = document.createElement('span'); el.className = 'landmark landmark-assembly'; el.textContent = l.label; $('labels').append(el); landmarks.push({ el, part, kind:'assembly', anchor:anchor ? new THREE.Vector3().fromArray(anchor.position) : null });
  }
  document.querySelectorAll('[data-assembly]').forEach(b => { b.classList.toggle('active', b.dataset.assembly === id); b.setAttribute('aria-pressed', b.dataset.assembly === id); });
- $('assembly-panel').hidden = false; $('assembly-title').textContent = a.title; $('assembly-eyebrow').textContent = a.eyebrow; $('assembly-copy').textContent = a.description; $('assembly-count').textContent = `${members.length} pieces`;
+ $('assembly-panel').hidden = false; $('assembly-side').hidden = !a.paired; document.querySelectorAll('[data-side]').forEach(b => { b.classList.toggle('active', b.dataset.side === state.assemblySide); b.setAttribute('aria-pressed', b.dataset.side === state.assemblySide); });
+ $('assembly-title').textContent = a.paired ? `${a.title} (${state.assemblySide === 'L' ? 'left' : 'right'})` : a.title; $('assembly-eyebrow').textContent = a.eyebrow; $('assembly-copy').textContent = a.description; $('assembly-count').textContent = `${members.length} pieces`;
  selectPart(null); updateList(); lastApplied = -1; controls.minDistance = .12;
- setAmount(1, { animate:true }); state.view = 'hero';
- const url = new URL(location); url.searchParams.set('assembly', id); history.replaceState(null, '', url);
+ setAmount(1, { animate:state.amount < .999 }); state.view = 'hero';   // a side switch at full explode only moves the camera
+ const url = new URL(location); url.searchParams.set('assembly', id); if (a.paired) url.searchParams.set('side', state.assemblySide); else url.searchParams.delete('side'); history.replaceState(null, '', url);
 }
 function leaveAssembly(){
  if (!state.assembly) return; state.assembly = null; for (const p of parts) { p.assemblyOffset = null; p.assemblyLayer = null; }
@@ -243,7 +248,7 @@ function leaveAssembly(){
  for (const l of landmarks.filter(l => l.kind === 'assembly')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'assembly') landmarks.splice(i, 1);
  document.querySelectorAll('[data-assembly]').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); }); $('assembly-panel').hidden = true;
  controls.minDistance = .25; selectPart(null); updateList(); lastApplied = -1; state.target = 0; state.amount = reducedMotion ? 0 : state.amount; setAmount(0, { animate:true }); setView('hero');
- const url = new URL(location); url.searchParams.delete('assembly'); history.replaceState(null, '', url);
+ const url = new URL(location); url.searchParams.delete('assembly'); url.searchParams.delete('side'); history.replaceState(null, '', url);
 }
 
 function stopSequence(){ explodeTween = null; state.sequence = false; $('animate').textContent = '▷ Play sequence'; }
@@ -261,6 +266,7 @@ function bindControls(){
  document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode, { user:true }));
  document.querySelectorAll('[data-assembly]').forEach(b => b.onclick = () => state.assembly === b.dataset.assembly ? leaveAssembly() : enterAssembly(b.dataset.assembly));
  $('leave-assembly').onclick = leaveAssembly;
+ document.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { if (state.assembly && assemblies[state.assembly].paired) enterAssembly(state.assembly, b.dataset.side); });
  $('system').onchange = e => { state.system = e.target.value; selectPart(null); updateList(); };
  $('search').oninput = updateList;
  $('part-list').onchange = e => selectPart(e.target.value === '' ? null : partsById.get(e.target.value));
