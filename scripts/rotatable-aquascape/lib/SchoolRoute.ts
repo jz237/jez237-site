@@ -1,6 +1,10 @@
+import {behaviorRandom} from './BehaviorVariation.ts';
 import type {FishPoint} from './FishBrain.ts';
 export type SchoolRoute={direction:1|-1;time:number;loose:boolean;remaining:number;seed:number};
-export const createSchoolRoute=():SchoolRoute=>({direction:1,time:0,loose:false,remaining:19,seed:9637});
+export function createSchoolRoute(seed?:number):SchoolRoute{
+ if(seed===undefined)return {direction:1,time:0,loose:false,remaining:19,seed:9637};
+ const r=behaviorRandom(seed);return {direction:r()<.5?-1:1,time:r()*240,loose:r()<.5,remaining:8+r()*18,seed};
+}
 /** Travel to the far side before committing the school to a return pass. */
 export function advanceSchoolRoute(route:SchoolRoute,dt:number,fish:FishPoint[]){
  if(dt>0){route.time+=dt;route.remaining-=dt;if(route.remaining<=0){route.seed=(Math.imul(route.seed,1664525)+1013904223)>>>0;route.loose=!route.loose;route.remaining=(route.loose?12:18)+(route.seed/4294967296)*14;}const center=fish.reduce((v,f)=>v+f.x,0)/Math.max(1,fish.length);if(center>1120)route.direction=-1;else if(center<750)route.direction=1;}
