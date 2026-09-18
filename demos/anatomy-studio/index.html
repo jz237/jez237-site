@@ -6,7 +6,7 @@
 <meta name="description" content="Explode a complete human body into 1,897 selectable anatomical pieces, then open seventeen nested exploded views, from the heart, lungs, spine and brain to the skull, eye, hand, knee, rib cage, digestive tract, urinary system, face, aorta, pelvis, shoulder, larynx and foot. Built on the open Z-Anatomy model.">
 <meta name="theme-color" content="#090e14"><link rel="icon" href="../../assets/brand.svg" type="image/svg+xml">
 <link rel="canonical" href="https://jez237.com/demos/anatomy-studio/">
-<link rel="stylesheet" href="studio.css?v=1"><link rel="stylesheet" href="enhancements.css?v=1"><link rel="stylesheet" href="polish.css?v=1"><link rel="stylesheet" href="anatomy.css?v=3">
+<link rel="stylesheet" href="studio.css?v=1"><link rel="stylesheet" href="enhancements.css?v=1"><link rel="stylesheet" href="polish.css?v=1"><link rel="stylesheet" href="anatomy.css?v=4">
 <script type="importmap">{"imports":{"three":"./vendor/three.module.js"}}</script>
 </head>
 <body>
@@ -18,7 +18,7 @@
   <div class="scene-badge"><span class="dot"></span><span id="scene-status">PREPARING STUDIO</span><span id="stage-status" class="stage-status" hidden></span></div>
   <div id="loading" class="loading" role="status"><span class="spinner"></span><strong>Bringing the body into focus</strong><span id="load-progress">Loading the skeleton…</span></div>
   <div id="error" class="error" hidden role="alert"><h2>The studio couldn’t start</h2><p id="error-message">This demo needs a browser with WebGL 2 enabled.</p><button onclick="location.reload()">Try again</button><a class="fallback-link" href="manual.html">Read the anatomy manual →</a></div>
-  <div id="labels" class="labels" aria-hidden="true"></div><div id="tooltip" class="tooltip" hidden></div>
+  <svg id="leaders" class="leaders" aria-hidden="true"></svg><div id="labels" class="labels" aria-hidden="true"></div><div id="tooltip" class="tooltip" hidden></div>
   <div id="board-header" class="board-header" hidden><div><span class="eyebrow">EVERY PIECE / ONE SCREEN</span><h2>The parts collection.</h2><p>Individually scaled for visibility. Drag to pan; scroll or pinch to inspect.</p></div><div><strong id="board-count">0 / 0 PIECES</strong><button id="fit-parts">Fit every part</button><button id="return-body">Return to body</button></div></div>
   <div class="view-toolbar" aria-label="Camera views"><button data-view="hero" class="active" title="Three-quarter view">Perspective</button><button data-view="front">Front</button><button data-view="side">Side</button><button data-view="back">Back</button><button data-view="top">Top</button></div>
   <p class="gesture-hint">DRAG TO ORBIT <span>·</span> SCROLL TO ZOOM <span>·</span> CLICK TO INSPECT</p>
@@ -42,5 +42,5 @@
   <a class="cockpit-entry" href="manual.html">Read the anatomy manual <span>↗</span></a><details class="credits"><summary>About this model &amp; credits</summary><p>An independent visual study of human anatomy. Pieces are the named meshes of the open Z-Anatomy model, simplified for the web; small branches of vessels, nerves, ligaments, lymph nodes and skin regions are merged into their parent structure. It is a teaching model, not a clinical reference.</p><p>Model and descriptions: <a href="https://github.com/LluisV/Z-Anatomy" target="_blank" rel="noopener">Z-Anatomy</a> (Gauthier Kervyn and contributors; app by Lluís Vinent Juanico), <a href="https://creativecommons.org/licenses/by-sa/4.0/" target="_blank" rel="noopener">CC BY-SA 4.0</a>. The derived 3D assets and description text on this page are shared under the same licence.</p><p><a href="https://github.com/jz237/jez237-site/tree/main/demos/anatomy-studio" target="_blank" rel="noopener">View the source on GitHub ↗</a></p><p>Keyboard: <kbd>E</kbd> explode · <kbd>1</kbd>–<kbd>9</kbd> <kbd>0</kbd> the first ten nested studies (<kbd>H</kbd> <kbd>L</kbd> <kbd>S</kbd> <kbd>B</kbd> heart, lungs, spine, brain) · <kbd>R</kbd> reset · <kbd>Esc</kbd> clear.</p></details>
  </aside>
 </main>
-<script type="module" src="studio.js?v=17"></script>
+<script type="module" src="studio.js?v=19"></script>
 </body></html>

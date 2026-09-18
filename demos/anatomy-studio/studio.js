@@ -19,7 +19,7 @@ const verifyQuality = params.get('quality') === 'verify';
 const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, stage:'none', loading:false, rotate:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
-let board = null, bodyCamera, bodyControls, boardControls, studioObjects = [], studioFog, boardKey = '', boardDirty = true, keyLight, composer, gtaoPass, renderPass;
+let lastLeaders = '', board = null, bodyCamera, bodyControls, boardControls, studioObjects = [], studioFog, boardKey = '', boardDirty = true, keyLight, composer, gtaoPass, renderPass;
 const baseTarget = new THREE.Vector3(0, .9, 0);
 const views = { hero:[2.1, 1.7, 2.9], front:[0, .95, 3.8], side:[3.8, .95, 0], back:[0, .95, -3.8], top:[.01, 4.4, .01] };
 const stageOrder = ['core', 'muscles', 'detail'];
@@ -92,7 +92,7 @@ async function loadStudio(){
  document.querySelectorAll('[data-assembly]').forEach(b => b.disabled = false);
  updateList(); updateUI(); setView('hero', true);
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:renderer.info.render.triangles, drawCalls:renderer.info.render.calls, files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
@@ -306,6 +306,16 @@ function tick(now){
   lastApplied = state.amount; }
  if (viewTween) { const t = Math.min(1, (now - viewTween.start) / (viewTween.duration || 900)), s = t * t * (3 - 2 * t); camera.position.lerpVectors(viewTween.from, viewTween.to, s); controls.target.lerpVectors(viewTween.fromTarget, viewTween.toTarget, s); if (t === 1) viewTween = null; }
  controls.update(dt);
- for (const l of landmarks) { const show = !state.board && l.part.mesh.visible && (l.kind === 'assembly' ? state.amount > .35 && !state.labelAll : l.kind === 'all' ? state.amount > .35 : state.labels && !state.assembly); l.el.hidden = !show; if (!show) continue; const anchor = l.anchor ? l.anchor.clone() : l.part.center.clone(); const p = anchor.add(l.part.mesh.position).sub(l.part.base).project(camera); l.el.hidden = Math.abs(p.x) > .95 || Math.abs(p.y) > .95 || p.z > 1; l.el.style.left = `${(p.x * .5 + .5) * renderer.domElement.clientWidth}px`; l.el.style.top = `${(-p.y * .5 + .5) * renderer.domElement.clientHeight}px`; }
+ const placed = []; const W = renderer.domElement.clientWidth, H = renderer.domElement.clientHeight;
+ for (const l of landmarks) { const show = !state.board && l.part.mesh.visible && (l.kind === 'assembly' ? state.amount > .35 && !state.labelAll : l.kind === 'all' ? state.amount > .35 : state.labels && !state.assembly); l.el.hidden = !show; if (!show) continue; const anchor = l.anchor ? l.anchor.clone() : l.part.center.clone(); const p = anchor.add(l.part.mesh.position).sub(l.part.base).project(camera); l.el.hidden = Math.abs(p.x) > .95 || Math.abs(p.y) > .95 || p.z > 1; if (l.el.hidden) continue; l.x = (p.x * .5 + .5) * W; l.y = (-p.y * .5 + .5) * H; l.depth = p.z; placed.push(l); }
+ // Labels are anchored above their piece; overlapping ones are nudged apart so every name stays legible.
+ placed.sort((a, b) => a.y - b.y);
+ let leaders = '';
+ for (let i = 0; i < placed.length; i++) { const l = placed[i]; const w = l.el.offsetWidth || 80, h = l.el.offsetHeight || 22; l.w = w; l.h = h; const ax = l.x, ay = l.y;
+  for (let k = 0; k < 4; k++) for (let j = 0; j < i; j++) { const o = placed[j]; if (Math.abs(l.x - o.x) < (l.w + o.w) / 2 + 4 && Math.abs(l.y - o.y) < (l.h + o.h) / 2 + 2) l.y = o.y + (o.h + l.h) / 2 + 3; }
+  l.el.style.left = `${l.x}px`; l.el.style.top = `${l.y}px`;
+  if (Math.abs(l.y - ay) > 6) leaders += `<line x1="${ax.toFixed(1)}" y1="${ay.toFixed(1)}" x2="${l.x.toFixed(1)}" y2="${(l.y - 2).toFixed(1)}"/>`; }
+ // Thin leader lines tie nudged labels back to the piece they name.
+ if (leaders !== lastLeaders) { $('leaders').innerHTML = leaders; lastLeaders = leaders; }
  if (state.ao && !state.board) { renderPass.camera = camera; gtaoPass.camera = camera; composer.render(); } else renderer.render(scene, camera);
 }
