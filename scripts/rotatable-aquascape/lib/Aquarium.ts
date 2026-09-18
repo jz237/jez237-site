@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import tetraTextureBounds from './TetraTextureBounds.json';
 import {behaviorSeed,behaviorRandom,freshBehaviorSeed} from './BehaviorVariation';
 import {FoodReachability,foodApproach} from './FoodReachability.ts';
 import {ObservationCamera,type ObservationSubject} from './ObservationCamera';
@@ -448,10 +449,8 @@ export class Aquarium{
  }
  private async loadFish(){
   const img=new Image();img.crossOrigin='anonymous';img.src=assetURL('./living-species.png');await img.decode();
-  const c=document.createElement('canvas');c.width=img.width/2;c.height=img.height/2;const ctx=c.getContext('2d')!;ctx.drawImage(img,0,0,c.width,c.height,0,0,c.width,c.height);
-  const data=ctx.getImageData(0,0,c.width,c.height).data;let left=c.width,top=c.height,right=0,bottom=0;
-  for(let y=0;y<c.height;y++)for(let x=0;x<c.width;x++)if(data[(y*c.width+x)*4+3]>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
-  const trimmed=document.createElement('canvas');trimmed.width=right-left+1;trimmed.height=bottom-top+1;trimmed.getContext('2d')!.drawImage(c,left,top,trimmed.width,trimmed.height,0,0,trimmed.width,trimmed.height);
+  const {left,top,width,height}=tetraTextureBounds;
+  const trimmed=document.createElement('canvas');trimmed.width=width;trimmed.height=height;trimmed.getContext('2d')!.drawImage(img,left,top,width,height,0,0,width,height);
   this.texture=new T.CanvasTexture(trimmed);this.texture.colorSpace=T.SRGBColorSpace;this.texture.anisotropy=8;
   const tetraMaterials=createTetraMaterials(this.texture);
   for(let i=0;i<16;i++){

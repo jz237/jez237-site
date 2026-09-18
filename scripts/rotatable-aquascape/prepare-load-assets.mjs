@@ -1,5 +1,6 @@
 // Run before Vite. Original geometry and JPEG/16-bit masks stay byte-for-byte intact.
 import fs from 'node:fs';
+import {PNG} from 'pngjs';
 import path from 'node:path';
 import {createHash} from 'node:crypto';
 const root=import.meta.dirname,pub=path.join(root,'public'),out=path.join(pub,'load');
@@ -30,3 +31,10 @@ for(const file of extras)copy(file,/\.(png|jpg)$/.test(file)?'image':'fetch');
 fs.writeFileSync(path.join(root,'lib/LoadAssetManifest.json'),JSON.stringify(manifest,null,2)+'\n');
 fs.writeFileSync(path.join(root,'LoadPreloads.json'),JSON.stringify(preloads,null,2)+'\n');
 console.log('Prepared '+preloads.length+' versioned aquarium assets.');
+
+// Compute the unchanged cardinal crop at build time, avoiding a synchronous
+// canvas readback and full alpha scan on every visitor's main thread.
+const atlas=PNG.sync.read(fs.readFileSync(path.join(pub,'living-species.png')));
+let left=atlas.width/2,top=atlas.height/2,right=0,bottom=0;
+for(let y=0;y<atlas.height/2;y++)for(let x=0;x<atlas.width/2;x++)if(atlas.data[(y*atlas.width+x)*4+3]>32){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}
+fs.writeFileSync(path.join(root,'lib/TetraTextureBounds.json'),JSON.stringify({left,top,width:right-left+1,height:bottom-top+1})+'\n');
