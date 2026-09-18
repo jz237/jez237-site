@@ -1,6 +1,6 @@
 export type FinKind='body'|'tail'|'dorsal'|'anal'|'pectoral';
-export function swimPhase(previous:number,dt:number,activity:number){
- return previous+Math.max(0,Math.min(.1,Number.isFinite(dt)?dt:0))*(.8+Math.max(0,Math.min(1.5,activity))*11);
+export function swimPhase(previous:number,dt:number,activity:number,courtship=false){
+ return previous+Math.max(0,Math.min(.1,Number.isFinite(dt)?dt:0))*(.8+Math.max(0,Math.min(1.5,activity))*11)*(courtship?2:1);
 }
 /** A head-anchored travelling wave with a smoothly increasing posterior envelope. */
 export function tetraSpine(x:number,phase:number,activity:number){
