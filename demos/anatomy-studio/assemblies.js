@@ -164,7 +164,8 @@ export const assemblies = {
   },
   eye: {
     title: 'The eye', eyebrow: 'CORNEA · IRIS · LENS · RETINA · SCLERA', files: ['brain'], color: '#cfe8f5',
-    match: p => p.file === 'brain' && p.side === 'L' && /Eye/.test(p.path),
+    paired: true,
+    match: (p, side = 'L') => p.file === 'brain' && p.side === side && /Eye/.test(p.path),
     view: [1.5, 0.45, 0.75], padding: 1.12, scale: 1,
     primary: p => /^(Cornea|Lens|Vitreous body|Sclera|Iris|Retina)$/.test(p.name),
     layers: [
@@ -185,7 +186,8 @@ export const assemblies = {
   },
   hand: {
     title: 'The hand', eyebrow: '27 BONES · 12 INTRINSIC MUSCLES', files: ['skeletal', 'muscular'], color: '#f0e6c8',
-    match: p => p.side === 'L' && ((p.file === 'skeletal' && /free part of upper limb/i.test(p.path) && p.center[1] < 0.86) || (p.file === 'muscular' && /Muscles of hand/.test(p.path))),
+    paired: true,
+    match: (p, side = 'L') => p.side === side && ((p.file === 'skeletal' && /free part of upper limb/i.test(p.path) && p.center[1] < 0.86) || (p.file === 'muscular' && /Muscles of hand/.test(p.path))),
     view: [0.7, 0.45, 1.5], padding: 1.3, scale: 1,
     primary: p => /^(Scaphoid|Lunate|Triquetrum|Pisiform|Trapezium|Trapezoid|Capitate|Hamate) bone$/.test(p.name) || /^(First|Fifth) metacarpal bone$/.test(p.name) || /^Distal phalanx/.test(p.name),
     layers: [
@@ -204,7 +206,8 @@ export const assemblies = {
   },
   knee: {
     title: 'The knee', eyebrow: 'FEMUR · TIBIA · PATELLA · MENISCI · LIGAMENTS', files: ['skeletal', 'joints'], color: '#d8d1c0',
-    match: p => p.side === 'L' && (/Knee joint/.test(p.path) || (p.file === 'skeletal' && /^(Femur|Tibia|Fibula|Patella)$/.test(p.name))),
+    paired: true,
+    match: (p, side = 'L') => p.side === side && (/Knee joint/.test(p.path) || (p.file === 'skeletal' && /^(Femur|Tibia|Fibula|Patella)$/.test(p.name))),
     view: [1.3, 0.35, 1.2], padding: 1.15, scale: 1,
     frame: p => !/^(Femur|Tibia|Fibula)$/.test(p.name),   // camera frames the joint; the long bones run out of view
     primary: p => /^(Femur|Tibia|Patella|Lateral meniscus|Medial meniscus|Anterior cruciate ligament|Posterior cruciate ligament|Fibular collateral ligament)$/.test(p.name),
@@ -292,4 +295,5 @@ export function assemblyContext(assembly, members) {
   const liver = centroid(members.filter(p => /segment of liver/.test(p.name)));
   return {center, axis, carpal: members.some(p => /Capitate bone/.test(p.name)) ? carpal : center, liver: members.some(p => /segment of liver/.test(p.name)) ? liver : center};
 }
-export function assemblyOffset(assembly, p, ctx) { const s = assembly.scale ?? 1; for (const layer of assembly.layers) if (layer.test(p)) return {offset: scale(layer.offset(p, ctx), s), opacity: layer.opacity}; return {offset: [0, 0, 0]}; }
+/** Offsets are authored for the left side of a paired study; the right side mirrors x. */
+export function assemblyOffset(assembly, p, ctx, side = 'L') { const s = assembly.scale ?? 1; const mirror = assembly.paired && side === 'R' ? -1 : 1; for (const layer of assembly.layers) if (layer.test(p)) { const o = scale(layer.offset(p, ctx), s); return {offset: [o[0] * mirror, o[1], o[2]], opacity: layer.opacity}; } return {offset: [0, 0, 0]}; }

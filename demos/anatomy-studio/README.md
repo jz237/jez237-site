@@ -7,7 +7,7 @@ exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, di
 ## Controls
 
 - Slider / **Explode the body** / `E` — separate every system from the skeleton outward; skeleton stays as the axis.
-- **Heart · Lungs · Spine · Brain · Skull · Eye · Hand · Knee · Rib cage · Digestive tract** (keys `1`–`0`; `H` `L` `S` `B` for the first four) — isolate that structure and explode it along its own anatomy. Paired structures (eye, hand, knee) show the left side.
+- **Heart · Lungs · Spine · Brain · Skull · Eye · Hand · Knee · Rib cage · Digestive tract** (keys `1`–`0`; `H` `L` `S` `B` for the first four) — isolate that structure and explode it along its own anatomy. Paired structures (eye, hand, knee) have a Left / Right toggle (`&side=R`).
 - Finish: X-ray (default), Realistic, Colour-coded, Clay. Visible system filter, Labels, Auto orbit, Play sequence.
 - Click a piece or pick it from the list: description (Z-Anatomy / Wikipedia), hierarchy path, size, triangles, merged sub-parts. Isolate to frame it alone.
 - **All parts on screen** — every loaded piece on one non-overlapping board.

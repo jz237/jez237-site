@@ -54,6 +54,12 @@ try {
   assert.ok(bad <= Math.max(2, prim.length * .12), `${id}: ${bad} primary pairs still overlap`);
   await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); assert.equal((await read()).visible, manifest.pieces.length); assert.ok(await restored(), `${id}: leaving restores positions`);
  }
+ // paired study: the Right toggle swaps to the mirrored member set of the same size
+ await page.locator('[data-assembly="hand"]').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === 'hand'); await settled(1);
+ const left = await page.evaluate(() => window.anatomyStudio.getAssembly('hand')); await page.locator('[data-side="R"]').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assemblySide === 'R'); await settled(1);
+ const right = await page.evaluate(() => window.anatomyStudio.getAssembly('hand')); assert.equal(right.members.length, left.members.length, 'right hand has the same piece count'); assert.ok(right.members.every(id => id.endsWith('-r')) && left.members.every(id => id.endsWith('-l')), 'sides swap'); assert.equal((await read()).visible, right.members.length);
+ assert.ok(await moved(.005), 'right hand explodes'); await page.waitForTimeout(1500); await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({path: path.join(shots, 'assembly-hand-right.png')});
+ await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); assert.ok(await restored());
  // filters, search, isolate, finish modes, labels, sequence, keyboard
  await page.locator('#system').selectOption('heart'); assert.equal((await read()).visible, manifest.files.find(f => f.id === 'heart').pieces);
  await page.locator('#system').selectOption('all'); await page.locator('#search').fill('femur');
