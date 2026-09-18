@@ -101,3 +101,16 @@ and upright angular acceleration remain smoothed; feeding, startles and obstacle
 recovery retain priority. Timing and effort values are qualitative animation
 choices, not measured angelfish kinematics. No claim of a bonded breeding pair is
 made for the two demonstration animals.
+
+## Independent visits and successful feeding locations
+Each page load now starts a new behavior seed, separate from the scenery seed.
+Angelfish have independent starting fin phases, glide timing and appetite. After
+an actual bite they can check the successful location once more; the bounded
+memory expires, and an empty location never supplies food or changes chemistry.
+Gomez-Laplaza and Morgan (2005) demonstrated time-place food learning over three
+weeks: https://pubmed.ncbi.nlm.nih.gov/16129239/
+This supports spatial feeding association, but our one-visit, 45-second memory is
+an illustrative simplification, not a reproduction of time-place conditioning.
+Their 2003 study also found social context and rank affected feeding/activity:
+https://pubmed.ncbi.nlm.nih.gov/12689421/
+Individual variation here does not assign unobserved sex, dominance or pair bonds.

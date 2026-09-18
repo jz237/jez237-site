@@ -3,11 +3,11 @@ import type {BodySphere} from './GrazerCollision.ts';
 import envelope from './AngelfishEnvelope.json' with {type:'json'};
 
 export type AngelFood={id:number;position:T.Vector3};
-export type AngelState={id:number;position:T.Vector3;previous:T.Vector3;goal:T.Vector3;yaw:number;pitch:number;speed:number;effort:number;seed:number;timer:number;hover:number;bite:number;startle:number;hunger:number;target:number|null;stalled:number;lastDistance:number;phase:number;size:number;behavior:string;consumed:number|null;detour:number;detourYaw:number;yawRate:number;pitchRate:number;blocked:number;social:T.Vector3;recovery:T.Vector3;retreat:number;reach:number;strokeIn:number;powerStroke:boolean;cruise:number;locomotorSeed:number};
+export type AngelState={id:number;position:T.Vector3;previous:T.Vector3;goal:T.Vector3;yaw:number;pitch:number;speed:number;effort:number;seed:number;timer:number;hover:number;bite:number;startle:number;hunger:number;target:number|null;stalled:number;lastDistance:number;phase:number;size:number;behavior:string;consumed:number|null;detour:number;detourYaw:number;yawRate:number;pitchRate:number;blocked:number;social:T.Vector3;recovery:T.Vector3;retreat:number;reach:number;strokeIn:number;powerStroke:boolean;cruise:number;locomotorSeed:number;foodMemory:T.Vector3|null;memoryIn:number;memoryVisits:number};
 export type AngelSenses={reachable?:(food:AngelFood)=>boolean;food:AngelFood[];other:{position:T.Vector3;radius:number}[];daylight:number;companion?:T.Vector3;clear:(position:T.Vector3,yaw:number,pitch:number,size:number)=>boolean};
 const clamp=T.MathUtils.clamp;
 function random(s:AngelState){s.seed=(Math.imul(s.seed,1664525)+1013904223)>>>0;return s.seed/4294967296;}
-export function createAngel(id:number):AngelState{return {id,position:new T.Vector3(id?2.5:-2.2,3.1+id*.6,1.55),previous:new T.Vector3(),goal:new T.Vector3(id?-2:2,3.4,1.5),yaw:id?Math.PI:0,pitch:0,speed:0,effort:.2,seed:237+id*7349,timer:8,hover:0,bite:0,startle:0,hunger:.65-id*.12,target:null,stalled:0,lastDistance:Infinity,phase:id*3.71,size:id?.58:.64,behavior:'Exploring the planting',consumed:null,detour:0,detourYaw:0,yawRate:0,pitchRate:0,blocked:0,social:new T.Vector3(),recovery:new T.Vector3(),retreat:0,reach:0,strokeIn:.8+id*.43,powerStroke:true,cruise:.34+id*.025,locomotorSeed:1907+id*7919};}
+export function createAngel(id:number):AngelState{return {id,position:new T.Vector3(id?2.5:-2.2,3.1+id*.6,1.55),previous:new T.Vector3(),goal:new T.Vector3(id?-2:2,3.4,1.5),yaw:id?Math.PI:0,pitch:0,speed:0,effort:.2,seed:237+id*7349,timer:8,hover:0,bite:0,startle:0,hunger:.65-id*.12,target:null,stalled:0,lastDistance:Infinity,phase:id*3.71,size:id?.58:.64,behavior:'Exploring the planting',consumed:null,detour:0,detourYaw:0,yawRate:0,pitchRate:0,blocked:0,social:new T.Vector3(),recovery:new T.Vector3(),retreat:0,reach:0,strokeIn:.8+id*.43,powerStroke:true,cruise:.34+id*.025,locomotorSeed:1907+id*7919,foodMemory:null,memoryIn:0,memoryVisits:0};}
 export function angelForward(yaw:number,pitch:number){return new T.Vector3(Math.cos(yaw)*Math.cos(pitch),Math.sin(pitch),-Math.sin(yaw)*Math.cos(pitch));}
 /** Same local aperture center and YXZ orientation as the rendered model. */
 export function angelMouth(s:Pick<AngelState,'position'|'yaw'|'pitch'|'size'>){
@@ -28,6 +28,14 @@ export function angelBody(position:T.Vector3,yaw:number,pitch:number,size:number
  });
 }
 function newGoal(s:AngelState,senses:AngelSenses){
+ // A successful feeding place can merit one later look, never phantom food.
+ // This short-lived spatial memory is illustrative, not time-of-day learning.
+ if(s.foodMemory&&s.memoryIn>0&&s.memoryVisits>0&&s.bite===0&&s.hunger>.16&&senses.daylight>.4){
+  const p=s.foodMemory.clone().add(new T.Vector3((random(s)-.5)*.7,(random(s)-.5)*.25,(random(s)-.5)*.5));
+  s.memoryVisits--;const yaw=Math.atan2(-(p.z-s.position.z),p.x-s.position.x);
+  if(senses.clear(p,yaw,0,s.size)){s.goal.copy(p);s.timer=7+random(s)*4;return;}
+ }
+
  for(let i=0;i<9;i++){
   const rear=s.id===0&&i<4;
   const p=rear?new T.Vector3(1.7+random(s)*.95,3.55+random(s)*.48,-.75+random(s)*.55):s.id===1&&senses.companion?senses.companion.clone().add(new T.Vector3((random(s)-.5)*2.8,(random(s)-.5)*.65,(random(s)-.5)*1.1)):new T.Vector3((random(s)-.5)*7.5,1.85+random(s)*2.3,(random(s)-.5)*3.5);
@@ -40,7 +48,7 @@ function newGoal(s:AngelState,senses:AngelSenses){
 /** Qualitative angelfish behavior, not measured species-specific kinematics.
  * Individual exploration and hovering replace tetra school alignment. */
 export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
- s.consumed=null;if(dt<=0)return;s.previous.copy(s.position);s.phase+=dt;
+ s.consumed=null;if(dt<=0)return;s.previous.copy(s.position);s.phase+=dt;s.memoryIn=Math.max(0,s.memoryIn-dt);if(s.memoryIn===0)s.foodMemory=null;
  s.hunger=clamp(s.hunger+dt*.001,0,1);s.timer-=dt;s.bite=Math.max(0,s.bite-dt);s.hover=Math.max(0,s.hover-dt);s.startle=Math.max(0,s.startle-dt);
  // A blocked fish first sculls out along one committed clear direction. It
  // does not alternate between a rejected turn and a fresh turn every frame.
@@ -148,6 +156,7 @@ export function advanceAngel(s:AngelState,dt:number,senses:AngelSenses){
  // Consume only after a valid movement puts the visible mouth on the flake.
  // A small mouth/flake tolerance, not a body-sized collection radius.
  if(food&&valid&&s.bite===0&&s.target===food.id&&angelMouth(s).distanceTo(food.position)<.055&&s.speed<.7){
+  s.foodMemory=food.position.clone();s.memoryIn=45;s.memoryVisits=1;
   s.consumed=food.id;s.target=null;s.hunger=Math.max(0,s.hunger-.14);s.bite=.4+random(s)*.35;s.hover=.3;s.speed=0;
   newGoal(s,senses);s.behavior='Taking a bite';
  }

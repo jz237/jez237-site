@@ -61,3 +61,10 @@ with the tested build. The existing deployment guards check this receipt against
 the shipped bundles and model/texture assets. Do not regenerate a performance or
 visual baseline merely to suppress a failure; investigate and review the change.
 Use `npm run check:live` after both deployments to verify production bytes.
+
+Fresh page loads must use independent behavior seeds for the freshwater fish,
+without randomizing the planted scenery or bypassing validated spawn placement.
+Keep QA replay seeds development-only, preserve per-animal decision streams and
+smooth movement, and test several seeds plus real reloads before publishing.
+Behavioral memory may revisit a successful feeding location, but only contact
+with an actual food particle may consume food or change chemistry.

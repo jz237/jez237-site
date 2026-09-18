@@ -46,3 +46,11 @@ test('nearby surfaces trigger a deliberate pelvic-fin reach which relaxes on lea
  for(let i=45;i<120;i++)life.update(1/30,i/30,1,[],[],()=>{});
  assert.ok(life.states.every(s=>s.reach<.05),'relaxes after leaving');
 });
+
+for(const seed of [391,7819,4294967295])test(`randomized angelfish session ${seed} stays clear and continues exploring`,async()=>{
+ const scene=new T.Scene();buildBotanicalPlants(scene,height,{value:0});addFernFixture(scene);buildAquariumPlumbing(scene);calmSwordLeaves(scene);scene.updateMatrixWorld();
+ const life=new Angelfish(await hardscapeObstacles(),height,new GrazerPlants(scene),new T.Group(),seed),distance=[0,0];
+ for(let i=0;i<1200;i++){const old=life.states.map(s=>s.position.clone());life.update(.05,i*.05,1,[],[],()=>{});
+ for(const s of life.states){distance[s.id]+=s.position.distanceTo(old[s.id]);assert.ok(life.clear(s.position,s.yaw,s.pitch,s.size,s.id));}}
+ assert.ok(distance.every(d=>d>2),JSON.stringify(distance));
+});
