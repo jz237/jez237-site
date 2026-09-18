@@ -14353,5 +14353,24 @@
       "imageSha256": "096a512e1c4830e0e3c80045ea35460937b7e35d41c17796bade57e18bcb8f76",
       "imageDHash": "233b3bd999188e8d"
     }
+  },
+  {
+    "id": "2026-09-18-intense-phobia-situation-acrophobia-one-boot-above-the-empt",
+    "title": "Acrophobia — One Boot Above the Empty Shaft",
+    "tests": "Fear-impact gate: the viewer is physically positioned over the void; the near boot and beam, repeating floor apertures, dark lower shaft, obstructed retreat, and narrow footing provide five phobia-specific pressure devices. Photorealism gate: ordinary 24 mm optics, plausible construction materials, coherent scale and gravity, rated harness hardware, and practical site lighting. Distinct this week from thalassophobia and claustrophobia.; archive_slot=2026-09-18T17:20; concept=acrophobia-boot-narrow-beam-elevator-shaft-drop",
+    "prompt": "Create a single finished, fully photorealistic first-person documentary photograph of acute acrophobia inside a real unfinished mid-rise building. The camera is the worker's own eye level, pitched almost straight downward past one dusty work boot planted on a very narrow galvanized steel crossbeam at the lip of an open elevator shaft. The boot and rough beam edge dominate the immediate foreground, close enough to show worn leather grain, tied laces, concrete dust, scuffed galvanizing, bolt heads, and a few tiny rust marks. Beyond that foothold, the elevator shaft drops vertically through many unfinished floors into dimness far below; repeated concrete slab openings, guide-rail brackets, realistic conduit, and progressively smaller safety lights create an overwhelming but optically coherent near-to-abyss depth cue. A properly fitted construction harness is visible only through a taut webbing strap crossing the lower edge and a correctly clipped lanyard leading sideways to a credible rated anchor, but it must not make the position feel comfortable or safe. The opposite landing is blocked by temporary guard rails and stacked material, while the narrow beam continues out of frame, making retreat visually awkward and leaving almost no margin for either foot. Use an ordinary 24 mm full-frame lens with natural perspective, coherent straight verticals, believable gravity and scale, practical cool work lights on several levels, weak late-afternoon daylight entering from one high opening, subdued concrete-gray and oxidized-steel color, realistic sensor noise and deep-focus detail. The feared drop and enclosing shaft must occupy most of the frame and produce an immediate bodily 'nope' response without relying on fantasy. Visible pressure devices: the precarious foreground boot inches from the edge, severe downward perspective through repeating floors, the narrow margin for movement, obstructed retreat, and the dark lower shaft swallowing detail. No falling person, no injury, no blood, no impossible skyscraper, no heroic skyline or panorama, no fisheye distortion, no floating hardware, no implausible safety gear, no cinematic orange-and-teal grading, no fog machine, no supernatural elements, no text, labels, logos, or watermark.",
+    "image": "images/2026-09-18-intense-phobia-situation-acrophobia-one-boot-above-the-empt.jpg",
+    "thumb": "thumbs/2026-09-18-intense-phobia-situation-acrophobia-one-boot-above-the-empt.webp",
+    "color": "#4e4b48",
+    "date": "2026-09-18",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1370x1148",
+    "dedup": {
+      "conceptKey": "acrophobia-boot-narrow-beam-elevator-shaft-drop",
+      "imageSha256": "cb32e100eca93ddecd29ab21038866658de063e2f572342f8b11aeb5b30b6970",
+      "imageDHash": "2ba2d4e0f0f03393"
+    }
   }
 ]
