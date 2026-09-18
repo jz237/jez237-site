@@ -67,6 +67,15 @@ use these instructions before writing code or snippets.
   download, print layout, and links back to the interactive views.
   Listed in the Website Demos catalog; source and validation tools are in
   `demos/model-s-studio/` and `scripts/model-s-studio/`.
+- `/demos/anatomy-studio/` - interactive human-anatomy exploded-view studio
+  built on the open Z-Anatomy model (CC BY-SA 4.0): 1,897 named pieces across
+  ten systems (skeleton, ligaments and discs, viscera, heart, brain and senses,
+  muscles, vessels, nerves, lymphatics, surface regions), an all-parts board,
+  realistic / colour-coded / X-ray / clay finishes, per-piece descriptions, and
+  four nested exploded studies reachable as `?assembly=heart|lungs|spine|brain`.
+  `/demos/anatomy-studio/manual.html` explains the systems, the explosion rules,
+  the nested studies and the build. Source and validation tools are in
+  `demos/anatomy-studio/` and `scripts/anatomy-studio/`.
 - `/weather/` - local weather console.
 - `/stock-market/` - Stock Command Center.
 - `/ops/` - operations, stats, runtime notes, and dashboard material.

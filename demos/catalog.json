@@ -156,5 +156,29 @@
     "note": "WebGL 2 · Desktop & mobile · Artist model by 3D Hawk, CC BY 4.0 · Preview captured from the running demo",
     "alternateUrl": "model-s-studio/tour.html",
     "alternateLabel": "Take the guided tour"
+  },
+  {
+    "id": "008",
+    "title": "Anatomy Studio",
+    "category": "3D · Human anatomy",
+    "description": "Explode a complete human body into 1,897 named anatomical pieces across ten systems, then open the heart, lungs, spine and brain as nested exploded views with their own labels. Realistic, colour-coded, X-ray and clay finishes; every piece described.",
+    "url": "anatomy-studio/",
+    "image": "assets/anatomy-studio.jpg",
+    "imageAlt": "Actual Anatomy Studio showing a human body mid-explosion: translucent skin regions and muscles fanned outward from the skeleton, with organs, vessels and nerves separated in layers",
+    "source": "https://github.com/jz237/jez237-site/tree/main/demos/anatomy-studio",
+    "features": [
+      "1,897 selectable pieces on one board",
+      "Heart, lungs, spine & brain nested explodes",
+      "Terminologia Anatomica names & descriptions",
+      "Realistic, X-ray, colour-coded & clay finishes"
+    ],
+    "facts": [
+      "Z-Anatomy model",
+      "2.2 M triangles",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop first, phones load the core systems · Z-Anatomy model, CC BY-SA 4.0 · Preview captured from the running demo",
+    "alternateUrl": "anatomy-studio/manual.html",
+    "alternateLabel": "Read the anatomy manual"
   }
 ]

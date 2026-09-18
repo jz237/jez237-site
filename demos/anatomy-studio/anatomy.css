@@ -1,0 +1,29 @@
+/* Anatomy Studio overrides on top of the Model S Studio stylesheets: warm clinical accent, nested-anatomy panel, finish modes. */
+:root{--mint:#f5b39c;--accent-soft:#f5b39c55;--accent-dark:#2a1d18}
+.dot{box-shadow:0 0 10px #f5b39c50}
+button[aria-pressed=true],button.active{border-color:var(--mint);color:var(--mint)}
+.view-toolbar button.active{background:#3a2a24;color:var(--mint)}
+.primary{background:var(--mint);color:#2a1410;border-color:var(--mint)}.primary:hover{background:#ffd0bd}
+.all-parts{border-color:#8c6a5c;background:#33241f;color:#f6d9cc}
+.landmark{color:var(--mint);border-color:#f5b39c5a}.landmark-assembly{color:#ffe1d3;border-color:#f5b39c9a;background:#1a0f0cdb}
+.tooltip{border-color:var(--mint)}.spinner{border-top-color:var(--mint)}
+.cockpit-entry{border-color:#7d5a4d;background:#2f211c;color:#f6d9cc}
+h1 em{color:#c9a99c}.hero .eyebrow{color:var(--mint)}
+.stage{background:radial-gradient(ellipse at 50% 42%,#2a2228 0,transparent 65%)}
+.stage-status{display:block;margin-top:6px;color:var(--mint);letter-spacing:1px}
+.stat-grid span b{color:var(--text);font-weight:500}
+.assembly-grid{display:grid;grid-template-columns:1fr 1fr;gap:7px}
+.assembly-grid button{display:flex;flex-direction:column;align-items:flex-start;gap:4px;padding:11px 12px;text-align:left;border-color:#3a3d44;background:#171c22}
+.assembly-grid button b{font-weight:500;font-size:13px}.assembly-grid button span{font-size:9px;color:var(--muted);letter-spacing:.3px;line-height:1.35}
+.assembly-grid button.active{background:#3a2622;border-color:var(--mint)}.assembly-grid button.active span{color:#e8c4b6}
+.assembly-panel{margin-top:12px;padding:14px 15px;border:1px solid #6b4a40;border-radius:7px;background:linear-gradient(160deg,#2c1d19,#1a1411)}
+.assembly-panel h4{font-family:'Space Grotesk',sans-serif;font-size:19px;font-weight:400;margin:7px 0 8px}.assembly-panel p{font-size:11px;line-height:1.65;color:#d9c3b8;margin:0 0 12px}
+.assembly-actions{display:flex;align-items:center;justify-content:space-between;gap:8px}.assembly-actions span{font-size:9px;letter-spacing:1px;color:var(--muted)}.assembly-actions button{font-size:10px;padding:8px 10px}
+.mode-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}.mode-row button{font-size:10px;padding:9px 8px}
+.load-more{width:100%;margin-top:10px;font-size:11px;border-color:#5a4a44;background:#221b18}
+.stage-note{font-size:9px;letter-spacing:.8px;color:var(--muted);margin:10px 0 0}
+.part-path{display:block;font-size:9px;color:#9c8a83;line-height:1.5;margin:-4px 0 8px;letter-spacing:.2px}
+.credits kbd{font-family:inherit;font-size:9px;border:1px solid var(--line);border-radius:3px;padding:1px 5px;color:var(--text)}
+#viewport{cursor:grab}
+.board-mode .stage{background:radial-gradient(ellipse at 50% 35%,#2b2226,#080f17)}
+@media(max-width:760px){.assemblies{grid-column:1/-1}.assembly-grid{grid-template-columns:1fr 1fr}.mode-row{grid-template-columns:1fr 1fr}}
