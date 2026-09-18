@@ -32,6 +32,9 @@ jobs:
             !/functions/
             !/scripts/
             /scripts/check_games_catalog_syntax.mjs
+            /scripts/check_aquarium_release.mjs
+            /scripts/rotatable-aquascape/qa/approved-build.json
+            /scripts/rotatable-aquascape/public/
             !/stock-market-src/
             !/tmp/
             !/workers/
@@ -75,6 +78,9 @@ jobs:
 
       - name: Check GameMaster catalog JavaScript
         run: node scripts/check_games_catalog_syntax.mjs
+
+      - name: Check tested aquarium build
+        run: node scripts/check_aquarium_release.mjs
 
       - name: Prepare GitHub Pages payload
         run: |

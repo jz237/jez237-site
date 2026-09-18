@@ -50,3 +50,14 @@ including while hovering. Use individual continuous timing with the oral pulse
 leading the opercular pulse. Keep eyes and the front of the head steady, retain
 Corydoras feeding-mouth motion, and freeze respiration on pause. These are
 illustrative respiratory rhythms, not measured species-specific physiology.
+
+The opt-in observation camera must leave the animals and full visual detail
+unchanged. Keep slow, bounded camera movement, conservative visibility checks,
+idle controls that wake on pointer/keyboard input, and immediate drag/Escape exit.
+
+Before publishing aquarium changes, run `npm run check:release`. Review its
+desktop/phone screenshots in `.qa-results/` and commit `qa/approved-build.json`
+with the tested build. The existing deployment guards check this receipt against
+the shipped bundles and model/texture assets. Do not regenerate a performance or
+visual baseline merely to suppress a failure; investigate and review the change.
+Use `npm run check:live` after both deployments to verify production bytes.

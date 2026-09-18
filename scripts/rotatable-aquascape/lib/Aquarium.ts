@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 import {FoodReachability,foodApproach} from './FoodReachability.ts';
+import {ObservationCamera,type ObservationSubject} from './ObservationCamera';
 import {assetURL,installAssetPaths} from './AssetPaths';
 import {LoadTiming} from './LoadTiming';
 import {Corydoras,coryBody,coryForward} from './Corydoras';
@@ -54,6 +55,34 @@ import {sweepHardscape} from './SweptFishContacts';
 const V=(x:number,y:number,z:number)=>new T.Vector3(x,y,z);
 const clamp=T.MathUtils.clamp;
 export class Aquarium{
+ private observation=new ObservationCamera();
+ onObservationChange:()=>void=()=>{};
+ get observing(){return this.observation.active;}
+ get observationLabel(){return this.observation.label;}
+ startObservation(){
+  this.following=null;this.followApproach=false;this.inspectingAngel=null;this.inspectingCory=null;this.inspectingAnimal=null;
+  this.targetCamera=null;this.targetFov=null;this.setMagnifier(false);this.clearSelection();
+  this.controls.minDistance=.7;this.controls.maxDistance=35;this.controls.minPolarAngle=0;this.controls.maxPolarAngle=Math.PI;
+  this.observation.start();this.onObservationChange();
+ }
+ stopObservation(){if(!this.observing)return;this.observation.stop();this.onObservationChange();}
+ private updateObservation(dt:number){
+  if(!this.observing)return;
+  const subjects:ObservationSubject[]=[];
+  for(const s of this.angels?.states??[])subjects.push({id:'angel'+s.id,kind:'angels',point:s.position,radius:1.2});
+  if(this.fishes.length){const point=new T.Vector3();for(const f of this.fishes)point.add(f.model.group.position);point.divideScalar(this.fishes.length);subjects.push({id:'school',kind:'school',point,radius:2.5});}
+  for(const s of this.invertebrates?.animals??[])if(s.kind==='shrimp')subjects.push({id:'shrimp'+s.id,kind:'shrimp',point:s.position,radius:.65});
+  for(const s of this.cories?.animals??[])subjects.push({id:'cory'+s.id,kind:'cory',point:s.position,radius:.8});
+  const visible=(p:T.Vector3,from:T.Vector3)=>{
+   // Bounded, infrequent hardscape visibility query; never per-frame leaf scans.
+   const line=new T.Line3(from,p),closest=new T.Vector3();
+   if(this.obstacles.some(o=>{line.closestPointToPoint(o.center,true,closest);return closest.distanceToSquared(o.center)<(o.radius+.06)**2;}))return false;
+   const distance=from.distanceTo(p),ray=new T.Raycaster(from,p.clone().sub(from).normalize(),0,Math.max(0,distance-.20));
+   return !this.picker?.pick(ray);
+  };
+  const overview=V(0,4.6,21.5),fov=aquariumFieldOfView(this.host.clientWidth,this.host.clientHeight,overview,this.host.offsetTop);
+  this.observation.update(dt,this.camera,this.controls.target,subjects,visible,fov,matchMedia('(prefers-reduced-motion: reduce)').matches);
+ }
  readonly ready:Promise<void>;
  readonly learning=new LearningModel();readonly challenge=new LearningModel();
  get chemistry(){return this.learning;}
@@ -159,7 +188,7 @@ export class Aquarium{
   this.controls.minPolarAngle=Math.PI*.31;this.controls.maxPolarAngle=Math.PI*.515;
   this.controls.minDistance=10.8;this.controls.maxDistance=29;
   this.controls.rotateSpeed=.55;this.controls.zoomSpeed=.7;
-  this.controls.addEventListener('start',()=>{this.followApproach=false;this.targetCamera=null;this.targetFov=null;});
+  this.controls.addEventListener('start',()=>{this.stopObservation();this.followApproach=false;this.targetCamera=null;this.targetFov=null;});
   this.camera.position.set(0,2.45,21.5);
   this.selectionRing=document.createElement('div');this.selectionRing.className='selection-ring';this.selectionRing.hidden=true;host.append(this.selectionRing);
   this.installGlassTap();
@@ -343,6 +372,7 @@ export class Aquarium{
  identifyPlant(species:string){const info=this.picker?.example(species);if(info){this.selection=info;this.onIdentify(info);}}
  get selectedFishStatus(){if(this.selection?.angelId!==undefined)return this.angels?.info(this.selection.angelId).behavior??'';if(this.selection?.coryId!==undefined)return this.cories?.info(this.selection.coryId)?.behavior??'';if(this.selection?.animalId!==undefined)return this.invertebrates?.info(this.selection.animalId)?.behavior??'';return this.selection?.fishId!==undefined?tetraBehaviorLabel(this.fishes[this.selection.fishId].swim):'';}
  follow(id:number|null){
+  this.stopObservation();
   if(id!==null&&!this.fishes[id])return;
   this.inspectingAngel=null;this.inspectingCory=null;this.inspectingAnimal=null;this.following=id;this.followApproach=id!==null;this.targetCamera=null;this.targetFov=null;this.controls.minDistance=id===null?10.8:4.5;
   if(id===null){this.controls.minPolarAngle=Math.PI*.31;this.controls.maxPolarAngle=Math.PI*.515;this.controls.minAzimuthAngle=-Math.PI*.42;this.controls.maxAzimuthAngle=Math.PI*.46;const offset=this.camera.position.clone().sub(this.controls.target);this.controls.target.set(0,2.75,0);this.camera.position.copy(this.controls.target).add(offset.setLength(Math.max(10.8,offset.length())));}
@@ -540,6 +570,7 @@ export class Aquarium{
   if(this.inspectingAngel!==null&&this.angels){trackFish(this.camera,this.controls.target,this.angels.states[this.inspectingAngel].position,wallDt);this.controls.update();}
   if(this.inspectingCory!==null&&this.cories){const a=this.cories.animals[this.inspectingCory];trackFish(this.camera,this.controls.target,a.position.clone().add(V(0,.1,0)),wallDt);this.controls.update();}
   if(this.inspectingAnimal!==null&&this.invertebrates){const a=this.invertebrates.animals[this.inspectingAnimal];trackFish(this.camera,this.controls.target,a.position.clone().addScaledVector(a.normal,.09),wallDt);this.controls.update();}
+  this.updateObservation(dt);
   this.updateSelection();
   this.status=this.food.length?'Foraging':this.fishes.length?tetraBehaviorLabel(this.fishes[0].swim):'Exploring';
   for(let i=this.food.length-1;i>=0;i--){const f=this.food[i];f.age+=dt;f.mesh.position.y-=dt*.07;f.mesh.rotation.y+=dt*.5;if(f.age>48){this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();this.food.splice(i,1);}}

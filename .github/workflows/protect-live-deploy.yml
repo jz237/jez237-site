@@ -32,6 +32,8 @@ jobs:
             /games/2026-08-20/final-blow/icon.svg
             /games/2026-08-20/final-blow/tests/service-worker-guard.test.mjs
             /scripts/check_aquarium_sync.mjs
+            /scripts/check_aquarium_release.mjs
+            /scripts/rotatable-aquascape/qa/approved-build.json
             /scripts/rotatable-aquascape/public/
             /demos/rotatable-aquascape/
             /prototypes/hidden-reef/showroom/aquarium/
