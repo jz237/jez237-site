@@ -547,7 +547,7 @@ export class Aquarium{
   this.learning.tick(!this.paused?elapsed:0);
   const teachingMode=this.teaching?.mode;
   const lightTarget=.27+.73*Math.min(1,this.chemistry.light);
-  this.daylight=T.MathUtils.lerp(this.daylight,lightTarget,1-Math.exp(-wallDt*1.4));
+  this.daylight=T.MathUtils.lerp(this.daylight,lightTarget,1-Math.exp(-wallDt*8));
   this.waterIllumination.value=this.daylight;
   this.ledMaterial.emissiveIntensity=3*this.daylight;
   for(const light of this.canopyLights)light.intensity=canopy.sampleIntensity*this.daylight;
@@ -557,7 +557,7 @@ export class Aquarium{
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,vz:s.vz,foodTarget:s.feedingTarget,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
-  this.courtship.update(dt,this.fishes.map(f=>f.swim),food.length>0||this.chemistry.state.oxygen<3);
+  this.courtship.update(dt,this.fishes.map(f=>f.swim),food.length>0||this.chemistry.state.oxygen<3||this.daylight<.4);
   this.fishes.forEach(({swim:s},i)=>{
    const activity=schoolActivity(this.school,goal,i);
    advanceTetraSwim(s,dt,false,this.chemistry.state.oxygen<3,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),reachable:f=>this.foodPaths[i].test(f.id,this.currentTime,fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),()=>foodApproach(fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),s.yaw+s.depthHeading,s.pitch,s.mouthReach*.014,(p)=>this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+.23)**2)&&(!this.invertebrates||this.invertebrates.plants.clearBody(p,[{center:p,radius:.23}],this.currentTime,undefined,false,.4)))),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,browseSites:this.browseSites,depthBounds:[-.26,1.26]});
