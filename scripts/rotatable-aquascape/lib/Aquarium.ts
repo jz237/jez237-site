@@ -225,7 +225,7 @@ export class Aquarium{
    if(!new URLSearchParams(location.search).has('originalHardscapeIndices')){try{await optimizeHardscapeIndices(this.scene);}catch(error){console.warn('Keeping original hardscape draw order.',error);}}
    calmSwordLeaves(this.scene);
    this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
-   this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3],this.obstacles);
+   this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3],this.obstacles,(x,z)=>this.height(x,z),false,behaviorSeed(this.behaviorSession,4));
    this.angels=new Angelfish(this.obstacles,(x,z)=>this.height(x,z),this.invertebrates.plants,results[4],behaviorSeed(this.behaviorSession,2));this.scene.add(this.angels.root);
    this.cories=new Corydoras(this.scene,(x,z)=>this.height(x,z),this.obstacles,this.invertebrates.plants,6,behaviorSeed(this.behaviorSession,3));
    await this.cories.prepareNavigation(floorRoutes as unknown as FloorRouteMap);
