@@ -26,3 +26,14 @@ test('cardinals cannot inspect a patch at the wrong depth or after an unsuccessf
  advanceTetraSwim(s,.05,false,false,{food:[],neighbors:[],daylight:1,depthBounds:[-.26,1.26]});assert.equal(s.behavior,'approaching');assert.equal(s.brain.visited.length,0);
  s.remaining=.001;s.brain.decisionIn=10;advanceTetraSwim(s,.05,false,false,{food:[],neighbors:[],daylight:1});assert.notEqual(s.behavior,'inspecting');assert.equal(s.brain.visited.length,0);
 });
+
+test('shrimp have stable individual sizes, bounded by their previous size, with matching rendered scale',()=>{
+ const make=seed=>new Invertebrates(new T.Scene(),()=>.5,[],undefined,[],()=>.5,false,seed);
+ const life=make(237),other=make(917),sizes=life.animals.slice(0,6).map(a=>a.scale);
+ assert.equal(new Set(sizes).size,6);assert.notDeepEqual(sizes,other.animals.slice(0,6).map(a=>a.scale));
+ for(const a of life.animals){const max=.80+a.id%3*.04;
+  if(a.kind==='shrimp'){assert.ok(a.scale>=max*.6&&a.scale<=max);assert.ok(Math.abs(new T.Vector3().setFromMatrixColumn(a.matrix,0).length()-a.scale)<1e-8);}
+  else assert.equal(a.scale,.84);}
+ life.update(.05);assert.deepEqual(life.animals.slice(0,6).map(a=>a.scale),sizes);
+ life.dispose();other.dispose();
+});

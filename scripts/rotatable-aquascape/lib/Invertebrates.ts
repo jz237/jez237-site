@@ -1,3 +1,4 @@
+import {behaviorSeed,behaviorRandom} from './BehaviorVariation.ts';
 import * as T from 'three';
 import {shrimpCarapace,shrimpPlate,shrimpFan,fanRays,shrimpRostrum,snailBody,ramshornShell} from './GrazerGeometry.ts';
 import {grazerMaterials} from './GrazerMaterials.ts';
@@ -7,7 +8,7 @@ import {grazerBody,bodiesOverlap,fishTouch,sweptPose,shrimpHip,type FishContactB
 import type {Obstacle} from './TankSpace.ts';
 import type {Identification} from './Exploration.ts';
 
-type Animal={escape?:{anchored:boolean;resume?:Animal['flight'];age:number;offset:T.Vector3;originDistance:number;from:T.Vector3;heading:T.Vector3};cooldown:number;motion:ShrimpMotion;trail?:LeafTrail;direction:number;blocked:number;tripIn:number;flight?:{freeFrom?:T.Vector3;from:T.Vector3;to:T.Vector3;target:LeafTrail;progress:number;duration:number;retreat:boolean;originDistance:number};id:number;kind:'shrimp'|'snail';position:T.Vector3;normal:T.Vector3;heading:number;distance:number;speed:number;remaining:number;grazing:boolean;phase:number;seed:number;route:T.Vector3[];normals:T.Vector3[];length:number;matrix:T.Matrix4;};
+type Animal={scale:number;escape?:{anchored:boolean;resume?:Animal['flight'];age:number;offset:T.Vector3;originDistance:number;from:T.Vector3;heading:T.Vector3};cooldown:number;motion:ShrimpMotion;trail?:LeafTrail;direction:number;blocked:number;tripIn:number;flight?:{freeFrom?:T.Vector3;from:T.Vector3;to:T.Vector3;target:LeafTrail;progress:number;duration:number;retreat:boolean;originDistance:number};id:number;kind:'shrimp'|'snail';position:T.Vector3;normal:T.Vector3;heading:number;distance:number;speed:number;remaining:number;grazing:boolean;phase:number;seed:number;route:T.Vector3[];normals:T.Vector3[];length:number;matrix:T.Matrix4;};
 const UP=new T.Vector3(0,1,0);
 const rand=(a:Animal)=>{a.seed=(Math.imul(a.seed,1664525)+1013904223)>>>0;return a.seed/4294967296;};
 /** Speeds here are illustrative world units, not measured species kinematics. */
@@ -27,7 +28,7 @@ export class Invertebrates{
  private pools:T.InstancedMesh[]=[];private textures:T.Texture[]=[];private size=new T.Vector3();private counts:number[]=[];private owners:number[][]=[];
  private bodyFrame:T.Matrix4|null=null;private bodyFrames=Array.from({length:6},()=>new T.Matrix4());private posed=new T.Matrix4();
  private posePosition=new T.Vector3();private poseScale=new T.Vector3();private poseRotation=new T.Quaternion();private poseEuler=new T.Euler();private poseMatrix=new T.Matrix4();private local=new T.Matrix4();private tangent=new T.Vector3();private binormal=new T.Vector3();private rotation=new T.Matrix4();private link=new T.Vector3();private end=new T.Vector3();
- constructor(scene:T.Scene,height:(x:number,z:number)=>number,surfaces:T.Object3D[]=[],atlas?:T.Texture,obstacles:Obstacle[]=[],floorHeight:(x:number,z:number)=>number=height,specimen=false){
+ constructor(scene:T.Scene,height:(x:number,z:number)=>number,surfaces:T.Object3D[]=[],atlas?:T.Texture,obstacles:Obstacle[]=[],floorHeight:(x:number,z:number)=>number=height,specimen=false,sizeSeed=237){
   this.obstacles=obstacles;this.floorHeight=floorHeight;
   this.root.name='Shrimp and ramshorn snails';scene.add(this.root);
   const {skin,plateSkin,membrane,joint,flesh,shell,dark,textures}=grazerMaterials(atlas);this.textures=textures;
@@ -39,7 +40,7 @@ export class Invertebrates{
   // Cache contact paths once. Hardscape is raycast at construction, never each frame.
   scene.updateMatrixWorld();this.plants=new GrazerPlants(specimen?new T.Scene():scene,(p,n,f,snail)=>this.solidClear(p,n,f,snail));const ray=new T.Raycaster(new T.Vector3(),new T.Vector3(0,-1,0));
   if(specimen){
-   this.animals.push({cooldown:0,motion:createShrimpMotion(0),direction:1,blocked:0,tripIn:Infinity,id:0,kind:'shrimp',position:new T.Vector3(),normal:UP.clone(),heading:0,distance:0,speed:0,remaining:Infinity,grazing:true,phase:0,seed:237,route:[],normals:[],length:1,matrix:new T.Matrix4()});
+   this.animals.push({scale:.8,cooldown:0,motion:createShrimpMotion(0),direction:1,blocked:0,tripIn:Infinity,id:0,kind:'shrimp',position:new T.Vector3(),normal:UP.clone(),heading:0,distance:0,speed:0,remaining:Infinity,grazing:true,phase:0,seed:237,route:[],normals:[],length:1,matrix:new T.Matrix4()});
    this.poseSpecimen(0);return;
   }
   const centers=[[-3.8,1.8],[-2.2,1.72],[1.1,1.96],[1.8,.9],[3.55,1.45],[-1.3,-.55],[3.6,0]];
@@ -62,7 +63,7 @@ export class Invertebrates{
    // Uniform arc-length sampling prevents speed changes caused by ellipse curvature.
    const lengths=[0];for(let j=1;j<=route.length;j++)lengths.push(lengths[j-1]+route[j%route.length].distanceTo(route[j-1]));const length=lengths.at(-1)!;
    const points:T.Vector3[]=[],ns:T.Vector3[]=[];let k=0;for(let j=0;j<256;j++){const d=j/256*length;while(k<route.length-1&&lengths[k+1]<d)k++;const f=(d-lengths[k])/(lengths[k+1]-lengths[k]);points.push(route[k].clone().lerp(route[(k+1)%route.length],f));ns.push(normals[k].clone().lerp(normals[(k+1)%route.length],f).normalize());}
-   this.animals.push({cooldown:0,motion:createShrimpMotion(id),trail,direction:1,blocked:id*.027,tripIn:18+id*9,id,kind,position:new T.Vector3(),normal:new T.Vector3(),heading:0,distance:(trail?.length??length)*(id*.173%1),speed:0,remaining:2+id*.73,grazing:id%2===0,phase:id*2.7,seed:237+id*3571,route:points,normals:ns,length:trail?.length??length,matrix:new T.Matrix4()});
+   this.animals.push({scale:kind==='shrimp'?(.80+id%3*.04)*(.60+.40*behaviorRandom(behaviorSeed(sizeSeed,id))()):.84,cooldown:0,motion:createShrimpMotion(id),trail,direction:1,blocked:id*.027,tripIn:18+id*9,id,kind,position:new T.Vector3(),normal:new T.Vector3(),heading:0,distance:(trail?.length??length)*(id*.173%1),speed:0,remaining:2+id*.73,grazing:id%2===0,phase:id*2.7,seed:237+id*3571,route:points,normals:ns,length:trail?.length??length,matrix:new T.Matrix4()});
   }
   this.update(0);
  }
@@ -86,10 +87,10 @@ export class Invertebrates{
   }return true;
  }
  private clear(a:Animal,p:T.Vector3,n:T.Vector3,f:T.Vector3,own=a.trail?.leaf){
-  if(this.externalBodies.length){const externalBody=grazerBody(p,n,f,a.kind==='snail',a.kind==='snail'?.84:.88);if(this.externalBodies.some(b=>bodiesOverlap(externalBody,b)))return false;}
+  if(this.externalBodies.length){const externalBody=grazerBody(p,n,f,a.kind==='snail',a.scale);if(this.externalBodies.some(b=>bodiesOverlap(externalBody,b)))return false;}
   if(!this.plants.clear(p,n,f,a.kind==='snail',this.waterTime,own))return false;
-  const body=grazerBody(p,n,f,a.kind==='snail',a.kind==='shrimp'?.80+a.id%3*.04:.84);
-  return !this.animals.some(other=>other!==a&&other.heading&&p.distanceToSquared(other.position)<.8**2&&bodiesOverlap(body,grazerBody(other.position,other.normal,new T.Vector3().setFromMatrixColumn(other.matrix,0).normalize(),other.kind==='snail',other.kind==='shrimp'?.80+other.id%3*.04:.84)));
+  const body=grazerBody(p,n,f,a.kind==='snail',a.scale);
+  return !this.animals.some(other=>other!==a&&other.heading&&p.distanceToSquared(other.position)<.8**2&&bodiesOverlap(body,grazerBody(other.position,other.normal,new T.Vector3().setFromMatrixColumn(other.matrix,0).normalize(),other.kind==='snail',other.scale)));
  }
  private flee(a:Animal,fish:FishContactBody){
   if(a.cooldown>0||a.escape)return;const forward=new T.Vector3().setFromMatrixColumn(a.matrix,0).normalize(),away=a.position.clone().sub(fish.position).normalize();
@@ -118,7 +119,7 @@ export class Invertebrates{
   for(const a of this.animals){
    const old=a.distance,oldPosition=a.position.clone(),oldNormal=a.normal.clone(),oldForward=new T.Vector3().setFromMatrixColumn(a.matrix,0).normalize(),oldProgress=a.flight?.progress,oldTrail=a.trail,oldLength=a.length,oldFlight=a.flight;
    a.cooldown=Math.max(0,a.cooldown-dt);
-   if(a.kind==='shrimp'&&a.heading){const body=grazerBody(a.position,a.normal,oldForward);for(const visitor of fish){const corrected=fishTouch(visitor,body);if(corrected){this.fishCorrections.set(visitor.id,corrected);this.flee(a,visitor);}}}
+   if(a.kind==='shrimp'&&a.heading){const body=grazerBody(a.position,a.normal,oldForward,false,a.scale);for(const visitor of fish){const corrected=fishTouch(visitor,body);if(corrected){this.fishCorrections.set(visitor.id,corrected);this.flee(a,visitor);}}}
    advanceGrazer(a,dt);a.distance=(old+(a.distance-old+a.length)%a.length*a.direction+a.length)%a.length;
    if(a.kind==='shrimp'&&this.plants.leaves.length&&!a.flight&&!a.escape&&dt){a.tripIn-=dt;if(a.tripIn<=0){this.startTrip(a);a.tripIn=20+rand(a)*30;}}
    if(a.escape){
@@ -154,7 +155,7 @@ export class Invertebrates{
      this.binormal.crossVectors(this.tangent,a.normal).normalize();this.rotation.makeBasis(this.tangent,a.normal,this.binormal);
     }
    }
-   a.matrix.copy(this.rotation).setPosition(a.position);a.matrix.scale(this.size.setScalar(a.kind==='shrimp'?.80+a.id%3*.04:.84));
+   a.matrix.copy(this.rotation).setPosition(a.position);a.matrix.scale(this.size.setScalar(a.scale));
    if(a.kind==='shrimp'){advanceShrimpMotion(a.motion,dt,(a.escape?Math.min(1,a.escape.age/2.6):a.flight?.progress)??null,a.speed,turnDemand,a.escape?.age);this.shrimp(a);}else this.snail(a);
   }
   this.pools.forEach((p,i)=>{p.count=this.counts[i];p.instanceMatrix.needsUpdate=true;});this.initialized=true;
