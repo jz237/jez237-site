@@ -55,6 +55,11 @@ function describe(p) {
   if (/ (nodes?|node)$/i.test(n0)) add('Lymph node', 'alias');
   if (/tooth|incisor|canine|molar|premolar/i.test(n0)) add('Tooth', 'alias');
   if (/rib$/i.test(noSide.replace(QUALIFIER, ''))) add('Ribs', 'alias');
+  if (/^Costal cartilage/.test(n0)) add('Costal cartilage', 'alias');
+  if (/papillary muscle/i.test(n0)) add('Papillary muscle', 'alias');
+  if (/leaflet/i.test(n0)) { add('Heart valve', 'alias'); }
+  const ALIAS = {'Femoral region': 'Thigh', 'Gluteal region': 'Buttocks', 'Knee region': 'Knee', 'Leg region': 'Leg', 'Talocrural region': 'Ankle', 'Regions of digits of foot': 'Toe', 'Antebrachial region': 'Forearm', 'Brachial region': 'Arm', 'Carpal region': 'Wrist', 'Cubital region': 'Elbow', 'Brainstem nuclei': 'Brainstem', 'Cerebral sulci': 'Sulcus (neuroanatomy)', 'Autonomic ganglia': 'Autonomic ganglion', 'Central canal of spinal cord': 'Central canal', 'External and middle ear': 'Middle ear', 'Lacrimal apparatus': 'Lacrimal apparatus', 'Hemi-azygos vein': 'Hemiazygos vein', 'Accessory hemi-azygos vein': 'Accessory hemiazygos vein'};
+  if (ALIAS[n0]) add(ALIAS[n0], 'alias');
   add(p.parent, 'parent'); for (const anc of (p.path || '').split(' / ').reverse()) add(anc, 'path');
   for (const [n, rule] of tries) { const k = lookup(n); if (k) return {key: k, rule}; }
   return {key: null, rule: 'none'};

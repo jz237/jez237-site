@@ -9,6 +9,7 @@ const radial = (p, ctx, d, lift = 0) => { const c = Array.isArray(ctx) ? ctx : c
 const has = (re, p) => re.test(p.name);
 const RIB = {First: 1, Second: 2, Third: 3, Fourth: 4, Fifth: 5, Sixth: 6, Seventh: 7, Eighth: 8, Ninth: 9, Tenth: 10, Eleventh: 11, Twelfth: 12};
 export const ribNumber = name => { const m = name.match(/(First|Second|Third|Fourth|Fifth|Sixth|Seventh|Eighth|Ninth|Tenth|Eleventh|Twelfth) rib/); return m ? RIB[m[1]] : 6; };
+const toeSpread = name => { const i = ['first', 'second', 'third', 'fourth', 'fifth'].findIndex(k => name.includes(k + ' finger')); return i < 0 ? 0 : (i - 2) * 0.022; };
 const centroid = list => { const n = Math.max(list.length, 1); return list.reduce((a, p) => [a[0] + p.center[0] / n, a[1] + p.center[1] / n, a[2] + p.center[2] / n], [0, 0, 0]); };
 
 // vertebral levels: C1..C7 = 0..6, T1..T12 = 7..18, L1..L5 = 19..23, sacrum 24, coccyx 25
@@ -270,6 +271,152 @@ export const assemblies = {
       {test: () => true, offset: (p, c) => radial(p, c, 0.12)}],
     landmarks: [{label: 'TONGUE', piece: 'Tongue'}, {label: 'OESOPHAGUS', piece: 'Oesophagus'}, {label: 'STOMACH', piece: 'Stomach'}, {label: 'LIVER · SEGMENT VIII', piece: 'Posterior medial segment of liver (VIII)'}, {label: 'PANCREAS', piece: 'Pancreas'}, {label: 'JEJUNUM', piece: 'Jejunum'}, {label: 'TRANSVERSE COLON', piece: 'Transverse colon'}, {label: 'SIGMOID COLON', piece: 'Sigmoid colon'}],
     description: 'The tract unwinds in order: mouth and salivary glands up, pharynx and oesophagus back, the stomach to the left, duodenum and jejunum forward, and the colon spread around the outside from the appendix to the sigmoid. The liver opens into its eight segments with the gallbladder and bile duct beside it, and the pancreas with its ducts drops back behind the stomach.'
+  },
+  urinary: {
+    title: 'The urinary system', eyebrow: 'KIDNEYS · URETERS · BLADDER · ADRENALS', files: ['visceral'], color: '#7d3038',
+    match: p => p.file === 'visceral' && (/Urinary/.test(p.path) || p.name === 'Suprarenal gland'),
+    view: [1.0, 0.45, 1.6], padding: 1.08, scale: 1,
+    primary: p => /^(Kidney|Urinary bladder|Urethra|Suprarenal gland)$/.test(p.name),
+    layers: [
+      {test: p => p.name === 'Suprarenal gland', offset: p => [sideSign(p) * 0.10, 0.12, 0.02]},
+      {test: p => p.name === 'Kidney', offset: p => [sideSign(p) * 0.16, 0.02, 0.04]},
+      {test: p => p.name === 'Renal pelvis', offset: p => [sideSign(p) * 0.16, 0.02, 0.13]},
+      {test: p => p.name === 'Ureter', offset: p => [sideSign(p) * 0.08, -0.04, 0.10]},
+      {test: p => p.name === 'Urinary bladder', offset: () => [0, -0.14, 0.12]},
+      {test: p => p.name === 'Urethra', offset: () => [0, -0.26, 0.16]},
+      {test: () => true, offset: (p, c) => radial(p, c, 0.10)}],
+    landmarks: [{label: 'LEFT KIDNEY', piece: 'Kidney', side: 'L'}, {label: 'RENAL PELVIS', piece: 'Renal pelvis', side: 'L'}, {label: 'ADRENAL GLAND', piece: 'Suprarenal gland', side: 'R'}, {label: 'URETER', piece: 'Ureter', side: 'R'}, {label: 'BLADDER', piece: 'Urinary bladder'}, {label: 'URETHRA', piece: 'Urethra'}],
+    description: 'The kidneys move apart to either side with the adrenal glands lifted off their upper poles, the renal pelvis drawn forward out of each hilum, the ureters running down to the bladder, and the bladder and urethra dropping forward out of the pelvis.'
+  },
+  face: {
+    title: 'Muscles of the face', eyebrow: 'EXPRESSION · MASTICATION · EPICRANIUS', files: ['muscular', 'skeletal'], color: '#e07a7a',
+    match: p => (p.file === 'muscular' && /Facial muscles|Masticatory muscles|Epicranius muscle/.test(p.path)) || (p.file === 'skeletal' && /^(Frontal bone|Maxilla|Zygomatic bone|Mandible|Nasal bone|Parietal bone|Temporal bone|Occipital bone|Sphenoid bone)$/.test(p.name)),
+    view: [1.0, 0.35, 1.5], padding: 1.08, scale: 1,
+    frame: p => p.file === 'muscular' || /^(Frontal bone|Maxilla|Mandible)$/.test(p.name),
+    primary: p => p.side === 'L' && /^(Temporalis muscle|Superficial part of masseter|Frontalis muscle|Orbicularis oris muscle|Zygomaticus major muscle|Bucinator|Occipitalis muscle)$/.test(p.name),
+    layers: [
+      {test: p => p.file === 'skeletal', offset: () => [0, 0, -0.06]},
+      {test: p => /Temporalis/.test(p.name), offset: p => [sideSign(p) * 0.14, 0.10, -0.02]},
+      {test: p => /masseter/.test(p.name), offset: p => [sideSign(p) * 0.15, -0.03, /Deep/.test(p.name) ? 0.03 : 0.07]},
+      {test: p => /pterygoid/.test(p.name), offset: p => [sideSign(p) * 0.10, -0.06, -0.02]},
+      {test: p => /Frontalis|Epicranius|Temporoparietalis/.test(p.name), offset: p => [sideSign(p) * 0.06, 0.16, 0.06]},
+      {test: p => /Occipitalis/.test(p.name), offset: p => [sideSign(p) * 0.06, 0.10, -0.12]},
+      {test: p => /orbicularis oculi|Corrugator|Procerus/.test(p.name), offset: p => [sideSign(p) * 0.08, 0.08, 0.13]},
+      {test: p => /Nasalis|septi nasi|nasolabialis/.test(p.name), offset: p => [sideSign(p) * 0.04, 0.02, 0.16]},
+      {test: p => /Zygomaticus|Levator labii|Levator anguli|Risorius/.test(p.name), offset: p => [sideSign(p) * 0.11, 0.0, 0.13]},
+      {test: p => /Orbicularis oris|Bucinator|Depressor|Mentalis/.test(p.name), offset: p => [sideSign(p) * 0.07, -0.08, 0.14]},
+      {test: () => true, offset: (p, c) => add(radial(p, c, 0.10), [0, 0, 0.08])}],
+    landmarks: [{label: 'TEMPORALIS', piece: 'Temporalis muscle', side: 'L'}, {label: 'MASSETER', piece: 'Superficial part of masseter', side: 'L'}, {label: 'FRONTALIS', piece: 'Frontalis muscle', side: 'L'}, {label: 'ORBICULARIS OCULI', piece: 'Orbital part of orbicularis oculi', side: 'L'}, {label: 'ZYGOMATICUS MAJOR', piece: 'Zygomaticus major muscle', side: 'L'}, {label: 'ORBICULARIS ORIS', piece: 'Orbicularis oris muscle'}, {label: 'BUCINATOR', piece: 'Bucinator', side: 'L'}],
+    description: 'The muscles of expression lift off the face in the layers they occupy: the scalp muscles up, the muscles of the eye and nose forward, the cheek and mouth muscles forward and down. The chewing muscles, temporalis and masseter on the surface and the pterygoids beneath, swing out to the sides. The skull stays behind as a reference.'
+  },
+  aorta: {
+    title: 'The aorta', eyebrow: 'ARCH · THORACIC · ABDOMINAL · BRANCHES', files: ['heart', 'vessels'], color: '#c8403f',
+    match: p => (p.file === 'heart' && /^(Ascending aorta|Aortic arch)$/.test(p.name)) || (p.file === 'vessels' && /Aorta/.test(p.path)),
+    view: [1.2, 0.35, 1.5], padding: 1.05, scale: 1,
+    primary: p => /^(Ascending aorta|Aortic arch|Thoracic aorta|Abdominal aorta|Brachiocephalic trunk|Coeliac trunk|Superior mesenteric artery|Inferior mesenteric artery)$/.test(p.name) || (p.side === 'L' && /^(Common iliac artery|Left renal artery)$/.test(p.name)),
+    layers: [
+      {test: p => /^(Ascending aorta|Aortic arch|Thoracic aorta|Abdominal aorta)$/.test(p.name), offset: () => [0, 0, 0]},
+      {test: p => p.name === 'Brachiocephalic trunk', offset: () => [-0.08, 0.08, 0.02]},
+      {test: p => /^Common iliac artery$/.test(p.name), offset: p => [sideSign(p) * 0.06, -0.10, 0.02]},
+      {test: p => /iliac|gluteal|pudendal|Obturator|Iliolumbar|epigastric|sacral/.test(p.name), offset: p => [sideSign(p) * 0.12, -0.14, 0.02]},
+      {test: p => /Coeliac|gastric|hepatic|Splenic|Gastroduodenal/.test(p.name), offset: p => [(p.side === 'M' ? 0 : sideSign(p) * 0.06), 0.06, 0.16]},
+      {test: p => /mesenteric|colic|Ileocolic|Marginal|Appendicular|Sigmoid|anorectal|pancreaticoduodenal|Ileal/.test(p.name), offset: p => [(p.side === 'M' ? 0 : sideSign(p) * 0.06), -0.02, 0.22]},
+      {test: p => /renal|suprarenal|Intrarenal/.test(p.name), offset: p => [sideSign(p) * 0.14, 0.0, 0.0]},
+      {test: p => /testicular|ovarian|Lumbar|Subcostal|intercostal|phrenic/.test(p.name), offset: p => [sideSign(p) * 0.10, 0, -0.06]},
+      {test: () => true, offset: (p, c) => radial(p, c, 0.10)}],
+    landmarks: [{label: 'ASCENDING AORTA', piece: 'Ascending aorta'}, {label: 'AORTIC ARCH', piece: 'Aortic arch'}, {label: 'THORACIC AORTA', piece: 'Thoracic aorta'}, {label: 'COELIAC TRUNK', piece: 'Coeliac trunk'}, {label: 'RENAL ARTERY', piece: 'Left renal artery', side: 'L'}, {label: 'ABDOMINAL AORTA', piece: 'Abdominal aorta'}, {label: 'COMMON ILIAC', piece: 'Common iliac artery', side: 'L'}],
+    description: 'The aorta itself stays as the trunk from the heart to the pelvis while its branches pull away in the direction they serve: the brachiocephalic trunk up, the renal arteries out to the kidneys, the coeliac and mesenteric trees forward to the gut, the segmental arteries back to the body wall, and the iliac system down into the pelvis.'
+  },
+  pelvis: {
+    title: 'The pelvis', eyebrow: 'HIP BONES · SACRUM · COCCYX · JOINTS', files: ['skeletal', 'joints'], color: '#f0e6c8',
+    match: p => (p.file === 'skeletal' && (/pelvic girdle/i.test(p.path) || /^(Sacrum|Coccyx)$/.test(p.name))) || (p.file === 'joints' && /pelvic girdle|Pubic symphysis|Sacro-iliac/i.test(p.path)),
+    view: [1.1, 0.5, 1.4], padding: 1.1, scale: 1,
+    primary: p => /^(Hip bone|Sacrum|Coccyx|Interpubic disc)$/.test(p.name),
+    layers: [
+      {test: p => p.name === 'Hip bone', offset: p => [sideSign(p) * 0.16, 0, 0.02]},
+      {test: p => p.name === 'Sacrum', offset: () => [0, 0.06, -0.10]},
+      {test: p => p.name === 'Coccyx', offset: () => [0, -0.06, -0.14]},
+      {test: p => p.name === 'Interpubic disc', offset: () => [0, -0.06, 0.12]},
+      {test: p => /Sacro-iliac/.test(p.name), offset: p => [sideSign(p) * 0.06, 0.08, -0.06], opacity: 0.6},
+      {test: p => /Fibrous joints/.test(p.name), offset: p => [sideSign(p) * 0.08, 0.10, -0.02], opacity: 0.6},
+      {test: p => /Cartilaginous joints/.test(p.name), offset: p => [sideSign(p) * 0.06, -0.10, 0.06], opacity: 0.6},
+      {test: () => true, offset: (p, c) => radial(p, c, 0.10)}],
+    landmarks: [{label: 'LEFT HIP BONE', piece: 'Hip bone', side: 'L'}, {label: 'RIGHT HIP BONE', piece: 'Hip bone', side: 'R'}, {label: 'SACRUM', piece: 'Sacrum'}, {label: 'COCCYX', piece: 'Coccyx'}, {label: 'PUBIC SYMPHYSIS', piece: 'Interpubic disc'}, {label: 'SACRO-ILIAC JOINT', piece: 'Sacro-iliac joint', side: 'L'}],
+    description: 'The two hip bones swing outward from the sacrum, which lifts back with the coccyx below it. The pubic symphysis drops forward between the hip bones and the sacro-iliac and pelvic ligaments lift clear as translucent bands.'
+  },
+  shoulder: {
+    title: 'The shoulder', eyebrow: 'SCAPULA · CLAVICLE · HUMERUS · ROTATOR CUFF', files: ['skeletal', 'joints', 'muscular'], color: '#e07a7a', paired: true,
+    match: (p, side = 'L') => p.side === side && ((p.file === 'skeletal' && /^(Scapula|Clavicle|Humerus)$/.test(p.name)) || (p.file === 'joints' && /pectoral girdle|Acromioclavicular|Sternoclavicular|Glenohumeral/i.test(p.path)) || (p.file === 'muscular' && /Rotator cuff|Deltoid muscle|Scapulohumeral/.test(p.path))),
+    view: [1.4, 0.5, 1.2], padding: 1.15, scale: 1,
+    frame: p => p.name !== 'Humerus',
+    primary: p => /^(Scapula|Clavicle|Humerus|Supraspinatus muscle|Infraspinatus muscle|Subscapularis muscle|Acromial part of deltoid muscle)$/.test(p.name),
+    layers: [
+      {test: p => p.name === 'Scapula', offset: () => [-0.05, 0, -0.06]},
+      {test: p => p.name === 'Clavicle', offset: () => [0, 0.10, 0.06]},
+      {test: p => p.name === 'Humerus', offset: () => [0.18, -0.08, 0]},
+      {test: p => /Supraspinatus/.test(p.name), offset: () => [0.02, 0.16, -0.04]},
+      {test: p => /Infraspinatus/.test(p.name), offset: () => [0.02, -0.02, -0.18]},
+      {test: p => /Teres minor/.test(p.name), offset: () => [0.08, -0.08, -0.16]},
+      {test: p => /Teres major/.test(p.name), offset: () => [0.06, -0.16, -0.12]},
+      {test: p => /Subscapularis/.test(p.name), offset: () => [0.0, -0.04, 0.16]},
+      {test: p => /Acromial part of deltoid/.test(p.name), offset: () => [0.24, 0.04, 0]},
+      {test: p => /Clavicular part of deltoid/.test(p.name), offset: () => [0.18, 0.06, 0.14]},
+      {test: p => /spinal part of deltoid/.test(p.name), offset: () => [0.18, 0.04, -0.14]},
+      {test: p => /Acromioclavicular/.test(p.name), offset: () => [0.04, 0.16, 0.0], opacity: 0.7},
+      {test: p => /Sternoclavicular/.test(p.name), offset: () => [-0.06, 0.12, 0.10], opacity: 0.7},
+      {test: p => p.file === 'joints', offset: () => [0.06, 0.08, 0.04], opacity: 0.6},
+      {test: () => true, offset: (p, c) => radial(p, c, 0.10)}],
+    landmarks: [{label: 'SCAPULA', piece: 'Scapula'}, {label: 'CLAVICLE', piece: 'Clavicle'}, {label: 'HUMERUS', piece: 'Humerus'}, {label: 'SUPRASPINATUS', piece: 'Supraspinatus muscle'}, {label: 'INFRASPINATUS', piece: 'Infraspinatus muscle'}, {label: 'SUBSCAPULARIS', piece: 'Subscapularis muscle'}, {label: 'DELTOID', piece: 'Acromial part of deltoid muscle'}],
+    description: 'The humerus swings out of the glenoid, the clavicle lifts, and the four rotator-cuff muscles peel away in the directions they act: supraspinatus up, infraspinatus and teres minor back, subscapularis forward. The three parts of the deltoid open as a cap around the joint, with the capsule and ligaments translucent between them.'
+  },
+  larynx: {
+    title: 'The larynx', eyebrow: 'CARTILAGES · MUSCLES · MEMBRANES · AIRWAY', files: ['skeletal', 'joints', 'muscular', 'visceral'], color: '#dfe7e3',
+    match: p => /Laryngeal/.test(p.path) || /Thyrohyoid|Fibro-elastic membrane|Crico-arytenoid joint|Cricothyroid joint|Fibrous joints of larynx|Ligaments of epiglottis/.test(p.path) || /^(Epiglottis|Hyoid bone|Thyroid gland)$/.test(p.name),
+    view: [1.2, 0.35, 1.4], padding: 1.12, scale: 1,
+    primary: p => /^(Thyroid cartilage|Cricoid cartilage|Epiglottis|Hyoid bone|Thyroid gland)$/.test(p.name) || (p.side === 'L' && /^(Arytenoid cartilage)$/.test(p.name)),
+    layers: [
+      {test: p => p.name === 'Hyoid bone', offset: () => [0, 0.09, 0.02]},
+      {test: p => p.name === 'Epiglottis', offset: () => [0, 0.07, 0.06]},
+      {test: p => p.name === 'Thyroid cartilage', offset: () => [0, 0.01, 0.08]},
+      {test: p => p.name === 'Cricoid cartilage', offset: () => [0, -0.06, 0.02]},
+      {test: p => /Arytenoid cartilage|Corniculate/.test(p.name), offset: p => [sideSign(p) * 0.05, 0.02, -0.05]},
+      {test: p => p.name === 'Thyroid gland', offset: () => [0, -0.10, 0.12]},
+      {test: p => /Thyrohyoid membrane/.test(p.name), offset: p => [sideSign(p) * 0.07, 0.06, 0.03], opacity: 0.6},
+      {test: p => /Fibro-elastic membrane|Fibrous joints of larynx/.test(p.name), offset: p => [sideSign(p) * 0.09, 0.0, 0.02], opacity: 0.6},
+      {test: p => /cricothyroid muscle/.test(p.name), offset: p => [sideSign(p) * 0.08, -0.04, 0.06]},
+      {test: p => /Posterior crico-arytenoid/.test(p.name), offset: p => [sideSign(p) * 0.06, -0.03, -0.09]},
+      {test: p => /Lateral crico-arytenoid/.test(p.name), offset: p => [sideSign(p) * 0.09, -0.02, -0.03]},
+      {test: p => /thyro-arytenoid|Thyro-epiglottic/.test(p.name), offset: p => [sideSign(p) * 0.08, 0.02, 0.0]},
+      {test: p => /arytenoid muscle|Ary-epiglottic/.test(p.name), offset: p => [sideSign(p) * 0.04, 0.05, -0.08]},
+      {test: p => /Crico-arytenoid joint/.test(p.name), offset: p => [sideSign(p) * 0.05, -0.02, -0.06], opacity: 0.6},
+      {test: () => true, offset: (p, c) => radial(p, c, 0.08)}],
+    landmarks: [{label: 'HYOID BONE', piece: 'Hyoid bone'}, {label: 'EPIGLOTTIS', piece: 'Epiglottis'}, {label: 'THYROID CARTILAGE', piece: 'Thyroid cartilage'}, {label: 'CRICOID CARTILAGE', piece: 'Cricoid cartilage'}, {label: 'ARYTENOID', piece: 'Arytenoid cartilage', side: 'L'}, {label: 'THYROID GLAND', piece: 'Thyroid gland'}, {label: 'CRICOTHYROID', piece: 'Straight part of cricothyroid muscle', side: 'L'}],
+    description: 'The voice box opens top to bottom: hyoid bone and epiglottis up, thyroid cartilage forward, cricoid down, the paired arytenoids back. The intrinsic muscles that tension and open the vocal folds fan out to the sides with the membranes translucent between them, and the thyroid gland drops forward off the front of the airway.'
+  },
+  foot: {
+    title: 'The foot', eyebrow: '26 BONES · SESAMOIDS · INTRINSIC MUSCLES', files: ['skeletal', 'muscular'], color: '#f0e6c8', paired: true,
+    match: (p, side = 'L') => p.side === side && ((p.file === 'skeletal' && /free part of lower limb/i.test(p.path) && p.center[1] < 0.12) || (p.file === 'muscular' && /Muscles of foot|Adductor hallucis|Flexor hallucis brevis/.test(p.path))),
+    view: [0.9, 0.7, 1.3], padding: 0.98, scale: 1,
+    primary: p => /^(Talus|Calcaneus|Navicular bone|Cuboid bone|Medial cuneiform bone|Intermediate cuneiform bone|Lateral cuneiform bone)$/.test(p.name) || /^(First|Fifth) metatarsal bone$/.test(p.name) || /^Distal phalanx/.test(p.name),
+    layers: [
+      {test: p => p.name === 'Talus', offset: () => [0, 0.10, -0.02]},
+      {test: p => p.name === 'Calcaneus', offset: () => [0, -0.02, -0.12]},
+      {test: p => p.name === 'Navicular bone', offset: () => [-0.03, 0.08, 0.02]},
+      {test: p => p.name === 'Cuboid bone', offset: () => [0.06, 0.04, -0.02]},
+      {test: p => /cuneiform bone/.test(p.name), offset: p => [/Medial/.test(p.name) ? -0.05 : /Lateral/.test(p.name) ? 0.05 : 0, 0.07, 0.03]},
+      {test: p => /metatarsal bone/.test(p.name), offset: p => [/First/.test(p.name) ? -0.05 : /Fifth/.test(p.name) ? 0.05 : 0, 0.02, 0.09]},
+      {test: p => /^Proximal phalanx/.test(p.name), offset: p => [toeSpread(p.name) * 0.5, 0.0, 0.17]},
+      {test: p => /^Middle phalanx/.test(p.name), offset: p => [toeSpread(p.name) * 0.8, 0.0, 0.23]},
+      {test: p => /^Distal phalanx/.test(p.name), offset: p => [toeSpread(p.name), 0.0, /first finger/.test(p.name) ? 0.24 : 0.29]},
+      {test: p => /Sesamoid/.test(p.name), offset: () => [-0.06, -0.05, 0.06]},
+      {test: p => /Extensor/.test(p.name), offset: () => [0, 0.12, 0.08]},
+      {test: p => /interossei/.test(p.name), offset: p => [0, /Dorsal/.test(p.name) ? 0.08 : -0.06, 0.10]},
+      {test: p => /hallucis|Abductor hallucis/.test(p.name), offset: () => [-0.12, -0.06, 0.06]},
+      {test: p => /digiti minimi/.test(p.name), offset: () => [0.12, -0.06, 0.04]},
+      {test: p => /Quadratus plantae|Flexor digitorum brevis|Lumbrical/.test(p.name), offset: () => [0, -0.12, 0.04]},
+      {test: () => true, offset: () => [0, -0.10, 0.06]}],
+    landmarks: [{label: 'TALUS', piece: 'Talus'}, {label: 'CALCANEUS', piece: 'Calcaneus'}, {label: 'NAVICULAR', piece: 'Navicular bone'}, {label: 'FIRST METATARSAL', piece: 'First metatarsal bone'}, {label: 'DISTAL PHALANX', piece: 'Distal phalanx of first finger of foot'}, {label: 'ABDUCTOR HALLUCIS', piece: 'Abductor hallucis'}, {label: 'FLEXOR DIGITORUM BREVIS', piece: 'Flexor digitorum brevis'}],
+    description: 'The talus lifts off the calcaneus, the midfoot bones spread apart in the arch, and the metatarsals and phalanges run forward along each toe in steps. The extensor muscles rise off the top of the foot and the plantar layers drop away beneath it, from the deep interossei to the superficial flexor digitorum brevis.'
   }};
 
 /** Whole-body labels shown with the Labels toggle: one landmark per loaded file, anchored on a representative piece. */

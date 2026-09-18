@@ -11,13 +11,13 @@ const manifest = JSON.parse(await readFile(path.join(DEMO, 'manifest.json'), 'ut
 const MAX = 25 * 1024 * 1024;
 
 // ---- static checks on the built assets
-assert.ok(manifest.pieces.length >= 1400 && manifest.pieces.length <= 2100, `piece count ${manifest.pieces.length}`);
-assert.ok(manifest.stats.triangles <= 2.4e6, `triangles ${manifest.stats.triangles}`);
+assert.ok(manifest.pieces.length >= 1400 && manifest.pieces.length <= 2600, `piece count ${manifest.pieces.length}`);
+assert.ok(manifest.stats.triangles <= 5.2e6, `triangles ${manifest.stats.triangles}`);
 for (const f of manifest.files) { const s = await stat(path.join(DEMO, f.path)); assert.equal(s.size, f.bytes, `${f.id} bytes drifted from manifest`); assert.ok(s.size < MAX, `${f.id} exceeds the 25 MiB Cloudflare Pages limit`); }
 const ids = new Set(manifest.pieces.map(p => p.id)); assert.equal(ids.size, manifest.pieces.length, 'piece ids must be unique');
 const direct = Object.entries(manifest.stats.descriptionRules).filter(([r]) => !['parent', 'path', 'none'].includes(r)).reduce((a, [, n]) => a + n, 0);
 assert.ok(direct / manifest.pieces.length >= .85, `direct description coverage ${(direct / manifest.pieces.length * 100).toFixed(1)}%`);
-for (const [id, min] of Object.entries({heart: 30, lungs: 25, spine: 55, brain: 60, skull: 60, eye: 10, hand: 35, knee: 15, ribcage: 45, digestive: 40})) assert.ok(manifest.assemblies[id].length >= min, `${id} assembly has ${manifest.assemblies[id].length} members`);
+for (const [id, min] of Object.entries({heart: 30, lungs: 25, spine: 55, brain: 60, skull: 60, eye: 10, hand: 35, knee: 15, ribcage: 45, digestive: 40, urinary: 10, face: 30, aorta: 60, pelvis: 10, shoulder: 14, larynx: 28, foot: 38})) assert.ok(manifest.assemblies[id].length >= min, `${id} assembly has ${manifest.assemblies[id].length} members`);
 console.log(`static: ${manifest.pieces.length} pieces, ${manifest.stats.triangles.toLocaleString()} triangles, ${(manifest.stats.bytes / 1048576).toFixed(1)} MB, ${(direct / manifest.pieces.length * 100).toFixed(1)}% direct descriptions`);
 
 // ---- browser checks (software WebGL on Linux without a GPU)
