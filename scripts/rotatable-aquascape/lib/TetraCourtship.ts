@@ -14,7 +14,7 @@ export class TetraCourtship {
   const eligible=(s:TetraSwim)=>s.feedingPhase==='search'&&s.brain.biteIn<=0&&s.startleRemaining<=0&&s.avoidanceRemaining<=0;
   if(this.pair.length){
    const [a,b]=this.pair,d=distance(a,b);
-   if(interrupted||!this.pair.every(eligible)||this.pair.some(s=>s.courtship<=0)||d<52||d>125||Math.abs(angle(a.yaw+a.depthHeading-b.yaw-b.depthHeading))>.65){
+   if(interrupted||!this.pair.every(eligible)||this.pair.every(s=>s.courtship<=0)||d<52||d>125||Math.abs(angle(a.yaw+a.depthHeading-b.yaw-b.depthHeading))>.65){
     this.pair.forEach(s=>{s.courtship=0;s.behavior='gliding';s.remaining=.8;});this.pair=[];
    }
    return;
@@ -29,19 +29,22 @@ export class TetraCourtship {
   }
   if(!candidates.length){this.remaining=1+this.random()*2;return;}
   this.pair=candidates[Math.floor(this.random()*candidates.length)];
-  const duration=1.4+this.random()*.7;
-  this.pair.forEach(s=>{s.courtship=duration;s.courtshipAge=0;s.browsing=false;});
+  const duration=3.8+this.random()*.8;
+  if(this.random()<.5)this.pair.reverse();
+  const responseDelay=.15+this.random()*.1;
+  this.pair.forEach((s,i)=>{s.courtship=duration;s.courtshipAge=0;s.courtshipDelay=i*responseDelay;s.browsing=false;});
   this.remaining=55+this.random()*95;
  }
 }
 /** Steady heading with a short posterior wave; normal solid/pair constraints run afterward. */
 export function advanceCourtshipSwim(s:TetraSwim,dt:number){
  if(s.startleRemaining>0||s.avoidanceRemaining>0){s.courtship=0;return false;}
- s.courtship=Math.max(0,s.courtship-dt);s.courtshipAge+=dt;s.elapsed+=dt;s.sinceTurn+=dt;
+ const activeDt=Math.max(0,dt-s.courtshipDelay);s.courtshipDelay=Math.max(0,s.courtshipDelay-dt);
+ s.courtship=Math.max(0,s.courtship-activeDt);s.courtshipAge+=activeDt;s.elapsed+=dt;s.sinceTurn+=dt;
  const envelope=Math.min(1,s.courtshipAge/.3,s.courtship/.35);
- s.effort+=(envelope*.95+.025-s.effort)*(1-Math.exp(-dt*12));
+ s.effort+=(envelope*1.35+.025-s.effort)*(1-Math.exp(-dt*12));
  s.pectoralEffort+=(.7-s.pectoralEffort)*(1-Math.exp(-dt*8));
- s.speed+=(7-s.speed)*(1-Math.exp(-dt*5));s.pitch*=Math.exp(-dt*4);
+ s.speed+=(0-s.speed)*(1-Math.exp(-dt*12));s.pitch*=Math.exp(-dt*4);
  const yaw=s.yaw+s.depthHeading;
  s.vx=Math.cos(yaw)*s.speed;s.vy=0;s.vz=-Math.sin(yaw)*s.speed/180;
  s.x+=s.vx*dt;s.z+=s.vz*dt;s.behavior='gliding';s.remaining=1;
