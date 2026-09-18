@@ -58,3 +58,16 @@ test('brisk pellet pursuit retains swept rock collision protection',()=>{
  const rock={center:new T.Vector3(0,.58,0),radius:.30},life=new Corydoras(new T.Scene(),()=>.4,[rock],undefined,1),a=life.animals[0];a.position.set(-1.2,.432,0);a.yaw=0;a.pitch=0;a.picking=undefined;a.route=[];life.feed();life.pellets[0].position.set(1,.425,0);
  for(let i=0;i<240;i++){life.update(.05,i*.05);for(const b of coryBody(a.position,coryForward(a),a.size,a.pitch))assert.ok(b.center.distanceTo(rock.center)>b.radius+rock.radius);}
 });
+
+test('a cory pauses between adjacent real pellets instead of vacuuming them in consecutive frames',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4,[],undefined,1),a=life.animals[0];
+ a.position.set(0,.432,0);a.yaw=0;a.pitch=0;a.picking=undefined;a.route=[];a.remaining=60;
+ let bites=0;life.feed(()=>bites++);
+ for(const p of life.pellets)p.position.set(.15,.425,0);
+ life.update(.025,.025);assert.equal(bites,1);const at=a.position.clone();
+ for(let i=0;i<16;i++)life.update(.025,.05+i*.025);
+ assert.equal(bites,1,'a visible handling pause precedes the next morsel');
+ assert.ok(a.position.distanceTo(at)<1e-8,'holds station during the bite');
+ for(let i=0;i<100;i++)life.update(.025,.5+i*.025);
+ assert.ok(bites>1,'resumes feeding instead of falling asleep');
+});

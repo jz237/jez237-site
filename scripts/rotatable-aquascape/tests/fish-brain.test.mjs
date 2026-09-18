@@ -67,3 +67,15 @@ test('tetra visits front, back and intermediate water with smooth depth steering
  }
 });
 
+
+test('cardinals remember feeding patches at their actual depth and align vertically with companions',()=>{
+ const b=createFishBrain();rememberPlant(b,1000,350,.1);
+ let browse=false;
+ for(let i=0;i<20;i++){b.curiosity=1;b.browseIn=0;b.decisionIn=0;
+  const action=thinkFish(b,.01,1000,350,10,{food:[],neighbors:[],daylight:1,browseSites:[{id:8,x:1000,y:350,z:.7}]},.65);
+  if(action.kind==='browse'){assert.equal(action.target.id,8);browse=true;break;}}
+ assert.ok(browse,'a leaf behind an inspected foreground leaf is still a new patch');
+ const neighbors=[{id:1,x:1080,y:350,z:.5,vy:8,vz:.02},{id:2,x:1100,y:350,z:.5,vy:8,vz:.02}];
+ const intent=thinkFish(createFishBrain(),.01,1000,350,10,{food:[],neighbors,daylight:1,schoolAffinity:1},.5);
+ assert.equal(intent.kind,'school');assert.ok(intent.target.y>350);assert.ok(intent.target.z>.5);
+});

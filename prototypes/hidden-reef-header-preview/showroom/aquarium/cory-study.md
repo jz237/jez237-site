@@ -27,3 +27,11 @@ Generated with the built-in GPT Image tool; no external paid asset or API was pu
 Prompt:
 
 Create a photorealistic scientific macro reference plate for a detailed 3D aquarium fish model: salt-and-pepper dwarf Corydoras, Corydoras habrosus (Hoplisoma habrosum), NOT pygmaeus, NOT a tetra. Four views of the same healthy small stocky armored catfish: large left-side profile facing right, top view, front three-quarter view, and close detail of head and downward-facing mouth with three pairs of delicate short barbels. Creamy translucent silver-beige body, irregular dark brown salt-and-pepper blotches along flanks and back, two rows of interlocking bony flank plates, dark spotted translucent dorsal and forked caudal fins with individually visible fine fin rays; paired pectoral and pelvic fins, tiny adipose fin, glossy black eyes with silver rims, subtle gill covers. Fins attached anatomically, no decorative extra whiskers. Natural underwater macro photography with fine pale sand and dark teal water background, physically convincing soft aquarium top lighting. Extremely fine skin detail, wet translucent fin membranes, natural small asymmetries. Clean four-panel composition with no text, no labels, no watermarks. This is an art/modeling reference, not a research diagram.
+
+## September 2026 behavior refinement
+A real pellet bite now starts a short individual handling pause before another
+pellet can be pursued. The fish holds station, retains breathing and feeding
+animation, then resumes searching. This prevents adjacent pellets disappearing
+in successive simulation steps. The illustrative 0.55–1.2 second pause is not a
+measured Corydoras habrosus handling time. Mouth-range checks, reachable-food
+selection, collision protection and per-pellet chemistry accounting are unchanged.
