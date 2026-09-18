@@ -17,7 +17,7 @@ for (const f of manifest.files) { const s = await stat(path.join(DEMO, f.path));
 const ids = new Set(manifest.pieces.map(p => p.id)); assert.equal(ids.size, manifest.pieces.length, 'piece ids must be unique');
 const direct = Object.entries(manifest.stats.descriptionRules).filter(([r]) => !['parent', 'path', 'none'].includes(r)).reduce((a, [, n]) => a + n, 0);
 assert.ok(direct / manifest.pieces.length >= .85, `direct description coverage ${(direct / manifest.pieces.length * 100).toFixed(1)}%`);
-for (const [id, min] of Object.entries({heart: 30, lungs: 25, spine: 55, brain: 60})) assert.ok(manifest.assemblies[id].length >= min, `${id} assembly has ${manifest.assemblies[id].length} members`);
+for (const [id, min] of Object.entries({heart: 30, lungs: 25, spine: 55, brain: 60, skull: 60, eye: 10, hand: 35, knee: 15, ribcage: 45, digestive: 40})) assert.ok(manifest.assemblies[id].length >= min, `${id} assembly has ${manifest.assemblies[id].length} members`);
 console.log(`static: ${manifest.pieces.length} pieces, ${manifest.stats.triangles.toLocaleString()} triangles, ${(manifest.stats.bytes / 1048576).toFixed(1)} MB, ${(direct / manifest.pieces.length * 100).toFixed(1)}% direct descriptions`);
 
 // ---- browser checks (software WebGL on Linux without a GPU)
@@ -47,10 +47,10 @@ try {
   await page.locator(`[data-assembly="${id}"]`).click(); await page.waitForFunction(a => window.anatomyStudio.getState().assembly === a, id, {timeout: 60000}); await settled(1); await page.waitForTimeout(1200);
   s = await read(); assert.equal(s.assembly, id); assert.equal(s.visible, manifest.assemblies[id].length, `${id}: only members visible`);
   const a = await page.evaluate(x => window.anatomyStudio.getAssembly(x), id); assert.equal(a.members.length, manifest.assemblies[id].length);
-  const inside = a.rectangles.filter(r => r.min.every(v => v >= -1) && r.max.every(v => v <= 1)).length; assert.ok(inside >= a.rectangles.length * .9, `${id}: ${inside}/${a.rectangles.length} members inside the frame`);
+  const framed = a.rectangles.filter(r => a.framed.includes(r.id)); const inside = framed.filter(r => r.min.every(v => v >= -1) && r.max.every(v => v <= 1)).length; assert.ok(inside >= framed.length * .9, `${id}: ${inside}/${framed.length} framed members inside the frame`);
   const prim = a.rectangles.filter(r => a.primary.includes(r.id)); let bad = 0;
   for (let i = 0; i < prim.length; i++) for (let j = i + 1; j < prim.length; j++) { const p = prim[i], q = prim[j]; const d = Math.hypot(...p.center.map((v, k) => v - q.center[k])); const ox = Math.max(0, Math.min(p.max[0], q.max[0]) - Math.max(p.min[0], q.min[0])), oy = Math.max(0, Math.min(p.max[1], q.max[1]) - Math.max(p.min[1], q.min[1])); const area = ox * oy, small = Math.min((p.max[0] - p.min[0]) * (p.max[1] - p.min[1]), (q.max[0] - q.min[0]) * (q.max[1] - q.min[1])); if (d < .02 || (small > 0 && area / small > .6)) bad++; }
-  await page.screenshot({path: path.join(shots, `assembly-${id}.png`)});
+  await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({path: path.join(shots, `assembly-${id}.png`)});
   assert.ok(bad <= Math.max(2, prim.length * .12), `${id}: ${bad} primary pairs still overlap`);
   await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); assert.equal((await read()).visible, manifest.pieces.length); assert.ok(await restored(), `${id}: leaving restores positions`);
  }
@@ -83,5 +83,5 @@ try {
  const reduced = await browser.newPage({viewport: {width: 1024, height: 800}, reducedMotion: 'reduce'}); reduced.on('pageerror', e => errors.push(e.message)); await reduced.goto(`${url}?quality=verify&stage=core`); await ready(reduced);
  await reduced.locator('#explode-button').click(); await reduced.waitForFunction(() => window.anatomyStudio.getState().amount > 0, null, {timeout: 30000}); await settled(1, reduced); assert.ok(await reduced.evaluate(() => window.anatomyStudio.getParts().every(p => Math.hypot(...p.position.map((v, i) => v - p.base[i])) > .01)), 'reduced motion explosion still separates every piece');
  assert.deepEqual(errors, []);
- console.log(`PASS: ${url} — ${manifest.pieces.length} pieces across ${manifest.files.length} files, explosion, exact reassembly, four nested studies (${Object.entries(manifest.assemblies).map(([k, v]) => `${k} ${v.length}`).join(', ')}), filters, search, isolate, finishes, labels, sequence, keyboard, non-overlapping board at three viewports, mobile, deep links, manual, reduced motion. Screenshots: ${shots}`);
+ console.log(`PASS: ${url} — ${manifest.pieces.length} pieces across ${manifest.files.length} files, explosion, exact reassembly, ${Object.keys(manifest.assemblies).length} nested studies (${Object.entries(manifest.assemblies).map(([k, v]) => `${k} ${v.length}`).join(', ')}), filters, search, isolate, finishes, labels, sequence, keyboard, non-overlapping board at three viewports, mobile, deep links, manual, reduced motion. Screenshots: ${shots}`);
 } finally { await browser.close(); }

@@ -85,7 +85,7 @@ async function loadStudio(){
  window.anatomyStudio = {
   getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, assembly:state.assembly, stage:state.stage, loading:state.loading, triangles:renderer.info.render.triangles, drawCalls:renderer.info.render.calls, files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && p.assembly === state.assembly) })),
-  getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = parts.filter(p => p.assemblies.includes(id)); return { members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
+  getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = parts.filter(p => p.assemblies.includes(id)); return { members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
   loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, getManifest:() => manifest
  };
@@ -129,7 +129,7 @@ function updateStageUI(){
  $('stage-note').textContent = state.stage === 'detail' ? `Every system loaded · ${parts.length.toLocaleString()} pieces` : `${parts.length.toLocaleString()} of ${manifest.stats.pieces.toLocaleString()} pieces loaded`;
 }
 function captureMaterial(part){ const m = part.mesh.material; part.opacity = m.opacity; part.transparent = m.transparent; part.depthWrite = m.depthWrite; part.emissive = m.emissive.clone(); part.emissiveIntensity = m.emissiveIntensity; }
-function setMode(mode){ if (!modes.includes(mode)) return; state.mode = mode; for (const p of parts) { p.mesh.material.dispose(); finishMaterial(p.mesh, p.piece, mode); captureMaterial(p); p.mesh.castShadow = !p.mesh.material.transparent; } document.querySelectorAll('[data-mode]').forEach(b => { b.classList.toggle('active', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); }); boardDirty = true; updateVisibility(); }
+function setMode(mode, { user = false } = {}){ if (!modes.includes(mode)) return; if (user) state.restoreMode = null; state.mode = mode; for (const p of parts) { p.mesh.material.dispose(); finishMaterial(p.mesh, p.piece, mode); captureMaterial(p); p.mesh.castShadow = !p.mesh.material.transparent; } document.querySelectorAll('[data-mode]').forEach(b => { b.classList.toggle('active', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); }); boardDirty = true; updateVisibility(); }
 
 function buildBodyLandmarks(){
  for (const l of landmarks.filter(l => l.kind === 'body')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'body') landmarks.splice(i, 1);
@@ -213,13 +213,15 @@ function focusSelected(){
 
 // ---------------------------------------------------------------- nested assemblies
 function assemblyMembers(id){ return parts.filter(p => p.assemblies.includes(id)); }
-function assemblyBox(){ const b = new THREE.Box3(); for (const p of assemblyMembers(state.assembly)) { const c = p.center.clone().addScaledVector(p.assemblyOffset, state.target); b.expandByPoint(c.clone().sub(p.size.clone().multiplyScalar(.5))); b.expandByPoint(c.clone().add(p.size.clone().multiplyScalar(.5))); } return b; }
+function assemblyBox(){ const b = new THREE.Box3(); const a = assemblies[state.assembly]; for (const p of assemblyMembers(state.assembly)) { if (a.frame && !a.frame(p.piece)) continue; const c = p.center.clone().addScaledVector(p.assemblyOffset, state.target); b.expandByPoint(c.clone().sub(p.size.clone().multiplyScalar(.5))); b.expandByPoint(c.clone().add(p.size.clone().multiplyScalar(.5))); } return b; }
 function assemblyTarget(){ return assemblyBox().getCenter(new THREE.Vector3()); }
 function assemblyDistance(){ const a = assemblies[state.assembly]; const radius = assemblyBox().getSize(new THREE.Vector3()).length() / 2; return radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.max(1, 1 / camera.aspect) * (a.padding || 1.1); }
 async function enterAssembly(id){
  const a = assemblies[id]; if (!a || !state.ready) return; if (state.board) toggleBoard(false); stopSequence();
  await loadFiles(a.files);
  state.assembly = id; state.system = 'all'; state.isolated = false; $('system').value = 'all';
+ // X-ray ghosts soft tissue, so a nested study renders in the realistic finish and restores X-ray on exit.
+ if (state.mode === 'xray') { state.restoreMode = 'xray'; setMode('realistic'); }
  const members = assemblyMembers(id), ctx = assemblyContext(a, members.map(p => p.piece));
  for (const p of members) { const r = assemblyOffset(a, p.piece, ctx); p.assemblyOffset = new THREE.Vector3().fromArray(r.offset); p.assemblyLayer = r; }
  for (const l of landmarks.filter(l => l.kind === 'assembly')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'assembly') landmarks.splice(i, 1);
@@ -237,6 +239,7 @@ async function enterAssembly(id){
 }
 function leaveAssembly(){
  if (!state.assembly) return; state.assembly = null; for (const p of parts) { p.assemblyOffset = null; p.assemblyLayer = null; }
+ if (state.restoreMode) { const m = state.restoreMode; state.restoreMode = null; if (state.mode === 'realistic') setMode(m); }
  for (const l of landmarks.filter(l => l.kind === 'assembly')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'assembly') landmarks.splice(i, 1);
  document.querySelectorAll('[data-assembly]').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); }); $('assembly-panel').hidden = true;
  controls.minDistance = .25; selectPart(null); updateList(); lastApplied = -1; state.target = 0; state.amount = reducedMotion ? 0 : state.amount; setAmount(0, { animate:true }); setView('hero');
@@ -255,7 +258,7 @@ function bindControls(){
  $('reset').onclick = reset;
  $('load-more').onclick = () => { const next = stageOrder[stageOrder.indexOf(state.stage) + 1]; if (next) loadStage(next); };
  document.querySelectorAll('[data-view]').forEach(b => b.onclick = () => { if (state.assembly) leaveAssembly(); setView(b.dataset.view); });
- document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode));
+ document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode, { user:true }));
  document.querySelectorAll('[data-assembly]').forEach(b => b.onclick = () => state.assembly === b.dataset.assembly ? leaveAssembly() : enterAssembly(b.dataset.assembly));
  $('leave-assembly').onclick = leaveAssembly;
  $('system').onchange = e => { state.system = e.target.value; selectPart(null); updateList(); };
@@ -266,7 +269,7 @@ function bindControls(){
  $('label-toggle').onclick = () => { state.labels = !state.labels; $('label-toggle').setAttribute('aria-pressed', state.labels); };
  $('fullscreen').onclick = async () => { try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); } catch { $('fullscreen').textContent = 'Fullscreen unavailable'; } };
  document.addEventListener('fullscreenchange', () => { $('fullscreen').textContent = document.fullscreenElement ? '⛶ Exit fullscreen' : '⛶ Fullscreen'; });
- document.addEventListener('keydown', e => { if (/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName) || e.ctrlKey || e.metaKey || e.altKey || !state.ready) return; const k = e.key.toLowerCase(); if (k === 'e') setAmount(state.target > .5 ? 0 : 1, { animate:true }); if (k === 'r') reset(); if (e.key === 'Escape') { if (state.selected) selectPart(null); else if (state.assembly) leaveAssembly(); } const map = { h:'heart', l:'lungs', s:'spine', b:'brain' }; if (map[k]) (state.assembly === map[k] ? leaveAssembly() : enterAssembly(map[k])); });
+ document.addEventListener('keydown', e => { if (/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName) || e.ctrlKey || e.metaKey || e.altKey || !state.ready) return; const k = e.key.toLowerCase(); if (k === 'e') setAmount(state.target > .5 ? 0 : 1, { animate:true }); if (k === 'r') reset(); if (e.key === 'Escape') { if (state.selected) selectPart(null); else if (state.assembly) leaveAssembly(); } const map = { h:'heart', l:'lungs', s:'spine', b:'brain' }; const order = Object.keys(assemblies); if (/^[0-9]$/.test(k)) map[k] = order[(Number(k) + 9) % 10]; if (map[k]) (state.assembly === map[k] ? leaveAssembly() : enterAssembly(map[k])); });
 }
 function tick(now){
  const dt = Math.min((now - last) / 1000, .05); last = now;

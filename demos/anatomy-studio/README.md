@@ -1,17 +1,17 @@
 # Anatomy Studio
 
-Interactive exploded view of a complete human body: 1,897 selectable anatomical pieces across ten systems, plus four nested
-exploded views (heart, lungs, spine, brain). Built on the open [Z-Anatomy](https://github.com/LluisV/Z-Anatomy) model
+Interactive exploded view of a complete human body: 1,897 selectable anatomical pieces across ten systems, plus ten nested
+exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, digestive tract). Built on the open [Z-Anatomy](https://github.com/LluisV/Z-Anatomy) model
 (CC BY-SA 4.0, see `ASSET-LICENSE.txt`). Published at https://jez237.com/demos/anatomy-studio/.
 
 ## Controls
 
 - Slider / **Explode the body** / `E` — separate every system from the skeleton outward; skeleton stays as the axis.
-- **Heart · Lungs · Spine · Brain** (`H` `L` `S` `B`) — isolate that structure and explode it along its own anatomy.
+- **Heart · Lungs · Spine · Brain · Skull · Eye · Hand · Knee · Rib cage · Digestive tract** (keys `1`–`0`; `H` `L` `S` `B` for the first four) — isolate that structure and explode it along its own anatomy. Paired structures (eye, hand, knee) show the left side.
 - Finish: X-ray (default), Realistic, Colour-coded, Clay. Visible system filter, Labels, Auto orbit, Play sequence.
 - Click a piece or pick it from the list: description (Z-Anatomy / Wikipedia), hierarchy path, size, triangles, merged sub-parts. Isolate to frame it alone.
 - **All parts on screen** — every loaded piece on one non-overlapping board.
-- Deep links: `?assembly=heart|lungs|spine|brain`, `?view=parts`, `?stage=core|muscles|full`. Phones load the core stage (skeleton, ligaments, viscera, heart, brain) and offer a button for the rest.
+- Deep links: `?assembly=heart|lungs|spine|brain|skull|eye|hand|knee|ribcage|digestive`, `?view=parts`, `?stage=core|muscles|full`. Phones load the core stage (skeleton, ligaments, viscera, heart, brain) and offer a button for the rest.
 
 ## Files
 
