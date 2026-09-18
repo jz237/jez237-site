@@ -105,3 +105,12 @@ study supports browsing submerged roots, plants and litter for small animal prey
 https://acta.inpa.gov.br/fasciculos/34-1/BODY/v34n1a09.html
 Memory duration, anticipation and movement constants are qualitative simulation
 choices, not measurements reported by that study.
+
+## Independent visits
+Cardinal school travel direction, loose/grouped starting state, movement-clock
+phase, inspection delays, individual speed and appetite now vary on each page
+load. Randomness is sampled for decisions rather than applied as frame-by-frame
+steering noise. The fixed planting, full model detail and contact constraints
+are unchanged. These variation ranges are illustrative, not measured from field
+observations. Walker (2004), cited above, supports group browsing near roots and
+plants rather than a permanent synchronized parade around the tank.

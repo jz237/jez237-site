@@ -168,3 +168,11 @@ test('angelfish alternate independent irregular propulsion and gliding bouts wit
  assert.ok(different>200);for(const times of switches){assert.ok(times.length>8);assert.ok(new Set(times.slice(1).map((t,i)=>t-times[i])).size>5);}
  const frozen=structuredClone(fish[0]);advanceAngel(fish[0],0,open);assert.equal(fish[0].strokeIn,frozen.strokeIn);
 });
+
+test('successful feeding leaves one expiring location memory and never consumes absent food',()=>{
+ const s=createAngel(0);s.position.set(0,3,0);s.yaw=0;const food={id:71,position:angelMouth(s)};
+ advanceAngel(s,.01,{...open,food:[food]});assert.equal(s.consumed,71);assert.ok(s.foodMemory);assert.equal(s.memoryVisits,1);
+ s.bite=0;s.hover=0;s.timer=0;advanceAngel(s,.01,open);assert.equal(s.memoryVisits,0);assert.ok(s.goal.distanceTo(food.position)<.6);
+ for(let i=0;i<1000;i++){advanceAngel(s,.05,open);assert.equal(s.consumed,null);}
+ assert.equal(s.foodMemory,null);
+});

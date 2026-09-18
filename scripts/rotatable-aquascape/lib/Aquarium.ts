@@ -1,4 +1,5 @@
 /// <reference types="vite/client" />
+import {behaviorSeed,behaviorRandom,freshBehaviorSeed} from './BehaviorVariation';
 import {FoodReachability,foodApproach} from './FoodReachability.ts';
 import {ObservationCamera,type ObservationSubject} from './ObservationCamera';
 import {assetURL,installAssetPaths} from './AssetPaths';
@@ -118,6 +119,8 @@ export class Aquarium{
  private currentTime=0;
  private last=0;
  private seed=237;
+ private behaviorSession=import.meta.env.DEV&&new URLSearchParams(location.search).has('qa')&&!new URLSearchParams(location.search).has('randomBehavior')?237:freshBehaviorSeed();
+ private animalRandom=behaviorRandom(behaviorSeed(this.behaviorSession,0));
  private daylight=1;
  private canopyLights:T.SpotLight[]=[];
  private stripLight=new T.RectAreaLight(canopy.color,canopy.stripIntensity,8.7,.50);
@@ -129,7 +132,7 @@ export class Aquarium{
  private invertebrates:Invertebrates|null=null;private inspectingAnimal:number|null=null;
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
  private angels:Angelfish|null=null;private inspectingAngel:number|null=null;
- private school=createSchoolRoute();
+ private school=createSchoolRoute(behaviorSeed(this.behaviorSession,1));
  private schoolEyes:SchoolEyes|null=null;
  private diagnostics=import.meta.env.DEV||new URLSearchParams(location.search).get('stats')==='1';
  private perfReadout:PerformanceReadout|null=null;
@@ -223,8 +226,8 @@ export class Aquarium{
    calmSwordLeaves(this.scene);
    this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
    this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3],this.obstacles);
-   this.angels=new Angelfish(this.obstacles,(x,z)=>this.height(x,z),this.invertebrates.plants,results[4]);this.scene.add(this.angels.root);
-   this.cories=new Corydoras(this.scene,(x,z)=>this.height(x,z),this.obstacles,this.invertebrates.plants);
+   this.angels=new Angelfish(this.obstacles,(x,z)=>this.height(x,z),this.invertebrates.plants,results[4],behaviorSeed(this.behaviorSession,2));this.scene.add(this.angels.root);
+   this.cories=new Corydoras(this.scene,(x,z)=>this.height(x,z),this.obstacles,this.invertebrates.plants,6,behaviorSeed(this.behaviorSession,3));
    await this.cories.prepareNavigation(floorRoutes as unknown as FloorRouteMap);
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}
@@ -450,9 +453,11 @@ export class Aquarium{
   this.texture=new T.CanvasTexture(trimmed);this.texture.colorSpace=T.SRGBColorSpace;this.texture.anisotropy=8;
   const tetraMaterials=createTetraMaterials(this.texture);
   for(let i=0;i<16;i++){
-   const model=new Tetra3D(this.texture,i*.83,false,import.meta.env.DEV&&new URLSearchParams(location.search).has('individualTetraMaterials')?undefined:tetraMaterials),swim=createTetraSwim(237+i*7919),size=.48+this.random()*.09;
-   Object.assign(swim,{x:870+i%4*65,y:310+Math.floor(i/4)*33,z:.28+i%3*.19,elapsed:i*.7,remaining:2+i*.23});
-   swim.brain.seed=723+i*3571;swim.brain.energy=.72+this.random()*.22;swim.brain.hunger=.45+this.random()*.22;
+   const model=new Tetra3D(this.texture,i*.83,false,import.meta.env.DEV&&new URLSearchParams(location.search).has('individualTetraMaterials')?undefined:tetraMaterials),swim=createTetraSwim(behaviorSeed(this.behaviorSession,10+i)),size=.48+this.random()*.09;
+   Object.assign(swim,{x:870+i%4*65,y:310+Math.floor(i/4)*33,z:.28+i%3*.19,elapsed:this.animalRandom()*30,remaining:.4+this.animalRandom()*4,depthRemaining:3+this.animalRandom()*18,targetZ:.1+this.animalRandom()*.8,cruiseSpeed:16+this.animalRandom()*15});
+   swim.brain.seed=behaviorSeed(this.behaviorSession,40+i);swim.brain.energy=.72+this.animalRandom()*.22;swim.brain.hunger=.45+this.animalRandom()*.22;
+   swim.brain.curiosity=.35+this.animalRandom()*.5;swim.brain.browseIn=this.animalRandom()*5;
+   swim.direction=this.school.direction;swim.yaw=swim.direction===1?0:Math.PI;swim.vx=swim.direction*swim.speed;
    // Development-only A/B check of the former two-pass membrane rendering.
    if(import.meta.env.DEV&&new URLSearchParams(location.search).has('doubleFinPass'))model.group.traverse(o=>{if(o instanceof T.Mesh)(o.material as T.Material).forceSinglePass=false;});
    model.group.scale.setScalar(size);model.group.traverse(o=>{if(o instanceof T.Mesh){o.castShadow=!(o.material as T.Material).transparent;o.receiveShadow=true;o.renderOrder=0;}});

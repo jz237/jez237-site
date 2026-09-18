@@ -55,3 +55,13 @@ test('whole-body plant rejection preserves 4000 detailed moving-surface results'
  assert.equal(bits.split('0').length-1,2402);
  assert.equal(createHash('sha256').update(bits).digest('hex'),'284d26166eb91e3c7d64a2353b02ae1f6de04763bc26a0665012b2681f2780bb');
 });
+
+for(const seed of [391,7819,4294967295])test(`randomized Corydoras session ${seed} retains floor movement and clearance`,async()=>{
+ const {Corydoras,coryBody,coryForward}=await import('../lib/Corydoras.ts');const scene=new T.Scene();buildBotanicalPlants(scene,height,{value:0});addFernFixture(scene);calmSwordLeaves(scene);scene.updateMatrixWorld();
+ const plants=new GrazerPlants(scene),life=new Corydoras(scene,height,await hardscapeObstacles(),plants,6,seed),distance=Array(6).fill(0);
+ await life.prepareNavigation(JSON.parse(fs.readFileSync(new URL('../lib/CoryFloorRoutes.json',import.meta.url),'utf8')));
+ for(let i=0;i<1200;i++){const old=life.animals.map(a=>a.position.clone());life.update(.1,i*.1);
+ for(const a of life.animals){distance[a.id]+=a.position.distanceTo(old[a.id]);assert.ok(plants.clearBody(a.position,coryBody(a.position,coryForward(a),a.size,a.pitch),i*.1));
+ for(const b of life.animals)if(b.id>a.id)assert.equal(bodiesOverlap(coryBody(a.position,coryForward(a),a.size,a.pitch),coryBody(b.position,coryForward(b),b.size,b.pitch),0),false);}}
+ assert.ok(distance.every(d=>d>2),JSON.stringify(distance));
+});

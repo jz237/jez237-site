@@ -35,3 +35,14 @@ animation, then resumes searching. This prevents adjacent pellets disappearing
 in successive simulation steps. The illustrative 0.55–1.2 second pause is not a
 measured Corydoras habrosus handling time. Mouth-range checks, reachable-food
 selection, collision protection and per-pellet chemistry accounting are unchanged.
+
+## Further social-behavior review and independent visits
+Riley et al. (2019) observed coordination and tactile interactions in Corydoras
+aeneus: https://pubmed.ncbi.nlm.nih.gov/31598295/
+That is a related species, not this demonstration's C. habrosus. We therefore do
+not claim identical nudging or measured shoaling distances, nor deliberately
+allow body overlap. An experimental stronger companion attraction was rejected
+because it caused traffic jams in the full planted habitat test.
+The retained change gives each visit independent route choices and foraging
+pause/fin phases through separate behavior seeds. Existing bottom preference,
+leaf/gravel picking, food handling and collision protection remain in place.

@@ -38,6 +38,18 @@ try{
   await page.locator('#observe').click();await page.keyboard.press('Escape');assert.equal(await page.locator('#observe').getAttribute('aria-pressed'),'false','Escape releases camera');
   assert.deepEqual(errors,[]);report.views[name]={visual,renderer,profile,observationProfile,assets};await page.close();
  }
+ // Exercise the real entropy path as well as the fixed-seed visual baseline.
+ const variation=await browser.newPage({viewport:{width:1280,height:800}}),visits=[],variationErrors=[];
+ variation.on('pageerror',e=>variationErrors.push(e.message));
+ for(let visit=0;visit<2;visit++){
+  await variation.goto('http://127.0.0.1:5233/?qa=1&randomBehavior=1');
+  await variation.waitForFunction(()=>window.aquariumQA&&!document.querySelector('#loading'),null,{timeout:120000});
+  visits.push(await variation.evaluate(()=>{const a=window.aquariumQA;a.paused=true;return {session:a.behaviorSession,school:a.school.seed,fish:a.fishes.map(f=>f.swim.brain.seed),angels:a.angels.states.map(s=>s.locomotorSeed),cories:a.cories.animals.map(s=>s.seed)};}));
+ }
+ assert.notEqual(visits[0].session,visits[1].session,'reload must use fresh behavior entropy');
+ for(const key of ['school','fish','angels','cories'])assert.notDeepEqual(visits[0][key],visits[1][key],key+' repeats across visits');
+ for(const visit of visits)assert.equal(new Set(visit.fish).size,16,'individual decisions need independent seeds');
+ assert.deepEqual(variationErrors,[]);await variation.close();report.sessionVariation=true;
  report.checks={browser:true,visual:true,performance:true};
  if(record)fs.writeFileSync(baselinePath,JSON.stringify(report,null,2)+'\n');
  fs.writeFileSync(path.join(out,'browser-report.json'),JSON.stringify(report,null,2)+'\n');console.log(JSON.stringify(report.views,null,2));

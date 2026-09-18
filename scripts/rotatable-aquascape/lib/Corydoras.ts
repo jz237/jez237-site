@@ -1,3 +1,4 @@
+import {behaviorSeed,behaviorRandom} from './BehaviorVariation.ts';
 import {CoryFloorRoutes,type FloorRouteMap} from './CoryFloorRoutes.ts';
 import * as T from 'three';
 import {FoodReachability,foodApproach} from './FoodReachability.ts';
@@ -25,10 +26,14 @@ export class Corydoras{
  private visitorBounds=new WeakMap<BodySphere[],T.Box3>();
  private bodyCache=new WeakMap<Cory,{x:number;y:number;z:number;yaw:number;pitch:number;size:number;body:BodySphere[]}>();
  private scene:T.Scene;private height:(x:number,z:number)=>number;private obstacles:Obstacle[];private plants?:GrazerPlants;private pelletGeometry=new T.IcosahedronGeometry(.022,1);private pelletMaterial=new T.MeshStandardMaterial({color:0xa78b58,roughness:1});private time=0;
- constructor(scene:T.Scene,height:(x:number,z:number)=>number,obstacles:Obstacle[]=[],plants?:GrazerPlants,count=6){this.scene=scene;this.height=height;this.obstacles=obstacles;this.plants=plants;this.routes=new CoryFloorRoutes((x,z)=>this.floor(x,z),(p,f)=>this.solid(p,coryBody(p,f)));this.models=new CoryModels(count);scene.add(this.models.root);
-  for(let id=0;id<count;id++){const a:Cory={id,position:V(),previous:V(),target:V(),yaw:id*1.73,pitch:0,size:(.66+id%3*.025)*.8,speed:0,phase:id*2.37,effort:0,remaining:1+id*.7,seed:237+id*7351,mode:id%2?'browsing':'foraging',blocked:0,time:0,lift:0,visits:new Map(),route:[],biteIn:0,restIn:5+id*1.1,replanIn:6+id,trail:[],retreat:0,yieldLeft:0,stalled:0,anchor:V()};let found=false;
+ constructor(scene:T.Scene,height:(x:number,z:number)=>number,obstacles:Obstacle[]=[],plants?:GrazerPlants,count=6,sessionSeed?:number){this.scene=scene;this.height=height;this.obstacles=obstacles;this.plants=plants;this.routes=new CoryFloorRoutes((x,z)=>this.floor(x,z),(p,f)=>this.solid(p,coryBody(p,f)));this.models=new CoryModels(count);scene.add(this.models.root);
+  for(let id=0;id<count;id++){const a:Cory={id,position:V(),previous:V(),target:V(),yaw:id*1.73,pitch:0,size:(.66+id%3*.025)*.8,speed:0,phase:id*2.37,effort:0,remaining:1+id*.7,seed:237+id*7351,mode:id%2?'browsing':'foraging',blocked:0,time:0,lift:0,visits:new Map(),route:[],biteIn:0,restIn:5+id*1.1,replanIn:6+id,trail:[],retreat:0,yieldLeft:0,stalled:0,anchor:V()};
+   let found=false;
    for(let k=0;k<1600;k++){const x=k<150? .4+random(a)*3: -4.55+random(a)*9.1,z=k<150? .5+random(a)*1.6:-2+random(a)*4.1;a.position.set(x,this.floor(x,z),z);if(this.clear(a,a.position,coryForward(a),[])&&[-.18,.18].every(d=>{const q=a.position.clone().addScaledVector(coryForward(a),d);q.y=this.floor(q.x,q.z);return this.clear(a,q,coryForward(a),[]);})){found=true;break;}}
-   if(!found)throw new Error('No unobstructed Corydoras starting position');a.previous.copy(a.position);a.target.copy(a.position);this.animals.push(a);this.choose(a);this.pose(a);
+   if(!found)throw new Error('No unobstructed Corydoras starting position');a.previous.copy(a.position);a.target.copy(a.position);this.animals.push(a);
+   // Keep validated spawn placement separate from random behavioral decisions.
+   if(sessionSeed!==undefined){const r=behaviorRandom(behaviorSeed(sessionSeed,id));a.seed=behaviorSeed(sessionSeed,id+10);a.phase=r()*30;a.restIn=2+r()*12;a.replanIn=4+r()*6;}
+   this.choose(a);this.pose(a);
   }this.models.flush();
  }
  async prepareNavigation(cached?:FloorRouteMap){if(cached)this.routes.load(cached);else await this.routes.build();for(const a of this.animals){const origin=V(-4+a.id*1.55,this.floor(-4+a.id*1.55,1.6),1.6),candidates=this.routes.nodes.filter(n=>n.neighbors.length>2).sort((n,m)=>n.point.distanceToSquared(origin)-m.point.distanceToSquared(origin));for(const n of candidates){let found=false;for(const id of n.neighbors){const d=this.routes.nodes[id].point.clone().sub(n.point);if(d.x*d.x+d.z*d.z<.01)continue;const yaw=Math.atan2(-d.z,d.x),f=V(Math.cos(yaw),0,-Math.sin(yaw));if(!this.clear(a,n.point,f,[])||this.animals.some(b=>b.id<a.id&&b.position.distanceTo(n.point)<.85))continue;const route=this.routes.route(n.point,a.visits,0,a.seed,yaw);if(route.length<4)continue;a.position.copy(n.point);a.previous.copy(n.point);a.anchor.copy(n.point);a.trail=[];a.yaw=yaw;found=true;break;}if(found)break;}this.choose(a);this.pose(a);}this.models.flush();}
