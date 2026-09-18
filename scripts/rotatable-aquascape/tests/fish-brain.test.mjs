@@ -2,6 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createFishBrain,thinkFish,rememberPlant} from '../lib/FishBrain.ts';
 import {createTetraSwim,advanceTetraSwim,MAX_TETRA_PITCH} from '../lib/TetraSwimming.ts';
+import {FEEDING_MAX_PITCH,FEEDING_TURN_RATE} from '../lib/TetraFeeding.ts';
 const empty={food:[],neighbors:[]};
 test('hungry fish seeks actual food and only eats within reach',()=>{
  const b=createFishBrain(),food={id:42,x:1080,y:320};
@@ -27,12 +28,16 @@ test('inspection memory expires and remains bounded',()=>{
 test('perception-driven locomotion stays bounded, upright and finite',()=>{
  const s=createTetraSwim();
  for(let i=0;i<60*300;i++){
-  const t=i/60,yaw=s.yaw,pitch=s.pitch;
+  const t=i/60,yaw=s.yaw+s.depthHeading,pitch=s.pitch,feedingBefore=s.feedingPhase!=='search';
   const food=i>600&&i<1800?[{id:1,x:1000,y:250+(t-10)*3}]:[];
   const neighbors=[{id:2,x:950+Math.sin(t*.08)*120,y:350},{id:3,x:990+Math.sin(t*.08)*120,y:360}];
   advanceTetraSwim(s,1/60,food.length>0,false,{food,neighbors});
   assert.ok(s.x>600&&s.x<1260);assert.ok(s.y>220&&s.y<530);
-  assert.ok(Math.abs(s.pitch)<=MAX_TETRA_PITCH+1e-9);assert.ok(Math.abs(s.pitch-pitch)<=.25/60+1e-9);assert.ok(Math.abs(s.yaw-yaw)<=.9/60+1e-9);
+  const feeding=feedingBefore||s.feedingPhase!=='search';
+  assert.ok(Math.abs(s.pitch)<=(feeding?FEEDING_MAX_PITCH:MAX_TETRA_PITCH)+1e-9);
+  assert.ok(Math.abs(s.pitch-pitch)<=(feeding?1.25:.25)/60+1e-9);
+  const turn=Math.atan2(Math.sin(s.yaw+s.depthHeading-yaw),Math.cos(s.yaw+s.depthHeading-yaw));
+  assert.ok(Math.abs(turn)<=(feeding?FEEDING_TURN_RATE:1.15)/60+(feedingBefore&&s.feedingPhase==='search'?.025:1e-9));
   assert.ok(s.brain.energy>=0&&s.brain.energy<=1&&s.brain.hunger>=0&&s.brain.hunger<=1);
  }
  const snapshot=structuredClone(s);advanceTetraSwim(s,0,true,false,empty);assert.deepEqual(s,snapshot);
@@ -62,3 +67,24 @@ test('tetra visits front, back and intermediate water with smooth depth steering
  }
 });
 
+
+test('cardinals remember feeding patches at their actual depth and align vertically with companions',()=>{
+ const b=createFishBrain();rememberPlant(b,1000,350,.1);
+ let browse=false;
+ for(let i=0;i<20;i++){b.curiosity=1;b.browseIn=0;b.decisionIn=0;
+  const action=thinkFish(b,.01,1000,350,10,{food:[],neighbors:[],daylight:1,browseSites:[{id:8,x:1000,y:350,z:.7}]},.65);
+  if(action.kind==='browse'){assert.equal(action.target.id,8);browse=true;break;}}
+ assert.ok(browse,'a leaf behind an inspected foreground leaf is still a new patch');
+ const neighbors=[{id:1,x:1080,y:350,z:.5,vy:8,vz:.02},{id:2,x:1100,y:350,z:.5,vy:8,vz:.02}];
+ const intent=thinkFish(createFishBrain(),.01,1000,350,10,{food:[],neighbors,daylight:1,schoolAffinity:1},.5);
+ assert.equal(intent.kind,'school');assert.ok(intent.target.y>350);assert.ok(intent.target.z>.5);
+});
+
+test('smaller cardinal mouth reach still captures actual sinking food',()=>{
+ for(const scale of [.75,.875,1]){
+  const s=createTetraSwim(837);s.mouthReach=18*scale;s.x=1000;s.y=340;s.z=.5;
+  let ate=false;
+  for(let i=0;i<1200;i++){const food={id:84,x:1080,y:310+i/60*2,z:.6};advanceTetraSwim(s,1/60,false,false,{food:[food],neighbors:[],daylight:1});if(s.brain.consumedFood===84){ate=true;break;}}
+  assert.ok(ate,`mouth at scale ${scale} reaches its food`);
+ }
+});
