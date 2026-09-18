@@ -6,7 +6,7 @@ const HERE = path.dirname(new URL(import.meta.url).pathname), DEMO = path.resolv
 const manifest = JSON.parse(readFileSync(path.join(DEMO, 'manifest.json'), 'utf8'));
 const {assemblies, assemblyContext, assemblyOffset} = await import(pathToFileURL(path.join(DEMO, 'assemblies.js')).href);
 let failures = 0;
-const expect = {heart: 30, lungs: 25, spine: 55, brain: 60};
+const expect = {heart: 30, lungs: 25, spine: 55, brain: 60, skull: 60, eye: 10, hand: 35, knee: 15, ribcage: 45, digestive: 40};
 for (const [id, a] of Object.entries(assemblies)) {
   const members = manifest.pieces.filter(p => a.match(p) && !(a.exclude && a.exclude(p)));
   const ctx = assemblyContext(a, members); const layerHits = new Array(a.layers.length).fill(0); let fallback = 0;

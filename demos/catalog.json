@@ -161,14 +161,14 @@
     "id": "008",
     "title": "Anatomy Studio",
     "category": "3D · Human anatomy",
-    "description": "Explode a complete human body into 1,897 named anatomical pieces across ten systems, then open the heart, lungs, spine and brain as nested exploded views with their own labels. Realistic, colour-coded, X-ray and clay finishes; every piece described.",
+    "description": "Explode a complete human body into 1,897 named anatomical pieces across ten systems, then open ten nested exploded views: heart, lungs, spine, brain, skull, eye, hand, knee, rib cage and digestive tract, each with its own labels. X-ray, realistic, colour-coded and clay finishes; every piece described.",
     "url": "anatomy-studio/",
     "image": "assets/anatomy-studio.jpg",
     "imageAlt": "Actual Anatomy Studio showing a human body mid-explosion: translucent skin regions and muscles fanned outward from the skeleton, with organs, vessels and nerves separated in layers",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/anatomy-studio",
     "features": [
       "1,897 selectable pieces on one board",
-      "Heart, lungs, spine & brain nested explodes",
+      "Ten nested explodes: heart to hand",
       "Terminologia Anatomica names & descriptions",
       "Realistic, X-ray, colour-coded & clay finishes"
     ],
