@@ -58,8 +58,8 @@ export class Tetra3D {
   // A fin is one thin membrane, not a transparent volume needing a back/front pair.
   if(kind!=='body')material.forceSinglePass=true;
   const mesh=new T.Mesh(geometry,material);this.meshes.push(mesh);this.fins.set(mesh,{kind,side});const rest=new Float32Array(geometry.getAttribute('position').array);this.deformers.set(geometry,createTetraDeformation(rest,kind,side));this.normalUpdates.set(geometry,createNormalUpdater(geometry));(geometry.getAttribute('position') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);(geometry.getAttribute('normal') as T.BufferAttribute).setUsage(T.DynamicDrawUsage);this.group.add(mesh);}
- update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number,pectoralEffort=.35){
-  this.phase=swimPhase(this.phase,dt,activity);
+ update(time:number,activity:number,photo:T.Texture,flow:number,depth:number,daylight:number,dt:number,pectoralEffort=.35,courtship=false){
+  this.phase=swimPhase(this.phase,dt,activity,courtship);
   this.pectoralPhase+=dt*(5+pectoralEffort*13);
   this.breathing.update(dt,activity);this.feedingBite.update(dt);const {gill}=this.breathing,mouth=Math.max(this.breathing.mouth,this.feedingBite.value*2.4);
   // Keep the biological clock running in isolated lessons, without uploading invisible bodies.
