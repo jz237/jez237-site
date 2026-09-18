@@ -25,6 +25,19 @@ export function createTetraDeformation(rest:Float32Array,kind:FinKind,side=1){
   }else if(kind==='tail'){
    const effort=Math.max(0,Math.min(1.5,activity)),root=tetraSpine(-.30,phase,effort),angle=root.angle+Math.sin(phase-3.7)*(.025+effort*.22),sin=Math.sin(angle),cos=Math.cos(angle);
    for(let i=0;i<rest.length;i+=3){const dx=rest[i]+.30,z=rest[i+2];out[i]=root.x+dx*cos-z*sin;out[i+1]=rest[i+1];out[i+2]=root.z+dx*sin+z*cos;}
+  }else if(kind==='pectoral'){
+   // Every vertex shares this fin's hinge pose. Evaluate its trigonometry once,
+   // retaining the original operation order and exact Float32 vertex results.
+   const beat=pectoralPhase+side*.7,strength=.35+pectoralEffort*.65;
+   const sweep=Math.sin(beat)*.65*strength,fan=(.45+Math.sin(beat-.5)*.40)*side*strength;
+   const cs=Math.cos(sweep),ss=Math.sin(sweep),cf=Math.cos(fan),sf=Math.sin(fan);
+   for(const vertex of unique){
+    const dx=vertex.x-.25,dy=vertex.y+.055,dz=vertex.z-side*.049;
+    const sx=dx*cs-dy*ss,sy=dx*ss+dy*cs;
+    const x=.25+sx,y=-.055+sy*cf-dz*sf,z=side*.049+sy*sf+dz*cf;
+    const spine=tetraSpine(x,phase,activity),px=x-z*Math.sin(spine.angle),pz=spine.z+z*Math.cos(spine.angle);
+    for(const i of vertex.indices){out[i]=px;out[i+1]=y;out[i+2]=pz;}
+   }
   }else{
    for(const vertex of unique){const p=bendTetra(vertex.x,vertex.y,vertex.z,phase,activity,kind,side,pectoralPhase,pectoralEffort);for(const i of vertex.indices){out[i]=p[0];out[i+1]=p[1];out[i+2]=p[2];}}
   }
