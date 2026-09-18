@@ -14334,5 +14334,24 @@
       "imageSha256": "17ace7408f518b06d76b7d5f7f4834d25f1c47aabeb185517a98fb872cc1cc80",
       "imageDHash": "4f27060793050929"
     }
+  },
+  {
+    "id": "2026-09-18-intense-phobia-situation-claustrophobia-the-jammed-cave-squ",
+    "title": "Claustrophobia — The Jammed Cave Squeeze",
+    "tests": "Fear-impact gate: first-person physical entrapment is clear without the caption; compressing rock, blocked forward motion, obstructed retreat, enclosing darkness, and lens-level proximity dominate the frame. Photorealism gate: credible cave anatomy, practical lamp, helmet hardware, muddy caving clothing, realistic action-camera optics, and no fantasy or injury.; archive_slot=2026-09-18T11:20; concept=claustrophobia-caver-jammed-limestone-squeeze",
+    "prompt": "Create one finished, fully photorealistic documentary image that triggers immediate claustrophobia through a physically believable caving situation. First-person helmet-camera viewpoint from a caver already wedged deep inside a real limestone cave squeeze, landscape composition, 1536x1024 pixels. The camera lens is only a few centimeters from wet, rough pale-gray limestone; the rock presses into both edges of the frame and appears to touch both shoulders. Show the viewer's muddy red-and-charcoal caving suit at the lower left and right, forearms pinned close to the torso, scuffed gloves braced uselessly against the rock, and bent knees filling the cramped route ahead so there is visibly no room to turn around. A compact, realistically sized gear pouch has twisted sideways and become firmly snagged between the viewer's hip and a limestone projection behind, visibly obstructing retreat without depicting injury. Ahead, the passage narrows still further around the knees into an irregular slot barely wider than the helmet. One practical helmet lamp provides the only illumination: hard near-field light reveals beads of moisture, gritty mud, sharp calcite ridges, scraped fabric, and breath condensation immediately around the lens, while the constricted slot beyond falls rapidly into enclosing blackness. Use credible cave geology and gravity, plausible CE-style caving helmet edge and chin-strap hardware barely visible at the top margin, correctly articulated human limbs, ordinary action-camera distortion, shallow near-field perspective, realistic sensor noise, subdued mineral gray, mud brown, and safety red. Make the trapped body position and compression instantly legible. At least four fear-pressure devices must dominate: rock inches from the lens, shoulders compressed between both walls, knees blocking forward motion, snagged equipment obstructing retreat, and darkness enclosing the narrowing route. The scene must feel like a real frame captured during difficult cave exploration, not a set or artwork. No spacious chamber, no visible exit, no distant observer, no rescue team, no cave-in, no injury, no blood, no monster, no supernatural element, no cinematic fog, no glamorous adventure lighting, no text, no labels, no logo, no watermark, no split panel, no border.",
+    "image": "images/2026-09-18-intense-phobia-situation-claustrophobia-the-jammed-cave-squ.jpg",
+    "thumb": "thumbs/2026-09-18-intense-phobia-situation-claustrophobia-the-jammed-cave-squ.webp",
+    "color": "#5b4d43",
+    "date": "2026-09-18",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "claustrophobia-caver-jammed-limestone-squeeze",
+      "imageSha256": "096a512e1c4830e0e3c80045ea35460937b7e35d41c17796bade57e18bcb8f76",
+      "imageDHash": "233b3bd999188e8d"
+    }
   }
 ]
