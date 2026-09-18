@@ -1,0 +1,17 @@
+Model Information:
+* title:   Z-Anatomy (3D anatomy atlas)
+* source:  https://github.com/LluisV/Z-Anatomy (branch PC-Version, Resources/Models/FBX and Resources/Descriptions)
+* authors: Gauthier Kervyn and the Z-Anatomy contributors (models); Lluís Vinent Juanico (PC application)
+* project: https://www.z-anatomy.com/
+
+Model License:
+* license type: CC BY-SA 4.0 (https://creativecommons.org/licenses/by-sa/4.0/)
+* requirements: Authors must be credited. Adaptations must be shared under the same licence.
+
+This work is based on Z-Anatomy (https://github.com/LluisV/Z-Anatomy) by Gauthier Kervyn, Lluís Vinent Juanico and
+contributors, licensed under CC BY-SA 4.0. The GLB files in assets/, manifest.json and descriptions.json are adaptations
+(simplified geometry, merged sub-parts, extracted and trimmed description text) and are shared under CC BY-SA 4.0.
+Description text derives from Wikipedia articles selected by the Z-Anatomy project (CC BY-SA).
+
+The studio code (studio.js, assemblies.js, explode-rules.js, materials.js, parts-board.js, stylesheets, pages) is part of
+jez237-site and is not covered by the model licence. Vendored three.js files carry their own MIT licence (vendor/LICENSE).

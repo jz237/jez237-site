@@ -1,0 +1,28 @@
+{
+  "comment": "Per output file triangle budgets and options for blender-export.py. Merge logic lives in the script (documented in README).",
+  "systems": {
+    "skeletal":       {"fbx": "SkeletalSystem100.fbx"},
+    "joints":         {"fbx": "Joints100.fbx"},
+    "visceral":       {"fbx": "VisceralSystem100.fbx"},
+    "cardiovascular": {"fbx": "CardioVascular41.fbx"},
+    "nervous":        {"fbx": "NervousSystem100.fbx"},
+    "muscular":       {"fbx": "MuscularSystem100.fbx"},
+    "lymphoid":       {"fbx": "LymphoidOrgans100.fbx"},
+    "regions":        {"fbx": "Regions of human body100.fbx"}
+  },
+  "files": {
+    "skeletal": {"budget": 520000, "system": "skeletal"},
+    "joints":   {"budget": 60000,  "system": "joints"},
+    "visceral": {"budget": 260000, "system": "visceral"},
+    "heart":    {"budget": 120000, "system": "cardiovascular", "hero": true},
+    "vessels":  {"budget": 160000, "system": "cardiovascular"},
+    "brain":    {"budget": 240000, "system": "nervous", "hero": true},
+    "nerves":   {"budget": 90000,  "system": "nervous"},
+    "muscular": {"budget": 560000, "system": "muscular"},
+    "lymphoid": {"budget": 20000,  "system": "lymphoid"},
+    "regions":  {"budget": 50000,  "system": "regions"}
+  },
+  "decimate": {"minTriangles": 600, "smallPieceTriangles": 5000, "smallPieceFloor": 0.15, "floor": 0.06, "heroBoost": 1.5},
+  "vesselUnitDepth": 4,
+  "nerveUnitDepth": 4
+}
