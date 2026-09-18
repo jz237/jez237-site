@@ -43,7 +43,7 @@ export function swimForFood(s:TetraSwim,dt:number,target:FishPoint|undefined,sen
    // Begin braking with enough distance to stop at the mouth, including one
    // whole simulation step. Never consume a flake using body-center proximity.
    const brakingDistance=24+s.speed*s.speed/(2*650)+s.speed*dt;
-   if(distance<brakingDistance||distance<44){s.feedingPhase='braking';pace=clamp((distance-17)*3.2,3,85);drive=.18;fan=1;}
+   if(distance<brakingDistance||distance<44){s.feedingPhase='braking';pace=clamp((distance-(s.mouthReach-1))*3.2,3,85);drive=.18;fan=1;}
   }
   const headingError=Math.abs(angle(desiredYaw-yaw));
   if(headingError>.35){pace=Math.min(pace,Math.max(7,s.feedingBurst*Math.pow(Math.max(0,Math.cos(headingError)),3)));fan=1;}
@@ -55,9 +55,9 @@ export function swimForFood(s:TetraSwim,dt:number,target:FishPoint|undefined,sen
    // At mouth range, paired fins can make small sideways/backward adjustments.
    // Hold heading when directly above/below the particle instead of spinning.
    if(horizontal<12)desiredYaw=yaw;
-   mouthDx=target.x-(s.x+Math.cos(yaw)*Math.cos(s.pitch)*18);
-   mouthDy=target.y-(s.y-Math.sin(s.pitch)*18);
-   mouthDz=((target.z??s.z)-s.z)*180+Math.sin(yaw)*Math.cos(s.pitch)*18;
+   mouthDx=target.x-(s.x+Math.cos(yaw)*Math.cos(s.pitch)*s.mouthReach);
+   mouthDy=target.y-(s.y-Math.sin(s.pitch)*s.mouthReach);
+   mouthDz=((target.z??s.z)-s.z)*180+Math.sin(yaw)*Math.cos(s.pitch)*s.mouthReach;
    pace=Math.min(18,Math.hypot(mouthDx,mouthDy,mouthDz)*2);
   }
   if(s.avoidanceRemaining>0)pace=Math.min(pace,65);

@@ -453,7 +453,8 @@ export class Aquarium{
   this.texture=new T.CanvasTexture(trimmed);this.texture.colorSpace=T.SRGBColorSpace;this.texture.anisotropy=8;
   const tetraMaterials=createTetraMaterials(this.texture);
   for(let i=0;i<16;i++){
-   const model=new Tetra3D(this.texture,i*.83,false,import.meta.env.DEV&&new URLSearchParams(location.search).has('individualTetraMaterials')?undefined:tetraMaterials),swim=createTetraSwim(behaviorSeed(this.behaviorSession,10+i)),size=.48+this.random()*.09;
+   const model=new Tetra3D(this.texture,i*.83,false,import.meta.env.DEV&&new URLSearchParams(location.search).has('individualTetraMaterials')?undefined:tetraMaterials),swim=createTetraSwim(behaviorSeed(this.behaviorSession,10+i)),size=(.48+this.random()*.09)*(.75+.25*this.animalRandom());
+   swim.mouthReach=.49*size/.014;
    Object.assign(swim,{x:870+i%4*65,y:310+Math.floor(i/4)*33,z:.28+i%3*.19,elapsed:this.animalRandom()*30,remaining:.4+this.animalRandom()*4,depthRemaining:3+this.animalRandom()*18,targetZ:.1+this.animalRandom()*.8,cruiseSpeed:16+this.animalRandom()*15});
    swim.brain.seed=behaviorSeed(this.behaviorSession,40+i);swim.brain.energy=.72+this.animalRandom()*.22;swim.brain.hunger=.45+this.animalRandom()*.22;
    swim.brain.curiosity=.35+this.animalRandom()*.5;swim.brain.browseIn=this.animalRandom()*5;
@@ -556,7 +557,7 @@ export class Aquarium{
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
   this.fishes.forEach(({swim:s},i)=>{
    const activity=schoolActivity(this.school,goal,i);
-   advanceTetraSwim(s,dt,false,this.chemistry.state.oxygen<3,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),reachable:f=>this.foodPaths[i].test(f.id,this.currentTime,fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),()=>foodApproach(fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),s.yaw+s.depthHeading,s.pitch,.252,(p)=>this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+.23)**2)&&(!this.invertebrates||this.invertebrates.plants.clearBody(p,[{center:p,radius:.23}],this.currentTime,undefined,false,.4)))),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,browseSites:this.browseSites,depthBounds:[-.26,1.26]});
+   advanceTetraSwim(s,dt,false,this.chemistry.state.oxygen<3,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),reachable:f=>this.foodPaths[i].test(f.id,this.currentTime,fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),()=>foodApproach(fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),s.yaw+s.depthHeading,s.pitch,s.mouthReach*.014,(p)=>this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+.23)**2)&&(!this.invertebrates||this.invertebrates.plants.clearBody(p,[{center:p,radius:.23}],this.currentTime,undefined,false,.4)))),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,browseSites:this.browseSites,depthBounds:[-.26,1.26]});
    if(dt)this.avoidSolid(s,snapshot[i]);
    if(s.brain.consumedFood!==null){const idx=this.food.findIndex(f=>f.mesh.id===s.brain.consumedFood);if(idx>=0){this.fishes[i].model.bite();const f=this.food.splice(idx,1)[0];this.learning.eat(f.mesh.userData.foodNitrogen??0,f.mesh.userData.chemistryGeneration);this.scene.remove(f.mesh);f.mesh.geometry.dispose();(f.mesh.material as T.Material).dispose();}s.brain.consumedFood=null;}
   });

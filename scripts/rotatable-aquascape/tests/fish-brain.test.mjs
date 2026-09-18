@@ -79,3 +79,12 @@ test('cardinals remember feeding patches at their actual depth and align vertica
  const intent=thinkFish(createFishBrain(),.01,1000,350,10,{food:[],neighbors,daylight:1,schoolAffinity:1},.5);
  assert.equal(intent.kind,'school');assert.ok(intent.target.y>350);assert.ok(intent.target.z>.5);
 });
+
+test('smaller cardinal mouth reach still captures actual sinking food',()=>{
+ for(const scale of [.75,.875,1]){
+  const s=createTetraSwim(837);s.mouthReach=18*scale;s.x=1000;s.y=340;s.z=.5;
+  let ate=false;
+  for(let i=0;i<1200;i++){const food={id:84,x:1080,y:310+i/60*2,z:.6};advanceTetraSwim(s,1/60,false,false,{food:[food],neighbors:[],daylight:1});if(s.brain.consumedFood===84){ate=true;break;}}
+  assert.ok(ate,`mouth at scale ${scale} reaches its food`);
+ }
+});
