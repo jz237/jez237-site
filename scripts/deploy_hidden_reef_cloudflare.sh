@@ -25,6 +25,7 @@ fi
 
 echo "Preflight: JavaScript syntax checks"
 node "$SCRIPT_DIR/check_aquarium_sync.mjs"
+node "$SCRIPT_DIR/check_aquarium_release.mjs"
 for js_file in "$SOURCE_DIR"/assets/*.js; do
   node --check "$js_file"
 done

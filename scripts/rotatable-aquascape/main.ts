@@ -5,6 +5,7 @@ import {installExploration} from './lib/ExplorationUI';
 import {installLearning} from './lib/LearningUI';
 import {installShowroom} from './lib/Showroom';
 import {Aquarium} from './lib/Aquarium';
+import {installObservation} from './lib/ObservationUI';
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
 <main>
@@ -16,7 +17,7 @@ document.querySelector<HTMLDivElement>('#app')!.innerHTML=`
  <div id="loading" role="status">Growing a small world<span></span></div>
  <button id="learn" class="learn-toggle" aria-expanded="false" aria-controls="learning" disabled>How the aquarium works ↗</button>
  <aside class="help"><span>EXPLORE THE TANK</span><p>Drag to rotate<br>Scroll or pinch to zoom</p></aside>
- <footer><div class="views" role="group" aria-label="Camera view"><button data-view="front" class="active">Front</button><button data-view="angle">Three-quarter</button><button data-view="side">Side</button></div>
+ <footer><div class="views" role="group" aria-label="Camera view"><button id="observe" aria-pressed="false">Watch the aquarium</button><button data-view="front" class="active">Front</button><button data-view="angle">Three-quarter</button><button data-view="side">Side</button></div>
  <div class="actions"><button id="zoomIn" aria-label="Zoom in">＋</button><button id="zoomOut" aria-label="Zoom out">−</button><span class="divider"></span><button id="feed">Feed fish</button><button id="pause" aria-pressed="false">Pause</button><button id="light" aria-pressed="false">Evening</button><button id="reset" aria-label="Reset camera">Reset view</button></div></footer>
  <button id="fullscreen" aria-pressed="false">Full screen</button>
  <div class="bottom-note">A separate 3D study <span>·</span> All scenery has volume</div>
@@ -49,6 +50,9 @@ async function start(){
  installFilterExperience(aquarium);installLearning(aquarium);installExploration(aquarium);
  primaryTools.append(document.querySelector('#explore')!,document.querySelector('.chemistry-summary')!);
  installShowroom(aquarium);
+ installObservation(aquarium);
+ // Local regression runner only; eliminated from production builds.
+ if(import.meta.env.DEV&&new URLSearchParams(location.search).has('qa'))Object.assign(window,{aquariumQA:aquarium});
  document.querySelector('#status')!.textContent='Exploring';
  document.querySelectorAll<HTMLButtonElement>('[data-view]').forEach(b=>b.onclick=()=>{aquarium.view(b.dataset.view!);document.querySelectorAll('[data-view]').forEach(v=>v.classList.toggle('active',v===b));});
  const pause=document.querySelector<HTMLButtonElement>('#pause')!;

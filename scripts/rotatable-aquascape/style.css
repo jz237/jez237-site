@@ -59,3 +59,11 @@ main.aquarium-fullscreen .aquarium-header .identity,main.aquarium-fullscreen .aq
 .effects-control select:focus-visible{outline:2px solid #8cedee;outline-offset:2px}
 
 .filter-loading{position:fixed;inset:0;z-index:5000;display:flex;align-items:center;justify-content:center;gap:20px;background:#07151df5;color:#e4f2eb}.filter-loading button{padding:12px 22px;border:1px solid #73b0b7;border-radius:8px;background:#173c49;color:inherit;font:inherit}
+
+#observe{color:#bdf8ec;font-weight:600}#observe[aria-pressed=true]{background:#19505b;color:#fff}
+.observation-caption{position:absolute;left:20px;right:20px;bottom:125px;text-align:center;pointer-events:none;color:#e2f4ed;font-size:12px;letter-spacing:.04em;text-shadow:0 2px 5px #000}
+.observing .aquarium-header,.observing footer,.observing .help,.observing .bottom-note,.observing #fullscreen{transition:opacity .7s}
+.observation-idle .aquarium-header,.observation-idle footer,.observation-idle .help,.observation-idle .bottom-note,.observation-idle #fullscreen{opacity:0}
+.observation-idle :has(:focus-visible){opacity:1}
+@media(max-width:850px){.views{flex-wrap:wrap;justify-content:center}.observation-caption{bottom:165px;font-size:10px}}
+@media(prefers-reduced-motion:reduce){.observing .aquarium-header,.observing footer,.observing .help,.observing .bottom-note,.observing #fullscreen{transition:none}}
