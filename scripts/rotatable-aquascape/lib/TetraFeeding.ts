@@ -15,7 +15,7 @@ export function swimForFood(s:TetraSwim,dt:number,target:FishPoint|undefined,sen
  s.startleRemaining=Math.max(0,s.startleRemaining-dt);s.startleCooldown=Math.max(0,s.startleCooldown-dt);s.avoidanceRemaining=Math.max(0,s.avoidanceRemaining-dt);
  s.feedingTimer-=dt;
  const biting=s.brain.biteIn>0;
- if(!biting&&(s.feedingPhase==='bite'||s.feedingPhase==='pause')){s.feedingPhase='depart';s.feedingTimer=.25+random(s)*.25;}
+ if(!biting&&(s.feedingPhase==='bite'||s.feedingPhase==='pause')){s.feedingPhase='depart';s.feedingTimer=.65+random(s)*.35;}
  const departing=s.feedingPhase==='depart'&&s.feedingTimer>0;
  if(departing)target=undefined;
  if(biting){s.feedingPhase=s.brain.consumedFood!==null?'bite':'pause';s.feedingTarget=null;}
@@ -62,7 +62,7 @@ export function swimForFood(s:TetraSwim,dt:number,target:FishPoint|undefined,sen
   }
   if(s.avoidanceRemaining>0)pace=Math.min(pace,65);
  }else if(!biting){
-  if(departing){pace=55;drive=.35;fan=.45;}else desiredYaw=Math.cos(yaw)>=0?0:Math.PI;
+  if(departing){pace=24;drive=.055;fan=.55;}else desiredYaw=Math.cos(yaw)>=0?0:Math.PI;
   s.behavior='gliding';s.remaining=.45;
  }
  // Predict full three-dimensional approaches, including another feeding fish.

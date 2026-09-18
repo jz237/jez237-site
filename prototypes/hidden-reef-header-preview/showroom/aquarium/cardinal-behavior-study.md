@@ -114,3 +114,6 @@ steering noise. The fixed planting, full model detail and contact constraints
 are unchanged. These variation ranges are illustrative, not measured from field
 observations. Walker (2004), cited above, supports group browsing near roots and
 plants rather than a permanent synchronized parade around the tank.
+
+## Paired courtship illustration
+An occasional already adjacent, aligned pair briefly displays a posterior body wave, then resumes swimming. Food, startle and contact avoidance interrupt it; it never follows a bite as a reward animation. Ordinary post-bite departure uses a quiet glide. The randomized display interval and motion amplitude are illustrative, not measured reproductive timing. No eggs, sex determination or successful spawning are simulated. Species accounts describe paired swimming during reproduction and emphasize dim conditions: https://animaldiversity.org/accounts/Paracheirodon_axelrodi/ .
