@@ -47,6 +47,7 @@ import {reuseUnchangedTransforms} from './TransformReuse';
 import {PerformanceReadout} from './PerformanceReadout';
 import {FrameBenchmark,type FrameProbe} from './FrameBenchmark';
 import {createTetraSwim,advanceTetraSwim,startleTetra,tetraBehaviorLabel,type TetraSwim} from './TetraSwimming';
+import {TetraCourtship} from './TetraCourtship';
 import {createSchoolRoute,advanceSchoolRoute,schoolActivity} from './SchoolRoute';
 import {separateFish} from './FishCollisions';
 
@@ -132,6 +133,7 @@ export class Aquarium{
  private invertebrates:Invertebrates|null=null;private inspectingAnimal:number|null=null;
  private fishes:{model:Tetra3D;swim:TetraSwim;size:number}[]=[];
  private angels:Angelfish|null=null;private inspectingAngel:number|null=null;
+ private courtship=new TetraCourtship(behaviorSeed(this.behaviorSession,81));
  private school=createSchoolRoute(behaviorSeed(this.behaviorSession,1));
  private schoolEyes:SchoolEyes|null=null;
  private diagnostics=import.meta.env.DEV||new URLSearchParams(location.search).get('stats')==='1';
@@ -555,6 +557,7 @@ export class Aquarium{
   const snapshot=this.fishes.map(({swim:s},id)=>({id,x:s.x,y:s.y,z:s.z,vx:s.vx,vy:s.vy,vz:s.vz,foodTarget:s.feedingTarget,radius:25}));
   const goal=advanceSchoolRoute(this.school,dt,snapshot);
   const food=this.food.map(f=>({id:f.mesh.id,...fishCoordinates(f.mesh.position)}));
+  this.courtship.update(dt,this.fishes.map(f=>f.swim),food.length>0||this.chemistry.state.oxygen<3);
   this.fishes.forEach(({swim:s},i)=>{
    const activity=schoolActivity(this.school,goal,i);
    advanceTetraSwim(s,dt,false,this.chemistry.state.oxygen<3,{food:food.filter(f=>this.food.some(live=>live.mesh.id===f.id)),reachable:f=>this.foodPaths[i].test(f.id,this.currentTime,fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),()=>foodApproach(fishPosition(s.x,s.y,s.z),fishPosition(f.x,f.y,f.z??s.z),s.yaw+s.depthHeading,s.pitch,s.mouthReach*.014,(p)=>this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+.23)**2)&&(!this.invertebrates||this.invertebrates.plants.clearBody(p,[{center:p,radius:.23}],this.currentTime,undefined,false,.4)))),neighbors:snapshot.filter(n=>n.id!==i),schoolGoal:activity.goal,schoolAffinity:activity.affinity,daylight:this.daylight,browseSites:this.browseSites,depthBounds:[-.26,1.26]});
