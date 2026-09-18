@@ -1,14 +1,14 @@
 # Anatomy Studio
 
-Interactive exploded view of a complete human body: 1,897 selectable anatomical pieces across ten systems, plus ten nested
-exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, digestive tract). Built on the open [Z-Anatomy](https://github.com/LluisV/Z-Anatomy) model
+Interactive exploded view of a complete human body: 2,270 selectable anatomical pieces across ten systems, plus seventeen nested
+exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, digestive tract, urinary system, face, aorta, pelvis, shoulder, larynx, foot). Built on the open [Z-Anatomy](https://github.com/LluisV/Z-Anatomy) model
 (CC BY-SA 4.0, see `ASSET-LICENSE.txt`). Published at https://jez237.com/demos/anatomy-studio/.
 
 ## Controls
 
 - Slider / **Explode the body** / `E` — separate every system from the skeleton outward; skeleton stays as the axis.
-- **Heart · Lungs · Spine · Brain · Skull · Eye · Hand · Knee · Rib cage · Digestive tract** (keys `1`–`0`; `H` `L` `S` `B` for the first four) — isolate that structure and explode it along its own anatomy. Paired structures (eye, hand, knee) have a Left / Right toggle (`&side=R`).
-- Finish: X-ray (default), Realistic, Colour-coded, Clay. Visible system filter, Labels, Auto orbit, Play sequence.
+- **Seventeen nested studies** (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, digestive tract, urinary, face, aorta, pelvis, shoulder, larynx, foot; keys `1`–`0` for the first ten, `H` `L` `S` `B` for the first four) — isolate that structure and explode it along its own anatomy. Paired structures (eye, hand, knee, shoulder, foot) have a Left / Right toggle (`&side=R`). “Label every piece” names all members of the open study.
+- Finish: X-ray (default), Realistic, Colour-coded, Clay. Shadowing toggles ground-truth ambient occlusion (on by default on desktop). Visible system filter, Labels, Auto orbit, Play sequence.
 - Click a piece or pick it from the list: description (Z-Anatomy / Wikipedia), hierarchy path, size, triangles, merged sub-parts. Isolate to frame it alone.
 - **All parts on screen** — every loaded piece on one non-overlapping board.
 - Deep links: `?assembly=heart|lungs|spine|brain|skull|eye|hand|knee|ribcage|digestive`, `?view=parts`, `?stage=core|muscles|full`. Phones load the core stage (skeleton, ligaments, viscera, heart, brain) and offer a button for the rest.
@@ -25,4 +25,4 @@ See `../../scripts/anatomy-studio/README.md`: `fetch-models.sh` → `run-exports
 Pieces keep Z-Anatomy's Terminologia Anatomica names. Every bone, tooth, cartilage, muscle, organ, lobe, bronchus, heart and
 brain structure is an individual piece; branches of vessels and nerves below the fourth level of their tree, small ligaments,
 lymph-node groups, fasciae/bursae and skin sub-regions are merged into their parent structure. Geometry is decimated to about
-2.2 M triangles in total. This is a teaching model, not a clinical reference.
+4.6 M triangles in total (32 MB); vessels and nerves are individual to the seventh and sixth levels of their trees. This is a teaching model, not a clinical reference.

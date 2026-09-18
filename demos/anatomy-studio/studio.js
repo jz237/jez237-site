@@ -2,20 +2,24 @@ import * as THREE from 'three';
 import { OrbitControls } from './vendor/OrbitControls.js';
 import { GLTFLoader } from './vendor/GLTFLoader.js';
 import { MeshoptDecoder } from './vendor/meshopt_decoder.module.js';
-import { PartsBoard } from './parts-board.js';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes } from './materials.js';
-import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js';
-import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js';
+import { EffectComposer } from './vendor/postprocessing/EffectComposer.js';
+import { RenderPass } from './vendor/postprocessing/RenderPass.js';
+import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
+import { OutputPass } from './vendor/postprocessing/OutputPass.js';
+import { PartsBoard } from './parts-board.js?v=2';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes } from './materials.js?v=2';
+import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=2';
+import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=2';
 
 const $ = id => document.getElementById(id);
 const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, stage:'none', loading:false, rotate:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, stage:'none', loading:false, rotate:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
-let board = null, bodyCamera, bodyControls, boardControls, studioObjects = [], studioFog, boardKey = '', boardDirty = true, keyLight;
+let board = null, bodyCamera, bodyControls, boardControls, studioObjects = [], studioFog, boardKey = '', boardDirty = true, keyLight, composer, gtaoPass, renderPass;
 const baseTarget = new THREE.Vector3(0, .9, 0);
 const views = { hero:[2.1, 1.7, 2.9], front:[0, .95, 3.8], side:[3.8, .95, 0], back:[0, .95, -3.8], top:[.01, 4.4, .01] };
 const stageOrder = ['core', 'muscles', 'detail'];
@@ -44,6 +48,11 @@ function init(){
  renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 1.05;
  host.appendChild(renderer.domElement);
  camera = new THREE.PerspectiveCamera(36, 1, .03, 120); camera.position.fromArray(views.hero);
+ // Ground-truth ambient occlusion (GTAO) so pieces shade each other; off for phones and headless verification.
+ composer = new EffectComposer(renderer); renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
+ gtaoPass = new GTAOPass(scene, camera, 1, 1, undefined, { radius:.14, distanceExponent:1.1, thickness:1, scale:1.6, samples:14, distanceFallOff:1, screenSpaceRadius:false }, { lumaPhi:8, depthPhi:2.5, normalPhi:3.5, radius:4, radiusExponent:1, rings:2, samples:14 });
+ gtaoPass.output = GTAOPass.OUTPUT.Default; gtaoPass.blendIntensity = 1; composer.addPass(gtaoPass); composer.addPass(new OutputPass());
+ state.ao = !verifyQuality && !mobile; gtaoPass.enabled = state.ao;
  controls = new OrbitControls(camera, renderer.domElement); controls.target.copy(baseTarget); controls.enableDamping = true; controls.dampingFactor = .065;
  controls.minDistance = .25; controls.maxDistance = 20; controls.maxPolarAngle = Math.PI * .49; controls.autoRotateSpeed = .55; controls.enablePan = true;
  controls.addEventListener('start', () => { viewTween = null; document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active')); });
@@ -61,7 +70,7 @@ function init(){
  const positions = []; for (let i = 0; i < 96; i++) { const a = i / 96 * Math.PI * 2, r = i % 8 === 0 ? 1.12 : 1.16; positions.push(Math.cos(a) * r, .003, Math.sin(a) * r, Math.cos(a) * 1.2, .003, Math.sin(a) * 1.2); }
  scene.add(new THREE.LineSegments(new THREE.BufferGeometry().setAttribute('position', new THREE.Float32BufferAttribute(positions, 3)), new THREE.LineBasicMaterial({ color:'#64717a', transparent:true, opacity:.32 })));
  bodyCamera = camera; bodyControls = controls; studioFog = scene.fog; studioObjects = scene.children.filter(o => o.isMesh || o.isLineSegments);
- const resize = () => { const w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h); bodyCamera.aspect = w / h; bodyCamera.updateProjectionMatrix(); if (state.ready) { if (state.board) reflowBoard(true); else setView(state.view, true); } }; new ResizeObserver(resize).observe(host); resize();
+ const resize = () => { const w = host.clientWidth, h = host.clientHeight; renderer.setSize(w, h); composer.setSize(w, h); bodyCamera.aspect = w / h; bodyCamera.updateProjectionMatrix(); if (state.ready) { if (state.board) reflowBoard(true); else setView(state.view, true); } }; new ResizeObserver(resize).observe(host); resize();
  renderer.domElement.addEventListener('webglcontextlost', e => { e.preventDefault(); fail(new Error('WebGL context lost')); });
  renderer.domElement.addEventListener('pointerdown', e => pointerStart = { x:e.clientX, y:e.clientY });
  renderer.domElement.addEventListener('pointerup', e => { if (pointerStart && Math.hypot(e.clientX - pointerStart.x, e.clientY - pointerStart.y) < 6) { const hit = pick(e); if (hit) selectPart(hit.userData.part); } pointerStart = null; });
@@ -79,15 +88,15 @@ async function loadStudio(){
  const requested = params.get('stage'); const target = requested && stageOrder.includes(requested) ? requested : requested === 'full' ? 'detail' : mobile ? 'core' : 'detail';
  await loadStage('core');
  state.ready = true; document.body.dataset.ready = 'true'; $('loading').hidden = true;
- for (const id of ['explode-button', 'animate', 'reset', 'all-parts']) $(id).disabled = false;
+ for (const id of ['explode-button', 'animate', 'reset', 'all-parts']) $(id).disabled = false; $('ao-toggle').setAttribute('aria-pressed', state.ao);
  document.querySelectorAll('[data-assembly]').forEach(b => b.disabled = false);
  updateList(); updateUI(); setView('hero', true);
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:renderer.info.render.triangles, drawCalls:renderer.info.render.calls, files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:renderer.info.render.triangles, drawCalls:renderer.info.render.calls, files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
-  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, getManifest:() => manifest
+  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
  };
  const initialView = params.get('view'), initialAssembly = params.get('assembly');
  if (initialAssembly && assemblies[initialAssembly]) await enterAssembly(initialAssembly, (params.get('side') || '').toUpperCase());
@@ -182,7 +191,7 @@ function updateVisibility(){
   p.mesh.visible = member && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected);
   const o = state.assembly && p.assemblyLayer?.opacity != null && state.amount > .05 ? p.assemblyLayer.opacity : null;
   mat.opacity = o ?? p.opacity; mat.transparent = o != null || p.transparent; mat.depthWrite = o != null ? false : p.depthWrite;
-  mat.emissive.copy(selected ? new THREE.Color('#49c8a3') : p.emissive); mat.emissiveIntensity = selected ? .45 : p.emissiveIntensity;
+  mat.emissive.copy(selected ? new THREE.Color('#49c8a3') : p.emissive); mat.emissiveIntensity = selected ? (state.isolated ? .08 : .3) : p.emissiveIntensity;   // faint when isolated so the surface detail stays readable
  }
  $('isolate').disabled = !state.selected; $('clear').disabled = !state.selected; $('isolate').textContent = state.isolated ? 'Show surrounding pieces' : 'Isolate piece'; $('isolate').setAttribute('aria-pressed', state.isolated);
  updateUI(); if (state.board && board) { board.select(state.selected); reflowBoard(); }
@@ -236,6 +245,7 @@ async function enterAssembly(id, side){
   if (!part) continue; const el = document.createElement('span'); el.className = 'landmark landmark-assembly'; el.textContent = l.label; $('labels').append(el); landmarks.push({ el, part, kind:'assembly', anchor:anchor ? new THREE.Vector3().fromArray(anchor.position) : null });
  }
  document.querySelectorAll('[data-assembly]').forEach(b => { b.classList.toggle('active', b.dataset.assembly === id); b.setAttribute('aria-pressed', b.dataset.assembly === id); });
+ buildAllLabels();
  $('assembly-panel').hidden = false; $('assembly-side').hidden = !a.paired; document.querySelectorAll('[data-side]').forEach(b => { b.classList.toggle('active', b.dataset.side === state.assemblySide); b.setAttribute('aria-pressed', b.dataset.side === state.assemblySide); });
  $('assembly-title').textContent = a.paired ? `${a.title} (${state.assemblySide === 'L' ? 'left' : 'right'})` : a.title; $('assembly-eyebrow').textContent = a.eyebrow; $('assembly-copy').textContent = a.description; $('assembly-count').textContent = `${members.length} pieces`;
  selectPart(null); updateList(); lastApplied = -1; controls.minDistance = .12;
@@ -245,12 +255,17 @@ async function enterAssembly(id, side){
 function leaveAssembly(){
  if (!state.assembly) return; state.assembly = null; for (const p of parts) { p.assemblyOffset = null; p.assemblyLayer = null; }
  if (state.restoreMode) { const m = state.restoreMode; state.restoreMode = null; if (state.mode === 'realistic') setMode(m); }
- for (const l of landmarks.filter(l => l.kind === 'assembly')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'assembly') landmarks.splice(i, 1);
+ for (const l of landmarks.filter(l => l.kind === 'assembly' || l.kind === 'all')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'assembly' || landmarks[i].kind === 'all') landmarks.splice(i, 1);
  document.querySelectorAll('[data-assembly]').forEach(b => { b.classList.remove('active'); b.setAttribute('aria-pressed', 'false'); }); $('assembly-panel').hidden = true;
  controls.minDistance = .25; selectPart(null); updateList(); lastApplied = -1; state.target = 0; state.amount = reducedMotion ? 0 : state.amount; setAmount(0, { animate:true }); setView('hero');
  const url = new URL(location); url.searchParams.delete('assembly'); url.searchParams.delete('side'); history.replaceState(null, '', url);
 }
 
+function buildAllLabels(){
+ for (const l of landmarks.filter(l => l.kind === 'all')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'all') landmarks.splice(i, 1);
+ if (!state.assembly || !state.labelAll) return;
+ for (const p of assemblyMembers(state.assembly)) { const el = document.createElement('span'); el.className = 'landmark landmark-all'; el.textContent = p.label.replace(/ · \d+$/, ''); $('labels').append(el); landmarks.push({ el, part:p, kind:'all' }); }
+}
 function stopSequence(){ explodeTween = null; state.sequence = false; $('animate').textContent = '▷ Play sequence'; }
 function reset(){ if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
 function bindControls(){
@@ -266,6 +281,7 @@ function bindControls(){
  document.querySelectorAll('[data-mode]').forEach(b => b.onclick = () => setMode(b.dataset.mode, { user:true }));
  document.querySelectorAll('[data-assembly]').forEach(b => b.onclick = () => state.assembly === b.dataset.assembly ? leaveAssembly() : enterAssembly(b.dataset.assembly));
  $('leave-assembly').onclick = leaveAssembly;
+ $('label-all').onclick = () => { state.labelAll = !state.labelAll; $('label-all').setAttribute('aria-pressed', state.labelAll); buildAllLabels(); };
  document.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { if (state.assembly && assemblies[state.assembly].paired) enterAssembly(state.assembly, b.dataset.side); });
  $('system').onchange = e => { state.system = e.target.value; selectPart(null); updateList(); };
  $('search').oninput = updateList;
@@ -273,6 +289,7 @@ function bindControls(){
  $('isolate').onclick = () => { state.isolated = !state.isolated; updateVisibility(); if (state.board) return; if (state.isolated) focusSelected(); else setView(state.view); }; $('clear').onclick = () => selectPart(null);
  $('rotate').onclick = () => { if (state.board) toggleBoard(false); controls.autoRotate = !controls.autoRotate; state.rotate = controls.autoRotate; $('rotate').setAttribute('aria-pressed', controls.autoRotate); };
  $('label-toggle').onclick = () => { state.labels = !state.labels; $('label-toggle').setAttribute('aria-pressed', state.labels); };
+ $('ao-toggle').onclick = () => { state.ao = !state.ao; gtaoPass.enabled = state.ao; $('ao-toggle').setAttribute('aria-pressed', state.ao); };
  $('fullscreen').onclick = async () => { try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); } catch { $('fullscreen').textContent = 'Fullscreen unavailable'; } };
  document.addEventListener('fullscreenchange', () => { $('fullscreen').textContent = document.fullscreenElement ? '⛶ Exit fullscreen' : '⛶ Fullscreen'; });
  document.addEventListener('keydown', e => { if (/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName) || e.ctrlKey || e.metaKey || e.altKey || !state.ready) return; const k = e.key.toLowerCase(); if (k === 'e') setAmount(state.target > .5 ? 0 : 1, { animate:true }); if (k === 'r') reset(); if (e.key === 'Escape') { if (state.selected) selectPart(null); else if (state.assembly) leaveAssembly(); } const map = { h:'heart', l:'lungs', s:'spine', b:'brain' }; const order = Object.keys(assemblies); if (/^[0-9]$/.test(k)) map[k] = order[(Number(k) + 9) % 10]; if (map[k]) (state.assembly === map[k] ? leaveAssembly() : enterAssembly(map[k])); });
@@ -289,6 +306,6 @@ function tick(now){
   lastApplied = state.amount; }
  if (viewTween) { const t = Math.min(1, (now - viewTween.start) / (viewTween.duration || 900)), s = t * t * (3 - 2 * t); camera.position.lerpVectors(viewTween.from, viewTween.to, s); controls.target.lerpVectors(viewTween.fromTarget, viewTween.toTarget, s); if (t === 1) viewTween = null; }
  controls.update(dt);
- for (const l of landmarks) { const show = !state.board && l.part.mesh.visible && (l.kind === 'assembly' ? state.amount > .35 : state.labels && !state.assembly); l.el.hidden = !show; if (!show) continue; const anchor = l.anchor ? l.anchor.clone() : l.part.center.clone(); const p = anchor.add(l.part.mesh.position).sub(l.part.base).project(camera); l.el.hidden = Math.abs(p.x) > .95 || Math.abs(p.y) > .95 || p.z > 1; l.el.style.left = `${(p.x * .5 + .5) * renderer.domElement.clientWidth}px`; l.el.style.top = `${(-p.y * .5 + .5) * renderer.domElement.clientHeight}px`; }
- renderer.render(scene, camera);
+ for (const l of landmarks) { const show = !state.board && l.part.mesh.visible && (l.kind === 'assembly' ? state.amount > .35 && !state.labelAll : l.kind === 'all' ? state.amount > .35 : state.labels && !state.assembly); l.el.hidden = !show; if (!show) continue; const anchor = l.anchor ? l.anchor.clone() : l.part.center.clone(); const p = anchor.add(l.part.mesh.position).sub(l.part.base).project(camera); l.el.hidden = Math.abs(p.x) > .95 || Math.abs(p.y) > .95 || p.z > 1; l.el.style.left = `${(p.x * .5 + .5) * renderer.domElement.clientWidth}px`; l.el.style.top = `${(-p.y * .5 + .5) * renderer.domElement.clientHeight}px`; }
+ if (state.ao && !state.board) { renderPass.camera = camera; gtaoPass.camera = camera; composer.render(); } else renderer.render(scene, camera);
 }
