@@ -8,7 +8,7 @@ exploded views (heart, lungs, spine, brain). Built on the open [Z-Anatomy](https
 
 - Slider / **Explode the body** / `E` — separate every system from the skeleton outward; skeleton stays as the axis.
 - **Heart · Lungs · Spine · Brain** (`H` `L` `S` `B`) — isolate that structure and explode it along its own anatomy.
-- Finish: Realistic, Colour-coded, X-ray, Clay. Visible system filter, Labels, Auto orbit, Play sequence.
+- Finish: X-ray (default), Realistic, Colour-coded, Clay. Visible system filter, Labels, Auto orbit, Play sequence.
 - Click a piece or pick it from the list: description (Z-Anatomy / Wikipedia), hierarchy path, size, triangles, merged sub-parts. Isolate to frame it alone.
 - **All parts on screen** — every loaded piece on one non-overlapping board.
 - Deep links: `?assembly=heart|lungs|spine|brain`, `?view=parts`, `?stage=core|muscles|full`. Phones load the core stage (skeleton, ligaments, viscera, heart, brain) and offer a button for the rest.

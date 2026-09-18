@@ -12,7 +12,7 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'realistic', view:'hero', board:false, assembly:null, labels:false, stage:'none', loading:false, rotate:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, labels:false, stage:'none', loading:false, rotate:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
 let board = null, bodyCamera, bodyControls, boardControls, studioObjects = [], studioFog, boardKey = '', boardDirty = true, keyLight;
@@ -72,7 +72,7 @@ function init(){
 }
 
 async function loadStudio(){
- manifest = await (await fetch('./manifest.json?v=1')).json();
+ manifest = await (await fetch('./manifest.json?v=2')).json();
  $('piece-total').textContent = manifest.stats.pieces.toLocaleString();
  model = new THREE.Group(); model.name = 'Human body'; scene.add(model);
  const select = $('system'); select.replaceChildren(new Option('Complete body', 'all'), ...manifest.files.map(f => new Option(fileLabels[f.id] || f.id, f.id)));
@@ -99,7 +99,7 @@ async function loadFiles(ids){
  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder); const env = manifest.envelope;
  for (const f of manifest.files.filter(f => ids.includes(f.id) && !f.loaded && !f.loadingPromise)) {
   f.loadingPromise = (async () => {
-   const gltf = await loader.loadAsync(`./${f.path}?v=1`, progress => { if (progress.total) { const pct = Math.round(progress.loaded / progress.total * 100); $('load-progress').textContent = `Loading ${fileLabels[f.id].toLowerCase()} · ${pct}%`; $('stage-status').textContent = `LOADING ${fileLabels[f.id].toUpperCase()} · ${pct}%`; } });
+   const gltf = await loader.loadAsync(`./${f.path}?v=2`, progress => { if (progress.total) { const pct = Math.round(progress.loaded / progress.total * 100); $('load-progress').textContent = `Loading ${fileLabels[f.id].toLowerCase()} · ${pct}%`; $('stage-status').textContent = `LOADING ${fileLabels[f.id].toUpperCase()} · ${pct}%`; } });
    gltf.scene.updateMatrixWorld(true); const meshes = []; gltf.scene.traverse(o => { if (o.isMesh) meshes.push(o); });
    for (const mesh of meshes) {
     const piece = manifest.pieces.find(p => p.id === mesh.userData.id) || manifest.pieces.find(p => p.id === mesh.parent?.userData.id); if (!piece) continue;
@@ -189,7 +189,7 @@ function updateVisibility(){
 }
 async function describe(part){
  if (!part.piece.descriptionKey) return fallbackCopy[part.file];
- if (!descriptions) { try { descriptions = await (await fetch('./descriptions.json?v=1')).json(); } catch { descriptions = {}; } }
+ if (!descriptions) { try { descriptions = await (await fetch('./descriptions.json?v=2')).json(); } catch { descriptions = {}; } }
  return descriptions[part.piece.descriptionKey] || fallbackCopy[part.file];
 }
 function selectPart(part){

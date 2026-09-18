@@ -27,7 +27,7 @@ log('imported', len(bpy.data.objects), 'objects')
 # Z-Anatomy suffixes: .l/.r side; .g group empty; .j/.i tiny label placeholder meshes; .t/.s label anchor empties;
 # .ol/.or/.el/.er/.oNl/.oNr/.iNl ... muscle origin/insertion overlays painted on bones. Blender adds .NNN on collisions.
 SUFFIX = re.compile(r'^(?P<base>.*?)(?P<kind>\.(?:l|r|g|j|t|s|i|ol|or|el|er|[oie]\d+[lr]|[oie][lr]))?(?P<blender>\.\d{3})?$')
-JUNK = re.compile(r'^(Cross Section|Take a picture|\?+|\(?\?)|-profile$|-curve|^(External|Internal) axis of eyeball|^Equator of eyeball|^Meridians of eyeball|^Hairs?$')
+JUNK = re.compile(r'^(Cross Section|Take a picture|\?+|\(?\?)|-profile$|-curve|^(External|Internal) axis of eyeball|^Equator of eyeball|^Meridians of eyeball|^Hairs?$|^Pubic hairs$')
 
 def classify(o):
     m = SUFFIX.match(o.name); base = m['base']; kind = (m['kind'] or '')[1:]

@@ -62,7 +62,7 @@ try {
  await page.locator('#part-list').selectOption('visceral/liver'); await page.locator('#isolate').click(); await page.waitForTimeout(1100); assert.equal((await read()).visible, 1); assert.ok((await read()).selected.startsWith('Liver'));
  await page.waitForFunction(() => /liver/i.test(document.getElementById('part-description').textContent), null, {timeout: 20000});
  await page.screenshot({path: path.join(shots, 'isolated.png')}); await page.locator('#clear').click(); assert.equal((await read()).visible, manifest.pieces.length);
- for (const mode of ['coded', 'xray', 'clay', 'realistic']) { await page.locator(`[data-mode="${mode}"]`).click(); assert.equal((await read()).mode, mode); }
+ assert.equal((await read()).mode, 'xray', 'studio opens in X-ray'); for (const mode of ['realistic', 'coded', 'clay', 'xray']) { await page.locator(`[data-mode="${mode}"]`).click(); assert.equal((await read()).mode, mode); }
  await page.locator('#label-toggle').click(); await page.waitForFunction(() => document.querySelectorAll('.landmark:not([hidden])').length >= 4, null, {timeout: 30000}); await page.locator('#label-toggle').click();
  await page.locator('#animate').click(); await page.waitForFunction(() => window.anatomyStudio.getState().target > .1, null, {timeout: 90000}); await page.locator('#animate').click(); await page.locator('#reset').click(); await settled(0);
  await page.locator('#viewport').focus(); await page.keyboard.press('e'); await settled(1); await page.keyboard.press('r'); await settled(0);
