@@ -1,0 +1,20 @@
+{
+  "name": "jez237-anatomy-studio-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "fetch": "bash fetch-models.sh",
+    "prepare-assets": "node prepare.mjs",
+    "check": "node check-assemblies.mjs",
+    "verify": "node verify.mjs"
+  },
+  "devDependencies": {
+    "@gltf-transform/cli": "4.5.0",
+    "@gltf-transform/core": "4.5.0",
+    "@gltf-transform/extensions": "4.5.0",
+    "@gltf-transform/functions": "4.5.0",
+    "meshoptimizer": "0.22.0",
+    "playwright": "1.63.0",
+    "three": "0.180.0"
+  }
+}
