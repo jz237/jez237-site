@@ -1,3 +1,4 @@
+import {angelfishProfile} from './AngelfishProfile.ts';
 import * as T from 'three';
 import {FeedingBite} from './FeedingBite.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
@@ -77,16 +78,25 @@ vec3 angelDeform(vec3 p){
 export class AngelfishModel{
  readonly group:T.Group;
  private feedingBite=new FeedingBite();
+ private ownedGeometry:T.BufferGeometry[]=[];
  bite(){this.feedingBite.trigger();}
  private phase:number;private pectoral:number;private drift=0;private breath:number;
  private uniforms:{angelPhase:T.IUniform<number>;angelEffort:T.IUniform<number>;angelPectoral:T.IUniform<number>;angelDrift:T.IUniform<number>;angelReach:T.IUniform<number>;angelStroke:T.IUniform<number>;angelFold:T.IUniform<number>;angelGill:T.IUniform<number>;angelMouth:T.IUniform<number>} ;
- constructor(prototype:T.Group,seed=0){
+ constructor(prototype:T.Group,seed=0,individual?:number){
   this.group=prototype.clone(true);this.phase=seed;this.pectoral=seed*1.7;this.breath=seed*2.13;
   const mouth=oralOpening();this.group.add(mouth);
   this.drift=seed;this.uniforms={angelPhase:{value:seed},angelEffort:{value:.2},angelPectoral:{value:seed*1.7},angelDrift:{value:seed},angelReach:{value:0},angelStroke:{value:0},angelFold:{value:0},angelGill:{value:0},angelMouth:{value:0}};
   this.group.traverse(o=>{
    if(!(o instanceof T.Mesh))return;
    const region=o.name==='OralOpening'?5:o.name.startsWith('Median')?1:o.name.startsWith('PectoralLeft')?2:o.name.startsWith('PectoralRight')?3:o.name.startsWith('Streamers')?4:0;
+   // Bake subtle anatomy once; every attached mesh uses the same continuous
+   // deformation, while UVs, texture maps and the animation shaders stay intact.
+   if(individual!==undefined&&region!==5){
+    o.geometry=o.geometry.clone();this.ownedGeometry.push(o.geometry);
+    const points=o.geometry.getAttribute('position') as T.BufferAttribute,p=new T.Vector3();
+    for(let i=0;i<points.count;i++){angelfishProfile(p.fromBufferAttribute(points,i),individual);points.setXYZ(i,p.x,p.y,p.z);}
+    o.geometry.computeVertexNormals();o.geometry.computeBoundingBox();
+   }
    const original=o.material as T.MeshStandardMaterial,m=original.clone();o.material=m;if(region===5)original.dispose();
    if(m.transparent){m.depthWrite=false;m.side=T.DoubleSide;m.forceSinglePass=true;}
    // No expensive transmission pass: transparent, textured single-sheet tissue.
@@ -138,5 +148,5 @@ objectNormal=normalize(cross(angelDeform(position+at*.001)-ap,angelDeform(positi
   this.pectoral+=dt*(hover?7:5+u.angelEffort.value*5);
   this.uniforms.angelReach.value=reach;this.uniforms.angelPhase.value=this.phase;this.uniforms.angelPectoral.value=this.pectoral;this.uniforms.angelDrift.value=this.drift;
  }
- dispose(){this.group.traverse(o=>{if(o instanceof T.Mesh){(o.material as T.Material).dispose();o.customDepthMaterial?.dispose();}});}
+ dispose(){this.ownedGeometry.forEach(g=>g.dispose());this.ownedGeometry=[];this.group.traverse(o=>{if(o instanceof T.Mesh){(o.material as T.Material).dispose();o.customDepthMaterial?.dispose();}});}
 }

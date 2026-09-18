@@ -25,7 +25,7 @@ export class Angelfish{
   this.obstacles=obstacles;this.height=height;this.plants=plants;this.prototype=prototype;
   for(const s of this.states){
    if(sessionSeed!==undefined){const r=behaviorRandom(behaviorSeed(sessionSeed,s.id));s.seed=behaviorSeed(sessionSeed,s.id+3);s.locomotorSeed=behaviorSeed(sessionSeed,s.id+5);s.phase=r()*30;s.timer=1+r()*7;s.strokeIn=.2+r()*2;s.powerStroke=r()<.6;s.cruise=.3+r()*.16;s.hunger=.45+r()*.25;}
-   const m=new AngelfishModel(prototype,s.phase);m.group.scale.setScalar(s.size);this.models.push(m);this.root.add(m.group);
+   const m=new AngelfishModel(prototype,s.phase,s.id);m.group.scale.setScalar(s.size);this.models.push(m);this.root.add(m.group);
    // A valid, whole-animal pose before the first visible frame.
    if(!this.clear(s.position,s.yaw,0,s.size,s.id)){let found=false;for(const z of [1.76,-1.72,1.25]){for(let x=-3.3;x<3.5;x+=.55){const p=new T.Vector3(x,3.8,z);if(this.clear(p,s.yaw,0,s.size,s.id)){s.position.copy(p);found=true;break;}}if(found)break;}}
    s.previous.copy(s.position);

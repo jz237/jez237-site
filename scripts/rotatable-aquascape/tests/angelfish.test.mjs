@@ -1,3 +1,4 @@
+import {angelfishProfile} from '../lib/AngelfishProfile.ts';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
@@ -67,7 +68,7 @@ test('Blender model contains detailed geometry, both fin pairs and embedded scal
  assert.equal(gltf.images.length,3);assert.ok(gltf.images.every(i=>i.bufferView!==undefined));assert.ok(gltf.materials.some(m=>m.alphaMode==='BLEND'));assert.ok(gltf.materials.some(m=>m.normalTexture));assert.ok(b.length<6_000_000);
  const spheres=angelBody(new T.Vector3(),0,0,1),start=28+b.readUInt32LE(12);
  for(const node of gltf.nodes){const primitive=gltf.meshes[node.mesh].primitives[0],a=gltf.accessors[primitive.attributes.POSITION],v=gltf.bufferViews[a.bufferView];
-  for(let i=0;i<a.count;i++){const at=start+(v.byteOffset??0)+(a.byteOffset??0)+i*(v.byteStride??12),p=new T.Vector3(b.readFloatLE(at),b.readFloatLE(at+4),b.readFloatLE(at+8));assert.ok(spheres.some(s=>p.distanceToSquared(s.center)<s.radius*s.radius),node.name+' has a vertex outside the collision envelope');}
+  for(let i=0;i<a.count;i++){const at=start+(v.byteOffset??0)+(a.byteOffset??0)+i*(v.byteStride??12),p=new T.Vector3(b.readFloatLE(at),b.readFloatLE(at+4),b.readFloatLE(at+8));for(const id of [0,1]){const shaped=angelfishProfile(p.clone(),id);assert.ok(spheres.some(s=>shaped.distanceToSquared(s.center)<s.radius*s.radius),node.name+' profile '+id+' exceeds the collision envelope');}}
  }
 });
 
@@ -175,4 +176,16 @@ test('successful feeding leaves one expiring location memory and never consumes 
  s.bite=0;s.hover=0;s.timer=0;advanceAngel(s,.01,open);assert.equal(s.memoryVisits,0);assert.ok(s.goal.distanceTo(food.position)<.6);
  for(let i=0;i<1000;i++){advanceAngel(s,.05,open);assert.equal(s.consumed,null);}
  assert.equal(s.foodMemory,null);
+});
+
+
+test('individual profiles preserve the mouth and eyes, vary forehead and belly, and release only owned geometry',()=>{
+ for(const p of [new T.Vector3(.785,-.035,0),new T.Vector3(.6,0,.05)])for(const id of [0,1])assert.deepEqual(angelfishProfile(p.clone(),id),p);
+ assert.ok(angelfishProfile(new T.Vector3(.44,.31,0),0).y>angelfishProfile(new T.Vector3(.44,.31,0),1).y);
+ assert.ok(angelfishProfile(new T.Vector3(.03,-.32,.1),1).y<-.32);
+ const source=new T.Group(),geometry=new T.SphereGeometry(.3,8,8),map=new T.Texture();source.add(new T.Mesh(geometry,new T.MeshStandardMaterial({map})));
+ const a=new AngelfishModel(source,0,0),b=new AngelfishModel(source,0,1);
+ assert.notEqual(a.group.children[0].geometry,b.group.children[0].geometry);assert.equal(a.group.children[0].material.map,map);
+ let released=false,originalReleased=false;a.group.children[0].geometry.addEventListener('dispose',()=>released=true);geometry.addEventListener('dispose',()=>originalReleased=true);
+ a.dispose();assert.ok(released);assert.equal(originalReleased,false);b.dispose();
 });
