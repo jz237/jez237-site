@@ -2,6 +2,23 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-18",
+      "historicDate": "1984-08-06",
+      "displayDate": "Week of August 6-12, 1984",
+      "edition": "Issue 106 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Amiga shows its colors, Symphony meets Framework, and Marvel's Hulk crashes into the adventure-game aisle.",
+      "leadHeadline": "Behind Closed Doors, Amiga's Lorraine Points to a New Generation",
+      "storyHeadlines": [
+        "Symphony and Framework Fight to Define Integrated Software",
+        "Compaq Deskpro Turns Compatibility into a Speed Contest",
+        "Questprobe Sends the Hulk into the Adventure Machine",
+        "IBM's Price Cuts Put PC-Compatible Makers in a Squeeze"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-08-06.jpg",
+      "thumb": "media/thumbs/1984-08-06.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-17",
       "historicDate": "1984-07-30",
       "displayDate": "Week of July 30-August 5, 1984",

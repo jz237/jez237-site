@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Thu, 17 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 18 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of August 6-12, 1984 — Behind Closed Doors, Amiga&apos;s Lorraine Points to a New Generation</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-08-06</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-06</guid>
+      <pubDate>Fri, 18 Sep 2026 12:00:00 GMT</pubDate>
+      <description>A rough but dazzling 68000 prototype promises color, sound, animation, speech, and communications in one home machine. Visitors invited behind closed doors at the Summer Consumer Electronics Show saw something very different from another beige box. Amiga&apos;s Lorraine prototype, now detailed in COMPUTE!&apos;s August issue, paired a Motorola 68000 processor with custom graphics and sound hardware intended to make animation, music, and multitasking central parts of personal computing. Also this week: Symphony and Framework Fight to Define Integrated Software · Compaq Deskpro Turns Compatibility into a Speed Contest · Questprobe Sends the Hulk into the Adventure Machine · IBM&apos;s Price Cuts Put PC-Compatible Makers in a Squeeze.</description>
+    </item>
     <item>
       <title>Week of July 30-August 5, 1984 — Free Software Travels the Phone Lines</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-07-30</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-26</guid>
       <pubDate>Sat, 29 Aug 2026 12:00:00 GMT</pubDate>
       <description>The post-divestiture giant puts Unix System V and its own 32-bit architecture at the center of a sweeping commercial challenge. AT&amp;T formally entered the general-purpose computer business on March 27, opening a campaign that reaches from a desktop multi-user machine to fault-tolerant systems. Only months after the Bell System divestiture, the company is carrying Bell Labs software and AT&amp;T-designed processors into direct competition with IBM, DEC, Data General, Wang and Hewlett-Packard. Also this week: Police Raids Put Britain’s Games-Cassette Pirates Under Pressure · IBM Rations PCs and XTs as the Component Squeeze Bites · Sinclair Microdrives Reach London Shops · Macintosh Commands the West Coast Computer Faire.</description>
-    </item>
-    <item>
-      <title>Week of March 19-25, 1984 — Mindset PC Bets on Custom Color Graphics</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-03-19</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-19</guid>
-      <pubDate>Fri, 28 Aug 2026 12:00:00 GMT</pubDate>
-      <description>An 80186, MS-DOS and purpose-built video hardware aim the new machine at artists, animators and game makers. The newest challenge to the IBM-shaped personal-computer market arrives with a very different sales pitch: do more with the picture. InfoWorld placed the Mindset computer on its March 19 cover under the teasing line “Gambling on Great Graphics,” giving the ambitious machine one of the week’s most conspicuous introductions. Also this week: Microcomputers Become Tools of Independence · Laserdiscs Point Toward an Arcade-Style Future at Home · Chequered Flag Takes the British Micro Pole.</description>
     </item>
   </channel>
 </rss>
