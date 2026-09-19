@@ -1,5 +1,11 @@
 # Site Image Sources
 
+## User-supplied reference artwork
+
+- `hidden-reef-header-reference.png` - wide Hidden Reef header concept supplied
+  by Jez on 2026-09-06. Preserved as an original reference asset; not yet wired
+  into the prototype.
+
 ## AI-generated demo hero images
 
 Generated with GPT Image 2 for this Hidden Reef prototype. These are demo
