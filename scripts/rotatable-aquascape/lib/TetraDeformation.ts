@@ -16,11 +16,15 @@ export function createTetraDeformation(rest:Float32Array,kind:FinKind,side=1){
   const lookup=new Map<string,typeof unique[number]>();
   for(let i=0;i<rest.length;i+=3){const x=rest[i],y=rest[i+1],z=rest[i+2],key=`${x},${y},${z}`;let entry=lookup.get(key);if(!entry){entry={x,y,z,indices:[]};lookup.set(key,entry);unique.push(entry);}entry.indices.push(i);}
  }
+ const sections=[...groups].map(([x,indices])=>{const u=Math.max(0,Math.min(1.3,(.33-x)/.65));return {x,indices,u,envelope:Math.pow(u,1.25),derivative:1.25*Math.pow(u,.25)};});
  return (out:Float32Array,phase:number,activity:number,pectoralPhase:number,pectoralEffort:number,gill=0,mouth=0)=>{
   if(kind==='body'){
-   for(const [x,indices] of groups){
-    const spine=tetraSpine(x,phase,activity),sin=Math.sin(spine.angle),cos=Math.cos(spine.angle);
-    for(const i of indices){const z=rest[i+2]+breathing[i]*gill+breathing[i+2]*mouth;out[i]=x-z*sin;out[i+1]=rest[i+1]+breathing[i+1]*mouth;out[i+2]=spine.z+z*cos;}
+   const amplitude=.002+Math.max(0,Math.min(1.5,activity))*.195;
+   for(const {x,indices,u,envelope,derivative} of sections){
+    const travel=phase-u*3.3,st=Math.sin(travel),ct=Math.cos(travel);
+    const offset=amplitude*envelope*st,slope=u>0?-amplitude/.65*(derivative*st-3.3*envelope*ct):0;
+    const angle=Math.atan(slope),sin=Math.sin(angle),cos=Math.cos(angle);
+    for(const i of indices){const z=rest[i+2]+breathing[i]*gill+breathing[i+2]*mouth;out[i]=x-z*sin;out[i+1]=rest[i+1]+breathing[i+1]*mouth;out[i+2]=offset+z*cos;}
    }
   }else if(kind==='tail'){
    const effort=Math.max(0,Math.min(1.5,activity)),root=tetraSpine(-.30,phase,effort),angle=root.angle+Math.sin(phase-3.7)*(.025+effort*.22),sin=Math.sin(angle),cos=Math.cos(angle);
