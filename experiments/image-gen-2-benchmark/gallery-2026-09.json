@@ -38,6 +38,25 @@
     }
   },
   {
+    "id": "2026-09-18-intense-phobia-situation-arachnophobia-behind-the-crawlspac",
+    "title": "Arachnophobia — Behind the Crawlspace Vapor Barrier",
+    "tests": "Fear-impact gate: the viewer is physically trapped prone in the crawlspace; an anatomically accurate spider fills the near foreground while repeated spiders, webs, low joists, ductwork, darkness, and the blocked route provide phobia-specific proximity and entrapment. Photorealism gate: ordinary home materials, realistic spider scale and anatomy, coherent flashlight falloff, documentary camera logic, and no fantasy or injury. Weekly uniqueness: arachnophobia differs from this week's thalassophobia, claustrophobia, and acrophobia posts.; archive_slot=2026-09-18T23:20; concept=arachnophobia-spiders-blocked-crawlspace-vapor-barrier",
+    "prompt": "Create a finished, ultra-photorealistic first-person home-inspection photograph inside an ordinary residential crawlspace, designed to trigger an immediate, realistic arachnophobia response without gore or fantasy. The camera is at chest-and-face level of a person forced prone beneath low timber floor joists, with the lens only inches above a wrinkled translucent polyethylene vapor barrier. A large anatomically accurate house spider occupies the razor-sharp near foreground just inches from the lens, its eight jointed legs, fine hairs, pedipalps, natural proportions, and contact shadows rendered correctly. Several more realistically sized house spiders are visibly distributed along the unavoidable plastic route ahead and on the nearest joist edges; two partial spiders and strands entering from beyond the crop imply credible repetition without becoming an impossible swarm. Fresh irregular webs stretch across the narrow passage between joists, one strand catching the flashlight beam directly in front of the lens. The only route forward is hemmed in by joists above, concrete foundation wall to one side, HVAC ductwork to the other, and pipes behind, while the viewer's gloved forearm and inspection flashlight intrude at the bottom edge and make turning around visibly impossible. Keep the ceiling oppressively low, with splintered but ordinary lumber less than a foot above the viewpoint, dusty insulation, pipe clips, realistic duct seams, minor condensation, grit, and folds in the vapor barrier. Use coherent close-range flashlight illumination: hard central beam, natural falloff into enclosing darkness, muted gray-brown wood and plastic, restrained cool shadows, believable sensor noise and depth of field. The feared subject and blocked crawl route dominate the entire frame; there is no open safe area and no visible easy exit. Camera logic: documentary inspection camera, roughly 24 mm full-frame equivalent, low prone viewpoint, strong foreground-to-dark-passage depth, accurate perspective and gravity, sharp spider anatomy nearest the lens with sufficient detail retained through the constricted middle distance. The fear comes from unavoidable proximity, repeated threatening forms extending beyond the crop, web obstruction, and physical entrapment in a real crawlspace. No giant spiders, no enlarged fantasy scale, no bites, no blood, no injury, no supernatural elements, no theatrical horror lighting, no cinematic color grading, no adventure-tourism feel, no calm observer, no text, no labels, no logos, no watermark, and no malformed or extra spider legs.",
+    "image": "images/2026-09-18-intense-phobia-situation-arachnophobia-behind-the-crawlspac.jpg",
+    "thumb": "thumbs/2026-09-18-intense-phobia-situation-arachnophobia-behind-the-crawlspac.webp",
+    "color": "#574f48",
+    "date": "2026-09-18",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1448x1086",
+    "dedup": {
+      "conceptKey": "arachnophobia-spiders-blocked-crawlspace-vapor-barrier",
+      "imageSha256": "0f824ffc23de41ca4e59acfcd6a23ae0890d972097a9aa2a64e7dd61fe54f8da",
+      "imageDHash": "8dcbc0c0cf0fa524"
+    }
+  },
+  {
     "id": "2026-09-18-intense-phobia-situation-acrophobia-one-boot-above-the-empt",
     "title": "Acrophobia — One Boot Above the Empty Shaft",
     "tests": "Fear-impact gate: the viewer is physically positioned over the void; the near boot and beam, repeating floor apertures, dark lower shaft, obstructed retreat, and narrow footing provide five phobia-specific pressure devices. Photorealism gate: ordinary 24 mm optics, plausible construction materials, coherent scale and gravity, rated harness hardware, and practical site lighting. Distinct this week from thalassophobia and claustrophobia.; archive_slot=2026-09-18T17:20; concept=acrophobia-boot-narrow-beam-elevator-shaft-drop",
