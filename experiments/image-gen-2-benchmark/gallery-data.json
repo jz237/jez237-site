@@ -14534,5 +14534,114 @@
       "imageSha256": "d017dee81778b5a8b8dbed91e1187b0f8f31eaf760cc18881a101e89c86c0e8c",
       "imageDHash": "673b2f8f1f3f3f5f"
     }
+  },
+  {
+    "id": "2026-09-19-factual-infographic-factual-infographic-nyctophobia-the-bra",
+    "title": "Factual infographic: Nyctophobia — The Brain in Low Light",
+    "tests": "factual_subtype=phobia-infographic; phobia=nyctophobia; direct-canvas portrait; one detailed hero; eight substantive panels; five explanatory close-ups/diagrams; no invented statistics; no unsafe exposure advice; archive_slot=2026-09-19T12:08; concept=nyctophobia-dark-hallway-body-alarm-avoidance; factual_subtype: phobia-infographic",
+    "prompt": "Create a museum-quality, direct-canvas portrait educational infographic titled exactly ‘NYCTOPHOBIA — THE BRAIN IN LOW LIGHT’, with the smaller subtitle ‘When darkness triggers a phobic alarm’. This is the finished infographic itself, not a photographed poster, book, clipboard, wall display, app screen, or mockup. Use a sophisticated deep-indigo, charcoal, muted amber and cool moonlight palette with crisp ivory typography, precise leader lines, generous margins, and highly legible labels. Render at 2048 × 3072 with dense but orderly information architecture.\n\nDOMINANT HERO: a large, realistic cutaway scene occupying the central upper half: a diverse adult paused in a genuinely dark domestic hallway at night, lit only by a weak warm night-light and a sliver of blue window light. Their posture and expression show intense alarm without melodrama. Familiar harmless objects—a hanging coat, doorway, plant, stair rail—lose visual clarity in low light and form ambiguous silhouettes, but show NO monster, intruder, supernatural figure, gore, or actual hazard. Integrate a transparent anatomical overlay from eye to brain and down through the torso only as a visual route for the alarm response, with restrained glowing pathways and three labeled body close-ups: ‘heart pounding’, ‘breathing tightens’, ‘trembling / dizziness’. Keep anatomy plausible and non-diagnostic.\n\nBuild EIGHT substantive supporting panels around the hero, each visually distinct and each with concise readable text rather than paragraphs:\n1. ‘WHAT IT IS’ — define nyctophobia as intense fear of darkness or night within the specific-phobia framework; contrast a small ordinary-caution gauge with a much larger ‘fear out of proportion to actual danger’ gauge.\n2. ‘COMMON TRIGGER MOMENTS’ — four illustrated vignettes: entering an unlit room, waking at night, a power outage, and anticipating bedtime; label these as examples, not a universal checklist.\n3. ‘THE BODY ALARM’ — an explanatory cutaway of the hero silhouette with callouts for severe anxiety, noticeable heartbeat, chest tightness, nausea, trembling, and dizziness. Do not imply everyone has every symptom.\n4. ‘PERCEIVED DANGER ≠ ACTUAL DANGER’ — a split comparison of the same harmless coat-and-plant hallway: left side shows the fear prediction in a red-edged thought bubble, right side shows the ordinary objects under a lamp; caption ‘The fear can be intense even when danger is low.’ No monster imagery.\n5. ‘THE AVOIDANCE LOOP’ — a clear four-step circular diagram: ‘darkness expected’ → ‘alarm surges’ → ‘avoid / escape / keep every light on’ → ‘short-term relief, feared situation remains untested’. Use the careful footer ‘Avoidance is common in phobias.’\n6. ‘WHAT CBT WORKS ON’ — three linked mini-diagrams labeled ‘learn about the fear’, ‘challenge unhelpful predictions’, and ‘practice new responses’, showing therapist and client collaboratively reviewing a plan.\n7. ‘SUPPORTED EXPOSURE, STEP BY STEP’ — a calm graduated staircase diagram designed by a clinician with tiny safe examples from brighter to dimmer settings, paired with the explicit note ‘planned with a qualified professional; not a forced or unsafe challenge’. Do not give a prescriptive self-treatment protocol.\n8. ‘WHEN TO SEEK HELP’ — show a primary-care or mental-health conversation and the concise lines ‘Symptoms affect daily life’ and ‘Assessment can guide treatment’; add a small grounding box: ‘Slow breathing can support relaxation.’\n\nInclude at least FOUR clearly explanatory diagrammatic close-ups: the eye-to-brain-to-body route, the body-alarm cutaway, the perceived-versus-actual hallway comparison, and the circular avoidance loop; the supported-exposure staircase is a fifth. Every arrow and visual implication must match the written labels. Use realistic skin, cloth, wood grain, dim-light falloff, subtle reflections, and credible domestic architecture in the hero, balanced with clean vector-scientific diagram language in the panels. Maintain strong typographic hierarchy and enough negative space that all labels are readable at a glance. Do not include statistics, prevalence, diagnostic checklists, URLs, citations, logos, medication advice, supernatural threats, gore, or tiny filler text. End with a slim footer: ‘Phobias are treatable — professional support can help.’",
+    "image": "images/2026-09-19-factual-infographic-factual-infographic-nyctophobia-the-bra.jpg",
+    "thumb": "thumbs/2026-09-19-factual-infographic-factual-infographic-nyctophobia-the-bra.webp",
+    "color": "#292b31",
+    "date": "2026-09-19",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "nyctophobia-dark-hallway-body-alarm-avoidance",
+      "imageSha256": "9d8f654d96d5b5d064007a35264745424ddf3e88dcbaa99014c31ceb424cffe2",
+      "imageDHash": "9e9d5f444cc48c1f"
+    },
+    "factualInfographic": {
+      "topic": "Nyctophobia: intense fear of darkness, bodily alarm, avoidance, and evidence-based support",
+      "description": "A richly illustrated direct-canvas educational plate explaining nyctophobia within the specific-phobia framework, common trigger moments, physical alarm symptoms, avoidance, perceived versus actual danger, and evidence-based professional support.",
+      "sourceNote": "Verified scope: specific-phobia definition, disproportionate fear, anxiety and avoidance responses, physical symptoms, CBT, clinician-supported exposure, and when to seek help. Sources: National Institute of Mental Health — https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders ; University of Pennsylvania Center for the Treatment and Study of Anxiety — https://www.med.upenn.edu/ctsa/phobias_ctsa.html ; NHS — https://www.nhs.uk/mental-health/conditions/phobias/",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-19T16:08:52Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "University of Pennsylvania Center for the Treatment and Study of Anxiety",
+            "title": "Specific Phobias (Treatment at the CTSA)",
+            "sourceType": "university",
+            "url": "https://www.med.upenn.edu/ctsa/phobias_ctsa.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "National Health Service",
+            "title": "Phobias",
+            "sourceType": "government-agency",
+            "url": "https://www.nhs.uk/mental-health/conditions/phobias/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A phobia is an intense fear or aversion focused on a particular object or situation, and the fear can be out of proportion to the actual danger.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "People with a phobia may worry excessively about encountering the trigger, avoid it, feel immediate intense anxiety when encountering it, or endure it with intense anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Phobia symptoms can include severe anxiety, dizziness, a noticeable heartbeat, chest tightness, nausea, trembling, and intense fear of fainting or losing control.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Specific phobias can center on particular situations; this plate applies that framework to darkness and night as the feared situation called nyctophobia.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Avoidance is a common response to phobic fear, while exposure therapy focuses on safely confronting feared situations so a person can re-engage with activities they have avoided.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Cognitive behavioral therapy is an established treatment approach for phobias and teaches different ways of thinking, behaving, and reacting to reduce anxiety and fear.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A university anxiety clinic describes CBT for specific phobias as education about phobias, exposure to feared sensations and situations, and techniques that challenge unhelpful thoughts and beliefs.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Breathing exercises may help relaxation, and people should seek professional help when phobia symptoms affect daily life.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "A qualified health professional can assess symptoms and recommend appropriate treatment; exposure work should be presented as supported care rather than an unsafe do-it-yourself challenge.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
