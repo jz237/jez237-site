@@ -798,5 +798,24 @@
       "imageSha256": "670e5e9e2e6dc9b7f3fdf7133cc83c925befdd02624baba3bac25affaaa194e5",
       "imageDHash": "cd5d3d3e37bd1d9f"
     }
+  },
+  {
+    "id": "2026-09-19-ocean-exploration-brinefall-basin-rov-above-the-undersea-la",
+    "title": "Brinefall Basin — ROV Above the Undersea Lake",
+    "tests": "Landscape photorealism; mechanically credible tethered work-class ROV; visible dense-brine interface refraction; careful edge sampling; anatomically credible cold-seep fauna; no text or logos.; archive_slot=2026-09-19T08:08; concept=rov-brine-pool-interface-sampling",
+    "prompt": "Create a finished, high-end photorealistic scientific-documentary underwater expedition photograph, landscape 1536x1024. Deep on a dark continental slope, a heavy work-class tethered ROV hovers just above the sharply defined edge of a deep-sea brine pool, an uncanny undersea lake of dense hypersaline water. Compose the frame from a slightly elevated three-quarter viewpoint: the ROV occupies the upper-left third, while the brine shoreline sweeps diagonally through the lower half and recedes into blue-black distance, giving a powerful sense of benthic scale. The vehicle must be mechanically convincing and pressure-worthy: robust open-frame chassis, syntactic-foam buoyancy blocks, multiple correctly oriented thrusters, paired manipulator arms, stereo cameras in pressure housings, compact CTD and chemical sensor ports, a carousel of capped sampling bottles, abrasion, marine sediment, cable ties, seals, and a taut armored tether rising naturally out of frame. One manipulator carefully lowers a small clear sampling tube exactly to the interface without stirring the habitat; the second arm remains safely folded.\n\nMake the brine interface physically legible through realistic refractive distortion, a glassy wavering boundary, subtle mirage-like bending of the ROV light beams, and a darker, milkier saline layer lying below ordinary seawater—never a glowing fantasy liquid. Along the margin, show a restrained cold-seep community of anatomically credible mussel beds, sparse bacterial mats, a few small tube worms, amphipods, and pale sediment, all appropriately scaled and undisturbed. No colorful tropical reef. Light comes primarily from the ROV's practical lamps: neutral-white cones fading through cold blue water, gentle particulate backscatter, strong but natural falloff, deep shadow beyond, muted red loss, and faint reflections on wet metal. Include tiny suspended particles and a few drifting marine-snow flakes, but keep the foreground readable. The mood is hushed, precise, hazardous, and genuinely exploratory. Emphasize realistic underwater optics, dense-water layering, tether behavior, engineering detail, and careful scientific sampling. No people, no swimmers, no submerged city, no acid imagery, no monsters, no oversaturated coral, no text, no labels, no logos, no watermark, no split panels, no prompt card, no UI.",
+    "image": "images/2026-09-19-ocean-exploration-brinefall-basin-rov-above-the-undersea-la.jpg",
+    "thumb": "thumbs/2026-09-19-ocean-exploration-brinefall-basin-rov-above-the-undersea-la.webp",
+    "color": "#2d363d",
+    "date": "2026-09-19",
+    "batch": "Daily Prompt",
+    "slot": "ocean-exploration",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "rov-brine-pool-interface-sampling",
+      "imageSha256": "d017dee81778b5a8b8dbed91e1187b0f8f31eaf760cc18881a101e89c86c0e8c",
+      "imageDHash": "673b2f8f1f3f3f5f"
+    }
   }
 ]
