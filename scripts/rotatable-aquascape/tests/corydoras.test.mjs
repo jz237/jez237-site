@@ -45,3 +45,52 @@ test('new sinking food still moves in world space after static transforms are re
  for(let i=0;i<80;i++){life.update(.05,i*.05);scene.updateMatrixWorld();}
  assert.ok(pellet.position.y<start-2);assert.equal(pellet.mesh.matrixWorld.elements[13],pellet.position.y);
 });
+
+test('a cory interrupts a saved route, approaches a descending pellet briskly and bites once near the floor',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4,[],undefined,1),a=life.animals[0];a.position.set(-1,.432,0);a.yaw=.3;a.pitch=0;a.picking=undefined;a.mode='browsing';a.remaining=60;a.restIn=60;a.replanIn=60;a.route=[new T.Vector3(3,.432,0)];a.target.copy(a.route[0]);a.anchor.copy(a.position);
+ life.routes.nodes.push({id:0,point:new T.Vector3(3,.432,0),neighbors:[],region:0});let bites=0;life.feed(()=>bites++);for(const p of life.pellets.splice(1))p.mesh.removeFromParent();life.pellets[0].position.set(.8,.8,.1);
+ let peak=0,movedWhileTurning=false;
+ for(let i=0;i<240&&bites===0;i++){const p=a.position.clone(),yaw=a.yaw;life.update(1/60,i/60);peak=Math.max(peak,a.speed);if(i===0)assert.equal(a.mode,'feeding','reacts before the pellet reaches the gravel');if(a.position.distanceTo(p)>.0001&&Math.abs(a.yaw-yaw)>.0001)movedWhileTurning=true;assert.ok(a.position.y<.55,'stays near the floor');}
+ assert.ok(peak>.42,'faster feeding approach');assert.ok(movedWhileTurning,'old route alignment cannot stop food pursuit');assert.equal(bites,1);assert.equal(life.pellets.length,0);
+});
+
+test('brisk pellet pursuit retains swept rock collision protection',()=>{
+ const rock={center:new T.Vector3(0,.58,0),radius:.30},life=new Corydoras(new T.Scene(),()=>.4,[rock],undefined,1),a=life.animals[0];a.position.set(-1.2,.432,0);a.yaw=0;a.pitch=0;a.picking=undefined;a.route=[];life.feed();life.pellets[0].position.set(1,.425,0);
+ for(let i=0;i<240;i++){life.update(.05,i*.05);for(const b of coryBody(a.position,coryForward(a),a.size,a.pitch))assert.ok(b.center.distanceTo(rock.center)>b.radius+rock.radius);}
+});
+
+test('a cory pauses between adjacent real pellets instead of vacuuming them in consecutive frames',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4,[],undefined,1),a=life.animals[0];
+ a.position.set(0,.432,0);a.yaw=0;a.pitch=0;a.picking=undefined;a.route=[];a.remaining=60;
+ let bites=0;life.feed(()=>bites++);
+ for(const p of life.pellets)p.position.set(.15,.425,0);
+ life.update(.025,.025);assert.equal(bites,1);const at=a.position.clone();
+ for(let i=0;i<16;i++)life.update(.025,.05+i*.025);
+ assert.equal(bites,1,'a visible handling pause precedes the next morsel');
+ assert.ok(a.position.distanceTo(at)<1e-8,'holds station during the bite');
+ for(let i=0;i<100;i++)life.update(.025,.5+i*.025);
+ assert.ok(bites>1,'resumes feeding instead of falling asleep');
+});
+
+
+test('twelve cories retain collision clearance during a shared meal and rotate food placement',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4,[],undefined,12,7819);
+ assert.equal(life.animals.length,12);let bites=0;
+ assert.equal(life.feed(()=>bites++),6);assert.equal(life.feed(()=>bites++),6);
+ for(let i=0;i<12;i++){assert.equal(life.pellets[i].position.x,life.animals[i].position.x);assert.equal(life.pellets[i].position.z,life.animals[i].position.z);}
+ for(let i=0;i<600;i++){
+  life.update(.05,i*.05);
+  for(const a of life.animals)for(const b of life.animals)if(b.id>a.id)
+   assert.equal(bodiesOverlap(coryBody(a.position,coryForward(a),a.size,a.pitch),coryBody(b.position,coryForward(b),b.size,b.pitch),0),false);
+ }
+ assert.ok(bites>0,'larger group still captures real food');assert.equal(bites+life.pellets.length,12,'no phantom food consumption');
+});
+
+test('food pursuit begins higher above the floor and uses visible swimming bursts',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4,[],undefined,1),a=life.animals[0];
+ a.position.set(-1.5,.432,0);a.yaw=0;a.pitch=0;a.picking=undefined;a.route=[];a.mode='browsing';a.remaining=60;a.anchor.copy(a.position);
+ let bites=0;life.feed(()=>bites++);for(const p of life.pellets.splice(1))p.mesh.removeFromParent();life.pellets[0].position.set(1,1.25,0);
+ let peak=0;
+ for(let i=0;i<300&&bites===0;i++){life.update(1/60,i/60);peak=Math.max(peak,a.speed);if(i===0){assert.equal(a.mode,'feeding');assert.equal(bites,0);}assert.ok(a.position.y<.55);}
+ assert.ok(peak>.8,'clear feeding burst instead of slow browsing');assert.equal(bites,1);
+});
