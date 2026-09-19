@@ -7,7 +7,7 @@ import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
 import { PartsBoard } from './parts-board.js?v=2';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, projectedUV } from './materials.js?v=6';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, projectedUV, skinTint } from './materials.js?v=8';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=2';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=2';
 
@@ -282,14 +282,15 @@ function buildAllLabels(){
 }
 
 // ---------------------------------------------------------------- zoom-level detail: full-resolution geometry streamed per system
-function setDetail(on){ state.detail = !!on; $('lod-toggle').setAttribute('aria-pressed', state.detail); if (!state.detail) for (const p of parts) if (p.lod === 'hi') { p.mesh.geometry = p.loGeometry; p.lod = 'lo'; } else lodPass(); }
+function swapGeometry(p, g){ if (p.mesh.material.vertexColors && !g.attributes.color && p.mesh.userData.uvWorld) skinTint(g, p.mesh.userData.uvWorld); p.mesh.geometry = g; }
+function setDetail(on){ state.detail = !!on; $('lod-toggle').setAttribute('aria-pressed', state.detail); if (!state.detail) for (const p of parts) if (p.lod === 'hi') { swapGeometry(p, p.loGeometry); p.lod = 'lo'; } else lodPass(); }
 const _v = new THREE.Vector3();
 function projectedRadiusPx(p){ const dist = _v.copy(p.mesh.position).sub(camera.position).length(); const fovScale = renderer.domElement.clientHeight / 2 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)); return (p.size.length() / 2) / Math.max(dist, .001) * fovScale; }
 function lodPass(){
  const want = new Map();
  for (const p of parts) { if (!p.mesh.visible || !manifest.files.find(f => f.id === p.file)?.hi) continue; const r = projectedRadiusPx(p); const on = p.lod === 'hi' ? r > 70 : r > 110;
-  if (on) { const g = hi.geometries.get(p.id); if (g) { if (p.lod !== 'hi') { p.mesh.geometry = g; p.lod = 'hi'; } } else want.set(p.file, Math.max(want.get(p.file) || 0, r)); }
-  else if (p.lod === 'hi') { p.mesh.geometry = p.loGeometry; p.lod = 'lo'; } }
+  if (on) { const g = hi.geometries.get(p.id); if (g) { if (p.lod !== 'hi') { swapGeometry(p, g); p.lod = 'hi'; } } else want.set(p.file, Math.max(want.get(p.file) || 0, r)); }
+  else if (p.lod === 'hi') { swapGeometry(p, p.loGeometry); p.lod = 'lo'; } }
  if (want.size && hi.loading.size < 2) { const next = [...want.entries()].filter(([f]) => !hi.loaded.has(f) && !hi.loading.has(f)).sort((a, b) => b[1] - a[1])[0]; if (next) loadHi(next[0]); }
 }
 async function loadHi(fileId){
@@ -308,6 +309,7 @@ async function loadHi(fileId){
    const assembled = new THREE.Matrix4().compose(part.base, part.mesh.quaternion, part.mesh.scale).premultiply(model.matrixWorld);
    g.applyMatrix4(assembled.invert().multiply(m)); g.computeBoundingSphere();
    if (part.mesh.geometry.attributes.uv) projectedUV({ geometry:g, userData:part.mesh.userData }, part.mesh.userData.uvCell || .06, part.mesh.userData.uvWorld);
+   if (part.mesh.geometry.attributes.color && part.mesh.userData.uvWorld) skinTint(g, part.mesh.userData.uvWorld);
    hi.geometries.set(id, g); o.material.dispose?.(); });
   hi.loaded.add(fileId); console.info('detail tier: ready', fileId, hi.geometries.size, 'pieces');
  } catch (e) { console.warn('detail tier failed', fileId, e); }
