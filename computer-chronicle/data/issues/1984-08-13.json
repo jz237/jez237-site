@@ -1,0 +1,377 @@
+{
+  "currentDate": "2026-09-19",
+  "historicDate": "1984-08-13",
+  "displayDate": "Week of August 13-19, 1984",
+  "edition": "Issue 107 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "extra-edition excitement, corporate blue, and warm late-summer newsprint",
+    "motifs": [
+      "IBM PC/AT system unit",
+      "80286 chip diagram",
+      "1.2MB floppy disk",
+      "home-computer adventure map"
+    ],
+    "layout": "dense five-column extra-edition front page with a large PC/AT lead, games rail, shelf charts, and compact world bulletin"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Personal Computing and Digital Culture",
+    "dateline": "August 13-19, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "extra-edition banner above the fold with a halftone IBM PC/AT and cutaway specification box",
+    "secondaryRail": "home-computer adventures, DOS 3.0, hardware prices, charts, modem notes, and Gadget Desk",
+    "archiveNavigation": "Issue 107 in the chronological weekly archive"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "IBM blue",
+    "texture": "warm newsprint, halftone screens, fine column rules, and slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-08-13.jpg",
+    "alt": "GPT Image 2 newspaper front page for the week of August 13-19, 1984, led by the IBM PC/AT launch",
+    "caption": "A GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Extra Edition: IBM has opened the next chapter of the personal-computer race with a faster 80286 machine, larger disks, and room to grow.",
+  "morningLine": "The AT arrives, adventures keep adults up late, and 1200-baud life gathers speed.",
+  "lead": {
+    "headline": "IBM's PC/AT Opens a Second Generation of Personal Computing",
+    "dek": "IBM unveils the 80286-powered 5170 with a 16-bit expansion path, high-capacity floppy, larger hard disks, and prices starting at $3,995.",
+    "body": [
+      "IBM used August 14 to introduce two models of the Personal Computer AT, a machine it says runs more than twice as fast as the current PC family. Both are built around Intel's 80286, with a 24-bit address path and a 16-bit data path that moves the IBM line decisively beyond the original 8088 generation.",
+      "The $3,995 Model 68 carries 256KB of memory and a 1.2MB 5.25-inch diskette drive. The $5,795 Model 99 raises memory to 512KB, adds a 20MB fixed disk, and includes a serial-and-parallel adapter—figures that put serious business storage on the desktop at a serious business price.",
+      "Inside, eight expansion slots leave room for ambitious installations; six accept either new 16-bit or familiar 8-bit cards. A socket awaits the 80287 mathematics coprocessor, while IBM says memory can reach 3MB and direct-access storage 41.2MB.",
+      "The announcement reaches beyond hardware. DOS 3.0 supports the new disk formats, PC/IX support is promised later this year, and XENIX protected-mode support is due early in 1985. IBM also introduced networking pieces designed to make its growing PC family work together.",
+      "Analysts immediately called the AT the first model of a second generation of personal computers. Its reach may extend past Apple and other desktop rivals toward the multiuser systems sold by established minicomputer companies."
+    ],
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "confidence": "exact-date"
+  },
+  "stories": [
+    {
+      "headline": "DOS 3.0 and PC Network Prepare IBM Machines to Share",
+      "body": [
+        "DOS 3.0 is the quiet partner in IBM's loud hardware debut. It gives the AT command of the 20MB fixed disk and the new 1.2MB high-capacity floppy while retaining the ability to read several older PC diskette formats.",
+        "IBM also announced a PC Network adapter, cabling, and a translator unit. The company expects a network and operating system in early 1985 capable of linking as many as 72 users in standard configurations, pushing the personal computer deeper into shared office work."
+      ],
+      "sourceRefs": [
+        0,
+        1
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "Home-Computer Adventures Hook a Growing Adult Audience",
+      "body": [
+        "Computer adventures are becoming an after-hours obsession for adults as well as a youthful pastime. A period wire feature finds players giving up sleep to wizards, priests, puzzles, and elaborate imaginary worlds.",
+        "The August shelves strengthen the spell. The Seven Cities of Gold and Boulder Dash headline Commodore 64 coverage, while arcade-flavored conversions and new quests crowd the listings. The attraction is not merely reflex: exploration, mapping, and problem solving can turn a short session into a long night."
+      ],
+      "sourceRefs": [
+        3,
+        2
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "IBM PC/AT Model 68",
+      "summary": "80286, 256KB RAM, 1.2MB floppy, $3,995",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "title": "IBM PC/AT Model 99",
+      "summary": "80286, 512KB RAM, 20MB hard disk, serial/parallel adapter, $5,795",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "title": "IBM PC Network Adapter",
+      "summary": "Announced for IBM PC-family networking with new cabling and a translator unit",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "exact-date"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "IBM PC DOS 3.0",
+      "detail": "Introduced with storage support needed by the PC/AT's 20MB hard disk and 1.2MB floppy."
+    },
+    {
+      "name": "IBM PC/IX 1.1",
+      "detail": "IBM promised AT compatibility-mode support in fourth-quarter 1984."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top Computer Games",
+      "items": [
+        "The Seven Cities of Gold — Commodore 64",
+        "Boulder Dash — Commodore 64",
+        "Cloak & Dagger — arcades/film tie-in"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "Ghostbusters — Ray Parker Jr.",
+        "What's Love Got to Do with It — Tina Turner",
+        "State of Shock — The Jacksons",
+        "When Doves Cry — Prince",
+        "Stuck on You — Lionel Richie"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "Tightrope",
+        "Red Dawn",
+        "Ghostbusters",
+        "Purple Rain"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "IBM PC/AT Model 68",
+      "price": "$3,995",
+      "note": "exact date listing",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "IBM PC/AT Model 99",
+      "price": "$5,795",
+      "note": "exact date listing",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "IBM 20MB fixed disk option",
+      "price": "$1,595",
+      "note": "exact date listing",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "IBM 80287 math coprocessor",
+      "price": "$375",
+      "note": "exact date listing",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Hayes Smartmodem 1200",
+      "price": "$699 list",
+      "note": "period listing",
+      "sourceRefs": [
+        8
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "IBM offers a 20 percent educational allowance on the PC/AT",
+      "summary": "Schools and colleges receive a substantial allowance against the new machine's list price.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "AT expansion can reach 3MB of primary storage and 41.2MB of direct-access storage",
+      "summary": "IBM's published expansion ceiling shows how far the AT can grow beyond its base configuration.",
+      "sourceRefs": [
+        0
+      ],
+      "confidence": "exact-date"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "Ghostbusters",
+      "artist": "Ray Parker Jr.",
+      "chartDate": "1984-08-18",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-08-18"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "What's Love Got to Do with It",
+      "artist": "Tina Turner",
+      "chartDate": "1984-08-18",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-08-18"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "State of Shock",
+      "artist": "The Jacksons",
+      "chartDate": "1984-08-18",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-08-18"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "When Doves Cry",
+      "artist": "Prince",
+      "chartDate": "1984-08-18",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-08-18"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Stuck on You",
+      "artist": "Lionel Richie",
+      "chartDate": "1984-08-18",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-08-18"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Twice the PC—and Built to Grow",
+    "summary": "The new IBM Personal Computer AT pairs an 80286 processor with high-capacity storage and eight expansion slots.",
+    "tagline": "A second generation arrives on the desktop."
+  },
+  "market": {
+    "headline": "AT Reaches Beyond the Desktop",
+    "summary": "Analysts say IBM's faster expandable machine threatens not only rival personal computers but lower-end multiuser systems from established minicomputer vendors.",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "confidence": "exact-date"
+  },
+  "worldAnchor": {
+    "headline": "Egyptian officials suspect Iran and Libya in mysterious Red Sea mining",
+    "summary": "A dated UPI report on August 13 said Egypt regarded Iran and Libya as prime suspects in mines that damaged shipping in the Red Sea, an important regional-security anchor.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      6
+    ]
+  },
+  "bbsNote": {
+    "headline": "At 1200 Baud, Online Life Moves Beyond the Hobbyist Fringe",
+    "summary": "August 1984 user-group coverage documented Timex/Sinclair owners connecting by modem to CompuServe, while the $699 Hayes Smartmodem 1200 represented the premium auto-dial/auto-answer standard. Period practice centered on terminal software, local BBS calls, downloads, and special-interest groups.",
+    "posts": [
+      {
+        "topic": "CompuServe access",
+        "platform": "CompuServe",
+        "text": "An August 1984 CATS newsletter article by Mark Fendrick specifically covered modems and CompuServe for Timex/Sinclair users."
+      },
+      {
+        "topic": "1200-baud hardware",
+        "platform": "dial-up modem",
+        "text": "A period review listed the Hayes Smartmodem 1200 at $699, showing the price premium for faster, command-driven telecommunications."
+      },
+      {
+        "topic": "Local directories",
+        "platform": "BBS/user groups",
+        "text": "A July 1984 Timelinez item announced a Bay Area Timex/Sinclair modem-owner directory with 13 members, illustrating how local user groups organized dial-up communities."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "IBM's New Computer Came With a Two-Hour Tour on a Floppy",
+    "summary": "Every PC/AT shipped with Exploring the IBM Personal Computer AT, a self-loading tutorial disk available in monochrome and color versions.",
+    "detail": "IBM said the guided introduction took 1.5 to 2.5 hours and taught the keyboard, printer, disk storage, DOS, and text editing—an unusually elaborate out-of-box lesson for a professional machine.",
+    "sourceUrls": [
+      "https://retrocmp.de/ibm/5170/ibm-al_184-097_1984-08-14.txt"
+    ]
+  },
+  "gadgetWatch": {
+    "headline": "Compact Disc players push 'laser and computer' audio",
+    "summary": "An August 1984 Technics SL-P8 advertisement sold the emerging CD format as a union of lasers and computers promising lifelike reproduction.",
+    "confidence": "same-month",
+    "sourceRefs": [
+      9
+    ]
+  },
+  "milestone": {
+    "title": "IBM introduces the PC/AT",
+    "note": "The 80286-based AT and its 16-bit expansion architecture set the dominant high-end IBM-compatible PC template and marked the industry's transition beyond the original 8088 PC generation."
+  },
+  "accuracyLedger": {
+    "items": [
+      "PC/AT specifications, pricing, DOS 3.0, and expansion details come from IBM's August 14 announcement.",
+      "Industry reaction comes from The Christian Science Monitor dated August 17, 1984.",
+      "Music and movie rankings are tied to the historical week; game coverage is identified as same-month where appropriate.",
+      "Modem, CD-player, and home-computer features retain their period or same-month confidence labels."
+    ]
+  },
+  "sources": [
+    {
+      "title": "IBM Announcement Letter 184-097: IBM Personal Computer AT",
+      "url": "https://retrocmp.de/ibm/5170/ibm-al_184-097_1984-08-14.txt",
+      "date": "1984-08-14"
+    },
+    {
+      "title": "New personal computer model raises IBM horizons yet higher",
+      "url": "https://www.csmonitor.com/1984/0817/081719.html",
+      "date": "1984-08-17"
+    },
+    {
+      "title": "Computer Entertainer, August 1984",
+      "url": "https://ataricompendium.com/archives/newsletters/video_game_update/computer_entertainer_aug84.pdf",
+      "date": "1984-08"
+    },
+    {
+      "title": "Home computer games poised to snare guileless player",
+      "url": "https://www.upi.com/Archives/1984/08/07/Home-computer-games-poised-to-snare-guileless-player/2636460699200/",
+      "date": "1984-08-07"
+    },
+    {
+      "title": "Billboard Hot 100 archive for August 18, 1984",
+      "url": "https://www.musicchartsarchive.com/singles-chart/1984-08-18",
+      "date": "1984-08-18"
+    },
+    {
+      "title": "Domestic Weekend 33",
+      "url": "https://www.boxofficemojo.com/weekend/1984W33/",
+      "date": "1984-08-17"
+    },
+    {
+      "title": "Iran and Libya suspects in Red Sea mining",
+      "url": "https://www.upi.com/Archives/1984/08/13/Iran-and-Libya-suspects-in-Red-Sea-mining/8815461217600/",
+      "date": "1984-08-13"
+    },
+    {
+      "title": "Modems and Compuserve",
+      "url": "https://timexsinclair.com/article/modems-and-compuserve/index.html",
+      "date": "1984-08"
+    },
+    {
+      "title": "Hayes Smartmodem 1200 review",
+      "url": "http://ftp.pigwa.net/stuff/collections/atari_forever/www/www.cyberroach.com-atari/analog/an19/hayes_1200.htm",
+      "date": "1984"
+    },
+    {
+      "title": "Technics SL-P8 CD player advertisement",
+      "url": "http://gammaelectronics.xyz/audio_08-1984_technics.html",
+      "date": "1984-08"
+    }
+  ]
+}

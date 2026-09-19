@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Fri, 18 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 19 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of August 13-19, 1984 — IBM&apos;s PC/AT Opens a Second Generation of Personal Computing</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-08-13</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-08-13</guid>
+      <pubDate>Sat, 19 Sep 2026 12:00:00 GMT</pubDate>
+      <description>IBM unveils the 80286-powered 5170 with a 16-bit expansion path, high-capacity floppy, larger hard disks, and prices starting at $3,995. IBM used August 14 to introduce two models of the Personal Computer AT, a machine it says runs more than twice as fast as the current PC family. Both are built around Intel&apos;s 80286, with a 24-bit address path and a 16-bit data path that moves the IBM line decisively beyond the original 8088 generation. Also this week: DOS 3.0 and PC Network Prepare IBM Machines to Share · Home-Computer Adventures Hook a Growing Adult Audience.</description>
+    </item>
     <item>
       <title>Week of August 6-12, 1984 — Behind Closed Doors, Amiga&apos;s Lorraine Points to a New Generation</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-08-06</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-02</guid>
       <pubDate>Mon, 31 Aug 2026 12:00:00 GMT</pubDate>
       <description>TIME&apos;s April 2 report frames two incompatible visions of personal computing, one betting on compatibility, the other on the mouse. The comparison that dealers have been making informally since January reached the national press this week. In its April 2 technology report, TIME set IBM&apos;s PCjr against Apple&apos;s Macintosh and described the two as new entries battling for attention from the same undecided buyer. The deck put it plainly: new entries from IBM and Apple battle for attention. Also this week: Atari Invades Rival Machines With a Dozen Atarisoft Games · PC Boom Turns Into a Stock-Market Crapshoot · Mindset Pushes PC Graphics Beyond the IBM Mold · Jobs Sells the Macintosh as a Mission, Not Just a Machine.</description>
-    </item>
-    <item>
-      <title>Week of March 26-April 1, 1984 — AT&amp;T Throws Down a Unix Gauntlet With Six 3B Computers</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-03-26</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-03-26</guid>
-      <pubDate>Sat, 29 Aug 2026 12:00:00 GMT</pubDate>
-      <description>The post-divestiture giant puts Unix System V and its own 32-bit architecture at the center of a sweeping commercial challenge. AT&amp;T formally entered the general-purpose computer business on March 27, opening a campaign that reaches from a desktop multi-user machine to fault-tolerant systems. Only months after the Bell System divestiture, the company is carrying Bell Labs software and AT&amp;T-designed processors into direct competition with IBM, DEC, Data General, Wang and Hewlett-Packard. Also this week: Police Raids Put Britain’s Games-Cassette Pirates Under Pressure · IBM Rations PCs and XTs as the Component Squeeze Bites · Sinclair Microdrives Reach London Shops · Macintosh Commands the West Coast Computer Faire.</description>
     </item>
   </channel>
 </rss>
