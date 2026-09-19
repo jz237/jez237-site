@@ -230,7 +230,7 @@ export class Aquarium{
    this.scene.updateMatrixWorld();const contactSurfaces:T.Object3D[]=[];this.scene.traverse(o=>{if(o instanceof T.Mesh&&!(o instanceof T.InstancedMesh)&&(Array.isArray(o.material)?o.material:[o.material]).some(m=>m.userData.bakeDiffuse))contactSurfaces.push(o);});
    this.invertebrates=new Invertebrates(this.scene,(x,z)=>this.height(x,z),contactSurfaces,results[3],this.obstacles,(x,z)=>this.height(x,z),false,behaviorSeed(this.behaviorSession,4));
    this.angels=new Angelfish(this.obstacles,(x,z)=>this.height(x,z),this.invertebrates.plants,results[4],behaviorSeed(this.behaviorSession,2));this.scene.add(this.angels.root);
-   this.cories=new Corydoras(this.scene,(x,z)=>this.height(x,z),this.obstacles,this.invertebrates.plants,6,behaviorSeed(this.behaviorSession,3));
+   this.cories=new Corydoras(this.scene,(x,z)=>this.height(x,z),this.obstacles,this.invertebrates.plants,7,behaviorSeed(this.behaviorSession,3));
    await this.cories.prepareNavigation(floorRoutes as unknown as FloorRouteMap);
    applyWaterDepth(this.scene,this.waterIllumination);
    try{await applyBakedIrradiance(this.scene,this.waterIllumination,import.meta.env.DEV&&this.lightingInspection==='indirect');}

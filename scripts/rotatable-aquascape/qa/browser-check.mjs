@@ -9,14 +9,14 @@ const server=await createServer({root,server:{host:'127.0.0.1',port:5233,strictP
 let browser;const report={checks:{},views:{}};
 function signature(buffer){const p=PNG.sync.read(buffer),cells=[];for(let gy=0;gy<8;gy++)for(let gx=0;gx<12;gx++){let r=0,g=0,b=0,n=0;for(let y=Math.floor(gy*p.height/8);y<(gy+1)*p.height/8;y+=4)for(let x=Math.floor(gx*p.width/12);x<(gx+1)*p.width/12;x+=4){const at=(y*p.width+x)*4;r+=p.data[at];g+=p.data[at+1];b+=p.data[at+2];n++;}cells.push(...[r,g,b].map(v=>Math.round(v/n)));}return cells;}
 try{
- browser=await chromium.launch({channel:process.env.QA_BROWSER_CHANNEL??'chrome',headless:true,args:['--disable-background-timer-throttling','--disable-renderer-backgrounding']});
+ browser=await chromium.launch({channel:process.env.QA_BROWSER_CHANNEL??'chrome',headless:true,args:['--force_high_performance_gpu','--disable-background-timer-throttling','--disable-renderer-backgrounding']});
  for(const [name,viewport] of Object.entries({desktop:{width:1280,height:800},phone:{width:390,height:844}})){
   const page=await browser.newPage({viewport,deviceScaleFactor:1});const errors=[];
   page.on('pageerror',e=>errors.push(e.message));page.on('response',r=>{if(r.status()>=400&&!r.url().endsWith('/favicon.ico'))errors.push(r.status()+' '+r.url());});
   page.on('console',m=>{if(m.type()==='error'&&!m.location().url.endsWith('/favicon.ico'))errors.push(m.text());});
   await page.goto('http://127.0.0.1:5233/?qa=1');await page.waitForFunction(()=>window.aquariumQA&& !document.querySelector('#loading'),null,{timeout:120000});
   const assets=await page.evaluate(()=>{const a=window.aquariumQA;a.paused=true;let mapped=0;const broken=[];a.scene.traverse(o=>{if(!o.isMesh)return;for(const m of Array.isArray(o.material)?o.material:[o.material])for(const key of ['map','normalMap','roughnessMap']){const t=m[key];if(t){mapped++;const image=t.image;if(!image||!(image.width||image.videoWidth))broken.push(o.name+':'+key);}}});const gl=a.renderer.getContext(),ext=gl.getExtension('WEBGL_debug_renderer_info');return {mapped,broken,renderer:ext?gl.getParameter(ext.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER),angels:a.angels.states.length,tetras:a.fishes.length,cories:a.cories.animals.length,tetraSizes:a.fishes.map(f=>f.size)};});
-  assert.ok(assets.tetraSizes.every(s=>s>=.48*.75&&s<=.57));assert.ok(new Set(assets.tetraSizes).size>8);assert.equal(assets.angels,2);assert.equal(assets.tetras,16);assert.equal(assets.cories,6);assert.ok(assets.mapped>100);assert.deepEqual(assets.broken,[]);
+  assert.ok(assets.tetraSizes.every(s=>s>=.48*.75&&s<=.57));assert.ok(new Set(assets.tetraSizes).size>8);assert.equal(assets.angels,2);assert.equal(assets.tetras,16);assert.equal(assets.cories,7);assert.ok(assets.mapped>100);assert.deepEqual(assets.broken,[]);
   if(!record&&baseline)assert.equal(assets.mapped,baseline.views[name].assets.mapped,'texture bindings changed; inspect for white/untextured animals');
   await page.waitForTimeout(600);const png=await page.locator('#scene').screenshot({path:path.join(out,name+'-front.png')}),visual=signature(png);
   assert.ok(Math.max(...visual)-Math.min(...visual)>50,'image has visible scene detail');
