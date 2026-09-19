@@ -28,7 +28,7 @@ log('imported', len(bpy.data.objects), 'objects')
 # Z-Anatomy suffixes: .l/.r side; .g group empty; .j/.i tiny label placeholder meshes; .t/.s label anchor empties;
 # .ol/.or/.el/.er/.oNl/.oNr/.iNl ... muscle origin/insertion overlays painted on bones. Blender adds .NNN on collisions.
 SUFFIX = re.compile(r'^(?P<base>.*?)(?P<kind>\.(?:l|r|g|j|t|s|i|ol|or|el|er|[oie]\d+[lr]|[oie][lr]))?(?P<blender>\.\d{3})?$')
-JUNK = re.compile(r'^(Cross Section|Take a picture|\?+|\(?\?)|-profile$|-curve|^(External|Internal) axis of eyeball|^Equator of eyeball|^Meridians of eyeball|^Hairs?$|^Pubic hairs$|^(Eyebrow|Mentolabial sulcus|Nasolabial sulcus)$')   # last group: skin overlays that fold the welded surface (the hair eyebrow covers the skin one)
+JUNK = re.compile(r'^(Cross Section|Take a picture|\?+|\(?\?)|-profile$|-curve|^(External|Internal) axis of eyeball|^Equator of eyeball|^Meridians of eyeball|^Hairs?$|^Pubic hairs$')
 
 def classify(o):
     m = SUFFIX.match(o.name); base = m['base']; kind = (m['kind'] or '')[1:]
@@ -207,6 +207,47 @@ if SYSTEM == 'regions':
         me = p['obj'].data; me.materials.clear(); me.materials.append(bpy.data.materials.new(f'PIECE::{i}'))
         for poly in me.polygons: poly.material_index = 0
     skin = [p for p in pieces if not re.search(r'hair', p['name'], re.I)]; hair = [p for p in pieces if p not in skin]
+    # Each source patch is a closed thin shell: an outer sheet, an inner sheet a few millimetres below it and a rim
+    # joining their borders. Welded together, the rims become fins at every patch border and subdivision turns them
+    # into ridges. Keep only the outer sheets: split each shell into smooth components (sharp edges separate the
+    # sheets from the rims) and drop every component whose faces cannot see open air along their normals.
+    from mathutils.bvhtree import BVHTree
+    world = bmesh.new()
+    for p in skin:
+        tmp = p['obj'].data.copy(); tmp.transform(p['obj'].matrix_world); world.from_mesh(tmp); bpy.data.meshes.remove(tmp)
+    bmesh.ops.triangulate(world, faces=world.faces); scene_tree = BVHTree.FromBMesh(world); world.free()
+    SHARP = math.radians(float(os.environ.get('SKIN_SHARP', '55'))); ESCAPE = float(os.environ.get('SKIN_ESCAPE', '0.08'))
+    kept_faces = dropped_faces = 0
+    for p in skin:
+        o = p['obj']; me = o.data; M = o.matrix_world; R = M.to_3x3()
+        bm0 = bmesh.new(); bm0.from_mesh(me); bm0.faces.ensure_lookup_table()
+        comp = [-1] * len(bm0.faces); ncomp = 0
+        for f in bm0.faces:
+            if comp[f.index] >= 0: continue
+            stack = [f]; comp[f.index] = ncomp
+            while stack:
+                g = stack.pop()
+                for e in g.edges:
+                    if len(e.link_faces) != 2 or e.calc_face_angle(0.0) > SHARP: continue
+                    for h in e.link_faces:
+                        if comp[h.index] < 0: comp[h.index] = ncomp; stack.append(h)
+            ncomp += 1
+        faces_of = [[] for _ in range(ncomp)]
+        for f in bm0.faces: faces_of[comp[f.index]].append(f)
+        remove = []; info = []; escape = []
+        for ci, fs in enumerate(faces_of):
+            step = max(1, len(fs) // 400); seen = 0; free = 0
+            for f in fs[::step]:
+                n = (R @ f.normal).normalized(); origin = M @ f.calc_center_median() + n * 5e-4
+                hit = scene_tree.ray_cast(origin, n); seen += 1
+                if hit[0] is None: free += 1
+            escape.append(free / max(1, seen)); info.append((len(fs), round(escape[-1], 2), min(f.index for f in fs), max(f.index for f in fs)))
+        for ci, fs in enumerate(faces_of):
+            if escape[ci] < ESCAPE: remove.extend(fs)   # inner sheets and abutting rims see no open air at all; concave skin still sees some
+        bmesh.ops.delete(bm0, geom=remove, context='FACES'); bm0.to_mesh(me); bm0.free()
+        kept_faces += len(me.polygons); dropped_faces += len(remove)
+        if os.environ.get('SKIN_DIAG'): log('SKIN_DIAG shell', p['name'], 'components', ncomp, 'kept faces', len(me.polygons), 'dropped', len(remove), sorted(info, key=lambda t: -t[0])[:40])
+    log('regions: outer sheets kept', kept_faces, 'faces; inner sheets and rims dropped', dropped_faces)
     objs = [p['obj'] for p in skin]; target = objs[0]
     with bpy.context.temp_override(active_object=target, selected_editable_objects=objs, selected_objects=objs, object=target):
         bpy.ops.object.join()
@@ -215,11 +256,221 @@ if SYSTEM == 'regions':
     def is_sliver(f):
         L = max(e.calc_length() for e in f.edges); return L > .03 and f.calc_area() < .08 * L * L   # long and needle-thin only
     slivers = [f for f in bm.faces if is_sliver(f)]; bmesh.ops.delete(bm, geom=slivers, context='FACES')
-    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=3e-4); bm.to_mesh(target.data); bm.free(); log('regions: removed', len(slivers), 'sliver faces')
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=3e-4)
+    bmesh.ops.dissolve_degenerate(bm, dist=1e-5, edges=bm.edges)
+    bm.edges.ensure_lookup_table(); pin = bmesh.ops.holes_fill(bm, edges=[e for e in bm.edges if len(e.link_faces) == 1], sides=8); log('regions: pinholes filled', len(pin['faces']), 'sides histogram', sorted(__import__('collections').Counter(len(f.verts) for f in pin['faces']).items()))
+    orig_normal = {f: f.normal.copy() for f in bm.faces}
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)   # source patches are wound inconsistently; mixed windings give garbage vertex normals along every patch border (visible seam ridges)
+    # Bridge the gaps between neighbouring patches: their outer sheets stop a few millimetres short of each other.
+    # Pair every border edge with the nearest border edge of a different patch and bridge each patch pair's chains.
+    from mathutils.kdtree import KDTree
+    BRIDGE = float(os.environ.get('SKIN_BRIDGE', '0.016'))
+    bm.edges.ensure_lookup_table(); bm.faces.ensure_lookup_table()
+    border = [e for e in bm.edges if len(e.link_faces) == 1]
+    def chains(edges):   # split border edges into connected chains (an opening such as an eye is one closed chain)
+        adj = {}
+        for e in edges:
+            for v in e.verts: adj.setdefault(v, []).append(e)
+        seen = set(); out = []
+        for e in edges:
+            if e in seen: continue
+            comp = []; stack = [e]; seen.add(e)
+            while stack:
+                x = stack.pop(); comp.append(x)
+                for v in x.verts:
+                    for y in adj[v]:
+                        if y not in seen: seen.add(y); stack.append(y)
+            out.append(comp)
+        return out
+    def chain_gap(a, b):
+        pts = [v.co for e in b for v in e.verts]; kdb = KDTree(len(pts))
+        for k, c in enumerate(pts): kdb.insert(c, k)
+        kdb.balance(); ds = [kdb.find(v.co)[2] for e in a for v in e.verts]; return sum(ds) / len(ds), max(ds)
+    def ordered(chain):   # walk a chain into edge order (open chains start at an end)
+        adj = {}
+        for e in chain:
+            for v in e.verts: adj.setdefault(v, []).append(e)
+        ends = [v for v, es in adj.items() if len(es) == 1]
+        v = ends[0] if ends else chain[0].verts[0]; out = []; seen = set()
+        while True:
+            nxt = [e for e in adj[v] if e not in seen]
+            if not nxt: break
+            e = nxt[0]; seen.add(e); out.append(e); v = e.other_vert(v)
+        return out if len(out) == len(chain) else chain
+    all_chains = [ordered(c) for c in chains(border) if len(c) >= 2]
+    chain_of = {}
+    for ci, c in enumerate(all_chains):
+        for k, e in enumerate(c): chain_of[e] = (ci, k)
+    kd = KDTree(len(border)); mids = {}
+    for k, e in enumerate(border): m = (e.verts[0].co + e.verts[1].co) / 2; mids[e] = m; kd.insert(m, k)
+    kd.balance()
+    def partner(e):   # nearest border edge of another chain within reach
+        ci = chain_of.get(e, (None,))[0]
+        for co, k, d in kd.find_n(mids[e], 16):
+            o = border[k]
+            if d > BRIDGE: return None
+            if o in chain_of and chain_of[o][0] != ci: return o
+        return None
+    bridged = failed = pairs = 0; new_faces = []
+    if os.environ.get('SKIN_DIAG'): log('SKIN_DIAG border edges before bridging', len(border), 'chains', len(all_chains))
+    done = set()
+    for ci, c in enumerate(all_chains):
+        runs = []; cur = None
+        for k, e in enumerate(c):
+            o = partner(e); oc = chain_of[o][0] if o else None
+            if oc is not None and cur and cur[0] == oc: cur[1].append(e); cur[2].append(chain_of[o][1])
+            else:
+                if cur: runs.append(cur)
+                cur = [oc, [e], [chain_of[o][1]]] if oc is not None else None
+        if cur: runs.append(cur)
+        for oc, run, pos in runs:
+            if len(run) < 2 or oc < ci and (oc, ci) in done: continue
+            other = all_chains[oc]; lo, hi_ = min(pos), max(pos)
+            span = other[lo:hi_ + 1] if hi_ - lo + 1 <= 3 * len(run) else other[lo:lo + 3 * len(run)]
+            if len(span) < 2: continue
+            edges = [e for e in run + span if e.is_valid and len(e.link_faces) == 1]
+            if len(edges) < 4: continue
+            mat = run[0].link_faces[0].material_index
+            try:
+                res = bmesh.ops.bridge_loops(bm, edges=edges, use_pairs=False, use_cyclic=False, use_merge=False, merge_factor=0.5, twist_offset=0)
+                for f in res['faces']: f.material_index = mat
+                new_faces.extend(res['faces']); bridged += len(res['faces']); pairs += 1; done.add((min(ci, oc), max(ci, oc)))
+            except Exception:
+                failed += 1
+    LONG = 2.0 * BRIDGE; bad = [f for f in new_faces if f.is_valid and max(e.calc_length() for e in f.edges) > LONG]
+    if bad: bmesh.ops.delete(bm, geom=bad, context='FACES'); log('regions: discarded', len(bad), 'over-long bridge faces')
+    log('regions: bridged', bridged, 'faces across', pairs, 'border runs;', failed, 'bridges failed')
+    # small loops left between bridged runs, then the open finger and toe tips (Z-Anatomy has no nails there)
+    bm.edges.ensure_lookup_table(); more = bmesh.ops.holes_fill(bm, edges=[e for e in bm.edges if len(e.link_faces) == 1], sides=12)['faces']
+    keep_open = {slot for slot, m in enumerate(target.data.materials) if m and m.name.startswith('PIECE::') and re.search(r'face|perineum', pieces[int(m.name.split('::')[1])]['name'], re.I)}
+    slits = bmesh.ops.holes_fill(bm, edges=[e for e in bm.edges if len(e.link_faces) == 1 and e.link_faces[0].material_index not in keep_open], sides=40)['faces']   # e.g. the slit down the inner arm; eyes stay open
+    digit_slots = {slot for slot, m in enumerate(target.data.materials) if m and m.name.startswith('PIECE::') and re.search(r'digits', pieces[int(m.name.split('::')[1])]['name'], re.I)}
+    tips = bmesh.ops.holes_fill(bm, edges=[e for e in bm.edges if len(e.link_faces) == 1 and e.link_faces[0].material_index in digit_slots], sides=0)['faces']
+    for f in tips: f.material_index = next(iter({e.link_faces[0].material_index for e in f.edges if len(e.link_faces) > 1} & digit_slots), f.material_index)
+    capped = 0
+    for c in chains([e for e in bm.edges if e.is_valid and len(e.link_faces) == 1]):   # tips whose loops are not simple: triangulate across them
+        if not all(e.link_faces[0].material_index in digit_slots for e in c): continue
+        pts = [v.co for e in c for v in e.verts]; ext = max(max(q[i] for q in pts) - min(q[i] for q in pts) for i in range(3))
+        if ext > 0.035: continue
+        centre = sum(pts, Vector()) / len(pts); cv = bm.verts.new(centre)   # fan cap from the loop's centre, wound to match the neighbouring face
+        for e in c:
+            if not e.is_valid or not e.link_faces: continue
+            f = e.link_faces[0]; loop = next((l for l in f.loops if l.edge is e), None)
+            a, b = (loop.vert, loop.link_loop_next.vert) if loop else (e.verts[0], e.verts[1])
+            try: nf = bm.faces.new((b, a, cv)); nf.material_index = f.material_index; capped += 1
+            except ValueError: pass
+    log('regions: filled', len(more), 'small loops,', len(slits), 'slits,', len(tips), 'finger/toe tips and', capped, 'triangles over the remaining tips')
+    # recalc orients each connected sheet by its own heuristic; put every sheet back the way the source faced (outward)
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    comp_seen = set(); flipped = 0
+    for f0 in bm.faces:
+        if f0 in comp_seen: continue
+        comp = []; stack = [f0]; comp_seen.add(f0)
+        while stack:
+            g = stack.pop(); comp.append(g)
+            for e in g.edges:
+                for h in e.link_faces:
+                    if h not in comp_seen: comp_seen.add(h); stack.append(h)
+        agree = sum(1 if f.normal.dot(orig_normal.get(f, f.normal)) >= 0 else -1 for f in comp if f in orig_normal)
+        if agree < 0: bmesh.ops.reverse_faces(bm, faces=comp); flipped += len(comp)
+    log('regions: re-oriented', flipped, 'faces on inverted sheets')
+    if os.environ.get('SKIN_DIAG'):
+        left = [e for e in bm.edges if e.is_valid and len(e.link_faces) == 1]
+        names = {i: p['name'] for i, p in enumerate(pieces)}; slot_name = {slot: names.get(int(m.name.split('::')[1]), m.name) for slot, m in enumerate(target.data.materials) if m and m.name.startswith('PIECE::')}
+        for c in sorted(chains(left), key=lambda c: -len(c)):
+            pts = [v.co for e in c for v in e.verts]; lo = Vector((min(q.x for q in pts), min(q.y for q in pts), min(q.z for q in pts))); hi_ = Vector((max(q.x for q in pts), max(q.y for q in pts), max(q.z for q in pts)))
+            mats = sorted({slot_name.get(e.link_faces[0].material_index, '?') for e in c})
+            log('SKIN_DIAG open chain', len(c), 'edges', 'centre %.2f %.2f %.2f' % tuple((lo + hi_) / 2), 'size %.0f %.0f %.0f mm' % tuple(1000 * (hi_ - lo)), '|'.join(mats)[:80])
+    bmesh.ops.recalc_face_normals(bm, faces=bm.faces)
+    if os.environ.get('SKIN_DIAG'):   # doubled layers: sub-regions duplicating the skin beneath them?
+        bm.faces.ensure_lookup_table(); bm.edges.ensure_lookup_table()
+        by_verts = {}
+        for f in bm.faces: by_verts.setdefault(frozenset(v.index for v in f.verts), []).append(f)
+        dup = [fs for fs in by_verts.values() if len(fs) > 1]
+        pairs = {}
+        for fs in dup:
+            key = tuple(sorted({f.material_index for f in fs})); pairs[key] = pairs.get(key, 0) + 1
+        nm = sum(1 for e in bm.edges if len(e.link_faces) > 2)
+        log('SKIN_DIAG duplicate face groups', len(dup), 'non-manifold edges (3+ faces)', nm, 'by patch pair', sorted(pairs.items(), key=lambda kv: -kv[1])[:12])
+        names = {i: p['name'] for i, p in enumerate(pieces)}; slot_name = {slot: names.get(int(m.name.split('::')[1]), m.name) for slot, m in enumerate(target.data.materials) if m and m.name.startswith('PIECE::')}
+        sets = {}; areas = {}
+        for e in bm.edges:
+            if len(e.link_faces) <= 2: continue
+            key = tuple(sorted({slot_name.get(f.material_index, '?') for f in e.link_faces})); sets[key] = sets.get(key, 0) + 1
+            for f in e.link_faces: areas.setdefault(slot_name.get(f.material_index, '?'), []).append(f.calc_area())
+        for k, n in sorted(sets.items(), key=lambda kv: -kv[1])[:25]: log('SKIN_DIAG nonmanifold', n, ' | '.join(k))
+        for k, v in sorted(areas.items(), key=lambda kv: -len(kv[1]))[:12]: log('SKIN_DIAG nm-face-area', k, len(v), 'mean cm2 %.3f' % (1e4 * sum(v) / len(v)))
+    if os.environ.get('SKIN_DIAG'):   # seam diagnostics: how far apart are the unwelded patch borders?
+        from mathutils.kdtree import KDTree
+        bm.verts.ensure_lookup_table(); bm.edges.ensure_lookup_table()
+        border = [e for e in bm.edges if len(e.link_faces) == 1]; bverts = {v for e in border for v in e.verts}
+        mat_of = {v: {f.material_index for f in v.link_faces} for v in bverts}
+        kd = KDTree(len(bverts)); blist = list(bverts)
+        for k, v in enumerate(blist): kd.insert(v.co, k)
+        kd.balance(); bins = [3e-4, 1e-3, 2e-3, 5e-3, 1e-2, 1e9]; hist = [0] * len(bins); far = 0
+        for v in blist:
+            best = None
+            for co, k, d in kd.find_n(v.co, 12):
+                if blist[k] is v or not (mat_of[blist[k]] - mat_of[v]): continue
+                best = d; break
+            if best is None: far += 1; continue
+            for b, lim in enumerate(bins):
+                if best <= lim: hist[b] += 1; break
+        log('SKIN_DIAG border edges', len(border), 'border verts', len(bverts), 'nearest other-patch border vert: <=0.3mm', hist[0], '<=1mm', hist[1], '<=2mm', hist[2], '<=5mm', hist[3], '<=1cm', hist[4], '>1cm', hist[5], 'none-within-12', far)
+    bm.to_mesh(target.data); bm.free(); log('regions: removed', len(slivers), 'sliver faces')
     mod = target.modifiers.new('subd', 'SUBSURF'); mod.levels = 2 if FULL else 1; mod.render_levels = mod.levels; mod.subdivision_type = 'CATMULL_CLARK'
     dg = bpy.context.evaluated_depsgraph_get(); new = bpy.data.meshes.new_from_object(target.evaluated_get(dg)); target.modifiers.clear(); old_me = target.data; target.data = new; bpy.data.meshes.remove(old_me)
-    new.shade_smooth(); new.normals_split_custom_set_from_vertices([v.normal for v in new.vertices])
     import numpy as np
+    new.shade_smooth()
+    # Seat overlapping borders. The source patches overlap along thin strips rather than sharing edges, so after
+    # subdivision the upper strip's border floats a fraction of a millimetre off the surface beneath and its
+    # vertex normals curl: every patch border draws as a bright ridge. Project each border vertex onto the nearest
+    # other-patch surface and take that surface's normal, so both layers shade as one skin.
+    from mathutils.bvhtree import BVHTree
+    nfaces = len(new.polygons); nloops = len(new.loops); nverts = len(new.vertices)
+    f_mat = np.empty(nfaces, dtype=np.int32); new.polygons.foreach_get('material_index', f_mat)
+    l_edge = np.empty(nloops, dtype=np.int32); new.loops.foreach_get('edge_index', l_edge)
+    l_vert = np.empty(nloops, dtype=np.int32); new.loops.foreach_get('vertex_index', l_vert)
+    f_start = np.empty(nfaces, dtype=np.int32); new.polygons.foreach_get('loop_start', f_start)
+    f_total = np.empty(nfaces, dtype=np.int32); new.polygons.foreach_get('loop_total', f_total)
+    e_verts = np.empty(len(new.edges) * 2, dtype=np.int32); new.edges.foreach_get('vertices', e_verts); e_verts = e_verts.reshape(-1, 2)
+    edge_use = np.bincount(l_edge, minlength=len(new.edges)); border_edges = np.nonzero(edge_use == 1)[0]
+    border_verts = np.unique(e_verts[border_edges].ravel())
+    loop_face = np.repeat(np.arange(nfaces), f_total); vert_mat = np.full(nverts, -1, dtype=np.int32); vert_mat[l_vert] = f_mat[loop_face]
+    vco = np.empty(nverts * 3, dtype=np.float64); new.vertices.foreach_get('co', vco); vco = vco.reshape(-1, 3)
+    vno = np.empty(nverts * 3, dtype=np.float64); new.vertices.foreach_get('normal', vno); vno = vno.reshape(-1, 3)
+    polys = [tuple(int(x) for x in l_vert[s0:s0 + t]) for s0, t in zip(f_start, f_total)]
+    tree = BVHTree.FromPolygons(vco.tolist(), polys, all_triangles=False)
+    SEAT = float(os.environ.get('SKIN_SEAT', '0.0025')); seated = 0; dists = []
+    if os.environ.get('SKIN_DIAG'):
+        gaps = [0] * 6; names = {i: p['name'] for i, p in enumerate(pieces)}; slot_name = {slot: names.get(int(m.name.split('::')[1]), m.name) for slot, m in enumerate(new.materials) if m and m.name.startswith('PIECE::')}; far_by = {}
+        for vi in border_verts:
+            own = vert_mat[vi]; best = None
+            for co, no, fi, d in tree.find_nearest_range(Vector(vco[vi]), 0.015):
+                if f_mat[fi] == own: continue
+                if best is None or d < best: best = d
+            b = 5 if best is None else 0 if best < 1e-3 else 1 if best < 2.5e-3 else 2 if best < 5e-3 else 3 if best < 1e-2 else 4
+            gaps[b] += 1
+            if b >= 2: k = slot_name.get(int(own), '?'); far_by[k] = far_by.get(k, 0) + 1
+        log('SKIN_DIAG border gap to other patch: <1mm', gaps[0], '1-2.5', gaps[1], '2.5-5', gaps[2], '5-10', gaps[3], '10-15', gaps[4], '>15', gaps[5])
+        log('SKIN_DIAG far borders by patch', sorted(far_by.items(), key=lambda kv: -kv[1])[:16])
+    for vi in border_verts:
+        own = vert_mat[vi]; best = None
+        for co, no, fi, d in tree.find_nearest_range(Vector(vco[vi]), SEAT):
+            if f_mat[fi] == own: continue
+            if best is None or d < best[3]: best = (co, no, fi, d)
+        if best is None: continue
+        co, no, fi, d = best; dists.append(d)
+        if no.dot(Vector(vno[vi])) < 0: no = -no
+        vco[vi] = co; vno[vi] = (Vector(vno[vi]) * .25 + no * .75).normalized(); seated += 1
+    new.vertices.foreach_set('co', vco.ravel()); new.update()
+    log('regions: border verts', len(border_verts), 'seated onto a neighbouring patch', seated, 'median gap %.2fmm' % (1000 * float(np.median(dists)) if dists else 0))
+    if os.environ.get('SKIN_DIAG'):
+        names = {i: p['name'] for i, p in enumerate(pieces)}; slot_name = {slot: names.get(int(m.name.split('::')[1]), m.name) for slot, m in enumerate(new.materials) if m and m.name.startswith('PIECE::')}
+        per = {}
+        for vi in border_verts: per.setdefault(slot_name.get(int(vert_mat[vi]), '?'), []).append(vco[vi])
+        for k, v in sorted(per.items(), key=lambda kv: -len(kv[1])): c = np.mean(v, axis=0); log('SKIN_DIAG border', k, len(v), 'centre %.2f %.2f %.2f' % tuple(c))
+    new.normals_split_custom_set_from_vertices(vno.tolist())
     nf = len(new.polygons); nl = len(new.loops); nv = len(new.vertices)
     mat_idx = np.empty(nf, dtype=np.int32); new.polygons.foreach_get('material_index', mat_idx)
     loop_start = np.empty(nf, dtype=np.int32); new.polygons.foreach_get('loop_start', loop_start)
