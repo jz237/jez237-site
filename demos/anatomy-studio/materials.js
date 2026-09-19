@@ -24,19 +24,37 @@ const brainTex = texture((c, s) => { paint(c, s, noiseField(s, 5, 8), 108, 148);
 const vesselTex = texture((c, s) => { paint(c, s, noiseField(s, 3, 6), 118, 138); for (let y = 0; y < s; y += 5) { const v = 90 + Math.round(random() * 60); c.fillStyle = `rgba(${v},${v},${v},.6)`; c.fillRect(0, y, s, 2 + Math.round(random())); } });
 // Skin: pores and fine creases.
 const skinTex = texture((c, s) => { paint(c, s, noiseField(s, 4, 7), 116, 140); for (let i = 0; i < 3000; i++) { const v = 80 + Math.round(random() * 40); c.fillStyle = `rgba(${v},${v},${v},.45)`; c.beginPath(); c.arc(random() * s, random() * s, .6 + random() * 1.4, 0, 7); c.fill(); } for (let i = 0; i < 240; i++) { c.strokeStyle = 'rgba(95,95,95,.35)'; c.lineWidth = .8; const x = random() * s, y = random() * s, a = random() * 6.283; c.beginPath(); c.moveTo(x, y); c.lineTo(x + Math.cos(a) * 18, y + Math.sin(a) * 18); c.stroke(); } });
+// Iris: radial fibres, a darker limbal ring and a lighter collarette, centred in UV space.
+const irisTex = texture((c, s) => { const g = c.createRadialGradient(s / 2, s / 2, s * .05, s / 2, s / 2, s * .5); g.addColorStop(0, '#2b2b2b'); g.addColorStop(.12, '#6f8a5a'); g.addColorStop(.55, '#587a4a'); g.addColorStop(.85, '#3d5a36'); g.addColorStop(1, '#1e2a1c'); c.fillStyle = g; c.fillRect(0, 0, s, s);
+  for (let i = 0; i < 420; i++) { const a = random() * 6.283, r0 = s * (.06 + random() * .1), r1 = s * (.3 + random() * .2); const v = 60 + Math.round(random() * 150); c.strokeStyle = `rgba(${v},${v + 20},${Math.round(v * .6)},${.25 + random() * .4})`; c.lineWidth = .6 + random() * 1.6; c.beginPath(); c.moveTo(s / 2 + Math.cos(a) * r0, s / 2 + Math.sin(a) * r0); c.lineTo(s / 2 + Math.cos(a + (random() - .5) * .08) * r1, s / 2 + Math.sin(a + (random() - .5) * .08) * r1); c.stroke(); }
+  c.fillStyle = '#0b0b0b'; c.beginPath(); c.arc(s / 2, s / 2, s * .13, 0, 7); c.fill(); }, 512);
+// Hair: long strands with tonal variation for an anisotropic sheen.
+const hairTex = texture((c, s) => { paint(c, s, noiseField(s, 2, 3), 90, 150); for (let x = 0; x < s; x += 1.5) { const v = 70 + Math.round(random() * 110); c.fillStyle = `rgba(${v},${v},${v},.7)`; c.fillRect(x, 0, 1, s); } });
 // Nerve: fine longitudinal fascicles.
 const nerveTex = texture((c, s) => { paint(c, s, noiseField(s, 3, 4), 118, 140); for (let x = 0; x < s; x += 3) { const v = 100 + Math.round(random() * 60); c.fillStyle = `rgba(${v},${v},${v},.5)`; c.fillRect(x, 0, 1, s); } });
 const grain = boneTex, pores = boneTex, striation = muscleTex, vesselRidge = vesselTex;
 
 /** Planar UVs along the piece's longest axis so muscle striations run with the fibres. */
-export function projectedUV(mesh, cell = 0.06) {
+export function projectedUV(mesh, cell = 0.06, world = null) {
   const g = mesh.geometry; g.computeBoundingBox(); const box = g.boundingBox, size = box.getSize(new THREE.Vector3()), p = g.attributes.position, uv = new Float32Array(p.count * 2);
+  if (world) {   // shared body-space projection (x, y) so adjacent pieces continue the same pattern across their seams
+    const s = world.scale || 1, o = world.offset || [0, 0, 0];
+    for (let i = 0; i < p.count; i++) { uv[i * 2] = (p.getX(i) * s + o[0]) / cell; uv[i * 2 + 1] = (p.getY(i) * s + o[1]) / cell; }
+    g.setAttribute('uv', new THREE.BufferAttribute(uv, 2)); return;
+  }
   const longest = size.x >= size.y && size.x >= size.z ? 0 : size.y >= size.z ? 1 : 2, other = longest === 0 ? (size.y >= size.z ? 1 : 2) : longest === 1 ? (size.x >= size.z ? 0 : 2) : (size.x >= size.y ? 0 : 1);
   const mins = box.min.toArray();
   for (let i = 0; i < p.count; i++) { const v = [p.getX(i), p.getY(i), p.getZ(i)]; uv[i * 2] = (v[other] - mins[other]) / cell; uv[i * 2 + 1] = (v[longest] - mins[longest]) / cell; }
   g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
 }
 
+/** UVs in [0,1] across the piece's two largest axes, centred: used for disc-like maps such as the iris. */
+export function planarCenteredUV(mesh) {
+  const g = mesh.geometry; g.computeBoundingBox(); const box = g.boundingBox, size = box.getSize(new THREE.Vector3()), p = g.attributes.position, uv = new Float32Array(p.count * 2);
+  const smallest = size.x <= size.y && size.x <= size.z ? 0 : size.y <= size.z ? 1 : 2, a = smallest === 0 ? 1 : 0, b = smallest === 2 ? 1 : 2; const c = box.getCenter(new THREE.Vector3()).toArray(), ext = Math.max(size.getComponent(a), size.getComponent(b), 1e-4);
+  for (let i = 0; i < p.count; i++) { const v = [p.getX(i), p.getY(i), p.getZ(i)]; uv[i * 2] = (v[a] - c[a]) / ext + .5; uv[i * 2 + 1] = (v[b] - c[b]) / ext + .5; }
+  g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
+}
 export const fileColors = {skeletal: '#f0e6c8', joints: '#d8d1c0', visceral: '#f2a8b8', heart: '#ff6b7a', brain: '#f5c0c8', muscular: '#e07a7a', vessels: '#7f8fe6', nerves: '#f5e08a', lymphoid: '#9fd98a', regions: '#e6c9a8', female: '#e8a0b4'};
 export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', visceral: 'Viscera', heart: 'Heart', brain: 'Brain & senses', muscular: 'Muscles', vessels: 'Arteries & veins', nerves: 'Nerves & cord', lymphoid: 'Lymphatics', regions: 'Surface regions', female: 'Female reproductive · schematic'};
 
@@ -86,11 +104,11 @@ function realistic(p) {
     case 'brain':
       if (/falx|tentorium|dura/.test(L)) return {color: '#e0d6c2', roughness: .3, clearcoat: .5, opacity: .38, transparent: true, depthWrite: false};
       if (/ventricle|choroid|aqueduct|central canal/.test(L)) return {color: '#8cc4e6', roughness: .2, clearcoat: .8, opacity: .62, transparent: true};
-      if (/cornea/.test(L)) return {color: '#cfe8f5', roughness: .05, clearcoat: 1, opacity: .35, transparent: true, depthWrite: false};
-      if (/lens/.test(L)) return {color: '#e8f2f4', roughness: .05, clearcoat: 1, opacity: .6, transparent: true};
-      if (/vitreous|chamber|segment of eyeball|zonular/.test(L)) return {color: '#d3e7ee', roughness: .1, clearcoat: .8, opacity: .28, transparent: true, depthWrite: false};
-      if (/sclera/.test(L)) return {color: '#f2eee6', roughness: .25, clearcoat: .8};
-      if (/iris/.test(L)) return {color: '#5d7a4c', roughness: .35, clearcoat: .6, bump: striation, bumpScale: .0004};
+      if (/cornea/.test(L)) return {color: '#eaf6fb', roughness: .02, clearcoat: 1, clearcoatRoughness: .02, opacity: .28, transparent: true, depthWrite: false, ior: 1.376};
+      if (/lens/.test(L)) return {color: '#f4fbfd', roughness: .03, clearcoat: 1, opacity: .55, transparent: true, ior: 1.41};
+      if (/vitreous|chamber|segment of eyeball|zonular/.test(L)) return {color: '#dcedf3', roughness: .1, clearcoat: .8, opacity: .22, transparent: true, depthWrite: false};
+      if (/sclera/.test(L)) return {color: '#f4f0ea', roughness: .22, clearcoat: .9, clearcoatRoughness: .1, bump: organTex, bumpScale: .0004, roughMap: organTex};
+      if (/iris/.test(L)) return {color: '#ffffff', map: irisTex, roughness: .3, clearcoat: .8, clearcoatRoughness: .1, planarUV: true};
       if (/retina/.test(L)) return {color: '#8b3b3b', roughness: .3, clearcoat: .6};
       if (/lacrimal|ear|cochlea|vestibule/.test(L)) return {color: '#e0c9b8', roughness: .45, clearcoat: .3};
       if (/white matter/.test(L)) return {color: '#efe7de', roughness: .35, clearcoat: .5};
@@ -116,25 +134,30 @@ function realistic(p) {
       if (/thymus/.test(L)) return {color: '#d9a0a8', roughness: .4, clearcoat: .4};
       return {color: '#86b96f', roughness: .45, clearcoat: .3};
     case 'regions':
-      if (/hair/.test(L)) return {color: '#3a2a20', roughness: .8};
+      if (/hair/.test(L)) return {color: '#2a1a12', roughness: .62, clearcoat: .08, clearcoatRoughness: .7, sheen: .8, sheenColor: '#6a4a34', sheenRoughness: .45, bump: hairTex, bumpScale: .0016, roughMap: hairTex, striated: true};
       return {color: '#d8b28f', roughness: .5, clearcoat: .2, opacity: .30, transparent: true, depthWrite: false, bump: skinTex, bumpScale: .0008, sheen: .35, sheenColor: '#f2d2c0'};
   }
   return {color: '#cfc6bb', roughness: .6};
 }
 
-export const modes = ['realistic', 'coded', 'xray', 'clay'];
+export const modes = ['skin', 'realistic', 'coded', 'xray', 'clay'];
+/** Opaque skin for the Skin finish: warm tone, pores, soft sheen standing in for subsurface scattering. */
+function skinSpec(p) { const L = p.name.toLowerCase(); if (/hair/.test(L)) return realistic(p); return {color: '#d8ab8c', roughness: .48, clearcoat: .12, clearcoatRoughness: .55, bump: skinTex, bumpScale: .0011, roughMap: skinTex, sheen: .55, sheenColor: '#e8a08a', sheenRoughness: .7}; }
 export function finishMaterial(mesh, part, mode = 'realistic') {
   const r = realistic(part); const base = fileColors[part.file] || '#cccccc';
   let spec;
   if (mode === 'realistic') spec = r;
+  else if (mode === 'skin') spec = part.file === 'regions' ? skinSpec(part) : r;
   else if (mode === 'coded') spec = {color: base, roughness: .5, clearcoat: .3, opacity: r.transparent ? Math.max(r.opacity, .4) : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
   else if (mode === 'xray') spec = {color: part.file === 'skeletal' ? '#eef3f7' : base, roughness: .25, clearcoat: .5, opacity: part.file === 'skeletal' ? .92 : .16, transparent: part.file !== 'skeletal', depthWrite: part.file === 'skeletal', emissive: base, emissiveIntensity: part.file === 'skeletal' ? 0 : .35};
   else spec = {color: '#cfc6bb', roughness: .85, clearcoat: 0, opacity: r.transparent ? .5 : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
-  if ((spec.bump || spec.roughMap) && !mesh.geometry.attributes.uv) { const cell = spec.striated ? .045 : .06; projectedUV(mesh, cell); if (mesh.userData) mesh.userData.uvCell = cell; }
+  if (spec.planarUV && !mesh.geometry.attributes.uv) { planarCenteredUV(mesh); if (mesh.userData) mesh.userData.uvCell = 0; }
+  if ((spec.bump || spec.roughMap) && !mesh.geometry.attributes.uv) { const cell = spec.striated ? .045 : .06; const world = part.file === 'regions' && !/hair/i.test(part.name) ? { scale: mesh.scale?.x || 1, offset: mesh.position ? mesh.position.toArray() : [0, 0, 0] } : null; projectedUV(mesh, cell, world); if (mesh.userData) { mesh.userData.uvCell = cell; mesh.userData.uvWorld = world; } }
   const mat = new THREE.MeshPhysicalMaterial({color: spec.color, roughness: spec.roughness ?? .5, metalness: 0, clearcoat: spec.clearcoat ?? 0, clearcoatRoughness: spec.clearcoatRoughness ?? .3, envMapIntensity: .8, transparent: !!spec.transparent, opacity: spec.opacity ?? 1, depthWrite: spec.depthWrite ?? true, side: THREE.FrontSide, ior: spec.ior ?? 1.45});
+  if (spec.map && mesh.geometry.attributes.uv) { mat.map = spec.map; mat.map.colorSpace = THREE.SRGBColorSpace; }
   if (spec.bump && mesh.geometry.attributes.uv) { mat.bumpMap = spec.bump; mat.bumpScale = spec.bumpScale; }
   if (spec.roughMap && mesh.geometry.attributes.uv) { mat.roughnessMap = spec.roughMap; mat.roughness = Math.min(1, (spec.roughness ?? .5) * 1.6); }
-  if (spec.sheen) { mat.sheen = spec.sheen; mat.sheenColor.set(spec.sheenColor || '#ffffff'); mat.sheenRoughness = .6; }
+  if (spec.sheen) { mat.sheen = spec.sheen; mat.sheenColor.set(spec.sheenColor || '#ffffff'); mat.sheenRoughness = spec.sheenRoughness ?? .6; }
   if (spec.emissive) { mat.emissive.set(spec.emissive); mat.emissiveIntensity = spec.emissiveIntensity ?? .3; }
   mesh.material = mat; return mat;
 }

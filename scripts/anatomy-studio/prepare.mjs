@@ -97,7 +97,9 @@ for (const fid of fileIds) {
     pieces.push(piece); tris += t;
     node.setExtras({id: x.id});   // keep the GLB lean; the manifest carries the rest
   }
-  await doc.transform(dedup(), prune(), weld({tolerance: 0}), quantize({quantizePosition: 14, quantizeNormal: 10, quantizationVolume: 'mesh'}), reorder({encoder: MeshoptEncoder}), meshopt({encoder: MeshoptEncoder, level: 'medium'}));
+  // The skin is one welded surface split into pieces: a shared quantisation grid keeps their shared boundaries coincident.
+  const qvol = fid === 'regions' ? 'scene' : 'mesh';
+  await doc.transform(dedup(), prune(), weld({tolerance: 0}), quantize({quantizePosition: fid === 'regions' ? 16 : 14, quantizeNormal: 10, quantizationVolume: qvol}), reorder({encoder: MeshoptEncoder}), meshopt({encoder: MeshoptEncoder, level: 'medium'}));
   const out = path.join(DEMO, 'assets', `${fid}.glb`); await io.write(out, doc);
   const bytes = statSync(out).size; totalBytes += bytes;
   if (bytes >= MAX_BYTES) throw new Error(`${fid}.glb is ${bytes} bytes; Cloudflare Pages deploy skips files >= 25 MiB`);
@@ -115,7 +117,7 @@ for (const f of files) {
     let t = 0; for (const prim of mesh.listPrimitives()) t += (prim.getIndices()?.getCount() ?? prim.getAttribute('POSITION').getCount()) / 3;
     const tr = node.getTranslation(); const d = tr.map((v, i) => +(v - piece.center[i]).toFixed(4)); if (d.some(v => Math.abs(v) > 0.0002)) piece.hiShift = d;
     piece.hiTriangles = t; tris += t; n++; node.setExtras({id: x.id}); }
-  await doc.transform(dedup(), prune(), weld({tolerance: 0}), quantize({quantizePosition: 14, quantizeNormal: 10, quantizationVolume: 'mesh'}), reorder({encoder: MeshoptEncoder}), meshopt({encoder: MeshoptEncoder, level: 'medium'}));
+  await doc.transform(dedup(), prune(), weld({tolerance: 0}), quantize({quantizePosition: f.id === 'regions' ? 16 : 14, quantizeNormal: 10, quantizationVolume: f.id === 'regions' ? 'scene' : 'mesh'}), reorder({encoder: MeshoptEncoder}), meshopt({encoder: MeshoptEncoder, level: 'medium'}));
   const out = path.join(DEMO, 'assets', 'hi', `${f.id}.glb`); await io.write(out, doc); const bytes = statSync(out).size;
   if (bytes >= MAX_BYTES) throw new Error(`hi/${f.id}.glb is ${bytes} bytes; over the 25 MiB Cloudflare Pages limit`);
   f.hi = {path: `assets/hi/${f.id}.glb`, bytes, pieces: n, triangles: tris}; totalBytes += bytes;

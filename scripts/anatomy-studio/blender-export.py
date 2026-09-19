@@ -28,7 +28,7 @@ log('imported', len(bpy.data.objects), 'objects')
 # Z-Anatomy suffixes: .l/.r side; .g group empty; .j/.i tiny label placeholder meshes; .t/.s label anchor empties;
 # .ol/.or/.el/.er/.oNl/.oNr/.iNl ... muscle origin/insertion overlays painted on bones. Blender adds .NNN on collisions.
 SUFFIX = re.compile(r'^(?P<base>.*?)(?P<kind>\.(?:l|r|g|j|t|s|i|ol|or|el|er|[oie]\d+[lr]|[oie][lr]))?(?P<blender>\.\d{3})?$')
-JUNK = re.compile(r'^(Cross Section|Take a picture|\?+|\(?\?)|-profile$|-curve|^(External|Internal) axis of eyeball|^Equator of eyeball|^Meridians of eyeball|^Hairs?$|^Pubic hairs$')
+JUNK = re.compile(r'^(Cross Section|Take a picture|\?+|\(?\?)|-profile$|-curve|^(External|Internal) axis of eyeball|^Equator of eyeball|^Meridians of eyeball|^Hairs?$|^Pubic hairs$|^(Eyebrow|Mentolabial sulcus|Nasolabial sulcus)$')   # last group: skin overlays that fold the welded surface (the hair eyebrow covers the skin one)
 
 def classify(o):
     m = SUFFIX.match(o.name); base = m['base']; kind = (m['kind'] or '')[1:]
@@ -185,6 +185,7 @@ for o in real:
         bpy.ops.object.transform_apply(location=False, rotation=True, scale=True)
     if neg: o.data.flip_normals()
 
+def tri_count(me): me.calc_loop_triangles(); return len(me.loop_triangles)
 pieces = []
 for key, u in units.items():
     members = u['members']; target = u['unit'] if (u['unit'] is not None and u['unit'] in members) else max(members, key=lambda x: len(x.data.polygons))
@@ -197,6 +198,56 @@ for key, u in units.items():
     pieces.append(dict(obj=target, name=u['name'], side=u['side'], file=u['file'], merged=merged, suffixSide=(u['side'] != 'M' and not (key[0] in ('self', 'mesh') and META[target.name]['prefixSide'])), parent=parent_groups[0] if parent_groups else None, path=' / '.join(reversed(parent_groups))))
 log('pieces', len(pieces), 'from', len(real), 'meshes')
 
+# ---------------------------------------------------------------- skin smoothing
+# Z-Anatomy's surface regions are coarse patches. Subdividing them one by one pulls every patch boundary inward and
+# cracks the face open, so: tag each patch with its own material, weld all patches into one surface, subdivide that,
+# stamp the smooth normals as custom split normals, then separate the pieces again by material.
+if SYSTEM == 'regions':
+    for i, p in enumerate(pieces):
+        me = p['obj'].data; me.materials.clear(); me.materials.append(bpy.data.materials.new(f'PIECE::{i}'))
+        for poly in me.polygons: poly.material_index = 0
+    skin = [p for p in pieces if not re.search(r'hair', p['name'], re.I)]; hair = [p for p in pieces if p not in skin]
+    objs = [p['obj'] for p in skin]; target = objs[0]
+    with bpy.context.temp_override(active_object=target, selected_editable_objects=objs, selected_objects=objs, object=target):
+        bpy.ops.object.join()
+    # drop sliver faces (the source has a few stray faces spanning centimetres), then weld the patches into one surface
+    bm = bmesh.new(); bm.from_mesh(target.data)
+    def is_sliver(f):
+        L = max(e.calc_length() for e in f.edges); return L > .03 and f.calc_area() < .08 * L * L   # long and needle-thin only
+    slivers = [f for f in bm.faces if is_sliver(f)]; bmesh.ops.delete(bm, geom=slivers, context='FACES')
+    bmesh.ops.remove_doubles(bm, verts=bm.verts, dist=3e-4); bm.to_mesh(target.data); bm.free(); log('regions: removed', len(slivers), 'sliver faces')
+    mod = target.modifiers.new('subd', 'SUBSURF'); mod.levels = 2 if FULL else 1; mod.render_levels = mod.levels; mod.subdivision_type = 'CATMULL_CLARK'
+    dg = bpy.context.evaluated_depsgraph_get(); new = bpy.data.meshes.new_from_object(target.evaluated_get(dg)); target.modifiers.clear(); old_me = target.data; target.data = new; bpy.data.meshes.remove(old_me)
+    new.shade_smooth(); new.normals_split_custom_set_from_vertices([v.normal for v in new.vertices])
+    import numpy as np
+    nf = len(new.polygons); nl = len(new.loops); nv = len(new.vertices)
+    mat_idx = np.empty(nf, dtype=np.int32); new.polygons.foreach_get('material_index', mat_idx)
+    loop_start = np.empty(nf, dtype=np.int32); new.polygons.foreach_get('loop_start', loop_start)
+    loop_total = np.empty(nf, dtype=np.int32); new.polygons.foreach_get('loop_total', loop_total)
+    loop_vert = np.empty(nl, dtype=np.int32); new.loops.foreach_get('vertex_index', loop_vert)
+    coords = np.empty(nv * 3, dtype=np.float64); new.vertices.foreach_get('co', coords); coords = coords.reshape(-1, 3)
+    cnorm = np.empty(nl * 3, dtype=np.float32); new.corner_normals.foreach_get('vector', cnorm); cnorm = cnorm.reshape(-1, 3)
+    slot_of = {int(m.name.split('::')[1]): slot for slot, m in enumerate(new.materials) if m and m.name.startswith('PIECE::')}   # join reorders material slots
+    found = len(hair)
+    for i, p in enumerate(pieces):
+        if p in hair: continue
+        faces = np.nonzero(mat_idx == slot_of.get(i, -1))[0]
+        if not len(faces): continue
+        starts = loop_start[faces]; totals = loop_total[faces]
+        loop_ids = np.concatenate([np.arange(s0, s0 + t) for s0, t in zip(starts, totals)])
+        verts_used, inv = np.unique(loop_vert[loop_ids], return_inverse=True)
+        me_i = bpy.data.meshes.new(f'skin_{i}')
+        faces_list = []; cursor = 0
+        for t in totals: faces_list.append(tuple(int(x) for x in inv[cursor:cursor + t])); cursor += t
+        me_i.from_pydata(coords[verts_used].tolist(), [], faces_list); me_i.update()
+        me_i.shade_smooth(); me_i.normals_split_custom_set(cnorm[loop_ids].tolist())
+        o = bpy.data.objects.new(f'skin_{i}', me_i); bpy.context.scene.collection.objects.link(o); o.matrix_world = target.matrix_world.copy(); p['obj'] = o; p['kept'] = True; found += 1
+    bpy.data.objects.remove(target, do_unlink=True)
+    for p in hair: p['kept'] = True
+    dropped = [p['name'] for p in pieces if not p.get('kept')]
+    pieces = [p for p in pieces if p.get('kept')]
+    if dropped: log('regions: dropped pieces with no faces left:', dropped)
+    log('regions welded, subdivided', 'x2' if FULL else 'x1', 'and separated:', found, 'pieces,', sum(tri_count(p['obj'].data) for p in pieces), 'tris')
 # ---------------------------------------------------------------- decimation
 def tri_count(me): me.calc_loop_triangles(); return len(me.loop_triangles)
 def decimate(obj, ratio):
@@ -237,7 +288,7 @@ for i, p in enumerate(pieces):
     bm = bmesh.new(); bm.from_mesh(me)
     loose = [v for v in bm.verts if not v.link_faces]; bmesh.ops.delete(bm, geom=loose, context='VERTS')
     bm.to_mesh(me); bm.free()
-    me.shade_smooth()
+    if SYSTEM != 'regions' or re.search(r'hair', p['name'], re.I): me.shade_smooth()   # skin pieces keep the shared custom normals stamped after subdivision
     # origin -> bounds centre (world). rotation/scale already applied so world = location + local.
     xs = [v.co.x for v in me.vertices]; ys = [v.co.y for v in me.vertices]; zs = [v.co.z for v in me.vertices]
     c = Vector(((min(xs) + max(xs)) / 2, (min(ys) + max(ys)) / 2, (min(zs) + max(zs)) / 2))
