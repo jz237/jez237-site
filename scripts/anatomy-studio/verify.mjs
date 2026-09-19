@@ -26,7 +26,7 @@ console.log(`static: ${manifest.pieces.length} pieces, ${manifest.stats.triangle
 const args = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--enable-webgl', '--disable-gpu-sandbox'];
 const browser = await chromium.launch({executablePath: process.env.CHROME_PATH || undefined, headless: true, args});
 const errors = []; const page = await browser.newPage({viewport: {width: 1280, height: 860}, deviceScaleFactor: 1});
-const infos = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(`console: ${m.text()}`); else if (!/Failed to load/.test(m.text())) infos.push(`${m.type()}: ${m.text()}`); });
+const infos = []; page.on('pageerror', e => errors.push(e.message)); const thirdParty = /googletagmanager|google-analytics|gstatic|doubleclick/; page.on('console', m => { if (m.type() === 'error') { if (!thirdParty.test(m.text())) errors.push(`console: ${m.text()}`); } else if (!/Failed to load/.test(m.text())) infos.push(`${m.type()}: ${m.text()}`); });
 page.on('response', r => { if (r.status() >= 400 && r.url().startsWith(new URL(url).origin) && r.url().includes('anatomy-studio')) errors.push(`${r.status()} ${r.url()}`); });
 const read = () => page.evaluate(() => window.anatomyStudio.getState());
 const ready = p => p.waitForFunction(() => document.body.dataset.ready === 'true', null, {timeout: 240000});
