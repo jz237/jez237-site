@@ -55,6 +55,28 @@ export function planarCenteredUV(mesh) {
   for (let i = 0; i < p.count; i++) { const v = [p.getX(i), p.getY(i), p.getZ(i)]; uv[i * 2] = (v[a] - c[a]) / ext + .5; uv[i * 2 + 1] = (v[b] - c[b]) / ext + .5; }
   g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
 }
+/** Skin tone variation as vertex colours in body space: warmer lips, cheeks, nose tip and ears; cooler creases; fine mottling. */
+export function skinTint(geometry, world) {
+  const p = geometry.attributes.position, s = world.scale || 1, o = world.offset || [0, 0, 0], col = new Float32Array(p.count * 3);
+  const hash = (x, y, z) => { const n = Math.sin(x * 127.1 + y * 311.7 + z * 74.7) * 43758.5453; return n - Math.floor(n); };
+  const zones = [   // [x, y, z, radius, r, g, b] warm/cool multipliers around body-space points (metres)
+    [0, 1.528, 0.078, .022, 1.06, .74, .72],      // lips
+    [.055, 1.548, .052, .045, 1.03, .92, .90], [-.055, 1.548, .052, .045, 1.03, .92, .90],   // cheeks
+    [0, 1.556, .092, .018, 1.04, .90, .88],       // nose tip
+    [.075, 1.57, -.02, .04, 1.04, .90, .89], [-.075, 1.57, -.02, .04, 1.04, .90, .89],       // ears
+    [.03, 1.582, .045, .026, .96, .93, .95], [-.03, 1.582, .045, .026, .96, .93, .95],       // orbits, slightly cool
+    [.24, .84, .02, .05, 1.03, .93, .92], [-.24, .84, .02, .05, 1.03, .93, .92],             // knuckles / hands
+    [.09, .43, -.02, .07, 1.02, .95, .94], [-.09, .43, -.02, .07, 1.02, .95, .94],           // knees
+    [.10, .04, .03, .09, 1.03, .93, .92], [-.10, .04, .03, .09, 1.03, .93, .92]];            // feet
+  for (let i = 0; i < p.count; i++) {
+    const x = p.getX(i) * s + o[0], y = p.getY(i) * s + o[1], z = p.getZ(i) * s + o[2];
+    let r = 1, g = 1, b = 1;
+    for (const zn of zones) { const d = Math.hypot(x - zn[0], y - zn[1], z - zn[2]); if (d < zn[3]) { const w = 1 - d / zn[3]; const k = w * w * (3 - 2 * w); r += (zn[4] - 1) * k; g += (zn[5] - 1) * k; b += (zn[6] - 1) * k; } }
+    const n = (hash(Math.round(x * 90), Math.round(y * 90), Math.round(z * 90)) - .5) * .05 + (hash(Math.round(x * 400), Math.round(y * 400), Math.round(z * 400)) - .5) * .03;
+    col[i * 3] = r + n; col[i * 3 + 1] = g + n * .9; col[i * 3 + 2] = b + n * .8;
+  }
+  geometry.setAttribute('color', new THREE.BufferAttribute(col, 3));
+}
 export const fileColors = {skeletal: '#f0e6c8', joints: '#d8d1c0', visceral: '#f2a8b8', heart: '#ff6b7a', brain: '#f5c0c8', muscular: '#e07a7a', vessels: '#7f8fe6', nerves: '#f5e08a', lymphoid: '#9fd98a', regions: '#e6c9a8', female: '#e8a0b4'};
 export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', visceral: 'Viscera', heart: 'Heart', brain: 'Brain & senses', muscular: 'Muscles', vessels: 'Arteries & veins', nerves: 'Nerves & cord', lymphoid: 'Lymphatics', regions: 'Surface regions', female: 'Female reproductive · schematic'};
 
@@ -142,7 +164,7 @@ function realistic(p) {
 
 export const modes = ['skin', 'realistic', 'coded', 'xray', 'clay'];
 /** Opaque skin for the Skin finish: warm tone, pores, soft sheen standing in for subsurface scattering. */
-function skinSpec(p) { const L = p.name.toLowerCase(); if (/hair/.test(L)) return realistic(p); return {color: '#d8ab8c', roughness: .48, clearcoat: .12, clearcoatRoughness: .55, bump: skinTex, bumpScale: .0011, roughMap: skinTex, sheen: .55, sheenColor: '#e8a08a', sheenRoughness: .7}; }
+function skinSpec(p) { const L = p.name.toLowerCase(); if (/hair/.test(L)) return realistic(p); return {color: '#d9ad8e', roughness: .5, clearcoat: .1, clearcoatRoughness: .6, bump: skinTex, bumpScale: .0011, roughMap: skinTex, sheen: .4, sheenColor: '#e8a08a', sheenRoughness: .75, sss: {wrap: .45, bleed: [.42, .12, .06]}}; }
 export function finishMaterial(mesh, part, mode = 'realistic') {
   const r = realistic(part); const base = fileColors[part.file] || '#cccccc';
   let spec;
@@ -158,6 +180,17 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
   if (spec.bump && mesh.geometry.attributes.uv) { mat.bumpMap = spec.bump; mat.bumpScale = spec.bumpScale; }
   if (spec.roughMap && mesh.geometry.attributes.uv) { mat.roughnessMap = spec.roughMap; mat.roughness = Math.min(1, (spec.roughness ?? .5) * 1.6); }
   if (spec.sheen) { mat.sheen = spec.sheen; mat.sheenColor.set(spec.sheenColor || '#ffffff'); mat.sheenRoughness = spec.sheenRoughness ?? .6; }
+  if (spec.sss && mesh.geometry && mesh.userData?.uvWorld) { if (!mesh.geometry.attributes.color) skinTint(mesh.geometry, mesh.userData.uvWorld); mat.vertexColors = true; }
+  if (spec.sss) {   // light wrap + warm bleed at the terminator: a cheap stand-in for subsurface scattering in skin
+    const sss = spec.sss;
+    mat.onBeforeCompile = shader => {
+      shader.uniforms.uSkinWrap = {value: sss.wrap}; shader.uniforms.uSkinBleed = {value: new THREE.Vector3(...sss.bleed)};
+      shader.fragmentShader = shader.fragmentShader.replace('#include <common>', '#include <common>\nuniform float uSkinWrap; uniform vec3 uSkinBleed;')
+        .replace('float dotNL = saturate( dot( geometryNormal, directLight.direction ) );\n\tvec3 irradiance = dotNL * directLight.color;\n\t#ifdef USE_CLEARCOAT',
+          'float dotNLraw = dot( geometryNormal, directLight.direction );\n\tfloat dotNL = saturate( ( dotNLraw + uSkinWrap ) / ( 1.0 + uSkinWrap ) );\n\tvec3 irradiance = dotNL * directLight.color;\n\tirradiance += uSkinBleed * pow( 1.0 - saturate( abs( dotNLraw ) ), 3.0 ) * directLight.color;\n\t#ifdef USE_CLEARCOAT');
+    };
+    mat.customProgramCacheKey = () => `skin-sss-${sss.wrap}`;
+  }
   if (spec.emissive) { mat.emissive.set(spec.emissive); mat.emissiveIntensity = spec.emissiveIntensity ?? .3; }
   mesh.material = mat; return mat;
 }
