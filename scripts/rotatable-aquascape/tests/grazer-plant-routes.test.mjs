@@ -58,7 +58,7 @@ test('whole-body plant rejection preserves 4000 detailed moving-surface results'
 
 for(const seed of [391,7819,4294967295])test(`randomized Corydoras session ${seed} retains floor movement and clearance`,async()=>{
  const {Corydoras,coryBody,coryForward}=await import('../lib/Corydoras.ts');const scene=new T.Scene();buildBotanicalPlants(scene,height,{value:0});addFernFixture(scene);calmSwordLeaves(scene);scene.updateMatrixWorld();
- const plants=new GrazerPlants(scene),life=new Corydoras(scene,height,await hardscapeObstacles(),plants,6,seed),distance=Array(6).fill(0);
+ const plants=new GrazerPlants(scene),life=new Corydoras(scene,height,await hardscapeObstacles(),plants,7,seed),distance=Array(7).fill(0);
  await life.prepareNavigation(JSON.parse(fs.readFileSync(new URL('../lib/CoryFloorRoutes.json',import.meta.url),'utf8')));
  for(let i=0;i<1200;i++){const old=life.animals.map(a=>a.position.clone());life.update(.1,i*.1);
  for(const a of life.animals){distance[a.id]+=a.position.distanceTo(old[a.id]);assert.ok(plants.clearBody(a.position,coryBody(a.position,coryForward(a),a.size,a.pitch),i*.1));

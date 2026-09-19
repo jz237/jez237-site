@@ -71,3 +71,26 @@ test('a cory pauses between adjacent real pellets instead of vacuuming them in c
  for(let i=0;i<100;i++)life.update(.025,.5+i*.025);
  assert.ok(bites>1,'resumes feeding instead of falling asleep');
 });
+
+
+test('twelve cories retain collision clearance during a shared meal and rotate food placement',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4,[],undefined,12,7819);
+ assert.equal(life.animals.length,12);let bites=0;
+ assert.equal(life.feed(()=>bites++),6);assert.equal(life.feed(()=>bites++),6);
+ for(let i=0;i<12;i++){assert.equal(life.pellets[i].position.x,life.animals[i].position.x);assert.equal(life.pellets[i].position.z,life.animals[i].position.z);}
+ for(let i=0;i<600;i++){
+  life.update(.05,i*.05);
+  for(const a of life.animals)for(const b of life.animals)if(b.id>a.id)
+   assert.equal(bodiesOverlap(coryBody(a.position,coryForward(a),a.size,a.pitch),coryBody(b.position,coryForward(b),b.size,b.pitch),0),false);
+ }
+ assert.ok(bites>0,'larger group still captures real food');assert.equal(bites+life.pellets.length,12,'no phantom food consumption');
+});
+
+test('food pursuit begins higher above the floor and uses visible swimming bursts',()=>{
+ const life=new Corydoras(new T.Scene(),()=>.4,[],undefined,1),a=life.animals[0];
+ a.position.set(-1.5,.432,0);a.yaw=0;a.pitch=0;a.picking=undefined;a.route=[];a.mode='browsing';a.remaining=60;a.anchor.copy(a.position);
+ let bites=0;life.feed(()=>bites++);for(const p of life.pellets.splice(1))p.mesh.removeFromParent();life.pellets[0].position.set(1,1.25,0);
+ let peak=0;
+ for(let i=0;i<300&&bites===0;i++){life.update(1/60,i/60);peak=Math.max(peak,a.speed);if(i===0){assert.equal(a.mode,'feeding');assert.equal(bites,0);}assert.ok(a.position.y<.55);}
+ assert.ok(peak>.8,'clear feeding burst instead of slow browsing');assert.equal(bites,1);
+});

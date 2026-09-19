@@ -1,6 +1,6 @@
 # Dwarf Corydoras: visual and behavior study
 
-Six salt-and-pepper dwarf Corydoras (Corydoras habrosus) join the existing cardinal tetras, cherry shrimp and ramshorn snails. This is an illustrative aquarium simulation, not a validated animal-behavior or husbandry model.
+Seven salt-and-pepper dwarf Corydoras (Corydoras habrosus) join the existing cardinal tetras, cherry shrimp and ramshorn snails. This is an illustrative aquarium simulation, not a validated animal-behavior or husbandry model.
 
 ## Evidence and interpretation
 
@@ -46,3 +46,6 @@ because it caused traffic jams in the full planted habitat test.
 The retained change gives each visit independent route choices and foraging
 pause/fin phases through separate behavior seeds. Existing bottom preference,
 leaf/gravel picking, food handling and collision protection remain in place.
+
+
+September 19 feeding update: earlier near-bottom food detection, quicker controlled turns and stronger individual swimming bursts with braking and bite pauses. Seven fish share the planted routes. Portions remain six pellets with a twelve-pellet cap; successive meals rotate drop locations among the fish, preserving nitrogen accounting. These animation rates are illustrative, not measured physiology.
