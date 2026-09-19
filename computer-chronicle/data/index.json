@@ -2,6 +2,21 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-19",
+      "historicDate": "1984-08-13",
+      "displayDate": "Week of August 13-19, 1984",
+      "edition": "Issue 107 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The AT arrives, adventures keep adults up late, and 1200-baud life gathers speed.",
+      "leadHeadline": "IBM's PC/AT Opens a Second Generation of Personal Computing",
+      "storyHeadlines": [
+        "DOS 3.0 and PC Network Prepare IBM Machines to Share",
+        "Home-Computer Adventures Hook a Growing Adult Audience"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-08-13.jpg",
+      "thumb": "media/thumbs/1984-08-13.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-09-18",
       "historicDate": "1984-08-06",
       "displayDate": "Week of August 6-12, 1984",
