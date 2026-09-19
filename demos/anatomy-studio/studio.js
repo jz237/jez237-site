@@ -7,7 +7,7 @@ import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
 import { PartsBoard } from './parts-board.js?v=2';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, projectedUV } from './materials.js?v=2';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, projectedUV } from './materials.js?v=6';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=2';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=2';
 
@@ -96,10 +96,10 @@ async function loadStudio(){
  updateList(); updateUI(); setView('hero', true);
  window.anatomyStudio = {
   getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, body:state.body, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
-  getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
+  getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), radius:(p.mesh.geometry.boundingSphere || p.mesh.geometry.computeBoundingSphere() || p.mesh.geometry.boundingSphere).radius * Math.max(p.mesh.scale.x, p.mesh.scale.y, p.mesh.scale.z), extent:p.size.length() / 2, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
-  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, setBody, loadHi, setDetail, lodPass, _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
+  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, setBody, loadHi, setDetail, lodPass, _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
  };
  const initialView = params.get('view'), initialAssembly = params.get('assembly'); if (params.get('body') === 'female') setBody('female', {silent:true});
  if (initialAssembly && assemblies[initialAssembly]) await enterAssembly(initialAssembly, (params.get('side') || '').toUpperCase());
@@ -141,7 +141,8 @@ function updateStageUI(){
  $('stage-note').textContent = state.stage === 'detail' ? `Every system loaded · ${parts.length.toLocaleString()} pieces` : `${parts.length.toLocaleString()} of ${manifest.stats.pieces.toLocaleString()} pieces loaded`;
 }
 function captureMaterial(part){ const m = part.mesh.material; part.opacity = m.opacity; part.transparent = m.transparent; part.depthWrite = m.depthWrite; part.emissive = m.emissive.clone(); part.emissiveIntensity = m.emissiveIntensity; }
-function setMode(mode, { user = false } = {}){ if (!modes.includes(mode)) return; if (user) state.restoreMode = null; state.mode = mode; for (const p of parts) { p.mesh.material.dispose(); finishMaterial(p.mesh, p.piece, mode); captureMaterial(p); p.mesh.castShadow = !p.mesh.material.transparent; } document.querySelectorAll('[data-mode]').forEach(b => { b.classList.toggle('active', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); }); boardDirty = true; updateVisibility(); }
+function setMode(mode, { user = false } = {}){ if (!modes.includes(mode)) return; if (user) state.restoreMode = null; state.mode = mode;
+ if (mode === 'skin' && manifest && !manifest.files.find(f => f.id === 'regions')?.loaded) loadFiles(['regions']).then(() => { if (state.mode === 'skin') updateVisibility(); }); /* the skin lives in the detail stage */ for (const p of parts) { p.mesh.material.dispose(); finishMaterial(p.mesh, p.piece, mode); captureMaterial(p); p.mesh.castShadow = !p.mesh.material.transparent; } document.querySelectorAll('[data-mode]').forEach(b => { b.classList.toggle('active', b.dataset.mode === mode); b.setAttribute('aria-pressed', b.dataset.mode === mode); }); boardDirty = true; updateVisibility(); }
 
 function buildBodyLandmarks(){
  for (const l of landmarks.filter(l => l.kind === 'body')) l.el.remove(); for (let i = landmarks.length - 1; i >= 0; i--) if (landmarks[i].kind === 'body') landmarks.splice(i, 1);
@@ -191,8 +192,9 @@ function updateList(){
  $('part-list').value = state.selected?.id ?? '';
 }
 function updateVisibility(){
+ const skinOnlyNow = skinOnly();
  for (const p of parts) { const selected = p === state.selected, mat = p.mesh.material, member = isMember(p);
-  p.mesh.visible = member && bodyAllows(p) && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected);
+  p.mesh.visible = member && bodyAllows(p) && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected) && (!skinOnlyNow || SURFACE(p));
   const o = state.assembly && p.assemblyLayer?.opacity != null && state.amount > .05 ? p.assemblyLayer.opacity : null;
   mat.opacity = o ?? p.opacity; mat.transparent = o != null || p.transparent; mat.depthWrite = o != null ? false : p.depthWrite;
   mat.emissive.copy(selected ? new THREE.Color('#49c8a3') : p.emissive); mat.emissiveIntensity = selected ? (state.isolated ? .08 : .3) : p.emissiveIntensity;   // faint when isolated so the surface detail stays readable
@@ -229,6 +231,8 @@ function focusSelected(){
 // ---------------------------------------------------------------- nested assemblies
 const MALE_GENITAL = p => p.file === 'visceral' && (/Male genital system/.test(p.path) || p.name === 'Urethra');
 function bodyAllows(p){ return state.body === 'female' ? !MALE_GENITAL(p) : p.file !== 'female'; }
+const SURFACE = p => p.file === 'regions' || (p.file === 'brain' && /^(Cornea|Iris|Sclera|Lens|Anterior chamber of eyeball|Anterior segment of eyeball)$/.test(p.name)) || (p.file === 'female' && /Mammary/.test(p.name));
+function skinOnly(){ return state.mode === 'skin' && !state.assembly && !state.isolated && state.system === 'all' && state.amount < .02; }
 function setBody(body, {silent = false} = {}){ state.body = body === 'female' ? 'female' : 'male'; document.querySelectorAll('[data-body]').forEach(b => { b.classList.toggle('active', b.dataset.body === state.body); b.setAttribute('aria-pressed', b.dataset.body === state.body); }); boardDirty = true; if (!silent) { selectPart(null); updateList(); } updateVisibility(); const url = new URL(location); if (state.body === 'female') url.searchParams.set('body', 'female'); else url.searchParams.delete('body'); history.replaceState(null, '', url); }
 function isMember(p){ if (!state.assembly) return true; const a = assemblies[state.assembly]; return p.assemblies.includes(state.assembly) && (!a.paired || p.side === state.assemblySide); }
 function assemblyMembers(id, side = state.assemblySide){ const a = assemblies[id]; return parts.filter(p => p.assemblies.includes(id) && (!a.paired || p.side === side)); }
@@ -242,7 +246,7 @@ async function enterAssembly(id, side){
  await loadFiles(a.files);
  state.assembly = id; state.system = 'all'; state.isolated = false; $('system').value = 'all';
  // X-ray ghosts soft tissue, so a nested study renders in the realistic finish and restores X-ray on exit.
- if (state.mode === 'xray') { state.restoreMode = 'xray'; setMode('realistic'); }
+ if (state.mode === 'xray' || state.mode === 'skin') { state.restoreMode = state.mode; setMode('realistic'); }
  const members = assemblyMembers(id), ctx = assemblyContext(a, members.map(p => p.piece));
  for (const p of parts) { p.assemblyOffset = null; p.assemblyLayer = null; }
  for (const p of members) { const r = assemblyOffset(a, p.piece, ctx, state.assemblySide); p.assemblyOffset = new THREE.Vector3().fromArray(r.offset); p.assemblyLayer = r; }
@@ -299,9 +303,11 @@ async function loadHi(fileId){
    const g = o.geometry; o.updateWorldMatrix(true, false); const m = o.matrixWorld.clone();
    // bake the node transform relative to the piece's ASSEMBLED transform (base position, same quantisation scale) so the
    // geometry drops into the base tier's local space even if the file arrives mid-explosion
+   // quantised (Int16/Int8) attributes cannot hold transformed floats: promote them first or a few vertices overflow into spikes
+   for (const name of ['position', 'normal']) { const a = g.attributes[name]; if (a && !(a.array instanceof Float32Array)) { const f = new THREE.Float32BufferAttribute(a.count * 3, 3); for (let i = 0; i < a.count; i++) f.setXYZ(i, a.getX(i), a.getY(i), a.getZ(i)); g.setAttribute(name, f); } }
    const assembled = new THREE.Matrix4().compose(part.base, part.mesh.quaternion, part.mesh.scale).premultiply(model.matrixWorld);
    g.applyMatrix4(assembled.invert().multiply(m)); g.computeBoundingSphere();
-   if (part.mesh.geometry.attributes.uv) projectedUV({ geometry:g }, part.mesh.userData.uvCell || .06);
+   if (part.mesh.geometry.attributes.uv) projectedUV({ geometry:g, userData:part.mesh.userData }, part.mesh.userData.uvCell || .06, part.mesh.userData.uvWorld);
    hi.geometries.set(id, g); o.material.dispose?.(); });
   hi.loaded.add(fileId); console.info('detail tier: ready', fileId, hi.geometries.size, 'pieces');
  } catch (e) { console.warn('detail tier failed', fileId, e); }
@@ -345,7 +351,7 @@ function tick(now){
  else { state.amount = THREE.MathUtils.damp(state.amount, state.target, reducedMotion ? 1000 : 5, dt); if (Math.abs(state.amount - state.target) < .0001) state.amount = state.target; }
  if (state.ready && lastApplied !== state.amount) { const t = state.amount, spread = THREE.MathUtils.smoothstep(t, explodeSchedule.spreadStart, explodeSchedule.spreadEnd);
   for (const p of parts) { if (state.assembly) { if (p.assemblyOffset) p.mesh.position.copy(p.base).addScaledVector(p.assemblyOffset, t); else p.mesh.position.copy(p.base); } else p.mesh.position.copy(p.base).addScaledVector(p.offset, t).addScaledVector(p.spread, spread); }
-  if (state.assembly && ((lastApplied < .05) !== (t < .05))) updateVisibility();
+  if ((state.assembly && ((lastApplied < .05) !== (t < .05))) || (state.mode === 'skin' && ((lastApplied < .02) !== (t < .02)))) updateVisibility();
   lastApplied = state.amount; }
  if (viewTween) { const t = Math.min(1, (now - viewTween.start) / (viewTween.duration || 900)), s = t * t * (3 - 2 * t); camera.position.lerpVectors(viewTween.from, viewTween.to, s); controls.target.lerpVectors(viewTween.fromTarget, viewTween.toTarget, s); if (t === 1) viewTween = null; }
  controls.update(dt);

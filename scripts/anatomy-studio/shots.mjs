@@ -20,6 +20,10 @@ for (const id of ['visceral/liver', 'muscular/rectus-abdominis-muscle-l', 'skele
   await page.evaluate(v => { const l = document.getElementById('part-list'); l.value = v; l.dispatchEvent(new Event('change')); document.getElementById('isolate').click(); }, id);
   await settle(2500); await shot(`isolated-${id.split('/')[1]}`); await page.evaluate(() => document.getElementById('clear').click()); await settle(500);
 }
+if (process.env.SKIN) { await page.evaluate(() => window.anatomyStudio.setMode('skin')); await settle(4000); await shot('skin-assembled');
+  await page.evaluate(() => { window.anatomyStudio.setDetail(true); window.anatomyStudio._focus('skeletal/frontal-bone', .42, [.9, .25, 1.4]); }); await settle(3000); await page.evaluate(() => window.anatomyStudio.lodPass()); await settle(6000); await shot('skin-face');
+  await page.evaluate(() => window.anatomyStudio._focus('brain/cornea-l', .12, [.6, .15, 1.4])); await settle(3000); await shot('skin-eye');
+  await page.evaluate(() => { window.anatomyStudio.setMode('realistic'); document.querySelector('[data-view="hero"]').click(); window.anatomyStudio.setDetail(false); }); await settle(2000); }
 if (process.env.LOD) { await page.evaluate(() => window.anatomyStudio.setDetail(false)); for (const id of ['muscular/rectus-abdominis-muscle-l', 'skeletal/vertebra-l3', 'brain/superior-frontal-gyrus-l']) {
   await page.evaluate(v => { const l = document.getElementById('part-list'); l.value = v; l.dispatchEvent(new Event('change')); document.getElementById('isolate').click(); }, id); await settle(2500); await shot(`lod-lo-${id.split('/')[1]}`);
   await page.evaluate(async v => { window.anatomyStudio.setDetail(true); await window.anatomyStudio.loadHi(v.split('/')[0]); window.anatomyStudio.lodPass(); }, id); await page.waitForFunction(v => window.anatomyStudio.getParts().find(p => p.id === v).lod === 'hi', id, {timeout: 240000}); await settle(2500); await shot(`lod-hi-${id.split('/')[1]}`);
