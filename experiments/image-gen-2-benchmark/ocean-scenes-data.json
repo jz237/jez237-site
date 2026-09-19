@@ -779,5 +779,24 @@
       "imageSha256": "54c398bce124918031514ed711d48026d464f1235bc7aa51161857cdbd3eb8c2",
       "imageDHash": "393333375ddf3f1d"
     }
+  },
+  {
+    "id": "2026-09-19-ocean-exploration-hadalfall-the-glasswing-surveyor-at-the-t",
+    "title": "Hadalfall — The Glasswing Surveyor at the Trench Wall",
+    "tests": "Clearly label both organism and vehicle fictional; keep the animal biologically coherent, the lander pressure-worthy, and the abyssal optics naturalistic.; archive_slot=2026-09-19T00:08; concept=hadal-glasswing-surveyor-trench-wall-lander",
+    "prompt": "Create a finished high-end photorealistic scientific-documentary underwater expedition image, not a poster, diagram, prompt card, or screen mockup. Scene: at hadal depth in a narrow ocean trench, a clearly fictional pressure-adapted animal called the glasswing surveyor glides within a few metres of a steep sedimented basalt wall while a compact fictional autonomous instrument lander maps the same face. The organism must read as an evolved deep-sea animal rather than a monster: roughly 70 cm long; compact translucent gelatinous body with visible but restrained internal shadowing; two very broad, thin, glasslike lateral fins used for slow efficient undulation; a short stabilizing tail vane; no jaws, claws, horns, tentacle beard, or humanlike face; a small ventral grazing mouth; paired rows of fine sensory filaments held close to the wall to detect currents and chemical gradients; reduced dark eyes plus subtle non-glowing sensory pores; pale smoke-gray and faint amber tissues with no decorative neon. Its posture must show gentle fin-wave locomotion parallel to the rock, coherently adapted to darkness, cold, extreme pressure, scarce food, and boundary-layer sensing. The fictional lander must be mechanically credible and visibly pressure-worthy: low rectangular titanium frame about 1.4 m wide, two small pressure spheres, blocky syntactic-foam buoyancy, protected paired electric thrusters, downward multibeam sonar heads, stereo camera housings behind thick flat ports, strobe lights, water samplers, cable routing, sacrificial ballast weights, abrasion marks, marine sediment dust, and no large glass cockpit. Show a thin fan of sonar-style illumination only through physical light and particulate cues, not as a graphic overlay. Composition: landscape 3:2, camera hovering slightly behind and above the lander, animal sharp in the left-middle foreground, lander lower right, trench wall rising diagonally into blackness, a cold abyss opening beyond it. The wall carries fine sediment drapes, small manganese-stained outcrops, sparse real-looking amphipods and xenophyophore-like seafloor forms at correct tiny scale; do not imply known species identification. Lighting comes only from the lander's strobes and dim work lamps: tight inverse-square falloff, black background, natural color loss, subtle volumetric beams, restrained backscatter, suspended particles, realistic deep-water optics, immense negative space and scale. Camera aesthetic: premium full-frame expedition still, crisp subject detail, physically credible lens perspective, high dynamic range but natural contrast, minute wear and seal detail, convincing water density. No humans or scuba divers, no submarine windows, no surface light, no fantasy ruins, no generic sea monster, no oversaturated aquarium blues, no bioluminescent rainbow, no labels, no readable text, no logos, no watermark. The animal and lander are fictional concepts and should be presented as such through coherent visual design, not as a claim of a real discovery.",
+    "image": "images/2026-09-19-ocean-exploration-hadalfall-the-glasswing-surveyor-at-the-t.jpg",
+    "thumb": "thumbs/2026-09-19-ocean-exploration-hadalfall-the-glasswing-surveyor-at-the-t.webp",
+    "color": "#262a2d",
+    "date": "2026-09-19",
+    "batch": "Daily Prompt",
+    "slot": "ocean-exploration",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "hadal-glasswing-surveyor-trench-wall-lander",
+      "imageSha256": "670e5e9e2e6dc9b7f3fdf7133cc83c925befdd02624baba3bac25affaaa194e5",
+      "imageDHash": "cd5d3d3e37bd1d9f"
+    }
   }
 ]
