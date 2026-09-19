@@ -19,7 +19,7 @@ assert.ok(manifest.stats.hiTriangles > manifest.stats.triangles * 1.5, 'full tie
 const ids = new Set(manifest.pieces.map(p => p.id)); assert.equal(ids.size, manifest.pieces.length, 'piece ids must be unique');
 const direct = Object.entries(manifest.stats.descriptionRules).filter(([r]) => !['parent', 'path', 'none'].includes(r)).reduce((a, [, n]) => a + n, 0);
 assert.ok(direct / manifest.pieces.length >= .85, `direct description coverage ${(direct / manifest.pieces.length * 100).toFixed(1)}%`);
-for (const [id, min] of Object.entries({heart: 30, lungs: 25, spine: 55, brain: 60, skull: 60, eye: 10, hand: 35, knee: 15, ribcage: 45, digestive: 40, urinary: 10, face: 30, aorta: 60, pelvis: 10, shoulder: 14, larynx: 28, foot: 38, reproductive: 9})) assert.ok(manifest.assemblies[id].length >= min, `${id} assembly has ${manifest.assemblies[id].length} members`);
+for (const [id, min] of Object.entries({heart: 30, lungs: 25, spine: 55, brain: 60, skull: 60, eye: 10, hand: 35, knee: 15, ribcage: 45, digestive: 40, urinary: 10, face: 30, aorta: 60, pelvis: 10, shoulder: 14, larynx: 28, foot: 38})) assert.ok(manifest.assemblies[id].length >= min, `${id} assembly has ${manifest.assemblies[id].length} members`);
 console.log(`static: ${manifest.pieces.length} pieces, ${manifest.stats.triangles.toLocaleString()} triangles, ${(manifest.stats.bytes / 1048576).toFixed(1)} MB, ${(direct / manifest.pieces.length * 100).toFixed(1)}% direct descriptions`);
 
 // ---- browser checks (software WebGL on Linux without a GPU)
@@ -36,7 +36,7 @@ const moved = (min = .01) => page.evaluate(m => window.anatomyStudio.getParts().
 const restored = () => page.evaluate(() => window.anatomyStudio.getParts().every(p => p.position.every((v, i) => v === p.base[i])));
 try {
  await page.goto(`${url}?quality=verify&stage=full`); await ready(page); await full();
- const FEMALE = manifest.files.find(f => f.id === 'female')?.pieces ?? 0, BODY = manifest.pieces.length - FEMALE;
+ const BODY = manifest.pieces.length;
  let s = await read(); assert.equal(s.pieces, manifest.pieces.length); assert.equal(s.visible, BODY); assert.deepEqual([...s.files].sort(), manifest.files.map(f => f.id).sort());
  await page.waitForTimeout(400); s = await read(); assert.ok(s.triangles > manifest.stats.triangles * .5 && s.triangles <= manifest.stats.triangles * 1.05, `rendered triangles ${s.triangles}`);
  await page.screenshot({path: path.join(shots, 'assembled.png')});
@@ -55,7 +55,7 @@ try {
   for (let i = 0; i < prim.length; i++) for (let j = i + 1; j < prim.length; j++) { const p = prim[i], q = prim[j]; const d = Math.hypot(...p.center.map((v, k) => v - q.center[k])); const ox = Math.max(0, Math.min(p.max[0], q.max[0]) - Math.max(p.min[0], q.min[0])), oy = Math.max(0, Math.min(p.max[1], q.max[1]) - Math.max(p.min[1], q.min[1])); const area = ox * oy, small = Math.min((p.max[0] - p.min[0]) * (p.max[1] - p.min[1]), (q.max[0] - q.min[0]) * (q.max[1] - q.min[1])); if (d < .02 || (small > 0 && area / small > .6)) bad++; }
   await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({path: path.join(shots, `assembly-${id}.png`)});
   assert.ok(bad <= Math.max(2, prim.length * .12), `${id}: ${bad} primary pairs still overlap`);
-  await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); if ((await read()).body !== 'male') await page.evaluate(() => window.anatomyStudio.setBody('male')); assert.equal((await read()).visible, BODY); assert.ok(await restored(), `${id}: leaving restores positions`);
+  await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); assert.equal((await read()).visible, BODY); assert.ok(await restored(), `${id}: leaving restores positions`);
  }
  // zoom detail: a piece that fills the view swaps to the full-resolution tier and back
  const camSettled = () => page.waitForFunction(() => !window.anatomyStudio._camera().tween, null, {timeout: 30000});
@@ -64,12 +64,6 @@ try {
  const lv = await page.evaluate(() => window.anatomyStudio.getParts().find(p => p.id === 'heart/left-ventricle')); if (lv.lod !== 'hi') { const diag = await page.evaluate(() => ({state: window.anatomyStudio.getState(), radius: window.anatomyStudio._radius('heart/left-ventricle'), camera: window.anatomyStudio._camera(), lv: window.anatomyStudio.getParts().find(p => p.id === 'heart/left-ventricle')})); console.log('LOD DIAG', JSON.stringify(diag), '\n', infos.slice(-14).join('\n')); }
  assert.equal(lv.lod, 'hi', 'zoomed piece uses the full tier'); assert.ok(lv.triangles >= manifest.pieces.find(p => p.id === 'heart/left-ventricle').triangles, 'full tier has at least the base triangles');
  await page.locator('#clear').click(); await page.locator('#reset').click(); await settled(0); await page.waitForTimeout(300); await camSettled(); await page.evaluate(() => window.anatomyStudio.lodPass()); assert.equal((await page.evaluate(() => window.anatomyStudio.getParts().find(p => p.id === 'heart/left-ventricle'))).lod, 'lo', 'far piece returns to the base tier'); await page.evaluate(() => window.anatomyStudio.setDetail(false));
- // reproductive system switch: female hides the male organs and shows the schematic set; reset returns to male
- await page.locator('[data-body="female"]').click(); await page.waitForTimeout(300); s = await read(); assert.equal(s.body, 'female');
- const fem = await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.file === 'female')); assert.ok(fem.length >= 9, 'schematic female pieces loaded');
- assert.ok(await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.file === 'female').length > 0) && s.visible === manifest.pieces.length - manifest.pieces.filter(p => p.file === 'visceral' && (/Male genital system/.test(p.path) || p.name === 'Urethra')).length, 'female body hides the male organs only');
- await page.locator('[data-body="male"]').click(); await page.waitForTimeout(300); assert.equal((await read()).visible, manifest.pieces.length - manifest.files.find(f => f.id === 'female').pieces);
- await page.locator('[data-assembly="reproductive"]').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === 'reproductive'); assert.equal((await read()).body, 'female'); await settled(1); await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); await page.locator('#reset').click(); await settled(0); assert.equal((await read()).body, 'male');
  // paired study: the Right toggle swaps to the mirrored member set of the same size
  await page.locator('[data-assembly="hand"]').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === 'hand'); await settled(1);
  const left = await page.evaluate(() => window.anatomyStudio.getAssembly('hand')); await page.locator('[data-side="R"]').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assemblySide === 'R'); await settled(1);

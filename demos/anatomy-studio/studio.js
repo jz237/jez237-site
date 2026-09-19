@@ -7,7 +7,7 @@ import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
 import { PartsBoard } from './parts-board.js?v=2';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, projectedUV, skinTint } from './materials.js?v=8';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, projectedUV, skinTint } from './materials.js?v=9';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=2';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=2';
 
@@ -16,7 +16,7 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, body:'male', detail:false, stage:'none', loading:false, rotate:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
 const hi = { geometries:new Map(), loaded:new Set(), loading:new Set(), frame:0 };
@@ -34,8 +34,7 @@ const fallbackCopy = {
  vessels:'A named artery or vein. Branches below the fourth level of the vascular tree are merged into their parent trunk.',
  nerves:'A nerve, plexus or part of the spinal cord. Branches below the fourth level of the nerve tree are merged into their parent nerve.',
  lymphoid:'A lymphoid organ or a regional group of lymph nodes.',
- regions:'A named surface region of the body, rendered as translucent skin. Sub-regions are merged into their regional group.',
- female:'A schematic reconstruction of the female reproductive system, added to the shared base body because the source model has none. Shapes follow textbook dimensions.'
+ regions:'A named surface region of the body, rendered as translucent skin. Sub-regions are merged into their regional group.'
 };
 
 function fail(error){ console.error(error); $('loading').hidden = true; $('error').hidden = false; $('scene-status').textContent = 'STUDIO UNAVAILABLE'; $('error-message').textContent = 'The 3D model could not load. Check your connection and that WebGL 2 / hardware acceleration is enabled, then try again.'; }
@@ -61,13 +60,13 @@ function init(){
  controls.addEventListener('start', () => { viewTween = null; document.querySelectorAll('[data-view]').forEach(b => b.classList.remove('active')); });
  scene.environment = studioEnvironment(renderer); scene.environmentIntensity = .75;
  scene.add(new THREE.HemisphereLight('#f3e9e2', '#1d2429', .6));
- keyLight = new THREE.DirectionalLight('#fff1e6', 2.0); keyLight.position.set(2.2, 4.5, 3); keyLight.castShadow = renderer.shadowMap.enabled; keyLight.shadow.mapSize.set(2048, 2048); keyLight.shadow.camera.left = -2.6; keyLight.shadow.camera.right = 2.6; keyLight.shadow.camera.top = 3; keyLight.shadow.camera.bottom = -.5; keyLight.shadow.camera.near = .5; keyLight.shadow.camera.far = 14; keyLight.shadow.normalBias = .004; keyLight.shadow.bias = -.00004; scene.add(keyLight);
+ keyLight = new THREE.DirectionalLight('#fff1e6', 2.0); keyLight.position.set(2.2, 4.5, 3); keyLight.castShadow = renderer.shadowMap.enabled; keyLight.shadow.mapSize.set(mobile ? 2048 : 4096, mobile ? 2048 : 4096); keyLight.shadow.radius = 6; keyLight.shadow.blurSamples = 12; keyLight.shadow.camera.left = -2.6; keyLight.shadow.camera.right = 2.6; keyLight.shadow.camera.top = 3; keyLight.shadow.camera.bottom = -.5; keyLight.shadow.camera.near = .5; keyLight.shadow.camera.far = 14; keyLight.shadow.normalBias = .004; keyLight.shadow.bias = -.00004; scene.add(keyLight);
  const rim = new THREE.DirectionalLight('#9fd3ff', 1.5); rim.position.set(-3, 2.5, -2.5); scene.add(rim);
  const fill = new THREE.DirectionalLight('#ffd9c4', .7); fill.position.set(2.5, 1.2, -3); scene.add(fill);
- const platform = new THREE.Mesh(new THREE.CylinderGeometry(1.32, 1.36, .13, 128), new THREE.MeshStandardMaterial({ color:'#0b1017', metalness:.2, roughness:.6, envMapIntensity:.12 })); platform.position.y = -.065; platform.receiveShadow = true; scene.add(platform);
+ const platform = new THREE.Mesh(new THREE.CylinderGeometry(1.32, 1.36, .13, 128), new THREE.MeshPhysicalMaterial({ color:'#0d131b', metalness:.1, roughness:.35, clearcoat:.8, clearcoatRoughness:.3, envMapIntensity:.35 })); platform.position.y = -.065; platform.receiveShadow = true; scene.add(platform);
  const ring = new THREE.Mesh(new THREE.TorusGeometry(1.34, .008, 8, 192), new THREE.MeshBasicMaterial({ color:'#f5b39c' })); ring.rotation.x = Math.PI / 2; ring.position.y = -.002; scene.add(ring);
  const inner = new THREE.Mesh(new THREE.TorusGeometry(1.22, .0025, 6, 160), new THREE.MeshBasicMaterial({ color:'#44525b' })); inner.rotation.x = Math.PI / 2; inner.position.y = .003; scene.add(inner);
- const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshStandardMaterial({ color:'#010204', roughness:.95, metalness:0, envMapIntensity:.04 })); floor.rotation.x = -Math.PI / 2; floor.position.y = -.14; floor.receiveShadow = true; scene.add(floor);
+ const floor = new THREE.Mesh(new THREE.PlaneGeometry(200, 200), new THREE.MeshPhysicalMaterial({ color:'#04060a', roughness:.55, metalness:0, clearcoat:.6, clearcoatRoughness:.45, envMapIntensity:.25 })); floor.rotation.x = -Math.PI / 2; floor.position.y = -.14; floor.receiveShadow = true; scene.add(floor);
  const shadowCanvas = document.createElement('canvas'); shadowCanvas.width = shadowCanvas.height = 128; const ctx = shadowCanvas.getContext('2d'), gradient = ctx.createRadialGradient(64, 64, 8, 64, 64, 64); gradient.addColorStop(0, 'rgba(0,0,0,.6)'); gradient.addColorStop(.5, 'rgba(0,0,0,.35)'); gradient.addColorStop(1, 'rgba(0,0,0,0)'); ctx.fillStyle = gradient; ctx.fillRect(0, 0, 128, 128);
  const contact = new THREE.Mesh(new THREE.PlaneGeometry(1.1, .8), new THREE.MeshBasicMaterial({ map:new THREE.CanvasTexture(shadowCanvas), transparent:true, depthWrite:false })); contact.rotation.x = -Math.PI / 2; contact.position.y = .004; scene.add(contact);
  const positions = []; for (let i = 0; i < 96; i++) { const a = i / 96 * Math.PI * 2, r = i % 8 === 0 ? 1.12 : 1.16; positions.push(Math.cos(a) * r, .003, Math.sin(a) * r, Math.cos(a) * 1.2, .003, Math.sin(a) * 1.2); }
@@ -95,13 +94,13 @@ async function loadStudio(){
  document.querySelectorAll('[data-assembly]').forEach(b => b.disabled = false);
  updateList(); updateUI(); setView('hero', true);
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, body:state.body, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), radius:(p.mesh.geometry.boundingSphere || p.mesh.geometry.computeBoundingSphere() || p.mesh.geometry.boundingSphere).radius * Math.max(p.mesh.scale.x, p.mesh.scale.y, p.mesh.scale.z), extent:p.size.length() / 2, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
-  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, setBody, loadHi, setDetail, lodPass, _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
+  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, loadHi, setDetail, lodPass, _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, _edges:(id, limit = .03) => { const p = partsById.get(id); if (!p) return null; const g = p.mesh.geometry, pos = g.attributes.position, idx = g.index, s = p.mesh.scale.x; let long = 0, max = 0; const n = idx ? idx.count : pos.count; const v = i => [pos.getX(i), pos.getY(i), pos.getZ(i)]; for (let t = 0; t < n; t += 3) { const a = v(idx ? idx.getX(t) : t), b = v(idx ? idx.getX(t + 1) : t + 1), c = v(idx ? idx.getX(t + 2) : t + 2); const L = Math.max(Math.hypot(a[0] - b[0], a[1] - b[1], a[2] - b[2]), Math.hypot(b[0] - c[0], b[1] - c[1], b[2] - c[2]), Math.hypot(a[0] - c[0], a[1] - c[1], a[2] - c[2])) * s; if (L > max) max = L; if (L > limit) long++; } return { tris:n / 3, long, max:+max.toFixed(4), lod:p.lod }; }, _focus:(id, distance = .6, dir = [1, .35, 1.4]) => { const p = partsById.get(id); if (!p) return false; const c = p.center.clone().add(p.mesh.position).sub(p.base); viewTween = null; controls.target.copy(c); camera.position.copy(c).addScaledVector(new THREE.Vector3().fromArray(dir).normalize(), distance); return true; }, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
  };
- const initialView = params.get('view'), initialAssembly = params.get('assembly'); if (params.get('body') === 'female') setBody('female', {silent:true});
+ const initialView = params.get('view'), initialAssembly = params.get('assembly');
  if (initialAssembly && assemblies[initialAssembly]) await enterAssembly(initialAssembly, (params.get('side') || '').toUpperCase());
  else if (initialView === 'parts') toggleBoard(true);
  if (target !== 'core') loadStage(target);
@@ -187,14 +186,14 @@ function updateUI(){
  $('scene-status').textContent = state.board ? 'ALL-PARTS BOARD' : state.assembly ? `${assemblies[state.assembly].title.toUpperCase()} · NESTED STUDY` : state.isolated ? 'ISOLATED PIECE' : state.system !== 'all' ? `${fileLabels[state.system].toUpperCase()} STUDY` : state.target > .01 ? 'EXPLODED STUDY' : 'LIVE 3D / HUMAN ANATOMY';
 }
 function updateList(){
- const search = $('search').value.toLowerCase(); const options = parts.filter(p => (state.system === 'all' || p.file === state.system) && isMember(p) && bodyAllows(p) && `${p.label} ${p.short} ${p.region} ${p.path}`.toLowerCase().includes(search));
+ const search = $('search').value.toLowerCase(); const options = parts.filter(p => (state.system === 'all' || p.file === state.system) && isMember(p) && `${p.label} ${p.short} ${p.region} ${p.path}`.toLowerCase().includes(search));
  $('part-list').replaceChildren(new Option(options.length ? `Select a piece… (${options.length})` : 'No matching pieces', ''), ...options.map(p => new Option(`${p.short} / ${p.label}`, p.id)));
  $('part-list').value = state.selected?.id ?? '';
 }
 function updateVisibility(){
  const skinOnlyNow = skinOnly();
  for (const p of parts) { const selected = p === state.selected, mat = p.mesh.material, member = isMember(p);
-  p.mesh.visible = member && bodyAllows(p) && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected) && (!skinOnlyNow || SURFACE(p));
+  p.mesh.visible = member && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected) && (!skinOnlyNow || SURFACE(p));
   const o = state.assembly && p.assemblyLayer?.opacity != null && state.amount > .05 ? p.assemblyLayer.opacity : null;
   mat.opacity = o ?? p.opacity; mat.transparent = o != null || p.transparent; mat.depthWrite = o != null ? false : p.depthWrite;
   mat.emissive.copy(selected ? new THREE.Color('#49c8a3') : p.emissive); mat.emissiveIntensity = selected ? (state.isolated ? .08 : .3) : p.emissiveIntensity;   // faint when isolated so the surface detail stays readable
@@ -229,11 +228,8 @@ function focusSelected(){
 }
 
 // ---------------------------------------------------------------- nested assemblies
-const MALE_GENITAL = p => p.file === 'visceral' && (/Male genital system/.test(p.path) || p.name === 'Urethra');
-function bodyAllows(p){ return state.body === 'female' ? !MALE_GENITAL(p) : p.file !== 'female'; }
-const SURFACE = p => p.file === 'regions' || (p.file === 'brain' && /^(Cornea|Iris|Sclera|Lens|Anterior chamber of eyeball|Anterior segment of eyeball)$/.test(p.name)) || (p.file === 'female' && /Mammary/.test(p.name));
+const SURFACE = p => p.file === 'regions' || (p.file === 'brain' && /^(Cornea|Iris|Sclera|Lens|Anterior chamber of eyeball|Anterior segment of eyeball)$/.test(p.name));
 function skinOnly(){ return state.mode === 'skin' && !state.assembly && !state.isolated && state.system === 'all' && state.amount < .02; }
-function setBody(body, {silent = false} = {}){ state.body = body === 'female' ? 'female' : 'male'; document.querySelectorAll('[data-body]').forEach(b => { b.classList.toggle('active', b.dataset.body === state.body); b.setAttribute('aria-pressed', b.dataset.body === state.body); }); boardDirty = true; if (!silent) { selectPart(null); updateList(); } updateVisibility(); const url = new URL(location); if (state.body === 'female') url.searchParams.set('body', 'female'); else url.searchParams.delete('body'); history.replaceState(null, '', url); }
 function isMember(p){ if (!state.assembly) return true; const a = assemblies[state.assembly]; return p.assemblies.includes(state.assembly) && (!a.paired || p.side === state.assemblySide); }
 function assemblyMembers(id, side = state.assemblySide){ const a = assemblies[id]; return parts.filter(p => p.assemblies.includes(id) && (!a.paired || p.side === side)); }
 function assemblyBox(){ const b = new THREE.Box3(); const a = assemblies[state.assembly]; for (const p of assemblyMembers(state.assembly)) { if (a.frame && !a.frame(p.piece)) continue; const c = p.center.clone().addScaledVector(p.assemblyOffset, state.target); b.expandByPoint(c.clone().sub(p.size.clone().multiplyScalar(.5))); b.expandByPoint(c.clone().add(p.size.clone().multiplyScalar(.5))); } return b; }
@@ -241,7 +237,6 @@ function assemblyTarget(){ return assemblyBox().getCenter(new THREE.Vector3()); 
 function assemblyDistance(){ const a = assemblies[state.assembly]; const radius = assemblyBox().getSize(new THREE.Vector3()).length() / 2; return radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.max(1, 1 / camera.aspect) * (a.padding || 1.1); }
 async function enterAssembly(id, side){
  const a = assemblies[id]; if (!a || !state.ready) return; if (state.board) toggleBoard(false); stopSequence();
- if (a.body && state.body !== a.body) setBody(a.body, {silent:true});
  state.assemblySide = a.paired ? (side === 'R' ? 'R' : side === 'L' ? 'L' : state.assemblySide) : 'L';
  await loadFiles(a.files);
  state.assembly = id; state.system = 'all'; state.isolated = false; $('system').value = 'all';
@@ -316,7 +311,7 @@ async function loadHi(fileId){
  hi.loading.delete(fileId); if (!state.loading) $('stage-status').hidden = true; lodPass();
 }
 function stopSequence(){ explodeTween = null; state.sequence = false; $('animate').textContent = '▷ Play sequence'; }
-function reset(){ if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); if (state.body !== 'male') setBody('male', {silent:true}); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
+function reset(){ if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
 function bindControls(){
  $('explode').addEventListener('input', e => setAmount(Number(e.target.value) / 100));
  $('explode-button').onclick = () => setAmount(state.target > .5 ? 0 : 1, { animate:true });
@@ -332,8 +327,7 @@ function bindControls(){
  $('leave-assembly').onclick = leaveAssembly;
  $('label-all').onclick = () => { state.labelAll = !state.labelAll; $('label-all').setAttribute('aria-pressed', state.labelAll); buildAllLabels(); };
  document.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { if (state.assembly && assemblies[state.assembly].paired) enterAssembly(state.assembly, b.dataset.side); });
- $('system').onchange = e => { state.system = e.target.value; if (state.system === 'female' && state.body !== 'female') setBody('female', {silent:true}); selectPart(null); updateList(); };
- document.querySelectorAll('[data-body]').forEach(b => b.onclick = () => setBody(b.dataset.body));
+ $('system').onchange = e => { state.system = e.target.value; selectPart(null); updateList(); };
  $('search').oninput = updateList;
  $('part-list').onchange = e => selectPart(e.target.value === '' ? null : partsById.get(e.target.value));
  $('isolate').onclick = () => { state.isolated = !state.isolated; updateVisibility(); if (state.board) return; if (state.isolated) focusSelected(); else setView(state.view); }; $('clear').onclick = () => selectPart(null);

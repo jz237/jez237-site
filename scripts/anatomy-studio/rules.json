@@ -68,11 +68,6 @@
     "regions": {
       "budget": 700000,
       "system": "regions"
-    },
-    "female": {
-      "budget": 200000,
-      "system": "female",
-      "schematic": true
     }
   },
   "decimate": {
