@@ -14,6 +14,8 @@ const MAX = 25 * 1024 * 1024;
 assert.ok(manifest.pieces.length >= 1400 && manifest.pieces.length <= 2600, `piece count ${manifest.pieces.length}`);
 assert.ok(manifest.stats.triangles <= 5.2e6, `triangles ${manifest.stats.triangles}`);
 for (const f of manifest.files) { const s = await stat(path.join(DEMO, f.path)); assert.equal(s.size, f.bytes, `${f.id} bytes drifted from manifest`); assert.ok(s.size < MAX, `${f.id} exceeds the 25 MiB Cloudflare Pages limit`); }
+for (const f of manifest.files.filter(f => f.hi)) { const s = await stat(path.join(DEMO, f.hi.path)); assert.equal(s.size, f.hi.bytes, `${f.id} hi bytes drifted`); assert.ok(s.size < MAX, `hi/${f.id} exceeds 25 MiB`); }
+assert.ok(manifest.stats.hiTriangles > manifest.stats.triangles * 1.5, 'full tier carries more detail');
 const ids = new Set(manifest.pieces.map(p => p.id)); assert.equal(ids.size, manifest.pieces.length, 'piece ids must be unique');
 const direct = Object.entries(manifest.stats.descriptionRules).filter(([r]) => !['parent', 'path', 'none'].includes(r)).reduce((a, [, n]) => a + n, 0);
 assert.ok(direct / manifest.pieces.length >= .85, `direct description coverage ${(direct / manifest.pieces.length * 100).toFixed(1)}%`);
@@ -24,7 +26,7 @@ console.log(`static: ${manifest.pieces.length} pieces, ${manifest.stats.triangle
 const args = ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--ignore-gpu-blocklist', '--enable-webgl', '--disable-gpu-sandbox'];
 const browser = await chromium.launch({executablePath: process.env.CHROME_PATH || undefined, headless: true, args});
 const errors = []; const page = await browser.newPage({viewport: {width: 1280, height: 860}, deviceScaleFactor: 1});
-page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(`console: ${m.text()}`); });
+const infos = []; page.on('pageerror', e => errors.push(e.message)); page.on('console', m => { if (m.type() === 'error') errors.push(`console: ${m.text()}`); else if (!/Failed to load/.test(m.text())) infos.push(`${m.type()}: ${m.text()}`); });
 page.on('response', r => { if (r.status() >= 400 && r.url().startsWith(new URL(url).origin) && r.url().includes('anatomy-studio')) errors.push(`${r.status()} ${r.url()}`); });
 const read = () => page.evaluate(() => window.anatomyStudio.getState());
 const ready = p => p.waitForFunction(() => document.body.dataset.ready === 'true', null, {timeout: 240000});
@@ -55,6 +57,13 @@ try {
   assert.ok(bad <= Math.max(2, prim.length * .12), `${id}: ${bad} primary pairs still overlap`);
   await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); if ((await read()).body !== 'male') await page.evaluate(() => window.anatomyStudio.setBody('male')); assert.equal((await read()).visible, BODY); assert.ok(await restored(), `${id}: leaving restores positions`);
  }
+ // zoom detail: a piece that fills the view swaps to the full-resolution tier and back
+ const camSettled = () => page.waitForFunction(() => !window.anatomyStudio._camera().tween, null, {timeout: 30000});
+ await page.evaluate(() => window.anatomyStudio.setDetail(true)); await page.locator('#part-list').selectOption('heart/left-ventricle'); await page.locator('#isolate').click(); await page.waitForTimeout(300); await camSettled();
+ await page.evaluate(() => window.anatomyStudio.loadHi('heart')); await page.waitForFunction(() => window.anatomyStudio.getState().hiFiles.includes('heart'), null, {timeout: 120000}); await page.evaluate(() => window.anatomyStudio.lodPass());
+ const lv = await page.evaluate(() => window.anatomyStudio.getParts().find(p => p.id === 'heart/left-ventricle')); if (lv.lod !== 'hi') { const diag = await page.evaluate(() => ({state: window.anatomyStudio.getState(), radius: window.anatomyStudio._radius('heart/left-ventricle'), camera: window.anatomyStudio._camera(), lv: window.anatomyStudio.getParts().find(p => p.id === 'heart/left-ventricle')})); console.log('LOD DIAG', JSON.stringify(diag), '\n', infos.slice(-14).join('\n')); }
+ assert.equal(lv.lod, 'hi', 'zoomed piece uses the full tier'); assert.ok(lv.triangles >= manifest.pieces.find(p => p.id === 'heart/left-ventricle').triangles, 'full tier has at least the base triangles');
+ await page.locator('#clear').click(); await page.locator('#reset').click(); await settled(0); await page.waitForTimeout(300); await camSettled(); await page.evaluate(() => window.anatomyStudio.lodPass()); assert.equal((await page.evaluate(() => window.anatomyStudio.getParts().find(p => p.id === 'heart/left-ventricle'))).lod, 'lo', 'far piece returns to the base tier'); await page.evaluate(() => window.anatomyStudio.setDetail(false));
  // reproductive system switch: female hides the male organs and shows the schematic set; reset returns to male
  await page.locator('[data-body="female"]').click(); await page.waitForTimeout(300); s = await read(); assert.equal(s.body, 'female');
  const fem = await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.file === 'female')); assert.ok(fem.length >= 9, 'schematic female pieces loaded');

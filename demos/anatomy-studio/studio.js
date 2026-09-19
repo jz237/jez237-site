@@ -7,7 +7,7 @@ import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
 import { PartsBoard } from './parts-board.js?v=2';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes } from './materials.js?v=2';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, projectedUV } from './materials.js?v=2';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=2';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=2';
 
@@ -16,9 +16,10 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, body:'male', stage:'none', loading:false, rotate:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, body:'male', detail:false, stage:'none', loading:false, rotate:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
+const hi = { geometries:new Map(), loaded:new Set(), loading:new Set(), frame:0 };
 let lastLeaders = '', board = null, bodyCamera, bodyControls, boardControls, studioObjects = [], studioFog, boardKey = '', boardDirty = true, keyLight, composer, gtaoPass, renderPass;
 const baseTarget = new THREE.Vector3(0, .9, 0);
 const views = { hero:[2.1, 1.7, 2.9], front:[0, .95, 3.8], side:[3.8, .95, 0], back:[0, .95, -3.8], top:[.01, 4.4, .01] };
@@ -50,7 +51,8 @@ function init(){
  host.appendChild(renderer.domElement);
  camera = new THREE.PerspectiveCamera(36, 1, .03, 120); camera.position.fromArray(views.hero);
  // Ground-truth ambient occlusion (GTAO) so pieces shade each other; off for phones and headless verification.
- composer = new EffectComposer(renderer); renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
+ const rt = new THREE.WebGLRenderTarget(1, 1, { type:THREE.HalfFloatType, samples:(verifyQuality || params.get('msaa') === '0') ? 0 : 4 });   // multisampled so occlusion does not cost anti-aliasing
+ composer = new EffectComposer(renderer, rt); renderPass = new RenderPass(scene, camera); composer.addPass(renderPass);
  gtaoPass = new GTAOPass(scene, camera, 1, 1, undefined, { radius:.14, distanceExponent:1.1, thickness:1, scale:1.6, samples:14, distanceFallOff:1, screenSpaceRadius:false }, { lumaPhi:8, depthPhi:2.5, normalPhi:3.5, radius:4, radiusExponent:1, rings:2, samples:14 });
  gtaoPass.output = GTAOPass.OUTPUT.Default; gtaoPass.blendIntensity = 1; composer.addPass(gtaoPass); composer.addPass(new OutputPass());
  state.ao = !verifyQuality && !mobile; gtaoPass.enabled = state.ao;
@@ -89,15 +91,15 @@ async function loadStudio(){
  const requested = params.get('stage'); const target = requested && stageOrder.includes(requested) ? requested : requested === 'full' ? 'detail' : mobile ? 'core' : 'detail';
  await loadStage('core');
  state.ready = true; document.body.dataset.ready = 'true'; $('loading').hidden = true;
- for (const id of ['explode-button', 'animate', 'reset', 'all-parts']) $(id).disabled = false; $('ao-toggle').setAttribute('aria-pressed', state.ao);
+ for (const id of ['explode-button', 'animate', 'reset', 'all-parts']) $(id).disabled = false; $('ao-toggle').setAttribute('aria-pressed', state.ao); state.detail = !verifyQuality && !mobile; $('lod-toggle').setAttribute('aria-pressed', state.detail);
  document.querySelectorAll('[data-assembly]').forEach(b => b.disabled = false);
  updateList(); updateUI(); setView('hero', true);
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, body:state.body, assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
-  getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, body:state.body, detail:state.detail, hiFiles:[...hi.loaded], hiLoading:[...hi.loading], assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, lod:p.lod, triangles:Math.round((p.mesh.geometry.index?.count ?? p.mesh.geometry.attributes.position.count) / 3), position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
-  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, setBody, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
+  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, setBody, loadHi, setDetail, lodPass, _radius:id => { const p = partsById.get(id); return p ? projectedRadiusPx(p) : null; }, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
  };
  const initialView = params.get('view'), initialAssembly = params.get('assembly'); if (params.get('body') === 'female') setBody('female', {silent:true});
  if (initialAssembly && assemblies[initialAssembly]) await enterAssembly(initialAssembly, (params.get('side') || '').toUpperCase());
@@ -116,7 +118,7 @@ async function loadFiles(ids){
     model.attach(mesh); const index = parts.length;
     const part = { id:piece.id, piece, mesh, file:piece.file, group:piece.file, short:fileLabels[piece.file], name:piece.name, side:piece.side, region:piece.region, path:piece.path, parent:piece.parent, merged:piece.merged, triangles:piece.triangles, index, label:`${piece.name}${piece.side === 'M' ? '' : ` (${piece.side === 'L' ? 'left' : 'right'})`} · ${String(index + 1).padStart(4, '0')}`, base:mesh.position.clone(), center:new THREE.Vector3().fromArray(piece.center), size:new THREE.Vector3().fromArray(piece.size), assemblies:Object.keys(assemblies).filter(k => assemblies[k].paired ? (assemblies[k].match(piece, 'L') || assemblies[k].match(piece, 'R')) : (manifest.assemblies[k] || []).includes(piece.id)) };
     part.assembly = part.assemblies[0] || null;
-    finishMaterial(mesh, piece, state.mode); captureMaterial(part);
+    finishMaterial(mesh, piece, state.mode); captureMaterial(part); part.loGeometry = mesh.geometry; part.lod = 'lo';
     mesh.castShadow = !mesh.material.transparent; mesh.receiveShadow = true; mesh.userData.part = part; mesh.frustumCulled = true;
     part.offset = new THREE.Vector3().fromArray(bodyOffset(piece, env)); part.spread = new THREE.Vector3().fromArray(bodySpread(piece, index, part.assemblies.length > 0));
     parts.push(part); partsById.set(part.id, part);
@@ -165,6 +167,7 @@ function setView(name, immediate = false){
  const distance = state.assembly ? assemblyDistance() : new THREE.Vector3().fromArray(views[name]).sub(baseTarget).length() * factor;
  const destination = target.clone().addScaledVector(dir, distance);
  if (immediate || reducedMotion) { camera.position.copy(destination); controls.target.copy(target); viewTween = null; } else viewTween = { start:performance.now(), from:camera.position.clone(), to:destination, fromTarget:controls.target.clone(), toTarget:target };
+ if (params.has('tracecam')) console.info('setView', name, immediate, new Error().stack.split('\n').slice(2, 5).join(' | '));
  document.querySelectorAll('[data-view]').forEach(b => b.classList.toggle('active', b.dataset.view === name && !state.assembly));
 }
 function setAmount(value, { fit = true, manual = true, animate = false } = {}){
@@ -220,6 +223,7 @@ function focusSelected(){
  const radius = Math.max(.03, size.length() / 2), distance = radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.max(1, 1 / camera.aspect) * 1.2;
  const direction = camera.position.clone().sub(controls.target).normalize();
  viewTween = { start:performance.now(), from:camera.position.clone(), to:center.clone().addScaledVector(direction, distance), fromTarget:controls.target.clone(), toTarget:center };
+ if (params.has('tracecam')) console.info('focusSelected', new Error().stack.split('\n').slice(2, 5).join(' | '));
 }
 
 // ---------------------------------------------------------------- nested assemblies
@@ -272,6 +276,37 @@ function buildAllLabels(){
  if (!state.assembly || !state.labelAll) return;
  for (const p of assemblyMembers(state.assembly)) { const el = document.createElement('span'); el.className = 'landmark landmark-all'; el.textContent = p.label.replace(/ · \d+$/, ''); $('labels').append(el); landmarks.push({ el, part:p, kind:'all' }); }
 }
+
+// ---------------------------------------------------------------- zoom-level detail: full-resolution geometry streamed per system
+function setDetail(on){ state.detail = !!on; $('lod-toggle').setAttribute('aria-pressed', state.detail); if (!state.detail) for (const p of parts) if (p.lod === 'hi') { p.mesh.geometry = p.loGeometry; p.lod = 'lo'; } else lodPass(); }
+const _v = new THREE.Vector3();
+function projectedRadiusPx(p){ const dist = _v.copy(p.mesh.position).sub(camera.position).length(); const fovScale = renderer.domElement.clientHeight / 2 / Math.tan(THREE.MathUtils.degToRad(camera.fov / 2)); return (p.size.length() / 2) / Math.max(dist, .001) * fovScale; }
+function lodPass(){
+ const want = new Map();
+ for (const p of parts) { if (!p.mesh.visible || !manifest.files.find(f => f.id === p.file)?.hi) continue; const r = projectedRadiusPx(p); const on = p.lod === 'hi' ? r > 70 : r > 110;
+  if (on) { const g = hi.geometries.get(p.id); if (g) { if (p.lod !== 'hi') { p.mesh.geometry = g; p.lod = 'hi'; } } else want.set(p.file, Math.max(want.get(p.file) || 0, r)); }
+  else if (p.lod === 'hi') { p.mesh.geometry = p.loGeometry; p.lod = 'lo'; } }
+ if (want.size && hi.loading.size < 2) { const next = [...want.entries()].filter(([f]) => !hi.loaded.has(f) && !hi.loading.has(f)).sort((a, b) => b[1] - a[1])[0]; if (next) loadHi(next[0]); }
+}
+async function loadHi(fileId){
+ const f = manifest.files.find(x => x.id === fileId); if (!f?.hi || hi.loaded.has(fileId) || hi.loading.has(fileId)) return;
+ hi.loading.add(fileId); $('stage-status').hidden = false; console.info('detail tier: loading', fileId);
+ try {
+  const loader = new GLTFLoader().setMeshoptDecoder(MeshoptDecoder);
+  const gltf = await loader.loadAsync(`./${f.hi.path}?v=1`, progress => { if (progress.total) $('stage-status').textContent = `DETAIL · ${fileLabels[fileId].toUpperCase()} · ${Math.round(progress.loaded / progress.total * 100)}%`; });
+  gltf.scene.updateMatrixWorld(true);
+  gltf.scene.traverse(o => { if (!o.isMesh) return; const id = o.userData.id || o.parent?.userData.id; const part = partsById.get(id); if (!part) return;
+   const g = o.geometry; o.updateWorldMatrix(true, false); const m = o.matrixWorld.clone();
+   // bake the node transform relative to the piece's ASSEMBLED transform (base position, same quantisation scale) so the
+   // geometry drops into the base tier's local space even if the file arrives mid-explosion
+   const assembled = new THREE.Matrix4().compose(part.base, part.mesh.quaternion, part.mesh.scale).premultiply(model.matrixWorld);
+   g.applyMatrix4(assembled.invert().multiply(m)); g.computeBoundingSphere();
+   if (part.mesh.geometry.attributes.uv) projectedUV({ geometry:g }, part.mesh.userData.uvCell || .06);
+   hi.geometries.set(id, g); o.material.dispose?.(); });
+  hi.loaded.add(fileId); console.info('detail tier: ready', fileId, hi.geometries.size, 'pieces');
+ } catch (e) { console.warn('detail tier failed', fileId, e); }
+ hi.loading.delete(fileId); if (!state.loading) $('stage-status').hidden = true; lodPass();
+}
 function stopSequence(){ explodeTween = null; state.sequence = false; $('animate').textContent = '▷ Play sequence'; }
 function reset(){ if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); if (state.body !== 'male') setBody('male', {silent:true}); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
 function bindControls(){
@@ -297,6 +332,7 @@ function bindControls(){
  $('rotate').onclick = () => { if (state.board) toggleBoard(false); controls.autoRotate = !controls.autoRotate; state.rotate = controls.autoRotate; $('rotate').setAttribute('aria-pressed', controls.autoRotate); };
  $('label-toggle').onclick = () => { state.labels = !state.labels; $('label-toggle').setAttribute('aria-pressed', state.labels); };
  $('ao-toggle').onclick = () => { state.ao = !state.ao; gtaoPass.enabled = state.ao; $('ao-toggle').setAttribute('aria-pressed', state.ao); };
+ $('lod-toggle').onclick = () => setDetail(!state.detail);
  $('fullscreen').onclick = async () => { try { if (document.fullscreenElement) await document.exitFullscreen(); else await document.documentElement.requestFullscreen(); } catch { $('fullscreen').textContent = 'Fullscreen unavailable'; } };
  document.addEventListener('fullscreenchange', () => { $('fullscreen').textContent = document.fullscreenElement ? '⛶ Exit fullscreen' : '⛶ Fullscreen'; });
  document.addEventListener('keydown', e => { if (/INPUT|SELECT|TEXTAREA|BUTTON/.test(e.target.tagName) || e.ctrlKey || e.metaKey || e.altKey || !state.ready) return; const k = e.key.toLowerCase(); if (k === 'e') setAmount(state.target > .5 ? 0 : 1, { animate:true }); if (k === 'r') reset(); if (e.key === 'Escape') { if (state.selected) selectPart(null); else if (state.assembly) leaveAssembly(); } const map = { h:'heart', l:'lungs', s:'spine', b:'brain' }; const order = Object.keys(assemblies); if (/^[0-9]$/.test(k)) map[k] = order[(Number(k) + 9) % 10]; if (map[k]) (state.assembly === map[k] ? leaveAssembly() : enterAssembly(map[k])); });
@@ -313,6 +349,7 @@ function tick(now){
   lastApplied = state.amount; }
  if (viewTween) { const t = Math.min(1, (now - viewTween.start) / (viewTween.duration || 900)), s = t * t * (3 - 2 * t); camera.position.lerpVectors(viewTween.from, viewTween.to, s); controls.target.lerpVectors(viewTween.fromTarget, viewTween.toTarget, s); if (t === 1) viewTween = null; }
  controls.update(dt);
+ if (state.ready && state.detail && !state.board && (++hi.frame % 10 === 0)) lodPass();
  const placed = []; const W = renderer.domElement.clientWidth, H = renderer.domElement.clientHeight;
  for (const l of landmarks) { const show = !state.board && l.part.mesh.visible && (l.kind === 'assembly' ? state.amount > .35 && !state.labelAll : l.kind === 'all' ? state.amount > .35 : state.labels && !state.assembly); l.el.hidden = !show; if (!show) continue; const anchor = l.anchor ? l.anchor.clone() : l.part.center.clone(); const p = anchor.add(l.part.mesh.position).sub(l.part.base).project(camera); l.el.hidden = Math.abs(p.x) > .95 || Math.abs(p.y) > .95 || p.z > 1; if (l.el.hidden) continue; l.x = (p.x * .5 + .5) * W; l.y = (-p.y * .5 + .5) * H; l.depth = p.z; placed.push(l); }
  // Labels are anchored above their piece; overlapping ones are nudged apart so every name stays legible.

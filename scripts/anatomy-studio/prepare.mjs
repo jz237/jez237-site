@@ -105,8 +105,23 @@ for (const fid of fileIds) {
   console.log(`${fid.padEnd(9)} ${String(index).padStart(4)} pieces ${String(tris).padStart(8)} tris ${(bytes / 1048576).toFixed(2).padStart(6)} MB`);
 }
 
-// ---------------------------------------------------------------- envelope (radial extents per 12.5 cm band) and limb axes
 const byId = new Map(pieces.map(p => [p.id, p]));
+// ---------------------------------------------------------------- full-resolution tier (streamed when pieces are large on screen)
+const hiDir = path.join(WORK, 'raw-hi'); mkdirSync(path.join(DEMO, 'assets', 'hi'), {recursive: true});
+for (const f of files) {
+  const raw = path.join(hiDir, `${f.id}.glb`); if (!existsSync(raw)) continue;
+  const doc = await io.read(raw); const root = doc.getRoot(); let tris = 0, n = 0;
+  for (const node of root.listNodes()) { const x = node.getExtras(); const mesh = node.getMesh(); if (!mesh || !x.id) continue; const piece = byId.get(x.id); if (!piece) continue;
+    let t = 0; for (const prim of mesh.listPrimitives()) t += (prim.getIndices()?.getCount() ?? prim.getAttribute('POSITION').getCount()) / 3;
+    const tr = node.getTranslation(); const d = tr.map((v, i) => +(v - piece.center[i]).toFixed(4)); if (d.some(v => Math.abs(v) > 0.0002)) piece.hiShift = d;
+    piece.hiTriangles = t; tris += t; n++; node.setExtras({id: x.id}); }
+  await doc.transform(dedup(), prune(), weld({tolerance: 0}), quantize({quantizePosition: 14, quantizeNormal: 10, quantizationVolume: 'mesh'}), reorder({encoder: MeshoptEncoder}), meshopt({encoder: MeshoptEncoder, level: 'medium'}));
+  const out = path.join(DEMO, 'assets', 'hi', `${f.id}.glb`); await io.write(out, doc); const bytes = statSync(out).size;
+  if (bytes >= MAX_BYTES) throw new Error(`hi/${f.id}.glb is ${bytes} bytes; over the 25 MiB Cloudflare Pages limit`);
+  f.hi = {path: `assets/hi/${f.id}.glb`, bytes, pieces: n, triangles: tris}; totalBytes += bytes;
+  console.log(`hi/${f.id.padEnd(9)} ${String(n).padStart(4)} pieces ${String(tris).padStart(8)} tris ${(bytes / 1048576).toFixed(2).padStart(6)} MB`);
+}
+// ---------------------------------------------------------------- envelope (radial extents per 12.5 cm band) and limb axes
 const mean = arr => arr.reduce((a, b) => a + b, 0) / Math.max(arr.length, 1);
 const limbAxis = {arm: {}, leg: {}};
 for (const side of ['L', 'R']) {
@@ -148,13 +163,13 @@ const manifest = {
   source: {name: 'Z-Anatomy', repo: 'https://github.com/LluisV/Z-Anatomy', branch: 'PC-Version', commit: existsSync(path.join(SRC, '.anatomy-commit')) ? readFileSync(path.join(SRC, '.anatomy-commit'), 'utf8').trim() : null, license: 'CC BY-SA 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/'},
   height: NORM.height, frame: 'metres; y up; +z anterior; +x subject left; feet at y=0',
   files, stages, mobileDefault: 'core', envelope, landmarks, assemblies,
-  stats: {pieces: pieces.length, triangles: pieces.reduce((a, p) => a + p.triangles, 0), bytes: totalBytes, descriptionRules: ruleHist, regions: regionHist, descriptions: Object.keys(descriptions).length},
+  stats: {pieces: pieces.length, triangles: pieces.reduce((a, p) => a + p.triangles, 0), hiTriangles: pieces.reduce((a, p) => a + (p.hiTriangles || p.triangles), 0), bytes: totalBytes, descriptionRules: ruleHist, regions: regionHist, descriptions: Object.keys(descriptions).length},
   pieces: pieces.map(({descriptionRule, ...p}) => p)
 };
 writeFileSync(path.join(DEMO, 'manifest.json'), JSON.stringify(manifest));
 writeFileSync(path.join(DEMO, 'descriptions.json'), JSON.stringify(descriptions));
 const strong = Object.entries(ruleHist).filter(([r]) => !['parent', 'path', 'none'].includes(r)).reduce((a, [, n]) => a + n, 0);
-console.log(`\nTOTAL ${pieces.length} pieces, ${manifest.stats.triangles.toLocaleString()} triangles, ${(totalBytes / 1048576).toFixed(1)} MB compressed, ${Object.keys(descriptions).length} descriptions`);
+console.log(`\nTOTAL ${pieces.length} pieces, ${manifest.stats.triangles.toLocaleString()} triangles (full tier ${manifest.stats.hiTriangles.toLocaleString()}), ${(totalBytes / 1048576).toFixed(1)} MB compressed, ${Object.keys(descriptions).length} descriptions`);
 console.log('description rules', ruleHist, `direct coverage ${(strong / pieces.length * 100).toFixed(1)}%`);
 console.log('regions', regionHist); console.log('assemblies', Object.fromEntries(Object.entries(assemblies).map(([k, v]) => [k, v.length])), 'landmarks', landmarks.length);
 console.log('manifest', (statSync(path.join(DEMO, 'manifest.json')).size / 1024).toFixed(0), 'KB; descriptions', (statSync(path.join(DEMO, 'descriptions.json')).size / 1024).toFixed(0), 'KB');

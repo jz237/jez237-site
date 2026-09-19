@@ -12,6 +12,7 @@ from mathutils import Matrix, Vector
 argv = sys.argv[sys.argv.index('--') + 1:]
 args = dict(zip(argv[::2], argv[1::2]))
 FBX, SYSTEM, WORK = args['--fbx'], args['--system'], args['--work']
+FULL = args.get('--full', '0') == '1'   # full-resolution tier: identical pieces, no decimation, written to raw-hi/
 RULES = json.load(open(args.get('--rules', os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rules.json'))))
 NORM = json.load(open(os.path.join(WORK, 'normalize.json')))
 os.makedirs(os.path.join(WORK, 'raw'), exist_ok=True)
@@ -64,7 +65,7 @@ for o in bpy.data.objects:
     if o.type == 'EMPTY' and META[o.name]['kind'] in ('t', 's'):
         p = Mn @ o.matrix_world.translation
         anchors.append(dict(name=META[o.name]['base'], side=META[o.name]['side'], parent=META[o.parent.name]['base'] if o.parent else None, position=[round(p.x, 4), round(p.z, 4), round(-p.y, 4)]))  # glTF frame
-json.dump(anchors, open(os.path.join(WORK, f'{SYSTEM}-anchors.json'), 'w'))
+if not FULL: json.dump(anchors, open(os.path.join(WORK, f'{SYSTEM}-anchors.json'), 'w'))
 log('anchors', len(anchors))
 
 # ---------------------------------------------------------------- keep set
@@ -209,8 +210,8 @@ D = RULES['decimate']; report = dict(system=SYSTEM, files={}, pieces=[])
 for fid in sorted(set(p['file'] for p in pieces)):
     fp = [p for p in pieces if p['file'] == fid]; budget = RULES['files'][fid]['budget']; hero = RULES['files'][fid].get('hero', False)
     before = {p['obj'].name: tri_count(p['obj'].data) for p in fp}; total = sum(before.values())
-    ratio = max(D['floor'], min(1.0, budget / max(total, 1)))
-    if hero: ratio = min(1.0, ratio * D['heroBoost'])
+    ratio = 1.0 if FULL else max(D['floor'], min(1.0, budget / max(total, 1)))
+    if hero and not FULL: ratio = min(1.0, ratio * D['heroBoost'])
     after = {}
     for p in fp:
         o = p['obj']; t = before[o.name]
@@ -259,12 +260,12 @@ for o in list(bpy.data.objects):
     if o not in keep: bpy.data.objects.remove(o, do_unlink=True)
 for fid in report['files']:
     for o in bpy.data.objects: o.select_set(o['file'] == fid)
-    out = os.path.join(WORK, 'raw', f'{fid}.glb')
+    out = os.path.join(WORK, 'raw-hi' if FULL else 'raw', f'{fid}.glb'); os.makedirs(os.path.dirname(out), exist_ok=True)
     bpy.ops.export_scene.gltf(filepath=out, export_format='GLB', use_selection=True, export_apply=True, export_extras=True, export_yup=True,
         export_materials='NONE', export_texcoords=False, export_normals=True, export_tangents=False, export_animations=False, export_skins=False,
         export_morph=False, export_lights=False, export_cameras=False, export_attributes=False, export_shared_accessors=False)
     report['files'][fid]['bytes'] = os.path.getsize(out)
     log('wrote', out, round(os.path.getsize(out) / 1048576, 1), 'MB')
 report['seconds'] = round(time.time() - T0, 1)
-json.dump(report, open(os.path.join(WORK, f'{SYSTEM}-report.json'), 'w'), indent=1)
+json.dump(report, open(os.path.join(WORK, f'{SYSTEM}-report' + ('-hi' if FULL else '') + '.json'), 'w'), indent=1)
 log('done')
