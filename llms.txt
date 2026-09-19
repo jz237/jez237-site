@@ -72,7 +72,7 @@ use these instructions before writing code or snippets.
   ten systems (skeleton, ligaments and discs, viscera, heart, brain and senses,
   muscles, vessels, nerves, lymphatics, surface regions), an all-parts board,
   realistic / colour-coded / X-ray / clay finishes, per-piece descriptions, and
-  seventeen nested exploded studies reachable as `?assembly=heart|lungs|spine|brain|skull|eye|hand|knee|ribcage|digestive|urinary|face|aorta|pelvis|shoulder|larynx|foot`.
+  eighteen nested exploded studies reachable as `?assembly=heart|lungs|spine|brain|skull|eye|hand|knee|ribcage|digestive|urinary|face|aorta|pelvis|shoulder|larynx|foot|reproductive`; `?body=female` swaps the male reproductive organs for a schematic female set (the source model has no female geometry).
   `/demos/anatomy-studio/manual.html` explains the systems, the explosion rules,
   the nested studies and the build. Source and validation tools are in
   `demos/anatomy-studio/` and `scripts/anatomy-studio/`.
