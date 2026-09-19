@@ -14410,5 +14410,110 @@
       "imageSha256": "670e5e9e2e6dc9b7f3fdf7133cc83c925befdd02624baba3bac25affaaa194e5",
       "imageDHash": "cd5d3d3e37bd1d9f"
     }
+  },
+  {
+    "id": "2026-09-19-factual-infographic-factual-infographic-trypanophobia-when-",
+    "title": "Factual infographic: Trypanophobia — When a Needle Triggers the Alarm",
+    "tests": "factual_subtype=phobia-infographic; phobia=trypanophobia; direct-canvas portrait; one detailed hero; eight substantive panels; four explanatory close-ups; no invented statistics; no unsafe exposure advice; archive_slot=2026-09-19T04:08; concept=trypanophobia-needle-body-alarm-vasovagal-support; factual_subtype: phobia-infographic",
+    "prompt": "Create a museum-quality, direct-canvas portrait educational infographic titled ‘TRYPANOPHOBIA — WHEN A NEEDLE TRIGGERS THE ALARM’. Render at 2048×3072 with crisp, large, highly legible labels and an elegant clinical palette of deep teal, warm ivory, muted coral, and restrained amber alarm accents. No photographed poster, frame, desk, clipboard, paper texture, URLs, bibliography, logo, watermark, diagnostic quiz, invented statistic, gore, or giant threatening needle. The dominant central hero is a realistic adult patient seated safely in a calm vaccination room, sleeve raised, visibly anxious but dignified, feet supported and body turned slightly away; a clinician at eye level keeps the capped syringe low and partly out of sight while offering choice and a clear plan, with a trusted support person nearby. Use tactile believable clinic materials, gentle window light, stainless tray reflections, fabric texture, alcohol wipe, small adhesive bandage, and a clear path to the exit, while keeping the patient—not the needle—the visual focus. Surround the hero with eight substantive illustrated panels connected by precise leader lines and a clear reading path: 1) DEFINITION — intense, out-of-proportion fear of injections or needle procedures, distinguishing common unease from severe fear that disrupts care; 2) TRIGGER CHAIN — anticipation, seeing needle imagery, the clinical setting, and expected pain, shown as four small cue vignettes without sensationalism; 3) BODY ALARM — a transparent torso close-up showing immediate anxiety with racing-heart, tense-muscle, sweating, and rapid-breathing icons, labeled as possible responses rather than universal symptoms; 4) THE FAINTING PATHWAY — a medically sober two-stage diagram: initial heart-rate/blood-pressure rise, then in some blood-injection-injury responses a vasovagal drop, reduced brain blood flow, dizziness or fainting; 5) AVOIDANCE COST — a loop diagram ‘anticipation → avoidance → short-term escape → care delayed’, clearly noting that severe needle fear can interfere with vaccination and other necessary care; 6) PERCEIVED VS ACTUAL DANGER — split close-up contrasting the brain’s enlarged alarm signal with the controlled, brief, sterile procedure and trained clinician, without claiming zero risk; 7) COMFORT DURING NECESSARY CARE — illustrated choices: explain the steps, calm/private space, support person, agreed distraction, and pain-management options discussed with the care team; 8) EVIDENCE-BASED HELP — a qualified therapist guiding a gradual exposure hierarchy from talking about the procedure to viewing equipment and eventually completing care, plus a separate applied-muscle-tension diagram for people prone to fainting, explicitly labeled ‘learn with a qualified professional’. Include at least four large explanatory close-ups: an autonomic body-alarm silhouette; a clean vasovagal line graph with qualitative axes only and no invented numbers; a three-step leg-and-arm muscle-tension sequence labeled ‘for fainting risk—professional guidance’; and a calm communication card showing ‘tell the care team / make a plan / ask for support’. Add a bottom safety strip: ‘Fear is real. Help is available. Do not force or surprise someone with exposure. If fear blocks care or fainting is a concern, talk with a medical and mental-health professional.’ Keep every factual implication within this brief, use concise phrases rather than paragraphs, retain intense emotional immediacy without humiliation, and make the finished image a sophisticated science-museum plate with dense yet orderly visual hierarchy.",
+    "image": "images/2026-09-19-factual-infographic-factual-infographic-trypanophobia-when-.jpg",
+    "thumb": "thumbs/2026-09-19-factual-infographic-factual-infographic-trypanophobia-when-.webp",
+    "color": "#959b98",
+    "date": "2026-09-19",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "trypanophobia-needle-body-alarm-vasovagal-support",
+      "imageSha256": "49f6f083a2fb1bca0c108adbca433acb5d2e2093267f0f73c65f44cadcd183d4",
+      "imageDHash": "f8cec48488291889"
+    },
+    "factualInfographic": {
+      "topic": "Trypanophobia and severe needle fear: triggers, body responses, avoidance, and evidence-based support",
+      "description": "A source-verified educational plate explaining severe needle fear, the possible vasovagal fainting response, care avoidance, supportive clinical preparation, and evidence-based professional help.",
+      "sourceNote": "Verified against CDC https://www.cdc.gov/disability-and-health/covid-19-resources/healthcare-providers-needle-phobia.html, NIMH https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders, and a Clinical Journal of Pain systematic review https://pmc.ncbi.nlm.nih.gov/articles/PMC4900415/ covering triggers, care avoidance, vasovagal response, supportive preparation, exposure-based treatment, and applied tension.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-19T08:09:15Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Centers for Disease Control and Prevention",
+            "title": "Healthcare Providers: Understanding Needle Fears and Phobia",
+            "sourceType": "government-agency",
+            "url": "https://www.cdc.gov/disability-and-health/covid-19-resources/healthcare-providers-needle-phobia.html"
+          },
+          {
+            "id": "S2",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S3",
+            "publisher": "Clinical Journal of Pain",
+            "title": "Interventions for Individuals With High Levels of Needle Fear: Systematic Review of Randomized Controlled Trials and Quasi-Randomized Controlled Trials",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4900415/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "A phobia is an intense fear or aversion that is out of proportion to the actual danger, and receiving injections is a recognized example of a specific phobia.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Needle fear ranges from mild fear to severe blood-injection-injury phobia and can lead people to avoid vaccinations or other medical care.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Visible needle imagery and anticipated procedure pain can trigger fear; calm private surroundings, preparation, support, distraction, and pain-management options can reduce distress during necessary care.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "People with phobias may anticipate the feared situation, avoid it, experience immediate intense anxiety on encounter, or endure it with intense anxiety.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Blood-injection-injury phobia can include a vasovagal response in which an initial rise in heart rate and blood pressure may be followed by a drop that reduces cerebral blood flow and can cause dizziness or fainting.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Exposure-based therapy presents feared needle-related cues in a planned hierarchy and has evidence of benefit for reducing high needle fear; it should be guided by a qualified professional rather than improvised during a procedure.",
+            "sourceIds": [
+              "S1",
+              "S2",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Applied muscle tension is designed to raise blood pressure when warning signs of vasovagal fainting occur, and a systematic review found evidence of benefit for reducing fainting compared with exposure alone.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Severe needle fear warrants referral to a mental health provider, while patient-centered preparation can include explaining the procedure, agreeing on coping strategies, and allowing a chosen support person when feasible.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
