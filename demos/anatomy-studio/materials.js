@@ -130,7 +130,7 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
   else if (mode === 'coded') spec = {color: base, roughness: .5, clearcoat: .3, opacity: r.transparent ? Math.max(r.opacity, .4) : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
   else if (mode === 'xray') spec = {color: part.file === 'skeletal' ? '#eef3f7' : base, roughness: .25, clearcoat: .5, opacity: part.file === 'skeletal' ? .92 : .16, transparent: part.file !== 'skeletal', depthWrite: part.file === 'skeletal', emissive: base, emissiveIntensity: part.file === 'skeletal' ? 0 : .35};
   else spec = {color: '#cfc6bb', roughness: .85, clearcoat: 0, opacity: r.transparent ? .5 : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
-  if ((spec.bump || spec.roughMap) && !mesh.geometry.attributes.uv) projectedUV(mesh, spec.striated ? .045 : .06);
+  if ((spec.bump || spec.roughMap) && !mesh.geometry.attributes.uv) { const cell = spec.striated ? .045 : .06; projectedUV(mesh, cell); if (mesh.userData) mesh.userData.uvCell = cell; }
   const mat = new THREE.MeshPhysicalMaterial({color: spec.color, roughness: spec.roughness ?? .5, metalness: 0, clearcoat: spec.clearcoat ?? 0, clearcoatRoughness: spec.clearcoatRoughness ?? .3, envMapIntensity: .8, transparent: !!spec.transparent, opacity: spec.opacity ?? 1, depthWrite: spec.depthWrite ?? true, side: THREE.FrontSide, ior: spec.ior ?? 1.45});
   if (spec.bump && mesh.geometry.attributes.uv) { mat.bumpMap = spec.bump; mat.bumpScale = spec.bumpScale; }
   if (spec.roughMap && mesh.geometry.attributes.uv) { mat.roughnessMap = spec.roughMap; mat.roughness = Math.min(1, (spec.roughness ?? .5) * 1.6); }
