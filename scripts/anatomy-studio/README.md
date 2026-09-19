@@ -25,6 +25,14 @@ small ligaments, lymph nodes, fasciae/bursae and skin sub-regions join their gro
 a floor for small pieces and a boost for the heart and brain. Each exported piece carries `id, name, system, file, side,
 parent, path, merged, tris` as glTF extras; three.js sanitises node names, so the runtime keys everything on `extras.id`.
 
+Skin (`regions`) gets its own treatment in `blender-export.py`: every Z-Anatomy region is a solidified shell (outer sheet,
+inner sheet, rim), so each patch is split into smooth components and only components whose faces can see open air along
+their normals are kept (`SKIN_ESCAPE`, default 0.08; concave skin such as an armpit still sees some, inner sheets see none).
+The outer sheets are joined, welded, pinholes filled, border chains bridged run-by-run where another chain lies within
+`SKIN_BRIDGE` (16 mm), slits and finger/toe tips capped, each sheet re-oriented the way the source faced, subdivided (x1
+base, x2 full tier), border vertices seated onto neighbouring sheets, and finally split back into pieces by material with
+the shared custom normals. `SKIN_DIAG=1` logs component escape fractions, bridge groups and the remaining open chains.
+
 `prepare.mjs` welds, quantises (14-bit positions) and meshopt-compresses each file, asserts every file is under the 25 MiB
 Cloudflare Pages limit, derives each piece's body region from its centre, matches descriptions with fallback rules
 (exact → parenthetical → side → qualifier → “of …” → aliases → parent → path), computes the radial envelope used by

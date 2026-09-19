@@ -25,4 +25,4 @@ See `../../scripts/anatomy-studio/README.md`: `fetch-models.sh` → `run-exports
 Pieces keep Z-Anatomy's Terminologia Anatomica names. Every bone, tooth, cartilage, muscle, organ, lobe, bronchus, heart and
 brain structure is an individual piece; branches of vessels and nerves below the fourth level of their tree, small ligaments,
 lymph-node groups, fasciae/bursae and skin sub-regions are merged into their parent structure. Geometry is decimated to about
-4.6 M triangles in total (32 MB); vessels and nerves are individual to the seventh and sixth levels of their trees. This is a teaching model, not a clinical reference.
+4.7 M triangles in total (35 MB, plus a 9 M-triangle zoom tier that streams per system); vessels and nerves are individual to the seventh and sixth levels of their trees. This is a teaching model, not a clinical reference.

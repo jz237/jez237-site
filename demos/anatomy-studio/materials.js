@@ -150,7 +150,7 @@ function realistic(p) {
       if (/thymus/.test(L)) return {color: '#d9a0a8', roughness: .4, clearcoat: .4};
       return {color: '#86b96f', roughness: .45, clearcoat: .3};
     case 'regions':
-      if (/hair/.test(L)) return {color: '#2a1a12', roughness: .62, clearcoat: .08, clearcoatRoughness: .7, sheen: .8, sheenColor: '#6a4a34', sheenRoughness: .45, bump: hairTex, bumpScale: .0016, roughMap: hairTex, striated: true};
+      if (/hair/.test(L)) return {color: '#2a1a12', roughness: .62, clearcoat: .08, clearcoatRoughness: .7, sheen: .8, sheenColor: '#6a4a34', sheenRoughness: .45, bump: hairTex, bumpScale: .0016, roughMap: hairTex, striated: true, anisotropy: .65};
       return {color: '#d8b28f', roughness: .5, clearcoat: .2, opacity: .30, transparent: true, depthWrite: false, bump: skinTex, bumpScale: .0008, sheen: .35, sheenColor: '#f2d2c0'};
   }
   return {color: '#cfc6bb', roughness: .6};
@@ -173,6 +173,7 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
   if (spec.map && mesh.geometry.attributes.uv) { mat.map = spec.map; mat.map.colorSpace = THREE.SRGBColorSpace; }
   if (spec.bump && mesh.geometry.attributes.uv) { mat.bumpMap = spec.bump; mat.bumpScale = spec.bumpScale; }
   if (spec.roughMap && mesh.geometry.attributes.uv) { mat.roughnessMap = spec.roughMap; mat.roughness = Math.min(1, (spec.roughness ?? .5) * 1.6); }
+  if (spec.anisotropy && mesh.geometry.attributes.uv) { mat.anisotropy = spec.anisotropy; mat.anisotropyRotation = Math.PI / 2; }   // hair: stretched highlight along the strands
   if (spec.sheen) { mat.sheen = spec.sheen; mat.sheenColor.set(spec.sheenColor || '#ffffff'); mat.sheenRoughness = spec.sheenRoughness ?? .6; }
   if (spec.sss && mesh.geometry && mesh.userData?.uvWorld) { if (!mesh.geometry.attributes.color) skinTint(mesh.geometry, mesh.userData.uvWorld); mat.vertexColors = true; }
   if (spec.sss) {   // light wrap + warm bleed at the terminator: a cheap stand-in for subsurface scattering in skin
