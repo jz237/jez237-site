@@ -37,8 +37,8 @@ export function projectedUV(mesh, cell = 0.06) {
   g.setAttribute('uv', new THREE.BufferAttribute(uv, 2));
 }
 
-export const fileColors = {skeletal: '#f0e6c8', joints: '#d8d1c0', visceral: '#f2a8b8', heart: '#ff6b7a', brain: '#f5c0c8', muscular: '#e07a7a', vessels: '#7f8fe6', nerves: '#f5e08a', lymphoid: '#9fd98a', regions: '#e6c9a8'};
-export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', visceral: 'Viscera', heart: 'Heart', brain: 'Brain & senses', muscular: 'Muscles', vessels: 'Arteries & veins', nerves: 'Nerves & cord', lymphoid: 'Lymphatics', regions: 'Surface regions'};
+export const fileColors = {skeletal: '#f0e6c8', joints: '#d8d1c0', visceral: '#f2a8b8', heart: '#ff6b7a', brain: '#f5c0c8', muscular: '#e07a7a', vessels: '#7f8fe6', nerves: '#f5e08a', lymphoid: '#9fd98a', regions: '#e6c9a8', female: '#e8a0b4'};
+export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', visceral: 'Viscera', heart: 'Heart', brain: 'Brain & senses', muscular: 'Muscles', vessels: 'Arteries & veins', nerves: 'Nerves & cord', lymphoid: 'Lymphatics', regions: 'Surface regions', female: 'Female reproductive · schematic'};
 
 /** Realistic finish for one piece. Returns {color, roughness, clearcoat, opacity, bump, bumpScale, emissive, sheen...}. */
 function realistic(p) {
@@ -101,6 +101,12 @@ function realistic(p) {
       if (/corpus callosum|commissure|septum/.test(L)) return {color: '#ece2d8', roughness: .35, clearcoat: .5};
       return {color: '#e3b4b7', roughness: .34, clearcoat: .7, clearcoatRoughness: .25, bump: brainTex, bumpScale: .0011, roughMap: brainTex};
     case 'nerves': return {color: '#f0dc9a', roughness: .48, clearcoat: .3, bump: nerveTex, bumpScale: .0006, striated: true};
+    case 'female':
+      if (/mammary/.test(L)) return {color: '#e6c3b2', roughness: .45, clearcoat: .3, bump: organTex, bumpScale: .0012, roughMap: organTex, sheen: .25, sheenColor: '#f6ddd0'};
+      if (/ovary/.test(L)) return {color: '#dca6ac', ...wet, bumpScale: .0016};
+      if (/uterine tube/.test(L)) return {color: '#c98090', ...wet, bumpScale: .0010};
+      if (/urethra/.test(L)) return {color: '#d9b0a0', ...wet};
+      return {color: '#b85673', ...wet, bumpScale: .0018};
     case 'muscular':
       if (/fascia|bursa|sheath|retinacul|aponeurosis|iliotibial|septum|thoracolumbar/.test(L)) return {color: '#e6dccb', roughness: .5, clearcoat: .3, opacity: .78, transparent: true};
       if (/tendon/.test(L)) return {color: '#efe7d8', roughness: .4, clearcoat: .4};

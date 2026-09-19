@@ -92,6 +92,7 @@ for (const fid of fileIds) {
     for (const prim of mesh.listPrimitives()) { const pos = prim.getAttribute('POSITION'); const mn = pos.getMin([]), mx = pos.getMax([]); for (let i = 0; i < 3; i++) { min[i] = Math.min(min[i], mn[i]); max[i] = Math.max(max[i], mx[i]); } t += (prim.getIndices()?.getCount() ?? pos.getCount()) / 3; }
     const tr = node.getTranslation(); const center = tr.map(v => +v.toFixed(4)); const size = max.map((v, i) => +(v - min[i]).toFixed(4));
     const piece = {id: x.id, name: x.name, system: x.system, file: fid, node: index++, parent: x.parent || null, path: x.path || '', side: x.side, region: region(center), center, size, triangles: t, merged: JSON.parse(x.merged || '[]')};
+    if (x.schematic) { piece.schematic = true; piece.text = x.description; }
     const d = describe(piece); piece.descriptionKey = d.key; piece.descriptionRule = d.rule;
     pieces.push(piece); tris += t;
     node.setExtras({id: x.id});   // keep the GLB lean; the manifest carries the rest
@@ -141,7 +142,7 @@ const landmarks = anchors.filter(a => landmarkNames.has(a.name)).map(a => ({name
 // ---------------------------------------------------------------- write outputs
 const descriptions = {}; for (const p of pieces) if (p.descriptionKey) descriptions[p.descriptionKey] = readDescription(p.descriptionKey);
 const ruleHist = {}, regionHist = {}; for (const p of pieces) { ruleHist[p.descriptionRule] = (ruleHist[p.descriptionRule] || 0) + 1; regionHist[p.region] = (regionHist[p.region] || 0) + 1; }
-const stages = {core: ['skeletal', 'joints', 'visceral', 'heart', 'brain'], muscles: ['muscular'], detail: ['vessels', 'nerves', 'lymphoid', 'regions']};
+const stages = {core: ['skeletal', 'joints', 'visceral', 'heart', 'brain', 'female'], muscles: ['muscular'], detail: ['vessels', 'nerves', 'lymphoid', 'regions']};
 const manifest = {
   version: 1, generated: new Date().toISOString().slice(0, 10),
   source: {name: 'Z-Anatomy', repo: 'https://github.com/LluisV/Z-Anatomy', branch: 'PC-Version', commit: existsSync(path.join(SRC, '.anatomy-commit')) ? readFileSync(path.join(SRC, '.anatomy-commit'), 'utf8').trim() : null, license: 'CC BY-SA 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/'},

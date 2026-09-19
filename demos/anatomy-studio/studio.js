@@ -16,7 +16,7 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, stage:'none', loading:false, rotate:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, body:'male', stage:'none', loading:false, rotate:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
 let lastLeaders = '', board = null, bodyCamera, bodyControls, boardControls, studioObjects = [], studioFog, boardKey = '', boardDirty = true, keyLight, composer, gtaoPass, renderPass;
@@ -33,7 +33,8 @@ const fallbackCopy = {
  vessels:'A named artery or vein. Branches below the fourth level of the vascular tree are merged into their parent trunk.',
  nerves:'A nerve, plexus or part of the spinal cord. Branches below the fourth level of the nerve tree are merged into their parent nerve.',
  lymphoid:'A lymphoid organ or a regional group of lymph nodes.',
- regions:'A named surface region of the body, rendered as translucent skin. Sub-regions are merged into their regional group.'
+ regions:'A named surface region of the body, rendered as translucent skin. Sub-regions are merged into their regional group.',
+ female:'A schematic reconstruction of the female reproductive system, added to the shared base body because the source model has none. Shapes follow textbook dimensions.'
 };
 
 function fail(error){ console.error(error); $('loading').hidden = true; $('error').hidden = false; $('scene-status').textContent = 'STUDIO UNAVAILABLE'; $('error-message').textContent = 'The 3D model could not load. Check your connection and that WebGL 2 / hardware acceleration is enabled, then try again.'; }
@@ -92,13 +93,13 @@ async function loadStudio(){
  document.querySelectorAll('[data-assembly]').forEach(b => b.disabled = false);
  updateList(); updateUI(); setView('hero', true);
  window.anatomyStudio = {
-  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
+  getState:() => ({ ready:state.ready, pieces:parts.length, visible:parts.filter(p => p.mesh.visible).length, amount:state.amount, target:state.target, selected:state.selected?.label ?? null, isolated:state.isolated, system:state.system, board:state.board, mode:state.mode, ao:state.ao, body:state.body, assembly:state.assembly, assemblySide:state.assemblySide, stage:state.stage, loading:state.loading, triangles:parts.reduce((n, p) => n + (p.mesh.visible ? p.triangles : 0), 0), drawCalls:parts.reduce((n, p) => n + (p.mesh.visible ? 1 : 0), 0), files:manifest.files.filter(f => f.loaded).map(f => f.id) }),
   getParts:() => parts.map(p => ({ id:p.id, name:p.name, side:p.side, file:p.file, region:p.region, position:p.mesh.position.toArray(), base:p.base.toArray(), inAssembly:!!(state.assembly && isMember(p)) })),
   getAssembly:id => { const a = assemblies[id]; if (!a) return null; const members = assemblyMembers(id); return { side:state.assemblySide, paired:!!a.paired, members:members.map(p => p.id), primary:members.filter(p => a.primary?.(p.piece)).map(p => p.id), framed:members.filter(p => !a.frame || a.frame(p.piece)).map(p => p.id), rectangles:projectedRectangles(members.filter(p => p.mesh.visible)) }; },
   getBoardRectangles:() => board ? board.rectangles() : [],
-  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
+  loadStage, enterAssembly, leaveAssembly, setMode, setAmount, reset, setBody, getManifest:() => manifest, _gtao:gtaoPass, _GTAOPass:GTAOPass, _camera:() => ({ position:camera.position.toArray(), target:controls.target.toArray(), tween:!!viewTween })
  };
- const initialView = params.get('view'), initialAssembly = params.get('assembly');
+ const initialView = params.get('view'), initialAssembly = params.get('assembly'); if (params.get('body') === 'female') setBody('female', {silent:true});
  if (initialAssembly && assemblies[initialAssembly]) await enterAssembly(initialAssembly, (params.get('side') || '').toUpperCase());
  else if (initialView === 'parts') toggleBoard(true);
  if (target !== 'core') loadStage(target);
@@ -182,13 +183,13 @@ function updateUI(){
  $('scene-status').textContent = state.board ? 'ALL-PARTS BOARD' : state.assembly ? `${assemblies[state.assembly].title.toUpperCase()} · NESTED STUDY` : state.isolated ? 'ISOLATED PIECE' : state.system !== 'all' ? `${fileLabels[state.system].toUpperCase()} STUDY` : state.target > .01 ? 'EXPLODED STUDY' : 'LIVE 3D / HUMAN ANATOMY';
 }
 function updateList(){
- const search = $('search').value.toLowerCase(); const options = parts.filter(p => (state.system === 'all' || p.file === state.system) && isMember(p) && `${p.label} ${p.short} ${p.region} ${p.path}`.toLowerCase().includes(search));
+ const search = $('search').value.toLowerCase(); const options = parts.filter(p => (state.system === 'all' || p.file === state.system) && isMember(p) && bodyAllows(p) && `${p.label} ${p.short} ${p.region} ${p.path}`.toLowerCase().includes(search));
  $('part-list').replaceChildren(new Option(options.length ? `Select a piece… (${options.length})` : 'No matching pieces', ''), ...options.map(p => new Option(`${p.short} / ${p.label}`, p.id)));
  $('part-list').value = state.selected?.id ?? '';
 }
 function updateVisibility(){
  for (const p of parts) { const selected = p === state.selected, mat = p.mesh.material, member = isMember(p);
-  p.mesh.visible = member && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected);
+  p.mesh.visible = member && bodyAllows(p) && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected);
   const o = state.assembly && p.assemblyLayer?.opacity != null && state.amount > .05 ? p.assemblyLayer.opacity : null;
   mat.opacity = o ?? p.opacity; mat.transparent = o != null || p.transparent; mat.depthWrite = o != null ? false : p.depthWrite;
   mat.emissive.copy(selected ? new THREE.Color('#49c8a3') : p.emissive); mat.emissiveIntensity = selected ? (state.isolated ? .08 : .3) : p.emissiveIntensity;   // faint when isolated so the surface detail stays readable
@@ -197,6 +198,7 @@ function updateVisibility(){
  updateUI(); if (state.board && board) { board.select(state.selected); reflowBoard(); }
 }
 async function describe(part){
+ if (part.piece.text) return part.piece.text;
  if (!part.piece.descriptionKey) return fallbackCopy[part.file];
  if (!descriptions) { try { descriptions = await (await fetch('./descriptions.json?v=2')).json(); } catch { descriptions = {}; } }
  return descriptions[part.piece.descriptionKey] || fallbackCopy[part.file];
@@ -208,7 +210,7 @@ function selectPart(part){
  $('part-path').textContent = part ? part.path.replace(/ \/ /g, ' › ') : '';
  $('part-description').textContent = part ? 'Loading description…' : 'Select directly on the body or choose from the list. Each piece can be viewed on its own.';
  if (part) describe(part).then(text => { if (state.selected === part) $('part-description').textContent = text; });
- $('part-meta').textContent = part ? `${part.merged.length > 1 ? `${part.merged.length} merged structures` : 'Single structure'} · ${part.size.toArray().map(v => Math.round(v * 1000)).join(' × ')} mm · ${part.triangles.toLocaleString()} triangles${part.merged.length > 1 ? ` · includes ${part.merged.slice(0, 6).join(', ')}${part.merged.length > 6 ? '…' : ''}` : ''}` : '';
+ $('part-meta').textContent = part ? `${part.piece.schematic ? 'Added schematic reconstruction' : part.merged.length > 1 ? `${part.merged.length} merged structures` : 'Single structure'} · ${part.size.toArray().map(v => Math.round(v * 1000)).join(' × ')} mm · ${part.triangles.toLocaleString()} triangles${part.merged.length > 1 ? ` · includes ${part.merged.slice(0, 6).join(', ')}${part.merged.length > 6 ? '…' : ''}` : ''}` : '';
  $('part-list').value = part ? part.id : ''; updateVisibility();
  if (state.isolated) focusSelected(); else if (wasIsolated && !state.board) setView(state.view);
 }
@@ -221,6 +223,9 @@ function focusSelected(){
 }
 
 // ---------------------------------------------------------------- nested assemblies
+const MALE_GENITAL = p => p.file === 'visceral' && (/Male genital system/.test(p.path) || p.name === 'Urethra');
+function bodyAllows(p){ return state.body === 'female' ? !MALE_GENITAL(p) : p.file !== 'female'; }
+function setBody(body, {silent = false} = {}){ state.body = body === 'female' ? 'female' : 'male'; document.querySelectorAll('[data-body]').forEach(b => { b.classList.toggle('active', b.dataset.body === state.body); b.setAttribute('aria-pressed', b.dataset.body === state.body); }); boardDirty = true; if (!silent) { selectPart(null); updateList(); } updateVisibility(); const url = new URL(location); if (state.body === 'female') url.searchParams.set('body', 'female'); else url.searchParams.delete('body'); history.replaceState(null, '', url); }
 function isMember(p){ if (!state.assembly) return true; const a = assemblies[state.assembly]; return p.assemblies.includes(state.assembly) && (!a.paired || p.side === state.assemblySide); }
 function assemblyMembers(id, side = state.assemblySide){ const a = assemblies[id]; return parts.filter(p => p.assemblies.includes(id) && (!a.paired || p.side === side)); }
 function assemblyBox(){ const b = new THREE.Box3(); const a = assemblies[state.assembly]; for (const p of assemblyMembers(state.assembly)) { if (a.frame && !a.frame(p.piece)) continue; const c = p.center.clone().addScaledVector(p.assemblyOffset, state.target); b.expandByPoint(c.clone().sub(p.size.clone().multiplyScalar(.5))); b.expandByPoint(c.clone().add(p.size.clone().multiplyScalar(.5))); } return b; }
@@ -228,6 +233,7 @@ function assemblyTarget(){ return assemblyBox().getCenter(new THREE.Vector3()); 
 function assemblyDistance(){ const a = assemblies[state.assembly]; const radius = assemblyBox().getSize(new THREE.Vector3()).length() / 2; return radius / Math.sin(THREE.MathUtils.degToRad(camera.fov / 2)) * Math.max(1, 1 / camera.aspect) * (a.padding || 1.1); }
 async function enterAssembly(id, side){
  const a = assemblies[id]; if (!a || !state.ready) return; if (state.board) toggleBoard(false); stopSequence();
+ if (a.body && state.body !== a.body) setBody(a.body, {silent:true});
  state.assemblySide = a.paired ? (side === 'R' ? 'R' : side === 'L' ? 'L' : state.assemblySide) : 'L';
  await loadFiles(a.files);
  state.assembly = id; state.system = 'all'; state.isolated = false; $('system').value = 'all';
@@ -267,7 +273,7 @@ function buildAllLabels(){
  for (const p of assemblyMembers(state.assembly)) { const el = document.createElement('span'); el.className = 'landmark landmark-all'; el.textContent = p.label.replace(/ · \d+$/, ''); $('labels').append(el); landmarks.push({ el, part:p, kind:'all' }); }
 }
 function stopSequence(){ explodeTween = null; state.sequence = false; $('animate').textContent = '▷ Play sequence'; }
-function reset(){ if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
+function reset(){ if (state.board) toggleBoard(false); stopSequence(); if (state.assembly) leaveAssembly(); if (state.body !== 'male') setBody('male', {silent:true}); controls.minDistance = .25; state.target = 0; state.system = 'all'; state.isolated = false; state.labels = false; state.view = 'hero'; controls.autoRotate = false; state.rotate = false; $('system').value = 'all'; $('search').value = ''; for (const id of ['rotate', 'label-toggle']) $(id).setAttribute('aria-pressed', 'false'); selectPart(null); updateList(); updateUI(); setView('hero'); }
 function bindControls(){
  $('explode').addEventListener('input', e => setAmount(Number(e.target.value) / 100));
  $('explode-button').onclick = () => setAmount(state.target > .5 ? 0 : 1, { animate:true });
@@ -283,7 +289,8 @@ function bindControls(){
  $('leave-assembly').onclick = leaveAssembly;
  $('label-all').onclick = () => { state.labelAll = !state.labelAll; $('label-all').setAttribute('aria-pressed', state.labelAll); buildAllLabels(); };
  document.querySelectorAll('[data-side]').forEach(b => b.onclick = () => { if (state.assembly && assemblies[state.assembly].paired) enterAssembly(state.assembly, b.dataset.side); });
- $('system').onchange = e => { state.system = e.target.value; selectPart(null); updateList(); };
+ $('system').onchange = e => { state.system = e.target.value; if (state.system === 'female' && state.body !== 'female') setBody('female', {silent:true}); selectPart(null); updateList(); };
+ document.querySelectorAll('[data-body]').forEach(b => b.onclick = () => setBody(b.dataset.body));
  $('search').oninput = updateList;
  $('part-list').onchange = e => selectPart(e.target.value === '' ? null : partsById.get(e.target.value));
  $('isolate').onclick = () => { state.isolated = !state.isolated; updateVisibility(); if (state.board) return; if (state.isolated) focusSelected(); else setView(state.view); }; $('clear').onclick = () => selectPart(null);
