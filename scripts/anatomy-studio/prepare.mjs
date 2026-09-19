@@ -159,7 +159,7 @@ const landmarks = anchors.filter(a => landmarkNames.has(a.name)).map(a => ({name
 // ---------------------------------------------------------------- write outputs
 const descriptions = {}; for (const p of pieces) if (p.descriptionKey) descriptions[p.descriptionKey] = readDescription(p.descriptionKey);
 const ruleHist = {}, regionHist = {}; for (const p of pieces) { ruleHist[p.descriptionRule] = (ruleHist[p.descriptionRule] || 0) + 1; regionHist[p.region] = (regionHist[p.region] || 0) + 1; }
-const stages = {core: ['skeletal', 'joints', 'visceral', 'heart', 'brain', 'female'], muscles: ['muscular'], detail: ['vessels', 'nerves', 'lymphoid', 'regions']};
+const stages = {core: ['skeletal', 'joints', 'visceral', 'heart', 'brain'], muscles: ['muscular'], detail: ['vessels', 'nerves', 'lymphoid', 'regions']};
 const manifest = {
   version: 1, generated: new Date().toISOString().slice(0, 10),
   source: {name: 'Z-Anatomy', repo: 'https://github.com/LluisV/Z-Anatomy', branch: 'PC-Version', commit: existsSync(path.join(SRC, '.anatomy-commit')) ? readFileSync(path.join(SRC, '.anatomy-commit'), 'utf8').trim() : null, license: 'CC BY-SA 4.0', licenseUrl: 'https://creativecommons.org/licenses/by-sa/4.0/'},

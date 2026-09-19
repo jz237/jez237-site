@@ -417,24 +417,8 @@ export const assemblies = {
       {test: () => true, offset: () => [0, -0.10, 0.06]}],
     landmarks: [{label: 'TALUS', piece: 'Talus'}, {label: 'CALCANEUS', piece: 'Calcaneus'}, {label: 'NAVICULAR', piece: 'Navicular bone'}, {label: 'FIRST METATARSAL', piece: 'First metatarsal bone'}, {label: 'DISTAL PHALANX', piece: 'Distal phalanx of first finger of foot'}, {label: 'ABDUCTOR HALLUCIS', piece: 'Abductor hallucis'}, {label: 'FLEXOR DIGITORUM BREVIS', piece: 'Flexor digitorum brevis'}],
     description: 'The talus lifts off the calcaneus, the midfoot bones spread apart in the arch, and the metatarsals and phalanges run forward along each toe in steps. The extensor muscles rise off the top of the foot and the plantar layers drop away beneath it, from the deep interossei to the superficial flexor digitorum brevis.'
-  },
-  reproductive: {
-    title: 'The female reproductive system', eyebrow: 'UTERUS · TUBES · OVARIES · VAGINA · SCHEMATIC', files: ['female', 'visceral'], color: '#e8a0b4', body: 'female',
-    match: p => p.file === 'female' && !/Mammary/.test(p.name) || (p.file === 'visceral' && p.name === 'Urinary bladder'),
-    view: [1.1, 0.5, 1.5], padding: 1.1, scale: 1,
-    primary: p => /^(Uterus|Vagina|Ovary|Uterine tube|Urinary bladder)$/.test(p.name),
-    layers: [
-      {test: p => p.name === 'Uterus', offset: () => [0, 0.06, 0.0]},
-      {test: p => p.name === 'Cervix of uterus', offset: () => [0, -0.01, -0.02]},
-      {test: p => p.name === 'Vagina', offset: () => [0, -0.10, 0.02]},
-      {test: p => p.name === 'Uterine tube', offset: p => [sideSign(p) * 0.09, 0.07, 0.0]},
-      {test: p => p.name === 'Ovary', offset: p => [sideSign(p) * 0.15, 0.03, 0.0]},
-      {test: p => p.name === 'Female urethra', offset: () => [0, -0.08, 0.12]},
-      {test: p => p.name === 'Urinary bladder', offset: () => [0, 0.02, 0.16], opacity: 0.35},
-      {test: () => true, offset: (p, c) => radial(p, c, 0.08)}],
-    landmarks: [{label: 'UTERUS', piece: 'Uterus'}, {label: 'CERVIX', piece: 'Cervix of uterus'}, {label: 'VAGINA', piece: 'Vagina'}, {label: 'UTERINE TUBE', piece: 'Uterine tube', side: 'L'}, {label: 'OVARY', piece: 'Ovary', side: 'L'}, {label: 'BLADDER', piece: 'Urinary bladder'}],
-    description: 'A schematic reconstruction: the uterus lifts off the bladder, the cervix and vagina drop below it, the uterine tubes swing out to either side with their fimbriae reaching toward the ovaries, and the ovaries move out to the pelvic walls. The bladder stays translucent in front for reference. Shapes and positions follow textbook dimensions, not scan data.'
-  }};
+  }
+};
 
 /** Whole-body labels shown with the Labels toggle: one landmark per loaded file, anchored on a representative piece. */
 export const bodyLandmarks = [

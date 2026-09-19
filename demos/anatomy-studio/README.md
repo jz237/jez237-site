@@ -1,7 +1,7 @@
 # Anatomy Studio
 
-Interactive exploded view of a complete human body: 2,270 selectable anatomical pieces across ten systems, plus eighteen nested
-exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, digestive tract, urinary system, face, aorta, pelvis, shoulder, larynx, foot, and a schematic female reproductive system). A Reproductive system switch (Male / Female, `?body=female`) swaps the source model's male organs for schematic female organs and mammary glands built by `scripts/anatomy-studio/blender-female.py`; the rest of the body is shared. Built on the open [Z-Anatomy](https://github.com/LluisV/Z-Anatomy) model
+Interactive exploded view of a complete human body: 2,270 selectable anatomical pieces across ten systems, plus seventeen nested
+exploded views (heart, lungs, spine, brain, skull, eye, hand, knee, rib cage, digestive tract, urinary system, face, aorta, pelvis, shoulder, larynx, foot). Built on the open [Z-Anatomy](https://github.com/LluisV/Z-Anatomy) model
 (CC BY-SA 4.0, see `ASSET-LICENSE.txt`). Published at https://jez237.com/demos/anatomy-studio/.
 
 ## Controls

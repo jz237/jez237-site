@@ -77,8 +77,8 @@ export function skinTint(geometry, world) {
   }
   geometry.setAttribute('color', new THREE.BufferAttribute(col, 3));
 }
-export const fileColors = {skeletal: '#f0e6c8', joints: '#d8d1c0', visceral: '#f2a8b8', heart: '#ff6b7a', brain: '#f5c0c8', muscular: '#e07a7a', vessels: '#7f8fe6', nerves: '#f5e08a', lymphoid: '#9fd98a', regions: '#e6c9a8', female: '#e8a0b4'};
-export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', visceral: 'Viscera', heart: 'Heart', brain: 'Brain & senses', muscular: 'Muscles', vessels: 'Arteries & veins', nerves: 'Nerves & cord', lymphoid: 'Lymphatics', regions: 'Surface regions', female: 'Female reproductive · schematic'};
+export const fileColors = {skeletal: '#f0e6c8', joints: '#d8d1c0', visceral: '#f2a8b8', heart: '#ff6b7a', brain: '#f5c0c8', muscular: '#e07a7a', vessels: '#7f8fe6', nerves: '#f5e08a', lymphoid: '#9fd98a', regions: '#e6c9a8'};
+export const fileLabels = {skeletal: 'Skeleton', joints: 'Ligaments & discs', visceral: 'Viscera', heart: 'Heart', brain: 'Brain & senses', muscular: 'Muscles', vessels: 'Arteries & veins', nerves: 'Nerves & cord', lymphoid: 'Lymphatics', regions: 'Surface regions'};
 
 /** Realistic finish for one piece. Returns {color, roughness, clearcoat, opacity, bump, bumpScale, emissive, sheen...}. */
 function realistic(p) {
@@ -141,12 +141,6 @@ function realistic(p) {
       if (/corpus callosum|commissure|septum/.test(L)) return {color: '#ece2d8', roughness: .35, clearcoat: .5};
       return {color: '#e3b4b7', roughness: .34, clearcoat: .7, clearcoatRoughness: .25, bump: brainTex, bumpScale: .0011, roughMap: brainTex};
     case 'nerves': return {color: '#f0dc9a', roughness: .48, clearcoat: .3, bump: nerveTex, bumpScale: .0006, striated: true};
-    case 'female':
-      if (/mammary/.test(L)) return {color: '#e6c3b2', roughness: .45, clearcoat: .3, bump: organTex, bumpScale: .0012, roughMap: organTex, sheen: .25, sheenColor: '#f6ddd0'};
-      if (/ovary/.test(L)) return {color: '#dca6ac', ...wet, bumpScale: .0016};
-      if (/uterine tube/.test(L)) return {color: '#c98090', ...wet, bumpScale: .0010};
-      if (/urethra/.test(L)) return {color: '#d9b0a0', ...wet};
-      return {color: '#b85673', ...wet, bumpScale: .0018};
     case 'muscular':
       if (/fascia|bursa|sheath|retinacul|aponeurosis|iliotibial|septum|thoracolumbar/.test(L)) return {color: '#e6dccb', roughness: .5, clearcoat: .3, opacity: .78, transparent: true};
       if (/tendon/.test(L)) return {color: '#efe7d8', roughness: .4, clearcoat: .4};
@@ -195,6 +189,18 @@ export function finishMaterial(mesh, part, mode = 'realistic') {
   mesh.material = mat; return mat;
 }
 export function studioEnvironment(renderer) {
+  // A photographic studio: large soft key box above-left, cool rim panel behind-right, warm fill low-front, dark floor and walls.
+  const room = new THREE.Scene(); room.background = new THREE.Color('#14171d');
+  const floor = new THREE.Mesh(new THREE.PlaneGeometry(40, 40), new THREE.MeshBasicMaterial({color: new THREE.Color(.06, .065, .075), side: THREE.DoubleSide})); floor.rotation.x = -Math.PI / 2; floor.position.y = -1; room.add(floor);
+  const box = (position, scale, intensity, tint = [1, 1, 1]) => { const p = new THREE.Mesh(new THREE.BoxGeometry(...scale), new THREE.MeshBasicMaterial({color: new THREE.Color(intensity * tint[0], intensity * tint[1], intensity * tint[2])})); p.position.set(...position); p.lookAt(0, .9, 0); room.add(p); };
+  box([-2.5, 4.2, 2.5], [3.2, 2.2, .1], 6.5, [1, .96, .9]);      // key softbox
+  box([3.2, 2.6, -2.6], [1.2, 4, .1], 3.2, [.85, .93, 1]);       // cool rim
+  box([2.6, .9, 3.4], [2.4, 1.2, .1], 1.6, [1, .9, .82]);        // warm fill
+  box([0, 1.2, -5.5], [6, 2.5, .1], .9, [.9, .95, 1]);           // back panel
+  box([-4.5, 1.5, -1], [.8, 3, .1], 1.2, [1, 1, 1]);             // side strip
+  const pmrem = new THREE.PMREMGenerator(renderer), target = pmrem.fromScene(room, .04); pmrem.dispose(); room.traverse(o => { o.geometry?.dispose(); o.material?.dispose(); }); return target.texture;
+}
+function studioEnvironmentOld(renderer) {
   const room = new THREE.Scene(); room.background = new THREE.Color('#1a1d24');
   const panel = (position, scale, intensity, tint = [1, 1, 1]) => { const p = new THREE.Mesh(new THREE.PlaneGeometry(...scale), new THREE.MeshBasicMaterial({color: new THREE.Color(intensity * tint[0], intensity * tint[1], intensity * tint[2]), side: THREE.DoubleSide})); p.position.set(...position); p.lookAt(0, .9, 0); room.add(p); };
   panel([0, 5, 0], [8, 2], 4.5, [1, .97, .92]); panel([-5, 2, 1], [1.3, 7], 3, [.9, .95, 1]); panel([5, 3, -2], [2, 7], 3.5, [1, .93, .88]); panel([0, 2, -6], [7, 1.1], 1.8); panel([1, 1, 6], [4, 1], 1.4, [1, .98, .95]);

@@ -42,7 +42,6 @@ export function bodyOffset(p, env) {
       return [cx * 0.7, stretch - 0.20, 0.50];
     }
     case 'heart': return [0.05, stretch - 0.05, 0.92];
-    case 'female': return /Mammary/.test(name) ? [cx * 0.8, stretch, 0.62] : [cx * 0.7, stretch - 0.2, 0.52];
     case 'brain': {
       if (/^(Falx cerebri|Tentorium cerebelli)$/.test(name)) return [0, 0.78, 0.10];
       if (name === 'Spinal dura') return [0, stretch, -0.30];
