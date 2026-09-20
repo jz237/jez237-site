@@ -36,15 +36,16 @@ const moved = (min = .01) => page.evaluate(m => window.anatomyStudio.getParts().
 const restored = () => page.evaluate(() => window.anatomyStudio.getParts().every(p => p.position.every((v, i) => v === p.base[i])));
 try {
  await page.goto(`${url}?quality=verify&stage=full`); await ready(page); await full();
- const BODY = manifest.pieces.length;
- let s = await read(); assert.equal(s.pieces, manifest.pieces.length); assert.equal(s.visible, BODY); assert.deepEqual([...s.files].sort(), manifest.files.map(f => f.id).sort());
+ const BODY = manifest.pieces.length; const ORGANS = manifest.pieces.filter(p => ['skeletal', 'visceral', 'heart', 'brain', 'lymphoid', 'vessels'].includes(p.file) && !/external genitalia/i.test(p.path || '')).length;
+ const whole = async () => (await read()).mode === 'organs' ? ORGANS : BODY;   // the default finish shows the bones, organs and vessels only
+ let s = await read(); assert.equal(s.pieces, manifest.pieces.length); assert.equal(s.mode, 'organs', 'studio opens in Organs & vessels'); assert.equal(s.visible, ORGANS); assert.deepEqual([...s.files].sort(), manifest.files.map(f => f.id).sort());
  await page.waitForTimeout(400); s = await read(); assert.ok(s.triangles > manifest.stats.triangles * .5 && s.triangles <= manifest.stats.triangles * 1.05, `rendered triangles ${s.triangles}`);
  await page.screenshot({path: path.join(shots, 'assembled.png')});
  // explode: visible intermediate motion, every piece moves, skeleton barely moves, exact reassembly
  await page.locator('#explode-button').click(); await page.waitForFunction(() => window.anatomyStudio.getState().amount > 0, null, {timeout: 30000}); s = await read(); assert.ok(s.amount > 0 && s.amount <= 1, 'explosion animates from the assembled state'); await settled(1);
  assert.ok(await moved(.01), 'every piece must move'); const skel = await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.file === 'skeletal').map(p => Math.hypot(...p.position.map((v, i) => v - p.base[i])))); assert.ok(Math.max(...skel) < .45, 'skeleton stays near the axis');
  await page.screenshot({path: path.join(shots, 'exploded.png')});
- await page.locator('#reset').click(); await settled(0); assert.ok(await restored(), 'reassembly must restore exact positions'); assert.equal((await read()).visible, BODY);
+ await page.locator('#reset').click(); await settled(0); assert.ok(await restored(), 'reassembly must restore exact positions'); assert.equal((await read()).visible, await whole());
  // nested assemblies: isolation, framing, primary members separated
  for (const id of Object.keys(manifest.assemblies)) {
   await page.locator(`[data-assembly="${id}"]`).click(); await page.waitForFunction(a => window.anatomyStudio.getState().assembly === a, id, {timeout: 60000}); await settled(1); await page.waitForTimeout(1200);
@@ -55,7 +56,7 @@ try {
   for (let i = 0; i < prim.length; i++) for (let j = i + 1; j < prim.length; j++) { const p = prim[i], q = prim[j]; const d = Math.hypot(...p.center.map((v, k) => v - q.center[k])); const ox = Math.max(0, Math.min(p.max[0], q.max[0]) - Math.max(p.min[0], q.min[0])), oy = Math.max(0, Math.min(p.max[1], q.max[1]) - Math.max(p.min[1], q.min[1])); const area = ox * oy, small = Math.min((p.max[0] - p.min[0]) * (p.max[1] - p.min[1]), (q.max[0] - q.min[0]) * (q.max[1] - q.min[1])); if (d < .02 || (small > 0 && area / small > .6)) bad++; }
   await page.evaluate(() => window.scrollTo(0, 0)); await page.screenshot({path: path.join(shots, `assembly-${id}.png`)});
   assert.ok(bad <= Math.max(2, prim.length * .12), `${id}: ${bad} primary pairs still overlap`);
-  await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); assert.equal((await read()).visible, BODY); assert.ok(await restored(), `${id}: leaving restores positions`);
+  await page.locator('#leave-assembly').click(); await page.waitForFunction(() => window.anatomyStudio.getState().assembly === null); await settled(0); assert.equal((await read()).visible, await whole()); assert.ok(await restored(), `${id}: leaving restores positions`);
  }
  // zoom detail: a piece that fills the view swaps to the full-resolution tier and back
  const camSettled = () => page.waitForFunction(() => !window.anatomyStudio._camera().tween, null, {timeout: 30000});
@@ -77,8 +78,8 @@ try {
  await page.locator('#search').fill('no-such-piece'); assert.equal(await page.locator('#part-list option').count(), 1); await page.locator('#search').fill('');
  await page.locator('#part-list').selectOption('visceral/liver'); await page.locator('#isolate').click(); await page.waitForTimeout(1100); assert.equal((await read()).visible, 1); assert.ok((await read()).selected.startsWith('Liver'));
  await page.waitForFunction(() => /liver/i.test(document.getElementById('part-description').textContent), null, {timeout: 20000});
- await page.screenshot({path: path.join(shots, 'isolated.png')}); await page.locator('#clear').click(); assert.equal((await read()).visible, BODY);
- assert.equal((await read()).mode, 'xray', 'studio opens in X-ray'); for (const mode of ['skin', 'realistic', 'organs', 'coded', 'clay', 'xray']) { await page.locator(`[data-mode="${mode}"]`).click(); assert.equal((await read()).mode, mode); if (mode === 'organs') { const v = await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.visible).map(p => p.file)); const shown = new Set(v); assert.equal(await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.visible && p.file === 'visceral' && /penis/i.test(p.name)).length), 0, 'Organs & vessels hides the penis but keeps its veins'); assert.ok(v.length > 300 && ['visceral', 'heart', 'brain', 'vessels', 'lymphoid'].every(f => shown.has(f)) && ['regions', 'muscular', 'skeletal', 'joints', 'nerves'].every(f => !shown.has(f)), 'Organs & vessels shows exactly the organ and vessel files'); } }
+ await page.screenshot({path: path.join(shots, 'isolated.png')}); await page.locator('#clear').click(); assert.equal((await read()).visible, await whole());
+ for (const mode of ['skin', 'realistic', 'organs', 'coded', 'clay', 'xray']) { await page.locator(`[data-mode="${mode}"]`).click(); assert.equal((await read()).mode, mode); if (mode === 'organs') { const v = await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.visible).map(p => p.file)); const shown = new Set(v); assert.equal(await page.evaluate(() => window.anatomyStudio.getParts().filter(p => p.visible && p.file === 'visceral' && /penis/i.test(p.name)).length), 0, 'Organs & vessels hides the penis but keeps its veins'); assert.ok(v.length > 300 && ['skeletal', 'visceral', 'heart', 'brain', 'vessels', 'lymphoid'].every(f => shown.has(f)) && ['regions', 'muscular', 'joints', 'nerves'].every(f => !shown.has(f)), 'Organs & vessels shows exactly the organ and vessel files'); } }
  await page.locator('#label-toggle').click(); await page.waitForFunction(() => document.querySelectorAll('.landmark:not([hidden])').length >= 4, null, {timeout: 30000}); await page.locator('#label-toggle').click();
  await page.locator('#animate').click(); await page.waitForFunction(() => window.anatomyStudio.getState().target > .1, null, {timeout: 90000}); await page.locator('#animate').click(); await page.locator('#reset').click(); await settled(0);
  await page.locator('#viewport').focus(); await page.keyboard.press('e'); await settled(1); await page.keyboard.press('r'); await settled(0);

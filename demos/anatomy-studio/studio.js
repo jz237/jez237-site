@@ -7,7 +7,7 @@ import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
 import { PartsBoard } from './parts-board.js?v=2';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint } from './materials.js?v=13';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint } from './materials.js?v=14';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=2';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=2';
 
@@ -16,7 +16,7 @@ const params = new URLSearchParams(location.search);
 const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const mobile = matchMedia('(max-width: 760px)').matches || (matchMedia('(pointer: coarse)').matches && innerWidth < 900);
 const verifyQuality = params.get('quality') === 'verify';
-const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'xray', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false };
+const state = { ready:false, amount:0, target:0, sequence:false, sequenceTime:0, selected:null, isolated:false, system:'all', mode:'organs', view:'hero', board:false, assembly:null, assemblySide:'L', labels:false, labelAll:false, ao:false, detail:false, stage:'none', loading:false, rotate:false };
 const parts = [], partsById = new Map(), landmarks = [], raycaster = new THREE.Raycaster(), pointer = new THREE.Vector2();
 let manifest, descriptions = null, renderer, controls, camera, scene, model, last = performance.now(), pointerStart = null, viewTween = null, lastApplied = -1, explodeTween = null;
 const hi = { geometries:new Map(), loaded:new Set(), loading:new Set(), frame:0 };
@@ -241,7 +241,7 @@ async function enterAssembly(id, side){
  await loadFiles(a.files);
  state.assembly = id; state.system = 'all'; state.isolated = false; $('system').value = 'all';
  // X-ray ghosts soft tissue, so a nested study renders in the realistic finish and restores X-ray on exit.
- if (state.mode === 'xray' || state.mode === 'skin') { state.restoreMode = state.mode; setMode('realistic'); }
+ if (state.mode === 'xray' || state.mode === 'skin' || state.mode === 'organs') { state.restoreMode = state.mode; setMode('realistic'); }   // a study needs its muscles and ligaments
  const members = assemblyMembers(id), ctx = assemblyContext(a, members.map(p => p.piece));
  for (const p of parts) { p.assemblyOffset = null; p.assemblyLayer = null; }
  for (const p of members) { const r = assemblyOffset(a, p.piece, ctx, state.assemblySide); p.assemblyOffset = new THREE.Vector3().fromArray(r.offset); p.assemblyLayer = r; }
