@@ -14757,5 +14757,24 @@
       "imageSha256": "ff63ae9312b2f06a9a6837ff2a442ffd7dcf28fd68eafe95407d7943d0036dcc",
       "imageDHash": "79794e7fbf273170"
     }
+  },
+  {
+    "id": "2026-09-20-outer-space-exploration-outer-space-exploration-pulsar-wind",
+    "title": "Outer Space Exploration: Pulsar Wind, Mapped in Polarized Light",
+    "tests": "Processed multiwavelength scientific visualization, not natural-color eyesight. Preserve a tiny central neutron star, broken oblique torus, unequal jets, termination shock, asymmetric remnant filaments, and deliberate wavelength/polarization color logic. No literal field wires. Sources checked: NASA Crab multiwavelength visualization; NASA IXPE Vela polarization; NASA Fermi PWN overview; Chandra/IXPE MSH 15-52.; archive_slot=2026-09-20T12:20; concept=pulsar-wind-nebula-polarization-map",
+    "prompt": "Create a finished, museum-quality processed multiwavelength scientific visualization of a young pulsar wind nebula in a wide 3:2 landscape composition, 1536x1024 pixels. This is explicitly a data-inspired visualization, not a natural-color photograph and not a literal naked-eye view. Compose the object on nested physical scales. At the exact energetic center place a pin-small white-blue neutron star, tiny compared with the nebula and never a giant sun. Around it form an oblique, uneven equatorial torus of high-energy emission with two or three broken elliptical rings and sharp inner termination-shock wisps; the torus is turbulent, knotty, partly interrupted, and brighter on one approaching side rather than perfectly symmetric. Drive two narrow polar jets from the rotation axis: one longer and kinked, one shorter and partly obscured, both textured with knots and fading into the surrounding synchrotron bubble. Envelop this compact engine in an asymmetric pulsar-wind cavity of braided, turbulent emission. Beyond it, occupy most of the frame with ragged supernova-remnant ejecta: hundreds of thin optical filaments, torn shells, curls, shocks, gaps, and chemically distinct strands, creating depth without becoming decorative smoke. Apply a physically deliberate processed-color mapping: cool cyan and electric blue for the highest-energy X-ray structures near the pulsar and jets; muted violet for polarized synchrotron regions; warm rust, amber, and restrained crimson for lower-energy optical and infrared ejecta filaments. Convey ordered polarization through subtle aligned hatch-like grain, directional filament texture, and repeated short luminous strokes embedded within selected regions, following the torus and jet flow; do not draw literal magnetic-field wires, arrows, text, labels, a legend, or a grid. Let local directional order gradually dissolve into turbulence toward the remnant edge. Use controlled high dynamic range, a deep nearly black astronomical field, sparse background stars, believable semi-transparent overlap, very fine detail, and restrained scientific color rather than neon fantasy. The silhouette must be irregular and lopsided, with shocks and filaments breaking any eye-like symmetry. No spacecraft, no planets, no fantasy portal, no perfect mandala, no giant glowing eyeball, no literal wire cage, no labels, no typography, no watermark, no logo, no border, no poster layout.",
+    "image": "images/2026-09-20-outer-space-exploration-outer-space-exploration-pulsar-wind.jpg",
+    "thumb": "thumbs/2026-09-20-outer-space-exploration-outer-space-exploration-pulsar-wind.webp",
+    "color": "#3b282b",
+    "date": "2026-09-20",
+    "batch": "Daily Prompt",
+    "slot": "outer-space-exploration",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "pulsar-wind-nebula-polarization-map",
+      "imageSha256": "76ca2bc8a625455955182c62579d363828a5d5301a01b568e96d18564295fc8e",
+      "imageDHash": "831b35692333170f"
+    }
   }
 ]
