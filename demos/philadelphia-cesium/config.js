@@ -1,0 +1,3 @@
+// Public, read-only Cesium ion browser token. Restrict allowed URLs in ion.
+// Never replace this with an account-management or asset-write token.
+export const ionToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJub25jZSI6IlA4elZibUNoajdScU0zWGsiLCJqdGkiOiIwMjEwMzI4NC1jMTgwLTQzZDMtOGYxYy0yMjI5ZWUzMWRiYzMiLCJpZCI6NTAyNDc1LCJzdWIiOiJqcmJhdWQiLCJpc3MiOiJodHRwczovL2FwaS5jZXNpdW0uY29tIiwiYXVkIjoiamV6MjM3LmNvbSIsImlhdCI6MTc4OTkzMjQzNH0.5IV18VINR5TPpXkFobtKKwZzpBOJ0Z4S4GknASHbDUc';

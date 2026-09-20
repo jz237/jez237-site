@@ -85,7 +85,9 @@
       "Delaware Valley",
       "Mouse & touch"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Real map data with illustrative miniature details"
+    "note": "WebGL 2 · Desktop & mobile · Real map data with illustrative miniature details",
+    "alternateUrl": "philadelphia-cesium/",
+    "alternateLabel": "Try photographic 3D"
   },
   {
     "id": "005",
