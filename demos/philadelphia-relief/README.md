@@ -1,3 +1,33 @@
+## Regional cameras, panoramas and observations — September 20, 2026
+
+Open **Cameras & local views** beside the desktop Explore controls, or the camera
+button in the phone toolbar. Camera cards open the official EarthCam, 511PA,
+511NJ, DelDOT and FOX 29 viewers in a new tab. No camera footage is copied or
+embedded: EarthCam's linking rules prohibit framing, and PennDOT's streaming
+feeds require separate registration and a video-sharing agreement.
+
+Street View links use Google's documented, key-free Maps URLs and the geographic
+map center when the panel opens. Shortcuts cover City Hall, Bauder Signs and The
+Hidden Reef. Availability and capture dates belong to Google; these are not live
+views and are not a new Cesium layer.
+
+Weather & river loads only on demand. A bounded same-origin Pages Function reads
+the nearest of five NWS airport stations and NOAA's Philadelphia gauge 8545240.
+Provider requests have ten-second deadlines, a 256 KiB response limit and five-
+minute caching. Missing fields stay unavailable; partial provider failures do
+not blank the other reading. Observation times, delayed readings, tidal datum
+and preliminary quality are labeled. The gauge value is not a flood overlay.
+
+Sources: https://www.earthcam.com/site/linktous.php,
+https://www.pa.gov/services/penndot/request-access-to-transportation-related-data-feeds,
+https://developers.google.com/maps/documentation/urls/get-started,
+https://www.weather.gov/documentation/services-web-api,
+https://api.tidesandcurrents.noaa.gov/api/prod/.
+
+Validation: 306 passing tests, including regional coordinate bounds, station
+selection, observation units and missing values, NOAA quality flags, stale times,
+request allowlisting, bounded responses and partial-failure caching.
+
 ## Integrated photographic close-ups — September 20, 2026
 
 The existing diorama now lazily loads CesiumJS 1.145 and Google Photorealistic
