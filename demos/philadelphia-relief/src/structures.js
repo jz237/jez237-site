@@ -14,13 +14,13 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026092004';
+import { hexToRgb } from './themes.js?v=philly-2026092005';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026092004';
-import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026092004';
-import { damp } from './geo.js?v=philly-2026092004';
+} from './structures-data.js?v=philly-2026092005';
+import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026092005';
+import { damp } from './geo.js?v=philly-2026092005';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute vec2 aFacadeOrigin;

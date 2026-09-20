@@ -1,5 +1,5 @@
 import { CAMERA_SOURCES, STREET_PLACES, GAUGE, nearestStation, streetViewUrl, observationTime }
-  from './regional-data.js?v=philly-2026092004';
+  from './regional-data.js?v=philly-2026092005';
 
 const node = (tag, text, className) => {
   const el = document.createElement(tag);
@@ -105,6 +105,12 @@ export function wireRegionalViews({ getPose, motion }) {
   for (const tab of tabs) tab.onclick = () => selectTab(tab.dataset.localTab);
   refresh.onclick = () => { cache.delete(station?.id); void loadConditions(); };
   const close = () => dialog.close();
+  dialog.querySelector('#showCameraMap').onclick = () => {
+    dialog.close();
+    const toggle = document.getElementById('cameraLayerToggle');
+    if (!toggle.checked) toggle.click();
+    toggle.focus();
+  };
   dialog.querySelector('#closeRegionalViews').onclick = close;
   const opened = event => {
     opener = event.currentTarget; motion.pause(); pose = getPose(); station = nearestStation(pose);

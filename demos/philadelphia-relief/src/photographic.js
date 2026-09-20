@@ -1,5 +1,5 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092004';
+  from './photo-policy.js?v=philly-2026092005';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -67,7 +67,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092004')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092005')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -151,6 +151,14 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
 
   return {
     get active() { return active; },
+    projectLocation(place) {
+      if (!active || !viewer) return null;
+      const C = window.Cesium;
+      const world = C.Cartesian3.fromDegrees(place.lon, place.lat, place.elevation + 12);
+      const delta = C.Cartesian3.subtract(world, viewer.camera.positionWC, new C.Cartesian3());
+      if (C.Cartesian3.dot(delta, viewer.camera.directionWC) <= 0) return null;
+      return C.SceneTransforms.worldToWindowCoordinates(viewer.scene, world);
+    },
     stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles }),
     update(pose, state, w, h) {
       lastPose = pose; width = w; height = h;
