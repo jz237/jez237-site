@@ -7,7 +7,7 @@ import { RenderPass } from './vendor/postprocessing/RenderPass.js';
 import { GTAOPass } from './vendor/postprocessing/GTAOPass.js';
 import { OutputPass } from './vendor/postprocessing/OutputPass.js';
 import { PartsBoard } from './parts-board.js?v=2';
-import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, projectedUV, skinTint } from './materials.js?v=11';
+import { finishMaterial, studioEnvironment, fileLabels, fileColors, modes, organPiece, projectedUV, skinTint } from './materials.js?v=13';
 import { assemblies, bodyLandmarks, assemblyContext, assemblyOffset } from './assemblies.js?v=2';
 import { bodyOffset, bodySpread, explodeSchedule } from './explode-rules.js?v=2';
 
@@ -193,7 +193,7 @@ function updateList(){
 function updateVisibility(){
  const skinOnlyNow = skinOnly();
  for (const p of parts) { const selected = p === state.selected, mat = p.mesh.material, member = isMember(p);
-  p.mesh.visible = member && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected) && (!skinOnlyNow || SURFACE(p)) && !(state.mode === 'skinless' && p.file === 'regions');   // No skin: the surface regions stay hidden
+  p.mesh.visible = member && (state.system === 'all' || p.file === state.system) && (!state.isolated || selected) && (!skinOnlyNow || SURFACE(p)) && !(state.mode === 'organs' && !organPiece(p));   // Organs & vessels: skin, muscles, fascia, skeleton, ligaments and nerves stay hidden
   const o = state.assembly && p.assemblyLayer?.opacity != null && state.amount > .05 ? p.assemblyLayer.opacity : null;
   mat.opacity = o ?? p.opacity; mat.transparent = o != null || p.transparent; mat.depthWrite = o != null ? false : p.depthWrite;
   mat.emissive.copy(selected ? new THREE.Color('#49c8a3') : p.emissive); mat.emissiveIntensity = selected ? (state.isolated ? .08 : .3) : p.emissiveIntensity;   // faint when isolated so the surface detail stays readable
