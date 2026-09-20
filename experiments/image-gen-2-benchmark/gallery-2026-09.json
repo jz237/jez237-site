@@ -1,5 +1,24 @@
 [
   {
+    "id": "2026-09-20-outer-space-exploration-outer-space-exploration-enceladus-p",
+    "title": "Outer Space Exploration: Enceladus Plume-Threading Surveyor",
+    "tests": "Artist impression of a fictional mission and viewpoint, not a claimed direct photograph. Preserve separate jet sources along south-polar tiger-stripe fractures, optically thin water-vapor/ice-grain plume, airless hard lighting, credible sampling hardware and scale. Sources checked 2026-09-20: NASA Science https://science.nasa.gov/resource/jet-spots-in-tiger-stripes/ ; ESA https://www.esa.int/Science_Exploration/Space_Science/Cassini-Huygens/Cassini_samples_the_icy_spray_of_Enceladus_water_plumes; archive_slot=2026-09-20T00:20; concept=enceladus-plume-sampling-surveyor",
+    "prompt": "Create a finished, cinematic, scientifically informed realistic artist impression—not a direct photograph—of a fictional uncrewed spacecraft making a close, grazing sampling pass above the south pole of Saturn's moon Enceladus. Landscape composition, 1536 x 1024 pixels, exceptional detail and physically credible materials. The viewpoint floats a little above and behind the compact survey craft as it crosses diagonally from lower right toward upper left through one tenuous, backlit curtain of water vapor and microscopic ice grains. Below, Enceladus fills the lower half: brilliant water-ice terrain in hard airless sunlight, long roughly parallel tiger-stripe fractures cutting across the south-polar surface, ridged margins, broken ice blocks, subdued bluish shadows, and visible horizon curvature. Multiple narrow jets originate at separated sites along the fractures, then spread and overlap into a sparse translucent plume against black space; make them behave like material venting into vacuum, not thick terrestrial geysers, clouds, smoke, or liquid waterfalls. Individual grains catch the Sun as a delicate luminous veil while most of the plume remains optically thin.\n\nThe spacecraft must look purpose-built and mechanically coherent: a compact radiation-tolerant instrument bus, ram-facing particle and gas sampling inlets aimed precisely into the flight path, replaceable collector cassettes, a Whipple-style forward dust shield with small impact scars, recessed optical-navigation cameras, mass spectrometer plumbing, star trackers, protected thruster clusters, black radiator panels oriented away from the bright ice, multilayer insulation, articulated high-gain dish turned toward a relay direction, and a narrow solar-array or power architecture that does not magically glow. Add tiny attitude-control puffs only if physically subtle. Show the craft at tens-of-meters visual scale against kilometer-scale geology; do not enlarge it into a ship. Use a faint curved trajectory cue made only from sequential sparkling particle disturbances—not text, arrows, HUD, or diagrams—to communicate the sample pass.\n\nSaturn appears beyond the moon's limb in the upper distance, beautiful but modest in angular size rather than filling the sky: pale banded globe, rings seen at an oblique angle with a thin shadow relationship, softened by distance. The Sun is out of frame, producing crisp rim light, hard shadows, realistic inverse-square brightness logic, and a restrained cool-white palette with warm cream Saturn tones. Deep black background with a sparse believable star field. Composition should convey isolation, speed, and discovery: dominant fractured ice foreground, clear plume-source causality, an unmistakable scientific sampling action, and enormous scale depth. No astronauts, surface bases, cities, alien artifacts, blue atmosphere, lens-flare clutter, fantasy engine trails, logos, watermarks, borders, captions, or any visible text. Render the image directly on the canvas; no poster, UI, frame, or mockup.",
+    "image": "images/2026-09-20-outer-space-exploration-outer-space-exploration-enceladus-p.jpg",
+    "thumb": "thumbs/2026-09-20-outer-space-exploration-outer-space-exploration-enceladus-p.webp",
+    "color": "#5c6068",
+    "date": "2026-09-20",
+    "batch": "Daily Prompt",
+    "slot": "outer-space-exploration",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "enceladus-plume-sampling-surveyor",
+      "imageSha256": "ff63ae9312b2f06a9a6837ff2a442ffd7dcf28fd68eafe95407d7943d0036dcc",
+      "imageDHash": "79794e7fbf273170"
+    }
+  },
+  {
     "id": "2026-09-19-ocean-exploration-hadalfall-the-glasswing-surveyor-at-the-t",
     "title": "Hadalfall — The Glasswing Surveyor at the Trench Wall",
     "tests": "Clearly label both organism and vehicle fictional; keep the animal biologically coherent, the lander pressure-worthy, and the abyssal optics naturalistic.; archive_slot=2026-09-19T00:08; concept=hadal-glasswing-surveyor-trench-wall-lander",
