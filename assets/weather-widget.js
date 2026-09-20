@@ -251,16 +251,18 @@
     ]);
     let todayPeriod = null;
     let tonightPeriod = null;
+    let forecastPeriods = [];
     if (points?.properties?.forecast) {
       try {
         const forecast = await fetchJson(points.properties.forecast);
         const periods = forecast?.properties?.periods || [];
+        forecastPeriods = periods;
         const todayKey = localDateKey(new Date(), TZ);
         todayPeriod = periods.find(p => p?.isDaytime === true && localDateKey(p.startTime, TZ) === todayKey) || null;
         tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
-    const bundle = { weather, aq, todayPeriod, tonightPeriod, alerts, place, source: weather.source || 'Open-Meteo', stale: false };
+    const bundle = { weather, aq, todayPeriod, tonightPeriod, forecastPeriods, alerts, place, source: weather.source || 'Open-Meteo', stale: false };
     saveWeatherCache(bundle);
     return bundle;
   }
@@ -483,6 +485,7 @@
   }
 
   async function updatePlace(placeOrZip) {
+    closeForecast();
     const status = root.querySelector('#weather-status');
     let nextPlace;
     try {
@@ -506,7 +509,95 @@
     }
   }
 
-  function render({ weather, aq, todayPeriod, tonightPeriod, alerts, place, source, stale, cachedAt, error }) {
+  // Mount outside the scrolling forecast strip so the description is never clipped.
+  const forecastPopup = document.createElement('div');
+  forecastPopup.id = 'weather-forecast-popup';
+  forecastPopup.className = 'weather-forecast-popup';
+  forecastPopup.setAttribute('role', 'tooltip');
+  forecastPopup.hidden = true;
+  document.body.appendChild(forecastPopup);
+  let forecastTrigger = null;
+  let forecastPinned = false;
+  let forecastCloseTimer;
+
+  function closeForecast() {
+    clearTimeout(forecastCloseTimer);
+    if (forecastTrigger) {
+      forecastTrigger.setAttribute('aria-expanded', 'false');
+      forecastTrigger.removeAttribute('aria-describedby');
+    }
+    forecastPopup.hidden = true;
+    forecastTrigger = null;
+    forecastPinned = false;
+  }
+
+  function positionForecast() {
+    if (!forecastTrigger) return;
+    const rect = forecastTrigger.getBoundingClientRect();
+    const gap = 8;
+    const width = forecastPopup.offsetWidth;
+    const height = forecastPopup.offsetHeight;
+    const left = Math.max(gap, Math.min(rect.left + rect.width / 2 - width / 2, window.innerWidth - width - gap));
+    const below = rect.bottom + gap;
+    const top = below + height <= window.innerHeight - gap ? below : Math.max(gap, rect.top - height - gap);
+    forecastPopup.style.left = `${left}px`;
+    forecastPopup.style.top = `${top}px`;
+  }
+
+  function openForecast(trigger) {
+    clearTimeout(forecastCloseTimer);
+    if (forecastTrigger !== trigger) {
+      closeForecast();
+      forecastTrigger = trigger;
+      forecastPopup.innerHTML = trigger.nextElementSibling.innerHTML;
+    }
+    trigger.setAttribute('aria-expanded', 'true');
+    trigger.setAttribute('aria-describedby', forecastPopup.id);
+    forecastPopup.hidden = false;
+    positionForecast();
+  }
+
+  function scheduleForecastClose() {
+    clearTimeout(forecastCloseTimer);
+    forecastCloseTimer = setTimeout(() => {
+      if (!forecastPinned && !forecastPopup.matches(':hover') && !forecastTrigger?.matches(':hover, :focus-visible')) closeForecast();
+    }, 180);
+  }
+
+  root.addEventListener('pointerover', event => {
+    const trigger = event.target.closest?.('[data-forecast-day]');
+    if (trigger && event.pointerType !== 'touch') openForecast(trigger);
+  });
+  root.addEventListener('pointerout', event => {
+    if (event.target.closest?.('[data-forecast-day]')) scheduleForecastClose();
+  });
+  root.addEventListener('focusin', event => {
+    if (event.target.matches('[data-forecast-day]:focus-visible')) openForecast(event.target);
+  });
+  root.addEventListener('focusout', event => {
+    if (event.target.matches('[data-forecast-day]')) closeForecast();
+  });
+  root.addEventListener('click', event => {
+    const trigger = event.target.closest?.('[data-forecast-day]');
+    if (!trigger) return;
+    if (forecastTrigger === trigger && forecastPinned) closeForecast();
+    else { openForecast(trigger); forecastPinned = true; }
+  });
+  forecastPopup.addEventListener('pointerenter', () => clearTimeout(forecastCloseTimer));
+  forecastPopup.addEventListener('pointerleave', scheduleForecastClose);
+  document.addEventListener('pointerdown', event => {
+    if (!event.target.closest?.('[data-forecast-day], #weather-forecast-popup')) closeForecast();
+  });
+  document.addEventListener('keydown', event => {
+    if (event.key === 'Escape') closeForecast();
+  });
+  window.addEventListener('resize', closeForecast);
+  document.addEventListener('scroll', event => {
+    if (!forecastPopup.contains(event.target)) closeForecast();
+  }, true);
+
+  function render({ weather, aq, todayPeriod, tonightPeriod, forecastPeriods = [], alerts, place, source, stale, cachedAt, error }) {
+    closeForecast();
     const current = weather.current || {};
     const hourly = weather.hourly || {};
     const daily = weather.daily || {};
@@ -674,6 +765,7 @@
 
         <div class="weather-five-day-head">
           <h3>5-day Extended Outlook</h3>
+          <p>Hover or tap a day for the full forecast.</p>
         </div>
         <div class="weather-five-day" aria-label="Five day forecast">
           ${(daily.time || []).slice(1, 6).map((ts, i) => {
@@ -682,7 +774,13 @@
             const [dIcon, dLabel] = weatherLabel(outlook.code);
             const dHi = Math.round(daily.temperature_2m_max?.[idx] ?? 0);
             const dLo = Math.round(daily.temperature_2m_min?.[idx] ?? 0);
-            return `<div class="weather-day"><span>${dayName(ts)}</span><strong>${dIcon}</strong><em>${dLo}–${dHi}°</em><small>${outlook.rain}% day · ${dLabel}</small></div>`;
+            // NWS timestamps include the forecast location's UTC offset.
+            const periods = forecastPeriods.filter(p => p?.startTime?.slice(0, 10) === ts && p.detailedForecast);
+            const fullDay = new Date(`${ts}T12:00:00`).toLocaleDateString('en-US', { weekday: 'long', month: 'short', day: 'numeric' });
+            const details = periods.length
+              ? `${stale ? '<p class="weather-forecast-source">Cached forecast</p>' : ''}${periods.map(p => `<section><h4>${escapeHtml(p.name)}</h4><p>${escapeHtml(p.detailedForecast)}</p></section>`).join('')}<p class="weather-forecast-source">National Weather Service</p>`
+              : `<section><h4>${escapeHtml(fullDay)}</h4><p>${escapeHtml(dLabel)}. Low ${dLo}°F, high ${dHi}°F. Daytime precipitation chance: ${outlook.rain}%.</p><p>Detailed day and night descriptions are currently unavailable.</p></section>`;
+            return `<div class="weather-day"><button type="button" class="weather-day-trigger" data-forecast-day="${escapeHtml(ts)}" aria-expanded="false" aria-controls="weather-forecast-popup" aria-label="Full forecast for ${escapeHtml(fullDay)}"><span>${dayName(ts)}</span><strong>${dIcon}</strong><em>${dLo}–${dHi}°</em><small>${outlook.rain}% day · ${dLabel}</small></button><template>${details}</template></div>`;
           }).join('')}
         </div>
 
