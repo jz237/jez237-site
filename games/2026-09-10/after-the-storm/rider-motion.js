@@ -35,7 +35,10 @@ export function riderMotion(memory,time,turn,motion={}){
  const headPitch=spring(memory,'headPitch',clamp(-(motion.pitchVelocity||0)*.065+(motion.impact||0)*.012,-.10,.14),9,dt);
  const headLook=spring(memory,'headLook',clamp((motion.waveLook||0)*.08,-.22,.22),5,dt);
  const shoulderLag=spring(memory,'shoulderLag',clamp(-(motion.rollVelocity||0)*.035,-.09,.09),7,dt);
- const cornerLean=spring(memory,'cornerLean',turn*clamp((motion.speed||0)/25,0,1)*.055,5,dt);
+ // Weight transfer follows actual lateral acceleration; steering in the air
+ // retains its arm pose without pretending that the hull is carving water.
+ const lateralLoad=motion.airborne?0:clamp((motion.yawVelocity||0)*(motion.speed||0)/9.81,-1.6,1.6)*clamp(motion.wet??1,0,1);
+ const cornerLean=spring(memory,'cornerLean',lateralLoad*.055,7,dt);
  const stand=spring(memory,'stand',motion.airborne?0:clamp((Math.abs(motion.pitchVelocity||0)*.24+Math.abs(motion.rollVelocity||0)*.12+Math.max(0,(motion.load??1)-1)*.18)*clamp((motion.speed||0)/14,0,1),0,1),6,dt);
  const wetness=spring(memory,'wetness',clamp(.25+(motion.speed||0)/35+(motion.impact||0)*.08,0,1),2,dt);
  return {...motion,stand,headPitch,headLook,shoulderLag,cornerLean,turn:lean,forwardShift:forward-duck*.08+anticipation*.035,compression:Math.min(.38,compression+duck*.13+anticipation*.16),flightBlend:flight,loadShift:load,wetness:Math.max(wetness,duck),recovery,counter:counter+airCounter,brace:Math.max(brace,duck*.7,anticipation*.7),anticipation,duck,steering:(motion.steering??turn*.3)+helm};

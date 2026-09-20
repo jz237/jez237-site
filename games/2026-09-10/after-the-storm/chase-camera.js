@@ -1,3 +1,4 @@
+import {speedLens} from './contact-cues.js';
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 const angle = v => Math.atan2(Math.sin(v), Math.cos(v));
 // Translate with the subject before damping the relative camera framing.
@@ -23,11 +24,14 @@ export function chaseFrame(memory, rider, dt, { orbit = 0, zoom = 8, pitch = .22
   const lift = clamp((h.y || 0) - water - .3, 0, 5) * .32;
   memory.lift += (lift - memory.lift) * (1 - Math.exp(-dt * 3));
   const heading = memory.heading + orbit, fx = Math.sin(heading), fz = Math.cos(heading);
-  const distance = clamp(zoom, 6, 25), pace = clamp(speed / 30, 0, 1);
-  const look = 3.4 + pace * 2.8, turnLook = clamp(rider.yawVelocity || 0, -.7, .7) * pace * 1.3;
+  const distance = clamp(zoom, 6, 25);
+  memory.pace??=clamp(speed/44,0,1);
+  memory.pace+=(clamp(speed/44,0,1)-memory.pace)*(1-Math.exp(-dt*2.5));
+  const pace=memory.pace;
+  const look = 3.4 + pace * 4.0, turnLook = clamp(rider.yawVelocity || 0, -.7, .7) * pace * 1.3;
   return {
-    position: { x: rider.x - fx * distance, y: memory.water + 1.35 - clamp(h.compression||0,0,.38)*.16 + Math.sin(pitch) * distance - pace * .4 + memory.lift, z: rider.z - fz * distance },
+    position: { x: rider.x - fx * distance, y: memory.water + 1.35 - clamp(h.compression||0,0,.38)*.16 + Math.sin(pitch) * distance - pace * .65 + memory.lift, z: rider.z - fz * distance },
     target: { x: rider.x + Math.sin(memory.heading + turnLook) * look, y: memory.water + .85 - clamp(h.compression||0,0,.38)*.16 + memory.lift * 1.5, z: rider.z + Math.cos(memory.heading + turnLook) * look },
-    fov: 58 + pace * 7
+    fov: speedLens(speed)
   };
 }
