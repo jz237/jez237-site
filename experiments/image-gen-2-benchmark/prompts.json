@@ -14776,5 +14776,24 @@
       "imageSha256": "76ca2bc8a625455955182c62579d363828a5d5301a01b568e96d18564295fc8e",
       "imageDHash": "831b35692333170f"
     }
+  },
+  {
+    "id": "2026-09-20-intense-phobia-situation-trypanophobia-the-needle-at-the-ve",
+    "title": "Trypanophobia — The Needle at the Vein",
+    "tests": "Fear-impact gate: the single needle tip and intact skin contact zone dominate the sharp foreground; close chair-arm crop, clinician hand placement, and crowded supplies remove visual relief. Maintain routine consent and clinical accuracy. No puncture, blood, injury, coercion, or text.; archive_slot=2026-09-20T16:20; concept=patient-view-needle-approaching-antecubital-vein",
+    "prompt": "Create a finished, fully photorealistic documentary-style image of intense trypanophobia during a real, routine blood-draw setup. Camera position is the seated patient's own eye level, angled steeply down at their bare inner forearm resting on a narrow padded phlebotomy chair arm. Use a tight 50 mm-equivalent close composition: the viewer's correctly proportioned forearm runs diagonally from the lower edge toward the center, a blue elastic tourniquet is snug above the elbow crease, and one trained clinician's gloved nondominant hand gently anchors the skin without force. The clinician's other gloved hand holds one medically correct evacuated-tube blood collection needle assembly, with a clear plastic hub, short bevel, holder, and an unfilled collection tube aligned correctly. The single sharp metal needle tip hovers only about one centimeter above a plausible superficial vein at the antecubital crease; it has not touched or punctured the skin. Put the needle, bevel, skin texture, fine arm hairs, slight pressure from the stabilizing fingers, tourniquet weave, and transparent hub in razor-sharp foreground focus so the approaching tip is impossible to ignore and dominates the visual reading. Build an immediate bodily 'nope' reaction through three simultaneous pressures: extreme needle-to-skin proximity in the center foreground; the viewer's forearm boxed in by the padded chair arm and clinician's hands with very little visual room to move; and a cramped real clinic alcove whose stainless tray, capped collection tubes, gauze packets, sharps container edge, and sealed sterile supplies crowd the peripheral crop and continue beyond the frame. The setting must feel physically close and unavoidable but consensual and routine, never coercive. Use ordinary practical ceiling illumination with slightly cool clinical color, realistic reflections on stainless steel and plastic, shallow but credible depth of field, subtle handheld patient-view camera logic, and natural skin color. Keep the clinician calm, competent, and only partly visible at the frame edge; no theatrical panic and no stock-photo smile. Preserve correct human anatomy, correct left-right hand interaction, correct phlebotomy equipment geometry, coherent scale, and a clean intact needle. The feared medical procedure should fill most of the frame; no wide room view, no obvious exit, no scenic relief. Exactly one exposed needle. No puncture, no blood, no bruise, no injury, no gore, no restraints, no coercion, no impossible extra fingers, no duplicated instruments, no floating equipment, no logos, no labels, no readable text, no watermark, no horror-movie color grading, no fantasy, no CGI look. Output a single high-detail horizontal image at 1536x1024 pixels.",
+    "image": "images/2026-09-20-intense-phobia-situation-trypanophobia-the-needle-at-the-ve.jpg",
+    "thumb": "thumbs/2026-09-20-intense-phobia-situation-trypanophobia-the-needle-at-the-ve.webp",
+    "color": "#65646f",
+    "date": "2026-09-20",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "patient-view-needle-approaching-antecubital-vein",
+      "imageSha256": "e2cf4314ce2eec448df76a1443b943d02f9d13d73276012b448268a38057b208",
+      "imageDHash": "0e4e6cc9cdcf968f"
+    }
   }
 ]
