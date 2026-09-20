@@ -7,12 +7,17 @@ import { onRequest } from '../../../functions/demos/philadelphia-relief/_middlew
 test('camera catalog only exposes bounded public locations and published preview widgets', async () => {
   const doc = JSON.parse(await readFile(new URL('../data/camera-locations.json', import.meta.url)));
   const traffic = trafficCameras(doc);
-  assert.equal(traffic.length, 549);
+  assert.equal(traffic.length, 569);
   assert.equal(new Set(traffic.map(p => p.id)).size, traffic.length);
   assert.ok(!JSON.stringify(doc).includes('.lcl'));
   for (const p of [...WEBCAMS, ...traffic]) {
     assert.ok(p.lon >= -75.8 && p.lon <= -74.7 && p.lat >= 39.7 && p.lat <= 40.55);
     assert.equal(new URL(p.url).protocol, 'https:');
+    if (p.traffic) {
+      assert.match(p.id, /^\d+$/);
+      assert.equal(p.url, `https://511pa.com/map#camera-${p.id}`);
+      assert.ok(p.name.trim());
+    }
     if (p.preview) {
       const u = new URL(p.preview);
       assert.equal(u.origin, 'https://api.wetmet.net');
@@ -22,6 +27,11 @@ test('camera catalog only exposes bounded public locations and published preview
   }
   const sample = traffic[0];
   assert.equal(trafficCameras({ cameras: [sample, sample, { ...sample, id: 'outside', lat: 90 }] }).length, 1);
+  assert.equal(trafficCameras({ cameras: [
+    { ...sample, id: 'CAM-06-271' }, { ...sample, id: '3215?other' },
+    { ...sample, name: '' }, { ...sample, lon: NaN },
+  ] }).length, 0);
+  assert.equal(traffic.find(p => p.id === '3215').name, 'US-1 SOUTH OF I-295');
 });
 
 test('camera clustering preserves every location and separates preview from traffic-only markers', () => {

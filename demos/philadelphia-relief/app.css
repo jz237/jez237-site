@@ -1582,9 +1582,10 @@ body.cinema .photo-credits { bottom: 8px; }
 .camera-card-notice { font-size: 12px; line-height: 1.6; padding: 14px; background: #ffffff08;
   border-radius: 10px; color: #ead8b8; }
 .camera-cluster-list { max-height: 210px; overflow-y: auto; display: grid; gap: 5px; }
-.camera-cluster-list button { text-align: left; padding: 11px; border-radius: 7px;
+.camera-cluster-list button, .camera-cluster-list a { text-align: left; padding: 11px; border-radius: 7px;
   background: #ffffff09; border: 1px solid #ffffff1c; color: #fff; font: 12px var(--font); cursor: pointer; }
-.camera-cluster-list button:hover { background: #ffffff20; }
+.camera-cluster-list a { text-decoration: none; font: inherit; }
+.camera-cluster-list button:hover, .camera-cluster-list a:hover { background: #ffffff20; }
 .camera-layer-control { margin-top: 8px; padding-top: 6px; border-top: 1px solid #c0d6d324; }
 .camera-layer-toggle { display: flex; align-items: center; gap: 7px; min-height: 32px;
   cursor: pointer; font-size: 12px; font-weight: 600; }
