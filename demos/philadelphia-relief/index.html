@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092003" />
+<link rel="stylesheet" href="app.css?v=philly-2026092004" />
 </head>
 <body data-theme="dusk">
 
@@ -118,6 +118,11 @@
   </div>
 
   <div class="topbar-actions">
+    <button type="button" class="icon-btn local-mobile-opener" id="btnLocalViews"
+      title="Cameras &amp; local views" aria-label="Cameras and local views">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+        stroke-width="1.7" aria-hidden="true"><path d="M8 5l1.5-2h5L16 5h4v15H4V5z" />
+        <circle cx="12" cy="12" r="4" /></svg></button>
     <button type="button" class="icon-btn" id="btnHome" title="Reset view (H)" aria-label="Reset view">⌂</button>
     <button type="button" class="icon-btn" id="btnShot" title="Save PNG (P)" aria-label="Save a PNG of the current view">▣</button>
     <button type="button" class="icon-btn" id="btnShare" title="Copy link to this view" aria-label="Copy a link to this view">↗</button>
@@ -132,7 +137,58 @@
   <button type="button" id="openExplore" aria-controls="shots">Explore places <span aria-hidden="true">↗</span></button>
   <button type="button" id="openCustomize" aria-controls="studio">Customize <span aria-hidden="true">☷</span></button>
   <button type="button" id="btnInspect" aria-pressed="false" title="Street inspection (I)">Street inspection</button>
+  <button type="button" id="openLocalViews">Cameras &amp; local views <span aria-hidden="true">◉</span></button>
 </nav>
+<dialog id="regionalViews" class="regional-dialog" aria-labelledby="regionalTitle">
+  <header class="regional-head">
+    <div><span class="local-eyebrow">A WINDOW INTO THE DELAWARE VALLEY</span>
+      <h2 id="regionalTitle">Cameras &amp; local views</h2></div>
+    <button type="button" id="closeRegionalViews" aria-label="Close local views">✕</button>
+  </header>
+  <div class="regional-tabs" role="group" aria-label="Local view categories">
+    <button type="button" data-local-tab="cameras" aria-pressed="true">Cameras</button>
+    <button type="button" data-local-tab="street" aria-pressed="false">Street View</button>
+    <button type="button" data-local-tab="conditions" aria-pressed="false">Weather &amp; river</button>
+  </div>
+  <section data-local-pane="cameras">
+    <p class="local-intro">Public webcams and traffic views around this region.
+      Viewers open on the provider’s site in a new tab; availability and schedules vary.</p>
+    <div id="regionalCameras" class="regional-cameras"></div>
+    <p class="local-footnote" id="trafficAccess">Embedded PennDOT streams require approved feed access. </p>
+  </section>
+  <section data-local-pane="street" hidden>
+    <div class="street-window" aria-hidden="true"><span>AT STREET LEVEL</span><b>360°</b></div>
+    <h3>Step into the place you’re exploring</h3>
+    <p id="streetLocation" class="local-coordinates"></p>
+    <p class="local-intro">Open the nearest available Google Street View panorama to the center of your map.
+      These are captured photographs, not live cameras. Coverage and capture dates vary.</p>
+    <a id="streetCurrent" class="local-primary" target="_blank" rel="noopener noreferrer">
+      Open Street View here ↗</a>
+    <h3 class="local-shortcut-title">Familiar places</h3>
+    <div id="streetShortcuts" class="local-actions"></div>
+    <p class="local-footnote">To choose another street, close this panel, pan or search, then open it again.
+      Panoramas open in Google Maps and keep this diorama available in its tab.</p>
+  </section>
+  <section data-local-pane="conditions" hidden>
+    <div class="local-refresh-row"><p id="conditionsStatus" role="status"></p>
+      <button type="button" id="refreshConditions" class="local-secondary">Refresh</button></div>
+    <div class="regional-conditions">
+      <article class="local-source"><span class="local-eyebrow">NEARBY WEATHER · NWS</span>
+        <h3>At the nearest reporting airport</h3><div id="regionalWeather"></div>
+        <p class="local-footnote">Airport observations can differ from conditions at the map center.</p>
+        <a id="localForecast" class="local-link" target="_blank" rel="noopener noreferrer">
+          Forecast for this map location ↗</a>
+      </article>
+      <article class="local-source"><span class="local-eyebrow">DELAWARE RIVER · NOAA</span>
+        <h3>Philadelphia water level</h3><div id="regionalWater"></div>
+        <p class="local-footnote">Station 8545240 at Philadelphia. Height relative to the tidal datum,
+          not water depth or a regional flood prediction.</p>
+        <div id="gaugeSource"></div>
+        <button type="button" id="gaugeVisit" class="local-secondary">Show gauge on map</button>
+      </article>
+    </div>
+  </section>
+</dialog>
 <!-- ── control studio ──────────────────────────────────────────────────── -->
 <section class="photo-controls" aria-label="Map presentation">
   <div class="photo-choice">
@@ -573,7 +629,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092003"></script>
+<script type="module" src="src/main.js?v=philly-2026092004"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
