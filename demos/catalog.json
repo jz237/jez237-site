@@ -185,19 +185,19 @@
     "id": "009",
     "title": "H2D Explorer",
     "category": "3D · Printer engineering",
-    "description": "Virtually disassemble the Bambu Lab H2D. Follow the filament, inspect the shared dual-nozzle carriage, and connect 43 reconstructed assemblies to official technical and maintenance references.",
+    "description": "Explore 44 reconstructed Bambu Lab H2D assemblies and take a six-step tour from filament to finished print. Refined toolhead details, flexible feed tubes and source-linked technical references.",
     "url": "h2d-explorer/",
     "image": "assets/h2d-explorer.jpg",
     "imageAlt": "Actual H2D Explorer showing the reconstructed enclosed printer, glass door, motion system and build platform",
     "source": "https://github.com/jz237/h2d-explorer",
     "features": [
-      "Staged exploded view",
-      "43 selectable assemblies",
+      "Six-step guided print tour",
+      "44 selectable assemblies",
       "10 system visualization modes",
-      "Source-linked technical guide"
+      "Adaptive mobile rendering"
     ],
     "facts": [
-      "43 assemblies",
+      "44 assemblies",
       "40 verified specifications",
       "Mouse & touch"
     ],
