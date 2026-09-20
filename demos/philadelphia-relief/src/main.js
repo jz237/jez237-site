@@ -1,11 +1,11 @@
-import { wireSavedViews } from './saved-views.js?v=philly-2026092001';
+import { wireSavedViews } from './saved-views.js?v=philly-2026092002';
 import { updateImageryCredit, wireFieldNotes, timelineSeek, captureName }
-  from './experience.js?v=philly-2026092001';
-import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092001';
-import { wireLooks } from './looks.js?v=philly-2026092001';
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092001';
-import { createOrientation } from './orientation.js?v=philly-2026092001';
-import { createPhotographic } from './photographic.js?v=philly-2026092001';
+  from './experience.js?v=philly-2026092002';
+import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092002';
+import { wireLooks } from './looks.js?v=philly-2026092002';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092002';
+import { createOrientation } from './orientation.js?v=philly-2026092002';
+import { createPhotographic } from './photographic.js?v=philly-2026092002';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -15,53 +15,53 @@ import { createPhotographic } from './photographic.js?v=philly-2026092001';
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026092001';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026092002';
 
-import { createStore } from './state.js?v=philly-2026092001';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026092001';
-import { effectiveLight } from './solar.js?v=philly-2026092001';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026092001';
+import { createStore } from './state.js?v=philly-2026092002';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026092002';
+import { effectiveLight } from './solar.js?v=philly-2026092002';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026092002';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026092001';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026092001';
+} from './geo.js?v=philly-2026092002';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026092002';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026092001';
+} from './tours.js?v=philly-2026092002';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026092001';
+} from './urlstate.js?v=philly-2026092002';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026092001';
+} from './degraded.js?v=philly-2026092002';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026092001';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026092001';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092001';
-import { createSky, sunDirection } from './sky.js?v=philly-2026092001';
-import { createPostFX } from './postfx.js?v=philly-2026092001';
-import { createCameraRig } from './camera.js?v=philly-2026092001';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092001';
-import { createStructures } from './structures.js?v=philly-2026092001';
+} from './terrain.js?v=philly-2026092002';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026092002';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092002';
+import { createSky, sunDirection } from './sky.js?v=philly-2026092002';
+import { createPostFX } from './postfx.js?v=philly-2026092002';
+import { createCameraRig } from './camera.js?v=philly-2026092002';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092002';
+import { createStructures } from './structures.js?v=philly-2026092002';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026092001';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026092001';
+} from './structures-data.js?v=philly-2026092002';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026092002';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026092001';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092001';
+} from './flood.js?v=philly-2026092002';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092002';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026092001';
+} from './vectors.js?v=philly-2026092002';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026092001';
-import { getTheme } from './themes.js?v=philly-2026092001';
+} from './ui.js?v=philly-2026092002';
+import { getTheme } from './themes.js?v=philly-2026092002';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -835,7 +835,7 @@ async function boot() {
         imageryDetail.consider(now, false, viewW, 1, effectiveQuality, state.imageryDetail, viewH);
       }
       ui.updateReadout({ pose: now, groundY: sampleElevation(now.lon, now.lat),
-        viewH, dt, exaggeration: 1 });
+        viewH, dt, exaggeration: 1, photographic: true });
       return;
     }
     const miniature = dioramaAmount(now.dist, state.diorama && state.layers.terrain
@@ -2024,6 +2024,7 @@ function wireInterface(deps) {
   // ---- readout ------------------------------------------------------------
   let fps = 0;
   let readoutClock = 0;
+  let photographicReadout = false;
 
   const api = {
     layerToggles,
@@ -2043,7 +2044,9 @@ function wireInterface(deps) {
       // restages the view.
       const away=awayFromPreset(preset,state,projection);
       dom.outPreset.textContent = viewName || (away ? 'Exploring the Delaware Valley' : preset.name);
-      dom.outBlurb.textContent = viewName
+      dom.outBlurb.textContent = photographicReadout
+        ? 'Photographic buildings, trees and streets from captured aerial imagery. '
+          + 'Zoom out to return to the relief diorama.' : viewName
         ? (preset ? `${preset.name}, shared by link.` : 'A named view shared by link.')
         : (away ? 'Follow the mapped streets and terrain. '
           + 'Use the locator to find your way back.' : preset.blurb);
@@ -2054,7 +2057,11 @@ function wireInterface(deps) {
     setFps(value) { fps = value; },
     setCapture(fn) { captureFn = fn; },
 
-    updateReadout({ pose, groundY, viewH, dt, exaggeration }) {
+    updateReadout({ pose, groundY, viewH, dt, exaggeration, photographic = false }) {
+      if (photographic !== photographicReadout) {
+        photographicReadout = photographic;
+        this.syncControls(store.get());
+      }
       readoutClock += dt;
       if (readoutClock < 0.1) return;
       readoutClock = 0;

@@ -1,5 +1,5 @@
-import { photoAllowed, photoWanted, photoCamera, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092001';
+import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
+  from './photo-policy.js?v=philly-2026092002';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -31,7 +31,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let viewer, tileset, loading = false, failed = false, disposed = false;
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
-  let lastPose, width = 1, height = 1, seenAt = 0, generation = 0;
+  let lastPose, width = 1, height = 1, detailTiles = 0, generation = 0;
   let resourceTimer, firstViewTimer, press;
 
   function report(text) {
@@ -67,7 +67,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092001')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092002')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -84,7 +84,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       viewer.scene.postProcessStages.fxaa.enabled = true;
       viewer.resize(); setCamera(lastPose, width, height);
       // Local curated place lookup uses no external geocoding service.
-      const loadedTiles = await C.createGooglePhotorealistic3DTileset({ onlyUsingWithGoogleGeocoder: true }, {
+      const googleOptions = { onlyUsingWithGoogleGeocoder: true };
+      const loadedTiles = await C.createGooglePhotorealistic3DTileset(googleOptions, {
         maximumScreenSpaceError: 2, dynamicScreenSpaceError: false,
         cacheBytes: 384 * 1024 * 1024, maximumCacheOverflowBytes: 128 * 1024 * 1024,
         preloadFlightDestinations: false, showCreditsOnScreen: true,
@@ -92,7 +93,10 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       if (disposed || failed || ticket !== generation) { loadedTiles.destroy(); return; }
       tileset = loadedTiles;
       viewer.scene.primitives.add(tileset);
-      tileset.tileVisible.addEventListener(() => { visibleTiles++; });
+      tileset.tileVisible.addEventListener(tile => {
+        visibleTiles++;
+        if (tile.geometricError <= 8) detailTiles++;
+      });
       tileset.loadProgress.addEventListener((requests, processing) => {
         pending = requests + processing;
       });
@@ -115,7 +119,6 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         entity.reliefPlace = place;
       }
       loading = false; clearTimeout(resourceTimer);
-      firstViewTimer = setTimeout(() => { if (!firstViewReady && wanted) unavailable(); }, 45000);
     } catch {
       // Provider resource URLs can contain credentials: never log raw errors.
       if (!disposed && ticket === generation) unavailable();
@@ -127,7 +130,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   retry.onclick = () => {
     if (viewer && !viewer.isDestroyed()) viewer.destroy();
     viewer = undefined; tileset = undefined; failed = false; loading = false;
-    firstViewReady = false; seenAt = 0; lastPoseKey = ''; enginePromise = undefined;
+    firstViewReady = false; firstViewTimer = undefined; lastPoseKey = ''; enginePromise = undefined;
     host.replaceChildren(); credits.replaceChildren(); retry.hidden = true;
     void start();
   };
@@ -147,11 +150,14 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
 
   return {
     get active() { return active; },
-    stats: () => ({ active, wanted, loading, failed, pending, firstViewReady }),
+    stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles }),
     update(pose, state, w, h) {
       lastPose = pose; width = w; height = h;
       wanted = photoWanted(state, pose.dist, wanted);
-      if (!wanted) present(false);
+      if (!wanted) {
+        present(false);
+        clearTimeout(firstViewTimer); firstViewTimer = undefined;
+      }
       if (failed) return false;
       const preload = photoAllowed(state) && state.photoMode !== 'relief'
         && (wanted || pose.dist <= PHOTO_PRELOAD);
@@ -163,6 +169,16 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         return false;
       }
       if (!viewer || !tileset || loading) return false;
+      // Warm the engine near the boundary without requesting a second,
+      // regional photographic scene while the miniature is still in use.
+      if (!wanted) {
+        clearTimeout(firstViewTimer); firstViewTimer = undefined;
+        report('Diorama · photographic engine ready');
+        return false;
+      }
+      if (!firstViewReady && !firstViewTimer) {
+        firstViewTimer = setTimeout(unavailable, 90000);
+      }
       const key = [pose.lon, pose.lat, pose.dist, pose.pitch, pose.bearing, pose.fov, w, h].join(':');
       if (key !== lastPoseKey) {
         lastPoseKey = key; lastMotion = performance.now();
@@ -173,14 +189,11 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         tileset.maximumScreenSpaceError = detail; viewer.scene.requestRender();
       }
       viewer.entities.show = state.layers.landmarks;
-      visibleTiles = 0;
+      visibleTiles = 0; detailTiles = 0;
       try { viewer.render(); } catch { unavailable(); return false; }
       // Keep the miniature visible through the initial coarse/empty frames.
-      // Tile visibility alone can be the whole-Earth fallback; wait for the
-      // current view to settle, with a bounded partial-coverage escape hatch.
-      if (visibleTiles && !seenAt) seenAt = performance.now();
-      if (!firstViewReady && visibleTiles && (tileset.tilesLoaded
-        || (visibleTiles > 12 && performance.now() - seenAt > 5000))) {
+      // Require neighborhood-scale geometry, not merely visible coarse tiles.
+      if (!firstViewReady && photoReady(detailTiles, visibleTiles, tileset.tilesLoaded)) {
         firstViewReady = true; clearTimeout(firstViewTimer);
       }
       present(wanted && firstViewReady);
@@ -191,20 +204,23 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     capture() {
       viewer.scene.requestRender(); viewer.render();
       const source = viewer.canvas, canvas = document.createElement('canvas');
-      canvas.width = source.width; canvas.height = source.height + 88;
+      canvas.width = source.width;
       const ctx = canvas.getContext('2d');
-      ctx.drawImage(source, 0, 0); ctx.fillStyle = '#152f3b';
-      ctx.fillRect(0, source.height, canvas.width, 88);
-      ctx.fillStyle = '#fff'; ctx.font = '14px sans-serif';
+      ctx.font = '14px sans-serif';
       const words = ('Google Maps · Cesium ion · ' + credits.textContent).replace(/\s+/g, ' ').split(' ');
-      let line = '', y = source.height + 24;
+      const lines = []; let line = '';
       for (const word of words) {
         if (ctx.measureText(line + word).width > canvas.width - 36) {
-          ctx.fillText(line, 16, y); y += 19; line = '';
+          lines.push(line); line = '';
         }
         line += `${word} `;
       }
-      ctx.fillText(line, 16, y);
+      lines.push(line);
+      canvas.height = source.height + Math.max(60, lines.length * 19 + 24);
+      ctx.drawImage(source, 0, 0); ctx.fillStyle = '#152f3b';
+      ctx.fillRect(0, source.height, canvas.width, canvas.height - source.height);
+      ctx.fillStyle = '#fff'; ctx.font = '14px sans-serif';
+      lines.forEach((text, i) => ctx.fillText(text, 16, source.height + 24 + i * 19));
       return canvas;
     },
     dispose() {

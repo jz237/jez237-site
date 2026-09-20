@@ -1443,6 +1443,8 @@ body.photographic-view .brand-title, body.photographic-view .brand-sub {
 .photo-credits { position: fixed; z-index: 53; bottom: 96px; right: 24px; max-width: 65vw;
   background: #102731ed; color: #fff; padding: 5px 9px; border-radius: 6px; font-size: 10px; }
 .photo-credits[hidden] { display: none; }
+.photo-credits .cesium-widget-credits { position: static; display: block;
+  max-width: 100%; white-space: normal; }
 .photo-credits a { color: #fff; }
 .photo-credits img { max-height: 20px; vertical-align: middle; }
 .photo-credits .cesium-credit-textContainer { font-size: 10px; }
