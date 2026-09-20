@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#132c32">
+  <meta name="description" content="Explore Philadelphia in photographic 3D. Stream mapped rooftops, streets and landscapes with Cesium, from Center City to Levittown.">
+  <title>Philadelphia in 3D · Cesium preview</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23132c32'/%3E%3Cpath d='M12 48V32h10V19h8V9h4v10h8v13h10v16' fill='%23edc88d'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://api.cesium.com" crossorigin>
+  <link rel="preconnect" href="https://tile.googleapis.com" crossorigin>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/Widgets/widgets.css">
+  <link rel="stylesheet" href="style.css?v=1">
+  <script defer src="https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/Cesium.js"></script>
+  <script type="module" src="app.js?v=1"></script>
+</head>
+<body>
+  <main id="map" aria-label="Interactive photographic 3D map of Philadelphia"></main>
+  <header class="masthead panel">
+    <a class="monogram" href="/demos/" aria-label="All demos">P<span>3D</span></a>
+    <div><p class="eyebrow">A city, closer</p><h1>Philadelphia <span>in 3D</span></h1></div>
+    <span class="preview">CESIUM PREVIEW</span>
+  </header>
+  <nav class="places panel" aria-label="Explore places">
+    <button data-place="city" aria-pressed="true"><span>01</span> Center City</button>
+    <button data-place="bauder" aria-pressed="false"><span>02</span> Bauder Signs</button>
+    <button data-place="reef" aria-pressed="false"><span>03</span> The Hidden Reef</button>
+    <button data-place="valley" aria-pressed="false"><span>04</span> Delaware Valley</button>
+  </nav>
+  <aside class="field-note panel">
+    <p class="eyebrow">Philadelphia / Delaware Valley</p>
+    <h2 id="place-title">The city, in another dimension.</h2>
+    <p id="place-description">Follow real rooftops, bridges and streets. Zoom closer and the view refines around you.</p>
+    <a href="/demos/philadelphia-relief/">Explore the relief diorama <span aria-hidden="true">↗</span></a>
+  </aside>
+  <div class="tools panel" role="group" aria-label="Map controls">
+    <button id="zoom-in" aria-label="Zoom in" title="Zoom in">+</button>
+    <button id="zoom-out" aria-label="Zoom out" title="Zoom out">−</button>
+    <span class="divider"></span>
+    <button id="overhead" title="Look straight down at the current location">Top</button>
+    <button id="orbit" aria-pressed="false" title="Slowly orbit the current location">Orbit</button>
+    <button id="home" title="Return to Center City">Home</button>
+    <button id="fullscreen" aria-label="Enter fullscreen" title="Fullscreen">⛶</button>
+  </div>
+  <footer class="readout panel">
+    <div class="status" role="status"><i id="status-dot"></i><span id="status">Starting 3D viewer…</span></div>
+    <span id="altitude">—</span>
+    <label><input id="detail" type="checkbox" checked> Full detail</label>
+    <label><input id="labels" type="checkbox" checked> Places</label>
+    <button id="help" aria-expanded="false" aria-controls="help-panel">How to explore</button>
+  </footer>
+  <section id="help-panel" class="help panel" hidden>
+    <h2>Make yourself at home.</h2>
+    <p><b>Mouse:</b> drag to move; wheel to zoom; middle-drag or Ctrl + drag to tilt and orbit.</p>
+    <p><b>Touch:</b> drag to move, pinch to zoom, two-finger drag to tilt.</p>
+    <p><b>Keyboard:</b> Tab to the controls. Use + / − to zoom, H for home and Escape to stop orbiting.</p>
+    <p>Detail streams for the view in front of you. Pause after moving to let the finest available tiles arrive. Full detail is on by default.</p>
+    <p>Photographic 3D is captured imagery, not a live view. Coverage and sharpness vary by location. Place pins identify mapped locations.</p>
+  </section>
+  <div id="welcome" class="welcome panel" role="status">
+    <span class="eyebrow">PHILADELPHIA / PHOTOGRAPHIC 3D</span>
+    <h2>Getting closer.</h2><p id="welcome-message">Bringing the city into focus…</p>
+    <div class="loading-line"></div>
+    <button id="retry" hidden>Try again</button>
+    <a href="/demos/philadelphia-relief/">Open the relief diorama ↗</a>
+  </div>
+  <noscript><div class="welcome panel">Enable JavaScript to explore the 3D map. <a href="/demos/">Back to demos</a></div></noscript>
+</body>
+</html>
