@@ -1,8 +1,179 @@
 {
-  "generatedAt": "2026-09-19",
+  "generatedAt": "2026-09-20",
   "editorialPriority": "When there is a choice, prefer personal computers, home computing, office PC software, and personal computer or console gaming over broad enterprise technology.",
   "fallbackPolicy": "Use exact-day computer news when verified. If none exists, use same-week or same-month personal-computing items with confidence labels, then fall back to a wider world/business headline.",
   "issues": [
+    {
+      "currentDate": "2026-09-20",
+      "historicDate": "1984-08-20",
+      "displayDate": "Week of August 20-26, 1984",
+      "edition": "Issue 108 - Weekly 1984 Computer & Culture Chronicle",
+      "visualProfile": {
+        "tone": "Extra-edition urgency on warm aged newsprint",
+        "motifs": ["IBM PC/AT system unit", "80286 chip", "software boxes", "telephone modem"],
+        "layout": "Dense 1980s computer-weekly front page with red and blue rules, halftones, boxed charts, and narrow columns"
+      },
+      "masthead": {
+        "title": "Computer Chronicle",
+        "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+        "dateline": "August 20-26, 1984",
+        "price": "75 cents"
+      },
+      "layoutPlan": {
+        "leadPlacement": "Banner lead beneath masthead with a large PC/AT halftone",
+        "secondaryRail": "Software, games, modem, charts, prices, and world bulletin",
+        "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+      },
+      "sectionChrome": {
+        "primary": "brick red",
+        "secondary": "IBM blue",
+        "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+      },
+      "heroImage": {
+        "src": "media/computer-chronicle-gpt-image-2-week-1984-08-20.jpg",
+        "alt": "GPT Image 2 newspaper front page for the week of August 20-26, 1984, led by IBM's PC/AT",
+        "caption": "A GPT Image 2 newspaper-style front page generated from structured Computer Chronicle issue data.",
+        "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+      },
+      "editorNote": "Extra Edition: IBM's new 80286-powered PC/AT resets the performance and expansion baseline for the personal-computer market.",
+      "morningLine": "The AT sets a new pace, software owns the showroom, and home computers find fresh routes onto the telephone line.",
+      "lead": {
+        "headline": "IBM's PC/AT Pushes Personal Computing Into a New Generation",
+        "dek": "The 80286-powered 5170 brings a 16-bit expansion path, a 1.2MB floppy, larger storage, and prices beginning at $3,995.",
+        "body": [
+          "IBM's Personal Computer AT dominates the conversation as the week opens. Announced August 14, the machine type 5170 is built around Intel's 80286, with a 16-bit data path and 24-bit addressing. IBM says it performs more than twice as fast as current members of the PC family, a claim that marks a clean break from the original 8088 generation.",
+          "The $3,995 Model 68 supplies 256KB of memory and a 1.2MB 5.25-inch diskette drive. The $5,795 Model 99 raises memory to 512KB, adds a 20MB fixed disk, and includes a serial-and-parallel adapter. Neither price includes a display, keeping the AT firmly in the professional and office class even as its architecture points the way for future compatibles.",
+          "Eight expansion slots sit inside the new chassis, and six can accept either new 16-bit cards or familiar 8-bit PC boards. Conventional memory can reach 640KB, expansion memory as much as 3MB, and a socket is ready for Intel's 80287 mathematics coprocessor. IBM is selling speed without abandoning the card collections customers already own.",
+          "DOS 3.0 arrives as the operating-system partner, supporting the 20MB disk and the high-density floppy while retaining access to older disk formats. IBM also promises PC/IX 1.1 later in 1984 and XENIX support early next year, a signal that the AT is expected to serve more than ordinary single-user DOS work.",
+          "The announcement also brings the Enhanced Graphics Adapter and PC Network components into view. Taken together, the faster processor, broader bus, storage, graphics, and networking plans give software houses and clone makers a new target—and make the AT the week's unavoidable computing landmark."
+        ],
+        "sourceRefs": [0, 1, 2],
+        "confidence": "same-week"
+      },
+      "stories": [
+        {
+          "headline": "Software Becomes the Home-Computer Show's Main Event",
+          "body": [
+            "The Summer Consumer Electronics Show looks markedly different from last year's hardware rush. COMPUTE! calls 1984 the year of software: several machines once presented as contenders have disappeared or been withdrawn, but programs for the surviving installed bases continue to multiply.",
+            "The magazine names the Atari 1400XL, Mattel Aquarius line, Spectravideo machines, TI-99/4A, and Timex/Sinclair 1000 among casualties of the shakeout. Yet computer hardware and software still occupied more than 170,000 square feet at McCormick West, 25 percent more floor space than a year earlier.",
+            "The result is a market less dazzled by another new plastic case and more attentive to what owners can actually do. Commodore, Atari, Apple, IBM, VIC-20, and TI users all find fresh reviews, utilities, and type-in programs in the August shelves."
+          ],
+          "sourceRefs": [3, 4],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Low-Cost Adapters Put Atari and Apple Owners on the Line",
+          "body": [
+            "Telecomputing is becoming an ordinary home-computer application. Advanced Interface Devices' R-Verter links the Atari serial bus to standard RS-232 modems, giving 400, 600XL, 800, and 800XL owners a direct route to telephone-line communications.",
+            "Apple users have two new approaches. ZOOM Telephonics' Networker bundles modem hardware and communications software for the II family, while Source Telecomputing's Apple Sourcelink is designed to help subscribers use The Source online service.",
+            "Even the orphaned Timex/Sinclair community is learning the ritual: an August user-group article walks members through modems and CompuServe. The growing lesson is clear—getting online is shifting from a specialist's project to a packaged purchase."
+          ],
+          "sourceRefs": [5, 6, 7, 8],
+          "confidence": "same-month"
+        },
+        {
+          "headline": "Infocom Sends Adventurers Diving for Treasure in Cutthroats",
+          "body": [
+            "Infocom's latest text adventure casts the player as a diver on Hardscrabble Island, surrounded by sailors and competing plans to recover treasure from the sea. Released August 9, Cutthroats branches toward two different wreck expeditions.",
+            "Michael Berlyn and Jerry Wolper designed the nautical mystery with Infocom's portable Z-machine. Its package turns paper into part of the puzzle, supplying a tide table and shipwreck material among the physical clues that players must consult.",
+            "The release is a reminder that the software-led market has room for games that sell prose, inference, and imagination rather than arcade reflex alone."
+          ],
+          "sourceRefs": [3],
+          "confidence": "same-month"
+        }
+      ],
+      "computerItems": [
+        {"title": "IBM Personal Computer AT 5170", "summary": "80286 platform with 256KB or 512KB standard RAM, 1.2MB floppy, eight slots, and an 80287 socket", "sourceRefs": [0], "confidence": "same-week"},
+        {"title": "R-Verter", "summary": "Serial-bus-to-RS-232 modem adapter for Atari 400, 600XL, 800, and 800XL", "sourceRefs": [5], "confidence": "same-month"},
+        {"title": "Networker modem", "summary": "ZOOM Telephonics package combining modem hardware and communications software for the Apple II family", "sourceRefs": [6], "confidence": "same-month"}
+      ],
+      "softwareList": [
+        {"name": "IBM DOS 3.0", "detail": "Supports the AT's 20MB fixed disk and 1.2MB high-density floppy."},
+        {"name": "Apple Sourcelink", "detail": "Software intended to supplement Apple sessions on The Source."},
+        {"name": "The Complete Personal Accountant", "detail": "A current Commodore 64 accounting package reviewed in COMPUTE!'s August issue."}
+      ],
+      "storeShelves": [
+        {"label": "Top 5 Computer Games", "items": ["Cutthroats — Infocom", "Star League Baseball — Gamestar", "Devastator — COMPUTE! type-in", "Jackpot — COMPUTE! type-in", "The Seven Cities of Gold — Electronic Arts"]},
+        {"label": "Top 5 Music", "items": ["Ghostbusters — Ray Parker Jr.", "What's Love Got to Do with It — Tina Turner", "Stuck on You — Lionel Richie", "When Doves Cry — Prince", "Missing You — John Waite"]},
+        {"label": "Top Movies", "items": ["Tightrope", "Ghostbusters", "Red Dawn", "Purple Rain"]}
+      ],
+      "priceWatch": [
+        {"item": "IBM PC/AT Model 68", "price": "$3,995 system unit", "note": "same-week listing", "sourceRefs": [0, 1]},
+        {"item": "IBM PC/AT Model 99", "price": "$5,795 system unit", "note": "same-week listing", "sourceRefs": [0, 1]},
+        {"item": "COMPUTE! August 1984", "price": "$2.95 US cover price", "note": "same-month cover price", "sourceRefs": [3]}
+      ],
+      "briefs": [
+        {"headline": "PC/AT keeps old cards in the new bus", "summary": "Six of the AT's eight slots accept either 16-bit or existing 8-bit cards, preserving a bridge for PC owners.", "sourceRefs": [0], "confidence": "same-week"},
+        {"headline": "Oxford Blues opens in eighth place", "summary": "The Rob Lowe comedy debuted with $2,486,418 from 1,075 theaters over August 24-26.", "sourceRefs": [10], "confidence": "exact-date"}
+      ],
+      "musicChart": [
+        {"rank": 1, "title": "Ghostbusters", "artist": "Ray Parker Jr.", "chartDate": "1984-08-25", "sourceUrls": ["https://musicchartsarchive.cheneyweb.com/singles-chart/1984-08-25"]},
+        {"rank": 2, "title": "What's Love Got to Do with It", "artist": "Tina Turner", "chartDate": "1984-08-25", "sourceUrls": ["https://musicchartsarchive.cheneyweb.com/singles-chart/1984-08-25"]},
+        {"rank": 3, "title": "Stuck on You", "artist": "Lionel Richie", "chartDate": "1984-08-25", "sourceUrls": ["https://musicchartsarchive.cheneyweb.com/singles-chart/1984-08-25"]},
+        {"rank": 4, "title": "When Doves Cry", "artist": "Prince", "chartDate": "1984-08-25", "sourceUrls": ["https://musicchartsarchive.cheneyweb.com/singles-chart/1984-08-25"]},
+        {"rank": 5, "title": "Missing You", "artist": "John Waite", "chartDate": "1984-08-25", "sourceUrls": ["https://musicchartsarchive.cheneyweb.com/singles-chart/1984-08-25"]}
+      ],
+      "periodAd": {
+        "headline": "Put Your Atari on the Telephone Line",
+        "summary": "The R-Verter turns the Atari serial bus into an RS-232 route for standard modems.",
+        "tagline": "Your bulletin board is only a phone call away."
+      },
+      "market": {
+        "headline": "Software Outgrows the Hardware Shakeout",
+        "summary": "Despite abandoned home-computer models, the Summer CES devoted more than 170,000 square feet to computer hardware and software—25 percent more than the prior year.",
+        "sourceRefs": [4],
+        "confidence": "same-month"
+      },
+      "worldAnchor": {
+        "headline": "Manila Braces for Aquino Anniversary Protests",
+        "summary": "Philippine military and police prepared for mass demonstrations marking one year since opposition leader Benigno Aquino Jr. was assassinated, sustaining pressure on Ferdinand Marcos's government.",
+        "confidence": "exact-date",
+        "sourceRefs": [11]
+      },
+      "bbsNote": {
+        "headline": "Home Computers Find Easier Routes Onto the Telephone Network",
+        "summary": "August product columns join inexpensive interfaces, bundled terminal software, and service-specific helpers as telecomputing becomes a normal home-computer application.",
+        "posts": [
+          {"topic": "Atari serial access", "platform": "Atari 400/600XL/800/800XL", "text": "The R-Verter connects the Atari serial bus to standard RS-232 modems."},
+          {"topic": "Apple package", "platform": "Apple II family", "text": "ZOOM's Networker combines modem hardware and communications software."},
+          {"topic": "The Source helper", "platform": "Apple II family / The Source", "text": "Apple Sourcelink is designed to supplement sessions on The Source."},
+          {"topic": "User-group onboarding", "platform": "Timex/Sinclair / CompuServe", "text": "An August user-group article introduces members to modems and CompuServe."}
+        ]
+      },
+      "curiosity": {
+        "headline": "IBM's New Powerhouse Comes With a Two-Hour Guided Tour",
+        "summary": "The PC/AT includes a self-booting tutorial disk called Exploring the IBM Personal Computer AT.",
+        "detail": "IBM estimates the tutorial takes 1.5 to 2.5 hours and supplies monochrome and color versions covering the keyboard, printer, storage, DOS, and text editing—an elaborate welcome mat for a professional machine.",
+        "sourceUrls": ["https://retrocmp.de/ibm/5170/ibm-al_184-097_1984-08-14.txt"]
+      },
+      "milestone": {
+        "title": "IBM introduces the PC/AT",
+        "note": "The 80286-based AT and its 16-bit expansion architecture reset the performance and hardware baseline for the IBM-compatible market."
+      },
+      "accuracyLedger": {
+        "items": [
+          "PC/AT specifications, pricing, expansion, and operating-system plans come from IBM's August 14 announcement and period reporting.",
+          "Home-computer software and telecommunications items are labeled same-month because they appeared in August 1984 period sources.",
+          "Music rankings use the August 25 chart; movie rankings use the August 24-26 weekend.",
+          "World news is anchored to dated reporting from within the historical week."
+        ]
+      },
+      "sources": [
+        {"title": "IBM Announcement Letter 184-097: IBM Personal Computer AT", "url": "https://retrocmp.de/ibm/5170/ibm-al_184-097_1984-08-14.txt", "date": "1984-08-14"},
+        {"title": "New personal computer model raises IBM horizons yet higher", "url": "https://www.csmonitor.com/1984/0817/081719.html", "date": "1984-08-17"},
+        {"title": "Computers: A Giant Flexes Its Muscles", "url": "https://time.com/archive/6860705/computers-a-giant-flexes-its-muscles/", "date": "1984-08-27"},
+        {"title": "COMPUTE! Issue 51 index", "url": "https://www.atarimagazines.com/compute/index/?issue=issue51", "date": "1984-08"},
+        {"title": "Software Power!: The Summer Consumer Electronics Show", "url": "https://www.atarimagazines.com/compute/issue51/176_1_Software_Power.php", "date": "1984-08"},
+        {"title": "RS-232 Modem Adapter For Atari", "url": "https://www.atarimagazines.com/compute/issue51/237_2_NEWS_PRODUCTS_RS-232_Modem_Adapter_For_Atari.php", "date": "1984-08"},
+        {"title": "New Telecommunications Package For Apple", "url": "https://www.atarimagazines.com/compute/issue51/238_3_NEWS_PRODUCTS_New_Telecommunications_Package_For_Apple.php", "date": "1984-08"},
+        {"title": "Telecommunications Aid", "url": "https://www.atarimagazines.com/compute/issue51/238_4_NEWS_PRODUCTS_Telecommunications_Aid.php", "date": "1984-08"},
+        {"title": "Modems and CompuServe", "url": "https://timexsinclair.com/article/modems-and-compuserve/index.html", "date": "1984-08"},
+        {"title": "Billboard singles chart for August 25, 1984", "url": "https://musicchartsarchive.cheneyweb.com/singles-chart/1984-08-25", "date": "1984-08-25"},
+        {"title": "Domestic weekend box office, August 24-26, 1984", "url": "https://www.boxofficemojo.com/weekend/1984W34/", "date": "1984-08-26"},
+        {"title": "Manila Readies for Protests Over Aquino's Killing", "url": "https://www.washingtonpost.com/archive/politics/1984/08/21/manila-readies-for-protests-over-aquinos-killing/8846fcee-8cda-481d-9eb3-f14554d6c82f/", "date": "1984-08-21"},
+        {"title": "Iraq Hits Second Ship in 2 Days", "url": "https://www.washingtonpost.com/archive/politics/1984/08/25/iraq-hits-second-ship-in-2-days/c2ae4b73-4477-4569-8ba6-491836b9a098/", "date": "1984-08-25"}
+      ]
+    },
     {
       "currentDate": "2026-09-19",
       "historicDate": "1984-08-13",
