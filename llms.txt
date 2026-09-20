@@ -71,7 +71,7 @@ use these instructions before writing code or snippets.
   built on the open Z-Anatomy model (CC BY-SA 4.0): 2,270 named pieces across
   ten systems (skeleton, ligaments and discs, viscera, heart, brain and senses,
   muscles, vessels, nerves, lymphatics, surface regions), an all-parts board,
-  skin / realistic / colour-coded / X-ray / clay finishes with ambient occlusion and a full-resolution tier that streams in as you zoom, per-piece descriptions, and
+  skin / realistic / no-skin / colour-coded / X-ray / clay finishes with ambient occlusion and a full-resolution tier that streams in as you zoom, per-piece descriptions, and
   seventeen nested exploded studies reachable as `?assembly=heart|lungs|spine|brain|skull|eye|hand|knee|ribcage|digestive|urinary|face|aorta|pelvis|shoulder|larynx|foot`.
   `/demos/anatomy-studio/manual.html` explains the systems, the explosion rules,
   the nested studies and the build. Source and validation tools are in
