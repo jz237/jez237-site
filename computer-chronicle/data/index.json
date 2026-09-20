@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-20",
+      "historicDate": "1984-08-20",
+      "displayDate": "Week of August 20-26, 1984",
+      "edition": "Issue 108 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "The AT sets a new pace, software owns the showroom, and home computers find fresh routes onto the telephone line.",
+      "leadHeadline": "IBM's PC/AT Pushes Personal Computing Into a New Generation",
+      "storyHeadlines": [
+        "Software Becomes the Home-Computer Show's Main Event",
+        "Low-Cost Adapters Put Atari and Apple Owners on the Line",
+        "Infocom Sends Adventurers Diving for Treasure in Cutthroats"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-08-20.jpg",
+      "thumb": "media/thumbs/1984-08-20.webp",
+      "milestone": true
+    },
+    {
       "currentDate": "2026-09-19",
       "historicDate": "1984-08-13",
       "displayDate": "Week of August 13-19, 1984",
