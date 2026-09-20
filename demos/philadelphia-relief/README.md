@@ -1,8 +1,44 @@
+## Cameras anchored to the diorama — September 20, 2026
+
+Check **Cameras on map** in the View panel, or choose **Show camera pins on the
+diorama** in Cameras & local views. Green pins offer ten FOX 29 / WMVision image
+previews. Hover, focus or tap a pin to preview; click its image or full-view link
+to open the provider's camera page. Numbered groups list nearby cameras and offer
+a zoom action. Filter to image previews or jump directly to a named webcam.
+
+Amber pins represent 549 existing camera locations in PennDOT's public GIS
+inventory, bounded to this map. They link to the regional 511PA viewer, where
+the matching camera must be selected. They are not advertised as available live
+streams. This is public regional coverage, not an exhaustive camera registry.
+
+Only one image widget loads at a time, after a short hover delay. Its provider
+frame is sandboxed without scripts, storage or navigation privileges. It reloads
+once a minute while the preview remains open; moving the map, disabling cameras,
+closing the preview or hiding the tab removes it. No image is copied, proxied,
+or represented as live video. The scoped Philadelphia CSP admits only the
+api.wetmet.net frame origin. Source outages retain the provider page link.
+
+Pins project through the active renderer (Three.js or Cesium). Webcam positions
+are approximate hosts or viewed areas, explicitly labeled. Host addresses come
+from FOX 29 camera pages; address coordinates use Census geocoding where matched.
+Area-only locations identify State Street, Independence Mall and PHL, not mounts.
+PennDOT coordinates come directly from its published inventory.
+
+Sources checked 2026-09-20:
+https://www.fox29.com/live-cameras and the individual camera pages linked in
+`src/camera-data.js`; https://geocoding.geo.census.gov/geocoder/;
+https://gis.penndot.pa.gov/gis/rest/services/paprojects/paprojects/MapServer/14.
+`data/camera-locations.json` retains source and retrieval metadata, drops internal
+image addresses and includes only EXISTING records within the diorama bounds.
+
+Validation: 310 tests, including complete cluster membership, source URL and
+coordinate checks, phone popup bounds, and the scoped iframe policy.
+
 ## Regional cameras, panoramas and observations — September 20, 2026
 
 Open **Cameras & local views** beside the desktop Explore controls, or the camera
 button in the phone toolbar. Camera cards open the official EarthCam, 511PA,
-511NJ, DelDOT and FOX 29 viewers in a new tab. No camera footage is copied or
+511NJ, DelDOT and FOX 29 viewers in a new tab. EarthCam footage is not
 embedded: EarthCam's linking rules prohibit framing, and PennDOT's streaming
 feeds require separate registration and a video-sharing agreement.
 

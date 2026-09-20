@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092004" />
+<link rel="stylesheet" href="app.css?v=philly-2026092005" />
 </head>
 <body data-theme="dusk">
 
@@ -153,6 +153,7 @@
   <section data-local-pane="cameras">
     <p class="local-intro">Public webcams and traffic views around this region.
       Viewers open on the provider’s site in a new tab; availability and schedules vary.</p>
+    <button type="button" id="showCameraMap" class="local-link">Show camera pins on the diorama →</button>
     <div id="regionalCameras" class="regional-cameras"></div>
     <p class="local-footnote" id="trafficAccess">Embedded PennDOT streams require approved feed access. </p>
   </section>
@@ -202,6 +203,24 @@
   <p id="photoStatus" role="status">Diorama · zoom in for photographic 3D</p>
   <button id="photoRetry" type="button" aria-label="Retry photographic detail" hidden>Retry</button>
   <p class="photo-note">Captured imagery · use Diorama for styled lighting and map overlays.</p>
+  <div class="camera-layer-control">
+    <label class="camera-layer-toggle"><input type="checkbox" id="cameraLayerToggle"
+      aria-controls="cameraLayerOptions"> <span>Cameras on map</span><span aria-hidden="true">◉</span></label>
+    <div id="cameraLayerOptions" hidden>
+      <p id="cameraLayerStatus" role="status"></p>
+      <div class="camera-layer-filters">
+        <select id="cameraLayerFilter" aria-label="Camera types">
+          <option value="all">All mapped cameras</option>
+          <option value="preview">Image previews only</option>
+        </select>
+        <select id="cameraLayerJump" aria-label="Find a webcam">
+          <option value="">Find a webcam…</option>
+        </select>
+      </div>
+      <p class="camera-layer-help"><i></i> Image preview <i class="traffic"></i> Opens 511PA
+        <br>Hover or tap a pin. Numbers group nearby cameras.</p>
+    </div>
+  </div>
 </section>
 <div id="photoCredits" class="photo-credits" hidden></div>
 <section id="studio" class="panel studio collapsed" aria-labelledby="studioTitle">
@@ -629,7 +648,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092004"></script>
+<script type="module" src="src/main.js?v=philly-2026092005"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
