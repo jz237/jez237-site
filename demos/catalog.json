@@ -69,25 +69,23 @@
     "id": "004",
     "title": "Philadelphia Relief Diorama",
     "category": "3D · Geography",
-    "description": "The Delaware Valley, in miniature. Follow wooded ridges and two rivers into Philadelphia, then zoom down to mapped streets, buildings and detailed aerial photography.",
+    "description": "The Delaware Valley, in miniature. Explore wooded ridges and two rivers, then zoom seamlessly into photographic 3D buildings and streets. One map, from regional relief to neighborhood detail.",
     "url": "philadelphia-relief/",
     "image": "assets/philadelphia-relief.png",
     "imageAlt": "The live Philadelphia Relief diorama: wooded terrain, rivers and a raised cutaway base on a light backdrop",
     "source": "https://github.com/jz237/jez237-site/tree/main/demos/philadelphia-relief",
     "features": [
-      "Continuous zoom",
-      "Detailed aerial imagery",
-      "Mapped buildings",
-      "Street inspection"
+      "Diorama to photographic 3D",
+      "Continuous zoom and place search",
+      "Guided tours and saved views",
+      "Historical and flood map layers"
     ],
     "facts": [
       "Real elevation data",
       "Delaware Valley",
       "Mouse & touch"
     ],
-    "note": "WebGL 2 · Desktop & mobile · Real map data with illustrative miniature details",
-    "alternateUrl": "philadelphia-cesium/",
-    "alternateLabel": "Try photographic 3D"
+    "note": "WebGL 2 · Desktop & mobile · Real elevation and Google photographic 3D via Cesium · Imagery streams on approach"
   },
   {
     "id": "005",

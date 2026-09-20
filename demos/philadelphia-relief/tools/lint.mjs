@@ -3,8 +3,9 @@
  *
  * The site has no build step and no node_modules, so rather than pull in a
  * linter this checks the rules that actually matter for shipping this app to a
- * static host — most importantly that nothing resembling a credential and no
- * third-party runtime call can reach the browser.
+ * static host. The relief source must not embed credentials or make arbitrary
+ * external data requests. The optional photographic renderer loads a pinned
+ * Cesium runtime and uses the site's existing public, restricted ion config.
  *
  *   node tools/lint.mjs
  */
