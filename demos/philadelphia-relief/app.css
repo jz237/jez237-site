@@ -1453,13 +1453,21 @@ body.cinema .photo-credits { bottom: 8px; }
   .photo-note { display: none !important; }
   .photo-choice select { padding: 3px; }
   #photoStatus { font-size: 9px; margin-top: 3px; }
-  .photo-credits { right: 12px; left: 12px; bottom: calc(116px + env(safe-area-inset-bottom));
+  #photoRetry { position: absolute; right: 10px; bottom: 6px; padding: 3px 7px;
+    margin: 0; font-size: 10px; }
+  .photo-controls:has(#photoRetry:not([hidden])) #photoStatus { padding-right: 45px; }
+  .photo-credits { right: 12px; left: 12px; top: 151px; bottom: auto;
     max-width: none; font-size: 9px; }
   .photo-credits .cesium-credit-textContainer { font-size: 9px; }
+  body.photographic-view .photo-controls { top: 211px; }
+  body.photographic-view .orientation, body.photographic-view .map-navigation { top: 275px; }
 }
 @media (max-height: 650px) {
   .photo-controls { top: auto; left: auto; right: 12px; bottom: 133px; width: 285px; }
   .photo-note { display: none !important; }
-  .photo-credits { bottom: 8px; left: 12px; right: 12px; max-width: none; }
+  .photo-credits { top: 65px; bottom: auto; left: 12px; right: 12px; max-width: none; }
+  body.photographic-view .photo-controls { top: auto; }
+  body.photographic-view .orientation { top: 104px; }
+  body.photographic-view .map-navigation { top: auto; }
 }
 @media (prefers-reduced-motion: reduce) { .photographic-stage { transition: none; } }
