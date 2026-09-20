@@ -1,15 +1,19 @@
 ## Cameras anchored to the diorama — September 20, 2026
 
 Check **Cameras on map** in the View panel, or choose **Show camera pins on the
-diorama** in Cameras & local views. Green pins offer ten FOX 29 / WMVision image
+diorama** in Cameras & local views. Green pins offer twelve FOX 29 / WMVision image
 previews. Hover, focus or tap a pin to preview; click its image or full-view link
 to open the provider's camera page. Numbered groups list nearby cameras and offer
 a zoom action. Filter to image previews or jump directly to a named webcam.
 
-Amber pins represent 549 existing camera locations in PennDOT's public GIS
-inventory, bounded to this map. They link to the regional 511PA viewer, where
-the matching camera must be selected. They are not advertised as available live
-streams. This is public regional coverage, not an exhaustive camera registry.
+Gold pins represent 569 camera locations from 511PA's current public map, bounded
+to this diorama. Clicking a single gold pin opens that specific camera on 511PA
+in a new tab; numbered groups offer named direct camera links. Hover or focus
+still shows the camera's name and provider. Names and IDs come from the official
+map and camera tooltips, without matching IDs from a different inventory.
+Provider availability varies. This is not an exhaustive camera registry.
+The twelve preview views include two extra panoramic angles at Independence Mall
+and the stadium complex, covering ten approximate hosts or viewed areas.
 
 Only one image widget loads at a time, after a short hover delay. Its provider
 frame is sandboxed without scripts, storage or navigation privileges. It reloads
@@ -22,12 +26,13 @@ Pins project through the active renderer (Three.js or Cesium). Webcam positions
 are approximate hosts or viewed areas, explicitly labeled. Host addresses come
 from FOX 29 camera pages; address coordinates use Census geocoding where matched.
 Area-only locations identify State Street, Independence Mall and PHL, not mounts.
-PennDOT coordinates come directly from its published inventory.
+PennDOT coordinates come directly from its published 511PA map.
 
 Sources checked 2026-09-20:
 https://www.fox29.com/live-cameras and the individual camera pages linked in
 `src/camera-data.js`; https://geocoding.geo.census.gov/geocoder/;
-https://gis.penndot.pa.gov/gis/rest/services/paprojects/paprojects/MapServer/14.
+https://511pa.com/map/mapIcons/Cameras and
+https://511pa.com/tooltip/Cameras/{id}?lang=en.
 `data/camera-locations.json` retains source and retrieval metadata, drops internal
 image addresses and includes only EXISTING records within the diorama bounds.
 

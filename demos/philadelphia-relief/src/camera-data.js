@@ -14,6 +14,8 @@ export const WEBCAMS = [
     'f3b535ee369a95f6c6ab40cf9147a33d', 'Former Bucks County Courthouse'),
   fox('independence-mall-webcam', 'Independence Mall', -75.1491, 39.9508,
     'e3fd58dc6f8d6955e5c7e4af8ade46bb', 'Independence Mall · viewed area', true),
+  fox('independence-mall-panoramic-webcam', 'Independence Mall · panorama', -75.1491, 39.9508,
+    '82bc4f98ec470741682e769f715ada76', 'Independence Mall · viewed area', true),
   fox('king-of-prussia-webcam', 'King of Prussia', -75.367791, 40.09308,
     '706bf01f988fbdfde46969b9bd403829', 'The Alloy · 301 W Dekalb Pike'),
   fox('media-webcam', 'Media · State Street', -75.3893, 39.9175,
@@ -22,6 +24,9 @@ export const WEBCAMS = [
     '6890b158439935a968125f5ab471076c', 'Philadelphia International Airport · viewed area', true),
   fox('philadelphia-stadium-complex-webcam', 'Philadelphia stadiums', -75.170979, 39.896532,
     '8c88166ce2d13d1d859ecfcc15791300', 'Courtyard Philadelphia South at the Navy Yard'),
+  fox('philadelphia-stadium-complex-panoramic-webcam', 'Philadelphia stadiums · panorama',
+    -75.170979, 39.896532,
+    '2fceeb92ea042526f15456ae4a763007', 'Courtyard Philadelphia South at the Navy Yard'),
   fox('west-chester-webcam', 'West Chester · Courthouse', -75.605331, 39.960502,
     '79af68966dff773157d467165b5b2a6b', 'Across from the Historic Chester County Courthouse'),
   fox('wilmington-webcam', 'Wilmington riverfront', -75.563759, 39.731335,
@@ -31,13 +36,14 @@ export const WEBCAMS = [
 export function trafficCameras(doc) {
   const seen = new Set();
   return (doc?.cameras || []).filter(p => {
-    if (!p || typeof p.id !== 'string' || seen.has(p.id)) return false;
+    if (!p || typeof p.id !== 'string' || !/^\d+$/.test(p.id) || seen.has(p.id)) return false;
+    if (typeof p.name !== 'string' || !p.name.trim()) return false;
     if (!Number.isFinite(p.lon) || !Number.isFinite(p.lat)) return false;
     if (p.lon < -75.8 || p.lon > -74.7 || p.lat < 39.7 || p.lat > 40.55) return false;
     seen.add(p.id); return true;
-  }).map(p => ({ ...p, provider: 'PennDOT · camera inventory',
-    location: 'Published PennDOT location · availability varies',
-    url: 'https://511pa.com/region/Greater%20Philadelphia', traffic: true }));
+  }).map(p => ({ ...p, provider: 'PennDOT · 511PA',
+    location: 'Published 511PA location · availability varies',
+    url: `https://511pa.com/map#camera-${p.id}`, traffic: true }));
 }
 
 // Screen-space groups keep every camera represented without hundreds of overlapping targets.
