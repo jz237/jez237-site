@@ -1,5 +1,6 @@
 import * as T from './vendor/three.module.js';
 import {sprayLaunch} from './hull-spray.js';
+import {carveLoad} from './contact-cues.js';
 import {sprayUniforms,sprayLightingGLSL} from './spray-light.js';
 // Emissions retain world momentum while the hull turns away from the sheet.
 export function sheetPoint(q,age,u){const fan=(u-.5)*(.10+age*q.fan),lift=Math.sin(u*Math.PI)*age*q.fan*.30;return [q.x+q.vx*age+q.rx*fan,q.y+q.vy*age-4.905*age*age+lift,q.z+q.vz*age+q.rz*fan];}
@@ -23,7 +24,8 @@ export function makeSpraySheets(scene){
  return {mesh,update(r,time){
   if(time<previous||time-previous>1){histories.forEach(h=>h.length=0);previous=-Infinity;}
   if(time-previous>=.025){for(let side=0;side<2;side++){const sign=side?1:-1,q=sprayLaunch(r,'chine',sign,()=>.5),contact=sign>0?r.hydro.starboardWet:r.hydro.portWet;
-   histories[side].unshift({...q,time,rx:Math.cos(r.heading)*sign,rz:-Math.sin(r.heading)*sign,fan:1.3+Math.min(1,r.speed/28)*(2+Math.abs(r.turn)*4),load:Math.min(1,r.speed/18)*Math.max(0,contact||0)});histories[side].length=Math.min(rows,histories[side].length);
+   const carve=carveLoad(r,sign);
+   histories[side].unshift({...q,time,rx:Math.cos(r.heading)*sign,rz:-Math.sin(r.heading)*sign,fan:1.3+Math.min(1,r.speed/28)*2+carve*4.5,load:r.hydro.airborne?0:Math.min(1,Math.min(1,r.speed/18)*Math.max(0,contact??r.hydro.wet??0)*.72+carve*.55)});histories[side].length=Math.min(rows,histories[side].length);
   }previous=time;}
   material.uniforms.sheetTime.value=time;mesh.visible=histories.some(h=>h.some(q=>q.load>.1&&time-q.time<.6));
   for(let side=0;side<2;side++)for(let j=0;j<rows;j++){const q=histories[side][Math.min(j,histories[side].length-1)];if(!q)continue;const age=Math.min(.65,Math.max(0,time-q.time));for(let k=0;k<columns;k++){const i=side*rows*columns+j*columns+k;positions.set(sheetPoint(q,age,k/(columns-1)),i*3);loads[i]=q.load*Math.max(0,1-age/.65);}}

@@ -1,6 +1,6 @@
 # After the Storm
 
-**v2.15.0 · TIDELINE** — September 16, 2026. Lower control-allocation overhead, shared scene transforms across water passes, and exact spatial wake queries for spray. Graphics quality and handling are unchanged. See [LATENCY-FPS-2.15.md](LATENCY-FPS-2.15.md) for measurements, limits and verification. Previous loading work: [PERFORMANCE-2.14.md](PERFORMANCE-2.14.md).
+**v2.16.0 · TIDELINE** — September 19, 2026. Clearer wave faces and spilling crests, motion-driven carving spray and rider weight transfer, distinct landing audio, and a progressive speed lens. Physics and graphics budgets are preserved. See [WATER-POLISH-2.16.md](WATER-POLISH-2.16.md) for validation and performance limits. Previous optimization: [LATENCY-FPS-2.15.md](LATENCY-FPS-2.15.md).
 
 The shared wave/buoyancy simulation, adaptive graphics and gameplay remain active. Earlier land and water notes are in [LAND-2.10.md](LAND-2.10.md) and [GRAPHICS-2.9.md](GRAPHICS-2.9.md).
 
