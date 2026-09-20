@@ -1,5 +1,5 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092002';
+  from './photo-policy.js?v=philly-2026092003';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -31,7 +31,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let viewer, tileset, loading = false, failed = false, disposed = false;
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
-  let lastPose, width = 1, height = 1, detailTiles = 0, generation = 0;
+  let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
   let resourceTimer, firstViewTimer, press;
 
   function report(text) {
@@ -67,7 +67,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092002')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092003')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -86,7 +86,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       // Local curated place lookup uses no external geocoding service.
       const googleOptions = { onlyUsingWithGoogleGeocoder: true };
       const loadedTiles = await C.createGooglePhotorealistic3DTileset(googleOptions, {
-        maximumScreenSpaceError: 2, dynamicScreenSpaceError: false,
+        maximumScreenSpaceError: 16, dynamicScreenSpaceError: false,
         cacheBytes: 384 * 1024 * 1024, maximumCacheOverflowBytes: 128 * 1024 * 1024,
         preloadFlightDestinations: false, showCreditsOnScreen: true,
       });
@@ -95,7 +95,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       viewer.scene.primitives.add(tileset);
       tileset.tileVisible.addEventListener(tile => {
         visibleTiles++;
-        if (tile.geometricError <= 8) detailTiles++;
+        bestError = Math.min(bestError, tile.geometricError);
+        if (tile.geometricError <= 64) detailTiles++;
       });
       tileset.loadProgress.addEventListener((requests, processing) => {
         pending = requests + processing;
@@ -184,13 +185,20 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         lastPoseKey = key; lastMotion = performance.now();
         viewer.resize(); setCamera(pose, w, h);
       }
-      const detail = performance.now() - lastMotion < 180 ? 12 : 2;
+      // Establish complete neighborhood coverage before requesting the finest
+      // level. Final stationary detail remains the same two-pixel threshold.
+      const detail = !firstViewReady ? 16 : performance.now() - lastMotion < 180 ? 12 : 2;
       if (tileset.maximumScreenSpaceError !== detail) {
         tileset.maximumScreenSpaceError = detail; viewer.scene.requestRender();
       }
       viewer.entities.show = state.layers.landmarks;
-      visibleTiles = 0; detailTiles = 0;
+      visibleTiles = 0; detailTiles = 0; bestError = Infinity;
       try { viewer.render(); } catch { unavailable(); return false; }
+      if (visibleTiles) {
+        message.dataset.visibleTiles = String(visibleTiles);
+        message.dataset.detailTiles = String(detailTiles);
+        message.dataset.bestError = String(Math.round(bestError));
+      }
       // Keep the miniature visible through the initial coarse/empty frames.
       // Require neighborhood-scale geometry, not merely visible coarse tiles.
       if (!firstViewReady && photoReady(detailTiles, visibleTiles, tileset.tilesLoaded)) {
@@ -198,7 +206,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       }
       present(wanted && firstViewReady);
       report(active ? pending ? `Photographic 3D · refining ${pending} tiles`
-        : 'Photographic 3D · full detail' : 'Preparing photographic detail…');
+        : 'Photographic 3D · full detail' : pending
+        ? `Preparing photographic detail · ${pending} tiles` : 'Preparing photographic detail…');
       return active;
     },
     capture() {

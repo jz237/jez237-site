@@ -20,7 +20,7 @@ The photographic runtime's service CSP is scoped to the map route. The standalon
 preview remains available for comparison, but the Demos catalog launches this
 integrated experience.
 
-Validation: 299 unit/data tests, including camera projection alignment, renderer
+Validation: 300 unit/data tests, including camera projection alignment, renderer
 thresholds, map-layer precedence, and photo-mode URL round trips. Localhost tests
 exercise the domain-restricted token's graceful fallback; imagery must be checked
 on the production domain.
