@@ -4,6 +4,12 @@
   "about": "Welcome to my public corner of the internet. This site is evolving into a home for projects, utilities, game prototypes, AI news, and personal creative stuff.",
   "projects": [
     {
+      "name": "H2D Explorer",
+      "desc": "Explore the Bambu Lab H2D through a 3D exploded assembly, selectable parts and an official-source technical guide.",
+      "status": "live",
+      "link": "/demos/h2d-explorer/"
+    },
+    {
       "name": "How AI Works",
       "desc": "Interactive explainer covering AI runtime concepts, agents, tokens, tools, hallucinations, and a roadmap for model training and alignment.",
       "status": "live",

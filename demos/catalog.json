@@ -180,5 +180,27 @@
     "note": "WebGL 2 · Desktop first, phones load the core systems · Z-Anatomy model, CC BY-SA 4.0 · Preview captured from the running demo",
     "alternateUrl": "anatomy-studio/manual.html",
     "alternateLabel": "Read the anatomy manual"
+  },
+  {
+    "id": "009",
+    "title": "H2D Explorer",
+    "category": "3D · Printer engineering",
+    "description": "Virtually disassemble the Bambu Lab H2D. Follow the filament, inspect the shared dual-nozzle carriage, and connect 43 reconstructed assemblies to official technical and maintenance references.",
+    "url": "h2d-explorer/",
+    "image": "assets/h2d-explorer.jpg",
+    "imageAlt": "Actual H2D Explorer showing the reconstructed enclosed printer, glass door, motion system and build platform",
+    "source": "https://github.com/jz237/h2d-explorer",
+    "features": [
+      "Staged exploded view",
+      "43 selectable assemblies",
+      "10 system visualization modes",
+      "Source-linked technical guide"
+    ],
+    "facts": [
+      "43 assemblies",
+      "40 verified specifications",
+      "Mouse & touch"
+    ],
+    "note": "WebGL 2 · Desktop & mobile · Original educational reconstruction, not factory CAD"
   }
 ]
