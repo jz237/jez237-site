@@ -4,9 +4,11 @@ import { onRequest as photographicPolicy } from '../philadelphia-cesium/_middlew
 
 export async function onRequest(context) {
   const response = await photographicPolicy(context);
-  // Only public WMVision image widgets are embedded, inside a script-free sandbox.
-  // The standalone Cesium viewer and every other route retain their existing policy.
+  // These public media hosts are confined to this route. Provider scripts remain in sandboxed frames.
   response.headers.set('Content-Security-Policy', response.headers.get('Content-Security-Policy')
-    .replace("frame-src 'self'", "frame-src 'self' https://api.wetmet.net"));
+    .replace("frame-src 'self'", "frame-src 'self' https://api.wetmet.net https://attheshore.com https://www.attheshore.com")
+    .replace("img-src 'self'", "img-src 'self' https://api.igotview.com")
+    .replace("connect-src 'self'", "connect-src 'self' https://video.deldot.gov")
+    + "; media-src 'self' blob: https://video.deldot.gov");
   return response;
 }

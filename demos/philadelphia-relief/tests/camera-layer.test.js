@@ -1,7 +1,8 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { WEBCAMS, trafficCameras, groupCameras, popupPosition } from '../src/camera-data.js';
+import { WEBCAMS, trafficCameras, regionalCameras, hasCameraPreview,
+  groupCameras, popupPosition } from '../src/camera-data.js';
 import { onRequest } from '../../../functions/demos/philadelphia-relief/_middleware.js';
 
 test('camera catalog only exposes bounded public locations and published preview widgets', async () => {
@@ -59,8 +60,33 @@ test('camera preview placement stays inside desktop and phone screens at every c
 test('regional camera policy adds only the widget frame host and preserves photographic restrictions', async () => {
   const result = await onRequest({ next: async () => new Response('map') });
   const csp = result.headers.get('Content-Security-Policy');
-  assert.ok(csp.includes("frame-src 'self' https://api.wetmet.net;"));
+  assert.ok(csp.includes("frame-src 'self' https://api.wetmet.net https://attheshore.com https://www.attheshore.com;"));
+  assert.ok(csp.includes("media-src 'self' blob: https://video.deldot.gov"));
+  assert.ok(csp.includes("img-src 'self' https://api.igotview.com"));
   assert.ok(csp.includes("frame-ancestors 'self'"));
   assert.ok(csp.includes("object-src 'none'"));
   assert.ok(!csp.split(';').find(s => s.includes('script-src')).includes('wetmet'));
+  assert.ok(!csp.split(';').find(s => s.includes('script-src')).includes('attheshore'));
+});
+
+test('additional cameras have exact provider identities, bounded locations and safe media URLs', async () => {
+  const doc = JSON.parse(await readFile(new URL('../data/regional-cameras.json', import.meta.url)));
+  const cams = regionalCameras(doc);
+  assert.equal(cams.length, 147);
+  assert.equal(cams.filter(p => p.provider === 'DelDOT').length, 93);
+  assert.equal(cams.filter(p => p.snapshot).length, 54);
+  assert.equal(cams.filter(hasCameraPreview).length, 147);
+  assert.equal(new Set(cams.map(p => p.id)).size, 147);
+  assert.ok(!JSON.stringify(doc).includes('wowzatoken'));
+  const de = doc.cameras.find(p => p.source === 'deldot');
+  const ats = doc.cameras.find(p => p.source === 'attheshore');
+  assert.equal(regionalCameras({cameras: [de, de, {...de, stream: 'https://evil.test/camera'}]}).length, 1);
+  for (const bad of [{...de, lon: NaN}, {...de, lat: 90}, {...ats, url: 'javascript:alert(1)'},
+    {...ats, snapshot: 'https://evil.test/image.jpg'}]) {
+    assert.deepEqual(regionalCameras({cameras: [bad]}), []);
+  }
+  assert.equal(regionalCameras({cameras: [{...ats, player: 'https://evil.test/player'}]})[0].player, undefined);
+  assert.equal(regionalCameras({cameras: [{...de, enabled: false}]})[0].stream, undefined);
+  assert.equal(new URL(cams.find(p => p.stream).url, 'https://jez237.com/demos/philadelphia-relief/').origin,
+    'https://jez237.com');
 });

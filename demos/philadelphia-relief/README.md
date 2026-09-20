@@ -1,3 +1,38 @@
+## Expanded regional previews — September 20, 2026
+
+The camera layer now includes 728 mapped views: 569 PennDOT/511PA locations,
+12 FOX 29 image widgets, 54 AtTheShore neighborhood views, and all 93 DelDOT
+camera locations inside the existing map bounds. This covers the identified
+provider catalogs, not every private or public camera in the region.
+
+159 entries support an image or video preview. AtTheShore snapshots load on
+hover with explicit unknown-capture-time labeling; where supplied, its own
+sandboxed player opens with **Play provider video here**. DelDOT uses its public
+HTTPS HLS feed, a pinned hls.js 1.7.3 runtime loaded only on demand, muted playback,
+and a large viewer with fullscreen controls. Gold PennDOT pins still open the
+exact 511PA camera. No PennDOT stream, private key, signed URL or copied image is
+included. Provider outages display a retry message rather than a false live claim.
+
+Only one card's media loads at once. Closing, moving the map, switching cameras,
+disabling the layer or hiding the tab destroys the player and cancels timers.
+DelDOT sessions stop after 60 seconds, matching its official viewer's session
+length. The separate viewer also stops on tab hide and page exit.
+
+Provider coordinates are retained, with neighborhood pins labeled approximate.
+Data provenance is in `data/regional-cameras.json`. Source checks on September 20
+found 54/54 snapshot URLs and 92/93 DelDOT manifests responding; NCAM180 returned
+404. Responses do not guarantee uninterrupted video or fresh snapshots. Browser
+playback and error behavior are checked separately.
+
+The Philadelphia-only response policy admits the precise image, iframe and
+video hosts. AtTheShore executes inside a sandboxed cross-origin iframe; its
+scripts are not added to the parent document's script policy. HLS segments travel
+directly from DelDOT; they are never proxied or stored by this site.
+
+Sources: https://attheshore.com/city/Philadelphia/PA and its individual camera
+pages; https://www.attheshore.com/city/Camden/NJ; https://deldot.gov/map/ and the public feed it uses,
+https://tmc.deldot.gov/json/videocamera.json?id=4yte.
+
 ## Cameras anchored to the diorama — September 20, 2026
 
 Check **Cameras on map** in the View panel, or choose **Show camera pins on the

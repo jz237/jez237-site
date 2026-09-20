@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Regional camera · Philadelphia Relief</title>
+  <link rel="stylesheet" href="camera-viewer.css?v=philly-2026092007">
+</head>
+<body>
+  <header><a href="./">← Philadelphia Relief</a><span>REGIONAL CAMERA</span></header>
+  <main>
+    <h1 id="cameraTitle">Loading camera…</h1>
+    <p id="cameraSource">Public traffic view from DelDOT</p>
+    <div id="cameraMedia" aria-label="Camera video"></div>
+    <p id="cameraStatus" role="status">Connecting…</p>
+    <nav aria-label="Camera controls">
+      <button id="cameraRetry" type="button" disabled>Play / retry video</button>
+      <button id="cameraFull" type="button" disabled>Fullscreen</button>
+      <a id="cameraProvider" href="https://deldot.gov/map/?region=Wilmington"
+        target="_blank" rel="noopener noreferrer">DelDOT map ↗</a>
+    </nav>
+    <p class="note">Video comes directly from DelDOT. Availability and delay vary.
+      Viewing pauses after one minute or when this tab is hidden.</p>
+  </main>
+  <script type="module" src="src/camera-viewer.js?v=philly-2026092007"></script>
+</body>
+</html>
