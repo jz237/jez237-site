@@ -143,6 +143,101 @@
     }
   },
   {
+    "id": "2026-09-19-factual-infographic-factual-infographic-ophidiophobia-the-s",
+    "title": "Factual infographic: Ophidiophobia — The Snake-Shaped Alarm",
+    "tests": "factual_subtype=phobia-infographic; phobia=ophidiophobia; direct-canvas portrait; one detailed hero; eight substantive panels; six explanatory close-ups/diagrams; no invented statistics; real-world snake safety separated from professional exposure; no unsafe exposure advice; archive_slot=2026-09-19T20:08; concept=ophidiophobia-snake-trail-visual-attention-avoidance; factual_subtype: phobia-infographic",
+    "prompt": "Create a museum-quality, direct-canvas portrait educational infographic titled exactly ‘OPHIDIOPHOBIA — THE SNAKE-SHAPED ALARM’, with the subtitle ‘When rapid attention becomes an out-of-proportion fear response’. This is the finished infographic itself, never a photographed poster, framed print, page, clipboard, display board, app screen, or room mockup. Render at 2048 × 3072 with crisp, large, highly legible typography, precise callouts and leader lines, and a sophisticated field-guide palette of deep forest green, charcoal, warm sandstone, ivory, and restrained amber-red alarm accents. No URLs, bibliography, citations, logos, watermarks, prevalence statistics, diagnostic quiz, gore, attacking giant snake, supernatural threat, or tiny filler text.\n\nDOMINANT HERO: occupy the central upper half with a richly realistic dusk trail scene. A diverse adult hiker has stopped several meters from a small, naturally proportioned wild snake crossing the path; the snake is visible but not striking, the hiker is startled and stepping back without reckless movement. Show layered leaf litter, bark, moss, curved roots, grass stems, dappled low-angle light, fabric weave, boot tread, backpack straps, and believable depth. Integrate a translucent visual route from the eye to the back of the brain and down through the torso, illustrating rapid visual attention followed by a whole-body alarm without implying one simplistic brain circuit. At the trail edge, include harmless snake-like cues—curved root, garden hose-like loop, shadowed stick—as examples of ambiguity, clearly revealed in a brighter inset. Keep the person dignified and the animal biologically plausible.\n\nSurround the hero with EIGHT substantive illustrated panels, each distinct and readable: 1) ‘WHAT IT IS’ — define ophidiophobia as an animal-type specific phobia: intense fear of snakes or snake cues that can be out of proportion to actual danger; contrast ordinary caution around an unidentified wild snake with a phobic alarm triggered even by a safe image or harmless shape. 2) ‘TRIGGERS CAN VARY’ — four concise cue vignettes: a real snake at a distance, a photograph, movement in long grass, and a coiled root mistaken in dim light; label them examples, not a universal checklist. 3) ‘RAPID ATTENTION’ — a scientific close-up of early visual processing: snake image among turtle, crocodile and slug silhouettes, with the careful caption ‘Laboratory studies found stronger early visual attention to snake images in non-phobic adults; rapid noticing is not the same as a phobia.’ Do not invent numerical timing beyond the qualitative sequence. 4) ‘THE BODY ALARM’ — transparent torso with possible responses labeled ‘heart pounding’, ‘breathing quickens’, ‘muscles tense’, ‘sweating or trembling’, and ‘urge to escape’; make clear that experiences differ. 5) ‘THE AVOIDANCE LOOP’ — circular cause-and-effect diagram: ‘snake cue expected’ → ‘alarm surges’ → ‘avoid / escape’ → ‘short-term relief’ → ‘fear remains untested’, with a small vignette of a person abandoning an otherwise safe nature walk. 6) ‘PERCEIVED vs ACTUAL DANGER’ — a split evaluation card: left shows the alarm magnifying a harmless snake photograph and curved root; right shows prudent field behavior around an unidentified live snake: stop, give it space, and do not handle it. State that ordinary caution and phobic distress can coexist. 7) ‘HOW PROFESSIONAL HELP WORKS’ — therapist and client collaboratively building a gradual exposure ladder, illustrated from discussing snakes, to viewing an image, to observing a secured animal with trained staff only if clinically appropriate; label ‘planned with a qualified professional — never forced, surprised, or attempted with wild snakes’. 8) ‘WHEN TO SEEK HELP’ — show a calm clinical conversation with concise labels: ‘fear restricts daily life’, ‘avoidance keeps expanding’, and ‘assessment can guide care’; add ‘CBT and exposure therapy are established treatments for phobias.’\n\nInclude at least FIVE large explanatory close-ups or diagrams: the eye-to-visual-cortex attention route; the snake-versus-comparison-image visual-attention panel; the labeled body-alarm cutaway; the avoidance feedback loop; and the perceived-versus-actual-danger split. Add a sixth bottom sequence showing ‘notice cue → create distance from a real unidentified snake → reassess in safety’, carefully separating wildlife caution from therapy. Every arrow and factual implication must match these labels. Use concise phrases, not paragraphs, with clean visual hierarchy and generous margins despite the dense content. End with a slim footer: ‘Fear is real. Help is available. Do not use wild snakes for exposure; seek qualified professional support.’ Preserve intense emotional immediacy, realistic textures and lighting, but do not sensationalize the snake or shame the person.",
+    "image": "images/2026-09-19-factual-infographic-factual-infographic-ophidiophobia-the-s.jpg",
+    "thumb": "thumbs/2026-09-19-factual-infographic-factual-infographic-ophidiophobia-the-s.webp",
+    "color": "#837d70",
+    "date": "2026-09-19",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "ophidiophobia-snake-trail-visual-attention-avoidance",
+      "imageSha256": "0e8ca1e00fa4ca5b3c0fcdb48c66988b98f19ea1d8d8ce7d3d87e56ebc6acfce",
+      "imageDHash": "696968e860683607"
+    },
+    "factualInfographic": {
+      "topic": "Ophidiophobia: intense fear of snakes, rapid visual attention, avoidance, realistic safety, and evidence-based support",
+      "description": "A richly illustrated direct-canvas educational plate explaining ophidiophobia, rapid visual attention to snake cues, bodily alarm, avoidance, realistic wildlife caution, and evidence-based professional support.",
+      "sourceNote": "Verified against the National Institute of Mental Health https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders and Frontiers in Psychology https://pmc.ncbi.nlm.nih.gov/articles/PMC4154444/ for specific-phobia definition, anxiety and avoidance responses, risk factors, CBT and exposure therapy, and laboratory evidence that snake images can capture early visual attention without equating rapid noticing with phobia.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-20T00:08:35Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "Frontiers in Psychology",
+            "title": "Testing the snake-detection hypothesis: larger early posterior negativity in humans to pictures of snakes than to pictures of other reptiles, spiders and slugs",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC4154444/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Ophidiophobia is an animal-type specific phobia in which snake-related cues can evoke fear or anxiety out of proportion to the actual danger.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "People with a specific phobia may worry about encountering the feared object, actively avoid it, experience immediate intense anxiety on encounter, or endure an unavoidable encounter with intense anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Specific phobias can arise through interacting genetic and environmental factors; a traumatic encounter is one possible risk factor, not a required cause.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In laboratory studies of non-phobic adults, snake images produced stronger early posterior visual responses than comparison images of other reptiles, spiders, or slugs, supporting rapid attentional capture without showing that every person is phobic.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Avoiding feared cues can provide immediate escape while leaving daily activities restricted and the fear untested.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Psychotherapy is the primary treatment approach for phobias, and cognitive behavioral therapy teaches new ways of thinking, behaving, and reacting to reduce anxiety and fear.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Exposure therapy is a CBT method that confronts the underlying fear and helps people re-engage in activities they have avoided; it should be presented as planned professional care rather than a forced surprise encounter.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Real-world snake safety and phobic alarm are separate questions: keeping distance from an unidentified wild snake is prudent, while a phobic response can also be triggered by harmless images or ambiguous snake-like shapes.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-19-factual-infographic-factual-infographic-nyctophobia-the-bra",
     "title": "Factual infographic: Nyctophobia — The Brain in Low Light",
     "tests": "factual_subtype=phobia-infographic; phobia=nyctophobia; direct-canvas portrait; one detailed hero; eight substantive panels; five explanatory close-ups/diagrams; no invented statistics; no unsafe exposure advice; archive_slot=2026-09-19T12:08; concept=nyctophobia-dark-hallway-body-alarm-avoidance; factual_subtype: phobia-infographic",
