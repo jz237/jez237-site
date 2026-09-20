@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090907';
-import { ERA_IDS } from './eras.js?v=philly-2026090907';
+import { WEATHERS } from './solar.js?v=philly-2026092001';
+import { ERA_IDS } from './eras.js?v=philly-2026092001';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -25,6 +25,12 @@ const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
  * unique and stable — changing one invalidates existing shared links.
  */
 export const CONTROLS = {
+  photoMode: {
+    k: 'pm', kind: 'enum', values: ['auto', 'relief', 'photo'], def: 'auto',
+    group: 'scene', label: 'Close-up rendering',
+    hint: 'Automatic keeps the miniature at regional scale and streams photographic 3D when close. '
+      + 'Historical views, contours and flood layers use the relief map. Photography has captured lighting.',
+  },
   diorama: {
     k: 'dm', kind: 'enum', values: [1, 0], def: 1, group: 'scene', label: 'Diorama presentation',
     hint: 'A cutaway landscape with illustrative woodland crowns and enlarged relief at regional scale. '
@@ -321,5 +327,5 @@ export const CHEAP_KEYS = new Set([
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
   'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era',
-  'imageryDetail', 'compareMode', 'comparePosition',
+  'imageryDetail', 'compareMode', 'comparePosition', 'photoMode',
 ]);

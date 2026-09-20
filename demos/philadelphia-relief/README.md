@@ -1,3 +1,30 @@
+## Integrated photographic close-ups — September 20, 2026
+
+The existing diorama now lazily loads CesiumJS 1.145 and Google Photorealistic
+3D Tiles through the site's public, URL-restricted ion token. Automatic mode
+prepares the photographic renderer below 16 km orbit distance, enters it below
+6.5 km, and returns to the miniature beyond 9.5 km. The gap prevents flickering
+between renderers. The first photographic frame waits for useful tile coverage;
+load failures preserve the working relief and expose a retry button.
+
+Both renderers use the same geographic camera, pointer gestures, local place
+lookup, tours, and saved/share state. `photoMode` can force Diorama or Photo 3D;
+historical, contour, flood and comparison layers always use the relief renderer.
+Photographic lighting is captured imagery, independent of the diorama's simulated
+sun. Provider credits remain visible and are included in photographic PNG exports.
+
+The hidden relief renderer and its aerial requests pause while photographic 3D
+is active. Full detail returns to a 2-pixel screen-space error after motion;
+the Cesium memory cache is bounded. No persistent Google imagery cache is added.
+The photographic runtime's service CSP is scoped to the map route. The standalone
+preview remains available for comparison, but the Demos catalog launches this
+integrated experience.
+
+Validation: 299 unit/data tests, including camera projection alignment, renderer
+thresholds, map-layer precedence, and photo-mode URL round trips. Localhost tests
+exercise the domain-restricted token's graceful fallback; imagery must be checked
+on the production domain.
+
 ## Four review rounds — September 9, 2026
 
 1. **Readability:** label budgets follow screen area, local street names stay near

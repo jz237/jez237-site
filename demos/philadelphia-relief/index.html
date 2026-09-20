@@ -4,12 +4,12 @@
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
 <title>Philadelphia Relief — A 3D Topographic Map of the Delaware Valley</title>
-<meta name="description" content="An interactive cinematic 3D relief map of Philadelphia and its suburbs with georeferenced public-domain USGS aerial imagery, real elevation, optional 3D buildings, historical views and flood layers. No API keys." />
+<meta name="description" content="Explore a miniature Delaware Valley, then zoom into photographic 3D streets and buildings. Real elevation, guided tours, historical views and flood layers in one Philadelphia map." />
 <meta name="keywords" content="Philadelphia topographic map, 3D terrain, Delaware Valley relief, Wissahickon, Schuylkill River, Main Line, Bucks County, elevation map, WebGL" />
 <meta name="robots" content="index, follow" />
 <link rel="canonical" href="https://jez237.com/demos/philadelphia-relief/" />
 <meta property="og:title" content="Philadelphia Relief — A 3D Topographic Map" />
-<meta property="og:description" content="A cinematic, interactive relief map of Philadelphia: public-domain USGS aerial imagery draped over real elevation, optional 3D buildings, guided tours, flood scenarios and historical views. No accounts or API keys." />
+<meta property="og:description" content="A miniature Philadelphia landscape with real elevation and photographic 3D close-ups. Explore streets, take guided tours, and compare historical and flood layers." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://jez237.com/demos/philadelphia-relief/" />
 <meta property="og:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026090907" />
+<link rel="stylesheet" href="app.css?v=philly-2026092001" />
 </head>
 <body data-theme="dusk">
 
@@ -134,6 +134,20 @@
   <button type="button" id="btnInspect" aria-pressed="false" title="Street inspection (I)">Street inspection</button>
 </nav>
 <!-- ── control studio ──────────────────────────────────────────────────── -->
+<section class="photo-controls" aria-label="Map presentation">
+  <div class="photo-choice">
+    <label for="photoMode">View</label>
+    <select id="photoMode">
+      <option value="auto">Automatic · diorama to photo 3D</option>
+      <option value="relief">Diorama</option>
+      <option value="photo">Photographic 3D</option>
+    </select>
+  </div>
+  <p id="photoStatus" role="status">Diorama · zoom in for photographic 3D</p>
+  <button id="photoRetry" type="button" hidden>Retry photographic detail</button>
+  <p class="photo-note">Captured imagery · use Diorama for styled lighting and map overlays.</p>
+</section>
+<div id="photoCredits" class="photo-credits" hidden></div>
 <section id="studio" class="panel studio collapsed" aria-labelledby="studioTitle">
   <header class="panel-head">
     <h2 id="studioTitle">Customize the map</h2>
@@ -356,7 +370,18 @@
         <dd>Hand-curated for this map. Elevations are sampled from the same DEM as the ground.</dd>
       </div>
       <div>
-        <dt>Buildings</dt>
+        <dt>Photographic close-ups</dt>
+        <dd>
+          Automatic view keeps the regional miniature and streams Google Photorealistic
+          3D Tiles through Cesium ion when you zoom in. The same camera, search and tours
+          work in both views. Photography shows captured lighting and source-date buildings;
+          it is not live imagery. Coverage and sharpness vary. Choose Diorama for simulated
+          lighting and illustrative models. Historical, contour, flood and comparison views
+          automatically use the relief map. Provider attribution appears on photographic views.
+        </dd>
+      </div>
+      <div>
+        <dt>Diorama buildings</dt>
         <dd>
           Optional — the aerial image is the default surface, and the
           <b>3D buildings &amp; bridges</b> layer restores the extruded model when wanted.
@@ -548,7 +573,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026090907"></script>
+<script type="module" src="src/main.js?v=philly-2026092001"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

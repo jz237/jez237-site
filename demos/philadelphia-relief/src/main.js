@@ -1,10 +1,11 @@
-import { wireSavedViews } from './saved-views.js?v=philly-2026090907';
+import { wireSavedViews } from './saved-views.js?v=philly-2026092001';
 import { updateImageryCredit, wireFieldNotes, timelineSeek, captureName }
-  from './experience.js?v=philly-2026090907';
-import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026090907';
-import { wireLooks } from './looks.js?v=philly-2026090907';
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026090907';
-import { createOrientation } from './orientation.js?v=philly-2026090907';
+  from './experience.js?v=philly-2026092001';
+import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092001';
+import { wireLooks } from './looks.js?v=philly-2026092001';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092001';
+import { createOrientation } from './orientation.js?v=philly-2026092001';
+import { createPhotographic } from './photographic.js?v=philly-2026092001';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -14,53 +15,53 @@ import { createOrientation } from './orientation.js?v=philly-2026090907';
  * allowed to blank the screen.
  */
 
-import * as THREE from '../vendor/three.module.min.js?v=philly-2026090907';
+import * as THREE from '../vendor/three.module.min.js?v=philly-2026092001';
 
-import { createStore } from './state.js?v=philly-2026090907';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026090907';
-import { effectiveLight } from './solar.js?v=philly-2026090907';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026090907';
+import { createStore } from './state.js?v=philly-2026092001';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026092001';
+import { effectiveLight } from './solar.js?v=philly-2026092001';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026092001';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026090907';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026090907';
+} from './geo.js?v=philly-2026092001';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026092001';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026090907';
+} from './tours.js?v=philly-2026092001';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026090907';
+} from './urlstate.js?v=philly-2026092001';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026090907';
+} from './degraded.js?v=philly-2026092001';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026090907';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026090907';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026090907';
-import { createSky, sunDirection } from './sky.js?v=philly-2026090907';
-import { createPostFX } from './postfx.js?v=philly-2026090907';
-import { createCameraRig } from './camera.js?v=philly-2026090907';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026090907';
-import { createStructures } from './structures.js?v=philly-2026090907';
+} from './terrain.js?v=philly-2026092001';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026092001';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092001';
+import { createSky, sunDirection } from './sky.js?v=philly-2026092001';
+import { createPostFX } from './postfx.js?v=philly-2026092001';
+import { createCameraRig } from './camera.js?v=philly-2026092001';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092001';
+import { createStructures } from './structures.js?v=philly-2026092001';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026090907';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026090907';
+} from './structures-data.js?v=philly-2026092001';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026092001';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026090907';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026090907';
+} from './flood.js?v=philly-2026092001';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092001';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026090907';
+} from './vectors.js?v=philly-2026092001';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026090907';
-import { getTheme } from './themes.js?v=philly-2026090907';
+} from './ui.js?v=philly-2026092001';
+import { getTheme } from './themes.js?v=philly-2026092001';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -495,6 +496,11 @@ async function boot() {
     water: data.water, landmarks:data.landmarks,
     onVisit: id => ui.visitPreset(id), onNavigate: target => motion.flyTo(target) });
   const navigation=wireNavigation($('mapNavigation'),rig,motion);
+  const photographic = createPhotographic({ stage: dom.stage, store, sampleElevation,
+    landmarks: data.landmarks, onSelect: place => {
+      motion.flyTo({ lon: place.lon, lat: place.lat }, { label: place.n });
+      ui.openCard(place.n);
+    } });
 
   // Comparison modes bring their required counterpart into view. The choices
   // remain ordinary state, so the resulting split survives a shared URL.
@@ -521,7 +527,7 @@ async function boot() {
   dom.stage.addEventListener('pointerup', async (event) => {
     const start = press;
     press = null;
-    if (!start || !structures || event.target !== renderer.domElement) return;
+    if (photographic.active || !start || !structures || event.target !== renderer.domElement) return;
     const moved = Math.hypot(event.clientX - start.x, event.clientY - start.y);
     if (moved > 4 || performance.now() - start.at > 500) return;
     const rect = dom.stage.getBoundingClientRect();
@@ -745,6 +751,7 @@ async function boot() {
   // the app depends on it.
   window.philadelphiaRelief = Object.freeze({
     stats: () => ({
+      photographic: photographic.stats(),
       structures: structures ? structures.stats() : null,
       imagery: {
         available: terrain.hasImagery,
@@ -819,6 +826,18 @@ async function boot() {
     const camera = rig.camera;
     const now = rig.pose();
     orientation.update(now, viewW / viewH, dt); navigation.update(now);
+    if (photographic.update(now, state, viewW, viewH)) {
+      // One active renderer: the relief rig, search, tours and share state keep
+      // running, but hidden terrain geometry and aerial requests do not compete.
+      imageryClock += dt;
+      if (imageryClock > .5) {
+        imageryClock = 0;
+        imageryDetail.consider(now, false, viewW, 1, effectiveQuality, state.imageryDetail, viewH);
+      }
+      ui.updateReadout({ pose: now, groundY: sampleElevation(now.lon, now.lat),
+        viewH, dt, exaggeration: 1 });
+      return;
+    }
     const miniature = dioramaAmount(now.dist, state.diorama && state.layers.terrain
       && state.era === 'present' && state.compareMode === 'off');
     const modelWater = state.diorama && state.layers.terrain && state.layers.structures
@@ -1008,7 +1027,7 @@ async function boot() {
 
     renderFrame(dt);
 
-    if (adaptive) {
+    if (adaptive && !photographic.active) {
       const level = adaptive.sample(rawDt);
       if (level !== effectiveQuality) {
         const step = adaptive.steps.at(-1);
@@ -1042,7 +1061,7 @@ async function boot() {
   ui.setCapture(() => {
     adaptive?.disturb();
     renderFrame(0);
-    return dom.canvas;
+    return photographic.active ? photographic.capture() : dom.canvas;
   });
   function rebuildTerrain(quality) {
     scene.remove(terrain.mesh);
@@ -1070,6 +1089,7 @@ async function boot() {
   finishLoading();
 
   window.addEventListener('pagehide', () => {
+    photographic.dispose();
     imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
     orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes(); ui.disposeSaved?.();
   },
