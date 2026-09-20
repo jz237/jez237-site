@@ -156,16 +156,17 @@ function realistic(p) {
   return {color: '#cfc6bb', roughness: .6};
 }
 
-export const modes = ['skin', 'realistic', 'organs', 'coded', 'xray', 'clay'];   // organs: realistic with only the bones, viscera, heart, brain, lymphoid organs and vessels shown
-export const ORGAN_FILES = new Set(['skeletal', 'visceral', 'heart', 'brain', 'lymphoid', 'vessels']);
-export const organPiece = p => ORGAN_FILES.has(p.file) && !/external genitalia/i.test(p.path || '');   // the penis is skin and erectile tissue, not an internal organ
+export const modes = ['skin', 'realistic', 'organs', 'coded', 'xray', 'clay'];   // organs: realistic with the bones, viscera, heart, brain, lymphoid organs, vessels, nerves and the face's skin shown
+export const ORGAN_FILES = new Set(['skeletal', 'visceral', 'heart', 'brain', 'lymphoid', 'vessels', 'nerves']);
+// Bones, organs, vessels, nerves and cord, plus the skin of the face; the greater omentum is lifted away so the bowel behind it shows, and the penis counts as skin.
+export const organPiece = p => (ORGAN_FILES.has(p.file) || (p.file === 'regions' && p.name === 'Regions of face')) && !/external genitalia/i.test(p.path || '') && p.name !== 'Greater omentum';
 /** Opaque skin for the Skin finish: warm tone, pores, soft sheen standing in for subsurface scattering. */
 function skinSpec(p) { const L = p.name.toLowerCase(); if (/hair/.test(L)) return realistic(p); return {color: '#d9ad8e', roughness: .5, clearcoat: .1, clearcoatRoughness: .6, bump: skinTex, bumpScale: .0011, roughMap: skinTex, sheen: .4, sheenColor: '#e8a08a', sheenRoughness: .75, sss: {wrap: .45, bleed: [.42, .12, .06]}}; }
 export function finishMaterial(mesh, part, mode = 'realistic') {
   const r = realistic(part); const base = fileColors[part.file] || '#cccccc';
   let spec;
-  if (mode === 'realistic' || mode === 'organs') spec = r;
-  else if (mode === 'skin') spec = part.file === 'regions' ? skinSpec(part) : r;
+  if (mode === 'realistic') spec = r;
+  else if (mode === 'skin' || mode === 'organs') spec = part.file === 'regions' ? skinSpec(part) : r;
   else if (mode === 'coded') spec = {color: base, roughness: .5, clearcoat: .3, opacity: r.transparent ? Math.max(r.opacity, .4) : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
   else if (mode === 'xray') spec = {color: part.file === 'skeletal' ? '#eef3f7' : base, roughness: .25, clearcoat: .5, opacity: part.file === 'skeletal' ? .92 : .16, transparent: part.file !== 'skeletal', depthWrite: part.file === 'skeletal', emissive: base, emissiveIntensity: part.file === 'skeletal' ? 0 : .35};
   else spec = {color: '#cfc6bb', roughness: .85, clearcoat: 0, opacity: r.transparent ? .5 : 1, transparent: !!r.transparent, depthWrite: r.depthWrite};
