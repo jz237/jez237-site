@@ -3,8 +3,16 @@ import assert from 'node:assert/strict';
 import { defaults } from '../src/schema.js';
 import { createStore } from '../src/state.js';
 import { encodeState, decodeState } from '../src/urlstate.js';
-import { photoAllowed, photoWanted, photoCamera } from '../src/photo-policy.js';
+import { photoAllowed, photoWanted, photoCamera, photoReady } from '../src/photo-policy.js';
 import { PRESET_EXCLUDED } from '../src/presets.js';
+
+test('photographic handoff rejects a loaded coarse fallback and sparse initial detail', () => {
+  assert.equal(photoReady(0, 50, true), false);
+  assert.equal(photoReady(1, 20, false), false);
+  assert.equal(photoReady(1, 20, true), false);
+  assert.equal(photoReady(8, 30, false), true);
+  assert.equal(photoReady(1, 1, true), true);
+});
 
 test('close-up switch has hysteresis and returns to the wide miniature', () => {
   const state = defaults();

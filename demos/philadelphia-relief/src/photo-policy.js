@@ -3,6 +3,11 @@ export const PHOTO_ENTER = 6500;
 export const PHOTO_EXIT = 9500;
 export const PHOTO_PRELOAD = 16000;
 
+// A loaded planet-scale fallback is not a usable photographic close-up.
+export function photoReady(detailTiles, visibleTiles, settled) {
+  return detailTiles >= 8 || (settled && detailTiles >= 1 && detailTiles === visibleTiles);
+}
+
 export function photoAllowed(state) {
   return state.era === 'present' && state.compareMode === 'off'
     && state.layers.terrain && state.layers.imagery
