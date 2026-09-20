@@ -46,6 +46,44 @@ export function trafficCameras(doc) {
     url: `https://511pa.com/map#camera-${p.id}`, traffic: true }));
 }
 
+export const hasCameraPreview = p => !!(p.preview || p.snapshot || p.stream);
+
+// Only published camera media on known provider hosts may reach the player.
+export function regionalCameras(doc) {
+  const seen = new Set();
+  return (doc?.cameras || []).flatMap(p => {
+    if (!p || typeof p.id !== 'string' || seen.has(p.id) || typeof p.name !== 'string') return [];
+    if (!Number.isFinite(p.lon) || !Number.isFinite(p.lat)) return [];
+    if (p.lon < -75.8 || p.lon > -74.7 || p.lat < 39.7 || p.lat > 40.55) return [];
+    const point = { id: p.id, name: p.name, lon: p.lon, lat: p.lat };
+    if (p.source === 'deldot' && /^deldot-NCAM\d+$/.test(p.id)) {
+      const id = p.id.slice(7);
+      const stream = `https://video.deldot.gov:443/live/${id}.stream/playlist.m3u8`;
+      if (p.stream !== stream) return [];
+      seen.add(p.id);
+      return [{ ...point, provider: 'DelDOT', traffic: true,
+        location: 'Published DelDOT location · availability varies',
+        stream: p.enabled ? stream : undefined,
+        url: `camera.html?id=${encodeURIComponent(p.id)}`,
+        providerUrl: 'https://deldot.gov/map/?region=Wilmington' }];
+    }
+    if (p.source === 'attheshore' && /^ats-[a-z0-9-]+$/.test(p.id)) {
+      const id = p.id.slice(4);
+      if (!/^https:\/\/(?:www\.)?attheshore\.com\/camera\/[a-z0-9-]+$/.test(p.url)) return [];
+      const imagePath = `https://api.igotview.com/images/cams/${id}/`;
+      if (typeof p.snapshot !== 'string' || !p.snapshot.startsWith(imagePath)
+        || !/^(?:[0-9]|1[0-9]|2[0-3])\.jpg$/.test(p.snapshot.slice(imagePath.length))) return [];
+      const players = [`https://attheshore.com/combined-player?id=${id}`,
+        `https://www.attheshore.com/combined-player?id=${id}`];
+      seen.add(p.id);
+      return [{ ...point, url: p.url, snapshot: p.snapshot,
+        player: players.includes(p.player) ? p.player : undefined,
+        provider: 'AtTheShore · iGotView', location: p.location, area: true }];
+    }
+    return [];
+  });
+}
+
 // Screen-space groups keep every camera represented without hundreds of overlapping targets.
 // Preview cameras stay separate from traffic-only groups so their images are easy to discover.
 export function groupCameras(points, size = 48) {
