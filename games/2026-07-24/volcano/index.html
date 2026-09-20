@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
-<title>Volcano — real-time photoreal eruption (unfinished demo)</title>
+<title>Volcano — Living Eruption</title>
 <style>
   :root{ --txt:#e8ecf5; --dim:#8d95a8; --line:#242a38; --accent:#ff7a34; }
   *{box-sizing:border-box}
@@ -45,9 +45,9 @@
     background:rgba(9,11,16,.9);backdrop-filter:blur(14px);border-left:1px solid var(--line);
     transform:translateX(100%);transition:transform .24s ease;scrollbar-width:thin}
   #panel.on{transform:none}
-  #panel h2{margin:0;padding:11px 13px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
+  #panel h2{margin:0;padding:26px 65px 26px 13px;font-size:11px;letter-spacing:.1em;text-transform:uppercase;
     color:#9aa3b6;border-bottom:1px solid var(--line);background:#0d1016;position:sticky;top:0;z-index:2}
-  #panel .body{padding:8px 13px 20px}
+  #panel .body{padding:8px 13px 100px}
   .ctl{margin:9px 0}
   .ctl .lab{display:flex;justify-content:space-between;align-items:baseline;gap:8px;margin-bottom:3px}
   .ctl .lab span:first-child{color:#b7bfd0;font-size:11.5px}
@@ -86,10 +86,25 @@
   body.hideui #hud,body.hideui #help,body.hideui #ptog,body.hideui #panel{opacity:0;pointer-events:none}
   body.hideui #panel{transform:translateX(100%)}
   @media (max-width:760px){ #panel{width:min(90vw,300px)} #panel.on ~ #ptog{right:12px} #help{display:none} }
+
+  #scene-title{position:fixed;left:28px;top:26px;z-index:12;pointer-events:none;text-shadow:0 2px 14px #000}
+  #scene-title span{font-size:18px;letter-spacing:.28em} #scene-title small{display:block;color:#bcc6d0;font-size:11px;letter-spacing:.14em;margin-top:5px}
+  #hud{top:100px;display:none} body.diagnostics #hud{display:block}
+  #actions{position:fixed;bottom:26px;right:28px;display:flex;gap:8px;z-index:13}
+  #actions button{border:1px solid #ffffff30;border-radius:6px;background:#0b1119c9;color:#e8ecf5;padding:11px 18px;cursor:pointer;backdrop-filter:blur(10px)}
+  #actions button:first-child{border-color:#cb753b;background:#49230fca;color:#ffd5b4}
+  #help{left:28px;bottom:25px;color:#c2c7cd;text-shadow:0 2px 6px #000}
+  #boot{background:linear-gradient(#080e17a8,#03070cd9),url('assets/eruption-gpt-v1.webp') center/cover}
+  #boot p{color:#b5c0cf} #boot h1{font-size:30px} #bootmsg{color:#929eae}
+  #ptog{right:28px;top:26px;width:38px;height:38px}
+  body.hideui #actions,body.hideui #scene-title{display:none}
+  @media(max-width:760px){#scene-title{left:18px;top:20px}#actions{left:18px;right:auto;bottom:22px}#actions button{padding:12px 17px}#ptog{right:18px;top:20px}}
 </style>
 </head>
 <body>
-<canvas id="gl"></canvas>
+<canvas id="gl" aria-label="Interactive erupting volcano"></canvas>
+<div id="scene-title"><span>VOLCANO</span><small>A living eruption</small></div>
+<div id="actions"><button id="eruption">Erupt</button><button id="pause">Pause</button><button id="sound">Sound on</button></div>
 
 <div id="hud">
   <div class="r"><span>fps</span><b id="h_fps">–</b></div>
@@ -101,23 +116,23 @@
   <div><span class="tag" id="h_mode">WEBGL2</span> <span class="tag bad" id="h_nan" style="display:none">NaN CLAMPED</span></div>
 </div>
 
-<button id="ptog" title="Controls (P)">☰</button>
+<button id="ptog" title="Controls (P)" aria-label="Eruption controls" aria-expanded="false">☰</button>
 <aside id="panel">
   <h2>Eruption controls</h2>
   <div class="body" id="pbody"></div>
 </aside>
 
 <div id="help">
-  <span class="wip">UNFINISHED DEMO</span> — still being tuned<br>
+  <span class="wip">LIVING ERUPTION</span> · twilight at the caldera<br>
   <b>click</b> erupt · <b>drag</b> wind · <b>wheel</b> zoom · <b>space</b> pause · <b>R</b> restart · <b>P</b> panel · <b>H</b> hide UI
 </div>
 
 <div id="boot">
   <div class="in">
     <h1>Volcano</h1>
-    <div style="margin:0 0 14px"><span class="wip">UNFINISHED DEMO</span></div>
-    <p>A real-time eruption. Photographic plates generated with fal, atmosphere simulated live with a
-       Stable-Fluids solver, sound from ElevenLabs. Nothing here is pre-rendered video.</p>
+    <div style="margin:0 0 14px"><span class="wip">LIVING ERUPTION</span></div>
+    <p>A volcanic landscape created with GPT Image, brought to life with rolling ash, flowing lava,
+       heat shimmer and live eruptions. Click to enter. Drag to change the wind.</p>
     <div id="bar"><i></i></div>
     <div id="bootmsg">loading…</div>
     <button class="go" id="gobtn">Click to erupt</button>
@@ -128,16 +143,8 @@
 (function(){
 'use strict';
 
-/* ==========================================================================
-   Volcano — real-time composite.
-     photoreal raster plates (fal)  ->  the set
-     Eulerian fluid (Stable Fluids) ->  the ash column and flank surge
-     GPU particles advected by that
-     fluid's velocity field         ->  embers, lava bombs, ash fall
-     bloom + heat haze + grade      ->  the photographic feel
-   The cone's ALPHA CHANNEL becomes the fluid's solid mask, so the plume
-   collides with that exact silhouette.
-   ========================================================================== */
+/* GPT Image landscape with localized flow animation, registered terrain collision,
+   live fluid atmosphere, ballistic particles, bloom and heat refraction. */
 
 var QS = new URLSearchParams(location.search);
 var QA = QS.has('qa');
@@ -164,11 +171,11 @@ var P = {
   embers:      1.00,
   bombs:       1.00,
   ashfall:     1.00,
-  exposure:    0.95,
-  bloom:       0.42,
+  exposure:    1.03,
+  bloom:       0.18,
   haze:        1.00,
   grade:       1.00,
-  grain:       0.55,
+  grain:       0.15,
   zoom:        1.00,
   lava:        1.00,
   ceiling:     0.62,
@@ -177,18 +184,18 @@ var P = {
   dust:        1.00,
   fglight:     1.00,
   haze2:       0.85,
-  fallout:     0.22,
+  fallout:     0.10,
   spill:       1.00,
   trails:      1.00,
   bolts:       1.00,
-  shake:       1.00,
+  shake:       0.35,
   paused:      false,
   debug:       0
 };
 var DEFAULTS = Object.assign({}, P);
 
-/* cone plate: vent position and framing measured from the alpha matte */
-var VENT_U = 0.533, VENT_V = 0.111;
+/* Crater coordinates measured from eruption-gpt-v1.webp. */
+var VENT_U = 0.493, VENT_V = 0.488;
 var SUMMIT_Y = 0.50;          // where the crater sits in the frame; the rest is sky for the column
 
 var ashLoad = 0;
@@ -201,8 +208,7 @@ var state = {
 /* =====================================================================
    1. ASSETS
    ===================================================================== */
-var IMG_SRC = { sky:'assets/sky.jpg', cone:'assets/cone.webp', ridges:'assets/ridges.webp',
-                fgrocks:'assets/fgrocks.webp', lava:'assets/lava.jpg', ash:'assets/ash.webp' };
+var IMG_SRC = { scene:'assets/eruption-gpt-v1.webp', ash:'assets/ash.webp' };
 var SFX_SRC = { rumble:'assets/audio/rumble.mp3', blast:'assets/audio/blast.mp3',
                 rockfall:'assets/audio/rockfall.mp3', thunder:'assets/audio/thunder.mp3',
                 surge:'assets/audio/surge.mp3' };
@@ -348,12 +354,22 @@ S.splat = FH+[
 '  add += uV[i]*exp(-dot(d,d)/(r*r)); }',
 ' fc=clamp(base+add,uLo,uHi); }'].join('\n');
 
-/* rasterise the cone plate's alpha into the solid mask */
-S.obstacle = FH+[
-'uniform sampler2D uCone; uniform vec4 uXf;',   // xy = scale, zw = offset
-'void main(){ vec2 uv=(vUv-uXf.zw)/uXf.xy;',
-' float a = (uv.x<0.0||uv.x>1.0||uv.y<0.0||uv.y>1.0) ? 0.0 : texture(uCone,vec2(uv.x,1.0-uv.y)).a;',
-' fc=vec4(a>0.55?1.0:0.0,0.0,0.0,a); }'].join('\n');
+/* Registered terrain skyline becomes the fluid solid mask. */
+S.obstacle = FH+`uniform vec4 uXf;
+float terrainY(float x){
+ if(x<0.17) return mix(0.635,0.603,x/0.17);
+ if(x<0.32) return mix(0.603,0.566,(x-0.17)/0.15);
+ if(x<0.43) return mix(0.566,0.486,(x-0.32)/0.11);
+ if(x<0.54) return mix(0.486,0.480,(x-0.43)/0.11);
+ if(x<0.65) return mix(0.480,0.591,(x-0.54)/0.11);
+ return mix(0.591,0.735,(x-0.65)/0.35);
+}
+void main(){
+ vec2 p=(vUv-uXf.zw)/uXf.xy; p.y=1.0-p.y;
+ float a=step(terrainY(p.x),p.y);
+ fc=vec4(a,0.0,0.0,a);
+}`;
+
 
 S.fallout = FH+[
 'uniform sampler2D uDye; uniform float uTime,uAmt,uAspect,uWind;',
@@ -424,9 +440,10 @@ S.pUpdate = ['#version 300 es','precision highp float; precision highp sampler2D
 'in vec2 vUv;','layout(location=0) out vec4 oA;','layout(location=1) out vec4 oB;',
 'uniform sampler2D uA,uB,uVel;',
 'uniform float uDt,uTime,uAspect,uIntensity,uEmit,uVentX,uVentY,uRate;',
-'uniform vec2 uVT;',
+'uniform vec2 uVT; uniform vec4 uSceneXf;',
 'float h1(float n){ vec3 q=fract(vec3(n)*vec3(443.897,441.423,437.195)); q+=dot(q,q.yzx+19.19); return fract((q.x+q.y)*q.z); }',
 'float h2(vec2 p){ vec3 q=fract(p.xyx*vec3(443.897,441.423,437.195)); q+=dot(q,q.yzx+19.19); return fract((q.x+q.y)*q.z); }',
+"float terrainY(float x){\n if(x<0.17) return mix(0.635,0.603,x/0.17);\n if(x<0.32) return mix(0.603,0.566,(x-0.17)/0.15);\n if(x<0.43) return mix(0.566,0.486,(x-0.32)/0.11);\n if(x<0.54) return mix(0.486,0.480,(x-0.43)/0.11);\n if(x<0.65) return mix(0.480,0.591,(x-0.54)/0.11);\n return mix(0.591,0.735,(x-0.65)/0.35);\n}",
 'void main(){',
 ' vec4 a=texture(uA,vUv); vec4 b=texture(uB,vUv);',
 ' vec2 pos=a.xy, vel=a.zw;',
@@ -437,24 +454,26 @@ S.pUpdate = ['#version 300 es','precision highp float; precision highp sampler2D
 '  float r=h1(seed+uTime*0.37), r2=h1(seed*3.1+uTime*0.71), r3=h1(seed*7.7+uTime*1.13);',
 '  if(uEmit<0.02 || r>uRate){ life=-0.05; oA=vec4(pos,0.0,0.0); oB=vec4(life,seed,type,size); return; }',
 '  float ang=(r2-0.5)*2.2;',
-'  float spd=(0.55+r3*1.5)*uIntensity;',
+'  float spd=(0.22+r3*0.55)*uIntensity;',
 '  pos=vec2(uVentX+(r-0.5)*0.045, uVentY+r2*0.02);',
 '  if(type<0.5){        vel=vec2(sin(ang*0.30)*spd*0.16, cos(ang*0.30)*spd*0.90); size=0.5+r3*0.7; }',   // ember
 '  else if(type<1.5){   vel=vec2(sin(ang*1.7)*spd*0.20, cos(ang*0.7)*spd*0.62); size=1.5+r3*2.0; }', // bomb
-'  else {               vel=vec2(sin(ang)*spd*0.7, cos(ang)*spd*0.9); size=2.4+r3*4.5; }',      // ash
+'  else {               vel=vec2(sin(ang)*spd*0.7, cos(ang)*spd*0.9); size=0.7+r3*1.2; }',      // ash
 '  life=1.0;',
 ' } else {',
 '  vec2 fv = texture(uVel,clamp(pos/vec2(uAspect,1.0),0.0,1.0)).xy * uVT * vec2(uAspect,1.0);',   // fluid velocity, uv/sec
 '  if(type<0.5){      vel = mix(vel, fv*1.05, clamp(uDt*9.0,0.0,1.0)); vel.y += uDt*0.22; }',
-'  else if(type<1.5){ vel.y -= uDt*2.15; vel.x += fv.x*uDt*0.45; vel *= (1.0-uDt*0.12); }',
+'  else if(type<1.5){ vel.y -= uDt*0.75; vel.x += fv.x*uDt*0.45; vel *= (1.0-uDt*0.12); }',
 '  else {             vel = mix(vel, fv*0.92+vec2(0.0,-0.05), clamp(uDt*2.2,0.0,1.0)); }',
 '  pos += vel*uDt;',
 '  if(pos.y<-0.06) life=0.0;',
+'  vec2 ground=(pos/vec2(uAspect,1.0)-uSceneXf.zw)/uSceneXf.xy; ground.y=1.0-ground.y;',
+'  if(type>0.5 && type<1.5 && vel.y<0.0 && ground.y>terrainY(ground.x)) life=0.0;',
 ' }',
 ' oA=vec4(pos,vel); oB=vec4(life,seed,type,size); }'].join('\n');
 
 var P_VS = ['#version 300 es','precision highp float;',
-'uniform sampler2D uA,uB,uDye; uniform vec2 uDim; uniform float uAspect,uPx,uWant,uScale;',
+'uniform sampler2D uA,uB,uDye; uniform vec2 uDim; uniform float uAspect,uPx,uWant,uScale,uAmount;',
 'uniform vec4 uXf;',
 'out float vLife; out float vSeed; out float vType; out float vDens;',
 'void main(){',
@@ -462,7 +481,7 @@ var P_VS = ['#version 300 es','precision highp float;',
 ' vec2 uv=(vec2(float(gx),float(gy))+0.5)/uDim;',
 ' vec4 a=texture(uA,uv); vec4 b=texture(uB,uv);',
 ' vLife=b.x; vSeed=b.y; vType=b.z;',
-' if(b.x<=0.0 || abs(b.z-uWant)>0.5){ gl_Position=vec4(2.0,2.0,2.0,1.0); gl_PointSize=0.0; return; }',
+' if(b.x<=0.0 || abs(b.z-uWant)>0.5 || b.y>uAmount){ gl_Position=vec4(2.0,2.0,2.0,1.0); gl_PointSize=0.0; return; }',
 ' vec2 sc = a.xy/vec2(uAspect,1.0);',
 ' vDens = texture(uDye, clamp(sc,0.0,1.0)).x;',
 ' sc = sc*uXf.xy + uXf.zw;',
@@ -506,7 +525,7 @@ var TRAIL_FS = ['#version 300 es','precision highp float;',
 ' float f=1.0-vT;',
 ' vec3 hot=vec3(1.0,0.62,0.20), cool=vec3(0.75,0.13,0.02);',
 ' vec3 col=mix(cool,hot,f*f);',
-' fc=vec4(col*f*0.55*vLife, f*0.55*vLife); }'].join('\n');
+' fc=vec4(col*f*0.24*vLife, f*0.24*vLife); }'].join('\n');
 
 var BOLT_VS = ['#version 300 es','precision highp float;','in vec2 aPos;',
 'void main(){ gl_Position=vec4(aPos,0.0,1.0); }'].join('\n');
@@ -525,7 +544,7 @@ var P_FS_ASH = ['#version 300 es','precision highp float;',
 ' pc=vec2(cs*pc.x-sn*pc.y, sn*pc.x+cs*pc.y)+0.5;',
 ' if(pc.x<0.0||pc.x>1.0||pc.y<0.0||pc.y>1.0) discard;',
 ' vec4 t=texture(uAsh,pc);',
-' float a=t.a*clamp(vLife*1.5,0.0,1.0)*0.15*smoothstep(0.08,0.60,vDens);',
+' float a=t.a*clamp(vLife*1.5,0.0,1.0)*0.06*smoothstep(0.08,0.60,vDens);',
 ' // BiRefNet returns a near-binary matte, which leaves a hard cutout edge on an',
 ' // inherently soft subject -- window the alpha radially so every puff fades out',
 ' float rad=length(gl_PointCoord-0.5)*2.0;',
@@ -533,42 +552,62 @@ var P_FS_ASH = ['#version 300 es','precision highp float;',
 ' if(a<0.004) discard;',
 ' // take ONLY alpha from the plate: it was matted off white, so its edge texels',
 ' // carry white RGB and premultiplying them rings every puff with a bright halo',
-' vec3 col=vec3(0.56,0.545,0.535)*(0.72+0.55*ha(vSeed*11.3));',
+' vec3 col=vec3(0.055,0.060,0.070)*(0.72+0.55*ha(vSeed*11.3));',
 ' fc=vec4(col*a,a); }'].join('\n');
 
 /* ---- scene draws ---- */
-S.plate = FH+[
-'uniform sampler2D uTex; uniform vec4 uXf; uniform vec4 uTintA; uniform float uIsJpg,uAsh,uLit,uHaze;',
-'uniform vec3 uHazeCol;',
-'uniform vec3 uLitCol;',
-'void main(){ vec2 uv=(vUv-uXf.zw)/uXf.xy;',
-' if(uv.x<0.0||uv.x>1.0||uv.y<0.0||uv.y>1.0){ fc=vec4(0.0); return; }',
-' vec4 t=texture(uTex,vec2(uv.x,1.0-uv.y));',
-' if(uIsJpg>0.5) t.a=1.0;',
-' vec3 rgb=t.rgb;',
-' if(uAsh>0.0){',
-'   float lum=dot(rgb,vec3(0.299,0.587,0.114));',
-'   // fresh ash lies on the lit, upward-facing rock and slides out of the gullies',
-'   float cover=uAsh*smoothstep(0.20,0.62,lum);',
-'   vec3 ash=vec3(0.400,0.378,0.352)*(0.55+0.70*lum);',
-'   rgb=mix(rgb, ash, clamp(cover,0.0,0.88));',
-' }',
-' if(uHaze>0.0){',
-'   // aerial perspective: more air sits between the camera and the BASE of a distant',
-'   // ridge than its crest, so haze must be a vertical gradient, not a flat tint',
-'   float hz=uHaze*(1.0-smoothstep(0.09,0.42,vUv.y));',
-'   float lum3=dot(rgb,vec3(0.299,0.587,0.114));',
-'   rgb=mix(rgb,uHazeCol,clamp(hz,0.0,0.88));',
-'   // crests catch the last of the sunset',
-'   rgb+=vec3(1.0,0.60,0.34)*0.30*uHaze*smoothstep(0.30,0.75,lum3);',
-' }',
-' if(uLit>0.0){',
-'   // the eruption throws light onto the foreground: brighter facets face it, so',
-'   // key off the plate\'s own luminance instead of washing the silhouette flat',
-'   float l2=dot(rgb,vec3(0.299,0.587,0.114));',
-'   rgb += uLitCol*uLit*(0.18+2.6*l2*l2);',
-' }',
-' fc=vec4(rgb*t.a*uTintA.rgb*uTintA.a, t.a*uTintA.a); }'].join('\n');
+S.landscape = FH+`uniform sampler2D uScene,uDye;
+uniform vec4 uXf;
+uniform float uTime,uWind,uIntensity,uFlow,uPulse,uHaze,uSteam,uSpill,uDust;
+float terrainY(float x){
+ if(x<0.17) return mix(0.635,0.603,x/0.17);
+ if(x<0.32) return mix(0.603,0.566,(x-0.17)/0.15);
+ if(x<0.43) return mix(0.566,0.486,(x-0.32)/0.11);
+ if(x<0.54) return mix(0.486,0.480,(x-0.43)/0.11);
+ if(x<0.65) return mix(0.480,0.591,(x-0.54)/0.11);
+ return mix(0.591,0.735,(x-0.65)/0.35);
+}
+
+float hash(vec2 p){return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453);}
+float noise(vec2 p){vec2 i=floor(p),f=fract(p);f=f*f*(3.0-2.0*f);return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);}
+void main(){
+ vec2 uv=(vUv-uXf.zw)/uXf.xy; uv.y=1.0-uv.y;
+ float above=1.0-smoothstep(0.458,0.490,uv.y);
+ float height=max(0.0,0.49-uv.y);
+ float center=0.493+height*0.23;
+ float width=0.042+height*0.47;
+ float cloud=(1.0-smoothstep(width*0.60,width,abs(uv.x-center)))*above;
+ float grounded=smoothstep(terrainY(uv.x)-0.008,terrainY(uv.x)+0.008,uv.y);
+ cloud*=1.0-grounded;
+ float n=noise(uv*vec2(19.0,24.0)+vec2(uTime*0.037,-uTime*0.10));
+ vec2 flow=vec2(-0.008-height*0.025-uWind*0.038,0.025+height*0.055);
+ flow+=vec2(n-0.5,noise(uv*31.0-uTime*0.05)-0.5)*0.017;
+ flow*=cloud*(0.55+0.45*uIntensity);
+ // Two overlapping advection phases keep the billows rising without a reset jump.
+ float phase=fract(uTime*0.075), phase2=fract(uTime*0.075+0.5);
+ float weight=abs(phase*2.0-1.0);
+ vec2 heat=vec2(sin(uv.y*330.0-uTime*6.0),sin(uv.x*260.0+uTime*4.0));
+ float hot=exp(-dot((uv-vec2(0.493,0.465))*vec2(16.0,22.0),(uv-vec2(0.493,0.465))*vec2(16.0,22.0)));
+ vec2 wobble=heat*0.00065*hot*uHaze;
+ vec3 a=texture(uScene,clamp(uv+flow*(phase-0.5)+wobble,0.001,0.999)).rgb;
+ vec3 b=texture(uScene,clamp(uv+flow*(phase2-0.5)+wobble,0.001,0.999)).rgb;
+ vec3 col=mix(a,b,weight);
+ // Lava only illuminates existing photographed channels. Geometry stays fixed.
+ float lava=smoothstep(0.16,0.45,col.r-max(col.g,col.b))*smoothstep(0.465,0.50,uv.y);
+ float travel=0.5+0.5*sin(uv.y*175.0-uv.x*80.0-uTime*3.8+noise(uv*80.0)*5.0);
+ float flicker=sin(uTime*7.0)*sin(uTime*11.3)*0.035;
+ col*=1.0+lava*((uFlow-1.0)*0.55+(travel-0.4)*0.34*uFlow+flicker+uPulse*0.20);
+ float ventLight=exp(-length((uv-vec2(0.493,0.49))*vec2(1.0,1.5))*19.0);
+ col+=vec3(1.0,0.23,0.035)*ventLight*(0.020+uPulse*0.065)*uSpill;
+ // Thin low steam, never an opaque layer over the detailed lava field.
+ float steam=noise(uv*vec2(28.0,70.0)+vec2(uTime*0.05,-uTime*0.14));
+ float steamBand=exp(-pow((uv.y-0.69)/0.12,2.0))*grounded;
+ col+=vec3(0.17,0.18,0.20)*smoothstep(0.66,0.90,steam)*steamBand*uSteam*0.14;
+ col=mix(col,col*vec3(0.87,0.88,0.89),uDust*grounded*0.12);
+ // The plate is already display-referred. Decode before the HDR composite.
+ fc=vec4(pow(max(col,vec3(0.0)),vec3(2.2)),1.0);
+}`;
+
 
 /* lit volumetric smoke: march toward the key light for self-shadowing */
 S.smoke = FH+[
@@ -594,69 +633,6 @@ S.smoke = FH+[
 ' fc=vec4(col*a,a); }'].join('\n');
 
 /* crater + fissure emissive, masked by the cone silhouette */
-S.lava = FH+[
-'uniform sampler2D uLava,uObs,uCone; uniform float uTime,uGlow,uAspect,uFlow,uSpill,uSteam;',
-'uniform vec2 uVent; uniform vec4 uXf;',
-'float h(vec2 p){ vec3 q=fract(vec3(p.xyx)*vec3(443.897,441.423,437.195));',
-' q+=dot(q,q.yzx+19.19); return fract((q.x+q.y)*q.z); }',
-'float vn(vec2 p){ vec2 i=floor(p),f=fract(p); vec2 u=f*f*(3.0-2.0*f);',
-' return mix(mix(h(i),h(i+vec2(1,0)),u.x),mix(h(i+vec2(0,1)),h(i+vec2(1,1)),u.x),u.y); }',
-'float fbm(vec2 p){ return vn(p)*0.58+vn(p*2.1+7.3)*0.28+vn(p*4.3+19.1)*0.14; }',
-'void main(){',
-' if(texture(uObs,vUv).x<0.5){ fc=vec4(0.0); return; }',
-' vec2 W=vUv*vec2(uAspect,1.0);',
-' vec2 d=W-uVent; float dist=length(d);',
-' // read the photographed rock: its gullies are the dark striations, and real lava',
-' // runs down those channels rather than fanning evenly over the whole cone',
-' vec2 cuv=(vUv-uXf.zw)/uXf.xy;',
-' float lum=0.0; float lumL=0.0; float lumR=0.0;',
-' if(cuv.x>=0.0&&cuv.x<=1.0&&cuv.y>=0.0&&cuv.y<=1.0){',
-'   vec2 t0=vec2(cuv.x,1.0-cuv.y);',
-'   vec3 ct=texture(uCone,t0).rgb;',
-'   lum=dot(ct,vec3(0.299,0.587,0.114));',
-'   lumL=dot(texture(uCone,t0-vec2(0.010,0.0)).rgb,vec3(0.299,0.587,0.114));',
-'   lumR=dot(texture(uCone,t0+vec2(0.010,0.0)).rgb,vec3(0.299,0.587,0.114)); }',
-' // local darkness relative to the surrounding rock = a gully',
-' float gully=clamp(((lumL+lumR)*0.5-lum)*7.0,0.0,1.0);',
-' float ang=atan(d.x, -d.y);',
-' float lake=exp(-dist*dist/0.0018);',
-' float below=smoothstep(0.004,0.045,-d.y);',
-' // CHANNEL GEOMETRY IS PERSISTENT. A lava channel does not slide sideways or',
-' // translate downhill -- once cut, it stays. So this noise does NOT scroll.',
-' float lane=fbm(vec2(ang*17.0, dist*1.15));',
-' float chan=smoothstep(0.50,0.66,lane)*mix(0.22,1.0,gully);',
-' // the flow FRONT creeps outward over time, and material only glows behind it',
-' float front=smoothstep(0.06,-0.10, dist-(0.34+0.13*fract(mod(uTime,240.0)*0.028)));',
-' chan*=below*front;',
-' // what actually moves: incandescent material travelling DOWN the channel',
-' float travel=fbm(vec2(ang*17.0, dist*13.0 - mod(uTime,240.0)*1.35));',
-' float pulse=smoothstep(0.46,0.80,travel);',
-' // crust: mostly black plates, glowing only in the cracks between them',
-' vec3 lt=texture(uLava, vec2(ang*0.55, dist*5.5 - mod(uTime,240.0)*0.16)).rgb;',
-' float cracks=smoothstep(0.30,0.80,lt.r-lt.b*0.6);',
-' // thin incandescent core, and a much dimmer cooling body around it',
-' float core=chan*pulse*mix(0.25,1.0,cracks)*exp(-dist*1.9);',
-' float body=chan*(0.14+0.26*cracks)*exp(-dist*1.5);',
-' float flows=(core*1.9+body)*uFlow;',
-' float steamGate=core;',
-' float nB=fbm(vec2(ang*17.0,(dist+0.030)*13.0 - mod(uTime,240.0)*1.35));',
-' float chanB=smoothstep(0.52,0.82,nB)*chan*exp(-dist*3.4);',
-' float wisp=fbm(vec2(W.x*9.0, W.y*6.5 - mod(uTime,240.0)*0.85));',
-' float steam=chanB*smoothstep(0.60,0.84,wisp)*uSteam*mix(0.20,1.0,gully);',
-' float m=clamp(lake*0.70 + flows*2.6, 0.0, 3.0);',
-' // incandescent ramp: deep red at the cooling tips, white-hot only in the vent',
-' float t=clamp(m*0.75,0.0,1.0);',
-' vec3 col;',
-' if(t<0.30)      col=mix(vec3(0.16,0.008,0.002),vec3(0.78,0.10,0.008),t/0.30);',
-' else if(t<0.62) col=mix(vec3(0.78,0.10,0.008),vec3(1.0,0.42,0.03),(t-0.30)/0.32);',
-' else            col=mix(vec3(1.0,0.42,0.03),vec3(1.0,0.90,0.55),(t-0.62)/0.38);',
-' // warm light spilling onto the rock: modulated by the plate\'s own luminance so it',
-' // lands on lit facets instead of sitting on top as a flat wash',
-' float spill=exp(-dist*dist/0.030)*uSpill*lum*(0.55+0.45*step(-0.002,-d.y));',
-' vec3 spillCol=vec3(1.0,0.42,0.12)*spill;',
-' // steam is lit from beneath by the lava, so it reads warm near the flow',
-' vec3 steamCol=mix(vec3(0.62,0.60,0.60),vec3(1.0,0.66,0.34),clamp(m*0.9,0.0,1.0))*steam;',
-' fc=vec4(col*m*uGlow + spillCol + steamCol, clamp(m*uGlow+spill+steam*0.8,0.0,1.0)); }'].join('\n');
 
 /* ---- post ---- */
 S.bright = FH+['uniform sampler2D uTex; uniform float uThresh;',
@@ -704,7 +680,7 @@ S.final = FH+[
 ' c=mix(vec3(l),c,mix(1.0,1.12,uGrade));',
 ' float d=distance(vUv,vec2(0.5)); c*=mix(1.0,smoothstep(1.02,0.28,d),uVig);',
 ' c+=(h(vUv*vec2(1920.0,1080.0)+uTime)-0.5)*0.035*uGrain;',
-' fc=vec4(c,1.0); }'].join('\n');
+' fc=vec4(pow(max(c,vec3(0.0)),vec3(1.0/2.2)),1.0); }'].join('\n');
 
 /* ---- compile helpers ---- */
 function sh(t,src){ var s=gl.createShader(t); gl.shaderSource(s,src); gl.compileShader(s);
@@ -850,15 +826,8 @@ function plateXf(imgAspect, widthFrac, anchorV, anchorY, offX, offY, minH){
   return [sx, sy, (1-sx)*0.5+offX, anchorY-(1-anchorV)*sy+offY];
 }
 function layout(){
-  var z=P.zoom;
-  var ia = IMG.sky ? IMG.sky.width/IMG.sky.height : 4/3;
-  XF.sky    = coverXf(ia, 1.06*z, cam.x*0.010, cam.y*0.010);
-  var ca = IMG.cone ? IMG.cone.width/IMG.cone.height : 4/3;
-  XF.cone   = plateXf(ca, 0.80*z, 0.107, SUMMIT_Y, cam.x*0.030, cam.y*0.030, 0.82*z);
-  var ra = IMG.ridges ? IMG.ridges.width/IMG.ridges.height : 4/3;
-  XF.ridges = plateXf(ra, 1.00*z, 0.696, 0.10,  cam.x*0.018, cam.y*0.018, 0.55*z);
-  var fa = IMG.fgrocks ? IMG.fgrocks.width/IMG.fgrocks.height : 4/3;
-  XF.rocks  = plateXf(fa, 1.20*z, 0.497, 0.16,  cam.x*0.060, cam.y*0.060, 0.55*z);
+  var ia=IMG.scene ? IMG.scene.width/IMG.scene.height : 16/9;
+  XF.cone=coverXf(ia,1.035*Math.max(1,P.zoom),cam.x*0.004,cam.y*0.004);
 }
 /* vent position in world units (x in [0,aspect], y in [0,1]) */
 function ventWorld(){
@@ -879,10 +848,10 @@ function step(dt){
   var vel=FB.vel, dye=FB.dye, pres=FB.pres;
   gl.disable(gl.BLEND); gl.bindVertexArray(quadVAO);
 
-  /* obstacle mask straight from the cone plate's alpha */
+  /* Collision skyline shares the photographic scene transform. */
   var p=PR.obstacle.use();
   p.f('uMaxVel',MAXV).v2('uTexel',FB.obs.tx,FB.obs.ty)
-   .v4('uXf',XF.cone[0],XF.cone[1],XF.cone[2],XF.cone[3]).tex('uCone',TEX.cone);
+   .v4('uXf',XF.cone[0],XF.cone[1],XF.cone[2],XF.cone[3]);
   blit(FB.obs);
 
   /* advect */
@@ -980,9 +949,9 @@ function step(dt){
   p=PR.pUpdate.use();
   p.v2('uTexel',FB.part.tx,FB.part.ty).f('uMaxVel',1)
    .f('uDt',dt).f('uTime',state.t).f('uAspect',state.aspect)
-   .f('uIntensity',P.intensity*(0.55+0.9*em.rate)).f('uEmit',em.rate)
+   .f('uIntensity',P.intensity*(0.35+0.14*em.rate)).f('uEmit',em.rate)
    .f('uVentX',pv[0]).f('uVentY',pv[1]).f('uRate',clamp(em.rate*0.85,0,1))
-   .v2('uVT',vel.tx,vel.ty)
+   .v2('uVT',vel.tx,vel.ty).v4('uSceneXf',XF.cone[0],XF.cone[1],XF.cone[2],XF.cone[3])
    .tex('uA',FB.part.read.texs[0]).tex('uB',FB.part.read.texs[1]).tex('uVel',vel.read.tex);
   blit(FB.part.write); FB.part.swap();
 
@@ -1126,23 +1095,15 @@ function erupt(){
 /* =====================================================================
    6. RENDER
    ===================================================================== */
-function drawPlate(tex,xf,tint,isJpg,ash,lit,haze){
-  var p=PR.plate.use();
-  p.f('uMaxVel',1).v2('uTexel',1/canvas.width,1/canvas.height)
-   .v4('uXf',xf[0],xf[1],xf[2],xf[3])
-   .v4('uTintA',tint[0],tint[1],tint[2],tint[3]).f('uIsJpg',isJpg?1:0)
-   .f('uAsh',ash||0).f('uLit',lit||0).v3('uLitCol',1.0,0.44,0.16)
-   .f('uHaze',haze||0).v3('uHazeCol',0.52,0.47,0.47).tex('uTex',tex);
-  blit(FB.scene);
-}
+
 function drawSmoke(chan){
   var vw=ventWorld();
   var p=PR.smoke.use();
   p.f('uMaxVel',1).v2('uTexel',FB.dye.tx,FB.dye.ty).v2('uVT',FB.dye.tx,FB.dye.ty)
-   .i('uChan',chan).f('uDens',chan===0?4.2:3.0).f('uEmis',chan===0?0.040:0.015)
+   .i('uChan',chan).f('uDens',chan===0?0.36:0.32).f('uEmis',chan===0?0.040:0.015)
    .f('uLightK',0.30).f('uAspect',state.aspect)
    .v2('uLight',-0.86,-0.22).v2('uVent',vw[0],vw[1]).f('uUnder',P.spill*0.22)
-   .v3('uColA',0.185,0.190,0.215).v3('uColB',0.68,0.590,0.500)
+   .v3('uColA',0.028,0.035,0.049).v3('uColB',0.11,0.12,0.14)
    .v3('uEmisCol',0.95,0.36,0.10)
    .tex('uDye',FB.dye.read.tex);
   blit(FB.scene);
@@ -1153,7 +1114,8 @@ function drawParticles(which){
   gl.uniform2f(pr.l('uDim'),PART_DIM,PART_DIM);
   gl.uniform1f(pr.l('uAspect'),state.aspect);
   gl.uniform1f(pr.l('uPx'),canvas.height/900);
-  gl.uniform1f(pr.l('uScale'),which==='ash'?2.8:2.0);
+  gl.uniform1f(pr.l('uScale'),which==='ash'?1.0:1.4);
+  gl.uniform1f(pr.l('uAmount'),clamp(which==='ash'?P.ashfall*0.15:which==='ember'?P.embers*0.75:P.bombs,0,1));
   gl.uniform4f(pr.l('uXf'),1,1,0,0);
   gl.uniform1f(pr.l('uWant'), which==='ember'?0:(which==='bomb'?1:2));
   gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,FB.part.read.texs[0]); gl.uniform1i(pr.l('uA'),0);
@@ -1169,7 +1131,7 @@ function drawParticles(which){
 function render(){
   var w=canvas.width,h=canvas.height;
   /* blast-driven camera shake, decaying, applied in screen uv */
-  var sk=state.shake*P.shake;
+  var sk=P.paused?0:state.shake*P.shake;
   var shakeX=(Math.random()-0.5)*sk*0.030, shakeY=(Math.random()-0.5)*sk*0.030;
   gl.bindFramebuffer(gl.FRAMEBUFFER,FB.scene.fb); gl.viewport(0,0,w,h);
   gl.clearColor(0,0,0,1); gl.clear(gl.COLOR_BUFFER_BIT);
@@ -1177,26 +1139,15 @@ function render(){
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);      // premultiplied-alpha over
 
-  drawPlate(TEX.sky,    XF.sky,    [1,1,1,1], true);
-  drawPlate(TEX.ridges, XF.ridges, [0.42,0.46,0.58,1], false, 0, 0, P.haze2);
-
-  drawSmoke(0);                                       // ash column, behind the cone
-
-  var al=clamp(ashLoad*P.dust,0,1);
-  drawPlate(TEX.cone,   XF.cone, [0.95,0.88,0.84,1], false, al*0.85);
-
-  /* crater + fissure glow, additive */
-  gl.blendFunc(gl.ONE,gl.ONE);
-  var p=PR.lava.use();
-  var v=ventWorld();
-  p.f('uMaxVel',1).v2('uTexel',FB.obs.tx,FB.obs.ty).f('uTime',state.t)
-   .f('uGlow',0.60*clamp(P.intensity,0,2)).f('uAspect',state.aspect).v2('uVent',v[0],v[1]).f('uFlow',P.lava)
-   .f('uSpill',P.spill).f('uSteam',P.steam).v4('uXf',XF.cone[0],XF.cone[1],XF.cone[2],XF.cone[3])
-   .tex('uLava',TEX.lava).tex('uObs',FB.obs.tex).tex('uCone',TEX.cone);
+  var p=PR.landscape.use();
+  p.v4('uXf',XF.cone[0],XF.cone[1],XF.cone[2],XF.cone[3])
+   .f('uTime',state.t).f('uWind',P.windX).f('uIntensity',P.intensity)
+   .f('uFlow',P.lava).f('uPulse',emission().rate).f('uHaze',P.haze)
+   .f('uSteam',P.steam).f('uSpill',P.spill).f('uDust',clamp(ashLoad*P.dust,0,1))
+   .tex('uScene',TEX.scene);
   blit(FB.scene);
-
-  gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
-  drawSmoke(1);                                       // flank surge, in front of the cone
+  drawSmoke(0);
+  drawSmoke(1);
 
   if(P.ashfall>0.01) drawParticles('ash');
   gl.blendFunc(gl.ONE,gl.ONE);
@@ -1205,7 +1156,7 @@ function render(){
     var tp=PR.trail.use();
     gl.uniform2f(tp.l('uDim'),PART_DIM,PART_DIM);
     gl.uniform1f(tp.l('uAspect'),state.aspect);
-    gl.uniform1f(tp.l('uLen'),0.040*P.trails);
+    gl.uniform1f(tp.l('uLen'),0.006*P.trails);
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D,FB.part.read.texs[0]); gl.uniform1i(tp.l('uA'),0);
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D,FB.part.read.texs[1]); gl.uniform1i(tp.l('uB'),1);
     gl.bindFramebuffer(gl.FRAMEBUFFER,FB.scene.fb); gl.viewport(0,0,FB.scene.w,FB.scene.h);
@@ -1234,8 +1185,6 @@ function render(){
   }
 
   gl.blendFunc(gl.ONE,gl.ONE_MINUS_SRC_ALPHA);
-  var fgLit = P.fglight*(0.16 + 0.42*clamp(P.intensity,0,2)*emission().rate + 1.5*state.flash);
-  drawPlate(TEX.fgrocks,XF.rocks,  [0.13,0.125,0.15,1], false, 0, fgLit);
   gl.disable(gl.BLEND);
 
   /* bloom */
@@ -1260,7 +1209,7 @@ function render(){
   p.f('uMaxVel',1).v2('uTexel',1/w,1/h)
    .f('uExposure',P.exposure).f('uBloomAmt',P.bloom).f('uHaze',P.haze)
    .f('uGrade',P.grade).f('uGrain',P.grain).f('uTime',state.t)
-   .f('uFlash',state.flash).f('uVig',0.85).f('uDebug',P.debug)
+   .f('uFlash',state.flash).f('uVig',0.24).f('uDebug',P.debug)
    .v2('uShake',shakeX,shakeY)
    .tex('uScene',FB.scene.tex).tex('uBloom',FB.b2.tex).tex('uDye',FB.dye.read.tex);
   blit(null);
@@ -1310,8 +1259,6 @@ var SPEC=[
   ['spread','Anvil spread',0,1.5,0.01,2],
   ['steam','Steam off flows',0,3,0.01,2],
   ['dust','Ash accumulation',0,2,0.01,2],
-  ['fglight','Foreground light',0,3,0.01,2],
-  ['haze2','Distance haze',0,1.5,0.01,2],
   ['fallout','Ash fallout',0,2.5,0.01,2],
   ['spill','Vent light spill',0,2.5,0.01,2],
   ['trails','Bomb trails',0,3,0.01,2],
@@ -1321,7 +1268,7 @@ var SPEC=[
   ['haze','Heat haze',0,3,0.01,2],
   ['grade','Grade',0,2,0.01,2],
   ['grain','Grain',0,2,0.01,2],
-  ['zoom','Zoom',0.8,1.6,0.01,2],
+  ['zoom','Zoom',1,1.6,0.01,2],
   ['shake','Camera shake',0,2,0.01,2]
 ];
 function buildUI(){
@@ -1338,7 +1285,7 @@ function buildUI(){
     var d=document.createElement('div'); d.className='ctl';
     d.innerHTML='<div class="lab"><span>'+s[1]+'</span><span class="v"></span></div>';
     var inp=document.createElement('input'); inp.type='range';
-    inp.min=s[2]; inp.max=s[3]; inp.step=s[4]; inp.value=P[k];
+    inp.setAttribute('aria-label',s[1]); inp.min=s[2]; inp.max=s[3]; inp.step=s[4]; inp.value=P[k];
     var out=d.querySelector('.v'); out.textContent=Number(P[k]).toFixed(s[5]);
     inp.addEventListener('input',function(){
       P[k]=parseFloat(inp.value); out.textContent=P[k].toFixed(s[5]);
@@ -1362,48 +1309,55 @@ function buildUI(){
   var rr=document.createElement('div'); rr.className='row';
   var res=document.createElement('button'); res.className='btn'; res.textContent='Reset all';
   res.onclick=function(){ Object.keys(DEFAULTS).forEach(function(k){ P[k]=DEFAULTS[k]; });
-                          refs.forEach(function(f){f()}); syncSeg(); layout(); };
+                          refs.forEach(function(f){f()}); syncSeg(); syncPlayback(); layout(); };
   rr.appendChild(res); b.appendChild(rr);
 
   var h=document.createElement('p'); h.className='hint';
   h.textContent='Click the sky to trigger a fresh blast. Drag left/right to push the wind. '+
-                'The cone is a photograph — its alpha channel is what the smoke collides with.';
+                'GPT Image landscape with animated ash and lava. Intensity adds live activity to the photographed eruption.';
   b.appendChild(h);
 }
 
 /* =====================================================================
    9. INPUT
    ===================================================================== */
-var dragging=false, lastX=0;
+var dragging=false, lastX=0, dragDistance=0;
+var muted=false;
+function syncPlayback(){ document.getElementById('pause').textContent=P.paused?'Resume':'Pause'; if(master) master.gain.value=(muted||P.paused)?0:0.9; }
+document.getElementById('eruption').onclick=function(){ if(state.started) erupt(); };
+document.getElementById('pause').onclick=function(){ P.paused=!P.paused; syncPlayback(); };
+document.getElementById('sound').onclick=function(){ muted=!muted; this.textContent=muted?'Sound off':'Sound on'; syncPlayback(); };
 canvas.addEventListener('pointerdown',function(e){
   if(!state.started) return;
-  dragging=true; lastX=e.clientX; canvas.setPointerCapture(e.pointerId);
+  dragging=true; dragDistance=0; lastX=e.clientX; canvas.setPointerCapture(e.pointerId);
 });
 window.addEventListener('pointermove',function(e){
   cam.tx = (e.clientX/window.innerWidth - 0.5)*2;
   cam.ty = (e.clientY/window.innerHeight - 0.5)*2;
-  if(dragging){ P.windX = clamp(P.windX + (e.clientX-lastX)*0.0009, -0.8, 0.8); lastX=e.clientX; }
+  if(dragging){ dragDistance+=Math.abs(e.clientX-lastX); P.windX = clamp(P.windX + (e.clientX-lastX)*0.0009, -0.8, 0.8); lastX=e.clientX; }
 });
 window.addEventListener('pointerup',function(e){
   if(dragging && Math.abs(e.clientX-lastX)<3){}
   dragging=false;
 });
-canvas.addEventListener('click',function(){ if(state.started) erupt(); });
+canvas.addEventListener('click',function(){ if(state.started && dragDistance<6) erupt(); });
 canvas.addEventListener('wheel',function(e){
   if(!state.started) return;
   e.preventDefault();
-  P.zoom=clamp(P.zoom - Math.sign(e.deltaY)*0.04, 0.8, 1.6); layout();
+  P.zoom=clamp(P.zoom - Math.sign(e.deltaY)*0.04, 1, 1.6); layout();
 },{passive:false});
 window.addEventListener('keydown',function(e){
   if(e.target.tagName==='INPUT') return;
   var k=e.key;
-  if(k===' '){ e.preventDefault(); P.paused=!P.paused; }
+  if(k===' '){ e.preventDefault(); P.paused=!P.paused; syncPlayback(); }
   else if(k==='r'||k==='R') restartSequence();
   else if(k==='h'||k==='H') document.body.classList.toggle('hideui');
-  else if(k==='p'||k==='P') document.getElementById('panel').classList.toggle('on');
+  else if(k==='p'||k==='P') togglePanel();
   else if(k==='e'||k==='E') erupt();
+  else if(k==='d'||k==='D') document.body.classList.toggle('diagnostics');
 });
-document.getElementById('ptog').onclick=function(){ document.getElementById('panel').classList.toggle('on'); };
+function togglePanel(){ var open=document.getElementById('panel').classList.toggle('on'); document.getElementById('ptog').setAttribute('aria-expanded',String(open)); }
+document.getElementById('ptog').onclick=togglePanel;
 
 /* =====================================================================
    10. LOOP
@@ -1468,6 +1422,7 @@ function begin(){
 }
 
 Promise.all([loadImages(), loadAudio()]).then(function(){
+  if(!IMG.scene){ fail('The landscape could not load. Please reload to retry.'); return; }
   bootMsg.textContent='initialising renderer…';
   var err=initGL();
   if(err){ fail(err+' — this demo needs WebGL2 with float render targets.'); return; }
@@ -1492,7 +1447,7 @@ Promise.all([loadImages(), loadAudio()]).then(function(){
       stats:function(){ return {fps:state.fps,ms:state.ms,residual:state.residual,nan:state.nanTick>0,
                                 sim:[state.simW,state.simH],dye:[state.dyeW,state.dyeH],particles:PART_DIM*PART_DIM,
                                 stage:state.stage,started:state.started,
-                                assets:Object.keys(TEX).length}; },
+                                assets:Object.keys(TEX).length, image:[IMG.scene.width,IMG.scene.height], renderError:gl.getError()}; },
       set:function(k,v){ P[k]=v; if(k==='zoom') layout(); },
       erupt:erupt, restart:restartSequence, bolt:spawnBolt,
       setStage:function(n){ for(var i=0;i<STAGES.length;i++) if(STAGES[i].name===n){ stageIdx=i; state.stage=n; state.stageT=0; onStageEnter(n); return true; } return false; },
