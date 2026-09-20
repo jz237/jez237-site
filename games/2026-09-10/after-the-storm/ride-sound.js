@@ -1,7 +1,11 @@
 const clamp=(v,a=0,b=1)=>Math.max(a,Math.min(b,v));
 export function rideSoundMix(memory,r,depth,time){const h=r.hydro,dt=memory.time===undefined?0:clamp(time-memory.time,0,.2);if(memory.time!==undefined&&time<memory.time){memory.slap=memory.drain=0;memory.landing=h.landingId;}memory.time=time;
- if(memory.landing!==undefined&&h.landingId!==memory.landing)memory.drain=clamp(h.impact/10);memory.landing=h.landingId;
+ const landed=memory.landing!==undefined&&h.landingId!==memory.landing;
+ if(landed)memory.drain=clamp(h.impact/10);memory.landing=h.landingId;
  const attack=Math.max(0,(h.load||1)-(memory.load??1)-.5)*h.wet;memory.load=h.load||1;memory.slap=Math.max((memory.slap||0)*Math.exp(-dt*14),clamp(attack*.11));memory.drain=(memory.drain||0)*Math.exp(-dt*.85);
+ // The entry event gives the low water slap one attack, followed by draining
+ // noise. Holding the impact value across several frames cannot retrigger it.
+ if(landed)memory.slap=Math.max(memory.slap,clamp((h.impact-1.5)/14)*(.65+.35*clamp(h.entry?.harshness??0)));
  const rattle=clamp((Math.abs(h.rollVelocity||0)*.16+Math.abs(h.pitchVelocity||0)*.14+Math.max(0,(h.load||1)-1)*.06)*h.wet)*(.55+.45*Math.sin(time*93)**2);
  return {slap:memory.slap*.30,rattle:rattle*.065,drain:memory.drain*.085,cutoff:18000-(18000-620)*clamp(depth/.45),rattlePitch:120+clamp(r.speed/30)*110};
 }
