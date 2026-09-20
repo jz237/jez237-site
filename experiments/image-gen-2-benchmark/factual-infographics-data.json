@@ -5555,5 +5555,111 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-20-factual-infographic-factual-infographic-aviophobia-the-alar",
+    "title": "Factual infographic: Aviophobia — The Alarm at Boarding",
+    "tests": "Direct-canvas portrait phobia infographic; one dominant airport-boarding hero, eight substantive panels, five explanatory close-ups, readable source-backed labels only; factual_subtype: phobia-infographic; phobia: aviophobia; archive_slot=2026-09-20T18:20; concept=aviophobia-airport-boarding-anticipation-avoidance; factual_subtype: phobia-infographic",
+    "prompt": "Create one finished high-resolution 2048x3072 portrait educational infographic titled AVIOPHOBIA: THE ALARM AT BOARDING, with the small subtitle WHEN FLYING FEELS LIKE IMMEDIATE DANGER. Render the infographic itself directly on the canvas, edge-to-edge and front-facing—no photographed poster, paper sheet, frame, wall, desk, screen, room, outer cast shadow, bibliography, URLs, logos, QR codes, or decorative pseudo-text. Build a sophisticated museum-quality mental-health plate with an immersive realistic airport-and-aircraft hero plus eight distinct source-backed illustrated panels, at least four explanatory close-ups, precise leader lines, clear large typography, and enough spacing for every label to be readable. No prevalence figures, accident statistics, diagnosis quiz, treatment guarantee, invented neurobiology, or aviation-safety claims.\n\nDOMINANT HERO — occupy the upper two-fifths with a dignified adult traveler paused at the threshold between an airport boarding bridge and a modern passenger-aircraft doorway. Show layered fear-specific context: receding jet-bridge perspective, narrow doorway, glimpsed cabin aisle and overhead bins, wing and cloud field visible through a small window, boarding pass held tightly but not caricatured, subtly tense shoulders, believable skin and fabric texture, brushed aluminum, rubber seals, carpet fibers, rivets, cool terminal light mixing with warm cabin light. Integrate a translucent but anatomically restrained body-alarm overlay: pulse at chest, shortened-breath cue at lungs, muscle-tension lines at shoulders, perspiration at palm, unsettled stomach, and balance/dizziness cue—each labeled MAY OCCUR, never implying that everyone has every symptom. Around the traveler, visually separate ANTICIPATION before boarding from IMMEDIATE ALARM at the doorway; keep the person respectful, capable, and non-stigmatized.\n\nPANEL 1 — WHAT AVIOPHOBIA MEANS: a clean definition diagram: FLYING IS A SPECIFIC SITUATION • FEAR CAN BE INTENSE AND OUT OF PROPORTION TO THE PRESENT DANGER • DISTRESS OR AVOIDANCE CAN DISRUPT LIFE. Distinguish ordinary travel nerves from a persistent, overwhelming pattern without declaring a diagnosis. PANEL 2 — THE TRIGGER MAP: a vertical travel sequence with illustrated vignettes labeled BOOKING, PACKING, AIRPORT SOUNDS, BOARDING, ENCLOSED CABIN, TAKEOFF CUES, and IN-FLIGHT MOTION. Caption POSSIBLE TRIGGERS VARY BY PERSON; do not claim these are universal or inherently dangerous. PANEL 3 — ANTICIPATION VERSUS FEAR: a split timeline close-up showing anxiety building around a future flight on the left and immediate fight-or-flight alarm at a perceived threat on the right; label ANXIETY CAN ARRIVE BEFORE THE FLIGHT and FEAR RESPONDS AS IF DANGER IS HERE NOW. PANEL 4 — BODY ALARM: a large anatomical close-up linking racing heart, short breath, sweating, trembling, nausea, dizziness, muscle tension, and feeling on edge with concise labels POSSIBLE ANXIETY SYMPTOMS; no brain-region claims or false physiological sequence. PANEL 5 — THE AVOIDANCE LOOP: a circular cause-and-effect diagram labeled FLIGHT CUE → ALARM → CANCEL / ESCAPE / ENDURE WITH DISTRESS → SHORT-TERM RELIEF → FEARED SITUATION STAYS HARD TO APPROACH. Carefully phrase the final node as a behavioral feedback concept, not a universal biological certainty, and add AVOIDANCE CAN RESTRICT WORK, FAMILY, OR TRAVEL CHOICES. PANEL 6 — PERCEIVED DANGER / PRESENT CUES: a balanced comparison close-up. Left, ALARM STORY with magnified attention to door closure, engine sound, cabin movement, and loss-of-control feelings. Right, OBSERVABLE PRESENT with seated passengers, normal crew activity, illuminated signs, secured baggage, and the neutral statement A STRONG ALARM FEELING IS REAL EVEN WHEN FEAR IS OUT OF PROPORTION TO THE PRESENT SITUATION. Do not quantify flight risk or promise safety. PANEL 7 — EVIDENCE-BASED HELP: a calm clinician-and-client pathway labeled ASSESS THE PATTERN → LEARN HOW THOUGHTS, FEELINGS, AND ACTIONS CONNECT → PRACTICE COPING SKILLS → GRADUALLY FACE FEARED CUES WITH PROFESSIONAL GUIDANCE → RE-ENGAGE WITH VALUED ACTIVITIES. Name COGNITIVE BEHAVIORAL THERAPY and EXPOSURE THERAPY; explicitly state GRADUAL • COLLABORATIVE • NOT FORCED. PANEL 8 — WHEN TO REACH OUT: a primary-care and mental-health referral vignette labeled SEEK QUALIFIED HELP WHEN FEAR, DISTRESS, OR AVOIDANCE INTERFERES WITH DAILY LIFE; include GENERAL EDUCATION — NOT A DIAGNOSIS.\n\nMANDATORY EXPLANATORY CLOSE-UPS: (1) a hand-and-chest body-alarm detail with pulse, sweat, and muscle tension callouts; (2) an anticipation timeline from calendar reminder to terminal to aircraft door; (3) the avoidance-loop wheel with short-term relief visually distinct from longer-term restriction; (4) a graduated, clinician-guided exposure ladder illustrated from discussing flight cues, to viewing aircraft imagery, to practicing airport-related cues, to a personally appropriate real-world step—label EXAMPLE ONLY • INDIVIDUALIZED WITH A QUALIFIED PROFESSIONAL and never command the viewer to board a flight; (5) a sensory-focus comparison magnifying engine sound, cabin motion, enclosed-space cues, and observed neutral context without labeling those cues as dangerous.\n\nINFORMATION DESIGN AND STYLE: deep midnight-navy direct canvas with warm amber alarm accents, cool aviation cyan, cream-white labels, restrained coral anatomy cues, and small green recovery-path accents. Use realistic cinematic lighting and tactile environmental detail in the hero, then crisp editorial illustration, cutaway icons, arrows, and large concise labels in supporting panels. Establish an obvious reading order, generous gutters, strong heading hierarchy, and accurate leaders. Make the plate visually intense but compassionate. Keep all claims within the verified evidence: fear of flying as a specific phobia; fear possibly out of proportion to present danger; anticipatory anxiety; possible physical symptoms; avoidance or endurance with distress; disruption of daily life; psychotherapy, CBT, professionally guided exposure, and referral to qualified help. No bibliography or citations on the image. No aircraft crash, emergency, turbulence hazard claim, screaming crowd, monster, gore, coercion, restraint, humiliation, giant eye, giant brain, sensational panic face, medication advice, breathing prescription, self-treatment protocol, forced exposure, prevalence number, crash-risk comparison, guarantee of cure, logo, watermark, border, illegible tiny text, classroom worksheet, or poster mockup.",
+    "image": "images/2026-09-20-factual-infographic-factual-infographic-aviophobia-the-alar.jpg",
+    "thumb": "thumbs/2026-09-20-factual-infographic-factual-infographic-aviophobia-the-alar.webp",
+    "color": "#696e77",
+    "date": "2026-09-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "aviophobia-airport-boarding-anticipation-avoidance",
+      "imageSha256": "d61c46164950832454bd1ee86695c88d192c72334d5897e657186c8a418fb417",
+      "imageDHash": "605c9967a7969617"
+    },
+    "factualInfographic": {
+      "topic": "Aviophobia: intense fear of flying, anticipatory anxiety, body alarm, avoidance, and evidence-based support",
+      "description": "A source-verified direct-canvas educational plate explaining fear of flying, anticipatory anxiety, possible physical alarm symptoms, avoidance and life interference, perceived versus present danger, and qualified evidence-based support.",
+      "sourceNote": "Verified against the National Institute of Mental Health https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders and the American Psychiatric Association https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders; scope covers fear of flying as a specific phobia, disproportionate fear, anticipation, possible physical symptoms, avoidance and functional interference, CBT, professionally guided exposure, and referral to qualified care.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-20T18:20:57-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Psychiatric Association",
+            "title": "What are Anxiety Disorders?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Fear of flying is an example of a specific phobia, an intense fear or anxiety focused on a particular situation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In a phobia, fear may be out of proportion to the actual danger posed by the situation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Thinking about or anticipating a feared situation can produce anxiety before the person encounters it.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Encountering a phobic trigger can produce immediate intense anxiety and physical alarm symptoms such as rapid heartbeat, shortness of breath, sweating, trembling, nausea, dizziness, muscle tension, or feeling on edge.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "People may actively avoid a feared situation or endure it with intense anxiety, and avoidance can interfere with daily life and activities.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Fear responds to an immediate perceived threat, while anxiety can involve anticipation of a future concern.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Psychotherapy is the primary treatment approach for phobias, and cognitive behavioral therapy teaches ways of thinking, behaving, and reacting that can reduce fear and anxiety.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Exposure therapy is a CBT method for phobias that focuses on confronting feared situations so people can re-engage with activities they have avoided; this should be presented as gradual and professionally guided, not as forced exposure.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "A primary care provider can refer someone with mental-health concerns to a qualified mental-health professional for assessment and next steps.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
