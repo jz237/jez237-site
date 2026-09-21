@@ -13,8 +13,8 @@
  *   two-finger drag         orbit; pinch distance zooms at the same time
  */
 
-import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026090907';
-import { CAMERA } from './schema.js?v=philly-2026090907';
+import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026092121';
+import { CAMERA } from './schema.js?v=philly-2026092121';
 
 const DEG = Math.PI / 180;
 
@@ -27,9 +27,11 @@ export function createCameraRig(THREE, options) {
   const now = { ...want };
   let revision = 0;
   let lastExaggeration = NaN;
+  let lastTargetHeight = NaN;
   let projectionAspect = NaN;
   let projectionNear = NaN;
   let projectionFar = NaN;
+  let wasRiding = false, lastDirectKey = '';
   let userActive = false;
   let idleTimer = 0;
 
@@ -276,6 +278,9 @@ export function createCameraRig(THREE, options) {
     },
 
     update(dt, opts = {}) {
+      const ride = opts.flightView;
+      const directKey = ride ? [ride.lon, ride.lat, ride.height, ride.heading, ride.pitch].join(':') : '';
+      const directChanged = directKey !== lastDirectKey;
       const snap = opts.snap === true;
       const prevLon = now.lon;
       const prevLat = now.lat;
@@ -311,19 +316,21 @@ export function createCameraRig(THREE, options) {
 
       const exag = getExaggeration(now.dist);
       const groundY = sampleElevation(now.lon, now.lat) * exag;
-      targetVec.set(projection.lonToX(now.lon), groundY, projection.latToZ(now.lat));
+      const targetHeight = Number.isFinite(opts.targetAltitude)
+        ? groundY + Math.max(35, opts.targetAltitude - sampleElevation(now.lon, now.lat)) : groundY;
+      targetVec.set(projection.lonToX(now.lon), targetHeight, projection.latToZ(now.lat));
 
       const changed = now.lon !== prevLon || now.lat !== prevLat
         || now.dist !== prevDist || now.pitch !== prevPitch
         || now.bearing !== prevBearing || now.fov !== prevFov
-        || exag !== lastExaggeration;
+        || exag !== lastExaggeration || targetHeight !== lastTargetHeight || directChanged;
 
       const pitchRad = now.pitch * DEG;
       const bearingRad = now.bearing * DEG;
       const horizontal = now.dist * Math.sin(pitchRad);
       const vertical = now.dist * Math.cos(pitchRad);
 
-      if (changed) {
+      if (changed && !ride) {
         camera.position.set(
           targetVec.x - Math.sin(bearingRad) * horizontal,
           targetVec.y + vertical,
@@ -335,7 +342,7 @@ export function createCameraRig(THREE, options) {
       // giant spikes and the shot is ruined. Lift the eye clear of whatever is
       // actually underneath it and re-aim; the effective pitch eases off, which
       // is exactly what a pilot would do.
-      if (changed) {
+      if (changed && !ride) {
         const eye = projection.clamp(
           projection.xToLon(camera.position.x), projection.zToLat(camera.position.z));
         const groundUnderEye = sampleElevation(eye.lon, eye.lat) * exag;
@@ -354,18 +361,31 @@ export function createCameraRig(THREE, options) {
         camera.updateProjectionMatrix();
       }
       lastExaggeration = exag;
+      lastTargetHeight = targetHeight;
+      wasRiding = !!ride;
+      if (ride && (changed || directChanged)) {
+        const ground = sampleElevation(ride.lon, ride.lat);
+        camera.position.set(projection.lonToX(ride.lon),
+          ground * exag + Math.max(ride.clearance ?? 35, ride.height - ground), projection.latToZ(ride.lat));
+        const heading = ride.heading * DEG, pitch = ride.pitch * DEG;
+        camera.up.set(0, 1, 0);
+        camera.lookAt(camera.position.x + Math.sin(heading) * Math.cos(pitch),
+          camera.position.y + Math.sin(pitch), camera.position.z - Math.cos(heading) * Math.cos(pitch));
+        revision++;
+      }
 
+      lastDirectKey = directKey;
       if (userActive && pointers.size === 0) {
         idleTimer += dt;
         if (idleTimer > 0.35) userActive = false;
       }
-      return { target: targetVec, groundY, changed };
+      return { target: targetVec, groundY, changed: changed || directChanged };
     },
 
     setAspect(aspect) {
       // Near/far track the orbit distance so precision stays usable at both
       // the source-quality close-view floor and 190 km without clipping.
-      const near = clamp(now.dist * 0.008, 2, 400);
+      const near = wasRiding ? .3 : clamp(now.dist * 0.008, 2, 400);
       const far = Math.max(60000, now.dist * 6 + 260000);
       if (aspect !== projectionAspect || near !== projectionNear || far !== projectionFar) {
         projectionAspect = aspect;

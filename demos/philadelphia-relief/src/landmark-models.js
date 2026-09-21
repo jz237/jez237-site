@@ -44,7 +44,8 @@ export function validateModels(doc, landmarkNames) {
  */
 export function buildLandmarkModels(doc, ctx) {
   const { anchors, toWorld, groundAt } = ctx;
-  const out = { position: [], ground: [], info: [], model: [], style: [], clock: [], year: [], index: [] };
+  const out = { position: [], ground: [], info: [], model: [], style: [], clock: [],
+    year: [], finish: [], index: [] };
   const models = [];
 
   (doc?.models || []).forEach((model, modelIndex) => {
@@ -59,6 +60,7 @@ export function buildLandmarkModels(doc, ctx) {
     let radius = 0;
 
     for (const part of model.parts) {
+      const partStart = out.position.length / 3;
       const base = part.base || 0;
       const rot = (part.rot || 0) * DEG;
       const cx = ax + (part.x || 0);
@@ -95,6 +97,9 @@ export function buildLandmarkModels(doc, ctx) {
         prism(out, ellipse(part.r, part.r, segs).map(([x, z]) => place(x, z)),
           base, base + part.h, ground, modelIndex);
       }
+      for (let v = partStart; v < out.position.length / 3; v++) {
+        out.finish.push(...(part.finish || [0, 0, 0, 0]));
+      }
     }
 
     const vertexEnd = out.position.length / 3;
@@ -115,6 +120,7 @@ export function buildLandmarkModels(doc, ctx) {
   return {
     position: new Float32Array(out.position),
     ground: new Float32Array(out.ground),
+    finish: new Float32Array(out.finish),
     info: new Float32Array(out.info),
     model: new Float32Array(out.model),
     style: new Float32Array(out.style),
