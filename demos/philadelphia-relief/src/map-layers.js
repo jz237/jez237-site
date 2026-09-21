@@ -1,6 +1,6 @@
-import { createMapSurfaces } from './map-surface.js?v=philly-2026092110';
-import { createMapPoints } from './map-point-layer.js?v=philly-2026092110';
-import { ageLabel, gaugeTrend } from './map-layer-data.js?v=philly-2026092110';
+import { createMapSurfaces } from './map-surface.js?v=philly-2026092111';
+import { createMapPoints } from './map-point-layer.js?v=philly-2026092111';
+import { ageLabel, gaugeTrend } from './map-layer-data.js?v=philly-2026092111';
 
 const el = (tag, text = '', cls = '') => {
   const e = document.createElement(tag); e.textContent = text; e.className = cls; return e;
@@ -18,7 +18,7 @@ const fetchDoc = async (url, signal) => {
 };
 
 export function createMapLayers(THREE, { scene, stage, projection, sampleElevation, photographic,
-  landmarks, motion, getPose, camera, onLandmark }) {
+  landmarks, motion, getPose, camera, onLandmark, onArchive = () => {}, invalidate = () => {} }) {
   const card = el('section', '', 'map-data-card'); card.hidden = true;
   card.setAttribute('aria-label', 'Map layer details'); document.body.append(card);
   let disposed = false, selected, cardRequest, lastUpdate = 0, press;
@@ -28,6 +28,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
   function status(type, text) { $(`${type}Status`).textContent = text; }
   const surfaces = createMapSurfaces(THREE, { scene, projection, sampleElevation, status });
   const points = createMapPoints(THREE, { scene, stage, projection, sampleElevation, photographic,
+    onCluster: showCluster,
     onSelect: (type, data) => {
       if (type === 'ship') showShip(data);
       else if (type === 'gauge') void showGauge(data);
@@ -35,11 +36,30 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     } });
   function close() { selected = null; card.hidden = true; cardRequest?.abort(); }
   function open(type, title, id) {
+    if (window.matchMedia('(max-width: 1024px)').matches) $('mapControls').open = false;
     close(); selected = { type, id }; card.hidden = false; card.replaceChildren();
     const head = el('div', '', 'map-data-head'), x = el('button', '×'); x.type = 'button';
     x.setAttribute('aria-label', 'Close map layer details'); x.onclick = close;
     const titles = el('div'); titles.append(el('small', type.toUpperCase()), el('h3', title));
     head.append(titles, x); card.append(head);
+  }
+  function showCluster(type, members) {
+    open('nearby on the map', `${members.length} ${type}s`, 'cluster');
+    card.append(el('p', 'Choose a name to see its details and move closer.', 'map-data-note'));
+    const list = el('div', '', 'map-cluster-list');
+    for (const row of members.toSorted((a, b) => a.name.localeCompare(b.name))) {
+      const button = el('button', row.name); button.type = 'button';
+      button.onclick = () => {
+        const current = rows[type].find(r => r.id === row.id);
+        if (!current) {
+          button.disabled = true; button.textContent = `${row.name} · no longer in feed`; return;
+        }
+        if (type === 'ship') showShip(current); else void showGauge(current);
+        motion.flyTo({ ...current, camDist: type === 'ship' ? 4500 : 6500 }, { label: current.name });
+      };
+      list.append(button);
+    }
+    card.append(list); list.querySelector('button')?.focus({ preventScroll: true });
   }
   function facts(items, host = card) {
     const dl = el('dl', '', 'map-data-facts');
@@ -196,12 +216,48 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
   }
   function archiveChanged() {
     const year = $('archiveYear').value; $('archiveOptions').hidden = year === 'off';
+    if (year !== 'off') onArchive();
     surfaces.setArchive(year);
     $('imageryCredit').textContent = year === 'off' ? 'Aerial imagery: USDA / USGS The National Map'
       : `${year} aerial survey: City of Philadelphia · current imagery outside loaded coverage`;
     if (year !== 'off') status('archive', `${year} · loading historical survey tiles…`);
-    banner();
+    swipeChanged(); banner();
   }
+  function swipeChanged() {
+    const on = $('archiveYear').value !== 'off' && $('archiveSwipe').checked;
+    const percent = Math.max(0, Math.min(100, Number($('archiveDivider').value)));
+    $('archiveSwipeOverlay').hidden = !on; $('archiveDivider').disabled = !on;
+    $('archivePastLabel').textContent = `${$('archiveYear').value} aerial`;
+    $('archivePastLabel').hidden = percent === 0;
+    $('archiveSwipeOverlay').querySelector('.current').hidden = percent === 100;
+    $('archiveSwipeOverlay').style.setProperty('--archive-split', `${percent}%`);
+    $('archiveSwipeHandle').setAttribute('aria-valuenow', String(percent));
+    $('archiveSwipeHandle').setAttribute('aria-valuetext',
+      `${percent}% historical aerial; rest current aerial`);
+    surfaces.setSwipe(on ? percent / 100 : 1);
+    invalidate();
+  }
+  const swipeHandle = $('archiveSwipeHandle');
+  const moveDivider = event => {
+    const rect = stage.getBoundingClientRect();
+    const percent = (event.clientX - rect.left) / rect.width * 100;
+    $('archiveDivider').value = String(Math.max(0, Math.min(100, percent)));
+    swipeChanged();
+  };
+  swipeHandle.onpointerdown = e => { e.preventDefault(); e.stopPropagation();
+    swipeHandle.setPointerCapture(e.pointerId); moveDivider(e); };
+  swipeHandle.onpointermove = e => { if (swipeHandle.hasPointerCapture(e.pointerId)) moveDivider(e); };
+  swipeHandle.onpointerup = e => { if (swipeHandle.hasPointerCapture(e.pointerId)) {
+    swipeHandle.releasePointerCapture(e.pointerId);
+  } };
+  swipeHandle.onkeydown = e => {
+    const delta = e.shiftKey ? 10 : 2;
+    const values = { ArrowLeft: Number($('archiveDivider').value) - delta,
+      ArrowRight: Number($('archiveDivider').value) + delta, Home: 0, End: 100 };
+    if (!(e.key in values)) return;
+    e.preventDefault(); e.stopPropagation();
+    $('archiveDivider').value = String(values[e.key]); swipeChanged();
+  };
   function banner() {
     const messages = [];
     if ($('archiveYear').value !== 'off') messages.push(`${$('archiveYear').value} aerials · today's terrain
@@ -282,6 +338,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
   $('radarFrame').oninput = e => { setPlaying(false); void radarFrame(Number(e.target.value)); };
   $('radarOpacity').oninput = e => surfaces.radarOpacity(Number(e.target.value) / 100);
   $('archiveOpacity').oninput = e => surfaces.archiveOpacity(Number(e.target.value) / 100);
+  $('archiveSwipe').onchange = swipeChanged; $('archiveDivider').oninput = swipeChanged;
   $('archiveVisit').onclick = () => motion.flyTo({ lon: -75.1635, lat: 39.9526, camDist: 7500,
     camPitch: 10 }, { label: 'Center City historical aerial survey' });
   $('propertyCenter').onclick = () => { const pose = getPose(); void inspect(pose.lon, pose.lat); };
@@ -295,6 +352,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     get propertyMode() { return $('propertyToggle').checked; },
     get archiveActive() { return $('archiveYear').value !== 'off'; },
     get reliefOnly() { return $('archiveYear').value !== 'off' || $('radarToggle').checked; },
+    clearArchive() { $('archiveYear').value = 'off'; archiveChanged(); },
     inspect,
     update(activeCamera, ctx) {
       lastExag = ctx.exaggeration; points.update(activeCamera, ctx);

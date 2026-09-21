@@ -998,3 +998,29 @@ controls and attribution remain visible in portrait and landscape. Desktop keeps
 its expanded controls above 1024 pixels. Verified at 390×844, 320×568, 740×390
 and 932×430, plus desktop;
 all 339 existing checks pass.
+
+### Idle rendering, grouped observations and historical swipe (21 September 2026)
+
+Save power when idle defaults on for narrow/coarse-pointer devices and is optional
+on desktop. After two seconds without movement or input, the map refreshes twice
+per second; active aircraft retain a faster cadence. Interaction, tours and imagery
+loading resume full cadence. Geometry, pixel ratio and imagery detail settings are
+unchanged, and intentional idle pacing is excluded from adaptive-quality sampling.
+Hidden tabs remain paused. Unchanged ship positions no longer request Cesium frames.
+
+Nearby ships and gauges form separate, count-labeled groups in screen space. Tapping
+a group opens a complete alphabetical list; selecting a member opens its latest
+details and moves closer. The existing station/vessel selectors remain available.
+
+Historical aerial surveys start with a draggable current/historical divider. The
+handle supports touch, arrow keys, Home and End; the layer drawer also provides a
+range control and an option to return to the full historical overlay. Selecting a
+conflicting era or comparison clears the survey. Historical imagery uses today's
+terrain, hides modern building models, and retains current imagery where the source
+survey has no loaded coverage. It is not a reconstruction of historical terrain.
+
+Validation: 342 automated checks pass. A ten-second mobile-emulated (390×844, DPR 1)
+idle comparison at balanced quality measured 12,621 WebGL draw calls before and 399
+after, with 2,494,525 triangles per scene in both. This measures rendering work, not
+battery life. Browser checks cover grouped gauge selection, touch/keyboard swipe,
+1996/current imagery alignment and mobile control visibility.

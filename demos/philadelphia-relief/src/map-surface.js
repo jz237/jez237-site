@@ -1,4 +1,4 @@
-import { MAP_BOUNDS, tileBounds, archiveTiles } from './map-layer-data.js?v=philly-2026092110';
+import { MAP_BOUNDS, tileBounds, archiveTiles } from './map-layer-data.js?v=philly-2026092111';
 
 export function createMapSurfaces(THREE, { scene, projection, sampleElevation, status }) {
   const root = new THREE.Group(); scene.add(root);
@@ -7,6 +7,7 @@ export function createMapSurfaces(THREE, { scene, projection, sampleElevation, s
   let generation = 0, year = 'off', disposed = false, exag = 1, lastPlan = '', active = 0;
   let queue = [], desired = new Set(), archiveOpacity = 1, radarOpacity = .55, radarKey = null;
   let radarController, radarTicket = 0;
+  const swipe = { value: 1 };
   function drop(entry) {
     root.remove(entry.mesh); entry.mesh.geometry.dispose(); entry.mesh.material.dispose();
     entry.texture.dispose(); entry.image.close?.();
@@ -34,11 +35,13 @@ export function createMapSurfaces(THREE, { scene, projection, sampleElevation, s
     const material = new THREE.ShaderMaterial({ transparent: true, depthWrite: false,
       depthTest: false, side: THREE.DoubleSide,
       uniforms: { uMap: { value: texture }, uAlpha: { value: historic ? archiveOpacity : radarOpacity },
-        uHistoric: { value: historic ? 1 : 0 } },
-      vertexShader: 'varying vec2 vUv; void main(){vUv=uv;'
-        + 'gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);}',
+        uHistoric: { value: historic ? 1 : 0 }, uSplit: swipe },
+      vertexShader: 'varying vec2 vUv; varying vec4 vClip; void main(){vUv=uv;'
+        + 'gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.0);vClip=gl_Position;}',
       fragmentShader: 'uniform sampler2D uMap; uniform float uAlpha; uniform float uHistoric;'
-        + 'varying vec2 vUv; void main(){vec4 c=texture2D(uMap,vUv);'
+        + 'uniform float uSplit; varying vec4 vClip; varying vec2 vUv;'
+        + 'void main(){if(uHistoric>0.5 && vClip.x/vClip.w*0.5+0.5>uSplit)discard;'
+        + 'vec4 c=texture2D(uMap,vUv);'
         + 'if(uHistoric>0.5 && max(c.r,max(c.g,c.b))<0.01)discard;'
         + 'gl_FragColor=vec4(c.rgb,c.a*uAlpha);}' });
     const mesh = new THREE.Mesh(geometry, material); mesh.renderOrder = historic ? 20 : 21;
@@ -63,6 +66,7 @@ export function createMapSurfaces(THREE, { scene, projection, sampleElevation, s
     }
   }
   return {
+    setSwipe(value) { swipe.value = Math.max(0, Math.min(1, value)); },
     setArchive(value) {
       year = value; generation++; lastPlan = ''; queue = []; desired.clear();
       for (const controller of archiveRequests) controller.abort();

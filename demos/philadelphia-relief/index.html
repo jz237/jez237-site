@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092110" />
+<link rel="stylesheet" href="app.css?v=philly-2026092111" />
 </head>
 <body data-theme="dusk">
 
@@ -208,6 +208,8 @@
   <p id="photoStatus" role="status">Diorama · zoom in for photographic 3D</p>
   <button id="photoRetry" type="button" aria-label="Retry photographic detail" hidden>Retry</button>
   <p class="photo-note">Captured imagery · use Diorama for styled lighting and map overlays.</p>
+  <label class="power-saving"><input id="powerSaving" type="checkbox"> Save power when idle</label>
+  <p id="powerStatus" class="power-status">Full image detail at every setting.</p>
   <div class="camera-layer-control">
     <label class="camera-layer-toggle"><input type="checkbox" id="cameraLayerToggle"
       aria-controls="cameraLayerOptions"> <span>Cameras on map</span><span aria-hidden="true">◉</span></label>
@@ -291,6 +293,9 @@
       </select>
       <div id="archiveOptions" hidden>
         <p id="archiveStatus" role="status"></p>
+        <label><input id="archiveSwipe" type="checkbox" checked> Swipe comparison with today</label>
+        <label class="layer-range">Divider <input id="archiveDivider" type="range" min="0" max="100"
+          value="50" aria-label="Historical comparison divider"></label>
         <label class="layer-range">Fade to today <input id="archiveOpacity" type="range" min="0" max="100"
           value="100" aria-label="Historical aerial opacity"></label>
         <button id="archiveVisit" type="button">View Center City</button>
@@ -312,6 +317,13 @@
   </div>
 </details>
 <div id="mapLayerBanner" class="map-layer-banner" role="status" hidden></div>
+<div id="archiveSwipeOverlay" class="archive-swipe-overlay" hidden>
+  <span id="archivePastLabel" class="archive-side past">Historical aerial</span>
+  <span class="archive-side current">Current aerial</span>
+  <div id="archiveSwipeHandle" class="archive-swipe-handle" role="slider" tabindex="0"
+    aria-label="Historical comparison divider on map" aria-valuemin="0" aria-valuemax="100"
+    aria-valuenow="50" aria-orientation="horizontal"><span aria-hidden="true">↔</span></div>
+</div>
 <div id="photoCredits" class="photo-credits" hidden></div>
 <section id="studio" class="panel studio collapsed" aria-labelledby="studioTitle">
   <header class="panel-head">
@@ -738,7 +750,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092110"></script>
+<script type="module" src="src/main.js?v=philly-2026092111"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

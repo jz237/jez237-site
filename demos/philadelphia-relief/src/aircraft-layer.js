@@ -1,9 +1,9 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092110';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092110';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092110';
-import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092110';
-import { createAircraftSession } from './aircraft-session.js?v=philly-2026092110';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092111';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092111';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092111';
+import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092111';
+import { createAircraftSession } from './aircraft-session.js?v=philly-2026092111';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -94,7 +94,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     const timeout = setTimeout(() => request.abort(), 12000);
     try {
       // Versioned URL also avoids an hour-long failure cached by earlier releases.
-      const response = await fetch('aircraft?v=philly-2026092110', {
+      const response = await fetch('aircraft?v=philly-2026092111', {
         signal: request.signal, cache: 'no-store' });
       const doc = await response.json();
       if (ticket !== generation || disposed || !enabled) return;
@@ -243,6 +243,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   document.addEventListener('keydown', escape);
 
   return {
+    get animating() { return enabled && records.size > 0; },
     beforeFrame() {
       if (session.check()) return undefined;
       if (!enabled || document.hidden) return undefined;
