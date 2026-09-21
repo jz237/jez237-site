@@ -1,7 +1,7 @@
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
-import { fetchTile } from './tile-cache.js?v=philly-2026092113';
+import { fetchTile } from './tile-cache.js?v=philly-2026092114';
 export { fetchTile };
-import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026092113';
+import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026092114';
 
 export const TILE_SPECS = [
   { tier: 'tile-inspection', lon: 0.0032, lat: 0.0024, range: 600 },
@@ -264,8 +264,22 @@ export function createTileStream({ region, projection, load = fetchTile, install
 export function createImageryTiles(THREE, options) {
   let terrain = options.terrain;
   const { region, projection, sceneProjection, onStatus } = options;
+  const elevation = options.elevation || { min: -500, max: 9000 };
   const group = new THREE.Group(); group.name = 'streamed-aerial-tiles';
   const entries = new Map();
+  let boundsScale, drawnTiles = 0;
+  function updateBounds(mesh, scale) {
+    const b = mesh.userData.cell.bounds;
+    // Positions are packed shader inputs, not world XYZ. Explicit conservative
+    // bounds include every possible DEM height, even after exaggeration changes.
+    const lo = Math.min(elevation.min * scale, elevation.max * scale) - 2;
+    const hi = Math.max(elevation.min * scale, elevation.max * scale) + 2;
+    const box = mesh.geometry.boundingBox || new THREE.Box3();
+    box.min.set(sceneProjection.lonToX(b.west), lo, sceneProjection.latToZ(b.north));
+    box.max.set(sceneProjection.lonToX(b.east), hi, sceneProjection.latToZ(b.south));
+    mesh.geometry.boundingBox = box;
+    box.getBoundingSphere(mesh.geometry.boundingSphere ||= new THREE.Sphere());
+  }
   const vertexShader = `
     uniform sampler2D uHeight; uniform float uExag; uniform float uReliefOn;
     varying vec2 vUv; varying vec3 vWorld; varying float vElev;
@@ -301,7 +315,7 @@ export function createImageryTiles(THREE, options) {
     group.remove(entry); entry.geometry.dispose(); entry.material.uniforms.uTile.value.dispose();
     entry.material.dispose(); entries.delete(key); options.onTileRemoved?.(key);
   }
-  const stream = createTileStream({ region, projection, onStatus, remove,
+  const stream = createTileStream({ region, projection, onStatus, remove, load: options.load,
     install({ cell, image }) {
       options.onTile?.(cell, image);
       const tex = new THREE.Texture(image); tex.flipY = false; tex.colorSpace = THREE.SRGBColorSpace;
@@ -332,13 +346,16 @@ export function createImageryTiles(THREE, options) {
         uArrival: { value: options.reducedMotion ? 1 : 0 } },
         vertexShader, fragmentShader, transparent: true, depthWrite: false, side: THREE.DoubleSide,
         polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
-      const mesh = new THREE.Mesh(geometry, material); mesh.frustumCulled = false;
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.onBeforeRender = () => { drawnTiles++; };
       mesh.renderOrder = 1 + (3 - cell.level) * 0.1;
       mesh.userData.cell = cell;
+      updateBounds(mesh, terrain.uniforms.uExag.value * terrain.uniforms.uReliefOn.value);
       group.add(mesh); entries.set(cell.key, mesh);
     },
   });
   return { ...stream, group,
+    stats() { return { ...stream.stats(), residentTiles: entries.size, drawnTiles }; },
     consider(...args) { group.visible = !!args[1] && args[0].dist <= 24000; stream.consider(...args); },
     roofTiles(pose) {
       return [...entries.values()].filter(mesh => mesh.userData.cell.level < 2)
@@ -351,7 +368,10 @@ export function createImageryTiles(THREE, options) {
           bounds: mesh.userData.cell.bounds }));
     },
     tick(dt) {
+      drawnTiles = 0;
+      const scale = terrain.uniforms.uExag.value * terrain.uniforms.uReliefOn.value;
       for (const mesh of entries.values()) {
+        if (scale !== boundsScale) updateBounds(mesh, scale);
         const u = mesh.material.uniforms;
         u.uBlend.value = Math.min(1, u.uBlend.value + dt / .45);
         u.uArrival.value = Math.min(1, u.uArrival.value + dt / .35);
@@ -359,6 +379,7 @@ export function createImageryTiles(THREE, options) {
           u.uPrevious.value.dispose(); u.uPrevious.value = u.uTile.value;
         }
       }
+      boundsScale = scale;
     },
     attachTerrain(next) { terrain = next; for (const mesh of entries.values()) {
       const { uTile, uPrevious, uBlend, uArrival } = mesh.material.uniforms;

@@ -13,8 +13,8 @@
  *   two-finger drag         orbit; pinch distance zooms at the same time
  */
 
-import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026092113';
-import { CAMERA } from './schema.js?v=philly-2026092113';
+import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026092114';
+import { CAMERA } from './schema.js?v=philly-2026092114';
 
 const DEG = Math.PI / 180;
 

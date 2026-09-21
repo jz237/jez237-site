@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092113';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092114';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -128,11 +128,15 @@ const FRAGMENT_SHADER = /* glsl */ `
     tE = pow(tE, 0.78);
     vec3 reliefBase = texture2D(uRamp, vec2(tE, 0.5)).rgb;
     vec3 aerialBase = texture2D(uImagery, vUv).rgb;
+    // Uniform branches avoid fetching inactive textures on every terrain pixel.
+    if (uImageryCityOn > 0.0) {
     vec2 cityUv = (vUv - uImageryCityBounds.xy)
       / (uImageryCityBounds.zw - uImageryCityBounds.xy);
     float cityEdge = min(min(cityUv.x, 1.0 - cityUv.x), min(cityUv.y, 1.0 - cityUv.y));
     aerialBase = mix(aerialBase, texture2D(uImageryCity, clamp(cityUv, 0.0, 1.0)).rgb,
       smoothstep(0.0, 0.08, cityEdge) * uImageryCityOn);
+    }
+    if (uImageryDetailOn > 0.0) {
     vec2 previousSpan = max(
       uImageryDetailPrevBounds.zw - uImageryDetailPrevBounds.xy,
       vec2(0.00001));
@@ -165,6 +169,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     ) * 0.25;
     detailBase = clamp(detailBase * 1.16 - detailBlur * 0.16, 0.0, 1.0);
     aerialBase = mix(aerialBase, detailBase, detailMix);
+    }
 
     // Lift the baked orthoimage shadows and restore restrained local contrast.
     // The photography already contains real sunlight; the DEM should add only
@@ -212,12 +217,14 @@ const FRAGMENT_SHADER = /* glsl */ `
     float aerialShade = clamp(0.97 + ndl * 0.03, 0.94, 1.03);
     // A sculpted miniature at regional scale, with terrain self-shadowing.
     float castShade = 1.0;
+    if (uDiorama > 0.0) {
     for (int i = 1; i <= 7; i++) {
       float reach = float(i * i) * 115.0;
       vec2 probe = vUv + uSunDir.xz * reach / uRegionSize;
       float ridge = texture2D(uHeight, clamp(probe, 0.0, 1.0)).r * uExag;
       float ray = vWorld.y + reach * uSunDir.y;
       castShade = min(castShade, 1.0 - smoothstep(0.0, 260.0, ridge - ray) * .40);
+    }
     }
     float miniatureShade = (.75 + max(ndl, 0.0) * .42) * mix(.86, 1.0, ao) * castShade;
     aerialShade = mix(aerialShade, miniatureShade, uDiorama);

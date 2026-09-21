@@ -1,6 +1,7 @@
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092113';
-import { shipGeometry } from './ship-model.js?v=philly-2026092113';
-import { clusterPoints } from './map-clusters.js?v=philly-2026092113';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092114';
+import { shipGeometry } from './ship-model.js?v=philly-2026092114';
+import { clusterPoints } from './map-clusters.js?v=philly-2026092114';
+import { createUpdateGate } from './frame-work.js?v=philly-2026092114';
 
 export function createMapPoints(THREE, { scene, stage, projection, sampleElevation,
   photographic, onSelect, onCluster }) {
@@ -12,7 +13,11 @@ export function createMapPoints(THREE, { scene, stage, projection, sampleElevati
     geometry.setAttribute(key, new THREE.Float32BufferAttribute(shape[field], 3));
   }
   const material = new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide });
-  let viewer, source, lastDraw = 0;
+  let viewer, source;
+  const gate = createUpdateGate();
+  const invalidate = () => gate.invalidate();
+  const layoutEvents = ['click', 'input', 'change', 'toggle', 'scroll'];
+  for (const type of layoutEvents) document.addEventListener(type, invalidate, true);
   const enabled = new Set();
   function remove(record) {
     if (record.mesh) group.remove(record.mesh);
@@ -20,6 +25,7 @@ export function createMapPoints(THREE, { scene, stage, projection, sampleElevati
   }
   return {
     set(type, rows) {
+      gate.invalidate();
       const ids = new Set(rows.map(r => `${type}:${r.id}`));
       for (const [id, record] of records) if (record.type === type && !ids.has(id)) {
         remove(record); records.delete(id);
@@ -34,9 +40,12 @@ export function createMapPoints(THREE, { scene, stage, projection, sampleElevati
         record.data = row;
       }
     },
-    enable(type, value) { if (value) enabled.add(type); else enabled.delete(type); lastDraw = 0; },
+    enable(type, value) { if (value) enabled.add(type); else enabled.delete(type); gate.invalidate(); },
     update(camera, ctx) {
-      if (performance.now() - lastDraw < 150) return; lastDraw = performance.now();
+      const p = ctx.pose;
+      const key = [p.lon, p.lat, p.dist, p.pitch, p.bearing, p.fov, p.targetAltitude,
+        ctx.width, ctx.height, ctx.exaggeration, photographic.active].join(':');
+      if (!gate.take(key, performance.now())) return;
       const next = photographic.aircraftViewer, C = window.Cesium;
       if (next !== viewer) {
         viewer = next; source = null;
@@ -112,6 +121,7 @@ export function createMapPoints(THREE, { scene, stage, projection, sampleElevati
       for (const [key, entry] of pins) if (!used.has(key)) { entry.pin.remove(); pins.delete(key); }
     },
     dispose() {
+      for (const type of layoutEvents) document.removeEventListener(type, invalidate, true);
       for (const r of records.values()) remove(r); records.clear(); pins.clear();
       if (source && viewer && !viewer.isDestroyed()) viewer.dataSources.remove(source, true);
       host.remove(); scene.remove(group); geometry.dispose(); material.dispose();

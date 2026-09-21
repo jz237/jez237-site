@@ -1,73 +1,73 @@
-import { wireSavedViews } from './saved-views.js?v=philly-2026092113';
-import { frameDelay } from './render-policy.js?v=philly-2026092113';
-import { preferLightweight, districtAssets } from './startup-policy.js?v=philly-2026092113';
+import { wireSavedViews } from './saved-views.js?v=philly-2026092114';
+import { frameDelay } from './render-policy.js?v=philly-2026092114';
+import { preferLightweight, districtAssets } from './startup-policy.js?v=philly-2026092114';
 import { updateImageryCredit, wireFieldNotes, wireMapChrome, timelineSeek, captureName }
-  from './experience.js?v=philly-2026092113';
-import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092113';
-import { wireLooks } from './looks.js?v=philly-2026092113';
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092113';
-import { createOrientation } from './orientation.js?v=philly-2026092113';
-import { createPhotographic } from './photographic.js?v=philly-2026092113';
-import { wireRegionalViews } from './regional-views.js?v=philly-2026092113';
-import { createCameraLayer } from './camera-layer.js?v=philly-2026092113';
-import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092113';
-import { createMapLayers } from './map-layers.js?v=philly-2026092113';
+  from './experience.js?v=philly-2026092114';
+import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092114';
+import { wireLooks } from './looks.js?v=philly-2026092114';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092114';
+import { createOrientation } from './orientation.js?v=philly-2026092114';
+import { createPhotographic } from './photographic.js?v=philly-2026092114';
+import { wireRegionalViews } from './regional-views.js?v=philly-2026092114';
+import { createCameraLayer } from './camera-layer.js?v=philly-2026092114';
+import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092114';
+import { createMapLayers } from './map-layers.js?v=philly-2026092114';
 /**
  * Philadelphia Relief — application entry point.
  *
- * Load order is deliberate: terrain metadata and the heightmap first (nothing
- * can be placed on the ground without them), then the overlays in parallel.
+ * Terrain, imagery and overlays download together. Geometry construction waits
+ * for the decoded DEM so every layer can be placed on the factual ground.
  * Anything that fails to arrive is reported and switched off rather than
  * allowed to blank the screen.
  */
 
 import * as THREE from '../vendor/three.module.min.js?v=philly-2026092113';
 
-import { createStore } from './state.js?v=philly-2026092113';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026092113';
-import { effectiveLight } from './solar.js?v=philly-2026092113';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026092113';
+import { createStore } from './state.js?v=philly-2026092114';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026092114';
+import { effectiveLight } from './solar.js?v=philly-2026092114';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026092114';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026092113';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026092113';
+} from './geo.js?v=philly-2026092114';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026092114';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026092113';
+} from './tours.js?v=philly-2026092114';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026092113';
+} from './urlstate.js?v=philly-2026092114';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026092113';
+} from './degraded.js?v=philly-2026092114';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026092113';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026092113';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092113';
-import { createSky, sunDirection } from './sky.js?v=philly-2026092113';
-import { createPostFX } from './postfx.js?v=philly-2026092113';
-import { createCameraRig } from './camera.js?v=philly-2026092113';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092113';
-import { createStructures } from './structures.js?v=philly-2026092113';
+} from './terrain.js?v=philly-2026092114';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026092114';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092114';
+import { createSky, sunDirection } from './sky.js?v=philly-2026092114';
+import { createPostFX } from './postfx.js?v=philly-2026092114';
+import { createCameraRig } from './camera.js?v=philly-2026092114';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092114';
+import { createStructures } from './structures.js?v=philly-2026092114';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026092113';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026092113';
+} from './structures-data.js?v=philly-2026092114';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026092114';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026092113';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092113';
+} from './flood.js?v=philly-2026092114';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092114';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026092113';
+} from './vectors.js?v=philly-2026092114';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026092113';
-import { getTheme } from './themes.js?v=philly-2026092113';
+} from './ui.js?v=philly-2026092114';
+import { getTheme } from './themes.js?v=philly-2026092114';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -142,9 +142,34 @@ async function loadEverything() {
   const results = {};
   const data = {};
 
+  // Start independent resources together instead of serializing their network
+  // round trips behind the DEM decode. Each promise handles its own failure.
+  const settled = promise => promise.then(value => ({ value }), error => ({ error }));
+  const metadata = settled(fetchJson('data/terrain.json'));
+  const heightImage = settled(loadImage('data/heightmap.webp'));
+  const overlays = ASSETS.filter(a => !a.required && !a.supplemental);
+  const overlayLoad = Promise.all(overlays.map(async asset => {
+    try {
+      let value = asset.kind === 'image' ? await loadImage(asset.path) : await fetchJson(asset.path);
+      if (asset.id === 'structures') {
+        const bridges = await optionalJson(`data/structures/${value.bridgesFile || 'bridges.json'}`);
+        value = { manifest: value, tierBuffers: new Map(), bridges: bridges || { bridges: [] } };
+      }
+      return { asset, value };
+    } catch (error) {
+      console.warn(`[philly-relief] ${asset.id} unavailable:`, error.message);
+      return { asset, value: null };
+    }
+  }));
+  const landmarks = Promise.all([
+    optionalJson('data/landmark-models.json?v=skyline3'),
+    optionalJson('data/landmark-cards.json?v=skyline3')]);
+
   setProgress(0.05, 'Reading elevation model…');
   try {
-    data.terrain = await fetchJson('data/terrain.json');
+    const loaded = await metadata;
+    if (loaded.error) throw loaded.error;
+    data.terrain = loaded.value;
     results.terrain = true;
   } catch (error) {
     console.warn('[philly-relief] terrain metadata unavailable:', error.message);
@@ -154,7 +179,9 @@ async function loadEverything() {
   if (results.terrain) {
     setProgress(0.18, 'Downloading terrain…');
     try {
-      const img = await loadImage('data/heightmap.webp');
+      const loaded = await heightImage;
+      if (loaded.error) throw loaded.error;
+      const img = loaded.value;
       setProgress(0.48, 'Decoding elevation…');
       const pixels = readImagePixels(img);
       if (pixels.width !== data.terrain.width || pixels.height !== data.terrain.height) {
@@ -178,50 +205,15 @@ async function loadEverything() {
   }
 
   setProgress(0.62, 'Loading map layers…');
-  const overlays = ASSETS.filter((a) => !a.required && !a.supplemental);
-  const loaded = await Promise.all(overlays.map(async (asset) => {
-    try {
-      const value = asset.kind === 'image'
-        ? await loadImage(asset.path)
-        : await fetchJson(asset.path);
-      return { asset, value };
-    } catch (error) {
-      console.warn(`[philly-relief] ${asset.id} unavailable:`, error.message);
-      return { asset, value: null };
-    }
-  }));
+  const loaded = await overlayLoad;
   for (const { asset, value } of loaded) {
     results[asset.id] = value !== null;
     data[asset.id] = value;
   }
 
-  // The manifest is part of the overlay batch above. Keep startup focused on
-  // the visible aerial scene: the packed footprint tiers are hydrated after
-  // first paint (or immediately when a structure feature is requested).
-  // Bridges are tiny and remain eager so landmark routes are always complete.
-  setProgress(0.78, 'Preparing buildings…');
-  const structureManifest = data.structures;
-  if (structureManifest) {
-    let bridges;
-    try {
-      bridges = await fetchJson(
-        `data/structures/${structureManifest.bridgesFile || 'bridges.json'}`);
-    } catch (error) {
-      console.warn('[philly-relief] bridges unavailable:', error.message);
-      bridges = { bridges: [] };
-    }
-    data.structures = { manifest: structureManifest, tierBuffers: new Map(), bridges };
-    results.structures = true;
-  } else {
-    data.structures = null;
-    results.structures = false;
-  }
-
   // Schematic landmark models and their information cards are enhancements:
   // without them the map still draws every footprint and label.
-  [data.landmarkModels, data.landmarkCards] = await Promise.all([
-    optionalJson('data/landmark-models.json?v=skyline3'),
-    optionalJson('data/landmark-cards.json?v=skyline3')]);
+  [data.landmarkModels, data.landmarkCards] = await landmarks;
 
   setProgress(0.82, 'Building the scene…');
   return { results, data };
@@ -356,6 +348,7 @@ async function boot() {
     region: projection.bounds,
     projection: meta.projection,
     sceneProjection: projection,
+    elevation: meta.elevation,
     onTile: (cell, image) => diorama.addTile(cell, image),
     onTileRemoved: key => diorama.dropTile(key),
     maxAnisotropy: renderer.capabilities.getMaxAnisotropy(),
@@ -886,9 +879,14 @@ async function boot() {
     || window.matchMedia('(max-width: 1024px), (pointer: coarse)').matches;
   let powerText = '';
   function queueFrame(delay = 0) {
-    cancelAnimationFrame(frameTicket); clearTimeout(frameTimer);
     if (!running || document.hidden) return;
-    if (delay) frameTimer = setTimeout(() => { frameTicket = requestAnimationFrame(tick); }, delay);
+    // Input bursts share the already-scheduled frame instead of canceling it.
+    // A wake still interrupts an idle timeout immediately.
+    if (frameTicket !== undefined) return;
+    clearTimeout(frameTimer); frameTimer = undefined;
+    if (delay) frameTimer = setTimeout(() => {
+      frameTimer = undefined; frameTicket = requestAnimationFrame(tick);
+    }, delay);
     else frameTicket = requestAnimationFrame(tick);
   }
   function wake() { lastInteraction = performance.now(); queueFrame(); }
@@ -1107,6 +1105,7 @@ async function boot() {
   }
 
   function tick(timestamp) {
+    frameTicket = undefined;
     if (!running) return;
     const intentionallyPaced = scheduledDelay > 0;
     const rawDt = (timestamp - last) / 1000;
@@ -1154,6 +1153,7 @@ async function boot() {
     if (document.hidden) {
       running = false;
       cancelAnimationFrame(frameTicket); clearTimeout(frameTimer);
+      frameTicket = undefined; frameTimer = undefined;
     } else if (!running) {
       running = true;
       last = performance.now();
