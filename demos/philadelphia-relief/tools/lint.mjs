@@ -3,8 +3,9 @@
  *
  * The site has no build step and no node_modules, so rather than pull in a
  * linter this checks the rules that actually matter for shipping this app to a
- * static host — most importantly that nothing resembling a credential and no
- * third-party runtime call can reach the browser.
+ * static host. The relief source must not embed credentials or make arbitrary
+ * external data requests. The optional photographic renderer loads a pinned
+ * Cesium runtime and uses the site's existing public, restricted ion config.
  *
  *   node tools/lint.mjs
  */
@@ -48,6 +49,9 @@ const SECRET_PATTERNS = [
  * About panel are fine; anything the code would *fetch* is not.
  */
 const ALLOWED_LINK_HOSTS = [
+  'www.nauticalcharts.noaa.gov',
+  'adsb.fi',
+  'github.com',
   'registry.opendata.aws',
   'www.openstreetmap.org',
   'openstreetmap.org',
