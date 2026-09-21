@@ -15,7 +15,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-20";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-21";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;

@@ -173,35 +173,64 @@ test("acid patrol moves and rotates with its editor object and validates degener
   c.zones[0].patrol.points[1] = { ...c.zones[0].patrol.points[0] };
   assert.throws(() => validateCourse(c), /positive length/);
 });
-test("Intermediate lower acid patrol remains on flat ground and clear of both pyramids", () => {
+test("all Intermediate acid patrols follow board axes and keep their whole outlines on flat ground", () => {
   const c = intermediateCourse(),
-    zone = c.zones.find((z) => z.patrol),
     sim = new Simulation(c, { untimed: true });
   sim.step();
-  for (let tick = 0; tick < 1200; tick += 12) {
-    const p = acidPositionAt(zone, tick / 120),
-      shape = acidShape(zone, tick / 120);
-    for (let i = 0; i < 40; i += 4) {
-      const ray = new RAPIER.Ray(
-        {
-          x: p.x + shape.vertices[i * 3],
-          y: p.y + 2,
-          z: p.z + shape.vertices[i * 3 + 2],
-        },
-        { x: 0, y: -1, z: 0 },
-      );
-      const hit = sim.world.castRay(
-        ray,
-        4,
-        true,
-        RAPIER.QueryFilterFlags.EXCLUDE_SENSORS |
-          RAPIER.QueryFilterFlags.EXCLUDE_DYNAMIC,
-      );
-      assert.ok(hit);
+  for (const [index, zone] of c.zones.entries()) {
+    assert.ok(zone.patrol);
+    assert.equal(zone.motion, undefined);
+    const { points, speed } = zone.patrol;
+    const lengths = points.map((p, i) => {
+      const q = points[(i + 1) % points.length];
+      const dx = q.x - p.x,
+        dz = q.z - p.z;
       assert.ok(
-        Math.abs(hit.timeOfImpact - 2) < 0.015,
-        `ground clearance at ${tick} / ${i}: ${hit.timeOfImpact}`,
+        Math.abs(Math.abs(dx) - Math.abs(dz)) < 1e-8,
+        "travel follows a board grid axis",
       );
+      return Math.hypot(dx, dz);
+    });
+    const period = lengths.reduce((a, b) => a + b, 0) / speed;
+    let elapsed = 0;
+    for (let i = 0; i < points.length; i++) {
+      const p = acidPositionAt(zone, elapsed),
+        q = points[i];
+      assert.ok(
+        Math.hypot(p.x - q.x, p.z - q.z) < 1e-7,
+        "shared clock reaches each corner continuously",
+      );
+      elapsed += lengths[i] / speed;
+    }
+    for (let sample = 0; sample < 160; sample++) {
+      const time = (period * sample) / 160,
+        p = acidPositionAt(zone, time),
+        shape = acidShape(zone, time);
+      // Ring 1 is the largest outline, not the slightly inset bottom rim.
+      for (let i = 40; i < 80; i++) {
+        const hit = sim.world.castRay(
+          new RAPIER.Ray(
+            {
+              x: p.x + shape.vertices[i * 3],
+              y: p.y + 2,
+              z: p.z + shape.vertices[i * 3 + 2],
+            },
+            { x: 0, y: -1, z: 0 },
+          ),
+          4,
+          true,
+          RAPIER.QueryFilterFlags.EXCLUDE_SENSORS |
+            RAPIER.QueryFilterFlags.EXCLUDE_DYNAMIC,
+        );
+        assert.ok(
+          hit,
+          `acid ${index}, phase ${sample}: entire footprint stays supported`,
+        );
+        assert.ok(
+          Math.abs(hit.timeOfImpact - 2) < 0.015,
+          `acid ${index}, phase ${sample}: avoids pyramid slopes (${hit.timeOfImpact})`,
+        );
+      }
     }
   }
   sim.dispose();

@@ -935,40 +935,62 @@ export function intermediateCourse() {
         route: [...rightRoute, ...route.slice(12)],
       },
     ],
+    // The 109-114s Amiga sequence shows grid-aligned travel and right-angle
+    // turns. Overlapping silhouettes prevent certifying complete return loops;
+    // dimensions, speeds and unseen return legs remain reconstructed.
     zones: [
-      [-1, 57],
-      [6, 60],
-      [3, 64],
-      [-1, 66],
-      [-7, 66],
-    ].map(([l, d], i) => ({
+      {
+        points: [
+          [-1, 58.5],
+          [-1, 56.5],
+        ],
+        speed: 0.65,
+      },
+      {
+        points: [
+          [6, 60],
+          [6, 59.5],
+          [4.2, 59.5],
+          [4.2, 61],
+          [6, 61],
+        ],
+        speed: 1.15,
+      },
+      {
+        points: [
+          [3, 64],
+          [1, 64],
+          [1, 62.3],
+          [3, 62.3],
+        ],
+        speed: 1.15,
+      },
+      {
+        points: [
+          [-1, 66],
+          [-1, 63.7],
+          [-1, 66.4],
+        ],
+        speed: 0.85,
+      },
+      {
+        points: [
+          [-7, 66],
+          [-7, 69],
+          [-3, 69],
+          [-3, 66],
+        ],
+        speed: 1.45,
+      },
+    ].map(({ points, speed }, i) => ({
       kind: "acid",
-      ...worldPoint(l, 13, d),
+      ...worldPoint(points[0][0], 13, points[0][1]),
       radius: 1.2,
       wobblePhase: i * 0.8,
-      ...(i === 4
-        ? {
-            // The isolated lower-left puddle at 110.44–113.64s travels down one
-            // axis, then turns onto the perpendicular axis. Return legs and scale
-            // remain reconstructed; preserve straight, constant-speed travel.
-            patrol: {
-              points: [
-                [-7, 66],
-                [-7, 69],
-                [-3, 69],
-                [-3, 66],
-              ].map(([l, d]) => worldPoint(l, 13, d)),
-              speed: 1.45,
-            },
-          }
-        : {
-            motion: {
-              axis: i % 2 ? "x" : "z",
-              amplitude: 0.55,
-              period: 5 + i,
-              phase: i * 0.8,
-            },
-          }),
+      patrol: {
+        points: points.map(([l, d]) => worldPoint(l, 13, d)),
+        speed,
+      },
     })),
     enemies: [
       {

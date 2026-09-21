@@ -30,6 +30,48 @@ The first segment runs diagonally down-left in the image; the following segment 
 
 ## Still open
 
-The 0.64s deformation cycle, precise silhouette, height, dimensions, 1.45-unit patrol speed, phase, and complete rectangular return path are reconstructions. Only the directional turn above is established by this sampled sequence. The other four Intermediate trajectories and Ultimate trajectories retain provisional sine motion until their complete paths are measured. Capture/dissolve animation, original sound effects, and final original AI/timing remain open.
+The 0.64s deformation cycle, precise silhouette, height, dimensions, 1.45-unit patrol speed, phase, and complete rectangular return path are reconstructions. Only the directional turn above is established by this sampled sequence. Intermediate now uses grid-aligned patrol paths; all unobserved return legs, dimensions, speed profiles and phase alignment remain provisional. Ultimate retains provisional sine motion. Capture/dissolve animation, original sound effects, and final original AI/timing remain open.
 
 Checks cover closed outward triangles, changing rendered vertices/indices matching the native sensor, empty-notch/actual-rim contact, grounded versus airborne contact, interpolation, deterministic restoration, editor transforms, and patrol floor clearance. Whole-course demos additionally check traversability; they do not prove fidelity.
+
+
+## Follow-up: the other Intermediate puddles (mm-21)
+
+Re-examined all 30 frames in the 109.00-113.64s sequence. Successive-frame
+vertical registration uses neutral static stone/wall pixels, excluding green
+puddles and the red marble. This avoids the earlier whole-frame correlation's
+360px wrap after 112s. Residual sprite-centroid jitter and one- or two-pixel
+registration uncertainty remain; these are approximate positions, not recovered
+original world coordinates.
+
+| Visible puddle / interval | Aligned screen centers | Evidence |
+|---|---|---|
+| Upper, 109.00 to 110.92 | (213.9,181.7) to (234.5,171.8) | Travel along the up-right board axis; small centroid variations reflect changing shape. |
+| Upper-right, 109.80 to 111.24 | (345.4,243.8) to (317.0,226.7) | A straight up-left leg. |
+| Upper-right, 111.24 to 111.88 | (317.0,226.7) to (304.5,236.4) | It turns down-left. |
+| Upper-right, 111.88 to 112.36 | (304.5,236.4) to (317.6,241.3) | It then turns down-right. |
+| Middle-right, 109.96 to 111.08 | (315.4,283.1) to (290.9,272.5) | Another up-left leg, parallel to the upper-right puddle during this interval. |
+| Central isolated outline, 110.28 to 111.24 | (261.5,296.1) to (276.1,290.2) | Up-right travel; subsequent overlaps obscure individual identity. |
+
+Merged green components have roughly twice or three times an isolated puddle's
+pixel area. Their centroid must not be treated as the path of one puddle.
+In particular, central identities and the complete upper-right return path are
+not certified after the merges. The topmost puddle also scrolls out of view.
+
+### Applied behavior and limits
+
+All five Intermediate puddles now travel along the board's two axes. The four
+former world-X/world-Z sine motions are gone. The upper-right path includes
+successive perpendicular turns; the middle-right path includes its observed
+leftward leg. The upper and central paths represent their visible axis travel.
+Their unseen reversals/return legs are authored continuations, not claims about
+the original AI. Speeds of 0.65, 1.15, 1.15, 0.85 and 1.45 units/s are provisional
+relative choices; constant-speed interpolation does not reproduce every observed
+pause or animation-dependent speed variation. Existing course dimensions are
+also approximate, so pixel traces do not establish exact world placement.
+
+The outermost 40-vertex ring of every puddle is ray-tested at 160 positions over
+its complete patrol cycle. All outlines remain over flat track, outside the
+refuge slopes. Vertex-based sensors, deformation, sound position and snapshots
+continue to use the shared physical clock and actual moving position. This is
+an incremental movement correction; complete acid behavior is still unverified.
