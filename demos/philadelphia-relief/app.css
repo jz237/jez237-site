@@ -1733,6 +1733,7 @@ body.sheet-open .archive-swipe-overlay { display: none; }
   border-radius: 16px; background: #102a35f5; color: #eff7f3; box-shadow: 0 10px 40px #00182066;
   font: 12px/1.5 var(--font); text-align: center; }
 .aircraft-ride-bar[hidden] { display: none; }
+body.photographic-view .aircraft-ride-bar { bottom: 150px; }
 .aircraft-ride-bar strong { color: #e7c68e; letter-spacing: .07em; }
 .aircraft-ride-status { display: block; margin: 4px 0 8px; }
 .aircraft-view-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
@@ -1744,6 +1745,7 @@ body.aircraft-riding .caption, body.aircraft-riding .readout-preset, body.aircra
 body.aircraft-riding .map-navigation { visibility: hidden; }
 @media (max-width: 700px) {
   .aircraft-ride-bar { bottom: 80px; padding: 10px; }
+  body.photographic-view .aircraft-ride-bar { bottom: 130px; }
   .aircraft-view-buttons button { padding: 8px; }
 }
 .aircraft-disclosure { display: block; color: #aec5cf; font-size: 10px; margin-top: 10px; }
