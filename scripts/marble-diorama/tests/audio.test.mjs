@@ -434,3 +434,16 @@ test("landing awards use the effects bus with separate player throttles", async 
     { name: "collect", key: "landing-bonus:1" },
   ]);
 });
+
+test("steelie knockouts use the reward cue with separate player keys", async () => {
+  const { audio } = fixture();
+  await audio.unlock();
+  const calls = [];
+  audio.effect = (name, options) => calls.push({ name, ...options });
+  audio.event({ type: "steelie-defeat", player: 0, score: 1000 });
+  audio.event({ type: "steelie-defeat", player: 1, score: 1000 });
+  assert.deepEqual(calls, [
+    { name: "collect", key: "steelie-defeat:0" },
+    { name: "collect", key: "steelie-defeat:1" },
+  ]);
+});

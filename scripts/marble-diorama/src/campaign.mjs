@@ -454,16 +454,16 @@ export function beginnerCourse() {
     [-2, 24, 12],
     [6, 24, 13],
     [9, 24, 17],
-    [7, 24, 22],
+    [3, 24, 24.5],
     [10, 24, 25],
     [7, 22, 30],
     [-1, 20, 34],
     [-10, 17, 43],
     [-11.8, 17, 45],
     [-11.8, 17, 52],
-    [-5, 17, 53],
-    [-5, 17, 56],
-    [-5, 16, 60],
+    [-3.5, 17, 53],
+    [-3.5, 17, 56],
+    [-3.5, 16, 60],
     [0, 16, 63],
     [0, 16, 66],
     [-0.8, 14.4, 70.8],
@@ -495,6 +495,12 @@ export function beginnerCourse() {
           : {}),
     }),
   );
+  // Approach the maze steelie from the side and pass the neck muncher on
+  // the right. These are steering targets; every enemy remains collidable.
+  for (const i of [5, 6, 12, 13, 14])
+    Object.assign(route[i], { radius: 0.3, speed: 2.8, flow: false });
+  for (const i of [0, 1, 2, 3, 4, 5, 6, 9, 10, 11]) route[i].speed = 3.6;
+  for (const p of route) if ((p.x + p.z) * Math.SQRT1_2 >= 108) p.speed = 3.5;
   const pipeRoute = [
     ...route.slice(0, 16),
     ...[
@@ -523,6 +529,8 @@ export function beginnerCourse() {
       }),
     ),
   ];
+  for (const p of pipeRoute)
+    if ((p.x + p.z) * Math.SQRT1_2 >= 108) p.speed = 3.5;
   for (const i of [17, 18])
     Object.assign(pipeRoute[i], { radius: 0.25, speed: 1.8 });
   for (const i of [21, 22])
@@ -593,6 +601,27 @@ export function beginnerCourse() {
     ],
     zones: [],
     enemies: [
+      {
+        id: "maze-steelie",
+        kind: "steelie",
+        ...worldPoint(6, 24.56, 24),
+        radius: 0.55,
+        roam: 8,
+        speed: 1.8,
+      },
+      ...[
+        [-5, 46.5],
+        [3, 49],
+        [-5, 56],
+      ].map(([lateral, distance], i) => ({
+        id: `pyramid-muncher-${i + 1}`,
+        kind: "muncher",
+        ...worldPoint(lateral, 17.9, distance),
+        radius: 0.65,
+        roam: 2.5,
+        speed: 0.6,
+        phase: i / 3,
+      })),
       {
         id: "landing-steelie",
         kind: "steelie",

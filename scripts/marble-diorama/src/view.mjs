@@ -736,7 +736,7 @@ export class DioramaView {
         quat(e.current.rotation),
         alpha,
       );
-      mesh.visible = !e.collected && !e.hidden;
+      mesh.visible = !e.collected && !e.defeated && !e.hidden;
       if (mesh.userData.articulated)
         updateActorMesh(
           mesh,

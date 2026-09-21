@@ -66,12 +66,13 @@ export function createEnemies(sim) {
       previous: pose,
       current: pose,
       fallenAt: null,
+      supportedY: def.y,
     };
   });
 }
 export function steerEnemies(sim, dt) {
   for (const e of sim.enemies) {
-    if (e.collected) continue;
+    if (e.collected || e.defeated) continue;
     const b = sim.world.getRigidBody(e.handle),
       pos = b.translation(),
       vel = b.linvel(),
@@ -111,8 +112,42 @@ export function steerEnemies(sim, dt) {
       e.hidden = !active;
       continue;
     }
-    if (pos.y < home.y - 5) {
+    const ray = new RAPIER.Ray(pos, { x: 0, y: -1, z: 0 });
+    const grounded = sim.world.castRay(
+      ray,
+      home.radius + (home.kind === "muncher" ? MUNCHER_HALF_HEIGHT : 0) + 0.1,
+      true,
+      undefined,
+      undefined,
+      sim.world.getCollider(e.collider),
+      b,
+    );
+    if (grounded) e.supportedY = pos.y;
+    // Descending a ramp is not a defeat. Measure the fall from the last
+    // supported height, and only retire a steelie while unsupported.
+    const fallen =
+      home.kind === "steelie"
+        ? !grounded && pos.y < e.supportedY - 5
+        : pos.y < home.y - 5;
+    if (fallen) {
       e.fallenAt ??= sim.tick;
+      if (home.kind === "steelie") {
+        // A defeated steelie stays out for the rest of the race. Attribute the
+        // reward to the last marble that made physical contact, not proximity.
+        e.defeated = true;
+        b.setEnabled(false);
+        const player = sim.players[e.lastContactPlayer];
+        if (player) {
+          player.score += 1000;
+          sim.events.push({
+            type: "steelie-defeat",
+            enemy: home.id,
+            player: e.lastContactPlayer,
+            score: 1000,
+          });
+        }
+        continue;
+      }
       if (sim.tick - e.fallenAt > 360) {
         b.setTranslation({ x: home.x, y: home.y, z: home.z }, true);
         b.setLinvel({ x: 0, y: 0, z: 0 }, true);
@@ -148,16 +183,6 @@ export function steerEnemies(sim, dt) {
       speed = Math.min(home.speed * sim.preset.enemySpeed, distance);
     const ex = (dx / Math.max(0.01, distance)) * speed - vel.x,
       ez = (dz / Math.max(0.01, distance)) * speed - vel.z;
-    const ray = new RAPIER.Ray(pos, { x: 0, y: -1, z: 0 });
-    const grounded = sim.world.castRay(
-      ray,
-      home.radius + (home.kind === "muncher" ? MUNCHER_HALF_HEIGHT : 0) + 0.1,
-      true,
-      undefined,
-      undefined,
-      sim.world.getCollider(e.collider),
-      b,
-    );
     if (!grounded) continue;
     if (home.kind === "muncher" && distance > 0.05) {
       const desired = Math.atan2(dx, dz),
@@ -193,13 +218,13 @@ export function steerEnemies(sim, dt) {
 }
 export function updateEnemies(sim) {
   for (const e of sim.enemies) {
-    if (e.collected) continue;
+    if (e.collected || e.defeated) continue;
     const b = sim.world.getRigidBody(e.handle);
     e.current = {
       position: copy(b.translation()),
       rotation: copy(b.rotation()),
     };
-    if (!["muncher", "mini", "bird"].includes(e.def.kind) || e.hidden) continue;
+    if (e.hidden) continue;
     for (const p of sim.players)
       if (p.status === "racing" && !e.collected) {
         for (const handle of e.colliders)
@@ -209,7 +234,9 @@ export function updateEnemies(sim) {
             (manifold) => {
               for (let i = 0; i < manifold.numContacts(); i++)
                 if (manifold.contactDist(i) <= 0.002) {
-                  if (e.def.kind === "muncher" || e.def.kind === "bird")
+                  if (e.def.kind === "steelie")
+                    e.lastContactPlayer = sim.players.indexOf(p);
+                  else if (e.def.kind === "muncher" || e.def.kind === "bird")
                     sim.fall(p);
                   else if (!e.collected) {
                     e.collected = true;

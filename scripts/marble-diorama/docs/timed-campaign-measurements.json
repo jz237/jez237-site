@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-11",
-  "generatedAt": "2026-09-21T13:49:53.165Z",
+  "physics": "rapier-0.20.0-mm-12",
+  "generatedAt": "2026-09-21T14:14:21.175Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -21,11 +21,11 @@
         },
         {
           "course": "beginner",
-          "ticks": 7084,
+          "ticks": 7112,
           "players": [
             {
-              "time": 28.880208333336405,
-              "score": 10706,
+              "time": 28.697916666669705,
+              "score": 10686,
               "deaths": 0,
               "status": "finished"
             }
@@ -37,7 +37,7 @@
           "players": [
             {
               "time": 31.899739583342047,
-              "score": 17607,
+              "score": 17587,
               "deaths": 0,
               "status": "finished"
             }
@@ -49,7 +49,7 @@
           "players": [
             {
               "time": 15.309895833341034,
-              "score": 24051,
+              "score": 24031,
               "deaths": 0,
               "status": "finished"
             }
@@ -61,7 +61,7 @@
           "players": [
             {
               "time": 0.2851562499973045,
-              "score": 32936,
+              "score": 32916,
               "deaths": 0,
               "status": "finished"
             }
@@ -73,7 +73,7 @@
           "players": [
             {
               "time": 0,
-              "score": 33626,
+              "score": 33606,
               "deaths": 0,
               "status": "timeout"
             }
@@ -105,17 +105,17 @@
         },
         {
           "course": "beginner",
-          "ticks": 7765,
+          "ticks": 7766,
           "players": [
             {
-              "time": 25.371093750002434,
-              "score": 10304,
+              "time": 24.44010416666893,
+              "score": 10186,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 24.4466145833356,
-              "score": 10306,
+              "time": 24.843750000002338,
+              "score": 10304,
               "deaths": 0,
               "status": "finished"
             }
@@ -126,14 +126,14 @@
           "ticks": 5730,
           "players": [
             {
-              "time": 28.899739583343685,
-              "score": 16905,
+              "time": 27.89973958334423,
+              "score": 16687,
               "deaths": 0,
               "status": "finished"
             },
             {
               "time": 26.695312500010676,
-              "score": 16707,
+              "score": 16705,
               "deaths": 0,
               "status": "finished"
             }
@@ -144,14 +144,14 @@
           "ticks": 7315,
           "players": [
             {
-              "time": 12.309895833340216,
-              "score": 23049,
+              "time": 11.309895833339946,
+              "score": 22731,
               "deaths": 0,
               "status": "finished"
             },
             {
               "time": 8.376302083339846,
-              "score": 22450,
+              "score": 22448,
               "deaths": 0,
               "status": "finished"
             }
@@ -159,17 +159,17 @@
         },
         {
           "course": "silly",
-          "ticks": 7066,
+          "ticks": 6912,
           "players": [
             {
               "time": 0,
-              "score": 25146,
+              "score": 24779,
               "deaths": 0,
               "status": "timeout"
             },
             {
               "time": 0,
-              "score": 24664,
+              "score": 24662,
               "deaths": 0,
               "status": "timeout"
             }
