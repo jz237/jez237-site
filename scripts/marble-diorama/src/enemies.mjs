@@ -1,7 +1,8 @@
 import RAPIER from "@dimforge/rapier3d-compat";
 
-// The visible ball/capsule dimensions come directly from these definitions.
-export const MUNCHER_HALF_HEIGHT = 0.25;
+// Animated actors share articulated solids with the renderer.
+import { actorShapes, MUNCHER_HALF_HEIGHT } from "./actor-shapes.mjs";
+export { MUNCHER_HALF_HEIGHT } from "./actor-shapes.mjs";
 const copy = (v) => ({ ...v });
 export function birdMotionAt(home, time, speedMultiplier = 1) {
   const duration = home.distance / (home.speed * speedMultiplier),
@@ -16,35 +17,14 @@ export function birdMotionAt(home, time, speedMultiplier = 1) {
     },
   };
 }
-// A convex, low-poly bird: the rendered triangles and collision hull share
-// these exact points, including the wings and beak.
-export function birdGeometry(radius) {
-  const vertices = new Float32Array([
-    -radius,
-    0,
-    0,
-    0,
-    0,
-    radius * 1.1,
-    radius,
-    0,
-    0,
-    0,
-    0,
-    -radius * 0.55,
-    0,
-    radius * 0.3,
-    0,
-    0,
-    -radius * 0.3,
-    0,
-  ]);
-  const indices = [];
-  for (let i = 0; i < 4; i++) {
-    const j = (i + 1) % 4;
-    indices.push(i, j, 4, i, 5, j);
-  }
-  return { vertices, indices: new Uint32Array(indices) };
+const collisionShapes = new WeakMap();
+function convexShape(solid) {
+  if (!collisionShapes.has(solid))
+    collisionShapes.set(
+      solid,
+      RAPIER.ColliderDesc.convexHull(solid.vertices).shape,
+    );
+  return collisionShapes.get(solid);
 }
 export function createEnemies(sim) {
   return (sim.course.enemies ?? []).map((def) => {
@@ -57,18 +37,22 @@ export function createEnemies(sim) {
       .setCcdEnabled(true);
     if (def.kind === "muncher") desc.lockRotations();
     const body = sim.world.createRigidBody(desc);
-    const shape =
-      def.kind === "bird"
-        ? RAPIER.ColliderDesc.convexHull(birdGeometry(def.radius).vertices)
-        : def.kind !== "muncher"
-          ? RAPIER.ColliderDesc.ball(def.radius)
-          : RAPIER.ColliderDesc.capsule(MUNCHER_HALF_HEIGHT, def.radius);
-    const col = sim.world.createCollider(
-      shape
-        .setMass(def.kind === "steelie" ? 1.4 : def.kind === "mini" ? 0.12 : 1)
-        .setFriction(0.85)
-        .setRestitution(0.12),
-      body,
+    const solids = actorShapes(def, 0);
+    const colliders = (solids ?? [null]).map(
+      (solid) =>
+        sim.world.createCollider(
+          (solid
+            ? RAPIER.ColliderDesc.convexHull(solid.vertices)
+            : RAPIER.ColliderDesc.ball(def.radius)
+          )
+            .setMass(
+              (def.kind === "steelie" ? 1.4 : def.kind === "mini" ? 0.12 : 1) /
+                (solids?.length ?? 1),
+            )
+            .setFriction(0.85)
+            .setRestitution(0.12),
+          body,
+        ).handle,
     );
     const pose = {
       position: copy(body.translation()),
@@ -77,7 +61,8 @@ export function createEnemies(sim) {
     return {
       def,
       handle: body.handle,
-      collider: col.handle,
+      collider: colliders[0],
+      colliders,
       previous: pose,
       current: pose,
       fallenAt: null,
@@ -92,6 +77,14 @@ export function steerEnemies(sim, dt) {
       vel = b.linvel(),
       home = e.def;
     e.previous = e.current;
+    const solids = actorShapes(home, sim.tick * dt * sim.preset.enemySpeed);
+    if (solids)
+      solids.forEach((solid, i) => {
+        if (!solid.dynamic) return;
+        const collider = sim.world.getCollider(e.colliders[i]);
+        collider.setShape(convexShape(solid));
+        if (home.kind === "muncher") collider.setMass(1 / solids.length);
+      });
     if (home.kind === "bird") {
       const { active, position: pos } = birdMotionAt(
         home,
@@ -166,6 +159,19 @@ export function steerEnemies(sim, dt) {
       b,
     );
     if (!grounded) continue;
+    if (home.kind === "muncher" && distance > 0.05) {
+      const desired = Math.atan2(dx, dz),
+        old = e.heading ?? desired;
+      const difference = Math.atan2(
+        Math.sin(desired - old),
+        Math.cos(desired - old),
+      );
+      e.heading = old + Math.max(-3 * dt, Math.min(3 * dt, difference));
+      b.setRotation(
+        { x: 0, y: Math.sin(e.heading / 2), z: 0, w: Math.cos(e.heading / 2) },
+        true,
+      );
+    }
     if (home.kind !== "muncher") {
       const n = Math.max(1, Math.hypot(ex, ez));
       b.applyTorqueImpulse(
@@ -196,28 +202,29 @@ export function updateEnemies(sim) {
     if (!["muncher", "mini", "bird"].includes(e.def.kind) || e.hidden) continue;
     for (const p of sim.players)
       if (p.status === "racing" && !e.collected) {
-        sim.world.contactPair(
-          sim.world.getCollider(e.collider),
-          sim.world.getCollider(p.collider),
-          (manifold) => {
-            for (let i = 0; i < manifold.numContacts(); i++)
-              if (manifold.contactDist(i) <= 0.002) {
-                if (e.def.kind === "muncher" || e.def.kind === "bird")
-                  sim.fall(p);
-                else if (!e.collected) {
-                  e.collected = true;
-                  p.time += 3;
-                  p.score += 500;
-                  sim.events.push({
-                    type: "collect",
-                    player: sim.players.indexOf(p),
-                    time: 3,
-                    score: 500,
-                  });
+        for (const handle of e.colliders)
+          sim.world.contactPair(
+            sim.world.getCollider(handle),
+            sim.world.getCollider(p.collider),
+            (manifold) => {
+              for (let i = 0; i < manifold.numContacts(); i++)
+                if (manifold.contactDist(i) <= 0.002) {
+                  if (e.def.kind === "muncher" || e.def.kind === "bird")
+                    sim.fall(p);
+                  else if (!e.collected) {
+                    e.collected = true;
+                    p.time += 3;
+                    p.score += 500;
+                    sim.events.push({
+                      type: "collect",
+                      player: sim.players.indexOf(p),
+                      time: 3,
+                      score: 500,
+                    });
+                  }
                 }
-              }
-          },
-        );
+            },
+          );
       }
     if (e.collected) b.setEnabled(false);
   }

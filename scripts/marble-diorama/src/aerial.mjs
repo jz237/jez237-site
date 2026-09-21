@@ -229,19 +229,30 @@ export function aerialCourse() {
       material: "metal",
       motion: { axis: "y", amplitude: 3, period: 3.5 },
     }),
-    deck("left-piston", -11, 63, 1, 1, 14.6, {
-      kind: "piston",
-      h: 2.1,
-      material: "metal",
-      motion: { axis: "y", amplitude: 1.5, period: 3.8 },
-    }),
-    deck("yellow-piston", -7.9, 84, 1, 1, 12.2, {
-      kind: "piston",
-      h: 1.7,
-      material: "metal",
-      motion: { axis: "y", amplitude: 1.1, period: 4.2 },
-    }),
   ];
+  // Amiga footage 162s and 167–169s: banks of silver pegs rise from the
+  // walking surface, then withdraw flush. They are not overhead crushers.
+  for (const [id, l, d, y, period, phase] of [
+    ["upper-pegs", -12, 64.5, 12.5, 3.8, 0],
+    ["lower-pegs", -9, 81, 10.5, 3.8, 1.6],
+    ["right-pegs", 10, 84, 6, 3.8, 3.2],
+  ])
+    for (let i = 0; i < 3; i++)
+      parts.push(
+        deck(`${id}-${i}`, l + (i - 1) * 0.88, d, 0.56, 0.56, y - 0.025, {
+          kind: "piston",
+          profile: "peg",
+          h: 1.8,
+          material: "metal",
+          motion: {
+            axis: "y",
+            amplitude: 1.75,
+            period,
+            phase,
+            cycle: "retract",
+          },
+        }),
+      );
   for (const p of parts.filter(
     (p) => p.id.includes("bowl") || p.id.includes("cross-rail"),
   ))

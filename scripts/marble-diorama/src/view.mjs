@@ -7,7 +7,8 @@ import { SURFACES } from "./course.mjs";
 import { reliefField } from "./relief-field.mjs";
 import { stoneTexture, finishStone, displayBase } from "./diorama-finish.mjs";
 import { RADIUS } from "./physics.mjs";
-import { MUNCHER_HALF_HEIGHT, birdGeometry } from "./enemies.mjs";
+import { actorShapes } from "./actor-shapes.mjs";
+import { actorMesh, updateActorMesh } from "./actor-view.mjs";
 const vec = (p) => new THREE.Vector3(p.x, p.y, p.z),
   quat = (p) => new THREE.Quaternion(p.x, p.y, p.z, p.w);
 
@@ -384,51 +385,19 @@ export class DioramaView {
     }
     for (const e of sim.enemies) {
       const steelie = e.def.kind === "steelie";
-      let bird;
-      if (e.def.kind === "bird") {
-        const data = birdGeometry(e.def.radius);
-        bird = new THREE.BufferGeometry();
-        bird.setAttribute(
-          "position",
-          new THREE.BufferAttribute(data.vertices, 3),
-        );
-        bird.setIndex(new THREE.BufferAttribute(data.indices, 1));
-        bird.computeVertexNormals();
-      }
-      const mesh = new THREE.Mesh(
-        bird ??
-          (e.def.kind !== "muncher"
-            ? new THREE.SphereGeometry(e.def.radius, 32, 24)
-            : new THREE.CapsuleGeometry(
-                e.def.radius,
-                2 * MUNCHER_HALF_HEIGHT,
-                8,
-                24,
-              )),
-        new THREE.MeshStandardMaterial({
-          color: e.def.color ?? (steelie ? "#292e30" : "#6bd329"),
-          metalness: steelie ? 0.85 : 0.05,
-          roughness: steelie ? 0.22 : 0.38,
-        }),
-      );
+      const articulated = actorShapes(e.def, 0);
+      const mesh = articulated
+        ? actorMesh(articulated)
+        : new THREE.Mesh(
+            new THREE.SphereGeometry(e.def.radius, 32, 24),
+            new THREE.MeshStandardMaterial({
+              color: e.def.color ?? (steelie ? "#292e30" : "#6bd329"),
+              metalness: steelie ? 0.85 : 0.05,
+              roughness: steelie ? 0.22 : 0.38,
+            }),
+          );
       mesh.castShadow = true;
       mesh.receiveShadow = true;
-      if (e.def.kind === "muncher") {
-        // Mouth is a surface marking. It does not change the capsule outline.
-        mesh.material.onBeforeCompile = (shader) => {
-          shader.vertexShader = "varying vec3 vEnemy;\n" + shader.vertexShader;
-          shader.vertexShader = shader.vertexShader.replace(
-            "#include <begin_vertex>",
-            "#include <begin_vertex>\nvEnemy=position;",
-          );
-          shader.fragmentShader =
-            "varying vec3 vEnemy;\n" + shader.fragmentShader;
-          shader.fragmentShader = shader.fragmentShader.replace(
-            "#include <color_fragment>",
-            "#include <color_fragment>\nif(abs(vEnemy.y-0.15)<0.08 && vEnemy.z>0.25) diffuseColor.rgb*=0.12;",
-          );
-        };
-      }
       this.marbleRoot.add(mesh);
       this.enemies.push(mesh);
     }
@@ -467,6 +436,7 @@ export class DioramaView {
         .filter((p) => p.kind === "spring")
         .map((p) => ({
           kind: "arrow",
+          movingPart: p.motion ? p.id : undefined,
           x: p.x,
           y: p.y,
           z: p.z,
@@ -520,7 +490,13 @@ export class DioramaView {
       plane.rotation.set(-Math.PI / 2, 0, -(mark.angle ?? 0));
       plane.position.set(mark.x, mark.y, mark.z);
       plane.receiveShadow = true;
-      this.root.add(plane);
+      const movingIndex = mark.movingPart
+        ? sim.compiled.moving.findIndex((g) => g.part.id === mark.movingPart)
+        : -1;
+      if (movingIndex >= 0) {
+        plane.position.set(0, 0.015, 0);
+        this.moving[movingIndex].add(plane);
+      } else this.root.add(plane);
     }
     for (const z of sim.course.zones ?? []) {
       if (z.kind === "vacuum") continue;
@@ -737,6 +713,15 @@ export class DioramaView {
         alpha,
       );
       mesh.visible = !e.collected && !e.hidden;
+      if (mesh.userData.articulated)
+        updateActorMesh(
+          mesh,
+          actorShapes(
+            e.def,
+            (Math.max(0, this.sim.tick - 1 + alpha) / 120) *
+              this.sim.preset.enemySpeed,
+          ),
+        );
     }
     for (const a of this.acid)
       a.mesh.position.copy(

@@ -1,3 +1,4 @@
+import { pegGeometry, extensionAt } from "./mechanisms.mjs";
 import { joinedBoardParts, mergeLevelTops } from "./board-joins.mjs";
 import {
   ribbonGeometry,
@@ -169,8 +170,18 @@ export function validateCourse(c) {
         "Course geometry exceeds the 150,000-vertex authoring limit.",
       );
     if (
+      p.profile !== undefined &&
+      (p.profile !== "peg" || p.kind !== "piston" || !finite(p.h) || p.h < 0.12)
+    )
+      throw Error("Invalid peg profile.");
+    if (
+      p.motion?.cycle !== undefined &&
+      (p.motion.cycle !== "retract" || p.motion.axis !== "y")
+    )
+      throw Error("Invalid machine cycle.");
+    if (
       p.motion &&
-      (!["x", "y", "z", "tilt", "wave"].includes(p.motion.axis) ||
+      (!["x", "y", "z", "tilt", "wave", "launch"].includes(p.motion.axis) ||
         ![p.motion.amplitude, p.motion.period, p.motion.phase ?? 0].every(
           finite,
         ) ||
@@ -322,6 +333,7 @@ export const point = (x, y, z) => ({ x, y, z });
 // Generate top, side, underside and optional bevel triangles once. Rendering uses
 // these exact arrays; Rapier uses the same arrays with internal-edge correction.
 export function partGeometry(p) {
+  if (p.profile === "peg") return pegGeometry(p);
   if (p.motion?.axis === "wave")
     return {
       vertices: wavePose(p, 0).vertices,
@@ -497,10 +509,34 @@ export function compileCourse(c) {
   return { definition: c, parts, statics, moving };
 }
 export function motionAt(p, time) {
+  if (p.motion?.axis === "launch") {
+    // The arm hinges at its rear edge. Geometry is already course-rotated.
+    const phase = Math.max(0, Math.min(1, time / p.motion.period));
+    const pitch = -Math.sin(Math.PI * phase) * p.motion.amplitude;
+    const a = p.angle ?? 0,
+      sn = Math.sin(a),
+      cs = Math.cos(a);
+    const along = (p.d / 2) * (Math.cos(pitch) - 1);
+    return {
+      position: {
+        x: p.x - along * sn,
+        y: p.y - (p.d / 2) * Math.sin(pitch),
+        z: p.z + along * cs,
+      },
+      rotation: {
+        x: cs * Math.sin(pitch / 2),
+        y: 0,
+        z: sn * Math.sin(pitch / 2),
+        w: Math.cos(pitch / 2),
+      },
+    };
+  }
   if (p.motion?.axis === "wave") return wavePose(p, time);
   const m = p.motion,
     phase = (time * 2 * Math.PI) / m.period + (m.phase ?? 0),
-    s = Math.sin(phase) * m.amplitude;
+    s =
+      (m.cycle === "retract" ? extensionAt(time, m) : Math.sin(phase)) *
+      m.amplitude;
   const position = { x: p.x, y: p.y, z: p.z },
     rotation = { x: 0, y: 0, z: 0, w: 1 };
   if (m.axis === "tilt") {

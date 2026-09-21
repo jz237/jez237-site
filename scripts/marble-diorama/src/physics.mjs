@@ -7,7 +7,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-6";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-7";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -169,7 +169,13 @@ export class Simulation {
     steerEnemies(this, STEP);
     for (const m of this.movers) {
       m.previous = m.current;
-      m.current = motionAt(m.part, this.tick * STEP * this.preset.machineSpeed);
+      const machineTime =
+        m.part.motion.axis === "launch"
+          ? m.launchTick === undefined
+            ? 0
+            : (this.tick - m.launchTick) * STEP
+          : this.tick * STEP * this.preset.machineSpeed;
+      m.current = motionAt(m.part, machineTime);
       const b = this.world.getRigidBody(m.handle);
       if (m.current.vertices)
         b.collider(0).setShape(
@@ -328,7 +334,9 @@ export class Simulation {
             true,
           );
           p.springTick = this.tick;
-          this.events.push({ type: "spring", player: i });
+          const arm = this.movers.find((m) => m.part.id === s.id);
+          if (arm) arm.launchTick = this.tick;
+          this.events.push({ type: "spring", player: i, part: s.id });
         }
       }
     }
@@ -347,6 +355,7 @@ export class Simulation {
     for (const m of this.movers) {
       const b = this.world.getRigidBody(m.handle);
       m.current = {
+        ...m.current, // Preserve the deforming hull for rendering and snapshots.
         position: copy(b.translation()),
         rotation: copy(b.rotation()),
       };

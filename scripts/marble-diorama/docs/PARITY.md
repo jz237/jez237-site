@@ -1,5 +1,7 @@
 # Per-course parity checklist
 
+See [the September 21 object audit](OBJECT-PARITY.md) for timestamped findings, fixes and known mechanism mismatches.
+
 All six races are playable reconstructions. **None is certified as a complete
 Amiga reproduction.** PARTIAL records implemented behavior and its remaining
 reference checks. Passing normal-input demonstrations prove traversability, not
@@ -9,10 +11,10 @@ original dimensions, timing, or complete route coverage.
 |---|---|---|---|
 | Practice | PARTIAL: training field, twin peaks, four banked reversals; left and right exits pass | PARTIAL: physical gates/bollards; exact gate and numbered-pad effects open | 60-unit start, rotated finish, 100 points per unused timed unit and last-safe recovery implemented; original score triggers/boundaries open |
 | Beginner | PARTIAL: cyan towers, fork, pyramids, ledges, three hollow pipes, ice; left ledge, two-pipe and upper-right-fork routes pass; exact original geometry remains open | Physical steelie pursuit/collision; exact enemy awards and placement open | 75-unit reset after Practice implemented; timed left, two-pipe and upper-right-fork runs pass; original finish/respawn details open |
-| Intermediate | PARTIAL: split towers, islands, acid room, orange pipe, lower green lanes; both upper starts and left bypass pass; orange pipe, two traveling-wave strips and right lane now pass | Physical munchers and moving acid; two physical traveling-wave strips implemented; full lower-lane deformation and original wave pattern open | 45 units added to carryover; paired starts and independent completion pass; scoring/boundary parity open |
-| Aerial | PARTIAL: crossed narrow rails, zigzags, vacuum turns, lower red/yellow towers; two-player demos yield at the crossing and both complete without falls | Directional vacuums, steelie, moving hammer/pistons implemented; measured hazard cycles open | 30 units added; normal-input untimed runs pass; timed full-campaign balance open |
-| Silly | PARTIAL: reverse uphill course, mini room, red uplift pipe, two mazes, bird field and split goal climbs; solo demo collects all six miniatures, paired paths collect three each, all finish without falls; exact original route coverage open | Collectible miniature enemies (+500/+3), wall-to-wall purple birds, pyramids; demos anticipate bird launches; exact flight pattern and uplift behavior open | 25 units added; timed solo campaign now completes Silly; full score/time parity open |
-| Ultimate | PARTIAL: three launch islands, split acid/muncher rooms, ice pyramids, branching finish; left route and authored right hazard-room path pass with recoveries; exact original route coverage open | Aimed physical launch impulses, munchers, moving acid, ice, three sequential disappearing bridge tiles; moving launcher mechanism and exact bridge pattern open | 25 units added; six-course ending and 20,000 + 1,000/time − 1,000/fall award implemented; complete timed campaign acceptance open |
+| Intermediate | PARTIAL: split towers, islands, acid room, orange pipe, lower green lanes; both upper starts and left bypass pass; orange pipe, two traveling-wave strips and right lane now pass | Articulated curling munchers with shared collision shapes, and moving acid; two physical traveling-wave strips with repaired render deformation; full lower-lane deformation and original wave pattern open | 45 units added to carryover; paired starts and independent completion pass; scoring/boundary parity open |
+| Aerial | PARTIAL: crossed narrow rails, zigzags, vacuum turns, lower red/yellow towers; two-player demos yield at the crossing and both complete without falls | Directional vacuums, steelie, round retracting peg banks implemented; red side-striker still mismatched and measured hazard cycles open | 30 units added; normal-input untimed runs pass; timed full-campaign balance open |
+| Silly | PARTIAL: reverse uphill course, mini room, red uplift pipe, two mazes, bird field and split goal climbs; solo demo collects all six miniatures, paired paths collect three each, all finish without falls; exact original route coverage open | Collectible miniature enemies (+500/+3), flapping purple birds with articulated collision solids, pyramids; demos anticipate bird launches; exact flight pattern and uplift behavior open | 25 units added; timed solo campaign now completes Silly; full score/time parity open |
+| Ultimate | PARTIAL: one launcher island with alternative left/right landing islands, split acid/muncher rooms, ice pyramids, branching finish; left route and authored right hazard-room path pass with recoveries; exact original route coverage open | Contact-triggered hinged launcher arms and aimed impulses, curling munchers, moving acid, ice, three sequential disappearing bridge tiles; original launcher law and exact bridge pattern open | 25 units added; six-course ending and 20,000 + 1,000/time − 1,000/fall award implemented; complete timed campaign acceptance open |
 
 ## Global campaign checks
 
@@ -76,7 +78,7 @@ The Amiga longplay's final-room frames and Michael Webb's Amiga retrospective
 place the disappearing bridges at Ultimate's ending. Exact geometry and cycles
 remain PARTIAL; names in an old ledger are not proof of a hazard's location.
 
-The Ultimate opening also needs a topology correction: the observed Amiga route
-uses the first square mechanism and then the left lower platform/bridge without
-visiting the right lower platform. The current serial three-launch route is not
-supported by that sequence. See ULTIMATE-REFERENCE.md before further timing work.
+The Ultimate opening's serial route has been corrected to branching landing
+islands. Both reconstructed openings pass ordinary-input checks, but exact
+launcher behavior, start recess and the 2000 award trigger remain open. See
+ULTIMATE-REFERENCE.md and OBJECT-PARITY.md before claiming original parity.
