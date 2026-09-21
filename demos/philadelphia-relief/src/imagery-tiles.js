@@ -1,7 +1,7 @@
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
-import { fetchTile } from './tile-cache.js?v=philly-2026092117';
+import { fetchTile } from './tile-cache.js?v=philly-2026092121';
 export { fetchTile };
-import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026092117';
+import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026092121';
 
 export const TILE_SPECS = [
   { tier: 'tile-inspection', lon: 0.0032, lat: 0.0024, range: 600 },

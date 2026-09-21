@@ -1,12 +1,13 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092117';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092117';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092117';
-import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092117';
-import { createAircraftSession } from './aircraft-session.js?v=philly-2026092117';
-import { createElevationCache } from './frame-work.js?v=philly-2026092117';
-import { flightView, FLIGHT_VIEWS, viewDelay } from './flight-view.js?v=philly-2026092117';
-import { createAirportCamera } from './airport-camera.js?v=philly-2026092117';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092121';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092121';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092121';
+import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092121';
+import { createAircraftSession } from './aircraft-session.js?v=philly-2026092121';
+import { createElevationCache } from './frame-work.js?v=philly-2026092121';
+import { flightView, FLIGHT_VIEWS, viewDelay } from './flight-view.js?v=philly-2026092121';
+import { SPOTTERS, observerView } from './explore-math.js?v=philly-2026092121';
+import { createAirportCamera } from './airport-camera.js?v=philly-2026092121';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -48,13 +49,22 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   const rideTitle = el('strong', '', 'SIMULATED RIDE-ALONG');
   const rideStatus = el('span', 'aircraft-ride-status');
   const rideControls = el('div', 'aircraft-view-buttons');
+  const spotterStation = el('select', 'spotter-station');
+  spotterStation.setAttribute('aria-label', 'Virtual airport viewpoint');
+  SPOTTERS.forEach((station, i) => {
+    const option = el('option', '', station.name); option.value = String(i); spotterStation.append(option);
+  });
+  spotterStation.hidden = true;
+  const realCamera = el('button', '', 'Real PHL camera ↗'); realCamera.type = 'button';
+  realCamera.onclick = airportCamera.open;
   for (const [mode, label] of Object.entries(FLIGHT_VIEWS)) {
     const button = el('button', '', label); button.type = 'button'; button.dataset.view = mode;
     button.onclick = () => startRide(following, mode); rideControls.append(button);
   }
   const exitRide = el('button', '', 'Return to map'); exitRide.type = 'button';
   exitRide.onclick = () => { stopFollow(true); close(); };
-  rideBar.append(rideTitle, rideStatus, rideControls, exitRide); document.body.append(rideBar);
+  rideBar.append(rideTitle, rideStatus, rideControls, spotterStation, realCamera, exitRide);
+  document.body.append(rideBar);
   let rideMode = null, currentView = null, lastRideReport = 0;
   let enabled = false, disposed = false, controller, timer, generation = 0, loading = false;
   let selected = null, following = null, returnPose, failed = false, lastPoll = 0, lastDraw = 0;
@@ -114,7 +124,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     const timeout = setTimeout(() => request.abort(), 12000);
     try {
       // Versioned URL also avoids an hour-long failure cached by earlier releases.
-      const response = await fetch('aircraft?v=philly-2026092117', {
+      const response = await fetch('aircraft?v=philly-2026092121', {
         signal: request.signal, cache: 'no-store' });
       const doc = await response.json();
       if (ticket !== generation || disposed || !enabled) return;
@@ -165,11 +175,13 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   }
   function startRide(id, mode) {
     const r = records.get(id);
-    if (!r || ageSeconds(r.data) > STALE_AFTER || !Number.isFinite(r.data.track)) return;
+    if (!r || ageSeconds(r.data) > STALE_AFTER
+      || mode !== 'spotter' && !Number.isFinite(r.data.track)) return;
     if (following !== id) follow(id);
     rideMode = mode; rideBar.hidden = false; close(); lastRideReport = 0;
     document.body.classList.add('aircraft-riding');
-    rideTitle.textContent = `${name(r.data)} · SIMULATED VIEW`;
+    rideTitle.textContent = `${name(r.data)} · SIMULATED ${mode === 'spotter' ? 'AIRPORT SPOTTER' : 'VIEW'}`;
+    spotterStation.hidden = mode !== 'spotter';
     for (const button of rideControls.children) {
       button.setAttribute('aria-pressed', String(button.dataset.view === mode));
     }
@@ -207,6 +219,9 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     button.onclick = () => follow(id); card.append(button);
     const ride = el('button', 'aircraft-follow aircraft-ride', 'Ride along · simulated 3D');
     ride.type = 'button'; ride.onclick = () => startRide(id, 'forward'); card.append(ride);
+    const spot = el('button', 'camera-card-retry', 'Track from PHL · simulated spotter');
+    spot.type = 'button'; spot.disabled = ageSeconds(r.data) > STALE_AFTER;
+    spot.onclick = () => startRide(id, 'spotter'); card.append(spot);
     const airport = el('button', 'camera-card-retry', 'Watch PHL airport camera ↗');
     airport.type = 'button'; airport.onclick = airportCamera.open; card.append(airport);
     card.append(el('small', 'aircraft-disclosure',
@@ -273,6 +288,15 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   filter.onchange = () => { close(); stopFollow(true); populate(); report(); };
   jump.onchange = () => { if (jump.value) { show(jump.value); follow(jump.value); } };
   back.onclick = () => { stopFollow(true); if (selected) show(selected); };
+  document.getElementById('airportSpotter').onclick = () => {
+    const station = SPOTTERS[0];
+    const candidates = visibleRecords().filter(r => ageSeconds(r.data) <= STALE_AFTER
+      && Math.hypot((r.data.lon - station.lon) * 85000, (r.data.lat - station.lat) * 111320) < 25000);
+    candidates.sort((a, b) => Math.hypot(a.data.lon - station.lon, a.data.lat - station.lat)
+      - Math.hypot(b.data.lon - station.lon, b.data.lat - station.lat));
+    if (candidates.length) startRide(candidates[0].data.id, 'spotter');
+    else status.textContent = 'No recent aircraft within 25 km of PHL. Try again after the feed updates.';
+  };
   retry.onclick = () => { clearTimeout(timer); void poll(); };
   const escape = e => {
     if (e.key === 'Escape' && !document.querySelector('.airport-camera-dialog[open]')) {
@@ -289,6 +313,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   document.addEventListener('keydown', escape);
 
   return {
+    stopFollow,
     get flightView() { return currentView; },
     get animating() { return enabled && records.size > 0; },
     beforeFrame() {
@@ -303,11 +328,15 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
         return undefined;
       }
       const p = flightPosition(r.samples, playbackAt);
-      currentView = rideMode ? flightView(p, rideMode, sampleElevation(p.lon, p.lat)) : null;
+      const station = SPOTTERS[Number(spotterStation.value)] || SPOTTERS[0];
+      currentView = rideMode === 'spotter'
+        ? observerView(station, p, sampleElevation(station.lon, station.lat))
+        : rideMode ? flightView(p, rideMode, sampleElevation(p.lon, p.lat)) : null;
       if (rideMode && !currentView) { stopFollow(true); return undefined; }
       if (performance.now() - lastFollow > 80) {
         lastFollow = performance.now();
-        store.set({ camLon: p.lon, camLat: p.lat }, { source: 'aircraft-follow' });
+        const eye = rideMode === 'spotter' ? station : p;
+        store.set({ camLon: eye.lon, camLat: eye.lat }, { source: 'aircraft-follow' });
       }
       if (rideMode && Date.now() - lastRideReport > 900) {
         lastRideReport = Date.now();
@@ -340,7 +369,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
         const ground = sampleElevation(p.lon, p.lat);
         const h = flightDisplayHeight(p, ground, ctx.exaggeration);
         r.mesh.visible = showPlane; r.line.visible = showPlane && trailToggle.checked;
-        const hideRidden = following === r.data.id && rideMode && rideMode !== 'chase';
+        const hideRidden = following === r.data.id && rideMode
+          && rideMode !== 'chase' && rideMode !== 'spotter';
         if (hideRidden) { r.mesh.visible = false; r.line.visible = false; }
         r.mesh.position.set(projection.lonToX(p.lon), h, projection.latToZ(p.lat));
         r.mesh.rotation.y = ((90 - (p.track ?? 0)) * Math.PI) / 180;

@@ -1,11 +1,11 @@
 // Geographic camera poses only: tracking supplies no video or aircraft attitude.
 const RAD = Math.PI / 180;
 export const FLIGHT_VIEWS = {
-  forward: 'Forward', left: 'Left window', right: 'Right window', chase: 'Chase',
+  forward: 'Forward', left: 'Left window', right: 'Right window', chase: 'Chase', spotter: 'PHL spotter',
 };
 
 export function flightView(position, mode, ground = 0) {
-  if (!position || !Object.hasOwn(FLIGHT_VIEWS, mode)
+  if (mode === 'spotter' || !position || !Object.hasOwn(FLIGHT_VIEWS, mode)
     || ![position.lon, position.lat, position.height, position.track].every(Number.isFinite)) return null;
   const heading = ((position.track % 360) + 360) % 360;
   const height = Math.max(ground + 35, position.height);

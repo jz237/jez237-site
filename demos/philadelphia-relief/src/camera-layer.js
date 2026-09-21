@@ -1,8 +1,8 @@
 import { WEBCAMS, trafficCameras, regionalCameras, hasCameraPreview, groupCameras, popupPosition }
-  from './camera-data.js?v=philly-2026092117';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092117';
+  from './camera-data.js?v=philly-2026092121';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092121';
 
-import { mountCameraMedia } from './camera-media.js?v=philly-2026092117';
+import { mountCameraMedia } from './camera-media.js?v=philly-2026092121';
 
 const element = (tag, className, text) => {
   const node = document.createElement(tag); node.className = className;

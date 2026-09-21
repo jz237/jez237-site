@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026092117';
-import { ERA_IDS } from './eras.js?v=philly-2026092117';
+import { WEATHERS } from './solar.js?v=philly-2026092121';
+import { ERA_IDS } from './eras.js?v=philly-2026092121';
 /**
  * Single source of truth for every tunable in the map.
  *

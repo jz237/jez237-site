@@ -14,13 +14,13 @@
  * objects, no DOM.
  */
 
-import { hexToRgb } from './themes.js?v=philly-2026092117';
+import { hexToRgb } from './themes.js?v=philly-2026092121';
 import {
   parseTier, extrudeBuildings, buildBridge, mergeSolids, tierGrow, drawFraction,
   drawIndexCount, heightScale, distanceToBox, distanceToFootprint, TIER_ORDER, resample,
-} from './structures-data.js?v=philly-2026092117';
-import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026092117';
-import { damp } from './geo.js?v=philly-2026092117';
+} from './structures-data.js?v=philly-2026092121';
+import { neighborhoodBuildings, localBuildingSolids } from './neighborhood-data.js?v=philly-2026092121';
+import { damp } from './geo.js?v=philly-2026092121';
 
 const VERTEX_SHADER = /* glsl */ `
   attribute vec2 aFacadeOrigin;
@@ -86,6 +86,9 @@ const FRAGMENT_SHADER = /* glsl */ `
   uniform float uFacade;
   uniform vec4 uLocalBounds;
   uniform float uLocalClip;
+  #ifdef ARCHITECTURAL_STUDY
+  uniform vec4 uStudyBounds;
+  #endif
   uniform float uRoofPhotoOn;
   uniform sampler2D uRoofPhoto0; uniform vec4 uRoofPhotoBounds0;
   uniform sampler2D uRoofPhoto1; uniform vec4 uRoofPhotoBounds1;
@@ -129,6 +132,10 @@ const FRAGMENT_SHADER = /* glsl */ `
   void main() {
     if (uLocalClip > 0.5 && vWorld.x > uLocalBounds.x && vWorld.x < uLocalBounds.z
         && vWorld.z > uLocalBounds.y && vWorld.z < uLocalBounds.w) discard;
+    #ifdef ARCHITECTURAL_STUDY
+    if (vWorld.x > uStudyBounds.x && vWorld.x < uStudyBounds.z
+      && vWorld.z > uStudyBounds.y && vWorld.z < uStudyBounds.w) discard;
+    #endif
     // Flat face normal from screen-space derivatives: no normal attribute,
     // shared ring vertices, crisp edges.
     // Camera-relative derivatives avoid precision noise far from the region origin.
@@ -158,7 +165,8 @@ const FRAGMENT_SHADER = /* glsl */ `
     #endif
     vec3 glass = mix(vec3(0.018, 0.052, 0.08), vec3(0.09, 0.19, 0.25), max(0.0, n.y + 0.45));
     vec3 facade = mix(masonry, vec3(0.18, 0.24, 0.28), vStyle);
-    facade = mix(facade, vFinish.rgb, vFinish.a);
+    facade = mix(facade, vFinish.rgb, min(1.0, vFinish.a));
+    window *= 1.0 - step(1.5, vFinish.a);
     vec2 brickGrid = vec2(across / .32, vStorey / .105);
     brickGrid.x += mod(floor(brickGrid.y), 2.0) * .5;
     vec2 brickAA = max(fwidth(brickGrid), vec2(.025));
@@ -377,10 +385,11 @@ export function createStructures(THREE, options) {
 
   const groundAt = (x, z) => sampleElevation(projection.xToLon(x), projection.zToLat(z));
 
-  let localBounds = null;
+  let localBounds = null, studyBounds = null;
   const emptyRoof = new THREE.DataTexture(new Uint8Array([96,96,96,255]),1,1);
   emptyRoof.needsUpdate = true;
   const sharedUniforms = {
+    uStudyBounds: { value: new THREE.Vector4() },
     uViewToWorld: { value: new THREE.Matrix3() },
     uExag: { value: 10 },
     uHScale: { value: 1 },
@@ -421,7 +430,7 @@ export function createStructures(THREE, options) {
     }
     return new THREE.ShaderMaterial({
       uniforms,
-      defines: landmark ? { LANDMARK: 1 } : {},
+      defines: landmark ? { LANDMARK: 1 } : studyBounds ? { ARCHITECTURAL_STUDY: 1 } : {},
       vertexShader: VERTEX_SHADER,
       fragmentShader: FRAGMENT_SHADER,
       side: THREE.DoubleSide,
@@ -613,6 +622,7 @@ export function createStructures(THREE, options) {
   let landmarkMesh = null;
   let skylineEdges = null;
   const proxies = [];
+  let originalLandmarkGeometry = null;
   let selectedModel = -1;
   if (landmarkModels && landmarkModels.vertexCount > 0) {
     const geometry = solidGeometry(landmarkModels);
@@ -796,6 +806,40 @@ export function createStructures(THREE, options) {
   }
 
   return {
+    setDetailedLandmarks(packed, id) {
+      if (!packed && !studyBounds && !originalLandmarkGeometry) return;
+      const model = packed?.models.find(m => m.id === id);
+      studyBounds = model ? new THREE.Box3() : null;
+      if (model) {
+        for (let i = model.vertexStart; i < model.vertexEnd; i++) {
+          studyBounds.expandByPoint(new THREE.Vector3(...packed.position.subarray(i * 3, i * 3 + 3)));
+        }
+        studyBounds.expandByScalar(4);
+        sharedUniforms.uStudyBounds.value.set(studyBounds.min.x, studyBounds.min.z,
+          studyBounds.max.x, studyBounds.max.z);
+      }
+      for (const tier of tiers) {
+        if (studyBounds) tier.mesh.material.defines.ARCHITECTURAL_STUDY = 1;
+        else delete tier.mesh.material.defines.ARCHITECTURAL_STUDY;
+        tier.mesh.material.needsUpdate = true;
+      }
+      if (!landmarkMesh) return;
+      if (!packed) {
+        if (originalLandmarkGeometry) {
+          landmarkMesh.geometry.dispose(); landmarkMesh.geometry = originalLandmarkGeometry;
+          originalLandmarkGeometry = null;
+        }
+        return;
+      }
+      if (!originalLandmarkGeometry) originalLandmarkGeometry = landmarkMesh.geometry;
+      else landmarkMesh.geometry.dispose();
+      const geometry = solidGeometry(packed);
+      geometry.setAttribute('aModel', new THREE.BufferAttribute(packed.model, 1));
+      geometry.setAttribute('aStyle', new THREE.BufferAttribute(packed.style, 1));
+      geometry.setAttribute('aClock', new THREE.BufferAttribute(packed.clock, 4));
+      landmarkMesh.geometry = geometry;
+
+    },
     group,
     inspectionGroup,
     tiers,
@@ -954,6 +998,7 @@ export function createStructures(THREE, options) {
       }
       if (landmarkMesh) {
         landmarkMesh.geometry.dispose();
+        originalLandmarkGeometry?.dispose();
         landmarkMesh.material.dispose();
       }
       if (skylineEdges) { skylineEdges.mesh.geometry.dispose(); skylineEdges.material.dispose(); }

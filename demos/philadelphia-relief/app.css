@@ -1860,3 +1860,36 @@ body.sheet-open .camera-map-card, body.cinema .camera-map-card { display: none; 
   .orientation, body.photographic-view .orientation { top: 64px; width: 175px; max-height: calc(100dvh - 136px); }
   .imagery-credit, .photo-credits { left: auto; max-width: 48vw; }
 }
+
+/* Optional exploration tools share the map renderer and compact mobile chrome. */
+.explore-tools { border-block:1px solid #ffffff24; padding:12px 0; margin:10px 0; }
+.explore-tools summary { cursor:pointer; font-weight:650; }
+.explore-tools label { display:block; margin:12px 0 5px; font-size:12px; }
+.explore-tools button,.explore-tools select { width:100%; margin-block:4px; }
+.explore-mode-bar {
+  position:fixed; z-index:85; left:50%; bottom:82px; transform:translateX(-50%);
+  width:min(720px,calc(100vw - 32px)); padding:16px 20px; border:1px solid #e9c88d55;
+  border-radius:16px; background:#132b36f5; color:#f5f0e5; box-shadow:0 10px 35px #0005;
+}
+.explore-mode-bar[hidden] { display:none; }
+.explore-mode-bar strong { font-size:12px; letter-spacing:.07em; }
+.explore-mode-bar p { font-size:12px; line-height:1.5; margin:8px 0; color:#d0dce0; }
+.explore-mode-bar div { display:flex; flex-wrap:wrap; gap:6px; margin-bottom:10px; }
+.explore-mode-bar button,.explore-mode-bar select,.spotter-station {
+  border:1px solid #ffffff30; border-radius:8px; background:#1e3c48; color:#fff;
+  min-height:36px; padding:7px 12px; font:inherit; font-size:12px; cursor:pointer;
+}
+.explore-mode-bar a { color:#ffd38b; font-size:12px; padding:8px; }
+.explore-mode-bar button:focus-visible,.explore-mode-bar select:focus-visible { outline:2px solid #ffd38b; }
+.explore-picking .stage { cursor:crosshair; }
+.explore-standing .stage { cursor:grab; touch-action:none; }
+.explore-standing .readout-preset,.explore-exhibit .readout-preset { display:none; }
+.explore-exhibit .map-labels,.explore-exhibit .camera-map-layer,
+.explore-exhibit .aircraft-map-layer,.explore-exhibit .extra-map-pins { visibility:hidden; }
+@media(max-width:700px) {
+  .explore-mode-bar { bottom:76px; padding:10px 12px; width:calc(100vw - 20px); max-height:34vh; overflow:auto; }
+  .explore-mode-bar div { gap:4px; }
+  .explore-mode-bar button { min-height:40px; padding:7px 9px; }
+}
+
+.explore-tools .photo-note,#exploreStatus { display:block; font-size:12px; line-height:1.45; }
