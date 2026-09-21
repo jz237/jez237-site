@@ -312,6 +312,8 @@ export function sillyCourse() {
       color: "#943adb",
     });
   }
+  // A controlled approach keeps the second demo marble clear of bird flights.
+  for (const i of [26, 27, 28]) rightDemoRoute[i].speed = 2.5;
   return {
     schema: 1,
     id: "silly",

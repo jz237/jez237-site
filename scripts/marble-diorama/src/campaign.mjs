@@ -505,6 +505,8 @@ export function beginnerCourse() {
     ].map(([l, d]) => routePoint(l, 17, d, { speed: 2.8 })),
     ...pipeRoute.slice(12),
   ]);
+  // Settle onto the shared fork before taking its sharper right-hand exit.
+  Object.assign(upperRightRoute[8], { speed: 2.2, radius: 0.35, flow: false });
   return {
     schema: 1,
     id: "beginner",

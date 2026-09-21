@@ -1,3 +1,4 @@
+import { joinedBoardParts, mergeLevelTops } from "./board-joins.mjs";
 import {
   ribbonGeometry,
   polygonGeometry,
@@ -428,7 +429,8 @@ export function compileCourse(c) {
   validateCourse(c);
   const staticGroups = new Map(),
     moving = [];
-  for (const p of c.parts) {
+  const parts = joinedBoardParts(c.parts);
+  for (const p of parts) {
     const geom = partGeometry(p);
     if (p.motion) {
       if (p.bank || p.bevel)
@@ -481,7 +483,7 @@ export function compileCourse(c) {
     }
   }
   const statics = [...staticGroups.values()].map((g) => {
-    for (const f of g.faces.values()) {
+    for (const f of mergeLevelTops(g)) {
       g.indices.push(...f.t);
       g.roles.push(f.role);
     }
@@ -492,7 +494,7 @@ export function compileCourse(c) {
       roles: g.roles,
     };
   });
-  return { definition: c, statics, moving };
+  return { definition: c, parts, statics, moving };
 }
 export function motionAt(p, time) {
   if (p.motion?.axis === "wave") return wavePose(p, time);

@@ -556,15 +556,11 @@ export class DioramaView {
     }
     const base = displayBase(sim.course, this.wallGrain);
     this.display.add(base.group);
-    for (const part of sim.course.parts) {
+    for (const part of sim.compiled.parts) {
       const foundation = foundationGeometry(part, base.top);
       if (foundation)
         this.display.add(
-          this.meshFor(
-            foundation,
-            part.material ?? "stone",
-            sim.course.color,
-          ),
+          this.meshFor(foundation, part.material ?? "stone", sim.course.color),
         );
     }
     this.ground.position.y = base.ground;
