@@ -250,8 +250,8 @@ export class AudioEngine {
   }
   event(event, assisted = false) {
     if (event.type === "impact") return this.impact(event.force);
-    if (event.type === "landing-bonus")
-      return this.effect("collect", { key: `landing-bonus:${event.player}` });
+    if (["landing-bonus", "steelie-defeat"].includes(event.type))
+      return this.effect("collect", { key: `${event.type}:${event.player}` });
     if (event.type === "checkpoint" && !assisted) return;
     return this.effect(event.type, { key: `${event.type}:${event.player}` });
   }
@@ -291,7 +291,8 @@ export class AudioEngine {
         });
     }
     for (const e of sim.enemies ?? []) {
-      const active = !e.hidden && !e.collected && e.fallenAt === null;
+      const active =
+        !e.hidden && !e.collected && !e.defeated && e.fallenAt === null;
       const previous = this.obstacleStates.get(e.handle);
       this.obstacleStates.set(e.handle, active);
       if (!active) continue;

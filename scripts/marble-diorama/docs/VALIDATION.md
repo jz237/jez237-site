@@ -626,3 +626,35 @@ landing and 1000 finish awards), with visible bonus feedback. Full original
 landing-score interpolation and repeat policy remain provisional. Full campaign
 timing remains incomplete: solo expires on Ultimate and paired play on Silly.
 See PRACTICE-SCORING.md for original footage and exact limits of these checks.
+
+
+### September 21 — Beginner hazards and steelie knockout lifecycle
+
+Restored the upper maze steelie and three independently curling pyramid-room
+munchers identified in both original recordings. All use active native collision
+and pursuit. Steelie knockouts now award 1000 points once, retire the enemy body,
+and emit a reward cue and visible notice. Supported lower elevations are not
+mistaken for a fall. See BEGINNER-ENEMIES.md for footage and provisional policies.
+
+New checks cover native rolling impact and fall, no automatic respawn, no award
+for an uncontacted fall, the last contacting player, snapshot continuation and
+lower supported elevation. Audio event keys distinguish the two players.
+
+The original route stalled against the newly restored upper enemy. The revised
+route passes around it and the neck muncher with normal bounded controls.
+Quicker approaches and final-stretch steering keep solo Beginner at 59.27s with
+zero falls. Timed paired Beginner completes both by 64.72s with zero falls.
+No original clock, physics limit, enemy collider or acceptance assertion changed.
+
+Fresh full-campaign measurements retain solo completion through Silly (0.285
+units left) and paired completion through Aerial. Full timed completion remains
+open: solo expires in Ultimate at 32.00s and both players expire in Silly by
+57.60s. The change is recorded as mm-12 to separate older recordings and records.
+
+Browser close-ups at 0.00 and 0.15s confirm three different curling poses on the
+actual Beginner board, with no captured warnings/errors. A paired browser run
+also displayed the steelie +1000 notice and finished both players with zero falls.
+
+Release verification: 121/121 tests pass in 185,325ms; production build and diff
+check pass. The final paired Beginner browser run finishes both marbles without
+falls or captured warnings/errors (Player 2: 64.20s, 2894 points; Player 1: 2877).
