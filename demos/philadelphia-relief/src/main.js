@@ -5,8 +5,8 @@ import { updateImageryCredit, wireFieldNotes, wireMapChrome, timelineSeek, captu
   from './experience.js?v=philly-2026092121';
 import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092121';
 import { wireLooks } from './looks.js?v=philly-2026092121';
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092121';
-import { createOrientation } from './orientation.js?v=philly-2026092121';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092122';
+import { createOrientation } from './orientation.js?v=philly-2026092122';
 import { createPhotographic } from './photographic.js?v=philly-2026092121';
 import { wireRegionalViews } from './regional-views.js?v=philly-2026092121';
 import { createCameraLayer } from './camera-layer.js?v=philly-2026092121';
@@ -45,11 +45,11 @@ import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
 } from './terrain.js?v=philly-2026092121';
 import { createNeighborhood } from './neighborhood.js?v=philly-2026092121';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092121';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092122';
 import { createSky, sunDirection } from './sky.js?v=philly-2026092121';
 import { createPostFX } from './postfx.js?v=philly-2026092121';
 import { createCameraRig } from './camera.js?v=philly-2026092121';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092121';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092122';
 import { createStructures } from './structures.js?v=philly-2026092121';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
@@ -958,7 +958,8 @@ async function boot() {
     document.body.classList.toggle('diorama-view', miniature > .1);
     document.body.classList.toggle('neighborhood-view', now.dist < 6500);
     terrain.uniforms.uDiorama.value = miniature;
-    terrain.uniforms.uFogDensity.value = fogDensityFor(effectiveLight(state, LIGHT_BOUNDS).fogDensity)
+    const light = effectiveLight(state, LIGHT_BOUNDS);
+    terrain.uniforms.uFogDensity.value = fogDensityFor(light.fogDensity)
       * (1 - miniature * .96);
     sky.uniforms.uDiorama.value = miniature;
     terrain.setDistrict(now.lon, now.lat);
@@ -1021,7 +1022,6 @@ async function boot() {
       if (joined) syncTiers(effectiveQuality);
     }
 
-    const light = effectiveLight(state, LIGHT_BOUNDS);
     lastLight = light;
     sunDirection(light.sunAzimuth, light.sunAltitude, sunDir);
     terrain.uniforms.uSunDir.value.copy(sunDir);
@@ -1030,7 +1030,7 @@ async function boot() {
     sky.uniforms.uHaze.value = light.fogDensity;
     sky.uniforms.uNight.value = 1 - light.twilight;
 
-    diorama.update(miniature, exaggeration, sunDir, state, now, light);
+    diorama.update(miniature, exaggeration, sunDir, state, now, light, camera);
     elapsed += dt * state.animationSpeed;
     // During roof inspection the vector overlays should hug the photography,
     // not float tens of metres above it. Restore the established separation

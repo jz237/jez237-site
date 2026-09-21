@@ -267,6 +267,7 @@ export function createImageryTiles(THREE, options) {
   const elevation = options.elevation || { min: -500, max: 9000 };
   const group = new THREE.Group(); group.name = 'streamed-aerial-tiles';
   const entries = new Map();
+  let roofRevision = 0, roofKey = '', roofSelection = [];
   let boundsScale, drawnTiles = 0;
   function updateBounds(mesh, scale) {
     const b = mesh.userData.cell.bounds;
@@ -310,6 +311,7 @@ export function createImageryTiles(THREE, options) {
   `;
   function remove(key) {
     const entry = entries.get(key); if (!entry) return;
+    roofRevision++;
     const previous = entry.material.uniforms.uPrevious.value;
     if (previous !== entry.material.uniforms.uTile.value) previous.dispose();
     group.remove(entry); entry.geometry.dispose(); entry.material.uniforms.uTile.value.dispose();
@@ -317,6 +319,7 @@ export function createImageryTiles(THREE, options) {
   }
   const stream = createTileStream({ region, projection, onStatus, remove, load: options.load,
     install({ cell, image }) {
+      roofRevision++;
       options.onTile?.(cell, image);
       const tex = new THREE.Texture(image); tex.flipY = false; tex.colorSpace = THREE.SRGBColorSpace;
       tex.minFilter = THREE.LinearMipmapLinearFilter; tex.magFilter = THREE.LinearFilter;
@@ -358,14 +361,25 @@ export function createImageryTiles(THREE, options) {
     stats() { return { ...stream.stats(), residentTiles: entries.size, drawnTiles }; },
     consider(...args) { group.visible = !!args[1] && args[0].dist <= 24000; stream.consider(...args); },
     roofTiles(pose) {
-      return [...entries.values()].filter(mesh => mesh.userData.cell.level < 2)
-        .sort((a,b) => {
-          const score = m => m.userData.cell.level * 1000
-            + Math.hypot((m.userData.cell.lon-pose.lon)*projection.metersPerDegLon,
-              (m.userData.cell.lat-pose.lat)*projection.metersPerDegLat);
-          return score(a)-score(b);
-        }).slice(0,4).map(mesh => ({ texture: mesh.material.uniforms.uTile.value,
-          bounds: mesh.userData.cell.bounds }));
+      const key = `${roofRevision}:${pose.lon}:${pose.lat}`;
+      if (key === roofKey) return roofSelection;
+      roofKey = key;
+      const nearest = [];
+      for (const mesh of entries.values()) {
+        const cell = mesh.userData.cell;
+        if (cell.level >= 2) continue;
+        const score = cell.level * 1000 + Math.hypot(
+          (cell.lon-pose.lon)*projection.metersPerDegLon,
+          (cell.lat-pose.lat)*projection.metersPerDegLat);
+        let i = 0;
+        while (i < nearest.length && nearest[i].score <= score) i++;
+        if (i >= 4) continue;
+        nearest.splice(i, 0, { mesh, score });
+        if (nearest.length > 4) nearest.pop();
+      }
+      roofSelection = nearest.map(({ mesh }) => ({ texture: mesh.material.uniforms.uTile.value,
+        bounds: mesh.userData.cell.bounds }));
+      return roofSelection;
     },
     tick(dt) {
       drawnTiles = 0;
