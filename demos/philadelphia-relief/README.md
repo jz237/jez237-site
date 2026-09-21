@@ -951,3 +951,39 @@ same 500 ms previews and 800 ms full-image responses reached central full detail
 scheduler simulation, not a guaranteed internet loading time. Chrome's real Cache
 Storage check reused a decoded image after page reload with zero network image
 requests; close zooms at The Hidden Reef were also checked in the browser.
+
+### Regional live and historical layers (20 September 2026)
+
+The **More map layers** panel contains five optional additions, all off initially:
+
+- Ships: regional AISStream positions, enlarged generic 3D vessels, names, speed,
+  course and crew-reported destination. The private home relay holds the free key;
+  the computer must be running. One connection serves active viewers and stops
+  after 75 seconds idle. Positions older than two minutes are marked stale and
+  disappear after ten minutes. Reports are not guaranteed real time.
+- Weather radar: the latest 12 advertised NOAA nowCOAST CONUS reflectivity frames,
+  with playback, timestamp, frame selection and opacity. Frames load on demand.
+- River gauges: NOAA/NWS regional stations, observed levels, recent observed trend
+  charts and available forecast values with their validity times. Gauge height
+  uses a station reference datum and is not water depth or a flood extent.
+- Historical aerials: actual Philadelphia surveys from 1996, 2000, 2004 and 2008,
+  tiled on demand over today's elevation. Modern buildings are hidden. Coverage
+  and loading gaps retain current imagery, explicitly labeled in the map banner;
+  these photographs do not reconstruct historical terrain or 3D buildings.
+- Property and landmark information: click the map or inspect its center for the
+  nearest Philadelphia OPA address records within 60 metres. Distance, building
+  facts and Atlas links are shown; gold pins open curated landmark cards. City
+  records do not cover surrounding counties or New Jersey.
+
+Radar and historical imagery use the relief renderer; other layers also project
+onto photographic 3D. Live requests pause while the tab is hidden and stop when
+their checkbox is cleared. Same-origin endpoints use fixed upstream hosts,
+geographic bounds, response-size limits, timeouts and shared caches.
+
+Aircraft automatically uncheck 30 minutes after activation. The wall-clock
+deadline is also checked on resume so sleeping or throttled tabs stop before
+another poll. Re-enabling the checkbox starts a new session.
+
+Validation: 339 automated checks, function-bundle compilation, live source checks,
+and browser checks of ship/gauge cards, radar frames, historical tile alignment
+and city property lookup. No SEPTA or recorded activity playback was added.

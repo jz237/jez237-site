@@ -1,8 +1,9 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092107';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092107';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092107';
-import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092107';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092108';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092108';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092108';
+import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092108';
+import { createAircraftSession } from './aircraft-session.js?v=philly-2026092108';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -22,6 +23,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   const trailToggle = document.getElementById('aircraftTrails');
   const back = document.getElementById('aircraftReturn');
   const retry = document.getElementById('aircraftRetry');
+  const limitNote = el('small', 'aircraft-source', 'Automatically turns off after 30 minutes.');
+  toggle.closest('.aircraft-controls').append(limitNote);
   const root = el('div', 'aircraft-map-layer'); root.hidden = true;
   root.setAttribute('aria-label', 'Aircraft over the region'); stage.append(root);
   const card = el('section', 'aircraft-card'); card.hidden = true;
@@ -41,6 +44,10 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   let accessRequired = false, relayUnavailable = false, homeRelay = false;
   let lastReport = 0, lastFollow = 0, viewWidth = 1, viewHeight = 1, cesiumViewer, datasource;
   let closeTimer, pinned = false, playbackAt = Date.now();
+  const session = createAircraftSession({ expire: () => {
+    toggle.checked = false; changed();
+    limitNote.textContent = 'Aircraft switched off after 30 minutes. Check the box to start again.';
+  } });
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function stopFollow(restore = false) {
@@ -80,13 +87,14 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     jump.value = selectedValue;
   }
   async function poll() {
+    if (session.check()) return;
     if (!enabled || disposed || document.hidden || loading) return;
     const ticket = generation; loading = true; report();
     const request = new AbortController(); controller = request;
     const timeout = setTimeout(() => request.abort(), 12000);
     try {
       // Versioned URL also avoids an hour-long failure cached by earlier releases.
-      const response = await fetch('aircraft?v=philly-2026092107', {
+      const response = await fetch('aircraft?v=philly-2026092108', {
         signal: request.signal, cache: 'no-store' });
       const doc = await response.json();
       if (ticket !== generation || disposed || !enabled) return;
@@ -205,6 +213,9 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   }
   const changed = () => {
     enabled = toggle.checked; options.hidden = !enabled; root.hidden = !enabled; group.visible = enabled;
+    session.stop();
+    limitNote.textContent = 'Automatically turns off after 30 minutes.';
+    if (enabled) session.start();
     document.body.classList.toggle('aircraft-layer-enabled', enabled);
     generation++; clearTimeout(timer); controller?.abort(); loading = false; close();
     if (enabled) void poll();
@@ -212,6 +223,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     if (datasource) datasource.show = enabled;
   };
   const visibility = () => {
+    if (session.check()) return;
     generation++; controller?.abort(); clearTimeout(timer); loading = false;
     if (!document.hidden && enabled) void poll();
   };
@@ -232,6 +244,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
 
   return {
     beforeFrame() {
+      if (session.check()) return undefined;
       if (!enabled || document.hidden) return undefined;
       playbackAt = Date.now() - (reducedMotion ? 0 : 20000);
       const r = records.get(following);
@@ -315,6 +328,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     },
     dispose() {
       disposed = true; generation++; controller?.abort(); clearTimeout(timer); clearTimeout(closeTimer);
+      session.stop(); limitNote.remove();
       unsubscribe(); toggle.removeEventListener('change', changed);
       document.removeEventListener('visibilitychange', visibility);
       document.removeEventListener('keydown', escape);

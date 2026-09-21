@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092107" />
+<link rel="stylesheet" href="app.css?v=philly-2026092108" />
 </head>
 <body data-theme="dusk">
 
@@ -248,7 +248,63 @@
           rel="noopener noreferrer">Personal-use data terms</a></p>
     </div>
   </div>
+  <details id="moreMapLayers" class="more-map-layers">
+    <summary>More map layers <span>Water · weather · history</span></summary>
+    <div class="extra-layer">
+      <label><input id="shipsToggle" type="checkbox"> Ships on the Delaware</label>
+      <div id="shipsOptions" hidden>
+        <p id="shipsStatus" role="status"></p>
+        <select id="shipSelect" aria-label="Find a ship"><option value="">Choose a ship…</option></select>
+        <small>AISStream · reported positions · coverage varies. Starts listening when enabled.</small>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label><input id="gaugesToggle" type="checkbox"> River gauges</label>
+      <div id="gaugesOptions" hidden>
+        <p id="gaugesStatus" role="status"></p>
+        <select id="gaugeSelect" aria-label="Find a river gauge"><option value="">Choose a gauge…</option></select>
+        <small>NOAA / NWS observations and forecasts. Click a gauge for its recent trend.</small>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label><input id="radarToggle" type="checkbox"> Weather radar</label>
+      <div id="radarOptions" hidden>
+        <p id="radarStatus" role="status"></p>
+        <div class="radar-playback"><button id="radarPlay" type="button" disabled>Play radar</button>
+          <input id="radarFrame" type="range" min="0" max="0" value="0" aria-label="Radar observation" disabled></div>
+        <label class="layer-range">Opacity <input id="radarOpacity" type="range" min="10" max="90"
+          value="55" aria-label="Radar opacity"></label>
+        <div class="radar-legend"><span>Weak echoes</span><i></i><span>Strong</span></div>
+        <small>NOAA nowCOAST · radar reflectivity, not a forecast. Shown on the relief surface.</small>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label for="archiveYear">Historical aerial photography</label>
+      <select id="archiveYear"><option value="off">Off · current imagery</option>
+        <option value="1996">1996 aerial photographs</option><option value="2000">2000 aerial photographs</option>
+        <option value="2004">2004 aerial photographs</option><option value="2008">2008 aerial photographs</option>
+      </select>
+      <div id="archiveOptions" hidden>
+        <p id="archiveStatus" role="status"></p>
+        <label class="layer-range">Fade to today <input id="archiveOpacity" type="range" min="0" max="100"
+          value="100" aria-label="Historical aerial opacity"></label>
+        <button id="archiveVisit" type="button">View Center City</button>
+        <small>City of Philadelphia aerials over today's terrain. Coverage is limited to the source survey.
+          Modern 3D buildings are hidden while comparing.</small>
+      </div>
+    </div>
+    <div class="extra-layer">
+      <label><input id="propertyToggle" type="checkbox"> Property &amp; landmark information</label>
+      <div id="propertyOptions" hidden>
+        <p>Click a building or location to find nearby city property records. Gold markers open landmark facts.</p>
+        <button id="propertyCenter" type="button">Inspect map center</button>
+        <small>Philadelphia city records only; nearest records are labeled by distance.</small>
+      </div>
+    </div>
+    <button id="refreshMapLayers" class="layer-refresh" type="button">Refresh enabled live layers</button>
+  </details>
 </section>
+<div id="mapLayerBanner" class="map-layer-banner" role="status" hidden></div>
 <div id="photoCredits" class="photo-credits" hidden></div>
 <section id="studio" class="panel studio collapsed" aria-labelledby="studioTitle">
   <header class="panel-head">
@@ -675,7 +731,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092107"></script>
+<script type="module" src="src/main.js?v=philly-2026092108"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

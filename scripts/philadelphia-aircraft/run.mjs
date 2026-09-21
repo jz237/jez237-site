@@ -2,6 +2,7 @@ import { spawn } from 'node:child_process';
 import { readFileSync, writeFileSync, appendFileSync, existsSync } from 'node:fs';
 import { join } from 'node:path';
 import { createRelay } from './relay.mjs';
+import { createShipFeed } from './ships.mjs';
 
 const root = process.argv[2];
 if (!root) throw new Error('Specify the private relay installation directory');
@@ -15,7 +16,8 @@ function log(message) {
   appendFileSync(logPath, `${new Date().toISOString()} ${message}\n`);
 }
 let stopping = false, tunnel, restartTimer, registerTimer, currentOrigin, lastUpdate;
-const server = createRelay({ token: config.token, onUpdate: value => {
+const ships = createShipFeed({ key: config.aisKey });
+const server = createRelay({ token: config.token, ships, onUpdate: value => {
   lastUpdate = value;
   writeFileSync(join(root, 'status.json'), JSON.stringify({ running: true, ...value }));
 } });
@@ -64,6 +66,7 @@ function startTunnel() {
 function stop() {
   if (stopping) return; stopping = true;
   clearTimeout(registerTimer); clearTimeout(restartTimer); tunnel?.kill();
+  ships.dispose();
   server.close(); server.closeAllConnections();
   writeFileSync(join(root, 'status.json'), JSON.stringify({ running: false, lastUpdate }));
   log('Relay stopped'); process.exit(0);
