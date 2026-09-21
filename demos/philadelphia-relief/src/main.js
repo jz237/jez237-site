@@ -10,7 +10,7 @@ import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?
 import { createOrientation } from './orientation.js?v=philly-2026092122';
 import { createPhotographic } from './photographic.js?v=philly-2026092201';
 import { wireRegionalViews } from './regional-views.js?v=philly-2026092121';
-import { createCameraLayer } from './camera-layer.js?v=philly-2026092202';
+import { createCameraLayer } from './camera-layer.js?v=philly-2026092203';
 import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092121';
 import { createMapLayers } from './map-layers.js?v=philly-2026092121';
 /**

@@ -90,6 +90,68 @@
       "video": "I1cueV9veYw",
       "location": "Brandywine Building · 1000 N. West Street, Wilmington",
       "url": "https://www.dosbirds.org/citizen-science/falcon-watch/"
+    },
+    {
+      "id": "found-usgs-01465500",
+      "name": "Neshaminy Creek near Langhorne",
+      "source": "usgs",
+      "lon": -74.9568342,
+      "lat": 40.1739982,
+      "station": "PA_Neshaminy_Creek_near_Langhorne",
+      "location": "USGS streamgage 01465500 · periodic river snapshots",
+      "url": "https://waterdata.usgs.gov/monitoring-location/USGS-01465500/"
+    },
+    {
+      "id": "found-usgs-01474500",
+      "name": "Schuylkill River at Philadelphia",
+      "source": "usgs",
+      "lon": -75.1885007,
+      "lat": 39.9677908,
+      "station": "PA_Vivotek_Schuylkill_River_at_Philadelphia",
+      "location": "USGS streamgage 01474500 · periodic river snapshots",
+      "url": "https://waterdata.usgs.gov/monitoring-location/USGS-01474500/"
+    },
+    {
+      "id": "found-usgs-01480870",
+      "name": "East Branch Brandywine Creek below Downingtown",
+      "source": "usgs",
+      "lon": -75.6732715,
+      "lat": 39.9687191,
+      "station": "PA_East_Branch_Brandywine_Creek_below_Downingtown",
+      "location": "USGS streamgage 01480870 · periodic river snapshots",
+      "url": "https://waterdata.usgs.gov/monitoring-location/USGS-01480870/"
+    },
+    {
+      "id": "found-usgs-01481000",
+      "name": "Brandywine Creek at Chadds Ford",
+      "source": "usgs",
+      "lon": -75.5932623,
+      "lat": 39.8698328,
+      "station": "PA_Brandywine_Creek_at_Chadds_Ford",
+      "location": "USGS streamgage 01481000 · periodic river snapshots",
+      "url": "https://waterdata.usgs.gov/monitoring-location/USGS-01481000/"
+    },
+    {
+      "id": "found-phoenixville-rail",
+      "name": "Phoenixville · Norfolk Southern freight trains",
+      "source": "ironrail",
+      "lon": -75.473,
+      "lat": 40.115,
+      "video": "F1lNwIEAXJU",
+      "area": true,
+      "location": "Norfolk Southern Harrisburg Line near Pawlings Road · approximate viewed area",
+      "url": "https://www.youtube.com/watch?v=F1lNwIEAXJU"
+    },
+    {
+      "id": "found-willow-grove-weather",
+      "name": "Willow Grove · weather and street view",
+      "source": "willowgrove",
+      "lon": -75.11,
+      "lat": 40.14,
+      "video": "vIdA-SCcM68",
+      "area": true,
+      "location": "Willow Grove Weather Center · approximate station area",
+      "url": "https://www.youtube.com/watch?v=vIdA-SCcM68"
     }
   ]
 }

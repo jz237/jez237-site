@@ -95,12 +95,12 @@ test('additional cameras have exact provider identities, bounded locations and s
 test('discovered cameras have verified provider identities, bounded positions and no arbitrary media', async () => {
   const doc = JSON.parse(await readFile(new URL('../data/discovered-cameras.json', import.meta.url)));
   const cams = discoveredCameras(doc);
-  assert.equal(cams.length, 9);
-  assert.equal(cams.filter(p => p.player).length, 3);
+  assert.equal(cams.length, 15);
+  assert.equal(cams.filter(p => p.player).length, 5);
   assert.ok(cams.every(p => p.discovered && hasCameraPreview(p) && !p.traffic));
-  assert.equal(new Set(cams.map(p => p.id)).size, 9);
+  assert.equal(new Set(cams.map(p => p.id)).size, 15);
   for (const p of cams) assert.equal(new URL(p.url).protocol, 'https:');
-  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 9);
+  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 15);
   assert.deepEqual(discoveredCameras({cameras: 'invalid'}), []);
   const sample = doc.cameras[0];
   for (const bad of [{...sample, lat: 90}, {...sample, lon: NaN}, {...sample, name: ''},
@@ -113,6 +113,11 @@ test('discovered cameras have verified provider identities, bounded positions an
   const safe = discoveredCameras({cameras: [{...falcon, player: 'https://evil.test', stream: 'https://evil.test'}]})[0];
   assert.equal(new URL(safe.player).origin, 'https://www.youtube-nocookie.com');
   assert.equal(safe.stream, undefined);
+  const rail = doc.cameras.find(p => p.source === 'ironrail');
+  assert.deepEqual(discoveredCameras({cameras: [{...rail, video: falcon.video}]}), []);
+  const river = doc.cameras.find(p => p.station === 'PA_Neshaminy_Creek_near_Langhorne');
+  assert.ok(discoveredCameras({cameras: [river]})[0].snapshot.endsWith(river.station + '_newest.jpg'));
+  assert.deepEqual(discoveredCameras({cameras: [{...river, station: '../escape'}]}), []);
   assert.equal(cameraMatchesFilter(cams[0], 'discovered'), true);
   assert.equal(cameraMatchesFilter(WEBCAMS[0], 'discovered'), false);
   assert.equal(cameraMatchesFilter({traffic: true}, 'preview'), false);

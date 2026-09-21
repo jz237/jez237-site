@@ -67,7 +67,10 @@ export function discoveredCameras(doc) {
         snapshot: `https://static.earthcam.com/camshots/512x288/${p.thumbnail}.jpg`,
         previewNote: 'Provider thumbnail · not a live frame. Open the camera page for live video.' };
     } else if (p.source === 'usgs' && ['NJ_Delaware_River_at_Lambertville_NJ',
-      'NJ_Delaware_River_at_Trenton', 'NJ_Assunpink_Creek_at_Trenton'].includes(p.station)) {
+      'NJ_Delaware_River_at_Trenton', 'NJ_Assunpink_Creek_at_Trenton',
+      'PA_Neshaminy_Creek_near_Langhorne', 'PA_Vivotek_Schuylkill_River_at_Philadelphia',
+      'PA_East_Branch_Brandywine_Creek_below_Downingtown',
+      'PA_Brandywine_Creek_at_Chadds_Ford'].includes(p.station)) {
       const folder = p.station === 'NJ_Assunpink_Creek_at_Trenton' ? '720' : 'overlay';
       media = { provider: 'USGS river camera',
         url: `https://apps.usgs.gov/hivis/camera/${p.station}`,
@@ -77,8 +80,12 @@ export function discoveredCameras(doc) {
       media = { provider: 'PTZtv · Port Philly', url: 'https://www.ptztv.live/port-philly-webcam/',
         snapshot: 'https://www.ptztv.live/port-philly-webcam/images/ppw_preview.jpg',
         previewNote: 'Provider preview · capture time not verified. Open the full camera page for video.' };
-    } else if (p.source === 'dosbirds' && ['2oqJJvDzdFY', '1qhsPj4jDT4', 'I1cueV9veYw'].includes(p.video)) {
-      media = { provider: 'Delaware Ornithological Society', previewKind: 'thumbnail',
+    } else if ((p.source === 'dosbirds' && ['2oqJJvDzdFY', '1qhsPj4jDT4', 'I1cueV9veYw'].includes(p.video))
+      || (p.source === 'ironrail' && p.video === 'F1lNwIEAXJU')
+      || (p.source === 'willowgrove' && p.video === 'vIdA-SCcM68')) {
+      const provider = p.source === 'ironrail' ? 'Iron Rail Cams'
+        : p.source === 'willowgrove' ? 'Willow Grove Weather Center' : 'Delaware Ornithological Society';
+      media = { provider, previewKind: 'thumbnail',
         url: `https://www.youtube.com/watch?v=${p.video}`,
         snapshot: `https://i.ytimg.com/vi/${p.video}/hqdefault.jpg`,
         player: `https://www.youtube-nocookie.com/embed/${p.video}?autoplay=1&mute=1&playsinline=1&rel=0`,

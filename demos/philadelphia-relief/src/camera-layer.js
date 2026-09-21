@@ -1,6 +1,6 @@
 import { WEBCAMS, trafficCameras, regionalCameras, discoveredCameras, cameraMatchesFilter,
   hasCameraPreview, groupCameras, popupPosition }
-  from './camera-data.js?v=philly-2026092202';
+  from './camera-data.js?v=philly-2026092203';
 import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092121';
 
 import { mountCameraMedia, mountCameraPlayer } from './camera-media.js?v=philly-2026092202';
@@ -59,7 +59,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     try {
       const sources = [['data/camera-locations.json?v=20260920-2', trafficCameras],
         ['data/regional-cameras.json?v=20260920-1', regionalCameras],
-        ['data/discovered-cameras.json?v=20260922-1', discoveredCameras]];
+        ['data/discovered-cameras.json?v=20260922-2', discoveredCameras]];
       const results = await Promise.allSettled(sources.map(async ([url, parse]) => {
         const response = await fetch(url, { signal: request.signal });
         if (!response.ok) throw new Error('Camera inventory unavailable');
