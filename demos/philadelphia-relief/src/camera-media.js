@@ -24,10 +24,11 @@ export function mountCameraMedia(host, item, {
   if (item.snapshot) {
     image = document.createElement('img'); image.alt = `${item.name} · provider snapshot`;
     image.referrerPolicy = 'strict-origin-when-cross-origin';
-    image.onload = () => ready('Provider snapshot · capture time not supplied; it may be delayed.');
+    image.onload = () => ready(item.previewNote
+      || 'Provider snapshot · capture time not supplied; it may be delayed.');
     image.onerror = fail; image.src = item.snapshot; host.append(image);
     // Provider owns the snapshot cadence. Never present the fetch time as its capture time.
-    refresh = setInterval(() => { image.src = item.snapshot; }, 60000);
+    if (item.previewKind !== 'thumbnail') refresh = setInterval(() => { image.src = item.snapshot; }, 60000);
   } else if (item.preview) {
     frame = document.createElement('iframe'); frame.title = `${item.name} · provider image`;
     frame.tabIndex = -1; frame.setAttribute('aria-hidden', 'true'); frame.setAttribute('sandbox', '');
@@ -73,4 +74,16 @@ export function mountCameraMedia(host, item, {
     if (video) video.removeEventListener('error', fail);
     stopVideo(); host.replaceChildren();
   };
+}
+
+// Explicit playback only; one bounded iframe session, also disposed on close/tab hide.
+export function mountCameraPlayer(host, item, { onExpired = () => {} } = {}) {
+  const frame = document.createElement('iframe'); frame.className = 'camera-provider-player';
+  frame.title = `${item.name} · ${item.provider} player`; frame.src = item.player;
+  frame.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-presentation');
+  frame.allow = 'autoplay; fullscreen; picture-in-picture'; frame.allowFullscreen = true;
+  frame.referrerPolicy = 'strict-origin-when-cross-origin'; host.replaceChildren(frame);
+  let disposed = false;
+  const timer = setTimeout(() => { if (!disposed) { host.replaceChildren(); onExpired(); } }, 60000);
+  return () => { disposed = true; clearTimeout(timer); host.replaceChildren(); };
 }

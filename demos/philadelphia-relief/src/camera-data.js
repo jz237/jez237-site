@@ -47,6 +47,50 @@ export function trafficCameras(doc) {
 }
 
 export const hasCameraPreview = p => !!(p.preview || p.snapshot || p.stream);
+export const cameraMatchesFilter = (p, filter) => filter === 'discovered' ? !!p.discovered
+  : filter === 'preview' ? hasCameraPreview(p) : true;
+
+// Owner-published public cameras only. Derive media URLs from provider identifiers;
+// the lazy catalog cannot introduce arbitrary players or stream credentials.
+export function discoveredCameras(doc) {
+  const seen = new Set();
+  return (Array.isArray(doc?.cameras) ? doc.cameras : []).flatMap(p => {
+    if (!p || !/^found-[a-z0-9-]+$/.test(p.id) || seen.has(p.id)
+      || typeof p.name !== 'string' || !p.name.trim()) return [];
+    if (!Number.isFinite(p.lon) || !Number.isFinite(p.lat)
+      || p.lon < -75.8 || p.lon > -74.7 || p.lat < 39.7 || p.lat > 40.55) return [];
+    let media;
+    if (p.source === 'earthcam' && /^[a-f0-9]{32}$/.test(p.thumbnail)
+      && ['https://www.earthcam.com/cams/pennsylvania/philadelphia/',
+        'https://www.earthcam.com/usa/pennsylvania/philadelphia/independencehall/'].includes(p.url)) {
+      media = { provider: 'EarthCam', url: p.url, previewKind: 'thumbnail',
+        snapshot: `https://static.earthcam.com/camshots/512x288/${p.thumbnail}.jpg`,
+        previewNote: 'Provider thumbnail · not a live frame. Open the camera page for live video.' };
+    } else if (p.source === 'usgs' && ['NJ_Delaware_River_at_Lambertville_NJ',
+      'NJ_Delaware_River_at_Trenton', 'NJ_Assunpink_Creek_at_Trenton'].includes(p.station)) {
+      const folder = p.station === 'NJ_Assunpink_Creek_at_Trenton' ? '720' : 'overlay';
+      media = { provider: 'USGS river camera',
+        url: `https://apps.usgs.gov/hivis/camera/${p.station}`,
+        snapshot: `https://usgs-nims-images.s3.amazonaws.com/${folder}/${p.station}/${p.station}_newest.jpg`,
+        previewNote: 'Periodic river snapshot · see image timestamp when available; not continuous video.' };
+    } else if (p.source === 'ptztv' && p.id === 'found-port-philly') {
+      media = { provider: 'PTZtv · Port Philly', url: 'https://www.ptztv.live/port-philly-webcam/',
+        snapshot: 'https://www.ptztv.live/port-philly-webcam/images/ppw_preview.jpg',
+        previewNote: 'Provider preview · capture time not verified. Open the full camera page for video.' };
+    } else if (p.source === 'dosbirds' && ['2oqJJvDzdFY', '1qhsPj4jDT4', 'I1cueV9veYw'].includes(p.video)) {
+      media = { provider: 'Delaware Ornithological Society', previewKind: 'thumbnail',
+        url: `https://www.youtube.com/watch?v=${p.video}`,
+        snapshot: `https://i.ytimg.com/vi/${p.video}/hqdefault.jpg`,
+        player: `https://www.youtube-nocookie.com/embed/${p.video}?autoplay=1&mute=1&playsinline=1&rel=0`,
+        previewNote: 'Video thumbnail · not a live frame. Play the provider video or open its camera page.' };
+    }
+    if (!media) return [];
+    seen.add(p.id);
+    return [{ id: p.id, name: p.name, lon: p.lon, lat: p.lat,
+      location: typeof p.location === 'string' ? p.location : '', area: !!p.area,
+      discovered: true, ...media }];
+  });
+}
 
 // Only published camera media on known provider hosts may reach the player.
 export function regionalCameras(doc) {
@@ -90,12 +134,14 @@ export function groupCameras(points, size = 48) {
   const groups = [];
   for (const p of points) {
     const group = groups.find(g => g.traffic === !!p.item.traffic
+      && g.discovered === !!p.item.discovered
       && Math.hypot(g.x - p.x, g.y - p.y) < size);
     if (group) {
       group.items.push(p.item);
       group.x += (p.x - group.x) / group.items.length;
       group.y += (p.y - group.y) / group.items.length;
-    } else groups.push({ x: p.x, y: p.y, traffic: !!p.item.traffic, items: [p.item] });
+    } else groups.push({ x: p.x, y: p.y, traffic: !!p.item.traffic,
+      discovered: !!p.item.discovered, items: [p.item] });
   }
   return groups;
 }

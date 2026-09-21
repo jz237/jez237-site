@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092201" />
+<link rel="stylesheet" href="app.css?v=philly-2026092202" />
 <link rel="modulepreload" href="vendor/three.module.min.js?v=philly-2026092113" />
 <link rel="modulepreload" href="vendor/three.core.min.js" />
 <link rel="preload" as="image" href="data/heightmap.webp" fetchpriority="high" />
@@ -245,13 +245,15 @@
         <select id="cameraLayerFilter" aria-label="Camera types">
           <option value="all">All mapped cameras</option>
           <option value="preview">Preview-capable cameras</option>
+          <option value="discovered">Discovered public cameras · purple</option>
         </select>
         <select id="cameraLayerJump" aria-label="Find a camera">
           <option value="">Find a camera…</option>
         </select>
       </div>
       <p class="camera-layer-help"><i></i> Neighborhood views <i class="traffic"></i> Traffic cameras
-        <br>Hover or tap a pin. Numbers group nearby cameras.</p>
+        <br><i class="discovered"></i> Discovered public cameras
+        <br>Hover to preview. Click gold/purple pins to open. Numbers group nearby cameras.</p>
     </div>
   </div>
   <div class="camera-layer-control aircraft-controls">
@@ -807,7 +809,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092201"></script>
+<script type="module" src="src/main.js?v=philly-2026092202"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

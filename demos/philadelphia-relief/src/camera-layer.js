@@ -1,8 +1,9 @@
-import { WEBCAMS, trafficCameras, regionalCameras, hasCameraPreview, groupCameras, popupPosition }
-  from './camera-data.js?v=philly-2026092121';
+import { WEBCAMS, trafficCameras, regionalCameras, discoveredCameras, cameraMatchesFilter,
+  hasCameraPreview, groupCameras, popupPosition }
+  from './camera-data.js?v=philly-2026092202';
 import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092121';
 
-import { mountCameraMedia } from './camera-media.js?v=philly-2026092121';
+import { mountCameraMedia, mountCameraPlayer } from './camera-media.js?v=philly-2026092202';
 
 const element = (tag, className, text) => {
   const node = document.createElement(tag); node.className = className;
@@ -37,7 +38,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
   function populateJump() {
     jump.replaceChildren(element('option', '', 'Find a camera…'));
     jump.firstChild.value = '';
-    for (const item of items.filter(hasCameraPreview)) {
+    for (const item of items.filter(p => hasCameraPreview(p) && cameraMatchesFilter(p, filter.value))) {
       const option = element('option', '', `${item.name} · ${item.provider}`);
       option.value = item.id; jump.append(option);
     }
@@ -47,7 +48,8 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     const previews = items.filter(hasCameraPreview).length;
     status.textContent = loading ? 'Loading mapped camera locations…'
       : `${items.length} mapped views · ${previews} with preview support. `
-        + (loaded ? 'Gold pins open their camera; numbered pins let you choose.'
+        + (loaded ? `${items.filter(p => p.discovered).length} discoveries in purple. `
+          + 'Gold/purple pins open their camera; numbers let you choose.'
           : 'Some camera sources unavailable; toggle to retry.');
   }
   async function load() {
@@ -56,7 +58,8 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     const timeout = setTimeout(() => request?.abort(), 12000);
     try {
       const sources = [['data/camera-locations.json?v=20260920-2', trafficCameras],
-        ['data/regional-cameras.json?v=20260920-1', regionalCameras]];
+        ['data/regional-cameras.json?v=20260920-1', regionalCameras],
+        ['data/discovered-cameras.json?v=20260922-1', discoveredCameras]];
       const results = await Promise.allSettled(sources.map(async ([url, parse]) => {
         const response = await fetch(url, { signal: request.signal });
         if (!response.ok) throw new Error('Camera inventory unavailable');
@@ -102,7 +105,8 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
   }
   function preview(item, anchor) {
     clearPreview(); card.replaceChildren();
-    header(item.name, hasCameraPreview(item) ? 'CAMERA PREVIEW' : 'TRAFFIC CAMERA LOCATION');
+    header(item.name, item.discovered ? 'DISCOVERED PUBLIC CAMERA'
+      : hasCameraPreview(item) ? 'CAMERA PREVIEW' : 'TRAFFIC CAMERA LOCATION');
     if (hasCameraPreview(item)) {
       const picture = external('', item.url, 'camera-preview-image');
       picture.setAttribute('aria-label', `Open full camera page: ${item.name}`);
@@ -118,15 +122,18 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
       if (item.player) {
         const play = element('button', 'camera-card-retry', 'Play provider video here');
         play.type = 'button';
+        const playerHost = element('div', 'camera-player-host'); card.insertBefore(playerHost, note);
         play.onclick = () => {
           clearPreview(); hold(); pinned = true;
-          const frame = document.createElement('iframe'); frame.className = 'camera-provider-player';
-          frame.title = `${item.name} · AtTheShore player`; frame.src = item.player;
-          frame.setAttribute('sandbox', 'allow-scripts allow-same-origin');
-          frame.allow = 'autoplay; fullscreen'; frame.allowFullscreen = true;
-          frame.referrerPolicy = 'strict-origin-when-cross-origin';
-          picture.replaceWith(frame); retry.hidden = true; play.hidden = true;
-          note.textContent = 'Provider video player · press Play if needed. Availability varies.';
+          picture.hidden = true; retry.hidden = true; play.hidden = true;
+          mediaCleanup = mountCameraPlayer(playerHost, item, { onExpired: () => {
+            play.hidden = false; play.textContent = 'Watch another minute';
+            note.textContent = 'Video paused after one minute to save bandwidth. '
+              + 'Play again or open the full camera page.';
+            placeCard(anchor.x, anchor.y);
+          } });
+          note.textContent = 'Provider video · one-minute preview. '
+            + 'If unavailable, open the full camera page.';
           placeCard(anchor.x, anchor.y);
         }; card.append(play);
       }
@@ -152,7 +159,8 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     if (group.items.length === 1) preview(group.items[0], group);
     else {
       card.replaceChildren(); header(`${group.items.length} cameras here`,
-        group.traffic ? 'TRAFFIC CAMERAS' : 'REGIONAL WEBCAMS');
+        group.discovered ? 'DISCOVERED PUBLIC CAMERAS'
+          : group.traffic ? 'TRAFFIC CAMERAS' : 'REGIONAL WEBCAMS');
       const list = element('div', 'camera-cluster-list');
       for (const item of group.items) {
         if (item.traffic && !hasCameraPreview(item)) {
@@ -193,7 +201,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     close(); dirty = true; if (enabled) void load();
   };
   toggle.addEventListener('change', changed);
-  filter.onchange = () => { close(); dirty = true; };
+  filter.onchange = () => { close(); populateJump(); dirty = true; };
   jump.onchange = () => {
     const item = items.find(p => p.id === jump.value); if (!item) return;
     close(); motion.flyTo({ lon: item.lon, lat: item.lat, camDist: 5500, camPitch: 48 },
@@ -233,7 +241,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
       const blocked = controlBoxes();
       const points = [];
       for (const item of items) {
-        if (filter.value === 'preview' && !hasCameraPreview(item)) continue;
+        if (!cameraMatchesFilter(item, filter.value)) continue;
         let point;
         if (photographic.active) point = photographic.projectLocation(item);
         else {
@@ -250,19 +258,21 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
       }
       const groups = groupCameras(points, ctx.width < 600 ? 46 : 40);
       groups.forEach((group, i) => {
-        const direct = group.traffic && group.items.length === 1;
+        const direct = (group.traffic || group.discovered) && group.items.length === 1;
         if (pool[i] && (pool[i].tagName === 'A') !== direct) {
           pool[i].remove(); pool[i] = undefined;
         }
         const pin = pool[i] || makePin(i, direct); pin.group = group; pin.hidden = false;
         if (direct) pin.href = group.items[0].url;
         pin.classList.toggle('traffic', group.traffic);
+        pin.classList.toggle('discovered', group.discovered);
         pin.classList.toggle('cluster', group.items.length > 1);
         pin.querySelector('.camera-pin-count').textContent = group.items.length > 1
           ? group.items.length : '';
-        pin.setAttribute('aria-label', group.items.length > 1 ? `${group.items.length} cameras: `
+        pin.setAttribute('aria-label', (group.discovered ? 'Discovered public camera · ' : '')
+          + (group.items.length > 1 ? `${group.items.length} cameras: `
           + group.items.slice(0, 2).map(p => p.name).join(', ') : `Camera: ${group.items[0].name}`
-          + (direct ? ' · open camera in a new tab' : ''));
+          + (direct ? ' · open camera in a new tab' : '')));
         pin.style.left = `${Math.round(group.x)}px`; pin.style.top = `${Math.round(group.y)}px`;
       });
       for (let i = groups.length; i < pool.length; i++) pool[i].hidden = true;
