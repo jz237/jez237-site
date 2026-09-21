@@ -80,7 +80,12 @@ export function vacuumFragmentGeometry(i) {
       .join(",");
   const put = (j) => {
     vertices.push(position.getX(j), position.getY(j), position.getZ(j));
-    coords.push(uv.getX(j), uv.getY(j));
+    // SphereGeometry normalizes each partial sphere to its own UV rectangle.
+    // Map back to the whole marble so assembled sectors retain its stripe count.
+    coords.push(
+      ((i % 4) + uv.getX(j)) / 4,
+      (1 - Math.floor(i / 4) + uv.getY(j)) / 2,
+    );
   };
   for (let k = 0; k < sphere.index.count; k += 3) {
     const tri = [0, 1, 2].map((n) => sphere.index.getX(k + n));
@@ -135,9 +140,11 @@ export function updateVacuumFragments(group, player, seconds) {
     if (!pose.visible) return;
     mesh.position.set(pose.position.x, pose.position.y, pose.position.z);
     mesh.scale.setScalar(pose.scale);
+    const returning = seconds - player.vacuumCapture.tick / 120 >= 0.92;
+    const remaining = returning ? pose.spin / 8 : 1;
     mesh.rotation.set(
-      pose.spin + i,
-      pose.spin * 0.7 + i * 0.4,
+      pose.spin + i * remaining,
+      pose.spin * 0.7 + i * 0.4 * remaining,
       pose.spin * 0.3,
     );
   });

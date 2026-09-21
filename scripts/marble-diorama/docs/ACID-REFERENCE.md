@@ -30,7 +30,7 @@ The first segment runs diagonally down-left in the image; the following segment 
 
 ## Still open
 
-The 0.64s deformation cycle, precise silhouette, height, dimensions, 1.45-unit patrol speed, phase, and complete rectangular return path are reconstructions. Only the directional turn above is established by this sampled sequence. Intermediate now uses grid-aligned patrol paths; all unobserved return legs, dimensions, speed profiles and phase alignment remain provisional. Ultimate retains provisional sine motion. Capture/dissolve animation, original sound effects, and final original AI/timing remain open.
+The 0.64s deformation cycle, precise silhouette, height, dimensions, 1.45-unit patrol speed, phase, and complete rectangular return path are reconstructions. Only the directional turn above is established by this sampled sequence. Intermediate now uses grid-aligned patrol paths; all unobserved return legs, dimensions, speed profiles and phase alignment remain provisional. Ultimate retains provisional sine motion. Capture/dissolve animation now follows a sampled Ultimate death sequence (below); original sound effects and exact original AI/timing remain open.
 
 Checks cover closed outward triangles, changing rendered vertices/indices matching the native sensor, empty-notch/actual-rim contact, grounded versus airborne contact, interpolation, deterministic restoration, editor transforms, and patrol floor clearance. Whole-course demos additionally check traversability; they do not prove fidelity.
 
@@ -75,3 +75,42 @@ its complete patrol cycle. All outlines remain over flat track, outside the
 refuge slopes. Vertex-based sensors, deformation, sound position and snapshots
 continue to use the shared physical clock and actual moving position. This is
 an incremental movement correction; complete acid behavior is still unverified.
+
+
+## Acid capture and recovery - mm-22
+
+Primary evidence: the same Ironclaw Amiga recording, 286.80-290.52s. The onset
+was inspected at every 25fps frame from 286.80-288.36, with the complete sequence
+sampled every 0.08s through 290.52. This is an actual Ultimate acid contact:
+
+- Around 287.28-287.36 the patterned marble contacts the lower puddle and becomes
+  largely solid red. It retains a full-height outline briefly.
+- From roughly 287.56-288.20 its visible height and outline diminish into the
+  puddle. Red speckles remain briefly; by approximately 288.36 they are gone.
+  The marble's location follows the moving puddle during dissolution.
+- Separate red pieces appear around 288.60 and converge near the lower-left
+  exit. They form a complete patterned marble by about 289.80-289.88.
+- The total capture/recovery interval is approximately 2.5 seconds. This is a
+  sampled observation of one death, not a recovered timing table for all modes.
+
+Implementation gives acid a separate 300-tick recovery state. A brief solid-color
+reaction is followed by a shrinking spherical cap attached to the moving pool,
+a short absence, and scattered solid sectors reassembling at the saved physical
+respawn destination. The intact marble collider is disabled during capture;
+the second player and both clocks continue normally. Timeout suppresses the
+recovery display and prevents respawn. Saved capture state includes the pool,
+relative contact position, rotation, start tick and destination, so pausing and
+snapshot replay preserve the sequence. The cap never leaves a visible intact
+sphere underneath the track. Generic shatter particles are suppressed for acid.
+
+The existing designed bubbling cue replaces the generic break cue on acid
+contact. It is not a recovered original acid sound. Exact colored-speckle
+patterns, segment count, fragment flight, original safe-respawn selection and
+cadence across difficulties remain reconstructed. Intermediate uses the same
+response; an Intermediate-specific death sequence has not yet been compared.
+
+Shared fragment texture coordinates now address each sector's portion of the
+whole marble instead of repeating a whole texture on each piece. Vacuum return
+rotations also converge to the respawn orientation, avoiding a final orientation
+jump. These are geometric continuity corrections, not claims of recovered
+original fragment trajectories.

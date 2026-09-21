@@ -1,3 +1,4 @@
+import { acidDeathGroup, updateAcidDeath } from "./acid-death-view.mjs";
 import { vacuumFragments, updateVacuumFragments } from "./vacuum-view.mjs";
 import { landingTargets } from "./landing-targets.mjs";
 import { acidMesh, updateAcidMesh } from "./acid-view.mjs";
@@ -335,6 +336,7 @@ export class DioramaView {
     this.moving = [];
     this.marbles = [];
     this.vacuumFragments = [];
+    this.acidDeaths = [];
     this.enemies = [];
     this.acid = [];
     this.ghost = null;
@@ -392,6 +394,9 @@ export class DioramaView {
       const fragments = vacuumFragments(mesh.material);
       this.marbleRoot.add(fragments);
       this.vacuumFragments.push(fragments);
+      const acidDeath = acidDeathGroup(mesh, i);
+      this.marbleRoot.add(acidDeath);
+      this.acidDeaths.push(acidDeath);
     }
     for (const e of sim.enemies) {
       const steelie =
@@ -670,7 +675,8 @@ export class DioramaView {
     this.resize();
   }
   effect(event) {
-    if (event.type === "fall" && event.cause === "vacuum") return;
+    if (event.type === "fall" && ["vacuum", "acid"].includes(event.cause))
+      return;
     const p =
       event.type === "fall"
         ? this.sim.players[event.player]
@@ -778,6 +784,13 @@ export class DioramaView {
         alpha,
       );
       m.visible = p.status === "racing";
+      updateAcidDeath(
+        this.acidDeaths[i],
+        p,
+        this.sim.course.zones?.[p.acidCapture?.zone],
+        (Math.max(0, this.sim.tick - 1) + alpha) / 120,
+        this.sim.preset.machineSpeed,
+      );
       updateVacuumFragments(
         this.vacuumFragments[i],
         p,
