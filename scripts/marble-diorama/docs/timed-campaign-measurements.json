@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-16",
-  "generatedAt": "2026-09-21T15:33:19.862Z",
+  "physics": "rapier-0.20.0-mm-17",
+  "generatedAt": "2026-09-21T16:02:06.368Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -45,11 +45,11 @@
         },
         {
           "course": "aerial",
-          "ticks": 7018,
+          "ticks": 7344,
           "players": [
             {
-              "time": 15.309895833341034,
-              "score": 30031,
+              "time": 13.187500000007894,
+              "score": 29831,
               "deaths": 0,
               "status": "finished"
             }
@@ -60,8 +60,8 @@
           "ticks": 8582,
           "players": [
             {
-              "time": 2.1276041666639776,
-              "score": 41114,
+              "time": 0.127604166663246,
+              "score": 40714,
               "deaths": 0,
               "status": "finished"
             }
@@ -69,11 +69,11 @@
         },
         {
           "course": "ultimate",
-          "ticks": 4148,
+          "ticks": 3840,
           "players": [
             {
               "time": 0,
-              "score": 41839,
+              "score": 41404,
               "deaths": 0,
               "status": "timeout"
             }
@@ -141,17 +141,17 @@
         },
         {
           "course": "aerial",
-          "ticks": 7315,
+          "ticks": 7982,
           "players": [
             {
-              "time": 11.309895833339946,
-              "score": 28731,
+              "time": 9.187500000006805,
+              "score": 28531,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 8.376302083339846,
-              "score": 24448,
+              "time": 4.0338541666730325,
+              "score": 24048,
               "deaths": 0,
               "status": "finished"
             }
@@ -159,17 +159,17 @@
         },
         {
           "course": "silly",
-          "ticks": 6912,
+          "ticks": 6605,
           "players": [
             {
               "time": 0,
-              "score": 33078,
+              "score": 32819,
               "deaths": 0,
               "status": "timeout"
             },
             {
               "time": 0,
-              "score": 28490,
+              "score": 28051,
               "deaths": 0,
               "status": "timeout"
             }

@@ -36,7 +36,30 @@ export function pegGeometry(p) {
   };
 }
 
+// A bed selects a complete row or column for each stroke. Selection is seeded
+// and stateless so physics, rendering and restored replays see the same pegs.
+// The original selection law is unknown; timings are measured from Amiga video.
+function bedExtensionAt(time, motion) {
+  const g = motion.grid;
+  const clock = time + ((motion.phase ?? 0) * motion.period) / (Math.PI * 2);
+  const slot = Math.floor(clock / motion.period);
+  const t = clock - slot * motion.period;
+  let hash = Math.imul((slot | 0) ^ g.seed, 0x45d9f3b);
+  hash = Math.imul(hash ^ (hash >>> 16), 0x45d9f3b);
+  hash = (hash ^ (hash >>> 16)) >>> 0;
+  // Empty selections leave the whole bed flush between intermittent strokes.
+  const line = hash % (g.rows + g.columns + 4);
+  const active = line < g.rows ? g.row === line : g.column === line - g.rows;
+  if (!active) return 0;
+  const ease = (x) => x * x * (3 - 2 * x);
+  if (t < 0.2) return ease(t / 0.2);
+  if (t < 0.56) return 1;
+  if (t < 0.76) return 1 - ease((t - 0.56) / 0.2);
+  return 0;
+}
+
 export function extensionAt(time, motion) {
+  if (motion.grid) return bedExtensionAt(time, motion);
   const t =
     (((time / motion.period + (motion.phase ?? 0) / (Math.PI * 2)) % 1) + 1) %
     1;

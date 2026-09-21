@@ -14,7 +14,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-16";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-17";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -705,18 +705,50 @@ export class DemoController {
     const movingGate = waiting
       ? sim.movers.find((m) => m.part.id === waiting.part)
       : null;
+    const pegBed = target.waitForPegBed;
+    const pegBedClear =
+      !pegBed ||
+      sim.movers
+        .filter((m) => m.part.id.startsWith(pegBed))
+        .every(({ part }) => {
+          const length = Math.hypot(
+            nextWaypoint.x - pos.x,
+            nextWaypoint.z - pos.z,
+          );
+          const ux = (nextWaypoint.x - pos.x) / length,
+            uz = (nextWaypoint.z - pos.z) / length;
+          const forward = (part.x - pos.x) * ux + (part.z - pos.z) * uz;
+          const side = Math.abs((part.x - pos.x) * uz - (part.z - pos.z) * ux);
+          if (side > RADIUS + part.w / 2 + 0.12) return true;
+          const crossingSpeed = (nextWaypoint.speed ?? 2.4) * 1.6;
+          for (let ahead = 0; ahead < 2.4; ahead += 0.04) {
+            const travel = crossingSpeed * Math.max(0, ahead - 0.3);
+            if (Math.abs(forward - travel) > RADIUS + part.w / 2 + 0.5)
+              continue;
+            if (
+              motionAt(
+                part,
+                (sim.tick * STEP + ahead) * sim.preset.machineSpeed,
+              ).position.y >
+              part.y + 0.03
+            )
+              return false;
+          }
+          return true;
+        });
     const gateOpen =
-      !waiting ||
-      (movingGate &&
-        presenceAt(movingGate.part, sim.tick * STEP * sim.preset.machineSpeed)
-          .visible &&
-        presenceAt(movingGate.part, sim.tick * STEP * sim.preset.machineSpeed)
-          .remaining >= (waiting.remaining ?? 0) &&
-        movingGate.current.position[waiting.axis] >= waiting.min &&
-        movingGate.current.position[waiting.axis] <= waiting.max &&
-        (!waiting.rising ||
-          sim.world.getRigidBody(movingGate.handle).linvel()[waiting.axis] >
-            0));
+      pegBedClear &&
+      (!waiting ||
+        (movingGate &&
+          presenceAt(movingGate.part, sim.tick * STEP * sim.preset.machineSpeed)
+            .visible &&
+          presenceAt(movingGate.part, sim.tick * STEP * sim.preset.machineSpeed)
+            .remaining >= (waiting.remaining ?? 0) &&
+          movingGate.current.position[waiting.axis] >= waiting.min &&
+          movingGate.current.position[waiting.axis] <= waiting.max &&
+          (!waiting.rising ||
+            sim.world.getRigidBody(movingGate.handle).linvel()[waiting.axis] >
+              0)));
     if (
       !target.collect &&
       (Math.hypot(pos.x - target.x, pos.z - target.z) <
