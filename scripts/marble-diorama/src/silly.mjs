@@ -258,7 +258,7 @@ export function sillyCourse() {
     miniaturePoint(0, 87, "mini-1"),
     ...rightRoute.slice(9),
   ];
-  // A lone marble can collect all six time pickups. In a paired race, retain
+  // The demo collects six of the nine room inhabitants. In a paired race, retain
   // separate three-pickup approaches so the marbles do not chase the same enemy.
   const soloDemoRoute = [
     ...leftDemoRoute.slice(0, 8),
@@ -273,20 +273,25 @@ export function sillyCourse() {
     ...leftDemoRoute.slice(13),
   ];
   const enemies = [
-    [-9, 87],
-    [0, 87],
-    [9, 96],
-    [-1, 97],
-    [8, 86],
-    [-6, 99],
-  ].map(([l, d], i) => ({
+    [-9, 87, "muncher"],
+    [0, 87, "acid"],
+    [9, 96, "steelie"],
+    [-1, 97, "steelie"],
+    [8, 86, "muncher"],
+    [-6, 99, "acid"],
+    [-11, 93, "acid"],
+    [2, 92, "steelie", 4.7],
+    [11, 90, "muncher"],
+  ].map(([l, d, form, y = 4.28], i) => ({
     id: `mini-${i}`,
     kind: "mini",
-    ...worldPoint(l, 4.28, d),
+    form,
+    phase: i / 3,
+    ...worldPoint(l, y, d),
     radius: 0.22,
     roam: 2,
     speed: 0.65,
-    color: i % 2 ? "#323b35" : "#65d526",
+    color: form === "steelie" ? "#292e30" : "#65d526",
   }));
   // Six independent wall-to-wall flights. The broad lower field and its
   // raised rows have different elevations; birds cross at marble height.
@@ -314,7 +319,7 @@ export function sillyCourse() {
     });
   }
   // A controlled approach keeps the second demo marble clear of bird flights.
-  for (const i of [26, 27, 28]) rightDemoRoute[i].speed = 2.5;
+  for (const i of [26, 27, 28]) rightDemoRoute[i].speed = 3.2;
   return {
     schema: 1,
     id: "silly",

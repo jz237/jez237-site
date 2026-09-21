@@ -389,7 +389,9 @@ export class DioramaView {
       this.marbles.push(mesh);
     }
     for (const e of sim.enemies) {
-      const steelie = e.def.kind === "steelie";
+      const steelie =
+        e.def.kind === "steelie" ||
+        (e.def.kind === "mini" && (e.def.form ?? "steelie") === "steelie");
       const articulated = actorShapes(e.def, 0);
       const mesh = articulated
         ? actorMesh(articulated)

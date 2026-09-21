@@ -402,6 +402,13 @@ export function validateCourse(c) {
       e.speed > 8
     )
       throw Error("Invalid enemy.");
+    if (
+      e.form !== undefined &&
+      (e.kind !== "mini" || !["steelie", "muncher", "acid"].includes(e.form))
+    )
+      throw Error("Invalid miniature form.");
+    if (e.phase !== undefined && !finite(e.phase))
+      throw Error("Invalid enemy animation phase.");
     enemyIds.add(e.id);
     if (
       e.kind === "bird" &&

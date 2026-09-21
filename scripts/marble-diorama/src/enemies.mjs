@@ -18,12 +18,19 @@ export function birdMotionAt(home, time, speedMultiplier = 1) {
   };
 }
 const collisionShapes = new WeakMap();
-function convexShape(solid) {
+const walks = (def) =>
+  def.kind === "muncher" ||
+  (def.kind === "mini" && ["muncher", "acid"].includes(def.form));
+const mass = (def) =>
+  def.kind === "steelie" ? 1.4 : def.kind === "mini" ? 0.12 : 1;
+function colliderDesc(solid) {
+  return solid.trimesh
+    ? RAPIER.ColliderDesc.trimesh(solid.vertices, solid.indices)
+    : RAPIER.ColliderDesc.convexHull(solid.vertices);
+}
+function cachedShape(solid) {
   if (!collisionShapes.has(solid))
-    collisionShapes.set(
-      solid,
-      RAPIER.ColliderDesc.convexHull(solid.vertices).shape,
-    );
+    collisionShapes.set(solid, colliderDesc(solid).shape);
   return collisionShapes.get(solid);
 }
 export function createEnemies(sim) {
@@ -35,18 +42,25 @@ export function createEnemies(sim) {
     )
       .setTranslation(def.x, def.y, def.z)
       .setCcdEnabled(true);
-    if (def.kind === "muncher") desc.lockRotations();
+    if (walks(def)) desc.lockRotations();
+    // Keep articulated miniature mass centered on its supporting footprint.
+    // Recomputing mass from a curling head shifts the body's origin and can
+    // pull its static foot through the floor.
+    if (def.kind === "mini" && walks(def))
+      desc.setAdditionalMassProperties(
+        mass(def),
+        { x: 0, y: 0, z: 0 },
+        { x: 0.002, y: 0.002, z: 0.002 },
+        { x: 0, y: 0, z: 0, w: 1 },
+      );
     const body = sim.world.createRigidBody(desc);
     const solids = actorShapes(def, 0);
     const colliders = (solids ?? [null]).map(
       (solid) =>
         sim.world.createCollider(
-          (solid
-            ? RAPIER.ColliderDesc.convexHull(solid.vertices)
-            : RAPIER.ColliderDesc.ball(def.radius)
-          )
+          (solid ? colliderDesc(solid) : RAPIER.ColliderDesc.ball(def.radius))
             .setMass(
-              (def.kind === "steelie" ? 1.4 : def.kind === "mini" ? 0.12 : 1) /
+              (def.kind === "mini" && walks(def) ? 0 : mass(def)) /
                 (solids?.length ?? 1),
             )
             .setFriction(0.85)
@@ -83,8 +97,11 @@ export function steerEnemies(sim, dt) {
       solids.forEach((solid, i) => {
         if (!solid.dynamic) return;
         const collider = sim.world.getCollider(e.colliders[i]);
-        collider.setShape(convexShape(solid));
-        if (home.kind === "muncher") collider.setMass(1 / solids.length);
+        collider.setShape(cachedShape(solid));
+        collider.setMass(
+          (home.kind === "mini" && walks(home) ? 0 : mass(home)) /
+            solids.length,
+        );
       });
     if (home.kind === "bird") {
       const { active, position: pos } = birdMotionAt(
@@ -184,7 +201,7 @@ export function steerEnemies(sim, dt) {
     const ex = (dx / Math.max(0.01, distance)) * speed - vel.x,
       ez = (dz / Math.max(0.01, distance)) * speed - vel.z;
     if (!grounded) continue;
-    if (home.kind === "muncher" && distance > 0.05) {
+    if (walks(home) && distance > 0.05) {
       const desired = Math.atan2(dx, dz),
         old = e.heading ?? desired;
       const difference = Math.atan2(
@@ -197,7 +214,7 @@ export function steerEnemies(sim, dt) {
         true,
       );
     }
-    if (home.kind !== "muncher") {
+    if (!walks(home)) {
       const n = Math.max(1, Math.hypot(ex, ez));
       b.applyTorqueImpulse(
         {
@@ -210,7 +227,11 @@ export function steerEnemies(sim, dt) {
     } else {
       const n = Math.max(1, Math.hypot(ex, ez));
       b.applyImpulse(
-        { x: (ex / n) * 3 * dt, y: 0, z: (ez / n) * 3 * dt },
+        {
+          x: (ex / n) * 3 * mass(home) * dt,
+          y: 0,
+          z: (ez / n) * 3 * mass(home) * dt,
+        },
         true,
       );
     }
