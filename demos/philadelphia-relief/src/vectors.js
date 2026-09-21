@@ -1,3 +1,4 @@
+import { BATHYMETRY_GLSL, bathymetryUniforms } from './bathymetry-shader.js?v=philly-2026092201';
 /**
  * Vector overlays: rivers, roads, rail, boundaries, parks and open water,
  * draped on the terrain.
@@ -162,6 +163,8 @@ const AREA_FRAGMENT = /* glsl */ `
 `;
 
 const WATER_FRAGMENT = /* glsl */ `
+  ${BATHYMETRY_GLSL}
+  uniform vec2 uRegionSize;
   precision highp float;
   uniform vec3  uColor;        // deep
   uniform vec3  uShallow;
@@ -221,7 +224,8 @@ const WATER_FRAGMENT = /* glsl */ `
     float towardSun = max(0.0, dot(normalize(vWorld - uCameraPos), uSunDir));
     color = mix(color, mix(uFogColor, uFogTint, pow(towardSun, 3.0)), clamp(fog, 0.0, 1.0));
 
-    gl_FragColor = vec4(color, uOpacity);
+    float reveal = bathymetryAt(vWorld.xz / uRegionSize + .5).y;
+    gl_FragColor = vec4(color, uOpacity * mix(1.0, .045, reveal));
   }
 `;
 
@@ -535,6 +539,8 @@ export function buildAreaMesh(THREE, rings, ctx, options) {
     uViewportWidth: { value: 1 },
   };
   if (isWater) {
+    Object.assign(uniforms, bathymetryUniforms(THREE));
+    uniforms.uRegionSize = { value: new THREE.Vector2(projection.widthM, projection.heightM) };
     uniforms.uShallow = { value: new THREE.Vector3() };
     uniforms.uSpecColor = { value: new THREE.Vector3() };
     uniforms.uSunDir = { value: new THREE.Vector3(0, 1, 0) };
