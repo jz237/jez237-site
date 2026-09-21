@@ -166,7 +166,10 @@ export class DioramaView {
   material(name, side = false, color = "#b85442", moving = false) {
     const s = SURFACES[name],
       m = new THREE.MeshStandardMaterial({
-        color: side ? color : s.color,
+        color:
+          side && !["blue", "red", "orange", "yellow", "metal"].includes(name)
+            ? color
+            : s.color,
         // Some authored shells have inward wall winding. Render both faces
         // so their closed walls and undersides stay opaque during inspection.
         side: side ? THREE.DoubleSide : THREE.FrontSide,
@@ -433,7 +436,7 @@ export class DioramaView {
     for (const mark of [
       ...(sim.course.markings ?? []),
       ...sim.course.parts
-        .filter((p) => p.kind === "spring")
+        .filter((p) => p.kind === "spring" && p.profile !== "flipper")
         .map((p) => ({
           kind: "arrow",
           movingPart: p.motion ? p.id : undefined,

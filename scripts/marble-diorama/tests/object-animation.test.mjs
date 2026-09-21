@@ -205,3 +205,136 @@ test("Aerial peg banks retract flush, extend from below and use round shared hul
     );
   }
 });
+
+test("Aerial paddle delays its upstroke, physically returns the marble to the upper ledge, and restores mid-launch", () => {
+  const c = aerialCourse(),
+    part = c.parts.find((p) => p.profile === "flipper");
+  const offset = (part.d - part.w) / 2;
+  c.starts = [
+    {
+      x: part.x - offset * Math.sin(part.angle),
+      y: part.y + 0.57,
+      z: part.z + offset * Math.cos(part.angle),
+    },
+  ];
+  const sim = new Simulation(c, { untimed: true });
+  for (let i = 0; i < 50; i++) sim.step();
+  assert.ok(Math.abs(sim.players[0].current.position.y - c.starts[0].y) < 0.04);
+  assert.equal(
+    sim.movers.find((m) => m.part.id === part.id).current.rotation.w,
+    1,
+  );
+  const snapshot = sim.snapshot();
+  const run = () => {
+    const events = [];
+    let airborne = false,
+      landed = false,
+      peak = 0;
+    while (sim.tick < 320) {
+      events.push(...sim.step().filter((e) => e.type === "spring"));
+      const p = sim.players[0],
+        v = p.current.position;
+      peak = Math.max(peak, v.y);
+      airborne ||= !p.grounded && v.y > 14;
+      const l = (v.x - v.z) * Math.SQRT1_2,
+        d = (v.x + v.z) * Math.SQRT1_2;
+      landed ||=
+        airborne &&
+        p.grounded &&
+        l > -16.5 &&
+        l < -7.5 &&
+        d > 57 &&
+        d < 65 &&
+        Math.abs(v.y - 13.05) < 0.15;
+    }
+    assert.ok(airborne && landed);
+    assert.ok(peak > 15 && peak < 18);
+    assert.deepEqual(events, [{ type: "spring", player: 0, part: part.id }]);
+    assert.equal(sim.players[0].deaths, 0);
+    return sim.players[0].current;
+  };
+  const first = run();
+  sim.restore(snapshot);
+  assert.deepEqual(run(), first);
+  sim.dispose();
+});
+
+test("vacuum opening stays hollow and disappearance disables its geometry and force", () => {
+  const course = aerialCourse(),
+    mouth = course.parts.find((p) => p.profile === "vacuum-mouth");
+  assert.equal(
+    course.parts.filter((p) => p.profile === "vacuum-mouth").length,
+    3,
+  );
+  const sim = new Simulation(course, { untimed: true });
+  const mover = sim.movers.find((m) => m.part.id === mouth.id);
+  const body = sim.world.getRigidBody(mover.handle),
+    col = body.collider(0);
+  // Cast through the actual intake center along the opening normal.
+  const cs = Math.cos(mouth.angle),
+    sn = Math.sin(mouth.angle);
+  const ray = {
+    origin: { x: mouth.x - 2 * cs, y: mouth.y + 0.95, z: mouth.z - 2 * sn },
+    dir: { x: cs, y: 0, z: sn },
+  };
+  assert.equal(col.castRay(ray, 4, true), -1);
+  ray.origin.y = mouth.y + 1.8;
+  assert.ok(col.castRay(ray, 4, true) > 0);
+  for (let i = 0; i < 200; i++) sim.step();
+  assert.equal(body.isEnabled(), false);
+  sim.dispose();
+  for (const [side, time, expected] of [
+    [-1, 0.1, "falling"],
+    [1, 0.1, "racing"],
+    [-1, 2, "racing"],
+  ]) {
+    const c = blankCourse();
+    c.zones = [
+      {
+        kind: "vacuum",
+        x: 0,
+        y: 2,
+        z: 0,
+        radius: 4,
+        strength: 1.3,
+        direction: { x: -1, y: 0, z: 0 },
+        presence: { period: 5, on: 1 },
+      },
+    ];
+    c.starts = [{ x: side * 0.6, y: 2, z: 0 }];
+    const s = new Simulation(c, { untimed: true });
+    s.tick = Math.round(time * 120);
+    s.step();
+    assert.equal(s.players[0].status, expected);
+    if (time === 2) assert.equal(s.body(s.players[0]).linvel().x, 0);
+    s.dispose();
+  }
+});
+
+test("Aerial paddle can be entered from its spur using ordinary held movement", () => {
+  const c = aerialCourse(),
+    part = c.parts.find((p) => p.profile === "flipper");
+  const q = Math.SQRT1_2;
+  c.starts = [{ x: (-3 + 66.7) * q, y: 11.06, z: (66.7 + 3) * q }];
+  const sim = new Simulation(c, { untimed: true });
+  let airborne = false,
+    landed = false;
+  while (sim.tick < 720 && !landed) {
+    const mover = sim.movers.find((m) => m.part.id === part.id);
+    sim.step([
+      mover.launchTick === undefined
+        ? { x: -q, z: q, turbo: true }
+        : { x: 0, z: 0 },
+    ]);
+    const p = sim.players[0],
+      v = p.current.position,
+      l = (v.x - v.z) * q,
+      d = (v.x + v.z) * q;
+    airborne ||= !p.grounded && v.y > 13.5;
+    landed =
+      airborne && p.grounded && l > -16.5 && l < -7.5 && d > 57 && d < 65;
+  }
+  assert.ok(landed);
+  assert.equal(sim.players[0].deaths, 0);
+  sim.dispose();
+});

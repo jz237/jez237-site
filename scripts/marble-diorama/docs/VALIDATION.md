@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**97 automated tests pass. All six campaign races and all three bonus courses
+**100 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-7`.
+Current simulation/replay version: `rapier-0.20.0-mm-8`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -545,3 +545,22 @@ Silly with 3.285 clock units remaining and times out in Ultimate after 35.842s;
 both players time out in Silly by 62.725s. These runs have zero falls but still
 need full timing/control/reference calibration. This checkpoint is a repair of
 the playable reconstruction, not a completed Amiga reproduction.
+
+
+### September 21 — Aerial mechanisms follow-up
+
+The original 160–164s sequence identifies the red device as a hinged cup, not an
+overhead hammer. The replacement physically holds and launches through its moving
+trimesh. A normal-input approach reaches it and returns to the upper ledge without
+falls. A separate resting-cup test verifies the dwell, one launch cue, bounded apex,
+upper landing, and identical continuation after restoring mid-cycle.
+
+Three rounded hollow vacuum frames share presence state with their suction and
+sound; behind-mouth approaches no longer trigger capture. Intake ray tests verify
+that the collider does not fill the opening. Browser close-ups check edge placement,
+the upstroke and metal peg coloring. Cadence and layout details remain provisional,
+as recorded in OBJECT-PARITY.md. No claim of full original parity is made.
+
+The updated timed campaign still fails: solo expires on Ultimate and paired play
+expires on Silly. Updated measurements use physics version mm-8; clocks were not
+extended to hide the remaining timing gap.

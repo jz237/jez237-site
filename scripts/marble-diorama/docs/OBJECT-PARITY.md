@@ -18,7 +18,8 @@ not included in the published game.
 | Intermediate waves, 121–131s | Found a real renderer-state bug: physics replaced each wave pose after stepping and dropped its changing vertices. Translation/rotation still moved, but rendered panel lengths no longer matched their colliders. Preserve the vertices through stepping and snapshots. | Exact original full-lane wave shape, travel speed and phase remain unmeasured. Current panels are still a reconstruction. |
 | Intermediate / Ultimate acid | Moving sensors already follow the rendered pool positions. | Circular green pool shapes and sinusoidal paths are provisional; original blob deformation and trajectories remain open. |
 | Aerial pegs, 162s and 167–169s | Original has groups of silver pegs rising from the track and retracting flush. Replaced two isolated overhead blocks with three banks of three round, chamfered pegs. Mesh and collider use the same points and rise/hold/retract state. | Bank locations, number of rows and 3.8s cycle are provisional. Need full reference coverage of every bank. |
-| Aerial vacuum and striker, 145–169s | Vacuum mouth geometry and directional attraction exist. The current overhead hammer block does not reproduce the red side-mounted striker seen in the recording. | **Striker mechanism remains a known mismatch.** Vacuum intake/disappearance cycle and gray ramp geometry also need further comparison. |
+| Aerial red paddle, 160–164s | Frame sequence shows a cup holding the marble, hinging upward, and throwing it onto an upper ledge. Replaced the overhead crusher with a red recessed cup, stem, metal hinge, and contact-triggered stroke. The moving concave collider provides the launch; no injected impulse or teleport. Ordinary held-input entry and upper-ledge landing pass. | Dimensions, placement, and 0.9s stroke are reconstructed. The observed ~0.5s dwell is represented; original launch law and exact return destination still need measurement. Gray ramp geometry remains open. |
+| Aerial vacuums, 146–154s | Three yellow mouths appear along the left zigzag; at least two disappear during the inspected interval. Added the middle mouth, rounded hollow frames, and shared visibility/collision/suction/audio gating. Fixed killing from behind the intake and moved frames onto the track edges. | Ten-second repeat periods and 3/5/6s active windows are provisional. Full original respawn cadence, intake deformation, and capture animation are not yet reproduced. |
 | Silly birds, 238–239s | Original purple birds have changing wing silhouettes during crossings. Replaced rigid diamonds with articulated purple bodies, heads, beaks, tails and independently posed wings. Wing collision solids deform with the visible wings. | Straight crossing paths, bird count/rest intervals and 3.2Hz wingbeat are provisional; exact original flight/impact animation is not certified. |
 | Silly miniatures / uplift | Existing miniature contacts award +500/+3; no change in this pass. | Miniature creature appearance, exact awards and uplift pipe/mechanism behavior remain open. |
 | Ultimate opening, 277–283s | Removed the unsupported serial three-launch route. The starting field now drops onto one launcher island, which sends the marble to either of two lower landing islands; each has its own ice bridge. Two contact-triggered hinged arms replace static pads. Both approaches are checked with ordinary controls and one launch, with no visit to the opposite island. | The paired arms, velocities and stroke are a playable reconstruction, **not a recovered launch law**. Starting recess, gold guide shape, exact dimensions and observed 2000 award trigger remain open. The recording establishes the left route; full original right-route traversal is still unverified. |
@@ -26,7 +27,7 @@ not included in the published game.
 
 ## Implementation safeguards and validation
 
-- Physics/replay version is `rapier-0.20.0-mm-7`: old recordings cannot silently
+- Physics/replay version is `rapier-0.20.0-mm-8`: old recordings cannot silently
   claim compatible outcomes after collision and layout changes.
 - Enemy articulation is a pure function of the simulation clock. Shape reuse is
   bounded; fixed body solids are not rebuilt every tick. Rendering uses separate
@@ -39,6 +40,8 @@ not included in the published game.
 - Remaining work above is not hidden by the Playable Games listing. That listing
   was explicitly requested for an unfinished playable reconstruction.
 
-Release checks: 97/97 automated tests pass; production build and diff check pass.
+Release checks: 100/100 automated tests pass; production build and diff check pass.
 Silly solo and Ultimate two-player browser demos finish without falls or captured
 console errors. The full timed campaign still fails; see VALIDATION.md.
+
+The Aerial follow-up additionally verifies hollow intake ray clearance, absent-mouth force/collision removal, directional capture, delayed launch cues, deterministic mid-launch restoration, and physical upper-ledge landing. Browser close-ups confirm the resting/raised cup and intake placement. Explicit metal/color materials now retain their side colors instead of inheriting the orange board tint.

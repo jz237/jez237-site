@@ -7,7 +7,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-7";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-8";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -56,7 +56,13 @@ export class Simulation {
             .setTranslation(...Object.values(pose.position))
             .setRotation(pose.rotation),
         );
-      const cd = RAPIER.ColliderDesc.convexHull(g.vertices);
+      const cd = ["flipper", "vacuum-mouth"].includes(g.part.profile)
+        ? RAPIER.ColliderDesc.trimesh(
+            g.vertices,
+            g.indices,
+            RAPIER.TriMeshFlags.FIX_INTERNAL_EDGES,
+          )
+        : RAPIER.ColliderDesc.convexHull(g.vertices);
       if (!cd) throw Error("Invalid convex moving part");
       this.world.createCollider(
         cd
@@ -176,6 +182,17 @@ export class Simulation {
             : (this.tick - m.launchTick) * STEP
           : this.tick * STEP * this.preset.machineSpeed;
       m.current = motionAt(m.part, machineTime);
+      if (
+        m.part.profile === "flipper" &&
+        m.launchTick !== undefined &&
+        this.tick - m.launchTick ===
+          Math.ceil((m.part.motion.delay ?? 0.5) / STEP) + 1
+      )
+        this.events.push({
+          type: "spring",
+          player: m.launchPlayer,
+          part: m.part.id,
+        });
       const b = this.world.getRigidBody(m.handle);
       if (m.current.vertices)
         b.collider(0).setShape(
@@ -282,6 +299,10 @@ export class Simulation {
           );
       }
       for (const zone of this.course.zones ?? []) {
+        if (
+          !presenceAt(zone, this.tick * STEP * this.preset.machineSpeed).visible
+        )
+          continue;
         const dist = Math.hypot(pos.x - zone.x, pos.y - zone.y, pos.z - zone.z);
         if (dist < zone.radius && zone.kind === "magnet" && dist > 0.01)
           b.applyImpulse(
@@ -307,8 +328,8 @@ export class Simulation {
               },
               true,
             );
+            if (dist < 0.7) this.fall(p);
           }
-          if (dist < 0.7) this.fall(p);
         }
       }
       for (const s of this.course.parts.filter((s) => s.kind === "spring")) {
@@ -316,6 +337,25 @@ export class Simulation {
           sn = Math.sin(s.angle ?? 0),
           dx = pos.x - s.x,
           dz = pos.z - s.z;
+        const arm = this.movers.find((m) => m.part.id === s.id);
+        if (s.profile === "flipper") {
+          const resting =
+            arm.launchTick === undefined ||
+            (this.tick - arm.launchTick) * STEP >
+              s.motion.period + (s.motion.delay ?? 0.5);
+          const localX = dx * cs + dz * sn,
+            localZ = -dx * sn + dz * cs;
+          if (
+            resting &&
+            p.grounded &&
+            Math.hypot(localX, localZ - (s.d - s.w) / 2) < s.w * 0.38 &&
+            Math.abs(pos.y - s.y - RADIUS) < 0.25
+          ) {
+            arm.launchTick = this.tick;
+            arm.launchPlayer = i;
+          }
+          continue;
+        }
         if (
           p.grounded &&
           this.tick - p.springTick > 90 &&
@@ -334,7 +374,6 @@ export class Simulation {
             true,
           );
           p.springTick = this.tick;
-          const arm = this.movers.find((m) => m.part.id === s.id);
           if (arm) arm.launchTick = this.tick;
           this.events.push({ type: "spring", player: i, part: s.id });
         }
