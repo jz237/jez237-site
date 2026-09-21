@@ -14920,5 +14920,109 @@
       "imageSha256": "7c321d359ebf18f57f5ca7447d74b628bf2897996a15feb720ec51bfc349d353",
       "imageDHash": "7eb4d45666162427"
     }
+  },
+  {
+    "id": "2026-09-20-factual-infographic-factual-infographic-cynophobia-when-a-d",
+    "title": "Factual infographic: Cynophobia — When a Dog Feels Like Danger",
+    "tests": "Direct-canvas portrait phobia infographic; one dominant calm leashed-dog park encounter hero, eight substantive panels, four explanatory close-ups, readable source-backed labels only; factual_subtype: phobia-infographic; phobia: cynophobia; archive_slot=2026-09-20T22:20; no subjective review or rerolls.; archive_slot=2026-09-20T22:20; concept=cynophobia-dog-fear-avoidance-cycle; factual_subtype: phobia-infographic",
+    "prompt": "Create a finished museum-quality DIRECT-CANVAS portrait infographic at 2048 x 3072 pixels titled ‘CYNOPHOBIA — WHEN A DOG FEELS LIKE DANGER’. This is the final illustrated educational plate itself, filling the canvas edge to edge: no photographed poster, paper sheet, clipboard, frame, room, wall, desk, screen UI, mockup, URLs, bibliography, logos, or watermark. Use a sophisticated editorial-science visual language with a deep slate-blue ground, warm amber alarm accents, restrained teal help-path accents, crisp ivory typography, precise leader lines, realistic materials, and generous but information-dense spacing. All text must be large, brief, correctly spelled, and readable.\n\nDOMINANT HERO — occupy roughly the central 40% of the page with a richly detailed, realistic urban-park path at late afternoon. A diverse adult has paused several metres from a calm medium-sized dog on a short leash beside its attentive handler. The dog has neutral anatomy and posture: closed mouth, relaxed ears and tail, four grounded paws, no teeth, no lunging, no contact. Show the fearful person respectfully, not caricatured: tense shoulders, one hand gripping a bag strap, weight shifted backward, eyes fixed on the dog. Layer subtle semi-transparent scientific overlays around the person: an amber attention cone narrowing toward the dog, a small chest pulse trace, a shallow-breath rhythm arc, and tightening shoulder-muscle fibers. A split halo around the encounter reads ‘PRESENT SCENE’ in cool teal and ‘ALARM RESPONSE’ in amber, emphasizing that a real scene and an intense internal alarm can coexist. Include tactile path gravel, leash webbing, dog fur, tree bark, bench metal, long natural shadows, and believable scale, but keep the subject calm and nonviolent.\n\nBuild EIGHT clearly separated substantive panels around the hero, each with a distinct diagram and only the exact concise labels below:\n1. ‘WHAT IT IS’ — a dog silhouette inside a focused fear ring, with: ‘Fear of dogs is an example of a specific phobia.’ and ‘The fear can feel intense and out of proportion to present danger.’\n2. ‘TRIGGERS DIFFER’ — four illustrated tiles labeled ‘Seeing a dog’, ‘Hearing barking’, ‘Unexpected approach’, ‘Thinking ahead’. Do not imply every person has every trigger.\n3. ‘ALARM CAN START NOW — OR EARLY’ — a two-part timeline: ‘Encounter → immediate intense anxiety’ and ‘Anticipation → anxiety before the encounter’.\n4. ‘THE BODY’S ALARM’ — a transparent upper-body anatomical close-up with four restrained callouts: ‘Rapid heartbeat’, ‘Shortness of breath’, ‘Muscle tension’, ‘Restlessness’. Add the qualifier ‘Symptoms vary.’\n5. ‘ATTENTION NARROWS’ — an eye-and-brain close-up showing the dog cue gaining visual priority while peripheral park details fade; label ‘Fear can make it harder to concentrate on anything else.’\n6. ‘THE AVOIDANCE LOOP’ — a cause-and-effect circular diagram with four large nodes: ‘Dog cue’ → ‘Alarm rises’ → ‘Escape or avoid’ → ‘Life becomes narrower’ → back to ‘Dog cue’. Beneath it: ‘Avoidance can interfere with daily life.’\n7. ‘PRESENT DANGER vs PERCEIVED DANGER’ — a balanced comparison, not a safety promise: left, the calm leashed dog and handler under ‘Observe the actual situation’; right, an enlarged amber threat silhouette under ‘The alarm may feel larger than the scene’. Add ‘Use ordinary real-world caution; phobia is about the scale and persistence of fear.’\n8. ‘HELP IS COLLABORATIVE’ — a teal pathway with clinician and patient icons: ‘Qualified assessment’ → ‘CBT skills’ → ‘Gradual, guided exposure’ → ‘Re-enter avoided activities’. Add ‘Pace and plan are individualized.’ Never show forced contact with a dog.\n\nInclude at least FOUR large explanatory close-ups: (A) eye/attention tunnel, (B) chest pulse and breathing rhythm, (C) shoulder muscle tension fibers, (D) the circular avoidance feedback loop. Connect them to the hero with clean leader lines. Add a compact footer banner: ‘INTENSE FEAR IS NOT A CHARACTER FLAW • PROFESSIONAL SUPPORT CAN HELP’. Keep the person dignified, the dog calm, and the educational tone intense but reassuring. No monsters, attack, barking teeth, bite, injury, gore, coercion, exposure challenge, diagnostic checklist, prevalence number, invented statistic, medical guarantee, medication advice, tiny paragraphs, decorative pseudo-text, or unsupported claim.",
+    "image": "images/2026-09-20-factual-infographic-factual-infographic-cynophobia-when-a-d.jpg",
+    "thumb": "thumbs/2026-09-20-factual-infographic-factual-infographic-cynophobia-when-a-d.webp",
+    "color": "#4d5150",
+    "date": "2026-09-20",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "cynophobia-dog-fear-avoidance-cycle",
+      "imageSha256": "93e764918dfdd9265ec222d77d12dce4a5dc03703088bdc80ff07cc860073e05",
+      "imageDHash": "b5b157652d57db19"
+    },
+    "factualInfographic": {
+      "topic": "Cynophobia: intense fear of dogs, body alarm, avoidance, and evidence-based support",
+      "description": "A source-verified direct-canvas educational plate explaining intense fear of dogs, immediate and anticipatory anxiety, variable body-alarm symptoms, avoidance and daily-life interference, perceived versus present danger, and evidence-based professional support.",
+      "sourceNote": "National Institute of Mental Health, Phobias and Phobia-Related Disorders: https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders ; American Psychiatric Association, What are Anxiety Disorders?: https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders . Verified scope: dog fear as a specific-phobia example; disproportionate fear; immediate and anticipatory anxiety; variable physical symptoms; avoidance and interference; CBT, professionally guided exposure, and qualified assessment.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-21T02:21:50Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Institute of Mental Health",
+            "title": "Phobias and Phobia-Related Disorders",
+            "sourceType": "government-agency",
+            "url": "https://www.nimh.nih.gov/health/publications/phobias-and-phobia-related-disorders"
+          },
+          {
+            "id": "S2",
+            "publisher": "American Psychiatric Association",
+            "title": "What are Anxiety Disorders?",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://www.psychiatry.org/patients-families/anxiety-disorders/what-are-anxiety-disorders"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Fear of dogs is an example of a specific phobia.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A phobia involves intense fear or aversion that is out of proportion to the actual danger presented by the object or situation.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Encountering a feared object can bring immediate intense anxiety, while anticipation can also produce anxiety before an encounter.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Anxiety can include rapid heartbeat, shortness of breath, muscle tension, restlessness, and difficulty concentrating; symptoms vary between people.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "People with phobias may actively avoid the feared object or endure unavoidable encounters with intense anxiety.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Anxiety disorders can interfere with daily activities, work, school, relationships, or overall well-being.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Psychotherapy is the primary treatment approach for phobias, and cognitive behavioral therapy is a well-established treatment.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Exposure therapy is a CBT method that gradually addresses feared situations and can help people re-engage with activities they have avoided.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Assessment and treatment planning should be done with a qualified health professional and tailored to the individual.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
