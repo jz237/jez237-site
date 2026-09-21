@@ -291,6 +291,29 @@ export function validateCourse(c) {
       (p.motion.cycle !== "retract" || p.motion.axis !== "y")
     )
       throw Error("Invalid machine cycle.");
+    if (p.motion?.grid !== undefined) {
+      const g = p.motion.grid;
+      if (
+        !g ||
+        p.profile !== "peg" ||
+        p.motion.cycle !== "retract" ||
+        p.motion.period < 0.76 ||
+        ![g.rows, g.columns, g.row, g.column, g.seed].every(
+          Number.isSafeInteger,
+        ) ||
+        g.rows < 1 ||
+        g.rows > 16 ||
+        g.columns < 1 ||
+        g.columns > 16 ||
+        g.row < 0 ||
+        g.row >= g.rows ||
+        g.column < 0 ||
+        g.column >= g.columns ||
+        g.seed < 0 ||
+        g.seed > 0x7fffffff
+      )
+        throw Error("Invalid peg bed.");
+    }
     if (
       p.motion &&
       (!["x", "y", "z", "tilt", "wave", "launch"].includes(p.motion.axis) ||
@@ -342,6 +365,16 @@ export function validateCourse(c) {
   ]) {
     if (!a || ![a.x, a.y, a.z].every(finite))
       throw Error("Invalid start, route, checkpoint or goal.");
+    if (
+      a.waitForPegBed !== undefined &&
+      (typeof a.waitForPegBed !== "string" ||
+        !a.waitForPegBed.length ||
+        !a.stop ||
+        !c.parts.some(
+          (p) => p.motion?.grid && p.id.startsWith(a.waitForPegBed),
+        ))
+    )
+      throw Error("Peg wait must stop before a known bed.");
     if (
       a.collect !== undefined &&
       !c.enemies?.some((e) => e.id === a.collect && e.kind === "mini")

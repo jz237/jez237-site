@@ -245,29 +245,40 @@ export function aerialCourse() {
       angle: -Math.PI / 2,
     }),
   ];
-  // Amiga footage 162s and 167–169s: banks of silver pegs rise from the
-  // walking surface, then withdraw flush. They are not overhead crushers.
-  for (const [id, l, d, y, period, phase] of [
-    ["upper-pegs", -12, 64.5, 12.5, 3.8, 0],
-    ["lower-pegs", -9, 81, 10.5, 3.8, 1.6],
-    ["right-pegs", 10, 84, 6, 3.8, 3.2],
+  // Amiga 161.28-162.60 and 166.20-169.44: 3x4 metal caps with
+  // full rows OR perpendicular columns rising for roughly 0.76 seconds.
+  // Selection/cadence is a deterministic reconstruction, not a recovered ROM rule.
+  for (const [id, l, d, y, seed, phase] of [
+    ["upper-pegs", -12, 64, 12.5, 139, 0],
+    ["lower-pegs", -9, 82.3, 10.5, 271, 1.6],
+    ["right-pegs", 10, 84, 6, 419, 3.2],
   ])
-    for (let i = 0; i < 3; i++)
-      parts.push(
-        deck(`${id}-${i}`, l + (i - 1) * 0.88, d, 0.56, 0.56, y - 0.025, {
-          kind: "piston",
-          profile: "peg",
-          h: 1.8,
-          material: "metal",
-          motion: {
-            axis: "y",
-            amplitude: 1.75,
-            period,
-            phase,
-            cycle: "retract",
-          },
-        }),
-      );
+    for (let row = 0; row < 3; row++)
+      for (let column = 0; column < 4; column++)
+        parts.push(
+          deck(
+            `${id}-${row}-${column}`,
+            l + (column - 1.5) * 0.7,
+            d + (row - 1) * 0.7,
+            0.56,
+            0.56,
+            y + 0.002,
+            {
+              kind: "piston",
+              profile: "peg",
+              h: 1.8,
+              material: "metal",
+              motion: {
+                axis: "y",
+                amplitude: 1.75,
+                period: 0.88,
+                phase,
+                cycle: "retract",
+                grid: { rows: 3, columns: 4, row, column, seed },
+              },
+            },
+          ),
+        );
   for (const p of parts.filter(
     (p) => p.id.includes("bowl") || p.id.includes("cross-rail"),
   ))
@@ -315,10 +326,11 @@ export function aerialCourse() {
     [0, 12.5, 52],
     [-8, 12.5, 57],
     [-14, 12.5, 61],
-    [-12, 12.5, 65],
+    [-12, 12.5, 61.7],
+    [-12, 12.5, 66],
     [-9, 10.5, 71],
     [-3, 10.5, 76],
-    [-9, 10.5, 81],
+    [-9, 10.5, 80],
     [-9.6, 10.5, 85],
     [-1, 8, 90],
     [4, 8, 94],
@@ -353,7 +365,7 @@ export function aerialCourse() {
     [3, 10.5, 70],
     [1, 9, 75],
     [3, 9, 77],
-    [10, 6, 82],
+    [10, 6, 81.7],
     [10, 6, 85],
     [4, 5, 89],
     [12, 5, 95],
@@ -368,6 +380,22 @@ export function aerialCourse() {
       radius: d === 18 ? 1 : 0.65,
     }),
   );
+  for (const [points, l, d, bank] of [
+    [route, -12, 61.7, "upper-pegs"],
+    [route, -9, 80, "lower-pegs"],
+    [rightRoute, 10, 81.7, "right-pegs"],
+  ]) {
+    const at = worldPoint(l, 0, d);
+    const waypoint = points.find(
+      (p) => Math.hypot(p.x - at.x, p.z - at.z) < 0.01,
+    );
+    Object.assign(waypoint, {
+      stop: true,
+      speed: points === route ? 4.8 : 2.4,
+      radius: 0.3,
+      waitForPegBed: bank,
+    });
+  }
   // Keep rolling through the shallow bend into the right-hand descent.
   // The acceptance radius stays inside the three-unit-wide track.
   rightRoute[17].radius = 0.9;

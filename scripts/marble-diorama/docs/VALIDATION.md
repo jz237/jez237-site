@@ -762,3 +762,29 @@ Silly by 57.6 seconds. All of these measured timed runs have zero falls.
 Regression validation: all 135 automated tests pass (262.1 seconds). The final
 small demo-route reset guard received a further solo/paired Silly check. Production
 bundling and diff checks pass. The replay/record version is mm-16.
+
+
+### September 21 - Aerial 3x4 peg beds
+
+Replaced the three synchronized three-peg lines with three twelve-cap beds.
+Footage shows perpendicular lines of three and four pegs and an approximately
+0.76-second rise/hold/return stroke. Shared geometry and simulation-clock poses
+control physical contact and display; selection and precise layout remain
+reconstructed. See AERIAL-PEGS.md for observations and limitations.
+
+Focused tests verify both line orientations, flush caps, invalid grid/route
+rejection, physical lifting of a marble and mid-stroke replay. Demo approaches
+stop outside the beds and forecast the crossing using ordinary steering.
+The existing timed solo check through Silly and paired Aerial zero-fall check
+pass without changing their assertions or the game clocks.
+
+Fresh mm-17 timed campaign: solo Aerial 61.2s, Silly 71.5167s with 0.1276 clock
+units left; Ultimate still times out at 32s. Paired Aerial completes by 66.5167s;
+both players then expire in Silly by 55.0417s. Every measured run has zero falls.
+The full timed campaign remains incomplete.
+
+The production-build browser demo also finishes both Aerial players with zero
+falls: P1 4944 points, P2 4943 points; P1 first at 61.20 seconds. Close-ups show
+flush caps and both perpendicular raised lines; no warnings/errors were captured.
+
+Current mm-17 release validation: all 136 tests pass; production build and diff checks pass.
