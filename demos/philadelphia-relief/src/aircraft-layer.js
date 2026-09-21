@@ -1,7 +1,7 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092104';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092104';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092104';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092105';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092105';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092105';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -37,7 +37,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   let enabled = false, disposed = false, controller, timer, generation = 0, loading = false;
   let selected = null, following = null, returnPose, failed = false, lastPoll = 0, lastDraw = 0;
   let retrySeconds = 30;
-  let accessRequired = false;
+  let accessRequired = false, relayUnavailable = false, homeRelay = false;
   let lastReport = 0, lastFollow = 0, viewWidth = 1, viewHeight = 1, cesiumViewer, datasource;
   let closeTimer, pinned = false, playbackAt = Date.now();
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -61,10 +61,12 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   function report() {
     const rows = visibleRecords(), fresh = rows.filter(r => ageSeconds(r.data) <= STALE_AFTER).length;
     const age = lastPoll ? Math.round((Date.now() - lastPoll) / 1000) : 0;
+    const unavailable = relayUnavailable ? 'Computer relay offline or feed unavailable' : 'Feed unavailable';
+    const waiting = `${rows.length} last-known aircraft. Retry in up to ${retrySeconds}s.`;
     status.textContent = accessRequired ? 'Live aircraft need provider approval. Tracking is not active.'
       : loading && !lastPoll ? 'Finding aircraft over the Delaware Valley…'
-      : failed ? `Feed unavailable · ${rows.length} last-known aircraft. Retry in up to ${retrySeconds}s.`
-      : `${rows.length} aircraft · ${fresh} recent · checked ${age}s ago`;
+      : failed ? `${unavailable} · ${waiting}`
+      : `${rows.length} aircraft · ${fresh} recent · checked ${age}s ago${homeRelay ? ' · home relay' : ''}`;
     retry.hidden = !failed || accessRequired;
   }
   function populate() {
@@ -86,7 +88,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
       const doc = await response.json();
       if (!response.ok) {
         accessRequired = doc.accessRequired === true;
-        retrySeconds = Math.max(30, Math.min(900, Number(doc.retryAfter) || 30));
+        relayUnavailable = doc.relayUnavailable === true;
+        retrySeconds = Math.max(30, Math.min(86400, Number(doc.retryAfter) || 30));
         throw new Error('Feed unavailable');
       }
       if (!Array.isArray(doc.aircraft) || !Number.isFinite(doc.timestamp)) throw new Error('Invalid feed');
@@ -101,7 +104,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
           record.data = a; appendFlightSample(record.samples, a);
         }
       }
-      failed = false; accessRequired = false; lastPoll = Date.now(); populate();
+      failed = false; accessRequired = false; relayUnavailable = false;
+      homeRelay = doc.relay === 'home'; lastPoll = Date.now(); populate();
     } catch { if (ticket === generation && enabled && !document.hidden) failed = true; }
     finally {
       clearTimeout(timeout);

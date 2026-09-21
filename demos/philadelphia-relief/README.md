@@ -1,12 +1,14 @@
 ## Aircraft over the region — September 20, 2026
 
-**Production access is pending.** Both feeds returned valid regional reports in
-local tests, but ADSB.lol returned 429 and adsb.fi returned 403 from Cloudflare.
-Airplanes.live also returned 403 with a request to contact its operator for access.
-The published interface explicitly says tracking is not active when permission
-is denied; it never substitutes simulated flights. Browser retries stop on 401/403,
-and the server caches access-denied responses for one hour. An approved provider
-connection is needed to activate live tracking on the public site.
+**Optional home-computer relay.** Hosted requests were refused by public providers,
+while adsb.fi works from the owner's computer. When the Pages secret
+`AIRCRAFT_RELAY_KEY` is configured, the endpoint uses the authenticated
+`philly-aircraft-relay` Worker and a Cloudflare Quick Tunnel to that computer.
+The relay is experimental: it depends on the computer being awake, connected,
+and running the helper. The interface identifies home-relayed reports and shows
+an unavailable state on failure; it never substitutes simulated flights.
+Provider access denials stop browser retries, and the local relay holds that
+failure for one hour. No paid aircraft service is used.
 
 An opt-in aircraft layer shares geographic reports between the Three.js diorama
 and Cesium photographic view. It includes original generic 3D models, hover/tap
@@ -17,16 +19,23 @@ the card retains reported altitude and identifies its measurement type. Diorama
 height adds the exaggerated ground offset, while the photographic view prefers
 reported geometric height and labels the barometric fallback.
 
-`functions/demos/philadelphia-relief/aircraft.js` fetches one fixed 45-nautical-mile
-circle from the public adsb.fi API and filters to the map rectangle. The response
+`functions/demos/philadelphia-relief/aircraft.js` retrieves one fixed 45-nautical-mile
+circle from the public adsb.fi API, through the home relay when configured, and filters to the map rectangle. The response
 is bounded to 1 MiB, validated, stripped to display fields, and cached for 15
-seconds per Cloudflare edge. There are no credentials, paid services, scheduled
-background jobs, arbitrary upstream URLs, or permanent flight-history storage.
+seconds per Cloudflare edge. The home relay also combines concurrent requests
+and enforces 15 seconds between provider requests across all visitors. Relay
+authentication stays in Cloudflare secrets and a private local configuration,
+never browser code. There are no paid services, idle aircraft polling,
+arbitrary upstream URLs, or permanent flight-history storage.
 The browser polls every 15 seconds only while enabled and visible; failures back
 off to 30 seconds, or at least five minutes for provider rate limits. Disabling,
 hiding the tab, and leaving the page cancel requests. ADSB.lol was tested first,
 but returned HTTP 429 from the production hosting network. Access-denied responses
 pause retries rather than repeatedly asking a provider that refused access.
+
+Local helper source and operation: `scripts/philadelphia-aircraft/README.md`.
+The gateway stores only the current tunnel address in KV, validates its exact
+hostname and the receiving helper, and does not expose a general-purpose proxy.
 
 Movement interpolates actual observations with a 20-second playback buffer and
 never extrapolates future positions. Reduced-motion users receive direct report
