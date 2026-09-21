@@ -57,6 +57,25 @@
     }
   },
   {
+    "id": "2026-09-20-intense-phobia-situation-megalophobia-beneath-the-dry-dock-",
+    "title": "Megalophobia — Beneath the Dry-Dock Propeller",
+    "tests": "Fear-impact gate: colossal stationary propeller blade and overhanging hull dominate and exceed the frame; narrow grated platform, gripping hand, obstructed route, and deep dock-floor cue remove visual relief. Preserve coherent dry-dock engineering and lockout, correct propeller geometry, no motion, injury, fantasy, scenic heroism, text, or logos. phobia=megalophobia; archive_slot=2026-09-20T20:20.; archive_slot=2026-09-20T20:20; concept=megalophobia-dry-dock-ship-propeller-platform",
+    "prompt": "Create a finished vertical photorealistic industrial documentary photograph, 1024 x 1536 pixels, depicting megalophobia from a first-person human-height viewpoint on a very narrow grated maintenance platform inside a real commercial dry dock. The camera is directly beneath the stern of a huge cargo ship. A colossal stationary five-bladed bronze ship propeller dominates most of the composition: the nearest thick blade root begins only a few feet from the lens, curves overhead, and runs beyond the top and both sides of the crop; portions of two other correctly attached blades crowd the edges. Above it, the immense dark red and black painted steel hull overhangs the camera, blocks nearly all sky, and shows plausible weld seams, antifouling paint wear, shaft boss, rudder geometry, marine growth stains, and dry salt streaks at coherent scale. The viewer's left gloved hand clamps a chipped waist-high safety rail in the extreme foreground; a work-boot toe and the narrow galvanized grating are visible at the bottom edge, emphasizing how little room there is to move. Look steeply upward past the rail and blade while also allowing one severe perspective line down through the grating to the concrete dock floor many stories below, scattered with tiny credible scaffolds, hoses, lockout barriers, and two minuscule helmeted workers for scale. Make the maintenance platform terminate against the hull at one side and disappear behind the blade at the other, with no open walkway or reassuring exit visible. Use an ordinary 20 mm full-frame wide-angle lens, slight realistic barrel perspective but no fisheye distortion, deep focus, cool overcast daylight filtering weakly from the distant dock opening, warm practical work lamps reflecting softly in aged bronze, heavy shadow under the hull, subtle airborne dock dust, believable gravity, and completely coherent shipyard engineering. The emotional force must come from the real object's overwhelming size, near blade intrusion, enclosing hull shadow, narrow movement margin, obstructed retreat, and vertiginous dock depth. The propeller is fully stopped and visibly under maintenance lockout; no motion blur, no danger theatrics, no active machinery. No scenic panorama, no heroic adventure mood, no fantasy, no impossible architecture, no disaster, no falling person, no injury, no gore, no logos, no watermark, no text overlay, no poster design, no border. The result must feel like a credible photograph taken by an inspector who suddenly realizes they are physically pinned beneath an object far larger than the frame.",
+    "image": "images/2026-09-20-intense-phobia-situation-megalophobia-beneath-the-dry-dock-.jpg",
+    "thumb": "thumbs/2026-09-20-intense-phobia-situation-megalophobia-beneath-the-dry-dock-.webp",
+    "color": "#4f4139",
+    "date": "2026-09-20",
+    "batch": "Daily Prompt",
+    "slot": "intense-phobia-situation",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "megalophobia-dry-dock-ship-propeller-platform",
+      "imageSha256": "7c321d359ebf18f57f5ca7447d74b628bf2897996a15feb720ec51bfc349d353",
+      "imageDHash": "7eb4d45666162427"
+    }
+  },
+  {
     "id": "2026-09-20-factual-infographic-factual-infographic-aviophobia-the-alar",
     "title": "Factual infographic: Aviophobia — The Alarm at Boarding",
     "tests": "Direct-canvas portrait phobia infographic; one dominant airport-boarding hero, eight substantive panels, five explanatory close-ups, readable source-backed labels only; factual_subtype: phobia-infographic; phobia: aviophobia; archive_slot=2026-09-20T18:20; concept=aviophobia-airport-boarding-anticipation-avoidance; factual_subtype: phobia-infographic",
