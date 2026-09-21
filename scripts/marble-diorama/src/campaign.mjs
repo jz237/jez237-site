@@ -373,6 +373,7 @@ export function beginnerCourse() {
     ),
     deck("pipe-upper", 0, 0, 4, 25, 0, {
       kind: "tube",
+      traversalBonus: 4000,
       material: "blue",
       radius: 1.8,
       path: [
@@ -388,6 +389,7 @@ export function beginnerCourse() {
     deck("pipe-exit-apron", 10, 81, 8, 10, 11, { h: 3 }),
     deck("pipe-lower-left", 0, 0, 4, 25, 0, {
       kind: "tube",
+      traversalBonus: 2000,
       material: "blue",
       radius: 1.8,
       path: [
@@ -402,6 +404,7 @@ export function beginnerCourse() {
     }),
     deck("pipe-lower-right", 0, 0, 4, 25, 0, {
       kind: "tube",
+      traversalBonus: 2000,
       material: "blue",
       radius: 1.8,
       path: [
@@ -763,6 +766,7 @@ export function intermediateCourse() {
     deck("pipe-entry", 0, 76, 8, 5, 13, { h: 16 }),
     deck("orange-pipe", 0, 0, 4, 18, 0, {
       kind: "tube",
+      traversalBonus: 2000,
       material: "orange",
       radius: 1.8,
       path: [

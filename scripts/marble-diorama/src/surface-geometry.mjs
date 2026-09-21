@@ -34,12 +34,16 @@ function roundedPath(points, closed, amount) {
   return result;
 }
 
-export function tubeGeometry(p) {
-  const curve = new CatmullRomCurve3(
+export function tubeCurve(p) {
+  return new CatmullRomCurve3(
     p.path.map((v) => new Vector3(v.x, v.y, v.z)),
     false,
     "centripetal",
   );
+}
+
+export function tubeGeometry(p) {
+  const curve = tubeCurve(p);
   const count = Math.max(24, Math.ceil(curve.getLength() * 8)),
     rings = 24,
     r = p.radius ?? 1.4,

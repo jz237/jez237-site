@@ -74,7 +74,8 @@ for (const players of [1, 2]) {
   test(`Silly ${players}-player demos collect miniatures through contact and cross bird flights without falls`, () => {
     const sim = new Simulation(sillyCourse(), { players, untimed: true }),
       drivers = sim.players.map(() => new DemoController()),
-      collections = sim.players.map(() => 0);
+      collections = sim.players.map(() => 0),
+      transfers = sim.players.map(() => []);
     while (
       sim.tick < 14400 &&
       sim.players.some((p) => p.status !== "finished")
@@ -90,9 +91,16 @@ for (const players of [1, 2]) {
         );
       });
       sim.step(inputs);
-      for (const event of sim.events)
+      for (const event of sim.events) {
         if (event.type === "collect") collections[event.player]++;
+        if (event.type === "traversal-bonus")
+          transfers[event.player].push([event.part, event.score]);
+      }
     }
+    assert.deepEqual(
+      transfers,
+      Array.from({ length: players }, () => [["red-transfer", 2000]]),
+    );
     const perPlayer = players === 1 ? 6 : 3;
     assert.deepEqual(collections, Array(players).fill(perPlayer));
     assert.equal(
@@ -141,6 +149,7 @@ test("Beginner upper-right fork reaches both pipes and finishes within the origi
     worldPoint(3, 8.2, 97),
   ];
   const visited = landmarks.map(() => false);
+  const transfers = [];
   while (sim.tick < 12000 && sim.players[0].status === "racing") {
     const before = { ...sim.body(sim.players[0]).translation() };
     const input = driver.input(sim);
@@ -148,6 +157,11 @@ test("Beginner upper-right fork reaches both pipes and finishes within the origi
     assert.ok(Math.hypot(input.x, input.z) <= 1.000001);
     assert.deepEqual({ ...sim.body(sim.players[0]).translation() }, before);
     sim.step([input]);
+    transfers.push(
+      ...sim.events
+        .filter((e) => e.type === "traversal-bonus")
+        .map((e) => [e.part, e.score]),
+    );
     const position = sim.body(sim.players[0]).translation();
     landmarks.forEach((point, i) => {
       if (
@@ -158,6 +172,10 @@ test("Beginner upper-right fork reaches both pipes and finishes within the origi
     });
   }
   assert.deepEqual(visited, [true, true, true]);
+  assert.deepEqual(transfers, [
+    ["pipe-upper", 4000],
+    ["pipe-lower-right", 2000],
+  ]);
   assert.equal(sim.players[0].status, "finished");
   assert.equal(sim.players[0].deaths, 0);
   assert.ok(sim.players[0].time > 20);
@@ -194,6 +212,7 @@ test("Intermediate orange pipe and traveling-wave alternate finishes with ordina
     sim.step([demo.input(sim)]);
   assert.equal(sim.players[0].status, "finished");
   assert.equal(sim.players[0].deaths, 0);
+  assert.deepEqual(sim.players[0].traversalClaims, ["orange-pipe"]);
   sim.dispose();
 });
 

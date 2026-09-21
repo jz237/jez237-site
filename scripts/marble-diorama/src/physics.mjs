@@ -1,3 +1,7 @@
+import {
+  traversalPaths,
+  updateTraversalBonuses,
+} from "./traversal-bonuses.mjs";
 import { landingTargets, updateLandingTargets } from "./landing-targets.mjs";
 import { acidShape, acidPositionAt } from "./acid.mjs";
 import RAPIER from "@dimforge/rapier3d-compat";
@@ -9,7 +13,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-12";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-13";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -22,6 +26,7 @@ export class Simulation {
     this.course = course;
     this.compiled = compileCourse(course);
     this.landingTargets = landingTargets(course);
+    this.traversalPaths = traversalPaths(course);
     this.options = {
       players: 1,
       difficulty: 0,
@@ -436,6 +441,13 @@ export class Simulation {
         this.fall(p);
         continue;
       }
+      for (const event of updateTraversalBonuses(
+        this.traversalPaths,
+        p,
+        pos,
+        RADIUS,
+      ))
+        this.events.push({ ...event, player: i });
       for (let j = 0; j < (this.course.checkpoints ?? []).length; j++) {
         const c = this.course.checkpoints[j];
         if (
@@ -486,6 +498,7 @@ export class Simulation {
     p.deaths++;
     p.respawnTick = this.tick + 90;
     p.landingAirTicks = 0;
+    p.traversals = {};
     this.events.push({ type: "fall", player: this.players.indexOf(p) });
   }
   snapshot() {
