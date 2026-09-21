@@ -1,3 +1,4 @@
+import { acidMesh, updateAcidMesh } from "./acid-view.mjs";
 import { foundationGeometry } from "./foundations.mjs";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
@@ -504,19 +505,11 @@ export class DioramaView {
     for (const z of sim.course.zones ?? []) {
       if (z.kind === "vacuum") continue;
       if (z.kind === "acid") {
-        const pool = new THREE.Mesh(
-          new THREE.CylinderGeometry(z.radius, z.radius, 0.08, 40),
-          new THREE.MeshStandardMaterial({
-            color: "#5ac61c",
-            emissive: "#235807",
-            emissiveIntensity: 0.3,
-            roughness: 0.22,
-          }),
-        );
-        pool.position.set(z.x, z.y + 0.04, z.z);
+        const pool = acidMesh(z);
         this.root.add(pool);
         this.acid.push({
           mesh: pool,
+          zone: z,
           handle: sim.acid.find((a) => a.zone === z).handle,
         });
         continue;
@@ -727,8 +720,13 @@ export class DioramaView {
         );
     }
     for (const a of this.acid)
-      a.mesh.position.copy(
-        vec(this.sim.world.getCollider(a.handle).translation()),
+      updateAcidMesh(
+        a.mesh,
+        a.zone,
+        (Math.max(0, this.sim.tick - 1) / 120) * this.sim.preset.machineSpeed,
+        (this.sim.tick / 120) * this.sim.preset.machineSpeed,
+        alpha,
+        this.sim.world.getCollider(a.handle).translation(),
       );
     for (let i = 0; i < this.marbles.length; i++) {
       const p = this.sim.players[i],

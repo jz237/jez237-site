@@ -59,6 +59,11 @@ export function moveWorkshopObject(course, key, position) {
   // Ribbon/tube coordinates are local to the part; moving its origin moves all
   // of its vertices through the normal geometry compiler.
   Object.assign(p, position);
+  for (const q of p.patrol?.points ?? []) {
+    q.x += dx;
+    q.z += dz;
+    if (q.y !== undefined) q.y += dy;
+  }
   for (const route of [
     course.route ?? [],
     ...(course.playerRoutes ?? []),
@@ -104,6 +109,12 @@ export function rotateWorkshopObject(course, key, radians) {
       v.z = x * sn + z * cs;
     }
   } else p.angle = (p.angle ?? 0) + radians;
+  for (const q of p.patrol?.points ?? []) {
+    const x = q.x - p.x,
+      z = q.z - p.z;
+    q.x = p.x + x * Math.cos(radians) - z * Math.sin(radians);
+    q.z = p.z + x * Math.sin(radians) + z * Math.cos(radians);
+  }
   if (p.direction) {
     const { x, z } = p.direction;
     p.direction.x = x * Math.cos(radians) - z * Math.sin(radians);

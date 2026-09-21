@@ -317,7 +317,14 @@ export class AudioEngine {
       )
         continue;
       this.effect(z.kind, {
-        gain: proximity(z) * 0.65,
+        gain:
+          proximity(
+            z.kind === "acid"
+              ? sim.world
+                  .getCollider(sim.acid.find((a) => a.zone === z).handle)
+                  .translation()
+              : z,
+          ) * 0.65,
         key: z.kind,
         cooldown: z.kind === "acid" ? 0.75 : 0.3,
       });

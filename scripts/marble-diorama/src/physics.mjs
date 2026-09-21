@@ -1,3 +1,4 @@
+import { acidShape, acidPositionAt } from "./acid.mjs";
 import RAPIER from "@dimforge/rapier3d-compat";
 import { compileCourse, motionAt, presenceAt, SURFACES } from "./course.mjs";
 import {
@@ -7,7 +8,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-8";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-9";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -87,8 +88,11 @@ export class Simulation {
       .map((zone) => ({
         zone,
         handle: this.world.createCollider(
-          RAPIER.ColliderDesc.cylinder(0.04, zone.radius)
-            .setTranslation(zone.x, zone.y + 0.04, zone.z)
+          RAPIER.ColliderDesc.trimesh(
+            acidShape(zone, 0).vertices,
+            acidShape(zone, 0).indices,
+          )
+            .setTranslation(...Object.values(acidPositionAt(zone, 0)))
             .setSensor(true),
         ).handle,
       }));
@@ -162,16 +166,19 @@ export class Simulation {
   step(inputs = []) {
     this.events = [];
     this.tick++;
-    for (const a of this.acid)
-      if (a.zone.motion) {
-        const p = motionAt(
-          a.zone,
-          this.tick * STEP * this.preset.machineSpeed,
-        ).position;
-        this.world
-          .getCollider(a.handle)
-          .setTranslation({ x: p.x, y: p.y + 0.04, z: p.z });
+    for (const a of this.acid) {
+      const time = this.tick * STEP * this.preset.machineSpeed;
+      const geometry = acidShape(a.zone, time),
+        collider = this.world.getCollider(a.handle);
+      if (a.geometry !== geometry) {
+        collider.setShape(
+          RAPIER.ColliderDesc.trimesh(geometry.vertices, geometry.indices)
+            .shape,
+        );
+        a.geometry = geometry;
       }
+      collider.setTranslation(acidPositionAt(a.zone, time));
+    }
     steerEnemies(this, STEP);
     for (const m of this.movers) {
       m.previous = m.current;
@@ -486,6 +493,8 @@ export class Simulation {
     this.movers = structuredClone(s.movers);
     this.enemies = structuredClone(s.enemies ?? []);
     this.events = [];
+    // Cached shapes are only an optimization, never restored simulation state.
+    for (const a of this.acid) a.geometry = null;
   }
   dispose() {
     this.queue.free();
