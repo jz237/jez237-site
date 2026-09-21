@@ -1,4 +1,4 @@
-import { transferForce } from "./powered-transfer.mjs";
+import { transferForce, chooseTransfer } from "./powered-transfer.mjs";
 import {
   traversalPaths,
   updateTraversalBonuses,
@@ -14,7 +14,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-15";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-16";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -402,16 +402,30 @@ export class Simulation {
         }
       }
     }
-    for (const p of this.players) {
+    for (const [index, p] of this.players.entries()) {
+      const wasPowered = p.poweredTransfer;
       p.poweredTransfer = null;
       if (p.status !== "racing") continue;
-      const b = this.body(p),
-        flow = transferForce(
+      const b = this.body(p);
+      if (!wasPowered) {
+        const choice = chooseTransfer(
           this.traversalPaths,
           b.translation(),
-          b.linvel(),
           RADIUS,
+          this.options.seed ^ this.tick ^ (index * 0x9e3779b9),
+          this.players
+            .filter((q) => q !== p && q.status === "racing")
+            .map((q) => this.body(q).translation()),
         );
+        if (choice) p.transferRoute = choice;
+      }
+      const flow = transferForce(
+        this.traversalPaths,
+        b.translation(),
+        b.linvel(),
+        RADIUS,
+        p.transferRoute,
+      );
       if (flow) {
         p.poweredTransfer = flow.id;
         b.applyImpulse(
@@ -522,6 +536,7 @@ export class Simulation {
     p.respawnTick = this.tick + 90;
     p.landingAirTicks = 0;
     p.traversals = {};
+    p.transferRoute = null;
     this.events.push({ type: "fall", player: this.players.indexOf(p) });
   }
   snapshot() {
@@ -580,6 +595,7 @@ export class DemoController {
     this.index = 0;
     this.lastDeath = 0;
     this.recovering = false;
+    this.exitRoute = null;
   }
   input(sim, player = 0) {
     if (sim.players[player].poweredTransfer) return { x: 0, z: 0 };
@@ -587,15 +603,25 @@ export class DemoController {
       b = sim.body(p),
       pos = b.translation(),
       v = b.linvel(),
+      exitRoute = p.traversalClaims?.includes(p.transferRoute?.id)
+        ? sim.course.alternateRoutes?.find(
+            (r) => r.id === p.transferRoute?.exitRoute,
+          )
+        : null,
       playerRoute =
-        sim.players.length === 1 && sim.course.route?.length
+        exitRoute?.route ??
+        (sim.players.length === 1 && sim.course.route?.length
           ? sim.course.route
-          : sim.course.playerRoutes?.[player],
+          : sim.course.playerRoutes?.[player]),
       route = playerRoute?.length
         ? playerRoute
         : sim.course.route?.length
           ? sim.course.route
           : [sim.course.goal];
+    if (this.exitRoute !== (exitRoute?.id ?? null)) {
+      this.exitRoute = exitRoute?.id ?? null;
+      this.recovering = true;
+    }
     if (p.deaths !== this.lastDeath) {
       this.recovering = true;
       this.lastDeath = p.deaths;

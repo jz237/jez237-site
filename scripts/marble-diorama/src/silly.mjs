@@ -76,6 +76,16 @@ export function sillyCourse() {
       flare: { throat: 0.9, length: 3 },
       flowSpeed: 8,
       flowExitSpeed: 2,
+      fork: {
+        at: 2,
+        exitRoutes: ["left-climbs", "right-climbs"],
+        path: [
+          { x: 0, y: 11.5, z: 82 },
+          { x: 2, y: 13.4, z: 80 },
+          { x: 6, y: 13.8, z: 76 },
+          { x: 8, y: 13.8, z: 72 },
+        ],
+      },
       path: [
         { x: 0, y: 5.2, z: 82 },
         { x: 0, y: 8, z: 82 },
@@ -86,6 +96,7 @@ export function sillyCourse() {
       ],
     }),
     deck("upper-pipe-landing", -8, 71, 7, 5, 6, { h: 11 }),
+    deck("right-pipe-landing", 8, 72, 7, 5, 6, { h: 11 }),
     ribbon(
       "left-middle-maze",
       [
@@ -225,7 +236,7 @@ export function sillyCourse() {
   rightRoute.push(
     ...[
       [0, 6, 69],
-      [8, 6, 73],
+      [8, 6, 70.8],
       [13, 6, 68],
       [3, 6, 63],
       [8, 7.5, 58],
@@ -372,6 +383,11 @@ export function sillyCourse() {
       roundDemoCorners(rightDemoRoute, { radius: 1.5 }),
     ],
     alternateRoutes: [
+      {
+        id: "left-climbs",
+        name: "Left transfer outlet and climbs",
+        route: roundDemoCorners(leftDemoRoute, { radius: 1.5 }),
+      },
       {
         id: "right-climbs",
         name: "Right climbs and bird-field exit",

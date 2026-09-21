@@ -1,4 +1,5 @@
 import { ShapeUtils, Vector2, Vector3, CatmullRomCurve3 } from "three";
+import { ConvexHull } from "three/addons/math/ConvexHull.js";
 
 // Short quadratic fillets preserve the end points of shared joins and remove
 // sharp corners from the same surface that both the renderer and Rapier use.
@@ -53,6 +54,7 @@ export function tubeRadiusAt(p, distance, length) {
 }
 
 export function tubeGeometry(p) {
+  if (p.fork) return forkGeometry(p);
   const curve = tubeCurve(p);
   const length = curve.getLength();
   const count = Math.max(24, Math.ceil(length * 8)),
@@ -97,6 +99,127 @@ export function tubeGeometry(p) {
     );
   }
   return b.result();
+}
+
+// A three-port junction: the same open shell is rendered and collided. Each
+// leg joins a convex central chamber at its exact inner/outer rim vertices.
+// Port faces are omitted, so no overlapping tube wall blocks either outlet.
+function forkGeometry(p) {
+  const b = builder(p.angle),
+    rings = 24;
+  const throat = p.flare?.throat ?? p.radius ?? 1.4;
+  const thickness = p.thickness ?? 0.15;
+  const legs = [
+    p.path.slice(0, p.fork.at + 1).reverse(),
+    p.path.slice(p.fork.at),
+    p.fork.path,
+  ];
+  const ports = [[], []],
+    chamber = [];
+  for (const points of legs) {
+    const curve = tubeCurve({ path: points }),
+      length = curve.getLength();
+    const cut = throat * 2.5;
+    const count = Math.max(24, Math.ceil(length * 8));
+    const frames = curve.computeFrenetFrames(count, false);
+    // Sample the curve from its shared chamber outwards, then interpolate its
+    // transported frame at the cut. The ring is also used by the chamber hull.
+    const at = (i, k, outer) => {
+      const distance = cut + ((length - cut) * i) / count;
+      const t = distance / length,
+        f = t * count;
+      const j = Math.min(count - 1, Math.floor(f));
+      const tangent = curve.getTangentAt(t).normalize();
+      const normal = frames.normals[j]
+        .clone()
+        .lerp(frames.normals[j + 1], f - j);
+      normal.addScaledVector(tangent, -normal.dot(tangent)).normalize();
+      const binormal = new Vector3().crossVectors(tangent, normal).normalize();
+      const flare = p.flare
+        ? Math.max(0, 1 - (length - distance) / p.flare.length) ** 2
+        : 0;
+      const r =
+        throat + ((p.radius ?? 1.4) - throat) * flare + outer * thickness;
+      const a = (k / rings) * Math.PI * 2;
+      return curve
+        .getPointAt(t)
+        .addScaledVector(normal, Math.cos(a) * r)
+        .addScaledVector(binormal, Math.sin(a) * r);
+    };
+    for (let outer = 0; outer < 2; outer++) {
+      const port = Array.from({ length: rings }, (_, k) => at(0, k, outer));
+      ports[outer].push(port);
+      for (let i = 0; i < count; i++)
+        for (let k = 0; k < rings; k++) {
+          const q = [
+            at(i, k, outer),
+            at(i, k + 1, outer),
+            at(i + 1, k + 1, outer),
+            at(i + 1, k, outer),
+          ].map((v) => v.toArray());
+          if (!outer) q.reverse();
+          b.quad(...q);
+        }
+    }
+    for (let k = 0; k < rings; k++)
+      b.quad(
+        at(count, k, 0).toArray(),
+        at(count, k, 1).toArray(),
+        at(count, k + 1, 1).toArray(),
+        at(count, k + 1, 0).toArray(),
+      );
+  }
+  for (let outer = 0; outer < 2; outer++) {
+    const points = ports[outer].flat();
+    const planes = ports[outer].map((ring) => {
+      const normal = new Vector3()
+        .crossVectors(
+          ring[1].clone().sub(ring[0]),
+          ring[2].clone().sub(ring[0]),
+        )
+        .normalize();
+      return { normal, point: ring[0] };
+    });
+    if (
+      planes.some(({ normal, point }) =>
+        points.some((v) => normal.dot(v.clone().sub(point)) > 1e-6),
+      )
+    )
+      throw Error(
+        "Tube fork ports overlap; lengthen the necks or separate their directions.",
+      );
+    const hull = new ConvexHull().setFromPoints(points);
+    for (const face of hull.faces) {
+      const vs = [];
+      let edge = face.edge;
+      do {
+        vs.push(edge.head().point);
+        edge = edge.next;
+      } while (edge !== face.edge);
+      if (!outer) {
+        const c = Math.cos(p.angle ?? 0),
+          s = Math.sin(p.angle ?? 0),
+          n = face.normal;
+        const normal = { x: n.x * c - n.z * s, y: n.y, z: n.x * s + n.z * c };
+        chamber.push({
+          normal,
+          constant:
+            n.dot(vs[0]) + normal.x * p.x + normal.y * p.y + normal.z * p.z,
+        });
+      }
+      if (
+        planes.some((p) =>
+          vs.every(
+            (v) => Math.abs(p.normal.dot(v.clone().sub(p.point))) < 1e-6,
+          ),
+        )
+      )
+        continue;
+      if (!outer) vs.reverse();
+      b.tri(...vs.map((v) => v.toArray()));
+    }
+  }
+  return { ...b.result(), chamber };
 }
 
 // These generators return collision/render geometry together. They never apply

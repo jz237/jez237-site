@@ -161,6 +161,7 @@ export function validateCourse(c) {
     if (
       p.flare !== undefined &&
       (p.kind !== "tube" ||
+        !p.flare ||
         ![p.flare.throat, p.flare.length].every(finite) ||
         p.flare.throat < 0.6 ||
         p.flare.throat > (p.radius ?? 1.4) ||
@@ -168,6 +169,63 @@ export function validateCourse(c) {
         p.flare.length > 10)
     )
       throw Error("Invalid tube flare.");
+    if (p.fork !== undefined) {
+      const f = p.fork;
+      if (
+        p.kind !== "tube" ||
+        !p.flowSpeed ||
+        !f ||
+        !Number.isInteger(f.at) ||
+        f.at < 1 ||
+        f.at >= p.path.length - 1 ||
+        !Array.isArray(f.path) ||
+        f.path.length < 2 ||
+        f.path.length > 100 ||
+        !f.path.every((v) => v && [v.x, v.y, v.z].every(finite)) ||
+        !["x", "y", "z"].every((k) => f.path[0][k] === p.path[f.at][k]) ||
+        (f.exitRoutes !== undefined &&
+          (!Array.isArray(f.exitRoutes) ||
+            f.exitRoutes.length !== 2 ||
+            !f.exitRoutes.every((id) =>
+              c.alternateRoutes?.some((r) => r.id === id),
+            )))
+      )
+        throw Error("Invalid tube fork.");
+      const legs = [
+        p.path.slice(0, f.at + 1).reverse(),
+        p.path.slice(f.at),
+        f.path,
+      ];
+      const directions = legs.map((leg) => {
+        const d = ["x", "y", "z"].map((k) => leg[1][k] - leg[0][k]);
+        const length = Math.hypot(...d);
+        if (length < (p.flare?.throat ?? p.radius ?? 1.4) * 3)
+          throw Error("Tube fork legs are too short.");
+        return d.map((v) => v / length);
+      });
+      for (let i = 0; i < 3; i++)
+        for (let j = i + 1; j < 3; j++)
+          if (
+            directions[i].reduce((n, v, k) => n + v * directions[j][k], 0) > 0.5
+          )
+            throw Error("Tube fork ports are too close.");
+      estimatedVertices +=
+        f.path
+          .slice(1)
+          .reduce(
+            (n, v, i) =>
+              n +
+              Math.ceil(
+                Math.hypot(
+                  v.x - f.path[i].x,
+                  v.y - f.path[i].y,
+                  v.z - f.path[i].z,
+                ) * 10,
+              ) *
+                52,
+            0,
+          ) + 500;
+    }
     if (
       p.flowExitSpeed !== undefined &&
       (!p.flowSpeed ||

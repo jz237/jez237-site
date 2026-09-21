@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-15",
-  "generatedAt": "2026-09-21T15:07:09.997Z",
+  "physics": "rapier-0.20.0-mm-16",
+  "generatedAt": "2026-09-21T15:33:19.862Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -57,11 +57,11 @@
         },
         {
           "course": "silly",
-          "ticks": 8860,
+          "ticks": 8582,
           "players": [
             {
-              "time": 0.3177083333306379,
-              "score": 40916,
+              "time": 2.1276041666639776,
+              "score": 41114,
               "deaths": 0,
               "status": "finished"
             }
@@ -69,11 +69,11 @@
         },
         {
           "course": "ultimate",
-          "ticks": 3840,
+          "ticks": 4148,
           "players": [
             {
               "time": 0,
-              "score": 41606,
+              "score": 41839,
               "deaths": 0,
               "status": "timeout"
             }
@@ -163,13 +163,13 @@
           "players": [
             {
               "time": 0,
-              "score": 32773,
+              "score": 33078,
               "deaths": 0,
               "status": "timeout"
             },
             {
               "time": 0,
-              "score": 28668,
+              "score": 28490,
               "deaths": 0,
               "status": "timeout"
             }
