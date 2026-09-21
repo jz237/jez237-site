@@ -83,6 +83,7 @@ export function createLabelLayer(THREE, options) {
       if (!width || !height) return 0;
 
       const placed = [];
+      const measure = [];
       const blocked = controlBoxes();
       const streetSeen = new Set();
       const budget = Math.min(MAX_NODES, labelBudget(width, height, density));
@@ -153,14 +154,18 @@ export function createLabelLayer(THREE, options) {
         // Learn this label's true width once, so every later frame declutters
         // and edge-culls against the real thing rather than an estimate.
         if (!measured.has(key)) {
-          const real = el.offsetWidth;
-          if (real > 0) measured.set(key, real / scale);
+          measure.push({ el, key });
         }
         used += 1;
       }
 
       for (let i = used; i < pool.length; i += 1) {
         if (pool[i].style.display !== 'none') pool[i].style.display = 'none';
+      }
+      // All writes finish before the first width read: one layout, not one per new label.
+      for (const { el, key } of measure) {
+        const real = el.offsetWidth;
+        if (real > 0) measured.set(key, real / scale);
       }
       return used;
     },

@@ -1,5 +1,6 @@
 import { canopySites, canopyLevel } from './canopy-layout.js?v=philly-2026092121';
 import { woodlandIndex } from './woodland.js?v=philly-2026092121';
+import { createCanopyCulling } from './canopy-culling.js?v=philly-2026092122';
 /** A zoom-dependent miniature stage. Crowns follow mapped woodland boundaries;
  * enlarged regional crowns shrink to individual trees as the camera approaches. */
 export function dioramaAmount(distance, enabled = true) {
@@ -130,13 +131,13 @@ function treeMesh(THREE, positions, sizes, uniforms) {
   const base = new THREE.SphereGeometry(1, 7, 5);
   const geometry = new THREE.InstancedBufferGeometry().copy(base);
   base.dispose();
-  geometry.setAttribute('aTree', new THREE.InstancedBufferAttribute(new Float32Array(positions), 3));
-  geometry.setAttribute('aSize', new THREE.InstancedBufferAttribute(new Float32Array(sizes), 1));
-  geometry.instanceCount = sizes.length;
+  const culling = createCanopyCulling(THREE, geometry, positions, sizes);
   const material = new THREE.ShaderMaterial({ uniforms, vertexShader: TREE_VERTEX,
     fragmentShader: TREE_FRAGMENT });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.name = 'illustrative woodland canopy'; mesh.frustumCulled = false;
+  mesh.userData.cull = camera =>
+    culling.update(camera, uniforms.uExag.value, uniforms.uAmount.value);
   mesh.userData.total = sizes.length;
   return mesh;
 }
@@ -228,7 +229,7 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
       wallUniforms.uHeight = next.uniforms.uHeight;
       wallUniforms.uExag = next.uniforms.uExag;
     },
-    update(amount, exaggeration, sunDir, state, pose, light=state) {
+    update(amount, exaggeration, sunDir, state, pose, light=state, camera=null) {
       const enabled = state.diorama && state.era === 'present' && state.compareMode === 'off';
       group.visible = enabled && state.layers.terrain;
       floor.visible = wall.visible = amount > .001;
@@ -251,6 +252,12 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
       treeUniforms.uKeyStrength.value=light.keyLight; treeUniforms.uSkyFill.value=light.ambient;
       if (trees) {
         trees.visible = !state.lightweight && (modelOn || amount > .1);
+      }
+      if (camera && group.visible) {
+        camera.updateMatrixWorld();
+        if (trees?.visible) trees.userData.cull(camera);
+        if (streetTrees?.visible) streetTrees.userData.cull(camera);
+        for (const mesh of near) if (mesh.visible) mesh.userData.cull(camera);
       }
     },
     dispose() {

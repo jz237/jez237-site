@@ -63,6 +63,19 @@ test('aerial tile culling encloses shader-displaced terrain at every exaggeratio
       true, 1366, 1, 'balanced', 'standard', 768);
     await new Promise(resolve => setImmediate(resolve));
     assert.ok(tiles.group.children.length > 0);
+    const pose = { lon: -75.16, lat: 39.95 };
+    const roofs = tiles.roofTiles(pose);
+    assert.ok(roofs.length > 0);
+    assert.equal(tiles.roofTiles(pose), roofs, 'stationary roof selection reuses its result');
+    const shifted = { lon: -75.165, lat: 39.956 };
+    const expected = tiles.group.children.filter(m => m.userData.cell.level < 2)
+      .sort((a, b) => {
+        const score = m => m.userData.cell.level * 1000
+          + Math.hypot((m.userData.cell.lon-shifted.lon)*projection.metersPerDegLon,
+            (m.userData.cell.lat-shifted.lat)*projection.metersPerDegLat);
+        return score(a)-score(b);
+      }).slice(0, 4).map(m => m.material.uniforms.uTile.value);
+    assert.deepEqual(tiles.roofTiles(shifted).map(r => r.texture), expected);
     for (const scale of [0, 1, 15, 80]) {
       terrain.uniforms.uExag.value = scale; tiles.tick(.1);
       for (const mesh of tiles.group.children) {
@@ -79,4 +92,5 @@ test('aerial tile culling encloses shader-displaced terrain at every exaggeratio
       }
     }
   } finally { tiles.dispose(); }
+  assert.deepEqual(tiles.roofTiles({ lon: -75.16, lat: 39.95 }), [], 'eviction clears roof references');
 });
