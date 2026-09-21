@@ -1722,6 +1722,30 @@ body.sheet-open .archive-swipe-overlay { display: none; }
 .aircraft-follow { width: 100%; padding: 11px; border: 0; border-radius: 8px;
   color: #122f3d; background: #a1e0e5; font: 600 12px var(--font); cursor: pointer; }
 .aircraft-follow:disabled { background: #2e505b; color: #adc8ce; cursor: default; }
+.aircraft-ride { margin: 8px 0; background: #e6c286; }
+.airport-camera-dialog { width: min(560px, calc(100vw - 24px)); max-height: calc(100dvh - 24px);
+  overflow: auto; padding: 20px; border: 1px solid #92c9c9; border-radius: 18px;
+  background: #102a35; color: #eef4ee; font: 14px/1.5 var(--font); }
+.airport-camera-dialog::backdrop { background: #03131b9c; }
+.airport-camera-dialog h2 { font: 28px Georgia, serif; margin: 0; }
+.aircraft-ride-bar { position: fixed; z-index: 58; bottom: 110px; left: 50%; transform: translateX(-50%);
+  width: min(560px, calc(100vw - 28px)); padding: 13px; border: 1px solid #99dadb80;
+  border-radius: 16px; background: #102a35f5; color: #eff7f3; box-shadow: 0 10px 40px #00182066;
+  font: 12px/1.5 var(--font); text-align: center; }
+.aircraft-ride-bar[hidden] { display: none; }
+.aircraft-ride-bar strong { color: #e7c68e; letter-spacing: .07em; }
+.aircraft-ride-status { display: block; margin: 4px 0 8px; }
+.aircraft-view-buttons { display: flex; flex-wrap: wrap; justify-content: center; gap: 5px; }
+.aircraft-ride-bar button { color: #eef8f4; background: #254754; border: 1px solid #a4dce566;
+  border-radius: 7px; padding: 9px 12px; font: inherit; cursor: pointer; min-height: 38px; }
+.aircraft-ride-bar button[aria-pressed="true"] { background: #c1e4df; color: #102a35; }
+.aircraft-ride-bar > button { margin-top: 8px; background: transparent; }
+body.aircraft-riding .caption, body.aircraft-riding .readout-preset, body.aircraft-riding .orientation,
+body.aircraft-riding .map-navigation { visibility: hidden; }
+@media (max-width: 700px) {
+  .aircraft-ride-bar { bottom: 80px; padding: 10px; }
+  .aircraft-view-buttons button { padding: 8px; }
+}
 .aircraft-disclosure { display: block; color: #aec5cf; font-size: 10px; margin-top: 10px; }
 #aircraftStatus { color: #a4e0e5; font-size: 10px; line-height: 1.4; margin: 3px 0 9px; }
 .aircraft-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }

@@ -23,7 +23,7 @@ export function controlBoxes(root = document) {
   // before the next task so drawer changes and resize are never left stale.
   if (measuredBoxes.has(root)) return measuredBoxes.get(root);
   const selectors = '.topbar,.explore-nav,.readout-preset,.readout,.orientation'
-    + ',#mobileBar,.caption,.map-navigation,.photo-controls,.panel:not(.collapsed)';
+    + ',#mobileBar,.caption,.map-navigation,.photo-controls,.panel:not(.collapsed),.aircraft-ride-bar';
   const boxes = [...root.querySelectorAll(selectors)].filter(el => {
     const style = getComputedStyle(el);
     return !el.hidden && style.display !== 'none' && style.visibility !== 'hidden';
