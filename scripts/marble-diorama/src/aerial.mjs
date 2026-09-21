@@ -292,7 +292,7 @@ export function aerialCourse() {
     ["lower", 1, 52, 5, 0],
   ]) {
     const h = 12.5,
-      presence = { period: 10, on, phase };
+      presence = { period: 10, on, phase, transition: 0.24 };
     parts.push(
       deck(`${id}-vacuum-mouth`, l, d, 0.5, 2.4, h, {
         kind: "piston",
@@ -305,11 +305,11 @@ export function aerialCourse() {
     );
     zones.push({
       kind: "vacuum",
+      mouth: `${id}-vacuum-mouth`,
       ...worldPoint(l, h + 0.9, d),
       radius: 4,
       strength: 1.3,
       direction: worldPoint(-1, 0, 0),
-      presence,
     });
   }
   const route = [

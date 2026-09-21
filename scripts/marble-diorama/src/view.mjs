@@ -1,3 +1,4 @@
+import { vacuumFragments, updateVacuumFragments } from "./vacuum-view.mjs";
 import { landingTargets } from "./landing-targets.mjs";
 import { acidMesh, updateAcidMesh } from "./acid-view.mjs";
 import { foundationGeometry } from "./foundations.mjs";
@@ -333,6 +334,7 @@ export class DioramaView {
     }
     this.moving = [];
     this.marbles = [];
+    this.vacuumFragments = [];
     this.enemies = [];
     this.acid = [];
     this.ghost = null;
@@ -387,6 +389,9 @@ export class DioramaView {
       const mesh = this.marble(i);
       this.marbleRoot.add(mesh);
       this.marbles.push(mesh);
+      const fragments = vacuumFragments(mesh.material);
+      this.marbleRoot.add(fragments);
+      this.vacuumFragments.push(fragments);
     }
     for (const e of sim.enemies) {
       const steelie =
@@ -665,6 +670,7 @@ export class DioramaView {
     this.resize();
   }
   effect(event) {
+    if (event.type === "fall" && event.cause === "vacuum") return;
     const p =
       event.type === "fall"
         ? this.sim.players[event.player]
@@ -772,6 +778,11 @@ export class DioramaView {
         alpha,
       );
       m.visible = p.status === "racing";
+      updateVacuumFragments(
+        this.vacuumFragments[i],
+        p,
+        (Math.max(0, this.sim.tick - 1) + alpha) / 120,
+      );
     }
     for (let i = 0; i < this.moving.length; i++) {
       this.moving[i].visible = this.sim.world

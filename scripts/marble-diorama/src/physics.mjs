@@ -1,3 +1,4 @@
+import { vacuumAt } from "./vacuum.mjs";
 import { transferForce, chooseTransfer } from "./powered-transfer.mjs";
 import {
   traversalPaths,
@@ -14,7 +15,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-17";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-18";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -148,15 +149,17 @@ export class Simulation {
   body(p) {
     return this.world.getRigidBody(p.handle);
   }
+  respawnPosition(p) {
+    return this.options.assisted && p.checkpoint >= 0
+      ? this.course.checkpoints[p.checkpoint]
+      : this.course.rules?.respawn === "last-safe"
+        ? p.safePosition
+        : this.course.starts[
+            this.players.indexOf(p) % this.course.starts.length
+          ];
+  }
   respawn(p) {
-    const s =
-      this.options.assisted && p.checkpoint >= 0
-        ? this.course.checkpoints[p.checkpoint]
-        : this.course.rules?.respawn === "last-safe"
-          ? p.safePosition
-          : this.course.starts[
-              this.players.indexOf(p) % this.course.starts.length
-            ];
+    const s = this.respawnPosition(p);
     const b = this.body(p);
     b.setEnabled(true);
     b.setTranslation(s, true);
@@ -164,6 +167,7 @@ export class Simulation {
     b.setAngvel({ x: 0, y: 0, z: 0 }, true);
     b.setRotation({ x: 0, y: 0, z: 0, w: 1 }, true);
     p.status = "racing";
+    p.vacuumCapture = null;
     p.safeHistory = [];
     p.previous = p.current = {
       position: copy(s),
@@ -326,7 +330,21 @@ export class Simulation {
           !presenceAt(zone, this.tick * STEP * this.preset.machineSpeed).visible
         )
           continue;
-        const dist = Math.hypot(pos.x - zone.x, pos.y - zone.y, pos.z - zone.z);
+        const vacuum =
+          zone.kind === "vacuum"
+            ? vacuumAt(
+                zone,
+                this.tick * STEP * this.preset.machineSpeed,
+                this.course.parts,
+              )
+            : null;
+        if (vacuum && !vacuum.active) continue;
+        const center = vacuum?.position ?? zone;
+        const dist = Math.hypot(
+          pos.x - center.x,
+          pos.y - center.y,
+          pos.z - center.z,
+        );
         if (dist < zone.radius && zone.kind === "magnet" && dist > 0.01)
           b.applyImpulse(
             {
@@ -339,19 +357,22 @@ export class Simulation {
         if (dist < zone.radius && zone.kind === "hazard") this.fall(p);
         if (zone.kind === "vacuum" && dist < zone.radius && dist > 0.01) {
           const q = zone.direction,
-            dot = ((pos.x - zone.x) * q.x + (pos.z - zone.z) * q.z) / dist;
+            dot = ((pos.x - center.x) * q.x + (pos.z - center.z) * q.z) / dist;
           if (dot > 0.35) {
             const force =
-              zone.strength * (1 - dist / zone.radius) * this.preset.force;
+              zone.strength *
+              vacuum.strength *
+              (1 - dist / zone.radius) *
+              this.preset.force;
             b.applyImpulse(
               {
-                x: ((zone.x - pos.x) / dist) * force * STEP,
-                y: ((zone.y - pos.y) / dist) * force * STEP,
-                z: ((zone.z - pos.z) / dist) * force * STEP,
+                x: ((center.x - pos.x) / dist) * force * STEP,
+                y: ((center.y - pos.y) / dist) * force * STEP,
+                z: ((center.z - pos.z) / dist) * force * STEP,
               },
               true,
             );
-            if (dist < 0.7) this.fall(p);
+            if (dist < 0.7) this.fall(p, { cause: "vacuum", intake: center });
           }
         }
       }
@@ -528,16 +549,29 @@ export class Simulation {
     }
     return this.events;
   }
-  fall(p) {
+  fall(p, detail) {
     if (p.status !== "racing") return;
     p.status = "falling";
     this.body(p).setEnabled(false);
     p.deaths++;
-    p.respawnTick = this.tick + 90;
+    const vacuum = detail?.cause === "vacuum";
+    p.respawnTick = this.tick + (vacuum ? 252 : 90);
+    p.vacuumCapture = vacuum
+      ? {
+          tick: this.tick,
+          origin: copy(this.body(p).translation()),
+          intake: copy(detail.intake),
+          destination: copy(this.respawnPosition(p)),
+        }
+      : null;
     p.landingAirTicks = 0;
     p.traversals = {};
     p.transferRoute = null;
-    this.events.push({ type: "fall", player: this.players.indexOf(p) });
+    this.events.push({
+      type: "fall",
+      player: this.players.indexOf(p),
+      ...(vacuum ? { cause: "vacuum" } : {}),
+    });
   }
   snapshot() {
     return {

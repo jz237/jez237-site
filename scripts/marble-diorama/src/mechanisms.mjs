@@ -153,7 +153,7 @@ export function flipperLift(time, motion) {
   return 0.5 + 0.5 * Math.cos(((t - hold) / (motion.period - hold)) * Math.PI);
 }
 
-// Rounded, open intake frame. Four perimeter loops preserve the opening.
+// Rounded intake with a recessed cavity and a solid rear housing.
 export function vacuumGeometry(p) {
   const vertices = [],
     indices = [],
@@ -163,8 +163,8 @@ export function vacuumGeometry(p) {
     sn = Math.sin(p.angle ?? 0);
   for (const [x, inset] of [
     [-p.w / 2, 0],
-    [-p.w / 2 - 0.025, 0.25],
-    [p.w / 2, 0.25],
+    [-p.w / 2 + 0.06, 0.25],
+    [p.w / 2 - 0.08, 0.25],
     [p.w / 2, 0],
   ]) {
     const hz = p.d / 2 - inset,
@@ -179,7 +179,7 @@ export function vacuumGeometry(p) {
       vertices.push(x * cs - z * sn, y, x * sn + z * cs);
     }
   }
-  for (let ring = 0; ring < 4; ring++)
+  for (const ring of [0, 1, 3])
     for (let i = 0; i < n; i++) {
       const a = ring * n + i,
         b = ring * n + ((i + 1) % n),
@@ -188,6 +188,18 @@ export function vacuumGeometry(p) {
       indices.push(a, b, c, a, c, d);
       roles.push("top", "top");
     }
+  // Inside of the back plate faces the intake; its outside closes the housing.
+  for (let i = 1; i < n - 1; i++) {
+    indices.push(
+      2 * n,
+      2 * n + i,
+      2 * n + i + 1,
+      3 * n,
+      3 * n + i + 1,
+      3 * n + i,
+    );
+    roles.push("side", "top");
+  }
   return {
     vertices: new Float32Array(vertices),
     indices: new Uint32Array(indices),
