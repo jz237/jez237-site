@@ -274,6 +274,17 @@ export class AudioEngine {
           (p) => 1 - Math.hypot(p.x - pos.x, p.y - pos.y, p.z - pos.z) / 14,
         ),
       );
+    const activeTransfers = new Set(
+      sim.players
+        .filter((p) => p.status === "racing" && p.poweredTransfer)
+        .map((p) => p.poweredTransfer),
+    );
+    for (const id of activeTransfers)
+      this.effect("vacuum", {
+        gain: 0.65,
+        key: `transfer:${id}`,
+        cooldown: 0.3,
+      });
     for (const m of sim.movers ?? []) {
       const body = sim.world.getRigidBody(m.handle);
       if (!body.isEnabled()) continue;

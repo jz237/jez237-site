@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**130 automated tests pass. All six campaign races and all three bonus courses
+**133 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-14`.
+Current simulation/replay version: `rapier-0.20.0-mm-15`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -707,3 +707,31 @@ The paired demo's right bird-field steering speed changes from 2.5 to 3.2;
 original clocks, player control limits and bird collision/flight paths are intact.
 
 Release checks: 130/130 tests pass in 241,167ms; production build and diff check pass.
+
+
+### September 21 — powered upward transfer
+
+Silly's sloped tube is replaced by a downward-facing flared intake, vertical
+neck and upper outlet. The eight-unit floor-to-floor rise carries the native
+sphere with bounded forces. Visible geometry, airflow and traversal scoring
+share the same variable-radius center curve. No transfer teleport or direct
+velocity assignment is used. The entire upper assembly, enemies and route
+heights move together. SILLY-TRANSFER.md records the original sequence and
+explicitly leaves the second functioning horn and original transfer law open.
+
+New native checks verify unsteered ascent, continuous movement, reward at the
+outlet, mid-transfer snapshot equality, shared cross-sections, force limits and
+import validation. The audio test verifies that airflow cues occur only during
+active carriage and do not double up for two players in the same passage.
+
+The paired browser demo completes both players with zero falls and no captured
+warnings/errors: Player 1 scores 9385, Player 2 scores 9383 and finishes first
+at 65.33s. Browser inspection confirms the flared inlet and outlet. The demo
+brakes on the landing and uses right bird-field approach speed 3.8 after the
+changed arrival timing; no bird flight, collision or timer is weakened.
+
+Fresh mm-15 timed measurements retain solo completion through Silly at 73.833s,
+with 0.318 clock units left; Ultimate still times out at 32.00s. Paired play
+still times out in Silly by 57.60s. Full timed campaign acceptance remains open.
+
+Release verification: 133/133 tests pass in 241,685ms; production build and diff check pass.

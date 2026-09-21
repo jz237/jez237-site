@@ -1,3 +1,4 @@
+import { transferForce } from "./powered-transfer.mjs";
 import {
   traversalPaths,
   updateTraversalBonuses,
@@ -13,7 +14,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-14";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-15";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -401,6 +402,28 @@ export class Simulation {
         }
       }
     }
+    for (const p of this.players) {
+      p.poweredTransfer = null;
+      if (p.status !== "racing") continue;
+      const b = this.body(p),
+        flow = transferForce(
+          this.traversalPaths,
+          b.translation(),
+          b.linvel(),
+          RADIUS,
+        );
+      if (flow) {
+        p.poweredTransfer = flow.id;
+        b.applyImpulse(
+          {
+            x: flow.acceleration.x * MASS * STEP,
+            y: flow.acceleration.y * MASS * STEP,
+            z: flow.acceleration.z * MASS * STEP,
+          },
+          true,
+        );
+      }
+    }
     this.world.step(this.queue);
     updateEnemies(this);
     for (const acid of this.acid)
@@ -559,6 +582,7 @@ export class DemoController {
     this.recovering = false;
   }
   input(sim, player = 0) {
+    if (sim.players[player].poweredTransfer) return { x: 0, z: 0 };
     const p = sim.players[player],
       b = sim.body(p),
       pos = b.translation(),

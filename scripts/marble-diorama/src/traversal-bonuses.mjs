@@ -1,10 +1,10 @@
-import { tubeCurve } from "./surface-geometry.mjs";
+import { tubeCurve, tubeRadiusAt } from "./surface-geometry.mjs";
 
 // These checkpoints use the exact center curve that builds the tube's shared
 // visible/collision rings. They do not add forces or alter its physical surface.
 export function traversalPaths(course) {
   return course.parts
-    .filter((p) => p.kind === "tube" && p.traversalBonus)
+    .filter((p) => p.kind === "tube" && (p.traversalBonus || p.flowSpeed))
     .map((p) => {
       const curve = tubeCurve(p),
         length = curve.getLength();
@@ -29,6 +29,9 @@ export function traversalPaths(course) {
       return {
         id: p.id,
         score: p.traversalBonus,
+        flare: p.flare,
+        flowSpeed: p.flowSpeed,
+        flowExitSpeed: p.flowExitSpeed,
         radius: p.radius ?? 1.4,
         length,
         points,
@@ -77,6 +80,12 @@ export function tubePosition(path, position) {
       best = {
         distance,
         progress: ((i - 1 + u) / (path.points.length - 1)) * path.length,
+        center: { x: a.x + u * dx, y: a.y + u * dy, z: a.z + u * dz },
+        tangent: {
+          x: dx / Math.hypot(dx, dy, dz),
+          y: dy / Math.hypot(dx, dy, dz),
+          z: dz / Math.hypot(dx, dy, dz),
+        },
       };
   }
   return best;
@@ -86,7 +95,7 @@ export function updateTraversalBonuses(paths, player, position, radius) {
   const events = [];
   player.traversals ??= {};
   for (const path of paths) {
-    if (player.traversalClaims?.includes(path.id)) continue;
+    if (!path.score || player.traversalClaims?.includes(path.id)) continue;
     if (
       ["x", "y", "z"].some(
         (axis) =>
@@ -98,7 +107,9 @@ export function updateTraversalBonuses(paths, player, position, radius) {
       continue;
     }
     const q = tubePosition(path, position),
-      inside = q.distance <= path.radius - radius + 0.12;
+      inside =
+        q.distance <=
+        tubeRadiusAt(path, q.progress, path.length) - radius + 0.12;
     const state = Object.hasOwn(player.traversals, path.id)
       ? player.traversals[path.id]
       : null;
