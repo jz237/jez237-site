@@ -149,6 +149,9 @@ export function ribbonGeometry(p) {
     if (div < 0.3) throw Error("Ribbon bend is too sharp for a safe mitre.");
     return { x: nxu / div, z: nzu / div };
   });
+  const originalCross = cross.map((v) => ({ ...v }));
+  for (const [end, join] of Object.entries(p.joins ?? {}))
+    if (join.cross) cross[Number(end)] = join.cross;
   const widthAt = (pnt) => pnt.width ?? p.width ?? 4;
   const bankAt = (pnt) => pnt.bank ?? p.bank ?? 0;
   for (let i = 0; i < path.length - 1; i++) {
@@ -157,14 +160,66 @@ export function ribbonGeometry(p) {
       steps = Math.ceil(Math.hypot(z.x - a.x, z.z - a.z) * 2);
     for (let j = 0; j < (i === path.length - 2 ? steps + 1 : steps); j++) {
       const t = j / steps;
+      const length = Math.hypot(z.x - a.x, z.z - a.z);
+      let heightT = t;
+      // At multi-way forks the small central landing and incoming edges meet
+      // on one plane. Ease back to the original grade outside that landing.
+      for (const [end, join] of Object.entries(p.joins ?? {})) {
+        if (!join.fork) continue;
+        const start = Number(end) === 0;
+        if (start ? i !== 0 : i !== path.length - 2) continue;
+        const flat = Math.min(join.flat, length * 0.24),
+          blend = Math.min(1, length * 0.16);
+        const distance = (start ? t : 1 - t) * length;
+        if (distance < flat + blend) {
+          const u = Math.max(0, (distance - flat) / blend);
+          const h =
+            ((flat + blend) * (3 * u * u - 2 * u * u * u) +
+              blend * (u * u * u - u * u)) /
+            length;
+          heightT = start ? h : 1 - h;
+        }
+      }
+      const blendCross = (axis) => {
+        let n =
+          originalCross[i][axis] +
+          (originalCross[i + 1][axis] - originalCross[i][axis]) * t;
+        if (i === 0 && p.joins?.[0]?.cross)
+          n +=
+            (cross[0][axis] - originalCross[0][axis]) *
+            Math.max(0, 1 - (t * length) / 1.5) ** 2;
+        if (i === path.length - 2 && p.joins?.[path.length - 1]?.cross)
+          n +=
+            (cross[i + 1][axis] - originalCross[i + 1][axis]) *
+            Math.max(0, 1 - ((1 - t) * length) / 1.5) ** 2;
+        return n;
+      };
+      const blendSection = (key, base) => {
+        if (i === 0 && p.joins?.[0]?.[key] !== undefined)
+          base +=
+            (p.joins[0][key] - (key === "width" ? widthAt(a) : bankAt(a))) *
+            Math.max(0, 1 - (t * length) / 1.5) ** 2;
+        if (
+          i === path.length - 2 &&
+          p.joins?.[path.length - 1]?.[key] !== undefined
+        )
+          base +=
+            (p.joins[path.length - 1][key] -
+              (key === "width" ? widthAt(z) : bankAt(z))) *
+            Math.max(0, 1 - ((1 - t) * length) / 1.5) ** 2;
+        return base;
+      };
       rows.push({
         x: a.x + (z.x - a.x) * t,
-        y: a.y + (z.y - a.y) * t,
+        y: a.y + (z.y - a.y) * heightT,
         z: a.z + (z.z - a.z) * t,
-        nx: cross[i].x + (cross[i + 1].x - cross[i].x) * t,
-        nz: cross[i].z + (cross[i + 1].z - cross[i].z) * t,
-        width: widthAt(a) + (widthAt(z) - widthAt(a)) * t,
-        bank: bankAt(a) + (bankAt(z) - bankAt(a)) * t,
+        nx: blendCross("x"),
+        nz: blendCross("z"),
+        width: blendSection(
+          "width",
+          widthAt(a) + (widthAt(z) - widthAt(a)) * t,
+        ),
+        bank: blendSection("bank", bankAt(a) + (bankAt(z) - bankAt(a)) * t),
       });
     }
   }
@@ -206,6 +261,7 @@ export function ribbonGeometry(p) {
     }
   for (const i of [0, rows.length - 1])
     for (let k = 0; k < bands; k++) {
+      if (p.joins?.[i === 0 ? 0 : path.length - 1]) continue;
       const a = at(i, k),
         z = at(i, k + 1);
       if (i === 0)

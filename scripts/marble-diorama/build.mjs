@@ -25,6 +25,8 @@ await build({
   outfile: fileURLToPath(new URL("game.js", out)),
   legalComments: "linked",
 });
+const legalPath = new URL("game.js.LEGAL.txt", out);
+await writeFile(legalPath, (await readFile(legalPath, "utf8")).replace(/[ \t]+$/gm, ""));
 await writeFile(
   new URL("style.css", out),
   (await readFile(new URL("src/style.css", import.meta.url), "utf8")).replace(
@@ -41,7 +43,7 @@ for (const asset of ["game.js", "style.css"]) {
 await writeFile(new URL("index.html", out), html);
 await writeFile(
   new URL("THIRD-PARTY-LICENSES.txt", out),
-  `Three.js 0.186.0\n${await readFile("node_modules/three/LICENSE", "utf8")}\nRapier 0.20.0\n${await readFile("node_modules/@dimforge/rapier3d-compat/LICENSE", "utf8")}`,
+  `Three.js 0.186.0\n${await readFile("node_modules/three/LICENSE", "utf8")}\nRapier 0.20.0\n${await readFile("node_modules/@dimforge/rapier3d-compat/LICENSE", "utf8")}\nPolygon Clipping 0.15.7\n${await readFile("node_modules/polygon-clipping/LICENSE.md", "utf8")}\nRobust Predicates\n${await readFile("node_modules/robust-predicates/LICENSE", "utf8")}\nSplaytree 3.2.3\n${(await readFile("node_modules/splaytree/Readme.md", "utf8")).split("The MIT License (MIT)")[1]}`,
 );
 console.log("Built locally bundled Three.js + Rapier:", fileURLToPath(out));
 

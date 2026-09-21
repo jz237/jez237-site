@@ -514,3 +514,9 @@ No clock extension was used. Original soundtrack and quantitative Amiga parity
 also remain open. The unfinished public preview is commit 2e3703951; this
 checkpoint is local development pending its next publication.
 Browser verification: the rebuilt two-player Aerial demo finishes both marbles with zero falls; the result shows Player 1 at 59.55 seconds. No browser errors were logged during this run.
+
+## September 20 - board junction smoothing
+
+Static ribbon ends now share a world-space cross section, width and bank profile. Junction changes taper out within1.5world units; three-way forks use a small rounded landing with eased incoming grades. Internal joined end caps are removed. Horizontal top faces are unioned before triangulation, removing overlapping coplanar surfaces while retaining holes and distinct elevations. Rendering and Rapier consume the same compiled triangles; foundations follow the prepared pieces. The physics version advances to mm-6 so earlier input replays are not incorrectly played against new geometry. Beginner right-fork and Silly second-player demo steering were adjusted for the changed joins.
+
+Validation: exact join profiles and input immutability across all campaign boards; overlap sample covered exactly once; stacked elevations and open holes retained. Full campaign/physics/render/audio regression suite run before release. Close-up Beginner fork visually inspected in browser; detailed full original-game parity remains open.
