@@ -286,17 +286,29 @@ export function aerialCourse() {
   const zones = [];
   // Three mouth locations are visible at 146–154s. Their finite activity is
   // observed; repetition periods remain provisional until a full cycle is traced.
-  for (const [id, l, d, on, phase] of [
-    ["upper", -0.7, 36, 6, 4.5],
-    ["middle", -5.5, 40, 3, 1],
-    ["lower", 1, 52, 5, 0],
+  for (const [id, from, to, fraction, edge, on, phase] of [
+    ["upper", [-2, 36], [-12, 44], 0.25, -1, 6, 4.5],
+    ["middle", [-2, 36], [-12, 44], 0.7, -1, 3, 1],
+    ["lower", [-12, 44], [0, 52], 0.5, 1, 5, 0],
   ]) {
+    const dl = to[0] - from[0],
+      dd = to[1] - from[1];
+    const length = Math.hypot(dl, dd);
+    // The housings sit on the outer edge and face the centerline. The third
+    // intake turns with the next zigzag leg, as in the Amiga 150.80s frame.
+    const nl = (-dd / length) * edge,
+      nd = (dl / length) * edge;
+    const l = from[0] + dl * fraction - nl * 1.3;
+    const d = from[1] + dd * fraction - nd * 1.3;
+    const direction = worldPoint(nl, 0, nd);
+    const angle = Math.atan2(-direction.z, -direction.x);
     const h = 12.5,
       presence = { period: 10, on, phase, transition: 0.24 };
     parts.push(
       deck(`${id}-vacuum-mouth`, l, d, 0.5, 2.4, h, {
         kind: "piston",
         profile: "vacuum-mouth",
+        angle,
         h: 1.9,
         material: "yellow",
         motion: { axis: "y", amplitude: 0, period: 10 },
@@ -306,10 +318,11 @@ export function aerialCourse() {
     zones.push({
       kind: "vacuum",
       mouth: `${id}-vacuum-mouth`,
+      intakeHeight: 0.9,
       ...worldPoint(l, h + 0.9, d),
       radius: 4,
       strength: 1.3,
-      direction: worldPoint(-1, 0, 0),
+      direction,
     });
   }
   const route = [

@@ -62,3 +62,24 @@ poses when paused, and closed fragment geometry with the original marble volume.
 Browser close-ups verify the full intake, fragment intake, partial withdrawal,
 returning fragments, full withdrawal and the restored marble without captured
 warnings/errors.
+
+
+## Track-edge alignment follow-up (mm-19)
+
+The 150.80s frame shows the first two mouths on the rear edge of one zigzag
+leg, facing onto the track, and the third mouth turned onto the following leg.
+The earlier reconstruction incorrectly gave all three the same orientation.
+The housings now align with the supporting edge: two on the [-2,36] to [-12,44]
+authoring segment, one on the [-12,44] to [0,52] segment. Their fractional
+positions (0.25,0.70,0.50) and 1.3-unit centerline offset remain approximations;
+the original absolute dimensions have not been recovered. A collider ray checks
+that a point in front of each opening lies on the playable surface.
+
+A linked housing now owns the intake origin and facing direction. The zone's
+local intakeHeight specifies the height within that housing. Editing either the
+housing or its linked zone moves/rotates both, and deleting either removes the
+complete hazard. JSON export/import retains the relationship. Stale absolute
+zone coordinates cannot leave a second invisible suction point behind.
+Physical front-side capture and rear-side rejection also pass after moving and
+rotating the edited housing. Existing acid, pipe, landing-pad and general editor
+transform checks retain their behavior.

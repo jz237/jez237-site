@@ -15,7 +15,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-18";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-19";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -356,7 +356,7 @@ export class Simulation {
           );
         if (dist < zone.radius && zone.kind === "hazard") this.fall(p);
         if (zone.kind === "vacuum" && dist < zone.radius && dist > 0.01) {
-          const q = zone.direction,
+          const q = vacuum.direction,
             dot = ((pos.x - center.x) * q.x + (pos.z - center.z) * q.z) / dist;
           if (dot > 0.35) {
             const force =

@@ -4,7 +4,12 @@ import { vacuumAt } from "../src/vacuum.mjs";
 import { vacuumFragments, updateVacuumFragments } from "../src/vacuum-view.mjs";
 import assert from "node:assert/strict";
 import { Simulation, initPhysics } from "../src/physics.mjs";
-import { blankCourse } from "../src/workshop.mjs";
+import {
+  blankCourse,
+  moveWorkshopObject,
+  rotateWorkshopObject,
+  removeWorkshopObject,
+} from "../src/workshop.mjs";
 import { waveStrip } from "../src/wave.mjs";
 import { surfaceGeometry } from "../src/render-surface.mjs";
 import { actorShapes } from "../src/actor-shapes.mjs";
@@ -571,4 +576,107 @@ test("vacuum fragments are closed solid sectors that reconstruct a whole marble"
   const volume = (4 / 3) * Math.PI * 0.55 ** 3;
   assert.ok(totalVolume > volume * 0.98 && totalVolume <= volume);
   material.dispose();
+});
+
+test("Aerial vacuum openings face the track, and the lower housing turns with the next leg", () => {
+  const c = aerialCourse(),
+    sim = new Simulation(c, { untimed: true });
+  const directions = [];
+  sim.step(); // Populate Rapier's broad-phase query structures.
+  for (const zone of c.zones.filter((z) => z.kind === "vacuum")) {
+    const mouth = c.parts.find((p) => p.id === zone.mouth);
+    const state = vacuumAt(zone, 1, c.parts),
+      normal = state.direction;
+    directions.push(normal);
+    // Probe the actual playable support in front of each intake.
+    const origin = {
+      x: mouth.x + normal.x,
+      y: mouth.y + 0.1,
+      z: mouth.z + normal.z,
+    };
+    const hit = sim.world.castRay(
+      { origin, dir: { x: 0, y: -1, z: 0 } },
+      0.2,
+      true,
+    );
+    assert.ok(hit, `${mouth.id} must face supported track`);
+    assert.ok(Math.abs(hit.timeOfImpact - 0.1) < 0.001);
+    assert.ok(
+      Math.hypot(
+        normal.x + Math.cos(mouth.angle),
+        normal.z + Math.sin(mouth.angle),
+      ) < 1e-12,
+    );
+  }
+  assert.deepEqual(directions[0], directions[1]);
+  // Both banks face toward increasing course depth, from opposite sides.
+  assert.ok(directions.every((n) => n.x + n.z > 0));
+  assert.ok(directions[0].x - directions[0].z > 0);
+  assert.ok(directions[2].x - directions[2].z < 0);
+  sim.dispose();
+});
+
+test("moving, rotating and removing an edited vacuum keeps the physical housing and intake together", () => {
+  const c = aerialCourse(),
+    zone = c.zones.find((z) => z.mouth),
+    mouth = c.parts.find((p) => p.id === zone.mouth);
+  const initial = vacuumAt(zone, 0, c.parts);
+  moveWorkshopObject(c, `part:${mouth.id}`, {
+    x: mouth.x + 4,
+    y: mouth.y + 2,
+    z: mouth.z - 3,
+  });
+  rotateWorkshopObject(c, `part:${mouth.id}`, Math.PI / 2);
+  let state = vacuumAt(zone, 0, c.parts);
+  assert.ok(Math.abs(state.position.x - initial.position.x - 4) < 1e-10);
+  assert.ok(Math.abs(state.position.y - initial.position.y - 2) < 1e-10);
+  assert.ok(Math.abs(state.position.z - initial.position.z + 3) < 1e-10);
+  assert.ok(Math.abs(state.direction.x + initial.direction.z) < 1e-10);
+  assert.ok(Math.abs(state.direction.z - initial.direction.x) < 1e-10);
+  const index = c.zones.indexOf(zone);
+  moveWorkshopObject(c, `zone:${index}`, {
+    x: zone.x - 1,
+    y: zone.y,
+    z: zone.z + 2,
+  });
+  rotateWorkshopObject(c, `zone:${index}`, -Math.PI / 2);
+  state = vacuumAt(zone, 0, c.parts);
+  assert.deepEqual(state.position, { x: zone.x, y: zone.y, z: zone.z });
+  assert.ok(
+    Math.hypot(
+      state.direction.x - initial.direction.x,
+      state.direction.z - initial.direction.z,
+    ) < 1e-10,
+  );
+  validateCourse(c);
+  const restored = JSON.parse(JSON.stringify(c));
+  assert.deepEqual(vacuumAt(restored.zones[index], 0, restored.parts), state);
+  // Stale absolute zone coordinates cannot create an invisible second intake.
+  Object.assign(zone, {
+    x: 999,
+    y: 999,
+    z: 999,
+    direction: { x: 0, y: 0, z: 1 },
+  });
+  assert.deepEqual(vacuumAt(zone, 0, c.parts), state);
+  for (const side of [1, -1]) {
+    const physical = blankCourse();
+    physical.parts.push(structuredClone(mouth));
+    physical.zones = [structuredClone(zone)];
+    physical.starts = [
+      {
+        x: state.position.x + state.direction.x * 0.6 * side,
+        y: state.position.y,
+        z: state.position.z + state.direction.z * 0.6 * side,
+      },
+    ];
+    const sim = new Simulation(physical, { untimed: true });
+    sim.step();
+    assert.equal(sim.players[0].status, side === 1 ? "falling" : "racing");
+    sim.dispose();
+  }
+  removeWorkshopObject(c, `zone:${index}`);
+  assert.ok(!c.parts.some((p) => p.id === mouth.id));
+  assert.ok(!c.zones.some((z) => z.mouth === mouth.id));
+  validateCourse(c);
 });

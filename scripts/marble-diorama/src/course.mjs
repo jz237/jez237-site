@@ -497,6 +497,16 @@ export function validateCourse(c) {
       throw Error("Vacuum must reference a valid mouth.");
   for (const z of c.zones ?? [])
     if (
+      z.intakeHeight !== undefined &&
+      (z.kind !== "vacuum" ||
+        !z.mouth ||
+        !finite(z.intakeHeight) ||
+        z.intakeHeight <= 0 ||
+        z.intakeHeight >= (c.parts.find((p) => p.id === z.mouth)?.h ?? 0))
+    )
+      throw Error("Invalid vacuum intake height.");
+  for (const z of c.zones ?? [])
+    if (
       z.kind === "vacuum" &&
       (!z.direction ||
         ![z.direction.x, z.direction.y, z.direction.z].every(finite))

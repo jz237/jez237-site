@@ -14,16 +14,37 @@ export function vacuumPoseAt(mouth, time) {
 
 // A linked vacuum pulls toward its actual moving intake, never an invisible
 // fixed point left above the track after its nozzle has withdrawn.
+export function vacuumMount(mouth, zone) {
+  return {
+    position: {
+      x: mouth.x,
+      y: mouth.y + (zone.intakeHeight ?? mouth.h / 2),
+      z: mouth.z,
+    },
+    direction: {
+      x: -Math.cos(mouth.angle ?? 0),
+      y: 0,
+      z: -Math.sin(mouth.angle ?? 0),
+    },
+  };
+}
+
 export function vacuumAt(zone, time, parts = []) {
   const mouth = zone.mouth ? parts.find((p) => p.id === zone.mouth) : null;
   const state = presenceAt(mouth ?? zone, time);
-  const position = { x: zone.x, y: zone.y, z: zone.z };
-  if (mouth) {
-    const pose = vacuumPoseAt(mouth, time).position;
-    position.x += pose.x - mouth.x;
-    position.y += pose.y - mouth.y;
-    position.z += pose.z - mouth.z;
-  }
+  const mount = mouth
+    ? vacuumMount(mouth, zone)
+    : {
+        position: { x: zone.x, y: zone.y, z: zone.z },
+        direction: zone.direction,
+      };
+  const position = { ...mount.position };
+  if (mouth) position.y += vacuumPoseAt(mouth, time).position.y - mouth.y;
   const active = state.visible && (!mouth || position.y > mouth.y);
-  return { position, active, strength: active ? state.deployment : 0 };
+  return {
+    position,
+    direction: mount.direction,
+    active,
+    strength: active ? state.deployment : 0,
+  };
 }

@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-18",
-  "generatedAt": "2026-09-21T16:20:55.261Z",
+  "physics": "rapier-0.20.0-mm-19",
+  "generatedAt": "2026-09-21T16:35:50.771Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -45,10 +45,10 @@
         },
         {
           "course": "aerial",
-          "ticks": 7343,
+          "ticks": 7341,
           "players": [
             {
-              "time": 13.19401041667456,
+              "time": 13.207031250007892,
               "score": 29831,
               "deaths": 0,
               "status": "finished"
@@ -141,16 +141,16 @@
         },
         {
           "course": "aerial",
-          "ticks": 7982,
+          "ticks": 7980,
           "players": [
             {
-              "time": 9.194010416673471,
+              "time": 9.207031250006803,
               "score": 28531,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 4.0338541666730325,
+              "time": 4.0468750000063665,
               "score": 24048,
               "deaths": 0,
               "status": "finished"

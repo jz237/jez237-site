@@ -812,3 +812,26 @@ and diff checks pass. Physics/replay version is mm-18.
 Fresh timed measurements retain zero falls throughout: solo Aerial 61.1917s,
 Silly 71.5167s with 0.1276 clock left, Ultimate timeout 32s; paired Aerial 66.5167s,
 then both Silly timeouts by 55.0417s. Full campaign acceptance remains open.
+
+
+### September 21 - vacuum alignment and attached workshop hazards
+
+Compared the original 150.80s frame with close-up rendered views. The first pair
+now mounts on the rear edge facing the track, and the lower mouth turns onto
+the next zigzag leg. Physical support rays verify the front of each opening.
+The housing defines suction origin/direction even after workshop relocation,
+rotation and JSON round trips; stale absolute zone fields are ignored. Removing
+either linked item removes the complete hazard. Physical front capture/rear
+rejection after editing and the existing acid/pipe/landing/general editor checks
+pass. Exact positions and dimensions remain reconstructed; see AERIAL-VACUUMS.md.
+Physics/replay version is mm-19.
+
+Fresh mm-19 timed measurements: solo Aerial 61.175s, Silly 71.5167s with
+0.1276 clock left, then Ultimate timeout at 32s. Paired Aerial completes by
+66.5s, then both expire in Silly by 55.0417s. All measured runs have zero falls.
+
+Release checks: all 142 tests pass (262402ms); production build and diff checks
+pass. A local production-browser two-player Aerial demonstration finishes with
+zero falls for both players and no captured warnings/errors. Close-up inspection
+shows both upper openings on the rear edge and the lower opening turned onto
+the following leg. This release does not establish full Amiga feature parity.
