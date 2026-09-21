@@ -1,9 +1,11 @@
+import { acidShape } from "./acid.mjs";
 // Articulated solids used by both Rapier and Three. Time is simulation time,
 // so pausing, replaying and changing render cadence cannot change a hazard.
 // The Amiga's 100.0–101.2s muncher curl and 238.0–239.3s bird wing poses inform
 // these reconstructions; the original AI and exact sprite timing remain open.
 const TAU = Math.PI * 2;
 const shapeCache = new Map();
+const miniAcidCache = new WeakMap();
 export const MUNCHER_HALF_HEIGHT = 0.25;
 
 function ellipsoid(name, color, center, radii, roll = 0, pitch = 0) {
@@ -54,11 +56,34 @@ function ellipsoid(name, color, center, radii, roll = 0, pitch = 0) {
 }
 
 export function actorShapes(def, time) {
-  if (!["bird", "muncher"].includes(def.kind)) return null;
+  const kind = def.kind === "mini" ? (def.form ?? "steelie") : def.kind;
+  if (def.kind === "mini" && kind === "acid") {
+    const source = acidShape(
+      { radius: def.radius, wobblePhase: def.phase ?? 0 },
+      time,
+    );
+    // Acid uses its complete concave mesh, including the empty notches.
+    if (!miniAcidCache.has(source)) {
+      const vertices = source.vertices.slice();
+      for (let i = 1; i < vertices.length; i += 3) vertices[i] -= def.radius;
+      miniAcidCache.set(source, [
+        {
+          name: "acid",
+          color: "#39b51b",
+          vertices,
+          indices: source.indices,
+          dynamic: true,
+          trimesh: true,
+        },
+      ]);
+    }
+    return miniAcidCache.get(source);
+  }
+  if (!["bird", "muncher"].includes(kind)) return null;
   const period = def.kind === "bird" ? 1 / 3.2 : 0.6;
   const phase = (((time / period + (def.phase ?? 0)) % 1) + 1) % 1;
   const frame = Math.floor(phase * 48);
-  const key = `${def.kind}/${def.radius}/${frame}`;
+  const key = `${def.kind}/${def.form ?? ""}/${def.radius}/${frame}`;
   if (!shapeCache.has(key)) {
     if (shapeCache.size >= 512)
       shapeCache.delete(shapeCache.keys().next().value);
@@ -112,10 +137,13 @@ function buildActorShapes(def, time) {
       ),
     ];
   }
-  if (def.kind === "muncher") {
+  if (
+    def.kind === "muncher" ||
+    (def.kind === "mini" && def.form === "muncher")
+  ) {
     // Feet retain their supporting footprint while the upper body curls.
     const curl = (1 - Math.cos(TAU * (time / 0.6 + phase))) / 2;
-    const base = -r - MUNCHER_HALF_HEIGHT;
+    const base = -r - (def.kind === "mini" ? 0 : MUNCHER_HALF_HEIGHT);
     return [
       ellipsoid(
         "foot",

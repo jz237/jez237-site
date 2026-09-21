@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**127 automated tests pass. All six campaign races and all three bonus courses
+**130 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-13`.
+Current simulation/replay version: `rapier-0.20.0-mm-14`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -683,3 +683,27 @@ Ultimate at 32.00s and paired play expires in Silly by 57.60s. No physics, clock
 route controls or acceptance assertions changed. Full parity remains unfinished,
 including the original Silly transfer geometry and miniature appearances.
 See TRANSFER-SCORING.md for evidence and limitations.
+
+
+### September 21 — Silly miniature forms and physical animation
+
+The miniature room now contains three steelies, three curling munchers and
+three low deforming acid puddles, replacing six spherical placeholders. New
+native checks verify support within 1% of radius, constant mass, matching
+visible/collision vertices, snapshot continuation, and exactly-once physical
+collection for all three forms. Imports preserve and validate the subtype.
+See SILLY-MINIATURES.md for original frames and reconstruction limits.
+
+The paired browser demo finishes both players with zero falls and no captured
+warnings/errors: Player 1 scores 9385; Player 2 scores 9383 and finishes first
+at 64.78s. Close-ups on the actual board show the changing curl and low puddle.
+The demo still requires six pickups; the three newly restored inhabitants
+remain available on the board. Existing pickup/finish assertions are retained.
+
+Updated mm-14 timed measurements show solo Silly finishing at 73.225s with
+0.793 clock units left. Solo still expires in Ultimate after 32.00s; paired play
+still expires in Silly by 57.60s. Full timed campaign acceptance remains open.
+The paired demo's right bird-field steering speed changes from 2.5 to 3.2;
+original clocks, player control limits and bird collision/flight paths are intact.
+
+Release checks: 130/130 tests pass in 241,167ms; production build and diff check pass.

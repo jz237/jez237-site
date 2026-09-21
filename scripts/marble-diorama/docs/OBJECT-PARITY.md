@@ -21,13 +21,13 @@ not included in the published game.
 | Aerial red paddle, 160–164s | Frame sequence shows a cup holding the marble, hinging upward, and throwing it onto an upper ledge. Replaced the overhead crusher with a red recessed cup, stem, metal hinge, and contact-triggered stroke. The moving concave collider provides the launch; no injected impulse or teleport. Ordinary held-input entry and upper-ledge landing pass. | Dimensions, placement, and 0.9s stroke are reconstructed. The observed ~0.5s dwell is represented; original launch law and exact return destination still need measurement. Gray ramp geometry remains open. |
 | Aerial vacuums, 146–154s | Three yellow mouths appear along the left zigzag; at least two disappear during the inspected interval. Added the middle mouth, rounded hollow frames, and shared visibility/collision/suction/audio gating. Fixed killing from behind the intake and moved frames onto the track edges. | Ten-second repeat periods and 3/5/6s active windows are provisional. Full original respawn cadence, intake deformation, and capture animation are not yet reproduced. |
 | Silly birds, 238–239s | Original purple birds have changing wing silhouettes during crossings. Replaced rigid diamonds with articulated purple bodies, heads, beaks, tails and independently posed wings. Wing collision solids deform with the visible wings. | Straight crossing paths, bird count/rest intervals and 3.2Hz wingbeat are provisional; exact original flight/impact animation is not certified. |
-| Silly miniatures / uplift | Existing miniature contacts award +500/+3; completing the upward transfer now pays the footage-verified 2000. | Miniature creature appearance and exact pickup awards remain open. The original red intake/outlet housing differs from the current tube; 215.5–218.5s does not prove a rotating lift. See TRANSFER-SCORING.md. |
+| Silly miniatures / uplift | Restored nine miniatures in three forms (steelie, curling muncher, deforming puddle), with shared visible/collision shapes; contacts award +500/+3; completing the upward transfer now pays the footage-verified 2000. | Exact miniature layout, dimensions, movement and repeat policy remain open; see SILLY-MINIATURES.md. The original red intake/outlet housing differs from the current tube; 215.5–218.5s does not prove a rotating lift. See TRANSFER-SCORING.md. |
 | Ultimate opening, 277–283s | Removed the unsupported serial three-launch route. The starting field now drops onto one launcher island, which sends the marble to either of two lower landing islands; each has its own ice bridge. Two contact-triggered hinged arms replace static pads. Both approaches are checked with ordinary controls and one launch, with no visit to the opposite island. | The paired arms, velocities and stroke are a playable reconstruction, **not a recovered launch law**. Starting recess, gold guide shape, exact dimensions and observed 2000 award trigger remain open. The recording establishes the left route; full original right-route traversal is still unverified. |
 | Ultimate disappearing bridge | Timed removal and restoration of physical support already exist and replay correctly. | Exact original tile pattern, positions, cadence and all alternate routes remain unverified. |
 
 ## Implementation safeguards and validation
 
-- Physics/replay version is `rapier-0.20.0-mm-13`: old recordings cannot silently
+- Physics/replay version is `rapier-0.20.0-mm-14`: old recordings cannot silently
   claim compatible outcomes after collision, layout, and clock changes.
 - Enemy articulation is a pure function of the simulation clock. Shape reuse is
   bounded; fixed body solids are not rebuilt every tick. Rendering uses separate
@@ -40,7 +40,7 @@ not included in the published game.
 - Remaining work above is not hidden by the Playable Games listing. That listing
   was explicitly requested for an unfinished playable reconstruction.
 
-Release checks: 127/127 automated tests pass; production build and diff check pass.
+Release checks: 130/130 automated tests pass; production build and diff check pass.
 Silly solo and Ultimate two-player browser demos finish without falls or captured
 console errors. The full timed campaign still fails; see VALIDATION.md.
 
