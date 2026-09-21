@@ -1,7 +1,8 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092106';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092106';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092106';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092107';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092107';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092107';
+import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092107';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -51,7 +52,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     record.pin.remove(); group.remove(record.mesh, record.line); record.line.geometry.dispose();
     if (record.entity && datasource) datasource.entities.remove(record.entity);
     records.delete(record.data.id);
-    if (selected === record.data.id) { selected = null; card.hidden = true; }
+    if (selected === record.data.id) close();
     if (following === record.data.id) stopFollow();
   }
   function visibleRecords() {
@@ -85,7 +86,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     const timeout = setTimeout(() => request.abort(), 12000);
     try {
       // Versioned URL also avoids an hour-long failure cached by earlier releases.
-      const response = await fetch('aircraft?v=philly-2026092106', {
+      const response = await fetch('aircraft?v=philly-2026092107', {
         signal: request.signal, cache: 'no-store' });
       const doc = await response.json();
       if (ticket !== generation || disposed || !enabled) return;
@@ -135,6 +136,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   function show(id) {
     const r = records.get(id); if (!r) return;
     hold(); selected = id; card.hidden = false; card.replaceChildren();
+    card.dataset.callsign = r.data.callsign || '';
     const header = el('div', 'aircraft-card-head');
     const title = el('div', ''); title.append(el('small', '', 'AIRCRAFT / DELAWARE VALLEY'),
       el('h3', '', name(r.data)));
@@ -143,6 +145,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     x.onclick = close; header.append(title, x); card.append(header);
     card.append(el('p', 'aircraft-identity',
       `${r.data.type || 'Type unknown'} · ${r.data.registration || 'Registration unavailable'}`));
+    card.append(aircraftRouteCard(r.data, () => !disposed && !card.hidden && selected === id
+      ? records.get(id)?.data : null));
     const facts = el('dl', 'aircraft-facts');
     for (const [label, value] of [['Reported altitude', `${number(r.data.altitudeFt)} ft`],
       ['Ground speed', r.data.speed === null ? 'Not reported' : `${number(r.data.speed)} kt`],
@@ -166,6 +170,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   }
   function updateCard() {
     const r = records.get(selected); if (!r || card.hidden) return;
+    if (card.dataset.callsign !== (r.data.callsign || '')) { show(selected); return; }
     const age = Math.round(ageSeconds(r.data));
     card.querySelector('.aircraft-age').textContent = age > STALE_AFTER
       ? `Stale position · received ${age}s ago; movement paused`
@@ -297,7 +302,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
         lastReport = time; report(); updateCard();
         if (selected && !card.hidden) {
           const r = records.get(selected);
-          const values = card.querySelectorAll('dd');
+          const values = card.querySelectorAll('.aircraft-facts dd');
           if (r && values.length === 4) {
             values[0].textContent = `${number(r.data.altitudeFt)} ft`;
             values[1].textContent = r.data.speed === null ? 'Not reported' : `${number(r.data.speed)} kt`;

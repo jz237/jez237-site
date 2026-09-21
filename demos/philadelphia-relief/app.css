@@ -1627,6 +1627,16 @@ body.cinema .photo-credits { bottom: 8px; }
 .aircraft-card-head button { background: #24434f; color: white; border: 1px solid #a9cbd54d;
   border-radius: 50%; width: 32px; height: 32px; cursor: pointer; }
 .aircraft-identity { color: #bcd2d9; }
+.aircraft-route { padding: 12px 0; border-block: 1px solid #ffffff20; color: #d3e0e5; font-size: 12px; }
+.aircraft-route-heading { display: block; margin-bottom: 9px; color: #83dce7; font-size: 9px;
+  font-weight: 700; letter-spacing: 1.3px; }
+.aircraft-route-stop { display: grid; grid-template-columns: 30px 40px minmax(0, 1fr);
+  align-items: baseline; gap: 8px; margin: 7px 0; }
+.aircraft-route-stop > span:first-child { color: #97aeb8; font-size: 10px; }
+.aircraft-route-stop strong { color: #fff; font-size: 16px; letter-spacing: .5px; }
+.aircraft-route-city { overflow-wrap: anywhere; }
+.aircraft-route-note { display: block; margin-top: 10px; color: #a9bdc7; font-size: 10px; line-height: 1.5; }
+.aircraft-route-source { display: inline-block; margin-top: 6px; color: #86cfda; font-size: 10px; }
 .aircraft-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 16px 0; }
 .aircraft-facts dt { color: #a9c3cd; font-size: 10px; }
 .aircraft-facts dd { margin: 2px 0 0; font: 600 16px var(--font); }
