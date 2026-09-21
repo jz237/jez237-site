@@ -1,5 +1,5 @@
-import { regionalCameras } from './camera-data.js?v=philly-2026092007';
-import { mountCameraMedia } from './camera-media.js?v=philly-2026092007';
+import { regionalCameras } from './camera-data.js?v=philly-2026092101';
+import { mountCameraMedia } from './camera-media.js?v=philly-2026092101';
 
 const host = document.getElementById('cameraMedia');
 const status = document.getElementById('cameraStatus');

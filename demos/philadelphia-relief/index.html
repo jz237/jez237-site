@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092007" />
+<link rel="stylesheet" href="app.css?v=philly-2026092101" />
 </head>
 <body data-theme="dusk">
 
@@ -219,6 +219,33 @@
       </div>
       <p class="camera-layer-help"><i></i> Neighborhood views <i class="traffic"></i> Traffic cameras
         <br>Hover or tap a pin. Numbers group nearby cameras.</p>
+    </div>
+  </div>
+  <div class="camera-layer-control aircraft-controls">
+    <label class="camera-layer-toggle"><input type="checkbox" id="aircraftToggle"
+      aria-controls="aircraftOptions"> <span>Aircraft over the region</span><span aria-hidden="true">✈</span></label>
+    <div id="aircraftOptions" hidden>
+      <p id="aircraftStatus" role="status"></p>
+      <div class="camera-layer-filters">
+        <select id="aircraftFilter" aria-label="Aircraft types">
+          <option value="all">All airborne aircraft</option>
+          <option value="low">Below 10,000 ft</option>
+          <option value="large">Large aircraft</option>
+          <option value="helicopter">Helicopters</option>
+        </select>
+        <select id="aircraftJump" aria-label="Follow an aircraft">
+          <option value="">Choose an aircraft…</option>
+        </select>
+      </div>
+      <div class="aircraft-actions">
+        <label><input type="checkbox" id="aircraftTrails" checked> Flight trails</label>
+        <button type="button" id="aircraftReturn" hidden>Return to map</button>
+        <button type="button" id="aircraftRetry" hidden>Retry feed</button>
+      </div>
+      <p class="aircraft-source">Near-live · hover or tap a plane. Coverage varies.
+        <a href="https://www.adsb.lol/" target="_blank" rel="noopener noreferrer">ADSB.lol</a> ·
+        <a href="https://opendatacommons.org/licenses/odbl/1-0/" target="_blank"
+          rel="noopener noreferrer">ODbL</a> · <a href="aircraft" target="_blank">Regional data</a></p>
     </div>
   </div>
 </section>
@@ -648,7 +675,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092007"></script>
+<script type="module" src="src/main.js?v=philly-2026092101"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

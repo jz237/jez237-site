@@ -49,6 +49,8 @@ const SECRET_PATTERNS = [
  * About panel are fine; anything the code would *fetch* is not.
  */
 const ALLOWED_LINK_HOSTS = [
+  'www.adsb.lol',
+  'opendatacommons.org',
   'registry.opendata.aws',
   'www.openstreetmap.org',
   'openstreetmap.org',

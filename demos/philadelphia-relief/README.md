@@ -1,3 +1,36 @@
+## Aircraft over the region — September 20, 2026
+
+An opt-in aircraft layer shares geographic reports between the Three.js diorama
+and Cesium photographic view. It includes original generic 3D models, hover/tap
+details, airborne/low-altitude/large-aircraft/helicopter filters, session flight
+trails, and aircraft-follow with a return-to-map action. Aircraft are displayed
+only inside the existing Philadelphia bounds. Models are enlarged for visibility;
+the card retains reported altitude and identifies its measurement type. Diorama
+height adds the exaggerated ground offset, while the photographic view prefers
+reported geometric height and labels the barometric fallback.
+
+`functions/demos/philadelphia-relief/aircraft.js` fetches one fixed 45-nautical-mile
+circle from the public ADSB.lol API and filters to the map rectangle. The response
+is bounded to 1 MiB, validated, stripped to display fields, and cached for 15
+seconds per Cloudflare edge. There are no credentials, paid services, scheduled
+background jobs, arbitrary upstream URLs, or permanent flight-history storage.
+The browser polls every 15 seconds only while enabled and visible; failures back
+off to 30 seconds. Disabling, hiding the tab, and leaving the page cancel requests.
+
+Movement interpolates actual observations with a 20-second playback buffer and
+never extrapolates future positions. Reduced-motion users receive direct report
+updates. Reports older than 45 seconds are marked stale, following stops, and
+aircraft disappear after 120 seconds. Trails collect up to three minutes of
+observations in the current session and break at implausible jumps or long gaps.
+Coverage, latency, and provider availability vary; this is not a navigation feed.
+
+Sources: [ADSB.lol API](https://www.adsb.lol/docs/open-data/api/),
+[API schema](https://api.adsb.lol/docs), and
+[ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/).
+Attribution, license, and the transformed regional data are linked beside the toggle.
+Original model source: `src/aircraft-model.js`; rebuild its Cesium GLB with
+`node tools/build-aircraft.mjs`.
+
 ## Expanded regional previews — September 20, 2026
 
 The camera layer now includes 728 mapped views: 569 PennDOT/511PA locations,
