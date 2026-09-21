@@ -6,6 +6,13 @@ const RELAY = 'https://philly-aircraft-relay.jez237.workers.dev/aircraft';
 const headers = { 'Content-Type': 'application/json; charset=utf-8',
   'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'public, max-age=15' };
 
+// Provider backoff belongs in the shared server cache, never in a visitor's browser.
+function forBrowser(response) {
+  const publicHeaders = new Headers(response.headers);
+  publicHeaders.set('Cache-Control', 'no-store');
+  return new Response(response.body, { status: response.status, headers: publicHeaders });
+}
+
 async function readBounded(response, relayed = false) {
   if (!response.ok || !response.body) {
     const seconds = Number(response.headers.get('Retry-After'));
@@ -37,7 +44,7 @@ export async function onRequest(context) {
   const url = new URL(context.request.url);
   const relayed = !!context.env?.AIRCRAFT_RELAY_KEY;
   const key = new Request(`${url.origin}/demos/philadelphia-relief/aircraft?schema=3&relay=${relayed ? 1 : 0}`);
-  const cached = await caches.default.match(key); if (cached) return cached;
+  const cached = await caches.default.match(key); if (cached) return forBrowser(cached);
   let response;
   try {
     const upstream = await fetch(relayed ? RELAY : FEED, { signal: AbortSignal.timeout(relayed ? 10500 : 9000),
@@ -64,5 +71,5 @@ export async function onRequest(context) {
         'Retry-After': String(retryAfter) } });
   }
   context.waitUntil(caches.default.put(key, response.clone()).catch(() => {}));
-  return response;
+  return forBrowser(response);
 }

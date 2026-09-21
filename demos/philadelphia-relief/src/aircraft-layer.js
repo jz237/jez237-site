@@ -1,7 +1,7 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092105';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092105';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092105';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092106';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092106';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092106';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -63,11 +63,11 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     const age = lastPoll ? Math.round((Date.now() - lastPoll) / 1000) : 0;
     const unavailable = relayUnavailable ? 'Computer relay offline or feed unavailable' : 'Feed unavailable';
     const waiting = `${rows.length} last-known aircraft. Retry in up to ${retrySeconds}s.`;
-    status.textContent = accessRequired ? 'Live aircraft need provider approval. Tracking is not active.'
-      : loading && !lastPoll ? 'Finding aircraft over the Delaware Valley…'
+    status.textContent = loading && !lastPoll ? 'Finding aircraft over the Delaware Valley…'
+      : accessRequired ? 'Live aircraft need provider approval. Tracking is not active.'
       : failed ? `${unavailable} · ${waiting}`
       : `${rows.length} aircraft · ${fresh} recent · checked ${age}s ago${homeRelay ? ' · home relay' : ''}`;
-    retry.hidden = !failed || accessRequired;
+    retry.hidden = !failed || loading;
   }
   function populate() {
     const selectedValue = jump.value;
@@ -84,8 +84,11 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     const request = new AbortController(); controller = request;
     const timeout = setTimeout(() => request.abort(), 12000);
     try {
-      const response = await fetch('aircraft', { signal: request.signal });
+      // Versioned URL also avoids an hour-long failure cached by earlier releases.
+      const response = await fetch('aircraft?v=philly-2026092106', {
+        signal: request.signal, cache: 'no-store' });
       const doc = await response.json();
+      if (ticket !== generation || disposed || !enabled) return;
       if (!response.ok) {
         accessRequired = doc.accessRequired === true;
         relayUnavailable = doc.relayUnavailable === true;
@@ -93,7 +96,6 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
         throw new Error('Feed unavailable');
       }
       if (!Array.isArray(doc.aircraft) || !Number.isFinite(doc.timestamp)) throw new Error('Invalid feed');
-      if (ticket !== generation || disposed || !enabled) return;
       if (Date.now() - doc.timestamp > 120000) throw new Error('Old feed');
       for (const a of doc.aircraft.slice(0, 300)) {
         if (!inFlightBounds(a) || !/^[a-f0-9]{6}$/.test(a.id) || !Number.isFinite(a.height)
