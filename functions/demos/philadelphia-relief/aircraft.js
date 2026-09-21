@@ -7,7 +7,7 @@ const headers = { 'Content-Type': 'application/json; charset=utf-8',
 
 async function readBounded(response) {
   if (!response.ok || !response.body) {
-    await response.body?.cancel(); throw new Error('Aircraft provider unavailable');
+    await response.body?.cancel(); throw new Error(`Provider HTTP ${response.status}`);
   }
   const reader = response.body.getReader(), chunks = []; let size = 0;
   try {
@@ -37,7 +37,12 @@ export async function onRequest(context) {
       cf: { cacheEverything: true, cacheTtlByStatus: { '200-299': 15, '400-599': 30 } } });
     const data = compactAircraft(await readBounded(upstream));
     response = new Response(JSON.stringify(data), { headers });
-  } catch {
+  } catch (error) {
+    // Fixed diagnostic categories only; never expose response bodies or request metadata.
+    const detail = /^Provider HTTP \d{3}$/.test(error.message) ? error.message
+      : ['Invalid aircraft feed', 'Outdated aircraft feed', 'Aircraft response too large'].includes(error.message)
+        ? error.message : 'Provider connection failed';
+    console.warn(JSON.stringify({ event: 'aircraft-feed-unavailable', detail }));
     response = new Response(JSON.stringify({ error: 'Aircraft feed temporarily unavailable' }),
       { status: 503, headers: { ...headers, 'Cache-Control': 'public, max-age=30', 'Retry-After': '30' } });
   }
