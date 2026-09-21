@@ -1,5 +1,5 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092114';
+  from './photo-policy.js?v=philly-2026092115';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -56,6 +56,16 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     const C = window.Cesium;
     const camera = viewer.camera, mapped = photoCamera(pose, w / h);
     camera.frustum.fov = mapped.fov;
+    viewer.scene.backgroundColor = C.Color.fromCssColorString(pose.flightView ? '#bacfdc' : '#203b43');
+    if (pose.flightView) {
+      const ride = pose.flightView;
+      camera.lookAtTransform(C.Matrix4.IDENTITY);
+      camera.setView({ destination: C.Cartesian3.fromDegrees(ride.lon, ride.lat,
+        Math.max(sampleElevation(ride.lon, ride.lat) + 35, ride.height)),
+      orientation: { heading: C.Math.toRadians(ride.heading),
+        pitch: C.Math.toRadians(ride.pitch), roll: 0 } });
+      viewer.scene.requestRender(); return;
+    }
     camera.lookAt(C.Cartesian3.fromDegrees(pose.lon, pose.lat,
       Number.isFinite(pose.targetAltitude)
         ? Math.max(sampleElevation(pose.lon, pose.lat) + 35, pose.targetAltitude)
@@ -71,7 +81,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092114')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092115')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -215,7 +225,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         firstViewTimer = setTimeout(unavailable, 90000);
       }
       const key = [pose.lon, pose.lat, pose.dist, pose.pitch, pose.bearing,
-        pose.fov, pose.targetAltitude, w, h].join(':');
+        pose.fov, pose.targetAltitude, pose.flightView?.lon, pose.flightView?.lat,
+        pose.flightView?.height, pose.flightView?.heading, pose.flightView?.pitch, w, h].join(':');
       if (key !== lastPoseKey) {
         lastPoseKey = key; lastMotion = performance.now();
         if (w !== resizedWidth || h !== resizedHeight) {

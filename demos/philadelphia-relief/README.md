@@ -1082,3 +1082,26 @@ balanced regional scene with 4× CPU slowdown, 120 GPU timer samples measured a 
 the browser remained around 60 FPS. This is a lab rendering-cost measurement, not an
 older-hardware FPS guarantee. Browser checks cover full-resolution streamed aerials,
 camera and gauge pins, resumed navigation, and live aircraft with trails on/off.
+
+
+### Aircraft ride-along and PHL video (21 September 2026)
+
+Aircraft cards now offer simulated forward, left/right window and chase views in
+both the relief renderer and Cesium photographic 3D. The existing graphics choice
+is preserved, so lighter graphics never starts Cesium. View direction follows
+reported ground track, not aircraft attitude. Buffered reports are interpolated;
+future positions and touchdown are never fabricated. The toolbar labels the view
+as simulated, displays the age of the position being shown, and provides a return
+to the previous map view. Missing track disables entry; stale tracking, disabling
+aircraft and the existing 30-minute session limit exit the view.
+
+The PHL airport camera button is available without aircraft tracking. Its dialog
+loads FOX 29 / WMVision's already-published image widget only on demand and links
+to FOX 29's full airport video page. This is a real ground camera, not onboard
+footage or a guaranteed view of the selected flight. Its preview stops when closed,
+when the tab is hidden, or after one minute. No new service, token or subscription.
+Source checked: https://www.fox29.com/philadelphia-international-airport-camera
+
+Validation includes camera heading/offset/terrain-clearance calculations, return to
+orbit, preview resource cleanup, desktop and 390px mobile flight controls, and the
+actual airport preview. Photographic ride-along is checked on the deployed domain.

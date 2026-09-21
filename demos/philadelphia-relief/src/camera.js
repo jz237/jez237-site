@@ -13,8 +13,8 @@
  *   two-finger drag         orbit; pinch distance zooms at the same time
  */
 
-import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026092114';
-import { CAMERA } from './schema.js?v=philly-2026092114';
+import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026092115';
+import { CAMERA } from './schema.js?v=philly-2026092115';
 
 const DEG = Math.PI / 180;
 
@@ -31,6 +31,7 @@ export function createCameraRig(THREE, options) {
   let projectionAspect = NaN;
   let projectionNear = NaN;
   let projectionFar = NaN;
+  let wasRiding = false;
   let userActive = false;
   let idleTimer = 0;
 
@@ -319,7 +320,7 @@ export function createCameraRig(THREE, options) {
       const changed = now.lon !== prevLon || now.lat !== prevLat
         || now.dist !== prevDist || now.pitch !== prevPitch
         || now.bearing !== prevBearing || now.fov !== prevFov
-        || exag !== lastExaggeration || targetHeight !== lastTargetHeight;
+        || exag !== lastExaggeration || targetHeight !== lastTargetHeight || wasRiding;
 
       const pitchRad = now.pitch * DEG;
       const bearingRad = now.bearing * DEG;
@@ -358,12 +359,24 @@ export function createCameraRig(THREE, options) {
       }
       lastExaggeration = exag;
       lastTargetHeight = targetHeight;
+      const ride = opts.flightView;
+      wasRiding = !!ride;
+      if (ride) {
+        const ground = sampleElevation(ride.lon, ride.lat);
+        camera.position.set(projection.lonToX(ride.lon),
+          ground * exag + Math.max(35, ride.height - ground), projection.latToZ(ride.lat));
+        const heading = ride.heading * DEG, pitch = ride.pitch * DEG;
+        camera.up.set(0, 1, 0);
+        camera.lookAt(camera.position.x + Math.sin(heading) * Math.cos(pitch),
+          camera.position.y + Math.sin(pitch), camera.position.z - Math.cos(heading) * Math.cos(pitch));
+        revision++;
+      }
 
       if (userActive && pointers.size === 0) {
         idleTimer += dt;
         if (idleTimer > 0.35) userActive = false;
       }
-      return { target: targetVec, groundY, changed };
+      return { target: targetVec, groundY, changed: changed || !!ride };
     },
 
     setAspect(aspect) {

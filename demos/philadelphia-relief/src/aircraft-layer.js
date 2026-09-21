@@ -1,10 +1,12 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092114';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092114';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092114';
-import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092114';
-import { createAircraftSession } from './aircraft-session.js?v=philly-2026092114';
-import { createElevationCache } from './frame-work.js?v=philly-2026092114';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092115';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092115';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092115';
+import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092115';
+import { createAircraftSession } from './aircraft-session.js?v=philly-2026092115';
+import { createElevationCache } from './frame-work.js?v=philly-2026092115';
+import { flightView, FLIGHT_VIEWS, viewDelay } from './flight-view.js?v=philly-2026092115';
+import { createAirportCamera } from './airport-camera.js?v=philly-2026092115';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -40,6 +42,20 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   const material = new THREE.MeshBasicMaterial({ vertexColors: true, side: THREE.DoubleSide });
   const lineMaterial = new THREE.LineBasicMaterial({ color: 0x73e2ec, transparent: true, opacity: .65 });
   const records = new Map(), vector = new THREE.Vector3();
+  const airportCamera = createAirportCamera();
+  const rideBar = el('section', 'aircraft-ride-bar'); rideBar.hidden = true;
+  rideBar.setAttribute('aria-label', 'Simulated aircraft ride-along');
+  const rideTitle = el('strong', '', 'SIMULATED RIDE-ALONG');
+  const rideStatus = el('span', 'aircraft-ride-status');
+  const rideControls = el('div', 'aircraft-view-buttons');
+  for (const [mode, label] of Object.entries(FLIGHT_VIEWS)) {
+    const button = el('button', '', label); button.type = 'button'; button.dataset.view = mode;
+    button.onclick = () => startRide(following, mode); rideControls.append(button);
+  }
+  const exitRide = el('button', '', 'Return to map'); exitRide.type = 'button';
+  exitRide.onclick = () => { stopFollow(true); close(); };
+  rideBar.append(rideTitle, rideStatus, rideControls, exitRide); document.body.append(rideBar);
+  let rideMode = null, currentView = null, lastRideReport = 0;
   let enabled = false, disposed = false, controller, timer, generation = 0, loading = false;
   let selected = null, following = null, returnPose, failed = false, lastPoll = 0, lastDraw = 0;
   let retrySeconds = 30;
@@ -53,6 +69,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function stopFollow(restore = false) {
+    rideMode = null; currentView = null; rideBar.hidden = true;
+    document.body.classList.remove('aircraft-riding');
     following = null; back.hidden = true;
     if (restore && returnPose) motion.flyTo(returnPose, { label: 'Previous map view' });
     returnPose = null;
@@ -62,7 +80,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     if (record.entity && datasource) datasource.entities.remove(record.entity);
     records.delete(record.data.id);
     if (selected === record.data.id) close();
-    if (following === record.data.id) stopFollow();
+    if (following === record.data.id) stopFollow(true);
   }
   function visibleRecords() {
     return [...records.values()].filter(r => flightMatches(r.data, filter.value)
@@ -96,7 +114,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     const timeout = setTimeout(() => request.abort(), 12000);
     try {
       // Versioned URL also avoids an hour-long failure cached by earlier releases.
-      const response = await fetch('aircraft?v=philly-2026092114', {
+      const response = await fetch('aircraft?v=philly-2026092115', {
         signal: request.signal, cache: 'no-store' });
       const doc = await response.json();
       if (ticket !== generation || disposed || !enabled) return;
@@ -140,8 +158,25 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
       returnPose = { lon: s.camLon, lat: s.camLat, camDist: s.camDist,
         camBearing: s.camBearing, camPitch: s.camPitch };
     }
+    rideMode = null; currentView = null; rideBar.hidden = true;
+    document.body.classList.remove('aircraft-riding');
     motion.stop(); following = id; back.hidden = false; pinned = true; show(id);
     store.set({ camDist: 4500, camPitch: 55 }, { source: 'aircraft-follow' });
+  }
+  function startRide(id, mode) {
+    const r = records.get(id);
+    if (!r || ageSeconds(r.data) > STALE_AFTER || !Number.isFinite(r.data.track)) return;
+    if (following !== id) follow(id);
+    rideMode = mode; rideBar.hidden = false; close(); lastRideReport = 0;
+    document.body.classList.add('aircraft-riding');
+    rideTitle.textContent = `${name(r.data)} · SIMULATED VIEW`;
+    for (const button of rideControls.children) {
+      button.setAttribute('aria-pressed', String(button.dataset.view === mode));
+    }
+    // Keep the existing graphics preference, including lighter graphics on older PCs.
+    store.set({ camDist: 1800 }, { source: 'aircraft-follow' });
+    document.getElementById('mapControls')?.removeAttribute('open');
+    exitRide.focus({ preventScroll: true });
   }
   function show(id) {
     const r = records.get(id); if (!r) return;
@@ -170,6 +205,10 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
       following === id ? 'Following this aircraft' : 'Follow aircraft');
     button.type = 'button'; button.disabled = following === id || ageSeconds(r.data) > STALE_AFTER;
     button.onclick = () => follow(id); card.append(button);
+    const ride = el('button', 'aircraft-follow aircraft-ride', 'Ride along · simulated 3D');
+    ride.type = 'button'; ride.onclick = () => startRide(id, 'forward'); card.append(ride);
+    const airport = el('button', 'camera-card-retry', 'Watch PHL airport camera ↗');
+    airport.type = 'button'; airport.onclick = airportCamera.open; card.append(airport);
     card.append(el('small', 'aircraft-disclosure',
       `${r.data.altitudeKind} altitude · `
       + `${r.data.geometric ? 'geometric' : 'barometric estimate for'} 3D height. `
@@ -186,6 +225,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
       ? `Stale position · received ${age}s ago; movement paused`
       : `Position received ${age}s ago · adsb.fi`;
     card.querySelector('.aircraft-follow').disabled = following === selected || age > STALE_AFTER;
+    card.querySelector('.aircraft-ride').disabled = age > STALE_AFTER || !Number.isFinite(r.data.track);
     card.style.left = `${Math.max(10, Math.min(viewWidth - card.offsetWidth - 10, 24))}px`;
     card.style.top = `${Math.max(10, Math.min(viewHeight - card.offsetHeight - 90, 190))}px`;
   }
@@ -234,7 +274,11 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   jump.onchange = () => { if (jump.value) { show(jump.value); follow(jump.value); } };
   back.onclick = () => { stopFollow(true); if (selected) show(selected); };
   retry.onclick = () => { clearTimeout(timer); void poll(); };
-  const escape = e => { if (e.key === 'Escape') { close(); stopFollow(true); } };
+  const escape = e => {
+    if (e.key === 'Escape' && !document.querySelector('.airport-camera-dialog[open]')) {
+      close(); stopFollow(true);
+    }
+  };
   const unsubscribe = store.subscribe((s, keys) => {
     if (following && s.lastChangeSource !== 'aircraft-follow'
       && [...keys].some(k => k.startsWith('cam'))) stopFollow();
@@ -245,6 +289,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   document.addEventListener('keydown', escape);
 
   return {
+    get flightView() { return currentView; },
     get animating() { return enabled && records.size > 0; },
     beforeFrame() {
       if (session.check()) return undefined;
@@ -252,11 +297,25 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
       playbackAt = Date.now() - (reducedMotion ? 0 : 20000);
       const r = records.get(following);
       if (!r) return undefined;
-      if (ageSeconds(r.data) > STALE_AFTER) { stopFollow(); return undefined; }
+      if (ageSeconds(r.data) > STALE_AFTER) {
+        stopFollow(true);
+        limitNote.textContent = 'Ride ended: tracking became stale. Select a recent aircraft.';
+        return undefined;
+      }
       const p = flightPosition(r.samples, playbackAt);
+      currentView = rideMode ? flightView(p, rideMode, sampleElevation(p.lon, p.lat)) : null;
+      if (rideMode && !currentView) { stopFollow(true); return undefined; }
       if (performance.now() - lastFollow > 80) {
         lastFollow = performance.now();
         store.set({ camLon: p.lon, camLat: p.lat }, { source: 'aircraft-follow' });
+      }
+      if (rideMode && Date.now() - lastRideReport > 900) {
+        lastRideReport = Date.now();
+        const shownAt = Math.max(r.samples[0].observedAt,
+          Math.min(playbackAt, r.samples.at(-1).observedAt));
+        const bufferedAge = viewDelay({ observedAt: shownAt });
+        rideStatus.textContent = `${FLIGHT_VIEWS[rideMode]} · position ~${bufferedAge}s behind · `
+          + `${number(r.data.altitudeFt)} ft · ${number(r.data.speed)} kt · no camera footage`;
       }
       return p.height;
     },
@@ -281,6 +340,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
         const ground = sampleElevation(p.lon, p.lat);
         const h = flightDisplayHeight(p, ground, ctx.exaggeration);
         r.mesh.visible = showPlane; r.line.visible = showPlane && trailToggle.checked;
+        const hideRidden = following === r.data.id && rideMode && rideMode !== 'chase';
+        if (hideRidden) { r.mesh.visible = false; r.line.visible = false; }
         r.mesh.position.set(projection.lonToX(p.lon), h, projection.latToZ(p.lat));
         r.mesh.rotation.y = ((90 - (p.track ?? 0)) * Math.PI) / 180;
         const distance = camera.position.distanceTo(r.mesh.position);
@@ -304,6 +365,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
             model: { uri: 'data/aircraft.glb?v=1', minimumPixelSize: 32, maximumScale: 1000 },
             polyline: { positions: [], width: 2, material: C.Color.CYAN.withAlpha(.6) } });
           r.entity.show = showPlane; r.entity.position = position;
+          if (hideRidden) r.entity.show = false;
           r.entity.orientation = C.Transforms.headingPitchRollQuaternion(position,
             new C.HeadingPitchRoll(C.Math.toRadians(p.track ?? 0), 0, 0));
           r.entity.polyline.show = trailToggle.checked;
@@ -316,7 +378,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
             y: (-vector.y * .5 + .5) * ctx.height };
         }
         const box = point && { l: point.x - 25, r: point.x + 25, t: point.y - 20, b: point.y + 35 };
-        r.pin.hidden = !showPlane || !point || point.x < 20 || point.x > ctx.width - 20
+        r.pin.hidden = hideRidden || !showPlane || !point || point.x < 20 || point.x > ctx.width - 20
           || point.y < 20 || point.y > ctx.height - 20 || blocked.some(b => box && overlapsBox(b, box, 3));
         r.pin.classList.toggle('stale', age > STALE_AFTER);
         r.pin.classList.toggle('selected', selected === r.data.id);
@@ -350,7 +412,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
         cesiumViewer.dataSources.remove(datasource, true);
       }
       scene.remove(group); geometry.dispose(); material.dispose(); lineMaterial.dispose();
-      root.remove(); card.remove();
+      airportCamera.dispose(); rideBar.remove(); root.remove(); card.remove();
     },
   };
 }

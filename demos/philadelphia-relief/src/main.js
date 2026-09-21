@@ -1,17 +1,17 @@
-import { wireSavedViews } from './saved-views.js?v=philly-2026092114';
-import { frameDelay } from './render-policy.js?v=philly-2026092114';
-import { preferLightweight, districtAssets } from './startup-policy.js?v=philly-2026092114';
+import { wireSavedViews } from './saved-views.js?v=philly-2026092115';
+import { frameDelay } from './render-policy.js?v=philly-2026092115';
+import { preferLightweight, districtAssets } from './startup-policy.js?v=philly-2026092115';
 import { updateImageryCredit, wireFieldNotes, wireMapChrome, timelineSeek, captureName }
-  from './experience.js?v=philly-2026092114';
-import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092114';
-import { wireLooks } from './looks.js?v=philly-2026092114';
-import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092114';
-import { createOrientation } from './orientation.js?v=philly-2026092114';
-import { createPhotographic } from './photographic.js?v=philly-2026092114';
-import { wireRegionalViews } from './regional-views.js?v=philly-2026092114';
-import { createCameraLayer } from './camera-layer.js?v=philly-2026092114';
-import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092114';
-import { createMapLayers } from './map-layers.js?v=philly-2026092114';
+  from './experience.js?v=philly-2026092115';
+import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092115';
+import { wireLooks } from './looks.js?v=philly-2026092115';
+import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092115';
+import { createOrientation } from './orientation.js?v=philly-2026092115';
+import { createPhotographic } from './photographic.js?v=philly-2026092115';
+import { wireRegionalViews } from './regional-views.js?v=philly-2026092115';
+import { createCameraLayer } from './camera-layer.js?v=philly-2026092115';
+import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092115';
+import { createMapLayers } from './map-layers.js?v=philly-2026092115';
 /**
  * Philadelphia Relief — application entry point.
  *
@@ -23,51 +23,51 @@ import { createMapLayers } from './map-layers.js?v=philly-2026092114';
 
 import * as THREE from '../vendor/three.module.min.js?v=philly-2026092113';
 
-import { createStore } from './state.js?v=philly-2026092114';
-import { CAMERA, CONTROLS } from './schema.js?v=philly-2026092114';
-import { effectiveLight } from './solar.js?v=philly-2026092114';
-import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026092114';
+import { createStore } from './state.js?v=philly-2026092115';
+import { CAMERA, CONTROLS } from './schema.js?v=philly-2026092115';
+import { effectiveLight } from './solar.js?v=philly-2026092115';
+import { getEra, eraRules, landmarkInEra } from './eras.js?v=philly-2026092115';
 import {
   createProjection, createElevationSampler, metersPerPixel, equivalentZoom,
   scaleBar, compassPoint, formatLatLon, easeInOutCubic, lerp, lerpAngle,
-} from './geo.js?v=philly-2026092114';
-import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026092114';
+} from './geo.js?v=philly-2026092115';
+import { PRESETS, HOME_PRESET, getPreset, presetPatch } from './presets.js?v=philly-2026092115';
 import {
   TOURS, DEFAULT_TOUR, getTour, tourDuration, tourShotStart, tourFrame,
-} from './tours.js?v=philly-2026092114';
+} from './tours.js?v=philly-2026092115';
 import {
   decodeState, encodeState, buildShareUrl, readViewName, cleanViewName,
-} from './urlstate.js?v=philly-2026092114';
+} from './urlstate.js?v=philly-2026092115';
 import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
-} from './degraded.js?v=philly-2026092114';
+} from './degraded.js?v=philly-2026092115';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026092114';
-import { createNeighborhood } from './neighborhood.js?v=philly-2026092114';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092114';
-import { createSky, sunDirection } from './sky.js?v=philly-2026092114';
-import { createPostFX } from './postfx.js?v=philly-2026092114';
-import { createCameraRig } from './camera.js?v=philly-2026092114';
-import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092114';
-import { createStructures } from './structures.js?v=philly-2026092114';
+} from './terrain.js?v=philly-2026092115';
+import { createNeighborhood } from './neighborhood.js?v=philly-2026092115';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092115';
+import { createSky, sunDirection } from './sky.js?v=philly-2026092115';
+import { createPostFX } from './postfx.js?v=philly-2026092115';
+import { createCameraRig } from './camera.js?v=philly-2026092115';
+import { createLabelLayer, buildLabelCandidates } from './labels.js?v=philly-2026092115';
+import { createStructures } from './structures.js?v=philly-2026092115';
 import {
   TIER_PLAN, shouldActivateZone, distanceToBox, tierAssetPath,
-} from './structures-data.js?v=philly-2026092114';
-import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026092114';
+} from './structures-data.js?v=philly-2026092115';
+import { createAdaptiveQuality, resolveQuality } from './adaptive.js?v=philly-2026092115';
 import {
   decodeFlood, floodSelection, floodLegend, FEMA_STYLE, SLR_STYLE,
-} from './flood.js?v=philly-2026092114';
-import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092114';
+} from './flood.js?v=philly-2026092115';
+import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092115';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026092114';
+} from './vectors.js?v=philly-2026092115';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026092114';
-import { getTheme } from './themes.js?v=philly-2026092114';
+} from './ui.js?v=philly-2026092115';
+import { getTheme } from './themes.js?v=philly-2026092115';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
 
@@ -899,13 +899,15 @@ async function boot() {
     motion.update(dt);
     const aircraftAltitude = aircraftLayer.beforeFrame();
     const state = store.get();
-    const pose = rig.update(dt, { snap: false, targetAltitude: aircraftAltitude });
+    const flightView = aircraftLayer.flightView;
+    const pose = rig.update(dt, { snap: false, targetAltitude: aircraftAltitude, flightView });
     if (pose.changed || rig.dragging || motion.playing) lastInteraction = performance.now();
     rig.setAspect(viewW / viewH);
 
     const camera = rig.camera;
     const now = rig.pose();
     now.targetAltitude = aircraftAltitude;
+    now.flightView = flightView;
     supplement(now, state);
     orientation.update(now, viewW / viewH, dt); navigation.update(now);
     if (photographic.update(now, state, viewW, viewH)) {

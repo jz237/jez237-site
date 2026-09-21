@@ -1,4 +1,4 @@
-import { woodlandCrown } from './woodland.js?v=philly-2026092114';
+import { woodlandCrown } from './woodland.js?v=philly-2026092115';
 
 /** A world-aligned lattice keeps trees in the same place across imagery tiles. */
 export function canopySites(coverage, projection, sampleElevation, bounds=null) {
