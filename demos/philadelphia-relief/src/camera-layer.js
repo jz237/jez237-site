@@ -1,8 +1,8 @@
 import { WEBCAMS, trafficCameras, regionalCameras, hasCameraPreview, groupCameras, popupPosition }
-  from './camera-data.js?v=philly-2026092007';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092007';
+  from './camera-data.js?v=philly-2026092101';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092101';
 
-import { mountCameraMedia } from './camera-media.js?v=philly-2026092007';
+import { mountCameraMedia } from './camera-media.js?v=philly-2026092101';
 
 const element = (tag, className, text) => {
   const node = document.createElement(tag); node.className = className;
@@ -222,7 +222,8 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
       if (!enabled || disposed) return;
       viewWidth = ctx.width; viewHeight = ctx.height; lastDistance = ctx.pose.dist;
       const key = [ctx.pose.lon, ctx.pose.lat, ctx.pose.dist, ctx.pose.pitch, ctx.pose.bearing,
-        ctx.pose.fov, ctx.width, ctx.height, ctx.exaggeration, photographic.active].join(':');
+        ctx.pose.fov, ctx.pose.targetAltitude, ctx.width, ctx.height,
+        ctx.exaggeration, photographic.active].join(':');
       const time = performance.now();
       if (!dirty && key === lastKey) return;
       if (!dirty && time - lastUpdate < 70) return;

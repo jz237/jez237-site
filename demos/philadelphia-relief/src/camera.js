@@ -13,8 +13,8 @@
  *   two-finger drag         orbit; pinch distance zooms at the same time
  */
 
-import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026092007';
-import { CAMERA } from './schema.js?v=philly-2026092007';
+import { damp, clamp, normalizeAngle, shortestAngleDelta } from './geo.js?v=philly-2026092101';
+import { CAMERA } from './schema.js?v=philly-2026092101';
 
 const DEG = Math.PI / 180;
 
@@ -27,6 +27,7 @@ export function createCameraRig(THREE, options) {
   const now = { ...want };
   let revision = 0;
   let lastExaggeration = NaN;
+  let lastTargetHeight = NaN;
   let projectionAspect = NaN;
   let projectionNear = NaN;
   let projectionFar = NaN;
@@ -311,12 +312,14 @@ export function createCameraRig(THREE, options) {
 
       const exag = getExaggeration(now.dist);
       const groundY = sampleElevation(now.lon, now.lat) * exag;
-      targetVec.set(projection.lonToX(now.lon), groundY, projection.latToZ(now.lat));
+      const targetHeight = Number.isFinite(opts.targetAltitude)
+        ? groundY + Math.max(35, opts.targetAltitude - sampleElevation(now.lon, now.lat)) : groundY;
+      targetVec.set(projection.lonToX(now.lon), targetHeight, projection.latToZ(now.lat));
 
       const changed = now.lon !== prevLon || now.lat !== prevLat
         || now.dist !== prevDist || now.pitch !== prevPitch
         || now.bearing !== prevBearing || now.fov !== prevFov
-        || exag !== lastExaggeration;
+        || exag !== lastExaggeration || targetHeight !== lastTargetHeight;
 
       const pitchRad = now.pitch * DEG;
       const bearingRad = now.bearing * DEG;
@@ -354,6 +357,7 @@ export function createCameraRig(THREE, options) {
         camera.updateProjectionMatrix();
       }
       lastExaggeration = exag;
+      lastTargetHeight = targetHeight;
 
       if (userActive && pointers.size === 0) {
         idleTimer += dt;
