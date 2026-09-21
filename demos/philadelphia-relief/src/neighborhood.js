@@ -1,5 +1,5 @@
-import { buildLineMesh, streetJunctions } from './vectors.js?v=philly-2026092116';
-import { neighborhoodLabels, streetWidth } from './neighborhood-data.js?v=philly-2026092116';
+import { buildLineMesh, streetJunctions } from './vectors.js?v=philly-2026092117';
+import { neighborhoodLabels, streetWidth } from './neighborhood-data.js?v=philly-2026092117';
 
 export function createNeighborhood(THREE, options) {
   const { projection, sampleElevation, onData } = options;

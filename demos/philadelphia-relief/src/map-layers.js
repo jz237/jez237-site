@@ -1,6 +1,6 @@
-import { createMapSurfaces } from './map-surface.js?v=philly-2026092116';
-import { createMapPoints } from './map-point-layer.js?v=philly-2026092116';
-import { ageLabel, gaugeTrend } from './map-layer-data.js?v=philly-2026092116';
+import { createMapSurfaces } from './map-surface.js?v=philly-2026092117';
+import { createMapPoints } from './map-point-layer.js?v=philly-2026092117';
+import { ageLabel, gaugeTrend } from './map-layer-data.js?v=philly-2026092117';
 
 const el = (tag, text = '', cls = '') => {
   const e = document.createElement(tag); e.textContent = text; e.className = cls; return e;
