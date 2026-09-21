@@ -1,12 +1,12 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092115';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092115';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092115';
-import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092115';
-import { createAircraftSession } from './aircraft-session.js?v=philly-2026092115';
-import { createElevationCache } from './frame-work.js?v=philly-2026092115';
-import { flightView, FLIGHT_VIEWS, viewDelay } from './flight-view.js?v=philly-2026092115';
-import { createAirportCamera } from './airport-camera.js?v=philly-2026092115';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092116';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092116';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092116';
+import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092116';
+import { createAircraftSession } from './aircraft-session.js?v=philly-2026092116';
+import { createElevationCache } from './frame-work.js?v=philly-2026092116';
+import { flightView, FLIGHT_VIEWS, viewDelay } from './flight-view.js?v=philly-2026092116';
+import { createAirportCamera } from './airport-camera.js?v=philly-2026092116';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -114,7 +114,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     const timeout = setTimeout(() => request.abort(), 12000);
     try {
       // Versioned URL also avoids an hour-long failure cached by earlier releases.
-      const response = await fetch('aircraft?v=philly-2026092115', {
+      const response = await fetch('aircraft?v=philly-2026092116', {
         signal: request.signal, cache: 'no-store' });
       const doc = await response.json();
       if (ticket !== generation || disposed || !enabled) return;

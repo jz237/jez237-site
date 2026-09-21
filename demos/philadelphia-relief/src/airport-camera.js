@@ -1,5 +1,5 @@
-import { WEBCAMS } from './camera-data.js?v=philly-2026092115';
-import { mountCameraMedia } from './camera-media.js?v=philly-2026092115';
+import { WEBCAMS } from './camera-data.js?v=philly-2026092116';
+import { mountCameraMedia } from './camera-media.js?v=philly-2026092116';
 
 /** Use the provider's published preview widget; full video stays on its source page. */
 export function createAirportCamera() {

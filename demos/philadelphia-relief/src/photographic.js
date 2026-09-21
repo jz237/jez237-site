@@ -1,5 +1,5 @@
-import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092115';
+import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady, PHOTO_PRELOAD }
+  from './photo-policy.js?v=philly-2026092116';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -81,7 +81,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092115')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092116')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -111,7 +111,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       tileset.tileVisible.addEventListener(tile => {
         visibleTiles++;
         bestError = Math.min(bestError, tile.geometricError);
-        if (tile.geometricError <= 64) detailTiles++;
+        if (photoTileReady(tile.geometricError, !!lastPose?.flightView)) detailTiles++;
       });
       tileset.loadProgress.addEventListener((requests, processing) => {
         pending = requests + processing;
