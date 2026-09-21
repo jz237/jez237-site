@@ -219,7 +219,14 @@ export function createPostFX(THREE, renderer) {
     },
 
     /** Run bright-pass + blur + composite over an already-rendered sceneRT. */
-    composite() {
+    composite(lightweight = false) {
+      if (lightweight) {
+        const u = compositeMat.uniforms, intensity = u.uIntensity.value, contact = u.uContact.value;
+        u.uIntensity.value = 0; u.uContact.value = 0;
+        draw(compositeMat, null);
+        u.uIntensity.value = intensity; u.uContact.value = contact;
+        return;
+      }
       draw(brightMat, brightRT);
 
       blurMat.uniforms.uInput.value = brightRT.texture;

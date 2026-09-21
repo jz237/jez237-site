@@ -1024,3 +1024,29 @@ idle comparison at balanced quality measured 12,621 WebGL draw calls before and 
 after, with 2,494,525 triangles per scene in both. This measures rendering work, not
 battery life. Browser checks cover grouped gauge selection, touch/keyboard swipe,
 1996/current imagery alignment and mobile control visibility.
+
+### Older computers and Chrome compatibility (21 September 2026)
+
+Marker grouping and observation selectors use copy-and-sort rather than
+`Array.toSorted`. Simulating that API's absence reproduced a stopped frame loop
+in the prior release; the patched loop continues rendering without that error.
+
+Lighter graphics is available in View & layers and the studio, remembers an
+explicit choice on this browser, and travels in shared URLs as `lg=1`. It defaults
+on when available browser hints report at most 4 GB memory or four logical CPU
+cores. It uses the existing performance terrain/building tiers, skips decorative
+woodland crowns and bloom/contact passes, enables idle power saving, and pauses
+photographic 3D. Selecting Photographic 3D explicitly turns lighter graphics off.
+All map layer selections remain available, and aerial image resolution is unchanged.
+The same regional scene draws approximately 375,000 triangles in lighter mode
+versus 2.5 million in balanced full graphics; this is not an FPS guarantee.
+
+Startup no longer waits for woodland, Center City imagery or Levittown imagery
+(about 16 MB of source files before transfer compression). Nearby district images
+load at their original resolution after first paint, one supplemental file at a
+time. Woodland arrives later only for full diorama graphics. Hidden building tiers
+are requested when needed. Optional failures retry and never disable core layers.
+Core requests have bounded waits so a stalled connection cannot block indefinitely.
+
+Validation: 346 automated checks; 4× CPU/Fast 4G browser profiling; simulated
+missing `Array.toSorted`; camera and river-gauge pins visible in lighter graphics.

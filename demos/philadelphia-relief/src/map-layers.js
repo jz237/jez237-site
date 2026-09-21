@@ -1,6 +1,6 @@
-import { createMapSurfaces } from './map-surface.js?v=philly-2026092111';
-import { createMapPoints } from './map-point-layer.js?v=philly-2026092111';
-import { ageLabel, gaugeTrend } from './map-layer-data.js?v=philly-2026092111';
+import { createMapSurfaces } from './map-surface.js?v=philly-2026092113';
+import { createMapPoints } from './map-point-layer.js?v=philly-2026092113';
+import { ageLabel, gaugeTrend } from './map-layer-data.js?v=philly-2026092113';
 
 const el = (tag, text = '', cls = '') => {
   const e = document.createElement(tag); e.textContent = text; e.className = cls; return e;
@@ -47,7 +47,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     open('nearby on the map', `${members.length} ${type}s`, 'cluster');
     card.append(el('p', 'Choose a name to see its details and move closer.', 'map-data-note'));
     const list = el('div', '', 'map-cluster-list');
-    for (const row of members.toSorted((a, b) => a.name.localeCompare(b.name))) {
+    for (const row of [...members].sort((a, b) => a.name.localeCompare(b.name))) {
       const button = el('button', row.name); button.type = 'button';
       button.onclick = () => {
         const current = rows[type].find(r => r.id === row.id);
@@ -125,7 +125,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
   function populate(type, list) {
     const select = $(type === 'ship' ? 'shipSelect' : 'gaugeSelect'), previous = select.value;
     select.replaceChildren(el('option', `Choose a ${type}…`)); select.firstChild.value = '';
-    for (const row of list.toSorted((a, b) => a.name.localeCompare(b.name))) {
+    for (const row of [...list].sort((a, b) => a.name.localeCompare(b.name))) {
       const option = el('option', row.name); option.value = row.id; select.append(option);
     }
     select.value = previous;

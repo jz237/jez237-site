@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092112" />
+<link rel="stylesheet" href="app.css?v=philly-2026092113" />
 </head>
 <body data-theme="dusk">
 
@@ -208,6 +208,8 @@
   <p id="photoStatus" role="status">Diorama · zoom in for photographic 3D</p>
   <button id="photoRetry" type="button" aria-label="Retry photographic detail" hidden>Retry</button>
   <p class="photo-note">Captured imagery · use Diorama for styled lighting and map overlays.</p>
+  <label class="power-saving"><input id="lightweightMode" type="checkbox"> Lighter graphics</label>
+  <p class="power-status">Keeps aerial detail and overlays; simplifies buildings and decorative effects.</p>
   <label class="power-saving"><input id="powerSaving" type="checkbox"> Save power when idle</label>
   <p id="powerStatus" class="power-status">Full image detail at every setting.</p>
   <div class="camera-layer-control">
@@ -750,7 +752,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092111"></script>
+<script type="module" src="src/main.js?v=philly-2026092113"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
