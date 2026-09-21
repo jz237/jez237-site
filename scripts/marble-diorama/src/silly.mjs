@@ -73,12 +73,16 @@ export function sillyCourse() {
       traversalBonus: 2000,
       material: "red",
       radius: 1.8,
+      flare: { throat: 0.9, length: 3 },
+      flowSpeed: 8,
+      flowExitSpeed: 2,
       path: [
-        { x: 0, y: 5.8, z: 82 },
-        { x: 0, y: 5.8, z: 80 },
-        { x: -3, y: 6.5, z: 77 },
-        { x: -8, y: 7.8, z: 74 },
-        { x: -8, y: 7.8, z: 72 },
+        { x: 0, y: 5.2, z: 82 },
+        { x: 0, y: 8, z: 82 },
+        { x: 0, y: 11.5, z: 82 },
+        { x: -2, y: 13.4, z: 80 },
+        { x: -6, y: 13.8, z: 76 },
+        { x: -8, y: 13.8, z: 72 },
       ],
     }),
     deck("upper-pipe-landing", -8, 71, 7, 5, 6, { h: 11 }),
@@ -167,6 +171,12 @@ export function sillyCourse() {
     parts.push(
       deck(`peak-${i}`, l, d, 2.7, 2.7, h, { kind: "pyramid", rise: 2.1 }),
     );
+  // The inlet now rises vertically into the upper course. Raise the complete
+  // upper assembly together so render geometry, routes and colliders agree.
+  for (const p of parts.slice(
+    parts.findIndex((p) => p.id === "upper-pipe-landing"),
+  ))
+    p.y += 6;
   const lower = [
     [-1, 0, 130],
     [-8, 0, 124],
@@ -179,9 +189,9 @@ export function sillyCourse() {
     [-12, 4, 85],
     [0, 4, 84],
     [0, 4, 82],
-    [-3, 4.7, 77],
-    [-8, 6, 74],
-    [-8, 6, 71],
+    [-8, 12, 72],
+    [-8, 12, 71.5],
+    [-8, 12, 71],
   ];
   const upper = [
     [-13, 6, 66],
@@ -200,13 +210,15 @@ export function sillyCourse() {
     [0, 12, 8],
     [0, 12, 5],
   ];
-  const route = [...lower, ...upper].map(([l, h, d]) =>
-    routePoint(l, h, d, {
-      speed: 3.5,
-      radius: d >= 71 && d <= 82 ? 1.2 : 0.65,
-    }),
+  const route = [...lower, ...upper.map(([l, h, d]) => [l, h + 6, d])].map(
+    ([l, h, d]) =>
+      routePoint(l, h, d, {
+        speed: 3.5,
+        radius: d >= 71 && d <= 82 ? 1.2 : 0.65,
+      }),
   );
   for (const i of [4, 15]) Object.assign(route[i], { stop: true, radius: 0.4 });
+  Object.assign(route[13], { stop: true, radius: 0.5, speed: 2, flow: false });
   const rightRoute = route
     .slice(0, 14)
     .map((p, i) => (i < 9 ? { ...p, x: p.z, z: p.x } : structuredClone(p)));
@@ -229,7 +241,7 @@ export function sillyCourse() {
       [6, 12, 13],
       [0, 12, 8],
       [0, 12, 5],
-    ].map(([l, h, d]) => routePoint(l, h, d, { speed: 3, radius: 1.5 })),
+    ].map(([l, h, d]) => routePoint(l, h + 6, d, { speed: 3, radius: 1.5 })),
   );
   // Follow the room's open lanes while collecting its small enemies. The
   // waypoints follow live miniature positions; collection still needs contact.
@@ -307,7 +319,7 @@ export function sillyCourse() {
     enemies.push({
       id: `bird-${i}`,
       kind: "bird",
-      ...worldPoint(sign * 14, h, d),
+      ...worldPoint(sign * 14, h + 6, d),
       radius: 0.65,
       roam: 15,
       speed: 6,
@@ -319,7 +331,7 @@ export function sillyCourse() {
     });
   }
   // A controlled approach keeps the second demo marble clear of bird flights.
-  for (const i of [26, 27, 28]) rightDemoRoute[i].speed = 3.2;
+  for (const i of [26, 27, 28]) rightDemoRoute[i].speed = 3.8;
   return {
     schema: 1,
     id: "silly",
@@ -352,7 +364,7 @@ export function sillyCourse() {
       ],
     },
     starts: [worldPoint(-0.7, 0.56, 130), worldPoint(0.7, 0.56, 130)],
-    goal: { ...worldPoint(0, 12, 5), angle: ISO, width: 9, depth: 1.3 },
+    goal: { ...worldPoint(0, 18, 5), angle: ISO, width: 9, depth: 1.3 },
     parts,
     route: roundDemoCorners(soloDemoRoute, { radius: 1.5 }),
     playerRoutes: [
@@ -370,9 +382,9 @@ export function sillyCourse() {
     zones: [],
     checkpoints: [
       worldPoint(-12, 4.56, 98),
-      worldPoint(-8, 6.56, 71),
-      worldPoint(-8, 10.06, 46),
-      worldPoint(-10, 12.56, 12),
+      worldPoint(-8, 12.56, 71),
+      worldPoint(-8, 16.06, 46),
+      worldPoint(-10, 18.56, 12),
     ],
   };
 }

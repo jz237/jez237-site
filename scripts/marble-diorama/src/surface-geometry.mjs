@@ -42,9 +42,20 @@ export function tubeCurve(p) {
   );
 }
 
+export function tubeRadiusAt(p, distance, length) {
+  const radius = p.radius ?? 1.4;
+  if (!p.flare) return radius;
+  const end = Math.max(
+    0,
+    1 - Math.min(distance, length - distance) / p.flare.length,
+  );
+  return p.flare.throat + (radius - p.flare.throat) * end * end;
+}
+
 export function tubeGeometry(p) {
   const curve = tubeCurve(p);
-  const count = Math.max(24, Math.ceil(curve.getLength() * 8)),
+  const length = curve.getLength();
+  const count = Math.max(24, Math.ceil(length * 8)),
     rings = 24,
     r = p.radius ?? 1.4,
     thickness = p.thickness ?? 0.15;
@@ -52,6 +63,7 @@ export function tubeGeometry(p) {
     b = builder(p.angle);
   const quad = (a, c, d, e) => b.quad(e, d, c, a);
   const at = (i, k, radius) => {
+    radius = tubeRadiusAt(p, (i / count) * length, length) + radius - r;
     const a = (k / rings) * Math.PI * 2,
       v = curve.getPointAt(i / count);
     v.addScaledVector(frames.normals[i], Math.cos(a) * radius).addScaledVector(

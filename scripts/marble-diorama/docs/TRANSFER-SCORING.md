@@ -39,13 +39,10 @@ sound remains the remake collection cue, not a recovered original sample.
 
 ## Geometry and motion are still open
 
-The Silly red transfer is visibly unlike the current smooth red tube. The
-215.5–218.5s sequence shows a lower intake, upper outlet, curved red housing and
-looped side detail. The marble disappears into the intake and emerges above.
-The housing retains its orientation relative to the board; the footage does
-**not** establish a rotating Ferris-wheel lift. Its complete shape, internal
-motion and transfer law need reconstruction. This scoring fix does not certify
-that mechanism's appearance or motion.
+The main Silly passage now has a downward-facing intake bell, vertical rise,
+curved neck and flared outlet with native physical carriage. See SILLY-TRANSFER.md.
+The second horn, looped side detail, exact dimensions and original transfer law
+remain open. The 215.5–218.5s sequence does not establish a rotating Ferris wheel.
 
 ## Validation
 

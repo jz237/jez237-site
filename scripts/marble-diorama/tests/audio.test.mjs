@@ -460,3 +460,28 @@ test("transfer awards route both players to the effects bus", async () => {
     { name: "collect", key: "traversal-bonus:1" },
   ]);
 });
+
+test("powered transfers sound only while carrying a racing marble", async () => {
+  const { audio } = fixture();
+  await audio.unlock();
+  const calls = [];
+  audio.effect = (name, options) => calls.push({ name, ...options });
+  const sim = {
+    tick: 1,
+    players: [0, 1].map(() => ({
+      status: "racing",
+      poweredTransfer: "red",
+      current: { position: { x: 0, y: 0, z: 0 } },
+    })),
+    course: { zones: [] },
+  };
+  audio.obstacles(sim);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].name, "vacuum");
+  assert.equal(calls[0].key, "transfer:red");
+  sim.tick++;
+  sim.players[0].poweredTransfer = null;
+  sim.players[1].status = "timeout";
+  audio.obstacles(sim);
+  assert.equal(calls.length, 1);
+});

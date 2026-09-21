@@ -159,6 +159,33 @@ export function validateCourse(c) {
     )
       throw Error("Invalid tube dimensions.");
     if (
+      p.flare !== undefined &&
+      (p.kind !== "tube" ||
+        ![p.flare.throat, p.flare.length].every(finite) ||
+        p.flare.throat < 0.6 ||
+        p.flare.throat > (p.radius ?? 1.4) ||
+        p.flare.length < 0.5 ||
+        p.flare.length > 10)
+    )
+      throw Error("Invalid tube flare.");
+    if (
+      p.flowExitSpeed !== undefined &&
+      (!p.flowSpeed ||
+        !finite(p.flowExitSpeed) ||
+        p.flowExitSpeed <= 0 ||
+        p.flowExitSpeed > p.flowSpeed)
+    )
+      throw Error("Invalid transfer outlet speed.");
+    if (
+      p.flowSpeed !== undefined &&
+      (p.kind !== "tube" ||
+        p.motion ||
+        !finite(p.flowSpeed) ||
+        p.flowSpeed <= 0 ||
+        p.flowSpeed > 8)
+    )
+      throw Error("Invalid powered transfer.");
+    if (
       p.traversalBonus !== undefined &&
       (p.kind !== "tube" ||
         p.motion ||
