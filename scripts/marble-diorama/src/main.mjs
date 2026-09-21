@@ -499,6 +499,8 @@ function step() {
     if (e.type === "fall") toast(`Player ${e.player + 1} · back in a moment`);
     if (e.type === "landing-bonus")
       toast(`Player ${e.player + 1} · landing bonus +${e.score} points`);
+    if (e.type === "traversal-bonus")
+      toast(`Player ${e.player + 1} · transfer bonus +${e.score} points`);
     if (e.type === "steelie-defeat")
       toast(`Player ${e.player + 1} · steelie defeated +${e.score} points`);
     if (e.type === "collect")

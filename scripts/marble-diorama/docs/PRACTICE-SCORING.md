@@ -66,3 +66,16 @@ imports. A full-start bounded-input alternate completes without falls. All six
 native goal checks verify fixed awards separately from timed/untimed clock awards;
 the Ultimate reference tally is reproduced from the observed pre-finish state.
 Audio routing is checked separately. Physics/replay version is mm-11.
+
+
+## Follow-up evidence: discrete tiles in another port
+
+The [official Game Boy Color booklet, printed page 10](https://www.videogamemanual.com/gbc/Marble%20Madness%20%28USA%29.pdf)
+describes 3000–6000 for numbered tiles and an additional 500 for the connected
+unnumbered tile of the same color (including a 6500 example). This conflicts with
+the current continuous interpolation. The Amiga's observed 4500 award is
+consistent with that discrete rule, but one observed landing does not verify all
+Amiga tiles or their boundaries. Do not treat the present interpolation as
+faithful, nor import the other port's exact map without further comparison.
+The pending EA folder scan and additional Amiga landing observations should
+resolve this before the rule is finalized.

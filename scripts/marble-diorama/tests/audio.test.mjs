@@ -447,3 +447,16 @@ test("steelie knockouts use the reward cue with separate player keys", async () 
     { name: "collect", key: "steelie-defeat:1" },
   ]);
 });
+
+test("transfer awards route both players to the effects bus", async () => {
+  const { audio } = fixture();
+  await audio.unlock();
+  const calls = [];
+  audio.effect = (name, options) => calls.push({ name, ...options });
+  audio.event({ type: "traversal-bonus", player: 0, score: 4000 });
+  audio.event({ type: "traversal-bonus", player: 1, score: 2000 });
+  assert.deepEqual(calls, [
+    { name: "collect", key: "traversal-bonus:0" },
+    { name: "collect", key: "traversal-bonus:1" },
+  ]);
+});

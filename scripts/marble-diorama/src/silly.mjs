@@ -70,6 +70,7 @@ export function sillyCourse() {
     }),
     deck("red-transfer", 0, 0, 4, 18, 0, {
       kind: "tube",
+      traversalBonus: 2000,
       material: "red",
       radius: 1.8,
       path: [

@@ -1,0 +1,138 @@
+import { tubeCurve } from "./surface-geometry.mjs";
+
+// These checkpoints use the exact center curve that builds the tube's shared
+// visible/collision rings. They do not add forces or alter its physical surface.
+export function traversalPaths(course) {
+  return course.parts
+    .filter((p) => p.kind === "tube" && p.traversalBonus)
+    .map((p) => {
+      const curve = tubeCurve(p),
+        length = curve.getLength();
+      const count = Math.max(24, Math.ceil(length * 8));
+      const c = Math.cos(p.angle ?? 0),
+        s = Math.sin(p.angle ?? 0);
+      const points = Array.from({ length: count + 1 }, (_, i) => {
+        const v = curve.getPointAt(i / count);
+        return {
+          x: p.x + v.x * c - v.z * s,
+          y: p.y + v.y,
+          z: p.z + v.x * s + v.z * c,
+        };
+      });
+      const end = points.at(-1),
+        before = points.at(-2);
+      const n = Math.hypot(
+        end.x - before.x,
+        end.y - before.y,
+        end.z - before.z,
+      );
+      return {
+        id: p.id,
+        score: p.traversalBonus,
+        radius: p.radius ?? 1.4,
+        length,
+        points,
+        bounds: Object.fromEntries(
+          ["x", "y", "z"].map((axis) => [
+            axis,
+            [
+              Math.min(...points.map((v) => v[axis])) - (p.radius ?? 1.4),
+              Math.max(...points.map((v) => v[axis])) + (p.radius ?? 1.4),
+            ],
+          ]),
+        ),
+        exit: {
+          x: (end.x - before.x) / n,
+          y: (end.y - before.y) / n,
+          z: (end.z - before.z) / n,
+        },
+      };
+    });
+}
+
+export function tubePosition(path, position) {
+  let best = { distance: Infinity, progress: 0 };
+  for (let i = 1; i < path.points.length; i++) {
+    const a = path.points[i - 1],
+      b = path.points[i];
+    const dx = b.x - a.x,
+      dy = b.y - a.y,
+      dz = b.z - a.z;
+    const u = Math.max(
+      0,
+      Math.min(
+        1,
+        ((position.x - a.x) * dx +
+          (position.y - a.y) * dy +
+          (position.z - a.z) * dz) /
+          (dx * dx + dy * dy + dz * dz),
+      ),
+    );
+    const distance = Math.hypot(
+      position.x - a.x - u * dx,
+      position.y - a.y - u * dy,
+      position.z - a.z - u * dz,
+    );
+    if (distance < best.distance)
+      best = {
+        distance,
+        progress: ((i - 1 + u) / (path.points.length - 1)) * path.length,
+      };
+  }
+  return best;
+}
+
+export function updateTraversalBonuses(paths, player, position, radius) {
+  const events = [];
+  player.traversals ??= {};
+  for (const path of paths) {
+    if (player.traversalClaims?.includes(path.id)) continue;
+    if (
+      ["x", "y", "z"].some(
+        (axis) =>
+          position[axis] < path.bounds[axis][0] ||
+          position[axis] > path.bounds[axis][1],
+      )
+    ) {
+      delete player.traversals[path.id];
+      continue;
+    }
+    const q = tubePosition(path, position),
+      inside = q.distance <= path.radius - radius + 0.12;
+    const state = Object.hasOwn(player.traversals, path.id)
+      ? player.traversals[path.id]
+      : null;
+    if (!state) {
+      if (inside && q.progress <= Math.min(1.5, path.length * 0.15))
+        player.traversals = {
+          ...player.traversals,
+          [path.id]: { progress: q.progress },
+        };
+      continue;
+    }
+    // Reject a skipped middle, a backwards retreat out of the entrance, and
+    // any departure through the side. Falling clears incomplete traversals.
+    if (!inside || Math.abs(q.progress - state.progress) > 1) {
+      delete player.traversals[path.id];
+      continue;
+    }
+    state.progress = q.progress;
+    const end = path.points.at(-1),
+      t = path.exit;
+    const beyond =
+      (position.x - end.x) * t.x +
+      (position.y - end.y) * t.y +
+      (position.z - end.z) * t.z;
+    if (beyond >= 0 && q.progress >= path.length - 0.25) {
+      (player.traversalClaims ??= []).push(path.id);
+      delete player.traversals[path.id];
+      player.score += path.score;
+      events.push({
+        type: "traversal-bonus",
+        part: path.id,
+        score: path.score,
+      });
+    }
+  }
+  return events;
+}

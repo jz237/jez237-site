@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**115 automated tests pass. All six campaign races and all three bonus courses
+**127 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-11`.
+Current simulation/replay version: `rapier-0.20.0-mm-13`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -658,3 +658,28 @@ also displayed the steelie +1000 notice and finished both players with zero fall
 Release verification: 121/121 tests pass in 185,325ms; production build and diff
 check pass. The final paired Beginner browser run finishes both marbles without
 falls or captured warnings/errors (Player 2: 64.20s, 2894 points; Player 1: 2877).
+
+
+### September 21 — pipe and upward-transfer rewards
+
+127/127 tests pass in 187,296ms; production build and diff check pass.
+The geometry's shared center curve now tracks continuous inlet-to-outlet travel.
+Beginner's separate upper pipe pays 4000; its lower pipes, Intermediate's orange
+pipe and Silly's upward transfer pay 2000. These amounts are verified against
+original Amiga recordings. Repeat policy and spatial tolerances remain provisional.
+
+Native checks reject exterior travel, backwards entry, skipped interiors and
+abandoned traversals. They verify independent players, mid-pipe replay, editor
+transforms and imported object-property IDs. The existing normal-input campaign
+routes verify the real pipes, including the alternate Intermediate route.
+
+The paired Beginner browser demo finishes both players without falls or captured
+warnings/errors: Player 1 earns 8877, Player 2 earns 4894 and finishes first at
+64.20s. The visible transfer notice shows +2000. Native event checks verify the
+first player's 4000+2000 and the second player's lower-pipe 2000.
+
+Fresh mm-13 full-campaign timing retains the prior outcomes: solo expires in
+Ultimate at 32.00s and paired play expires in Silly by 57.60s. No physics, clock,
+route controls or acceptance assertions changed. Full parity remains unfinished,
+including the original Silly transfer geometry and miniature appearances.
+See TRANSFER-SCORING.md for evidence and limitations.

@@ -158,6 +158,15 @@ export function validateCourse(c) {
         (p.thickness ?? 0.15) > 2)
     )
       throw Error("Invalid tube dimensions.");
+    if (
+      p.traversalBonus !== undefined &&
+      (p.kind !== "tube" ||
+        p.motion ||
+        !Number.isInteger(p.traversalBonus) ||
+        p.traversalBonus <= 0 ||
+        p.traversalBonus > 20000)
+    )
+      throw Error("Invalid traversal bonus.");
     if (p.kind === "polygon") {
       if (
         p.motion ||

@@ -250,7 +250,11 @@ export class AudioEngine {
   }
   event(event, assisted = false) {
     if (event.type === "impact") return this.impact(event.force);
-    if (["landing-bonus", "steelie-defeat"].includes(event.type))
+    if (
+      ["landing-bonus", "steelie-defeat", "traversal-bonus"].includes(
+        event.type,
+      )
+    )
       return this.effect("collect", { key: `${event.type}:${event.player}` });
     if (event.type === "checkpoint" && !assisted) return;
     return this.effect(event.type, { key: `${event.type}:${event.player}` });
