@@ -11,7 +11,7 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092111';
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092113';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -366,8 +366,9 @@ export function createTerrain(THREE, options) {
   const macroTex = makeHeightTexture(THREE, macro, macroSize, macroSize);
   const rampTex = makeRampTexture(THREE, 'dusk');
   const imageryTex = makeImageryTexture(THREE, imagery);
-  const cityTex = makeImageryTexture(THREE, cityImagery);
-  const reefTex = makeImageryTexture(THREE, reefImagery);
+  let cityTex = makeImageryTexture(THREE, cityImagery);
+  let reefTex = makeImageryTexture(THREE, reefImagery);
+  const districtReady = { cityImagery: !!cityImagery, reefImagery: !!reefImagery };
   let reefDistrict = false;
   const b = meta.bounds;
   const cityBounds = new THREE.Vector4(
@@ -451,13 +452,22 @@ export function createTerrain(THREE, options) {
     segments,
     hasImagery: !!imagery,
 
+    setDistrictImage(id, image) {
+      const next = makeImageryTexture(THREE, image);
+      if (id === 'reefImagery') { reefTex.dispose(); reefTex = next; }
+      else { cityTex.dispose(); cityTex = next; }
+      districtReady[id] = true;
+      uniforms.uImageryCity.value = reefDistrict ? reefTex : cityTex;
+      uniforms.uImageryCityOn.value = districtReady[reefDistrict ? 'reefImagery' : 'cityImagery'] ? 1 : 0;
+    },
+
     setDistrict(lon, lat) {
       const useReef = lon > -74.94 && lat > 40.10;
       if (useReef === reefDistrict) return;
       reefDistrict = useReef;
       uniforms.uImageryCity.value = useReef ? reefTex : cityTex;
       uniforms.uImageryCityBounds.value = useReef ? reefBounds : cityBounds;
-      uniforms.uImageryCityOn.value = (useReef ? reefImagery : cityImagery) ? 1 : 0;
+      uniforms.uImageryCityOn.value = districtReady[useReef ? 'reefImagery' : 'cityImagery'] ? 1 : 0;
     },
 
     setDetailImagery(image, bounds, region, immediate = false) {

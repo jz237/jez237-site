@@ -9,7 +9,7 @@ export function photoReady(detailTiles, visibleTiles, settled) {
 }
 
 export function photoAllowed(state) {
-  return state.era === 'present' && state.compareMode === 'off'
+  return !state.lightweight && state.era === 'present' && state.compareMode === 'off'
     && state.layers.terrain && state.layers.imagery
     && !state.layers.flood && !state.layers.contours;
 }

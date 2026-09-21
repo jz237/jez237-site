@@ -1,7 +1,7 @@
 /** Group nearby same-kind markers in screen pixels, retaining every member. */
 export function clusterPoints(points, radius = 48) {
   const groups = [], cells = new Map();
-  for (const p of points.toSorted((a, b) => a.key.localeCompare(b.key))) {
+  for (const p of [...points].sort((a, b) => a.key.localeCompare(b.key))) {
     if (!Number.isFinite(p.x) || !Number.isFinite(p.y)) continue;
     const cx = Math.floor(p.x / radius), cy = Math.floor(p.y / radius);
     let group;

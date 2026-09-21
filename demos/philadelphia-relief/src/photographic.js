@@ -1,5 +1,5 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092111';
+  from './photo-policy.js?v=philly-2026092113';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -70,7 +70,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092111')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092113')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -130,12 +130,19 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   }
   const unsubscribe = store.subscribe(state => { select.value = state.photoMode; });
   select.value = store.value('photoMode');
-  select.onchange = () => store.set({ photoMode: select.value }, { source: 'photo-mode' });
-  retry.onclick = () => {
+  select.onchange = () => store.set({ photoMode: select.value,
+    ...(select.value === 'photo' ? { lightweight: 0 } : {}) }, { source: 'photo-mode' });
+  function release() {
+    generation++; clearTimeout(firstViewTimer); clearTimeout(resourceTimer);
     if (viewer && !viewer.isDestroyed()) viewer.destroy();
     viewer = undefined; tileset = undefined; failed = false; loading = false;
-    firstViewReady = false; firstViewTimer = undefined; lastPoseKey = ''; enginePromise = undefined;
+    firstViewReady = false; firstViewTimer = undefined; lastPoseKey = ''; pending = 0;
+    present(false);
     host.replaceChildren(); credits.replaceChildren(); retry.hidden = true;
+  }
+  retry.onclick = () => {
+    release(); enginePromise = undefined;
+    if (store.value('lightweight')) return;
     void start();
   };
   const down = event => { press = active && event.button === 0
@@ -175,6 +182,10 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles }),
     update(pose, state, w, h) {
       lastPose = pose; width = w; height = h;
+      if (state.lightweight) {
+        if (viewer || loading || failed) release();
+        wanted = false; report('Lighter graphics · photographic 3D paused'); return false;
+      }
       wanted = !isOverlayActive() && photoWanted(state, pose.dist, wanted);
       if (!wanted) {
         present(false);

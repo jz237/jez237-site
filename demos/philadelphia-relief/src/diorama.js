@@ -1,5 +1,5 @@
-import { canopySites, canopyLevel } from './canopy-layout.js?v=philly-2026092111';
-import { woodlandIndex } from './woodland.js?v=philly-2026092111';
+import { canopySites, canopyLevel } from './canopy-layout.js?v=philly-2026092113';
+import { woodlandIndex } from './woodland.js?v=philly-2026092113';
 /** A zoom-dependent miniature stage. Crowns follow mapped woodland boundaries;
  * enlarged regional crowns shrink to individual trees as the camera approaches. */
 export function dioramaAmount(distance, enabled = true) {
@@ -172,21 +172,31 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
     vertexShader: FLOOR_VERTEX, fragmentShader: FLOOR_FRAGMENT }));
   floor.frustumCulled = false; group.add(floor);
   const closeCanopies = new Map();
+  const pendingCells = new Map();
   const treeUniforms = { uExag: { value: 1 }, uAmount: { value: 1 },
     uKeyStrength: {value:1}, uSkyFill: {value:.7},
     uSunDir: { value: new THREE.Vector3(-.5, .8, .3).normalize() } };
-  const coverage = woodland ? woodlandIndex(woodland) : null;
-  const trees = makeTrees(THREE, coverage, projection, sampleElevation, treeUniforms);
+  let coverage = woodland ? woodlandIndex(woodland) : null;
+  let trees = makeTrees(THREE, coverage, projection, sampleElevation, treeUniforms);
   if (trees) group.add(trees);
   const closeUniforms = { ...treeUniforms, uAmount: { value: 1 } };
   let streetTrees = null;
   const dropTile = key => {
+    pendingCells.delete(key);
     const mesh = closeCanopies.get(key);
     if (!mesh) return;
     group.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); closeCanopies.delete(key);
   };
   return {
     group,
+    setWoodland(doc) {
+      if (coverage || !doc) return;
+      coverage = woodlandIndex(doc);
+      trees = makeTrees(THREE, coverage, projection, sampleElevation, treeUniforms);
+      if (trees) { trees.visible = false; group.add(trees); }
+      for (const cell of pendingCells.values()) this.addTile(cell);
+      pendingCells.clear();
+    },
     setLocalDetail(doc) {
       if (streetTrees) {
         group.remove(streetTrees); streetTrees.geometry.dispose(); streetTrees.material.dispose();
@@ -206,6 +216,7 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
     },
     addTile(cell) {
       if (cell.level > 1 || closeCanopies.has(cell.key)) return;
+      if (!coverage) { pendingCells.set(cell.key, cell); return; }
       const mesh = makeTrees(THREE, coverage, projection, sampleElevation, closeUniforms, cell.bounds);
       if (!mesh) return;
       mesh.userData.cell = cell; mesh.visible = false;
@@ -229,7 +240,7 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
       const level = canopyLevel(near.map(mesh => mesh.userData.cell),pose);
       let shown = 0;
       for (const mesh of near) {
-        mesh.visible = modelOn && pose.dist < 6500
+        mesh.visible = !state.lightweight && modelOn && pose.dist < 6500
           && mesh.userData.cell.level === level && shown++ < 8;
       }
       closeUniforms.uAmount.value = Math.min(1, Math.max(0, (6500 - pose.dist) / 1800));
@@ -239,7 +250,7 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
       treeUniforms.uSunDir.value.copy(sunDir);
       treeUniforms.uKeyStrength.value=light.keyLight; treeUniforms.uSkyFill.value=light.ambient;
       if (trees) {
-        trees.visible = modelOn || amount > .1;
+        trees.visible = !state.lightweight && (modelOn || amount > .1);
       }
     },
     dispose() {

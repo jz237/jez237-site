@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026092111';
-import { ERA_IDS } from './eras.js?v=philly-2026092111';
+import { WEATHERS } from './solar.js?v=philly-2026092113';
+import { ERA_IDS } from './eras.js?v=philly-2026092113';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -25,6 +25,11 @@ const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
  * unique and stable — changing one invalidates existing shared links.
  */
 export const CONTROLS = {
+  lightweight: {
+    k: 'lg', kind: 'enum', values: [0, 1], def: 0, group: 'scene', label: 'Lighter graphics',
+    hint: 'For older computers: simpler rendering without decorative tree crowns, bloom or photographic 3D. '
+      + 'Real elevation, sharp aerial imagery and all map overlays remain available.',
+  },
   photoMode: {
     k: 'pm', kind: 'enum', values: ['auto', 'relief', 'photo'], def: 'auto',
     group: 'scene', label: 'Close-up rendering',
