@@ -345,6 +345,22 @@ export function validateCourse(c) {
         p.bevel)
     )
       throw Error("Invalid wave panel.");
+    if (p.motion?.axis === "wave" && p.motion.profile !== undefined) {
+      const m = p.motion;
+      if (
+        m.profile !== "crest" ||
+        ![m.crestWidth, m.crestPeak, m.anchorLength].every(finite) ||
+        m.amplitude < 0 ||
+        m.crestWidth <= 0 ||
+        m.crestWidth >= m.wavelength ||
+        m.crestPeak <= 0 ||
+        m.crestPeak >= 1 ||
+        m.anchorLength <= 0 ||
+        m.anchorLength > m.total / 2
+      )
+        throw Error("Invalid wave crest.");
+    }
+
     if (
       p.presence?.transition !== undefined &&
       (p.profile !== "vacuum-mouth" ||

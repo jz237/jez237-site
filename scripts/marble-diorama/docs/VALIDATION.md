@@ -835,3 +835,26 @@ pass. A local production-browser two-player Aerial demonstration finishes with
 zero falls for both players and no captured warnings/errors. Close-up inspection
 shows both upper openings on the rear edge and the lower opening turned onto
 the following leg. This release does not establish full Amiga feature parity.
+
+
+### September 21 - Intermediate continuous traveling crests, mm-20
+
+Replaced the two short sinusoidal patches with one continuous strip using
+positive asymmetric traveling crests and long flat intervals. See
+INTERMEDIATE-WAVES.md for primary-frame observations, approximate 2.4s cadence,
+reference-coordinate measurements, and remaining scale/profile uncertainties.
+Panel tops and undersides stay joined. The shared convex geometry lifts a real
+marble and restores the same contact outcome from a snapshot. Graph lines and
+textured side colors remain continuous across panels.
+
+All 144 tests pass (272060ms). Production build and diff checks pass. The actual
+production browser's orange-pipe/wave alternate demo finishes in 56.07s with
+zero falls and no captured warnings/errors. Close-ups verify the moving profile,
+joined underside, graph alignment and side texture. Four additional native runs
+starting at the wave entrance with different phases all finish without falls.
+
+Timed campaign measurement remains incomplete: solo Intermediate 46.2s, Aerial
+61.175s, Silly 71.5167s with 0.1276 clock left, then Ultimate timeout at 32s.
+Paired Intermediate finishes by 47.7583s and Aerial by 66.5s, then both players
+time out in Silly by 55.0417s. All these measured runs have zero falls. Full
+campaign acceptance and full Amiga parity remain open.
