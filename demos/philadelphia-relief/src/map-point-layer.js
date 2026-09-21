@@ -1,5 +1,5 @@
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092109';
-import { shipGeometry } from './ship-model.js?v=philly-2026092109';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092110';
+import { shipGeometry } from './ship-model.js?v=philly-2026092110';
 
 export function createMapPoints(THREE, { scene, stage, projection, sampleElevation,
   photographic, onSelect }) {

@@ -1,4 +1,4 @@
-import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026092109';
+import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026092110';
 /**
  * The control studio, preset list, search and dialogs.
  *
@@ -7,13 +7,13 @@ import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026092
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026092109';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026092109';
-import { getEra } from './eras.js?v=philly-2026092109';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026092109';
-import { TOURS } from './tours.js?v=philly-2026092109';
-import { ERAS } from './eras.js?v=philly-2026092109';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026092109';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026092110';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026092110';
+import { getEra } from './eras.js?v=philly-2026092110';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026092110';
+import { TOURS } from './tours.js?v=philly-2026092110';
+import { ERAS } from './eras.js?v=philly-2026092110';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026092110';
 
 const ENUM_LABELS = {
   photoMode: v => ({ auto: 'Automatic', relief: 'Diorama', photo: 'Photo 3D' }[v] || v),

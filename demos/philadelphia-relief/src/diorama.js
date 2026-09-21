@@ -1,5 +1,5 @@
-import { canopySites, canopyLevel } from './canopy-layout.js?v=philly-2026092109';
-import { woodlandIndex } from './woodland.js?v=philly-2026092109';
+import { canopySites, canopyLevel } from './canopy-layout.js?v=philly-2026092110';
+import { woodlandIndex } from './woodland.js?v=philly-2026092110';
 /** A zoom-dependent miniature stage. Crowns follow mapped woodland boundaries;
  * enlarged regional crowns shrink to individual trees as the camera approaches. */
 export function dioramaAmount(distance, enabled = true) {

@@ -1,4 +1,4 @@
-import { MAP_BOUNDS, tileBounds, archiveTiles } from './map-layer-data.js?v=philly-2026092109';
+import { MAP_BOUNDS, tileBounds, archiveTiles } from './map-layer-data.js?v=philly-2026092110';
 
 export function createMapSurfaces(THREE, { scene, projection, sampleElevation, status }) {
   const root = new THREE.Group(); scene.add(root);
