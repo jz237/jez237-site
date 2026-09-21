@@ -16,7 +16,7 @@ export const CAMPAIGN_ORDER = [
 export const COURSE_TIME = Object.freeze({
   practice: 60,
   beginner: 75,
-  intermediate: 45,
+  intermediate: 40,
   aerial: 30,
   silly: 25,
   ultimate: 25,

@@ -7,7 +7,7 @@ import {
   ribbon,
   routePoint,
 } from "./course-authoring.mjs";
-import { AMIGA_RULES } from "./rules.mjs";
+import { AMIGA_RULES, COURSE_TIME } from "./rules.mjs";
 
 export function sillyCourse() {
   const parts = [
@@ -325,7 +325,7 @@ export function sillyCourse() {
       "Everything you know is wrong. Roll uphill through a miniature world.",
     category: "campaign",
     rules: AMIGA_RULES,
-    time: 25,
+    time: COURSE_TIME.silly,
     color: "#dfc82b",
     sidePalette: ["#e5d92c", "#e5d92c", "#8e741f", "#6f641f"],
     sidePattern: "spots",
