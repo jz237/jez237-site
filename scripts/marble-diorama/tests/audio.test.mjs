@@ -396,3 +396,28 @@ test("obstacles are audible only near a racing player and while moving or active
   audio.obstacles(sim);
   assert.equal(audio.effectSources.size, 1);
 });
+
+test("moving acid sound follows the current sensor instead of its starting position", async () => {
+  const { audio } = fixture();
+  await audio.unlock();
+  const zone = { kind: "acid", x: 100, y: 0, z: 0 };
+  let location = { x: 1, y: 0, z: 0 };
+  const sim = {
+    tick: 1,
+    players: [
+      { status: "racing", current: { position: { x: 0, y: 0, z: 0 } } },
+    ],
+    course: { zones: [zone] },
+    enemies: [],
+    acid: [{ zone, handle: 4 }],
+    world: { getCollider: () => ({ translation: () => location }) },
+  };
+  const calls = [];
+  audio.effect = (name, options) => calls.push({ name, ...options });
+  audio.obstacles(sim);
+  assert.ok(calls[0].gain > 0.5);
+  location = { x: 100, y: 0, z: 0 };
+  sim.tick++;
+  audio.obstacles(sim);
+  assert.equal(calls[1].gain, 0);
+});

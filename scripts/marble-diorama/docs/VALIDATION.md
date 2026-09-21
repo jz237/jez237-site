@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**100 automated tests pass. All six campaign races and all three bonus courses
+**107 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-8`.
+Current simulation/replay version: `rapier-0.20.0-mm-9`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -564,3 +564,23 @@ as recorded in OBJECT-PARITY.md. No claim of full original parity is made.
 The updated timed campaign still fails: solo expires on Ultimate and paired play
 expires on Silly. Updated measurements use physics version mm-8; clocks were not
 extended to hide the remaining timing gap.
+
+
+### September 21 — deforming acid and measured directional turn
+
+All acid sensors use the same closed concave triangles as the animated meshes.
+Seven added checks exercise outline notches, actual rendered/native vertices and
+indices, interpolation without cache mutation, snapshot collision replay, patrol
+validation/editor transforms, floor clearance, and audio proximity at the current
+position. Reference evidence and provisional parameters are in ACID-REFERENCE.md.
+
+Browser close-ups at simulation 0.00 and 0.30 seconds show changing lobes and
+movement, darker interiors, and a narrow brighter rim, with no captured console
+warnings/errors. A local 1,200-step Intermediate physics sample took 1,303ms on an
+AMD Ryzen 9 9950X3D2 16-Core Processor (about 1.09ms per physics step). This is a
+local simulation sample, not a sustained rendering or physical-phone benchmark.
+Full timed campaign outcome remains incomplete: solo expires on Ultimate and
+paired play on Silly; no clock extension was made.
+
+Production-build browser check: both Intermediate players finished with zero
+falls and no captured errors; Player 1 finished in 46.21s and both scored 801.

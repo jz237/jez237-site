@@ -16,7 +16,7 @@ not included in the published game.
 | Beginner steelie and pipes | Pursuit and rolling collisions exist; no replacement made in this pass. | Original targeting, speed, awards, exact pipe shapes and entry behavior remain unmeasured. |
 | Intermediate munchers, 100–102s | Original green creatures curl down and stand up repeatedly, with yellow mouths. Replaced the rigid capsule/painted stripe with articulated green solids and a yellow mouth. Turns follow the pursuit direction. Shapes animate in simulation time and are used for both drawing and contact. | Curl is a reconstruction (~0.6s cycle), not a recovered sprite sequence. Original AI, distances, hit timing and the complete body silhouette remain unverified. |
 | Intermediate waves, 121–131s | Found a real renderer-state bug: physics replaced each wave pose after stepping and dropped its changing vertices. Translation/rotation still moved, but rendered panel lengths no longer matched their colliders. Preserve the vertices through stepping and snapshots. | Exact original full-lane wave shape, travel speed and phase remain unmeasured. Current panels are still a reconstruction. |
-| Intermediate / Ultimate acid | Moving sensors already follow the rendered pool positions. | Circular green pool shapes and sinusoidal paths are provisional; original blob deformation and trajectories remain open. |
+| Intermediate / Ultimate acid, 109–114s | Replaced rigid disks with dark green, deforming lobed surfaces. Rendering and sensors share the complete concave mesh, including safe notches. Intermediate lower-left puddle now takes straight legs and a perpendicular turn; sound follows current position. See ACID-REFERENCE.md for measured screen centers. | Full original outlines, deformation cadence, dimensions, complete patrol loop, four remaining Intermediate paths and Ultimate paths remain provisional. Capture animation and original effects remain open. |
 | Aerial pegs, 162s and 167–169s | Original has groups of silver pegs rising from the track and retracting flush. Replaced two isolated overhead blocks with three banks of three round, chamfered pegs. Mesh and collider use the same points and rise/hold/retract state. | Bank locations, number of rows and 3.8s cycle are provisional. Need full reference coverage of every bank. |
 | Aerial red paddle, 160–164s | Frame sequence shows a cup holding the marble, hinging upward, and throwing it onto an upper ledge. Replaced the overhead crusher with a red recessed cup, stem, metal hinge, and contact-triggered stroke. The moving concave collider provides the launch; no injected impulse or teleport. Ordinary held-input entry and upper-ledge landing pass. | Dimensions, placement, and 0.9s stroke are reconstructed. The observed ~0.5s dwell is represented; original launch law and exact return destination still need measurement. Gray ramp geometry remains open. |
 | Aerial vacuums, 146–154s | Three yellow mouths appear along the left zigzag; at least two disappear during the inspected interval. Added the middle mouth, rounded hollow frames, and shared visibility/collision/suction/audio gating. Fixed killing from behind the intake and moved frames onto the track edges. | Ten-second repeat periods and 3/5/6s active windows are provisional. Full original respawn cadence, intake deformation, and capture animation are not yet reproduced. |
@@ -27,7 +27,7 @@ not included in the published game.
 
 ## Implementation safeguards and validation
 
-- Physics/replay version is `rapier-0.20.0-mm-8`: old recordings cannot silently
+- Physics/replay version is `rapier-0.20.0-mm-9`: old recordings cannot silently
   claim compatible outcomes after collision and layout changes.
 - Enemy articulation is a pure function of the simulation clock. Shape reuse is
   bounded; fixed body solids are not rebuilt every tick. Rendering uses separate
@@ -40,7 +40,7 @@ not included in the published game.
 - Remaining work above is not hidden by the Playable Games listing. That listing
   was explicitly requested for an unfinished playable reconstruction.
 
-Release checks: 100/100 automated tests pass; production build and diff check pass.
+Release checks: 107/107 automated tests pass; production build and diff check pass.
 Silly solo and Ultimate two-player browser demos finish without falls or captured
 console errors. The full timed campaign still fails; see VALIDATION.md.
 

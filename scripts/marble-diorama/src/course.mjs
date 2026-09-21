@@ -310,6 +310,38 @@ export function validateCourse(c) {
         ![z.direction.x, z.direction.y, z.direction.z].every(finite))
     )
       throw Error("Invalid vacuum direction.");
+  for (const z of c.zones ?? []) {
+    if (
+      z.wobblePhase !== undefined &&
+      (z.kind !== "acid" || !finite(z.wobblePhase))
+    )
+      throw Error("Invalid acid deformation phase.");
+    if (!z.patrol) continue;
+    const { points, speed, phase = 0 } = z.patrol;
+    if (
+      z.kind !== "acid" ||
+      z.motion ||
+      !finite(speed) ||
+      speed <= 0 ||
+      speed > 8 ||
+      !finite(phase) ||
+      !Array.isArray(points) ||
+      points.length < 2 ||
+      points.length > 64 ||
+      points.some((p) => ![p.x, p.z].every(finite))
+    )
+      throw Error("Invalid acid patrol.");
+    if (
+      points.some(
+        (p, i) =>
+          Math.hypot(
+            p.x - points[(i + 1) % points.length].x,
+            p.z - points[(i + 1) % points.length].z,
+          ) < 0.01,
+      )
+    )
+      throw Error("Acid patrol legs must have positive length.");
+  }
   if ((c.enemies?.length ?? 0) > 40) throw Error("Too many enemies.");
   const enemyIds = new Set();
   for (const e of c.enemies ?? []) {

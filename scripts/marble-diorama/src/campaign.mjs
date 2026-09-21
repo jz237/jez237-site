@@ -871,21 +871,39 @@ export function intermediateCourse() {
       },
     ],
     zones: [
-      [-1, 57, 1.2],
-      [6, 60, 1.4],
-      [3, 64, 1.2],
-      [-1, 66, 1.3],
-      [1, 67, 1.1],
-    ].map(([l, d, radius], i) => ({
+      [-1, 57],
+      [6, 60],
+      [3, 64],
+      [-1, 66],
+      [-7, 66],
+    ].map(([l, d], i) => ({
       kind: "acid",
       ...worldPoint(l, 13, d),
-      radius,
-      motion: {
-        axis: i % 2 ? "x" : "z",
-        amplitude: 0.55,
-        period: 5 + i,
-        phase: i * 0.8,
-      },
+      radius: 1.2,
+      wobblePhase: i * 0.8,
+      ...(i === 4
+        ? {
+            // The isolated lower-left puddle at 110.44–113.64s travels down one
+            // axis, then turns onto the perpendicular axis. Return legs and scale
+            // remain reconstructed; preserve straight, constant-speed travel.
+            patrol: {
+              points: [
+                [-7, 66],
+                [-7, 69],
+                [-3, 69],
+                [-3, 66],
+              ].map(([l, d]) => worldPoint(l, 13, d)),
+              speed: 1.45,
+            },
+          }
+        : {
+            motion: {
+              axis: i % 2 ? "x" : "z",
+              amplitude: 0.55,
+              period: 5 + i,
+              phase: i * 0.8,
+            },
+          }),
     })),
     enemies: [
       {
