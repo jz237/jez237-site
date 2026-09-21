@@ -1682,11 +1682,12 @@ body.cinema .photo-credits { bottom: 8px; }
 .archive-swipe-handle:focus-visible { outline: 3px solid white; outline-offset: 4px; }
 .archive-side { position: absolute; top: 160px; padding: 7px 10px; border-radius: 6px;
   background: #19323ee8; color: #fff3d5; font-size: 11px; }
-.archive-side.past { left: 12px; } .archive-side.current { right: 12px; }
+.archive-side.past { left: 12px; } .archive-side.current { right: 270px; }
 body.sheet-open .archive-swipe-overlay { display: none; }
 @media (max-width: 1024px) {
   .extra-map-pin { min-width: 44px; min-height: 44px; }
   .archive-side { top: calc(170px + env(safe-area-inset-top)); font-size: 10px; }
+  .archive-side.current { right: 12px; }
   .map-data-head button { min-width: 44px; min-height: 44px; flex-basis: 44px; }
 }
 .property-pick-mode canvas { cursor: crosshair; }
