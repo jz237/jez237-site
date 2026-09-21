@@ -63,7 +63,11 @@ test('endpoint caches a fixed region and handles provider failure without return
   try {
     const response = await onRequest(context('?url=https://evil.example'));
     assert.equal(response.status, 200); assert.equal((await response.json()).aircraft.length, 1);
-    await Promise.all(pending); await onRequest(context('?lat=0')); assert.equal(calls, 1);
+    assert.equal(response.headers.get('Cache-Control'), 'no-store');
+    await Promise.all(pending);
+    assert.equal([...cache.values()][0].headers.get('Cache-Control'), 'public, max-age=15');
+    const hit = await onRequest(context('?lat=0')); assert.equal(calls, 1);
+    assert.equal(hit.headers.get('Cache-Control'), 'no-store');
     cache.clear(); globalThis.fetch = async () => new Response('limited', { status: 429 });
     const failure = await onRequest(context(''));
     assert.equal(failure.status, 503); assert.equal(failure.headers.get('Retry-After'), '300');
@@ -71,7 +75,10 @@ test('endpoint caches a fixed region and handles provider failure without return
     cache.clear(); globalThis.fetch = async () => new Response('denied', { status: 403 });
     const denied = await onRequest(context(''));
     assert.equal(denied.headers.get('Retry-After'), '3600');
+    assert.equal(denied.headers.get('Cache-Control'), 'no-store');
     assert.equal((await denied.json()).accessRequired, true);
+    await Promise.all(pending);
+    assert.equal([...cache.values()][0].headers.get('Cache-Control'), 'public, max-age=3600');
     assert.equal((await onRequest({ request: new Request('https://example.com', { method: 'POST' }) })).status, 405);
   } finally { globalThis.fetch = originalFetch; globalThis.caches = originalCaches; }
 });

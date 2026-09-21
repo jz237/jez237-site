@@ -16,7 +16,7 @@
  * regional shot without becoming needles up close.
  */
 
-import { triangulate } from './vectors.js?v=philly-2026092105';
+import { triangulate } from './vectors.js?v=philly-2026092106';
 
 export const TIER_ORDER = ['tall', 'mid', 'low'];
 
