@@ -276,6 +276,26 @@ and output color-space conversion, with retuned lighting and wider imagery-edge 
 
 # Philadelphia Relief
 
+### Aircraft departure and destination
+
+Opening an aircraft card lazily looks up its callsign in Virtual Radar Server's
+CC0 standing data, served by `vrs-standing-data.adsb.lol`. The same-origin
+`aircraft-route` function accepts only a bounded alphanumeric callsign, uses a
+fixed upstream host, limits responses to 32 KiB and times out after six seconds.
+Listed routes cache for one hour, missing entries for ten minutes, and failures
+for one minute. The browser shares in-flight lookups and limits its cache to 100
+callsigns; it does not prefetch the entire aircraft feed or poll for routes.
+
+Cards display airport codes and cities, airport names on hover, and intermediate
+stops when present. These are **listed routes, not live-confirmed flight plans**:
+callsigns can be reused, schedules change and flights divert. A geographic check
+rejects obvious mismatches (e.g. PHX–AUS for an aircraft over Philadelphia), but
+does not prove a route correct. Multi-stop itineraries state that the current
+leg is unknown. Missing or failed route lookups never interrupt position tracking.
+
+Source and license: https://github.com/vradarserver/standing-data (CC0-1.0).
+Tests: `node --test tests/aircraft-route.test.js`.
+
 An interactive, cinematic 3D topographic map of Philadelphia and the surrounding
 suburbs — Center City, Port Richmond, Northeast and Northwest Philadelphia, the Main Line, and
 Delaware, Montgomery, Chester and Bucks Counties, across the river into Camden,

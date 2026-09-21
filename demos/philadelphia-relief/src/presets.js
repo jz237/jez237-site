@@ -10,8 +10,8 @@
  * without a renderer.
  */
 
-import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026092106';
-import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026092106';
+import { lerp, lerpAngle, easeInOutCubic, clamp } from './geo.js?v=philly-2026092107';
+import { CONTROLS, CAMERA, LAYERS, coercePatch } from './schema.js?v=philly-2026092107';
 
 /** Keys that are angles and must take the short way round when blending. */
 const ANGLE_KEYS = new Set(['camBearing', 'sunAzimuth']);
