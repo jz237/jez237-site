@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092121" />
+<link rel="stylesheet" href="app.css?v=philly-2026092201" />
 <link rel="modulepreload" href="vendor/three.module.min.js?v=philly-2026092113" />
 <link rel="modulepreload" href="vendor/three.core.min.js" />
 <link rel="preload" as="image" href="data/heightmap.webp" fetchpriority="high" />
@@ -287,6 +287,26 @@
   <details id="moreMapLayers" class="more-map-layers">
     <summary>More map layers <span>Water · weather · history</span></summary>
     <div class="extra-layer">
+      <label><input id="bathymetryToggle" type="checkbox"> Reveal the riverbed</label>
+      <div id="bathymetryOptions" hidden>
+        <p id="bathymetryStatus" role="status"></p>
+        <div class="riverbed-visits">
+          <button type="button" data-riverbed-visit="delaware">Delaware waterfront</button>
+          <button type="button" data-riverbed-visit="schuylkill">Lower Schuylkill</button>
+          <button type="button" data-riverbed-visit="bristol">Bristol channel</button>
+        </div>
+        <label class="layer-range">Riverbed relief <output id="bathymetryScaleValue">6×</output>
+          <input id="bathymetryScale" type="range" min="1" max="12" step="1" value="6"
+            aria-label="Riverbed vertical exaggeration"></label>
+        <small id="bathymetryScaleNote">Riverbed relief ×6 on top of the map’s terrain scale.</small>
+        <small>Surveyed parts of the Delaware and lower Schuylkill. Gaps keep the normal map.
+          Colors show elevation below NAVD88, not today’s water depth. Uses the relief view.</small>
+        <a href="https://www.nauticalcharts.noaa.gov/data/bluetopo.html" target="_blank" rel="noopener noreferrer">NOAA BlueTopo source ↗</a>
+        <a href="data/bathymetry/sources.json" target="_blank" rel="noopener noreferrer">Survey dates &amp; provenance ↗</a>
+        <button id="bathymetryRetry" type="button" hidden>Retry riverbed download</button>
+      </div>
+    </div>
+    <div class="extra-layer">
       <label><input id="shipsToggle" type="checkbox"> Ships on the Delaware</label>
       <div id="shipsOptions" hidden>
         <p id="shipsStatus" role="status"></p>
@@ -346,6 +366,14 @@
   </div>
 </details>
 <div id="mapLayerBanner" class="map-layer-banner" role="status" hidden></div>
+<section id="bathymetryLegend" class="riverbed-legend" aria-label="Riverbed elevation legend" hidden>
+  <div class="riverbed-heading"><strong>BENEATH THE RIVERS</strong>
+    <button id="bathymetryClose" type="button" aria-label="Turn off riverbed view">×</button></div>
+  <div class="riverbed-ramp" aria-hidden="true"></div>
+  <div class="riverbed-ticks"><span>0 m</span><span>8 m</span><span>22 m</span></div>
+  <p id="bathymetryReading">Move the map center over a surveyed river.</p>
+  <small>Below NAVD88 · 2 m contours · survey gaps unchanged<br>NOAA BlueTopo · not for navigation</small>
+</section>
 <div id="archiveSwipeOverlay" class="archive-swipe-overlay" hidden>
   <span id="archivePastLabel" class="archive-side past">Historical aerial</span>
   <span class="archive-side current">Current aerial</span>
@@ -779,7 +807,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092122"></script>
+<script type="module" src="src/main.js?v=philly-2026092201"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

@@ -13,6 +13,8 @@
 
 import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092121';
 
+import { BATHYMETRY_GLSL, bathymetryUniforms } from './bathymetry-shader.js?v=philly-2026092201';
+
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
   uniform vec2  uCenter;        // camera target, region-normalised (0..1)
@@ -36,13 +38,16 @@ const VERTEX_SHADER = /* glsl */ `
     return clamp(c + sign(t) * span * d, 0.0, 1.0);
   }
 
+  ${BATHYMETRY_GLSL}
   void main() {
     float k = max(uWarp, 0.001);
     vec2 g = vec2(warpAxis(uv.x, uCenter.x, k), warpAxis(uv.y, uCenter.y, k));
     vUv = g;
 
     float h = texture2D(uHeight, g).r;
-    vElev = h;
+    vec2 bed = bathymetryAt(g);
+    vElev = mix(h, bed.x, bed.y);
+    h = mix(h, bed.x * uBathScale, bed.y);
 
     vec3 pos = vec3((g.x - 0.5) * uRegionSize.x,
                     h * uExag * uReliefOn,
@@ -105,6 +110,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   varying vec3  vWorld;
   varying float vElev;
 
+  ${BATHYMETRY_GLSL}
   void main() {
     // ---- surface normal from the height field --------------------------
     float hL = texture2D(uHeight, vUv - vec2(uTexel.x, 0.0)).r;
@@ -267,6 +273,31 @@ const FRAGMENT_SHADER = /* glsl */ `
       color = mix(color, uContourIndexColor, clamp(index * amount, 0.0, 1.0));
     }
 
+    // Surveyed riverbed: retain true elevations for colors/contours while
+    // stretching geometry only. Missing data keeps the original map surface.
+    vec2 bed = bathymetryAt(vUv);
+    if (bed.y > .5) {
+      float below = -bed.x;
+      vec3 shallow = vec3(.55, .69, .42), middle = vec3(.055, .42, .43);
+      vec3 deep = vec3(.016, .11, .24);
+      vec3 bedColor = below < 8.0 ? mix(shallow, middle, smoothstep(0.0, 8.0, below))
+        : mix(middle, deep, smoothstep(8.0, 22.0, below));
+      vec2 l = bathymetryAt(vUv - vec2(uBathTexel.x, 0.0));
+      vec2 r = bathymetryAt(vUv + vec2(uBathTexel.x, 0.0));
+      vec2 nBed = bathymetryAt(vUv - vec2(0.0, uBathTexel.y));
+      vec2 sBed = bathymetryAt(vUv + vec2(0.0, uBathTexel.y));
+      float dx = mix(bed.x, r.x, r.y) - mix(bed.x, l.x, l.y);
+      float dz = mix(bed.x, sBed.x, sBed.y) - mix(bed.x, nBed.x, nBed.y);
+      vec3 bedNormal = normalize(vec3(-dx * uBathScale * uExag
+        / (2.0 * uBathTexel.x * uRegionSize.x), 1.0,
+        -dz * uBathScale * uExag / (2.0 * uBathTexel.y * uRegionSize.y)));
+      bedColor *= .74 + .38 * max(0.0, dot(bedNormal, normalize(vec3(.4,.8,-.3))));
+      float phase = below / 2.0, width = max(fwidth(phase), .0001);
+      float line = 1.0 - smoothstep(0.0, width * 1.2, min(fract(phase), 1.0-fract(phase)));
+      line *= 1.0 - smoothstep(.2, .7, width);
+      color = mix(bedColor, vec3(.63,.88,.81), line * .32);
+    }
+
     // ---- atmosphere ----------------------------------------------------
     vec3 toFrag = vWorld - uCameraPos;
     float dist = length(toFrag);
@@ -389,6 +420,7 @@ export function createTerrain(THREE, options) {
   let hasDetail = false;
 
   const uniforms = {
+    ...bathymetryUniforms(THREE, heightTex),
     uHeight: { value: heightTex },
     uMacro: { value: macroTex },
     uRamp: { value: rampTex },

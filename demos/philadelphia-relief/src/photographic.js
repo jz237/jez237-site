@@ -226,7 +226,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         clearTimeout(firstViewTimer); firstViewTimer = undefined;
       }
       if (failed) return false;
-      const preload = photoAllowed(state) && state.photoMode !== 'relief'
+      const preload = !isOverlayActive() && photoAllowed(state) && state.photoMode !== 'relief'
         && (wanted || pose.dist <= PHOTO_PRELOAD);
       if (preload && !viewer) void start();
       if (!preload) {

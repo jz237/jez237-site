@@ -1,3 +1,4 @@
+import { createBathymetry } from './bathymetry.js?v=philly-2026092201';
 import { wireSavedViews } from './saved-views.js?v=philly-2026092121';
 import { frameDelay } from './render-policy.js?v=philly-2026092121';
 import { preferLightweight, districtAssets } from './startup-policy.js?v=philly-2026092121';
@@ -7,7 +8,7 @@ import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092
 import { wireLooks } from './looks.js?v=philly-2026092121';
 import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092122';
 import { createOrientation } from './orientation.js?v=philly-2026092122';
-import { createPhotographic } from './photographic.js?v=philly-2026092121';
+import { createPhotographic } from './photographic.js?v=philly-2026092201';
 import { wireRegionalViews } from './regional-views.js?v=philly-2026092121';
 import { createCameraLayer } from './camera-layer.js?v=philly-2026092121';
 import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092121';
@@ -43,9 +44,9 @@ import {
 } from './degraded.js?v=philly-2026092121';
 import {
   decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
-} from './terrain.js?v=philly-2026092121';
+} from './terrain.js?v=philly-2026092201';
 import { createNeighborhood } from './neighborhood.js?v=philly-2026092121';
-import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092122';
+import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092201';
 import { createSky, sunDirection } from './sky.js?v=philly-2026092121';
 import { createPostFX } from './postfx.js?v=philly-2026092121';
 import { createCameraRig } from './camera.js?v=philly-2026092121';
@@ -61,7 +62,7 @@ import {
 import { buildLandmarkModels } from './landmark-models.js?v=philly-2026092121';
 import {
   groupLines, collectRings, buildLineMesh, buildAreaMesh, setVec3,
-} from './vectors.js?v=philly-2026092121';
+} from './vectors.js?v=philly-2026092201';
 import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
@@ -520,8 +521,9 @@ async function boot() {
     catch { /* private browsing */ }
   });
   const disposeRegionalViews = wireRegionalViews({ getPose: () => rig.pose(), motion });
+  let bathymetry;
   const photographic = createPhotographic({ stage: dom.stage, store, sampleElevation,
-    isOverlayActive: () => mapLayers.reliefOnly,
+    isOverlayActive: () => mapLayers.reliefOnly || bathymetry?.active,
     landmarks: data.landmarks, onSelect: place => {
       if (mapLayers.propertyMode) return;
       motion.flyTo({ lon: place.lon, lat: place.lat }, { label: place.n });
@@ -534,8 +536,12 @@ async function boot() {
   const mapLayers = createMapLayers(THREE, { scene, stage: dom.stage, projection, sampleElevation,
     photographic, landmarks: data.landmarks, motion, getPose: () => rig.pose(), camera: rig.camera,
     onLandmark: name => ui.openCard(name), invalidate: () => wake(),
-    onArchive: () => store.set({ era: 'present', compareMode: 'off', layers: { imagery: true } },
-      { source: 'archive-comparison' }) });
+    onArchive: () => { bathymetry?.disable();
+      store.set({ era: 'present', compareMode: 'off', layers: { imagery: true } },
+        { source: 'archive-comparison' }); } });
+  bathymetry = createBathymetry(THREE, { terrain, projection, store, motion,
+    water: overlays.areas.filter(entry => entry.kind === 'water'),
+    getPose: () => rig.pose(), clearArchive: () => mapLayers.clearArchive(), invalidate: () => wake() });
 
   // Optional regional decoration and district photographs never hold up the map.
   // Fetch at most one supplemental asset at a time, after the first useful frame.
@@ -831,6 +837,7 @@ async function boot() {
   window.philadelphiaRelief = Object.freeze({
     stats: () => ({
       photographic: photographic.stats(),
+      bathymetry: bathymetry.stats(),
       rendering: { frames: renderedFrames, delay: scheduledDelay, saving: powerToggle.checked },
       startup: { firstFrameMs: firstFrameAt, supplements: [...supplementalDone] },
       lightweight: !!store.value('lightweight'),
@@ -934,6 +941,7 @@ async function boot() {
     now.flightView = flightView;
     supplement(now, state);
     orientation.update(now, viewW / viewH, dt); navigation.update(now);
+    bathymetry.update();
     if (photographic.update(now, state, viewW, viewH)) {
       explore?.update(camera, 1);
       mapLayers.update(camera, { pose: now, width: viewW, height: viewH, exaggeration: 1 });
@@ -1207,6 +1215,7 @@ async function boot() {
     terrain = createTerrain(THREE, {
       meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
       reefImagery: data.reefImagery, quality });
+    bathymetry?.setTerrain(terrain);
     imageryDetail.attachTerrain(terrain);
     diorama.attachTerrain(terrain);
     terrain.setTheme(store.value('theme'));
@@ -1233,6 +1242,7 @@ async function boot() {
     window.removeEventListener('resize', wake);
     explore?.dispose();
     aircraftLayer.dispose();
+    bathymetry.dispose();
     mapLayers.dispose();
     photographic.dispose();
     cameraLayer.dispose();

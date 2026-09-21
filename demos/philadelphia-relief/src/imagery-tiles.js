@@ -1,3 +1,4 @@
+import { BATHYMETRY_GLSL } from './bathymetry-shader.js?v=philly-2026092201';
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
 import { fetchTile } from './tile-cache.js?v=philly-2026092121';
 export { fetchTile };
@@ -289,12 +290,15 @@ export function createImageryTiles(THREE, options) {
       gl_Position = projectionMatrix * modelViewMatrix * vec4(vWorld, 1.0); }
   `;
   const fragmentShader = `
+    ${BATHYMETRY_GLSL}
+    uniform vec2 uRegionSize;
     uniform sampler2D uTile; uniform float uCompareMode; uniform float uComparePosition;
     uniform sampler2D uPrevious; uniform float uBlend; uniform float uArrival;
     uniform float uViewportWidth; uniform vec3 uCameraPos; uniform float uFogDensity;
     uniform vec3 uFogColor; uniform float uImageryOn; varying vec2 vUv;
     varying vec3 vWorld; varying float vElev;
     void main() {
+      if (bathymetryAt(vWorld.xz / uRegionSize + .5).y > .5) discard;
       if (uCompareMode > 0.5 && uCompareMode < 2.5) {
         if (gl_FragCoord.x / max(uViewportWidth, 1.0) > uComparePosition) discard;
       } else if (uImageryOn < 0.5) discard;

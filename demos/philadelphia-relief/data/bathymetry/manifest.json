@@ -1,0 +1,63 @@
+{
+  "version": 1,
+  "source": "NOAA Office of Coast Survey BlueTopo",
+  "sourceUrl": "https://www.nauticalcharts.noaa.gov/data/bluetopo.html",
+  "datum": "NAVD88",
+  "encoding": "elevationM = -(R * 256 + G) / 100; B = 255 means coverage",
+  "bounds": {
+    "west": -75.6,
+    "south": 39.7,
+    "east": -74.7,
+    "north": 40.275
+  },
+  "width": 4096,
+  "height": 3072,
+  "image": "riverbed.png",
+  "sampleSpacingM": [
+    18.7,
+    20.8
+  ],
+  "validSamples": 126298,
+  "minElevationM": -20.54,
+  "surveyDateRange": [
+    "1978-01-01",
+    "2026-09-01"
+  ],
+  "note": "Survey-derived elevations, sampled for display. No live tides. Source coverage and survey dates vary. Generalization filler excluded. Not for navigation.",
+  "probes": [
+    {
+      "name": "Delaware at Penns Landing",
+      "lon": -75.136,
+      "lat": 39.944,
+      "x": 2111,
+      "y": 1768,
+      "elevationM": -13.25
+    },
+    {
+      "name": "Lower Schuylkill",
+      "lon": -75.214,
+      "lat": 39.9,
+      "x": 1756,
+      "y": 2003,
+      "elevationM": -9.93
+    },
+    {
+      "name": "Center City land",
+      "lon": -75.164,
+      "lat": 39.953,
+      "x": 1984,
+      "y": 1720,
+      "elevationM": null
+    },
+    {
+      "name": "Upper Schuylkill",
+      "lon": -75.191,
+      "lat": 39.976,
+      "x": 1861,
+      "y": 1597,
+      "elevationM": null
+    }
+  ],
+  "sources": "sources.json",
+  "sourceTiles": 23
+}
