@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-9",
-  "generatedAt": "2026-09-21T13:19:12.496Z",
+  "physics": "rapier-0.20.0-mm-10",
+  "generatedAt": "2026-09-21T13:28:36.986Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -21,11 +21,11 @@
         },
         {
           "course": "beginner",
-          "ticks": 7400,
+          "ticks": 7084,
           "players": [
             {
-              "time": 26.822916666669364,
-              "score": 7505,
+              "time": 28.880208333336405,
+              "score": 7706,
               "deaths": 0,
               "status": "finished"
             }
@@ -36,8 +36,8 @@
           "ticks": 5545,
           "players": [
             {
-              "time": 34.89973958333883,
-              "score": 11706,
+              "time": 31.899739583342047,
+              "score": 11607,
               "deaths": 0,
               "status": "finished"
             }
@@ -48,8 +48,8 @@
           "ticks": 7018,
           "players": [
             {
-              "time": 18.309895833342484,
-              "score": 14450,
+              "time": 15.309895833341034,
+              "score": 14051,
               "deaths": 0,
               "status": "finished"
             }
@@ -60,8 +60,8 @@
           "ticks": 8865,
           "players": [
             {
-              "time": 3.285156249999014,
-              "score": 18635,
+              "time": 0.2851562499973045,
+              "score": 17936,
               "deaths": 0,
               "status": "finished"
             }
@@ -69,11 +69,11 @@
         },
         {
           "course": "ultimate",
-          "ticks": 4301,
+          "ticks": 3840,
           "players": [
             {
               "time": 0,
-              "score": 19396,
+              "score": 18626,
               "deaths": 0,
               "status": "timeout"
             }
@@ -105,17 +105,17 @@
         },
         {
           "course": "beginner",
-          "ticks": 7911,
+          "ticks": 7765,
           "players": [
             {
-              "time": 23.496093750002093,
-              "score": 7103,
+              "time": 25.371093750002434,
+              "score": 7304,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 24.53125000000228,
-              "score": 7305,
+              "time": 24.4466145833356,
+              "score": 7306,
               "deaths": 0,
               "status": "finished"
             }
@@ -126,14 +126,14 @@
           "ticks": 5730,
           "players": [
             {
-              "time": 31.899739583342047,
-              "score": 11004,
+              "time": 28.899739583343685,
+              "score": 10905,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 31.695312500007955,
-              "score": 11206,
+              "time": 26.695312500010676,
+              "score": 10707,
               "deaths": 0,
               "status": "finished"
             }
@@ -144,14 +144,14 @@
           "ticks": 7315,
           "players": [
             {
-              "time": 15.309895833341034,
-              "score": 13448,
+              "time": 12.309895833340216,
+              "score": 13049,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 13.37630208334121,
-              "score": 13449,
+              "time": 8.376302083339846,
+              "score": 12450,
               "deaths": 0,
               "status": "finished"
             }
@@ -159,17 +159,17 @@
         },
         {
           "course": "silly",
-          "ticks": 7527,
+          "ticks": 7066,
           "players": [
             {
               "time": 0,
-              "score": 15679,
+              "score": 15146,
               "deaths": 0,
               "status": "timeout"
             },
             {
               "time": 0,
-              "score": 15717,
+              "score": 14664,
               "deaths": 0,
               "status": "timeout"
             }

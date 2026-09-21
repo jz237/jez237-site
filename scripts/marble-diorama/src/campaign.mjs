@@ -1,5 +1,5 @@
 import { roundDemoCorners } from "./demo-route.mjs";
-import { AMIGA_RULES } from "./rules.mjs";
+import { AMIGA_RULES, COURSE_TIME } from "./rules.mjs";
 import { waveStrip } from "./wave.mjs";
 import { aerialCourse } from "./aerial.mjs";
 import { sillyCourse } from "./silly.mjs";
@@ -176,7 +176,7 @@ export function practiceCourse() {
       "#d8bd49",
       "#be3e35",
     ],
-    time: 60,
+    time: COURSE_TIME.practice,
     parity: "reconstruction",
     reference: {
       id: "MM-A500-R13-MAP-01",
@@ -492,7 +492,7 @@ export function beginnerCourse() {
     ),
   ];
   for (const i of [17, 18])
-    Object.assign(pipeRoute[i], { radius: 0.25, speed: 1.3 });
+    Object.assign(pipeRoute[i], { radius: 0.25, speed: 1.8 });
   for (const i of [21, 22])
     Object.assign(pipeRoute[i], { radius: 0.6, speed: 1.8 });
   const upperRightRoute = roundDemoCorners([
@@ -519,7 +519,7 @@ export function beginnerCourse() {
     courseNumber: 2,
     color: "#2284ba",
     sidePalette: ["#235474", "#259bc9", "#38cce3", "#265478"],
-    time: 75,
+    time: COURSE_TIME.beginner,
     parity: "reconstruction",
     reference: {
       id: "MM-A500-R13-MAP-02",
@@ -835,7 +835,7 @@ export function intermediateCourse() {
       "Split towers, acid islands, an orange pipe, and rolling final lanes.",
     category: "campaign",
     rules: AMIGA_RULES,
-    time: 45,
+    time: COURSE_TIME.intermediate,
     color: "#777948",
     sidePalette: ["#555746", "#9d9d61", "#454a44", "#676b49"],
     parity: "reconstruction",

@@ -27,8 +27,8 @@ not included in the published game.
 
 ## Implementation safeguards and validation
 
-- Physics/replay version is `rapier-0.20.0-mm-9`: old recordings cannot silently
-  claim compatible outcomes after collision and layout changes.
+- Physics/replay version is `rapier-0.20.0-mm-10`: old recordings cannot silently
+  claim compatible outcomes after collision, layout, and clock changes.
 - Enemy articulation is a pure function of the simulation clock. Shape reuse is
   bounded; fixed body solids are not rebuilt every tick. Rendering uses separate
   writable buffers so animation cannot mutate cached collision shapes.

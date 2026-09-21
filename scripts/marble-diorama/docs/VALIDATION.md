@@ -7,7 +7,7 @@ are playable. This reconstruction is published under Playable Games at the owner
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-9`.
+Current simulation/replay version: `rapier-0.20.0-mm-10`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -584,3 +584,24 @@ paired play on Silly; no clock extension was made.
 
 Production-build browser check: both Intermediate players finished with zero
 falls and no captured errors; Player 1 finished in 46.21s and both scored 801.
+
+
+### September 21 — original Intermediate clock correction
+
+107/107 tests pass in 137,708ms. The original 86.00s banner confirms +40 for
+Intermediate; campaign and single-course clocks now share that allocation.
+Version mm-10 separates recordings and records made with the old clock.
+
+The demo's precise Beginner pipe approach now requests speed 1.8 instead of 1.3,
+using the existing bounded controls and physics. Solo Beginner improves from
+61.67s to 59.03s without falls. The browser's paired demo finishes both marbles
+without falls or captured warnings/errors (Player 1: 63.52s, 895 points;
+Player 2: 896 points). A normal Intermediate race shows 39.4 after starting and
+immediately pausing, consistent with the corrected 40-unit initial clock.
+
+Fresh timed measurements preserve the existing completion assertions: solo
+finishes Silly with only 0.285 units remaining; both players finish Aerial.
+Solo times out in Ultimate after 32.00s, and both players time out in Silly by
+58.88s. Full campaign balance is still not accepted. No completion assertion,
+clock rate, torque, speed limit, collider, or hazard was weakened to pass this
+check. See CLOCK-REFERENCE.md and timed-campaign-measurements.json.

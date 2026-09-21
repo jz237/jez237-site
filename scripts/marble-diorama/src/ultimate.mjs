@@ -6,7 +6,7 @@ import {
   ribbon,
   routePoint,
 } from "./course-authoring.mjs";
-import { AMIGA_RULES } from "./rules.mjs";
+import { AMIGA_RULES, COURSE_TIME } from "./rules.mjs";
 
 export function ultimateCourse() {
   const parts = [
@@ -292,7 +292,7 @@ export function ultimateCourse() {
     subtitle: "Catapult islands, split hazard rooms, and the last icy descent.",
     category: "campaign",
     rules: { ...AMIGA_RULES, finishPointRate: 0 },
-    time: 25,
+    time: COURSE_TIME.ultimate,
     color: "#c64127",
     sky: "stars",
     sidePalette: ["#d63b23", "#9d231e", "#dc5a2d", "#7b2d27"],
