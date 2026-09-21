@@ -1,13 +1,13 @@
-# Validation — 2026-09-15
+# Validation — updated 2026-09-21
 
 ## Current outcome
 
-**86 automated tests pass. All six campaign races and all three bonus courses
+**97 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-5`.
+Current simulation/replay version: `rapier-0.20.0-mm-7`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -520,3 +520,28 @@ Browser verification: the rebuilt two-player Aerial demo finishes both marbles w
 Static ribbon ends now share a world-space cross section, width and bank profile. Junction changes taper out within1.5world units; three-way forks use a small rounded landing with eased incoming grades. Internal joined end caps are removed. Horizontal top faces are unioned before triangulation, removing overlapping coplanar surfaces while retaining holes and distinct elevations. Rendering and Rapier consume the same compiled triangles; foundations follow the prepared pieces. The physics version advances to mm-6 so earlier input replays are not incorrectly played against new geometry. Beginner right-fork and Silly second-player demo steering were adjusted for the changed joins.
 
 Validation: exact join profiles and input immutability across all campaign boards; overlap sample covered exactly once; stacked elevations and open holes retained. Full campaign/physics/render/audio regression suite run before release. Close-up Beginner fork visually inspected in browser; detailed full original-game parity remains open.
+
+
+## September 21 — object animation and opening topology repairs
+
+All 97 tests pass; production build and diff checks pass. See OBJECT-PARITY.md
+for the reference observations and explicit remaining mismatches. Wave vertex
+state now survives simulation stepping and snapshots. Munchers curl and turn;
+birds flap with compound contacts matching their articulated surfaces. Aerial
+has round peg banks rising from below the track. Ultimate has one launcher
+island and alternative lower landings, with contact-triggered moving arms.
+A settling waypoint keeps both demo marbles on the narrow ice approach using
+ordinary braking/steering; no position override or extra clock time is used.
+
+Browser verification on the release candidate: Silly solo finishes in 73.88s,
+3885 points, zero falls. Bird-field replay shows moving wings and reports 60fps
+at the sampled point. Ultimate two-player finishes both marbles, zero falls,
+1057 points each; the faster player finishes in 52.72s, both complete by 57.20s.
+No captured console warnings/errors. Close-up actor poses were also inspected.
+These are desktop spot checks, not sustained mobile performance certification.
+
+Fresh timed-campaign measurement still reports `complete: false`: solo passes
+Silly with 3.285 clock units remaining and times out in Ultimate after 35.842s;
+both players time out in Silly by 62.725s. These runs have zero falls but still
+need full timing/control/reference calibration. This checkpoint is a repair of
+the playable reconstruction, not a completed Amiga reproduction.

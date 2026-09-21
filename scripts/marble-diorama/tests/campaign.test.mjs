@@ -330,7 +330,7 @@ test("acid footprint kills touching marbles but leaves adjacent and airborne mar
   }
 });
 
-test("steelies exchange physical momentum and munchers kill on capsule contact", () => {
+test("steelies exchange physical momentum and munchers kill on articulated-body contact", () => {
   for (const kind of ["steelie", "muncher"]) {
     const c = proofCourse();
     c.parts = [part("floor", 0, 0, 20, 20)];

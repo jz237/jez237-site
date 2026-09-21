@@ -11,7 +11,6 @@ import {
 } from "../src/workshop.mjs";
 import { compileCourse, validateCourse } from "../src/course.mjs";
 import { Recording, seekRecording } from "../src/storage.mjs";
-import { birdGeometry } from "../src/enemies.mjs";
 import { waveStrip, wavePose } from "../src/wave.mjs";
 import { Vector3, Quaternion } from "three";
 await initPhysics();
@@ -61,7 +60,7 @@ test("traveling-wave panels share exact top edges and physically lift a marble",
 });
 
 test("wall-to-wall bird hulls hit a marble on their path and leave adjacent marbles safe", () => {
-  for (const z of [0, 2]) {
+  for (const z of [0, 0.9, 2]) {
     const c = blankCourse();
     c.goal.z = 30;
     c.starts = [{ x: 0, y: 0.55, z }];
@@ -82,25 +81,8 @@ test("wall-to-wall bird hulls hit a marble on their path and leave adjacent marb
     ];
     const s = new Simulation(c, { untimed: true });
     for (let i = 0; i < 90; i++) s.step();
-    assert.equal(s.players[0].deaths, z === 0 ? 1 : 0);
+    assert.equal(s.players[0].deaths, z < 2 ? 1 : 0);
     s.dispose();
-  }
-  const { vertices: v, indices } = birdGeometry(0.65);
-  for (let i = 0; i < indices.length; i += 3) {
-    const [a, b, c] = [0, 1, 2].map((j) =>
-      Array.from(v.slice(indices[i + j] * 3, indices[i + j] * 3 + 3)),
-    );
-    const ab = b.map((n, j) => n - a[j]),
-      ac = c.map((n, j) => n - a[j]);
-    const normal = [
-      ab[1] * ac[2] - ab[2] * ac[1],
-      ab[2] * ac[0] - ab[0] * ac[2],
-      ab[0] * ac[1] - ab[1] * ac[0],
-    ];
-    assert.ok(
-      normal.reduce((s, n, j) => s + n * a[j], 0) > 0,
-      "outward bird face",
-    );
   }
 });
 

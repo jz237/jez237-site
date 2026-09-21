@@ -12,29 +12,41 @@ export function ultimateCourse() {
   const parts = [
     deck("start-field", 0, 5, 22, 16, 16, { h: 0.8, material: "sand" }),
     deck("start-ridge", -1, 7, 8, 4, 16, { kind: "pyramid", rise: 1.4 }),
-    deck("catapult-one", 6, 12, 3.2, 3.2, 16, {
-      kind: "spring",
-      material: "brass",
-      launch: { forward: 8, lateral: 0, up: 5, velocity: true },
-    }),
-    deck("first-island", 6, 24, 8, 8, 14, { h: 0.8 }),
-    deck("catapult-two", 6, 27, 3.2, 3.2, 14, {
-      kind: "spring",
-      material: "brass",
-      launch: { forward: 8, lateral: -6, up: 5, velocity: true },
-    }),
-    deck("second-island", -3, 36, 10, 8, 12, { h: 0.8 }),
-    deck("catapult-three", -3, 39, 3.2, 3.2, 12, {
-      kind: "spring",
-      material: "brass",
-      launch: { forward: 4, lateral: 6, up: 7, velocity: true },
-    }),
-    deck("third-island", 5, 48, 14, 10, 10, { h: 0.8 }),
+    // The start drops onto one launcher island. Its lower landing islands
+    // branch left/right; the left route never visits the right platform.
+    deck("first-island", 6, 18, 8, 8, 14, { h: 0.8 }),
+    ...[-1, 1].map((sign) =>
+      deck(
+        `catapult-${sign < 0 ? "left" : "right"}`,
+        6 + sign * 1.45,
+        19,
+        2.8,
+        3,
+        14.015,
+        {
+          kind: "spring",
+          h: 0.16,
+          material: "brass",
+          motion: { axis: "launch", amplitude: 0.42, period: 0.9 },
+          launch: { forward: 6.5, lateral: sign * 4, up: 5, velocity: true },
+        },
+      ),
+    ),
+    deck("left-landing-island", -3, 30, 10, 9, 10, { h: 0.8 }),
+    deck("right-landing-island", 15, 30, 10, 9, 10, { h: 0.8 }),
+    ...[-3, 15].map((l, i) =>
+      deck(`landing-guide-${i}`, l, 29, 2.8, 2.8, 10, {
+        kind: "ramp",
+        rise: 0.6,
+        h: 0.16,
+        material: "brass",
+      }),
+    ),
     ribbon(
       "ice-left-bridge",
       [
-        [5, 52, 10],
-        [-7, 57, 10],
+        [-3, 34.5, 10],
+        [-7, 48, 10],
         [-13, 60, 10],
       ],
       3.2,
@@ -42,8 +54,8 @@ export function ultimateCourse() {
     ribbon(
       "ice-right-bridge",
       [
-        [5, 52, 10],
-        [13, 56, 10],
+        [15, 34.5, 10],
+        [13, 48, 10],
         [13, 60, 10],
       ],
       3.2,
@@ -169,14 +181,12 @@ export function ultimateCourse() {
         }),
       );
   const route = [
-    [6, 16, 3],
-    [6, 16, 10.5],
-    [6, 14, 23],
-    [6, 14, 25.5],
-    [-3, 12, 35],
-    [-3, 12, 37.5],
-    [5, 10, 47],
-    [5, 10, 51],
+    [4.55, 16, 3],
+    [4.55, 16, 12.8],
+    [4.55, 14, 17.2],
+    [-3, 10, 30],
+    [-3, 10, 32],
+    [-7, 10, 48],
     [-13, 10, 60],
     [-14, 10, 62],
     [-14, 10, 66],
@@ -204,10 +214,14 @@ export function ultimateCourse() {
     }),
   );
   // Targets beyond the pads let the launchers accelerate a normally steered ball.
-  for (const i of [1, 3, 5]) route[i].radius = 0.45;
-  for (const i of [2, 4, 6]) route[i].radius = 2.5;
+  route[1].radius = 0.35;
+  route[1].speed = 3.6;
+  route[2].radius = 1.3;
+  route[2].speed = 3.6;
+  route[3].radius = 2.5;
+  Object.assign(route[4], { stop: true, speed: 1.8, radius: 0.5 });
   route.splice(
-    23,
+    21,
     0,
     routePoint(-14, 1, 129, {
       speed: 2.4,
@@ -224,7 +238,19 @@ export function ultimateCourse() {
     routePoint(-14, 1, 134, { speed: 3.5, radius: 0.6 }),
   );
   const rightRoute = [
-    ...route.slice(0, 8),
+    ...[
+      [7.45, 16, 3],
+      [7.45, 16, 12.8],
+      [7.45, 14, 17.2],
+      [15, 10, 30],
+      [15, 10, 34],
+      [13, 10, 48],
+    ].map(([l, h, d], i) =>
+      routePoint(l, h, d, {
+        speed: i === 1 || i === 2 ? 3.6 : 2.4,
+        radius: i === 1 ? 0.35 : i === 2 ? 1.3 : i === 3 ? 2.5 : 0.7,
+      }),
+    ),
     ...[
       [13, 10, 56],
       [13, 10, 58],
@@ -260,7 +286,7 @@ export function ultimateCourse() {
     schema: 1,
     id: "ultimate",
     medals: { gold: 85, silver: 125 },
-    revision: 1,
+    revision: 2,
     name: "Ultimate Race",
     courseNumber: 6,
     subtitle: "Catapult islands, split hazard rooms, and the last icy descent.",
@@ -277,7 +303,7 @@ export function ultimateCourse() {
         "layout and launch reconstruction; alternate routes, timing and full parity pending",
       landmarks: [
         "sand start",
-        "three catapult islands",
+        "launcher island and two alternative landing islands",
         "ice links",
         "paired acid and muncher rooms",
         "four ice pyramids",
@@ -288,7 +314,7 @@ export function ultimateCourse() {
     starts: [worldPoint(-0.7, 16.56, 0), worldPoint(0.7, 16.56, 0)],
     goal: { ...worldPoint(0, 2, 128), angle: ISO, width: 9, depth: 1.3 },
     parts,
-    route: roundDemoCorners(route, { radius: 1.5 }),
+    route: roundDemoCorners(route, { radius: 1.5, from: 6 }),
     alternateRoutes: [
       {
         id: "right-hazard-rooms",
@@ -297,7 +323,7 @@ export function ultimateCourse() {
       },
     ],
     checkpoints: [
-      worldPoint(5, 10.56, 48),
+      worldPoint(-3, 10.56, 33),
       worldPoint(-14, 10.56, 59),
       worldPoint(-14, 8.56, 80),
       worldPoint(-10, 4.56, 110),
