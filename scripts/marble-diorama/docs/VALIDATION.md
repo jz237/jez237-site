@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**107 automated tests pass. All six campaign races and all three bonus courses
+**115 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-10`.
+Current simulation/replay version: `rapier-0.20.0-mm-11`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -605,3 +605,24 @@ Solo times out in Ultimate after 32.00s, and both players time out in Silly by
 58.88s. Full campaign balance is still not accepted. No completion assertion,
 clock rate, torque, speed limit, collider, or hazard was weakened to pass this
 check. See CLOCK-REFERENCE.md and timed-campaign-measurements.json.
+
+
+### September 21 — Practice targets and six-race finish scoring
+
+115/115 final tests pass in 138,230ms; production build and diff check pass.
+Browser check captured no warnings/errors.
+
+New native checks cover landing on all three actual shelves; rejection of rolling
+starts, high overflights, undersides and unpainted margins; independent players;
+repeat prevention; midair snapshot continuation; floor-relative editor transforms,
+deletion and JSON validation; and the full-start ordinary-input bonus route.
+All six native goal checks separate their fixed awards from clock points. A
+reference-state Ultimate test produces 58470 after finishing, then 79470 after
+the separate campaign ending. Bonus events reach the effects bus per player.
+
+Browser production-build inspection shows the 3–6 markings. The selectable left
+landing route finishes in 26.94s, zero falls, 6413 untimed points (including 5000
+landing and 1000 finish awards), with visible bonus feedback. Full original
+landing-score interpolation and repeat policy remain provisional. Full campaign
+timing remains incomplete: solo expires on Ultimate and paired play on Silly.
+See PRACTICE-SCORING.md for original footage and exact limits of these checks.

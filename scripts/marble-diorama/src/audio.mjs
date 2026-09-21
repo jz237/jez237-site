@@ -250,6 +250,8 @@ export class AudioEngine {
   }
   event(event, assisted = false) {
     if (event.type === "impact") return this.impact(event.force);
+    if (event.type === "landing-bonus")
+      return this.effect("collect", { key: `landing-bonus:${event.player}` });
     if (event.type === "checkpoint" && !assisted) return;
     return this.effect(event.type, { key: `${event.type}:${event.player}` });
   }

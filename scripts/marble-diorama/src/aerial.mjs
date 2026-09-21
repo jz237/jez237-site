@@ -6,7 +6,7 @@ import {
   ribbon,
   routePoint,
 } from "./course-authoring.mjs";
-import { AMIGA_RULES, COURSE_TIME } from "./rules.mjs";
+import { amigaCourseRules, COURSE_TIME } from "./rules.mjs";
 
 export function aerialCourse() {
   const parts = [
@@ -381,7 +381,7 @@ export function aerialCourse() {
     subtitle:
       "Crossed balancing rails, vacuum turns, and the yellow tower descent.",
     category: "campaign",
-    rules: AMIGA_RULES,
+    rules: amigaCourseRules("aerial"),
     time: COURSE_TIME.aerial,
     color: "#bd6328",
     sidePalette: ["#b8381f", "#df8b2d", "#edac41", "#5b3933"],

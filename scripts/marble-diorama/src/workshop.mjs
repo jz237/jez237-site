@@ -81,6 +81,8 @@ export function removeWorkshopObject(course, key) {
   const [type, id] = key.split(":");
   if (type === "part") {
     course.parts = course.parts.filter((p) => p.id !== id);
+    if (course.markings)
+      course.markings = course.markings.filter((m) => m.part !== id);
     for (const route of [
       course.route ?? [],
       ...(course.playerRoutes ?? []),

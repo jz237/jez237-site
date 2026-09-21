@@ -421,3 +421,16 @@ test("moving acid sound follows the current sensor instead of its starting posit
   audio.obstacles(sim);
   assert.equal(calls[1].gain, 0);
 });
+
+test("landing awards use the effects bus with separate player throttles", async () => {
+  const { audio } = fixture();
+  await audio.unlock();
+  const calls = [];
+  audio.effect = (name, options) => calls.push({ name, ...options });
+  audio.event({ type: "landing-bonus", player: 0, score: 4500 });
+  audio.event({ type: "landing-bonus", player: 1, score: 4500 });
+  assert.deepEqual(calls, [
+    { name: "collect", key: "landing-bonus:0" },
+    { name: "collect", key: "landing-bonus:1" },
+  ]);
+});
