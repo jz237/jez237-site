@@ -1,7 +1,7 @@
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092116';
-import { shipGeometry } from './ship-model.js?v=philly-2026092116';
-import { clusterPoints } from './map-clusters.js?v=philly-2026092116';
-import { createUpdateGate } from './frame-work.js?v=philly-2026092116';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092117';
+import { shipGeometry } from './ship-model.js?v=philly-2026092117';
+import { clusterPoints } from './map-clusters.js?v=philly-2026092117';
+import { createUpdateGate } from './frame-work.js?v=philly-2026092117';
 
 export function createMapPoints(THREE, { scene, stage, projection, sampleElevation,
   photographic, onSelect, onCluster }) {

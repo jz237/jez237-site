@@ -8,10 +8,12 @@ import { PRESET_EXCLUDED } from '../src/presets.js';
 
 test('aircraft horizon handoff accepts neighborhood tiles but rejects country-scale geometry', () => {
   assert.equal(photoTileReady(64.01), false, 'ordinary close-up readiness stays unchanged');
-  assert.equal(photoTileReady(64.01, true), true);
-  assert.equal(photoTileReady(128, true), true);
-  assert.equal(photoTileReady(256, true), false);
-  assert.equal(photoTileReady(Infinity, true), false);
+  assert.equal(photoTileReady(64.01, 500), true);
+  assert.equal(photoTileReady(128.4, 500), true, 'provider errors are not exact powers of two');
+  assert.equal(photoTileReady(256, 500), false);
+  assert.equal(photoTileReady(1024.2, 14000), true, 'high aircraft need wider initial coverage');
+  assert.equal(photoTileReady(4096, 14000), false);
+  assert.equal(photoTileReady(Infinity, 500), false);
   assert.equal(photoReady(0, 500, true), false, 'many coarse horizon tiles cannot trigger handoff');
 });
 

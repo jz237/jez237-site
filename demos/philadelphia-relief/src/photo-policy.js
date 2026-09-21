@@ -5,8 +5,12 @@ export const PHOTO_PRELOAD = 16000;
 
 // Horizon views spread the first tile budget over a much larger visible area.
 // Accept neighborhood geometry for that initial handoff; final SSE is unchanged.
-export function photoTileReady(error, flying = false) {
-  return Number.isFinite(error) && error <= (flying ? 128 : 64);
+export function photoTileReady(error, flightHeight) {
+  // Google tile errors are near powers of two, not necessarily exact powers.
+  // Higher aircraft need a wider initial footprint than a street-level orbit.
+  const threshold = Number.isFinite(flightHeight)
+    ? Math.max(130, Math.min(2048, flightHeight / 8)) : 64;
+  return Number.isFinite(error) && error <= threshold;
 }
 
 // A loaded planet-scale fallback is not a usable photographic close-up.
