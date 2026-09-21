@@ -126,6 +126,7 @@ export function waveStrip(
       material,
       motion: {
         axis: "wave",
+        strip: id,
         ...(profile
           ? { profile, crestWidth, crestPeak, anchorLength, phase }
           : {}),

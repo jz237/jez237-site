@@ -858,3 +858,25 @@ Timed campaign measurement remains incomplete: solo Intermediate 46.2s, Aerial
 Paired Intermediate finishes by 47.7583s and Aerial by 66.5s, then both players
 time out in Silly by 55.0417s. All these measured runs have zero falls. Full
 campaign acceptance and full Amiga parity remain open.
+
+
+### September 21 - connected wave editing
+
+Fixed invalid wave rotation and made each new wave strip a single editor object.
+Move/rotate keep every panel and its animated seams together; remove/erase clear
+the complete strip and linked references. Imported ungrouped panels also rotate
+correctly. Moving starts, goals and unlinked zones leaves unrelated routes alone;
+aliased linked waypoints move once instead of once per route containing them.
+
+Production build and diff checks pass. All 29 focused tests pass (6928ms), covering
+workshop motion, extras, animated objects, rendered surface geometry and crest
+physics. Four new regressions cover grouped transforms/removal, legacy panel
+rotation, live physical contact and snapshot restoration after editing, and
+unrelated route preservation. The prior full 144-test campaign release remains
+the latest complete suite; this editor follow-up does not claim a new full-suite
+run or full Amiga parity. Physics version stays mm-20 because campaign dynamics
+are unchanged by the authoring metadata.
+
+Actual browser checks verify grouped selection, rotate, move, removal, undo/redo,
+restoration of the original layout and playtest startup without captured errors.
+See INTERMEDIATE-WAVES.md for the geometry and reference limits.

@@ -888,7 +888,12 @@ async function init() {
             )
             .sort((a, b) => Math.abs(a.y - y) - Math.abs(b.y - y))[0];
           if (closest)
-            editCourse.parts = editCourse.parts.filter((p) => p !== closest);
+            removeWorkshopObject(
+              editCourse,
+              closest.motion?.strip
+                ? `wave:${closest.motion.strip}`
+                : `part:${closest.id}`,
+            );
         } else if (["hazard", "magnet", "acid", "vacuum"].includes(kind)) {
           editCourse.zones ??= [];
           const a = (Number($("pieceAngle").value) * Math.PI) / 180;

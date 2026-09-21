@@ -55,7 +55,9 @@ original dimensions, timing, or complete route coverage.
   checkpoints, goals and ordered demo waypoints.
 - [x] Editor snapping, move/rotate/remove, undo/redo, naming, local save,
   validated JSON round trips and instant playtest. Curve placement, rotation,
-  movement, undo/redo and save/playtest exercised in the browser.
+  movement, undo/redo and save/playtest exercised in the browser. Connected waves
+  now move/rotate/remove as one strip; legacy panel rotation, grouped undo/redo
+  and edited physical contact also pass.
 - [ ] Persistent undo history and arbitrary path-control-point editing.
 - [x] Input recording, periodic in-memory physics snapshots, replay speed/seek,
   saved input-only reconstruction and noncolliding personal-best ghosts.
