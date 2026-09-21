@@ -3,8 +3,17 @@ import assert from 'node:assert/strict';
 import { defaults } from '../src/schema.js';
 import { createStore } from '../src/state.js';
 import { encodeState, decodeState } from '../src/urlstate.js';
-import { photoAllowed, photoWanted, photoCamera, photoReady } from '../src/photo-policy.js';
+import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady } from '../src/photo-policy.js';
 import { PRESET_EXCLUDED } from '../src/presets.js';
+
+test('aircraft horizon handoff accepts neighborhood tiles but rejects country-scale geometry', () => {
+  assert.equal(photoTileReady(64.01), false, 'ordinary close-up readiness stays unchanged');
+  assert.equal(photoTileReady(64.01, true), true);
+  assert.equal(photoTileReady(128, true), true);
+  assert.equal(photoTileReady(256, true), false);
+  assert.equal(photoTileReady(Infinity, true), false);
+  assert.equal(photoReady(0, 500, true), false, 'many coarse horizon tiles cannot trigger handoff');
+});
 
 test('photographic handoff rejects a loaded coarse fallback and sparse initial detail', () => {
   assert.equal(photoReady(0, 50, true), false);
