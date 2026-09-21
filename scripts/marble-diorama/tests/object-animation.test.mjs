@@ -1,4 +1,7 @@
 import test from "node:test";
+import * as THREE from "three";
+import { vacuumAt } from "../src/vacuum.mjs";
+import { vacuumFragments, updateVacuumFragments } from "../src/vacuum-view.mjs";
 import assert from "node:assert/strict";
 import { Simulation, initPhysics } from "../src/physics.mjs";
 import { blankCourse } from "../src/workshop.mjs";
@@ -328,7 +331,7 @@ test("Aerial paddle delays its upstroke, physically returns the marble to the up
   sim.dispose();
 });
 
-test("vacuum opening stays hollow and disappearance disables its geometry and force", () => {
+test("vacuum intake has a recessed cavity and solid rear wall, and retracts out of contact", () => {
   const course = aerialCourse(),
     mouth = course.parts.find((p) => p.profile === "vacuum-mouth");
   assert.equal(
@@ -346,7 +349,10 @@ test("vacuum opening stays hollow and disappearance disables its geometry and fo
     origin: { x: mouth.x - 2 * cs, y: mouth.y + 0.95, z: mouth.z - 2 * sn },
     dir: { x: cs, y: 0, z: sn },
   };
-  assert.equal(col.castRay(ray, 4, true), -1);
+  // The front aperture is open, but it ends at the housing's recessed rear wall.
+  const back = col.castRay(ray, 4, true);
+  assert.ok(Math.abs(back - (2 + mouth.w / 2 - 0.08)) < 1e-4);
+  assert.equal(col.castRay(ray, 2, true), -1);
   ray.origin.y = mouth.y + 1.8;
   assert.ok(col.castRay(ray, 4, true) > 0);
   for (let i = 0; i < 200; i++) sim.step();
@@ -406,4 +412,163 @@ test("Aerial paddle can be entered from its spur using ordinary held movement", 
   assert.ok(landed);
   assert.equal(sim.players[0].deaths, 0);
   sim.dispose();
+});
+
+test("vacuum deployment moves its collision surface and suction origin together through withdrawal and return", () => {
+  const c = aerialCourse(),
+    mouth = c.parts.find((p) => p.profile === "vacuum-mouth"),
+    zone = c.zones.find((z) => z.mouth === mouth.id);
+  const sim = new Simulation(c, { untimed: true });
+  const mover = sim.movers.find((m) => m.part.id === mouth.id);
+  const body = sim.world.getRigidBody(mover.handle);
+  const poses = [];
+  for (let i = 0; i < 690; i++) {
+    sim.step();
+    const t = sim.tick / 120;
+    const state = vacuumAt(zone, t, c.parts);
+    if (body.isEnabled())
+      assert.ok(
+        Math.abs(state.position.y - (zone.y + body.translation().y - mouth.y)) <
+          1e-5,
+      );
+    else {
+      assert.equal(state.active, false);
+      assert.ok(body.translation().y + mouth.h <= mouth.y + 0.01);
+    }
+    assert.ok(Math.abs(mover.current.position.y - body.translation().y) < 1e-5);
+    if ([152, 166, 180, 674, 686].includes(sim.tick))
+      poses.push({
+        tick: sim.tick,
+        y: body.translation().y,
+        active: state.active,
+        enabled: body.isEnabled(),
+      });
+  }
+  assert.ok(
+    poses[1].y < poses[0].y - 0.5 && poses[1].y > mouth.y - mouth.h + 0.5,
+  );
+  assert.equal(poses[2].enabled, false);
+  assert.equal(poses[2].active, false);
+  assert.ok(poses[3].y > mouth.y - mouth.h + 0.5 && poses[3].y < mouth.y - 0.5);
+  assert.ok(poses[4].active);
+  sim.dispose();
+  const invalid = structuredClone(c);
+  invalid.parts.find((p) => p.id === mouth.id).presence.transition = 10;
+  assert.throws(() => validateCourse(invalid), /deployment/);
+  invalid.parts.find((p) => p.id === mouth.id).presence.transition = 0.24;
+  invalid.zones.find((z) => z.mouth).mouth = "absent";
+  assert.throws(() => validateCourse(invalid), /valid mouth/);
+});
+
+test("vacuum capture inhales fragments, restores mid-capture, and reforms at the physical respawn point", () => {
+  const c = blankCourse();
+  c.starts = [{ x: -0.6, y: 0.55, z: 0 }];
+  c.rules = { respawn: "last-safe" };
+  c.zones = [
+    {
+      kind: "vacuum",
+      x: 0,
+      y: 0.55,
+      z: 0,
+      radius: 4,
+      strength: 1.3,
+      direction: { x: -1, y: 0, z: 0 },
+      presence: { period: 10, on: 1 },
+    },
+  ];
+  const sim = new Simulation(c, { untimed: true });
+  const events = sim.step();
+  const p = sim.players[0];
+  assert.deepEqual(
+    events.filter((e) => e.type === "fall"),
+    [{ type: "fall", player: 0, cause: "vacuum" }],
+  );
+  assert.equal(p.respawnTick - sim.tick, 252);
+  assert.equal(sim.body(p).isEnabled(), false);
+  const mesh = vacuumFragments(new THREE.MeshStandardMaterial());
+  const poseAt = (age) => {
+    updateVacuumFragments(mesh, p, p.vacuumCapture.tick / 120 + age);
+    return mesh.children.map((m) => ({
+      visible: m.visible,
+      position: m.position.toArray(),
+      scale: m.scale.toArray(),
+    }));
+  };
+  const early = poseAt(0.12),
+    inhaled = poseAt(0.62);
+  const distance = (pose) =>
+    Math.hypot(...pose.position.map((v, i) => v - [0, 0.55, 0][i]));
+  assert.ok(inhaled.every((pose, i) => distance(pose) < distance(early[i])));
+  assert.ok(poseAt(0.8).every((p) => !p.visible));
+  assert.ok(poseAt(1.4).every((p) => p.visible));
+  const returnPose = poseAt(1.7);
+  assert.deepEqual(
+    poseAt(1.7),
+    returnPose,
+    "rendering the same time cannot advance fragments",
+  );
+  for (let i = 0; i < 90; i++) sim.step();
+  const snapshot = sim.snapshot();
+  const finish = () => {
+    const events = [];
+    while (sim.tick < 253) events.push(...sim.step());
+    assert.equal(sim.players[0].status, "racing");
+    assert.equal(sim.players[0].vacuumCapture, null);
+    assert.ok(
+      Math.hypot(
+        ...["x", "y", "z"].map(
+          (k) => sim.players[0].current.position[k] - c.starts[0][k],
+        ),
+      ) < 0.001,
+    );
+    assert.equal(sim.players[0].deaths, 1);
+    assert.equal(events.filter((e) => e.type === "respawn").length, 1);
+    return structuredClone(sim.players[0]);
+  };
+  const first = finish();
+  sim.restore(snapshot);
+  assert.deepEqual(finish(), first);
+  mesh.children.forEach((m) => m.geometry.dispose());
+  mesh.children[0].material.dispose();
+  sim.dispose();
+});
+
+test("vacuum fragments are closed solid sectors that reconstruct a whole marble", () => {
+  const material = new THREE.MeshStandardMaterial(),
+    group = vacuumFragments(material);
+  let totalVolume = 0;
+  for (const mesh of group.children) {
+    const v = mesh.geometry.attributes.position.array,
+      edges = new Map();
+    const key = (point) => point.map((n) => Math.round(n * 1e6)).join(",");
+    for (let i = 0; i < v.length; i += 9) {
+      const a = Array.from(v.slice(i, i + 3)),
+        b = Array.from(v.slice(i + 3, i + 6)),
+        c = Array.from(v.slice(i + 6, i + 9));
+      totalVolume +=
+        (a[0] * (b[1] * c[2] - b[2] * c[1]) +
+          a[1] * (b[2] * c[0] - b[0] * c[2]) +
+          a[2] * (b[0] * c[1] - b[1] * c[0])) /
+        6;
+      for (const [p, q] of [
+        [a, b],
+        [b, c],
+        [c, a],
+      ]) {
+        const kp = key(p),
+          kq = key(q);
+        if (kp === kq) continue;
+        const id = [kp, kq].sort().join("|");
+        edges.set(id, (edges.get(id) ?? 0) + 1);
+      }
+    }
+    assert.ok(
+      [...edges.values()].every((n) => n === 2),
+      "each cut face must close its sector",
+    );
+    mesh.geometry.dispose();
+  }
+  const volume = (4 / 3) * Math.PI * 0.55 ** 3;
+  assert.ok(totalVolume > volume * 0.98 && totalVolume <= volume);
+  material.dispose();
 });

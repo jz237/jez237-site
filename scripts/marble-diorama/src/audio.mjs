@@ -1,3 +1,4 @@
+import { vacuumAt } from "./vacuum.mjs";
 import { presenceAt } from "./mechanism-time.mjs";
 import { effectSamples } from "./effects.mjs";
 // No synthesized replacement music. Only explicitly verified local cues may play.
@@ -250,6 +251,10 @@ export class AudioEngine {
   }
   event(event, assisted = false) {
     if (event.type === "impact") return this.impact(event.force);
+    if (event.type === "fall" && event.cause === "vacuum") {
+      this.effect("vacuum", { key: `vacuum-capture:${event.player}` });
+      return this.effect("fall", { key: `fall:${event.player}` });
+    }
     if (
       ["landing-bonus", "steelie-defeat", "traversal-bonus"].includes(
         event.type,
@@ -328,6 +333,15 @@ export class AudioEngine {
         });
     }
     for (const z of sim.course.zones ?? []) {
+      const vacuum =
+        z.kind === "vacuum"
+          ? vacuumAt(
+              z,
+              (sim.tick / 120) * (sim.preset?.machineSpeed ?? 1),
+              sim.course.parts,
+            )
+          : null;
+      if (vacuum && !vacuum.active) continue;
       if (
         !["vacuum", "magnet", "acid"].includes(z.kind) ||
         !presenceAt(z, (sim.tick / 120) * (sim.preset?.machineSpeed ?? 1))
@@ -341,8 +355,10 @@ export class AudioEngine {
               ? sim.world
                   .getCollider(sim.acid.find((a) => a.zone === z).handle)
                   .translation()
-              : z,
-          ) * 0.65,
+              : (vacuum?.position ?? z),
+          ) *
+          0.65 *
+          (vacuum?.strength ?? 1),
         key: z.kind,
         cooldown: z.kind === "acid" ? 0.75 : 0.3,
       });

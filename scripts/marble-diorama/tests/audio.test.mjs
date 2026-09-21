@@ -485,3 +485,45 @@ test("powered transfers sound only while carrying a racing marble", async () => 
   audio.obstacles(sim);
   assert.equal(calls.length, 1);
 });
+
+test("vacuum audio follows the linked mouth and stays silent beneath the surface", async () => {
+  const { audio } = fixture();
+  await audio.unlock();
+  const mouth = {
+    id: "mouth",
+    profile: "vacuum-mouth",
+    x: 0,
+    y: 0,
+    z: 0,
+    h: 1.9,
+    presence: { period: 5, on: 2, transition: 0.24 },
+    motion: { axis: "y", period: 5, amplitude: 0 },
+  };
+  const sim = {
+    tick: 12,
+    players: [
+      { status: "racing", current: { position: { x: -1, y: 0.55, z: 0 } } },
+    ],
+    course: {
+      parts: [mouth],
+      zones: [{ kind: "vacuum", mouth: "mouth", x: 0, y: 0.9, z: 0 }],
+    },
+  };
+  const calls = [];
+  audio.effect = (name, options) => calls.push({ name, ...options });
+  audio.obstacles(sim);
+  assert.equal(calls.length, 0);
+  sim.tick = 30;
+  audio.obstacles(sim);
+  assert.equal(calls.length, 1);
+  assert.equal(calls[0].name, "vacuum");
+  assert.ok(calls[0].gain > 0);
+  sim.tick = 240;
+  audio.obstacles(sim);
+  assert.equal(calls.length, 1);
+  audio.event({ type: "fall", cause: "vacuum", player: 1 });
+  assert.deepEqual(
+    calls.slice(1).map((c) => c.name),
+    ["vacuum", "fall"],
+  );
+});

@@ -19,7 +19,7 @@ not included in the published game.
 | Intermediate / Ultimate acid, 109–114s | Replaced rigid disks with dark green, deforming lobed surfaces. Rendering and sensors share the complete concave mesh, including safe notches. Intermediate lower-left puddle now takes straight legs and a perpendicular turn; sound follows current position. See ACID-REFERENCE.md for measured screen centers. | Full original outlines, deformation cadence, dimensions, complete patrol loop, four remaining Intermediate paths and Ultimate paths remain provisional. Capture animation and original effects remain open. |
 | Aerial pegs, 161.28-162.60s and 166.20-169.44s | Rebuilt three 3x4 beds with visible flush caps. Full lines of three or four pegs rise in perpendicular directions, sharing the rendered/collision pose. Stroke now follows measured ~0.20s rise, 0.36s hold, 0.20s return. | Locations, dimensions, idle probability and seeded line selection remain reconstructed. The original selection law and complete coverage of every bed are unverified. See AERIAL-PEGS.md. |
 | Aerial red paddle, 160–164s | Frame sequence shows a cup holding the marble, hinging upward, and throwing it onto an upper ledge. Replaced the overhead crusher with a red recessed cup, stem, metal hinge, and contact-triggered stroke. The moving concave collider provides the launch; no injected impulse or teleport. Ordinary held-input entry and upper-ledge landing pass. | Dimensions, placement, and 0.9s stroke are reconstructed. The observed ~0.5s dwell is represented; original launch law and exact return destination still need measurement. Gray ramp geometry remains open. |
-| Aerial vacuums, 146–154s | Three yellow mouths appear along the left zigzag; at least two disappear during the inspected interval. Added the middle mouth, rounded hollow frames, and shared visibility/collision/suction/audio gating. Fixed killing from behind the intake and moved frames onto the track edges. | Ten-second repeat periods and 3/5/6s active windows are provisional. Full original respawn cadence, intake deformation, and capture animation are not yet reproduced. |
+| Aerial vacuums, 146-154s | Three recessed yellow housings now rise and retract physically. Suction and audio follow each moving intake and stop below the track. Vacuum captures have an approximately 2.1s fragment-intake/return/reassembly sequence, with solid striped sectors, saved state and shared respawn destination. See AERIAL-VACUUMS.md. | Repeat periods, positions/orientations, dimensions, force, exact capture threshold and fragment trajectories remain reconstructed; original sound and full appearance cadence need further comparison. |
 | Silly birds, 238–239s | Original purple birds have changing wing silhouettes during crossings. Replaced rigid diamonds with articulated purple bodies, heads, beaks, tails and independently posed wings. Wing collision solids deform with the visible wings. | Straight crossing paths, bird count/rest intervals and 3.2Hz wingbeat are provisional; exact original flight/impact animation is not certified. |
 | Silly miniatures / uplift | Restored nine miniatures in three forms (steelie, curling muncher, deforming puddle), with shared visible/collision shapes; contacts award +500/+3; the powered, flared upward passage carries the physical marble and pays the footage-verified 2000. | Exact miniature layout, dimensions, movement and repeat policy remain open; see SILLY-MINIATURES.md. Both horn passages are reconstructed; side loops, scale and original selection/transfer law remain open. See SILLY-TRANSFER.md. |
 | Ultimate opening, 277–283s | Removed the unsupported serial three-launch route. The starting field now drops onto one launcher island, which sends the marble to either of two lower landing islands; each has its own ice bridge. Two contact-triggered hinged arms replace static pads. Both approaches are checked with ordinary controls and one launch, with no visit to the opposite island. | The paired arms, velocities and stroke are a playable reconstruction, **not a recovered launch law**. Starting recess, gold guide shape, exact dimensions and observed 2000 award trigger remain open. The recording establishes the left route; full original right-route traversal is still unverified. |
@@ -27,7 +27,7 @@ not included in the published game.
 
 ## Implementation safeguards and validation
 
-- Physics/replay version is `rapier-0.20.0-mm-17`: old recordings cannot silently
+- Physics/replay version is `rapier-0.20.0-mm-18`: old recordings cannot silently
   claim compatible outcomes after collision, layout, and clock changes.
 - Enemy articulation is a pure function of the simulation clock. Shape reuse is
   bounded; fixed body solids are not rebuilt every tick. Rendering uses separate
@@ -63,3 +63,8 @@ avoidance; the arcade reference is not yet mapped to the Amiga Silly mechanism.
 Exact dimensions, selection law and side loops remain open. See SILLY-TRANSFER.md.
 
 Current mm-17 release validation: all 136 tests pass; production build and diff checks pass.
+
+Latest mm-18 validation: full 139/139 suite passes, followed by a complete
+object-animation/audio rerun for final fragment geometry and pose factoring.
+The added solid-sector test passes. Build, browser close-ups and diff checks pass.
+See AERIAL-VACUUMS.md and VALIDATION.md for scope and remaining gaps.

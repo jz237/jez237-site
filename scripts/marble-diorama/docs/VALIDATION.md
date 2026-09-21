@@ -788,3 +788,27 @@ falls: P1 4944 points, P2 4943 points; P1 first at 61.20 seconds. Close-ups show
 flush caps and both perpendicular raised lines; no warnings/errors were captured.
 
 Current mm-17 release validation: all 136 tests pass; production build and diff checks pass.
+
+
+### September 21 - vacuum emergence and capture
+
+All three Aerial vacuum mouths rise/retract over approximately 0.24s, with
+recessed solid rear housings. The physical pose, visible pose, suction position
+and proximity sound share deployment state. Captures now take approximately
+2.1s and draw solid striped fragments into the mouth before returning and
+reforming at the physical respawn destination. Mid-capture snapshot restoration
+and fixed-time rendering checks pass. See AERIAL-VACUUMS.md for primary evidence
+and the still-provisional repeat cycle, force and fragment choreography.
+
+Browser close-ups verified the recessed intake, solid fragments, partial and
+complete retraction, fragment return and restored marble; no warnings/errors
+were captured. This does not establish full Amiga parity.
+
+Release validation: the full 139-test suite passes (262193ms). The final solid
+fragment geometry and shared-pose refactor received a further complete object
+animation/audio test run, including the new closed-sector volume check. Build
+and diff checks pass. Physics/replay version is mm-18.
+
+Fresh timed measurements retain zero falls throughout: solo Aerial 61.1917s,
+Silly 71.5167s with 0.1276 clock left, Ultimate timeout 32s; paired Aerial 66.5167s,
+then both Silly timeouts by 55.0417s. Full campaign acceptance remains open.

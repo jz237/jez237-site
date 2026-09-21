@@ -1,4 +1,6 @@
-export { presenceAt } from "./mechanism-time.mjs";
+import { vacuumPoseAt } from "./vacuum.mjs";
+import { presenceAt } from "./mechanism-time.mjs";
+export { presenceAt };
 import {
   pegGeometry,
   extensionAt,
@@ -344,6 +346,16 @@ export function validateCourse(c) {
     )
       throw Error("Invalid wave panel.");
     if (
+      p.presence?.transition !== undefined &&
+      (p.profile !== "vacuum-mouth" ||
+        p.motion?.axis !== "y" ||
+        p.motion.amplitude !== 0 ||
+        !finite(p.presence.transition) ||
+        p.presence.transition <= 0 ||
+        p.presence.transition * 2 > p.presence.on)
+    )
+      throw Error("Invalid vacuum deployment duration.");
+    if (
       p.presence &&
       (!p.motion ||
         ![p.presence.period, p.presence.on, p.presence.phase ?? 0].every(
@@ -462,9 +474,27 @@ export function validateCourse(c) {
       ) ||
         z.presence.period < 0.5 ||
         z.presence.on <= 0 ||
-        z.presence.on > z.presence.period)
+        z.presence.on > z.presence.period ||
+        (z.presence.transition !== undefined &&
+          (!finite(z.presence.transition) ||
+            z.presence.transition <= 0 ||
+            z.presence.transition * 2 > z.presence.on)))
     )
       throw Error("Invalid hazard presence cycle.");
+  for (const z of c.zones ?? [])
+    if (
+      z.mouth !== undefined &&
+      (z.kind !== "vacuum" ||
+        typeof z.mouth !== "string" ||
+        !c.parts.some(
+          (p) =>
+            p.id === z.mouth &&
+            p.profile === "vacuum-mouth" &&
+            p.motion?.axis === "y" &&
+            p.motion.amplitude === 0,
+        ))
+    )
+      throw Error("Vacuum must reference a valid mouth.");
   for (const z of c.zones ?? [])
     if (
       z.kind === "vacuum" &&
@@ -741,6 +771,8 @@ export function compileCourse(c) {
   return { definition: c, parts, statics, moving };
 }
 export function motionAt(p, time) {
+  if (p.profile === "vacuum-mouth" && p.presence?.transition)
+    return vacuumPoseAt(p, time);
   if (p.motion?.axis === "launch") {
     // The arm hinges at its rear edge. Geometry is already course-rotated.
     const phase = Math.max(0, Math.min(1, time / p.motion.period));
