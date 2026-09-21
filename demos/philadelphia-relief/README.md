@@ -1,5 +1,13 @@
 ## Aircraft over the region — September 20, 2026
 
+**Production access is pending.** Both feeds returned valid regional reports in
+local tests, but ADSB.lol returned 429 and adsb.fi returned 403 from Cloudflare.
+Airplanes.live also returned 403 with a request to contact its operator for access.
+The published interface explicitly says tracking is not active when permission
+is denied; it never substitutes simulated flights. Browser retries stop on 401/403,
+and the server caches access-denied responses for one hour. An approved provider
+connection is needed to activate live tracking on the public site.
+
 An opt-in aircraft layer shares geographic reports between the Three.js diorama
 and Cesium photographic view. It includes original generic 3D models, hover/tap
 details, airborne/low-altitude/large-aircraft/helicopter filters, session flight
@@ -17,7 +25,8 @@ background jobs, arbitrary upstream URLs, or permanent flight-history storage.
 The browser polls every 15 seconds only while enabled and visible; failures back
 off to 30 seconds, or at least five minutes for provider rate limits. Disabling,
 hiding the tab, and leaving the page cancel requests. ADSB.lol was tested first,
-but returned HTTP 429 from the production hosting network.
+but returned HTTP 429 from the production hosting network. Access-denied responses
+pause retries rather than repeatedly asking a provider that refused access.
 
 Movement interpolates actual observations with a 20-second playback buffer and
 never extrapolates future positions. Reduced-motion users receive direct report

@@ -1,7 +1,7 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092102';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092102';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092102';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092103';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092103';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092103';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -37,6 +37,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   let enabled = false, disposed = false, controller, timer, generation = 0, loading = false;
   let selected = null, following = null, returnPose, failed = false, lastPoll = 0, lastDraw = 0;
   let retrySeconds = 30;
+  let accessRequired = false;
   let lastReport = 0, lastFollow = 0, viewWidth = 1, viewHeight = 1, cesiumViewer, datasource;
   let closeTimer, pinned = false, playbackAt = Date.now();
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -60,10 +61,11 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   function report() {
     const rows = visibleRecords(), fresh = rows.filter(r => ageSeconds(r.data) <= STALE_AFTER).length;
     const age = lastPoll ? Math.round((Date.now() - lastPoll) / 1000) : 0;
-    status.textContent = loading && !lastPoll ? 'Finding aircraft over the Delaware Valley…'
+    status.textContent = accessRequired ? 'Live aircraft need provider approval. Tracking is not active.'
+      : loading && !lastPoll ? 'Finding aircraft over the Delaware Valley…'
       : failed ? `Feed unavailable · ${rows.length} last-known aircraft. Retry in up to ${retrySeconds}s.`
       : `${rows.length} aircraft · ${fresh} recent · checked ${age}s ago`;
-    retry.hidden = !failed;
+    retry.hidden = !failed || accessRequired;
   }
   function populate() {
     const selectedValue = jump.value;
@@ -83,6 +85,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
       const response = await fetch('aircraft', { signal: request.signal });
       const doc = await response.json();
       if (!response.ok) {
+        accessRequired = doc.accessRequired === true;
         retrySeconds = Math.max(30, Math.min(900, Number(doc.retryAfter) || 30));
         throw new Error('Feed unavailable');
       }
@@ -98,13 +101,13 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
           record.data = a; appendFlightSample(record.samples, a);
         }
       }
-      failed = false; lastPoll = Date.now(); populate();
+      failed = false; accessRequired = false; lastPoll = Date.now(); populate();
     } catch { if (ticket === generation && enabled && !document.hidden) failed = true; }
     finally {
       clearTimeout(timeout);
       if (ticket === generation) {
         loading = false; report();
-        if (enabled && !disposed && !document.hidden) {
+        if (enabled && !disposed && !document.hidden && !accessRequired) {
           timer = setTimeout(poll, failed ? retrySeconds * 1000 : 15000);
         }
       }

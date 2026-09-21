@@ -9,7 +9,9 @@ async function readBounded(response) {
   if (!response.ok || !response.body) {
     const seconds = Number(response.headers.get('Retry-After'));
     const error = new Error(`Provider HTTP ${response.status}`);
-    error.retryAfter = response.status === 429 ? Math.max(300, Math.min(900, seconds || 300)) : 30;
+    error.accessRequired = response.status === 401 || response.status === 403;
+    error.retryAfter = error.accessRequired ? 3600
+      : response.status === 429 ? Math.max(300, Math.min(900, seconds || 300)) : 30;
     await response.body?.cancel(); throw error;
   }
   const reader = response.body.getReader(), chunks = []; let size = 0;
@@ -37,7 +39,8 @@ export async function onRequest(context) {
     const upstream = await fetch(FEED, { signal: AbortSignal.timeout(9000),
       headers: { Accept: 'application/json',
         'User-Agent': 'PhiladelphiaRelief/1.0 (https://jez237.com/demos/philadelphia-relief/)' },
-      cf: { cacheEverything: true, cacheTtlByStatus: { '200-299': 15, '429': 300, '500-599': 30 } } });
+      cf: { cacheEverything: true,
+        cacheTtlByStatus: { '200-299': 15, '401': 3600, '403': 3600, '429': 300, '500-599': 30 } } });
     const data = compactAircraft(await readBounded(upstream));
     response = new Response(JSON.stringify(data), { headers });
   } catch (error) {
@@ -47,7 +50,9 @@ export async function onRequest(context) {
         ? error.message : 'Provider connection failed';
     console.warn(JSON.stringify({ event: 'aircraft-feed-unavailable', detail }));
     const retryAfter = error.retryAfter || 30;
-    response = new Response(JSON.stringify({ error: 'Aircraft feed temporarily unavailable', retryAfter }),
+    response = new Response(JSON.stringify({ error: error.accessRequired
+      ? 'Aircraft data provider approval required' : 'Aircraft feed temporarily unavailable',
+      accessRequired: !!error.accessRequired, retryAfter }),
       { status: 503, headers: { ...headers, 'Cache-Control': `public, max-age=${retryAfter}`,
         'Retry-After': String(retryAfter) } });
   }
