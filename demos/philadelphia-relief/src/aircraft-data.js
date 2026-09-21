@@ -31,7 +31,7 @@ export function compactAircraft(doc, receivedAt = Date.now()) {
       verticalRate: measure(a.baro_rate ?? a.geom_rate, -15000, 15000),
       observedAt: timestamp - a.seen_pos * 1000 });
   }
-  return { source: 'ADSB.lol', license: 'ODbL-1.0', timestamp, aircraft };
+  return { source: 'adsb.fi', license: 'personal-non-commercial', timestamp, aircraft };
 }
 
 export function flightMatches(a, filter) {
