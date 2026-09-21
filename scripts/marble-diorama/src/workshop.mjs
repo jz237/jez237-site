@@ -1,3 +1,4 @@
+import { vacuumMount } from "./vacuum.mjs";
 import { part, point } from "./course.mjs";
 
 export function blankCourse() {
@@ -53,12 +54,22 @@ export function workshopObjects(course) {
 export function moveWorkshopObject(course, key, position) {
   const p = workshopObjects(course).find((o) => o.key === key)?.value;
   if (!p) throw Error("Select an object to move.");
+  if (p.mouth) {
+    const mouth = course.parts.find((part) => part.id === p.mouth);
+    return moveWorkshopObject(course, `part:${mouth.id}`, {
+      x: mouth.x + position.x - p.x,
+      y: mouth.y + position.y - p.y,
+      z: mouth.z + position.z - p.z,
+    });
+  }
   const dx = position.x - p.x,
     dy = position.y - p.y,
     dz = position.z - p.z;
   // Ribbon/tube coordinates are local to the part; moving its origin moves all
   // of its vertices through the normal geometry compiler.
   Object.assign(p, position);
+  for (const zone of course.zones ?? [])
+    if (zone.mouth && zone.mouth === p.id) Object.assign(zone, vacuumMount(p, zone).position);
   for (const q of p.patrol?.points ?? []) {
     q.x += dx;
     q.z += dz;
@@ -81,6 +92,7 @@ export function removeWorkshopObject(course, key) {
   const [type, id] = key.split(":");
   if (type === "part") {
     course.parts = course.parts.filter((p) => p.id !== id);
+    course.zones = (course.zones ?? []).filter((z) => z.mouth !== id);
     if (course.markings)
       course.markings = course.markings.filter((m) => m.part !== id);
     for (const route of [
@@ -94,14 +106,18 @@ export function removeWorkshopObject(course, key) {
       }
   } else if (type === "enemy")
     course.enemies = course.enemies.filter((p) => p.id !== id);
-  else if (type === "zone") course.zones.splice(Number(id), 1);
-  else if (type === "checkpoint") course.checkpoints.splice(Number(id), 1);
+  else if (type === "zone") {
+    const zone = course.zones[Number(id)];
+    if (zone?.mouth) removeWorkshopObject(course, `part:${zone.mouth}`);
+    else course.zones.splice(Number(id), 1);
+  } else if (type === "checkpoint") course.checkpoints.splice(Number(id), 1);
   else throw Error("Move starts and the finish instead of deleting them.");
 }
 
 export function rotateWorkshopObject(course, key, radians) {
   const p = workshopObjects(course).find((o) => o.key === key)?.value;
   if (!p) throw Error("Select an object to rotate.");
+  if (p.mouth) return rotateWorkshopObject(course, `part:${p.mouth}`, radians);
   if (p.path || p.outline) {
     const cs = Math.cos(radians),
       sn = Math.sin(radians);
@@ -117,6 +133,8 @@ export function rotateWorkshopObject(course, key, radians) {
     q.x = p.x + x * Math.cos(radians) - z * Math.sin(radians);
     q.z = p.z + x * Math.sin(radians) + z * Math.cos(radians);
   }
+  for (const zone of course.zones ?? [])
+    if (zone.mouth && zone.mouth === p.id) zone.direction = vacuumMount(p, zone).direction;
   if (p.direction) {
     const { x, z } = p.direction;
     p.direction.x = x * Math.cos(radians) - z * Math.sin(radians);
