@@ -1,5 +1,5 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092113';
+  from './photo-policy.js?v=philly-2026092114';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -34,6 +34,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
   let resourceTimer, firstViewTimer, press;
+  let resizedWidth = 0, resizedHeight = 0;
 
   function report(text) {
     if (text === lastStatus) return;
@@ -70,7 +71,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092113')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092114')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -86,6 +87,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       viewer.scene.backgroundColor = C.Color.fromCssColorString('#203b43');
       viewer.scene.postProcessStages.fxaa.enabled = true;
       viewer.resize(); setCamera(lastPose, width, height);
+      resizedWidth = width; resizedHeight = height;
       // Local curated place lookup uses no external geocoding service.
       const googleOptions = { onlyUsingWithGoogleGeocoder: true };
       const loadedTiles = await C.createGooglePhotorealistic3DTileset(googleOptions, {
@@ -216,7 +218,10 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         pose.fov, pose.targetAltitude, w, h].join(':');
       if (key !== lastPoseKey) {
         lastPoseKey = key; lastMotion = performance.now();
-        viewer.resize(); setCamera(pose, w, h);
+        if (w !== resizedWidth || h !== resizedHeight) {
+          viewer.resize(); resizedWidth = w; resizedHeight = h;
+        }
+        setCamera(pose, w, h);
       }
       // Establish complete neighborhood coverage before requesting the finest
       // level. Final stationary detail remains the same two-pixel threshold.

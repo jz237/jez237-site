@@ -1,9 +1,10 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092113';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092113';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092113';
-import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092113';
-import { createAircraftSession } from './aircraft-session.js?v=philly-2026092113';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092114';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092114';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092114';
+import { aircraftRouteCard } from './aircraft-route-card.js?v=philly-2026092114';
+import { createAircraftSession } from './aircraft-session.js?v=philly-2026092114';
+import { createElevationCache } from './frame-work.js?v=philly-2026092114';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -21,6 +22,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   const filter = document.getElementById('aircraftFilter');
   const jump = document.getElementById('aircraftJump');
   const trailToggle = document.getElementById('aircraftTrails');
+  const trailGround = createElevationCache(sampleElevation);
   const back = document.getElementById('aircraftReturn');
   const retry = document.getElementById('aircraftRetry');
   const limitNote = el('small', 'aircraft-source', 'Automatically turns off after 30 minutes.');
@@ -94,7 +96,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     const timeout = setTimeout(() => request.abort(), 12000);
     try {
       // Versioned URL also avoids an hour-long failure cached by earlier releases.
-      const response = await fetch('aircraft?v=philly-2026092113', {
+      const response = await fetch('aircraft?v=philly-2026092114', {
         signal: request.signal, cache: 'no-store' });
       const doc = await response.json();
       if (ticket !== generation || disposed || !enabled) return;
@@ -270,6 +272,11 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
         const age = ageSeconds(r.data, time);
         if (age >= EXPIRE_AFTER) { remove(r); continue; }
         const showPlane = flightMatches(r.data, filter.value);
+        if (!showPlane) {
+          r.mesh.visible = false; r.line.visible = false; r.pin.hidden = true;
+          if (r.entity) r.entity.show = false;
+          continue;
+        }
         const p = flightPosition(r.samples, playbackAt);
         const ground = sampleElevation(p.lon, p.lat);
         const h = flightDisplayHeight(p, ground, ctx.exaggeration);
@@ -278,13 +285,18 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
         r.mesh.rotation.y = ((90 - (p.track ?? 0)) * Math.PI) / 180;
         const distance = camera.position.distanceTo(r.mesh.position);
         r.mesh.scale.setScalar(Math.max(1, distance * .00055));
-        const trail = r.samples.filter(s => s.observedAt <= playbackAt).slice(-63); trail.push(p);
-        const coordinates = [];
-        for (const s of trail) coordinates.push(projection.lonToX(s.lon),
-          flightDisplayHeight(s, sampleElevation(s.lon, s.lat), ctx.exaggeration), projection.latToZ(s.lat));
-        r.line.geometry.attributes.position.array.set(coordinates);
-        r.line.geometry.attributes.position.needsUpdate = true;
-        r.line.geometry.setDrawRange(0, trail.length);
+        const trail = trailToggle.checked
+          ? [...r.samples.filter(s => s.observedAt <= playbackAt).slice(-63), p] : [];
+        if (trail.length && !photographic.active) {
+          const coordinates = r.line.geometry.attributes.position.array;
+          trail.forEach((s, i) => {
+            coordinates[i * 3] = projection.lonToX(s.lon);
+            coordinates[i * 3 + 1] = flightDisplayHeight(s, trailGround(s), ctx.exaggeration);
+            coordinates[i * 3 + 2] = projection.latToZ(s.lat);
+          });
+          r.line.geometry.attributes.position.needsUpdate = true;
+          r.line.geometry.setDrawRange(0, trail.length);
+        }
         let point;
         if (photographic.active && C && datasource) {
           const position = C.Cartesian3.fromDegrees(p.lon, p.lat, flightDisplayHeight(p, ground));
@@ -295,8 +307,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
           r.entity.orientation = C.Transforms.headingPitchRollQuaternion(position,
             new C.HeadingPitchRoll(C.Math.toRadians(p.track ?? 0), 0, 0));
           r.entity.polyline.show = trailToggle.checked;
-          r.entity.polyline.positions = trail.map(s => C.Cartesian3.fromDegrees(s.lon, s.lat,
-            flightDisplayHeight(s, sampleElevation(s.lon, s.lat))));
+          if (trail.length) r.entity.polyline.positions = trail.map(s => C.Cartesian3.fromDegrees(
+            s.lon, s.lat, flightDisplayHeight(s, trailGround(s))));
           point = photographic.projectLocation({ ...p, elevation: flightDisplayHeight(p, ground) - 12 });
         } else {
           vector.copy(r.mesh.position).project(camera);

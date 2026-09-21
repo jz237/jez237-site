@@ -1050,3 +1050,35 @@ Core requests have bounded waits so a stalled connection cannot block indefinite
 
 Validation: 346 automated checks; 4× CPU/Fast 4G browser profiling; simulated
 missing `Array.toSorted`; camera and river-gauge pins visible in lighter graphics.
+
+### Further latency and frame-work reductions (21 September 2026)
+
+Core data downloads now start together, including landmark metadata and the bridge
+dependency as soon as its manifest arrives. The heightmap and Three.js modules are
+discovered from the document head; the unchanged vendor module keeps its previous
+cache URL. Optional district images and woodland remain deferred. Input bursts share
+the next animation frame and still interrupt idle pacing immediately.
+
+Terrain shaders skip inactive district/detail samplers and skip the seven terrain
+shadow probes when diorama shading contributes nothing. Bloom work is skipped when
+its intensity is zero. These paths preserve the active shading calculations, DEM,
+geometry and original aerial resolutions. Cesium resizes only when the viewport
+changes, rather than on every camera movement.
+
+Cached aerial meshes have explicit world-space bounds enclosing the shader-displaced
+DEM, updated with terrain exaggeration. Off-screen tiles remain available in memory
+without unconditional draws. Diagnostics expose resident and drawn tile counts.
+
+Overlay systems share a layout measurement within a frame. Ship/gauge projection
+updates at up to 30 Hz during movement instead of the former 150 ms cadence, while
+unchanged views refresh once per second for stale-data indicators. Feed and control
+changes invalidate immediately. Filtered aircraft skip invisible work; hidden trails
+are not rebuilt, and retained trail samples reuse elevation reads across frames.
+
+Validation: 350 checks pass, including displaced-tile bounds at 0×/1×/15×/80× relief,
+marker pacing, layout cache invalidation and flight elevation reuse. In a 1366×768
+balanced regional scene with 4× CPU slowdown, 120 GPU timer samples measured a median
+2.49 ms before shader changes and 2.22 ms afterward; both drew 2,494,525 triangles and
+the browser remained around 60 FPS. This is a lab rendering-cost measurement, not an
+older-hardware FPS guarantee. Browser checks cover full-resolution streamed aerials,
+camera and gauge pins, resumed navigation, and live aircraft with trails on/off.

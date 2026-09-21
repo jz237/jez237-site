@@ -1,4 +1,4 @@
-import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026092113';
+import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026092114';
 /**
  * The control studio, preset list, search and dialogs.
  *
@@ -7,13 +7,13 @@ import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026092
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026092113';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026092113';
-import { getEra } from './eras.js?v=philly-2026092113';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026092113';
-import { TOURS } from './tours.js?v=philly-2026092113';
-import { ERAS } from './eras.js?v=philly-2026092113';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026092113';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026092114';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026092114';
+import { getEra } from './eras.js?v=philly-2026092114';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026092114';
+import { TOURS } from './tours.js?v=philly-2026092114';
+import { ERAS } from './eras.js?v=philly-2026092114';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026092114';
 
 const ENUM_LABELS = {
   lightweight: v => v ? 'On · older computers' : 'Off · full graphics',

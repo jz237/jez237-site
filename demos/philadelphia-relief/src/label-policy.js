@@ -16,16 +16,24 @@ export function overlapsBox(a, b, padding = 0) {
     || a.b + padding < b.t || a.t - padding > b.b);
 }
 
+const measuredBoxes = new WeakMap();
+
 export function controlBoxes(root = document) {
+  // All overlay systems in this frame share one layout read. Drop the cache
+  // before the next task so drawer changes and resize are never left stale.
+  if (measuredBoxes.has(root)) return measuredBoxes.get(root);
   const selectors = '.topbar,.explore-nav,.readout-preset,.readout,.orientation'
     + ',#mobileBar,.caption,.map-navigation,.photo-controls,.panel:not(.collapsed)';
-  return [...root.querySelectorAll(selectors)].filter(el => {
+  const boxes = [...root.querySelectorAll(selectors)].filter(el => {
     const style = getComputedStyle(el);
     return !el.hidden && style.display !== 'none' && style.visibility !== 'hidden';
   }).map(el => {
     const r = el.getBoundingClientRect();
     return {l:r.left, r:r.right, t:r.top, b:r.bottom};
   }).filter(r => r.r > r.l && r.b > r.t);
+  measuredBoxes.set(root, boxes);
+  queueMicrotask(() => measuredBoxes.delete(root));
+  return boxes;
 }
 
 export function labelPriority(item) {

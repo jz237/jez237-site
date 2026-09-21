@@ -73,8 +73,8 @@ const COMPOSITE_FRAGMENT = /* glsl */ `
   }
   void main() {
     vec3 scene = texture2D(uScene, vUv).rgb;
-    vec3 bloom = texture2D(uBloom, vUv).rgb;
-    vec3 color = scene + bloom * uIntensity;
+    vec3 color = scene;
+    if (uIntensity > 0.0) color += texture2D(uBloom, vUv).rgb * uIntensity;
     // Contact occlusion uses the actual rendered geometry and preserves image sharpness.
     if (uContact > .001 && texture2D(uDepth, vUv).r < .999999) {
       vec3 center = viewPosition(vUv);
@@ -225,6 +225,10 @@ export function createPostFX(THREE, renderer) {
         u.uIntensity.value = 0; u.uContact.value = 0;
         draw(compositeMat, null);
         u.uIntensity.value = intensity; u.uContact.value = contact;
+        return;
+      }
+      if (compositeMat.uniforms.uIntensity.value === 0) {
+        draw(compositeMat, null);
         return;
       }
       draw(brightMat, brightRT);
