@@ -345,6 +345,15 @@ export function validateCourse(c) {
         p.bevel)
     )
       throw Error("Invalid wave panel.");
+    if (
+      p.motion?.strip !== undefined &&
+      (p.motion.axis !== "wave" ||
+        typeof p.motion.strip !== "string" ||
+        !p.motion.strip.trim() ||
+        p.motion.strip.length > 100)
+    )
+      throw Error("Invalid wave strip identifier.");
+
     if (p.motion?.axis === "wave" && p.motion.profile !== undefined) {
       const m = p.motion;
       if (

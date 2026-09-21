@@ -69,3 +69,27 @@ x=166..293/y=244..349. The upper traveling strip visibly changes in those same
 frames. This supports keeping those visible lower sections static; it does not
 prove the shape or behavior of every section outside those rectangles. Do not
 add lower-lane motion merely because earlier checklists called it missing.
+
+
+## Workshop follow-up
+
+Wave strips now carry a validated optional strip identifier and appear as one
+object in the editor. Move and rotation transform every panel together around
+the strip center. Rotation updates the motion heading with the editor's correct
+sign instead of writing the forbidden static angle. Remove and the erase tool
+remove the entire grouped strip and clear linked route references.
+
+Older imported waves without a strip identifier remain individually editable;
+rotating them also keeps their course data valid. The identifier is authoring
+metadata only: wave motion and campaign physics remain at mm-20.
+
+Regression checks transform all eight vertices of every panel through several
+wave phases, verify joined top/bottom edges, compare compiled JSON round trips,
+query live collider tops and restore physical lifting from snapshots. Unrelated
+parts and other wave groups remain unchanged. A shared waypoint used in several
+routes moves once; moving a start, goal or unlinked hazard no longer shifts all
+unattached demo waypoints.
+
+Browser checks on a custom copy of Intermediate verify whole-strip selection,
+rotation, movement, removal, undo/redo, undoing all edits and immediate playtest.
+No custom test course was saved. No warnings/errors were captured.

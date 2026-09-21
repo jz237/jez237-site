@@ -20,13 +20,52 @@ export function blankCourse() {
   };
 }
 
+const waveMembers = (course, key) =>
+  key.startsWith("wave:")
+    ? course.parts.filter(
+        (p) => p.motion?.axis === "wave" && p.motion.strip === key.slice(5),
+      )
+    : [];
+const centerOf = (parts) =>
+  Object.fromEntries(
+    ["x", "y", "z"].map((axis) => [
+      axis,
+      parts.reduce((sum, p) => sum + p[axis], 0) / parts.length,
+    ]),
+  );
+const selectedObject = (course, key) =>
+  workshopObjects(course).find((o) => o.key === key)?.value ??
+  (key.startsWith("part:")
+    ? course.parts.find((p) => p.id === key.slice(5))
+    : null);
+const routePoints = (course) => [
+  ...new Set([
+    ...(course.route ?? []),
+    ...(course.playerRoutes ?? []).flat(),
+    ...(course.alternateRoutes ?? []).flatMap((r) => r.route ?? []),
+  ]),
+];
+
 export function workshopObjects(course) {
+  const seen = new Set();
   return [
-    ...course.parts.map((p) => ({
-      key: `part:${p.id}`,
-      label: `${p.kind} · ${p.id}`,
-      value: p,
-    })),
+    ...course.parts.flatMap((p) => {
+      const strip = p.motion?.axis === "wave" && p.motion.strip;
+      if (!strip)
+        return [
+          { key: `part:${p.id}`, label: `${p.kind} · ${p.id}`, value: p },
+        ];
+      if (seen.has(strip)) return [];
+      seen.add(strip);
+      const members = waveMembers(course, `wave:${strip}`);
+      return [
+        {
+          key: `wave:${strip}`,
+          label: `Wave strip · ${strip}`,
+          value: { kind: "wave", ...centerOf(members) },
+        },
+      ];
+    }),
     ...(course.zones ?? []).map((p, i) => ({
       key: `zone:${i}`,
       label: `${p.kind} ${i + 1}`,
@@ -52,7 +91,18 @@ export function workshopObjects(course) {
 }
 
 export function moveWorkshopObject(course, key, position) {
-  const p = workshopObjects(course).find((o) => o.key === key)?.value;
+  const members = waveMembers(course, key);
+  if (members.length) {
+    const center = centerOf(members);
+    for (const p of members)
+      moveWorkshopObject(course, `part:${p.id}`, {
+        x: p.x + position.x - center.x,
+        y: p.y + position.y - center.y,
+        z: p.z + position.z - center.z,
+      });
+    return;
+  }
+  const p = selectedObject(course, key);
   if (!p) throw Error("Select an object to move.");
   if (p.mouth) {
     const mouth = course.parts.find((part) => part.id === p.mouth);
@@ -69,27 +119,30 @@ export function moveWorkshopObject(course, key, position) {
   // of its vertices through the normal geometry compiler.
   Object.assign(p, position);
   for (const zone of course.zones ?? [])
-    if (zone.mouth && zone.mouth === p.id) Object.assign(zone, vacuumMount(p, zone).position);
+    if (zone.mouth && zone.mouth === p.id)
+      Object.assign(zone, vacuumMount(p, zone).position);
   for (const q of p.patrol?.points ?? []) {
     q.x += dx;
     q.z += dz;
     if (q.y !== undefined) q.y += dy;
   }
-  for (const route of [
-    course.route ?? [],
-    ...(course.playerRoutes ?? []),
-    ...(course.alternateRoutes ?? []).map((r) => r.route),
-  ])
-    for (const q of route ?? [])
-      if (q.part === p.id) {
-        q.x += dx;
-        q.y += dy;
-        q.z += dz;
-      }
+  for (const q of routePoints(course))
+    if (key.startsWith("part:") && q.part === p.id) {
+      q.x += dx;
+      q.y += dy;
+      q.z += dz;
+    }
 }
 
 export function removeWorkshopObject(course, key) {
-  const [type, id] = key.split(":");
+  const members = waveMembers(course, key);
+  if (members.length) {
+    for (const p of members) removeWorkshopObject(course, `part:${p.id}`);
+    return;
+  }
+  const colon = key.indexOf(":");
+  const type = key.slice(0, colon),
+    id = key.slice(colon + 1);
   if (type === "part") {
     course.parts = course.parts.filter((p) => p.id !== id);
     course.zones = (course.zones ?? []).filter((z) => z.mouth !== id);
@@ -115,10 +168,31 @@ export function removeWorkshopObject(course, key) {
 }
 
 export function rotateWorkshopObject(course, key, radians) {
-  const p = workshopObjects(course).find((o) => o.key === key)?.value;
+  const members = waveMembers(course, key);
+  if (members.length) {
+    const center = centerOf(members),
+      cs = Math.cos(radians),
+      sn = Math.sin(radians);
+    for (const p of members) {
+      const x = p.x - center.x,
+        z = p.z - center.z;
+      moveWorkshopObject(course, `part:${p.id}`, {
+        x: center.x + x * cs - z * sn,
+        y: p.y,
+        z: center.z + x * sn + z * cs,
+      });
+      rotateWorkshopObject(course, `part:${p.id}`, radians);
+    }
+    return;
+  }
+  const p = selectedObject(course, key);
   if (!p) throw Error("Select an object to rotate.");
   if (p.mouth) return rotateWorkshopObject(course, `part:${p.mouth}`, radians);
-  if (p.path || p.outline) {
+  if (p.motion?.axis === "wave") {
+    // Wave yaw lives in its shared motion pose. Its quaternion heading uses
+    // the opposite sign to the editor's x/z rotation convention.
+    p.motion.heading -= radians;
+  } else if (p.path || p.outline) {
     const cs = Math.cos(radians),
       sn = Math.sin(radians);
     for (const v of p.path ?? p.outline) {
@@ -134,7 +208,8 @@ export function rotateWorkshopObject(course, key, radians) {
     q.z = p.z + x * Math.sin(radians) + z * Math.cos(radians);
   }
   for (const zone of course.zones ?? [])
-    if (zone.mouth && zone.mouth === p.id) zone.direction = vacuumMount(p, zone).direction;
+    if (zone.mouth && zone.mouth === p.id)
+      zone.direction = vacuumMount(p, zone).direction;
   if (p.direction) {
     const { x, z } = p.direction;
     p.direction.x = x * Math.cos(radians) - z * Math.sin(radians);
