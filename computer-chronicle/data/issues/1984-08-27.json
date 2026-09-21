@@ -1,0 +1,388 @@
+{
+  "currentDate": "2026-09-21",
+  "historicDate": "1984-08-27",
+  "displayDate": "Week of August 27-September 2, 1984",
+  "edition": "Issue 109 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Warm late-summer newsprint with acquisition-day urgency",
+    "motifs": [
+      "Amiga Lorraine prototype",
+      "color graphics display",
+      "IBM PC/AT",
+      "Apple II modem"
+    ],
+    "layout": "Dense 1980s computer-weekly front page with red and blue rules, halftones, boxed charts, and narrow columns"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "August 27-September 2, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Banner lead beneath masthead with a large Amiga color-computer halftone",
+    "secondaryRail": "Games, PC/AT, modem, charts, prices, and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-08-27.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for the week of August 27, 1984, led by Commodore and Amiga",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Commodore has bought itself a startling new future: Amiga’s color-rich Lorraine project now sits at the center of the home-computer contest.",
+  "morningLine": "Amiga changes hands, the PC/AT flexes its muscle, and adventurous games redraw the home-computer map.",
+  "lead": {
+    "headline": "Commodore Bets on Amiga's High-Tech Macintosh Rival",
+    "dek": "The rescued Lorraine project promises vivid color, 32-bit ambition, and a fresh answer to Apple and Atari.",
+    "body": [
+      "Commodore International has agreed to acquire privately held Amiga Corporation, bringing one of the personal-computer industry’s most closely watched experimental machines under the company that made the VIC-20 and Commodore 64. Terms were not disclosed, but the purchase gives Commodore a dramatic new technology platform just as competition in home computing is being rearranged.",
+      "Amiga had demonstrated a Macintosh-like computer expected to sell for about $1,500, well below the Macintosh’s $2,495 price. Period reports emphasized its advanced processor class and unusually capable color graphics—features that could move a friendly graphical computer out of the monochrome office and into games, animation, and the living room.",
+      "The deal also sharpens a personal rivalry. Former Commodore president Jack Tramiel now controls Atari’s consumer operations, while Commodore chief Marshall Smith has promised a small, high-performance Macintosh-like machine for “well under $1,000.” Amiga’s engineering gives that promise more weight, even if the final product and price remain unsettled.",
+      "For Amiga, Commodore’s backing may be the difference between an impressive demonstration and a computer that reaches store shelves. For Commodore, the gamble is whether it can turn sophisticated custom chips and a daring design into a reliable, affordable family of machines before Apple, IBM, and the revived Atari seize the next generation."
+    ],
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "confidence": "exact-date"
+  },
+  "stories": [
+    {
+      "headline": "IBM's PC/AT Launch Echoes Through the Week",
+      "body": [
+        "IBM’s model 5170 Personal Computer AT continues to reset expectations across the business-computer market. Built around Intel’s 80286, IBM says the machine runs more than twice as fast as existing members of its PC family and offers eight expansion slots, six ready for new 16-bit cards.",
+        "The entry configuration carries 256K of memory and a 1.2-megabyte floppy drive; the larger model combines 512K with a 20-megabyte fixed disk. DOS 3.0 supports both new storage formats while retaining read compatibility with older PC-family disks.",
+        "The specifications make the AT more than a speed bump. Its memory range, expansion bus, and storage capacity establish a new target for software houses and compatible-machine builders—one that will reverberate long after this launch season."
+      ],
+      "sourceRefs": [
+        2,
+        3
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "Home-Computer Games Move Beyond the Arcade Formula",
+      "body": [
+        "The newest computer games are asking players to explore, plan, and improvise instead of merely chasing a high score. Dan Bunten’s Seven Cities of Gold creates a new map for each expedition and mixes discovery, trade, and conflict across a broad simulated world.",
+        "First Star’s Boulder Dash turns the underground into a quick-thinking puzzle, with gems to collect, caves to dig, and rocks whose weight can help or crush the player. Heist and Super Pipeline add still more variety to the August review shelf.",
+        "Infocom’s Cutthroats, released earlier this month, carries the trend into prose. Its treasure-diving mystery relies on conversation, navigation, and careful choices—a reminder that the home computer is becoming its own game medium rather than a small imitation of the arcade."
+      ],
+      "sourceRefs": [
+        5
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Macintosh and PCjr Face the Review Bench",
+      "body": [
+        "BYTE’s August review bench places two of 1984’s most discussed machines under sustained examination: Apple’s Macintosh and IBM’s PCjr. Their contrasting designs make the issue a useful buyer’s snapshot of graphical ambition on one side and PC-family compatibility on the other.",
+        "The magazine also tests Sanyo’s MBC-550, the Juki 6100 printer, and four Logo implementations for the IBM PC. Technical features on Framework, the 65816 processor, FORTH-83, and UNIX benchmarking show how quickly the conversation is widening beyond simple hardware comparisons."
+      ],
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Amiga Lorraine prototype",
+      "summary": "Advanced color-graphics computer project acquired by Commodore and positioned against Macintosh and Atari’s coming machines.",
+      "sourceRefs": [
+        0,
+        1
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "title": "IBM Personal Computer AT model 5170",
+      "summary": "80286 system with a 1.2MB floppy, 16-bit expansion capability, and a 20MB fixed-disk configuration.",
+      "sourceRefs": [
+        2,
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "ZOOM Networker",
+      "summary": "Single-slot direct-connect 300-baud modem for Apple II-family computers, bundled with terminal software and Source access.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Framework",
+      "detail": "Ashton-Tate’s integrated, windowed PC productivity environment."
+    },
+    {
+      "name": "Apple Sourcelink",
+      "detail": "Automates network sign-on, Source access, capture editing, and file transfers on the Apple II."
+    },
+    {
+      "name": "Cutthroats",
+      "detail": "Infocom’s new nautical treasure-diving interactive fiction by Michael Berlyn and Jerry Wolper."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Seven Cities of Gold — Electronic Arts",
+        "Boulder Dash — First Star",
+        "Cutthroats — Infocom",
+        "Heist — Micro Fun",
+        "Super Pipeline — Taskset"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "What's Love Got to Do with It — Tina Turner",
+        "Missing You — John Waite",
+        "Stuck on You — Lionel Richie",
+        "Ghostbusters — Ray Parker Jr.",
+        "When Doves Cry — Prince"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "Tightrope",
+        "Ghostbusters",
+        "Purple Rain"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Apple Macintosh",
+      "price": "$2,495",
+      "note": "Contemporary comparison price in the Commodore-Amiga account.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "Proposed Amiga computer",
+      "price": "$1,500",
+      "note": "Price cited for Amiga’s demonstrated Macintosh-like design.",
+      "sourceRefs": [
+        1
+      ]
+    },
+    {
+      "item": "ZOOM Networker modem package",
+      "price": "$129",
+      "note": "Includes 300-baud modem, terminal software, and a Source subscription.",
+      "sourceRefs": [
+        6
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "Multi-user micros challenge the one-person PC",
+      "summary": "The New York Times technology column surveyed multi-user computer systems on August 23, useful as immediate context for the AT's business ambitions.",
+      "sourceRefs": [
+        13
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "The 65816 points beyond 8-bit home computing",
+      "summary": "BYTE's August technical coverage examined the 65816, the 16-bit extension of the 6502 lineage powering much of the home-computer market.",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "What's Love Got to Do with It",
+      "artist": "Tina Turner",
+      "chartDate": "1984-09-01",
+      "sourceUrls": [
+        "https://musicchartsarchive.cheneyweb.com/singles-chart/1984-09-01"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Missing You",
+      "artist": "John Waite",
+      "chartDate": "1984-09-01",
+      "sourceUrls": [
+        "https://musicchartsarchive.cheneyweb.com/singles-chart/1984-09-01"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "Stuck on You",
+      "artist": "Lionel Richie",
+      "chartDate": "1984-09-01",
+      "sourceUrls": [
+        "https://musicchartsarchive.cheneyweb.com/singles-chart/1984-09-01"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Ghostbusters",
+      "artist": "Ray Parker Jr.",
+      "chartDate": "1984-09-01",
+      "sourceUrls": [
+        "https://musicchartsarchive.cheneyweb.com/singles-chart/1984-09-01"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "When Doves Cry",
+      "artist": "Prince",
+      "chartDate": "1984-09-01",
+      "sourceUrls": [
+        "https://musicchartsarchive.cheneyweb.com/singles-chart/1984-09-01"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Put Your Apple on The Source",
+    "summary": "ZOOM’s Networker combines a direct-connect 300-baud modem, terminal software, and an online-service subscription.",
+    "tagline": "One slot, one phone line, a whole electronic world."
+  },
+  "market": {
+    "headline": "Commodore Buys Its Next Generation",
+    "summary": "The Amiga acquisition gives Commodore advanced color-graphics technology as Atari and Apple intensify the contest for the next home-computer platform.",
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "confidence": "exact-date"
+  },
+  "worldAnchor": {
+    "headline": "Fighting Intensifies in the Philippines",
+    "summary": "Four clashes between rebels and government troops killed at least 29 people on August 27, according to UPI.",
+    "confidence": "exact-date",
+    "sourceRefs": [
+      11
+    ]
+  },
+  "bbsNote": {
+    "headline": "A $129 Apple modem puts The Source one slot away",
+    "summary": "August's COMPUTE! reported two concrete steps toward easier consumer telecomputing: ZOOM's inexpensive bundled modem and STC's Apple Sourcelink automation software.",
+    "posts": [
+      {
+        "topic": "Networker package",
+        "platform": "Apple II/II+/IIe and The Source",
+        "text": "ZOOM's $129 single-slot package combined a direct-connect 300-baud modem, terminal software, and a free Source subscription; the $179 configuration added Netmaster."
+      },
+      {
+        "topic": "Apple Sourcelink",
+        "platform": "Apple II family; Telenet, Uninet, Sourcenet and The Source",
+        "text": "Sourcelink automated dialing and sign-on, offered one-button service access, captured online text to memory or disk, and transferred files while online."
+      },
+      {
+        "topic": "Hobbyist bulletin boards",
+        "platform": "CP/M and local dial-up BBS systems",
+        "text": "Micro Cornucopia No. 19 devoted a feature to 'Bulletin Boards, Getting It Together,' evidence that running and linking hobbyist boards was a live August topic."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "Your new modem came with an online-service subscription",
+    "summary": "ZOOM used access to The Source as part of the hardware bundle, foreshadowing the service-packaging tactics of later online eras.",
+    "detail": "For $129, an Apple owner received the 300-baud Networker modem, terminal software, and a free subscription to The Source; the enhanced Netmaster bundle cost $179.",
+    "sourceUrls": [
+      "https://www.atarimagazines.com/compute/issue51/238_3_NEWS_PRODUCTS_New_Telecommunications_Package_For_Apple.php"
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Amiga acquisition details and comparison prices come from dated contemporary reporting.",
+      "PC/AT specifications come from IBM’s announcement and TIME’s August 27 market account.",
+      "Games, software, and modem items are labeled same-month when drawn from August period publications.",
+      "Music uses the September 1 singles chart; movies use the August 31-September 2 weekend.",
+      "World news is anchored to UPI reporting dated August 27."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Amiga's High-Tech Gamble",
+      "url": "https://www.nytimes.com/1984/08/29/business/amiga-s-high-tech-gamble.html",
+      "date": "1984-08-29"
+    },
+    {
+      "title": "Commodore to Buy Amiga (contemporaneous AP text)",
+      "url": "http://www.retroisle.com/commodore/amiga/Articles/cbmtobuyamiga.php",
+      "date": "1984-08-24"
+    },
+    {
+      "title": "Computers: A Giant Flexes Its Muscles",
+      "url": "https://time.com/archive/6860705/computers-a-giant-flexes-its-muscles/",
+      "date": "1984-08-27"
+    },
+    {
+      "title": "IBM Personal Computer AT announcement letter 184-097",
+      "url": "https://retrocmp.de/ibm/5170/ibm-al_184-097_1984-08-14.txt",
+      "date": "1984-08-14"
+    },
+    {
+      "title": "BYTE, August 1984",
+      "url": "https://www.worldradiohistory.com/Archive-Byte/80s/Byte-1984-08.pdf",
+      "date": "1984-08"
+    },
+    {
+      "title": "Computer Entertainer, August 1984",
+      "url": "https://ataricompendium.com/archives/newsletters/video_game_update/computer_entertainer_aug84.pdf",
+      "date": "1984-08"
+    },
+    {
+      "title": "COMPUTE! News & Products: New Telecommunications Package for Apple",
+      "url": "https://www.atarimagazines.com/compute/issue51/238_3_NEWS_PRODUCTS_New_Telecommunications_Package_For_Apple.php",
+      "date": "1984-08"
+    },
+    {
+      "title": "COMPUTE! News & Products: Telecommunications Aid",
+      "url": "https://www.atarimagazines.com/compute/issue51/238_4_NEWS_PRODUCTS_Telecommunications_Aid.php",
+      "date": "1984-08"
+    },
+    {
+      "title": "Micro Cornucopia No. 19",
+      "url": "https://bitsavers.org/magazines/Micro_Cornucopia/Micro_Cornucopia_19_Aug84.pdf",
+      "date": "1984-08"
+    },
+    {
+      "title": "Billboard singles chart for September 1, 1984",
+      "url": "https://musicchartsarchive.cheneyweb.com/singles-chart/1984-09-01",
+      "date": "1984-09-01"
+    },
+    {
+      "title": "Domestic weekend 35, 1984",
+      "url": "https://www.boxofficemojo.com/weekend/1984W35/",
+      "date": "1984-08-31"
+    },
+    {
+      "title": "UPI: Philippines clashes",
+      "url": "https://www.upi.com/Archives/1984/08/27/Four-separate-clashes-between-rebels-and-government-troops-in/2786462427200/",
+      "date": "1984-08-27"
+    },
+    {
+      "title": "Nicaragua Says It Downed a Rebel Supply Plane",
+      "url": "https://www.nytimes.com/1984/08/29/world/nicaragua-says-it-downed-a-rebel-supply-plane.html",
+      "date": "1984-08-29"
+    },
+    {
+      "title": "Technology: The Multi-User Computers",
+      "url": "https://www.nytimes.com/1984/08/23/business/technology-the-multi-user-computers.html",
+      "date": "1984-08-23"
+    }
+  ]
+}

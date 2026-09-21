@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-21",
+      "historicDate": "1984-08-27",
+      "displayDate": "Week of August 27-September 2, 1984",
+      "edition": "Issue 109 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "Amiga changes hands, the PC/AT flexes its muscle, and adventurous games redraw the home-computer map.",
+      "leadHeadline": "Commodore Bets on Amiga's High-Tech Macintosh Rival",
+      "storyHeadlines": [
+        "IBM's PC/AT Launch Echoes Through the Week",
+        "Home-Computer Games Move Beyond the Arcade Formula",
+        "Macintosh and PCjr Face the Review Bench"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-08-27.jpg",
+      "thumb": "media/thumbs/1984-08-27.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-20",
       "historicDate": "1984-08-20",
       "displayDate": "Week of August 20-26, 1984",
