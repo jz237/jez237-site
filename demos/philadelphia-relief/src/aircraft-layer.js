@@ -1,7 +1,7 @@
 import { ageSeconds, flightMatches, flightPosition, appendFlightSample, flightDisplayHeight,
-  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092103';
-import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092103';
-import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092103';
+  STALE_AFTER, EXPIRE_AFTER, inFlightBounds } from './aircraft-data.js?v=philly-2026092104';
+import { aircraftGeometry } from './aircraft-model.js?v=philly-2026092104';
+import { controlBoxes, overlapsBox } from './label-policy.js?v=philly-2026092104';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -268,7 +268,7 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
             polyline: { positions: [], width: 2, material: C.Color.CYAN.withAlpha(.6) } });
           r.entity.show = showPlane; r.entity.position = position;
           r.entity.orientation = C.Transforms.headingPitchRollQuaternion(position,
-            new C.HeadingPitchRoll(C.Math.toRadians((p.track ?? 0) - 90), 0, 0));
+            new C.HeadingPitchRoll(C.Math.toRadians(p.track ?? 0), 0, 0));
           r.entity.polyline.show = trailToggle.checked;
           r.entity.polyline.positions = trail.map(s => C.Cartesian3.fromDegrees(s.lon, s.lat,
             flightDisplayHeight(s, sampleElevation(s.lon, s.lat))));

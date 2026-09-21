@@ -1,5 +1,5 @@
 import { labelBudget, nearbyLabel, overlapsBox, controlBoxes, labelPriority }
-  from './label-policy.js?v=philly-2026092103';
+  from './label-policy.js?v=philly-2026092104';
 /**
  * Projected map labels.
  *
@@ -12,7 +12,7 @@ import { labelBudget, nearbyLabel, overlapsBox, controlBoxes, labelPriority }
  * occlusion test so a name never floats over the ridge that is hiding it.
  */
 
-import { clamp } from './geo.js?v=philly-2026092103';
+import { clamp } from './geo.js?v=philly-2026092104';
 
 const MAX_NODES = 90;
 
