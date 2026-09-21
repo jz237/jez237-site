@@ -1,5 +1,5 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092117';
+  from './photo-policy.js?v=philly-2026092121';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -33,7 +33,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   let active = false, wanted = false, firstViewReady = false, visibleTiles = 0;
   let pending = 0, lastPoseKey = '', lastMotion = 0, lastStatus = '';
   let lastPose, width = 1, height = 1, detailTiles = 0, bestError = Infinity, generation = 0;
-  let resourceTimer, firstViewTimer, press;
+  let resourceTimer, firstViewTimer, press, exhibitBounds;
   let resizedWidth = 0, resizedHeight = 0;
 
   function report(text) {
@@ -61,7 +61,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       const ride = pose.flightView;
       camera.lookAtTransform(C.Matrix4.IDENTITY);
       camera.setView({ destination: C.Cartesian3.fromDegrees(ride.lon, ride.lat,
-        Math.max(sampleElevation(ride.lon, ride.lat) + 35, ride.height)),
+        Math.max(sampleElevation(ride.lon, ride.lat) + (ride.clearance ?? 35), ride.height)),
       orientation: { heading: C.Math.toRadians(ride.heading),
         pitch: C.Math.toRadians(ride.pitch), roll: 0 } });
       viewer.scene.requestRender(); return;
@@ -74,6 +74,21 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     camera.lookAtTransform(C.Matrix4.IDENTITY);
     viewer.scene.requestRender();
   }
+  function applyExhibit() {
+    if (!tileset || !viewer) return true;
+    for (const entity of viewer.entities.values) {
+      const p = entity.reliefPlace, b = exhibitBounds;
+      entity.show = !b || p.lon >= b.west && p.lon <= b.east && p.lat >= b.south && p.lat <= b.north;
+    }
+    if (!exhibitBounds) { tileset.clippingPolygons = undefined; return true; }
+    const C = window.Cesium, b = exhibitBounds;
+    if (!C.ClippingPolygonCollection.isSupported(viewer.scene)) return false;
+    tileset.clippingPolygons = new C.ClippingPolygonCollection({ inverse: true,
+      polygons: [new C.ClippingPolygon({ positions: C.Cartesian3.fromDegreesArray([
+        b.west, b.north, b.east, b.north, b.east, b.south, b.west, b.south,
+      ]) })] });
+    viewer.scene.requestRender(); return true;
+  }
   async function start() {
     if (loading || viewer || failed || disposed) return;
     const ticket = ++generation;
@@ -81,7 +96,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092117')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092121')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -108,6 +123,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       if (disposed || failed || ticket !== generation) { loadedTiles.destroy(); return; }
       tileset = loadedTiles;
       viewer.scene.primitives.add(tileset);
+      applyExhibit();
       tileset.tileVisible.addEventListener(tile => {
         visibleTiles++;
         bestError = Math.min(bestError, tile.geometricError);
@@ -134,6 +150,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
         });
         entity.reliefPlace = place;
       }
+      applyExhibit();
       loading = false; clearTimeout(resourceTimer);
     } catch {
       // Provider resource URLs can contain credentials: never log raw errors.
@@ -172,6 +189,10 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   stage.addEventListener('pointerup', up);
 
   return {
+    setExhibit(bounds) { exhibitBounds = bounds; return applyExhibit(); },
+    get exhibitSupported() {
+      return !viewer || window.Cesium.ClippingPolygonCollection.isSupported(viewer.scene);
+    },
     get active() { return active; },
     get aircraftViewer() { return viewer && !viewer.isDestroyed() ? viewer : null; },
     pickLocation(x, y) {
@@ -180,7 +201,8 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       try {
         const position = viewer.scene.pickPosition(new C.Cartesian2(x, y)); if (!position) return null;
         const point = C.Cartographic.fromCartesian(position);
-        return { lon: C.Math.toDegrees(point.longitude), lat: C.Math.toDegrees(point.latitude) };
+        return { lon: C.Math.toDegrees(point.longitude), lat: C.Math.toDegrees(point.latitude),
+          height: point.height, surface: true };
       } catch { return null; }
     },
     projectLocation(place) {

@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092118" />
+<link rel="stylesheet" href="app.css?v=philly-2026092121" />
 <link rel="modulepreload" href="vendor/three.module.min.js?v=philly-2026092113" />
 <link rel="modulepreload" href="vendor/three.core.min.js" />
 <link rel="preload" as="image" href="data/heightmap.webp" fetchpriority="high" />
@@ -215,6 +215,27 @@
   <p class="power-status">Keeps aerial detail and overlays; simplifies buildings and decorative effects.</p>
   <label class="power-saving"><input id="powerSaving" type="checkbox"> Save power when idle</label>
   <p id="powerStatus" class="power-status">Full image detail at every setting.</p>
+  <details class="explore-tools" id="exploreTools">
+    <summary>Viewpoints &amp; miniature exhibits</summary>
+    <p class="photo-note">Explore the same geographic map from a new perspective.</p>
+    <button type="button" id="standHere">Stand here · choose a point</button>
+    <label for="exhibitPlace">Neighborhood exhibit</label>
+    <select id="exhibitPlace">
+      <option value="current">Current map center</option>
+      <option value="Philadelphia City Hall">Center City</option>
+      <option value="Bauder Signs">Bauder Signs</option>
+      <option value="The Hidden Reef">The Hidden Reef</option>
+    </select>
+    <button type="button" id="openExhibit">Make a miniature exhibit</button>
+    <label for="modelPlace">Architectural models</label>
+    <select id="modelPlace">
+      <option value="independence-hall">Independence Hall</option>
+      <option value="museum-of-art">Philadelphia Museum of Art</option>
+      <option value="city-hall">Philadelphia City Hall</option>
+    </select>
+    <button type="button" id="openModel">Explore detailed model</button>
+    <p id="exploreStatus" class="photo-note" role="status">Extra tools load only when opened.</p>
+  </details>
   <div class="camera-layer-control">
     <label class="camera-layer-toggle"><input type="checkbox" id="cameraLayerToggle"
       aria-controls="cameraLayerOptions"> <span>Cameras on map</span><span aria-hidden="true">◉</span></label>
@@ -239,6 +260,8 @@
       aria-controls="aircraftOptions"> <span>Aircraft over the region</span><span aria-hidden="true">✈</span></label>
     <div id="aircraftOptions" hidden>
       <p id="aircraftStatus" role="status"></p>
+      <button type="button" id="airportSpotter">Spot from PHL · nearest reported aircraft</button>
+      <p class="photo-note">Virtual ground viewpoint; does not confirm a PHL arrival or public access.</p>
       <div class="camera-layer-filters">
         <select id="aircraftFilter" aria-label="Aircraft types">
           <option value="all">All airborne aircraft</option>
@@ -756,7 +779,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092117"></script>
+<script type="module" src="src/main.js?v=philly-2026092121"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
