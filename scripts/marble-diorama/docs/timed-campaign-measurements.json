@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-19",
-  "generatedAt": "2026-09-21T16:35:50.771Z",
+  "physics": "rapier-0.20.0-mm-20",
+  "generatedAt": "2026-09-21T16:52:36.572Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -33,10 +33,10 @@
         },
         {
           "course": "intermediate",
-          "ticks": 5545,
+          "ticks": 5544,
           "players": [
             {
-              "time": 31.899739583342047,
+              "time": 31.906250000008715,
               "score": 23587,
               "deaths": 0,
               "status": "finished"
@@ -123,16 +123,16 @@
         },
         {
           "course": "intermediate",
-          "ticks": 5730,
+          "ticks": 5731,
           "players": [
             {
-              "time": 27.89973958334423,
+              "time": 27.906250000010896,
               "score": 22687,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 26.695312500010676,
+              "time": 26.688802083344008,
               "score": 18705,
               "deaths": 0,
               "status": "finished"

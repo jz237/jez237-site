@@ -52,7 +52,7 @@ function graphSurface(material, field, neutralSurface, moving) {
       terrainColor=mix(terrainColor,ridgeColor,ridge);
       diffuseColor.rgb=${neutralSurface ? "terrainColor" : "mix(diffuseColor.rgb,terrainColor,0.14)"};
       // Course-aligned graph lines are draped on the real 3D surface.
-      vec3 gridPosition=${moving ? "vTerrainLocal" : "vTerrainWorld"};
+      vec3 gridPosition=${moving && moving !== "wave" ? "vTerrainLocal" : "vTerrainWorld"};
       vec2 graph=vec2(gridPosition.x-gridPosition.z,gridPosition.x+gridPosition.z)*0.70710678/0.65;
       vec2 distanceToLine=abs(fract(graph+0.5)-0.5);
       vec2 coverage=1.0-smoothstep(vec2(0.014),vec2(0.014)+fwidth(graph)*0.85,distanceToLine);
@@ -197,7 +197,7 @@ export class DioramaView {
         "varying vec3 vTrackPosition;\n" + shader.vertexShader;
       shader.vertexShader = shader.vertexShader.replace(
         "#include <begin_vertex>",
-        "#include <begin_vertex>\nvTrackPosition=position;",
+        `#include <begin_vertex>\nvTrackPosition=${moving === "wave" ? "(modelMatrix*vec4(position,1.0)).xyz" : "position"};`,
       );
       shader.fragmentShader =
         "varying vec3 vTrackPosition;\n" +
@@ -227,13 +227,13 @@ export class DioramaView {
         );
     };
     m.customProgramCacheKey = () =>
-      `${side ? "side" : "top"}-${name}-${this.sim?.course.id}-${this.sim?.course.sidePattern ?? ""}`;
+      `${side ? "side" : "top"}-${name}-${moving}-${this.sim?.course.id}-${this.sim?.course.sidePattern ?? ""}`;
     return finishStone(m, this.wallGrain);
   }
   meshFor(g, material, color) {
     const mesh = new THREE.Mesh(surfaceGeometry(g), [
-      this.material(material, false, color, !!g.part?.motion),
-      this.material(material, true, color),
+      this.material(material, false, color, g.part?.motion?.axis ?? false),
+      this.material(material, true, color, g.part?.motion?.axis ?? false),
     ]);
     mesh.castShadow = true;
     mesh.receiveShadow = true;

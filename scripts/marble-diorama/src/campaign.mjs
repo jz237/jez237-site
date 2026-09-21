@@ -1019,36 +1019,25 @@ export function intermediateCourse() {
   ];
   course.route = course.playerRoutes[0];
   course.parts = course.parts.filter((p) => p.id !== "first-wave");
+  // Original footage 121-125s: a continuous strip with separated raised
+  // crests moving downstream, not two isolated sine panels. World dimensions
+  // remain reconstructed; see INTERMEDIATE-WAVES.md for the measured cadence.
   course.parts.push(
-    ribbon(
-      "wave-entry",
-      [
-        [0, 91, 2.5],
-        [5, 94, 2.5],
-      ],
-      4,
-    ),
     ...waveStrip(
-      "upper-wave",
-      worldPoint(5, 2.5, 94),
-      worldPoint(5, 2.5, 98),
-      4,
-      { amplitude: 0.75, period: 2.8, wavelength: 4 },
-    ),
-    ribbon(
-      "wave-turn",
-      [
-        [5, 98, 2.5],
-        [10, 102, 2.5],
-      ],
-      4,
-    ),
-    ...waveStrip(
-      "lower-wave",
-      worldPoint(10, 2.5, 102),
+      "traveling-wave",
+      worldPoint(0, 2.5, 93),
       worldPoint(10, 2.5, 106),
       4,
-      { amplitude: 0.75, period: 2.8, wavelength: 4 },
+      {
+        profile: "crest",
+        amplitude: 2.2,
+        period: 2.4,
+        wavelength: 9.6,
+        crestWidth: 3.6,
+        crestPeak: 0.2,
+        anchorLength: 0.8,
+        segmentLength: 0.3,
+      },
     ),
   );
   const pipeRoute = [
@@ -1062,11 +1051,10 @@ export function intermediateCourse() {
       [0, 10, 82],
       [0, 5, 88],
       [0, 5, 91],
-      [5, 5, 94],
-      [5, 5, 96],
-      [5, 5, 98],
-      [10, 5, 102],
-      [10, 5, 104],
+      [0, 5, 93],
+      [2.5, 5, 96.25],
+      [5, 5, 99.5],
+      [7.5, 5, 102.75],
       [10, 5, 106],
       [7, 2, 110],
       [8, 3, 114],
@@ -1078,6 +1066,20 @@ export function intermediateCourse() {
       ...worldPoint(l, h * 0.5, d),
       speed: 2.4,
       radius: d === 77 ? 0.3 : 0.7,
+      ...(d >= 93 && d <= 106 ? { speed: 3, flow: true, radius: 1 } : {}),
+      ...(d === 91
+        ? {
+            stop: true,
+            radius: 0.4,
+            waitFor: {
+              part: "traveling-wave-5",
+              axis: "y",
+              min: 4,
+              max: 4.2,
+              rising: true,
+            },
+          }
+        : {}),
     })),
   ];
   course.alternateRoutes.push({
