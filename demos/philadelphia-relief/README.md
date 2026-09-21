@@ -10,12 +10,14 @@ height adds the exaggerated ground offset, while the photographic view prefers
 reported geometric height and labels the barometric fallback.
 
 `functions/demos/philadelphia-relief/aircraft.js` fetches one fixed 45-nautical-mile
-circle from the public ADSB.lol API and filters to the map rectangle. The response
+circle from the public adsb.fi API and filters to the map rectangle. The response
 is bounded to 1 MiB, validated, stripped to display fields, and cached for 15
 seconds per Cloudflare edge. There are no credentials, paid services, scheduled
 background jobs, arbitrary upstream URLs, or permanent flight-history storage.
 The browser polls every 15 seconds only while enabled and visible; failures back
-off to 30 seconds. Disabling, hiding the tab, and leaving the page cancel requests.
+off to 30 seconds, or at least five minutes for provider rate limits. Disabling,
+hiding the tab, and leaving the page cancel requests. ADSB.lol was tested first,
+but returned HTTP 429 from the production hosting network.
 
 Movement interpolates actual observations with a 20-second playback buffer and
 never extrapolates future positions. Reduced-motion users receive direct report
@@ -24,10 +26,9 @@ aircraft disappear after 120 seconds. Trails collect up to three minutes of
 observations in the current session and break at implausible jumps or long gaps.
 Coverage, latency, and provider availability vary; this is not a navigation feed.
 
-Sources: [ADSB.lol API](https://www.adsb.lol/docs/open-data/api/),
-[API schema](https://api.adsb.lol/docs), and
-[ODbL 1.0](https://opendatacommons.org/licenses/odbl/1-0/).
-Attribution, license, and the transformed regional data are linked beside the toggle.
+Source and terms: [adsb.fi open data](https://github.com/adsbfi/opendata).
+The public API permits personal, non-commercial use with attribution; commercial
+use requires contacting the provider. Attribution and terms are linked beside the toggle.
 Original model source: `src/aircraft-model.js`; rebuild its Cesium GLB with
 `node tools/build-aircraft.mjs`.
 

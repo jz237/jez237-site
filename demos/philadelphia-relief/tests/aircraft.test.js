@@ -55,7 +55,7 @@ test('endpoint caches a fixed region and handles provider failure without return
   globalThis.caches = { default: { match: async k => cache.get(k.url)?.clone(),
     put: async (k, response) => { cache.set(k.url, response); } } };
   globalThis.fetch = async url => {
-    calls++; assert.equal(url, 'https://api.adsb.lol/v2/point/40.125/-75.25/45');
+    calls++; assert.equal(url, 'https://opendata.adsb.fi/api/v3/lat/40.125/lon/-75.25/dist/45');
     return Response.json({ ...feed(), now: Date.now() });
   };
   const context = suffix => ({ request: new Request(`https://example.com/demos/philadelphia-relief/aircraft${suffix}`),
@@ -66,7 +66,7 @@ test('endpoint caches a fixed region and handles provider failure without return
     await Promise.all(pending); await onRequest(context('?lat=0')); assert.equal(calls, 1);
     cache.clear(); globalThis.fetch = async () => new Response('limited', { status: 429 });
     const failure = await onRequest(context(''));
-    assert.equal(failure.status, 503); assert.equal(failure.headers.get('Retry-After'), '30');
+    assert.equal(failure.status, 503); assert.equal(failure.headers.get('Retry-After'), '300');
     assert.equal((await failure.json()).aircraft, undefined);
     assert.equal((await onRequest({ request: new Request('https://example.com', { method: 'POST' }) })).status, 405);
   } finally { globalThis.fetch = originalFetch; globalThis.caches = originalCaches; }

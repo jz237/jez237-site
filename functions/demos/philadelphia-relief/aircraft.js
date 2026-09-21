@@ -1,13 +1,16 @@
 import { compactAircraft } from '../../../demos/philadelphia-relief/src/aircraft-data.js';
 
 // One fixed public region; query strings cannot expand the request or select another host.
-const FEED = 'https://api.adsb.lol/v2/point/40.125/-75.25/45';
+const FEED = 'https://opendata.adsb.fi/api/v3/lat/40.125/lon/-75.25/dist/45';
 const headers = { 'Content-Type': 'application/json; charset=utf-8',
   'X-Content-Type-Options': 'nosniff', 'Cache-Control': 'public, max-age=15' };
 
 async function readBounded(response) {
   if (!response.ok || !response.body) {
-    await response.body?.cancel(); throw new Error(`Provider HTTP ${response.status}`);
+    const seconds = Number(response.headers.get('Retry-After'));
+    const error = new Error(`Provider HTTP ${response.status}`);
+    error.retryAfter = response.status === 429 ? Math.max(300, Math.min(900, seconds || 300)) : 30;
+    await response.body?.cancel(); throw error;
   }
   const reader = response.body.getReader(), chunks = []; let size = 0;
   try {
@@ -27,14 +30,14 @@ export async function onRequest(context) {
   if (context.request.method !== 'GET') return new Response('Method not allowed',
     { status: 405, headers: { Allow: 'GET', 'Cache-Control': 'no-store' } });
   const url = new URL(context.request.url);
-  const key = new Request(`${url.origin}/demos/philadelphia-relief/aircraft?schema=1`);
+  const key = new Request(`${url.origin}/demos/philadelphia-relief/aircraft?schema=2`);
   const cached = await caches.default.match(key); if (cached) return cached;
   let response;
   try {
     const upstream = await fetch(FEED, { signal: AbortSignal.timeout(9000),
       headers: { Accept: 'application/json',
         'User-Agent': 'PhiladelphiaRelief/1.0 (https://jez237.com/demos/philadelphia-relief/)' },
-      cf: { cacheEverything: true, cacheTtlByStatus: { '200-299': 15, '400-599': 30 } } });
+      cf: { cacheEverything: true, cacheTtlByStatus: { '200-299': 15, '429': 300, '500-599': 30 } } });
     const data = compactAircraft(await readBounded(upstream));
     response = new Response(JSON.stringify(data), { headers });
   } catch (error) {
@@ -43,8 +46,10 @@ export async function onRequest(context) {
       : ['Invalid aircraft feed', 'Outdated aircraft feed', 'Aircraft response too large'].includes(error.message)
         ? error.message : 'Provider connection failed';
     console.warn(JSON.stringify({ event: 'aircraft-feed-unavailable', detail }));
-    response = new Response(JSON.stringify({ error: 'Aircraft feed temporarily unavailable' }),
-      { status: 503, headers: { ...headers, 'Cache-Control': 'public, max-age=30', 'Retry-After': '30' } });
+    const retryAfter = error.retryAfter || 30;
+    response = new Response(JSON.stringify({ error: 'Aircraft feed temporarily unavailable', retryAfter }),
+      { status: 503, headers: { ...headers, 'Cache-Control': `public, max-age=${retryAfter}`,
+        'Retry-After': String(retryAfter) } });
   }
   context.waitUntil(caches.default.put(key, response.clone()).catch(() => {}));
   return response;
