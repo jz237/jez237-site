@@ -880,3 +880,23 @@ are unchanged by the authoring metadata.
 Actual browser checks verify grouped selection, rotate, move, removal, undo/redo,
 restoration of the original layout and playtest startup without captured errors.
 See INTERMEDIATE-WAVES.md for the geometry and reference limits.
+
+
+### September 21 - Intermediate board-axis acid patrols, mm-21
+
+All five Intermediate puddles now follow board-axis patrols. Registered primary
+frames establish additional visible directions and upper-right turns; full loops,
+return legs, world distances, speeds and initial phases remain reconstructed.
+See ACID-REFERENCE.md for the trace and identity limits where puddles overlap.
+
+All 148 tests pass (271003ms), including the four connected-wave workshop tests
+from the previous release. Production build and diff checks pass. Each acid's
+entire outer footprint is checked at 160 samples across its complete loop for
+flat-floor contact and clearance from pyramid refuges. Corner timing and board
+axis alignment are also checked. Browser close-ups show the revised motion;
+the production two-player Intermediate demonstration finishes both players with
+zero falls and no captured warnings/errors (P1 46.20s, 3801 points each).
+
+Fresh mm-21 timed campaign results remain unchanged: solo Ultimate times out at
+32s and both players time out in paired Silly by 55.0417s, with zero falls in all
+measured runs. Full campaign acceptance and full Amiga parity remain incomplete.
