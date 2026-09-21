@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092108" />
+<link rel="stylesheet" href="app.css?v=philly-2026092109" />
 </head>
 <body data-theme="dusk">
 
@@ -117,7 +117,9 @@
     <ul id="searchResults" class="search-results" role="listbox" aria-label="Search results" hidden></ul>
   </div>
 
-  <div class="topbar-actions">
+  <details id="pageTools" class="topbar-actions">
+    <summary aria-label="Page tools">•••</summary>
+    <div class="page-tools-body">
     <button type="button" class="icon-btn local-mobile-opener" id="btnLocalViews"
       title="Cameras &amp; local views" aria-label="Cameras and local views">
       <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor"
@@ -130,7 +132,8 @@
     <button type="button" class="icon-btn" id="btnFull" title="Fullscreen (F)" aria-label="Toggle fullscreen">⤢</button>
     <button type="button" class="icon-btn" id="btnKeys" title="Keyboard shortcuts (?)" aria-label="Keyboard shortcuts">⌘</button>
     <button type="button" class="icon-btn" id="btnAbout" title="About &amp; sources" aria-label="About and data sources">i</button>
-  </div>
+    </div>
+  </details>
 </header>
 
 <nav class="explore-nav" aria-label="Explore and customize">
@@ -191,7 +194,9 @@
   </section>
 </dialog>
 <!-- ── control studio ──────────────────────────────────────────────────── -->
-<section class="photo-controls" aria-label="Map presentation">
+<details id="mapControls" class="photo-controls" aria-label="Map presentation">
+  <summary class="map-controls-summary">View &amp; layers <span aria-hidden="true">⌄</span></summary>
+  <div class="map-controls-body">
   <div class="photo-choice">
     <label for="photoMode">View</label>
     <select id="photoMode">
@@ -303,7 +308,9 @@
     </div>
     <button id="refreshMapLayers" class="layer-refresh" type="button">Refresh enabled live layers</button>
   </details>
-</section>
+  <button id="closeMapControls" class="close-map-controls" type="button">Back to map</button>
+  </div>
+</details>
 <div id="mapLayerBanner" class="map-layer-banner" role="status" hidden></div>
 <div id="photoCredits" class="photo-credits" hidden></div>
 <section id="studio" class="panel studio collapsed" aria-labelledby="studioTitle">
@@ -731,7 +738,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092108"></script>
+<script type="module" src="src/main.js?v=philly-2026092109"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it
