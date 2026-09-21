@@ -251,6 +251,8 @@ export class AudioEngine {
   }
   event(event, assisted = false) {
     if (event.type === "impact") return this.impact(event.force);
+    if (event.type === "fall" && event.cause === "acid")
+      return this.effect("acid", { key: `acid-capture:${event.player}` });
     if (event.type === "fall" && event.cause === "vacuum") {
       this.effect("vacuum", { key: `vacuum-capture:${event.player}` });
       return this.effect("fall", { key: `fall:${event.player}` });

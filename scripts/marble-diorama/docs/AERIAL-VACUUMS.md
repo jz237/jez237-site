@@ -83,3 +83,9 @@ zone coordinates cannot leave a second invisible suction point behind.
 Physical front-side capture and rear-side rejection also pass after moving and
 rotating the edited housing. Existing acid, pipe, landing-pad and general editor
 transform checks retain their behavior.
+
+
+September 21 mm-22 presentation correction: spherical sectors now use their
+proper portion of the full marble texture, and return rotations converge to
+identity before physical respawn. This removes extra repeated stripes and a
+final rotation discontinuity. Capture durations and physical outcomes are unchanged.

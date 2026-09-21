@@ -1,3 +1,4 @@
+import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
 import { transferForce, chooseTransfer } from "./powered-transfer.mjs";
 import {
@@ -15,7 +16,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-21";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-22";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -159,7 +160,7 @@ export class Simulation {
           ];
   }
   respawn(p) {
-    const s = this.respawnPosition(p);
+    const s = p.acidCapture?.destination ?? this.respawnPosition(p);
     const b = this.body(p);
     b.setEnabled(true);
     b.setTranslation(s, true);
@@ -168,6 +169,7 @@ export class Simulation {
     b.setRotation({ x: 0, y: 0, z: 0, w: 1 }, true);
     p.status = "racing";
     p.vacuumCapture = null;
+    p.acidCapture = null;
     p.safeHistory = [];
     p.previous = p.current = {
       position: copy(s),
@@ -470,7 +472,7 @@ export class Simulation {
             this.world.getCollider(p.collider),
           )
         )
-          this.fall(p);
+          this.fall(p, { cause: "acid", zone: acid.zone });
     for (const m of this.movers) {
       const b = this.world.getRigidBody(m.handle);
       m.current = {
@@ -555,7 +557,27 @@ export class Simulation {
     this.body(p).setEnabled(false);
     p.deaths++;
     const vacuum = detail?.cause === "vacuum";
-    p.respawnTick = this.tick + (vacuum ? 252 : 90);
+    const acid = detail?.cause === "acid";
+    p.respawnTick =
+      this.tick + (vacuum ? 252 : acid ? ACID_RECOVERY_TICKS : 90);
+    if (acid) {
+      const origin = this.body(p).translation();
+      const pool = acidPositionAt(
+        detail.zone,
+        this.tick * STEP * this.preset.machineSpeed,
+      );
+      p.acidCapture = {
+        tick: this.tick,
+        zone: this.course.zones.indexOf(detail.zone),
+        offset: {
+          x: origin.x - pool.x,
+          y: origin.y - pool.y,
+          z: origin.z - pool.z,
+        },
+        rotation: copy(this.body(p).rotation()),
+        destination: copy(this.respawnPosition(p)),
+      };
+    } else p.acidCapture = null;
     p.vacuumCapture = vacuum
       ? {
           tick: this.tick,
@@ -570,7 +592,7 @@ export class Simulation {
     this.events.push({
       type: "fall",
       player: this.players.indexOf(p),
-      ...(vacuum ? { cause: "vacuum" } : {}),
+      ...(vacuum ? { cause: "vacuum" } : acid ? { cause: "acid" } : {}),
     });
   }
   snapshot() {

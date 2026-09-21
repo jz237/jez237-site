@@ -900,3 +900,33 @@ zero falls and no captured warnings/errors (P1 46.20s, 3801 points each).
 Fresh mm-21 timed campaign results remain unchanged: solo Ultimate times out at
 32s and both players time out in paired Silly by 55.0417s, with zero falls in all
 measured runs. Full campaign acceptance and full Amiga parity remain incomplete.
+
+
+### September 21 - acid dissolution and fragment recovery, mm-22
+
+The Ultimate recording's 287.32-289.84s acid capture now has a separate response:
+solid-color reaction, sinking cap following the pool, absence, then scattered
+pieces reassembling at the saved physical respawn destination. Recovery takes
+300 ticks / 2.5 seconds. The independent clock continues; timeout cancels the
+visible response and prevents respawn. Generic shatter particles and breaking
+cue are replaced for acid; the bubbling cue is still designed, not authentic.
+See ACID-REFERENCE.md for evidence and remaining reconstruction limits.
+
+All 152 full-suite tests pass (271545ms). After browser inspection found repeated
+fragment textures, the final acid/object-animation target passes all 19 tests
+(7027ms, including final texture and rotation corrections). This adds
+one new whole-marble texture regression, bringing the test inventory to 153;
+the complete suite was not rerun after those presentation-only corrections.
+Production build and diff checks pass. Tests cover actual acid contact, saved
+recovery state, independent two-player outcomes and clocks, timeout, deterministic
+mid-capture restoration, cap clearance, pause stability, fragment convergence,
+texture alignment and acid cue routing. Vacuum sectors now also converge to
+the respawn orientation. Browser close-ups verify contact, dissolution, absence,
+return and continuous reassembly without captured warnings/errors.
+
+Fresh mm-22 timed campaign outcomes are unchanged: solo Ultimate times out at
+32s and paired Silly by 55.0417s; all measured runs have zero falls. Full timed
+campaign acceptance, exact original effects and full Amiga parity remain open.
+
+The final production-browser paired Intermediate demo finishes both players with
+3801 points and zero falls (P1 46.20s), without captured warnings/errors.

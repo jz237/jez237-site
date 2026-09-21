@@ -506,6 +506,12 @@ test("vacuum capture inhales fragments, restores mid-capture, and reforms at the
   assert.ok(inhaled.every((pose, i) => distance(pose) < distance(early[i])));
   assert.ok(poseAt(0.8).every((p) => !p.visible));
   assert.ok(poseAt(1.4).every((p) => p.visible));
+  poseAt(2.1 - 1e-6);
+  for (const fragment of mesh.children)
+    assert.ok(
+      fragment.quaternion.angleTo(new THREE.Quaternion()) < 1e-5,
+      "returning sectors assemble with the physical marble's respawn orientation",
+    );
   const returnPose = poseAt(1.7);
   assert.deepEqual(
     poseAt(1.7),
