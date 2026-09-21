@@ -1,5 +1,5 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092102';
+  from './photo-policy.js?v=philly-2026092103';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -69,7 +69,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092102')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092103')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {

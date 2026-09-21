@@ -68,6 +68,10 @@ test('endpoint caches a fixed region and handles provider failure without return
     const failure = await onRequest(context(''));
     assert.equal(failure.status, 503); assert.equal(failure.headers.get('Retry-After'), '300');
     assert.equal((await failure.json()).aircraft, undefined);
+    cache.clear(); globalThis.fetch = async () => new Response('denied', { status: 403 });
+    const denied = await onRequest(context(''));
+    assert.equal(denied.headers.get('Retry-After'), '3600');
+    assert.equal((await denied.json()).accessRequired, true);
     assert.equal((await onRequest({ request: new Request('https://example.com', { method: 'POST' }) })).status, 405);
   } finally { globalThis.fetch = originalFetch; globalThis.caches = originalCaches; }
 });
