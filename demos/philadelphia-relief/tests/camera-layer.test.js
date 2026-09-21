@@ -1,7 +1,7 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
-import { WEBCAMS, trafficCameras, regionalCameras, hasCameraPreview,
+import { WEBCAMS, trafficCameras, regionalCameras, discoveredCameras, cameraMatchesFilter, hasCameraPreview,
   groupCameras, popupPosition } from '../src/camera-data.js';
 import { onRequest } from '../../../functions/demos/philadelphia-relief/_middleware.js';
 
@@ -60,7 +60,7 @@ test('camera preview placement stays inside desktop and phone screens at every c
 test('regional camera policy adds only the widget frame host and preserves photographic restrictions', async () => {
   const result = await onRequest({ next: async () => new Response('map') });
   const csp = result.headers.get('Content-Security-Policy');
-  assert.ok(csp.includes("frame-src 'self' https://api.wetmet.net https://attheshore.com https://www.attheshore.com;"));
+  assert.ok(csp.includes("frame-src 'self' https://api.wetmet.net https://attheshore.com https://www.attheshore.com https://www.youtube-nocookie.com;"));
   assert.ok(csp.includes("media-src 'self' blob: https://video.deldot.gov"));
   assert.ok(csp.includes("img-src 'self' https://api.igotview.com"));
   assert.ok(csp.includes("frame-ancestors 'self'"));
@@ -89,4 +89,54 @@ test('additional cameras have exact provider identities, bounded locations and s
   assert.equal(regionalCameras({cameras: [{...de, enabled: false}]})[0].stream, undefined);
   assert.equal(new URL(cams.find(p => p.stream).url, 'https://jez237.com/demos/philadelphia-relief/').origin,
     'https://jez237.com');
+});
+
+
+test('discovered cameras have verified provider identities, bounded positions and no arbitrary media', async () => {
+  const doc = JSON.parse(await readFile(new URL('../data/discovered-cameras.json', import.meta.url)));
+  const cams = discoveredCameras(doc);
+  assert.equal(cams.length, 9);
+  assert.equal(cams.filter(p => p.player).length, 3);
+  assert.ok(cams.every(p => p.discovered && hasCameraPreview(p) && !p.traffic));
+  assert.equal(new Set(cams.map(p => p.id)).size, 9);
+  for (const p of cams) assert.equal(new URL(p.url).protocol, 'https:');
+  assert.equal(discoveredCameras({cameras: [...doc.cameras, ...doc.cameras]}).length, 9);
+  assert.deepEqual(discoveredCameras({cameras: 'invalid'}), []);
+  const sample = doc.cameras[0];
+  for (const bad of [{...sample, lat: 90}, {...sample, lon: NaN}, {...sample, name: ''},
+    {...sample, url: 'https://www.earthcam.com.evil.test/camera'},
+    {...sample, thumbnail: '../escape'}, {...sample, source: 'unknown'}]) {
+    assert.deepEqual(discoveredCameras({cameras: [bad]}), []);
+  }
+  const falcon = doc.cameras.find(p => p.source === 'dosbirds');
+  assert.deepEqual(discoveredCameras({cameras: [{...falcon, video: 'XwxS5HriQBE'}]}), []);
+  const safe = discoveredCameras({cameras: [{...falcon, player: 'https://evil.test', stream: 'https://evil.test'}]})[0];
+  assert.equal(new URL(safe.player).origin, 'https://www.youtube-nocookie.com');
+  assert.equal(safe.stream, undefined);
+  assert.equal(cameraMatchesFilter(cams[0], 'discovered'), true);
+  assert.equal(cameraMatchesFilter(WEBCAMS[0], 'discovered'), false);
+  assert.equal(cameraMatchesFilter({traffic: true}, 'preview'), false);
+});
+
+test('purple camera clusters remain separate from green and gold at the same position', () => {
+  const items = [{id:'a'}, {id:'b', traffic:true}, {id:'c', discovered:true}, {id:'d', discovered:true}];
+  const groups = groupCameras(items.map(item => ({x:100,y:100,item})));
+  assert.equal(groups.length, 3);
+  assert.equal(groups.find(g => g.discovered).items.length, 2);
+  assert.equal(groups.flatMap(g => g.items).length, 4);
+});
+
+test('camera CSP allows exact public media hosts only inside the appropriate directives', async () => {
+  const response = await onRequest({next: async () => new Response('map')});
+  const csp = response.headers.get('Content-Security-Policy');
+  const directives = csp.split(';');
+  const images = directives.find(s => s.includes('img-src'));
+  for (const host of ['static.earthcam.com', 'usgs-nims-images.s3.amazonaws.com', 'www.ptztv.live', 'i.ytimg.com']) {
+    assert.ok(images.includes('https://' + host));
+    assert.ok(!directives.find(s => s.includes('script-src')).includes(host));
+  }
+  const frames = directives.find(s => s.includes('frame-src'));
+  assert.ok(frames.includes('https://www.youtube-nocookie.com'));
+  assert.ok(!frames.includes('ptztv'));
+  assert.ok(!frames.includes('*'));
 });

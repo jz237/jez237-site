@@ -1,0 +1,95 @@
+{
+  "checked": "2026-09-21",
+  "cameras": [
+    {
+      "id": "found-franklin-institute",
+      "name": "Franklin Institute · Parkway",
+      "source": "earthcam",
+      "lon": -75.1731,
+      "lat": 39.9582,
+      "location": "The Franklin Institute · Benjamin Franklin Parkway",
+      "url": "https://www.earthcam.com/cams/pennsylvania/philadelphia/",
+      "thumbnail": "fc65c09a99e61ca67a3196f45ed48596"
+    },
+    {
+      "id": "found-liberty-bell",
+      "name": "Liberty Bell · Independence Hall",
+      "source": "earthcam",
+      "lon": -75.1503,
+      "lat": 39.9496,
+      "location": "Liberty Bell Center · Independence National Historical Park",
+      "url": "https://www.earthcam.com/usa/pennsylvania/philadelphia/independencehall/",
+      "thumbnail": "9e2f1301e3566e1c24b763fef3ce1ae0"
+    },
+    {
+      "id": "found-port-philly",
+      "name": "Port Philly · ships and airport approach",
+      "source": "ptztv",
+      "lon": -75.2322,
+      "lat": 39.8594,
+      "location": "Delaware River viewed from Paulsboro Sportsmen’s Club",
+      "area": true,
+      "url": "https://www.ptztv.live/port-philly-webcam/"
+    },
+    {
+      "id": "found-usgs-lambertville",
+      "name": "Delaware River · Lambertville / New Hope",
+      "source": "usgs",
+      "lon": -74.948889,
+      "lat": 40.364722,
+      "station": "NJ_Delaware_River_at_Lambertville_NJ",
+      "location": "USGS streamgage 01462000 · periodic river snapshots",
+      "url": "https://www.usgs.gov/media/webcams/streamgage-01462000-delaware-river-lambertville-nj"
+    },
+    {
+      "id": "found-usgs-trenton",
+      "name": "Delaware River · Trenton",
+      "source": "usgs",
+      "lon": -74.77805556,
+      "lat": 40.22166667,
+      "station": "NJ_Delaware_River_at_Trenton",
+      "location": "USGS streamgage 01463500 · periodic river snapshots",
+      "url": "https://www.usgs.gov/media/webcams/streamgage-01463500-delaware-river-trenton-nj"
+    },
+    {
+      "id": "found-usgs-assunpink",
+      "name": "Assunpink Creek · Trenton",
+      "source": "usgs",
+      "lon": -74.7491667,
+      "lat": 40.22416667,
+      "station": "NJ_Assunpink_Creek_at_Trenton",
+      "location": "USGS streamgage 01464000 · periodic river snapshots",
+      "url": "https://www.usgs.gov/media/webcams/streamgage-01464000-assunpink-creek-trenton-nj"
+    },
+    {
+      "id": "found-falcon-1",
+      "name": "Wilmington falcons · nest camera 1",
+      "source": "dosbirds",
+      "lon": -75.55063,
+      "lat": 39.74717,
+      "video": "2oqJJvDzdFY",
+      "location": "Brandywine Building · 1000 N. West Street, Wilmington",
+      "url": "https://www.dosbirds.org/citizen-science/falcon-watch/"
+    },
+    {
+      "id": "found-falcon-2",
+      "name": "Wilmington falcons · nest camera 2",
+      "source": "dosbirds",
+      "lon": -75.55063,
+      "lat": 39.74717,
+      "video": "1qhsPj4jDT4",
+      "location": "Brandywine Building · 1000 N. West Street, Wilmington",
+      "url": "https://www.dosbirds.org/citizen-science/falcon-watch/"
+    },
+    {
+      "id": "found-falcon-3",
+      "name": "Wilmington falcons · east rooftop",
+      "source": "dosbirds",
+      "lon": -75.55063,
+      "lat": 39.74717,
+      "video": "I1cueV9veYw",
+      "location": "Brandywine Building · 1000 N. West Street, Wilmington",
+      "url": "https://www.dosbirds.org/citizen-science/falcon-watch/"
+    }
+  ]
+}

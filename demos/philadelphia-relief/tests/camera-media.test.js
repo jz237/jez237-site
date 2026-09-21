@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { mountCameraMedia } from '../src/camera-media.js';
+import { mountCameraMedia, mountCameraPlayer } from '../src/camera-media.js';
 
 class FakeMedia extends EventTarget {
   style = {};
@@ -18,7 +18,7 @@ function setup(t) {
   globalThis.document = { createElement: () => new FakeMedia() };
   t.after(() => { globalThis.document = previous; });
   const host = { clientWidth: 344, children: [], append(e) { this.children.push(e); },
-    replaceChildren() { this.children = []; } };
+    replaceChildren(...children) { this.children = children; } };
   return host;
 }
 const camera = {name: 'Test camera', stream: 'https://video.deldot.gov/live/NCAM001.stream/playlist.m3u8'};
@@ -56,4 +56,31 @@ test('provider snapshots show an explicit error and stop refreshing when closed'
   assert.match(messages.at(-1), /unavailable/);
   cleanup(); image.onload(); t.mock.timers.tick(120000);
   assert.equal(host.children.length, 0); assert.match(messages.at(-1), /unavailable/);
+});
+
+
+test('static thumbnails identify themselves and do not poll', t => {
+  const host = setup(t), messages = [];
+  const cleanup = mountCameraMedia(host, {name:'Falcon', snapshot:'https://i.ytimg.com/vi/test/hqdefault.jpg',
+    previewKind:'thumbnail', previewNote:'Video thumbnail · not a live frame.'},
+    {onStatus: text => messages.push(text)});
+  const image = host.children[0]; image.onload();
+  assert.match(messages.at(-1), /not a live frame/);
+  let writes = 0;
+  Object.defineProperty(image, 'src', {set() { writes++; }});
+  t.mock.timers.tick(180000);
+  assert.equal(writes, 0); cleanup();
+});
+
+test('provider playback is removed after one minute and cleanup cancels expiry callbacks', t => {
+  const host = setup(t); let expired = 0;
+  const item = {name:'Falcon', provider:'DOS', player:'https://www.youtube-nocookie.com/embed/2oqJJvDzdFY'};
+  const cleanup = mountCameraPlayer(host, item, {onExpired: () => expired++});
+  assert.equal(host.children.length, 1);
+  assert.equal(host.children[0].src, item.player);
+  t.mock.timers.tick(60000);
+  assert.equal(host.children.length, 0); assert.equal(expired, 1); cleanup();
+  const close = mountCameraPlayer(host, item, {onExpired: () => expired++});
+  close(); t.mock.timers.tick(60000);
+  assert.equal(host.children.length, 0); assert.equal(expired, 1);
 });
