@@ -54,11 +54,13 @@ export default {
       } catch { console.warn(JSON.stringify({ event: 'relay-health', status: 'connection-failed' }));
         return json({ error: 'Relay not ready' }, 503); }
     }
-    if (path !== '/aircraft' || request.method !== 'GET') return json({ error: 'Not found' }, 404);
+    if (!['/aircraft', '/ships'].includes(path) || request.method !== 'GET') {
+      return json({ error: 'Not found' }, 404);
+    }
     try {
       const origin = tunnelOrigin(await env.REGISTRY.get('origin'));
       if (!origin) return json({ error: 'Computer relay offline' }, 503);
-      const response = await fetch(`${origin}/aircraft`, { redirect: 'manual', signal: AbortSignal.timeout(9500),
+      const response = await fetch(`${origin}${path}`, { redirect: 'manual', signal: AbortSignal.timeout(9500),
         headers: { Authorization: `Bearer ${env.RELAY_KEY}`, Accept: 'application/json', 'User-Agent': agent },
         cf: { cacheTtl: 0 } });
       if (![200, 503].includes(response.status)

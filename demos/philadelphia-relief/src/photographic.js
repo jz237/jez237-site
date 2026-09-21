@@ -1,5 +1,5 @@
 import { photoAllowed, photoWanted, photoCamera, photoReady, PHOTO_PRELOAD }
-  from './photo-policy.js?v=philly-2026092107';
+  from './photo-policy.js?v=philly-2026092108';
 
 const CDN = 'https://cdn.jsdelivr.net/npm/cesium@1.145.0/Build/Cesium/';
 let enginePromise;
@@ -20,7 +20,8 @@ function loadEngine() {
 }
 
 /** A second renderer, driven by the SAME geographic camera and controls. */
-export function createPhotographic({ stage, store, sampleElevation, landmarks, onSelect }) {
+export function createPhotographic({ stage, store, sampleElevation, landmarks, onSelect,
+  isOverlayActive = () => false }) {
   const host = document.createElement('div');
   host.className = 'photographic-stage'; host.setAttribute('aria-hidden', 'true');
   stage.append(host);
@@ -69,7 +70,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     resourceTimer = setTimeout(unavailable, 45000);
     try {
       const [C, config] = await Promise.all([loadEngine(),
-        import('../../philadelphia-cesium/config.js?v=philly-2026092107')]);
+        import('../../philadelphia-cesium/config.js?v=philly-2026092108')]);
       if (disposed || failed || ticket !== generation) return;
       C.Ion.defaultAccessToken = config.ionToken;
       viewer = new C.Viewer(host, {
@@ -154,6 +155,15 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
   return {
     get active() { return active; },
     get aircraftViewer() { return viewer && !viewer.isDestroyed() ? viewer : null; },
+    pickLocation(x, y) {
+      if (!active || !viewer) return null;
+      const C = window.Cesium;
+      try {
+        const position = viewer.scene.pickPosition(new C.Cartesian2(x, y)); if (!position) return null;
+        const point = C.Cartographic.fromCartesian(position);
+        return { lon: C.Math.toDegrees(point.longitude), lat: C.Math.toDegrees(point.latitude) };
+      } catch { return null; }
+    },
     projectLocation(place) {
       if (!active || !viewer) return null;
       const C = window.Cesium;
@@ -165,7 +175,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
     stats: () => ({ active, wanted, loading, failed, pending, firstViewReady, visibleTiles, detailTiles }),
     update(pose, state, w, h) {
       lastPose = pose; width = w; height = h;
-      wanted = photoWanted(state, pose.dist, wanted);
+      wanted = !isOverlayActive() && photoWanted(state, pose.dist, wanted);
       if (!wanted) {
         present(false);
         clearTimeout(firstViewTimer); firstViewTimer = undefined;

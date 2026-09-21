@@ -5,7 +5,7 @@ export const FEED = 'https://opendata.adsb.fi/api/v3/lat/40.125/lon/-75.25/dist/
 const FIELDS = ['hex', 'flight', 'r', 't', 'category', 'lon', 'lat', 'alt_baro', 'alt_geom',
   'gs', 'track', 'baro_rate', 'geom_rate', 'seen_pos'];
 
-export function createRelay({ token, fetchFeed = fetch, now = Date.now, onUpdate = () => {} }) {
+export function createRelay({ token, fetchFeed = fetch, now = Date.now, onUpdate = () => {}, ships }) {
   if (typeof token !== 'string' || token.length < 32) throw new Error('Relay secret is required');
   let cache, nextFetch = 0, pending;
   const expected = Buffer.from(`Bearer ${token}`);
@@ -57,6 +57,10 @@ export function createRelay({ token, fetchFeed = fetch, now = Date.now, onUpdate
     }
     res.setHeader('X-Philadelphia-Aircraft-Relay', '1');
     if (req.method === 'GET' && req.url === '/health') { res.writeHead(204); res.end(); return; }
+    if (req.method === 'GET' && req.url === '/ships' && ships) {
+      res.setHeader('Content-Type', 'application/json');
+      res.writeHead(200); res.end(JSON.stringify(ships.snapshot())); return;
+    }
     // Exact route only: no file serving, request forwarding, queries, or arbitrary URLs.
     if (req.method !== 'GET' || req.url !== '/aircraft') { res.writeHead(404); res.end(); return; }
     try {

@@ -1617,6 +1617,58 @@ body.cinema .photo-credits { bottom: 8px; }
 .aircraft-pin:hover, .aircraft-pin:focus-visible, .aircraft-pin.selected { border-color: #9cf3fa;
   outline: 2px solid #0b344e88; background: #77e7f21c; }
 .aircraft-pin.stale span { border-color: #e0ad66; color: #e6cba3; }
+.more-map-layers { margin-top: 10px; border-top: 1px solid #ffffff25; padding-top: 10px; }
+.more-map-layers > summary { cursor: pointer; font-size: 12px; font-weight: 700; color: #e5f4f3; }
+.more-map-layers > summary span { display: block; padding: 4px 0 0 16px; font-size: 10px;
+  font-weight: 400; color: #b4c9cd; }
+.extra-layer { padding: 12px 0; border-bottom: 1px solid #ffffff1a; }
+.extra-layer > label { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 650; }
+.extra-layer input[type=checkbox] { accent-color: #84d2cc; }
+.extra-layer select { width: 100%; margin-top: 8px; background: #19343f; color: #eef6f4;
+  border: 1px solid #ffffff30; border-radius: 6px; padding: 8px; font-size: 11px; }
+.extra-layer p, .extra-layer small { display: block; font-size: 10px; line-height: 1.55; color: #b7d1d6; }
+.extra-layer button, .layer-refresh { padding: 7px 10px; color: #d4eeec; border: 1px solid #8fc9c750;
+  background: #294854; border-radius: 6px; font-size: 11px; cursor: pointer; }
+.layer-refresh { margin-top: 12px; width: 100%; }
+.extra-layer button:disabled { opacity: .5; cursor: default; }
+.layer-range, .radar-playback { display: flex; align-items: center; gap: 10px; margin: 9px 0; font-size: 11px; }
+.extra-layer input[type=range] { flex: 1; width: 100%; min-width: 30px; accent-color: #86d9d0; }
+.radar-playback button { flex: 0 0 auto; }
+.radar-legend { display: flex; gap: 7px; align-items: center; font-size: 9px; color: #bfd4d7; }
+.radar-legend i { flex: 1; height: 5px; background: linear-gradient(90deg,#4879bd,#45ad66,#f2d757,#d24138,#b255bb); }
+.map-layer-banner { position: fixed; left: 50%; bottom: 148px; transform: translateX(-50%); z-index: 25;
+  max-width: min(700px,90vw); padding: 8px 14px; border-radius: 9px; color: #e5eee9;
+  background: #19323ee8; border: 1px solid #95d0d149; font-size: 11px; text-align: center; pointer-events: none; }
+.map-data-card { position: fixed; z-index: 56; left: 24px; top: 185px; width: min(350px,calc(100vw - 32px));
+  max-height: calc(100dvh - 290px); overflow: auto; padding: 20px; border-radius: 16px;
+  background: #15303ef5; border: 1px solid #9ac8cd55; color: #f3f3e9; box-shadow: 0 12px 40px #10243235; }
+.map-data-head { display: flex; gap: 12px; justify-content: space-between; align-items: flex-start; }
+.map-data-head small { font-size: 9px; letter-spacing: 1.4px; color: #96d8d6; }
+.map-data-head h3 { margin: 5px 0 14px; font: 23px/1.2 Georgia,serif; }
+.map-data-head button { border: 1px solid #ffffff30; background: #2b4852; color: white;
+  border-radius: 50%; width: 30px; height: 30px; flex: 0 0 30px; cursor: pointer; }
+.map-data-facts { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin: 14px 0; }
+.map-data-facts dt { font-size: 10px; color: #a9c5cc; }
+.map-data-facts dd { font-size: 12px; margin: 3px 0 0; overflow-wrap: anywhere; }
+.map-data-note { font-size: 11px; color: #b6cbd0; line-height: 1.6; }
+.map-data-card a { color: #8bddd5; font-size: 11px; }
+.map-data-action { display: block; width: 100%; background: #a5dad7; color: #123642;
+  border: 0; border-radius: 7px; padding: 10px; margin-top: 14px; cursor: pointer; }
+.property-record { border-top: 1px solid #ffffff24; padding: 12px 0; }
+.property-record summary { font-size: 12px; line-height: 1.5; cursor: pointer; }
+.gauge-chart { display: block; width: 100%; background: #ffffff05; border-block: 1px solid #ffffff18; margin: 8px 0; }
+.extra-map-pins { position: absolute; inset: 0; pointer-events: none; z-index: 9; }
+.extra-map-pin { position: absolute; transform: translate(-50%,-50%); pointer-events: auto; width: 29px;
+  height: 29px; border-radius: 50%; border: 1px solid #c9ffed; background: #204953eb; color: #9cead8;
+  font-size: 20px; cursor: pointer; box-shadow: 0 2px 9px #071e3650; }
+.extra-map-pin.ship { font-size: 12px; background: #275c6ded; color: #d2faff; }
+.extra-map-pin.landmark { color: #ffe2a7; background: #5a4931e8; border-color: #efc688; font-size: 12px; }
+.extra-map-pin.stale { opacity: .55; }
+.property-pick-mode canvas { cursor: crosshair; }
+@media (max-width: 700px) {
+  .map-data-card { left: 10px; top: 130px; padding: 15px; max-height: calc(100dvh - 250px); }
+  .map-layer-banner { bottom: 95px; font-size: 9px; }
+}
 .aircraft-card { position: fixed; z-index: 55; width: min(330px, calc(100vw - 44px));
   max-height: calc(100dvh - 110px); overflow: auto; padding: 20px; box-sizing: border-box;
   border: 1px solid #83d7df88; border-radius: 17px; background: #102b39f7; color: #e9f3f1;
