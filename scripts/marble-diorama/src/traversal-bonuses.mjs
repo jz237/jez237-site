@@ -1,56 +1,87 @@
-import { tubeCurve, tubeRadiusAt } from "./surface-geometry.mjs";
+import { tubeCurve, tubeRadiusAt, tubeGeometry } from "./surface-geometry.mjs";
 
 // These checkpoints use the exact center curve that builds the tube's shared
 // visible/collision rings. They do not add forces or alter its physical surface.
 export function traversalPaths(course) {
   return course.parts
     .filter((p) => p.kind === "tube" && (p.traversalBonus || p.flowSpeed))
-    .map((p) => {
-      const curve = tubeCurve(p),
-        length = curve.getLength();
-      const count = Math.max(24, Math.ceil(length * 8));
-      const c = Math.cos(p.angle ?? 0),
-        s = Math.sin(p.angle ?? 0);
-      const points = Array.from({ length: count + 1 }, (_, i) => {
-        const v = curve.getPointAt(i / count);
+    .flatMap((p) =>
+      (p.fork ? [0, 1] : [0]).map((branch) => {
+        const curves = p.fork
+          ? [
+              tubeCurve({ path: p.path.slice(0, p.fork.at + 1) }),
+              tubeCurve({
+                path: branch ? p.fork.path : p.path.slice(p.fork.at),
+              }),
+            ]
+          : [tubeCurve(p)];
+        const length = curves.reduce((n, c) => n + c.getLength(), 0);
+        const samples = curves.flatMap((curve, i) => {
+          const count = Math.max(24, Math.ceil(curve.getLength() * 8));
+          return Array.from({ length: count + 1 }, (_, j) =>
+            curve.getPointAt(j / count),
+          ).slice(i ? 1 : 0);
+        });
+        const c = Math.cos(p.angle ?? 0),
+          s = Math.sin(p.angle ?? 0);
+        const points = samples.map((v) => {
+          return {
+            x: p.x + v.x * c - v.z * s,
+            y: p.y + v.y,
+            z: p.z + v.x * s + v.z * c,
+          };
+        });
+        const end = points.at(-1),
+          before = points.at(-2);
+        const n = Math.hypot(
+          end.x - before.x,
+          end.y - before.y,
+          end.z - before.z,
+        );
         return {
-          x: p.x + v.x * c - v.z * s,
-          y: p.y + v.y,
-          z: p.z + v.x * s + v.z * c,
+          id: p.id,
+          branch,
+          fork: !!p.fork,
+          chamber: p.fork ? tubeGeometry(p).chamber : null,
+          junctionProgress: p.fork ? curves[0].getLength() : null,
+          exitRoute: p.fork?.exitRoutes?.[branch],
+          cumulative: points.reduce((a, v, i) => {
+            a.push(
+              i
+                ? a[i - 1] +
+                    Math.hypot(
+                      v.x - points[i - 1].x,
+                      v.y - points[i - 1].y,
+                      v.z - points[i - 1].z,
+                    )
+                : 0,
+            );
+            return a;
+          }, []),
+          score: p.traversalBonus,
+          flare: p.flare,
+          flowSpeed: p.flowSpeed,
+          flowExitSpeed: p.flowExitSpeed,
+          radius: p.radius ?? 1.4,
+          length,
+          points,
+          bounds: Object.fromEntries(
+            ["x", "y", "z"].map((axis) => [
+              axis,
+              [
+                Math.min(...points.map((v) => v[axis])) - (p.radius ?? 1.4),
+                Math.max(...points.map((v) => v[axis])) + (p.radius ?? 1.4),
+              ],
+            ]),
+          ),
+          exit: {
+            x: (end.x - before.x) / n,
+            y: (end.y - before.y) / n,
+            z: (end.z - before.z) / n,
+          },
         };
-      });
-      const end = points.at(-1),
-        before = points.at(-2);
-      const n = Math.hypot(
-        end.x - before.x,
-        end.y - before.y,
-        end.z - before.z,
-      );
-      return {
-        id: p.id,
-        score: p.traversalBonus,
-        flare: p.flare,
-        flowSpeed: p.flowSpeed,
-        flowExitSpeed: p.flowExitSpeed,
-        radius: p.radius ?? 1.4,
-        length,
-        points,
-        bounds: Object.fromEntries(
-          ["x", "y", "z"].map((axis) => [
-            axis,
-            [
-              Math.min(...points.map((v) => v[axis])) - (p.radius ?? 1.4),
-              Math.max(...points.map((v) => v[axis])) + (p.radius ?? 1.4),
-            ],
-          ]),
-        ),
-        exit: {
-          x: (end.x - before.x) / n,
-          y: (end.y - before.y) / n,
-          z: (end.z - before.z) / n,
-        },
-      };
-    });
+      }),
+    );
 }
 
 export function tubePosition(path, position) {
@@ -79,7 +110,10 @@ export function tubePosition(path, position) {
     if (distance < best.distance)
       best = {
         distance,
-        progress: ((i - 1 + u) / (path.points.length - 1)) * path.length,
+        progress: path.cumulative
+          ? path.cumulative[i - 1] +
+            u * (path.cumulative[i] - path.cumulative[i - 1])
+          : ((i - 1 + u) / (path.points.length - 1)) * path.length,
         center: { x: a.x + u * dx, y: a.y + u * dy, z: a.z + u * dz },
         tangent: {
           x: dx / Math.hypot(dx, dy, dz),
@@ -96,6 +130,7 @@ export function updateTraversalBonuses(paths, player, position, radius) {
   player.traversals ??= {};
   for (const path of paths) {
     if (!path.score || player.traversalClaims?.includes(path.id)) continue;
+    if (path.fork && player.transferRoute?.branch !== path.branch) continue;
     if (
       ["x", "y", "z"].some(
         (axis) =>
@@ -108,8 +143,9 @@ export function updateTraversalBonuses(paths, player, position, radius) {
     }
     const q = tubePosition(path, position),
       inside =
+        inTransferChamber(path, position) ||
         q.distance <=
-        tubeRadiusAt(path, q.progress, path.length) - radius + 0.12;
+          tubeRadiusAt(path, q.progress, path.length) - radius + 0.12;
     const state = Object.hasOwn(player.traversals, path.id)
       ? player.traversals[path.id]
       : null;
@@ -146,4 +182,15 @@ export function updateTraversalBonuses(paths, player, position, radius) {
     }
   }
   return events;
+}
+
+export function inTransferChamber(path, position) {
+  return (
+    !!path.chamber?.length &&
+    path.chamber.every(
+      ({ normal: n, constant }) =>
+        n.x * position.x + n.y * position.y + n.z * position.z <=
+        constant + 1e-6,
+    )
+  );
 }

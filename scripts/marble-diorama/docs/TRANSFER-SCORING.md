@@ -41,7 +41,7 @@ sound remains the remake collection cue, not a recovered original sample.
 
 The main Silly passage now has a downward-facing intake bell, vertical rise,
 curved neck and flared outlet with native physical carriage. See SILLY-TRANSFER.md.
-The second horn, looped side detail, exact dimensions and original transfer law
+Both horn passages now work. Looped side detail, exact dimensions and original transfer law
 remain open. The 215.5–218.5s sequence does not establish a rotating Ferris wheel.
 
 ## Validation

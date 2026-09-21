@@ -39,8 +39,7 @@ it is not claimed as the original Amiga effect.
 
 ## Evidence limits
 
-The main entry-to-exit action is restored. The original second functioning outlet and side
-loops are not yet reconstructed. Its routing/selection rule needs verification. Exact cross-sections, scale, upper-platform
+Both upper outlets now work. The side loops are not yet reconstructed. The exact Amiga routing/selection rule needs verification. Exact cross-sections, scale, upper-platform
 height, transfer duration, suction law and outlet velocity remain provisional.
 The current force law is a physical reconstruction, not recovered Amiga code.
 In particular, this work does not claim a general reversed-gravity rule for
@@ -58,3 +57,40 @@ using the same bounded controls and unchanged bird flight/collision definitions.
 
 The second-exit evidence is retained in `hip-transfer-motion.jpg` and individual
 `hip-transfer-*` frames; it must not be replaced by a decorative closed horn.
+
+
+## Second outlet (mm-16)
+
+The transfer now has one downward bell and two upper horns feeding the left and
+right maze approaches. Three tube legs meet a hollow convex chamber. Chamber
+faces covering ports are removed, and their exact rim vertices join the legs.
+Both sides of the wall and the mouth rims use the shared render/collision mesh;
+there are no closed overlapping walls or invisible shortcuts. A manifold check
+requires exactly two incident triangles at every wall edge. Both inlet-to-outlet
+physics tests rise continuously, award 2000, and replay from an in-flight snapshot.
+
+A seeded choice is retained for the whole passage and replayed with the player's
+state. A nearby marble at the chosen exit causes the other outlet to be preferred
+when that outlet is clear. Demo steering resumes on the maze connected to the
+actual exit. The right approach passes around the new horn's lip. The force slows
+inside the chamber before accelerating along the chosen outlet; chamber inclusion
+uses the same inner convex hull as its physical wall.
+
+### Additional reference and its limits
+
+[Marble Love's arcade collision reconstruction](https://github.com/magno73/marble-love/blob/113cf5de969ff62cb1d7b901340206f30122f658/packages/engine/src/sub-29cce.ts)
+contains two-way random exit choices in `runTube22` and `runTube25`, with a
+proximity check before selecting a destination. Its
+[proximity helper](https://github.com/magno73/marble-love/blob/113cf5de969ff62cb1d7b901340206f30122f658/packages/engine/src/string-helper-17cb8.ts)
+checks active objects around that destination. This was read as behavioral
+reference only; no source was copied or executed. The public source labels these
+handlers as Beginner mechanisms; the available level-five start snapshots did
+not identify the Silly transfer's handler. Consequently this supports an arcade
+analogy, **not a verified Silly or Amiga selection rule**. The seeded hash,
+clearance distance, choice timing, symmetric branch dimensions and chamber shape
+remain reconstruction choices. The two functioning Amiga exits themselves are
+verified by the two recordings above.
+
+The same repository describes a Silly trackball sign change. That alone does not
+establish the Amiga's screen-space input or gravity behavior, so neither has
+been changed on that basis.

@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**133 automated tests pass. All six campaign races and all three bonus courses
+**135 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-15`.
+Current simulation/replay version: `rapier-0.20.0-mm-16`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -735,3 +735,30 @@ with 0.318 clock units left; Ultimate still times out at 32.00s. Paired play
 still times out in Silly by 57.60s. Full timed campaign acceptance remains open.
 
 Release verification: 133/133 tests pass in 241,685ms; production build and diff check pass.
+
+
+### September 21 — both Silly lift outlets
+
+The shared physical red transfer now connects its lower inlet to both upper
+horns. Each branch passes a no-steering ascent with continuous motion, one 2000
+award, zero falls, and deterministic replay from inside the lift. Mesh checks
+find no unmatched or multiply used wall edges; a directed-edge check also finds
+consistent winding. Seeded outlet choice and occupied-exit fallback have focused
+checks. These are reconstruction rules, not certified Amiga behavior; see
+SILLY-TRANSFER.md for the limits of the new arcade-code reference.
+
+The full Silly solo/paired tests retain their existing zero-fall, collection,
+award and finish-time assertions. A fresh local browser paired demo also finished:
+P1 9383 points, P2 9385 points, both zero falls; P1 first at 64.46 seconds.
+No browser warnings/errors were captured. A close-up browser inspection verified
+both flared horns and their connected neck. No physical phone testing is claimed.
+
+Fresh timed measurement still fails the whole-campaign gate: solo completes
+Silly in 71.5167 seconds with 2.1276 clock units left, then times out in Ultimate
+after 34.5667 seconds. Paired players complete Aerial, then both expire during
+Silly by 57.6 seconds. All of these measured timed runs have zero falls.
+
+
+Regression validation: all 135 automated tests pass (262.1 seconds). The final
+small demo-route reset guard received a further solo/paired Silly check. Production
+bundling and diff checks pass. The replay/record version is mm-16.
