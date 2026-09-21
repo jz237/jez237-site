@@ -12,7 +12,7 @@ not included in the published game.
 
 | Course / object | Findings and changes | Still unverified or missing |
 |---|---|---|
-| Practice gates and numbered pads | Existing gates have physical geometry; numbered pads are markings. No claim of completing their original effects. | Original gate/pad triggers, awards and detailed gate behavior need a dedicated comparison. |
+| Practice gates and numbered pads | Four numbered landing labels replace the 20/30/40 plaques; supported airborne landings award points, with a normal-control bonus route to the finish. | Original complete award formula, repeat policy and exact shelf dimensions remain provisional; gates still need comparison. See PRACTICE-SCORING.md. |
 | Beginner steelie and pipes | Pursuit and rolling collisions exist; no replacement made in this pass. | Original targeting, speed, awards, exact pipe shapes and entry behavior remain unmeasured. |
 | Intermediate munchers, 100–102s | Original green creatures curl down and stand up repeatedly, with yellow mouths. Replaced the rigid capsule/painted stripe with articulated green solids and a yellow mouth. Turns follow the pursuit direction. Shapes animate in simulation time and are used for both drawing and contact. | Curl is a reconstruction (~0.6s cycle), not a recovered sprite sequence. Original AI, distances, hit timing and the complete body silhouette remain unverified. |
 | Intermediate waves, 121–131s | Found a real renderer-state bug: physics replaced each wave pose after stepping and dropped its changing vertices. Translation/rotation still moved, but rendered panel lengths no longer matched their colliders. Preserve the vertices through stepping and snapshots. | Exact original full-lane wave shape, travel speed and phase remain unmeasured. Current panels are still a reconstruction. |
@@ -27,7 +27,7 @@ not included in the published game.
 
 ## Implementation safeguards and validation
 
-- Physics/replay version is `rapier-0.20.0-mm-10`: old recordings cannot silently
+- Physics/replay version is `rapier-0.20.0-mm-11`: old recordings cannot silently
   claim compatible outcomes after collision, layout, and clock changes.
 - Enemy articulation is a pure function of the simulation clock. Shape reuse is
   bounded; fixed body solids are not rebuilt every tick. Rendering uses separate
@@ -40,8 +40,14 @@ not included in the published game.
 - Remaining work above is not hidden by the Playable Games listing. That listing
   was explicitly requested for an unfinished playable reconstruction.
 
-Release checks: 107/107 automated tests pass; production build and diff check pass.
+Release checks: 115/115 automated tests pass; production build and diff check pass.
 Silly solo and Ultimate two-player browser demos finish without falls or captured
 console errors. The full timed campaign still fails; see VALIDATION.md.
 
 The Aerial follow-up additionally verifies hollow intake ray clearance, absent-mouth force/collision removal, directional capture, delayed launch cues, deterministic mid-launch restoration, and physical upper-ledge landing. Browser close-ups confirm the resting/raised cup and intake placement. Explicit metal/color materials now retain their side colors instead of inheriting the orange board tint.
+
+
+The scoring follow-up also restores the footage-verified fixed goal awards
+(1000–6000) and Ultimate's ordinary unused-clock award before the separate ending
+tally. Progress scoring, original paired-race bonuses and full landing-target
+interpolation/repeat behavior remain open; see PRACTICE-SCORING.md.

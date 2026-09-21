@@ -1,3 +1,4 @@
+import { landingTargets, updateLandingTargets } from "./landing-targets.mjs";
 import { acidShape, acidPositionAt } from "./acid.mjs";
 import RAPIER from "@dimforge/rapier3d-compat";
 import { compileCourse, motionAt, presenceAt, SURFACES } from "./course.mjs";
@@ -8,7 +9,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-10";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-11";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -20,6 +21,7 @@ export class Simulation {
   constructor(course, options = {}) {
     this.course = course;
     this.compiled = compileCourse(course);
+    this.landingTargets = landingTargets(course);
     this.options = {
       players: 1,
       difficulty: 0,
@@ -248,6 +250,14 @@ export class Simulation {
       );
       p.grounded = !!hit;
       p.groundNormal = hit ? copy(hit.normal) : null;
+      const landingBonus = updateLandingTargets(
+        this.landingTargets,
+        p,
+        pos,
+        RADIUS,
+      );
+      if (landingBonus) this.events.push({ ...landingBonus, player: i });
+      if (hit && hit.timeOfImpact < RADIUS + 0.015) p.landingAirTicks = 0;
       if (
         this.course.rules?.respawn === "last-safe" &&
         p.grounded &&
@@ -458,6 +468,7 @@ export class Simulation {
       ) {
         p.status = "finished";
         p.finishTick = this.tick;
+        p.score += this.course.rules?.finishBonus ?? 0;
         p.score += this.options.untimed
           ? 0
           : Math.floor(p.time) * (this.course.rules?.finishPointRate ?? 10);
@@ -474,6 +485,7 @@ export class Simulation {
     this.body(p).setEnabled(false);
     p.deaths++;
     p.respawnTick = this.tick + 90;
+    p.landingAirTicks = 0;
     this.events.push({ type: "fall", player: this.players.indexOf(p) });
   }
   snapshot() {

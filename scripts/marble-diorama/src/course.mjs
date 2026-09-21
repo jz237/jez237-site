@@ -271,9 +271,44 @@ export function validateCourse(c) {
       (c.rules.timerRate ?? 1) > 4 ||
       (c.rules.finishPointRate ?? 10) < 0 ||
       (c.rules.finishPointRate ?? 10) > 1000 ||
+      !Number.isInteger(c.rules.finishBonus ?? 0) ||
+      (c.rules.finishBonus ?? 0) < 0 ||
+      (c.rules.finishBonus ?? 0) > 20000 ||
       ![undefined, "last-safe", "start"].includes(c.rules.respawn))
   )
     throw Error("Invalid course rules.");
+  const targetIds = new Set();
+  for (const mark of c.markings ?? []) {
+    if (mark.kind !== "landing-target") continue;
+    const floor = c.parts.find((p) => p.id === mark.part);
+    if (
+      typeof mark.id !== "string" ||
+      targetIds.has(mark.id) ||
+      !floor ||
+      floor.kind !== "floor" ||
+      floor.motion ||
+      floor.presence ||
+      floor.w < 1.2 ||
+      floor.d < 1.2 ||
+      !Array.isArray(mark.values) ||
+      mark.values.length !== 4 ||
+      mark.values.some((v) => !finite(v) || v < 1 || v > 20)
+    )
+      throw Error("Invalid landing target.");
+    const width = mark.width ?? floor.w - 0.6,
+      depth = mark.depth ?? floor.d - 0.6;
+    const ox = mark.offset?.x ?? 0,
+      oz = mark.offset?.z ?? 0;
+    if (
+      ![width, depth, ox, oz].every(finite) ||
+      width < 0.5 ||
+      depth < 0.5 ||
+      Math.abs(ox) + width / 2 > floor.w / 2 - 0.29 ||
+      Math.abs(oz) + depth / 2 > floor.d / 2 - 0.29
+    )
+      throw Error("Landing target must fit its floor.");
+    targetIds.add(mark.id);
+  }
   for (const z of c.zones ?? [])
     if (
       !["magnet", "hazard", "acid", "vacuum"].includes(z.kind) ||

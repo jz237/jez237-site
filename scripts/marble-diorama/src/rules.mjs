@@ -21,6 +21,18 @@ export const COURSE_TIME = Object.freeze({
   silly: 25,
   ultimate: 25,
 });
+// Original goal flags display these awards before the unused-clock tally.
+export function amigaCourseRules(id) {
+  const finishBonus = {
+    practice: 1000,
+    beginner: 2000,
+    intermediate: 3000,
+    aerial: 4000,
+    silly: 5000,
+    ultimate: 6000,
+  }[id];
+  return { ...AMIGA_RULES, finishBonus };
+}
 export function nextCourseTime(id, remaining = 0) {
   return id === "practice" || id === "beginner"
     ? COURSE_TIME[id]

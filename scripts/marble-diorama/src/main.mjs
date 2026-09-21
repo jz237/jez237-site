@@ -497,10 +497,10 @@ function step() {
     if (e.type === "checkpoint" && sim.options.assisted)
       toast("Checkpoint reached");
     if (e.type === "fall") toast(`Player ${e.player + 1} · back in a moment`);
+    if (e.type === "landing-bonus")
+      toast(`Player ${e.player + 1} · landing bonus +${e.score} points`);
     if (e.type === "collect")
-      toast(
-        `Player ${e.player + 1} · +${e.time} seconds · +${e.score} points`,
-      );
+      toast(`Player ${e.player + 1} · +${e.time} seconds · +${e.score} points`);
   }
   if (
     sim.players.every((p) => p.status === "finished" || p.status === "timeout")

@@ -1,3 +1,4 @@
+import { landingTargets } from "./landing-targets.mjs";
 import { acidMesh, updateAcidMesh } from "./acid-view.mjs";
 import { foundationGeometry } from "./foundations.mjs";
 import * as THREE from "three";
@@ -435,7 +436,10 @@ export class DioramaView {
         }
     }
     for (const mark of [
-      ...(sim.course.markings ?? []),
+      ...(sim.course.markings ?? []).filter(
+        (mark) => mark.kind !== "landing-target",
+      ),
+      ...landingTargets(sim.course),
       ...sim.course.parts
         .filter((p) => p.kind === "spring" && p.profile !== "flipper")
         .map((p) => ({
@@ -463,6 +467,26 @@ export class DioramaView {
         ctx.lineTo(221, 130);
         ctx.closePath();
         ctx.fill();
+      } else if (mark.kind === "landing-target") {
+        // Four red/ivory landing labels replace the unrelated 20/30/40 plaques.
+        // The plane has the same inset rectangle used for landing detection.
+        ctx.fillStyle = "#a8352b";
+        ctx.fillRect(0, 0, 256, 256);
+        ctx.fillStyle = "#f5e9cf";
+        for (let row = 0; row < 4; row++)
+          for (let col = 0; col < 4; col++)
+            if ((row + col) % 2 === 0) ctx.fillRect(col * 64, row * 64, 64, 64);
+        ctx.font = "bold 74px sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        for (let i = 0; i < 4; i++) {
+          const x = 64 + (i % 2) * 128,
+            y = 64 + Math.floor(i / 2) * 128;
+          ctx.fillStyle = "#a8352b";
+          ctx.fillRect(x - 43, y - 43, 86, 86);
+          ctx.fillStyle = "#fff3d8";
+          ctx.fillText(String(mark.values[i]), x, y + 4);
+        }
       } else {
         ctx.fillStyle = "#b84939";
         ctx.fillRect(18, 18, 220, 220);
@@ -479,8 +503,8 @@ export class DioramaView {
       texture.colorSpace = THREE.SRGBColorSpace;
       const plane = new THREE.Mesh(
         new THREE.PlaneGeometry(
-          mark.kind === "arrow" ? 2 : 3,
-          mark.kind === "arrow" ? 2 : 3,
+          mark.w ?? (mark.kind === "arrow" ? 2 : 3),
+          mark.d ?? (mark.kind === "arrow" ? 2 : 3),
         ),
         new THREE.MeshStandardMaterial({
           map: texture,
@@ -492,7 +516,11 @@ export class DioramaView {
         }),
       );
       plane.rotation.set(-Math.PI / 2, 0, -(mark.angle ?? 0));
-      plane.position.set(mark.x, mark.y, mark.z);
+      plane.position.set(
+        mark.x,
+        mark.y + (mark.kind === "landing-target" ? 0.012 : 0),
+        mark.z,
+      );
       plane.receiveShadow = true;
       const movingIndex = mark.movingPart
         ? sim.compiled.moving.findIndex((g) => g.part.id === mark.movingPart)

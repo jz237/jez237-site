@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-10",
-  "generatedAt": "2026-09-21T13:28:36.986Z",
+  "physics": "rapier-0.20.0-mm-11",
+  "generatedAt": "2026-09-21T13:49:53.165Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -13,7 +13,7 @@
           "players": [
             {
               "time": 36.76432291667512,
-              "score": 4010,
+              "score": 5010,
               "deaths": 0,
               "status": "finished"
             }
@@ -25,7 +25,7 @@
           "players": [
             {
               "time": 28.880208333336405,
-              "score": 7706,
+              "score": 10706,
               "deaths": 0,
               "status": "finished"
             }
@@ -37,7 +37,7 @@
           "players": [
             {
               "time": 31.899739583342047,
-              "score": 11607,
+              "score": 17607,
               "deaths": 0,
               "status": "finished"
             }
@@ -49,7 +49,7 @@
           "players": [
             {
               "time": 15.309895833341034,
-              "score": 14051,
+              "score": 24051,
               "deaths": 0,
               "status": "finished"
             }
@@ -61,7 +61,7 @@
           "players": [
             {
               "time": 0.2851562499973045,
-              "score": 17936,
+              "score": 32936,
               "deaths": 0,
               "status": "finished"
             }
@@ -73,7 +73,7 @@
           "players": [
             {
               "time": 0,
-              "score": 18626,
+              "score": 33626,
               "deaths": 0,
               "status": "timeout"
             }
@@ -87,17 +87,17 @@
       "results": [
         {
           "course": "practice",
-          "ticks": 3740,
+          "ticks": 3746,
           "players": [
             {
-              "time": 35.651041666675525,
-              "score": 3909,
+              "time": 35.61197916667554,
+              "score": 4909,
               "deaths": 0,
               "status": "finished"
             },
             {
-              "time": 36.302083333341955,
-              "score": 4010,
+              "time": 36.23697916667531,
+              "score": 5010,
               "deaths": 0,
               "status": "finished"
             }
@@ -109,13 +109,13 @@
           "players": [
             {
               "time": 25.371093750002434,
-              "score": 7304,
+              "score": 10304,
               "deaths": 0,
               "status": "finished"
             },
             {
               "time": 24.4466145833356,
-              "score": 7306,
+              "score": 10306,
               "deaths": 0,
               "status": "finished"
             }
@@ -127,13 +127,13 @@
           "players": [
             {
               "time": 28.899739583343685,
-              "score": 10905,
+              "score": 16905,
               "deaths": 0,
               "status": "finished"
             },
             {
               "time": 26.695312500010676,
-              "score": 10707,
+              "score": 16707,
               "deaths": 0,
               "status": "finished"
             }
@@ -145,13 +145,13 @@
           "players": [
             {
               "time": 12.309895833340216,
-              "score": 13049,
+              "score": 23049,
               "deaths": 0,
               "status": "finished"
             },
             {
               "time": 8.376302083339846,
-              "score": 12450,
+              "score": 22450,
               "deaths": 0,
               "status": "finished"
             }
@@ -163,13 +163,13 @@
           "players": [
             {
               "time": 0,
-              "score": 15146,
+              "score": 25146,
               "deaths": 0,
               "status": "timeout"
             },
             {
               "time": 0,
-              "score": 14664,
+              "score": 24664,
               "deaths": 0,
               "status": "timeout"
             }

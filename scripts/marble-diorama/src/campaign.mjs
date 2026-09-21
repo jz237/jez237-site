@@ -1,5 +1,5 @@
 import { roundDemoCorners } from "./demo-route.mjs";
-import { AMIGA_RULES, COURSE_TIME } from "./rules.mjs";
+import { amigaCourseRules, COURSE_TIME } from "./rules.mjs";
 import { waveStrip } from "./wave.mjs";
 import { aerialCourse } from "./aerial.mjs";
 import { sillyCourse } from "./silly.mjs";
@@ -102,7 +102,7 @@ export function practiceCourse() {
       1,
     ),
     deck("upper-right-shelf", 9.5, 42, 5, 4, 7.6, { h: 10.6 }),
-    deck("left-shelf", -9.5, 46, 5, 4, 6.4, { h: 9.4 }),
+    deck("left-shelf", -9.5, 48, 5, 8, 6.4, { h: 9.4 }),
     deck("lower-right-shelf", 9.5, 50, 5, 4, 5.2, { h: 8.2 }),
     deck("goal-slab", -8, 55, 6, 4, 3.2, { h: 6.2 }),
   ];
@@ -157,11 +157,21 @@ export function practiceCourse() {
     routePoint(3, 8, 33),
     ...route.slice(5),
   ];
+  const bonusRoute = [
+    ...route
+      .slice(0, 7)
+      .map((p, i) =>
+        i >= 5 ? { ...p, speed: 3, radius: 1.2, flow: true } : { ...p },
+      ),
+    routePoint(-9.5, 6.4, 46, { speed: 3, radius: 0.3 }),
+    routePoint(-9, 6.4, 51, { speed: 3, radius: 0.6 }),
+    ...route.slice(10),
+  ];
   return {
     schema: 1,
     id: "practice",
     medals: { gold: 35, silver: 55 },
-    rules: AMIGA_RULES,
+    rules: amigaCourseRules("practice"),
     revision: 1,
     name: "Practice Race",
     subtitle: "Training gates, twin peaks, and four banked reversals.",
@@ -208,6 +218,11 @@ export function practiceCourse() {
         name: "Right training exit",
         route: rightRoute,
       },
+      {
+        id: "left-landing-bonus",
+        name: "Left landing target and shelf exit",
+        route: bonusRoute,
+      },
     ],
     parts,
     zones: [],
@@ -215,9 +230,26 @@ export function practiceCourse() {
       { kind: "arrow", ...worldPoint(-8, 10.02, 22), angle: ISO },
       { kind: "arrow", ...worldPoint(8, 10.02, 22), angle: ISO },
       { kind: "arrow", ...worldPoint(0, 8.02, 34), angle: ISO },
-      { kind: "pad", value: 30, ...worldPoint(9.5, 7.62, 42), angle: ISO },
-      { kind: "pad", value: 40, ...worldPoint(-9.5, 6.42, 46), angle: ISO },
-      { kind: "pad", value: 20, ...worldPoint(9.5, 5.22, 50), angle: ISO },
+      {
+        kind: "landing-target",
+        id: "bonus-upper-right-shelf",
+        part: "upper-right-shelf",
+        values: [3, 5, 4, 6],
+      },
+      {
+        kind: "landing-target",
+        id: "bonus-left-shelf",
+        part: "left-shelf",
+        offset: { x: 0, z: -2 },
+        depth: 3.4,
+        values: [3, 5, 4, 6],
+      },
+      {
+        kind: "landing-target",
+        id: "bonus-lower-right-shelf",
+        part: "lower-right-shelf",
+        values: [3, 5, 4, 6],
+      },
     ],
   };
 }
@@ -511,7 +543,7 @@ export function beginnerCourse() {
     schema: 1,
     id: "beginner",
     medals: { gold: 75, silver: 110 },
-    rules: AMIGA_RULES,
+    rules: amigaCourseRules("beginner"),
     revision: 2,
     name: "Beginner Race",
     subtitle: "Cyan towers, branching descents, twin pipes, and an icy finish.",
@@ -834,7 +866,7 @@ export function intermediateCourse() {
     subtitle:
       "Split towers, acid islands, an orange pipe, and rolling final lanes.",
     category: "campaign",
-    rules: AMIGA_RULES,
+    rules: amigaCourseRules("intermediate"),
     time: COURSE_TIME.intermediate,
     color: "#777948",
     sidePalette: ["#555746", "#9d9d61", "#454a44", "#676b49"],
