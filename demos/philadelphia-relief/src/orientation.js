@@ -1,5 +1,5 @@
-import { overviewLocation } from './navigation.js?v=philly-2026092109';
-import { groundPoint } from './imagery-tiles.js?v=philly-2026092109';
+import { overviewLocation } from './navigation.js?v=philly-2026092110';
+import { groundPoint } from './imagery-tiles.js?v=philly-2026092110';
 
 export function overviewPoint(lon, lat, bounds, width = 220, height = 150) {
   return [12 + (lon - bounds.west) / (bounds.east - bounds.west) * (width - 24),
@@ -10,7 +10,7 @@ export function createOrientation({ host, projection, water, landmarks, onVisit,
   if (!host) return { update() {}, dispose() {} };
   const canvas = host.querySelector('canvas'), ctx = canvas.getContext('2d');
   const details = host.querySelector('details'), note = host.querySelector('.orientation-position');
-  details.open = !window.matchMedia('(max-width: 820px)').matches;
+  details.open = !window.matchMedia('(max-width: 1024px)').matches;
   const width = 220, height = 150, bounds = projection.bounds;
   const point = (lon, lat) => overviewPoint(lon, lat, bounds, width, height);
   const background = document.createElement('canvas');

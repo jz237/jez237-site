@@ -25,7 +25,7 @@ export function updateImageryCredit(host, detail) {
 
 export function wireFieldNotes(button) {
   if (!button) return () => {};
-  const narrow = window.matchMedia('(max-width: 820px)');
+  const narrow = window.matchMedia('(max-width: 1024px)');
   const set = collapsed => {
     document.body.classList.toggle('notes-collapsed', collapsed);
     button.textContent = collapsed ? 'Show notes' : 'Hide notes';
@@ -41,7 +41,7 @@ export function wireFieldNotes(button) {
 }
 
 export function wireMapChrome() {
-  const narrow = window.matchMedia('(max-width: 820px)');
+  const narrow = window.matchMedia('(max-width: 1024px)');
   const layers = document.getElementById('mapControls');
   const tools = document.getElementById('pageTools');
   const locator = document.querySelector('#orientation details');

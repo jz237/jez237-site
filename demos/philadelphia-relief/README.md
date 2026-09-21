@@ -995,5 +995,6 @@ Opening one closes the others. The layers drawer scrolls within the viewport and
 has a sticky Back to map button; closing it preserves all selected layers. Page
 tools retain labeled screenshot, sharing, camera and fullscreen actions. Zoom
 controls and attribution remain visible in portrait and landscape. Desktop keeps
-its expanded controls. Verified at 390×844, 320×568 and 740×390, plus desktop;
+its expanded controls above 1024 pixels. Verified at 390×844, 320×568, 740×390
+and 932×430, plus desktop;
 all 339 existing checks pass.
