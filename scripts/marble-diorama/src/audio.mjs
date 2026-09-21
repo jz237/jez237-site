@@ -1,3 +1,4 @@
+import { presenceAt } from "./mechanism-time.mjs";
 import { effectSamples } from "./effects.mjs";
 // No synthesized replacement music. Only explicitly verified local cues may play.
 export class AudioEngine {
@@ -309,7 +310,12 @@ export class AudioEngine {
         });
     }
     for (const z of sim.course.zones ?? []) {
-      if (!["vacuum", "magnet", "acid"].includes(z.kind)) continue;
+      if (
+        !["vacuum", "magnet", "acid"].includes(z.kind) ||
+        !presenceAt(z, (sim.tick / 120) * (sim.preset?.machineSpeed ?? 1))
+          .visible
+      )
+        continue;
       this.effect(z.kind, {
         gain: proximity(z) * 0.65,
         key: z.kind,

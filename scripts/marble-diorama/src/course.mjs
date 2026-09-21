@@ -1,4 +1,11 @@
-import { pegGeometry, extensionAt } from "./mechanisms.mjs";
+export { presenceAt } from "./mechanism-time.mjs";
+import {
+  pegGeometry,
+  extensionAt,
+  flipperGeometry,
+  vacuumGeometry,
+  flipperLift,
+} from "./mechanisms.mjs";
 import { joinedBoardParts, mergeLevelTops } from "./board-joins.mjs";
 import {
   ribbonGeometry,
@@ -171,9 +178,20 @@ export function validateCourse(c) {
       );
     if (
       p.profile !== undefined &&
-      (p.profile !== "peg" || p.kind !== "piston" || !finite(p.h) || p.h < 0.12)
+      (!["peg", "flipper", "vacuum-mouth"].includes(p.profile) ||
+        (p.profile === "peg" &&
+          (p.kind !== "piston" || !finite(p.h) || p.h < 0.12)) ||
+        (p.profile === "flipper" &&
+          (p.kind !== "spring" || p.motion?.axis !== "launch" || p.d < p.w)) ||
+        (p.profile === "vacuum-mouth" &&
+          (p.kind !== "piston" || !finite(p.h) || p.h < 1.1 || p.d < 1.1)))
     )
-      throw Error("Invalid peg profile.");
+      throw Error("Invalid mechanism profile.");
+    if (
+      p.motion?.delay !== undefined &&
+      (!finite(p.motion.delay) || p.motion.delay < 0 || p.motion.delay > 5)
+    )
+      throw Error("Invalid mechanism delay.");
     if (
       p.motion?.cycle !== undefined &&
       (p.motion.cycle !== "retract" || p.motion.axis !== "y")
@@ -276,6 +294,17 @@ export function validateCourse(c) {
       throw Error("Invalid moving hazard.");
   for (const z of c.zones ?? [])
     if (
+      z.presence &&
+      (![z.presence.period, z.presence.on, z.presence.phase ?? 0].every(
+        finite,
+      ) ||
+        z.presence.period < 0.5 ||
+        z.presence.on <= 0 ||
+        z.presence.on > z.presence.period)
+    )
+      throw Error("Invalid hazard presence cycle.");
+  for (const z of c.zones ?? [])
+    if (
       z.kind === "vacuum" &&
       (!z.direction ||
         ![z.direction.x, z.direction.y, z.direction.z].every(finite))
@@ -334,6 +363,8 @@ export const point = (x, y, z) => ({ x, y, z });
 // these exact arrays; Rapier uses the same arrays with internal-edge correction.
 export function partGeometry(p) {
   if (p.profile === "peg") return pegGeometry(p);
+  if (p.profile === "flipper") return flipperGeometry(p);
+  if (p.profile === "vacuum-mouth") return vacuumGeometry(p);
   if (p.motion?.axis === "wave")
     return {
       vertices: wavePose(p, 0).vertices,
@@ -512,7 +543,10 @@ export function motionAt(p, time) {
   if (p.motion?.axis === "launch") {
     // The arm hinges at its rear edge. Geometry is already course-rotated.
     const phase = Math.max(0, Math.min(1, time / p.motion.period));
-    const pitch = -Math.sin(Math.PI * phase) * p.motion.amplitude;
+    const pitch =
+      -(p.profile === "flipper"
+        ? flipperLift(time, p.motion)
+        : Math.sin(Math.PI * phase)) * p.motion.amplitude;
     const a = p.angle ?? 0,
       sn = Math.sin(a),
       cs = Math.cos(a);
@@ -544,12 +578,6 @@ export function motionAt(p, time) {
     rotation.w = Math.cos(s / 2);
   } else position[m.axis] += s;
   return { position, rotation };
-}
-export function presenceAt(p, time) {
-  if (!p.presence) return { visible: true, remaining: Infinity };
-  const { period, on, phase = 0 } = p.presence,
-    t = (((time + phase) % period) + period) % period;
-  return { visible: t < on, remaining: Math.max(0, on - t) };
 }
 
 export function proofCourse() {

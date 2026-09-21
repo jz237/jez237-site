@@ -223,11 +223,26 @@ export function aerialCourse() {
       2.6,
     ),
     deck("finish", -8, 118, 7, 6, 4, { h: 7 }),
-    deck("hammer", 0.5, 61, 5, 1, 15, {
-      kind: "piston",
-      h: 1.5,
+    ribbon(
+      "paddle-spur",
+      [
+        [-3, 65, 10.5],
+        [-5.5, 66.7, 10.5],
+      ],
+      3,
+    ),
+    deck("red-paddle", -6, 66.7, 2.2, 2.4, 10.53, {
+      kind: "spring",
+      profile: "flipper",
+      material: "red",
+      angle: -Math.PI / 2,
+      motion: { axis: "launch", amplitude: 1.5, period: 0.9, delay: 0.5 },
+    }),
+    deck("paddle-hinge", -6.85, 65.85, 2.3, 0.35, 10.5, {
+      kind: "wall",
+      h: 0.3,
       material: "metal",
-      motion: { axis: "y", amplitude: 3, period: 3.5 },
+      angle: -Math.PI / 2,
     }),
   ];
   // Amiga footage 162s and 167–169s: banks of silver pegs rise from the
@@ -258,42 +273,32 @@ export function aerialCourse() {
   ))
     p.material = "sand";
   const zones = [];
-  for (const [id, l, d] of [
-    ["upper", 1, 36],
-    ["lower", 3, 52],
+  // Three mouth locations are visible at 146–154s. Their finite activity is
+  // observed; repetition periods remain provisional until a full cycle is traced.
+  for (const [id, l, d, on, phase] of [
+    ["upper", -0.7, 36, 6, 4.5],
+    ["middle", -5.5, 40, 3, 1],
+    ["lower", 1, 52, 5, 0],
   ]) {
-    const h = 12.5;
-    // A hollow rectangular mouth made of four shared mesh/collider solids.
+    const h = 12.5,
+      presence = { period: 10, on, phase };
     parts.push(
-      deck(`${id}-vacuum-top`, l, d, 0.45, 2.4, h + 1.9, {
-        kind: "wall",
-        h: 0.3,
+      deck(`${id}-vacuum-mouth`, l, d, 0.5, 2.4, h, {
+        kind: "piston",
+        profile: "vacuum-mouth",
+        h: 1.9,
         material: "yellow",
-      }),
-      deck(`${id}-vacuum-bottom`, l, d, 0.45, 2.4, h + 0.25, {
-        kind: "wall",
-        h: 0.25,
-        material: "yellow",
+        motion: { axis: "y", amplitude: 0, period: 10 },
+        presence,
       }),
     );
-    for (const side of [-1, 1])
-      parts.push(
-        deck(
-          `${id}-vacuum-side-${side}`,
-          l,
-          d + side * 1.05,
-          0.45,
-          0.3,
-          h + 1.6,
-          { kind: "wall", h: 1.35, material: "yellow" },
-        ),
-      );
     zones.push({
       kind: "vacuum",
       ...worldPoint(l, h + 0.9, d),
       radius: 4,
       strength: 1.3,
       direction: worldPoint(-1, 0, 0),
+      presence,
     });
   }
   const route = [
@@ -389,7 +394,7 @@ export function aerialCourse() {
         "crossed narrow rails",
         "twin zigzags and vacuums",
         "steelie room",
-        "hammer and pistons",
+        "red hinged paddle and retracting pegs",
         "yellow lower towers",
         "branching finish",
       ],
@@ -406,7 +411,7 @@ export function aerialCourse() {
     alternateRoutes: [
       {
         id: "right-hammer-route",
-        name: "Right zigzag and hammer",
+        name: "Right zigzag and paddle",
         start: 1,
         route: rightRoute,
       },
