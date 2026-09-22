@@ -1,3 +1,4 @@
+import { createNativeFlags, advanceNativeFlags } from "./native-flags.mjs";
 import { createAerialPegs, advanceAerialPegs } from "./aerial-pegs.mjs";
 import {
   createTerrainNavigation,
@@ -88,6 +89,7 @@ export class Simulation {
     this.nativeCamera = course.nativeCamera
       ? createNativeCamera(course.nativeCamera)
       : null;
+    this.nativeFlags = createNativeFlags(course);
     this.aerialHammers = createAerialHammers(course);
     this.aerialPegs = createAerialPegs(course, this.options.seed);
     this.aerialVacuums = createAerialVacuums(course);
@@ -299,6 +301,12 @@ export class Simulation {
       terrainPlayers,
       this.tick * STEP * this.preset.machineSpeed,
       RADIUS,
+    );
+    advanceNativeFlags(
+      this.course,
+      this.nativeFlags,
+      this.tick * STEP * this.preset.machineSpeed,
+      this.nativeCamera,
     );
     const terrainPoses = advanceTerrainAnimations(
       this.course,
@@ -932,6 +940,7 @@ export class Simulation {
       movers: structuredClone(this.movers),
       terrainAnimations: structuredClone(this.terrainAnimations),
       nativeCamera: structuredClone(this.nativeCamera),
+      nativeFlags: structuredClone(this.nativeFlags),
       aerialHammers: structuredClone(this.aerialHammers),
       aerialPegs: structuredClone(this.aerialPegs),
       aerialVacuums: structuredClone(this.aerialVacuums),
@@ -954,6 +963,9 @@ export class Simulation {
         (this.course.nativeCamera
           ? createNativeCamera(this.course.nativeCamera)
           : null),
+    );
+    this.nativeFlags = structuredClone(
+      s.nativeFlags ?? createNativeFlags(this.course),
     );
     this.enemies = structuredClone(s.enemies ?? []);
     this.aerialHammers = structuredClone(

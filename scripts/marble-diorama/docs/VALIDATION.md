@@ -1564,3 +1564,23 @@ the corrected straight line of caps, with zero falls and no console errors.
 build and diff checks pass. The preceding full suite was 276/276 before these
 two new regressions. No full-suite count is claimed for this follow-up. Changes
 remain optional local native-board work; no public campaign definition changed.
+
+### September 22 — recovered finish flags
+
+The paired kind-0/subtype-5 actors are checkered finish flags, resolving an
+incorrect steelie identification in earlier private audit notes. All six native
+fixtures now use their recovered pole positions, camera bands, five-update
+animation divider and separate second-pole delay (eight updates, six on Ultimate).
+The new 3D cloth is an interpretation of the decoded two-pose original artwork.
+Independent interpretation matches 12,000 actor observations. A local Aerial
+start verifies loading at its unmodified band 43, tick 1074, and both subsequent
+frame schedules with zero falls. Browser inspection has no captured errors.
+
+Five new regressions cover timing, validation, snapshots, cloth movement and
+unchanged physical outcomes. See FINISH-FLAGS.md for exact scope and evidence.
+Full native-course acceptance and public integration remain pending; the public
+campaign remains mm-35.
+
+Full regression result for this change: **283/283 tests pass**, 283675.5747 ms.
+Production build and diff check pass. This includes the prior peg-art corrections
+and the five new flag regressions. No native fixture is published by this commit.

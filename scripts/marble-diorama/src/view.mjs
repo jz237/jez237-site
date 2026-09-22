@@ -1,3 +1,4 @@
+import { nativeFlagGroup, updateNativeFlag } from "./flag-view.mjs";
 import { stunMarks, updateStunMarks } from "./stun-view.mjs";
 import { acidDeathGroup, updateAcidDeath } from "./acid-death-view.mjs";
 import { vacuumFragments, updateVacuumFragments } from "./vacuum-view.mjs";
@@ -497,34 +498,42 @@ export class DioramaView {
       this.marbleRoot.add(mesh);
       this.enemies.push(mesh);
     }
-    const goal = sim.course.goal;
-    const goalRoot = new THREE.Group();
-    goalRoot.position.set(goal.x, goal.y, goal.z);
-    goalRoot.rotation.y = -(goal.angle ?? 0);
-    this.root.add(goalRoot);
-    const flagmat = new THREE.MeshStandardMaterial({
-      color: "#ede4cf",
-      roughness: 0.6,
-    });
-    for (const x of [-(goal.width ?? 4.6) / 2, (goal.width ?? 4.6) / 2]) {
-      const pole = new THREE.Mesh(
-        new THREE.CylinderGeometry(0.04, 0.04, 2.4, 12),
-        flagmat,
+    this.finishFlags = [];
+    if (sim.course.finishFlags) {
+      this.finishFlags = sim.course.finishFlags.poles.map((p) =>
+        nativeFlagGroup(p),
       );
-      pole.position.set(x, 1.2, 0);
-      pole.castShadow = true;
-      goalRoot.add(pole);
-      for (let row = 0; row < 3; row++)
-        for (let col = 0; col < 4; col++) {
-          const square = new THREE.Mesh(
-            new THREE.BoxGeometry(0.22, 0.22, 0.035),
-            new THREE.MeshStandardMaterial({
-              color: (row + col) % 2 ? "#262b2a" : "#e6c273",
-            }),
-          );
-          square.position.set(x + 0.11 + col * 0.22, 2.3 - row * 0.22, 0);
-          goalRoot.add(square);
-        }
+      for (const flag of this.finishFlags) this.root.add(flag);
+    } else {
+      const goal = sim.course.goal;
+      const goalRoot = new THREE.Group();
+      goalRoot.position.set(goal.x, goal.y, goal.z);
+      goalRoot.rotation.y = -(goal.angle ?? 0);
+      this.root.add(goalRoot);
+      const flagmat = new THREE.MeshStandardMaterial({
+        color: "#ede4cf",
+        roughness: 0.6,
+      });
+      for (const x of [-(goal.width ?? 4.6) / 2, (goal.width ?? 4.6) / 2]) {
+        const pole = new THREE.Mesh(
+          new THREE.CylinderGeometry(0.04, 0.04, 2.4, 12),
+          flagmat,
+        );
+        pole.position.set(x, 1.2, 0);
+        pole.castShadow = true;
+        goalRoot.add(pole);
+        for (let row = 0; row < 3; row++)
+          for (let col = 0; col < 4; col++) {
+            const square = new THREE.Mesh(
+              new THREE.BoxGeometry(0.22, 0.22, 0.035),
+              new THREE.MeshStandardMaterial({
+                color: (row + col) % 2 ? "#262b2a" : "#e6c273",
+              }),
+            );
+            square.position.set(x + 0.11 + col * 0.22, 2.3 - row * 0.22, 0);
+            goalRoot.add(square);
+          }
+      }
     }
     for (const mark of [
       ...(sim.course.markings ?? []).filter(
@@ -847,6 +856,20 @@ export class DioramaView {
     pg.setDrawRange(0, this.particles.length);
     for (let i = 0; i < this.gears.length; i++)
       this.gears[i].rotation.z = (this.sim.tick / 120) * (i % 2 ? -0.2 : 0.2);
+    if (this.sim.nativeFlags) {
+      const sequence = this.sim.nativeFlags.sequence;
+      const clock =
+        (Math.max(0, this.sim.tick - 1 + alpha) / 120) *
+        this.sim.preset.machineSpeed *
+        this.sim.course.finishFlags.rate;
+      this.finishFlags.forEach((flag, i) =>
+        updateNativeFlag(
+          flag,
+          sequence.loaded ? sequence.actors[i] : null,
+          clock - sequence.tick,
+        ),
+      );
+    }
     for (let i = 0; i < this.enemies.length; i++) {
       const e = this.sim.enemies[i],
         mesh = this.enemies[i];
