@@ -20,9 +20,9 @@ The Amiga executable independently confirms 45 in its difficulty-zero table. Its
 
 The game restores Intermediate to 45 for single-course and campaign play. All original course definitions continue importing COURSE_TIME. Rules/replay version mm-29 separates records made under the earlier incorrect allowance. The regression asserts both the actual simulation's initial clock and campaign carryover. Historical logs describing +40 remain historical, not current proof.
 
-## Other difficulty rows found, not yet adopted
+## All eight difficulty rows
 
-Static inspection also found these per-course allocations. They are evidence for the next difficulty audit, not proof of all difficulty behavior.
+These per-course allocations now drive single-course and campaign clocks. See DIFFICULTY-REFERENCE.md for the selector trace, implementation and limits.
 
 | Difficulty | Practice | Beginner | Intermediate | Aerial | Silly | Ultimate |
 |---|---:|---:|---:|---:|---:|---:|
@@ -35,4 +35,4 @@ Static inspection also found these per-course allocations. They are evidence for
 | 6 | 50 | 40 | 25 | 20 | 20 | 20 |
 | 7 | 45 | 35 | 20 | 20 | 20 | 20 |
 
-The current nonzero difficulty speed multipliers remain provisional. Clock cadence under original hardware load, complete timed campaign balance and the rest of the original difficulty effects remain open.
+Unreferenced difficulty speed multipliers have been removed. Clock cadence under original hardware load, complete timed campaign balance and all-level original playback comparison remain open.

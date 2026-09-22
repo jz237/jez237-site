@@ -19,7 +19,8 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-29";
+import { courseTime } from "./rules.mjs";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-30";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -141,7 +142,11 @@ export class Simulation {
       collider: col.handle,
       previous: pose,
       current: pose,
-      time: this.course.time,
+      time:
+        this.course.category === "campaign"
+          ? (courseTime(this.course.id, this.options.difficulty) ??
+            this.course.time)
+          : this.course.time,
       score: 0,
       status: "racing",
       checkpoint: -1,

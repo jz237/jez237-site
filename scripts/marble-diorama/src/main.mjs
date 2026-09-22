@@ -10,7 +10,8 @@ import {
 } from "./physics.mjs";
 import { proofCourse, validateCourse, part, point } from "./course.mjs";
 import { campaignCourses, practiceCourse } from "./campaign.mjs";
-import { CampaignRun } from "./rules.mjs";
+import { CampaignRun, courseTime } from "./rules.mjs";
+import { normalizeDifficulty } from "./difficulty.mjs";
 import { bonusCourses } from "./bonus.mjs";
 import {
   blankCourse,
@@ -438,7 +439,7 @@ function finish() {
       $("resultText").textContent =
         totals +
         (campaign.courseId === "beginner"
-          ? ". Beginner starts with 75 clock units."
+          ? `. Beginner starts with ${courseTime("beginner", campaign.options.difficulty)} clock units.`
           : ". Each surviving player carries their remaining time.") +
         campaign.nextTimeBonuses
           .map((bonus, i) =>
@@ -697,11 +698,13 @@ async function init() {
       o.textContent = `${i} — ${i === 0 ? "Easiest" : i === 7 ? "Hardest" : "Level " + i}`;
       $("difficulty").append(o);
     }
+    store.settings.difficulty = normalizeDifficulty(store.settings.difficulty);
     for (const [id, key] of [
       ["musicVolume", "music"],
       ["effectsVolume", "effects"],
       ["sensitivity", "sensitivity"],
       ["quality", "quality"],
+      ["difficulty", "difficulty"],
     ]) {
       $(id).value = store.settings[key];
       $(id).oninput = () => {
