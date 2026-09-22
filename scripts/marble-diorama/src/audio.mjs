@@ -341,6 +341,7 @@ export class AudioEngine {
               z,
               (sim.tick / 120) * (sim.preset?.machineSpeed ?? 1),
               sim.course.parts,
+              sim.nativeVacuumPoses,
             )
           : null;
       if (vacuum && !vacuum.active) continue;

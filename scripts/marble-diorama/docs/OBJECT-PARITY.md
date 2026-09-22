@@ -12,6 +12,14 @@ rectangles are recovered. A local native-board fixture now animates physical
 3D shape, original impact response, global random state and wall-clock cadence
 are not certified. See [AERIAL-HAMMERS.md](AERIAL-HAMMERS.md).
 
+September 22 vacuum follow-up: source inspection establishes six Aerial mouths.
+The local native-board implementation restores region-driven activation, paired
+occupancy, deployment/withdrawal counts and front attraction/capture fields.
+An independent script interpreter matches 17,640 actor observations. Shared solid
+meshes govern housing contact. Public Aerial still has three reconstructed mouths;
+cadence, original body response, dimensions and fragment trajectories remain open.
+See [AERIAL-VACUUMS.md](AERIAL-VACUUMS.md).
+
 Reference: [World of Longplays / Ironclaw, Amiga difficulty 0](https://www.youtube.com/watch?v=Nfa2etJ84_8).
 Video timestamps below refer to the existing local copy. Frame sequences were
 inspected, including 100.00–102.28s at 0.12s intervals, 238.00–239.32s at 0.12s,
