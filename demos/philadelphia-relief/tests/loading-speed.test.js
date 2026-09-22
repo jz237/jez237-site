@@ -19,6 +19,16 @@ function harness(options = {}) {
     consider:(p = pose, mode = 'standard') => stream.consider(p,true,1700,1,'balanced',mode,1000)};
 }
 
+test('stalled aerial requests release their slots, back off, and ignore late results', async () => {
+  const h=harness();h.consider();const first=h.requests[0];
+  h.advance(100001);h.consider();assert.equal(first.signal.aborted,true);
+  first.resolve({image:{},source:'late'});await settle();assert.equal(h.installed.length,0);
+  assert.equal(h.requests.filter(r=>r.cell.key===first.cell.key).length,1);
+  h.advance(30001);h.consider();
+  assert.equal(h.requests.filter(r=>r.cell.key===first.cell.key).length,2);
+  h.stream.dispose();
+});
+
 test('central full detail starts before outstanding peripheral previews', async () => {
   const h = harness(); h.consider();
   const first = h.requests[0];

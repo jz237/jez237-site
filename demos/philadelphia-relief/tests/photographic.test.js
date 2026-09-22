@@ -46,13 +46,23 @@ test('close-up switch has hysteresis and returns to the wide miniature', () => {
 test('explicit modes and factual map layers take precedence over automatic switching', () => {
   const state = defaults();
   assert.equal(photoWanted({ ...state, photoMode: 'relief' }, 200), false);
-  assert.equal(photoWanted({ ...state, photoMode: 'photo' }, 90000), true);
+  assert.equal(photoWanted({ ...state, photoMode: 'photo' }, 16000), true);
+  assert.equal(photoWanted({ ...state, photoMode: 'photo' }, 90000), false);
   for (const patch of [{ era: '1776' }, { compareMode: 'aerial' },
     { layers: { ...state.layers, flood: true } }, { layers: { ...state.layers, contours: true } },
     { layers: { ...state.layers, imagery: false } }]) {
     assert.equal(photoAllowed({ ...state, ...patch }), false);
     assert.equal(photoWanted({ ...state, ...patch, photoMode: 'photo' }, 200), false);
   }
+});
+
+test('a reloaded wide photographic link returns to the diorama, with a stable close-up boundary', () => {
+  const state=createStore(decodeState('#pm=photo&ex=1&x=-75.244&y=40.0974&d=190000')).get();
+  assert.equal(state.diorama,1);assert.equal(photoWanted(state,state.camDist),false);
+  assert.equal(photoWanted(state,17000,true),true);
+  assert.equal(photoWanted(state,20000,true),false);
+  assert.equal(photoWanted(state,17000,false),false);
+  assert.equal(photoWanted(state,15000,false),true);
 });
 test('camera mapping preserves vertical field of view and cardinal orientations', () => {
   for (const aspect of [.5, 1, 2]) {
