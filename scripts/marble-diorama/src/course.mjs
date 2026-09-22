@@ -13,6 +13,7 @@ import { validateNativeCamera } from "./native-camera.mjs";
 import { validateAerialVacuums, nativeVacuumPose } from "./aerial-vacuums.mjs";
 import { validateAerialPaddle, paddlePose } from "./aerial-paddle.mjs";
 import { validateNativeDynamics } from "./native-dynamics.mjs";
+import { railGeometry } from "./training-rails.mjs";
 import {
   validateAerialHammers,
   hammerGeometry,
@@ -368,7 +369,8 @@ export function validateCourse(c) {
     if (p.kind === "terrain") {
       validateTerrain(p, finite);
       estimatedVertices += p.cells.length * 36;
-    } else if (p.kind === "polygon") estimatedVertices += p.outline.length * 3;
+    } else if (p.profile === "rail") estimatedVertices += 386;
+    else if (p.kind === "polygon") estimatedVertices += p.outline.length * 3;
     else if (p.kind === "pyramid") estimatedVertices += 9;
     else if (!["ribbon", "tube"].includes(p.kind))
       estimatedVertices += (Math.ceil(p.w * 2) + 1) * (Math.ceil(p.d * 2) + 1);
@@ -395,7 +397,17 @@ export function validateCourse(c) {
       );
     if (
       p.profile !== undefined &&
-      (!["peg", "flipper", "vacuum-mouth", "hammer"].includes(p.profile) ||
+      (!["peg", "flipper", "vacuum-mouth", "hammer", "rail"].includes(
+        p.profile,
+      ) ||
+        (p.profile === "rail" &&
+          (p.kind !== "wall" ||
+            p.motion ||
+            p.presence ||
+            p.d <= p.w ||
+            p.bank ||
+            p.bevel ||
+            Math.abs(p.h - p.w) > 1e-6)) ||
         (p.profile === "hammer" &&
           (p.kind !== "piston" ||
             p.motion?.axis !== "hammer" ||
@@ -812,6 +824,7 @@ export function partGeometry(p) {
           ? TERRAIN_QUAD_ROLES
           : TERRAIN_TRIANGLE_ROLES,
     };
+  if (p.profile === "rail") return railGeometry(p);
   if (p.profile === "peg") return pegGeometry(p);
   if (p.profile === "hammer") return hammerGeometry(p);
   if (p.profile === "flipper") return flipperGeometry(p);

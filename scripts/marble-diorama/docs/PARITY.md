@@ -15,6 +15,10 @@ housing fidelity, remaining native objects, full routes and diorama polish still
 prevent publication. The legacy checklist below describes the **published older
 reconstructions**, not validation of the newly integrated boards.
 
+The mm-40 Practice board adds [ten rounded physical training rails](NATIVE-PRACTICE.md).
+Its existing timed solo/paired routes still pass; native numbered shelf awards
+and alternate-route acceptance remain open.
+
 ## Published reconstruction status
 
 The recovered Ultimate code contradicts the older hinged-catapult interpretation
