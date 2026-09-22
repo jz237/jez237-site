@@ -20,6 +20,7 @@ export function recordContext(options) {
     options.untimed ? "Untimed practice" : "Timed race",
     `Difficulty ${options.difficulty}`,
     options.assisted ? "Checkpoint assistance" : "Standard",
+    options.handling === "forgiving" ? "Forgiving handling" : "Classic handling",
     options.campaign ? "Campaign" : "Single course",
   ].join(" · ");
 }

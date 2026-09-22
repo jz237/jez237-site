@@ -154,6 +154,7 @@ export function recordKey(c, options) {
     options.assisted ? "assisted" : "standard",
     options.untimed ? "untimed" : "timed",
     options.campaign ? "campaign" : "single",
+    options.handling === "forgiving" ? "forgiving" : "classic",
   ];
   if (c.category === "custom") fields.push(customDefinitionTag(c));
   return fields.join(":");

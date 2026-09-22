@@ -427,6 +427,20 @@
         obstacle speeds stay the same.
       </p>
       <label
+        >Ball handling
+        <select id="handling">
+          <option value="forgiving">
+            Forgiving — easier braking and turns
+          </option>
+          <option value="classic">Classic — full momentum</option>
+        </select>
+      </label>
+      <p class="build-note">
+        Forgiving handling brakes when you release the controls and reduces
+        sideways drift. Ice stays slippery. Applies to your next race; separate
+        records.
+      </p>
+      <label
         >Music<input
           id="musicVolume"
           type="range"
@@ -436,7 +450,8 @@
           value="0.5"
       /></label>
       <p class="audio-note" id="musicStatus">
-        Original Amiga soundtrack · Larry Reed. Music starts when you start a race.
+        Original Amiga soundtrack · Larry Reed. Music starts when you start a
+        race.
       </p>
       <label
         >Effects<input
