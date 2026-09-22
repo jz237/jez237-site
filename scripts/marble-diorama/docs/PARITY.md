@@ -7,6 +7,11 @@ physical bodies](NATIVE-SLINKIES.md). Those fixtures have not replaced the
 published campaign; the reconstruction checklist below still describes its
 remaining course and encounter work.
 
+The latest native Silly fixture adds [recovered birds](NATIVE-BIRDS.md),
+[miniature room behavior](NATIVE-MINIATURES.md) and the original
+[uphill slope acceleration](NATIVE-SLOPES.md). These changes still require
+full-course integration and release validation.
+
 All six races are playable reconstructions. **None is certified as a complete
 Amiga reproduction.** PARTIAL records implemented behavior and its remaining
 reference checks. Passing normal-input demonstrations prove traversability, not

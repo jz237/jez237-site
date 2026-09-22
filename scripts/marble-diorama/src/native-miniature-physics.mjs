@@ -169,13 +169,10 @@ export function advanceNativeMiniatures(sim, dt) {
       p.grounded && floor !== null
         ? Math.round(space.source({ ...pos, y: floor }).height * 256) / 256
         : source.height;
-    // Room membership is derived from the recovered room footprint. This
-    // supplies the source type-1 room input; it is not a physical collision mask.
-    const surface = !miniatureBlocked(source.x, source.z) ? 1 : 0;
     return {
       ...source,
       height,
-      surface,
+      region: p.navigation?.region,
       active: p.status === "racing",
       present: p.status !== "waiting",
     };

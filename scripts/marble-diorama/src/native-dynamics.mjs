@@ -6,6 +6,12 @@ export const NATIVE_TERMINAL_SPEED = 5;
 export function validateNativeDynamics(course, finite) {
   if (!course.nativeDynamics) return;
   if (
+    course.nativeDynamics.uphillSlopes !== undefined &&
+    (typeof course.nativeDynamics.uphillSlopes !== "boolean" ||
+      (course.nativeDynamics.uphillSlopes && !course.nativeCamera?.reverse))
+  )
+    throw Error("Uphill slopes require the native Silly camera.");
+  if (
     !course.nativeCamera ||
     !finite(course.nativeDynamics.rate) ||
     course.nativeDynamics.rate < 1 ||

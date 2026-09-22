@@ -42,8 +42,9 @@ it is not claimed as the original Amiga effect.
 Both upper outlets now work. The side loops are not yet reconstructed. The exact Amiga routing/selection rule needs verification. Exact cross-sections, scale, upper-platform
 height, transfer duration, suction law and outlet velocity remain provisional.
 The current force law is a physical reconstruction, not recovered Amiga code.
-In particular, this work does not claim a general reversed-gravity rule for
-Silly. That needs independent verification.
+The later source audit recovers Silly's uphill slope acceleration while airborne
+gravity stays downward; see [NATIVE-SLOPES.md](NATIVE-SLOPES.md). The red transfer's
+selection and carriage law remain separate from that slope rule.
 
 ## Checks
 

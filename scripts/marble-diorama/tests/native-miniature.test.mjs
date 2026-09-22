@@ -77,21 +77,21 @@ test("one contact input pays the selected player and leaves a spent form", () =>
     [36, 34],
   );
 });
-test("room alert checks original height, active status and surface, then retains the divider remainder", () => {
+test("room alert checks original height, active status and region, then retains the divider remainder", () => {
   const s = loaded();
   const b = s.slots[0];
   b.walkCounter = 0;
   b.counter = 0;
-  stepMiniatureSequence(s, [{ active: true, height: 16238, surface: 0 }]);
+  stepMiniatureSequence(s, [{ active: true, height: 16238, region: 0 }]);
   assert.equal(b.mode, 0);
   assert.equal(b.counter, 1);
-  stepMiniatureSequence(s, [{ active: false, height: 16238, surface: 1 }]);
+  stepMiniatureSequence(s, [{ active: false, height: 16238, region: 1 }]);
   assert.equal(b.counter, 2);
-  stepMiniatureSequence(s, [{ active: true, height: 16238, surface: 1 }]);
+  stepMiniatureSequence(s, [{ active: true, height: 16238, region: 1 }]);
   assert.equal(b.mode, 1);
   assert.equal(b.counter, 0);
   assert.equal(b.walkCounter, 1);
-  stepMiniatureSequence(s, [{ active: true, height: 16239, surface: 1 }]);
+  stepMiniatureSequence(s, [{ active: true, height: 16239, region: 1 }]);
   assert.equal(b.mode, 0);
   assert.equal(b.counter, 1);
 });
@@ -170,7 +170,7 @@ test("snapshot continuation includes random choices, counters, spent objects and
   contactNativeMiniature(s, 4, 0);
   const copy = structuredClone(s);
   const players = [
-    { present: true, active: true, x: 770, z: 770, height: 16238, surface: 1 },
+    { present: true, active: true, x: 770, z: 770, height: 16238, region: 1 },
   ];
   for (let i = 0; i < 1000; i++) {
     stepMiniatureSequence(s, players);

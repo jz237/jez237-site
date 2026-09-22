@@ -21,6 +21,7 @@ import { updateLaunchBonus } from "./launch-bonus.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
 import { nativeDynamics } from "./native-dynamics.mjs";
+import { applyNativeSlope } from "./native-slopes.mjs";
 import {
   createAerialPaddle,
   advanceAerialPaddle,
@@ -517,6 +518,7 @@ export class Simulation {
       const pos = b.translation(),
         v = b.linvel(),
         w = b.angvel();
+      applyNativeSlope(this, p, STEP);
       const ray = new RAPIER.Ray(pos, { x: 0, y: -1, z: 0 });
       const hit = this.world.castRayAndGetNormal(
         ray,
