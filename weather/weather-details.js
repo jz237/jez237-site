@@ -40,8 +40,9 @@ window.WeatherDetails = (() => {
     const dateOf = t => new Date(t).toLocaleDateString('en-CA', {timeZone: tz});
     const hourOf = t => Number(new Date(t).toLocaleTimeString('en-US', {timeZone: tz, hour: 'numeric', hour12: false}));
     const daily = data.daily, hourly = data.hourly;
-    const past = daily.time.map((t, i) => t < today ? daily.rain_sum?.[i] : null).filter(finite).map(Number).slice(-7);
-    const upcoming = hourly.time.map((t, i) => ({time: new Date(t).getTime(), stamp:t, rain:hourly.rain?.[i], temp:hourly.temperature_2m?.[i]})).filter(h => h.time >= now.getTime() && h.time < now.getTime() + 24 * 3600000);
+    const totalRain = (rain, showers) => finite(rain) && finite(showers) ? Number(rain) + Number(showers) : null;
+    const past = daily.time.map((t, i) => t < today ? totalRain(daily.rain_sum?.[i], daily.showers_sum?.[i]) : null).filter(finite).map(Number).slice(-7);
+    const upcoming = hourly.time.map((t, i) => ({time: new Date(t).getTime(), stamp:t, rain:totalRain(hourly.rain?.[i], hourly.showers?.[i]), temp:hourly.temperature_2m?.[i]})).filter(h => h.time >= now.getTime() && h.time < now.getTime() + 24 * 3600000);
     const rain = upcoming.map(h => h.rain).filter(finite).map(Number);
     // Before dawn show the remainder of this night; otherwise show tonight through 6 am.
     const overnight = upcoming.filter(h => hourNow < 6 ? dateOf(h.stamp) === today && hourOf(h.stamp) < 6 : (dateOf(h.stamp) === today && hourOf(h.stamp) >= 18) || (dateOf(h.stamp) !== today && hourOf(h.stamp) < 6)).map(h => h.temp).filter(finite).map(Number);
