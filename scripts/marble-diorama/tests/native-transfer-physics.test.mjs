@@ -5,7 +5,97 @@ import { proofCourse, validateCourse } from "../src/course.mjs";
 import { slinkyCoordinates } from "../src/native-slinky-physics.mjs";
 import { nativeTransferIntent } from "../src/native-transfer.mjs";
 import { physicalNativeTransfer } from "../src/native-transfer-physics.mjs";
+import { tubeGeometry, tubeRadiusAt } from "../src/surface-geometry.mjs";
+import { traversalPaths } from "../src/traversal-bonuses.mjs";
+import RAPIER from "@dimforge/rapier3d-compat";
 await initPhysics();
+
+test("flattened outlet bells are closed meshes and their visible rim is the physical wall", () => {
+  const c = fixture(),
+    part = c.parts[1],
+    geometry = tubeGeometry(part),
+    edges = new Map();
+  for (let i = 0; i < geometry.indices.length; i += 3)
+    for (let j = 0; j < 3; j++) {
+      const a = geometry.indices[i + j],
+        b = geometry.indices[i + ((j + 1) % 3)];
+      const key = [Math.min(a, b), Math.max(a, b)].join(":");
+      edges.set(key, (edges.get(key) ?? 0) + 1);
+    }
+  assert.ok(
+    [...edges.values()].every((n) => n === 2),
+    "every wall edge is shared by two triangles",
+  );
+  const sim = new Simulation(c, { untimed: true });
+  try {
+    sim.step();
+    for (const x of [-4.5, 1.5]) {
+      const vertices = [];
+      for (let i = 0; i < geometry.vertices.length; i += 3) {
+        const v = geometry.vertices.slice(i, i + 3);
+        if (Math.abs(v[2] + 5) < 1e-5 && Math.abs(v[0] - x) < 2)
+          vertices.push(v);
+      }
+      assert.ok(vertices.length >= 48);
+      assert.ok(
+        Math.abs(Math.max(...vertices.map((v) => v[0])) - x - 1.65) < 1e-5,
+      );
+      assert.ok(
+        Math.abs(Math.max(...vertices.map((v) => v[1])) - 8.9 - 1.15) < 1e-5,
+      );
+      for (const direction of [-1, 1]) {
+        const ray = new RAPIER.Ray(
+          { x, y: 8.9, z: -4.999 },
+          { x: direction, y: 0, z: 0 },
+        );
+        const hit = sim.world.castRay(ray, 2, true);
+        assert.ok(
+          hit && Math.abs(hit.timeOfImpact - 1.5) < 0.005,
+          "actual collider uses flattened 3-unit opening",
+        );
+      }
+    }
+    for (const path of traversalPaths(c))
+      assert.equal(tubeRadiusAt(path, path.length, path.length), 1);
+  } finally {
+    sim.dispose();
+  }
+  for (const profile of [
+    null,
+    { width: 1, height: 2 },
+    { width: 3, height: Infinity },
+    { width: 17, height: 2 },
+  ]) {
+    const invalid = fixture();
+    invalid.parts[1].fork.outletProfile = profile;
+    assert.throws(() => validateCourse(invalid), /outlet profile/);
+  }
+  for (const scrollwork of [
+    null,
+    [
+      {
+        radius: 0.5,
+        path: [
+          { x: 0, y: 0, z: 0 },
+          { x: 1, y: 1, z: 0 },
+        ],
+      },
+    ],
+    [
+      {
+        radius: 0.1,
+        path: [
+          { x: 0, y: 0, z: 0 },
+          { x: 0, y: 0, z: 0 },
+        ],
+      },
+    ],
+  ]) {
+    const invalid = fixture();
+    invalid.parts[1].fork.scrollwork = scrollwork;
+    assert.throws(() => validateCourse(invalid), /scrollwork/);
+  }
+});
 
 export function fixture() {
   const c = proofCourse();
@@ -55,6 +145,19 @@ export function fixture() {
       ],
       fork: {
         at: 2,
+        outletProfile: { width: 3, height: 2 },
+        scrollwork: [
+          {
+            radius: 0.08,
+            path: [
+              { x: -1.5, y: 6, z: -0.5 },
+              { x: 0.2, y: 7, z: -0.4 },
+              { x: 0.2, y: 9, z: -0.4 },
+              { x: -0.5, y: 9.5, z: -0.4 },
+              { x: -1, y: 9, z: -0.4 },
+            ],
+          },
+        ],
         path: [
           { x: -1.5, y: 8.9, z: -1.5 },
           { x: 1.5, y: 8.9, z: -1.5 },
