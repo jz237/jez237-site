@@ -97,6 +97,125 @@
     }
   },
   {
+    "id": "2026-09-22-factual-infographic-factual-infographic-immaculate-antlion-",
+    "title": "Factual infographic: Immaculate Antlion — The Funnel Trap Underfoot",
+    "tests": "Archive-wide factual-topic packet contains no prior Myrmeleon immaculatus or antlion-pit entry. Selected entry is unique, marked factual_subtype=bizarre-insect-life, and planned as one dominant larval hero plus eight panels and four close-ups. Sources were fetched successfully before authoring.; archive_slot=2026-09-22T04:20; concept=immaculate-antlion-larva-sand-pit-trap; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished, museum-quality DIRECT-CANVAS vertical factual infographic at exactly 2048 x 3072 pixels titled ‘IMMACULATE ANTLION — THE FUNNEL TRAP UNDERFOOT’ with the scientific name ‘Myrmeleon immaculatus’ beneath it. No photographed poster, paper edge, frame, wall, desk, museum case, specimen tray, UI, or mockup. Use a disciplined Sunburst information design: warm desert-sand gold and ochre, umber, charcoal, bone ivory, muted rust and restrained cyan accents; strong typographic hierarchy; short readable labels; crisp leader lines; realistic natural-history macro illumination and granular soil textures. The insect biology must dominate most of the canvas, not prose or charts.\n\nHERO ANCHOR: occupy roughly the upper central 40 percent with an enormous, anatomically correct naturalistic macro portrait of one pit-trapping antlion larva, Myrmeleon immaculatus, half emerged from loose dry sand at the bottom of a steep conical pit. Show a gray-brown slightly hairy larva with armor-like plates, exactly six legs, and a paired set of enlarged sickle-shaped mandibles; mandibles exposed at the surface, most of the body buried. Use extreme high-resolution cuticle hairs, dust grains and believable depth of field, but no monster scale and no fantasy. Integrate a clean side cutaway through the entire funnel so the narrow buried larva, unstable dry slope and ground surface read instantly. Add a human fingertip-free scale strip labeled ‘OBSERVED PIT: about ¾–2 in wide; about ½ in deep’ and a small larva-versus-adult silhouette scale cue without inventing a larval length.\n\nArrange EIGHT substantive supporting panels around the hero, each visually distinct, generously illustrated and connected into one causal story:\n1. ‘WHERE IT LIVES’ — a habitat vignette of sheltered loose dry soil beside a tree base and building overhang, with a small range map labeled ‘Native to North and Central America; often found in the U.S. east of the Mississippi.’ Include a rain cloud crossed by a fine line and the concise note ‘Wet soil impedes building; rain can destroy pits.’\n2. ‘BACKWARD BUILDER’ — overhead four-step spiral track showing the six-legged larva moving backward through powdery soil; arrows must point backward, never forward.\n3. ‘MANDIBLES AS SHOVELS’ — large close-up of the head and paired sickle-shaped mandibles flipping a spray of grains outward during excavation; label only ‘head-and-mandible flick.’\n4. ‘A FUNNEL OF LOOSE GRAINS’ — engineering-style pit cross-section with clean slope arrows and an ant losing traction on loose dry grains while the larva waits buried at the bottom. Do not add angles, coefficients or unsupported numbers.\n5. ‘SAND-FLICK LANDSLIDE’ — three-frame mechanism sequence: prey starts climbing; larva flicks sand onto the slope; a small grain avalanche carries prey downward. Use clear cause-and-effect arrows and no sensational gore.\n6. ‘CAPTURE AND FEED’ — restrained biological close-up sequence: sickle mandibles seize a small arthropod; digestive secretions are injected; liquefied tissues are extracted; the empty remains are tossed outside the pit. Keep this scientific and non-gory, with no chemistry formulas or toxicity statistics.\n7. ‘THREE LARVAL INSTARS TO COCOON’ — developmental strip labeled ‘three larval instars’ followed by a round soil-particle cocoon cutaway with silk threads binding grains, then pupa. Do not assign durations.\n8. ‘THE ADULT LOOKS ENTIRELY DIFFERENT’ — large naturalistic view of the slender nocturnal adult, about one inch long, with two pairs of transparent net-veined unspotted wings and six legs, perched at night; label ‘nocturnal adult — about 1 in long.’\n\nInclude FOUR especially large explanatory close-ups embedded among those panels: A) dorsal larval head and the paired curved mandibles, B) side macro of armor-like plates and sparse hairs with exactly three visible legs on that side, C) individual sand grains beginning a small slope failure under the thrown-grain impact, D) silk strands cementing soil particles in the cocoon wall. Also add one small food-web context vignette labeled ‘sit-and-wait predator of ants and other small arthropods’ and ‘does not harm nearby plants.’\n\nRender all stages consistently as the SAME named species, never substitute a generic horned antlion, beetle larva, spider, scorpion or centipede. Correct insect anatomy and body segmentation, believable proportions, no duplicated legs or jaws. Make every factual implication match the supplied claims: eggs in dry powdery or sandy soil; backward spiral excavation; head-and-mandible sand flicks; buried ambush at the pit base; prey capture and extra-oral digestion; three larval instars; silk-and-soil cocoon; slender nocturnal net-winged adult. Use concise English labels only, no bibliography, URLs, invented statistics, pseudo-text, logos or watermark. The final plate should feel like a premium adult science-museum exhibit: visually dense but readable, lavishly illustrated, accurate, tactile and cohesive.",
+    "image": "images/2026-09-22-factual-infographic-factual-infographic-immaculate-antlion-.jpg",
+    "thumb": "thumbs/2026-09-22-factual-infographic-factual-infographic-immaculate-antlion-.webp",
+    "color": "#9c8264",
+    "date": "2026-09-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "immaculate-antlion-larva-sand-pit-trap",
+      "imageSha256": "059355780d4ad0bf84a8f30f6abf5019d2da3db158c804c03de9fe838c7eddb4",
+      "imageDHash": "617049e63479db1d"
+    },
+    "factualInfographic": {
+      "topic": "How the pit-trapping antlion Myrmeleon immaculatus builds and weaponizes a conical sand trap",
+      "description": "A source-verified natural-history plate showing the larva’s anatomy, backward spiral excavation, conical pit mechanics, sand-flick prey capture, three larval instars, silk-and-soil cocoon and net-winged adult.",
+      "sourceNote": "Ohio State University Extension https://bygl.osu.edu/index.php/node/2570 verifies the species’ range, habitat, anatomy, pit dimensions, backward excavation, sand-flick landslides, prey capture, development, cocoon and adult form; the Integrated Taxonomic Information System https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=666530 verifies the valid taxonomic identity and catalog basis for Myrmeleon immaculatus.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-22T08:21:12Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Ohio State University Extension",
+            "title": "Pits of Doom and Anti-Ant Farms",
+            "sourceType": "university",
+            "url": "https://bygl.osu.edu/index.php/node/2570"
+          },
+          {
+            "id": "S2",
+            "publisher": "Integrated Taxonomic Information System",
+            "title": "ITIS Report: Myrmeleon immaculatus",
+            "sourceType": "government-agency",
+            "url": "https://www.itis.gov/servlet/SingleRpt/SingleRpt?search_topic=TSN&search_value=666530"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Myrmeleon immaculatus is a valid species in the antlion family Myrmeleontidae and insect order Neuroptera.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "The species is native to North America and Central America and is most often encountered in the United States east of the Mississippi River.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Females place eggs in dry powdery or sandy soil, often in sheltered loose soil near foundations or tree bases where overhangs or canopy reduce flooding.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The gray-brown, slightly hairy larva has armor-like plating, six legs and enlarged sickle-shaped mandibles.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The larva moves backward through loose soil in a spiral and flips soil away with its head and mandibles to excavate a funnel-shaped pit.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The larva waits buried at the pit bottom with its mandibles exposed while loose dry grains give small arthropod prey poor traction.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "When prey tries to climb out, rapid head-and-mandible flicks throw sand onto the slope and can create small landslides toward the larva.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The larva seizes small arthropod prey with its mandibles, injects digestive secretions, extracts liquefied tissues and discards the remains outside the pit.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Myrmeleon immaculatus passes through three larval instars and the final instar spins silk that binds soil particles into a cocoon before pupation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The adult is a nocturnal, slender-bodied insect about one inch long with net-veined, unspotted wings.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Observed pits are roughly three-quarters to two inches wide and about one-half inch deep; wet soil impedes construction and rain can destroy pits.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "As a carnivorous sit-and-wait predator of ants and other small arthropods, the larva is part of forest and landscape food webs and does not harm nearby plants.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-20-outer-space-exploration-outer-space-exploration-pulsar-wind",
     "title": "Outer Space Exploration: Pulsar Wind, Mapped in Polarized Light",
     "tests": "Processed multiwavelength scientific visualization, not natural-color eyesight. Preserve a tiny central neutron star, broken oblique torus, unequal jets, termination shock, asymmetric remnant filaments, and deliberate wavelength/polarization color logic. No literal field wires. Sources checked: NASA Crab multiwavelength visualization; NASA IXPE Vela polarization; NASA Fermi PWN overview; Chandra/IXPE MSH 15-52.; archive_slot=2026-09-20T12:20; concept=pulsar-wind-nebula-polarization-map",
