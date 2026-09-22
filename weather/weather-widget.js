@@ -245,14 +245,12 @@
     const weatherPromise = fetchJson(weatherUrl)
       .then(weather => ({ ...weather, source: 'Open-Meteo' }))
       .catch(async () => loadNwsWeatherBackup(await pointsPromise));
-    const gardenPromise = fetchJson(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=rain_sum,showers_sum&hourly=rain,showers,temperature_2m&past_days=7&forecast_days=3&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=${TZ}`).catch(() => null);
     const aqPromise = fetchJson(aqUrl).catch(() => ({ hourly: {}, unavailable: true }));
-    const [weather, aq, points, alerts, garden] = await Promise.all([
+    const [weather, aq, points, alerts] = await Promise.all([
       weatherPromise,
       aqPromise,
       pointsPromise,
-      alertsPromise,
-      gardenPromise
+      alertsPromise
     ]);
     let todayPeriod = null;
     let tonightPeriod = null;
@@ -267,7 +265,7 @@
         tonightPeriod = periods.find(p => p?.isDaytime === false) || periods[1] || periods[0] || null;
       } catch (_) {}
     }
-    const bundle = { weather, aq, garden, fetchedAt: new Date().toISOString(), todayPeriod, tonightPeriod, forecastPeriods, alerts, place, source: weather.source || 'Open-Meteo', stale: false };
+    const bundle = { weather, aq, fetchedAt: new Date().toISOString(), todayPeriod, tonightPeriod, forecastPeriods, alerts, place, source: weather.source || 'Open-Meteo', stale: false };
     saveWeatherCache(bundle);
     return bundle;
   }
@@ -602,7 +600,7 @@
     if (!forecastPopup.contains(event.target)) closeForecast();
   }, true);
 
-  function render({ weather, aq, garden, fetchedAt, todayPeriod, tonightPeriod, forecastPeriods = [], alerts, place, source, stale, cachedAt, error }) {
+  function render({ weather, aq, fetchedAt, todayPeriod, tonightPeriod, forecastPeriods = [], alerts, place, source, stale, cachedAt, error }) {
     closeForecast();
     const current = weather.current || {};
     const hourly = weather.hourly || {};
@@ -797,7 +795,6 @@
           }).join('')}
         </div>
 
-        ${details.garden(garden, TZ)}
         <p class="weather-detail-note">Forecast cards: ${escapeHtml(source || 'Open-Meteo')}. Expanded descriptions: National Weather Service when available. Forecast sources and periods can differ; rain percentages are chances, not rainfall amounts. All times Eastern.</p>
         <p class="weather-updated" id="weather-status">${stale ? 'Cached fallback' : 'Updated'} from ${escapeHtml(source || 'live public weather APIs')} at ${new Date(fetchedAt || cachedAt || Date.now()).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ })}.</p>
       </div>`;
