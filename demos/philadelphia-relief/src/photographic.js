@@ -127,7 +127,7 @@ export function createPhotographic({ stage, store, sampleElevation, landmarks, o
       tileset.tileVisible.addEventListener(tile => {
         visibleTiles++;
         bestError = Math.min(bestError, tile.geometricError);
-        if (photoTileReady(tile.geometricError, lastPose?.flightView?.height)) detailTiles++;
+        if (photoTileReady(tile.geometricError, lastPose?.flightView?.height, lastPose?.dist)) detailTiles++;
       });
       tileset.loadProgress.addEventListener((requests, processing) => {
         pending = requests + processing;

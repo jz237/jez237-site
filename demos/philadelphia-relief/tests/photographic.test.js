@@ -7,7 +7,8 @@ import { photoAllowed, photoWanted, photoCamera, photoReady, photoTileReady } fr
 import { PRESET_EXCLUDED } from '../src/presets.js';
 
 test('aircraft horizon handoff accepts neighborhood tiles but rejects country-scale geometry', () => {
-  assert.equal(photoTileReady(64.01), false, 'ordinary close-up readiness stays unchanged');
+  assert.equal(photoTileReady(64.2038007938601), true, 'actual provider tiles slightly exceed 64');
+  assert.equal(photoTileReady(128.4076015877202), false, 'close-ups still reject coarse tiles');
   assert.equal(photoTileReady(64.01, 500), true);
   assert.equal(photoTileReady(128.4, 500), true, 'provider errors are not exact powers of two');
   assert.equal(photoTileReady(256, 500), false);
@@ -15,6 +16,15 @@ test('aircraft horizon handoff accepts neighborhood tiles but rejects country-sc
   assert.equal(photoTileReady(4096, 14000), false);
   assert.equal(photoTileReady(Infinity, 500), false);
   assert.equal(photoReady(0, 500, true), false, 'many coarse horizon tiles cannot trigger handoff');
+});
+
+test('explicit photographic overview can hand off at its viewing scale without accepting planet tiles', () => {
+  assert.equal(photoTileReady(64.2038007938601, undefined, 6500), true);
+  assert.equal(photoTileReady(128.4076015877202, undefined, 16000), true);
+  assert.equal(photoTileReady(1027.2608127017616, undefined, 132000), true);
+  assert.equal(photoTileReady(32872.34600645637, undefined, 132000), false);
+  assert.equal(photoTileReady(Infinity, undefined, 132000), false);
+  assert.equal(photoTileReady(256, undefined, NaN), false);
 });
 
 test('photographic handoff rejects a loaded coarse fallback and sparse initial detail', () => {
