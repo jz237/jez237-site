@@ -2,6 +2,41 @@
 window.WeatherDetails = (() => {
   const finite = value => value != null && Number.isFinite(Number(value));
   const escape = value => String(value ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+  const number = value => finite(value) ? Number(value) : null;
+  const degrees = value => finite(value) ? `${Math.round(value)}°F` : '—';
+  const percent = value => finite(value) ? `${Math.round(value)}%` : '—';
+  const inches = value => finite(value) ? (Number(value) > 0 && Number(value) < .005 ? '<0.01 in' : `${Number(value).toFixed(2)} in`) : 'Unavailable';
+  const rainTotal = (rain, showers) => finite(rain) && finite(showers) ? Number(rain) + Number(showers) : null;
+  const temperature = period => !finite(period?.temperature) ? null : period.temperatureUnit === 'C' ? Number(period.temperature) * 9 / 5 + 32 : Number(period.temperature);
+
+  function forecastDay(date, daily, periods = []) {
+    const index = (daily.time || []).indexOf(date);
+    const matching = periods.filter(p => p?.startTime?.slice(0, 10) === date);
+    const day = matching.find(p => p.isDaytime === true);
+    const night = matching.findLast(p => p.isDaytime === false);
+    // Never fill half of an NWS day with another provider's numbers.
+    const nws = matching.length > 0;
+    return {
+      date, periods: matching, source: nws ? 'NWS' : 'Open-Meteo',
+      high: nws ? temperature(day) : number(daily.temperature_2m_max?.[index]),
+      low: nws ? temperature(night) : number(daily.temperature_2m_min?.[index]),
+      chance: nws ? number((day || night)?.probabilityOfPrecipitation?.value) : number(daily.precipitation_probability_max?.[index]),
+      chanceLabel: nws ? (day ? 'Day' : 'Night') : 'Daily peak',
+      summary: (day || night)?.shortForecast || '',
+      rain: rainTotal(daily.rain_sum?.[index], daily.showers_sum?.[index]),
+      code: daily.weather_code?.[index]
+    };
+  }
+
+  function age(timestamp, now = Date.now()) {
+    const elapsed = now - Date.parse(timestamp);
+    if (!Number.isFinite(elapsed)) return 'time unavailable';
+    const minutes = Math.max(0, Math.floor(elapsed / 60000));
+    if (minutes < 1) return 'just now';
+    if (minutes < 60) return `${minutes} minute${minutes === 1 ? '' : 's'} ago`;
+    const hours = Math.floor(minutes / 60);
+    return hours < 24 ? `${hours} hour${hours === 1 ? '' : 's'} ago` : `${Math.floor(hours / 24)} day${hours < 48 ? '' : 's'} ago`;
+  }
   function normalize(data) {
     // API wall-clock timestamps need their offset when visitors are in another zone.
     if (!data || !Number.isFinite(data.utc_offset_seconds)) return data;
@@ -13,7 +48,10 @@ window.WeatherDetails = (() => {
     for (const key of ['sunrise', 'sunset']) if (data.daily?.[key]) data.daily[key] = data.daily[key].map(stamp);
     return data;
   }
-  function chart(hours) {
+  function hourDescription(h) {
+    return `${h.fullTime || h.time}: ${degrees(h.temp)} · Precipitation ${percent(h.rain)} · Rainfall ${inches(h.amount)}`;
+  }
+  function chart(hours, source = 'Open-Meteo') {
     if (!hours.length) return '<p>Hourly chart unavailable.</p>';
     const temps = hours.map(h => h.temp).filter(finite).map(Number);
     if (!temps.length) return '<p>Hourly chart unavailable.</p>';
@@ -21,17 +59,41 @@ window.WeatherDetails = (() => {
     const high = Math.ceil(Math.max(...temps) / 5) * 5 + 5;
     const x = i => 64 + i * (752 / Math.max(1, hours.length - 1));
     const y = t => 190 - (t - low) / (high - low) * 144;
-    const points = hours.map((h, i) => `${x(i)},${y(h.temp)}`).join(' ');
-    return `<figure class="weather-chart"><figcaption><span class="chart-temp-key">Temperature °F</span><span class="chart-rain-key">Hourly rain chance %</span></figcaption>
+    const line = (key, scale) => hours.map((h, i) => finite(h[key]) ? `${i && finite(hours[i - 1][key]) ? 'L' : 'M'}${x(i)},${scale(Number(h[key]))}` : '').join(' ');
+    const maxAmount = Math.max(.05, ...hours.map(h => number(h.amount) || 0));
+    const rainY = value => 290 - value / maxAmount * 60;
+    return `<figure class="weather-chart"><figcaption><span class="chart-temp-key">Temperature °F</span><span class="chart-chance-key">Precipitation chance %</span><span class="chart-rain-key">Rainfall in</span></figcaption>
       <div class="weather-chart-scroll" tabindex="0" role="region" aria-label="Scrollable hourly temperature and rain chart">
-      <svg viewBox="0 0 880 250" role="img" aria-labelledby="hourly-chart-title hourly-chart-desc">
-      <title id="hourly-chart-title">Next 12 hours: temperature and rain chance</title>
-      <desc id="hourly-chart-desc">${escape(hours.map(h => `${h.time}: ${h.temp} degrees Fahrenheit, ${h.rain}% rain chance`).join('; '))}</desc>
+      <svg viewBox="0 0 880 338" role="img" aria-labelledby="hourly-chart-title hourly-chart-desc">
+      <title id="hourly-chart-title">Next 24 hours: temperature, precipitation chance and rainfall</title>
+      <desc id="hourly-chart-desc">${escape(hours.map(hourDescription).join('; '))}</desc>
       ${[0, 0.5, 1].map(f => `<line x1="44" x2="836" y1="${190 - f * 144}" y2="${190 - f * 144}" class="chart-grid"/><text x="36" y="${195 - f * 144}" text-anchor="end">${Math.round(low + f * (high - low))}°</text><text x="842" y="${195 - f * 144}">${f * 100}%</text>`).join('')}
-      ${hours.map((h, i) => `<rect x="${x(i) - 16}" y="${190 - h.rain * 1.44}" width="32" height="${h.rain * 1.44}" rx="4" class="chart-rain"><title>${escape(h.time)}: ${h.rain}% rain chance</title></rect>`).join('')}
-      <polyline points="${points}" class="chart-temp"/>
-      ${hours.map((h, i) => `<circle cx="${x(i)}" cy="${y(h.temp)}" r="4" class="chart-dot"><title>${escape(h.time)}: ${h.temp}°F</title></circle><text x="${x(i)}" y="${y(h.temp) - 12}" text-anchor="middle">${h.temp}°</text><text x="${x(i)}" y="220" text-anchor="middle">${escape(h.time)}</text>`).join('')}
-      </svg></div></figure>`;
+      <path d="${line('temp', y)}" class="chart-temp"/>
+      <path d="${line('rain', value => 190 - value * 1.44)}" class="chart-chance"/>
+      <text x="44" y="218">Rainfall per hour (in)</text><text x="836" y="218" text-anchor="end">${hours.some(h => finite(h.amount)) ? `Scale: 0–${maxAmount.toFixed(2)} in` : 'Rainfall unavailable'}</text>
+      <line x1="44" x2="836" y1="290" y2="290" class="chart-grid"/>
+      ${hours.map((h, i) => `${finite(h.amount) ? `<rect x="${x(i) - 10}" y="${rainY(h.amount)}" width="20" height="${290 - rainY(h.amount)}" rx="3" class="chart-rain"/>` : `<text x="${x(i)}" y="280" text-anchor="middle">—</text>`}${finite(h.temp) ? `<circle cx="${x(i)}" cy="${y(h.temp)}" r="3" class="chart-dot"/>` : ''}${i % 3 === 0 || i === hours.length - 1 ? `<text x="${x(i)}" y="318" text-anchor="middle">${escape(h.time)}</text>` : ''}<rect data-chart-hour="${i}" x="${x(i) - 15}" y="32" width="30" height="265" class="chart-hit"><title>${escape(hourDescription(h))}</title></rect>`).join('')}
+      </svg></div>
+      <div class="weather-chart-inspector"><label for="weather-chart-hour">Explore an hour</label><input id="weather-chart-hour" type="range" min="0" max="${hours.length - 1}" value="0" aria-valuetext="${escape(hourDescription(hours[0]))}" aria-controls="weather-chart-readout"><output id="weather-chart-readout" for="weather-chart-hour" aria-live="polite">${escape(hourDescription(hours[0]))}</output></div>
+      <p class="weather-detail-note">Temperature and precipitation: ${escape(source)}. Rainfall: Open-Meteo, for the hour beginning at each time. Hover, tap, or use the hour slider.</p></figure>`;
+  }
+  function bindChart(root, hours) {
+    const slider = root.querySelector('#weather-chart-hour');
+    if (!slider) return;
+    const select = index => {
+      if (!hours[index]) return;
+      slider.value = index;
+      const text = hourDescription(hours[index]);
+      slider.setAttribute('aria-valuetext', text);
+      root.querySelector('#weather-chart-readout').textContent = text;
+      root.querySelectorAll('[data-chart-hour]').forEach(el => el.classList.toggle('is-selected', Number(el.dataset.chartHour) === Number(index)));
+    };
+    slider.addEventListener('input', () => select(Number(slider.value)));
+    root.querySelectorAll('[data-chart-hour]').forEach(el => {
+      el.addEventListener('pointerenter', event => { if (event.pointerType !== 'touch') select(Number(el.dataset.chartHour)); });
+      el.addEventListener('click', () => select(Number(el.dataset.chartHour)));
+    });
+    select(0);
   }
   async function almanac() {
     const caption = document.getElementById('almanac-edition');
@@ -44,5 +106,5 @@ window.WeatherDetails = (() => {
       if (meta.generatedAt && Number.isFinite(Date.parse(meta.generatedAt))) caption.textContent += ` Created ${new Date(meta.generatedAt).toLocaleString('en-US', {timeZone:'America/New_York'})} Eastern.`;
     } catch (_) { caption.textContent = 'Illustrated Philly 19111 forecast snapshot. Edition details are unavailable; use the live forecast above for updated conditions.'; }
   }
-  return { normalize, chart, almanac };
+  return { normalize, chart, bindChart, almanac, forecastDay, age, degrees, percent, inches, rainTotal, temperature, number };
 })();
