@@ -118,3 +118,12 @@ are implemented for all six private native-board fixtures. Cloth and poles are
 newly modeled; timing, snapshots and nonblocking behavior are tested. This does
 not establish complete enemy recovery or update the published campaign. See
 [FINISH-FLAGS.md](FINISH-FLAGS.md) for evidence and remaining limits.
+
+### Native black marbles — local source recovery
+
+A separate controller supplies four black marbles across Beginner, Aerial and
+Ultimate. Their recovered graph routes, camera activation, pursuit/return rules,
+target selection and rolling resistance now have a physical implementation.
+The earlier generic proximity AI remains in the public campaign. Exact source
+impact/defeat rules, calibration and complete native races are still open. See
+[NATIVE-STEELIES.md](NATIVE-STEELIES.md).
