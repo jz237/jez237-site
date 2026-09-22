@@ -5,9 +5,15 @@ import { acidPositionAt } from "./acid.mjs";
 // the original sprite program and exact fragment paths have not been recovered.
 export const ACID_RECOVERY_TICKS = 300;
 export const ACID_RECOVERY_SECONDS = ACID_RECOVERY_TICKS / 120;
-export function acidCapturePose(capture, zone, seconds, machineSpeed = 1) {
+export function acidCapturePose(
+  capture,
+  zone,
+  seconds,
+  machineSpeed = 1,
+  currentPool,
+) {
   const age = seconds - capture.tick / 120;
-  const pool = acidPositionAt(zone, seconds * machineSpeed);
+  const pool = currentPool ?? acidPositionAt(zone, seconds * machineSpeed);
   const offset = capture.offset;
   return {
     age,

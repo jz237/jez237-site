@@ -40,6 +40,8 @@ import {
 } from "./traversal-bonuses.mjs";
 import { landingTargets, updateLandingTargets } from "./landing-targets.mjs";
 import { acidShape, acidPositionAt } from "./acid.mjs";
+import { createAcidSequence, holdAcidOnContact } from "./native-acid.mjs";
+import { advanceNativeAcids } from "./native-acid-physics.mjs";
 import RAPIER from "@dimforge/rapier3d-compat";
 import { finishSlinkyCapture, SLINKY_REFORM_TICKS } from "./slinky-capture.mjs";
 import { compileCourse, motionAt, presenceAt, SURFACES } from "./course.mjs";
@@ -91,6 +93,9 @@ export class Simulation {
       ? createNativeCamera(course.nativeCamera)
       : null;
     this.nativeFlags = createNativeFlags(course);
+    this.nativeAcids = course.acidSequence
+      ? createAcidSequence(this.options.seed)
+      : null;
     this.aerialHammers = createAerialHammers(course);
     this.aerialPegs = createAerialPegs(course, this.options.seed);
     this.aerialVacuums = createAerialVacuums(course);
@@ -162,13 +167,15 @@ export class Simulation {
       .filter((z) => z.kind === "acid")
       .map((zone) => ({
         zone,
+        hidden: zone.nativeAcidSlot !== undefined,
         handle: this.world.createCollider(
           RAPIER.ColliderDesc.trimesh(
             acidShape(zone, 0).vertices,
             acidShape(zone, 0).indices,
           )
             .setTranslation(...Object.values(acidPositionAt(zone, 0)))
-            .setSensor(true),
+            .setSensor(true)
+            .setEnabled(zone.nativeAcidSlot === undefined),
         ).handle,
       }));
   }
@@ -284,6 +291,7 @@ export class Simulation {
     this.events = [];
     this.tick++;
     for (const a of this.acid) {
+      if (a.zone.nativeAcidSlot !== undefined) continue;
       const time = this.tick * STEP * this.preset.machineSpeed;
       const geometry = acidShape(a.zone, time),
         collider = this.world.getCollider(a.handle);
@@ -315,6 +323,7 @@ export class Simulation {
       this.tick * STEP * this.preset.machineSpeed,
       this.nativeCamera,
     );
+    advanceNativeAcids(this, STEP);
     steerEnemies(this, STEP);
     const terrainPoses = advanceTerrainAnimations(
       this.course,
@@ -807,13 +816,14 @@ export class Simulation {
     for (const acid of this.acid)
       for (const p of this.players)
         if (
+          !acid.hidden &&
           p.status === "racing" &&
           this.world.intersectionPair(
             this.world.getCollider(acid.handle),
             this.world.getCollider(p.collider),
           )
         )
-          this.fall(p, { cause: "acid", zone: acid.zone });
+          this.fall(p, { cause: "acid", zone: acid.zone, pool: acid });
     for (const m of this.movers) {
       const b = this.world.getRigidBody(m.handle);
       m.current = {
@@ -929,10 +939,12 @@ export class Simulation {
     if (slinky) p.respawnTick = p.slinkyCapture.endTick;
     if (acid) {
       const origin = this.body(p).translation();
-      const pool = acidPositionAt(
-        detail.zone,
-        this.tick * STEP * this.preset.machineSpeed,
-      );
+      const pool =
+        detail.pool?.current?.position ??
+        acidPositionAt(
+          detail.zone,
+          this.tick * STEP * this.preset.machineSpeed,
+        );
       p.acidCapture = {
         tick: this.tick,
         zone: this.course.zones.indexOf(detail.zone),
@@ -944,6 +956,7 @@ export class Simulation {
         rotation: copy(this.body(p).rotation()),
         destination: copy(this.respawnPosition(p)),
       };
+      holdAcidOnContact(this.nativeAcids?.slots[detail.zone.nativeAcidSlot]);
     } else p.acidCapture = null;
     p.vacuumCapture = vacuum
       ? {
@@ -973,6 +986,10 @@ export class Simulation {
       terrainAnimations: structuredClone(this.terrainAnimations),
       nativeCamera: structuredClone(this.nativeCamera),
       nativeFlags: structuredClone(this.nativeFlags),
+      nativeAcids: structuredClone(this.nativeAcids),
+      acid: this.acid.map(({ zone, geometry, ...runtime }) =>
+        structuredClone(runtime),
+      ),
       aerialHammers: structuredClone(this.aerialHammers),
       aerialPegs: structuredClone(this.aerialPegs),
       aerialVacuums: structuredClone(this.aerialVacuums),
@@ -1002,6 +1019,14 @@ export class Simulation {
     this.nativeFlags = structuredClone(
       s.nativeFlags ?? createNativeFlags(this.course),
     );
+    this.nativeAcids = structuredClone(
+      s.nativeAcids ??
+        (this.course.acidSequence
+          ? createAcidSequence(this.options.seed)
+          : null),
+    );
+    if (s.acid)
+      this.acid.forEach((a, i) => Object.assign(a, structuredClone(s.acid[i])));
     this.enemies = structuredClone(s.enemies ?? []);
     this.aerialHammers = structuredClone(
       s.aerialHammers ?? createAerialHammers(this.course),

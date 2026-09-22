@@ -1,5 +1,6 @@
 import { validateNativeSteelies } from "./native-steelie.mjs";
 import { validateNativeSlinkies } from "./native-slinky.mjs";
+import { validateNativeAcids } from "./native-acid.mjs";
 import { validateNativeFlags } from "./native-flags.mjs";
 import { validateAerialPegs, pegPose } from "./aerial-pegs.mjs";
 import { compileTerrainSequence } from "./terrain-sequence.mjs";
@@ -711,6 +712,7 @@ export function validateCourse(c) {
   validateNativeFlags(c, finite);
   validateNativeSteelies(c);
   validateNativeSlinkies(c);
+  validateNativeAcids(c);
   validateAerialHammers(c, finite);
   return c;
 }
