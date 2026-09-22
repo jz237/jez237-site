@@ -100,3 +100,9 @@ private extraction records each candidate and both preference lists. Actual
 world-coordinate mapping, occupancy/height queries, camera correspondence and
 paired playback are still required before enabling catch-up. No catch-up
 teleports are introduced by the mm-35 scoring release.
+
+The follow-up [terrain audit](TERRAIN-REFERENCE.md) decoded fixed corner heights
+for all six courses. As an independent spatial check, 731 of 732 candidate
+destinations lie on complete static tiles; Ultimate `(13, 13, region 0)` is the
+exception. Original occupancy rejection must be retained. Mapping these data
+to shared course meshes, the original camera and changing surfaces remains open.
