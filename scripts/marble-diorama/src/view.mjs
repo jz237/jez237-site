@@ -15,6 +15,7 @@ import { reliefField } from "./relief-field.mjs";
 import { stoneTexture, finishStone, displayBase } from "./diorama-finish.mjs";
 import { RADIUS } from "./physics.mjs";
 import { actorShapes } from "./actor-shapes.mjs";
+import { interpolateSlinkySolids } from "./slinky-shape.mjs";
 import { actorMesh, updateActorMesh } from "./actor-view.mjs";
 const vec = (p) => new THREE.Vector3(p.x, p.y, p.z),
   quat = (p) => new THREE.Quaternion(p.x, p.y, p.z, p.w);
@@ -482,7 +483,7 @@ export class DioramaView {
       const steelie =
         e.def.kind === "steelie" ||
         (e.def.kind === "mini" && (e.def.form ?? "steelie") === "steelie");
-      const articulated = actorShapes(e.def, 0);
+      const articulated = e.current.solids ?? actorShapes(e.def, 0);
       const mesh = articulated
         ? actorMesh(articulated)
         : new THREE.Mesh(
@@ -887,11 +888,17 @@ export class DioramaView {
       if (mesh.userData.articulated)
         updateActorMesh(
           mesh,
-          actorShapes(
-            e.def,
-            (Math.max(0, this.sim.tick - 1 + alpha) / 120) *
-              this.sim.preset.enemySpeed,
-          ),
+          e.nativeSlinky
+            ? interpolateSlinkySolids(
+                e.previous.solids,
+                e.current.solids,
+                alpha,
+              )
+            : actorShapes(
+                e.def,
+                (Math.max(0, this.sim.tick - 1 + alpha) / 120) *
+                  this.sim.preset.enemySpeed,
+              ),
         );
     }
     for (const a of this.acid)

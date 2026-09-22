@@ -2,6 +2,11 @@
 
 See [the September 21 object audit](OBJECT-PARITY.md) for timestamped findings, fixes and known mechanism mismatches.
 
+Local native-board fixtures now include [recovered slinky rules and shared
+physical bodies](NATIVE-SLINKIES.md). Those fixtures have not replaced the
+published campaign; the reconstruction checklist below still describes its
+remaining course and encounter work.
+
 All six races are playable reconstructions. **None is certified as a complete
 Amiga reproduction.** PARTIAL records implemented behavior and its remaining
 reference checks. Passing normal-input demonstrations prove traversability, not

@@ -1,5 +1,11 @@
 import RAPIER from "@dimforge/rapier3d-compat";
 import { createSteelieState } from "./native-steelie.mjs";
+import { createSlinkyState } from "./native-slinky.mjs";
+import {
+  initialSlinkyPose,
+  advanceNativeSlinky,
+  contactNativeSlinky,
+} from "./native-slinky-physics.mjs";
 import {
   advanceNativeSteelie,
   steerNativeSteelie,
@@ -43,7 +49,7 @@ function cachedShape(solid) {
 export function createEnemies(sim) {
   return (sim.course.enemies ?? []).map((def) => {
     const desc = (
-      def.kind === "bird"
+      def.kind === "bird" || def.nativeSlinky
         ? RAPIER.RigidBodyDesc.kinematicPositionBased()
         : RAPIER.RigidBodyDesc.dynamic()
     )
@@ -61,7 +67,13 @@ export function createEnemies(sim) {
         { x: 0, y: 0, z: 0, w: 1 },
       );
     const body = sim.world.createRigidBody(desc);
-    const solids = actorShapes(def, 0);
+    const nativeSlinky = def.nativeSlinky
+      ? createSlinkyState(def.nativeSlinky)
+      : null;
+    const initial = nativeSlinky
+      ? initialSlinkyPose(sim.course, { def, nativeSlinky })
+      : null;
+    const solids = initial?.solids ?? actorShapes(def, 0);
     const colliders = (solids ?? [null]).map(
       (solid) =>
         sim.world.createCollider(
@@ -76,10 +88,11 @@ export function createEnemies(sim) {
         ).handle,
     );
     const pose = {
+      ...(initial ? { solids } : {}),
       position: copy(body.translation()),
       rotation: copy(body.rotation()),
     };
-    if (def.nativeSteelie) body.setEnabled(false);
+    if (def.nativeSteelie || nativeSlinky) body.setEnabled(false);
     return {
       def,
       handle: body.handle,
@@ -92,6 +105,7 @@ export function createEnemies(sim) {
       ...(def.nativeSteelie
         ? { nativeSteelie: createSteelieState(), hidden: true }
         : {}),
+      ...(nativeSlinky ? { nativeSlinky, hidden: true } : {}),
     };
   });
 }
@@ -103,6 +117,10 @@ export function steerEnemies(sim, dt) {
       vel = b.linvel(),
       home = e.def;
     e.previous = e.current;
+    if (e.nativeSlinky) {
+      advanceNativeSlinky(sim, e, dt);
+      continue;
+    }
     const solids = actorShapes(home, sim.tick * dt * sim.preset.enemySpeed);
     if (solids)
       solids.forEach((solid, i) => {
@@ -262,11 +280,12 @@ export function steerEnemies(sim, dt) {
     }
   }
 }
-export function updateEnemies(sim) {
+export function updateEnemies(sim, incomingVelocity = []) {
   for (const e of sim.enemies) {
     if (e.collected || e.defeated) continue;
     const b = sim.world.getRigidBody(e.handle);
     e.current = {
+      ...e.current,
       position: copy(b.translation()),
       rotation: copy(b.rotation()),
     };
@@ -281,7 +300,16 @@ export function updateEnemies(sim) {
             (manifold) => {
               for (let i = 0; i < manifold.numContacts(); i++)
                 if (manifold.contactDist(i) <= 0.002) {
-                  if (e.def.kind === "steelie") {
+                  if (e.nativeSlinky) {
+                    if (p.status === "racing")
+                      contactNativeSlinky(
+                        sim,
+                        e,
+                        p,
+                        incomingVelocity[sim.players.indexOf(p)] ??
+                          sim.body(p).linvel(),
+                      );
+                  } else if (e.def.kind === "steelie") {
                     e.lastContactPlayer = sim.players.indexOf(p);
                     steelieTouch = true;
                   } else if (e.def.kind === "muncher" || e.def.kind === "bird")

@@ -261,8 +261,8 @@ function patrolCycle(config, s, players, peers) {
 }
 
 // Source reference update in original units. It exposes capture and push as
-// intents only and never mutates player records. No runtime uses this source
-// position until a matching articulated physical adapter has been validated.
+// intents only and never mutates player records. The runtime adapter maps
+// these coordinates to continuous articulated poses and actual contacts.
 export function stepSlinkyController(
   config,
   s,
@@ -292,7 +292,7 @@ export function stepSlinkyController(
       } else if (s.mode === 5 || s.mode === 6) {
         if (s.mode === 5) s.events.push({ type: "release", player: s.target });
         // Reference-only grid alignment in 0x1b5be. The future physical
-        // adapter must return through actual movement instead of this snap.
+        // adapter returns through actual movement instead of this snap.
         s.x = cell(s.x) * 8 + 4;
         s.z = cell(s.z) * 8 + 4;
         s.mode = 3;
@@ -374,4 +374,45 @@ export function advanceSlinkyController(
   }
   state.events = events;
   return spawned;
+}
+
+export function validateNativeSlinkies(course) {
+  for (const e of course.enemies ?? []) {
+    if (e.nativeSlinky === undefined) continue;
+    const c = e.nativeSlinky;
+    if (
+      !c ||
+      e.kind !== "muncher" ||
+      e.nativeSteelie ||
+      !course.nativeCamera ||
+      course.nativeDynamics?.rate !== course.nativeCamera.rate ||
+      !course.navigation ||
+      course.nativeCamera.partId !== course.navigation.partId ||
+      !Number.isInteger(c.region) ||
+      c.region < 0 ||
+      c.region > 127 ||
+      !Array.isArray(c.activationBand) ||
+      c.activationBand.length !== 2 ||
+      !c.activationBand.every(
+        (n) => Number.isInteger(n) && n >= -128 && n <= 127,
+      ) ||
+      c.activationBand[0] > c.activationBand[1] ||
+      !Array.isArray(c.nodes) ||
+      !c.nodes.length ||
+      c.nodes.length > 127 ||
+      c.nodes.some(
+        (n) =>
+          !Array.isArray(n) ||
+          n.length !== 3 ||
+          !n.every(Number.isInteger) ||
+          n[0] < 0 ||
+          n[0] > 127 ||
+          n[1] < 0 ||
+          n[1] > 127 ||
+          n[2] < 0 ||
+          n[2] >= c.nodes.length,
+      )
+    )
+      throw Error("Invalid native slinky route.");
+  }
 }
