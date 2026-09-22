@@ -56,3 +56,36 @@ the opposite island, a visibly moving arm, arrival on its ice bridge and no fall
 This verifies the implemented branch topology, not the original launch law.
 Paired arms, stroke, velocities and dimensions are reconstructed; the initial
 white recess and exact 2000 award trigger still need correction/measurement.
+
+
+## September 21: launcher landing award (mm-24)
+
+A closer 25fps trace of the same local recording from 280.08-280.52s narrows
+the award to arrival on the left landing island, before the turquoise bridge:
+
+- Through approximately 280.20s the score reads 48590.
+- At approximately 280.24s it reads 50590: an exact 2000 increase. The marble
+  is arriving behind the gold guide, partially occluded by it.
+- The following frames show 50600 and a floating 2000 label while the marble
+  emerges onto the platform. The extra ten is a separate progress increment.
+- The bridge is reached later, around 282s; walking onto it is not the observed
+  award boundary.
+
+This establishes the amount and passage, but the occluded contact does not
+recover a pixel-exact collision boundary. The original repeat policy, failure
+cases, paired credit and right-hand route's award remain unverified.
+
+The reconstruction now pays 2000 for each player's completed catapult flight
+onto its associated lower island. It requires real upward support, a preceding
+airborne flight from that launcher, and a landing within the current floor's
+rotated footprint and height. A wrong first landing consumes the pending flight;
+ordinary drops, overhead passage, falling/respawning and repeated claims do not
+pay. Each launcher can be claimed once per player per race. Symmetric right-side
+behavior and this repeat policy are explicit reconstruction choices.
+
+The floor reference stays attached through workshop moves/rotations and JSON
+round trips. Removing the destination removes the launch award association.
+The existing landing reward notification and effects bus report the award;
+that cue is designed, not recovered Amiga audio. Replay/record physics version
+is mm-24 because scoring outcomes changed. No geometry, steering, launch force,
+clock allowance or demo route was changed.

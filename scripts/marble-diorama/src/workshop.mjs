@@ -145,6 +145,8 @@ export function removeWorkshopObject(course, key) {
     id = key.slice(colon + 1);
   if (type === "part") {
     course.parts = course.parts.filter((p) => p.id !== id);
+    for (const p of course.parts)
+      if (p.launchBonus?.target === id) delete p.launchBonus;
     course.zones = (course.zones ?? []).filter((z) => z.mouth !== id);
     if (course.markings)
       course.markings = course.markings.filter((m) => m.part !== id);

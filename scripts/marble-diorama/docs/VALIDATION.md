@@ -963,3 +963,32 @@ or authentic original sound.
 Fresh timed campaign measurements still fail solo Ultimate at 32s and paired
 Silly by 55.0417s. All measured runs have zero falls. Full campaign acceptance,
 original-control calibration, effect fidelity and full Amiga parity remain open.
+
+
+### September 21 - Ultimate launcher landing reward, mm-24
+
+The original recording's 48590-to-50590 change around 280.24s establishes a
+2000-point award on arrival at the lower left island, before its ice bridge.
+Both reconstructed branches now award 2000 after a real launcher flight lands
+on the corresponding island. Exact occluded collision boundary, original repeat
+policy and right-route/paired behavior remain unverified. See ULTIMATE-REFERENCE.md.
+
+New regressions cover both actual launches and landing awards, snapshot restore
+midflight, independent player credit, no award for an unassisted drop or failed
+flight, no repeat claim, rotated/moved destination bounds, overhead rejection,
+JSON validation and destination removal. The existing real-contact query is now
+shared with dizziness, retaining moving-ground and restored-collider handling.
+The initial focused launch/dizziness set passes all 12 tests (8781ms).
+
+The production browser's paired Ultimate untimed demo finishes with 9057 points
+for each player, exactly 2000 above the previous release, zero falls and the same
+P2 52.72s finish. The landing notification is present and no warnings/errors were
+captured. Ordinary steering, geometry, launch impulse, clocks and demo routes
+are unchanged. The existing reward sound is designed, not original Amiga audio.
+
+Fresh mm-24 timed measurements still fail solo Ultimate at 32s and paired Silly
+by 55.0417s, with zero falls throughout. The scoring correction does not resolve
+full timed campaign acceptance or establish full Amiga parity.
+
+The final complete suite passes all 165 tests (282204.54ms), including the
+rotated destination edge checks. Production build and diff checks pass.

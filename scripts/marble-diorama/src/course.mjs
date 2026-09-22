@@ -114,6 +114,28 @@ export function validateCourse(c) {
         p.launch.up < 0)
     )
       throw Error("Invalid launcher impulse.");
+    if (p.launchBonus !== undefined) {
+      if (
+        !p.launchBonus ||
+        typeof p.launchBonus !== "object" ||
+        Array.isArray(p.launchBonus)
+      )
+        throw Error("Invalid launch bonus.");
+      const target = c.parts.find((q) => q.id === p.launchBonus.target);
+      if (
+        p.kind !== "spring" ||
+        !p.launch ||
+        !target ||
+        target.kind !== "floor" ||
+        target.motion ||
+        !Number.isInteger(p.launchBonus.score) ||
+        p.launchBonus.score <= 0 ||
+        p.launchBonus.score > 20000
+      )
+        throw Error(
+          "A launch bonus needs an impulse launcher, a static floor target and a positive score.",
+        );
+    }
     if (p.kind === "ribbon" || p.kind === "tube") {
       if (
         p.motion ||

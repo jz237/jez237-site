@@ -1,4 +1,6 @@
 import { updateLandingStun } from "./landing-stun.mjs";
+import { landingContact } from "./landing-contact.mjs";
+import { updateLaunchBonus } from "./launch-bonus.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
 import { transferForce, chooseTransfer } from "./powered-transfer.mjs";
@@ -17,7 +19,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-23";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-24";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -147,6 +149,7 @@ export class Simulation {
       stunnedUntil: 0,
       impactAirTicks: 0,
       impactLaunched: false,
+      launchBonusPending: null,
       progress: 0,
       safePosition: copy(s),
       safeHistory: [],
@@ -178,6 +181,7 @@ export class Simulation {
     p.stunnedUntil = 0;
     p.impactAirTicks = 0;
     p.impactLaunched = false;
+    p.launchBonusPending = null;
     p.safeHistory = [];
     p.previous = p.current = {
       position: copy(s),
@@ -433,6 +437,9 @@ export class Simulation {
           );
           p.springTick = this.tick;
           p.impactLaunched = true;
+          p.launchBonusPending = s.launchBonus
+            ? { part: s.id, airborne: false }
+            : null;
           if (arm) arm.launchTick = this.tick;
           this.events.push({ type: "spring", player: i, part: s.id });
         }
@@ -478,8 +485,18 @@ export class Simulation {
       copy(this.body(p).linvel()),
     );
     this.world.step(this.queue);
-    for (let i = 0; i < this.players.length; i++)
-      updateLandingStun(this, this.players[i], incomingVelocity[i]);
+    for (let i = 0; i < this.players.length; i++) {
+      const p = this.players[i];
+      if (
+        p.status !== "racing" ||
+        (!this.course.rules?.landingStun && !p.launchBonusPending)
+      )
+        continue;
+      const contact = landingContact(this, p, incomingVelocity[i], RADIUS);
+      updateLandingStun(this, p, contact);
+      const award = updateLaunchBonus(this, p, contact, RADIUS);
+      if (award) this.events.push({ ...award, player: i });
+    }
     updateEnemies(this);
     for (const acid of this.acid)
       for (const p of this.players)
@@ -575,6 +592,7 @@ export class Simulation {
     p.stunnedUntil = 0;
     p.impactAirTicks = 0;
     p.impactLaunched = false;
+    p.launchBonusPending = null;
     this.body(p).setEnabled(false);
     p.deaths++;
     const vacuum = detail?.cause === "vacuum";
