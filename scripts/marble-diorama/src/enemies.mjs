@@ -3,6 +3,8 @@ import { createSteelieState } from "./native-steelie.mjs";
 import {
   advanceNativeSteelie,
   steerNativeSteelie,
+  nativeSteelieFallen,
+  awardNativeSteelieDefeat,
 } from "./native-steelie-physics.mjs";
 
 // Animated actors share articulated solids with the renderer.
@@ -152,20 +154,25 @@ export function steerEnemies(sim, dt) {
       const spawned = advanceNativeSteelie(sim, e, !!grounded, dt);
       if (spawned || e.hidden || e.defeated) continue;
     }
-    if (grounded) e.supportedY = pos.y;
-    // Descending a ramp is not a defeat. Measure the fall from the last
-    // supported height, and only retire a steelie while unsupported.
-    const fallen =
-      home.kind === "steelie"
+    // Descending a ramp is not a defeat. Native guards use source terrain/drop
+    // limits; the older campaign retains its unsupported five-unit fall rule.
+    const fallen = e.nativeSteelie
+      ? nativeSteelieFallen(sim, e, !!grounded)
+      : home.kind === "steelie"
         ? !grounded && pos.y < e.supportedY - 5
         : pos.y < home.y - 5;
     if (fallen) {
       e.fallenAt ??= sim.tick;
       if (home.kind === "steelie") {
-        // A defeated steelie stays out for the rest of the race. Attribute the
-        // reward to the last marble that made physical contact, not proximity.
         e.defeated = true;
         b.setEnabled(false);
+        if (e.nativeSteelie) {
+          e.hidden = true;
+          awardNativeSteelieDefeat(sim, e);
+          continue;
+        }
+        // The older authored campaign retains its last-contact rule until its
+        // separate native-board replacement has passed release acceptance.
         const player = sim.players[e.lastContactPlayer];
         if (player) {
           player.score += 1000;
@@ -190,6 +197,7 @@ export function steerEnemies(sim, dt) {
       }
       continue;
     }
+    if (grounded) e.supportedY = pos.y;
     if (e.nativeSteelie) {
       if (grounded) steerNativeSteelie(sim, e, dt);
       continue;

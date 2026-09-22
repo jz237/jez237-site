@@ -763,9 +763,15 @@ export class Simulation {
       copy(this.body(p).linvel()),
     );
     if (this.nativeDynamics.terminalSpeed !== null)
-      for (const p of this.players) {
-        if (p.status !== "racing") continue;
-        const b = this.body(p),
+      for (const actor of [
+        ...this.players.filter((p) => p.status === "racing"),
+        ...this.enemies.filter(
+          (e) => e.nativeSteelie && !e.hidden && !e.defeated,
+        ),
+      ]) {
+        // The guard's airborne branch at 0x13350 uses the same acceleration
+        // and terminal descent as the player's branch at 0x130f0.
+        const b = this.body(actor),
           v = b.linvel();
         // Account for the gravity Rapier adds during this step. This limits
         // only downward velocity; planar momentum and angular motion remain.

@@ -11,6 +11,11 @@ import {
 } from "../src/native-steelie.mjs";
 import { proofCourse, validateCourse } from "../src/course.mjs";
 import { initPhysics, Simulation } from "../src/physics.mjs";
+import {
+  nativeSteelieTerrainHeight,
+  nativeSteelieFallen,
+  awardNativeSteelieDefeat,
+} from "../src/native-steelie-physics.mjs";
 await initPhysics();
 const config = () => ({
   region: 4,
@@ -336,6 +341,177 @@ test("actual native steelie contact starts recovery and paired snapshots retain 
     const result = run();
     sim.restore(snapshot);
     assert.deepEqual(run(), result);
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("native void falls award both eligible players once without requiring a contact and restore deterministically", () => {
+  const sim = new Simulation(fixture(), { untimed: true, players: 2 });
+  try {
+    for (let i = 0; i < 6; i++) sim.step();
+    const e = sim.enemies[0],
+      body = sim.world.getRigidBody(e.handle);
+    // Initial off-edge condition; gravity and the full simulation decide when
+    // the guard is lost. No proximity/contact attribution is injected.
+    body.setTranslation({ x: 15, y: 0.55, z: 0 }, true);
+    body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    for (let i = 0; i < 100; i++) sim.step();
+    assert.ok(body.translation().y < -4.5);
+    assert.ok(
+      Math.abs(body.linvel().y + sim.nativeDynamics.terminalSpeed) < 1e-4,
+      "native guards share the original five-unit terminal descent",
+    );
+    assert.equal(
+      e.defeated,
+      false,
+      "the old five-world-unit threshold is gone",
+    );
+    assert.equal(e.lastContactPlayer, undefined);
+    const snapshot = sim.snapshot();
+    const run = () => {
+      const events = [];
+      for (let i = 0; i < 360; i++)
+        events.push(
+          ...sim.step().filter((event) => event.type === "steelie-defeat"),
+        );
+      return {
+        events,
+        enemies: structuredClone(sim.enemies),
+        scores: sim.players.map((p) => p.score),
+      };
+    };
+    const expected = run();
+    assert.deepEqual(expected.events, [
+      { type: "steelie-defeat", enemy: "guard", player: 0, score: 1000 },
+      { type: "steelie-defeat", enemy: "guard", player: 1, score: 1000 },
+    ]);
+    assert.deepEqual(expected.scores, [1000, 1000]);
+    assert.equal(expected.enemies[0].hidden, true);
+    assert.equal(body.isEnabled(), false);
+    sim.restore(snapshot);
+    assert.deepEqual(run(), expected);
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("native fall checks use the closed board top and original 16/128-unit strict thresholds", () => {
+  const sim = new Simulation(fixture(), { untimed: true });
+  try {
+    for (let i = 0; i < 6; i++) sim.step();
+    const e = sim.enemies[0],
+      b = sim.world.getRigidBody(e.handle);
+    assert.equal(nativeSteelieTerrainHeight(sim, { x: 0, y: -5, z: 0 }), 0);
+    b.setTranslation({ x: 0, y: -1.44, z: 0 }, true);
+    assert.equal(nativeSteelieFallen(sim, e, true), false);
+    b.setTranslation({ x: 0, y: -1.46, z: 0 }, true);
+    assert.equal(
+      nativeSteelieFallen(sim, e, true),
+      true,
+      "a down ray inside the closed solid must not count as safe support",
+    );
+    e.supportedY = 0;
+    b.setTranslation({ x: 15, y: -16, z: 0 }, true);
+    assert.equal(nativeSteelieFallen(sim, e, false), false);
+    b.setTranslation({ x: 15, y: -16.01, z: 0 }, true);
+    assert.equal(nativeSteelieFallen(sim, e, false), true);
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("native terrain queries respect sloped rotated half tiles and exclude other marbles", () => {
+  const c = fixture();
+  c.parts[0].cells = [[10, 10, 0, 2, null, 4]];
+  c.parts[0].angle = Math.PI / 2;
+  const sim = new Simulation(c, { untimed: true });
+  try {
+    sim.step();
+    // Before rotation: u=.75, v=.25, height 2u+2v=2.
+    assert.ok(
+      Math.abs(
+        nativeSteelieTerrainHeight(sim, { x: 1.75, y: -8, z: -1.25 }) - 2,
+      ) < 1e-5,
+    );
+    assert.equal(
+      nativeSteelieTerrainHeight(sim, { x: 1.25, y: -8, z: -1.75 }),
+      null,
+    );
+    assert.equal(
+      nativeSteelieTerrainHeight(sim, sim.body(sim.players[0]).translation()),
+      null,
+    );
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("native defeat rewards include recovering and finished players but exclude timeouts and absent players", () => {
+  const players = ["racing", "falling", "finished", "timeout", "absent"].map(
+    (status) => ({ status, score: 50 }),
+  );
+  const sim = { players, events: [] };
+  awardNativeSteelieDefeat(sim, { def: { id: "guard" } });
+  assert.deepEqual(
+    players.map((p) => p.score),
+    [1050, 1050, 1050, 50, 50],
+  );
+  assert.deepEqual(
+    sim.events.map((e) => e.player),
+    [0, 1, 2],
+  );
+});
+
+test("native fall queries follow changing terrain meshes and replay the current frame", () => {
+  const c = fixture();
+  const terrain = c.parts[0];
+  terrain.animation = {
+    type: "terrain-sequence",
+    secondsPerFrame: 0.5,
+    activationRegions: [0, 0],
+    initialRegions: [0, 0],
+    gates: [],
+    frames: [0, 3].map((height) => [[12, 12, height, height, height, height]]),
+  };
+  const sim = new Simulation(c, { untimed: true });
+  const at = { x: 0.5, y: -8, z: 0.5 };
+  try {
+    sim.step();
+    assert.ok(Math.abs(nativeSteelieTerrainHeight(sim, at)) < 1e-5);
+    const snapshot = sim.snapshot();
+    const run = () => {
+      for (let i = 0; i < 62; i++) sim.step();
+      return nativeSteelieTerrainHeight(sim, at);
+    };
+    assert.ok(Math.abs(run() - 3) < 1e-5);
+    sim.restore(snapshot);
+    assert.ok(Math.abs(run() - 3) < 1e-5);
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("camera removal does not award a defeat and later loading resets the guard", () => {
+  const sim = new Simulation(fixture(), { untimed: true });
+  try {
+    for (let i = 0; i < 6; i++) sim.step();
+    const e = sim.enemies[0];
+    e.nativeSteelie.pendingUnload = true;
+    for (let i = 0; i < 6; i++)
+      assert.equal(
+        sim.step().some((event) => event.type === "steelie-defeat"),
+        false,
+      );
+    assert.equal(e.hidden, true);
+    assert.equal(sim.players[0].score, 0);
+    e.defeated = true;
+    e.nativeSteelie.pendingLoad = true;
+    for (let i = 0; i < 6; i++) sim.step();
+    assert.equal(e.hidden, false);
+    assert.equal(e.defeated, false);
+    assert.equal(sim.world.getRigidBody(e.handle).isEnabled(), true);
+    assert.equal(sim.players[0].score, 0);
   } finally {
     sim.dispose();
   }
