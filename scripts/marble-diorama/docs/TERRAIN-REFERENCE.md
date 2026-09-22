@@ -182,3 +182,86 @@ resting board, derives raised kinematic faces from original corner states and
 shares them with rendering. Direct generic `motion` on a terrain part is still
 rejected. The existing six public campaign definitions have not been switched
 to recovered terrain by these compiler/integration checkpoints.
+
+
+## Original race starts and finish integration
+
+The initializer at `0x14586–0x14600` reads two packed coordinate words from
+terrain metadata offsets `0x14` and `0x16`. Each high byte is the first horizontal
+coordinate and each low byte the second. It shifts each byte by 19 and adds
+`0x40000`, placing the marble at the center of its eight-unit tile in 16.16
+coordinates. It queries the terrain height, then clears region byte `0x1b` to
+zero at `0x14624`. The remake stores sphere-center height, so its import adds
+its radius to that contact height.
+
+| Race | Player 1 tile coordinates | Player 2 tile coordinates |
+|---|---|---|
+| Practice | (17.5, 17.5) | (16.5, 18.5) |
+| Beginner | (27.5, 13.5) | (17.5, 13.5) |
+| Intermediate | (22.5, 9.5) | (8.5, 23.5) |
+| Aerial | (10.5, 23.5) | (22.5, 9.5) |
+| Silly | (125.5, 124.5) | (123.5, 126.5) |
+| Ultimate | (11.5, 16.5) | (11.5, 22.5) |
+
+Private fixtures now contain these starts and all original region gates.
+All twelve start locations agree with the physical surface within 0.0000032
+remake units and stay grounded, with no falls, during a half-second rest check.
+This verifies placement, not traversal of the full courses.
+
+CourseDefinition optionally accepts:
+
+```json
+{
+  "navigation": {
+    "type": "terrain-gates",
+    "partId": "terrain-part-id",
+    "initialRegions": [0, 0],
+    "gates": [
+      {"axis": "z", "constant": 4, "start": 0, "end": 7, "low": 1, "high": 255}
+    ]
+  }
+}
+```
+
+Coordinates use the referenced terrain part's local tile grid. Translation and
+rotation are inverted before tile lookup. The shared gate helper now drives
+race regions and Intermediate wave eligibility. With this metadata, departure
+into region 255 completes a race; `goal` remains the visual marker. Without it,
+existing courses retain their goal-box behavior. Entering a gate is insufficient;
+a high-speed step that skips its row/column entirely does not count. Gate order
+is preserved, including a first matching gate that leaves the region unchanged.
+
+At `0x14f56–0x14f80`, the flag guarding the region call identifies player
+objects, not ground contact. `0x151e4–0x15204` excludes player substate 11 before
+calling the region routine; the call has no finish-box height/ground test.
+The remake checks racing marbles after their physical step, with captured and
+falling marbles excluded by existing status handling. Original substep cadence
+and the exact original substate model remain calibration work.
+
+Region and previous tile are included in replay snapshots. Respawns restore the
+saved region for a last-safe location or assisted checkpoint; returning to the
+start resets the initial region. Every relocation resets the previous tile to
+the destination so teleporting does not manufacture a gate departure. This
+supports existing remake respawns; it does not implement the original catch-up
+candidate selection.
+
+Seven of eight original finish approaches complete with ordinary steering on
+the private recovered boards, without falls. Practice has three approaches;
+Beginner, Intermediate, Aerial and Silly each have one. **Ultimate still fails**:
+its gate at original column 87, rows 88–90 sits beside unresolved changing
+terrain references. The static patch-only fixture leaves an impassable wall
+there. Its failed check is retained; no replacement ramp or wider finish trigger
+was added to conceal the missing animation.
+
+The original marble collision routine at `0x164a6–0x165a0` rejects horizontal
+integer-coordinate differences outside ±7, height differences outside ±14,
+and an approximate horizontal norm `16*max + 3*(16*min >> 3) >= 112`.
+This is an octagonal integer approximation, not a spherical collider. It is
+useful scale evidence, but does not yet establish a single exact Rapier sphere
+radius or the original sprite's physical dimensions. Private fixtures retain
+the explicitly provisional 0.1375 units per original coordinate unit.
+
+The six full private fixtures still lack restored actors and full demo routes;
+Ultimate's changing terrain, final scale/cadence, camera framing at original
+heights and rounded native silhouettes remain unfinished. They are not the
+published campaign definitions.

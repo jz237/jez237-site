@@ -1370,3 +1370,32 @@ check pass. Existing published campaign layouts and mm-35 behavior are retained.
 This is an unpublished implementation checkpoint; native scale/timing, other
 actors, native respawn/finish/catch-up integration, rounded edges and full timed
 campaign acceptance remain unfinished.
+
+
+### September 22 — original starts and tile-based race finishes
+
+The six private native fixtures now use all twelve original start positions
+and the ordered original region gates. Optional CourseDefinition navigation
+connects these gates to race completion and the native wave controller.
+Region/tile history is restored by snapshots and reset safely on relocation.
+See TERRAIN-REFERENCE.md for the original routine, coordinates and schema.
+
+Six new regressions cover translated/rotated grids, ordered gate departures,
+normal-input two-player finishes independent of the display goal, identical
+finish outcomes after snapshot restoration, respawn relocation and import
+validation. **Full suite: 222/222 pass**, 281118.0721 ms. Focused terrain,
+wave and navigation suite: 20/20. Build and diff checks pass.
+
+Private source checks: all twelve starts lie on their original decoded planes
+(maximum ray-height error 0.000003171 units) and remain grounded without falls.
+Seven of eight native finish approaches complete with ordinary steering,
+without falls, in 96–97 simulation ticks from their local gate test starts.
+**The Ultimate approach fails**: its unimplemented changing terrain leaves a
+wall at the final gate. This is not a full-race traversal test or full parity.
+The failing private test and report are retained for continued work.
+
+Local browser import of native Intermediate plays from the original start,
+with zero falls during the observed idle interval and no captured warnings or
+errors. Camera framing at the larger original heights still needs adaptation.
+No original resource files are published. This remains a local checkpoint;
+public campaign definitions and physics identity mm-35 are unchanged.

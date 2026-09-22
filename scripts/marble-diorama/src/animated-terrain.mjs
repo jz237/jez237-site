@@ -1,4 +1,10 @@
 import {
+  terrainTileAt,
+  terrainRegionAfter,
+  validateTerrainGates,
+} from "./terrain-navigation.mjs";
+export { terrainRegionAfter } from "./terrain-navigation.mjs";
+import {
   createIntermediateWaves,
   advanceIntermediateWaves,
   intermediateWaveCorners,
@@ -60,18 +66,7 @@ export function validateAnimatedTerrain(p, finite) {
     !a.initialRegions.every((r) => Number.isInteger(r) && r >= 0 && r <= 255)
   )
     throw Error("Invalid terrain animation.");
-  for (const g of a.gates)
-    if (
-      !["x", "z"].includes(g.axis) ||
-      ![g.constant, g.start, g.end, g.low, g.high].every(Number.isInteger) ||
-      ![g.constant, g.start, g.end].every(finite) ||
-      g.end < g.start ||
-      g.low < 0 ||
-      g.low > 255 ||
-      g.high < 0 ||
-      g.high > 255
-    )
-      throw Error("Invalid terrain region gate.");
+  validateTerrainGates(a.gates);
   let affected = 0;
   for (const cell of p.cells) {
     const points = cellPoints(p, cell);
@@ -247,28 +242,6 @@ function poseFromHeights(p, heights) {
   };
 }
 
-function tileAt(part, position) {
-  const dx = position.x - part.x,
-    dz = position.z - part.z,
-    c = Math.cos(part.angle ?? 0),
-    s = Math.sin(part.angle ?? 0);
-  return {
-    x: Math.floor((dx * c + dz * s + part.w / 2) / part.cellSize),
-    z: Math.floor((-dx * s + dz * c + part.d / 2) / part.cellSize),
-  };
-}
-export function terrainRegionAfter(gates, previous, current, region) {
-  if (!previous || (previous.x === current.x && previous.z === current.z))
-    return region;
-  for (const g of gates) {
-    const cross = g.axis === "x" ? "z" : "x";
-    const inside = (v) =>
-      v[g.axis] === g.constant && v[cross] >= g.start && v[cross] <= g.end;
-    if (inside(previous) && !inside(current))
-      return current[g.axis] <= g.constant ? g.low : g.high;
-  }
-  return region;
-}
 export function createTerrainAnimations(course, players) {
   return Object.fromEntries(
     course.parts
@@ -293,13 +266,16 @@ export function advanceTerrainAnimations(course, controllers, players, time) {
     if (!part.animation) continue;
     const controller = controllers[part.id];
     const eligible = players.map((player, i) => {
-      const tile = tileAt(part, player.position);
-      controller.regions[i] = terrainRegionAfter(
-        part.animation.gates,
-        controller.tiles[i],
-        tile,
-        controller.regions[i],
-      );
+      const tile = terrainTileAt(part, player.position);
+      controller.regions[i] =
+        player.navigationPartId === part.id
+          ? player.region
+          : terrainRegionAfter(
+              part.animation.gates,
+              controller.tiles[i],
+              tile,
+              controller.regions[i],
+            );
       controller.tiles[i] = tile;
       return player.active ? controller.regions[i] : null;
     });

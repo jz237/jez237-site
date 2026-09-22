@@ -1,3 +1,4 @@
+import { validateTerrainNavigation } from "./terrain-navigation.mjs";
 import { vacuumPoseAt } from "./vacuum.mjs";
 import { presenceAt } from "./mechanism-time.mjs";
 export { presenceAt };
@@ -659,6 +660,7 @@ export function validateCourse(c) {
     )
       throw Error("Invalid bird flight.");
   }
+  validateTerrainNavigation(c);
   return c;
 }
 export const part = (id, x, z, w, d, y = 0, extra = {}) => ({
