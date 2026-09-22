@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**191 automated tests pass. All six campaign races and all three bonus courses
+**194 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-33`.
+Current simulation/replay version: `rapier-0.20.0-mm-34`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -1247,3 +1247,25 @@ The mm-33 timed campaign reaches Silly without falls in both modes, retaining
 times out at 65.283s solo and 79.367s paired. Original time allowances were not
 extended. Exact ledge dimensions, impact calibration, catch-up behavior and
 full timed campaign acceptance remain open.
+
+### September 22 — shared Practice landing bonus
+
+The original code uses one per-player claim bit for all three Practice shelves.
+Practice revision 2 now shares this eligibility, retaining it after respawn and
+in snapshots while allowing the other player an independent bonus. Custom
+landing groups round trip and validate; ungrouped custom targets remain
+independent. See PRACTICE-SCORING.md for recovered addresses and limitations.
+
+Focused landing/finish checks: **10/10 pass**, 3905.48 ms. The new regressions
+cover all first-shelf choices for both players, later-shelf rejection, respawn,
+snapshot restoration, fresh-race reset and custom imports. Local browser bonus
+route: 22.02s, 6,314 total points, one 4,900-point landing award, zero falls and
+no captured warnings/errors. This tests integration; the 4,900 amount reflects
+the still-provisional interpolation and is not an original scoring claim.
+
+Movement and clocks are unchanged. The mm-33 timed campaign measurement remains
+applicable to traversal, but is not a fresh mm-34 measurement. Ultimate timed
+completion, original discrete Practice reward values/regions and catch-up
+relocation remain open.
+
+Full suite: **194/194 pass**, 282319.02 ms. Production build and diff check pass.

@@ -472,6 +472,10 @@ export function validateCourse(c) {
     if (
       typeof mark.id !== "string" ||
       targetIds.has(mark.id) ||
+      (mark.claimGroup !== undefined &&
+        (typeof mark.claimGroup !== "string" ||
+          !mark.claimGroup.trim() ||
+          mark.claimGroup.length > 64)) ||
       !floor ||
       floor.kind !== "floor" ||
       floor.motion ||

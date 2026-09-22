@@ -22,15 +22,15 @@ The left shelf extends toward the goal, matching the reference's route structure
 its precise dimensions remain reconstructed. Removing a shelf removes its target.
 
 An airborne approach followed by physical support in the painted rectangle pays
-an award, with visible text and an effects-bus cue. Claims are separate per player,
-stored in snapshots, and retained after falling. Rolling over the paint, flying
+an award, with visible text and an effects-bus cue. The three shelves share one claim per player per race. Claims are stored in
+snapshots and retained after falling; the other player remains eligible. Rolling over the paint, flying
 above it, or passing beneath the shelf does not pay.
 
 **The award formula is provisional.** The original 4500 observation demonstrates
 an intermediate award but does not establish every position's value. Current
 values interpolate across the 3/5 and 4/6 corner labels and round to 100 points.
-The six-tick airborne requirement and once-per-player-per-shelf policy also need
-original repeat-landing checks. Do not certify these choices as recovered rules.
+The six-tick airborne requirement and exact landing-region boundaries still
+need comparison. The former once-per-shelf policy is corrected below.
 The effect uses the remake's collection cue, not a recovered original sample.
 
 A selectable `Left landing target and shelf exit` demonstration uses only normal
@@ -79,3 +79,42 @@ Amiga tiles or their boundaries. Do not treat the present interpolation as
 faithful, nor import the other port's exact map without further comparison.
 The pending EA folder scan and additional Amiga landing observations should
 resolve this before the rule is finalized.
+
+## September 22 — shared Practice landing claim (mm-34)
+
+The private executable identified in TWO-PLAYER-RULES.md supplies direct evidence
+for claim scope. The Practice landing branch begins at **0x1534c**. It requires course zero and region 1, 2 or 3.
+The player index at offset `0x19` becomes the bit mask `index + 1` (one or two).
+All three region branches test and set that same bit in global byte `0x5f6`:
+`0x153b2–0x153ca`, `0x1542c–0x15444`, and `0x154a8–0x154c0`.
+There is no independent bit for a second shelf. Race initialization clears the
+byte at `0x33c6`; ordinary respawning does not clear it. Both players can each
+claim once, and a fresh race restores eligibility.
+
+Practice now puts all three landing targets in the `practice-landing-bonus`
+claim group. The group is optional for custom targets, preserved through JSON
+and editor transforms, and validated as a nonempty string of at most 64
+characters. Ungrouped targets retain independent claims. The original target
+ID remains in the award event and claim history; shared eligibility is separate
+snapshot state. Practice revision 2 and replay version mm-34 separate old results.
+
+Ten landing/finish checks pass, including all three first-shelf choices for both
+players, rejection of later shelves, retention through respawn and restored
+snapshots, reset on a fresh race, independent custom targets and import checks.
+The existing normal-input shelf route still completes without falls.
+
+### Further scoring evidence, still unresolved
+
+The same code contradicts continuous bilinear scoring. Regions 1 and 2 use
+original coordinate Y minus 488 and 568 respectively; region 3 uses X minus
+528. Nonnegative offsets are shifted right by two, then seven is added and the
+index is capped at thirteen. Only indices greater than six invoke the award
+routine (`0x15518–0x15554`). This selects seven discrete reward entries.
+`0xa622` reads the amount from a separately loaded resource at `0x14ed8`,
+offset `0x24 + 2 * index`, rather than calculating it from four corner labels.
+The loader at `0x139c4` names this resource `marbdat` (with the related
+`marbdat.vlb` archive). The executable does not provide that resource's score
+values or the complete geometry mapping. The original also consumes the region claim before checking
+whether the resulting index pays. Exact boundaries, the seven amounts and
+nonpaying-region behavior remain unresolved; the current formula is explicitly
+provisional. No other port's scoring table has been substituted.
