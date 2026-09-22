@@ -78,9 +78,27 @@ export function advanceNativeSlinky(sim, e, dt) {
   const body = sim.world.getRigidBody(e.handle);
   const rate = space.camera.rate * sim.preset.machineSpeed;
   const sourceTime = sim.tick * dt * rate;
+  const supportingFloor = nativeSteelieTerrainHeight(sim, body.translation());
+  if (supportingFloor !== null)
+    e.slinkyFloorHeight = space.source({
+      x: 0,
+      y: supportingFloor,
+      z: 0,
+    }).height;
+  if (s.loaded && !e.defeated && !e.slinkyFalling && supportingFloor === null) {
+    // A disappeared support or a physical bump over an edge releases the
+    // actual body to gravity. Never map the source's void sentinel to a pose.
+    e.slinkyFalling = true;
+    e.slinkyFallOriginY = body.translation().y;
+    e.slinkyIntent = null;
+    body.setBodyType(RAPIER.RigidBodyType.Dynamic, true);
+  }
   const terrainHeight = (x, z) => {
     const height = nativeSteelieTerrainHeight(sim, space.world(x, z, 0));
-    if (height === null) return -32768;
+    if (height === null)
+      return x === s.x && z === s.z
+        ? (e.slinkyFloorHeight ?? space.source(e.def).height)
+        : -32768;
     // Rapier rays have float precision. Quantize both supported players and
     // terrain to the source height grid, so identical floors compare equal.
     return (
@@ -116,9 +134,21 @@ export function advanceNativeSlinky(sim, e, dt) {
       .map((other) => other.nativeSlinky),
     terrainHeight,
   );
-  e.hidden = !s.loaded;
+  if (spawned) {
+    e.defeated = false;
+    e.slinkyFalling = false;
+    body.setBodyType(RAPIER.RigidBodyType.KinematicPositionBased, true);
+    body.setLinvel({ x: 0, y: 0, z: 0 }, true);
+    body.setAngvel({ x: 0, y: 0, z: 0 }, true);
+  }
+  if (
+    e.slinkyFalling &&
+    body.translation().y < e.slinkyFallOriginY - 128 * space.camera.heightScale
+  )
+    e.defeated = true;
+  e.hidden = !s.loaded || !!e.defeated;
   body.setEnabled(!e.hidden);
-  if (e.hidden) return;
+  if (e.hidden || e.slinkyFalling) return;
   if (spawned) {
     e.slinkyOffset = { x: 0, y: 0, z: 0 };
     e.slinkyFrom = e.slinkyTo = sourcePose(e, space);
@@ -182,20 +212,17 @@ export function advanceNativeSlinky(sim, e, dt) {
 
 // Only call for a manifold contact, never the original broad proximity box.
 export function contactNativeSlinky(sim, e, p, incomingVelocity) {
+  if (e.slinkyFalling) return;
   const index = sim.players.indexOf(p),
     s = e.nativeSlinky;
   if (e.slinkyIntent?.player === index && s.mode === 5) {
     e.slinkyIntent = null;
-    sim.fall(p);
-    p.respawnTick = Math.max(
-      p.respawnTick,
-      sim.tick +
-        Math.ceil(
-          ((30 - s.frame) /
-            (sim.course.nativeCamera.rate * sim.preset.machineSpeed)) *
-            120,
-        ),
-    );
+    const rate = sim.course.nativeCamera.rate * sim.preset.machineSpeed;
+    sim.fall(p, {
+      cause: "slinky",
+      enemy: e.def.id,
+      releaseTick: Math.ceil(((s.tick + 30 - s.frame) / rate) * 120 - 1e-8),
+    });
     sim.events.push({ type: "slinky-capture", enemy: e.def.id, player: index });
     return;
   }

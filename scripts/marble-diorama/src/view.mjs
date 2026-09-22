@@ -2,6 +2,10 @@ import { nativeFlagGroup, updateNativeFlag } from "./flag-view.mjs";
 import { stunMarks, updateStunMarks } from "./stun-view.mjs";
 import { acidDeathGroup, updateAcidDeath } from "./acid-death-view.mjs";
 import { vacuumFragments, updateVacuumFragments } from "./vacuum-view.mjs";
+import {
+  slinkyCaptureGroup,
+  updateSlinkyCapture,
+} from "./slinky-capture-view.mjs";
 import { landingTargets, landingAmount } from "./landing-targets.mjs";
 import { acidMesh, updateAcidMesh } from "./acid-view.mjs";
 import { foundationGeometry } from "./foundations.mjs";
@@ -393,6 +397,7 @@ export class DioramaView {
     this.marbles = [];
     this.vacuumFragments = [];
     this.acidDeaths = [];
+    this.slinkyCaptures = [];
     this.stunMarks = [];
     this.enemies = [];
     this.acid = [];
@@ -475,6 +480,9 @@ export class DioramaView {
       const acidDeath = acidDeathGroup(mesh, i);
       this.marbleRoot.add(acidDeath);
       this.acidDeaths.push(acidDeath);
+      const slinkyCapture = slinkyCaptureGroup(mesh);
+      this.scene.add(slinkyCapture);
+      this.slinkyCaptures.push(slinkyCapture);
       const marks = stunMarks();
       this.marbleRoot.add(marks);
       this.stunMarks.push(marks);
@@ -924,6 +932,11 @@ export class DioramaView {
         alpha,
       );
       m.visible = p.status === "racing";
+      updateSlinkyCapture(
+        this.slinkyCaptures[i],
+        p,
+        Math.max(0, this.sim.tick - 1) + alpha,
+      );
       updateStunMarks(
         this.stunMarks[i],
         p,

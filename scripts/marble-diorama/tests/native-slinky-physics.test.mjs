@@ -5,9 +5,11 @@ import { proofCourse, validateCourse } from "../src/course.mjs";
 import { initPhysics, Simulation } from "../src/physics.mjs";
 import { createSlinkyState, SLINKY_ANIMATIONS } from "../src/native-slinky.mjs";
 import { slinkySolids } from "../src/slinky-shape.mjs";
+import { nativeSteelieTerrainHeight } from "../src/native-steelie-physics.mjs";
 import {
   slinkyCoordinates,
   initialSlinkyPose,
+  advanceNativeSlinky,
 } from "../src/native-slinky-physics.mjs";
 await initPhysics();
 
@@ -223,7 +225,25 @@ test("camera-loaded patrol uses shared physical meshes, moves continuously and r
     };
     const expected = run();
     sim.restore(snapshot);
-    assert.deepEqual(run(), expected);
+    const restoredPosition = sim.body(sim.enemies[0]).translation();
+    assert.equal(
+      nativeSteelieTerrainHeight(sim, restoredPosition),
+      0,
+      "restored support remains the same board",
+    );
+    const actual = run();
+    const summary = (enemies) =>
+      enemies.map((e) => ({
+        floor: e.slinkyFloorHeight,
+        falling: e.slinkyFalling,
+        position: e.current.position,
+        state: e.nativeSlinky,
+      }));
+    assert.deepEqual(summary(actual), summary(expected));
+    assert.ok(
+      JSON.stringify(actual) === JSON.stringify(expected),
+      "all replay mesh vertices match",
+    );
   } finally {
     sim.dispose();
   }
@@ -367,9 +387,78 @@ test("a descending open mouth captures only on a real contact and keeps recovery
         });
     }
     assert.equal(captures.length, 1, JSON.stringify(trace));
-    assert.equal(p.deaths, 1);
+    assert.equal(p.deaths, 0, "loss waits until the capture sequence ends");
     assert.equal(p.status, "falling");
     assert.ok(p.respawnTick > sim.tick);
+    const capture = structuredClone(p.slinkyCapture),
+      snapshot = sim.snapshot();
+    const finish = () => {
+      const events = [];
+      while (sim.tick <= capture.endTick) {
+        sim.step();
+        events.push(
+          ...sim.events.filter((e) =>
+            ["slinky-release", "respawn", "fall"].includes(e.type),
+          ),
+        );
+      }
+      return { events, player: structuredClone(sim.players[0]) };
+    };
+    const expected = finish();
+    assert.equal(expected.player.deaths, 1);
+    assert.equal(expected.player.status, "racing");
+    assert.deepEqual(
+      expected.events.map((e) => e.type),
+      ["slinky-release", "respawn"],
+    );
+    assert.equal(expected.player.slinkyCapture, null);
+    assert.ok(
+      Math.hypot(
+        expected.player.current.position.x - capture.destination.x,
+        expected.player.current.position.z - capture.destination.z,
+      ) < 0.01,
+    );
+    sim.restore(snapshot);
+    assert.deepEqual(finish(), expected);
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("an unsupported slinky falls under gravity without a source-coordinate teleport and reloads after camera reentry", () => {
+  const sim = new Simulation(fixture(), { untimed: true });
+  try {
+    for (let i = 0; i < 6; i++) sim.step();
+    const e = sim.enemies[0],
+      body = sim.body(e);
+    body.setTranslation({ x: 15, y: 1, z: 0 }, true);
+    let previous = { ...body.translation() },
+      maxStep = 0;
+    for (let i = 0; i < 360 && !e.defeated; i++) {
+      sim.step();
+      const p = body.translation();
+      maxStep = Math.max(
+        maxStep,
+        Math.hypot(p.x - previous.x, p.y - previous.y, p.z - previous.z),
+      );
+      previous = { ...p };
+    }
+    assert.equal(e.slinkyFalling, true);
+    assert.ok(maxStep < 0.15, `bounded physical descent: ${maxStep}`);
+    assert.equal(e.defeated, true);
+    assert.equal(body.isEnabled(), false);
+    assert.equal(sim.players[0].score, 0);
+    sim.tick += 6;
+    sim.nativeCamera.transitions = [[31, 32]];
+    advanceNativeSlinky(sim, e, 1 / 120);
+    sim.tick += 6;
+    sim.nativeCamera.transitions = [[32, 31]];
+    advanceNativeSlinky(sim, e, 1 / 120);
+    assert.equal(e.defeated, false);
+    assert.equal(e.slinkyFalling, false);
+    assert.equal(body.isKinematic(), true);
+    assert.equal(body.isEnabled(), true);
+    assert.ok(Math.abs(body.translation().x - e.def.x) < 0.001);
   } finally {
     sim.dispose();
   }

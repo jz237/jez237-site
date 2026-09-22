@@ -98,10 +98,24 @@ the same geometry used by Rapier.
 Actual patrol/return contacts invoke the recovered slide and retaliation rules
 using incoming marble velocity. They no longer immediately remove the player.
 A capture intent alone has no effect: the target must contact the closing
-body during the capture state. Removal occurs once, and respawn waits until
-the remaining capture sequence has elapsed. Rebound is supplied by physical
+body during the capture state. Contact disables control and collision; the
+captured shell stays at that measured contact position while shrinking inside
+the mouth. The loss is recorded once when the source capture sequence ends,
+then eight solid sectors reform at the saved respawn destination. Rebound is supplied by physical
 shell contacts; the source's direct player-velocity replacement is not applied.
-This adaptation still needs encounter calibration and capture presentation.
+Reassembly currently takes 90 physics ticks and uses new fragment paths; the
+original player reformation program still needs calibration. Capture, release
+and physical bump have separate effects-bus cues. These cues are newly
+synthesized effects, not recovered Amiga samples. The source requests sound
+0x1a at capture (0x1b540), then 0x0f/0x10 and 0x13 at release/reformation
+(0x1b606, 0x14706); exact sample restoration remains open.
+
+If support disappears beneath a slinky or it is displaced over an edge, its
+same body is released to gravity and retired after the native fall distance.
+Camera reentry restores the kinematic patrol. A void sentinel is never used as
+a physical height. Board collider handles are saved explicitly with snapshots:
+classifying restored static terrain by a collider wrapper's parent association
+could otherwise report a false void before the first replayed step.
 
 ## Evidence and acceptance still required
 
@@ -126,12 +140,23 @@ absence of proximity-only removal. All nine native actors also completed
 patrol and shared-mesh checks. These patrol fixtures explicitly load actors
 and disable the player; they are not ordinary camera traversal evidence.
 
+The subsequent capture pass adds unsupported-body fall/reentry and exact
+capture-to-respawn replay checks, plus presentation, delayed single-loss and
+paired sound-key regressions. The full suite passes 322 tests. In a private
+Beginner encounter with a stationary marble beside the route, real contact
+occurs at tick 234, capture at 532, loss/reformation at 672, and respawn at 762.
+The browser inspection shows the marble inside the closing mouth while its
+fall count is still zero, followed by eight reassembling sectors and one loss.
+The pause panel now sits in a corner; phone touch controls hide while paused.
+Desktop and 390-by-844 viewport inspection passed. This is not physical-phone
+performance evidence or original-sample listening verification.
+
 The Beginner encounter fixture imported through the local editor and rendered
 the three green/yellow bodies without browser warnings or errors. A stationary
 player remained racing with no falls during that inspection. This is visual
 and import evidence, not a complete encounter playthrough.
 
-Still required: capture/reassembly animation and effects, original update-rate
+Still required: original reassembly timing, sound samples, update-rate
 and rebound calibration, ordinary approaches on every native board, paired
 encounters, complete editor/replay acceptance and publication. The native
 fixture data and these runtime improvements are not published yet.
