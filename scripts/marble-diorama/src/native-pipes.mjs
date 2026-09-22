@@ -91,12 +91,13 @@ export function validateNativePipes(course) {
   for (const part of course.parts.filter((p) => p.nativePipe !== undefined)) {
     const upper = part.nativePipe === "beginner-upper";
     const lower = part.nativePipe === "beginner-lower";
+    const orange = part.nativePipe === "intermediate-orange";
     const terrain = course.parts.find(
       (p) => p.id === course.nativeCamera?.partId,
     );
     const exitSpeed = 4 * (terrain?.cellSize / 8) * course.nativeCamera?.rate;
     if (
-      (!upper && !lower) ||
+      (!upper && !lower && !orange) ||
       part.kind !== "tube" ||
       !part.flowSpeed ||
       part.motion ||
@@ -106,12 +107,12 @@ export function validateNativePipes(course) {
       !Number.isFinite(exitSpeed) ||
       Math.abs(part.flowSpeed - exitSpeed) > 1e-8 ||
       Math.abs((part.flowExitSpeed ?? part.flowSpeed) - exitSpeed) > 1e-8 ||
-      (upper && part.fork) ||
+      ((upper || orange) && part.fork) ||
       (lower && !part.fork?.merge) ||
       part.nativeTransfer
     )
       throw Error(
-        "Native Beginner pipes need a stationary upper tube or merging lower tube and native dynamics.",
+        "Native pipes need a stationary single tube or merging lower tube and native dynamics.",
       );
   }
 }

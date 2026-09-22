@@ -1,4 +1,4 @@
-# Beginner's recovered pipe passages (mm-37, local)
+# Recovered pipe passages (mm-38, local)
 
 The local native Beginner board now includes its tall blue pipe and the two
 lower entrances joining into one Y-shaped outlet. These are in the actual
@@ -43,8 +43,52 @@ return, floor lookup and sound service; it is not execution of a complete race.
 The clearance helper itself was checked in the earlier Silly transfer audit.
 Original bytes, disassembly and execution fixtures remain outside this repository.
 
-Intermediate's decision helper is recovered here, but its orange physical pipe
-has not yet been added to the native campaign.
+Intermediate's orange pipe is now included in the actual native campaign.
+Its inlet actor 32 is at cell 78,82, height 16320, camera bands 26–47.
+The reference frame at 116 seconds shows the tall shaft, its bend under the
+raised bridge and the separate visible outlet, with a 2000-point award.
+
+An adjacent initializer at track offset 5972 describes type 33 at cell 78,75,
+height 16196. Its handler at `0x17592` uses housing shape 4 below height 16224.
+This is **not evidence of an active second actor**: the preceding initializer
+stops at a zero-count wait, and the actor table references offset 5948, not
+5972. The interpreter does not advance that zero-count wait or allocate a
+second actor for the adjacent initializer. The visible outlet and handler 32's
+destination provide the independent outlet evidence.
+
+## Intermediate's bridge opening
+
+The shaft starts at source (620,644), height 16320, descends, then curves toward
+decreasing source Z. Its horizontal center is height 16205 and its outlet is
+(620,596). The flared orange shell has a 1.20-world-unit throat, 1.65 mouth
+radius and 0.14 wall thickness. These curves and dimensions are authored physical
+adaptations; precise original silhouette and transit timing remain open.
+
+Source cells X 76–78, Z 76–78 form a raised bridge directly across the passage.
+The native terrain now has a bounded tunnel in those nine cells, with floor
+16196 and ceiling 16216. The grid-aligned opening retains the original roof,
+lower solid foundation and side walls. The pipe passes through this real
+opening in the rendered and colliding board; it does not bypass a solid collider.
+
+`terrain-tunnels.mjs` constructs the solid intervals on either side of the
+opening. Adjacent faces split at the same height crossings and omit buried
+walls. Imports reject missing/partial cells, overlapping tunnels, out-of-grid
+bounds, buried floors and collapsed roofs. Terrain sequences validate the roof
+in every frame and compile the same opening into their visible/collision meshes.
+Intermediate's pipe area itself uses static terrain.
+
+The first 1.08-radius shaft was too tight for simultaneous entry: a paired
+encounter exceeded contact-penetration tolerance. Increasing contact stiffness
+or solver iterations could leave both marbles jammed at the mouth. Increasing
+the actual visible/collision throat to 1.20 and lifting the horizontal center
+one source height unit provides clearance. No solver change was retained.
+The two marbles now both exit by tick 420, with zero falls and minimum center
+separation 1.099717 (diameter 1.1), within the 0.0055 contact tolerance.
+
+The full Intermediate mesh gains no open edges. It retains one existing
+four-face vertical edge where two diagonal source islands touch, away from the
+pipe. Dedicated tunnel fixtures verify two-face closed edges, opposite winding,
+floor/ceiling/side ray contacts and exact render/collision positions.
 
 ## Continuous geometry and motion
 
@@ -91,7 +135,16 @@ restored; the existing reward effect is still provisional.
 
 ## Validation and remaining work
 
-The full suite passed **407/407** (282,447 ms). After removing an unused
+The mm-38 full suite passed **412/412** (285,648 ms). The final wider orange
+throat and new simultaneous-entry regression were then checked with the focused
+pipe, terrain and terrain-sequence suites: **33/33** (6,806 ms). The final build
+and diff check pass. The local browser shows the orange inlet, shaft and outlet
+on the actual Intermediate board, including rotated views, with empty
+warning/error logs. These are encounter and visual checks, not a complete
+Intermediate route or a publication. Original cue 28, full routes, actor timing
+and native presentation acceptance remain open.
+
+At the preceding mm-37 milestone, the full suite passed **407/407** (282,447 ms). After removing an unused
 occupancy scan and rejecting reversed Silly imports, the focused pipe,
 Silly-transfer and audio suites passed **39/39**. The final bundle build and
 diff check passed. The full-suite count also includes older reconstruction
@@ -102,6 +155,9 @@ tests; it does not certify native whole-campaign completion.
 - Recovered decision boundaries, occupied exits and movement/contact states.
 - Actual native-board upper/left/right passages with bounded normal steering,
   zero falls, outlet awards, continuous steps below 0.15 and snapshot replay.
+- The native Intermediate orange passage has the same normal-input, zero-fall,
+  continuous-motion and replay checks, including physical transit through its
+  bridge and the 2000-point outlet award.
 - A closed shared Y mesh, physical ray contact against its rounded entry walls,
   correct direction/clearance when merging and generic import branch selection.
 - Inactive camera bands, positions outside the bore and malformed imports.

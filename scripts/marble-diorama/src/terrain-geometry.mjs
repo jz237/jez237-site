@@ -1,3 +1,8 @@
+import {
+  validateTerrainTunnels,
+  terrainTunnelGeometry,
+} from "./terrain-tunnels.mjs";
+
 // A tile retains four independent heights. Neighbours share positions, but a
 // cliff must keep both heights; averaging them would change the playable slope.
 // Null denotes absent terrain, including half tiles along diagonal boundaries.
@@ -41,9 +46,11 @@ export function validateTerrain(p, finite) {
     if (occupied.has(key)) throw Error("Duplicate terrain cell.");
     occupied.add(key);
   }
+  validateTerrainTunnels(p, finite);
 }
 
 export function terrainGeometry(p) {
+  if (p.tunnels?.length) return terrainTunnelGeometry(p);
   const triangles = [],
     edges = new Map(),
     levels = new Map();

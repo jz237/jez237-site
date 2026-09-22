@@ -89,6 +89,33 @@ test("terrain state meshes preserve top faces, cliffs and solid undersides", () 
   }
 });
 
+test("terrain sequences retain a tunnel in every frame and reject a collapsed roof", () => {
+  const c = fixture(),
+    p = c.parts[0];
+  p.tunnels = [{ columns: [2, 4], rows: [2, 4], floor: -5.8, ceiling: -5 }];
+  validateCourse(c);
+  const compiled = compileCourse(c).moving[0];
+  for (const g of compiled.frames) {
+    const floorVertices = Array.from(g.vertices).filter(
+      (_, i) => i % 3 === 1 && Math.abs(g.vertices[i] + 5.8) < 1e-5,
+    );
+    assert.ok(floorVertices.length > 0, "tunnel floor survives each state");
+    assert.ok(
+      Array.from(g.vertices).some((v, i) => i % 3 === 1 && v === -5),
+      "solid ceiling survives each state",
+    );
+  }
+  p.animation.frames[1] = p.animation.frames[1].map(([x, z]) => [
+    x,
+    z,
+    -5.5,
+    -5.5,
+    -5.5,
+    -5.5,
+  ]);
+  assert.throws(() => validateCourse(c), /solid roof/);
+});
+
 test("sequence activation reads both players, retains stopped state and restarts at frame zero", () => {
   const p = fixture().parts[0],
     s = createTerrainSequence(p, 2);
