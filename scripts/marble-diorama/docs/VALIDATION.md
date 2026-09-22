@@ -1521,3 +1521,23 @@ rejection, gravity, terminal speed and snapshot continuation. See AERIAL-PADDLE.
 for the unverified native cadence, source capture/paired response, random-state,
 3D shape and discrete-integration differences. Public courses/mm-35 are unchanged;
 native-board publication and remaining campaign acceptance are still pending.
+
+
+### September 22 — native Aerial peg controller
+
+The optional native three-bed controller restores source selections, 13-frame
+strokes, 0/16/32/48-update waits and activation by either player in region 4/5.
+Independent table interpretation agrees over 12,000 bed observations across
+4,000 updates, including inactive windows/re-entry and random call order.
+Six new tests verify selectors, counters, source collision classification,
+validation, real solid lifting, distant-marble isolation and paired snapshots.
+All 36 peg centers match original terrain support within 0.000001 world unit.
+Ordinary forward input enters region 5 and activates all beds at tick 186,
+with zero falls. Browser raised/flush views show clean caps after the 0.01-unit
+coplanarity correction, with no captured warnings/errors.
+
+**276/276 full suite**, 281323.7794 ms; production build and diff check pass.
+This is local native-board work; public Aerial/mm-35 are unchanged. Original
+sprite grouping conflicts with the earlier four-peg video interpretation;
+full source eruption response, cue variants, RNG and update cadence remain
+open. See AERIAL-PEGS.md. Complete native races/publication remain pending.

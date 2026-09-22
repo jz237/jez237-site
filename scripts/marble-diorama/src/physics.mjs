@@ -1,3 +1,4 @@
+import { createAerialPegs, advanceAerialPegs } from "./aerial-pegs.mjs";
 import {
   createTerrainNavigation,
   advanceTerrainNavigation,
@@ -88,6 +89,7 @@ export class Simulation {
       ? createNativeCamera(course.nativeCamera)
       : null;
     this.aerialHammers = createAerialHammers(course);
+    this.aerialPegs = createAerialPegs(course, this.options.seed);
     this.aerialVacuums = createAerialVacuums(course);
     this.aerialPaddle = createAerialPaddle(course, this.options.seed);
     this.nativeVacuumPoses = aerialVacuumPoses(course, this.aerialVacuums);
@@ -305,6 +307,12 @@ export class Simulation {
       this.tick * STEP * this.preset.machineSpeed,
       this.nativeCamera,
     );
+    const pegPoses = advanceAerialPegs(
+      this.course,
+      this.aerialPegs,
+      terrainPlayers,
+      this.tick * STEP * this.preset.machineSpeed,
+    );
     const hammerPoses = advanceAerialHammers(
       this.course,
       this.aerialHammers,
@@ -384,6 +392,7 @@ export class Simulation {
         machineTime,
         terrainPoses[m.part.sourcePartId] ??
           hammerPoses[m.part.id] ??
+          pegPoses[m.part.id] ??
           this.nativeVacuumPoses[m.part.id] ??
           (m.part.id === this.course.paddleSequence?.part
             ? paddle?.pose
@@ -924,6 +933,7 @@ export class Simulation {
       terrainAnimations: structuredClone(this.terrainAnimations),
       nativeCamera: structuredClone(this.nativeCamera),
       aerialHammers: structuredClone(this.aerialHammers),
+      aerialPegs: structuredClone(this.aerialPegs),
       aerialVacuums: structuredClone(this.aerialVacuums),
       aerialPaddle: structuredClone(this.aerialPaddle),
       enemies: structuredClone(this.enemies),
@@ -948,6 +958,9 @@ export class Simulation {
     this.enemies = structuredClone(s.enemies ?? []);
     this.aerialHammers = structuredClone(
       s.aerialHammers ?? createAerialHammers(this.course),
+    );
+    this.aerialPegs = structuredClone(
+      s.aerialPegs ?? createAerialPegs(this.course, this.options.seed),
     );
     this.aerialVacuums = structuredClone(
       s.aerialVacuums ?? createAerialVacuums(this.course),

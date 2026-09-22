@@ -28,6 +28,13 @@ cup contact; its source-directed spring impulse preserves the marble's position.
 Cadence, capture/paired behavior, global random state and other limits remain
 open. See [AERIAL-PADDLE.md](AERIAL-PADDLE.md). Public Aerial is unchanged.
 
+The local peg follow-up recovers the separate three-bed selector, four group
+animation tables, 13-update strokes, 0/16/32/48-update waits and region-4/5
+activation. Independent table traces match 12,000 bed observations. Original
+sprite grouping versus the three selected collision cells, eruption response,
+random-state/cadence and sound assignment remain open. See [AERIAL-PEGS.md](AERIAL-PEGS.md).
+The published video-based selector remains unchanged until native-board release.
+
 Video timestamps below refer to the existing local copy. Frame sequences were
 inspected, including 100.00–102.28s at 0.12s intervals, 238.00–239.32s at 0.12s,
 165.00–169.56s at 0.24s, and 277.0–283.0s at 0.4s. Private reference images are
