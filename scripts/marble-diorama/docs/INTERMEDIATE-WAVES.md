@@ -166,3 +166,82 @@ collider velocity transfer and calibrated scale remain required. Rendering
 and physical deformation must share the chosen interpolation. The current
 published `wave.mjs` strip and mm-35 behavior are unchanged; do not call these
 checks full moving-wave or Intermediate parity.
+
+## Native moving terrain integration
+
+`animated-terrain.mjs` now connects those states to CourseDefinition terrain,
+Rapier kinematic colliders, the live renderer and simulation snapshots. An
+optional `animation` object on a terrain part has these fields:
+
+```js
+{
+  type: "intermediate-wave",
+  column: 0, row: 0,       // upper-left changing vertex in the part's cell grid
+  base: 0, scale: 0.1375,  // resting lane height and height-unit scale
+  rate: 20,               // native updates/second; this value is provisional
+  initialRegions: [9, 9],
+  gates: [{axis: "z", constant: 3, start: 0, end: 4, low: 8, high: 9}]
+}
+```
+
+The cells must contain the wave's resting corner heights and null pattern.
+The validator checks the supported animation, finite/bounded scale and rate,
+region data, a nonempty affected footprint, and agreement with those resting
+corners. Gates use part-local tile coordinates. Moving or rotating the parent
+terrain keeps geometry and region queries in the same coordinate frame.
+
+### Geometry and physical motion
+
+Every offset in this original wave is nonnegative, so the solid resting board
+can remain one welded static mesh. Only raised faces enable their additional
+moving colliders. This avoids an internal-edge problem found in the first
+implementation: separate resting triangle colliders produced a 0.0143-unit
+contact error. Coplanar columns across each central lane row also share one
+moving panel. At the edge connections, distinct source planes remain separate
+triangular prisms; they are never flattened or averaged.
+
+Each raised face's centroid and normal define a kinematic body pose. Its local
+convex hull is rebuilt from the same corner positions used by the renderer;
+bottom vertices remain on the fixed board footprint and base. Stationary faces
+reuse their previous shape. Resting moving colliders are disabled individually,
+while their bodies continue to update, avoiding stale transforms at reactivation.
+
+The controller advances at the authored native rate on the fixed simulation
+clock. It linearly interpolates each corner between consecutive native terrain
+writes, including the original slow-startup reset intervals. The renderer then
+interpolates world corner heights between physics steps and recomputes the
+face pose. Interpolating local hulls and rotations independently would separate
+neighboring corners. Both graph/side textures use world coordinates.
+
+Original region gates apply when the previous tile was in a gate span and the
+current tile is outside it. The first applicable gate wins, including when it
+keeps the same region. No broad swept crossing is invented. Either active
+player in region 9 or 10 enables new waves. Controller counters, regions,
+previous/current corner states and interpolation phase are included in snapshots.
+
+### Verification and remaining work
+
+Eight focused checks pass (682.04 ms), including every frame's transformed
+corners and fixed underside, region ordering, physical marble lifting, snapshot
+restoration, validated imports, world-corner render interpolation and identical
+physical outcomes at 30/60/120 rendering fps. A marble crosses the resting lane
+with zero falls and maximum settled contact error **0.0008961 units**, below
+1% of its radius. **2,184** probes against moving collider tops agree with the
+visible face planes to within **0.00011993 units**, below 0.1% of radius.
+
+A private full native Intermediate fixture contains 2,094 resting cells and
+83 generated moving faces, with at most 40 raised faces during measured runs.
+It starts at the wave entrance and places a test finish near the wave exit;
+it is not a reconstruction of original race starts, finish or all actors.
+Normal steering completes that section in **6.2917s** solo and
+**6.4833s/6.4500s** for two players, all with zero falls. The local browser demo
+matches the solo result, and replay seeking to tick 300 shows the traveling
+crest and recorded marble with no captured warnings/errors.
+
+The private fixture uses provisional scale 0.1375 and rate 20. These values,
+the shared corner interpolation and difficulty scaling still need comparison
+against original playback. Native finish/respawn/catch-up regions, occupancy
+of the original shared actor pool, all other actors and rounded terrain edges
+remain unfinished. The public campaign continues using its existing authored
+wave strip. This integration is available to imported local terrain definitions;
+it is not a claim of complete Intermediate parity or a new published campaign.

@@ -175,3 +175,10 @@ textured walls, grid and wood platform without captured warnings/errors.
 Silhouette rounding, scale calibration and moving-surface integration remain
 required. No campaign geometry or physics version changes in this compiler
 checkpoint. The decoded original resource files remain outside the site.
+
+The subsequent [native wave integration](INTERMEDIATE-WAVES.md#native-moving-terrain-integration)
+adds optional `animation` metadata on terrain parts. It retains the solid
+resting board, derives raised kinematic faces from original corner states and
+shares them with rendering. Direct generic `motion` on a terrain part is still
+rejected. The existing six public campaign definitions have not been switched
+to recovered terrain by these compiler/integration checkpoints.

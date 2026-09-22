@@ -8,11 +8,11 @@ export function surfaceGeometry(compiled) {
   const source = new BufferGeometry();
   source.setAttribute("position", new BufferAttribute(compiled.vertices, 3));
   source.setIndex(new BufferAttribute(compiled.indices, 1));
-  const geometry =
-    compiled.part?.motion?.axis === "wave"
-      ? source.toNonIndexed()
-      : toCreasedNormals(source, Math.PI / 5);
-  if (compiled.part?.motion?.axis === "wave") geometry.computeVertexNormals();
+  const geometry = ["wave", "terrain"].includes(compiled.part?.motion?.axis)
+    ? source.toNonIndexed()
+    : toCreasedNormals(source, Math.PI / 5);
+  if (["wave", "terrain"].includes(compiled.part?.motion?.axis))
+    geometry.computeVertexNormals();
   source.dispose();
 
   const order = new Uint32Array(compiled.indices.length);

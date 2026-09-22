@@ -17,6 +17,15 @@ import {
 } from "./surface-geometry.mjs";
 import { wavePose, WAVE_INDICES, WAVE_ROLES } from "./wave.mjs";
 import { terrainGeometry, validateTerrain } from "./terrain-geometry.mjs";
+import {
+  validateAnimatedTerrain,
+  expandAnimatedTerrain,
+  terrainTrianglePose,
+  TERRAIN_TRIANGLE_INDICES,
+  TERRAIN_TRIANGLE_ROLES,
+  TERRAIN_QUAD_INDICES,
+  TERRAIN_QUAD_ROLES,
+} from "./animated-terrain.mjs";
 // CourseDefinition v1 is the only source of visible and physical track surfaces.
 export const COURSE_SCHEMA = 1;
 export const SURFACES = {
@@ -296,6 +305,7 @@ export function validateCourse(c) {
     else if (p.kind === "pyramid") estimatedVertices += 9;
     else if (!["ribbon", "tube"].includes(p.kind))
       estimatedVertices += (Math.ceil(p.w * 2) + 1) * (Math.ceil(p.d * 2) + 1);
+    validateAnimatedTerrain(p, finite);
     if (estimatedVertices > 150000)
       throw Error(
         "Course geometry exceeds the 150,000-vertex authoring limit.",
@@ -668,6 +678,18 @@ export const point = (x, y, z) => ({ x, y, z });
 // Generate top, side, underside and optional bevel triangles once. Rendering uses
 // these exact arrays; Rapier uses the same arrays with internal-edge correction.
 export function partGeometry(p) {
+  if (p.motion?.axis === "terrain")
+    return {
+      vertices: terrainTrianglePose(p).vertices,
+      indices:
+        p.terrainTriangle.length === 4
+          ? TERRAIN_QUAD_INDICES
+          : TERRAIN_TRIANGLE_INDICES,
+      roles:
+        p.terrainTriangle.length === 4
+          ? TERRAIN_QUAD_ROLES
+          : TERRAIN_TRIANGLE_ROLES,
+    };
   if (p.profile === "peg") return pegGeometry(p);
   if (p.profile === "flipper") return flipperGeometry(p);
   if (p.profile === "vacuum-mouth") return vacuumGeometry(p);
@@ -785,7 +807,7 @@ export function compileCourse(c) {
   validateCourse(c);
   const staticGroups = new Map(),
     moving = [];
-  const parts = joinedBoardParts(c.parts);
+  const parts = joinedBoardParts(expandAnimatedTerrain(c.parts));
   for (const p of parts) {
     const geom = partGeometry(p);
     if (p.motion) {
@@ -857,7 +879,9 @@ export function compileCourse(c) {
   });
   return { definition: c, parts, statics, moving };
 }
-export function motionAt(p, time) {
+export function motionAt(p, time, terrainRows, previous) {
+  if (p.motion?.axis === "terrain")
+    return terrainTrianglePose(p, terrainRows, previous);
   if (p.profile === "vacuum-mouth" && p.presence?.transition)
     return vacuumPoseAt(p, time);
   if (p.motion?.axis === "launch") {
