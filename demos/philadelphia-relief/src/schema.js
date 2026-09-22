@@ -1,5 +1,5 @@
-import { WEATHERS } from './solar.js?v=philly-2026090907';
-import { ERA_IDS } from './eras.js?v=philly-2026090907';
+import { WEATHERS } from './solar.js?v=philly-2026092121';
+import { ERA_IDS } from './eras.js?v=philly-2026092121';
 /**
  * Single source of truth for every tunable in the map.
  *
@@ -25,6 +25,17 @@ const CONTOUR_INTERVALS = [10, 20, 25, 50, 100];
  * unique and stable — changing one invalidates existing shared links.
  */
 export const CONTROLS = {
+  lightweight: {
+    k: 'lg', kind: 'enum', values: [0, 1], def: 0, group: 'scene', label: 'Lighter graphics',
+    hint: 'For older computers: simpler rendering without decorative tree crowns, bloom or photographic 3D. '
+      + 'Real elevation, sharp aerial imagery and all map overlays remain available.',
+  },
+  photoMode: {
+    k: 'pm', kind: 'enum', values: ['auto', 'relief', 'photo'], def: 'auto',
+    group: 'scene', label: 'Close-up rendering',
+    hint: 'Automatic keeps the miniature at regional scale and streams photographic 3D when close. '
+      + 'Historical views, contours and flood layers use the relief map. Photography has captured lighting.',
+  },
   diorama: {
     k: 'dm', kind: 'enum', values: [1, 0], def: 1, group: 'scene', label: 'Diorama presentation',
     hint: 'A cutaway landscape with illustrative woodland crowns and enlarged relief at regional scale. '
@@ -89,10 +100,6 @@ export const CONTROLS = {
   labelDensity: {
     k: 'ld', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.28,
     group: 'carto', label: 'Label density',
-  },
-  roadOpacity: {
-    k: 'ro', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.65,
-    group: 'carto', label: 'Road opacity',
   },
   boundaryOpacity: {
     k: 'bo', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.15,
@@ -198,7 +205,6 @@ export const LAYERS = {
   contours: { k: 'Lc', def: false, label: 'Contours' },
   water: { k: 'Lw', def: false, label: 'Waterways' },
   parks: { k: 'Lp', def: false, label: 'Parks & preserves' },
-  roads: { k: 'Lr', def: true, label: 'Roads & local streets' },
   rail: { k: 'Ll', def: false, label: 'Rail' },
   boundaries: { k: 'Lb', def: false, label: 'County / municipal lines' },
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
@@ -316,10 +322,10 @@ export function coercePatch(patch) {
 /** Keys whose change only needs a uniform update, not a geometry rebuild. */
 export const CHEAP_KEYS = new Set([
   'sunAzimuth', 'sunAltitude', 'keyLight', 'ambient', 'fogDensity', 'glow',
-  'waterIntensity', 'contourStrength', 'contourInterval', 'roadOpacity',
+  'waterIntensity', 'contourStrength', 'contourInterval',
   'boundaryOpacity', 'theme', 'camLon', 'camLat', 'camDist', 'camBearing',
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
   'timeMode', 'dayOfYear', 'clockHour', 'weather', 'era',
-  'imageryDetail', 'compareMode', 'comparePosition',
+  'imageryDetail', 'compareMode', 'comparePosition', 'photoMode',
 ]);
