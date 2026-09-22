@@ -10,7 +10,7 @@ import { CAMPAIGN_ORDER, COURSE_TIME, amigaCourseRules } from "./rules.mjs";
 const boards = [practice, beginner, intermediate, aerial, silly, ultimate];
 const descriptions = [
   "Training slopes, moving steps and banked downhill bends.",
-  "Split towers, black marbles and curling slinkies.",
+  "Split towers, black marbles, curling slinkies and three blue pipe passages.",
   "Acid patrols, split paths and a traveling wave.",
   "Crossed rails, hammers, vacuums, retracting pegs and a hinged paddle.",
   "An uphill race through miniatures, the red transfer and purple birds.",

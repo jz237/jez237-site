@@ -44,6 +44,7 @@ export function tubeCurve(p) {
 }
 
 export function tubeRadiusAt(p, distance, length) {
+  if (p.reverseFlow) distance = length - distance;
   const profile = p.outletProfile;
   // The circular airflow/scoring envelope remains inside a shaped opening.
   const radius =

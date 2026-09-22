@@ -22,7 +22,7 @@ new source verification of each mechanism.
 | Board | Integrated mechanisms | Still missing or unverified |
 |---|---|---|
 | Practice | Changing training steps, original navigation and finish flags | Training rails, numbered landing awards, alternate routes |
-| Beginner | Changing terrain, two steelies, three slinkies, finish flags | Three pipes and their complete transit/bonus behavior; full routes |
+| Beginner | Changing terrain, two steelies, three slinkies, finish flags; [upper pipe and joined lower passages](NATIVE-PIPES.md) | Full routes; pipe timing, repeat awards, creature handling and original sound |
 | Intermediate | Traveling wave, slinkies, acid patrols, finish flags | Orange pipe; full routes and encounters |
 | Aerial | Steelie, four hammers, six vacuums, three peg banks, paddle, finish flags | Full route, capture/launch calibration and encounter acceptance |
 | Silly | Uphill response, nine miniatures, ten birds, red transfer, finish flags | Transit duration/exit calibration, full routes, complete scoring |
@@ -84,7 +84,9 @@ existing cyan palette. The final bundle build and `git diff --check` passed.
 The full suite includes legacy reconstruction tests as well as the new native
 tests; its total is not a full-campaign parity claim.
 
-- Complete missing pipes, launchers and Practice objects before publication.
+- Complete Intermediate's missing pipe, Ultimate launchers and Practice objects
+  before publication. Beginner's passages are integrated in mm-37; their remaining
+  source calibration is detailed in NATIVE-PIPES.md.
 - Test every course and alternate route with bounded controls, timed and paired.
 - Correct native terrain presentation: the integrated overview still shows
   pointed outer foundations and insufficiently rounded silhouettes; title framing
