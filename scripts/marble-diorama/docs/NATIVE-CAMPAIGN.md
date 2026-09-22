@@ -23,10 +23,10 @@ new source verification of each mechanism.
 |---|---|---|
 | Practice | Changing training steps, original navigation and finish flags | Training rails, numbered landing awards, alternate routes |
 | Beginner | Changing terrain, two steelies, three slinkies, finish flags; [upper pipe and joined lower passages](NATIVE-PIPES.md) | Full routes; pipe timing, repeat awards, creature handling and original sound |
-| Intermediate | Traveling wave, slinkies, acid patrols, finish flags | Orange pipe; full routes and encounters |
+| Intermediate | Traveling wave, slinkies, acid patrols, finish flags; [orange pipe and bridge tunnel](NATIVE-PIPES.md) | Full routes, encounter timing and original sound |
 | Aerial | Steelie, four hammers, six vacuums, three peg banks, paddle, finish flags | Full route, capture/launch calibration and encounter acceptance |
 | Silly | Uphill response, nine miniatures, ten birds, red transfer, finish flags | Transit duration/exit calibration, full routes, complete scoring |
-| Ultimate | Changing terrain, steelie, four slinkies, acid patrols, finish flags | Launchers and full routes |
+| Ultimate | Changing terrain, steelie, four slinkies, acid patrols, finish flags | [Gold transfer and static housings](NATIVE-GOLD-TRANSFER.md), full routes |
 
 Factories supply canonical IDs, category, course numbers, color palettes,
 music cues, original difficulty clocks and finish rules. All six use native
@@ -84,7 +84,10 @@ existing cyan palette. The final bundle build and `git diff --check` passed.
 The full suite includes legacy reconstruction tests as well as the new native
 tests; its total is not a full-campaign parity claim.
 
-- Complete Ultimate launchers and Practice objects before publication.
+- Complete Ultimate's gold transfer and Practice objects before publication.
+  Source verification identifies the gold objects as a transfer system, not
+  hinged launchers; see NATIVE-GOLD-TRANSFER.md for the recovered choice law
+  and the still-missing physical implementation.
   Beginner's passages are integrated in mm-37; Intermediate's orange pipe and
   real bridge tunnel are integrated in mm-38. Their remaining source calibration
   and limited encounter coverage are detailed in NATIVE-PIPES.md.
