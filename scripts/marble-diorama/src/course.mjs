@@ -1,5 +1,6 @@
 import { compileTerrainSequence } from "./terrain-sequence.mjs";
 import { validateTerrainNavigation } from "./terrain-navigation.mjs";
+import { validateNativeCamera } from "./native-camera.mjs";
 import { vacuumPoseAt } from "./vacuum.mjs";
 import { presenceAt } from "./mechanism-time.mjs";
 export { presenceAt };
@@ -667,6 +668,7 @@ export function validateCourse(c) {
       throw Error("Invalid bird flight.");
   }
   validateTerrainNavigation(c);
+  validateNativeCamera(c, finite);
   return c;
 }
 export const part = (id, x, z, w, d, y = 0, extra = {}) => ({
