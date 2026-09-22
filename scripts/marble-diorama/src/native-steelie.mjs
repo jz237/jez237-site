@@ -4,6 +4,9 @@ export const STEELIE_PATROL = 0x20;
 export const STEELIE_CHASE = 0x21;
 export const STEELIE_ROUTE = 0x22;
 export const STEELIE_RETURN = 0x23;
+export const STEELIE_IMPACT = 0x24;
+export const STEELIE_BREAK_UPDATES = 64;
+export const STEELIE_SPLIT_UPDATE = 18;
 const fixed = (v) => Math.floor(v * 65536);
 const cell = (v) => Math.floor(v / 8);
 const metric = (x, z) => Math.max(x, z) + 3 * Math.floor(Math.min(x, z) / 8);
@@ -59,7 +62,33 @@ export function createSteelieState() {
     pendingLoad: false,
     pendingUnload: false,
     bump: false,
+    impactDamage: 0,
+    breaking: false,
+    breakUpdates: 0,
   };
+}
+
+// 0x152d2–0x15300: landing severity is twice the absolute change from the
+// last supported height, in 16.16 source units. It is not planar impact speed.
+export function steelieLandingSeverity(previousHeight, floorHeight) {
+  const difference = Math.abs(fixed(previousHeight) - fixed(floorHeight));
+  return (Math.floor(difference / 32768) << 16) >> 16;
+}
+
+// 0x14884 / 0x14a34: signed-byte accumulation, strict >80 or single >31.
+// The source's break initializer replaces this byte with its animation phase 2.
+export function applySteelieLanding(state, severity) {
+  if (state.breaking || !state.loaded) return false;
+  const damage = (((state.impactDamage ?? 0) + severity) << 24) >> 24;
+  state.mode = STEELIE_IMPACT;
+  state.impactDamage = damage;
+  if (damage <= 80 && severity <= 31) return false;
+  state.breaking = true;
+  state.mode = 2;
+  state.breakUpdates = 0;
+  state.impactDamage = 2;
+  state.velocity = { x: 0, z: 0 };
+  return true;
 }
 
 // The steering update is followed by the original five-unit planar limit
@@ -117,6 +146,12 @@ function returnToRoute(config, s, position) {
 // Source 0x195f4, 0x19cd8–0x1a134 and 0x13122. Coordinates and desired
 // velocity are in original world units. Rapier owns actual integration.
 export function stepSteelieController(config, s, position, players) {
+  if (s.breaking) {
+    if (s.cooldown > 0) s.cooldown--;
+    s.breakUpdates++;
+    if (s.breakUpdates >= STEELIE_BREAK_UPDATES) s.loaded = false;
+    return s;
+  }
   if (s.bump) {
     if (s.cooldown === -1) s.cooldown = 150;
     returnToRoute(config, s, position);
@@ -128,6 +163,13 @@ export function stepSteelieController(config, s, position, players) {
     [STEELIE_CHASE, STEELIE_ROUTE].includes(s.mode)
   )
     returnToRoute(config, s, position);
+  // 0x19638: decrement only in landing state 0x24. The subsequent route AI
+  // runs normally and can replace that state in the same update; damage does
+  // not decay continuously in patrol/chase modes.
+  if (s.mode === STEELIE_IMPACT) {
+    if (s.impactDamage) s.impactDamage = ((s.impactDamage - 1) << 24) >> 24;
+    if (!s.impactDamage) returnToRoute(config, s, position);
+  }
   const n = config.nodes[s.node];
   let reached = cell(position.x) === n[0] && cell(position.z) === n[1];
   if (reached && s.mode === STEELIE_RETURN) s.mode = STEELIE_PATROL;

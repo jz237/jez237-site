@@ -4,7 +4,11 @@ import {
   advanceSteelieController,
   steelieVelocityStep,
   steelieGroundDragStep,
+  steelieLandingSeverity,
+  applySteelieLanding,
+  STEELIE_SPLIT_UPDATE,
 } from "./native-steelie.mjs";
+import { landingContact } from "./landing-contact.mjs";
 
 const boardTops = new WeakMap();
 const meshExtents = new WeakMap();
@@ -102,6 +106,43 @@ export function awardNativeSteelieDefeat(sim, e) {
   }
 }
 
+export function updateNativeSteelieLanding(sim, e) {
+  if (!e.nativeSteelie || e.hidden || e.defeated) return;
+  const body = sim.world.getRigidBody(e.handle);
+  const contact = landingContact(sim, e, body.linvel(), e.def.radius);
+  const floor = body.translation().y - e.def.radius;
+  if (!contact.supported) {
+    e.steelieAirborne = true;
+    return;
+  }
+  if (e.steelieAirborne) {
+    const scale = sim.course.nativeCamera.heightScale;
+    // Quantize solver contact noise to the source height grid. The actual
+    // sphere remains at its solved position; this is only damage measurement.
+    const sourceHeight = (y) => Math.round((y / scale) * 256) / 256;
+    const severity = steelieLandingSeverity(
+      sourceHeight(e.steelieSupportY),
+      sourceHeight(floor),
+    );
+    if (applySteelieLanding(e.nativeSteelie, severity)) {
+      e.defeated = true;
+      e.hidden = true;
+      e.steelieShatter = {
+        tick: sim.tick,
+        sourceTick: e.nativeSteelie.tick,
+        origin: { ...body.translation() },
+        rotation: { ...body.rotation() },
+        radius: e.def.radius,
+      };
+      body.setEnabled(false);
+      awardNativeSteelieDefeat(sim, e);
+      sim.events.push({ type: "steelie-shatter", enemy: e.def.id, severity });
+    }
+  }
+  e.steelieAirborne = false;
+  e.steelieSupportY = floor;
+}
+
 export function advanceNativeSteelie(sim, e, grounded, dt) {
   const camera = sim.course.nativeCamera;
   const terrain = sim.course.parts.find((p) => p.id === camera.partId);
@@ -121,6 +162,7 @@ export function advanceNativeSteelie(sim, e, grounded, dt) {
     motionState: p.grounded ? 0 : 2,
     animationState: 0,
   }));
+  const previousBreakUpdates = e.nativeSteelie.breakUpdates;
   const spawned = advanceSteelieController(
     e.def.nativeSteelie,
     e.nativeSteelie,
@@ -139,11 +181,22 @@ export function advanceNativeSteelie(sim, e, grounded, dt) {
     e.supportedY = e.def.y;
     e.lastContactPlayer = undefined;
     e.steelieTouch = false;
+    e.steelieSupportY = e.def.y - e.def.radius;
+    e.steelieAirborne = false;
+    e.steelieShatter = null;
     e.previous = e.current = {
       position: { ...body.translation() },
       rotation: { ...body.rotation() },
     };
   }
+  if (
+    !spawned &&
+    e.nativeSteelie.loaded &&
+    e.nativeSteelie.breaking &&
+    previousBreakUpdates < STEELIE_SPLIT_UPDATE &&
+    e.nativeSteelie.breakUpdates >= STEELIE_SPLIT_UPDATE
+  )
+    sim.events.push({ type: "steelie-shatter-split", enemy: e.def.id });
   e.hidden = !e.nativeSteelie.loaded || !!e.defeated;
   body.setEnabled(!e.hidden);
   return spawned;

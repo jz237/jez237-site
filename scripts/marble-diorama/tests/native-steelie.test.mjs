@@ -8,6 +8,8 @@ import {
   steelieNeighbor,
   steelieVelocityStep,
   steelieGroundDragStep,
+  steelieLandingSeverity,
+  applySteelieLanding,
 } from "../src/native-steelie.mjs";
 import { proofCourse, validateCourse } from "../src/course.mjs";
 import { initPhysics, Simulation } from "../src/physics.mjs";
@@ -36,6 +38,42 @@ const player = (x, z, other = {}) => ({
   motionState: 0,
   animationState: 0,
   ...other,
+});
+
+test("steelie landing damage uses source height, strict break thresholds and the source landing-state decrement", () => {
+  assert.equal(steelieLandingSeverity(16, 0), 32);
+  assert.equal(steelieLandingSeverity(15.999, 0), 31);
+  assert.equal(steelieLandingSeverity(-1.25, 2.25), 7);
+  const s = createSteelieState();
+  s.loaded = true;
+  assert.equal(applySteelieLanding(s, 30), false);
+  assert.equal(s.mode, 0x24);
+  stepSteelieController(config(), s, position(), []);
+  assert.equal(s.impactDamage, 29);
+  for (let i = 0; i < 30; i++)
+    stepSteelieController(config(), s, position(), []);
+  assert.equal(
+    s.impactDamage,
+    29,
+    "patrol does not keep decaying the landing byte",
+  );
+  s.impactDamage = 50;
+  assert.equal(applySteelieLanding(s, 30), false);
+  assert.equal(s.impactDamage, 80);
+  assert.equal(applySteelieLanding(s, 1), true);
+  assert.equal(s.breaking, true);
+  assert.equal(s.mode,2);
+  s.cooldown=100;
+  assert.equal(s.impactDamage, 2, "break animation owns the reused phase byte");
+  for (let i = 0; i < 63; i++)
+    stepSteelieController(config(), s, position(), []);
+  assert.equal(s.loaded, true);
+  stepSteelieController(config(), s, position(), []);
+  assert.equal(s.loaded, false);
+  assert.equal(s.cooldown,36);
+  const hard = createSteelieState();
+  hard.loaded = true;
+  assert.equal(applySteelieLanding(hard, 32), true);
 });
 
 test("steelie patrol uses the first graph link, and route pursuit uses the source distance and tie order", () => {
@@ -266,6 +304,107 @@ function fixture() {
   ];
   return c;
 }
+
+function dropFixture(height) {
+  const c = fixture();
+  c.parts[0].cells.forEach((cell) => {
+    if (cell[0] < 12) cell.fill(height, 2);
+  });
+  c.enemies[0].y += height;
+  c.starts.forEach((p) => (p.y += height));
+  return c;
+}
+
+test("a native guard physically rolling off a high ledge breaks once, rewards eligible players and replays the fragment clock", () => {
+  const sim = new Simulation(dropFixture(3), { untimed: true, players: 2 });
+  try {
+    sim.players[1].status = "timeout";
+    sim.body(sim.players[1]).setEnabled(false);
+    const e = sim.enemies[0],
+      events = [];
+    for (let i = 0; i < 1200 && !e.steelieShatter; i++) {
+      sim.step();
+      events.push(...sim.events);
+    }
+    assert.ok(e.steelieShatter, "unforced patrol reaches a real hard landing");
+    assert.equal(sim.players[0].score, 1000);
+    assert.equal(sim.players[1].score, 0);
+    assert.equal(events.filter((e) => e.type === "steelie-shatter").length, 1);
+    assert.ok(events.find((e) => e.type === "steelie-shatter").severity > 31);
+    assert.equal(sim.world.getRigidBody(e.handle).isEnabled(), false);
+    const captureTick = sim.tick;
+    for (let i = 0; i < 45; i++) sim.step();
+    const saved = sim.snapshot();
+    const run = () => {
+      const events = [];
+      for (let i = 0; i < 420; i++) {
+        sim.step();
+        events.push(...sim.events.map((e) => ({ tick: sim.tick, ...e })));
+      }
+      return {
+        guard: structuredClone(sim.enemies[0]),
+        scores: sim.players.map((p) => p.score),
+        events,
+      };
+    };
+    const first = run();
+    sim.restore(saved);
+    const second = run();
+    assert.deepEqual(second, first);
+    const splits = first.events.filter(
+      (e) => e.type === "steelie-shatter-split",
+    );
+    assert.equal(splits.length, 1);
+    assert.ok(
+      splits[0].tick - captureTick >= 103 &&
+        splits[0].tick - captureTick <= 108,
+    );
+    assert.equal(first.guard.nativeSteelie.loaded, false);
+    assert.deepEqual(first.scores, [1000, 0]);
+    assert.equal(
+      first.events.filter((e) => e.type === "steelie-defeat").length,
+      0,
+    );
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("gentle native drops and ordinary rolling do not trigger a guard break", () => {
+  const sim = new Simulation(dropFixture(1), { untimed: true });
+  try {
+    const e = sim.enemies[0];
+    for (let i = 0; i < 330; i++) sim.step();
+    assert.ok(e.nativeSteelie.impactDamage > 0, "the actual drop was measured");
+    assert.equal(e.nativeSteelie.breaking, false);
+    assert.equal(sim.players[0].score, 0);
+    assert.equal(e.steelieShatter, null);
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("camera departure hides a broken guard and reentry clears its old fragments and damage", () => {
+  const sim = new Simulation(dropFixture(3), { untimed: true });
+  try {
+    for (let i = 0; i < 1200 && !sim.enemies[0].steelieShatter; i++) sim.step();
+    assert.ok(sim.enemies[0].steelieShatter);
+    sim.nativeCamera.initialTransition = [31, 32];
+    for (let i = 0; i < 6; i++) sim.step();
+    assert.equal(sim.enemies[0].nativeSteelie.loaded, false);
+    sim.nativeCamera.initialTransition = [32, 31];
+    for (let i = 0; i < 6; i++) sim.step();
+    const e = sim.enemies[0];
+    assert.equal(e.nativeSteelie.loaded, true);
+    assert.equal(e.steelieShatter, null);
+    assert.equal(e.nativeSteelie.impactDamage, 0);
+    assert.equal(e.nativeSteelie.breaking, false);
+    assert.equal(e.defeated, false);
+    assert.equal(sim.players[0].score, 1000);
+  } finally {
+    sim.dispose();
+  }
+});
 
 test("native routes reject malformed graph edges, invalid bands, missing coordinates and wrong enemy types", () => {
   validateCourse(fixture());
