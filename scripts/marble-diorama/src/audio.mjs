@@ -288,9 +288,12 @@ export class AudioEngine {
       return this.effect("fall", { key: `fall:${event.player}` });
     }
     if (
-      ["landing-bonus", "steelie-defeat", "traversal-bonus"].includes(
-        event.type,
-      )
+      [
+        "landing-bonus",
+        "landing-claim",
+        "steelie-defeat",
+        "traversal-bonus",
+      ].includes(event.type)
     )
       return this.effect("collect", { key: `${event.type}:${event.player}` });
     if (event.type === "collect" && event.miniatureForm) {

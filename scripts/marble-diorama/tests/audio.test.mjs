@@ -429,9 +429,11 @@ test("landing awards use the effects bus with separate player throttles", async 
   audio.effect = (name, options) => calls.push({ name, ...options });
   audio.event({ type: "landing-bonus", player: 0, score: 4500 });
   audio.event({ type: "landing-bonus", player: 1, score: 4500 });
+  audio.event({ type: "landing-claim", player: 0, score: 0 });
   assert.deepEqual(calls, [
     { name: "collect", key: "landing-bonus:0" },
     { name: "collect", key: "landing-bonus:1" },
+    { name: "collect", key: "landing-claim:0" },
   ]);
 });
 

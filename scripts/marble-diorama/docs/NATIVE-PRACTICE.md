@@ -1,9 +1,10 @@
-# Native Practice training objects (mm-40, local)
+# Native Practice training objects (mm-41, local)
 
 The recovered Practice board now includes ten red physical rails. Eight frame
 the upper training pits and two guard the lower approach. They were absent
 from the native board, although the older reconstruction had different rails.
-The numbered landing shelves remain unfinished in the native campaign.
+The three landing shelves now use source-coordinate reward bands and physical
+landing detection. Full-start alternate shelf routes remain unverified.
 
 ## Original rail evidence
 
@@ -55,7 +56,7 @@ make a visible nearby rail intangible.
 
 ## Validation and limits
 
-Full regression: **427/427** passed in 287,379 ms. The bundle builds successfully;
+Full regression: **433/433** passed in 322,416 ms. The bundle builds successfully;
 browser warning/error logs are empty. The full suite includes tests of older
 reconstructions and does not prove complete native-campaign parity.
 
@@ -74,12 +75,10 @@ reconstructions and does not prove complete native-campaign parity.
 - Exact original sound 34 is not yet restored. Current contacts use the remake's
   measured-impact audio. Rebound calibration, top/below-rail behavior and paired
   rail encounters still need acceptance against original gameplay.
-- The native numbered shelves, source landing-region mapping and full alternate
-  routes remain to be implemented and tested. PRACTICE-SCORING.md describes
-  previous work on the older reconstruction; its route checks do not validate
-  these newly integrated boards.
+- PRACTICE-SCORING.md describes previous work on the older reconstruction;
+  its route checks do not validate these newly integrated boards.
 
-## Next: native landing awards
+## Native landing awards
 
 A separate private harness now executes the original landing branch from
 `0x1534c` to `0x155d2`. All 2,079 checked cases agree on course/region gates,
@@ -94,9 +93,39 @@ not pay. Region 1 uses integer Z minus 488, region 2 uses Z minus 568, and regio
 `min(13, 7 + floor(offset / 4))`, with the recovered 3000–6000 amounts.
 Other regions/courses and an already-used player bit have no effect.
 
-These source coordinates now correspond directly to the native terrain frame;
-the old normalized shelf gradient must not be reused. The next integration
-must use actual physical landings and native navigation regions, preserve the
-claim across falls and snapshots, paint the same discrete bands, and validate
-the alternate routes. `nativeCourse` currently supplies empty markings, so
-adding paint to a JSON fixture alone would not display it in the campaign.
+The integrated intent function matches all 2,079 original branch cases. Scoring
+uses the actual marble position in the recovered terrain frame and its current
+navigation region. One claim is shared across the three shelves per player;
+falls and snapshots preserve it. A negative-offset landing consumes the claim
+without points and still emits an effect event.
+
+Physical contact ends the airborne interval. The adapter qualifies a descending
+marble more than eight source height units above the floor, or over a void.
+It does not move the marble. This adapts the original descent rule; original
+contact-type scheduling and other airborne-mode entry paths remain unverified.
+
+Seven red/cream numbered bands are derived directly in the view from the same
+source intervals. They are explanatory paint on the existing flat shelves,
+not a claim of exact original bitmap artwork. The final 6,000 band caps the
+award beyond the painted interval. Paint does not constrain the source region
+or create a separate collision area. Translation and rotation are tested;
+arbitrary shelf reshaping in the editor remains outside this validation.
+
+### Landing validation and limits
+
+- All 21 localized physical drops (three shelves, seven bands) award exactly
+  once with the expected amount and no falls. These fixtures begin above the
+  shelves with the corresponding navigation region; they do not prove access
+  from the starting line.
+- Walking and shallow hops do not claim an award. Negative-offset claims,
+  independent two-player awards, fall/respawn retention, and exact midair replay
+  restoration pass in the six focused tests.
+- Existing timed full-start Practice main routes still pass solo and paired
+  on difficulties 0 and 7. They bypass the optional landing shelves.
+- Full-start alternate approach experiments using bounded normal input stall
+  on the uphill approach near source X425, Z453. No successful alternate route
+  has been added. Route choice and control calibration still need investigation.
+- Browser inspection confirms paint appears on all three shelves. At the title
+  overview it is small; course framing and final artwork remain unfinished.
+- Effect 42 currently uses the remake's collect cue. The exact original sound
+  remains to be restored and checked by listening.

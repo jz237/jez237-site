@@ -84,7 +84,10 @@ existing cyan palette. The final bundle build and `git diff --check` passed.
 The full suite includes legacy reconstruction tests as well as the new native
 tests; its total is not a full-campaign parity claim.
 
-- Complete Practice's numbered landing shelves and refine Ultimate's gold housing before publication.
+- Validate full-start Practice landing routes and refine Ultimate's gold housing before publication.
+  The mm-41 shelves now use source-coordinate awards and numbered paint, with
+  21 localized physical band checks and independent claims/replay. Full-start
+  shelf approaches still stall uphill; original effect 42 remains provisional.
   The mm-40 Practice rails are integrated with rounded shared collision geometry;
   its existing timed solo/paired routes still pass. See NATIVE-PRACTICE.md for
   original contact evidence and remaining calibration.

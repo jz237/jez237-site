@@ -11,6 +11,7 @@ import {
   updateSlinkyCapture,
 } from "./slinky-capture-view.mjs";
 import { landingTargets, landingAmount } from "./landing-targets.mjs";
+import { nativePracticeMarkings } from "./native-practice-landings.mjs";
 import { acidMesh, updateAcidMesh } from "./acid-view.mjs";
 import { foundationGeometry } from "./foundations.mjs";
 import { interpolateTerrainTriangle } from "./animated-terrain.mjs";
@@ -558,6 +559,7 @@ export class DioramaView {
         (mark) => mark.kind !== "landing-target",
       ),
       ...landingTargets(sim.course),
+      ...nativePracticeMarkings(sim.course),
       ...sim.course.parts
         .filter((p) => p.kind === "spring" && p.profile !== "flipper")
         .map((p) => ({
@@ -585,6 +587,18 @@ export class DioramaView {
         ctx.lineTo(221, 130);
         ctx.closePath();
         ctx.fill();
+      } else if (mark.kind === "native-landing-target") {
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.font = "bold 25px sans-serif";
+        mark.scoreBands.forEach((score, i) => {
+          const top = (i * 256) / 7,
+            bottom = ((i + 1) * 256) / 7;
+          ctx.fillStyle = i % 2 ? "#f5e9cf" : "#a8352b";
+          ctx.fillRect(0, top, 256, bottom - top);
+          ctx.fillStyle = i % 2 ? "#a8352b" : "#fff3d8";
+          ctx.fillText(String(score / 1000), 128, (top + bottom) / 2);
+        });
       } else if (mark.kind === "landing-target") {
         // Paint the same discrete scoring regions used by physical landings.
         // Custom targets without bands retain their checkerboard treatment.
