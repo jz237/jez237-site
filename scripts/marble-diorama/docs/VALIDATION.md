@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**188 automated tests pass. All six campaign races and all three bonus courses
+**191 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-32`.
+Current simulation/replay version: `rapier-0.20.0-mm-33`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -1227,3 +1227,23 @@ The repeated mm-32 timed campaign measurements match mm-30: both modes finish
 through Silly without falls; solo Ultimate times out at 65.283s and the paired
 race ends at 79.367s with both players timed out. Original time allowances were
 not extended. Full timed campaign acceptance remains incomplete.
+
+### September 22 — Aerial descending ledges
+
+Two continuous ramps on Aerial's left descent are replaced by real ledges,
+matching the original drops near 173.2 and 177.2 seconds in the reference.
+The shared surface geometry produces airborne motion and landing recovery
+without scripted effects or position changes. See AERIAL-LEDGES.md.
+
+Full suite: **191/191 pass**, 282211.74 ms. Three focused checks pass in
+1727.01 ms: matching rendered/collision heights and solo/paired normal-input
+runs with both physical landing recoveries and no falls. Build and diff check
+pass. Local browser demo finishes in 54.47s, 4,942 points and zero falls.
+Replay seeks at ticks 4870 and 5440 show the marble on the appropriate lower
+surfaces in dizzy state. No captured console warnings or errors.
+
+The mm-33 timed campaign reaches Silly without falls in both modes, retaining
+26.2604 clock units solo and 32.9844/15.7018 paired after Silly. Ultimate still
+times out at 65.283s solo and 79.367s paired. Original time allowances were not
+extended. Exact ledge dimensions, impact calibration, catch-up behavior and
+full timed campaign acceptance remain open.

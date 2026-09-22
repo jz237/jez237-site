@@ -137,3 +137,11 @@ Original code disproves the earlier whole-effect input lock. Steering and turbo
 now remain available at reduced authority during dizziness, using the recovered
 counter attenuation. Impact threshold, duration, severe-impact shattering and
 accumulated damage remain provisional; see LANDING-DIZZINESS.md.
+
+### Aerial descending ledges (mm-33)
+
+Two continuous ramps on the left descent are corrected to physical ledges,
+matching the original airborne drops and subsequent dizzy recovery. Both
+solo and paired normal-input routes finish without falls and trigger the two
+landings. Exact dimensions and landing calibration remain partial. See
+AERIAL-LEDGES.md.

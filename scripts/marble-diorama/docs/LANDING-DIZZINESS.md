@@ -117,8 +117,15 @@ player response, restoration, recovery and the original attenuation fractions.
 
 A normal-input event trace exercises an actual Ultimate opening stun at tick
 1459 (12.158s), followed by launcher activation at tick 1559. The full untimed
-solo route finishes in 90.117s without a fall. Aerial's current normal demo
+solo route finishes in 90.117s without a fall. The mm-32 Aerial normal demo
 finishes in 54.508s but triggers no stun; its drop geometry and path remain a
 specific comparison gap against the original Aerial observations above. The
 local Aerial browser demo passes (54.51s, 4,942 points, zero falls, no errors),
 but that alone does not verify original landing placement or difficulty.
+
+## Aerial drop correction (mm-33)
+
+The no-stun Aerial finding above is corrected by restoring two actual ledges.
+Normal solo and paired runs now trigger both physical landing recoveries and
+finish without falls. See AERIAL-LEDGES.md for reference frames, geometry and
+verification. Original impact calibration remains open.
