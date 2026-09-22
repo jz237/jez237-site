@@ -1,3 +1,8 @@
+import {
+  createTerrainNavigation,
+  advanceTerrainNavigation,
+  terrainTileAt,
+} from "./terrain-navigation.mjs";
 import { updateLandingStun, landingControlScale } from "./landing-stun.mjs";
 import { landingContact } from "./landing-contact.mjs";
 import { updateLaunchBonus } from "./launch-bonus.mjs";
@@ -172,6 +177,8 @@ export class Simulation {
       impactLaunched: false,
       launchBonusPending: null,
       progress: 0,
+      navigation: createTerrainNavigation(this.course, i, s),
+      safeNavigation: createTerrainNavigation(this.course, i, s),
       safePosition: copy(s),
       safeHistory: [],
     };
@@ -196,6 +203,22 @@ export class Simulation {
     b.setLinvel({ x: 0, y: 0, z: 0 }, true);
     b.setAngvel({ x: 0, y: 0, z: 0 }, true);
     b.setRotation({ x: 0, y: 0, z: 0, w: 1 }, true);
+    if (this.course.navigation) {
+      const i = this.players.indexOf(p);
+      const saved =
+        this.options.assisted && p.checkpoint >= 0
+          ? p.checkpointNavigation
+          : this.course.rules?.respawn === "last-safe"
+            ? p.safeNavigation
+            : null;
+      p.navigation = structuredClone(
+        saved ?? createTerrainNavigation(this.course, i, s),
+      );
+      const part = this.course.parts.find(
+        (p) => p.id === this.course.navigation.partId,
+      );
+      p.navigation.tile = terrainTileAt(part, s);
+    }
     p.status = "racing";
     p.vacuumCapture = null;
     p.acidCapture = null;
@@ -233,6 +256,8 @@ export class Simulation {
       this.players.map((p) => ({
         position: this.body(p).translation(),
         active: p.status === "racing",
+        region: p.navigation?.region,
+        navigationPartId: this.course.navigation?.partId,
       })),
       this.tick * STEP * this.preset.machineSpeed,
     );
@@ -352,9 +377,19 @@ export class Simulation {
           ),
         );
         if (supported)
-          p.safeHistory.push({ tick: this.tick, position: copy(pos) });
-        while (p.safeHistory.length && p.safeHistory[0].tick <= this.tick - 120)
-          p.safePosition = p.safeHistory.shift().position;
+          p.safeHistory.push({
+            tick: this.tick,
+            position: copy(pos),
+            navigation: structuredClone(p.navigation),
+          });
+        while (
+          p.safeHistory.length &&
+          p.safeHistory[0].tick <= this.tick - 120
+        ) {
+          const safe = p.safeHistory.shift();
+          p.safePosition = safe.position;
+          p.safeNavigation = safe.navigation;
+        }
       }
       const input = inputs[i] ?? {
           x: 0,
@@ -583,6 +618,11 @@ export class Simulation {
         this.fall(p);
         continue;
       }
+      const nativeFinish = advanceTerrainNavigation(
+        this.course,
+        p.navigation,
+        pos,
+      );
       for (const event of updateTraversalBonuses(
         this.traversalPaths,
         p,
@@ -597,6 +637,7 @@ export class Simulation {
           Math.hypot(pos.x - c.x, pos.y - c.y, pos.z - c.z) < 2
         ) {
           p.checkpoint = j;
+          p.checkpointNavigation = structuredClone(p.navigation);
           this.events.push({ type: "checkpoint", player: i });
         }
       }
@@ -615,10 +656,12 @@ export class Simulation {
         gx = (pos.x - g.x) * gc + (pos.z - g.z) * gs,
         gz = -(pos.x - g.x) * gs + (pos.z - g.z) * gc;
       if (
-        Math.abs(gx) < (g.width ?? 4) / 2 &&
-        Math.abs(gz) < (g.depth ?? 2.4) / 2 &&
-        Math.abs(pos.y - (g.y + RADIUS)) < 0.25 &&
-        p.grounded
+        this.course.navigation
+          ? nativeFinish
+          : Math.abs(gx) < (g.width ?? 4) / 2 &&
+            Math.abs(gz) < (g.depth ?? 2.4) / 2 &&
+            Math.abs(pos.y - (g.y + RADIUS)) < 0.25 &&
+            p.grounded
       ) {
         p.status = "finished";
         p.finishTick = this.tick;

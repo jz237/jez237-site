@@ -245,3 +245,15 @@ of the original shared actor pool, all other actors and rounded terrain edges
 remain unfinished. The public campaign continues using its existing authored
 wave strip. This integration is available to imported local terrain definitions;
 it is not a claim of complete Intermediate parity or a new published campaign.
+
+
+### Follow-up: shared race regions
+
+A terrain definition with CourseDefinition `navigation` now supplies the
+player's race region directly to its wave controller. This keeps wave activation
+and native finish gates on the same region history, including respawn resets.
+Imports without navigation retain the earlier animation-local gate controller.
+The original-start Intermediate fixture initializes both regions to zero;
+its waves activate only after players reach the wave regions. Real starts and
+finish boundaries are documented in TERRAIN-REFERENCE.md. Original catch-up,
+actor-pool occupancy, calibrated cadence and complete race traversal remain open.
