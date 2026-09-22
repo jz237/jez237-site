@@ -403,7 +403,7 @@ export function createTerrain(THREE, options) {
   const macroSize = Math.round(Math.sqrt(macro.length));
   const macroTex = makeHeightTexture(THREE, macro, macroSize, macroSize);
   const rampTex = makeRampTexture(THREE, 'dusk');
-  const imageryTex = makeImageryTexture(THREE, imagery);
+  let imageryTex = makeImageryTexture(THREE, imagery), imageryReady = !!imagery;
   let cityTex = makeImageryTexture(THREE, cityImagery);
   let reefTex = makeImageryTexture(THREE, reefImagery);
   const districtReady = { cityImagery: !!cityImagery, reefImagery: !!reefImagery };
@@ -489,7 +489,12 @@ export function createTerrain(THREE, options) {
     material,
     uniforms,
     segments,
-    hasImagery: !!imagery,
+    get hasImagery() { return imageryReady; },
+    setImagery(image) {
+      const next = makeImageryTexture(THREE, image);
+      imageryTex.dispose(); imageryTex = next; imageryReady = true;
+      uniforms.uImagery.value = next;
+    },
 
     setDistrictImage(id, image) {
       const next = makeImageryTexture(THREE, image);

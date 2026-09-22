@@ -3,22 +3,27 @@
   "version": "1.0.0",
   "private": true,
   "type": "module",
-  "description": "Philadelphia Relief — a geographic diorama with streamed Cesium photographic 3D close-ups.",
+  "description": "Philadelphia Relief \u2014 a geographic diorama with streamed Cesium photographic 3D close-ups.",
   "license": "MIT",
   "scripts": {
     "dev": "python3 -m http.server 8731 --bind 127.0.0.1 --directory ../..",
     "test": "node --test tests/*.test.js",
     "lint": "node tools/lint.mjs",
-    "check": "npm run lint && npm test",
+    "check": "npm run lint && npm test && npm run check:build",
     "qa": "node tools/qa.mjs",
     "qa:upgrades": "node tools/qa-upgrades.mjs",
     "build:terrain": "python3 tools/build_terrain.py --grid 2048 --step 0.25 --out heightmap.webp",
     "build:imagery": "python3 tools/build_imagery.py --size 4096 --quality 82",
     "build:vectors": "python3 tools/build_vectors.py",
     "build:structures": "python3 tools/build_structures.py",
-    "build:data": "npm run build:terrain && npm run build:imagery && npm run build:vectors && npm run build:structures"
+    "build:data": "npm run build:terrain && npm run build:imagery && npm run build:vectors && npm run build:structures",
+    "build": "node tools/build.mjs",
+    "check:build": "node tools/build.mjs --check"
   },
   "engines": {
     "node": ">=20"
+  },
+  "devDependencies": {
+    "esbuild": "0.28.1"
   }
 }

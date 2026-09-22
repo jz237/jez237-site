@@ -43,10 +43,10 @@ const SKYLINE = ['Comcast Technology Center', 'Comcast Center', 'One Liberty Pla
 const hex = /^#[0-9a-f]{6}$/i;
 const inRegion = (lon, lat) => projection.contains(lon, lat);
 
-test('browser assets carry one cache generation', async () => {
+test('browser assets use content hashes and source imports stay versioned', async () => {
   const index = await readFile(new URL('../index.html', import.meta.url), 'utf8');
-  assert.match(index, /app\.css\?v=philly-\d+/);
-  assert.match(index, /src\/main\.js\?v=philly-\d+/);
+  assert.match(index, /load\/style-[a-f0-9]+\.css/);
+  assert.match(index, /load\/app-[A-Z0-9]+\.js/);
 
   const srcDir = new URL('../src/', import.meta.url);
   const files = (await readdir(srcDir)).filter((file) => file.endsWith('.js'));

@@ -130,3 +130,10 @@
 
 /prototypes/hidden-reef-header-preview/assets/*.css
   Cache-Control: public, max-age=300, must-revalidate
+
+# Philadelphia browser bundles use content hashes; source/data freshness stays separate.
+/demos/philadelphia-relief/load/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+/demos/philadelphia-relief/load/*.css
+  Cache-Control: public, max-age=31536000, immutable

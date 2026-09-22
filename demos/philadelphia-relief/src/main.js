@@ -149,7 +149,10 @@ async function loadEverything() {
   const settled = promise => promise.then(value => ({ value }), error => ({ error }));
   const metadata = settled(fetchJson('data/terrain.json'));
   const heightImage = settled(loadImage('data/heightmap.webp'));
-  const overlays = ASSETS.filter(a => !a.required && !a.supplemental);
+  // The real elevation and vectors become usable while the full aerial finishes.
+  data.imageryPending = settled(loadImage(ASSETS.find(a => a.id === 'imagery').path));
+  results.imagery = true; // Pending is not a failure; report a later error separately.
+  const overlays = ASSETS.filter(a => !a.required && !a.supplemental && a.id !== 'imagery');
   const overlayLoad = Promise.all(overlays.map(async asset => {
     try {
       let value = asset.kind === 'image' ? await loadImage(asset.path) : await fetchJson(asset.path);
@@ -552,7 +555,8 @@ async function boot() {
   const supplementalDone = new Set(), supplementalRetry = new Map();
   let supplementalBusy = false, supplementalAt = 0;
   function supplement(pose, state) {
-    if (!firstFrameAt || performance.now() - firstFrameAt < 1500 || supplementalBusy
+    if (!firstFrameAt || !data.imagerySettled || performance.now() - firstFrameAt < 1500
+      || supplementalBusy
       || sceneDisposed || document.hidden || performance.now() < supplementalAt) return;
     supplementalAt = performance.now() + 1000;
     const ids = districtAssets(pose, state.layers.imagery && !photographic.active);
@@ -918,6 +922,17 @@ async function boot() {
         fogDensity: Math.round(lastLight.fogDensity * 100) / 100,
       } : null,
     }),
+  });
+  void data.imageryPending.then(({ value, error }) => {
+    data.imagerySettled = true;
+    if (sceneDisposed) return;
+    if (error) {
+      toast('Aerial image unavailable. Elevation and map layers remain available.');
+      return;
+    }
+    data.imagery = value; terrain.setImagery(value);
+    applyState(store.get(), { terrain, sky, overlays, structures, postfx, ui, flood, force: true });
+    wake();
   });
   let last = performance.now();
   let labelClock = 0;

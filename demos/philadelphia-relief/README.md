@@ -1,3 +1,16 @@
+## Browser build and performance
+
+After changing JavaScript in `src/`, `app.css`, or the vendored library, run
+`npm run build`, then `npm run check` in this directory before publishing.
+Commit the generated `load/` files and updated `index.html` together. The check
+rejects stale or altered bundles. Source modules remain readable and tested.
+Install the pinned development dependency with `npm install` if needed.
+
+The build deduplicates versioned module imports, minifies code, and splits
+optional exhibits into lazy chunks. Content-hashed output uses immutable browser
+caching. Elevation and vectors start the map while the original full-resolution
+regional photograph finishes downloading; the image is never resized for this.
+
 ## Aircraft over the region — September 20, 2026
 
 **Optional home-computer relay.** Hosted requests were refused by public providers,
