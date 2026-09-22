@@ -125,5 +125,17 @@ A separate controller supplies four black marbles across Beginner, Aerial and
 Ultimate. Their recovered graph routes, camera activation, pursuit/return rules,
 target selection and rolling resistance now have a physical implementation.
 The earlier generic proximity AI remains in the public campaign. Exact source
-impact/defeat rules, calibration and complete native races are still open. See
+impact shattering, calibration and complete native races are still open.
+Native falls now use the recovered 16/128-unit limits, terminal descent and
+shared 1,000-point reward for eligible players. See
 [NATIVE-STEELIES.md](NATIVE-STEELIES.md).
+
+### Native slinkies — rules recovered, physical integration pending
+
+The separate +0x1c course resource loads `slink.vlb` and contains nine enemies
+across Beginner, Intermediate and Ultimate. Original routes, animation lengths,
+patrol steps, movement-sensitive attacks, paired target reservation, jump
+pursuit, capture/miss intents and contact recovery are now transcribed and
+tested. Their new 3D bodies and collision-driven adapter are still required;
+the published green enemies have not changed. See
+[NATIVE-SLINKIES.md](NATIVE-SLINKIES.md).

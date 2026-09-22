@@ -85,15 +85,19 @@ const GROUND_DRAG = [
 
 // Original neutral-ground resistance (0x14b20, table 0x201a). Coulomb
 // contact friction alone does not slow an already rolling rigid sphere.
-export function steelieGroundDragStep(velocity) {
+export function steelieGroundDragStep(velocity, mode = 0) {
   const x = fixed(velocity.x),
     z = fixed(velocity.z);
   const magnitude = metric(Math.abs(x), Math.abs(z));
   const index = Math.floor(magnitude / 32768) & 15;
   const fraction = Math.floor(magnitude / 4096) & 7;
+  // Mode 2 (0x14c04) is used by a slinky sliding after a marble hits it.
   const drag =
-    GROUND_DRAG[index] +
-    Math.floor(((GROUND_DRAG[index + 1] - GROUND_DRAG[index]) * fraction) / 8);
+    (mode === 2 ? 4 : 1) *
+    (GROUND_DRAG[index] +
+      Math.floor(
+        ((GROUND_DRAG[index + 1] - GROUND_DRAG[index]) * fraction) / 8,
+      ));
   const denominator = Math.max(256, magnitude);
   const ratio = Math.floor(
     (Math.max(0, denominator - drag) * 64) / Math.floor(denominator / 256),
