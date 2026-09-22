@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Mon, 21 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 22 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 3-9, 1984 — The $4,000 Robot Rolls Into the Home</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-09-03</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-03</guid>
+      <pubDate>Tue, 22 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Hubot brings a smiling electronic companion, a serving tray, and a steep price into the consumer marketplace. A mobile robot called Hubot went on sale this week for $4,000, offering households a distinctly 1984 vision of electronic companionship. The machine could move around the home, speak through a synthesized voice, and carry objects on a tray while presenting a friendly face on its display. Also this week: Digital Equipment Pays $1.1 Million Export Fine · September&apos;s PC Market Fills With Compatibles and Databases · Hard Disks Promise to End Macintosh Floppy Shuffling.</description>
+    </item>
     <item>
       <title>Week of August 27-September 2, 1984 — Commodore Bets on Amiga&apos;s High-Tech Macintosh Rival</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-08-27</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-23</guid>
       <pubDate>Thu, 03 Sep 2026 12:00:00 GMT</pubDate>
       <description>The $1,295 Apple IIc brings 128K, a built-in disk drive and nearly a decade of Apple II software into a compact 7.5-pound package. SAN FRANCISCO — Apple Computer unveiled the Apple IIc on April 24 at its “Apple II Forever” dealer convention, putting the durable Apple II design into an ivory case small enough to carry by its handle. Even a 6.2-magnitude earthquake shaking Moscone Center could not upstage the week’s landmark personal-computer announcement. Also this week: Apple II Forever, Apple III No More · IBM’s PCjr Stumbles Out of the Gate · Software Becomes the Machine’s Magic · April’s Game Shelf Spans Machines.</description>
-    </item>
-    <item>
-      <title>Week of April 16-22, 1984 — Software Steps Into the Spotlight</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-04-16</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-16</guid>
-      <pubDate>Wed, 02 Sep 2026 12:00:00 GMT</pubDate>
-      <description>TIME puts the programs inside the machine on its April 16 cover as applications, compatibility and ease of use begin deciding the personal-computer contest. The personal-computer business has spent years selling the wonder of the machine itself. This week, the spotlight swings decisively to the programs that make those machines useful. TIME’s April 16 cover story, “The Wizard Inside the Machine,” calls software the magic carpet to the future and captures an industry learning that specifications alone do not close the sale. Also this week: Macintosh Meets the User-Group Crowd · Atari Sends Arcade Names to Rival Machines · PCjr and Macintosh Court the Newcomer.</description>
     </item>
   </channel>
 </rss>

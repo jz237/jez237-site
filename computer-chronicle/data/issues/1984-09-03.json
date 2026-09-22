@@ -1,0 +1,362 @@
+{
+  "currentDate": "2026-09-22",
+  "historicDate": "1984-09-03",
+  "displayDate": "Week of September 3-9, 1984",
+  "edition": "Issue 110 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Warm early-autumn newsprint with home-robot showmanship",
+    "motifs": [
+      "Hubot home robot",
+      "IBM-compatible computers",
+      "Macintosh hard disk",
+      "300-baud modem"
+    ],
+    "layout": "Dense 1980s computer-weekly front page with red and blue rules, halftones, boxed charts, and narrow columns"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "September 3-9, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Banner lead beneath masthead with a large Hubot halftone",
+    "secondaryRail": "Games, compatibles, Macintosh storage, modem, charts, prices, and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-09-03.jpg",
+    "alt": "GPT Image 2 newspaper front page for the week of September 3-9, 1984, led by the Hubot home robot.",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "A $4,000 household robot rolls into view while compatibles, hard disks, databases, and modems show where practical computing is heading.",
+  "morningLine": "This week in 1984: Hubot promises a robotic companion for the living room, even if the chores remain yours.",
+  "lead": {
+    "headline": "The $4,000 Robot Rolls Into the Home",
+    "dek": "Hubot brings a smiling electronic companion, a serving tray, and a steep price into the consumer marketplace.",
+    "body": [
+      "A mobile robot called Hubot went on sale this week for $4,000, offering households a distinctly 1984 vision of electronic companionship. The machine could move around the home, speak through a synthesized voice, and carry objects on a tray while presenting a friendly face on its display.",
+      "The sales pitch mixed science fiction with carefully limited reality. Hubot could entertain, communicate, and serve as a rolling presence, but it could not brew coffee, wash windows, or clean the floor. It could carry a cup once someone else had filled it.",
+      "That contrast captures the state of home robotics. Microprocessors, sensors, speech, and compact electronics make a personable machine possible, yet reliable household manipulation remains far harder than rolling across a room. Hubot is closer to an electronic companion and conversation piece than an automated servant.",
+      "Even so, the launch matters because it puts a consumer price and a retail proposition on the domestic robot. At $4,000, Hubot is costlier than many complete personal-computer systems, but it turns the robot from a laboratory spectacle into something a determined buyer can order."
+    ],
+    "sourceRefs": [
+      0
+    ],
+    "confidence": "exact-date"
+  },
+  "stories": [
+    {
+      "headline": "Digital Equipment Pays $1.1 Million Export Fine",
+      "body": [
+        "Digital Equipment Corp. was fined $1.1 million after computers reached the Soviet bloc through an unauthorized export route, according to a September 6 report. The penalty underscores how strategic Washington considers advanced computing equipment.",
+        "The case places computer makers in a difficult global market: demand is international, but export controls can follow machines far beyond the first sale. For one of the industry’s largest minicomputer companies, compliance has become as consequential as engineering."
+      ],
+      "sourceRefs": [
+        1
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "September's PC Market Fills With Compatibles and Databases",
+      "body": [
+        "September periodicals show the IBM-compatible market broadening quickly. Creative Computing examined the low-cost Sanyo 555 while devoting a special section to database-management choices for buyers trying to turn hardware into useful office systems.",
+        "Software competition is just as visible. Borland is advertising Turbo Pascal and Sidekick at prices intended to bring serious programming and desktop utility tools within reach of individual PC owners."
+      ],
+      "sourceRefs": [
+        2,
+        3
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Hard Disks Promise to End Macintosh Floppy Shuffling",
+      "body": [
+        "The Tecmar Mac Drive offers Macintosh owners fixed and removable storage beyond the machine’s built-in floppy drive. Configurations include 10 megabytes of fixed storage or 5 megabytes removable, with another removable option available.",
+        "For users juggling programs and documents across disks, a hard drive changes the rhythm of the Macintosh. The capacities remain modest by institutional standards, but desktop access to megabytes of online storage makes the graphical machine far more practical for sustained work."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Sanyo 555 PC-compatible",
+      "summary": "Creative Computing evaluates it as a particularly inexpensive route into IBM-compatible computing.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Tecmar Mac Drive",
+      "summary": "Macintosh storage expands with 10MB fixed and 5MB removable configurations.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "TRS-80 Model 4",
+      "summary": "A September advertisement marks the Model 4 down from $1,999 to $1,299.",
+      "sourceRefs": [
+        4
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Turbo Pascal",
+      "detail": "Borland programming system advertised at $49.95 in September Byte."
+    },
+    {
+      "name": "Sidekick",
+      "detail": "Borland desktop utility promoted alongside Turbo Pascal."
+    },
+    {
+      "name": "Database-management buyers' guide",
+      "detail": "Creative Computing compares database types and products for prospective buyers."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Sorcerer — Infocom",
+        "Cyberchess",
+        "War in Europe — Strategic Simulations",
+        "Seven Cities of Gold — Electronic Arts",
+        "Boulder Dash — First Star"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "What's Love Got to Do with It — Tina Turner",
+        "Missing You — John Waite",
+        "She Bop — Cyndi Lauper",
+        "Stuck on You — Lionel Richie",
+        "Ghostbusters — Ray Parker Jr."
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "Tightrope",
+        "Ghostbusters",
+        "Purple Rain",
+        "Red Dawn",
+        "The Woman in Red"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Hubot home robot",
+      "price": "$4,000",
+      "note": "Consumer price reported September 3.",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "TRS-80 Model 4",
+      "price": "$1,299",
+      "note": "Advertised as reduced from $1,999.",
+      "sourceRefs": [
+        4
+      ]
+    },
+    {
+      "item": "Creative Computing subscription",
+      "price": "$24.97 for 12 issues",
+      "note": "September magazine offer.",
+      "sourceRefs": [
+        2
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "PC Magazine Arrives September 4",
+      "summary": "The dated issue offers a fresh window into the week's IBM-compatible market.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "headline": "Dr. Dobb's September Issue Reaches Programmers",
+      "summary": "The month's journal records the tools and concerns occupying software developers.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "What's Love Got to Do with It",
+      "artist": "Tina Turner",
+      "chartDate": "1984-09-08",
+      "sourceUrls": [
+        "https://web.archive.org/web/20201021020606/https:/www.billboard.com/charts/hot-100/1984-09-08"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Missing You",
+      "artist": "John Waite",
+      "chartDate": "1984-09-08",
+      "sourceUrls": [
+        "https://web.archive.org/web/20201021020606/https:/www.billboard.com/charts/hot-100/1984-09-08"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "She Bop",
+      "artist": "Cyndi Lauper",
+      "chartDate": "1984-09-08",
+      "sourceUrls": [
+        "https://web.archive.org/web/20201021020606/https:/www.billboard.com/charts/hot-100/1984-09-08"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Stuck on You",
+      "artist": "Lionel Richie",
+      "chartDate": "1984-09-08",
+      "sourceUrls": [
+        "https://web.archive.org/web/20201021020606/https:/www.billboard.com/charts/hot-100/1984-09-08"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Ghostbusters",
+      "artist": "Ray Parker Jr.",
+      "chartDate": "1984-09-08",
+      "sourceUrls": [
+        "https://web.archive.org/web/20201021020606/https:/www.billboard.com/charts/hot-100/1984-09-08"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "Put a Hard Disk Beside Your Macintosh",
+    "summary": "Tecmar offers fixed and removable megabyte storage for Apple’s compact machine.",
+    "tagline": "Leave the floppy shuffle behind."
+  },
+  "market": {
+    "headline": "Compatibles Compete on Price",
+    "summary": "The Sanyo 555 and a crowded September PC market show how quickly IBM compatibility is becoming a retail category rather than a single-company franchise.",
+    "sourceRefs": [
+      2
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Two Americans Reported Killed in Nicaragua Clash",
+    "summary": "On September 5, the Washington Post reported that two Americans killed in a clash with Nicaraguan government troops had been described as volunteers, reflecting the intensifying Contra-war controversy.",
+    "sourceRefs": [
+      8
+    ],
+    "confidence": "exact-date"
+  },
+  "gadgetWatch": {
+    "headline": "Hubot Makes the Consumer-Robot Pitch",
+    "summary": "The $4,000 mobile robot is sold as a household electronic companion even though its useful physical tasks remain sharply limited.",
+    "sourceRefs": [
+      0
+    ],
+    "confidence": "exact-date"
+  },
+  "bbsNote": {
+    "headline": "A Timex/Sinclair User Dials Into the Growing BBS World",
+    "summary": "A September first-hand report uses a Westridge 2050 modem and Mterm to visit CompuServe and free local bulletin boards.",
+    "posts": [
+      {
+        "topic": "Going online",
+        "platform": "Timex/Sinclair",
+        "text": "User groups and specialized communities are becoming reachable through local calls and 300-baud links."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "A Robot That Carries Coffee but Cannot Make It",
+    "summary": "Hubot's $4,000 promise meets the modest reality of 1984 household robotics.",
+    "detail": "The robot can carry a cup on its tray, but it cannot brew coffee, clean windows, or wash floors.",
+    "sourceUrls": [
+      "https://www.upi.com/Archives/1984/09/03/Hubot-the-robot-on-sale-for-4000/2677463032000/"
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Hubot details and price come from a September 3 UPI dispatch.",
+      "The Digital Equipment fine comes from exact-date September 6 reporting.",
+      "Computer, software, game, and modem items are labeled same-month when drawn from September period publications.",
+      "Music uses the September 8 singles chart; movies use the September 7-9 weekend.",
+      "World news is anchored to Washington Post reporting dated September 5."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Hubot the robot -- on sale for $4,000",
+      "date": "1984-09-03",
+      "url": "https://www.upi.com/Archives/1984/09/03/Hubot-the-robot-on-sale-for-4000/2677463032000/"
+    },
+    {
+      "title": "Digital Equipment Corp. fined $1.1 million",
+      "date": "1984-09-06",
+      "url": "https://www.upi.com/Archives/1984/09/06/Digital-Equipment-Corp-fined-11-million-for-selling-computers/8784463291200/"
+    },
+    {
+      "title": "Creative Computing, Volume 10 Number 9",
+      "date": "1984-09",
+      "url": "https://archive.org/stream/creativecomputing-1984-09/Creative_Computing_v10_n09_1984_September_djvu.txt"
+    },
+    {
+      "title": "Byte, September 1984",
+      "date": "1984-09",
+      "url": "https://vintageapple.org/byte/pdf/198409_Byte_Magazine_Vol_09-09_Special_IBM_Issue.pdf"
+    },
+    {
+      "title": "80 Micro, September 1984",
+      "date": "1984-09",
+      "url": "https://colorcomputerarchive.com/repo/Documents/Magazines/80%20Micro/1984/80%20Micro%20-%208409%20-%20September%201984.pdf"
+    },
+    {
+      "title": "T/S On-Line: Modems and BBS Report",
+      "date": "1984-09",
+      "url": "https://timexsinclair.com/article/t-s-on-line-modems-and-bbs-report/index.html"
+    },
+    {
+      "title": "Billboard Hot 100, September 8, 1984",
+      "date": "1984-09-08",
+      "url": "https://web.archive.org/web/20201021020606/https:/www.billboard.com/charts/hot-100/1984-09-08"
+    },
+    {
+      "title": "Domestic Weekend 36",
+      "date": "1984-09-07/1984-09-09",
+      "url": "https://www.boxofficemojo.com/weekend/1984W36/"
+    },
+    {
+      "title": "Pair Died in Nicaraguan Clash",
+      "date": "1984-09-05",
+      "url": "https://www.washingtonpost.com/archive/politics/1984/09/05/pair-died-in-nicaraguan-clash/5a906f0a-57cc-48d4-ab4b-8d5ad88bf447/"
+    },
+    {
+      "title": "East-West: Echoes Across the Gap",
+      "date": "1984-09-03",
+      "url": "https://time.com/archive/6884363/east-west-echoes-across-the-gap/"
+    }
+  ]
+}
