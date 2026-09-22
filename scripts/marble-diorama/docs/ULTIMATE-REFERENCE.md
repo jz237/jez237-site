@@ -119,3 +119,36 @@ Course revision is 3 and physics/replay version is mm-25. Collision rays check
 height and continuous foot/crest joins, visible positions are checked against the
 compiled collision vertices, held-input climbing and mid-ramp restoration pass,
 and both normal-input openings visit the ramp and ledge before their launch.
+
+
+## Ice-exit steelie and complete alternate route (mm-26)
+
+The original recording shows a black steelie on the small gray platform directly
+below the four ice pyramids (311-317s). At 315.8-316.4s it contacts the player's
+marble near the left side. It drops alongside the descending track at
+316.6-317.2s; the score changes from 50890 at 317.4s to 51890 at 317.6s with a
+visible `1000` label. A private 5fps contact sheet covers 315.8-318.0s. This is an
+additional guard, not one of the green munchers in the preceding rooms.
+
+The reconstruction previously omitted it. `ice-exit-steelie` now starts on the
+exit platform at board coordinates L0, D116, height4.56. It uses the existing
+physical black steel sphere, pursuit torque, native marble contact and 1000-point
+knockout award. Radius0.55, roam3 and speed1.8 reuse the lower Beginner steelie
+settings; these positions and AI constants are provisional. The original footage
+does not establish paired credit, exact mass/torque or permanent retirement.
+Course revision4 and physics/replay mm-26 distinguish the new encounter.
+
+A complete right-route test revealed previously untested failures after its
+launcher: the approach to the lower acid room cut through a puddle, and the outer
+ice lane's abrupt turns carried the marble off the board. An approach waypoint
+now turns before the acid, and the demo reduces its target speed and anticipates
+turns on the same outer ice lane. It still visits both right hazard rooms, travels
+outside the right ice peaks, and takes the separate right finish approach. No
+hazards, collision surfaces, player torque or clocks were changed to pass it.
+
+Both full solo routes now finish with normal bounded inputs and no falls: main
+62.01s, right108.53s in the measured runs. This is untimed traversal evidence,
+not timed campaign acceptance or proof of original movement calibration. A
+separate initial-condition collision fixture on the actual exit platform verifies
+that an edge knockout pays exactly1000 once; generic steelie tests retain
+snapshot, attribution and no-respawn coverage.

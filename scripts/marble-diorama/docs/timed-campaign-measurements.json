@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-25",
-  "generatedAt": "2026-09-22T02:32:40.550Z",
+  "physics": "rapier-0.20.0-mm-26",
+  "generatedAt": "2026-09-22T02:50:59.271Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
