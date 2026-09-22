@@ -8,10 +8,29 @@ import {
 } from "./course-authoring.mjs";
 import { amigaCourseRules, COURSE_TIME } from "./rules.mjs";
 
+const whiteApproach = (l) => [
+  routePoint(-5, 16, 7, { speed: 2.4, radius: 0.35 }),
+  routePoint(-3, 16.111, 7, { speed: 3.6, radius: 0.7 }),
+  routePoint(2.8, 17.5, 7, { speed: 3, radius: 0.6 }),
+  routePoint(l, 17.5, 11.8, { speed: 2.4, radius: 0.4 }),
+  routePoint(l, 17.5, 12.8, { speed: 1.8, radius: 0.35 }),
+  routePoint(l, 14, 17.2, { speed: 2.4, radius: 1.3 }),
+];
+
 export function ultimateCourse() {
   const parts = [
     deck("start-field", 0, 5, 22, 16, 16, { h: 0.8, material: "sand" }),
-    deck("start-ridge", -1, 7, 8, 4, 16, { kind: "pyramid", rise: 1.4 }),
+    // The original white approach climbs from the sand to an elevated ledge.
+    // Sample one smooth curve into the same solid used for drawing/contact.
+    ribbon(
+      "start-white-ramp",
+      Array.from({ length: 25 }, (_, i) => {
+        const u = i / 24;
+        return [-4 + 6 * u, 7, 16 + 1.5 * u * u * (3 - 2 * u)];
+      }),
+      4,
+    ),
+    deck("start-white-ledge", 5.25, 8.5, 6.5, 9, 17.5, { h: 2.3 }),
     // The start drops onto one launcher island. Its lower landing islands
     // branch left/right; the left route never visits the right platform.
     deck("first-island", 6, 18, 8, 8, 14, { h: 0.8 }),
@@ -217,11 +236,7 @@ export function ultimateCourse() {
       radius: d >= 98 && d <= 117 ? 1.6 : 0.7,
     }),
   );
-  // Targets beyond the pads let the launchers accelerate a normally steered ball.
-  route[1].radius = 0.35;
-  route[1].speed = 3.6;
-  route[2].radius = 1.3;
-  route[2].speed = 3.6;
+  // Settle on the lower island before entering its narrow ice bridge.
   route[3].radius = 2.5;
   Object.assign(route[4], { stop: true, speed: 1.8, radius: 0.5 });
   route.splice(
@@ -286,11 +301,13 @@ export function ultimateCourse() {
       }),
     ),
   ];
+  route.splice(0, 3, ...whiteApproach(4.55));
+  rightRoute.splice(0, 3, ...whiteApproach(7.45));
   return {
     schema: 1,
     id: "ultimate",
     medals: { gold: 85, silver: 125 },
-    revision: 2,
+    revision: 3,
     name: "Ultimate Race",
     courseNumber: 6,
     subtitle: "Catapult islands, split hazard rooms, and the last icy descent.",
@@ -318,7 +335,7 @@ export function ultimateCourse() {
     starts: [worldPoint(-0.7, 16.56, 0), worldPoint(0.7, 16.56, 0)],
     goal: { ...worldPoint(0, 2, 128), angle: ISO, width: 9, depth: 1.3 },
     parts,
-    route: roundDemoCorners(route, { radius: 1.5, from: 6 }),
+    route: roundDemoCorners(route, { radius: 1.5, from: 9 }),
     alternateRoutes: [
       {
         id: "right-hazard-rooms",

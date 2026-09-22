@@ -7,7 +7,7 @@ Reference images remain outside the published game.
 
 ## Observed route
 
-- The starting field has a white recessed approach to its front edge.
+- The starting field has a white curved climb onto a raised ledge at its front edge (the earlier recessed interpretation was corrected by the close-up below).
 - Around 278 seconds the marble leaves that edge and reaches the separate
   square platform immediately below it. A gold mechanism occupies its center.
 - The marble bounces there before reaching the lower left platform around
@@ -55,7 +55,8 @@ exactly one spring event, a grounded landing on the chosen island, no visit to
 the opposite island, a visibly moving arm, arrival on its ice bridge and no falls.
 This verifies the implemented branch topology, not the original launch law.
 Paired arms, stroke, velocities and dimensions are reconstructed; the initial
-white recess and exact 2000 award trigger still need correction/measurement.
+white approach and exact 2000 award trigger still needed correction/measurement
+at this checkpoint; see the subsequent sections below.
 
 
 ## September 21: launcher landing award (mm-24)
@@ -89,3 +90,32 @@ The existing landing reward notification and effects bus report the award;
 that cue is designed, not recovered Amiga audio. Replay/record physics version
 is mm-24 because scoring outcomes changed. No geometry, steering, launch force,
 clock allowance or demo route was changed.
+
+
+## September 21: curved white start ramp and raised ledge (mm-25)
+
+A 274.0-278.4s frame sequence and an enlarged 275.2s frame correct the earlier
+"recess" interpretation. A white curved face climbs from the gold surface onto
+an elevated, tiled ledge. Its visible front red wall stands above the surrounding
+gold field. The marble approaches from the gold side, climbs the white face,
+rolls along the elevated strip, and drops onto the separate launcher island.
+This is not the gold pyramid that was previously authored there.
+
+The starting pyramid is replaced by a closed white ramp with a smooth 1.5-unit
+rise over 6 units, sampled at 0.25-unit intervals, joining a white ledge at height
+17.5 above the height-16 starting field. The ledge's bottom overlaps the solid
+base. The existing ribbon and floor compilers supply the same top, sides and
+underside triangles to drawing and collision. Dimensions and smoothstep profile
+are reconstructed; original world measurements and exact silhouette remain open.
+
+Both demo approaches now climb the white ramp and align on the ledge before the
+drop, using ordinary bounded steering. The solo left opening produces dizziness
+at 12.2417s, launches at 13.1917s and lands with its 2000 award at 14.7417s. These
+are implementation timings, not original timing claims. The observed original
+blue-mark sequence remains the reference; exact duration/control law is still
+provisional. Clocks, torque, catapult impulse and the lower course are unchanged.
+
+Course revision is 3 and physics/replay version is mm-25. Collision rays check
+height and continuous foot/crest joins, visible positions are checked against the
+compiled collision vertices, held-input climbing and mid-ramp restoration pass,
+and both normal-input openings visit the ramp and ledge before their launch.

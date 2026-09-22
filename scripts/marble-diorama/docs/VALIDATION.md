@@ -992,3 +992,35 @@ full timed campaign acceptance or establish full Amiga parity.
 
 The final complete suite passes all 165 tests (282204.54ms), including the
 rotated destination edge checks. Production build and diff checks pass.
+
+
+### September 21 - Ultimate curved white start and raised ledge, mm-25
+
+An enlarged 275.2s original frame and the 274.0-278.4s movement sequence correct
+the earlier recessed-surface interpretation: the marble climbs a curved white
+face onto a raised white ledge, with a visible red wall below. Replaced the gold
+starting pyramid with a solid sampled white ramp and ledge, using existing shared
+ribbon/floor geometry. Dimensions and curve profile remain reconstructed. The
+course revision is 3; physics/replay is mm-25. See ULTIMATE-REFERENCE.md.
+
+Three added regressions check the curve against actual collision rays, continuous
+foot/crest joins, visible positions matching collision vertices, held-input
+climbing and snapshot replay from the slope, and both demo routes visiting the
+ramp/ledge before dizziness, launch and the 2000 landing award. Existing paired
+Ultimate completion and both launch-to-bridge checks pass (2 tests, 11433ms).
+The paired landing-award test's untimed observation bound increased from15 to20s
+to include the longer approach; game clocks and acceptance conditions are unchanged.
+
+The production browser shows the ramp joining the raised ledge and both marbles
+climbing through the same surface. Both players finish the full untimed demo with
+9057 points and zero falls (P1 61.99s), with no captured warnings/errors. The solo
+opening's measured sequence is dizziness12.2417s, launch13.1917s and landing award
+14.7417s; these are reconstructed gameplay timings, not recovered Amiga constants.
+
+Fresh timed campaign measurements still fail solo Ultimate at32s and paired
+Silly by55.0417s, with zero falls throughout. Torque, clock allowances, catapult
+impulse and the lower course are unchanged. Full timed campaign acceptance,
+exact geometry and full Amiga parity remain incomplete.
+
+The final complete suite passes all 168 tests (278740.14ms), including the
+new start geometry and updated observation bound. Build and diff checks pass.
