@@ -229,3 +229,138 @@ test("terrain sequence frames count toward the authoring budget", () => {
   );
   assert.throws(() => validateCourse(c), /150,000-vertex/);
 });
+
+function timedFixture(conditional = false) {
+  const c = fixture(),
+    a = c.parts[0].animation;
+  delete a.secondsPerFrame;
+  a.timeline = conditional
+    ? {
+        rate: 20,
+        durationTicks: 30,
+        loop: false,
+        condition: { tick: 10, bounds: [2, 2, 4, 4] },
+        events: [
+          [1, 0],
+          [11, 1],
+          [13, 2],
+          [21, 0],
+        ],
+      }
+    : {
+        rate: 20,
+        durationTicks: 27,
+        loop: true,
+        events: [
+          [1, 0],
+          [5, 1],
+          [7, 2],
+          [9, 3],
+          [15, 2],
+          [17, 1],
+          [19, 0],
+        ],
+      };
+  return c;
+}
+const timedPlayer = (x = 0, z = 0, active = true) => ({
+  position: { x, z },
+  active,
+  region: 9,
+  navigationPartId: "room",
+});
+
+test("terrain timelines retain writes through unequal waits and repeat on the exact update", () => {
+  const p = timedFixture().parts[0],
+    s = createTerrainSequence(p, 1);
+  const cycle = [
+    0, 0, 0, 0, 1, 1, 2, 2, 3, 3, 3, 3, 3, 3, 2, 2, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+    0, 0,
+  ];
+  for (let tick = 1; tick <= 100; tick++) {
+    advanceTerrainSequence(p, s, [timedPlayer()], 3 + (tick - 1) / 20);
+    assert.equal(s.frame, cycle[(tick - 1) % cycle.length], `tick ${tick}`);
+  }
+});
+
+test("one-shot terrain tests either active player's footprint only at the condition update", () => {
+  const p = timedFixture(true).parts[0];
+  for (const [position, active, expected] of [
+    [[-2, -2], true, true],
+    [[1.99, 1.99], true, true],
+    [[2, 0], true, false],
+    [[0, 2], true, false],
+    [[-2.01, 0], true, false],
+    [[0, -2.01], true, false],
+    [[0, 0], false, false],
+  ]) {
+    const s = createTerrainSequence(p, 2);
+    advanceTerrainSequence(p, s, [timedPlayer(-4, -4), timedPlayer()], 0);
+    advanceTerrainSequence(
+      p,
+      s,
+      [timedPlayer(-4, -4), timedPlayer(...position, active)],
+      0.45,
+    );
+    assert.equal(s.conditionPassed, expected);
+    // Subsequent arrivals/departures must not change the latched decision.
+    advanceTerrainSequence(p, s, [timedPlayer(), timedPlayer(-4, -4)], 0.5);
+    assert.equal(s.frame, expected ? 1 : 0);
+    advanceTerrainSequence(p, s, [timedPlayer()], 10);
+    assert.equal(s.frame, 0);
+    assert.equal(s.nativeTick, 30);
+  }
+});
+
+test("conditional terrain physics and decisions restore across a snapshot and rendering rates", () => {
+  const outcomes = [];
+  for (const fps of [30, 60, 120]) {
+    const s = new Simulation(timedFixture(true), { untimed: true });
+    try {
+      while (s.tick < 40) s.step();
+      const snap = s.snapshot();
+      const run = () => {
+        const clock = new FixedClock(() => s.step());
+        for (let i = 0; i < fps; i++) clock.advance(1 / fps);
+        return {
+          player: structuredClone(s.players[0]),
+          controller: structuredClone(s.terrainAnimations),
+        };
+      };
+      const result = run();
+      assert.equal(result.controller.room.conditionPassed, true);
+      s.restore(snap);
+      assert.deepEqual(run(), result);
+      outcomes.push(result);
+    } finally {
+      s.dispose();
+    }
+  }
+  assert.deepEqual(outcomes[1], outcomes[0]);
+  assert.deepEqual(outcomes[2], outcomes[0]);
+});
+
+test("terrain timeline imports reject ambiguous ticks, invalid frames and unbounded scripts", () => {
+  const c = timedFixture(true);
+  assert.deepEqual(validateCourse(structuredClone(c)), c);
+  for (const mutate of [
+    (a) => (a.timeline = null),
+    (a) => (a.timeline.rate = 0),
+    (a) => (a.timeline.durationTicks = 100001),
+    (a) => (a.timeline.loop = "yes"),
+    (a) => (a.timeline.events = []),
+    (a) => (a.timeline.events[0] = [2, 0]),
+    (a) => (a.timeline.events[1] = [1, 1]),
+    (a) => (a.timeline.events[1] = [11, 9]),
+    (a) => (a.timeline.events[1] = [11.5, 1]),
+    (a) => (a.timeline.events[1] = [31, 1]),
+    (a) => (a.timeline.events[1] = [9, 1]),
+    (a) => (a.timeline.loop = true),
+    (a) => (a.timeline.condition.tick = NaN),
+    (a) => (a.timeline.condition.bounds = [4, 2, 2, 4]),
+  ]) {
+    const bad = structuredClone(c);
+    mutate(bad.parts[0].animation);
+    assert.throws(() => validateCourse(bad), /terrain/i);
+  }
+});

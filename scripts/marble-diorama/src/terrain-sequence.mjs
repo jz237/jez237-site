@@ -1,5 +1,9 @@
 import { terrainGeometry, validateTerrain } from "./terrain-geometry.mjs";
 import {
+  validateTerrainTimeline,
+  advanceTerrainTimeline,
+} from "./terrain-timeline.mjs";
+import {
   terrainTileAt,
   terrainRegionAfter,
   validateTerrainGates,
@@ -20,9 +24,10 @@ export function validateTerrainSequence(part, finite) {
   const a = part.animation;
   if (
     part.kind !== "terrain" ||
-    !finite(a.secondsPerFrame) ||
-    a.secondsPerFrame < 0.05 ||
-    a.secondsPerFrame > 30 ||
+    (!a.timeline &&
+      (!finite(a.secondsPerFrame) ||
+        a.secondsPerFrame < 0.05 ||
+        a.secondsPerFrame > 30)) ||
     !Array.isArray(a.frames) ||
     a.frames.length < 2 ||
     a.frames.length > 8 ||
@@ -38,6 +43,8 @@ export function validateTerrainSequence(part, finite) {
   )
     throw Error("Invalid terrain sequence.");
   validateTerrainGates(a.gates);
+  if (a.timeline !== undefined)
+    validateTerrainTimeline(a.timeline, a.frames.length, finite);
   const keys = new Set(part.cells.map((c) => `${c[0]},${c[1]}`));
   for (let i = 0; i < a.frames.length; i++) {
     const cells = a.frames[i];
@@ -80,6 +87,8 @@ export function createTerrainSequence(part, players) {
     frame: 0,
     regions: part.animation.initialRegions.slice(0, players),
     tiles: Array(players).fill(null),
+    nativeTick: 0,
+    conditionPassed: null,
   };
 }
 
@@ -100,10 +109,17 @@ export function advanceTerrainSequence(part, state, players, time) {
   });
   const active = eligible.some(Boolean);
   if (active) {
-    if (!state.active) state.startedAt = time;
-    state.frame =
-      Math.floor((time - state.startedAt + 1e-9) / a.secondsPerFrame) %
-      a.frames.length;
+    if (!state.active) {
+      state.startedAt = time;
+      state.frame = 0;
+      state.nativeTick = 0;
+      state.conditionPassed = null;
+    }
+    if (a.timeline) advanceTerrainTimeline(a.timeline, state, players, time);
+    else
+      state.frame =
+        Math.floor((time - state.startedAt + 1e-9) / a.secondsPerFrame) %
+        a.frames.length;
   }
   state.active = active;
   return { frame: state.frame };
