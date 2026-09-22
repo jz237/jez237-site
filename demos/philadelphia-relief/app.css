@@ -1957,3 +1957,32 @@ body.cinema .window-dock { display: none; }
   .window-dock { left: 10px; bottom: 145px; max-width: calc(100vw - 20px); max-height: 78px; }
   body:has(#readout.window-minimized) .window-dock { bottom: 90px; }
 }
+
+/* Optional discoveries share the map renderer and stay out of the central view. */
+.city-feature-panel { position: fixed; z-index: 76; left: 24px; top: 166px; width: 310px;
+  max-width: calc(100vw - 32px); max-height: calc(100dvh - 275px); overflow: auto;
+  padding: 18px; border-radius: 16px; background: #142d39f7; color: #f5f1e6;
+  border: 1px solid #dec39170; box-shadow: 0 10px 35px #001d2944; }
+.city-feature-panel[hidden], .city-feature-badge[hidden] { display: none; }
+.city-feature-panel h2 { font: 24px/1.15 Georgia,serif; margin: 10px 0; }
+.city-feature-panel p { font-size: 12px; line-height: 1.5; }
+#cityFeatureControls { display: grid; gap: 9px; }
+#cityFeatureControls label { display: flex; flex-wrap: wrap; gap: 8px; align-items: center;
+  font-size: 12px; color: var(--route-color, #fff0d5); }
+#cityFeatureControls label input[type=range] { flex: 1 1 100%; }
+.city-feature-panel button, .city-feature-panel select { min-height: 36px; padding: 7px 10px;
+  border-radius: 8px; background: #274954; color: #fff0ce; border: 1px solid #a0c3b85e;
+  cursor: pointer; font: 12px var(--font); }
+.city-feature-panel a { color: #a6dcd7; font-size: 11px; }
+#cityFeatureExit { width: 100%; margin-top: 8px; position: sticky; bottom: 0; }
+.city-feature-badge { position: fixed; z-index: 54; bottom: 144px; left: 50%;
+  transform: translateX(-50%); padding: 7px 12px; border-radius: 9px; pointer-events: none;
+  color: #ffe1a2; background: #142d39ef; font: 10px var(--mono); text-align: center; }
+.city-feature-labels { position: fixed; inset: 0; pointer-events: none; z-index: 24; overflow: hidden; }
+.city-feature-labels span { position: absolute; top: 0; left: 0; padding: 3px 6px; white-space: nowrap;
+  border-radius: 4px; color: #f8f4e9; background: #102633df; font: 11px var(--font); }
+.city-feature-labels span[hidden] { display: none; }
+@media (max-width: 1024px) {
+  .city-feature-panel { top: 165px; left: 12px; max-height: calc(100dvh - 300px); }
+  .city-feature-badge { bottom: 135px; width: max-content; max-width: calc(100vw - 28px); }
+}

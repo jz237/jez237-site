@@ -1,5 +1,6 @@
 // Observe only popup roots, never map animation, marker positions or the full DOM.
 export const COLLAPSIBLE_WINDOWS = [
+  ['#cityFeaturePanel', 'City discovery'],
   ['#card', 'Place details'], ['.camera-map-card', 'Camera preview'],
   ['.aircraft-card', 'Aircraft details'], ['.map-data-card', 'Map details'],
   ['#regionalViews', 'Cameras & local views'], ['.airport-camera-dialog', 'PHL camera'],
@@ -29,6 +30,7 @@ export function wireWindowCollapse() {
       entry.minimized = false; node.classList.remove('window-minimized'); node.inert = false;
       restore.hidden = true; updateDock();
     };
+    node.addEventListener('map-window-dismiss', reset);
     button.onclick = event => {
       event.stopPropagation();
       restore.textContent = `↗ ${title()}`;
@@ -71,7 +73,8 @@ export function wireWindowCollapse() {
     observer.observe(host, { childList: true });
     observer.observe(node, { childList: true, attributes: true, attributeFilter: ['hidden', 'open'] });
     sync([]);
-    entry.dispose = () => { observer.disconnect(); resize?.disconnect(); button.remove(); node.inert = false;
+    entry.dispose = () => { node.removeEventListener('map-window-dismiss', reset);
+      observer.disconnect(); resize?.disconnect(); button.remove(); node.inert = false;
       node.classList.remove('window-minimized'); };
   }
   return () => { entries.forEach(e => e.dispose()); dock.remove(); };

@@ -22,7 +22,7 @@
 <meta name="twitter:description" content="Real elevation, real footprints, schematic bridges and landmarks, flood zones, a simulated clock and honest historical views of the Delaware Valley. Runs entirely in your browser." />
 <meta name="twitter:image" content="https://jez237.com/demos/philadelphia-relief/assets/social-card.jpg" />
 <link rel="icon" type="image/svg+xml" href="/assets/brand.svg" />
-<link rel="stylesheet" href="app.css?v=philly-2026092204" />
+<link rel="stylesheet" href="app.css?v=philly-2026092205" />
 <link rel="modulepreload" href="vendor/three.module.min.js?v=philly-2026092113" />
 <link rel="modulepreload" href="vendor/three.core.min.js" />
 <link rel="preload" as="image" href="data/heightmap.webp" fetchpriority="high" />
@@ -145,6 +145,15 @@
   <button type="button" id="btnInspect" aria-pressed="false" title="Street inspection (I)">Street inspection</button>
   <button type="button" id="openLocalViews">Cameras &amp; local views <span aria-hidden="true">◉</span></button>
 </nav>
+<section id="cityFeaturePanel" class="city-feature-panel" hidden aria-labelledby="cityFeatureTitle">
+  <p class="story-eyebrow">DISCOVER THE CITY</p>
+  <h2 id="cityFeatureTitle"></h2>
+  <p id="cityFeatureNote"></p>
+  <div id="cityFeatureControls"></div>
+  <p id="cityFeatureStatus" role="status"></p>
+  <button type="button" id="cityFeatureExit">Return to normal map</button>
+</section>
+<div id="cityFeatureBadge" class="city-feature-badge" hidden></div>
 <dialog id="regionalViews" class="regional-dialog" aria-labelledby="regionalTitle">
   <header class="regional-head">
     <div><span class="local-eyebrow">A WINDOW INTO THE DELAWARE VALLEY</span>
@@ -234,6 +243,9 @@
       <option value="city-hall">Philadelphia City Hall</option>
     </select>
     <button type="button" id="openModel">Explore detailed model</button>
+    <button type="button" id="openDrawbridges">Working drawbridges · demonstration</button>
+    <button type="button" id="openUnderground">Beneath Philadelphia · cutaway</button>
+    <p id="cityFeatureLoadStatus" class="photo-note" role="status"></p>
     <p id="exploreStatus" class="photo-note" role="status">Extra tools load only when opened.</p>
   </details>
   <div class="camera-layer-control">
@@ -809,7 +821,7 @@
 
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
-<script type="module" src="src/main.js?v=philly-2026092204"></script>
+<script type="module" src="src/main.js?v=philly-2026092205"></script>
 <noscript>
   <div class="noscript">
     This map is a WebGL application and needs JavaScript. The elevation data it

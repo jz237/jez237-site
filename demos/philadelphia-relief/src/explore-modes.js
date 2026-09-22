@@ -198,7 +198,7 @@ export function createExploreModes(THREE, options) {
   stage.addEventListener('pointerup', up, true); stage.addEventListener('pointercancel', up, true);
   stage.addEventListener('wheel', wheel, { capture: true, passive: false });
   document.addEventListener('keydown', key, true);
-  return { open, get view() { return view; }, get bounds() { return bounds; },
+  return { open, close: () => leave(true), get view() { return view; }, get bounds() { return bounds; },
     update(camera, exaggeration) {
       if (!bounds) return;
       if (!photographic.exhibitSupported && store.value('photoMode') !== 'relief') {

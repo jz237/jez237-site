@@ -1,4 +1,4 @@
-import { wireWindowCollapse } from './window-collapse.js?v=philly-2026092204';
+import { wireWindowCollapse } from './window-collapse.js?v=philly-2026092205';
 import { createBathymetry } from './bathymetry.js?v=philly-2026092201';
 import { wireSavedViews } from './saved-views.js?v=philly-2026092121';
 import { frameDelay } from './render-policy.js?v=philly-2026092121';
@@ -522,9 +522,9 @@ async function boot() {
     catch { /* private browsing */ }
   });
   const disposeRegionalViews = wireRegionalViews({ getPose: () => rig.pose(), motion });
-  let bathymetry;
+  let bathymetry, cityFeatures, cityFeaturesPromise;
   const photographic = createPhotographic({ stage: dom.stage, store, sampleElevation,
-    isOverlayActive: () => mapLayers.reliefOnly || bathymetry?.active,
+    isOverlayActive: () => mapLayers.reliefOnly || bathymetry?.active || cityFeatures?.active,
     landmarks: data.landmarks, onSelect: place => {
       if (mapLayers.propertyMode) return;
       motion.flyTo({ lon: place.lon, lat: place.lat }, { label: place.n });
@@ -537,12 +537,13 @@ async function boot() {
   const mapLayers = createMapLayers(THREE, { scene, stage: dom.stage, projection, sampleElevation,
     photographic, landmarks: data.landmarks, motion, getPose: () => rig.pose(), camera: rig.camera,
     onLandmark: name => ui.openCard(name), invalidate: () => wake(),
-    onArchive: () => { bathymetry?.disable();
+    onArchive: () => { cityFeatures?.close(); bathymetry?.disable();
       store.set({ era: 'present', compareMode: 'off', layers: { imagery: true } },
         { source: 'archive-comparison' }); } });
   bathymetry = createBathymetry(THREE, { terrain, projection, store, motion,
     water: overlays.areas.filter(entry => entry.kind === 'water'),
-    getPose: () => rig.pose(), clearArchive: () => mapLayers.clearArchive(), invalidate: () => wake() });
+    getPose: () => rig.pose(),
+    clearArchive: () => { cityFeatures?.close(); mapLayers.clearArchive(); }, invalidate: () => wake() });
 
   const disposeWindows = wireWindowCollapse();
 
@@ -589,10 +590,11 @@ async function boot() {
 
   let explore, explorePromise;
   async function openExplore(kind) {
+    cityFeatures?.close();
     const status = $('exploreStatus');
     status.textContent = 'Opening map tools…';
     try {
-      explorePromise ??= import('./explore-modes.js?v=philly-2026092121');
+      explorePromise ??= import('./explore-modes.js?v=philly-2026092205');
       const module = await explorePromise;
       if (sceneDisposed) return;
       explore ??= module.createExploreModes(THREE, {
@@ -610,6 +612,28 @@ async function boot() {
   $('standHere').onclick = () => openExplore('stand');
   $('openExhibit').onclick = () => openExplore('exhibit');
   $('openModel').onclick = () => openExplore('model');
+
+  let cityRequest = 0;
+  async function openCityFeature(kind) {
+    const request = ++cityRequest, status = $('cityFeatureLoadStatus');
+    status.textContent = 'Loading discovery…';
+    try {
+      cityFeaturesPromise ??= import('./city-features.js?v=philly-2026092205');
+      const module = await cityFeaturesPromise;
+      if (sceneDisposed || request !== cityRequest) return;
+      cityFeatures ??= module.createCityFeatures(THREE, { scene, sky: sky.mesh, projection,
+        sampleElevation, store, motion, invalidate: () => wake(),
+        stopOtherModes: () => { explore?.close(); aircraftLayer.stopFollow(true);
+          bathymetry.disable(); mapLayers.clearArchive(); } });
+      cityFeatures.open(kind); status.textContent = '';
+    } catch {
+      cityFeaturesPromise = undefined;
+      cityFeatures?.close(); status.textContent = 'Discovery could not load. Please try again.';
+    }
+  }
+  $('openDrawbridges').onclick = () => openCityFeature('bridge');
+  $('openUnderground').onclick = () => openCityFeature('underground');
+
 
   // A click first tries a schematic landmark, then solves the ray against the
   // height field and finds the actual packed OSM footprint underneath.
@@ -841,6 +865,7 @@ async function boot() {
     stats: () => ({
       photographic: photographic.stats(),
       bathymetry: bathymetry.stats(),
+      cityFeatures: cityFeatures?.stats() || { mode: null, resources: 0 },
       rendering: { frames: renderedFrames, delay: scheduledDelay, saving: powerToggle.checked },
       startup: { firstFrameMs: firstFrameAt, supplements: [...supplementalDone] },
       lightweight: !!store.value('lightweight'),
@@ -1109,6 +1134,7 @@ async function boot() {
     mapLayers.update(camera, { pose: now, width: viewW, height: viewH, exaggeration });
     aircraftLayer.update(camera, { pose: now, width: viewW, height: viewH, exaggeration });
     explore?.update(camera, exaggeration);
+    cityFeatures?.update(camera, dt, viewW, viewH);
     renderer.render(scene, camera);
     // Snapshot before the post-FX passes reset the counters.
     lastRenderInfo = { calls: renderer.info.render.calls, triangles: renderer.info.render.triangles };
@@ -1175,7 +1201,7 @@ async function boot() {
     }
     const photo = photographic.stats();
     scheduledDelay = frameDelay({ saving: powerToggle.checked,
-      moving: rig.dragging || motion.playing, live: aircraftLayer.animating,
+      moving: rig.dragging || motion.playing || cityFeatures?.animating, live: aircraftLayer.animating,
       loading: photo.wanted && !photo.failed && (photo.loading || !photo.firstViewReady || photo.pending > 0)
         || imageryDetail.stats().pending > 0,
       now: performance.now(), lastInteraction });
@@ -1219,6 +1245,7 @@ async function boot() {
       meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
       reefImagery: data.reefImagery, quality });
     bathymetry?.setTerrain(terrain);
+    cityFeatures?.refresh();
     imageryDetail.attachTerrain(terrain);
     diorama.attachTerrain(terrain);
     terrain.setTheme(store.value('theme'));
@@ -1245,6 +1272,7 @@ async function boot() {
     window.removeEventListener('resize', wake);
     explore?.dispose();
     aircraftLayer.dispose();
+    cityFeatures?.dispose();
     bathymetry.dispose();
     mapLayers.dispose();
     photographic.dispose();
