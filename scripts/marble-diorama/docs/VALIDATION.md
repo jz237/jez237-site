@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**184 automated tests pass. All six campaign races and all three bonus courses
+**187 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-30`.
+Current simulation/replay version: `rapier-0.20.0-mm-31`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -1187,3 +1187,22 @@ survives a reload; settings describe the new behavior. No captured console error
 The mm-30 timed campaign measurement is unchanged from mm-29 at difficulty zero:
 solo and paired runs reach Silly with zero falls, but Ultimate still times out.
 Full timed campaign and original control/cadence calibration remain open.
+
+### September 22 — original ending arithmetic caps
+
+The original executable caps ending time credit at 99 whole clock units and
+loss deductions at 20 before calculating the award. Both caps now apply to
+campaign endings; actual clocks, loss totals and individual race records remain
+intact. The result explanation states the limits. See ENDING-REFERENCE.md.
+
+Full suite: **187/187 pass**, 281323.15 ms. Three new tests cover cap boundaries,
+independent two-player six-race totals, untimed endings and an ineligible rival.
+Production build and diff check pass. Local browser Practice demo completes in
+24.74 seconds with 1,408 points, zero falls and no captured warnings/errors.
+The boundary ending cases are native rule tests, not a fresh full browser
+campaign walkthrough. No geometry, steering or course timing changed; the
+previous mm-30 timed campaign measurement remains applicable to movement.
+
+The catch-up audit is recorded in CATCHUP-REFERENCE.md. Its original trigger,
+penalty, destination selection and camera dependency are traced, but the
+mechanic is not implemented. Full parity and timed Ultimate completion remain open.

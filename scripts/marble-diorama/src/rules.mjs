@@ -57,8 +57,12 @@ export function nextCourseTime(id, remaining = 0, difficulty = 0) {
     : Math.floor(remaining) + allocation;
 }
 export function endingBonus(time, deaths) {
+  // Original ending routine caps both displayed operands before calculating
+  // the award. See ENDING-REFERENCE.md; these are not just display limits.
   return (
-    20000 + Math.floor(Math.max(0, time)) * 1000 - Math.max(0, deaths) * 1000
+    20000 +
+    Math.min(99, Math.floor(Math.max(0, time))) * 1000 -
+    Math.min(20, Math.max(0, deaths)) * 1000
   );
 }
 
