@@ -1,3 +1,4 @@
+import { wireWindowCollapse } from './window-collapse.js?v=philly-2026092204';
 import { createBathymetry } from './bathymetry.js?v=philly-2026092201';
 import { wireSavedViews } from './saved-views.js?v=philly-2026092121';
 import { frameDelay } from './render-policy.js?v=philly-2026092121';
@@ -9,9 +10,9 @@ import { wireLooks } from './looks.js?v=philly-2026092121';
 import { createDiorama, dioramaAmount, displayExaggeration } from './diorama.js?v=philly-2026092122';
 import { createOrientation } from './orientation.js?v=philly-2026092122';
 import { createPhotographic } from './photographic.js?v=philly-2026092201';
-import { wireRegionalViews } from './regional-views.js?v=philly-2026092121';
-import { createCameraLayer } from './camera-layer.js?v=philly-2026092203';
-import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092121';
+import { wireRegionalViews } from './regional-views.js?v=philly-2026092204';
+import { createCameraLayer } from './camera-layer.js?v=philly-2026092204';
+import { createAircraftLayer } from './aircraft-layer.js?v=philly-2026092204';
 import { createMapLayers } from './map-layers.js?v=philly-2026092121';
 /**
  * Philadelphia Relief — application entry point.
@@ -67,7 +68,7 @@ import {
   buildControls, buildLayerToggles, buildPresets, buildQuickJumps,
   createSearch, buildSearchIndex, createDialogs, createCard, applyThemeChrome, toast,
   enumLabel, setValueNote, renderFloodLegend, renderEraBanner,
-} from './ui.js?v=philly-2026092121';
+} from './ui.js?v=philly-2026092204';
 import { getTheme } from './themes.js?v=philly-2026092121';
 
 const LIGHT_BOUNDS = { altMin: CONTROLS.sunAltitude.min, altMax: CONTROLS.sunAltitude.max };
@@ -542,6 +543,8 @@ async function boot() {
   bathymetry = createBathymetry(THREE, { terrain, projection, store, motion,
     water: overlays.areas.filter(entry => entry.kind === 'water'),
     getPose: () => rig.pose(), clearArchive: () => mapLayers.clearArchive(), invalidate: () => wake() });
+
+  const disposeWindows = wireWindowCollapse();
 
   // Optional regional decoration and district photographs never hold up the map.
   // Fetch at most one supplemental asset at a time, after the first useful frame.
@@ -1249,7 +1252,7 @@ async function boot() {
     disposeRegionalViews();
     imageryDetail.dispose(); neighborhood.dispose(); diorama.dispose();
     orientation.dispose(); navigation.dispose(); disposeLooks(); disposeNotes(); ui.disposeSaved?.();
-    disposeMapChrome();
+    disposeMapChrome(); disposeWindows();
   },
       { once: true });
 
