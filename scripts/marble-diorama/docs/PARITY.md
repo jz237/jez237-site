@@ -9,7 +9,8 @@ remaining course and encounter work.
 
 The latest native Silly fixture adds [recovered birds](NATIVE-BIRDS.md),
 [miniature room behavior](NATIVE-MINIATURES.md) and the original
-[uphill slope acceleration](NATIVE-SLOPES.md). These changes still require
+[uphill slope acceleration](NATIVE-SLOPES.md), plus the red transfer's recovered
+[inlet acceleration and outlet choice](NATIVE-TRANSFER.md). These changes still require
 full-course integration and release validation.
 
 All six races are playable reconstructions. **None is certified as a complete

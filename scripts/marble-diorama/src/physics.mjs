@@ -40,6 +40,7 @@ import {
   advanceTerrainAnimations,
 } from "./animated-terrain.mjs";
 import { transferForce, chooseTransfer } from "./powered-transfer.mjs";
+import { physicalNativeTransfer } from "./native-transfer-physics.mjs";
 import {
   traversalPaths,
   updateTraversalBonuses,
@@ -776,13 +777,15 @@ export class Simulation {
         );
         if (choice) p.transferRoute = choice;
       }
-      const flow = transferForce(
-        this.traversalPaths,
-        b.translation(),
-        b.linvel(),
-        RADIUS,
-        p.transferRoute,
-      );
+      const flow =
+        physicalNativeTransfer(this, p, index, RADIUS, wasPowered) ??
+        transferForce(
+          this.traversalPaths.filter((path) => !path.nativeTransfer),
+          b.translation(),
+          b.linvel(),
+          RADIUS,
+          p.transferRoute,
+        );
       if (flow) {
         p.poweredTransfer = flow.id;
         b.applyImpulse(

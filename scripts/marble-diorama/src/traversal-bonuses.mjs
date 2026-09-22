@@ -62,6 +62,7 @@ export function traversalPaths(course) {
           flare: p.flare,
           flowSpeed: p.flowSpeed,
           flowExitSpeed: p.flowExitSpeed,
+          nativeTransfer: p.nativeTransfer === true,
           radius: p.radius ?? 1.4,
           length,
           points,
@@ -130,7 +131,11 @@ export function updateTraversalBonuses(paths, player, position, radius) {
   player.traversals ??= {};
   for (const path of paths) {
     if (!path.score || player.traversalClaims?.includes(path.id)) continue;
-    if (path.fork && player.transferRoute?.branch !== path.branch) continue;
+    // Native selection happens above the inlet. Both paths share precisely
+    // the same lower leg, so track that leg once until the outlet is chosen.
+    const branch =
+      player.transferRoute?.branch ?? (path.nativeTransfer ? 0 : null);
+    if (path.fork && branch !== path.branch) continue;
     if (
       ["x", "y", "z"].some(
         (axis) =>
