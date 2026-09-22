@@ -17,7 +17,7 @@ older miniatures are described separately in `SILLY-MINIATURES.md`.
   direction vectors are recovered tables. The adapter uses a seeded random
   stream, not the original global RNG.
 - Actors ordinarily advance every three source updates. An active player at
-  source height 16238 on surface type 1 alerts the room, advancing them every
+  source height 16238 in navigation region 1 alerts the room, advancing them every
   update. Divider remainders survive that change. Fleeing selects a player and
   quantizes direction using the source's signed arithmetic and tie order.
 - Steelies move on each animation update and reconsider direction after four
@@ -59,9 +59,11 @@ gravity. This is an adapter tuning value, not a recovered original constant.
 Only initial room allocation may relocate a candidate. It requires the actual
 floor at the source room elevation and clear visible actor geometry, trying
 nearby open cell centers if necessary. An actor without a valid placement stays
-hidden. The source type-1 player input is currently inferred from the open room
-footprint and measured supported height; full source surface-byte dispatch is
-still pending.
+hidden. The room input uses the player's recorded navigation region and measured
+supported height. Source `0x12d32/0x12d3e` writes gate-selected regions to actor
+field `+0x1b`, which the miniature alert routine reads. This corrects the initial
+misidentification of that field as a surface type and removes the former open
+maze-footprint approximation. Native miniature imports require navigation data.
 
 Steelies use closed reflective meshes; puddles use their complete concave mesh;
 munchers use separate foot, body, head and mouth solids. Source frame counters
@@ -83,7 +85,9 @@ one-contact rewards, cadence, signed fleeing, probe side effects, actor spacing,
 deterministic continuation and invalid injected randomness. Seven physical tests
 cover import validation, sustained movement against friction, real wall contact,
 shared geometry, support, all three physical pickups, spent orientation and
-exact snapshot continuation. Audio routing has a separate test.
+exact snapshot continuation. A further test changes the region while retaining
+the same room position, checking that region tracking governs fleeing. Audio
+routing has a separate test.
 
 Two private runs on the recovered Silly board each sampled nine actors for
 1,800 physical ticks (16,200 actor samples per run). Both had zero missing floors
@@ -95,5 +99,5 @@ The local browser preview shows the nine forms inside the actual maze, with
 changing positions and poses. Audio has not had human listening verification.
 
 Remaining: independent source execution comparison, original silhouettes and
-frame offsets, exact surface-byte inputs, motion calibration, full campaign
+frame offsets, motion calibration, full campaign
 integration and ordinary-input playtesting before publication.

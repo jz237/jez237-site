@@ -38,6 +38,7 @@ export function validateNativeMiniatures(course) {
     course.miniatureSequence !== true ||
     !course.nativeCamera?.reverse ||
     course.nativeDynamics?.rate !== course.nativeCamera.rate ||
+    course.navigation?.partId !== course.nativeCamera.partId ||
     actors.length !== 9 ||
     new Set(actors.map((e) => e.nativeMiniatureSlot)).size !== 9 ||
     actors.some(
@@ -282,7 +283,7 @@ export function stepMiniatureSequence(state, players = [], random) {
   state.tick++;
   state.events = [];
   const alerted = players.some(
-    (p) => p.active && word(p.height) === 16238 && p.surface === 1,
+    (p) => p.active && word(p.height) === 16238 && p.region === 1,
   );
   for (const s of state.slots) {
     if (!s.loaded) continue;

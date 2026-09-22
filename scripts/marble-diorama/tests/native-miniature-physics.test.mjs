@@ -105,6 +105,12 @@ function fixture(wall = false) {
     rate: 20,
   };
   c.nativeDynamics = { rate: 20 };
+  c.navigation = {
+    type: "terrain-gates",
+    partId: "ground",
+    initialRegions: [1, 1],
+    gates: [],
+  };
   c.miniatureSequence = true;
   c.enemies = Array.from({ length: 9 }, (_, i) => ({
     id: `mini-${i}`,
@@ -136,6 +142,7 @@ test("native miniature import validates all nine unique forms and compatible clo
     (c) => (c.enemies[1].nativeMiniatureSlot = 0),
     (c) => (c.enemies[0].form = "acid"),
     (c) => delete c.nativeDynamics,
+    (c) => delete c.navigation,
     (c) => delete c.miniatureSequence,
   ]) {
     const c = fixture();
@@ -273,6 +280,26 @@ test("actual contact pays once for every form and leaves a visible harmless spen
     } finally {
       sim.dispose();
     }
+  }
+});
+
+test("miniature fleeing uses the recorded region even at the same room position", () => {
+  const c = fixture();
+  c.navigation.initialRegions = [0, 0];
+  const sim = new Simulation(c, { untimed: true });
+  try {
+    sim.nativeCamera.initialTransition = [57, 56];
+    for (let i = 0; i < 30; i++) sim.step();
+    assert.ok(sim.players[0].grounded);
+    assert.ok(sim.nativeMiniatures.slots.every((s) => s.mode === 0));
+    sim.players[0].navigation.region = 1;
+    for (let i = 0; i < 6; i++) sim.step();
+    assert.ok(sim.nativeMiniatures.slots.every((s) => s.mode === 1));
+    sim.players[0].navigation.region = 0;
+    for (let i = 0; i < 6; i++) sim.step();
+    assert.ok(sim.nativeMiniatures.slots.every((s) => s.mode === 0));
+  } finally {
+    sim.dispose();
   }
 });
 
