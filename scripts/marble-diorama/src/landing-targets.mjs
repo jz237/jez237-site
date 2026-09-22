@@ -51,6 +51,8 @@ export function updateLandingTargets(targets, player, position, radius) {
     for (const target of targets) {
       if (
         player.landingClaims?.includes(target.id) ||
+        (target.claimGroup &&
+          player.landingClaimGroups?.includes(target.claimGroup)) ||
         position.y - radius - target.y > 0.015 ||
         position.y - radius - target.y < -0.1
       )
@@ -58,6 +60,10 @@ export function updateLandingTargets(targets, player, position, radius) {
       const score = landingScore(target, position);
       if (!score) continue;
       (player.landingClaims ??= []).push(target.id);
+      // The Amiga Practice shelves share one eligibility bit per player.
+      // Custom targets without a group retain independent claims.
+      if (target.claimGroup)
+        (player.landingClaimGroups ??= []).push(target.claimGroup);
       player.landingAirTicks = 0;
       player.score += score;
       return { type: "landing-bonus", target: target.id, score };

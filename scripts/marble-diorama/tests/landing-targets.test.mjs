@@ -195,3 +195,73 @@ test("Ultimate reference tally includes 6000, the 400 clock award, and the separ
   assert.equal(run.players[0].score, 79470);
   s.dispose();
 });
+
+test("Practice permits one shelf bonus per player across all three landing regions", () => {
+  for (const firstIndex of [0, 1, 2]) {
+    const c = practiceCourse(),
+      targets = landingTargets(c);
+    const sim = new Simulation(c, { players: 2, untimed: true });
+    for (const player of [0, 1]) {
+      const other = sim.players[1 - player];
+      sim.body(other).setTranslation(worldPoint(-10, 10.56, 14), true);
+      const order = [firstIndex, (firstIndex + 1) % 3, (firstIndex + 2) % 3];
+      for (const [attempt, index] of order.entries()) {
+        drop(sim, player, targets[index]);
+        const awards = advance(sim, 180).filter((e) => e.player === player);
+        assert.equal(awards.length, attempt === 0 ? 1 : 0);
+      }
+      assert.deepEqual(sim.players[player].landingClaims, [
+        targets[firstIndex].id,
+      ]);
+      assert.deepEqual(sim.players[player].landingClaimGroups, [
+        "practice-landing-bonus",
+      ]);
+    }
+    sim.dispose();
+  }
+});
+
+test("shared shelf eligibility survives respawn and replay; a fresh race resets it", () => {
+  const c = practiceCourse(),
+    targets = landingTargets(c);
+  const sim = new Simulation(c, { untimed: true });
+  drop(sim, 0, targets[0]);
+  assert.equal(advance(sim, 180).length, 1);
+  const claimed = sim.snapshot();
+  sim.respawn(sim.players[0]);
+  drop(sim, 0, targets[1]);
+  assert.deepEqual(advance(sim, 180), []);
+  sim.restore(claimed);
+  sim.respawn(sim.players[0]);
+  drop(sim, 0, targets[2]);
+  assert.deepEqual(advance(sim, 180), []);
+  sim.dispose();
+  const restarted = new Simulation(c, { untimed: true });
+  drop(restarted, 0, targets[2]);
+  assert.equal(advance(restarted, 180).length, 1);
+  restarted.dispose();
+});
+
+test("custom landing groups round trip, validate and leave ungrouped shelves independent", () => {
+  const c = practiceCourse();
+  const marks = c.markings.filter((m) => m.kind === "landing-target");
+  for (const mark of marks) delete mark.claimGroup;
+  const sim = new Simulation(validateCourse(JSON.parse(JSON.stringify(c))), {
+    untimed: true,
+  });
+  for (const target of landingTargets(c)) {
+    drop(sim, 0, target);
+    assert.equal(advance(sim, 180).length, 1);
+  }
+  assert.equal(sim.players[0].landingClaimGroups, undefined);
+  sim.dispose();
+  marks[0].claimGroup = "shared-shelves";
+  assert.equal(
+    landingTargets(validateCourse(JSON.parse(JSON.stringify(c))))[0].claimGroup,
+    "shared-shelves",
+  );
+  for (const invalid of [null, 0, [], {}, "", "   ", "x".repeat(65)]) {
+    marks[0].claimGroup = invalid;
+    assert.throws(() => validateCourse(c), /Invalid landing target/);
+  }
+});
