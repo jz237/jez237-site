@@ -1,4 +1,4 @@
-import { updateLandingStun } from "./landing-stun.mjs";
+import { updateLandingStun, landingControlScale } from "./landing-stun.mjs";
 import { landingContact } from "./landing-contact.mjs";
 import { updateLaunchBonus } from "./launch-bonus.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
@@ -20,7 +20,7 @@ import {
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
 import { courseTime } from "./rules.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-31";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-32";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -325,7 +325,7 @@ export class Simulation {
         while (p.safeHistory.length && p.safeHistory[0].tick <= this.tick - 120)
           p.safePosition = p.safeHistory.shift().position;
       }
-      const input = (this.tick < p.stunnedUntil ? null : inputs[i]) ?? {
+      const input = inputs[i] ?? {
           x: 0,
           z: 0,
           turbo: false,
@@ -340,7 +340,8 @@ export class Simulation {
           gain = along > 0 ? clamp((max - speed) / 2, 0, 1) : 1,
           torque =
             (input.turbo ? STEERING_TORQUE.turbo : STEERING_TORQUE.normal) *
-            gain;
+            gain *
+            landingControlScale(p, this.tick);
         b.applyTorqueImpulse(
           { x: (z / n) * torque * STEP, y: 0, z: (-x / n) * torque * STEP },
           true,
