@@ -1457,3 +1457,21 @@ deterministic physics/snapshots at 30/60/120 fps. **241/241 full suite**,
 errors. See NATIVE-CAMERA.md for limits: player-state mapping, original cadence,
 Three.js framing, catch-up, shared actor allocation and remaining hazards are
 not complete. No publication; public authored campaign/mm-35 unchanged.
+
+### September 22 — recovered Aerial finish-hammer group
+
+The four previously omitted subtype-12 actors now have a local native-board
+implementation. The source controller preserves all four initial staggers,
+region-10 release, sixteen graphics at divider two, loop waits and the distinct
+drawn/collision frame pointers. A private independent bytecode reader matches
+16,000 observations. The 3D mallet mesh and Rapier response remain reconstructed;
+the original collision classifier is retained separately for further work.
+
+The recovered-terrain integration check loads at camera band 40/tick 1002 and
+ordinary steering activates the group in region 10/tick 1170, with zero falls.
+Nine regressions cover lifecycle, import validation, geometry, actual physical
+contact and snapshot continuation. **250/250 full suite**, 281803.263 ms.
+Build and browser inspection pass, with no captured warnings or errors.
+This is a local-start check, not a complete race. See AERIAL-HAMMERS.md for
+cadence, random-state, visual and original-response limitations. Public course
+definitions and mm-35 remain unchanged; no publication in this pass.

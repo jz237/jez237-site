@@ -4,6 +4,10 @@ import {
   terrainTileAt,
 } from "./terrain-navigation.mjs";
 import { createNativeCamera, advanceNativeCamera } from "./native-camera.mjs";
+import {
+  createAerialHammers,
+  advanceAerialHammers,
+} from "./aerial-hammers.mjs";
 import { updateLandingStun, landingControlScale } from "./landing-stun.mjs";
 import { landingContact } from "./landing-contact.mjs";
 import { updateLaunchBonus } from "./launch-bonus.mjs";
@@ -69,6 +73,7 @@ export class Simulation {
     this.nativeCamera = course.nativeCamera
       ? createNativeCamera(course.nativeCamera)
       : null;
+    this.aerialHammers = createAerialHammers(course);
     this.events = [];
     this.world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
     this.world.timestep = STEP;
@@ -96,7 +101,7 @@ export class Simulation {
         );
       const cd =
         g.part.motion.axis === "terrain-sequence" ||
-        ["flipper", "vacuum-mouth"].includes(g.part.profile)
+        ["flipper", "vacuum-mouth", "hammer"].includes(g.part.profile)
           ? RAPIER.ColliderDesc.trimesh(
               g.vertices,
               g.indices,
@@ -116,7 +121,7 @@ export class Simulation {
         previous: pose,
         current: pose,
       });
-      b.setEnabled(presenceAt(g.part, 0).visible);
+      b.setEnabled(pose.visible ?? presenceAt(g.part, 0).visible);
       if (g.part.motion.axis === "terrain") b.collider(0).setEnabled(false);
     }
     this.players = Array.from({ length: this.options.players }, (_, i) =>
@@ -276,6 +281,13 @@ export class Simulation {
       this.tick * STEP * this.preset.machineSpeed,
       this.nativeCamera,
     );
+    const hammerPoses = advanceAerialHammers(
+      this.course,
+      this.aerialHammers,
+      terrainPlayers,
+      this.tick * STEP * this.preset.machineSpeed,
+      this.nativeCamera,
+    );
     for (const m of this.movers) {
       m.previous = m.current;
       const machineTime =
@@ -287,7 +299,7 @@ export class Simulation {
       m.current = motionAt(
         m.part,
         machineTime,
-        terrainPoses[m.part.sourcePartId],
+        terrainPoses[m.part.sourcePartId] ?? hammerPoses[m.part.id],
         m.previous,
       );
       if (
@@ -328,8 +340,9 @@ export class Simulation {
         );
       else
         b.setEnabled(
-          presenceAt(m.part, this.tick * STEP * this.preset.machineSpeed)
-            .visible,
+          m.current.visible ??
+            presenceAt(m.part, this.tick * STEP * this.preset.machineSpeed)
+              .visible,
         );
       b.setNextKinematicTranslation(m.current.position);
       b.setNextKinematicRotation(m.current.rotation);
@@ -761,6 +774,7 @@ export class Simulation {
       movers: structuredClone(this.movers),
       terrainAnimations: structuredClone(this.terrainAnimations),
       nativeCamera: structuredClone(this.nativeCamera),
+      aerialHammers: structuredClone(this.aerialHammers),
       enemies: structuredClone(this.enemies),
     };
   }
@@ -781,6 +795,9 @@ export class Simulation {
           : null),
     );
     this.enemies = structuredClone(s.enemies ?? []);
+    this.aerialHammers = structuredClone(
+      s.aerialHammers ?? createAerialHammers(this.course),
+    );
     this.events = [];
     // Cached shapes are only an optimization, never restored simulation state.
     for (const a of this.acid) a.geometry = null;
