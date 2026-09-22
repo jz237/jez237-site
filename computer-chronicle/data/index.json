@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-22",
+      "historicDate": "1984-09-03",
+      "displayDate": "Week of September 3-9, 1984",
+      "edition": "Issue 110 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: Hubot promises a robotic companion for the living room, even if the chores remain yours.",
+      "leadHeadline": "The $4,000 Robot Rolls Into the Home",
+      "storyHeadlines": [
+        "Digital Equipment Pays $1.1 Million Export Fine",
+        "September's PC Market Fills With Compatibles and Databases",
+        "Hard Disks Promise to End Macintosh Floppy Shuffling"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-09-03.jpg",
+      "thumb": "media/thumbs/1984-09-03.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-21",
       "historicDate": "1984-08-27",
       "displayDate": "Week of August 27-September 2, 1984",
