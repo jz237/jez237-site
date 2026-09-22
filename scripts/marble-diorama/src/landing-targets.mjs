@@ -22,22 +22,34 @@ export function landingTargets(course) {
     });
 }
 
+// Shared by the scoring query and the painted target. Original reward amounts
+// are recovered; their mapping onto the reconstructed shelf remains normalized.
+export function landingAmount(target, u, v) {
+  const [a, b, c, d] = target.values;
+  const value = (a * (1 - u) + b * u) * (1 - v) + (c * (1 - u) + d * u) * v;
+  if (target.scoreBands) {
+    const low = Math.min(...target.values),
+      high = Math.max(...target.values);
+    const fraction = high === low ? 0 : (value - low) / (high - low);
+    const band = Math.max(
+      0,
+      Math.min(
+        target.scoreBands.length - 1,
+        Math.floor(fraction * target.scoreBands.length),
+      ),
+    );
+    return target.scoreBands[band];
+  }
+  return Math.round(value * 10) * 100;
+}
+
 export function landingScore(target, position) {
   const c = Math.cos(target.angle),
     s = Math.sin(target.angle);
   const x = (position.x - target.x) * c + (position.z - target.z) * s;
   const z = -(position.x - target.x) * s + (position.z - target.z) * c;
   if (Math.abs(x) > target.w / 2 || Math.abs(z) > target.d / 2) return 0;
-  const u = x / target.w + 0.5,
-    v = z / target.d + 0.5;
-  const [a, b, c0, d] = target.values;
-  // The reference shows an intermediate 4500 award, not only integer labels.
-  // Bilinear interpolation/100-point rounding remain a reconstruction.
-  return (
-    Math.round(
-      ((a * (1 - u) + b * u) * (1 - v) + (c0 * (1 - u) + d * u) * v) * 10,
-    ) * 100
-  );
+  return landingAmount(target, x / target.w + 0.5, z / target.d + 0.5);
 }
 
 export function updateLandingTargets(targets, player, position, radius) {

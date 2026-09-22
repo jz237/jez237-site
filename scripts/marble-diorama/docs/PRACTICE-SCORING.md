@@ -26,9 +26,10 @@ an award, with visible text and an effects-bus cue. The three shelves share one 
 snapshots and retained after falling; the other player remains eligible. Rolling over the paint, flying
 above it, or passing beneath the shelf does not pay.
 
-**The award formula is provisional.** The original 4500 observation demonstrates
-an intermediate award but does not establish every position's value. Current
-values interpolate across the 3/5 and 4/6 corner labels and round to 100 points.
+**The spatial mapping is provisional.** Seven original amounts are now recovered
+and used as discrete bands; the prior 100-point interpolation is removed. The
+bands and paint share a normalized mapping on the reconstructed rectangles,
+which is not yet an exact map of original world coordinates.
 The six-tick airborne requirement and exact landing-region boundaries still
 need comparison. The former once-per-shelf policy is corrected below.
 The effect uses the remake's collection cue, not a recovered original sample.
@@ -103,7 +104,7 @@ players, rejection of later shelves, retention through respawn and restored
 snapshots, reset on a fresh race, independent custom targets and import checks.
 The existing normal-input shelf route still completes without falls.
 
-### Further scoring evidence, still unresolved
+### Executable scoring evidence (followed by the resource recovery below)
 
 The same code contradicts continuous bilinear scoring. Regions 1 and 2 use
 original coordinate Y minus 488 and 568 respectively; region 3 uses X minus
@@ -118,3 +119,51 @@ values or the complete geometry mapping. The original also consumes the region c
 whether the resulting index pays. Exact boundaries, the seven amounts and
 nonpaying-region behavior remain unresolved; the current formula is explicitly
 provisional. No other port's scoring table has been substituted.
+
+## Original reward data recovered (mm-35)
+
+A preserved 901,120-byte OFS disk image was inspected without executing its
+Amiga programs. The selected files were read with amitools 0.8.1; their HUNK
+sections and relocations were decoded privately using the same address model
+as the executable audit. The disk SHA-256 is
+`a34b2d585cbe5630d6e3a42bf35df7e31b26c952f1b33d085aebbafb7c550c75`.
+The extracted 2,776-byte `marbdat` SHA-256 is
+`491efbce8fd826642af156b76db16a8ea28d0f90472dabe32923ae09500e3cc4`.
+The disk, original programs/resources and decoded tables are private reference
+material; none are included in the published site.
+
+The relocated `marbdat` data section is 1,920 bytes. Reading big-endian words at
+`0x24 + 2 * index`, as required by `0xa622`, gives these Practice landing entries:
+
+| Index | Points |
+|---|---:|
+| 7 | 3000 |
+| 8 | 3500 |
+| 9 | 4000 |
+| 10 | 4500 |
+| 11 | 5000 |
+| 12 | 5500 |
+| 13 | 6000 |
+
+The visible 4500 award in the independent Amiga recording agrees with index 10.
+The remake's three Practice targets now use exactly these seven amounts.
+They no longer produce unsupported intermediate amounts such as 4900. Paint
+and scoring call the same `landingAmount` function, so the visible bands agree
+with the amounts, including after an editor move or rotation. Custom targets
+without `scoreBands` keep their previous continuous interpolation.
+
+### Remaining spatial reconstruction
+
+The original divides a region-specific coordinate offset into four-unit bands
+and caps at index 13. The current boards are authored in different dimensions
+and axes. For now, the existing corner-value gradient is normalized across the
+seven bands (equal intervals in that normalized coordinate, with capped ends).
+That correspondence is reconstructed, not the original coordinate map. The
+paint is an explanatory remake texture, not a recovered original bitmap. Full
+shelf dimensions, precise entry regions, the six-tick airborne gate, and a
+nonpaying entry consuming the shared claim remain open. Practice revision 3
+and physics/replay mm-35 separate the changed scores and recordings.
+
+Thirteen focused landing/finish tests pass, including physical drops into all
+seven bands, paint-coordinate agreement with moved/rotated scoring footprints,
+shared claims, snapshots, independent players and legacy/custom imports.

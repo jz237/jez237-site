@@ -476,6 +476,13 @@ export function validateCourse(c) {
         (typeof mark.claimGroup !== "string" ||
           !mark.claimGroup.trim() ||
           mark.claimGroup.length > 64)) ||
+      (mark.scoreBands !== undefined &&
+        (!Array.isArray(mark.scoreBands) ||
+          mark.scoreBands.length < 1 ||
+          mark.scoreBands.length > 32 ||
+          mark.scoreBands.some(
+            (value) => !Number.isInteger(value) || value < 1 || value > 20000,
+          ))) ||
       !floor ||
       floor.kind !== "floor" ||
       floor.motion ||

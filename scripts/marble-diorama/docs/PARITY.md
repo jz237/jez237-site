@@ -9,7 +9,7 @@ original dimensions, timing, or complete route coverage.
 
 | Course | Layout and routes | Hazards | Rules, recovery, finish |
 |---|---|---|---|
-| Practice | PARTIAL: training field, twin peaks, four banked reversals; left/right exits and left bonus-shelf route pass | PARTIAL: physical gates/bollards; numbered landing targets now award points; one landing claim per player shared across shelves; precise reward bands remain provisional | 60-unit start, 1000 finish award, 100 points per unused timed unit and last-safe recovery implemented; other score triggers/boundaries open |
+| Practice | PARTIAL: training field, twin peaks, four banked reversals; left/right exits and left bonus-shelf route pass | PARTIAL: physical gates/bollards; numbered landing targets now award points; one landing claim per player shared across shelves; seven original amounts restored; exact spatial band mapping remains provisional | 60-unit start, 1000 finish award, 100 points per unused timed unit and last-safe recovery implemented; other score triggers/boundaries open |
 | Beginner | PARTIAL: cyan towers, fork, pyramids, ledges, three hollow pipes, ice; left ledge, two-pipe and upper-right-fork routes pass; exact original geometry remains open | Two physical steelies and three curling munchers restored; steelie knockout awards 1000; completed pipes pay 4000/2000; exact AI, placement and paired attribution open | 75-unit reset after Practice implemented; timed left, two-pipe and upper-right-fork runs pass; original finish/respawn details open |
 | Intermediate | PARTIAL: split towers, islands, acid room, orange pipe, lower green lanes; both upper starts and left bypass pass; orange pipe, continuous traveling-wave strip and right lane now pass | Articulated curling munchers with shared collision shapes, and deforming acid with shared concave sensors; five board-axis patrols using observed straight legs/turns, with unverified return legs and speeds; acid contacts dissolve and reassemble using a sampled Ultimate sequence; continuous physical strip with reference-informed raised crests, flat intervals and approximately 2.4s cadence; exact profile/scale and lower-lane shape remain open; sampled lower cyan sections are static | 45 units added to carryover; orange pipe pays 2000; paired starts and independent completion pass; scoring/boundary parity open |
 | Aerial | PARTIAL: crossed narrow rails, zigzags, vacuum turns, lower red/yellow towers; two-player demos yield at the crossing and both complete without falls | Directional vacuums, steelie, round retracting peg banks implemented; red hinged cup physically launches; exact return destination, dimensions and measured hazard cycles open | 30 units added; normal-input untimed runs pass; timed full-campaign balance open |
@@ -152,3 +152,11 @@ The original landing branches share one per-player claim across all three
 shelves. The remake now preserves this through deaths and replay, resetting
 only for a fresh race. Discrete reward-table values and region mapping remain
 open; the interpolation formula is still provisional. See PRACTICE-SCORING.md.
+
+### Practice discrete rewards (mm-35)
+
+The original marbdat resource confirms seven landing amounts, 3000 through
+6000 in 500-point steps. Scoring and painted bands now share this discrete
+selection. Mapping the reconstructed shelves to original coordinate bands
+remains partial. Original catch-up tables for all six courses are also recovered,
+but their world mapping and gameplay integration remain open.

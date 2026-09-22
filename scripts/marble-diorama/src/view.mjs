@@ -1,7 +1,7 @@
 import { stunMarks, updateStunMarks } from "./stun-view.mjs";
 import { acidDeathGroup, updateAcidDeath } from "./acid-death-view.mjs";
 import { vacuumFragments, updateVacuumFragments } from "./vacuum-view.mjs";
-import { landingTargets } from "./landing-targets.mjs";
+import { landingTargets, landingAmount } from "./landing-targets.mjs";
 import { acidMesh, updateAcidMesh } from "./acid-view.mjs";
 import { foundationGeometry } from "./foundations.mjs";
 import * as THREE from "three";
@@ -494,24 +494,55 @@ export class DioramaView {
         ctx.closePath();
         ctx.fill();
       } else if (mark.kind === "landing-target") {
-        // Four red/ivory landing labels replace the unrelated 20/30/40 plaques.
-        // The plane has the same inset rectangle used for landing detection.
-        ctx.fillStyle = "#a8352b";
-        ctx.fillRect(0, 0, 256, 256);
-        ctx.fillStyle = "#f5e9cf";
-        for (let row = 0; row < 4; row++)
-          for (let col = 0; col < 4; col++)
-            if ((row + col) % 2 === 0) ctx.fillRect(col * 64, row * 64, 64, 64);
-        ctx.font = "bold 74px sans-serif";
+        // Paint the same discrete scoring regions used by physical landings.
+        // Custom targets without bands retain their checkerboard treatment.
+        if (mark.scoreBands) {
+          const pixels = ctx.createImageData(256, 256);
+          const colors = [
+            [168, 53, 43],
+            [245, 233, 207],
+          ];
+          for (let y = 0; y < 256; y++)
+            for (let x = 0; x < 256; x++) {
+              const score = landingAmount(
+                mark,
+                (x + 0.5) / 256,
+                (y + 0.5) / 256,
+              );
+              const color = colors[mark.scoreBands.indexOf(score) % 2];
+              const at = (y * 256 + x) * 4;
+              pixels.data.set([...color, 255], at);
+            }
+          ctx.putImageData(pixels, 0, 0);
+        } else {
+          ctx.fillStyle = "#a8352b";
+          ctx.fillRect(0, 0, 256, 256);
+          ctx.fillStyle = "#f5e9cf";
+          for (let row = 0; row < 4; row++)
+            for (let col = 0; col < 4; col++)
+              if ((row + col) % 2 === 0)
+                ctx.fillRect(col * 64, row * 64, 64, 64);
+        }
+        ctx.font = mark.scoreBands
+          ? "bold 44px sans-serif"
+          : "bold 74px sans-serif";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
         for (let i = 0; i < 4; i++) {
-          const x = 64 + (i % 2) * 128,
-            y = 64 + Math.floor(i / 2) * 128;
+          const x =
+              (mark.scoreBands ? 32 : 64) +
+              (i % 2) * (mark.scoreBands ? 192 : 128),
+            y =
+              (mark.scoreBands ? 32 : 64) +
+              Math.floor(i / 2) * (mark.scoreBands ? 192 : 128),
+            half = mark.scoreBands ? 26 : 43;
           ctx.fillStyle = "#a8352b";
-          ctx.fillRect(x - 43, y - 43, 86, 86);
+          ctx.fillRect(x - half, y - half, half * 2, half * 2);
           ctx.fillStyle = "#fff3d8";
-          ctx.fillText(String(mark.values[i]), x, y + 4);
+          const value = mark.scoreBands
+            ? landingAmount(mark, x / 256, y / 256) / 1000
+            : mark.values[i];
+          ctx.fillText(String(value), x, y + (mark.scoreBands ? 2 : 4));
         }
       } else {
         ctx.fillStyle = "#b84939";

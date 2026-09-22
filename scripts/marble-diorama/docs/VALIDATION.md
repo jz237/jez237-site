@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**194 automated tests pass. All six campaign races and all three bonus courses
+**197 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-34`.
+Current simulation/replay version: `rapier-0.20.0-mm-35`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -1269,3 +1269,27 @@ completion, original discrete Practice reward values/regions and catch-up
 relocation remain open.
 
 Full suite: **194/194 pass**, 282319.02 ms. Production build and diff check pass.
+
+### September 22 — recovered discrete Practice rewards
+
+The privately recovered marbdat table verifies all seven amounts: 3000, 3500,
+4000, 4500, 5000, 5500 and 6000. Practice revision 3 / mm-35 replaces unsupported
+100-point interpolation with these bands. Painted regions and scoring share
+one function. Normalized placement on the current shelf geometry remains
+reconstructed; see PRACTICE-SCORING.md for the exact evidence and limits.
+
+Focused checks: **13/13 pass**, 4169.84 ms. They include actual supported
+landings for all seven awards, transformed paint/scoring agreement, shared
+claims, replay and validated custom imports. Production build passes. Browser
+bonus demo: 22.02s, 6,414 points, one 5,000-point landing award, zero falls.
+Replay inspection confirms all three painted targets have readable 3/4/5/6
+labels and matching discrete stripes. No captured console warnings/errors.
+
+The original catch-up destination tables for all six races are recovered and
+privately decoded. World mapping and gameplay integration remain open. Movement
+and clocks are unchanged; the mm-33 timed traversal measurement remains relevant
+but is not a fresh mm-35 timed campaign run. Full timed Ultimate acceptance is
+still incomplete. Original binaries, disk contents and decoded reference files
+are excluded from the release.
+
+Full suite: **197/197 pass**, 283106.47 ms. Production build and diff check pass.

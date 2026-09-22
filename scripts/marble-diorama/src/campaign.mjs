@@ -172,7 +172,7 @@ export function practiceCourse() {
     id: "practice",
     medals: { gold: 35, silver: 55 },
     rules: amigaCourseRules("practice"),
-    revision: 2,
+    revision: 3,
     name: "Practice Race",
     subtitle: "Training gates, twin peaks, and four banked reversals.",
     category: "campaign",
@@ -233,6 +233,7 @@ export function practiceCourse() {
       {
         kind: "landing-target",
         id: "bonus-upper-right-shelf",
+        scoreBands: [3000, 3500, 4000, 4500, 5000, 5500, 6000],
         claimGroup: "practice-landing-bonus",
         part: "upper-right-shelf",
         values: [3, 5, 4, 6],
@@ -240,6 +241,7 @@ export function practiceCourse() {
       {
         kind: "landing-target",
         id: "bonus-left-shelf",
+        scoreBands: [3000, 3500, 4000, 4500, 5000, 5500, 6000],
         claimGroup: "practice-landing-bonus",
         part: "left-shelf",
         offset: { x: 0, z: -2 },
@@ -249,6 +251,7 @@ export function practiceCourse() {
       {
         kind: "landing-target",
         id: "bonus-lower-right-shelf",
+        scoreBands: [3000, 3500, 4000, 4500, 5000, 5500, 6000],
         claimGroup: "practice-landing-bonus",
         part: "lower-right-shelf",
         values: [3, 5, 4, 6],
