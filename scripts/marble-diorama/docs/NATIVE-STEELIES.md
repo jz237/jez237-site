@@ -34,6 +34,9 @@ Relevant original routines:
 - 0x13122: desired velocity and one-thirty-second steering response.
 - 0x14d28 / 0x14e7e: five-unit planar speed limit.
 - 0x14b20, table 0x201a: speed-dependent neutral-ground rolling resistance.
+- 0x14f96 / 0x1555e: terrain-relative and last-supported-height fall limits.
+- 0x19a14 / 0xa622: guard retirement and shared defeat rewards.
+- 0x13350: guard gravity and five-unit terminal descent.
 
 Original binary resources, route extracts and diagnostic fixtures remain private.
 
@@ -71,11 +74,42 @@ does not snap it onto route points. An early longer patrol check exposed missing
 rolling resistance: ordinary contact friction alone allowed overshoot and a
 fall. Restoring the original resistance table corrected that failure.
 
+### Falling and rewards
+
+Native guards now retire when their source-equivalent height is more than 16
+units below the current terrain, or when an unsupported guard drops more than
+128 units from its last supported height. Height conversion subtracts the
+sphere's radius from its physical center. A ray from above the board queries
+the actual contact mesh, including changing terrain frames and excluding
+other marbles and obstacle actors. This also detects a guard below a closed
+board; a downward ray from inside the board must not mistakenly keep it alive.
+The query changes retirement only, never position or collision geometry.
+The guard's airborne branch at 0x13350 also subtracts 3/8 from vertical velocity
+and caps descent at five source units per update. Native guards now receive
+that cap, which the earlier physical adapter applied only to players.
+
+The original retirement routine awards type 3 to every player whose status is
+neither absent (0) nor retiring (2). `marbdat` at `0x24 + 3*2` gives 1,000 points.
+Finishing region 255 selects animation 6 at 0x12db8; its completion at 0x13fa8
+sets status 3, so finished players also qualify. Recovering/falling players
+retain eligibility. The current status mapping therefore rewards racing,
+falling and finished players, and excludes timed-out players. No previous
+contact is required. Each qualifying player receives one score event when
+the guard is removed. Camera unloading gives no points; a later camera load
+reinitializes the guard. Snapshot restoration preserves that lifecycle.
+
+The public authored courses retain their older last-contact award until the
+native course replacement passes release acceptance.
+
 ## Validation and remaining scope
 
-- Ten regressions cover graph choices, target eligibility/ties, mode changes,
+- Sixteen regressions cover graph choices, target eligibility/ties, mode changes,
   timer expiry, special camera boundaries, fixed-point steering, rolling drag,
   import validation, real rolling/contact and deterministic paired restoration.
+- Fall regressions cover void descent beyond the old five-world-unit limit,
+  terrain-relative retirement, rotated half tiles, changing terrain frames,
+  paired rewards, finish/recovery/timeout eligibility, camera removal/reload,
+  and deterministic restoration without duplicate rewards.
 - An independent Python transcription of the recovered branches agrees on
   10,000 state/steering observations across all four original graphs. This is
   source-branch comparison, not execution of the original game.
@@ -88,18 +122,27 @@ fall. Restoring the original resistance table corrected that failure.
   every node on their respective first-link patrol loops. These diagnostics
   inject a camera load boundary and disable the racing player; they verify
   sustained guard/terrain behavior, not ordinary player approaches.
+- All four guards pass isolated falls on their native boards: each retires
+  after approximately 128.653 source units of descent and awards both finished
+  players exactly once without prior contact. These fixtures hold the camera
+  still and supply an off-board initial condition; they are not full races.
 - Local browser inspection checks the black sphere, physical encounter and
   absence of console warnings/errors.
 
-The full suite passes 293/293 tests (283605.0042 ms). The final import-validation
-requirement for matching native dynamics was then verified with all 13 native
-steelie/dynamics tests (341.366 ms). Build and diff checks pass.
+The fall/reward change passes the full 299-test suite (282657.5498 ms).
+The terminal-descent correction was added during that run and then verified
+with all 24 focused native-steelie, legacy-steelie and native-dynamics tests
+(399.3061 ms), plus the four native-board fall fixtures. The four 7,200-tick
+patrol diagnostics pass with the new retirement rules. Build and diff checks
+pass. These are local checks; the native campaign has not been published.
 
-Open: original collision impulses, airborne-state details, defeat thresholds
-and paired reward attribution, other surface-specific resistance modes, exact
+Open: original collision impulses, airborne-state details, impact shattering
+and its animation, other surface-specific resistance modes, exact
 update cadence/difficulty calibration and complete normal-input course runs.
 Rapier integrates continuous rolling at 120 Hz; the original applies its
 discrete resistance after position integration. The torque response is a
-physical adaptation, not an assertion of identical trajectories. Existing
-last-contact defeat awards remain a reconstruction. Native boards still need
+physical adaptation, not an assertion of identical trajectories. The source
+also awards a guard's impact destruction at 0x14a34 before its break animation;
+that branch still needs physical impact calibration and visible shattering.
+Native boards still need
 the other enemy families, geometry polish and full release acceptance.
