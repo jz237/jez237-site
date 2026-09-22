@@ -127,9 +127,11 @@ export function wireRegionalViews({ getPose, motion }) {
   };
   for (const button of openers) button.addEventListener('click', opened);
   const closed = () => {
-    generation++; request?.abort(); refresh.disabled = false; opener?.focus();
+    generation++; request?.abort(); refresh.disabled = false;
+    if (!dialog.classList.contains('window-minimized')) opener?.focus();
   };
   dialog.addEventListener('close', closed);
+  dialog.addEventListener('map-window-restore', () => selectTab(selected));
   return () => {
     generation++; request?.abort();
     for (const button of openers) button.removeEventListener('click', opened);

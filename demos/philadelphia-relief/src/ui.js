@@ -502,7 +502,9 @@ export function createDialogs(ids) {
     }
   }, true);
 
-  for (const [, node] of dialogs) {
+  for (const [id, node] of dialogs) {
+    node.addEventListener('map-window-collapse', () => { if (openId === id) close(); });
+    node.addEventListener('map-window-restore', () => open(id));
     node.addEventListener('click', (event) => {
       if (event.target === node) close();     // click the scrim
     });

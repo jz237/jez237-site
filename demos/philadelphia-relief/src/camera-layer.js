@@ -27,6 +27,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
   card.setAttribute('aria-label', 'Camera preview'); document.body.append(card);
   const pool = [], projected = new THREE.Vector3();
   let items = [], enabled = false, loaded = false, loading = false, disposed = false, dirty = true;
+  let previewItem, minimizedPreview;
   let selected, selectionKey = '', closeTimer, previewTimer, mediaCleanup, request, pinned = false;
   let lastKey = '', lastUpdate = 0, viewWidth = 1, viewHeight = 1, lastDistance = 80000;
 
@@ -104,6 +105,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     top.append(titleBox, button); card.append(top);
   }
   function preview(item, anchor) {
+    previewItem = item;
     clearPreview(); card.replaceChildren();
     header(item.name, item.discovered ? 'DISCOVERED PUBLIC CAMERA'
       : hasCameraPreview(item) ? 'CAMERA PREVIEW' : 'TRAFFIC CAMERA LOCATION');
@@ -158,6 +160,7 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     pin?.classList.add('selected');
     if (group.items.length === 1) preview(group.items[0], group);
     else {
+      previewItem = undefined;
       card.replaceChildren(); header(`${group.items.length} cameras here`,
         group.discovered ? 'DISCOVERED PUBLIC CAMERAS'
           : group.traffic ? 'TRAFFIC CAMERAS' : 'REGIONAL WEBCAMS');
@@ -215,6 +218,17 @@ export function createCameraLayer(THREE, { stage, projection, sampleElevation, p
     if (!root.contains(e.target) && !card.contains(e.target)) close();
   };
   const visibility = () => { if (document.hidden) close(); };
+  card.addEventListener('map-window-collapse', () => {
+    minimizedPreview = { item: previewItem, group: selected };
+    clearPreview(); hold(); pinned = true;
+  });
+  card.addEventListener('map-window-restore', () => {
+    const saved = minimizedPreview;
+    if (!enabled || !saved?.group) { close(); return; }
+    selected = saved.group; card.hidden = false; hold(); pinned = true;
+    if (saved.item) preview(saved.item, saved.group);
+    else { selectionKey = ''; show(saved.group); pinned = true; }
+  });
   card.addEventListener('pointerenter', hold);
   card.addEventListener('pointerleave', e => { if (e.pointerType !== 'touch') deferClose(); });
   card.addEventListener('pointerdown', () => { pinned = true; });

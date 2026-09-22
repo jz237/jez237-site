@@ -7,7 +7,7 @@ import { createAircraftSession } from './aircraft-session.js?v=philly-2026092121
 import { createElevationCache } from './frame-work.js?v=philly-2026092121';
 import { flightView, FLIGHT_VIEWS, viewDelay } from './flight-view.js?v=philly-2026092121';
 import { SPOTTERS, observerView } from './explore-math.js?v=philly-2026092121';
-import { createAirportCamera } from './airport-camera.js?v=philly-2026092121';
+import { createAirportCamera } from './airport-camera.js?v=philly-2026092204';
 
 const el = (tag, cls, text) => {
   const node = document.createElement(tag); node.className = cls;
@@ -190,6 +190,14 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
     document.getElementById('mapControls')?.removeAttribute('open');
     exitRide.focus({ preventScroll: true });
   }
+  let minimizedAircraft;
+  card.addEventListener('map-window-collapse', () => {
+    minimizedAircraft = selected; hold(); pinned = true;
+  });
+  card.addEventListener('map-window-restore', () => {
+    if (records.has(minimizedAircraft)) { show(minimizedAircraft); pinned = true; }
+    else close();
+  });
   function show(id) {
     const r = records.get(id); if (!r) return;
     hold(); selected = id; card.hidden = false; card.replaceChildren();

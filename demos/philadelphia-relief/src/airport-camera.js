@@ -34,6 +34,8 @@ export function createAirportCamera() {
   }
   retry.onclick = start; close.onclick = () => dialog.close();
   dialog.addEventListener('close', stop);
+  dialog.addEventListener('map-window-collapse', stop);
+  dialog.addEventListener('map-window-restore', start);
   const visibility = () => {
     if (document.hidden) { stop(); status.textContent = 'Preview paused while away. Reload to reconnect.'; }
   };

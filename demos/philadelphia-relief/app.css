@@ -1925,3 +1925,35 @@ body.sheet-open .camera-map-card, body.cinema .camera-map-card { display: none; 
   .riverbed-heading button { width:40px; height:40px; }
   .riverbed-visits button { min-height:42px; }
 }
+
+
+/* Every floating window can be put away without losing its content. */
+.window-minimized { display: none !important; }
+.window-collapse { display: block; margin: 0 0 8px auto; min-height: 30px; padding: 4px 10px;
+  border: 1px solid #e4c88b70; border-radius: 8px; background: #294653; color: #fff0ce;
+  font: 600 11px var(--font); cursor: pointer; flex: 0 0 auto; }
+.window-dock { position: fixed; z-index: 120; left: 16px; bottom: 100px; display: flex;
+  gap: 6px; flex-wrap: wrap; max-width: min(760px, calc(100vw - 380px));
+  max-height: 110px; overflow: auto; pointer-events: none; }
+.window-dock[hidden], .window-restore[hidden] { display: none; }
+.window-restore { pointer-events: auto; max-width: 220px; white-space: nowrap; overflow: hidden;
+  text-overflow: ellipsis; min-height: 34px; padding: 6px 12px; border-radius: 10px;
+  border: 1px solid #c6e3dd80; background: #163442; color: #fff1d3; cursor: pointer;
+  box-shadow: 0 3px 14px #0003; font: 600 11px var(--font); }
+.window-collapse:focus-visible, .window-restore:focus-visible { outline: 2px solid #ffce7c; outline-offset: 2px; }
+#readout > .window-collapse { margin: 0; align-self: center; }
+body:has(#readout.window-minimized) .window-dock { bottom: 16px; }
+body.cinema .window-dock { display: none; }
+@media (min-width: 1025px) {
+  #pageTools > summary { display: grid; place-items: center; cursor: pointer; list-style: none;
+    min-height: 40px; padding: 0 12px; border-radius: 22px; background: #193341; color: #fff; }
+  #pageTools[open] { display: flex; align-items: center; gap: 6px; }
+  #pageTools:not([open]) > .page-tools-body { display: none; }
+  body.notes-collapsed .readout-preset > :not(.notes-toggle) { display: none; }
+  body.notes-collapsed .readout-preset { padding: 10px 14px; width: auto; }
+}
+@media (max-width: 1024px) {
+  #readout > .window-collapse { display: none; }
+  .window-dock { left: 10px; bottom: 145px; max-width: calc(100vw - 20px); max-height: 78px; }
+  body:has(#readout.window-minimized) .window-dock { bottom: 90px; }
+}
