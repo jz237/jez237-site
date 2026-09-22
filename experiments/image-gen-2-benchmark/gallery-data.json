@@ -15354,5 +15354,108 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-22-factual-infographic-factual-infographic-hangingfly-the-hunt",
+    "title": "Factual infographic: Hangingfly — The Hunter That Never Stands",
+    "tests": "Archive-wide packet contains no prior Bittacus strigosus or hangingfly topic. One dominant macro hero, eight substantive panels, four mechanism close-ups, and only claim-sheet-backed labels. factual_subtype=bizarre-insect-life; exact size and species-specific life cycle omitted because the fetched authoritative sources did not establish them.; archive_slot=2026-09-22T12:20; concept=bittacus-strigosus-suspended-raptorial-hunting; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a museum-quality direct-canvas scientific infographic in portrait orientation, 2048 x 3072 pixels, titled exactly ‘HANGINGFLY — THE HUNTER THAT NEVER STANDS’ with the italic scientific name Bittacus strigosus beneath. Sunburst infographic aesthetic: deep forest-green and warm amber field-guide palette, precise ivory typography, fine gold leader lines, naturalistic macro-photography realism, credible moist-forest light, no poster mockup, no room, no frame, no bibliography, no URLs, no logos. The insect imagery must occupy most of the canvas. CENTRAL HERO: an enormous anatomically correct adult Bittacus strigosus hanging upside-down beneath a nettle leaf in a moist woodland opening, one pair of long legs visibly anchored to the leaf while the remaining long raptorial legs curve toward a small flying insect; correct six legs, head-thorax-abdomen segmentation, two clear membranous wings with strongly margined crossveins and yellow pterostigma, dark-yellow to light-brown legs and abdomen, slender crane-fly-like silhouette but unmistakable predatory feet. Show shallow macro depth of field and droplets on foliage without obscuring anatomy. Surround the hero with EIGHT substantive, clearly separated illustrated panels: (1) ‘IDENTITY’ — compact taxonomy ladder Insecta → Mecoptera → Bittacidae → Bittacus strigosus with a dorsal silhouette; (2) ‘HANG, DON’T STAND’ — side-by-side posture comparison, the hangingfly suspended beneath a stem versus a faint crossed-out upright crane-fly-like stance, labeled as superficial resemblance only; (3) ‘THE GRASPING FOOT’ — enlarged cutaway of one tarsus showing the single raptorial claw and the fourth and fifth tarsomeres forming the grasping apparatus; (4) ‘CLAW CLOSER’ — simplified internal cutaway showing the modified pretarsal flexor system pulling the claw shut, with one short causal arrow; (5) ‘CAPTURE SEQUENCE’ — three readable frames: wait beneath foliage → flying insect enters reach → raptorial feet close around prey, with no sensational gore; (6) ‘SIX RAPTORIAL LEGS’ — underside anatomical diagram color-coding all three pairs as similarly structured raptorial legs, explicitly noting this is not a mantis-style foreleg-only system; (7) ‘WING ID’ — translucent wing close-up with clear membrane, heavily margined crossveins, and yellow pterostigma called out; (8) ‘WHERE IT HANGS’ — moist Ontario forest-edge vignette with nettle patches and a restrained Ontario locator silhouette, stating varied habitats, especially moist forests with nettles, and noting B. strigosus as the more common and widespread of Ontario’s three Bittacus species. Include FOUR prominent explanatory macro windows: claw/tarsomere geometry, flexor action, wing venation/pterostigma, and the plant-contact foot gripping the underside of a leaf. Add a small nonnumeric scale-context vignette of the whole insect beneath a nettle leaf; do not invent body length. Use only these concise factual labels, avoiding unsupported life-cycle stages, exact size, universal geographic range, nuptial-feeding details, or claims that one leg alone always supports the body. Ensure every leg joins the thorax correctly, no extra limbs, no fused wings, no monster scale, no human motives. Dense but legible hierarchy, large labels, short sentences, generous separation, precise callouts and leader lines, beautifully integrated scientific plate rather than a school poster.",
+    "image": "images/2026-09-22-factual-infographic-factual-infographic-hangingfly-the-hunt.jpg",
+    "thumb": "thumbs/2026-09-22-factual-infographic-factual-infographic-hangingfly-the-hunt.webp",
+    "color": "#373f22",
+    "date": "2026-09-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "bittacus-strigosus-suspended-raptorial-hunting",
+      "imageSha256": "b6033d73d746ae5a13af1c9b824916f086ab298344db724cbe4ec5e715b7825b",
+      "imageDHash": "b625ce8c2c3d3547"
+    },
+    "factualInfographic": {
+      "topic": "How Bittacus strigosus hangs from vegetation and captures insect prey with raptorial feet",
+      "description": "A source-backed anatomical and behavioral plate of the hangingfly Bittacus strigosus, centered on suspended predation and the tarsal grasping mechanism.",
+      "sourceNote": "Verified against the Harvard Museum of Comparative Zoology taxon record https://mczbase.mcz.harvard.edu/name/Bittacus%20strigosus, the Canadian Journal of Arthropod Identification species treatment https://cjai.biologicalsurvey.ca/cmw01/strigosus.html, and Acta Entomologica Sinica's raptorial-leg study https://www.insect.org.cn/EN/Y2008/V51/I7/745. Scope: taxonomy, Ontario habitat and diagnosis, hanging predation, and tarsal grasping anatomy; unsupported exact size and species-specific immature stages omitted.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-22T12:21:30-04:00",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Museum of Comparative Zoology, Harvard University",
+            "title": "Taxon Details: Bittacus strigosus Hagen, 1861",
+            "sourceType": "museum",
+            "url": "https://mczbase.mcz.harvard.edu/name/Bittacus%20strigosus"
+          },
+          {
+            "id": "S2",
+            "publisher": "Canadian Journal of Arthropod Identification",
+            "title": "Bittacus strigosus",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://cjai.biologicalsurvey.ca/cmw01/strigosus.html"
+          },
+          {
+            "id": "S3",
+            "publisher": "Acta Entomologica Sinica",
+            "title": "Structure of raptorial legs in Bittacus (Mecoptera: Bittacidae)",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.insect.org.cn/EN/Y2008/V51/I7/745"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Bittacus strigosus is an insect species in the order Mecoptera and family Bittacidae.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Bittacids have long legs and wings, superficially resembling crane flies, but possess a single raptorial tarsal claw.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Adult Bittacus hangingflies have three pairs of similarly structured raptorial legs; the grasping apparatus is formed by the fourth and fifth tarsomeres.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The grasping foot includes a strong modified pretarsal flexor system associated with the claw-closing action.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Bittacus strigosus is diagnosed by clear wings with heavily margined crossveins, a yellow pterostigma, and dark-yellow to light-brown legs and abdomen.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Bittacus species are predators that hang from plants rather than stand on the vegetation.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "In Ontario, Bittacus hangingflies occur in varied habitats and especially moist forests with patches of nettles; B. strigosus is the more common and widespread of the three Ontario species.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The unusual visual mechanism is suspension from foliage combined with prey capture by specialized raptorial feet, not a mantis-like foreleg strike.",
+            "sourceIds": [
+              "S2",
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
