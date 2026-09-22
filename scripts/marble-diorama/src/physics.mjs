@@ -793,7 +793,7 @@ export class Simulation {
       const award = updateLaunchBonus(this, p, contact, RADIUS);
       if (award) this.events.push({ ...award, player: i });
     }
-    updateEnemies(this);
+    updateEnemies(this, incomingVelocity);
     for (const acid of this.acid)
       for (const p of this.players)
         if (

@@ -1,15 +1,16 @@
-# Recovered slinky rules — physical integration pending
+# Recovered slinky rules and physical integration
 
 The published green enemies still use the earlier curling/proximity
-reconstruction. This pass adds a tested source-coordinate controller and
-recovers the original routes and animation timings. It does **not** yet replace
-their drawing or collision behavior. Full object parity remains incomplete.
+reconstruction. Local native-board fixtures now use the recovered controller
+with new articulated green tubes and yellow mouths. Their visible triangles
+also supply their physical contact surfaces. The public campaign has not yet
+been replaced, and full object parity remains incomplete.
 
 ## Identity and resources
 
 Course header +0x1c feeds global 0x1abe0. The loader at 0x1a138 explicitly loads
 `slink.vlb`. Its green body and yellow mouth match the slinky enemies in the
-recordings. Original artwork stays private; the eventual 3D model must be new.
+recordings. Original artwork stays private; the 3D model is newly constructed.
 
 The eight-byte camera entries point to routes of three-byte records:
 column, row, next-node index. Spawn coordinates are cell centers (`cell*8+4`).
@@ -73,6 +74,35 @@ return visible and continuous, use the same articulated solids for drawing and
 contact, and resolve capture/push intents against actual contact. The original
 proximity box and player position rollback are not suitable replacements.
 
+## Physical adapter
+
+An optional `nativeSlinky` definition on a `muncher` selects a source region,
+camera activation interval, and route of `[column, row, nextIndex]` records.
+It requires matching native camera, dynamics and terrain-navigation settings.
+The older authored enemy definitions retain their existing behavior.
+
+`native-slinky-physics.mjs` drives a kinematic articulated body. The source
+controller runs at the native rate, with root positions and mesh vertices
+interpolated at 120 Hz. Rendering interpolates those same physical poses.
+Walking advances across each cell continuously, including animation wraps and
+changes of direction. The source's post-attack cell alignment is converted
+into visible route-return movement. Its below-floor landing squash is kept
+above the supporting terrain through the visible body geometry.
+
+`slinky-shape.mjs` constructs a ribbed hollow tube, an inner wall and annular
+end rims. The green shell and yellow mouth are both triangle meshes; a capsule
+or hidden filled mouth is not used. Vertex correspondence stays fixed when a
+walking direction changes. Source jump/capture/recovery states bend and squash
+the same geometry used by Rapier.
+
+Actual patrol/return contacts invoke the recovered slide and retaliation rules
+using incoming marble velocity. They no longer immediately remove the player.
+A capture intent alone has no effect: the target must contact the closing
+body during the capture state. Removal occurs once, and respawn waits until
+the remaining capture sequence has elapsed. Rebound is supplied by physical
+shell contacts; the source's direct player-velocity replacement is not applied.
+This adaptation still needs encounter calibration and capture presentation.
+
 ## Evidence and acceptance still required
 
 Ten regressions cover strict range and movement thresholds, paired target
@@ -87,9 +117,21 @@ lengths also match all three original course resources. Inputs are synthetic;
 this is a comparison with recovered branches, not original-game execution or
 proof of physical course traversal.
 
-Still required: a new articulated 3D body and matching collision solids,
-physical slide/jump/route-return integration, real capture and rebound behavior,
-capture/reassembly animation and effects, original update-rate calibration,
-ordinary approaches on every native board, paired encounters, editor/replay
-checks and publication. Neither the source controller nor the private resource
-decoding changes the public game's enemies yet.
+Nine additional physical regressions cover definition validation, rotated
+coordinates, mesh topology and throat rays, shared collision vertices,
+continuous patrol articulation and route return, deterministic snapshots,
+moving-player acquisition, contact-driven recovery, physical capture and the
+absence of proximity-only removal. All nine native actors also completed
+5,400 physics ticks each on their respective private boards with continuous
+patrol and shared-mesh checks. These patrol fixtures explicitly load actors
+and disable the player; they are not ordinary camera traversal evidence.
+
+The Beginner encounter fixture imported through the local editor and rendered
+the three green/yellow bodies without browser warnings or errors. A stationary
+player remained racing with no falls during that inspection. This is visual
+and import evidence, not a complete encounter playthrough.
+
+Still required: capture/reassembly animation and effects, original update-rate
+and rebound calibration, ordinary approaches on every native board, paired
+encounters, complete editor/replay acceptance and publication. The native
+fixture data and these runtime improvements are not published yet.
