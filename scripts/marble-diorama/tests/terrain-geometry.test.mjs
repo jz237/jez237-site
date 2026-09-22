@@ -5,6 +5,7 @@ import { terrainGeometry } from "../src/terrain-geometry.mjs";
 import { compileCourse, validateCourse, proofCourse } from "../src/course.mjs";
 import { surfaceGeometry } from "../src/render-surface.mjs";
 import { initPhysics, Simulation, RADIUS } from "../src/physics.mjs";
+import { nativeCourse } from "../src/native-campaign.mjs";
 await initPhysics();
 
 const part = (cells, options = {}) => ({
@@ -64,6 +65,104 @@ function probe(p) {
       ),
   };
 }
+
+test("a tunnel leaves a closed solid bridge with matching floor, roof and side collisions", () => {
+  const cells = [];
+  for (let x = 0; x < 3; x++)
+    for (let z = 0; z < 3; z++)
+      cells.push([x, z, ...Array(4).fill(z === 1 ? 8 : 0)]);
+  const p = part(cells, {
+    w: 12,
+    d: 12,
+    tunnels: [{ columns: [1, 2], rows: [1, 2], floor: 0, ceiling: 3 }],
+  });
+  validateCourse(course(p));
+  closed(terrainGeometry(p));
+  const { s, ray } = probe(p);
+  try {
+    assert.equal(
+      ray({ x: 0, y: 1, z: -5 }, { x: 0, y: 0, z: 1 }),
+      null,
+      "open passage through the bridge",
+    );
+    for (const [origin, dir, distance] of [
+      [{ x: 0, y: 1, z: 0 }, { x: 1, y: 0, z: 0 }, 2],
+      [{ x: 0, y: 1, z: 0 }, { x: 0, y: 1, z: 0 }, 2],
+      [{ x: 0, y: 1, z: 0 }, { x: 0, y: -1, z: 0 }, 1],
+      [{ x: 0, y: 10, z: 0 }, { x: 0, y: -1, z: 0 }, 2],
+      [{ x: 0, y: -10, z: 0 }, { x: 0, y: 1, z: 0 }, 7],
+    ])
+      close(ray(origin, dir).timeOfImpact, distance, "solid tunnel boundary");
+    const compiled = compileCourse(course(p)).statics[0],
+      rendered = surfaceGeometry(compiled);
+    try {
+      for (let i = 0; i < rendered.attributes.position.count; i++)
+        for (let axis = 0; axis < 3; axis++)
+          close(
+            rendered.attributes.position.array[i * 3 + axis],
+            compiled.vertices[compiled.indices[i] * 3 + axis],
+            "visible and collision tunnel coincide",
+          );
+    } finally {
+      rendered.dispose();
+    }
+  } finally {
+    s.dispose();
+  }
+  for (const mutate of [
+    (t) => (t.ceiling = 8),
+    (t) => (t.floor = -3),
+    (t) => (t.columns = [0.5, 2]),
+    (t) => (t.rows = [0, 2]),
+  ]) {
+    const bad = structuredClone(p);
+    mutate(bad.tunnels[0]);
+    assert.throws(() => validateCourse(course(bad)));
+  }
+});
+
+test("tunnel junctions stay closed when adjacent sloped walls cross the ceiling", () => {
+  const p = part(
+    [
+      [0, 0, 8, 8, 8, 8],
+      [1, 0, 0, 0, 6, 6],
+    ],
+    {
+      w: 8,
+      tunnels: [{ columns: [0, 1], rows: [0, 1], floor: -1, ceiling: 3 }],
+    },
+  );
+  closed(terrainGeometry(p));
+});
+
+test("native Intermediate tunnel introduces no open or multiply shared edges", () => {
+  const p = nativeCourse("intermediate").parts[0];
+  assert.equal(p.tunnels.length, 1);
+  const exceptions = (g) => {
+    const edges = new Map();
+    for (let i = 0; i < g.indices.length; i += 3)
+      for (let j = 0; j < 3; j++) {
+        const a = g.indices[i + j],
+          b = g.indices[i + ((j + 1) % 3)];
+        const points = [a, b].map((v) =>
+          Array.from(g.vertices.slice(v * 3, v * 3 + 3)).join(","),
+        );
+        const k = points.sort().join("|");
+        const entry = edges.get(k) ?? { count: 0, winding: 0 };
+        entry.count++;
+        entry.winding += a < b ? 1 : -1;
+        edges.set(k, entry);
+      }
+    for (const e of edges.values()) assert.equal(e.winding, 0);
+    return [...edges].filter(([, e]) => e.count !== 2);
+  };
+  // Two original diagonal islands touch along one vertical line. Preserve
+  // that pre-existing four-face edge; the new tunnel has no such junctions.
+  const before = exceptions(terrainGeometry({ ...p, tunnels: undefined }));
+  assert.equal(before.length, 1);
+  assert.equal(before[0][1].count, 4);
+  assert.deepEqual(exceptions(terrainGeometry(p)), before);
+});
 
 test("terrain keeps the original diagonal planes in the rendered and physical mesh", () => {
   const p = part([[0, 0, 0, 2, 4, 2]], { angle: 0.43, x: 2, y: 3, z: -1 });

@@ -6,7 +6,9 @@ The mm-36 local entry point now loads the six recovered board definitions and
 their native actors through [native campaign integration](NATIVE-CAMPAIGN.md).
 Practice passes timed solo/paired normal-input completion on difficulties 0 and
 7. The mm-37 local Beginner board adds [three physical pipe passages](NATIVE-PIPES.md),
-including the shared lower Y and recovered capture rules. Intermediate's pipe,
+including the shared lower Y and recovered capture rules. The mm-38 local
+Intermediate board adds its orange pipe and a shared visible/physical tunnel
+through the raised bridge; its localized normal-input passage and replay pass.
 Ultimate launchers, remaining routes and native diorama polish still
 prevent publication. The legacy checklist below describes the **published older
 reconstructions**, not validation of the newly integrated boards.

@@ -84,9 +84,10 @@ existing cyan palette. The final bundle build and `git diff --check` passed.
 The full suite includes legacy reconstruction tests as well as the new native
 tests; its total is not a full-campaign parity claim.
 
-- Complete Intermediate's missing pipe, Ultimate launchers and Practice objects
-  before publication. Beginner's passages are integrated in mm-37; their remaining
-  source calibration is detailed in NATIVE-PIPES.md.
+- Complete Ultimate launchers and Practice objects before publication.
+  Beginner's passages are integrated in mm-37; Intermediate's orange pipe and
+  real bridge tunnel are integrated in mm-38. Their remaining source calibration
+  and limited encounter coverage are detailed in NATIVE-PIPES.md.
 - Test every course and alternate route with bounded controls, timed and paired.
 - Correct native terrain presentation: the integrated overview still shows
   pointed outer foundations and insufficiently rounded silhouettes; title framing

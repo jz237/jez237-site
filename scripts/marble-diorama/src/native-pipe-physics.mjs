@@ -21,7 +21,12 @@ export function physicalNativePipes(sim, player, radius, wasPowered) {
   );
   for (const path of paths) {
     const upper = path.nativePipe === "beginner-upper";
-    if (band < (upper ? 23 : 34) || band > (upper ? 44 : 61)) continue;
+    const orange = path.nativePipe === "intermediate-orange";
+    if (
+      band < (upper ? 23 : orange ? 26 : 34) ||
+      band > (upper ? 44 : orange ? 47 : 61)
+    )
+      continue;
     const flow = transferForce(
       [path],
       position,
@@ -32,10 +37,13 @@ export function physicalNativePipes(sim, player, radius, wasPowered) {
     );
     if (!flow) continue;
     if (player.transferRoute?.id === path.id) return flow;
-    const intent = nativePipeIntent(upper ? 18 : path.branch ? 20 : 19, {
-      ...source,
-      vy: velocity.y / (space.camera.heightScale * space.camera.rate),
-    });
+    const intent = nativePipeIntent(
+      upper ? 18 : orange ? 32 : path.branch ? 20 : 19,
+      {
+        ...source,
+        vy: velocity.y / (space.camera.heightScale * space.camera.rate),
+      },
+    );
     if (intent?.phase === "hold") {
       // Original horizontal clearing becomes bounded damping; gravity carries
       // the marble down the vertical shaft into the release band.

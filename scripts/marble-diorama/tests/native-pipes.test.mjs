@@ -80,6 +80,17 @@ test("both lower entries share the original outlet and preserve movement mode", 
 
 const entries = [
   {
+    course: "intermediate",
+    name: "orange",
+    x: 600,
+    z: 644,
+    h: 16320,
+    band: 32,
+    aim: [620, 644, 16320],
+    id: "native-orange-pipe",
+    score: 2000,
+  },
+  {
     name: "upper",
     x: 500,
     z: 612,
@@ -113,7 +124,7 @@ const entries = [
   },
 ];
 function encounter(entry) {
-  const c = nativeCourse("beginner"),
+  const c = nativeCourse(entry.course ?? "beginner"),
     space = slinkyCoordinates(c);
   const start = space.world(entry.x, entry.z, entry.h);
   start.y += 0.55;
@@ -126,7 +137,7 @@ function encounter(entry) {
   return { sim, space };
 }
 for (const entry of entries)
-  test(`native Beginner ${entry.name} passage carries normal input through shared geometry and replays`, () => {
+  test(`native ${entry.course ?? "beginner"} ${entry.name} passage carries normal input through shared geometry and replays`, () => {
     const { sim } = encounter(entry),
       driver = new DemoController(),
       p = sim.players[0];
@@ -241,7 +252,7 @@ test("lower pipe is one closed merging shell with open physical mouths and rever
 });
 
 test("native pipe forces require the loaded encounter and the actual bore", () => {
-  const { sim, space } = encounter(entries[0]);
+  const { sim, space } = encounter(entries.find((e) => e.name === "upper"));
   try {
     const p = sim.players[0];
     sim.nativeCamera.scroll = sim.course.nativeCamera.initialScroll;
@@ -332,6 +343,49 @@ test("earlier contact prediction in native pipe courses preserves settled floor 
     const gap = sim.body(sim.players[0]).translation().y - floor.y - 0.55;
     assert.ok(Math.abs(gap) < 0.0055, `settled gap ${gap}`);
     assert.equal(sim.players[0].deaths, 0);
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("two marbles enter the orange shaft together and exit within contact tolerance", () => {
+  const c = nativeCourse("intermediate"),
+    space = slinkyCoordinates(c);
+  c.starts = [639, 649].map((z) => ({
+    ...space.world(600, z, 16320),
+    y: space.world(600, z, 16320).y + 0.55,
+  }));
+  assert.ok(
+    Math.abs(c.starts[1].z - c.starts[0].z) > 1.1,
+    "initial marbles do not overlap",
+  );
+  c.route = [{ ...space.world(620, 644, 16320), speed: 3, radius: 0.6 }];
+  const sim = new Simulation(c, { players: 2, untimed: true, seed: 237 }),
+    drivers = sim.players.map(() => new DemoController()),
+    awards = [];
+  sim.nativeCamera.scroll += 512;
+  sim.nativeCamera.offset = 512;
+  let separation = Infinity;
+  try {
+    while (sim.tick < 1200 && awards.length < 2) {
+      sim.step(drivers.map((d, i) => d.input(sim, i)));
+      awards.push(...sim.events.filter((e) => e.type === "traversal-bonus"));
+      const a = sim.body(sim.players[0]).translation(),
+        b = sim.body(sim.players[1]).translation();
+      separation = Math.min(
+        separation,
+        Math.hypot(a.x - b.x, a.y - b.y, a.z - b.z),
+      );
+    }
+    assert.deepEqual(awards.map((e) => e.player).sort(), [0, 1]);
+    assert.ok(
+      awards.every((e) => e.part === "native-orange-pipe" && e.score === 2000),
+    );
+    assert.ok(sim.players.every((p) => p.deaths === 0));
+    assert.ok(
+      separation > 1.1 - 0.0055,
+      `contact penetration below 1% of radius: ${separation}`,
+    );
   } finally {
     sim.dispose();
   }

@@ -65,9 +65,13 @@ export function validateTerrainSequence(part, finite) {
       cells.length > part.cells.length
     )
       throw Error("Invalid terrain sequence frame.");
-    validateTerrain({ ...part, animation: undefined, cells }, finite);
+    validateTerrain(
+      { ...part, animation: undefined, tunnels: undefined, cells },
+      finite,
+    );
     if (cells.some((c) => !keys.has(`${c[0]},${c[1]}`)))
       throw Error("Terrain sequence frames must replace existing cells.");
+    if (part.tunnels) validateTerrain(terrainFramePart(part, i), finite);
   }
   const first = terrainFramePart(part, 0);
   if (first.cells.some((c, i) => c.some((v, j) => v !== part.cells[i][j])))
