@@ -15240,5 +15240,119 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-22-factual-infographic-factual-infographic-desert-soil-crust-a",
+    "title": "Factual infographic: Desert Soil Crust — A Living Skin Between the Grains",
+    "tests": "Archive-wide topic scan found no existing biological-soil-crust infographic; prompt uses one dominant hero, eight substantive panels, four mechanism close-ups, qualified study-specific hydrology, and no invented recovery time.; archive_slot=2026-09-22T08:20; concept=biological-soil-crust-cyanobacteria-binding-disturbance-recovery; factual_subtype: factual-infographic",
+    "prompt": "Create one finished 2048x3072 portrait factual infographic titled DESERT SOIL CRUST: A LIVING SKIN BETWEEN THE GRAINS. This is the direct infographic canvas itself, perfectly front-facing, edge-to-edge, and orthographic—not a photographed poster, paper page, screen, wall display, field clipboard, specimen tray, desk scene, or museum placard. Build a sophisticated science-museum plate around one dominant, highly detailed cutaway hero of intact dryland biological soil crust: a sunlit knobby dark surface with tiny moss and pale lichen patches above a magnified shallow soil profile, individual sand and silt grains visibly webbed together by fine cyanobacterial fibers, sparse native desert plants at the margins, and credible mineral texture and scale. Make the hero occupy most of the upper-middle canvas, with precise leader lines connecting visible surface structure to microscopic mechanism. Surround it with eight large, clearly separated substantive panels, each using concise, highly legible labels and short phrases only. Panel 1, WHO LIVES HERE?: a layered organism key showing cyanobacteria, green algae, microfungi, lichens, mosses, and other bacteria as members of a living surface community, without implying every crust has the same mixture. Panel 2, THREADS BETWEEN GRAINS: a three-step macro sequence—dry cyanobacteria dormant, moisture arrives, sticky fibers bind adjacent soil particles—shown as a magnified grain-scale cutaway. Panel 3, FROM LIGHT TO DARK: compare a flat brown young crust with a more developed bumpy dark crust bearing visible lichen and moss, explicitly framed as a southeast-Utah example rather than a universal age chart. Panel 4, HOLDING THE SURFACE: paired wind and rain arrows striking intact bound aggregates versus loose disturbed grains, showing that particle binding helps resist erosion. Panel 5, WATER IS CONTEXT-DEPENDENT: a qualified Colorado Plateau sandy-soil study diagram showing intact well-developed dark crust with lower runoff, low sediment loss, and high aggregate stability; beside it, a compact caution that developmental stage, soil structure, and disturbance type can change water response. Do not claim all crusts always absorb more water. Panel 6, ONE TRACK, BROKEN CONTINUITY: a top-down footprint and tire-edge sequence cracking the crust, followed by wind and rain scattering fragments; keep human impact factual and non-dramatic. Panel 7, RECOVERY IS NOT A CLOCK: show a branching rather than linear pathway that commonly starts with cyanobacteria and algae and may later add lichens and bryophytes, while climate, soil, timing, and disturbance severity redirect the pathway; include no invented recovery time. Panel 8, A CHANGING MICROLANDSCAPE: close-up arrows show mature crust trapping fine particles while nutrient and organic-matter content can increase, with careful conditional wording. Include at least four prominent explanatory close-ups: cyanobacterial fibers bridging mineral grains, young-versus-developed surface microtopography, intact-versus-broken soil aggregates under water flow, and a branching recovery-succession diagram. Add a clear process spine: LIVING COMMUNITY → MOISTURE ACTIVATES → GRAINS BIND → SURFACE STABILIZES → DISTURBANCE BREAKS → RECOVERY VARIES. Use crisp leader lines, numbered steps, a small visual key for organism groups, and strong typographic hierarchy. Palette: warm sandstone, umber, charcoal-black crust, muted sage, lichen ivory, cyan accents for water, and restrained amber arrows. Maintain realistic desert daylight, tactile granular microtexture, scientific cutaway clarity, credible scale transitions, and high label contrast. Every factual visual implication must remain within the conservative source-backed claims above. Do not include exact recovery durations, unsupported percentages, universal hydrology claims, equations, bibliography, URLs, logos, QR codes, watermarks, pseudo-text, decorative filler, fantasy organisms, oversized jungle moss, physical paper edges, frame, cast shadow, room, hands, tools, or tiny unreadable paragraphs.",
+    "image": "images/2026-09-22-factual-infographic-factual-infographic-desert-soil-crust-a.jpg",
+    "thumb": "thumbs/2026-09-22-factual-infographic-factual-infographic-desert-soil-crust-a.webp",
+    "color": "#b0a18d",
+    "date": "2026-09-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "biological-soil-crust-cyanobacteria-binding-disturbance-recovery",
+      "imageSha256": "5b455dae4b8ddebd2ce1332fa717ac1273a5f23640eeaa4e7c6a77435fb0e535",
+      "imageDHash": "60a1925860783a38"
+    },
+    "factualInfographic": {
+      "topic": "How biological soil crust organisms bind dryland soil, interact with water, respond to disturbance, and recover",
+      "description": "A detailed dryland-ecology plate explaining biocrust community members, cyanobacterial soil binding, surface development, erosion resistance, context-dependent hydrology, physical disturbance, and variable recovery succession.",
+      "sourceNote": "U.S. National Park Service — https://www.nps.gov/articles/seug-soil-crust.htm; U.S. Geological Survey — https://www.usgs.gov/publications/biological-soil-crust-and-disturbance-controls-surface-hydrology-a-semi-arid-ecosystem; and Springer-hosted recovery chapter indexed by USGS — https://pubs.usgs.gov/publication/70176222 verify the depicted community, binding, erosion, hydrology, disturbance, and recovery claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-22T12:21:05Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "U.S. National Park Service",
+            "title": "Biological Soil Crust of Southeast Utah",
+            "sourceType": "government-agency",
+            "url": "https://www.nps.gov/articles/seug-soil-crust.htm"
+          },
+          {
+            "id": "S2",
+            "publisher": "U.S. Geological Survey",
+            "title": "Biological soil crust and disturbance controls on surface hydrology in a semi-arid ecosystem",
+            "sourceType": "government-agency",
+            "url": "https://www.usgs.gov/publications/biological-soil-crust-and-disturbance-controls-surface-hydrology-a-semi-arid-ecosystem"
+          },
+          {
+            "id": "S3",
+            "publisher": "Springer International Publishing",
+            "title": "Natural recovery of biological soil crusts after disturbance",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pubs.usgs.gov/publication/70176222"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Biological soil crust is a living surface community that can include cyanobacteria, lichens, mosses, green algae, microfungi, and other bacteria.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "In the biological soil crusts described for southeast Utah, cyanobacteria are dormant while dry and move through soil when wet, leaving sticky fibers that bind soil particles.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Binding soil particles into a continuous crust helps resist erosion by wind and rain.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Young crusts in the southeast Utah example can appear flat and brown, while more mature crusts may be bumpy, dark, and include visible lichens or mosses.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Foot traffic, bicycles, and vehicle tracks can break biological soil crust; once fragmented, pieces can be scattered by wind or rain.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "On sandy Colorado Plateau soils in one study, intact well-developed dark biocrusts had lower runoff, low sediment loss, and the highest aggregate stability, while disturbance altered these hydrologic responses.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Biocrust hydrology is context-dependent: developmental stage, soil structure, and disturbance type can change runoff, infiltration, and sediment-loss responses.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Natural recovery after disturbance depends on climate, soil conditions, disturbance severity, and timing, and is often dynamic rather than linear.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "A common recovery sequence begins with cyanobacteria and algae, followed later by lichens and bryophytes, but local conditions can alter that sequence.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "As biocrusts mature, they can trap fine soil particles and soil nutrient and organic-matter contents can increase.",
+            "sourceIds": [
+              "S3"
+            ]
+          }
+        ]
+      }
+    }
   }
 ]
