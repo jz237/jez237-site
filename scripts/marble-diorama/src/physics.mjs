@@ -17,6 +17,7 @@ import {
 } from "./aerial-hammers.mjs";
 import { updateLandingStun, landingControlScale } from "./landing-stun.mjs";
 import { landingContact } from "./landing-contact.mjs";
+import { updateNativePracticeLanding } from "./native-practice-landings.mjs";
 import { updateLaunchBonus } from "./launch-bonus.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
@@ -61,7 +62,7 @@ import {
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
 import { courseTime } from "./rules.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-40";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-41";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -831,14 +832,18 @@ export class Simulation {
         if (v.y < minimum) b.setLinvel({ ...v, y: minimum }, true);
       }
     this.world.step(this.queue);
+    const landingContacts = [];
     for (let i = 0; i < this.players.length; i++) {
       const p = this.players[i];
       if (
         p.status !== "racing" ||
-        (!this.course.rules?.landingStun && !p.launchBonusPending)
+        (!this.course.rules?.landingStun &&
+          !p.launchBonusPending &&
+          !this.course.nativePracticeLandings)
       )
         continue;
       const contact = landingContact(this, p, incomingVelocity[i], RADIUS);
+      landingContacts[i] = contact;
       updateLandingStun(this, p, contact);
       const award = updateLaunchBonus(this, p, contact, RADIUS);
       if (award) this.events.push({ ...award, player: i });
@@ -888,6 +893,15 @@ export class Simulation {
         p.navigation,
         pos,
       );
+      if (landingContacts[i]) {
+        const award = updateNativePracticeLanding(
+          this,
+          p,
+          landingContacts[i],
+          RADIUS,
+        );
+        if (award) this.events.push({ ...award, player: i });
+      }
       for (const event of updateTraversalBonuses(
         this.traversalPaths,
         p,
@@ -1011,6 +1025,7 @@ export class Simulation {
         }
       : null;
     p.landingAirTicks = 0;
+    p.nativePracticeAirborne = false;
     p.traversals = {};
     p.transferRoute = null;
     if (!slinky && !bird)

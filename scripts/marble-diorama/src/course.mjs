@@ -14,6 +14,7 @@ import { validateAerialVacuums, nativeVacuumPose } from "./aerial-vacuums.mjs";
 import { validateAerialPaddle, paddlePose } from "./aerial-paddle.mjs";
 import { validateNativeDynamics } from "./native-dynamics.mjs";
 import { railGeometry } from "./training-rails.mjs";
+import { validateNativePracticeLandings } from "./native-practice-landings.mjs";
 import {
   validateAerialHammers,
   hammerGeometry,
@@ -69,6 +70,7 @@ export const SURFACES = {
 const finite = (x) =>
   typeof x === "number" && Number.isFinite(x) && Math.abs(x) <= 2000;
 export function validateCourse(c) {
+  validateNativePracticeLandings(c);
   if (
     !c ||
     c.schema !== COURSE_SCHEMA ||

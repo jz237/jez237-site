@@ -196,3 +196,14 @@ The original marbdat resource confirms seven landing amounts, 3000 through
 selection. Mapping the reconstructed shelves to original coordinate bands
 remains partial. Original catch-up tables for all six courses are also recovered,
 but their world mapping and gameplay integration remain open.
+
+### Native Practice landing awards (mm-41, local)
+
+The recovered board now scores all three shelves from original integer
+coordinates and navigation regions, with one claim per player across shelves.
+All 2,079 original award-branch cases match, and 21 localized physical drops
+cover all seven amounts per shelf. Numbered paint shares those intervals;
+zero-point claims, falls and replay preserve the original shared-claim rule.
+Full-start alternate approaches still stall uphill. Original airborne-mode
+scheduling, exact effect 42 and final artwork remain incomplete. See
+NATIVE-PRACTICE.md; older reconstruction route checks are not native acceptance.
