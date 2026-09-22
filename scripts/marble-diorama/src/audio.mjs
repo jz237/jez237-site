@@ -327,7 +327,14 @@ export class AudioEngine {
       );
     const activeTransfers = new Set(
       sim.players
-        .filter((p) => p.status === "racing" && p.poweredTransfer)
+        .filter(
+          (p) =>
+            p.status === "racing" &&
+            p.poweredTransfer &&
+            !sim.traversalPaths?.some(
+              (path) => path.id === p.poweredTransfer && path.nativePipe,
+            ),
+        )
         .map((p) => p.poweredTransfer),
     );
     for (const id of activeTransfers)

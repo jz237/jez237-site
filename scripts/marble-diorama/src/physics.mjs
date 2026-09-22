@@ -21,6 +21,7 @@ import { updateLaunchBonus } from "./launch-bonus.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
 import { nativeDynamics } from "./native-dynamics.mjs";
+import { physicalNativePipes } from "./native-pipe-physics.mjs";
 import { applyNativeSlope } from "./native-slopes.mjs";
 import {
   createAerialPaddle,
@@ -60,7 +61,7 @@ import {
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
 import { courseTime } from "./rules.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-36";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-37";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -125,6 +126,12 @@ export class Simulation {
     this.world.integrationParameters.numSolverIterations = 12;
     this.world.integrationParameters.normalizedAllowedLinearError = 0.0001;
     this.world.integrationParameters.normalizedPredictionDistance = 0.002;
+    if (course.parts.some((part) => part.nativePipe)) {
+      // Prepare contact constraints before two fast marbles meet in the Y.
+      // These are solver tolerances; collider and rendered radii stay .55.
+      this.world.integrationParameters.normalizedPredictionDistance = 0.15;
+      this.world.integrationParameters.contact_natural_frequency = 120;
+    }
     this.queue = new RAPIER.EventQueue(true);
     this.movers = [];
     this.staticColliderHandles = [];
@@ -779,8 +786,11 @@ export class Simulation {
       }
       const flow =
         physicalNativeTransfer(this, p, index, RADIUS, wasPowered) ??
+        physicalNativePipes(this, p, RADIUS, wasPowered) ??
         transferForce(
-          this.traversalPaths.filter((path) => !path.nativeTransfer),
+          this.traversalPaths.filter(
+            (path) => !path.nativeTransfer && !path.nativePipe,
+          ),
           b.translation(),
           b.linvel(),
           RADIUS,

@@ -23,6 +23,7 @@ export function validateNativeTransfers(course) {
     parts[0].nativeTransfer !== true ||
     parts[0].kind !== "tube" ||
     !parts[0].fork ||
+    parts[0].fork.merge ||
     !parts[0].flowSpeed ||
     parts[0].motion ||
     !course.nativeCamera?.reverse ||

@@ -2,6 +2,7 @@ import { validateNativeSteelies } from "./native-steelie.mjs";
 import { validateNativeBirds } from "./native-bird.mjs";
 import { validateNativeMiniatures } from "./native-miniature.mjs";
 import { validateNativeTransfers } from "./native-transfer.mjs";
+import { validateNativePipes } from "./native-pipes.mjs";
 import { validateNativeSlinkies } from "./native-slinky.mjs";
 import { validateNativeAcids } from "./native-acid.mjs";
 import { validateNativeFlags } from "./native-flags.mjs";
@@ -239,6 +240,7 @@ export function validateCourse(c) {
         f.path.length > 100 ||
         !f.path.every((v) => v && [v.x, v.y, v.z].every(finite)) ||
         !["x", "y", "z"].every((k) => f.path[0][k] === p.path[f.at][k]) ||
+        (f.merge !== undefined && typeof f.merge !== "boolean") ||
         (f.exitRoutes !== undefined &&
           (!Array.isArray(f.exitRoutes) ||
             f.exitRoutes.length !== 2 ||
@@ -340,7 +342,7 @@ export function validateCourse(c) {
         p.motion ||
         !finite(p.flowSpeed) ||
         p.flowSpeed <= 0 ||
-        p.flowSpeed > 8)
+        p.flowSpeed > (p.nativePipe ? 12 : 8))
     )
       throw Error("Invalid powered transfer.");
     if (
@@ -763,6 +765,7 @@ export function validateCourse(c) {
   validateNativeBirds(c);
   validateNativeMiniatures(c);
   validateNativeTransfers(c);
+  validateNativePipes(c);
   validateNativeSlinkies(c);
   validateNativeAcids(c);
   validateAerialHammers(c, finite);

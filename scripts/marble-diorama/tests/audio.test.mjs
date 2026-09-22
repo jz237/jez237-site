@@ -484,6 +484,17 @@ test("powered transfers sound only while carrying a racing marble", async () => 
   sim.players[1].status = "timeout";
   audio.obstacles(sim);
   assert.equal(calls.length, 1);
+  sim.tick++;
+  sim.players[0].poweredTransfer = "native-lower-pipes";
+  sim.traversalPaths = [
+    { id: "native-lower-pipes", nativePipe: "beginner-lower" },
+  ];
+  audio.obstacles(sim);
+  assert.equal(
+    calls.length,
+    1,
+    "native descending pipes do not inherit the lift's vacuum loop",
+  );
 });
 
 test("native miniature pickups use their form cue and a separate reward key per creature", async () => {

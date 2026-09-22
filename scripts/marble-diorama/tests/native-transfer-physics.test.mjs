@@ -304,6 +304,7 @@ test("native import requires a powered fork, original coordinate mapping and nat
     (c) => (c.nativeCamera.reverse = false),
     (c) => (c.parts[1].nativeTransfer = "yes"),
     (c) => (c.parts[1].flowSpeed = undefined),
+    (c) => (c.parts[1].fork.merge = true),
   ]) {
     const c = fixture();
     change(c);

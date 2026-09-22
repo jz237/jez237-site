@@ -31,6 +31,7 @@ export function traversalPaths(course) {
             z: p.z + v.x * s + v.z * c,
           };
         });
+        if (p.fork?.merge) points.reverse();
         const end = points.at(-1),
           before = points.at(-2);
         const n = Math.hypot(
@@ -42,8 +43,14 @@ export function traversalPaths(course) {
           id: p.id,
           branch,
           fork: !!p.fork,
+          merge: !!p.fork?.merge,
+          reverseFlow: !!p.fork?.merge,
           chamber: p.fork ? tubeGeometry(p).chamber : null,
-          junctionProgress: p.fork ? curves[0].getLength() : null,
+          junctionProgress: p.fork
+            ? p.fork.merge
+              ? length - curves[0].getLength()
+              : curves[0].getLength()
+            : null,
           exitRoute: p.fork?.exitRoutes?.[branch],
           cumulative: points.reduce((a, v, i) => {
             a.push(
@@ -63,6 +70,7 @@ export function traversalPaths(course) {
           flowSpeed: p.flowSpeed,
           flowExitSpeed: p.flowExitSpeed,
           nativeTransfer: p.nativeTransfer === true,
+          nativePipe: p.nativePipe,
           outletProfile: p.fork?.outletProfile,
           radius: p.radius ?? 1.4,
           length,

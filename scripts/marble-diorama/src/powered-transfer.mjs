@@ -85,9 +85,22 @@ export function transferForce(
 // two-way choice and occupied-exit fallback inform this reconstruction; exact
 // Amiga selection/clearance is still unverified.
 export function chooseTransfer(paths, position, radius, seed, occupied = []) {
+  // A merging pipe is entered through whichever physical mouth is nearest;
+  // it has one outlet, so no random exit choice is needed.
+  const merge = paths.find((p) => {
+    if (!p.merge || p.nativePipe) return false;
+    const q = tubePosition(p, position);
+    return (
+      q.progress < 1.5 &&
+      q.distance < tubeRadiusAt(p, q.progress, p.length) - radius + 0.12
+    );
+  });
+  if (merge)
+    return { id: merge.id, branch: merge.branch, exitRoute: merge.exitRoute };
   const entry = paths.find(
     (p) =>
       p.fork &&
+      !p.merge &&
       !p.nativeTransfer &&
       p.flowSpeed &&
       (() => {
