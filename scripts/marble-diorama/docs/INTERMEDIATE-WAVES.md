@@ -93,3 +93,12 @@ unattached demo waypoints.
 Browser checks on a custom copy of Intermediate verify whole-strip selection,
 rotation, movement, removal, undo/redo, undoing all edits and immediate playtest.
 No custom test course was saved. No warnings/errors were captured.
+
+## Original height tables recovered, September 22
+
+The [terrain audit](TERRAIN-REFERENCE.md) located Intermediate's original
+initializer, update routine, center-height values and edge-profile tables in
+the course resource. This supersedes the missing-data assumption behind the
+current smoothstep profile. Frame timing, activation/reset conditions and
+complete changing terrain still require mapping; the recovered tables have
+not yet replaced the playable strip.
