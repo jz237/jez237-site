@@ -14,7 +14,7 @@ const projection={lonToX:x=>x,latToZ:y=>y,contains:()=>true};
 test('returning to loaded streets cancels a pending neighborhood and ignores its late response', async t=>{
   const requests=[],installed=[];
   t.mock.method(globalThis,'fetch',(url,{signal})=>new Promise(resolve=>requests.push({url,signal,resolve})));
-  const layer=createNeighborhood(THREE,{projection,sampleElevation:()=>5,onData:doc=>installed.push(doc)});
+  const layer=createNeighborhood({onData:doc=>installed.push(doc)});
   t.after(()=>layer.dispose());
   layer.consider(pose,state);layer.consider(pose,state);
   const documentFor=r=>({...streetCell(new URL(r.url,'https://example.test/').searchParams),elements:[]});
@@ -31,7 +31,7 @@ test('stalled neighborhood requests time out and back off instead of staying pen
   t.mock.method(globalThis,'fetch',(_url,options)=>new Promise((_resolve,reject)=>{
     calls++;signal=options.signal;signal.addEventListener('abort',()=>reject(signal.reason));
   }));
-  const layer=createNeighborhood(THREE,{projection,sampleElevation:()=>5,onData(){}});
+  const layer=createNeighborhood({onData(){}});
   t.after(()=>layer.dispose());layer.consider(pose,state);layer.consider(pose,state);
   t.mock.timers.tick(55000);await settle();assert.equal(signal.aborted,true);
   layer.consider(pose,state);assert.equal(calls,1);

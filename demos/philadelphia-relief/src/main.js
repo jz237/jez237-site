@@ -490,7 +490,7 @@ async function boot() {
       streetNames = doc.labels; refreshLabels();
     }).catch(() => {});
   }
-  const neighborhood = createNeighborhood(THREE, { projection, sampleElevation,
+  const neighborhood = createNeighborhood({
     onData(doc, names) {
       neighborhoodNames = names;
       structures?.setLocalDetail(doc);
@@ -498,7 +498,6 @@ async function boot() {
       refreshLabels();
     },
   });
-  scene.add(neighborhood.group);
   store.subscribe((state, changed) => {
     if (changed.has('era')) {
       refreshLabels();
@@ -609,12 +608,11 @@ async function boot() {
         getExaggeration: () => displayExaggeration(store.get()),
       });
       explore.open(kind);
-      status.textContent = 'Choose a viewpoint or exhibit. Return to map restores your view.';
+      status.textContent = 'Choose an exhibit. Return to map restores your view.';
     } catch {
       explorePromise = undefined; status.textContent = 'Map tools could not load. Please try again.';
     }
   }
-  $('standHere').onclick = () => openExplore('stand');
   $('openExhibit').onclick = () => openExplore('exhibit');
   $('openModel').onclick = () => openExplore('model');
 
@@ -974,7 +972,7 @@ async function boot() {
     motion.update(dt);
     const aircraftAltitude = aircraftLayer.beforeFrame();
     const state = store.get();
-    const flightView = explore?.view || aircraftLayer.flightView;
+    const flightView = aircraftLayer.flightView;
     const pose = rig.update(dt, { snap: false, targetAltitude: aircraftAltitude, flightView });
     if (pose.changed || rig.dragging || motion.playing) lastInteraction = performance.now();
     rig.setAspect(viewW / viewH);
@@ -1093,19 +1091,8 @@ async function boot() {
     for (const entry of overlays.lines) {
       const u = entry.material.uniforms;
       u.uExag.value = exaggeration;
-      u.uStreetDetail.value = entry.layer === 'roads' && state.layers.structures
-        ? Math.max(0, Math.min(1, (7000 - now.dist) / 3500)) : 0;
-      u.uLift.value = entry.layer === 'roads' ? Math.min(7, lift * 0.3) : lift;
-      if (entry.kind === 'road-5') {
-        const streetFade = Math.max(0, Math.min(1, (18000 - now.dist) / 9000));
-        u.uOpacity.value = state.roadOpacity * 0.5 * streetFade;
-        entry.mesh.visible = state.layers.roads && state.era === 'present' && streetFade > 0.01;
-      }
-      if (entry.layer === 'roads' && now.dist < 2600 && neighborhood.hasCoverage(now)) {
-        entry.mesh.visible = false;
-      } else if (entry.layer === 'roads' && entry.kind !== 'road-5') {
-        entry.mesh.visible = state.layers.roads && state.era === 'present';
-      }
+      u.uStreetDetail.value = 0;
+      u.uLift.value = lift;
       u.uNear.value = camera.near;
       if (entry.kind === 'shoreline') {
         entry.mesh.visible = state.layers.water || modelWater > .01;
@@ -1129,8 +1116,6 @@ async function boot() {
       }
     }
 
-    neighborhood.update(camera, state, exaggeration, viewW * renderer.getPixelRatio(),
-      viewH * renderer.getPixelRatio());
     if (structures) {
       structures.setRoofImagery(imageryDetail.roofTiles(now),
         state.layers.imagery && state.era === 'present');
@@ -1144,7 +1129,7 @@ async function boot() {
     renderer.clear();
     overlayRoot.visible = !mapLayers.archiveActive;
     if (mapLayers.archiveActive) {
-      diorama.group.visible = false; neighborhood.group.visible = false;
+      diorama.group.visible = false;
       if (structures) { structures.group.visible = false; structures.inspectionGroup.visible = false; }
     }
     mapLayers.update(camera, { pose: now, width: viewW, height: viewH, exaggeration });
@@ -1175,7 +1160,7 @@ async function boot() {
           size: state.labelSize,
           showPlaces: state.layers.places,
           showLandmarks: state.layers.landmarks && !mapLayers.archiveActive,
-          showStreets: state.layers.roads && state.era === 'present' && !mapLayers.archiveActive,
+          showStreets: false,
           distance: now.dist, pose: now,
         });
       }
@@ -1391,23 +1376,6 @@ function buildOverlays(data, ctx, root) {
     }), 'parks', 'park');
   }
 
-  if (data.roads) {
-    const byTier = groupLines(data.roads, (p) => p.t);
-    for (const tier of [5, 3, 4, 2, 1]) {
-      const parts = byTier.get(tier);
-      if (!parts) continue;
-      add(buildLineMesh(THREE, parts, ctx, {
-        crosswalks: tier === 5,
-        roadWidth: tier === 1 ? 25 : tier === 2 ? 18 : tier === 5 ? 9 : 13,
-        width: tier === 1 ? 2.4 : tier === 2 ? 1.7 : tier === 5 ? 0.85 : 1.2,
-        color: '#ffd9a8',
-        opacity: 1,
-        renderOrder: 14 + (4 - tier),
-        name: `roads-${tier}`,
-      }), 'roads', `road-${tier}`);
-    }
-  }
-
   if (data.rail) {
     const byKind = groupLines(data.rail, (p) => p.k);
     for (const [kind, parts] of byKind) {
@@ -1489,21 +1457,13 @@ function applyState(state, ctx) {
     if (entry.layer === 'flood') on = !!selection && selection.keys.has(entry.floodKey);
     if (entry.layer === 'era') on = era.extent1776;
     if (entry.layer === 'rail' && !era.rail) on = false;
-    if (entry.kind === 'road-1' && era.motorways === 'hide') on = false;
     entry.mesh.visible = on;
     const uu = entry.mesh.material.uniforms;
     if (entry.layer === 'flood' && uu.uCompareClip) {
       uu.uCompareClip.value = state.compareMode === 'flood' ? 1 : 0;
       uu.uComparePosition.value = state.comparePosition;
     }
-    if (entry.layer === 'roads' && uu.uOpacity) {
-      const tier = Number(entry.kind.split('-')[1]);
-      // Secondary roads and ramps are context, not subject: at full strength
-      // the network read as the map and buried the relief underneath it.
-      uu.uOpacity.value = state.roadOpacity
-        * (tier === 1 ? 1 : tier === 2 ? 0.85 : tier === 3 ? 0.7 : tier === 5 ? 0.5 : 0.65)
-        * (tier === 1 && era.motorways === 'ghost' ? 0.3 : 1);
-    } else if (entry.layer === 'boundaries' && uu.uOpacity) {
+    if (entry.layer === 'boundaries' && uu.uOpacity) {
       const level = Number(entry.kind.split('-')[1]);
       uu.uOpacity.value = state.boundaryOpacity * (level === 6 ? 1 : 0.55);
     } else if (entry.kind === 'water') {
@@ -1537,10 +1497,6 @@ function recolorOverlays(overlays, theme) {
     } else if (entry.layer === 'parks') {
       setVec3(u.uColor.value, theme.park);
       setVec3(u.uFogColor.value, theme.fog);
-    } else if (entry.layer === 'roads') {
-      const tier = Number(entry.kind.split('-')[1]);
-      setVec3(u.uColor.value, tier === 5 ? '#e6e6df'
-        : theme.road[Math.min(2, tier - 1)] || theme.road[0]);
     } else if (entry.layer === 'rail') {
       setVec3(u.uColor.value, theme.rail);
     } else if (entry.layer === 'boundaries') {
@@ -1900,7 +1856,7 @@ function wireInterface(deps) {
       const pose = rig.pose();
       store.set({ camLon: pose.lon, camLat: pose.lat, camPitch: 12, camDist: 350,
         exaggeration: 1, era: 'present', compareMode: 'off', labelDensity: 0.65,
-        layers: { imagery: true, terrain: true, roads: true, structures: false,
+        layers: { imagery: true, terrain: true, structures: false,
           places: false, landmarks: false, contours: false, parks: false, water: false, flood: false },
       }, { source: 'inspection' });
       studioPanel.set(true); shotsPanel.set(true);

@@ -512,9 +512,9 @@ test('url state', async (t) => {
   });
 
   await t.test('layer flags survive as booleans', () => {
-    const patch = decodeState(`#${LAYERS.rail.k}=1&${LAYERS.roads.k}=0`);
+    const patch = decodeState(`#${LAYERS.rail.k}=1&${LAYERS.water.k}=0`);
     assert.equal(patch.layers.rail, true);
-    assert.equal(patch.layers.roads, false);
+    assert.equal(patch.layers.water, false);
   });
 
   await t.test('buildShareUrl replaces an existing hash', () => {
@@ -560,11 +560,11 @@ test('degraded mode', async (t) => {
   });
 
   await t.test('some overlays missing is partial, and names them', () => {
-    const status = assess({ ...allOk(), roads: false, rail: false });
+    const status = assess({ ...allOk(), parks: false, rail: false });
     assert.equal(status.mode, MODE.PARTIAL);
     assert.equal(status.trustworthy, true, 'the terrain is still real');
-    assert.deepEqual(status.disableLayers.sort(), ['rail', 'roads']);
-    assert.match(status.message, /roads/);
+    assert.deepEqual(status.disableLayers.sort(), ['parks', 'rail']);
+    assert.match(status.message, /parks/);
     assert.match(status.message, /rail/);
   });
 

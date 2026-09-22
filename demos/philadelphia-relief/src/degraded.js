@@ -27,8 +27,6 @@ export const ASSETS = [
     label: 'parks' },
   { id: 'woodland', path: 'data/woodland.geojson', kind: 'geojson', supplemental: true,
     label: 'mapped woodland' },
-  { id: 'roads', path: 'data/roads.geojson?v=streets-2026090602', kind: 'geojson', layer: 'roads',
-    label: 'roads' },
   { id: 'rail', path: 'data/rail.geojson', kind: 'geojson', layer: 'rail',
     label: 'rail' },
   { id: 'boundaries', path: 'data/boundaries.geojson', kind: 'geojson',
