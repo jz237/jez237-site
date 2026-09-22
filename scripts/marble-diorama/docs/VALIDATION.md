@@ -1024,3 +1024,28 @@ exact geometry and full Amiga parity remain incomplete.
 
 The final complete suite passes all 168 tests (278740.14ms), including the
 new start geometry and updated observation bound. Build and diff checks pass.
+
+
+### September 21 - Ultimate ice-exit guard and complete right route, mm-26
+
+Added the footage-observed black steelie below the ice pyramids, using existing
+physical enemy behavior and knockout scoring. Two new regression tests pass
+(29896ms): both complete solo routes with bounded inputs, actual guard contact on
+the main route, explicit right-room/outer-ice/right-finish visits, and an actual
+platform collision fixture paying1000 exactly once. Main62.01s/right108.53s,
+zero falls. A previous right-route diagnostic failed before reaching the guard:
+acid contacts at35.56s/39.18s and later ice falls. Corrected the demo approach and
+ice steering hints; retained the hazards, outer ice lane and player physics.
+
+These untimed results do not satisfy timed campaign acceptance. Steelie AI
+constants and original right-side traversal remain provisional. See
+ULTIMATE-REFERENCE.md for sampled Amiga evidence and limits.
+
+Local browser validation of the production build completes the right-route demo
+in 108.53s with 8955 points and zero falls. The black guard is visible on its platform during the
+final approach; no captured warnings/errors. Timed campaign measurements remain
+incomplete: solo Ultimate expires at32s, paired Silly at55.0417s, all zero falls.
+
+The final full suite passes all 170 tests (281513.42ms). Production build and
+whitespace checks pass. The existing paired Ultimate main-route test also passes
+with zero falls. No timed allowances or human controls changed.

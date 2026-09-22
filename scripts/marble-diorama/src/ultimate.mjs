@@ -278,6 +278,8 @@ export function ultimateCourse() {
       [9, 10, 69],
       [12, 10, 70],
       [8, 8, 77],
+      // Turn along the safe entrance edge before approaching the acid room.
+      [13, 8, 77.8],
       [13, 8, 80],
       [13, 8, 86],
       [10, 8, 89],
@@ -296,8 +298,11 @@ export function ultimateCourse() {
       [0, 2, 128],
     ].map(([l, h, d]) =>
       routePoint(l, h, d, {
-        speed: 2.4,
-        radius: d >= 98 && d <= 117 ? 1.6 : 0.7,
+        // A broad, slow turn gives the outer ice lane enough braking distance.
+        speed: d === 77.8 ? 1.6 : d >= 100 && d <= 117 ? 1 : 2.4,
+        radius: d === 77.8 ? 0.35 : d >= 98 && d <= 117 ? 1.6 : 0.7,
+        ...(d === 77.8 ? { stop: true } : {}),
+        ...(d >= 100 && d <= 117 ? { flow: true } : {}),
       }),
     ),
   ];
@@ -307,7 +312,7 @@ export function ultimateCourse() {
     schema: 1,
     id: "ultimate",
     medals: { gold: 85, silver: 125 },
-    revision: 3,
+    revision: 4,
     name: "Ultimate Race",
     courseNumber: 6,
     subtitle: "Catapult islands, split hazard rooms, and the last icy descent.",
@@ -367,17 +372,27 @@ export function ultimateCourse() {
       },
     })),
     enemies: [
-      [-7, 8, 80],
-      [-6, 8, 84],
-      [10, 10, 63],
-      [14, 10, 67],
-    ].map(([l, h, d], i) => ({
-      id: `muncher-${i}`,
-      kind: "muncher",
-      ...worldPoint(l, h + 0.9, d),
-      radius: 0.65,
-      roam: 2.3,
-      speed: 0.6,
-    })),
+      {
+        id: "ice-exit-steelie",
+        kind: "steelie",
+        ...worldPoint(0, 4.56, 116),
+        radius: 0.55,
+        roam: 3,
+        speed: 1.8,
+      },
+      ...[
+        [-7, 8, 80],
+        [-6, 8, 84],
+        [10, 10, 63],
+        [14, 10, 67],
+      ].map(([l, h, d], i) => ({
+        id: `muncher-${i}`,
+        kind: "muncher",
+        ...worldPoint(l, h + 0.9, d),
+        radius: 0.65,
+        roam: 2.3,
+        speed: 0.6,
+      })),
+    ],
   };
 }
