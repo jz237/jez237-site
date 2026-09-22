@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-28",
-  "generatedAt": "2026-09-22T04:09:35.921Z",
+  "physics": "rapier-0.20.0-mm-29",
+  "generatedAt": "2026-09-22T04:23:22.049Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -10,72 +10,102 @@
         {
           "course": "practice",
           "ticks": 2969,
+          "winner": 0,
+          "nextTimeBonuses": [
+            0
+          ],
           "players": [
             {
               "time": 40.6705729166737,
               "score": 5408,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 2969
             }
           ]
         },
         {
           "course": "beginner",
           "ticks": 6831,
+          "winner": 0,
+          "nextTimeBonuses": [
+            0
+          ],
           "players": [
             {
               "time": 30.52734375000337,
               "score": 17303,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 6831
             }
           ]
         },
         {
           "course": "intermediate",
           "ticks": 5201,
+          "winner": 0,
+          "nextTimeBonuses": [
+            0
+          ],
           "players": [
             {
-              "time": 36.13932291667244,
-              "score": 24704,
+              "time": 41.139322916666984,
+              "score": 25204,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 5201
             }
           ]
         },
         {
           "course": "aerial",
           "ticks": 6541,
+          "winner": 0,
+          "nextTimeBonuses": [
+            0
+          ],
           "players": [
             {
-              "time": 23.415364583341958,
-              "score": 31946,
+              "time": 28.41536458333923,
+              "score": 32946,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 6541
             }
           ]
         },
         {
           "course": "silly",
           "ticks": 6872,
+          "winner": 0,
+          "nextTimeBonuses": [
+            0
+          ],
           "players": [
             {
-              "time": 21.26041666667708,
-              "score": 44931,
+              "time": 26.26041666667981,
+              "score": 46431,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 6872
             }
           ]
         },
         {
           "course": "ultimate",
-          "ticks": 7066,
+          "ticks": 7834,
+          "winner": -1,
+          "nextTimeBonuses": [
+            0
+          ],
           "players": [
             {
               "time": 0,
-              "score": 47825,
+              "score": 49325,
               "deaths": 0,
-              "status": "timeout"
+              "status": "timeout",
+              "finishTick": null
             }
           ]
         }
@@ -88,108 +118,150 @@
         {
           "course": "practice",
           "ticks": 3119,
+          "winner": 0,
+          "nextTimeBonuses": [
+            5,
+            0
+          ],
           "players": [
             {
               "time": 40.761718750007,
               "score": 5408,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 2955
             },
             {
               "time": 39.694010416674054,
               "score": 5308,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 3119
             }
           ]
         },
         {
           "course": "beginner",
           "ticks": 7252,
+          "winner": 1,
+          "nextTimeBonuses": [
+            0,
+            5
+          ],
           "players": [
             {
-              "time": 27.786458333336206,
-              "score": 16992,
+              "time": 32.78645833333305,
+              "score": 17492,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 7252
             },
             {
               "time": 29.023437500003098,
               "score": 13104,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 7062
             }
           ]
         },
         {
           "course": "intermediate",
           "ticks": 5424,
+          "winner": 0,
+          "nextTimeBonuses": [
+            5,
+            0
+          ],
           "players": [
             {
-              "time": 33.13932291667572,
-              "score": 24093,
+              "time": 43.1393229166648,
+              "score": 25593,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 5201
             },
             {
-              "time": 33.6875000000074,
-              "score": 20205,
+              "time": 43.68749999999648,
+              "score": 21205,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 5424
             }
           ]
         },
         {
           "course": "aerial",
           "ticks": 7454,
+          "winner": 0,
+          "nextTimeBonuses": [
+            5,
+            0
+          ],
           "players": [
             {
-              "time": 20.4153645833425,
-              "score": 31035,
+              "time": 35.41536458333355,
+              "score": 34035,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 6541
             },
             {
-              "time": 14.471354166675171,
-              "score": 26547,
+              "time": 24.47135416667039,
+              "score": 28547,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 7454
             }
           ]
         },
         {
           "course": "silly",
           "ticks": 6497,
+          "winner": 0,
+          "nextTimeBonuses": [
+            5,
+            0
+          ],
           "players": [
             {
-              "time": 12.984375000005233,
-              "score": 41620,
+              "time": 32.984375000013834,
+              "score": 46620,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 6300
             },
             {
-              "time": 5.701822916665288,
-              "score": 36430,
+              "time": 15.70182291667324,
+              "score": 39430,
               "deaths": 0,
-              "status": "finished"
+              "status": "finished",
+              "finishTick": 6497
             }
           ]
         },
         {
           "course": "ultimate",
-          "ticks": 5684,
+          "ticks": 9524,
+          "winner": -1,
+          "nextTimeBonuses": [
+            0,
+            0
+          ],
           "players": [
             {
               "time": 0,
-              "score": 44451,
+              "score": 49514,
               "deaths": 0,
-              "status": "timeout"
+              "status": "timeout",
+              "finishTick": null
             },
             {
               "time": 0,
-              "score": 39112,
+              "score": 42263,
               "deaths": 0,
-              "status": "timeout"
+              "status": "timeout",
+              "finishTick": null
             }
           ]
         }

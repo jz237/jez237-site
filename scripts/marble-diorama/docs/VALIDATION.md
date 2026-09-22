@@ -1138,3 +1138,35 @@ zero-fall assertions. The final full suite passes **175/175** tests
 production browser's paired Silly demo completes with 9385 / 9383 points, zero
 falls and no captured warnings/errors. Existing input recordings retain mm-28
 physics; the added ground-friction reading only guides the demo controller.
+
+### September 22 - corrected Intermediate allocation and contested-race award, mm-29
+
+A fresh original-code audit exposed the earlier Intermediate clock error: the
+initial banner at 85.00s is +45; 86.00s shows +40 after five units have already
+transferred. Earlier video frames and the executable independently agree.
+Intermediate is restored to 45 in single-course and campaign play. See the
+corrected CLOCK-REFERENCE.md; older +40 conclusions above are superseded.
+
+The original executable also establishes a five-unit next-race award for the
+first finisher when both marbles started the previous race. CampaignRun now
+keeps this award separate from completed-race scores and applies it after
+Beginner reset or later carryover. The result screen explains the award.
+A rival's timeout does not cancel an earned win; subsequent uncontested races,
+solo, untimed and Ultimate generate no next-race award. Four focused tests pass
+(885.87ms), including restart without accumulation, swapped winners, elimination,
+same-tick serial ordering and original records remaining unchanged. Exact original
+simultaneous-frame order and catch-up behavior remain open; TWO-PLAYER-RULES.md
+records the reference identity, static evidence and limits. No original code or
+reference images are included in the release. Version mm-29 separates old records.
+
+Fresh 120 Hz full timed measurements still fail Ultimate, at 65.2833s for solo
+and 79.3667s overall for two players, with zero falls. Both complete through
+Silly: solo retains 26.2604 clock units, paired 32.9844 / 15.7018. Geometry,
+steering and hazard cycles are unchanged. This is restoration of referenced
+rules, not proof of complete timed-campaign acceptance.
+
+The local production browser starts a timed Intermediate race above the old
+40-unit limit (44.5 visible after startup), pauses correctly and captures no
+warnings/errors. The production build and whitespace checks pass.
+
+The final full suite passes 179/179 tests (280202.68ms), with no skipped tests.
