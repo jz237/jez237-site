@@ -1,17 +1,27 @@
 # Per-course parity checklist
 
+## Current local integration
+
+The mm-36 local entry point now loads the six recovered board definitions and
+their native actors through [native campaign integration](NATIVE-CAMPAIGN.md).
+Practice passes timed solo/paired normal-input completion on difficulties 0 and
+7. Missing pipes/launchers, remaining routes and native diorama polish still
+prevent publication. The legacy checklist below describes the **published older
+reconstructions**, not validation of the newly integrated boards.
+
+## Published reconstruction status
+
 See [the September 21 object audit](OBJECT-PARITY.md) for timestamped findings, fixes and known mechanism mismatches.
 
-Local native-board fixtures now include [recovered slinky rules and shared
-physical bodies](NATIVE-SLINKIES.md). Those fixtures have not replaced the
-published campaign; the reconstruction checklist below still describes its
-remaining course and encounter work.
+Local recovered boards include [recovered slinky rules and shared
+physical bodies](NATIVE-SLINKIES.md). They now replace the local entry point but
+have not replaced the published campaign.
 
 The latest native Silly fixture adds [recovered birds](NATIVE-BIRDS.md),
 [miniature room behavior](NATIVE-MINIATURES.md) and the original
 [uphill slope acceleration](NATIVE-SLOPES.md), plus the red transfer's recovered
-[inlet acceleration and outlet choice](NATIVE-TRANSFER.md). These changes still require
-full-course integration and release validation.
+[inlet acceleration and outlet choice](NATIVE-TRANSFER.md). These changes are
+integrated locally and still require full-course route and release validation.
 
 All six races are playable reconstructions. **None is certified as a complete
 Amiga reproduction.** PARTIAL records implemented behavior and its remaining
