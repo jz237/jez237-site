@@ -251,6 +251,20 @@ export class AudioEngine {
   }
   event(event, assisted = false) {
     if (event.type === "impact") return this.impact(event.force);
+    if (event.type === "bird-hit")
+      return this.effect("scatter", { key: `bird-hit:${event.player}` });
+    if (event.type === "bird-reform")
+      return this.effect("reform", { key: `bird-reform:${event.player}` });
+    if (event.type === "bird-emerge")
+      return this.effect("bird", {
+        key: `bird-emerge:${event.slot}`,
+        gain: 0.35,
+      });
+    if (event.type === "bird-wall")
+      return this.effect("crack", {
+        key: `bird-wall:${event.slot}`,
+        gain: 0.35,
+      });
     if (event.type === "steelie-shatter")
       return this.effect("crack", {
         key: `steelie-crack:${event.enemy}`,

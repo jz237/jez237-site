@@ -1,4 +1,5 @@
 import RAPIER from "@dimforge/rapier3d-compat";
+import { contactPhysicalBird } from "./native-bird-physics.mjs";
 import { createSteelieState } from "./native-steelie.mjs";
 import { createSlinkyState } from "./native-slinky.mjs";
 import {
@@ -89,11 +90,12 @@ export function createEnemies(sim) {
         ).handle,
     );
     const pose = {
-      ...(initial ? { solids } : {}),
+      ...(initial || def.nativeBirdSlot !== undefined ? { solids } : {}),
       position: copy(body.translation()),
       rotation: copy(body.rotation()),
     };
-    if (def.nativeSteelie || nativeSlinky) body.setEnabled(false);
+    if (def.nativeSteelie || nativeSlinky || def.nativeBirdSlot !== undefined)
+      body.setEnabled(false);
     return {
       def,
       handle: body.handle,
@@ -107,11 +109,13 @@ export function createEnemies(sim) {
         ? { nativeSteelie: createSteelieState(), hidden: true }
         : {}),
       ...(nativeSlinky ? { nativeSlinky, hidden: true } : {}),
+      ...(def.nativeBirdSlot !== undefined ? { hidden: true } : {}),
     };
   });
 }
 export function steerEnemies(sim, dt) {
   for (const e of sim.enemies) {
+    if (e.def.nativeBirdSlot !== undefined) continue;
     if (e.collected || (e.defeated && !e.nativeSteelie && !e.nativeSlinky))
       continue;
     const b = sim.world.getRigidBody(e.handle),
@@ -303,7 +307,9 @@ export function updateEnemies(sim, incomingVelocity = []) {
             (manifold) => {
               for (let i = 0; i < manifold.numContacts(); i++)
                 if (manifold.contactDist(i) <= 0.002) {
-                  if (e.nativeSlinky) {
+                  if (e.def.nativeBirdSlot !== undefined) {
+                    contactPhysicalBird(sim, e, p);
+                  } else if (e.nativeSlinky) {
                     if (p.status === "racing")
                       contactNativeSlinky(
                         sim,

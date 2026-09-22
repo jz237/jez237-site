@@ -53,12 +53,49 @@ choices, lane 3 meets its wall at update 41, lanes 2/4 at 73, and lanes 0/1 at
 stops at 400. This validates controller paths against reconstructed terrain;
 it is not original-binary execution or a normal-input playthrough.
 
-## Remaining integration
+## Physical integration
 
-This module is not yet connected to the campaign or runtime bundle. The current
-published birds still use authored crossing loops. Remaining work includes
-shared visible/contact geometry, continuous movement to real wall contact,
-emergence and retirement visuals, player animation 11 and its physical recovery,
-sound playback, native course configuration, physical encounters and replay
-tests, browser inspection, and full-course acceptance. No bird parity or
-publication claim follows from these controller tests alone.
+The local runtime now accepts `birdSequence: true` and ten unique
+`nativeBirdSlot` enemies on a course with a reverse native camera and matching
+physics rate. The new Silly fixture retains the recovered board and flags.
+Camera departure stops spawning while existing birds finish their flights.
+
+Newly drawn purple bodies, heads, beaks, wings and tails use the same closed
+solids for rendering and convex contact. Source poses interpolate at 120 Hz.
+The source height anchors the bottom of the flying shape; the body's origin
+is explicitly half a radius above that height. Continuous casts of those solids
+stop at the actual wall surface. An active bird never applies the source's
+cell-alignment snap. Emergence and retirement are non-colliding animation phases.
+
+Real marble contact starts a 36-source-update break-apart phase, then a
+24-update reassembly at the existing safe respawn position. The loss is counted
+at the reassembly transition, once. Source 0x143c8 dispatches player animation
+11 through 0x13384; 0x143e6 selects animation 4 with marker101, which becomes24.
+Eight closed patterned sectors expand from the actual impact pose and contract
+at the respawn point. Their 3D paths are newly drawn, preserving the source
+phase durations rather than claiming identical bitmap trajectories. The
+original respawn search and early exit when the destination remains obstructed
+still need integration. Newly synthesized flight, hit, wall and reform cues
+are routed to the effects bus; original sample parity remains open.
+
+Physical tests cover slot validation, closed changing solids, continuous wall
+stops, actual marble contact, separate deadlines, one loss, exact snapshot
+continuation, and native birds in the demo's motion forecast. A private
+1,800-tick original-board diagnostic produces 31 emergences, 25 wall stops and
+22 removals. Every live collider retains exactly the rendered vertices and the
+correct enabled state. Maximum displacement is 0.091668 world units per physics
+step. This diagnostic fixes camera entry and disables the player for coverage;
+it does not prove an ordinary timed race.
+
+Local browser inspection of a physical encounter shows purple birds in
+different wing poses and the player's patterned fragments. The stationary
+preview can be hit again after returning to the flight lane. Safe respawn
+selection, source bitmap silhouette comparison, human audio listening, complete
+normal-input races, and release validation remain open. The published campaign
+still uses authored birds until the recovered campaign replacement is ready.
+
+The integration passes the full 349-test suite (285002.4834 ms). The subsequent
+native demo forecast and rotated-facing correction pass all six focused
+physical bird tests (5255.8638 ms); the nine controller tests also pass. Build
+and diff checks pass, and local browser warnings/errors are empty. No human
+audio listening or physical-phone check has been performed for this milestone.

@@ -120,6 +120,44 @@ export function contactNativeBird(state, slot, player) {
   return true;
 }
 
+export function stopNativeBird(state, slot) {
+  const s = state.slots[slot];
+  if (!s?.loaded || s.mode !== "fly") return false;
+  Object.assign(s, {
+    mode: "retire",
+    animation: "wall",
+    frame: 0,
+    counter: 0,
+    divider: 1,
+  });
+  emit(state, s, "bird-wall");
+  return true;
+}
+
+export function validateNativeBirds(course) {
+  const birds = (course.enemies ?? []).filter(
+    (e) => e.nativeBirdSlot !== undefined,
+  );
+  if (!course.birdSequence && !birds.length) return;
+  if (
+    course.birdSequence !== true ||
+    !course.nativeCamera?.reverse ||
+    course.nativeDynamics?.rate !== course.nativeCamera.rate ||
+    birds.length !== 10 ||
+    new Set(birds.map((e) => e.nativeBirdSlot)).size !== 10 ||
+    birds.some(
+      (e) =>
+        e.kind !== "bird" ||
+        !Number.isInteger(e.nativeBirdSlot) ||
+        e.nativeBirdSlot < 0 ||
+        e.nativeBirdSlot > 9 ||
+        e.nativeSlinky ||
+        e.nativeSteelie,
+    )
+  )
+    throw Error("Invalid native bird sequence.");
+}
+
 // One original update. heightAt returns source terrain height or null for a
 // void. Wall contact is reported as an intent: the original rounded its prior
 // z down to four units; a 3D adapter must resolve real contact without snapping.

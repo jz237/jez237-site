@@ -913,7 +913,7 @@ export class DioramaView {
       if (mesh.userData.articulated)
         updateActorMesh(
           mesh,
-          e.nativeSlinky
+          e.nativeSlinky || e.def.nativeBirdSlot !== undefined
             ? interpolateSlinkySolids(
                 e.previous.solids,
                 e.current.solids,

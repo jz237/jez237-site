@@ -1,4 +1,7 @@
 import { createNativeFlags, advanceNativeFlags } from "./native-flags.mjs";
+import { createBirdSequence } from "./native-bird.mjs";
+import { advanceNativeBirds } from "./native-bird-physics.mjs";
+import { finishBirdCapture } from "./bird-capture.mjs";
 import { createAerialPegs, advanceAerialPegs } from "./aerial-pegs.mjs";
 import {
   createTerrainNavigation,
@@ -93,6 +96,9 @@ export class Simulation {
       ? createNativeCamera(course.nativeCamera)
       : null;
     this.nativeFlags = createNativeFlags(course);
+    this.nativeBirds = course.birdSequence
+      ? createBirdSequence(this.options.seed)
+      : null;
     this.nativeAcids = course.acidSequence
       ? createAcidSequence(this.options.seed)
       : null;
@@ -245,6 +251,7 @@ export class Simulation {
   }
   respawn(p) {
     const s =
+      p.birdCapture?.destination ??
       p.slinkyCapture?.destination ??
       p.acidCapture?.destination ??
       this.respawnPosition(p);
@@ -276,6 +283,7 @@ export class Simulation {
     p.nativeVacuumCaptureUntil = null;
     p.acidCapture = null;
     p.slinkyCapture = null;
+    p.birdCapture = null;
     p.stunnedUntil = 0;
     p.impactAirTicks = 0;
     p.impactLaunched = false;
@@ -324,6 +332,7 @@ export class Simulation {
       this.nativeCamera,
     );
     advanceNativeAcids(this, STEP);
+    advanceNativeBirds(this, STEP);
     steerEnemies(this, STEP);
     const terrainPoses = advanceTerrainAnimations(
       this.course,
@@ -495,6 +504,7 @@ export class Simulation {
       }
       if (p.status === "falling") {
         finishSlinkyCapture(this, p);
+        finishBirdCapture(this, p);
         if (this.tick >= p.respawnTick) this.respawn(p);
         continue;
       }
@@ -919,7 +929,8 @@ export class Simulation {
     p.launchBonusPending = null;
     this.body(p).setEnabled(false);
     const slinky = detail?.cause === "slinky";
-    if (!slinky) p.deaths++;
+    const bird = detail?.cause === "bird";
+    if (!slinky && !bird) p.deaths++;
     const vacuum = detail?.cause === "vacuum";
     const acid = detail?.cause === "acid";
     p.respawnTick =
@@ -937,6 +948,18 @@ export class Simulation {
         }
       : null;
     if (slinky) p.respawnTick = p.slinkyCapture.endTick;
+    p.birdCapture = bird
+      ? {
+          tick: this.tick,
+          releaseTick: detail.releaseTick,
+          endTick: detail.endTick,
+          released: false,
+          origin: copy(this.body(p).translation()),
+          rotation: copy(this.body(p).rotation()),
+          destination: copy(this.respawnPosition(p)),
+        }
+      : null;
+    if (bird) p.respawnTick = p.birdCapture.endTick;
     if (acid) {
       const origin = this.body(p).translation();
       const pool =
@@ -969,7 +992,7 @@ export class Simulation {
     p.landingAirTicks = 0;
     p.traversals = {};
     p.transferRoute = null;
-    if (!slinky)
+    if (!slinky && !bird)
       this.events.push({
         type: "fall",
         player: this.players.indexOf(p),
@@ -986,6 +1009,7 @@ export class Simulation {
       terrainAnimations: structuredClone(this.terrainAnimations),
       nativeCamera: structuredClone(this.nativeCamera),
       nativeFlags: structuredClone(this.nativeFlags),
+      nativeBirds: structuredClone(this.nativeBirds),
       nativeAcids: structuredClone(this.nativeAcids),
       acid: this.acid.map(({ zone, geometry, ...runtime }) =>
         structuredClone(runtime),
@@ -1018,6 +1042,12 @@ export class Simulation {
     );
     this.nativeFlags = structuredClone(
       s.nativeFlags ?? createNativeFlags(this.course),
+    );
+    this.nativeBirds = structuredClone(
+      s.nativeBirds ??
+        (this.course.birdSequence
+          ? createBirdSequence(this.options.seed)
+          : null),
     );
     this.nativeAcids = structuredClone(
       s.nativeAcids ??
@@ -1323,6 +1353,34 @@ export class DemoController {
     });
     const birdCrossing = sim.enemies.some((enemy) => {
       if (enemy.def.kind !== "bird" || enemy.collected) return false;
+      if (enemy.def.nativeBirdSlot !== undefined) {
+        const slot = sim.nativeBirds.slots[enemy.def.nativeBirdSlot];
+        if (enemy.hidden || slot.mode !== "fly") return false;
+        const bird = sim.world.getRigidBody(enemy.handle);
+        const bp = bird.translation(),
+          bv = bird.linvel();
+        if (Math.abs(bp.y - pos.y) > RADIUS + enemy.def.radius) return false;
+        // Forecast from real motion. Native birds can change speed or retire;
+        // full native-course demo routes remain a separate acceptance gate.
+        for (let ahead = 0.15; ahead <= 1.2; ahead += 0.15) {
+          const travel = Math.min(dist, cruisingSpeed * ahead);
+          if (
+            Math.hypot(
+              bp.x +
+                bv.x * ahead -
+                pos.x -
+                (dx / Math.max(dist, 0.01)) * travel,
+              bp.z +
+                bv.z * ahead -
+                pos.z -
+                (dz / Math.max(dist, 0.01)) * travel,
+            ) <
+            RADIUS + enemy.def.radius + 0.4
+          )
+            return true;
+        }
+        return false;
+      }
       const home = enemy.def,
         direction = home.direction;
       if (Math.abs(home.y - pos.y) > RADIUS + home.radius) return false;
