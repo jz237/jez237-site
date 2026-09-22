@@ -3,6 +3,10 @@ import { landingContact } from "./landing-contact.mjs";
 import { updateLaunchBonus } from "./launch-bonus.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
+import {
+  createTerrainAnimations,
+  advanceTerrainAnimations,
+} from "./animated-terrain.mjs";
 import { transferForce, chooseTransfer } from "./powered-transfer.mjs";
 import {
   traversalPaths,
@@ -49,6 +53,10 @@ export class Simulation {
       ...options,
     };
     this.options.players = clamp(Math.trunc(this.options.players) || 1, 1, 2);
+    this.terrainAnimations = createTerrainAnimations(
+      course,
+      this.options.players,
+    );
     this.preset = difficultyPreset(this.options.difficulty);
     this.options.difficulty = this.preset.level;
     this.tick = 0;
@@ -98,6 +106,7 @@ export class Simulation {
         current: pose,
       });
       b.setEnabled(presenceAt(g.part, 0).visible);
+      if (g.part.motion.axis === "terrain") b.collider(0).setEnabled(false);
     }
     this.players = Array.from({ length: this.options.players }, (_, i) =>
       this.addPlayer(i),
@@ -218,6 +227,15 @@ export class Simulation {
       collider.setTranslation(acidPositionAt(a.zone, time));
     }
     steerEnemies(this, STEP);
+    const terrainPoses = advanceTerrainAnimations(
+      this.course,
+      this.terrainAnimations,
+      this.players.map((p) => ({
+        position: this.body(p).translation(),
+        active: p.status === "racing",
+      })),
+      this.tick * STEP * this.preset.machineSpeed,
+    );
     for (const m of this.movers) {
       m.previous = m.current;
       const machineTime =
@@ -226,7 +244,12 @@ export class Simulation {
             ? 0
             : (this.tick - m.launchTick) * STEP
           : this.tick * STEP * this.preset.machineSpeed;
-      m.current = motionAt(m.part, machineTime);
+      m.current = motionAt(
+        m.part,
+        machineTime,
+        terrainPoses[m.part.sourcePartId],
+        m.previous,
+      );
       if (
         m.part.profile === "flipper" &&
         m.launchTick !== undefined &&
@@ -239,13 +262,21 @@ export class Simulation {
           part: m.part.id,
         });
       const b = this.world.getRigidBody(m.handle);
-      if (m.current.vertices)
+      if (m.current.vertices && m.current !== m.previous)
         b.collider(0).setShape(
           RAPIER.ColliderDesc.convexHull(m.current.vertices).shape,
         );
-      b.setEnabled(
-        presenceAt(m.part, this.tick * STEP * this.preset.machineSpeed).visible,
-      );
+      if (m.part.motion.axis === "terrain")
+        b.collider(0).setEnabled(
+          m.current.terrainHeights.some(
+            (h, i) => h > m.part.terrainTriangle[i].y + 1e-7,
+          ),
+        );
+      else
+        b.setEnabled(
+          presenceAt(m.part, this.tick * STEP * this.preset.machineSpeed)
+            .visible,
+        );
       b.setNextKinematicTranslation(m.current.position);
       b.setNextKinematicRotation(m.current.rotation);
     }
@@ -656,6 +687,7 @@ export class Simulation {
       world: Array.from(this.world.takeSnapshot()),
       players: structuredClone(this.players),
       movers: structuredClone(this.movers),
+      terrainAnimations: structuredClone(this.terrainAnimations),
       enemies: structuredClone(this.enemies),
     };
   }
@@ -665,6 +697,10 @@ export class Simulation {
     this.tick = s.tick;
     this.players = structuredClone(s.players);
     this.movers = structuredClone(s.movers);
+    this.terrainAnimations = structuredClone(
+      s.terrainAnimations ??
+        createTerrainAnimations(this.course, this.options.players),
+    );
     this.enemies = structuredClone(s.enemies ?? []);
     this.events = [];
     // Cached shapes are only an optimization, never restored simulation state.

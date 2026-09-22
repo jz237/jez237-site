@@ -1340,3 +1340,33 @@ Final focused suite: **13/13 pass**, 414.84 ms, covering the new state machine,
 terrain geometry and the existing published crest's physical lifting/replay.
 The existing crest test does not validate native-wave dynamics. Campaign,
 published build and physics version remain unchanged; no release this turn.
+
+### September 22 — live native wave geometry and physics
+
+The native wave controller now drives optional animated terrain definitions in
+Simulation, the Three.js view and replay snapshots. A welded resting board
+supports the marble while raised faces use matching kinematic convex hulls.
+Coplanar central columns share a panel, separate edge planes retain triangles,
+and all underside vertices stay fixed. World-corner interpolation preserves
+shared edges between rendered physics frames. See INTERMEDIATE-WAVES.md.
+
+Eight new integration checks pass: all animation-frame corners and undersides,
+original gate departure/order, physical lifting, restored physical outcome,
+JSON validation, resting-lane seam traversal, render interpolation and matching
+30/60/120 fps outcomes. Maximum resting contact error is **0.0008961 units**,
+below 1% of radius. **2,184** moving-collider probes differ from visible planes
+by at most **0.00011993 units**, below 0.1% of radius.
+
+The private native Intermediate fixture contains 2,094 cells and 83 generated
+moving faces. Normal-input traversal of its wave section finishes in 6.2917s
+solo and 6.4833s/6.4500s paired, all with zero falls. Its test starts/finish,
+scale 0.1375 and native rate 20 are provisional; these are not full original
+race completion results. Local browser import/demo matches 6.29s, 198 points,
+zero falls. Replay seek to tick 300 shows the recorded marble and crest; no
+captured warnings/errors. Original resources and fixture remain private.
+
+Full regression suite: **216/216 pass**, 281632.05 ms. Production build and diff
+check pass. Existing published campaign layouts and mm-35 behavior are retained.
+This is an unpublished implementation checkpoint; native scale/timing, other
+actors, native respawn/finish/catch-up integration, rounded edges and full timed
+campaign acceptance remain unfinished.

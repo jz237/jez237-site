@@ -4,6 +4,7 @@ import { vacuumFragments, updateVacuumFragments } from "./vacuum-view.mjs";
 import { landingTargets, landingAmount } from "./landing-targets.mjs";
 import { acidMesh, updateAcidMesh } from "./acid-view.mjs";
 import { foundationGeometry } from "./foundations.mjs";
+import { interpolateTerrainTriangle } from "./animated-terrain.mjs";
 import * as THREE from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RoomEnvironment } from "three/addons/environments/RoomEnvironment.js";
@@ -54,7 +55,7 @@ function graphSurface(material, field, neutralSurface, moving) {
       terrainColor=mix(terrainColor,ridgeColor,ridge);
       diffuseColor.rgb=${neutralSurface ? "terrainColor" : "mix(diffuseColor.rgb,terrainColor,0.14)"};
       // Course-aligned graph lines are draped on the real 3D surface.
-      vec3 gridPosition=${moving && !["wave", "stationary"].includes(moving) ? "vTerrainLocal" : "vTerrainWorld"};
+      vec3 gridPosition=${moving && !["wave", "terrain", "stationary"].includes(moving) ? "vTerrainLocal" : "vTerrainWorld"};
       vec2 graph=vec2(gridPosition.x-gridPosition.z,gridPosition.x+gridPosition.z)*0.70710678/0.65;
       vec2 distanceToLine=abs(fract(graph+0.5)-0.5);
       vec2 coverage=1.0-smoothstep(vec2(0.014),vec2(0.014)+fwidth(graph)*0.85,distanceToLine);
@@ -199,7 +200,7 @@ export class DioramaView {
         "varying vec3 vTrackPosition;\n" + shader.vertexShader;
       shader.vertexShader = shader.vertexShader.replace(
         "#include <begin_vertex>",
-        `#include <begin_vertex>\nvTrackPosition=${["wave", "stationary"].includes(moving) ? "(modelMatrix*vec4(position,1.0)).xyz" : "position"};`,
+        `#include <begin_vertex>\nvTrackPosition=${["wave", "terrain", "stationary"].includes(moving) ? "(modelMatrix*vec4(position,1.0)).xyz" : "position"};`,
       );
       shader.fragmentShader =
         "varying vec3 vTrackPosition;\n" +
@@ -853,6 +854,14 @@ export class DioramaView {
         .getRigidBody(this.sim.movers[i].handle)
         .isEnabled();
       const m = this.sim.movers[i];
+      const terrainPose =
+        m.part.motion.axis === "terrain"
+          ? interpolateTerrainTriangle(m.part, m.previous, m.current, alpha)
+          : null;
+      if (terrainPose)
+        this.moving[i].visible = terrainPose.terrainHeights.some(
+          (h, index) => h > m.part.terrainTriangle[index].y + 1e-7,
+        );
       if (m.current.vertices) {
         const data = this.sim.compiled.moving[i],
           geometry = this.moving[i].geometry,
@@ -860,24 +869,31 @@ export class DioramaView {
         for (let j = 0; j < data.indices.length; j++)
           for (let k = 0; k < 3; k++) {
             const index = data.indices[j] * 3 + k;
-            position.array[j * 3 + k] =
-              m.previous.vertices[index] +
-              (m.current.vertices[index] - m.previous.vertices[index]) * alpha;
+            position.array[j * 3 + k] = terrainPose
+              ? terrainPose.vertices[index]
+              : m.previous.vertices[index] +
+                (m.current.vertices[index] - m.previous.vertices[index]) *
+                  alpha;
           }
         position.needsUpdate = true;
         geometry.computeVertexNormals();
         geometry.computeBoundingSphere();
       }
-      this.moving[i].position.lerpVectors(
-        vec(m.previous.position),
-        vec(m.current.position),
-        alpha,
-      );
-      this.moving[i].quaternion.slerpQuaternions(
-        quat(m.previous.rotation),
-        quat(m.current.rotation),
-        alpha,
-      );
+      if (terrainPose) {
+        this.moving[i].position.copy(vec(terrainPose.position));
+        this.moving[i].quaternion.copy(quat(terrainPose.rotation));
+      } else {
+        this.moving[i].position.lerpVectors(
+          vec(m.previous.position),
+          vec(m.current.position),
+          alpha,
+        );
+        this.moving[i].quaternion.slerpQuaternions(
+          quat(m.previous.rotation),
+          quat(m.current.rotation),
+          alpha,
+        );
+      }
     }
     if (ghostPose) {
       if (!this.ghost) {
