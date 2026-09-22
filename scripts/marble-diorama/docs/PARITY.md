@@ -40,7 +40,11 @@ original dimensions, timing, or complete route coverage.
   measurement fails in Ultimate for both solo and two players; see VALIDATION.md.
 - [x] Five-unit next-race award for the first finisher of a contested race,
   including Beginner reset and independent elimination; see TWO-PLAYER-RULES.md.
-- [ ] Original catch-up rules and exact simultaneous-frame tie behavior.
+- [ ] Original catch-up rules and exact simultaneous-frame tie behavior. The
+  trigger, penalty and camera dependency are traced in CATCHUP-REFERENCE.md.
+- [x] Original ending arithmetic caps credited whole time at 99 and loss
+  deductions at 20; see ENDING-REFERENCE.md. Complete loss counting still
+  depends on the unimplemented catch-up relocation.
 - [x] Fixed finish awards of 1000–6000, including Ultimate's unused-clock award, verified against original footage.
 - [ ] Exact progress, steelie paired attribution, training gate and complete landing-target award formula. See PRACTICE-SCORING.md.
 - [ ] Original soundtrack all-cue listening, assignments, loops and transitions.

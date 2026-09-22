@@ -22,3 +22,7 @@ CampaignRun stores the pending per-player award separately and applies it when p
 Four focused regressions cover swapped winners, Beginner reset, Intermediate carryover, restart, independent elimination, no extra scoring, preserved previous results, all-timeout, solo, untimed and final-race cases. Same-tick finishes retain the simulation's serial player order, awarding only one player. The first-winner latch is supported by the executable; an original simultaneous-frame experiment is still needed before claiming exact tie behavior.
 
 Full original catch-up relocation, penalties, camera rules, original collision balance and exact presentation remain open. This award does not certify complete two-player parity. Rules/replay version mm-29 separates affected records.
+
+Further static tracing of catch-up triggers, destination selection, penalty and
+camera dependency is recorded in [CATCHUP-REFERENCE.md](CATCHUP-REFERENCE.md).
+The ending arithmetic caps are verified in [ENDING-REFERENCE.md](ENDING-REFERENCE.md).

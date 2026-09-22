@@ -460,7 +460,7 @@ function finish() {
       $("resultText").textContent =
         totals +
         (campaignOutcome === "complete"
-          ? ". Finish bonus: 20,000 + 1,000 per remaining clock unit − 1,000 per fall. Untimed runs receive no time bonus."
+          ? ". Finish bonus: 20,000 + 1,000 per remaining whole clock unit (up to 99) − 1,000 per fall (up to 20). Untimed runs receive no time bonus."
           : "");
       $("again").textContent = "Restart campaign ↻";
       if (!campaignDemo && campaignOutcome === "complete") {
