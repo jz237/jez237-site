@@ -575,12 +575,12 @@ for (const players of [1, 2])
     assert.equal(run.courseId, players === 1 ? "ultimate" : "silly");
   });
 
-test("Ultimate demo takes the open ice lane and crosses the timed bridge without falls for both marbles", () => {
+test("Ultimate demo crosses the complete changing final room without falls for both marbles", () => {
   const course = campaignCourses().find((c) => c.id === "ultimate");
   const sim = new Simulation(course, { players: 2, untimed: true });
   const drivers = sim.players.map(() => new DemoController());
   while (
-    sim.tick < 120 * 90 &&
+    sim.tick < 120 * 150 &&
     !sim.players.every((p) => p.status === "finished")
   )
     sim.step(drivers.map((driver, i) => driver.input(sim, i)));

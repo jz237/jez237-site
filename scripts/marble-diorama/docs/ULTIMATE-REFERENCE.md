@@ -152,3 +152,15 @@ not timed campaign acceptance or proof of original movement calibration. A
 separate initial-condition collision fixture on the actual exit platform verifies
 that an edge knockout pays exactly1000 once; generic steelie tests retain
 snapshot, attribution and no-respawn coverage.
+
+### September 21: expanded final room (revision 5 / mm-27)
+
+[ULTIMATE-FINAL.md](ULTIMATE-FINAL.md) supersedes the abbreviated final room and
+separate right finish described above. Both upper routes now share the full
+disappearing entry, staggered dark crossings and changing corners, lower landing,
+uphill/ice return and gold goal crossing observed in the Amiga recordings.
+The right hazard-room and outer-ice alternative remains available. The measured
+main solo traversal is now 96.375s; paired main finishes at 96.375/102.375s,
+with zero falls. Earlier completion times describe the old, shorter room.
+These are untimed traversal checks. Original dimensions, complete cell masks,
+phase origin and timed completion remain open.

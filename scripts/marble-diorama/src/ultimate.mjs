@@ -1,11 +1,6 @@
+import { ultimateFinish } from "./ultimate-finish.mjs";
 import { roundDemoCorners } from "./demo-route.mjs";
-import {
-  ISO,
-  worldPoint,
-  deck,
-  ribbon,
-  routePoint,
-} from "./course-authoring.mjs";
+import { worldPoint, deck, ribbon, routePoint } from "./course-authoring.mjs";
 import { amigaCourseRules, COURSE_TIME } from "./rules.mjs";
 
 const whiteApproach = (l) => [
@@ -18,6 +13,7 @@ const whiteApproach = (l) => [
 ];
 
 export function ultimateCourse() {
+  const finish = ultimateFinish();
   const parts = [
     deck("start-field", 0, 5, 22, 16, 16, { h: 0.8, material: "sand" }),
     // The original white approach climbs from the sand to an elevated ledge.
@@ -137,59 +133,8 @@ export function ultimateCourse() {
     ),
     deck("ice-field", 0, 106, 24, 16, 4, { h: 8, material: "ice" }),
     deck("ice-exit", 0, 116, 8, 6, 4, { h: 8 }),
-    ribbon(
-      "left-finish-entry",
-      [
-        [0, 117, 4],
-        [-10, 124, 1],
-        [-14, 128, 1],
-        [-14, 130, 1],
-      ],
-      3.4,
-    ),
-    ribbon(
-      "left-finish-after-gap",
-      [
-        [-14, 133, 1],
-        [-14, 137, 1],
-        [-7, 140, 1],
-      ],
-      3.4,
-    ),
-    ribbon(
-      "right-finish-entry",
-      [
-        [0, 117, 4],
-        [10, 122, 1],
-        [14, 126, 1],
-        [14, 135, 1],
-        [8, 140, 1],
-        [0, 136, 2],
-      ],
-      3.4,
-    ),
-    deck("lower-finish-room", -5, 138, 10, 7, 1, { h: 5 }),
-    ribbon(
-      "goal-return",
-      [
-        [-7, 140, 1],
-        [-4, 137, 1],
-        [0, 134, 2],
-        [0, 128, 2],
-      ],
-      4,
-    ),
-    deck("goal", 0, 128, 11, 5, 2, { h: 6, material: "sand" }),
+    ...finish.parts,
   ];
-  for (let i = 0; i < 3; i++)
-    parts.push(
-      deck(`vanishing-left-${i}`, -14, 130.5 + i, 3.4, 1, 1, {
-        kind: "moving",
-        h: 5,
-        motion: { axis: "y", amplitude: 0, period: 4.8 },
-        presence: { period: 4.8, on: 3.6, phase: -i * 0.18 },
-      }),
-    );
   for (const p of parts.filter(
     (p) => p.id.startsWith("ice-") && p.id.includes("bridge"),
   ))
@@ -223,13 +168,6 @@ export function ultimateCourse() {
     [0, 4, 100],
     [0, 4, 115],
     [0, 4, 117],
-    [-10, 1, 124],
-    [-14, 1, 128],
-    [-14, 1, 137],
-    [-7, 1, 140],
-    [-4, 1, 137],
-    [0, 2, 134],
-    [0, 2, 128],
   ].map(([l, h, d]) =>
     routePoint(l, h, d, {
       speed: 2.4,
@@ -239,23 +177,6 @@ export function ultimateCourse() {
   // Settle on the lower island before entering its narrow ice bridge.
   route[3].radius = 2.5;
   Object.assign(route[4], { stop: true, speed: 1.8, radius: 0.5 });
-  route.splice(
-    21,
-    0,
-    routePoint(-14, 1, 129, {
-      speed: 2.4,
-      radius: 0.3,
-      stop: true,
-      waitFor: {
-        part: "vanishing-left-0",
-        axis: "y",
-        min: 0.9,
-        max: 1.1,
-        remaining: 2.8,
-      },
-    }),
-    routePoint(-14, 1, 134, { speed: 3.5, radius: 0.6 }),
-  );
   const rightRoute = [
     ...[
       [7.45, 16, 3],
@@ -290,12 +211,6 @@ export function ultimateCourse() {
       [10, 4, 110],
       [0, 4, 115],
       [0, 4, 117],
-      [10, 1, 122],
-      [14, 1, 126],
-      [14, 1, 135],
-      [8, 1, 140],
-      [0, 2, 136],
-      [0, 2, 128],
     ].map(([l, h, d]) =>
       routePoint(l, h, d, {
         // A broad, slow turn gives the outer ice lane enough braking distance.
@@ -312,10 +227,11 @@ export function ultimateCourse() {
     schema: 1,
     id: "ultimate",
     medals: { gold: 85, silver: 125 },
-    revision: 4,
+    revision: 5,
     name: "Ultimate Race",
     courseNumber: 6,
-    subtitle: "Catapult islands, split hazard rooms, and the last icy descent.",
+    subtitle:
+      "Catapult islands, split hazard rooms, and disappearing final crossings.",
     category: "campaign",
     rules: amigaCourseRules("ultimate"),
     time: COURSE_TIME.ultimate,
@@ -333,19 +249,23 @@ export function ultimateCourse() {
         "ice links",
         "paired acid and muncher rooms",
         "four ice pyramids",
-        "branching final room",
+        "sequential disappearing entry and staggered crossings",
+        "raised icy return and disappearing gold approach",
         "return to central goal",
       ],
     },
     starts: [worldPoint(-0.7, 16.56, 0), worldPoint(0.7, 16.56, 0)],
-    goal: { ...worldPoint(0, 2, 128), angle: ISO, width: 9, depth: 1.3 },
+    goal: finish.goal,
     parts,
-    route: roundDemoCorners(route, { radius: 1.5, from: 9 }),
+    route: [
+      ...roundDemoCorners(route, { radius: 1.5, from: 9 }),
+      ...finish.route,
+    ],
     alternateRoutes: [
       {
         id: "right-hazard-rooms",
-        name: "Right hazard rooms and finish approach",
-        route: rightRoute,
+        name: "Right hazard rooms and outer ice lane",
+        route: [...rightRoute, ...finish.route],
       },
     ],
     checkpoints: [
@@ -353,7 +273,8 @@ export function ultimateCourse() {
       worldPoint(-14, 10.56, 59),
       worldPoint(-14, 8.56, 80),
       worldPoint(-10, 4.56, 110),
-      worldPoint(-14, 1.56, 128),
+      worldPoint(0, 4.56, 127.4),
+      worldPoint(19.2, 4.56, 137),
     ],
     zones: [
       [-9, 10, 61],

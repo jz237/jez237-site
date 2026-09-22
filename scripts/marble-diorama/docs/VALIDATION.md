@@ -1049,3 +1049,36 @@ incomplete: solo Ultimate expires at32s, paired Silly at55.0417s, all zero falls
 The final full suite passes all 170 tests (281513.42ms). Production build and
 whitespace checks pass. The existing paired Ultimate main-route test also passes
 with zero falls. No timed allowances or human controls changed.
+
+### September 21 - Ultimate changing final room, mm-27
+
+Rebuilt the missing final sequence from two Amiga recordings. It now includes
+three disappearing entry spans, staggered dark crossings with disappearing
+corners, an uphill/ice return and a gold disappearing goal approach. The entry
+cycle is supported by aligned video frames; world dimensions and later phase
+relationships remain reconstructed. See ULTIMATE-FINAL.md for evidence and limits.
+
+The expanded full suite passes 172/172 tests (297976.97ms), including native
+collision rays, snapshot continuation and complete untimed routes. After that
+run started, stationary vanishing pieces received the existing rounded-corner
+geometry in both mesh and collider. The final geometry passes seven focused
+tests (41117.82ms: final-room collisions, solid boards, both complete solo routes
+and the real steelie knockout) and the existing disappearing-platform regression
+(291.03ms). Separate final-source full solo and paired runs complete at
+96.375s and 96.375/102.375s respectively, all with zero falls and normal steering.
+
+Untimed observation caps rose to 150s for paired Ultimate and 180s for the two
+solo route checks to accommodate the longer room. Actual race clocks, player
+torque and the bounded-input/zero-fall assertions are unchanged. Timed campaign
+measurement still fails solo Ultimate at 32s and paired Silly at 55.0417s, all
+with zero falls. Those timed failures occur before the changed final room.
+Full timed campaign acceptance and complete Amiga parity remain unfinished.
+
+Final presentation check corrected the permanent lower landing to white ceramic,
+matching the other stable junctions. The seven focused checks were rerun on this
+release source and pass (40942.39ms); full solo/paired diagnostic traversal retains
+the same completion times and zero falls. Browser verification completes the
+paired production demo with 8895 points each and zero falls; a close-up scene
+using the final source also completes the final room with zero falls and confirms
+the aligned grid, rounded solids and white lower landing. Neither browser scene
+captured warnings/errors. Production build and whitespace checks pass.
