@@ -1418,3 +1418,19 @@ remain successful. This is not a full-race run. Activation and 1.5s frame spacin
 are provisional, pending the original camera/streaming integration. Other actors,
 rounding, scale, damage behavior and full campaign acceptance remain unfinished.
 See ULTIMATE-FINAL.md. Public layouts and mm-35 remain unchanged; unpublished.
+
+### September 22 — Practice and Beginner terrain scripts
+
+Discrete terrain sequences now support unequal waits, exact update events,
+looping and a one-time player footprint condition. Recovered private fixtures
+restore six Practice starting-ramp states and seven Beginner states. Graphics
+and collision shapes share each complete welded mesh. Both conditions match
+an independent script-word interpreter over **2,400 update comparisons**.
+All **54,319** surface probes pass (maximum error **0.000005603 units**), with
+no open/unbalanced mesh edges. Full suite **233/233**, 281550.0741 ms; build and
+browser inspection pass. No captured browser warnings/errors.
+
+Native actor rate/scale and camera-based loading remain provisional. Other
+actors, sound cue 33, full-course play, rounding and other acceptance items
+remain incomplete. No publication; public layouts/mm-35 unchanged. See
+SMALL-TERRAIN-STATES.md for exact evidence and inspection limits.
