@@ -21,12 +21,12 @@ new source verification of each mechanism.
 
 | Board | Integrated mechanisms | Still missing or unverified |
 |---|---|---|
-| Practice | Changing training steps, original navigation and finish flags | Training rails, numbered landing awards, alternate routes |
+| Practice | Changing training steps, original navigation and finish flags; [ten physical red rails](NATIVE-PRACTICE.md) | Numbered landing awards, alternate routes, contact calibration |
 | Beginner | Changing terrain, two steelies, three slinkies, finish flags; [upper pipe and joined lower passages](NATIVE-PIPES.md) | Full routes; pipe timing, repeat awards, creature handling and original sound |
 | Intermediate | Traveling wave, slinkies, acid patrols, finish flags; [orange pipe and bridge tunnel](NATIVE-PIPES.md) | Full routes, encounter timing and original sound |
 | Aerial | Steelie, four hammers, six vacuums, three peg banks, paddle, finish flags | Full route, capture/launch calibration and encounter acceptance |
 | Silly | Uphill response, nine miniatures, ten birds, red transfer, finish flags | Transit duration/exit calibration, full routes, complete scoring |
-| Ultimate | Changing terrain, steelie, four slinkies, acid patrols, finish flags | [Gold transfer and static housings](NATIVE-GOLD-TRANSFER.md), full routes |
+| Ultimate | Changing terrain, steelie, four slinkies, acid patrols, finish flags; [continuous gold transfer](NATIVE-GOLD-TRANSFER.md) | Gold housing fidelity, full routes and calibration |
 
 Factories supply canonical IDs, category, course numbers, color palettes,
 music cues, original difficulty clocks and finish rules. All six use native
@@ -84,7 +84,10 @@ existing cyan palette. The final bundle build and `git diff --check` passed.
 The full suite includes legacy reconstruction tests as well as the new native
 tests; its total is not a full-campaign parity claim.
 
-- Complete Practice objects and refine Ultimate's gold housing before publication.
+- Complete Practice's numbered landing shelves and refine Ultimate's gold housing before publication.
+  The mm-40 Practice rails are integrated with rounded shared collision geometry;
+  its existing timed solo/paired routes still pass. See NATIVE-PRACTICE.md for
+  original contact evidence and remaining calibration.
   The mm-39 gold fork now provides continuous physical travel through both exits,
   with source choice rules, localized solo/paired and replay checks. Full Ultimate
   routes, original housing fidelity and calibration remain open; see
