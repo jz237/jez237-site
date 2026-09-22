@@ -109,3 +109,12 @@ matching the original airborne drops and subsequent dizzy recovery. Both
 solo and paired normal-input routes finish without falls and trigger the two
 landings. Exact dimensions and landing calibration remain partial. See
 AERIAL-LEDGES.md.
+
+### Native finish flags — local source recovery
+
+The paired kind-0/subtype-5 actors are animated finish flags, confirmed from
+original artwork. Recovered positions, camera activation and separate timing
+are implemented for all six private native-board fixtures. Cloth and poles are
+newly modeled; timing, snapshots and nonblocking behavior are tested. This does
+not establish complete enemy recovery or update the published campaign. See
+[FINISH-FLAGS.md](FINISH-FLAGS.md) for evidence and remaining limits.
