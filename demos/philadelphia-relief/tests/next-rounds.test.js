@@ -1,6 +1,21 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { detailMessage } from '../src/experience.js';
+import { detailMessage, mapShortcutAllowed } from '../src/experience.js';
+
+test('map hotkeys leave native controls, editable content and handled keys alone', () => {
+  const target = selector => ({closest: query => query.split(',').includes(selector)});
+  for (const selector of ['input','textarea','select','button','a[href]','summary','[role="slider"]']) {
+    for (const key of [' ', 'ArrowDown', 'h']) {
+      assert.equal(mapShortcutAllowed({key,target:target(selector)}),false,`${key} on ${selector}`);
+    }
+  }
+  assert.equal(mapShortcutAllowed({key:'f',target:{isContentEditable:true}}),false);
+  assert.equal(mapShortcutAllowed({key:'Escape',target:target('select')}),false);
+  assert.equal(mapShortcutAllowed({key:'Escape',target:target('button')}),true);
+  assert.equal(mapShortcutAllowed({key:' ',target:target('canvas')}),true);
+  assert.equal(mapShortcutAllowed({key:'h',defaultPrevented:true}),false);
+  assert.equal(mapShortcutAllowed({key:'f',ctrlKey:true}),false);
+});
 import { cameraCaption } from '../src/navigation.js';
 import { labelPriority } from '../src/label-policy.js';
 

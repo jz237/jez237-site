@@ -1,7 +1,8 @@
+import { BATHYMETRY_GLSL } from './bathymetry-shader.js?v=philly-2026092201';
 /** Viewport coverage, bounded streaming, and directional look-ahead. */
-import { fetchTile } from './tile-cache.js?v=philly-2026090907';
+import { fetchTile } from './tile-cache.js?v=philly-2026092121';
 export { fetchTile };
-import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026090907';
+import { imageryFocus, detailResolutionM } from './imagery-detail.js?v=philly-2026092121';
 
 export const TILE_SPECS = [
   { tier: 'tile-inspection', lon: 0.0032, lat: 0.0024, range: 600 },
@@ -47,7 +48,7 @@ export function groundPoint(pose, projection, aspect, sx, sy, horizon = false) {
 
 export function planImageryTiles(pose, region, projection, aspect = 1, mode = 'standard', previous = null) {
   if (pose.dist > 24000) return { visible: [], ahead: [] };
-  const focus = imageryFocus(pose, projection);
+  const focus = groundPoint(pose, projection, aspect, 0, 0) || imageryFocus(pose, projection);
   const found = new Map();
   const samples = [];
   // Each screen quad contributes the cells covering its ground bounding box.
@@ -99,6 +100,21 @@ export function planImageryTiles(pose, region, projection, aspect = 1, mode = 's
   return { visible, ahead };
 }
 
+/** A small ring outside visible coverage, warmed only after the view is settled. */
+export function idleNeighbours(visible, pose, region, projection) {
+  const occupied = new Set(visible.map(c => c.key)), candidates = new Map();
+  for (const cell of visible) {
+    const spec = TILE_SPECS[cell.level];
+    for (const [x, y] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+      const next = tileAt(cell.lon + x * spec.lon, cell.lat + y * spec.lat, region, cell.level);
+      if (!occupied.has(next.key)) candidates.set(next.key, next);
+    }
+  }
+  const distance = c => Math.hypot((c.lon - pose.lon) * projection.metersPerDegLon,
+    (c.lat - pose.lat) * projection.metersPerDegLat);
+  return [...candidates.values()].sort((a,b) => distance(a)-distance(b)).slice(0,4);
+}
+
 /** Predict the next closer level without changing the visible coverage plan. */
 export function zoomAhead(pose, previous, region, projection, aspect, mode, visible) {
   if (mode === 'data' || !previous || pose.dist >= previous.dist * .985) return [];
@@ -113,10 +129,11 @@ export function zoomAhead(pose, previous, region, projection, aspect, mode, visi
 export function createTileStream({ region, projection, load = fetchTile, install, remove,
   onStatus = () => {}, now = Date.now, connection = () => globalThis.navigator?.connection }) {
   const cache = new Map(), pending = new Map(), failed = new Map();
-  let desired = [], ahead = [], zoom = [], previous = null, active = false, disposed = false, clock = 0;
+  let desired = [], ahead = [], zoom = [], nearby = [], previous = null;
+  let active = false, disposed = false, clock = 0;
   let lastStatus = { state: 'regional' }, finalSize = 2048, dataSaver = false;
   let direction = { lon: 0, lat: 0 }, travelledAt = 0, zoomedAt = 0;
-  let limit = 3, fast = 0, typicalMs = 2000;
+  let limit = 3, fast = 0, typicalMs = 2000, movedAt = now(), idleReady = false;
   const workSize = cell => cache.has(cell.key) ? finalSize : 512;
   const needsWork = cell => (cache.get(cell.key)?.size || 0) < finalSize;
   const cancel = (key, job) => { job.controller.abort(); pending.delete(key); };
@@ -136,7 +153,7 @@ export function createTileStream({ region, projection, load = fetchTile, install
     onStatus(lastStatus);
   }
   function evict() {
-    const wanted = new Set([...desired, ...ahead, ...zoom].map(c => c.key));
+    const wanted = new Set([...desired, ...ahead, ...zoom, ...nearby].map(c => c.key));
     let bytes = [...cache.values()].reduce((n, e) => n + e.size * e.size * 3, 0);
     for (const [key, entry] of [...cache].sort((a, b) => a[1].used - b[1].used)) {
       if (cache.size <= 32 && bytes <= 144 * 1024 * 1024) break;
@@ -151,18 +168,20 @@ export function createTileStream({ region, projection, load = fetchTile, install
     else { fast = 0; limit = Math.max(2, limit - 1); }
   }
   function pump() {
-    if (!active || disposed) return;
+    if (!active || disposed || globalThis.document?.hidden) return;
     const central = desired.slice(0, 2), outer = desired.slice(2);
     const entry = cell => ({ cell, size: workSize(cell) });
     const centralReady = central.every(c => cache.has(c.key));
     const queue = [
       ...central.filter(needsWork).map(entry),
-      ...(!dataSaver && centralReady ? zoom.filter(needsWork)
-        .map(cell => ({ cell, size: finalSize, speculative: true })) : []),
       ...outer.filter(c => !cache.has(c.key)).map(entry),
       ...outer.filter(c => cache.has(c.key) && needsWork(c)).map(entry),
+      ...(!dataSaver && centralReady ? zoom.filter(needsWork)
+        .map(cell => ({ cell, size: finalSize, speculative: true })) : []),
       ...(!dataSaver && desired.every(c => !needsWork(c))
         ? ahead.filter(c => !cache.has(c.key)).map(cell => ({ cell, size: 512, speculative: true })) : []),
+      ...(idleReady && desired.every(c => !needsWork(c))
+        ? nearby.filter(c => !cache.has(c.key)).map(cell => ({ cell, size: 512, speculative: true })) : []),
     ];
     const budget = dataSaver ? 2 : limit;
     for (const { cell, size, speculative = false } of queue) {
@@ -205,6 +224,12 @@ export function createTileStream({ region, projection, load = fetchTile, install
       active = enabled && pose.dist <= 24000;
       const network = connection();
       dataSaver = mode === 'data' || !!network?.saveData || /(^|-)2g$/.test(network?.effectiveType || '');
+      const moved = !previous || ['lon','lat','dist','bearing','pitch','fov']
+        .some(key => pose[key] !== previous[key]);
+      if (moved) movedAt = now();
+      idleReady = active && !dataSaver && !globalThis.document?.hidden
+        && network?.effectiveType !== '3g' && (network?.downlink ?? 10) >= 1
+        && typicalMs < 4000 && now() - movedAt >= 1200;
       if (previous) {
         const lon = pose.lon - previous.lon, lat = pose.lat - previous.lat;
         if (Math.hypot(lon * projection.metersPerDegLon, lat * projection.metersPerDegLat) > 2) {
@@ -225,24 +250,30 @@ export function createTileStream({ region, projection, load = fetchTile, install
         || previous && pose.dist > previous.dist * 1.05) zoom = [];
       previous = { ...pose }; desired = plan.visible; ahead = dataSaver ? [] : plan.ahead;
       zoom = zoom.filter(c => !desired.some(d => d.key === c.key));
+      nearby = idleReady ? idleNeighbours(desired, pose, region, projection) : [];
       // Unchanged output detail policy; network adaptation never lowers resolution.
       finalSize = mode === 'data' || (quality === 'performance' && mode !== 'maximum')
         || desired.length > 12 ? 1024 : 2048;
-      const wanted = new Set([...desired, ...ahead, ...zoom].map(c => c.key));
+      const wanted = new Set([...desired, ...ahead, ...zoom, ...nearby].map(c => c.key));
       let retained = 0;
       for (const [key, job] of pending) {
         if (!active) { cancel(key, job); continue; }
-        if (job.retainedUntil && job.retainedUntil <= now() && !wanted.has(key)) {
+        // Allow all three 30-second source fallbacks, but never let a stalled
+        // connection or decoder occupy a download slot indefinitely.
+        if (now() - job.started >= 100000) {
+          failed.set(key, now() + 30000); measure(0, false); cancel(key, job); continue;
+        }
+        if (job.retainedUntil && job.retainedUntil <= now() && !desired.some(c => c.key === key)) {
           cancel(key, job); continue;
         }
-        const age = now() - job.started, progress = job.progress;
+        const progress = job.progress;
         const nearlyDone = progress?.complete
-          || progress?.total > 0 && progress.loaded / progress.total >= .7
-          || age >= typicalMs * .7 && age < Math.min(8000, typicalMs * 1.5);
+          || progress?.total > 0 && progress.loaded / progress.total >= .7;
         const close = Math.hypot((job.cell.lon - pose.lon) * projection.metersPerDegLon,
           (job.cell.lat - pose.lat) * projection.metersPerDegLat) < Math.max(800, pose.dist * 1.2);
-        const focusWaiting = desired.slice(0, 2).some(c => needsWork(c) && !pending.has(c.key));
-        const preempt = job.speculative && focusWaiting && !nearlyDone;
+        const visibleWaiting = desired.some(c => needsWork(c) && !pending.has(c.key));
+        const preempt = job.speculative && !desired.some(c => c.key === key)
+          && visibleWaiting && !nearlyDone;
         const unwanted = !wanted.has(key) || job.speculative && dataSaver || preempt;
         if (unwanted) {
           if (!dataSaver && !jumped && nearlyDone && close && retained++ < 1) {
@@ -264,8 +295,23 @@ export function createTileStream({ region, projection, load = fetchTile, install
 export function createImageryTiles(THREE, options) {
   let terrain = options.terrain;
   const { region, projection, sceneProjection, onStatus } = options;
+  const elevation = options.elevation || { min: -500, max: 9000 };
   const group = new THREE.Group(); group.name = 'streamed-aerial-tiles';
   const entries = new Map();
+  let roofRevision = 0, roofKey = '', roofSelection = [];
+  let boundsScale, drawnTiles = 0;
+  function updateBounds(mesh, scale) {
+    const b = mesh.userData.cell.bounds;
+    // Positions are packed shader inputs, not world XYZ. Explicit conservative
+    // bounds include every possible DEM height, even after exaggeration changes.
+    const lo = Math.min(elevation.min * scale, elevation.max * scale) - 2;
+    const hi = Math.max(elevation.min * scale, elevation.max * scale) + 2;
+    const box = mesh.geometry.boundingBox || new THREE.Box3();
+    box.min.set(sceneProjection.lonToX(b.west), lo, sceneProjection.latToZ(b.north));
+    box.max.set(sceneProjection.lonToX(b.east), hi, sceneProjection.latToZ(b.south));
+    mesh.geometry.boundingBox = box;
+    box.getBoundingSphere(mesh.geometry.boundingSphere ||= new THREE.Sphere());
+  }
   const vertexShader = `
     uniform sampler2D uHeight; uniform float uExag; uniform float uReliefOn;
     varying vec2 vUv; varying vec3 vWorld; varying float vElev;
@@ -274,12 +320,15 @@ export function createImageryTiles(THREE, options) {
       gl_Position = projectionMatrix * modelViewMatrix * vec4(vWorld, 1.0); }
   `;
   const fragmentShader = `
+    ${BATHYMETRY_GLSL}
+    uniform vec2 uRegionSize;
     uniform sampler2D uTile; uniform float uCompareMode; uniform float uComparePosition;
     uniform sampler2D uPrevious; uniform float uBlend; uniform float uArrival;
     uniform float uViewportWidth; uniform vec3 uCameraPos; uniform float uFogDensity;
     uniform vec3 uFogColor; uniform float uImageryOn; varying vec2 vUv;
     varying vec3 vWorld; varying float vElev;
     void main() {
+      if (bathymetryAt(vWorld.xz / uRegionSize + .5).y > .5) discard;
       if (uCompareMode > 0.5 && uCompareMode < 2.5) {
         if (gl_FragCoord.x / max(uViewportWidth, 1.0) > uComparePosition) discard;
       } else if (uImageryOn < 0.5) discard;
@@ -296,13 +345,15 @@ export function createImageryTiles(THREE, options) {
   `;
   function remove(key) {
     const entry = entries.get(key); if (!entry) return;
+    roofRevision++;
     const previous = entry.material.uniforms.uPrevious.value;
     if (previous !== entry.material.uniforms.uTile.value) previous.dispose();
     group.remove(entry); entry.geometry.dispose(); entry.material.uniforms.uTile.value.dispose();
     entry.material.dispose(); entries.delete(key); options.onTileRemoved?.(key);
   }
-  const stream = createTileStream({ region, projection, onStatus, remove,
+  const stream = createTileStream({ region, projection, onStatus, remove, load: options.load,
     install({ cell, image }) {
+      roofRevision++;
       options.onTile?.(cell, image);
       const tex = new THREE.Texture(image); tex.flipY = false; tex.colorSpace = THREE.SRGBColorSpace;
       tex.minFilter = THREE.LinearMipmapLinearFilter; tex.magFilter = THREE.LinearFilter;
@@ -332,26 +383,43 @@ export function createImageryTiles(THREE, options) {
         uArrival: { value: options.reducedMotion ? 1 : 0 } },
         vertexShader, fragmentShader, transparent: true, depthWrite: false, side: THREE.DoubleSide,
         polygonOffset: true, polygonOffsetFactor: -2, polygonOffsetUnits: -2 });
-      const mesh = new THREE.Mesh(geometry, material); mesh.frustumCulled = false;
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.onBeforeRender = () => { drawnTiles++; };
       mesh.renderOrder = 1 + (3 - cell.level) * 0.1;
       mesh.userData.cell = cell;
+      updateBounds(mesh, terrain.uniforms.uExag.value * terrain.uniforms.uReliefOn.value);
       group.add(mesh); entries.set(cell.key, mesh);
     },
   });
   return { ...stream, group,
+    stats() { return { ...stream.stats(), residentTiles: entries.size, drawnTiles }; },
     consider(...args) { group.visible = !!args[1] && args[0].dist <= 24000; stream.consider(...args); },
     roofTiles(pose) {
-      return [...entries.values()].filter(mesh => mesh.userData.cell.level < 2)
-        .sort((a,b) => {
-          const score = m => m.userData.cell.level * 1000
-            + Math.hypot((m.userData.cell.lon-pose.lon)*projection.metersPerDegLon,
-              (m.userData.cell.lat-pose.lat)*projection.metersPerDegLat);
-          return score(a)-score(b);
-        }).slice(0,4).map(mesh => ({ texture: mesh.material.uniforms.uTile.value,
-          bounds: mesh.userData.cell.bounds }));
+      const key = `${roofRevision}:${pose.lon}:${pose.lat}`;
+      if (key === roofKey) return roofSelection;
+      roofKey = key;
+      const nearest = [];
+      for (const mesh of entries.values()) {
+        const cell = mesh.userData.cell;
+        if (cell.level >= 2) continue;
+        const score = cell.level * 1000 + Math.hypot(
+          (cell.lon-pose.lon)*projection.metersPerDegLon,
+          (cell.lat-pose.lat)*projection.metersPerDegLat);
+        let i = 0;
+        while (i < nearest.length && nearest[i].score <= score) i++;
+        if (i >= 4) continue;
+        nearest.splice(i, 0, { mesh, score });
+        if (nearest.length > 4) nearest.pop();
+      }
+      roofSelection = nearest.map(({ mesh }) => ({ texture: mesh.material.uniforms.uTile.value,
+        bounds: mesh.userData.cell.bounds }));
+      return roofSelection;
     },
     tick(dt) {
+      drawnTiles = 0;
+      const scale = terrain.uniforms.uExag.value * terrain.uniforms.uReliefOn.value;
       for (const mesh of entries.values()) {
+        if (scale !== boundsScale) updateBounds(mesh, scale);
         const u = mesh.material.uniforms;
         u.uBlend.value = Math.min(1, u.uBlend.value + dt / .45);
         u.uArrival.value = Math.min(1, u.uArrival.value + dt / .35);
@@ -359,6 +427,7 @@ export function createImageryTiles(THREE, options) {
           u.uPrevious.value.dispose(); u.uPrevious.value = u.uTile.value;
         }
       }
+      boundsScale = scale;
     },
     attachTerrain(next) { terrain = next; for (const mesh of entries.values()) {
       const { uTile, uPrevious, uBlend, uArrival } = mesh.material.uniforms;

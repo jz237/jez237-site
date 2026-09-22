@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createTileStream, planImageryTiles, zoomAhead } from '../src/imagery-tiles.js';
+import { createTileStream, planImageryTiles, zoomAhead, idleNeighbours } from '../src/imagery-tiles.js';
 import { createImageryCache, createTileLoader, tileImageUrl } from '../src/tile-cache.js';
 
 const region = { west:-75.8, east:-74.7, south:39.7, north:40.55 };
@@ -18,6 +18,16 @@ function harness(options = {}) {
   return {stream, requests, installed, advance:ms => { time += ms; },
     consider:(p = pose, mode = 'standard') => stream.consider(p,true,1700,1,'balanced',mode,1000)};
 }
+
+test('stalled aerial requests release their slots, back off, and ignore late results', async () => {
+  const h=harness();h.consider();const first=h.requests[0];
+  h.advance(100001);h.consider();assert.equal(first.signal.aborted,true);
+  first.resolve({image:{},source:'late'});await settle();assert.equal(h.installed.length,0);
+  assert.equal(h.requests.filter(r=>r.cell.key===first.cell.key).length,1);
+  h.advance(30001);h.consider();
+  assert.equal(h.requests.filter(r=>r.cell.key===first.cell.key).length,2);
+  h.stream.dispose();
+});
 
 test('central full detail starts before outstanding peripheral previews', async () => {
   const h = harness(); h.consider();
@@ -195,4 +205,77 @@ test('cached full detail is installed at its real resolution and never downloade
   assert.ok(installed.every(e => e.size === 2048));
   assert.equal(new Set(calls.map(c => c[0])).size,calls.length);
   assert.equal(stream.stats().concurrency,3,'Disk hits do not inflate network concurrency'); stream.dispose();
+});
+
+
+test('tile resolutions are checked together and highest cached detail wins', async () => {
+  const waiting=[],seen=[];let downloads=0;
+  const loader=createTileLoader({cache:{get:path=>new Promise(resolve=>{
+    seen.push(path);waiting.push(resolve);
+  }),put:async()=>{}},decode:blob=>blob.text(),request:async()=>{downloads++;return new Response('network');}});
+  const cell=planImageryTiles(pose,region,projection,1.7).visible[0];
+  const result=loader(cell,512,new AbortController().signal,{maxSize:2048});
+  await Promise.resolve();
+  assert.equal(seen.length,3,'No sequential cache-resolution round trips');
+  waiting[2](new Response('preview'));waiting[1](null);waiting[0](new Response('full detail'));
+  const tile=await result;assert.equal(tile.size,2048);assert.equal(tile.image,'full detail');
+  assert.equal(downloads,0);
+});
+
+test('concurrent tile lookups share a single cache open', async () => {
+  const storage=memoryStorage();let opens=0;
+  const cache=createImageryCache({storage:()=>({open:async name=>{opens++;return storage.open(name);}}),
+    base:()=> 'https://example.test/map/'});
+  await Promise.all(['a','b','c','d'].map(path=>cache.get(path)));
+  assert.equal(opens,1);
+});
+
+
+test('idle neighbour ring is bounded, outside visible tiles and inside the region', () => {
+  const visible = planImageryTiles(pose,region,projection,1.7).visible;
+  const ring = idleNeighbours(visible,pose,region,projection);
+  assert.equal(ring.length,4);
+  assert.equal(new Set(ring.map(c => c.key)).size,ring.length);
+  for (const c of ring) {
+    assert.ok(!visible.some(v => v.key === c.key));
+    assert.ok(c.bounds.west >= region.west && c.bounds.east <= region.east);
+    assert.ok(c.bounds.south >= region.south && c.bounds.north <= region.north);
+  }
+});
+
+async function finishVisible(h) {
+  for (let i=0;i<100;i++) {
+    const r=h.requests.find(r => !r.done && !r.signal.aborted);
+    if (!r) break;
+    r.done=true; r.resolve({image:{},source:'survey'}); await settle();
+  }
+}
+
+test('stationary views warm at most four previews after full visible detail and reuse them on pan', async () => {
+  const h=harness(); h.consider(); await finishVisible(h);
+  const visible=new Set(planImageryTiles(pose,region,projection,1.7).visible.map(c => c.key));
+  assert.ok(h.requests.every(r => visible.has(r.cell.key)),'No speculative startup work');
+  h.advance(1300); h.consider();
+  assert.equal(h.stream.stats().preparing,1,'Only one idle request at once');
+  await finishVisible(h);
+  const extra=h.requests.filter(r => !visible.has(r.cell.key));
+  assert.equal(extra.length,4); assert.ok(extra.every(r => r.size===512));
+  const target=extra[0].cell;
+  h.consider({...pose,lon:target.lon,lat:target.lat});
+  assert.equal(h.requests.filter(r => r.cell.key===target.key && r.size===512).length,1);
+  h.stream.dispose();
+});
+
+test('idle warming respects slow connections, save-data, and cancels when the view changes', async () => {
+  for (const network of [{saveData:true},{effectiveType:'3g'},{downlink:.5}]) {
+    const h=harness({connection:()=>network}); h.consider(); await finishVisible(h);
+    const count=h.requests.length; h.advance(2000); h.consider(); await finishVisible(h);
+    assert.equal(h.requests.length,count); h.stream.dispose();
+  }
+  const h=harness(); h.consider(); await finishVisible(h);
+  h.advance(1300); h.consider(); const warm=h.requests.at(-1);
+  h.consider({...pose,lon:-74.9}); assert.equal(warm.signal.aborted,true);
+  warm.resolve({image:{},source:'survey'}); await settle();
+  assert.ok(!h.installed.some(e=>e.cell.key===warm.cell.key),'Late obsolete result is ignored');
+  h.stream.dispose();
 });

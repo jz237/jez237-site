@@ -1,4 +1,4 @@
-import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026090907';
+import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026092121';
 /**
  * The control studio, preset list, search and dialogs.
  *
@@ -7,15 +7,17 @@ import { normalizeSearch, searchScore } from './search-match.js?v=philly-2026090
  * serialiser and the tests all pick it up together.
  */
 
-import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026090907';
-import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026090907';
-import { getEra } from './eras.js?v=philly-2026090907';
-import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026090907';
-import { TOURS } from './tours.js?v=philly-2026090907';
-import { ERAS } from './eras.js?v=philly-2026090907';
-import { getTheme, THEME_IDS } from './themes.js?v=philly-2026090907';
+import { CONTROLS, LAYERS, GROUPS } from './schema.js?v=philly-2026092121';
+import { WEATHER_PRESETS, dayLabel, clockLabel } from './solar.js?v=philly-2026092121';
+import { getEra } from './eras.js?v=philly-2026092121';
+import { PRESETS, QUICK_JUMPS } from './presets.js?v=philly-2026092121';
+import { TOURS } from './tours.js?v=philly-2026092121';
+import { ERAS } from './eras.js?v=philly-2026092121';
+import { getTheme, THEME_IDS } from './themes.js?v=philly-2026092121';
 
 const ENUM_LABELS = {
+  lightweight: v => v ? 'On · older computers' : 'Off · full graphics',
+  photoMode: v => ({ auto: 'Automatic', relief: 'Diorama', photo: 'Photo close-ups' }[v] || v),
   diorama: v => v ? 'Miniature' : 'Classic map',
   theme: (v) => getTheme(v).label,
   quality: (v) => ({ auto: 'Auto', performance: 'Performance', balanced: 'Balanced',
@@ -500,7 +502,9 @@ export function createDialogs(ids) {
     }
   }, true);
 
-  for (const [, node] of dialogs) {
+  for (const [id, node] of dialogs) {
+    node.addEventListener('map-window-collapse', () => { if (openId === id) close(); });
+    node.addEventListener('map-window-restore', () => open(id));
     node.addEventListener('click', (event) => {
       if (event.target === node) close();     // click the scrim
     });
