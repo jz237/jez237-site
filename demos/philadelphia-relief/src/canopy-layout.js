@@ -1,7 +1,9 @@
 import { woodlandCrown } from './woodland.js?v=philly-2026092121';
 
+import { prepareInBatches } from './background-work.js?v=philly-2026092207';
+
 /** A world-aligned lattice keeps trees in the same place across imagery tiles. */
-export function canopySites(coverage, projection, sampleElevation, bounds=null) {
+function* canopySteps(coverage, projection, sampleElevation, bounds=null) {
   const positions=[], sizes=[];
   const step=bounds ? 20 : 210;
   const west=bounds ? projection.lonToX(bounds.west) : -projection.widthM/2;
@@ -10,6 +12,7 @@ export function canopySites(coverage, projection, sampleElevation, bounds=null) 
   const south=bounds ? projection.latToZ(bounds.south) : projection.heightM/2;
   for (let iz=Math.floor(north/step)-1; iz<=Math.ceil(south/step)+1; iz++) {
     for (let ix=Math.floor(west/step)-1; ix<=Math.ceil(east/step)+1; ix++) {
+      if ((ix & 15) === 0) yield;
       let seed=(Math.imul(ix,73856093)^Math.imul(iz,19349663)^237)>>>0;
       const random=() => { seed=(Math.imul(seed,1664525)+1013904223)>>>0; return seed/4294967296; };
       const x=(ix+(random()-.5)*.9)*step, z=(iz+(random()-.5)*.9)*step;
@@ -24,6 +27,15 @@ export function canopySites(coverage, projection, sampleElevation, bounds=null) 
     }
   }
   return {positions,sizes};
+}
+
+export function canopySites(...args) {
+  const work = canopySteps(...args);
+  for (;;) { const step = work.next(); if (step.done) return step.value; }
+}
+
+export function prepareCanopy(coverage, projection, sampleElevation, bounds, options) {
+  return prepareInBatches(canopySteps(coverage, projection, sampleElevation, bounds), options);
 }
 
 export function canopyLevel(cells, pose) {

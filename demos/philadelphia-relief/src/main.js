@@ -44,7 +44,7 @@ import {
   ASSETS, MODE, assess, webglFailure, syntheticGrid,
 } from './degraded.js?v=philly-2026092121';
 import {
-  decodeHeightmap, buildMacroGrid, createTerrain, warpForDistance, fogDensityFor,
+  prepareHeightmap, prepareMacroGrid, createTerrain, warpForDistance, fogDensityFor,
 } from './terrain.js?v=philly-2026092201';
 import { createNeighborhood } from './neighborhood.js?v=philly-2026092121';
 import { createImageryTiles } from './imagery-tiles.js?v=philly-2026092201';
@@ -193,7 +193,7 @@ async function loadEverything() {
         throw new Error(`heightmap is ${pixels.width}x${pixels.height}, `
           + `expected ${data.terrain.width}x${data.terrain.height}`);
       }
-      const decoded = decodeHeightmap(pixels, data.terrain);
+      const decoded = await prepareHeightmap(pixels, data.terrain);
       if (decoded.probeFailures.length) {
         // Integrity probes exist precisely so this can never pass silently.
         console.warn('[philly-relief] heightmap integrity probes failed:',
@@ -339,13 +339,14 @@ async function boot() {
   const sky = createSky(THREE);
   scene.add(sky.mesh);
 
-  const macro = buildMacroGrid(grid, meta.width, meta.height, 256);
+  const macro = await prepareMacroGrid(grid, meta.width, meta.height, 256);
   let terrain = createTerrain(THREE, {
     meta, grid, macro, imagery: data.imagery, cityImagery: data.cityImagery,
     reefImagery: data.reefImagery, quality: effectiveQuality,
   });
   scene.add(terrain.mesh);
-  const diorama = createDiorama(THREE, { terrain, projection, sampleElevation, woodland: data.woodland });
+  const diorama = createDiorama(THREE, { terrain, projection, sampleElevation,
+    woodland: data.woodland, onReady: () => wake() });
   scene.add(diorama.group);
 
   const imageryDetail = createImageryTiles(THREE, {
@@ -871,7 +872,7 @@ async function boot() {
       bathymetry: bathymetry.stats(),
       cityFeatures: cityFeatures?.stats() || { mode: null, resources: 0 },
       rendering: { frames: renderedFrames, delay: scheduledDelay, saving: powerToggle.checked },
-      startup: { firstFrameMs: firstFrameAt, supplements: [...supplementalDone] },
+      startup: { firstFrameMs: firstFrameAt, supplements: [...supplementalDone], trees: diorama.stats() },
       lightweight: !!store.value('lightweight'),
       structures: structures ? structures.stats() : null,
       imagery: {

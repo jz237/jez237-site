@@ -11,6 +11,8 @@
  * is ever re-uploaded.
  */
 
+import { prepareInBatches } from './background-work.js?v=philly-2026092207';
+
 import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092121';
 
 import { BATHYMETRY_GLSL, bathymetryUniforms } from './bathymetry-shader.js?v=philly-2026092201';
@@ -331,12 +333,13 @@ const FRAGMENT_SHADER = /* glsl */ `
  * altered the bytes on their way through the canvas the elevations would be
  * quietly wrong, and silently-wrong terrain is worse than none.
  */
-export function decodeHeightmap(imageData, meta) {
+function* heightmapSteps(imageData, meta) {
   const { width, height } = meta;
   const { min: elevMin, step } = meta.elevation;
   const px = imageData.data;
   const grid = new Float32Array(width * height);
   for (let i = 0, p = 0; i < grid.length; i += 1, p += 4) {
+    if ((i & 32767) === 0) yield;
     grid[i] = elevMin + (px[p] * 256 + px[p + 1]) * step;
   }
 
@@ -349,12 +352,21 @@ export function decodeHeightmap(imageData, meta) {
   return { grid, probeFailures: failures };
 }
 
+export function decodeHeightmap(...args) {
+  const work = heightmapSteps(...args);
+  for (;;) { const step = work.next(); if (step.done) return step.value; }
+}
+export function prepareHeightmap(imageData, meta, options) {
+  return prepareInBatches(heightmapSteps(imageData, meta), options);
+}
+
 /** Box-downsample the height grid for the cheap ambient-occlusion term. */
-export function buildMacroGrid(grid, width, height, size = 256) {
+function* macroSteps(grid, width, height, size = 256) {
   const out = new Float32Array(size * size);
   const sx = width / size;
   const sy = height / size;
   for (let y = 0; y < size; y += 1) {
+    yield;
     const y0 = Math.floor(y * sy);
     const y1 = Math.min(height, Math.floor((y + 1) * sy));
     for (let x = 0; x < size; x += 1) {
@@ -372,6 +384,14 @@ export function buildMacroGrid(grid, width, height, size = 256) {
     }
   }
   return out;
+}
+
+export function buildMacroGrid(...args) {
+  const work = macroSteps(...args);
+  for (;;) { const step = work.next(); if (step.done) return step.value; }
+}
+export function prepareMacroGrid(grid, width, height, size, options) {
+  return prepareInBatches(macroSteps(grid, width, height, size), options);
 }
 
 export const MESH_SEGMENTS = {

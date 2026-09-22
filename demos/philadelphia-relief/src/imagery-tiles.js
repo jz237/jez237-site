@@ -48,7 +48,7 @@ export function groundPoint(pose, projection, aspect, sx, sy, horizon = false) {
 
 export function planImageryTiles(pose, region, projection, aspect = 1, mode = 'standard', previous = null) {
   if (pose.dist > 24000) return { visible: [], ahead: [] };
-  const focus = imageryFocus(pose, projection);
+  const focus = groundPoint(pose, projection, aspect, 0, 0) || imageryFocus(pose, projection);
   const found = new Map();
   const samples = [];
   // Each screen quad contributes the cells covering its ground bounding box.
@@ -100,6 +100,21 @@ export function planImageryTiles(pose, region, projection, aspect = 1, mode = 's
   return { visible, ahead };
 }
 
+/** A small ring outside visible coverage, warmed only after the view is settled. */
+export function idleNeighbours(visible, pose, region, projection) {
+  const occupied = new Set(visible.map(c => c.key)), candidates = new Map();
+  for (const cell of visible) {
+    const spec = TILE_SPECS[cell.level];
+    for (const [x, y] of [[-1,0],[1,0],[0,-1],[0,1]]) {
+      const next = tileAt(cell.lon + x * spec.lon, cell.lat + y * spec.lat, region, cell.level);
+      if (!occupied.has(next.key)) candidates.set(next.key, next);
+    }
+  }
+  const distance = c => Math.hypot((c.lon - pose.lon) * projection.metersPerDegLon,
+    (c.lat - pose.lat) * projection.metersPerDegLat);
+  return [...candidates.values()].sort((a,b) => distance(a)-distance(b)).slice(0,4);
+}
+
 /** Predict the next closer level without changing the visible coverage plan. */
 export function zoomAhead(pose, previous, region, projection, aspect, mode, visible) {
   if (mode === 'data' || !previous || pose.dist >= previous.dist * .985) return [];
@@ -114,10 +129,11 @@ export function zoomAhead(pose, previous, region, projection, aspect, mode, visi
 export function createTileStream({ region, projection, load = fetchTile, install, remove,
   onStatus = () => {}, now = Date.now, connection = () => globalThis.navigator?.connection }) {
   const cache = new Map(), pending = new Map(), failed = new Map();
-  let desired = [], ahead = [], zoom = [], previous = null, active = false, disposed = false, clock = 0;
+  let desired = [], ahead = [], zoom = [], nearby = [], previous = null;
+  let active = false, disposed = false, clock = 0;
   let lastStatus = { state: 'regional' }, finalSize = 2048, dataSaver = false;
   let direction = { lon: 0, lat: 0 }, travelledAt = 0, zoomedAt = 0;
-  let limit = 3, fast = 0, typicalMs = 2000;
+  let limit = 3, fast = 0, typicalMs = 2000, movedAt = now(), idleReady = false;
   const workSize = cell => cache.has(cell.key) ? finalSize : 512;
   const needsWork = cell => (cache.get(cell.key)?.size || 0) < finalSize;
   const cancel = (key, job) => { job.controller.abort(); pending.delete(key); };
@@ -137,7 +153,7 @@ export function createTileStream({ region, projection, load = fetchTile, install
     onStatus(lastStatus);
   }
   function evict() {
-    const wanted = new Set([...desired, ...ahead, ...zoom].map(c => c.key));
+    const wanted = new Set([...desired, ...ahead, ...zoom, ...nearby].map(c => c.key));
     let bytes = [...cache.values()].reduce((n, e) => n + e.size * e.size * 3, 0);
     for (const [key, entry] of [...cache].sort((a, b) => a[1].used - b[1].used)) {
       if (cache.size <= 32 && bytes <= 144 * 1024 * 1024) break;
@@ -152,18 +168,20 @@ export function createTileStream({ region, projection, load = fetchTile, install
     else { fast = 0; limit = Math.max(2, limit - 1); }
   }
   function pump() {
-    if (!active || disposed) return;
+    if (!active || disposed || globalThis.document?.hidden) return;
     const central = desired.slice(0, 2), outer = desired.slice(2);
     const entry = cell => ({ cell, size: workSize(cell) });
     const centralReady = central.every(c => cache.has(c.key));
     const queue = [
       ...central.filter(needsWork).map(entry),
-      ...(!dataSaver && centralReady ? zoom.filter(needsWork)
-        .map(cell => ({ cell, size: finalSize, speculative: true })) : []),
       ...outer.filter(c => !cache.has(c.key)).map(entry),
       ...outer.filter(c => cache.has(c.key) && needsWork(c)).map(entry),
+      ...(!dataSaver && centralReady ? zoom.filter(needsWork)
+        .map(cell => ({ cell, size: finalSize, speculative: true })) : []),
       ...(!dataSaver && desired.every(c => !needsWork(c))
         ? ahead.filter(c => !cache.has(c.key)).map(cell => ({ cell, size: 512, speculative: true })) : []),
+      ...(idleReady && desired.every(c => !needsWork(c))
+        ? nearby.filter(c => !cache.has(c.key)).map(cell => ({ cell, size: 512, speculative: true })) : []),
     ];
     const budget = dataSaver ? 2 : limit;
     for (const { cell, size, speculative = false } of queue) {
@@ -206,6 +224,12 @@ export function createTileStream({ region, projection, load = fetchTile, install
       active = enabled && pose.dist <= 24000;
       const network = connection();
       dataSaver = mode === 'data' || !!network?.saveData || /(^|-)2g$/.test(network?.effectiveType || '');
+      const moved = !previous || ['lon','lat','dist','bearing','pitch','fov']
+        .some(key => pose[key] !== previous[key]);
+      if (moved) movedAt = now();
+      idleReady = active && !dataSaver && !globalThis.document?.hidden
+        && network?.effectiveType !== '3g' && (network?.downlink ?? 10) >= 1
+        && typicalMs < 4000 && now() - movedAt >= 1200;
       if (previous) {
         const lon = pose.lon - previous.lon, lat = pose.lat - previous.lat;
         if (Math.hypot(lon * projection.metersPerDegLon, lat * projection.metersPerDegLat) > 2) {
@@ -226,24 +250,25 @@ export function createTileStream({ region, projection, load = fetchTile, install
         || previous && pose.dist > previous.dist * 1.05) zoom = [];
       previous = { ...pose }; desired = plan.visible; ahead = dataSaver ? [] : plan.ahead;
       zoom = zoom.filter(c => !desired.some(d => d.key === c.key));
+      nearby = idleReady ? idleNeighbours(desired, pose, region, projection) : [];
       // Unchanged output detail policy; network adaptation never lowers resolution.
       finalSize = mode === 'data' || (quality === 'performance' && mode !== 'maximum')
         || desired.length > 12 ? 1024 : 2048;
-      const wanted = new Set([...desired, ...ahead, ...zoom].map(c => c.key));
+      const wanted = new Set([...desired, ...ahead, ...zoom, ...nearby].map(c => c.key));
       let retained = 0;
       for (const [key, job] of pending) {
         if (!active) { cancel(key, job); continue; }
-        if (job.retainedUntil && job.retainedUntil <= now() && !wanted.has(key)) {
+        if (job.retainedUntil && job.retainedUntil <= now() && !desired.some(c => c.key === key)) {
           cancel(key, job); continue;
         }
-        const age = now() - job.started, progress = job.progress;
+        const progress = job.progress;
         const nearlyDone = progress?.complete
-          || progress?.total > 0 && progress.loaded / progress.total >= .7
-          || age >= typicalMs * .7 && age < Math.min(8000, typicalMs * 1.5);
+          || progress?.total > 0 && progress.loaded / progress.total >= .7;
         const close = Math.hypot((job.cell.lon - pose.lon) * projection.metersPerDegLon,
           (job.cell.lat - pose.lat) * projection.metersPerDegLat) < Math.max(800, pose.dist * 1.2);
-        const focusWaiting = desired.slice(0, 2).some(c => needsWork(c) && !pending.has(c.key));
-        const preempt = job.speculative && focusWaiting && !nearlyDone;
+        const visibleWaiting = desired.some(c => needsWork(c) && !pending.has(c.key));
+        const preempt = job.speculative && !desired.some(c => c.key === key)
+          && visibleWaiting && !nearlyDone;
         const unwanted = !wanted.has(key) || job.speculative && dataSaver || preempt;
         if (unwanted) {
           if (!dataSaver && !jumped && nearlyDone && close && retained++ < 1) {
