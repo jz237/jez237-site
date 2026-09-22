@@ -111,7 +111,8 @@ export function createEnemies(sim) {
 }
 export function steerEnemies(sim, dt) {
   for (const e of sim.enemies) {
-    if (e.collected || (e.defeated && !e.nativeSteelie)) continue;
+    if (e.collected || (e.defeated && !e.nativeSteelie && !e.nativeSlinky))
+      continue;
     const b = sim.world.getRigidBody(e.handle),
       pos = b.translation(),
       vel = b.linvel(),

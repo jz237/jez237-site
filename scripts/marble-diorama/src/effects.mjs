@@ -13,6 +13,8 @@ export const effectDurations = {
   machine: 0.18,
   bird: 0.2,
   muncher: 0.16,
+  swallow: 0.5,
+  reform: 0.75,
   vacuum: 0.3,
   magnet: 0.22,
   acid: 0.22,
@@ -74,6 +76,15 @@ export function effectSamples(kind, rate) {
       case "muncher":
         frequency = 130 + 75 * Math.sin(u * 15);
         signal = smooth * 0.7;
+        break;
+      case "swallow":
+        frequency = 350 * Math.pow(0.16, u) + 25 * Math.sin(u * 30);
+        signal = smooth * 0.35;
+        amplitude = 0.18;
+        break;
+      case "reform":
+        frequency = 340 + 950 * u;
+        amplitude = 0.13 * (0.7 + 0.3 * Math.cos(u * 38));
         break;
       case "vacuum":
         frequency = 190 + 30 * Math.sin(u * 8);

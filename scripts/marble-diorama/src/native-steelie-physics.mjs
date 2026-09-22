@@ -36,13 +36,14 @@ export function nativeSteelieTerrainHeight(sim, position) {
       Math.max(...sim.compiled.statics.map((g) => highestVertex(g.vertices))),
     );
   let top = boardTops.get(sim.compiled);
-  const terrainBodies = new Set();
+  const terrainColliders = [...sim.staticColliderHandles];
   for (let i = 0; i < sim.movers.length; i++) {
     const m = sim.movers[i];
     if (!["terrain", "terrain-sequence"].includes(m.part.motion.axis)) continue;
     const body = sim.world.getRigidBody(m.handle);
     if (!body.isEnabled()) continue;
-    terrainBodies.add(m.handle);
+    for (let j = 0; j < body.numColliders(); j++)
+      terrainColliders.push(body.collider(j).handle);
     // The original mesh's bounding sphere encloses any rotation; animated
     // triangles also retain their current vertex coordinates after deformation.
     const mesh = sim.compiled.moving[i];
@@ -58,22 +59,18 @@ export function nativeSteelieTerrainHeight(sim, position) {
     y: Math.max(top, position.y) + 1,
     z: position.z,
   };
-  const hit = sim.world.castRay(
-    new RAPIER.Ray(origin, { x: 0, y: -1, z: 0 }),
-    Infinity,
-    false,
-    undefined,
-    undefined,
-    undefined,
-    undefined,
-    (collider) => {
-      const parent = collider.parent();
-      return (
-        !collider.isSensor() && (!parent || terrainBodies.has(parent.handle))
-      );
-    },
-  );
-  return hit ? origin.y - hit.timeOfImpact : null;
+  // Query explicitly recorded board shapes. Immediately after restore,
+  // parent() can report handle zero for an unattached collider; classifying
+  // terrain by that wrapper association falsely reports a void in a replay.
+  const ray = new RAPIER.Ray(origin, { x: 0, y: -1, z: 0 });
+  let nearest = Infinity;
+  for (const handle of terrainColliders) {
+    const collider = sim.world.getCollider(handle);
+    if (!collider.isEnabled() || collider.isSensor()) continue;
+    const distance = collider.castRay(ray, nearest, false);
+    if (distance >= 0) nearest = distance;
+  }
+  return nearest < Infinity ? origin.y - nearest : null;
 }
 
 export function nativeSteelieFallen(sim, e, grounded) {

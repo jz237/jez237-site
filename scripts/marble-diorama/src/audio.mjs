@@ -251,6 +251,15 @@ export class AudioEngine {
   }
   event(event, assisted = false) {
     if (event.type === "impact") return this.impact(event.force);
+    if (event.type === "slinky-capture")
+      return this.effect("swallow", { key: `slinky-capture:${event.player}` });
+    if (event.type === "slinky-release")
+      return this.effect("reform", { key: `slinky-release:${event.player}` });
+    if (event.type === "slinky-bump")
+      return this.effect("muncher", {
+        key: `slinky-bump:${event.enemy}`,
+        cooldown: 0.2,
+      });
     if (event.type === "fall" && event.cause === "acid")
       return this.effect("acid", { key: `acid-capture:${event.player}` });
     if (event.type === "fall" && event.cause === "vacuum") {

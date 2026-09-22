@@ -371,6 +371,7 @@ function pause(value = !paused) {
   paused = value;
   clock.pause(value);
   show("pauseCard", value);
+  show("touchControls", !value && runMode === "play");
   view.setOrbit(value);
   inputs.reset();
   if (value) audio.pause();

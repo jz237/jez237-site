@@ -41,6 +41,7 @@ import {
 import { landingTargets, updateLandingTargets } from "./landing-targets.mjs";
 import { acidShape, acidPositionAt } from "./acid.mjs";
 import RAPIER from "@dimforge/rapier3d-compat";
+import { finishSlinkyCapture, SLINKY_REFORM_TICKS } from "./slinky-capture.mjs";
 import { compileCourse, motionAt, presenceAt, SURFACES } from "./course.mjs";
 import {
   createEnemies,
@@ -108,15 +109,18 @@ export class Simulation {
     this.world.integrationParameters.normalizedPredictionDistance = 0.002;
     this.queue = new RAPIER.EventQueue(true);
     this.movers = [];
+    this.staticColliderHandles = [];
     for (const g of this.compiled.statics)
-      this.world.createCollider(
-        RAPIER.ColliderDesc.trimesh(
-          g.vertices,
-          g.indices,
-          RAPIER.TriMeshFlags.FIX_INTERNAL_EDGES,
-        )
-          .setFriction(SURFACES[g.material].friction)
-          .setRestitution(0.08),
+      this.staticColliderHandles.push(
+        this.world.createCollider(
+          RAPIER.ColliderDesc.trimesh(
+            g.vertices,
+            g.indices,
+            RAPIER.TriMeshFlags.FIX_INTERNAL_EDGES,
+          )
+            .setFriction(SURFACES[g.material].friction)
+            .setRestitution(0.08),
+        ).handle,
       );
     for (const g of this.compiled.moving) {
       const pose = motionAt(g.part, 0),
@@ -233,7 +237,10 @@ export class Simulation {
           ];
   }
   respawn(p) {
-    const s = p.acidCapture?.destination ?? this.respawnPosition(p);
+    const s =
+      p.slinkyCapture?.destination ??
+      p.acidCapture?.destination ??
+      this.respawnPosition(p);
     const b = this.body(p);
     b.setEnabled(true);
     b.setTranslation(s, true);
@@ -261,6 +268,7 @@ export class Simulation {
     p.nativeVacuumPrevious = null;
     p.nativeVacuumCaptureUntil = null;
     p.acidCapture = null;
+    p.slinkyCapture = null;
     p.stunnedUntil = 0;
     p.impactAirTicks = 0;
     p.impactLaunched = false;
@@ -477,6 +485,7 @@ export class Simulation {
         continue;
       }
       if (p.status === "falling") {
+        finishSlinkyCapture(this, p);
         if (this.tick >= p.respawnTick) this.respawn(p);
         continue;
       }
@@ -766,7 +775,8 @@ export class Simulation {
       for (const actor of [
         ...this.players.filter((p) => p.status === "racing"),
         ...this.enemies.filter(
-          (e) => e.nativeSteelie && !e.hidden && !e.defeated,
+          (e) =>
+            (e.nativeSteelie || e.slinkyFalling) && !e.hidden && !e.defeated,
         ),
       ]) {
         // The guard's airborne branch at 0x13350 uses the same acceleration
@@ -898,11 +908,25 @@ export class Simulation {
     p.impactLaunched = false;
     p.launchBonusPending = null;
     this.body(p).setEnabled(false);
-    p.deaths++;
+    const slinky = detail?.cause === "slinky";
+    if (!slinky) p.deaths++;
     const vacuum = detail?.cause === "vacuum";
     const acid = detail?.cause === "acid";
     p.respawnTick =
       this.tick + (vacuum ? 252 : acid ? ACID_RECOVERY_TICKS : 90);
+    p.slinkyCapture = slinky
+      ? {
+          tick: this.tick,
+          enemy: detail.enemy,
+          releaseTick: detail.releaseTick,
+          endTick: detail.releaseTick + SLINKY_REFORM_TICKS,
+          released: false,
+          origin: copy(this.body(p).translation()),
+          rotation: copy(this.body(p).rotation()),
+          destination: copy(this.respawnPosition(p)),
+        }
+      : null;
+    if (slinky) p.respawnTick = p.slinkyCapture.endTick;
     if (acid) {
       const origin = this.body(p).translation();
       const pool = acidPositionAt(
@@ -932,16 +956,18 @@ export class Simulation {
     p.landingAirTicks = 0;
     p.traversals = {};
     p.transferRoute = null;
-    this.events.push({
-      type: "fall",
-      player: this.players.indexOf(p),
-      ...(vacuum ? { cause: "vacuum" } : acid ? { cause: "acid" } : {}),
-    });
+    if (!slinky)
+      this.events.push({
+        type: "fall",
+        player: this.players.indexOf(p),
+        ...(vacuum ? { cause: "vacuum" } : acid ? { cause: "acid" } : {}),
+      });
   }
   snapshot() {
     return {
       tick: this.tick,
       world: Array.from(this.world.takeSnapshot()),
+      staticColliderHandles: [...this.staticColliderHandles],
       players: structuredClone(this.players),
       movers: structuredClone(this.movers),
       terrainAnimations: structuredClone(this.terrainAnimations),
@@ -957,6 +983,9 @@ export class Simulation {
   restore(s) {
     this.world.free();
     this.world = RAPIER.World.restoreSnapshot(Uint8Array.from(s.world));
+    this.staticColliderHandles = [
+      ...(s.staticColliderHandles ?? this.staticColliderHandles),
+    ];
     this.tick = s.tick;
     this.players = structuredClone(s.players);
     this.movers = structuredClone(s.movers);

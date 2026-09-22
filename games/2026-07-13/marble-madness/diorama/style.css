@@ -573,6 +573,22 @@ kbd {
   display: block;
   margin: 8px auto 0;
 }
+#pauseCard {
+  top: auto;
+  left: 18px;
+  bottom: 18px;
+  transform: none;
+  width: min(250px, calc(100% - 36px));
+  padding: 16px;
+}
+#pauseCard h2 {
+  font-size: 25px;
+  margin: 8px 0;
+}
+#pauseCard p {
+  font-size: 12px;
+  margin: 10px 0 14px;
+}
 #toast {
   position: absolute;
   bottom: 30px;
