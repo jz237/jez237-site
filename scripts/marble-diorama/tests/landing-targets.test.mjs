@@ -18,7 +18,12 @@ import {
   campaignCourses,
 } from "../src/campaign.mjs";
 import { validateCourse } from "../src/course.mjs";
-import { landingTargets } from "../src/landing-targets.mjs";
+import * as THREE from "three";
+import {
+  landingTargets,
+  landingScore,
+  landingAmount,
+} from "../src/landing-targets.mjs";
 await initPhysics();
 
 function drop(sim, index, target, height = 2) {
@@ -264,4 +269,82 @@ test("custom landing groups round trip, validate and leave ungrouped shelves ind
     marks[0].claimGroup = invalid;
     assert.throws(() => validateCourse(c), /Invalid landing target/);
   }
+});
+
+test("all seven recovered Practice awards come from real shelf landings", () => {
+  const amounts = [3000, 3500, 4000, 4500, 5000, 5500, 6000];
+  for (const [index, amount] of amounts.entries()) {
+    const c = practiceCourse(),
+      target = landingTargets(c)[0];
+    const sim = new Simulation(c, { untimed: true });
+    const t = (index + 0.5) / amounts.length;
+    const x = (t - 0.5) * target.w,
+      z = (t - 0.5) * target.d;
+    drop(sim, 0, {
+      ...target,
+      x: target.x + x * Math.cos(target.angle) - z * Math.sin(target.angle),
+      z: target.z + x * Math.sin(target.angle) + z * Math.cos(target.angle),
+    });
+    assert.equal(advance(sim, 180)[0]?.score, amount, `band ${index}`);
+    assert.equal(sim.players[0].deaths, 0);
+    sim.dispose();
+  }
+});
+
+test("paint coordinates agree with landing scores after moving and rotating a shelf", () => {
+  const c = practiceCourse(),
+    floor = c.parts.find((p) => p.id === "left-shelf");
+  moveWorkshopObject(c, "part:left-shelf", { x: 12, y: 8, z: -5 });
+  rotateWorkshopObject(c, "part:left-shelf", 0.7 - floor.angle);
+  const target = landingTargets(
+    validateCourse(JSON.parse(JSON.stringify(c))),
+  )[1];
+  // Canvas top is PlaneGeometry +Y, which rotates onto floor-local -Z.
+  const plane = new THREE.Mesh(new THREE.PlaneGeometry(target.w, target.d));
+  plane.rotation.set(-Math.PI / 2, 0, -target.angle);
+  plane.position.set(target.x, target.y + 0.012, target.z);
+  plane.updateMatrixWorld();
+  const observed = new Set();
+  for (let y = 1; y < 256; y += 7)
+    for (let x = 1; x < 256; x += 7) {
+      const u = x / 256,
+        v = y / 256;
+      const pos = plane.localToWorld(
+        new THREE.Vector3((u - 0.5) * target.w, (0.5 - v) * target.d, 0),
+      );
+      const painted = landingAmount(target, u, v);
+      assert.equal(landingScore(target, pos), painted);
+      observed.add(painted);
+    }
+  assert.deepEqual(
+    [...observed].sort((a, b) => a - b),
+    [3000, 3500, 4000, 4500, 5000, 5500, 6000],
+  );
+  plane.geometry.dispose();
+  plane.material.dispose();
+});
+
+test("banded target imports validate and legacy custom interpolation remains available", () => {
+  const c = practiceCourse(),
+    mark = c.markings.find((m) => m.kind === "landing-target");
+  const saved = [...mark.scoreBands];
+  for (const invalid of [
+    null,
+    {},
+    [],
+    [0],
+    [20001],
+    [3000.5],
+    Array(33).fill(3000),
+  ]) {
+    mark.scoreBands = invalid;
+    assert.throws(() => validateCourse(c), /Invalid landing target/);
+  }
+  mark.scoreBands = saved;
+  assert.deepEqual(
+    landingTargets(validateCourse(JSON.parse(JSON.stringify(c))))[0].scoreBands,
+    saved,
+  );
+  delete mark.scoreBands;
+  assert.equal(landingAmount(mark, 0.6, 0.7), 4900);
 });

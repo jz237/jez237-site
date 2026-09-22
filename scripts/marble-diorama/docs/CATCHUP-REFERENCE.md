@@ -75,3 +75,28 @@ course-specific destination lists.
    surfaces, ineligible states, low clocks, pause/restart and snapshot/replay.
 
 No distance-only teleport or new threshold has been enabled from this audit.
+
+## Course resources recovered on September 22
+
+The six original course resources have now been extracted privately from the
+preserved OFS disk identified in PRACTICE-SCORING.md. This removes the missing
+resource dependency described above. Their relocated root pointer at offset 4
+matches the loader at 0x31b8. Its destination list contains three-byte entries
+(tile X, tile Y, region), terminated by 0xff. The selection routine converts
+coordinates to tile centers with `8 * tile + 4`.
+
+| Course | Candidate destinations |
+|---|---:|
+| Practice | 59 |
+| Beginner | 79 |
+| Intermediate | 87 |
+| Aerial | 159 |
+| Silly | 104 |
+| Ultimate | 144 |
+
+The per-player preference lists differ on Intermediate and Aerial, confirming
+that a single generic destination list loses original route behavior. The
+private extraction records each candidate and both preference lists. Actual
+world-coordinate mapping, occupancy/height queries, camera correspondence and
+paired playback are still required before enabling catch-up. No catch-up
+teleports are introduced by the mm-35 scoring release.

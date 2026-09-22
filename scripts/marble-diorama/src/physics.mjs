@@ -20,7 +20,7 @@ import {
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
 import { courseTime } from "./rules.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-34";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-35";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
