@@ -96,6 +96,7 @@ function options() {
     difficulty: Number($("difficulty").value),
     untimed: $("mode").value === "untimed",
     assisted: $("assisted").checked,
+    handling: $("handling").value,
     seed: 237,
   };
 }
@@ -713,24 +714,29 @@ async function init() {
       $("difficulty").append(o);
     }
     store.settings.difficulty = normalizeDifficulty(store.settings.difficulty);
+    store.settings.handling =
+      store.settings.handling === "classic" ? "classic" : "forgiving";
     for (const [id, key] of [
       ["musicVolume", "music"],
       ["effectsVolume", "effects"],
       ["sensitivity", "sensitivity"],
       ["quality", "quality"],
       ["difficulty", "difficulty"],
+      ["handling", "handling"],
     ]) {
       $(id).value = store.settings[key];
       $(id).oninput = () => {
         store.settings[key] =
-          key === "quality" ? $(id).value : Number($(id).value);
+          key === "quality" || key === "handling"
+            ? $(id).value
+            : Number($(id).value);
         settings();
         persist();
       };
     }
     settings();
     $("trackball").onchange = settings;
-    for (const id of ["players", "mode", "difficulty", "assisted"])
+    for (const id of ["players", "mode", "difficulty", "assisted", "handling"])
       $(id).onchange = refreshSelectedRecords;
     $("recordScope").onchange = refreshCourses;
     $("play").onclick = () => start();

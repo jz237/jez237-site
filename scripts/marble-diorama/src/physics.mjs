@@ -61,8 +61,9 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
+import { handlingBrake } from "./handling.mjs";
 import { courseTime } from "./rules.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-41";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-42";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -598,6 +599,20 @@ export class Simulation {
         z = clamp(Number(input.z) || 0, -1, 1),
         n = Math.max(1, Math.hypot(x, z));
       if (p.grounded) {
+        if (
+          this.options.handling === "forgiving" &&
+          hit.timeOfImpact <= RADIUS + 0.015 &&
+          p.groundFriction >= 0.1
+        )
+          b.applyTorqueImpulse(
+            handlingBrake(
+              { x: x / n, z: z / n },
+              w,
+              STEP,
+              0.4 * MASS * RADIUS * RADIUS,
+            ),
+            true,
+          );
         const speed = Math.hypot(v.x, v.z),
           max = input.turbo ? 12 : 8,
           along = (v.x * x + v.z * z) / Math.max(speed, 0.001),
