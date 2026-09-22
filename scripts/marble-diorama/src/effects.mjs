@@ -3,6 +3,7 @@
 // Web Audio device without additional downloads or oscillator lifetimes.
 export const effectDurations = {
   fall: 0.7,
+  stun: 0.55,
   respawn: 0.24,
   finish: 1.25,
   timeout: 0.7,
@@ -35,6 +36,10 @@ export function effectSamples(kind, rate) {
     switch (kind) {
       case "fall":
         frequency = 850 * Math.pow(0.055, u);
+        break;
+      case "stun":
+        frequency = 480 + 170 * Math.sin(u * 28) * (1 - u);
+        amplitude = 0.12;
         break;
       case "respawn":
         frequency = 320 + 780 * u;

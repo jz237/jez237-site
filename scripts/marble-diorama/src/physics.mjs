@@ -1,3 +1,4 @@
+import { updateLandingStun } from "./landing-stun.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
 import { transferForce, chooseTransfer } from "./powered-transfer.mjs";
@@ -16,7 +17,7 @@ import {
   birdMotionAt,
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-22";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-23";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -142,6 +143,10 @@ export class Simulation {
       grounded: false,
       respawnTick: 0,
       springTick: 0,
+      stunTick: 0,
+      stunnedUntil: 0,
+      impactAirTicks: 0,
+      impactLaunched: false,
       progress: 0,
       safePosition: copy(s),
       safeHistory: [],
@@ -170,6 +175,9 @@ export class Simulation {
     p.status = "racing";
     p.vacuumCapture = null;
     p.acidCapture = null;
+    p.stunnedUntil = 0;
+    p.impactAirTicks = 0;
+    p.impactLaunched = false;
     p.safeHistory = [];
     p.previous = p.current = {
       position: copy(s),
@@ -300,7 +308,11 @@ export class Simulation {
         while (p.safeHistory.length && p.safeHistory[0].tick <= this.tick - 120)
           p.safePosition = p.safeHistory.shift().position;
       }
-      const input = inputs[i] ?? { x: 0, z: 0, turbo: false },
+      const input = (this.tick < p.stunnedUntil ? null : inputs[i]) ?? {
+          x: 0,
+          z: 0,
+          turbo: false,
+        },
         x = clamp(Number(input.x) || 0, -1, 1),
         z = clamp(Number(input.z) || 0, -1, 1),
         n = Math.max(1, Math.hypot(x, z));
@@ -420,6 +432,7 @@ export class Simulation {
             true,
           );
           p.springTick = this.tick;
+          p.impactLaunched = true;
           if (arm) arm.launchTick = this.tick;
           this.events.push({ type: "spring", player: i, part: s.id });
         }
@@ -461,7 +474,12 @@ export class Simulation {
         );
       }
     }
+    const incomingVelocity = this.players.map((p) =>
+      copy(this.body(p).linvel()),
+    );
     this.world.step(this.queue);
+    for (let i = 0; i < this.players.length; i++)
+      updateLandingStun(this, this.players[i], incomingVelocity[i]);
     updateEnemies(this);
     for (const acid of this.acid)
       for (const p of this.players)
@@ -554,6 +572,9 @@ export class Simulation {
   fall(p, detail) {
     if (p.status !== "racing") return;
     p.status = "falling";
+    p.stunnedUntil = 0;
+    p.impactAirTicks = 0;
+    p.impactLaunched = false;
     this.body(p).setEnabled(false);
     p.deaths++;
     const vacuum = detail?.cause === "vacuum";

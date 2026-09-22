@@ -388,7 +388,7 @@ function renderHud() {
   }
   sim.players.forEach((p, i) => {
     const d = root.children[i];
-    d.children[0].textContent = `PLAYER ${i + 1} · ${p.status.toUpperCase()}`;
+    d.children[0].textContent = `PLAYER ${i + 1} · ${p.status === "racing" && sim.tick < p.stunnedUntil ? "DIZZY" : p.status.toUpperCase()}`;
     d.children[1].textContent = sim.options.untimed ? "∞" : p.time.toFixed(1);
     const total =
       campaignOutcome === "complete" && runMode !== "replay"

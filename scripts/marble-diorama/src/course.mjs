@@ -438,7 +438,8 @@ export function validateCourse(c) {
       !Number.isInteger(c.rules.finishBonus ?? 0) ||
       (c.rules.finishBonus ?? 0) < 0 ||
       (c.rules.finishBonus ?? 0) > 20000 ||
-      ![undefined, "last-safe", "start"].includes(c.rules.respawn))
+      ![undefined, "last-safe", "start"].includes(c.rules.respawn) ||
+      ![undefined, false, true].includes(c.rules.landingStun))
   )
     throw Error("Invalid course rules.");
   const targetIds = new Set();

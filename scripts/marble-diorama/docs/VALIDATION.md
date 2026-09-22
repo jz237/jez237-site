@@ -930,3 +930,36 @@ campaign acceptance, exact original effects and full Amiga parity remain open.
 
 The final production-browser paired Intermediate demo finishes both players with
 3801 points and zero falls (P1 46.20s), without captured warnings/errors.
+
+
+### September 21 - hard-landing dizziness, mm-23
+
+Primary Aerial drops show intact marbles with blue circling marks, lasting about
+1.28-1.44 seconds in sampled footage; an Ultimate descent shows about 2.84s.
+The initial Ultimate drop is dizzy, but its following catapult landing is not.
+Added real-contact dizziness with independent clocks/control, continued momentum,
+blue orbiting marks, HUD feedback and a newly designed warble. Impulse-launch
+flights are exempt until the next landing; later unassisted drops still stun.
+Threshold, duration law, control response and exemption remain reconstructed.
+See LANDING-DIZZINESS.md for observations and unresolved original behavior.
+
+All 160 tests pass (282586ms). Seven focused landing tests pass (3335ms), covering
+soft/hard drops, moving-surface relative velocity, side impacts, independent
+players, continued drift, resumed controls, deterministic snapshots during both
+dizziness and a real catapult flight, and no lingering launch immunity. Build
+and diff checks pass. Earlier full-suite failures exposed the missing assisted
+landing distinction; the final suite includes both Ultimate branches and the
+paired zero-fall completion checks. Beginner's fork finishes with 19.785 clock
+seconds and no falls; its assertion now checks the intended original-clock
+completion requirement instead of an incidental 20-second spare-time margin.
+No demo route, steering strength, course geometry or clock allowance changed.
+
+Browser close-ups confirm orbiting marks around a moving, rotating marble,
+recovery in place and no fall count. The final production two-player Ultimate
+untimed demo finishes both marbles with 7057 points and zero falls (P2 52.72s),
+with no captured warnings/errors. This does not certify a timed Ultimate finish
+or authentic original sound.
+
+Fresh timed campaign measurements still fail solo Ultimate at 32s and paired
+Silly by 55.0417s. All measured runs have zero falls. Full campaign acceptance,
+original-control calibration, effect fidelity and full Amiga parity remain open.
