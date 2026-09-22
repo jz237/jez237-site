@@ -102,3 +102,67 @@ the course resource. This supersedes the missing-data assumption behind the
 current smoothstep profile. Frame timing, activation/reset conditions and
 complete changing terrain still require mapping; the recovered tables have
 not yet replaced the playable strip.
+
+## Native corner states and launch sequence implemented
+
+`intermediate-wave-state.mjs` now expresses the original wave in height units
+and native actor updates, independently of the current approximate strip. It
+returns all four corner heights at each left, center and right vertex record
+for 22 longitudinal rows. Interior center records cover three vertices. The
+tall left edge is 48 original units above the lane; it rises with the crest
+except at the final outer corner. Right-side entries, complete connections and
+exits retain their distinct fixed and absent corners. They cannot be modeled
+by a uniform cross-section or by stretching the center curve across the lane.
+
+The original resource's 19 height samples and eleven phase rows define the
+shape. A private independent reader decoded all original bit-packed and
+byte-pattern corner records. Its **96** initial/single/multiple-wave states
+match all **25,344** corner values returned by the implementation. The check
+includes every argument 0–90 and overlapping actor orders. State resets once
+per update, then actors overwrite their rows in order; heights are neither
+added nor combined by taking their maximum.
+
+### Actor sequence
+
+- Five starting animation frames use divider 4, then two frames use divider 2.
+- Nineteen four-frame traveling loops and seven ending frames use divider 1.
+- Frame 30 releases eligibility for another wave. This is animation update 47.
+- Animation reaches frame 90 and removal after 107 animation updates.
+- A newly allocated actor first spends one update initializing its script.
+  The initializer ends on the first animation command; it does not run that
+  command's counter during the same update. Repeated launches are therefore
+  **48 native updates apart**, including initialization, while a player remains
+  active in original region 9 or 10. Either player can enable a launch, and two
+  players do not create duplicate waves.
+- Leaving those regions prevents new launches; existing crests finish, and
+  released eligibility waits for a player to return.
+
+Evidence is in the private original executable: allocation at 0xf6f4/0xf96a,
+state-3 initialization at 0xfb18, state-2 counters at 0xfbe0, launch eligibility
+at 0xfc8a, loop count at 0x101a0/0x101c2, removal at 0x102e6/0xf9a2 and initial
+eligibility at 0x3044. The resource sequence begins at 0x1a78. Inspection of
+0xfd02 and 0xfc6a also confirms that the terrain table resets every active
+update, but slow startup actors write it only on their divider's due updates.
+The state machine exposes those writes explicitly rather than retaining a
+previous crest through intervening updates.
+
+### Geometry checks and remaining integration
+
+The private fixture applies the changing corner records to their original
+vertices (x81–85, y77–98), including all **115 affected cells**, then compiles
+the entire board. Across the 96 states, **22,080** independent Rapier height
+probes pass, with no missing hits and maximum error 0.00005188 world units.
+No state has open or unbalanced mesh edges. These are static snapshots of
+deformation, not a test of kinematic velocity transfer or a complete race.
+
+Five new regressions cover edge/connection/end shapes, stable holes, actor
+overwrite order, update counters, initialization, both-player eligibility,
+leaving/re-entering trigger regions and deterministic JSON state restoration.
+Together with terrain and existing wave-contact tests, **13/13** pass.
+
+The new module is not connected to the campaign yet. Native update frequency
+in seconds, shared occupancy with non-wave actors, region transitions, moving
+collider velocity transfer and calibrated scale remain required. Rendering
+and physical deformation must share the chosen interpolation. The current
+published `wave.mjs` strip and mm-35 behavior are unchanged; do not call these
+checks full moving-wave or Intermediate parity.

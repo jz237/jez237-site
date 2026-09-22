@@ -1321,3 +1321,22 @@ They are not yet aligned gameplay boards and were not published. The campaign
 still uses its existing layouts and mm-35 physics/replay version. Actor/region
 mapping, original wave scheduling, rounded terrain boundaries and full timed
 campaign acceptance remain open.
+
+### September 22 — native Intermediate wave state
+
+Implemented original corner states and a wave actor scheduler in native update
+counts. The initialization update is explicit: it makes successive launches
+48 updates apart, including the frame-30 release and next-loop allocation.
+The module remains separate from the current campaign pending native region,
+clock and moving-collider integration. See INTERMEDIATE-WAVES.md.
+
+Independent private resource decoding verifies **96 states / 25,344 corners**.
+Full native-board meshes for those states pass **22,080** analytical-height
+Rapier probes, no missing hits, maximum error 0.00005188. No open/unbalanced
+edges appear. The 115 affected cells include neighboring edge connections.
+These checks validate deformation snapshots, not motion transfer.
+
+Final focused suite: **13/13 pass**, 414.84 ms, covering the new state machine,
+terrain geometry and the existing published crest's physical lifting/replay.
+The existing crest test does not validate native-wave dynamics. Campaign,
+published build and physics version remain unchanged; no release this turn.
