@@ -1293,3 +1293,31 @@ still incomplete. Original binaries, disk contents and decoded reference files
 are excluded from the release.
 
 Full suite: **197/197 pass**, 283106.47 ms. Production build and diff check pass.
+
+### September 22 — original tile terrain compiler
+
+Added static terrain parts with independent corner heights, original diagonal
+planes, real holes and closed solid sides/undersides. Shared topology preserves
+cliffs and crossing edge profiles without averaging slopes. Native terrain
+tops bypass polygon union, fixing a missing Practice triangle found by source
+height comparisons. See TERRAIN-REFERENCE.md for format and limitations.
+
+Full suite before the final topology/validator corrections: **203/203 pass**,
+282745.14 ms. After those corrections, all **13/13** focused terrain, board join,
+foundation and rendered-surface checks pass in 1872.32 ms. Regressions cover
+rotated/translated analytic planes, visible/collision agreement, cliff walls,
+crossing edges, missing and half tiles, closed undersides, retained flat-tile
+diagonals, invalid imports and normal-input travel across eight tile joins
+with zero deaths and contact error below 1% of marble radius.
+
+Six private recovered terrain fixtures pass **26,538** independent Rapier height
+probes; none is missing, maximum error 0.00004273 world units. Mesh edge checks
+find no open or unbalanced edges, with one four-face corner junction each in
+Practice and Intermediate. Production build passes. The rebuilt local browser
+imports and displays Practice terrain with no captured warnings or errors.
+
+The fixtures use provisional scale and static values at changing vertices.
+They are not yet aligned gameplay boards and were not published. The campaign
+still uses its existing layouts and mm-35 physics/replay version. Actor/region
+mapping, original wave scheduling, rounded terrain boundaries and full timed
+campaign acceptance remain open.

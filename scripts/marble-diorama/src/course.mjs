@@ -16,6 +16,7 @@ import {
   tubeGeometry,
 } from "./surface-geometry.mjs";
 import { wavePose, WAVE_INDICES, WAVE_ROLES } from "./wave.mjs";
+import { terrainGeometry, validateTerrain } from "./terrain-geometry.mjs";
 // CourseDefinition v1 is the only source of visible and physical track surfaces.
 export const COURSE_SCHEMA = 1;
 export const SURFACES = {
@@ -79,6 +80,7 @@ export function validateCourse(c) {
         "polygon",
         "pyramid",
         "tube",
+        "terrain",
       ].includes(p.kind)
     )
       throw Error("Unknown part type.");
@@ -97,8 +99,8 @@ export function validateCourse(c) {
       ].every(finite) ||
       p.w < 0.1 ||
       p.d < 0.1 ||
-      p.w > 100 ||
-      p.d > 100 ||
+      p.w > (p.kind === "terrain" ? 200 : 100) ||
+      p.d > (p.kind === "terrain" ? 200 : 100) ||
       (p.h ?? 0.5) < 0.05 ||
       (p.bevel ?? 0) < 0 ||
       (p.bevel ?? 0) > Math.min(p.w, p.d) / 4
@@ -287,7 +289,10 @@ export function validateCourse(c) {
       )
         throw Error("Invalid polygon outline.");
     }
-    if (p.kind === "polygon") estimatedVertices += p.outline.length * 3;
+    if (p.kind === "terrain") {
+      validateTerrain(p, finite);
+      estimatedVertices += p.cells.length * 36;
+    } else if (p.kind === "polygon") estimatedVertices += p.outline.length * 3;
     else if (p.kind === "pyramid") estimatedVertices += 9;
     else if (!["ribbon", "tube"].includes(p.kind))
       estimatedVertices += (Math.ceil(p.w * 2) + 1) * (Math.ceil(p.d * 2) + 1);
@@ -676,6 +681,7 @@ export function partGeometry(p) {
   if (p.kind === "ribbon") return ribbonGeometry(p);
   if (p.kind === "polygon") return polygonGeometry(p);
   if (p.kind === "pyramid") return pyramidGeometry(p);
+  if (p.kind === "terrain") return terrainGeometry(p);
   const vertices = [],
     indices = [],
     roles = [],
@@ -829,7 +835,12 @@ export function compileCourse(c) {
             previous[(j + 2) % 3] === t[2],
         );
         if (!sameFacing) group.faces.delete(key);
-      } else group.faces.set(key, { t, role: geom.roles[i / 3] });
+      } else
+        group.faces.set(key, {
+          t,
+          role: geom.roles[i / 3],
+          preserveTopology: p.kind === "terrain",
+        });
     }
   }
   const statics = [...staticGroups.values()].map((g) => {

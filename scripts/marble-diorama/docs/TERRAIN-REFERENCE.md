@@ -126,3 +126,52 @@ The private working files are `terrain-private.py`, `check-terrain-private.py`,
 `plot-terrain-private.py`, the six generated terrain JSON files and
 `terrain-overview-private.png` in the September 22 audit directory. They are
 research artifacts; no terrain changes were published from this audit.
+
+## Shared terrain compiler implemented
+
+`terrain-geometry.mjs` now builds the visible and Rapier mesh directly from
+independent tile-corner heights. A static `terrain` CourseDefinition part uses
+`cellSize` and `cells: [[column, row, h00, h10, h01, h11], ...]`. Heights are
+relative to the part's `y`; the grid is centered on its `x`/`z`, with an optional
+rotation. `w` and `d` must be integer multiples of `cellSize`. A null corner
+removes its triangle. Each supplied cell must retain the 00/11 diagonal and at
+least one complete triangle. Missing cells remain holes.
+
+The compiler keeps each original diagonal and plane, removes buried internal
+walls, and closes exposed walls and undersides at local height `-h`. Adjacent
+tiles can retain different heights at cliffs. Crossing cliff profiles split
+at their intersection; wall boundaries split at neighboring vertex levels
+to avoid unmatched edges. Terrain tops bypass the flat-polygon union pass:
+that pass removed one Practice triangle during the six-course validation.
+Existing floor/ribbon joining is unchanged. Static terrain currently rejects
+motion, presence, rise, bank and bevel settings instead of silently ignoring
+them. The editor can import a terrain CourseDefinition; cell authoring is not
+yet exposed in the piece palette.
+
+Private fixtures compiled all six recovered terrains at a provisional scale
+of 0.1375 world units per original unit (1.1 per tile). Downward Rapier rays at
+the interior of every present original triangle were compared against
+independently calculated source planes:
+
+| Course | Original triangles checked | Missing hits | Maximum height error |
+|---|---:|---:|---:|
+| Practice | 3,473 | 0 | 0.00002747 |
+| Beginner | 4,783 | 0 | 0.00003357 |
+| Intermediate | 4,137 | 0 | 0.00003663 |
+| Aerial | 2,590 | 0 | 0.00003052 |
+| Silly | 7,130 | 0 | 0.00004273 |
+| Ultimate | 4,425 | 0 | 0.00002137 |
+
+All **26,538** checks passed. Every mesh edge has balanced winding and at least
+two incident faces. Practice and Intermediate each have one four-face vertical
+edge where separate footprints touch at a corner; these are closed junctions,
+not ordinary two-face manifold edges. Do not call the complete meshes manifold.
+
+The fixtures retain static patch values at changing vertices solely to test
+the compiler. They contain no restored actors, starts, goals or demo routes,
+and are not replacement campaign definitions. The local browser imported the
+rebuilt Practice fixture successfully and displayed its banks, holes, solid
+textured walls, grid and wood platform without captured warnings/errors.
+Silhouette rounding, scale calibration and moving-surface integration remain
+required. No campaign geometry or physics version changes in this compiler
+checkpoint. The decoded original resource files remain outside the site.
