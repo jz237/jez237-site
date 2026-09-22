@@ -1,4 +1,9 @@
 import RAPIER from "@dimforge/rapier3d-compat";
+import { createSteelieState } from "./native-steelie.mjs";
+import {
+  advanceNativeSteelie,
+  steerNativeSteelie,
+} from "./native-steelie-physics.mjs";
 
 // Animated actors share articulated solids with the renderer.
 import { actorShapes, MUNCHER_HALF_HEIGHT } from "./actor-shapes.mjs";
@@ -72,6 +77,7 @@ export function createEnemies(sim) {
       position: copy(body.translation()),
       rotation: copy(body.rotation()),
     };
+    if (def.nativeSteelie) body.setEnabled(false);
     return {
       def,
       handle: body.handle,
@@ -81,12 +87,15 @@ export function createEnemies(sim) {
       current: pose,
       fallenAt: null,
       supportedY: def.y,
+      ...(def.nativeSteelie
+        ? { nativeSteelie: createSteelieState(), hidden: true }
+        : {}),
     };
   });
 }
 export function steerEnemies(sim, dt) {
   for (const e of sim.enemies) {
-    if (e.collected || e.defeated) continue;
+    if (e.collected || (e.defeated && !e.nativeSteelie)) continue;
     const b = sim.world.getRigidBody(e.handle),
       pos = b.translation(),
       vel = b.linvel(),
@@ -139,6 +148,10 @@ export function steerEnemies(sim, dt) {
       sim.world.getCollider(e.collider),
       b,
     );
+    if (e.nativeSteelie) {
+      const spawned = advanceNativeSteelie(sim, e, !!grounded, dt);
+      if (spawned || e.hidden || e.defeated) continue;
+    }
     if (grounded) e.supportedY = pos.y;
     // Descending a ramp is not a defeat. Measure the fall from the last
     // supported height, and only retire a steelie while unsupported.
@@ -175,6 +188,10 @@ export function steerEnemies(sim, dt) {
         };
         e.fallenAt = null;
       }
+      continue;
+    }
+    if (e.nativeSteelie) {
+      if (grounded) steerNativeSteelie(sim, e, dt);
       continue;
     }
     let target = home,
@@ -246,6 +263,7 @@ export function updateEnemies(sim) {
       rotation: copy(b.rotation()),
     };
     if (e.hidden) continue;
+    let steelieTouch = false;
     for (const p of sim.players)
       if (p.status === "racing" && !e.collected) {
         for (const handle of e.colliders)
@@ -255,9 +273,10 @@ export function updateEnemies(sim) {
             (manifold) => {
               for (let i = 0; i < manifold.numContacts(); i++)
                 if (manifold.contactDist(i) <= 0.002) {
-                  if (e.def.kind === "steelie")
+                  if (e.def.kind === "steelie") {
                     e.lastContactPlayer = sim.players.indexOf(p);
-                  else if (e.def.kind === "muncher" || e.def.kind === "bird")
+                    steelieTouch = true;
+                  } else if (e.def.kind === "muncher" || e.def.kind === "bird")
                     sim.fall(p);
                   else if (!e.collected) {
                     e.collected = true;
@@ -275,5 +294,9 @@ export function updateEnemies(sim) {
           );
       }
     if (e.collected) b.setEnabled(false);
+    if (e.nativeSteelie) {
+      if (steelieTouch && !e.steelieTouch) e.nativeSteelie.bump = true;
+      e.steelieTouch = steelieTouch;
+    }
   }
 }

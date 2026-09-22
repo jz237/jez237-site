@@ -1584,3 +1584,33 @@ campaign remains mm-35.
 Full regression result for this change: **283/283 tests pass**, 283675.5747 ms.
 Production build and diff check pass. This includes the prior peg-art corrections
 and the five new flag regressions. No native fixture is published by this commit.
+
+### September 22 — native black-marble routes and pursuit
+
+Recovered the separate enemy resource at course-header +0x18: two Beginner
+guards, one Aerial guard and one Ultimate guard. Optional native definitions
+now restore their graph routes, camera intervals, patrol/direct/route/return
+states, paired target choice, initial contact timer, source steering, planar
+limit and neutral-ground rolling resistance. Physical torque drives the visible
+sphere; route points never reposition it.
+
+Ten focused regressions pass. Independent source-branch transcription agrees
+on 10,000 observations across all four graphs. Aerial loads at original band15,
+tick402; a local physical encounter has zero player falls. A separate 60-second
+unattended patrol visits all six patrol nodes with no contact or falling. This
+longer check caught and resolved missing rolling resistance before acceptance.
+See NATIVE-STEELIES.md for evidence and remaining collision/reward/cadence limits.
+This is optional local native-board work; public courses remain unchanged.
+
+The completed full suite is **293/293 passing**, 283605.0042 ms. The final
+native-dynamics import prerequisite then passes all 13 native steelie/dynamics
+checks (341.366 ms); production build and diff check pass. All four recovered
+guards additionally pass 60-second isolated patrol diagnostics with every node
+on their first-link loops visited and no defeats. These diagnostics inject a
+load boundary and disable the racing player, so they are not full-course runs.
+Beginner/Ultimate fixtures now enable the already recovered native gravity;
+ordinary gravity had insufficient traction and caused turn overshoot. The
+matching native rate is now required on import. Final browser inspection shows
+the guard still rolling on the Aerial platform after the physical encounter,
+zero player falls and no console warnings/errors. Full parity and publication
+remain pending.

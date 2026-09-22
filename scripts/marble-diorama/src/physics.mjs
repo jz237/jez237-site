@@ -288,7 +288,6 @@ export class Simulation {
       }
       collider.setTranslation(acidPositionAt(a.zone, time));
     }
-    steerEnemies(this, STEP);
     const terrainPlayers = this.players.map((p) => ({
       position: this.body(p).translation(),
       active: p.status === "racing",
@@ -308,6 +307,7 @@ export class Simulation {
       this.tick * STEP * this.preset.machineSpeed,
       this.nativeCamera,
     );
+    steerEnemies(this, STEP);
     const terrainPoses = advanceTerrainAnimations(
       this.course,
       this.terrainAnimations,
