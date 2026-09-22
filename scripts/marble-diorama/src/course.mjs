@@ -93,6 +93,7 @@ export function validateCourse(c) {
   const ids = new Set();
   let estimatedVertices = 0;
   for (const p of c.parts) {
+    const verticesBeforePart = estimatedVertices;
     if (ids.has(p.id) || typeof p.id !== "string")
       throw Error("Part IDs must be unique.");
     ids.add(p.id);
@@ -377,6 +378,17 @@ export function validateCourse(c) {
         (n, cells) => n + cells.length * 36,
         0,
       );
+    if (
+      estimatedVertices > 150000 &&
+      p.kind === "tube" &&
+      estimatedVertices - verticesBeforePart <= 150000
+    ) {
+      // The chord estimate counts the fork chamber and cropped necks twice.
+      // Resolve a near-limit tube with its actual welded mesh; retain the
+      // same total limit and reject huge estimates before allocating a mesh.
+      estimatedVertices =
+        verticesBeforePart + tubeGeometry(p).vertices.length / 3;
+    }
     if (estimatedVertices > 150000)
       throw Error(
         "Course geometry exceeds the 150,000-vertex authoring limit.",

@@ -1,10 +1,11 @@
-# Ultimate gold transfer: recovered rules, physical integration pending
+# Ultimate gold transfer: recovered rules and physical passage
 
 The original gold objects at Ultimate's opening are a transfer inlet and two
 static outlet housings. The older remake's hinged catapults and aimed launch
-impulses are not supported by the recovered program. The native campaign does
-not yet include a physical replacement; adding catapults would preserve the
-wrong behavior.
+impulses are not supported by the recovered program. The mm-39 native campaign
+includes a continuous gold passage with a shared inlet and two exits. Its curved
+housing is an authored physical adaptation; the original static housing's
+silhouette and collision form still need refinement.
 
 ## Source evidence
 
@@ -65,20 +66,58 @@ checked during the Silly audit.
 Original executable bytes, track resources, disassembly, screenshots and
 execution fixtures remain outside the published repository.
 
-## Required integration
+## Physical integration (mm-39)
 
-- Restore the recessed inlet and both static gold housings in the actual
-  `native-courses/ultimate.json` board. Keep the native island/branch layout.
-- Build and test a continuous physical transfer that matches its visible
-  geometry. The source's instantaneous destination assignment must not be
-  copied into Rapier. Do not introduce hinged catapults or reuse the old aimed
-  launch impulses as recovered behavior.
-- Inspect the connecting geometry against the solid foundations and original
-  openings. The inlet's two-by-two hole is already present in native terrain;
-  the outlet ramps remain part of the recovered surface.
-- Apply the original loaded encounter, below-threshold choice and occupied-exit
-  fallback only in the real passage. Calibrate dimensions, transit, exit motion
-  and repeat awards; restore the original sound data and timing.
-- Verify both branches with normal input, paired encounters, replay and full
-  Ultimate routes before publication. The 792 source cases do not establish
-  any of those physical acceptance requirements.
+`native-courses/ultimate.json` now contains a stationary brass fork beneath the
+existing two-by-two inlet hole. Two explicit foundation tunnels admit the
+connecting passage without changing recovered top cells, outlet ramps or island
+positions. The tube mesh is shared by rendering and collision. Its welded shell
+has exactly two oppositely wound faces per edge; all animated terrain frames
+compile with the tunnels present.
+
+`native-gold-physics.mjs` applies the recovered camera-band, inlet threshold,
+random mapping and occupied-exit fallback inside the real passage. It retains
+the selected exit through downstream travel and replay, and applies bounded
+force through the visible bore. It never assigns the original destination or
+velocity to the active body. Original RNG state is still replaced by the
+simulation's deterministic seed/tick choice.
+
+The fork exposed two shared transfer bugs, now covered by regression tests:
+an infinite tilted outlet plane could stop flow deep inside a curved passage,
+and nearest-centerline progress could jump between perpendicular chamber legs
+despite continuous physical movement. Outlet cutoff now requires arrival near
+the path end. Bonus tracking accepts that chamber transition only while both
+positions remain inside the real chamber and the physical step is small; a
+large position jump still cancels the pending award.
+
+Both exits pass localized normal-input tests with zero falls, continuous motion,
+a 2000 traversal award, and exact mid-passage snapshot/replay. The maximum
+observed single-step displacement was 0.09654 world units. A paired entry pays
+both players by tick 650 with zero falls; minimum center separation is 1.09732
+for two radius-0.55 marbles (less than 0.0055 penetration). The focused pipe,
+gold and traversal suites pass 24/24. These tests begin at the inlet island;
+they do not prove a complete Ultimate route.
+
+Full regression: 423/423 passed in 285,943 ms; bundle build and diff whitespace
+checks passed. The local Ultimate title view loads the new assembly without
+browser warnings or errors. This suite also includes legacy reconstruction
+tests and is not a full native-campaign parity claim.
+
+The unchanged 150,000-vertex authoring limit is respected: terrain estimate
+133,740 plus actual welded tube vertices 14,928 totals 148,668. When a tube's
+conservative chord estimate alone causes a budget failure, validation resolves
+its actual mesh before rejecting it. Oversized geometry remains rejected.
+
+## Acceptance still required
+
+- Refine the static gold housing silhouette and bounded collision form against
+  the original. The local browser shows curved brass outlet bells; these are
+  not yet a match for the original canopy shapes.
+- Calibrate passage dimensions, transit and exit motion. Continuous travel is
+  deliberate; exact original teleport timing cannot be copied literally.
+- Recover exact award timing and repeat/paired policy. The current physical
+  traversal award is once per player per assembly.
+- Restore original effect data and timing, including the transfer cue.
+- Verify complete Ultimate routes with normal controls, timed and paired,
+  including occupied exits and downstream encounters. Neither the 792 source
+  cases nor the localized physical tests establish full-course parity.

@@ -92,12 +92,13 @@ export function validateNativePipes(course) {
     const upper = part.nativePipe === "beginner-upper";
     const lower = part.nativePipe === "beginner-lower";
     const orange = part.nativePipe === "intermediate-orange";
+    const gold = part.nativePipe === "ultimate-gold";
     const terrain = course.parts.find(
       (p) => p.id === course.nativeCamera?.partId,
     );
     const exitSpeed = 4 * (terrain?.cellSize / 8) * course.nativeCamera?.rate;
     if (
-      (!upper && !lower && !orange) ||
+      (!upper && !lower && !orange && !gold) ||
       part.kind !== "tube" ||
       !part.flowSpeed ||
       part.motion ||
@@ -109,10 +110,11 @@ export function validateNativePipes(course) {
       Math.abs((part.flowExitSpeed ?? part.flowSpeed) - exitSpeed) > 1e-8 ||
       ((upper || orange) && part.fork) ||
       (lower && !part.fork?.merge) ||
+      (gold && (!part.fork || part.fork.merge)) ||
       part.nativeTransfer
     )
       throw Error(
-        "Native pipes need a stationary single tube or merging lower tube and native dynamics.",
+        "Native pipes need a stationary single tube, merging lower tube or branching gold tube and native dynamics.",
       );
   }
 }

@@ -132,7 +132,7 @@ function forkGeometry(p) {
     // transported frame at the cut. The ring is also used by the chamber hull.
     const at = (i, k, outer) => {
       const distance = cut + ((length - cut) * i) / count;
-      const t = distance / length,
+      const t = Math.min(1, Math.max(0, distance / length)),
         f = t * count;
       const j = Math.min(count - 1, Math.floor(f));
       const tangent = curve.getTangentAt(t).normalize();

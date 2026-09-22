@@ -9,7 +9,9 @@ Practice passes timed solo/paired normal-input completion on difficulties 0 and
 including the shared lower Y and recovered capture rules. The mm-38 local
 Intermediate board adds its orange pipe and a shared visible/physical tunnel
 through the raised bridge; its localized normal-input passage and replay pass.
-Ultimate's [gold transfer](NATIVE-GOLD-TRANSFER.md), remaining routes and native diorama polish still
+The mm-39 Ultimate [gold transfer](NATIVE-GOLD-TRANSFER.md) now has a continuous
+physical fork, with both exits, paired entry and replay tested locally. Its
+housing fidelity, remaining native objects, full routes and diorama polish still
 prevent publication. The legacy checklist below describes the **published older
 reconstructions**, not validation of the newly integrated boards.
 
@@ -17,8 +19,8 @@ reconstructions**, not validation of the newly integrated boards.
 
 The recovered Ultimate code contradicts the older hinged-catapult interpretation
 below: its gold inlet selects one of two static outlet housings. The original
-rules are now verified separately, but a continuous physical implementation is
-still required in the native campaign.
+rules are verified separately and a continuous physical fork is integrated
+locally. Its curved housing and full-course acceptance remain incomplete.
 
 See [the September 21 object audit](OBJECT-PARITY.md) for timestamped findings, fixes and known mechanism mismatches.
 

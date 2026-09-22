@@ -31,6 +31,7 @@ export function transferForce(
       continue;
     const end = path.points.at(-1);
     if (
+      q.progress >= path.length - 0.25 &&
       Object.keys(path.exit).reduce(
         (v, k) => v + (position[k] - end[k]) * path.exit[k],
         0,
@@ -102,6 +103,7 @@ export function chooseTransfer(paths, position, radius, seed, occupied = []) {
       p.fork &&
       !p.merge &&
       !p.nativeTransfer &&
+      !p.nativePipe &&
       p.flowSpeed &&
       (() => {
         const q = tubePosition(p, position);
