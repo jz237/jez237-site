@@ -486,6 +486,25 @@ test("powered transfers sound only while carrying a racing marble", async () => 
   assert.equal(calls.length, 1);
 });
 
+test("native miniature pickups use their form cue and a separate reward key per creature", async () => {
+  const { audio } = fixture();
+  await audio.unlock();
+  const calls = [];
+  audio.effect = (name, options) => calls.push({ name, ...options });
+  for (const [i, miniatureForm] of ["steelie", "acid", "muncher"].entries())
+    audio.event({
+      type: "collect",
+      player: 0,
+      enemy: `mini-${i}`,
+      miniatureForm,
+    });
+  assert.deepEqual(
+    calls.map((c) => c.name),
+    ["crack", "collect", "acid", "collect", "muncher", "collect"],
+  );
+  assert.equal(new Set(calls.map((c) => c.key)).size, 6);
+});
+
 test("vacuum audio follows the linked mouth and stays silent beneath the surface", async () => {
   const { audio } = fixture();
   await audio.unlock();

@@ -1,5 +1,9 @@
 import RAPIER from "@dimforge/rapier3d-compat";
 import { contactPhysicalBird } from "./native-bird-physics.mjs";
+import {
+  nativeMiniatureSolids,
+  contactPhysicalMiniature,
+} from "./native-miniature-physics.mjs";
 import { createSteelieState } from "./native-steelie.mjs";
 import { createSlinkyState } from "./native-slinky.mjs";
 import {
@@ -75,7 +79,10 @@ export function createEnemies(sim) {
     const initial = nativeSlinky
       ? initialSlinkyPose(sim.course, { def, nativeSlinky })
       : null;
-    const solids = initial?.solids ?? actorShapes(def, 0);
+    const solids =
+      def.nativeMiniatureSlot !== undefined
+        ? nativeMiniatureSolids(def)
+        : (initial?.solids ?? actorShapes(def, 0));
     const colliders = (solids ?? [null]).map(
       (solid) =>
         sim.world.createCollider(
@@ -90,11 +97,20 @@ export function createEnemies(sim) {
         ).handle,
     );
     const pose = {
-      ...(initial || def.nativeBirdSlot !== undefined ? { solids } : {}),
+      ...(initial ||
+      def.nativeBirdSlot !== undefined ||
+      def.nativeMiniatureSlot !== undefined
+        ? { solids }
+        : {}),
       position: copy(body.translation()),
       rotation: copy(body.rotation()),
     };
-    if (def.nativeSteelie || nativeSlinky || def.nativeBirdSlot !== undefined)
+    if (
+      def.nativeSteelie ||
+      nativeSlinky ||
+      def.nativeBirdSlot !== undefined ||
+      def.nativeMiniatureSlot !== undefined
+    )
       body.setEnabled(false);
     return {
       def,
@@ -110,12 +126,17 @@ export function createEnemies(sim) {
         : {}),
       ...(nativeSlinky ? { nativeSlinky, hidden: true } : {}),
       ...(def.nativeBirdSlot !== undefined ? { hidden: true } : {}),
+      ...(def.nativeMiniatureSlot !== undefined ? { hidden: true } : {}),
     };
   });
 }
 export function steerEnemies(sim, dt) {
   for (const e of sim.enemies) {
-    if (e.def.nativeBirdSlot !== undefined) continue;
+    if (
+      e.def.nativeBirdSlot !== undefined ||
+      e.def.nativeMiniatureSlot !== undefined
+    )
+      continue;
     if (e.collected || (e.defeated && !e.nativeSteelie && !e.nativeSlinky))
       continue;
     const b = sim.world.getRigidBody(e.handle),
@@ -307,7 +328,9 @@ export function updateEnemies(sim, incomingVelocity = []) {
             (manifold) => {
               for (let i = 0; i < manifold.numContacts(); i++)
                 if (manifold.contactDist(i) <= 0.002) {
-                  if (e.def.nativeBirdSlot !== undefined) {
+                  if (e.def.nativeMiniatureSlot !== undefined) {
+                    contactPhysicalMiniature(sim, e, p);
+                  } else if (e.def.nativeBirdSlot !== undefined) {
                     contactPhysicalBird(sim, e, p);
                   } else if (e.nativeSlinky) {
                     if (p.status === "racing")

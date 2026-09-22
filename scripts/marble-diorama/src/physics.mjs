@@ -1,5 +1,7 @@
 import { createNativeFlags, advanceNativeFlags } from "./native-flags.mjs";
 import { createBirdSequence } from "./native-bird.mjs";
+import { createMiniatureSequence } from "./native-miniature.mjs";
+import { advanceNativeMiniatures } from "./native-miniature-physics.mjs";
 import { advanceNativeBirds } from "./native-bird-physics.mjs";
 import { finishBirdCapture } from "./bird-capture.mjs";
 import { createAerialPegs, advanceAerialPegs } from "./aerial-pegs.mjs";
@@ -101,6 +103,9 @@ export class Simulation {
       : null;
     this.nativeAcids = course.acidSequence
       ? createAcidSequence(this.options.seed)
+      : null;
+    this.nativeMiniatures = course.miniatureSequence
+      ? createMiniatureSequence(this.options.seed)
       : null;
     this.aerialHammers = createAerialHammers(course);
     this.aerialPegs = createAerialPegs(course, this.options.seed);
@@ -333,6 +338,7 @@ export class Simulation {
     );
     advanceNativeAcids(this, STEP);
     advanceNativeBirds(this, STEP);
+    advanceNativeMiniatures(this, STEP);
     steerEnemies(this, STEP);
     const terrainPoses = advanceTerrainAnimations(
       this.course,
@@ -1010,6 +1016,7 @@ export class Simulation {
       nativeCamera: structuredClone(this.nativeCamera),
       nativeFlags: structuredClone(this.nativeFlags),
       nativeBirds: structuredClone(this.nativeBirds),
+      nativeMiniatures: structuredClone(this.nativeMiniatures),
       nativeAcids: structuredClone(this.nativeAcids),
       acid: this.acid.map(({ zone, geometry, ...runtime }) =>
         structuredClone(runtime),
@@ -1053,6 +1060,12 @@ export class Simulation {
       s.nativeAcids ??
         (this.course.acidSequence
           ? createAcidSequence(this.options.seed)
+          : null),
+    );
+    this.nativeMiniatures = structuredClone(
+      s.nativeMiniatures ??
+        (this.course.miniatureSequence
+          ? createMiniatureSequence(this.options.seed)
           : null),
     );
     if (s.acid)

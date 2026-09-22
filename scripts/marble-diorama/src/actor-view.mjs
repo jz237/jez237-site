@@ -22,7 +22,7 @@ export function actorMesh(solids) {
       new MeshStandardMaterial({
         color: solid.color,
         roughness: 0.36,
-        metalness: 0.06,
+        metalness: solid.metalness ?? 0.06,
       }),
     );
     mesh.name = solid.name;
