@@ -60,7 +60,7 @@ import {
 } from "./enemies.mjs";
 import { difficultyPreset } from "./difficulty.mjs";
 import { courseTime } from "./rules.mjs";
-export const PHYSICS_VERSION = "rapier-0.20.0-mm-35";
+export const PHYSICS_VERSION = "rapier-0.20.0-mm-36";
 export const STEP = 1 / 120,
   RADIUS = 0.55,
   MASS = 1;
@@ -1445,7 +1445,8 @@ export class DemoController {
     // Counter gravity on descents as well as climbs. Slip feedback limits
     // excessive spin before a low-friction surface grips again.
     const compensation = p.groundNormal
-      ? (-9.81 * RADIUS * p.groundNormal.y) / steeringTorque
+      ? (-sim.nativeDynamics.gravity * RADIUS * p.groundNormal.y) /
+        steeringTorque
       : 0;
     const errorX =
         (dx / Math.max(dist, 0.01)) * speed -

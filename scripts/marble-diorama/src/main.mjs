@@ -9,7 +9,7 @@ import {
   RADIUS,
 } from "./physics.mjs";
 import { proofCourse, validateCourse, part, point } from "./course.mjs";
-import { campaignCourses, practiceCourse } from "./campaign.mjs";
+import { campaignCourses, practiceCourse } from "./native-campaign.mjs";
 import { CampaignRun, courseTime } from "./rules.mjs";
 import { normalizeDifficulty } from "./difficulty.mjs";
 import { bonusCourses } from "./bonus.mjs";
@@ -256,6 +256,17 @@ function menu() {
     $("demoRoute").append(option);
   }
   show("demoRoutes", !!selected.alternateRoutes?.length);
+  $("demo").disabled = selected.demoReady === false;
+  $("demo").title =
+    selected.demoReady === false
+      ? "This course's demonstration route is still being prepared."
+      : "";
+  $("campaignDemo").disabled = campaignCourses().some(
+    (c) => c.demoReady === false,
+  );
+  $("campaignDemo").title = $("campaignDemo").disabled
+    ? "The recovered campaign's demonstration routes are still being prepared."
+    : "";
   $("sceneLabel").children[0].textContent =
     selected.category === "campaign"
       ? `${String(selected.courseNumber).padStart(2, "0")} / ${selected.name.toUpperCase()}`
