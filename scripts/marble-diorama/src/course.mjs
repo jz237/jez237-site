@@ -2,6 +2,8 @@ import { compileTerrainSequence } from "./terrain-sequence.mjs";
 import { validateTerrainNavigation } from "./terrain-navigation.mjs";
 import { validateNativeCamera } from "./native-camera.mjs";
 import { validateAerialVacuums, nativeVacuumPose } from "./aerial-vacuums.mjs";
+import { validateAerialPaddle, paddlePose } from "./aerial-paddle.mjs";
+import { validateNativeDynamics } from "./native-dynamics.mjs";
 import {
   validateAerialHammers,
   hammerGeometry,
@@ -335,7 +337,9 @@ export function validateCourse(c) {
         (p.profile === "peg" &&
           (p.kind !== "piston" || !finite(p.h) || p.h < 0.12)) ||
         (p.profile === "flipper" &&
-          (p.kind !== "spring" || p.motion?.axis !== "launch" || p.d < p.w)) ||
+          (p.kind !== "spring" ||
+            !["launch", "native-paddle"].includes(p.motion?.axis) ||
+            p.d < p.w)) ||
         (p.profile === "vacuum-mouth" &&
           (p.kind !== "piston" || !finite(p.h) || p.h < 1.1 || p.d < 1.1)))
     )
@@ -384,8 +388,10 @@ export function validateCourse(c) {
         "launch",
         "hammer",
         "native-vacuum",
+        "native-paddle",
       ].includes(p.motion.axis) ||
         (p.motion.axis === "hammer" && p.profile !== "hammer") ||
+        (p.motion.axis === "native-paddle" && p.profile !== "flipper") ||
         (p.motion.axis === "native-vacuum" &&
           (p.profile !== "vacuum-mouth" || p.presence)) ||
         ![p.motion.amplitude, p.motion.period, p.motion.phase ?? 0].every(
@@ -692,7 +698,9 @@ export function validateCourse(c) {
   }
   validateTerrainNavigation(c);
   validateNativeCamera(c, finite);
+  validateNativeDynamics(c, finite);
   validateAerialVacuums(c, finite);
+  validateAerialPaddle(c, finite);
   validateAerialHammers(c, finite);
   return c;
 }
@@ -929,6 +937,8 @@ export function compileCourse(c) {
   };
 }
 export function motionAt(p, time, terrainRows, previous) {
+  if (p.motion?.axis === "native-paddle")
+    return terrainRows ?? paddlePose(p, null);
   if (p.motion?.axis === "native-vacuum")
     return terrainRows ?? nativeVacuumPose(p, null);
   if (p.motion?.axis === "hammer") return hammerPose(p, terrainRows);

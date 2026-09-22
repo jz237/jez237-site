@@ -21,6 +21,13 @@ cadence, original body response, dimensions and fragment trajectories remain ope
 See [AERIAL-VACUUMS.md](AERIAL-VACUUMS.md).
 
 Reference: [World of Longplays / Ironclaw, Amiga difficulty 0](https://www.youtube.com/watch?v=Nfa2etJ84_8).
+The next local native-board pass restores Aerial's contact-driven paddle script
+and launch velocity ranges, plus recovered airborne gravity and terminal speed.
+The first higher-lane landing passes on recovered terrain. Shared meshes govern
+cup contact; its source-directed spring impulse preserves the marble's position.
+Cadence, capture/paired behavior, global random state and other limits remain
+open. See [AERIAL-PADDLE.md](AERIAL-PADDLE.md). Public Aerial is unchanged.
+
 Video timestamps below refer to the existing local copy. Frame sequences were
 inspected, including 100.00–102.28s at 0.12s intervals, 238.00–239.32s at 0.12s,
 165.00–169.56s at 0.24s, and 277.0–283.0s at 0.4s. Private reference images are

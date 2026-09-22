@@ -13,6 +13,13 @@ import { landingContact } from "./landing-contact.mjs";
 import { updateLaunchBonus } from "./launch-bonus.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
+import { nativeDynamics } from "./native-dynamics.mjs";
+import {
+  createAerialPaddle,
+  advanceAerialPaddle,
+  queuePaddleContact,
+  paddleLaunchVelocity,
+} from "./aerial-paddle.mjs";
 import {
   createAerialVacuums,
   advanceAerialVacuums,
@@ -82,9 +89,15 @@ export class Simulation {
       : null;
     this.aerialHammers = createAerialHammers(course);
     this.aerialVacuums = createAerialVacuums(course);
+    this.aerialPaddle = createAerialPaddle(course, this.options.seed);
     this.nativeVacuumPoses = aerialVacuumPoses(course, this.aerialVacuums);
     this.events = [];
-    this.world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
+    this.nativeDynamics = nativeDynamics(course);
+    this.world = new RAPIER.World({
+      x: 0,
+      y: -this.nativeDynamics.gravity,
+      z: 0,
+    });
     this.world.timestep = STEP;
     this.world.integrationParameters.numSolverIterations = 12;
     this.world.integrationParameters.normalizedAllowedLinearError = 0.0001;
@@ -313,6 +326,51 @@ export class Simulation {
       this.nativeCamera,
     );
     this.nativeVacuumPoses = aerialVacuumPoses(this.course, this.aerialVacuums);
+    const paddle = advanceAerialPaddle(
+      this.course,
+      this.aerialPaddle,
+      this.tick * STEP * this.preset.machineSpeed,
+      this.nativeCamera,
+    );
+    if (paddle?.launched !== undefined && paddle.launched !== null) {
+      const p = this.players[paddle.launched];
+      const part = this.course.parts.find(
+        (v) => v.id === this.course.paddleSequence.part,
+      );
+      const b = p && this.body(p),
+        pos = b?.translation();
+      const cs = Math.cos(part.angle ?? 0),
+        sn = Math.sin(part.angle ?? 0);
+      const cup = {
+        x: part.x - ((part.d - part.w) / 2) * sn,
+        z: part.z + ((part.d - part.w) / 2) * cs,
+      };
+      // A real spring impulse at the cup, with no source position snap. A
+      // marble that rolled away during the dwell cannot be launched remotely.
+      if (
+        p?.status === "racing" &&
+        Math.hypot(pos.x - cup.x, pos.z - cup.z) < part.w * 0.55 &&
+        Math.abs(pos.y - part.y - RADIUS) < 0.25
+      ) {
+        const v = b.linvel(),
+          target = paddleLaunchVelocity(this.course, part, this.aerialPaddle);
+        b.applyImpulse(
+          {
+            x: (target.x - v.x) * MASS,
+            y: (target.y - v.y) * MASS,
+            z: (target.z - v.z) * MASS,
+          },
+          true,
+        );
+        p.springTick = this.tick;
+        p.impactLaunched = true;
+      }
+      this.events.push({
+        type: "spring",
+        player: paddle.launched,
+        part: this.course.paddleSequence.part,
+      });
+    }
     for (const m of this.movers) {
       m.previous = m.current;
       const machineTime =
@@ -326,11 +384,15 @@ export class Simulation {
         machineTime,
         terrainPoses[m.part.sourcePartId] ??
           hammerPoses[m.part.id] ??
-          this.nativeVacuumPoses[m.part.id],
+          this.nativeVacuumPoses[m.part.id] ??
+          (m.part.id === this.course.paddleSequence?.part
+            ? paddle?.pose
+            : undefined),
         m.previous,
       );
       if (
         m.part.profile === "flipper" &&
+        m.part.motion.axis !== "native-paddle" &&
         m.launchTick !== undefined &&
         this.tick - m.launchTick ===
           Math.ceil((m.part.motion.delay ?? 0.5) / STEP) + 1
@@ -373,7 +435,10 @@ export class Simulation {
         );
       b.setNextKinematicTranslation(m.current.position);
       b.setNextKinematicRotation(m.current.rotation);
-      if (m.part.motion.axis === "native-vacuum" && !m.current.visible)
+      if (
+        ["native-vacuum", "native-paddle"].includes(m.part.motion.axis) &&
+        !m.current.visible
+      )
         b.setTranslation(m.current.position, false);
     }
     for (let i = 0; i < this.players.length; i++) {
@@ -590,9 +655,12 @@ export class Simulation {
         const arm = this.movers.find((m) => m.part.id === s.id);
         if (s.profile === "flipper") {
           const resting =
-            arm.launchTick === undefined ||
-            (this.tick - arm.launchTick) * STEP >
-              s.motion.period + (s.motion.delay ?? 0.5);
+            s.motion.axis === "native-paddle"
+              ? this.aerialPaddle.sequence.loaded &&
+                this.aerialPaddle.sequence.phase === "idle"
+              : arm.launchTick === undefined ||
+                (this.tick - arm.launchTick) * STEP >
+                  s.motion.period + (s.motion.delay ?? 0.5);
           const localX = dx * cs + dz * sn,
             localZ = -dx * sn + dz * cs;
           if (
@@ -601,6 +669,11 @@ export class Simulation {
             Math.hypot(localX, localZ - (s.d - s.w) / 2) < s.w * 0.38 &&
             Math.abs(pos.y - s.y - RADIUS) < 0.25
           ) {
+            if (
+              s.motion.axis === "native-paddle" &&
+              !queuePaddleContact(this.aerialPaddle, i)
+            )
+              continue;
             arm.launchTick = this.tick;
             arm.launchPlayer = i;
           }
@@ -672,6 +745,18 @@ export class Simulation {
     const incomingVelocity = this.players.map((p) =>
       copy(this.body(p).linvel()),
     );
+    if (this.nativeDynamics.terminalSpeed !== null)
+      for (const p of this.players) {
+        if (p.status !== "racing") continue;
+        const b = this.body(p),
+          v = b.linvel();
+        // Account for the gravity Rapier adds during this step. This limits
+        // only downward velocity; planar momentum and angular motion remain.
+        const minimum =
+          -this.nativeDynamics.terminalSpeed +
+          this.nativeDynamics.gravity * STEP;
+        if (v.y < minimum) b.setLinvel({ ...v, y: minimum }, true);
+      }
     this.world.step(this.queue);
     for (let i = 0; i < this.players.length; i++) {
       const p = this.players[i];
@@ -840,6 +925,7 @@ export class Simulation {
       nativeCamera: structuredClone(this.nativeCamera),
       aerialHammers: structuredClone(this.aerialHammers),
       aerialVacuums: structuredClone(this.aerialVacuums),
+      aerialPaddle: structuredClone(this.aerialPaddle),
       enemies: structuredClone(this.enemies),
     };
   }
@@ -867,6 +953,9 @@ export class Simulation {
       s.aerialVacuums ?? createAerialVacuums(this.course),
     );
     this.nativeVacuumPoses = aerialVacuumPoses(this.course, this.aerialVacuums);
+    this.aerialPaddle = structuredClone(
+      s.aerialPaddle ?? createAerialPaddle(this.course, this.options.seed),
+    );
     this.events = [];
     // Cached shapes are only an optimization, never restored simulation state.
     for (const a of this.acid) a.geometry = null;
