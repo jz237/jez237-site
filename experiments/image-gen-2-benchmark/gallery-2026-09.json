@@ -1,5 +1,102 @@
 [
   {
+    "id": "2026-09-22-factual-infographic-factual-infographic-snow-crystals-a-clo",
+    "title": "Factual infographic: Snow Crystals — A Cloud History Written in Ice",
+    "tests": "Archive scan found no existing snow-crystal or snowflake-growth topic; prompt uses one dominant hero, eight substantive panels, four mechanism close-ups, and only claim-sheet-backed qualitative labels.; archive_slot=2026-09-22T00:20; concept=snow-crystal-cloud-path-branching; factual_subtype: factual-infographic",
+    "prompt": "Create one finished 2048x3072 portrait factual infographic titled SNOW CRYSTALS: A CLOUD HISTORY WRITTEN IN ICE. This is the direct infographic canvas itself, perfectly front-facing, edge-to-edge, and orthographic—not a photographed poster, page, screen, wall display, desk scene, classroom prop, or museum placard. Build a sophisticated science-museum plate with a dominant, highly detailed photoreal macro snow crystal as the central hero: translucent ice facets, crisp sixfold organization, delicate branched arms, realistic internal bubbles and subtle rim lighting against a midnight-blue cloud-depth field. Split part of the hero into a precise scientific cutaway so leader lines can connect visible scale to mechanism. Surround it with eight large, clearly separated substantive information panels, each with concise, highly legible display labels and short phrases only. Panel 1, CLOUD BIRTH: a vertical cloud cutaway showing below-freezing air and one tiny airborne particle becoming the starting point for ice, without naming a specific particle type. Panel 2, VAPOR BUILDS THE CRYSTAL: a three-stage sequence showing water vapor moving to and joining an ice facet as the crystal grows while falling. Panel 3, WHY SIX SIDES: a large molecular-order schematic linking the arrangement of water molecules in ice to hexagonal crystal structure; keep it qualitative and do not invent bond lengths or angles. Panel 4, A FAMILY OF FORMS: a specimen gallery of flat plate, long column, prism, needle, and branched crystal forms, labeled as forms influenced by temperature and atmospheric moisture conditions, with no exact temperature thresholds. Panel 5, THE CLOUD PATH: trace one crystal down through three visually distinct cloud layers; show its growth pattern changing as surrounding temperature and moisture conditions change while sixfold organization remains. Panel 6, BRANCHING ARM: enlarge one arm tip to show new branches developing symmetrically under shared local conditions, using clear directional arrows but no unsupported equations. Panel 7, ONE CRYSTAL OR MANY: a bold side-by-side comparison of a single ice crystal and several crystals fused into an aggregate snowflake. Panel 8, A GROWTH HISTORY: compare three crystals following different cloud paths, showing that different condition histories produce different detailed forms while some flakes can still look alike. Include at least four prominent explanatory close-ups integrated into those panels: the nucleating airborne particle inside the first ice, water vapor joining a facet, qualitative hexagonal ice order, and a high-magnification branching arm tip. Add a clear top-to-bottom process spine: PARTICLE → FIRST ICE → VAPOR GROWTH → CHANGING CONDITIONS → BRANCHING OR AGGREGATION. Use precise leader lines, numbered steps, scale transitions, a restrained icon key for vapor/ice/cloud path, and strong typographic hierarchy. Palette: deep midnight blue, glacier cyan, luminous white, silver-gray, with tiny restrained amber accents for process arrows. Maintain believable ice optics, crisp microtexture, cloud depth, and readable contrast. Every factual visual implication must stay within these conservative claims: snow crystals form in below-freezing clouds around tiny airborne particles; water vapor joins growing ice; water-molecule organization produces six-sided structure; temperature and moisture influence morphology; changing conditions along a falling path can alter branching while preserving sixfold organization; arms share local atmospheric conditions; a snowflake may be one crystal or an aggregate; different paths create different growth histories. Do not include exact statistics, exact temperature bands, equations, universal claims of perfect symmetry, the slogan that no two can ever look alike, bibliography, URLs, logos, QR codes, watermarks, pseudo-text, decorative filler, snowmen, holiday motifs, fantasy glow, physical paper edges, frame, cast shadow, room, hands, tools, or tiny unreadable paragraphs.",
+    "image": "images/2026-09-22-factual-infographic-factual-infographic-snow-crystals-a-clo.jpg",
+    "thumb": "thumbs/2026-09-22-factual-infographic-factual-infographic-snow-crystals-a-clo.webp",
+    "color": "#38526d",
+    "date": "2026-09-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "snow-crystal-cloud-path-branching",
+      "imageSha256": "e4a42d8bd92726f197304b89e36b04b8948e15c3198828b70b2a644dcee09add",
+      "imageDHash": "d979694d4f48980d"
+    },
+    "factualInfographic": {
+      "topic": "How snow crystals grow, branch, and record changing cloud conditions",
+      "description": "A detailed atmospheric-microphysics plate explaining ice-crystal nucleation, vapor growth, sixfold structure, condition-dependent morphology, branching, path history, and aggregation.",
+      "sourceNote": "National Oceanic and Atmospheric Administration — https://www.noaa.gov/stories/how-do-snowflakes-form-science-behind-snow and UCAR Center for Science Education — https://scied.ucar.edu/learning-zone/storms/snowflakes verify the depicted formation, structure, morphology, path-history, and aggregation claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-22T04:21:20Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "National Oceanic and Atmospheric Administration",
+            "title": "How do snowflakes form? Get the science behind snow",
+            "sourceType": "government-agency",
+            "url": "https://www.noaa.gov/stories/how-do-snowflakes-form-science-behind-snow"
+          },
+          {
+            "id": "S2",
+            "publisher": "UCAR Center for Science Education",
+            "title": "Snowflakes",
+            "sourceType": "professional-scientific-organization",
+            "url": "https://scied.ucar.edu/learning-zone/storms/snowflakes"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Snow crystals form in below-freezing clouds around tiny airborne particles.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Water vapor joins the growing ice crystal as it falls through the cloud.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The organization of water molecules in ice produces the crystal's six-sided structure.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Temperature and atmospheric moisture conditions influence whether snow crystals grow as plates, columns, prisms, needles, or branched forms.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Changes in temperature or moisture along a crystal's path can change how its arms grow and branch while preserving sixfold organization.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The arms of one crystal can resemble one another because they experience the same local atmospheric conditions as the crystal grows.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A snowflake may be one ice crystal or an aggregate of multiple ice crystals fused together.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Different paths through a cloud expose crystals to different growth histories, so their detailed forms vary.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-20-outer-space-exploration-outer-space-exploration-pulsar-wind",
     "title": "Outer Space Exploration: Pulsar Wind, Mapped in Polarized Light",
     "tests": "Processed multiwavelength scientific visualization, not natural-color eyesight. Preserve a tiny central neutron star, broken oblique torus, unequal jets, termination shock, asymmetric remnant filaments, and deliberate wavelength/polarization color logic. No literal field wires. Sources checked: NASA Crab multiwavelength visualization; NASA IXPE Vela polarization; NASA Fermi PWN overview; Chandra/IXPE MSH 15-52.; archive_slot=2026-09-20T12:20; concept=pulsar-wind-nebula-polarization-map",
