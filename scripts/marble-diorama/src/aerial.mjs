@@ -151,6 +151,15 @@ export function aerialCourse() {
       [
         [-9, 81, 10.5],
         [-9, 85, 10.5],
+      ],
+      3,
+    ),
+    // The Amiga 173.2s frame shows the peg-bed lip above this lane,
+    // not a continuous ramp. Shared geometry supplies the actual drop.
+    ribbon(
+      "left-yellow-receiving-lane",
+      [
+        [-9, 85, 8],
         [-1, 90, 8],
         [4, 94, 8],
       ],
@@ -186,8 +195,9 @@ export function aerialCourse() {
     ribbon(
       "left-final-descent",
       [
-        [4, 94, 8],
-        [2, 98, 6],
+        // A second lip drops onto the descending track (177.2s).
+        [4, 94, 6],
+        [2, 98, 5],
         [-4, 102, 4],
         [-4, 105, 4],
       ],
@@ -347,7 +357,7 @@ export function aerialCourse() {
     [-9.6, 10.5, 85],
     [-1, 8, 90],
     [4, 8, 94],
-    [2, 6, 98],
+    [2, 5, 98],
     [-4, 4, 102],
     [-4, 4, 105],
     [1, 4, 108],
@@ -416,7 +426,7 @@ export function aerialCourse() {
     schema: 1,
     id: "aerial",
     medals: { gold: 75, silver: 110 },
-    revision: 1,
+    revision: 2,
     name: "Aerial Race",
     courseNumber: 4,
     subtitle:

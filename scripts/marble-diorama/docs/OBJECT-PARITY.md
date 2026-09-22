@@ -70,3 +70,11 @@ Latest mm-18 validation: full 139/139 suite passes, followed by a complete
 object-animation/audio rerun for final fragment geometry and pose factoring.
 The added solid-sector test passes. Build, browser close-ups and diff checks pass.
 See AERIAL-VACUUMS.md and VALIDATION.md for scope and remaining gaps.
+
+### Aerial descending ledges (mm-33)
+
+Two continuous ramps on the left descent are corrected to physical ledges,
+matching the original airborne drops and subsequent dizzy recovery. Both
+solo and paired normal-input routes finish without falls and trigger the two
+landings. Exact dimensions and landing calibration remain partial. See
+AERIAL-LEDGES.md.
