@@ -97,6 +97,114 @@
     }
   },
   {
+    "id": "2026-09-22-factual-infographic-factual-infographic-leafcutter-ant-fung",
+    "title": "Factual infographic: Leafcutter Ant Fungus Farm — From Green Leaf to Living Garden",
+    "tests": "Archive-wide factual-topic packet contains no prior leafcutter-ant fungus-farming entry. Stop-scroll topic uses one dominant ant-and-garden cutaway, eight substantive source-backed panels, four explanatory close-ups, direct-canvas composition, and no unsupported numbers or universal claims.; archive_slot=2026-09-22T16:20; concept=leafcutter-ant-fungus-farm; factual_subtype: factual-infographic",
+    "prompt": "Create a finished, direct-canvas, museum-quality scientific infographic titled exactly \"LEAFCUTTER ANT FUNGUS FARM\" with the subtitle \"From green leaf to living garden\". Portrait 2048x3072, edge-to-edge educational plate, no paper edge, wall, room, frame, desk, specimen drawer, website, or poster mockup. Use a sophisticated natural-history visual language: deep forest green, damp umber soil, ivory fungal threads, pale cream gongylidia, restrained amber process arrows, crisp off-white typography, realistic macro textures, credible underground moisture and soft directional light. All text must be concise, large, correctly spelled, and readable; use precise leader lines, numbered arrows, and clear hierarchy rather than paragraphs. Do not show bibliography or URLs.\n\nDOMINANT HERO: a huge, anatomically credible leafcutter worker in profile carries a freshly cut green leaf fragment across the surface while the ground opens into an integrated cutaway of a living underground fungus chamber. Make the hero ant, leaf, and cream-white spongy fungus garden occupy most of the canvas. Reveal realistic chewed leaf flecks woven through branching mycelium, smaller workers tending the crop, and a separate darker refuse chamber connected by a tunnel. This is one continuous scientific visualization, not a grid of generic boxes.\n\nBuild EIGHT substantive supporting panels around and through the hero, each with a distinct, source-backed point: 1) \"HARVEST\" — workers carry fresh plant fragments toward the nest; label that the plant is crop substrate, while the cultivated fungus is the ants' primary food source. 2) \"PREPARE\" — a three-step sequence labeled CHEW, FECAL DROPLET, INOCULATE WITH MYCELIUM, ending as prepared fragments enter the garden. 3) \"THE CULTIVAR\" — identify Leucoagaricus gongylophorus as the primary plant-material degrader in the studied garden system; show hyphae penetrating leaf fragments without implying that ants digest the leaf directly. 4) \"FOOD BODIES\" — macro view of staphylae made of swollen gongylidia; label them as nutrient-rich fungal structures eaten by larvae and most adult workers in the studied higher-attine system. 5) \"ENZYME LOOP\" — clean circular cause-and-return diagram: gongylidia eaten, fungal enzymes pass through the ant gut, enzyme-bearing fecal fluid is applied to fresh substrate; keep wording qualitative and do not add counts. 6) \"MICROBIAL TEAM\" — magnified garden cross-section with fungus, leaf polymers, and resident bacteria; label that bacteria in the PNNL study converted already-digested plant polymers into metabolites used as amino acids and vitamins that support the garden ecosystem. 7) \"GARDEN CARE\" — workers groom and maintain the cultivar, supply fresh substrate, and move fungal material through the colony; no unsupported pesticides or invented behaviors. 8) \"WASTE STREAM\" — directional section from productive garden to a physically separate refuse chamber containing partly degraded plant material; label that garden and dump are chemically and microbially distinct environments.\n\nInclude FOUR large explanatory close-ups, visibly integrated and easy to compare: A) serrated mandibles reducing a leaf edge to pulp-like fragments; B) a single prepared leaf fragment with one fecal droplet and branching inoculum, using three readable leader lines; C) an extreme macro cutaway contrasting ordinary hyphae with bulbous gongylidia clustered as a staphyla; D) a split-circle microscope view contrasting the diverse garden microbial community with the distinct refuse-dump community, without inventing species names or cell counts. Add one small flow ribbon across the bottom reading exactly \"LEAF HARVEST → PREPARED SUBSTRATE → FUNGAL DEGRADATION → FUNGAL FOOD → REFUSE REMOVAL\". Add a restrained qualifier badge: \"CLAIMS SHOWN ARE FROM STUDIED LEAFCUTTER-ANT GARDEN SYSTEMS\".\n\nScientific constraints: keep six-legged insect anatomy correct; show fungal gardens as cultivated biological material, not mushrooms with caps; show no queen anatomy, colony size, geographic range, exact quantities, timelines, evolutionary dates, pesticides, antibiotic bacteria, pathogen species, or other facts not requested. Do not imply all bacteria perform the same function. No logos, watermark, pseudo-text, decorative filler, fantasy bioluminescence, horror styling, giant monster ants, human faces, or tiny unreadable body copy. Prioritize one spectacular macro hero, eight genuinely informative panels, four real mechanism close-ups, and readable labels at final size.",
+    "image": "images/2026-09-22-factual-infographic-factual-infographic-leafcutter-ant-fung.jpg",
+    "thumb": "thumbs/2026-09-22-factual-infographic-factual-infographic-leafcutter-ant-fung.webp",
+    "color": "#4a4331",
+    "date": "2026-09-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "leafcutter-ant-fungus-farm",
+      "imageSha256": "a2daa2026df30c7a00767ff7eb5f4591c8f0e796d886dbc5f88b207e67fe614e",
+      "imageDHash": "87e15bc94fd9cd0d"
+    },
+    "factualInfographic": {
+      "topic": "How leafcutter ants cultivate a fungus garden that converts harvested plant material into food and separates fresh substrate from refuse",
+      "description": "A source-verified underground-farm cutaway showing plant harvest, substrate preparation, fungal inoculation and degradation, gongylidia food bodies, enzyme recycling through fecal droplets, bacterial contributions documented in a studied system, garden care, and separate refuse management.",
+      "sourceNote": "Pacific Northwest National Laboratory https://www.pnnl.gov/news-media/how-leafcutter-ants-cultivate-fungal-garden-degrade-plants-and-provide-insights-future, PLOS ONE https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0009922, and Nature Communications https://www.nature.com/articles/ncomms6675 verify the depicted harvest, preparation, fungal degradation, gongylidia, enzyme return, bacterial contribution, garden care, and separate refuse claims.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-22T20:20:44Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "Pacific Northwest National Laboratory",
+            "title": "How Leafcutter Ants Cultivate a Fungal Garden to Degrade Plants and Provide Insights into Future Biofuels",
+            "sourceType": "government-agency",
+            "url": "https://www.pnnl.gov/news-media/how-leafcutter-ants-cultivate-fungal-garden-degrade-plants-and-provide-insights-future"
+          },
+          {
+            "id": "S2",
+            "publisher": "PLOS ONE",
+            "title": "Microbial Community Structure of Leaf-Cutter Ant Fungus Gardens and Refuse Dumps",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0009922"
+          },
+          {
+            "id": "S3",
+            "publisher": "Nature Communications",
+            "title": "Symbiotic adaptations in the fungal cultivar of leaf-cutting ants",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/ncomms6675"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Leafcutter ants harvest fresh plant material and use it as substrate for a cultivated mutualistic fungus that is their primary food source.",
+            "sourceIds": [
+              "S1",
+              "S2"
+            ]
+          },
+          {
+            "claim": "Workers prepare incoming plant material by chewing it, applying fecal droplets, and inoculating it with fungal mycelium before incorporating it into the garden.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "The cultivated fungus Leucoagaricus gongylophorus is the primary degrader of plant material in the studied garden system.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "The cultivar forms swollen hyphal tips called gongylidia, clustered in staphylae, that provide food to larvae and most food to adult workers in the studied higher-attine system.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Some fungal enzymes eaten with gongylidia remain active through the ant gut and are deposited in fecal fluid onto freshly prepared plant substrate.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Resident bacteria participate in the garden ecosystem; in the PNNL study they transformed digested plant polymers into metabolites used as amino acids and vitamins that support fungal growth and degradation.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Fungus gardens and refuse dumps are spatially and chemically distinct colony environments with distinct microbial communities.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Refuse consists largely of partly degraded plant material removed from the productive garden, creating a plant-biomass degradation gradient across the colony system.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "Workers protect and maintain the cultivar while supplying nutrients and dispersing fungal material within the colony.",
+            "sourceIds": [
+              "S2"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-22-factual-infographic-factual-infographic-immaculate-antlion-",
     "title": "Factual infographic: Immaculate Antlion — The Funnel Trap Underfoot",
     "tests": "Archive-wide factual-topic packet contains no prior Myrmeleon immaculatus or antlion-pit entry. Selected entry is unique, marked factual_subtype=bizarre-insect-life, and planned as one dominant larval hero plus eight panels and four close-ups. Sources were fetched successfully before authoring.; archive_slot=2026-09-22T04:20; concept=immaculate-antlion-larva-sand-pit-trap; factual_subtype: bizarre-insect-life",
