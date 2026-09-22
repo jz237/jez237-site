@@ -1,12 +1,14 @@
-// Remake presets. Level zero preserves the measured reference clock; effects
-// at levels 1–7 are provisional until original difficulty traces are available.
+// The Amiga selector changes course allocations. Former speed multipliers were
+// unreferenced remake guesses. See DIFFICULTY-REFERENCE.md.
+export const normalizeDifficulty = (level = 0) =>
+  Math.max(0, Math.min(7, Math.trunc(Number(level)) || 0));
+
 export const difficultyPreset = (level = 0) => {
-  const n = Math.max(0, Math.min(7, Math.trunc(Number(level)) || 0));
   return {
-    level: n,
-    clockRate: 1 + n * 0.035,
-    enemySpeed: 1 + n * 0.12,
-    machineSpeed: 1 + n * 0.055,
-    force: 1 + n * 0.06,
+    level: normalizeDifficulty(level),
+    clockRate: 1,
+    enemySpeed: 1,
+    machineSpeed: 1,
+    force: 1,
   };
 };

@@ -1,3 +1,4 @@
+import { normalizeDifficulty } from "./difficulty.mjs";
 // PAL reference: World of Longplays, Nfa2etJ84_8, difficulty 0.
 // Nominal timer unit is 64 PAL frames; measured reference intervals vary with load.
 export const AMIGA_RULES = Object.freeze({
@@ -14,14 +15,29 @@ export const CAMPAIGN_ORDER = [
   "silly",
   "ultimate",
 ];
-export const COURSE_TIME = Object.freeze({
-  practice: 60,
-  beginner: 75,
-  intermediate: 45,
-  aerial: 30,
-  silly: 25,
-  ultimate: 25,
-});
+// Original eight six-course rows, aggregate offsets 0x22f0–0x231f.
+// Level 1 Aerial really is 35. See DIFFICULTY-REFERENCE.md.
+export const COURSE_TIME_BY_DIFFICULTY = Object.freeze(
+  [
+    [60, 75, 45, 30, 25, 25],
+    [60, 70, 40, 35, 25, 20],
+    [60, 65, 30, 30, 20, 20],
+    [60, 55, 30, 25, 20, 20],
+    [60, 50, 30, 20, 20, 20],
+    [60, 40, 30, 20, 20, 20],
+    [50, 40, 25, 20, 20, 20],
+    [45, 35, 20, 20, 20, 20],
+  ].map((row) =>
+    Object.freeze(
+      Object.fromEntries(CAMPAIGN_ORDER.map((id, i) => [id, row[i]])),
+    ),
+  ),
+);
+export const COURSE_TIME = COURSE_TIME_BY_DIFFICULTY[0];
+export const courseTime = (id, difficulty = 0) => {
+  const row = COURSE_TIME_BY_DIFFICULTY[normalizeDifficulty(difficulty)];
+  return Object.hasOwn(row, id) ? row[id] : undefined;
+};
 // Original goal flags display these awards before the unused-clock tally.
 export function amigaCourseRules(id) {
   const finishBonus = {
@@ -34,10 +50,11 @@ export function amigaCourseRules(id) {
   }[id];
   return { ...AMIGA_RULES, finishBonus };
 }
-export function nextCourseTime(id, remaining = 0) {
+export function nextCourseTime(id, remaining = 0, difficulty = 0) {
+  const allocation = courseTime(id, difficulty);
   return id === "practice" || id === "beginner"
-    ? COURSE_TIME[id]
-    : Math.floor(remaining) + COURSE_TIME[id];
+    ? allocation
+    : Math.floor(remaining) + allocation;
 }
 export function endingBonus(time, deaths) {
   return (
@@ -47,13 +64,16 @@ export function endingBonus(time, deaths) {
 
 export class CampaignRun {
   constructor(options) {
-    this.options = { ...options };
+    this.options = {
+      ...options,
+      difficulty: normalizeDifficulty(options.difficulty),
+    };
     this.index = 0;
     this.results = [];
     this.nextTimeBonuses = Array(options.players ?? 1).fill(0);
     this.players = Array.from({ length: options.players ?? 1 }, () => ({
       active: true,
-      time: 60,
+      time: courseTime("practice", this.options.difficulty),
       score: 0,
       deaths: 0,
     }));
@@ -65,7 +85,8 @@ export class CampaignRun {
     sim.players.forEach((p, i) => {
       const total = this.players[i];
       p.time =
-        nextCourseTime(this.courseId, total.time) + this.nextTimeBonuses[i];
+        nextCourseTime(this.courseId, total.time, this.options.difficulty) +
+        this.nextTimeBonuses[i];
       p.score = total.score;
       p.campaignDeaths = total.deaths;
       if (!total.active) {

@@ -25,8 +25,10 @@ original dimensions, timing, or complete route coverage.
   and current mm-5 two-player untimed browser campaign through ending with zero
   falls for both players (published 0c263d075 build, September 16).
 - [x] Original manual's 0–7 selector and held-button turbo are represented.
-- [ ] Difficulty effects measured against Amiga. Current 0–7 presets increase
-  clock, enemy, machine and force speeds; UI explicitly calls them provisional.
+- [x] All eight original difficulty allocation rows recovered and applied to
+  single-course/campaign clocks. Unreferenced speed multipliers removed; see
+  DIFFICULTY-REFERENCE.md.
+- [ ] All-level original playback and wall-clock cadence comparison.
 - [ ] Calibrate steering, brakes, friction, restitution and turbo against Amiga.
   The mm-28 turbo acceleration clears a conservative opening-displacement bound;
   the complete trajectory, projection and known-input response are still open.

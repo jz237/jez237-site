@@ -1,13 +1,13 @@
-# Validation — updated 2026-09-21
+# Validation — updated 2026-09-22
 
 ## Current outcome
 
-**135 automated tests pass. All six campaign races and all three bonus courses
+**184 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-16`.
+Current simulation/replay version: `rapier-0.20.0-mm-30`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -1170,3 +1170,20 @@ The local production browser starts a timed Intermediate race above the old
 warnings/errors. The production build and whitespace checks pass.
 
 The final full suite passes 179/179 tests (280202.68ms), with no skipped tests.
+
+### September 22 — original difficulty allocations
+
+All eight original six-course time rows now apply to single-course and campaign
+play. Unreferenced difficulty multipliers for the timer, enemies, machinery and
+force zones are removed. The selected difficulty is saved and restored on reload.
+See [DIFFICULTY-REFERENCE.md](DIFFICULTY-REFERENCE.md) for source evidence and limits.
+
+Full suite: **184/184 pass**, 281146.99 ms. Production build passes. Five new
+checks cover the original 48-byte table, actual courses at all eight levels,
+carryover/winner/reset behavior, invariant motion, custom courses and recordings.
+Browser verification: hardest Practice begins with 45 clock units; difficulty 7
+survives a reload; settings describe the new behavior. No captured console errors.
+
+The mm-30 timed campaign measurement is unchanged from mm-29 at difficulty zero:
+solo and paired runs reach Silly with zero falls, but Ultimate still times out.
+Full timed campaign and original control/cadence calibration remain open.
