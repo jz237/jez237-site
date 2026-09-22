@@ -2,6 +2,7 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import {
   createPegSequence,
+  pegPose,
   stepPegSequence,
   sourcePegContact,
   advanceAerialPegs,
@@ -99,6 +100,10 @@ test("each source selector raises exactly three indexed pegs, including both non
         s.beds[i].selected,
         expected.map((n) => n + i * 12),
       );
+      assert.deepEqual(
+        s.beds[i].drawn,
+        expected.map((n) => n + i * 12 + (pattern === 3 ? 2 : 0)),
+      );
       assert.equal(
         s.levels.slice(i * 12, i * 12 + 12).filter(Boolean).length,
         3,
@@ -188,7 +193,7 @@ test("physical peg mesh lifts a marble, does not move a distant marble, and rest
   const c = fixture(),
     probe = createPegSequence(237);
   stepPegSequence(probe, true);
-  const peg = c.parts[probe.beds[0].selected[0] + 1];
+  const peg = c.parts[probe.beds[0].drawn[0] + 1];
   c.starts[0] = { x: peg.x, y: RADIUS + 0.025, z: peg.z };
   const sim = new Simulation(c, { seed: 237, players: 2, untimed: true });
   try {
@@ -220,6 +225,78 @@ test("physical peg mesh lifts a marble, does not move a distant marble, and rest
     assert.ok(Math.abs(result.players[1].z - c.starts[1].z) < 0.02);
     sim.restore(snapshot);
     assert.deepEqual(run(), result);
+  } finally {
+    sim.dispose();
+  }
+});
+
+test("sprite diagonal occupies a straight line of real solids and rises by recovered pixel heights", () => {
+  const c = fixture(),
+    s = createPegSequence();
+  const samples = [0, 3, 0, 3, 1, 3, 0, 0, 0, 0];
+  stepPegSequence(s, true, () => samples.shift());
+  assert.deepEqual(s.beds[0].drawn, [2, 4, 6]);
+  assert.deepEqual(s.beds[1].drawn, [17, 19, 21]);
+  assert.equal(
+    s.levels[0],
+    0,
+    "Original stray collision cell must remain flush",
+  );
+  assert.equal(
+    s.levels[6],
+    1,
+    "Drawn end of diagonal needs its actual collider",
+  );
+  const p = { ...c.parts[1], motion: { ...c.parts[1].motion, amplitude: 19 } };
+  for (const [level, height] of [
+    [0, 0],
+    [1, 5],
+    [2, 12],
+    [3, 17],
+    [4, 19],
+    [1.5, 8.5],
+    [2.5, 14.5],
+  ])
+    assert.ok(Math.abs(pegPose(p, level).position.y - p.y - height) < 1e-10);
+});
+
+test("native peg eruption comes from its rising surface and leaves the original stray collision cell safe", () => {
+  const c = fixture();
+  c.nativeDynamics = { rate: 20 };
+  for (const p of c.parts.slice(1))
+    p.h = p.motion.amplitude = 19 * c.nativeCamera.heightScale;
+  // Seed 237 starts the top bed's fourth pattern. Cell 6 is drawn but omitted
+  // by the original mask; cell 0 is marked by that mask but not actually drawn.
+  c.starts = [6, 0].map((i) => ({
+    x: c.parts[i + 1].x,
+    y: RADIUS + 0.025,
+    z: c.parts[i + 1].z,
+  }));
+  const sim = new Simulation(c, { seed: 237, players: 2, untimed: true });
+  try {
+    let maximumUp = 0,
+      peak = 0;
+    for (let i = 0; i < 80; i++) {
+      sim.step();
+      maximumUp = Math.max(maximumUp, sim.body(sim.players[0]).linvel().y);
+      peak = Math.max(peak, sim.body(sim.players[0]).translation().y);
+      assert.equal(
+        sim.events.some((e) => e.type === "spring"),
+        false,
+      );
+    }
+    const wanted = 7 * c.nativeCamera.heightScale * c.pegSequence.rate;
+    assert.ok(
+      Math.abs(maximumUp - wanted) < 1,
+      `physical speed ${maximumUp}, sprite speed ${wanted}`,
+    );
+    assert.ok(peak > 3);
+    const safe = sim.body(sim.players[1]).translation();
+    assert.ok(Math.abs(safe.y - RADIUS) < 0.03);
+    assert.ok(
+      Math.hypot(safe.x - c.starts[1].x, safe.z - c.starts[1].z) < 0.03,
+    );
+    assert.equal(sim.players[0].deaths + sim.players[1].deaths, 0);
   } finally {
     sim.dispose();
   }

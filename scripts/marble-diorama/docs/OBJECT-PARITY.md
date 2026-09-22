@@ -30,8 +30,9 @@ open. See [AERIAL-PADDLE.md](AERIAL-PADDLE.md). Public Aerial is unchanged.
 
 The local peg follow-up recovers the separate three-bed selector, four group
 animation tables, 13-update strokes, 0/16/32/48-update waits and region-4/5
-activation. Independent table traces match 12,000 bed observations. Original
-sprite grouping versus the three selected collision cells, eruption response,
+activation. Independent table traces match 12,000 bed observations. Decoded original sprites now establish three pegs per group, a true fourth-pattern
+diagonal and unequal rise levels. Physical solids follow those sprites, correcting
+the original's shifted fourth-pattern collision mask. Planar scatter,
 random-state/cadence and sound assignment remain open. See [AERIAL-PEGS.md](AERIAL-PEGS.md).
 The published video-based selector remains unchanged until native-board release.
 
