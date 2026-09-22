@@ -14,7 +14,7 @@ original dimensions, timing, or complete route coverage.
 | Intermediate | PARTIAL: split towers, islands, acid room, orange pipe, lower green lanes; both upper starts and left bypass pass; orange pipe, continuous traveling-wave strip and right lane now pass | Articulated curling munchers with shared collision shapes, and deforming acid with shared concave sensors; five board-axis patrols using observed straight legs/turns, with unverified return legs and speeds; acid contacts dissolve and reassemble using a sampled Ultimate sequence; continuous physical strip with reference-informed raised crests, flat intervals and approximately 2.4s cadence; exact profile/scale and lower-lane shape remain open; sampled lower cyan sections are static | 40 units added to carryover; orange pipe pays 2000; paired starts and independent completion pass; scoring/boundary parity open |
 | Aerial | PARTIAL: crossed narrow rails, zigzags, vacuum turns, lower red/yellow towers; two-player demos yield at the crossing and both complete without falls | Directional vacuums, steelie, round retracting peg banks implemented; red hinged cup physically launches; exact return destination, dimensions and measured hazard cycles open | 30 units added; normal-input untimed runs pass; timed full-campaign balance open |
 | Silly | PARTIAL: reverse uphill course, mini room, flared powered red uplift with two working outlets, two mazes, bird field and split goal climbs; solo demo collects six of nine miniatures, paired paths collect three each, all finish without falls; exact original route coverage open | Nine collectible miniatures: three steelies, three curling munchers and three deforming puddles (+500/+3), flapping purple birds with articulated collision solids, pyramids; demos anticipate bird launches; exact flight pattern, original uplift selection/transfer law and decorative loops open | 25 units added; upward transfer pays 2000; timed solo campaign now completes Silly; full score/time parity open |
-| Ultimate | PARTIAL: one launcher island with alternative left/right landing islands, split acid/muncher rooms, ice pyramids, branching finish; left route and authored right hazard-room path pass with recoveries; exact original route coverage open | Contact-triggered hinged launcher arms and aimed impulses, curling munchers, deforming acid with provisional trajectories and reference-informed dissolve/recovery, ice, three sequential disappearing bridge tiles; original launcher law and exact bridge pattern open | 25 units added; 6000 goal and ordinary unused-clock awards, plus separate 20,000 + 1,000/time − 1,000/fall ending implemented; complete timed campaign acceptance open |
+| Ultimate | PARTIAL: one launcher island with alternative left/right landing islands, split acid/muncher rooms, ice pyramids, branching finish; left route and authored right hazard-room path pass with recoveries; exact original route coverage open | Contact-triggered hinged launcher arms and aimed impulses, curling munchers, deforming acid with provisional trajectories and reference-informed dissolve/recovery, ice, three sequential disappearing bridge tiles; original launcher law and exact bridge pattern open | 25 units added; 2000 completed launcher-landing award with reconstructed repeat/paired policy; 6000 goal and ordinary unused-clock awards, plus separate 20,000 + 1,000/time − 1,000/fall ending implemented; complete timed campaign acceptance open |
 
 ## Global campaign checks
 
@@ -101,3 +101,12 @@ briefly suppresses steering while momentum, collisions and independent clocks
 continue. It does not count as a death. Shared-clock blue marks and HUD feedback
 make the state visible. See LANDING-DIZZINESS.md for the Amiga observations,
 relative-impact query, replay checks and provisional threshold/duration law.
+
+
+### Ultimate launch scoring (mm-24)
+
+The traced original 2000 award occurs on arrival at the left landing island,
+before the ice bridge. Completed launcher flights now pay on real landing, with
+per-player claims and replay/editor-safe destination references. Exact contact
+boundary and original right-route/repeat/paired policy remain unverified; see
+ULTIMATE-REFERENCE.md. Geometry and timed campaign balancing remain open.

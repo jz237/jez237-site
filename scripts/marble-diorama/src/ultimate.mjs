@@ -29,6 +29,10 @@ export function ultimateCourse() {
           material: "brass",
           motion: { axis: "launch", amplitude: 0.42, period: 0.9 },
           launch: { forward: 6.5, lateral: sign * 4, up: 5, velocity: true },
+          launchBonus: {
+            target: `${sign < 0 ? "left" : "right"}-landing-island`,
+            score: 2000,
+          },
         },
       ),
     ),
