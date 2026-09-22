@@ -57,10 +57,12 @@ The change is applied through grounded torque and native friction, preserving
 airborne angular momentum and physical rolling. At 1.2s, translation and
 integrated rolling differ by about 0.25%; contact error remains below 1% radius.
 
-The demo chooses half-strength turbo input to retain its established 2.2 torque
-and safe route behavior. It uses the same controls and simulation as the player;
-there is no separate movement rule or positional correction. Replay/record
-version mm-28 separates the stronger player response from earlier recordings.
+The initial mm-28 release kept the demo at half-strength turbo (2.2 torque).
+The subsequent [demo steering update](DEMO-STEERING.md) uses up to 75% input on
+firm track, while retaining gentler input on ice and before slow approaches.
+It uses the same controls and simulation as the player; there is no separate
+movement rule or positional correction. Replay/record version mm-28 separates
+the stronger player response from earlier recordings.
 
 The Aerial paddle fixture was checked at both half and full turbo. Both activate
 the physical paddle and land on the intended upper platform without a death.
@@ -82,7 +84,8 @@ Private experiments increasing the demo's broad-route speed factor from 1.6 to
 1.8/2.0 reduced Practice by less than a second but made Silly slower, changing
 its physical outlet selection. Combining a speed increase with later braking
 also missed approaches and caused timeouts. Those experiments were discarded.
-The source retains the published demo policy with proportional input strength.
+The broad-route speed and stopping-distance profiles remain unchanged; the
+subsequent steering update changes input strength and grip anticipation only.
 Do not infer calibrated human physics or full timed acceptance from a successful
 demo, or change original clocks to cover a steering/geometry mismatch.
 

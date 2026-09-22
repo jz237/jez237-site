@@ -32,9 +32,10 @@ original dimensions, timing, or complete route coverage.
   the complete trajectory, projection and known-input response are still open.
   See [CONTROL-RESPONSE.md](CONTROL-RESPONSE.md).
 - [x] Timed solo and two-player campaigns through Aerial, normal bounded input and zero falls.
-- [x] Timed solo campaign through Silly, six miniature pickups and zero falls.
+- [x] Timed solo and two-player campaigns through Silly with zero falls; solo
+  collects six miniatures, paired routes collect three each. See DEMO-STEERING.md.
 - [ ] Full timed campaign completion and every alternate route. Current timed
-  measurement fails in Ultimate for solo and Silly for two players; see VALIDATION.md.
+  measurement fails in Ultimate for both solo and two players; see VALIDATION.md.
 - [ ] Original two-player winner/catch-up/time-bonus rules and simultaneous ties.
 - [x] Fixed finish awards of 1000–6000, including Ultimate's unused-clock award, verified against original footage.
 - [ ] Exact progress, steelie paired attribution, training gate and complete landing-target award formula. See PRACTICE-SCORING.md.

@@ -547,9 +547,9 @@ test("pyramid default thickness and all Practice mesh vertices are finite", () =
 });
 
 for (const players of [1, 2])
-  test(`timed ${players}-player campaign carries the original clock through ${players === 1 ? "Silly" : "Aerial"} without falls`, () => {
+  test(`timed ${players}-player campaign carries the original clock through Silly without falls`, () => {
     const run = new CampaignRun({ players, untimed: false, campaign: true });
-    for (const course of campaignCourses().slice(0, players === 1 ? 5 : 4)) {
+    for (const course of campaignCourses().slice(0, 5)) {
       const sim = new Simulation(course, run.options);
       const drivers = sim.players.map(() => new DemoController());
       run.prepare(sim);
@@ -572,7 +572,7 @@ for (const players of [1, 2])
       run.complete(sim);
       sim.dispose();
     }
-    assert.equal(run.courseId, players === 1 ? "ultimate" : "silly");
+    assert.equal(run.courseId, "ultimate");
   });
 
 test("Ultimate demo crosses the complete changing final room without falls for both marbles", () => {

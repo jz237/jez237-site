@@ -1115,3 +1115,26 @@ covers gentle and full input. All 15 object-animation tests pass (9258.13ms).
 The final full suite passes all 175 tests (294013.66ms). Production build and
 whitespace checks pass. Exact original control calibration and full timed
 campaign completion remain incomplete.
+
+### September 22 - grip-aware demo steering, mm-28
+
+The demo uses more of the available ordinary turbo input on firm track (3.3
+torque), retaining 2.2 on ice and before authored slow approaches. Human controls,
+course geometry, clocks, target speeds and hazard cycles are unchanged. See
+DEMO-STEERING.md for the rejected variants and remaining calibration limits.
+
+Both timed campaign runs now finish through Silly with bounded input and zero
+falls. Solo Silly completes in 57.2667s with 21.2604 clock units remaining. Paired
+Silly completes in 54.1417s with 12.9844 / 5.7018 units remaining; the first marble
+finishes at 52.50s. Both campaigns still time out in Ultimate: solo at 58.8833s,
+paired at 47.3667s overall, all with zero falls. These are race-clock measurements,
+separate from the untimed browser demonstration. The committed measurement JSON
+records every course and player. Full timed acceptance remains open.
+
+The timed regression now requires both players to finish the first five races
+with positive time. Both complete Ultimate alternate-route checks retain their
+zero-fall assertions. The final full suite passes **175/175** tests
+(283270.10ms), with no skipped checks. The production build passes. The local
+production browser's paired Silly demo completes with 9385 / 9383 points, zero
+falls and no captured warnings/errors. Existing input recordings retain mm-28
+physics; the added ground-friction reading only guides the demo controller.
