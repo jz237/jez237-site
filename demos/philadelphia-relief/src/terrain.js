@@ -11,7 +11,11 @@
  * is ever re-uploaded.
  */
 
-import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026090907';
+import { prepareInBatches } from './background-work.js?v=philly-2026092207';
+
+import { hexToRgb, getTheme, bakeRamp } from './themes.js?v=philly-2026092121';
+
+import { BATHYMETRY_GLSL, bathymetryUniforms } from './bathymetry-shader.js?v=philly-2026092201';
 
 const VERTEX_SHADER = /* glsl */ `
   uniform sampler2D uHeight;
@@ -36,13 +40,16 @@ const VERTEX_SHADER = /* glsl */ `
     return clamp(c + sign(t) * span * d, 0.0, 1.0);
   }
 
+  ${BATHYMETRY_GLSL}
   void main() {
     float k = max(uWarp, 0.001);
     vec2 g = vec2(warpAxis(uv.x, uCenter.x, k), warpAxis(uv.y, uCenter.y, k));
     vUv = g;
 
     float h = texture2D(uHeight, g).r;
-    vElev = h;
+    vec2 bed = bathymetryAt(g);
+    vElev = mix(h, bed.x, bed.y);
+    h = mix(h, bed.x * uBathScale, bed.y);
 
     vec3 pos = vec3((g.x - 0.5) * uRegionSize.x,
                     h * uExag * uReliefOn,
@@ -105,6 +112,7 @@ const FRAGMENT_SHADER = /* glsl */ `
   varying vec3  vWorld;
   varying float vElev;
 
+  ${BATHYMETRY_GLSL}
   void main() {
     // ---- surface normal from the height field --------------------------
     float hL = texture2D(uHeight, vUv - vec2(uTexel.x, 0.0)).r;
@@ -128,11 +136,15 @@ const FRAGMENT_SHADER = /* glsl */ `
     tE = pow(tE, 0.78);
     vec3 reliefBase = texture2D(uRamp, vec2(tE, 0.5)).rgb;
     vec3 aerialBase = texture2D(uImagery, vUv).rgb;
+    // Uniform branches avoid fetching inactive textures on every terrain pixel.
+    if (uImageryCityOn > 0.0) {
     vec2 cityUv = (vUv - uImageryCityBounds.xy)
       / (uImageryCityBounds.zw - uImageryCityBounds.xy);
     float cityEdge = min(min(cityUv.x, 1.0 - cityUv.x), min(cityUv.y, 1.0 - cityUv.y));
     aerialBase = mix(aerialBase, texture2D(uImageryCity, clamp(cityUv, 0.0, 1.0)).rgb,
       smoothstep(0.0, 0.08, cityEdge) * uImageryCityOn);
+    }
+    if (uImageryDetailOn > 0.0) {
     vec2 previousSpan = max(
       uImageryDetailPrevBounds.zw - uImageryDetailPrevBounds.xy,
       vec2(0.00001));
@@ -165,6 +177,7 @@ const FRAGMENT_SHADER = /* glsl */ `
     ) * 0.25;
     detailBase = clamp(detailBase * 1.16 - detailBlur * 0.16, 0.0, 1.0);
     aerialBase = mix(aerialBase, detailBase, detailMix);
+    }
 
     // Lift the baked orthoimage shadows and restore restrained local contrast.
     // The photography already contains real sunlight; the DEM should add only
@@ -212,12 +225,14 @@ const FRAGMENT_SHADER = /* glsl */ `
     float aerialShade = clamp(0.97 + ndl * 0.03, 0.94, 1.03);
     // A sculpted miniature at regional scale, with terrain self-shadowing.
     float castShade = 1.0;
+    if (uDiorama > 0.0) {
     for (int i = 1; i <= 7; i++) {
       float reach = float(i * i) * 115.0;
       vec2 probe = vUv + uSunDir.xz * reach / uRegionSize;
       float ridge = texture2D(uHeight, clamp(probe, 0.0, 1.0)).r * uExag;
       float ray = vWorld.y + reach * uSunDir.y;
       castShade = min(castShade, 1.0 - smoothstep(0.0, 260.0, ridge - ray) * .40);
+    }
     }
     float miniatureShade = (.75 + max(ndl, 0.0) * .42) * mix(.86, 1.0, ao) * castShade;
     aerialShade = mix(aerialShade, miniatureShade, uDiorama);
@@ -260,6 +275,31 @@ const FRAGMENT_SHADER = /* glsl */ `
       color = mix(color, uContourIndexColor, clamp(index * amount, 0.0, 1.0));
     }
 
+    // Surveyed riverbed: retain true elevations for colors/contours while
+    // stretching geometry only. Missing data keeps the original map surface.
+    vec2 bed = bathymetryAt(vUv);
+    if (bed.y > .5) {
+      float below = -bed.x;
+      vec3 shallow = vec3(.55, .69, .42), middle = vec3(.055, .42, .43);
+      vec3 deep = vec3(.016, .11, .24);
+      vec3 bedColor = below < 8.0 ? mix(shallow, middle, smoothstep(0.0, 8.0, below))
+        : mix(middle, deep, smoothstep(8.0, 22.0, below));
+      vec2 l = bathymetryAt(vUv - vec2(uBathTexel.x, 0.0));
+      vec2 r = bathymetryAt(vUv + vec2(uBathTexel.x, 0.0));
+      vec2 nBed = bathymetryAt(vUv - vec2(0.0, uBathTexel.y));
+      vec2 sBed = bathymetryAt(vUv + vec2(0.0, uBathTexel.y));
+      float dx = mix(bed.x, r.x, r.y) - mix(bed.x, l.x, l.y);
+      float dz = mix(bed.x, sBed.x, sBed.y) - mix(bed.x, nBed.x, nBed.y);
+      vec3 bedNormal = normalize(vec3(-dx * uBathScale * uExag
+        / (2.0 * uBathTexel.x * uRegionSize.x), 1.0,
+        -dz * uBathScale * uExag / (2.0 * uBathTexel.y * uRegionSize.y)));
+      bedColor *= .74 + .38 * max(0.0, dot(bedNormal, normalize(vec3(.4,.8,-.3))));
+      float phase = below / 2.0, width = max(fwidth(phase), .0001);
+      float line = 1.0 - smoothstep(0.0, width * 1.2, min(fract(phase), 1.0-fract(phase)));
+      line *= 1.0 - smoothstep(.2, .7, width);
+      color = mix(bedColor, vec3(.63,.88,.81), line * .32);
+    }
+
     // ---- atmosphere ----------------------------------------------------
     vec3 toFrag = vWorld - uCameraPos;
     float dist = length(toFrag);
@@ -293,12 +333,13 @@ const FRAGMENT_SHADER = /* glsl */ `
  * altered the bytes on their way through the canvas the elevations would be
  * quietly wrong, and silently-wrong terrain is worse than none.
  */
-export function decodeHeightmap(imageData, meta) {
+function* heightmapSteps(imageData, meta) {
   const { width, height } = meta;
   const { min: elevMin, step } = meta.elevation;
   const px = imageData.data;
   const grid = new Float32Array(width * height);
   for (let i = 0, p = 0; i < grid.length; i += 1, p += 4) {
+    if ((i & 32767) === 0) yield;
     grid[i] = elevMin + (px[p] * 256 + px[p + 1]) * step;
   }
 
@@ -311,12 +352,21 @@ export function decodeHeightmap(imageData, meta) {
   return { grid, probeFailures: failures };
 }
 
+export function decodeHeightmap(...args) {
+  const work = heightmapSteps(...args);
+  for (;;) { const step = work.next(); if (step.done) return step.value; }
+}
+export function prepareHeightmap(imageData, meta, options) {
+  return prepareInBatches(heightmapSteps(imageData, meta), options);
+}
+
 /** Box-downsample the height grid for the cheap ambient-occlusion term. */
-export function buildMacroGrid(grid, width, height, size = 256) {
+function* macroSteps(grid, width, height, size = 256) {
   const out = new Float32Array(size * size);
   const sx = width / size;
   const sy = height / size;
   for (let y = 0; y < size; y += 1) {
+    yield;
     const y0 = Math.floor(y * sy);
     const y1 = Math.min(height, Math.floor((y + 1) * sy));
     for (let x = 0; x < size; x += 1) {
@@ -334,6 +384,14 @@ export function buildMacroGrid(grid, width, height, size = 256) {
     }
   }
   return out;
+}
+
+export function buildMacroGrid(...args) {
+  const work = macroSteps(...args);
+  for (;;) { const step = work.next(); if (step.done) return step.value; }
+}
+export function prepareMacroGrid(grid, width, height, size, options) {
+  return prepareInBatches(macroSteps(grid, width, height, size), options);
 }
 
 export const MESH_SEGMENTS = {
@@ -365,9 +423,10 @@ export function createTerrain(THREE, options) {
   const macroSize = Math.round(Math.sqrt(macro.length));
   const macroTex = makeHeightTexture(THREE, macro, macroSize, macroSize);
   const rampTex = makeRampTexture(THREE, 'dusk');
-  const imageryTex = makeImageryTexture(THREE, imagery);
-  const cityTex = makeImageryTexture(THREE, cityImagery);
-  const reefTex = makeImageryTexture(THREE, reefImagery);
+  let imageryTex = makeImageryTexture(THREE, imagery), imageryReady = !!imagery;
+  let cityTex = makeImageryTexture(THREE, cityImagery);
+  let reefTex = makeImageryTexture(THREE, reefImagery);
+  const districtReady = { cityImagery: !!cityImagery, reefImagery: !!reefImagery };
   let reefDistrict = false;
   const b = meta.bounds;
   const cityBounds = new THREE.Vector4(
@@ -381,6 +440,7 @@ export function createTerrain(THREE, options) {
   let hasDetail = false;
 
   const uniforms = {
+    ...bathymetryUniforms(THREE, heightTex),
     uHeight: { value: heightTex },
     uMacro: { value: macroTex },
     uRamp: { value: rampTex },
@@ -449,7 +509,21 @@ export function createTerrain(THREE, options) {
     material,
     uniforms,
     segments,
-    hasImagery: !!imagery,
+    get hasImagery() { return imageryReady; },
+    setImagery(image) {
+      const next = makeImageryTexture(THREE, image);
+      imageryTex.dispose(); imageryTex = next; imageryReady = true;
+      uniforms.uImagery.value = next;
+    },
+
+    setDistrictImage(id, image) {
+      const next = makeImageryTexture(THREE, image);
+      if (id === 'reefImagery') { reefTex.dispose(); reefTex = next; }
+      else { cityTex.dispose(); cityTex = next; }
+      districtReady[id] = true;
+      uniforms.uImageryCity.value = reefDistrict ? reefTex : cityTex;
+      uniforms.uImageryCityOn.value = districtReady[reefDistrict ? 'reefImagery' : 'cityImagery'] ? 1 : 0;
+    },
 
     setDistrict(lon, lat) {
       const useReef = lon > -74.94 && lat > 40.10;
@@ -457,7 +531,7 @@ export function createTerrain(THREE, options) {
       reefDistrict = useReef;
       uniforms.uImageryCity.value = useReef ? reefTex : cityTex;
       uniforms.uImageryCityBounds.value = useReef ? reefBounds : cityBounds;
-      uniforms.uImageryCityOn.value = (useReef ? reefImagery : cityImagery) ? 1 : 0;
+      uniforms.uImageryCityOn.value = districtReady[useReef ? 'reefImagery' : 'cityImagery'] ? 1 : 0;
     },
 
     setDetailImagery(image, bounds, region, immediate = false) {

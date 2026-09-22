@@ -1,3 +1,4 @@
+import { prepareInBatches } from './background-work.js?v=philly-2026092207';
 /** Spatially indexed mapped woodland, including unwooded interior rings. */
 export function inRing(x, y, ring) {
   let inside = false;
@@ -9,9 +10,10 @@ export function inRing(x, y, ring) {
   return inside;
 }
 
-export function woodlandIndex(doc) {
+function* indexSteps(doc) {
   const buckets = new Map(), size = .025;
   for (const feature of doc?.features || []) {
+    yield;
     const g = feature.geometry;
     const polygons = g?.type === 'Polygon' ? [g.coordinates]
       : g?.type === 'MultiPolygon' ? g.coordinates : [];
@@ -33,6 +35,15 @@ export function woodlandIndex(doc) {
   return (lon, lat) => (buckets.get(`${Math.floor(lon / size)},${Math.floor(lat / size)}`) || [])
     .some(p => lon>=p.west && lon<=p.east && lat>=p.south && lat<=p.north
       && inRing(lon,lat,p.rings[0]) && !p.holes.some(r => inRing(lon,lat,r)));
+}
+
+export function woodlandIndex(doc) {
+  const work = indexSteps(doc);
+  for (;;) { const step = work.next(); if (step.done) return step.value; }
+}
+
+export function prepareWoodland(doc, options) {
+  return prepareInBatches(indexSteps(doc), options);
 }
 
 /** Keep the enlarged illustrative crown inside the mapped forest's edge. */

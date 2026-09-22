@@ -1,3 +1,214 @@
+## Browser build and performance
+
+After changing JavaScript in `src/`, `app.css`, or the vendored library, run
+`npm run build`, then `npm run check` in this directory before publishing.
+Commit the generated `load/` files and updated `index.html` together. The check
+rejects stale or altered bundles. Source modules remain readable and tested.
+Install the pinned development dependency with `npm install` if needed.
+
+The build deduplicates versioned module imports, minifies code, and splits
+optional exhibits into lazy chunks. Content-hashed output uses immutable browser
+caching. Elevation and vectors start the map while the original full-resolution
+regional photograph finishes downloading; the image is never resized for this.
+
+Tree placement, elevation decoding, and the shading grid prepare in short cooperative
+batches. The same coordinates, elevation probes, crown counts, and final imagery
+resolutions are retained. Tree jobs are cancelled when their tile is evicted or
+when the scene closes. Visible imagery is queued before speculative zoom work;
+large jumps abort obsolete downloads, with one bounded grace period for a nearby
+transfer whose reported bytes show it is almost complete.
+
+After 1.2 seconds without camera movement and once visible detail is complete,
+the streamer warms up to four adjacent 512-pixel previews, one at a time. It skips
+this on data-saving, 2G/3G, low-bandwidth, or measured slow connections. These
+previews use the existing bounded cache and refine to the original full detail
+when brought into view. Hidden pages start no new tile jobs.
+
+## Aircraft over the region — September 20, 2026
+
+**Optional home-computer relay.** Hosted requests were refused by public providers,
+while adsb.fi works from the owner's computer. When the Pages secret
+`AIRCRAFT_RELAY_KEY` is configured, the endpoint uses the authenticated
+`philly-aircraft-relay` Worker and a Cloudflare Quick Tunnel to that computer.
+The relay is experimental: it depends on the computer being awake, connected,
+and running the helper. The interface identifies home-relayed reports and shows
+an unavailable state on failure; it never substitutes simulated flights.
+Provider access denials stop browser retries, and the local relay holds that
+failure for one hour. No paid aircraft service is used.
+
+An opt-in aircraft layer shares geographic reports between the Three.js diorama
+and Cesium photographic view. It includes original generic 3D models, hover/tap
+details, airborne/low-altitude/large-aircraft/helicopter filters, session flight
+trails, and aircraft-follow with a return-to-map action. Aircraft are displayed
+only inside the existing Philadelphia bounds. Models are enlarged for visibility;
+the card retains reported altitude and identifies its measurement type. Diorama
+height adds the exaggerated ground offset, while the photographic view prefers
+reported geometric height and labels the barometric fallback.
+
+`functions/demos/philadelphia-relief/aircraft.js` retrieves one fixed 45-nautical-mile
+circle from the public adsb.fi API, through the home relay when configured, and filters to the map rectangle. The response
+is bounded to 1 MiB, validated, stripped to display fields, and cached for 15
+seconds per Cloudflare edge. The home relay also combines concurrent requests
+and enforces 15 seconds between provider requests across all visitors. Relay
+authentication stays in Cloudflare secrets and a private local configuration,
+never browser code. There are no paid services, idle aircraft polling,
+arbitrary upstream URLs, or permanent flight-history storage.
+The browser polls every 15 seconds only while enabled and visible; failures back
+off to 30 seconds, or at least five minutes for provider rate limits. Disabling,
+hiding the tab, and leaving the page cancel requests. ADSB.lol was tested first,
+but returned HTTP 429 from the production hosting network. Access-denied responses
+pause retries rather than repeatedly asking a provider that refused access.
+
+Local helper source and operation: `scripts/philadelphia-aircraft/README.md`.
+The gateway stores only the current tunnel address in KV, validates its exact
+hostname and the receiving helper, and does not expose a general-purpose proxy.
+
+Movement interpolates actual observations with a 20-second playback buffer and
+never extrapolates future positions. Reduced-motion users receive direct report
+updates. Reports older than 45 seconds are marked stale, following stops, and
+aircraft disappear after 120 seconds. Trails collect up to three minutes of
+observations in the current session and break at implausible jumps or long gaps.
+Coverage, latency, and provider availability vary; this is not a navigation feed.
+
+Source and terms: [adsb.fi open data](https://github.com/adsbfi/opendata).
+The public API permits personal, non-commercial use with attribution; commercial
+use requires contacting the provider. Attribution and terms are linked beside the toggle.
+Original model source: `src/aircraft-model.js`; rebuild its Cesium GLB with
+`node tools/build-aircraft.mjs`.
+
+## Expanded regional previews — September 20, 2026
+
+The camera layer now includes 728 mapped views: 569 PennDOT/511PA locations,
+12 FOX 29 image widgets, 54 AtTheShore neighborhood views, and all 93 DelDOT
+camera locations inside the existing map bounds. This covers the identified
+provider catalogs, not every private or public camera in the region.
+
+159 entries support an image or video preview. AtTheShore snapshots load on
+hover with explicit unknown-capture-time labeling; where supplied, its own
+sandboxed player opens with **Play provider video here**. DelDOT uses its public
+HTTPS HLS feed, a pinned hls.js 1.7.3 runtime loaded only on demand, muted playback,
+and a large viewer with fullscreen controls. Gold PennDOT pins still open the
+exact 511PA camera. No PennDOT stream, private key, signed URL or copied image is
+included. Provider outages display a retry message rather than a false live claim.
+
+Only one card's media loads at once. Closing, moving the map, switching cameras,
+disabling the layer or hiding the tab destroys the player and cancels timers.
+DelDOT sessions stop after 60 seconds, matching its official viewer's session
+length. The separate viewer also stops on tab hide and page exit.
+
+Provider coordinates are retained, with neighborhood pins labeled approximate.
+Data provenance is in `data/regional-cameras.json`. Source checks on September 20
+found 54/54 snapshot URLs and 92/93 DelDOT manifests responding; NCAM180 returned
+404. Responses do not guarantee uninterrupted video or fresh snapshots. Browser
+playback and error behavior are checked separately.
+
+The Philadelphia-only response policy admits the precise image, iframe and
+video hosts. AtTheShore executes inside a sandboxed cross-origin iframe; its
+scripts are not added to the parent document's script policy. HLS segments travel
+directly from DelDOT; they are never proxied or stored by this site.
+
+Sources: https://attheshore.com/city/Philadelphia/PA and its individual camera
+pages; https://www.attheshore.com/city/Camden/NJ; https://deldot.gov/map/ and the public feed it uses,
+https://tmc.deldot.gov/json/videocamera.json?id=4yte.
+
+## Cameras anchored to the diorama — September 20, 2026
+
+Check **Cameras on map** in the View panel, or choose **Show camera pins on the
+diorama** in Cameras & local views. Green pins offer twelve FOX 29 / WMVision image
+previews. Hover, focus or tap a pin to preview; click its image or full-view link
+to open the provider's camera page. Numbered groups list nearby cameras and offer
+a zoom action. Filter to image previews or jump directly to a named webcam.
+
+Gold pins represent 569 camera locations from 511PA's current public map, bounded
+to this diorama. Clicking a single gold pin opens that specific camera on 511PA
+in a new tab; numbered groups offer named direct camera links. Hover or focus
+still shows the camera's name and provider. Names and IDs come from the official
+map and camera tooltips, without matching IDs from a different inventory.
+Provider availability varies. This is not an exhaustive camera registry.
+The twelve preview views include two extra panoramic angles at Independence Mall
+and the stadium complex, covering ten approximate hosts or viewed areas.
+
+Only one image widget loads at a time, after a short hover delay. Its provider
+frame is sandboxed without scripts, storage or navigation privileges. It reloads
+once a minute while the preview remains open; moving the map, disabling cameras,
+closing the preview or hiding the tab removes it. No image is copied, proxied,
+or represented as live video. The scoped Philadelphia CSP admits only the
+api.wetmet.net frame origin. Source outages retain the provider page link.
+
+Pins project through the active renderer (Three.js or Cesium). Webcam positions
+are approximate hosts or viewed areas, explicitly labeled. Host addresses come
+from FOX 29 camera pages; address coordinates use Census geocoding where matched.
+Area-only locations identify State Street, Independence Mall and PHL, not mounts.
+PennDOT coordinates come directly from its published 511PA map.
+
+Sources checked 2026-09-20:
+https://www.fox29.com/live-cameras and the individual camera pages linked in
+`src/camera-data.js`; https://geocoding.geo.census.gov/geocoder/;
+https://511pa.com/map/mapIcons/Cameras and
+https://511pa.com/tooltip/Cameras/{id}?lang=en.
+`data/camera-locations.json` retains source and retrieval metadata, drops internal
+image addresses and includes only EXISTING records within the diorama bounds.
+
+Validation: 310 tests, including complete cluster membership, source URL and
+coordinate checks, phone popup bounds, and the scoped iframe policy.
+
+## Regional cameras, panoramas and observations — September 20, 2026
+
+Open **Cameras & local views** beside the desktop Explore controls, or the camera
+button in the phone toolbar. Camera cards open the official EarthCam, 511PA,
+511NJ, DelDOT and FOX 29 viewers in a new tab. EarthCam footage is not
+embedded: EarthCam's linking rules prohibit framing, and PennDOT's streaming
+feeds require separate registration and a video-sharing agreement.
+
+Street View links use Google's documented, key-free Maps URLs and the geographic
+map center when the panel opens. Shortcuts cover City Hall, Bauder Signs and The
+Hidden Reef. Availability and capture dates belong to Google; these are not live
+views and are not a new Cesium layer.
+
+Weather & river loads only on demand. A bounded same-origin Pages Function reads
+the nearest of five NWS airport stations and NOAA's Philadelphia gauge 8545240.
+Provider requests have ten-second deadlines, a 256 KiB response limit and five-
+minute caching. Missing fields stay unavailable; partial provider failures do
+not blank the other reading. Observation times, delayed readings, tidal datum
+and preliminary quality are labeled. The gauge value is not a flood overlay.
+
+Sources: https://www.earthcam.com/site/linktous.php,
+https://www.pa.gov/services/penndot/request-access-to-transportation-related-data-feeds,
+https://developers.google.com/maps/documentation/urls/get-started,
+https://www.weather.gov/documentation/services-web-api,
+https://api.tidesandcurrents.noaa.gov/api/prod/.
+
+Validation: 306 passing tests, including regional coordinate bounds, station
+selection, observation units and missing values, NOAA quality flags, stale times,
+request allowlisting, bounded responses and partial-failure caching.
+
+## Integrated photographic close-ups — September 20, 2026
+
+The existing diorama now lazily loads CesiumJS 1.145 and Google Photorealistic
+3D Tiles through the site's public, URL-restricted ion token. Automatic mode
+prepares the photographic renderer below 16 km orbit distance, enters it below
+6.5 km, and returns to the miniature beyond 9.5 km. The gap prevents flickering
+between renderers. The first photographic frame waits for useful tile coverage;
+load failures preserve the working relief and expose a retry button.
+
+Both renderers use the same geographic camera, pointer gestures, local place
+lookup, tours, and saved/share state. `photoMode` can force Diorama or Photo 3D;
+historical, contour, flood and comparison layers always use the relief renderer.
+Photographic lighting is captured imagery, independent of the diorama's simulated
+sun. Provider credits remain visible and are included in photographic PNG exports.
+
+The hidden relief renderer and its aerial requests pause while photographic 3D
+is active. Full detail returns to a 2-pixel screen-space error after motion;
+the Cesium memory cache is bounded. No persistent Google imagery cache is added.
+The photographic runtime's service CSP is scoped to the map route. The standalone
+preview remains available for comparison, but the Demos catalog launches this
+integrated experience.
+
+Validation: 300 unit/data tests, including camera projection alignment, renderer
+thresholds, map-layer precedence, and photo-mode URL round trips. Localhost tests
+exercise the domain-restricted token's graceful fallback; imagery must be checked
+on the production domain.
+
 ## Four review rounds — September 9, 2026
 
 1. **Readability:** label budgets follow screen area, local street names stay near
@@ -90,6 +301,26 @@ The phone layout retains bottom-sheet controls. The final HDR composite applies 
 and output color-space conversion, with retuned lighting and wider imagery-edge blending.
 
 # Philadelphia Relief
+
+### Aircraft departure and destination
+
+Opening an aircraft card lazily looks up its callsign in Virtual Radar Server's
+CC0 standing data, served by `vrs-standing-data.adsb.lol`. The same-origin
+`aircraft-route` function accepts only a bounded alphanumeric callsign, uses a
+fixed upstream host, limits responses to 32 KiB and times out after six seconds.
+Listed routes cache for one hour, missing entries for ten minutes, and failures
+for one minute. The browser shares in-flight lookups and limits its cache to 100
+callsigns; it does not prefetch the entire aircraft feed or poll for routes.
+
+Cards display airport codes and cities, airport names on hover, and intermediate
+stops when present. These are **listed routes, not live-confirmed flight plans**:
+callsigns can be reused, schedules change and flights divert. A geographic check
+rejects obvious mismatches (e.g. PHX–AUS for an aircraft over Philadelphia), but
+does not prove a route correct. Multi-stop itineraries state that the current
+leg is unknown. Missing or failed route lookups never interrupt position tracking.
+
+Source and license: https://github.com/vradarserver/standing-data (CC0-1.0).
+Tests: `node --test tests/aircraft-route.test.js`.
 
 An interactive, cinematic 3D topographic map of Philadelphia and the surrounding
 suburbs — Center City, Port Richmond, Northeast and Northwest Philadelphia, the Main Line, and
@@ -746,3 +977,157 @@ same 500 ms previews and 800 ms full-image responses reached central full detail
 scheduler simulation, not a guaranteed internet loading time. Chrome's real Cache
 Storage check reused a decoded image after page reload with zero network image
 requests; close zooms at The Hidden Reef were also checked in the browser.
+
+### Regional live and historical layers (20 September 2026)
+
+The **More map layers** panel contains five optional additions, all off initially:
+
+- Ships: regional AISStream positions, enlarged generic 3D vessels, names, speed,
+  course and crew-reported destination. The private home relay holds the free key;
+  the computer must be running. One connection serves active viewers and stops
+  after 75 seconds idle. Positions older than two minutes are marked stale and
+  disappear after ten minutes. Reports are not guaranteed real time.
+- Weather radar: the latest 12 advertised NOAA nowCOAST CONUS reflectivity frames,
+  with playback, timestamp, frame selection and opacity. Frames load on demand.
+- River gauges: NOAA/NWS regional stations, observed levels, recent observed trend
+  charts and available forecast values with their validity times. Gauge height
+  uses a station reference datum and is not water depth or a flood extent.
+- Historical aerials: actual Philadelphia surveys from 1996, 2000, 2004 and 2008,
+  tiled on demand over today's elevation. Modern buildings are hidden. Coverage
+  and loading gaps retain current imagery, explicitly labeled in the map banner;
+  these photographs do not reconstruct historical terrain or 3D buildings.
+- Property and landmark information: click the map or inspect its center for the
+  nearest Philadelphia OPA address records within 60 metres. Distance, building
+  facts and Atlas links are shown; gold pins open curated landmark cards. City
+  records do not cover surrounding counties or New Jersey.
+
+Radar and historical imagery use the relief renderer; other layers also project
+onto photographic 3D. Live requests pause while the tab is hidden and stop when
+their checkbox is cleared. Same-origin endpoints use fixed upstream hosts,
+geographic bounds, response-size limits, timeouts and shared caches.
+
+Aircraft automatically uncheck 30 minutes after activation. The wall-clock
+deadline is also checked on resume so sleeping or throttled tabs stop before
+another poll. Re-enabling the checkbox starts a new session.
+
+Validation: 339 automated checks, function-bundle compilation, live source checks,
+and browser checks of ship/gauge cards, radar frames, historical tile alignment
+and city property lookup. No SEPTA or recorded activity playback was added.
+
+### Mobile controls (21 September 2026)
+
+Phone layouts start with view/layers, page tools, locator and field notes collapsed.
+Opening one closes the others. The layers drawer scrolls within the viewport and
+has a sticky Back to map button; closing it preserves all selected layers. Page
+tools retain labeled screenshot, sharing, camera and fullscreen actions. Zoom
+controls and attribution remain visible in portrait and landscape. Desktop keeps
+its expanded controls above 1024 pixels. Verified at 390×844, 320×568, 740×390
+and 932×430, plus desktop;
+all 339 existing checks pass.
+
+### Idle rendering, grouped observations and historical swipe (21 September 2026)
+
+Save power when idle defaults on for narrow/coarse-pointer devices and is optional
+on desktop. After two seconds without movement or input, the map refreshes twice
+per second; active aircraft retain a faster cadence. Interaction, tours and imagery
+loading resume full cadence. Geometry, pixel ratio and imagery detail settings are
+unchanged, and intentional idle pacing is excluded from adaptive-quality sampling.
+Hidden tabs remain paused. Unchanged ship positions no longer request Cesium frames.
+
+Nearby ships and gauges form separate, count-labeled groups in screen space. Tapping
+a group opens a complete alphabetical list; selecting a member opens its latest
+details and moves closer. The existing station/vessel selectors remain available.
+
+Historical aerial surveys start with a draggable current/historical divider. The
+handle supports touch, arrow keys, Home and End; the layer drawer also provides a
+range control and an option to return to the full historical overlay. Selecting a
+conflicting era or comparison clears the survey. Historical imagery uses today's
+terrain, hides modern building models, and retains current imagery where the source
+survey has no loaded coverage. It is not a reconstruction of historical terrain.
+
+Validation: 342 automated checks pass. A ten-second mobile-emulated (390×844, DPR 1)
+idle comparison at balanced quality measured 12,621 WebGL draw calls before and 399
+after, with 2,494,525 triangles per scene in both. This measures rendering work, not
+battery life. Browser checks cover grouped gauge selection, touch/keyboard swipe,
+1996/current imagery alignment and mobile control visibility.
+
+### Older computers and Chrome compatibility (21 September 2026)
+
+Marker grouping and observation selectors use copy-and-sort rather than
+`Array.toSorted`. Simulating that API's absence reproduced a stopped frame loop
+in the prior release; the patched loop continues rendering without that error.
+
+Lighter graphics is available in View & layers and the studio, remembers an
+explicit choice on this browser, and travels in shared URLs as `lg=1`. It defaults
+on when available browser hints report at most 4 GB memory or four logical CPU
+cores. It uses the existing performance terrain/building tiers, skips decorative
+woodland crowns and bloom/contact passes, enables idle power saving, and pauses
+photographic 3D. Selecting Photographic 3D explicitly turns lighter graphics off.
+All map layer selections remain available, and aerial image resolution is unchanged.
+The same regional scene draws approximately 375,000 triangles in lighter mode
+versus 2.5 million in balanced full graphics; this is not an FPS guarantee.
+
+Startup no longer waits for woodland, Center City imagery or Levittown imagery
+(about 16 MB of source files before transfer compression). Nearby district images
+load at their original resolution after first paint, one supplemental file at a
+time. Woodland arrives later only for full diorama graphics. Hidden building tiers
+are requested when needed. Optional failures retry and never disable core layers.
+Core requests have bounded waits so a stalled connection cannot block indefinitely.
+
+Validation: 346 automated checks; 4× CPU/Fast 4G browser profiling; simulated
+missing `Array.toSorted`; camera and river-gauge pins visible in lighter graphics.
+
+### Further latency and frame-work reductions (21 September 2026)
+
+Core data downloads now start together, including landmark metadata and the bridge
+dependency as soon as its manifest arrives. The heightmap and Three.js modules are
+discovered from the document head; the unchanged vendor module keeps its previous
+cache URL. Optional district images and woodland remain deferred. Input bursts share
+the next animation frame and still interrupt idle pacing immediately.
+
+Terrain shaders skip inactive district/detail samplers and skip the seven terrain
+shadow probes when diorama shading contributes nothing. Bloom work is skipped when
+its intensity is zero. These paths preserve the active shading calculations, DEM,
+geometry and original aerial resolutions. Cesium resizes only when the viewport
+changes, rather than on every camera movement.
+
+Cached aerial meshes have explicit world-space bounds enclosing the shader-displaced
+DEM, updated with terrain exaggeration. Off-screen tiles remain available in memory
+without unconditional draws. Diagnostics expose resident and drawn tile counts.
+
+Overlay systems share a layout measurement within a frame. Ship/gauge projection
+updates at up to 30 Hz during movement instead of the former 150 ms cadence, while
+unchanged views refresh once per second for stale-data indicators. Feed and control
+changes invalidate immediately. Filtered aircraft skip invisible work; hidden trails
+are not rebuilt, and retained trail samples reuse elevation reads across frames.
+
+Validation: 350 checks pass, including displaced-tile bounds at 0×/1×/15×/80× relief,
+marker pacing, layout cache invalidation and flight elevation reuse. In a 1366×768
+balanced regional scene with 4× CPU slowdown, 120 GPU timer samples measured a median
+2.49 ms before shader changes and 2.22 ms afterward; both drew 2,494,525 triangles and
+the browser remained around 60 FPS. This is a lab rendering-cost measurement, not an
+older-hardware FPS guarantee. Browser checks cover full-resolution streamed aerials,
+camera and gauge pins, resumed navigation, and live aircraft with trails on/off.
+
+
+### Aircraft ride-along and PHL video (21 September 2026)
+
+Aircraft cards now offer simulated forward, left/right window and chase views in
+both the relief renderer and Cesium photographic 3D. The existing graphics choice
+is preserved, so lighter graphics never starts Cesium. View direction follows
+reported ground track, not aircraft attitude. Buffered reports are interpolated;
+future positions and touchdown are never fabricated. The toolbar labels the view
+as simulated, displays the age of the position being shown, and provides a return
+to the previous map view. Missing track disables entry; stale tracking, disabling
+aircraft and the existing 30-minute session limit exit the view.
+
+The PHL airport camera button is available without aircraft tracking. Its dialog
+loads FOX 29 / WMVision's already-published image widget only on demand and links
+to FOX 29's full airport video page. This is a real ground camera, not onboard
+footage or a guaranteed view of the selected flight. Its preview stops when closed,
+when the tab is hidden, or after one minute. No new service, token or subscription.
+Source checked: https://www.fox29.com/philadelphia-international-airport-camera
+
+Validation includes camera heading/offset/terrain-clearance calculations, return to
+orbit, preview resource cleanup, desktop and 390px mobile flight controls, and the
+actual airport preview. Photographic ride-along is checked on the deployed domain.

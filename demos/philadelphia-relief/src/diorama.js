@@ -1,5 +1,6 @@
-import { canopySites, canopyLevel } from './canopy-layout.js?v=philly-2026090907';
-import { woodlandIndex } from './woodland.js?v=philly-2026090907';
+import { canopySites, canopyLevel, prepareCanopy } from './canopy-layout.js?v=philly-2026092121';
+import { woodlandIndex, prepareWoodland } from './woodland.js?v=philly-2026092121';
+import { createCanopyCulling } from './canopy-culling.js?v=philly-2026092122';
 /** A zoom-dependent miniature stage. Crowns follow mapped woodland boundaries;
  * enlarged regional crowns shrink to individual trees as the camera approaches. */
 export function dioramaAmount(distance, enabled = true) {
@@ -130,18 +131,18 @@ function treeMesh(THREE, positions, sizes, uniforms) {
   const base = new THREE.SphereGeometry(1, 7, 5);
   const geometry = new THREE.InstancedBufferGeometry().copy(base);
   base.dispose();
-  geometry.setAttribute('aTree', new THREE.InstancedBufferAttribute(new Float32Array(positions), 3));
-  geometry.setAttribute('aSize', new THREE.InstancedBufferAttribute(new Float32Array(sizes), 1));
-  geometry.instanceCount = sizes.length;
+  const culling = createCanopyCulling(THREE, geometry, positions, sizes);
   const material = new THREE.ShaderMaterial({ uniforms, vertexShader: TREE_VERTEX,
     fragmentShader: TREE_FRAGMENT });
   const mesh = new THREE.Mesh(geometry, material);
   mesh.name = 'illustrative woodland canopy'; mesh.frustumCulled = false;
+  mesh.userData.cull = camera =>
+    culling.update(camera, uniforms.uExag.value, uniforms.uAmount.value);
   mesh.userData.total = sizes.length;
   return mesh;
 }
 
-export function createDiorama(THREE, { terrain, projection, sampleElevation, woodland }) {
+export function createDiorama(THREE, { terrain, projection, sampleElevation, woodland, onReady = () => {} }) {
   const group = new THREE.Group();
   group.name = 'diorama stage';
   const w = projection.widthM, h = projection.heightM;
@@ -172,21 +173,67 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
     vertexShader: FLOOR_VERTEX, fragmentShader: FLOOR_FRAGMENT }));
   floor.frustumCulled = false; group.add(floor);
   const closeCanopies = new Map();
+  const pendingCells = new Map();
   const treeUniforms = { uExag: { value: 1 }, uAmount: { value: 1 },
     uKeyStrength: {value:1}, uSkyFill: {value:.7},
     uSunDir: { value: new THREE.Vector3(-.5, .8, .3).normalize() } };
-  const coverage = woodland ? woodlandIndex(woodland) : null;
-  const trees = makeTrees(THREE, coverage, projection, sampleElevation, treeUniforms);
+  let coverage = woodland ? woodlandIndex(woodland) : null;
+  let trees = makeTrees(THREE, coverage, projection, sampleElevation, treeUniforms);
   if (trees) group.add(trees);
   const closeUniforms = { ...treeUniforms, uAmount: { value: 1 } };
   let streetTrees = null;
+  const lifetime = new AbortController();
+  let woodlandWork = null, tileWork = null;
+  async function prepareTiles() {
+    if (!coverage || tileWork || lifetime.signal.aborted) return;
+    while (pendingCells.size && !lifetime.signal.aborted) {
+      const [key, cell] = pendingCells.entries().next().value;
+      pendingCells.delete(key);
+      const job = { key, controller: new AbortController() };
+      tileWork = job;
+      try {
+        const { positions, sizes } = await prepareCanopy(coverage, projection, sampleElevation,
+          cell.bounds, { signal: job.controller.signal });
+        if (job.controller.signal.aborted || lifetime.signal.aborted) continue;
+        const mesh = treeMesh(THREE, positions, sizes, closeUniforms);
+        mesh.userData.cell = cell; mesh.visible = false;
+        closeCanopies.set(key, mesh); group.add(mesh);
+        while (closeCanopies.size > 20) dropTile(closeCanopies.keys().next().value);
+        onReady();
+      } catch (error) {
+        if (!job.controller.signal.aborted) console.warn('Tree detail unavailable', error);
+      } finally { tileWork = null; }
+    }
+  }
   const dropTile = key => {
+    pendingCells.delete(key);
+    if (tileWork?.key === key) tileWork.controller.abort();
     const mesh = closeCanopies.get(key);
     if (!mesh) return;
     group.remove(mesh); mesh.geometry.dispose(); mesh.material.dispose(); closeCanopies.delete(key);
   };
   return {
     group,
+    stats() { return { preparing: !!woodlandWork || !!tileWork, queued: pendingCells.size,
+      regionalTrees: trees?.userData.total || 0, localTiles: closeCanopies.size }; },
+    setWoodland(doc) {
+      if (woodlandWork) return woodlandWork;
+      if (coverage || !doc || lifetime.signal.aborted) return Promise.resolve();
+      woodlandWork = (async () => {
+        const options = { signal: lifetime.signal };
+        const nextCoverage = await prepareWoodland(doc, options);
+        const { positions, sizes } = await prepareCanopy(nextCoverage, projection,
+          sampleElevation, null, options);
+        if (lifetime.signal.aborted) return;
+        coverage = nextCoverage;
+        trees = treeMesh(THREE, positions, sizes, treeUniforms);
+        trees.visible = false; group.add(trees); onReady();
+        void prepareTiles();
+      })().catch(error => {
+        if (!lifetime.signal.aborted) console.warn('Woodland preparation unavailable', error);
+      }).finally(() => { woodlandWork = null; });
+      return woodlandWork;
+    },
     setLocalDetail(doc) {
       if (streetTrees) {
         group.remove(streetTrees); streetTrees.geometry.dispose(); streetTrees.material.dispose();
@@ -205,19 +252,18 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
       }
     },
     addTile(cell) {
-      if (cell.level > 1 || closeCanopies.has(cell.key)) return;
-      const mesh = makeTrees(THREE, coverage, projection, sampleElevation, closeUniforms, cell.bounds);
-      if (!mesh) return;
-      mesh.userData.cell = cell; mesh.visible = false;
-      closeCanopies.set(cell.key, mesh); group.add(mesh);
-      while (closeCanopies.size > 20) dropTile(closeCanopies.keys().next().value);
+      if (lifetime.signal.aborted || cell.level > 1 || closeCanopies.has(cell.key)
+        || tileWork?.key === cell.key && !tileWork.controller.signal.aborted) return;
+      pendingCells.set(cell.key, cell);
+      while (pendingCells.size > 20) pendingCells.delete(pendingCells.keys().next().value);
+      void prepareTiles();
     },
     dropTile,
     attachTerrain(next) {
       wallUniforms.uHeight = next.uniforms.uHeight;
       wallUniforms.uExag = next.uniforms.uExag;
     },
-    update(amount, exaggeration, sunDir, state, pose, light=state) {
+    update(amount, exaggeration, sunDir, state, pose, light=state, camera=null) {
       const enabled = state.diorama && state.era === 'present' && state.compareMode === 'off';
       group.visible = enabled && state.layers.terrain;
       floor.visible = wall.visible = amount > .001;
@@ -229,7 +275,7 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
       const level = canopyLevel(near.map(mesh => mesh.userData.cell),pose);
       let shown = 0;
       for (const mesh of near) {
-        mesh.visible = modelOn && pose.dist < 6500
+        mesh.visible = !state.lightweight && modelOn && pose.dist < 6500
           && mesh.userData.cell.level === level && shown++ < 8;
       }
       closeUniforms.uAmount.value = Math.min(1, Math.max(0, (6500 - pose.dist) / 1800));
@@ -239,10 +285,17 @@ export function createDiorama(THREE, { terrain, projection, sampleElevation, woo
       treeUniforms.uSunDir.value.copy(sunDir);
       treeUniforms.uKeyStrength.value=light.keyLight; treeUniforms.uSkyFill.value=light.ambient;
       if (trees) {
-        trees.visible = modelOn || amount > .1;
+        trees.visible = !state.lightweight && (modelOn || amount > .1);
+      }
+      if (camera && group.visible) {
+        camera.updateMatrixWorld();
+        if (trees?.visible) trees.userData.cull(camera);
+        if (streetTrees?.visible) streetTrees.userData.cull(camera);
+        for (const mesh of near) if (mesh.visible) mesh.userData.cull(camera);
       }
     },
     dispose() {
+      lifetime.abort(); tileWork?.controller.abort(); pendingCells.clear();
       group.traverse(node => { node.geometry?.dispose(); node.material?.dispose(); });
     },
   };
