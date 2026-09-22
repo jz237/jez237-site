@@ -1,4 +1,5 @@
 import { validateNativeSteelies } from "./native-steelie.mjs";
+import { validateNativeBirds } from "./native-bird.mjs";
 import { validateNativeSlinkies } from "./native-slinky.mjs";
 import { validateNativeAcids } from "./native-acid.mjs";
 import { validateNativeFlags } from "./native-flags.mjs";
@@ -689,6 +690,7 @@ export function validateCourse(c) {
     enemyIds.add(e.id);
     if (
       e.kind === "bird" &&
+      e.nativeBirdSlot === undefined &&
       (!e.direction ||
         ![
           e.direction.x,
@@ -711,6 +713,7 @@ export function validateCourse(c) {
   validateAerialPegs(c, finite);
   validateNativeFlags(c, finite);
   validateNativeSteelies(c);
+  validateNativeBirds(c);
   validateNativeSlinkies(c);
   validateNativeAcids(c);
   validateAerialHammers(c, finite);

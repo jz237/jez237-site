@@ -1,6 +1,7 @@
 import * as THREE from "three";
 import { vacuumFragments } from "./vacuum-view.mjs";
 import { slinkyCapturePose, slinkyReformPose } from "./slinky-capture.mjs";
+import { birdFragmentPose } from "./bird-capture.mjs";
 
 export function slinkyCaptureGroup(marble) {
   const group = new THREE.Group();
@@ -12,8 +13,30 @@ export function slinkyCaptureGroup(marble) {
 }
 
 export function updateSlinkyCapture(group, player, tick) {
-  group.visible = player.status === "falling" && !!player.slinkyCapture;
+  group.visible =
+    player.status === "falling" &&
+    !!(player.slinkyCapture || player.birdCapture);
   if (!group.visible) return;
+  if (player.birdCapture) {
+    const [shell, fragments] = group.children;
+    shell.visible = false;
+    fragments.visible = true;
+    fragments.children.forEach((mesh, i) => {
+      const p = birdFragmentPose(player.birdCapture, tick, i);
+      mesh.visible = p.visible;
+      if (!p.visible) return;
+      mesh.position.set(p.position.x, p.position.y, p.position.z);
+      mesh.quaternion.set(
+        p.rotation.x,
+        p.rotation.y,
+        p.rotation.z,
+        p.rotation.w,
+      );
+      mesh.rotateX(p.spin);
+      mesh.scale.setScalar(p.scale);
+    });
+    return;
+  }
   const capture = player.slinkyCapture,
     [shell, fragments] = group.children;
   const pose = slinkyCapturePose(capture, tick);
