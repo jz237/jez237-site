@@ -2,7 +2,7 @@ import { transferOutletOccupied } from "./native-transfer.mjs";
 
 // Ultimate's gold inlet is source actor 37 (0x1774c), not a catapult.
 // This module describes source decisions; destinations must never be assigned
-// to active Rapier bodies. A continuous physical passage is still required.
+// to active Rapier bodies. native-gold-physics.mjs drives the physical passage.
 export const GOLD_TRANSFER = Object.freeze({
   inlet: Object.freeze({ x: 23, z: 32, height: 16384 }),
   cameraBand: Object.freeze([0, 12]),

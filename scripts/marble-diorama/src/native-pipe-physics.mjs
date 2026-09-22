@@ -2,11 +2,16 @@ import { nativePipeIntent } from "./native-pipes.mjs";
 import { slinkyCoordinates } from "./native-slinky-physics.mjs";
 import { nativeCameraBand } from "./native-camera.mjs";
 import { transferForce } from "./powered-transfer.mjs";
+import { physicalNativeGold } from "./native-gold-physics.mjs";
 
 // Capture only inside the rendered bore, then carry the sphere through the
 // same continuous passage. The source's destination jumps are not applied.
 export function physicalNativePipes(sim, player, radius, wasPowered) {
-  const paths = sim.traversalPaths.filter((path) => path.nativePipe);
+  const gold = physicalNativeGold(sim, player, radius, wasPowered);
+  if (gold) return gold;
+  const paths = sim.traversalPaths.filter(
+    (path) => path.nativePipe && path.nativePipe !== "ultimate-gold",
+  );
   if (!paths.length) return null;
   if (!wasPowered && paths.some((path) => path.id === player.transferRoute?.id))
     player.transferRoute = null;

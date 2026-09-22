@@ -157,7 +157,8 @@ export function updateTraversalBonuses(paths, player, position, radius) {
     // Native selection happens above the inlet. Both paths share precisely
     // the same lower leg, so track that leg once until the outlet is chosen.
     const branch =
-      player.transferRoute?.branch ?? (path.nativeTransfer ? 0 : null);
+      player.transferRoute?.branch ??
+      (path.nativeTransfer || path.nativePipe === "ultimate-gold" ? 0 : null);
     if (path.fork && branch !== path.branch) continue;
     if (
       ["x", "y", "z"].some(
@@ -170,8 +171,9 @@ export function updateTraversalBonuses(paths, player, position, radius) {
       continue;
     }
     const q = tubePosition(path, position),
+      chamber = inTransferChamber(path, position),
       inside =
-        inTransferChamber(path, position) ||
+        chamber ||
         q.distance <=
           tubeRadiusAt(path, q.progress, path.length) - radius + 0.12;
     const state = Object.hasOwn(player.traversals, path.id)
@@ -181,17 +183,38 @@ export function updateTraversalBonuses(paths, player, position, radius) {
       if (inside && q.progress <= Math.min(1.5, path.length * 0.15))
         player.traversals = {
           ...player.traversals,
-          [path.id]: { progress: q.progress },
+          [path.id]: {
+            progress: q.progress,
+            chamber,
+            position: { ...position },
+          },
         };
       continue;
     }
     // Reject a skipped middle, a backwards retreat out of the entrance, and
     // any departure through the side. Falling clears incomplete traversals.
-    if (!inside || Math.abs(q.progress - state.progress) > 1) {
+    // Nearest-centerline progress can jump between perpendicular legs while
+    // a sphere moves a tiny distance across the real open junction. Require
+    // both positions inside that chamber and continuous physical displacement.
+    const crossingChamber =
+      chamber &&
+      state.chamber &&
+      state.position &&
+      Math.hypot(
+        position.x - state.position.x,
+        position.y - state.position.y,
+        position.z - state.position.z,
+      ) < 0.5;
+    if (
+      !inside ||
+      (Math.abs(q.progress - state.progress) > 1 && !crossingChamber)
+    ) {
       delete player.traversals[path.id];
       continue;
     }
     state.progress = q.progress;
+    state.chamber = chamber;
+    state.position = { ...position };
     const end = path.points.at(-1),
       t = path.exit;
     const beyond =

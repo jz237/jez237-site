@@ -84,10 +84,11 @@ existing cyan palette. The final bundle build and `git diff --check` passed.
 The full suite includes legacy reconstruction tests as well as the new native
 tests; its total is not a full-campaign parity claim.
 
-- Complete Ultimate's gold transfer and Practice objects before publication.
-  Source verification identifies the gold objects as a transfer system, not
-  hinged launchers; see NATIVE-GOLD-TRANSFER.md for the recovered choice law
-  and the still-missing physical implementation.
+- Complete Practice objects and refine Ultimate's gold housing before publication.
+  The mm-39 gold fork now provides continuous physical travel through both exits,
+  with source choice rules, localized solo/paired and replay checks. Full Ultimate
+  routes, original housing fidelity and calibration remain open; see
+  NATIVE-GOLD-TRANSFER.md for evidence and limits.
   Beginner's passages are integrated in mm-37; Intermediate's orange pipe and
   real bridge tunnel are integrated in mm-38. Their remaining source calibration
   and limited encounter coverage are detailed in NATIVE-PIPES.md.

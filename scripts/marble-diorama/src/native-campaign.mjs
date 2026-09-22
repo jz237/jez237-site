@@ -14,7 +14,7 @@ const descriptions = [
   "Acid patrols, split paths, an orange pipe and a traveling wave.",
   "Crossed rails, hammers, vacuums, retracting pegs and a hinged paddle.",
   "An uphill race through miniatures, the red transfer and purple birds.",
-  "Divided rooms, acid patrols and disappearing finish paths.",
+  "A gold transfer with two exits, divided rooms and disappearing finish paths.",
 ];
 const palettes = [
   ["#be3e35", "#be3e35", "#d98a38", "#d8bd49", "#d8bd49", "#be3e35"],
