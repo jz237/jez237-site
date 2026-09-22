@@ -1885,9 +1885,7 @@ body.sheet-open .camera-map-card, body.cinema .camera-map-card { display: none; 
 }
 .explore-mode-bar a { color:#ffd38b; font-size:12px; padding:8px; }
 .explore-mode-bar button:focus-visible,.explore-mode-bar select:focus-visible { outline:2px solid #ffd38b; }
-.explore-picking .stage { cursor:crosshair; }
-.explore-standing .stage { cursor:grab; touch-action:none; }
-.explore-standing .readout-preset,.explore-exhibit .readout-preset { display:none; }
+.explore-exhibit .readout-preset { display:none; }
 .explore-exhibit .map-labels,.explore-exhibit .camera-map-layer,
 .explore-exhibit .aircraft-map-layer,.explore-exhibit .extra-map-pins { visibility:hidden; }
 @media(max-width:700px) {

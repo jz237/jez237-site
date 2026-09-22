@@ -101,10 +101,6 @@ export const CONTROLS = {
     k: 'ld', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.28,
     group: 'carto', label: 'Label density',
   },
-  roadOpacity: {
-    k: 'ro', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.65,
-    group: 'carto', label: 'Road opacity',
-  },
   boundaryOpacity: {
     k: 'bo', kind: 'range', min: 0, max: 1, step: 0.01, def: 0.15,
     group: 'carto', label: 'Boundary strength',
@@ -209,7 +205,6 @@ export const LAYERS = {
   contours: { k: 'Lc', def: false, label: 'Contours' },
   water: { k: 'Lw', def: false, label: 'Waterways' },
   parks: { k: 'Lp', def: false, label: 'Parks & preserves' },
-  roads: { k: 'Lr', def: true, label: 'Roads & local streets' },
   rail: { k: 'Ll', def: false, label: 'Rail' },
   boundaries: { k: 'Lb', def: false, label: 'County / municipal lines' },
   places: { k: 'Ls', def: true, label: 'Neighborhoods & suburbs' },
@@ -327,7 +322,7 @@ export function coercePatch(patch) {
 /** Keys whose change only needs a uniform update, not a geometry rebuild. */
 export const CHEAP_KEYS = new Set([
   'sunAzimuth', 'sunAltitude', 'keyLight', 'ambient', 'fogDensity', 'glow',
-  'waterIntensity', 'contourStrength', 'contourInterval', 'roadOpacity',
+  'waterIntensity', 'contourStrength', 'contourInterval',
   'boundaryOpacity', 'theme', 'camLon', 'camLat', 'camDist', 'camBearing',
   'camPitch', 'fov', 'animationSpeed', 'labelSize', 'labelDensity', 'preset',
   'structureDetail', 'structureHeight', 'floodMode', 'seaLevelRise',
