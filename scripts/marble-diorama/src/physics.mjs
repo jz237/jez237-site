@@ -3,6 +3,7 @@ import {
   advanceTerrainNavigation,
   terrainTileAt,
 } from "./terrain-navigation.mjs";
+import { createNativeCamera, advanceNativeCamera } from "./native-camera.mjs";
 import { updateLandingStun, landingControlScale } from "./landing-stun.mjs";
 import { landingContact } from "./landing-contact.mjs";
 import { updateLaunchBonus } from "./launch-bonus.mjs";
@@ -65,6 +66,9 @@ export class Simulation {
     this.preset = difficultyPreset(this.options.difficulty);
     this.options.difficulty = this.preset.level;
     this.tick = 0;
+    this.nativeCamera = course.nativeCamera
+      ? createNativeCamera(course.nativeCamera)
+      : null;
     this.events = [];
     this.world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
     this.world.timestep = STEP;
@@ -252,16 +256,25 @@ export class Simulation {
       collider.setTranslation(acidPositionAt(a.zone, time));
     }
     steerEnemies(this, STEP);
+    const terrainPlayers = this.players.map((p) => ({
+      position: this.body(p).translation(),
+      active: p.status === "racing",
+      region: p.navigation?.region,
+      navigationPartId: this.course.navigation?.partId,
+    }));
+    advanceNativeCamera(
+      this.course,
+      this.nativeCamera,
+      terrainPlayers,
+      this.tick * STEP * this.preset.machineSpeed,
+      RADIUS,
+    );
     const terrainPoses = advanceTerrainAnimations(
       this.course,
       this.terrainAnimations,
-      this.players.map((p) => ({
-        position: this.body(p).translation(),
-        active: p.status === "racing",
-        region: p.navigation?.region,
-        navigationPartId: this.course.navigation?.partId,
-      })),
+      terrainPlayers,
       this.tick * STEP * this.preset.machineSpeed,
+      this.nativeCamera,
     );
     for (const m of this.movers) {
       m.previous = m.current;
@@ -747,6 +760,7 @@ export class Simulation {
       players: structuredClone(this.players),
       movers: structuredClone(this.movers),
       terrainAnimations: structuredClone(this.terrainAnimations),
+      nativeCamera: structuredClone(this.nativeCamera),
       enemies: structuredClone(this.enemies),
     };
   }
@@ -759,6 +773,12 @@ export class Simulation {
     this.terrainAnimations = structuredClone(
       s.terrainAnimations ??
         createTerrainAnimations(this.course, this.options.players),
+    );
+    this.nativeCamera = structuredClone(
+      s.nativeCamera ??
+        (this.course.nativeCamera
+          ? createNativeCamera(this.course.nativeCamera)
+          : null),
     );
     this.enemies = structuredClone(s.enemies ?? []);
     this.events = [];

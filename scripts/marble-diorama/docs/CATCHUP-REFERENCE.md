@@ -101,6 +101,12 @@ world-coordinate mapping, occupancy/height queries, camera correspondence and
 paired playback are still required before enabling catch-up. No catch-up
 teleports are introduced by the mm-35 scoring release.
 
+The subsequent [native camera implementation](NATIVE-CAMERA.md) adds optional
+simulation-owned scroll state and camera-boundary terrain loading in private
+recovered courses. It verifies original start-coordinate mapping, screen-space
+leader choice and loading transitions. It does not yet replace Three.js view
+framing, map all original player animation states, or enable catch-up penalties.
+
 The follow-up [terrain audit](TERRAIN-REFERENCE.md) decoded fixed corner heights
 for all six courses. As an independent spatial check, 731 of 732 candidate
 destinations lie on complete static tiles; Ultimate `(13, 13, region 0)` is the

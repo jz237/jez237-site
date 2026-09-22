@@ -1434,3 +1434,26 @@ Native actor rate/scale and camera-based loading remain provisional. Other
 actors, sound cue 33, full-course play, rounding and other acceptance items
 remain incomplete. No publication; public layouts/mm-35 unchanged. See
 SMALL-TERRAIN-STATES.md for exact evidence and inspection limits.
+
+### September 22 — native camera and terrain loading boundaries
+
+Optional simulation-owned native camera state now selects the source leader,
+retains original speed hysteresis/idle checks and emits loading-band crossings.
+Recovered Practice, Beginner and Ultimate sequences can load/unload/restart on
+their original camera boundaries. Viewport, orbit and zoom cannot change these
+gameplay events. Snapshot state includes the camera and actor loading state.
+
+All twelve original starts map to source coordinates/heights; six private
+two-player simulations pass initial activation and snapshot checks. Synthetic
+camera sweeps cross 291 bands across the original background-derived extents.
+Private local-start runs activate Beginner at band 16/tick 426 and Ultimate at
+band 24/tick 618 and reach all seven/four states with no falls. These are local
+integration checks at provisional cadence, not full original races.
+
+Eight new regressions cover source projection, both leader directions, camera
+state/thresholds, loading boundaries, one-shot re-entry, import validation and
+deterministic physics/snapshots at 30/60/120 fps. **241/241 full suite**,
+282660.0301 ms. Build/diff/browser checks pass; no captured browser warnings or
+errors. See NATIVE-CAMERA.md for limits: player-state mapping, original cadence,
+Three.js framing, catch-up, shared actor allocation and remaining hazards are
+not complete. No publication; public authored campaign/mm-35 unchanged.

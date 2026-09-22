@@ -268,13 +268,25 @@ export function createTerrainAnimations(course, players) {
       ]),
   );
 }
-export function advanceTerrainAnimations(course, controllers, players, time) {
+export function advanceTerrainAnimations(
+  course,
+  controllers,
+  players,
+  time,
+  camera,
+) {
   const poses = {};
   for (const part of course.parts) {
     if (!part.animation) continue;
     const controller = controllers[part.id];
     if (part.animation.type === "terrain-sequence") {
-      poses[part.id] = advanceTerrainSequence(part, controller, players, time);
+      poses[part.id] = advanceTerrainSequence(
+        part,
+        controller,
+        players,
+        time,
+        camera,
+      );
       continue;
     }
     const eligible = players.map((player, i) => {

@@ -1,4 +1,5 @@
 import { terrainGeometry, validateTerrain } from "./terrain-geometry.mjs";
+import { entersCameraBand, leavesCameraBand } from "./native-camera.mjs";
 import {
   validateTerrainTimeline,
   advanceTerrainTimeline,
@@ -43,6 +44,16 @@ export function validateTerrainSequence(part, finite) {
   )
     throw Error("Invalid terrain sequence.");
   validateTerrainGates(a.gates);
+  if (
+    a.activationBand !== undefined &&
+    (!Array.isArray(a.activationBand) ||
+      a.activationBand.length !== 2 ||
+      !a.activationBand.every(
+        (v) => Number.isInteger(v) && v >= -128 && v <= 127,
+      ) ||
+      a.activationBand[0] > a.activationBand[1])
+  )
+    throw Error("Invalid terrain camera activation band.");
   if (a.timeline !== undefined)
     validateTerrainTimeline(a.timeline, a.frames.length, finite);
   const keys = new Set(part.cells.map((c) => `${c[0]},${c[1]}`));
@@ -89,10 +100,11 @@ export function createTerrainSequence(part, players) {
     tiles: Array(players).fill(null),
     nativeTick: 0,
     conditionPassed: null,
+    cameraLoaded: false,
   };
 }
 
-export function advanceTerrainSequence(part, state, players, time) {
+export function advanceTerrainSequence(part, state, players, time, camera) {
   const a = part.animation;
   const eligible = players.map((player, i) => {
     const tile = terrainTileAt(part, player.position);
@@ -107,7 +119,20 @@ export function advanceTerrainSequence(part, state, players, time) {
       state.regions[i] <= a.activationRegions[1]
     );
   });
-  const active = eligible.some(Boolean);
+  if (a.activationBand) {
+    for (const transition of camera?.transitions ?? []) {
+      if (
+        !state.cameraLoaded &&
+        entersCameraBand(transition, a.activationBand)
+      ) {
+        state.cameraLoaded = true;
+        state.active = false;
+      }
+      if (state.cameraLoaded && leavesCameraBand(transition, a.activationBand))
+        state.cameraLoaded = false;
+    }
+  }
+  const active = a.activationBand ? state.cameraLoaded : eligible.some(Boolean);
   if (active) {
     if (!state.active) {
       state.startedAt = time;
@@ -122,5 +147,16 @@ export function advanceTerrainSequence(part, state, players, time) {
         a.frames.length;
   }
   state.active = active;
+  if (
+    a.activationBand &&
+    a.timeline &&
+    !a.timeline.loop &&
+    (state.conditionPassed === false ||
+      state.nativeTick === a.timeline.durationTicks)
+  ) {
+    // Script removal cannot respawn an actor while its camera stays in-band.
+    state.cameraLoaded = false;
+    state.active = false;
+  }
   return { frame: state.frame };
 }
