@@ -9,10 +9,11 @@
 - Failed camera snapshots stop their refresh timers; closing media removes resource URLs and event handlers.
 - An empty radar update hides the previous image, stops playback and explains the lack of observations.
 - The route's connection policy now includes the exact Google Analytics hosts used by the site's existing analytics injection.
+- Production verification found a photographic handoff deadlock: actual Google geometric errors slightly exceed exact powers of two, and explicit regional views need a larger initial footprint. Readiness now allows that measured rounding and scales with viewing distance, still rejecting planet tiles and retaining final SSE 2 detail.
 
 ## Validation
 
-- `npm --prefix demos/philadelphia-relief run check`: lint, 396 passing tests, and verified production bundle. Nine additional regression tests cover failure recovery, cancellation, restored controls and policy.
+- `npm --prefix demos/philadelphia-relief run check`: lint, 397 passing tests, and verified production bundle. Ten additional regression tests cover failure recovery, cancellation, restored controls, photographic readiness and policy.
 - Site deployment guard, aquarium synchronization/release gate and Final Blow service-worker guard passed.
 - Chrome checks covered initial rendering, named-place search, tour navigation, bridge/underground opening and cleanup, aircraft/ships/gauges/camera layers together, riverbed loading, and weather/river observations.
 - Reproduced the property timeout in the browser before repair and confirmed the unavailable message afterwards.
