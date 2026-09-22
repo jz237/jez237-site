@@ -14,6 +14,13 @@ import { updateLaunchBonus } from "./launch-bonus.mjs";
 import { ACID_RECOVERY_TICKS } from "./acid-capture.mjs";
 import { vacuumAt } from "./vacuum.mjs";
 import {
+  createAerialVacuums,
+  advanceAerialVacuums,
+  aerialVacuumPoses,
+  nativeVacuumEffect,
+  scheduleVacuumRetirement,
+} from "./aerial-vacuums.mjs";
+import {
   createTerrainAnimations,
   advanceTerrainAnimations,
 } from "./animated-terrain.mjs";
@@ -74,6 +81,8 @@ export class Simulation {
       ? createNativeCamera(course.nativeCamera)
       : null;
     this.aerialHammers = createAerialHammers(course);
+    this.aerialVacuums = createAerialVacuums(course);
+    this.nativeVacuumPoses = aerialVacuumPoses(course, this.aerialVacuums);
     this.events = [];
     this.world = new RAPIER.World({ x: 0, y: -9.81, z: 0 });
     this.world.timestep = STEP;
@@ -232,6 +241,8 @@ export class Simulation {
     }
     p.status = "racing";
     p.vacuumCapture = null;
+    p.nativeVacuumPrevious = null;
+    p.nativeVacuumCaptureUntil = null;
     p.acidCapture = null;
     p.stunnedUntil = 0;
     p.impactAirTicks = 0;
@@ -288,6 +299,20 @@ export class Simulation {
       this.tick * STEP * this.preset.machineSpeed,
       this.nativeCamera,
     );
+    advanceAerialVacuums(
+      this.course,
+      this.aerialVacuums,
+      terrainPlayers.map((p, i) => ({
+        ...p,
+        active:
+          p.active ||
+          (this.players[i].nativeVacuumCaptureUntil ?? -1) >
+            (this.aerialVacuums?.sequence.tick ?? 0),
+      })),
+      this.tick * STEP * this.preset.machineSpeed,
+      this.nativeCamera,
+    );
+    this.nativeVacuumPoses = aerialVacuumPoses(this.course, this.aerialVacuums);
     for (const m of this.movers) {
       m.previous = m.current;
       const machineTime =
@@ -299,7 +324,9 @@ export class Simulation {
       m.current = motionAt(
         m.part,
         machineTime,
-        terrainPoses[m.part.sourcePartId] ?? hammerPoses[m.part.id],
+        terrainPoses[m.part.sourcePartId] ??
+          hammerPoses[m.part.id] ??
+          this.nativeVacuumPoses[m.part.id],
         m.previous,
       );
       if (
@@ -346,6 +373,8 @@ export class Simulation {
         );
       b.setNextKinematicTranslation(m.current.position);
       b.setNextKinematicRotation(m.current.rotation);
+      if (m.part.motion.axis === "native-vacuum" && !m.current.visible)
+        b.setTranslation(m.current.position, false);
     }
     for (let i = 0; i < this.players.length; i++) {
       const p = this.players[i],
@@ -467,7 +496,42 @@ export class Simulation {
             false,
           );
       }
+      if (this.aerialVacuums?.steps) {
+        const previous = p.nativeVacuumPrevious ?? pos;
+        for (let j = 0; j < 6; j++) {
+          const effect = nativeVacuumEffect(
+            this.course,
+            this.aerialVacuums,
+            j,
+            previous,
+            pos,
+            RADIUS,
+          );
+          if (!effect) continue;
+          if (effect.kind === "pull")
+            b.applyImpulse(
+              {
+                x: effect.x * this.aerialVacuums.steps,
+                y: 0,
+                z: effect.z * this.aerialVacuums.steps,
+              },
+              true,
+            );
+          else if (effect.kind === "capture") {
+            scheduleVacuumRetirement(this.aerialVacuums, j);
+            p.nativeVacuumCaptureUntil = this.aerialVacuums.sequence.tick + 32;
+            this.fall(p, { cause: "vacuum", intake: effect.intake });
+            break;
+          }
+          // The source body rectangles remain reference evidence. Solid
+          // contact uses the visible housing mesh, including while rising;
+          // invisible rectangular blocks must not override that geometry.
+        }
+        p.nativeVacuumPrevious = copy(b.translation());
+        if (p.status !== "racing") continue;
+      }
       for (const zone of this.course.zones ?? []) {
+        if (this.course.vacuumSequence?.parts.includes(zone.mouth)) continue;
         if (
           !presenceAt(zone, this.tick * STEP * this.preset.machineSpeed).visible
         )
@@ -775,6 +839,7 @@ export class Simulation {
       terrainAnimations: structuredClone(this.terrainAnimations),
       nativeCamera: structuredClone(this.nativeCamera),
       aerialHammers: structuredClone(this.aerialHammers),
+      aerialVacuums: structuredClone(this.aerialVacuums),
       enemies: structuredClone(this.enemies),
     };
   }
@@ -798,6 +863,10 @@ export class Simulation {
     this.aerialHammers = structuredClone(
       s.aerialHammers ?? createAerialHammers(this.course),
     );
+    this.aerialVacuums = structuredClone(
+      s.aerialVacuums ?? createAerialVacuums(this.course),
+    );
+    this.nativeVacuumPoses = aerialVacuumPoses(this.course, this.aerialVacuums);
     this.events = [];
     // Cached shapes are only an optimization, never restored simulation state.
     for (const a of this.acid) a.geometry = null;

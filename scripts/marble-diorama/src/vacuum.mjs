@@ -29,7 +29,7 @@ export function vacuumMount(mouth, zone) {
   };
 }
 
-export function vacuumAt(zone, time, parts = []) {
+export function vacuumAt(zone, time, parts = [], nativePoses = {}) {
   const mouth = zone.mouth ? parts.find((p) => p.id === zone.mouth) : null;
   const state = presenceAt(mouth ?? zone, time);
   const mount = mouth
@@ -39,6 +39,20 @@ export function vacuumAt(zone, time, parts = []) {
         direction: zone.direction,
       };
   const position = { ...mount.position };
+  if (mouth?.motion?.axis === "native-vacuum") {
+    const pose = nativePoses[mouth.id];
+    if (pose) {
+      position.y += pose.position.y - mouth.y;
+      position.x += mount.direction.x * (pose.intakeOffset ?? 0);
+      position.z += mount.direction.z * (pose.intakeOffset ?? 0);
+    }
+    return {
+      position,
+      direction: mount.direction,
+      active: !!pose?.suction,
+      strength: pose?.suction ? 1 : 0,
+    };
+  }
   if (mouth) position.y += vacuumPoseAt(mouth, time).position.y - mouth.y;
   const active = state.visible && (!mouth || position.y > mouth.y);
   return {

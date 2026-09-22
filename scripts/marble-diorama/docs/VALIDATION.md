@@ -1475,3 +1475,27 @@ Build and browser inspection pass, with no captured warnings or errors.
 This is a local-start check, not a complete race. See AERIAL-HAMMERS.md for
 cadence, random-state, visual and original-response limitations. Public course
 definitions and mm-35 remain unchanged; no publication in this pass.
+
+### September 22 — recovered six-mouth Aerial vacuum group
+
+An optional native vacuum sequence now implements the six recovered placements,
+region 30–35 activation, paired occupancy, graphic table counts, capture-driven
+retirement and camera band 6–30 loading. Front attraction and capture use the
+original quantized fields; solid housing contact follows the rendered mesh.
+Independent resource interpretation matches **17,640 actor observations** over
+3,000 updates. The source block/crush classifier is retained for comparison,
+not used as an invisible collision surface.
+
+The recovered-board local check loads at band 6/tick 186 and ordinary steering
+enters region 30/wakes the first mouth at tick 354, with zero falls. All six
+intake support rays agree within 0.000001 world unit. Ten new tests cover
+script transitions, schema, fields, edited transforms, retirement, real-marble
+capture, solid colliders, sound state and snapshot continuation.
+**260/260 full suite**, 280507.2542 ms; focused tests also pass after assertion
+clarification. Production build and browser inspection pass, with no captured
+warnings/errors. The browser fixture uses an explicit isolated activation band.
+
+The native fixture clock remains provisionally 20 Hz. Dimensions, original body
+response, source fragment animation, cue assignment and complete race acceptance
+remain open. See AERIAL-VACUUMS.md. Public course definitions and mm-35 remain
+unchanged; this native-board work is not yet published.

@@ -1,6 +1,7 @@
 import { compileTerrainSequence } from "./terrain-sequence.mjs";
 import { validateTerrainNavigation } from "./terrain-navigation.mjs";
 import { validateNativeCamera } from "./native-camera.mjs";
+import { validateAerialVacuums, nativeVacuumPose } from "./aerial-vacuums.mjs";
 import {
   validateAerialHammers,
   hammerGeometry,
@@ -374,10 +375,19 @@ export function validateCourse(c) {
     }
     if (
       p.motion &&
-      (!["x", "y", "z", "tilt", "wave", "launch", "hammer"].includes(
-        p.motion.axis,
-      ) ||
+      (![
+        "x",
+        "y",
+        "z",
+        "tilt",
+        "wave",
+        "launch",
+        "hammer",
+        "native-vacuum",
+      ].includes(p.motion.axis) ||
         (p.motion.axis === "hammer" && p.profile !== "hammer") ||
+        (p.motion.axis === "native-vacuum" &&
+          (p.profile !== "vacuum-mouth" || p.presence)) ||
         ![p.motion.amplitude, p.motion.period, p.motion.phase ?? 0].every(
           finite,
         ) ||
@@ -586,7 +596,7 @@ export function validateCourse(c) {
           (p) =>
             p.id === z.mouth &&
             p.profile === "vacuum-mouth" &&
-            p.motion?.axis === "y" &&
+            ["y", "native-vacuum"].includes(p.motion?.axis) &&
             p.motion.amplitude === 0,
         ))
     )
@@ -682,6 +692,7 @@ export function validateCourse(c) {
   }
   validateTerrainNavigation(c);
   validateNativeCamera(c, finite);
+  validateAerialVacuums(c, finite);
   validateAerialHammers(c, finite);
   return c;
 }
@@ -918,6 +929,8 @@ export function compileCourse(c) {
   };
 }
 export function motionAt(p, time, terrainRows, previous) {
+  if (p.motion?.axis === "native-vacuum")
+    return terrainRows ?? nativeVacuumPose(p, null);
   if (p.motion?.axis === "hammer") return hammerPose(p, terrainRows);
   if (p.motion?.axis === "terrain-sequence")
     return {

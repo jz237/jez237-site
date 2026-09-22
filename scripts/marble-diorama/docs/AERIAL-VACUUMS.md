@@ -89,3 +89,70 @@ September 21 mm-22 presentation correction: spherical sectors now use their
 proper portion of the full marble texture, and return rotations converge to
 identity before physical respawn. This removes extra repeated stripes and a
 final rotation discontinuity. Capture durations and physical outcomes are unchanged.
+
+## September 22 — six recovered actor scripts (local native boards)
+
+Static inspection establishes **six** Aerial mouths, not three. The public
+reconstruction still has three; this new controller is integrated into the local
+native-board fixture pending campaign replacement and acceptance.
+
+| Actor | Source cell x,z | Subtype | Wake region |
+|---|---|---|---|
+| 0 | 39,36 | 11 | 30 |
+| 1 | 47,36 | 11 | 31 |
+| 2 | 50,47 | 13 | 32 |
+| 3 | 33,42 | 11 | 33 |
+| 4 | 41,42 | 11 | 34 |
+| 5 | 44,53 | 13 | 35 |
+
+All six use source height 16300 and camera loading band 6–30. Region entry
+wakes a waiting mouth. Eight deployment graphics, two holding graphics and
+nine withdrawal graphics run at divider two. After deployment and each hold
+loop, either active player in the mouth's region or the next region keeps it
+open. Otherwise it withdraws and waits for a new entry. Region 4 clears the
+preceding group. A captured player keeps the mouth occupied for 32 native
+updates, then redirects it into withdrawal/removal. Unload/reload starts a
+fresh group. Controller state and pending callbacks are saved in snapshots.
+
+The front attraction rectangle, smaller capture rectangle and signed fixed-point
+velocity increment are recovered from both subtype handlers. Attraction is
+active only in the holding phase. These fields rotate/translate with the actual
+housing, and audio uses the same active intake. Contact against the housing uses
+its rendered solid mesh throughout deployment and withdrawal. The source body
+block/crush classifier is reference evidence only; it does **not** cause
+invisible rectangular collisions or position rollback.
+
+### Evidence and checks
+
+- An independent interpreter reads original script words and graphic tables.
+  Three 1,000-update scenarios agree on **17,640 actor states**, including two
+  players, capture retirement, region-4 clearing and reloading.
+- On recovered Aerial terrain, the original camera loads the group at band 6
+  (simulation tick 186). Ordinary positive-z steering enters region 30 and wakes
+  mouth 0 at tick 354, with zero falls. It reaches its holding image.
+- All six intake centers have supporting original terrain at the expected
+  marble-radius distance; maximum ray error is below 0.000001 world unit.
+- Regressions cover validation, script frames, paired occupancy, attraction
+  boundaries/quantization, edited mouths, active sound state, real-marble
+  capture, solid colliders and snapshot continuation.
+- Browser inspection shows a rounded, recessed yellow housing on the original
+  zigzag, zero falls and no captured warnings/errors. That visual fixture uses
+  an inspection-only loading band; the original band/gate are checked above.
+
+### Remaining differences
+
+The native fixture uses the existing provisional **20 updates/second**. The
+synthetic test fixture uses 50 to exercise a non-divisor clock; this is **not
+evidence of the Amiga's cadence**. Script counts are recovered, but wall-clock
+cadence is unverified. The source fragment routine staggers eight fragments by
+two updates and hides each after eight updates. The last disappears around
+update 22, before the 32-update capture counter expires. Dividing 32 by the
+approximate visible inhale duration would therefore be an invalid calibration.
+
+Housing dimensions and the mapping of sprites to four deployment heights remain
+reconstructed. The existing 2.1-second fragment/reform presentation is unchanged;
+it is not a port of the source screen-space fragment algorithm. Original body
+response, the subtype-13 previous-position ambiguity, sound assignment, and
+repeated tile-entry callbacks inside region 4 remain open. These checks verify
+a local interaction, not a complete original Aerial race. Full parity and public
+native-board replacement remain incomplete.
