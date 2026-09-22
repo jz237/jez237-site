@@ -28,6 +28,7 @@ export function acidMesh(zone) {
   );
   const p = acidPositionAt(zone, 0);
   mesh.position.set(p.x, p.y, p.z);
+  mesh.visible = zone.nativeAcidSlot === undefined;
   return mesh;
 }
 export function updateAcidMesh(
@@ -37,9 +38,12 @@ export function updateAcidMesh(
   currentTime,
   alpha,
   currentPosition,
+  runtime,
 ) {
-  const current = acidShape(zone, currentTime),
-    previous = acidShape(zone, previousTime);
+  mesh.visible = !runtime?.hidden;
+  if (!mesh.visible) return;
+  const current = runtime?.current?.geometry ?? acidShape(zone, currentTime),
+    previous = runtime?.previous?.geometry ?? acidShape(zone, previousTime);
   const position = mesh.geometry.attributes.position;
   for (let i = 0; i < position.array.length; i++)
     position.array[i] =
@@ -48,11 +52,19 @@ export function updateAcidMesh(
   position.needsUpdate = true;
   mesh.geometry.computeVertexNormals();
   mesh.geometry.computeBoundingSphere();
-  const before = acidPositionAt(zone, previousTime),
-    now = currentPosition ?? acidPositionAt(zone, currentTime);
+  const before =
+      runtime?.previous?.position ?? acidPositionAt(zone, previousTime),
+    now =
+      runtime?.current?.position ??
+      currentPosition ??
+      acidPositionAt(zone, currentTime);
   mesh.position.set(
     before.x + (now.x - before.x) * alpha,
     before.y + (now.y - before.y) * alpha,
     before.z + (now.z - before.z) * alpha,
   );
+  if (runtime?.current?.rotation) {
+    const q = runtime.current.rotation;
+    mesh.quaternion.set(q.x, q.y, q.z, q.w);
+  }
 }

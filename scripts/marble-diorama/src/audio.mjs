@@ -344,6 +344,8 @@ export class AudioEngine {
         });
     }
     for (const z of sim.course.zones ?? []) {
+      if (z.kind === "acid" && sim.acid.find((a) => a.zone === z)?.hidden)
+        continue;
       const vacuum =
         z.kind === "vacuum"
           ? vacuumAt(

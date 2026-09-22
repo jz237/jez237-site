@@ -20,11 +20,18 @@ export function updateAcidDeath(
   zone,
   seconds,
   machineSpeed = 1,
+  currentPool,
 ) {
   group.visible = player.status === "falling" && !!player.acidCapture && !!zone;
   if (!group.visible) return;
   const capture = player.acidCapture;
-  const pose = acidCapturePose(capture, zone, seconds, machineSpeed);
+  const pose = acidCapturePose(
+    capture,
+    zone,
+    seconds,
+    machineSpeed,
+    currentPool,
+  );
   const [shell, fragments] = group.children;
   shell.visible = pose.visible;
   if (shell.visible) {

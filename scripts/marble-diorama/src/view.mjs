@@ -917,6 +917,7 @@ export class DioramaView {
         (this.sim.tick / 120) * this.sim.preset.machineSpeed,
         alpha,
         this.sim.world.getCollider(a.handle).translation(),
+        this.sim.acid.find((pool) => pool.handle === a.handle),
       );
     for (let i = 0; i < this.marbles.length; i++) {
       const p = this.sim.players[i],
@@ -949,6 +950,9 @@ export class DioramaView {
         this.sim.course.zones?.[p.acidCapture?.zone],
         (Math.max(0, this.sim.tick - 1) + alpha) / 120,
         this.sim.preset.machineSpeed,
+        this.acid.find(
+          (pool) => pool.zone === this.sim.course.zones?.[p.acidCapture?.zone],
+        )?.mesh.position,
       );
       updateVacuumFragments(
         this.vacuumFragments[i],
