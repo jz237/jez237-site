@@ -1499,3 +1499,25 @@ The native fixture clock remains provisionally 20 Hz. Dimensions, original body
 response, source fragment animation, cue assignment and complete race acceptance
 remain open. See AERIAL-VACUUMS.md. Public course definitions and mm-35 remain
 unchanged; this native-board work is not yet published.
+
+### September 22 — Aerial paddle and native airborne dynamics
+
+The local native paddle now follows the recovered 15-update dwell, four throwing
+frames, ten-update hold and five return frames. Independent bytecode data
+interpretation matches 1,000 updates. Source launch velocity ranges drive a
+physical spring impulse while the marble remains at the visible cup; no source
+centering snap or remote launch is applied. Optional native dynamics recover
+the original 3/8-unit gravity increment and five-unit downward velocity limit.
+
+On the recovered board, the original camera loads at band 20/tick 522; a local
+start contacts the cup at tick 528 and lands on the higher lane at tick 949,
+with one release cue and zero falls. Browser inspection verifies the resting
+cup, throwing stroke and first landing, with no captured warnings/errors.
+This is a local launch/landing check, not a complete race.
+
+**270/270 full suite**, 281766.3894 ms; build and diff checks pass. Ten added
+tests cover script timing, impulses, loading, shared transforms, remote-launch
+rejection, gravity, terminal speed and snapshot continuation. See AERIAL-PADDLE.md
+for the unverified native cadence, source capture/paired response, random-state,
+3D shape and discrete-integration differences. Public courses/mm-35 are unchanged;
+native-board publication and remaining campaign acceptance are still pending.
