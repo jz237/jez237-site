@@ -1,6 +1,10 @@
 import { nativeFlagGroup, updateNativeFlag } from "./flag-view.mjs";
 import { stunMarks, updateStunMarks } from "./stun-view.mjs";
 import { acidDeathGroup, updateAcidDeath } from "./acid-death-view.mjs";
+import {
+  steelieShatterGroup,
+  updateSteelieShatter,
+} from "./steelie-shatter-view.mjs";
 import { vacuumFragments, updateVacuumFragments } from "./vacuum-view.mjs";
 import {
   slinkyCaptureGroup,
@@ -506,6 +510,11 @@ export class DioramaView {
       mesh.receiveShadow = true;
       this.marbleRoot.add(mesh);
       this.enemies.push(mesh);
+      if (e.nativeSteelie) {
+        const fragments = steelieShatterGroup(mesh.material);
+        this.marbleRoot.add(fragments);
+        mesh.userData.steelieShatter = fragments;
+      }
     }
     this.finishFlags = [];
     if (sim.course.finishFlags) {
@@ -893,6 +902,14 @@ export class DioramaView {
         alpha,
       );
       mesh.visible = !e.collected && !e.defeated && !e.hidden;
+      if (mesh.userData.steelieShatter)
+        updateSteelieShatter(
+          mesh.userData.steelieShatter,
+          e,
+          (Math.max(0, this.sim.tick - 1 + alpha) / 120) *
+            this.sim.preset.machineSpeed *
+            this.sim.course.nativeCamera.rate,
+        );
       if (mesh.userData.articulated)
         updateActorMesh(
           mesh,

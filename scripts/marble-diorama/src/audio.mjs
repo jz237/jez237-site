@@ -251,6 +251,13 @@ export class AudioEngine {
   }
   event(event, assisted = false) {
     if (event.type === "impact") return this.impact(event.force);
+    if (event.type === "steelie-shatter")
+      return this.effect("crack", {
+        key: `steelie-crack:${event.enemy}`,
+        gain: 0.8,
+      });
+    if (event.type === "steelie-shatter-split")
+      return this.effect("scatter", { key: `steelie-split:${event.enemy}` });
     if (event.type === "slinky-capture")
       return this.effect("swallow", { key: `slinky-capture:${event.player}` });
     if (event.type === "slinky-release")

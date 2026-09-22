@@ -101,7 +101,56 @@ reinitializes the guard. Snapshot restoration preserves that lifecycle.
 The public authored courses retain their older last-contact award until the
 native course replacement passes release acceptance.
 
+### Hard landing and break-up
+
+The original landing path at `0x152d2` computes severity from the absolute
+difference between the last supported height and the new floor, shifted right
+15 bits: two severity units per source height unit. Ordinary sideways contact
+does not directly add this damage. The physical adapter detects a real landing
+manifold after an unsupported interval and measures the same height difference;
+it does not move the sphere to a source-coordinate position.
+
+`0x14a34` adds severity to a signed byte and breaks the guard when that byte is
+strictly above 80 or one landing's severity is above 31. `0x19638` decrements
+the byte only in landing state `0x24`. The subsequent route AI can replace that
+state in the same update, so this is not a continuous decay during patrol.
+The adapter preserves that ordering. The break initializer selects animation
+2 and reuses the damage byte as phase 2; its pursuit cooldown keeps counting.
+
+The original `marbdat` break sequence contains 32 frames at two source updates
+per frame. A secondary fragment sequence starts at update 18, with sound
+request `0x12`; the initial crack requests `0x11`. Main graphics are blank
+from update 54, the secondary graphics from update 62, and the actor is removed
+at update 64. The adapter awards each eligible player's 1,000 points once at
+the start, disables the physical sphere, and runs that retirement clock.
+Camera departure hides the effect; camera reentry resets it and the damage.
+
+Newly drawn closed spherical sectors crack and scatter from the actual impact
+position and rotation, followed by small metal chips. The sectors settle on
+the landing plane without passing through it. These are non-colliding retirement
+effects. Their 3D paths and the newly synthesized crack/scatter audio are
+authored adaptations, not recovered bitmap art or original samples. Their
+timing, state, visibility and reward boundaries come from the source program.
+All state needed for seeking and replay remains in simulation snapshots.
+
+The physical drop study uses a three-world-unit ledge. Without forced actor
+states or player input, the patrol lands at physics tick 151 with severity 48,
+awards 1,000 points, and starts the secondary burst at tick 258. A gentler drop
+does not break the guard. Tests cover threshold boundaries, retained damage,
+camera removal/reload, timed-out reward exclusion and snapshot restoration
+without duplicate rewards. Browser inspection shows the black sphere followed
+by separate solid fragments. All four original guards still complete their
+7,200-tick isolated patrols without false defeats.
+
 ## Validation and remaining scope
+
+The hard-landing milestone passes the full 336-test suite (284449.0368 ms).
+Subsequent corrections to the break mode/cooldown and decorative fragment floor
+bounds pass all 22 focused steelie and shatter tests (444.4431 ms). The final
+build passes, the local browser reports no warnings/errors, and its physical
+drop study shows the delayed fragments with exactly 1,000 points and no player
+falls. Audio samples pass signal checks; human listening remains outstanding.
+These changes are local and have not yet been published.
 
 - Sixteen regressions cover graph choices, target eligibility/ties, mode changes,
   timer expiry, special camera boundaries, fixed-point steering, rolling drag,
@@ -136,13 +185,12 @@ with all 24 focused native-steelie, legacy-steelie and native-dynamics tests
 patrol diagnostics pass with the new retirement rules. Build and diff checks
 pass. These are local checks; the native campaign has not been published.
 
-Open: original collision impulses, airborne-state details, impact shattering
-and its animation, other surface-specific resistance modes, exact
+Open: original collision impulses, airborne-state details, exact impact-height
+calibration and original break artwork, other surface-specific resistance modes, exact
 update cadence/difficulty calibration and complete normal-input course runs.
 Rapier integrates continuous rolling at 120 Hz; the original applies its
 discrete resistance after position integration. The torque response is a
 physical adaptation, not an assertion of identical trajectories. The source
-also awards a guard's impact destruction at 0x14a34 before its break animation;
-that branch still needs physical impact calibration and visible shattering.
-Native boards still need
+awards a guard's hard-landing destruction before its break animation, now
+implemented as described above. Native boards still need
 the other enemy families, geometry polish and full release acceptance.

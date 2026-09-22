@@ -15,6 +15,8 @@ export const effectDurations = {
   muncher: 0.16,
   swallow: 0.5,
   reform: 0.75,
+  crack: 0.22,
+  scatter: 0.65,
   vacuum: 0.3,
   magnet: 0.22,
   acid: 0.22,
@@ -85,6 +87,16 @@ export function effectSamples(kind, rate) {
       case "reform":
         frequency = 340 + 950 * u;
         amplitude = 0.13 * (0.7 + 0.3 * Math.cos(u * 38));
+        break;
+      case "crack":
+        frequency = 1600 * Math.pow(0.14, u);
+        signal = noise * Math.exp(-u * 8) * 0.7;
+        amplitude = 0.22;
+        break;
+      case "scatter":
+        frequency = 1900 + 1100 * Math.sin(u * 39);
+        signal = noise * Math.max(0, Math.cos(u * 65)) * 0.22;
+        amplitude = 0.11 * (1 - u);
         break;
       case "vacuum":
         frequency = 190 + 30 * Math.sin(u * 8);

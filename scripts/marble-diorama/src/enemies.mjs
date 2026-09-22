@@ -11,6 +11,7 @@ import {
   steerNativeSteelie,
   nativeSteelieFallen,
   awardNativeSteelieDefeat,
+  updateNativeSteelieLanding,
 } from "./native-steelie-physics.mjs";
 
 // Animated actors share articulated solids with the renderer.
@@ -283,6 +284,7 @@ export function steerEnemies(sim, dt) {
 }
 export function updateEnemies(sim, incomingVelocity = []) {
   for (const e of sim.enemies) {
+    updateNativeSteelieLanding(sim, e);
     if (e.collected || e.defeated) continue;
     const b = sim.world.getRigidBody(e.handle);
     e.current = {
