@@ -20,6 +20,7 @@ import { wavePose, WAVE_INDICES, WAVE_ROLES } from "./wave.mjs";
 export const COURSE_SCHEMA = 1;
 export const SURFACES = {
   stone: { friction: 0.9, color: "#e4ddd0", roughness: 0.52 },
+  slate: { friction: 0.9, color: "#647174", roughness: 0.52 },
   ceramic: { friction: 0.85, color: "#dbe1de", roughness: 0.3 },
   ice: { friction: 0.035, color: "#8fd8de", roughness: 0.12 },
   glass: { friction: 0.4, color: "#b1ece6", roughness: 0.12 },
@@ -672,7 +673,13 @@ export function partGeometry(p) {
     cs = Math.cos(ang),
     sn = Math.sin(ang);
   const put = ([x, y, z]) => {
-    if (!p.motion && ["floor", "ramp", "channel"].includes(p.kind)) {
+    if (
+      (!p.motion && ["floor", "ramp", "channel"].includes(p.kind)) ||
+      (p.kind === "moving" &&
+        p.presence &&
+        p.motion?.axis === "y" &&
+        p.motion.amplitude === 0)
+    ) {
       const radius = Math.min(0.55, p.w * 0.18, p.d * 0.18),
         cx = p.w / 2 - radius,
         cz = p.d / 2 - radius,

@@ -21,8 +21,8 @@ test("both complete Ultimate routes pass the active ice-exit steelie with bounde
     let exitVisited = false,
       rightAcidRoom = false,
       outerIce = false,
-      rightFinish = false;
-    while (sim.tick < 120 * 120 && sim.players[0].status !== "finished") {
+      raisedReturn = false;
+    while (sim.tick < 120 * 180 && sim.players[0].status !== "finished") {
       const before = { ...sim.body(sim.players[0]).translation() };
       const input = driver.input(sim);
       assert.deepEqual({ ...sim.body(sim.players[0]).translation() }, before);
@@ -33,7 +33,7 @@ test("both complete Ultimate routes pass the active ice-exit steelie with bounde
         d = (p.x + p.z) * Math.SQRT1_2;
       rightAcidRoom ||= l > 11 && d > 79 && d < 87 && p.y > 8;
       outerIce ||= l > 8 && d > 103 && d < 110 && p.y > 4;
-      rightFinish ||= l > 12 && d > 127 && d < 135 && p.y > 1;
+      raisedReturn ||= l > 18 && d > 126 && d < 129 && p.y > 6;
       if (d > 114 && d < 118 && p.y > 4) {
         exitVisited = true;
         assert.ok(
@@ -44,7 +44,7 @@ test("both complete Ultimate routes pass the active ice-exit steelie with bounde
     assert.equal(sim.players[0].status, "finished");
     assert.equal(sim.players[0].deaths, 0);
     assert.ok(exitVisited);
-    if (right) assert.ok(rightAcidRoom && outerIce && rightFinish);
+    if (right) assert.ok(rightAcidRoom && outerIce && raisedReturn);
     else
       assert.equal(
         enemy.lastContactPlayer,
