@@ -71,11 +71,37 @@ travel and replay from inside the passage.
 
 ## Remaining parity work
 
+### Outlet shape and side curls
+
+The original 35/36 housing handler at 0x1770c calls bounded-plane contact
+routine 0x180ac with shape 5 (table at 0x18568). Two vertical side planes are
+24 source units apart; their vertical bounds extend 16 units above the actor
+height, with a two-unit lower tolerance. A third plane forms the back. These
+are collision rules, not a full surface model: the routine can rewind the
+previous position and reverse velocity, which the rigid-body remake does not
+copy. The source table and private reference crop support broad, flattened
+horns in place of the previous circular mouths.
+
+The native fixture now uses 24-by-16-unit outlet profiles (3.3 by 2.2 world
+units at its current scale). Smooth fourth-power curves round the corners and
+blend back into the circular throat. Newly authored curled side supports have
+round tips and remain outside both passages. The supports, shell, inner walls
+and rims all belong to the rendered/collided geometry. Each mesh edge has two
+incident faces; ray tests confirm the widened visible openings are also the
+physical openings. Optional fork profiles and scrollwork survive JSON import,
+with finite dimensions, distinct curve points and the existing total vertex
+limit enforced. Shape and proportions still require final reference comparison.
+
+The airflow and scoring envelope is conservatively circular inside the shaped
+mouth. A wider usable off-center exit envelope remains future calibration work.
+The reference loops are newly modeled, not extracted bitmap artwork.
+
 The branch RNG remains a deterministic hash, not the original global RNG.
 Continuous travel through the upper bends necessarily replaces an original
 internal relocation; bend dimensions, transit duration, horizontal exit speed
-and preserved exit lift still need calibration against Amiga footage. Original
-outlet-housing contact handlers (35/36) and looped side details remain open.
+and preserved exit lift still need calibration against Amiga footage. The
+bounded-plane outlet contact code is recovered; physical response calibration
+and final silhouette comparison remain open.
 The original sound identifier is recovered, but the runtime still uses authored
 airflow and reward effects. Scoring's once-per-race policy is still provisional.
 The native fixture has not replaced the published campaign. Full-course controls,

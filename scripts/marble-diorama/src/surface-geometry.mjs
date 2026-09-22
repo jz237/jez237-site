@@ -44,7 +44,12 @@ export function tubeCurve(p) {
 }
 
 export function tubeRadiusAt(p, distance, length) {
-  const radius = p.radius ?? 1.4;
+  const profile = p.outletProfile;
+  // The circular airflow/scoring envelope remains inside a shaped opening.
+  const radius =
+    profile && distance > length / 2
+      ? Math.min(profile.width, profile.height) / 2
+      : (p.radius ?? 1.4);
   if (!p.flare) return radius;
   const end = Math.max(
     0,
@@ -116,7 +121,7 @@ function forkGeometry(p) {
   ];
   const ports = [[], []],
     chamber = [];
-  for (const points of legs) {
+  for (const [legIndex, points] of legs.entries()) {
     const curve = tubeCurve({ path: points }),
       length = curve.getLength();
     const cut = throat * 2.5;
@@ -138,9 +143,28 @@ function forkGeometry(p) {
       const flare = p.flare
         ? Math.max(0, 1 - (length - distance) / p.flare.length) ** 2
         : 0;
-      const r =
-        throat + ((p.radius ?? 1.4) - throat) * flare + outer * thickness;
+      let r = throat + ((p.radius ?? 1.4) - throat) * flare + outer * thickness;
       const a = (k / rings) * Math.PI * 2;
+      const radial = normal
+        .clone()
+        .multiplyScalar(Math.cos(a))
+        .addScaledVector(binormal, Math.sin(a));
+      if (legIndex > 0 && p.fork.outletProfile) {
+        // A rounded rectangular bell, aligned to world-up in its own course
+        // coordinates. A fourth-power superellipse has no sharp corners.
+        const up = new Vector3(0, 1, 0);
+        up.addScaledVector(tangent, -up.dot(tangent));
+        if (up.lengthSq() < 1e-8) up.copy(binormal);
+        up.normalize();
+        const right = new Vector3().crossVectors(tangent, up).normalize();
+        const { width, height } = p.fork.outletProfile;
+        const mouth = Math.pow(
+          Math.pow(radial.dot(right) / (width / 2), 4) +
+            Math.pow(radial.dot(up) / (height / 2), 4),
+          -0.25,
+        );
+        r = throat + (mouth - throat) * flare + outer * thickness;
+      }
       return curve
         .getPointAt(t)
         .addScaledVector(normal, Math.cos(a) * r)
@@ -217,6 +241,68 @@ function forkGeometry(p) {
         continue;
       if (!outer) vs.reverse();
       b.tri(...vs.map((v) => v.toArray()));
+    }
+  }
+  for (const detail of p.fork.scrollwork ?? []) {
+    const curve = tubeCurve(detail),
+      length = curve.getLength();
+    const count = Math.max(24, Math.ceil(length * 12)),
+      sides = 12;
+    const frames = curve.computeFrenetFrames(count, false);
+    const at = (i, k) =>
+      curve
+        .getPointAt(i / count)
+        .addScaledVector(
+          frames.normals[i],
+          Math.cos((k / sides) * Math.PI * 2) * detail.radius,
+        )
+        .addScaledVector(
+          frames.binormals[i],
+          Math.sin((k / sides) * Math.PI * 2) * detail.radius,
+        )
+        .toArray();
+    for (let i = 0; i < count; i++)
+      for (let k = 0; k < sides; k++)
+        b.quad(at(i, k), at(i, k + 1), at(i + 1, k + 1), at(i + 1, k));
+    // Hemispherical tips avoid sharp cap edges and use the same contact mesh.
+    for (const end of [0, 1]) {
+      const index = end * count,
+        center = curve.getPointAt(end);
+      const tangent = curve.getTangentAt(end).multiplyScalar(end ? 1 : -1);
+      const cap = (row, k) => {
+        const angle = ((row / 4) * Math.PI) / 2;
+        return center
+          .clone()
+          .addScaledVector(tangent, Math.sin(angle) * detail.radius)
+          .addScaledVector(
+            frames.normals[index],
+            Math.cos((k / sides) * Math.PI * 2) *
+              Math.cos(angle) *
+              detail.radius,
+          )
+          .addScaledVector(
+            frames.binormals[index],
+            Math.sin((k / sides) * Math.PI * 2) *
+              Math.cos(angle) *
+              detail.radius,
+          )
+          .toArray();
+      };
+      for (let row = 0; row < 4; row++)
+        for (let k = 0; k < sides; k++) {
+          const face =
+            row === 3
+              ? [cap(row, k), cap(row, k + 1), cap(4, 0)]
+              : [
+                  cap(row, k),
+                  cap(row, k + 1),
+                  cap(row + 1, k + 1),
+                  cap(row + 1, k),
+                ];
+          if (!end) face.reverse();
+          if (row === 3) b.tri(...face);
+          else b.quad(...face);
+        }
     }
   }
   return { ...b.result(), chamber };

@@ -33,6 +33,7 @@ import {
   polygonGeometry,
   pyramidGeometry,
   tubeGeometry,
+  tubeCurve,
 } from "./surface-geometry.mjs";
 import { wavePose, WAVE_INDICES, WAVE_ROLES } from "./wave.mjs";
 import { terrainGeometry, validateTerrain } from "./terrain-geometry.mjs";
@@ -246,6 +247,50 @@ export function validateCourse(c) {
             )))
       )
         throw Error("Invalid tube fork.");
+      if (
+        f.outletProfile !== undefined &&
+        (!f.outletProfile ||
+          ![f.outletProfile.width, f.outletProfile.height].every(finite) ||
+          Math.min(f.outletProfile.width, f.outletProfile.height) <
+            2 * (p.flare?.throat ?? p.radius ?? 1.4) ||
+          Math.max(f.outletProfile.width, f.outletProfile.height) > 16)
+      )
+        throw Error("Invalid tube outlet profile.");
+      if (
+        f.scrollwork !== undefined &&
+        (!Array.isArray(f.scrollwork) ||
+          f.scrollwork.length > 4 ||
+          f.scrollwork.some(
+            (detail) =>
+              !detail ||
+              !finite(detail.radius) ||
+              detail.radius < 0.04 ||
+              detail.radius > 0.25 ||
+              !Array.isArray(detail.path) ||
+              detail.path.length < 2 ||
+              detail.path.length > 32 ||
+              !detail.path.every((v) => v && [v.x, v.y, v.z].every(finite)) ||
+              detail.path
+                .slice(1)
+                .some(
+                  (v, i) =>
+                    Math.hypot(
+                      v.x - detail.path[i].x,
+                      v.y - detail.path[i].y,
+                      v.z - detail.path[i].z,
+                    ) < 0.02,
+                ),
+          ))
+      )
+        throw Error("Invalid tube scrollwork.");
+      estimatedVertices += (f.scrollwork ?? []).reduce(
+        (total, detail) =>
+          total +
+          (Math.max(24, Math.ceil(tubeCurve(detail).getLength() * 12)) + 1) *
+            12 +
+          74,
+        0,
+      );
       const legs = [
         p.path.slice(0, f.at + 1).reverse(),
         p.path.slice(f.at),

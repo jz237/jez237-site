@@ -63,6 +63,7 @@ export function traversalPaths(course) {
           flowSpeed: p.flowSpeed,
           flowExitSpeed: p.flowExitSpeed,
           nativeTransfer: p.nativeTransfer === true,
+          outletProfile: p.fork?.outletProfile,
           radius: p.radius ?? 1.4,
           length,
           points,
@@ -70,8 +71,22 @@ export function traversalPaths(course) {
             ["x", "y", "z"].map((axis) => [
               axis,
               [
-                Math.min(...points.map((v) => v[axis])) - (p.radius ?? 1.4),
-                Math.max(...points.map((v) => v[axis])) + (p.radius ?? 1.4),
+                Math.min(...points.map((v) => v[axis])) -
+                  Math.max(
+                    p.radius ?? 1.4,
+                    Math.hypot(
+                      p.fork?.outletProfile?.width ?? 0,
+                      p.fork?.outletProfile?.height ?? 0,
+                    ) / 2,
+                  ),
+                Math.max(...points.map((v) => v[axis])) +
+                  Math.max(
+                    p.radius ?? 1.4,
+                    Math.hypot(
+                      p.fork?.outletProfile?.width ?? 0,
+                      p.fork?.outletProfile?.height ?? 0,
+                    ) / 2,
+                  ),
               ],
             ]),
           ),
