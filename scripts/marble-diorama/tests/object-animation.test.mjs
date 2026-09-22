@@ -391,33 +391,45 @@ test("vacuum intake has a recessed cavity and solid rear wall, and retracts out 
   }
 });
 
-test("Aerial paddle can be entered from its spur using ordinary held movement", () => {
-  const c = aerialCourse(),
-    part = c.parts.find((p) => p.profile === "flipper");
-  const q = Math.SQRT1_2;
-  c.starts = [{ x: (-3 + 66.7) * q, y: 11.06, z: (66.7 + 3) * q }];
-  const sim = new Simulation(c, { untimed: true });
-  let airborne = false,
-    landed = false;
-  while (sim.tick < 720 && !landed) {
-    const mover = sim.movers.find((m) => m.part.id === part.id);
-    sim.step([
-      mover.launchTick === undefined
-        ? { x: -q, z: q, turbo: true }
-        : { x: 0, z: 0 },
-    ]);
-    const p = sim.players[0],
-      v = p.current.position,
-      l = (v.x - v.z) * q,
-      d = (v.x + v.z) * q;
-    airborne ||= !p.grounded && v.y > 13.5;
-    landed =
-      airborne && p.grounded && l > -16.5 && l < -7.5 && d > 57 && d < 65;
-  }
-  assert.ok(landed);
-  assert.equal(sim.players[0].deaths, 0);
-  sim.dispose();
-});
+for (const strength of [0.5, 1])
+  test(`Aerial paddle reaches its upper landing with ${strength === 1 ? "full" : "gentle"} held turbo`, () => {
+    const c = aerialCourse(),
+      part = c.parts.find((p) => p.profile === "flipper");
+    const q = Math.SQRT1_2;
+    c.starts = [{ x: (-3 + 66.7) * q, y: 11.06, z: (66.7 + 3) * q }];
+    const sim = new Simulation(c, { untimed: true });
+    let airborne = false,
+      landed = false;
+    while (sim.tick < 720 && !landed) {
+      const mover = sim.movers.find((m) => m.part.id === part.id);
+      sim.step([
+        mover.launchTick === undefined
+          ? { x: -q * strength, z: q * strength, turbo: true }
+          : { x: 0, z: 0 },
+      ]);
+      const p = sim.players[0],
+        v = p.current.position,
+        l = (v.x - v.z) * q,
+        d = (v.x + v.z) * q;
+      // A faster approach has a lower successful arc. Verify actual unsupported
+      // flight after paddle activation, not an arbitrary peak-height threshold.
+      airborne ||=
+        mover.launchTick !== undefined &&
+        sim.tick > mover.launchTick &&
+        !p.grounded;
+      landed =
+        airborne &&
+        p.grounded &&
+        Math.abs(v.y - 13.05) < 0.1 &&
+        l > -16.5 &&
+        l < -7.5 &&
+        d > 57 &&
+        d < 65;
+    }
+    assert.ok(landed);
+    assert.equal(sim.players[0].deaths, 0);
+    sim.dispose();
+  });
 
 test("vacuum deployment moves its collision surface and suction origin together through withdrawal and return", () => {
   const c = aerialCourse(),

@@ -1082,3 +1082,36 @@ paired production demo with 8895 points each and zero falls; a close-up scene
 using the final source also completes the final room with zero falls and confirms
 the aligned grid, rounded solids and white lower landing. Neither browser scene
 captured warnings/errors. Production build and whitespace checks pass.
+
+### September 21 - initial turbo-response calibration, mm-28
+
+An original opening-frame trace revealed that the old maximum torque could not
+cover even the horizontal-only observed displacement from rest. Full turbo
+torque is now 4.4; normal torque remains 1.35. This clears a conservative
+screen-displacement check given 1.2s, but does not reproduce the complete sampled
+1.1s trajectory. See CONTROL-RESPONSE.md for pixel coordinates, assumptions and
+limits. Top-speed envelopes and race clocks are unchanged. Demo inputs use
+half strength to retain their established torque through the same player controls.
+
+The reproducible native fixture records normal/full-turbo displacement, speed,
+rolling and contact every 0.1s. At 1.2s full turbo travels 3.734 marble diameters,
+versus 1.860 previously; rolling discrepancy is about 0.25%. The 14 existing
+physics tests and two new response/replay tests pass. New tests cover the
+reference lower bound, rotation/contact agreement, preserved gentle input and
+exact snapshot continuation under stronger steering. Browser Practice demo
+completes in 29.74s with 1410 points, zero falls and no captured warnings/errors.
+
+Fresh timed measurement has identical outcomes: solo times out in Ultimate at
+32s; paired Silly expires by 55.0417s, with zero falls. These demo failures are
+still open. The faster broad-route/braking experiments were discarded after
+missed approaches or slower Silly traversal; none is present in this release.
+
+The first full run passed 173/174 checks; the remaining Aerial paddle test assumed
+a minimum arc height of 13.5. Native diagnostics showed both input strengths
+land safely, with a lower successful arc at full turbo. The revised test retains
+physical flight, landing footprint/elevation and zero-fall assertions, and now
+covers gentle and full input. All 15 object-animation tests pass (9258.13ms).
+
+The final full suite passes all 175 tests (294013.66ms). Production build and
+whitespace checks pass. Exact original control calibration and full timed
+campaign completion remain incomplete.
