@@ -11,6 +11,19 @@ optional exhibits into lazy chunks. Content-hashed output uses immutable browser
 caching. Elevation and vectors start the map while the original full-resolution
 regional photograph finishes downloading; the image is never resized for this.
 
+Tree placement, elevation decoding, and the shading grid prepare in short cooperative
+batches. The same coordinates, elevation probes, crown counts, and final imagery
+resolutions are retained. Tree jobs are cancelled when their tile is evicted or
+when the scene closes. Visible imagery is queued before speculative zoom work;
+large jumps abort obsolete downloads, with one bounded grace period for a nearby
+transfer whose reported bytes show it is almost complete.
+
+After 1.2 seconds without camera movement and once visible detail is complete,
+the streamer warms up to four adjacent 512-pixel previews, one at a time. It skips
+this on data-saving, 2G/3G, low-bandwidth, or measured slow connections. These
+previews use the existing bounded cache and refine to the original full detail
+when brought into view. Hidden pages start no new tile jobs.
+
 ## Aircraft over the region — September 20, 2026
 
 **Optional home-computer relay.** Hosted requests were refused by public providers,
