@@ -1,5 +1,10 @@
 # Silly upward transfer
 
+**Native-board update:** [NATIVE-TRANSFER.md](NATIVE-TRANSFER.md) recovers and
+executes the Amiga inlet and outlet-selection code and integrates its decisions
+with a continuous physical passage. The reconstruction and evidence limits below
+describe the older published course; they are not the latest native fixture.
+
 ## Observed sequence
 
 [Ironclaw's Amiga recording](https://www.youtube.com/watch?v=Nfa2etJ84_8),

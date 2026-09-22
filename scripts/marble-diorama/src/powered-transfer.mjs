@@ -9,6 +9,7 @@ export function transferForce(
   velocity,
   radius,
   choice = null,
+  dynamics = {},
 ) {
   for (const path of paths) {
     if (path.fork && choice?.id === path.id && path.branch !== choice.branch)
@@ -60,10 +61,12 @@ export function transferForce(
         q.tangent[k] * (speed - along) * 8 +
           (q.center[k] - position[k] - offset * q.tangent[k]) * 12 -
           (velocity[k] - along * q.tangent[k]) * 4 +
-          (k === "y" ? 9.81 : 0),
+          (k === "y" ? (dynamics.gravity ?? 9.81) : 0),
       ]),
     );
-    const scale = 25 / Math.max(25, Math.hypot(force.x, force.y, force.z));
+    const limit = dynamics.maxAcceleration ?? 25;
+    const scale =
+      limit / Math.max(limit, Math.hypot(force.x, force.y, force.z));
     return {
       id: path.id,
       branch: path.branch,
@@ -85,6 +88,7 @@ export function chooseTransfer(paths, position, radius, seed, occupied = []) {
   const entry = paths.find(
     (p) =>
       p.fork &&
+      !p.nativeTransfer &&
       p.flowSpeed &&
       (() => {
         const q = tubePosition(p, position);

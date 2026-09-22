@@ -1,6 +1,7 @@
 import { validateNativeSteelies } from "./native-steelie.mjs";
 import { validateNativeBirds } from "./native-bird.mjs";
 import { validateNativeMiniatures } from "./native-miniature.mjs";
+import { validateNativeTransfers } from "./native-transfer.mjs";
 import { validateNativeSlinkies } from "./native-slinky.mjs";
 import { validateNativeAcids } from "./native-acid.mjs";
 import { validateNativeFlags } from "./native-flags.mjs";
@@ -716,6 +717,7 @@ export function validateCourse(c) {
   validateNativeSteelies(c);
   validateNativeBirds(c);
   validateNativeMiniatures(c);
+  validateNativeTransfers(c);
   validateNativeSlinkies(c);
   validateNativeAcids(c);
   validateAerialHammers(c, finite);
