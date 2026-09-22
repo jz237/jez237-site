@@ -1,3 +1,4 @@
+import { validateAerialPegs, pegPose } from "./aerial-pegs.mjs";
 import { compileTerrainSequence } from "./terrain-sequence.mjs";
 import { validateTerrainNavigation } from "./terrain-navigation.mjs";
 import { validateNativeCamera } from "./native-camera.mjs";
@@ -389,8 +390,10 @@ export function validateCourse(c) {
         "hammer",
         "native-vacuum",
         "native-paddle",
+        "native-peg",
       ].includes(p.motion.axis) ||
         (p.motion.axis === "hammer" && p.profile !== "hammer") ||
+        (p.motion.axis === "native-peg" && p.profile !== "peg") ||
         (p.motion.axis === "native-paddle" && p.profile !== "flipper") ||
         (p.motion.axis === "native-vacuum" &&
           (p.profile !== "vacuum-mouth" || p.presence)) ||
@@ -701,6 +704,7 @@ export function validateCourse(c) {
   validateNativeDynamics(c, finite);
   validateAerialVacuums(c, finite);
   validateAerialPaddle(c, finite);
+  validateAerialPegs(c, finite);
   validateAerialHammers(c, finite);
   return c;
 }
@@ -937,6 +941,7 @@ export function compileCourse(c) {
   };
 }
 export function motionAt(p, time, terrainRows, previous) {
+  if (p.motion?.axis === "native-peg") return terrainRows ?? pegPose(p);
   if (p.motion?.axis === "native-paddle")
     return terrainRows ?? paddlePose(p, null);
   if (p.motion?.axis === "native-vacuum")

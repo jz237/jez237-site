@@ -15,7 +15,7 @@ then a perpendicular line of three around 168.12-168.72. Consequently a single
 synchronized line of three pegs was inadequate. The source shows longer flush
 intervals as well as these closely spaced strokes.
 
-## Reconstruction
+## Published reconstruction (before native source recovery)
 
 Each of the three current bed locations has a 3x4 grid of rounded metal pegs.
 The caps sit 0.002 units above their supporting flat surface, avoiding buried
@@ -44,3 +44,85 @@ assertions. Browser close-ups show flush caps, three raised pegs, and the
 perpendicular four-peg line without captured warnings or errors.
 
 This corrects one hazard family. Full Amiga parity remains incomplete.
+
+
+## September 22: recovered native group controller (local only)
+
+The executable's separate controller at `0x1d3ec` updates three 20-byte bed
+records at Aerial actor-root `0x1758 + 0x23c`. It is not the regular actor
+script interpreter. The `root + 0x68` single-peg graphic table is not the table
+used by this routine. Four group tables at `root + 0x278` point to graphics
+44–47, 48–51, 52–55 and 56–59 respectively. Each table has 13 frames:
+`1,2,3,4,4,4,4,4,4,4,3,2,1`, followed by its terminator. There is no divider.
+The next wait is `random(4) * 16` original updates; zero still waits until the
+next controller call before starting another stroke.
+
+The selector at `0x1d456–0x1d586` chooses:
+
+| Pattern | Start row | Start column | Linear index stride |
+|---|---|---|---|
+| 0 | random(4) | 0 | 1 |
+| 1 | random(2) | random(3) | 3 |
+| 2 | random(2) | 0 | 4 |
+| 3 | random(2) | 0 | 2 |
+
+The code marks exactly THREE collision entries, starting at `bed*12 + row*3 +
+column`. Columns vary fastest in the coordinate table. In particular pattern 3
+must not be silently changed to a conventional reversed diagonal: its recovered
+indices are `[0,2,4]` or `[3,5,7]` within a bed. Group-sprite silhouettes have
+not yet been independently decoded. The earlier video interpretation of a
+four-peg line conflicts with this three-cell collision loop; visual/collision
+parity is therefore still open. The native 3D reconstruction currently raises
+the selected cells so its visible solids and collision agree.
+
+`0x1d87e` activates the family while EITHER active player occupies region 4 or 5.
+It initializes 36 entries at `0x18a6`, using source cells:
+
+- Bed 0: columns 69–71, rows 55–58, height 16300.
+- Bed 1: columns 69–71, rows 63–66, height 16280.
+- Bed 2: columns 76–78, rows 74–77, height 16280.
+
+Leaving both regions clears per-peg collision flags and freezes the group
+counters. Re-entry resumes those counters. Initialization samples an otherwise
+unused legacy wait-pattern choice; sound choices are sampled after all group
+updates. The new controller preserves these call positions, with an injectable
+random source for comparison. The game uses a snapshot-preserved local seeded
+random generator; original global RNG/call-order parity is not claimed.
+
+The optional `pegSequence` definition supplies 36 ordered `native-peg` parts
+and the same update rate as the native camera. Both mesh and physical solid use
+one interpolated height, in four equal reconstructed levels. Local fixture
+caps are 0.01 units above the board to eliminate coplanar flicker, with rounded
+closed hulls. Current generic proximity machinery sound follows actual movement;
+the two original sample variants per bed have not been assigned to audio assets.
+The native fixture's 20 Hz clock, diameter and equal-height level mapping remain
+provisional. Public authored Aerial is unchanged by this optional implementation.
+
+### Collision reference and limits
+
+`0x1da80–0x1dbf6` restores the prior planar position on entry to a selected cell.
+If the prior position was already in that cell and integer height matches the
+bed, it adds 12 height units, sets upward velocity to 7 and halves each planar
+velocity plus an independent ±0.375, then plays cue 11. Other contacts below
+12 units reverse both planar components; higher contacts still restore position.
+`sourcePegContact` retains this classification for reference. Runtime contact
+uses the real rounded moving hull, which physically lifts and blocks marbles;
+it does not reproduce those cell-wide snaps or randomized eruption velocities.
+Original contact response remains an explicit parity gap.
+
+### Checks for this native implementation
+
+- Independent reading of the original group tables agrees over 4,000 updates /
+  12,000 bed observations, including unload/re-entry, random call ranges/order,
+  selected cells, collision flags and frame levels.
+- Six regressions cover all selectors and wait values, two-player activation,
+  source collision classification, schema constraints, actual solid lifting,
+  remote-marble isolation and exact mid-stroke paired snapshot continuation.
+- A local approach using ordinary forward input enters original region 5 at
+  physics tick 186 with zero falls, waking all three beds. All 36 cap centers
+  have matching original terrain support within 0.000001 unit.
+- Browser inspection shows raised pegs at 179.6 and clean flush caps at 179.1,
+  after fixing coplanar flicker. No captured console warnings/errors.
+
+This is a local family/approach check, not completion of the native timed race.
+Native-board publication and remaining campaign parity are still pending.
