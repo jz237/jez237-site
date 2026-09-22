@@ -20,7 +20,7 @@ test('sample decoding preserves datum elevation, small depths, gaps and geograph
   assert.equal(sampleRiverbed(null, null, -75.5, 39.5), null);
 });
 
-function harness(t, fetcher) {
+function harness(t, fetcher, restored = false) {
   const originals = Object.fromEntries(['document','window','fetch','createImageBitmap']
     .map(k => [k, globalThis[k]]));
   const elements = new Map();
@@ -39,6 +39,7 @@ function harness(t, fetcher) {
     uHeight: { value: new THREE.Texture() }, uRegionSize: { value: new THREE.Vector2(1,1) } } };
   const water = [{ material: { uniforms: {} } }];
   const store = createStore();
+  get('bathymetryToggle').checked = restored;
   const layer = createBathymetry(THREE, { terrain, water, store,
     projection: { bounds: meta.bounds }, motion: {}, getPose: () => ({ lon: -75.9, lat: 39.9 }),
     clearArchive() {}, invalidate() {} });
@@ -48,6 +49,12 @@ function harness(t, fetcher) {
 }
 const flush = () => new Promise(resolve => setImmediate(resolve));
 const response = url => Promise.resolve({ ok: true, json: async () => meta, blob: async () => url });
+
+test('a browser-restored riverbed checkbox activates its layer after startup', async t => {
+  const h = harness(t, response, true); await flush();
+  assert.equal(h.layer.active,true); assert.equal(h.layer.stats().loaded,true);
+  assert.equal(h.get('bathymetryOptions').hidden,false);
+});
 test('optional layer does not fetch until enabled; releases memory and restores terrain on disable', async t => {
   let requests = 0;
   const h = harness(t, url => { requests++; return response(url); });

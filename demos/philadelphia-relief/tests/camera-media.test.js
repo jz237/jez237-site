@@ -54,7 +54,7 @@ test('provider snapshots show an explicit error and stop refreshing when closed'
     {onStatus: text => messages.push(text)});
   const image = host.children[0]; image.onerror();
   assert.match(messages.at(-1), /unavailable/);
-  cleanup(); image.onload(); t.mock.timers.tick(120000);
+  const lateLoad=image.onload; cleanup(); lateLoad(); t.mock.timers.tick(120000);
   assert.equal(host.children.length, 0); assert.match(messages.at(-1), /unavailable/);
 });
 
@@ -83,4 +83,16 @@ test('provider playback is removed after one minute and cleanup cancels expiry c
   const close = mountCameraPlayer(host, item, {onExpired: () => expired++});
   close(); t.mock.timers.tick(60000);
   assert.equal(host.children.length, 0); assert.equal(expired, 1);
+});
+
+
+test('failed snapshots stop their refresh timer before the card is closed', t => {
+  const host=setup(t);let requests=0;
+  const original=globalThis.document.createElement;
+  globalThis.document.createElement=()=>{
+    const image=original();Object.defineProperty(image,'src',{configurable:true,set(){requests++;}});return image;
+  };
+  const cleanup=mountCameraMedia(host,{snapshot:'https://example.test/camera.jpg',name:'Camera'});
+  assert.equal(requests,1);host.children[0].onerror();t.mock.timers.tick(180000);
+  assert.equal(requests,1,'An unavailable preview must not keep polling');cleanup();
 });

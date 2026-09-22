@@ -7,6 +7,7 @@ class Element extends EventTarget {
   append(...children) { this.children.push(...children); }
   replaceChildren() { this.children = []; }
   setAttribute() {}
+  removeAttribute(name) { delete this[name]; }
   showModal() { this.open = true; }
   close() { this.open = false; this.dispatchEvent(new Event('close')); }
   remove() {}

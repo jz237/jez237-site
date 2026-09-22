@@ -7,6 +7,10 @@ export function createNeighborhood(THREE, options) {
   const cache = new Map();
   let current = null, pending = null, candidate = '', failedUntil = 0, failedKey = '';
   let generation = 0, disposed = false, lines = [];
+  function cancelPending() {
+    if (!pending) return;
+    generation++; clearTimeout(pending.timer); pending.controller.abort(); pending = null;
+  }
   function clearLines() {
     for (const entry of lines) { group.remove(entry.mesh); entry.mesh.geometry.dispose();
       entry.material.dispose(); }
@@ -44,36 +48,40 @@ export function createNeighborhood(THREE, options) {
       const enabled = state.era === 'present' && pose.dist < 3200
         && (state.layers.roads || state.layers.structures);
       if (!enabled) {
-        if (pending) { generation++; pending.controller.abort(); pending = null; }
+        cancelPending();
         group.visible = false; return;
       }
       if (current) {
         const b = current.bounds;
         if (pose.lon > b.west + 0.0015 && pose.lon < b.east - 0.0015
-            && pose.lat > b.south + 0.001 && pose.lat < b.north - 0.001) return;
+            && pose.lat > b.south + 0.001 && pose.lat < b.north - 0.001) {
+          cancelPending(); candidate = ''; return;
+        }
       }
       const lon = Math.round((pose.lon + 75.8) / 0.004) * 0.004 - 75.8;
       const lat = Math.round((pose.lat - 39.7) / 0.003) * 0.003 + 39.7;
       const key = `${lon.toFixed(4)},${lat.toFixed(4)}`;
+      if (pending && pending.key !== key) cancelPending();
       if (pending?.key === key || failedKey === key && Date.now() < failedUntil) return;
       if (cache.has(key)) { install(cache.get(key)); return; }
       if (candidate !== key) { candidate = key; return; }
-      if (pending) pending.controller.abort();
+      cancelPending();
       const controller = new AbortController(), revision = ++generation;
-      pending = { key, controller };
+      const timer = setTimeout(() => controller.abort(), 55000);
+      pending = { key, controller, timer };
       fetch(`street-detail?lon=${lon.toFixed(4)}&lat=${lat.toFixed(4)}&v=2`, {
         signal: controller.signal, credentials: 'same-origin',
       }).then(response => {
         if (!response.ok) throw new Error('Neighborhood detail unavailable');
         return response.json();
       }).then(doc => {
-        if (disposed || revision !== generation) return;
+        if (disposed || revision !== generation || controller.signal.aborted) return;
         cache.set(key,doc);
         if (cache.size > 6) cache.delete(cache.keys().next().value);
         install(doc);
       }).catch(() => {
-        if (!controller.signal.aborted) { failedKey = key; failedUntil = Date.now() + 60000; }
-      }).finally(() => { if (revision === generation) pending = null; });
+        if (!disposed && revision === generation) { failedKey = key; failedUntil = Date.now() + 60000; }
+      }).finally(() => { clearTimeout(timer); if (revision === generation) pending = null; });
     },
     update(camera, state, exaggeration, width, height) {
       group.visible = !!current && state.layers.roads && state.era === 'present' && state.camDist < 3200;
@@ -89,6 +97,6 @@ export function createNeighborhood(THREE, options) {
       const b = current?.bounds;
       return !!b && pose.lon > b.west && pose.lon < b.east && pose.lat > b.south && pose.lat < b.north;
     },
-    dispose() { disposed = true; generation++; pending?.controller.abort(); clearLines(); cache.clear(); },
+    dispose() { disposed = true; cancelPending(); generation++; clearLines(); cache.clear(); },
   };
 }
