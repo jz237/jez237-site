@@ -119,6 +119,7 @@ export function createBathymetry(THREE, { terrain, water, projection, store, mot
       if (window.matchMedia('(max-width: 1024px)').matches) $('mapControls').open = false;
     };
   }
+  queueMicrotask(() => { if (!disposed && toggle.checked && !enabled) setEnabled(true); });
   return {
     get active() { return enabled; },
     setTerrain: attach,

@@ -118,7 +118,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
       detail.textContent = gaugeTrend(doc.observed); chart(doc.observed, detail);
       if (doc.observed?.length) detail.append(el('small',
         `${ageLabel(doc.observed[0].time)} → ${ageLabel(doc.observed.at(-1).time)} · ${doc.unit}`));
-    } catch { if (!request.signal.aborted && selected?.id === gauge.id) {
+    } catch { if (!disposed && cardRequest === request && selected?.id === gauge.id) {
       detail.textContent = 'Recent trend unavailable; current station readings are shown above.';
     } } finally { clearTimeout(timeout); }
   }
@@ -212,6 +212,8 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
       frames = doc.frames || []; $('radarFrame').max = String(Math.max(0, frames.length - 1));
       $('radarFrame').disabled = $('radarPlay').disabled = !frames.length;
       if (frames.length) void radarFrame(frames.length - 1);
+      else { frameRevision++; radarBusy = false; setPlaying(false); void surfaces.radar(null);
+        status('radar', 'No recent radar frames available from NOAA. Try refreshing shortly.'); }
     }); banner();
   }
   function archiveChanged() {
@@ -287,7 +289,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
       }
       result.append(el('p', 'Nearest address records, not a surveyed parcel selection. Year-built entries '
         + 'may be approximate. Source: Philadelphia Office of Property Assessment.', 'map-data-note'));
-    } catch { if (!request.signal.aborted && selected?.id === at) {
+    } catch { if (!disposed && cardRequest === request && selected?.id === at) {
       result.textContent = 'City records temporarily unavailable. Try another location or try again shortly.';
     } } finally { clearTimeout(timeout); }
   }
@@ -348,6 +350,14 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
   };
   stage.addEventListener('pointerdown', down); stage.addEventListener('pointerup', up);
   document.addEventListener('visibilitychange', visibility); document.addEventListener('keydown', escape);
+  if ($('shipsToggle').checked) shipChanged();
+  if ($('gaugesToggle').checked) gaugeChanged();
+  if ($('radarToggle').checked) radarChanged();
+  if ($('propertyToggle').checked) propertyChanged();
+  // Wait until the other optional layers exist before resolving archive conflicts.
+  queueMicrotask(() => {
+    if (!disposed && /^[12]\d{3}$/.test($('archiveYear').value)) archiveChanged();
+  });
   return {
     get propertyMode() { return $('propertyToggle').checked; },
     get archiveActive() { return $('archiveYear').value !== 'off'; },

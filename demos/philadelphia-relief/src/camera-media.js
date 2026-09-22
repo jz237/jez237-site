@@ -16,7 +16,7 @@ export function mountCameraMedia(host, item, {
   const fail = () => {
     if (disposed || failed) return;
     failed = true;
-    clearTimeout(timer); stopVideo();
+    clearTimeout(timer); clearTimeout(limit); clearInterval(refresh); stopVideo();
     status('Preview unavailable from the provider. Retry or open the camera page.');
   };
   status(item.stream ? 'Connecting to DelDOT video…' : 'Loading provider image…');
@@ -71,6 +71,8 @@ export function mountCameraMedia(host, item, {
   } else { clearTimeout(timer); status('Open the provider page to view this camera.'); }
   return () => {
     disposed = true; clearTimeout(timer); clearTimeout(limit); clearInterval(refresh);
+    if (image) { image.onload = image.onerror = null; image.removeAttribute('src'); }
+    if (frame) { frame.onload = null; frame.removeAttribute('src'); }
     if (video) video.removeEventListener('error', fail);
     stopVideo(); host.replaceChildren();
   };

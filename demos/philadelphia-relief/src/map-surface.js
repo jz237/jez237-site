@@ -1,9 +1,9 @@
 import { MAP_BOUNDS, tileBounds, archiveTiles } from './map-layer-data.js?v=philly-2026092121';
 
-export function createMapSurfaces(THREE, { scene, projection, sampleElevation, status }) {
+export function createMapSurfaces(THREE, { scene, projection, sampleElevation, status, now = Date.now }) {
   const root = new THREE.Group(); scene.add(root);
   const archive = new Map(), radar = new Map();
-  const archiveRequests = new Set();
+  const archiveRequests = new Set(), failed = new Map();
   let generation = 0, year = 'off', disposed = false, exag = 1, lastPlan = '', active = 0;
   let queue = [], desired = new Set(), archiveOpacity = 1, radarOpacity = .55, radarKey = null;
   let radarController, radarTicket = 0;
@@ -56,10 +56,14 @@ export function createMapSurfaces(THREE, { scene, projection, sampleElevation, s
       image(`map-image?kind=archive&year=${year}&z=${task.z}&x=${task.x}&y=${task.y}`, controller.signal)
         .then(bitmap => {
           if (disposed || ticket !== generation || !desired.has(task.key)) { bitmap.close(); return; }
+          failed.delete(task.key);
           archive.set(task.key, patch(bitmap, tileBounds(task.z, task.x, task.y), true));
           status('archive', `${year} aerials · ${archive.size} tiles loaded · City of Philadelphia`);
         }).catch(() => {
-          if (ticket === generation) status('archive', `${year} · some tiles unavailable or outside survey`);
+          if (ticket === generation && !disposed) {
+            failed.set(task.key, now() + 30000);
+            status('archive', `${year} · some tiles unavailable; retrying in 30 seconds`);
+          }
         }).finally(() => {
           clearTimeout(timer); archiveRequests.delete(controller); active--; pump();
         });
@@ -68,7 +72,7 @@ export function createMapSurfaces(THREE, { scene, projection, sampleElevation, s
   return {
     setSwipe(value) { swipe.value = Math.max(0, Math.min(1, value)); },
     setArchive(value) {
-      year = value; generation++; lastPlan = ''; queue = []; desired.clear();
+      year = value; generation++; lastPlan = ''; queue = []; desired.clear(); failed.clear();
       for (const controller of archiveRequests) controller.abort();
       for (const entry of archive.values()) drop(entry); archive.clear();
     },
@@ -112,11 +116,15 @@ export function createMapSurfaces(THREE, { scene, projection, sampleElevation, s
       }
       if (year === 'off' || !visible) return;
       const tiles = archiveTiles(pose), key = tiles.map(t => `${t.z}/${t.x}/${t.y}`).join('|');
-      if (lastPlan === key) return; lastPlan = key; generation++;
+      if (lastPlan === key && (active || queue.length
+        || ![...failed.values()].some(until => until <= now()))) return;
+      lastPlan = key; generation++;
       for (const controller of archiveRequests) controller.abort();
       desired = new Set(tiles.map(t => `${t.z}/${t.x}/${t.y}`));
+      for (const id of failed.keys()) if (!desired.has(id)) failed.delete(id);
       for (const [id, entry] of archive) if (!desired.has(id)) { drop(entry); archive.delete(id); }
-      queue = tiles.map(t => ({ ...t, key: `${t.z}/${t.x}/${t.y}` })).filter(t => !archive.has(t.key));
+      queue = tiles.map(t => ({ ...t, key: `${t.z}/${t.x}/${t.y}` }))
+        .filter(t => !archive.has(t.key) && (failed.get(t.key) || 0) <= now());
       pump();
     },
     dispose() {

@@ -319,6 +319,8 @@ export function createAircraftLayer(THREE, { stage, scene, projection, sampleEle
   card.onfocusin = () => { pinned = true; hold(); };
   document.addEventListener('visibilitychange', visibility);
   document.addEventListener('keydown', escape);
+  // Chrome can restore a checked form control before its layer is constructed.
+  if (toggle.checked) changed();
 
   return {
     stopFollow,
