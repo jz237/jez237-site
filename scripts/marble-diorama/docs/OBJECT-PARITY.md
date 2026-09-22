@@ -4,6 +4,14 @@
 observations in the original recording from reconstructed behavior and automated
 checks. Passing a demo is evidence of a route being traversable, not fidelity.
 
+September 22 follow-up: static source inspection confirmed another omitted
+family, **four orange Aerial finish hammers**. Their original placements,
+region-10 wake-up, four stagger patterns, graphic sequence and collision
+rectangles are recovered. A local native-board fixture now animates physical
+3D mallets using those scripts. The public authored board still omits them;
+3D shape, original impact response, global random state and wall-clock cadence
+are not certified. See [AERIAL-HAMMERS.md](AERIAL-HAMMERS.md).
+
 Reference: [World of Longplays / Ironclaw, Amiga difficulty 0](https://www.youtube.com/watch?v=Nfa2etJ84_8).
 Video timestamps below refer to the existing local copy. Frame sequences were
 inspected, including 100.00–102.28s at 0.12s intervals, 238.00–239.32s at 0.12s,

@@ -1,6 +1,11 @@
 import { compileTerrainSequence } from "./terrain-sequence.mjs";
 import { validateTerrainNavigation } from "./terrain-navigation.mjs";
 import { validateNativeCamera } from "./native-camera.mjs";
+import {
+  validateAerialHammers,
+  hammerGeometry,
+  hammerPose,
+} from "./aerial-hammers.mjs";
 import { vacuumPoseAt } from "./vacuum.mjs";
 import { presenceAt } from "./mechanism-time.mjs";
 export { presenceAt };
@@ -320,7 +325,12 @@ export function validateCourse(c) {
       );
     if (
       p.profile !== undefined &&
-      (!["peg", "flipper", "vacuum-mouth"].includes(p.profile) ||
+      (!["peg", "flipper", "vacuum-mouth", "hammer"].includes(p.profile) ||
+        (p.profile === "hammer" &&
+          (p.kind !== "piston" ||
+            p.motion?.axis !== "hammer" ||
+            !finite(p.h) ||
+            p.h < 0.12)) ||
         (p.profile === "peg" &&
           (p.kind !== "piston" || !finite(p.h) || p.h < 0.12)) ||
         (p.profile === "flipper" &&
@@ -364,7 +374,10 @@ export function validateCourse(c) {
     }
     if (
       p.motion &&
-      (!["x", "y", "z", "tilt", "wave", "launch"].includes(p.motion.axis) ||
+      (!["x", "y", "z", "tilt", "wave", "launch", "hammer"].includes(
+        p.motion.axis,
+      ) ||
+        (p.motion.axis === "hammer" && p.profile !== "hammer") ||
         ![p.motion.amplitude, p.motion.period, p.motion.phase ?? 0].every(
           finite,
         ) ||
@@ -669,6 +682,7 @@ export function validateCourse(c) {
   }
   validateTerrainNavigation(c);
   validateNativeCamera(c, finite);
+  validateAerialHammers(c, finite);
   return c;
 }
 export const part = (id, x, z, w, d, y = 0, extra = {}) => ({
@@ -701,6 +715,7 @@ export function partGeometry(p) {
           : TERRAIN_TRIANGLE_ROLES,
     };
   if (p.profile === "peg") return pegGeometry(p);
+  if (p.profile === "hammer") return hammerGeometry(p);
   if (p.profile === "flipper") return flipperGeometry(p);
   if (p.profile === "vacuum-mouth") return vacuumGeometry(p);
   if (p.motion?.axis === "wave")
@@ -903,6 +918,7 @@ export function compileCourse(c) {
   };
 }
 export function motionAt(p, time, terrainRows, previous) {
+  if (p.motion?.axis === "hammer") return hammerPose(p, terrainRows);
   if (p.motion?.axis === "terrain-sequence")
     return {
       position: { x: p.x, y: p.y, z: p.z },
