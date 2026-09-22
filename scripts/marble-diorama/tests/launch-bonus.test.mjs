@@ -84,7 +84,8 @@ test("each player receives their own launcher landing reward through ordinary st
   const sim = new Simulation(ultimateCourse(), { players: 2, untimed: true });
   const drivers = sim.players.map(() => new DemoController());
   const awards = [];
-  while (sim.tick < 1800 && awards.length < 2)
+  // Include the white ramp climb before the two independent launch flights.
+  while (sim.tick < 2400 && awards.length < 2)
     awards.push(
       ...sim
         .step(drivers.map((d, i) => d.input(sim, i)))
