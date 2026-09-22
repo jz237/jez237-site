@@ -12,6 +12,7 @@ not included in the published game.
 
 | Course / object | Findings and changes | Still unverified or missing |
 |---|---|---|
+| Hard landings / dizziness | Aerial drops show blue circling marks while an intact marble continues moving; three sampled effect durations are about 1.28-2.84s. Added actual-contact landing dizziness, independent clocks/controls, physics-driven drift and shared-clock blue marks. The inspected Ultimate catapult landing has no dizziness; assisted-flight exemption is reconstructed. See LANDING-DIZZINESS.md. | Exact impact threshold, duration law, input response, immunity, difficulty dependence and original sound remain provisional. |
 | Practice gates and numbered pads | Four numbered landing labels replace the 20/30/40 plaques; supported airborne landings award points, with a normal-control bonus route to the finish. | Original complete award formula, repeat policy and exact shelf dimensions remain provisional; gates still need comparison. See PRACTICE-SCORING.md. |
 | Beginner enemies and pipes | Restored the omitted upper steelie and all three pyramid-room munchers. Physical steelie knockouts now award 1000 once, with reward cue and notice. Completed pipes now pay their footage-verified 4000/2000 awards. See BEGINNER-ENEMIES.md. | Exact positions, AI, paired credit policy, fall threshold, retirement policy, pipe shapes and entry behavior remain provisional. |
 | Intermediate munchers, 100–102s | Original green creatures curl down and stand up repeatedly, with yellow mouths. Replaced the rigid capsule/painted stripe with articulated green solids and a yellow mouth. Turns follow the pursuit direction. Shapes animate in simulation time and are used for both drawing and contact. | Curl is a reconstruction (~0.6s cycle), not a recovered sprite sequence. Original AI, distances, hit timing and the complete body silhouette remain unverified. |
@@ -27,7 +28,7 @@ not included in the published game.
 
 ## Implementation safeguards and validation
 
-- Physics/replay version is `rapier-0.20.0-mm-22`: old recordings cannot silently
+- Physics/replay version is `rapier-0.20.0-mm-23`: old recordings cannot silently
   claim compatible outcomes after collision, layout, and clock changes.
 - Enemy articulation is a pure function of the simulation clock. Shape reuse is
   bounded; fixed body solids are not rebuilt every tick. Rendering uses separate

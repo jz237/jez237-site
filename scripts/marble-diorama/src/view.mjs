@@ -1,3 +1,4 @@
+import { stunMarks, updateStunMarks } from "./stun-view.mjs";
 import { acidDeathGroup, updateAcidDeath } from "./acid-death-view.mjs";
 import { vacuumFragments, updateVacuumFragments } from "./vacuum-view.mjs";
 import { landingTargets } from "./landing-targets.mjs";
@@ -337,6 +338,7 @@ export class DioramaView {
     this.marbles = [];
     this.vacuumFragments = [];
     this.acidDeaths = [];
+    this.stunMarks = [];
     this.enemies = [];
     this.acid = [];
     this.ghost = null;
@@ -397,6 +399,9 @@ export class DioramaView {
       const acidDeath = acidDeathGroup(mesh, i);
       this.marbleRoot.add(acidDeath);
       this.acidDeaths.push(acidDeath);
+      const marks = stunMarks();
+      this.marbleRoot.add(marks);
+      this.stunMarks.push(marks);
     }
     for (const e of sim.enemies) {
       const steelie =
@@ -784,6 +789,12 @@ export class DioramaView {
         alpha,
       );
       m.visible = p.status === "racing";
+      updateStunMarks(
+        this.stunMarks[i],
+        p,
+        (Math.max(0, this.sim.tick - 1) + alpha) / 120,
+        m.position,
+      );
       updateAcidDeath(
         this.acidDeaths[i],
         p,

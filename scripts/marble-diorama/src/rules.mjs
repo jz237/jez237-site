@@ -4,6 +4,7 @@ export const AMIGA_RULES = Object.freeze({
   timerRate: 50 / 64,
   finishPointRate: 100,
   respawn: "last-safe",
+  landingStun: true,
 });
 export const CAMPAIGN_ORDER = [
   "practice",

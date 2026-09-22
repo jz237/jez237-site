@@ -92,3 +92,12 @@ The Intermediate allocation is corrected from 45 to **40**, matching the origina
 86.00s banner. All six course definitions now use the same allocations as campaign
 carryover. See [CLOCK-REFERENCE.md](CLOCK-REFERENCE.md) for evidence, the demo pipe
 approach adjustment, and the remaining timed-completion gap.
+
+
+### Landing dizziness (mm-23)
+
+Original courses now enable hard-landing dizziness: actual physical contact
+briefly suppresses steering while momentum, collisions and independent clocks
+continue. It does not count as a death. Shared-clock blue marks and HUD feedback
+make the state visible. See LANDING-DIZZINESS.md for the Amiga observations,
+relative-impact query, replay checks and provisional threshold/duration law.

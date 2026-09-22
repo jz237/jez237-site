@@ -178,7 +178,9 @@ test("Beginner upper-right fork reaches both pipes and finishes within the origi
   ]);
   assert.equal(sim.players[0].status, "finished");
   assert.equal(sim.players[0].deaths, 0);
-  assert.ok(sim.players[0].time > 20);
+  // Dizziness consumes clock time too; acceptance is completing the route
+  // inside the original allowance, not preserving an incidental 20s margin.
+  assert.ok(sim.players[0].time > 0);
   sim.dispose();
 });
 

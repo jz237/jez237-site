@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-22",
-  "generatedAt": "2026-09-21T17:32:35.582Z",
+  "physics": "rapier-0.20.0-mm-23",
+  "generatedAt": "2026-09-22T02:01:52.839Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -21,11 +21,11 @@
         },
         {
           "course": "beginner",
-          "ticks": 7112,
+          "ticks": 7104,
           "players": [
             {
-              "time": 28.697916666669705,
-              "score": 16686,
+              "time": 28.75000000000305,
+              "score": 16684,
               "deaths": 0,
               "status": "finished"
             }
@@ -37,7 +37,7 @@
           "players": [
             {
               "time": 31.906250000008715,
-              "score": 23587,
+              "score": 23585,
               "deaths": 0,
               "status": "finished"
             }
@@ -49,7 +49,7 @@
           "players": [
             {
               "time": 13.207031250007892,
-              "score": 29831,
+              "score": 29829,
               "deaths": 0,
               "status": "finished"
             }
@@ -61,7 +61,7 @@
           "players": [
             {
               "time": 0.127604166663246,
-              "score": 40714,
+              "score": 40712,
               "deaths": 0,
               "status": "finished"
             }
@@ -73,7 +73,7 @@
           "players": [
             {
               "time": 0,
-              "score": 41404,
+              "score": 41402,
               "deaths": 0,
               "status": "timeout"
             }
@@ -105,11 +105,11 @@
         },
         {
           "course": "beginner",
-          "ticks": 7766,
+          "ticks": 7808,
           "players": [
             {
-              "time": 24.44010416666893,
-              "score": 16186,
+              "time": 24.16666666666888,
+              "score": 16190,
               "deaths": 0,
               "status": "finished"
             },
@@ -127,7 +127,7 @@
           "players": [
             {
               "time": 27.906250000010896,
-              "score": 22687,
+              "score": 22691,
               "deaths": 0,
               "status": "finished"
             },
@@ -145,7 +145,7 @@
           "players": [
             {
               "time": 9.207031250006803,
-              "score": 28531,
+              "score": 28535,
               "deaths": 0,
               "status": "finished"
             },
@@ -163,7 +163,7 @@
           "players": [
             {
               "time": 0,
-              "score": 32819,
+              "score": 32823,
               "deaths": 0,
               "status": "timeout"
             },
