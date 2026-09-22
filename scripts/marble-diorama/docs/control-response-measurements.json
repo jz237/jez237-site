@@ -1,0 +1,577 @@
+{
+  "physics": "rapier-0.20.0-mm-28",
+  "diameter": 1.1,
+  "method": "One second settling at rest; then held full forward input on level stone at 120 Hz. Distances and speeds are normalized by the visible/collision marble diameter.",
+  "runs": [
+    {
+      "turbo": false,
+      "samples": [
+        {
+          "seconds": 0.1,
+          "distanceDiameters": 0.00841999172487042,
+          "speedDiametersPerSecond": 0.1566838269883936,
+          "rolledDiameters": 0.007845871127210559,
+          "contactHeightError": -0.00006746053695683152
+        },
+        {
+          "seconds": 0.2,
+          "distanceDiameters": 0.03248426724563945,
+          "speedDiametersPerSecond": 0.3131238709796558,
+          "rolledDiameters": 0.031337707031828664,
+          "contactHeightError": -0.00006984472274784714
+        },
+        {
+          "seconds": 0.3,
+          "distanceDiameters": 0.07219259711829099,
+          "speedDiametersPerSecond": 0.4695651747963645,
+          "rolledDiameters": 0.07047468042777232,
+          "contactHeightError": -0.00007258653640751511
+        },
+        {
+          "seconds": 0.4,
+          "distanceDiameters": 0.12754503976215015,
+          "speedDiametersPerSecond": 0.6260059096596458,
+          "rolledDiameters": 0.12525690003143003,
+          "contactHeightError": -0.0000758647918701616
+        },
+        {
+          "seconds": 0.5,
+          "distanceDiameters": 0.19854170354929837,
+          "speedDiametersPerSecond": 0.7824485410343517,
+          "rolledDiameters": 0.19568460463390996,
+          "contactHeightError": -0.00008039474487309128
+        },
+        {
+          "seconds": 0.6,
+          "distanceDiameters": 0.2851825952529907,
+          "speedDiametersPerSecond": 0.9388910640369761,
+          "rolledDiameters": 0.28175802954938256,
+          "contactHeightError": -0.00008569955825810105
+        },
+        {
+          "seconds": 0.7,
+          "distanceDiameters": 0.38746760650114576,
+          "speedDiametersPerSecond": 1.0953336412256414,
+          "rolledDiameters": 0.38347748646046953,
+          "contactHeightError": -0.0000923752784729448
+        },
+        {
+          "seconds": 0.8,
+          "distanceDiameters": 0.5054220828143032,
+          "speedDiametersPerSecond": 1.2517783858559348,
+          "rolledDiameters": 0.5008433588237191,
+          "contactHeightError": -0.00010238885879521042
+        },
+        {
+          "seconds": 0.9,
+          "distanceDiameters": 0.6390281698920509,
+          "speedDiametersPerSecond": 1.4082165197892622,
+          "rolledDiameters": 0.6338566867401823,
+          "contactHeightError": -0.00012718439102177292
+        },
+        {
+          "seconds": 1,
+          "distanceDiameters": 0.7882771708748557,
+          "speedDiametersPerSecond": 1.5646564960479734,
+          "rolledDiameters": 0.782519181856575,
+          "contactHeightError": -0.00015692710876469285
+        },
+        {
+          "seconds": 1.1,
+          "distanceDiameters": 0.953171361576427,
+          "speedDiametersPerSecond": 1.7210934378884053,
+          "rolledDiameters": 0.9468322632601486,
+          "contactHeightError": -0.00019006729125981003
+        },
+        {
+          "seconds": 1.2,
+          "distanceDiameters": 1.1337075450203635,
+          "speedDiametersPerSecond": 1.877536123449152,
+          "rolledDiameters": 1.1267966164043175,
+          "contactHeightError": -0.00021456480026249558
+        },
+        {
+          "seconds": 1.3,
+          "distanceDiameters": 1.3298896226015957,
+          "speedDiametersPerSecond": 2.0339883457530625,
+          "rolledDiameters": 1.3224119770418232,
+          "contactHeightError": -0.00022994279861454636
+        },
+        {
+          "seconds": 1.4,
+          "distanceDiameters": 1.541712934320623,
+          "speedDiametersPerSecond": 2.1904232285239478,
+          "rolledDiameters": 1.5336796351165198,
+          "contactHeightError": -0.0002645730972290483
+        },
+        {
+          "seconds": 1.5,
+          "distanceDiameters": 1.7691793225028296,
+          "speedDiametersPerSecond": 2.3468633131547407,
+          "rolledDiameters": 1.7606025604298334,
+          "contactHeightError": -0.00030373334884647996
+        },
+        {
+          "seconds": 1.6,
+          "distanceDiameters": 2.0122898708690293,
+          "speedDiametersPerSecond": 2.503304048018022,
+          "rolledDiameters": 2.003182258992456,
+          "contactHeightError": -0.00034646987915043503
+        },
+        {
+          "seconds": 1.7,
+          "distanceDiameters": 2.271043170582164,
+          "speedDiametersPerSecond": 2.659741314974698,
+          "rolledDiameters": 2.2614201841643085,
+          "contactHeightError": -0.0003886699676514116
+        },
+        {
+          "seconds": 1.8,
+          "distanceDiameters": 2.545440630479292,
+          "speedDiametersPerSecond": 2.816190502860329,
+          "rolledDiameters": 2.5353163965434455,
+          "contactHeightError": -0.0004159092903137651
+        },
+        {
+          "seconds": 1.9,
+          "distanceDiameters": 2.8354850682345303,
+          "speedDiametersPerSecond": 2.9726503112099385,
+          "rolledDiameters": 2.824869744766814,
+          "contactHeightError": -0.0004332542419434038
+        },
+        {
+          "seconds": 2,
+          "distanceDiameters": 3.141176483847878,
+          "speedDiametersPerSecond": 3.1291109865361992,
+          "rolledDiameters": 3.1300796854387354,
+          "contactHeightError": -0.00044863224029545457
+        },
+        {
+          "seconds": 2.1,
+          "distanceDiameters": 3.462509675459428,
+          "speedDiametersPerSecond": 3.2855541055852715,
+          "rolledDiameters": 3.450949397473597,
+          "contactHeightError": -0.0004905939102173296
+        },
+        {
+          "seconds": 2.2,
+          "distanceDiameters": 3.799483992836692,
+          "speedDiametersPerSecond": 3.441990722309459,
+          "rolledDiameters": 3.7874839075297753,
+          "contactHeightError": -0.0005362510681152788
+        },
+        {
+          "seconds": 2.3,
+          "distanceDiameters": 4.152105938304554,
+          "speedDiametersPerSecond": 3.598430806940252,
+          "rolledDiameters": 4.1396841553738355,
+          "contactHeightError": -0.00058679580688481
+        },
+        {
+          "seconds": 2.4,
+          "distanceDiameters": 4.520369876514781,
+          "speedDiametersPerSecond": 3.7548732757568355,
+          "rolledDiameters": 4.507552958318657,
+          "contactHeightError": -0.0006392478942871538
+        },
+        {
+          "seconds": 2.5,
+          "distanceDiameters": 4.904275807467373,
+          "speedDiametersPerSecond": 3.911313577131791,
+          "rolledDiameters": 4.891092334974871,
+          "contactHeightError": -0.0006897330284119096
+        },
+        {
+          "seconds": 2.6,
+          "distanceDiameters": 5.303833267905495,
+          "speedDiametersPerSecond": 4.067772951993075,
+          "rolledDiameters": 5.290302066792116,
+          "contactHeightError": -0.0007218003273010698
+        },
+        {
+          "seconds": 2.7,
+          "distanceDiameters": 5.719028819691051,
+          "speedDiametersPerSecond": 4.224249666387384,
+          "rolledDiameters": 5.705178448348309,
+          "contactHeightError": -0.0007427215576172319
+        },
+        {
+          "seconds": 2.8,
+          "distanceDiameters": 6.149875900962136,
+          "speedDiametersPerSecond": 4.38073071566495,
+          "rolledDiameters": 6.13572096108304,
+          "contactHeightError": -0.0007606625556946245
+        },
+        {
+          "seconds": 2.9,
+          "distanceDiameters": 6.596374945207075,
+          "speedDiametersPerSecond": 4.537220001220703,
+          "rolledDiameters": 6.581929541418023,
+          "contactHeightError": -0.0007778882980347124
+        },
+        {
+          "seconds": 3,
+          "distanceDiameters": 7.058512947776101,
+          "speedDiametersPerSecond": 4.693706252358176,
+          "rolledDiameters": 7.043805363564755,
+          "contactHeightError": -0.0007954716682434526
+        },
+        {
+          "seconds": 3.1,
+          "distanceDiameters": 7.5363098491321905,
+          "speedDiametersPerSecond": 4.8501435193148525,
+          "rolledDiameters": 7.52135376015213,
+          "contactHeightError": -0.0008515596389770952
+        },
+        {
+          "seconds": 3.2,
+          "distanceDiameters": 8.029735738580877,
+          "speedDiametersPerSecond": 5.006592056967995,
+          "rolledDiameters": 8.01458223739174,
+          "contactHeightError": -0.0008993625640869585
+        },
+        {
+          "seconds": 3.3,
+          "distanceDiameters": 8.538814891468395,
+          "speedDiametersPerSecond": 5.163033225319602,
+          "rolledDiameters": 8.52349294701126,
+          "contactHeightError": -0.0009509801864624468
+        },
+        {
+          "seconds": 3.4,
+          "distanceDiameters": 9.06353170221502,
+          "speedDiametersPerSecond": 5.319480462507768,
+          "rolledDiameters": 9.048086246638563,
+          "contactHeightError": -0.0010180354118347612
+        },
+        {
+          "seconds": 3.5,
+          "distanceDiameters": 9.60389570756392,
+          "speedDiametersPerSecond": 5.475862676447088,
+          "rolledDiameters": 9.588366040377883,
+          "contactHeightError": -0.001075375080108687
+        },
+        {
+          "seconds": 3.6,
+          "distanceDiameters": 10.159589594060723,
+          "speedDiametersPerSecond": 5.624370141462846,
+          "rolledDiameters": 10.144040807872084,
+          "contactHeightError": -0.001131522655487105
+        },
+        {
+          "seconds": 3.7,
+          "distanceDiameters": 10.72945854880593,
+          "speedDiametersPerSecond": 5.7603888078169385,
+          "rolledDiameters": 10.713972525585758,
+          "contactHeightError": -0.0011696100234985796
+        },
+        {
+          "seconds": 3.8,
+          "distanceDiameters": 11.312309611927379,
+          "speedDiametersPerSecond": 5.884978554465554,
+          "rolledDiameters": 11.296956061113937,
+          "contactHeightError": -0.0011920809745789018
+        },
+        {
+          "seconds": 3.9,
+          "distanceDiameters": 11.907051259821111,
+          "speedDiametersPerSecond": 5.999075716192071,
+          "rolledDiameters": 11.891889954397142,
+          "contactHeightError": -0.0012085318565369096
+        },
+        {
+          "seconds": 4,
+          "distanceDiameters": 12.512670863758434,
+          "speedDiametersPerSecond": 6.103558106855912,
+          "rolledDiameters": 12.497765984921713,
+          "contactHeightError": -0.0012223601341248003
+        }
+      ]
+    },
+    {
+      "turbo": true,
+      "samples": [
+        {
+          "seconds": 0.1,
+          "distanceDiameters": 0.026792277666655453,
+          "speedDiametersPerSecond": 0.5167885260148481,
+          "rolledDiameters": 0.02585218654324611,
+          "contactHeightError": -0.00007151365280155808
+        },
+        {
+          "seconds": 0.2,
+          "distanceDiameters": 0.10524024340239438,
+          "speedDiametersPerSecond": 1.0333342985673384,
+          "rolledDiameters": 0.10336372684687377,
+          "contactHeightError": -0.00008510351181034714
+        },
+        {
+          "seconds": 0.3,
+          "distanceDiameters": 0.23554864254864777,
+          "speedDiametersPerSecond": 1.5498694506558504,
+          "rolledDiameters": 0.2325371149306496,
+          "contactHeightError": -0.00015376806259159714
+        },
+        {
+          "seconds": 0.4,
+          "distanceDiameters": 0.4176155545494773,
+          "speedDiametersPerSecond": 2.066406119953502,
+          "rolledDiameters": 0.4133821892862519,
+          "contactHeightError": -0.00024663209915165574
+        },
+        {
+          "seconds": 0.5,
+          "distanceDiameters": 0.6513836708935824,
+          "speedDiametersPerSecond": 2.5829326022755015,
+          "rolledDiameters": 0.6459111360833049,
+          "contactHeightError": -0.0003523111343384233
+        },
+        {
+          "seconds": 0.6,
+          "distanceDiameters": 0.9368285265835848,
+          "speedDiametersPerSecond": 3.0992408232255415,
+          "rolledDiameters": 0.9301403013989329,
+          "contactHeightError": -0.000457394123077437
+        },
+        {
+          "seconds": 0.7,
+          "distanceDiameters": 1.2739688699895684,
+          "speedDiametersPerSecond": 3.615767522291703,
+          "rolledDiameters": 1.2661007958774768,
+          "contactHeightError": -0.0005923986434936968
+        },
+        {
+          "seconds": 0.8,
+          "distanceDiameters": 1.6627644408832896,
+          "speedDiametersPerSecond": 4.132338870655406,
+          "rolledDiameters": 1.6537846950814132,
+          "contactHeightError": -0.0006893157958984819
+        },
+        {
+          "seconds": 0.9,
+          "distanceDiameters": 2.103154442527077,
+          "speedDiametersPerSecond": 4.642889716408469,
+          "rolledDiameters": 2.093483911765119,
+          "contactHeightError": -0.0008076310157776323
+        },
+        {
+          "seconds": 1,
+          "distanceDiameters": 2.595119693062522,
+          "speedDiametersPerSecond": 5.159421834078701,
+          "rolledDiameters": 2.585394707135857,
+          "contactHeightError": -0.0009626030921936479
+        },
+        {
+          "seconds": 1.1,
+          "distanceDiameters": 3.1387359445745293,
+          "speedDiametersPerSecond": 5.675973458723588,
+          "rolledDiameters": 3.1290777591988452,
+          "contactHeightError": -0.001096892356872603
+        },
+        {
+          "seconds": 1.2,
+          "distanceDiameters": 3.734017718922008,
+          "speedDiametersPerSecond": 6.1926208842884405,
+          "rolledDiameters": 3.7245300082489856,
+          "contactHeightError": -0.0011808753013611284
+        },
+        {
+          "seconds": 1.3,
+          "distanceDiameters": 4.3809309872713955,
+          "speedDiametersPerSecond": 6.703731363469903,
+          "rolledDiameters": 4.371806103798252,
+          "contactHeightError": -0.0012782096862793413
+        },
+        {
+          "seconds": 1.4,
+          "distanceDiameters": 5.079361742193048,
+          "speedDiametersPerSecond": 7.219799215143377,
+          "rolledDiameters": 5.071573146991433,
+          "contactHeightError": -0.0014394998550415483
+        },
+        {
+          "seconds": 1.5,
+          "distanceDiameters": 5.829452167857776,
+          "speedDiametersPerSecond": 7.7362962202592325,
+          "rolledDiameters": 5.823179128579795,
+          "contactHeightError": -0.0016354799270630327
+        },
+        {
+          "seconds": 1.6,
+          "distanceDiameters": 6.631189693104137,
+          "speedDiametersPerSecond": 8.252929340709338,
+          "rolledDiameters": 6.626635446958245,
+          "contactHeightError": -0.0017597556114197221
+        },
+        {
+          "seconds": 1.7,
+          "distanceDiameters": 7.484601627696644,
+          "speedDiametersPerSecond": 8.769656961614436,
+          "rolledDiameters": 7.481923634621003,
+          "contactHeightError": -0.0018461227416992632
+        },
+        {
+          "seconds": 1.8,
+          "distanceDiameters": 8.38960127397017,
+          "speedDiametersPerSecond": 9.281428077004172,
+          "rolledDiameters": 8.388856695902843,
+          "contactHeightError": -0.0019189000129700151
+        },
+        {
+          "seconds": 1.9,
+          "distanceDiameters": 9.341009313409979,
+          "speedDiametersPerSecond": 9.694570194591174,
+          "rolledDiameters": 9.341176512651144,
+          "contactHeightError": -0.001982080936431929
+        },
+        {
+          "seconds": 2,
+          "distanceDiameters": 10.327341773293234,
+          "speedDiametersPerSecond": 9.99707742170854,
+          "rolledDiameters": 10.328282756420474,
+          "contactHeightError": -0.0020344734191894975
+        },
+        {
+          "seconds": 2.1,
+          "distanceDiameters": 11.339732950383965,
+          "speedDiametersPerSecond": 10.223542993718926,
+          "rolledDiameters": 11.341756287030877,
+          "contactHeightError": -0.002103972434997603
+        },
+        {
+          "seconds": 2.2,
+          "distanceDiameters": 12.371603358875621,
+          "speedDiametersPerSecond": 10.393090681596235,
+          "rolledDiameters": 12.374999672981598,
+          "contactHeightError": -0.002164232730865523
+        },
+        {
+          "seconds": 2.3,
+          "distanceDiameters": 13.418061516501686,
+          "speedDiametersPerSecond": 10.52006027915261,
+          "rolledDiameters": 13.423054646266005,
+          "contactHeightError": -0.002218890190124556
+        },
+        {
+          "seconds": 2.4,
+          "distanceDiameters": 14.475441845980557,
+          "speedDiametersPerSecond": 10.61517455361106,
+          "rolledDiameters": 14.482203100932143,
+          "contactHeightError": -0.0022547721862793413
+        },
+        {
+          "seconds": 2.5,
+          "distanceDiameters": 15.54099516435103,
+          "speedDiametersPerSecond": 10.6864088231867,
+          "rolledDiameters": 15.549661404701572,
+          "contactHeightError": -0.002282488346099898
+        },
+        {
+          "seconds": 2.6,
+          "distanceDiameters": 16.612652865323152,
+          "speedDiametersPerSecond": 10.739764300259676,
+          "rolledDiameters": 16.62334391158074,
+          "contactHeightError": -0.0023033499717712846
+        },
+        {
+          "seconds": 2.7,
+          "distanceDiameters": 17.6888725974343,
+          "speedDiametersPerSecond": 10.779720653187145,
+          "rolledDiameters": 17.70168842356652,
+          "contactHeightError": -0.0023200988769531694
+        },
+        {
+          "seconds": 2.8,
+          "distanceDiameters": 18.768551566384055,
+          "speedDiametersPerSecond": 10.809628746726295,
+          "rolledDiameters": 18.78352510413776,
+          "contactHeightError": -0.002338635921478316
+        },
+        {
+          "seconds": 2.9,
+          "distanceDiameters": 19.850807189941406,
+          "speedDiametersPerSecond": 10.832063501531426,
+          "rolledDiameters": 19.86797701399773,
+          "contactHeightError": -0.0023459076881409135
+        },
+        {
+          "seconds": 3,
+          "distanceDiameters": 20.93493721701882,
+          "speedDiametersPerSecond": 10.848826495083895,
+          "rolledDiameters": 20.95438883981356,
+          "contactHeightError": -0.0023543119430542436
+        },
+        {
+          "seconds": 3.1,
+          "distanceDiameters": 22.020523764870383,
+          "speedDiametersPerSecond": 10.861410661177201,
+          "rolledDiameters": 22.04226868829379,
+          "contactHeightError": -0.0023567557334900346
+        },
+        {
+          "seconds": 3.2,
+          "distanceDiameters": 23.10719229958274,
+          "speedDiametersPerSecond": 10.87086417458274,
+          "rolledDiameters": 23.131246593408285,
+          "contactHeightError": -0.002377259731292769
+        },
+        {
+          "seconds": 3.3,
+          "distanceDiameters": 24.194674058393996,
+          "speedDiametersPerSecond": 10.87785547429865,
+          "rolledDiameters": 24.221046426706003,
+          "contactHeightError": -0.0023660540580749956
+        },
+        {
+          "seconds": 3.4,
+          "distanceDiameters": 25.28277830644087,
+          "speedDiametersPerSecond": 10.883200385353781,
+          "rolledDiameters": 25.31146221440284,
+          "contactHeightError": -0.002379822731018111
+        },
+        {
+          "seconds": 3.5,
+          "distanceDiameters": 26.371319510719992,
+          "speedDiametersPerSecond": 10.887088775634766,
+          "rolledDiameters": 26.40234091163922,
+          "contactHeightError": -0.0023699879646301714
+        },
+        {
+          "seconds": 3.6,
+          "distanceDiameters": 27.460176294500176,
+          "speedDiametersPerSecond": 10.890078978105024,
+          "rolledDiameters": 27.493565725100527,
+          "contactHeightError": -0.0023702859878540483
+        },
+        {
+          "seconds": 3.7,
+          "distanceDiameters": 28.54931918057528,
+          "speedDiametersPerSecond": 10.892308842052111,
+          "rolledDiameters": 28.585049202851945,
+          "contactHeightError": -0.002372252941131636
+        },
+        {
+          "seconds": 3.8,
+          "distanceDiameters": 29.63858517733487,
+          "speedDiametersPerSecond": 10.89397517117587,
+          "rolledDiameters": 29.676727011613536,
+          "contactHeightError": -0.0023707628250122514
+        },
+        {
+          "seconds": 3.9,
+          "distanceDiameters": 30.728229175914414,
+          "speedDiametersPerSecond": 10.895233154296875,
+          "rolledDiameters": 30.768549830528578,
+          "contactHeightError": -0.0023884654045105425
+        },
+        {
+          "seconds": 4,
+          "distanceDiameters": 31.81787317449396,
+          "speedDiametersPerSecond": 10.896151282570578,
+          "rolledDiameters": 31.860483017377533,
+          "contactHeightError": -0.0023670673370361772
+        }
+      ]
+    }
+  ]
+}

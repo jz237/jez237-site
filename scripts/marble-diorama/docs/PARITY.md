@@ -28,6 +28,9 @@ original dimensions, timing, or complete route coverage.
 - [ ] Difficulty effects measured against Amiga. Current 0–7 presets increase
   clock, enemy, machine and force speeds; UI explicitly calls them provisional.
 - [ ] Calibrate steering, brakes, friction, restitution and turbo against Amiga.
+  The mm-28 turbo acceleration clears a conservative opening-displacement bound;
+  the complete trajectory, projection and known-input response are still open.
+  See [CONTROL-RESPONSE.md](CONTROL-RESPONSE.md).
 - [x] Timed solo and two-player campaigns through Aerial, normal bounded input and zero falls.
 - [x] Timed solo campaign through Silly, six miniature pickups and zero falls.
 - [ ] Full timed campaign completion and every alternate route. Current timed
