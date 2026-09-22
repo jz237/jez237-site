@@ -17,7 +17,7 @@ export const CAMPAIGN_ORDER = [
 export const COURSE_TIME = Object.freeze({
   practice: 60,
   beginner: 75,
-  intermediate: 40,
+  intermediate: 45,
   aerial: 30,
   silly: 25,
   ultimate: 25,
@@ -50,6 +50,7 @@ export class CampaignRun {
     this.options = { ...options };
     this.index = 0;
     this.results = [];
+    this.nextTimeBonuses = Array(options.players ?? 1).fill(0);
     this.players = Array.from({ length: options.players ?? 1 }, () => ({
       active: true,
       time: 60,
@@ -63,7 +64,8 @@ export class CampaignRun {
   prepare(sim) {
     sim.players.forEach((p, i) => {
       const total = this.players[i];
-      p.time = nextCourseTime(this.courseId, total.time);
+      p.time =
+        nextCourseTime(this.courseId, total.time) + this.nextTimeBonuses[i];
       p.score = total.score;
       p.campaignDeaths = total.deaths;
       if (!total.active) {
@@ -74,14 +76,37 @@ export class CampaignRun {
     });
   }
   complete(sim) {
+    // The Amiga adds five clock units to the first finisher before the next
+    // allocation, including Beginner's reset. Both marbles must have started
+    // the previous race. See TWO-PLAYER-RULES.md for the executable trace.
+    const winner = sim.players.reduce(
+      (first, p, i) =>
+        p.status === "finished" &&
+        Number.isFinite(p.finishTick) &&
+        (first < 0 || p.finishTick < sim.players[first].finishTick)
+          ? i
+          : first,
+      -1,
+    );
+    const award =
+      !this.options.untimed &&
+      this.index < CAMPAIGN_ORDER.length - 1 &&
+      this.players.length === 2 &&
+      this.players.every((p) => p.active);
+    this.nextTimeBonuses = this.players.map((_, i) =>
+      award && i === winner ? 5 : 0,
+    );
     this.results.push({
       course: this.courseId,
       ticks: sim.tick,
+      winner,
+      nextTimeBonuses: [...this.nextTimeBonuses],
       players: sim.players.map((p) => ({
         time: p.time,
         score: p.score,
         deaths: p.deaths,
         status: p.status,
+        finishTick: p.finishTick,
       })),
     });
     this.players = sim.players.map((p, i) => ({

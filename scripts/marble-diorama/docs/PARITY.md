@@ -11,7 +11,7 @@ original dimensions, timing, or complete route coverage.
 |---|---|---|---|
 | Practice | PARTIAL: training field, twin peaks, four banked reversals; left/right exits and left bonus-shelf route pass | PARTIAL: physical gates/bollards; numbered landing targets now award points; precise interpolation/repeat policy still provisional | 60-unit start, 1000 finish award, 100 points per unused timed unit and last-safe recovery implemented; other score triggers/boundaries open |
 | Beginner | PARTIAL: cyan towers, fork, pyramids, ledges, three hollow pipes, ice; left ledge, two-pipe and upper-right-fork routes pass; exact original geometry remains open | Two physical steelies and three curling munchers restored; steelie knockout awards 1000; completed pipes pay 4000/2000; exact AI, placement and paired attribution open | 75-unit reset after Practice implemented; timed left, two-pipe and upper-right-fork runs pass; original finish/respawn details open |
-| Intermediate | PARTIAL: split towers, islands, acid room, orange pipe, lower green lanes; both upper starts and left bypass pass; orange pipe, continuous traveling-wave strip and right lane now pass | Articulated curling munchers with shared collision shapes, and deforming acid with shared concave sensors; five board-axis patrols using observed straight legs/turns, with unverified return legs and speeds; acid contacts dissolve and reassemble using a sampled Ultimate sequence; continuous physical strip with reference-informed raised crests, flat intervals and approximately 2.4s cadence; exact profile/scale and lower-lane shape remain open; sampled lower cyan sections are static | 40 units added to carryover; orange pipe pays 2000; paired starts and independent completion pass; scoring/boundary parity open |
+| Intermediate | PARTIAL: split towers, islands, acid room, orange pipe, lower green lanes; both upper starts and left bypass pass; orange pipe, continuous traveling-wave strip and right lane now pass | Articulated curling munchers with shared collision shapes, and deforming acid with shared concave sensors; five board-axis patrols using observed straight legs/turns, with unverified return legs and speeds; acid contacts dissolve and reassemble using a sampled Ultimate sequence; continuous physical strip with reference-informed raised crests, flat intervals and approximately 2.4s cadence; exact profile/scale and lower-lane shape remain open; sampled lower cyan sections are static | 45 units added to carryover; orange pipe pays 2000; paired starts and independent completion pass; scoring/boundary parity open |
 | Aerial | PARTIAL: crossed narrow rails, zigzags, vacuum turns, lower red/yellow towers; two-player demos yield at the crossing and both complete without falls | Directional vacuums, steelie, round retracting peg banks implemented; red hinged cup physically launches; exact return destination, dimensions and measured hazard cycles open | 30 units added; normal-input untimed runs pass; timed full-campaign balance open |
 | Silly | PARTIAL: reverse uphill course, mini room, flared powered red uplift with two working outlets, two mazes, bird field and split goal climbs; solo demo collects six of nine miniatures, paired paths collect three each, all finish without falls; exact original route coverage open | Nine collectible miniatures: three steelies, three curling munchers and three deforming puddles (+500/+3), flapping purple birds with articulated collision solids, pyramids; demos anticipate bird launches; exact flight pattern, original uplift selection/transfer law and decorative loops open | 25 units added; upward transfer pays 2000; timed solo campaign now completes Silly; full score/time parity open |
 | Ultimate | PARTIAL: curved white starting climb and elevated ledge, one launcher island with alternative left/right landing islands, split acid/muncher rooms, ice pyramids, staggered disappearing finish with rising icy return; both complete solo routes pass without falls, including the outer right ice lane and shared final sequence; exact original route coverage open | Contact-triggered hinged launcher arms and aimed impulses, curling munchers, deforming acid with provisional trajectories and reference-informed dissolve/recovery, ice, restored black exit steelie with physical 1000-point knockout, six-second disappearing entry plus staggered lower spans and corners, rising icy return and gold approach; original launcher law and exact cell/phase maps remain open | 25 units added; 2000 completed launcher-landing award with reconstructed repeat/paired policy; 6000 goal and ordinary unused-clock awards, plus separate 20,000 + 1,000/time − 1,000/fall ending implemented; complete timed campaign acceptance open |
@@ -36,7 +36,9 @@ original dimensions, timing, or complete route coverage.
   collects six miniatures, paired routes collect three each. See DEMO-STEERING.md.
 - [ ] Full timed campaign completion and every alternate route. Current timed
   measurement fails in Ultimate for both solo and two players; see VALIDATION.md.
-- [ ] Original two-player winner/catch-up/time-bonus rules and simultaneous ties.
+- [x] Five-unit next-race award for the first finisher of a contested race,
+  including Beginner reset and independent elimination; see TWO-PLAYER-RULES.md.
+- [ ] Original catch-up rules and exact simultaneous-frame tie behavior.
 - [x] Fixed finish awards of 1000–6000, including Ultimate's unused-clock award, verified against original footage.
 - [ ] Exact progress, steelie paired attribution, training gate and complete landing-target award formula. See PRACTICE-SCORING.md.
 - [ ] Original soundtrack all-cue listening, assignments, loops and transitions.
@@ -92,11 +94,10 @@ ULTIMATE-REFERENCE.md and OBJECT-PARITY.md before claiming original parity.
 
 ## Clock allocation reference check
 
-The Intermediate allocation is corrected from 45 to **40**, matching the original
-86.00s banner. All six course definitions now use the same allocations as campaign
-carryover. See [CLOCK-REFERENCE.md](CLOCK-REFERENCE.md) for evidence, the demo pipe
-approach adjustment, and the remaining timed-completion gap.
-
+The September 22 re-audit corrects Intermediate to **45**. The earlier +40
+reading was already partway through the transfer. Earlier original frames and
+the original executable agree on +45. See [CLOCK-REFERENCE.md](CLOCK-REFERENCE.md)
+for the corrected sequence and remaining difficulty/clock questions.
 
 ### Landing dizziness (mm-23)
 

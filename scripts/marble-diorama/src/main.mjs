@@ -439,7 +439,14 @@ function finish() {
         totals +
         (campaign.courseId === "beginner"
           ? ". Beginner starts with 75 clock units."
-          : ". Each surviving player carries their remaining time.");
+          : ". Each surviving player carries their remaining time.") +
+        campaign.nextTimeBonuses
+          .map((bonus, i) =>
+            bonus
+              ? ` Player ${i + 1} won this race: +${bonus} clock units next race.`
+              : "",
+          )
+          .join("");
       $("again").textContent = "Next race →";
       if (campaignDemo) campaignTransition = performance.now() + 2500;
     } else {

@@ -447,12 +447,12 @@ test("Beginner two-pipe route carries enough time to finish Intermediate", () =>
   }
 });
 test("campaign clocks reset for Beginner then carry over, with independent two-player elimination", () => {
-  // Amiga longplay 86.00s explicitly announces +40 for Intermediate.
+  // The initial banner is +45; +40 is a later transfer frame. CLOCK-REFERENCE.md.
   const intermediate = new Simulation(intermediateCourse());
-  assert.equal(intermediate.players[0].time, 40);
+  assert.equal(intermediate.players[0].time, 45);
   intermediate.dispose();
   assert.equal(nextCourseTime("beginner", 51), 75);
-  assert.equal(nextCourseTime("intermediate", 40), 80);
+  assert.equal(nextCourseTime("intermediate", 40), 85);
   assert.equal(nextCourseTime("aerial", 52), 82);
   assert.equal(nextCourseTime("silly", 46), 71);
   assert.equal(nextCourseTime("ultimate", 30), 55);
@@ -460,14 +460,19 @@ test("campaign clocks reset for Beginner then carry over, with independent two-p
   const run = new CampaignRun({ players: 2 }),
     s = new Simulation(practiceCourse(), { players: 2 });
   run.prepare(s);
-  Object.assign(s.players[0], { status: "finished", time: 51, score: 6420 });
+  Object.assign(s.players[0], {
+    status: "finished",
+    finishTick: 120,
+    time: 51,
+    score: 6420,
+  });
   Object.assign(s.players[1], { status: "timeout", time: 0, deaths: 2 });
   assert.equal(run.complete(s), "next");
   assert.equal(run.courseId, "beginner");
   s.dispose();
   const next = new Simulation(beginnerCourse(), { players: 2 });
   run.prepare(next);
-  assert.equal(next.players[0].time, 75);
+  assert.equal(next.players[0].time, 80);
   assert.equal(next.players[0].score, 6420);
   assert.equal(next.players[1].status, "timeout");
   assert.equal(next.body(next.players[1]).isEnabled(), false);
