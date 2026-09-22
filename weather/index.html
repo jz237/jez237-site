@@ -70,6 +70,7 @@
       .weather-day { flex: 0 0 72% !important; max-width: 72% !important; scroll-snap-align: start !important; padding: 11px !important; }
     }
   </style>
+  <link rel="stylesheet" href="weather-details.css?v=20260922" />
 </head>
 <body>
   <header id="site-nav" class="home-hidden-nav"></header>
@@ -102,9 +103,13 @@
           </div>
         </div>
 
+        <nav class="weather-jump-nav" aria-label="Weather sections">
+          <a href="#weather-now">Now</a><a href="#weather-hourly">Hourly</a><a href="#weather-five-day">Five-day</a><a href="#weather-map">Map</a><a href="#weather-garden">Garden</a><a href="#weather-almanac">Almanac</a>
+        </nav>
         <section id="philly-weather" class="below-hub weather-dashboard" aria-label="Weather dashboard">
           <div id="philly-weather-widget"></div>
-          <figure style="margin-top:22px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:linear-gradient(135deg,rgba(13,19,28,.88),rgba(11,15,20,.7));box-shadow:0 18px 46px rgba(0,0,0,.22);">
+          <figure id="weather-almanac" style="margin-top:22px;padding:14px;border:1px solid rgba(255,255,255,.12);border-radius:18px;background:linear-gradient(135deg,rgba(13,19,28,.88),rgba(11,15,20,.7));box-shadow:0 18px 46px rgba(0,0,0,.22);">
+            <figcaption class="weather-almanac-caption"><h2>Philly Weather Almanac</h2><p id="almanac-edition">Illustrated Philly 19111 forecast snapshot; printed numbers do not update with the live forecast above.</p></figcaption>
             <picture>
               <source srcset="almanac/latest.webp" type="image/webp">
               <img src="almanac/latest.jpg" alt="Illustrated Philly 19111 weather almanac" width="800" height="1421" loading="lazy" decoding="async" style="display:block;width:min(100%,760px);height:auto;margin:0 auto;border-radius:14px;border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.04);">
@@ -123,6 +128,7 @@
   <script src="../assets/site-enhance.js" defer></script>
   <script src="../assets/side-menu.js?v=chronicle-20260612" defer></script>
   <script src="../assets/nav.js?v=nav-20260702b" defer></script>
-  <script src="../assets/weather-widget.js?v=20260920-forecast-popup" defer></script>
+  <script src="weather-details.js?v=20260922" defer></script>
+  <script src="weather-widget.js?v=20260922" defer></script>
 </body>
 </html>
