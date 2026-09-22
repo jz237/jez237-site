@@ -293,6 +293,20 @@ export class AudioEngine {
       )
     )
       return this.effect("collect", { key: `${event.type}:${event.player}` });
+    if (event.type === "collect" && event.miniatureForm) {
+      this.effect(
+        event.miniatureForm === "steelie"
+          ? "crack"
+          : event.miniatureForm === "acid"
+            ? "acid"
+            : "muncher",
+        {
+          key: `miniature:${event.enemy}`,
+          gain: 0.45,
+        },
+      );
+      return this.effect("collect", { key: `collect:${event.enemy}` });
+    }
     if (event.type === "checkpoint" && !assisted) return;
     return this.effect(event.type, { key: `${event.type}:${event.player}` });
   }

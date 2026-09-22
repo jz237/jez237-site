@@ -8,7 +8,7 @@ const shapeCache = new Map();
 const miniAcidCache = new WeakMap();
 export const MUNCHER_HALF_HEIGHT = 0.25;
 
-function ellipsoid(name, color, center, radii, roll = 0, pitch = 0) {
+export function ellipsoid(name, color, center, radii, roll = 0, pitch = 0) {
   const vertices = [],
     indices = [];
   const put = (x, y, z) => {

@@ -29,6 +29,36 @@ export const MINIATURE_FRAMES = Object.freeze({
   muncherIdle: 11,
   muncherSpent: 1,
 });
+export function validateNativeMiniatures(course) {
+  const actors = (course.enemies ?? []).filter(
+    (e) => e.nativeMiniatureSlot !== undefined,
+  );
+  if (!course.miniatureSequence && !actors.length) return;
+  if (
+    course.miniatureSequence !== true ||
+    !course.nativeCamera?.reverse ||
+    course.nativeDynamics?.rate !== course.nativeCamera.rate ||
+    actors.length !== 9 ||
+    new Set(actors.map((e) => e.nativeMiniatureSlot)).size !== 9 ||
+    actors.some(
+      (e) =>
+        !Number.isInteger(e.nativeMiniatureSlot) ||
+        e.nativeMiniatureSlot < 0 ||
+        e.nativeMiniatureSlot > 8 ||
+        e.kind !== "mini" ||
+        e.form !==
+          (e.nativeMiniatureSlot < 3
+            ? "steelie"
+            : e.nativeMiniatureSlot < 6
+              ? "acid"
+              : "muncher") ||
+        e.nativeBirdSlot !== undefined ||
+        e.nativeSteelie ||
+        e.nativeSlinky,
+    )
+  )
+    throw Error("Invalid native miniature sequence.");
+}
 const cell = (v) => Math.floor(v / 8);
 const word = (v) => (Math.floor(v) << 16) >> 16;
 export function miniatureBlocked(x, z) {

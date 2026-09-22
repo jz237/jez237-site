@@ -901,7 +901,10 @@ export class DioramaView {
         quat(e.current.rotation),
         alpha,
       );
-      mesh.visible = !e.collected && !e.defeated && !e.hidden;
+      mesh.visible =
+        (!e.collected || e.def.nativeMiniatureSlot !== undefined) &&
+        !e.defeated &&
+        !e.hidden;
       if (mesh.userData.steelieShatter)
         updateSteelieShatter(
           mesh.userData.steelieShatter,
@@ -913,7 +916,9 @@ export class DioramaView {
       if (mesh.userData.articulated)
         updateActorMesh(
           mesh,
-          e.nativeSlinky || e.def.nativeBirdSlot !== undefined
+          e.nativeSlinky ||
+            e.def.nativeBirdSlot !== undefined ||
+            e.def.nativeMiniatureSlot !== undefined
             ? interpolateSlinkySolids(
                 e.previous.solids,
                 e.current.solids,

@@ -1,5 +1,9 @@
 # Silly miniature inhabitants
 
+This page describes the older published campaign reconstruction. The recovered
+room controller and its physical adapter are documented in `NATIVE-MINIATURES.md`;
+their campaign replacement remains in progress.
+
 ## Amiga reference
 
 [Ironclaw's Amiga longplay](https://www.youtube.com/watch?v=Nfa2etJ84_8),
