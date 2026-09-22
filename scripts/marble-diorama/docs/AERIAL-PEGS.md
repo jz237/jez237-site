@@ -69,11 +69,12 @@ The selector at `0x1d456–0x1d586` chooses:
 The code marks exactly THREE collision entries, starting at `bed*12 + row*3 +
 column`. Columns vary fastest in the coordinate table. In particular pattern 3
 must not be silently changed to a conventional reversed diagonal: its recovered
-indices are `[0,2,4]` or `[3,5,7]` within a bed. Group-sprite silhouettes have
-not yet been independently decoded. The earlier video interpretation of a
-four-peg line conflicts with this three-cell collision loop; visual/collision
-parity is therefore still open. The native 3D reconstruction currently raises
-the selected cells so its visible solids and collision agree.
+indices are `[0,2,4]` or `[3,5,7]` within a bed. The group sprites have now been independently decoded from the original Aerial
+image bank. They show THREE caps in every pattern, correcting the earlier
+four-peg video interpretation. Pattern 3 draws cells `[2,4,6]` or `[5,7,9]`, a
+true diagonal. Its collision mask is shifted two entries earlier. The native
+3D reconstruction uses the DRAWN cells for both mesh and physical collision;
+the original mismatched mask is retained only as reference data.
 
 `0x1d87e` activates the family while EITHER active player occupies region 4 or 5.
 It initializes 36 entries at `0x18a6`, using source cells:
@@ -91,12 +92,13 @@ random generator; original global RNG/call-order parity is not claimed.
 
 The optional `pegSequence` definition supplies 36 ordered `native-peg` parts
 and the same update rate as the native camera. Both mesh and physical solid use
-one interpolated height, in four equal reconstructed levels. Local fixture
-caps are 0.01 units above the board to eliminate coplanar flicker, with rounded
-closed hulls. Current generic proximity machinery sound follows actual movement;
+one interpolated height. The four raised graphic levels are recovered as
+5, 12, 17 and 19 pixels above the flush caps, rather than four equal steps.
+The local fixture maps those vertical source units through its native height
+scale. Caps are 0.01 units above the board to eliminate coplanar flicker, with
+rounded closed hulls. Current generic proximity machinery sound follows actual movement;
 the two original sample variants per bed have not been assigned to audio assets.
-The native fixture's 20 Hz clock, diameter and equal-height level mapping remain
-provisional. Public authored Aerial is unchanged by this optional implementation.
+The native fixture's 20 Hz clock and cap diameter remain provisional. Public authored Aerial is unchanged by this optional implementation.
 
 ### Collision reference and limits
 
@@ -108,7 +110,13 @@ velocity plus an independent ±0.375, then plays cue 11. Other contacts below
 `sourcePegContact` retains this classification for reference. Runtime contact
 uses the real rounded moving hull, which physically lifts and blocks marbles;
 it does not reproduce those cell-wide snaps or randomized eruption velocities.
-Original contact response remains an explicit parity gap.
+The recovered rise increments 5, 7, 5 and 2 units now produce a physical
+upward throw near the source's 7-unit velocity. A paired regression places one
+marble on the corrected diagonal's end and another on the original stray
+collision cell: only the first rises, without an injected spring event or a
+position snap. Exact planar scatter and original cell-based impact responses
+remain different; copying invisible cell reactions would contradict the
+request's requirement that graphics and physical surfaces agree.
 
 ### Checks for this native implementation
 
@@ -126,3 +134,21 @@ Original contact response remains an explicit parity gap.
 
 This is a local family/approach check, not completion of the native timed race.
 Native-board publication and remaining campaign parity are still pending.
+
+
+### Sprite-bank evidence follow-up
+
+The private original `Aerial.ilb` SHA-256 is
+`3d80a5709bb1d4fbcf294d6c97a04b0333da5d54b7095a4ccc3b36080ce2f5f6`.
+ByteRun1 decompression produces a 63-image bank with 20-byte records. Group
+images 44–59 have four planar bitplanes. Reading their six-pixel cap-rim motif
+and applying the actor descriptor's draw offset recovers these row-major cells:
+`[0,1,2]`, `[0,3,6]`, `[0,4,8]`, `[2,4,6]`. The source bed's first flush cap rim
+is at image y=19; raised rims at 14,7,2,0 give lifts 5,12,17,19. This is asset
+measurement, independent of the reconstructed model or its tests. Source art
+is retained privately for comparison and is not included in the game bundle.
+
+The 12,000-observation comparison now checks sprite-derived occupied cells as
+well as the original collision masks. Two further regressions cover the true
+diagonal, measured height curve, physical launch speed and absence of a false
+launch on the original's stray collision cell. All eight peg tests pass.

@@ -4,6 +4,9 @@ export const PEG_LEVELS = Object.freeze([
   1, 2, 3, 4, 4, 4, 4, 4, 4, 4, 3, 2, 1,
 ]);
 
+// Pixel lifts measured from the original cap tops relative to the flush bed.
+export const PEG_HEIGHTS = Object.freeze([0, 5, 12, 17, 19]);
+
 export function createPegSequence(seed = 237) {
   return {
     tick: 0,
@@ -14,6 +17,7 @@ export function createPegSequence(seed = 237) {
       frame: -1,
       pattern: 0,
       selected: [],
+      drawn: [],
     })),
     levels: Array(36).fill(0),
     previousLevels: Array(36).fill(0),
@@ -66,6 +70,12 @@ export function stepPegSequence(state, active, random) {
         { length: 3 },
         (_, j) => i * 12 + row * 3 + column + j * stride,
       );
+      // Graphic 59 is a horizontal screen-space line: cells 2,4,6 (or 5,7,9).
+      // The original collision loop instead marks 0,2,4 (or 3,5,7). Preserve
+      // that mask as reference data, but make our actual solid match the art.
+      bed.drawn = bed.selected.map(
+        (index) => index + (bed.pattern === 3 ? 2 : 0),
+      );
       for (const index of bed.selected) state.collision[index] = true;
       bed.wait = -1;
       bed.frame = 0;
@@ -74,11 +84,11 @@ export function stepPegSequence(state, active, random) {
       bed.wait = sample(state, 4, random) * 16;
       state.collision.fill(false, i * 12, i * 12 + 12);
       bed.selected = [];
+      bed.drawn = [];
       bed.frame = -1;
       continue;
     }
-    for (const index of bed.selected)
-      state.levels[index] = PEG_LEVELS[bed.frame];
+    for (const index of bed.drawn) state.levels[index] = PEG_LEVELS[bed.frame];
   }
   // The original chooses one of two sounds per newly started bed AFTER all
   // three bed updates. Preserve that sample order in source trace comparisons.
@@ -142,10 +152,16 @@ export function createAerialPegs(course, seed) {
 }
 
 export function pegPose(part, level = 0) {
+  const value = Math.max(0, Math.min(4, level));
+  const lower = Math.floor(value),
+    upper = Math.ceil(value),
+    fraction = value - lower;
+  const lift =
+    (PEG_HEIGHTS[lower] * (1 - fraction) + PEG_HEIGHTS[upper] * fraction) / 19;
   return {
     position: {
       x: part.x,
-      y: part.y + (part.motion.amplitude * level) / 4,
+      y: part.y + part.motion.amplitude * lift,
       z: part.z,
     },
     rotation: { x: 0, y: 0, z: 0, w: 1 },

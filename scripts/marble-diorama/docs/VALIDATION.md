@@ -1541,3 +1541,26 @@ This is local native-board work; public Aerial/mm-35 are unchanged. Original
 sprite grouping conflicts with the earlier four-peg video interpretation;
 full source eruption response, cue variants, RNG and update cadence remain
 open. See AERIAL-PEGS.md. Complete native races/publication remain pending.
+
+
+### September 22 — peg sprite footprint and eruption correction
+
+Private decoding of the original Aerial image bank resolves the earlier
+four-peg ambiguity: all four group sprites contain three caps. It also exposes
+an original mismatch between the fourth group's drawn diagonal and collision
+mask. The local 3D solids now follow the drawn diagonal in both rendering and
+physics. Recovered cap lifts are 5/12/17/19 source units, replacing equal steps;
+the 19-unit native fixture height replaces the earlier 12-unit interpretation.
+
+The independent 12,000-observation comparison now checks decoded sprite cells
+alongside source collision flags. All 36 native support rays and the ordinary
+region-entry approach still pass. A new paired contact test verifies that the
+corrected diagonal physically launches its marble near the measured seven-unit
+per-update surface speed while the original stray mask cell stays safe.
+No spring event or position snap produces this throw. Browser inspection shows
+the corrected straight line of caps, with zero falls and no console errors.
+
+**27/27 focused native actor/dynamics tests pass**, including all eight peg tests;
+build and diff checks pass. The preceding full suite was 276/276 before these
+two new regressions. No full-suite count is claimed for this follow-up. Changes
+remain optional local native-board work; no public campaign definition changed.
