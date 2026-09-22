@@ -107,6 +107,7 @@ export function mergeLevelTops(group) {
     const pts = face.t.map((id) => group.vertices.slice(id * 3, id * 3 + 3));
     if (
       face.role !== "top" ||
+      face.preserveTopology ||
       Math.max(...pts.map((v) => v[1])) - Math.min(...pts.map((v) => v[1])) >
         1e-7
     ) {
