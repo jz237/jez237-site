@@ -34,7 +34,10 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
       else if (type === 'gauge') void showGauge(data);
       else { close(); onLandmark(data.name); }
     } });
-  function close() { selected = null; card.hidden = true; cardRequest?.abort(); }
+  function close() {
+    selected = null; card.hidden = true; cardRequest?.abort();
+    card.dispatchEvent(new Event('map-window-dismiss'));
+  }
   function open(type, title, id) {
     if (window.matchMedia('(max-width: 1024px)').matches) $('mapControls').open = false;
     close(); selected = { type, id }; card.hidden = false; card.replaceChildren();
@@ -168,7 +171,9 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
           : `${rows.ship.length} vessels heard · ${doc.state === 'connected' ? 'listening' : 'connecting'}
             · AISStream via home relay${rows.ship.length ? '' : ' · waiting for regional radio reports'}`);
       if (selected?.type === 'ship') {
-        const ship = rows.ship.find(s => s.id === selected.id); if (ship) showShip(ship); else close();
+        const ship = rows.ship.find(s => s.id === selected.id);
+        if (!ship) close();
+        else if (!card.hidden) showShip(ship);
       }
     });
   }
@@ -329,6 +334,12 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
     if (!document.hidden) for (const job of jobs.values()) void job.run();
   };
   const escape = e => { if (e.key === 'Escape') close(); };
+  const restore = () => {
+    if (selected?.type !== 'ship') return;
+    const ship = rows.ship.find(s => s.id === selected.id);
+    if (ship) showShip(ship); else close();
+  };
+  card.addEventListener('map-window-restore', restore);
   $('shipsToggle').onchange = shipChanged; $('gaugesToggle').onchange = gaugeChanged;
   $('radarToggle').onchange = radarChanged; $('archiveYear').onchange = archiveChanged;
   $('propertyToggle').onchange = propertyChanged;
@@ -374,6 +385,7 @@ export function createMapLayers(THREE, { scene, stage, projection, sampleElevati
       disposed = true;
       for (const name of [...jobs.keys()]) cancelJob(name); setPlaying(false);
       close(); points.dispose(); surfaces.dispose(); card.remove();
+      card.removeEventListener('map-window-restore', restore);
       stage.removeEventListener('pointerdown', down); stage.removeEventListener('pointerup', up);
       document.removeEventListener('visibilitychange', visibility);
       document.removeEventListener('keydown', escape);

@@ -3,7 +3,7 @@ import { createBathymetry } from './bathymetry.js?v=philly-2026092201';
 import { wireSavedViews } from './saved-views.js?v=philly-2026092121';
 import { frameDelay } from './render-policy.js?v=philly-2026092121';
 import { preferLightweight, districtAssets } from './startup-policy.js?v=philly-2026092121';
-import { updateImageryCredit, wireFieldNotes, wireMapChrome, timelineSeek, captureName }
+import { updateImageryCredit, wireFieldNotes, wireMapChrome, timelineSeek, captureName, mapShortcutAllowed }
   from './experience.js?v=philly-2026092121';
 import { wireNavigation, awayFromPreset } from './navigation.js?v=philly-2026092121';
 import { wireLooks } from './looks.js?v=philly-2026092121';
@@ -1889,6 +1889,8 @@ function wireInterface(deps) {
   let inspectionSnapshot = null;
   function visitPreset(id) {
     if (inspectionSnapshot) setInspection(false);
+    if (id === HOME_PRESET) store.set({ diorama: 1, photoMode: 'auto', era: 'present', compareMode: 'off' },
+      { source: 'home' });
     motion.toPreset(id);
   }
   function setInspection(enabled) {
@@ -2107,11 +2109,7 @@ function wireInterface(deps) {
 
   // ---- keyboard -----------------------------------------------------------
   window.addEventListener('keydown', (event) => {
-    if ($('regionalViews').open) return;
-    if (event.metaKey || event.ctrlKey || event.altKey) return;
-    const target = event.target;
-    if (target?.closest('.camera-map-card,.camera-map-pin,.camera-layer-control')) return;
-    if (target && (target.tagName === 'INPUT' || target.tagName === 'TEXTAREA')) return;
+    if (document.querySelector('dialog[open]') || !mapShortcutAllowed(event)) return;
     if (dialogs.openId && event.key !== 'Escape') return;
 
     const key = event.key;

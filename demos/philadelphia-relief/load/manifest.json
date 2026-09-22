@@ -1,13 +1,13 @@
 {
   "version": 1,
   "esbuild": "0.28.1",
-  "sourceHash": "d5dd8be08290c4646b48ee91d72dab02b956c75ef589a6ffb51f0bc6302f2b93",
-  "entry": "load/app-DSEOIJON.js",
+  "sourceHash": "7b32cfa7313e83b36be3e05fe14132a970cbd273ac307e77d66f73ad8d82fe00",
+  "entry": "load/app-X6NFRF4K.js",
   "css": "load/style-b63aadbb34ca.css",
   "startupRequests": 3,
-  "startupBytes": 1052369,
+  "startupBytes": 1053062,
   "files": {
-    "load/app-DSEOIJON.js": "e3d5776a1dee93e57180c21fca16d31184a566fe8542cabc32c2b73fdffd12e0",
+    "load/app-X6NFRF4K.js": "add337e4baf446f47322ed55b3e23a7db0361f21882cbbade55f4897679bab8b",
     "load/chunk-PVR3HQVE.js": "8cbf0075a619e5dabfdfe2475ef4e718b9569c2f86cb00fb3e3a34a090e837bf",
     "load/chunk-NSE4GZ3K.js": "c6ba7c9546b871f99e215b0cad943edd7eb8f52f958846b2af22d8fb4fd3e2d7",
     "load/chunk-BS7THNUG.js": "6d422491c2483e777d5cb7032ec4fabca89b78a28a94f837f8ee279871ab1c2d",

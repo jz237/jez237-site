@@ -29,7 +29,9 @@ export function photoAllowed(state) {
 
 export function photoWanted(state, distance, wasWanted = false) {
   if (!photoAllowed(state) || state.photoMode === 'relief') return false;
-  if (state.photoMode === 'photo') return true;
+  // This is a regional diorama: even an explicit photographic choice hands
+  // back to the miniature when zoomed out. Shared close-ups still open in 3D.
+  if (state.photoMode === 'photo') return distance <= (wasWanted ? PHOTO_PRELOAD * 1.2 : PHOTO_PRELOAD);
   return distance <= (wasWanted ? PHOTO_EXIT : PHOTO_ENTER);
 }
 

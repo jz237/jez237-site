@@ -17,7 +17,7 @@ import { getTheme, THEME_IDS } from './themes.js?v=philly-2026092121';
 
 const ENUM_LABELS = {
   lightweight: v => v ? 'On · older computers' : 'Off · full graphics',
-  photoMode: v => ({ auto: 'Automatic', relief: 'Diorama', photo: 'Photo 3D' }[v] || v),
+  photoMode: v => ({ auto: 'Automatic', relief: 'Diorama', photo: 'Photo close-ups' }[v] || v),
   diorama: v => v ? 'Miniature' : 'Classic map',
   theme: (v) => getTheme(v).label,
   quality: (v) => ({ auto: 'Auto', performance: 'Performance', balanced: 'Balanced',

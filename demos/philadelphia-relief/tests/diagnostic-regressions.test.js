@@ -116,6 +116,20 @@ test('browser-restored map-layer checkboxes activate their data and controls', a
   layer.dispose();
 });
 
+test('a ship refresh keeps collapsed details hidden and restore uses the latest observation', async t=>{
+  t.mock.timers.enable({apis:['setTimeout']});const {doc,nodes}=mapDOM(t);let speed=3;
+  t.mock.method(globalThis,'fetch',async()=>Response.json({configured:true,state:'connected',vessels:[{
+    id:'123456789',name:'Test ship',lon:-75.16,lat:39.95,speed,course:0,observedAt:Date.now()}]}));
+  const layer=createMapLayers(THREE,{scene:new THREE.Scene(),stage:new Element(),projection,
+    sampleElevation:()=>5,photographic:{},landmarks:{landmarks:[]},motion:{flyTo(){}},getPose:()=>pose});
+  nodes.get('shipsToggle').checked=true;nodes.get('shipsToggle').onchange();await settle();
+  nodes.get('shipSelect').onchange({target:{value:'123456789'}});
+  const card=doc.body.children[0];card.dispatchEvent(new Event('map-window-collapse'));card.hidden=true;
+  speed=9;t.mock.timers.tick(30000);await settle();assert.equal(card.hidden,true);
+  card.hidden=false;card.dispatchEvent(new Event('map-window-restore'));
+  assert.match(card.textContent,/9 knots/);layer.dispose();
+});
+
 test('Philadelphia policy permits its actual analytics connections without allowing arbitrary hosts', async()=>{
   const response=await policy({next:async()=>new Response('map')});
   const connect=response.headers.get('Content-Security-Policy').split(';').find(v=>v.trim().startsWith('connect-src'));

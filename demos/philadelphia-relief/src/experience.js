@@ -1,3 +1,13 @@
+export function mapShortcutAllowed(event) {
+  if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return false;
+  const target = event.target;
+  if (target?.isContentEditable
+    || target?.closest?.('input,textarea,select,[role="textbox"],dialog[open]')) return false;
+  if (target?.closest?.('.camera-map-card,.camera-map-pin,.camera-layer-control')) return false;
+  return event.key === 'Escape'
+    || !target?.closest?.('button,a[href],summary,[role="button"],[role="slider"]');
+}
+
 export function detailMessage(detail) {
   if (detail.state==='regional') return 'Regional aerial';
   if (detail.state==='unavailable') return 'Using available imagery';

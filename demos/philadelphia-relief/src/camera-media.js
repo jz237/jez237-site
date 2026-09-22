@@ -17,6 +17,8 @@ export function mountCameraMedia(host, item, {
     if (disposed || failed) return;
     failed = true;
     clearTimeout(timer); clearTimeout(limit); clearInterval(refresh); stopVideo();
+    if (image) image.removeAttribute('src');
+    if (frame) frame.removeAttribute('src');
     status('Preview unavailable from the provider. Retry or open the camera page.');
   };
   status(item.stream ? 'Connecting to DelDOT video…' : 'Loading provider image…');

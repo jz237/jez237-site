@@ -48,6 +48,17 @@ test('timed-out previews report failure and ignore a late library response', asy
   assert.equal(constructed, 0); cleanup();
 });
 
+test('preview timeouts cancel pending image and iframe navigations', t => {
+  const host=setup(t);
+  for (const source of [{snapshot:'https://example.test/camera.jpg'},{preview:'https://example.test/view'}]) {
+    const messages=[];
+    const cleanup=mountCameraMedia(host,{name:'Camera',...source},{onStatus:text=>messages.push(text)});
+    const media=host.children[0];assert.ok(media.src);
+    t.mock.timers.tick(18000);assert.equal(media.src,undefined);
+    assert.match(messages.at(-1),/unavailable/);cleanup();
+  }
+});
+
 test('provider snapshots show an explicit error and stop refreshing when closed', t => {
   const host = setup(t), messages = [];
   const cleanup = mountCameraMedia(host, {snapshot: 'https://api.igotview.com/image.jpg', name:'Square'},

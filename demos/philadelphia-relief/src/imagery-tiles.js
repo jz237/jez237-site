@@ -258,6 +258,11 @@ export function createTileStream({ region, projection, load = fetchTile, install
       let retained = 0;
       for (const [key, job] of pending) {
         if (!active) { cancel(key, job); continue; }
+        // Allow all three 30-second source fallbacks, but never let a stalled
+        // connection or decoder occupy a download slot indefinitely.
+        if (now() - job.started >= 100000) {
+          failed.set(key, now() + 30000); measure(0, false); cancel(key, job); continue;
+        }
         if (job.retainedUntil && job.retainedUntil <= now() && !desired.some(c => c.key === key)) {
           cancel(key, job); continue;
         }
