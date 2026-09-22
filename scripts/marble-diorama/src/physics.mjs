@@ -90,13 +90,15 @@ export class Simulation {
             .setTranslation(...Object.values(pose.position))
             .setRotation(pose.rotation),
         );
-      const cd = ["flipper", "vacuum-mouth"].includes(g.part.profile)
-        ? RAPIER.ColliderDesc.trimesh(
-            g.vertices,
-            g.indices,
-            RAPIER.TriMeshFlags.FIX_INTERNAL_EDGES,
-          )
-        : RAPIER.ColliderDesc.convexHull(g.vertices);
+      const cd =
+        g.part.motion.axis === "terrain-sequence" ||
+        ["flipper", "vacuum-mouth"].includes(g.part.profile)
+          ? RAPIER.ColliderDesc.trimesh(
+              g.vertices,
+              g.indices,
+              RAPIER.TriMeshFlags.FIX_INTERNAL_EDGES,
+            )
+          : RAPIER.ColliderDesc.convexHull(g.vertices);
       if (!cd) throw Error("Invalid convex moving part");
       this.world.createCollider(
         cd
@@ -287,6 +289,20 @@ export class Simulation {
           part: m.part.id,
         });
       const b = this.world.getRigidBody(m.handle);
+      if (
+        m.part.motion.axis === "terrain-sequence" &&
+        m.current.frame !== m.previous.frame
+      ) {
+        const data = this.compiled.moving.find((g) => g.part.id === m.part.id)
+          .frames[m.current.frame];
+        b.collider(0).setShape(
+          RAPIER.ColliderDesc.trimesh(
+            data.vertices,
+            data.indices,
+            RAPIER.TriMeshFlags.FIX_INTERNAL_EDGES,
+          ).shape,
+        );
+      }
       if (m.current.vertices && m.current !== m.previous)
         b.collider(0).setShape(
           RAPIER.ColliderDesc.convexHull(m.current.vertices).shape,

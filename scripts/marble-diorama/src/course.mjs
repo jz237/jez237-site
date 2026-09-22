@@ -1,3 +1,4 @@
+import { compileTerrainSequence } from "./terrain-sequence.mjs";
 import { validateTerrainNavigation } from "./terrain-navigation.mjs";
 import { vacuumPoseAt } from "./vacuum.mjs";
 import { presenceAt } from "./mechanism-time.mjs";
@@ -307,6 +308,11 @@ export function validateCourse(c) {
     else if (!["ribbon", "tube"].includes(p.kind))
       estimatedVertices += (Math.ceil(p.w * 2) + 1) * (Math.ceil(p.d * 2) + 1);
     validateAnimatedTerrain(p, finite);
+    if (p.animation?.type === "terrain-sequence")
+      estimatedVertices += p.animation.frames.reduce(
+        (n, cells) => n + cells.length * 36,
+        0,
+      );
     if (estimatedVertices > 150000)
       throw Error(
         "Course geometry exceeds the 150,000-vertex authoring limit.",
@@ -809,7 +815,15 @@ export function compileCourse(c) {
   validateCourse(c);
   const staticGroups = new Map(),
     moving = [];
-  const parts = joinedBoardParts(expandAnimatedTerrain(c.parts));
+  const sequenceParts = c.parts.filter(
+    (p) => p.animation?.type === "terrain-sequence",
+  );
+  const parts = joinedBoardParts(
+    expandAnimatedTerrain(
+      c.parts.filter((p) => p.animation?.type !== "terrain-sequence"),
+    ),
+  );
+  for (const p of sequenceParts) moving.push(compileTerrainSequence(p));
   for (const p of parts) {
     const geom = partGeometry(p);
     if (p.motion) {
@@ -879,9 +893,20 @@ export function compileCourse(c) {
       roles: g.roles,
     };
   });
-  return { definition: c, parts, statics, moving };
+  return {
+    definition: c,
+    parts: [...parts, ...sequenceParts],
+    statics,
+    moving,
+  };
 }
 export function motionAt(p, time, terrainRows, previous) {
+  if (p.motion?.axis === "terrain-sequence")
+    return {
+      position: { x: p.x, y: p.y, z: p.z },
+      rotation: { x: 0, y: 0, z: 0, w: 1 },
+      frame: terrainRows?.frame ?? 0,
+    };
   if (p.motion?.axis === "terrain")
     return terrainTrianglePose(p, terrainRows, previous);
   if (p.profile === "vacuum-mouth" && p.presence?.transition)

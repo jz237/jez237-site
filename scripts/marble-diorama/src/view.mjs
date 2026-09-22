@@ -18,6 +18,38 @@ import { actorMesh, updateActorMesh } from "./actor-view.mjs";
 const vec = (p) => new THREE.Vector3(p.x, p.y, p.z),
   quat = (p) => new THREE.Quaternion(p.x, p.y, p.z, p.w);
 
+function updateReliefTexture(target, field) {
+  target.texture.image = {
+    data: field.data,
+    width: field.width,
+    height: field.height,
+  };
+  target.texture.needsUpdate = true;
+  target.bounds.set(
+    field.minX - field.step / 2,
+    field.minZ - field.step / 2,
+    field.width * field.step,
+    field.height * field.step,
+  );
+  target.height.set(field.minY, field.yRange);
+}
+function makeReliefTexture(field) {
+  const texture = new THREE.DataTexture(
+    field.data,
+    field.width,
+    field.height,
+    THREE.RGBAFormat,
+  );
+  texture.minFilter = texture.magFilter = THREE.LinearFilter;
+  const target = {
+    texture,
+    bounds: new THREE.Vector4(),
+    height: new THREE.Vector2(),
+  };
+  updateReliefTexture(target, field);
+  return target;
+}
+
 // Grid and relief paint are evaluated on the actual mesh, without displacement.
 function graphSurface(material, field, neutralSurface, moving) {
   material.onBeforeCompile = (shader) => {
@@ -48,14 +80,14 @@ function graphSurface(material, field, neutralSurface, moving) {
       `#include <color_fragment>
       vec4 terrain=texture2D(reliefMap,(vTerrainWorld.xz-reliefBounds.xy)/reliefBounds.zw);
       float surfaceHeight=reliefHeight.x+terrain.b*reliefHeight.y;
-      float valid=terrain.a*(1.0-smoothstep(0.4,0.9,abs(vTerrainWorld.y-surfaceHeight)))*${moving ? "0.0" : "1.0"};
+      float valid=terrain.a*(1.0-smoothstep(0.4,0.9,abs(vTerrainWorld.y-surfaceHeight)))*${moving && moving !== "terrain-sequence" ? "0.0" : "1.0"};
       float relief=(terrain.r-0.5)*2.0*valid;
       vec3 terrainColor=mix(levelColor,valleyColor,smoothstep(0.015,0.42,-relief));
       float ridge=max(smoothstep(0.015,0.46,relief),terrain.g*valid*0.94);
       terrainColor=mix(terrainColor,ridgeColor,ridge);
       diffuseColor.rgb=${neutralSurface ? "terrainColor" : "mix(diffuseColor.rgb,terrainColor,0.14)"};
       // Course-aligned graph lines are draped on the real 3D surface.
-      vec3 gridPosition=${moving && !["wave", "terrain", "stationary"].includes(moving) ? "vTerrainLocal" : "vTerrainWorld"};
+      vec3 gridPosition=${moving && !["wave", "terrain", "terrain-sequence", "stationary"].includes(moving) ? "vTerrainLocal" : "vTerrainWorld"};
       vec2 graph=vec2(gridPosition.x-gridPosition.z,gridPosition.x+gridPosition.z)*0.70710678/0.65;
       vec2 distanceToLine=abs(fract(graph+0.5)-0.5);
       vec2 coverage=1.0-smoothstep(vec2(0.014),vec2(0.014)+fwidth(graph)*0.85,distanceToLine);
@@ -169,7 +201,13 @@ export class DioramaView {
     Object.assign(this.camera, { left: -w, right: w, top: h, bottom: -h });
     this.camera.updateProjectionMatrix();
   }
-  material(name, side = false, color = "#b85442", moving = false) {
+  material(
+    name,
+    side = false,
+    color = "#b85442",
+    moving = false,
+    relief = this.relief,
+  ) {
     const s = SURFACES[name],
       m = new THREE.MeshStandardMaterial({
         color:
@@ -186,7 +224,7 @@ export class DioramaView {
     if (!side)
       return graphSurface(
         m,
-        this.relief,
+        relief,
         ["stone", "ceramic", "miniature"].includes(name),
         moving,
       );
@@ -200,7 +238,7 @@ export class DioramaView {
         "varying vec3 vTrackPosition;\n" + shader.vertexShader;
       shader.vertexShader = shader.vertexShader.replace(
         "#include <begin_vertex>",
-        `#include <begin_vertex>\nvTrackPosition=${["wave", "terrain", "stationary"].includes(moving) ? "(modelMatrix*vec4(position,1.0)).xyz" : "position"};`,
+        `#include <begin_vertex>\nvTrackPosition=${["wave", "terrain", "terrain-sequence", "stationary"].includes(moving) ? "(modelMatrix*vec4(position,1.0)).xyz" : "position"};`,
       );
       shader.fragmentShader =
         "varying vec3 vTrackPosition;\n" +
@@ -233,7 +271,7 @@ export class DioramaView {
       `${side ? "side" : "top"}-${name}-${moving}-${this.sim?.course.id}-${this.sim?.course.sidePattern ?? ""}`;
     return finishStone(m, this.wallGrain);
   }
-  meshFor(g, material, color) {
+  meshFor(g, material, color, relief = this.relief) {
     // Vanishing spans do not translate. Keep their grid and masonry aligned
     // with neighboring fixed surfaces while their support switches on/off.
     const motion = g.part?.motion;
@@ -244,7 +282,7 @@ export class DioramaView {
         ? "stationary"
         : (motion?.axis ?? false);
     const mesh = new THREE.Mesh(surfaceGeometry(g), [
-      this.material(material, false, color, moving),
+      this.material(material, false, color, moving, relief),
       this.material(material, true, color, moving),
     ]);
     mesh.castShadow = true;
@@ -264,6 +302,11 @@ export class DioramaView {
   }
   load(sim) {
     this.replayFollow = false;
+    for (const mesh of this.moving ?? []) {
+      mesh.userData.sequenceRelief?.texture.dispose();
+      for (const geometry of mesh.userData.sequenceGeometry ?? [])
+        if (geometry !== mesh.geometry) geometry.dispose();
+    }
     this.clear(this.root);
     this.clear(this.display);
     this.clear(this.marbleRoot);
@@ -355,11 +398,32 @@ export class DioramaView {
     for (const g of sim.compiled.statics)
       this.root.add(this.meshFor(g, g.material, sim.course.color));
     for (const g of sim.compiled.moving) {
+      const fields = g.frames?.map((frame) =>
+        reliefField([
+          {
+            ...frame,
+            vertices: frame.vertices.map(
+              (v, i) => v + [g.part.x, g.part.y, g.part.z][i % 3],
+            ),
+          },
+        ]),
+      );
+      const sequenceRelief = fields ? makeReliefTexture(fields[0]) : null;
       const mesh = this.meshFor(
         g,
         g.part.material ?? "stone",
         sim.course.color,
+        sequenceRelief ?? this.relief,
       );
+      if (fields) {
+        mesh.userData.sequenceFields = fields;
+        mesh.userData.sequenceRelief = sequenceRelief;
+        mesh.userData.sequenceGeometry = [
+          mesh.geometry,
+          ...g.frames.slice(1).map(surfaceGeometry),
+        ];
+        mesh.userData.terrainFrame = 0;
+      }
       this.root.add(mesh);
       this.moving.push(mesh);
     }
@@ -854,6 +918,19 @@ export class DioramaView {
         .getRigidBody(this.sim.movers[i].handle)
         .isEnabled();
       const m = this.sim.movers[i];
+      if (
+        m.part.motion.axis === "terrain-sequence" &&
+        this.moving[i].userData.terrainFrame !== m.current.frame
+      ) {
+        const mesh = this.moving[i],
+          data = mesh.userData;
+        mesh.geometry = data.sequenceGeometry[m.current.frame];
+        updateReliefTexture(
+          data.sequenceRelief,
+          data.sequenceFields[m.current.frame],
+        );
+        data.terrainFrame = m.current.frame;
+      }
       const terrainPose =
         m.part.motion.axis === "terrain"
           ? interpolateTerrainTriangle(m.part, m.previous, m.current, alpha)

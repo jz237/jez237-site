@@ -1,4 +1,9 @@
 import {
+  validateTerrainSequence,
+  createTerrainSequence,
+  advanceTerrainSequence,
+} from "./terrain-sequence.mjs";
+import {
   terrainTileAt,
   terrainRegionAfter,
   validateTerrainGates,
@@ -48,6 +53,7 @@ function cellPoints(p, cell) {
 export function validateAnimatedTerrain(p, finite) {
   const a = p.animation;
   if (!a) return;
+  if (a.type === "terrain-sequence") return validateTerrainSequence(p, finite);
   if (
     p.kind !== "terrain" ||
     a.type !== "intermediate-wave" ||
@@ -248,15 +254,17 @@ export function createTerrainAnimations(course, players) {
       .filter((p) => p.animation)
       .map((p) => [
         p.id,
-        {
-          nativeTick: 0,
-          state: createIntermediateWaves(),
-          previous: intermediateWaveCorners(),
-          current: intermediateWaveCorners(),
-          regions: p.animation.initialRegions.slice(0, players),
-          tiles: Array(players).fill(null),
-          alpha: 0,
-        },
+        p.animation.type === "terrain-sequence"
+          ? createTerrainSequence(p, players)
+          : {
+              nativeTick: 0,
+              state: createIntermediateWaves(),
+              previous: intermediateWaveCorners(),
+              current: intermediateWaveCorners(),
+              regions: p.animation.initialRegions.slice(0, players),
+              tiles: Array(players).fill(null),
+              alpha: 0,
+            },
       ]),
   );
 }
@@ -265,6 +273,10 @@ export function advanceTerrainAnimations(course, controllers, players, time) {
   for (const part of course.parts) {
     if (!part.animation) continue;
     const controller = controllers[part.id];
+    if (part.animation.type === "terrain-sequence") {
+      poses[part.id] = advanceTerrainSequence(part, controller, players, time);
+      continue;
+    }
     const eligible = players.map((player, i) => {
       const tile = terrainTileAt(part, player.position);
       controller.regions[i] =

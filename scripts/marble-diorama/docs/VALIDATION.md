@@ -1399,3 +1399,22 @@ with zero falls during the observed idle interval and no captured warnings or
 errors. Camera framing at the larger original heights still needs adaptation.
 No original resource files are published. This remains a local checkpoint;
 public campaign definitions and physics identity mm-35 are unchanged.
+
+
+### September 22 — four recovered Ultimate terrain states
+
+`terrain-sequence` imports now switch one welded visible/collision mesh among
+recovered discrete states. Seven regressions cover solid geometry, activation,
+physical support removal, all phases, snapshot/frame-rate determinism, import
+validation and geometry budgets. Full suite **229/229**, 282010.9911 ms.
+Rendering additionally caches each state's mesh/relief field and retains
+world-aligned grid/masonry; final build and local browser inspection pass.
+
+Private Ultimate source fixture: 272 changed vertices, 369 affected cells,
+four original height tables. All 17,700 top probes match within 0.000002802 units,
+with no missing hits/open edges. The previously blocked native final gate now
+passes ordinary-input steering in 97 ticks with no falls. Original start checks
+remain successful. This is not a full-race run. Activation and 1.5s frame spacing
+are provisional, pending the original camera/streaming integration. Other actors,
+rounding, scale, damage behavior and full campaign acceptance remain unfinished.
+See ULTIMATE-FINAL.md. Public layouts and mm-35 remain unchanged; unpublished.
