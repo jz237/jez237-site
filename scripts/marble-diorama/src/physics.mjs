@@ -26,9 +26,9 @@ export const STEP = 1 / 120,
 // The published 2.2 turbo torque could not reach even the screen-space
 // displacement observed from rest in the Amiga opening. See CONTROL-RESPONSE.md.
 // This clears that conservative envelope; full input/trajectory calibration
-// remains open. Demo paths retain their intentionally gentler 2.2 torque.
+// remains open. Demo paths use gentler torque through ordinary analog input.
 export const STEERING_TORQUE = Object.freeze({ normal: 1.35, turbo: 4.4 });
-const DEMO_TORQUE = 2.2;
+const DEMO_TORQUE = 3.3;
 export const initPhysics = () => RAPIER.init();
 const copy = (v) => ({ ...v }),
   mag = (v) => Math.hypot(v.x, v.y, v.z),
@@ -149,6 +149,7 @@ export class Simulation {
       campaignDeaths: 0,
       finishTick: null,
       grounded: false,
+      groundFriction: null,
       respawnTick: 0,
       springTick: 0,
       stunTick: 0,
@@ -280,6 +281,7 @@ export class Simulation {
       );
       p.grounded = !!hit;
       p.groundNormal = hit ? copy(hit.normal) : null;
+      p.groundFriction = hit ? hit.collider.friction() : null;
       const landingBonus = updateLandingTargets(
         this.landingTargets,
         p,
@@ -975,10 +977,18 @@ export class DemoController {
       return false;
     });
     const speed = traffic || birdCrossing ? 0 : cruisingSpeed;
+    // Extra torque cannot provide extra grip on ice. Also ease off before an
+    // authored slow approach, while there is still room to shed momentum.
+    const steeringTorque =
+      (p.groundFriction !== null && p.groundFriction < 0.1) ||
+      (target.speed ?? 3.5) <= 1.4 ||
+      (next.speed ?? 3.5) <= 1.4
+        ? 2.2
+        : DEMO_TORQUE;
     // Counter gravity on descents as well as climbs. Slip feedback limits
     // excessive spin before a low-friction surface grips again.
     const compensation = p.groundNormal
-      ? (-9.81 * RADIUS * p.groundNormal.y) / DEMO_TORQUE
+      ? (-9.81 * RADIUS * p.groundNormal.y) / steeringTorque
       : 0;
     const errorX =
         (dx / Math.max(dist, 0.01)) * speed -
@@ -993,7 +1003,7 @@ export class DemoController {
       inputMagnitude = Math.max(0.5, Math.hypot(errorX, errorZ)),
       x = errorX / inputMagnitude,
       z = errorZ / inputMagnitude;
-    const strength = DEMO_TORQUE / STEERING_TORQUE.turbo;
+    const strength = steeringTorque / STEERING_TORQUE.turbo;
     return { x: x * strength, z: z * strength, turbo: true };
   }
 }
