@@ -12,6 +12,7 @@ import { part, validateCourse } from "../src/course.mjs";
 import { campaignCourses, ultimateCourse } from "../src/campaign.mjs";
 import { stunMarks, updateStunMarks } from "../src/stun-view.mjs";
 import { effectSamples } from "../src/effects.mjs";
+import { landingControlScale } from "../src/landing-stun.mjs";
 await initPhysics();
 test("a real catapult flight lands without dizziness, restores midair, and does not protect later ordinary drops", () => {
   const sim = new Simulation(ultimateCourse(), { untimed: true });
@@ -93,7 +94,7 @@ test("a hard physical landing causes dizziness without death or respawn, while a
     sim.dispose();
   }
 });
-test("dizziness blocks steering and turbo without freezing momentum, and snapshot replay restores the same recovery", () => {
+test("dizziness reduces steering and turbo without locking them, and snapshot replay restores the same recovery", () => {
   const sim = fixture();
   sim.body(sim.players[0]).setLinvel({ x: 2, y: 0, z: 0 }, true);
   land(sim);
@@ -104,12 +105,30 @@ test("dizziness blocks steering and turbo without freezing momentum, and snapsho
     for (let i = 0; i < 80; i++) sim.step([input, { x: 0, z: 1, turbo: true }]);
     return structuredClone(sim.players);
   };
-  const steered = run({ x: -1, z: -1, turbo: true });
+  const steered = run({ x: 0, z: 1, turbo: true });
   sim.restore(snap);
   assert.deepEqual(
-    run({ x: 0, z: 0, turbo: false }),
+    run({ x: 0, z: 1, turbo: true }),
     steered,
-    "inputs have no influence during dizziness",
+    "the recovery response is deterministic after restoration",
+  );
+  sim.restore(snap);
+  const coasting = run({ x: 0, z: 0, turbo: false });
+  assert.ok(
+    steered[0].current.position.z > coasting[0].current.position.z + 0.1,
+    "a dizzy marble still responds to steering",
+  );
+  sim.restore(snap);
+  sim.players[0].stunnedUntil = 0;
+  const unrestricted = run({ x: 0, z: 1, turbo: true });
+  assert.ok(
+    unrestricted[0].current.position.z > steered[0].current.position.z + 0.1,
+    "dizziness reduces physical steering authority",
+  );
+  assert.deepEqual(
+    steered[1],
+    coasting[1],
+    "the other marble's control is independent",
   );
   assert.ok(
     Math.abs(steered[0].current.position.x - before.x) > 0.1,
@@ -129,6 +148,23 @@ test("dizziness blocks steering and turbo without freezing momentum, and snapsho
   const backward = after({ x: -1, z: 0, turbo: true });
   assert.ok(forward.current.position.x > backward.current.position.x + 1);
   sim.dispose();
+});
+
+test("recovery steering fades and returns with the original counter attenuation", () => {
+  const p = { stunTick: 100, stunnedUntil: 264 };
+  // This duration maps to the original 32-update recovery: 0 -> 16 -> 0.
+  assert.equal(landingControlScale(p, 99), 1);
+  assert.equal(landingControlScale(p, 100), 31 / 32);
+  assert.equal(landingControlScale(p, 141), 23 / 32);
+  assert.equal(landingControlScale(p, 182), 15 / 32);
+  assert.equal(landingControlScale(p, 223), 23 / 32);
+  assert.equal(landingControlScale(p, 264), 1);
+  const hard = { stunTick: 0, stunnedUntil: 342 };
+  assert.equal(landingControlScale(hard, 171), 0);
+  for (let tick = 0; tick < 342; tick++) {
+    const scale = landingControlScale(hard, tick);
+    assert.ok(scale >= 0 && scale < 1);
+  }
 });
 test("side impacts in mid-air cannot masquerade as a landing", () => {
   const c = blankCourse();

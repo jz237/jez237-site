@@ -108,7 +108,7 @@ for the corrected sequence and remaining difficulty/clock questions.
 ### Landing dizziness (mm-23)
 
 Original courses now enable hard-landing dizziness: actual physical contact
-briefly suppresses steering while momentum, collisions and independent clocks
+reduces steering while momentum, collisions and independent clocks
 continue. It does not count as a death. Shared-clock blue marks and HUD feedback
 make the state visible. See LANDING-DIZZINESS.md for the Amiga observations,
 relative-impact query, replay checks and provisional threshold/duration law.
@@ -129,3 +129,11 @@ The previous gold pyramid is replaced by a curved white climb and raised ledge,
 using shared visible/collision surfaces. Close-up footage corrected the earlier
 recess interpretation. Both demos climb the ramp before dropping to the launcher;
 exact dimensions, gold guide shapes and original timing remain unverified.
+
+
+### Landing control correction (mm-32)
+
+Original code disproves the earlier whole-effect input lock. Steering and turbo
+now remain available at reduced authority during dizziness, using the recovered
+counter attenuation. Impact threshold, duration, severe-impact shattering and
+accumulated damage remain provisional; see LANDING-DIZZINESS.md.

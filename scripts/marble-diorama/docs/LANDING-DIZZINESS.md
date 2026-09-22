@@ -27,7 +27,7 @@ between impact severity and duration is an inference from these examples;
 original thresholds, severity law, influence of simulation slowdown, collision
 immunity and difficulty dependence remain unverified.
 
-## Reconstruction in mm-23
+## Initial reconstruction in mm-23 (control lock superseded)
 
 All six original course rule sets enable `landingStun`. Bonus and existing custom
 courses retain their own rules; imported courses can explicitly enable this
@@ -57,8 +57,8 @@ marble appearance during dizziness, controls and sound remain open.
 
 ## Verification scope
 
-Regression checks exercise actual small/hard landings, control suppression and
-resumption, retained momentum, independent player control and clocks, no death
+Regression checks exercise actual small/hard landings, reduced control and
+recovery, retained momentum, independent player control and clocks, no death
 or respawn, side-wall exclusion, snapshot restoration and moving-surface relative
 velocity, an actual catapult flight and a later unassisted drop. The reference
 renderer follows the marble and disappears on recovery or timeout. A replay test exposed Rapier 0.20 restored wrappers reporting body
@@ -68,3 +68,57 @@ authored moving bodies explicitly, preserving the same outcome after restore.
 This restores a missing mechanic but does not establish complete landing or
 Amiga feature parity. See VALIDATION.md for the release checks and remaining
 full timed campaign failures.
+
+## September 22 executable audit and mm-32 correction
+
+The privately decoded Amiga executable is identified in TWO-PLAYER-RULES.md.
+The original normal-input routine at `0x12f8c` still runs in dizzy state 1:
+state dispatch at `0x13f44` leads to `0x1427c`, which invokes input at `0x1428e`
+and ordinary motion/collision at `0x14298`. At `0x1307e–0x130cc`, state 1
+attenuates the input by the recovery counter at player offset `0x60`.
+Ignoring original integer rounding, its multiplier is `(31 - counter) / 32`.
+State 5 shares this path with a separate minimum numerator of four; that state
+is not being conflated with landing dizziness here.
+
+The state-1 update at `0x142aa–0x142f4` reduces the remaining damage byte at
+`0x61`, then raises or lowers the recovery counter toward it, returning to
+ordinary state when the recovery counter reaches zero. For a single isolated
+surviving impact this produces a rising then falling counter: steering weakens
+and returns during the visible effect. The prior remake discarded all input
+for the full effect duration, which is contradicted by this code.
+
+mm-32 keeps input direction and turbo available and multiplies applied steering
+torque by the counter attenuation. It leaves physical momentum, collisions and
+independent player control intact. The counter is evaluated from simulation
+ticks, so restored snapshots and input recordings recover identical responses.
+For a 32-update recovery its counter runs 0 -> 16 -> 0, giving approximately
+97% -> 47% -> 97% input before ordinary 100% control returns.
+
+### Calibration limits
+
+The existing 6.5-unit impact threshold and speed-to-duration approximation are
+retained. The counter envelope is fitted to that duration using the existing
+clock-rate approximation and the original 30 updates per clock unit, rounded
+to an even update count. Its surviving range is limited to 62 updates (peak
+counter 31). This is an explicit adapter between the current Rapier calibration
+and the recovered input law, not an exact original impact model.
+
+The original landing branch at `0x152d2–0x15300` derives damage from vertical
+height difference, not measured normal impact speed. It calls `0x14884`, which
+accumulates damage, handles existing recovery state and can enter a shattering
+path when the resulting half-sum exceeds 31. Those height units, accumulated
+impacts, severe-landing death behavior, exact integer input rounding and
+wall-clock cadence still require calibration. The earlier launcher exemption
+also remains inferred. Do not mark complete landing parity from this correction.
+
+Eight focused landing checks pass, including actual hard contact, steering
+weaker than an unstunned marble but stronger than coasting, independent second
+player response, restoration, recovery and the original attenuation fractions.
+
+A normal-input event trace exercises an actual Ultimate opening stun at tick
+1459 (12.158s), followed by launcher activation at tick 1559. The full untimed
+solo route finishes in 90.117s without a fall. Aerial's current normal demo
+finishes in 54.508s but triggers no stun; its drop geometry and path remain a
+specific comparison gap against the original Aerial observations above. The
+local Aerial browser demo passes (54.51s, 4,942 points, zero falls, no errors),
+but that alone does not verify original landing placement or difficulty.

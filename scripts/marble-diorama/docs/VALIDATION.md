@@ -2,12 +2,12 @@
 
 ## Current outcome
 
-**187 automated tests pass. All six campaign races and all three bonus courses
+**188 automated tests pass. All six campaign races and all three bonus courses
 are playable. This reconstruction is published under Playable Games at the owner's request, with
 completion gates open in PARITY.md.** The full campaign passes untimed one- and two-player
 normal-input runs; all bonuses pass timed one- and two-player runs. A complete
 timed original campaign has not yet passed. Original Amiga module playback is enabled; detailed reference-listening parity remains open.
-Current simulation/replay version: `rapier-0.20.0-mm-31`.
+Current simulation/replay version: `rapier-0.20.0-mm-32`.
 Commands: `npm test`, `npm run build`, `node measure.mjs`, `git diff --check`.
 Node: v24.17.0. Three.js: 0.186.0. Rapier: 0.20.0. Build tool: esbuild 0.28.2.
 Dependencies are pinned and bundled locally. No runtime CDN dependency.
@@ -1206,3 +1206,24 @@ previous mm-30 timed campaign measurement remains applicable to movement.
 The catch-up audit is recorded in CATCHUP-REFERENCE.md. Its original trigger,
 penalty, destination selection and camera dependency are traced, but the
 mechanic is not implemented. Full parity and timed Ultimate completion remain open.
+
+### September 22 — steering during landing recovery
+
+Original input code attenuates steering during dizziness; the former remake
+locked input for the full effect. mm-32 preserves steering/turbo at reduced
+strength using the recovered counter law fitted to the current duration
+calibration. Exact damage from drop height, accumulated impacts, severe-impact
+shattering and original update cadence remain open; see LANDING-DIZZINESS.md.
+
+Full suite: **188/188 pass**, 282682.86 ms. Focused landing checks: **8/8 pass**,
+4115.71 ms. These compare actual dizzy steering against coasting and unrestricted
+steering, exercise turbo, independent players, recovery and snapshot replay.
+Build and diff check pass. Local Aerial demo: 54.51s, 4,942 points, zero falls,
+no captured warnings/errors. Native Ultimate route: 90.117s, one opening stun
+and no falls. Aerial's demo triggers no stuns, leaving a specific original
+geometry/path comparison gap; passing the demo is not proof of that behavior.
+
+The repeated mm-32 timed campaign measurements match mm-30: both modes finish
+through Silly without falls; solo Ultimate times out at 65.283s and the paired
+race ends at 79.367s with both players timed out. Original time allowances were
+not extended. Full timed campaign acceptance remains incomplete.

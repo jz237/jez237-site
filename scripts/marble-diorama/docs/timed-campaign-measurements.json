@@ -1,6 +1,6 @@
 {
-  "physics": "rapier-0.20.0-mm-30",
-  "generatedAt": "2026-09-22T04:36:52.752Z",
+  "physics": "rapier-0.20.0-mm-32",
+  "generatedAt": "2026-09-22T04:59:07.425Z",
   "method": "Timed 120 Hz campaigns at difficulty 0, normal bounded demo steering, no assistance or position overrides.",
   "runs": [
     {
@@ -258,7 +258,7 @@
             },
             {
               "time": 0,
-              "score": 42263,
+              "score": 42261,
               "deaths": 0,
               "status": "timeout",
               "finishTick": null
