@@ -245,7 +245,7 @@
     const weatherPromise = fetchJson(weatherUrl)
       .then(weather => ({ ...weather, source: 'Open-Meteo' }))
       .catch(async () => loadNwsWeatherBackup(await pointsPromise));
-    const gardenPromise = fetchJson(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=rain_sum&hourly=rain,temperature_2m&past_days=7&forecast_days=3&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=${TZ}`).catch(() => null);
+    const gardenPromise = fetchJson(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&daily=rain_sum,showers_sum&hourly=rain,showers,temperature_2m&past_days=7&forecast_days=3&temperature_unit=fahrenheit&precipitation_unit=inch&timezone=${TZ}`).catch(() => null);
     const aqPromise = fetchJson(aqUrl).catch(() => ({ hourly: {}, unavailable: true }));
     const [weather, aq, points, alerts, garden] = await Promise.all([
       weatherPromise,
