@@ -196,3 +196,26 @@ test('cached full detail is installed at its real resolution and never downloade
   assert.equal(new Set(calls.map(c => c[0])).size,calls.length);
   assert.equal(stream.stats().concurrency,3,'Disk hits do not inflate network concurrency'); stream.dispose();
 });
+
+
+test('tile resolutions are checked together and highest cached detail wins', async () => {
+  const waiting=[],seen=[];let downloads=0;
+  const loader=createTileLoader({cache:{get:path=>new Promise(resolve=>{
+    seen.push(path);waiting.push(resolve);
+  }),put:async()=>{}},decode:blob=>blob.text(),request:async()=>{downloads++;return new Response('network');}});
+  const cell=planImageryTiles(pose,region,projection,1.7).visible[0];
+  const result=loader(cell,512,new AbortController().signal,{maxSize:2048});
+  await Promise.resolve();
+  assert.equal(seen.length,3,'No sequential cache-resolution round trips');
+  waiting[2](new Response('preview'));waiting[1](null);waiting[0](new Response('full detail'));
+  const tile=await result;assert.equal(tile.size,2048);assert.equal(tile.image,'full detail');
+  assert.equal(downloads,0);
+});
+
+test('concurrent tile lookups share a single cache open', async () => {
+  const storage=memoryStorage();let opens=0;
+  const cache=createImageryCache({storage:()=>({open:async name=>{opens++;return storage.open(name);}}),
+    base:()=> 'https://example.test/map/'});
+  await Promise.all(['a','b','c','d'].map(path=>cache.get(path)));
+  assert.equal(opens,1);
+});

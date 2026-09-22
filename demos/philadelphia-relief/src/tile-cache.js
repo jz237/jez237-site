@@ -5,9 +5,12 @@ export function createImageryCache({ storage = () => globalThis.caches,
   const name = 'philadelphia-relief.imagery.v1';
   let writes = Promise.resolve(), queuedBytes = 0, queuedEntries = 0;
   const key = path => new URL(path, base()).href;
+  let opened;
+  const open = () => opened ||= Promise.resolve().then(() => storage()?.open(name))
+    .catch(() => { opened = undefined; return null; });
   async function get(path) {
     try {
-      const cache = await storage()?.open(name);
+      const cache = await open();
       if (!cache) return null;
       const url = key(path), response = await cache.match(url);
       if (!response) return null;
@@ -24,7 +27,7 @@ export function createImageryCache({ storage = () => globalThis.caches,
     }
     queuedBytes += blob.size; queuedEntries++;
     writes = writes.then(async () => {
-      const cache = await storage()?.open(name);
+      const cache = await open();
       if (!cache) return;
       const headers = new Headers(originalHeaders);
       const ttl = Math.min(2592000, Number(headers.get('Cache-Control')
@@ -96,8 +99,10 @@ export function createTileLoader({ cache = createImageryCache(),
   return async (cell, size, signal, { maxSize = size, progress } = {}) => {
     signal?.throwIfAborted();
     // A stored sharp tile replaces its preview without another download or downgrade.
-    for (const storedSize of [2048, 1024, 512].filter(s => s >= size && s <= maxSize)) {
-      const response = await cache.get(tileImageUrl(cell, storedSize));
+    const sizes = [2048, 1024, 512].filter(s => s >= size && s <= maxSize);
+    const stored = await Promise.all(sizes.map(s => cache.get(tileImageUrl(cell, s))));
+    for (const [index, storedSize] of sizes.entries()) {
+      const response = stored[index];
       if (!response) continue;
       try {
         const image = await decode(await response.blob());

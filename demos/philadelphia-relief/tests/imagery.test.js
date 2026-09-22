@@ -316,6 +316,25 @@ test('first detail leaves the backdrop visible and refinement keeps the neighbou
 });
 
 
+test('late regional imagery preserves full resolution and releases the placeholder', async () => {
+  const THREE = await import('../vendor/three.module.min.js');
+  const { createTerrain } = await import('../src/terrain.js');
+  const map = createTerrain(THREE, { meta: { ...terrain, width: 2, height: 2 },
+    grid: new Float32Array(4), macro: new Float32Array(4), quality: 'performance' });
+  let disposed = 0;
+  map.uniforms.uImagery.value.addEventListener('dispose', () => disposed++);
+  assert.equal(map.hasImagery, false);
+  const fullImage = { width: 8192, height: 8192 };
+  map.setImagery(fullImage);
+  assert.equal(map.hasImagery, true);
+  assert.equal(map.uniforms.uImagery.value.image, fullImage);
+  assert.equal(map.uniforms.uImagery.value.colorSpace, THREE.SRGBColorSpace);
+  assert.equal(disposed, 1);
+  map.uniforms.uImagery.value.addEventListener('dispose', () => disposed++);
+  map.dispose();
+  assert.equal(disposed, 2);
+});
+
 test('cross-river detail tiles avoid partial state mosaics at every resolution', () => {
   for (const size of [512,2048]) {
     const tile=detailRequest(new URLSearchParams({tier:'tile-ultra',
