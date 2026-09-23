@@ -1,11 +1,11 @@
 {
-  "buildHash": "4522a506562bba249ffc798d10ac656f798a3af920b14d8fa98d49d3599da3a9",
+  "buildHash": "6686a422c9aaea67954d5172b38c43b33d55bd9cb555a4e1a2fc744ac1d768c8",
   "files": [
     "assets/anthias-QcvtfU54.glb",
     "assets/chromis-BeZMqwQ5.glb",
     "assets/clown-zY3G7iuy.glb",
     "assets/gramma-BgdGKcNy.glb",
-    "assets/index-C_fSQ09p.js",
+    "assets/index-Cvr8R5_q.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
@@ -23,48 +23,48 @@
     "assets/yellow-CCMRPYfK.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T10:13:56.160Z",
-  "readyMs": 2278,
+  "checkedAt": "2026-09-23T10:29:03.076Z",
+  "readyMs": 2239,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 4.290000000000001,
-      "bites": 22,
-      "remaining": 14
+      "fps": 59.99700014999249,
+      "time": 4.287300000095368,
+      "bites": 17,
+      "remaining": 19
     },
     {
       "fps": 59.99400059993998,
-      "time": 8.306900000000038,
-      "bites": 35,
-      "remaining": 1
-    },
-    {
-      "fps": 59.99400059994003,
-      "time": 12.323899999999982,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 16.34089999999992,
-      "bites": 36,
-      "remaining": 0
+      "time": 8.287700000095406,
+      "bites": 32,
+      "remaining": 4
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.341299999999823,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 24.35829999999976,
+      "time": 12.304700000095346,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.994000599940094,
-      "time": 28.375399999999694,
+      "time": 16.321800000095273,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 20.322100000095183,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 24.339100000095097,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 28.339500000095022,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 5290438,
+    "triangles": 5464730,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -101,13 +101,13 @@
     },
     "infillStats": {
       "colonies": 11,
-      "triangles": 375693,
+      "triangles": 398723,
       "placements": [
         [
           1,
           -2.38,
           2.62,
-          0.53,
+          0.47,
           0.035
         ],
         [
@@ -142,7 +142,7 @@
           14,
           1.35,
           3.5,
-          0.5,
+          0.43,
           0.14
         ],
         [
@@ -170,7 +170,7 @@
           27,
           2.2,
           3.48,
-          0.36,
+          0.31,
           0.23
         ],
         [
@@ -206,15 +206,14 @@
     "Branch anatomy:119 matched axial cup boundaries/normals with recessed centers; side-cup footprints agree with real curved/swollen triangles within1.1451e-8; finite, nondegenerate geometry and conservative navigation",
     "Plate tissue: periodic baked maps with outward near-unit normals; existing closed skeleton, thickness and conservative navigation checks pass; one normalized byte per vertex controls upper/edge/underside relief",
     "Marine fin joins: closed bodies, thin peduncle caps, shared median-fin/skin image source and paired outward fin strokes",
-    "Folded anemones: nonplanar anchored roots, outward skins, recessed oral centers, curved-axis normals and positive sampled deformation determinant"
+    "Folded anemones: nonplanar anchored roots, outward skins, recessed oral centers, curved-axis normals and positive sampled deformation determinant",
+    "Coral terminal growth: short offshoots rooted in existing branches, joined recessed axial cups, all11infill colonies and updated conservative navigation bounds"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "anemone-closeup",
-    "anemone-motion-a",
-    "anemone-motion-b",
+    "coral-closeup",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -223,5 +222,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Three anemones now have individually folded oral discs, matching columns and underside tissue, regionally varied tentacle spread and individually curved tips. All540 strands and7725024geometry bytes retained, same5290438scene triangles. No new map, shader pass or per-frame work. Alternating loads2446/2447.3ms and uncapped255.1/253.7FPS. Target photographic realism not reached."
+  "scope": "Branching coral crowns have unequal heights and local exposure directions, variable taper and short offset terminal growth with joined axial cups. All existing branches/maps retained. Three small infill colonies resized to retain all11 with new bounds. Rendered5464730triangles vs5290438 (+3.3%). No additional draw groups/maps/passes. Loads2391/2384ms; uncapped237/237.9FPS. Artistic approximation, photographic target not reached."
 }

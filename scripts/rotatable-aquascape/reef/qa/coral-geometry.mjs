@@ -35,6 +35,13 @@ for(const {style,meshes} of forms){
  assert.deepEqual(meshes[0].getAttribute('position').array,fixture(style)[0].getAttribute('position').array,'art geometry stays reproducible');
 }
 console.log('Growth forms passed: distinct canopy, bushy and antler silhouettes; same detail count; rounded tips.');
+// Offset growth stays rooted inside an existing terminal, instead of floating.
+for(const {meshes} of forms){
+ const shoots=meshes.filter(g=>g.name==='Offset terminal growth');assert.ok(shoots.length>10);
+ const parents=meshes.filter(g=>g.type==='TubeGeometry'&&g.parameters.tubularSegments===4);
+ for(const shoot of shoots){const root=shoot.parameters.path.getPointAt(0);assert.ok(parents.some(g=>{let best=Infinity;for(let i=0;i<=200;i++)best=Math.min(best,g.parameters.path.getPointAt(i/200).distanceTo(root));return best<g.parameters.radius*.2;}),'new growth begins inside a parent branch');}
+}
+
 
 // Distributed primary stems stay embedded in sloping support, and never jump
 // down to a disconnected ledge when the local rock sample is missing.
