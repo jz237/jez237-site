@@ -15703,5 +15703,30 @@
         ]
       }
     }
+  },
+  {
+    "id": "2026-09-23-random-image-style-screen-print-the-empty-pool-orchestra",
+    "title": "Screen Print: The Empty Pool Orchestra",
+    "tests": "Visual formula: repurpose the spatial geometry of a disused civic venue as an ensemble performance score; continuous scene, no document framing or factual claims.; archive_slot=2026-09-23T01:20; concept=musicians-rehearse-drained-swimming-pool; image_provenance={\"requested_model\": \"openai/gpt-image-2.5-flare\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"requestedQuality\": \"medium\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"verified\"}]}; Requested GPT Image 2.5; backend model not independently verified; owner-approved one-run settings exception: medium quality, variable dimensions",
+    "prompt": "Create a finished, sumptuous four-color hand-pulled SCREEN PRINT illustration, not a photograph, mockup, poster, artifact, or infographic. Concept: after closing, a drained old municipal swimming pool has been quietly repurposed for a midnight percussion rehearsal. The pool itself is the score: its long blue lane lines and black tile markers become visual rhythms that guide the musicians, while the sloping deep end creates a real change in scale and tempo. View from a steep overhead angle that still reveals the pool walls, diving board, ladders, tiled shallows, and a narrow strip of empty spectator seats. Arrange around twenty varied adult performers in a readable, dynamic spiral rather than a uniform grid: one woman on the high diving board cues the downbeat with two bright mallets; a cluster at the deep end strikes steel pans and suspended bicycle rims; at center a seated older drummer plays a floor tom; smaller groups use marimbas, congas, hand bells and clapping; one performer hurries down the steps carrying a cymbal. Their poses and silhouettes are individually distinct. A row of little lanterns at the pool rim throws bold decorative shadow shapes down the dry walls. The music is visible only through alternating arcs of hands, instruments, tile lines, and shadows—NO notes, labels, lettering, sound-wave diagrams or comic panels. Deliberately use four spot inks only: saturated midnight indigo for structure, warm vermilion-coral for skin and accents, swimming-pool mint for tile and instrument flashes, and unprinted warm ivory paper; a few deep purples emerge solely from translucent overprint. Let layers misregister subtly at edges, with occasional coarse halftone and squeegee grain; crisp flat cut shapes, tactile ink density, sophisticated negative space, generous intricate details. Overall mood: ingenious, communal, secretive, exuberant, and unmistakably screen-printed. One continuous complete image to the edges; no border, logo, watermark, typography, or photorealistic/cinematic grading.",
+    "image": "images/2026-09-23-random-image-style-screen-print-the-empty-pool-orchestra.jpg",
+    "thumb": "thumbs/2026-09-23-random-image-style-screen-print-the-empty-pool-orchestra.webp",
+    "color": "#9d9b97",
+    "date": "2026-09-23",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2.5-flare",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "musicians-rehearse-drained-swimming-pool",
+      "imageSha256": "23f419cb72b1f43ff5bf46556e526273c29d081dcd8e5d971395a4585bd6776f",
+      "imageDHash": "1fb02e4616a5ad17",
+      "styleFamily": "screen-print"
+    },
+    "randomRenderingStyle": {
+      "medium": "screen-print",
+      "description": "Four-color hand-pulled screen print with opaque spot inks, translucent overprints, coarse halftone and slight registration drift.",
+      "template": ""
+    }
   }
 ]
