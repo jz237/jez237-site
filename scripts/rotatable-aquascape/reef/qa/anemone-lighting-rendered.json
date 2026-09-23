@@ -1,0 +1,22 @@
+{
+  "plainBack": {
+    "mean": 0.9529266357421875,
+    "max": 213
+  },
+  "scatterBack": {
+    "mean": 1.8608233133951824,
+    "max": 208
+  },
+  "dark": {
+    "mean": 0,
+    "max": 0
+  },
+  "plainFront": {
+    "mean": 8.911331176757812,
+    "max": 122
+  },
+  "scatterFront": {
+    "mean": 6.118787129720052,
+    "max": 71
+  }
+}
