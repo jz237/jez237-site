@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
 import * as T from 'three';
+import {axialCorallite,finishBranch,radialCorallites} from '../BranchAnatomy.ts';
 import {branchingColony,platingColony,plateCollisionVolumes} from '../CoralMorphology.ts';
 let seed=84;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
 const branches=branchingColony(new T.Vector3(),1,.8,random),plate=platingColony(0,0,0,1,.4),all=[...branches,plate];
@@ -58,3 +59,45 @@ for(const [size,phase] of [[.65,.4],[1.08,2.2],[.8,5.1]]){
  assert.ok(volumes.every(v=>v.radius<.25),'avoid enclosing the whole shelf in a large solid ball');
  console.log('Folded plate coverage passed:',size,volumes.length,'local volumes.');
 }
+
+// Each axial cup is welded geometrically to its branch, with continuous normals
+// at the shared boundary and a single recessed center (not an open mesh hole).
+let axialCount=0;
+for(let i=0;i<branches.length;i++){
+ const tube=branches[i];if(tube.type!=='TubeGeometry')continue;
+ const cap=branches[i+1];assert.equal(cap.name,'Axial corallite');axialCount++;
+ const {radialSegments:s,tubularSegments:steps,path}=tube.parameters,tp=tube.getAttribute('position'),tn=tube.getAttribute('normal'),cp=cap.getAttribute('position'),cn=cap.getAttribute('normal');
+ for(let k=0;k<=s;k++){
+  const a=new T.Vector3().fromBufferAttribute(tp,steps*(s+1)+k),b=new T.Vector3().fromBufferAttribute(cp,k);
+  assert.ok(a.distanceTo(b)<1e-7,'no gap at axial insertion');
+  assert.ok(new T.Vector3().fromBufferAttribute(tn,steps*(s+1)+k).dot(new T.Vector3().fromBufferAttribute(cn,k))>.99999,'continuous tissue normal');
+ }
+ const axis=path.getTangentAt(1),center=path.getPointAt(1),depth=k=>new T.Vector3().fromBufferAttribute(cp,k).sub(center).dot(axis);
+ assert.ok(depth(2*(s+1))>depth(cp.count-1),'tip cup has a raised lip around its recessed calice');
+ const indices=cap.index.array,edges=new Map();
+ for(let j=0;j<indices.length;j+=3){
+  const a=new T.Vector3().fromBufferAttribute(cp,indices[j]),b=new T.Vector3().fromBufferAttribute(cp,indices[j+1]),c=new T.Vector3().fromBufferAttribute(cp,indices[j+2]);
+  assert.ok(b.sub(a).cross(c.sub(a)).lengthSq()>1e-18,'tip has no degenerate triangles');
+  for(let q=0;q<3;q++){const a=indices[j+q],b=indices[j+(q+1)%3],key=Math.min(a,b)+':'+Math.max(a,b);edges.set(key,(edges.get(key)||0)+1);}
+ }
+ assert.ok([...edges.values()].every(n=>n<=2),'no non-manifold tip edges');
+}
+assert.ok(axialCount>80);console.log('Axial corallites passed:',axialCount,'continuous attached cups, recessed centers and nondegenerate faces.');
+
+
+// Check the side-cup footprint against triangles independently of the UV-like
+// interpolation used by the builder, on a curved/swollen skeleton.
+const path=new T.CatmullRomCurve3([new T.Vector3(),new T.Vector3(.1,.3,.04),new T.Vector3(-.05,.7,.12),new T.Vector3(.15,1,.1)]);
+const tube=new T.TubeGeometry(path,8,.045,12,false);tube.setAttribute('color',new T.Float32BufferAttribute(new Float32Array(tube.getAttribute('position').count*3).fill(.3),3));
+const tip=axialCorallite(tube,new T.Color(.7,.6,.5),true);finishBranch(tube,tip,[.32,.57,.75]);
+const tp=tube.getAttribute('position'),idx=tube.index.array,triangle=new T.Triangle(),nearest=new T.Vector3();let worstGap=0;
+for(const level of [0,1,2])for(const cup of radialCorallites(tube,level,1.7,new T.Color(.2,.3,.4),new T.Color(.8,.7,.6))){
+ const cp=cup.getAttribute('position'),s=level<2?8:6;
+ for(let i=0;i<=s;i++){
+  const point=new T.Vector3().fromBufferAttribute(cp,i);let best=Infinity;
+  for(let j=0;j<idx.length;j+=3){triangle.a.fromBufferAttribute(tp,idx[j]);triangle.b.fromBufferAttribute(tp,idx[j+1]);triangle.c.fromBufferAttribute(tp,idx[j+2]);triangle.closestPointToPoint(point,nearest);best=Math.min(best,point.distanceTo(nearest));}
+  worstGap=Math.max(worstGap,best);assert.ok(best<1e-6,'side-cup foot must sit on the real branch triangles');
+ }
+ for(const a of Object.values(cup.attributes))assert.ok(a.array.every(Number.isFinite));
+}
+console.log('Radial corallite attachment passed: maximum footprint distance',worstGap);

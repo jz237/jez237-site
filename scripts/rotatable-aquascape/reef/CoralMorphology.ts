@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {axialCorallite,finishBranch,radialCorallites} from './BranchAnatomy.ts';
 
 type Random=()=>number;
 export type CoralGrowth='canopy'|'bushy'|'antler';
@@ -17,36 +18,25 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
    const t=j/steps,center=curve.getPointAt(t),taper=(1-(1-endScale)*t)*(1+.42*Math.exp(-t*15));
    for(let k=0;k<=sides;k++){
     const i=j*(sides+1)+k,angle=k/sides*Math.PI*2;
-    const polypRidges=1+.045*Math.sin(angle*3+t*19+seed)+.027*Math.sin(angle*5-t*27);
+    const polypRidges=1+.075*Math.sin(angle*3+t*13+seed)+.04*Math.sin(angle*5-t*19)+.075*Math.sin(t*12+seed)*Math.sin(Math.PI*t);
     p.setXYZ(i,center.x+(p.getX(i)-center.x)*taper*polypRidges,center.y+(p.getY(i)-center.y)*taper*polypRidges,center.z+(p.getZ(i)-center.z)*taper*polypRidges);
     const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,.87,1)*.85).multiplyScalar(.76+.18*t+.055*Math.sin(seed+t*5+angle*2));colors.set([c.r,c.g,c.b],i*3);
    }
   }
-  g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.135,j/steps*delta.length()/.135);g.computeVertexNormals();const normals=g.getAttribute('normal');for(let j=0;j<=steps;j++){const a=j*(sides+1),b=a+sides,n=new T.Vector3().fromBufferAttribute(normals,a).add(new T.Vector3().fromBufferAttribute(normals,b)).normalize();normals.setXYZ(a,n.x,n.y,n.z);normals.setXYZ(b,n.x,n.y,n.z);}geometries.push(g);
-  const cap=new T.SphereGeometry(radius*endScale,10,3,0,Math.PI*2,0,Math.PI/2);cap.scale(1,1.05,1);cap.applyQuaternion(new T.Quaternion().setFromUnitVectors(new T.Vector3(0,1,0),curve.getTangentAt(1)));cap.translate(end.x,end.y,end.z);const ca=new Float32Array(cap.getAttribute('position').count*3);for(let i=0;i<ca.length;i+=3)ca.set([tipColor.r,tipColor.g,tipColor.b],i);cap.setAttribute('color',new T.BufferAttribute(ca,3));geometries.push(cap);
-  // Sparse raised radial cups break the branch silhouette; shared maps carry
-  // the much finer tissue between them without a mesh for every small polyp.
-  if(level<2)for(let q=0;q<(level===0?5:2);q++){
-   const t=.16+q/(level===0?5:2)*.65,c=curve.getPointAt(t),tangent=curve.getTangentAt(t),axis=new T.Vector3(0,1,0);if(Math.abs(tangent.y)>.93)axis.set(1,0,0);
-   const u=new T.Vector3().crossVectors(tangent,axis).normalize(),v=new T.Vector3().crossVectors(tangent,u).normalize(),angle=seed+q*2.399;
-   const radial=u.clone().multiplyScalar(Math.cos(angle)).addScaledVector(v,Math.sin(angle)),out=radial.clone().addScaledVector(tangent,.35).normalize(),across=new T.Vector3().crossVectors(out,tangent).normalize(),along=new T.Vector3().crossVectors(across,out).normalize();
-   c.addScaledVector(radial,radius*(1-(1-endScale)*t)*(1+.42*Math.exp(-t*15))*.97);const r=radius*.26,h=r*.75,positions:number[]=[],colors:number[]=[],uv:number[]=[],index:number[]=[];
-   for(let row=0;row<4;row++)for(let j=0;j<=8;j++){
-    const a=j/8*Math.PI*2,rr=r*[1,.94,.52,0][row],p=c.clone().addScaledVector(across,Math.cos(a)*rr).addScaledVector(along,Math.sin(a)*rr).addScaledVector(out,h*[0,1,.78,.52][row]);positions.push(p.x,p.y,p.z);const color=baseColor.clone().lerp(tipColor,row===1?.25:0).multiplyScalar(row===3?.62:1);colors.push(color.r,color.g,color.b);uv.push(p.x/.135,p.y/.135);
-    if(row<3&&j<8){const n=row*9+j;index.push(n,n+9,n+1,n+1,n+9,n+10);}
-   }
-   const cup=new T.BufferGeometry();cup.setAttribute('position',new T.Float32BufferAttribute(positions,3));cup.setAttribute('color',new T.Float32BufferAttribute(colors,3));cup.setAttribute('uv',new T.Float32BufferAttribute(uv,2));cup.setIndex(index);cup.computeVertexNormals();geometries.push(cup);
-  }
-  if(level>=2)return;
+  g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.135,j/steps*delta.length()/.135);geometries.push(g);
+  const cap=axialCorallite(g,tipColor,terminal);geometries.push(cap);const junctions:number[]=[];
+  if(level>=2){finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));return;}
   const count=level===0?choice(3,4):choice(2,3);
   for(let j=0;j<count;j++){
    const t=.32+(j/count)*.57+.085*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+.33*Math.sin(seed*1.7+j*3.8)+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58);
+   junctions.push(t);
    const direction=curve.getTangentAt(t),rise=choice(.15,.34)*size*(level===0?1:.47),tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,rise,Math.sin(angle)*out));
    if(growth==='canopy'&&level===0)tip.y=base.y+size*(.48+.23*(.5+.5*Math.cos(angle-hue*19))+.09*Math.sin(angle*1.13+seed*.37));
    if(growth==='bushy')tip.addScaledVector(direction,.025*size);
    tip.addScaledVector(direction,choice(.04,.12)*size);
    branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.80,(level===0?.021:growth==='antler'?.013:.016)*size),level+1,seed+j*1.73);
   }
+  finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));
  }
  const count=7+Math.floor(random()*3);
  for(let i=0;i<count;i++){
