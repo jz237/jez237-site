@@ -1,4 +1,5 @@
 import './anemone-geometry.mjs';
+import './buttress-geometry.mjs';
 import './fish-geometry.mjs';
 import './fish-navigation.mjs';
 import './fin-motion.mjs';
@@ -32,6 +33,7 @@ try{
  assert.ok(initial.crustStats.mantleTriangles>20000&&initial.crustStats.mantleTriangles<32000,'resolved mantle relief stays within its reviewed geometry allocation');
  assert.equal(initial.crustStats.emergentColonies,3,'all three branching growths stay attached to the selected living crusts');
  assert.ok(initial.crustStats.emergentTriangles>75000&&initial.crustStats.emergentTriangles<120000,'small emergent colonies preserve detailed anatomy within their reviewed budget');
+ assert.equal(initial.buttressStats.rocks,9);assert.equal(initial.buttressStats.colonies,4);assert.ok(initial.buttressStats.polyps>80);assert.ok(initial.buttressStats.maxAttachmentError<.00301);
  const shadowSequence=await page.evaluate(async()=>{const frames=[];for(let i=0;i<60;i++){await new Promise(requestAnimationFrame);frames.push(window.reefQA.snapshot().shadows);}return frames;});
  assert.ok(shadowSequence.every((s,i)=>!i||s.updates>shadowSequence[i-1].updates),'fish shadow matrices update every rendered animation frame');
  assert.ok(shadowSequence.filter((s,i)=>i&&JSON.stringify(s.centers)!==JSON.stringify(shadowSequence[i-1].centers)).length>50,'moving penumbras must not hold for30frames');
@@ -51,6 +53,7 @@ try{
  await page.evaluate(()=>window.reefQA.inspectWater());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'water-above.png')});
  await page.evaluate(()=>window.reefQA.inspectRear());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'rear-closeup.png')});
  await page.evaluate(()=>window.reefQA.inspectSand());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'sand-closeup.png')});
+ await page.evaluate(()=>window.reefQA.inspectOutcrops());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'outcrop-closeup.png')});
  await page.evaluate(()=>window.reefQA.inspectPolyps());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'polyp-closeup.png')});
  await page.evaluate(()=>window.reefQA.inspectCorals());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'coral-closeup.png')});await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  for(const species of ['clown','tang','yellow','anthias','chromis','gramma']){await page.evaluate(s=>window.reefQA.inspectFish(s),species);await page.waitForTimeout(350);await page.screenshot({path:resolve(out,`fish-${species}.png`)});}
@@ -62,7 +65,7 @@ try{
  // Actual reloads must seed different fish positions rather than repeat a film.
  await page.reload();await page.waitForFunction(()=>window.reefQA?.snapshot().ready,null,{timeout:120000});const fresh=await page.evaluate(()=>window.reefQA.snapshot());assert.notDeepEqual(fresh.positions,initial.positions);assert.equal(fresh.obstacleOverlaps,0);assert.equal(fresh.fishOverlaps,0);
  assert.deepEqual(errors,[]);report.checks={loading:true,feeding:true,spacing:true,obstacles:true,pause:true,camera:true,lighting:true,fullscreen:true,identification:true,mobile:true,randomized:true};
- report.initial={triangles:initial.triangles,inhabitants:initial.fish,polypStats:initial.polypStats,rockStats:initial.rockStats,crustStats:initial.crustStats,infillStats:initial.infillStats};
+ report.initial={triangles:initial.triangles,inhabitants:initial.fish,buttressStats:initial.buttressStats,polypStats:initial.polypStats,rockStats:initial.rockStats,crustStats:initial.crustStats,infillStats:initial.infillStats};
  // Planted navigation mounts independently of the shared freshwater renderer.
  await page.goto('http://127.0.0.1:5241/demos/rotatable-aquascape/');await page.locator('.reef-preview-link').waitFor({timeout:60000});assert.equal(await page.locator('.reef-preview-link').count(),1);assert.equal(await page.locator('.reef-preview-link').getAttribute('href'),'../reef-aquarium/');const reefLink=await page.locator('.reef-preview-link').boundingBox();assert.ok(reefLink.x>=0&&reefLink.x+reefLink.width<=390,'reef selector fits the phone');
  console.log(JSON.stringify(report,null,2));writeFileSync(resolve(out,'results.json'),JSON.stringify(report,null,2)+'\n');
