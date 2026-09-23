@@ -72,3 +72,7 @@ It is an inexpensive lighting approximation, not volumetric path tracing or meas
 
 ## Right anemone and clownfish proportions
 User requested larger right anemone and slightly smaller clownfish. Increased main right host linear scale from1 to1.25, reduced clownfish maximum linear scale from0.53 to0.4664 (12%), preserving individual variation. The original reference has a dominant right anemone with small hosts sheltering inside; current front/oblique/macro shows a more appropriate relative scale. Host excursion radii/heights now use actual anemone scale. All tentacles, mesh topology, fish anatomy and materials retained. Inspected current desktop, angle, mobile, macro and two motion frames: canopy still attached to rock, curved tentacles and fish occlusion preserved. This fixes proportions; it does not establish overall reference realism.
+
+
+## Deposited sand and fine growth at the island feet
+The reference shows undulating white sand meeting irregular encrusted rubble, orange polyp discs, green/turquoise skirts and violet/pink small colonies. Added ten low rock fragments in broken clusters along the island feet;242 fine polyps and1944 fringe tentacles share existing material batches. Sand now has asymmetric toe dunes, stronger low banks and small ripples; height range0.166-0.390 and maximum slope0.632, perimeter sealed. Central channel retained. Desktop/oblique/mobile and sand/base macros inspected; change is clearest in closeup and oblique views. More irregular branching, subtler tissue and underwater light remain needed to approach the photo.

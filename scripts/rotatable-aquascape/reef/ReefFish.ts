@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {sandHeight} from './ReefOptics.ts';
 import metadata from './assets/fish/model-info.json';
 import {bodyBend} from './MarineFinFlex.ts';
 import {type MarineSpecies} from './MarineModels.ts';
@@ -64,9 +65,10 @@ export class ReefFish{
    }
   }
  }
- private free(p:T.Vector3,r:number){return p.x>-4.7+r&&p.x<4.7-r&&p.z>-2.09+r&&p.z<2.09-r&&p.y>.3+r&&p.y<5.12-r&&this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+r)**2);}
+ private free(p:T.Vector3,r:number){return p.x>-4.7+r&&p.x<4.7-r&&p.z>-2.09+r&&p.z<2.09-r&&p.y>Math.max(.3,sandHeight(p.x,p.z)+.035)+r&&p.y<5.12-r&&this.obstacles.every(o=>p.distanceToSquared(o.center)>(o.radius+r)**2);}
  private clearSegment(a:T.Vector3,b:T.Vector3,r:number){
   if(!this.free(b,r))return false;const dx=b.x-a.x,dy=b.y-a.y,dz=b.z-a.z,l=dx*dx+dy*dy+dz*dz;
+  for(let i=1;i<8;i++){const t=i/8;if(a.y+dy*t<=sandHeight(a.x+dx*t,a.z+dz*t)+r+.035)return false;}
   for(const o of this.obstacles){const radius=o.radius+r,c=o.center;
    if(c.x+radius<Math.min(a.x,b.x)||c.x-radius>Math.max(a.x,b.x)||c.y+radius<Math.min(a.y,b.y)||c.y-radius>Math.max(a.y,b.y)||c.z+radius<Math.min(a.z,b.z)||c.z-radius>Math.max(a.z,b.z))continue;
    const t=T.MathUtils.clamp(((c.x-a.x)*dx+(c.y-a.y)*dy+(c.z-a.z)*dz)/(l||1),0,1),x=a.x+dx*t-c.x,y=a.y+dy*t-c.y,z=a.z+dz*t-c.z;
