@@ -34,7 +34,7 @@ export async function checkPhillyLive(base, fetcher = fetch) {
   ]) {
     const response = await request(path, method);
     if (response.status !== status || !(await response.text()).includes(text)) {
-      throw new Error(`Philadelphia deployment blocked: ${path} Function is missing or incorrect.`);
+      throw new Error(`Philadelphia deployment blocked: ${path} Function is missing or incorrect (HTTP ${response.status}).`);
     }
   }
   console.log(`Philadelphia live checks passed: Cesium policy, imagery, neighborhoods, aircraft (${root.host}).`);

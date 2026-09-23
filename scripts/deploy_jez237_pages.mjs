@@ -30,6 +30,16 @@ function run(command, args) {
   return result.stdout;
 }
 const git = (...args) => run('git', args).trim();
+async function verifyRelease(url) {
+  for (let attempt = 0; attempt < 3; attempt++) {
+    try { await checkPhillyLive(url); return; }
+    catch (error) {
+      if (attempt === 2) throw error;
+      console.log(`${error.message} Retrying the newly deployed service.`);
+      await new Promise(resolve => setTimeout(resolve, 2000 * (attempt + 1)));
+    }
+  }
+}
 if (git('status', '--porcelain')) throw new Error('Commit changes before preparing a deployment.');
 git('fetch', 'origin', 'main');
 const sha = git('rev-parse', 'HEAD');
@@ -52,9 +62,9 @@ if (prepareOnly) {
   const preview = deploy(`release-check-${sha.slice(0, 12)}`);
   const previewUrl = preview.match(/https:\/\/[a-z0-9]+\.jez237-site\.pages\.dev/)?.[0];
   if (!previewUrl) throw new Error('Preview deployment URL was not returned; production unchanged.');
-  await checkPhillyLive(previewUrl);
+  await verifyRelease(previewUrl);
   git('fetch', 'origin', 'main');
   if (sha !== git('rev-parse', 'origin/main')) throw new Error('Main changed during preview; production unchanged.');
   deploy('main');
-  await checkPhillyLive('https://jez237.com');
+  await verifyRelease('https://jez237.com');
 }
