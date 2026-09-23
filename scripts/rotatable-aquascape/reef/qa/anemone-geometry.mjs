@@ -7,7 +7,12 @@ const {mesh,tentacles,behavior}=buildAnemones([new T.Vector3(3,1,.8),new T.Vecto
 assert.equal(tentacles,540);
 assert.ok(mesh.geometry.index, 'retain shared vertices without discarding detail');
 const bytes=Object.values(mesh.geometry.attributes).reduce((sum,a)=>sum+a.array.byteLength,0)+mesh.geometry.index.array.byteLength;
-assert.ok(bytes<15000000, 'retain twelve-sided skin with compact feeding-sector and longitudinal tissue coordinates and 24 axial sections within 15 MB');
+assert.ok(bytes<15200000, 'retain twelve-sided skin with compact feeding-sector and longitudinal tissue coordinates and 24 axial sections within 15.2 MB including one byte of optical width per vertex');
+const opticalWidth=mesh.geometry.getAttribute('anemoneThickness');
+assert.equal(opticalWidth.normalized,true);assert.ok(opticalWidth.array instanceof Uint8Array);
+assert.equal(opticalWidth.count,mesh.geometry.getAttribute('position').count);
+assert.ok([...opticalWidth.array].every(v=>v>0),'tissue always has finite optical thickness');
+assert.ok(Math.max(...opticalWidth.array.subarray(4000,10000))-Math.min(...opticalWidth.array.subarray(4000,10000))>30,'different strand widths and thick oral tissue retain optical variation');
 const p=mesh.geometry.getAttribute('position'),n=mesh.geometry.getAttribute('normal'),flex=mesh.geometry.getAttribute('anemoneFlex');
 const rings=new Map();
 for(let i=0;i<p.count;i++){
