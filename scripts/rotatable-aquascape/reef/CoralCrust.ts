@@ -1,0 +1,33 @@
+import * as T from 'three';
+
+/** A thin living layer on the actual indexed rock surface. The irregular boundary
+ * clips triangles instead of leaving a stair-stepped grid or bridging cavities. */
+export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vector3,radius:number,hue:number,seed:number){
+ const p=rock.getAttribute('position'),n=rock.getAttribute('normal'),source=rock.index!;
+ const up=Math.abs(normal.y)<.9?new T.Vector3(0,1,0):new T.Vector3(1,0,0),u=new T.Vector3().crossVectors(up,normal).normalize(),v=new T.Vector3().crossVectors(normal,u).normalize();
+ const positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],cache=new Map<string,number>();
+ const base=new T.Color().setHSL(hue,.43,.37).convertSRGBToLinear(),edge=new T.Color().setHSL(hue,.36,.52).convertSRGBToLinear();
+ type Point={p:T.Vector3;n:T.Vector3;d:number;key:string};
+ const points:Point[]=Array.from({length:p.count},(_,i)=>{
+  const point=new T.Vector3().fromBufferAttribute(p,i),delta=point.clone().sub(center),x=delta.dot(u),y=delta.dot(v),a=Math.atan2(y,x);
+  const margin=radius*(.86+.095*Math.sin(a*3+seed)+.055*Math.sin(a*7-seed)+.03*Math.cos(a*13));
+  return {p:point,n:new T.Vector3().fromBufferAttribute(n,i),d:Math.min(margin-delta.length(),delta.dot(normal)+radius*.48),key:String(i)};
+ });
+ function vertex(point:Point){
+  const existing=cache.get(point.key);if(existing!==undefined)return existing;
+  const d=point.p.clone().sub(center),x=d.dot(u),y=d.dot(v),fade=T.MathUtils.smoothstep(point.d,0,radius*.14);
+  // Low winding skeletal ridges: stationary hard coral, never soft-body waving.
+  const wave=.5+.5*Math.sin(x*57+Math.sin(y*21+seed)*1.7+seed),height=.003+fade*(.013+.018*wave*wave);
+  const out=point.p.clone().addScaledVector(point.n,height),c=base.clone().lerp(edge,(1-fade)*.65).multiplyScalar(.79+.14*wave+.07*Math.sin(x*17+Math.sin(y*23)));
+  const index=positions.length/3;positions.push(out.x,out.y,out.z);colors.push(c.r,c.g,c.b);uv.push(x/.16,y/.16);cache.set(point.key,index);return index;
+ }
+ for(let i=0;i<source.count;i+=3){
+  const triangle=[points[source.getX(i)],points[source.getX(i+1)],points[source.getX(i+2)]],polygon:Point[]=[];
+  for(let j=0;j<3;j++){
+   const a=triangle[j],b=triangle[(j+1)%3];if(a.d>=0)polygon.push(a);
+   if((a.d>=0)!==(b.d>=0)){const t=a.d/(a.d-b.d);polygon.push({p:a.p.clone().lerp(b.p,t),n:a.n.clone().lerp(b.n,t).normalize(),d:0,key:[a.key,b.key].sort().join(':')});}
+  }
+  for(let j=1;j+1<polygon.length;j++)indices.push(vertex(polygon[0]),vertex(polygon[j]),vertex(polygon[j+1]));
+ }
+ const geometry=new T.BufferGeometry();geometry.setAttribute('position',new T.Float32BufferAttribute(positions,3));geometry.setAttribute('color',new T.Float32BufferAttribute(colors,3));geometry.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geometry.setIndex(indices);geometry.computeVertexNormals();return geometry;
+}

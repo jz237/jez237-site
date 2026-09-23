@@ -161,3 +161,15 @@ and color arrays exactly, enforce bounded displacement and outward normals,
 and retain the surface-query comparison against Three.js raycasts. This memory
 figure is for rock geometry, not total GPU memory. Local QA runs around 60 FPS
 with startup 1634 ms versus 1675 previously; other devices remain unmeasured.
+
+## Attached encrusting tissue
+
+Ten low coral crusts use clipped copies of actual rock triangles, with uneven
+margins, shallow skeletal ridges and existing fine tissue maps. They share the
+merged hard-coral draw mesh and add no image download or render pass. Surface
+indices place neighboring polyp beds above the added tissue. Colors and mixed
+colony arrangements are artistic, not a species-specific ecological model.
+A geometry regression checks finite indexed attributes, nondegenerate clipped
+triangles, and thin attachment to an eroded rock fixture. The new crusts total
+11,097 source triangles; scene render triangles rise 0.55%. Full QA remains near
+60 FPS locally, startup 1666 ms versus 1634 previously. Other hardware unmeasured.

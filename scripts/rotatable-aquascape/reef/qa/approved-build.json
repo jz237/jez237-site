@@ -1,11 +1,11 @@
 {
-  "buildHash": "55a8c53d6675d82dc48c466cd33fd67e587b1d5224791c00bf90f8b700856e16",
+  "buildHash": "8ae9392d914d51d3bd2f610c70d8ca625d060f6aba628bf8e55da41b5df251a2",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-CHAMw-kH.js",
+    "assets/index-DIJs4SPG.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T04:09:39.062Z",
-  "readyMs": 1634,
+  "checkedAt": "2026-09-23T04:27:14.121Z",
+  "readyMs": 1666,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 4.297799999999998,
-      "bites": 5,
-      "remaining": 31
+      "fps": 59.99400059994001,
+      "time": 4.299099999904631,
+      "bites": 10,
+      "remaining": 26
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 8.299499999904668,
+      "bites": 28,
+      "remaining": 8
     },
     {
       "fps": 59.99700014999249,
-      "time": 8.298200000000037,
-      "bites": 31,
-      "remaining": 5
-    },
-    {
-      "fps": 59.99700014999249,
-      "time": 12.31519999999998,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999244,
-      "time": 16.332199999999922,
-      "bites": 36,
-      "remaining": 0
+      "time": 12.316399999904615,
+      "bites": 35,
+      "remaining": 1
     },
     {
       "fps": 59.99100134979755,
-      "time": 20.34929999999985,
+      "time": 16.33349999990456,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 20.333799999904464,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.366299999999786,
+      "time": 24.35079999990438,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99400059993998,
-      "time": 28.38329999999971,
+      "fps": 59.99700014999255,
+      "time": 28.367799999904292,
       "bites": 36,
       "remaining": 0
     }
@@ -77,17 +77,21 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 3705228,
+    "triangles": 3725742,
     "inhabitants": 20,
     "polypStats": {
-      "polyps": 556,
-      "tentacles": 3288,
-      "maxAttachmentError": 0.003000000000000221
+      "polyps": 561,
+      "tentacles": 3240,
+      "maxAttachmentError": 0.003000000000000283
     },
     "rockStats": {
       "triangles": 243340,
       "bufferBytes": 8345412,
       "expandedBufferBytes": 32120880
+    },
+    "crustStats": {
+      "colonies": 10,
+      "triangles": 11097
     }
   },
   "geometryChecks": [
@@ -97,7 +101,8 @@
     "Rock index matches 452 raycast hits",
     "Indexed coral geometry, smooth branch seams and outward plate faces; fixture buffers 1659484 bytes",
     "Basal coral tissue follows slopes without bridging disconnected lower shelves",
-    "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 8345412 vs 32120880 bytes"
+    "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 8345412 vs 32120880 bytes",
+    "Clipped crust triangles nondegenerate; sampled support gap bounded; 10 colonies / 11097 triangles"
   ],
   "visualReview": [
     "front",
@@ -111,5 +116,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Eroded rock pockets, distinct contours and wider attached zoanthid beds. Local 60 FPS; startup 1634 ms vs 1675 prior. Rock geometry buffers 74% smaller with all triangles preserved. Still short of reference realism; other hardware unmeasured."
+  "scope": "Ten rock-attached encrusting coral colonies, shared material and maps. Polyps attach to the new surface. Local 60 FPS; ready 1666 ms vs 1634 prior; render triangles +0.55%. Still short of reference realism; other hardware unmeasured."
 }
