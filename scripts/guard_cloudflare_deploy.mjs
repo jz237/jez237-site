@@ -3,12 +3,19 @@ import { existsSync, readFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
 import { checkGamesCatalogSyntax } from "./check_games_catalog_syntax.mjs";
 import { checkAquariumSync } from "./check_aquarium_sync.mjs";
+import { checkAquariumRelease } from "./check_aquarium_release.mjs";
 
 const BASELINE_COMMIT = "4810212c063f49501d5d5dbb5bb7ba4bf8c66fd1";
 const BASELINE_LABEL = "2026-08-24 Final Blow 1.9E live-safe baseline";
 const BASELINE_MARKER_PATH = "scripts/live-deploy-baseline.json";
 const PRODUCTION_BRANCHES = new Set(["main"]);
 const REQUIRED_PATHS = [
+  "functions/_middleware.js",
+  "functions/demos/philadelphia-cesium/_middleware.js",
+  "functions/demos/philadelphia-relief/_middleware.js",
+  "functions/demos/philadelphia-relief/aircraft.js",
+  "functions/demos/philadelphia-relief/detail-imagery.js",
+  "functions/demos/philadelphia-relief/street-detail.js",
   "games/index.html",
   "garden/index.html",
   "experiments/image-gen-2-benchmark/index.html",
@@ -134,6 +141,7 @@ try {
   const checked = checkGamesCatalogSyntax();
   console.log(`Games catalog syntax passed (${checked} inline scripts).`);
   console.log(`Aquarium synchronization passed (${checkAquariumSync()} shared assets).`);
+  checkAquariumRelease();console.log('Aquarium tested-build release gate passed.');
 } catch (error) {
   fail(error.message);
 }

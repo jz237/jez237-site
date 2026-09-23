@@ -1,3 +1,13 @@
+export function mapShortcutAllowed(event) {
+  if (event.defaultPrevented || event.metaKey || event.ctrlKey || event.altKey) return false;
+  const target = event.target;
+  if (target?.isContentEditable
+    || target?.closest?.('input,textarea,select,[role="textbox"],dialog[open]')) return false;
+  if (target?.closest?.('.camera-map-card,.camera-map-pin,.camera-layer-control')) return false;
+  return event.key === 'Escape'
+    || !target?.closest?.('button,a[href],summary,[role="button"],[role="slider"]');
+}
+
 export function detailMessage(detail) {
   if (detail.state==='regional') return 'Regional aerial';
   if (detail.state==='unavailable') return 'Using available imagery';
@@ -25,13 +35,87 @@ export function updateImageryCredit(host, detail) {
 
 export function wireFieldNotes(button) {
   if (!button) return () => {};
-  const click=() => {
-    const collapsed=document.body.classList.toggle('notes-collapsed');
-    button.textContent=collapsed ? 'Show notes' : 'Hide notes';
-    button.setAttribute('aria-expanded',String(!collapsed));
+  const narrow = window.matchMedia('(max-width: 1024px)');
+  const key = 'philly-field-notes-collapsed';
+  let preference = null;
+  try { preference = localStorage.getItem(key); } catch { /* Storage is optional. */ }
+  const set = collapsed => {
+    document.body.classList.toggle('notes-collapsed', collapsed);
+    button.textContent = collapsed ? '+ Show field notes' : '− Collapse';
+    button.setAttribute('aria-label', collapsed ? 'Expand field notes' : 'Collapse field notes');
+    button.setAttribute('aria-expanded', String(!collapsed));
   };
+  const click=() => {
+    const collapsed = !document.body.classList.contains('notes-collapsed');
+    preference = String(collapsed);
+    set(collapsed);
+    try { localStorage.setItem(key, preference); } catch { /* Storage is optional. */ }
+  };
+  const resize = () => set(preference === null ? narrow.matches : preference === 'true');
+  resize(); narrow.addEventListener('change', resize);
   button.addEventListener('click',click);
-  return () => button.removeEventListener('click',click);
+  return () => { button.removeEventListener('click',click); narrow.removeEventListener('change',resize); };
+}
+
+export function wireMapChrome() {
+  const narrow = window.matchMedia('(max-width: 1024px)');
+  const layers = document.getElementById('mapControls');
+  const tools = document.getElementById('pageTools');
+  const locator = document.querySelector('#orientation details');
+  const notes = document.getElementById('toggleNotes');
+  const close = document.getElementById('closeMapControls');
+  const collapseNotes = () => {
+    if (!document.body.classList.contains('notes-collapsed')) notes.click();
+  };
+  const resized = () => {
+    layers.open = !narrow.matches; locator.open = !narrow.matches; tools.open = !narrow.matches;
+  };
+  const layerToggle = () => {
+    if (!narrow.matches || !layers.open) return;
+    locator.open = false; tools.open = false; collapseNotes();
+  };
+  const locatorToggle = () => {
+    if (!narrow.matches || !locator.open) return;
+    layers.open = false; tools.open = false; collapseNotes();
+  };
+  const toolsToggle = () => {
+    if (!narrow.matches || !tools.open) return;
+    layers.open = false; locator.open = false; collapseNotes();
+  };
+  const toolsClick = event => {
+    if (narrow.matches && event.target.closest('button')) tools.open = false;
+  };
+  const notesClick = () => {
+    if (narrow.matches && !document.body.classList.contains('notes-collapsed')) {
+      layers.open = false; locator.open = false; tools.open = false;
+    }
+  };
+  const dismiss = () => { layers.open = false; layers.querySelector('summary').focus(); };
+  const escape = event => {
+    if (event.key !== 'Escape' || !narrow.matches) return;
+    if (layers.open) dismiss();
+    if (tools.open) { tools.open = false; tools.querySelector('summary').focus(); }
+    if (locator.open) { locator.open = false; locator.querySelector('summary').focus(); }
+  };
+  const sheetChange = () => {
+    if (narrow.matches && document.body.classList.contains('sheet-open')) {
+      layers.open = false; locator.open = false; tools.open = false; collapseNotes();
+    }
+  };
+  const observer = new MutationObserver(sheetChange);
+  observer.observe(document.body, { attributes: true, attributeFilter: ['class'] });
+  resized(); narrow.addEventListener('change', resized);
+  layers.addEventListener('toggle', layerToggle); locator.addEventListener('toggle', locatorToggle);
+  tools.addEventListener('toggle', toolsToggle); tools.addEventListener('click', toolsClick);
+  notes.addEventListener('click', notesClick); close.addEventListener('click', dismiss);
+  document.addEventListener('keydown', escape);
+  return () => {
+    observer.disconnect(); narrow.removeEventListener('change', resized);
+    layers.removeEventListener('toggle', layerToggle); locator.removeEventListener('toggle', locatorToggle);
+    tools.removeEventListener('toggle', toolsToggle); tools.removeEventListener('click', toolsClick);
+    notes.removeEventListener('click', notesClick); close.removeEventListener('click', dismiss);
+    document.removeEventListener('keydown', escape);
+  };
 }
 
 export function timelineSeek(key, seconds, total) {
