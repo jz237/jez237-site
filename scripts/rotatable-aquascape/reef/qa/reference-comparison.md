@@ -1,4 +1,4 @@
-# Reef reference comparison — September 23, softer anemone tissue
+# Reef reference comparison — September 23, connected edge outcrops
 
 Reference: `C:/Users/jrb04/Desktop/ChatGPT Image Sep 22, 2026, 08_13_11 PM.png`.
 Compare actual full-tank views as well as macros. The reference is the visual target; its exact biological species/anatomy cannot be inferred reliably from appearance alone. This is an artistic reconstruction, not a stocking plan.
@@ -19,3 +19,10 @@ Mature planted comparison inspected: `../../.qa-results/desktop-front.png`. The 
 
 
 Anemone evidence: `before-tentacle-crowns-front.png`, `before-tentacle-crowns-angle.png`, `before-tentacle-crowns-anemone-closeup.png`, `before-tentacle-crowns-mobile.png` and before/after `anemone-motion-a/b` images. Reopened both original reef and planted references and the actual planted desktop view. Geometry checks are not proof of photographic material response; broader density, exposed stone, fish anatomy, water/glass and rear rock support remain priorities.
+
+
+## Edge outcrops and attached gardens
+
+The reference has irregular interlocking fragments at island feet and small colonies between larger structures. Previous side views showed very narrow exposed supports and an isolated rear fragment. A sampled geometry audit found the main stones already intersected their supporting rocks; do not call this a proven floating-rock physics bug. Added nine eroded outcrops around the outer and lower edges, four small attached branching colonies, and four polyp gardens. Seven low stones settle against the actual varying sand height; two shoulder stones overlap their supports. Existing caves and the foreground channel remain open. All new stone and branching vertices have enclosing navigation volumes. Additions are merged into existing rock/coral/polyp material batches.
+
+Compare `before-buttress-front.png`, `before-buttress-side.png`, `before-buttress-angle.png` and mobile evidence with the final images, especially the right rear foot and small front polyp gardens. The dedicated `outcrop-closeup.png` shows added tissue at its actual attachment. This makes selected transitions less isolated; it does not reproduce the reference's much denser living coverage or subtler materials. Main-rock faces, coral/anemone clearance, fish fin anatomy, and water/glass/lighting remain below the planted/reference quality target.

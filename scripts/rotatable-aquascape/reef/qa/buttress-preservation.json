@@ -1,0 +1,10 @@
+{
+  "checks": [
+    "polypStats",
+    "crustStats",
+    "infillStats"
+  ],
+  "priorTriangles": 8503536,
+  "currentTriangles": 9134868,
+  "retained": true
+}

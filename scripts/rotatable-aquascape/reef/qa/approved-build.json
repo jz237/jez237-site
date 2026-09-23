@@ -1,12 +1,12 @@
 {
-  "buildHash": "0b41077e6e512a9ea115939f8b304a761be1683ecb8bd47f99404d1e687c90eb",
+  "buildHash": "d5e9a2ee31bce4ec5b59f881f27b632fce19d7c009941972bda2530fabe59b82",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
+    "assets/index-C4aGnn2w.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-DvNV6fT1.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T19:12:30.303Z",
-  "readyMs": 3251,
+  "checkedAt": "2026-09-23T19:36:20.141Z",
+  "readyMs": 3583,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 6.1180999999523324,
+      "fps": 59.99400059993998,
+      "time": 6.048999999856965,
       "bites": 16,
       "remaining": 20
     },
     {
       "fps": 59.99700014999249,
-      "time": 10.13509999995232,
-      "bites": 32,
-      "remaining": 4
+      "time": 10.04929999985695,
+      "bites": 28,
+      "remaining": 8
     },
     {
-      "fps": 59.99400059993998,
-      "time": 14.135499999952268,
+      "fps": 59.99700014999249,
+      "time": 14.0662999998569,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99400059993998,
-      "time": 18.152499999952205,
+      "fps": 59.994000599940094,
+      "time": 18.083399999856834,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 22.100399999856755,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 26.117399999856662,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999244,
-      "time": 22.15279999995211,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 26.169899999952026,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99100134979744,
-      "time": 30.186899999951944,
+      "time": 30.11769999985654,
       "bites": 36,
       "remaining": 0
     }
@@ -83,17 +83,26 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 8503536,
+    "triangles": 9134868,
     "inhabitants": 20,
+    "buttressStats": {
+      "rocks": 9,
+      "rockTriangles": 95220,
+      "colonies": 4,
+      "coralTriangles": 135366,
+      "polyps": 97,
+      "tentacles": 912,
+      "maxAttachmentError": 0.0030000000000001505
+    },
     "polypStats": {
       "polyps": 564,
       "tentacles": 3504,
       "maxAttachmentError": 0.003000000000000225
     },
     "rockStats": {
-      "triangles": 412620,
-      "bufferBytes": 14150916,
-      "expandedBufferBytes": 54465840
+      "triangles": 507840,
+      "bufferBytes": 17416512,
+      "expandedBufferBytes": 67034880
     },
     "crustStats": {
       "colonies": 92,
@@ -218,14 +227,17 @@
     "Large coral basal footprint: irregular spread, local support retreat, sloping-root attachment, preserved cup seams and all11infill colonies",
     "Sand relief: sealed perimeter, smooth banks, floor/food clearance and lower channel",
     "Broad encrusting folds: shared midpoint topology, manifold edges, outward normals, nondegenerate faces and ray-tested rock attachment",
-    "Three prior/current seeded fixtures retain2160RNG calls, exact states, all540phases and anchored root centers within2e-7; cap roundness and perpendicular axes independently checked"
+    "Three prior/current seeded fixtures retain2160RNG calls, exact states, all540phases and anchored root centers within2e-7; cap roundness and perpendicular axes independently checked",
+    "Nine outcrops:95,220source triangles; all vertices inside navigation bounds. Seven base stones buried0.035below actual sand; two upper stones overlap supports. Four ray-attached colonies:135,366source triangles.97new polyps/912tentacles:maximum attachment error0.003. Existing polyp/crust/infill statistics unchanged."
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "side",
     "mobile",
-    "anemone closeup and actual time sequence",
+    "outcrop closeup",
+    "actual anemone time sequence",
+    "90-second tang travel/turn sequences",
     "original reef reference",
     "original planted reference and actual planted comparison",
     "reference-comparison.md"
@@ -236,7 +248,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Anemone marginal tentacles drape outward with varied curl; perpendicular ring frames, twelve-sided skin and short tinted tips improve the shape. Added filtered tissue relief and roughness variation. All540 strands and rooted current animation retained; reference/planted quality target remains unmet.",
+  "scope": "Nine eroded edge outcrops, four attached branching colonies and97small polyps connect selected reef feet/shoulders. Existing caves, original growth and fish behavior retained. Reference/planted comparative realism target remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -274,9 +286,9 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 3213.8,
-    "loadCurrent": 3288.8,
-    "fpsPrior": 190.9,
-    "fpsCurrent": 189.5
+    "loadPrior": 3281.5,
+    "loadCurrent": 3575,
+    "fpsPrior": 185.5,
+    "fpsCurrent": 186.5
   }
 }
