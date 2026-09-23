@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict';
 import * as T from 'three';
-import {branchingColony,platingColony} from '../CoralMorphology.ts';
+import {branchingColony,platingColony,plateCollisionVolumes} from '../CoralMorphology.ts';
 let seed=84;const random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
 const branches=branchingColony(new T.Vector3(),1,.8,random),plate=platingColony(0,0,0,1,.4),all=[...branches,plate];
 let bytes=0,triangles=0;
@@ -45,3 +45,16 @@ for(const g of stems){const root=g.parameters.path.getPointAt(0);assert.ok(Math.
 const rejected=branchingColony(new T.Vector3(),1,.8,rootRandom,()=>-.4).filter(g=>g.type==='TubeGeometry'&&g.parameters.tubularSegments===8);
 for(const g of rejected)assert.equal(g.parameters.path.getPointAt(0).length(),0,'unsupported roots return to the established central attachment');
 console.log('Primary stems passed: distributed sloping attachments and disconnected-ledge rejection.');
+
+// Folded shelves use their real vertices for navigation volumes. Exercise
+// different sizes/phases, including triangle interiors between sampled points.
+for(const [size,phase] of [[.65,.4],[1.08,2.2],[.8,5.1]]){
+ const shelf=platingColony(1,2,-.5,size,phase),volumes=plateCollisionVolumes(shelf),p=shelf.getAttribute('position'),index=shelf.index,point=new T.Vector3();
+ const covered=point=>volumes.some(v=>v.center.distanceToSquared(point)<=v.radius*v.radius+1e-8);
+ for(let i=0;i<p.count/2;i++){const thickness=p.getY(i)-p.getY(i+p.count/2);assert.ok(thickness>size*.006&&thickness<size*.046,'fine ridges do not invert the thin skeleton');}
+ for(let i=0;i<p.count;i++){point.fromBufferAttribute(p,i);assert.ok(covered(point),'every shelf vertex is protected');}
+ for(let i=0;i<index.count;i+=3){point.set(0,0,0);for(let j=0;j<3;j++){const n=index.getX(i+j);point.x+=p.getX(n)/3;point.y+=p.getY(n)/3;point.z+=p.getZ(n)/3;}assert.ok(covered(point),'folded triangle interiors remain protected');}
+ assert.ok(volumes.length<180,'plate navigation stays locally bounded');
+ assert.ok(volumes.every(v=>v.radius<.25),'avoid enclosing the whole shelf in a large solid ball');
+ console.log('Folded plate coverage passed:',size,volumes.length,'local volumes.');
+}

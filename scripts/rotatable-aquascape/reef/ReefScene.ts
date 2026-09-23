@@ -7,7 +7,7 @@ import {topSurfaceSampler} from './RockSurface.ts';
 import {encrustingGarden,animatePolypMaterial} from './EncrustingPolyps.ts';
 import {buildAnemones} from './Anemones.ts';
 import {limestoneMaps,encrustRock} from './ReefMaterials.ts';
-import {branchingColony,platingColony} from './CoralMorphology.ts';
+import {branchingColony,platingColony,plateCollisionVolumes} from './CoralMorphology.ts';
 import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 export type Obstacle={center:T.Vector3;radius:number};
@@ -94,8 +94,8 @@ export function buildReef(scene:T.Scene){
  // indexed detail and merged material as the main islands.
  for(const b of [[-.91,1.32,-1.71,.63,.82],[.28,1.22,-1.69,.52,.23],[-.32,.57,-1.59,.40,.96]])branch(...b as [number,number,number,number,number],rearRandom);
  const plate=(x:number,y:number,z:number,r:number)=>{
-  corals.push(platingColony(x,y,z,r,random()*Math.PI*2));
-  for(let dx=-r*1.2;dx<=r*1.2;dx+=.18)for(let dz=-r*.92;dz<=r*.92;dz+=.18)if((dx/r)**2+(dz/(r*.76))**2<1.46)obstacles.push({center:new T.Vector3(x+dx,y+.045+.065*(dx*dx+dz*dz)/(r*r),z+dz),radius:.12});
+  const geometry=platingColony(x,y,z,r,random()*Math.PI*2);corals.push(geometry);
+  obstacles.push(...plateCollisionVolumes(geometry));
  };
  plate(-3,1.98,.43,1.08);plate(-2.77,1.77,.62,.8);plate(2.4,2.52,.1,1.05);plate(1.62,2.4,-.07,.65);plate(1.26,.81,.95,.68);
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');

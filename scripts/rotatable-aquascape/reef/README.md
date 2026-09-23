@@ -257,3 +257,15 @@ Patch construction rejects out-of-range triangles before allocating vertex
 records. Thirty varied fixtures match the previous algorithm's attributes and
 indices exactly. Rock raycasts also use tight bounding boxes. These changes
 reduce setup work without simplifying the visible surface.
+
+## Folded plating corals
+
+Shelves now have asymmetric lobes, uneven broad folds and finer edge ruffles.
+Their skeleton becomes thinner at the growing margin, with separate underside
+ridges and smaller physical tissue-map repeats. All192angular samples and36rings
+remain in each closed plate; the mesh and buffer counts are unchanged.
+Navigation spheres are derived from each actual mesh instead of a guessed height.
+Local vertex cells plus a maximum-edge padding enclose the incident triangles.
+Fixtures verify coverage of vertices and triangle interiors across sizes/phases,
+outward normals and positive skeleton thickness. The visual growth pattern is
+artistic; collision volumes remain conservative approximations.

@@ -1,12 +1,12 @@
 {
-  "buildHash": "45363aed090c4db170505c5fa4cc3ee391d19cf606e81d8b06b147171af8ca94",
+  "buildHash": "11f202155bec53d4908588a54e850d5e7178dc608868a661bd9ad41753cbbf2b",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
     "assets/index-DdD2V56_.css",
-    "assets/index-pcH4i8yH.js",
+    "assets/index-c9BI1cKy.js",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/roughnessMap-4hZTjONg.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T06:16:51.560Z",
-  "readyMs": 1877,
+  "checkedAt": "2026-09-23T06:29:29.931Z",
+  "readyMs": 1817,
   "samples": [
     {
-      "fps": 59.99400059994001,
-      "time": 4.283799999904633,
-      "bites": 20,
-      "remaining": 16
-    },
-    {
-      "fps": 59.99100134979749,
-      "time": 8.300899999904662,
-      "bites": 35,
-      "remaining": 1
+      "fps": 59.99100134979752,
+      "time": 4.326699999856948,
+      "bites": 26,
+      "remaining": 10
     },
     {
       "fps": 59.99400059993998,
-      "time": 12.31779999990461,
-      "bites": 36,
-      "remaining": 0
+      "time": 8.343599999856977,
+      "bites": 33,
+      "remaining": 3
     },
     {
       "fps": 59.99400059993998,
-      "time": 16.31809999990454,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 20.318399999904443,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 24.335499999904375,
+      "time": 12.360599999856932,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99100134979755,
-      "time": 28.352599999904285,
+      "time": 16.377699999856873,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 20.377999999856776,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 24.37839999985669,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 28.395399999856608,
       "bites": 36,
       "remaining": 0
     }
@@ -107,13 +107,13 @@
     "540 rooted tentacles; outward seam-smoothed skin; unit tip normals; actual recessed oral disc; 7320528 geometry bytes",
     "Clipped branching foot: curved rock attachment at every fixture vertex, max sampled gap .009001; valid normals and nondegenerate faces",
     "Primary stems: distributed sloping attachments and disconnected-ledge rejection; same geometry count and rounded tips",
-    "Clipped crust culling: 30 varied fixtures with identical attributes/indices; generation 24.27ms to15.77ms"
+    "Clipped crust culling: 30 varied fixtures with identical attributes/indices; generation 24.27ms to15.77ms",
+    "Folded shelves: positive thin skeleton; outward faces; vertices and triangle interiors covered at3sizes/phases,45/110/66local volumes; same geometry count"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "rear-closeup",
     "coral-closeup"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -122,5 +122,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Richer baked coralline mosaic and53 additional attached surface colonies; all original fine detail retained. Rendered triangles+0.615%. Setup culling preserves exact geometry. Ready1877ms; repeated load means1790.3ms prior/1869.0ms current, near60FPS locally. Reference target not reached."
+  "scope": "Uneven folded plating corals with thin ruffled margins and finer surface detail; actual mesh-derived navigation volumes. Full4,052,492 rendered triangles retained. Ready1817ms vs1877previous, near60FPS locally; other hardware unmeasured. Reference realism not reached."
 }
