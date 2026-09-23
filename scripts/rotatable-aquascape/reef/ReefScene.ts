@@ -1,4 +1,6 @@
 import * as T from 'three';
+import {topSurfaceSampler} from './RockSurface.ts';
+import {encrustingGarden,animatePolypMaterial} from './EncrustingPolyps.ts';
 import {buildAnemones} from './Anemones.ts';
 import {limestoneMaps,encrustRock} from './ReefMaterials.ts';
 import {branchingColony,platingColony} from './CoralMorphology.ts';
@@ -24,16 +26,6 @@ function texture(kind:'rock'|'sand'|'coral'){
  }
  const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;return t;
 }
-function colored(g:T.BufferGeometry,color:T.Color,variation=.1){
- const p=g.getAttribute('position'),a=new Float32Array(p.count*3);
- for(let i=0;i<p.count;i++){const q=1+Math.sin(p.getX(i)*31+p.getY(i)*19+p.getZ(i)*23)*variation*.5;a[i*3]=color.r*q;a[i*3+1]=color.g*q;a[i*3+2]=color.b*q;}
- g.setAttribute('color',new T.BufferAttribute(a,3));return g.index?g.toNonIndexed():g;
-}
-function tube(points:T.Vector3[],radius:number,color:T.Color,segments=10,sides=6,taper=true){
- const curve=new T.CatmullRomCurve3(points),g=new T.TubeGeometry(curve,segments,radius,sides,false),p=g.getAttribute('position');
- if(taper)for(let i=0;i<=segments;i++){const center=curve.getPointAt(i/segments),s=1-.78*Math.pow(i/segments,1.3);for(let j=0;j<=sides;j++){const k=i*(sides+1)+j;p.setXYZ(k,center.x+(p.getX(k)-center.x)*s,center.y+(p.getY(k)-center.y)*s,center.z+(p.getZ(k)-center.z)*s);}}
- g.computeVertexNormals();return colored(g,color,.16);
-}
 function batch(geometries:T.BufferGeometry[],material:T.Material,parent:T.Group,name:string){
  if(!geometries.length)return;const geometry=mergeGeometries(geometries,false);geometries.forEach(g=>g.dispose());const mesh=new T.Mesh(geometry,material);mesh.name=name;mesh.castShadow=true;mesh.receiveShadow=true;parent.add(mesh);return mesh;
 }
@@ -42,7 +34,7 @@ export function buildReef(scene:T.Scene){
  const rockMaps=limestoneMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
  const rockMat=new T.MeshStandardMaterial({...rockMaps.maps,normalScale:new T.Vector2(1.1,1.1),roughness:.96,vertexColors:true});
  const coralMat=new T.MeshStandardMaterial({map:coralTex,bumpMap:coralTex,bumpScale:.018,roughness:.76,vertexColors:true});
- const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],polyps:T.BufferGeometry[]=[];
+ const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
  const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number)=>{
   const original=new T.IcosahedronGeometry(1,22);original.deleteAttribute('normal');const geo=mergeVertices(original),p=geo.getAttribute('position');original.dispose();
@@ -82,31 +74,17 @@ export function buildReef(scene:T.Scene){
  const hosts=[new T.Vector3(3.05,1.21,.82),new T.Vector3(-3.62,.78,1.35)];
  const anemone=buildAnemones(hosts,reefClock,random,center=>{attachRay.set(center.clone().add(new T.Vector3(0,.08,0)),new T.Vector3(0,-1,0));attachRay.far=1.5;return attachRay.intersectObjects(supports,false)[0]?.point.y??center.y-.35;});group.add(anemone.mesh);
  addNote(anemone.mesh,'Shelter in the tentacles','A central oral disc is surrounded by fleshy tentacles; a basal foot anchors the animal to the reef. Flow bends the tentacles progressively toward their tips. The clownfish make short foraging trips and return to their host. This is an artistic motion study, not a measured fluid simulation.');
- for(const [x,nominalY,z,s] of [[-3.23,.48,1.81,.5],[2.18,.7,1.63,.56],[-2.4,1.08,.64,.32],[1.12,2.76,-.39,.31]]){
-  attachRay.set(new T.Vector3(x,nominalY+.35,z),new T.Vector3(0,-1,0));attachRay.far=2.5;
-  const y=(attachRay.intersectObjects(supports,false)[0]?.point.y??.2)+.005;
-  const cushion=new T.SphereGeometry(s,22,10);cushion.scale(1,.22/s,1);cushion.translate(x,y,z);polyps.push(colored(cushion,new T.Color('#66664b'),.13));
-  for(let i=0;i<46;i++){
-   const a=i*2.399,r=Math.sqrt(i/46)*s,px=x+Math.cos(a)*r,pz=z+Math.sin(a)*r,py=y+.22*Math.sqrt(Math.max(0,1-(r/s)**2));
-   const ring=new T.TorusGeometry(.058,.016,5,12);ring.rotateX(-Math.PI/2);ring.translate(px,py,pz);polyps.push(colored(ring,new T.Color(i%3?'#ed982a':'#43bf9b')));
-   const disk=new T.SphereGeometry(.048,8,5);disk.scale(1,.27,1);disk.translate(px,py-.005,pz);polyps.push(colored(disk,new T.Color(i%3?'#3b717e':'#674e97')));
-   for(let j=0;j<7;j++){const q=j/7*6.28;polyps.push(tube([new T.Vector3(px+Math.cos(q)*.06,py,pz+Math.sin(q)*.06),new T.Vector3(px+Math.cos(q)*.085,py+.038,pz+Math.sin(q)*.085)],.006,new T.Color('#929365'),2,4,false));}
-  }
+ const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
+ const gardens:T.BufferGeometry[]=[],polypStats={polyps:0,tentacles:0,maxAttachmentError:0};
+ const colonies:[number,number,number,number,'zoanthid'|'stony'][]=[[-3.23,.48,1.81,.5,'zoanthid'],[2.18,.7,1.63,.56,'zoanthid'],[-2.4,1.08,.64,.32,'zoanthid'],[1.12,2.76,-.39,.31,'zoanthid'],[-2.42,2.09,.03,.38,'stony'],[-3.47,1.37,.64,.37,'stony'],[-2.2,.67,.97,.29,'stony'],[1.31,2.94,-.34,.37,'stony'],[2.45,1.72,.3,.42,'stony'],[3.79,.74,1.15,.32,'stony'],[.91,1.17,-.06,.28,'stony']];
+ for(const [x,y,z,r,kind] of colonies){
+  const sample=(px:number,pz:number)=>surfaceLookup(px,y+.5,pz);
+  const garden=encrustingGarden(x,z,r,kind,sample,random);gardens.push(garden.geometry);polypStats.polyps+=garden.polypCount;polypStats.tentacles+=garden.tentacleCount;polypStats.maxAttachmentError=Math.max(polypStats.maxAttachmentError,garden.attachmentError);
  }
- // Smaller encrusting colonies cover exposed ledges, with raised corallite rims.
- for(const [x,nominalY,z,r] of [[-2.42,2.09,.03,.38],[-3.47,1.37,.64,.37],[-2.2,.67,.97,.29],[1.31,2.94,-.34,.37],[2.45,1.72,.3,.42],[3.79,.74,1.15,.32],[.91,1.17,-.06,.28]]){
-  attachRay.set(new T.Vector3(x,nominalY+.35,z),new T.Vector3(0,-1,0));attachRay.far=2.5;
-  const y=(attachRay.intersectObjects(supports,false)[0]?.point.y??.2)+.004;
-  const crust=new T.SphereGeometry(r,22,10);crust.scale(1,.7,1);crust.translate(x,y,z);polyps.push(colored(crust,new T.Color('#436e57'),.12));
-  for(let i=0;i<85;i++){
-   const a=i*2.399,rr=Math.sqrt(i/85)*r,px=x+Math.cos(a)*rr,pz=z+Math.sin(a)*rr,py=y+Math.sqrt(Math.max(0,r*r-rr*rr))*.7;
-   const rim=new T.TorusGeometry(.034,.012,5,9);rim.rotateX(-Math.PI/2);rim.translate(px,py,pz);polyps.push(colored(rim,new T.Color(i%4?'#68b78e':'#afc781')));
-   const center=new T.SphereGeometry(.025,5,4);center.scale(1,.3,1);center.translate(px,py-.014,pz);polyps.push(colored(center,new T.Color('#425664')));
-  }
- }
- const zoo=batch(polyps,coralMat,group,'Zoanthid gardens')!;addNote(zoo,'A garden of polyps','These buttonlike animals form colonies on the rock. Each crown of tentacles surrounds a mouth. The reef mixes branching, plating and soft forms; look closely to see their different structures.');
+ const polypMat=new T.MeshStandardMaterial({vertexColors:true,map:coralTex,bumpMap:coralTex,bumpScale:.0012,roughness:.78,side:T.DoubleSide});animatePolypMaterial(polypMat,reefClock);
+ const zoo=batch(gardens,polypMat,group,'Rock-encrusting polyp gardens')!;addNote(zoo,'Life across the rock','Living tissue follows the reef surface. Zoanthid oral discs have a mouth and two fringes of narrow tentacles. Their soft fringes move gently while the stony colonies stay rigid. Colors and motion are illustrative.');
  const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.025,roughness:1,color:'#dedbd0'}));sand.rotation.x=-Math.PI/2;sand.position.y=.18;sand.receiveShadow=true;group.add(sand);
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
  for(let i=0;i<1600;i++){const x=pick(-4.94,4.94),z=pick(-2.23,2.23);dummy.position.set(x,.185,z);const s=pick(.012,.049);dummy.scale.set(s,pick(.4,1)*s,s);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));}rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone,assetsReady:rockMaps.ready};
+ return {group,obstacles,notes,hosts,anemone,polypStats,assetsReady:rockMaps.ready};
 }
