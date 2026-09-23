@@ -1,0 +1,89 @@
+{
+  "samples": [
+    {
+      "seconds": 0.2,
+      "time": 1.2686999999046327,
+      "captured": 1,
+      "swallowed": 0,
+      "carried": 1,
+      "fold": [
+        0.0025461574068224163,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 1,
+      "time": 2.3521999999046326,
+      "captured": 1,
+      "swallowed": 0,
+      "carried": 1,
+      "fold": [
+        0.10001199999997445,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 3,
+      "time": 4.618999999904635,
+      "captured": 1,
+      "swallowed": 0,
+      "carried": 1,
+      "fold": [
+        0.2,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 5,
+      "time": 6.885899999904661,
+      "captured": 1,
+      "swallowed": 0,
+      "carried": 1,
+      "fold": [
+        0.2,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 8.5,
+      "time": 10.669599999904635,
+      "captured": 1,
+      "swallowed": 1,
+      "carried": 0,
+      "fold": [
+        0.2,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 15,
+      "time": 17.453499999904555,
+      "captured": 1,
+      "swallowed": 1,
+      "carried": 0,
+      "fold": [
+        0.11385879674646576,
+        0,
+        0
+      ]
+    },
+    {
+      "seconds": 25,
+      "time": 27.721099999904293,
+      "captured": 1,
+      "swallowed": 1,
+      "carried": 0,
+      "fold": [
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "errors": []
+}
