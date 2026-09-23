@@ -1,12 +1,12 @@
 {
-  "buildHash": "dd23cc24bd12bd766b6a7dc9d5440871eb32da778c89836cfe7482043077f54a",
+  "buildHash": "1e54ba278231580610a74a2d7bedf867d34d5790531801291458a1cc2869962c",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-BT1U9-pT.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-fsUEIX8t.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T16:42:23.071Z",
-  "readyMs": 2835,
+  "checkedAt": "2026-09-23T17:03:19.725Z",
+  "readyMs": 2720,
   "samples": [
     {
-      "fps": 59.99999999999999,
-      "time": 6.080100000000013,
-      "bites": 30,
-      "remaining": 6
+      "fps": 59.99400059994001,
+      "time": 6.158800000143071,
+      "bites": 21,
+      "remaining": 15
     },
     {
       "fps": 59.99400059993998,
-      "time": 10.113900000000005,
-      "bites": 34,
-      "remaining": 2
+      "time": 10.17590000014306,
+      "bites": 35,
+      "remaining": 1
     },
     {
-      "fps": 59.99400059994003,
-      "time": 14.13079999999996,
+      "fps": 59.99400059993998,
+      "time": 14.192800000142999,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 18.20990000014292,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 22.226900000142845,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 26.243900000142776,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 18.131199999999897,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.98800239952005,
-      "time": 22.148399999999842,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 26.16529999999978,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999244,
-      "time": 30.165599999999735,
+      "time": 30.244300000142665,
       "bites": 36,
       "remaining": 0
     }
@@ -220,9 +220,9 @@
     "three-quarter",
     "side",
     "mobile",
+    "sand-closeup",
     "coral-closeup",
-    "anemone-closeup",
-    "two rendered motion frames",
+    "five actual rendered sand motion frames",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -231,7 +231,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Connected irregular coral growth fronts on actual rock, with three detailed colonies emerging from their living crust. Same inhabitants, models, textures, anemones, gardens and existing infill. Adds static geometry; photographic comparative target remains unmet.",
+  "scope": "Water-wave-driven, filtered moving light on underwater surfaces; same geometry, textures and inhabitants. Local optical approximation, not full ray-traced caustics. Comparative photographic target remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -269,9 +269,9 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 2668.5,
-    "loadCurrent": 2713.8,
-    "fpsPrior": 253.1,
-    "fpsCurrent": 250.6
+    "loadPrior": 2504.8,
+    "loadCurrent": 2528.8,
+    "fpsPrior": 261.7,
+    "fpsCurrent": 252.8
   }
 }

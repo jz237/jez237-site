@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {reefCausticsShader} from './ReefCaustics.ts';
 
 /** An inexpensive artistic approximation of moving water light, not ray-traced optics. */
 export function applyReefOptics(material:T.MeshStandardMaterial,clock:{value:number},daylight:{value:number}){
@@ -18,7 +19,7 @@ export function applyReefOptics(material:T.MeshStandardMaterial,clock:{value:num
     reefWorld=instanceMatrix*reefWorld;
    #endif
    vReefWorld=(modelMatrix*reefWorld).xyz;`);
-  shader.fragmentShader='varying vec3 vReefWorld;uniform float reefOpticsTime,reefDaylight;\n'+shader.fragmentShader;
+  shader.fragmentShader='varying vec3 vReefWorld;uniform float reefOpticsTime,reefDaylight;\n'+reefCausticsShader+shader.fragmentShader;
   // Standard materials assume an air/tissue interface. Submerged coral/rock
   // has lower Fresnel contrast. Keep normal/roughness detail, reduce the broad
   // air-like specular sheen. Fish already carry an explicit underwater IOR.
@@ -26,13 +27,14 @@ export function applyReefOptics(material:T.MeshStandardMaterial,clock:{value:num
    material.specularColor*=.25;`);
   shader.fragmentShader=shader.fragmentShader.replace('#include <lights_fragment_end>',`#include <lights_fragment_end>
    vec3 reefNormal=inverseTransformDirection(normal,viewMatrix);
-   vec2 reefUV=vReefWorld.xz+vReefWorld.y*vec2(.17,.09);
-   float reefTime=reefOpticsTime*.43;
-   float waterWave=sin(reefUV.x*10.7+sin(reefUV.y*5.3+reefTime)*1.2-reefTime)
-      *.55+sin(reefUV.y*11.9+sin(reefUV.x*6.7-reefTime)*1.1+reefTime*.83)*.45;
-   float focus=pow(max(0.,1.-abs(waterWave)),14.);
-   // Modulate shadowed direct light only; no emissive pattern glowing in caves.
-   reflectedLight.directDiffuse*=1.+(focus*.58-.065)*smoothstep(-.08,.7,reefNormal.y)*reefDaylight;
+   float reefDepth=max(0.,5.45-vReefWorld.y);
+   vec2 reefUV=vReefWorld.xz-reefDepth*vec2(.13,.025);
+   float focus=reefCausticFocus(reefUV,reefDepth,reefOpticsTime);
+   float facing=smoothstep(.0,.8,dot(reefNormal,normalize(vec3(-.13,1.,-.025))));
+   // Shadowed direct illumination only: cave walls cannot emit caustic light.
+   // Keep the redistribution bounded, with slight warm-light loss on descent.
+   vec3 incidentTransmission=exp(-reefDepth*vec3(.022,.009,.004));
+   reflectedLight.directDiffuse*=incidentTransmission*(1.+(focus*.36-.075)*facing*reefDaylight);
   `);
   shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`
    // Only the portion of the camera ray inside the tank attenuates color.
@@ -44,7 +46,7 @@ export function applyReefOptics(material:T.MeshStandardMaterial,clock:{value:num
    outgoingLight=outgoingLight*transmittance+vec3(.012,.047,.095)*(1.-transmittance)*reefDaylight;
    #include <opaque_fragment>`);
  };
- material.customProgramCacheKey=()=>cacheKey+'-reef-optics-submerged-v2';
+ material.customProgramCacheKey=()=>cacheKey+'-reef-optics-wave-focus-v3';
  material.needsUpdate=true;
 }
 
