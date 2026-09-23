@@ -69,7 +69,7 @@ export function buildReef(scene:T.Scene){
  const branch=(x:number,y:number,z:number,size:number,hue:number,rng:()=>number=random)=>{
   const base=new T.Vector3(x,y,z);attachRay.set(new T.Vector3(x,y+.32,z),new T.Vector3(0,-1,0));attachRay.far=.95;
   const support=attachRay.intersectObjects(supports,false)[0];if(support)base.y=support.point.y-.012*size;
-  const colony=branchingColony(base,size,hue,rng,(px,pz)=>surfaceLookup(px,base.y+.28*size,pz)?.point.y??null,hue>.9?'antler':hue>.7?'canopy':'bushy'),center=base.clone().add(new T.Vector3(0,size*.47,0));let radiusSquared=0;
+  const colony=branchingColony(base,size,hue,rng,(px,pz)=>surfaceLookup(px,base.y+.28*size,pz)?.point.y??null,hue>.9?'antler':hue>.7?'canopy':'bushy',support?.face?coralCrust((support.object as T.Mesh).geometry,support.point,support.face.normal,.23*size,hue,hue*17+size,{color:new T.Color().setHSL(hue,.52,.29),thickness:.006*size}):undefined),center=base.clone().add(new T.Vector3(0,size*.47,0));let radiusSquared=0;
   for(const geometry of colony){const p=geometry.getAttribute('position');for(let i=0;i<p.count;i++)radiusSquared=Math.max(radiusSquared,(p.getX(i)-center.x)**2+(p.getY(i)-center.y)**2+(p.getZ(i)-center.z)**2);}
   corals.push(...colony);obstacles.push({center,radius:Math.sqrt(radiusSquared)+.015});
  };

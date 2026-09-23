@@ -4,7 +4,7 @@ type Random=()=>number;
 export type CoralGrowth='canopy'|'bushy'|'antler';
 /** Rounded, irregular fork growth. Polyps are fine normal/color detail; a coral
  * skeleton stays rigid, unlike the soft anemone tissue elsewhere in the scene. */
-export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null,growth:CoralGrowth='canopy'){
+export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null,growth:CoralGrowth='canopy',basalGeometry?:T.BufferGeometry){
  const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.52,.29),tipColor=baseColor.clone().lerp(new T.Color('#e5e3cc'),.31);
  const choice=(a:number,b:number)=>a+(b-a)*random();
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
@@ -54,6 +54,8 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   const root=base.clone().add(new T.Vector3(Math.cos(angle)*.045*size,choice(-.012,.009)*size,Math.sin(angle)*.045*size));
   const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.051,.073)*size,0,angle+random()*2);
  }
+ // Prefer clipped triangles from the actual support, including its curved relief.
+ if(basalGeometry){basalGeometry.name='Rock-conforming colony base';geometries.push(basalGeometry);return geometries;}
  // A thin irregular living crust conforms to the actual rock, not a flowerpot disc.
  const positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],valid:boolean[]=[],rings=8,sides=48;
  for(let j=0;j<=rings;j++)for(let k=0;k<=sides;k++){

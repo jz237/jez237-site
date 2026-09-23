@@ -2,11 +2,11 @@ import * as T from 'three';
 
 /** A thin living layer on the actual indexed rock surface. The irregular boundary
  * clips triangles instead of leaving a stair-stepped grid or bridging cavities. */
-export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vector3,radius:number,hue:number,seed:number){
+export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vector3,radius:number,hue:number,seed:number,profile?:{color:T.Color;thickness:number}){
  const p=rock.getAttribute('position'),n=rock.getAttribute('normal'),source=rock.index!;
  const up=Math.abs(normal.y)<.9?new T.Vector3(0,1,0):new T.Vector3(1,0,0),u=new T.Vector3().crossVectors(up,normal).normalize(),v=new T.Vector3().crossVectors(normal,u).normalize();
  const positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],cache=new Map<string,number>();
- const base=new T.Color().setHSL(hue,.43,.37).convertSRGBToLinear(),edge=new T.Color().setHSL(hue,.36,.52).convertSRGBToLinear();
+ const base=profile?profile.color.clone().multiplyScalar(.72):new T.Color().setHSL(hue,.43,.37).convertSRGBToLinear(),edge=profile?base.clone().multiplyScalar(1.12):new T.Color().setHSL(hue,.36,.52).convertSRGBToLinear();
  type Point={p:T.Vector3;n:T.Vector3;d:number;key:string};
  const points:Point[]=Array.from({length:p.count},(_,i)=>{
   const point=new T.Vector3().fromBufferAttribute(p,i),delta=point.clone().sub(center),x=delta.dot(u),y=delta.dot(v),a=Math.atan2(y,x);
@@ -17,7 +17,7 @@ export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vecto
   const existing=cache.get(point.key);if(existing!==undefined)return existing;
   const d=point.p.clone().sub(center),x=d.dot(u),y=d.dot(v),fade=T.MathUtils.smoothstep(point.d,0,radius*.14);
   // Low winding skeletal ridges: stationary hard coral, never soft-body waving.
-  const wave=.5+.5*Math.sin(x*57+Math.sin(y*21+seed)*1.7+seed),height=.003+fade*(.013+.018*wave*wave);
+  const wave=.5+.5*Math.sin(x*57+Math.sin(y*21+seed)*1.7+seed),height=.003+fade*(profile?profile.thickness*(.42+.58*wave*wave):.013+.018*wave*wave);
   const out=point.p.clone().addScaledVector(point.n,height),c=base.clone().lerp(edge,(1-fade)*.65).multiplyScalar(.79+.14*wave+.07*Math.sin(x*17+Math.sin(y*23)));
   const index=positions.length/3;positions.push(out.x,out.y,out.z);colors.push(c.r,c.g,c.b);uv.push(x/.16,y/.16);cache.set(point.key,index);return index;
  }
