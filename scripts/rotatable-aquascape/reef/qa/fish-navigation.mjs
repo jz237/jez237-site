@@ -17,3 +17,18 @@ console.log({minRange,start:samples[0],end:samples.at(-1)});assert.ok(minRange>.
 
 }finally{Math.random=originalRandom;}
 }
+
+// A valid food segment does not guarantee an uncrowded lane. Recovery must
+// temporarily take priority over food, then restore normal feeding eligibility.
+{
+ const world=new ReefFish(new T.Scene(),[],[new T.Vector3(3,1,1)],models);world.fish.splice(1);const f=world.fish[0];
+ f.position.set(0,2,0);f.group.position.copy(f.position);f.progressPosition.copy(f.position);f.goal.set(-1,2,0);f.yaw=Math.PI;f.until=2;f.recoverUntil=2;
+ world.foods.push({position:new T.Vector3(1,2,0),alive:true,age:0});
+ for(let i=0;i<30;i++){world.update(1/60,false);assert.equal(f.goal.x,-1,'food cannot overwrite the committed escape waypoint');assert.equal(f.mode,'exploring');}
+ assert.ok(f.position.x<-.04,'fish makes actual escape progress while food is present');
+ f.recoverUntil=0;world.update(1/60,false);assert.equal(f.mode,'feeding','food becomes eligible after recovery');
+ // The displacement watchdog must also work while a pellet remains selected.
+ f.position.set(0,2,0);f.progressPosition.copy(f.position);f.progressAt=-10;f.recoverUntil=0;world.update(1/60,false);
+ assert.ok(f.recoverUntil>world.clock,'feeding does not disable the progress watchdog');assert.equal(f.mode,'exploring');
+ console.log('Feeding recovery: committed escape, actual progress, food reacquisition and feeding watchdog passed.');
+}
