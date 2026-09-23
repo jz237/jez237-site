@@ -70,11 +70,29 @@ for species,s in DATA.items():
    vertices.append(pos(px,py,depth));uvs.append(uv(px,py))
    if i<rings:
     n=i*sides+j;nn=i*sides+(j+1)%sides;faces.append((n,n+sides,nn+sides,nn))
- for edge in [0,rings]:
-  px=begin+length*edge/rings;py=(interp(s['top'],px)+interp(s['bottom'],px))/2;center=len(vertices);vertices.append(pos(px,py));uvs.append(uv(px,py))
+ # Close the tail; the head instead folds into a real recessed oral cavity.
+ px=begin;py=(interp(s['top'],px)+interp(s['bottom'],px))/2;center=len(vertices);vertices.append(pos(px,py));uvs.append(uv(px,py))
+ for j in range(sides):faces.append((center,j,(j+1)%sides))
+ colors=[(1,1,1,1)]*len(vertices)
+ top=interp(s['top'],end);bottom=interp(s['bottom'],end);mid=(top+bottom)/2;radius=(bottom-top)/2
+ previous=rings*sides
+ for offset,ratio,shade in [( .005,.88,1),(.002,.59,.55),(-.023,.28,.065)]:
+  start=len(vertices)
   for j in range(sides):
-   a=edge*sides+j;b=edge*sides+(j+1)%sides;faces.append((center,b,a) if edge==0 else (center,a,b))
- objects.append(make_mesh('body',vertices,faces,uvs,skin))
+   a=2*math.pi*j/sides;py=mid-radius*ratio*math.sin(a)
+   vertices.append(pos(end+offset*length,py,math.cos(a)*trunk_thickness(1)*ratio));uvs.append(uv(end-7,mid-radius*.85*math.sin(a)));colors.append((shade,shade,shade,1))
+   faces.append((previous+j,start+j,start+(j+1)%sides,previous+(j+1)%sides))
+  previous=start
+ center=len(vertices);vertices.append(pos(end-.03*length,mid));uvs.append(uv(end-7,mid));colors.append((.035,.035,.035,1))
+ for j in range(sides):faces.append((center,previous+(j+1)%sides,previous+j))
+ bodySkin=skin.copy();bodySkin.name=species+' lip and cavity tissue';nodes=bodySkin.node_tree.nodes
+ vertex=nodes.new('ShaderNodeVertexColor');vertex.layer_name='Oral depth'
+ texture=next(n for n in nodes if n.type=='TEX_IMAGE');mix=nodes.new('ShaderNodeMixRGB');mix.blend_type='MULTIPLY';mix.inputs[0].default_value=1
+ bodySkin.node_tree.links.new(texture.outputs['Color'],mix.inputs[1]);bodySkin.node_tree.links.new(vertex.outputs['Color'],mix.inputs[2]);bodySkin.node_tree.links.new(mix.outputs[0],nodes.get('Principled BSDF').inputs['Base Color'])
+ body=make_mesh('body',vertices,faces,uvs,bodySkin)
+ colorLayer=body.data.color_attributes.new(name='Oral depth',type='FLOAT_COLOR',domain='POINT')
+ for i,color in enumerate(colors):colorLayer.data[i].color=color
+ objects.append(body)
  def fin_mesh(name,polygon,side=0,pivot=None):
   # Concave fins are tessellated without a fan crossing the fork/edge.
   control=[Vector((float(x),float(y),0)) for x,y in polygon];p=[]
@@ -146,7 +164,7 @@ for species,s in DATA.items():
  bpy.ops.object.select_all(action='DESELECT')
  for obj in objects:obj.select_set(True)
  bpy.context.view_layer.objects.active=objects[0]
- bpy.ops.export_scene.gltf(filepath=str(OUT/(species+'.glb')),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_animations=False,export_cameras=False,export_lights=False,export_image_format='JPEG',export_jpeg_quality=95)
+ bpy.ops.export_scene.gltf(filepath=str(OUT/(species+'.glb')),export_format='GLB',use_selection=True,export_yup=True,export_apply=True,export_animations=False,export_cameras=False,export_lights=False,export_image_format='JPEG',export_jpeg_quality=95,export_vertex_color='ACTIVE')
  triangles=sum(sum(len(p.vertices)-2 for p in o.data.polygons) for o in objects)
  metadata[species]={'mouth':pos(*s['mouth']),'triangles':triangles,'meshes':len(objects),'reference':species+'.png','authoring':'Blender '+bpy.app.version_string,'bodyLength':1,'width':width,'upper':[pos(x,y)[:2] for x,y in s['top']],'lower':[pos(x,y)[:2] for x,y in s['bottom']]}
  collection=bpy.data.collections.new(species);scene.collection.children.link(collection)

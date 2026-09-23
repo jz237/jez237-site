@@ -1,11 +1,11 @@
 {
-  "buildHash": "6686a422c9aaea67954d5172b38c43b33d55bd9cb555a4e1a2fc744ac1d768c8",
+  "buildHash": "6098b9707012186aa35f2414e70f01b6f6a20109b0c603aee362e1fc2e48b88a",
   "files": [
-    "assets/anthias-QcvtfU54.glb",
-    "assets/chromis-BeZMqwQ5.glb",
-    "assets/clown-zY3G7iuy.glb",
-    "assets/gramma-BgdGKcNy.glb",
-    "assets/index-Cvr8R5_q.js",
+    "assets/anthias-qh5-fys7.glb",
+    "assets/chromis-ArXoNpqP.glb",
+    "assets/clown-CVwpScsO.glb",
+    "assets/gramma-4tsMCcIb.glb",
+    "assets/index-B7S4mFbb.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
@@ -19,52 +19,52 @@
     "assets/seaside_rock_diff_1k-STQ4lmr_.jpg",
     "assets/seaside_rock_nor_gl_1k-SdHn3rBd.jpg",
     "assets/seaside_rock_rough_1k-sKOQ0WHG.jpg",
-    "assets/tang-Y0Eaq3Iy.glb",
-    "assets/yellow-CCMRPYfK.glb",
+    "assets/tang-DZS7dloZ.glb",
+    "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T10:29:03.076Z",
-  "readyMs": 2239,
+  "checkedAt": "2026-09-23T10:54:15.086Z",
+  "readyMs": 3203,
   "samples": [
     {
       "fps": 59.99700014999249,
-      "time": 4.287300000095368,
-      "bites": 17,
-      "remaining": 19
+      "time": 4.376100000047685,
+      "bites": 31,
+      "remaining": 5
     },
     {
       "fps": 59.99400059993998,
-      "time": 8.287700000095406,
-      "bites": 32,
-      "remaining": 4
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 12.304700000095346,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 16.321800000095273,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 20.322100000095183,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 24.339100000095097,
+      "time": 8.393200000047718,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99100134979755,
-      "time": 28.339500000095022,
+      "time": 12.410200000047661,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 16.42720000004762,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 20.427500000047523,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 24.444500000047427,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 28.46150000004736,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 5464730,
+    "triangles": 5466170,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -207,13 +207,15 @@
     "Plate tissue: periodic baked maps with outward near-unit normals; existing closed skeleton, thickness and conservative navigation checks pass; one normalized byte per vertex controls upper/edge/underside relief",
     "Marine fin joins: closed bodies, thin peduncle caps, shared median-fin/skin image source and paired outward fin strokes",
     "Folded anemones: nonplanar anchored roots, outward skins, recessed oral centers, curved-axis normals and positive sampled deformation determinant",
-    "Coral terminal growth: short offshoots rooted in existing branches, joined recessed axial cups, all11infill colonies and updated conservative navigation bounds"
+    "Coral terminal growth: short offshoots rooted in existing branches, joined recessed axial cups, all11infill colonies and updated conservative navigation bounds",
+    "All six connected recessed oral cavities: outward cap winding, ray-tested depth, normalized vertex tissue shading, animated lip uniforms and pause invariance"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "coral-closeup",
+    "six-fish-closeups",
+    "tang-mouth-orbit",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -222,5 +224,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Branching coral crowns have unequal heights and local exposure directions, variable taper and short offset terminal growth with joined axial cups. All existing branches/maps retained. Three small infill colonies resized to retain all11 with new bounds. Rendered5464730triangles vs5290438 (+3.3%). No additional draw groups/maps/passes. Loads2391/2384ms; uncapped237/237.9FPS. Artistic approximation, photographic target not reached."
+  "scope": "Six Blender marine fish models have connected lip rims and recessed shaded cavities, with shader-deformed respiration/feeding and steady upper heads. Removed20separate mouth meshes. Source96640triangles vs94912; rendered5466170 vs5464730. GLBs5801832bytes vs5548928 (+252904). Loads2580.7/2465.3ms; uncapped232.1/246.3FPS. Photographic target not reached."
 }
