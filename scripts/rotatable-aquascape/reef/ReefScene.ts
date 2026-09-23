@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {coralSurfaceMaps} from './CoralSurface.ts';
 import {topSurfaceSampler} from './RockSurface.ts';
 import {encrustingGarden,animatePolypMaterial} from './EncrustingPolyps.ts';
 import {buildAnemones} from './Anemones.ts';
@@ -31,9 +32,9 @@ function batch(geometries:T.BufferGeometry[],material:T.Material,parent:T.Group,
 }
 export function buildReef(scene:T.Scene){
  const group=new T.Group();scene.add(group);const obstacles:Obstacle[]=[],notes:T.Object3D[]=[];
- const rockMaps=limestoneMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
+ const rockMaps=limestoneMaps(),coralMaps=coralSurfaceMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
  const rockMat=new T.MeshStandardMaterial({...rockMaps.maps,normalScale:new T.Vector2(1.1,1.1),roughness:.96,vertexColors:true});
- const coralMat=new T.MeshStandardMaterial({map:coralTex,bumpMap:coralTex,bumpScale:.018,roughness:.76,vertexColors:true});
+ const coralMat=new T.MeshStandardMaterial({...coralMaps.maps,normalScale:new T.Vector2(.9,.9),roughness:.9,vertexColors:true});
  const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
  const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number)=>{
@@ -86,5 +87,5 @@ export function buildReef(scene:T.Scene){
  const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.025,roughness:1,color:'#dedbd0'}));sand.rotation.x=-Math.PI/2;sand.position.y=.18;sand.receiveShadow=true;group.add(sand);
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
  for(let i=0;i<1600;i++){const x=pick(-4.94,4.94),z=pick(-2.23,2.23);dummy.position.set(x,.185,z);const s=pick(.012,.049);dummy.scale.set(s,pick(.4,1)*s,s);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));}rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone,polypStats,assetsReady:rockMaps.ready};
+ return {group,obstacles,notes,hosts,anemone,polypStats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready])};
 }

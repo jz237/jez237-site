@@ -2,6 +2,7 @@ import './anemone-geometry.mjs';
 import './fish-geometry.mjs';
 import './polyp-geometry.mjs';
 import './rock-surface.mjs';
+import './coral-geometry.mjs';
 import {chromium} from 'playwright';
 import {createServer} from 'node:http';
 import {readFile,stat} from 'node:fs/promises';
