@@ -2,12 +2,14 @@
 // Keeps jez237 and both Hidden Reef variants on the same tested aquarium bundle.
 import {cpSync,readFileSync,writeFileSync,mkdirSync} from 'node:fs';
 import {resolve} from 'node:path';
+import {installReefNavigation} from './reef_navigation.mjs';
 import {checkAquariumSync} from './check_aquarium_sync.mjs';
 const root=resolve(import.meta.dirname,'..');
 const site=resolve(root,'prototypes/hidden-reef');
 const preview=resolve(root,'prototypes/hidden-reef-header-preview');
 const dist=resolve(root,'scripts/rotatable-aquascape/dist');
 cpSync(dist,resolve(root,'demos/rotatable-aquascape'),{recursive:true});
+installReefNavigation(root);
 // Reuse the store's actual navigation enhancement without running its animated
 // full-page background alongside the aquarium. Regenerate rather than fork it.
 const backgroundSource=readFileSync(resolve(site,'assets/reef-background.js'),'utf8');
