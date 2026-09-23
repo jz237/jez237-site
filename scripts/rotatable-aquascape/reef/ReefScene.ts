@@ -1,3 +1,4 @@
+import {reefFlankShelves} from './ReefFlankShelves.ts';
 import * as T from 'three';
 import {reefButtresses} from './ReefButtress.ts';
 import {plateSurfaceMaps,finishPlateMaterial} from './PlateSurface.ts';
@@ -202,6 +203,7 @@ export function buildReef(scene:T.Scene){
   massiveCorals.push(mantle);mantleSurfaces.push(mantle);crustStats.colonies++;crustStats.triangles+=mantle.index!.count/3;crustStats.mantleColonies++;crustStats.mantleTriangles+=mantle.index!.count/3;
   mantle.computeBoundingSphere();obstacles.push({center:mantle.boundingSphere!.center.clone(),radius:mantle.boundingSphere!.radius+.004});
  }
+ const flankShelves=reefFlankShelves(supports);plates.push(...flankShelves.geometries);obstacles.push(...flankShelves.obstacles);
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const plateMaterial=finishPlateMaterial(new T.MeshStandardMaterial({...plateMaps.maps,normalScale:new T.Vector2(1.05,1.05),roughness:.88,vertexColors:true,side:T.DoubleSide}));
  const shelves=batch(plates,plateMaterial,group,'Layered plate coral tissue')!;addNote(shelves,'Growing toward the light','Thin folded shelves carry small coral cups among irregular skeletal ridges. The pale growing margin remains finer and smoother. This is a Montipora-inspired artistic study, not an exact species reconstruction.');
@@ -248,5 +250,5 @@ export function buildReef(scene:T.Scene){
   const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
   dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
  }rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone,polypStats,rockStats,crustStats,infillStats,buttressStats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
+ return {group,obstacles,notes,hosts,anemone,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }
