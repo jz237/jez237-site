@@ -55,7 +55,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   // into the actual support rather than suspending a radial bouquet above it.
   const spread=(.075+.055*(.5+.5*Math.sin(i*4.13+hue*11)))*size;
   const root=base.clone().add(new T.Vector3(Math.cos(angle)*spread,choice(-.012,.009)*size,Math.sin(angle)*spread));
-  if(surface){const y=surface(root.x,root.z);if(y!==null&&Math.abs(y-base.y)<.15*size)root.y=y-.014*size;else root.copy(base);} 
+  if(surface){const y=surface(root.x,root.z);if(y!==null&&Math.abs(y-base.y)<.15*size)root.y=y-.014*size;else root.copy(base);}
   const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.041,.058)*size,0,angle+random()*2);
  }
  // Prefer clipped triangles from the actual support, including its curved relief.
