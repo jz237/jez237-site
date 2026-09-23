@@ -55,8 +55,10 @@ export function buildReef(scene:T.Scene){
  const coralMat=new T.MeshStandardMaterial({...coralMaps.maps,normalScale:new T.Vector2(.9,.9),roughness:.9,vertexColors:true});
  const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],massiveCorals:T.BufferGeometry[]=[],plates:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
- const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number,rng:()=>number=random)=>{
-  const geo=erodedRock(x,y,z,sx,sy,sz,rng),surface=encrustRock(geo);rocks.push(surface);
+ const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number,rng:()=>number=random,ground=false)=>{
+  const geo=erodedRock(x,y,z,sx,sy,sz,rng);
+  if(ground){geo.computeBoundingBox();const sink=Math.min(0,sandHeight(x,z)-.025-geo.boundingBox!.min.y);geo.translate(0,sink,0);y+=sink;}
+  const surface=encrustRock(geo);rocks.push(surface);
   // Conservative cluster of collision volumes follows the irregular rock rather than one island-sized ball.
   const r=Math.min(sx,sy,sz)*1.16;obstacles.push({center:new T.Vector3(x,y,z),radius:r});
   for(const [axis,size] of [[0,sx],[1,sy],[2,sz]] as const)if(size>r*1.2)for(const sign of [-1,1]){const center=new T.Vector3(x,y,z);center.setComponent(axis,center.getComponent(axis)+sign*(size-r)*.85);obstacles.push({center,radius:r});}
@@ -72,10 +74,14 @@ export function buildReef(scene:T.Scene){
  const rearRandom=seeded(230926);
  for(const a of [[-1.03,.43,-1.64,.55,.30,.36],[-.46,.38,-1.65,.43,.25,.34],[-.91,.91,-1.66,.38,.47,.32],[.19,.35,-1.72,.41,.22,.31],[.36,.81,-1.69,.29,.47,.32],[-1.00,1.35,-1.71,.34,.25,.28],[.29,1.24,-1.69,.34,.23,.29]])rock(...a as [number,number,number,number,number,number],rearRandom);
  // Temporary per-rock bounds keep attachment raycasts local; these are never rendered.
+ const toeRandom=seeded(2309231712);
+ // Broken live-rock fragments feather the island feet into the sand. Their
+ // separate stream does not reshuffle existing colonies or animal animations.
+ for(const a of [[-4.48,.38,-.35,.25,.24,.32],[-4.38,.28,1.72,.25,.16,.30],[-3.24,.3,1.96,.29,.16,.19],[-1.63,.29,.96,.32,.14,.27],[.28,.26,-1.9,.3,.12,.22],[1.21,.31,1.79,.26,.17,.2],[3.07,.31,1.82,.28,.17,.23],[4.32,.32,1.49,.24,.18,.26],[4.23,.5,-1.67,.37,.3,.28]])rock(...a as [number,number,number,number,number,number],toeRandom,true);
  const supports=rocks.map(g=>{g.computeBoundingSphere();g.computeBoundingBox();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
  // Small irregular colonies follow front-facing rock relief. No new draw group.
- const crustStats={colonies:0,triangles:0,emergentColonies:0,emergentTriangles:0},crustSurfaces:T.BufferGeometry[]=[],livingCrustZones:Obstacle[]=[];
+ const crustStats={colonies:0,triangles:0,emergentColonies:0,emergentTriangles:0,understoryColonies:0,understoryTriangles:0},crustSurfaces:T.BufferGeometry[]=[],livingCrustZones:Obstacle[]=[];
  for(const [rockIndex,dx,dy,r,hue] of [[4,-.18,.02,.7,.12],[5,.18,.07,.56,.055],[2,-.08,-.09,.46,.8],[8,.04,.02,.43,.08],[14,-.18,.05,.66,.1],[15,.12,.06,.5,.82],[12,.18,.12,.61,.045],[17,.06,.04,.43,.22],[19,.04,.08,.49,.095],[20,.09,.04,.37,.83]]){
   const f=formations[rockIndex];attachRay.set(new T.Vector3(f[0]+dx,f[1]+dy,3),new T.Vector3(0,0,-1));attachRay.far=6;
   const hit=attachRay.intersectObject(supports[rockIndex],false)[0];if(!hit?.face)continue;
@@ -130,9 +136,14 @@ export function buildReef(scene:T.Scene){
  const occupied=obstacles.slice(rockObstacleCount);
  // These inspected anchor sites have stable independent shape seeds; rejected
  // placement trials are not regenerated on each page load.
- for(const [seed,x,y,size,hue] of [[1,-2.38,2.62,.47,.035],[5,-2.48,.88,.48,.22],[8,-2.08,1.05,.36,.03],[9,-3.42,1.22,.33,.14],[11,-3.87,1.63,.34,.23],[14,1.35,3.5,.43,.14],[19,3.94,1.62,.48,.14],[22,1.29,1.24,.4,.025],[23,1.05,1.65,.35,.23],[27,2.2,3.48,.31,.23],[28,3.96,2.24,.37,.025]]){
+ for(const [seed,x,y,size,hue] of [[1,-2.3293738395249055,2.4894741716151554,.47,.035],[5,-2.48,.88,.48,.22],[8,-2.08,1.05,.36,.03],[9,-3.42,1.22,.33,.14],[11,-3.86002344463442,1.5607145878049533,.34,.23],[14,1.35,3.5,.43,.14],[19,3.9427001728732343,1.6899479025164776,.48,.14],[22,1.29,1.24,.4,.025],[23,1.05,1.65,.35,.23],[27,2.2374922334230005,3.420887121259786,.31,.23],[28,3.96,2.24,.37,.025]]){
+  // Erosion can turn a former shoulder into a cavity. Reattach a displaced
+  // colony to a nearby clear shoulder instead of silently deleting its detail.
+  for(let attempt=0;attempt<33;attempt++){
+  const reach=attempt===0?0:.07*Math.ceil(attempt/8),angle=(attempt-1)*Math.PI/4+seed*.37;
+  const px=x+Math.cos(angle)*reach,py=y+Math.sin(angle)*reach;
   const infillRandom=seeded(23092307+seed);
-  attachRay.set(new T.Vector3(x,y,3),new T.Vector3(0,0,-1));attachRay.far=5.1;
+  attachRay.set(new T.Vector3(px,py,3),new T.Vector3(0,0,-1));attachRay.far=5.1;
   const hit=attachRay.intersectObjects(supports,false)[0];if(!hit?.face||hit.face.normal.z<.12)continue;
   if(livingCrustZones.some(zone=>hit.point.distanceTo(zone.center)<zone.radius))continue;
   const normal=hit.face.normal.clone().normalize();
@@ -142,7 +153,8 @@ export function buildReef(scene:T.Scene){
   const blocked=occupied.some(other=>o.center.distanceTo(other.center)<other.radius*.52+o.radius*.55)||
    o.center.distanceTo(new T.Vector3(3.05,1.5,.82))<.92+o.radius||o.center.distanceTo(new T.Vector3(-3.62,1.0,1.35))<.73+o.radius;
   if(blocked){colony.geometries.forEach(g=>g.dispose());continue;}
-  corals.push(...colony.geometries);obstacles.push(o);occupied.push(o);infillStats.colonies++;infillStats.triangles+=colony.triangles;infillStats.placements.push([seed,x,y,size,hue]);
+  corals.push(...colony.geometries);obstacles.push(o);occupied.push(o);infillStats.colonies++;infillStats.triangles+=colony.triangles;infillStats.placements.push([seed,px,py,size,hue]);break;
+  }
  }
  // Small upward/outward fingers grow from selected living crusts. Using the
  // crust itself as support keeps their feet on the tissue rather than buried
@@ -153,6 +165,23 @@ export function buildReef(scene:T.Scene){
   const hit=attachRay.intersectObject(support,false)[0];if(!hit?.face)continue;
   const colony=surfaceColony(support,hit.point,hit.face.normal,size,hue,seeded(23092340+index));
   corals.push(...colony.geometries);obstacles.push(colony.obstacle);crustStats.emergentColonies++;crustStats.emergentTriangles+=colony.triangles;
+ }
+ // A second scale of growth occupies flanks, ledges and lower shoulders.
+ // Each colony has real branch/corallite anatomy and a ray-attached basal crust.
+ // Interleaved colors and heights leave the arches and central channel open.
+ const understorySites=[[-4.12,1.05,.32,.81],[-4.01,1.78,.35,.14],[-3.70,2.12,.36,.92],[-3.31,1.46,.28,.23],[-2.66,2.68,.32,.035],[-2.39,1.36,.28,.81],[-1.84,.70,.30,.14],[-2.02,1.93,.32,.94],[-3.11,.83,.31,.025],[-3.90,.44,.24,.22],[-2.65,.46,.25,.92],[-4.40,.39,.26,.025],
+ [1.08,.79,.29,.22],[1.06,1.93,.33,.81],[1.39,2.72,.32,.035],[2.36,3.28,.34,.23],[2.73,2.15,.30,.92],[3.40,1.80,.34,.14],[3.89,1.23,.33,.81],[4.12,.69,.27,.22],[2.59,.90,.31,.035],[2.17,1.51,.30,.81],[3.70,.45,.25,.025],[4.05,2.37,.31,.14],[-.89,.72,.29,.23],[.29,.71,.28,.94],[-.70,1.15,.33,.035],[.37,1.10,.29,.81]];
+ const newGrowth:Obstacle[]=[];
+ for(let index=0;index<understorySites.length;index++){
+  const [x,y,size,hue]=understorySites[index];
+  attachRay.set(new T.Vector3(x,y,3),new T.Vector3(0,0,-1));attachRay.far=5.2;
+  const hit=attachRay.intersectObjects(supports,false)[0];if(!hit?.face||hit.face.normal.y<-.65||hit.face.normal.z<.08)continue;
+  if(hit.point.distanceTo(new T.Vector3(3.05,1.35,.82))<.72||hit.point.distanceTo(new T.Vector3(-3.62,.91,1.35))<.57)continue;
+  const colony=surfaceColony(hit.object as T.Mesh,hit.point,hit.face.normal,size,hue,seeded(2309231800+index));
+  // Fine branches may interleave; prevent whole colonies sharing one center.
+  if(newGrowth.some(o=>o.center.distanceTo(colony.obstacle.center)<(o.radius+colony.obstacle.radius)*.63)){colony.geometries.forEach(g=>g.dispose());continue;}
+  corals.push(...colony.geometries);obstacles.push(colony.obstacle);newGrowth.push(colony.obstacle);
+  crustStats.understoryColonies++;crustStats.understoryTriangles+=colony.triangles;
  }
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const plateMaterial=finishPlateMaterial(new T.MeshStandardMaterial({...plateMaps.maps,normalScale:new T.Vector2(1.05,1.05),roughness:.88,vertexColors:true,side:T.DoubleSide}));

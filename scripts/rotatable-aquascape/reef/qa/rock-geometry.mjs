@@ -18,3 +18,26 @@ for(const key of Object.keys(old.attributes)){assert.deepEqual(expanded.getAttri
 const bytes=g=>Object.values(g.attributes).reduce((n,a)=>n+a.array.byteLength,0)+(g.index?.array.byteLength??0);
 assert.ok(bytes(indexed)<bytes(old)*.3,'retain detail with at least 70% smaller fixture buffers');
 console.log('Rock geometry passed:',bytes(indexed),'indexed bytes vs',bytes(old),'expanded bytes; identical expanded surface attributes.');
+assert.equal(indexed.getAttribute('rockCavity'),undefined,'temporary cavity bake never reaches the GPU');
+// Shape changes must keep all seeded rocks closed, outward facing and inside
+// the established obstacle envelope; a single pretty fixture is insufficient.
+let globalMinimum=2,globalMaximum=0;
+for(let sample=0;sample<8;sample++){
+ let state=913+sample*729,calls=0;
+ const rng=()=>{calls++;state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;};
+ const g=erodedRock(0,0,0,1,.8,.9,rng),p=g.getAttribute('position'),n=g.getAttribute('normal');
+ assert.equal(calls,124,'erosion preserves scene random stream');
+ const edgeCounts=new Map(),positionKey=i=>[p.getX(i),p.getY(i),p.getZ(i)].map(v=>v.toFixed(5)).join(',');
+ for(let i=0;i<p.count;i++){
+  const x=p.getX(i),y=p.getY(i)/.8,z=p.getZ(i)/.9,r=Math.hypot(x,y,z);
+  globalMinimum=Math.min(globalMinimum,r);globalMaximum=Math.max(globalMaximum,r);
+  assert.ok(r>=.499&&r<1.18,'no collapsed core or growth beyond collision envelope');
+  assert.ok(x*n.getX(i)+y*n.getY(i)+z*n.getZ(i)>0,'no inverted cavity walls');
+ }
+ for(let i=0;i<g.index.count;i+=3)for(let j=0;j<3;j++){
+  const key=[positionKey(g.index.getX(i+j)),positionKey(g.index.getX(i+(j+1)%3))].sort().join('|');edgeCounts.set(key,(edgeCounts.get(key)||0)+1);
+ }
+ assert.ok([...edgeCounts.values()].every(n=>n===2),'eroded surface stays sealed across UV seams');
+ g.dispose();
+}
+console.log('Eight eroded shapes: closed surfaces, stable RNG, radial bounds',globalMinimum,globalMaximum);

@@ -9,7 +9,7 @@ const names:Record<Species,string>={tang:'Blue tang',yellow:'Yellow tang',clown:
 const descriptions:Record<Species,string>={tang:'A laterally compressed body lets this blue tang turn between reef structures. It alternates fin-powered cruising with short tail-driven bursts, exploring the open channel and rock edges.',yellow:'Watch the yellow tang cruise around the islands and pause near the rock. Tangs graze as well as take food from the water. Its paired fins work independently while the tail supplies extra thrust.',clown:'The two clownfish stay close to their host anemone. They make short foraging trips into the water and return to shelter, rather than joining the open-water school.',anthias:'These orange fish use the open water above the reef. Individuals keep changing position within their loose group, making short feeding trips and then returning toward shelter.',chromis:'The blue-green fish loosely associate above the reef. They keep individual spacing and change speed instead of swimming in a perfectly synchronized formation.',gramma:'This purple-and-yellow inhabitant keeps closer to the reef and its shelter. Watch for exploratory trips around the lower openings and retreating turns.'};
 const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},yellow:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.53,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'}};
 const v=(x:number,y:number,z=0)=>new T.Vector3(x,y,z);
-type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;pitch:number;clock:{value:number};effort:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string};
+type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;pitch:number;clock:{value:number};effort:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string;progressPosition:T.Vector3;progressAt:number;blockedTime:number;recoverUntil:number};
 export type Food={position:T.Vector3;alive:boolean;age:number};
 export class ReefFish{
  readonly fish:Fish[]=[];readonly foods:Food[]=[];readonly notes:T.Object3D[]=[];private clock=0;private seed=Math.random()*100;private templates=new Map<Species,T.Group>();private eatCount=0;private foodMesh:T.InstancedMesh;private dummy=new T.Object3D();
@@ -60,7 +60,7 @@ export class ReefFish{
     }});
     const size=specs[s].size*(.83+Math.random()*.17);group.scale.setScalar(size);group.userData.note={title:names[s],description:descriptions[s]};scene.add(group);this.notes.push(group);
     let position=this.destination(s,i);const radius=size*(s==='tang'||s==='yellow'?.4:.31);for(let attempt=0;attempt<500;attempt++){if(this.free(position,radius)&&this.fish.every(o=>position.distanceTo(o.position)>radius+o.radius+.06))break;position=this.destination(s,i);}
-    const fish:Fish={group,species:s,position,velocity:v(0,0,0),goal:position.clone(),radius:size*(s==='tang'||s==='yellow'?.4:.31),yaw:Math.random()*6.28,pitch:0,clock,effort,mouthOpening,gillOpening,respiration:Math.random()*Math.PI*2,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring'};group.position.copy(position);this.fish.push(fish);
+    const fish:Fish={group,species:s,position,velocity:v(0,0,0),goal:position.clone(),radius:size*(s==='tang'||s==='yellow'?.4:.31),yaw:Math.random()*6.28,pitch:0,clock,effort,mouthOpening,gillOpening,respiration:Math.random()*Math.PI*2,until:0,phase:Math.random()*6.28,pectoral:group.children.filter(o=>o.name==='pectoral') as T.Group[],mouth:group.getObjectByName('mouth') as T.Group,eyes:group.getObjectByName('eyes') as T.Group,mode:'exploring',progressPosition:position.clone(),progressAt:0,blockedTime:0,recoverUntil:0};group.position.copy(position);this.fish.push(fish);
    }
   }
  }
@@ -84,6 +84,21 @@ export class ReefFish{
   }
   return v((index%7-3)*.5,4.8,1.3);
  }
+ private planSwim(f:Fish,index:number,recover:boolean){
+  let chosen:T.Vector3|undefined;
+  if(!recover)for(let j=0;j<20;j++){const p=this.destination(f.species,index);if(p.distanceToSquared(f.position)>.36&&this.clearSegment(f.position,p,f.radius)){chosen=p;break;}}
+  if(!chosen){let best=-Infinity;
+   for(const reach of [.45,.85,1.4])for(let j=0;j<16;j++){
+    const angle=f.yaw+j*Math.PI/8,p=f.position.clone().add(v(Math.cos(angle)*reach,Math.sin(j*2.4+f.phase)*reach*.22,-Math.sin(angle)*reach));
+    if(!this.clearSegment(f.position,p,f.radius)||this.fish.some(o=>o!==f&&p.distanceToSquared(o.position)<(f.radius+o.radius+.06)**2))continue;
+    const score=reach+.3*Math.cos(angle-f.yaw)+.08*Math.sin(j+f.phase);
+    if(score>best){best=score;chosen=p;}
+   }
+  }
+  if(chosen)f.goal.copy(chosen);
+  f.until=this.clock+(recover?3:2+Math.random()*5);
+  f.mode=recover?'exploring':Math.random()<.16?'hovering':'exploring';
+ }
  feed(){
   if(this.foods.some(f=>f.alive))return false;
   this.foods.length=0;for(let i=0;i<36;i++)this.foods.push({position:v((Math.random()-.5)*3.2,4.95+Math.random()*.08,.8+(Math.random()-.5)*.9),alive:true,age:0});return true;
@@ -96,10 +111,11 @@ export class ReefFish{
    let target:Food|undefined,dist=Infinity;
    for(const food of this.foods)if(food.alive){const d=f.position.distanceToSquared(food.position);if(d<dist&&this.clearSegment(f.position,food.position,f.radius)){dist=d;target=food;}}
    if(target){f.goal.copy(target.position);f.mode='feeding';if(mouth.distanceTo(target.position)<.13){target.alive=false;this.eatCount++;f.until=now+.6;f.goal.copy(f.position).add(v(Math.cos(f.yaw)*.5,0,-Math.sin(f.yaw)*.5));}}
-   else if(now>f.until||f.position.distanceTo(f.goal)<.2){
-    for(let j=0;j<20;j++){const p=this.destination(f.species,i);if(this.clearSegment(f.position,p,f.radius)){f.goal.copy(p);break;}}
-    f.until=now+2+Math.random()*5;f.mode=Math.random()<.22?'hovering':'exploring';
-   }
+   else if(now>f.until||f.position.distanceTo(f.goal)<.2){this.planSwim(f,i,now<f.recoverUntil);}
+   // Monitor actual displacement, not commanded velocity: a blocked fish can
+   // still have a nonzero velocity and animated tail without getting anywhere.
+   if(f.position.distanceToSquared(f.progressPosition)>.025){f.progressPosition.copy(f.position);f.progressAt=now;}
+   else if(!target&&now-f.progressAt>2.4){f.recoverUntil=now+4;this.planSwim(f,i,true);f.progressAt=now;}
    const desired=f.goal.clone().sub(f.position);let speed=(f.species==='tang'||f.species==='yellow'?.47:.34)*(night?.42:1);
    speed*=.75+.35*Math.sin(now*.83+f.phase);if(f.mode==='hovering')speed*=.2;if(target)speed=1.2+(Math.sin(now*6+f.phase)+1)*.35;
    desired.normalize();
@@ -107,13 +123,21 @@ export class ReefFish{
    // Local separation and obstacle anticipation. Heading, rather than position,
    // turns gradually; a rejected swept step waits/replans instead of teleporting.
    for(const other of this.fish)if(other!==f){const d=f.position.clone().sub(other.position),l=d.length(),space=f.radius+other.radius+.22;if(l<space&&l>.0001)desired.addScaledVector(d,(space-l)/space/l*2.8);}
-   for(const o of this.obstacles){const x=f.position.x-o.center.x,y=f.position.y-o.center.y,z=f.position.z-o.center.z,limit=o.radius+f.radius+.38,d2=x*x+y*y+z*z;if(d2<limit*limit&&d2>.000001){const d=Math.sqrt(d2),gain=(limit-d)/.38/d*2;desired.x+=x*gain;desired.y+=y*gain;desired.z+=z*gain;}}
+   const avoidance=v(0,0,0);
+   for(const o of this.obstacles){const x=f.position.x-o.center.x,y=f.position.y-o.center.y,z=f.position.z-o.center.z,limit=o.radius+f.radius+.38,d2=x*x+y*y+z*z;if(d2<limit*limit&&d2>.000001){const d=Math.sqrt(d2),gain=(limit-d)/.38/d*2;avoidance.x+=x*gain;avoidance.y+=y*gain;avoidance.z+=z*gain;}}
+   // Summing dozens of overlapping rock/coral proxies used to overpower the
+   // route and trap a tang between opposing forces. Bound the combined force.
+   desired.add(avoidance.clampLength(0,.65));
    const wantedYaw=Math.atan2(-desired.z,desired.x),turn=Math.atan2(Math.sin(wantedYaw-f.yaw),Math.cos(wantedYaw-f.yaw));f.yaw+=T.MathUtils.clamp(turn,-dt*1.55,dt*1.55);
    const pitch=T.MathUtils.clamp(Math.atan2(desired.y,Math.hypot(desired.x,desired.z)),-.28,.28);f.pitch=T.MathUtils.damp(f.pitch,pitch,2.5,dt);
    speed*=Math.max(.17,Math.cos(turn));const forward=v(Math.cos(f.yaw)*Math.cos(f.pitch),Math.sin(f.pitch),-Math.sin(f.yaw)*Math.cos(f.pitch));f.velocity.lerp(forward.multiplyScalar(speed),1-Math.exp(-dt*3));
    const next=f.position.clone().addScaledVector(f.velocity,dt);
    const collision=this.fish.some(other=>other!==f&&next.distanceToSquared(other.position)<(f.radius+other.radius)**2);
-   if(!collision&&this.clearSegment(f.position,next,f.radius))f.position.copy(next);else{f.velocity.multiplyScalar(.65);f.until=0;}
+   if(!collision&&this.clearSegment(f.position,next,f.radius)){f.position.copy(next);f.blockedTime=Math.max(0,f.blockedTime-dt);}else{f.velocity.multiplyScalar(.65);f.blockedTime+=dt;
+    // Commit to an escape waypoint long enough to turn; never select a new
+    // random destination every rejected frame (the source of the quivering).
+    if(f.blockedTime>.65&&now>f.recoverUntil){f.recoverUntil=now+3;this.planSwim(f,i,true);f.blockedTime=0;}
+   }
    f.group.position.copy(f.position);f.group.rotation.set(0,f.yaw,f.pitch,'YXZ');f.clock.value+=dt*(.52+f.velocity.length()*1.65);f.effort.value=T.MathUtils.damp(f.effort.value,f.velocity.length(),5,dt);
    for(let j=0;j<f.pectoral.length;j++){const p=f.pectoral[j];p.position.z=p.userData.restZ+bodyBend(p.position.x,f.clock.value,f.effort.value);p.rotation.y=Math.sign(p.userData.restZ)*(.24+.20*Math.sin(now*(7+f.effort.value*5)+f.phase+j));p.rotation.x=Math.cos(now*6+f.phase+j)*.055;}
    // Activity modulates breathing smoothly, independent of tail-beat speed.

@@ -11,19 +11,37 @@ export function erodedRock(x:number,y:number,z:number,sx:number,sy:number,sz:num
   const theta=pick(0,Math.PI*2),vertical=pick(-.93,.93),horizontal=Math.sqrt(1-vertical*vertical);
   return {a:Math.cos(theta)*horizontal,b:vertical,c:Math.sin(theta)*horizontal,r:pick(.13,.30),depth:pick(.13,.31)};
  });
- const phase=x*2.31+y*3.17+z*1.73;
+ const phase=x*2.31+y*3.17+z*1.73,cavities=new Float32Array(p.count);
+ const chambers=pores.map((p,j)=>({...p,ca:Math.cos(phase+j*2.39996),sa:Math.sin(phase+j*2.39996),aspect:.65+.25*(.5+.5*Math.sin(j*3.71+phase)),strength:1.15+.25*Math.sin(j*2.1+phase)}));
  for(let i=0;i<p.count;i++){
   const a=p.getX(i),b=p.getY(i),c=p.getZ(i);
   let n=1+.095*Math.sin(a*5+c*3+phase)*Math.cos(b*6-a*2+phase*.7)
    +.055*Math.sin(c*13+b*9-phase)*Math.sin(a*11-b*4)
    +.022*Math.sin(a*37+c*29+phase)*Math.cos(b*33-phase);
-  // Eroded seams break smooth egg-shaped silhouettes without expanding bounds.
-  n-=.065*Math.pow(.5+.5*Math.sin(a*7+b*3+c*5+phase),6);
-  for(const pore of pores){
-   const d=((a-pore.a)**2+(b-pore.b)**2+(c-pore.c)**2)/(pore.r*pore.r);
-   if(d<1)n-=pore.depth*Math.pow(1-d,1.45);
+  // Dissolution follows intersecting weak layers. Broad cutaways interrupt the
+  // round boulder envelope; narrow flutes remain part of the same sealed mesh.
+  const seam=.5+.5*Math.sin(a*7+b*3+c*5+phase);
+  const cross=.5+.5*Math.sin(a*3-b*6+c*4-phase*.7);
+  n-=.15*Math.pow(seam,6)+.10*Math.pow(cross,8);
+  let erosion=0;
+  for(const pore of chambers){
+   const dx=a-pore.a,dy=b-pore.b,dz=c-pore.c,ca=pore.ca,sa=pore.sa;
+   // Both chambers fit inside 1.34r. Most surface vertices are far outside;
+   // reject those before evaluating the rotated asymmetric cavity profile.
+   if(dx*dx+dy*dy+dz*dz>pore.r*pore.r*1.8)continue;
+   // Asymmetric connected chambers, not identical circular dimples. These
+   // use no extra scene random numbers, preserving every coral placement seed.
+   const u=(dx*ca+dz*sa)/pore.r,v=dy/pore.r,w=(-dx*sa+dz*ca)/pore.r;
+   const aspect=pore.aspect;
+   const d=u*u+v*v/(aspect*aspect)+w*w;
+   const chamber=(u-.28)*(u-.28)*1.6+(v+.17)*(v+.17)*1.5+w*w;
+   const field=Math.min(d,chamber);
+   if(field<1){const t=1-field,lip=t*t*(3-2*t);erosion+=pore.depth*lip*pore.strength;}
   }
+  n-=erosion;cavities[i]=Math.min(1,erosion*2.8+Math.pow(seam,6)*.2);
   n=Math.max(.50,n);p.setXYZ(i,a*n*sx+x,b*n*sy+y,c*n*sz+z);
  }
+ // Temporary bake input: consumed by encrustRock, never sent to the GPU.
+ geometry.setAttribute('rockCavity',new T.BufferAttribute(cavities,1));
  geometry.computeVertexNormals();return geometry;
 }
