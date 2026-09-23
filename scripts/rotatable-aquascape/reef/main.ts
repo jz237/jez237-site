@@ -33,7 +33,7 @@ const fill=new T.DirectionalLight('#b1cbea',.45);fill.position.set(1,4,7);scene.
 const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);buildAquariumGlass(scene,reflections);
 const reef=buildReef(scene);
 const fishModels=await loadMarineModels().catch(error=>{document.querySelector('#loading')!.textContent='The fish models could not load. Please reload to try again.';throw error;});
-const fish=new ReefFish(scene,reef.obstacles,reef.anemone.behavior.hosts.map(h=>h.center),fishModels);
+const fish=new ReefFish(scene,reef.obstacles,reef.anemone.behavior.hosts.map(h=>h.center),fishModels,reef.anemone.behavior.hosts[0].scale);
 const reefDaylight={value:1};const fishShadows=new ReefFishShadows(fish,key.position,reefDaylight);scene.add(fishShadows.mesh);scene.add(reefSuspension(reefClock,reefDaylight));
 const applyOptics=(o:T.Object3D)=>{if(o instanceof T.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material])if(material instanceof T.MeshStandardMaterial)applyReefOptics(material,reefClock,reefDaylight);};
 reef.group.traverse(applyOptics);for(const inhabitant of fish.fish)inhabitant.group.traverse(applyOptics);

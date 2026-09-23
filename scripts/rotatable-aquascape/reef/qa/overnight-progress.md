@@ -568,3 +568,13 @@ Stop at the overnight cutoff or if verified realism is achieved earlier. Clearly
 - build:reef/check:reef passed: 4980ms ready, 36bites, zero sampled overlaps, breathing/fins/shadows, cameras, pause, identification, fullscreen and mobile. Every initial scene statistic exactly matches prior receipt. Rendered lighting fixture asserts no emission, stronger backlight response and reduced front-lobe energy; report anemone-lighting-rendered.json. Isolated contact motion sequence verifies folding, one swallowed morsel and recovery, with screenshots at0.2/1/3/5/8.5/15/25seconds.
 - Local alternating startup prior/current 4113/4162.5ms, uncapped 232.6/230.9FPS; normal samples about60FPS. Small-sample local measurements only. Preserve unchanged asset and geometry counts; no broad performance promise.
 - Visually inspected desktop/front/oblique/mobile and closeups/time sequence. Improvement strongest in macro, not proof of photographic realism. Further layered coral anatomy/material and scene light work remains. Existing automation stays active; onlyjez237/GitHub publication, no Hidden Reef/planted edits or paid services.
+
+
+## September23 - user-directed right host scale
+- Set aside unaccepted folded-plate trial in .qa-results/*folded-plate-wip and restored its source/tests to published d679 baseline. Trial underside remained too cardboard-like; not shipped. Resume coral work from accepted source, not rejected trial.
+- Right host anemone 25% larger; both clownfish 12% smaller; host excursion radii/heights scale with canopy. Existing meshes and all detail retained. Existing scene initial statistics exactly match d679 receipt. Smaller collision radii follow actual fish scale automatically. Main host routes expand with canopy, keeping inner shelter and outer excursions.
+- build:reef/check:reef passed: 4505ms ready, 39 bites, zero sampled overlaps, breathing/fins, pause, feeding, camera, lighting, mobile, randomized starts. Front/angle/mobile/anemone macro and motion sequence inspected against prior and reference.
+- Local alternating load prior/current 4493.5/4480.5ms, uncapped 175/159FPS. Same geometry/inhabitant counts; no claim about all devices.
+- Broader realism goal remains active. Reef-only publication to jez237/GitHub using full-site Functions-preserving wrapper; no Hidden Reef or planted changes.
+
+Performance interpretation: normal frame-capped alternating runs all remained about60 FPS. Uncapped results declined across the whole sequence (prior207.6 then142.4; current175.3 then142.7), so the175/159 averages are confounded by run-order/environment variation and do not isolate an effect of this scale change. No universal performance claim.

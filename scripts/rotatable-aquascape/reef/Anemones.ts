@@ -31,7 +31,7 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
   parts.push(g);
  }
  for(let k=0;k<3;k++){
-  const center=(k<2?hosts[k]:new T.Vector3(3.88,.52,1.73)).clone(),scale=k===0?1:k===1?.63:.46;
+  const center=(k<2?hosts[k]:new T.Vector3(3.88,.52,1.73)).clone(),scale=k===0?1.25:k===1?.63:.46;
   const ground=supportHeight(center);center.y=Math.min(center.y,ground+.10*scale);
   anatomy.push({center:center.clone(),scale,strands:[]});
   const base=new T.Color(k===2?'#65566b':'#655044'),shaft=new T.Color(k===2?'#ad7b99':'#777138'),tip=new T.Color(k===2?'#b6c9cf':'#78b875');

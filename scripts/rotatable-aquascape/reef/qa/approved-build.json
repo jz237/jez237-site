@@ -1,12 +1,12 @@
 {
-  "buildHash": "26e2eb064ab30a2495dbb873ef7c9e87e975b594e93f12a808e972d91444219d",
+  "buildHash": "1f7da392ff3566a768d924ab3c2a8b5eaacb06c335a93b9ffb3cbc707641760d",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-D7i0m1Ge.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-sXzj6NzO.js",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
     "assets/map-CwlJNp5D.png",
@@ -22,12 +22,12 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T22:37:41.916Z",
-  "readyMs": 4980,
+  "checkedAt": "2026-09-23T22:59:22.865Z",
+  "readyMs": 4505,
   "samples": [
     {
       "fps": 59.99999999999999,
-      "time": 5.929500000047694,
+      "time": 6.058299999952332,
       "bites": 5,
       "remaining": 37,
       "anemones": {
@@ -42,10 +42,10 @@
       }
     },
     {
-      "fps": 59.99700014999249,
-      "time": 9.946500000047708,
-      "bites": 27,
-      "remaining": 15,
+      "fps": 59.99400059994003,
+      "time": 10.075299999952321,
+      "bites": 30,
+      "remaining": 12,
       "anemones": {
         "captured": 0,
         "swallowed": 0,
@@ -58,81 +58,81 @@
       }
     },
     {
-      "fps": 59.99100134979755,
-      "time": 13.946900000047673,
-      "bites": 34,
-      "remaining": 6,
+      "fps": 59.99400059993998,
+      "time": 14.092299999952262,
+      "bites": 37,
+      "remaining": 5,
       "anemones": {
-        "captured": 2,
+        "captured": 0,
         "swallowed": 0,
-        "carried": 2,
+        "carried": 0,
         "fold": [
-          0.2,
-          0.2,
+          0,
+          0,
           0
         ]
       }
     },
     {
       "fps": 59.99400059993998,
-      "time": 17.963900000047612,
-      "bites": 36,
+      "time": 18.109299999952214,
+      "bites": 38,
       "remaining": 4,
       "anemones": {
-        "captured": 2,
+        "captured": 0,
         "swallowed": 0,
-        "carried": 2,
+        "carried": 0,
         "fold": [
-          0.2,
-          0.2,
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 22.109599999952128,
+      "bites": 38,
+      "remaining": 4,
+      "anemones": {
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
           0
         ]
       }
     },
     {
       "fps": 59.99400059993998,
-      "time": 21.980900000047534,
-      "bites": 36,
-      "remaining": 4,
+      "time": 26.12669999995204,
+      "bites": 39,
+      "remaining": 3,
       "anemones": {
-        "captured": 2,
-        "swallowed": 2,
+        "captured": 0,
+        "swallowed": 0,
         "carried": 0,
         "fold": [
-          0.19123959402007937,
-          0.19726543543465588,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.98800239952017,
-      "time": 25.99820000004743,
-      "bites": 36,
-      "remaining": 4,
-      "anemones": {
-        "captured": 2,
-        "swallowed": 2,
-        "carried": 0,
-        "fold": [
-          0.1257742546100641,
-          0.14198595431851843,
+          0,
+          0,
           0
         ]
       }
     },
     {
       "fps": 59.994000599940094,
-      "time": 30.01490000004731,
-      "bites": 36,
-      "remaining": 4,
+      "time": 30.14369999995195,
+      "bites": 39,
+      "remaining": 3,
       "anemones": {
-        "captured": 2,
-        "swallowed": 2,
+        "captured": 0,
+        "swallowed": 0,
         "carried": 0,
         "fold": [
-          0.04316940353949892,
-          0.05827558561879967,
+          0,
+          0,
           0
         ]
       }
@@ -400,10 +400,8 @@
     "oblique",
     "mobile",
     "anemone closeup",
-    "contact time sequence 0.2/3/8.5/25",
+    "anemone motion sequence",
     "original reef reference",
-    "GPT anemone reference",
-    "mature planted and original planted reference",
     "reference-comparison.md"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -412,7 +410,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Anemone thin-tissue light redistribution, measured per-strand optical width, slender curled gold/olive shafts and small mint tips. All 540 tentacles, geometry resolution, contact feeding and current motion preserved. Reference realism remains unfinished.",
+  "scope": "Right host anemone 25% larger; both clownfish 12% smaller; host excursion radii/heights scale with canopy. Existing meshes and all detail retained.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -450,10 +448,10 @@
     ]
   },
   "performanceComparison": {
-    "baseline": "9bb2871ca",
-    "loadPrior": 4113,
-    "loadCurrent": 4162.5,
-    "fpsPrior": 232.6,
-    "fpsCurrent": 230.9
+    "baseline": "d679bb87f",
+    "loadPrior": 4493.5,
+    "loadCurrent": 4480.5,
+    "fpsPrior": 175,
+    "fpsCurrent": 159
   }
 }
