@@ -132,3 +132,17 @@ No new render pass, draw group, image asset or triangle is required. The full
 scene still reports 3,671,150 triangles. Local QA: ready 1650 ms versus 1653 prior,
 approximately 60 FPS both; no evidence yet for other hardware. Reef resemblance
 has improved, but regular rock silhouettes and coral architecture remain gaps.
+
+## Coral growth and attached bases
+
+Primary branches now have individually varied shoulders, stronger taper, flared
+junctions and staggered lateral growth. Child thickness follows the supporting
+branch instead of a uniform fraction independent of attachment location. Fine
+rounded tips and corallite detail remain. These are artistic growth shapes, not
+a calibrated biological growth simulation or a watertight fused skeleton.
+
+Thin irregular basal tissue follows the actual rock surface. Steep gaps and
+disconnected lower-shelf fragments are excluded; the old flattened spherical
+support discs are removed. A slope/ledge regression checks attachment and outward
+normals. The temporary surface index is shared with the existing polyp attachment.
+No per-frame surface searches or new image assets are introduced.

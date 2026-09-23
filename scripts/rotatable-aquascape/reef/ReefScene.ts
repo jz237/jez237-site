@@ -57,11 +57,12 @@ export function buildReef(scene:T.Scene){
  for(const a of formations)rock(...a as [number,number,number,number,number,number]);
  // Temporary per-rock bounds keep attachment raycasts local; these are never rendered.
  const supports=rocks.map(g=>{g.computeBoundingSphere();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
+ const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
  const rockMesh=batch(rocks,rockMat,group,'Porous living reef rock')!;addNote(rockMesh,'The architecture of a reef','Open caves and water-filled spaces give fish shelter and routes between the reef islands. The rock carries irregular patches of coralline algae. Drag to look through the arches.');
  const branch=(x:number,y:number,z:number,size:number,hue:number)=>{
   const base=new T.Vector3(x,y,z);attachRay.set(new T.Vector3(x,y+.32,z),new T.Vector3(0,-1,0));attachRay.far=.95;
   const support=attachRay.intersectObjects(supports,false)[0];if(support)base.y=support.point.y-.012*size;
-  const colony=branchingColony(base,size,hue,random),center=base.clone().add(new T.Vector3(0,size*.47,0));let radiusSquared=0;
+  const colony=branchingColony(base,size,hue,random,(px,pz)=>surfaceLookup(px,base.y+.28*size,pz)?.point.y??null),center=base.clone().add(new T.Vector3(0,size*.47,0));let radiusSquared=0;
   for(const geometry of colony){const p=geometry.getAttribute('position');for(let i=0;i<p.count;i++)radiusSquared=Math.max(radiusSquared,(p.getX(i)-center.x)**2+(p.getY(i)-center.y)**2+(p.getZ(i)-center.z)**2);}
   corals.push(...colony);obstacles.push({center,radius:Math.sqrt(radiusSquared)+.015});
  };
@@ -76,7 +77,7 @@ export function buildReef(scene:T.Scene){
  const hosts=[new T.Vector3(3.05,1.21,.82),new T.Vector3(-3.62,.78,1.35)];
  const anemone=buildAnemones(hosts,reefClock,random,center=>{attachRay.set(center.clone().add(new T.Vector3(0,.08,0)),new T.Vector3(0,-1,0));attachRay.far=1.5;return attachRay.intersectObjects(supports,false)[0]?.point.y??center.y-.35;});group.add(anemone.mesh);
  addNote(anemone.mesh,'Shelter in the tentacles','A central oral disc is surrounded by fleshy tentacles; a basal foot anchors the animal to the reef. Flow bends the tentacles progressively toward their tips. The clownfish make short foraging trips and return to their host. This is an artistic motion study, not a measured fluid simulation.');
- const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
+
  const gardens:T.BufferGeometry[]=[],polypStats={polyps:0,tentacles:0,maxAttachmentError:0};
  const colonies:[number,number,number,number,'zoanthid'|'stony'][]=[[-3.23,.48,1.81,.5,'zoanthid'],[2.18,.7,1.63,.56,'zoanthid'],[-2.4,1.08,.64,.32,'zoanthid'],[1.12,2.76,-.39,.31,'zoanthid'],[-2.42,2.09,.03,.38,'stony'],[-3.47,1.37,.64,.37,'stony'],[-2.2,.67,.97,.29,'stony'],[1.31,2.94,-.34,.37,'stony'],[2.45,1.72,.3,.42,'stony'],[3.79,.74,1.15,.32,'stony'],[.91,1.17,-.06,.28,'stony']];
  for(const [x,y,z,r,kind] of colonies){
