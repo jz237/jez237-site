@@ -17,7 +17,9 @@ if (!rel || (!rel.startsWith('..') && !isAbsolute(rel))) {
 for (const path of ['_headers', 'index.html', 'demos/philadelphia-relief/index.html']) {
   if (!existsSync(resolve(stage, path))) throw new Error(`Upload directory is missing ${path}.`);
 }
-const wrangler = createRequire(import.meta.url).resolve('wrangler/bin/wrangler.js');
+const wranglerPackage = createRequire(import.meta.url).resolve('wrangler/package.json');
+const wrangler = resolve(dirname(wranglerPackage),
+  JSON.parse(readFileSync(wranglerPackage, 'utf8')).bin.wrangler);
 const env = { ...process.env, CF_PAGES_BRANCH: 'main',
   CLOUDFLARE_ACCOUNT_ID: 'ac73a259dff5a3cbeccbb78824ac0db6' };
 function run(command, args) {
