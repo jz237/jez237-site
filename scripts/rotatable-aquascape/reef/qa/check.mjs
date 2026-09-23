@@ -25,6 +25,7 @@ try{
  await page.getByRole('button',{name:'Full screen',exact:true}).click();assert.equal(await page.locator('#fullscreen').getAttribute('aria-pressed'),'true');await page.getByRole('button',{name:'Exit full screen',exact:true}).click();
  await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  const canvas=await page.locator('canvas').boundingBox();await page.mouse.click(canvas.x+canvas.width*.29,canvas.y+canvas.height*.64);assert.ok(await page.locator('#detail').isVisible(),'rock identification should open');await page.getByRole('button',{name:'Close detail',exact:true}).click();
+ await page.evaluate(()=>window.reefQA.inspectCorals());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'coral-closeup.png')});await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(500);await page.screenshot({path:resolve(out,'mobile.png')});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
  const mobileCanvas=await page.locator('canvas').boundingBox();assert.ok(mobileCanvas.width<=390&&mobileCanvas.x>=0,'canvas must fit the phone width');
  const mobileControl=await page.locator('#feed').boundingBox();assert.ok(mobileControl.x>=0&&mobileControl.x+mobileControl.width<=390&&mobileControl.y+mobileControl.height<844,'feeding remains visible on phone');
@@ -34,6 +35,6 @@ try{
  assert.deepEqual(errors,[]);report.checks={loading:true,feeding:true,spacing:true,obstacles:true,pause:true,camera:true,lighting:true,fullscreen:true,identification:true,mobile:true,randomized:true};
  report.initial={triangles:initial.triangles,inhabitants:initial.fish};
  // Planted navigation mounts independently of the shared freshwater renderer.
- await page.goto('http://127.0.0.1:5241/demos/rotatable-aquascape/');await page.getByRole('link',{name:'Coral reef PREVIEW'}).waitFor({timeout:60000});assert.equal(await page.locator('.reef-preview-link').count(),1);assert.equal(await page.locator('.reef-preview-link').getAttribute('href'),'../reef-aquarium/');
+ await page.goto('http://127.0.0.1:5241/demos/rotatable-aquascape/');await page.locator('.reef-preview-link').waitFor({timeout:60000});assert.equal(await page.locator('.reef-preview-link').count(),1);assert.equal(await page.locator('.reef-preview-link').getAttribute('href'),'../reef-aquarium/');const reefLink=await page.locator('.reef-preview-link').boundingBox();assert.ok(reefLink.x>=0&&reefLink.x+reefLink.width<=390,'reef selector fits the phone');
  console.log(JSON.stringify(report,null,2));writeFileSync(resolve(out,'results.json'),JSON.stringify(report,null,2)+'\n');
 }finally{await browser?.close();await new Promise(r=>server.close(r));}

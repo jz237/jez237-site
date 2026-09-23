@@ -1,4 +1,6 @@
 import * as T from 'three';
+import {limestoneMaps} from './ReefMaterials.ts';
+import {branchingColony,platingColony} from './CoralMorphology.ts';
 import {mergeVertices,mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 export type Obstacle={center:T.Vector3;radius:number};
@@ -15,7 +17,10 @@ function texture(kind:'rock'|'sand'|'coral'){
  }
  ctx.putImageData(im,0,0);
  if(kind==='rock')for(let i=0;i<4100;i++){const x=random()*512,y=random()*512,r=pick(.4,5);ctx.fillStyle=i%3===0?'#634d6680':i%3===1?'#252d25a0':'#99916b60';ctx.beginPath();ctx.ellipse(x,y,r,r*.6,random()*6.28,0,6.28);ctx.fill();}
- if(kind==='coral')for(let y=4;y<512;y+=12)for(let x=4;x<512;x+=12){ctx.strokeStyle='#565445';ctx.lineWidth=1.5;ctx.beginPath();ctx.arc(x+(y%24?5:0),y,2,0,6.28);ctx.stroke();ctx.fillStyle='#e4dec9';ctx.fillRect(x-1,y-3,2,2);}
+ if(kind==='coral')for(let i=0;i<2500;i++){
+  const x=random()*512,y=random()*512,r=pick(.6,1.9);ctx.strokeStyle='#938d7a';ctx.lineWidth=pick(.35,.7);ctx.beginPath();ctx.ellipse(x,y,r,r*pick(.65,1),random()*6.28,0,6.28);ctx.stroke();
+  ctx.fillStyle='#e9e2cb';ctx.beginPath();ctx.arc(x-r*.35,y-r*.7,r*.4,0,6.28);ctx.fill();
+ }
  const t=new T.CanvasTexture(c);t.colorSpace=T.SRGBColorSpace;t.wrapS=t.wrapT=T.RepeatWrapping;t.anisotropy=8;return t;
 }
 function colored(g:T.BufferGeometry,color:T.Color,variation=.1){
@@ -33,19 +38,20 @@ function batch(geometries:T.BufferGeometry[],material:T.Material,parent:T.Group,
 }
 export function buildReef(scene:T.Scene){
  const group=new T.Group();scene.add(group);const obstacles:Obstacle[]=[],notes:T.Object3D[]=[];
- const rockTex=texture('rock'),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
- const rockMat=new T.MeshStandardMaterial({map:rockTex,bumpMap:rockTex,bumpScale:.07,roughness:.97,vertexColors:true});
+ const rockMaps=limestoneMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
+ const rockMat=new T.MeshStandardMaterial({...rockMaps,normalScale:new T.Vector2(.9,.9),roughness:.96,vertexColors:true});
  const coralMat=new T.MeshStandardMaterial({map:coralTex,bumpMap:coralTex,bumpScale:.018,roughness:.76,vertexColors:true});
  const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],soft:T.BufferGeometry[]=[],polyps:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
  const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number)=>{
   const original=new T.IcosahedronGeometry(1,22);original.deleteAttribute('normal');const geo=mergeVertices(original),p=geo.getAttribute('position');original.dispose();
-  for(let i=0;i<p.count;i++){const a=p.getX(i),b=p.getY(i),c=p.getZ(i);const n=1+.14*Math.sin(a*8+c*4)*Math.cos(b*9-a*2)+.045*Math.sin(c*24+b*19)*Math.sin(a*22-b*6)+.012*Math.sin(a*67+c*51)*Math.cos(b*61);p.setXYZ(i,a*n*sx+x,b*n*sy+y,c*n*sz+z);}
-  geo.computeVertexNormals();const surface=colored(geo,new T.Color('#adad92'),.12),sp=surface.getAttribute('position'),sc=surface.getAttribute('color');
-  for(let i=0;i<sp.count;i++){
-   const a=sp.getX(i),b=sp.getY(i),c=sp.getZ(i),patch=Math.sin(a*9+b*6)*Math.sin(c*11+b*5)+Math.sin(a*21-c*15)*.3;
-   const color=new T.Color(patch>.4?'#af7eac':patch<-.5?'#98a264':patch<-.2?'#b7a079':'#acb6a1');color.multiplyScalar(.88+.13*Math.sin(a*47+b*39+c*31));sc.setXYZ(i,color.r,color.g,color.b);
-  }rocks.push(surface);
+  const pores=Array.from({length:31},()=>{const theta=pick(0,Math.PI*2),vertical=pick(-.93,.93),horizontal=Math.sqrt(1-vertical*vertical);return {a:Math.cos(theta)*horizontal,b:vertical,c:Math.sin(theta)*horizontal,r:pick(.1,.25),depth:pick(.025,.095)};});
+  for(let i=0;i<p.count;i++){
+   const a=p.getX(i),b=p.getY(i),c=p.getZ(i);let n=1+.12*Math.sin(a*8+c*4)*Math.cos(b*9-a*2)+.04*Math.sin(c*24+b*19)*Math.sin(a*22-b*6)+.014*Math.sin(a*67+c*51)*Math.cos(b*61);
+   for(const pore of pores){const d=((a-pore.a)**2+(b-pore.b)**2+(c-pore.c)**2)/(pore.r*pore.r);if(d<1)n-=pore.depth*(1-d)**2;}
+   p.setXYZ(i,a*n*sx+x,b*n*sy+y,c*n*sz+z);
+  }
+  geo.computeVertexNormals();const surface=colored(geo,new T.Color('#ebdfc9'),.06);rocks.push(surface);
   // Conservative cluster of collision volumes follows the irregular rock rather than one island-sized ball.
   const r=Math.min(sx,sy,sz)*1.16;obstacles.push({center:new T.Vector3(x,y,z),radius:r});
   for(const [axis,size] of [[0,sx],[1,sy],[2,sz]] as const)if(size>r*1.2)for(const sign of [-1,1]){const center=new T.Vector3(x,y,z);center.setComponent(axis,center.getComponent(axis)+sign*(size-r)*.85);obstacles.push({center,radius:r});}
@@ -54,38 +60,21 @@ export function buildReef(scene:T.Scene){
  const formations=[[-3.6,.63,.15,.91,.55,.93],[-2.45,.55,-.6,.87,.48,.9],[-3.85,1.27,-.45,.64,.78,.72],[-2.05,1.13,-.6,.62,.75,.72],[-2.97,1.92,-.5,1.13,.57,.76],[-2.9,2.45,-.73,.82,.62,.76],[-3.1,2.91,-.95,.6,.56,.57],[-3.9,.5,1.38,.72,.39,.58],[-2.42,.51,1.45,.68,.4,.6],[-1.81,.35,-1.38,.65,.26,.52],
  [1.25,.66,-.42,.81,.59,.83],[3.35,.64,-.05,1,.6,.91],[3.25,1.4,-.72,.77,.82,.84],[1.01,1.45,-.75,.68,.78,.78],[1.68,2.35,-.81,1.12,.7,.8],[2.05,3.01,-.91,.83,.67,.74],[1.64,3.44,-1.02,.63,.49,.62],[3.4,2.11,-.82,.74,.58,.72],[3.98,.91,.65,.57,.67,.74],[2.25,.58,1.36,.88,.48,.6],[3.74,.5,1.52,.67,.42,.63],[.66,.36,1.42,.58,.22,.55],[3.99,2.09,-1.31,.56,.72,.53]];
  for(const a of formations)rock(...a as [number,number,number,number,number,number]);
+ // Temporary per-rock bounds keep attachment raycasts local; these are never rendered.
+ const supports=rocks.map(g=>{g.computeBoundingSphere();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const rockMesh=batch(rocks,rockMat,group,'Porous living reef rock')!;addNote(rockMesh,'The architecture of a reef','Open caves and water-filled spaces give fish shelter and routes between the reef islands. The rock carries irregular patches of coralline algae. Drag to look through the arches.');
  const branch=(x:number,y:number,z:number,size:number,hue:number)=>{
-  const base=new T.Vector3(x,y,z),color=new T.Color().setHSL(hue,.46,.61);
-  for(let b=0;b<11;b++){
-   const a=b*2.399+random(),reach=pick(.3,.72)*size,h=pick(.46,.93)*size,tip=base.clone().add(new T.Vector3(Math.cos(a)*reach,h,Math.sin(a)*reach));
-   const mid=base.clone().lerp(tip,.5);mid.y+=.07*size;
-   corals.push(tube([base,mid,tip],.079*size,color,12,9));
-   for(let j=0;j<6;j++){
-    const t=.2+j*.133,root=base.clone().lerp(tip,t),angle=a+j*2.4,side=pick(.18,.33)*size;
-    const end=root.clone().add(new T.Vector3(Math.cos(angle)*side,pick(.13,.29)*size,Math.sin(angle)*side));
-    corals.push(tube([root,root.clone().lerp(end,.55),end],.038*size,color.clone().lerp(new T.Color('#eadedc'),t*.35),4,6));
-    const bud=new T.SphereGeometry(.026*size,7,5);bud.translate(end.x,end.y,end.z);corals.push(colored(bud,new T.Color('#dad2e5').lerp(color,.5)));
-    if(j>1)for(const sign of [-1,1]){
-     const fork=root.clone().lerp(end,.66),tip=end.clone().add(new T.Vector3(Math.cos(angle+sign*.8)*.10*size,.09*size,Math.sin(angle+sign*.8)*.10*size));
-     corals.push(tube([fork,tip],.021*size,color.clone().lerp(new T.Color('#e5ddd2'),.2),4,6));
-    }
-   }
-  }
-  obstacles.push({center:base.clone().add(new T.Vector3(0,size*.47,0)),radius:size*.8});
+  const base=new T.Vector3(x,y,z);attachRay.set(new T.Vector3(x,y+.32,z),new T.Vector3(0,-1,0));attachRay.far=.95;
+  const support=attachRay.intersectObjects(supports,false)[0];if(support)base.y=support.point.y-.012*size;
+  const colony=branchingColony(base,size,hue,random),center=base.clone().add(new T.Vector3(0,size*.47,0));let radiusSquared=0;
+  for(const geometry of colony){const p=geometry.getAttribute('position');for(let i=0;i<p.count;i++)radiusSquared=Math.max(radiusSquared,(p.getX(i)-center.x)**2+(p.getY(i)-center.y)**2+(p.getZ(i)-center.z)**2);}
+  corals.push(...colony);obstacles.push({center,radius:Math.sqrt(radiusSquared)+.015});
  };
  for(const b of [[-3.12,3.24,-.95,1,.94],[-3.92,2.55,-.6,.8,.025],[-2.37,2.83,-.7,.72,.22],[-3.45,2.83,-.25,.82,.81],[-1.94,1.61,-.63,.63,.47],[-3.89,1.23,1.06,.5,.2],[-2.11,.63,1.61,.51,.025],[-4.27,.72,.56,.63,.28],[-1.48,.57,-1.46,.55,.8],
  [1.69,3.76,-1.06,1.07,.84],[2.3,3.41,-.74,.95,.96],[1.02,3.22,-.5,.83,.23],[2.87,2.7,-.81,.82,.075],[3.69,2.43,-1.1,.94,.81],[3.72,1.32,.88,.8,.03],[4.15,1.5,.1,.6,.23],[1.1,1.13,.5,.52,.92],[.64,.55,1.58,.55,.025],[2.85,.87,1.42,.44,.21],[3.45,.65,1.77,.39,.82]])branch(...b as [number,number,number,number,number]);
  const plate=(x:number,y:number,z:number,r:number)=>{
-  const geo=new T.BufferGeometry(),pos:number[]=[],colors:number[]=[],uv:number[]=[],idx:number[]=[];const rings=14,sides=100;
-  for(let j=0;j<=rings;j++)for(let i=0;i<=sides;i++){
-   const a=i/sides*Math.PI*2,t=j/rings,rr=r*t*(1+.055*Math.sin(a*7)+.035*Math.cos(a*13)),edge=t**6;
-   pos.push(x+Math.cos(a)*rr,y+.17*t*t+.045*Math.sin(a*9)*t*t+.03*Math.sin(a*27)*edge,z+Math.sin(a)*rr*.76);
-   const c=new T.Color('#da725d').lerp(new T.Color('#ffd9b8'),edge*.86);const ridges=.8+.2*Math.cos(a*62+t*9);colors.push(c.r*ridges,c.g*ridges,c.b*ridges);uv.push(i/sides*8,t*3);
-   if(j<rings&&i<sides){const n=j*(sides+1)+i;idx.push(n,n+sides+1,n+1,n+1,n+sides+1,n+sides+2);}
-  }
-  geo.setAttribute('position',new T.Float32BufferAttribute(pos,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setIndex(idx.map((n,i)=>i%3===1?idx[i+1]:i%3===2?idx[i-1]:n));geo.computeVertexNormals();corals.push(geo.toNonIndexed());
-  for(let dx=-r;dx<=r;dx+=.18)for(let dz=-r*.76;dz<=r*.76;dz+=.18)if((dx/r)**2+(dz/(r*.76))**2<1.05)obstacles.push({center:new T.Vector3(x+dx,y+.1+.14*(dx*dx+dz*dz)/(r*r),z+dz),radius:.13});
+  corals.push(platingColony(x,y,z,r,random()*Math.PI*2));
+  for(let dx=-r*1.2;dx<=r*1.2;dx+=.18)for(let dz=-r*.92;dz<=r*.92;dz+=.18)if((dx/r)**2+(dz/(r*.76))**2<1.46)obstacles.push({center:new T.Vector3(x+dx,y+.045+.065*(dx*dx+dz*dz)/(r*r),z+dz),radius:.12});
  };
  plate(-3,1.98,.43,1.08);plate(-2.77,1.77,.62,.8);plate(2.4,2.52,.1,1.05);plate(1.62,2.4,-.07,.65);plate(1.26,.81,.95,.68);
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');

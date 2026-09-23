@@ -19,6 +19,12 @@ and its shared freshwater biology/chemistry bundles are unchanged.
 The small jez237-only selector is maintained by `scripts/reef_navigation.mjs`.
 Shared aquarium rebuilds preserve it without adding it to either Hidden Reef copy.
 
+## Current visual pass
+
+Irregular forked coral with rounded growth tips, rock-attached bases, closed thin
+plate skeletons, and procedural limestone albedo/normal/roughness maps. The QA
+run includes a close-up capture for checking tissue detail as well as full views.
+
 ## Rendering and behavior
 
 Shared water, glass, contact shading, adaptive effects and reflection scheduling.
