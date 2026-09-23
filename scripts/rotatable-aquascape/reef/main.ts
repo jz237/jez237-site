@@ -4,7 +4,7 @@ import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 import {RoomEnvironment} from 'three/addons/environments/RoomEnvironment.js';
 import {AquariumWater} from '../lib/AquariumWater.ts';
 import {buildAquariumGlass} from '../lib/AquariumGlass.ts';
-import {ReflectionPool} from '../lib/ReflectionPool.ts';
+import {ReefReflections} from './ReefReflections.ts';
 import {AquariumLighting} from '../lib/AquariumLighting.ts';
 import {CaptureScheduler} from '../lib/CaptureScheduler.ts';
 import {AdaptiveEffects,effectProfiles} from '../lib/AdaptiveEffects.ts';
@@ -20,14 +20,14 @@ const scene=new T.Scene();scene.background=new T.Color('#051525');scene.fog=new 
 const renderer=new T.WebGLRenderer({antialias:false,alpha:false,powerPreference:'high-performance',depth:false});
 renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.toneMapping=T.ACESFilmicToneMapping;renderer.toneMappingExposure=1.03;
 renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;renderer.shadowMap.autoUpdate=false;
-container.appendChild(renderer.domElement);const camera=new T.PerspectiveCamera(31,1,.1,120);camera.position.set(0,4.05,17.7);
+container.appendChild(renderer.domElement);const camera=new T.PerspectiveCamera(31,1,.1,120);camera.position.set(0,3.25,17.7);
 const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,2.67,0);controls.enableDamping=true;controls.dampingFactor=.08;controls.minDistance=7;controls.maxDistance=30;controls.minPolarAngle=.52;controls.maxPolarAngle=1.69;controls.maxAzimuthAngle=1.75;controls.minAzimuthAngle=-1.75;controls.enablePan=false;
 const env=new T.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=env.fromScene(room,.04).texture;scene.environmentIntensity=.24;room.dispose();env.dispose();
 const ambient=new T.HemisphereLight('#b1d5ff','#202c43',.48);scene.add(ambient);
 const key=new T.SpotLight('#c5d9ff',190,26,.91,.52,1.7);key.position.set(-1.8,7.2,.15);key.target.position.set(-1,1,0);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.bias=-.00015;key.shadow.normalBias=.018;scene.add(key,key.target);
 const blue=new T.SpotLight('#5289ff',170,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
 const fill=new T.DirectionalLight('#96b9f3',.46);fill.position.set(1,4,7);scene.add(fill);
-const reflections=new ReflectionPool(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);buildAquariumGlass(scene,reflections);
+const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);buildAquariumGlass(scene,reflections);
 const reef=buildReef(scene);
 const fishModels=await loadMarineModels().catch(error=>{document.querySelector('#loading')!.textContent='The fish models could not load. Please reload to try again.';throw error;});
 const fish=new ReefFish(scene,reef.obstacles,reef.hosts,fishModels);
@@ -59,13 +59,13 @@ const resize=()=>{const {width,height}=container.getBoundingClientRect();rendere
  // Frame tank itself, rather than header/footer already outside this canvas.
  const vfov=2*Math.atan(Math.max(3.52,5.9/camera.aspect)/17.7)*180/Math.PI;camera.fov=Math.max(24,vfov);camera.updateProjectionMatrix();lighting.resize(Math.round(width*renderer.getPixelRatio()),Math.round(height*renderer.getPixelRatio()));scheduler.invalidate();};
 new ResizeObserver(resize).observe(container);resize();
-function applyEffects(){const p=effectProfiles[effectMode==='full'?0:adaptive.level];lighting.setEffects(p.aoScale,p.contact,p.samples);reflections.setEffects(p.reflectionScale,p.samples);water.advancedReflections.value=p.waterTrace?1:0;scheduler.invalidate();$('#effects option[value="auto"]').textContent=`Auto \u00b7 ${p.name.toLowerCase()}`;}
+function applyEffects(){const p=effectProfiles[effectMode==='full'?0:adaptive.level];lighting.setEffects(p.aoScale,p.contact,p.samples);water.advancedReflections.value=p.waterTrace?1:0;reflections.setEffects(p.reflectionScale,p.samples);scheduler.invalidate();$('#effects option[value="auto"]').textContent=`Auto \u00b7 ${p.name.toLowerCase()}`;}
 $('#effects').addEventListener('change',e=>{effectMode=(e.target as HTMLSelectElement).value;adaptive.reset();applyEffects();});
 $('#feed').onclick=()=>{if(paused){paused=false;$('#pause').textContent='Pause';$('#pause').setAttribute('aria-pressed','false');}if(fish.feed())$('#status').textContent='Feeding \u00b7 Watch for individual approaches and bites';};
 $('#pause').onclick=()=>{paused=!paused;$('#pause').textContent=paused?'Resume':'Pause';$('#pause').setAttribute('aria-pressed',String(paused));};
 $('#light').onclick=()=>{night=!night;$('#light').textContent=night?'Daylight':'Blue hour';$('#light').setAttribute('aria-pressed',String(night));revision++;};
 installFullscreen(app,$<HTMLButtonElement>('#fullscreen'));
-for(const button of Array.from(document.querySelectorAll<HTMLButtonElement>('[data-view]')))button.onclick=()=>{controls.target.set(0,2.67,0);controls.minDistance=7;document.querySelector('[data-view].active')?.classList.remove('active');button.classList.add('active');cameraGoal=new T.Vector3(...(button.dataset.view==='angle'?[11,6,17.5]:button.dataset.view==='side'?[20,4,4]:[0,4.05,17.7]) as [number,number,number]);};
+for(const button of Array.from(document.querySelectorAll<HTMLButtonElement>('[data-view]')))button.onclick=()=>{controls.target.set(0,2.67,0);controls.minDistance=7;document.querySelector('[data-view].active')?.classList.remove('active');button.classList.add('active');cameraGoal=new T.Vector3(...(button.dataset.view==='angle'?[11,6,17.5]:button.dataset.view==='side'?[20,4,4]:[0,3.25,17.7]) as [number,number,number]);};
 controls.addEventListener('start',()=>{cameraGoal=null;});
 const raycaster=new T.Raycaster(),pointer=new T.Vector2();let down=[0,0];renderer.domElement.addEventListener('pointerdown',e=>{down=[e.clientX,e.clientY];});
 renderer.domElement.addEventListener('pointerup',e=>{

@@ -349,3 +349,24 @@ Regression checks cover pinned insertions across all six body profiles and1,800
 sloped tissue samples against independently displaced tangent vectors. This is
 procedural animation, not a measured biomechanical model. Additional gradient
 buffers use553,392bytes across six shared templates; no new maps or passes.
+
+
+## Reef surface reflections
+
+The front camera sits closer to tank mid-height, exposing more of the rippled
+underside. The reef adapter strengthens the same three broad crossing waves in
+both vertex displacement and analytic normals; fine-wave filtering and the
+narrow glass meniscus remain unchanged. This is a procedural circulation field,
+not a fluid solver. Freshwater wave shaders are untouched.
+
+ReefReflections extends only the underside water capture vertically by50%,
+using1024x1536 at full quality to preserve the existing pixels per view angle.
+The original narrow planar capture excluded some scenery reached by the bent
+reflection rays. The existing depth search can now find more of that geometry,
+without inventing reflected coral or painting a surface texture. Camera objects
+are reused; adaptive capture resolution/MSAA/scheduling continue to apply.
+The extra vertical area is dropped when automatic effects disable depth tracing,
+and restored when full effects return. Above-water and glass captures remain unchanged. This adds render-target area
+and memory, not a new render pass or model/texture download. Geometry counts,
+organisms and source textures are retained. Regression checks cover projection,
+view-camera isolation, density, reuse and adaptive target resizing.
