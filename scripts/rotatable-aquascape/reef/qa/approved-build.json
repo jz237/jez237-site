@@ -1,11 +1,11 @@
 {
-  "buildHash": "649991f28c8e93603c316b60f25456891237ddf78eeec82d936c8f7fb7d7aadc",
+  "buildHash": "4dbcff7b851ac5f57ddcb8a8dc1e7c0aad7c040dc8c70d1a2bd2db72806e37a2",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-BRwwmCMW.js",
+    "assets/index-Bg1M5v8v.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T15:47:35.570Z",
-  "readyMs": 2672,
+  "checkedAt": "2026-09-23T16:15:41.905Z",
+  "readyMs": 2411,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 6.11240000000001,
-      "bites": 17,
-      "remaining": 19
+      "fps": 59.99100134979755,
+      "time": 6.17589999990465,
+      "bites": 22,
+      "remaining": 14
     },
     {
       "fps": 59.99400059994003,
-      "time": 10.12939999999999,
+      "time": 10.19289999990463,
+      "bites": 35,
+      "remaining": 1
+    },
+    {
+      "fps": 59.98800239952005,
+      "time": 14.193399999904583,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999249,
-      "time": 14.146299999999945,
+      "fps": 59.99400059993998,
+      "time": 18.21029999990453,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.994000599940094,
-      "time": 18.14669999999988,
+      "time": 22.21059999990444,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 26.22759999990434,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 22.163699999999817,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 26.18069999999974,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993988,
-      "time": 30.197899999999613,
+      "time": 30.24459999990425,
       "bites": 36,
       "remaining": 0
     }
@@ -218,8 +218,8 @@
     "three-quarter",
     "side",
     "mobile",
-    "coral-closeup",
-    "two anemone/clown movement frames",
+    "anemone-closeup",
+    "four rendered motion frames",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -228,7 +228,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Fuller volumetric coral colonies with staggered attached lower scaffolds and fine forks; isolated deterministic growth stream preserves existing scene placements. Same model/texture assets and render passes. Comparative photographic quality remains unmet.",
+  "scope": "Anemone tissue anatomy: slender shafts and individually inflated distal lobes with radius-proportioned rounded closures; regional pigment, filtered rest-space skin detail and restrained backlit tissue shading. Same geometry buffers, models, textures and render passes. Photographic comparative target remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -266,9 +266,9 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 2643.5,
-    "loadCurrent": 2735.8,
-    "fpsPrior": 254.4,
-    "fpsCurrent": 251.1
+    "loadPrior": 2512.5,
+    "loadCurrent": 2545.5,
+    "fpsPrior": 154,
+    "fpsCurrent": 154.6
   }
 }

@@ -43,9 +43,13 @@ const strands=new Map();for(let i=0;i<p.count;i++)if(flex.getW(i)>0){const phase
 const rootHeights=[];
 for(const ids of [...strands.values()].slice(0,180))rootHeights.push(ids.slice(0,8).reduce((sum,i)=>sum+p.getY(i),0)/8);
 assert.ok(Math.max(...rootHeights)-Math.min(...rootHeights)>.15,'tentacle attachments follow the raised and lowered disc folds');
-let worstDot=1,minDeterminant=Infinity;
+let worstDot=1,minDeterminant=Infinity;const lobeRatios=[];
 for(const ids of strands.values()){
  const centers=[];for(let row=0;row<19;row++){const center=new T.Vector3();for(let j=0;j<8;j++)center.add(new T.Vector3().fromBufferAttribute(p,ids[row*9+j]));centers.push(center.multiplyScalar(1/8));}
+ const ringRadius=row=>ids.slice(row*9,row*9+8).reduce((sum,i)=>sum+new T.Vector3().fromBufferAttribute(p,i).distanceTo(centers[row]),0)/8;
+ const capAspect=centers[14].distanceTo(centers[18])/ringRadius(14);
+ assert.ok(capAspect>.90&&capAspect<1.08,'cap rounds over within one tissue radius instead of an elongated beak: '+capAspect);
+ lobeRatios.push(ringRadius(14)/ringRadius(8));
  for(let row=1;row<18;row++){
   const i=ids[row*9],axis=decode(i),a=flex.getX(i)-flex.getX(ids[(row-1)*9]),b=flex.getX(ids[(row+1)*9])-flex.getX(i);
   const direction=centers[row].clone().sub(centers[row-1]).multiplyScalar(b/a).addScaledVector(centers[row+1].clone().sub(centers[row]),a/b).normalize();worstDot=Math.min(worstDot,axis.dot(direction));
@@ -59,5 +63,6 @@ for(const ids of strands.values()){
  }
 }
 assert.ok(worstDot>.97,'compressed axis follows curved tissue: '+worstDot);assert.ok(minDeterminant>.4,'sampled motion does not fold the local deformation inside out: '+minDeterminant);
+assert.ok(Math.max(...lobeRatios)-Math.min(...lobeRatios)>.4,'slender and inflated tentacles keep individual anatomical variation');
 console.log('Curved tissue shading passed: axis alignment',worstDot,'minimum sampled deformation determinant',minDeterminant);
 mesh.geometry.dispose();mesh.material.dispose();
