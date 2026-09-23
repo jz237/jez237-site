@@ -1,12 +1,12 @@
 {
-  "buildHash": "2ed2a7d573468f33a845485db5c2021a15c25fe4ad327e1e6cce799f8fe689a1",
+  "buildHash": "3814b99d2e4b77db942b2e0d700c5caca0cedb5fd45ffa3718877d26e095f8c6",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
     "assets/index-DdD2V56_.css",
-    "assets/index-qe8otnOa.js",
+    "assets/index-hG-UAoNx.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T20:14:17.529Z",
-  "readyMs": 4027,
+  "checkedAt": "2026-09-23T20:34:06.830Z",
+  "readyMs": 3966,
   "samples": [
     {
       "fps": 59.99400059993998,
-      "time": 5.923800000095382,
-      "bites": 9,
-      "remaining": 27
+      "time": 6.108500000047695,
+      "bites": 21,
+      "remaining": 15
+    },
+    {
+      "fps": 59.99400059994003,
+      "time": 10.125600000047683,
+      "bites": 33,
+      "remaining": 3
     },
     {
       "fps": 59.99700014999255,
-      "time": 9.957400000095376,
-      "bites": 32,
-      "remaining": 4
+      "time": 14.142600000047628,
+      "bites": 34,
+      "remaining": 2
     },
     {
-      "fps": 59.99100134979744,
-      "time": 13.974500000095327,
-      "bites": 35,
-      "remaining": 1
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 17.97480000009525,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 21.991800000095175,
+      "fps": 59.99100134979755,
+      "time": 18.143000000047586,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99100134979755,
-      "time": 26.00890000009509,
+      "time": 22.16000000004751,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 26.177000000047432,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.994000599940094,
-      "time": 30.00920000009495,
+      "time": 30.19400000004732,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 9527892,
+    "triangles": 9706644,
     "inhabitants": 20,
     "buttressStats": {
       "rocks": 9,
@@ -196,6 +196,96 @@
           0.025
         ]
       ]
+    },
+    "flankStats": {
+      "colonies": 12,
+      "triangles": 89376,
+      "attachments": [
+        [
+          0,
+          -3.92,
+          1.68,
+          0.11275640704334178,
+          0.015999999999999914
+        ],
+        [
+          1,
+          -3.77,
+          1.55,
+          0.08205625243712067,
+          0.01599999999999993
+        ],
+        [
+          2,
+          -2.18,
+          1.29,
+          -0.08703367491617708,
+          0.016000000000000052
+        ],
+        [
+          3,
+          -2.29,
+          1.14,
+          -0.11662285490846269,
+          0.015999999999999993
+        ],
+        [
+          4,
+          -3.07,
+          2.76,
+          -0.15430565272290453,
+          0.016000000000000025
+        ],
+        [
+          5,
+          -2.94,
+          2.63,
+          -0.11420143169021468,
+          0.0160000000000001
+        ],
+        [
+          6,
+          1.04,
+          1.82,
+          0.008808643348922729,
+          0.01599999999999997
+        ],
+        [
+          7,
+          1.14,
+          1.65,
+          -0.004482169313894779,
+          0.016000000000000007
+        ],
+        [
+          8,
+          2.08,
+          3.18,
+          -0.21441361356917454,
+          0.01599999999999992
+        ],
+        [
+          9,
+          2.23,
+          3.02,
+          -0.22690699737094233,
+          0.015999999999999973
+        ],
+        [
+          10,
+          3.49,
+          1.61,
+          -0.0880344678472369,
+          0.0160000000000001
+        ],
+        [
+          11,
+          3.61,
+          1.46,
+          0.665630571957534,
+          0.016000000000000125
+        ]
+      ]
     }
   },
   "geometryChecks": [
@@ -229,17 +319,18 @@
     "Broad encrusting folds: shared midpoint topology, manifold edges, outward normals, nondegenerate faces and ray-tested rock attachment",
     "Three prior/current seeded fixtures retain2160RNG calls, exact states, all540phases and anchored root centers within2e-7; cap roundness and perpendicular axes independently checked",
     "Nine outcrops:95,220source triangles; all vertices inside navigation bounds. Seven base stones buried0.035below actual sand; two upper stones overlap supports. Four ray-attached colonies:135,366source triangles.97new polyps/912tentacles:maximum attachment error0.003. Existing polyp/crust/infill statistics unchanged.",
-    "Soft polyp tissue: six paired old/new seeded gardens preserve RNG, counts and basal attachments; stony indices and original attributes unchanged. Zoanthid faces nondegenerate, seven-sided tentacles outward, closed tips and joined seam normals.61-polyp fixture167628triangles/7270712bytes versus102480triangles before."
+    "Soft polyp tissue: six paired old/new seeded gardens preserve RNG, counts and basal attachments; stony indices and original attributes unchanged. Zoanthid faces nondegenerate, seven-sided tentacles outward, closed tips and joined seam normals.61-polyp fixture167628triangles/7270712bytes versus102480triangles before.",
+    "Flank shelves: twelve ray-attached roots buried0.016 in stone. Each7448triangles/212358bytes. All faces finite/nondegenerate, closed consistently wound edges, positive signed volume; conservative bounds enclose all vertices. Existing rock/crust/infill/polyp/buttress statistics unchanged."
   ],
   "visualReview": [
     "front",
-    "three-quarter",
+    "oblique",
     "side",
     "mobile",
-    "polyp/outcrop closeups",
-    "four actual polyp motion frames",
+    "flank-closeup",
+    "polyp and anemone time sequences",
     "original reef reference",
-    "planted reference and actual planted comparison",
+    "mature planted aquarium and its reference",
     "reference-comparison.md"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -248,7 +339,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Zoanthid gardens have rolled rims, inset oral slits, curved closed tentacles, corrected outward skin and seam normals, mixed warm centers/cool skirts, and individual rooted motion. All colony counts and placements preserved; comparative realism goal remains unmet. Feeding no longer overwrites a committed escape waypoint; the progress watchdog remains active when food is selected.",
+  "scope": "Twelve attached, asymmetric plate fans add a middle scale of growth across rock flanks. Closed thin skeletons, pale folded margins, existing detailed plate material, and enclosing navigation volumes. Existing reef detail retained. Comparative realism target remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -286,26 +377,10 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 4170.5,
-    "loadCurrent": 4247.3,
-    "fpsPrior": 159.7,
-    "fpsCurrent": 157.4
-  },
-  "feedingRecovery": [
-    {
-      "seed": 913,
-      "minTenSecondRange": 1.0234529343681902,
-      "bites": 36
-    },
-    {
-      "seed": 411,
-      "minTenSecondRange": 0.42969036568880714,
-      "bites": 36
-    },
-    {
-      "seed": 729,
-      "minTenSecondRange": 1.4779469253785071,
-      "bites": 36
-    }
-  ]
+    "baseline": "94c670759",
+    "loadPrior": 4408,
+    "loadCurrent": 4623,
+    "fpsPrior": 155.4,
+    "fpsCurrent": 159.4
+  }
 }
