@@ -22,7 +22,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
     const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,.87,1)*.85).multiplyScalar(.76+.18*t+.055*Math.sin(seed+t*5+angle*2));colors.set([c.r,c.g,c.b],i*3);
    }
   }
-  g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.21,j/steps*delta.length()/.21);g.computeVertexNormals();const normals=g.getAttribute('normal');for(let j=0;j<=steps;j++){const a=j*(sides+1),b=a+sides,n=new T.Vector3().fromBufferAttribute(normals,a).add(new T.Vector3().fromBufferAttribute(normals,b)).normalize();normals.setXYZ(a,n.x,n.y,n.z);normals.setXYZ(b,n.x,n.y,n.z);}geometries.push(g);
+  g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.135,j/steps*delta.length()/.135);g.computeVertexNormals();const normals=g.getAttribute('normal');for(let j=0;j<=steps;j++){const a=j*(sides+1),b=a+sides,n=new T.Vector3().fromBufferAttribute(normals,a).add(new T.Vector3().fromBufferAttribute(normals,b)).normalize();normals.setXYZ(a,n.x,n.y,n.z);normals.setXYZ(b,n.x,n.y,n.z);}geometries.push(g);
   const cap=new T.SphereGeometry(radius*endScale,10,3,0,Math.PI*2,0,Math.PI/2);cap.scale(1,1.05,1);cap.applyQuaternion(new T.Quaternion().setFromUnitVectors(new T.Vector3(0,1,0),curve.getTangentAt(1)));cap.translate(end.x,end.y,end.z);const ca=new Float32Array(cap.getAttribute('position').count*3);for(let i=0;i<ca.length;i+=3)ca.set([tipColor.r,tipColor.g,tipColor.b],i);cap.setAttribute('color',new T.BufferAttribute(ca,3));geometries.push(cap);
   // Sparse raised radial cups break the branch silhouette; shared maps carry
   // the much finer tissue between them without a mesh for every small polyp.
@@ -32,7 +32,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
    const radial=u.clone().multiplyScalar(Math.cos(angle)).addScaledVector(v,Math.sin(angle)),out=radial.clone().addScaledVector(tangent,.35).normalize(),across=new T.Vector3().crossVectors(out,tangent).normalize(),along=new T.Vector3().crossVectors(across,out).normalize();
    c.addScaledVector(radial,radius*(1-(1-endScale)*t)*(1+.42*Math.exp(-t*15))*.97);const r=radius*.26,h=r*.75,positions:number[]=[],colors:number[]=[],uv:number[]=[],index:number[]=[];
    for(let row=0;row<4;row++)for(let j=0;j<=8;j++){
-    const a=j/8*Math.PI*2,rr=r*[1,.94,.52,0][row],p=c.clone().addScaledVector(across,Math.cos(a)*rr).addScaledVector(along,Math.sin(a)*rr).addScaledVector(out,h*[0,1,.78,.52][row]);positions.push(p.x,p.y,p.z);const color=baseColor.clone().lerp(tipColor,row===1?.25:0).multiplyScalar(row===3?.62:1);colors.push(color.r,color.g,color.b);uv.push(p.x/.21,p.y/.21);
+    const a=j/8*Math.PI*2,rr=r*[1,.94,.52,0][row],p=c.clone().addScaledVector(across,Math.cos(a)*rr).addScaledVector(along,Math.sin(a)*rr).addScaledVector(out,h*[0,1,.78,.52][row]);positions.push(p.x,p.y,p.z);const color=baseColor.clone().lerp(tipColor,row===1?.25:0).multiplyScalar(row===3?.62:1);colors.push(color.r,color.g,color.b);uv.push(p.x/.135,p.y/.135);
     if(row<3&&j<8){const n=row*9+j;index.push(n,n+9,n+1,n+1,n+9,n+10);}
    }
    const cup=new T.BufferGeometry();cup.setAttribute('position',new T.Float32BufferAttribute(positions,3));cup.setAttribute('color',new T.Float32BufferAttribute(colors,3));cup.setAttribute('uv',new T.Float32BufferAttribute(uv,2));cup.setIndex(index);cup.computeVertexNormals();geometries.push(cup);
@@ -40,19 +40,23 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   if(level>=2)return;
   const count=level===0?choice(3,4):choice(2,3);
   for(let j=0;j<count;j++){
-   const t=.32+(j/count)*.57+.045*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58);
+   const t=.32+(j/count)*.57+.085*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+.33*Math.sin(seed*1.7+j*3.8)+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58);
    const direction=curve.getTangentAt(t),rise=choice(.15,.34)*size*(level===0?1:.47),tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,rise,Math.sin(angle)*out));
-   if(growth==='canopy'&&level===0)tip.y=base.y+size*(.62+.13*Math.sin(angle*1.13+seed*.37));
+   if(growth==='canopy'&&level===0)tip.y=base.y+size*(.48+.23*(.5+.5*Math.cos(angle-hue*19))+.09*Math.sin(angle*1.13+seed*.37));
    if(growth==='bushy')tip.addScaledVector(direction,.025*size);
    tip.addScaledVector(direction,choice(.04,.12)*size);
-   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.80,(level===0?.026:growth==='antler'?.013:.021)*size),level+1,seed+j*1.73);
+   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.80,(level===0?.021:growth==='antler'?.013:.016)*size),level+1,seed+j*1.73);
   }
  }
  const count=7+Math.floor(random()*3);
  for(let i=0;i<count;i++){
-  const angle=i*2.399+choice(-.32,.32),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1),height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1);
-  const root=base.clone().add(new T.Vector3(Math.cos(angle)*.045*size,choice(-.012,.009)*size,Math.sin(angle)*.045*size));
-  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.051,.073)*size,0,angle+random()*2);
+  const angle=i*2.399+choice(-.32,.32),exposure=.5+.5*Math.cos(angle-hue*19),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1)*(.82+.40*exposure),height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1)*(.74+.42*exposure);
+  // Separate attachment points across the living crust; keep each stem sunk
+  // into the actual support rather than suspending a radial bouquet above it.
+  const spread=(.075+.055*(.5+.5*Math.sin(i*4.13+hue*11)))*size;
+  const root=base.clone().add(new T.Vector3(Math.cos(angle)*spread,choice(-.012,.009)*size,Math.sin(angle)*spread));
+  if(surface){const y=surface(root.x,root.z);if(y!==null&&Math.abs(y-base.y)<.15*size)root.y=y-.014*size;else root.copy(base);} 
+  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.041,.058)*size,0,angle+random()*2);
  }
  // Prefer clipped triangles from the actual support, including its curved relief.
  if(basalGeometry){basalGeometry.name='Rock-conforming colony base';geometries.push(basalGeometry);return geometries;}
@@ -61,7 +65,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
  for(let j=0;j<=rings;j++)for(let k=0;k<=sides;k++){
   const a=k/sides*Math.PI*2,t=j/rings,r=.19*size*t*(1+.17*Math.sin(a*3+hue*17)+.08*Math.sin(a*7)),x=base.x+Math.cos(a)*r,z=base.z+Math.sin(a)*r;
   const y=surface?surface(x,z):base.y,ok=y!==null&&Math.abs(y-base.y)<.29*size;valid.push(ok);
-  positions.push(x,(ok?y!:base.y)+.003*size,z);const c=baseColor.clone().multiplyScalar(.67+.13*(1-t));colors.push(c.r,c.g,c.b);uv.push(x/.21,z/.21);
+  positions.push(x,(ok?y!:base.y)+.003*size,z);const c=baseColor.clone().multiplyScalar(.67+.13*(1-t));colors.push(c.r,c.g,c.b);uv.push(x/.135,z/.135);
   if(j&&k){const n=j*(sides+1)+k,a=n-sides-2,b=n-sides-1,c=n-1;const connected=(a:number,b:number,c:number)=>{if(!valid[a]||!valid[b]||!valid[c])return false;for(const [u,v] of [[a,b],[b,c],[c,a]]){const dx=positions[u*3]-positions[v*3],dz=positions[u*3+2]-positions[v*3+2],dy=Math.abs(positions[u*3+1]-positions[v*3+1]);if(dy>Math.hypot(dx,dz)*1.45+.002*size)return false;}return true;};if(j>1&&connected(a,b,c))indices.push(a,b,c);if(connected(b,c,n))indices.push(b,n,c);}
  }
  // Discard isolated pieces below ledges: living basal tissue stays connected.
