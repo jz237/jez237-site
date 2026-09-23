@@ -1,0 +1,35 @@
+{
+  "results": [
+    {
+      "oblique": false,
+      "z": -1.9,
+      "green": 42
+    },
+    {
+      "oblique": false,
+      "z": 0,
+      "green": 10
+    },
+    {
+      "oblique": false,
+      "z": 1.8,
+      "green": 0
+    },
+    {
+      "oblique": true,
+      "z": -1.9,
+      "green": 42
+    },
+    {
+      "oblique": true,
+      "z": 0,
+      "green": 11
+    },
+    {
+      "oblique": true,
+      "z": 1.8,
+      "green": 0
+    }
+  ],
+  "glError": 0
+}
