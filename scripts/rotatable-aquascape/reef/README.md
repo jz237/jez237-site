@@ -198,3 +198,15 @@ Unused UV buffers are removed from this vertex-colored material. Anemone geometr
 uses 7,320,528 bytes versus 7,621,920 previously, despite the more detailed discs.
 Raycasts verify the oral recess; normals, roots and 540 tips are checked. Motion
 frames are saved with desktop, oblique, close-up and mobile evidence.
+
+## Receding reef depth
+
+Seven smaller eroded stones and three full branching colonies extend behind the
+central sand channel. They have real volume, use the same fine indexed surfaces
+and share existing merged material groups. A separate seeded random stream keeps
+the established foreground corals, anemones and rubble stable. Attachments sample
+the actual stone surface and new obstacles join the fish navigation system.
+No new texture downloads or capture passes. Scene triangles rise from 3,750,342
+to 4,045,478 (7.87%); local startup 1789 ms versus 1644, with approximately 60 FPS.
+Other hardware is unmeasured. Front, oblique, rear macro and phone evidence are
+retained in qa; the remaining reference gap is acknowledged in overnight-progress.
