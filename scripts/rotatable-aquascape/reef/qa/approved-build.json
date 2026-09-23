@@ -1,11 +1,11 @@
 {
-  "buildHash": "c984b18f3466c8c02e249766660609d9e59ce76fcaeababbc662d16083862852",
+  "buildHash": "f8fe0bc05612c16fcec9a64b6b2969c209b1bbecea6ef75cf128c0348f0c7fbb",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-CQWEkSg8.js",
+    "assets/index-CI41OQqY.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T05:11:09.775Z",
-  "readyMs": 1789,
+  "checkedAt": "2026-09-23T05:27:19.548Z",
+  "readyMs": 2317,
   "samples": [
     {
       "fps": 59.99400059993998,
-      "time": 4.285699999904634,
-      "bites": 18,
-      "remaining": 18
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 8.302699999904672,
-      "bites": 30,
-      "remaining": 6
+      "time": 4.347699999856946,
+      "bites": 21,
+      "remaining": 15
     },
     {
       "fps": 59.99700014999249,
-      "time": 12.319699999904614,
+      "time": 8.364699999856972,
+      "bites": 32,
+      "remaining": 4
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 12.38169999985692,
       "bites": 35,
       "remaining": 1
     },
     {
       "fps": 59.99400059993998,
-      "time": 16.336699999904553,
+      "time": 16.398799999856855,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.994000599940094,
-      "time": 20.33709999990445,
+      "time": 20.399199999856748,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.994000599940094,
-      "time": 24.35409999990438,
+      "fps": 59.99700014999255,
+      "time": 24.416099999856666,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 28.3543999999043,
+      "time": 28.43309999985662,
       "bites": 36,
       "remaining": 0
     }
@@ -101,7 +101,7 @@
     "Rock index matches 452 raycast hits",
     "Indexed coral geometry, smooth branch seams and outward plate faces; fixture buffers 1659484 bytes",
     "Basal coral tissue follows slopes without bridging disconnected lower shelves",
-    "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 8345412 vs 32120880 bytes",
+    "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 10885320 vs 41896800 bytes",
     "Clipped crust triangles nondegenerate; sampled support gap bounded; 10 colonies / 11097 triangles",
     "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved",
     "540 rooted tentacles; outward seam-smoothed skin; unit tip normals; actual recessed oral disc; 7320528 geometry bytes"
@@ -110,7 +110,12 @@
     "front",
     "three-quarter",
     "mobile",
-    "coral-closeup"
+    "anthias",
+    "tang",
+    "clown",
+    "yellow",
+    "chromis",
+    "gramma"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -118,5 +123,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Receding rear reef layer: seven eroded stones, three fully detailed colonies, independent art RNG and integrated navigation. Front/oblique/rear macro/mobile reviewed. Local 60 FPS; ready1789ms vs1644; triangles +7.87%. Still short of reference realism; other hardware unmeasured."
+  "scope": "Underwater fish material calibration: reduced broad glare, stronger preserved reference coloration, all geometry and maps retained. Full QA passed. Repeated prior/current load means1779.7/1773.0ms, near60FPS both; initial current cold run2317ms. Still short of photographic reference; other hardware unmeasured."
 }

@@ -20,7 +20,14 @@ export async function loadMarineModels(){
   gltf.scene.traverse(node=>{
    if(!(node instanceof T.Mesh))return;
    const label=node.name.split('__').at(-1)!,geometry=node.geometry.clone().applyMatrix4(node.matrixWorld);
-   const material=(node.material as T.MeshStandardMaterial).clone();material.envMapIntensity=.38;
+   const material=(node.material as T.MeshPhysicalMaterial).clone();material.envMapIntensity=.38;
+   // Submerged tissue has a much smaller optical contrast than a varnished object
+   // in air. Keep the source scale/iris detail without the broad clearcoat glare.
+   material.metalness=0;material.clearcoat=0;material.ior=1.16;
+   material.roughness=label.startsWith('eye')?.25:label==='body'||label.startsWith('gill')?.52:.56;
+   // Reference photos already contain studio lighting; calibrate reflected color
+   // to retain orange chroma under the aquarium's intense overhead illumination.
+   material.color.setScalar(species==='anthias'?.40:.72);
    if(material.map)material.map.anisotropy=8;
    const mesh=new T.Mesh(geometry,material);mesh.castShadow=true;mesh.receiveShadow=true;
    if(label.startsWith('pectoral')){
