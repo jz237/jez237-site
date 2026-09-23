@@ -60,7 +60,7 @@ test('optional models release GPU assets, restore shaders, and preserve map sett
   const feature=createCityFeatures(THREE,{scene,sky,projection,sampleElevation:()=>10,
     store,motion,stopOtherModes(){},invalidate(){}});
   const camera=new THREE.PerspectiveCamera();camera.position.set(0,1000,0);
-  let disposed=0;
+  let disposed=0,expectedDisposals=0;
   try {
     assert.equal(feature.stats().resources,0);
     for(let round=0;round<3;round++){
@@ -76,6 +76,8 @@ test('optional models release GPU assets, restore shaders, and preserve map sett
       const resources=new Set();root.traverse(n=>{
         if(n.geometry)resources.add(n.geometry);if(n.material)resources.add(n.material);
       });
+      assert.ok(resources.size>0);
+      expectedDisposals+=resources.size;
       resources.forEach(r=>r.addEventListener('dispose',()=>disposed++));
       const compare=nodes.get('cityFeatureControls').children.find(n=>n.textContent==='Show city surface');
       compare.onclick();assert.equal(root.visible,false);compare.onclick();assert.equal(root.visible,true);
@@ -85,6 +87,6 @@ test('optional models release GPU assets, restore shaders, and preserve map sett
       assert.equal(store.value('exaggeration'),initial.exaggeration);
       assert.equal(store.value('diorama'),initial.diorama);
     }
-    assert.ok(disposed>=48);
+    assert.equal(disposed,expectedDisposals);
   } finally {feature.dispose();material.dispose();mesh.geometry.dispose();globalThis.document=oldDocument;}
 });

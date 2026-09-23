@@ -2000,3 +2000,7 @@ body.notes-collapsed .readout-preset .notes-toggle { margin: 0; }
 .water-layer-options { display: grid; gap: 8px; }
 .water-feature-info { padding: 10px; border: 1px solid #8fcbd955; border-radius: 8px; background: #102d37; }
 #cityFeatureControls h3 { margin: 14px 0 4px; font-size: 16px; }
+
+.underground-transit { border-bottom: 1px solid #abc4c344; padding-bottom: 14px; }
+.underground-transit select { width: 100%; margin: 5px 0; }
+.underground-transit a { display: block; margin: 8px 0; }

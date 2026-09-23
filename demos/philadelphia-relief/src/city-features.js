@@ -1,3 +1,4 @@
+import { createUndergroundTransit } from './underground-transit.js?v=philly-2026092305';
 import { WATER_AREAS, waterBounds, createUndergroundWater } from './underground-water.js?v=philly-2026092303';
 import { BRIDGE_DEMOS, UNDERGROUND_ROUTES,
   openingPose, openingCycle, cutawayShader } from './city-features-data.js?v=philly-2026092205';
@@ -15,7 +16,7 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
   const point = new THREE.Vector3(), dummy = new THREE.Object3D();
   let mode = null, saved = null, cycle = null, amount = 0, moving = [], spec, slider, play;
   let scanAt = 0, labelKey = '', currentBridge = 'tacony', disposed = false;
-  let waterAtlas, undergroundArea = 'center';
+  let waterAtlas, transitAtlas, undergroundArea = 'center';
   const el = (tag, text) => { const n = document.createElement(tag); n.textContent = text; return n; };
   function control(text, action) {
     const b = el('button', text); b.type = 'button'; b.onclick = action; controls.append(b); return b;
@@ -51,6 +52,7 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
   }
   function clearModels() {
     waterAtlas?.dispose(); waterAtlas = null;
+    transitAtlas?.dispose(); transitAtlas = null;
     group.traverse(node => { if (node.isInstancedMesh) node.dispose(); });
     for (const child of [...group.children]) group.remove(child);
     for (const asset of assets) asset.dispose(); assets.clear();
@@ -225,8 +227,12 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
         void main(){float stripe=.06*sin(depth*.14)+.02*sin(depth*.9);
           gl_FragColor=vec4(vec3(.36,.27,.19)+stripe,1.);}`,
     }))));
-    waterAtlas = createUndergroundWater(THREE, {group, controls, projection, area, invalidate});
-    for(const route of area === 'center' ? UNDERGROUND_ROUTES : []) {
+    transitAtlas = createUndergroundTransit(THREE, {group, controls, projection, sampleElevation,
+      bounds: b, area, motion, invalidate, showNetwork: () => makeUnderground('transit')});
+    if (area !== 'transit') {
+      waterAtlas = createUndergroundWater(THREE, {group, controls, projection, area, invalidate});
+    }
+    for(const route of area === 'center' ? UNDERGROUND_ROUTES.filter(r => r.id === 'patco') : []) {
       const routeGroup=new THREE.Group();group.add(routeGroup);
       const points=route.path.map(([lon,lat])=>new THREE.Vector3(
         projection.lonToX(lon),route.level,projection.latToZ(lat)));
@@ -257,7 +263,7 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
       compare.setAttribute('aria-pressed',String(surface));invalidate();
     });
     compare.setAttribute('aria-pressed','false');
-    $('cityFeatureStatus').textContent='Public map positions · schematic depths · click a water feature';
+    $('cityFeatureStatus').textContent='Public route positions · schematic depths · click a mapped feature';
     clip(b);frameUnderground();
   }
   function frameUnderground() {
@@ -307,7 +313,7 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
       resources:assets.size,clippedMaterials:originals.size}),
     update(camera,dt,width,height) {
       if(!mode||disposed)return;
-      camera.updateMatrixWorld(); waterAtlas?.update(camera);
+      camera.updateMatrixWorld(); waterAtlas?.update(camera); transitAtlas?.update(camera);
       inverse.value.multiplyMatrices(camera.matrixWorld,camera.projectionMatrixInverse);
       if(cycle!==null) {
         cycle+=dt;applyOpening(openingCycle(cycle));

@@ -30,3 +30,32 @@ https://water.phila.gov/pool/files/SSES-Report_July2014.pdf
 No complete current underground pipe survey is claimed.
 
 The original educational SVG sewer cross-section is schematic, not site-specific.
+
+## SEPTA rail network
+
+`septa-rail.json` contains all route types 0, 1 and 2 in SEPTA's official
+v202609061 GTFS release (26 rail route IDs). All referenced trip shapes and their
+served stops are included, rather than selecting a single trip per line. Bus and
+trolleybus routes are excluded. Route identifiers use SEPTA's current Metro names.
+GTFS source: https://github.com/septadev/GTFS/releases/tag/v202609061
+This is a geographic snapshot, not a service-status or departure-time display.
+Temporary patterns in the feed are retained; this is not a survey of every track.
+Stop counts include distinct platforms and directional stop locations.
+Routes are clipped to the existing relief bounds (-75.8,39.7,-74.7,40.55), so any
+outlying pieces, such as Newark south of the region, are outside the exhibit.
+
+Railway tunnel and bridge tags were retrieved from public OpenStreetMap Overpass
+on 2026-09-23. Attribution: OpenStreetMap contributors, ODbL 1.0:
+https://www.openstreetmap.org/copyright
+Each GTFS segment is matched within 25 m to a similarly oriented mapped railway
+segment (absolute direction cosine >= 0.8); segments are split to at most 80 m.
+GTFS shapes are simplified with 3 m tolerance before matching. These are
+approximate structure classifications, not measured track depths or heights.
+Unmatched segments are explicitly unclassified, never assumed underground.
+Station classifications match nearby structure tags without an orientation test.
+All vertical display levels are illustrative. Shared segments keep all route IDs.
+
+Refresh with `python tools/build_transit.py GTFS.zip tunnels.json bridges.json`.
+The input Overpass JSON files contain `out geom` railway ways with tunnel or bridge
+tags for rail, subway, light_rail and tram inside the relief bounds. Reject responses
+with a timeout remark. The browser downloads only the compact derived snapshot.

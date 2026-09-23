@@ -1,5 +1,6 @@
 // Public PWD snapshots are loaded only while this optional cutaway is open.
 export const WATER_AREAS = {
+  transit: { name: "Full SEPTA rail network", bounds: [-75.8, 39.7, -74.7, 40.55] },
   center: { name: "Center City", bounds: [-75.191, 39.94, -75.14, 39.967] },
   mill: { name: "West Philadelphia / Mill Creek", bounds: [-75.255, 39.948, -75.196, 39.99] },
   wingohocking: { name: "Germantown / Wingohocking", bounds: [-75.188, 40.014, -75.128, 40.056] },
