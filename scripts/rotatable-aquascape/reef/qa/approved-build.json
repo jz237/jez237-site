@@ -1,12 +1,12 @@
 {
-  "buildHash": "db96e60915acc63e419626dfc98ed8cef4bf3267379563fd7fa3b4fc177096ce",
+  "buildHash": "b4997c651e7530dfde9d385f61fbae82871289cb800f41f7b0a02a539dab9eee",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
+    "assets/index-Cocv5VoK.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-DoaHwjEZ.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/normalMap-AIoBIlzs.png",
@@ -20,48 +20,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T08:23:01.116Z",
-  "readyMs": 2103,
+  "checkedAt": "2026-09-23T08:45:09.402Z",
+  "readyMs": 2197,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 4.2879999998569485,
-      "bites": 22,
-      "remaining": 14
+      "fps": 59.99700014999249,
+      "time": 4.273900000047686,
+      "bites": 21,
+      "remaining": 15
     },
     {
       "fps": 59.99700014999249,
-      "time": 8.304999999856982,
-      "bites": 35,
-      "remaining": 1
+      "time": 8.290800000047717,
+      "bites": 31,
+      "remaining": 5
     },
     {
-      "fps": 59.99700014999249,
-      "time": 12.32199999985693,
+      "fps": 59.99400059993998,
+      "time": 12.291200000047667,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 16.308300000047616,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 16.338999999856874,
+      "time": 20.308600000047537,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 24.309000000047448,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.3559999998568,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 24.373099999856702,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 28.390099999856616,
+      "time": 28.32590000004737,
       "bites": 36,
       "remaining": 0
     }
@@ -80,7 +80,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 4625398,
+    "triangles": 5166658,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -98,7 +98,7 @@
     },
     "infillStats": {
       "colonies": 11,
-      "triangles": 286453,
+      "triangles": 375693,
       "placements": [
         [
           1,
@@ -199,13 +199,14 @@
     "Curved anemone axes: worst dot0.999714; analytic flow derivative agrees with finite differences; minimum sampled determinant0.603289; all540 strands and171840 triangles retained",
     "Encrusting maps: seamless wrap gradients below interior gradients; unit outward normals;637268bytes",
     "Marine fin motion: six pinned species profiles;1800 sloped membrane samples, normal dot0.999999999969; minimum determinant0.951112",
-    "Water capture: vertical-only coverage and retained pixel density, main camera unchanged, capture camera reused; adaptive planar fallback and full restoration"
+    "Water capture: vertical-only coverage and retained pixel density, main camera unchanged, capture camera reused; adaptive planar fallback and full restoration",
+    "Branch anatomy:119 matched axial cup boundaries/normals with recessed centers; side-cup footprints agree with real curved/swollen triangles within1.1451e-8; finite, nondegenerate geometry and conservative navigation"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "water-above-closeup",
+    "coral-closeup",
     "reference-and-mature-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -214,5 +215,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Reef water with matching stronger displacement/normals, lower front viewpoint and vertically extended depth-guided underside reflection. Full capture1024x1536 retains density; planar fallback drops unused extra area. Same4625398 rendered triangles and all assets. Normal local60FPS; preliminary uncapped198.4 prior vs187.9 current, a5.3% quality cost. Reference target unmet."
+  "scope": "Branching corals gain attached axial cups, projecting side cups on finer branchlets and fuller real junctions. Existing scenery/assets/material groups retained. Rendered5166658triangles vs4625398; no new maps/passes. Loads2136.0ms prior vs2235.7ms current;normal60FPS both,uncapped247.9vs247.0 locally. Target remains unmet."
 }

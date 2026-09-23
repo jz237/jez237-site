@@ -370,3 +370,26 @@ and restored when full effects return. Above-water and glass captures remain unc
 and memory, not a new render pass or model/texture download. Geometry counts,
 organisms and source textures are retained. Regression checks cover projection,
 view-camera isolation, density, reuse and adaptive target resizing.
+
+
+## Branching coral skeleton detail
+
+Branch tips now use a recessed axial cup with a raised lip, copied directly
+from the actual irregular end ring. Boundary normals are shared with the stem;
+the old separate hemispheres could leave gaps or abrupt lighting seams.
+Existing branch vertices swell locally around real offshoot insertions, and
+small side cups also reach the finer branchlets. Their footprints sample the
+actual indexed skin triangles after the junctions are shaped, so they do not
+float above a guessed cylinder. Geometry-derived navigation bounds include them.
+
+These are illustrative Acropora-like forms, not an exact species identification
+or living-tissue simulation. The distinction between terminal axial and lateral
+radial corallites, and the variety in their projecting shapes, follows the
+[Corals of the World Acropora nasuta description](https://www.coralsoftheworld.org/species_factsheets/species_factsheet_summary/acropora-nasuta/)
+and its [Acropora russelli description](https://www.coralsoftheworld.org/species_factsheets/species_factsheet_summary/acropora-russelli/).
+Fine branchlet lips have six segments; larger stem lips retain eight, with the
+existing baked maps supplying finer tissue detail. All geometry stays in the
+existing merged material groups. No new texture/model download or render pass.
+Tests compare tip boundaries/normals and side-cup footprints against the actual
+stem triangles. More detailed geometry has a cost; consult the saved comparison
+and progress notes rather than treating a passing test as proof of realism.
