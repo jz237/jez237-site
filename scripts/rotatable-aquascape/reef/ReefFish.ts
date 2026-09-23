@@ -93,7 +93,7 @@ export class ReefFish{
    const collision=this.fish.some(other=>other!==f&&next.distanceToSquared(other.position)<(f.radius+other.radius)**2);
    if(!collision&&this.clearSegment(f.position,next,f.radius))f.position.copy(next);else{f.velocity.multiplyScalar(.65);f.until=0;}
    f.group.position.copy(f.position);f.group.rotation.set(0,f.yaw,f.pitch,'YXZ');f.clock.value+=dt*(.52+f.velocity.length()*1.65);f.effort.value=T.MathUtils.damp(f.effort.value,f.velocity.length(),5,dt);
-   for(let j=0;j<f.pectoral.length;j++){const p=f.pectoral[j];p.position.z=p.userData.restZ+bodyBend(p.position.x,f.clock.value,f.effort.value);p.rotation.y=Math.sin(now*(7+f.effort.value*5)+f.phase+j)*.42;p.rotation.x=Math.cos(now*6+f.phase+j)*.15;}
+   for(let j=0;j<f.pectoral.length;j++){const p=f.pectoral[j];p.position.z=p.userData.restZ+bodyBend(p.position.x,f.clock.value,f.effort.value);p.rotation.y=Math.sign(p.userData.restZ)*(.24+.20*Math.sin(now*(7+f.effort.value*5)+f.phase+j));p.rotation.x=Math.cos(now*6+f.phase+j)*.055;}
    for(const gill of f.group.children)if(gill.name==='gill')gill.position.z=gill.userData.side*(.0005+.002*(1+Math.sin(now*5.5+f.phase)));
    f.mouth.scale.set(1,.24+.09*(1+Math.sin(now*5.5+f.phase))+(target?.alive?Math.max(0,1-Math.sqrt(dist))*Math.max(0,Math.sin(now*18))*1.35:0),1);
   }

@@ -428,3 +428,14 @@ Pause freezes the circulation and shaft patterns. The particle data is created
 once (7,200bytes); all movement runs on the GPU, without per-frame buffer writes.
 These are artistic light/flow cues, not a shadowed volumetric transport solution
 or fluid simulation. No geometry detail or existing surface maps are removed.
+
+
+## Fish fin attachments
+
+The Blender trunk narrows smoothly into the caudal membrane rather than ending
+in a thick rear cap. Median fins and trunk share the clean-flank color image,
+while the independently moving pectorals retain their source ray detail. The
+clownfish pectoral outline is retraced to exclude the adjacent white body stripe.
+Paired fins conform around the flank at rest and use opposite outward strokes,
+with independent phase and effort-dependent rate, instead of rotating through
+the trunk. Existing traveling body/fin waves, breathing and feeding remain.
