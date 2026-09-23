@@ -9,11 +9,26 @@ export function coralCrust(rock:T.BufferGeometry,center:T.Vector3,normal:T.Vecto
  const base=profile?profile.color.clone().multiplyScalar(.72):new T.Color().setHSL(hue,.43,.37).convertSRGBToLinear(),edge=profile?base.clone().multiplyScalar(1.12):new T.Color().setHSL(hue,.36,.52).convertSRGBToLinear();
  type Point={p:T.Vector3;n:T.Vector3;d:number;key:string};
  const points:Array<Point|undefined>=new Array(p.count);
+ // Broad colonies advance along several connected growth fronts instead of
+ // painting a nearly circular disc on the rock. Every lobe overlaps the core;
+ // the field is clipped against the real stone, so it cannot bridge a cave.
+ const growth=Array.from({length:profile?0:6},(_,i)=>{
+  const angle=i*Math.PI/3+seed*.43+.24*Math.sin(i*2.7+seed),reach=radius*(.37+.14*(.5+.5*Math.sin(seed+i*4.1)));
+  return {x:Math.cos(angle)*reach,y:Math.sin(angle)*reach,angle:angle+.55*Math.sin(seed+i),a:radius*(.30+.085*(.5+.5*Math.cos(seed*2+i*1.9))),b:radius*(.20+.10*(.5+.5*Math.sin(seed*1.3+i*2.3)))};
+ });
+ function growthDistance(x:number,y:number){
+  let distance=(1-Math.hypot(x/(radius*.57),y/(radius*.48)))*radius*.48;
+  for(const lobe of growth){const dx=x-lobe.x,dy=y-lobe.y,c=Math.cos(lobe.angle),s=Math.sin(lobe.angle),d=(1-Math.hypot((dx*c+dy*s)/lobe.a,(-dx*s+dy*c)/lobe.b))*lobe.b;
+   // Smooth the joins without erasing the bays between neighboring lobes.
+   const h=Math.max(.045*radius-Math.abs(distance-d),0)/(.045*radius);distance=Math.max(distance,d)+h*h*.01125*radius;
+  }
+  return distance;
+ }
  function point(i:number):Point{
   if(points[i])return points[i]!;
   const point=new T.Vector3().fromBufferAttribute(p,i),delta=point.clone().sub(center),x=delta.dot(u),y=delta.dot(v),a=Math.atan2(y,x);
   const margin=radius*(.86+.095*Math.sin(a*3+seed)+.055*Math.sin(a*7-seed)+.03*Math.cos(a*13));
-  return points[i]={p:point,n:new T.Vector3().fromBufferAttribute(n,i),d:Math.min(margin-delta.length(),delta.dot(normal)+radius*.48),key:String(i)};
+  return points[i]={p:point,n:new T.Vector3().fromBufferAttribute(n,i),d:Math.min(profile?margin-delta.length():Math.min(growthDistance(x,y),radius*1.04-delta.length()),delta.dot(normal)+radius*.48),key:String(i)};
  }
  function vertex(point:Point){
   const existing=cache.get(point.key);if(existing!==undefined)return existing;
