@@ -1,11 +1,11 @@
 {
-  "buildHash": "98b51e65cd92743ca16a4d2220fd3b5af3db25854d6fe795eec0cb4bc2ebab94",
+  "buildHash": "55a8c53d6675d82dc48c466cd33fd67e587b1d5224791c00bf90f8b700856e16",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-2XSNcpDX.js",
+    "assets/index-CHAMw-kH.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T03:55:56.588Z",
-  "readyMs": 1675,
+  "checkedAt": "2026-09-23T04:09:39.062Z",
+  "readyMs": 1634,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 4.277399999999998,
-      "bites": 20,
-      "remaining": 16
-    },
-    {
       "fps": 59.99400059994003,
-      "time": 8.27770000000004,
-      "bites": 32,
-      "remaining": 4
+      "time": 4.297799999999998,
+      "bites": 5,
+      "remaining": 31
     },
     {
-      "fps": 59.99400059994003,
-      "time": 12.294699999999988,
+      "fps": 59.99700014999249,
+      "time": 8.298200000000037,
+      "bites": 31,
+      "remaining": 5
+    },
+    {
+      "fps": 59.99700014999249,
+      "time": 12.31519999999998,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 16.332199999999922,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 20.34929999999985,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 16.311799999999934,
+      "time": 24.366299999999786,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.32879999999984,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 24.34579999999977,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 28.362799999999694,
+      "time": 28.38329999999971,
       "bites": 36,
       "remaining": 0
     }
@@ -77,12 +77,17 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 3685416,
+    "triangles": 3705228,
     "inhabitants": 20,
     "polypStats": {
-      "polyps": 560,
-      "tentacles": 3072,
-      "maxAttachmentError": 0.0030000000000002555
+      "polyps": 556,
+      "tentacles": 3288,
+      "maxAttachmentError": 0.003000000000000221
+    },
+    "rockStats": {
+      "triangles": 243340,
+      "bufferBytes": 8345412,
+      "expandedBufferBytes": 32120880
     }
   },
   "geometryChecks": [
@@ -91,7 +96,8 @@
     "Polyp roots, finite geometry, unsupported surfaces and motion attributes",
     "Rock index matches 452 raycast hits",
     "Indexed coral geometry, smooth branch seams and outward plate faces; fixture buffers 1659484 bytes",
-    "Basal coral tissue follows slopes without bridging disconnected lower shelves"
+    "Basal coral tissue follows slopes without bridging disconnected lower shelves",
+    "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 8345412 vs 32120880 bytes"
   ],
   "visualReview": [
     "front",
@@ -105,5 +111,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Varied tapered coral growth and attached basal tissue. Local 60 FPS, startup 1675 ms vs 1650 prior; 3685416 triangles vs 3671150 prior. No new image payload or capture pass. Still short of reference realism; other hardware unmeasured."
+  "scope": "Eroded rock pockets, distinct contours and wider attached zoanthid beds. Local 60 FPS; startup 1634 ms vs 1675 prior. Rock geometry buffers 74% smaller with all triangles preserved. Still short of reference realism; other hardware unmeasured."
 }
