@@ -220,3 +220,14 @@ lighting already present in the source images, with stronger compensation on the
 orange anthias. These are visual calibration values, not measured fish-tissue
 optical constants. All Blender geometry, textures, motion and breathing remain.
 No new textures, geometry or rendering passes are introduced.
+
+## Curved rock attachment for branching colonies
+
+When a colony has an actual rock hit, its thin basal tissue is clipped directly
+from that stone's triangles. It follows curved relief instead of ending at a
+sampled grid boundary, with a fine irregular margin and color tied to its branches.
+The generic height-sampled fallback remains for unsupported authoring fixtures.
+No fine branch, corallite, polyp or texture detail is removed. The curved-foot
+regression raycasts every fixture vertex back to its support, verifies thin
+attachment and checks nondegenerate triangles. Rendered scene triangles decrease
+from4,045,478 to4,027,708; local QA remains near60FPS, ready1755ms.

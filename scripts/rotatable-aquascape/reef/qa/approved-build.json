@@ -1,12 +1,12 @@
 {
-  "buildHash": "f8fe0bc05612c16fcec9a64b6b2969c209b1bbecea6ef75cf128c0348f0c7fbb",
+  "buildHash": "28f441741a563fa746231c5ce9f0e019fa10e5ac46d50439714fbc9b6c646693",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-CI41OQqY.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-DreRmB16.js",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/roughnessMap-4hZTjONg.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T05:27:19.548Z",
-  "readyMs": 2317,
+  "checkedAt": "2026-09-23T05:40:01.828Z",
+  "readyMs": 1755,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 4.347699999856946,
-      "bites": 21,
-      "remaining": 15
+      "fps": 59.99400059994001,
+      "time": 4.300199999952314,
+      "bites": 24,
+      "remaining": 12
     },
     {
-      "fps": 59.99700014999249,
-      "time": 8.364699999856972,
-      "bites": 32,
-      "remaining": 4
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 12.38169999985692,
-      "bites": 35,
-      "remaining": 1
+      "fps": 59.99400059994003,
+      "time": 8.317199999952345,
+      "bites": 34,
+      "remaining": 2
     },
     {
       "fps": 59.99400059993998,
-      "time": 16.398799999856855,
+      "time": 12.31749999995229,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.994000599940094,
-      "time": 20.399199999856748,
+      "fps": 59.99700014999244,
+      "time": 16.334499999952232,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999255,
-      "time": 24.416099999856666,
+      "fps": 59.99100134979755,
+      "time": 20.35159999995214,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 28.43309999985662,
+      "time": 24.368599999952075,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 28.385499999951982,
       "bites": 36,
       "remaining": 0
     }
@@ -77,7 +77,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 4045478,
+    "triangles": 4027708,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -104,18 +104,15 @@
     "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 10885320 vs 41896800 bytes",
     "Clipped crust triangles nondegenerate; sampled support gap bounded; 10 colonies / 11097 triangles",
     "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved",
-    "540 rooted tentacles; outward seam-smoothed skin; unit tip normals; actual recessed oral disc; 7320528 geometry bytes"
+    "540 rooted tentacles; outward seam-smoothed skin; unit tip normals; actual recessed oral disc; 7320528 geometry bytes",
+    "Clipped branching foot: curved rock attachment at every fixture vertex, max sampled gap .009001; valid normals and nondegenerate faces"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "anthias",
-    "tang",
-    "clown",
-    "yellow",
-    "chromis",
-    "gramma"
+    "rear-closeup",
+    "coral-closeup"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -123,5 +120,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Underwater fish material calibration: reduced broad glare, stronger preserved reference coloration, all geometry and maps retained. Full QA passed. Repeated prior/current load means1779.7/1773.0ms, near60FPS both; initial current cold run2317ms. Still short of photographic reference; other hardware unmeasured."
+  "scope": "Curved rock-conforming basal tissue on branching colonies; angular grid-cut edges replaced by clipped actual surface. Full fine textures/anatomy retained. Ready1755ms, near60FPS; rendered triangles -0.44%. Still short of reference realism; other hardware unmeasured."
 }
