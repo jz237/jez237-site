@@ -1,11 +1,11 @@
 {
-  "buildHash": "0f6c6db08aedcfa3d7bdbb75e202d8557ff0214aacfefe16129bc9e52320dc58",
+  "buildHash": "649991f28c8e93603c316b60f25456891237ddf78eeec82d936c8f7fb7d7aadc",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-DSopTREv.js",
+    "assets/index-BRwwmCMW.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T15:28:43.862Z",
-  "readyMs": 2371,
+  "checkedAt": "2026-09-23T15:47:35.570Z",
+  "readyMs": 2672,
   "samples": [
     {
-      "fps": 59.99400059994001,
-      "time": 6.160000000047705,
-      "bites": 24,
-      "remaining": 12
+      "fps": 59.99400059994003,
+      "time": 6.11240000000001,
+      "bites": 17,
+      "remaining": 19
     },
     {
-      "fps": 59.99400059993998,
-      "time": 10.177000000047686,
-      "bites": 35,
-      "remaining": 1
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 14.177400000047635,
+      "fps": 59.99400059994003,
+      "time": 10.12939999999999,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99400059993998,
-      "time": 18.17780000004756,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 22.1947000000475,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 26.2118000000474,
+      "fps": 59.99700014999249,
+      "time": 14.146299999999945,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.994000599940094,
-      "time": 30.212100000047307,
+      "time": 18.14669999999988,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 22.163699999999817,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 26.18069999999974,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993988,
+      "time": 30.197899999999613,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 5551288,
+    "triangles": 6029008,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 556,
@@ -218,8 +218,8 @@
     "three-quarter",
     "side",
     "mobile",
-    "sand-closeup",
-    "six isolated open/closed respiration studies",
+    "coral-closeup",
+    "two anemone/clown movement frames",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -228,7 +228,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Attached gill-cover flex and localized mouth respiration with independent activity-sensitive timing; continuous instanced diffuse fish penumbras, cached full-resolution static reef shadows with softer edges; lower submerged specular sheen. Same model/texture assets. Rendered5551288triangles (+3840). Loads2314.8/2329.8ms; uncapped257.9/257.6FPS. Comparative reference realism not yet reached; refinement automation active without time cutoff.",
+  "scope": "Fuller volumetric coral colonies with staggered attached lower scaffolds and fine forks; isolated deterministic growth stream preserves existing scene placements. Same model/texture assets and render passes. Comparative photographic quality remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -266,9 +266,9 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 2314.8,
-    "loadCurrent": 2329.8,
-    "fpsPrior": 257.9,
-    "fpsCurrent": 257.6
+    "loadPrior": 2643.5,
+    "loadCurrent": 2735.8,
+    "fpsPrior": 254.4,
+    "fpsCurrent": 251.1
   }
 }

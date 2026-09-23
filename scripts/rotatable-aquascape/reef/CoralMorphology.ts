@@ -7,7 +7,8 @@ export type CoralGrowth='canopy'|'bushy'|'antler';
  * skeleton stays rigid, unlike the soft anemone tissue elsewhere in the scene. */
 export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null,growth:CoralGrowth='canopy',basalGeometry?:T.BufferGeometry){
  const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.52,.29),tipColor=baseColor.clone().lerp(new T.Color('#e5e3cc'),.31);
- const choice=(a:number,b:number)=>a+(b-a)*random();
+ let growthRandom=random;
+ const choice=(a:number,b:number)=>a+(b-a)*growthRandom();
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
   const delta=end.clone().sub(start),middle=start.clone().lerp(end,.5);middle.x+=Math.sin(seed)*delta.length()*.12;middle.z+=Math.cos(seed*1.7)*delta.length()*.12;
   const shoulder=start.clone().lerp(end,.27);if(level===0){const bend=.5+.5*Math.sin(seed*1.83);shoulder.y=start.y+delta.y*(.27-.17*bend);middle.y=start.y+delta.y*(.5-.11*bend);if(size>=.6){const drift=.075*size*Math.sin(seed*2.31);shoulder.x+=Math.cos(seed+1.2)*drift;shoulder.z+=Math.sin(seed+1.2)*drift;middle.x-=Math.cos(seed+1.2)*drift*.45;middle.z-=Math.sin(seed+1.2)*drift*.45;}}else{shoulder.addScaledVector(delta.clone().normalize(),-.025*size);}
@@ -57,6 +58,22 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
    if(growth==='bushy')tip.addScaledVector(direction,.025*size);
    tip.addScaledVector(direction,choice(.04,.12)*size);
    branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.72,(level===0?.018:growth==='antler'?.013:.014)*size),level+1,seed+j*1.73);
+  }
+  if(level===0&&size>=.6){
+   // Interleaved lower scaffolds fill the bare trunk intervals. A local stream
+   // leaves every established colony, garden and small infill placement intact.
+   const sceneRandom=growthRandom;let state=(Math.floor((seed+31.7)*104729)>>>0)||1;
+   growthRandom=()=>{state^=state<<13;state^=state>>>17;state^=state<<5;return (state>>>0)/4294967296;};
+   for(let j=0;j<2;j++){
+    const t=.20+j*.27+.045*Math.sin(seed*3.7+j*2.1),root=curve.getPointAt(t);
+    const angle=seed+(j?1.35:-1.1)+.45*Math.sin(seed*2.3);
+    const length=size*(.19+.09*growthRandom()),tip=root.clone().add(new T.Vector3(Math.cos(angle)*length,.13*size+length*.45,Math.sin(angle)*length));
+    junctions.push(t);
+    const first=geometries.length;
+    branch(root,tip,radius*(1-(1-endScale)*t)*.48,1,seed+11.31+j*3.17);
+    geometries[first].name='Interleaved scaffold';
+   }
+   growthRandom=sceneRandom;
   }
   finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));
  }
