@@ -1,0 +1,62 @@
+[
+  {
+    "kind": "zoanthid",
+    "seed": 41,
+    "polyps": 61,
+    "tentacles": 1464,
+    "rngCalls": 2072,
+    "priorTriangles": 102480,
+    "triangles": 167628,
+    "bytes": 7270712
+  },
+  {
+    "kind": "zoanthid",
+    "seed": 728,
+    "polyps": 61,
+    "tentacles": 1464,
+    "rngCalls": 2072,
+    "priorTriangles": 102480,
+    "triangles": 167628,
+    "bytes": 7270712
+  },
+  {
+    "kind": "zoanthid",
+    "seed": 193,
+    "polyps": 61,
+    "tentacles": 1464,
+    "rngCalls": 2072,
+    "priorTriangles": 102480,
+    "triangles": 167628,
+    "bytes": 7270712
+  },
+  {
+    "kind": "stony",
+    "seed": 41,
+    "polyps": 145,
+    "tentacles": 0,
+    "rngCalls": 1175,
+    "priorTriangles": 52200,
+    "triangles": 52200,
+    "bytes": 1987080
+  },
+  {
+    "kind": "stony",
+    "seed": 728,
+    "polyps": 141,
+    "tentacles": 0,
+    "rngCalls": 1155,
+    "priorTriangles": 50760,
+    "triangles": 50760,
+    "bytes": 1932264
+  },
+  {
+    "kind": "stony",
+    "seed": 193,
+    "polyps": 143,
+    "tentacles": 0,
+    "rngCalls": 1165,
+    "priorTriangles": 51480,
+    "triangles": 51480,
+    "bytes": 1959672
+  }
+]

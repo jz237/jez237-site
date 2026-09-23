@@ -6,6 +6,7 @@ import './fin-motion.mjs';
 import './water-capture.mjs';
 import './caustics.mjs';
 import './polyp-geometry.mjs';
+import './polyp-tissue-geometry.mjs';
 import './rock-surface.mjs';
 import './rock-geometry.mjs';
 import './coral-geometry.mjs';
@@ -55,6 +56,9 @@ try{
  await page.evaluate(()=>window.reefQA.inspectSand());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'sand-closeup.png')});
  await page.evaluate(()=>window.reefQA.inspectOutcrops());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'outcrop-closeup.png')});
  await page.evaluate(()=>window.reefQA.inspectPolyps());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'polyp-closeup.png')});
+ await page.getByRole('button',{name:'Resume',exact:true}).click();
+ for(let i=0;i<4;i++){await page.waitForTimeout(650);await page.screenshot({path:resolve(out,`polyp-motion-${i}.png`)});}
+ await page.getByRole('button',{name:'Pause',exact:true}).click();
  await page.evaluate(()=>window.reefQA.inspectCorals());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'coral-closeup.png')});await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  for(const species of ['clown','tang','yellow','anthias','chromis','gramma']){await page.evaluate(s=>window.reefQA.inspectFish(s),species);await page.waitForTimeout(350);await page.screenshot({path:resolve(out,`fish-${species}.png`)});}
  await page.evaluate(()=>window.reefQA.inspectAnemones());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'anemone-closeup.png')});await page.getByRole('button',{name:'Resume',exact:true}).click();await page.waitForTimeout(800);await page.screenshot({path:resolve(out,'anemone-motion-a.png')});await page.waitForTimeout(1000);await page.screenshot({path:resolve(out,'anemone-motion-b.png')});await page.getByRole('button',{name:'Pause',exact:true}).click();await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
