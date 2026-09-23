@@ -1,4 +1,5 @@
 import './anemone-geometry.mjs';
+import './fish-geometry.mjs';
 import {chromium} from 'playwright';
 import {createServer} from 'node:http';
 import {readFile,stat} from 'node:fs/promises';
@@ -27,6 +28,7 @@ try{
  await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  const canvas=await page.locator('canvas').boundingBox();await page.mouse.click(canvas.x+canvas.width*.29,canvas.y+canvas.height*.64);assert.ok(await page.locator('#detail').isVisible(),'rock identification should open');await page.getByRole('button',{name:'Close detail',exact:true}).click();
  await page.evaluate(()=>window.reefQA.inspectCorals());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'coral-closeup.png')});await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
+ for(const species of ['clown','tang','yellow']){await page.evaluate(s=>window.reefQA.inspectFish(s),species);await page.waitForTimeout(350);await page.screenshot({path:resolve(out,`fish-${species}.png`)});}
  await page.evaluate(()=>window.reefQA.inspectAnemones());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'anemone-closeup.png')});await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(500);await page.screenshot({path:resolve(out,'mobile.png')});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
  const mobileCanvas=await page.locator('canvas').boundingBox();assert.ok(mobileCanvas.width<=390&&mobileCanvas.x>=0,'canvas must fit the phone width');
