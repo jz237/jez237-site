@@ -1,18 +1,21 @@
 {
-  "buildHash": "572e856c2a3b7e11ad19aa00dfa5b5a52cbffbc63a43225e34f7f0c3e8baf088",
+  "buildHash": "7705cc72ec7f8d1dd6d32f584b184f714879d9af97eea143e8749d4429be4412",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-Dbnz7-c6.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-ESMy3QxZ.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
+    "assets/map-Ie55ijny.png",
     "assets/normalMap-AIoBIlzs.png",
+    "assets/normalMap-CVYemK4O.png",
     "assets/normalMap-u0tbhGky.png",
     "assets/roughnessMap-4hZTjONg.png",
     "assets/roughnessMap-BGsWqYxk.png",
+    "assets/roughnessMap-qepxckm-.png",
     "assets/seaside_rock_diff_1k-STQ4lmr_.jpg",
     "assets/seaside_rock_nor_gl_1k-SdHn3rBd.jpg",
     "assets/seaside_rock_rough_1k-sKOQ0WHG.jpg",
@@ -20,48 +23,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T09:02:12.285Z",
-  "readyMs": 2449,
+  "checkedAt": "2026-09-23T09:19:40.815Z",
+  "readyMs": 2282,
   "samples": [
     {
-      "fps": 59.99700014999251,
-      "time": 4.298999999904632,
-      "bites": 13,
-      "remaining": 23
-    },
-    {
-      "fps": 59.99400059994003,
-      "time": 8.315999999904664,
-      "bites": 32,
-      "remaining": 4
+      "fps": 59.99700014999249,
+      "time": 4.289699999809268,
+      "bites": 30,
+      "remaining": 6
     },
     {
       "fps": 59.99400059993998,
-      "time": 12.332999999904624,
-      "bites": 35,
-      "remaining": 1
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 16.350099999904593,
+      "time": 8.290199999809296,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999244,
-      "time": 20.35029999990452,
+      "fps": 59.99100134979755,
+      "time": 12.30719999980927,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 16.324199999809213,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 20.324599999809156,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.367399999904443,
+      "time": 24.341499999809084,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999244,
-      "time": 28.384399999904353,
+      "fps": 59.99400059993998,
+      "time": 28.358599999809023,
       "bites": 36,
       "remaining": 0
     }
@@ -200,13 +203,13 @@
     "Encrusting maps: seamless wrap gradients below interior gradients; unit outward normals;637268bytes",
     "Marine fin motion: six pinned species profiles;1800 sloped membrane samples, normal dot0.999999999969; minimum determinant0.951112",
     "Water capture: vertical-only coverage and retained pixel density, main camera unchanged, capture camera reused; adaptive planar fallback and full restoration",
-    "Branch anatomy:119 matched axial cup boundaries/normals with recessed centers; side-cup footprints agree with real curved/swollen triangles within1.1451e-8; finite, nondegenerate geometry and conservative navigation"
+    "Branch anatomy:119 matched axial cup boundaries/normals with recessed centers; side-cup footprints agree with real curved/swollen triangles within1.1451e-8; finite, nondegenerate geometry and conservative navigation",
+    "Plate tissue: periodic baked maps with outward near-unit normals; existing closed skeleton, thickness and conservative navigation checks pass; one normalized byte per vertex controls upper/edge/underside relief"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "rear-closeup",
     "coral-closeup",
     "reference-and-mature-planted-comparison"
   ],
@@ -216,5 +219,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Raised and broadened the rear ridge/crowns, with two additional rock-attached shoulder colonies. Actual 3D depth, foreground placements and open front channel retained. Rendered5289638triangles vs5166658 (+2.38%); no new maps/passes. Mean loads2311.3ms prior vs2353.0ms current;normal60FPSboth,uncapped237.0vs232.2 locally. Target remains unmet."
+  "scope": "Five plate corals gain stationary mesh wrinkles and baked immersed cups/hoods/ridges, with smoother growth margins and undersides. Same5289638rendered triangles and all organisms retained. Three512px maps add692895bytes, one material draw group and71410bytes of vertex masks; no new render passes. Local normal60FPS both; alternating mean loads2245.7ms prior/2226.3current, a small run variation. See plate-tissue-uncapped-comparison.json for paired rendering. Photographic target remains unmet."
 }

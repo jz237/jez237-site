@@ -403,3 +403,16 @@ meshes with the same axial/radial detail as the foreground, shared maps/material
 and conservative navigation volumes. Independent seeds retain the established
 foreground placements. The rear inspection camera covers the taller structures.
 This is an artistic composition change; photographic parity is still unmet.
+
+## Plating coral tissue
+
+Five closed shelves retain all vertices and gain small stationary tissue wrinkles.
+Locally baked 512px albedo/normal/roughness maps add immersed cups, asymmetric
+hoods and interrupted fine ridges; the growing edge and underside retain a
+smoother finish. A normalized byte per vertex blends this relief, without CPU
+updates per frame. The shelves share one material and one additional draw group.
+The original offline source is model-source/bake_plate_maps.py (numpy/Pillow).
+
+Morphology inspiration: [Corals of the World, Montipora aequituberculata](https://www.coralsoftheworld.org/species_factsheets/species_factsheet_summary/montipora-aequituberculata/).
+The pattern is an artistic approximation, not a species scan or simulated polyp
+extension. No external image is embedded, purchased or generated with a paid API.

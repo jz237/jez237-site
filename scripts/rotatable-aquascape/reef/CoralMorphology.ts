@@ -70,19 +70,20 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
 
 /** A closed, thin skeleton with independent upper tissue and lower ridges. */
 export function platingColony(x:number,y:number,z:number,r:number,seed:number){
- const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[];
+ const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],tissue:number[]=[];
  const top=new T.Color('#b74423'),rim=new T.Color('#e6aa75'),bottom=new T.Color('#ba9478');
  for(let layer=0;layer<2;layer++)for(let j=0;j<=rings;j++)for(let i=0;i<=sides;i++){
   const a=i/sides*Math.PI*2,t=j/rings,rr=r*t*(1+.16*Math.sin(a*3+seed)+.08*Math.cos(a*5-seed*.3)+.055*Math.sin(a*9+seed)+.017*Math.sin(a*29));
   const scallop=r*(Math.sin(a*17+Math.sin(a*5)*.8+seed)*.025*t**5+Math.sin(a*37-seed)*.008*t**8);
   const raised=r*(.14*t*t+.10*Math.sin(a*2+seed)*t*t+.06*Math.sin(a*5+seed*.3)*t**3+.035*Math.sin(t*13+a*3+seed)*t*t),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
-  const thickness=r*(.010+.035*(1-t)**2),py=y+raised+scallop+groove-(layer?thickness:0);
-  positions.push(x+Math.cos(a)*rr,py,z+Math.sin(a)*rr*.76);
-  const c=layer?bottom.clone().multiplyScalar(.82+.08*Math.cos(a*67)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.987,1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.135,Math.sin(a)*rr*.76/.135);
+  const tissueRelief=r*.016*(.6*Math.sin(a*37+Math.sin(t*17+seed))+.4*Math.sin(a*61-t*13+seed))*Math.sin(t*43+a*5)*t*(1-T.MathUtils.smoothstep(t,.92,1));
+  const thickness=r*(.010+.035*(1-t)**2),py=y+raised+scallop+groove+tissueRelief-(layer?thickness:0);
+  positions.push(x+Math.cos(a)*rr,py,z+Math.sin(a)*rr*.76);tissue.push(Math.round(255*(layer?.12:1-T.MathUtils.smoothstep(t,.955,1))));
+  const c=layer?bottom.clone().multiplyScalar(.82+.08*Math.cos(a*67)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.987,1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.32,Math.sin(a)*rr*.76/.32);
   if(j<rings&&i<sides){const n=layer*(rings+1)*(sides+1)+j*(sides+1)+i;const ids=[n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1];indices.push(...(layer?ids.map((v,k)=>k%3===1?ids[k+1]:k%3===2?ids[k-1]:v):ids));}
  }
  const offset=(rings+1)*(sides+1);for(let i=0;i<sides;i++){const n=rings*(sides+1)+i;indices.push(n,n+offset,n+1,n+1,n+offset,n+offset+1);}
- const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setIndex(indices);geo.computeVertexNormals();return geo;
+ const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setAttribute('plateTissue',new T.Uint8BufferAttribute(tissue,1,true));geo.setIndex(indices);geo.computeVertexNormals();return geo;
 }
 
 /** Conservative volumes derived from the actual closed shelf, including folds.
