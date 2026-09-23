@@ -1351,5 +1351,30 @@
       "description": "Four-color hand-pulled screen print with opaque spot inks, translucent overprints, coarse halftone and slight registration drift.",
       "template": ""
     }
+  },
+  {
+    "id": "2026-09-23-random-image-style-pyrography-the-rooftop-banquet-takes-fli",
+    "title": "Pyrography: The Rooftop Banquet Takes Flight",
+    "tests": "Reusable formula: show an initiating accident and its cascading consequences across adjacent spaces in one continuous sweep; no storyboard or document frame.; archive_slot=2026-09-23T09:20; concept=windborne-banquet-cloth-rooftop-chain-reaction; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1536x1024\", \"backendReportedSize\": \"1536x1024\", \"backendReportedQuality\": \"high\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1536x1024\", \"quality\": \"high\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create a finished, richly detailed panoramic pyrography artwork burned into a single pale linden-wood panel, 1536 x 1024 landscape. The visual grammar is one uninterrupted diagonal chain reaction across four adjoining old-city rooftops, seen from a high oblique viewpoint; no panels, frames, captions, diagram arrows, lettering, or poster layout. At lower left, a gust catches the long tablecloth of a rooftop birthday banquet. The cloth arches upward like an accidental sail, cradling a tall celebration cake that is tipping but still intact. Follow that SAME airborne cloth in a sweeping S-curve toward the upper right: one guest lunges to catch a tray, a child steadies a stack of plates, a neighbor on the next roof leans back as a string of drying linens tangles with the trailing corner, and on the far roof two surprised musicians duck beneath the cloth's shadow. Make each gesture and the cause-and-effect path instantly legible in one frozen moment, with believable gravity, folds, roof geometry, and distinct people of different ages, builds, skin tones, hairstyles, and poses. The cake is the bright focal silhouette, surrounded by flying crumbs, one rolling lemon, and a few loose paper napkins; these tiny details reinforce movement without clutter. Use authentic hot-point pyrography marks: hairline nib strokes for figures and shingles; clustered, darker burned stipples at contact shadows; wide softly scorched gradients for sky and billowing cloth; unburned wood reserved for gleams. Let real horizontal wood grain subtly steer cloud and roof contours; retain visible grain, irregular char edges, and slight hand pressure variation. Restrained material palette of pale ash wood, honey sepia, and deep burnt umber only, with warm natural side light emphasizing incised and scorched texture. Complex but clean spatial hierarchy, playful humane visual storytelling, no ink, paint, photographic color, fake text, logo, watermark, border, or mockup.",
+    "image": "images/2026-09-23-random-image-style-pyrography-the-rooftop-banquet-takes-fli.jpg",
+    "thumb": "thumbs/2026-09-23-random-image-style-pyrography-the-rooftop-banquet-takes-fli.webp",
+    "color": "#9c7453",
+    "date": "2026-09-23",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1536x1024",
+    "dedup": {
+      "conceptKey": "windborne-banquet-cloth-rooftop-chain-reaction",
+      "imageSha256": "4a68166ae5f788802eb662af4bbcc849a972824b1590e55c3207a30bb2917611",
+      "imageDHash": "4baf9e3a39107a5a",
+      "styleFamily": "pyrography"
+    },
+    "randomRenderingStyle": {
+      "medium": "pyrography",
+      "description": "A continuous rooftop cause-and-effect comedy rendered as hand-burned hot-point pyrography on pale linden wood, using grain-led contours and char gradients rather than ink or paint.",
+      "template": ""
+    }
   }
 ]
