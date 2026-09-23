@@ -1,0 +1,182 @@
+[
+  {
+    "style": "canopy",
+    "seed": 84,
+    "size": 0.5,
+    "randomCalls": 526,
+    "originalBranches": 119,
+    "priorTriangles": 31202,
+    "currentTriangles": 31202,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "canopy",
+    "seed": 84,
+    "size": 1,
+    "randomCalls": 526,
+    "originalBranches": 175,
+    "priorTriangles": 44894,
+    "currentTriangles": 49652,
+    "smallColonyUnchanged": false
+  },
+  {
+    "style": "canopy",
+    "seed": 684,
+    "size": 0.5,
+    "randomCalls": 601,
+    "originalBranches": 136,
+    "priorTriangles": 35434,
+    "currentTriangles": 35434,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "canopy",
+    "seed": 684,
+    "size": 1,
+    "randomCalls": 601,
+    "originalBranches": 200,
+    "priorTriangles": 52174,
+    "currentTriangles": 57556,
+    "smallColonyUnchanged": false
+  },
+  {
+    "style": "canopy",
+    "seed": 1927,
+    "size": 0.5,
+    "randomCalls": 676,
+    "originalBranches": 153,
+    "priorTriangles": 39354,
+    "currentTriangles": 39354,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "canopy",
+    "seed": 1927,
+    "size": 1,
+    "randomCalls": 676,
+    "originalBranches": 225,
+    "priorTriangles": 58206,
+    "currentTriangles": 62262,
+    "smallColonyUnchanged": false
+  },
+  {
+    "style": "bushy",
+    "seed": 84,
+    "size": 0.5,
+    "randomCalls": 526,
+    "originalBranches": 119,
+    "priorTriangles": 31202,
+    "currentTriangles": 31202,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "bushy",
+    "seed": 84,
+    "size": 1,
+    "randomCalls": 526,
+    "originalBranches": 175,
+    "priorTriangles": 44894,
+    "currentTriangles": 49652,
+    "smallColonyUnchanged": false
+  },
+  {
+    "style": "bushy",
+    "seed": 684,
+    "size": 0.5,
+    "randomCalls": 601,
+    "originalBranches": 136,
+    "priorTriangles": 35434,
+    "currentTriangles": 35434,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "bushy",
+    "seed": 684,
+    "size": 1,
+    "randomCalls": 601,
+    "originalBranches": 200,
+    "priorTriangles": 52174,
+    "currentTriangles": 57556,
+    "smallColonyUnchanged": false
+  },
+  {
+    "style": "bushy",
+    "seed": 1927,
+    "size": 0.5,
+    "randomCalls": 676,
+    "originalBranches": 153,
+    "priorTriangles": 39354,
+    "currentTriangles": 39354,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "bushy",
+    "seed": 1927,
+    "size": 1,
+    "randomCalls": 676,
+    "originalBranches": 225,
+    "priorTriangles": 58206,
+    "currentTriangles": 62262,
+    "smallColonyUnchanged": false
+  },
+  {
+    "style": "antler",
+    "seed": 84,
+    "size": 0.5,
+    "randomCalls": 526,
+    "originalBranches": 119,
+    "priorTriangles": 31202,
+    "currentTriangles": 31202,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "antler",
+    "seed": 84,
+    "size": 1,
+    "randomCalls": 526,
+    "originalBranches": 175,
+    "priorTriangles": 44894,
+    "currentTriangles": 49652,
+    "smallColonyUnchanged": false
+  },
+  {
+    "style": "antler",
+    "seed": 684,
+    "size": 0.5,
+    "randomCalls": 601,
+    "originalBranches": 136,
+    "priorTriangles": 35434,
+    "currentTriangles": 35434,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "antler",
+    "seed": 684,
+    "size": 1,
+    "randomCalls": 601,
+    "originalBranches": 200,
+    "priorTriangles": 52174,
+    "currentTriangles": 57556,
+    "smallColonyUnchanged": false
+  },
+  {
+    "style": "antler",
+    "seed": 1927,
+    "size": 0.5,
+    "randomCalls": 676,
+    "originalBranches": 153,
+    "priorTriangles": 39354,
+    "currentTriangles": 39354,
+    "smallColonyUnchanged": true
+  },
+  {
+    "style": "antler",
+    "seed": 1927,
+    "size": 1,
+    "randomCalls": 676,
+    "originalBranches": 225,
+    "priorTriangles": 58206,
+    "currentTriangles": 62262,
+    "smallColonyUnchanged": false
+  }
+]
