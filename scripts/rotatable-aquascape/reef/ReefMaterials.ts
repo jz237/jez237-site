@@ -1,6 +1,6 @@
 import * as T from 'three';
 
-// Free CC0 scanned coastal stone, locally hosted. See assets/README.md.
+// Original periodic porous limestone maps, baked offline. See assets/README.md.
 export function limestoneMaps(){
  const loader=new T.TextureLoader(),pending:Promise<unknown>[]=[];
  const load=(url:string,color=false)=>{
@@ -10,10 +10,10 @@ export function limestoneMaps(){
   map.colorSpace=color?T.SRGBColorSpace:T.NoColorSpace;map.wrapS=map.wrapT=T.RepeatWrapping;
   map.repeat.set(2.4,1.6);map.anisotropy=8;return map;
  };
- const map=load(new URL('./assets/seaside_rock_diff_1k.jpg',import.meta.url).href,true);
- const normalMap=load(new URL('./assets/seaside_rock_nor_gl_1k.jpg',import.meta.url).href);
- const roughnessMap=load(new URL('./assets/seaside_rock_rough_1k.jpg',import.meta.url).href);
- return {maps:{map,normalMap,roughnessMap},ready:Promise.all(pending)};
+ const map=load(new URL('./assets/limestone/map.png',import.meta.url).href,true);
+ const normalMap=load(new URL('./assets/limestone/normalMap.png',import.meta.url).href);
+ // Roughness shares the normal map's alpha channel: same 1K detail, one fewer sampler.
+ return {maps:{map,normalMap},ready:Promise.all(pending)};
 }
 function hash(x:number,y:number,z:number){let n=Math.imul(x,374761393)^Math.imul(y,668265263)^Math.imul(z,1442695041);n=Math.imul(n^(n>>>13),1274126177);return ((n^(n>>>16))>>>0)/4294967295;}
 function noise(x:number,y:number,z:number){
@@ -29,7 +29,7 @@ export function encrustRock(g:T.BufferGeometry){
   const x=p.getX(i),y=p.getY(i),z=p.getZ(i),fine=noise(x*31,y*31,z*31),grain=noise(x*13,y*13,z*13);
   const patch=noise(x*5.1+grain*.6,y*5.1,z*5.1)*.72+grain*.28;
   const crust=T.MathUtils.smoothstep(patch,.44,.57),variation=noise(x*3.1,y*3.1,z*3.1);
-  color.copy(chalk).lerp(olive,T.MathUtils.smoothstep(variation,.48,.71)*.55).lerp(variation>.48?purple:rose,crust*.94);
+  color.copy(chalk).lerp(olive,T.MathUtils.smoothstep(variation,.48,.71)*.55).lerp(variation>.48?purple:rose,crust*.58);
   // Thin pale growing boundaries and uneven age/color within each attached patch.
   const margin=Math.exp(-(((patch-.485)/.018)**2))*.17;
   color.lerp(edge,margin).multiplyScalar(.78+.27*fine+.12*grain);
