@@ -83,14 +83,27 @@ export function platingColony(x:number,y:number,z:number,r:number,seed:number){
  const sides=192,rings=36,positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[];
  const top=new T.Color('#b74423'),rim=new T.Color('#e6aa75'),bottom=new T.Color('#ba9478');
  for(let layer=0;layer<2;layer++)for(let j=0;j<=rings;j++)for(let i=0;i<=sides;i++){
-  const a=i/sides*Math.PI*2,t=j/rings,rr=r*t*(1+.12*Math.sin(a*3+seed)+.075*Math.cos(a*7-seed*.3)+.026*Math.sin(a*17));
-  const scallop=Math.sin(a*11+t*5+seed)*.046*t*t+Math.sin(a*23-seed)*.017*t**5;
-  const raised=.10*t*t+.045*Math.sin(a*4+seed)*t**2+.024*Math.sin(t*11+a*2+seed)*t,groove=Math.sin(a*67+Math.sin(t*18)*.35)*.004*t;
-  const thickness=.018+.035*(1-t),py=y+raised+scallop+groove-(layer?thickness:0);
+  const a=i/sides*Math.PI*2,t=j/rings,rr=r*t*(1+.16*Math.sin(a*3+seed)+.08*Math.cos(a*5-seed*.3)+.055*Math.sin(a*9+seed)+.017*Math.sin(a*29));
+  const scallop=r*(Math.sin(a*17+Math.sin(a*5)*.8+seed)*.025*t**5+Math.sin(a*37-seed)*.008*t**8);
+  const raised=r*(.14*t*t+.10*Math.sin(a*2+seed)*t*t+.06*Math.sin(a*5+seed*.3)*t**3+.035*Math.sin(t*13+a*3+seed)*t*t),groove=Math.sin(a*67+Math.sin(t*18)*.7)*r*(layer?.006:.003)*t;
+  const thickness=r*(.010+.035*(1-t)**2),py=y+raised+scallop+groove-(layer?thickness:0);
   positions.push(x+Math.cos(a)*rr,py,z+Math.sin(a)*rr*.76);
-  const c=layer?bottom.clone().multiplyScalar(.82+.08*Math.cos(a*67)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.977,1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.21,Math.sin(a)*rr*.76/.21);
+  const c=layer?bottom.clone().multiplyScalar(.82+.08*Math.cos(a*67)):top.clone().lerp(rim,T.MathUtils.smoothstep(t,.987,1));c.multiplyScalar(.94+.025*Math.sin(a*37+t*61)+.015*Math.sin(a*91-t*19));colors.push(c.r,c.g,c.b);uv.push(Math.cos(a)*rr/.135,Math.sin(a)*rr*.76/.135);
   if(j<rings&&i<sides){const n=layer*(rings+1)*(sides+1)+j*(sides+1)+i;const ids=[n,n+1,n+sides+1,n+1,n+sides+2,n+sides+1];indices.push(...(layer?ids.map((v,k)=>k%3===1?ids[k+1]:k%3===2?ids[k-1]:v):ids));}
  }
  const offset=(rings+1)*(sides+1);for(let i=0;i<sides;i++){const n=rings*(sides+1)+i;indices.push(n,n+offset,n+1,n+1,n+offset,n+offset+1);}
  const geo=new T.BufferGeometry();geo.setAttribute('position',new T.Float32BufferAttribute(positions,3));geo.setAttribute('color',new T.Float32BufferAttribute(colors,3));geo.setAttribute('uv',new T.Float32BufferAttribute(uv,2));geo.setIndex(indices);geo.computeVertexNormals();return geo;
+}
+
+/** Conservative volumes derived from the actual closed shelf, including folds.
+ * A cell encloses its vertices; one maximum edge of padding also encloses every
+ * triangle incident to those vertices. No separately guessed height formula. */
+export function plateCollisionVolumes(geometry:T.BufferGeometry,cellSize=.18){
+ const p=geometry.getAttribute('position'),index=geometry.index!,cells=new Map<string,T.Box3>();
+ let edgeSquared=0;
+ for(let i=0;i<index.count;i+=3)for(let j=0;j<3;j++){const a=index.getX(i+j),b=index.getX(i+(j+1)%3);edgeSquared=Math.max(edgeSquared,(p.getX(a)-p.getX(b))**2+(p.getY(a)-p.getY(b))**2+(p.getZ(a)-p.getZ(b))**2);}
+ const point=new T.Vector3();
+ for(let i=0;i<p.count;i++){point.fromBufferAttribute(p,i);const key=Math.floor(point.x/cellSize)+':'+Math.floor(point.z/cellSize);let box=cells.get(key);if(!box){box=new T.Box3();cells.set(key,box);}box.expandByPoint(point);}
+ const padding=Math.sqrt(edgeSquared)+.006;
+ return [...cells.values()].map(box=>({center:box.getCenter(new T.Vector3()),radius:box.getSize(new T.Vector3()).length()*.5+padding}));
 }
