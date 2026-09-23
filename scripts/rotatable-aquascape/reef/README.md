@@ -146,3 +146,18 @@ disconnected lower-shelf fragments are excluded; the old flattened spherical
 support discs are removed. A slope/ledge regression checks attachment and outward
 normals. The temporary surface index is shared with the existing polyp attachment.
 No per-frame surface searches or new image assets are introduced.
+
+## Eroded live-rock geometry
+
+Each rock now has distinct large-scale contours, deeper rounded cavities and
+eroded seams. The rock surfaces retain all 243,340 triangles and scanned maps.
+Coral bases, polyps and anemone feet resample the changed supporting surfaces;
+three zoanthid beds spread farther across safe attachment areas. These are
+modeled cavities in solid stone, not internal connected reef porosity.
+
+Retaining shared vertices reduces the merged rock buffers from 32,120,880 to
+8,345,412 bytes (74%). Regression checks compare expanded position, normal, UV
+and color arrays exactly, enforce bounded displacement and outward normals,
+and retain the surface-query comparison against Three.js raycasts. This memory
+figure is for rock geometry, not total GPU memory. Local QA runs around 60 FPS
+with startup 1634 ms versus 1675 previously; other devices remain unmeasured.

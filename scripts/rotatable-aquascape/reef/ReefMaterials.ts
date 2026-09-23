@@ -30,5 +30,5 @@ export function encrustRock(g:T.BufferGeometry){
   color.copy(chalk).lerp(olive,T.MathUtils.smoothstep(variation,.55,.78)*.5).lerp(variation>.5?purple:rose,crust*.81);
   colors.set([color.r,color.g,color.b],i*3);
  }
- g.setAttribute('color',new T.BufferAttribute(colors,3));return g.index?g.toNonIndexed():g;
+ g.setAttribute('color',new T.BufferAttribute(colors,3));return g;
 }
