@@ -23,7 +23,15 @@ Shared aquarium rebuilds preserve it without adding it to either Hidden Reef cop
 
 Irregular forked coral with rounded growth tips, rock-attached bases, closed thin
 plate skeletons, and procedural limestone albedo/normal/roughness maps. The QA
-run includes a close-up capture for checking tissue detail as well as full views.
+run includes coral and anemone close-ups for checking tissue detail as well as full views.
+Anemones have continuous rounded skin, a rock-anchored column and oral disc,
+individual curved tentacles, and root-to-tip GPU deformation shared across views.
+A geometry check guards against inward-facing tentacle surfaces.
+
+Basic anemone anatomy is informed by the [National Aquarium](https://aqua.org/explore/animals/anemones)
+and [Oregon Coast Aquarium](https://aquarium.org/animals/bubble-tip-anemone/).
+The reference guides the artistic appearance; flow and tissue shading are illustrative,
+not a species-calibrated fluid or subsurface-scattering simulation.
 
 ## Rendering and behavior
 

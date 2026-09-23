@@ -1,3 +1,4 @@
+import './anemone-geometry.mjs';
 import {chromium} from 'playwright';
 import {createServer} from 'node:http';
 import {readFile,stat} from 'node:fs/promises';
@@ -13,7 +14,7 @@ try{
  const page=await browser.newPage({viewport:{width:1440,height:1080}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  const start=Date.now();await page.goto('http://127.0.0.1:5241/demos/reef-aquarium/');await page.waitForFunction(()=>window.reefQA?.snapshot().ready,null,{timeout:120000});report.readyMs=Date.now()-start;
- await page.waitForTimeout(1500);const initial=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(initial.fish,20);assert.equal(initial.obstacleOverlaps,0);assert.equal(initial.fishOverlaps,0);
+ await page.waitForTimeout(1500);const initial=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(initial.fish,20);assert.equal(initial.anemoneTentacles,540);assert.equal(initial.obstacleOverlaps,0);assert.equal(initial.fishOverlaps,0);
  await page.screenshot({path:resolve(out,'front.png')});await page.getByRole('button',{name:'Feed fish',exact:true}).click();
  report.samples=[];
  for(let i=0;i<7;i++){await page.waitForTimeout(4000);const s=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(s.obstacleOverlaps,0,'fish overlaps an obstacle');assert.equal(s.fishOverlaps,0,'fish overlap one another');report.samples.push({fps:s.fps,time:s.time,bites:s.bites,remaining:s.food});}
@@ -26,6 +27,7 @@ try{
  await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  const canvas=await page.locator('canvas').boundingBox();await page.mouse.click(canvas.x+canvas.width*.29,canvas.y+canvas.height*.64);assert.ok(await page.locator('#detail').isVisible(),'rock identification should open');await page.getByRole('button',{name:'Close detail',exact:true}).click();
  await page.evaluate(()=>window.reefQA.inspectCorals());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'coral-closeup.png')});await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
+ await page.evaluate(()=>window.reefQA.inspectAnemones());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'anemone-closeup.png')});await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  await page.setViewportSize({width:390,height:844});await page.waitForTimeout(500);await page.screenshot({path:resolve(out,'mobile.png')});assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'no horizontal overflow');
  const mobileCanvas=await page.locator('canvas').boundingBox();assert.ok(mobileCanvas.width<=390&&mobileCanvas.x>=0,'canvas must fit the phone width');
  const mobileControl=await page.locator('#feed').boundingBox();assert.ok(mobileControl.x>=0&&mobileControl.x+mobileControl.width<=390&&mobileControl.y+mobileControl.height<844,'feeding remains visible on phone');
