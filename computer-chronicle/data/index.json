@@ -2,6 +2,22 @@
   "mode": "weekly-1982",
   "issues": [
     {
+      "currentDate": "2026-09-23",
+      "historicDate": "1984-09-10",
+      "displayDate": "Week of September 10-16, 1984",
+      "edition": "Issue 111 - Weekly 1984 Computer & Culture Chronicle",
+      "morningLine": "This week in 1984: the Macintosh gets 512K, and the game shelf ignores hardware boundaries.",
+      "leadHeadline": "Apple Unveils a 512K Macintosh",
+      "storyHeadlines": [
+        "AtariSoft Sends Arcade Favorites Across the Home-Computer Aisle",
+        "PC Compatibles Compete on Price, Portability and Speed",
+        "Framework Packs Six Office Tools Into One Box"
+      ],
+      "hero": "media/computer-chronicle-gpt-image-2-week-1984-09-10.jpg",
+      "thumb": "media/thumbs/1984-09-10.webp",
+      "milestone": false
+    },
+    {
       "currentDate": "2026-09-22",
       "historicDate": "1984-09-03",
       "displayDate": "Week of September 3-9, 1984",
