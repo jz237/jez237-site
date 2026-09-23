@@ -16,7 +16,13 @@ for(let i=0;i<p.count;i+=13){const point=new T.Vector3().fromBufferAttribute(p,i
 }
 for(let i=0;i<crust.index.count;i+=3){const a=new T.Vector3().fromBufferAttribute(p,crust.index.getX(i)),b=new T.Vector3().fromBufferAttribute(p,crust.index.getX(i+1)),c=new T.Vector3().fromBufferAttribute(p,crust.index.getX(i+2));assert.ok(new T.Vector3().crossVectors(b.sub(a),c.sub(a)).length()>1e-10,'clipped triangles keep nonzero area');}
 const bytes=Object.values(crust.attributes).reduce((s,a)=>s+a.array.byteLength,0)+crust.index.array.byteLength;
-assert.ok(bytes<100000);
+assert.ok(bytes<160000,'resolved folds stay within the static geometry budget');
+const edges=new Map();
+for(let i=0;i<crust.index.count;i+=3)for(let j=0;j<3;j++){
+ const key=[crust.index.getX(i+j),crust.index.getX(i+(j+1)%3)].sort((a,b)=>a-b).join(':');edges.set(key,(edges.get(key)||0)+1);
+}
+assert.ok([...edges.values()].every(count=>count===1||count===2),'resolved tissue has no nonmanifold seams');
+assert.ok([...edges.values()].filter(count=>count===2).length>crust.index.count*.4,'interior triangles share indexed edges');
 console.log('Encrusting tissue passed:',crust.index.count/3,'triangles,',bytes,'bytes, maximum sampled rock gap',maxGap);
 
 // A small branching-colony foot must hug curved stone just as the large crust does.
