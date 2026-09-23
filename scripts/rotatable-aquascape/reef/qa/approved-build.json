@@ -1,12 +1,12 @@
 {
-  "buildHash": "c93459d30f565b8e17940cd3a0560f835cbfe2812c2ce94438ae5be2e40e35c2",
+  "buildHash": "4522a506562bba249ffc798d10ac656f798a3af920b14d8fa98d49d3599da3a9",
   "files": [
     "assets/anthias-QcvtfU54.glb",
     "assets/chromis-BeZMqwQ5.glb",
     "assets/clown-zY3G7iuy.glb",
     "assets/gramma-BgdGKcNy.glb",
+    "assets/index-C_fSQ09p.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-DqAmh1lX.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-CCMRPYfK.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T09:58:02.851Z",
-  "readyMs": 2381,
+  "checkedAt": "2026-09-23T10:13:56.160Z",
+  "readyMs": 2278,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 4.304200000000002,
-      "bites": 30,
-      "remaining": 6
+      "fps": 59.99400059993998,
+      "time": 4.290000000000001,
+      "bites": 22,
+      "remaining": 14
     },
     {
-      "fps": 59.99700014999249,
-      "time": 8.321200000000042,
+      "fps": 59.99400059993998,
+      "time": 8.306900000000038,
       "bites": 35,
       "remaining": 1
     },
     {
-      "fps": 59.99400059993998,
-      "time": 12.33829999999999,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 16.338699999999935,
+      "fps": 59.99400059994003,
+      "time": 12.323899999999982,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 20.355599999999868,
+      "time": 16.34089999999992,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 20.341299999999823,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 24.35829999999976,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.994000599940094,
-      "time": 24.372699999999757,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 28.38969999999968,
+      "time": 28.375399999999694,
       "bites": 36,
       "remaining": 0
     }
@@ -205,16 +205,16 @@
     "Water capture: vertical-only coverage and retained pixel density, main camera unchanged, capture camera reused; adaptive planar fallback and full restoration",
     "Branch anatomy:119 matched axial cup boundaries/normals with recessed centers; side-cup footprints agree with real curved/swollen triangles within1.1451e-8; finite, nondegenerate geometry and conservative navigation",
     "Plate tissue: periodic baked maps with outward near-unit normals; existing closed skeleton, thickness and conservative navigation checks pass; one normalized byte per vertex controls upper/edge/underside relief",
-    "Marine fin joins: closed bodies, thin peduncle caps, shared median-fin/skin image source and paired outward fin strokes"
+    "Marine fin joins: closed bodies, thin peduncle caps, shared median-fin/skin image source and paired outward fin strokes",
+    "Folded anemones: nonplanar anchored roots, outward skins, recessed oral centers, curved-axis normals and positive sampled deformation determinant"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "fish-clown",
-    "fish-tang",
-    "fish-anthias",
-    "Blender-oblique-proofs",
+    "anemone-closeup",
+    "anemone-motion-a",
+    "anemone-motion-b",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -223,5 +223,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Blender fish now taper into tail membranes, share color images across median-fin roots, conform paired fins around the flank and stroke outward independently. Clownfish pectoral trace excludes adjacent stripe. All20fish and scenery retained. Source triangles94912 vs94712; rendered5290438 vs5289638. SixGLBs5548928bytes vs5527308. Existing texture dimensions/material passes retained. Alternating ready means2343.7/2265ms, uncapped251.1/255.8FPS. Local60FPSboth. Photographic target remains unmet."
+  "scope": "Three anemones now have individually folded oral discs, matching columns and underside tissue, regionally varied tentacle spread and individually curved tips. All540 strands and7725024geometry bytes retained, same5290438scene triangles. No new map, shader pass or per-frame work. Alternating loads2446/2447.3ms and uncapped255.1/253.7FPS. Target photographic realism not reached."
 }
