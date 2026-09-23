@@ -185,3 +185,16 @@ not a named-species growth model. Joins still use overlapping flared surfaces.
 Tests compare reproducible silhouettes and rounded tips with equal detail counts.
 Rendered triangles remain 3,725,742; local QA ready 1632 ms versus 1666 previously,
 with roughly 60 FPS. Feeding and conservative collision bounds follow new shapes.
+
+## Radial anemone anatomy and flow
+
+All 540 tentacles retain their detailed indexed skins, attached roots and joined
+rounded tips. Cubic curves create varied outward arches, with slower shared surge
+and delayed tip response. Circular-row shading seams are smoothed and closed tips
+have valid normals. The disc has folds and an actual recessed oral center; hidden
+column caps no longer fill that depression. This remains artistic motion, without
+fluid dynamics, self-contact or measured species-specific tissue mechanics.
+Unused UV buffers are removed from this vertex-colored material. Anemone geometry
+uses 7,320,528 bytes versus 7,621,920 previously, despite the more detailed discs.
+Raycasts verify the oral recess; normals, roots and 540 tips are checked. Motion
+frames are saved with desktop, oblique, close-up and mobile evidence.

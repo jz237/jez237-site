@@ -1,11 +1,11 @@
 {
-  "buildHash": "3b3a92bc4a2e0c85152cc2e01de23b322488fb2290a180e415095a87671cc519",
+  "buildHash": "ecc268d0e0508f005efd38346f46104047808078e2a3387d79542dd525411bbb",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-CmiIr8Ip.js",
+    "assets/index-DAtZWnnV.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T04:38:05.715Z",
-  "readyMs": 1632,
+  "checkedAt": "2026-09-23T04:55:56.870Z",
+  "readyMs": 1644,
   "samples": [
     {
       "fps": 59.99400059993998,
-      "time": 4.283699999904628,
-      "bites": 30,
-      "remaining": 6
+      "time": 4.3132999999523145,
+      "bites": 19,
+      "remaining": 17
+    },
+    {
+      "fps": 59.99400059994003,
+      "time": 8.313599999952347,
+      "bites": 35,
+      "remaining": 1
     },
     {
       "fps": 59.99700014999249,
-      "time": 8.300599999904666,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999249,
-      "time": 12.317699999904612,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 16.31809999990455,
+      "time": 12.330599999952296,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.351799999904465,
+      "time": 16.330999999952233,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.368799999904372,
+      "time": 20.331399999952133,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 28.38579999990426,
+      "time": 24.364999999952023,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 28.36539999995195,
       "bites": 36,
       "remaining": 0
     }
@@ -77,7 +77,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 3725742,
+    "triangles": 3750342,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -103,7 +103,8 @@
     "Basal coral tissue follows slopes without bridging disconnected lower shelves",
     "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 8345412 vs 32120880 bytes",
     "Clipped crust triangles nondegenerate; sampled support gap bounded; 10 colonies / 11097 triangles",
-    "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved"
+    "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved",
+    "540 rooted tentacles; outward seam-smoothed skin; unit tip normals; actual recessed oral disc; 7320528 geometry bytes"
   ],
   "visualReview": [
     "front",
@@ -117,5 +118,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Compact branching canopies, bushes and antlers with rounded terminals and deeper tissue colors. Full detail counts retained. Local 60 FPS; ready 1632 ms vs 1666 prior. Still short of reference realism; other hardware unmeasured."
+  "scope": "Radial anemone anatomy and smoother cubic arches, delayed surge, fixed seam/tip normals and oral recess. Local 60 FPS; ready1644ms vs1632. Anemone buffers3.95% smaller. Still short of reference realism; other hardware unmeasured."
 }

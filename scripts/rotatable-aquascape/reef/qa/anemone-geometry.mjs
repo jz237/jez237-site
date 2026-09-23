@@ -21,5 +21,16 @@ assert.ok(facingOut/total>.99,'tentacle skins face outward; inverted tubes appea
 // Every tentacle has anchored root vertices and a rounded, joined tip.
 const ends=new Map();for(let i=0;i<p.count;i++){if(flex.getW(i)===0)continue;const phase=flex.getY(i),e=ends.get(phase)||{root:0,tip:0};if(flex.getX(i)===0)e.root++;if(flex.getX(i)===1)e.tip++;ends.set(phase,e);}
 assert.equal(ends.size,540);assert.ok([...ends.values()].every(e=>e.root>0&&e.tip>0));
+console.log('Anemone buffers:',bytes,'bytes;',mesh.geometry.index.count/3,'triangles.');
 console.log(`Anemone geometry passed: ${tentacles} anchored tentacles, ${(100*facingOut/total).toFixed(2)}% outward normals.`);
+// A central depression belongs to the oral disc, without a cylinder cap filling it.
+const ray=new T.Raycaster(new T.Vector3(3,3,.8),new T.Vector3(0,-1,0));
+const centerHit=ray.intersectObject(mesh)[0];ray.set(new T.Vector3(3.10,3,.8),new T.Vector3(0,-1,0));const lipHit=ray.intersectObject(mesh)[0];
+assert.ok(lipHit.point.y-centerHit.point.y>.05,'oral center is recessed below its surrounding lip');
+// Closed tip vertices all have a stable unit normal, rather than zero normals.
+let tips=0;for(let i=0;i<p.count;i++)if(flex.getX(i)===1){assert.ok(new T.Vector3().fromBufferAttribute(n,i).length()>.999);tips++;}
+assert.equal(tips,540*9);
+// The first and last vertex in each circular row share shading after UV removal.
+for(let i=0;i<p.count-8;i++)if(flex.getW(i)>0&&flex.getX(i)<1&&i+8<p.count&&p.getX(i)===p.getX(i+8)&&p.getY(i)===p.getY(i+8))assert.ok(new T.Vector3().fromBufferAttribute(n,i).distanceTo(new T.Vector3().fromBufferAttribute(n,i+8))<1e-6);
+assert.equal(mesh.geometry.getAttribute('uv'),undefined,'no unused UV allocation for the vertex-colored skin');
 mesh.geometry.dispose();mesh.material.dispose();
