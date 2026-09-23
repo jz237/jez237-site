@@ -74,3 +74,21 @@ first load; rendering starts after all maps and lighting are ready.
 Anemones retain shared indexed vertices. All expanded attributes match the prior
 geometry exactly; buffer storage decreases from 28,717,200 to 7,621,920 bytes.
 Triangle count, shape, color, normals and animation attributes are unchanged.
+
+## Rock-attached polyp gardens
+
+560 polyps follow the actual rock triangles instead of spherical support cushions.
+Zoanthid crowns include recessed mouths, patterned oral discs and two alternating
+fringes with 3,072 tapered tentacles. Roots remain fixed while the GPU adds subtle
+current motion. Stony corallites remain rigid. Indexed geometry forms one mesh.
+
+Anatomy reference: [Museums Victoria zoanthids](https://collections.museumsvictoria.com.au/species/8619).
+Colors and movement are illustrative, not a calibrated species simulation.
+No image from that source is embedded or redistributed.
+
+A temporary X/Z triangle index accelerates exact vertical attachment queries.
+Regression tests compare it against Three.js through overhangs and depth limits.
+It is discarded after construction; no per-frame surface search. The rejected
+raycast prototype took 7.0 seconds locally to start; the final detailed version
+takes 1.78 seconds (prior accepted 1.45), while both sustain about 60 FPS on the
+local test computer. Other devices remain unmeasured.
