@@ -71,6 +71,24 @@ const edgeStems=branchingColony(new T.Vector3(),1,.8,edgeRandom,(x,z)=>Math.hypo
 for(const g of edgeStems){const r=g.parameters.path.getPointAt(0);assert.ok(Math.hypot(r.x,r.z)<.14&&Math.hypot(r.x,r.z)>.05,'roots retreat inward onto continuous support');}
 console.log('Primary stems passed: distributed sloping attachments and disconnected-ledge rejection.');
 
+// Changed growth margins must still form a closed thin skeleton, including the
+// angular seam and center. Check geometric edges independently of grid indices.
+for(const phase of [.4,1.7,3.3,5.1]){
+ const shelf=platingColony(0,0,0,1,phase),p=shelf.getAttribute('position'),n=shelf.getAttribute('normal'),idx=shelf.index.array;
+ const edges=new Map(),point=i=>new T.Vector3().fromBufferAttribute(p,i),key=i=>[p.getX(i),p.getY(i),p.getZ(i)].map(v=>Math.round(v*1e6)).join(',');
+ for(let i=0;i<idx.length;i+=3){
+  const a=point(idx[i]),b=point(idx[i+1]),c=point(idx[i+2]);assert.ok(b.sub(a).cross(c.sub(a)).lengthSq()>1e-15,'no collapsed pole triangles or razor-thin faces');
+  for(let j=0;j<3;j++){const pair=[key(idx[i+j]),key(idx[i+(j+1)%3])].sort().join('|');edges.set(pair,(edges.get(pair)||0)+1);}
+ }
+ assert.ok([...edges.values()].every(v=>v===2),'shelf is geometrically watertight');
+ for(let layer=0;layer<2;layer++)for(let row=0;row<=36;row++){
+  const a=layer*p.count/2+row*193,b=a+192;
+  assert.ok(point(a).distanceTo(point(b))<1e-7,'no gap at polar seam');
+  assert.ok(new T.Vector3().fromBufferAttribute(n,a).distanceTo(new T.Vector3().fromBufferAttribute(n,b))<1e-7,'no shading seam');
+ }
+}
+console.log('Folded growth margins passed: four closed skeletons, smooth seams and no degenerate pole faces.');
+
 // Folded shelves use their real vertices for navigation volumes. Exercise
 // different sizes/phases, including triangle interiors between sampled points.
 for(const [size,phase] of [[.65,.4],[1.08,2.2],[.8,5.1]]){
