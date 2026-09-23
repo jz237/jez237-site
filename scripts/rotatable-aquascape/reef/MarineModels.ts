@@ -46,7 +46,8 @@ export async function loadMarineModels(){
    node.geometry.setAttribute('finFlex',new T.BufferAttribute(flex,1));node.geometry.setAttribute('finGradient',new T.BufferAttribute(gradient,3));
   });
   const mouth=new T.Group();mouth.name='mouth';mouth.position.fromArray(metadata[species].mouth);
-  const aperture=new T.Mesh(new T.SphereGeometry(.012,14,10),new T.MeshStandardMaterial({color:'#25221c',roughness:.6}));aperture.scale.set(.25,1,1);mouth.add(aperture);group.add(mouth);
+  // The mouth group marks the bite target; lips and cavity now belong to the body.
+  group.add(mouth);
   group.userData.model='Blender 5.2 photographic reference study';group.userData.species=species;
   templates.set(species,group);
  }));

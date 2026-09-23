@@ -5,7 +5,7 @@
       -0.02244165170556553,
       0
     ],
-    "triangles": 15360,
+    "triangles": 15648,
     "meshes": 10,
     "reference": "tang.png",
     "authoring": "Blender 5.2.1 LTS",
@@ -94,7 +94,7 @@
       -0.08888888888888889,
       0
     ],
-    "triangles": 15280,
+    "triangles": 15568,
     "meshes": 10,
     "reference": "yellow.png",
     "authoring": "Blender 5.2.1 LTS",
@@ -183,7 +183,7 @@
       0.012658227848101266,
       0
     ],
-    "triangles": 16088,
+    "triangles": 16376,
     "meshes": 11,
     "reference": "clown.png",
     "authoring": "Blender 5.2.1 LTS",
@@ -268,7 +268,7 @@
       -0.0018148820326678765,
       0
     ],
-    "triangles": 15928,
+    "triangles": 16216,
     "meshes": 11,
     "reference": "gramma.png",
     "authoring": "Blender 5.2.1 LTS",
@@ -353,7 +353,7 @@
       -0.01020408163265306,
       0
     ],
-    "triangles": 16168,
+    "triangles": 16456,
     "meshes": 11,
     "reference": "anthias.png",
     "authoring": "Blender 5.2.1 LTS",
@@ -430,7 +430,7 @@
       -0.01488095238095238,
       0
     ],
-    "triangles": 16088,
+    "triangles": 16376,
     "meshes": 11,
     "reference": "chromis.png",
     "authoring": "Blender 5.2.1 LTS",
