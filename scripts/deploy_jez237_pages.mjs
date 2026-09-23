@@ -31,10 +31,12 @@ function run(command, args) {
 }
 const git = (...args) => run('git', args).trim();
 async function verifyRelease(url) {
-  for (let attempt = 0; attempt < 3; attempt++) {
+  // A newly uploaded Pages Worker may lag its static assets briefly. Keep all
+  // checks fail-closed, but allow 30 seconds of bounded readiness backoff.
+  for (let attempt = 0; attempt < 6; attempt++) {
     try { await checkPhillyLive(url); return; }
     catch (error) {
-      if (attempt === 2) throw error;
+      if (attempt === 5) throw error;
       console.log(`${error.message} Retrying the newly deployed service.`);
       await new Promise(resolve => setTimeout(resolve, 2000 * (attempt + 1)));
     }
