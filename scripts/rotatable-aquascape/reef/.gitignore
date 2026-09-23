@@ -1,0 +1,5 @@
+qa/*.png
+qa/*-look.mjs
+qa/look.mjs
+qa/results.json
+qa/before-*-results.json
