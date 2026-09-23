@@ -55,7 +55,7 @@ export function buildReef(scene:T.Scene){
  const rearRandom=seeded(230926);
  for(const a of [[-1.03,.43,-1.64,.55,.30,.36],[-.46,.38,-1.65,.43,.25,.34],[-.83,.86,-1.66,.38,.31,.32],[.19,.35,-1.72,.41,.22,.31],[.35,.71,-1.69,.29,.38,.32],[-.89,1.13,-1.71,.29,.20,.28],[.29,1.03,-1.69,.32,.20,.29]])rock(...a as [number,number,number,number,number,number],rearRandom);
  // Temporary per-rock bounds keep attachment raycasts local; these are never rendered.
- const supports=rocks.map(g=>{g.computeBoundingSphere();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
+ const supports=rocks.map(g=>{g.computeBoundingSphere();g.computeBoundingBox();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
  // Small irregular colonies follow front-facing rock relief. No new draw group.
  const crustStats={colonies:0,triangles:0},crustSurfaces:T.BufferGeometry[]=[];
@@ -63,6 +63,21 @@ export function buildReef(scene:T.Scene){
   const f=formations[rockIndex];attachRay.set(new T.Vector3(f[0]+dx,f[1]+dy,3),new T.Vector3(0,0,-1));attachRay.far=6;
   const hit=attachRay.intersectObject(supports[rockIndex],false)[0];if(!hit?.face)continue;
   const crust=coralCrust(supports[rockIndex].geometry,hit.point,hit.face.normal,r,hue,rockIndex*1.73);if(crust.index!.count){corals.push(crust);crustSurfaces.push(crust);crustStats.colonies++;crustStats.triangles+=crust.index!.count/3;}
+ }
+ // Scattered thin encrusting colonies grow directly on exposed stone. An
+ // independent random stream leaves every established organism/placement intact.
+ const crustRandom=seeded(23092306),crustPalette=['#794365','#9e6f83','#77785e','#897b49','#536f69'];
+ for(let rockIndex=0;rockIndex<supports.length;rockIndex++){
+  const support=supports[rockIndex],box=support.geometry.boundingBox!,center=box.getCenter(new T.Vector3()),extent=box.getSize(new T.Vector3());
+  for(let patch=0;patch<3;patch++){
+   const x=center.x+(crustRandom()-.5)*extent.x*.78,y=center.y+(crustRandom()-.5)*extent.y*.8;
+   attachRay.set(new T.Vector3(x,y,3),new T.Vector3(0,0,-1));attachRay.far=6;
+   const hit=attachRay.intersectObjects(supports,false)[0];
+   if(!hit?.face||hit.object!==support)continue;
+   const radius=.075+crustRandom()*.13,color=new T.Color(crustPalette[Math.floor(crustRandom()*crustPalette.length)]).multiplyScalar(.48);
+   const tissue=coralCrust(support.geometry,hit.point,hit.face.normal,radius,.8,rockIndex*9.13+patch*3.4,{color,thickness:.005});
+   if(tissue.index!.count){corals.push(tissue);crustSurfaces.push(tissue);crustStats.colonies++;crustStats.triangles+=tissue.index!.count/3;}
+  }
  }
  const rockMesh=batch(rocks,rockMat,group,'Porous living reef rock')!;addNote(rockMesh,'The architecture of a reef','Open caves and water-filled spaces give fish shelter and routes between the reef islands. The rock carries irregular patches of coralline algae. Drag to look through the arches.');
  const rockGeometry=rockMesh.geometry,rockStats={triangles:rockGeometry.index!.count/3,bufferBytes:Object.values(rockGeometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockGeometry.index!.array.byteLength,expandedBufferBytes:rockGeometry.index!.count*11*4};

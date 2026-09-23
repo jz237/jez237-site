@@ -241,3 +241,19 @@ branch proportions retain rounded tips, all raised cups and the same geometry
 count. Shared fine tissue maps repeat at a smaller physical scale on stems.
 The procedural random stream is unchanged, preserving other scenery placement.
 These are visual growth rules, not a biological growth simulation.
+
+## Live-rock surface mosaic
+
+The rock now carries multiscale, volume-based coralline coloration, with broken
+patch boundaries and fine mottling baked into its retained vertices once during
+loading. Distributed small colonies clip directly to exposed rock triangles and
+reuse the existing coral maps/material. Their placement uses a separate random
+stream; fish, branches, anemones and rubble are not reshuffled. Hidden rock hits
+are skipped. No additional textures, draw groups or per-frame noise calculation.
+Existing collision volumes and all fine rock and organism geometry are retained.
+This is visual surface growth, not a model of coral ecology or succession.
+
+Patch construction rejects out-of-range triangles before allocating vertex
+records. Thirty varied fixtures match the previous algorithm's attributes and
+indices exactly. Rock raycasts also use tight bounding boxes. These changes
+reduce setup work without simplifying the visible surface.
