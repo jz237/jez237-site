@@ -1,0 +1,14 @@
+{
+  "destination": "SEPTA headquarters, 1234 Market Street",
+  "coordinates": [
+    39.9517176,
+    -75.1609552
+  ],
+  "source": "TravelTime public map, H3 Fast",
+  "retrieved": "2026-09-23",
+  "period": "weekday_morning arrivals",
+  "limit_seconds": 3600,
+  "h3_resolution": 8,
+  "cell_statistic": "minimum",
+  "notes": "Cells indicate potentially reachable locations, not every address. Not a specific-date or exact-hour itinerary. No added allowance for parking or building entry. Transit access, waiting and walking depend on provider model."
+}
