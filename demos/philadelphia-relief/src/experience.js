@@ -36,15 +36,22 @@ export function updateImageryCredit(host, detail) {
 export function wireFieldNotes(button) {
   if (!button) return () => {};
   const narrow = window.matchMedia('(max-width: 1024px)');
+  const key = 'philly-field-notes-collapsed';
+  let preference = null;
+  try { preference = localStorage.getItem(key); } catch { /* Storage is optional. */ }
   const set = collapsed => {
     document.body.classList.toggle('notes-collapsed', collapsed);
-    button.textContent = collapsed ? 'Show notes' : 'Hide notes';
+    button.textContent = collapsed ? '+ Show field notes' : '− Collapse';
+    button.setAttribute('aria-label', collapsed ? 'Expand field notes' : 'Collapse field notes');
     button.setAttribute('aria-expanded', String(!collapsed));
   };
   const click=() => {
-    set(!document.body.classList.contains('notes-collapsed'));
+    const collapsed = !document.body.classList.contains('notes-collapsed');
+    preference = String(collapsed);
+    set(collapsed);
+    try { localStorage.setItem(key, preference); } catch { /* Storage is optional. */ }
   };
-  const resize = () => set(narrow.matches);
+  const resize = () => set(preference === null ? narrow.matches : preference === 'true');
   resize(); narrow.addEventListener('change', resize);
   button.addEventListener('click',click);
   return () => { button.removeEventListener('click',click); narrow.removeEventListener('change',resize); };

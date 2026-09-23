@@ -10,6 +10,12 @@ const BASELINE_LABEL = "2026-08-24 Final Blow 1.9E live-safe baseline";
 const BASELINE_MARKER_PATH = "scripts/live-deploy-baseline.json";
 const PRODUCTION_BRANCHES = new Set(["main"]);
 const REQUIRED_PATHS = [
+  "functions/_middleware.js",
+  "functions/demos/philadelphia-cesium/_middleware.js",
+  "functions/demos/philadelphia-relief/_middleware.js",
+  "functions/demos/philadelphia-relief/aircraft.js",
+  "functions/demos/philadelphia-relief/detail-imagery.js",
+  "functions/demos/philadelphia-relief/street-detail.js",
   "games/index.html",
   "garden/index.html",
   "experiments/image-gen-2-benchmark/index.html",
