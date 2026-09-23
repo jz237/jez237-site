@@ -1,12 +1,12 @@
 {
-  "buildHash": "3e192028188c30c8a7e78417b362de096f3207537989cecb0df9809a007e1a99",
+  "buildHash": "5473471c069149aff5548d3e92d2e17098a6050d687c7a006d1564e42cbe7834",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-BS8grsHF.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-mEyWrgPb.js",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/roughnessMap-4hZTjONg.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T07:05:57.982Z",
-  "readyMs": 2282,
+  "checkedAt": "2026-09-23T07:29:31.958Z",
+  "readyMs": 2014,
   "samples": [
     {
       "fps": 59.99400059993998,
-      "time": 4.306699999904631,
-      "bites": 16,
-      "remaining": 20
+      "time": 4.290200000095363,
+      "bites": 19,
+      "remaining": 17
     },
     {
-      "fps": 59.99400059994003,
-      "time": 8.340399999904655,
-      "bites": 33,
-      "remaining": 3
+      "fps": 59.99400059993998,
+      "time": 8.307200000095403,
+      "bites": 35,
+      "remaining": 1
     },
     {
-      "fps": 59.99100134979749,
-      "time": 12.357499999904599,
+      "fps": 59.99100134979755,
+      "time": 12.307600000095348,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 16.324600000095298,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 20.341600000095198,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 16.374399999904533,
+      "time": 24.34190000009512,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99100134979755,
-      "time": 20.39159999990445,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 24.40849999990437,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 28.40879999990425,
+      "fps": 59.99700014999255,
+      "time": 28.358900000095044,
       "bites": 36,
       "remaining": 0
     }
@@ -192,15 +192,16 @@
     "Primary stems: distributed sloping attachments and disconnected-ledge rejection; same geometry count and rounded tips",
     "Clipped crust culling: 30 varied fixtures with identical attributes/indices; generation 24.27ms to15.77ms",
     "Folded shelves: positive thin skeleton; outward faces; vertices and triangle interiors covered at3sizes/phases,45/110/66local volumes; same geometry count",
-    "Sloping colony roots: three support orientations; all transformed vertices inside navigation spheres; finite retained detail"
+    "Sloping colony roots: three support orientations; all transformed vertices inside navigation spheres; finite retained detail",
+    "Curved anemone axes: worst dot0.999714; analytic flow derivative agrees with finite differences; minimum sampled determinant0.603289; all540 strands and171840 triangles retained"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "coral-closeup",
-    "fish-macros",
-    "water-above"
+    "anemone-closeup",
+    "anemone-motion-a",
+    "anemone-motion-b"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -208,5 +209,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Eleven detailed colonies anchored to sloping rock faces. All existing detail retained; rendered4,625,398 triangles. Alternating load means2251ms vs1991.7previous; both near60FPS locally. Other hardware unmeasured. Reference realism not reached."
+  "scope": "Tapered anemone tissue, smooth terminal curves, curved-axis animated shading and length-scaled rooted flow. All detail retained; rendered4625398 triangles; anemone buffers7725024bytes. Ready2014ms vs2282previous, near60FPS locally; single-run variation is not an optimization claim. Other hardware unmeasured. Reference realism not reached."
 }
