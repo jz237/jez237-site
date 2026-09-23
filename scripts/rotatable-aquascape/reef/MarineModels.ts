@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {finField} from './MarineFinFlex.ts';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import metadata from './assets/fish/model-info.json';
 export type MarineSpecies='tang'|'yellow'|'clown'|'anthias'|'chromis'|'gramma';
@@ -33,14 +34,17 @@ export async function loadMarineModels(){
    if(label.startsWith('pectoral')){
     const pivot=new T.Group();pivot.name='pectoral';pivot.position.setFromMatrixPosition(node.matrixWorld);
     geometry.translate(-pivot.position.x,-pivot.position.y,-pivot.position.z);mesh.name='fin';mesh.userData.pectoral=true;material.side=T.DoubleSide;material.depthWrite=false;
-    pivot.add(mesh);group.add(pivot);
+    pivot.userData.restZ=pivot.position.z;pivot.add(mesh);group.add(pivot);
    }else if(label.startsWith('eye')){mesh.name='eye';eyes.add(mesh);
    }else if(label.startsWith('gill')){mesh.name='gill';mesh.userData.side=label.endsWith('-1')?-1:1;material.side=T.DoubleSide;group.add(mesh);
    }else {mesh.name=label==='body'?'body':'fin';if(mesh.name==='fin'){material.side=T.DoubleSide;material.depthWrite=false;}group.add(mesh);}
   });
   // Fin flex grows from a pinned insertion to a freely moving margin.
-  const edge=(points:number[][],x:number)=>{for(let i=1;i<points.length;i++)if(x<=points[i][0])return T.MathUtils.lerp(points[i-1][1],points[i][1],T.MathUtils.clamp((x-points[i-1][0])/(points[i][0]-points[i-1][0]),0,1));return points.at(-1)![1];};
-  group.traverse(node=>{if(!(node instanceof T.Mesh)||node.name!=='fin')return;const p=node.geometry.getAttribute('position'),flex=new Float32Array(p.count);for(let i=0;i<p.count;i++){const x=p.getX(i),y=p.getY(i);flex[i]=node.userData.pectoral?T.MathUtils.clamp(Math.hypot(x,y,p.getZ(i))/.24,0,1):Math.max(T.MathUtils.clamp((-.47-x)/.30,0,1),T.MathUtils.clamp(Math.max(y-edge(metadata[species].upper,x),edge(metadata[species].lower,x)-y)/.12,0,1));}node.geometry.setAttribute('finFlex',new T.BufferAttribute(flex,1));});
+  group.traverse(node=>{if(!(node instanceof T.Mesh)||node.name!=='fin')return;
+   const p=node.geometry.getAttribute('position'),flex=new Float32Array(p.count),gradient=new Float32Array(p.count*3);
+   for(let i=0;i<p.count;i++){const [f,dx,dy,dz]=finField(metadata[species],p.getX(i),p.getY(i),p.getZ(i),Boolean(node.userData.pectoral));flex[i]=f;gradient[i*3]=dx;gradient[i*3+1]=dy;gradient[i*3+2]=dz;}
+   node.geometry.setAttribute('finFlex',new T.BufferAttribute(flex,1));node.geometry.setAttribute('finGradient',new T.BufferAttribute(gradient,3));
+  });
   const mouth=new T.Group();mouth.name='mouth';mouth.position.fromArray(metadata[species].mouth);
   const aperture=new T.Mesh(new T.SphereGeometry(.012,14,10),new T.MeshStandardMaterial({color:'#25221c',roughness:.6}));aperture.scale.set(.25,1,1);mouth.add(aperture);group.add(mouth);
   group.userData.model='Blender 5.2 photographic reference study';group.userData.species=species;
