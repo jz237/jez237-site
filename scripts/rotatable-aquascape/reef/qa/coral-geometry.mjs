@@ -11,7 +11,9 @@ for(const g of all){assert.ok(g.index,'keep shared vertices');triangles+=g.index
 }
 const normal=plate.getAttribute('normal'),p=plate.getAttribute('position'),half=p.count/2;let up=0,down=0;
 for(let i=0;i<half;i++){up+=normal.getY(i);down+=normal.getY(i+half);}assert.ok(up/half>.65&&down/half<-.65,'plate surfaces face outwards');
-assert.ok(bytes<2000000,'detailed colony and plate use less memory than the 2674320-byte prior geometry');
+// Additional attached scaffolds intentionally add anatomy. Keep the denser
+// fixture below 2.5MB (still below the original 2,674,320-byte expanded mesh).
+assert.ok(bytes<2500000,'denser indexed colony and plate stay inside their reviewed memory budget');
 console.log('Stony coral geometry passed:',triangles,'triangles,',bytes,'bytes, outward plate tissue and smooth branch seams.');
 
 // A coral foot follows a slope without bridging a separate lower shelf.
@@ -35,6 +37,14 @@ for(const {style,meshes} of forms){
  assert.deepEqual(meshes[0].getAttribute('position').array,fixture(style)[0].getAttribute('position').array,'art geometry stays reproducible');
 }
 console.log('Growth forms passed: distinct canopy, bushy and antler silhouettes; same detail count; rounded tips.');
+for(const {meshes} of forms){
+ const primary=meshes.filter(g=>g.type==='TubeGeometry'&&g.parameters.tubularSegments===8);
+ const scaffolds=meshes.filter(g=>g.name==='Interleaved scaffold');
+ assert.equal(scaffolds.length,primary.length*2,'each broad primary carries staggered lower growth');
+ for(const scaffold of scaffolds){const root=scaffold.parameters.path.getPointAt(0);assert.ok(primary.some(g=>{let best=Infinity;for(let i=0;i<=300;i++)best=Math.min(best,g.parameters.path.getPointAt(i/300).distanceTo(root));return best<g.parameters.radius*.15;}),'scaffold root is embedded in an existing primary');}
+}
+const consumed=size=>{let state=684,calls=0;const meshes=branchingColony(new T.Vector3(),size,.8,()=>{calls++;state=(Math.imul(state,1664525)+1013904223)>>>0;return state/4294967296;});meshes.forEach(g=>g.dispose());return {state,calls};};
+assert.deepEqual(consumed(1),consumed(.5),'extra growth must not reshuffle later organisms through scene RNG consumption');
 // Offset growth stays rooted inside an existing terminal, instead of floating.
 for(const {meshes} of forms){
  const shoots=meshes.filter(g=>g.name==='Offset terminal growth');assert.ok(shoots.length>10);
