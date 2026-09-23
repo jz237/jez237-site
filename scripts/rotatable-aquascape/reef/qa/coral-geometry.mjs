@@ -12,3 +12,12 @@ const normal=plate.getAttribute('normal'),p=plate.getAttribute('position'),half=
 for(let i=0;i<half;i++){up+=normal.getY(i);down+=normal.getY(i+half);}assert.ok(up/half>.65&&down/half<-.65,'plate surfaces face outwards');
 assert.ok(bytes<2000000,'detailed colony and plate use less memory than the 2674320-byte prior geometry');
 console.log('Stony coral geometry passed:',triangles,'triangles,',bytes,'bytes, outward plate tissue and smooth branch seams.');
+
+// A coral foot follows a slope without bridging a separate lower shelf.
+const slope=(x,z)=>x>.09?-.24:.35*x+.15*z;
+const attached=branchingColony(new T.Vector3(),1,.8,random,slope).at(-1);
+assert.equal(attached.name,'Rock-conforming colony base');
+const ap=attached.getAttribute('position'),an=attached.getAttribute('normal');
+assert.ok(attached.index.count>150,'retain a connected crust on the supported slope');
+for(const index of attached.index.array){const x=ap.getX(index),z=ap.getZ(index);assert.ok(x<.091,'do not leave disconnected tissue on the lower shelf');assert.ok(Math.abs(ap.getY(index)-slope(x,z)-.003)<1e-6,'crust hugs the actual support');assert.ok(an.getY(index)>.8,'supported tissue faces outwards');}
+console.log('Coral attachment passed: sloping support, outward normals and no detached lower-shelf fragments.');
