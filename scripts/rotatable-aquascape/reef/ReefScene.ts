@@ -4,7 +4,7 @@ import {encrustingSurfaceMaps} from './EncrustingSurface.ts';
 import {surfaceColony} from './SurfaceColony.ts';
 import {coralCrust} from './CoralCrust.ts';
 import {erodedRock} from './ReefRock.ts';
-import {sandHeight} from './ReefOptics.ts';
+import {sandHeight,sandBank} from './ReefOptics.ts';
 import {coralSurfaceMaps} from './CoralSurface.ts';
 import {topSurfaceSampler} from './RockSurface.ts';
 import {encrustingGarden,animatePolypMaterial} from './EncrustingPolyps.ts';
@@ -26,6 +26,18 @@ function texture(kind:'rock'|'sand'|'coral'){
   for(let k=0;k<3;k++)im.data[i+k]=255*base[k]*factor;im.data[i+3]=255;
  }
  ctx.putImageData(im,0,0);
+ if(kind==='sand'){
+  // Independent stream: detailing sand must not reshuffle reef inhabitants.
+  const grainRandom=seeded(2309230740),palette=['#e5dfc9','#bcb5a2','#d1cbb4','#f0e9d4','#a39d89'];
+  for(let i=0;i<14500;i++){
+   const x=grainRandom()*512,y=grainRandom()*512,r=.55+grainRandom()*1.7,aspect=.45+grainRandom()*.5,angle=grainRandom()*6.28;
+   ctx.fillStyle=palette[Math.floor(grainRandom()*palette.length)];
+   // Wrapped edge grains make the existing repeated map seamless.
+   for(const dx of x<3?[0,512]:x>509?[0,-512]:[0])for(const dy of y<3?[0,512]:y>509?[0,-512]:[0]){
+    ctx.beginPath();ctx.ellipse(x+dx,y+dy,r,r*aspect,angle,0,6.28);ctx.fill();
+   }
+  }
+ }
  if(kind==='rock')for(let i=0;i<4100;i++){const x=random()*512,y=random()*512,r=pick(.4,5);ctx.fillStyle=i%3===0?'#634d6680':i%3===1?'#252d25a0':'#99916b60';ctx.beginPath();ctx.ellipse(x,y,r,r*.6,random()*6.28,0,6.28);ctx.fill();}
  if(kind==='coral')for(let i=0;i<2500;i++){
   const x=random()*512,y=random()*512,r=pick(.6,1.9);ctx.strokeStyle='#938d7a';ctx.lineWidth=pick(.35,.7);ctx.beginPath();ctx.ellipse(x,y,r,r*pick(.65,1),random()*6.28,0,6.28);ctx.stroke();
@@ -151,8 +163,19 @@ export function buildReef(scene:T.Scene){
  }
  const polypMat=new T.MeshStandardMaterial({vertexColors:true,map:coralTex,bumpMap:coralTex,bumpScale:.0012,roughness:.78,side:T.DoubleSide});animatePolypMaterial(polypMat,reefClock);
  const zoo=batch(gardens,polypMat,group,'Rock-encrusting polyp gardens')!;addNote(zoo,'Life across the rock','Living tissue follows the reef surface. Zoanthid oral discs have a mouth and two fringes of narrow tentacles. Their soft fringes move gently while the stony colonies stay rigid. Colors and motion are illustrative.');
- const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.025,roughness:1,color:'#dedbd0'}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position');for(let i=0;i<sandPositions.count;i++)sandPositions.setZ(i,sandHeight(sandPositions.getX(i),-sandPositions.getY(i)));sand.geometry.computeVertexNormals();sand.receiveShadow=true;group.add(sand);
+ const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#ccc6b5',vertexColors:true}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
+ for(let i=0;i<sandPositions.count;i++){
+  const x=sandPositions.getX(i),z=-sandPositions.getY(i),bank=sandBank(x,z);
+  sandPositions.setZ(i,sandHeight(x,z));
+  const patch=.5+.5*Math.sin(x*4.1+Math.sin(z*2.3))*Math.sin(z*3.7+x*.8),shade=1-bank*(.035+patch*.065);
+  sandColors.set([shade,shade*.995,shade*.975],i*3);
+ }
+ sand.geometry.setAttribute('color',new T.BufferAttribute(sandColors,3));sand.geometry.computeVertexNormals();sand.receiveShadow=true;group.add(sand);
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
- for(let i=0;i<1600;i++){const x=pick(-4.94,4.94),z=pick(-2.23,2.23);dummy.position.set(x,sandHeight(x,z)+.003,z);const s=pick(.006,.032);dummy.scale.set(s,pick(.4,1)*s,s);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));}rubble.receiveShadow=true;group.add(rubble);
+ for(let i=0;i<1600;i++){
+  const x=pick(-4.94,4.94),z=pick(-2.23,2.23),bank=sandBank(x,z),patch=.5+.5*Math.sin(x*7.1+z*2.3)*Math.sin(z*5.7-x*1.8);
+  const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
+  dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
+ }rubble.receiveShadow=true;group.add(rubble);
  return {group,obstacles,notes,hosts,anemone,polypStats,rockStats,crustStats,infillStats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }
