@@ -1,5 +1,6 @@
 import './anemone-geometry.mjs';
 import './fish-geometry.mjs';
+import './fish-navigation.mjs';
 import './fin-motion.mjs';
 import './water-capture.mjs';
 import './caustics.mjs';
@@ -26,7 +27,7 @@ try{
  const page=await browser.newPage({viewport:{width:1440,height:1080}}),errors=[];
  page.on('pageerror',e=>errors.push(e.message));page.on('console',m=>{if(m.type()==='error')errors.push(m.text());});page.on('response',r=>{if(r.status()>=400)errors.push(r.status()+' '+r.url());});
  const start=Date.now();await page.goto('http://127.0.0.1:5241/demos/reef-aquarium/');await page.waitForFunction(()=>window.reefQA?.snapshot().ready,null,{timeout:120000});report.readyMs=Date.now()-start;
- await page.waitForTimeout(1500);const initial=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(initial.fish,20);assert.equal(initial.infillStats.colonies,11);assert.ok(initial.infillStats.triangles<400000);assert.ok(initial.polypStats.polyps>500);assert.ok(initial.polypStats.maxAttachmentError<.00301);assert.ok(initial.crustStats.colonies>30&&initial.crustStats.colonies<=100,'exposed rock retains distributed encrusting coverage');assert.ok(initial.crustStats.triangles>1000&&initial.crustStats.triangles<70000);assert.equal(initial.anemoneTentacles,540);assert.equal(initial.obstacleOverlaps,0);assert.equal(initial.fishOverlaps,0);assert.equal(initial.anatomy.length,20);assert.ok(initial.anatomy.every(f=>f.model.startsWith('Blender')&&f.pectoral.length===2&&f.gills.length===2),'every inhabitant uses the articulated Blender model');
+ await page.waitForTimeout(1500);const initial=await page.evaluate(()=>window.reefQA.snapshot());assert.equal(initial.fish,20);assert.equal(initial.infillStats.colonies,11);assert.ok(initial.crustStats.understoryColonies>=20,'retain the new layer of smaller coral colonies');assert.ok(initial.crustStats.understoryTriangles<900000,'merged detailed growth stays within its reviewed geometry budget');assert.ok(initial.infillStats.triangles<400000);assert.ok(initial.polypStats.polyps>500);assert.ok(initial.polypStats.maxAttachmentError<.00301);assert.ok(initial.crustStats.colonies>30&&initial.crustStats.colonies<=100,'exposed rock retains distributed encrusting coverage');assert.ok(initial.crustStats.triangles>1000&&initial.crustStats.triangles<70000);assert.equal(initial.anemoneTentacles,540);assert.equal(initial.obstacleOverlaps,0);assert.equal(initial.fishOverlaps,0);assert.equal(initial.anatomy.length,20);assert.ok(initial.anatomy.every(f=>f.model.startsWith('Blender')&&f.pectoral.length===2&&f.gills.length===2),'every inhabitant uses the articulated Blender model');
  assert.equal(initial.crustStats.emergentColonies,3,'all three branching growths stay attached to the selected living crusts');
  assert.ok(initial.crustStats.emergentTriangles>75000&&initial.crustStats.emergentTriangles<120000,'small emergent colonies preserve detailed anatomy within their reviewed budget');
  const shadowSequence=await page.evaluate(async()=>{const frames=[];for(let i=0;i<60;i++){await new Promise(requestAnimationFrame);frames.push(window.reefQA.snapshot().shadows);}return frames;});

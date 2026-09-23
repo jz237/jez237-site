@@ -1,12 +1,12 @@
 {
-  "buildHash": "1e54ba278231580610a74a2d7bedf867d34d5790531801291458a1cc2869962c",
+  "buildHash": "b93b190b903bff47f3343417a75817e2f2c3e946de8c8a65101e2c39987a4ef4",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
     "assets/index-DdD2V56_.css",
-    "assets/index-fsUEIX8t.js",
+    "assets/index-Ih5es3S7.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T17:03:19.725Z",
-  "readyMs": 2720,
+  "checkedAt": "2026-09-23T17:34:22.183Z",
+  "readyMs": 3154,
   "samples": [
     {
-      "fps": 59.99400059994001,
-      "time": 6.158800000143071,
-      "bites": 21,
-      "remaining": 15
+      "fps": 59.99400059993998,
+      "time": 6.162100000190753,
+      "bites": 6,
+      "remaining": 30
     },
     {
       "fps": 59.99400059993998,
-      "time": 10.17590000014306,
-      "bites": 35,
-      "remaining": 1
+      "time": 10.162400000190752,
+      "bites": 31,
+      "remaining": 5
     },
     {
-      "fps": 59.99400059993998,
-      "time": 14.192800000142999,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 18.20990000014292,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 22.226900000142845,
+      "fps": 59.99999999999999,
+      "time": 14.179400000190693,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 26.243900000142776,
+      "time": 18.196400000190632,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99400059993998,
-      "time": 30.244300000142665,
+      "fps": 59.994000599940094,
+      "time": 22.21350000019052,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 26.230500000190457,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 30.24750000019037,
       "bites": 36,
       "remaining": 0
     }
@@ -83,32 +83,34 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 6210336,
+    "triangles": 8147120,
     "inhabitants": 20,
     "polypStats": {
-      "polyps": 556,
-      "tentacles": 3288,
-      "maxAttachmentError": 0.003000000000000221
+      "polyps": 564,
+      "tentacles": 3504,
+      "maxAttachmentError": 0.003000000000000225
     },
     "rockStats": {
-      "triangles": 317400,
-      "bufferBytes": 10885320,
-      "expandedBufferBytes": 41896800
+      "triangles": 412620,
+      "bufferBytes": 14150916,
+      "expandedBufferBytes": 54465840
     },
     "crustStats": {
-      "colonies": 62,
-      "triangles": 44693,
+      "colonies": 80,
+      "triangles": 65819,
       "emergentColonies": 3,
-      "emergentTriangles": 100824
+      "emergentTriangles": 100830,
+      "understoryColonies": 24,
+      "understoryTriangles": 836904
     },
     "infillStats": {
       "colonies": 11,
-      "triangles": 398723,
+      "triangles": 398691,
       "placements": [
         [
           1,
-          -2.38,
-          2.62,
+          -2.3293738395249055,
+          2.4894741716151554,
           0.47,
           0.035
         ],
@@ -135,8 +137,8 @@
         ],
         [
           11,
-          -3.87,
-          1.63,
+          -3.86002344463442,
+          1.5607145878049533,
           0.34,
           0.23
         ],
@@ -149,8 +151,8 @@
         ],
         [
           19,
-          3.94,
-          1.62,
+          3.9427001728732343,
+          1.6899479025164776,
           0.48,
           0.14
         ],
@@ -170,8 +172,8 @@
         ],
         [
           27,
-          2.2,
-          3.48,
+          2.2374922334230005,
+          3.420887121259786,
           0.31,
           0.23
         ],
@@ -222,7 +224,8 @@
     "mobile",
     "sand-closeup",
     "coral-closeup",
-    "five actual rendered sand motion frames",
+    "anemone time sequence",
+    "90-second real rendered tang traversal and turn sequence",
     "reference-and-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -231,7 +234,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Water-wave-driven, filtered moving light on underwater surfaces; same geometry, textures and inhabitants. Local optical approximation, not full ray-traced caustics. Comparative photographic target remains unmet.",
+  "scope": "Deeper asymmetric live-rock relief, nine grounded fragments and24 new small coral colonies. Stable blue-tang escape steering, displacement monitoring and bounded combined avoidance. Comparative photographic target remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -269,9 +272,9 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 2504.8,
-    "loadCurrent": 2528.8,
-    "fpsPrior": 261.7,
-    "fpsCurrent": 252.8
+    "loadPrior": 2495.5,
+    "loadCurrent": 3190,
+    "fpsPrior": 255.2,
+    "fpsCurrent": 250.7
   }
 }

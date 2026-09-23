@@ -23,7 +23,7 @@ function noise(x:number,y:number,z:number){
 // Baked coralline-algae mosaic follows the actual volume, without a repeating
 // image decal or an extra runtime shader. Nested scales break up smooth stone.
 export function encrustRock(g:T.BufferGeometry){
- const p=g.getAttribute('position'),colors=new Float32Array(p.count*3);
+ const p=g.getAttribute('position'),cavity=g.getAttribute('rockCavity'),colors=new Float32Array(p.count*3);
  const chalk=new T.Color('#c8b797').multiplyScalar(1.45),purple=new T.Color('#9b477f').multiplyScalar(1.65),rose=new T.Color('#bd7785').multiplyScalar(1.4),olive=new T.Color('#858974').multiplyScalar(1.35),edge=new T.Color('#c9a6b5'),color=new T.Color();
  for(let i=0;i<p.count;i++){
   const x=p.getX(i),y=p.getY(i),z=p.getZ(i),fine=noise(x*31,y*31,z*31),grain=noise(x*13,y*13,z*13);
@@ -33,7 +33,10 @@ export function encrustRock(g:T.BufferGeometry){
   // Thin pale growing boundaries and uneven age/color within each attached patch.
   const margin=Math.exp(-(((patch-.485)/.018)**2))*.17;
   color.lerp(edge,margin).multiplyScalar(.78+.27*fine+.12*grain);
+  // Baked sheltered-pore darkening supplements real geometry/shadows without
+  // another screen-space pass. It is restrained so cavities retain color.
+  color.multiplyScalar(1-(cavity?.getX(i)??0)*.28);
   colors.set([color.r,color.g,color.b],i*3);
  }
- g.setAttribute('color',new T.BufferAttribute(colors,3));return g;
+ g.setAttribute('color',new T.BufferAttribute(colors,3));g.deleteAttribute('rockCavity');return g;
 }
