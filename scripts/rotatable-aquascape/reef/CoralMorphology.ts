@@ -13,9 +13,9 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   const shoulder=start.clone().lerp(end,.27);if(level===0){const bend=.5+.5*Math.sin(seed*1.83);shoulder.y=start.y+delta.y*(.27-.17*bend);middle.y=start.y+delta.y*(.5-.11*bend);}else{shoulder.addScaledVector(delta.clone().normalize(),-.025*size);}
   const curve=new T.CatmullRomCurve3([start,shoulder,middle,end]),steps=level===0?8:level===1?6:4,sides=level===0?12:10;
   const g=new T.TubeGeometry(curve,steps,radius,sides,false),p=g.getAttribute('position'),colors=new Float32Array(p.count*3);
-  const terminal=level>=2,endScale=terminal?(growth==='antler'?.66:.82):.62;
+  const terminal=level>=2,endScale=terminal?(growth==='antler'?.66:.70):.62;
   for(let j=0;j<=steps;j++){
-   const t=j/steps,center=curve.getPointAt(t),taper=(1-(1-endScale)*t)*(1+.42*Math.exp(-t*15));
+   const t=j/steps,center=curve.getPointAt(t),taper=(1-(1-endScale)*t)*(1+(level===0?.26:.36)*Math.exp(-t*15));
    for(let k=0;k<=sides;k++){
     const i=j*(sides+1)+k,angle=k/sides*Math.PI*2;
     const polypRidges=1+.075*Math.sin(angle*3+t*13+seed)+.04*Math.sin(angle*5-t*19)+.075*Math.sin(t*12+seed)*Math.sin(Math.PI*t);
@@ -25,16 +25,38 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   }
   g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.135,j/steps*delta.length()/.135);geometries.push(g);
   const cap=axialCorallite(g,tipColor,terminal);geometries.push(cap);const junctions:number[]=[];
-  if(level>=2){finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));return;}
+  if(level>=2){
+   // Short offset shoots interrupt identical two-fork terminals. Their direction
+   // and occurrence are deterministic, without consuming the scene RNG stream.
+   if(Math.sin(seed*13.71)>(size<.6?.65:.4)){
+    const t=.55+.08*Math.sin(seed*4.1),root=curve.getPointAt(t),axis=curve.getTangentAt(t);
+    const lateral=new T.Vector3(Math.cos(seed*2.1),.3,Math.sin(seed*2.1)).addScaledVector(axis,.6).normalize();
+    const len=size*(.066+.034*(.5+.5*Math.sin(seed*7.3))),end=root.clone().addScaledVector(lateral,len);
+    const path=new T.QuadraticBezierCurve3(root,root.clone().addScaledVector(lateral,len*.45).addScaledVector(axis,len*.16),end);
+    const shoot=new T.TubeGeometry(path,3,radius*.49,6,false),sp=shoot.getAttribute('position'),sc=new Float32Array(sp.count*3);
+    for(let row=0;row<=3;row++){const u=row/3,center=path.getPointAt(u),color=baseColor.clone().lerp(tipColor,u*.72);
+     for(let k=0;k<=6;k++){const i=row*7+k,v=new T.Vector3().fromBufferAttribute(sp,i).sub(center).multiplyScalar(1-.27*u).add(center);sp.setXYZ(i,v.x,v.y,v.z);sc.set([color.r,color.g,color.b],i*3);}}
+    shoot.setAttribute('color',new T.BufferAttribute(sc,3));const uv=shoot.getAttribute('uv');for(let row=0;row<=3;row++)for(let k=0;k<=6;k++)uv.setXY(row*7+k,k/6*2*Math.PI*radius*.49/.135,row/3*len/.135);
+    const shootCap=axialCorallite(shoot,tipColor,true);finishBranch(shoot,shootCap,[]);shoot.name='Offset terminal growth';geometries.push(shoot,shootCap);junctions.push(t);
+   }
+   finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));return;
+  }
   const count=level===0?choice(3,4):choice(2,3);
   for(let j=0;j<count;j++){
    const t=.32+(j/count)*.57+.085*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+.33*Math.sin(seed*1.7+j*3.8)+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58);
    junctions.push(t);
    const direction=curve.getTangentAt(t),rise=choice(.15,.34)*size*(level===0?1:.47),tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,rise,Math.sin(angle)*out));
-   if(growth==='canopy'&&level===0)tip.y=base.y+size*(.48+.23*(.5+.5*Math.cos(angle-hue*19))+.09*Math.sin(angle*1.13+seed*.37));
+   // Branches inherit a local exposure direction. Neighboring forks form
+   // unequal terraces instead of every child reaching one circular rim.
+   const exposure=.5+.5*Math.cos(seed*.83-hue*19),curl=Math.sin(seed*2.13+j*1.9);
+   if(growth==='canopy'&&level===0){
+    tip.y=Math.max(root.y+.08*size,base.y+size*(.34+.28*exposure+.10*curl));
+    tip.x+=Math.cos(seed)*out*.24;tip.z+=Math.sin(seed)*out*.24;
+   }
+   if(level===1){tip.x+=Math.cos(seed+.6)*out*.20;tip.z+=Math.sin(seed+.6)*out*.20;tip.y+=size*.035*curl;}
    if(growth==='bushy')tip.addScaledVector(direction,.025*size);
    tip.addScaledVector(direction,choice(.04,.12)*size);
-   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.80,(level===0?.021:growth==='antler'?.013:.016)*size),level+1,seed+j*1.73);
+   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.72,(level===0?.018:growth==='antler'?.013:.014)*size),level+1,seed+j*1.73);
   }
   finishBranch(g,cap,junctions);geometries.push(...radialCorallites(g,level,seed,baseColor,tipColor));
  }
@@ -43,10 +65,10 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   const angle=i*2.399+choice(-.32,.32),exposure=.5+.5*Math.cos(angle-hue*19),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1)*(.82+.40*exposure),height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1)*(.74+.42*exposure);
   // Separate attachment points across the living crust; keep each stem sunk
   // into the actual support rather than suspending a radial bouquet above it.
-  const spread=(.075+.055*(.5+.5*Math.sin(i*4.13+hue*11)))*size;
+  const spread=(.09+.085*(.5+.5*Math.sin(i*4.13+hue*11)))*size;
   const root=base.clone().add(new T.Vector3(Math.cos(angle)*spread,choice(-.012,.009)*size,Math.sin(angle)*spread));
   if(surface){const y=surface(root.x,root.z);if(y!==null&&Math.abs(y-base.y)<.15*size)root.y=y-.014*size;else root.copy(base);}
-  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.041,.058)*size,0,angle+random()*2);
+  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.037,.057)*size,0,angle+random()*2);
  }
  // Prefer clipped triangles from the actual support, including its curved relief.
  if(basalGeometry){basalGeometry.name='Rock-conforming colony base';geometries.push(basalGeometry);return geometries;}

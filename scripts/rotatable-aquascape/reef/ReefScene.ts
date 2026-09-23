@@ -118,7 +118,7 @@ export function buildReef(scene:T.Scene){
  const occupied=obstacles.slice(rockObstacleCount);
  // These inspected anchor sites have stable independent shape seeds; rejected
  // placement trials are not regenerated on each page load.
- for(const [seed,x,y,size,hue] of [[1,-2.38,2.62,.53,.035],[5,-2.48,.88,.48,.22],[8,-2.08,1.05,.36,.03],[9,-3.42,1.22,.33,.14],[11,-3.87,1.63,.34,.23],[14,1.35,3.5,.5,.14],[19,3.94,1.62,.48,.14],[22,1.29,1.24,.4,.025],[23,1.05,1.65,.35,.23],[27,2.2,3.48,.36,.23],[28,3.96,2.24,.37,.025]]){
+ for(const [seed,x,y,size,hue] of [[1,-2.38,2.62,.47,.035],[5,-2.48,.88,.48,.22],[8,-2.08,1.05,.36,.03],[9,-3.42,1.22,.33,.14],[11,-3.87,1.63,.34,.23],[14,1.35,3.5,.43,.14],[19,3.94,1.62,.48,.14],[22,1.29,1.24,.4,.025],[23,1.05,1.65,.35,.23],[27,2.2,3.48,.31,.23],[28,3.96,2.24,.37,.025]]){
   const infillRandom=seeded(23092307+seed);
   attachRay.set(new T.Vector3(x,y,3),new T.Vector3(0,0,-1));attachRay.far=5.1;
   const hit=attachRay.intersectObjects(supports,false)[0];if(!hit?.face||hit.face.normal.z<.12)continue;
