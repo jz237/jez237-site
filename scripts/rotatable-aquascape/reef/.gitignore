@@ -1,0 +1,4 @@
+qa/*.png
+qa/*-look.mjs
+qa/look.mjs
+qa/results.json

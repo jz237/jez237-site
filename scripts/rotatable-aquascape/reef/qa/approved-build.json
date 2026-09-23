@@ -1,0 +1,86 @@
+{
+  "buildHash": "1248bfe5970494336daf0669f6bb9a14306f94cdf2d31749ae3e0b8a05d042ac",
+  "files": [
+    "assets/index-D7yZwMeH.js",
+    "assets/index-DdD2V56_.css",
+    "index.html"
+  ],
+  "checkedAt": "2026-09-23T00:48:23.699Z",
+  "readyMs": 1488,
+  "samples": [
+    {
+      "fps": 59.99700014999249,
+      "time": 4.292199999904631,
+      "bites": 21,
+      "remaining": 15
+    },
+    {
+      "fps": 59.99700014999249,
+      "time": 8.292499999904672,
+      "bites": 34,
+      "remaining": 2
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 12.309599999904618,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 16.30989999990457,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 20.31019999990447,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 24.3272999999044,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 28.344299999904322,
+      "bites": 36,
+      "remaining": 0
+    }
+  ],
+  "checks": {
+    "loading": true,
+    "feeding": true,
+    "spacing": true,
+    "obstacles": true,
+    "pause": true,
+    "camera": true,
+    "lighting": true,
+    "fullscreen": true,
+    "identification": true,
+    "mobile": true,
+    "randomized": true
+  },
+  "initial": {
+    "triangles": 2166582,
+    "inhabitants": 20
+  },
+  "visualReview": [
+    "front",
+    "three-quarter",
+    "side",
+    "mobile",
+    "blue-hour"
+  ],
+  "plantedBehaviorTests": 264,
+  "plantedReleaseAndSyncPassed": true,
+  "hiddenReefFilesChanged": false,
+  "publication": [
+    "jez237.com",
+    "GitHub"
+  ],
+  "scope": "First reef preview; not photographic parity. Desktop measurements are local, not a phone performance claim."
+}
