@@ -14,7 +14,7 @@ export function surfaceColony(support:T.Mesh,point:T.Vector3,normal:T.Vector3,si
   ray.set(new T.Vector3(x,.28*size,z).applyMatrix4(transform),castDirection);ray.far=.58*size;
   const hit=ray.intersectObject(support,false)[0];return hit?hit.point.clone().applyMatrix4(inverse).y:null;
  };
- const foot=coralCrust(support.geometry,point,normal,.23*size,hue,hue*17+size,{color:new T.Color().setHSL(hue,.52,.29),thickness:.006*size});
+ const foot=coralCrust(support.geometry,point,normal,(size>=.6?.36:.23)*size,hue,hue*17+size,{color:new T.Color().setHSL(hue,.52,.29).multiplyScalar(size>=.6?.55:1),thickness:.006*size});
  foot.applyMatrix4(inverse);
  const geometries=branchingColony(new T.Vector3(),size,hue,random,sample,hue>.7?'canopy':'bushy',foot);
  const bounds=new T.Box3();let triangles=0;

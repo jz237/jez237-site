@@ -52,6 +52,13 @@ assert.ok(stems.length>=7);
 for(const g of stems){const root=g.parameters.path.getPointAt(0);assert.ok(Math.hypot(root.x,root.z)>.07,'stems spread across the basal tissue');assert.ok(Math.abs(root.y-stemSurface(root.x,root.z)+.014)<1e-6,'stem sinks into its actual local support');}
 const rejected=branchingColony(new T.Vector3(),1,.8,rootRandom,()=>-.4).filter(g=>g.type==='TubeGeometry'&&g.parameters.tubularSegments===8);
 for(const g of rejected)assert.equal(g.parameters.path.getPointAt(0).length(),0,'unsupported roots return to the established central attachment');
+// Large colonies occupy a broad, uneven attachment patch rather than a tight ring.
+const rootRadii=stems.map(g=>{const r=g.parameters.path.getPointAt(0);return Math.hypot(r.x,r.z);});
+assert.ok(Math.max(...rootRadii)>.24&&Math.max(...rootRadii)-Math.min(...rootRadii)>.08,'broad irregular primary attachment footprint');
+// Near an edge, search inward for supported tissue rather than falling to center.
+let edgeState=684;const edgeRandom=()=>{edgeState=(Math.imul(edgeState,1664525)+1013904223)>>>0;return edgeState/4294967296;};
+const edgeStems=branchingColony(new T.Vector3(),1,.8,edgeRandom,(x,z)=>Math.hypot(x,z)<.14?0:null).filter(g=>g.type==='TubeGeometry'&&g.parameters.tubularSegments===8);
+for(const g of edgeStems){const r=g.parameters.path.getPointAt(0);assert.ok(Math.hypot(r.x,r.z)<.14&&Math.hypot(r.x,r.z)>.05,'roots retreat inward onto continuous support');}
 console.log('Primary stems passed: distributed sloping attachments and disconnected-ledge rejection.');
 
 // Folded shelves use their real vertices for navigation volumes. Exercise

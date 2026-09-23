@@ -10,7 +10,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
  const choice=(a:number,b:number)=>a+(b-a)*random();
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
   const delta=end.clone().sub(start),middle=start.clone().lerp(end,.5);middle.x+=Math.sin(seed)*delta.length()*.12;middle.z+=Math.cos(seed*1.7)*delta.length()*.12;
-  const shoulder=start.clone().lerp(end,.27);if(level===0){const bend=.5+.5*Math.sin(seed*1.83);shoulder.y=start.y+delta.y*(.27-.17*bend);middle.y=start.y+delta.y*(.5-.11*bend);}else{shoulder.addScaledVector(delta.clone().normalize(),-.025*size);}
+  const shoulder=start.clone().lerp(end,.27);if(level===0){const bend=.5+.5*Math.sin(seed*1.83);shoulder.y=start.y+delta.y*(.27-.17*bend);middle.y=start.y+delta.y*(.5-.11*bend);if(size>=.6){const drift=.075*size*Math.sin(seed*2.31);shoulder.x+=Math.cos(seed+1.2)*drift;shoulder.z+=Math.sin(seed+1.2)*drift;middle.x-=Math.cos(seed+1.2)*drift*.45;middle.z-=Math.sin(seed+1.2)*drift*.45;}}else{shoulder.addScaledVector(delta.clone().normalize(),-.025*size);}
   const curve=new T.CatmullRomCurve3([start,shoulder,middle,end]),steps=level===0?8:level===1?6:4,sides=level===0?12:10;
   const g=new T.TubeGeometry(curve,steps,radius,sides,false),p=g.getAttribute('position'),colors=new Float32Array(p.count*3);
   const terminal=level>=2,endScale=terminal?(growth==='antler'?.66:.70):.62;
@@ -65,9 +65,20 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   const angle=i*2.399+choice(-.32,.32),exposure=.5+.5*Math.cos(angle-hue*19),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1)*(.82+.40*exposure),height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1)*(.74+.42*exposure);
   // Separate attachment points across the living crust; keep each stem sunk
   // into the actual support rather than suspending a radial bouquet above it.
-  const spread=(.09+.085*(.5+.5*Math.sin(i*4.13+hue*11)))*size;
-  const root=base.clone().add(new T.Vector3(Math.cos(angle)*spread,choice(-.012,.009)*size,Math.sin(angle)*spread));
-  if(surface){const y=surface(root.x,root.z);if(y!==null&&Math.abs(y-base.y)<.15*size)root.y=y-.014*size;else root.copy(base);}
+  const broad=size>=.6;
+  const spread=(broad?.13+.15*(.5+.5*Math.sin(i*4.13+hue*11)):.09+.085*(.5+.5*Math.sin(i*4.13+hue*11)))*size;
+  const rootAngle=angle+(broad?.45*Math.sin(i*3.7+hue*13):0);
+  const root=base.clone().add(new T.Vector3(Math.cos(rootAngle)*spread,choice(-.012,.009)*size,Math.sin(rootAngle)*spread));
+  if(surface){
+   // Retreat across the same local support when the wider foot reaches an edge.
+   // Never leave roots hanging above a ledge or drop onto a disconnected shelf.
+   const dx=root.x-base.x,dz=root.z-base.z;let anchored=false;
+   for(const fraction of broad?[1,.82,.64,.46]:[1]){
+    const x=base.x+dx*fraction,z=base.z+dz*fraction,y=surface(x,z);
+    if(y!==null&&Math.abs(y-base.y)<.15*size){root.set(x,y-.014*size,z);anchored=true;break;}
+   }
+   if(!anchored)root.copy(base);
+  }
   const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.037,.057)*size,0,angle+random()*2);
  }
  // Prefer clipped triangles from the actual support, including its curved relief.
@@ -75,7 +86,7 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
  // A thin irregular living crust conforms to the actual rock, not a flowerpot disc.
  const positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],valid:boolean[]=[],rings=8,sides=48;
  for(let j=0;j<=rings;j++)for(let k=0;k<=sides;k++){
-  const a=k/sides*Math.PI*2,t=j/rings,r=.19*size*t*(1+.17*Math.sin(a*3+hue*17)+.08*Math.sin(a*7)),x=base.x+Math.cos(a)*r,z=base.z+Math.sin(a)*r;
+  const a=k/sides*Math.PI*2,t=j/rings,r=(size>=.6?.34:.19)*size*t*(1+.17*Math.sin(a*3+hue*17)+.08*Math.sin(a*7)),x=base.x+Math.cos(a)*r,z=base.z+Math.sin(a)*r;
   const y=surface?surface(x,z):base.y,ok=y!==null&&Math.abs(y-base.y)<.29*size;valid.push(ok);
   positions.push(x,(ok?y!:base.y)+.003*size,z);const c=baseColor.clone().multiplyScalar(.67+.13*(1-t));colors.push(c.r,c.g,c.b);uv.push(x/.135,z/.135);
   if(j&&k){const n=j*(sides+1)+k,a=n-sides-2,b=n-sides-1,c=n-1;const connected=(a:number,b:number,c:number)=>{if(!valid[a]||!valid[b]||!valid[c])return false;for(const [u,v] of [[a,b],[b,c],[c,a]]){const dx=positions[u*3]-positions[v*3],dz=positions[u*3+2]-positions[v*3+2],dy=Math.abs(positions[u*3+1]-positions[v*3+1]);if(dy>Math.hypot(dx,dz)*1.45+.002*size)return false;}return true;};if(j>1&&connected(a,b,c))indices.push(a,b,c);if(connected(b,c,n))indices.push(b,n,c);}
