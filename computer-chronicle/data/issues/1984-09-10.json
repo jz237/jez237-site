@@ -1,0 +1,413 @@
+{
+  "currentDate": "2026-09-23",
+  "historicDate": "1984-09-10",
+  "displayDate": "Week of September 10-16, 1984",
+  "edition": "Issue 111 - Weekly 1984 Computer & Culture Chronicle",
+  "visualProfile": {
+    "tone": "Warm September 1984 newsprint with Macintosh and arcade counter cues",
+    "motifs": [
+      "Macintosh 512K",
+      "AtariSoft arcade games",
+      "IBM-compatible portables",
+      "floppy disks"
+    ],
+    "layout": "Dense computer-weekly front page with brick-red and blue rules, halftones, boxed charts and narrow columns"
+  },
+  "masthead": {
+    "title": "Computer Chronicle",
+    "subtitle": "The Weekly Record of Computers, Games & Digital Culture",
+    "dateline": "September 10-16, 1984",
+    "price": "75 cents"
+  },
+  "layoutPlan": {
+    "leadPlacement": "Banner Macintosh 512K lead with a large compact-Mac halftone and prominent AtariSoft game art",
+    "secondaryRail": "Arcade releases, compatibles, integrated software, charts, prices and world bulletin",
+    "archiveNavigation": "Previous and next weekly issue controls with calendar shelf"
+  },
+  "sectionChrome": {
+    "primary": "brick red",
+    "secondary": "royal blue",
+    "texture": "aged newsprint, paper grain, fine column rules, slight ink bleed"
+  },
+  "heroImage": {
+    "src": "media/computer-chronicle-gpt-image-2-week-1984-09-10.jpg",
+    "alt": "GPT Image 2 vintage newspaper front page for September 10-16, 1984, led by the Macintosh 512K and AtariSoft games",
+    "caption": "GPT Image 2 newspaper-style front page generated from structured Chronicle issue data.",
+    "confidence": "Generated visual based on verified structured issue data; webpage text and sources remain canonical"
+  },
+  "editorNote": "Apple gives the Macintosh room to breathe while AtariSoft brings arcade stars to competing home computers.",
+  "morningLine": "This week in 1984: the Macintosh gets 512K, and the game shelf ignores hardware boundaries.",
+  "lead": {
+    "headline": "Apple Unveils a 512K Macintosh",
+    "dek": "Four times the memory gives the little graphical computer room to breathe.",
+    "body": [
+      "Apple opened the week on September 10 with the Macintosh 512K, its first major revision of the compact machine introduced in January. The familiar all-in-one case still houses a nine-inch black-and-white display and a Motorola 68000 processor, but the built-in memory leaps from 128K to 512K. That fourfold increase tackles the original Macintosh’s most conspicuous limitation.",
+      "The extra RAM gives bigger documents and applications more working room and makes the computer a more practical proposition for people who spend a full day inside its graphical desktop. Early owners had learned how quickly 128K could disappear when a program, document and system software all needed space at once. The new machine does not change the single 400K floppy drive, but it gives software a much larger workbench.",
+      "The Centre for Computing History lists the new machine at $3,195. That puts the improved Macintosh well above the bargain PC compatibles crowding shop windows this autumn. Apple is asking buyers to value the integrated screen, mouse-driven interface and growing application library over cheaper configurations with a familiar IBM-style command line.",
+      "The “Fat Mac,” as the memory-rich revision is becoming known, is therefore less a new look than a bet on what the Macintosh can do when software has room to grow. For owners who liked the original machine but found its memory cramped, this week’s announcement is a consequential upgrade; for undecided shoppers, it sharpens the choice between graphical ease and price."
+    ],
+    "sourceRefs": [
+      0,
+      1
+    ],
+    "confidence": "exact-date"
+  },
+  "stories": [
+    {
+      "headline": "AtariSoft Sends Arcade Favorites Across the Home-Computer Aisle",
+      "body": [
+        "AtariSoft’s September advertisement puts six new titles in front of owners of rival computers: Gremlins, Crystal Castles, Donkey Kong Jr., Mario Bros., Track & Field and Typo Attack. The line spans combinations of Commodore 64, Apple II, IBM PC, PCjr and VIC-20 versions, making familiar arcade names a selling point well beyond Atari’s own hardware.",
+        "The catalog also keeps Pac-Man, Ms. Pac-Man, Jungle Hunt, Battlezone, Donkey Kong, Centipede and Pole Position in circulation. Its small print stresses that these editions are not made or approved by the rival computer manufacturers. The more important message at the game counter is that a good title can travel with players from one machine to another."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "PC Compatibles Compete on Price, Portability and Speed",
+      "body": [
+        "The IBM-compatible aisle is filling fast. In September’s Creative Computing, Otrona offers a 19-pound 2001 portable with a seven-inch amber display, 8088 processor, 360K floppy and 128K of RAM for $2,495. Heathkit’s heavier HS-161 brings a nine-inch screen and pop-up floppy drives; a two-drive assembled model lists for $3,199.",
+        "At the desktop end, Tava lists a two-drive PC at $1,995 and a faster Turbo Tava at $2,495. These machines compete on price or portability, yet compatibility is not a single promise: shoppers must ask whether a favorite program depends on IBM hardware behavior or merely reads a DOS disk. The expanding choice is good news for buyers willing to examine the details."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Framework Packs Six Office Tools Into One Box",
+      "body": [
+        "Ashton-Tate’s Framework brings word processing, spreadsheet, business graphics, data management, forms processing and outlining to an IBM PC package priced at $695. The program requires 256K of RAM, a reminder that integrated software is demanding more from the office machine even as it promises fewer trips between separate disks.",
+        "Computer Creations offers a lower-priced answer with The Ultimate at $249.50, combining writing, database, mail merge and a link to the Postal Service’s E-COM system. The two products make the same argument from different price points: an office computer should let workers move among jobs without rebuilding their day around separate applications."
+      ],
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "computerItems": [
+    {
+      "title": "Macintosh 512K",
+      "summary": "8 MHz 68000, 512K RAM, 400K floppy, 9-inch 512x342 monochrome display",
+      "sourceRefs": [
+        0,
+        1
+      ],
+      "confidence": "exact-date"
+    },
+    {
+      "title": "Otrona 2001",
+      "summary": "8088, 128K expandable to 640K, 360K floppy, built-in 7-inch amber display, 19 pounds",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Sanyo MBC-550/555",
+      "summary": "8088, 128K, one or two 160K floppies, bundled MS-DOS business software",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "title": "Prentice Popcorn C100 modem",
+      "summary": "Internal IBM PC modem, 300/1200 baud, auto dial and automatic voice/data switching, Bell 103/113/212A compatibility",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    }
+  ],
+  "softwareList": [
+    {
+      "name": "Framework",
+      "detail": "IBM PC integrated suite: word processing, spreadsheet, graphics, data management, forms and outlining; 256K required."
+    },
+    {
+      "name": "The Ultimate",
+      "detail": "Integrated word processor, dictionary, database, mail merge and E-COM communications link."
+    },
+    {
+      "name": "UltraFile",
+      "detail": "Menu-driven IBM PC database praised for flexible data entry, search, reports and built-in graphics."
+    },
+    {
+      "name": "Write Tool / Print Tool / Postal and Sort Tool",
+      "detail": "New Atari word-processing, document-production and mailing-list utilities."
+    }
+  ],
+  "storeShelves": [
+    {
+      "label": "Top 5 Computer Games",
+      "items": [
+        "Gremlins — AtariSoft",
+        "Crystal Castles — AtariSoft",
+        "Donkey Kong Jr. — AtariSoft",
+        "Mario Bros. — AtariSoft",
+        "Track & Field — AtariSoft"
+      ]
+    },
+    {
+      "label": "Top 5 Music",
+      "items": [
+        "What's Love Got to Do with It — Tina Turner",
+        "Missing You — John Waite",
+        "She Bop — Cyndi Lauper",
+        "Let's Go Crazy — Prince & The Revolution",
+        "Stuck on You — Lionel Richie"
+      ]
+    },
+    {
+      "label": "Top Movies",
+      "items": [
+        "Ghostbusters",
+        "Tightrope",
+        "Purple Rain",
+        "The Karate Kid",
+        "The Woman in Red"
+      ]
+    }
+  ],
+  "priceWatch": [
+    {
+      "item": "Macintosh 512K",
+      "price": "$3,195",
+      "note": "Launch price.",
+      "sourceRefs": [
+        0
+      ]
+    },
+    {
+      "item": "Sanyo MBC-550 / MBC-555",
+      "price": "$999 / $1,399",
+      "note": "September 1984 listed price.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Tava PC / Turbo Tava",
+      "price": "$1,995 / $2,495",
+      "note": "September 1984 listed price.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Key Tronic replacement keyboards (IBM PC / DEC VT-100 / TRS-80 Color Computer)",
+      "price": "$255 / $379 / $89.95",
+      "note": "September 1984 listed price.",
+      "sourceRefs": [
+        2
+      ]
+    },
+    {
+      "item": "Revox B225 CD player",
+      "price": "$1,150; optional B201 remote $125",
+      "note": "September 1984 listed price.",
+      "sourceRefs": [
+        4
+      ]
+    }
+  ],
+  "briefs": [
+    {
+      "headline": "PC modem at 1200 baud",
+      "summary": "Prentice's $445 Popcorn C100 placed auto-dial 300/1200-baud communications inside an IBM PC.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "DVORAK keyboards sold as productivity tools",
+      "summary": "Key Tronic advertised IBM PC and PCjr keyboards in the DVORAK layout, claiming an eight-person word-processing shop improved productivity by 80 percent.",
+      "sourceRefs": [
+        2
+      ],
+      "confidence": "same-month"
+    },
+    {
+      "headline": "Ghostbusters returns to box-office number one",
+      "summary": "The film grossed $3.46 million on September 14-16, narrowly beating Tightrope.",
+      "sourceRefs": [
+        6
+      ],
+      "confidence": "exact-date"
+    }
+  ],
+  "musicChart": [
+    {
+      "rank": 1,
+      "title": "What's Love Got to Do with It",
+      "artist": "Tina Turner",
+      "chartDate": "1984-09-15",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-09-15"
+      ]
+    },
+    {
+      "rank": 2,
+      "title": "Missing You",
+      "artist": "John Waite",
+      "chartDate": "1984-09-15",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-09-15"
+      ]
+    },
+    {
+      "rank": 3,
+      "title": "She Bop",
+      "artist": "Cyndi Lauper",
+      "chartDate": "1984-09-15",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-09-15"
+      ]
+    },
+    {
+      "rank": 4,
+      "title": "Let's Go Crazy",
+      "artist": "Prince & The Revolution",
+      "chartDate": "1984-09-15",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-09-15"
+      ]
+    },
+    {
+      "rank": 5,
+      "title": "Stuck on You",
+      "artist": "Lionel Richie",
+      "chartDate": "1984-09-15",
+      "sourceUrls": [
+        "https://www.musicchartsarchive.com/singles-chart/1984-09-15"
+      ]
+    }
+  ],
+  "periodAd": {
+    "headline": "More Memory for the Macintosh",
+    "summary": "The Macintosh 512K quadruples built-in RAM while keeping the compact case and mouse-driven desktop.",
+    "tagline": "A roomier desk inside the little screen."
+  },
+  "market": {
+    "headline": "The Compatible Counter Gets Crowded",
+    "summary": "Sanyo, Tava, Otrona and Heathkit give PC shoppers sharply different price and portability choices in September.",
+    "sourceRefs": [
+      2
+    ],
+    "confidence": "same-month"
+  },
+  "worldAnchor": {
+    "headline": "Hurricane Diana menaces the Carolina coast",
+    "summary": "On September 10-11, Hurricane Diana strengthened and threatened the Carolinas; contemporary UPI dispatches described 110 mph winds and the storm bearing down on Cape Fear and the Grand Strand.",
+    "sourceRefs": [
+      7
+    ],
+    "confidence": "exact-date"
+  },
+  "gadgetWatch": {
+    "headline": "Revox's $1,150 CD player remembers its program when unplugged",
+    "summary": "Audio's September test praised the Studer-Revox B225, a four-times-oversampling Compact Disc player with 19-step programming, track- or time-based selection, looping, automatic pauses, a calibration tone and nonvolatile memory. The optional infrared remote cost $125.",
+    "sourceRefs": [
+      4
+    ],
+    "confidence": "same-month"
+  },
+  "bbsNote": {
+    "headline": "Creative Computing opens a two-way clubhouse on CompuServe",
+    "summary": "The magazine's September telecommunications column described its new CompuServe Special Interest Group, launched in May, as a lively direct line between staff and readers. Public message boards, downloadable data sections, online conferences and a frequently updated street-price index show the increasingly social and practical character of dial-up computing.",
+    "posts": [
+      {
+        "topic": "Magazine-reader exchange",
+        "platform": "CompuServe Creative Computing SIG",
+        "text": "Users could leave and reply to public messages; the column warned there was no private messaging in the SIG and recommended E-Mail for private exchanges."
+      },
+      {
+        "topic": "Online conference",
+        "platform": "CompuServe",
+        "text": "A CB-style conference area offered as many as 30 channels and was mainly used for scheduled live conferences."
+      },
+      {
+        "topic": "Street prices",
+        "platform": "CompuServe XA2 database",
+        "text": "The SIG promised maintained street prices for popular computers, ten printers, seven monitors and twenty software packages."
+      },
+      {
+        "topic": "Apple community telecomputing",
+        "platform": "Washington Apple Pi / CompuServe / Apple BBS",
+        "text": "The September Washington Apple Pi Journal carried both 'Calling CompuServe with Apple III' and sysop Tom Warrick's 'Your Own Apple Bulletin Board,' documenting a user group moving between national service and local BBS culture."
+      }
+    ]
+  },
+  "curiosity": {
+    "headline": "A PC-compatible kit that weighed 35 pounds",
+    "summary": "Heathkit called the HS-161 portable, but carrying it meant hauling 35 pounds of computer.",
+    "detail": "The luggable's two floppy drives popped up from the case; it included a 9-inch amber screen and detachable keyboard. The assembled two-drive version cost $3,199, while Creative Computing estimated the still-unannounced kit price would be $700-$800 less.",
+    "sourceUrls": [
+      "https://archive.org/stream/creativecomputing-1984-09/Creative_Computing_v10_n09_1984_September_djvu.txt"
+    ]
+  },
+  "accuracyLedger": {
+    "items": [
+      "Macintosh 512K launch is dated September 10; $3,195 follows the computing-history source.",
+      "AtariSoft, PC-compatible, software, modem and gadget reporting comes from September period publications and is marked same-month.",
+      "Music uses the September 15 chart; movies use the September 14-16 weekend.",
+      "Hurricane Diana bulletin follows September 10 contemporary UPI coverage."
+    ]
+  },
+  "sources": [
+    {
+      "title": "Centre for Computing History: Apple launches the Macintosh 512K",
+      "url": "https://www.computinghistory.org.uk/det/5810/",
+      "date": "1984-09-10"
+    },
+    {
+      "title": "Low End Mac: Mac 512K Fat Mac",
+      "url": "https://lowendmac.com/1984/mac-512k-fat-mac/",
+      "date": "1984-09-10"
+    },
+    {
+      "title": "Creative Computing, Volume 10 Number 9",
+      "url": "https://archive.org/stream/creativecomputing-1984-09/Creative_Computing_v10_n09_1984_September_djvu.txt",
+      "date": "1984-09"
+    },
+    {
+      "title": "Washington Apple Pi Journal, Volume 6 Number 9",
+      "url": "https://www.wap.org/journal/entries/1984-09-v06-n09.html",
+      "date": "1984-09"
+    },
+    {
+      "title": "Audio: Revox B225 Compact Disc Player",
+      "url": "https://www.gammaelectronics.xyz/audio_09-1984_revox.html",
+      "date": "1984-09"
+    },
+    {
+      "title": "Billboard Hot 100 archive, September 15, 1984",
+      "url": "https://www.musicchartsarchive.com/singles-chart/1984-09-15",
+      "date": "1984-09-15"
+    },
+    {
+      "title": "Box Office Mojo: Domestic Weekend 37",
+      "url": "https://www.boxofficemojo.com/weekend/1984W37/?sort=rank&sortDir=asc",
+      "date": "1984-09-16"
+    },
+    {
+      "title": "UPI: Hurricane Diana menaces the coast",
+      "url": "https://www.upi.com/Archives/1984/09/10/Hurricane-Diana-growing-and-wobbling-like-a-top-menaced/9371463636800/",
+      "date": "1984-09-10"
+    },
+    {
+      "title": "UPI: Foreign News Briefs",
+      "url": "https://www.upi.com/Archives/1984/09/14/Foreign-News-Briefs/2905463982400/",
+      "date": "1984-09-14"
+    },
+    {
+      "title": "UPI: Soviet Union sets stage for video revolution",
+      "url": "https://www.upi.com/Archives/1984/09/09/Soviet-Union-sets-stage-for-video-revolution/5038463550400/",
+      "date": "1984-09-09"
+    }
+  ]
+}
