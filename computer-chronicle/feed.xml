@@ -6,7 +6,14 @@
     <atom:link href="https://jez237.com/computer-chronicle/feed.xml" rel="self" type="application/rss+xml"/>
     <description>A weekly early-1980s computer newspaper rebuilt from the historical record — games, software, hardware, prices, charts, and culture, one week at a time.</description>
     <language>en-us</language>
-    <lastBuildDate>Tue, 22 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 23 Sep 2026 12:00:00 GMT</lastBuildDate>
+    <item>
+      <title>Week of September 10-16, 1984 — Apple Unveils a 512K Macintosh</title>
+      <link>https://jez237.com/computer-chronicle/?date=1984-09-10</link>
+      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-09-10</guid>
+      <pubDate>Wed, 23 Sep 2026 12:00:00 GMT</pubDate>
+      <description>Four times the memory gives the little graphical computer room to breathe. Apple opened the week on September 10 with the Macintosh 512K, its first major revision of the compact machine introduced in January. The familiar all-in-one case still houses a nine-inch black-and-white display and a Motorola 68000 processor, but the built-in memory leaps from 128K to 512K. That fourfold increase tackles the original Macintosh’s most conspicuous limitation. Also this week: AtariSoft Sends Arcade Favorites Across the Home-Computer Aisle · PC Compatibles Compete on Price, Portability and Speed · Framework Packs Six Office Tools Into One Box.</description>
+    </item>
     <item>
       <title>Week of September 3-9, 1984 — The $4,000 Robot Rolls Into the Home</title>
       <link>https://jez237.com/computer-chronicle/?date=1984-09-03</link>
@@ -139,13 +146,6 @@
       <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-30</guid>
       <pubDate>Fri, 04 Sep 2026 12:00:00 GMT</pubDate>
       <description>Epson lifts the lid on a lap-size LCD machine as Commodore signals a 16-bit business turn. HANOVER, West Germany — One of Europe&apos;s largest computer fairs drew roughly 650,000 visitors this week, turning the exhibition floor into a vivid measure of how quickly electronic computing is moving from specialist rooms toward desks, briefcases and homes. Also this week: Chuck Peddle Rides Back to Victor with the PlusPC · One Box, Two Computer Worlds · Can a Computer Teach Music? · Early Macintosh Verdict: Brilliant, but Boxed In.</description>
-    </item>
-    <item>
-      <title>Week of April 23-29, 1984 — Apple Puts the II in a Carrying Case</title>
-      <link>https://jez237.com/computer-chronicle/?date=1984-04-23</link>
-      <guid isPermaLink="true">https://jez237.com/computer-chronicle/?date=1984-04-23</guid>
-      <pubDate>Thu, 03 Sep 2026 12:00:00 GMT</pubDate>
-      <description>The $1,295 Apple IIc brings 128K, a built-in disk drive and nearly a decade of Apple II software into a compact 7.5-pound package. SAN FRANCISCO — Apple Computer unveiled the Apple IIc on April 24 at its “Apple II Forever” dealer convention, putting the durable Apple II design into an ivory case small enough to carry by its handle. Even a 6.2-magnitude earthquake shaking Moscone Center could not upstage the week’s landmark personal-computer announcement. Also this week: Apple II Forever, Apple III No More · IBM’s PCjr Stumbles Out of the Gate · Software Becomes the Machine’s Magic · April’s Game Shelf Spans Machines.</description>
     </item>
   </channel>
 </rss>
