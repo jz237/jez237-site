@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {buildAnemones} from './Anemones.ts';
 import {limestoneMaps} from './ReefMaterials.ts';
 import {branchingColony,platingColony} from './CoralMorphology.ts';
 import {mergeVertices,mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
@@ -41,7 +42,7 @@ export function buildReef(scene:T.Scene){
  const rockMaps=limestoneMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
  const rockMat=new T.MeshStandardMaterial({...rockMaps,normalScale:new T.Vector2(.9,.9),roughness:.96,vertexColors:true});
  const coralMat=new T.MeshStandardMaterial({map:coralTex,bumpMap:coralTex,bumpScale:.018,roughness:.76,vertexColors:true});
- const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],soft:T.BufferGeometry[]=[],polyps:T.BufferGeometry[]=[];
+ const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],polyps:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
  const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number)=>{
   const original=new T.IcosahedronGeometry(1,22);original.deleteAttribute('normal');const geo=mergeVertices(original),p=geo.getAttribute('position');original.dispose();
@@ -79,33 +80,24 @@ export function buildReef(scene:T.Scene){
  plate(-3,1.98,.43,1.08);plate(-2.77,1.77,.62,.8);plate(2.4,2.52,.1,1.05);plate(1.62,2.4,-.07,.65);plate(1.26,.81,.95,.68);
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const hosts=[new T.Vector3(3.05,1.21,.82),new T.Vector3(-3.62,.78,1.35)];
- for(let k=0;k<3;k++){
-  const center=k<2?hosts[k]:new T.Vector3(3.88,.52,1.73),s=k===0?1:k===1?.63:.46;
-  for(let i=0;i<180;i++){
-   const a=i*2.399,r=Math.sqrt((i+.5)/180)*.63*s,root=center.clone().add(new T.Vector3(Math.cos(a)*r,0,Math.sin(a)*r)),h=pick(.35,.82)*s;
-   const end=root.clone().add(new T.Vector3(Math.cos(a)*.3*s,h,Math.sin(a)*.3*s)),bend=root.clone().lerp(end,.57);bend.x+=Math.sin(i)*.12*s;
-   const color=new T.Color(k===2?'#9c94b0':'#a2b273').multiplyScalar(pick(.8,1.14));
-   soft.push(tube([root,bend,end],pick(.023,.036)*s,color,10,6,false));
-   const tip=new T.SphereGeometry(.038*s,7,5);tip.scale(1,1.3,1);tip.translate(end.x,end.y,end.z);soft.push(colored(tip,new T.Color(k===2?'#cad7db':'#d5eaa1')));
-  }
- }
- const softMat=new T.MeshStandardMaterial({vertexColors:true,roughness:.59,metalness:.03});
- softMat.onBeforeCompile=shader=>{shader.uniforms.reefTime=reefClock;shader.vertexShader='uniform float reefTime;\n'+shader.vertexShader;shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
- float root=position.x>2.5?(position.z>1.4?.52:1.21):.78;
- float flex=clamp((position.y-root)*1.6,0.,1.);flex*=flex;
- transformed.x+=sin(reefTime*1.65+position.z*2.4+position.x*1.1)*.075*flex;
- transformed.z+=sin(reefTime*1.23+position.x*3.)*.058*flex;`);};
- const anemones=batch(soft,softMat,group,'Swaying anemone tentacles')!;anemones.castShadow=false;addNote(anemones,'Shelter in the tentacles','Clownfish stay close to a host anemone, returning to its tentacles for shelter. The soft tentacles bend in the current while their base stays attached. Tap Feed fish to watch their short trips out from the host.');
- for(const [x,y,z,s] of [[-3.23,.48,1.81,.5],[2.18,.7,1.63,.56],[-2.4,1.08,.64,.32],[1.12,2.76,-.39,.31]]){
+ const anemone=buildAnemones(hosts,reefClock,random,center=>{attachRay.set(center.clone().add(new T.Vector3(0,.08,0)),new T.Vector3(0,-1,0));attachRay.far=1.5;return attachRay.intersectObjects(supports,false)[0]?.point.y??center.y-.35;});group.add(anemone.mesh);
+ addNote(anemone.mesh,'Shelter in the tentacles','A central oral disc is surrounded by fleshy tentacles; a basal foot anchors the animal to the reef. Flow bends the tentacles progressively toward their tips. The clownfish make short foraging trips and return to their host. This is an artistic motion study, not a measured fluid simulation.');
+ for(const [x,nominalY,z,s] of [[-3.23,.48,1.81,.5],[2.18,.7,1.63,.56],[-2.4,1.08,.64,.32],[1.12,2.76,-.39,.31]]){
+  attachRay.set(new T.Vector3(x,nominalY+.35,z),new T.Vector3(0,-1,0));attachRay.far=2.5;
+  const y=(attachRay.intersectObjects(supports,false)[0]?.point.y??.2)+.005;
+  const cushion=new T.SphereGeometry(s,22,10);cushion.scale(1,.22/s,1);cushion.translate(x,y,z);polyps.push(colored(cushion,new T.Color('#66664b'),.13));
   for(let i=0;i<46;i++){
-   const a=i*2.399,r=Math.sqrt(i/46)*s,px=x+Math.cos(a)*r,pz=z+Math.sin(a)*r,py=y+.22*(1-r/s);
+   const a=i*2.399,r=Math.sqrt(i/46)*s,px=x+Math.cos(a)*r,pz=z+Math.sin(a)*r,py=y+.22*Math.sqrt(Math.max(0,1-(r/s)**2));
    const ring=new T.TorusGeometry(.058,.016,5,12);ring.rotateX(-Math.PI/2);ring.translate(px,py,pz);polyps.push(colored(ring,new T.Color(i%3?'#ed982a':'#43bf9b')));
    const disk=new T.SphereGeometry(.048,8,5);disk.scale(1,.27,1);disk.translate(px,py-.005,pz);polyps.push(colored(disk,new T.Color(i%3?'#3b717e':'#674e97')));
    for(let j=0;j<7;j++){const q=j/7*6.28;polyps.push(tube([new T.Vector3(px+Math.cos(q)*.06,py,pz+Math.sin(q)*.06),new T.Vector3(px+Math.cos(q)*.085,py+.038,pz+Math.sin(q)*.085)],.006,new T.Color('#929365'),2,4,false));}
   }
  }
  // Smaller encrusting colonies cover exposed ledges, with raised corallite rims.
- for(const [x,y,z,r] of [[-2.42,2.09,.03,.38],[-3.47,1.37,.64,.37],[-2.2,.67,.97,.29],[1.31,2.94,-.34,.37],[2.45,1.72,.3,.42],[3.79,.74,1.15,.32],[.91,1.17,-.06,.28]]){
+ for(const [x,nominalY,z,r] of [[-2.42,2.09,.03,.38],[-3.47,1.37,.64,.37],[-2.2,.67,.97,.29],[1.31,2.94,-.34,.37],[2.45,1.72,.3,.42],[3.79,.74,1.15,.32],[.91,1.17,-.06,.28]]){
+  attachRay.set(new T.Vector3(x,nominalY+.35,z),new T.Vector3(0,-1,0));attachRay.far=2.5;
+  const y=(attachRay.intersectObjects(supports,false)[0]?.point.y??.2)+.004;
+  const crust=new T.SphereGeometry(r,22,10);crust.scale(1,.7,1);crust.translate(x,y,z);polyps.push(colored(crust,new T.Color('#436e57'),.12));
   for(let i=0;i<85;i++){
    const a=i*2.399,rr=Math.sqrt(i/85)*r,px=x+Math.cos(a)*rr,pz=z+Math.sin(a)*rr,py=y+Math.sqrt(Math.max(0,r*r-rr*rr))*.7;
    const rim=new T.TorusGeometry(.034,.012,5,9);rim.rotateX(-Math.PI/2);rim.translate(px,py,pz);polyps.push(colored(rim,new T.Color(i%4?'#68b78e':'#afc781')));
@@ -116,5 +108,5 @@ export function buildReef(scene:T.Scene){
  const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.025,roughness:1,color:'#dedbd0'}));sand.rotation.x=-Math.PI/2;sand.position.y=.18;sand.receiveShadow=true;group.add(sand);
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
  for(let i=0;i<1600;i++){const x=pick(-4.94,4.94),z=pick(-2.23,2.23);dummy.position.set(x,.185,z);const s=pick(.012,.049);dummy.scale.set(s,pick(.4,1)*s,s);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));}rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts};
+ return {group,obstacles,notes,hosts,anemone};
 }

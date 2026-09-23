@@ -1,52 +1,52 @@
 {
-  "buildHash": "9bb19492b3d38d4474daea1a31df163af837283f19a6b8a4dad68c5e69e0c975",
+  "buildHash": "244bcbb1154654bdea3e2e03779816c44ec0d6dace8d327a0dbcb9738e3d435a",
   "files": [
-    "assets/index-B8Tur_ZM.js",
+    "assets/index-C6vdGrmR.js",
     "assets/index-DdD2V56_.css",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T01:22:56.630Z",
-  "readyMs": 1507,
+  "checkedAt": "2026-09-23T01:38:55.235Z",
+  "readyMs": 1587,
   "samples": [
     {
       "fps": 59.99700014999249,
-      "time": 4.297500000047683,
-      "bites": 20,
-      "remaining": 16
-    },
-    {
-      "fps": 59.99100134979749,
-      "time": 8.314600000047722,
-      "bites": 32,
-      "remaining": 4
+      "time": 4.296500000000001,
+      "bites": 23,
+      "remaining": 13
     },
     {
       "fps": 59.99400059993998,
-      "time": 12.331500000047681,
+      "time": 8.296900000000033,
       "bites": 35,
       "remaining": 1
     },
     {
-      "fps": 59.99700014999244,
-      "time": 16.331800000047647,
+      "fps": 59.99400059993998,
+      "time": 12.313900000000007,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 16.330999999999946,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.348900000047543,
+      "time": 20.347899999999857,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 24.36499999999977,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.36590000004748,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 28.366200000047364,
+      "time": 28.365299999999706,
       "bites": 36,
       "remaining": 0
     }
@@ -65,16 +65,21 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 2168022,
+    "triangles": 2305734,
     "inhabitants": 20
+  },
+  "anemoneGeometry": {
+    "tentacles": 540,
+    "outwardNormalsPercent": 100,
+    "rootAndTipContinuity": true
   },
   "visualReview": [
     "front",
     "three-quarter",
-    "side",
     "mobile",
-    "blue-hour",
-    "coral-closeup"
+    "coral-closeup",
+    "anemone-closeup",
+    "anemone-flow"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -82,5 +87,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Coral morphology and rock-material pass; not photographic parity. Local desktop measurements do not establish phone performance."
+  "scope": "Continuous anemone tissue, rooted flow and attached polyp colonies. Artistic approximation, not photographic parity; local desktop performance is not a phone guarantee."
 }
