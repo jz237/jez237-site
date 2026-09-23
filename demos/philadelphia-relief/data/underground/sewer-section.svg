@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 210" role="img" aria-label="Illustrative sewer cross-section: masonry walls surrounding a channel carrying wastewater and rainwater">
+    <defs><pattern id="sewerBrick" width="24" height="12" patternUnits="userSpaceOnUse"><rect width="24" height="12" fill="#90634b"/><path d="M0 0H24M0 12H24M12 0V12" fill="none" stroke="#d4a77b" stroke-width="1"/></pattern></defs>
+    <rect width="280" height="210" rx="10" fill="#182830"/>
+    <path d="M58 109C58 5 222 5 222 109C222 175 176 191 140 191S58 175 58 109Z" fill="url(#sewerBrick)"/>
+    <path d="M75 109C75 28 205 28 205 109C205 158 172 176 140 176S75 158 75 109Z" fill="#101c25"/>
+    <path d="M79 135Q108 129 140 135T201 135Q188 176 140 176T79 135" fill="#4798a8"/>
+    <text x="140" y="105" text-anchor="middle" fill="#fff3d4" font-size="12">Combined sewer</text>
+    <text x="140" y="154" text-anchor="middle" fill="white" font-size="10">Wastewater + stormwater</text>
+    <text x="140" y="205" text-anchor="middle" fill="#b9cdd2" font-size="10">Illustrative shape · no measured dimensions</text></svg>
