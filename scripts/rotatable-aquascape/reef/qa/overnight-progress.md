@@ -36,7 +36,7 @@ Publish meaningful verified milestones only. Latest root main may advance from o
 
 Stop at the overnight cutoff or if verified realism is achieved earlier. Clearly state remaining discrepancies at the final checkpoint. Leave the last accepted live version intact if a new iteration fails.
 
-## September 22, 21:25 EDT â€” coral morphology pass
+## September 22, 21:25 EDT — coral morphology pass
 
 - Replaced the pointed twig clusters with irregular connected forks, rounded pale growth tips and attached encrusting bases. Attachment raycasts run once during construction.
 - Plates now have closed thin sides, separate upper/lower coloring, scalloped contours and subtle radial relief. Reduced the previous corrugated texture after inspecting a macro view.
@@ -45,7 +45,7 @@ Stop at the overnight cutoff or if verified realism is achieved earlier. Clearly
 - Local ready time 1507 ms; approximately 60 FPS; 2,168,022 reported rendered triangles (baseline 2,166,582, essentially unchanged). JS 176.11 KB gzip. No mobile hardware speed claim. Planted sync and approved-release guards pass; no shared planted or Hidden Reef source/bundle edits.
 - Visual review: front/angle/mobile/macro are functional and branch/plate silhouettes improve. Still far from reference: rock crust is too broad/soft, coral junctions and basal crust look modeled, anemone tentacles too uniform, fish anatomy/skin too simplified, lower background empty. Next pass should improve anemone taper/flow and finer surface detail before increasing object count. Do not claim realism complete.
 
-## September 22, 21:40 EDT â€” anemone anatomy and rooted flow
+## September 22, 21:40 EDT — anemone anatomy and rooted flow
 
 - Replaced separate shafts/bead tips with 540 continuous tapered tentacles, rounded ends, curved individual silhouettes, darker roots and pale tips. Added oral disc/mouth and a short column that reaches a sampled rock surface. Surface normals follow the bend; one merged mesh and shader time uniform avoid per-frame CPU vertex updates.
 - Replaced the old world-position root guess with explicit root-to-tip attributes. The shared current combines a broad surge and smaller individual offsets, keeping roots pinned and tips more flexible. Successive macro captures show the change in bending.
@@ -55,7 +55,7 @@ Stop at the overnight cutoff or if verified realism is achieved earlier. Clearly
 - Planted release/sync guards pass. Only reef files and its generated bundle change; jez237/GitHub publication only.
 - Still clearly short of reference: tentacles need finer optical tissue response, polyp supports are too spherical, rock needs smaller-scale realistic crust/pores, and fish remain stylized. Next substantial priority: marine fish anatomy/skin (especially protruding mouths, eyes and planar fins), while preserving smooth swimming.
 
-## September 22, 21:55 EDT â€” marine fish detail
+## September 22, 21:55 EDT — marine fish detail
 
 - Replaced pointed oval body geometry with a smooth sampled cheek/snout profile, closed ends and averaged normals at the side UV seam. First prototype showed profile bumps and a hard cheek shading seam; both were corrected after macro inspection. Body lighting now follows the traveling body wave.
 - Smaller inset irises/pupils with darker rims, body-conforming textured gill covers that lift subtly for breathing, and a small slit-like mouth that opens during approaches replace protruding eyes, untextured round gill pieces and the large expanding mouth ring.
@@ -234,3 +234,12 @@ Stop at the overnight cutoff or if verified realism is achieved earlier. Clearly
 - Same4,625,398 rendered triangles and171,840 anemone triangles. Anemone buffers7,725,024bytes vs7,320,528 (+404,496); new encoded axis is four bytes/vertex. JSgzip205.12KB vs204.62. No new maps, model downloads or passes. Ready2014ms vs2282previous, both near60FPS locally. Single-run variation is not evidence of an optimization; other hardware remains unmeasured.
 - Inspected final front, oblique, mobile, anemone close-up and two motion frames. Tips are smoother and short-strand bending more controlled. Still clearly modeled: tentacles remain smooth and fairly uniform, oral discs appear flat, coral mounds and fish fin seams differ from the reference. Photographic target is not reached. Before-tissue evidence retained.
 - Publish only jez237/GitHub after tested-build/current-main/sync guards. Planted and Hidden Reef preserved. Existing overnight loop remains active until08:00EDT. Next prioritize material microstructure, anemone basal anatomy or fish fin joins rather than adding mesh density.
+
+## September 23, 03:44 EDT - distinct encrusting coral cups
+
+- Compared reference, mature planted image and before/after front/oblique/close-up/mobile reef views. The ten prominent encrusting colonies now use a distinct material with unevenly spaced cups, recessed centers, fine radial ribs and variation across raised rims. Broad tissue no longer reuses the tiny pore map of the branches. Existing attached skin, rock and all organisms remain in place.
+- Generated original three512px maps offline with Python/numpy/Pillow, no services or paid assets. Rejected nearest-cell shading seams in the first trial; final smooth summed cup profiles wrap periodically. Regression checks compare texture seam gradients against internal gradients, positive unit normals and reviewed byte budget. This is artistic anatomy, not species-specific biological simulation.
+- build:reef/check:reef pass:20 articulated fish,36/36food by16.35s, zero sampled proxy overlaps, independent movement/breathing, pause, daylight, camera, fullscreen, identification, mobile and randomized starts. All540anemone strands,561polyps/3240tentacles and4,625,398rendered triangles retained.
+- Added637,268bytes of PNG maps, approximately4MiB uncompressed GPU texture storage including mipmaps, and one merged material draw group. Existing passes, geometry and maps retained; no runtime texture synthesis. JSgzip205.31KB vs205.12. QAready2175ms vs2014previous; alternating three-load means2031.3ms prior vs2045.7ms current (+14.4ms/0.7%), both near60FPS locally at1440x854. Small local variation is not a speed claim or evidence about other devices.
+- Inspected final front, oblique, mobile and coral close-up. Close-up cups read more clearly as organized living surfaces, with less uniform pore shading. Wide view remains similar. Large mounds are still too smooth in silhouette, plate tissue is plain and the reference has denser varied growth; fish fin joins and organic translucency remain gaps. Reference realism is not reached. Before-corallites evidence and alternating load comparison saved.
+- Publish jez237/GitHub only after tested-build/current-main guards. Planted and Hidden Reef preserved. Existing overnight loop remains active to08:00EDT. Next should address a larger silhouette or lighting/depth gap rather than additional pore-texture tweaking.

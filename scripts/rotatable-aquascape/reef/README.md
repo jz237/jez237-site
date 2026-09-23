@@ -1,4 +1,4 @@
-# Living Reef â€” first 3D preview
+# Living Reef — first 3D preview
 
 Separate reef option built from the current jez237 planted aquarium renderer.
 The reference supplied September 22 guides the two islands, archways, white sand
@@ -11,9 +11,9 @@ and its shared freshwater biology/chemistry bundles are unchanged.
 
 ## Develop and build
 
-- `npm run dev:reef` â€” local preview at port 5240.
-- `npm run build:reef` â€” type-check, build and copy to `demos/reef-aquarium/`.
-- `npm run check:reef` â€” browser behavior, controls, collision and mobile checks.
+- `npm run dev:reef` — local preview at port 5240.
+- `npm run build:reef` — type-check, build and copy to `demos/reef-aquarium/`.
+- `npm run check:reef` — browser behavior, controls, collision and mobile checks.
   Inspect `reef/qa/front.png`, `angle.png` and `mobile.png` before releasing.
 
 The small jez237-only selector is maintained by `scripts/reef_navigation.mjs`.
@@ -315,3 +315,19 @@ Regression checks compare analytic bending derivatives to finite differences,
 encoded axes to mesh centerlines, and sampled deformation determinants to a
 positive bound. All 171,840 anemone triangles remain; buffers use 7,725,024 bytes
 (previously 7,320,528). No new maps, downloads or render passes.
+
+## Distinct encrusting coral tissue
+
+The ten large rock-attached colonies now have their own baked tissue material.
+Irregularly spaced coral cups combine recessed centers, uneven rims and fine
+radial ribs; smoothly summed profiles avoid discontinuous nearest-cell borders.
+The original three-dimensional attached skin and all branching, plate and polyp
+geometry are retained. This is original artistic anatomy, not a species ID.
+
+Regenerate three 512px maps with `python reef/model-source/bake_encrusting_maps.py`
+(numpy/Pillow). All synthesis runs offline. PNGs retain full-resolution pixels,
+637,268 additional download bytes. The additional material uses the existing
+standard shader and adds one merged draw group, with roughly 4MiB of texture
+storage including mipmaps in an uncompressed RGBA upload. Existing maps and
+geometry are unchanged. Tests check wrapped texture edges, positive unit
+normals and download budget; visual review remains a separate requirement.

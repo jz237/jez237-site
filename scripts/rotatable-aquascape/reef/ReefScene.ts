@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {encrustingSurfaceMaps} from './EncrustingSurface.ts';
 import {surfaceColony} from './SurfaceColony.ts';
 import {coralCrust} from './CoralCrust.ts';
 import {erodedRock} from './ReefRock.ts';
@@ -36,10 +37,10 @@ function batch(geometries:T.BufferGeometry[],material:T.Material,parent:T.Group,
 }
 export function buildReef(scene:T.Scene){
  const group=new T.Group();scene.add(group);const obstacles:Obstacle[]=[],notes:T.Object3D[]=[];
- const rockMaps=limestoneMaps(),coralMaps=coralSurfaceMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
+ const rockMaps=limestoneMaps(),coralMaps=coralSurfaceMaps(),crustMaps=encrustingSurfaceMaps(),sandTex=texture('sand'),coralTex=texture('coral');sandTex.repeat.set(7,4);
  const rockMat=new T.MeshStandardMaterial({...rockMaps.maps,normalScale:new T.Vector2(1.1,1.1),roughness:.96,vertexColors:true});
  const coralMat=new T.MeshStandardMaterial({...coralMaps.maps,normalScale:new T.Vector2(.9,.9),roughness:.9,vertexColors:true});
- const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[];
+ const rocks:T.BufferGeometry[]=[],corals:T.BufferGeometry[]=[],massiveCorals:T.BufferGeometry[]=[];
  const addNote=(mesh:T.Object3D,title:string,description:string)=>{mesh.userData.note={title,description};notes.push(mesh);};
  const rock=(x:number,y:number,z:number,sx:number,sy:number,sz:number,rng:()=>number=random)=>{
   const geo=erodedRock(x,y,z,sx,sy,sz,rng),surface=encrustRock(geo);rocks.push(surface);
@@ -63,7 +64,7 @@ export function buildReef(scene:T.Scene){
  for(const [rockIndex,dx,dy,r,hue] of [[4,-.18,.02,.7,.12],[5,.18,.07,.56,.055],[2,-.08,-.09,.46,.8],[8,.04,.02,.43,.08],[14,-.18,.05,.66,.1],[15,.12,.06,.5,.82],[12,.18,.12,.61,.045],[17,.06,.04,.43,.22],[19,.04,.08,.49,.095],[20,.09,.04,.37,.83]]){
   const f=formations[rockIndex];attachRay.set(new T.Vector3(f[0]+dx,f[1]+dy,3),new T.Vector3(0,0,-1));attachRay.far=6;
   const hit=attachRay.intersectObject(supports[rockIndex],false)[0];if(!hit?.face)continue;
-  const crust=coralCrust(supports[rockIndex].geometry,hit.point,hit.face.normal,r,hue,rockIndex*1.73);if(crust.index!.count){corals.push(crust);crustSurfaces.push(crust);crustStats.colonies++;crustStats.triangles+=crust.index!.count/3;livingCrustZones.push({center:hit.point.clone(),radius:r*.85});}
+  const crust=coralCrust(supports[rockIndex].geometry,hit.point,hit.face.normal,r,hue,rockIndex*1.73);if(crust.index!.count){massiveCorals.push(crust);crustSurfaces.push(crust);crustStats.colonies++;crustStats.triangles+=crust.index!.count/3;livingCrustZones.push({center:hit.point.clone(),radius:r*.85});}
  }
  // Scattered thin encrusting colonies grow directly on exposed stone. An
  // independent random stream leaves every established organism/placement intact.
@@ -121,6 +122,8 @@ export function buildReef(scene:T.Scene){
   corals.push(...colony.geometries);obstacles.push(o);occupied.push(o);infillStats.colonies++;infillStats.triangles+=colony.triangles;infillStats.placements.push([seed,x,y,size,hue]);
  }
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
+ const crustMaterial=new T.MeshStandardMaterial({...crustMaps.maps,normalScale:new T.Vector2(1.15,1.15),roughness:.92,vertexColors:true,side:T.DoubleSide});
+ const massive=batch(massiveCorals,crustMaterial,group,'Ridged encrusting colonies')!;addNote(massive,'A living surface','Closely packed coral cups have recessed centers and fine radial ridges. This tissue follows the supporting rock, while its hard skeleton remains still in the current. An artistic anatomical study.');
  const hosts=[new T.Vector3(3.05,1.21,.82),new T.Vector3(-3.62,.78,1.35)];
  const anemone=buildAnemones(hosts,reefClock,random,center=>{attachRay.set(center.clone().add(new T.Vector3(0,.08,0)),new T.Vector3(0,-1,0));attachRay.far=1.5;return attachRay.intersectObjects(supports,false)[0]?.point.y??center.y-.35;});group.add(anemone.mesh);
  addNote(anemone.mesh,'Shelter in the tentacles','A central oral disc is surrounded by fleshy tentacles; a basal foot anchors the animal to the reef. Flow bends the tentacles progressively toward their tips. The clownfish make short foraging trips and return to their host. This is an artistic motion study, not a measured fluid simulation.');
@@ -138,5 +141,5 @@ export function buildReef(scene:T.Scene){
  const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.025,roughness:1,color:'#dedbd0'}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position');for(let i=0;i<sandPositions.count;i++)sandPositions.setZ(i,sandHeight(sandPositions.getX(i),-sandPositions.getY(i)));sand.geometry.computeVertexNormals();sand.receiveShadow=true;group.add(sand);
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
  for(let i=0;i<1600;i++){const x=pick(-4.94,4.94),z=pick(-2.23,2.23);dummy.position.set(x,sandHeight(x,z)+.003,z);const s=pick(.006,.032);dummy.scale.set(s,pick(.4,1)*s,s);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));}rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone,polypStats,rockStats,crustStats,infillStats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready])};
+ return {group,obstacles,notes,hosts,anemone,polypStats,rockStats,crustStats,infillStats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready])};
 }
