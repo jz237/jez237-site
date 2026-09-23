@@ -15,6 +15,7 @@ import './coral-geometry.mjs';
 import './crust-geometry.mjs';
 import './surface-colony.mjs';
 import './encrusting-maps.mjs';
+import './limestone-maps.mjs';
 import './sand-relief.mjs';
 import {chromium} from 'playwright';
 import {createServer} from 'node:http';
