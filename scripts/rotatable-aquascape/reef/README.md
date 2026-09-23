@@ -231,3 +231,13 @@ No fine branch, corallite, polyp or texture detail is removed. The curved-foot
 regression raycasts every fixture vertex back to its support, verifies thin
 attachment and checks nondegenerate triangles. Rendered scene triangles decrease
 from4,045,478 to4,027,708; local QA remains near60FPS, ready1755ms.
+
+## Irregular spreading branch architecture
+
+Primary stems attach at individually sampled positions across the living crust,
+with a central fallback when a sample hits a disconnected ledge. Colony growth
+has a directional bias, uneven fork spacing and variable canopy height. Slender
+branch proportions retain rounded tips, all raised cups and the same geometry
+count. Shared fine tissue maps repeat at a smaller physical scale on stems.
+The procedural random stream is unchanged, preserving other scenery placement.
+These are visual growth rules, not a biological growth simulation.

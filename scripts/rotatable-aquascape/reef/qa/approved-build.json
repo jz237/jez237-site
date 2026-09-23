@@ -1,12 +1,12 @@
 {
-  "buildHash": "28f441741a563fa746231c5ce9f0e019fa10e5ac46d50439714fbc9b6c646693",
+  "buildHash": "6f120fbfc587d383eab5ecc8fea4460448c59f6daffe49ae2a53180571132420",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
+    "assets/index-BvnnhRwA.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-DreRmB16.js",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/roughnessMap-4hZTjONg.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T05:40:01.828Z",
-  "readyMs": 1755,
+  "checkedAt": "2026-09-23T05:56:30.924Z",
+  "readyMs": 1820,
   "samples": [
     {
-      "fps": 59.99400059994001,
-      "time": 4.300199999952314,
-      "bites": 24,
-      "remaining": 12
+      "fps": 59.99400059993998,
+      "time": 4.324199999952317,
+      "bites": 14,
+      "remaining": 22
     },
     {
-      "fps": 59.99400059994003,
-      "time": 8.317199999952345,
-      "bites": 34,
-      "remaining": 2
+      "fps": 59.99700014999249,
+      "time": 8.32449999995235,
+      "bites": 29,
+      "remaining": 7
+    },
+    {
+      "fps": 59.99700014999249,
+      "time": 12.341499999952296,
+      "bites": 35,
+      "remaining": 1
     },
     {
       "fps": 59.99400059993998,
-      "time": 12.31749999995229,
+      "time": 16.358499999952233,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999244,
-      "time": 16.334499999952232,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 20.35159999995214,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 24.368599999952075,
+      "fps": 59.994000599940094,
+      "time": 20.37559999995218,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 28.385499999951982,
+      "time": 24.37589999995211,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 28.392999999952014,
       "bites": 36,
       "remaining": 0
     }
@@ -105,7 +105,8 @@
     "Clipped crust triangles nondegenerate; sampled support gap bounded; 10 colonies / 11097 triangles",
     "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved",
     "540 rooted tentacles; outward seam-smoothed skin; unit tip normals; actual recessed oral disc; 7320528 geometry bytes",
-    "Clipped branching foot: curved rock attachment at every fixture vertex, max sampled gap .009001; valid normals and nondegenerate faces"
+    "Clipped branching foot: curved rock attachment at every fixture vertex, max sampled gap .009001; valid normals and nondegenerate faces",
+    "Primary stems: distributed sloping attachments and disconnected-ledge rejection; same geometry count and rounded tips"
   ],
   "visualReview": [
     "front",
@@ -120,5 +121,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Curved rock-conforming basal tissue on branching colonies; angular grid-cut edges replaced by clipped actual surface. Full fine textures/anatomy retained. Ready1755ms, near60FPS; rendered triangles -0.44%. Still short of reference realism; other hardware unmeasured."
+  "scope": "Irregular spreading branching colonies, individually attached stems, slender rounded branches and finer tissue repeats. All meshes retained; same4,027,708 rendered triangles. Ready1820ms, near60FPS locally; other hardware unmeasured. Reference realism not reached."
 }

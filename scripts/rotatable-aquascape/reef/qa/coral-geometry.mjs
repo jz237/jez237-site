@@ -34,3 +34,14 @@ for(const {style,meshes} of forms){
  assert.deepEqual(meshes[0].getAttribute('position').array,fixture(style)[0].getAttribute('position').array,'art geometry stays reproducible');
 }
 console.log('Growth forms passed: distinct canopy, bushy and antler silhouettes; same detail count; rounded tips.');
+
+// Distributed primary stems stay embedded in sloping support, and never jump
+// down to a disconnected ledge when the local rock sample is missing.
+let rootSeed=684;const rootRandom=()=>{rootSeed=(Math.imul(rootSeed,1664525)+1013904223)>>>0;return rootSeed/4294967296;};
+const stemSurface=(x,z)=>.35*x+.15*z;
+const stems=branchingColony(new T.Vector3(),1,.8,rootRandom,stemSurface).filter(g=>g.type==='TubeGeometry'&&g.parameters.tubularSegments===8);
+assert.ok(stems.length>=7);
+for(const g of stems){const root=g.parameters.path.getPointAt(0);assert.ok(Math.hypot(root.x,root.z)>.07,'stems spread across the basal tissue');assert.ok(Math.abs(root.y-stemSurface(root.x,root.z)+.014)<1e-6,'stem sinks into its actual local support');}
+const rejected=branchingColony(new T.Vector3(),1,.8,rootRandom,()=>-.4).filter(g=>g.type==='TubeGeometry'&&g.parameters.tubularSegments===8);
+for(const g of rejected)assert.equal(g.parameters.path.getPointAt(0).length(),0,'unsupported roots return to the established central attachment');
+console.log('Primary stems passed: distributed sloping attachments and disconnected-ledge rejection.');
