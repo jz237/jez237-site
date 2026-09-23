@@ -1,11 +1,11 @@
 {
-  "buildHash": "8ae9392d914d51d3bd2f610c70d8ca625d060f6aba628bf8e55da41b5df251a2",
+  "buildHash": "3b3a92bc4a2e0c85152cc2e01de23b322488fb2290a180e415095a87671cc519",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-DIJs4SPG.js",
+    "assets/index-CmiIr8Ip.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T04:27:14.121Z",
-  "readyMs": 1666,
+  "checkedAt": "2026-09-23T04:38:05.715Z",
+  "readyMs": 1632,
   "samples": [
     {
-      "fps": 59.99400059994001,
-      "time": 4.299099999904631,
-      "bites": 10,
-      "remaining": 26
-    },
-    {
       "fps": 59.99400059993998,
-      "time": 8.299499999904668,
-      "bites": 28,
-      "remaining": 8
+      "time": 4.283699999904628,
+      "bites": 30,
+      "remaining": 6
     },
     {
       "fps": 59.99700014999249,
-      "time": 12.316399999904615,
-      "bites": 35,
-      "remaining": 1
+      "time": 8.300599999904666,
+      "bites": 36,
+      "remaining": 0
     },
     {
-      "fps": 59.99100134979755,
-      "time": 16.33349999990456,
+      "fps": 59.99700014999249,
+      "time": 12.317699999904612,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 20.333799999904464,
+      "time": 16.31809999990455,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.35079999990438,
+      "time": 20.351799999904465,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999255,
-      "time": 28.367799999904292,
+      "fps": 59.99400059993998,
+      "time": 24.368799999904372,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 28.38579999990426,
       "bites": 36,
       "remaining": 0
     }
@@ -102,7 +102,8 @@
     "Indexed coral geometry, smooth branch seams and outward plate faces; fixture buffers 1659484 bytes",
     "Basal coral tissue follows slopes without bridging disconnected lower shelves",
     "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 8345412 vs 32120880 bytes",
-    "Clipped crust triangles nondegenerate; sampled support gap bounded; 10 colonies / 11097 triangles"
+    "Clipped crust triangles nondegenerate; sampled support gap bounded; 10 colonies / 11097 triangles",
+    "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved"
   ],
   "visualReview": [
     "front",
@@ -116,5 +117,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Ten rock-attached encrusting coral colonies, shared material and maps. Polyps attach to the new surface. Local 60 FPS; ready 1666 ms vs 1634 prior; render triangles +0.55%. Still short of reference realism; other hardware unmeasured."
+  "scope": "Compact branching canopies, bushes and antlers with rounded terminals and deeper tissue colors. Full detail counts retained. Local 60 FPS; ready 1632 ms vs 1666 prior. Still short of reference realism; other hardware unmeasured."
 }

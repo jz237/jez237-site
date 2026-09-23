@@ -1,24 +1,25 @@
 import * as T from 'three';
 
 type Random=()=>number;
+export type CoralGrowth='canopy'|'bushy'|'antler';
 /** Rounded, irregular fork growth. Polyps are fine normal/color detail; a coral
  * skeleton stays rigid, unlike the soft anemone tissue elsewhere in the scene. */
-export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null){
- const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.64,.37),tipColor=baseColor.clone().lerp(new T.Color('#e5e3cc'),.28);
+export function branchingColony(base:T.Vector3,size:number,hue:number,random:Random,surface?:(x:number,z:number)=>number|null,growth:CoralGrowth='canopy'){
+ const geometries:T.BufferGeometry[]=[],baseColor=new T.Color().setHSL(hue,.52,.29),tipColor=baseColor.clone().lerp(new T.Color('#e5e3cc'),.31);
  const choice=(a:number,b:number)=>a+(b-a)*random();
  function branch(start:T.Vector3,end:T.Vector3,radius:number,level:number,seed:number){
   const delta=end.clone().sub(start),middle=start.clone().lerp(end,.5);middle.x+=Math.sin(seed)*delta.length()*.12;middle.z+=Math.cos(seed*1.7)*delta.length()*.12;
   const shoulder=start.clone().lerp(end,.27);if(level===0){const bend=.5+.5*Math.sin(seed*1.83);shoulder.y=start.y+delta.y*(.27-.17*bend);middle.y=start.y+delta.y*(.5-.11*bend);}else{shoulder.addScaledVector(delta.clone().normalize(),-.025*size);}
   const curve=new T.CatmullRomCurve3([start,shoulder,middle,end]),steps=level===0?8:level===1?6:4,sides=level===0?12:10;
   const g=new T.TubeGeometry(curve,steps,radius,sides,false),p=g.getAttribute('position'),colors=new Float32Array(p.count*3);
-  const terminal=level>=2,endScale=terminal?.48:.38;
+  const terminal=level>=2,endScale=terminal?(growth==='antler'?.66:.82):.62;
   for(let j=0;j<=steps;j++){
    const t=j/steps,center=curve.getPointAt(t),taper=(1-(1-endScale)*t)*(1+.42*Math.exp(-t*15));
    for(let k=0;k<=sides;k++){
     const i=j*(sides+1)+k,angle=k/sides*Math.PI*2;
     const polypRidges=1+.045*Math.sin(angle*3+t*19+seed)+.027*Math.sin(angle*5-t*27);
     p.setXYZ(i,center.x+(p.getX(i)-center.x)*taper*polypRidges,center.y+(p.getY(i)-center.y)*taper*polypRidges,center.z+(p.getZ(i)-center.z)*taper*polypRidges);
-    const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,.87,1)*.85).multiplyScalar(.96+.03*Math.sin(seed+t*5+angle*2));colors.set([c.r,c.g,c.b],i*3);
+    const c=baseColor.clone().lerp(tipColor,T.MathUtils.smoothstep(t,.87,1)*.85).multiplyScalar(.76+.18*t+.055*Math.sin(seed+t*5+angle*2));colors.set([c.r,c.g,c.b],i*3);
    }
   }
   g.setAttribute('color',new T.BufferAttribute(colors,3));const uv=g.getAttribute('uv');for(let j=0;j<=steps;j++)for(let k=0;k<=sides;k++)uv.setXY(j*(sides+1)+k,k/sides*2*Math.PI*radius/.21,j/steps*delta.length()/.21);g.computeVertexNormals();const normals=g.getAttribute('normal');for(let j=0;j<=steps;j++){const a=j*(sides+1),b=a+sides,n=new T.Vector3().fromBufferAttribute(normals,a).add(new T.Vector3().fromBufferAttribute(normals,b)).normalize();normals.setXYZ(a,n.x,n.y,n.z);normals.setXYZ(b,n.x,n.y,n.z);}geometries.push(g);
@@ -39,17 +40,19 @@ export function branchingColony(base:T.Vector3,size:number,hue:number,random:Ran
   if(level>=2)return;
   const count=level===0?choice(3,4):choice(2,3);
   for(let j=0;j<count;j++){
-   const t=.28+(j/count)*.60+.045*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.65);
-   const direction=curve.getTangentAt(t),tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,choice(.15,.34)*size*(level===0?1:.75),Math.sin(angle)*out));
+   const t=.32+(j/count)*.57+.045*Math.sin(seed*2.7+j*4.1),root=curve.getPointAt(t),angle=seed+j*2.4+choice(-.4,.4),out=choice(.12,.25)*size*(level===0?1:.58);
+   const direction=curve.getTangentAt(t),rise=choice(.15,.34)*size*(level===0?1:.47),tip=root.clone().add(new T.Vector3(Math.cos(angle)*out,rise,Math.sin(angle)*out));
+   if(growth==='canopy'&&level===0)tip.y=base.y+size*(.62+.13*Math.sin(angle*1.13+seed*.37));
+   if(growth==='bushy')tip.addScaledVector(direction,.025*size);
    tip.addScaledVector(direction,choice(.04,.12)*size);
-   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.81,(level===0?.018:.010)*size),level+1,seed+j*1.73);
+   branch(root,tip,Math.max(radius*(1-(1-endScale)*t)*.80,(level===0?.026:growth==='antler'?.013:.021)*size),level+1,seed+j*1.73);
   }
  }
  const count=7+Math.floor(random()*3);
  for(let i=0;i<count;i++){
-  const angle=i*2.399+choice(-.32,.32),rad=choice(.35,.67)*size,height=choice(.38,.9)*size;
-  const root=base.clone().add(new T.Vector3(Math.cos(angle)*.026*size,choice(-.012,.009)*size,Math.sin(angle)*.026*size));
-  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.047,.065)*size,0,angle+random()*2);
+  const angle=i*2.399+choice(-.32,.32),rad=choice(.35,.67)*size*(growth==='bushy'?.78:growth==='antler'?.65:1),height=choice(.38,.9)*size*(growth==='canopy'?.55:growth==='bushy'?.72:1);
+  const root=base.clone().add(new T.Vector3(Math.cos(angle)*.045*size,choice(-.012,.009)*size,Math.sin(angle)*.045*size));
+  const end=base.clone().add(new T.Vector3(Math.cos(angle)*rad,height,Math.sin(angle)*rad));branch(root,end,choice(.051,.073)*size,0,angle+random()*2);
  }
  // A thin irregular living crust conforms to the actual rock, not a flowerpot disc.
  const positions:number[]=[],colors:number[]=[],uv:number[]=[],indices:number[]=[],valid:boolean[]=[],rings=8,sides=48;
