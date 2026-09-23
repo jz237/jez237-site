@@ -1,4 +1,5 @@
-import { BRIDGE_DEMOS, UNDERGROUND_BOUNDS, UNDERGROUND_ROUTES,
+import { WATER_AREAS, waterBounds, createUndergroundWater } from './underground-water.js?v=philly-2026092303';
+import { BRIDGE_DEMOS, UNDERGROUND_ROUTES,
   openingPose, openingCycle, cutawayShader } from './city-features-data.js?v=philly-2026092205';
 
 // Loaded on demand. Uses the existing renderer; no feeds, timers or animation loop.
@@ -14,6 +15,7 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
   const point = new THREE.Vector3(), dummy = new THREE.Object3D();
   let mode = null, saved = null, cycle = null, amount = 0, moving = [], spec, slider, play;
   let scanAt = 0, labelKey = '', currentBridge = 'tacony', disposed = false;
+  let waterAtlas, undergroundArea = 'center';
   const el = (tag, text) => { const n = document.createElement(tag); n.textContent = text; return n; };
   function control(text, action) {
     const b = el('button', text); b.type = 'button'; b.onclick = action; controls.append(b); return b;
@@ -48,6 +50,7 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
       s: [Math.hypot(dx,dy),width,width], r: Math.atan2(dy,dx) });
   }
   function clearModels() {
+    waterAtlas?.dispose(); waterAtlas = null;
     group.traverse(node => { if (node.isInstancedMesh) node.dispose(); });
     for (const child of [...group.children]) group.remove(child);
     for (const asset of assets) asset.dispose(); assets.clear();
@@ -186,12 +189,20 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
     const n=el('span',name);labels.append(n);
     markers.push({node:n,x:projection.lonToX(lon),z:projection.latToZ(lat),y});
   }
-  function makeUnderground() {
+  function makeUnderground(area = undergroundArea) {
+    undergroundArea = area; clearClip(); clearModels(); controls.replaceChildren();
+    const chooser = el('select', ''); chooser.setAttribute('aria-label', 'Underground neighborhood');
+    for (const [id, value] of Object.entries(WATER_AREAS)) {
+      const option = el('option', value.name); option.value = id; chooser.append(option);
+    }
+    chooser.value = area; chooser.onchange = () => makeUnderground(chooser.value); controls.append(chooser);
     $('cityFeatureTitle').textContent='Beneath Philadelphia';
-    $('cityFeatureNote').textContent='Selected underground corridors, not a complete network. '
+    $('cityFeatureNote').textContent='Explore transit, drainage inlets, outfalls, '
+      + 'culverts and historic watercourses. '
       + 'Routes are generalized; depth, tunnel width and rock layers are schematic, not measured. '
-      + 'Dock Creek shows a historic course, not a mapped present-day sewer.';
-    const b=UNDERGROUND_BOUNDS, x0=projection.lonToX(b.west),x1=projection.lonToX(b.east);
+      + 'Historic streams are not current sewer pipe maps; '
+      + 'open the sewer map library for original plans.';
+    const b=waterBounds(area), x0=projection.lonToX(b.west),x1=projection.lonToX(b.east);
     const z0=projection.latToZ(b.north),z1=projection.latToZ(b.south),floorY=-200;
     const floor=new THREE.Mesh(own(new THREE.PlaneGeometry(x1-x0,z1-z0)),
       own(new THREE.MeshBasicMaterial({color:'#16232c',side:THREE.DoubleSide})));
@@ -214,7 +225,8 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
         void main(){float stripe=.06*sin(depth*.14)+.02*sin(depth*.9);
           gl_FragColor=vec4(vec3(.36,.27,.19)+stripe,1.);}`,
     }))));
-    for(const route of UNDERGROUND_ROUTES) {
+    waterAtlas = createUndergroundWater(THREE, {group, controls, projection, area, invalidate});
+    for(const route of area === 'center' ? UNDERGROUND_ROUTES : []) {
       const routeGroup=new THREE.Group();group.add(routeGroup);
       const points=route.path.map(([lon,lat])=>new THREE.Vector3(
         projection.lonToX(lon),route.level,projection.latToZ(lat)));
@@ -223,7 +235,7 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
       const tube=own(new THREE.TubeGeometry(curve,Math.max(24,points.length*8),10,6,false));
       const mat=own(new THREE.MeshBasicMaterial({color:route.color}));
       routeGroup.add(new THREE.Mesh(tube,mat));
-      const spheres=own(new THREE.SphereGeometry(23,10,6));
+      const spheres=own(new THREE.BoxGeometry(42,18,27));
       for(const [name,lon,lat] of route.stations) {
         const station=new THREE.Mesh(spheres,mat);station.position.set(
           projection.lonToX(lon),route.level,projection.latToZ(lat));routeGroup.add(station);
@@ -245,11 +257,15 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
       compare.setAttribute('aria-pressed',String(surface));invalidate();
     });
     compare.setAttribute('aria-pressed','false');
-    $('cityFeatureStatus').textContent='Generalized corridors · schematic depths';
+    $('cityFeatureStatus').textContent='Public map positions · schematic depths · click a water feature';
     clip(b);frameUnderground();
   }
   function frameUnderground() {
-    motion.flyTo({lon:-75.1655,lat:39.9535,camDist:globalThis.innerWidth<700?10600:5700,
+    const b = waterBounds(undergroundArea);
+    const span = Math.max(projection.lonToX(b.east)-projection.lonToX(b.west),
+      projection.latToZ(b.south)-projection.latToZ(b.north));
+    motion.flyTo({lon:(b.west+b.east)/2,lat:(b.north+b.south)/2,
+      camDist:span*(globalThis.innerWidth<700?2.8:1.55),
       camPitch:57,camBearing:8},
       {label:'Beneath Philadelphia'});
   }
@@ -291,7 +307,7 @@ export function createCityFeatures(THREE, { scene, sky, projection, sampleElevat
       resources:assets.size,clippedMaterials:originals.size}),
     update(camera,dt,width,height) {
       if(!mode||disposed)return;
-      camera.updateMatrixWorld();
+      camera.updateMatrixWorld(); waterAtlas?.update(camera);
       inverse.value.multiplyMatrices(camera.matrixWorld,camera.projectionMatrixInverse);
       if(cycle!==null) {
         cycle+=dt;applyOpening(openingCycle(cycle));

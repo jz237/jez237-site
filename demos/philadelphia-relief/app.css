@@ -1991,3 +1991,12 @@ body.cinema .window-dock { display: none; }
   color: #fff0ce; font: 600 12px var(--font); }
 body.notes-collapsed .readout-preset > :not(.notes-toggle) { display: none; }
 body.notes-collapsed .readout-preset .notes-toggle { margin: 0; }
+
+.water-map-library { border-top: 1px solid #abc4c344; padding: 12px 0; }
+.water-map-library summary { color: #f4d49b; cursor: pointer; font-weight: 650; }
+.water-map-library a { display: block; margin: 12px 0; }
+.water-map-library img { display: block; width: 100%; height: auto; margin: 8px 0; border-radius: 6px; }
+.water-map-library svg { display: block; width: 100%; margin: 12px 0; }
+.water-layer-options { display: grid; gap: 8px; }
+.water-feature-info { padding: 10px; border: 1px solid #8fcbd955; border-radius: 8px; background: #102d37; }
+#cityFeatureControls h3 { margin: 14px 0 4px; font-size: 16px; }
