@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {sandHeight} from './ReefOptics.ts';
 import {coralSurfaceMaps} from './CoralSurface.ts';
 import {topSurfaceSampler} from './RockSurface.ts';
 import {encrustingGarden,animatePolypMaterial} from './EncrustingPolyps.ts';
@@ -84,8 +85,8 @@ export function buildReef(scene:T.Scene){
  }
  const polypMat=new T.MeshStandardMaterial({vertexColors:true,map:coralTex,bumpMap:coralTex,bumpScale:.0012,roughness:.78,side:T.DoubleSide});animatePolypMaterial(polypMat,reefClock);
  const zoo=batch(gardens,polypMat,group,'Rock-encrusting polyp gardens')!;addNote(zoo,'Life across the rock','Living tissue follows the reef surface. Zoanthid oral discs have a mouth and two fringes of narrow tentacles. Their soft fringes move gently while the stony colonies stay rigid. Colors and motion are illustrative.');
- const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.025,roughness:1,color:'#dedbd0'}));sand.rotation.x=-Math.PI/2;sand.position.y=.18;sand.receiveShadow=true;group.add(sand);
+ const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.025,roughness:1,color:'#dedbd0'}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position');for(let i=0;i<sandPositions.count;i++)sandPositions.setZ(i,sandHeight(sandPositions.getX(i),-sandPositions.getY(i)));sand.geometry.computeVertexNormals();sand.receiveShadow=true;group.add(sand);
  const rubble=new T.InstancedMesh(new T.IcosahedronGeometry(1,0),new T.MeshStandardMaterial({color:'#d4d4bd',roughness:1}),1600),dummy=new T.Object3D();
- for(let i=0;i<1600;i++){const x=pick(-4.94,4.94),z=pick(-2.23,2.23);dummy.position.set(x,.185,z);const s=pick(.012,.049);dummy.scale.set(s,pick(.4,1)*s,s);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));}rubble.receiveShadow=true;group.add(rubble);
+ for(let i=0;i<1600;i++){const x=pick(-4.94,4.94),z=pick(-2.23,2.23);dummy.position.set(x,sandHeight(x,z)+.003,z);const s=pick(.006,.032);dummy.scale.set(s,pick(.4,1)*s,s);dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));}rubble.receiveShadow=true;group.add(rubble);
  return {group,obstacles,notes,hosts,anemone,polypStats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready])};
 }

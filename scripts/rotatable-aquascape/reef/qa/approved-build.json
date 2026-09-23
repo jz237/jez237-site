@@ -1,12 +1,12 @@
 {
-  "buildHash": "2492a65cf1e72c791f7ee5097564b210b2c9084069a6735e3ec60cdace2cc232",
+  "buildHash": "86cb89e4b95b47b7ac799086a7433051fcf4c99ab1e4d80edaeecbdd20454338",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-BAU5xfr8.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-QnLmFMmm.js",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/roughnessMap-4hZTjONg.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T03:26:44.287Z",
-  "readyMs": 1653,
+  "checkedAt": "2026-09-23T03:40:07.799Z",
+  "readyMs": 1650,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 4.302599999904632,
-      "bites": 30,
-      "remaining": 6
+      "fps": 59.99700014999251,
+      "time": 4.294800000095365,
+      "bites": 20,
+      "remaining": 16
     },
     {
-      "fps": 59.99700014999249,
-      "time": 8.319599999904668,
+      "fps": 59.99400059993998,
+      "time": 8.311800000095399,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 12.319999999904613,
+      "time": 12.328800000095349,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 16.345900000095288,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99100134979755,
-      "time": 16.33709999990454,
+      "time": 20.346300000095212,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99400059993998,
-      "time": 20.353999999904456,
+      "fps": 59.99700014999255,
+      "time": 24.363200000095084,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99100134979755,
-      "time": 24.371099999904345,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 28.37139999990425,
+      "fps": 59.99700014999255,
+      "time": 28.380200000094995,
       "bites": 36,
       "remaining": 0
     }
@@ -96,9 +96,9 @@
     "front",
     "three-quarter",
     "mobile",
+    "sand-closeup",
     "coral-closeup",
-    "polyp-closeup",
-    "fish macros"
+    "blue-hour"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -106,5 +106,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Finer branching corallites and ruffled plates, baked tissue maps. Local 60 FPS; startup 1653 ms versus prior 1781 ms. Rendered triangles 3671150 versus 2931102; new maps 0.87 MB. Still short of reference realism; other hardware unmeasured."
+  "scope": "Water-light material hooks preserve animated anatomy; pause/blue-hour verified. Shallow sand relief with all 1600 rubble instances. Local 60 FPS, startup 1650 ms vs 1653 prior; unchanged 3671150 rendered triangles. No new image payload or capture pass. Still short of reference realism; other hardware unmeasured."
 }

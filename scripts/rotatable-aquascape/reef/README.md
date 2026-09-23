@@ -114,3 +114,21 @@ rendered triangles versus 2,931,102 before. Local checks hold about 60 FPS and
 reach ready in 1.65 seconds versus 1.78 previously; other hardware is unmeasured.
 The reef still falls short of the photographic reference, especially branch
 joins, island silhouettes, lighting and underwater depth.
+
+## Water light and sand relief
+
+Reef-only material hooks add an animated interference pattern to shadowed direct
+diffuse illumination, with stronger response on upward-facing surfaces. Caves
+do not receive emissive caustics. The shared biological clock freezes the pattern
+on pause; blue hour reduces it. Existing fish, polyp and anemone deformation hooks
+are preserved. Color attenuation uses only the camera ray length inside the tank,
+so rotating or approaching it does not count the surrounding room as water.
+This is an artistic approximation, not a fluid or spectral-light simulation.
+
+Lower ambient/front fill and stronger overhead lighting separate exposed tops
+from sheltered recesses. Sand has shallow geometric ripples and drifts; all 1,600
+rubble instances remain, with finer sizes and positions on that same surface.
+No new render pass, draw group, image asset or triangle is required. The full
+scene still reports 3,671,150 triangles. Local QA: ready 1650 ms versus 1653 prior,
+approximately 60 FPS both; no evidence yet for other hardware. Reef resemblance
+has improved, but regular rock silhouettes and coral architecture remain gaps.
