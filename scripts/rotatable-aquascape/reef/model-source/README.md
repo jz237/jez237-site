@@ -17,3 +17,24 @@ npm run check:reef
 The runtime shares geometry and embedded full-resolution textures across inhabitants. Body waves, rooted fin flex, separate pectoral pivots, breathing and modeled-mouth food contact remain individual. All six unique models together contain 94,712 source triangles. Collision tests use conservative volumes, not triangle-perfect contact. These models improve detail but do not establish photographic parity with the supplied reef reference.
 
 Anatomy cross-check: https://doris.ffessm.fr/Especes/Gramma-loreto-Gramma-royal-1213 (royal gramma coloration, eye line and anterior dorsal spot).
+
+## Procedural coral surface maps
+
+`generate_coral_maps.ts` generates deterministic 512 x 512 RGBA diffuse, normal
+and roughness textures from jittered corallites, recessed centers, raised rims,
+septa and fine tissue grain. These are original procedural maps, with no external
+image inputs or paid services. The runtime loads the baked PNGs from assets/coral.
+
+From the aquarium source directory, export raw RGBA bytes with Node:
+
+```javascript
+import fs from 'node:fs';
+import {coralSurfaceMaps} from './reef/model-source/generate_coral_maps.ts';
+for (const [name, tex] of Object.entries(coralSurfaceMaps())) {
+  fs.writeFileSync('reef/assets/coral/' + name + '.rgba', tex.image.data);
+}
+```
+
+Encode each raw buffer using Pillow `Image.frombytes('RGBA', (512, 512), bytes)`
+and `save(path, optimize=True)`. Raw intermediates are ignored. Keep PNG pixels
+unaltered; CoralSurface.ts uses flipY=false to preserve DataTexture orientation.

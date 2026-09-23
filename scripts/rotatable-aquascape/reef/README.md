@@ -92,3 +92,25 @@ It is discarded after construction; no per-frame surface search. The rejected
 raycast prototype took 7.0 seconds locally to start; the final detailed version
 takes 1.78 seconds (prior accepted 1.45), while both sustain about 60 FPS on the
 local test computer. Other devices remain unmeasured.
+
+## Stony coral growth and tissue
+
+Branching colonies now have finer tapered tips, rounded terminal growth, smoother
+seams and sparse modeled radial corallite cups. Plate colonies have asymmetric
+folds, scalloped margins and a narrow pale growth edge. Baked diffuse, normal and
+roughness maps add smaller corallites and tissue variation between modeled cups.
+The three full-resolution 512-pixel maps add 0.87 MB to the first download; their
+deterministic source is retained under model-source. No runtime texture synthesis.
+
+Morphology inspiration: [Corals of the World, Acropora loripes](https://www.coralsoftheworld.org/species_factsheets/species_factsheet_summary/acropora-loripes/)
+and [Smithsonian coral anatomy](https://ocean.si.edu/ocean-life/invertebrates/corals-and-coral-reefs).
+This is an artistic mixed reef, not a species-exact model. No reference images
+from these sources are redistributed.
+
+Indexed buffers for the representative colony/plate fixture use 1,643,836 bytes
+versus 2,674,320 previously, despite added geometry. This is a fixture memory
+comparison, not a claim about total GPU memory. The scene reports 3,671,150
+rendered triangles versus 2,931,102 before. Local checks hold about 60 FPS and
+reach ready in 1.65 seconds versus 1.78 previously; other hardware is unmeasured.
+The reef still falls short of the photographic reference, especially branch
+joins, island silhouettes, lighting and underwater depth.

@@ -1,12 +1,15 @@
 {
-  "buildHash": "44d74e2caa0286501797efa38b0f9d25b928ae988a2d116702b9d122edee6242",
+  "buildHash": "2492a65cf1e72c791f7ee5097564b210b2c9084069a6735e3ec60cdace2cc232",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-B11DOeQC.js",
+    "assets/index-BAU5xfr8.js",
     "assets/index-DdD2V56_.css",
+    "assets/map-BeFEIA0e.png",
+    "assets/normalMap-AIoBIlzs.png",
+    "assets/roughnessMap-4hZTjONg.png",
     "assets/seaside_rock_diff_1k-STQ4lmr_.jpg",
     "assets/seaside_rock_nor_gl_1k-SdHn3rBd.jpg",
     "assets/seaside_rock_rough_1k-sKOQ0WHG.jpg",
@@ -14,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T03:05:19.428Z",
-  "readyMs": 1781,
+  "checkedAt": "2026-09-23T03:26:44.287Z",
+  "readyMs": 1653,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 4.314599999952312,
-      "bites": 17,
-      "remaining": 19
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 8.331599999952346,
-      "bites": 35,
-      "remaining": 1
+      "fps": 59.99700014999249,
+      "time": 4.302599999904632,
+      "bites": 30,
+      "remaining": 6
     },
     {
       "fps": 59.99700014999249,
-      "time": 12.348599999952295,
+      "time": 8.319599999904668,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 16.348999999952227,
+      "time": 12.319999999904613,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 16.33709999990454,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.365999999952116,
+      "time": 20.353999999904456,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99100134979755,
+      "time": 24.371099999904345,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.382999999952023,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 28.399999999951934,
+      "time": 28.37139999990425,
       "bites": 36,
       "remaining": 0
     }
@@ -74,7 +77,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 2931102,
+    "triangles": 3671150,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 560,
@@ -86,12 +89,14 @@
     "GLB bodies, anatomy and outward normals",
     "Anchored indexed anemone tentacles",
     "Polyp roots, finite geometry, unsupported surfaces and motion attributes",
-    "Rock index matches 452 raycast hits"
+    "Rock index matches 452 raycast hits",
+    "Indexed coral geometry, smooth branch seams and outward plate faces; fixture buffers 1643836 bytes versus 2674320"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
+    "coral-closeup",
     "polyp-closeup",
     "fish macros"
   ],
@@ -101,5 +106,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Rock-attached colonies replace spherical bases. Local 60 FPS; startup 1781 ms versus prior 1454 ms. Still short of reference realism; other hardware unmeasured."
+  "scope": "Finer branching corallites and ruffled plates, baked tissue maps. Local 60 FPS; startup 1653 ms versus prior 1781 ms. Rendered triangles 3671150 versus 2931102; new maps 0.87 MB. Still short of reference realism; other hardware unmeasured."
 }
