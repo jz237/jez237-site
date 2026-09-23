@@ -269,3 +269,16 @@ Local vertex cells plus a maximum-edge padding enclose the incident triangles.
 Fixtures verify coverage of vertices and triangle interiors across sizes/phases,
 outward normals and positive skeleton thickness. The visual growth pattern is
 artistic; collision volumes remain conservative approximations.
+
+## Reef overhead lighting and water calibration
+
+The key light sits above the coral canopy, giving branches and overlapping shelves
+clearer directional shading. Exposure and fill preserve readable fish markings.
+ReefWater configures the two shared surface shaders locally: the reflected LED
+height, width and depth match this tank's fixture, with a blue-white spectrum.
+Reflected-water attenuation uses the same bounded color coefficients as the reef
+materials, instead of the freshwater tint. Fresnel, total internal reflection,
+meniscus, ripple geometry and full depth tracing remain intact. No new render
+passes, maps or geometry. The reef-only adapter leaves freshwater files unchanged.
+An above-water inspection view is included in release screenshots. This is still
+an artistic real-time lighting approximation, not physically measured radiometry.

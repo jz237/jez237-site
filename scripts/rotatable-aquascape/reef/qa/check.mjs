@@ -33,6 +33,7 @@ try{
  await page.getByRole('button',{name:'Full screen',exact:true}).click();assert.equal(await page.locator('#fullscreen').getAttribute('aria-pressed'),'true');await page.getByRole('button',{name:'Exit full screen',exact:true}).click();
  await page.getByRole('button',{name:'Front',exact:true}).click();await page.waitForTimeout(1800);
  const canvas=await page.locator('canvas').boundingBox();await page.mouse.click(canvas.x+canvas.width*.29,canvas.y+canvas.height*.64);assert.ok(await page.locator('#detail').isVisible(),'rock identification should open');await page.getByRole('button',{name:'Close detail',exact:true}).click();
+ await page.evaluate(()=>window.reefQA.inspectWater());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'water-above.png')});
  await page.evaluate(()=>window.reefQA.inspectRear());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'rear-closeup.png')});
  await page.evaluate(()=>window.reefQA.inspectSand());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'sand-closeup.png')});
  await page.evaluate(()=>window.reefQA.inspectPolyps());await page.waitForTimeout(600);await page.screenshot({path:resolve(out,'polyp-closeup.png')});

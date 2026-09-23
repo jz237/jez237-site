@@ -1,12 +1,12 @@
 {
-  "buildHash": "11f202155bec53d4908588a54e850d5e7178dc608868a661bd9ad41753cbbf2b",
+  "buildHash": "607f6eb814a4497491d60a7e0161078e0dc955a0b5eae7440533ee5af6ca3798",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
+    "assets/index-BgCXFMPW.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-c9BI1cKy.js",
     "assets/map-BeFEIA0e.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/roughnessMap-4hZTjONg.png",
@@ -17,48 +17,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T06:29:29.931Z",
-  "readyMs": 1817,
+  "checkedAt": "2026-09-23T06:48:38.829Z",
+  "readyMs": 1841,
   "samples": [
     {
       "fps": 59.99100134979752,
-      "time": 4.326699999856948,
+      "time": 4.276899999856946,
       "bites": 26,
       "remaining": 10
     },
     {
       "fps": 59.99400059993998,
-      "time": 8.343599999856977,
-      "bites": 33,
-      "remaining": 3
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 12.360599999856932,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 16.377699999856873,
+      "time": 8.293899999856977,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.377999999856776,
+      "time": 12.310899999856916,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.37839999985669,
+      "time": 16.311199999856843,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99700014999255,
-      "time": 28.395399999856608,
+      "time": 20.328199999856757,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 24.34529999985667,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 28.3622999998566,
       "bites": 36,
       "remaining": 0
     }
@@ -114,7 +114,9 @@
     "front",
     "three-quarter",
     "mobile",
-    "coral-closeup"
+    "coral-closeup",
+    "fish-macros",
+    "water-above"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -122,5 +124,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Uneven folded plating corals with thin ruffled margins and finer surface detail; actual mesh-derived navigation volumes. Full4,052,492 rendered triangles retained. Ready1817ms vs1877previous, near60FPS locally; other hardware unmeasured. Reference realism not reached."
+  "scope": "Overhead directional reef lighting; fixture-correct lamp reflection and reef-specific water attenuation. Full4,052,492 rendered triangles retained. Ready1841ms vs1817previous, near60FPS locally; other hardware unmeasured. Reference realism not reached."
 }
