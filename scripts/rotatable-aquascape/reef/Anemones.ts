@@ -4,9 +4,13 @@ import {mergeGeometries} from 'three/addons/utils/BufferGeometryUtils.js';
 
 type Random=()=>number;
 // A shallow radial disc with folded tissue and a recessed oral center.
-function discPoint(t:number,a:number,scale:number){
- const r=.65*t*(1+.025*Math.sin(a*3)+.014*Math.cos(a*7));
- return new T.Vector3(Math.cos(a)*r,(.07*(1-t*t)-.025-.12*Math.exp(-((t/.13)**2))+.009*Math.sin(a*18+t*12)*Math.sin(Math.PI*t))*scale,Math.sin(a)*r*(.35+.56*T.MathUtils.smoothstep(t,0,.25))).multiply(new T.Vector3(scale,1,scale));
+function discPoint(t:number,a:number,scale:number,host=0){
+ const q=a+host*1.73,edge=t*t;
+ const r=.65*t*(1+.085*Math.sin(q*3)+.045*Math.cos(q*5));
+ const fold=edge*(.105*Math.sin(q*2+.5)+.055*Math.cos(q*3-1.1))+.065*t*Math.cos(q);
+ return new T.Vector3(Math.cos(a)*r*scale,
+  (.07*(1-t*t)-.025-.12*Math.exp(-((t/.13)**2))+fold+.009*Math.sin(a*18+t*12)*Math.sin(Math.PI*t))*scale,
+  Math.sin(a)*r*(.35+.56*T.MathUtils.smoothstep(t,0,.25))*scale);
 }
 
 /** The tentacle tip is part of the same closed skin as the shaft, rather than a
@@ -26,11 +30,11 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
   const base=new T.Color(k===2?'#65566b':'#595b3c'),shaft=new T.Color(k===2?'#ad7b99':'#7d8550'),tip=new T.Color(k===2?'#b6c9cf':'#bdd5b3');
   const footY=Math.min(center.y-.10*scale,ground-.025*scale),columnTop=center.y-.025*scale;
   const column=new T.CylinderGeometry(.57*scale,.31*scale,columnTop-footY,32,5,true),cp=column.getAttribute('position');
-  for(let j=0;j<cp.count;j++){const a=Math.atan2(cp.getZ(j),cp.getX(j)),rib=1+.055*Math.sin(a*7+cp.getY(j)*4)+.022*Math.sin(a*17);cp.setXYZ(j,cp.getX(j)*rib,cp.getY(j),cp.getZ(j)*rib);}
+  for(let j=0;j<cp.count;j++){const a=Math.atan2(cp.getZ(j),cp.getX(j)),rib=1+.055*Math.sin(a*7+cp.getY(j)*4)+.022*Math.sin(a*17);const t=cp.getY(j)/(columnTop-footY)+.5,edge=discPoint(1,a,scale,k);cp.setXYZ(j,T.MathUtils.lerp(cp.getX(j)*rib,edge.x,t*t),cp.getY(j)+t*t*(edge.y+.025*scale),T.MathUtils.lerp(cp.getZ(j)*rib,edge.z,t*t));}
   column.computeVertexNormals();column.translate(center.x,(columnTop+footY)/2,center.z);flesh(column,base.clone().multiplyScalar(.82));
   const dp:number[]=[],dc:number[]=[],duv:number[]=[],di:number[]=[],discRings=20,discSides=64;
   for(let layer=0;layer<2;layer++)for(let row=0;row<=discRings;row++)for(let j=0;j<=discSides;j++){
-   const t=row/discRings,a=j/discSides*Math.PI*2,point=discPoint(t,a,scale);if(layer)point.y=(-.105+.045*t)*scale;point.add(center);
+   const t=row/discRings,a=j/discSides*Math.PI*2,point=discPoint(t,a,scale,k);if(layer)point.y-= (.15-.115*t)*scale;point.add(center);
    dp.push(point.x,point.y,point.z);const c=base.clone().lerp(shaft,.18+.10*Math.sin(a*18+t*12)).multiplyScalar(layer?.65:.55+.45*T.MathUtils.smoothstep(t,.02,.17));dc.push(c.r,c.g,c.b);duv.push(Math.cos(a)*t,Math.sin(a)*t);
    if(row&&j){const n=layer*(discRings+1)*(discSides+1)+row*(discSides+1)+j,tri:number[]=[];if(row>1)tri.push(n-discSides-2,n-discSides-1,n-1);tri.push(n-discSides-1,n,n-1);if(layer)for(let k=0;k<tri.length;k+=3)[tri[k+1],tri[k+2]]=[tri[k+2],tri[k+1]];di.push(...tri);}
   }
@@ -38,14 +42,19 @@ export function buildAnemones(hosts:T.Vector3[],clock:{value:number},random:Rand
   const disc=new T.BufferGeometry();disc.setAttribute('position',new T.Float32BufferAttribute(dp,3));disc.setAttribute('uv',new T.Float32BufferAttribute(duv,2));disc.setIndex(di);disc.computeVertexNormals();flesh(disc,base);disc.setAttribute('color',new T.Float32BufferAttribute(dc,3));
   for(let i=0;i<180;i++){
    const angle=i*2.399963+choose(-.14,.14),radial=Math.sqrt((i+.8)/180),r=(.23+.40*radial)*scale;
-   const root=center.clone().add(discPoint(r/(.65*scale),angle,scale));root.y-=.012*scale;
-   const length=choose(.39,.85)*scale*(.88+.22*radial),spread=(.22+.36*radial)*scale,phase=choose(0,6.28),radius=choose(.019,.032)*scale;
-   const end=root.clone().add(new T.Vector3(Math.cos(angle)*spread+.15*scale,length*(.94-.28*radial)+.055*scale*Math.sin(phase),Math.sin(angle)*spread+.025*scale));
-   const c1=root.clone().add(new T.Vector3(Math.cos(angle)*spread*.12,length*.39,Math.sin(angle)*spread*.12));
-   // Keep a finite end handle: nearly coincident control points previously
-   // produced sharp hooks and a sudden cap highlight at some random phases.
-   const tipDirection=new T.Vector3(end.x-root.x+Math.sin(phase)*.04*scale,length*(.20-.30*radial),end.z-root.z+Math.cos(phase)*.035*scale).normalize();
-   const c2=end.clone().addScaledVector(tipDirection,-(.24*length+.025*scale));
+   const root=center.clone().add(discPoint(r/(.65*scale),angle,scale,k));root.y-=.012*scale;
+   // Regional folds guide neighboring strands, while individuals keep different
+   // lengths and tip directions. Reuse the same four random draws per strand.
+   const length=choose(.39,.85)*scale*(.88+.22*radial),phase=choose(0,6.28),radius=choose(.019,.032)*scale;
+   const sector=angle+k*1.73,spread=(.17+.31*radial)*scale*(1+.22*Math.sin(sector*2));
+   const height=length*(.97-.23*radial)*(.88+.16*Math.cos(sector*2+.5));
+   const curl=.115*scale*Math.sin(phase),sweep=.15*scale;
+   const end=root.clone().add(new T.Vector3(Math.cos(angle)*spread+sweep-Math.sin(angle)*curl,height,Math.sin(angle)*spread+Math.cos(angle)*curl+.025*scale));
+   const c1=root.clone().add(new T.Vector3(Math.cos(angle)*spread*.13,length*.44,Math.sin(angle)*spread*.13));
+   // A finite, individually angled end handle avoids identical radial fans and
+   // sharp hooks. Axes and shading below are rebuilt from the actual curve.
+   const tipDirection=new T.Vector3(Math.cos(angle)*spread+sweep*.55-Math.sin(angle)*curl*1.7,length*(.28-.33*radial+.22*Math.sin(phase)),Math.sin(angle)*spread+Math.cos(angle)*curl*1.7).normalize();
+   const c2=end.clone().addScaledVector(tipDirection,-(.27*length+.025*scale));
    const curve=new T.CubicBezierCurve3(root,c1,c2,end),steps=18,sides=8,frames=curve.computeFrenetFrames(steps,false),arcLength=curve.getLength();
    const g=new T.BufferGeometry(),positions:number[]=[],colors:number[]=[],uv:number[]=[],flex:number[]=[],axes:number[]=[],indices:number[]=[];
    for(let j=0;j<=steps;j++){

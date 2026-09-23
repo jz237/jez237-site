@@ -39,6 +39,10 @@ assert.equal(mesh.geometry.getAttribute('uv'),undefined,'no unused UV allocation
 const axes=mesh.geometry.getAttribute('anemoneAxis');assert.equal(axes.normalized,true);assert.ok(axes.array instanceof Int16Array);
 const decode=i=>{let x=axes.getX(i),y=axes.getY(i),z=1-Math.abs(x)-Math.abs(y);if(z<0){const old=x;x=(1-Math.abs(y))*(x>=0?1:-1);y=(1-Math.abs(old))*(y>=0?1:-1);}return new T.Vector3(x,y,z).normalize();};
 const strands=new Map();for(let i=0;i<p.count;i++)if(flex.getW(i)>0){const phase=flex.getY(i),list=strands.get(phase)||[];list.push(i);strands.set(phase,list);}
+// Attached roots should follow folded tissue rather than a flat pedestal.
+const rootHeights=[];
+for(const ids of [...strands.values()].slice(0,180))rootHeights.push(ids.slice(0,8).reduce((sum,i)=>sum+p.getY(i),0)/8);
+assert.ok(Math.max(...rootHeights)-Math.min(...rootHeights)>.15,'tentacle attachments follow the raised and lowered disc folds');
 let worstDot=1,minDeterminant=Infinity;
 for(const ids of strands.values()){
  const centers=[];for(let row=0;row<19;row++){const center=new T.Vector3();for(let j=0;j<8;j++)center.add(new T.Vector3().fromBufferAttribute(p,ids[row*9+j]));centers.push(center.multiplyScalar(1/8));}
