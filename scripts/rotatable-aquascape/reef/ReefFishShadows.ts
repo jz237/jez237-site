@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {sandHeight} from './ReefOptics.ts';
 import {type ReefFish} from './ReefFish.ts';
 
 /** Broad overhead light produces diffuse fish penumbras, not crisp cutouts.
@@ -22,7 +23,8 @@ export class ReefFishShadows {
     float toe=exp(-(pow(x-.7,2.)/.4+pow(z-1.43,2.)/.4));
     float bank=min(1.,left+right+toe*.42),edge=min(1.,min(max(0.,(5.03-abs(x))*4.),max(0.,(2.305-abs(z))*4.)));
     float phase=z*11.4+x*.85+sin(x*1.9)*.65;
-    return .18+edge*edge*(3.-2.*edge)*(bank*.085+(sin(phase)+sin(phase*2.+.7)*.22)*(.006+bank*.004)+sin(x*2.1+z*.7)*cos(z*1.6)*.009);
+    float dunes=.115*exp(-(pow(x+1.85,2.)/.85+pow(z-1.42,2.)/.32))+.14*exp(-(pow(x-1.48,2.)/.65+pow(z-1.58,2.)/.26))+.09*exp(-(pow(x+3.85,2.)/.45+pow(z-.98,2.)/.30));
+    return .18+edge*edge*(3.-2.*edge)*(bank*.14+dunes+(sin(phase)+sin(phase*2.+.7)*.22)*(.010+bank*.008)+sin(x*2.1+z*.7)*cos(z*1.6)*.009);
    }
    void main(){v=uv;strength=shadowOpacity;vec4 p=modelMatrix*instanceMatrix*vec4(position,1.);p.y=bed(p.xz)+.006;world=p.xyz;gl_Position=projectionMatrix*viewMatrix*p;}`,
    fragmentShader:`varying vec2 v;varying vec3 world;varying float strength;uniform float daylight;
@@ -35,7 +37,7 @@ export class ReefFishShadows {
  }
  snapshot(){const a=this.mesh.instanceMatrix.array;return {updates:this.updates,centers:this.fish.fish.map((_,i)=>[a[i*16+12],a[i*16+14]])};}
  update(){this.updates++;for(let i=0;i<this.fish.fish.length;i++){
-  const f=this.fish.fish[i],p=f.position,h=Math.max(0,p.y-.23),size=f.group.scale.x;
+  const f=this.fish.fish[i],p=f.position,h=Math.max(0,p.y-sandHeight(p.x,p.z)),size=f.group.scale.x;
   const projection=h/Math.max(1,this.light.y-p.y);
   this.dummy.position.set(p.x+(p.x-this.light.x)*projection,0,p.z+(p.z-this.light.z)*projection);
   this.dummy.rotation.set(0,f.yaw,0);

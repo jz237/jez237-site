@@ -58,12 +58,14 @@ export function sandBank(x:number,z:number){
  const toe=Math.exp(-((x-.7)**2/.4+(z-1.43)**2/.4));
  return Math.min(1,left+right+toe*.42);
 }
-// Keep relief below food/resting heights; the tank perimeter remains sealed.
+// Low deposited dunes, scalloped island toes and a shallow channel. Food and
+// fish clearance follow this terrain; the tank perimeter remains sealed.
 export function sandHeight(x:number,z:number){
  const edge=Math.min(1,Math.max(0,(5.03-Math.abs(x))*4),Math.max(0,(2.305-Math.abs(z))*4));
  const fade=edge*edge*(3-2*edge),bank=sandBank(x,z);
  const phase=z*11.4+x*.85+Math.sin(x*1.9)*.65;
- const ripple=(Math.sin(phase)+Math.sin(phase*2+.7)*.22)*(.006+bank*.004);
+ const ripple=(Math.sin(phase)+Math.sin(phase*2+.7)*.22)*(.010+bank*.008);
  const drift=Math.sin(x*2.1+z*.7)*Math.cos(z*1.6)*.009;
- return .18+fade*(bank*.085+ripple+drift);
+ const dunes=.115*Math.exp(-((x+1.85)**2/.85+(z-1.42)**2/.32))+.14*Math.exp(-((x-1.48)**2/.65+(z-1.58)**2/.26))+.09*Math.exp(-((x+3.85)**2/.45+(z-.98)**2/.30));
+ return .18+fade*(bank*.14+dunes+ripple+drift);
 }

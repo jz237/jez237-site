@@ -578,3 +578,11 @@ Stop at the overnight cutoff or if verified realism is achieved earlier. Clearly
 - Broader realism goal remains active. Reef-only publication to jez237/GitHub using full-site Functions-preserving wrapper; no Hidden Reef or planted changes.
 
 Performance interpretation: normal frame-capped alternating runs all remained about60 FPS. Uncapped results declined across the whole sequence (prior207.6 then142.4; current175.3 then142.7), so the175/159 averages are confounded by run-order/environment variation and do not isolate an effect of this scale change. No universal performance claim.
+
+
+## September23 - uneven substrate and fine colorful base life
+- Continued from3f93f1f44 after both livehosts and GitHub workflow35931317859 success. User prioritizes substrate relief and colorful small details at the live-rock bases.
+- Uneven low sand banks and dunes; terrain-aware food, fish and shadows; ten buried live-rock fragments with242 colorful polyps and1944 soft fringe tentacles. Existing colonies and fish preserved. Independent RNG, terrain burial and enclosing navigation volumes. Old colony/inhabitant statistics retained exactly. Sand mesh160x74 replaces100x46. Source additions386348triangles plus sand refinement; rendered count11321716 to12123372. No extra material batches.
+- Fish/food clearance uses actual sand height; swept routes sample terrain. Soft shadow receiver conforms to new bed; projection uses local height. New tests verify burial, rock vertex enclosure, attachment, polyp counts and geometry budget. Test loader updated for terrain import.
+- build:reef/check:reef passed: 5107ms ready, 39bites, zero sampled overlaps, shadows/breathing/fins, pause/camera/feeding/mobile. Viewed front/angle/mobile, sand/base macros and motion frames against original reference.
+- Alternating local startup prior/current 4550.5/4859.5ms; uncapped 161.8/179.6FPS. Extra detail has cost; no universal device promise. Reef-only guarded publication; broader goal active and unmet.

@@ -2,6 +2,7 @@ import {finishRockMaterial} from './ReefRockMaterial.ts';
 import {reefFlankShelves} from './ReefFlankShelves.ts';
 import * as T from 'three';
 import {reefButtresses} from './ReefButtress.ts';
+import {reefFootGardens} from './ReefFootGardens.ts';
 import {plateSurfaceMaps,finishPlateMaterial} from './PlateSurface.ts';
 import {encrustingSurfaceMaps} from './EncrustingSurface.ts';
 import {surfaceColony} from './SurfaceColony.ts';
@@ -246,11 +247,14 @@ export function buildReef(scene:T.Scene){
  };
  extend(rockMesh,buttress.rocks);extend(hard,buttress.corals);extend(zoo,buttress.gardens);
  obstacles.push(...buttress.obstacles);
+ const feet=reefFootGardens(seeded(2309232345));
+ extend(rockMesh,feet.rocks);extend(zoo,feet.gardens);obstacles.push(...feet.obstacles);
+ const footStats=feet.stats;
  rockStats.triangles=rockMesh.geometry.index!.count/3;
  rockStats.bufferBytes=Object.values(rockMesh.geometry.attributes).reduce((n,a)=>n+a.array.byteLength,0)+rockMesh.geometry.index!.array.byteLength;
  rockStats.expandedBufferBytes=rockMesh.geometry.index!.count*11*4;
  const buttressStats=buttress.stats;
- const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,100,46),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#ccc6b5',vertexColors:true}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
+ const sand=new T.Mesh(new T.PlaneGeometry(10.06,4.61,160,74),new T.MeshStandardMaterial({map:sandTex,bumpMap:sandTex,bumpScale:.018,roughness:1,color:'#ccc6b5',vertexColors:true}));sand.rotation.x=-Math.PI/2;const sandPositions=sand.geometry.getAttribute('position'),sandColors=new Float32Array(sandPositions.count*3);
  for(let i=0;i<sandPositions.count;i++){
   const x=sandPositions.getX(i),z=-sandPositions.getY(i),bank=sandBank(x,z);
   sandPositions.setZ(i,sandHeight(x,z));
@@ -264,5 +268,5 @@ export function buildReef(scene:T.Scene){
   const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
   dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
  }rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
+ return {group,obstacles,notes,hosts,anemone,footStats,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }
