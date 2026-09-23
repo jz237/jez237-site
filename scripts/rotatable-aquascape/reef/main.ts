@@ -11,6 +11,7 @@ import {AdaptiveEffects,effectProfiles} from '../lib/AdaptiveEffects.ts';
 import {installFullscreen} from '../lib/Fullscreen.ts';
 import {buildReef,reefClock} from './ReefScene.ts';
 import {ReefFish} from './ReefFish.ts';
+import {reefSuspension} from './ReefSuspension.ts';
 import {applyReefOptics} from './ReefOptics.ts';
 import {configureReefWater} from './ReefWater.ts';
 import {loadMarineModels} from './MarineModels.ts';
@@ -23,22 +24,22 @@ renderer.shadowMap.enabled=true;renderer.shadowMap.type=T.PCFSoftShadowMap;rende
 container.appendChild(renderer.domElement);const camera=new T.PerspectiveCamera(31,1,.1,120);camera.position.set(0,3.25,17.7);
 const controls=new OrbitControls(camera,renderer.domElement);controls.target.set(0,2.67,0);controls.enableDamping=true;controls.dampingFactor=.08;controls.minDistance=7;controls.maxDistance=30;controls.minPolarAngle=.52;controls.maxPolarAngle=1.69;controls.maxAzimuthAngle=1.75;controls.minAzimuthAngle=-1.75;controls.enablePan=false;
 const env=new T.PMREMGenerator(renderer),room=new RoomEnvironment();scene.environment=env.fromScene(room,.04).texture;scene.environmentIntensity=.24;room.dispose();env.dispose();
-const ambient=new T.HemisphereLight('#b1d5ff','#202c43',.48);scene.add(ambient);
-const key=new T.SpotLight('#c5d9ff',190,26,.91,.52,1.7);key.position.set(-1.8,7.2,.15);key.target.position.set(-1,1,0);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.bias=-.00015;key.shadow.normalBias=.018;scene.add(key,key.target);
-const blue=new T.SpotLight('#5289ff',170,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
-const fill=new T.DirectionalLight('#96b9f3',.46);fill.position.set(1,4,7);scene.add(fill);
+const ambient=new T.HemisphereLight('#b1d5ff','#202c43',.34);scene.add(ambient);
+const key=new T.SpotLight('#dceaff',245,26,.91,.52,1.7);key.position.set(-1.8,7.2,.15);key.target.position.set(-1,1,0);key.castShadow=true;key.shadow.mapSize.set(1536,1536);key.shadow.bias=-.00015;key.shadow.normalBias=.018;scene.add(key,key.target);
+const blue=new T.SpotLight('#5087ff',115,24,.9,.6,1.7);blue.position.set(3,7.5,-.3);blue.target.position.set(1.5,1,0);scene.add(blue,blue.target);
+const fill=new T.DirectionalLight('#96b9f3',.30);fill.position.set(1,4,7);scene.add(fill);
 const reflections=new ReefReflections(),water=new AquariumWater(reflections);configureReefWater(water);scene.add(water);buildAquariumGlass(scene,reflections);
 const reef=buildReef(scene);
 const fishModels=await loadMarineModels().catch(error=>{document.querySelector('#loading')!.textContent='The fish models could not load. Please reload to try again.';throw error;});
 const fish=new ReefFish(scene,reef.obstacles,reef.hosts,fishModels);
-const reefDaylight={value:1};
+const reefDaylight={value:1};scene.add(reefSuspension(reefClock,reefDaylight));
 const applyOptics=(o:T.Object3D)=>{if(o instanceof T.Mesh)for(const material of Array.isArray(o.material)?o.material:[o.material])if(material instanceof T.MeshStandardMaterial)applyReefOptics(material,reefClock,reefDaylight);};
 reef.group.traverse(applyOptics);for(const inhabitant of fish.fish)inhabitant.group.traverse(applyOptics);
-const back=new T.Mesh(new T.PlaneGeometry(10.04,5.2),new T.ShaderMaterial({uniforms:{time:reefClock},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 v;uniform float time;void main(){
+const back=new T.Mesh(new T.PlaneGeometry(10.04,5.2),new T.ShaderMaterial({uniforms:{time:reefClock,daylight:reefDaylight},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:`varying vec2 v;uniform float time,daylight;void main(){
  float glow=pow(max(0.,1.-length((v-vec2(.5,.83))*vec2(1.,.65))),2.);
  float rays=pow(max(0.,sin(v.x*68.+v.y*8.+sin(time*.23)*.5)),14.)*v.y*.05;
- vec3 col=mix(vec3(.002,.008,.018),vec3(.008,.065,.17),glow)+vec3(.018,.07,.12)*rays;
- gl_FragColor=vec4(col,1.);#include <tonemapping_fragment>
+ vec3 col=mix(vec3(.002,.008,.018),vec3(.012,.090,.26),glow)+vec3(.018,.07,.12)*rays;
+ gl_FragColor=vec4(col*(.25+.75*daylight),1.);#include <tonemapping_fragment>
  #include <colorspace_fragment>
 }`.replace(';#include',';\n#include')}));back.position.set(0,2.8,-2.325);scene.add(back);
 
@@ -50,7 +51,7 @@ const emitter=new T.Mesh(new T.BoxGeometry(9.35,.014,.5),new T.MeshBasicMaterial
 // Soft volume shafts only: no solid cones or opaque blue overlay over the corals.
 const shaftGroup=new T.Group();scene.add(shaftGroup);
 for(let i=0;i<9;i++){
- const geo=new T.PlaneGeometry(.4+Math.random()*.3,4.75);const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 v;uniform float time;void main(){float a=pow(sin(v.x*3.14159),2.)*smoothstep(0.,.9,v.y)*.023;gl_FragColor=vec4(.23,.47,.92,a);}' });
+ const geo=new T.PlaneGeometry(.4+Math.random()*.3,4.75);const mat=new T.ShaderMaterial({transparent:true,depthWrite:false,blending:T.AdditiveBlending,side:T.DoubleSide,uniforms:{time:reefClock,daylight:reefDaylight,phase:{value:i*2.399}},vertexShader:'varying vec2 v;void main(){v=uv;gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',fragmentShader:'varying vec2 v;uniform float time,daylight,phase;void main(){float center=.5+.08*sin(v.y*3.+time*.20+phase)*(1.-v.y);float envelope=exp(-pow((v.x-center)*4.,2.))*(1.-smoothstep(.30,.5,abs(v.x-.5)));float pulse=.73+.27*sin(v.y*5.-time*.28+phase);float a=envelope*smoothstep(0.,.9,v.y)*.065*pulse*daylight;gl_FragColor=vec4(.23,.47,.92,a);}' });
  const mesh=new T.Mesh(geo,mat);mesh.position.set(-4.2+i,3.06,-1.92);mesh.rotation.z=-.17;shaftGroup.add(mesh);
 }
 const lighting=new AquariumLighting(scene,camera),scheduler=new CaptureScheduler(),adaptive=new AdaptiveEffects();let paused=false,night=false,time=0,last=performance.now(),revision=0,frame=0,ready=false,effectMode='auto';let cameraGoal:T.Vector3|null=null;
@@ -76,7 +77,7 @@ const sampleMs:number[]=[];let triangles=0;
 function animate(now:number){requestAnimationFrame(animate);const elapsed=now-last;last=now;if(document.hidden)return;const dt=Math.min(elapsed/1000,.04);
  if(cameraGoal){camera.position.lerp(cameraGoal,1-Math.exp(-dt*4));if(camera.position.distanceTo(cameraGoal)<.025)cameraGoal=null;}controls.update();
  if(!paused){time+=dt;reefClock.value=time;fish.update(dt,night);}
- const l=night?.42:1;reefDaylight.value=T.MathUtils.damp(reefDaylight.value,night?.24:1,5,dt);ambient.intensity=T.MathUtils.damp(ambient.intensity,.48*l,5,dt);key.intensity=T.MathUtils.damp(key.intensity,190*l,5,dt);blue.intensity=T.MathUtils.damp(blue.intensity,night?115:170,5,dt);fill.intensity=T.MathUtils.damp(fill.intensity,.46*l,5,dt);water.update(time,camera.position.y,l);
+ const l=night?.42:1;reefDaylight.value=T.MathUtils.damp(reefDaylight.value,night?.24:1,5,dt);ambient.intensity=T.MathUtils.damp(ambient.intensity,.34*l,5,dt);key.intensity=T.MathUtils.damp(key.intensity,245*l,5,dt);blue.intensity=T.MathUtils.damp(blue.intensity,night?95:115,5,dt);fill.intensity=T.MathUtils.damp(fill.intensity,.30*l,5,dt);water.update(time,camera.position.y,l);
  scene.updateMatrixWorld(true);const ids=reflections.visible(camera).map(o=>o.uuid),selected=scheduler.select(ids,camera,String(revision),true,adaptive.level>1?2:1);renderer.shadowMap.needsUpdate=frame===0||frame%30===0;reflections.prepare(renderer,scene,camera,selected);scheduler.complete(selected);triangles=lighting.render(renderer,null);frame++;
  if(ready&&!paused&&effectMode==='auto'&&adaptive.observe(elapsed))applyEffects();sampleMs.push(elapsed);if(sampleMs.length>120)sampleMs.shift();
  if(frame%120===0&&fish.snapshot().food===0)$('#status').textContent=`${fish.fish.length} inhabitants \u00b7 Living coral gardens`;

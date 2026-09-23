@@ -1,12 +1,12 @@
 {
-  "buildHash": "7705cc72ec7f8d1dd6d32f584b184f714879d9af97eea143e8749d4429be4412",
+  "buildHash": "efea0e22df32c523afd505428a04e18bcdf4a51af52a0ad7901c0fcece97120d",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
+    "assets/index-CDz0dl4K.js",
     "assets/index-DdD2V56_.css",
-    "assets/index-ESMy3QxZ.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T09:19:40.815Z",
-  "readyMs": 2282,
+  "checkedAt": "2026-09-23T09:39:18.583Z",
+  "readyMs": 2533,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 4.289699999809268,
-      "bites": 30,
-      "remaining": 6
+      "fps": 59.99400059993998,
+      "time": 4.299099999856948,
+      "bites": 17,
+      "remaining": 19
     },
     {
-      "fps": 59.99400059993998,
-      "time": 8.290199999809296,
+      "fps": 59.99100134979749,
+      "time": 8.316199999856986,
+      "bites": 33,
+      "remaining": 3
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 12.333099999856936,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99100134979755,
-      "time": 12.30719999980927,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 16.324199999809213,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 20.324599999809156,
+      "time": 16.333599999856876,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 24.341499999809084,
+      "time": 20.350499999856794,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99400059993998,
-      "time": 28.358599999809023,
+      "fps": 59.99700014999255,
+      "time": 24.350799999856715,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 28.367799999856622,
       "bites": 36,
       "remaining": 0
     }
@@ -211,6 +211,7 @@
     "three-quarter",
     "mobile",
     "coral-closeup",
+    "blue-hour",
     "reference-and-mature-planted-comparison"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -219,5 +220,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Five plate corals gain stationary mesh wrinkles and baked immersed cups/hoods/ridges, with smoother growth margins and undersides. Same5289638rendered triangles and all organisms retained. Three512px maps add692895bytes, one material draw group and71410bytes of vertex masks; no new render passes. Local normal60FPS both; alternating mean loads2245.7ms prior/2226.3current, a small run variation. See plate-tissue-uncapped-comparison.json for paired rendering. Photographic target remains unmet."
+  "scope": "Neutral overhead light and restrained ambient fill separate shelves/caves; soft animated shafts and360 depth-tested motes add water-column depth. Background, shafts and motes dim with Blue hour; shared clock freezes movement on Pause. Same5289638rendered triangles and all inhabitants retained,7200bytes static particle buffers and one new draw group; no new maps or render passes. Local normal60FPSboth. Alternating load means2250ms prior/2286current; uncapped means245.4/244.9FPS. Other hardware unmeasured. Photographic target remains unmet."
 }
