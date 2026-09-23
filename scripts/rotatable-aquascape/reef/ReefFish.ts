@@ -7,13 +7,13 @@ import {type Obstacle} from './ReefScene.ts';
 type Species=MarineSpecies;
 const names:Record<Species,string>={tang:'Blue tang',yellow:'Yellow tang',clown:'Clownfish',anthias:'Anthias',chromis:'Blue-green chromis',gramma:'Royal gramma'};
 const descriptions:Record<Species,string>={tang:'A laterally compressed body lets this blue tang turn between reef structures. It alternates fin-powered cruising with short tail-driven bursts, exploring the open channel and rock edges.',yellow:'Watch the yellow tang cruise around the islands and pause near the rock. Tangs graze as well as take food from the water. Its paired fins work independently while the tail supplies extra thrust.',clown:'The two clownfish stay close to their host anemone. They make short foraging trips into the water and return to shelter, rather than joining the open-water school.',anthias:'These orange fish use the open water above the reef. Individuals keep changing position within their loose group, making short feeding trips and then returning toward shelter.',chromis:'The blue-green fish loosely associate above the reef. They keep individual spacing and change speed instead of swimming in a perfectly synchronized formation.',gramma:'This purple-and-yellow inhabitant keeps closer to the reef and its shelter. Watch for exploratory trips around the lower openings and retreating turns.'};
-const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},yellow:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.53,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'}};
+const specs:Record<Species,{h:number;w:number;size:number;color:string}>={tang:{h:.32,w:.095,size:.83,color:'#285deb'},yellow:{h:.35,w:.09,size:.72,color:'#ffd800'},clown:{h:.21,w:.12,size:.4664,color:'#f68210'},anthias:{h:.16,w:.075,size:.47,color:'#f8783c'},chromis:{h:.19,w:.085,size:.41,color:'#59bde0'},gramma:{h:.16,w:.07,size:.49,color:'#b951df'}};
 const v=(x:number,y:number,z=0)=>new T.Vector3(x,y,z);
 type Fish={group:T.Group;species:Species;position:T.Vector3;velocity:T.Vector3;goal:T.Vector3;radius:number;yaw:number;pitch:number;clock:{value:number};effort:{value:number};mouthOpening:{value:number};gillOpening:{value:number};respiration:number;until:number;phase:number;pectoral:T.Group[];mouth:T.Group;eyes:T.Group;mode:string;progressPosition:T.Vector3;progressAt:number;blockedTime:number;recoverUntil:number;hostLeg:number;hostHold:number;hostVisits:number};
 export type Food={position:T.Vector3;alive:boolean;age:number;sinkRate?:number};
 export class ReefFish{
  readonly fish:Fish[]=[];readonly foods:Food[]=[];readonly notes:T.Object3D[]=[];private clock=0;private seed=Math.random()*100;private templates=new Map<Species,T.Group>();private eatCount=0;private foodMesh:T.InstancedMesh;private dummy=new T.Object3D();
- constructor(private scene:T.Scene,private obstacles:Obstacle[],private hosts:T.Vector3[],templates:Map<Species,T.Group>){
+ constructor(private scene:T.Scene,private obstacles:Obstacle[],private hosts:T.Vector3[],templates:Map<Species,T.Group>,private hostScale=1){
   this.templates=templates;
   this.foodMesh=new T.InstancedMesh(new T.SphereGeometry(.022,6,4),new T.MeshStandardMaterial({color:'#cf9d67',roughness:.8}),48);this.foodMesh.count=0;scene.add(this.foodMesh);
   for(const [s,count] of [['tang',1],['yellow',1],['clown',2],['anthias',7],['chromis',8],['gramma',1]] as [Species,number][]){
@@ -101,15 +101,15 @@ export class ReefFish{
   f.mode=recover?'exploring':Math.random()<.16?'hovering':'exploring';
  }
  private planHostVisit(f:Fish){
-  const host=this.hosts[0],relative=f.position.clone().sub(host),far=relative.length()>1.45;
+  const host=this.hosts[0],relative=f.position.clone().sub(host),far=relative.length()>1.45*this.hostScale;
   // Alternate visits to shelter with independently chosen perimeter/foraging
   // excursions. The pair does not share a clock or a repeated circular path.
   const leg=far?0:f.hostLeg===0?(Math.random()<.62?1:2):f.hostLeg===1?0:Math.random()<.68?0:1;
   const bearing=Math.atan2(relative.z,relative.x);
   for(let attempt=0;attempt<48;attempt++){
    const turn=(Math.random()<.5?-1:1)*(.45+Math.random()*1.3),angle=attempt<32?bearing+turn:Math.random()*Math.PI*2;
-   const radius=leg===0?.24+Math.random()*.32:leg===1?.88+Math.random()*.38:.56+Math.random()*.35;
-   const p=host.clone().add(v(Math.cos(angle)*radius,.38+Math.random()*(leg===1?.58:.38),Math.sin(angle)*radius));
+   const radius=(leg===0?.24+Math.random()*.32:leg===1?.88+Math.random()*.38:.56+Math.random()*.35)*this.hostScale;
+   const p=host.clone().add(v(Math.cos(angle)*radius,(.38+Math.random()*(leg===1?.58:.38))*this.hostScale,Math.sin(angle)*radius));
    if(!this.clearSegment(f.position,p,f.radius)||this.fish.some(o=>o!==f&&p.distanceToSquared(o.position)<(f.radius+o.radius+.05)**2))continue;
    f.goal.copy(p);f.hostLeg=leg;f.hostHold=0;f.until=this.clock+4.5+Math.random()*1.5;
    f.mode=leg===0?'returning to anemone':leg===1?'darting from anemone':'circling anemone';return true;
