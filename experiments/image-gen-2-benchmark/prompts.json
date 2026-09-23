@@ -15753,5 +15753,30 @@
       "description": "A continuous rooftop cause-and-effect comedy rendered as hand-burned hot-point pyrography on pale linden wood, using grain-led contours and char gradients rather than ink or paint.",
       "template": ""
     }
+  },
+  {
+    "id": "2026-09-23-random-image-style-marbled-paper-river-of-borrowed-umbrella",
+    "title": "Marbled Paper: River of Borrowed Umbrellas",
+    "tests": "Reusable visual formula: a handcrafted medium’s native motion becomes the physical force that routes objects and people through a continuous scene. Third Wednesday style; distinct from today’s screen print and pyrography. No factual claims or document framing.; archive_slot=2026-09-23T17:20; concept=rainwater-carries-umbrellas-steep-pedestrian-arcade; image_provenance={\"requested_model\": \"openai/gpt-image-2\", \"backend_models\": [], \"verification\": \"unverified\", \"output_settings\": [{\"imageIndex\": 1, \"actualSize\": \"1024x1536\", \"backendReportedSize\": \"1024x1536\", \"backendReportedQuality\": \"medium\", \"sizeVerification\": \"not_requested\", \"qualityVerification\": \"not_requested\"}], \"transport\": \"codex-images\", \"responseSettings\": {\"size\": \"1024x1536\", \"quality\": \"medium\", \"output_format\": \"png\", \"background\": \"opaque\"}}; Requested GPT Image 2; exact backend version not independently verified.; owner-approved direct OpenAI subscription Images route; requested quality=auto, size=auto, background=opaque",
+    "prompt": "Create a finished, richly detailed narrative image made entirely in the visual language of hand-marbled paper. A sudden cloudburst has turned a steep, old pedestrian arcade into a winding downhill stream. Its flowing water is literally the swirled pigment of traditional paper marbling: elongated jade and deep violet cells, fine combed gold veins, inky black eddies, tiny blooms of lifted color, and irregular feathered transitions where pigments push against one another. The marbling is not a decorative overlay; its currents dictate every movement in the scene. A chain of six or seven abandoned umbrellas, each distinct in silhouette and color, is caught in different eddies as it sweeps from the upper-left arcade entrance toward the lower-right foreground. One umbrella turns in a circular whirlpool beside a fountain; another snags briefly against a stair rail; a small yellow one skims a narrow side channel. Give the eye one clear, continuous S-curve through the composition, with readable cause and effect along its length.\n\nShow several neighbors responding to this tiny urban emergency with specific, varied gestures: an older woman bracing one foot on a wet step and extending a hooked walking stick; a broad-shouldered shopkeeper leaning from under an awning with a broom; a child high on a safe landing pointing toward the umbrella caught at the fountain; two adults reaching from opposite sides of a footbridge to guide one umbrella to shore. Make them human and expressive but small enough that the current remains the protagonist. Their poses should make the slope, force and direction of the water legible. The arcade has weathered stone arches, narrow stairs, iron handrails, shuttered storefronts, a modest circular fountain, and a few warm lamplights reflecting as broken streaks in the pigmented water. Establish believable depth and perspective through overlapping architecture, diminishing scale, and controlled value contrast, even though every form is interpreted through marbled-paper craft.\n\nThe image should visibly retain the physical qualities of marbling: floating-pigment boundaries, hand-combed parallel ripples that stretch around obstacles, minute pigment granulation, slight paper tooth, occasional uninked fibers, and a few imperfect edges where the transfer met the sheet. Integrate the architectural contours and figures into this material system rather than pasting photoreal objects over a marbled background. Refined color hierarchy: luminous jade as the main flow, violet shadows, muted honey-gold light, sparse vermilion accents, deep near-black structural lines. The atmosphere is playful and urgent, rain-dark but not ominous. Compose as one immersive artwork, not a sample sheet, product mockup, comic strip, infographic, map, poster, or framed document. No text, typography, logos, watermark, or border. Preserve crisp recognizable umbrellas and gestures amid intricate abstract flow.",
+    "image": "images/2026-09-23-random-image-style-marbled-paper-river-of-borrowed-umbrella.jpg",
+    "thumb": "thumbs/2026-09-23-random-image-style-marbled-paper-river-of-borrowed-umbrella.webp",
+    "color": "#615d56",
+    "date": "2026-09-23",
+    "batch": "Daily Prompt",
+    "slot": "random-image-style",
+    "model": "openai/gpt-image-2",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "rainwater-carries-umbrellas-steep-pedestrian-arcade",
+      "imageSha256": "da41288a6766c62b4712897d96cb682aa922f718a57b2e82bed5239d33ac5789",
+      "imageDHash": "5a391acdafa594f0",
+      "styleFamily": "paper-marbling"
+    },
+    "randomRenderingStyle": {
+      "medium": "paper-marbling",
+      "description": "Traditional hand-marbled paper with combed pigment veins and floating color cells; the marbling currents are the scene’s physical watercourse and the cause of the action.",
+      "template": ""
+    }
   }
 ]
