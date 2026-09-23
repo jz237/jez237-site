@@ -109,13 +109,16 @@ export class ReefFish{
   for(let i=0;i<this.fish.length;i++){
    const f=this.fish[i],mouth=f.mouth.position.clone().multiplyScalar(f.group.scale.x).applyEuler(new T.Euler(0,f.yaw,f.pitch,'YXZ')).add(f.position);
    let target:Food|undefined,dist=Infinity;
-   for(const food of this.foods)if(food.alive){const d=f.position.distanceToSquared(food.position);if(d<dist&&this.clearSegment(f.position,food.position,f.radius)){dist=d;target=food;}}
+   // A crowded feeding lane can block a geometrically reachable pellet. Keep
+   // the escape route committed instead of replacing it with that pellet on
+   // the very next frame. Food becomes eligible again once recovery ends.
+   if(now>=f.recoverUntil)for(const food of this.foods)if(food.alive){const d=f.position.distanceToSquared(food.position);if(d<dist&&this.clearSegment(f.position,food.position,f.radius)){dist=d;target=food;}}
    if(target){f.goal.copy(target.position);f.mode='feeding';if(mouth.distanceTo(target.position)<.13){target.alive=false;this.eatCount++;f.until=now+.6;f.goal.copy(f.position).add(v(Math.cos(f.yaw)*.5,0,-Math.sin(f.yaw)*.5));}}
    else if(now>f.until||f.position.distanceTo(f.goal)<.2){this.planSwim(f,i,now<f.recoverUntil);}
    // Monitor actual displacement, not commanded velocity: a blocked fish can
    // still have a nonzero velocity and animated tail without getting anywhere.
    if(f.position.distanceToSquared(f.progressPosition)>.025){f.progressPosition.copy(f.position);f.progressAt=now;}
-   else if(!target&&now-f.progressAt>2.4){f.recoverUntil=now+4;this.planSwim(f,i,true);f.progressAt=now;}
+   else if(now>=f.recoverUntil&&now-f.progressAt>2.4){f.recoverUntil=now+4;this.planSwim(f,i,true);f.progressAt=now;target=undefined;}
    const desired=f.goal.clone().sub(f.position);let speed=(f.species==='tang'||f.species==='yellow'?.47:.34)*(night?.42:1);
    speed*=.75+.35*Math.sin(now*.83+f.phase);if(f.mode==='hovering')speed*=.2;if(target)speed=1.2+(Math.sin(now*6+f.phase)+1)*.35;
    desired.normalize();

@@ -1,7 +1,7 @@
 [
   {
     "version": "current",
-    "readyMs": 3715,
+    "readyMs": 4364,
     "fps": 59.99400059994001,
     "triangles": 9527892,
     "drawCalls": 1,
@@ -14,8 +14,8 @@
   },
   {
     "version": "prior",
-    "readyMs": 3588,
-    "fps": 59.99400059994003,
+    "readyMs": 4256,
+    "fps": 59.99400059993998,
     "triangles": 9134868,
     "drawCalls": 1,
     "canvas": {
@@ -27,8 +27,8 @@
   },
   {
     "version": "prior",
-    "readyMs": 3670,
-    "fps": 59.99700014999249,
+    "readyMs": 4086,
+    "fps": 59.99400059993998,
     "triangles": 9134868,
     "drawCalls": 1,
     "canvas": {
@@ -40,8 +40,8 @@
   },
   {
     "version": "current",
-    "readyMs": 3869,
-    "fps": 59.99400059993998,
+    "readyMs": 4208,
+    "fps": 59.99700014999251,
     "triangles": 9527892,
     "drawCalls": 1,
     "canvas": {
@@ -53,7 +53,7 @@
   },
   {
     "version": "current",
-    "readyMs": 3721,
+    "readyMs": 4156,
     "fps": 59.99700014999251,
     "triangles": 9527892,
     "drawCalls": 1,
@@ -66,7 +66,7 @@
   },
   {
     "version": "prior",
-    "readyMs": 3892,
+    "readyMs": 4244,
     "fps": 59.99400059994003,
     "triangles": 9134868,
     "drawCalls": 1,
@@ -79,8 +79,8 @@
   },
   {
     "version": "prior",
-    "readyMs": 4298,
-    "fps": 59.99700014999249,
+    "readyMs": 4096,
+    "fps": 59.99700014999251,
     "triangles": 9134868,
     "drawCalls": 1,
     "canvas": {
@@ -92,8 +92,8 @@
   },
   {
     "version": "current",
-    "readyMs": 4103,
-    "fps": 59.99400059994003,
+    "readyMs": 4261,
+    "fps": 59.99400059993998,
     "triangles": 9527892,
     "drawCalls": 1,
     "canvas": {

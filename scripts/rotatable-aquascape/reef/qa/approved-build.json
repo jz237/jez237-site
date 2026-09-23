@@ -1,12 +1,12 @@
 {
-  "buildHash": "d0cf31db0ac3c4bce7759a937c706d5787d82054d959b5d57b9b3bca7a1bb0a2",
+  "buildHash": "2ed2a7d573468f33a845485db5c2021a15c25fe4ad327e1e6cce799f8fe689a1",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-B2TzMv0j.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-qe8otnOa.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T19:56:37.777Z",
-  "readyMs": 3665,
+  "checkedAt": "2026-09-23T20:14:17.529Z",
+  "readyMs": 4027,
   "samples": [
     {
       "fps": 59.99400059993998,
-      "time": 6.0624000000000215,
-      "bites": 12,
-      "remaining": 24
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 10.079400000000012,
-      "bites": 27,
-      "remaining": 9
+      "time": 5.923800000095382,
+      "bites": 9,
+      "remaining": 27
     },
     {
       "fps": 59.99700014999255,
-      "time": 14.079699999999958,
+      "time": 9.957400000095376,
+      "bites": 32,
+      "remaining": 4
+    },
+    {
+      "fps": 59.99100134979744,
+      "time": 13.974500000095327,
       "bites": 35,
       "remaining": 1
     },
     {
       "fps": 59.99400059993998,
-      "time": 18.096699999999878,
+      "time": 17.97480000009525,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 22.097099999999795,
+      "time": 21.991800000095175,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99400059993998,
-      "time": 26.11409999999971,
+      "fps": 59.99100134979755,
+      "time": 26.00890000009509,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99700014999255,
-      "time": 30.114399999999595,
+      "fps": 59.994000599940094,
+      "time": 30.00920000009495,
       "bites": 36,
       "remaining": 0
     }
@@ -248,7 +248,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Zoanthid gardens have rolled rims, inset oral slits, curved closed tentacles, corrected outward skin and seam normals, mixed warm centers/cool skirts, and individual rooted motion. All colony counts and placements preserved; comparative realism goal remains unmet.",
+  "scope": "Zoanthid gardens have rolled rims, inset oral slits, curved closed tentacles, corrected outward skin and seam normals, mixed warm centers/cool skirts, and individual rooted motion. All colony counts and placements preserved; comparative realism goal remains unmet. Feeding no longer overwrites a committed escape waypoint; the progress watchdog remains active when food is selected.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -286,9 +286,26 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 3862,
-    "loadCurrent": 3852,
-    "fpsPrior": 156,
-    "fpsCurrent": 164.7
-  }
+    "loadPrior": 4170.5,
+    "loadCurrent": 4247.3,
+    "fpsPrior": 159.7,
+    "fpsCurrent": 157.4
+  },
+  "feedingRecovery": [
+    {
+      "seed": 913,
+      "minTenSecondRange": 1.0234529343681902,
+      "bites": 36
+    },
+    {
+      "seed": 411,
+      "minTenSecondRange": 0.42969036568880714,
+      "bites": 36
+    },
+    {
+      "seed": 729,
+      "minTenSecondRange": 1.4779469253785071,
+      "bites": 36
+    }
+  ]
 }

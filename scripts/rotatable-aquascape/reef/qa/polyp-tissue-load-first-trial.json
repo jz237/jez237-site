@@ -1,34 +1,8 @@
 [
   {
-    "version": "prior",
-    "readyMs": 4475,
-    "fps": 148.82016644006885,
-    "triangles": 9134868,
-    "drawCalls": 1,
-    "canvas": {
-      "x": 0,
-      "y": 122,
-      "width": 1440,
-      "height": 854
-    }
-  },
-  {
     "version": "current",
-    "readyMs": 4497,
-    "fps": 152.25330799197343,
-    "triangles": 9527892,
-    "drawCalls": 1,
-    "canvas": {
-      "x": 0,
-      "y": 122,
-      "width": 1440,
-      "height": 854
-    }
-  },
-  {
-    "version": "current",
-    "readyMs": 4346,
-    "fps": 152.12004086075527,
+    "readyMs": 3715,
+    "fps": 59.99400059994001,
     "triangles": 9527892,
     "drawCalls": 1,
     "canvas": {
@@ -40,8 +14,21 @@
   },
   {
     "version": "prior",
-    "readyMs": 4259,
-    "fps": 160.6934181306232,
+    "readyMs": 3588,
+    "fps": 59.99400059994003,
+    "triangles": 9134868,
+    "drawCalls": 1,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "prior",
+    "readyMs": 3670,
+    "fps": 59.99700014999249,
     "triangles": 9134868,
     "drawCalls": 1,
     "canvas": {
@@ -53,8 +40,21 @@
   },
   {
     "version": "current",
-    "readyMs": 4250,
-    "fps": 166.87590903131942,
+    "readyMs": 3869,
+    "fps": 59.99400059993998,
+    "triangles": 9527892,
+    "drawCalls": 1,
+    "canvas": {
+      "x": 0,
+      "y": 122,
+      "width": 1440,
+      "height": 854
+    }
+  },
+  {
+    "version": "current",
+    "readyMs": 3721,
+    "fps": 59.99700014999251,
     "triangles": 9527892,
     "drawCalls": 1,
     "canvas": {
@@ -66,8 +66,8 @@
   },
   {
     "version": "prior",
-    "readyMs": 4179,
-    "fps": 161.1109861701408,
+    "readyMs": 3892,
+    "fps": 59.99400059994003,
     "triangles": 9134868,
     "drawCalls": 1,
     "canvas": {
@@ -79,8 +79,8 @@
   },
   {
     "version": "prior",
-    "readyMs": 4320,
-    "fps": 168.00673213258563,
+    "readyMs": 4298,
+    "fps": 59.99700014999249,
     "triangles": 9134868,
     "drawCalls": 1,
     "canvas": {
@@ -92,8 +92,8 @@
   },
   {
     "version": "current",
-    "readyMs": 4286,
-    "fps": 158.3792925640783,
+    "readyMs": 4103,
+    "fps": 59.99400059994003,
     "triangles": 9527892,
     "drawCalls": 1,
     "canvas": {
