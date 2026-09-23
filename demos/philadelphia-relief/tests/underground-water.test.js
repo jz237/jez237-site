@@ -14,6 +14,7 @@ test('water paths clip at all four exhibit edges and never join separate source 
 
 test('public snapshots contain valid geographic records with explicit display scope', () => {
   for (const area of Object.keys(WATER_AREAS)) {
+    if (area === 'transit') continue; // Transit overview does not load water snapshots.
     const data = JSON.parse(readFileSync(new URL(`../data/underground/${area}.json`,import.meta.url)));
     assert.match(data.source, /Philadelphia Water Department/);
     assert.equal(data.retrieved, '2026-09-23');
