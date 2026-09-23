@@ -97,6 +97,144 @@
     }
   },
   {
+    "id": "2026-09-22-factual-infographic-factual-infographic-philippine-leaf-ins",
+    "title": "Factual infographic: Philippine Leaf Insect — Two Bodies, Two Solutions",
+    "tests": "Archive-wide factual-topic packet contained no prior Phyllium philippinicum or leaf-insect sexual-dimorphism entry. One dominant macro hero, eight substantive illustrated panels, four mechanism close-ups, and only claim-sheet-backed qualitative labels. factual_subtype=bizarre-insect-life; unsupported host plants, exact wild range, adult size, development timing, and universal claims omitted.; archive_slot=2026-09-22T20:20; concept=philippine-leaf-insect-sexual-dimorphism-flight-grip-egg-adhesion; factual_subtype: bizarre-insect-life",
+    "prompt": "Create a finished museum-quality scientific infographic directly on a 1024x1536 portrait canvas, not a photographed poster, prop scene, specimen tray, classroom worksheet, or screen mockup. Title: ‘PHILIPPINE LEAF INSECT — TWO BODIES, TWO SOLUTIONS’. Subtitle: ‘Phyllium philippinicum: leaf masquerade, flight, grip, and a rain-activated egg’. Use a sophisticated natural-history palette of living leaf green, yellow-green veins, bark umber, translucent wing gray, and warm ivory labels, with crisp typographic hierarchy, generous margins, precise leader lines, and readable concise text. The insect biology—not prose—must occupy most of the canvas. Render anatomically credible insects with exactly six legs, correct head-thorax-abdomen segmentation, jointed tarsi, species-appropriate leaf-like lobes, natural cuticle microtexture, believable macro depth of field, and no monster scale or anthropomorphism.\n\nDOMINANT HERO, about 42% of the canvas: an enormous photorealistic dorsal-oblique adult female Philippine leaf insect clinging beneath a living broad leaf in humid canopy light. Her flattened broad green body, lateral abdominal and leg expansions, leaf-like surface pattern, and flat forewings merge with the foliage. A peeled-back botanical overlay visually separates insect silhouette from real leaf without inventing anatomy. Add a human fingertip-free scale cue: a clean metric ruler segment beside the specimen, but do not print an unsupported body-length number. Label only: ‘adult female’, ‘flattened leaf masquerade’, ‘lateral abdominal lobes’, ‘leg lobes’, ‘flat forewings’, ‘six legs’.\n\nBuild EIGHT substantive supporting panels around the hero, all illustrated and distinct:\n1. ‘ONE SPECIES, TWO ADULT FORMS’ — large matched dorsal portraits of a broad flightless-looking female and a much slimmer male at the same visual scale. Concise labels: ‘female: broad, sedentary leaf mimic’ and ‘male: lighter, slimmer, longer antennae’. A small mass silhouette states ‘adult male ≈ nine times lighter in the cited study population’ and a shape bracket says ‘almost twice as slender’; make clear these are study results, not universal exact dimensions.\n2. ‘WINGS DIVIDE THE JOBS’ — exploded three-quarter wing comparison. Female: extended forewings lie flat over the dorsum, hindwings absent, forewings cannot flap but may help parachuting. Male: short rudimentary forewings above long transparent fully developed hindwings used for flapping flight. Show wing hinges and translucent membrane veins accurately without adding extra wings.\n3. ‘SEARCHING THE CANOPY’ — a concise three-frame mechanism strip: long male antenna samples airborne pheromone cue → male launches through gaps in foliage → lands near a comparatively sedentary female. Label this as a canopy mate-search sequence. Do not depict the female emitting visible perfume clouds; use restrained scientific flow lines.\n4. ‘SMALLER MALES FLY BETTER’ — a clean experiment-derived comparison diagram of low versus high wing loading: smaller male corrects pitch and climbs more effectively; larger male shows reduced pitch agility and ascent. Use qualitative arrows only, no invented speed values. Caption: ‘High-speed flight tests: smaller males were more agile and ascended faster.’\n5. ‘A FIVE-PART FOOT’ — first mandatory explanatory close-up: magnified tarsus cutaway with five tarsomeres, euplantula heel pads, terminal arolium toe pad, and two claws. Use a sharp macro rendering and leader lines; clearly distinguish friction-oriented heel pads from the adhesion-oriented terminal pad without overstating exclusivity.\n6. ‘SEX-SPECIFIC GRIP TEXTURE’ — second mandatory explanatory close-up: split scanning-electron-microscope-style views of female smooth euplantula versus male maze-like ridged euplantula. Add a tiny leaf / bark substrate comparison and the qualified label ‘male ridges are interpreted as useful across varied landing and walking surfaces’.\n7. ‘LANDING LOAD’ — third mandatory explanatory diagram: male approaching a flexible large leaf versus a small stiff leaf, arrows showing leaf deflection and impact. State carefully: ‘Model prediction: heavier males face greater slipping risk, especially on small stiff leaves.’ Clearly mark ‘model prediction’, not field certainty.\n8. ‘THE EGG WAKES WITH WATER’ — fourth mandatory explanatory close-up and process strip: dry sculptured P. philippinicum egg → water contacts densely packed fibrillary surface structures → fibers spread with water-soluble glue and conform to the substrate → attached egg; a final small loop arrow shows laboratory reactivation and repeated attachment. Include a 1 mm scale bar only on this egg micrograph sequence.\n\nAdd a narrow bottom habitat band: humid layered foliage and canopy branches, with one female hanging beneath a smooth leaf and one male landing on a different plant surface. Label ‘solitary canopy-dwelling plant feeder’; add the careful note ‘field natural history remains incompletely known’. Include a tiny Philippines locator silhouette only as an identity cue labeled ‘Philippine leaf insect’; do not claim a precise range or endemic status. Finish with a compact takeaway: ‘Masquerade favors the female’s broad leaf form; mate search favors the male’s lighter flying form. Even the egg has a water-activated attachment system.’ No bibliography, URLs, logos, watermarks, fake citations, unsupported host plants, exact adult sizes, conservation claims, or invented life-cycle timing. Keep every visible factual assertion within the supplied verified claim sheet.",
+    "image": "images/2026-09-22-factual-infographic-factual-infographic-philippine-leaf-ins.jpg",
+    "thumb": "thumbs/2026-09-22-factual-infographic-factual-infographic-philippine-leaf-ins.webp",
+    "color": "#abad8f",
+    "date": "2026-09-22",
+    "batch": "Daily Prompt",
+    "slot": "factual-infographic",
+    "model": "openai/gpt-image-2.5-sunburst",
+    "size": "1024x1536",
+    "dedup": {
+      "conceptKey": "philippine-leaf-insect-sexual-dimorphism-flight-grip-egg-adhesion",
+      "imageSha256": "d5693250b0f8b5b7e74d7a7c9b847c6010ef9717e2fd89bbd93976f643da101d",
+      "imageDHash": "9a863c35303256f0"
+    },
+    "factualInfographic": {
+      "topic": "How the Philippine leaf insect Phyllium philippinicum combines leaf masquerade with extreme sex-specific wings, flight, attachment pads, and water-activated egg adhesion",
+      "description": "A source-verified direct-canvas natural-history plate showing female leaf masquerade, male flight and mate-search anatomy, sex-specific tarsal microstructure, qualified landing-model results, and water-activated egg adhesion.",
+      "sourceNote": "Verified against BMC Ecology and Evolution (flight, sexual dimorphism and tarsal attachment: https://pmc.ncbi.nlm.nih.gov/articles/PMC8962604/), Communications Biology (leaf-insect masquerade anatomy and family context: https://www.nature.com/articles/s42003-021-02436-z), and Biomimetics (water-activated P. philippinicum egg adhesion: https://pmc.ncbi.nlm.nih.gov/articles/PMC9680409/). Scope is anatomy, locomotion, attachment, and egg adhesive mechanism; exact wild range, host plants and development timing were intentionally omitted.",
+      "evidence": {
+        "schemaVersion": 1,
+        "checkedAt": "2026-09-23T00:21:14Z",
+        "sources": [
+          {
+            "id": "S1",
+            "publisher": "BMC Ecology and Evolution",
+            "title": "Multi-modal locomotor costs favor smaller males in a sexually dimorphic leaf-mimicking insect",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC8962604/"
+          },
+          {
+            "id": "S2",
+            "publisher": "Communications Biology",
+            "title": "A tree of leaves: Phylogeny and historical biogeography of the leaf insects (Phasmatodea: Phylliidae)",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://www.nature.com/articles/s42003-021-02436-z"
+          },
+          {
+            "id": "S3",
+            "publisher": "Biomimetics",
+            "title": "Convergent Evolution of Adhesive Properties in Leaf Insect Eggs and Plant Seeds: Cross-Kingdom Bioinspiration",
+            "sourceType": "peer-reviewed-journal",
+            "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC9680409/"
+          }
+        ],
+        "claims": [
+          {
+            "claim": "Phyllium philippinicum is a phylliid phasmid commonly called the Philippine leaf insect.",
+            "sourceIds": [
+              "S1",
+              "S3"
+            ]
+          },
+          {
+            "claim": "Leaf insects are dorsoventrally flattened plant masqueraders; leaf-like venation patterns and lobe-like extensions on the abdomen and legs contribute to the masquerade across Phylliidae.",
+            "sourceIds": [
+              "S2"
+            ]
+          },
+          {
+            "claim": "In P. philippinicum, large sedentary adult females are strong leaf mimics because of lateral leaf-like expansions of the abdomen and legs.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Adult males are about nine times lighter and almost twice as slender as adult females, and males have relatively longer antennae.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Adult females lack hindwings and have extended forewings lying flat over the dorsum; these forewings aid camouflage and may contribute to parachuting but cannot flap.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Adult males have rudimentary forewings and long, fully developed transparent hindwings that permit flapping flight.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Male leaf insects use long antennae to detect pheromones and fly through the canopy while searching for comparatively sedentary females.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Experiments found that smaller males were more agile in the air and ascended faster than larger males; greater male body size impaired measured flight performance.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Both sexes have five-segmented tarsi with euplantula heel pads on the tarsomeres, plus an arolium toe pad and two claws on the pretarsus.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "Female euplantulae are smooth, while male euplantulae carry maze-like cuticular ridges; the study interprets the male surface as suited to a broader range of substrates encountered during active searching.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "A landing model predicted that heavier males experience larger impact forces and a higher risk of slipping, especially on small stiff leaves; this remains a model prediction rather than a field-demonstrated universal outcome.",
+            "sourceIds": [
+              "S1"
+            ]
+          },
+          {
+            "claim": "P. philippinicum eggs have densely packed fibrillary surface structures and a water-soluble glue; water contact spreads the fibers and glue so the system conforms to the substrate and activates adhesion.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "Laboratory tests found P. philippinicum eggs could be detached, reactivated with water, and attached repeatedly.",
+            "sourceIds": [
+              "S3"
+            ]
+          },
+          {
+            "claim": "The insect is a solitary canopy-dweller and a plant-feeding phasmid; females in the cited laboratory culture moved to adjacent leaves to feed, while much of the species' field natural history remains incompletely known.",
+            "sourceIds": [
+              "S1"
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
     "id": "2026-09-22-factual-infographic-factual-infographic-leafcutter-ant-fung",
     "title": "Factual infographic: Leafcutter Ant Fungus Farm — From Green Leaf to Living Garden",
     "tests": "Archive-wide factual-topic packet contains no prior leafcutter-ant fungus-farming entry. Stop-scroll topic uses one dominant ant-and-garden cutaway, eight substantive source-backed panels, four explanatory close-ups, direct-canvas composition, and no unsupported numbers or universal claims.; archive_slot=2026-09-22T16:20; concept=leafcutter-ant-fungus-farm; factual_subtype: factual-infographic",
