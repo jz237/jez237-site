@@ -1,11 +1,11 @@
 {
-  "buildHash": "b4997c651e7530dfde9d385f61fbae82871289cb800f41f7b0a02a539dab9eee",
+  "buildHash": "572e856c2a3b7e11ad19aa00dfa5b5a52cbffbc63a43225e34f7f0c3e8baf088",
   "files": [
     "assets/anthias-BtfICPIN.glb",
     "assets/chromis-BJi4ZRfM.glb",
     "assets/clown-D-bxKsMk.glb",
     "assets/gramma-d3_cP3UV.glb",
-    "assets/index-Cocv5VoK.js",
+    "assets/index-Dbnz7-c6.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
@@ -20,48 +20,48 @@
     "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T08:45:09.402Z",
-  "readyMs": 2197,
+  "checkedAt": "2026-09-23T09:02:12.285Z",
+  "readyMs": 2449,
   "samples": [
     {
-      "fps": 59.99700014999249,
-      "time": 4.273900000047686,
-      "bites": 21,
-      "remaining": 15
+      "fps": 59.99700014999251,
+      "time": 4.298999999904632,
+      "bites": 13,
+      "remaining": 23
     },
     {
-      "fps": 59.99700014999249,
-      "time": 8.290800000047717,
-      "bites": 31,
-      "remaining": 5
-    },
-    {
-      "fps": 59.99400059993998,
-      "time": 12.291200000047667,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 16.308300000047616,
-      "bites": 36,
-      "remaining": 0
+      "fps": 59.99400059994003,
+      "time": 8.315999999904664,
+      "bites": 32,
+      "remaining": 4
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.308600000047537,
+      "time": 12.332999999904624,
+      "bites": 35,
+      "remaining": 1
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 16.350099999904593,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99100134979755,
-      "time": 24.309000000047448,
+      "fps": 59.99700014999244,
+      "time": 20.35029999990452,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 28.32590000004737,
+      "time": 24.367399999904443,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 28.384399999904353,
       "bites": 36,
       "remaining": 0
     }
@@ -80,7 +80,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 5166658,
+    "triangles": 5289638,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 561,
@@ -93,8 +93,8 @@
       "expandedBufferBytes": 41896800
     },
     "crustStats": {
-      "colonies": 63,
-      "triangles": 23489
+      "colonies": 62,
+      "triangles": 21562
     },
     "infillStats": {
       "colonies": 11,
@@ -206,6 +206,7 @@
     "front",
     "three-quarter",
     "mobile",
+    "rear-closeup",
     "coral-closeup",
     "reference-and-mature-planted-comparison"
   ],
@@ -215,5 +216,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Branching corals gain attached axial cups, projecting side cups on finer branchlets and fuller real junctions. Existing scenery/assets/material groups retained. Rendered5166658triangles vs4625398; no new maps/passes. Loads2136.0ms prior vs2235.7ms current;normal60FPS both,uncapped247.9vs247.0 locally. Target remains unmet."
+  "scope": "Raised and broadened the rear ridge/crowns, with two additional rock-attached shoulder colonies. Actual 3D depth, foreground placements and open front channel retained. Rendered5289638triangles vs5166658 (+2.38%); no new maps/passes. Mean loads2311.3ms prior vs2353.0ms current;normal60FPSboth,uncapped237.0vs232.2 locally. Target remains unmet."
 }

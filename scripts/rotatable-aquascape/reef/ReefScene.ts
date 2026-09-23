@@ -52,10 +52,12 @@ export function buildReef(scene:T.Scene){
  const formations=[[-3.6,.63,.15,.91,.55,.93],[-2.45,.55,-.6,.87,.48,.9],[-3.85,1.27,-.45,.64,.78,.72],[-2.05,1.13,-.6,.62,.75,.72],[-2.97,1.92,-.5,1.13,.57,.76],[-2.9,2.45,-.73,.82,.62,.76],[-3.1,2.91,-.95,.6,.56,.57],[-3.9,.5,1.38,.72,.39,.58],[-2.42,.51,1.45,.68,.4,.6],[-1.81,.35,-1.38,.65,.26,.52],
  [1.25,.66,-.42,.81,.59,.83],[3.35,.64,-.05,1,.6,.91],[3.25,1.4,-.72,.77,.82,.84],[1.01,1.45,-.75,.68,.78,.78],[1.68,2.35,-.81,1.12,.7,.8],[2.05,3.01,-.91,.83,.67,.74],[1.64,3.44,-1.02,.63,.49,.62],[3.4,2.11,-.82,.74,.58,.72],[3.98,.91,.65,.57,.67,.74],[2.25,.58,1.36,.88,.48,.6],[3.74,.5,1.52,.67,.42,.63],[.66,.36,1.42,.58,.22,.55],[3.99,2.09,-1.31,.56,.72,.53]];
  for(const a of formations)rock(...a as [number,number,number,number,number,number]);
- // Smaller formations recede behind the open sand channel. Their own random stream
+ // A staggered rear ridge rises behind the open foreground sand channel. Taller
+ // crowns overlap its shoulders, creating depth without a flat scenery card.
+ // Its own random stream
  // keeps all established foreground anatomy and motion seeds unchanged.
  const rearRandom=seeded(230926);
- for(const a of [[-1.03,.43,-1.64,.55,.30,.36],[-.46,.38,-1.65,.43,.25,.34],[-.83,.86,-1.66,.38,.31,.32],[.19,.35,-1.72,.41,.22,.31],[.35,.71,-1.69,.29,.38,.32],[-.89,1.13,-1.71,.29,.20,.28],[.29,1.03,-1.69,.32,.20,.29]])rock(...a as [number,number,number,number,number,number],rearRandom);
+ for(const a of [[-1.03,.43,-1.64,.55,.30,.36],[-.46,.38,-1.65,.43,.25,.34],[-.91,.91,-1.66,.38,.47,.32],[.19,.35,-1.72,.41,.22,.31],[.36,.81,-1.69,.29,.47,.32],[-1.00,1.35,-1.71,.34,.25,.28],[.29,1.24,-1.69,.34,.23,.29]])rock(...a as [number,number,number,number,number,number],rearRandom);
  // Temporary per-rock bounds keep attachment raycasts local; these are never rendered.
  const supports=rocks.map(g=>{g.computeBoundingSphere();g.computeBoundingBox();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
@@ -95,7 +97,15 @@ export function buildReef(scene:T.Scene){
  [1.69,3.76,-1.06,1.07,.84],[2.3,3.41,-.74,.95,.96],[1.02,3.22,-.5,.83,.23],[2.87,2.7,-.81,.82,.075],[3.69,2.43,-1.1,.94,.81],[3.72,1.32,.88,.8,.03],[4.15,1.5,.1,.6,.23],[1.1,1.13,.5,.52,.92],[.64,.55,1.58,.55,.025],[2.85,.87,1.42,.44,.21],[3.45,.65,1.77,.39,.82]])branch(...b as [number,number,number,number,number]);
  // These are full volumetric colonies, not distant cards; they share the same
  // indexed detail and merged material as the main islands.
- for(const b of [[-.91,1.32,-1.71,.63,.82],[.28,1.22,-1.69,.52,.23],[-.32,.57,-1.59,.40,.96]])branch(...b as [number,number,number,number,number],rearRandom);
+ for(const b of [[-1.00,1.64,-1.71,1.02,.82],[.28,1.51,-1.69,.90,.23],[-.32,.57,-1.59,.53,.96]])branch(...b as [number,number,number,number,number],rearRandom);
+ // Asymmetric shoulder colonies interrupt the bare rear pillars. Their feet
+ // follow the real stone; existing navigation includes the entire grown volume.
+ for(const [rockIndex,x,y,size,hue,seed] of [[25,-1.00,.96,.59,.79,4101],[27,.34,.84,.53,.94,4102]]){
+  const support=supports[rockIndex];attachRay.set(new T.Vector3(x,y,0),new T.Vector3(0,0,-1));attachRay.far=2.3;
+  const hit=attachRay.intersectObject(support,false)[0];if(!hit?.face)continue;
+  const colony=surfaceColony(support,hit.point,hit.face.normal,size,hue,seeded(seed));
+  corals.push(...colony.geometries);obstacles.push(colony.obstacle);
+ }
  const plate=(x:number,y:number,z:number,r:number)=>{
   const geometry=platingColony(x,y,z,r,random()*Math.PI*2);corals.push(geometry);
   obstacles.push(...plateCollisionVolumes(geometry));
