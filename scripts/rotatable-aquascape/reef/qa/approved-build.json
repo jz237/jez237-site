@@ -1,55 +1,61 @@
 {
-  "buildHash": "46ade5ab2a810a13e4d3d4e9453ba1778a616658ac8e1530ea9b814837bfa3e7",
+  "buildHash": "dcba86d8e78a86b6e6e2323b1e05c666f73724296b45ad78dd5eefcb2e008b39",
   "files": [
-    "assets/index-DbR_hIaa.js",
+    "assets/anthias-BtfICPIN.glb",
+    "assets/chromis-BJi4ZRfM.glb",
+    "assets/clown-D-bxKsMk.glb",
+    "assets/gramma-d3_cP3UV.glb",
+    "assets/index-CE9_7uiJ.js",
     "assets/index-DdD2V56_.css",
     "assets/seaside_rock_diff_1k-STQ4lmr_.jpg",
     "assets/seaside_rock_nor_gl_1k-SdHn3rBd.jpg",
     "assets/seaside_rock_rough_1k-sKOQ0WHG.jpg",
+    "assets/tang-BgoOVjXF.glb",
+    "assets/yellow-DDdRGU1T.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T02:07:53.640Z",
-  "readyMs": 1464,
+  "checkedAt": "2026-09-23T02:46:37.963477+00:00",
+  "readyMs": 1454,
   "samples": [
     {
-      "fps": 57.59539236861051,
-      "time": 4.305999999999998,
-      "bites": 21,
-      "remaining": 15
-    },
-    {
-      "fps": 59.99700014999249,
-      "time": 8.322900000000038,
-      "bites": 33,
-      "remaining": 3
-    },
-    {
-      "fps": 59.99400059994003,
-      "time": 12.34,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99700014999255,
-      "time": 16.35699999999994,
-      "bites": 36,
-      "remaining": 0
+      "fps": 59.99400059994001,
+      "time": 4.275800000095365,
+      "bites": 27,
+      "remaining": 9
     },
     {
       "fps": 59.99400059993998,
-      "time": 20.373999999999835,
-      "bites": 36,
-      "remaining": 0
+      "time": 8.276100000095393,
+      "bites": 34,
+      "remaining": 2
     },
     {
-      "fps": 59.99100134979744,
-      "time": 24.39109999999974,
+      "fps": 59.99700014999249,
+      "time": 12.293100000095349,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.994000599940094,
-      "time": 28.391299999999642,
+      "time": 16.310200000095303,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 20.327100000095193,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 24.327500000095117,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.994000599940094,
+      "time": 28.361200000095046,
       "bites": 36,
       "remaining": 0
     }
@@ -68,20 +74,19 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 2387574,
+    "triangles": 2450422,
     "inhabitants": 20
   },
   "geometryChecks": [
-    "anemone roots, tips and outward skin",
-    "fish closed bodies, smooth cheek seams and outward gills"
+    "Actual GLB closed bodies, finite attributes, embedded full-resolution images, paired fins/gills and outward gill/eye normals",
+    "Indexed anemone anchored tentacles and outward normals"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "mobile",
-    "clownfish",
-    "blue-tang",
-    "yellow-tang"
+    "six species close-ups",
+    "Blender three-quarter proofs"
   ],
   "plantedReleaseAndSyncPassed": true,
   "hiddenReefFilesChanged": false,
@@ -89,11 +94,5 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Scanned rock surface and exact-detail anemone geometry memory pass. Still short of reference realism; 2.49 MB extra first-download maps. Local desktop performance only.",
-  "geometryMemory": {
-    "exactExpandedAttributes": true,
-    "previousBytes": 28717200,
-    "indexedBytes": 7621920,
-    "triangles": 159540
-  }
+  "scope": "Six GPT Image reference studies and Blender-authored marine fish. Local desktop performance only. Reef still short of reference realism; approximately 5.5 MB extra cached model payload."
 }
