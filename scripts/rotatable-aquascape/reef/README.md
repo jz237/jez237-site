@@ -331,3 +331,21 @@ standard shader and adds one merged draw group, with roughly 4MiB of texture
 storage including mipmaps in an uncompressed RGBA upload. Existing maps and
 geometry are unchanged. Tests check wrapped texture edges, positive unit
 normals and download budget; visual review remains a separate requirement.
+
+## Fin attachments and moving membrane shading
+
+The runtime now evaluates the same cubic body outline used by the Blender
+authoring script when deciding which fin vertices are free to flex. The tail
+field begins at the body endpoint, with a smooth transition away from the root.
+Pectoral pivots follow the body's lateral displacement while retaining their
+independent strokes. Existing fish geometry and embedded images are untouched.
+
+A three-component fin-field gradient is computed once per shared template.
+Vertex normals account for both the traveling body wave and the additional fin
+ripple, including the depth derivative of sloping pectoral tissue. The previous
+shader changed fin positions without changing their normals to match, and applied
+a body-wave lighting slope to pectorals that did not receive that displacement.
+Regression checks cover pinned insertions across all six body profiles and1,800
+sloped tissue samples against independently displaced tangent vectors. This is
+procedural animation, not a measured biomechanical model. Additional gradient
+buffers use553,392bytes across six shared templates; no new maps or passes.

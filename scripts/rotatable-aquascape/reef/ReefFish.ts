@@ -1,4 +1,5 @@
 import * as T from 'three';
+import {bodyBend} from './MarineFinFlex.ts';
 import {type MarineSpecies} from './MarineModels.ts';
 import {type Obstacle} from './ReefScene.ts';
 
@@ -19,16 +20,20 @@ export class ReefFish{
     const group=this.templates.get(s)!.clone(true),clock={value:Math.random()*7},effort={value:.5};
     group.traverse(o=>{if(o instanceof T.Mesh){o.material=(o.material as T.MeshStandardMaterial).clone();const mat=o.material as T.MeshStandardMaterial;
      if(o.name==='body'||o.name==='fin'){
-      const isBody=o.name==='body',isPectoral=Boolean(o.userData.pectoral);mat.onBeforeCompile=shader=>{shader.uniforms.swimTime=clock;shader.uniforms.swimEffort=effort;shader.vertexShader='uniform float swimTime,swimEffort;\n'+(isBody?'':'attribute float finFlex;\n')+shader.vertexShader;
+      const isBody=o.name==='body',isPectoral=Boolean(o.userData.pectoral);mat.onBeforeCompile=shader=>{shader.uniforms.swimTime=clock;shader.uniforms.swimEffort=effort;shader.vertexShader='uniform float swimTime,swimEffort;\n'+(isBody?'':'attribute float finFlex; attribute vec3 finGradient;\n')+shader.vertexShader;
        shader.vertexShader=shader.vertexShader.replace('#include <beginnormal_vertex>',`#include <beginnormal_vertex>
         float tail=clamp((.3-position.x)/.9,0.,1.),dTail=position.x>-.6&&position.x<.3?-1./.9:0.;
         float slope=(2.*tail*dTail*sin(swimTime*7.5-position.x*7.)-7.*tail*tail*cos(swimTime*7.5-position.x*7.))*(.018+swimEffort*.075);
-        objectNormal.x-=slope*objectNormal.z;objectNormal=normalize(objectNormal);`);
+        ${isPectoral?'slope=0.;':''}
+        vec3 tissueSlope=vec3(slope,0.,0.);
+        ${isBody?'':`float finPhase=swimTime*9.-position.x*8.,finAmplitude=.015+abs(position.y)*.11;
+        tissueSlope+=vec3(-8.*cos(finPhase)*finFlex*finAmplitude,sin(finPhase)*finFlex*.11*sign(position.y),0.)+sin(finPhase)*finAmplitude*finGradient;`}
+        objectNormal.z/=max(.25,1.+tissueSlope.z);objectNormal.xy-=tissueSlope.xy*objectNormal.z;objectNormal=normalize(objectNormal);`);
        shader.vertexShader=shader.vertexShader.replace('#include <begin_vertex>',`#include <begin_vertex>
         float rear=clamp((.3-position.x)/.9,0.,1.);
         ${isPectoral?'':'transformed.z+=sin(swimTime*7.5-position.x*7.)*rear*rear*(.018+swimEffort*.075);'}
         ${isBody?'':'transformed.z+=sin(swimTime*9.-position.x*8.)*finFlex*(.015+abs(position.y)*.11);'}
-       `);};mat.customProgramCacheKey=()=>`reef-${isBody?'body':isPectoral?'pectoral':'fin'}-rooted`;
+       `);};mat.customProgramCacheKey=()=>`reef-${isBody?'body':isPectoral?'pectoral':'fin'}-membrane-normals-v2`;
      }
     }});
     const size=specs[s].size*(.83+Math.random()*.17);group.scale.setScalar(size);group.userData.note={title:names[s],description:descriptions[s]};scene.add(group);this.notes.push(group);
@@ -88,7 +93,7 @@ export class ReefFish{
    const collision=this.fish.some(other=>other!==f&&next.distanceToSquared(other.position)<(f.radius+other.radius)**2);
    if(!collision&&this.clearSegment(f.position,next,f.radius))f.position.copy(next);else{f.velocity.multiplyScalar(.65);f.until=0;}
    f.group.position.copy(f.position);f.group.rotation.set(0,f.yaw,f.pitch,'YXZ');f.clock.value+=dt*(.52+f.velocity.length()*1.65);f.effort.value=T.MathUtils.damp(f.effort.value,f.velocity.length(),5,dt);
-   for(let j=0;j<f.pectoral.length;j++){const p=f.pectoral[j];p.rotation.y=Math.sin(now*(7+f.effort.value*5)+f.phase+j)*.42;p.rotation.x=Math.cos(now*6+f.phase+j)*.15;}
+   for(let j=0;j<f.pectoral.length;j++){const p=f.pectoral[j];p.position.z=p.userData.restZ+bodyBend(p.position.x,f.clock.value,f.effort.value);p.rotation.y=Math.sin(now*(7+f.effort.value*5)+f.phase+j)*.42;p.rotation.x=Math.cos(now*6+f.phase+j)*.15;}
    for(const gill of f.group.children)if(gill.name==='gill')gill.position.z=gill.userData.side*(.0005+.002*(1+Math.sin(now*5.5+f.phase)));
    f.mouth.scale.set(1,.24+.09*(1+Math.sin(now*5.5+f.phase))+(target?.alive?Math.max(0,1-Math.sqrt(dist))*Math.max(0,Math.sin(now*18))*1.35:0),1);
   }
