@@ -1,20 +1,20 @@
 {
-  "buildHash": "3814b99d2e4b77db942b2e0d700c5caca0cedb5fd45ffa3718877d26e095f8c6",
+  "buildHash": "012d9994cc5e908cea6dcddfc832eb13fbaf6a89b61cb1cbcc53c9de52d35ad5",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
     "assets/index-DdD2V56_.css",
-    "assets/index-hG-UAoNx.js",
+    "assets/index-E6TUqE4M.js",
+    "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
-    "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
     "assets/normalMap-AIoBIlzs.png",
     "assets/normalMap-CVYemK4O.png",
-    "assets/normalMap-u0tbhGky.png",
+    "assets/normalMap-T-Tek4aZ.png",
     "assets/roughnessMap-4hZTjONg.png",
-    "assets/roughnessMap-BGsWqYxk.png",
+    "assets/roughnessMap-DIiV2VjT.png",
     "assets/roughnessMap-qepxckm-.png",
     "assets/seaside_rock_diff_1k-STQ4lmr_.jpg",
     "assets/seaside_rock_nor_gl_1k-SdHn3rBd.jpg",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T20:34:06.830Z",
-  "readyMs": 3966,
+  "checkedAt": "2026-09-23T20:55:28.341Z",
+  "readyMs": 4680,
   "samples": [
     {
-      "fps": 59.99400059993998,
-      "time": 6.108500000047695,
-      "bites": 21,
-      "remaining": 15
+      "fps": 59.99400059994003,
+      "time": 5.9473999998092815,
+      "bites": 5,
+      "remaining": 31
     },
     {
-      "fps": 59.99400059994003,
-      "time": 10.125600000047683,
+      "fps": 59.99700014999249,
+      "time": 9.947699999809274,
+      "bites": 31,
+      "remaining": 5
+    },
+    {
+      "fps": 59.476605868358384,
+      "time": 13.965399999809225,
       "bites": 33,
       "remaining": 3
     },
     {
-      "fps": 59.99700014999255,
-      "time": 14.142600000047628,
-      "bites": 34,
-      "remaining": 2
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 18.143000000047586,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 22.16000000004751,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
       "fps": 59.99400059993998,
-      "time": 26.177000000047432,
+      "time": 17.982399999809147,
+      "bites": 35,
+      "remaining": 1
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 21.99939999980912,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.994000599940094,
-      "time": 30.19400000004732,
+      "fps": 59.99100134979755,
+      "time": 26.016599999809063,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 30.033399999808914,
       "bites": 36,
       "remaining": 0
     }
@@ -327,8 +327,8 @@
     "oblique",
     "side",
     "mobile",
-    "flank-closeup",
-    "polyp and anemone time sequences",
+    "flank-closeup before/after",
+    "polyp motion frames 0/2",
     "original reef reference",
     "mature planted aquarium and its reference",
     "reference-comparison.md"
@@ -339,7 +339,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Twelve attached, asymmetric plate fans add a middle scale of growth across rock flanks. Closed thin skeletons, pale folded margins, existing detailed plate material, and enclosing navigation volumes. Existing reef detail retained. Comparative realism target remains unmet.",
+  "scope": "Replace coarse radial flower stamps on encrusting coral with denser irregular cup walls, narrow oral recesses, varied septa and continuous mottled tissue. Same 512px maps and rendering work; reference quality target still unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -377,10 +377,10 @@
     ]
   },
   "performanceComparison": {
-    "baseline": "94c670759",
-    "loadPrior": 4408,
-    "loadCurrent": 4623,
-    "fpsPrior": 155.4,
-    "fpsCurrent": 159.4
+    "baseline": "72bfd9a7a",
+    "loadPrior": 4074.5,
+    "loadCurrent": 4252.5,
+    "fpsPrior": 218.8,
+    "fpsCurrent": 204
   }
 }
