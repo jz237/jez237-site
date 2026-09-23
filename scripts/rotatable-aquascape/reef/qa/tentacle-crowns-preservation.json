@@ -1,0 +1,29 @@
+[
+  {
+    "seed": 17,
+    "calls": 2160,
+    "maxRootError": 1.9967694974678863e-7,
+    "oldBytes": 7725024,
+    "newBytes": 10956384,
+    "oldTriangles": 171840,
+    "newTriangles": 249600
+  },
+  {
+    "seed": 91,
+    "calls": 2160,
+    "maxRootError": 1.9868214984342103e-7,
+    "oldBytes": 7725024,
+    "newBytes": 10956384,
+    "oldTriangles": 171840,
+    "newTriangles": 249600
+  },
+  {
+    "seed": 213,
+    "calls": 2160,
+    "maxRootError": 1.9874422742687996e-7,
+    "oldBytes": 7725024,
+    "newBytes": 10956384,
+    "oldTriangles": 171840,
+    "newTriangles": 249600
+  }
+]
