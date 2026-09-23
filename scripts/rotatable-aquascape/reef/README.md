@@ -416,3 +416,15 @@ The original offline source is model-source/bake_plate_maps.py (numpy/Pillow).
 Morphology inspiration: [Corals of the World, Montipora aequituberculata](https://www.coralsoftheworld.org/species_factsheets/species_factsheet_summary/montipora-aequituberculata/).
 The pattern is an artistic approximation, not a species scan or simulated polyp
 extension. No external image is embedded, purchased or generated with a paid API.
+
+## Water-column lighting
+
+A stronger neutral overhead key with reduced broad blue/ambient fill gives
+coral shelves and caves more separation. Soft shafts vary slowly with the shared
+clock; 360 sparse suspended particles drift through the real tank volume and
+use depth testing to remain behind solid scenery. Both dim with Blue hour.
+The background also responds to daylight instead of remaining fully illuminated.
+Pause freezes the circulation and shaft patterns. The particle data is created
+once (7,200bytes); all movement runs on the GPU, without per-frame buffer writes.
+These are artistic light/flow cues, not a shadowed volumetric transport solution
+or fluid simulation. No geometry detail or existing surface maps are removed.
