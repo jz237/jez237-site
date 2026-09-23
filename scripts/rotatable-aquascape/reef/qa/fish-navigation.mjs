@@ -30,5 +30,28 @@ console.log({minRange,start:samples[0],end:samples.at(-1)});assert.ok(minRange>.
  // The displacement watchdog must also work while a pellet remains selected.
  f.position.set(0,2,0);f.progressPosition.copy(f.position);f.progressAt=-10;f.recoverUntil=0;world.update(1/60,false);
  assert.ok(f.recoverUntil>world.clock,'feeding does not disable the progress watchdog');assert.equal(f.mode,'exploring');
- console.log('Feeding recovery: committed escape, actual progress, food reacquisition and feeding watchdog passed.');
+console.log('Feeding recovery: committed escape, actual progress, food reacquisition and feeding watchdog passed.');
+}
+
+// Host-centered swimming must include returns, excursions, pauses and speed
+// changes rather than a pair tracing the same orbit forever.
+{
+ const originalRandom=Math.random;let seed=98237;Math.random=()=>{seed=(Math.imul(seed,1664525)+1013904223)>>>0;return seed/4294967296;};
+ try{
+  const host=new T.Vector3(3,1,.6),world=new ReefFish(new T.Scene(),[],[host],models);
+  world.fish.splice(0,world.fish.length,...world.fish.filter(f=>f.species==='clown'));
+  const stats=world.fish.map(()=>({modes:new Set(),min:Infinity,max:0,near:0,far:0}));
+  for(let i=0;i<6000;i++){
+   world.update(1/60,false);const snap=world.snapshot();assert.equal(snap.fishOverlaps,0);
+   world.fish.forEach((f,j)=>{const s=stats[j];s.modes.add(f.mode);s.min=Math.min(s.min,f.velocity.length());s.max=Math.max(s.max,f.velocity.length());const radius=Math.hypot(f.position.x-host.x,f.position.z-host.z);if(radius<.55)s.near++;if(radius>.82)s.far++;});
+  }
+  for(const [j,s] of stats.entries()){
+   assert.ok(s.near>50&&s.far>50,'leave canopy and return among tentacles');
+   assert.ok(s.max>.65&&s.min<.12,'visible darts and deceleration');
+   assert.ok(s.modes.has('sheltering')&&s.modes.has('darting from anemone')&&s.modes.has('returning to anemone'));
+   assert.ok(world.fish[j].hostVisits>3,'repeated completed host visits');
+  }
+  assert.notDeepEqual(world.fish[0].position,world.fish[1].position,'independent pair with spacing');
+  console.log('Clownfish host visits:',stats.map((s,i)=>({...s,modes:[...s.modes],visits:world.fish[i].hostVisits})));
+ }finally{Math.random=originalRandom;}
 }

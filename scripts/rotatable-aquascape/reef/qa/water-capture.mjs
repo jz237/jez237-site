@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 import * as T from 'three';
 import {Reflector} from 'three/addons/objects/Reflector.js';
 import {ReefReflections} from '../ReefReflections.ts';
+import {reefBackGlass} from '../ReefBackGlass.ts';
 const pool=new ReefReflections(),scene=new T.Scene(),camera=new T.PerspectiveCamera(24,1.7,.1,120);
 camera.position.set(0,3.25,17.7);camera.lookAt(0,2.67,0);camera.updateMatrixWorld();
 const original=camera.projectionMatrix.clone(),observed=[];
@@ -36,3 +37,11 @@ surfaces[0].material.uniforms.advancedReflections.value=1;pool.setEffects(1,2);
 assert.equal(surfaces[0].getRenderTarget().height,1536,'full coverage restores with advanced effects');
 for(const s of surfaces){s.geometry.dispose();s.dispose();}
 console.log('Reef water capture passed: vertical coverage, unchanged view, pixel density, reused camera, adaptive resolution.');
+
+const rearPool=new ReefReflections(),clock={value:0},daylight={value:1};
+const rear=reefBackGlass(rearPool,clock,daylight);scene.add(rear);scene.updateMatrixWorld(true);
+assert.equal(rear.material.uniforms.daylight,daylight,'reflection tint uses live daylight, not a cloned stale value');
+assert.ok(rearPool.visible(camera).includes(rear),'rear reflection is managed by the shared capture budget');
+assert.equal(rear.getRenderTarget().width,1024);rearPool.setEffects(.65,0);assert.equal(rear.getRenderTarget().width,666);assert.equal(rear.getRenderTarget().samples,0);
+rear.geometry.dispose();rear.dispose();
+console.log('Rear glass: live uniforms, shared scheduling and adaptive capture size passed.');

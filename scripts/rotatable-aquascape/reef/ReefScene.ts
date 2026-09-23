@@ -81,6 +81,9 @@ export function buildReef(scene:T.Scene){
  // Broken live-rock fragments feather the island feet into the sand. Their
  // separate stream does not reshuffle existing colonies or animal animations.
  for(const a of [[-4.48,.38,-.35,.25,.24,.32],[-4.38,.28,1.72,.25,.16,.30],[-3.24,.3,1.96,.29,.16,.19],[-1.63,.29,.96,.32,.14,.27],[.28,.26,-1.9,.3,.12,.22],[1.21,.31,1.79,.26,.17,.2],[3.07,.31,1.82,.28,.17,.23],[4.32,.32,1.49,.24,.18,.26],[4.23,.5,-1.67,.37,.3,.28]])rock(...a as [number,number,number,number,number,number],toeRandom,true);
+ // Rear buttresses lift the middle-distance garden behind the sand channel.
+ const canopyRandom=seeded(2309232235);
+ for(const a of [[-1.08,1.48,-1.62,.42,.62,.37],[-.45,.98,-1.67,.48,.38,.33],[.16,1.41,-1.63,.40,.55,.35]])rock(...a as [number,number,number,number,number,number],canopyRandom);
  const supports=rocks.map(g=>{g.computeBoundingSphere();g.computeBoundingBox();return new T.Mesh(g,rockMat);}),attachRay=new T.Raycaster();
  const surfaceLookup=topSurfaceSampler(supports.map(s=>s.geometry));
  // Small irregular colonies follow front-facing rock relief. No new draw group.
@@ -204,6 +207,15 @@ export function buildReef(scene:T.Scene){
   massiveCorals.push(mantle);mantleSurfaces.push(mantle);crustStats.colonies++;crustStats.triangles+=mantle.index!.count/3;crustStats.mantleColonies++;crustStats.mantleTriangles+=mantle.index!.count/3;
   mantle.computeBoundingSphere();obstacles.push({center:mantle.boundingSphere!.center.clone(),radius:mantle.boundingSphere!.radius+.004});
  }
+ // Larger overlapping fans close broad gaps between the major crowns. These
+ // are full detailed colonies anchored to rock, not miniature filler or cards.
+ const canopyStats={colonies:0,triangles:0};
+ for(const b of [[-2.91,3.22,-.68,1.08,.81],[-3.70,2.74,-.84,.93,.23],[-2.40,2.72,-.44,.88,.035],[-3.93,1.76,-.14,.78,.82],[-2.1,1.85,-.88,.82,.94],
+  [-1.08,2.06,-1.62,1.12,.96],[.16,1.94,-1.63,.99,.81],[-.46,1.4,-1.62,.88,.23],
+  [1.53,3.9,-.74,1.18,.035],[2.48,3.31,-.98,1.02,.81],[3.46,2.62,-.73,.93,.23],[.89,2.9,-.63,.89,.96]]){
+  const first=corals.length;branch(...b as [number,number,number,number,number],canopyRandom);canopyStats.colonies++;
+  for(const g of corals.slice(first))canopyStats.triangles+=(g.index?.count??g.getAttribute('position').count)/3;
+ }
  const flankShelves=reefFlankShelves(supports);plates.push(...flankShelves.geometries);obstacles.push(...flankShelves.obstacles);
  coralMat.side=T.DoubleSide;const hard=batch(corals,coralMat,group,'Branching and plating corals')!;addNote(hard,'A city built by tiny animals','Stony corals are colonies of polyps supported by a hard skeleton. Branching colonies and ruffled plates add different shapes and shelter. Their skeletons do not bend in the current. This scene is an artistic reef study, not a stocking plan.');
  const plateMaterial=finishPlateMaterial(new T.MeshStandardMaterial({...plateMaps.maps,normalScale:new T.Vector2(1.05,1.05),roughness:.88,vertexColors:true,side:T.DoubleSide}));
@@ -252,5 +264,5 @@ export function buildReef(scene:T.Scene){
   const s=pick(.006,.032)*(.7+bank*.6+patch*.25),height=pick(.4,1)*s;
   dummy.position.set(x,sandHeight(x,z)-height*.12,z);dummy.scale.set(s*(.8+patch*.5),height,s*(.75+bank*.2));dummy.rotation.set(random()*3,random()*3,random()*3);dummy.updateMatrix();rubble.setMatrixAt(i,dummy.matrix);rubble.setColorAt(i,new T.Color().setHSL(.11,.12,pick(.37,.83)));
  }rubble.receiveShadow=true;group.add(rubble);
- return {group,obstacles,notes,hosts,anemone,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
+ return {group,obstacles,notes,hosts,anemone,canopyStats,polypStats,rockStats,crustStats,infillStats,buttressStats,flankStats:flankShelves.stats,assetsReady:Promise.all([rockMaps.ready,coralMaps.ready,crustMaps.ready,plateMaps.ready])};
 }
