@@ -586,3 +586,10 @@ Performance interpretation: normal frame-capped alternating runs all remained ab
 - Fish/food clearance uses actual sand height; swept routes sample terrain. Soft shadow receiver conforms to new bed; projection uses local height. New tests verify burial, rock vertex enclosure, attachment, polyp counts and geometry budget. Test loader updated for terrain import.
 - build:reef/check:reef passed: 5107ms ready, 39bites, zero sampled overlaps, shadows/breathing/fins, pause/camera/feeding/mobile. Viewed front/angle/mobile, sand/base macros and motion frames against original reference.
 - Alternating local startup prior/current 4550.5/4859.5ms; uncapped 161.8/179.6FPS. Extra detail has cost; no universal device promise. Reef-only guarded publication; broader goal active and unmet.
+
+
+## September23 - quieter depth-correct rear glass and lower rock surface
+- Depth-attenuated rear-glass reflections and finer multi-scale porous shading on lower live rock; existing geometry, colonies, fish and capture cadence retained. Source baseline e492fcebc, deployment head e966934fb includes automatic stock-data update. Lower rock material adds fine pores at3.7x existing map frequency, tangent-space slope combined with original normal. No new downloaded maps, triangles or draw batches.
+- Rear Reflector receives depth texture; inverse of its actual clipped projection and capture matrixWorld updated after each capture, before pool registration. Main/view transforms do not substitute for reflection transforms. Existing adaptive dimensions and scheduled cadence preserved.
+- Rendered depth fixture passed front/oblique monotonic attenuation, front contrast less than half rear, zero GL errors. build:reef/check:reef passed 5382ms ready, 40bites, zero sampled overlaps, full behavior/camera/lighting/mobile checks. Initial geometry/inhabitant/colony statistics exactly retained. Front/angle/mobile and rock/rear macros inspected.
+- Local startup prior/current 5081/4792ms; uncapped 206.2/200FPS. Small-sample observations only. Reef-only publication using guarded full-site Functions deployment. Larger realism goal remains active.

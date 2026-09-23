@@ -1,11 +1,11 @@
 {
-  "buildHash": "903d9ddea1c8deaf196cdbefac0fa40dd1853eb2bab5f1f4b14fe9900c01c1d6",
+  "buildHash": "0c9c6ee00a80cb7755e3d75e43b1cf1708a28e1fd3679989924dd2e2d8e28558",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CHGcNWXv.js",
+    "assets/index-BIaYmF4A.js",
     "assets/index-DdD2V56_.css",
     "assets/map-BCNLyojM.png",
     "assets/map-BeFEIA0e.png",
@@ -22,30 +22,14 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T23:19:43.750Z",
-  "readyMs": 5107,
+  "checkedAt": "2026-09-23T23:36:00.874Z",
+  "readyMs": 5382,
   "samples": [
     {
-      "fps": 59.99100134979755,
-      "time": 5.9684999999046395,
-      "bites": 11,
-      "remaining": 31,
-      "anemones": {
-        "captured": 0,
-        "swallowed": 0,
-        "carried": 0,
-        "fold": [
-          0,
-          0,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 59.99100134979755,
-      "time": 9.98539999990464,
-      "bites": 31,
-      "remaining": 11,
+      "fps": 59.99700014999249,
+      "time": 6.000200000000019,
+      "bites": 19,
+      "remaining": 23,
       "anemones": {
         "captured": 0,
         "swallowed": 0,
@@ -59,9 +43,25 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 14.002499999904611,
+      "time": 10.017300000000006,
       "bites": 38,
-      "remaining": 3,
+      "remaining": 4,
+      "anemones": {
+        "captured": 0,
+        "swallowed": 0,
+        "carried": 0,
+        "fold": [
+          0,
+          0,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 14.034199999999936,
+      "bites": 39,
+      "remaining": 2,
       "anemones": {
         "captured": 1,
         "swallowed": 0,
@@ -75,9 +75,9 @@
     },
     {
       "fps": 59.99400059993998,
-      "time": 18.019399999904547,
-      "bites": 38,
-      "remaining": 3,
+      "time": 18.03459999999987,
+      "bites": 39,
+      "remaining": 2,
       "anemones": {
         "captured": 1,
         "swallowed": 0,
@@ -90,24 +90,8 @@
       }
     },
     {
-      "fps": 59.99100134979755,
-      "time": 22.036499999904507,
-      "bites": 38,
-      "remaining": 3,
-      "anemones": {
-        "captured": 1,
-        "swallowed": 1,
-        "carried": 0,
-        "fold": [
-          0,
-          0.19744669381729035,
-          0
-        ]
-      }
-    },
-    {
-      "fps": 60.00300015000745,
-      "time": 26.03669999990442,
+      "fps": 59.99700014999255,
+      "time": 22.051599999999763,
       "bites": 39,
       "remaining": 2,
       "anemones": {
@@ -116,23 +100,39 @@
         "carried": 0,
         "fold": [
           0,
-          0.14297616289922063,
+          0.19735734505090924,
           0
         ]
       }
     },
     {
-      "fps": 59.99700014999232,
-      "time": 30.053799999904317,
-      "bites": 39,
-      "remaining": 2,
+      "fps": 59.99700014999255,
+      "time": 26.06859999999968,
+      "bites": 40,
+      "remaining": 1,
       "anemones": {
         "captured": 1,
         "swallowed": 1,
         "carried": 0,
         "fold": [
           0,
-          0.059263548393606286,
+          0.14232176158365603,
+          0
+        ]
+      }
+    },
+    {
+      "fps": 59.99700014999255,
+      "time": 30.085699999999537,
+      "bites": 40,
+      "remaining": 1,
+      "anemones": {
+        "captured": 1,
+        "swallowed": 1,
+        "carried": 0,
+        "fold": [
+          0,
+          0.05860442370627703,
           0
         ]
       }
@@ -406,10 +406,9 @@
     "front",
     "oblique",
     "mobile",
-    "sand macro",
-    "rock-base macro",
-    "anemone motion",
-    "original reef reference",
+    "lower rock macro",
+    "rear reflection",
+    "rendered depth test",
     "reference-comparison.md"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -418,7 +417,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Uneven low sand banks and dunes; terrain-aware food, fish and shadows; ten buried live-rock fragments with242 colorful polyps and1944 soft fringe tentacles. Existing colonies and fish preserved.",
+  "scope": "Depth-attenuated rear-glass reflections and finer multi-scale porous shading on lower live rock; existing geometry, colonies, fish and capture cadence retained.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -456,10 +455,10 @@
     ]
   },
   "performanceComparison": {
-    "baseline": "3f93f1f44",
-    "loadPrior": 4550.5,
-    "loadCurrent": 4859.5,
-    "fpsPrior": 161.8,
-    "fpsCurrent": 179.6
+    "baseline": "e492fcebc",
+    "loadPrior": 5081,
+    "loadCurrent": 4792,
+    "fpsPrior": 206.2,
+    "fpsCurrent": 200
   }
 }
