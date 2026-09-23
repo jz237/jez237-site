@@ -43,10 +43,20 @@ export function applyReefOptics(material:T.MeshStandardMaterial,clock:{value:num
  material.needsUpdate=true;
 }
 
-// Keep relief below food/resting heights; rubble uses the identical surface function.
+// Static deposition around the two island feet, with a lower winding channel.
+// Not a sediment simulation. Shared by the bed and its partly buried rubble.
+export function sandBank(x:number,z:number){
+ const left=Math.exp(-((x+2.95+Math.sin(z*1.8)*.16)**2/1.65+(z-.1)**2/3.2));
+ const right=Math.exp(-((x-2.55-Math.sin(z*1.5)*.23)**2/2.15+(z-.2)**2/3.5));
+ const toe=Math.exp(-((x-.7)**2/.4+(z-1.43)**2/.4));
+ return Math.min(1,left+right+toe*.42);
+}
+// Keep relief below food/resting heights; the tank perimeter remains sealed.
 export function sandHeight(x:number,z:number){
- const edge=Math.min(1,Math.max(0,(5.03-Math.abs(x))*5),Math.max(0,(2.305-Math.abs(z))*5));
- const ripple=Math.sin(z*14+x*1.1+Math.sin(x*1.6)*.7)*.006;
- const drift=Math.sin(x*.9+z*.6)*Math.cos(z*1.3)*.008;
- return .18+edge*(ripple+drift);
+ const edge=Math.min(1,Math.max(0,(5.03-Math.abs(x))*4),Math.max(0,(2.305-Math.abs(z))*4));
+ const fade=edge*edge*(3-2*edge),bank=sandBank(x,z);
+ const phase=z*11.4+x*.85+Math.sin(x*1.9)*.65;
+ const ripple=(Math.sin(phase)+Math.sin(phase*2+.7)*.22)*(.006+bank*.004);
+ const drift=Math.sin(x*2.1+z*.7)*Math.cos(z*1.6)*.009;
+ return .18+fade*(bank*.085+ripple+drift);
 }
