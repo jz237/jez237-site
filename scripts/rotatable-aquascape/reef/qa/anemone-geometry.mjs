@@ -7,7 +7,7 @@ const {mesh,tentacles}=buildAnemones([new T.Vector3(3,1,.8),new T.Vector3(-3,.8,
 assert.equal(tentacles,540);
 assert.ok(mesh.geometry.index, 'retain shared vertices without discarding detail');
 const bytes=Object.values(mesh.geometry.attributes).reduce((sum,a)=>sum+a.array.byteLength,0)+mesh.geometry.index.array.byteLength;
-assert.ok(bytes<8000000, 'anemone geometry buffers remain below 8 MB');
+assert.ok(bytes<11000000, 'anemone geometry buffers remain below the reviewed 11 MB budget for twelve-sided skin');
 const p=mesh.geometry.getAttribute('position'),n=mesh.geometry.getAttribute('normal'),flex=mesh.geometry.getAttribute('anemoneFlex');
 const rings=new Map();
 for(let i=0;i<p.count;i++){
@@ -30,28 +30,36 @@ const centerHit=ray.intersectObject(mesh)[0];ray.set(new T.Vector3(3.10,3,.8),ne
 assert.ok(lipHit.point.y-centerHit.point.y>.05,'oral center is recessed below its surrounding lip');
 // Closed tip vertices all have a stable unit normal, rather than zero normals.
 let tips=0;for(let i=0;i<p.count;i++)if(flex.getX(i)===1){assert.ok(new T.Vector3().fromBufferAttribute(n,i).length()>.999);tips++;}
-assert.equal(tips,540*9);
+assert.equal(tips,540*13);
 // The first and last vertex in each circular row share shading after UV removal.
-for(let i=0;i<p.count-8;i++)if(flex.getW(i)>0&&flex.getX(i)<1&&i+8<p.count&&p.getX(i)===p.getX(i+8)&&p.getY(i)===p.getY(i+8))assert.ok(new T.Vector3().fromBufferAttribute(n,i).distanceTo(new T.Vector3().fromBufferAttribute(n,i+8))<1e-6);
+for(let i=0;i<p.count-12;i++)if(flex.getW(i)>0&&flex.getX(i)<1&&i+12<p.count&&p.getX(i)===p.getX(i+12)&&p.getY(i)===p.getY(i+12))assert.ok(new T.Vector3().fromBufferAttribute(n,i).distanceTo(new T.Vector3().fromBufferAttribute(n,i+12))<1e-6);
 assert.equal(mesh.geometry.getAttribute('uv'),undefined,'no unused UV allocation for the vertex-colored skin');
 // Packed curved axes must follow the actual centerline; the small signed buffer
-// keeps the extra shading data below the existing8MB geometry budget.
+// keeps the extra shading data below the reviewed11MB geometry budget.
 const axes=mesh.geometry.getAttribute('anemoneAxis');assert.equal(axes.normalized,true);assert.ok(axes.array instanceof Int16Array);
 const decode=i=>{let x=axes.getX(i),y=axes.getY(i),z=1-Math.abs(x)-Math.abs(y);if(z<0){const old=x;x=(1-Math.abs(y))*(x>=0?1:-1);y=(1-Math.abs(old))*(y>=0?1:-1);}return new T.Vector3(x,y,z).normalize();};
 const strands=new Map();for(let i=0;i<p.count;i++)if(flex.getW(i)>0){const phase=flex.getY(i),list=strands.get(phase)||[];list.push(i);strands.set(phase,list);}
 // Attached roots should follow folded tissue rather than a flat pedestal.
 const rootHeights=[];
-for(const ids of [...strands.values()].slice(0,180))rootHeights.push(ids.slice(0,8).reduce((sum,i)=>sum+p.getY(i),0)/8);
+for(const ids of [...strands.values()].slice(0,180))rootHeights.push(ids.slice(0,12).reduce((sum,i)=>sum+p.getY(i),0)/12);
 assert.ok(Math.max(...rootHeights)-Math.min(...rootHeights)>.15,'tentacle attachments follow the raised and lowered disc folds');
 let worstDot=1,minDeterminant=Infinity;const lobeRatios=[];
 for(const ids of strands.values()){
- const centers=[];for(let row=0;row<19;row++){const center=new T.Vector3();for(let j=0;j<8;j++)center.add(new T.Vector3().fromBufferAttribute(p,ids[row*9+j]));centers.push(center.multiplyScalar(1/8));}
- const ringRadius=row=>ids.slice(row*9,row*9+8).reduce((sum,i)=>sum+new T.Vector3().fromBufferAttribute(p,i).distanceTo(centers[row]),0)/8;
+ const centers=[];for(let row=0;row<19;row++){const center=new T.Vector3();for(let j=0;j<12;j++)center.add(new T.Vector3().fromBufferAttribute(p,ids[row*13+j]));centers.push(center.multiplyScalar(1/12));}
+ const ringRadius=row=>ids.slice(row*13,row*13+12).reduce((sum,i)=>sum+new T.Vector3().fromBufferAttribute(p,i).distanceTo(centers[row]),0)/12;
+ // Cap sections must stay circular and perpendicular to their real centerline.
+ for(const row of [14,15,16]){
+  const idsAt=ids.slice(row*13,row*13+12),axis=decode(ids[row*13]);
+  const offsets=idsAt.map(i=>new T.Vector3().fromBufferAttribute(p,i).sub(centers[row]));
+  const radii=offsets.map(o=>o.length());
+  assert.ok(Math.min(...radii)/Math.max(...radii)>.96,'rounded cap is not flattened by interpolated curve frames');
+  assert.ok(offsets.every(o=>Math.abs(o.clone().normalize().dot(axis))<.001),'cap frame stays perpendicular to curve tangent');
+ }
  const capAspect=centers[14].distanceTo(centers[18])/ringRadius(14);
  assert.ok(capAspect>.90&&capAspect<1.08,'cap rounds over within one tissue radius instead of an elongated beak: '+capAspect);
  lobeRatios.push(ringRadius(14)/ringRadius(8));
  for(let row=1;row<18;row++){
-  const i=ids[row*9],axis=decode(i),a=flex.getX(i)-flex.getX(ids[(row-1)*9]),b=flex.getX(ids[(row+1)*9])-flex.getX(i);
+  const i=ids[row*13],axis=decode(i),a=flex.getX(i)-flex.getX(ids[(row-1)*13]),b=flex.getX(ids[(row+1)*13])-flex.getX(i);
   const direction=centers[row].clone().sub(centers[row-1]).multiplyScalar(b/a).addScaledVector(centers[row+1].clone().sub(centers[row]),a/b).normalize();worstDot=Math.min(worstDot,axis.dot(direction));
   const t=flex.getX(i),phase=flex.getY(i),arc=flex.getZ(i),scale=Math.min(flex.getW(i),arc*.85);
   for(const time of [0,1,3,7,15,31]){

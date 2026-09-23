@@ -1,12 +1,12 @@
 {
-  "buildHash": "233d133be8d80f6241e787ec7132ea6b894dfacca660645d3b3b54d8397e935c",
+  "buildHash": "0b41077e6e512a9ea115939f8b304a761be1683ecb8bd47f99404d1e687c90eb",
   "files": [
     "assets/anthias-qh5-fys7.glb",
     "assets/chromis-ArXoNpqP.glb",
     "assets/clown-CVwpScsO.glb",
     "assets/gramma-4tsMCcIb.glb",
-    "assets/index-CX9bdKrv.js",
     "assets/index-DdD2V56_.css",
+    "assets/index-DvNV6fT1.js",
     "assets/map-BeFEIA0e.png",
     "assets/map-C-JiKhig.png",
     "assets/map-Ie55ijny.png",
@@ -23,48 +23,48 @@
     "assets/yellow-BgTFl_Sa.glb",
     "index.html"
   ],
-  "checkedAt": "2026-09-23T18:48:32.974Z",
-  "readyMs": 3420,
+  "checkedAt": "2026-09-23T19:12:30.303Z",
+  "readyMs": 3251,
   "samples": [
     {
-      "fps": 59.99400059994003,
-      "time": 5.929100000000014,
-      "bites": 20,
-      "remaining": 16
+      "fps": 59.99700014999249,
+      "time": 6.1180999999523324,
+      "bites": 16,
+      "remaining": 20
     },
     {
       "fps": 59.99700014999249,
-      "time": 9.929400000000014,
+      "time": 10.13509999995232,
+      "bites": 32,
+      "remaining": 4
+    },
+    {
+      "fps": 59.99400059993998,
+      "time": 14.135499999952268,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 13.946399999999954,
+      "time": 18.152499999952205,
+      "bites": 36,
+      "remaining": 0
+    },
+    {
+      "fps": 59.99700014999244,
+      "time": 22.15279999995211,
       "bites": 36,
       "remaining": 0
     },
     {
       "fps": 59.99400059993998,
-      "time": 17.96339999999989,
+      "time": 26.169899999952026,
       "bites": 36,
       "remaining": 0
     },
     {
-      "fps": 59.99400059993998,
-      "time": 21.980399999999793,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.994000599940094,
-      "time": 25.9807999999997,
-      "bites": 36,
-      "remaining": 0
-    },
-    {
-      "fps": 59.99999999999999,
-      "time": 29.997699999999625,
+      "fps": 59.99100134979744,
+      "time": 30.186899999951944,
       "bites": 36,
       "remaining": 0
     }
@@ -83,7 +83,7 @@
     "randomized": true
   },
   "initial": {
-    "triangles": 8348016,
+    "triangles": 8503536,
     "inhabitants": 20,
     "polypStats": {
       "polyps": 564,
@@ -199,13 +199,13 @@
     "Eroded rock bounded/outward; indexed and expanded surface attributes exactly equal; full rock buffers 10885320 vs 41896800 bytes",
     "Clipped crust triangles nondegenerate; sampled support gap bounded; 63 colonies / 23489 triangles",
     "Three reproducible branching architectures; equal triangle counts; rounded tips; attachment and seams preserved",
-    "540 rooted tentacles; outward seam-smoothed skin; unit tip normals; actual recessed oral disc; 7320528 geometry bytes",
+    "540 rooted twelve-sided tentacles; rounded perpendicular caps, outward seam-smoothed skin, recessed oral centers;10956384geometry bytes",
     "Clipped branching foot: curved rock attachment at every fixture vertex, max sampled gap .009001; valid normals and nondegenerate faces",
     "Primary stems: distributed sloping attachments and disconnected-ledge rejection; same geometry count and rounded tips",
     "Clipped crust culling: 30 varied fixtures with identical attributes/indices; generation 24.27ms to15.77ms",
     "Folded shelves: positive thin skeleton; outward faces; vertices and triangle interiors covered at3sizes/phases,45/110/66local volumes; same geometry count",
     "Sloping colony roots: three support orientations; all transformed vertices inside navigation spheres; finite retained detail",
-    "Curved anemone axes: worst dot0.999714; analytic flow derivative agrees with finite differences; minimum sampled determinant0.603289; all540 strands and171840 triangles retained",
+    "Curved anemone axes: worst dot0.995105; analytic flow derivatives checked; minimum sampled determinant0.619756;540strands and249600triangles",
     "Encrusting maps: seamless wrap gradients below interior gradients; unit outward normals;637268bytes",
     "Marine fin motion: six pinned species profiles;1800 sloped membrane samples, normal dot0.999999999969; minimum determinant0.951112",
     "Water capture: vertical-only coverage and retained pixel density, main camera unchanged, capture camera reused; adaptive planar fallback and full restoration",
@@ -217,17 +217,17 @@
     "All six connected recessed oral cavities: outward cap winding, ray-tested depth, normalized vertex tissue shading, animated lip uniforms and pause invariance",
     "Large coral basal footprint: irregular spread, local support retreat, sloping-root attachment, preserved cup seams and all11infill colonies",
     "Sand relief: sealed perimeter, smooth banks, floor/food clearance and lower channel",
-    "Broad encrusting folds: shared midpoint topology, manifold edges, outward normals, nondegenerate faces and ray-tested rock attachment"
+    "Broad encrusting folds: shared midpoint topology, manifold edges, outward normals, nondegenerate faces and ray-tested rock attachment",
+    "Three prior/current seeded fixtures retain2160RNG calls, exact states, all540phases and anchored root centers within2e-7; cap roundness and perpendicular axes independently checked"
   ],
   "visualReview": [
     "front",
     "three-quarter",
     "side",
     "mobile",
-    "coral-closeup",
-    "anemone time sequence",
-    "90-second tang travel/turn sequence",
-    "original reef and mature planted comparison",
+    "anemone closeup and actual time sequence",
+    "original reef reference",
+    "original planted reference and actual planted comparison",
     "reference-comparison.md"
   ],
   "plantedReleaseAndSyncPassed": true,
@@ -236,7 +236,7 @@
     "jez237.com",
     "GitHub"
   ],
-  "scope": "Mature coral crowns grow as parent-directed outward shoulder fans with upright fine tips and extra short irregular terminal shoots. Original detail retained. Two nearby infill colonies reattached without deleting them. Reference/planted quality target remains unmet.",
+  "scope": "Anemone marginal tentacles drape outward with varied curl; perpendicular ring frames, twelve-sided skin and short tinted tips improve the shape. Added filtered tissue relief and roughness variation. All540 strands and rooted current animation retained; reference/planted quality target remains unmet.",
   "shadowFrames": 60,
   "respirationRenderChecks": {
     "errors": [],
@@ -274,9 +274,9 @@
     ]
   },
   "performanceComparison": {
-    "loadPrior": 3207.5,
-    "loadCurrent": 3264.3,
-    "fpsPrior": 182.1,
-    "fpsCurrent": 182
+    "loadPrior": 3213.8,
+    "loadCurrent": 3288.8,
+    "fpsPrior": 190.9,
+    "fpsCurrent": 189.5
   }
 }
